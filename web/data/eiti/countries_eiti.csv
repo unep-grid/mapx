@@ -1,0 +1,40 @@
+code_iso_3,name_official,name_un,name_eiti,language,language_iso,map_x_pending,lat,lng,zoom
+AFG,د افغانستان اسلامي جمهوریت,Afghanistan,Afghanistan,Pashto,pus,TRUE,34.210155812,64.0990541153,5.661958989
+COD,République démocratique du Congo,Democratic Republic of the Congo,Democratic Republic of Congo,French,fre,TRUE,-2.6781139772,17.344003084,4.936283365
+NGA,Federal Republic of Nigeria,Nigeria,Nigeria,English,eng,TRUE,9.6826639151,5.477443626,5.6005211972
+ALB,Republika e Shqipërisë,Albania,Albania,Albanian,alb,FALSE,41.2203646983,19.2032378518,7.1349050228
+AZE,Azərbaycan Respublikası,Azerbaijan,Azerbaijan,Azerbaijani,aze,FALSE,40.1828398629,46.5700013552,6.9313062731
+BFA,Burkina Faso,Burkina Faso,Burkina Faso,French,fre,FALSE,12.2017749586,-3.6029734248,6.4395445812
+CMR,République du Cameroun: Republic of Cameroon,Cameroon,Cameroon,French; English,fre,FALSE,7.4131859588,9.4880948927,5.4318227915
+CAF,Ködörösêse tî Bêafrîka; République centrafricaine,Central African Republic,Central African Republic,Sango; French,sog,FALSE,6.67596528,17.3634713324,5.6621024077
+TCD,République du Tchad; جمهورية تشاد,Chad,Chad,French; Arabic,fre,FALSE,15.5616251472,13.1493644418,5.0602886594
+COG,République du Congo,Congo,Republic of the Congo,French,fre,FALSE,-0.5374181714,12.8893759178,5.5803572352
+CIV,République de Côte d'Ivoire,Côte d'Ivoire,Côte d'Ivoire,French,fre,FALSE,7.5800794271,-7.1304534498,6.3628902699
+GAB,République gabonaise,Gabon,Gabon,French,fre,FALSE,-0.7550764533,10.0714937509,6.4378775734
+GHA,Republic of Ghana,Ghana,Ghana,English,eng,FALSE,8.0359393837,-2.1175057644,6.4360664616
+GTM,República de Guatemala,Guatemala,Guatemala,Spanish,spa,FALSE,15.8293053414,-91.6218864677,6.778653169
+GIN,République de Guinée,Guinea,Guinea,French,fre,FALSE,10.5910414788,-13.2075957103,6.2812575959
+HND,República de Honduras,Honduras,Honduras,Spanish,spa,FALSE,14.8273083094,-87.8282508409,6.7319123977
+IDN,Republik Indonesia,Indonesia,Indonesia,Indonesian,ind,FALSE,-2.544803357,106.4681082271,4
+IRQ,جمهورية العـراق,Iraq,Iraq,Arabic,ara,FALSE,33.3585441192,41.8045303182,5.8106798028
+KAZ,Қазақстан Республикасы; Республика Казахстан,Kazakhstan,Kazakhstan,Kazakh; Russian,kaz,FALSE,47.6572053906,58.0192835018,4.0286765037
+KGZ,Кыргыз Республикасы; Кыргызская Республика,Kyrgyzstan,Kyrgyz Republic,Kyrgyz; Russian,kir,FALSE,41.3758390558,71.6015682708,5.877531786
+LBR,Republic of Liberia,Liberia,Liberia,English,eng,FALSE,6.3810873375,-10.2688416441,7.0688120393
+MDG,Repoblikan'i Madagasikara; République de Madagascar,Madagascar,Madagascar,Malagasy; French,mlg,FALSE,-18.7036824435,42.5753705133,5.1694171178
+MLI,République du Mali,Mali,Mali,French,fre,FALSE,17.7810640669,-8.858029225,5.0412557089
+MRT,موريتانيا‎,Mauritania,Mauritania,Arabic,ara,FALSE,21.2127299701,-13.5420568602,5.4116493535
+MNG,Монгол Улс,Mongolia,Mongolia,Mongolian,mon,FALSE,46.9423452997,93.8316651514,4.1665328624
+MOZ,República de Moçambique,Mozambique,Mozambique,Portuguese,por,FALSE,-18.9572126055,32.3617948086,4.9545453934
+NER,République du Niger,Niger,Niger,French,fre,FALSE,17.5715068492,4.9673227865,5.3418780727
+NOR,Kongeriket Norge,Norway,Norway,Norwegian,nor,FALSE,65.0229150092,6.3760703693,4.0881624479
+PER,República del Perú,Peru,Peru,Spanish,spa,FALSE,-8.9397898574,-78.9079252071,4.9537843627
+PHL,Republika ng Pilipinas; Republic of the Philippines,Philippines,Philippines,Filipino; English,fil,FALSE,11.2632880733,-242.5506821756,4.8785209562
+STP,República Democrática de São Tomé e Príncipe,Sao Tome and Principe,São Tomé and Príncipe,Portuguese,por,FALSE,0.2275389004,6.5000308321,10.1947431357
+SLE,Republic of Sierra Leone,Sierra Leone,Sierra Leone,English,eng,FALSE,8.5455127657,-12.3870698677,7.3013009532
+SLB,Solomon Islands,Solomon Islands,Solomon Islands,English,eng,FALSE,-9.105241152,-201.929708429,6.3383688746
+TLS,Repúblika Demokrátika Timór-Leste; República Democrática de Timor-Leste,Timor-Leste,Timor-Leste,Tetum; Portuguese,tet,FALSE,-8.8190330542,124.6219492075,7.4997609066
+TGO,République Togolaise,Togo,Togo,French,fre,FALSE,8.8138871408,-0.65830544,6.7642463572
+TTO,Republic of Trinidad and Tobago,Trinidad and Tobago,Trinidad and Tobago,English,eng,FALSE,10.4279672443,-61.5648551353,9.2055760778
+TZA,Jamhuri ya Muungano wa Tanzania / United Republic of Tanzania,United Republic of Tanzania,Tanzania,Swahili; English,swa,FALSE,-6.5510772191,31.4315339838,5.5331776986
+YEM,الجمهورية اليمنية,Yemen,Yemen,Arabic,ara,FALSE,16.1325106171,47.1834004939,6.2524675255
+ZMB,Republic of Zambia,Zambia,Zambia,English,eng,FALSE,-13.1936875751,25.6087087429,5.6982463452

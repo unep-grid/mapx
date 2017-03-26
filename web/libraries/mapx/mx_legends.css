@@ -1,0 +1,79 @@
+
+
+.mx-view-item-legend input[type="checkbox"]
+{
+display:none;
+}
+
+
+.mx-view-item-legend input[type="checkbox"]:checked > label::before
+{
+  font-family: 'FontAwesome';
+  content: '\f06a';
+  padding: 5px;
+}
+
+.mx-view-item-legend
+{
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background: rgba(0,0,0,0);
+}
+
+.mx-view-item-legend ul 
+{
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+  display: flex;
+  display: -webkit-flex;
+  flex-direction:column;
+  -webkit-flex-direction:column;
+}
+
+.mx-view-item-legend li 
+{
+  display: flex;
+  display: -webkit-flex;
+  padding-left:2px;
+}
+
+.mx-legend-item-container 
+{
+  height: 20px;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  justify-content:center; 
+}
+
+
+.mx-legend-item-color {
+  background-color: #000;
+  background-image: none;
+  float: left;
+  margin: 0px 10px 0px 0px;
+  width: 20px;
+  height: 20px;
+  cursor:pointer;
+}
+
+.mx-legend-item-label {
+  font-familly : "Helvetica Neue",Helvetica,Arial,sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mx-legend-item-arrow {
+  display:none;
+}
+
+input:checked ~ .mx-legend-item-arrow {
+ display:block;
+}
+

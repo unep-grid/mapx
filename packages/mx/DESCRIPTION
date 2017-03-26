@@ -1,0 +1,7 @@
+Package: mx
+Title: map-x helper
+Description: Handle map-x features : server logic, ui, script, misc functions
+Version: 0.0
+License: MIT
+Author: Fred Moser <f@fxi.io>
+Maintainer: Fred Moser <f@fxi.io>
