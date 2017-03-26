@@ -1,0 +1,46 @@
+{
+  "version": 8,
+  "name": "simple",
+  "zoom": 8.0306256113636,
+  "bearing": 0,
+  "pitch": 0,
+  "glyphs": "mapbox://fonts/unepgrid/{fontstack}/{range}.pbf",
+  "sprite": "/sprites/sprite",
+  "center": [
+    -123.33769000071862,
+    49.70378630133243
+  ],
+  "sources":{},
+  "layers":[ 
+    {
+      "id": "background",
+      "type": "background",
+      "layout": {
+        "visibility": "visible"
+      },
+      "paint.black": {
+        "background-color": "rgb(47,47,47)",
+        "background-opacity": 1
+      },
+      "paint.white": {
+        "background-color": "rgb(255,255,255)",
+        "background-opacity": 1
+      }
+    },
+    {
+      "id": "mxlayers",
+      "type": "background",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint.black": {
+        "background-color": "rgb(255,0,0)",
+        "background-opacity": 0
+      },
+      "paint.white": {
+        "background-color": "rgb(255,0,0)",
+        "background-opacity": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,90 @@
+.medium-toolbar-arrow-under:after {
+  top: 35px;
+border-color: #fff transparent transparent transparent; }
+
+.medium-toolbar-arrow-over:before {
+  top: -8px;
+border-color: transparent transparent #fff transparent; }
+
+.medium-editor-toolbar {
+  background-color: #fff; 
+  -webkit-box-shadow: 0px 0px 15px 0px rgba(109, 108, 108, 0.5);
+  -moz-box-shadow: 0px 0px 15px 0px rgba(109, 108, 108, 0.5);
+  box-shadow: 0px 0px 15px 0px rgba(109, 108, 108, 0.5);
+}
+.medium-editor-toolbar li {
+padding: 0; }
+.medium-editor-toolbar li button {
+  min-width: 35px;
+  height: 35px;
+  border: none;
+  padding:0px;
+  background-color: transparent;
+  color: #fff;
+  -webkit-transition: background-color .2s ease-in, color .2s ease-in;
+transition: background-color .2s ease-in, color .2s ease-in; }
+.medium-editor-toolbar li button:hover {
+  background-color: #CCC;
+color: #fff; }
+.medium-editor-toolbar li .medium-editor-button-active {
+  background-color: #CCC;
+color: #fff; }
+.medium-editor-toolbar li .medium-editor-button-last {
+border-right: none; }
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+  height: 35px;
+  background: #fff;
+color: #333; }
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-webkit-input-placeholder {
+  color: #fff;
+color: rgba(255, 255, 255, 0.8); }
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-moz-placeholder {
+  /* Firefox 18- */
+  color: #fff;
+color: rgba(255, 255, 255, 0.8); }
+.medium-editor-toolbar-form .medium-editor-toolbar-input::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #fff;
+color: rgba(255, 255, 255, 0.8); }
+.medium-editor-toolbar-form .medium-editor-toolbar-input:-ms-input-placeholder {
+  color: #fff;
+color: rgba(255, 255, 255, 0.8); }
+
+.medium-editor-toolbar-form a {
+color: #fff; }
+
+.medium-editor-toolbar-anchor-preview {
+  background: #fff;
+color: #fff; }
+
+.medium-editor-placeholder:after {
+    color: #d8d8d8;
+}
+
+.medium-editor-element {
+  padding:10px;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  border-radius: 0px;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAEklEQVQI12M4c+YMEwMDAz4MAFKMAnX742zUAAAAAElFTkSuQmCC) no-repeat left bottom, url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAEklEQVQI12M4c+YMEwMDAz4MAFKMAnX742zUAAAAAElFTkSuQmCC) no-repeat right bottom,url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAEklEQVQI12M4c+YMEwMDAz4MAFKMAnX742zUAAAAAElFTkSuQmCC) no-repeat right top, url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAJCAIAAAB8JNGzAAAAEklEQVQI12M4c+YMEwMDAz4MAFKMAnX742zUAAAAAElFTkSuQmCC) no-repeat left top;
+}
+
+.medium-editor-element:focus {
+  outline: none !important;
+}
+
+.medium-editor-element:focus p:hover {
+    border: 1px solid rgba(144, 144, 144, 0.50);
+    padding:0px;
+}
+
+.medium-editor-element:focus p {
+  padding:1px;
+}
+
+
+

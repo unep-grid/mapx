@@ -1,0 +1,7 @@
+Package: jed
+Title: json editor helpers
+Description: Handle jsoneditor bindings
+Version: 0.0
+License: MIT
+Author: Fred Moser <f@fxi.io>
+Maintainer: Fred Moser <f@fxi.io>

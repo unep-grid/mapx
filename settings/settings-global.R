@@ -1,0 +1,430 @@
+#
+# Configuration and options
+#
+config <- list()
+
+#
+# get info about the host
+#
+config[["system"]] <- list(
+  os = Sys.info()[["sysname"]],
+  hostname = Sys.info()[["nodename"]],
+  hostnameRemote = "map-x-full"
+  )
+
+#
+# ssh config for remote command. Not that list names are used in cmd 
+# 
+config[["ssh"]] <- list( 
+  HostName="localhost",
+  User="vagrant",
+  Port=2222,
+  UserKnownHostsFile="/dev/null",
+  StrictHostKeyChecking="no",
+  PasswordAuthentication="no",
+  IdentityFile="/Users/fxi/Documents/unep_grid/map-x/git/vagrant-map-x-full/.vagrant/machines/map-x-full/virtualbox/private_key",
+  IdentitiesOnly="yes",
+  LogLevel="FATAL"
+  )
+
+#
+# web resources : will be exposed to the client using shiny::addRessourcePath. 
+#
+# List name will be prefix 
+# The key is used from the client as :
+# http://{location}:{port}/{prefix}/{resource.xxx}
+#  http://localhost:8080/dict/dict.csv
+config[["resources"]]  =  list(
+      "dict"  = file.path("web","data","dictionaries"),
+      "countries"  = file.path("web","data","countries"),
+      "sprites" = file.path("web","data","styles","sprites"),
+      "styles" = file.path("web","data","styles"),
+      "mx" = file.path("web","libraries"),
+      "font" = file.path("web","font"),
+      "images" = file.path("/tmp")
+    )
+
+#
+# Server and UI folder path
+#
+config[["srvPath"]] = "server"
+config[["uiPath"]] = "ui"
+
+
+#
+# Import dictionaries
+#
+config[["dictionaries"]] <- list(
+  main = import(
+    file.path(
+      config[[c("resources","dict")]],"dict_main.csv"
+      )
+    ),
+  countries = import(
+    file.path(
+      config[[c("resources","dict")]],"dict_countries.csv"
+      )
+    ),
+  languages = import(
+    file.path(
+      config[[c("resources","dict")]],"dict_languages.csv"
+      )
+    ),
+  schemaMetadata = import(
+    file.path(
+      config[[c("resources","dict")]],"dict_schema_source.csv"
+      )
+    )
+  )
+
+#
+# Update main dictionary 
+#
+config[["dict"]] <- rbind(
+  .get(config,c("dictionaries","main")),
+  .get(config,c("dictionaries","countries")),
+  .get(config,c("dictionaries","languages"))
+  )
+
+
+#
+# vt configuration : updated live
+#
+config[["vt"]] <- list(
+  port = 3030,
+  host = "localhost",
+  protocol = "http:"
+  )
+
+# map default 
+#
+config[["map"]] <- list(
+  zoom = 4.936283,
+  lat = -2.6781140,
+  lng = 17.3440031,
+  maxZoom = 22,
+  minZoom = 3,
+  token = "pk.eyJ1IjoidW5lcGdyaWQiLCJhIjoiY2lrd293Z3RhMDAzNHd4bTR4YjE4MHM0byJ9.9c-Yt3p0aKFSO2tX6CR26Q",
+  id = "map_main",
+  idViewsListContainer = "viewListContainer", # include filters and search field
+  idViewsList = "viewListContent", # include views
+  paths = list(
+    style= "styles/base/mapx.json",
+    themes="styles/themes/mapx.json",
+    sprite="styles/sprites/sprite"
+    #style = "styles/base/simple.json",
+    )
+  )
+
+  #styles = fromJSON(file.path(config[[c("resources","styles")]],"mapx.json"),simplifyDataFrame=F,simplifyVector=F),
+
+# config map sources
+#config[["map"]][["sources"]] = list()
+
+## wms sources
+#config[["map"]][["sources"]][["wms"]] = list(
+  #"forestCover"="http://50.18.182.188:6080/arcgis/services/ForestCover_lossyear/ImageServer/WMSServer",
+  #"columbia.edu"="http://sedac.ciesin.columbia.edu/geoserver/wms",
+  #"preview.grid.unep.ch"="http://preview.grid.unep.ch:8080/geoserver/wms",
+  #"sampleserver6.arcgisonline.com"="http://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer",
+  #"nowcoast.noaa.gov"="http://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
+  #)
+
+#
+# Set default variable names
+#
+config[["variables"]] <- list()
+
+config[[c("variables","time")]] <- list(
+  "t0"="mx_t0",
+  "t1"="mx_t1"
+  ) 
+
+#
+# Templates
+#
+config[["templates"]] <- list()
+# R wiskers renderer
+config[[c("templates","pgViewSimple")]] <- mxReadText("templates/pg/view_simple.sql",clean=TRUE)
+config[[c("templates","pgViewOverlap")]] <- mxReadText("templates/pg/view_overlap.sql",clean=TRUE)
+# js dot renderer
+
+config[[c("templates","dot")]] <-  list()
+config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("templates/dot/view_list_legend.R"))
+config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/dot/view_list.R"))
+config[[c("templates","dot","viewPopup")]] <- as.character(mxSource("templates/dot/view_popup.R"))
+config[[c("templates","dot","viewStory")]] <- as.character(mxSource("templates/dot/view_story.R"))
+
+#
+# default languages
+#
+config[["languages"]] <- list()
+
+## fallback languages
+#config[["languages"]][["default"]] <- list(
+    #"first" = "en",
+    #"second" = "fr",
+    #"third" = "es"
+    #)
+
+# list of supported language. Those names should be present in all dict files  !
+config[["languages"]][["list"]] <- list(
+  "English ( english )" = "en",
+  "Français ( french )" = "fr",
+  "Español ( spanish )" = "es",
+  "Русский ( russian )" = "ru",
+  "中国 ( chinese )" = "zh",
+  "Deutsch ( german )" = "de",
+  "বাংলা  (bengali)" = "bn"
+  )
+
+#
+# countries data
+#
+config[["countries"]] <- list()
+
+# fallback countries
+config[["countries"]][["default"]] <- list(
+  "first" = "COD",
+  "second" = "AFG",
+  "third" = "SLE"
+  )
+
+# read countriea
+config[["countries"]]$table <- import(
+  file.path(
+    config[[c("resources","countries")]],"countries.csv"
+    )
+  )
+
+# all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
+config[["countries"]]$codes <- na.omit(
+  .get(config,c("dictionaries","countries"))
+  )
+#
+# Set default no data keys
+#
+config[["noData"]] <- list(
+  "noData",
+  "noVariable",
+  "noLayer",
+  "noTitle",
+  "noSelect",
+  "noFilter"
+  )
+
+#
+# postgres configuration
+#
+config[["pg"]] = list(
+    host ='127.0.0.1',
+    dbname = 'mapx',
+    port = '5432',
+    user = 'mapxw',
+    encryptKey = readLines("../vagrant-map-x-full/passwords/generated/psql_crypto"),
+    password= readLines("../vagrant-map-x-full/passwords/generated/psql_mapx_write"),
+    conPool = 5,
+    geomCol = "geom",
+    tables = list(
+      "users"="mx_users",
+      "views"="mx_views",
+      "sources"="mx_sources"
+      )
+  )
+
+#
+# remote server configuration
+#
+config[["remote"]] <- list(
+  hostname="map-x-full",
+  host="127.0.0.1",
+  user="vagrant",
+  port=2222
+  )
+
+#
+# views configuration
+#
+config[["views"]] = list()
+
+# Set data classes. Value will be fetched in dict
+config[[c("views","classes")]] <- list(
+  "oth", # other (default)
+  "sat", # satellite imagery
+  "ext", # extractive
+  "dev", # development
+  "soc", # social
+  "pol", # political
+  "env", # environment
+  "nrg", # energy
+  "inf", # infrastructure
+  "str" # stresses
+  )
+
+config[[c("views","type")]] <- list(
+  "vt",
+  "rt",
+  "sm"
+  )
+
+
+#
+# data format
+#
+config[["data"]] <- list()
+
+# structured list data format
+# https://en.wikipedia.org/wiki/GIS_file_formats
+# http://www.w3schools.com/tags/att_input_accept.asp
+config[[c("data","format")]] <- list(
+  list(
+    name = "shapefile",
+    type = "vector",
+    fileExt = c(".shp",".shx",".dbf",".prj"),
+    multiple = TRUE
+    ),
+  list(
+    name = "geojson",
+    type = "vector",
+    fileExt = c(".geojson",".json"),
+    multiple = FALSE
+    )
+  )
+
+#
+# email default
+#
+config[["mail"]] =  list(
+  "bot" = "bot@mapx.io",
+  "guest" = "guest@mapx.io"
+  )
+
+#
+# default user value
+#
+config[["users"]] <- list(
+  defaultEmail = "guest@mapx.io",
+  defaultName = "user",
+  loginTimerMinutes = 20,
+  cookieExpireDays = 30,
+  cookieName = "mx_data"
+  )
+
+
+# default data
+config[[c("users","data")]] <- list() 
+
+# default data for new users
+config[[c("users","data","public")]] <- list(
+  user = list(
+    cache = list (
+      last_country = config[["countries"]][['default']][['first']],
+      last_language = config[["language"]][['default']][['first']],
+      last_story_map = c()
+      )
+    ),
+  admin = list(
+    roles =  list(
+      list(
+        project = "world",
+        role = "public"
+        )
+      )
+    )
+  )
+
+# default data for new  superuser if database is empty
+config[["users"]][["data"]][["superUser"]]  <- list(
+  user = list(
+    cache = list (
+      last_country = config[["countries"]][['default']][['first']], 
+      last_language = config[["language"]][['default']][['first']],
+      last_story_map = c()
+      )
+    ),
+  admin = list(
+    roles =  list(
+      list(
+        project = "world",
+        role = "superuser"
+        )
+      )
+    )
+  )
+
+
+# note : could be searched with function
+#mxRecursiveSearch(config$$users$roles,"role","==","admin")
+# role definition : 
+# each user has a role stored in the database : public, user, editor, admin or superuser.
+# each roles is described in the following list.
+# access : which parts of the app the user can use.
+# read : The user can read content targeting those group.
+# publish : The user can write content targeting those group. If the user publish to group he don't have right to edit, he will loose its right.
+# edit : The user can edit content targeting those group.
+# profile : The user can edit profile of all users in this group.
+# admin : The user can edit account of all users in this group.
+config[["users"]][["roles"]]<- list(
+  list(
+    role="public",
+    level=4,
+    desc = list(
+      access = c(),
+      read = c("public"),
+      publish = c(),
+      edit = c(),
+      profile = c(),
+      admin = c()
+      )
+    ),
+  list(
+    role="user",
+    level=3,
+    desc=list(
+      access = c(),
+      read = c("self","public","user"),
+      publish = c("self","publisher"),
+      edit = c("self"),
+      profile = c("self"),
+      admin = c()
+      )
+    ),
+  list(
+    role="publisher",
+    level=2,
+    desc = list(
+      access = c(),
+      read = c("self","public","user","publisher"),
+      publish = c("self","public","user","publisher"),
+      edit = c("self","public","user","publisher"),
+      profile = c("self"),
+      admin = c()
+      )
+    ),
+  list(
+    role="admin",
+    level=1,
+    desc = list(
+      access = c(),
+      read = c("self","public","user","publisher","admin"),
+      publish = c("self","public","user","publisher","admin"),
+      edit = c("self","public","user","publisher","admin"),
+      profile = c("self","public","user","publisher","admin"),
+      admin = c("self","public","user","publisher")
+      )
+    ),
+  list(
+    role="superuser",
+    level=0,
+    desc = list(
+      access = c(),
+      read = c("self","public","user","publisher","admin","superuser"),
+      publish = c("self","public","user","publisher","admin","superuser"),
+      edit = c("self","public","user","publisher","admin","superuser"),
+      profile = c("self","public","user","publisher","admin","superuser"),
+      admin = c("public","user","publisher","admin","superuser")
+      )
+    )
+  )
+
+

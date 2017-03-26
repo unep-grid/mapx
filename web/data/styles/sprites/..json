@@ -1,0 +1,345 @@
+{
+  "verticalstripe": {
+    "width": 6,
+    "height": 49,
+    "x": 0,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "circles-1": {
+    "width": 10,
+    "height": 10,
+    "x": 0,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "circles-2": {
+    "width": 10,
+    "height": 10,
+    "x": 0,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "circles-3": {
+    "width": 10,
+    "height": 10,
+    "x": 0,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "circles-4": {
+    "width": 10,
+    "height": 10,
+    "x": 0,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "circles-5": {
+    "width": 10,
+    "height": 10,
+    "x": 10,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "circles-6": {
+    "width": 10,
+    "height": 10,
+    "x": 10,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "circles-7": {
+    "width": 10,
+    "height": 10,
+    "x": 10,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "circles-8": {
+    "width": 10,
+    "height": 10,
+    "x": 10,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "circles-9": {
+    "width": 10,
+    "height": 10,
+    "x": 6,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-1": {
+    "width": 10,
+    "height": 10,
+    "x": 20,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-2": {
+    "width": 10,
+    "height": 10,
+    "x": 30,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-3": {
+    "width": 10,
+    "height": 10,
+    "x": 20,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-4": {
+    "width": 10,
+    "height": 10,
+    "x": 30,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-5": {
+    "width": 10,
+    "height": 10,
+    "x": 20,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "diagonal-stripe-6": {
+    "width": 10,
+    "height": 10,
+    "x": 30,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "dots-1": {
+    "width": 10,
+    "height": 10,
+    "x": 20,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "dots-2": {
+    "width": 10,
+    "height": 10,
+    "x": 30,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "dots-3": {
+    "width": 10,
+    "height": 10,
+    "x": 16,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "dots-4": {
+    "width": 10,
+    "height": 10,
+    "x": 26,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "dots-5": {
+    "width": 10,
+    "height": 10,
+    "x": 36,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "dots-6": {
+    "width": 10,
+    "height": 10,
+    "x": 40,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "dots-7": {
+    "width": 10,
+    "height": 10,
+    "x": 50,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "dots-8": {
+    "width": 10,
+    "height": 10,
+    "x": 60,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "dots-9": {
+    "width": 10,
+    "height": 10,
+    "x": 70,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-1": {
+    "width": 10,
+    "height": 10,
+    "x": 80,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-2": {
+    "width": 10,
+    "height": 10,
+    "x": 40,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-3": {
+    "width": 10,
+    "height": 10,
+    "x": 50,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-4": {
+    "width": 10,
+    "height": 10,
+    "x": 60,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-5": {
+    "width": 10,
+    "height": 10,
+    "x": 70,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-6": {
+    "width": 10,
+    "height": 10,
+    "x": 80,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-7": {
+    "width": 10,
+    "height": 10,
+    "x": 40,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-8": {
+    "width": 10,
+    "height": 10,
+    "x": 50,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "horizontal-stripe-9": {
+    "width": 10,
+    "height": 10,
+    "x": 60,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "houndstooth": {
+    "width": 10,
+    "height": 10,
+    "x": 70,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-1": {
+    "width": 10,
+    "height": 10,
+    "x": 80,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-2": {
+    "width": 10,
+    "height": 10,
+    "x": 40,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-3": {
+    "width": 10,
+    "height": 10,
+    "x": 50,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-4": {
+    "width": 10,
+    "height": 10,
+    "x": 60,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-5": {
+    "width": 10,
+    "height": 10,
+    "x": 70,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-6": {
+    "width": 10,
+    "height": 10,
+    "x": 80,
+    "y": 79,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-7": {
+    "width": 10,
+    "height": 10,
+    "x": 46,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-8": {
+    "width": 10,
+    "height": 10,
+    "x": 56,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "vertical-stripe-9": {
+    "width": 10,
+    "height": 10,
+    "x": 66,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "crosshatch": {
+    "width": 8,
+    "height": 8,
+    "x": 76,
+    "y": 0,
+    "pixelRatio": 1
+  },
+  "whitecarbon": {
+    "width": 6,
+    "height": 6,
+    "x": 90,
+    "y": 49,
+    "pixelRatio": 1
+  },
+  "lightstripe": {
+    "width": 5,
+    "height": 5,
+    "x": 90,
+    "y": 59,
+    "pixelRatio": 1
+  },
+  "smalldot": {
+    "width": 5,
+    "height": 5,
+    "x": 90,
+    "y": 69,
+    "pixelRatio": 1
+  },
+  "subtle-patch": {
+    "width": 5,
+    "height": 5,
+    "x": 90,
+    "y": 79,
+    "pixelRatio": 1
+  }
+}

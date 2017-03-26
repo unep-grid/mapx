@@ -1,0 +1,134 @@
+{
+  "config" : {
+    "initial" : {},
+    "altered" : [],
+    "class" : "white"
+  },
+  "store": [ 
+    {
+      "id": "black",
+      "ui":{
+        "class":"black"
+      },
+      "layers":[
+        {
+          "id":"background",
+          "paint": {
+            "background-color": "hsla(0, 0%, 18%, 0.9)"
+          }
+        },
+        {
+          "id":"water",
+          "paint": {
+            "fill-color": "rgb(0,0,0)",
+            "fill-outline-color" : "rgb(0,0,0)"
+          }
+        },
+        {
+          "id":"waterway",
+          "paint": {
+            "line-color": "rgb(0,0,0)"
+          }
+        },
+        {
+          "id":"country-code",
+          "paint":{
+            "fill-color": "hsla(0, 0%, 18%, 0.9)"
+          }
+        },
+        {
+          "id":"road-minor",
+          "paint":{
+            "line-color":"hsla(196, 98%, 50%, 0.9)"
+          }
+        },
+        {
+          "id":"road-major",
+          "paint":{
+            "line-color":"hsla(196, 98%, 50%, 0.9)"
+          }
+        },
+        {
+          "id":"road-street-minor",
+          "paint":{
+            "line-color":"hsla(196, 98%, 50%, 0.9)"
+          }
+        },
+        {
+          "id":"road-footway",
+          "paint":{
+            "line-color":"hsla(196, 98%, 50%, 0.9)"
+          }
+        },
+        {
+          "id":"road-cycleway",
+          "paint":{
+            "line-color":"hsla(196, 98%, 50%, 0.9)"
+          }
+        }
+      ]
+    },
+    {
+      "id":"sat",
+      "ui":{
+        "class":"white"
+      },
+      "layers": [
+        {
+          "id":"here_aerial",
+          "layout": {
+            "visibility": "visible"
+          }
+        },
+        {
+          "id":"water",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"waterway",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"shade-56",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"shade-67",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"shade-78",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"shade-89",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"high-90",
+          "layout":{
+            "visibility":"none"
+          }
+        },
+        {
+          "id":"high-94",
+          "layout":{
+            "visibility":"none"
+          }
+        }
+      ]
+    } 
+  ]
+}
