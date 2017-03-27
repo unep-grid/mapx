@@ -5,19 +5,20 @@
 library(checkpoint)
 
 checkPointOptions <- list(
-  path = normalizePath("~/.mapx/.checkpoint",mustWork=F),
+  pathFull = normalizePath("~/.mapx/.checkpoint",mustWork=F),
+  pathBase =  normalizePath("~/.mapx/",mustWork=F),
   date = "2016-11-30" 
   )
 
 dir.create(
-  path = checkPointOptions$path,
+  path = checkPointOptions$pathFull,
   showWarnings = F,
   recursive = T
   )
 
 checkpoint(
   snapshotDate = checkPointOptions$date,
-  checkpointLocation = checkPointOptions$path,
+  checkpointLocation = checkPointOptions$pathBase,
   scanForPackages = FALSE
   )
 
@@ -41,7 +42,7 @@ require(infuser)
 if(!packagesOk){
 checkpoint(
   snapshotDate = checkPointOptions$date,
-  checkpointLocation = checkPointOptions$path,
+  checkpointLocation = checkPointOptions$pathBase,
   scanForPackages = TRUE
   )
 }
