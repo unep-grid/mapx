@@ -24,17 +24,17 @@ checkpoint(
 
 # dependencies
 packagesOk <- all(c(
-require(roxygen2)
-require(memoise)
-require(shiny)
-require(jsonlite)
-require(devtools)
-require(Rcpp)
-require(rio)
-require(xml2)
-require(RPostgreSQL)
-require(magrittr)
-require(base64)
+require(roxygen2),
+require(memoise),
+require(shiny),
+require(jsonlite),
+require(devtools),
+require(Rcpp),
+require(rio),
+require(xml2),
+require(RPostgreSQL),
+require(magrittr),
+require(base64),
 require(infuser)
 ))
 
