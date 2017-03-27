@@ -2,20 +2,22 @@
 # Init config list, checkpoint date and package installation
 #
 
+library(checkpoint)
+
 checkPointOptions <- list(
-  path = "$HOME/.mapx",
+  path = normalizePath("~/.mapx/.checkpoint",mustWork=F),
   date = "2016-11-30" 
   )
 
-
-#
-# Libary manager
-#
-library(checkpoint)
+dir.create(
+  path = checkPointOptions$path,
+  showWarnings = F,
+  recursive = T
+  )
 
 checkpoint(
   snapshotDate = checkPointOptions$date,
-  checkpointLocation = normalizePath(checkPointOptions$path, mustWork=F),
+  checkpointLocation = checkPointOptions$path,
   scanForPackages = FALSE
   )
 
@@ -39,7 +41,7 @@ require(infuser)
 if(!packagesOk){
 checkpoint(
   snapshotDate = checkPointOptions$date,
-  checkpointLocation = normalizePath(checkPointOptions$path, mustWork=F),
+  checkpointLocation = checkPointOptions$path,
   scanForPackages = TRUE
   )
 }
