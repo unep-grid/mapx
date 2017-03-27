@@ -1,22 +1,50 @@
 #
 # Init config list, checkpoint date and package installation
 #
-#source(file.path("settings","settings-init.R"),local=.GlobalEnv)
 
+checkPointOptions <- list(
+  path = "$HOME/.mapx"
+  date = "2016-11-30" 
+  )
+
+
+#
+# Libary manager
+#
+library(checkpoint)
+
+checkpoint(
+  snapshotDate = checkPointOptions$date,
+  checkpointLocation = normalizePath(checkPointOptions$path, mustWork=F),
+  scanForPackages = FALSE
+  )
 
 # dependencies
-library(roxygen2)
-library(memoise)
-library(shiny)
-library(jsonlite)
-library(devtools)
-library(Rcpp)
-library(rio)
-library(xml2)
-library(RPostgreSQL)
-library(magrittr)
-library(base64)
-library(infuser)
+packagesOk <- all(c(
+require(roxygen2)
+require(memoise)
+require(shiny)
+require(jsonlite)
+require(devtools)
+require(Rcpp)
+require(rio)
+require(xml2)
+require(RPostgreSQL)
+require(magrittr)
+require(base64)
+require(infuser)
+))
+
+
+if(!packagesOk){
+checkpoint(
+  snapshotDate = checkPointOptions$date,
+  checkpointLocation = normalizePath(checkPointOptions$path, mustWork=F),
+  scanForPackages = TRUE
+  )
+}
+
+
 
 # load local packages
 load_all("packages/mx")
