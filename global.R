@@ -3,7 +3,7 @@
 #
 
 checkPointOptions <- list(
-  path = "$HOME/.mapx"
+  path = "$HOME/.mapx",
   date = "2016-11-30" 
   )
 
