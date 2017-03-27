@@ -1,7 +1,7 @@
 #
 # Init config list, checkpoint date and package installation
 #
-source(file.path("settings","settings-init.R"),local=.GlobalEnv)
+#source(file.path("settings","settings-init.R"),local=.GlobalEnv)
 
 
 # dependencies
