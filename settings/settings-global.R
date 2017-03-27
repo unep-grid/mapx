@@ -71,7 +71,6 @@ config[["resources"]]  =  list(
       "sprites" = file.path("web","data","styles","sprites"),
       "styles" = file.path("web","data","styles"),
       "mx" = file.path("web","libraries"),
-      "font" = file.path("web","font"),
       "images" = file.path("/tmp")
     )
 
