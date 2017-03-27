@@ -5,6 +5,7 @@ source(file.path("settings","settings-init.R"),local=.GlobalEnv)
 
 
 # dependencies
+library(roxygen2)
 library(memoise)
 library(shiny)
 library(jsonlite)
