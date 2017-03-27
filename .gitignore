@@ -1,5 +1,5 @@
 # settings
-settings/setting-local.R
+settings/settings-local.R
 # History files
 .Rhistory
 .Rapp.history
