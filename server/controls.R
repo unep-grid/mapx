@@ -64,10 +64,6 @@ observeEvent(input$btn_control,{
         names(countries) <- d(countries,language)
       }
 
-
-      mxDebugToJs(capture.output(str(countries)))
-
-
       ui <- mxPanel(
         id="uiSelectCountry",
         title=tags$span(icon("globe"),style="font-size:100px"),
@@ -75,7 +71,7 @@ observeEvent(input$btn_control,{
           inputId = "selectCountry",
           label=tags$span(d("ui_country",language),`data-lang_key`='ui_country'),
           selected = country,
-          choices = countries,
+          choices = as.list(countries),
           options = list(
             dropdownParent="body"
             )
