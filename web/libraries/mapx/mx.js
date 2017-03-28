@@ -6,10 +6,6 @@ mx.templates = {};
 
 
 
-
-
-
-
 /** 
  * Date utils
  * Experimental date support for most common cases:
@@ -1269,7 +1265,7 @@ if( typeof(Shiny) != "undefined" ){
    * Add Shiny bling bling binding dinging dong
    */
   Shiny.addCustomMessageHandler('mxSetTemplates', mx.util.setTemplates);
-  Shiny.addCustomMessageHandler('mxDebugMsg', function(x){console.log(x)});
+  Shiny.addCustomMessageHandler('mxDebugMsg', function(x){console.log(x);});
   Shiny.addCustomMessageHandler('mxSetElementAttribute', mx.util.setElementAttribute);
   Shiny.addCustomMessageHandler("mxSetImageAttributes", mx.util.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", mx.util.hide);
