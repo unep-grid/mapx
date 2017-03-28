@@ -43,17 +43,26 @@ observeEvent(input$btn_control,{
         if(!ctry %in% viewsCount$country){
           viewsCount = rbind(
             viewsCount,
-            data.frame(count=0,country=ctry)
+            data.frame( count=0, country=ctry )
             )
         }
       }
      
 
-      labels <- apply(viewsCount,1,function(row){
-            sprintf("%1$s (%2$d)",d(row['country'],language),as.integer(row['count']))
+      labels <- apply(viewsCount, 1, function(row){
+            sprintf("%1$s (%2$d)", 
+              d(row['country'],language), 
+              as.integer(row['count'])
+              )
             })
+
       countries <- viewsCount$country
-      names(countries)<-labels
+
+      if( length(labels) == length(countries) ){      
+        names(countries) <- labels
+      }else{
+        names(countries) <- d(countries,language)
+      }
 
       ui <- mxPanel(
         id="uiSelectCountry",
