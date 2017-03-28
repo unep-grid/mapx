@@ -1,7 +1,6 @@
 
 observeEvent(input$uploadGeojson,{
 
-  library(digest)
   language <- reactData$language 
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
   msgSave <- d("msgProcessWait", lang=language, dict=dict)

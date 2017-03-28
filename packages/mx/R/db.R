@@ -259,7 +259,6 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
 #' @return spatial object.
 #' @export
 mxDbGetSp <- function(query) {
-  if(!require('rgdal')|!require(RPostgreSQL))stop('missing rgdal or RPostgreSQL')
 
   conf <- mxGetDefaultConfig()
 
@@ -1306,7 +1305,6 @@ mxDbClearResult <- function(con=NULL,allCon=FALSE){
 #' @param geomCol Set the name of the geometry column
 mxDbWriteSpatial <- function(spatial.df=NULL, schemaname="public", tablename, overwrite=FALSE, keyCol="gid", srid=4326, geomCol="geom") {
 
-  library(rgeos)
 
   mxDbDropLayer(tablename)
 

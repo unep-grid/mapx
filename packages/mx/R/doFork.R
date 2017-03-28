@@ -12,8 +12,6 @@
 #' @export
 doFork <- function(expr, export=NULL,onFeedback=NULL, onMessage=NULL, onTimeout=NULL, refreshRateSeconds= 1, maxTimeSeconds = Inf ){
   
-  stopifnot(require(parallel))
-
   #
   # export function
   #

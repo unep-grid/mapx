@@ -1045,7 +1045,6 @@ mxSetCookie <- function(
 #' Create WDI indicators list
 #' @export
 mxGetWdiIndicators <- function(){
-  require(WDI)
   wdiIndicators <- WDIsearch()[,'indicator']
   names(wdiIndicators) <- WDIsearch()[,'name']
   wdiIndicators

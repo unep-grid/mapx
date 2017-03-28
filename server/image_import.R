@@ -1,8 +1,6 @@
 
 
 observeEvent(input$imageUpload,{
-  library(base64)
-  library(digest)
 
   idUser <- reactUser$data$id
   dirWeb <- file.path("images",idUser)
