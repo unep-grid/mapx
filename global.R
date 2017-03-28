@@ -66,6 +66,8 @@ if( opt$libraryOk ){
 
 if( !isTRUE(opt$packagesOk) || !isTRUE(opt$libraryOk) ){
 
+  warning("Packges list or library path is not set, this could take a while")
+
   dir.create(
     path=opt$pathFull,
     recursive=TRUE,
