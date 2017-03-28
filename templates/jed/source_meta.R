@@ -151,7 +151,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
             title = d("textualKeywordTitle",lang=language,dict=dict),
             description = d("textualKeywordDesc",lang=language,dict=dict),
             properties = list(
-              words = list(
+               keys = list(
                 title = d("textualKeywordsTitle",lang=language,dict=dict),
                 type = "array",
                 format = "table",
@@ -184,7 +184,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
             description = d("langDesc",lang=language,dict=dict),
             options = list(collapsed = TRUE),
             properties = list(
-              languages = list(
+              codes = list(
                 type = "array",
                 title = d("langListTitle",lang=language,dict=dict),
                 description = d("langListDesc",lang=language,dict=dict),
@@ -459,7 +459,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
               )
             )
           ),
-        sources = list(
+        `source` = list(
           type = "object",
           options = list(collapsed = TRUE),
           title = d("originSourcesTitle",lang=language,dict=dict),

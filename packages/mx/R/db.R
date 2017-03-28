@@ -375,27 +375,41 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
 
     q <- sprintf("
       SELECT 
-        ST_AsGeoJSON(
-            ST_Extent(%1$s)
-      ) AS ext 
+      ST_AsGeoJSON(
+        ST_Extent(%1$s)
+        ) AS ext 
       FROM %2$s"
       , geomColumn
       , table
       )
 
-    res <- mxDbGetQuery(q)$ext %>%
-    fromJSON() %>%
-    `[[`("coordinates") %>%
-    as.list()
-    
-    return(
-      list(
-      "lng1" = res[[1]],
-      "lng2" = res[[3]],
-      "lat1" = res[[6]],
-      "lat2" = res[[7]]
-      )
-      )
+    #
+    # Extract coordinates from json
+    #
+    res <- .get(
+      jsonlite::fromJSON(
+        mxDbGetQuery(q)$ext,  
+        simplifyVector=F 
+        ),c("coordinates")
+      )[[1]]
+
+    #
+    # Geojson coordinate order is : longitude, latitude
+    #
+
+    if(is.null(res)){
+      out <- list()
+    }else{
+      out <- list(
+        "lng1" = res[[1]][[1]],
+        "lng2" = res[[3]][[1]],
+        "lat1" = res[[1]][[2]],
+        "lat2" = res[[3]][[2]]
+        )
+    }
+
+    return(out)
+
   }
 }
 
@@ -853,7 +867,7 @@ mxDbGetLayerCentroid<-function(table=NULL,geomColumn='geom'){
     , table
     )
 
-    res <- mxDbGetQuery(query)$t %>% fromJSON()
+    res <- mxDbGetQuery(query)$t %>% jsonlite::fromJSON()
 
     res <- as.list(res$coordinates)
     
@@ -938,7 +952,8 @@ mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,ar
 
   if(!is.null(gL) && typeof(gL) == "list"){
     gP <- tempfile(fileext=".GeoJSON")
-    write(jsonlite::toJSON(gL,auto_unbox=TRUE),gP)
+    gJ <- jsonlite::toJSON(gL,auto_unbox=T)
+    write(gJ,gP)
   }
 
   #
@@ -1645,9 +1660,9 @@ mxDbGetLayerGeomTypes <- function(table=NULL,geomColumn="geom"){
 #' Get column summary
 #' @param table {character} Layer name
 #' @param column {character} Variable name
-mxDbGetColumnSummary <- function(table,column,geomColumn="geom",geomType=NULL){
+mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NULL ){
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetColumnsNames(table)))
+  if(!tolower(column) %in% tolower(mxDbGetColumnsNames(table))) return(list())
 
   filter <- ""
 
@@ -1699,13 +1714,13 @@ mxDbGetColumnSummary <- function(table,column,geomColumn="geom",geomType=NULL){
         , filter
         )
  
-   out <- list()
+  out <- list()
   out$table <- mxDbGetQuery(qTable,stringAsFactors=T)
   out$numberOfRow <- mxDbGetQuery(qCountRows)$count
   out$numberOfNull <- mxDbGetQuery(qCountNull)$count 
   out$numberOfDistinct <- mxDbGetQuery(qCountDistinct)$count
   out$type <- ifelse(is.numeric(out$table$values),"number","string")
-  
+
  return(out)
 
 }
@@ -1812,7 +1827,13 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL,geomType=NULL,language=
     geomType = mxDbGetLayerGeomTypes(layer)[1,"geom_type"]
   }
 
-  summary  <- mxDbGetColumnSummary(layer,variable,"geom",geomType)
+  summary  <- mxDbGetColumnSummary(
+    table = layer,
+    column = variable,
+    geomColumn = "geom",
+    geomType = geomType
+    )
+
   summary$timeVariables <- mxDbGetLayerTimeVariables(layer)
   summary$timeExtent <- mxDbGetLayerTimeExtent(layer)
   summary$timeDensity <- mxDbGetLayerTimeDensity(layer)

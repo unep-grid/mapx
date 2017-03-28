@@ -23,7 +23,7 @@ registerInputHandler("mx.jsonchunk", function(chunk,session,name){
       browser()
       stop(attributes(valid)$err)
     }
-    return(fromJSON(data,simplifyVector=FALSE))
+    return(jsonlite::fromJSON(data,simplifyVector=FALSE))
   }else{
     return(NULL)
   }

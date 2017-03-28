@@ -146,8 +146,6 @@ config[["map"]] <- list(
     )
   )
 
-  #styles = fromJSON(file.path(config[[c("resources","styles")]],"mapx.json"),simplifyDataFrame=F,simplifyVector=F),
-
 # config map sources
 #config[["map"]][["sources"]] = list()
 

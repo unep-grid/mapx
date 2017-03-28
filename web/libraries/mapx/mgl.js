@@ -1163,7 +1163,7 @@ mgl.helper.removeView = function(o){
   var views = m.views;
   var view = views.filter(function(x){
     return x.id == o.idView ;
-  });
+  })[0];
 
   if( view.type == "gj" ){
    var data =  mgl.data.geojson ;

@@ -1440,7 +1440,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       )
    
   }else{
-    isNumeric <- sourceData[["type"]] == "number"
+    
+    isNumeric <- isTRUE(sourceData[["type"]] == "number")
     # set data type choic      
     if( isNumeric ){
       dataDrivenChoice <- list("categorical","exponential","interval")

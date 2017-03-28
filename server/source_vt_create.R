@@ -85,10 +85,12 @@ observeEvent(input$sourceNew_init,{
   # If there is no doubt
   #
   if(isDuplicated){
-    startVal <- mxDbGetQuery(sprintf("SELECT data#>'{\"meta\"}' from %1$s WHERE id='%2$s'",
+    startVal <- jsonlite::fromJSON(mxDbGetQuery(      
+      sprintf("SELECT data#>'{\"meta\"}' meta from %1$s WHERE id='%2$s'",
       .get(config,c("pg","tables","sources")),
       duplicateOf[[1]]
-      ))$data
+      )
+      )$meta)
   }
 
   jedSchema(
@@ -96,7 +98,7 @@ observeEvent(input$sourceNew_init,{
     schema = mxSchemaSourceMeta(
       language = language,
       rolesTarget = rolesTarget,
-      defaults = reactData$viewSourceGeojson
+      defaults = view
       ),
     startVal = startVal,
     options = list("no_additional_properties"=FALSE)
@@ -157,8 +159,6 @@ observeEvent(input$btnSaveNewSource,{
       splitSep="_",
       sep = "_"
       )
-
-    
 
     #
     # Create new row
@@ -358,7 +358,10 @@ observeEvent(input$btnOptionalViewCreate,{
     variable = selectedAttribute
     )
 
-  newView <- mxUpdateDefViewVt(newView, sourceSummary$list)
+  newView <- mxUpdateDefViewVt(
+    view = newView, 
+    sourceData = sourceSummary$list
+    )
 
   #
   # Add the view to the db
@@ -369,7 +372,6 @@ observeEvent(input$btnOptionalViewCreate,{
     )
 
   newView$`_edit` = TRUE 
-
 
   mglSetSourcesFromViews(
     id = .get(config,c("map","id")),
