@@ -376,7 +376,6 @@ observe({
     hasInfo <- !noDataCheck(userInfo)
     hasCountry <- !noDataCheck(cntry)   
 
-
     isolate({
 
 

@@ -7,7 +7,7 @@ observe({
 
   country_ui <- input$selectCountry
   
-  country_db <- .get(reactUser$data,c("data","user","cache","last_country"))
+  country_db <- .get(reactUser$data,c("data","user","cache","last_project"))
 
   isolate({
 
@@ -66,7 +66,7 @@ observe({
 
     # update reactive value and db if needed
     mxDbUpdateUserData(reactUser,
-      path = c("user","cache","last_country"),
+      path = c("user","cache","last_project"),
       value = country
       )
 
