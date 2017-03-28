@@ -14,7 +14,7 @@ observeEvent(input$uploadGeojson,{
 
   view  <- input$uploadGeojson
   gj <- .get(view,c("data","source","data"))
-  md5 <- digest(toJSON(gj),serialize=F) 
+  md5 <- digest::digest(toJSON(gj),serialize=F) 
   view <- .set(view,c("data","source","md5"),md5)
 
   #
