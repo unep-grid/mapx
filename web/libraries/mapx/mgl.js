@@ -3191,7 +3191,7 @@ mgl.helper.initMap = function(o){
   }
 
   if (!o.location){
-    o.location = window.location.href;
+    o.location = window.location.origin + window.location.pathname;
   }
 
   // set path using current location. 
