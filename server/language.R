@@ -3,7 +3,7 @@
 # Define language.
 #
 observe({
-  lang_def <- config[["languages"]][["default"]][["first"]]
+  lang_def <- .get(config,c("languages","list"))[[1]]
   lang_ui <- input$selectLanguage
   lang_db <- reactUser$data[["data"]][["user"]][["cache"]][["last_language"]]
 
@@ -33,7 +33,6 @@ observe({
 observeEvent(reactData$language,{
 
   language <- reactData$language
-  country  <- reactData$country
   # update reactive value and db if needed
   mxDbUpdateUserData(reactUser,
     path = c("user","cache","last_language"),
@@ -54,7 +53,7 @@ observe({
   hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[["map"]][["id"]]) ]])
   hasLang <- !noDataCheck(language)
 
-  if(hasMap && hasLang){
+  if( hasMap && hasLang ){
 
     # subset dictionary for default and choosen language
     val <- d(lang=language)
