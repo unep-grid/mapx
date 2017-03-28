@@ -44,31 +44,32 @@ if( opt$libraryOk ){
   .libPaths( opt$libPaths )
 
   # dependencies
-  opt$packagesOk <- all(c(
-      require(shiny),
-      require(RPostgreSQL),
-      require(roxygen2),
-      require(memoise),
-      require(jsonlite),
-      require(devtools),
-      require(rio),
-      require(magrittr),
-      library(digest),
-      require(base64),
-      require(infuser),
-      require(WDI),
-      require(rgdal),
-      require(parallel),
-      library(rgeos)
-      ))
+  opt$packagesOk <- all(
+      c(
+        require(shiny),
+        require(RPostgreSQL),
+        require(roxygen2),
+        require(memoise),
+        require(jsonlite),
+        require(devtools),
+        require(rio),
+        require(magrittr),
+        require(digest),
+        require(base64),
+        require(infuser),
+        require(WDI),
+        require(rgdal),
+        require(parallel)
+        )
+      )
 }
 
-if( !opt$packagesOk || !opt$libraryOk ){
+if( !isTRUE(opt$packagesOk) || !isTRUE(opt$libraryOk) ){
 
   dir.create(
     path=opt$pathFull,
-    recursive=T,
-    showWarnings=F
+    recursive=TRUE,
+    showWarnings=FALSE
     )
 
   checkpoint(
