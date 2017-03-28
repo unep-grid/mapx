@@ -43,8 +43,8 @@ require(infuser)
 
 if( !packagesOk || !libraryOk ){
 checkpoint(
-  snapshotDate = checkPointOptions$date,
-  checkpointLocation = checkPointOptions$pathBase,
+  snapshotDate = opt$date,
+  checkpointLocation = opt$pathBase,
   scanForPackages = TRUE
   )
 }
