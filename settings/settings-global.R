@@ -320,8 +320,8 @@ config[[c("users","data")]] <- list()
 config[[c("users","data","public")]] <- list(
   user = list(
     cache = list (
-      last_country = config[["countries"]][['default']][['first']],
-      last_language = config[["language"]][['default']][['first']],
+      last_project = config[["countries"]][['default']][['first']],
+      last_language = config[["languages"]][["list"]][[1]],
       last_story_map = c()
       )
     ),
@@ -340,7 +340,7 @@ config[["users"]][["data"]][["superUser"]]  <- list(
   user = list(
     cache = list (
       last_country = config[["countries"]][['default']][['first']], 
-      last_language = config[["language"]][['default']][['first']],
+      last_language = config[["languages"]][["list"]][[1]],
       last_story_map = c()
       )
     ),

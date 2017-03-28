@@ -14,7 +14,7 @@ observe({
   dat <- reactUser$data
 
   language <- .get(dat,c("data","user","cache","last_language"))
-  country <- .get(dat,c("data","user","cache","last_country"))
+  country <- .get(dat,c("data","user","cache","last_project"))
 
   if(noDataCheck(language)){
     language <- .get(config,c("languages","default","first"))

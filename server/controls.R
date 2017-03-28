@@ -64,9 +64,6 @@ observeEvent(input$btn_control,{
         names(countries) <- d(countries,language)
       }
 
-     mxDebugToJs(countries)
-     mxDebugToJs(country)
-
       ui <- mxPanel(
         id="uiSelectCountry",
         title=tags$span(icon("globe"),style="font-size:100px"),
