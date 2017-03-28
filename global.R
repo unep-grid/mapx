@@ -4,23 +4,26 @@
 
 library(checkpoint)
 
-checkPointOptions <- list(
+opt <- list(
   pathFull = normalizePath("~/.mapx/.checkpoint",mustWork=F),
   pathBase =  normalizePath("~/.mapx/",mustWork=F),
-  date = "2016-11-30" 
+  date = "2016-11-30",
+  version = paste(R.version$major,R.version$minor,sep="."),
+  platform = R.version$platform
   )
 
-dir.create(
-  path = checkPointOptions$pathFull,
-  showWarnings = F,
-  recursive = T
+opt$libPaths = c(
+  file.path(opt$pathFull,opt$date,"lib",opt$platform,opt$version),
+  file.path(opt$pathFull,paste0("R-",opt$version))
   )
 
-checkpoint(
-  snapshotDate = checkPointOptions$date,
-  checkpointLocation = checkPointOptions$pathBase,
-  scanForPackages = FALSE
-  )
+
+libraryOk = all(sapply(opt$libPaths,dir.exists))
+
+if(libraryOk){
+  .libPaths(opt$libPaths)
+}
+
 
 # dependencies
 packagesOk <- all(c(
@@ -38,15 +41,13 @@ require(base64),
 require(infuser)
 ))
 
-
-if(!packagesOk){
+if( !packagesOk || !libraryOk ){
 checkpoint(
   snapshotDate = checkPointOptions$date,
   checkpointLocation = checkPointOptions$pathBase,
   scanForPackages = TRUE
   )
 }
-
 
 
 # load local packages
