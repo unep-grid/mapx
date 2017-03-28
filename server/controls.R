@@ -56,7 +56,7 @@ observeEvent(input$btn_control,{
               )
             })
 
-      countries <- viewsCount$country
+      countries <- as.list(viewsCount$country)
 
       if( length(labels) == length(countries) ){      
         names(countries) <- labels
@@ -64,7 +64,7 @@ observeEvent(input$btn_control,{
         names(countries) <- d(countries,language)
       }
 
-     mxDebugToJs(as.list(countries))
+     mxDebugToJs(countries)
      mxDebugToJs(country)
 
       ui <- mxPanel(
