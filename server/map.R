@@ -29,13 +29,13 @@ observe({
   countryData <- countryData[countryData$iso3 == country,][1,]
 
 
-    d <- session$clientData
+  d <- session$clientData
 
-    vtBaseUrl <- sprintf("%1$s//%2$s:%3$s/tile/{z}/{x}/{y}.mvt",
-      d$url_protocol,
-      d$url_hostname,
-      .get(config,c("vt","port"))
-      )
+  vtBaseUrl <- sprintf("%1$s//%2$s:%3$s/tile/{z}/{x}/{y}.mvt",
+    d$url_protocol,
+    d$url_hostname,
+    .get(config,c("vt","port"))
+    )
 
   mapConfig<- list(
     # Default from user

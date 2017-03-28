@@ -47,7 +47,7 @@ mgl.settings = {};
 mgl.settings.separators = {};
 mgl.settings.separators.sublayer = "_@_";
 mgl.settings.country="";
-mgl.settings.vtUrl= "http://localhost:3030/tile/{z}/{x}/{y}.mvt"
+mgl.settings.vtUrl= "http://localhost:3030/tile/{z}/{x}/{y}.mvt";
 /**
 * Data unrelated to specific map
 */
@@ -1163,9 +1163,9 @@ mgl.helper.removeView = function(o){
   var views = m.views;
   var view = views.filter(function(x){
     return x.id == o.idView ;
-  })
+  });
 
-  if(view.type="gj"){
+  if( view.type == "gj" ){
    var data =  mgl.data.geojson ;
     data.removeItem( o.idView );
   }
@@ -1184,7 +1184,7 @@ mgl.helper.removeView = function(o){
   }
 
   list.reIndex();
-}
+};
 
 /**
 * Handle view click events
@@ -1219,7 +1219,7 @@ mgl.helper.handleViewClick = function(o){
           mgl.helper.removeView({
             id : o.id,
             idView : arg.view_action_target
-          })
+          });
 
         }
       },
@@ -1341,9 +1341,9 @@ mgl.helper.handleViewClick = function(o){
             }
           }
 
-          viewValues.push("")
+          viewValues.push("");
 
-          console.log(viewValues.join("|"))
+          console.log(viewValues.join("|"));
 
           mgl.helper.filterViewValues({
             id : o.id,
@@ -3191,7 +3191,7 @@ mgl.helper.initMap = function(o){
   }
 
   if (!o.location){
-    o.location = window.location.origin + "/";
+    o.location = window.location.href;
   }
 
   // set path using current location. 
