@@ -42,6 +42,9 @@ require(infuser)
 ))
 
 if( !packagesOk || !libraryOk ){
+
+dir.create(opt$pathFull,recursive=T,showWarnings=F)
+
 checkpoint(
   snapshotDate = opt$date,
   checkpointLocation = opt$pathBase,
