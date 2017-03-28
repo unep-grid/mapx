@@ -4,52 +4,78 @@
 
 library(checkpoint)
 
+#
+# Option list for packge provisionning
+#
 opt <- list(
+  # Path to the checkpoint installation
   pathFull = normalizePath("~/.mapx/.checkpoint",mustWork=F),
   pathBase =  normalizePath("~/.mapx/",mustWork=F),
+  # Date of the CRAN checkpoint
   date = "2016-11-30",
+  # Version of R used. 
   version = paste(R.version$major,R.version$minor,sep="."),
-  platform = R.version$platform
+  platform = R.version$platform,
+  packageOk = FALSE,
+  libraryOk = FALSE
   )
 
 opt$libPaths = c(
-  file.path(opt$pathFull,opt$date,"lib",opt$platform,opt$version),
-  file.path(opt$pathFull,paste0("R-",opt$version))
+  file.path(
+    opt$pathFull,opt$date,
+    "lib",
+    opt$platform,
+    opt$version
+    ),
+  file.path(
+    opt$pathFull,
+    paste0("R-",opt$version)
+    )
   )
 
+opt$libraryOk = all(
+  sapply(
+    opt$libPaths,
+    dir.exists
+    )
+  )
 
-libraryOk = all(sapply(opt$libPaths,dir.exists))
+if( opt$libraryOk ){
+  .libPaths( opt$libPaths )
 
-if(libraryOk){
-  .libPaths(opt$libPaths)
+  # dependencies
+  opt$packagesOk <- all(c(
+      require(shiny),
+      require(RPostgreSQL),
+      require(roxygen2),
+      require(memoise),
+      require(jsonlite),
+      require(devtools),
+      require(rio),
+      require(magrittr),
+      library(digest),
+      require(base64),
+      require(infuser),
+      require(WDI),
+      require(rgdal),
+      require(parallel),
+      library(rgeos)
+      ))
 }
 
+if( !opt$packagesOk || !opt$libraryOk ){
 
-# dependencies
-packagesOk <- all(c(
-require(roxygen2),
-require(memoise),
-require(shiny),
-require(jsonlite),
-require(devtools),
-require(Rcpp),
-require(rio),
-require(xml2),
-require(RPostgreSQL),
-require(magrittr),
-require(base64),
-require(infuser)
-))
+  dir.create(
+    path=opt$pathFull,
+    recursive=T,
+    showWarnings=F
+    )
 
-if( !packagesOk || !libraryOk ){
-
-dir.create(opt$pathFull,recursive=T,showWarnings=F)
-
-checkpoint(
-  snapshotDate = opt$date,
-  checkpointLocation = opt$pathBase,
-  scanForPackages = TRUE
-  )
+  checkpoint(
+    snapshotDate = opt$date,
+    checkpointLocation = opt$pathBase,
+    scanForPackages = TRUE
+    )
 }
 
 
