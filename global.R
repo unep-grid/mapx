@@ -54,7 +54,6 @@ if( opt$libraryOk ){
         require(devtools),
         require(rio),
         require(magrittr),
-        require(digest),
         require(base64),
         require(infuser),
         require(WDI),
