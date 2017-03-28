@@ -65,8 +65,7 @@ observeEvent(input$btn_control,{
       }
 
 
-      mxDebugToJs(countries)
-      mxDebugToJs(labels)
+      mxDebugToJs(str(countries))
 
 
       ui <- mxPanel(
