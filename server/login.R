@@ -285,7 +285,7 @@ observeEvent(reactData$loginRequested,{
 
     timeStamp <- mxTimer("start",sprintf("Login process: logic done for %s in",email))
 
-    console.log(email)
+    mxDebugToJs(email)
 
     # Last email validation
     if(!mxEmailIsValid(email)) stop(sprintf("Invalid email: %s",email))
