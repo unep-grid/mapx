@@ -168,7 +168,7 @@ observeEvent(input$btnSendLoginKey,{
         body <- tagList(
           tags$span("Here is your one time password. It's valid during 20 minutes. Copy and paste it in the Map-x window"),
           tags$br(),
-          tags$span("Voici votre mot de passe à usage unique. Il est valable 20 minutes. Copiez-le dans la fenêtre Map-X")
+          tags$span("Voici votre mot de passe à usage unique. Il est valable 20 minutes. Copiez-le dans la fenêtre Map-X"),
           tags$br(),
           tags$span(reactData$loginSecret)
           )
