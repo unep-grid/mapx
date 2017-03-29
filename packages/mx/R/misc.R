@@ -504,26 +504,6 @@ mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(
 }
 
 
-#' mxHtmlMailTemplate 
-#' 
-mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
-
-
-  if(is.null(title)) title = "mapx"
-  if(is.null(subject)) subject = title
-  if(is.null(content)) return("")
-
-  template <- .get(config,c("templates","email","simple"))
-  template <- gsub("\\{\\{content\\}\\}",content,template)
-  template <- gsub("\\{\\{subject\\}\\}",subject,template)
-  template <- gsub("\\{\\{title\\}\\}",title,template)
-  
-  return(template)
-
-}
-
-
-
 
 
 
@@ -1207,28 +1187,40 @@ mxSendJson <- function(pathToJson,objName,session=getDefaultReactiveDomain()){
 
 
 
+#' mxHtmlMailTemplate 
+#' 
+mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
+
+
+  if(is.null(title)) title = "mapx"
+  if(is.null(subject)) subject = title
+  if(is.null(content)) return("")
+
+  template <- .get(config,c("templates","email","simple"))
+  template <- gsub("\\{\\{content\\}\\}",content,template)
+  template <- gsub("\\{\\{subject\\}\\}",subject,template)
+  template <- gsub("\\{\\{title\\}\\}",title,template)
+  
+  return(template)
+
+}
+
+
+
 #' Send an email using local or remote 'mail' command
 #' @param from String. Valid email for  sender
 #' @param to String. Valid email for Recipient
 #' @param body String. Text of the body
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
+mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
 
-  conf <- mxGetDefaultConfig()
 
   isLocal = Sys.info()[["user"]] != "shiny"
   
   if(is.null(from)){
-    from <- .get(conf,c("mail","bot"))
+    from <- .get(config,c("mail","bot"))
   }
-
-  stopifnot(
-    mxEmailIsValid(from),
-    mxEmailIsValid(to),
-    is.character(body),
-    is.character(subject)
-    )
 
   if(!all(
       c(mxEmailIsValid(from),
@@ -1242,7 +1234,13 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
 
   tempFile <- tempfile()
 
-  write(sprintf(
+  body <- mxHtmlMailTemplate(
+    title = subject, 
+    subject = subject,
+    content = body 
+    )
+
+  mailToSend = sprintf(
     paste("From: %1$s",
     "To: %2$s",
     "Subject: %3$s",
@@ -1254,8 +1252,9 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
     , to
     , subject
     , body
-    ),tempFile)
-
+    )
+  
+  write(mailToSend,tempFile)
 
   if( isLocal ){
     mxDebug(mailToSend)
