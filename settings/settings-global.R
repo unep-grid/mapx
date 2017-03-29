@@ -183,6 +183,11 @@ config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/do
 config[[c("templates","dot","viewPopup")]] <- as.character(mxSource("templates/dot/view_popup.R"))
 config[[c("templates","dot","viewStory")]] <- as.character(mxSource("templates/dot/view_story.R"))
 
+
+config[[c("templates","email")]] <-  list()
+config[[c("templates","email","simple")]] <- paste(readLines("templates/html/email_simple.html"),collapse="\n")
+
+
 #
 # default languages
 #

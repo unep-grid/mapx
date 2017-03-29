@@ -506,44 +506,22 @@ mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(
 
 #' mxHtmlMailTemplate 
 #' 
-mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
+mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 
 
-  if(is.null(title)) title="mapx"
+  if(is.null(title)) title = "mapx"
+  if(is.null(subject)) subject = title
   if(is.null(content)) return("")
 
-  docType <- '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
-
-  out <- tags$html(xmlns="http://www.w3.org/1999/xhtml",
-    tags$head(
-      tags$meta(`http-equiv`="Content-Type", content="text/html; charset=utf-8"),
-      tags$title( title ),
-      tags$style(
-        type = "text/css",
-        paste(
-          "body {margin: 0; padding: 0; min-width: 100%!important;}",
-          ".content {width: 100%; max-width: 600px;}"
-          )
-        )
-      ),
-    tags$body(bgcolor="#fff",
-      tags$table(width="100%", bgcolor="#f6f8f1",border="0",cellpadding="0",cellspacing="0",
-        tags$tr(
-          tags$td(
-            tags$table( class="content", align="center", cellpadding="0", cellspacing="0", border="0",
-              tags$tr(
-                tags$td( as.character(content) )
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-
-  return( paste(docType,out))
+  template <- .get(config,c("templates","email","simple"))
+  template <- gsub("\\{\\{content\\}\\}",content,template)
+  template <- gsub("\\{\\{subject\\}\\}",subject,template)
+  template <- gsub("\\{\\{title\\}\\}",title,template)
+  
+  return(template)
 
 }
+
 
 
 
