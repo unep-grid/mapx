@@ -1267,7 +1267,8 @@ mxSendMail <- function(cdata=NULL,from=NULL,to=NULL,body="",subject="",wait=FALS
     )
  
   if( isLocal ){
-     mxDebugToJs(mailToSend)
+  mxDebugToJs(body)
+  mxDebugToJs(cdata)
   }else{
     mxDebugToJs(mailToSend)
     system(mailToSend,wait=wait)
