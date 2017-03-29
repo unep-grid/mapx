@@ -29,8 +29,7 @@ observe({
 
         viewData <- views[ sapply(views,function(x){
           x[["id"]] == viewId && isTRUE(x[["_edit"]])
-}) ][[1]]
-
+        }) ][[1]]
 
 
         if(noDataCheck(viewData)) return()
@@ -426,6 +425,7 @@ observeEvent(input$styleEdit_init,{
 
   }else{
 
+
     schema <- mxSchemaViewStyle(
       view=view,
       language=language
@@ -531,6 +531,7 @@ observeEvent(input$btnViewUpdate,{
     #
     # Update view data 
     #
+    
     view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask)
   }
   #
@@ -564,6 +565,7 @@ observeEvent(input$btnViewUpdate,{
   #
   # save a version in db
   #
+
   mxDbAddRow(
     data=view,
     table=.get(config,c("pg","tables","views"))
@@ -614,6 +616,7 @@ observeEvent(input$styleEdit_values,{
 observeEvent(input$btnViewUpdateStyle,{
 
   view <- reactData$viewDataEdited
+  country <- reactData$country
 
   if( view[["_edit"]] && view[["type"]] == "vt" ){
     view[["_edit"]] = NULL
@@ -622,18 +625,35 @@ observeEvent(input$btnViewUpdateStyle,{
 
     if(!noDataCheck(style)){
 
-      view[["date_modified"]] <- Sys.time()
-      view[["target"]] <- as.list(view$target)
-      view[[c("data","style","dataDrivenMethod")]] <- style$dataDrivenMethod 
-      view[[c("data","style","rules")]] <- style$rules
-      view[["data"]] <- as.list(view$data)
+      view <- .set(view, c("date_modified"), Sys.time() )
+      view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+      view <- .set(view, c("data", "style", "dataDrivenMethod"), .get(style,c("dataDrivenMethod")))
+      view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
+      view <- .set(view,c("data"), as.list(.get(view,"data")))
 
       mxDbAddRow(
         data=view,
-        table=config[[c("pg","tables","views")]]
+        table=.get(config,c("pg","tables","views"))
         )
 
-      reactData$updateViewList <- runif(1)
+      #
+      # Trigger update
+      #
+      mglRemoveView(
+        idView=view$id
+        )
+
+      # edit flag
+      view$`_edit` = TRUE 
+
+      # add this as new (empty) source
+      mglSetSourcesFromViews(
+        id = .get(config,c("map","id")),
+        viewsList = view,
+        render = FALSE,
+        country = country
+        )
+      reactData$updateViewListFetchOnly <- runif(1)
     }
   }
 })

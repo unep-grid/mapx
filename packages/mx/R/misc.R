@@ -1455,71 +1455,68 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
   # update meta data
   #
 
-  def <- sourceData
-  defMask <- sourceDataMask
-
-  def <- .get(view,c("data"))
+  viewData <- .get(view,c("data"))
   meta <- mxDbGetLayerMeta(.get(sourceData,c("layerName")))
 
-  def[["geometry"]] <- list(
-     type = sourceData[["geomType"]],
-     centroid = sourceData[["centroid"]],
-     extent = sourceData[["extent"]]
-    )
-
-  def[["attribute"]] <- list(
-     name = sourceData[["variableName"]],
-     type = sourceData[["type"]],
-     table = sourceData[["table"]],
-     sample = sourceData[["sampleData"]],
-     numberRow = sourceData[["numberOfRow"]],
-     numberNull =  sourceData[["numberOfNull"]],
-     numberDistinct = sourceData[["numberOfDistinct"]]
-    )
-  
-  def[[c("period")]] <- list(
-    extent = sourceData[["timeExtent"]],
-    density = sourceData[["timeDensty"]], 
-    variables = sourceData[["timeVariables"]]
-    )
+  viewData <- .set(viewData,c("geometry"),list(
+      type = .get(sourceData,c("geomType")),
+      centroid = .get(sourceData,c("centroid")),
+      extent = .get(sourceData,c("extent"))
+      ))
 
 
- attrib <- .get(meta,c("oigin","homepage","url"))
- if(noDataCheck(attrib)) attrib = "https://mapx.og"
+  viewData <- .set(viewData,c("attribute"),list(
+      name = .get(sourceData,c("variableName")),
+      type = .get(sourceData,c("type")),
+      table = .get(sourceData,c("table")),
+      sample = .get(sourceData,c("sampleData")),
+      numberRow = .get(sourceData,c("numberOfRow")),
+      numberNull =  .get(sourceData,c("numberOfNull")),
+      numberDistinct = .get(sourceData,c("numberOfDistinct"))
+      ))
 
-  def[["source"]] <- list(
-    type = "vector",
-    attribution = paste0("<a href='",attrib,"'>"),
-    query = mxViewMakeQuery( sourceData, sourceDataMask, view[["id"]] ),
-    layerInfo = list(
-      name =  sourceData[["layerName"]],
-      maskName = sourceDataMask[["layerMaskName"]],
-      meta = sourceData[["layerMeta"]] 
-      )
-    )
+  viewData <- .set(viewData,c("period"),list(
+      extent = .get(sourceData,c("timeExtent")),
+      density = .get(sourceData,c("timeDensty")), 
+      variables = .get(sourceData,c("timeVariables"))
+      ))
+
+  viewData <- .set(viewData,c("source"),list(
+      type = "vector",
+      attribution = as.character(tags$a(href=.get(meta,c("oigin","homepage","url")))),
+      query = mxViewMakeQuery(sourceData, sourceDataMask, .get(view,c("id"))),
+      layerInfo = list(
+        name =  .get(sourceData,c("layerName")),
+        maskName = .get(sourceDataMask,c("layerMaskName")),
+        meta = .get(sourceData,c("layerMeta"))
+        )      
+      ))
+
 
   #
   #set style default
   #
-  geomType <- sourceData[["geomType"]]
-  hasStyle <- !noDataCheck(def[[c("style")]])
-  
-  if( !hasStyle ){
+  geomType <- .get(sourceData,c("geomType"))
+  style <- .get(viewData,c("style"))
+
+  if(noDataCheck(style)){
     def[["style"]] =  list()
   }
 
   #for now, data driven style for lines is not working
   if( geomType == "lines" ){
 
-    def[["style"]] <- list(
-      "spriteEnable" = FALSE,
-      "dataDrivenEbable" = FALSE,
-      "dataDrivenChoices" = "none"
-      )
-   
+    viewData <- .set(viewData,c("style"),list(
+       spriteEnable = FALSE,
+      dataDrivenEnable = FALSE,
+      dataDrivenChoice = "none",
+      rules = .get(viewData,c("style","rules")),
+      dataDrivenMethod = .get(viewData,c("style","dataDrivenMethod"))
+        ))
+
   }else{
-    
-    isNumeric <- isTRUE(sourceData[["type"]] == "number")
+
+    isNumeric <- isTRUE(.get(sourceData,c("type")) == "number")
     # set data type choic      
     if( isNumeric ){
       dataDrivenChoice <- list("categorical","exponential","interval")
@@ -1527,16 +1524,18 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       dataDrivenChoice <- list("categorical")
     }
 
-    def[["style"]] <- list(
-      "spriteEnable" = TRUE,
-      "dataDrivenEnable" = TRUE,
-      "dataDrivenChoices" = dataDrivenChoice
-      )
-   
+    viewData <- .set(viewData,c("style"),list(
+      rules = .get(viewData,c("style","rules")),
+      dataDrivenMethod = .get(viewData,c("style","dataDrivenMethod")),
+      spriteEnable = TRUE,
+      dataDrivenEnable = TRUE,
+      dataDrivenChoice = dataDrivenChoice
+      ))
+
   }
 
+  view <- .set(view,c("data"),viewData)
 
-  view[["data"]] <- def
 
   return(view)
 
