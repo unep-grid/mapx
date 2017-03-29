@@ -546,11 +546,13 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
 
 
 
-mxCatchHandler <- function(cdata=NULL,type="error",message="",session=shiny::getDefaultReactiveDomain()){
+mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
 
-  if(!exists("cdata")) stop("cdata (client data from session$client data) should be set at the begining of the sesssion")
+  isLocal = Sys.info()[["user"]] != "shiny"
 
-  isLocal <- cdata$hostname == "localhost"
+  if(!exists("cdata")){
+    cdata = list()
+  }
 
   errorSummary <- list(
     type = type,
@@ -558,7 +560,6 @@ mxCatchHandler <- function(cdata=NULL,type="error",message="",session=shiny::get
     date = Sys.time(),
     cdata = cdata
     )
-
 
   if(type == "error"){
   #
@@ -586,10 +587,9 @@ mxCatchHandler <- function(cdata=NULL,type="error",message="",session=shiny::get
     #
     # else send an email
     #
-    title =  paste("[ mx-issue-",type," ]", cdata$hostname)
+    title =  paste("[ mx-issue-",type," ]")
 
     mxSendMail(
-      cdata = cdata,
       from = .get(config,c("mail","bot"),
         to = .get(config,c("mail","admin")),
         subject = title,
@@ -1232,11 +1232,11 @@ mxSendJson <- function(pathToJson,objName,session=getDefaultReactiveDomain()){
 #' @param body String. Text of the body
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function(cdata=NULL,from=NULL,to=NULL,body="",subject="",wait=FALSE){
+mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
 
   conf <- mxGetDefaultConfig()
 
-  isLocal = cdata$hostname == "localhost"
+  isLocal = Sys.info()[["user"]] != "shiny"
   
   if(is.null(from)){
     from <- .get(conf,c("mail","bot"))
@@ -1268,7 +1268,6 @@ mxSendMail <- function(cdata=NULL,from=NULL,to=NULL,body="",subject="",wait=FALS
  
   if( isLocal ){
   mxDebugToJs(body)
-  mxDebugToJs(cdata)
   }else{
     mxDebugToJs(mailToSend)
     system(mailToSend,wait=wait)

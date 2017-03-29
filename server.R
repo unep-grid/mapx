@@ -4,21 +4,7 @@ options(shiny.reactlog=FALSE)
 #
 server <- function(input,output,session){
 
-  #
-  # cdata : non reactive list of client data 
-  # for use outside reactive context
-  #
-
-
   observeEvent(input$cookies,{
-
-    cdata <- list(
-      protocol = session$clientData$url_protocol,
-      hostname = session$clientData$url_hostname,
-      pathname = session$clientData$url_pathname,
-      port = session$clientData$url_port,
-      search = session$clientData$url_search
-      )
 
     #
     # Context specific reactive values

@@ -32,6 +32,15 @@ observe({
     # Construct vt base url a service running 
     # on the same location as the current app
     #
+
+    cdata <- list(
+      protocol = session$clientData$url_protocol,
+      hostname = session$clientData$url_hostname,
+      pathname = session$clientData$url_pathname,
+      port = session$clientData$url_port,
+      search = session$clientData$url_search
+      )
+
     vtBaseUrl <- sprintf("%1$s//%2$s%3$s/tile/{z}/{x}/{y}.mvt",
       cdata$protocol,
       cdata$hostname,
