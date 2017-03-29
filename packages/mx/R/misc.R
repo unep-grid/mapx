@@ -511,10 +511,10 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
 
   if(is.null(title)) title="mapx"
   if(is.null(content)) return("")
- 
-  docType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
 
-  tags$html(xmlns="http://www.w3.org/1999/xhtml",
+  docType <- '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+
+  out <- tags$html(xmlns="http://www.w3.org/1999/xhtml",
     tags$head(
       tags$meta(`http-equiv`="Content-Type", content="text/html; charset=utf-8"),
       tags$title( title ),
@@ -532,7 +532,7 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
           tags$td(
             tags$table( class="content", align="center", cellpadding="0", cellspacing="0", border="0",
               tags$tr(
-                tags$td( HTML(content ) )
+                tags$td( as.character(content) )
                 )
               )
             )
@@ -540,6 +540,9 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
         )
       )
     )
+
+  return( paste(docType,out))
+
 }
 
 
@@ -1259,7 +1262,13 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
       )
     )) stop("mxSendMail : bad input")
 
-  mailToSend <- sprintf("printf \"Subject:%1$s\nFrom: %2$s\n%3$s\n\" | /usr/sbin/sendmail %4$s",
+  mailToSend <- sprintf("printf \"
+    Subject:%1$s
+    From: %2$s
+    Content-Type: text/html
+    MIME-Version: 1.0
+    %3$s
+    \" | /usr/sbin/sendmail %4$s",
     subject,
     from,
     body,
