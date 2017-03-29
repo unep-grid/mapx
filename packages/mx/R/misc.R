@@ -547,6 +547,7 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
 
 
 mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
+
   if(!exists("cdata")) stop("cdata (client data from session$client data) should be set at the begining of the sesssion")
 
   isLocal <- cdata$hostname == "localhost"
@@ -556,7 +557,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
     message = message,
     date = Sys.time(),
     cdata = cdata
-    ) 
+    )
 
 
   if(type == "error"){
@@ -630,11 +631,14 @@ mxCatch <- function(
     emsg <- as.character(e$message)
     ecall <- as.character(e$call)
 
+    browser()
+
+
     mxCatchHandler(
       type = "error",
       message = list(
         message = emsg,
-        call = ecall,
+        call = as.character(ecall),
         syscall = head(tail(sys.calls(),11),1)[[1]]
         )
       )
@@ -1239,10 +1243,10 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
 
   conf <- mxGetDefaultConfig()
 
-  sendOverSsh <- conf[["system"]][["hostname"]] != conf[["system"]][["hostnameRemote"]]
+  isLocal = cdata$hostname == "localhost"
   
   if(is.null(from)){
-    from <- conf$mail$bot
+    from <- .get(conf,c("mail","bot"))
   }
 
   stopifnot(
@@ -1269,9 +1273,10 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
     to
     )
  
-  if( sendOverSsh ){
-    remoteCmd(mailToSend)
+  if( isLocal ){
+     mxDebugToJs(mailToSend)
   }else{
+    mxDebugToJs(mailToSend)
     system(mailToSend,wait=wait)
   }
 
