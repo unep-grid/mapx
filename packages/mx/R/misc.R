@@ -1262,13 +1262,7 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
       )
     )) stop("mxSendMail : bad input")
 
-  mailToSend <- sprintf("printf \"
-    Subject:%1$s
-    From: %2$s
-    Content-Type: text/html
-    MIME-Version: 1.0
-    %3$s
-    \" | /usr/sbin/sendmail %4$s",
+  mailToSend <- sprintf("printf \"Subject:%1$s\nFrom: %2$s\nContent-Type: text/html\nMIME-Version: 1.0\n%3$s\n\" | /usr/sbin/sendmail %4$s",
     subject,
     from,
     body,
