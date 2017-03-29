@@ -121,7 +121,7 @@ config[["dict"]] <- rbind(
 # vt configuration : updated live
 #
 config[["vt"]] <- list(
-  port = 3030,
+  port = ":3030",
   host = "localhost",
   protocol = "http:"
   )
@@ -296,10 +296,11 @@ config[[c("data","format")]] <- list(
 #
 config[["mail"]] =  list(
   "bot" = "bot@mapx.io",
-  "guest" = "guest@mapx.io"
+  "guest" = "guest@mapx.io",
+  "admin" = "moser.frederic@gmail.com"
   )
 
-#
+
 # default user value
 #
 config[["users"]] <- list(

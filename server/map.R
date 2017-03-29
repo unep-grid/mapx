@@ -28,32 +28,44 @@ observe({
 
   countryData <- countryData[countryData$iso3 == country,][1,]
 
-
-  d <- session$clientData
-
-  vtBaseUrl <- sprintf("%1$s//%2$s:%3$s/tile/{z}/{x}/{y}.mvt",
-    d$url_protocol,
-    d$url_hostname,
+  #
+  # Construct vt base url a service running 
+  # on the same location as the current app
+  #
+  vtBaseUrl <- sprintf("%1$s//%2$s%3$s/tile/{z}/{x}/{y}.mvt",
+    cdata$protocol,
+    cdata$hostname,
     .get(config,c("vt","port"))
     )
 
+  #
+  # Set map options
+  # 
   mapConfig<- list(
+    #
+    # Vector tile service : base url
+    #
+    vtUrl = vtBaseUrl,
+    #
     # Default from user
+    #
     language = language,
     lat = countryData$lat, 
     lng =  countryData$lng, 
     zoom =  countryData$zoom,
+    #
     # value from config
+    # 
     id = .get(config,c("map","id")), 
+    paths = .get(config,c("map","paths")),
     token = .get(config,c('map','token')),
     minZoom = .get(config,c("map","minZoom")),
     maxZoom = .get(config,c("map","maxZoom")),
-    paths = .get(config,c("map","paths")),
     languages = .get(config,c("languages","list")),
     countries =  .get(config,c("countries","table","iso3")),
-    # vt conf
-    vtUrl = vtBaseUrl,
-    # id of element for listener setting
+    #
+    # Elements : id of element for listener setting
+    #
     idViewsList = .get(config,c("map","idViewsList")),
     idViewsListContainer = .get(config,c("map","idViewsListContainer"))
     )

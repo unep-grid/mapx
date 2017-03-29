@@ -504,6 +504,106 @@ mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(
 }
 
 
+#' mxHtmlMailTemplate 
+#' 
+mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
+
+
+  if(is.null(title)) title="mapx"
+  if(is.null(content)) return("")
+ 
+  docType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'
+
+  tags$html(xmlns="http://www.w3.org/1999/xhtml",
+    tags$head(
+      tags$meta(`http-equiv`="Content-Type", content="text/html; charset=utf-8"),
+      tags$title( title ),
+      tags$style(
+        type = "text/css",
+        paste(
+          "body {margin: 0; padding: 0; min-width: 100%!important;}",
+          ".content {width: 100%; max-width: 600px;}"
+          )
+        )
+      ),
+    tags$body(bgcolor="#fff",
+      tags$table(width="100%", bgcolor="#f6f8f1",border="0",cellpadding="0",cellspacing="0",
+        tags$tr(
+          tags$td(
+            tags$table( class="content", align="center", cellpadding="0", cellspacing="0", border="0",
+              tags$tr(
+                tags$td( HTML(content ) )
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+}
+
+
+
+
+
+mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
+  if(!exists("cdata")) stop("cdata (client data from session$client data) should be set at the begining of the sesssion")
+
+  isLocal <- cdata$hostname == "localhost"
+
+  errorSummary <- list(
+    type = type,
+    message = message,
+    date = Sys.time(),
+    cdata = cdata
+    ) 
+
+
+  if(type == "error"){
+  #
+  # outut message
+  #
+  session$output$panelAlert <-renderUI({
+    mxPanelAlert(
+      "error",
+      title,
+      message=tagList(p("Something went wrong, sorry!"))
+      )
+  })
+  }
+
+
+  if( isLocal ){
+
+    #
+    # If is local, send to js console
+    #
+    mxDebugToJs(errorSummary)
+
+  }else{
+
+    #
+    # else send an email
+    #
+    title =  paste("[ mx-issue-",type," ]", cdata$hostname)
+
+    mxSendMail(
+      from = .get(config,c("mail","bot"),
+        to = .get(config,c("mail","admin")),
+        subject = title,
+        body =  mxHtmlMailTemplate(
+          title = title,
+          content =  listToHtmlClass(
+            errorSummary
+            )
+          )
+        )
+      )
+  }
+}
+
+
+
 
 #' Catch errors
 #'
@@ -518,71 +618,50 @@ mxCatch <- function(
   title,
   expression,
   session=shiny:::getDefaultReactiveDomain(),
-  debug=TRUE,
-  logToJs=TRUE,
-  panelId="panelAlert",...){
+  debug = TRUE,
+  logToJs = TRUE
+  ){
+  #
+  # try this and catch errors !
+  # 
   tryCatch({
     expression
   },error = function(e){
     emsg <- as.character(e$message)
     ecall <- as.character(e$call)
-    if(logToJs){
-      call = head(tail(sys.calls(),11),1)[[1]]
-      call = as.character(call)
-      mxDebugToJs(list(type="error",msg=emsg,call=ecall,context=call))
-    }else{
-      
 
-      
-      session$output[[panelId]]<-renderUI({
-        mxPanelAlert(
-          "error",
-          title,
-          message=tagList(p("Something went wrong, sorry!"))
-          )
-      })
-
-      msgLog <- paste(
-        emsg,
-        paste("(",paste(ecall,collapse=" "),")")
+    mxCatchHandler(
+      type = "error",
+      message = list(
+        message = emsg,
+        call = ecall,
+        syscall = head(tail(sys.calls(),11),1)[[1]]
         )
+      )
 
 
-
-    }
   },warning = function(e){
     emsg <- as.character(e$message)
     ecall <- as.character(e$call)
-    if(logToJs){
-      mxDebugToJs(list(type="warning",msg=emsg,call=ecall))
-    }else{
-      session$output[[panelId]]<-renderUI({
-        mxPanelAlert(
-          "warning",
-          title,
-          message=tagList(
-            p(emsg),
-            p(style="",paste("(",paste(ecall,collapse=" "),")"))
-            ),
-          ...
-          )
-      })
-    }
+
+    mxCatchHandler(
+      type = "warning",
+      message = list(
+        message = emsg,
+        call = ecall,
+        syscall = head(tail(sys.calls(),11),1)[[1]]
+        )
+      )
+
   },message = function(m){
     if(debug){
-      session$output[[panelId]]<-renderUI({
-        mxPanelAlert(
-          "warning",
-          title,
-          message=tagList(
-            p(m$message),
-            p(style="",paste("(",paste(m$call,collapse=" "),")"))
-            ),
-          ...
-          )
-      })
+      mxCatchHandler(
+        type = "message",
+        message = m
+        )
     }
-  })   
+  })
+
 }
 
 
