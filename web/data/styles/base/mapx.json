@@ -130,7 +130,7 @@
           "visibility": "visible"
         },
         "paint": {
-          "fill-pattern": "t_b_lines_21"
+          "fill-color": "rgba(47,47,47,0.6)"
         }
       },
       {
