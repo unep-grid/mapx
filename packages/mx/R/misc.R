@@ -1243,12 +1243,13 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
   tempFile <- tempfile()
 
 
-  write(sprintf("
-    From: %1$s
+  write(sprintf(
+    "From: %1$s
     To: %2$s
     Subject: %3$s
     Content-Type: text/html
     MIME-Version: 1.0
+    
     %4$s"
     , from
     , to
