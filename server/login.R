@@ -163,6 +163,7 @@ observeEvent(input$btnSendLoginKey,{
         )
       # send mail
       res <- try({
+        
           mxSendMail(
             from = config[["mail"]][["bot"]],
             to = email,
