@@ -1267,9 +1267,11 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
     )
  
   if( isLocal ){
-  mxDebugToJs(body)
+    mxDebug(mailToSend)
   }else{
-    mxDebugToJs(mailToSend)
+    if(!is.null(shiny::getDefautReactiveDomain())){
+      mxDebugToJs(mailToSend)
+    }
     system(mailToSend,wait=wait)
   }
 
