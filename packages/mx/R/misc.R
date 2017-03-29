@@ -1240,20 +1240,33 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
       )
     )) stop("mxSendMail : bad input")
 
-  mailToSend <- sprintf("printf \"Subject:%1$s\nFrom: %2$s\nContent-Type: text/html\nMIME-Version: 1.0\n%3$s\n\" | /usr/sbin/sendmail %4$s",
-    subject,
-    from,
-    body,
-    to
-    )
- 
+  tempFile <- tempfile()
+
+
+  write(sprintf("
+    From: %1$s\n
+    To: %2$s\n
+    Subject: %3$s\n 
+    Content-Type: text/html\n
+    MIME-Version: 1.0\n
+    \n
+    %4$s\n"
+    , from,
+    , to
+    , subject
+    , body
+    ),tempFile)
+
+
   if( isLocal ){
     mxDebug(mailToSend)
   }else{
     if(!is.null(shiny::getDefaultReactiveDomain())){
       mxDebugToJs(mailToSend)
     }
-    system(mailToSend,wait=wait)
+
+  system(sprintf("cat %1$s | /usr/sbin/sendmail -t", tempFile),wait=wait)
+  
   }
 
 }
