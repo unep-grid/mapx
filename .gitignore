@@ -23,4 +23,5 @@ packrat-scenario*/
 node_modules
 
 #Update script
-updateMxUniMapx.sh
+mxRemoteUpdate.sh
+mxRemoteGetLog.sh
