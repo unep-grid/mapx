@@ -164,11 +164,12 @@ observeEvent(input$btnSendLoginKey,{
       # send mail
       res <- try({
           mxSendMail(
-            from=config[["mail"]][["bot"]],
-            to=email,
-            body=reactData$loginSecret,
-            subject="Map-x secure login",
-            wait=F
+            cdata = cdata,
+            from = config[["mail"]][["bot"]],
+            to = email,
+            body = reactData$loginSecret,
+            subject = "Map-x secure login",
+            wait = F
             )
       })
 

@@ -546,7 +546,7 @@ mxHtmlMailTemplate <- function(title = NULL, content=NULL ){
 
 
 
-mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
+mxCatchHandler <- function(cdata=NULL,type="error",message="",session=shiny::getDefaultReactiveDomain()){
 
   if(!exists("cdata")) stop("cdata (client data from session$client data) should be set at the begining of the sesssion")
 
@@ -589,6 +589,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
     title =  paste("[ mx-issue-",type," ]", cdata$hostname)
 
     mxSendMail(
+      cdata = cdata,
       from = .get(config,c("mail","bot"),
         to = .get(config,c("mail","admin")),
         subject = title,
@@ -628,32 +629,24 @@ mxCatch <- function(
   tryCatch({
     expression
   },error = function(e){
-    emsg <- as.character(e$message)
-    ecall <- as.character(e$call)
 
-    browser()
-
+    emsg <- as.character(e)
 
     mxCatchHandler(
       type = "error",
       message = list(
-        message = emsg,
-        call = as.character(ecall),
-        syscall = head(tail(sys.calls(),11),1)[[1]]
+        message = emsg
         )
       )
 
 
   },warning = function(e){
-    emsg <- as.character(e$message)
-    ecall <- as.character(e$call)
+    emsg <- as.character(e)
 
     mxCatchHandler(
       type = "warning",
       message = list(
-        message = emsg,
-        call = ecall,
-        syscall = head(tail(sys.calls(),11),1)[[1]]
+        message = emsg
         )
       )
 
@@ -1239,7 +1232,7 @@ mxSendJson <- function(pathToJson,objName,session=getDefaultReactiveDomain()){
 #' @param body String. Text of the body
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
+mxSendMail <- function(cdata=NULL,from=NULL,to=NULL,body="",subject="",wait=FALSE){
 
   conf <- mxGetDefaultConfig()
 
