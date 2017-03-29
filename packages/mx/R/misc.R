@@ -1244,14 +1244,13 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
 
 
   write(sprintf("
-    From: %1$s\n
-    To: %2$s\n
-    Subject: %3$s\n 
-    Content-Type: text/html\n
-    MIME-Version: 1.0\n
-    \n
-    %4$s\n"
-    , from,
+    From: %1$s
+    To: %2$s
+    Subject: %3$s
+    Content-Type: text/html
+    MIME-Version: 1.0
+    %4$s"
+    , from
     , to
     , subject
     , body
