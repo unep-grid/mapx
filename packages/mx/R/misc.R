@@ -1257,11 +1257,10 @@ mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
   write(mailToSend,tempFile)
 
   if( isLocal ){
+
     mxDebugMsg(mailToSend)
+
   }else{
-    if(!is.null(shiny::getDefaultReactiveDomain())){
-      mxDebugToJs(tempFile)
-    }
 
   system(sprintf("cat %1$s | /usr/sbin/sendmail -t", tempFile),wait=wait)
   
