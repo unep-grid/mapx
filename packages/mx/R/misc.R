@@ -1249,7 +1249,7 @@ mxSendMail <- function(from=NULL,to=NULL,body="",subject="",wait=FALSE){
     "Content-Type: text/html",
     "MIME-Version: 1.0",
     "",
-    "%4$s",sep="\n"),
+    "%4$s",sep="\n")
     , from
     , to
     , subject
