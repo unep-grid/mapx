@@ -164,11 +164,12 @@ observeEvent(input$btnSendLoginKey,{
       # send mail
       res <- try({
           mxSendMail(
-            from=config[["mail"]][["botEmail"]],
+            from=config[["mail"]][["bot"]],
             to=email,
             body=reactData$loginSecret,
             subject="Map-x secure login",
-            wait=F)
+            wait=F
+            )
       })
 
       mxDebugMsg(reactData$loginSecret)
@@ -284,8 +285,6 @@ observeEvent(reactData$loginRequested,{
     email <- reactData$loginUserEmail
 
     timeStamp <- mxTimer("start",sprintf("Login process: logic done for %s in",email))
-
-    mxDebugToJs(email)
 
     # Last email validation
     if(!mxEmailIsValid(email)) stop(sprintf("Invalid email: %s",email))
