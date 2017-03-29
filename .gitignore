@@ -21,3 +21,6 @@ packrat-scenario*/
 .~lock*
 # node module
 node_modules
+
+#Update script
+updateMxUniMapx.sh
