@@ -483,10 +483,14 @@ mxConsoleText <- function(text=""){
 #' @session {reactive} Shiny reactive object
 #' @export
 mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
+  if(!noDataCheck(session)){
   res <-   session$sendCustomMessage(
     type = "mxDebugMsg",
     message = jsonlite::toJSON(text)
     )
+  }else{
+  mxDebugMsg(text)
+  }
 }
 
 
@@ -611,7 +615,7 @@ mxCatch <- function(
     mxCatchHandler(
       type = "warning",
       message = e$message,
-      call = as.charcter(e$call)
+      call = as.character(e$call)
       )
 
   },message = function(e){
