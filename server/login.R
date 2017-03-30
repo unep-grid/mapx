@@ -163,26 +163,20 @@ observeEvent(input$btnSendLoginKey,{
         )
       # send mail
       res <- try({
+      
+       template <- .get(config,c("templates","text","email_password"))
        
+       text <- gsub("{{password}}",react$loginSecret,template)
 
-        body <- tagList(
-          tags$span("Here is your one time password. It's valid during 20 minutes. Copy and paste it in the Map-x window"),
-          tags$br(),
-          tags$span("Voici votre mot de passe à usage unique. Il est valable 20 minutes. Copiez-le dans la fenêtre Map-X"),
-          tags$br(),
-          tags$span(reactData$loginSecret)
-          )
-
-          mxSendMail(
+       mxSendMail(
             from = config[["mail"]][["bot"]],
             to = email,
-            body = as.character(body),
+            body = text,
+            type = "text",
             subject = "MAP-X SECURE PASSWORD",
             wait = F
             )
       })
-
-      mxDebugMsg(reactData$loginSecret)
 
       if("try-error" %in% class(res)){ 
         msg <- "An error occured, sorry, We can't send you an email right now."

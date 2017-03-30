@@ -184,8 +184,13 @@ config[[c("templates","dot","viewPopup")]] <- as.character(mxSource("templates/d
 config[[c("templates","dot","viewStory")]] <- as.character(mxSource("templates/dot/view_story.R"))
 
 
-config[[c("templates","email")]] <-  list()
-config[[c("templates","email","simple")]] <- paste(readLines("templates/html/email_simple.html"),collapse="\n")
+config[[c("templates","html")]] <-  list()
+config[[c("templates","html","email")]] <- paste(readLines("templates/html/email_simple.html"),collapse="\n")
+
+config[[c("templates","text")]] <-  list()
+config[[c("templates","text","email_password")]] <- paste(readLines("templates/text/email_password.txt"),collapse="\n")
+
+
 
 
 #
@@ -300,16 +305,16 @@ config[[c("data","format")]] <- list(
 # email default
 #
 config[["mail"]] =  list(
-  "bot" = "bot@mapx.io",
+  "bot" = "Map-x bot <mapx@grid.unep.ch>", # same domain as gridmailfwd.
   "guest" = "guest@mapx.io",
-  "admin" = "moser.frederic@gmail.com"
+  "admin" = "frederic.moser@unepgrid.ch"
   )
 
 
 # default user value
 #
 config[["users"]] <- list(
-  defaultEmail = "guest@mapx.io",
+  defaultEmail =  config[[c("mail","guest")]],
   defaultName = "user",
   loginTimerMinutes = 20,
   cookieExpireDays = 30,

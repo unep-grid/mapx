@@ -1211,9 +1211,10 @@ mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 #' @param from String. Valid email for  sender
 #' @param to String. Valid email for Recipient
 #' @param body String. Text of the body
+#' @param type String. "text" or "html"
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
+mxSendMail <- function( from=NULL, to=NULL, type="text", body="", subject="", wait=FALSE ){
 
 
   isLocal = Sys.info()[["user"]] != "shiny"
@@ -1234,6 +1235,7 @@ mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
 
   tempFile <- tempfile()
 
+  if(type="html"){
   body <- mxHtmlMailTemplate(
     title = subject, 
     subject = subject,
@@ -1241,20 +1243,35 @@ mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
     )
 
   mailToSend = sprintf(
-    paste("From: %1$s",
-    "To: %2$s",
-    "Subject: %3$s",
-    "Content-Type: text/html",
-    "MIME-Version: 1.0",
-    "",
-    "%4$s",sep="\n")
+    paste(
+      "From: %1$s",
+      "To: %2$s",
+      "Subject: %3$s",
+      "Content-Type: text/html",
+      "MIME-Version: 1.0",
+      "",
+      "%4$s",sep="\n")
     , from
     , to
     , subject
     , body
     )
-  
-  write(mailToSend,tempFile)
+  }else{
+
+    mailToSend = sprintf(
+      paste(
+        "From: %1$s",
+        "To: %2$s",
+        "Subject: %3$s",
+        "",
+        "%4$s",sep="\n")
+      , from
+      , to
+      , subject
+      , body
+      ) 
+  }
+
 
   if( isLocal ){
 
@@ -1262,6 +1279,7 @@ mxSendMail <- function( from=NULL, to=NULL, body="", subject="", wait=FALSE ){
 
   }else{
 
+  write(mailToSend,tempFile)
   system(sprintf("cat %1$s | /usr/sbin/sendmail -t", tempFile),wait=wait)
   
   }
