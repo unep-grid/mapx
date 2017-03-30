@@ -511,60 +511,63 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
 
   isLocal = Sys.info()[["user"]] != "shiny"
 
+  if(!exists("cdata") || noDataCheck(cdata)){
+    cdata "<unkown>"
+  }
 
   if(noDataCheck(type)){
-  type = "<unknown>"
+    type = "<unknown>"
   }
 
   if(noDataCheck(message)){
-   message = "<empty message>"
+    message = "<empty message>"
   }
 
-  errorSummary <- list(
+  err <- list(
     type = type,
-    message = message,
-    date = Sys.time()
+    message = as.character(message),
+    time = as.character(Sys.time()),
+    cdata = cdata
     )
 
   if(type == "error"){
-  #
-  # outut message
-  #
-  session$output$panelAlert <-renderUI({
-    mxPanelAlert(
-      "error",
-      title,
-      message=tagList(p("Something went wrong, sorry!"))
-      )
-  })
+    #
+    # outut message
+    #
+    session$output$panelAlert <-renderUI({
+      mxPanelAlert(
+        "error",
+        title,
+        message=tagList(p("Something went wrong, sorry!"))
+        )
+    })
   }
-
 
   if( isLocal ){
 
     #
     # If is local, send to js console
     #
-    mxDebugToJs(errorSummary)
+    mxDebugToJs(err)
 
   }else{
+
+    text <- .get(config,c("templates","text","email_error.txt"))
+    text <- gsub("\\{\\{TYPE\\}\\}",err$type,text)
+    text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
+    text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
+    text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
 
     #
     # else send an email
     #
-    title =  paste("[ mx-issue-",type," ]")
+    subject =  paste0("[ mx-issue-",type," ]")
 
     mxSendMail(
       from = .get(config,c("mail","bot")),
-        to = .get(config,c("mail","admin")),
-        subject = title,
-        type = "html",
-        body =  mxHtmlMailTemplate(
-          title = title,
-          content =  listToHtmlClass(
-            errorSummary
-            )
-          )
+      to = .get(config,c("mail","admin")),
+      subject = title,
+      body = text
       )
   }
 }
