@@ -511,15 +511,19 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
 
   isLocal = Sys.info()[["user"]] != "shiny"
 
-  if(!exists("cdata")){
-    cdata = list()
+
+  if(noDataCheck(type)){
+  type = "<unknown>"
+  }
+
+  if(noDataCheck(message)){
+   message = "<empty message>"
   }
 
   errorSummary <- list(
     type = type,
     message = message,
-    date = Sys.time(),
-    cdata = cdata
+    date = Sys.time()
     )
 
   if(type == "error"){
@@ -1190,12 +1194,11 @@ mxSendJson <- function(pathToJson,objName,session=getDefaultReactiveDomain()){
 #' 
 mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 
-
   if(is.null(title)) title = "mapx"
   if(is.null(subject)) subject = title
   if(is.null(content)) return("")
 
-  template <- .get(config,c("templates","email","simple"))
+  template <- .get(config,c("templates","html","email"))
   template <- gsub("\\{\\{content\\}\\}",content,template)
   template <- gsub("\\{\\{subject\\}\\}",subject,template)
   template <- gsub("\\{\\{title\\}\\}",title,template)
