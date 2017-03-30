@@ -530,7 +530,7 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
   err <- list(
     type = type,
     message = message,
-    call = call,
+    call = paste(call,sep=";",collapse="; "),
     time = as.character(Sys.time()),
     cdata = as.character(cdata)
     )
