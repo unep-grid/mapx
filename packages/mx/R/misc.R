@@ -527,9 +527,13 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
     message = "<empty message>"
   }
 
+  if(noDataCheck(call)){
+    message = "<empty call>"
+  }
+
   err <- list(
     type = type,
-    message = message,
+    message = as.character(message),
     call = paste(call,sep=";",collapse="; "),
     time = as.character(Sys.time()),
     cdata = as.character(cdata)
@@ -579,8 +583,6 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
 }
 
 
-
-
 #' Catch errors
 #'
 #' Catch errors and return alert panel in an existing div id.
@@ -606,7 +608,7 @@ mxCatch <- function(
 
     mxCatchHandler(
       type = "error",
-      message = e$message,
+      message = as.character(e$message),
       call = as.character(e$call)
       )
 
@@ -614,7 +616,7 @@ mxCatch <- function(
 
     mxCatchHandler(
       type = "warning",
-      message = e$message,
+      message = as.character(e$message),
       call = as.character(e$call)
       )
 
@@ -622,7 +624,7 @@ mxCatch <- function(
     if(debug){
       mxCatchHandler(
         type = "message",
-        message = e$message,
+        message = as.character(e$message),
         call = as.character(e$call)
         )
     }
@@ -1504,7 +1506,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
   style <- .get(viewData,c("style"))
 
   if(noDataCheck(style)){
-    def[["style"]] =  list()
+    viewData[["style"]] =  list()
   }
 
   #for now, data driven style for lines is not working
