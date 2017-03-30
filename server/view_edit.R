@@ -6,165 +6,166 @@
 # View action handler
 #
 observe({
-  #
-  # Extract action type
-  #
-  viewAction <- input[[sprintf("mglEvent_%1$s_view_action",config[["map"]][["id"]])]]
+  mxCatch("view_edit.R",{
+    #
+    # Extract action type
+    #
+    viewAction <- input[[sprintf("mglEvent_%1$s_view_action",config[["map"]][["id"]])]]
 
-  if(!noDataCheck(viewAction)){
+    if(!noDataCheck(viewAction)){
 
-    isolate({
+      isolate({
 
-      language <- reactData$language
+        language <- reactData$language
 
-      if(viewAction[["action"]] == "btn_opt_upload_geojson" ){
-      
-      }else{
+        if(viewAction[["action"]] == "btn_opt_upload_geojson" ){
 
-        #
-        # Get view data and check if user can edit
-        #
-        views <- reactViews()
-        viewId <- viewAction[["target"]]
+        }else{
 
-        viewData <- views[ sapply(views,function(x){
-          x[["id"]] == viewId && isTRUE(x[["_edit"]])
-        }) ][[1]]
+          #
+          # Get view data and check if user can edit
+          #
+          views <- reactViews()
+          viewId <- viewAction[["target"]]
+
+          viewData <- views[ sapply(views,function(x){
+            x[["id"]] == viewId && isTRUE(x[["_edit"]])
+}) ][[1]]
 
 
-        if(noDataCheck(viewData)) return()
-        if(!isTRUE(.get(viewData,c("_edit")))) return()
-        #
-        # Get title and descrition in current language
-        #
+          if(noDataCheck(viewData)) return()
+          if(!isTRUE(.get(viewData,c("_edit")))) return()
+          #
+          # Get title and descrition in current language
+          #
 
-        viewType <- viewData[["type"]]
-       
-        viewTitle <- .get(viewData, c("data","title",language))
-        viewAbstract <- .get(viewData, c("data","abstract",language))
+          viewType <- viewData[["type"]]
 
-        #
-        # User publish right
-        #
-        targetGroups <- reactUser$role[[c("desc","publish")]]
-        targetCurrent <- viewData[["target"]]
+          viewTitle <- .get(viewData, c("data","title",language))
+          viewAbstract <- .get(viewData, c("data","abstract",language))
 
-        #
-        # View classes
-        #
-        classesTags <- config[[c("views","classes")]]
-        classesCurrent <- viewData[[c("data","classes")]]
+          #
+          # User publish right
+          #
+          targetGroups <- reactUser$role[[c("desc","publish")]]
+          targetCurrent <- viewData[["target"]]
 
-        #
-        # Create a list with other languages titles and description
-        #
-        viewTitleAll <- lapply(
-          config[[c("languages","list")]], function(x){
-            .get(viewData,c("data","title",x))
-          })
+          #
+          # View classes
+          #
+          classesTags <- config[[c("views","classes")]]
+          classesCurrent <- viewData[[c("data","classes")]]
 
-        viewAbstractAll <- lapply(
-          config[["languages"]][["list"]], function(x){
-            .get(viewData, c("data","abstract",x))
-          })
+          #
+          # Create a list with other languages titles and description
+          #
+          viewTitleAll <- lapply(
+            config[[c("languages","list")]], function(x){
+              .get(viewData,c("data","title",x))
+            })
 
-        #
-        # Keep a version of the view edited
-        #
-        reactData$viewDataEdited <- viewData
+          viewAbstractAll <- lapply(
+            config[["languages"]][["list"]], function(x){
+              .get(viewData, c("data","abstract",x))
+            })
 
-        #
-        # Initial button list
-        #
-        btnList <- list()
+          #
+          # Keep a version of the view edited
+          #
+          reactData$viewDataEdited <- viewData
 
-        #
-        # Switch through actions
-        #
-        switch(viewAction$action,
-          "btn_opt_download"={
+          #
+          # Initial button list
+          #
+          btnList <- list()
 
-            uiOut<-tagList(
-              tags$h4(
-                tags$span(d("view_download_layer",language))
-                ),
-              p("download layer",.get(viewData,c("data","source","layerInfo","name")))
-              )
+          #
+          # Switch through actions
+          #
+          switch(viewAction$action,
+            "btn_opt_download"={
 
-            output$panelModal <- renderUI(mxPanel(
-                id="uiViewMetaData",
-                headIcon="download",
-                subtitle=tags$b(viewTitle),
-                html=uiOut,
-                addCloseButton=TRUE,
-                closeButtonText=d("btn_close",language)
+              uiOut<-tagList(
+                tags$h4(
+                  tags$span(d("view_download_layer",language))
+                  ),
+                p("download layer",.get(viewData,c("data","source","layerInfo","name")))
                 )
-              )
 
-
-          },
-          "btn_opt_meta"={
-
-            layerMeta  <- .get(viewData, c("data","source","layerInfo","meta"))
-
-            uiOut<-tagList(
-              tags$h4(
-                tags$span(d("view_meta_data",language))
-                ),
-              HTML(listToHtmlClass(layerMeta))
-              )
-
-            output$panelModal <- renderUI(mxPanel(
-                id="uiViewMetaData",
-                headIcon="info-circle",
-                subtitle=tags$b(viewTitle),
-                html=uiOut,
-                addCloseButton=TRUE,
-                closeButtonText=d("btn_close",language)
+              output$panelModal <- renderUI(mxPanel(
+                  id="uiViewMetaData",
+                  headIcon="download",
+                  subtitle=tags$b(viewTitle),
+                  html=uiOut,
+                  addCloseButton=TRUE,
+                  closeButtonText=d("btn_close",language)
+                  )
                 )
-              )
 
-          },
-          "btn_opt_delete"={
-            uiOut<-tagList(
-              tags$p(
-                tags$span(d("view_delete_confirm",language))
+
+            },
+            "btn_opt_meta"={
+
+              layerMeta  <- .get(viewData, c("data","source","layerInfo","meta"))
+
+              uiOut<-tagList(
+                tags$h4(
+                  tags$span(d("view_meta_data",language))
+                  ),
+                HTML(listToHtmlClass(layerMeta))
                 )
-              )
-            btnList <- list(
-              actionButton(
-                inputId="btnViewDeleteConfirm",
-                label=d("btn_confirm",language)
+
+              output$panelModal <- renderUI(mxPanel(
+                  id="uiViewMetaData",
+                  headIcon="info-circle",
+                  subtitle=tags$b(viewTitle),
+                  html=uiOut,
+                  addCloseButton=TRUE,
+                  closeButtonText=d("btn_close",language)
+                  )
                 )
-              )
 
-            output$panelModal <- renderUI(mxPanel(
-                id="uiConfirmViewDelete",
-                headIcon="trash-o",
-                subtitle=tags$b(viewTitle),
-                html=uiOut,
-                addCloseButton=TRUE,
-                closeButtonText=d("btn_close",language),
-                listActionButton=btnList
-                ))
+            },
+            "btn_opt_delete"={
+              uiOut<-tagList(
+                tags$p(
+                  tags$span(d("view_delete_confirm",language))
+                  )
+                )
+              btnList <- list(
+                actionButton(
+                  inputId="btnViewDeleteConfirm",
+                  label=d("btn_confirm",language)
+                  )
+                )
+
+              output$panelModal <- renderUI(mxPanel(
+                  id="uiConfirmViewDelete",
+                  headIcon="trash-o",
+                  subtitle=tags$b(viewTitle),
+                  html=uiOut,
+                  addCloseButton=TRUE,
+                  closeButtonText=d("btn_close",language),
+                  listActionButton=btnList
+                  ))
 
 
-          },
-          "btn_opt_edit_config"={
+            },
+            "btn_opt_edit_config"={
 
 
-            #if(noDataCheck(reactSourceLayer())){
+              #if(noDataCheck(reactSourceLayer())){
 
               #err = logical(0)
 
               #err["error_no_source"] <- TRUE
 
               #uiOut <- mxErrorsToUi(
-                #errors=err,
-                #language=language
-                #)
+              #errors=err,
+              #language=language
+              #)
 
-            #}else{
+              #}else{
               uiDesc <- tagList(
                 #
                 # Who can see this ?
@@ -213,10 +214,10 @@ observe({
                   labelText = d("view_show_abstract_languages",language)
                   )
                 )
-              
-            #
-            # Stors map
-            #
+
+              #
+              # Stors map
+              #
               if(viewType=="sm"){
                 uiType =  tagList(
                   jedOutput(id="storyEdit")
@@ -297,57 +298,58 @@ observe({
                   label=d("btn_update",language)
                   )
                 )
-            #}
+              #}
 
-            #
-            # Final edit modal panel
-            #
-            output$panelModal <- renderUI(mxPanel(
-                id="uiConfirmViewEdit",
-                headIcon="pencil",
-                subtitle=tags$b(id=sprintf("title_view_edit_panel"),viewTitle),
-                html=uiOut,
-                listActionButton=btnList,
-                addCloseButton=TRUE,
-                background=FALSE,
-                closeButtonText=d("btn_close",language)
-                ))
+              #
+              # Final edit modal panel
+              #
+              output$panelModal <- renderUI(mxPanel(
+                  id="uiConfirmViewEdit",
+                  headIcon="pencil",
+                  subtitle=tags$b(id=sprintf("title_view_edit_panel"),viewTitle),
+                  html=uiOut,
+                  listActionButton=btnList,
+                  addCloseButton=TRUE,
+                  background=FALSE,
+                  closeButtonText=d("btn_close",language)
+                  ))
 
-          },
-          "btn_opt_edit_style"={
+            },
+            "btn_opt_edit_style"={
 
-            if(viewType != "vt") return()
+              if(viewType != "vt") return()
 
-            btnList <- list(
-              actionButton(
-                inputId="btnViewUpdateStyle",
-                label=d("btn_update",language)
-                ),
-              actionButton(
-                inputId="btnViewResetStyle",
-                label=d("btn_reset",language)
-                )
-              )
-
-            output$panelModal <- renderUI(
-              mxPanel(
-                id="uiConfirmViewDelete",
-                headIcon="paint-brush",
-                subtitle=tags$b(id=sprintf("title_view_style_panel"),viewTitle),
-                background=FALSE,
-                html=tagList(
-                  uiOutput("txtValidSchema"),
-                  jedOutput(id="styleEdit")
+              btnList <- list(
+                actionButton(
+                  inputId="btnViewUpdateStyle",
+                  label=d("btn_update",language)
                   ),
-                listActionButton=btnList,
-                addCloseButton=TRUE,
-                closeButtonText=d("btn_close",language)
-                ))
+                actionButton(
+                  inputId="btnViewResetStyle",
+                  label=d("btn_reset",language)
+                  )
+                )
 
-          })
-      }
-    })
-  }
+              output$panelModal <- renderUI(
+                mxPanel(
+                  id="uiConfirmViewDelete",
+                  headIcon="paint-brush",
+                  subtitle=tags$b(id=sprintf("title_view_style_panel"),viewTitle),
+                  background=FALSE,
+                  html=tagList(
+                    uiOutput("txtValidSchema"),
+                    jedOutput(id="styleEdit")
+                    ),
+                  listActionButton=btnList,
+                  addCloseButton=TRUE,
+                  closeButtonText=d("btn_close",language)
+                  ))
+
+            })
+        }
+      })
+    }
+})
 })
 
 
