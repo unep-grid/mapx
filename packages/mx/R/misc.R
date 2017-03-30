@@ -512,7 +512,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
   isLocal = Sys.info()[["user"]] != "shiny"
 
   if(!exists("cdata") || noDataCheck(cdata)){
-    cdata "<unkown>"
+    cdata = "<unkown>"
   }
 
   if(noDataCheck(type)){
