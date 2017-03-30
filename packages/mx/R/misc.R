@@ -551,7 +551,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
     title =  paste("[ mx-issue-",type," ]")
 
     mxSendMail(
-      from = .get(config,c("mail","bot"),
+      from = .get(config,c("mail","bot")),
         to = .get(config,c("mail","admin")),
         subject = title,
         body =  mxHtmlMailTemplate(
@@ -560,7 +560,6 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
             errorSummary
             )
           )
-        )
       )
   }
 }
