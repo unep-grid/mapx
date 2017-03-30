@@ -305,7 +305,7 @@ config[[c("data","format")]] <- list(
 # email default
 #
 config[["mail"]] =  list(
-  "bot" = "Map-x bot <mapx@grid.unep.ch>", # same domain as gridmailfwd.
+  "bot" = "Map-x bot <bot@mapx.io>",
   "guest" = "guest@mapx.io",
   "admin" = "frederic.moser@unepgrid.ch"
   )
