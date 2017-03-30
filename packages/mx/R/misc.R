@@ -558,6 +558,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
       from = .get(config,c("mail","bot")),
         to = .get(config,c("mail","admin")),
         subject = title,
+        type = "html",
         body =  mxHtmlMailTemplate(
           title = title,
           content =  listToHtmlClass(
