@@ -507,7 +507,7 @@ mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(
 
 
 
-mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
+mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDefaultReactiveDomain()){
 
   isLocal = Sys.info()[["user"]] != "shiny"
 
@@ -525,16 +525,17 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
 
   err <- list(
     type = type,
-    message = as.character(message),
+    message = message,
+    call = call,
     time = as.character(Sys.time()),
-    cdata = cdata
+    cdata = as.character(cdata)
     )
 
   if(type == "error"){
     #
     # outut message
     #
-    session$output$panelAlert <-renderUI({
+    session$output$panelAlert <- renderUI({
       mxPanelAlert(
         "error",
         title,
@@ -557,6 +558,7 @@ mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReac
     text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
     text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
     text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
+    text <- gsub("\\{\\{CALL\\}\\}",err$call,text)
 
     #
     # else send an email
@@ -598,31 +600,26 @@ mxCatch <- function(
     expression
   },error = function(e){
 
-    emsg <- as.character(e)
-
     mxCatchHandler(
       type = "error",
-      message = list(
-        message = emsg
-        )
+      message = e$message,
+      call = as.character(e$call)
       )
 
-
   },warning = function(e){
-    emsg <- as.character(e)
 
     mxCatchHandler(
       type = "warning",
-      message = list(
-        message = emsg
-        )
+      message = e$message,
+      call = as.charcter(e$call)
       )
 
-  },message = function(m){
+  },message = function(e){
     if(debug){
       mxCatchHandler(
         type = "message",
-        message = m
+        message = e$message,
+        call = as.character(e$call)
         )
     }
   })

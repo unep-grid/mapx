@@ -4,9 +4,13 @@ MAP-X MAIL SYSTEM
 date : {{DATE}}
 type : {{TYPE}}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-ERROR
+MESSAGE
 
-{{ERROR}}
+{{MESSAGE}}
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+CALL
+
+{{CALL}}
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 CDATA
 
