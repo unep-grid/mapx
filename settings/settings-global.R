@@ -189,6 +189,8 @@ config[[c("templates","html","email")]] <- paste(readLines("templates/html/email
 
 config[[c("templates","text")]] <-  list()
 config[[c("templates","text","email_password")]] <- paste(readLines("templates/text/email_password.txt"),collapse="\n")
+config[[c("templates","text","email_error")]] <- paste(readLines("templates/text/email_error.txt"),collapse="\n")
+
 
 
 

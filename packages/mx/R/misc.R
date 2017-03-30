@@ -513,8 +513,6 @@ mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(
 
 mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDefaultReactiveDomain()){
 
-  isLocal = Sys.info()[["user"]] != "shiny"
-
   if(!exists("cdata") || noDataCheck(cdata)){
     cdata = "<unkown>"
   }
@@ -543,43 +541,36 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
     #
     # outut message
     #
+    if(!noDataCheck(session)){
     session$output$panelAlert <- renderUI({
       mxPanelAlert(
-        "error",
-        title,
+        title="error",
         message=tagList(p("Something went wrong, sorry!"))
         )
     })
+    }
   }
 
-  if( isLocal ){
+  text <- .get(config,c("templates","text","email_error"))
+  text <- gsub("\\{\\{TYPE\\}\\}",err$type,text)
+  text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
+  text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
+  text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
+  text <- gsub("\\{\\{CALL\\}\\}",err$call,text)
 
-    #
-    # If is local, send to js console
-    #
-    mxDebugToJs(err)
+  if(noDataCheck(text)) text = "<no text>"
+  #
+  # else send an email
+  #
+  subject =  paste0("[ mx-issue-",type," ]")
 
-  }else{
+  mxSendMail(
+    from = .get(config,c("mail","bot")),
+    to = .get(config,c("mail","admin")),
+    subject = subject,
+    body = text
+    )
 
-    text <- .get(config,c("templates","text","email_error.txt"))
-    text <- gsub("\\{\\{TYPE\\}\\}",err$type,text)
-    text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
-    text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
-    text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
-    text <- gsub("\\{\\{CALL\\}\\}",err$call,text)
-
-    #
-    # else send an email
-    #
-    subject =  paste0("[ mx-issue-",type," ]")
-
-    mxSendMail(
-      from = .get(config,c("mail","bot")),
-      to = .get(config,c("mail","admin")),
-      subject = title,
-      body = text
-      )
-  }
 }
 
 
@@ -621,6 +612,7 @@ mxCatch <- function(
       )
 
   },message = function(e){
+
     if(debug){
       mxCatchHandler(
         type = "message",
@@ -1227,7 +1219,7 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
 
 
   isLocal = Sys.info()[["user"]] != "shiny"
-  
+
   if(noDataCheck(from)){
     from <- .get(config,c("mail","bot"))
   }
@@ -1237,7 +1229,7 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
   }
 
   if(noDataCheck(subject)){
-   subject = "map-x"
+    subject = "map-x"
   }
 
   if(noDataCheck(body)){
@@ -1255,29 +1247,31 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
     )
 
   if(isTRUE(type == "html")){
-  body <- mxHtmlMailTemplate(
-    title = subject, 
-    subject = subject,
-    content = body 
-    )
+    body <- mxHtmlMailTemplate(
+      title = subject, 
+      subject = subject,
+      content = body 
+      )
   }
+
+  command = sprintf("cat %1$s | mail -s '%2$s' -a 'From: %3$s' -a 'Content-Type: %4$s' %5$s"
+    , tempFile
+    , subject
+    , from
+    , contentType
+    , to
+    )
 
   if( isLocal ){
 
     mxDebugMsg(body)
+    mxDebugMsg(command)
 
   }else{
 
-  write(body,tempFile)
+    write(body,tempFile)
+    system(command,wait=wait)
 
-  system(sprintf("cat %1$s | mail -s '%2$s' -a 'From: %3$s' -a 'Content-Type: %4$s' %5$s"
-      , tempFile
-      , subject
-      , from
-      , contentType
-      , to
-      ),wait=wait)
-  
   }
 
 }
