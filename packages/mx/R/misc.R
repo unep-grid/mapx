@@ -1235,7 +1235,7 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body="", subject="", wa
 
   tempFile <- tempfile()
 
-  if(type="html"){
+  if(isTRUE(type == "html")){
   body <- mxHtmlMailTemplate(
     title = subject, 
     subject = subject,
