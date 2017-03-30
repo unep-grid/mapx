@@ -1214,13 +1214,17 @@ mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 #' @param type String. "text" or "html"
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function( from=NULL, to=NULL, type="text", body="", subject="", wait=FALSE ){
+mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body="", subject="", wait=FALSE ){
 
 
   isLocal = Sys.info()[["user"]] != "shiny"
   
   if(is.null(from)){
     from <- .get(config,c("mail","bot"))
+  }
+
+  if(is.null(replyTo)){
+    replyTo <- .get(config,c("mail","admin"))
   }
 
   if(!all(
@@ -1246,13 +1250,15 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body="", subject="", wa
     paste(
       "From: %1$s",
       "To: %2$s",
-      "Subject: %3$s",
-      "Content-Type: text/html",
+      "Reply-To: %3$s",
+      "Subject: %4$s",
+      "Content-Type: text/html;charset=UTF-8",
       "MIME-Version: 1.0",
       "",
-      "%4$s",sep="\n")
+      "%5$s",sep="\n")
     , from
     , to
+    , replyTo
     , subject
     , body
     )
@@ -1262,11 +1268,14 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body="", subject="", wa
       paste(
         "From: %1$s",
         "To: %2$s",
-        "Subject: %3$s",
+        "Reply-To: %3$s",
+        "Subject: %4$s",
+        "Content-type:text/plain;charset=UTF-8",
         "",
-        "%4$s",sep="\n")
+        "%5$s",sep="\n")
       , from
       , to
+      , replyTo
       , subject
       , body
       ) 
