@@ -47,7 +47,7 @@ html, body, .full-page {
 
 .mapboxgl-popup-content .list-group {
   max-height:300px;
- overflow:scroll;
+ overflow:auto;
 }
 
 /*.mx-dragged-ghost-clean *:after,*/
@@ -262,7 +262,7 @@ font-family: fontawesome;
 
 .mx-views-content {
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   /*flex-grow: 1;*/
 }
@@ -542,7 +542,7 @@ z-index:1000;
   margin: 10px;
   padding: 10px;
   padding: 5px;
-  overflow: scroll;
+  overflow: auto;
   border: none;
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
