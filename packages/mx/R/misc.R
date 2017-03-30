@@ -1213,28 +1213,29 @@ mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 #' @param type String. "text" or "html"
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body="", subject="", wait=FALSE ){
+mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL, subject=NULL, wait=FALSE ){
 
 
   isLocal = Sys.info()[["user"]] != "shiny"
   
-  if(is.null(from)){
+  if(noDataCheck(from)){
     from <- .get(config,c("mail","bot"))
   }
 
-  if(is.null(replyTo)){
+  if(noDataCheck(replyTo)){
     replyTo <- .get(config,c("mail","admin"))
   }
 
-  if(!all(
-      c(mxEmailIsValid(from),
-        mxEmailIsValid(to),
-        isTRUE(is.character(body)),
-        isTRUE(is.character(subject)),
-        isTRUE(nchar(body)>0),
-        isTRUE(nchar(subject)>0)
-      )
-    )) stop("mxSendMail : bad input")
+  if(noDataCheck(subject)){
+   subject = "map-x"
+  }
+
+  if(noDataCheck(body)){
+    body = "empty"
+  }
+
+
+  if( ! mxEmailIsValid(from) | ! mxEmailIsValid(to)) stop(paste("mxSendMail : email not valid. From: ", from, " To: ", to))
 
   tempFile <- tempfile()
 
