@@ -113,7 +113,9 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
           titlePrefix = x,
           keyCounter = keyCounter,
           type=type,
-          format=format)
+          format=format,
+          default = list('en'='empty')
+          )
     })
     names(prop) <- attributes
     return(prop)
