@@ -166,7 +166,7 @@ observeEvent(input$btnSendLoginKey,{
       
        template <- .get(config,c("templates","text","email_password"))
        
-       text <- gsub("{{password}}",react$loginSecret,template)
+       text <- gsub("\\{\\{password\\}\\}",react$loginSecret,template)
 
        mxSendMail(
             from = config[["mail"]][["bot"]],
