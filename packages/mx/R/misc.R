@@ -1239,57 +1239,34 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body="", 
 
   tempFile <- tempfile()
 
+  contentType = ifelse(isTRUE(type== "html"),
+    "text/html",
+    "text/plain"
+    )
+
   if(isTRUE(type == "html")){
   body <- mxHtmlMailTemplate(
     title = subject, 
     subject = subject,
     content = body 
     )
-
-  mailToSend = sprintf(
-    paste(
-      "From: %1$s",
-      "To: %2$s",
-      "Reply-To: %3$s",
-      "Subject: %4$s",
-      "Content-Type: text/html;charset=UTF-8",
-      "MIME-Version: 1.0",
-      "",
-      "%5$s",sep="\n")
-    , from
-    , to
-    , replyTo
-    , subject
-    , body
-    )
-  }else{
-
-    mailToSend = sprintf(
-      paste(
-        "From: %1$s",
-        "To: %2$s",
-        "Reply-To: %3$s",
-        "Subject: %4$s",
-        "Content-type:text/plain;charset=UTF-8",
-        "",
-        "%5$s",sep="\n")
-      , from
-      , to
-      , replyTo
-      , subject
-      , body
-      ) 
   }
-
 
   if( isLocal ){
 
-    mxDebugMsg(mailToSend)
+    mxDebugMsg(body)
 
   }else{
 
-  write(mailToSend,tempFile)
-  system(sprintf("cat %1$s | /usr/sbin/sendmail -t", tempFile),wait=wait)
+  write(body,tempFile)
+
+  system(sprintf("cat %1$s | mail -s '%2$s' -a 'From: %3$s' -a 'Content-Type: %4$s' %5$s"
+      , tempFile
+      , subject
+      , from
+      , contentType
+      , to
+      ),wait=wait)
   
   }
 
