@@ -2890,7 +2890,6 @@ mgl.helper.filterViewValues = function(o){
       }else{
         filter =  newFilter ;
       }
-        debugger;
         map.setFilter(lay,filter);
       }
     }
@@ -3372,6 +3371,7 @@ mgl.helper.initMap = function(o){
 
                 features = map.queryRenderedFeatures(e.point, { layers: [layers[i]] });
 
+                debugger;
                 if(features.length > 0){
                   layerDone.push(baseLayer);
                 }
