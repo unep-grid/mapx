@@ -1339,20 +1339,19 @@ mgl.helper.handleViewClick = function(o){
             if(li.checked){
               viewValue = li.dataset.view_action_value; 
               if(viewValue){
-                viewValues.push(viewValue);
+                /*
+                * Serch regex should end by the view value.
+                */
+                viewValues.push( viewValue + '$' );
               }
             }
           }
-
-          viewValues.push("");
-
-          console.log(viewValues.join("|"));
 
           mgl.helper.filterViewValues({
             id : o.id,
             idView : el.dataset.view_action_target,
             viewVariable : el.dataset.view_action_variable,
-            search : viewValues.join(" | ")
+            search : viewValues.join("|")
           });
 
         } 
@@ -2693,9 +2692,9 @@ mgl.helper.makeStringFilterFun = function(re){
   if( ! re | re == "all" ){
     re = ".*";
   }else{
-    re = re.replace(/[^0-9A-zÀ-ÿ\,\&\|]/g," ");
+    re = re.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g," ");
   }
-  
+ 
   try {
       re = re
         .trim()
@@ -2723,7 +2722,6 @@ mgl.helper.makeStringFilterFun = function(re){
       }
 
       re =  new RegExp(re);
-    console.log(re);
     }
     catch( err ){
       console.log( "make filter fun failed: "+err );
