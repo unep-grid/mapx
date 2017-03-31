@@ -2723,6 +2723,7 @@ mgl.helper.makeStringFilterFun = function(re){
       }
 
       re =  new RegExp(re);
+    console.log(re);
     }
     catch( err ){
       console.log( "make filter fun failed: "+err );
