@@ -21,8 +21,8 @@
       "here_aerial":{
         "type":"raster",
         "tiles":[
-          "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=POnllNcND34O4iIHuoPT&app_code=UFkYKCmg6mxVrlOoYT103w&ppi=72",
-        "https://2.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=POnllNcND34O4iIHuoPT&app_code=UFkYKCmg6mxVrlOoYT103w&ppi=72"
+          "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=rz1dw2ysVarRxYpFI7sA&app_code=5OH0cwmAlWbXQFpt8wYSrQ&ppi=72",
+        "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=rz1dw2ysVarRxYpFI7sA&app_code=5OH0cwmAlWbXQFpt8wYSrQ&ppi=72"
         ]
       }
     },
