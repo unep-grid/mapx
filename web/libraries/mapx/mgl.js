@@ -3371,7 +3371,6 @@ mgl.helper.initMap = function(o){
 
                 features = map.queryRenderedFeatures(e.point, { layers: [layers[i]] });
 
-                debugger;
                 if(features.length > 0){
                   layerDone.push(baseLayer);
                 }
