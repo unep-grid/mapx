@@ -2797,13 +2797,15 @@ mgl.helper.filterViewValues = function(o){
   type = path(view,"data.attribute.type");
   attributes =  path(view,"data.attributes");
 
-  if(!table && attributes){
-    if(!varView){
-     varView = Object.keys(attributes)[0];
+  if( !table && attributes ){
+    if( !varView ){
+     varView = Object.keys( attributes )[0];
     }
-    values = attributes[varView] ;
-    if(values && values.length > 0) type = typeof values[0];
+    values = attributes[ varView ] ;
+    if( values && values.length > 0 ) type = typeof values[ 0 ];
   }
+
+  debugger
 
   if(!values && !table) {
     return;
