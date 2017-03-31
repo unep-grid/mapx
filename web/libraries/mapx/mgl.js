@@ -819,7 +819,7 @@ mgl.helper.defaultStyle = function(o){
       o.opacity = 0.7;
     }
     colA = mgl.helper.hex2rgba(o.hexColor,o.opacity );
-    colB = mgl.helper.hex2rgba(o.hexColor,o.opacity + 0.3);
+    colB = mgl.helper.hex2rgba(o.hexColor,o.opacity + 0.6);
   }
 
     style = {
@@ -829,7 +829,10 @@ mgl.helper.defaultStyle = function(o){
         "source-layer":o.id,
         "type": "circle",
         "paint": {
-          "circle-color": colA
+          "circle-color": colA,
+          "circle-radius":10,
+          "circle-stroke-width":1,
+          "circle-stroke-color":colB
         }
       },
       "polygon": {
@@ -1806,9 +1809,9 @@ mgl.helper.hex2rgba = function(hex, opacity) {
   }
 
   if (typeof opacity != "undefined") {
-    h.push(opacity);
     if(opacity>1) opacity=1;
     if(opacity<0) opacity=0;
+    h.push(opacity);
     rgb = rgba;
   }
 
