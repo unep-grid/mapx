@@ -2805,8 +2805,6 @@ mgl.helper.filterViewValues = function(o){
     if( values && values.length > 0 ) type = typeof values[ 0 ];
   }
 
-  debugger
-
   if(!values && !table) {
     return;
   }
@@ -2892,6 +2890,7 @@ mgl.helper.filterViewValues = function(o){
       }else{
         filter =  newFilter ;
       }
+        debugger;
         map.setFilter(lay,filter);
       }
     }
