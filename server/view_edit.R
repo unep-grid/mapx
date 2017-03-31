@@ -28,13 +28,15 @@ observe({
           views <- reactViews()
           viewId <- viewAction[["target"]]
 
-          viewData <- views[ sapply(views,function(x){
-            x[["id"]] == viewId && isTRUE(x[["_edit"]])
+          viewData <- views[ sapply( views, function(x){
+            x[["id"]] == viewId
 }) ][[1]]
 
 
           if(noDataCheck(viewData)) return()
-          if(!isTRUE(.get(viewData,c("_edit")))) return()
+          
+          viewIsEditable <- isTRUE(.get(viewData,c("_edit")))
+          
           #
           # Get title and descrition in current language
           #
@@ -106,13 +108,18 @@ observe({
             },
             "btn_opt_meta"={
 
-              layerMeta  <- .get(viewData, c("data","source","layerInfo","meta"))
+              viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
+              layerMeta <- mxDbGetLayerMeta(viewLayerName)
 
               uiOut<-tagList(
                 tags$h4(
                   tags$span(d("view_meta_data",language))
                   ),
-                HTML(listToHtmlClass(layerMeta))
+                HTML(listToHtmlClass(
+                    listInput = layerMeta,
+                    titleMain = d("view_meta_data",language)
+                    )
+                  )
                 )
 
               output$panelModal <- renderUI(mxPanel(
@@ -127,6 +134,9 @@ observe({
 
             },
             "btn_opt_delete"={
+              
+              if(!viewIsEditable) return()
+
               uiOut<-tagList(
                 tags$p(
                   tags$span(d("view_delete_confirm",language))
@@ -153,17 +163,7 @@ observe({
             },
             "btn_opt_edit_config"={
 
-
-              #if(noDataCheck(reactSourceLayer())){
-
-              #err = logical(0)
-
-              #err["error_no_source"] <- TRUE
-
-              #uiOut <- mxErrorsToUi(
-              #errors=err,
-              #language=language
-              #)
+              if(!viewIsEditable) return()
 
               #}else{
               uiDesc <- tagList(
@@ -196,7 +196,10 @@ observe({
                   value=viewTitle
                   ),
                 mxFold(
-                  HTML(listToHtmlClass(viewTitleAll)),
+                  HTML(listToHtmlClass(
+                      listInput = viewTitleAll,
+                      titleMain = d("view_title",language))
+                    ),
                   id =  "checkDisplayOtherTitles",
                   labelText = d("view_show_title_languages",language)
                   ),
@@ -209,7 +212,11 @@ observe({
                   value=viewAbstract
                   ),
                 mxFold(
-                  HTML(listToHtmlClass(viewAbstractAll)),
+                  HTML(listToHtmlClass(
+                      listInput = viewAbstractAll,
+                      titleMain = d("view_abstract",language)
+                      )
+                    ),
                   id =  "checkDisplayOtherAbstract",
                   labelText = d("view_show_abstract_languages",language)
                   )
@@ -317,6 +324,7 @@ observe({
             },
             "btn_opt_edit_style"={
 
+              if(!viewIsEditable) return()
               if(viewType != "vt") return()
 
               btnList <- list(
@@ -739,7 +747,11 @@ observeEvent(input$selectSourceLayerMask,{
   output$uiViewEditVtMask <- renderUI({
     numOverlapping = list(mxDbGetOverlapsCount(layerMain,layerMask))
     names(numOverlapping) <- d("view_num_overlap",language) 
-    HTML(listToHtmlClass(numOverlapping))
+    HTML(listToHtmlClass(
+        listInput = numOverlapping,
+        titleMain = d("view_num_overlap","en")
+        )
+      )
  })
 
 
