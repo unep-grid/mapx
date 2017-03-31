@@ -113,11 +113,11 @@ observe({
 
               uiOut<-tagList(
                 tags$h4(
-                  tags$span(d("view_meta_data",language))
+                  tags$span(d("source_meta_data",language))
                   ),
                 HTML(listToHtmlClass(
                     listInput = layerMeta,
-                    titleMain = d("view_meta_data",language)
+                    titleMain = d("source_meta_data",language)
                     )
                   )
                 )
