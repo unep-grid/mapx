@@ -228,7 +228,7 @@ mxGetLayerNamedList <- function( layerTable, language ){
   titleEn <- layerTable[,"title_en"]
 
   for(i in 1:length(titleLang)){
-     if(noDataCheck(titleLang)) titleLang[i] <- titleEn[i]
+     if(noDataCheck(titleLang[i])) titleLang[i] <- titleEn[i]
   }
 
   date <- layerTable$date_modified
