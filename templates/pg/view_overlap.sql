@@ -1,14 +1,41 @@
-SELECT ST_AsGeoJSON(geom,7) AS the_geom_geojson, {{variableName|}} from
-( SELECT {{variableName|}}
- , CASE 
-   WHEN ST_CoveredBy(main.{{geom}}, mask.{{geom}}) 
-   THEN main.{{geom}} 
-   ELSE 
-    ST_Multi(
-      ST_Intersection(ST_MakeValid(main.{{geom}}), ST_MakeValid(mask.{{geom}}))
-      ) END AS geom 
- FROM {{layerName}} AS main 
-   INNER JOIN ( SELECT {{geom}} from {{layerMaskName}} ) AS mask 
-    ON ST_Intersects(main.{{geom}}, mask.{{geom}})
-    WHERE main.{{geom}} && !bbox_4326!
-  ) temp
+SELECT * FROM (
+  WITH bbox AS(
+    SELECT !bbox_4326! {{geom}}
+  ),
+  mask as(
+    SELECT k.geom 
+    FROM {{layerMaskName}} k, bbox b
+    WHERE 
+    k.{{geom}} && b.{{geom}}
+  ),
+  main as(
+    SELECT m.{{geom}}, m.{{variableName|}} 
+    FROM  {{layerName}} m, mask k, bbox b 
+    WHERE 
+    m.{{geom}} && b.{{geom}} AND 
+    m.{{geom}} && k.{{geom}}
+  ),
+  overlap as (
+    SELECT m.{{variableName|}},
+    CASE WHEN GeometryType(m.{{geom}}) != $$POINT$$
+      THEN CASE WHEN ST_CoveredBy(
+        m.{{geom}},
+        k.{{geom}}
+      )
+      THEN m.{{geom}}
+    ELSE
+      ST_Multi(
+        ST_Intersection(
+          k.{{geom}},
+          m.{{geom}}
+        )
+      ) END
+    ELSE
+      m.{{geom}} END as {{geom}}
+      FROM main m, mask k
+      WHERE ST_Intersects(m.geom,k.geom)
+    )
+
+    SELECT ST_AsGeoJSON(o.{{geom}},8) AS the_geom_geojson, o.{{variableName}} FROM overlap o
+
+  ) t
