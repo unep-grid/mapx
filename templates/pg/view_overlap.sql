@@ -3,7 +3,7 @@ SELECT * FROM (
     SELECT !bbox_4326! {{geom}}
   ),
   mask as(
-    SELECT k.geom 
+    SELECT ST_buffer(k.geom,0) geom
     FROM {{layerMaskName}} k, bbox b
     WHERE 
     k.{{geom}} && b.{{geom}}
