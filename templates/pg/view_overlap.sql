@@ -3,10 +3,11 @@ SELECT * FROM (
     SELECT !bbox_4326! {{geom}}
   ),
   mask as(
-    SELECT ST_Union(k.geom) geom
+    SELECT 1 as id_temp, ST_Union(k.geom) geom
     FROM {{layerMaskName}} k, bbox b
-    WHERE 
+    WHERE
     k.{{geom}} && b.{{geom}}
+    GROUP BY id_temp 
   ),
   main as(
     SELECT m.{{geom}}, m.{{variableName|}} 
