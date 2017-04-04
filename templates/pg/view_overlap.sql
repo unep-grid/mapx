@@ -5,7 +5,7 @@ SELECT ST_AsGeoJSON(geom,7) AS the_geom_geojson, {{variableName|}} from
    THEN main.{{geom}} 
    ELSE 
     ST_Multi(
-      ST_Intersection(main.{{geom}}, mask.{{geom}})
+      ST_Intersection(ST_MakeValid(main.{{geom}}), ST_MakeValid(mask.{{geom}}))
       ) END AS geom 
  FROM {{layerName}} AS main 
    INNER JOIN ( SELECT {{geom}} from {{layerMaskName}} ) AS mask 
