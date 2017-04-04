@@ -2,8 +2,8 @@ SELECT * FROM (
   WITH bbox AS(
     SELECT !bbox_4326! {{geom}}
   ),
-  mask as(
-    SELECT ST_Collect(k.geom) geom
+ mask as(
+    SELECT ST_Buffer(ST_Collect(k.geom),0) geom
     FROM {{layerMaskName}} k, bbox b
     WHERE
     k.{{geom}} && b.{{geom}}
