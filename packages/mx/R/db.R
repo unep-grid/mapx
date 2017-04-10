@@ -120,7 +120,7 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   # explicit check
   stopifnot(mxDbExistsTable(table))
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetColumnsNames(table)))
+  stopifnot(tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table)))
   # implicit check
   stopifnot(!noDataCheck(id))
   stopifnot(!noDataCheck(idCol))
@@ -759,7 +759,7 @@ mxDbGetColumnInfo<-function(table=NULL,column=NULL){
   if(noDataCheck(table) || noDataCheck(column) || isTRUE(column=='gid'))return() 
 
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetColumnsNames(table)))
+  stopifnot(tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table)))
   timing<-system.time({
 
     q <- sprintf(
@@ -1125,7 +1125,7 @@ mxDbExistsViewTitle <- function(title,country,languages=NULL){
 #' @param table {character} table name
 #' @param avoid {vector} notIn names to remove
 #' @export
-mxDbGetColumnsNames <- function(table,notIn=NULL){
+mxDbGetLayerColumnsNames <- function(table,notIn=NULL){
   query <- sprintf("select column_name as res from information_schema.columns where table_schema='public' and table_name='%s'",
     table
     )
@@ -1175,7 +1175,7 @@ mxDbAddData <- function(data,table){
 
   if(tExists){
     tNam <- sort(tolower(names(data)))
-    rNam <- sort(tolower(mxDbGetColumnsNames(table)))
+    rNam <- sort(tolower(mxDbGetLayerColumnsNames(table)))
     if(!isTRUE(identical(tNam,rNam))){
       wText <- sprintf("mxDbAddData: append to %1$s. Name(s) not in remote table: '%2$s', remote name not in local table '%3$s'",
         table,
@@ -1211,7 +1211,7 @@ mxDbAddRow <- function(data,table){
 
   tName <- names(data)
   tClass <- sapply(data,class)
-  rName <- mxDbGetColumnsNames(table)
+  rName <- mxDbGetLayerColumnsNames(table)
 
 
 
@@ -1662,7 +1662,7 @@ mxDbGetLayerGeomTypes <- function(table=NULL,geomColumn="geom"){
 #' @param column {character} Variable name
 mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NULL ){
 
-  if(!tolower(column) %in% tolower(mxDbGetColumnsNames(table))) return(list())
+  if(!tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table))) return(list())
 
   filter <- ""
 
@@ -1733,7 +1733,7 @@ mxDbGetLayerTimeVariables <- function(layer){
 
   out = list()
 
-  varLayer = mxDbGetColumnsNames(
+  varLayer = mxDbGetLayerColumnsNames(
     table=layer
     )
 

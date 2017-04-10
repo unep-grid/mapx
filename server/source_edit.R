@@ -114,7 +114,9 @@ observeEvent(input$selectSourceLayerEdit,{
   meta <- mxDbGetLayerMeta(layer)
   rolesTarget <- .get(reactUser$role,c("desc","publish"))
 
-  attributesNames <- mxDbGetColumnsNames(layer,notIn=c("gid","geom"))
+  attributesNames <- mxDbGetLayerColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1"))
+
+
 
   # Clean old schema values
   meta = .set(meta,c("origin","sources"),NULL)

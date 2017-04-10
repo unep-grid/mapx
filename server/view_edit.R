@@ -688,7 +688,7 @@ observe({
 
   geomTypes <- mxSetNameGeomType(geomTypesDf,language)
 
-  variables <- mxDbGetColumnsNames(
+  variables <- mxDbGetLayerColumnsNames(
     table = layerMain,
     notIn = c("geom","gid")
     )
@@ -773,7 +773,7 @@ reactSourceVariables <- reactive({
     isLayerOk <- isTRUE(layerName %in% reactSourceLayer())
 
     if(isLayerOk){
-      outLocal <- mxDbGetColumnsNames(layerName,notIn=c("geom","gid"))
+      outLocal <- mxDbGetLayerColumnsNames(layerName,notIn=c("geom","gid"))
 
       if(!noDataCheck(outLocal)) out <- outLocal
     }
