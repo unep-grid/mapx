@@ -1,6 +1,6 @@
 
 
-mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list()){
+mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=c(),extent=list(),title="",abstract=""){
 
   #
   # 
@@ -13,7 +13,6 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
   # date : suffix "_at"
   # 
   #
-
 
   dict =  .get(config,c("dictionaries","schemaMetadata"))
 
@@ -35,11 +34,6 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
   }
 
   mxCounter(reset=T)
-
-
-
-
-  extentDefault = .get(defaults,c("data","geometry","extent"))
 
 
   dataIntegrityQuestion = function(keyTitle){ 
@@ -98,13 +92,14 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
   #
   # Attributes constructor output the attribute editor
   #
+  
   attributeInput = function(
     format=NULL,
     keyTitle="",
     keyCounter="attr",
     type="string",
     collapsed=TRUE,
-    attributes=names(.get(defaults,c("data","attributes")))
+    attributes=attributesNames
     ){
 
     prop = lapply(attributes,function(x){
@@ -114,9 +109,10 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
           keyCounter = keyCounter,
           type=type,
           format=format,
-          default = list('en'='empty')
+          default = list('en'='-')
           )
     })
+    
     names(prop) <- attributes
     return(prop)
   }
@@ -139,11 +135,11 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
         properties = list(
           title = multiLingualInput(
             keyTitle="textualDescTitle",
-            default=.get(defaults,c("data","title"))
+            default= list(en=title)
             ),
           abstract = multiLingualInput(
             keyTitle="textualDescAbstract",
-            default=.get(defaults,c("data","abstract")),
+            default = list(en=abstract),
             type="string",format="textarea"
             ),
           keywords = list(
@@ -378,28 +374,28 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
                 type = "number",
                 minimum = -180,
                 maximum = 180,
-                default = .get(extentDefault,"lng1")
+                default = .get(extent,"lng1")
                 ),
               lng_max = list(
                 title = d("spatialBbxLngMax",lang=language,dict=dict),
                 type = "number",
                 minumum = -180,
                 maximum = 180,
-                default = .get(extentDefault,"lng2")
+                default = .get(extent,"lng2")
                 ),
               lat_min = list(
                 title = d("spatialBbxLatMin",lang=language,dict=dict),
                 type = "number",
                 minumum = -90,
                 maximum = 90,
-                default = .get(extentDefault,"lat1") 
+                default = .get(extent,"lat1") 
                 ),
               lat_max = list(
                 title = d("spatialBbxLatMax",lang=language,dict=dict),
                 type = "number",
                 minumum = -90,
                 maximum = 90, 
-                default = .get(extentDefault,"lat2") 
+                default = .get(extent,"lat2") 
                 )
               )
             )
@@ -584,5 +580,11 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",defaults=list())
       )
     )
   )
+
+  #fOut = tempfile()
+  #write(toJSON(out),fOut)
+  #mxDebugMsg(fOut)
+
+
   return(out)
 }

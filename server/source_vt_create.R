@@ -4,7 +4,7 @@ observeEvent(input$uploadGeojson,{
   language <- reactData$language 
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
   msgSave <- d("msgProcessWait", lang=language, dict=dict)
-
+  idUser <- .get(reactUser$data,c("id"))
 
   mxProgress(id="dataUploaded", text=paste(msgSave," :  md5 sum " ), percent=50)
 
@@ -85,20 +85,24 @@ observeEvent(input$sourceNew_init,{
   # If there is no doubt
   #
   if(isDuplicated){
-    startVal <- jsonlite::fromJSON(mxDbGetQuery(      
-      sprintf("SELECT data#>'{\"meta\"}' meta from %1$s WHERE id='%2$s'",
-      .get(config,c("pg","tables","sources")),
-      duplicateOf[[1]]
-      )
-      )$meta)
-  }
 
+#    startVal <- jsonlite::fromJSON(mxDbGetQuery(      
+      #sprintf("SELECT data#>'{\"meta\"}' meta from %1$s WHERE id='%2$s'",
+      #.get(config,c("pg","tables","sources")),
+      #duplicateOf[[1]]
+      #)
+      #)$meta)
+  }
+ 
   jedSchema(
     id="sourceNew",
     schema = mxSchemaSourceMeta(
       language = language,
       rolesTarget = rolesTarget,
-      defaults = view
+      title = .get(view, c("data","title","en")),
+      abstract =.get(view, c("data","abstract","en")), 
+      extent = .get(view, c("data","geometry","extent")),
+      attributesNames = names(.get(view, c("data","attributes")))
       ),
     startVal = startVal,
     options = list("no_additional_properties"=FALSE)
