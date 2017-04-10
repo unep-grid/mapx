@@ -391,7 +391,7 @@ mx.util.exists = function(x){
 };
 
 
-/** Translate text in element based on "[data-lang_key]" id and a json key-value pair dictionnary
+/** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
  * @param {Object} m 
  * @param {Object} m.dict dictionary
  * @param {element} m.el Target element. If omitted, the whole document will be translated.
@@ -410,7 +410,7 @@ mx.util.setLanguage = function(m) {
 
   if (!m.dict) return;
 
-  var i, els, el, id, doc, label, found, setLabel = {};
+  var i, els, el, doc, label, found, setLabel = {};
   langDefault = m.default ? m.default : "en";
   lang = m.lang ? m.lang : mx.language ? mx.language : langDefault;
 
@@ -431,20 +431,30 @@ mx.util.setLanguage = function(m) {
     }
   };
 
-  // fetch all elements with data-lang_key attr 
+  // if no el to look at, serach the whole document
   doc = m.el ? m.el : document;
 
+  // fetch all elements with data-lang_key attr 
   els = doc.querySelectorAll("[data-lang_key]");
+  
+  
   for (i = 0; i < els.length; i++) {
     el = els[i];
 
     if (mx.util.isElement(el)) {
+      var type = el.dataset.lang_type;
+      var id = el.dataset.lang_key;
 
-      id = el.dataset.lang_key;
-      type = el.dataset.lang_type;
+      /*
+      * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
+      */
+      if(!type) type = el.getAttribute("data-lang_type");
+      
+      // Default is text. Maybe not the most clever default.
       if (!type) type = "text";
-      isPlaceholder = !!el.dataset.lang_key_placeholder;
+      
       found = false;
+      
       for (j = 0; j < m.dict.length; j++) {
         if (!found) {
           if (m.dict[j].id == id) {
