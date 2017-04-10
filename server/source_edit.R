@@ -120,6 +120,8 @@ observeEvent(input$selectSourceLayerEdit,{
   meta = .set(meta,c("origin","sources"),NULL)
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
+  
+  mxDebugToJs(meta);
 
   jedSchema(
     id="sourceEdit",
