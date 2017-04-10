@@ -2,10 +2,11 @@
 observeEvent(input$uploadGeojson,{
 
   language <- reactData$language 
+  country <- reactData$country
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
   msgSave <- d("msgProcessWait", lang=language, dict=dict)
   idUser <- .get(reactUser$data,c("id"))
-
+  canRead <- .get(reactUser$role,c("desc","read"))
   mxProgress(id="dataUploaded", text=paste(msgSave," :  md5 sum " ), percent=50)
 
   #
@@ -17,18 +18,55 @@ observeEvent(input$uploadGeojson,{
   md5 <- digest::digest(toJSON(gj),serialize=F) 
   view <- .set(view,c("data","source","md5"),md5)
 
+  isDuplicate <- FALSE
   #
-  # Check if the data alredy exists
-  #  - If exists, populate schema with existing meta data
-  #  - If it does not exists, add a new table, add an empty schema
-  #
-  
+  # Check if the data alredy exists and available to the user
+  # 
   mxProgress(id="dataUploaded", text=paste(msgSave," : duplicate analysis " ), percent=50)
-  duplicateOf = mxDbGetQuery(sprintf(
-      "select id duplicate from %1$s where data#>>'{\"md5\"}' = '%2$s'",
+  
+  duplicates = mxDbGetQuery(sprintf(
+      "select id,editor,data#>>'{\"meta\",\"text\",\"title\"}' title from %1$s where data#>>'{\"md5\"}' = '%2$s' limit 1",
       .get(config,c("pg","tables","sources")),
       .get(view,c("data","source","md5"))
-      ))$duplicate
+      ))
+
+  if(!noDataCheck(duplicates)){
+
+ layers <-  mxDbGetLayerTable(
+    project = country,
+    userId = idUser,
+    target = canRead,
+    language = language
+    )
+
+ isDuplicate <- isTRUE(duplicates$id %in% layers$id)
+ }
+
+ if(isDuplicate){
+
+
+   titles <- lapply(duplicates$title,jsonlite::fromJSON,simplifyVector=F)[[1]]
+   
+   names(titles) <- names(d(names(titles),language))
+
+   uiOut <- tagList(
+      tags$p(d("msgErrorImport",dict=dict,lang=language)),
+      tags$p(d("msgErrorDuplicate",dict=dict,lang=language),': '),
+      listToHtmlClass(titles,titleMain=d("source_title",language)
+        )
+      )
+
+  mxProgress(id="importSource", percent=100, enable=F)
+  
+  output$panelModal <- renderUI(mxPanel(
+      id="uiErrorDuplicate",
+      headIcon="times",
+      html=uiOut,
+      addCloseButton=TRUE,
+      background=TRUE,
+      closeButtonText=d("btn_close",language)
+      )) 
+  }else{
 
   # save state
   view <- .set(view,c("data","source","duplicateOf"),duplicateOf)
@@ -64,7 +102,7 @@ observeEvent(input$uploadGeojson,{
       background=TRUE,
       closeButtonText=d("btn_close",language)
       ))
-
+  }
 }) 
 
 
@@ -77,8 +115,8 @@ observeEvent(input$sourceNew_init,{
   rolesTarget <- .get(reactUser$role,c("desc","publish"))
 
   view <- reactData$viewSourceGeojson 
-  duplicateOf <- .get(view,c("data","source","duplicateOf")) 
-  isDuplicated <- length(duplicateOf) > 0
+  #duplicateOf <- .get(view,c("data","source","duplicateOf")) 
+  #isDuplicated <- length(duplicateOf) > 0
 
   startVal <- NULL
   #
