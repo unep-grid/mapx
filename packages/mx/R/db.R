@@ -2213,10 +2213,10 @@ mxDbGetSessionDurationHMS <- function(id=NULL){
 #' Check in a standard mapx database if an email/user exists
 #'
 #' @param email map-x user email
-#' @param usertable name of the table
+#' @param userTable name of the table
 #' @return boolean exists
 #' @export
-mxDbEmailIsKnown <- function(email=NULL,usertable="mx_users",active=TRUE,validated=TRUE){
+mxDbEmailIsKnown <- function(email=NULL,userTable="mx_users",active=TRUE,validated=TRUE){
 
   if(is.null(email)) return()
   email <- as.character(email)
@@ -2226,7 +2226,7 @@ mxDbEmailIsKnown <- function(email=NULL,usertable="mx_users",active=TRUE,validat
     WHERE email='%2$s'
     AND validated='%3$s'
     AND hidden='%4$s' ",
-    usertable,
+    userTable,
     email,
     ifelse(validated,"true","false"),
     ifelse(!active,"true","false")
@@ -2235,6 +2235,10 @@ mxDbEmailIsKnown <- function(email=NULL,usertable="mx_users",active=TRUE,validat
   return(isTRUE(nrow(res)>0 && res$count > 0))
 }
 
+
+mxDbGetEmailFromId <- function(id,userTable="mx_users"){
+  mxDbGetQuery(sprintf("SELECT email from mx_users where id = 2",id))$email
+}
 
 
 
