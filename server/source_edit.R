@@ -144,7 +144,6 @@ observeEvent(input$selectSourceLayerEdit,{
     options = list("no_additional_properties"=FALSE)
     )
 
-  mxDebugToJs(meta)
 })
 
 observeEvent(input$sourceEdit_issues,{
