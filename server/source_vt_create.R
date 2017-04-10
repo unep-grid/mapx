@@ -1,108 +1,108 @@
 
 observeEvent(input$uploadGeojson,{
+  mxCatch(title="Upload Geojson",{
+    language <- reactData$language 
+    country <- reactData$country
+    dict <- .get(config,c("dictionaries","schemaMetadata")) 
+    msgSave <- d("msgProcessWait", lang=language, dict=dict)
+    idUser <- .get(reactUser$data,c("id"))
+    canRead <- .get(reactUser$role,c("desc","read"))
+    mxProgress(id="dataUploaded", text=paste(msgSave," :  md5 sum " ), percent=50)
 
-  language <- reactData$language 
-  country <- reactData$country
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
-  msgSave <- d("msgProcessWait", lang=language, dict=dict)
-  idUser <- .get(reactUser$data,c("id"))
-  canRead <- .get(reactUser$role,c("desc","read"))
-  mxProgress(id="dataUploaded", text=paste(msgSave," :  md5 sum " ), percent=50)
+    #
+    # Get geojson
+    #
 
-  #
-  # Get geojson
-  #
+    view  <- input$uploadGeojson
+    gj <- .get(view,c("data","source","data"))
+    md5 <- digest::digest(toJSON(gj),serialize=F) 
+    view <- .set(view,c("data","source","md5"),md5)
 
-  view  <- input$uploadGeojson
-  gj <- .get(view,c("data","source","data"))
-  md5 <- digest::digest(toJSON(gj),serialize=F) 
-  view <- .set(view,c("data","source","md5"),md5)
+    isDuplicate <- FALSE
+    #
+    # Check if the data alredy exists and available to the user
+    # 
+    mxProgress(id="dataUploaded", text=paste(msgSave," : duplicate analysis " ), percent=50)
 
-  isDuplicate <- FALSE
-  #
-  # Check if the data alredy exists and available to the user
-  # 
-  mxProgress(id="dataUploaded", text=paste(msgSave," : duplicate analysis " ), percent=50)
-  
-  duplicates = mxDbGetQuery(sprintf(
-      "select id,editor,data#>>'{\"meta\",\"text\",\"title\"}' title from %1$s where data#>>'{\"md5\"}' = '%2$s' limit 1",
-      .get(config,c("pg","tables","sources")),
-      .get(view,c("data","source","md5"))
-      ))
+    duplicates = mxDbGetQuery(sprintf(
+        "select id,editor,data#>>'{\"meta\",\"text\",\"title\"}' title from %1$s where data#>>'{\"md5\"}' = '%2$s' limit 1",
+        .get(config,c("pg","tables","sources")),
+        .get(view,c("data","source","md5"))
+        ))
 
-  if(!noDataCheck(duplicates)){
+    if(!noDataCheck(duplicates)){
 
- layers <-  mxDbGetLayerTable(
-    project = country,
-    userId = idUser,
-    target = canRead,
-    language = language
-    )
-
- isDuplicate <- isTRUE(duplicates$id %in% layers$id)
- }
-
- if(isDuplicate){
-
-
-   titles <- lapply(duplicates$title,jsonlite::fromJSON,simplifyVector=F)[[1]]
-   
-   names(titles) <- names(d(names(titles),language))
-
-   uiOut <- tagList(
-      tags$p(d("msgErrorImport",dict=dict,lang=language)),
-      tags$p(d("msgErrorDuplicate",dict=dict,lang=language),': '),
-      listToHtmlClass(titles,titleMain=d("source_title",language)
+      layers <-  mxDbGetLayerTable(
+        project = country,
+        userId = idUser,
+        target = canRead,
+        language = language
         )
-      )
 
-  mxProgress(id="importSource", percent=100, enable=F)
-  
-  output$panelModal <- renderUI(mxPanel(
-      id="uiErrorDuplicate",
-      headIcon="times",
-      html=uiOut,
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      )) 
-  }else{
+      isDuplicate <- isTRUE(duplicates$id %in% layers$id)
+    }
 
-  # save state
-  view <- .set(view,c("data","source","duplicateOf"),duplicateOf)
-  reactData$viewSourceGeojson <- view
+    if(isDuplicate){
 
-  mxProgress(id="dataUploaded", percent=100, enable=F)
-  #
-  # json editor output
-  #
-  uiOut = tagList(
-    jedOutput(id="sourceNew")
-    )
+      titles <- lapply(duplicates$title,jsonlite::fromJSON,simplifyVector=F)[[1]]
 
-  #
-  # List of button for the modal window
-  #
-  btnList <- list(
-    actionButton(
-      inputId="btnSaveNewSource",
-      label=d("btn_save",language)
-      )
-    )
+      names(titles) <- names(d(names(titles),language))
 
-  #
-  # Generate the modal panel
-  #
-  output$panelModal <- renderUI(mxPanel(
-      id="uiConfirmSourceInit",
-      headIcon="pencil",
-      html=uiOut,
-      listActionButton=btnList,
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
-  }
+      uiOut <- tagList(
+        tags$p(d("msgErrorImport",dict=dict,lang=language)),
+        tags$p(d("msgErrorDuplicate",dict=dict,lang=language),': '),
+        listToHtmlClass(titles,titleMain=d("source_title",language)
+          )
+        )
+
+      mxProgress(id="importSource", percent=100, enable=F)
+
+      output$panelModal <- renderUI(mxPanel(
+          id="uiErrorDuplicate",
+          headIcon="times",
+          html=uiOut,
+          addCloseButton=TRUE,
+          background=TRUE,
+          closeButtonText=d("btn_close",language)
+          )) 
+    }else{
+
+      # save state
+      view <- .set(view,c("data","source","duplicateOf"),duplicateOf)
+      reactData$viewSourceGeojson <- view
+
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+      #
+      # json editor output
+      #
+      uiOut = tagList(
+        jedOutput(id="sourceNew")
+        )
+
+      #
+      # List of button for the modal window
+      #
+      btnList <- list(
+        actionButton(
+          inputId="btnSaveNewSource",
+          label=d("btn_save",language)
+          )
+        )
+
+      #
+      # Generate the modal panel
+      #
+      output$panelModal <- renderUI(mxPanel(
+          id="uiConfirmSourceInit",
+          headIcon="pencil",
+          html=uiOut,
+          listActionButton=btnList,
+          addCloseButton=TRUE,
+          background=TRUE,
+          closeButtonText=d("btn_close",language)
+          ))
+    }
+})
 }) 
 
 
@@ -110,7 +110,7 @@ observeEvent(input$uploadGeojson,{
 # Send the json data when the ui is generated
 #
 observeEvent(input$sourceNew_init,{
-
+  mxCatch(title="Init Schema for source edition",{
   language <- reactData$language 
   rolesTarget <- .get(reactUser$role,c("desc","publish"))
 
@@ -119,18 +119,6 @@ observeEvent(input$sourceNew_init,{
   #isDuplicated <- length(duplicateOf) > 0
 
   startVal <- NULL
-  #
-  # If there is no doubt
-  #
-  if(isDuplicated){
-
-#    startVal <- jsonlite::fromJSON(mxDbGetQuery(      
-      #sprintf("SELECT data#>'{\"meta\"}' meta from %1$s WHERE id='%2$s'",
-      #.get(config,c("pg","tables","sources")),
-      #duplicateOf[[1]]
-      #)
-      #)$meta)
-  }
  
   jedSchema(
     id="sourceNew",
@@ -145,7 +133,7 @@ observeEvent(input$sourceNew_init,{
     startVal = startVal,
     options = list("no_additional_properties"=FALSE)
     )
-
+        })
 })
 
 #
@@ -174,89 +162,90 @@ observeEvent(input$sourceNew_issues,{
 # Save the source in db
 #
 observeEvent(input$btnSaveNewSource,{
-  meta <-input$sourceNew_values$msg
-  country <- reactData$country
-  language <- reactData$language
-  user <- reactUser$data$id
-  view <- reactData$viewSourceGeojson
-  type <- "vector"
-  gj <- .get(view,c("data","source","data"))
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
+  mxCatch(title="Save new source",{
+    meta <-input$sourceNew_values$msg
+    country <- reactData$country
+    language <- reactData$language
+    user <- reactUser$data$id
+    view <- reactData$viewSourceGeojson
+    type <- "vector"
+    gj <- .get(view,c("data","source","data"))
+    dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
-  msgSave <- d("msgProcessWait", lang=language, dict=dict)
+    msgSave <- d("msgProcessWait", lang=language, dict=dict)
 
-  mxProgress(id="importSource", text= paste(msgSave,": import in DB"), percent=10)
+    mxProgress(id="importSource", text= paste(msgSave,": import in DB"), percent=10)
 
-  if(reactData$viewSourceHasIssues) return()
+    if(reactData$viewSourceHasIssues) return()
 
-  tryCatch({
-    #
-    # Source id = layer id = table name
-    #
-    idSource <- randomString(
-      prefix=sprintf("mx_%1$s_%2$s_",tolower(country),type),
-      splitIn=3,
-      addLETTERS=F,
-      addLetters=T,
-      splitSep="_",
-      sep = "_"
-      )
+    tryCatch({
+      #
+      # Source id = layer id = table name
+      #
+      idSource <- randomString(
+        prefix=sprintf("mx_%1$s_%2$s_",tolower(country),type),
+        splitIn=3,
+        addLETTERS=F,
+        addLetters=T,
+        splitSep="_",
+        sep = "_"
+        )
 
-    #
-    # Create new row
-    #
-    sourceRow = list(
-      id = idSource,
-      country = country,
-      editor = user,
-      target = .get(meta,c("access","roles","names"),flattenList=T),
-      date_modified = Sys.time(),
-      data = list(
-        meta = meta,
-        md5 = .get(view,c("data","source","md5"))
-        ),
-      type = "vector"
-      )
+      #
+      # Create new row
+      #
+      sourceRow = list(
+        id = idSource,
+        country = country,
+        editor = user,
+        target = .get(meta,c("access","roles","names"),flattenList=T),
+        date_modified = Sys.time(),
+        data = list(
+          meta = meta,
+          md5 = .get(view,c("data","source","md5"))
+          ),
+        type = "vector"
+        )
 
-    #
-    # Add source row to DB
-    #
-    mxDbAddRow(
-      data=sourceRow,
-      table=.get(config,c("pg","tables","sources"))
-      )
+      #
+      # Add source row to DB
+      #
+      mxDbAddRow(
+        data=sourceRow,
+        table=.get(config,c("pg","tables","sources"))
+        )
 
-    #
-    # Add view to the DB
-    #
-    mxDbAddGeoJSON(
-      geojsonList=gj,
-      tableName=idSource
-      )
+      #
+      # Add view to the DB
+      #
+      mxDbAddGeoJSON(
+        geojsonList=gj,
+        tableName=idSource
+        )
 
-  reactData$triggerNewViewForSourceId <- idSource
+      reactData$triggerNewViewForSourceId <- idSource
 
-  reactData$updateSourceLayerList <- runif(1)  
+      reactData$updateSourceLayerList <- runif(1)  
 
-  },error=function(cond){
+    },error=function(cond){
 
-    mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
-    mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
+      mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
+      mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
 
-    output$panelModal <- renderUI(mxPanel(
-        id="uiSuccessufulImport",
-        headIcon="times",
-        html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
-        addCloseButton=TRUE,
-        background=TRUE,
-        closeButtonText=d("btn_close",language)
-        ))
+      output$panelModal <- renderUI(mxPanel(
+          id="uiSuccessufulImport",
+          headIcon="times",
+          html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
+          addCloseButton=TRUE,
+          background=TRUE,
+          closeButtonText=d("btn_close",language)
+          ))
 
-    mxDebugToJs(cond$message)
-  })
+      mxDebugToJs(cond$message)
+    })
 
-  mxProgress(id="importSource", percent=100, enable=F)
-
+    mxProgress(id="importSource", percent=100, enable=F)
+    })
 })
 
 
@@ -265,26 +254,28 @@ observeEvent(input$btnSaveNewSource,{
 #
 observeEvent(reactData$triggerNewViewForSourceId,{
 
-  view  <- input$uploadGeojson
-  language <- reactData$language
-  attributes <- .get(view,c("data","attributes"))
-  idSource <- 
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
- 
-  ui <- tagList(
-    tags$h3(d("optionalViewTitle",lang=language,dict=dict)),
-    tags$p(d("optionalViewText",lang=language,dict=dict)),
-    selectInput("selectOptionalViewAttribute",
-      label = d("selectOptionalViewAttribute",lang=language,dict=dict),
-      choices = tolower(names(attributes))
-      ),
-    uiOutput("summaryOptionalViewAttribute")
-    )
+  mxCatch(title="Optional view source trigger",{
 
-  btnList <- list(
-    actionButton("btnOptionalViewCreate",label=d("btn_create",lang=language)),
-    actionButton("btnOptionalViewCancel",label=d("btn_finish",lang=language)) 
-    )
+    view  <- input$uploadGeojson
+    language <- reactData$language
+    attributes <- .get(view,c("data","attributes"))
+    idSource <- 
+      dict <- .get(config,c("dictionaries","schemaMetadata")) 
+
+    ui <- tagList(
+      tags$h3(d("optionalViewTitle",lang=language,dict=dict)),
+      tags$p(d("optionalViewText",lang=language,dict=dict)),
+      selectInput("selectOptionalViewAttribute",
+        label = d("selectOptionalViewAttribute",lang=language,dict=dict),
+        choices = tolower(names(attributes))
+        ),
+      uiOutput("summaryOptionalViewAttribute")
+      )
+
+    btnList <- list(
+      actionButton("btnOptionalViewCreate",label=d("btn_create",lang=language)),
+      actionButton("btnOptionalViewCancel",label=d("btn_finish",lang=language)) 
+      )
 
     output$panelModal <- renderUI(mxPanel(
         id="uiSuccessufulImport",
@@ -295,11 +286,14 @@ observeEvent(reactData$triggerNewViewForSourceId,{
         listActionButton=btnList,
         background=TRUE,
         ))
-
+    })
 })
 
 
 observeEvent(input$selectOptionalViewAttribute,{
+
+  mxCatch(title="Select optional view attribute",{
+
   sourceId <- reactData$triggerNewViewForSourceId 
   attribute <- input$selectOptionalViewAttribute
   language <- reactData$language 
@@ -313,7 +307,7 @@ observeEvent(input$selectOptionalViewAttribute,{
       )
  
   output$summaryOptionalViewAttribute <- renderUI(summary$html)
-
+    })
 })
 
 
@@ -322,20 +316,24 @@ observeEvent(input$selectOptionalViewAttribute,{
 #
 #
 observeEvent(input$btnOptionalViewCancel,{
-  language <- reactData$language
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
- 
-  #
-  # Generate the modal panel
-  #
-  output$panelModal <- renderUI(mxPanel(
-      id="uiSuccessufulImport",
-      headIcon="check",
-      html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+
+  mxCatch(title="Ignore optional view",{
+
+    language <- reactData$language
+    dict <- .get(config,c("dictionaries","schemaMetadata")) 
+
+    #
+    # Generate the modal panel
+    #
+    output$panelModal <- renderUI(mxPanel(
+        id="uiSuccessufulImport",
+        headIcon="check",
+        html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
+        addCloseButton=TRUE,
+        background=TRUE,
+        closeButtonText=d("btn_close",language)
+        ))
+      })
 })
 
 #
@@ -343,15 +341,17 @@ observeEvent(input$btnOptionalViewCancel,{
 #
 observeEvent(input$btnOptionalViewCreate,{
 
-  selectedAttribute <- input$selectOptionalViewAttribute
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
-  view  <- input$uploadGeojson
-  language <- reactData$language
-  country <- reactData$country
-  user <- reactUser$data$id
-  meta <- input$sourceNew_values$msg
-  idSource <- reactData$triggerNewViewForSourceId
-  msgSave <- d("msgProcessWait", lang=language, dict=dict)
+  mxCatch(title="Optional new view create",{
+
+    selectedAttribute <- input$selectOptionalViewAttribute
+    dict <- .get(config,c("dictionaries","schemaMetadata")) 
+    view  <- input$uploadGeojson
+    language <- reactData$language
+    country <- reactData$country
+    user <- reactUser$data$id
+    meta <- input$sourceNew_values$msg
+    idSource <- reactData$triggerNewViewForSourceId
+    msgSave <- d("msgProcessWait", lang=language, dict=dict)
 
     # 
     # New view id
@@ -365,110 +365,105 @@ observeEvent(input$btnOptionalViewCreate,{
       sep = "-"
       )
 
-  tryCatch({
-  mxProgress(id="importSource", text=paste(msgSave,": create a new empty view "), percent=90)
+    tryCatch({
+      mxProgress(id="importSource", text=paste(msgSave,": create a new empty view "), percent=90)
 
-  #
-  # New view squeleton
-  #
-  newView <- list(
-    id = idView,
-    country = country,
-    editor = user,
-    target = list("self"),
-    date_modified = Sys.time(),
-    data = list(
-      title = .get(meta,c("text","title")),
-      abstract = .get(meta,c("text","abstract")
+      #
+      # New view squeleton
+      #
+      newView <- list(
+        id = idView,
+        country = country,
+        editor = user,
+        target = list("self"),
+        date_modified = Sys.time(),
+        data = list(
+          title = .get(meta,c("text","title")),
+          abstract = .get(meta,c("text","abstract")
+            )
+          ),
+        type = "vt"
         )
-      ),
-      type = "vt"
-    )
- 
-  #
-  # Get summary for the attributes with the less occurences.
-  #
-  attributes = .get(view,c("data","attributes"))
-  
-  if(noDataCheck(selectedAttribute)){ 
-    selectedAttribute =  tolower(names(which(min(sapply(attributes,length)) == sapply(attributes,length))))[[1]]
-  }
+
+      #
+      # Get summary for the attributes with the less occurences.
+      #
+      attributes = .get(view,c("data","attributes"))
+
+      if(noDataCheck(selectedAttribute)){ 
+        selectedAttribute =  tolower(names(which(min(sapply(attributes,length)) == sapply(attributes,length))))[[1]]
+      }
 
 
-  sourceSummary <- mxDbGetLayerSummary(
-    layer = idSource,
-    variable = selectedAttribute
-    )
+      sourceSummary <- mxDbGetLayerSummary(
+        layer = idSource,
+        variable = selectedAttribute
+        )
 
-  newView <- mxUpdateDefViewVt(
-    view = newView, 
-    sourceData = sourceSummary$list
-    )
+      newView <- mxUpdateDefViewVt(
+        view = newView, 
+        sourceData = sourceSummary$list
+        )
 
-  #
-  # Add the view to the db
-  #
-  mxDbAddRow(
-    data=newView,
-    table=.get(config,c("pg","tables","views"))
-    )
+      #
+      # Add the view to the db
+      #
+      mxDbAddRow(
+        data=newView,
+        table=.get(config,c("pg","tables","views"))
+        )
 
-  newView$`_edit` = TRUE 
+      newView$`_edit` = TRUE 
 
-  mglSetSourcesFromViews(
-    id = .get(config,c("map","id")),
-    viewsList = newView,
-    render = FALSE,
-    country = country
-    )
-
-
-  mxProgress(id="importSource", enable=FALSE)
-  #
-  # Generate the modal panel
-  #
-  output$panelModal <- renderUI(mxPanel(
-      id="uiSuccessufulImport",
-      headIcon="check",
-      html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+      mglSetSourcesFromViews(
+        id = .get(config,c("map","id")),
+        viewsList = newView,
+        render = FALSE,
+        country = country
+        )
 
 
-  #
-  # Remove original geojson
-  #
-  mglRemoveView(
-    idView = .get(view,"id") 
-    )
+      mxProgress(id="importSource", enable=FALSE)
+      #
+      # Generate the modal panel
+      #
+      output$panelModal <- renderUI(mxPanel(
+          id="uiSuccessufulImport",
+          headIcon="check",
+          html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
+          addCloseButton=TRUE,
+          background=TRUE,
+          closeButtonText=d("btn_close",language)
+          ))
 
-  },error=function(cond){
 
-   mxDbGetQuery(sprintf("delete from mx_views where id='%s'",idView)) ;
-   mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
-   mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
+      #
+      # Remove original geojson
+      #
+      mglRemoveView(
+        idView = .get(view,"id") 
+        )
 
-   output$panelModal <- renderUI(mxPanel(
-      id="uiErrorImport",
-      headIcon="times",
-      html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+    },error=function(cond){
 
-   mxDebugToJs(
-     list(
-       cond = cond$message,
-       stack = traceback()
-       )
-     )
-  })
+      mxDbGetQuery(sprintf("delete from mx_views where id='%s'",idView)) ;
+      mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
+      mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
 
-  reactData$updateViewListFetchOnly <- runif(1)
-  mxProgress(id="importSource", enable=FALSE)
+      output$panelModal <- renderUI(mxPanel(
+          id="uiErrorImport",
+          headIcon="times",
+          html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
+          addCloseButton=TRUE,
+          background=TRUE,
+          closeButtonText=d("btn_close",language)
+          ))
+
+    })
+
+    reactData$updateViewListFetchOnly <- runif(1)
+    mxProgress(id="importSource", enable=FALSE)
+      })
 })
 
 
