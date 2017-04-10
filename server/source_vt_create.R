@@ -1,6 +1,11 @@
 
 observeEvent(input$uploadGeojson,{
-  mxCatch(title="Upload Geojson",{
+  mxCatch(
+    title="Upload Geojson",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+     },
+    {
     language <- reactData$language 
     country <- reactData$country
     dict <- .get(config,c("dictionaries","schemaMetadata")) 
@@ -68,7 +73,6 @@ observeEvent(input$uploadGeojson,{
     }else{
 
       # save state
-      view <- .set(view,c("data","source","duplicateOf"),duplicateOf)
       reactData$viewSourceGeojson <- view
 
       mxProgress(id="dataUploaded", percent=100, enable=F)
@@ -110,30 +114,33 @@ observeEvent(input$uploadGeojson,{
 # Send the json data when the ui is generated
 #
 observeEvent(input$sourceNew_init,{
-  mxCatch(title="Init Schema for source edition",{
-  language <- reactData$language 
-  rolesTarget <- .get(reactUser$role,c("desc","publish"))
+  mxCatch(
+    title="Init Schema for source edition",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+    },
+    {
+      language <- reactData$language 
+      rolesTarget <- .get(reactUser$role,c("desc","publish"))
 
-  view <- reactData$viewSourceGeojson 
-  #duplicateOf <- .get(view,c("data","source","duplicateOf")) 
-  #isDuplicated <- length(duplicateOf) > 0
+      view <- reactData$viewSourceGeojson 
 
-  startVal <- NULL
- 
-  jedSchema(
-    id="sourceNew",
-    schema = mxSchemaSourceMeta(
-      language = language,
-      rolesTarget = rolesTarget,
-      title = .get(view, c("data","title","en")),
-      abstract =.get(view, c("data","abstract","en")), 
-      extent = .get(view, c("data","geometry","extent")),
-      attributesNames = names(.get(view, c("data","attributes")))
-      ),
-    startVal = startVal,
-    options = list("no_additional_properties"=FALSE)
-    )
-        })
+      startVal <- NULL
+
+      jedSchema(
+        id="sourceNew",
+        schema = mxSchemaSourceMeta(
+          language = language,
+          rolesTarget = rolesTarget,
+          title = .get(view, c("data","title","en")),
+          abstract =.get(view, c("data","abstract","en")), 
+          extent = .get(view, c("data","geometry","extent")),
+          attributesNames = names(.get(view, c("data","attributes")))
+          ),
+        startVal = startVal,
+        options = list("no_additional_properties"=FALSE)
+        )
+    })
 })
 
 #
@@ -162,7 +169,12 @@ observeEvent(input$sourceNew_issues,{
 # Save the source in db
 #
 observeEvent(input$btnSaveNewSource,{
-  mxCatch(title="Save new source",{
+  mxCatch(
+    title="Save new source",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+     },
+    {
     meta <-input$sourceNew_values$msg
     country <- reactData$country
     language <- reactData$language
@@ -254,8 +266,12 @@ observeEvent(input$btnSaveNewSource,{
 #
 observeEvent(reactData$triggerNewViewForSourceId,{
 
-  mxCatch(title="Optional view source trigger",{
-
+  mxCatch(
+    title="Optional view source trigger",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+     },
+    {
     view  <- input$uploadGeojson
     language <- reactData$language
     attributes <- .get(view,c("data","attributes"))
@@ -291,22 +307,26 @@ observeEvent(reactData$triggerNewViewForSourceId,{
 
 
 observeEvent(input$selectOptionalViewAttribute,{
+  mxCatch(
+    title="Select optional view attribute",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+    },
+    {
 
-  mxCatch(title="Select optional view attribute",{
+      sourceId <- reactData$triggerNewViewForSourceId 
+      attribute <- input$selectOptionalViewAttribute
+      language <- reactData$language 
+      dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
-  sourceId <- reactData$triggerNewViewForSourceId 
-  attribute <- input$selectOptionalViewAttribute
-  language <- reactData$language 
-  dict <- .get(config,c("dictionaries","schemaMetadata")) 
+      summary <-  mxDbGetLayerSummary(
+        layer=sourceId,
+        variable=attribute,
+        geomType=NULL,
+        language=language
+        )
 
-   summary <-  mxDbGetLayerSummary(
-      layer=sourceId,
-      variable=attribute,
-      geomType=NULL,
-      language=language
-      )
- 
-  output$summaryOptionalViewAttribute <- renderUI(summary$html)
+      output$summaryOptionalViewAttribute <- renderUI(summary$html)
     })
 })
 
@@ -317,7 +337,11 @@ observeEvent(input$selectOptionalViewAttribute,{
 #
 observeEvent(input$btnOptionalViewCancel,{
 
-  mxCatch(title="Ignore optional view",{
+  mxCatch(title="Ignore optional view",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+     },
+    {
 
     language <- reactData$language
     dict <- .get(config,c("dictionaries","schemaMetadata")) 
@@ -341,129 +365,133 @@ observeEvent(input$btnOptionalViewCancel,{
 #
 observeEvent(input$btnOptionalViewCreate,{
 
-  mxCatch(title="Optional new view create",{
+  mxCatch(
+    title="Optional new view create",
+    onError = function(){
+      mxProgress(id="dataUploaded", percent=100, enable=F)
+     },
+     {
+       selectedAttribute <- input$selectOptionalViewAttribute
+       dict <- .get(config,c("dictionaries","schemaMetadata")) 
+       view  <- input$uploadGeojson
+       language <- reactData$language
+       country <- reactData$country
+       user <- reactUser$data$id
+       meta <- input$sourceNew_values$msg
+       idSource <- reactData$triggerNewViewForSourceId
+       msgSave <- d("msgProcessWait", lang=language, dict=dict)
 
-    selectedAttribute <- input$selectOptionalViewAttribute
-    dict <- .get(config,c("dictionaries","schemaMetadata")) 
-    view  <- input$uploadGeojson
-    language <- reactData$language
-    country <- reactData$country
-    user <- reactUser$data$id
-    meta <- input$sourceNew_values$msg
-    idSource <- reactData$triggerNewViewForSourceId
-    msgSave <- d("msgProcessWait", lang=language, dict=dict)
+       # 
+       # New view id
+       #
+       idView <- randomString(
+         prefix="MX-",
+         splitIn=3,
+         addLETTERS=T,
+         addLetters=F,
+         splitSep="-",
+         sep = "-"
+         )
 
-    # 
-    # New view id
-    #
-    idView <- randomString(
-      prefix="MX-",
-      splitIn=3,
-      addLETTERS=T,
-      addLetters=F,
-      splitSep="-",
-      sep = "-"
-      )
+       tryCatch({
+         mxProgress(id="importSource", text=paste(msgSave,": create a new empty view "), percent=90)
 
-    tryCatch({
-      mxProgress(id="importSource", text=paste(msgSave,": create a new empty view "), percent=90)
+         #
+         # New view squeleton
+         #
+         newView <- list(
+           id = idView,
+           country = country,
+           editor = user,
+           target = list("self"),
+           date_modified = Sys.time(),
+           data = list(
+             title = .get(meta,c("text","title")),
+             abstract = .get(meta,c("text","abstract")
+               )
+             ),
+           type = "vt"
+           )
 
-      #
-      # New view squeleton
-      #
-      newView <- list(
-        id = idView,
-        country = country,
-        editor = user,
-        target = list("self"),
-        date_modified = Sys.time(),
-        data = list(
-          title = .get(meta,c("text","title")),
-          abstract = .get(meta,c("text","abstract")
-            )
-          ),
-        type = "vt"
-        )
+         #
+         # Get summary for the attributes with the less occurences.
+         #
+         attributes = .get(view,c("data","attributes"))
 
-      #
-      # Get summary for the attributes with the less occurences.
-      #
-      attributes = .get(view,c("data","attributes"))
-
-      if(noDataCheck(selectedAttribute)){ 
-        selectedAttribute =  tolower(names(which(min(sapply(attributes,length)) == sapply(attributes,length))))[[1]]
-      }
-
-
-      sourceSummary <- mxDbGetLayerSummary(
-        layer = idSource,
-        variable = selectedAttribute
-        )
-
-      newView <- mxUpdateDefViewVt(
-        view = newView, 
-        sourceData = sourceSummary$list
-        )
-
-      #
-      # Add the view to the db
-      #
-      mxDbAddRow(
-        data=newView,
-        table=.get(config,c("pg","tables","views"))
-        )
-
-      newView$`_edit` = TRUE 
-
-      mglSetSourcesFromViews(
-        id = .get(config,c("map","id")),
-        viewsList = newView,
-        render = FALSE,
-        country = country
-        )
+         if(noDataCheck(selectedAttribute)){ 
+           selectedAttribute =  tolower(names(which(min(sapply(attributes,length)) == sapply(attributes,length))))[[1]]
+         }
 
 
-      mxProgress(id="importSource", enable=FALSE)
-      #
-      # Generate the modal panel
-      #
-      output$panelModal <- renderUI(mxPanel(
-          id="uiSuccessufulImport",
-          headIcon="check",
-          html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
-          addCloseButton=TRUE,
-          background=TRUE,
-          closeButtonText=d("btn_close",language)
-          ))
+         sourceSummary <- mxDbGetLayerSummary(
+           layer = idSource,
+           variable = selectedAttribute
+           )
+
+         newView <- mxUpdateDefViewVt(
+           view = newView, 
+           sourceData = sourceSummary$list
+           )
+
+         #
+         # Add the view to the db
+         #
+         mxDbAddRow(
+           data=newView,
+           table=.get(config,c("pg","tables","views"))
+           )
+
+         newView$`_edit` = TRUE 
+
+         mglSetSourcesFromViews(
+           id = .get(config,c("map","id")),
+           viewsList = newView,
+           render = FALSE,
+           country = country
+           )
 
 
-      #
-      # Remove original geojson
-      #
-      mglRemoveView(
-        idView = .get(view,"id") 
-        )
+         mxProgress(id="importSource", enable=FALSE)
+         #
+         # Generate the modal panel
+         #
+         output$panelModal <- renderUI(mxPanel(
+             id="uiSuccessufulImport",
+             headIcon="check",
+             html=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
+             addCloseButton=TRUE,
+             background=TRUE,
+             closeButtonText=d("btn_close",language)
+             ))
 
-    },error=function(cond){
 
-      mxDbGetQuery(sprintf("delete from mx_views where id='%s'",idView)) ;
-      mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
-      mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
+         #
+         # Remove original geojson
+         #
+         mglRemoveView(
+           idView = .get(view,"id") 
+           )
 
-      output$panelModal <- renderUI(mxPanel(
-          id="uiErrorImport",
-          headIcon="times",
-          html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
-          addCloseButton=TRUE,
-          background=TRUE,
-          closeButtonText=d("btn_close",language)
-          ))
+       },error=function(cond){
 
-    })
+         mxDbGetQuery(sprintf("delete from mx_views where id='%s'",idView)) ;
+         mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
+         mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
 
-    reactData$updateViewListFetchOnly <- runif(1)
-    mxProgress(id="importSource", enable=FALSE)
-      })
+         output$panelModal <- renderUI(mxPanel(
+             id="uiErrorImport",
+             headIcon="times",
+             html=tags$p(d("msgErrorImport",dict=dict,lang=language)),
+             addCloseButton=TRUE,
+             background=TRUE,
+             closeButtonText=d("btn_close",language)
+             ))
+
+       })
+
+       reactData$updateViewListFetchOnly <- runif(1)
+       mxProgress(id="importSource", enable=FALSE)
+     })
 })
 
 

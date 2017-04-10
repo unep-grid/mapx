@@ -588,7 +588,9 @@ mxCatch <- function(
   expression,
   session=shiny:::getDefaultReactiveDomain(),
   debug = TRUE,
-  logToJs = TRUE
+  onError = function(){},
+  onWarning = function(){},
+  onMessage = function(){}
   ){
   #
   # try this and catch errors !
@@ -603,6 +605,8 @@ mxCatch <- function(
       call = as.character(e$call)
       )
 
+    onError()
+
   },warning = function(e){
 
     mxCatchHandler(
@@ -610,6 +614,8 @@ mxCatch <- function(
       message = as.character(e$message),
       call = as.character(e$call)
       )
+
+    onWarning()
 
   },message = function(e){
 
@@ -620,6 +626,8 @@ mxCatch <- function(
         call = as.character(e$call)
         )
     }
+
+    onMessage()
   })
 
 }
