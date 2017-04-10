@@ -121,7 +121,6 @@ observeEvent(input$selectSourceLayerEdit,{
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
   
-  mxDebugToJs(meta);
 
   jedSchema(
     id="sourceEdit",
@@ -134,6 +133,7 @@ observeEvent(input$selectSourceLayerEdit,{
     options = list("no_additional_properties"=FALSE)
     )
 
+  mxDebugToJs(meta)
 })
 
 observeEvent(input$sourceEdit_issues,{
