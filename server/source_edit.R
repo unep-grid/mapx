@@ -115,15 +115,24 @@ observeEvent(input$selectSourceLayerEdit,{
   rolesTarget <- .get(reactUser$role,c("desc","publish"))
 
   attributesNames <- mxDbGetLayerColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1"))
+  
 
 
+  # Clean meta : 
+  # - remove old attributes names 
+  # - remove old schema values NOTE : once stable, remove those lines
 
-  # Clean old schema values
+  attributesOld <- names(.get(meta,c("text","attributes")))
+  attributesRemoved <- attributesOld[ ! attributesOld %in% attributesNames]
+
+  for(a in attributesRemoved){
+    meta = .set(meta,c("text","attributes",a),NULL)
+  }
+
   meta = .set(meta,c("origin","sources"),NULL)
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
   
-
   jedSchema(
     id="sourceEdit",
     schema = mxSchemaSourceMeta(
