@@ -492,6 +492,39 @@ listToHtml<-function(listInput,htL='',h=2, exclude=NULL){
   return(paste(htL,collapse=''))
 }
 
+
+
+#' R list to html list
+#'
+#' Create a html list and apply a class for <ul> and <li>
+#'
+#' @param listInput list in inptu
+listToHtmlSimple <- function(listInput){
+
+
+  makeUL = function(li){
+    nL <- names(li)
+    content <- tagList()
+    for( n in nL){ 
+      content <- tagList(content, makeLi(li[[n]],n))
+    }
+    tags$ul(content,class="list-group")
+  }
+
+  makeLi = function(it,ti){
+    if (is.list(it)){
+      content = makeUL(it)
+    }else{
+      content = it 
+    }
+    tags$li(class="list-group-item",tags$b(ti),content)
+  }
+
+  makeUL(listInput)         
+
+}
+
+
 #' R list to html list
 #'
 #' Create a html list and apply a class for <ul> and <li>
@@ -577,7 +610,8 @@ listToHtmlClass <- function(listInput, exclude=NULL,titleMain="",title=NULL,c=0,
   }
   return(HTML(paste(htL,collapse='')))
 } 
- 
+
+
 
 #' R list to html list
 #'
