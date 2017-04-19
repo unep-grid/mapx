@@ -110,12 +110,11 @@ observe({
 
               viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
               layerMeta <- mxDbGetLayerMeta(viewLayerName)
-
+              layerMeta$db <- list(id = viewLayerName)
+              
               uiOut<-tagList(
-                tags$h4(
-                  tags$span(d("source_meta_data",language))
-                  ),
-                HTML(listToHtmlClass(
+                HTML(
+                  listToHtmlClass(
                     listInput = layerMeta,
                     titleMain = d("source_meta_data",language)
                     )
