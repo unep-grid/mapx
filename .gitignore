@@ -11,11 +11,9 @@ settings/settings-local.R
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
-# packrate
-packrat/lib*/
+
 .DS_Store
 .Rproj.user
-tests/testthat/packrat/
 packrat-scenario*/
 # libre office temp file
 .~lock*
@@ -24,4 +22,5 @@ node_modules
 
 #Update script
 mxRemoteUpdate.sh
-mxRemoteGetLog.sh
+
+
