@@ -41,6 +41,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       title = d(keyTitle,dict=dict,lang=language),
       description = d(paste0(keyTitle,"_desc"),dict=dict,lang=language),
       type = "string",
+      propertyOrder = mxCounter("dataIntegrity"),
       minlength = 1,
       default = "0",
       enum = c("0",
