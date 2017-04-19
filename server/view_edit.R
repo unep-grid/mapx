@@ -49,7 +49,7 @@ observe({
           #
           # User publish right
           #
-          targetGroups <- reactUser$role[[c("desc","publish")]]
+          targetGroups <- reactUser$role[[c("publish")]]
           targetCurrent <- viewData[["target"]]
 
           #
@@ -785,7 +785,7 @@ reactSourceVariables <- reactive({
 #
 reactSourceLayer <- reactive({
 
-  userCanRead <- reactUser$role[[c("desc","read")]]
+  userCanRead <- reactUser$role[[c("read")]]
   userId <- reactUser$data[["id"]]
   country <- reactData$country
   language <- reactData$language

@@ -395,57 +395,51 @@ observe({
         #
         # Extract role description value
         #
-        roleDesc <- reactUser$role$desc
+        role <- reactUser$role
         
-        profile <- roleDesc$profile
-        edit <- roleDesc$edit
-        publish <- roleDesc$publish 
-        access <- roleDesc$access
-
-
         mxDebugMsg(sprintf("%1$s connected as %2$s in %3$s",
             reactUser$data$email,
-            reactUser$role$role,
+            reactUser$role$name,
             cntry
             ))
+        
+        ##
+        ## Set user access
+        ##
 
-        #
-        # Set user access
-        #
+        #reactUser$allowStoryCreator <- isTRUE("storymap_creator" %in% access)
+        #reactUser$allowStoryReader <-  isTRUE("storymap" %in% access)
+        #reactUser$allowViewsCreator <-isTRUE("view_creator" %in% access)
+        #reactUser$allowUpload <- isTRUE("data_upload" %in% access)
+        #reactUser$allowAnalysisOverlap <- isTRUE("analysis_overlap" %in% access)
+        #reactUser$allowPolygonOfInterest <- isTRUE("polygon_of_interest" %in% access)
+        #reactUser$allowMap <- isTRUE("map" %in% access)
+        #reactUser$allowAdmin <- isTRUE("admin" %in% access)
+        #reactUser$allowProfile <- isTRUE("profile" %in% access)
+        ##
+        ## Update select publishing / editing target
+        ##
 
-        reactUser$allowStoryCreator <- isTRUE("storymap_creator" %in% access)
-        reactUser$allowStoryReader <-  isTRUE("storymap" %in% access)
-        reactUser$allowViewsCreator <-isTRUE("view_creator" %in% access)
-        reactUser$allowUpload <- isTRUE("data_upload" %in% access)
-        reactUser$allowAnalysisOverlap <- isTRUE("analysis_overlap" %in% access)
-        reactUser$allowPolygonOfInterest <- isTRUE("polygon_of_interest" %in% access)
-        reactUser$allowMap <- isTRUE("map" %in% access)
-        reactUser$allowAdmin <- isTRUE("admin" %in% access)
-        reactUser$allowProfile <- isTRUE("profile" %in% access)
-        #
-        # Update select publishing / editing target
-        #
+        #if("data_upload" %in% access){
+          #updateSelectInput(session,
+            #inputId="selNewLayerVisibility",
+            #choices=publish
+            #)
+        #}
 
-        if("data_upload" %in% access){
-          updateSelectInput(session,
-            inputId="selNewLayerVisibility",
-            choices=publish
-            )
-        }
+        #if("view_creator" %in% access){
+          #updateSelectInput(session,
+            #inputId="selNewViewVisibility",
+            #choices=publish
+            #)
+        #}
 
-        if("view_creator" %in% access){
-          updateSelectInput(session,
-            inputId="selNewViewVisibility",
-            choices=publish
-            )
-        }
-
-        if("storymap_creator" %in% access){
-          updateSelectInput(session,
-            inputId="selStoryVisibility",
-            choices=publish
-            )
-        }
+        #if("storymap_creator" %in% access){
+          #updateSelectInput(session,
+            #inputId="selStoryVisibility",
+            #choices=publish
+            #)
+        #}
       }
     })
 })

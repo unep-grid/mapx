@@ -11,22 +11,6 @@ config[["system"]] <- list(
   hostname = Sys.info()[["nodename"]],
   hostnameRemote = "map-x-full"
   )
-
-#
-# ssh config for remote command. Not that list names are used in cmd 
-# 
-config[["ssh"]] <- list( 
-  HostName="localhost",
-  User="vagrant",
-  Port=2222,
-  UserKnownHostsFile="/dev/null",
-  StrictHostKeyChecking="no",
-  PasswordAuthentication="no",
-  IdentityFile="",
-  IdentitiesOnly="yes",
-  LogLevel="FATAL"
-  )
-
 #
 # postgres configuration
 #
@@ -47,18 +31,6 @@ config[["pg"]] = list(
   )
 
 #
-# remote server configuration
-#
-config[["remote"]] <- list(
-  hostname="map-x-full",
-  host="127.0.0.1",
-  user="vagrant",
-  port=2222
-  )
-
-
-
-#
 # web resources : will be exposed to the client using shiny::addRessourcePath. 
 #
 # List name will be prefix 
@@ -71,7 +43,7 @@ config[["resources"]]  =  list(
       "sprites" = file.path("web","data","styles","sprites"),
       "styles" = file.path("web","data","styles"),
       "mx" = file.path("web","libraries"),
-      "images" = file.path("/tmp")
+      "userdata" = file.path("/vagrant/data/userdata") ## expected shared folder from vagrant
     )
 
 #
@@ -139,10 +111,10 @@ config[["map"]] <- list(
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
   paths = list(
-    style= "styles/base/mapx.json",
-    themes="styles/themes/mapx.json",
-    sprite="styles/sprites/sprite"
-    #style = "styles/base/simple.json",
+    style= "styles/base/mapx.json"
+    , themes="styles/themes/mapx.json"
+    , sprite="styles/sprites/sprite"
+    #, style = "styles/base/simple.json"
     )
   )
 
@@ -379,65 +351,81 @@ config[["users"]][["data"]][["superUser"]]  <- list(
 # admin : The user can edit account of all users in this group.
 config[["users"]][["roles"]]<- list(
   list(
-    role="public",
+    name="public",
     level=4,
-    desc = list(
+    #desc = list(
       access = c(),
       read = c("public"),
       publish = c(),
       edit = c(),
       profile = c(),
       admin = c()
-      )
+      #)
     ),
   list(
-    role="user",
+    name="user",
     level=3,
-    desc=list(
+    #desc=list(
       access = c(),
       read = c("self","public","user"),
       publish = c("self","publisher"),
       edit = c("self"),
       profile = c("self"),
       admin = c()
-      )
+      #)
     ),
   list(
-    role="publisher",
+    name="publisher",
     level=2,
-    desc = list(
+    #desc = list(
       access = c(),
       read = c("self","public","user","publisher"),
       publish = c("self","public","user","publisher"),
       edit = c("self","public","user","publisher"),
       profile = c("self"),
       admin = c()
-      )
+      #)
     ),
   list(
-    role="admin",
+    name="admin",
     level=1,
-    desc = list(
+    #desc = list(
       access = c(),
       read = c("self","public","user","publisher","admin"),
       publish = c("self","public","user","publisher","admin"),
       edit = c("self","public","user","publisher","admin"),
       profile = c("self","public","user","publisher","admin"),
       admin = c("self","public","user","publisher")
-      )
+      #)
     ),
   list(
-    role="superuser",
+    name="superuser",
     level=0,
-    desc = list(
-      access = c(),
+    #desc = list(
+      access = c("qgis"),
       read = c("self","public","user","publisher","admin","superuser"),
       publish = c("self","public","user","publisher","admin","superuser"),
       edit = c("self","public","user","publisher","admin","superuser"),
       profile = c("self","public","user","publisher","admin","superuser"),
       admin = c("public","user","publisher","admin","superuser")
-      )
+      #)
     )
   )
+
+
+#
+# ssh config for remote command. Not that list names are used in cmd 
+# 
+#config[["ssh"]] <- list( 
+  #HostName="localhost",
+  #User="vagrant",
+  #Port=2222,
+  #UserKnownHostsFile="/dev/null",
+  #StrictHostKeyChecking="no",
+  #PasswordAuthentication="no",
+  #IdentityFile="",
+  #IdentitiesOnly="yes",
+  #LogLevel="FATAL"
+  #)
 
 

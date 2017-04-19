@@ -1396,19 +1396,19 @@ mxGetMaxRole <- function(project,userInfo){
 
   if(hasRoleInProject){
     levelProject <- mxRecursiveSearch(
-      li=roles,"role","==",roleInProject
+      li=roles,"name","==",roleInProject
       )[[1]]$level
   }
 
   if(hasRoleInWorld){
     levelWorld <- mxRecursiveSearch(
-      li=roles,"role","==",roleInWorld
+      li=roles,"name","==",roleInWorld
       )[[1]]$level
   }
 
   levelUser <- min(c(levelWorld,levelProject))
 
-  out  <- mxRecursiveSearch(conf[[c("users","roles")]],"level","==",levelUser)[[1]]
+  out  <- mxRecursiveSearch(.get(config,c("users","roles")),"level","==",levelUser)[[1]]
 
   return(out)
 }

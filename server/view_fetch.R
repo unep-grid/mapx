@@ -19,9 +19,9 @@ reactViews <- reactive({
 
   out <-  mxDbGetViews(
     project = country,
-    read = userRole[[c("desc","read")]],
-    edit = userRole[[c("desc","edit")]],
-    userId = userData[["id"]],
+    read = userRole$read,
+    edit = userRole$edit,
+    userId = userData$id,
     from = 0,
     to = 1000
     )
