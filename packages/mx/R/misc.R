@@ -1356,8 +1356,7 @@ mxGetMaxRole <- function(project,userInfo){
   levelWorld <- 10
 
   userRoles <- .get(userInfo,c("data","admin","roles"))
-  conf <- mxGetDefaultConfig()
-  roles <- conf[[c("users","roles")]]
+  roles <- .get(config,c("users","roles"))
 
   # NOTE: Backward compatibility with previous version.
   if("world" %in% names(userRoles)) {
@@ -1408,7 +1407,6 @@ mxGetMaxRole <- function(project,userInfo){
   }
 
   levelUser <- min(c(levelWorld,levelProject))
-
 
   out  <- mxRecursiveSearch(conf[[c("users","roles")]],"level","==",levelUser)[[1]]
 
