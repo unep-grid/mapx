@@ -36,6 +36,6 @@ SELECT * FROM (
       WHERE ST_Intersects(m.geom,k.geom)
     )
 
-    SELECT ST_AsGeoJSON(o.{{geom}},8) AS the_geom_geojson, o.{{variableName}} FROM overlap o
+    SELECT ST_AsGeoJSON(o.{{geom}},10) AS the_geom_geojson, o.{{variableName}} FROM overlap o
 
   ) t
