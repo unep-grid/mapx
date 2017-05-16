@@ -78,22 +78,27 @@ if( !isTRUE(opt$packagesOk) || !isTRUE(opt$libraryOk) ){
     checkpointLocation = opt$pathBase,
     scanForPackages = TRUE
     )
+  #
+  # Recursive global reload after 
+  #
+  source("global.R")
+
+}else{
+
+
+  # load local packages
+  load_all("packages/mx")
+  load_all("packages/jed")
+
+  # load schemas function
+  source("templates/jed/view_story.R")
+  source("templates/jed/view_style.R")
+  source("templates/jed/source_meta.R")
+
+  #
+  # Additional app specific config files
+  #
+  source(file.path("settings","settings-global.R"),local=.GlobalEnv)
+  source(file.path("settings","settings-local.R"),local=.GlobalEnv)
 }
-
-
-# load local packages
-load_all("packages/mx")
-load_all("packages/jed")
-
-# load schemas function
-source("templates/jed/view_story.R")
-source("templates/jed/view_style.R")
-source("templates/jed/source_meta.R")
-
-#
-# Additional app specific config files
-#
-source(file.path("settings","settings-global.R"),local=.GlobalEnv)
-source(file.path("settings","settings-local.R"),local=.GlobalEnv)
-
 
