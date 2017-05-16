@@ -553,12 +553,12 @@ mxJsonToList <- function(res){
 mxJsonToListMem <- memoise(mxJsonToList)
 
 
-##' Build encrypted url for a vt view
-##' @param sourceData {list} Source settings
-##' @param sourceDataMask {list} Source settings
-##' @param idView View id (view$id)
-##' @export
-#mxViewMakeUrl <- function( def = NULL, defMask = NULL, idView = NULL){
+#' Build encrypted query for a vt view
+#' @param sourceData {list} Source settings
+#' @param sourceDataMask {list} Source settings
+#' @param idView View id (view$id)
+#' @export
+#mxViewMakeQuery <- function( def = NULL, defMask = NULL, idView = NULL){
 
   #out <-  list()
 
@@ -569,8 +569,8 @@ mxJsonToListMem <- memoise(mxJsonToList)
     #layerName = def[["layerName"]]
     #layerNameMask = defMask[["layerMaskName"]]
 
-    #templateOverLap = config[[c("templates","pgViewOverlap")]]
-    #templateSimple = config[[c("templates","pgViewSimple")]]
+    ##templateOverLap = config[[c("templates","pgViewOverlap")]]
+    ##templateSimple = config[[c("templates","pgViewSimple")]]
 
     #geomCol = config[[c("pg","geomCol")]]
 
@@ -616,96 +616,12 @@ mxJsonToListMem <- memoise(mxJsonToList)
           #) 
       #}
 
-      ##
-      ## Create url encrypted string
-      ##
-      #request <- sprintf(
-        #"view=%1$s&query=%2$s"
-        #, idView
-        #, mxDbEncrypt(query)
-        #)
-
-      #out = rep(sprintf(
-          #"%1$s?%2$s"
-          #, config[[c("vt","baseUrl")]]
-          #, request
-          #),2)
+      #out = mxDbEncrypt(query)
     #}
   #}
   #return(out)
 
 #}
-
-
-#' Build encrypted query for a vt view
-#' @param sourceData {list} Source settings
-#' @param sourceDataMask {list} Source settings
-#' @param idView View id (view$id)
-#' @export
-mxViewMakeQuery <- function( def = NULL, defMask = NULL, idView = NULL){
-
-  out <-  list()
-
-  if(!noDataCheck(def)){
-
-    variableName = def[["variableName"]]
-    variablesNamesAdd = def[["variableNameAdd"]]
-    layerName = def[["layerName"]]
-    layerNameMask = defMask[["layerMaskName"]]
-
-    templateOverLap = config[[c("templates","pgViewOverlap")]]
-    templateSimple = config[[c("templates","pgViewSimple")]]
-
-    geomCol = config[[c("pg","geomCol")]]
-
-    hasVariable = !noDataCheck(variableName)
-    hasLayer = !noDataCheck(layerName)
-    hasLayerMask = !noDataCheck(layerNameMask)
-
-    if( hasLayer && hasVariable){
-
-      #
-      # Check if time is available
-      #
-      timeVars <- def[["timeVariables"]]
-
-      if(!noDataCheck(timeVars)){
-        variablesNamesAdd <- c(
-          timeVars,
-          variablesNamesAdd
-          )
-      }
-
-      if( hasLayerMask ){
-        # 
-        # Use overlap template
-        #
-        query <- infuse(
-          file_or_string = templateOverLap,
-          geom = geomCol,
-          variableName = c( variableName, variablesNamesAdd ),
-          layerName = layerName,
-          layerMaskName = layerNameMask
-          )
-       
-      }else{
-        #
-        # Use simple template
-        #
-        query <- infuse(
-          file_or_string = templateSimple,
-          geom = geomCol,
-          variableName = c(variableName, variablesNamesAdd),
-          layerName = layerName
-          ) 
-      }
-
-      out = mxDbEncrypt(query)
-    }
-  }
-  return(out)
-
-}
 
 
 

@@ -145,8 +145,8 @@ config[[c("variables","time")]] <- list(
 #
 config[["templates"]] <- list()
 # R wiskers renderer
-config[[c("templates","pgViewSimple")]] <- mxReadText("templates/pg/view_simple.sql",clean=TRUE)
-config[[c("templates","pgViewOverlap")]] <- mxReadText("templates/pg/view_overlap.sql",clean=TRUE)
+#config[[c("templates","pgViewSimple")]] <- mxReadText("templates/pg/view_simple.sql",clean=TRUE)
+#config[[c("templates","pgViewOverlap")]] <- mxReadText("templates/pg/view_overlap.sql",clean=TRUE)
 # js dot renderer
 
 config[[c("templates","dot")]] <-  list()

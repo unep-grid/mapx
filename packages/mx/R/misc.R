@@ -1490,7 +1490,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
   viewData <- .set(viewData,c("source"),list(
       type = "vector",
       attribution = as.character(tags$a(href=.get(meta,c("oigin","homepage","url")))),
-      query = mxViewMakeQuery(sourceData, sourceDataMask, .get(view,c("id"))),
+      #query = mxViewMakeQuery(sourceData, sourceDataMask, .get(view,c("id"))),
+
       layerInfo = list(
         name =  .get(sourceData,c("layerName")),
         maskName = .get(sourceDataMask,c("layerMaskName")),
