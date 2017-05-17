@@ -223,8 +223,7 @@ font-family: fontawesome;
   width: 100%;
   min-height: 60px;
   max-height: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding: 3px;
   bottom: 0px;
   top:auto;
   position: absolute;
@@ -260,6 +259,13 @@ font-family: fontawesome;
   flex-grow: 1;
 }
 
+@media( max-width:800px){
+  .mx-views-header{
+    display:none;
+  }
+}
+
+
 .mx-views-content {
   height: 100%;
   overflow-y: auto;
@@ -269,7 +275,7 @@ font-family: fontawesome;
 
 @media( max-width:800px ){
   .mx-views-content {
-    max-height: 20vh;
+    max-height: 30vh;
     min-height: 10vh;
   }
 }
