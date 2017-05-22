@@ -1,21 +1,21 @@
-
 <!--- 
 This a template to report bugs and features request.
-Please :
+Please: 
 - Read the instructions like this one,
-- Remove irrelevent instructions block,
+- Ensure that a similar issue is not already reported,
+- Remove irrelevant instructions block,
 - Try to keep it short,
+- You can add screenshot or document inside your comment if this helps,
 - Click on "Preview" to see the result.
 --->
 
 ### Quick check list
 <!-- write a x inside the box -->
-- [ ] This isssue is not linked to a dataset
-- [ ] This issue is not already discussed in another issue
+- [ ] This issue is linked to a dataset
 - [ ] This issue concerns a bug
 - [ ] This issue concerns a feature request
 - [ ] This is VERY URGENT
-- [ ] You are a coder and could help with code stuff
+- [ ] You are a coder and could contribute to solve this issue
 - [ ] This project is awesome
 
 ### Context
@@ -36,7 +36,7 @@ Please :
 1.
 2.
 3.
-4.
+...
 
 ### Detailed Description
 <!--- Provide a detailed description of the change or addition you are proposing -->
