@@ -1470,35 +1470,37 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       extent = .get(sourceData,c("extent"))
       ))
 
-
   viewData <- .set(viewData,c("attribute"),list(
       name = .get(sourceData,c("variableName")),
+      names = unique(c(
+        .get(sourceData,c("timeVariables")),
+        .get(sourceData,c("variableName")),
+        .get(sourceData,c("variableNames"))
+        )),
       type = .get(sourceData,c("type")),
       table = .get(sourceData,c("table")),
       sample = .get(sourceData,c("sampleData")),
-      numberRow = .get(sourceData,c("numberOfRow")),
-      numberNull =  .get(sourceData,c("numberOfNull")),
-      numberDistinct = .get(sourceData,c("numberOfDistinct"))
+      min = min(.get(sourceData,c("table","values"))),
+      max = max(.get(sourceData,c("table","values"))),
+      rows = .get(sourceData,c("numberOfRow")),
+      nulls =  .get(sourceData,c("numberOfNull")),
+      distincts = .get(sourceData,c("numberOfDistinct"))
       ))
 
   viewData <- .set(viewData,c("period"),list(
       extent = .get(sourceData,c("timeExtent")),
-      density = .get(sourceData,c("timeDensty")), 
-      variables = .get(sourceData,c("timeVariables"))
+      density = .get(sourceData,c("timeDensty")) 
       ))
 
   viewData <- .set(viewData,c("source"),list(
       type = "vector",
       attribution = as.character(tags$a(href=.get(meta,c("oigin","homepage","url")))),
-      #query = mxViewMakeQuery(sourceData, sourceDataMask, .get(view,c("id"))),
-
       layerInfo = list(
         name =  .get(sourceData,c("layerName")),
         maskName = .get(sourceDataMask,c("layerMaskName")),
         meta = .get(sourceData,c("layerMeta"))
         )      
       ))
-
 
   #
   #set style default
