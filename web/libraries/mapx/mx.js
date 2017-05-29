@@ -196,52 +196,256 @@ mx.util.getJSON = function(o) {
 
 
 /* Get stat of an array
- * @param {object} o options
- * @param {array} o.arr Numeric array
- * @param {string} o.stat Stat string : min, max, mean, median, distinct. Default = max;
+ * @param {Object} o options
+ * @param {Array} o.arr Numeric array
+ * @param {String} o.stat Stat string : min, max, mean, median, distinct, quantile. Default = max;
+ * @param {Number|Array} o.percentile : percentile to use for quantile
  */
 mx.util.getArrayStat = function(o){
 
-  o.arr = o.arr.constructor == Array ? o.arr : [];
-  o.stat =  o.stat ? o.stat : "max";
+  if( 
+    o.arr === undefined ||
+    o.arr.constructor != Array ||
+    o.arr.length === 0
+  ) return [];
+ 
+  if(
+    o.stat == "quantile" &&
+    o.percentile && 
+    o.percentile.constructor == Array
+  ) o.stat = "quantiles";
+
+  var arr = mx.util.cloneArray( o.arr );
+  var stat =  o.stat ? o.stat : "max";
+  var len_o = arr.length;
+  var len = len_o;
+
+  function sortNumber(a,b) {
+    return a - b;
+  }
 
   opt = {
-    "min" : function(a){ 
-      return Math.min.apply(null, a);
-    },
-    "max" : function(a){ 
-      return Math.max.apply(null, a);
-    },
-    "mean":function(a){
-      var sum = a.reduce(function(a, b){ return b += a ; });
-      return sum / a.length;
-    },
-    "median":function(a){
-      a.sort(function(a, b){ return a - b ; });
-      return (a[(a.length - 1) >> 1] + a[a.length >> 1]) / 2;
-    },
-    "distinct":function(a){
-      var obj = {};
-      var res = [];
-      var it;
-      var isNum = typeof a[0] == "number";
-      if(a.length>0){
-        a.forEach(function(x){
-          obj[x]=x;
-        });
-
-        for( it in obj ){
-          if(isNum) it = it * 1;
-          res.push(it);
+    "max" : function(){ 
+      var max = -Infinity ;
+      var v = 0 ;
+      while ( len-- ){
+        v = arr.pop();
+        if ( v > max ) {
+          max = v;
         }
       }
-      return res;
-    }
+      return max;
+    },
+    "min" : function(){ 
+      var min = Infinity;
+      while( len-- ){
+        v = arr.pop();
+        if (v < min){
+          min = v;
+        }
+      }
+      return min;
+    },
+    "sum":function(){
+      var sum = 0; 
+      while( len-- ){ 
+        sum += arr.pop() ;
+      }
+      return sum ;
+    },
+    "mean":function(){
+      var sum = mx.util.getArrayStat({
+        stat : "sum",
+        arr : arr
+      });
+      return sum / len_o;
+    },
+    "median":function(){
+      var median = mx.util.getArrayStat({
+        stat : "quantile",
+        arr : arr,
+        percentile : 50
+      });
+      return median;
+    },
+    "quantile":function(){
+      arr.sort(sortNumber);
+      o.percentile = o.percentile? o.percentile : 50;
+      index = o.percentile/100 * (arr.length-1);
+      if (Math.floor(index) == index) {
+        result = arr[index];
+      } else {
+        i = Math.floor(index);
+        fraction = index - i;
+        result = arr[i] + (arr[i+1] - arr[i]) * fraction;
+      }
+      return result;
+    },
+    "quantiles":function(){
+      var quantiles = {};
+      o.percentile.forEach(function(x){
+        var res =  mx.util.getArrayStat({
+          stat : "quantile",
+          arr : arr,
+          percentile : x
+        });
+        quantiles[x] = res;  
+      });
+      return quantiles;
+    },
+    "distinct":function(){
+      var n = {}, r = [];
+      
+      while( len-- ) 
+      {
+        if (!n[arr[len]])
+        {
+          n[arr[len]] = true; 
+          r.push(arr[len]); 
+        }
+      }
+      return r;
+    }  
   };
 
-  return(opt[o.stat](o.arr));
+  return(opt[stat](o));
 
 };
+
+
+/**
+* Remove diacritics
+* @note https://jsperf.com/diacritics/47
+* @param {string} Character string to convert
+* @return Converted string
+*/
+mx.util.cleanDiacritic = function(str){
+  return str.replace(/[À-ž]/g, function(ch) {
+    return mx.data.diacriticsObject[ch.charCodeAt(0)] || ch;
+  });
+};
+
+/**
+* Get Levenshtein distance by Gustaf Andersson
+* @note https://jsperf.com/levenshtein-distance/25
+* @param {string} String a
+* @param {string} String b
+*/
+mx.util.distance = function(s, t) {
+  if (s === t) {
+    return 0;
+  }
+  var n = s.length, m = t.length;
+  if (n === 0 || m === 0) {
+    return n + m;
+  }
+  var x = 0, y, a, b, c, d, g, h;
+  var p = new Array(n);
+  for (y = 0; y < n;) {
+    p[y] = ++y;
+  }
+
+  for (; (x + 3) < m; x += 4) {
+    var e1 = t.charCodeAt(x);
+    var e2 = t.charCodeAt(x + 1);
+    var e3 = t.charCodeAt(x + 2);
+    var e4 = t.charCodeAt(x + 3);
+    c = x;
+    b = x + 1;
+    d = x + 2;
+    g = x + 3;
+    h = x + 4;
+    for (y = 0; y < n; y++) {
+      var f = s.charCodeAt(y);
+      a = p[y];
+      if (a < c || b < c) {
+        c = (a > b ? b + 1 : a + 1);
+      }
+      else {
+        if (e1 !== f) {
+          c++;
+        }
+      }
+
+      if (c < b || d < b) {
+        b = (c > d ? d + 1 : c + 1);
+      }
+      else {
+        if (e2 !== f) {
+          b++;
+        }
+      }
+
+      if (b < d || g < d) {
+        d = (b > g ? g + 1 : b + 1);
+      }
+      else {
+        if (e3 !== f) {
+          d++;
+        }
+      }
+
+      if (d < g || h < g) {
+        g = (d > h ? h + 1 : d + 1);
+      }
+      else {
+        if (e4 !== f) {
+          g++;
+        }
+      }
+      p[y] = h = g;
+      g = d;
+      d = b;
+      b = c;
+      c = a;
+    }
+  }
+
+  for (; x < m;) {
+    var e = t.charCodeAt(x);
+    c = x;
+    d = ++x;
+    for (y = 0; y < n; y++) {
+      a = p[y];
+      if (a < c || d < c) {
+        d = (a > d ? d + 1 : a + 1);
+      }
+      else {
+        if (e !== s.charCodeAt(y)) {
+          d = c + 1;
+        }
+        else {
+          d = c;
+        }
+      }
+      p[y] = d;
+      c = a;
+    }
+    h = d;
+  }
+
+  return h;
+};
+
+mx.util.distanceScore = function(a,b){
+
+  a = a
+    .replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g,"")
+    .toLowerCase();
+  b = b
+    .replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g,"")
+    .toLowerCase();
+
+  a = mx.util.cleanDiacritic(a);
+  b = mx.util.cleanDiacritic(b);
+
+  var l = a.length + b.length;
+
+return 100 - (mx.util.distance(a,b)/l) * 100  ;
+};
+
+
+
 
 
 /**
@@ -493,13 +697,17 @@ mx.util.getLanguage = function(key, lang, def) {
   if (!def) def = "en";
   if (!lang) lang = def;
 
-  keys = key.constructor = Array ? key : keys.push(key);
+  if( key.constructor == Array ){
+      keys = key;
+  }else{ 
+     keys.push(key);
+  }
 
   res = [];
 
-  for (var k = 0; k < keys.length; k++) {
+  for (var k = 0, klen = keys.length; k < klen; k++) {
     key = keys[k];
-    for (var i = 0; i < dict.length; i++) {
+    for (var i = 0, dlen = dict.length ; i < dlen ; i++) {
       if (dict[i].id === key) {
         v = dict[i][lang];
         if (!v) v = dict[i][def];
@@ -787,7 +995,9 @@ mx.util.draggable = function(o) {
  *
  */
 mx.util.forEachEl = function(o){
- Array.prototype.forEach.call( o.els, o.callback );
+  for (i = 0; i < o.els.length; ++i) {
+    o.callback(o.els[i]);
+  }
 };
 
 /**
@@ -1126,6 +1336,44 @@ mx.util.progressScreen =  function(o) {
   if (lItems.length === 0) mx.util.progressScreen({enable:false});
 
 };
+
+
+/** 
+* Clone an object
+* @param {Object|Array} Source to clone
+*/
+mx.util.clone = function(obj){
+  var copy, i;
+  if ( obj === undefined || obj === null ) return {};
+  if ( obj.constructor == Array ) {
+    copy = [];
+    obj.forEach(function(x,i){
+      copy[i] = mx.util.clone(x);
+    });
+    return copy;
+  } else if (obj.constructor == Object) {
+    copy = {};
+    for (var prop in obj) {
+      if (!obj.hasOwnProperty(prop)) continue;
+        copy[prop] = mx.util.clone(obj[prop]);
+      }
+    return copy;
+  } else {
+    return obj;
+  }
+};
+/** 
+* Clone an array
+* @param {Array} Source to clone
+*/
+mx.util.cloneArray = function(arr){
+  var i = arr.length;
+  var clone = [];
+  while(i--) { clone[i] = arr[i]; }
+  return(clone);
+};
+
+
 
 
 /**
