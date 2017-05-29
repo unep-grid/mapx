@@ -1736,8 +1736,10 @@ mxDbGetLayerTimeDensity <- function(layer){
 #' Get source summary data
 #' @param layer {string} Table to query
 #' @param variable {string} Column of interest
+#' @param variables {string} Other columns names
+#' @param geomType {string} Geometry type
 #' @export
-mxDbGetLayerSummary <- function(layer=NULL,variable=NULL,geomType=NULL,language="en"){
+mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, variables=NULL, geomType=NULL,language="en"){
 
   if(is.null(geomType)){
     geomType = mxDbGetLayerGeomTypes(layer)[1,"geom_type"]
@@ -1758,6 +1760,7 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL,geomType=NULL,language=
   summary$layerMeta <- mxDbGetLayerMeta(layer)
   summary$layerName <- layer 
   summary$variableName <- variable
+  summary$variableNames <- variables
   summary$geomType <- geomType
   summary$sampleData <- head(summary$table$values,10)
 
