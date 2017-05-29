@@ -1489,7 +1489,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
 
   viewData <- .set(viewData,c("period"),list(
       extent = .get(sourceData,c("timeExtent")),
-      density = .get(sourceData,c("timeDensty")) 
+      density = .get(sourceData,c("timeDensity")) 
       ))
 
   viewData <- .set(viewData,c("source"),list(
