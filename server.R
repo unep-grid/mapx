@@ -5,7 +5,6 @@ options(shiny.reactlog=FALSE)
 server <- function(input,output,session){
 
   observeEvent(input$cookies,{
-
     #
     # Context specific reactive values
     #
