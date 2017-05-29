@@ -40,6 +40,13 @@ html, body, .full-page {
   opacity:0.2;
 }
 
+/**
+* Shiny input
+ */
+.shiny-input-container:not(.shiny-input-container-inline) {
+  width: 100%;
+  max-width: 100%;
+}
 
 /**
 * mapbox gl popup 
