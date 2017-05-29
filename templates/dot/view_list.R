@@ -39,15 +39,48 @@ divSearchVectorTiles <- tags$div(
   #
   # Search input for vector tile search
   #
-  tags$input(
-    `data-lang_key`="view_search_values",
-    `data-lang_type`="placeholder",
-    `data-view_action_key`="view_search_value",
-    `data-view_action_target`="{{=view.id}}",
-    type="text",
-    class="form-control",
-    value=""
+#  tags$input(
+    #`data-lang_key`="view_search_values",
+    #`data-lang_type`="placeholder",
+    #`data-view_action_key`="view_search_value",
+    #`data-view_action_target`="{{=view.id}}",
+    #type="text",
+    #class="form-control",
+    #value=""
+    #),
+  #tags$div(`data-search-box`="{{=view.id}}",onload="mgl.helper.makeSelectrViewSearchBox()"),
+  "{{?view.data.attribute.type == 'string'}}",
+  tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
+  "{{?}}",
+  "{{?view.data.attribute.type == 'number'}}",
+  tags$div(
+    class="mx-slider-container",
+    tags$div(
+      class="mx-slider-dyn",
+      tags$div(
+        class="mx-slider-dyn-min"
+        ),
+      tags$div(
+        class="mx-slider-dyn-max"
+        )
+      ),
+    tags$div(
+      class="mx-slider mx-slider-numeric",
+      `data-range_numeric_for`="{{=view.id}}"
+      ),
+    tags$div(
+      class="mx-slider-range",
+      tags$div(
+        class="mx-slider-range-min",
+        "{{=view.data.attribute.min}}"
+        ),
+      tags$div(
+        class="mx-slider-range-max",
+        "{{=view.data.attribute.max}}"
+        )
+      )
     ),
+  "{{?}}",
   #
   # Time slider input for vector tile
   #
@@ -65,8 +98,8 @@ divSearchVectorTiles <- tags$div(
         )
       ),
     tags$div(
-      class="mx-slider",
-      `data-range-for`="{{=view.id}}"
+      class="mx-slider mx-slider-date",
+      `data-range_time_for`="{{=view.id}}"
       ),
     tags$div(
       class="mx-slider-range",
@@ -96,7 +129,7 @@ liControlsVectorTiles <- tagList(
     `data-lang_key`="btn_opt_zoom_all",
     `data-lang_type`="tooltip",
     tags$div(
-      class="fa fa-arrows-alt"
+      class="fa fa-search-minus"
       )
     ),
   tags$li(
@@ -106,7 +139,7 @@ liControlsVectorTiles <- tagList(
     `data-view_action_key`="btn_opt_zoom_visible",
     `data-view_action_target`="{{=view.id}}",
     tags$div(
-      class="fa fa-binoculars"
+      class="fa fa-search-plus"
       )
     ),
   tags$li(
@@ -126,7 +159,7 @@ liControlsVectorTiles <- tagList(
     `data-lang_key`="btn_opt_search",
     `data-lang_type`="tooltip",
     tags$div(
-      class="fa fa-search"
+      class="fa fa-filter"
       )
     ),
   "{{?}}",
