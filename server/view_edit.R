@@ -540,7 +540,7 @@ observeEvent(input$btnViewUpdate,{
     #
     # Update view data 
     #
-    
+   
     view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask)
   }
   #
@@ -694,6 +694,7 @@ observe({
 
   geomType <- .get(viewData,c("data","geometry","type"))
   variableName <- .get(viewData,c("data","attribute","name"))
+  variableNames <- .get(viewData,c("data","attribute","names"))
 
   output$uiViewEditVtMain <- renderUI({
     tagList(
@@ -708,6 +709,13 @@ observe({
       label=d("source_select_variable"),
       choices=variables,
       selected=variableName
+      ),
+    selectInput(
+      inputId="selectSourceLayerOtherVariables",
+      label=d("source_select_variable"),
+      choices=variables,
+      selected=variableNames,
+      multiple=TRUE
       ),
     uiOutput("uiViewEditVtMainSummary") 
     )
@@ -838,11 +846,11 @@ reactLayerSummary <- reactive({
   layerName <- input$selectSourceLayerMain
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
+  variableNames <- input$selectSourceLayerOtherVariables
   language <- reactData$language
 
   hasVariable <- !noDataCheck(variableName)
   hasLayer <- !noDataCheck(layerName)
-
 
   out <- list()
 
@@ -851,9 +859,9 @@ reactLayerSummary <- reactive({
 
   if(hasVariable && hasLayer){
 
-
     geomTypes <- mxDbGetLayerGeomTypes(layerName)
     isVariableOk <- isTRUE(variableName %in% reactSourceVariables())
+    areVariablesOk <- isTRUE(all(variableNames %in% reactSourceVariables()))
     isLayerOk <- isTRUE(layerName %in% reactSourceLayer())
     isGeomOk <- isTRUE(geomType %in% geomTypes$geom_type)
 
@@ -864,6 +872,7 @@ reactLayerSummary <- reactive({
       out <- mxDbGetLayerSummary(
         layer = layerName,
         variable = variableName,
+        variables = variableNames,
         geomType = geomType,
         language = language
         )
