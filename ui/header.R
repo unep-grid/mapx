@@ -15,6 +15,11 @@ tagList(
     tags$link(
       rel="stylesheet",
       type="text/css",
+      href="mx/choices/choices.min.css"
+      ),
+    tags$link(
+      rel="stylesheet",
+      type="text/css",
       href="mx/hint/hint.min.css"
       ),
     tags$link(
@@ -26,11 +31,6 @@ tagList(
       rel = "stylesheet",
       type = "text/css",
       href = "mx/bootstrap/bootstrap.min.css"
-      ),
-    tags$link(
-      rel = "stylesheet",
-      type = "text/css",
-      href = "mx/mapx/mx_progress.css"
       ),
     tags$link(
       rel = "stylesheet",
@@ -51,11 +51,6 @@ tagList(
       rel = "stylesheet",
       type = "text/css",
       href = "mx/mapx/mx.css"
-      ),
-    tags$link(
-      rel = "stylesheet",
-      type = "text/css",
-      href = "mx/mapx/mx_shiny_patch.css"
       ),
     tags$link(
       rel = "stylesheet",
@@ -111,15 +106,6 @@ tagList(
       src="mx/mapx/mx_pwd.js"
       ),
     tags$script(
-      src="mx/mapx/mx_misc.js"
-      ),
-    tags$script(
-      src="mx/mapx/mx_switchui.js"
-      ),
-    tags$script(
-      src="mx/mapx/mx_progress.js"
-      ),
-    tags$script(
       src="mx/mapx/mgl.js"
       ),
     tags$script(
@@ -132,7 +118,13 @@ tagList(
       src="mx/mapx/mx_fullscreen.js"
       ),
     tags$script(
+      src="mx/choices/choices.min.js"
+      ),
+    tags$script(
       src="mx/mapx/mx.js"
+      ),
+    tags$script(
+      src="mx/mapx/mx_diacritics_table.js"
       ),
     tags$script("console.log('header set')")
     )
