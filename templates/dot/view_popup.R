@@ -11,7 +11,7 @@ tags$div(
       style='max-width: 300px;',
       tags$b("{{=prop.key}}"),
       tags$span(
-        HTML("{{ console.log(prop.value) ;var tags = prop.value.toString().split(','); for(var t = 0; t < tags.length ; t++){ }}"),
+        HTML("{{ var tags = prop.value.toString().split(','); for(var t = 0; t < tags.length ; t++){ }}"),
         tags$a(href="#",onclick="mgl.helper.filterViewValues({id:'{{=prop.idMap}}',idView:'{{=prop.idView}}',viewVariable:'{{=prop.key}}',search:'{{=tags[t]}}'})","{{=tags[t]}}"),
         "{{ } }}",
         tags$a(href="#",onclick="mgl.helper.resetViewStyle({id:'{{=prop.idMap}}',idView:'{{=prop.idView}}'})",icon("undo"))
