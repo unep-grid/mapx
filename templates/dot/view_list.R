@@ -49,10 +49,10 @@ divSearchVectorTiles <- tags$div(
     #value=""
     #),
   #tags$div(`data-search-box`="{{=view.id}}",onload="mgl.helper.makeSelectrViewSearchBox()"),
-  "{{?view.data.attribute.type == 'string'}}",
-  tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
+  "{{?path(view,'data.attribute.type') == 'string'}}",
+    tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
   "{{?}}",
-  "{{?view.data.attribute.type == 'number'}}",
+  "{{?path(view,'data.attribute.type') == 'number'}}",
   tags$div(
     class="mx-slider-container",
     tags$div(
@@ -84,8 +84,9 @@ divSearchVectorTiles <- tags$div(
   #
   # Time slider input for vector tile
   #
+  "{{ var prop = path(view,'data.attribute.names'); }}",
   "{{ var vExt = path(view,'data.period.extent'); }}",
-  "{{?vExt \\u0026\\u0026 vExt.min \\u0026\\u0026 vExt.max }}",
+  "{{?prop \\u0026\\u0026 prop.indexOf('mx_t0') \\u003E -1 \\u0026\\u0026 vExt \\u0026\\u0026 vExt.min \\u0026\\u0026 vExt.max}}",
   tags$div(
     class="mx-slider-container",
     tags$div(
