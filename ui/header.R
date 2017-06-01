@@ -15,6 +15,16 @@ tagList(
     tags$link(
       rel="stylesheet",
       type="text/css",
+      href="mx/selectize/selectize.css"
+      ),
+    tags$link(
+      rel="stylesheet",
+      type="text/css",
+      href="mx/selectize/selectize.bootstrap3.css"
+      ),
+    tags$link(
+      rel="stylesheet",
+      type="text/css",
       href="mx/choices/choices.min.css"
       ),
     tags$link(
@@ -119,6 +129,9 @@ tagList(
       ),
     tags$script(
       src="mx/choices/choices.min.js"
+      ),
+    tags$script(
+      src="mx/selectize/selectize.min.js"
       ),
     tags$script(
       src="mx/mapx/mx.js"
