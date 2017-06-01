@@ -1685,6 +1685,7 @@ mxDbGetLayerTimeExtent <- function(layer){
       MIN(%1$s) as min,
       MAX(%2$s) as max
       FROM %3$s
+      WHERE %1$s > -9e10 AND %2$s > -9e10
       "
       , t0
       , t1
@@ -1714,7 +1715,7 @@ mxDbGetLayerTimeDensity <- function(layer){
       SELECT 
       extract(year from to_timestamp(%2$s)) as year, count(*) as n 
       FROM %1$s 
-      WHERE extract(year from to_timestamp(mx_t0)) IS NOT NULL
+      WHERE extract(year from to_timestamp(mx_t0)) IS NOT NULL AND mx_t0 > -9e10
       GROUP by extract(year from to_timestamp(mx_t0)) 
       ORDER BY extract(year from to_timestamp(mx_t0)) DESC
       "
