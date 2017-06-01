@@ -28,6 +28,14 @@ mx.util.date = function(val){
 
 };
 
+/**
+* Test if entry is numeric
+* @param {String|Number} n string or number to test
+*/
+mx.util.isNumeric = function(n){
+  return !isNaN(parseFloat(n)) && isFinite(n);
+};
+
 
 /**
  * Round at given decimal
