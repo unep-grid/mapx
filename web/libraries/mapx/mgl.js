@@ -390,7 +390,8 @@ mgl.helper.viewControler = function(o){
 
     loaded = mgl.helper.getLayersNamesByPrefix({
       id:o.id,
-      prefix:"MX-"
+      prefix:"MX-",
+      base : true
     }) ;
 
     for( i = 0; i < els.length ; i++ ){
@@ -421,6 +422,8 @@ mgl.helper.viewControler = function(o){
             viewData : view,
             idViewsList : o.idViewsList,
           });
+          
+          view._setFilter();
 
 
         }
@@ -629,7 +632,7 @@ mgl.helper.parseStory = function(o){
             mgl.helper.filterViewValues({
               id : o.id,
               idView : vn,
-              viewVariable : fiVariable,
+              attribute : fiVariable,
               search : fi
             }); 
           }
@@ -979,7 +982,6 @@ mgl.helper.makeNumericSlider = function(o) {
   m = mgl.maps[idMap];
 
   el = document.querySelector("[data-range_numeric_for='"+view.id+"']");
-
   if(!el) return;
 
   makeSlider();
@@ -989,7 +991,7 @@ mgl.helper.makeNumericSlider = function(o) {
     var attrName = view.data.attribute.name;
     var min = path(view,"data.attribute.min");
     var max = path(view,"data.attribute.max");
-    
+
     if(view && min !== null && max !== null){
 
       var range = {
@@ -1006,20 +1008,25 @@ mgl.helper.makeNumericSlider = function(o) {
         tooltips: false
       });
 
+      slider.targetView = view;
+
       /*
        * Save the slider in the view
        */
-      view.interactive.numericSlider = slider;
+      view._interactive.numericSlider = slider;
 
       /*
        * 
        */
       slider.on("update", mx.util.debounce(function(n, h) {
-
+        var view =  this.targetView;
         var layerExists, filter;
+
         elContainer = this.target.parentElement;
         elDMax = elContainer.querySelector('.mx-slider-dyn-max');
         elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+
+        k = view.data.attribute.name;
 
         /* Update text values*/
         if (n[0]) {
@@ -1029,48 +1036,39 @@ mgl.helper.makeNumericSlider = function(o) {
           elDMax.innerHTML = " – " + n[1];
         }
 
-        /* check if layer is visible*/
-        layerExists = mgl.helper.getLayersNamesByPrefix({
-          id: idMap,
-          prefix: idView
-        }).length > 0;
-        /* If it's visible, apply a filter */
-        if (layerExists) {
+        filter = ['any', 
+          ['all', 
+            ['<=', k, n[1]*1],
+            ['>=', k, n[0]*1],
+          ],
+          ['!has', k],
+        ];
 
-          filter = ['all'];
+        view._setFilter({
+          filter : filter,
+          type : "numeric_slider"
+        });
 
-          k = attrName;
-
-          filter = ['any', 
-            ['all', 
-              ['<=', k, n[1]*1],
-              ['>=', k, n[0]*1],
-            ],
-            ['!has', k],
-          ];
-
-          m.map.setFilter(
-            idView,
-            filter
-          );
-
-        }
-      }, 100 ));
+      }, 10 ));
     }
   }
 };
-
 
 /**
 * Create and listen to time sliders
 */
 mgl.helper.makeTimeSlider = function(o) {
 
+  var k = {};
+  k.t0 = "mx_t0";
+  k.t1 = "mx_t1";
+
   view = o.view;
   idMap = o.idMap;
   m = mgl.maps[idMap];
 
-  el = document.querySelector("[data-range_time_for='"+view.id+"']");
+  el = document.querySelector('[data-range_time_for="'+view.id+'"]');
+  if(!el) return ;
 
   /*
    * Create a time slider for each time enabled view
@@ -1085,8 +1083,6 @@ mgl.helper.makeTimeSlider = function(o) {
   };
 
   var now = new Date().getTime() / 1000;
-  var nowPlus1 = now + (86400 * 365);
-  var nowMinus1 = now - (86400 * 365);
   var dateForm = {
     to: mx.util.date,
     from: true
@@ -1097,33 +1093,24 @@ mgl.helper.makeTimeSlider = function(o) {
   function makeSlider(){
 
     if( view.data.period ){
-      var time = view.data.period;
+      var time = path(view,"data.period");
+      var prop = path(view,"data.attribute.names");
       var start = [];
       var tooltips = [];
       var nowIsIn = now > time.extent.min && now < time.extent.max;
+      var idView = view.id;
 
       if (time.extent.min && time.extent.max) {
 
+        var hasT0 = prop.indexOf(k.t0) > -1;
+        var hasT1 = prop.indexOf(k.t1) > -1;
         var range = {
           min: time.extent.min * 1000,
           max: time.extent.max * 1000
         };
 
-        if (time.variables && time.variables.t1) {
-          if (nowIsIn) {
-            start.push(now * 1000);
-          } else {
-            start.push(time.extent.min * 1000);
-          }
-        } else {
-          if (nowIsIn) {
-            start.push(nowMinus1 * 1000);
-            start.push(nowPlus1 * 1000);
-          } else {
-            start.push(time.extent.min * 1000);
-            start.push(time.extent.max * 1000);
-          }
-        }
+        start.push(range.min);
+        start.push(range.max);
 
         slider = noUiSlider.create(el, {
           range: range,
@@ -1139,9 +1126,11 @@ mgl.helper.makeTimeSlider = function(o) {
         });
 
         /**
-         * Save slider in the view
+         * Save slider in the view and view ref in target
          */
-        view.interactive.timeSlider = slider;
+        slider.targetView = view;
+        view._interactive.timeSlider = slider;
+      
         /*
          * create distribution plot in time slider
          */
@@ -1156,17 +1145,15 @@ mgl.helper.makeTimeSlider = function(o) {
          * 
          */
         slider.on("update", mx.util.debounce(function(t, h) {
-
+          var view = this.targetView;
           var layerExists, filter;
 
           elContainer = this.target.parentElement;
           elDMax = elContainer.querySelector('.mx-slider-dyn-max');
           elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-
-          time = view.data.period;
-
+ 
           /* save current time value */
-          time.extent.set = t;
+          //ime.extent.set = t;
 
           /* Update text values*/
           if (t[0]) {
@@ -1176,42 +1163,26 @@ mgl.helper.makeTimeSlider = function(o) {
             elDMax.innerHTML = " – " + mx.util.date(t[1]);
           }
 
-          /* check if layer is visible*/
-          layerExists = mgl.helper.getLayersNamesByPrefix({
-            id: idMap,
-            prefix: view.id
-          }).length > 0;
-          /* If it's visible, apply a filter */
-          if (layerExists) {
+          filter = ['any'];
+          filterAll = ["all"];
+          filter.push(["==",k.t0,-9e10]);
+          filter.push(["==",k.t1,-9e10]);
+       
+            if ( hasT0 && hasT1 ) {
+              filterAll.push( ['<=', k.t0, t[1] / 1000] ); 
+              filterAll.push( ['>=', k.t1, t[0] / 1000] );
+            } else if (hasT0) {
+              filterAll.push( ['>=', k.t0, t[0] / 1000] );
+              filterAll.push( ['<=', k.t0, t[1] / 1000] );
+            }         
+          filter.push(filterAll);
 
-            filter = ['all'];
-
-            k = time.variables;
-
-            if (k.t0 && k.t1) {
-              /* two column, one handle t[0]*/
-              filter = ['any', ['all', ['<=', k.t0, t[0] / 1000],
-                ['>=', k.t1, t[0] / 1000],
-              ],
-                ['!has', k.t0],
-                ['!has', k.t1]
-              ];
-            } else if (k.t0) {
-              /* one column, two handles t[0,1]*/
-              filter = ['any', ['all', ['>=', k.t0, t[0] / 1000],
-                ['<=', k.t0, t[1] / 1000],
-              ],
-                ['!has', k.t0],
-              ];
-            }
-
-            m.map.setFilter(
-              view.id,
-              filter
-            );
-
-          }
-        }, 100 ));
+          view._setFilter({
+            filter : filter,
+            type : "time_slider"
+          });
+           
+        }, 10 ));
       }
     }
   }
@@ -1430,26 +1401,31 @@ mgl.helper.handleViewClick = function(o){
             selector : el,
             class : "mx-view-item-legend" 
           }),
-          legendInputs = legendContainer.querySelectorAll("input");
+          legendInputs = legendContainer.querySelectorAll("input") 
+            ;
+          var idView = el.dataset.view_action_target;
+          var view = mgl.helper.getKeyedViews({id:'map_main'})[idView]; 
+          var attribute = view.data.attribute.name;
+          var type = view.data.attribute.type;
+          var op = "==";
+          var  filter = ["any"];
+          if(type=="number") op = ">=";
 
-          for(var i =0 ; i < legendInputs.length ; i++){
+
+          for(var i = 0, il = legendInputs.length; i < il ; i++){
             var li =  legendInputs[i];
             if(li.checked){
               viewValue = li.dataset.view_action_value; 
               if(viewValue){
-                /*
-                * Serch regex should end by the view value.
-                */
-                viewValues.push( viewValue );
+                if(type=="number") viewValue = viewValue * 1;
+                filter.push([op,attribute,viewValue]);
               }
             }
           }
 
-          mgl.helper.filterViewValues({
-            id : o.id,
-            idView : el.dataset.view_action_target,
-            viewVariable : el.dataset.view_action_variable,
-            search : viewValues
+          view._setFilter({
+            type : "legend", 
+            filter : filter 
           });
 
         } 
@@ -1639,11 +1615,6 @@ mgl.helper.renderViewsList = function(o){
     });
     
 
-    /*
-     * inital view controler after view rendering
-     */
-    mgl.helper.viewControler(o);
-
 
     /**
      * Create searchable list.js object
@@ -1710,15 +1681,78 @@ mgl.helper.renderViewsList = function(o){
     * Init interactive tools for views
     */
     o.views.forEach(function(x){ 
-      x.interactive = {};
+      x._idMap = o.id;
+      x._interactive = {};
+      x._filters = {
+        style : ['all'],
+        legend : ['all'],
+        time_slider : ['all'],
+        search_box : ['all'],
+        numeric_slider : ['all']
+      };
+      x._setFilter = mgl.helper.viewSetFilter;
+
       mgl.helper.makeTimeSlider({ view: x , idMap: o.id }); 
       mgl.helper.makeNumericSlider({ view: x, idMap: o.id });
       mgl.helper.makeSearchBox({ view: x, idMap: o.id });
     });
     //}
 
+    /*
+     * inital view controler after view rendering
+     */
+    mgl.helper.viewControler(o);
+
+
   } 
 };
+
+/**
+* Filter current view and store rules
+* @param {Object} o Options
+* @param {Array} o.filter Array of filter
+* @param {String} o.type Type of filter : style, legend, time_slider, search_box or numeric_slider
+*/
+mgl.helper.viewSetFilter = function(o){
+  if(!o)o={};
+  var view = this;
+  var idView = view.id;
+  var filter = o.filter;
+  var filters = view._filters;
+  var filterNew = ['all'];
+  var type = o.type ? o.type : "default";
+  var idMap = view._idMap ? view._idMap : "map_main";
+  var m = mgl.maps[idMap].map;
+  var layers = mgl.helper.getLayersByPrefix({id:idMap,prefix:idView});
+
+  if(filter && filter.constructor == Array && filter.length > 1){  
+    filters[type] = filter;
+  }else{
+    filters[type] = ['all'];
+  }
+
+  for(var t in filters){
+    var f = filters[t];
+    filterNew.push(f);
+  }
+
+  for(var l=0,ll=layers.length;l<ll;l++){
+    var layer = layers[l];
+    var origFilter = path(layer,"metadata.filter_base");
+    var filterFinal = [];
+    if(!origFilter){
+      filterFinal = filterNew;
+    }else{
+      filterFinal = filterNew.concat([origFilter]);
+    }
+    m.setFilter(layer.id, filterFinal);
+  }
+};
+
+
+
+
+
 
 /**
 * Plot distribution
@@ -1804,30 +1838,7 @@ mgl.helper.downloadMapPng =  function(o){
         });
       }
     });
-    //var legendClone =  legend.cloneNode(true);
-   /* //body.appendChild(legendClone);*/
-    ////legendClone.classList.add("mx-screenshot-2x");
-    //html2canvas(legend, {
-      //background: undefined,
-      //onrendered: function (canvas) {
-        ////legendClone.remove();
-        ////console.log(legendClone);
-        
-        //var imgLegend, zip, img, ratio, ctx;
-        ////ctx = canvas.getContext("2d");
-        ////ctx.scale(2,2);
-        //imgLegend =  canvas.toDataURL();
-        //zip = new JSZip();
-        //img = zip.folder("mx-data");
 
-        //img.file("mx-legend.png", imgLegend.split(",")[1], {base64: true});
-        //img.file("mx-map.png", imgMap.split(",")[1], {base64: true});
-
-        //zip.generateAsync({type:"blob"}).then(function(content) {
-          //download(content, fileName);
-        //});
-      //}
-    /*});*/
   }else{
     zip = new JSZip();
     img = zip.folder("mx-data");
@@ -1841,60 +1852,6 @@ mgl.helper.downloadMapPng =  function(o){
   }
 };
 
-
-/*toScaledRaster({*/
-  //selector: "#wrapper"
-//});
-
-
-//https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Drawing_DOM_objects_into_a_canvas
-
-
-
-
-
-
-
-
-/**
- * @param {Object} o options
- * @param {String|Element} o.selector Element or Selector string e.g .myClass
- * @param {Function} o.callback Callback with one parameter : img
- * @param {Number} o.scaleFacto Factor to scale the image
- */
-//toScaledRaster = function(o) {
-
-  //var canvas, ctx, body, el, elRect, elClone;
-  //if (!o.scaleFactor) o.scaleFactor = 1;
-  //if (!o.callback) o.callback = console.log;
-  //canvas = document.createElement("canvas");
-  //ctx = canvas.getContext("2d");
-  //body = documnet.querySelector("body");
-
-  //if (o.selector instanceof Node) {
-    //el = o.selector;
-  //} else {
-    //el = document.querySelector(o.selector);
-  //}
-  //elClone = el.cloneNode(true);
-  //elRect = el.getBoundingClientRect();
-  //elClone.style.width = elRect.width + "px";
-  //elClone.style.height = elRect.height + "px";
-  //elClone.classList.add("clone");
-  //body.appendChild(elClone);
-  //canvas.width = elRect.width * o.scaleFactor;
-  //canvas.height = elRect.height * o.scaleFactor;
-  //canvas.style.width = elRect.width + "px";
-  //canvas.style.height = elRect.width + "px";
-  //canvas.scale(o.scaleFactor, o.scaleFactor);
-
-  //res = html2canvas(el, {
-    //canvas: canvas,
-    //onrendered: function(canvas) {
-      //o.callback(canvas.toDataURL("image/png"));
-    //}
-  //});
-//};
 /**
  * convert hex to rgb or rgba
  * @param {string} hex Hex color
@@ -2179,15 +2136,7 @@ mgl.helper.addViewVt = function(o){
     hasSprite = false,
     hasStyleDefault = false,
     defaultColor, defaultOpacity,
-    ruleValues = [],
-    layer = {
-      'id': view.id,
-      'type': "",
-      'source': idSource,
-      'source-layer': view.id,
-      'layout': {},
-      'paint': {}
-    };
+    ruleValues = [];
 
 
   /* check style and rules*/
@@ -2250,250 +2199,131 @@ mgl.helper.addViewVt = function(o){
       x.rgb  = mgl.helper.hex2rgba(x.color);
     });
 
-    /* always sort by value if data driven */
-    if (style.dataDrivenEnable && style.valueType=="numeric") {
-      style.rules = style.rules.sort(function(a, b) {
-        if (a.value > b.value) return (1);
-        if (b.value > a.value) return (-1);
-        return (0);
-      });
-    }
+    /*    [> always sort by value if data driven <]*/
+    //if (style.dataDrivenEnable && style.valueType=="numeric") {
+    //style.rules = style.rules.sort(function(a, b) {
+    //if (a.value > b.value) return (1);
+    //if (b.value > a.value) return (-1);
+    //return (0);
+    //});
+    /*}*/
 
-    switch (geomType) {
-      case "point":
-        layer.type = "circle";
-        layer.paint = {
-          'circle-color': {
-            "property": def.attribute.name,
-            "type": style.dataDrivenMethod,
-            "stops": []
-          },
-          'circle-radius': {
-            "property": def.attribute.name,
-            "type": style.dataDrivenMethod,
-            "stops": []
-          }
-        };
+    /**
+     * evaluate rules
+     */
 
-        if ( hasSprite ) {
+    rules.forEach(function(rule,i){
+      var value = rule.value;
+      var max = path(view,"data.attribute.max")+1;
+      var nextRule = rules[i+1];
+      var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
+      var isNumeric = path(view,"data.attribute.type") == "number";
+      var idView = view.id;
+      var sepLayer = mgl.settings.separators.sublayer; 
+      var getIdLayer = function(){ return idView + sepLayer + num++ ; };
+      var filter = ["all"];
+      var attr = def.attribute.name;
+      var paint = {};
+      var layerSprite = {};
 
-          /*
-           * Layers with sprite
+
+      /**
+       * Set filter
+       */
+
+      if(isNumeric){
+        filter.push(["has", attr]);
+        filter.push([">=", attr, value]);
+        filter.push(["<", attr, nextValue]);
+      }else{
+        filter.push(["has", attr]);
+        filter.push(["==", attr, value]);
+      }
+      /** 
+       * layer skeleton
+       */
+      var layer = {
+        'id': getIdLayer(),
+        'source': idSource,
+        'source-layer': idView,
+        'filter': filter,
+        'metadata': {
+          'filter_base':filter
+        }
+      };
+
+      switch(geomType) {
+        case "point":
+          layer.type = 'circle';
+          /**
+           * Handle sprite based circle
            */
-          rules.forEach(function(x) {
-            if (x.sprite && x.sprite != 'none'){
-              var l = {
-                'id': view.id + mgl.settings.separators.sublayer + "symbol_" + num++,
-                'type': "symbol",
-                'source': idSource,
-                'source-layer': view.id,
-                'filter': ["==", def.attribute.name, x.value],
-                'layout': {
-                  'icon-image': x.sprite,
-                  'icon-size': x.size / 10
-                },
-                'paint': {
-                  'icon-opacity': 1,
-                  'icon-halo-width': 2,
-                  'icon-halo-color': x.rgb
-                }
-              };
-              /* add layer*/
-              layers.push(l);
-            }
-          }
-          );
-        }
-
-        /*
-         * Layer data driven
-         */
-        rules.forEach(
-          function(x) {
-            var p = layer.paint;
-            p['circle-color'].stops
-              .push([x.value, x.rgba]);
-            p['circle-radius'].stops
-              .push([x.value, x.size]);
-          });
-
-        /* Add layer */
-        layers.push(layer);
-
-        break;
-        /**
-         * Polygon : data driven for color, layers for pattern
-         */
-      case "polygon":
-        /*
-         * Layer with sprite
-         */
-        if ( hasSprite ) {
-          rules.forEach(
-            function(x) {
-              if (x.sprite && x.sprite != 'none') {
-                var l = {
-                  'id': view.id + mgl.settings.separators.sublayer + "pattern_" + num++,
-                  'type': 'fill',
-                  'source': idSource,
-                  'source-layer': view.id,
-                  'filter': ["==", def.attribute.name, x.value],
-                  'paint': {
-                    'fill-pattern': x.sprite
-                  }
-                };
-                layers.push(l);
-              }
-            }
-          );
-        }
-
-        /*
-         * Layer data driven
-         */
-        layer.type = "fill";
-
-        layer.paint = {
-          'fill-color': {
-            "property": def.attribute.name,
-            "type": style.dataDrivenMethod,
-            "stops": []
-          },
-          'fill-outline-color': {
-            "property": def.attribute.name,
-            "type": style.dataDrivenMethod,
-            "stops": []
-          }
-        };
-
-        rules.forEach(
-          function(x) {
-            var p = layer.paint;
-            p['fill-outline-color'].stops
-              .push([ x.value, x.rgba]);
-            p['fill-color'].stops
-              .push([ x.value, x.rgba]);
-          });
-
-        layers.push(layer);
-
-        break;
-      case "line":
-
-        /*
-         * All layers
-         */
-        style.rules.forEach(
-          function(x) {
-            var l = {
-              'id': view.id + mgl.settings.separators.sublayer + "lines_" + num++,
-              'type': 'line',
-              'source': idSource,
-              'source-layer': view.id,
-              'filter': ["==", def.attribute.name, x.value],
-              'paint': {
-                'line-color': x.rgba,
-                'line-width': x.size
-              }
+          if(rule.sprite && rule.sprite != 'none'){
+            layerSprite = mx.util.clone(layer);
+            layerSprite.layout = {
+              'icon-image': rule.sprite,
+              'icon-size': rule.size / 10
             };
-            layers.push(l);
+            layerSprite.paint = {
+              'icon-opacity': 1,
+              'icon-halo-width': 2,
+              'icon-halo-color': rule.rgb
+            };
+            layerSprite.id = getIdLayer();
+            layers.push(layerSprite); 
           }
-        );
 
-    }
+          layer.paint = {
+            "circle-color" : rule.rgba,
+            "circle-radius": rule.size
+          };
+          layers.push(layer); 
+          break;
+        case "polygon":
+          layer.type = "fill";
 
+          if(rule.sprite && rule.sprite != 'none'){
+            layerSprite = mx.util.clone(layer);
+            layerSprite.paint = {
+              'fill-patern': rule.sprite
+            };
+            layerSprite.id = getIdLayer();
+            layers.push(layerSprite); 
+          }
+
+          layer.paint = {
+            "fill-color" : rule.rgba
+          };
+          layers.push(layer);
+          break;
+        case "line":
+          layer.type = "line";
+          layer.paint = {
+            'line-color': rule.rgba,
+            'line-width': rule.size
+          };
+          layers.push(layer);
+          break;
+      }
+    });
   }
-
+  
   if(layers.length>0){
-
-    /*
-     * If categorical, filter values
-     */
-
-    if( hasStyle && !hasStyleDefault && style.dataDrivenMethod == "categorical"  ){
-
-
-      layers.forEach(function(l){
-        filterValue = ["in",def.attribute.name].concat(ruleValues);
-        if(l.filter){
-          l.filter = ["all",filterValue,l.filter];
-        }else{
-          l.filter = ["all",filterValue];
-        }
-
-      });
-
-    }
-
-    /* 
-     * Handle time enabled layer :
-     * NOTE : this could be stored in view list
-     * Use the time slider value, saved in time.extent.set, to filter features
-     */
-
-    if( time && time.extent && time.extent.set ){
-
-      var t = time.extent.set;
-      var k = time.variables;
-
-      layers.forEach(function(l){
-
-        filter = ['all'];
-
-        if( k.t0 && k.t1 ){
-          /* two column, one handle t[0]*/
-          filter = ['any',
-            ['all',
-              ['<=',k.t0,t[0]/1000],
-              ['>=',k.t1,t[0]/1000],
-            ],
-            ['!has',k.t0],
-            ['!has',k.t1]
-          ];
-        }else if(k.t0){
-          /* one column, two handles t[0,1]*/
-          filter = ['any',
-            ['all',
-              ['>=',k.t0,t[0]/1000],
-              ['<=',k.t0,t[1]/1000],
-            ],
-            ['!has',k.t0],
-          ];
-        }
-
-        if(l.filter){
-          l.filter = ["all",filter,l.filter];
-        }else{
-          l.filter = filter;
-        }
-
-      });
-
-    }
-
-    /*
-     * Save computed layers in view
-     */
-
-    view.data.layers = layers;
 
     /*
      * Add layers to map
      */
-    layers.forEach(function(x){
-      if(x){
+      layers.forEach(function(x){
         map.addLayer(x);
-      }
-    });
+      });
 
-    /**
-     * remove duplicated rules based on value and merge sprite 
-     */
+      /**
+       * remove duplicated rules based on value and merge sprite 
+       */
 
     if(!o.noLegend){
 
-      var viewTemp = mx.util.clone(view);
-      rules = path(viewTemp, "data.style.rules") ;
+      rules = path(view, "data.style.rules") ;
 
       if(!rules) return;
 
@@ -2520,20 +2350,19 @@ mgl.helper.addViewVt = function(o){
           }
         }
       }
-      viewTemp.data.style.rules = rules;
+      view.data.style.rules = rules;
 
       /*
        * Add legend and update view order
        */
 
-      var legend = document.querySelector("#check_view_legend_" + view.id);
-      if(legend){
-        legend.innerHTML = mx.templates.viewListLegend(viewTemp);
+        var legend = document.querySelector("#check_view_legend_" + view.id);
+        if(legend){
+          legend.innerHTML = mx.templates.viewListLegend(view);
+        }
+        mgl.helper.updateViewOrder(o);
       }
-      mgl.helper.updateViewOrder(o);
     }
-  }
-
 };
 
 /** 
@@ -2766,7 +2595,6 @@ mgl.helper.sendRenderedLayersAreaToUi = function(o){
     //}
 
   //return function(t){
-    //debugger;
     //t  = t.toLowerCase();
    //return t.search(re)>-1;
   //};
@@ -2850,7 +2678,7 @@ mgl.helper.sendRenderedLayersAreaToUi = function(o){
     //}
   //}
 /*};*/
-mgl.helper.makeSearchBox = function(o){
+mgl.helper.makeSearchBox_choicejs = function(o){
 
   view = o.view;
   idMap = o.idMap;
@@ -2891,31 +2719,96 @@ mgl.helper.makeSearchBox = function(o){
      /**
     * Save selectr object in the view
     */
-    view.interactive.searchBox = searchBox;
+    searchBox.targetView = view;
+    view._interactive.searchBox = searchBox;
     /**
     * Set event logic
     */
     el.addEventListener('change', function(event) {
       var listObj = searchBox.getValue();
-      filterSearchBoxValues(listObj); 
+      var view = searchBox.targetView;
+      var attr = path(view,"data.attribute.name");
+      var filter = ['any'];
+      listObj.forEach(function(x){
+        filter.push(["==",attr,x.value]);
+      });
+      view._setFilter({
+        filter : filter,
+        type : "search_box"
+      });
     });
-    /*
-    * Filter selected values
-    */
-    function filterSearchBoxValues(values){
-      var res = [];
-      values.forEach(function(x){
-        res.push(x.value);
-      });
-      mgl.helper.filterViewValues({
-        id : idMap,
-        search : res,
-        idView : idView
-      });
-    }
   }
 };
+/*selectize version*/
+mgl.helper.makeSearchBox = function(o){
 
+  view = o.view;
+  idMap = o.idMap;
+  m = mgl.maps[idMap];
+
+  el = document.querySelector("[data-search_box_for='"+view.id+"']");
+
+  if(!el) return;
+
+  makeSelectize();
+
+  function tableToData(table){
+    var r, res;
+    var data = [];
+    for(r = 0 ; r < table.length ; r++ ){
+      row = table[r];
+      res = {};
+      res.value = row.values;
+      res.label = row.values;
+      data.push(res);
+    }
+    return data;
+  }
+
+  function makeSelectize(){
+    var idView = view.id;
+    var table = path(view,"data.attribute.table");
+    var attr = path(view,"data.attribute.name");
+    var data = tableToData(table);
+
+    selectOnChange = function(value) {
+      var view = this.view;
+      var listObj = this.getValue();
+      var filter = ['any'];
+      listObj.forEach(function(x){
+        filter.push(["==",attr,x]);
+      });
+      view._setFilter({
+        filter : filter,
+        type : "search_box"
+      });
+    };
+
+    var searchBox = $(el).selectize({
+      placeholder : "Filter values",
+      choices : data,
+      valueField : 'value',
+      labelField : 'label',
+      searchField :['value'],
+      options : data,
+      onChange : selectOnChange
+    })
+      .data()
+      .selectize;
+    /**
+    * Save selectr object in the view
+    */
+    searchBox.view = view;
+    view._interactive.searchBox = searchBox;
+
+    // searchBox.targetView = view;
+    //view._interactive.searchBox = searchBox;
+    /**
+    * Set event logic
+    */
+
+  }
+};
 
 /**
  * Apply a filter on a layer
@@ -2926,14 +2819,16 @@ mgl.helper.makeSearchBox = function(o){
  * @param {boolean} o.useTable Search in table first.
  * @param {string} o.viewVariable variable name
  * @param {array} o.search srtring to search
+ * @param {string} o.operator Operator for matching numeric value
 */ 
-mgl.helper.filterViewValues = function(o){
+mgl.helper.filterViewValues_orig = function(o){
 
   //var start = performance.now();
 
   var view, views, idView, filterAll, varView, search, map, filt, valueMatch, valueStore = [], layers={}, idViewAll=[], values = [], attributes = {};
   var l, lay, origFilter, newFilter, filter;
   var operators = ["==",">=","<=",">","<"];
+  var operator = o.operator ? o.operator : operators[0];
   var groupAnd = ["all"];
   var gOr, gAnd, op, rul, ops, attrs;
   var threshold = 90;
@@ -2969,32 +2864,10 @@ mgl.helper.filterViewValues = function(o){
     varView = path(view,"data.attribute.name");
   }
   
-  // if equal sign is found, expect left part to be an attribute name
-  if(search.indexOf("=")>-1){
-    var comp = search.split(/\s*=\s/);
-    varView =  comp[0];
-    search =  comp[1];
-  }
-
   /** 
    *  retrieve view type and table for quick values match
    */
-
-  table = mx.util.clone(path(view,"data.attribute.table"));
   type = path(view,"data.attribute.type");
-  // attributes =  path(view,"data.attributes");
-
-/*  if( !table && attributes ){*/
-    //if( !varView ){
-     //varView = Object.keys( attributes )[0];
-    //}
-    //values = attributes[ varView ] ;
-    //if( values && values.length > 0 ) type = typeof values[ 0 ];
-  //}
-
-  //if(!values && !table) {
-    //return;
-  //}
 
   if(!search || search=="all$" || search === ""){
    threshold = 0;
@@ -3004,8 +2877,6 @@ mgl.helper.filterViewValues = function(o){
     search = [search];
   }
   
-
-
   if(type=="string"){
 
     search.forEach(function(s){ 
@@ -3068,7 +2939,7 @@ mgl.helper.filterViewValues = function(o){
             }
           }
           op = ops[0];
-          if(!op) op = "==";
+          if(!op) op = operator;
           val = parseFloat(g.replace(/[^0-9\.]+/,""));
           if(!isNaN(val)){
             rul = [op,varView,val];
@@ -3096,8 +2967,66 @@ mgl.helper.filterViewValues = function(o){
       }
     }
   }
-  //console.log("search done in " + Math.round(performance.now() - start)/1000 + "s" );
 };
+
+mgl.helper.filterViewValues = function(o){
+
+  var attr,idMap,idView,search;
+  var view, views, map, features, values, filter, op, dat;
+  var isEl, isNumeric;
+
+  isEl = o.constructor == HTMLAnchorElement;
+
+  if(isEl){
+    dat = o.dataset;
+    attr = dat.tags_filter_attribute;
+    idMap = dat.tags_filter_id_map;
+    idView = dat.tags_filter_id_view;
+    search = dat.tags_filter_search;
+  }else{
+    attr = o.attribute;
+    idMap = o.id;
+    idView = o.idView;
+    search = o.search;
+  }
+
+  search = search.trim();
+  isNumeric = mx.util.isNumeric(search);
+  views = mgl.helper.getKeyedViews({id:idMap});
+  view = views[idView];
+
+  filter = ["all"];
+
+  if( isNumeric ){
+    filter = [">=",attr,search*1];
+  }else{
+    map = mgl.maps[idMap].map;
+    features = map.querySourceFeatures(idView+"-SRC",{sourceLayer:idView});
+    values = {}; 
+
+    features.forEach(function(f){
+      var value = f.properties[attr]; 
+      var splited = value.split(/\s*,\s*/);
+      if(splited.indexOf(search)>-1){
+        values[value] = true;
+      }
+    });
+
+    values = Object.keys(values);
+
+    if(values.length>0){
+      filter =  ['in',attr].concat(values);
+    }
+  }
+
+  view._setFilter({
+    filter : filter,
+    type : "filter"
+  });
+
+};
+
+
 
 /**
  * Add a new layer
@@ -3592,13 +3521,15 @@ mgl.helper.initMap = function(o){
                     p = feat.properties;
                     if( p ){
                       for(var k in p){
-                        item = {
-                          key : k,
-                          value : p[k],
-                          idView : layers[i],
-                          idMap : o.id
-                        };
-                        prop.push(item);
+                        if(k !="mx_t0" && k != "mx_t1"){
+                          item = {
+                            key : k,
+                            value : p[k],
+                            idView : baseLayer,
+                            idMap : o.id
+                          };
+                          prop.push(item);
+                        }
                       }
                     }
                   }
