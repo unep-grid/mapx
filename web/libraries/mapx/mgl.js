@@ -994,6 +994,11 @@ mgl.helper.makeNumericSlider = function(o) {
 
     if(view && min !== null && max !== null){
 
+      if(min == max){
+        min = min -1;
+        max = max +1;
+      }
+
       var range = {
         min: min,
         max: max
@@ -1104,13 +1109,21 @@ mgl.helper.makeTimeSlider = function(o) {
 
         var hasT0 = prop.indexOf(k.t0) > -1;
         var hasT1 = prop.indexOf(k.t1) > -1;
+        var min = time.extent.min * 1000; 
+        var max = time.extent.max * 1000; 
+
+        if(min == max){
+          min = min -1;
+          max = max +1;
+        }
+
         var range = {
-          min: time.extent.min * 1000,
-          max: time.extent.max * 1000
+          min: min,
+          max: max
         };
 
-        start.push(range.min);
-        start.push(range.max);
+        start.push(min);
+        start.push(max);
 
         slider = noUiSlider.create(el, {
           range: range,
