@@ -152,7 +152,7 @@ observeEvent(input$btn_control,{
             tags$li(
               tags$span(
                 tags$b(d("login_role",language)),
-                reactUser$role$role
+                reactUser$role$name
                 )
               ),
             tags$li(
