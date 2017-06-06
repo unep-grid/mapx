@@ -305,9 +305,13 @@ observeEvent(reactData$loginRequested,{
 
     if(newAccount){
 
+      #
+      # Create new user
+      # 
+
       mxDbCreateUser(
-        email=email,
-        timeStamp=timeStamp
+        email = email,
+        timeStamp = timeStamp
         ) 
 
     }else{
@@ -316,11 +320,11 @@ observeEvent(reactData$loginRequested,{
       # Save last visit
       #
       mxDbUpdate(
-        table=userTable,
-        column='date_last_visit',
-        idCol='email',
-        id=email,
-        value=timeStamp
+        table = userTable,
+        column = 'date_last_visit',
+        idCol = 'email',
+        id = email,
+        value = timeStamp
         )
 
     }
