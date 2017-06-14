@@ -63,20 +63,11 @@ tagList(
       href = "mx/mapx/mx.css"
       ),
     tags$link(
+      title =  "mx_colors",
       rel = "stylesheet",
       type = "text/css",
-      href = "mx/mapx/mx_black.css"
-      ),
-    tags$link(
-      rel = "stylesheet",
-      type = "text/css",
-      href = "mx/mapx/mx_white.css"
+      href = "mx/mapx/mx_colors.css"
       )
-    #  tags$link(
-    #rel = "stylesheet",
-    #type = "text/css",
-    #href = "mx/tooltip/tooltip-1.2.0/dist/css/tooltip-theme-arrows.css"
-    #)
     ),
   tags$footer( 
     tags$script(

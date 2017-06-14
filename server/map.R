@@ -73,6 +73,10 @@ observe({
       languages = .get(config,c("languages","list")),
       countries =  .get(config,c("countries","table","iso3")),
       #
+      # Colorscheme
+      #
+      colorScheme = .get(config,c("ui","colors","default")),
+      #
       # Elements : id of element for listener setting
       #
       idViewsList = .get(config,c("map","idViewsList")),

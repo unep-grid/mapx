@@ -1292,9 +1292,11 @@ mx.util.progressScreen =  function(o) {
   text = o.text !== undefined ? o.text : "";
 
   lScreen = document.querySelector(".loading-screen");
+  lScreenBack = document.querySelector(".loading-screen-background");
 
   if (!enable) {
     if (lScreen) lScreen.remove();
+    if (lScreenBack) lScreenBack.remove();
     return;
   }
 
@@ -1303,10 +1305,13 @@ mx.util.progressScreen =  function(o) {
   if (!lScreen && enable) {
     lBody = document.querySelector("body");
     lScreen = document.createElement("div");
+    lScreenBack = document.createElement("div");
     lScreen.className = "loading-screen";
+    lScreenBack.className = "loading-screen-background";
     lScreenContainer = document.createElement("div");
     lScreenContainer.className = "loading-container";
     lScreen.appendChild(lScreenContainer);
+    lBody.appendChild(lScreenBack);
     lBody.appendChild(lScreen);
   }
 

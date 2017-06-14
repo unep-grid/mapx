@@ -32,7 +32,7 @@ mgl.helper = {};
 *  - map = mapbox gl js map object
 *  - options = store map options like defaults, ids of elements, languages, etc.
 *  - style = the main style of the map
-*  - themes = Additional rules to theme the map
+*  - (removed) themes = Additional rules to theme the map
 *  - tools = object produced by dependencies, like list.js
 *  - views = list of mapx-views
 *
@@ -56,6 +56,9 @@ mgl.data.geojson = localforage.createInstance({
     name: "geojson"
 });
 
+mgl.data.images = localforage.createInstance({
+    name: "images"
+});
 /**
 * Controls
 */
@@ -156,21 +159,7 @@ mgl.control.main.prototype.onAdd = function(map) {
       classes:"fa fa-plane",
       key:"btn_theme_sat",
       action:function(){  
-        mgl.helper.setTheme({idMap:"map_main",id:"sat"});
-      }
-    },
-     btnThemeBlack:{
-      classes:"fa fa-square",
-      key:"btn_theme_black",
-      action:function(){  
-        mgl.helper.setTheme({idMap:"map_main",id:"black"});
-      }
-    },
-     btnThemeOrig:{
-      classes:"fa fa-square-o",
-      key:"btn_theme_orig",
-      action:function(){  
-        mgl.helper.setTheme({idMap:"map_main",id:"orig"});
+        mgl.helper.toggleLayer({id:'map_main',idLayer:'here_aerial',idSwitch:'btnThemeAerial'});
       }
     }
   }; 
@@ -182,6 +171,7 @@ mgl.control.main.prototype.onAdd = function(map) {
     for( id in btns ){
       btn = btns[id];
       el = document.createElement("li");
+      el.id = id;
       elBtn = document.createElement("div");
       elBtn.className = btn.classes;
       el.appendChild(elBtn);
@@ -198,7 +188,7 @@ mgl.control.main.prototype.onAdd = function(map) {
 
   this._map = map;
   this._container = document.createElement('div');
-  this._container.className = 'mapboxgl-ctrl mx-controls-top transparent';
+  this._container.className = 'mapboxgl-ctrl mx-controls-top transparent shadow';
   this._container.appendChild(btnList);
   return this._container;
 };
@@ -1893,6 +1883,46 @@ mgl.helper.hex2rgba = function(hex, opacity) {
 };
 
 /**
+ * convert rgb|a to hex
+ * @param {string} rgba string
+ */
+mgl.helper.rgba2hex = function(rgb){
+ rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+ return (rgb && rgb.length === 4) ? "#" +
+  ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+  ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+};
+/**
+ * convert any color to obj with key alpha and hex color
+ * @param {string} color string. e.g. hsl(10%,10%,0)
+ */
+mgl.helper.color2obj = function(color){
+  var alpha;
+  var col;
+  var out = {
+    alpha : 1,
+    color: "#000"
+  };
+  var div = document.createElement("div");
+  div.style.color = color;
+  div.style.height = 0;
+  div.style.width = 0;
+  document.body.appendChild(div);
+  col = window.getComputedStyle(div).color;
+  if(col){
+    alpha = col.split(", ")[3];
+    if(alpha){
+      out.alpha = alpha.replace("\)",'')*1;
+    }
+    out.color = mgl.helper.rgba2hex(col);
+  }
+  div.remove();
+  return out;
+};
+
+
+/**
  * Get layer by prefix
  * @param {Object} o Options
  * @param {string} o.id Map element id
@@ -3266,6 +3296,212 @@ mgl.helper.setLanguage = function(o) {
   }
 };
 
+
+
+/**
+* Toggle visibility for existing layer in style
+* @param {Object} o options
+* @param {String} o.id map id
+* @param {String} o.idLayer Layer id to toggle
+* @param {String} o.idSwitch Add a class "active" to given element id.
+*/
+mgl.helper.toggleLayer = function(o){
+
+  var map = mgl.maps[o.id||"map_main"].map;
+  var btn = document.getElementById(o.idSwitch);
+  var lay = map.getLayer(o.idLayer);
+
+  if(lay){
+    if(lay.layout.visibility == "none"){
+      map.setLayoutProperty(o.idLayer,"visibility","visible");
+      if(btn){
+        btn.classList.add("active");
+      }     
+    }else{
+      map.setLayoutProperty(o.idLayer,"visibility","none");
+      if(btn){
+        btn.classList.remove("active");
+      }
+    }
+  }
+};
+
+/**
+* Set map-x ui and map colorscheme. 
+* TODO: 
+* - Generalize this. Default in mgl settings
+* - Map modifier object as an option
+* 
+* @param {Object} o options
+* @param {String} o.id map id
+* @param {Object} o.colors Intial colors scheme.
+*
+*/
+mgl.helper.setUiColorScheme = function(o){
+
+  var init = false;
+  var mx_colors;
+  var map = mgl.maps[o.id||"map_main"].map;
+  var styles = document.styleSheets;
+  for(var i= 0,iL=styles.length;i<iL;i++){
+    if(styles[i].title == "mx_colors"){
+      var rules = styles[i].rules||styles[i].cssRules||[];
+      for(var j=0,jL=rules.length;j<jL;j++){
+        if(rules[j].selectorText == ".mx *"){
+          mx_colors=rules[j];
+        }
+      }
+    }
+  }
+
+  if(!mx_colors) {
+    alert("mx_colors rules not found");
+  }
+
+  var c = o.colors;
+  init = c !== undefined;
+  c = c||{};
+  c.mx_text = c.mx_text || "hsl(0, 0%, 21%)";
+  c.mx_hidden = c.mx_hidden || "hsla(196, 98%, 50%,0)";
+  c.mx_border = c.mx_border || "hsl(0, 0%, 61%)";
+  c.mx_background = c.mx_background ||"hsla(0, 0%, 97%, 0.95)";
+  c.mx_shadow = c.mx_shadow || "hsla(0, 0%, 60%, 0.3)";
+  c.mx_country_mask = c.mx_country_mask || "hsla(0, 0%, 60%, 0.3)";
+  c.mx_water =  c.mx_water || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_road = c.mx_road || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_admin = c.mx_admin || "hsla(0, 0%, 97%, 0.95)";
+
+  /**
+  * create / update input color
+  */
+
+  var inputs = document.getElementById("inputThemeColors");
+  
+  if(inputs && inputs.children.length>0){
+    mx.util.forEachEl({
+      els:inputs.children,
+      callback:function(el){
+         var colorIn = el.querySelector("[type='color']").value;
+         var alphaIn = el.querySelector("[type='range']").value;
+         var idIn = el.id;
+        c[idIn] = mgl.helper.hex2rgba(colorIn,alphaIn);
+      }
+    });
+  }
+
+  if(init){
+    inputs.innerHTML="";
+    var inputType = ["color","range"];
+    for(var cid in c){
+      var container = document.createElement("div");
+      container.id = cid;
+      var container_inputs = document.createElement("div");
+      var lab = document.createElement("label");
+      container_inputs.id = cid + "_inputs";
+      var color = mgl.helper.color2obj(c[cid]);
+
+      for(var ityp=0,itypL=inputType.length;ityp<itypL;ityp++ ){
+        var typ = inputType[ityp];
+        var input = document.createElement("input");
+        input.onchange=mgl.helper.setUiColorScheme;
+        input.type = typ;
+        input.id = cid + "_" + typ;
+        if( typ == "range" ){
+          input.min = 0;
+          input.max = 1;
+          input.step = 0.1;
+        }
+        input.value = typ == "range" ? color.alpha : color.color;
+        container_inputs.appendChild(input);
+      }
+      lab.innerHTML = cid;
+      lab.for = cid;
+      container.appendChild(lab);
+      container.appendChild(container_inputs);
+      inputs.appendChild(container);
+    }
+  }
+  /**
+  * Ui color
+  */
+
+  for(var col in c){
+    mx_colors.style.setProperty("--"+col,c[col]);
+  }
+  
+
+  /**
+  * Map colors NOTE: PUT THIS OBJECT AS THEME
+  */ 
+  var layers = [
+    {
+      "id":["background"],
+      "paint": {
+        "background-color": c.mx_background 
+      }
+    },
+    {
+      "id":["maritime"],
+      "paint": {
+        "line-color": c.mx_background 
+      }
+    },
+    {
+      "id":["water"],
+      "paint": {
+        "fill-color": c.mx_water,
+        "fill-outline-color" : c.mx_water
+      }
+    },
+    {
+      "id":["waterway"],
+      "paint": {
+        "line-color": c.mx_water
+      }
+    },
+    {
+      "id":["country-code"],
+      "paint":{
+        "fill-color": c.mx_country_mask
+      }
+    },
+    {
+      "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
+      "paint":{
+        "line-color":c.mx_road
+      }
+    },
+    {
+      "id":["boundaries_2","boundaries_3-4"],
+      "paint":{
+        "line-color":c.mx_admin
+      }
+    },
+    {
+      "id":["country-label","place-label"],
+      "paint":{          
+        "text-color": c.mx_text
+      }
+    } 
+  ];
+
+for(var k = 0,kL = layers.length; k<kL; k++ ){
+  var grp = layers[k];
+  for( l = 0, lL = grp.id.length; l < lL; l++ ){
+    var lid = grp.id[l];
+    var lay = map.getLayer(lid);
+    if( lay ){
+      for(var p in grp.paint){
+        map.setPaintProperty(lid,p,grp.paint[p]); 
+        }
+      }
+    }
+  }
+
+};
+
+
+
 /**
  * Initial mgl and mapboxgl
  * @param {string} o options
@@ -3345,9 +3581,9 @@ mgl.helper.initMap = function(o){
   if(o.paths.style){
     o.paths.style = o.location + o.paths.style;
   }
-  if(o.paths.themes){
-    o.paths.themes = o.location + o.paths.themes;
-  }
+/*  if(o.paths.themes){*/
+    //o.paths.themes = o.location + o.paths.themes;
+  /*}*/
   if(o.paths.sprite){
     o.paths.sprite = o.location + o.paths.sprite;
   }
@@ -3385,8 +3621,8 @@ mgl.helper.initMap = function(o){
     map: {},
     listener: {},
     views : [],
-    style : {},
-    themes : {}
+    style : {}
+    //themes : {}
   };
 
   /*
@@ -3399,13 +3635,13 @@ mgl.helper.initMap = function(o){
       /*
       * Get the theme object
       */
-      mx.util.getJSON({
-        url : o.paths.themes,
-        onError : console.log,
-        onSuccess : function(themes) {
+/*      mx.util.getJSON({*/
+        //url : o.paths.themes,
+        //onError : console.log,
+        /*onSuccess : function(themes) {*/
 
           /* save theme and sytle object, used in switchui */
-          mgl.maps[o.id].themes = themes;
+          //mgl.maps[o.id].themes = themes;
           mgl.maps[o.id].style = style;
 
           /*  Set sprite url : relative path does not work..*/
@@ -3430,6 +3666,10 @@ mgl.helper.initMap = function(o){
            */
           map.on('load', function() {
             Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date()));
+
+            if(o.colorScheme){
+              mgl.helper.setUiColorScheme({colors:o.colorScheme});
+            }
           });
 
           /**
@@ -3568,8 +3808,8 @@ mgl.helper.initMap = function(o){
             }
           });
 
-        }
-      });
+        //}
+      //});
     }
   });
 };
@@ -3711,100 +3951,100 @@ mgl.helper.easingFun = function(o) {
  * @param {string} o.idMap id map
  * @param {string} o.id ID of the theme
  */
-mgl.helper.setTheme =  function(o){
-  var m =  mgl.maps[o.idMap],
-    map = m.map,
-    style = m.style,
-    themes = m.themes,
-    config = themes.config, /* ready: false ; idEnabled : "init" */
-    oldClass = config.class;
+//mgl.helper.setTheme =  function(o){
+  //var m =  mgl.maps[o.idMap],
+    //map = m.map,
+    //style = m.style,
+    //themes = m.themes,
+    //config = themes.config, [> ready: false ; idEnabled : "init" <]
+    //oldClass = config.class;
     
-    if ( !config.initial || !config.initial.name  ) {
-      config.initial = JSON.parse(JSON.stringify(map.getStyle()));
-      config.current = "init";
-    }
+    //if ( !config.initial || !config.initial.name  ) {
+      //config.initial = JSON.parse(JSON.stringify(map.getStyle()));
+      //config.current = "init";
+    //}
 
 
-  var updateStyle = function(layer){
-    for( var p in layer.paint){
-      map.setPaintProperty(layer.id,p,layer.paint[p]);
-    }
-    for( var l in layer.layout ){
-      map.setLayoutProperty(layer.id,l,layer.layout[l]);
-    }
-  };
+  //var updateStyle = function(layer){
+    //for( var p in layer.paint){
+      //map.setPaintProperty(layer.id,p,layer.paint[p]);
+    //}
+    //for( var l in layer.layout ){
+      //map.setLayoutProperty(layer.id,l,layer.layout[l]);
+    //}
+  //};
 
 
-  var resetStyle = function(){
-    var layers = config.initial.layers,
-      altered = config.altered,
-      layer, alt;
-    for(var i = 0; i < altered.length ; i++){
-      for(var j = 0; j < layers.length ; j++){
-        layer = layers[j];
-        alt = altered[i];
-        if( layer.id == alt ){
-          updateStyle(layer);
-         }
-      }
-    }
-    config.altered = [] ;
-    config.current = "init";
-    config.class="white";
-  };
+  //var resetStyle = function(){
+    //var layers = config.initial.layers,
+      //altered = config.altered,
+      //layer, alt;
+    //for(var i = 0; i < altered.length ; i++){
+      //for(var j = 0; j < layers.length ; j++){
+        //layer = layers[j];
+        //alt = altered[i];
+        //if( layer.id == alt ){
+          //updateStyle(layer);
+         //}
+      //}
+    //}
+    //config.altered = [] ;
+    //config.current = "init";
+    //config.class="white";
+  //};
 
-  var applyTheme = function(id){
-    resetStyle();
-    for(var i = 0 ; i < themes.store.length; i++){
-      var theme =  themes.store[i];
-      if( id == theme.id ){
-        config.current = id;
-        config.class = theme.ui.class;
-        for(var j = 0; j < theme.layers.length ; j ++ ){
-          var layer = theme.layers[j];
-          config.altered.push(layer.id);
-          updateStyle(layer);
-        } 
-      }
-    }
-  };
+  //var applyTheme = function(id){
+    //resetStyle();
+    //for(var i = 0 ; i < themes.store.length; i++){
+      //var theme =  themes.store[i];
+      //if( id == theme.id ){
+        //config.current = id;
+        //config.class = theme.ui.class;
+        //for(var j = 0; j < theme.layers.length ; j ++ ){
+          //var layer = theme.layers[j];
+          //config.altered.push(layer.id);
+          //updateStyle(layer);
+        //} 
+      //}
+    //}
+  //};
 
-  var applyNextTheme = function(){
-    var ids = ['init'];
-    var pos = 0;
-    for(var i = 0 ; i < themes.store.length ; i++){
-      ids.push(themes.store[i].id);
-    }
-    pos = ids.indexOf(config.current);
-    if(pos == -1 || pos == ids.length ){
-      pos = 0;
-    }else{
-      pos = pos + 1;
-    }
+  //var applyNextTheme = function(){
+    //var ids = ['init'];
+    //var pos = 0;
+    //for(var i = 0 ; i < themes.store.length ; i++){
+      //ids.push(themes.store[i].id);
+    //}
+    //pos = ids.indexOf(config.current);
+    //if(pos == -1 || pos == ids.length ){
+      //pos = 0;
+    //}else{
+      //pos = pos + 1;
+    //}
 
-    applyTheme(ids[pos]);
-  };
+    //applyTheme(ids[pos]);
+  //};
 
-  if(o.id){
-     applyTheme(o.id); 
-  }else{
-    applyNextTheme();
-  }
+  //if(o.id){
+     //applyTheme(o.id); 
+  //}else{
+    //applyNextTheme();
+  //}
 
 
-  mx.util.classAction({
-    selector : "body",
-    class : oldClass,
-    action : "remove"
-  });
+  //mx.util.classAction({
+    //selector : "body",
+    //class : oldClass,
+    //action : "remove"
+  //});
 
-  mx.util.classAction({
-    selector : "body",
-    class : config.class,
-    action : "add"
-  });
+  //mx.util.classAction({
+    //selector : "body",
+    //class : config.class,
+    //action : "add"
+  //});
 
-};
+//};
 
 
 
@@ -3905,32 +4145,32 @@ $('document').ready(function() {
  * Take every layer and randomly change the color  
  * @param {string} mapId Map identifier
  */
-//mgl.helper.randomFillAll = function(mapId) {
-  //setInterval(function() {
-    //var map = mgl.maps[mapId].map;
-    //var layers = map.style._layers;
+mgl.helper.randomFillAll = function(mapId) {
+  setInterval(function() {
+    var map = mgl.maps[mapId].map;
+    var layers = map.style._layers;
 
-    ////map.setBearing(Math.random() * 360);
-    ////map.setPitch(Math.random() * 60);
+    //map.setBearing(Math.random() * 360);
+    //map.setPitch(Math.random() * 60);
 
-    //for (var l in layers) {
-      //var type = layers[l].type;
-      //if (type) {
-        //switch (type) {
-          //case 'fill':
-            //map.setPaintProperty(l, 'fill-color', mx.util.randomHsl(1));
-            //break;
-          //case 'background':
-            //map.setPaintProperty(l, 'background-color', mx.util.randomHsl(1));
-            //break;
-          //case 'line':
-            //map.setPaintProperty(l, 'line-color', mx.util.randomHsl(1));
-            //break;
-        //}
-      //}
-    //}
-  //}, 100);
-//};
+    for (var l in layers) {
+      var type = layers[l].type;
+      if (type) {
+        switch (type) {
+          case 'fill':
+            map.setPaintProperty(l, 'fill-color', mx.util.randomHsl(1));
+            break;
+          case 'background':
+            map.setPaintProperty(l, 'background-color', mx.util.randomHsl(1));
+            break;
+          case 'line':
+            map.setPaintProperty(l, 'line-color', mx.util.randomHsl(1));
+            break;
+        }
+      }
+    }
+  }, 100);
+};
 
 
 /*

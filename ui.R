@@ -12,7 +12,7 @@ mxSetResourcePath(config[["resources"]])
 #
 tagList(
   mxSource("ui/header.R"),
-  tags$body(class="switchui full-page white",
+  tags$body(class="full-page mx",
       tags$div(id="cookies",class="shinyCookies"),
       mxSource("ui/modals.R"),
       mxSource("ui/bar_main.R"),

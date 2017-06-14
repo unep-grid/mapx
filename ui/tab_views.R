@@ -21,23 +21,26 @@ toolBar <-  tags$div(
 #
 # Filter class by tag
 #
-filterClass <- tags$div(class="check-toggle-group", 
-  lapply(c(config[[c("views","type")]],config[[c("views","classes")]]),function(x){
-    cl_id <- sprintf("cl_%s", x)
-    tags$div( class="check-toggle",
-      tags$input(
-        class="filter check-toggle-input",
-        type="checkbox",
-        id = cl_id,
-        `data-filter`=x
-        ),
-      tags$label(
-        class="btn btn-default btn-xs check-toggle-label",
-        `for`=cl_id,
-        "data-lang_key"=x
-        )
-      )
-    })
+filterClass <- tags$div(
+  class="filters",
+  tags$div(
+    class="check-toggle-group", 
+    lapply(c(config[[c("views","classes")]]),function(x){
+      cl_id <- sprintf("cl_%s", x)
+      tags$div( class="check-toggle",
+        tags$input(
+          class="filter check-toggle-input",
+          type="checkbox",
+          id = cl_id,
+          `data-filter`=x
+          ),
+        tags$label(
+          class="btn btn-default btn-xs check-toggle-label",
+          `for`=cl_id,
+          "data-lang_key"=x
+          )
+        )})
+    )
   )
 #
 # Sort button
@@ -71,11 +74,7 @@ filter <-  mxFold(
     mxFold(
       id = "optViewFilter",
       labelDictKey = "fold_views_class",
-      content = tagList(
-        tags$div(class="filters",
-          filterClass
-          )
-        )
+      content = filterClass
       ),
     mxFold(
       id = "optViewSorts",
@@ -98,9 +97,10 @@ tags$div(
   tags$div(class="mx-views-header",
     title,
     toolBar,
-    filter
+    filterClass
     ),
   tags$div(class="mx-views-content",
     tags$ul(class="mx-views-list")
     )
   )
+

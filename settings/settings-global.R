@@ -105,18 +105,38 @@ config[["map"]] <- list(
   lat = -2.6781140,
   lng = 17.3440031,
   maxZoom = 22,
-  minZoom = 3,
+  minZoom = 0,
   token = "pk.eyJ1IjoidW5lcGdyaWQiLCJhIjoiY2lrd293Z3RhMDAzNHd4bTR4YjE4MHM0byJ9.9c-Yt3p0aKFSO2tX6CR26Q",
   id = "map_main",
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
   paths = list(
     style= "styles/base/mapx.json"
-    , themes="styles/themes/mapx.json"
+    #, themes="styles/themes/mapx.json"
     , sprite="styles/sprites/sprite"
     #, style = "styles/base/simple.json"
     )
   )
+
+#
+# Default ui and map colors
+#
+config[["ui"]] <- list(
+  colors = list(
+    default = list(
+      "mx_text" = "rgba(53,53,53,1)",
+      "mx_hidden" = "rgba(2,186,253,0)",
+      "mx_border" = "rgba(156,156,156,0.4)",
+      "mx_background" = "rgba(248,248,248,1)",
+      "mx_shadow" = "rgba(153,153,153,0.4)",
+      "mx_country_mask" = "rgba(153,153,153,0.4)",
+      "mx_water" = "rgba(102,102,102,1)",
+      "mx_road" = "rgba(0,0,0,1)",
+      "mx_admin" = "rgba(127,127,127,1)"
+      )
+    )
+  )
+
 
 # config map sources
 #config[["map"]][["sources"]] = list()

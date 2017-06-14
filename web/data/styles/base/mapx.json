@@ -112,8 +112,6 @@
         "type": "fill",
         "source": "mapbox://unepgrid.6idtkx33",
         "source-layer": "mx_country_un_iso3code",
-        "minzoom": 3,
-        "interactive": true,
         "filter": [
           "all",
           [
@@ -130,7 +128,7 @@
           "visibility": "visible"
         },
         "paint": {
-          "fill-color": "rgba(47,47,47,0.6)"
+          "fill-color": "rgba(220,220,220,0.8)"
         }
       },
       {
@@ -1097,7 +1095,7 @@
         },
         "paint": {
           "text-color": "hsl(0, 0%, 0%)",
-          "text-halo-width": 0,
+          "text-halo-width":0,
           "text-halo-color": "#000"
         }
       },
@@ -1116,7 +1114,7 @@
           "visibility": "visible"
         },
         "paint": {
-          "line-color": "rgba(48,48,48,1)",
+          "line-color": "rgba(255,255,255,1)",
           "line-dasharray": [
             3,
             2
@@ -1186,7 +1184,7 @@
         }
       },
       {
-        "id": "boundaries 2",
+        "id": "boundaries_2",
         "type": "line",
         "source": "mapbox://mapbox.mapbox-streets-v6",
         "source-layer": "admin",
@@ -1243,7 +1241,7 @@
         }
       },
       {
-        "id": "boundaries 3-4",
+        "id": "boundaries_3-4",
         "type": "line",
         "source": "mapbox://mapbox.mapbox-streets-v6",
         "source-layer": "admin",
@@ -1301,7 +1299,7 @@
         }
       },
       {
-        "id": "boundaries conflict",
+        "id": "boundaries_conflict",
         "type": "line",
         "source": "mapbox://mapbox.mapbox-streets-v6",
         "source-layer": "admin",
