@@ -1,0 +1,276 @@
+
+/** Black modifiers
+*
+*/
+
+/*.mx * {   */
+  /*--mx_text : hsla(196, 98%, 50%,1);*/
+  /*--mx_hidden : hsla(196, 98%, 50%,0);*/
+  /*--mx_border : hsla(196, 98%, 20%,0.9);*/
+  /*--mx_background : hsla(196, 98%, 10%,0.8);*/
+  /*--mx_shadow : hsla(196, 98%, 30%, 0.3);*/
+  /*border-color : var(--mx_border);*/
+  /*color: var(--mx_text);*/
+/*}*/
+.mx * {   
+  --mx_text: hsl(0, 0%, 21%);
+  --mx_hidden: hsla(196, 98%, 50%,0);
+  --mx_border: hsl(0, 0%, 81%);
+  --mx_background: hsla(0, 0%, 97%, 0.95);
+  --mx_shadow: hsla(0, 0%, 60%, 0.3);
+  border-color: var(--mx_border);
+  color: var(--mx_text);
+}
+
+.mx select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+} 
+/* targeting ie 9 and 10*/
+@media screen and (min-width:0{{ content }}) {
+  select {
+    background:none;
+    padding: 5px;
+  }
+}
+
+
+
+.mx .transparent{
+  transition: background-color 0.3s ease-in 0s; 
+  background-color: var(--mx_background) ;
+  border-color : var(--mx_border);
+}
+
+.mx .shadow {
+  -webkit-box-shadow:  2px 2px 5px 0 var(--mx_shadow);  
+  -moz-box-shadow:  2px 2px 5px 0 var(--mx_shadow);
+  box-shadow :  2px 2px 5px 0 var(--mx_shadow);
+}
+
+
+
+.mx .transparent:hover {
+  background-color: var(--mx_background);
+}
+
+.mx .opaque
+{
+  background-color: var(--mx_background);
+}
+/*
+* map-x general changes
+* 
+*/
+.mx .mx-flex-content {
+  border-top: 1px solid ;
+  border-bottom: 1px solid;
+}
+
+.mx ::-webkit-input-placeholder {
+   color: var(--mx_border);
+}
+
+.mx :-moz-placeholder { /* Firefox 18- */
+   color: var(--mx_border);  
+}
+
+.mx ::-moz-placeholder {  /* Firefox 19+ */
+   color: var(--mx_border);  
+}
+
+.mx :-ms-input-placeholder {  
+   color: var(--mx_border);  
+}
+
+.mx .mx-modal-container,
+.mx .selectize-dropdown,
+.mx .mapboxgl-popup-content
+{
+border : 1px solid var(--mx_border);
+background-color: var(--mx_background);
+  -webkit-box-shadow:  2px 2px 5px 0 var(--mx_shadow);  
+  -moz-box-shadow:  2px 2px 5px 0 var(--mx_shadow);
+  box-shadow :  2px 2px 5px 0 var(--mx_shadow);
+}
+
+.mx .input-group-addon {
+  background-color: var(--mx_border);
+}
+
+.mx .well,
+.mx .form-control,
+.mx .btn,
+.mx .selectize-control.single .selectize-input,
+.mx .selectize-control.single .selectize-input.input-active,
+.mx .selectize-control.single .selectize-input .dropdown-active,
+.mx .selectize-input,
+.mx .selectize-control.multi .selectize-input > div,
+.mx .list-group-item
+{
+  color: var(--mx_text);
+  border-radius: 0px;
+  border-color: var(--mx_border);
+  background-color: var(--mx_background);
+  -webkit-box-shadow: none;
+  box-shadow: none;
+} 
+
+
+.mx .jed-container .well {
+  border-left: var(--mx_border);
+}
+
+.mx .mx-modal-top {
+  background-color:var(--mx_background);
+}
+
+.mx .form.group .form-control.selectize-control {
+   border:none;
+   background:none;
+}
+
+.mx .selectize-control.single .selectize-input:after,
+.mx .selectize-control.single .selectize-input.dropdown-active:after,
+.mx .selectize-dropdown.form-control{
+  background-color: var(--mx_background);
+  border-color: var(--mx_border) transparent transparent transparent;
+}
+
+.mx .btn-circle:hover,
+.mx .btn-circle:focus,
+.mx .btn-circle:hover i:before,
+.mx .btn-circle:focus i:before, 
+.mx .selectize-dropdown .active,
+.mx .selectize-dropdown [data-selectable] .highlight,
+.mx .btn:hover,
+.mx .btn:hover i,
+.mx [class*=hint--]:after
+{
+  color: var(--mx_background);
+  background-color: var(--mx_text);
+  outline :0;
+  text-shadow: none;
+  box-shadow 4px 4px 8px var(--mx-shadow); 
+}
+
+/*
+* Mapbox gl css changes
+*/
+.mx .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
+    border-top-color: var(--mx_hidden);
+    border-bottom-color: var(--mx_text);
+    border-left-color: var(--mx_hidden);
+    border-right-color: var(--mx_hidden);
+}
+.mx .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
+    border-top-color: var(--mx_text);
+    border-bottom-color: var(--mx_hidden);
+    border-left-color: var(--mx_hidden);
+    border-right-color: var(--mx_hidden);
+}
+.mx .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
+    border-top-color: var(--mx_hidden);
+    border-bottom-color: var(--mx_hidden);
+    border-left-color: var(--mx_text);
+    border-right-color: var(--mx_hidden);
+}
+.mx .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
+    border-top-color: var(--mx_hidden);
+    border-bottom-color: var(--mx_hidden);
+    border-left-color: var(--mx_text);
+    border-right-color: var(--mx_hidden);
+}
+
+
+.mx .mx-controls-top 
+{
+  background-color: var(--mx_background);
+  border: none;
+}
+
+.mx .mx-controls li,
+.mx .mx-controls ul 
+{
+  border: none;
+}
+
+.mx .mx-controls li:hover
+{
+  background-color: var(--mx_text);
+}
+
+.mx .mx-controls-ul li:hover, 
+.mx .mx-controls-ul li:hover div,
+.mx .mx-controls-ul .active,
+.mx .mx-controls-ul .active div
+{
+    background-color: var(--mx_text);
+    color: var(--mx_background);
+}
+/*.mx .mx-controls li:hover .mx-pointer*/
+/*{*/
+  /*color: var(--mx_background);*/
+/*}*/
+
+
+/**
+* Progress bar
+*/
+
+.loading-screen {
+}
+
+.loading-screen-background {
+  background-color : var(--mx_background);
+  opacity:0.4;
+}
+.loading-bar-out { 
+  border:1px solid var(--mx_text);
+}
+
+.loading-bar-in {
+  background-color: var(--mx_text) ;
+}
+
+.loading-bar-txt {
+  font-family : "Lucida Console", Monaco, monospace;
+  color: var(--mx_text) ;
+}
+
+/**
+* Slider
+*/
+.mx .mx-slider-container .noUi-horizontal .noUi-handle {
+  background-color: var(--mx_background);
+  border: 1px solid var(--mx_text);
+}
+
+.mx .mx-slider-container .noUi-target {
+  background : none;
+  border :1px solid var(--mx_border);
+  border-radius: 2.5px;
+  box-shadow: none;
+}
+.mx .mx-slider-container .noUi-connect:after {
+  background-color: var(--mx_text);
+}
+
+.mx .mx-slider-container .noUi-connect {
+    background: var(--mx_text);
+    height: 10px;
+    top: 10px;
+}
+
+
+.mx .mx-slider-container .noUi-horizontal .noUi-tooltip {
+    color: var(--mx_text);
+    background: none;
+    border: none;
+}
+
