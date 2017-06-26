@@ -3,12 +3,12 @@
 #
 # title
 #
-title <- tags$h4(`data-lang_key`="title_views","Views")
-filter <- tags$h4("Search")
+#title <- tags$h4(`data-lang_key`="title_views","Views")
+#filter <- tags$h4("Search")
 #
 # Toolbar 
 #
-toolBar <-  tags$div(
+viewFilterInput <-  tags$div(
   id="viewsTools",
   tags$input(
     class="search form-control", 
@@ -21,7 +21,7 @@ toolBar <-  tags$div(
 #
 # Filter class by tag
 #
-filterClass <- tags$div(
+viewFilterButton <- tags$div(
   class="filters",
   tags$div(
     class="check-toggle-group", 
@@ -95,15 +95,13 @@ tags$div(
   id=config[[c("map","idViewsListContainer")]],
   class="mx-views-container", 
   tags$div(class="mx-views-header",
-    title
+    viewFilterInput,
+    viewFilterButton
     ),
   tags$div(class="mx-views-content",
     tags$ul(class="mx-views-list")
     ),
-  tags$div(class="mx-views-footer",
-    filter,
-    toolBar,
-    filterClass
+  tags$div(class="mx-views-footer"
     )
   )
 

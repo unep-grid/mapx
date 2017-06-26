@@ -3477,6 +3477,7 @@ mgl.helper.setUiColorScheme = function(o){
   init = c !== undefined;
   c = c||{};
   c.mx_text = c.mx_text || "hsl(0, 0%, 21%)";
+  c.mx_text_faded = c.mx_text_faded || "hsla(0, 0%, 21%, 0.6)";
   c.mx_hidden = c.mx_hidden || "hsla(196, 98%, 50%,0)";
   c.mx_border = c.mx_border || "hsl(0, 0%, 61%)";
   c.mx_background = c.mx_background ||"hsla(0, 0%, 97%, 0.95)";
@@ -3531,6 +3532,10 @@ mgl.helper.setUiColorScheme = function(o){
         container_inputs.appendChild(input);
       }
       lab.innerHTML = cid;
+      //lab.dataset.lang_key = cid;
+      //lab.dataset.lang_type = "tooltip";
+      lab.setAttribute("aria-label", cid);
+      lab.classList.add("hint--right");
       lab.for = cid;
       container.appendChild(lab);
       container.appendChild(container_inputs);

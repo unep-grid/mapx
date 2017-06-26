@@ -187,7 +187,7 @@ font-family: fontawesome;
 * General layout
 */
 .left-column {
-  border-radius:3px;
+  border-radius: 3px;
   max-height: 100%;
   z-index: 100;
   float: left;
@@ -196,8 +196,9 @@ font-family: fontawesome;
   padding-bottom: 30px;
   width: 445px;
   min-height: 100px;
-  padding-right: 15px;
-  padding-left: 15px;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
   bottom: 0px;
   top: 40px;
   position: absolute;
@@ -276,6 +277,7 @@ font-family: fontawesome;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
+  margin-top: 5px;
 }
 
 @media( max-width:800px ){
@@ -531,8 +533,9 @@ font-family: fontawesome;
 }
 
 .mx-view-item {
-  padding: 5px;
-  margin: 5px;
+  padding: 0px;
+  margin: 10px;
+  border-radius:5px;
   position: relative;
 }
 
@@ -543,10 +546,10 @@ font-family: fontawesome;
   }
 }
 
-.mx-view-item:hover {
-  border-left-width : 2px;
-  padding-left: 4px;
-}
+/*.mx-view-item:hover {*/
+  /*border-left-width : 2px;*/
+  /*padding-left: 4px;*/
+/*}*/
 
 .mx-view-item-sm {
   border-left : 1px solid blue;
@@ -892,6 +895,7 @@ font-family: fontawesome;
 
 .check-toggle .check-toggle-label {
   margin-top: 3px;
+  zoom:83%;
 }
 
 .check-toggle .check-toggle-label:before {
