@@ -1016,6 +1016,11 @@
             "suburb",
             "town",
             "village"
+          ],
+          [
+            "!=",
+            "capital",
+            2
           ]
         ],
         "layout": {
