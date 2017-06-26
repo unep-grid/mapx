@@ -698,30 +698,37 @@ mx.util.getSizeOf = function(obj){
 * @param {String} o.using Easing function name
 */
 mx.util.srollFromTo = function(o){
-  
-  var start;
+
+  var start,duration;
   var diff = o.to - o.from;
   var easing = mx.util.easingFun({
-    type:o.using || "easeOut",
+    type:o.using || "easeInOut",
     power:2
   });
-  //var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
-  var duration = (o.during || 1000); 
+  var bodyHeight = document.body.clientHeight || 800;
 
-  if (!diff) return;
+  if (!diff || diff === 0) return;
 
-  mx.util.onNextFrame(function step(timestamp) {
-    if (!start) start = timestamp;
-    var time = timestamp - start;
-    var percent = Math.min(time / duration, 1);
-    percent = easing(percent);
+  if( Math.abs(diff) > ( bodyHeight * 1.5 )){
+    // instant scroll
+    o.el.scrollTop = o.to;
+  }else{
+    // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
+    duration = (o.during || 1000); 
+    // scroll on next frame
+    mx.util.onNextFrame(function step(timestamp) {
+      if (!start) start = timestamp;
+      var time = timestamp - start;
+      var percent = Math.min(time / duration, 1);
+      percent = easing(percent);
 
-    o.el.scrollTop = o.from + diff * percent;
+      o.el.scrollTop = o.from + diff * percent;
 
-    if (time < duration) {
-      window.requestAnimationFrame(step);
-    }
-  });
+      if (time < duration) {
+        window.requestAnimationFrame(step);
+      }
+    });
+  }
 };
 
 /**
