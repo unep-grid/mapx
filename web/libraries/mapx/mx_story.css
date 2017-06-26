@@ -69,14 +69,22 @@
   padding:5%;
 }
 
+
+.mx-story-slide img {
+  max-width:100%;
+}
+
+
 .mx-story-slide.mx-story-image-fixed-top img,
 .mx-story-slide.mx-story-image-fixed-top iframe {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height:auto;
+  bottom: 0;
+  right:0;
+  max-height: 100%;
   zoom: 100%;
+  overflow: hidden;
 }
 
 .mx-story-slide.mx-story-card.mx-story-cube-face {
