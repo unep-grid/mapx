@@ -125,7 +125,7 @@ config[["ui"]] <- list(
   colors = list(
     default = list(
       "mx_text" = "rgba(53,53,53,1)",
-      "mx_text_faded" = "rgba(53,53,53,1)",
+      "mx_text_faded" = "rgba(53,53,53,0.5)",
       "mx_hidden" = "rgba(2,186,253,0)",
       "mx_border" = "rgba(156,156,156,0.4)",
       "mx_background" = "rgba(248,248,248,1)",
