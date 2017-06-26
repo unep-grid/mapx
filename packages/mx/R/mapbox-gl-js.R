@@ -25,6 +25,26 @@ mglSetLegendTemplate <- function( template, session=shiny::getDefaultReactiveDom
       )
     )
 }
+
+
+
+#' Get client localForage object 
+#' @param idStore localforage store id
+#' @param idKey Id of the object
+#' @param idInput Id to trigger when the operation is completed
+mglGetLocalForageData <- function(idStore,idKey,idInput,session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mglGetLocalForageData",
+    list(
+      idInput = idInput,
+      idKey = idKey,
+      idStore = idStore
+      )
+    )
+}
+
+
+
+
 #' Remove geojson from view list and geojson  db
 #' @param id {character} map id
 #' @param idView {character} geojson view id
@@ -256,4 +276,28 @@ mglAddAutoLayer <- function(id=NULL, style=NULL, before=NULL, session=shiny::get
     )
 
 }
+
+#' Live preview story map
+#' @param id Map id
+#' @param view View object
+#' @param session Shiny session object
+mglReadStory <- function(id=NULL,view=list(), session=shiny::getDefaultReactiveDomain()){
+
+  if(noDataCheck(id)){
+    id <- .get(config,c("map","id"))
+  }
+
+  session$sendCustomMessage("mglReadStory",
+    list(
+      id = id,
+      view = view,
+      save = TRUE
+      )
+    )
+}
+
+
+
+
+
 

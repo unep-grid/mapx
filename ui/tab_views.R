@@ -3,8 +3,8 @@
 #
 # title
 #
-title <- tags$h3(`data-lang_key`="title_views")
-
+title <- tags$h4(`data-lang_key`="title_views","Views")
+filter <- tags$h4("Search")
 #
 # Toolbar 
 #
@@ -64,29 +64,29 @@ sortButton <- tagList(
   )
 
 
-#
-# Filter and sort button
-#
-filter <-  mxFold(
-  id = "optViewTools",
-  labelDictKey = "fold_views_filter",
-  content = tags$div(
-    mxFold(
-      id = "optViewFilter",
-      labelDictKey = "fold_views_class",
-      content = filterClass
-      ),
-    mxFold(
-      id = "optViewSorts",
-      labelDictKey = "fold_views_sort",
-      content = tagList(
-        tags$div(class="sorts",
-          sortButton
-          )
-        )
-      )
-    )
-  )
+##
+## Filter and sort button
+##
+#filter <-  mxFold(
+  #id = "optViewTools",
+  #labelDictKey = "fold_views_filter",
+  #content = tags$div(
+    #mxFold(
+      #id = "optViewFilter",
+      #labelDictKey = "fold_views_class",
+      #content = filterClass
+      #),
+    #mxFold(
+      #id = "optViewSorts",
+      #labelDictKey = "fold_views_sort",
+      #content = tagList(
+        #tags$div(class="sorts",
+          #sortButton
+          #)
+        #)
+      #)
+    #)
+  #)
 
 #
 # Final tab object
@@ -95,12 +95,15 @@ tags$div(
   id=config[[c("map","idViewsListContainer")]],
   class="mx-views-container", 
   tags$div(class="mx-views-header",
-    title,
-    toolBar,
-    filterClass
+    title
     ),
   tags$div(class="mx-views-content",
     tags$ul(class="mx-views-list")
+    ),
+  tags$div(class="mx-views-footer",
+    filter,
+    toolBar,
+    filterClass
     )
   )
 

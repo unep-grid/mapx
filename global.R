@@ -91,7 +91,7 @@ if( !isTRUE(opt$packagesOk) || !isTRUE(opt$libraryOk) ){
   load_all("packages/jed")
 
   # load schemas function
-  source("templates/jed/view_story.R")
+  source("templates/jed/view_story_2.R")
   source("templates/jed/view_style.R")
   source("templates/jed/source_meta.R")
 

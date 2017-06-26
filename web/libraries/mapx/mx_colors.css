@@ -39,7 +39,10 @@
   }
 }
 
-
+.mx .theme_colors label {
+  color : var(--mx_text);
+  text-shadow: -1px -1px 0 var(--mx_shadow), 1px -1px 0 #000, -1px 1px 0 var(--mx_shadow), 1px 1px 0 var(--mx_shadow);
+}
 
 .mx .transparent{
   transition: background-color 0.3s ease-in 0s; 
@@ -53,7 +56,18 @@
   box-shadow :  2px 2px 5px 0 var(--mx_shadow);
 }
 
+/*.mx .shadow-inset {*/
+  /*position:relative;*/
+  /*-webkit-box-shadow: inset  2px 2px 5px 0 var(--mx_shadow);  */
+  /*-moz-box-shadow: inset  2px 2px 5px 0 var(--mx_shadow);*/
+  /*box-shadow : inset 2px 2px 5px 0 var(--mx_shadow);*/
+  /*pointer-events:none;*/
+/*}*/
 
+.mx .jed-container div[data-schematype='object'] {
+    border-radius: 5px;
+    border : 1px solid var(--mx_border);
+}
 
 .mx .transparent:hover {
   background-color: var(--mx_background);
@@ -98,6 +112,11 @@ background-color: var(--mx_background);
   -moz-box-shadow:  2px 2px 5px 0 var(--mx_shadow);
   box-shadow :  2px 2px 5px 0 var(--mx_shadow);
 }
+
+.mx .mx-modal-top.mx-modal-drag-enable{
+  background-color: var(--mx_border);
+}
+
 
 .mx .input-group-addon {
   background-color: var(--mx_border);
@@ -188,9 +207,8 @@ background-color: var(--mx_background);
 }
 
 
-.mx .mx-controls-top 
+.mx .mx-controls-ul 
 {
-  background-color: var(--mx_background);
   border: none;
 }
 
@@ -199,6 +217,12 @@ background-color: var(--mx_background);
 {
   border: none;
 }
+
+.mx .mx-controls-ul li
+{
+  background-color: var(--mx_background);
+}
+
 
 .mx .mx-controls li:hover
 {
@@ -273,4 +297,18 @@ background-color: var(--mx_background);
     background: none;
     border: none;
 }
+
+.mx-story-step-bullet{
+  background: var(--mx_background);
+  color: var(--mx_text);
+}
+
+.mx .mx-story-step-bullet.mx-story-step-active ,
+.mx .mx-story-step-bullet:hover {
+  background: var(--mx_text);
+  color:var(--mx_background);
+}
+
+
+
 

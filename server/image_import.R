@@ -3,25 +3,26 @@
 observeEvent(input$imageUpload,{
 
   idUser <- reactUser$data$id
-  dirWeb <- file.path("images",idUser)
+  dirWeb <- file.path("userdata",idUser)
 
-  dir <- config[[c("resources","images")]]
-  dir <- file.path(dir,idUser)
+  dirData <- config[[c("resources","userdata")]]
+ 
+  dirUser <- file.path(dirData,idUser)
 
-  if(!dir.exists(dir)){
-    dir.create(dir)
+  if(!dir.exists(dirUser)){
+    dir.create(dirUser)
   }
 
   data <- input$imageUpload
 
   #
-  # Temp image, copy to user dir in images
+  # Temp image, copy to user dir in userdata
   #
   img <- unlist(strsplit(data$img,","))[2]
   tf <-  tempfile()
   write(img,tf)
   df <- base64::decode(tf)
-  idMd5 <- digest(img)
+  idMd5 <- digest::digest(img)
 
   imgSize <- list(
     "@sm" = 400,
@@ -50,7 +51,7 @@ observeEvent(input$imageUpload,{
       resize <- sprintf("convert %1$s -strip -quality 86 -resize '%2$s>' %3$s"
         , df
         , size
-        , file.path(dir,fileName)
+        , file.path(dirUser,fileName)
         )
 
       system(resize)

@@ -4,6 +4,45 @@ mx.listener = {};
 mx.language = "en";
 mx.templates = {};
 
+/**
+ * Do something on next frame
+ * @param {Function} cb Callback function to execute on next animation frame
+ */
+mx.util.onNextFrame = function(cb) { 
+  var nf = window.requestAnimationFrame ||
+    window.webkitRequestAnimationFrame ||
+    window.mozRequestAnimationFrame ||
+    window.msRequestAnimationFrame ||
+    window.oRequestAnimationFrame ||
+    function(callback) {
+      window.setTimeout(callback, 1000 / 60);
+    };
+  return nf(cb);
+};
+
+/**
+ * Get the correct css transform function
+ */
+mx.util.cssTransformFun = function(){
+  /* Create dummy div to explore style */
+  var style = document
+    .createElement("div")
+    .style;
+
+if (undefined !== style.WebkitTransform) {
+  return "WebkitTransform";
+} else if (undefined !== style.MozTransform) {
+  return "MozTransform ";
+} else if (undefined !== style.OTransform) {
+  return "OTransform";
+} else if (undefined !== style.msTransform) {
+  return "msTransform ";
+} else if (undefined !== style.WebkitTransform) {
+  return "WebkitTransform";
+} else {
+  return "transform";
+}
+  }();
 
 
 /** 
@@ -594,6 +633,126 @@ mx.util.chunkString = function(str, size) {
   return chunks;
 };
 
+
+/**
+* Estimate memory size of object
+* @note https://gist.github.com/zensh/4975495
+* @param {Object} object to evaluate
+*/
+mx.util.getSizeOf = function(obj){
+  var bytes = 0;
+  var seenObjects = [];
+
+  function sizeOf(obj) {
+    if(obj !== null && obj !== undefined) {
+      if(seenObjects.indexOf(obj) === -1){
+        seenObjects.push(obj);
+        switch(typeof obj) {
+          case 'number':
+            bytes += 8;
+            break;
+          case 'string':
+            bytes += obj.length * 2;
+            break;
+          case 'boolean':
+            bytes += 4;
+            break;
+          case 'object':
+            var objClass = Object.prototype.toString.call(obj).slice(8, -1);
+            if(objClass === 'Object' || objClass === 'Array') {
+              for(var key in obj) {
+                if(!obj.hasOwnProperty(key)) continue;
+                sizeOf(obj[key]);
+              }
+            } else bytes += obj.toString().length * 2;
+            break;
+        }
+        return bytes;
+      }
+    }
+  }
+
+  function formatByteSize(bytes) {
+    if(bytes < 1024) return bytes + " bytes";
+    else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
+    else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
+    else return(bytes / 1073741824).toFixed(3) + " GiB";
+  }
+
+  return formatByteSize(sizeOf(obj));
+
+};
+
+
+
+
+
+/**
+* Smooth scroll
+* @note https://stackoverflow.com/questions/17722497/scroll-smoothly-to-specific-element-on-page
+* @param {Object} o options
+* @param {Element} o.el Element to scroll on
+* @param {Number} o.from Starting point in px
+* @param {Number} o.to Ending point in px
+* @param {Number} o.during Duration in ms for 1000 px
+* @param {String} o.using Easing function name
+*/
+mx.util.srollFromTo = function(o){
+  
+  var start;
+  var diff = o.to - o.from;
+  var easing = mx.util.easingFun({
+    type:o.using || "easeOut",
+    power:2
+  });
+  var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
+  //var duration = (o.during || 1000); 
+
+  if (!diff) return;
+
+  mx.util.onNextFrame(function step(timestamp) {
+    if (!start) start = timestamp;
+    var time = timestamp - start;
+    var percent = Math.min(time / duration, 1);
+    percent = easing(percent);
+
+    o.el.scrollTop = o.from + diff * percent;
+
+    if (time < duration) {
+      window.requestAnimationFrame(step);
+    }
+  });
+};
+
+/**
+* Create easing function
+* @note https://gist.github.com/gre/1650294
+* @param {object} o options
+* @param {string} o.type type in "easeIn", "easeOut", "easeInOut",
+* @param {integer} o.power Power of the function
+*/
+mx.util.easingFun = function(o) {
+
+  var opt = {
+    easeIn : function (power) {
+      return function (t) { return Math.pow(t, power);};
+    },
+    easeOut : function (power){
+      return function (t) { return 1 - Math.abs(Math.pow(t-1, power));};
+    },
+    easeInOut : function(power) {
+      return function(t) { return t<0.5 ? opt.easeIn(power)(t*2)/2 : opt.easeOut(power)(t*2 - 1)/2+0.5;};
+    }
+  };
+
+  return opt[o.type](o.power) ;
+
+};
+
+
+
+
+
 /**
  * Test if undefined
  * @param {Object|Function}
@@ -770,17 +929,26 @@ mx.util.getLanguageFromObjectPath = function(o){
 */
 mx.util.checkLanguage = function(o){
   
-  var langs = o.languages ? o.languages: mx.util.objectToArray(mx.languages);
-  var lang = o.language ? o.language: mx.language ? mx.language: langs[0];
+  var langs = o.languages || mx.util.objectToArray(mx.languages);
+  var lang = o.language || mx.language || langs[0];
   var out = lang;
   var found = false;
 
+  /**
+  * Test if lang value return something
+  */
   function test(){
     found = !!path( o.obj, o.path + "." + lang ) ;
   }
 
+  /**
+  * Initial language test
+  */
   test();
 
+  /**
+  * If nothing found, iterrate through languages
+  */
   if( !found ){
     for( var l in langs ){
         lang = langs[l];
@@ -891,7 +1059,7 @@ mx.util.tabEnable = function(classGroup, classItem, classHide) {
 
 /**
  * Check if an object is a html element
- * @param obj Object to test
+ * @param {Object} obj object to test
  */
 mx.util.isElement = function(obj) {
   return obj instanceof Node;
@@ -900,37 +1068,48 @@ mx.util.isElement = function(obj) {
 
 /**
  * Class handling : add, remove and toggle
- * @param o {object} options
- * @param o.selector {string|element} selector of element to handle or element eg. #test, .test
- * @param o.class {string} class name to process. By default, "mx-hide"
- * @param o.action {string} action to use : add, remove or toggle
+ * @param o {Object} options
+ * @param o.selector {String|Element} selector of element to handle or element eg. #test, .test
+ * @param o.class {String|Array} class name to process. By default, "mx-hide"
+ * @param o.action {String} action to use : add, remove or toggle
  */
 mx.util.classAction = function(o) {
-  var el, idx, oldCl, hasClass;
+  var el, hasClass;
 
   if (!o.class) o.class = "mx-hide";
+  if (!o.action) o.action = "toggle";
+
+  if (o.class.constructor != Array){
+    o.class = o.class.split(/\s+/);
+  }
 
   if (mx.util.isElement(o.selector)) {
     el = o.selector;
   } else {
-    el = document.querySelector(o.selector);
+    el = document.querySelectorAll(o.selector);
   }
 
-  if (el && o.action) {
-    oldCl = el.className.split(" ");
-    idx = oldCl.indexOf(o.class);
-    hasClass = idx > -1;
+  mx.util.forEachEl({
+    els : el,
+    callback : classAction
+  });
 
-    if (hasClass && (o.action == "remove" || o.action == "toggle")) {
-      oldCl.splice(idx, 1);
+  function classAction(el){
+    if (el && o.action) {
+
+      o.class.forEach(function(cl){
+
+        hasClass = el.classList.contains(cl);
+
+        if (hasClass && (o.action == "remove" || o.action == "toggle")) {
+          el.classList.remove(cl);
+        }
+
+        if (!hasClass && (o.action == "add" || o.action == "toggle")) {
+          el.classList.add(cl);
+        }
+      });    
     }
-
-    if (!hasClass && (o.action == "add" || o.action == "toggle")) {
-      oldCl.push(o.class);
-    }
-
-    el.className = oldCl.join(" ");
-
   }
 };
 
@@ -1003,8 +1182,12 @@ mx.util.draggable = function(o) {
  *
  */
 mx.util.forEachEl = function(o){
-  for (i = 0; i < o.els.length; ++i) {
-    o.callback(o.els[i]);
+  if( mx.util.isElement(o.els) ){
+    o.callback(o.els);
+  }else{
+    for (i = 0; i < o.els.length; ++i) {
+      o.callback(o.els[i]);
+    }
   }
 };
 

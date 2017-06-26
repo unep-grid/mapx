@@ -18,7 +18,7 @@
         "url": "mapbox://mapbox.mapbox-streets-v7",
         "type": "vector"
       },
-      "here_aerial":{
+      "here-aerial-src":{
         "type":"raster",
         "tiles":[
           "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=uuwDMowmvkGDpyTRwZc7&app_code=XhjiSo0ng_b-1vakIjXwVA&ppi=72",
@@ -87,11 +87,10 @@
           "fill-antialias": true
         }
       },
-
       {
-        "id": "here_aerial",
+        "id": "here-aerial",
         "type": "raster",
-        "source": "here_aerial",
+        "source": "here-aerial-src",
         "layout": {
           "visibility": "none"
         }
@@ -996,7 +995,7 @@
         }
       },
       {
-        "id": "place-label",
+        "id": "place-label-city",
         "type": "symbol",
         "source": "mapbox://mapbox.mapbox-streets-v6",
         "source-layer": "place_label",
@@ -1156,7 +1155,7 @@
         }
       },
       {
-        "id": "place-label (1)",
+        "id": "place-label-capital",
         "type": "symbol",
         "source": "mapbox://mapbox.mapbox-streets-v7",
         "source-layer": "place_label",

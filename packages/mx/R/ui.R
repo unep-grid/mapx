@@ -177,6 +177,17 @@ mxPanel<- function(
       )
     )
 
+
+  #
+  # Info text
+  #
+  infoText = tags$div(
+    class="mx-modal-info-text",
+    p(
+      id=sprintf("%s_infoText",id)
+      )
+    )
+
   #
   # Final object
   #
@@ -185,14 +196,14 @@ mxPanel<- function(
     div(
       id=idContent,
       style=sprintf("z-index:%s",zIndex+1),
-      class="mx-modal-container mx-modal-drag-enable",
+      class="mx-modal-container",
       div(
         class="mx-modal-top mx-modal-drag-enable",
         closeButton,
         dragButton
         ),
       div(
-     class="mx-modal-head mx-modal-drag-enable",
+     class="mx-modal-head",
      title
         ),
       div(
@@ -200,7 +211,8 @@ mxPanel<- function(
           html
         ),
       div(
-        class="mx-modal-foot mx-modal-drag-enable",
+        class="mx-modal-foot",
+        infoText,
         listActionButton
         )
       ),

@@ -59,10 +59,17 @@ mgl.data.geojson = localforage.createInstance({
 mgl.data.images = localforage.createInstance({
     name: "images"
 });
+
+mgl.data.stories = localforage.createInstance({
+    name: "stories"
+});
 /**
 * Controls
 */
 mgl.control = {};
+
+
+
 
 /**
 * Create the prototype containing additional control / button.
@@ -71,27 +78,43 @@ mgl.control = {};
 mgl.control.main = function(){};
 mgl.control.main.prototype.onAdd = function(map) {
 
-  btns = {
-    btnZoomIn:{
-      classes:"fa fa-plus",
-      key:"btn_zoom_in",
-      action:function(){
-        map.zoomIn();
+  mgl.helper.toggleControls = function(o){
+    o = o || {};
+    var hide = o.hide || !btns.btnToggleBtns.hidden;
+    var action = hide ? 'add':'remove';  
+    var idToggle = ["#tabLayers","#tabTools","#tabSettings"];
+    var idSkip = ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
+    btns.btnToggleBtns.hidden = hide;
+
+    for(var key in btns){  
+      if(idSkip.indexOf(key) == -1){
+        idToggle.push("#"+key);
       }
+    }
+
+    mx.util.classAction({
+      selector:idToggle,
+      action:action,
+      class:'mx-hide-bis'
+    });
+  };
+
+  btns = {
+    btnToggleBtns:{
+      classes:"fa fa-bars",
+      key:"btn_togle_btns",
+      hidden:false,
+      action:mgl.helper.toggleControls
     },
-    btnZoomOut:{
-      classes:"fa fa-minus",
-      key:"btn_zoom_out",
-      action:function(){
-        map.zoomOut();
-      },
-    },
-    btnPrint:{
-      classes:"fa fa-print",
-      key:"btn_print",
-      action:function(){
-         var png = map.getCanvas().toDataURL();
-        download(png,"mx-export.png");
+    btnShowLogin:{
+      classes:"fa fa-sign-in",
+      key:"btn_login",
+      action:function(){ 
+        val = {
+          time : new Date(),
+          value : 'showLogin' 
+        };
+        Shiny.onInputChange('btn_control', val);
       }
     },
     btnShowCountry:{
@@ -105,26 +128,19 @@ mgl.control.main.prototype.onAdd = function(map) {
         Shiny.onInputChange('btn_control', val);
       }
     },
-    btnFullscreen:{
-      classes:"fa fa-expand",
-      key:"btn_fullscreen",
-      action:function(){
-        toggleFullScreen('btnFullScreen');
-      }
-    },
-    btnShowLogin:{
-      classes:"fa fa-sign-in",
-      key:"btn_login",
+    btnShowLanguage:{
+      classes:"fa fa-language",
+      key:"btn_language",
       action:function(){ 
         val = {
           time : new Date(),
-          value : 'showLogin' 
+          value : 'showLanguage' 
         };
         Shiny.onInputChange('btn_control', val);
       }
     },
     btnTabView:{
-      classes:"fa fa-list",
+      classes:"fa fa-newspaper-o",
       key:"btn_tab_views",
       action:function(){ 
         mx.util.tabEnable('tabs-main','tab-layers');
@@ -137,31 +153,76 @@ mgl.control.main.prototype.onAdd = function(map) {
         mx.util.tabEnable('tabs-main','tab-settings');
       }
     },
-     btnTabTools:{
+    btnTabTools:{
       classes:"fa fa-cogs",
       key:"btn_tab_tools",
       action:function(){ 
         mx.util.tabEnable('tabs-main','tab-tools');
       }
     },
-     btnShowLanguage:{
-      classes:"fa fa-language",
-      key:"btn_language",
-      action:function(){ 
-        val = {
-          time : new Date(),
-          value : 'showLanguage' 
-        };
-        Shiny.onInputChange('btn_control', val);
+
+    btnPrint:{
+      classes:"fa fa-print",
+      key:"btn_print",
+      action:function(){
+        var png = map.getCanvas().toDataURL();
+        download(png,"mx-export.png");
       }
-     },
-     btnThemeAerial:{
+    },
+    btnFullscreen:{
+      classes:"fa fa-expand",
+      key:"btn_fullscreen",
+      action:function(){
+        toggleFullScreen('btnFullScreen');
+      }
+    },
+    btnThemeAerial:{
       classes:"fa fa-plane",
       key:"btn_theme_sat",
       action:function(){  
-        mgl.helper.toggleLayer({id:'map_main',idLayer:'here_aerial',idSwitch:'btnThemeAerial'});
+        mgl.helper.btnToggleLayer({
+          id:'map_main',
+          idLayer:'here-aerial',
+          idSwitch:'btnThemeAerial',
+          action:'toggle'
+        });
+      }
+    },
+    btnStoryUnlockMap:{
+      classes: "fa fa-lock",
+      liClasses: "mx-hide",
+      liData: {"map_unlock":"off"},
+      key: "btn_story_unlock_map", 
+      action : mgl.helper.story.controlMapPan 
+    },
+    btnStoryClose:{
+      classes:"fa fa-close",
+      liClasses:"mx-hide",
+      key:"btn_story_close",
+      action:function(){  
+        mgl.helper.story.controller({
+          enable : false
+        });
+        mgl.helper.toggleControls({
+          hide : false
+        });
+      }
+    },
+    btnZoomIn:{
+      classes:"fa fa-plus",
+      key:"btn_zoom_in",
+      action:function(){
+        map.zoomIn();
+      }
+    },
+    btnZoomOut:{
+      classes:"fa fa-minus",
+      key:"btn_zoom_out",
+      action:function(){
+        map.zoomOut();
       }
     }
+
   }; 
 
   function createList(){
@@ -170,14 +231,20 @@ mgl.control.main.prototype.onAdd = function(map) {
     ulAll.className = "mx-controls-ul";
     for( id in btns ){
       btn = btns[id];
+      
       el = document.createElement("li");
-      el.id = id;
       elBtn = document.createElement("div");
-      elBtn.className = btn.classes;
+
+      if(btn.liClasses) el.className = btn.liClasses;
+      if(btn.classes) elBtn.className = btn.classes;
+      if(btn.liData) for(var k in btn.liData){el.dataset[k]=btn.liData[k];}
+      el.id = id;
       el.appendChild(elBtn);
       el.dataset.lang_key = btn.key;
       el.dataset.lang_type = "tooltip";
-      el.className="mx-pointer hint--right";
+      el.classList.add("mx-pointer");
+      el.classList.add("shadow");
+      el.classList.add("hint--bottom");
       el.onclick = btn.action;
       ulAll.appendChild(el);
     }
@@ -188,7 +255,7 @@ mgl.control.main.prototype.onAdd = function(map) {
 
   this._map = map;
   this._container = document.createElement('div');
-  this._container.className = 'mapboxgl-ctrl mx-controls-top transparent shadow';
+  this._container.className = 'mapboxgl-ctrl mx-controls-top';
   this._container.appendChild(btnList);
   return this._container;
 };
@@ -198,7 +265,22 @@ mgl.control.main.prototype.onRemove = function() {
 };
 
 
-
+/**
+ * Get local forage item and send it to shiny server
+ * @param {Object} o options
+ * @param {String} o.idStore Id/Name of the store
+ * @param {String} o.idKey Key to retrieve
+ * @param {String} o.idInput Which id to trigger in Shiny
+ */
+mgl.helper.getLocalForageData = function(o){
+  var db = mgl.data[o.idStore];
+  db.getItem(o.idKey).then(function(item){
+    Shiny.onInputChange(o.idInput,{
+      item : item,
+      time : (new Date())
+    });
+  });
+};
 
 /** 
 * Add source from view object 
@@ -584,7 +666,7 @@ mgl.helper.parseStory = function(o){
 
         m.map.flyTo({
           speed : 0.5,
-          easing : mgl.helper.easingFun({type:"easeOut",power:5}),
+          easing : mx.util.easingFun({type:"easeOut",power:5}),
           zoom : pos.z,
           bearing : pos.bearing,
           pitch :  pos.pitch,
@@ -739,7 +821,7 @@ mgl.helper.parseStory = function(o){
 
                     m.map.flyTo({
                       speed : 3,
-                      easing : mgl.helper.easingFun({type:"easeIn",power:1}),
+                      easing : mx.util.easingFun({type:"easeIn",power:1}),
                       zoom : pos.z,
                       bearing : pos.b,
                       pitch :  pos.p,
@@ -1348,9 +1430,14 @@ mgl.helper.handleViewClick = function(o){
         comment :"target is the play button",
         isTrue : el.dataset.view_action_key == "btn_opt_start_story",
         action : function(){
-          mgl.helper.parseStory({
+/*          mgl.helper.parseStory({*/
+            //id : o.id,
+            //idView : el.dataset.view_action_target
+          /*});*/
+          mgl.helper.story.read({
             id : o.id,
-            idView : el.dataset.view_action_target
+            idView : el.dataset.view_action_target,
+            save : false
           });
         }
       },
@@ -1717,7 +1804,7 @@ mgl.helper.renderViewsList = function(o){
 * @param {String} o.type Type of filter : style, legend, time_slider, search_box or numeric_slider
 */
 mgl.helper.viewSetFilter = function(o){
-  if(!o)o={};
+  o = o||{};
   var view = this;
   var idView = view.id;
   var filter = o.filter;
@@ -3276,7 +3363,7 @@ mgl.helper.setLanguage = function(o) {
     /**
     * Set language in layers
     */
-    var layers = ["place-label","country-label","water-label","poi-label"];
+    var layers = ["place-label-city","place-label-capital","country-label","water-label","poi-label"];
 
     for(var i = 0; i < layers.length ; i++){
       var layer = layers[i];
@@ -3300,30 +3387,58 @@ mgl.helper.setLanguage = function(o) {
 
 /**
 * Toggle visibility for existing layer in style
+* TODO: This is quite messy : simplify, generalize
 * @param {Object} o options
 * @param {String} o.id map id
 * @param {String} o.idLayer Layer id to toggle
 * @param {String} o.idSwitch Add a class "active" to given element id.
+* @param {String} o.action hide, show, toggle
+* @return {String} Toggled
 */
-mgl.helper.toggleLayer = function(o){
+mgl.helper.btnToggleLayer = function(o){
 
-  var map = mgl.maps[o.id||"map_main"].map;
+  o.id = o.id || "map_main";
+  var map = mgl.maps[o.id].map;
   var btn = document.getElementById(o.idSwitch);
   var lay = map.getLayer(o.idLayer);
+  var layersToShow = [];
+  var layersToHide = [];
 
-  if(lay){
-    if(lay.layout.visibility == "none"){
-      map.setLayoutProperty(o.idLayer,"visibility","visible");
-      if(btn){
-        btn.classList.add("active");
-      }     
-    }else{
+  o.action = o.action || 'toggle';
+  var isAerial = o.idLayer == 'here-aerial';// hide also shades...
+  var toShow = o.action == 'show';
+  var toHide = o.action == 'hide';
+  var isVisible = lay.layout.visibility === "visible";
+  var toToggle = o.action == 'toggle' || toShow && !isVisible || toHide && isVisible;
+
+  if(isAerial){
+    shades = mgl.helper.getLayersNamesByPrefix({id:o.id,prefix:'shade'});
+  }
+
+  if(toToggle){
+    if(isVisible){    
       map.setLayoutProperty(o.idLayer,"visibility","none");
+      if(isAerial){
+        shades.forEach(function(s){ 
+          map.setLayoutProperty(s,"visibility","visible");
+        });
+      }
       if(btn){
         btn.classList.remove("active");
+      }     
+    }else{
+      map.setLayoutProperty(o.idLayer,"visibility","visible");
+      if(isAerial){
+        shades.forEach(function(s){ 
+          map.setLayoutProperty(s,"visibility","none");
+        });
+      }
+      if(btn){
+        btn.classList.add("active");
       }
     }
   }
+  return toToggle;
 };
 
 /**
@@ -3376,6 +3491,7 @@ mgl.helper.setUiColorScheme = function(o){
   */
 
   var inputs = document.getElementById("inputThemeColors");
+  inputs.classList.add("theme_colors");
   
   if(inputs && inputs.children.length>0){
     mx.util.forEachEl({
@@ -3478,7 +3594,7 @@ mgl.helper.setUiColorScheme = function(o){
       }
     },
     {
-      "id":["country-label","place-label"],
+      "id":["country-label","place-label-capital","place-label-city"],
       "paint":{          
         "text-color": c.mx_text
       }
@@ -3919,31 +4035,6 @@ mgl.helper.makeLayerJiggle = function(mapId, prefix) {
   }
 };
 
-/**
-* Create easing function
-* @note https://gist.github.com/gre/1650294
-* @param {object} o options
-* @param {string} o.type type in "easeIn", "easeOut", "easeInOut",
-* @param {integer} o.power Power of the function
-*/
-mgl.helper.easingFun = function(o) {
-
-  var opt = {
-    easeIn : function (power) {
-      return function (t) { return Math.pow(t, power);};
-    },
-    easeOut : function (power){
-      return function (t) { return 1 - Math.abs(Math.pow(t-1, power));};
-    },
-    easeInOut : function(power) {
-      return function(t) { return t<0.5 ? opt.easeIn(power)(t*2)/2 : opt.easeOut(power)(t*2 - 1)/2+0.5;};
-    }
-  };
-
-  return opt[o.type](o.power) ;
-
-};
-
 
 /**
  * swich ui color
@@ -4047,100 +4138,6 @@ mgl.helper.easingFun = function(o) {
 //};
 
 
-
-
-/*
- * Shiny bindings
- */
-$('document').ready(function() {
-
-  // mapbox gl init
-  Shiny.addCustomMessageHandler( 'mglInit', mgl.helper.initMap );
-
-  // Set country language
-  Shiny.addCustomMessageHandler( 'mglSetLanguage', mgl.helper.setLanguage );
-
-  // Save update vuew list
-  Shiny.addCustomMessageHandler( 'mglSetSourcesFromViews',mgl.helper.setSourcesFromViews );
-
-  // Render view list to ui
-  Shiny.addCustomMessageHandler( 'mglRenderViewsList', mgl.helper.renderViewsList );
-
-  // add auto layer generated by schema
-  /*Shiny.addCustomMessageHandler( 'mglAddAutoLayer', mgl.helper.addAutoLayer );*/
-
-  // add view style
-  Shiny.addCustomMessageHandler('mglAddView', mgl.helper.addView );
-
-  // filter visible feature of the given layer id
-  Shiny.addCustomMessageHandler( 'mglSetFilter', mgl.helper.setFilter );
-
-  // add new layer
-  Shiny.addCustomMessageHandler( 'mglAddLayer',  mgl.helper.addLayer );
-
-  // go to location with animation
-  Shiny.addCustomMessageHandler( 'mglFlyTo', mgl.helper.flyTo );
-
-  // sync all maps
-  Shiny.addCustomMessageHandler( 'mglSyncAllMaps', mgl.helper.syncAll );
-
-  // delete geojson view
-  Shiny.addCustomMessageHandler( 'mglRemoveView', mgl.helper.removeView );
-
-});
-
-
-//mx.util.dateUtil = function(o){
-
-  //o.action = o.action ? o.action : "num-to-year";
-  ////conversion to numeric
-  //o.str = o.action.indexOf("unix-to") > -1 ? o.str * 1 : o.str;
-  //o.str = o.str ? o.str : new Date().toLocaleDateString();
-  
-  //o.str = o.str.constructor == Date ? o.str : new Date(o.str);
-
-  //var m = o.str.getMonth()+1;
-  //var y = o.str.getFullYear();
-  //var d = o.str.getDate();
-
-  //opt = {
-    //"unix-to-year-month-day" : function(s){
-      //return y + "-" + m + "-" + d;
-    //},
-    //"num-to-year-month" : function(s){
-      //return y + "-" + m;
-    //},
-    //"num-to-year" : function(s){
-      //return y ;
-    //},
-    //"num-to-local-string" : function(s){
-      //return o.str.toLocaleString();
-    //},
-    //"num-to-local-date-string" : function(s){
-      //return o.str.toLocaleDateString();
-    //},
-    //"num-to-date" : function(s){
-      //return o.str;
-    //},
-    //"num-to-date-string" : function(s){
-      //return o.str.toLocaleString();
-    //},
-    //"year-to-num" : function(s){
-      //return o.str.getTime();
-    //},
-    //"year-month-to-num" : function(s){
-      //return o.str.getTime();
-    //},
-    //"year-month-day-to-num" : function(s){
-      //return o.str.getTime();
-    //}
-
-  //};
-
-  //return(opt[o.action](o.str));
-//};
-
-
 /**
  * Take every layer and randomly change the color  
  * @param {string} mapId Map identifier
@@ -4173,107 +4170,52 @@ mgl.helper.randomFillAll = function(mapId) {
 };
 
 
+
+
 /*
-* object to html list
-* @param {object} o Options
-* @note http://stackoverflow.com/questions/1211764/turning-nested-json-into-an-html-nested-list-with-javascript
-*/
-//mgl.helper.objToList = function(obj){
-  //[>  if (obj instanceof Array) {<]
-  ////var ol = document.createElement('ol');
-  ////for (var child in obj) {
-  ////var li = document.createElement('li');
-  ////li.classList = ["list-group-item"];
-  ////li.appendChild(this.objToList(obj[child]));
-  ////ol.appendChild(li);
-  ////}
-  ////return ol;
-  //[>}<]
-  //if ( ( obj instanceof Object || obj instanceof Array ) && !(obj instanceof String)) {
-    //console.log(obj);
-    //var ul = document.createElement('ul');
-    //ul.classList = ["list-group"];
-    //for(var a = 0 ; a < obj.length; a++){
-      //var child = obj[a];
-      //var li = document.createElement('li');
-      //li.classList = ["list-group-item"];
-      //li.appendChild(this.objToList(child));
-      //ul.appendChild(li);
-    //}
-    //return ul;
-  //} else {
-    
-    //return document.createTextNode(obj);
-  //}
-/*};*/
+ * Shiny bindings
+ */
+$('document').ready(function() {
 
+  // mapbox gl init
+  Shiny.addCustomMessageHandler( 'mglInit', mgl.helper.initMap );
 
-/**
-* Action to client side db
-* @param {Object} o Options
-* @param {String} o.id Map id
-* @param {String} o.idStore  Store id. Default is geojson
-* @param {Array} o.idKeys Keys id to apply action on. Default is all
-* @param {String} o.action renderViews
-*/
-//mgl.helper.dbAction = function(o){
+  // Set country language
+  Shiny.addCustomMessageHandler( 'mglSetLanguage', mgl.helper.setLanguage );
 
-  //if( !o.idStore ) o.idStore = "geojson";
-  //o.store = mgl.data[o.idStore];
-  //o.store.keys().then(function( keys ){
+  // Save update vuew list
+  Shiny.addCustomMessageHandler( 'mglSetSourcesFromViews',mgl.helper.setSourcesFromViews );
 
-    //if( !o.idKeys ) o.idKeys = keys;
-    //if( ! ( o.idKeys instanceof Array ) ) o.idKeys = [o.idKeys] ; 
+  // Render view list to ui
+  Shiny.addCustomMessageHandler( 'mglRenderViewsList', mgl.helper.renderViewsList );
 
-    //if( !o.action ) o.action = "renderLocalViews";
+  // add auto layer generated by schema
+  /*Shiny.addCustomMessageHandler( 'mglAddAutoLayer', mgl.helper.addAutoLayer );*/
 
-    //var kl = o.idKeys.length;
-    //for(var i = 0 ; i < kl ; i ++ ){
-      //o.idKey = o.idKeys[i];
-      //mgl.helper.dbActions[o.action](o);
-    //}
+  // preview story map edits, save state
+  Shiny.addCustomMessageHandler('mglReadStory', mgl.helper.story.read );
 
-  //});
-//};
+  // add view style
+  Shiny.addCustomMessageHandler('mglAddView', mgl.helper.addView );
+  
+  // Get local forage object
+  Shiny.addCustomMessageHandler('mglGetLocalForageData', mgl.helper.getLocalForageData );
 
+  // filter visible feature of the given layer id
+  Shiny.addCustomMessageHandler( 'mglSetFilter', mgl.helper.setFilter );
 
-//mgl.helper.dbActions = {
-  //"renderLocalViews" : function(o){
-    
-    //// extract data
-    //o.store.getItem( o.idKey ).then(function(value){
-      //// add source to map
-      //mgl.helper.addSource({
-        //id : o.id,
-        //idSource : o.idKey,
-        //source : value.source
-      //});
-      //// reRender views list and add geojson items
-      //mgl.helper.renderViewsList({
-        //id : o.id,
-        //views : value.view,
-        //add : true
-      //});
-    //});
-  //},
-  //"addLocalViews" : function(o){
-    
-    //// extract data
-    //o.store.getItem( o.idKey ).then(function(value){
-      //// add source to map
-      //mgl.helper.addSource({
-        //id : o.id,
-        //idSource : o.idKey,
-        //source : value.source
-      //});
-      //// reRender views list and add geojson items
-      //mgl.helper.renderViewsList({
-        //id : o.id,
-        //views : value.view,
-        //add : true
-      //});
-    //});
-  //}
-//};
+  // add new layer
+  Shiny.addCustomMessageHandler( 'mglAddLayer',  mgl.helper.addLayer );
+
+  // go to location with animation
+  Shiny.addCustomMessageHandler( 'mglFlyTo', mgl.helper.flyTo );
+
+  // sync all maps
+  Shiny.addCustomMessageHandler( 'mglSyncAllMaps', mgl.helper.syncAll );
+
+  // delete geojson view
+  Shiny.addCustomMessageHandler( 'mglRemoveView', mgl.helper.removeView );
+
+});
 
 

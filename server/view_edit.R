@@ -222,12 +222,25 @@ observe({
                 )
 
               #
-              # Stors map
+              # Story map
               #
               if(viewType=="sm"){
+                #
+                # First, get latest stored version of the story, if any.
+                #
+                mglGetLocalForageData(
+                    idStore = "stories",
+                    idInput = "localStory",
+                    idKey = viewId
+                    )
+                #
+                # Then initiate jsonEditor output
+                #
                 uiType =  tagList(
                   jedOutput(id="storyEdit")
                   )
+
+
               }
 
 
@@ -255,9 +268,7 @@ observe({
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
                         choices = reactSourceLayer(),
-                        #choices = NULL,
                         selected = .get(viewData,c("data","source","layerInfo","maskName"))
-                        #selected = NULL
                         ),         
                       uiOutput("uiViewEditVtMask")
                       ),
@@ -310,14 +321,15 @@ observe({
               # Final edit modal panel
               #
               output$panelModal <- renderUI(mxPanel(
-                  id="uiConfirmViewEdit",
-                  headIcon="pencil",
-                  subtitle=tags$b(id=sprintf("title_view_edit_panel"),viewTitle),
-                  html=uiOut,
-                  listActionButton=btnList,
-                  addCloseButton=TRUE,
-                  background=FALSE,
-                  closeButtonText=d("btn_close",language)
+                  id = "uiConfirmViewEdit",
+                  headIcon = "pencil",
+                  subtitle = tags$b(id=sprintf("title_view_edit_panel"),viewTitle),
+                  html = uiOut,
+                  listActionButton = btnList,
+                  addCloseButton = TRUE,
+                  addOnClickClose = FALSE,
+                  background = FALSE,
+                  closeButtonText = d("btn_close",language)
                   ))
 
             },
@@ -361,11 +373,54 @@ observe({
 
 
 #
+# Evaluate client and db story
+# NOTE: shiny seems to convert date to UTC with jsonlite.. Be careful here.
+#
+observeEvent(input$localStory,{
+  useDbVersion = TRUE
+  viewDb = reactData$viewDataEdited
+  viewClient = input$localStory$item
+  sysTimeZone = Sys.timezone()
+
+  if(noDataCheck(viewClient)){
+    useDbVersion = TRUE
+  }else{
+    dateClient= viewClient$date_modified
+    dateDb = viewDb$date_modified
+    # format UTC string to  posixct
+    dateClientCt = as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
+    # convert UTC to sysTimeZone string
+    dateClientCt = format(dateClientCt,tz=sysTimeZone,usetz=TRUE)
+    # convert string back to posixct
+    dateClientCt =  as.POSIXct(dateClientCt,tz=sysTimeZone)
+    # get db version time 
+    dateDbCt = as.POSIXct(dateDb,format="%Y-%m-%d%tT%T",tz=sysTimeZone)
+    # check which is the more recent
+    useDbVersion = dateDbCt > dateClientCt
+    #mxDebugMsg(sprintf("client date= %s, db date= %s",dateClientCt,dateDbCt))
+  }
+ 
+  if(useDbVersion){
+    reactData$viewStory <- list(
+      view = viewDb,
+      dbVersion = useDbVersion
+      )
+  }else{
+    reactData$viewStory <- list(
+      view = viewClient,
+      dbVersion = useDbVersion
+      )
+  }
+
+})
+
+#
 # View story : render schema
 #
-observeEvent(input$storyEdit_init,{
+observeEvent(reactData$viewStory,{
 
-  view <- reactData$viewDataEdited
+  view <- reactData$viewStory$view
+  isDbVersion <- reactData$viewStory$dbVersion
 
   if(!isTRUE(view[["_edit"]])) return()
 
@@ -374,7 +429,7 @@ observeEvent(input$storyEdit_init,{
 
   language <- reactData$language 
 
-    schema <- mxSchemaViewStory(
+    schema <- mxSchemaViewStory2(
       view=view,
       views=views,
       language=language
@@ -386,8 +441,36 @@ observeEvent(input$storyEdit_init,{
       startVal = story
       )
 
+    if(!isDbVersion){
+      mxUpdateText(
+        id = "uiConfirmViewEdit_infoText",
+        text = "Unsaved draft"
+        )
+    }
+   
 })
 
+#
+# Update story changes
+#
+observeEvent(input$storyEdit_values,{
+
+  story <- input$storyEdit_values$msg
+
+  if(noDataCheck(story)) return();
+
+  view <- reactData$viewDataEdited
+  view <- .set(view,c("data","story"), story)
+  view <- .set(view,c("date_modified"), Sys.time())
+
+  mxUpdateText(
+    id = "uiConfirmViewEdit_infoText",
+    text = "Unsaved draft"
+    )
+
+  mglReadStory(view=view)
+
+})
 #
 # View vt style : render schema
 #
@@ -483,6 +566,7 @@ observeEvent(input$btnViewUpdate,{
   country <- reactData$country
   userData <- reactUser$data
   idView <- view[["id"]]
+  time <- Sys.time()
 
   #
   # check for edit right
@@ -515,7 +599,7 @@ observeEvent(input$btnViewUpdate,{
   view[[c("data","classes")]] <- as.list(classes)
 
   #
-  # Title an description
+  # Title and description
   #
   view[[c("data","title",language)]] <- input$txtViewTitleUpdate
   view[[c("data","abstract",language)]] <- input$txtViewAbstractUpdate
@@ -525,7 +609,7 @@ observeEvent(input$btnViewUpdate,{
   #
   view[["target"]] <- as.list(view$target)
   view[["data"]] <- as.list(view$data)
-  view[["date_modified"]] <- Sys.time()
+  view[["date_modified"]] <- time
 
   #
   # vector tiles
@@ -598,6 +682,16 @@ observeEvent(input$btnViewUpdate,{
     country = country
     )
   reactData$updateViewListFetchOnly <- runif(1)
+
+  #
+  # Display info text
+  #
+
+  mxUpdateText(
+    id = "uiConfirmViewEdit_infoText",
+    text = sprintf("Saved at %s",time)
+    )
+
 })
 
 #

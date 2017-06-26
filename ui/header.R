@@ -63,6 +63,11 @@ tagList(
       href = "mx/mapx/mx.css"
       ),
     tags$link(
+      rel = "stylesheet",
+      type = "text/css",
+      href = "mx/mapx/mx_story.css"
+      ),
+    tags$link(
       title =  "mx_colors",
       rel = "stylesheet",
       type = "text/css",
@@ -111,6 +116,9 @@ tagList(
       ),
     tags$script(
       src="mx/mapx/mgl_drop.js"
+      ),
+    tags$script(
+      src="mx/mapx/mx_story.js"
       ),
     tags$script(
       src="mx/mapx/mx_cookies.js"
