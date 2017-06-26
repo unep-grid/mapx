@@ -705,8 +705,8 @@ mx.util.srollFromTo = function(o){
     type:o.using || "easeOut",
     power:2
   });
-  var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
-  //var duration = (o.during || 1000); 
+  //var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
+  var duration = (o.during || 1000); 
 
   if (!diff) return;
 

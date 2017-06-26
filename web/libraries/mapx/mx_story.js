@@ -401,8 +401,7 @@ mgl.helper.story.updateSlides = function(o) {
          to : end,
          during : 3000,
          using : "easeOut"
-       });
-    
+       }); 
     };
 
     /*
