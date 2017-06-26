@@ -2415,7 +2415,7 @@ mgl.helper.addViewVt = function(o){
           if(rule.sprite && rule.sprite != 'none'){
             layerSprite = mx.util.clone(layer);
             layerSprite.paint = {
-              'fill-patern': rule.sprite
+              'fill-pattern': rule.sprite
             };
             layerSprite.id = getIdLayer();
             layers.push(layerSprite); 
