@@ -293,6 +293,7 @@ mgl.helper.story.build =  function(o){
       });
       divSlideFront.style.color = slide.color_fg || o.colors.fg;
       divSlideFront.style.zoom = slide.size_text+"%" || o.sizes.text+"%";
+      divSlideFront.style.overflowY = slide.scroll_enable ? 'scroll' : 'hidden';
       divSlide.setAttribute("data-slide_config",JSON.stringify(slide.effects || []));
       divSlideBack.style.backgroundColor = slide.color_bg || o.colors.bg;
       divSlideBack.style.opacity = slide.opacity_bg || o.colors.alpha;

@@ -25,6 +25,8 @@ mx.util.onNextFrame = function(cb) {
  */
 mx.util.cssTransformFun = function(){
   /* Create dummy div to explore style */
+  if(typeof document == "undefined") return;
+
   var style = document
     .createElement("div")
     .style;
@@ -832,6 +834,7 @@ mx.util.setLanguage = function(m) {
       if (!type) type = "text";
       
       found = false;
+      label = "";
       
       for (j = 0; j < m.dict.length; j++) {
         if (!found) {

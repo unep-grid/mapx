@@ -29,6 +29,147 @@ mxJsonToListSource <- function(path){
 
 
 
+#' Simple counter
+#' @param id Id of the counter
+#' @param reset Boolean Should the function reset the counter ?
+mxCounter =  function(id,reset=F){
+    if(!exists("mxCounters") || reset ){
+      mxCounters <<- list()
+    }
+    if(!reset){
+      if(noDataCheck(mxCounters[[id]])){
+        mxCounters[[id]] <<- 1
+      }else{
+        mxCounters[[id]] <<- mxCounters[[id]] + 1
+      }
+      mxCounters[[id]]
+    }
+  }
+
+
+#' Create multilingual object of input in json schema
+#' @param format {Character} Schema input format
+#' @param default {List} Default list
+#' @param keyTitle {Character} Translation key of the title
+#' @param titlePrefix {Character} 
+#' @param keyCounter {Character|Numeric} Id of the counter to set
+#' @param type {Character} Input type
+#' @param collapsed {Boolean} Collapse state of the object
+#' @param lanaguages {Character} Vector of languages code
+mxSchemaMultiLingualInput = function(
+    format = NULL,
+    default = list(),
+    keyTitle = "",
+    titlePrefix = "",
+    keyCounter = "b",
+    type = "string",
+    collapsed = TRUE,
+    language = "en",
+    languages = unlist(config[["languages"]]),
+    dict = NULL
+    ){
+
+
+  if(noDataCheck(language)){
+    language = get("language",envir=parent.frame())
+  }
+
+
+  if(nchar(titlePrefix)>0){
+    titlePrefix = paste(toupper(titlePrefix),":")
+  }
+
+    prop = lapply(languages,function(x){
+      list(
+        title = paste(d(keyTitle,lang=x)," ( ",d(x,lang=language), " )"),
+        type = type,
+        format = format,
+        minLength = ifelse(x=="en",1,0),
+        default = .get(default,x)
+        )
+    })
+    names(prop) <- languages
+    list(
+      propertyOrder = mxCounter(keyCounter),
+      title = paste(titlePrefix,d(keyTitle,lang=language)),
+      type = "object",
+      options = list(collapsed = collapsed),
+      properties = prop
+      )
+  }
+
+#' Create object for data integrity framework
+#' @param keyTitle {Character} Translation key of the title
+#' @param language {Character} Language code to use
+mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){ 
+
+  if(noDataCheck(language)){
+    language = get("language",envir=parent.frame())
+  }
+  if(noDataCheck(dict)){
+    dict = .get(config,c("dictionaries","schemaMetadata"))
+  }
+
+  list(
+    title = d(keyTitle,lang=language,dict=dict),
+    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict),
+    type = "string",
+    propertyOrder = mxCounter("dataIntegrity"),
+    minlength = 1,
+    default = "0",
+    enum = c("0",
+      "1",
+      "2",
+      "3"),
+    options = list(
+      enum_titles = names(d(
+          c(
+            "dontKnow",
+            "no",
+            "partial",
+            "yes"),
+          lang = language,
+          dict = dict
+          ))
+      )
+    )
+}
+
+
+#' Create attribute description object based on multilingual input
+#' @param format {Character} Schema input format
+#' @param keyTitle {Character} Translation key of the title
+#' @param keyCounter {Character|Numeric} Id of the counter to set
+#' @param type {Character} Input type
+#' @param collapsed {Boolean} Collapse state of the object
+#' @param attributes {Character} Vector of attributes names
+#' @param dict {List} Dictionnary object. Default is "config$dictionaries$main"
+mxSchemaAttributeInput = function(
+    format=NULL,
+    keyTitle="",
+    keyCounter="attr",
+    type="string",
+    collapsed=TRUE,
+    attributes=c(),
+    dict
+    ){
+
+    prop = lapply(attributes,function(x){
+         mxSchemaMultiLingualInput(
+          keyTitle = keyTitle,
+          titlePrefix = x,
+          keyCounter = keyCounter,
+          type=type,
+          format=format,
+          default = list('en'='-'),
+          dict = dict
+          )
+    })
+    
+    names(prop) <- attributes
+    return(prop)
+  }
+
 
 
 #' Use system grep to return list of file matching grep exp
@@ -146,9 +287,13 @@ mxSetResourcePath <- function(resources){
 #' @export
 mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL){
   out <- NULL
- 
-  if(is.null(dict)){
-    dict = .get(config,"dict")
+
+  if(noDataCheck(dict)){
+    dict=dynGet("dict",inherits=T)
+  }
+
+  if(noDataCheck(dict)){ 
+      dict = .get(config,"dict")
   }else{
     dict = rbind(dict,.get(config,"dict"))
   }

@@ -146,7 +146,7 @@ mxSchemaViewStory2 <- function(view,views,language){
       properties = list(
         name = list(
           type = "string",
-          enum = c("card","image-fixed-top","shadow","half-vertical-center","half-horizontal-center","half-right","half-left","half-top","half-bottom","cube-face")
+          enum = c("card","image-cover","shadow","half-vertical-center","half-horizontal-center","half-right","half-left","half-top","half-bottom","cube-face")
           )
         )
       )
@@ -162,6 +162,14 @@ mxSchemaViewStory2 <- function(view,views,language){
     default = "#ffffff"
     )
 
+  #
+  # Slide background color
+  #
+  slideScroll <- list(
+    title = "Allow scroll",
+    type = "boolean",
+    format = "checkbox"
+  )
   #
   # Slide background opacity
   #
@@ -263,6 +271,7 @@ mxSchemaViewStory2 <- function(view,views,language){
       type = "object",
       title = "Slide",
       properties = list(
+        scroll_enable = slideScroll,
         html = slideText,
         classes = slideClasses,
         color_fg = slideColorText,

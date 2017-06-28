@@ -165,7 +165,10 @@ font-family: fontawesome;
  margin-right : 5px;
  border-radius : 3px;
 }
-
+.mx-controls-view .mx-controls-ul li {
+  width: 25px;
+  height: 25px;
+}
 .mx-controls-ul li div {
   position: absolute;
   top: 50%;

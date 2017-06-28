@@ -75,16 +75,19 @@
 }
 
 
-.mx-story-slide.mx-story-image-fixed-top img,
-.mx-story-slide.mx-story-image-fixed-top iframe {
+.mx-story-slide {
+  overflow:hidden;
+}
+
+.mx-story-slide.mx-story-image-cover img,
+.mx-story-slide.mx-story-image-cover iframe {
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
-  right:0;
-  height: 100%;
   zoom: 100%;
-  overflow: hidden;
+  min-height:100%;
+  min-width:100%;
+  object-fit: cover;
 }
 
 .mx-story-slide.mx-story-card.mx-story-cube-face {

@@ -6,117 +6,12 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
   # 
   # PArtial use of codes from from  https://geo-ide.noaa.gov/wiki/index.php?title=ISO_19115_and_19115-2_CodeList_Dictionaries#MD_GeometricObjectTypeCode
 
-
-  #
-  # Key convention naming
-  # boolean : prefix  "is_"
-  # date : suffix "_at"
-  # 
-  #
-
   dict =  .get(config,c("dictionaries","schemaMetadata"))
 
   #
-  # Counter to keep property in the same order as descibed here 
-  #
-  mxCounter =  function(id,reset=F){
-    if(!exists("mxCounters") || reset ){
-      mxCounters <<- list()
-    }
-    if(!reset){
-      if(noDataCheck(mxCounters[[id]])){
-        mxCounters[[id]] <<- 1
-      }else{
-        mxCounters[[id]] <<- mxCounters[[id]] + 1
-      }
-      mxCounters[[id]]
-    }
-  }
-
+  # Counter to keep property in the same order as described here 
+  #  
   mxCounter(reset=T)
-
-
-  dataIntegrityQuestion = function(keyTitle){ 
-    list(
-      title = d(keyTitle,dict=dict,lang=language),
-      description = d(paste0(keyTitle,"_desc"),dict=dict,lang=language),
-      type = "string",
-      propertyOrder = mxCounter("dataIntegrity"),
-      minlength = 1,
-      default = "0",
-      enum = c("0",
-        "1",
-        "2",
-        "3"),
-      options = list(
-        enum_titles = names(d(
-            c(
-              "dontKnow",
-              "no",
-              "partial",
-              "yes"),
-            dict = dict,
-            lang = language
-            ))
-        )
-      )
-  }
-
-  #
-  # Output an object with everly language code as key and text or text area editor
-  #
-  multiLingualInput = function(format=NULL,default=list(),keyTitle="",titlePrefix="",keyCounter="b",type="string",collapsed=TRUE,languages=unlist(config[["languages"]])){
-
-    if(nchar(titlePrefix)>0){
-     titlePrefix = paste(toupper(titlePrefix),":")
-    }
-
-    prop = lapply(languages,function(x){
-      list(
-        title = paste(d(keyTitle,lang=x,dict=dict)," ( ",d(x,lang=language), " )"),
-        type = type,
-        format = format,
-        minLength = ifelse(x=="en",1,0),
-        default = .get(default,x)
-        )
-      })
-    names(prop) <- languages
-    list(
-      propertyOrder = mxCounter(keyCounter),
-      title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict)),
-      type = "object",
-      options = list(collapsed = collapsed),
-      properties = prop
-      )
-  }
-
-  #
-  # Attributes constructor output the attribute editor
-  #
-  
-  attributeInput = function(
-    format=NULL,
-    keyTitle="",
-    keyCounter="attr",
-    type="string",
-    collapsed=TRUE,
-    attributes=attributesNames
-    ){
-
-    prop = lapply(attributes,function(x){
-         multiLingualInput(
-          keyTitle = keyTitle,
-          titlePrefix = x,
-          keyCounter = keyCounter,
-          type=type,
-          format=format,
-          default = list('en'='-')
-          )
-    })
-    
-    names(prop) <- attributes
-    return(prop)
-  }
 
   #
   # Final object
@@ -134,11 +29,11 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         description = d("textualDesc",lang=language,dict=dict),
         options = list(collapsed = TRUE),
         properties = list(
-          title = multiLingualInput(
+          title = mxSchemaMultiLingualInput(
             keyTitle="textualDescTitle",
             default= list(en=title)
             ),
-          abstract = multiLingualInput(
+          abstract = mxSchemaMultiLingualInput(
             keyTitle="textualDescAbstract",
             default = list(en=abstract),
             type="string",format="textarea"
@@ -168,12 +63,13 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
             title = d("attributesTitle",lang=language,dict=dict),
             description = d("attributesDesc",lang=language,dict=dict), 
             options = list(collapsed = TRUE),
-            properties = attributeInput(
+            properties = mxSchemaAttributeInput(
                 format="textarea",
                 keyTitle="attributeDescTitle",
                 keyCounter="attr",
                 type="string",
-                collapsed=TRUE
+                collapsed=TRUE,
+                attributes=attributesNames
                 )  
             ),
           language = list(
@@ -561,30 +457,26 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       type = "object",
       options = list(collapsed = TRUE),
       properties = list(
-        "di_1_1" = dataIntegrityQuestion("di_1_1"),
-        "di_1_2" = dataIntegrityQuestion("di_1_2"), 
-        "di_1_3" = dataIntegrityQuestion("di_1_3"),
-        "di_1_4" = dataIntegrityQuestion("di_1_4"),
-        "di_2_1" = dataIntegrityQuestion("di_2_1"),
-        "di_2_2" = dataIntegrityQuestion("di_2_2"),
-        "di_2_3" = dataIntegrityQuestion("di_2_3"),
-        "di_2_4" = dataIntegrityQuestion("di_2_4"),
-        "di_3_1" = dataIntegrityQuestion("di_3_1"),
-        "di_3_2" = dataIntegrityQuestion("di_3_2"),
-        "di_3_3" = dataIntegrityQuestion("di_3_3"),
-        "di_3_4" = dataIntegrityQuestion("di_3_4"),
-        "di_4_1" = dataIntegrityQuestion("di_4_1"),
-        "di_4_2" = dataIntegrityQuestion("di_4_2"),
-        "di_4_3" = dataIntegrityQuestion("di_4_3"),
-        "di_4_4" = dataIntegrityQuestion("di_4_4")
+        "di_1_1" = mxSchemaDataIntegrityQuestion("di_1_1"),
+        "di_1_2" = mxSchemaDataIntegrityQuestion("di_1_2"), 
+        "di_1_3" = mxSchemaDataIntegrityQuestion("di_1_3"),
+        "di_1_4" = mxSchemaDataIntegrityQuestion("di_1_4"),
+        "di_2_1" = mxSchemaDataIntegrityQuestion("di_2_1"),
+        "di_2_2" = mxSchemaDataIntegrityQuestion("di_2_2"),
+        "di_2_3" = mxSchemaDataIntegrityQuestion("di_2_3"),
+        "di_2_4" = mxSchemaDataIntegrityQuestion("di_2_4"),
+        "di_3_1" = mxSchemaDataIntegrityQuestion("di_3_1"),
+        "di_3_2" = mxSchemaDataIntegrityQuestion("di_3_2"),
+        "di_3_3" = mxSchemaDataIntegrityQuestion("di_3_3"),
+        "di_3_4" = mxSchemaDataIntegrityQuestion("di_3_4"),
+        "di_4_1" = mxSchemaDataIntegrityQuestion("di_4_1"),
+        "di_4_2" = mxSchemaDataIntegrityQuestion("di_4_2"),
+        "di_4_3" = mxSchemaDataIntegrityQuestion("di_4_3"),
+        "di_4_4" = mxSchemaDataIntegrityQuestion("di_4_4")
         )
       )
     )
   )
-
-  #fOut = tempfile()
-  #write(toJSON(out),fOut)
-  #mxDebugMsg(fOut)
 
 
   return(out)
