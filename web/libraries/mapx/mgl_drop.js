@@ -89,7 +89,18 @@
 
         // If extent is received
         if (m.extent) {
-          map.fitBounds(m.extent);
+          // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
+          // here, quick hack
+          if(m.extent[0] < -179) m.extent[0] = -179;
+          if(m.extent[1] < -85) m.extent[1] = -85;
+          if(m.extent[2] > 179) m.extent[2] = 179;
+          if(m.extent[3] > 85) m.extent[3] = 85;
+
+          var a = new mapboxgl.LngLatBounds(
+            new mapboxgl.LngLat(m.extent[0],m.extent[1]),
+            new mapboxgl.LngLat(m.extent[2],m.extent[3])
+          );
+          map.fitBounds(a);
         }
         
         // If layer is valid and returned

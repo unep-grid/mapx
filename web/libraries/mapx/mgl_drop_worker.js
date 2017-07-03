@@ -163,10 +163,11 @@ onmessage = function(e) {
     // Quick extent validation 
     if (
         extent[0] > 180 || extent[0] < -180 ||
-        extent[1] > 89 || extent[1] < -89 ||
+        extent[1] > 90 || extent[1] < -90 ||
         extent[2] > 180 || extent[2] < -180 ||
-        extent[3] > 89 || extent[3] < -89
+        extent[3] > 90 || extent[3] < -90
        ) {
+      
       errorMsg = fileName + " : extent seems to be out of range: " + extent;
 
       postMessage({
@@ -183,7 +184,7 @@ onmessage = function(e) {
 
     postMessage({
       progress: 80,
-      message: " extent found in " + timerLapString()
+      message: " extent (" + extent +") found in " + timerLapString()
     });
     /**
      * Avoid multi type : we don't handle them for now
@@ -205,7 +206,7 @@ onmessage = function(e) {
 
     postMessage({
       progress: 90,
-      message: " geom types =" + geomTypes + " found in " + timerLapString()
+      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
     });
 
     // if more than one type, return an error
