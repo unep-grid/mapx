@@ -60,13 +60,22 @@
       };
 
       var map = mgl.maps[o.id].map;
+      //var gJson = {};
       // parse file content before passing to worker.
-      var gJson = JSON.parse(e.target.result);
+      var gJson = e.target.result;
+
+      debugger;
+
+      if(theFile.fileType == 'kml') gJson =  toGeoJSON.kml((new DOMParser()).parseFromString(gJson, 'text/xml'));
+      if(theFile.fileType == 'gpx') gJson=  toGeoJSON.gpx((new DOMParser()).parseFromString(gJson, 'text/xml'));
+      if(theFile.fileType == 'geojson') gJson =  JSON.parse(gJson);
+
 
       // Message to pass to the worker
       var res = {
-        json: gJson,
-        fileName: theFile.name
+        geojson : gJson,
+        fileName: theFile.name,
+        fileType: theFile.fileType
       };
 
       // handle message received
@@ -134,7 +143,7 @@
                 layer : m.layer,
                 source : {
                 type:"geojson",
-                  data: gJson
+                  data: m.geojson
                 }
               }
             };
@@ -181,7 +190,7 @@
   };
 
   // handle drop event
-  util.handleDropGeojson =  function(evt) {
+  util.handleDropFile =  function(evt) {
     evt.stopPropagation();
     evt.preventDefault();
     var files = evt.dataTransfer.files;
@@ -189,17 +198,25 @@
     var nFiles = files.length;
     var incFile = 100 / nFiles;
     var progressBar = 0;
+    var exts = {
+    ".json":"geojson",
+    ".geojson":"geojson",
+    ".kml":"kml",
+    ".gpx":"gpx"
+    };
 
     // In case of multiple file, loop on them
     for (var i = 0; i < nFiles; i++) {
       
       var f = files[i];
-
+      f.fileType = exts[f.name.toLowerCase().match(/.[a-z0-9]+$/)[0]];
+      
       // Only process geojson files. Validate later.
-      if (f.name.toLowerCase().indexOf(".geojson") == -1) {
-        alert(f.name + " : filename not valid. Should be <filename>.geojson");
+      if (!f.fileType) {
+        alert(f.name + " : filename not valid. Should be .kml, .json, .geojson or .gpx");
         continue;
       }
+
       // get a new reader
       var reader = new FileReader();
       // handle events

@@ -36,8 +36,9 @@ onmessage = function(e) {
     var errorMsg = "";
     var warningMsg = "";
     var dat = e.data;
-    var gJson = dat.json;
+    var gJson = dat.geojson;
     var fileName = dat.fileName;
+    //var fileType = dat.fileType;
 
     // set basic timing function
     timerVal = 0;
@@ -61,6 +62,15 @@ onmessage = function(e) {
 
     // start timer
     timerStart();
+
+
+    /**
+    * Convert if not geojson
+    */
+
+    //if(fileType == 'kml') gJson =  toGeoJSON.kml(gJson);
+    //if(fileType == 'gpx') gJson =  toGeoJSON.gpx(gJson);
+    //if(fileType == 'geojson') gJson =  JSON.parse(gJson);
 
     /**
      * validation : geojson validation with geojsonhint
@@ -281,7 +291,8 @@ onmessage = function(e) {
       id: id,
       extent: extent,
       attributes : attributes,
-      layer: dummyStyle[typ]
+      layer: dummyStyle[typ],
+      geojson : gJson
     });
   }
 
