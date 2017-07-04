@@ -1908,7 +1908,40 @@ mgl.helper.downloadMapPng =  function(o){
   var legend = document.getElementById("check_view_legend_"+o.idView);
   var imgMap = map.getCanvas().toDataURL();
   var imgLegend ;
+  var kml;
   var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
+
+
+    var layers = mgl.helper.getLayersNamesByPrefix({
+      id: o.id,
+      prefix: o.idView
+    });
+
+
+    if( layers.length > 0 ){
+
+      var geomTemp = {
+        type : "FeatureCollection",
+        features : [] 
+      };
+
+      qf = map.queryRenderedFeatures({layers:layers});
+
+      // get all abject in one
+      qf.forEach(function(feature){
+        geomTemp
+          .features
+          .push({
+            "type" : "Feature",
+            "properties":feature.properties,
+            "geometry":feature.geometry
+          });
+      });
+    kml = tokml(geomTemp);
+    
+    }
+ 
+
 
 
   if(legend){
@@ -1920,6 +1953,9 @@ mgl.helper.downloadMapPng =  function(o){
         var zip, folder ;
         zip = new JSZip();
         folder = zip.folder("mx-data");
+        if(kml){
+           folder.file("mx-data.kml",kml);
+        }
         folder.file("mx-legend.png", out.png.split(",")[1], {base64: true});
         folder.file("mx-legend.svg", out.svg.split(",")[1], {base64: true});
         folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
