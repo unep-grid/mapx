@@ -1,6 +1,9 @@
 // Importation of helpers
 importScripts(
   "../geojsonhint/geojsonhint.js",
+  //"../shapefile/shapefile.js",
+  //"../toGeoJSON/togeojson.js",
+  //"../jszip/jszip.min.js",
   "../turf/turf_mx.min.js",
   "mx.js"
 );
@@ -35,10 +38,12 @@ onmessage = function(e) {
     // init variables
     var errorMsg = "";
     var warningMsg = "";
+    var gJson = {};
     var dat = e.data;
-    var gJson = dat.geojson;
+    var data = dat.data;
+    var gJson = dat.data;
     var fileName = dat.fileName;
-    //var fileType = dat.fileType;
+    var fileType = dat.fileType;
 
     // set basic timing function
     timerVal = 0;

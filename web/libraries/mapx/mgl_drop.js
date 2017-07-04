@@ -8,118 +8,159 @@
 
   // handle read geojson
   // Update progress
-  util.updateProgress = function(theFile) {
+  util.updateProgress = function(f) {
     return function(e) {
+    console.log("Update progress");
       // evt is an ProgressEvent. 100/2 as loading is ~ half the process
       if (e.lengthComputable) {
         var percentLoaded = Math.round((e.loaded / e.total) * 50);
         mx.util.progressScreen({
           enable : true,
-          id : theFile.name,
+          id : f.name,
           percent : percentLoaded,
-          text : theFile.name + " loading (" + percentLoaded + "%)"
+          text : f.name + " loading (" + percentLoaded + "%)"
         });
       }
     };
   };
 
   // init progress bar
-  util.startProgress = function(theFile) {
+  util.startProgress = function(f) {
     return function(e) {
+    console.log("Start progress");
       mx.util.progressScreen({
         enable : true,
-        id : theFile.name,
+        id : f.name,
         percent : 0,
-        text : theFile.name + " init .. "
+        text : f.name + " init .. "
       });
     };
   };
 
   // on error, set progress to 100 (remove it)
-  util.errorProgress = function(theFile) {
+  util.errorProgress = function(f) {
     return function(e) {
+    console.log("Error progress");
       mx.util.progressScreen({
         enable : true,
-        id : theFile.name,
+        id : f.name,
         percent : 100,
-        text : theFile.name + "stop .. "
+        text : f.name + "stop .. "
       });
     };
   };
 
   // handle read json 
 
-  // handle worker
-  util.startWorker = function(theFile) {
-    return function(e) {
-      // Create a worker to handle this file
-      var w = new Worker("mx/mapx/mgl_drop_worker.js");
 
-      var o = {
-        id : "map_main"
-      };
+  util.zipToGeojson = function(data){
+    var gJson = {};
+    var dat = JSZip.loadAsync(data)
+      .then(function(files){
+        var dbf, shp;
+        var f = files.files;
+        for(var dat in f){
+          var ext = util.getExtension(dat);
+          if(ext == ".dbf") dbf = f[dat];
+          if(ext == ".shp") shp = f[dat]; 
+        }
 
-      var map = mgl.maps[o.id].map;
-      //var gJson = {};
-      // parse file content before passing to worker.
-      var gJson = e.target.result;
+        if(!shp){
+           throw new Error('No shp file found in archive, abord.');
+        }
+        if(!dbf){
+           throw new Error('No dbf file found in archive, abord.');
+        }
 
-      debugger;
+        var rShp = shp.async("Uint8Array");
+        var rDbf = dbf.async("Uint8Array");
 
-      if(theFile.fileType == 'kml') gJson =  toGeoJSON.kml((new DOMParser()).parseFromString(gJson, 'text/xml'));
-      if(theFile.fileType == 'gpx') gJson=  toGeoJSON.gpx((new DOMParser()).parseFromString(gJson, 'text/xml'));
-      if(theFile.fileType == 'geojson') gJson =  JSON.parse(gJson);
+        return Promise.all([rShp,rDbf]);
 
+      }).then(function(v){
 
-      // Message to pass to the worker
-      var res = {
-        geojson : gJson,
-        fileName: theFile.name,
-        fileType: theFile.fileType
-      };
-
-      // handle message received
-      w.onmessage = function(e) {
-        var m = e.data;
-        if ( m.progress ) {
-          console.log(m.message);
-          mx.util.progressScreen({
-            enable : true,
-            id :theFile.name,
-            percent : m.progress,
-            text : theFile.name + ": " + m.message
+        return shapefile
+          .read(v[0],v[1])
+          .then(function(gj){
+            return(gj);
           });
-        }
+      }).then(function(gj){
+        return gj;
+      });
 
-        // send alert for errors message
-        if( m.errorMessage ){
-          alert(m.errorMessage);
-        }
+  return dat;
+};
 
-        // If extent is received
-        if (m.extent) {
-          // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
-          // here, quick hack
-          if(m.extent[0] < -179) m.extent[0] = -179;
-          if(m.extent[1] < -85) m.extent[1] = -85;
-          if(m.extent[2] > 179) m.extent[2] = 179;
-          if(m.extent[3] > 85) m.extent[3] = 85;
 
-          var a = new mapboxgl.LngLatBounds(
-            new mapboxgl.LngLat(m.extent[0],m.extent[1]),
-            new mapboxgl.LngLat(m.extent[2],m.extent[3])
-          );
-          map.fitBounds(a);
-        }
-        
-        // If layer is valid and returned
-        if (m.layer) {
-          try {
+  // handle worker
+  util.startWorker = function(f) {
+    return function(e) {
+        // Create a worker to handle this file
+        var w = new Worker("mx/mapx/mgl_drop_worker.js");
+
+        var o = {
+          id : "map_main"
+        };
+
+        var map = mgl.maps[o.id].map;
+        //var data = {};
+        // parse file content before passing to worker.
+        var data = e.target.result;
+        var gJson = {};
+
+        if(f.fileType == 'kml') gJson =  toGeoJSON.kml((new DOMParser()).parseFromString(data, 'text/xml'));
+        if(f.fileType == 'gpx') gJson =  toGeoJSON.gpx((new DOMParser()).parseFromString(data, 'text/xml'));
+        if(f.fileType == 'geojson') gJson =  JSON.parse(data);
+        if(f.fileType == 'zip') gJson = util.zipToGeojson(data);
+        // Message to pass to the worker
+        var res = {
+          data : gJson,
+          fileName: f.name,
+          fileType: f.fileType
+        };
+
+        // handle message received
+        w.onmessage = function(e) {
+          var m = e.data;
+          if ( m.progress ) {
+            console.log(m.message);
             mx.util.progressScreen({
               enable : true,
-              id : theFile.name,
+              id :f.name,
+              percent : m.progress,
+              text : f.name + ": " + m.message
+            });
+          }
+
+          // send alert for errors message
+          if( m.errorMessage ){
+            alert(m.errorMessage);
+          }
+
+          // If extent is received
+          if (m.extent) {
+            // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
+            // here, quick hack
+            if(m.extent[0] < -179) m.extent[0] = -179;
+            if(m.extent[1] < -85) m.extent[1] = -85;
+            if(m.extent[2] > 179) m.extent[2] = 179;
+            if(m.extent[3] > 85) m.extent[3] = 85;
+
+            var a = new mapboxgl.LngLatBounds(
+              new mapboxgl.LngLat(m.extent[0],m.extent[1]),
+              new mapboxgl.LngLat(m.extent[2],m.extent[3])
+            );
+            map.fitBounds(a);
+          }
+
+          // If layer is valid and returned
+          if (m.layer) {
+
+            mx.util.progressScreen({
+              enable : true,
+              id : f.name,
               percent : 100,
-              text : theFile.name + " done"
+              text : f.name + " done"
             });
 
             // mx default view
@@ -129,9 +170,9 @@
               country : mgl.settings.country,
               date_modified : (new Date()).toLocaleDateString(),
               data : {
-                title : { en : theFile.name.split('.')[0] },             
+                title : { en : f.name.split('.')[0] },             
                 attributes : m.attributes,
-                abstract : {en : theFile.name},
+                abstract : {en : f.name},
                 geometry : {
                   extent : {
                     lng1 : m.extent[0],
@@ -142,7 +183,7 @@
                 },
                 layer : m.layer,
                 source : {
-                type:"geojson",
+                  type:"geojson",
                   data: m.geojson
                 }
               }
@@ -153,7 +194,7 @@
             db.setItem(m.id,{
               view : view
             }).then(function(){
-              
+
               // Add source from view
               util.setSourcesFromViews({
                 id : o.id,
@@ -162,35 +203,41 @@
 
             });
 
+            // close worker
+            w.terminate();
           }
-          catch(err){
-            alert(err);
-          }
-          // close worker
-          w.terminate();
+
+        };
+
+        // launch process
+        if(res.data.then){
+          res
+            .data
+            .then(function(gJson){
+            res.data = gJson;
+            w.postMessage(res);
+          })
+            .catch(function(err){
+              alert(err);
+              util.errorProgress(f)();
+              w.terminate();
+            });
+
+        }else{ 
+          w.postMessage(res);
         }
-
-      };
-
-      // launch process
-      try {
-        w.postMessage(res);
-      }catch(err){
-        alert("An error occured, quick ! check the console !");
-        console.log({
-          res : res,
-          err : err
-        });
-      }
     };
   };
 
-  util.updateLayerList =  function(theFile) {
+  util.updateLayerList =  function(f) {
     return function(e) {};
   };
 
+  util.getExtension =  function(str){
+  return str.toLowerCase().match(/.[a-z0-9]+$/)[0];
+  };
   // handle drop event
-  util.handleDropFile =  function(evt) {
+  util.handleUploadFileEvent =  function(evt) {
     evt.stopPropagation();
     evt.preventDefault();
     var files = evt.dataTransfer.files;
@@ -202,18 +249,19 @@
     ".json":"geojson",
     ".geojson":"geojson",
     ".kml":"kml",
-    ".gpx":"gpx"
+    ".gpx":"gpx",
+    ".zip":"zip"
     };
 
     // In case of multiple file, loop on them
     for (var i = 0; i < nFiles; i++) {
       
       var f = files[i];
-      f.fileType = exts[f.name.toLowerCase().match(/.[a-z0-9]+$/)[0]];
-      
+      f.fileType = exts[util.getExtension(f.name)];
+
       // Only process geojson files. Validate later.
       if (!f.fileType) {
-        alert(f.name + " : filename not valid. Should be .kml, .json, .geojson or .gpx");
+        alert(f.name + " : filename not valid. Should be .zip, .kml, .json, .geojson or .gpx");
         continue;
       }
 
@@ -223,10 +271,17 @@
       reader.onloadstart = (util.startProgress)(f);
       reader.onprogress = (util.updateProgress)(f);
       reader.onerror = (util.errorProgress)(f);
+
       reader.onload = (util.startWorker)(f);
       reader.onloadend = (util.updateLayerList)(f);
-      // read the geojson
-      reader.readAsText(f);
+
+        // read the geojson
+        if(f.fileType == "zip" ){
+          reader.readAsArrayBuffer(f);
+        }else{ 
+          reader.readAsText(f);
+        }
+      
     }
   };
 

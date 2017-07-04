@@ -106,6 +106,15 @@ tagList(
       src="mx/turf/turf_mx.min.js"
       ),
     tags$script(
+      src="mx/shapefile/shapefile.js"
+      ),
+    tags$script(
+      src="mx/toGeoJSON/togeojson.js"
+      ),
+    tags$script(
+      src="mx/toKml/tokml.js"
+      ),
+    tags$script(
       src="mx/download/download.min.js"
       ),
     tags$script(

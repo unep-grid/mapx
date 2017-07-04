@@ -3796,10 +3796,10 @@ mgl.helper.initMap = function(o){
           /**
            * Handle drop geojson event
            */
-          if(mgl.helper.handleDropFile && mgl.helper.handleDragOver){
+          if(mgl.helper.handleUploadFileEvent && mgl.helper.handleDragOver){
             // Set events
             mapEl.addEventListener('dragover', mgl.helper.handleDragOver, false);
-            mapEl.addEventListener('drop', mgl.helper.handleDropFile, false);
+            mapEl.addEventListener('drop', mgl.helper.handleUploadFileEvent, false);
           }
           /**
            * Add controls to the map
