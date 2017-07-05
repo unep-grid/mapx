@@ -1916,10 +1916,16 @@ mgl.helper.downloadMapPng =  function(o){
     var rules = path(view,'data.style.rules');
     var gType = path(view,'data.geometry.type');
 
-    var simpleStyle = {
+    var simpleColor = {
       'polygon':'fill',
       'line':'stroke',
       'point':'marker-color'
+    }[gType];
+
+    var simpleOpacity = {
+      'polygon':'fill-opacity',
+      'line':'stroke-opacity',
+      'point':null
     }[gType];
 
     var geomTemp = {
@@ -1933,12 +1939,15 @@ mgl.helper.downloadMapPng =  function(o){
     qf.forEach(function(feature){
 
       // add properties for simplestyle conversion
-      if(rules){
+      if(rules && simpleColor){
         var v = feature.properties[attr];
         var n = mx.util.isNumeric(v);
         rules.forEach(function(r){
           if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
-            feature.properties[simpleStyle] = r.color;
+            feature.properties[simpleColor] = r.color;
+            if(simpleOpacity){
+              feature.properties[simpleOpacity] = r.opacity;
+            }
           }
         });
       }
