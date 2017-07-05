@@ -59,8 +59,8 @@ mgl.helper.story.read = function(o){
 
   /* Fetch view if not given */
   if(!o.view && o.id && o.idView ){
-    var views =  mgl.helper.getKeyedViews({id:o.id});
-    o.view = views[o.idView];
+    var view =  mgl.helper.getViews(o);
+    o.view = view;
   }
 
   if ( !path(o,"view.data.story") ) {
