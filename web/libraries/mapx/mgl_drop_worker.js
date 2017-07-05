@@ -177,10 +177,10 @@ onmessage = function(e) {
 
     // Quick extent validation 
     if (
-        extent[0] > 180 || extent[0] < -180 ||
-        extent[1] > 90 || extent[1] < -90 ||
-        extent[2] > 180 || extent[2] < -180 ||
-        extent[3] > 90 || extent[3] < -90
+        Math.round(extent[0]) > 180 || Math.round(extent[0]) < -180 ||
+        Math.round(extent[1]) > 90 || Math.round(extent[1]) < -90 ||
+        Math.round(extent[2]) > 180 || Math.round(extent[2]) < -180 ||
+        Math.round(extent[3]) > 90 || Math.round(extent[3]) < -90
        ) {
       
       errorMsg = fileName + " : extent seems to be out of range: " + extent;
