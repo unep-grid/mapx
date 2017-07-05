@@ -457,7 +457,7 @@ font-family: fontawesome;
   display: flex;
   position: absolute;
   flex-direction: column;
-  min-width: 100%;
+  min-width: 280px;
   max-width: 600px;
   min-height: 200px;
   max-height: 90%;
