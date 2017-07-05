@@ -457,7 +457,7 @@ mgl.helper.viewControler = function(o){
 
   if(m.views){ 
 
-    views = mgl.helper.getKeyedViews(o);
+    views = mgl.helper.getViews(o);
     els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
 
     loaded = mgl.helper.getLayersNamesByPrefix({
@@ -538,9 +538,8 @@ mgl.helper.viewLiAction = function(o){
 */
 mgl.helper.parseStory = function(o){
 
-  var m, view, views, story, steps, storyContainer;
-  views = mgl.helper.getKeyedViews(o);
-  view = views[o.idView];
+  var m, view, story, steps, storyContainer;
+  view = mgl.helper.getViews(o);
   m = mgl.maps[o.id];
   
   if( !mx.templates.viewStory ) return;
@@ -858,14 +857,8 @@ mgl.helper.parseStory = function(o){
 * @param {string} o.idView view id
 */
 mgl.helper.getViewVariable = function(o){
-  var out;
-
-  views = mgl.helper.getKeyedViews(o);
-  if(views && o.idView){
-    view = views[o.idView];
-    out = path(view,"data.attribute.name");
-  }
-  return out;
+  var view = mgl.helper.getViews(o);
+  return path(view,"data.attribute.name");
 };
 
 /**
@@ -1494,9 +1487,9 @@ mgl.helper.handleViewClick = function(o){
           legendInputs = legendContainer.querySelectorAll("input") 
             ;
           var idView = el.dataset.view_action_target;
-          var view = mgl.helper.getKeyedViews({id:'map_main'})[idView]; 
-          var attribute = view.data.attribute.name;
-          var type = view.data.attribute.type;
+          var view = mgl.helper.getViews({id:'map_main',idView:idView});
+          var attribute = path(view,'data.attribute.name');
+          var type = path(view,'data.attribute.type');
           var op = "==";
           var  filter = ["any"];
           if(type=="number") op = ">=";
@@ -1910,37 +1903,61 @@ mgl.helper.downloadMapPng =  function(o){
   var imgLegend ;
   var kml;
   var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
+  var view = mgl.helper.getViews(o);
 
+  var layers = mgl.helper.getLayersNamesByPrefix({
+    id: o.id,
+    prefix: o.idView
+  });
 
-    var layers = mgl.helper.getLayersNamesByPrefix({
-      id: o.id,
-      prefix: o.idView
+  if( layers.length > 0 ){
+
+    var attr = path(view,'data.attribute.name');
+    var rules = path(view,'data.style.rules');
+    var gType = path(view,'data.geometry.type');
+
+    var simpleStyle = {
+      'polygon':'fill',
+      'line':'stroke',
+      'point':'marker-color'
+    }[gType];
+
+    var geomTemp = {
+      type : "FeatureCollection",
+      features : [] 
+    };
+
+    qf = map.queryRenderedFeatures({layers:layers});
+
+    // get all abject in one
+    qf.forEach(function(feature){
+
+      // add properties for simplestyle conversion
+      if(rules){
+        var v = feature.properties[attr];
+        var n = mx.util.isNumeric(v);
+        rules.forEach(function(r){
+          if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
+            feature.properties[simpleStyle] = r.color;
+          }
+        });
+      }
+
+      // Push featre in main geojson NOTE: This include duplicated due to tiles 
+      geomTemp
+        .features
+        .push({
+          "type" : "Feature",
+          "properties":feature.properties,
+          "geometry":feature.geometry
+        });
+    });
+    kml = tokml(geomTemp,{
+      simplestyle:true
     });
 
+  }
 
-    if( layers.length > 0 ){
-
-      var geomTemp = {
-        type : "FeatureCollection",
-        features : [] 
-      };
-
-      qf = map.queryRenderedFeatures({layers:layers});
-
-      // get all abject in one
-      qf.forEach(function(feature){
-        geomTemp
-          .features
-          .push({
-            "type" : "Feature",
-            "properties":feature.properties,
-            "geometry":feature.geometry
-          });
-      });
-    kml = tokml(geomTemp);
-    
-    }
- 
 
 
 
@@ -1954,7 +1971,7 @@ mgl.helper.downloadMapPng =  function(o){
         zip = new JSZip();
         folder = zip.folder("mx-data");
         if(kml){
-           folder.file("mx-data.kml",kml);
+          folder.file("mx-data.kml",kml);
         }
         folder.file("mx-legend.png", out.png.split(",")[1], {base64: true});
         folder.file("mx-legend.svg", out.svg.split(",")[1], {base64: true});
@@ -2548,14 +2565,12 @@ mgl.helper.addView = function(o){
     return;
   }
 
-  var views;
   var m = mgl.maps[o.id];
   var view = o.viewData;
 
   if(o.idView){
     o.idView = o.idView.split(mgl.settings.separators.sublayer)[0];
-    views = mgl.helper.getKeyedViews(o);
-    view = views[o.idView];
+    view = mgl.helper.getViews(o);
   }  
 
   if(!view || !view.data.source ) return;
@@ -3006,11 +3021,10 @@ mgl.helper.filterViewValues_orig = function(o){
    * Extracting base layer : MX-YN0ZZ-T2YUQ-64LLV
   */ 
   idView = o.idView.split(mgl.settings.separators.sublayer)[0];
-  views = mgl.helper.getKeyedViews(o);
+  view = mgl.helper.getViews(o);
   varView = o.viewVariable ;
   search = o.search;
   map = mgl.maps[o.id].map;
-  view = views[idView];
 
 
   /* populate keyed multi layers */
@@ -3158,8 +3172,7 @@ mgl.helper.filterViewValues = function(o){
 
   search = search.trim();
   isNumeric = mx.util.isNumeric(search);
-  views = mgl.helper.getKeyedViews({id:idMap});
-  view = views[idView];
+  view = mgl.helper.getViews({id:idMap,idView:idView});
 
   filter = ["all"];
 
@@ -3224,25 +3237,19 @@ mgl.helper.zoomToViewId = function(o){
   var hasMap = mgl.helper.hasMap(o.id); 
 
   if ( hasMap ) {
-
-    map =  mgl.maps[o.id].map;
-    views = mgl.helper.getKeyedViews(o);
-    
-    if( !views ) return ;
-    
+   
     var isArray = o.idView.constructor === Array;
 
-    if(isArray){
-      id = o.idView[0];
-    }else{
-      id = o.idView;
-    }
+    o.idView = isArray ? o.idView[0] : o.idView;
     /* in case of layer group */
-    id = id.split(mgl.settings.separators.sublayer )[0];
-    /* extract view data */
-    var dat = views[id];
+    o.idView = o.idView.split(mgl.settings.separators.sublayer )[0];
+    /* get map and view */
+    map =  mgl.maps[o.id].map;
+    view = mgl.helper.getViews(o);
     
-    var extent = path(dat,"data.geometry.extent");
+    if( !view ) return ;
+ 
+    var extent = path(view,"data.geometry.extent");
    
     if( !extent ) return;
 
@@ -3901,7 +3908,7 @@ mgl.helper.initMap = function(o){
 
             propAll = [];
             layerDone = [];
-            views = mgl.helper.getKeyedViews(o);
+            views = mgl.helper.getViews(o);
             lang =  mx.language;
 
             for(var i =0; i < layers.length; i++){
@@ -4010,25 +4017,30 @@ mgl.helper.getMapPos = function(o){
 };
 
 /**
-* Create views object with id as key
-* @param {object} o options
-* @param {string} o.id map id
+* Create views object with id as key or single view if idView is provided in options
+* @param {Object} o options
+* @param {String} o.id map id
+* @param {String} o.idView Optional. Filter view to return. Default = all.
 */
-mgl.helper.getKeyedViews = function(o){
+mgl.helper.getViews = function(o){
 
-  var dat, viewsKeyed = {};
+  var dat, out = {};
 
   dat = mgl.maps[o.id];
 
   if( dat && dat.views ){
     if( dat.views.length > 0 ){
       dat.views.forEach(function(x){
-        viewsKeyed[x.id] = x;     
+        if( !o.idView ){ 
+          out[x.id] = x;     
+        }else if(o.idView == x.id){ 
+          out= x;     
+        }
       });
     }
   }
 
-  return viewsKeyed;
+  return out;
 };
 
 /**

@@ -38,7 +38,6 @@ onmessage = function(e) {
     // init variables
     var errorMsg = "";
     var warningMsg = "";
-    var gJson = {};
     var dat = e.data;
     var data = dat.data;
     var gJson = dat.data;

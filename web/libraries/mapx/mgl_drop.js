@@ -50,9 +50,7 @@
     };
   };
 
-  // handle read json 
-
-
+  // handle zip to geojson
   util.zipToGeojson = function(data){
     var gJson = {};
     var dat = JSZip.loadAsync(data)
@@ -102,9 +100,7 @@
           id : "map_main"
         };
 
-        var map = mgl.maps[o.id].map;
-        //var data = {};
-        // parse file content before passing to worker.
+        var map = mgl.maps[o.id].map; 
         var data = e.target.result;
         var gJson = {};
 
