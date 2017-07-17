@@ -1588,8 +1588,13 @@ mgl.helper.updateViewsListLanguage = function(o){
       var l =  o.lang,
        id = el.dataset.view_id,
        v = views.filter(function(v){ return v.id == id ; })[0],
-      elTitle = el.querySelector(".mx-view-item-title"),
-      elText = el.querySelector(".mx-view-item-desc");
+       elTitle = el.querySelector(".mx-view-item-title"),
+       elText = el.querySelector(".mx-view-item-desc"),
+       elLegend = el.querySelector(".mx-view-item-legend");
+
+      if(elLegend){
+        elLegend.innerHTML = mx.templates.viewListLegend(v);
+      }
 
       if(elTitle){ 
         elTitle.innerHTML = mx.util.getLanguageFromObjectPath({
