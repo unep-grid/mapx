@@ -1560,7 +1560,7 @@ mgl.helper.handleViewClick = function(o){
         isTrue : el.dataset.view_action_key == "btn_opt_share",
         action : function(){
           var idView =  el.dataset.view_action_target;
-          var link = window.origin + "/" + "?views=" + idView + "&country="+mgl.settings.country;
+          var link =  location.origin + location.pathname + "?views=" + idView + "&country="+mgl.settings.country;
           var idLink = "share_"+idView;
           var input = "<textarea class='form-control form-input-line'>"+link+"</textarea>";
           mx.util.modal({
