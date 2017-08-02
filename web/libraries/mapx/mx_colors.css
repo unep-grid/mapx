@@ -135,7 +135,7 @@ background-color: var(--mx_ui_background);
 }
 
 .mx .mx-modal-top {
-  background-color:var(--mx_water);
+  background-color:var(--mx_ui_shadow);
   border-bottom: 1px solid var(--mx_ui_text);
 }
 
