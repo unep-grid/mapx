@@ -10,13 +10,12 @@ observeEvent(input$btn_control,{
 
         languages <- config[["languages"]][["list"]]
 
-        ui <- mxPanel(
+        mxModal(
           id="uiSelectLanguage",
-          title=tags$span(icon("language"),style="font-size:100px"),
-          html=selectizeInput(
+          content = selectizeInput(
             inputId="selectLanguage",
             choices=languages,
-            label=tags$span(d("ui_language",language),`data-lang_key`='ui_language'),
+            label=d("ui_language",language),
             selected=language,
             options=list(
               dropdownParent="body"
@@ -24,62 +23,85 @@ observeEvent(input$btn_control,{
             )
           )
 
-        output$panelSelect <- renderUI(ui)
-
       },
       "showCountry"={
 
         country <- reactData$country
         language <- reactData$language
+        idUser  <- reactUser$data$id
+        canRead <-  reactUser$role$read
 
-        countries <- unique(config[[c("countries","table")]]$iso3)
+        #countries <- unique(config[[c("countries","table")]]$iso3)
+        countries <- .get(config,c("dictionaries","countries","id"))
 
-        viewsCount <- mxDbGetViewsByCountry()
+        countries <- countries[ !countries %in% "XXX" ]
 
-        labels <- c()
+        countriesDf <- data.frame()
 
-        for(i in 1:length(countries)){ 
-          ctry = countries[i];
-          count = 0;
-          if(!ctry %in% viewsCount$country){
-            viewsCount = rbind(
-              viewsCount,
-              data.frame( count=0, country=ctry )
-              )
+        viewsCount <- mxDbGetViewsByCountry(idUser,canRead)
+        
+        for(c  in countries){
+          count = viewsCount[viewsCount$country==c,"n"]
+          if(noDataCheck(count)) count = 0;
+          cDf = data.frame(  
+            iso3 = c,
+            count = count,
+            name = d(c,language,web=F)
+            )
+          if(nrow(countriesDf)==0){
+            countriesDf = cDf
+          }else{ 
+            countriesDf <- rbind(countriesDf,cDf,stringsAsFactors=F)
           }
         }
 
+        countriesDf$name <- as.character(countriesDf$name)
+        countriesDf$iso3 <- as.character(countriesDf$iso3)
 
-        labels <- apply(viewsCount, 1, function(row){
-          sprintf("%1$s (%2$d)", 
-            d(row['country'],language), 
-            as.integer(row['count'])
-            )
-              })
+        countriesDf <- countriesDf[order(countriesDf$count,-rank(countriesDf$name),decreasing=T),]
 
-        countries <- as.list(viewsCount$country)
+        countries <- countriesDf$iso3
 
-        if( length(labels) == length(countries) ){      
-          names(countries) <- labels
-        }else{
-          names(countries) <- d(countries,language)
-        }
+        
+        names(countries) <- countriesDf$name
 
-        ui <- mxPanel(
-          id="uiSelectCountry",
-          title=tags$span(icon("globe"),style="font-size:100px"),
-          html= selectizeInput(
-            inputId = "selectCountry",
-            label=tags$span(d("ui_country",language),`data-lang_key`='ui_country'),
-            selected = country,
-            choices = as.list(countries),
-            options = list(
-              dropdownParent="body"
-              )
+        selectCountry <- tagList(
+          tags$label(d("ui_country"),language),
+          tags$select(
+            type = "select",
+            id = "selectCountry",
+            class = "form-control"
+            ), 
+          tags$script(
+            `data-for`="selectCountry",
+            jsonlite::toJSON(list(
+                valueField = 'iso3',
+                labelField = 'name',
+                items = list(country),
+                searchField = list("name"),
+                dropdownParent="body",
+                options=countriesDf,
+                renderFun = 'parseCountryOptions'
+                ),auto_unbox=T)
             )
           )
 
-        output$panelSelect <- renderUI(ui)
+        mxModal(
+          id="uiSelectCountry",
+          content=selectCountry
+          )
+
+#selectizeInput(
+            #inputId = "selectCountry",
+            #label=d("ui_country",language),
+            #selected = country,
+            #choices = countries,
+            #options =list(
+              #dropdownParent = "body",
+              #options = jsonlite::toJSON(countriesDf),
+              #renderFun = 'parseCountryOptions'
+              #)
+          #)
 
       },
       "showLogin"={
@@ -109,14 +131,14 @@ observeEvent(input$btn_control,{
               class="input-group mx-login-group",
               mxInputUser(
                 inputId="loginUserEmail",
-                label=d("login_email",language),
+                label=d("login_email",language,web=F),
                 class="mx-login-input-black form-control"
                 ),
               tags$span(
                 class="input-group-btn",   
                 actionButton(
                   inputId="btnSendLoginKey", 
-                  label=tagList(icon("envelope"),tags$span(d("login_send_pwd",language))),
+                  label= d("login_send_pwd",language),
                   class="btn-square btn-black",
                   disabled=TRUE
                   )
@@ -126,7 +148,7 @@ observeEvent(input$btn_control,{
               tags$input(
                 id="loginKey",
                 type="text",
-                placeholder=d("login_insert_pwd",language),
+                placeholder = d("login_insert_pwd",language,web=F),
                 class="form-control mx-login-input mx-login-input-black  mx-hide"
                 )
               )
@@ -142,55 +164,43 @@ observeEvent(input$btn_control,{
 
           #sessionDuration <- mxGetSessionDurationHMS(reactUser$data$id)
 
-          loginInput <- tags$ul(
-            tags$li(
-              tags$span(
-                tags$b(d("login_email",language)),
-                reactUser$data$email
-                )
-              ),
-            tags$li(
-              tags$span(
-                tags$b(d("login_role",language)),
-                reactUser$role$name
-                )
-              ),
-            tags$li(
-              tags$span(
-                tags$b(d("login_country",language)),
-                country
-                )
-              )
-            )
+          loginInput <- listToHtmlSimple(list(
+               "login_email"=reactUser$data$email,
+               "login_role"=reactUser$role$name,
+               "login_country"=d(country,language,web=F)
+              ),lang=language)
+
 
           btn <-list(
             actionButton(
               inputId = "btnLogout",
               label = d("login_out",language),
-              icon=icon("sign-out"),
               class="btn btn-modal"
               )
             )
         }
 
+
+
+
+
+
         #
         # Build the final modal 
         #
-        panModal <- mxPanel(
-          listActionButton=btn,
-          addCloseButton=TRUE,
-          closeButtonText=d("login_cancel",language),
+        mxModal(
           id="loginCode",
-          #title=d("login_title",language),
-          title=tags$span(icon("sign-in"),style="font-size:100px"),
-          subtitle=div(id="txtLoginDialog",txtSubTitle), 
-          html=loginInput
+          buttons=btn,
+          textCloseButton=d("login_cancel",language),
+          content=tags$div(
+            tags$b(div(id="txtLoginDialog",txtSubTitle)),
+            loginInput
+            )
           )
-
         # 
         # Render it to panel login div
         #
-        output$panelLogin = renderUI(panModal)
+        #output$panelLogin = renderUI(panModal)
 
 
       })

@@ -10,10 +10,13 @@ observeEvent(input$btnEditSources,{
   #
   uiOut = tagList(
 
-    selectInput(
+    selectizeInput(
       inputId = "selectSourceLayerEdit",
       label = d("source_select_layer",language),
-      choices = reactSourceLayer()
+      choices = reactSourceLayer(),
+      options=list(
+        dropdownParent="body"
+        )
       ),
     jedOutput(id="sourceEdit")
     )
@@ -35,16 +38,13 @@ observeEvent(input$btnEditSources,{
   #
   # Generate the modal panel
   #
-  output$panelModal <- renderUI(mxPanel(
-      id="uiEditSource",
-      headIcon="pencil",
-      html=uiOut,
-      listActionButton=btnList,
-      addOnClickClose=FALSE,
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+  mxModal(
+    id="uiEditSource",
+    title="Edit sources",
+    content=uiOut,
+    buttons=btnList,
+    textCloseButton=d("btn_close",language)
+    )
 
 })
 
@@ -64,21 +64,26 @@ observeEvent(input$btnDeleteSource,{
   #
   # Generate the modal panel
   #
-  output$panelAlert <- renderUI(mxPanel(
-      id="uiConfirmSourceRemove",
-      headIcon="warning",
-      html=tags$span(d("confirmSourceRemove",lang=language,dict=dict)),
-      listActionButton=btnList,
-      zIndex = 600,
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
-
+  mxModal(
+    id="uiConfirmSourceRemove",
+    title="Confirm source remove",
+    content=tags$span(d("confirmSourceRemove",lang=language,dict=dict)),
+    buttons=btnList,
+    textCloseButton=d("btn_close",language)
+    )
 })
 
 
 observeEvent(input$btnDeleteSourceConfirm,{
+
+  mxModal(
+    id="uiConfirmSourceRemove",
+    close=TRUE
+    )
+  mxModal(
+    id="uiEditSource",
+    close=TRUE
+    )
 
   selectedSource <- input$selectSourceLayerEdit 
   language <- reactData$language
@@ -94,25 +99,31 @@ observeEvent(input$btnDeleteSourceConfirm,{
   reactData$updateViewListFetchOnly <- runif(1)
   reactData$updateSourceLayerList <- runif(1)  
 
-  output$panelModal <- renderUI(mxPanel(
-      id="uiConfirmSourceRemoveDone",
-      headIcon="check",
-      html=tags$span(d("msgSuccessDelete",lang=language,dict=dict)),
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+  mxModal(
+    id="uiConfirmSourceRemoveDone",
+    title="Success delete source",
+    content=tags$span(d("msgSuccessDelete",lang=language,dict=dict)),
+    textCloseButton=d("btn_close",language)
+    )
 
 })
 
 
 
 
-observeEvent(input$selectSourceLayerEdit,{
+observeEvent({
+  input$sourceEdit_init
+  input$selectSourceLayerEdit
+},{
+  init <- input$sourceEdit_init
   language <- reactData$language
   layer <- input$selectSourceLayerEdit 
+
+  if(noDataCheck(layer) || noDataCheck(init)) return;
+
+
   meta <- mxDbGetLayerMeta(layer)
-  rolesTarget <- .get(reactUser$role,c("desc","publish"))
+  rolesTarget <- .get(reactUser$role,c("publish"))
 
   attributesNames <- mxDbGetLayerColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1"))
   
@@ -132,16 +143,18 @@ observeEvent(input$selectSourceLayerEdit,{
   meta = .set(meta,c("origin","sources"),NULL)
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
-  
-  jedSchema(
-    id="sourceEdit",
-    schema = mxSchemaSourceMeta(
+ 
+  schema = mxSchemaSourceMeta(
       language = language,
       rolesTarget = rolesTarget,
       attributesNames =  attributesNames
-      ),
+      )
+
+  jedSchema(
+    id="sourceEdit",
+    schema = schema,
     startVal = meta,
-    options = list("no_additional_properties"=FALSE)
+    options = list("no_additional_properties" = FALSE)
     )
 
 })
@@ -188,14 +201,13 @@ observeEvent(input$btnUpdateSource,{
   #
   # Generate the modal panel
   #
-  output$panelModal <- renderUI(mxPanel(
-      id="uiConfirmSourceInit",
-      headIcon="check",
-      html=tags$p(d("msgSuccessUpdate",dict=dict,lang=language)),
-      addCloseButton=TRUE,
-      background=TRUE,
-      closeButtonText=d("btn_close",language)
-      ))
+
+  mxModal(
+    id="uiConfirmSourceInit",
+    title="Success update",
+    content=tags$p(d("msgSuccessUpdate",dict=dict,lang=language)),
+    textCloseButton=d("btn_close",language)
+    )
 
 })
 

@@ -10,7 +10,8 @@ observe({
     #
     # Extract action type
     #
-    viewAction <- input[[sprintf("mglEvent_%1$s_view_action",config[["map"]][["id"]])]]
+    viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
+
 
     if(!noDataCheck(viewAction)){
 
@@ -18,7 +19,11 @@ observe({
 
         language <- reactData$language
 
-        if(viewAction[["action"]] == "btn_opt_upload_geojson" ){
+        if(viewAction[["action"]] == "btn_upload_geojson" ){
+
+          #
+          # Section to remove
+          #
 
         }else{
 
@@ -44,7 +49,7 @@ observe({
           viewType <- viewData[["type"]]
 
           viewTitle <- .get(viewData, c("data","title",language))
-          viewAbstract <- .get(viewData, c("data","abstract",language))
+          #viewAbstract <- .get(viewData, c("data","abstract",language))
 
           #
           # User publish right
@@ -58,18 +63,18 @@ observe({
           classesTags <- config[[c("views","classes")]]
           classesCurrent <- viewData[[c("data","classes")]]
 
-          #
-          # Create a list with other languages titles and description
-          #
-          viewTitleAll <- lapply(
-            config[[c("languages","list")]], function(x){
-              .get(viewData,c("data","title",x))
-            })
+#          #
+          ## Create a list with other languages titles and description
+          ##
+          #viewTitleAll <- lapply(
+            #config[[c("languages","list")]], function(x){
+              #.get(viewData,c("data","title",x))
+            #})
 
-          viewAbstractAll <- lapply(
-            config[["languages"]][["list"]], function(x){
-              .get(viewData, c("data","abstract",x))
-            })
+          #viewAbstractAll <- lapply(
+            #config[["languages"]][["list"]], function(x){
+              #.get(viewData, c("data","abstract",x))
+            #})
 
           #
           # Keep a version of the view edited
@@ -94,16 +99,12 @@ observe({
                 p("download layer",.get(viewData,c("data","source","layerInfo","name")))
                 )
 
-              output$panelModal <- renderUI(mxPanel(
-                  id="uiViewMetaData",
-                  headIcon="download",
-                  subtitle=tags$b(viewTitle),
-                  html=uiOut,
-                  addCloseButton=TRUE,
-                  closeButtonText=d("btn_close",language)
-                  )
+                mxModal(
+                  id="modalViewEdit",
+                  title=tags$b(viewTitle),
+                  content=uiOut,
+                  textCloseButton=d("btn_close",language)
                 )
-
 
             },
             "btn_opt_meta"={
@@ -113,27 +114,22 @@ observe({
               layerMeta$db <- list(id = viewLayerName)
               
               uiOut<-tagList(
-                HTML(
-                  listToHtmlClass(
-                    listInput = layerMeta,
-                    titleMain = d("source_meta_data",language)
+                  listToHtmlSimple(
+                    list("source_meta_data"=layerMeta),
+                    lang=language
                     )
-                  )
                 )
 
-              output$panelModal <- renderUI(mxPanel(
-                  id="uiViewMetaData",
-                  headIcon="info-circle",
-                  subtitle=tags$b(viewTitle),
-                  html=uiOut,
-                  addCloseButton=TRUE,
-                  closeButtonText=d("btn_close",language)
-                  )
+              mxModal(
+                  id="modalViewEdit",
+                  title=tags$b(viewTitle),
+                  content=uiOut,
+                  textCloseButton=d("btn_close",language)
                 )
 
             },
             "btn_opt_delete"={
-              
+
               if(!viewIsEditable) return()
 
               uiOut<-tagList(
@@ -141,6 +137,7 @@ observe({
                   tags$span(d("view_delete_confirm",language))
                   )
                 )
+
               btnList <- list(
                 actionButton(
                   inputId="btnViewDeleteConfirm",
@@ -148,76 +145,80 @@ observe({
                   )
                 )
 
-              output$panelModal <- renderUI(mxPanel(
-                  id="uiConfirmViewDelete",
-                  headIcon="trash-o",
-                  subtitle=tags$b(viewTitle),
-                  html=uiOut,
-                  addCloseButton=TRUE,
-                  closeButtonText=d("btn_close",language),
-                  listActionButton=btnList
-                  ))
-
+              mxModal(
+                id="modalViewEdit",
+                title=tags$b(sprintf("Delete %s",viewTitle)),
+                content=uiOut,
+                textCloseButton=d("btn_close",language),
+                buttons=btnList
+                )
 
             },
             "btn_opt_edit_config"={
 
               if(!viewIsEditable) return()
 
-              #}else{
+
               uiDesc <- tagList(
+                #
+                # Title and abstract (schema based)
+                #
+                jedOutput("viewTitleSchema"),
+                jedOutput("viewAbstractSchema"),
+                #
+                # Country of the view ?
+                # 
+                selectizeInput(
+                  inputId="selViewCountryUpdate",
+                  label=d("view_country",language),
+                  choices=d(config$countries$codes$id,language),
+                  selected=.get(viewData,c("country")),
+                  multiple=FALSE,
+                  options=list(
+                    sortField="label",
+                    dropdownParent="body"
+                    )
+                  ),
+                #
+                # Countries of the view ?
+                #
+                selectizeInput(
+                  inputId="selViewCountriesUpdate",
+                  label=d("view_countries",language),
+                  choices=d(config$countries$codes$id,language),
+                  selected=.get(viewData,c("data","countries")),
+                  multiple=TRUE,
+                  options=list(
+                    sortField="label",
+                    dropdownParent="body"
+                    )
+                  ),         
                 #
                 # Who can see this ?
                 #
-                selectInput(
+                selectizeInput(
                   inputId="selViewTargetUpdate",
                   label=d("view_target",language),
                   choices=d(targetGroups,language),
                   selected=targetCurrent,
-                  multiple=TRUE
+                  multiple=TRUE,
+                  options=list(
+                    dropdownParent="body"
+                    )
                   ),
                 #
                 # Classes
                 #
-                selectInput(
+                selectizeInput(
                   inputId="selViewClassesUpdate",
                   label=d("view_classes",language),
                   choices=d(classesTags,language),
                   selected=classesCurrent,
-                  multiple=TRUE
-                  ),
-                #
-                # Title view, always visible
-                #
-                textInput(
-                  inputId="txtViewTitleUpdate",
-                  label=d("view_title",language),
-                  value=viewTitle
-                  ),
-                mxFold(
-                  HTML(listToHtmlClass(
-                      listInput = viewTitleAll,
-                      titleMain = d("view_title",language))
-                    ),
-                  id =  "checkDisplayOtherTitles",
-                  labelText = d("view_show_title_languages",language)
-                  ),
-                #
-                # Main view abstract, always visible
-                # 
-                textAreaInput(
-                  inputId="txtViewAbstractUpdate",
-                  label=d("view_abstract",language),
-                  value=viewAbstract
-                  ),
-                mxFold(
-                  HTML(listToHtmlClass(
-                      listInput = viewAbstractAll,
-                      titleMain = d("view_abstract",language)
-                      )
-                    ),
-                  id =  "checkDisplayOtherAbstract",
-                  labelText = d("view_show_abstract_languages",language)
+                  multiple=TRUE,
+                  options=list(
+                    dropdownParent="body"
+                    )
+
                   )
                 )
 
@@ -252,11 +253,14 @@ observe({
                   #
                   # main layer
                   #
-                  selectInput(
+                  selectizeInput(
                     inputId = "selectSourceLayerMain",
                     label = d("source_select_layer",language),
                     choices = reactSourceLayer(),
-                    selected = .get(viewData,c("data","source","layerInfo","name"))
+                    selected = .get(viewData,c("data","source","layerInfo","name")),
+                    options=list(
+                      dropdownParent="body"
+                      )
                     ),
                   uiOutput("uiViewEditVtMain"),
                   #
@@ -264,11 +268,14 @@ observe({
                   #
                   mxFold(
                     tagList(
-                      selectInput(
+                      selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
                         choices = reactSourceLayer(),
-                        selected = .get(viewData,c("data","source","layerInfo","maskName"))
+                        selected = .get(viewData,c("data","source","layerInfo","maskName")),
+                        options=list(
+                          dropdownParent="body"
+                          )
                         ),         
                       uiOutput("uiViewEditVtMask")
                       ),
@@ -282,23 +289,100 @@ observe({
               # raster tile specific
               #
               if(viewType=="rt"){
-                url = .get(viewData,c("data","source","tiles"))
+                url <- .get(viewData,c("data","source","tiles"))
                 if(noDataCheck(url)) url = list()
+                url <-  unlist(url[1])
 
                 uiType <- tagList(
-                  textAreaInput(
-                    inputId = "txtRasterTileUrl",
-                    label = d("source_raster_tile_url",language),
-                    value = ifelse(length(url)>0,url[[1]],"")
+                  mxFold(
+                    labelText="WMS configurator",
+                    classContainer="fold-container well",
+                    content = tagList(
+                      tags$label("Select a predefined service"),
+                      tags$select(
+                        type = "select",
+                        id = "selectWmsService",
+                        class = "form-control"
+                        ), 
+                      tags$script(
+                        `data-for`="selectWmsService",
+                        jsonlite::toJSON(list(
+                            dropdownParent="body",
+                            options=config$wms,
+                            valueField = 'value',
+                            labelField = 'label'
+                            ),auto_unbox=T)
+                        ),
+                      tagList(
+                        tags$label("WMS service url"),
+                        tags$div(
+                          class="input-group",
+                          tags$input(
+                            type="text",
+                            id = "textWmsService",
+                            class= "form-control"
+                            ),
+                          tags$span(
+                            class="input-group-btn",
+                            tags$button(
+                              id="btnFetchLayers",
+                              type="button",
+                              class="form-control btn btn-default action-button",
+                              disabled=TRUE,
+                              "Get layers"
+                              )
+                            )
+                          )
+                        ),
+                      tagList(
+                        tags$label("Layers"),
+                        tags$div(
+                          class="input-group",
+                          tags$select(
+                            type="select",
+                            id = "selectWmsLayer",
+                            class= "form-control"
+                            ),
+                          tags$script(
+                            `data-for`="selectWmsLayer",
+                            jsonlite::toJSON(list(
+                                dropdownParent="body",
+                                options=list(),
+                                valueField = 'value',
+                                labelField = 'label'
+                                ),auto_unbox=T)
+                            ),
+                          tags$span(
+                            class="input-group-btn",
+                            tags$button(
+                              id="btnUptateTileUrl",
+                              type="button",
+                              class="form-control btn btn-default action-button",
+                              disabled=TRUE,
+                              "Set tiles url"
+                              )
+                            )
+                          )
+                        )
+                      )
                     ),
-                  selectInput(
+                  selectizeInput(
                     inputId = "selectRasterTileSize",
                     label = d("source_raster_tile_size",language),
                     selected = .get(viewData,c("data","source","tileSize")),
-                    choices = c(512,256)
+                    choices = c(512,256),
+                    options=list(
+                      dropdownParent="body"
+                      )
+                    ),
+                  textAreaInput(
+                    inputId = "textRasterTileUrl",
+                    label = d("source_raster_tile_url",language),
+                    value = url 
                     )
                   )
               }
+
               #
               # ui title/ desc and type specific ui
               #
@@ -320,17 +404,14 @@ observe({
               #
               # Final edit modal panel
               #
-              output$panelModal <- renderUI(mxPanel(
-                  id = "uiConfirmViewEdit",
-                  headIcon = "pencil",
-                  subtitle = tags$b(id=sprintf("title_view_edit_panel"),viewTitle),
-                  html = uiOut,
-                  listActionButton = btnList,
-                  addCloseButton = TRUE,
-                  addOnClickClose = FALSE,
-                  background = FALSE,
-                  closeButtonText = d("btn_close",language)
-                  ))
+              mxModal(
+                id = "modalViewEdit",
+                title = sprintf("%1$s : %2$s",d("view_edit_current",language,web=F),viewTitle),
+                content = uiOut,
+                buttons = btnList,
+                addBackground = FALSE,
+                textCloseButton= d("btn_close",language)
+                )
 
             },
             "btn_opt_edit_style"={
@@ -349,20 +430,17 @@ observe({
                   )
                 )
 
-              output$panelModal <- renderUI(
-                mxPanel(
-                  id="uiConfirmViewDelete",
-                  headIcon="paint-brush",
-                  subtitle=tags$b(id=sprintf("title_view_style_panel"),viewTitle),
-                  background=FALSE,
-                  html=tagList(
-                    uiOutput("txtValidSchema"),
-                    jedOutput(id="styleEdit")
-                    ),
-                  listActionButton=btnList,
-                  addCloseButton=TRUE,
-                  closeButtonText=d("btn_close",language)
-                  ))
+              mxModal(
+                id="modalViewEdit",
+                title=sprintf("Edit style %s",viewTitle),
+                addBackground=FALSE,
+                content=tagList(
+                  uiOutput("txtValidSchema"),
+                  jedOutput(id="styleEdit")
+                  ),
+                buttons=btnList,
+                textCloseButton=d("btn_close",language)
+                )
 
             })
         }
@@ -371,6 +449,40 @@ observe({
 })
 })
 
+
+observeEvent(input$viewTitleSchema_init,{
+  view = reactData$viewDataEdited
+  language = reactData$language
+  titles = .get(view,c("data","title"))
+  schema =  mxSchemaMultiLingualInput(
+    keyTitle = "view_title",
+    format = "text",
+    default = titles,
+    language = language
+    )
+  jedSchema(
+    id="viewTitleSchema",
+    schema=schema,
+    startVal=titles
+    )
+})
+
+observeEvent(input$viewAbstractSchema_init,{
+  view = reactData$viewDataEdited
+  language = reactData$language
+  abstracts = .get(view,c("data","abstract"))
+  schema =  mxSchemaMultiLingualInput(
+    keyTitle = "view_abstract",
+    format = "textarea",
+    default = abstracts,
+    language = language
+    )
+  jedSchema(
+    id="viewAbstractSchema",
+    schema=schema,
+    startVal=abstracts
+    )
+})
 
 #
 # Evaluate client and db story
@@ -397,57 +509,68 @@ observeEvent(input$localStory,{
     dateDbCt = as.POSIXct(dateDb,format="%Y-%m-%d%tT%T",tz=sysTimeZone)
     # check which is the more recent
     useDbVersion = dateDbCt > dateClientCt
-    #mxDebugMsg(sprintf("client date= %s, db date= %s",dateClientCt,dateDbCt))
   }
- 
+
+  #
+  # Update reactData 
+  #
   if(useDbVersion){
-    reactData$viewStory <- list(
-      view = viewDb,
-      dbVersion = useDbVersion
-      )
+    view = viewDb
   }else{
-    reactData$viewStory <- list(
-      view = viewClient,
-      dbVersion = useDbVersion
-      )
+    view = viewClient
   }
+
+  reactData$viewStory <- list(
+    view = view,
+    dbVersion = useDbVersion
+    )
 
 })
 
 #
 # View story : render schema
 #
-observeEvent(reactData$viewStory,{
+observeEvent(input$storyEdit_init,{
 
-  view <- reactData$viewStory$view
-  isDbVersion <- reactData$viewStory$dbVersion
+  viewStory <- reactData$viewStory
+  isDbVersion <- viewStory$dbVersion
+  language <- reactData$language 
+  view <- viewStory$view
+  
+  story <- view[[c("data","story")]]
 
   if(!isTRUE(view[["_edit"]])) return()
 
-  views <- reactViews()
-  story <- view[[c("data","story")]]
+  views = mxDbGetViews(
+    views = NULL,
+    project = reactData$country,
+    read = reactUser$role$read,
+    edit = reactUser$role$edit,
+    userId = reactUser$data$id,
+    from = 0,
+    to = 1000
+    )
+  reactData$viewsAllAvailable = views
 
-  language <- reactData$language 
+  schema <- mxSchemaViewStory(
+    view=view,
+    views=views,
+    language=language
+    )
 
-    schema <- mxSchemaViewStory2(
-      view=view,
-      views=views,
-      language=language
+  jedSchema(
+    id="storyEdit",
+    schema = schema,
+    startVal = story
+    )
+
+  if(!isDbVersion){
+    mxUpdateText(
+      id = "modalViewEdit_txt",
+      text = "Unsaved draft"
       )
+  }
 
-    jedSchema(
-      id="storyEdit",
-      schema = schema,
-      startVal = story
-      )
-
-    if(!isDbVersion){
-      mxUpdateText(
-        id = "uiConfirmViewEdit_infoText",
-        text = "Unsaved draft"
-        )
-    }
-   
 })
 
 #
@@ -464,7 +587,7 @@ observeEvent(input$storyEdit_values,{
   view <- .set(view,c("date_modified"), Sys.time())
 
   mxUpdateText(
-    id = "uiConfirmViewEdit_infoText",
+    id = "modalViewEdit_txt",
     text = "Unsaved draft"
     )
 
@@ -517,12 +640,10 @@ observeEvent(input$styleEdit_init,{
 
   }else{
 
-
     schema <- mxSchemaViewStyle(
       view=view,
       language=language
       )
-
 
     jedSchema(
       id="styleEdit",
@@ -551,7 +672,10 @@ observeEvent(input$btnViewDeleteConfirm,{
   mglRemoveView(
     idView = id 
     )
-
+  mxModal(
+    id="modalViewEdit",
+    close=TRUE
+    )
 })
 
 #
@@ -562,27 +686,18 @@ observeEvent(input$btnViewUpdate,{
   #
   # Retrieve view value
   #
+  time <- Sys.time()
   view <- reactData$viewDataEdited 
+  idView <- .get(view,c("id"))
   country <- reactData$country
   userData <- reactUser$data
-  idView <- view[["id"]]
-  time <- Sys.time()
+  language <- reactData$language
 
   #
-  # check for edit right
+  # check for edit right, remove temporary edit mark
   #
   if(!isTRUE(view[["_edit"]])) return()
   view[["_edit"]] <- NULL
-
-  #
-  # language related stuff
-  #
-  #updateAllLanguages <- input$checkUpdateAllLanguages
-  #languageList <- config[[c("languages","list")]]
-  language <- reactData$language
-
-  # Update title and text
-  #if(!updateAllLanguages) languageList = language
 
   #
   # Update target
@@ -590,6 +705,20 @@ observeEvent(input$btnViewUpdate,{
   target <- input$selViewTargetUpdate
   if(noDataCheck(target)) target = "self"
   view[[c("target")]] <- target
+
+
+  #
+  # Update country
+  #
+  countryUpdate = input$selViewCountryUpdate
+  countriesUpdate = input$selViewCountriesUpdate
+  if(noDataCheck(countryUpdate)) countryUpdate = country
+  if(noDataCheck(countriesUpdate)) countriesUpdate = list()
+  country = countryUpdate
+  countries = as.list(countriesUpdate)
+
+  view[[c("data","countries")]] <- countries
+  view[[c("country")]] <- country
 
   #
   # Update classes
@@ -601,8 +730,11 @@ observeEvent(input$btnViewUpdate,{
   #
   # Title and description
   #
-  view[[c("data","title",language)]] <- input$txtViewTitleUpdate
-  view[[c("data","abstract",language)]] <- input$txtViewAbstractUpdate
+  view[[c("data","title")]] <- input$viewTitleSchema_values$msg
+  view[[c("data","abstract")]] <- input$viewAbstractSchema_values$msg
+
+  #view[[c("data","title",language)]] <- input$txtViewTitleUpdate
+  #view[[c("data","abstract",language)]] <- input$txtViewAbstractUpdate
 
   #
   # Update first level values
@@ -624,7 +756,6 @@ observeEvent(input$btnViewUpdate,{
     #
     # Update view data 
     #
-   
     view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask)
   }
   #
@@ -636,7 +767,7 @@ observeEvent(input$btnViewUpdate,{
     #
     view[[c("data","source")]] <- list(
       type = "raster",
-      tiles =  rep(input$txtRasterTileUrl,2),
+      tiles =  rep(input$textRasterTileUrl,2),
       tileSize = as.integer(input$selectRasterTileSize)
       )
 
@@ -649,10 +780,43 @@ observeEvent(input$btnViewUpdate,{
     #
     # Update view data
     #
-    story =  input$storyEdit_values$msg
-    errors = input$storyEdit_errors$msg
+    story <-  input$storyEdit_values$msg
+    errors <- input$storyEdit_errors$msg
+    story <- input$storyEdit_values$msg
 
-    view[[c("data","story")]] <- input$storyEdit_values$msg
+    view[[c("data","story")]] <- story
+
+
+    #
+    # Retrieve and store data for all views used in story.
+    #
+   
+    
+    views = list()
+
+    try(silent=T,{
+      viewsId = list()
+      
+      viewsStory = lapply(story$steps,function(s){
+        lapply(s$views,function(v){v})
+      })
+
+      viewsId = list(unique(unlist(viewsStory)))
+      if(!noDataCheck(viewsId)){
+      views = mxDbGetViews(
+        views = viewsId,
+        project = reactData$country,
+        read = reactUser$role$read,
+        edit = reactUser$role$edit,
+        userId = reactUser$data$id,
+        from = 0,
+        to = 1000
+        )}
+
+      })
+  
+    view[[c("data","views")]] <- views
+
   }
 
   #
@@ -688,7 +852,7 @@ observeEvent(input$btnViewUpdate,{
   #
 
   mxUpdateText(
-    id = "uiConfirmViewEdit_infoText",
+    id = "modalViewEdit_txt",
     text = sprintf("Saved at %s",time)
     )
 
@@ -792,24 +956,33 @@ observe({
 
   output$uiViewEditVtMain <- renderUI({
     tagList(
-    selectInput(
+    selectizeInput(
       inputId="selectSourceLayerMainGeom",
       label=d("source_select_geometry",language),
       choices=geomTypes,
-      selected=geomType
+      selected=geomType,
+      options=list(
+        dropdownParent="body"
+        )
       ),
-    selectInput(
+    selectizeInput(
       inputId="selectSourceLayerMainVariable",
       label=d("source_select_variable"),
       choices=variables,
-      selected=variableName
+      selected=variableName,
+      options=list(
+        dropdownParent="body"
+        )
       ),
-    selectInput(
+  selectizeInput(
       inputId="selectSourceLayerOtherVariables",
       label=d("source_select_variable"),
       choices=variables,
       selected=variableNames,
-      multiple=TRUE
+      multiple=TRUE,
+      options=list(
+        dropdownParent="body"
+        )
       ),
     uiOutput("uiViewEditVtMainSummary") 
     )
@@ -843,15 +1016,14 @@ observeEvent(input$selectSourceLayerMask,{
   
   language <- reactData$language
   
-  #viewData <- reactData$viewDataEdited
-
   output$uiViewEditVtMask <- renderUI({
-    numOverlapping = list(mxDbGetOverlapsCount(layerMain,layerMask))
-    names(numOverlapping) <- d("view_num_overlap",language) 
-    HTML(listToHtmlClass(
-        listInput = numOverlapping,
-        titleMain = d("view_num_overlap","en")
-        )
+    numOverlapping = mxDbGetOverlapsCount(layerMain,layerMask)
+    
+    listToHtmlSimple(
+      list(
+        "view_num_overlap"=numOverlapping
+        ),
+        lang=language
       )
  })
 

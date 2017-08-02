@@ -12,39 +12,44 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 }
 
 
-#' Password input
-#'
-#' Create a password input.
-#' 
-#' @param inputId Input id
-#' @param label Label to display
-#' @export
-mxInputPassword <- function(inputId, label) {
-  tagList(
-    tags$input(id = inputId,placeholder=label,class="mx-login-input",type="password", value="")
+
+
+#' Create a modal window
+#' @param id {string} Id of the modal
+#' @param close {logical} Ask to close an existing modal
+#' @param replace {logical} Ask to replace an existing modal
+#' @param title {character|shiny.tag} Optional title 
+#' @param subtitle {character|shiny.tag} Optional subtitle
+#' @param content {character|shiny.tag} Optional content
+#' @param buttons {list} Optional ActionButton list
+#' @param addBackground {logical} Add a background
+#' @param removeCloseButton {logical} Remove close button
+#' @param textCloseButton {character|shiny.tag} Text of the default close button
+#' @param session {shiny.session} Default session object
+mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,addBackground=F,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+
+  stopifnot(!noDataCheck(id))
+
+  if(!noDataCheck(buttons) && is.list(buttons)){
+    buttons <- lapply(buttons,function(b){as.character(b)})
+  }
+
+  session$sendCustomMessage(
+    type="mxModal",
+    list(
+      id=id,
+      replace=as.logical(replace),
+      title=as.character(title),
+      subtitle=as.character(subtitle),
+      textCloseButton=as.character(textCloseButton),
+      buttons=buttons,
+      content=as.character(content),
+      addBackground=as.logical(addBackground),
+      removeCloseButton=as.logical(removeCloseButton),
+      close=as.logical(close)
+      )
     )
 }
-
-#' User name input
-#' 
-#' Create a username input
-#' 
-#' @param inputId Input id
-#' @param label Label to display
-#' @export
-mxInputUser <- function(inputId, label,class="form-control") {
-  tags$input(
-    id = inputId, 
-    placeholder=label,
-    class=paste("mx-login-input",class),
-    value="",
-    autocomplete="off",
-    autocorrect="off", 
-    autocapitalize="off",
-    spellcheck="false"
-    )
-}
-
 #' Create a modal panel
 #'
 #' Create a modal panel with some options as custom button, close button, html content. 
@@ -240,6 +245,40 @@ mxPanelAlert <- function(title=c("error","warning","message"),subtitle=NULL,mess
     )
   mxPanel(class="panel-overall panel-fixed",title=title,subtitle=subtitle,html=message,listActionButton=listActionButton,style="position:fixed;top:100px",...)
 }
+#' Password input
+#'
+#' Create a password input.
+#' 
+#' @param inputId Input id
+#' @param label Label to display
+#' @export
+mxInputPassword <- function(inputId, label) {
+  tagList(
+    tags$input(id = inputId,placeholder=label,class="mx-login-input",type="password", value="")
+    )
+}
+
+#' User name input
+#' 
+#' Create a username input
+#' 
+#' @param inputId Input id
+#' @param label Label to display
+#' @export
+mxInputUser <- function(inputId, label,class="form-control") {
+  tags$input(
+    id = inputId, 
+    placeholder=label,
+    class=paste("mx-login-input",class),
+    value="",
+    autocomplete="off",
+    autocorrect="off", 
+    autocapitalize="off",
+    spellcheck="false"
+    )
+}
+
+
 
 
 
@@ -457,7 +496,8 @@ mxScroll <- function(content){
 #' @param classContent {character} Name of the class for the fold content
 #' @param classLabel {character} Name of the class for the label
 #' @export
-mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
+#mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
+mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
   if(noDataCheck(id)) id <- randomString()
 
   elInput = tags$input(type="checkbox",id=id,class="fold-switch")
@@ -466,44 +506,20 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE,
     elInput$attribs$checked=T
   }
 
+  if(noDataCheck(labelUi)){
+     label = tags$label(class=classLabel,`for`=id,`data-lang_key`= labelDictKey,labelText)
+  }else{
+     label = tags$label(labelUi,class=classLabel,`for`=id)
+  }
+
   tags$div(class=classContainer,
     elInput,
-    tags$label(class=classLabel,`for`=id,`data-lang_key`= labelDictKey,labelText),
+    label,
     tags$div(class=classContent,
       content
       )
     )
 }
-  
- 
-
-#' R list to html
-#' @param listInput list in inptu
-#' @param htL List to append to
-#' @param h Value of the first level of html header
-#' @param exclude list named item to exclude
-#' @export
-listToHtml<-function(listInput,htL='',h=2, exclude=NULL){
-
-  hS<-paste0('<H',h,'><u>',collapse='') #start 
-  hE<-paste0('</u></H',h,'>',collapse='') #end
-  h=h+1 #next
-  if(is.list(listInput)){
-    nL<-names(listInput)
-    nL <- nL[!nL %in% exclude]
-    htL<-append(htL,'<ul>')
-    for(n in nL){
-      htL<-append(htL,c(hS,n,hE))
-      subL<-listInput[[n]]
-      htL<-listToHtml(subL,htL=htL,h=h,exclude=exclude)
-    }
-    htL<-append(htL,'</ul>')
-  }else if(is.character(listInput) || is.numeric(listInput)){
-    htL<-append(htL,c('<li>',paste(listInput,collapse=','),'</li>'))
-  }
-  return(paste(htL,collapse=''))
-}
-
 
 
 #' R list to html list
@@ -511,8 +527,7 @@ listToHtml<-function(listInput,htL='',h=2, exclude=NULL){
 #' Create a html list and apply a class for <ul> and <li>
 #'
 #' @param listInput list in inptu
-listToHtmlSimple <- function(listInput){
-
+listToHtmlSimple <- function(listInput,lang="en",dict=config$dict){
 
   makeUL = function(li){
     nL <- names(li)
@@ -524,12 +539,23 @@ listToHtmlSimple <- function(listInput){
   }
 
   makeLi = function(it,ti){
+    ti <- d(ti,lang=lang,dict=dict);
     if (is.list(it)){
-      content = makeUL(it)
+      content = mxFold(
+        content = makeUL(it),
+        labelUi = ti
+        )
     }else{
-      content = it 
+      content = tags$div(
+        tags$span(class="list-group-title",ti),
+        tags$span(it)
+        )
     }
-    tags$li(class="list-group-item",tags$b(ti),content)
+
+    tags$li(
+      class = "list-group-item",
+      content
+      )
   }
 
   makeUL(listInput)         
@@ -537,170 +563,6 @@ listToHtmlSimple <- function(listInput){
 }
 
 
-#' R list to html list
-#'
-#' Create a html list and apply a class for <ul> and <li>
-#'
-#' @param listInput list in inptu
-#' @param htL List to append to
-#' @param h Value of the first level of html header
-#' @param exclude list named item to exclude
-#' @param optional dictionary table for titles
-#' @param language to use from dict
-#' @return HTML list 
-#' @export
-listToHtmlClass <- function(listInput, exclude=NULL,titleMain="",title=NULL,c=0, htL="",classUl="list-group",classLi="list-group-item",dict=NULL,language="en"){
-
-  c <- c+1 #next
-
-  if(is.null(listInput)) listInput = character(1);
-
-
-  if(is.list(listInput) ){
-
-    id <- randomString()
-    nL <- names(listInput)
-    if( c == 1 && nchar(titleMain)>0 ) title=titleMain
-    htL <- append(
-      htL,
-      paste(
-        "<div class='fold-container'>",
-        "<input type='checkbox' id='",id,"' class='fold-switch'/>",
-        "<label class='fold-label' for='",id,"'>",toupper(title),"</label>",
-        "<div class='fold-content'>",
-        "<ul class='list-group'>"
-        )
-      ) # open
-
-    if(length(listInput)>0){
-      for(i in 1:length(listInput)){
-
-        subL <- listInput[[i]]
-
-        htL<-append(
-          htL,
-          c(
-            paste(
-              '<li class="',
-              paste(classLi,collapse=","),
-              '">'
-              )
-            )
-          )
-        htL <- listToHtmlClass(
-          subL, 
-          exclude=exclude,
-          title=nL[[i]],
-          htL=htL,
-          c=c,
-          classUl=classUl,
-          classLi=classLi,
-          dict = dict,
-          language = language
-          )
-      }
-    }
-    htL<-append(htL,'</li></ul></div></div>') # close
-
-  }else if(is.character(listInput) || is.numeric(listInput)){
-    if(!is.null(dict)){
-      title <- d(title,dict=dict,lang=language)
-      if(noDataCheck(title)) title <- title
-    }
-    htL<-append(
-      htL,
-      sprintf(
-        "
-        <span class='mx-list-title'>%1$s: </span>
-        <span class='mx-list-content'>%2$s</span>
-        "
-        , title
-        , listInput
-        )
-      )
-
-  }
-  return(HTML(paste(htL,collapse='')))
-} 
-
-
-
-#' R list to html list
-#'
-#' Create a html list and apply a class for <ul> and <li>
-#'
-#' @param listInput list in inptu
-#' @param htL List to append to
-#' @param h Value of the first level of html header
-#' @param exclude list named item to exclude
-#' @return HTML list 
-#' @export
-listToHtmlClassOld <- function(listInput, exclude=NULL,title=NULL,c=0, htL="",classUl="list-group",classLi="list-group-item"){
-
-  c = c+1 #next
-
-  if(is.null(listInput)) listInput = character(1);
-
-  if(is.list(listInput) ){
-    nL <- names(listInput)
-    htL <- append(
-      htL,
-      paste(
-        '<b class="mx-list-title">',toupper(title),'</b>',
-        '<ul class="',
-        paste(
-          classUl,
-          collapse=","
-          ),
-        '">'
-        )
-      ) # open
-
-    if(length(listInput)>0){
-      for(i in 1:length(listInput)){
-
-        subL <- listInput[[i]]
-
-        htL<-append(
-          htL,
-          c(
-            paste(
-              '<li class="',
-              paste(classLi,collapse=","),
-              '">'
-              )
-            )
-          )
-        htL <- listToHtmlClass(
-          subL, 
-          exclude=exclude,
-          title=nL[[i]],
-          htL=htL,
-          c=c,
-          classUl=classUl,
-          classLi=classLi
-          )
-      }
-    }
-    htL<-append(htL,'</li></ul>') # close
-
-  }else if(is.character(listInput) || is.numeric(listInput)){
-    htL<-append(
-      htL,
-      sprintf(
-        "
-        <span class='mx-list-title'>%1$s: </span>
-        <span class='mx-list-content'>%2$s</span>
-        "
-        , title
-        , listInput
-        )
-      )
-
-  }
-  return(HTML(paste(htL,collapse='')))
-} 
- 
 
 
 #' Checkbox with custom ui
@@ -766,4 +628,202 @@ tags$div(
 
 }
 
+ 
+
+##' R list to html
+##' @param listInput list in inptu
+##' @param htL List to append to
+##' @param h Value of the first level of html header
+##' @param exclude list named item to exclude
+##' @export
+#listToHtml<-function(listInput,htL='',h=2, exclude=NULL){
+
+  #hS<-paste0('<H',h,'><u>',collapse='') #start 
+  #hE<-paste0('</u></H',h,'>',collapse='') #end
+  #h=h+1 #next
+  #if(is.list(listInput)){
+    #nL<-names(listInput)
+    #nL <- nL[!nL %in% exclude]
+    #htL<-append(htL,'<ul>')
+    #for(n in nL){
+      #htL<-append(htL,c(hS,n,hE))
+      #subL<-listInput[[n]]
+      #htL<-listToHtml(subL,htL=htL,h=h,exclude=exclude)
+    #}
+    #htL<-append(htL,'</ul>')
+  #}else if(is.character(listInput) || is.numeric(listInput)){
+    #htL<-append(htL,c('<li>',paste(listInput,collapse=','),'</li>'))
+  #}
+  #return(paste(htL,collapse=''))
+#}
+
+
+
+
+
+
+##' R list to html list
+##'
+##' Create a html list and apply a class for <ul> and <li>
+##'
+##' @param listInput list in inptu
+##' @param htL List to append to
+##' @param h Value of the first level of html header
+##' @param exclude list named item to exclude
+##' @param optional dictionary table for titles
+##' @param language to use from dict
+##' @return HTML list 
+##' @export
+#listToHtmlClass <- function(listInput, exclude=NULL,titleMain="",title=NULL,c=0, htL="",classUl="list-group",classLi="list-group-item",dict=NULL,language="en"){
+
+  #c <- c+1 #next
+
+  #if(is.null(listInput)) listInput = character(1);
+
+
+  #if(is.list(listInput) ){
+
+    #id <- randomString()
+    #nL <- names(listInput)
+    #if( c == 1 && nchar(titleMain)>0 ) title=titleMain
+    #htL <- append(
+      #htL,
+      #paste(
+        #"<div class='fold-container'>",
+        #"<input type='checkbox' id='",id,"' class='fold-switch'/>",
+        #"<label class='fold-label' for='",id,"'>",toupper(title),"</label>",
+        #"<div class='fold-content'>",
+        #"<ul class='list-group'>"
+        #)
+      #) # open
+
+    #if(length(listInput)>0){
+      #for(i in 1:length(listInput)){
+
+        #subL <- listInput[[i]]
+
+        #htL<-append(
+          #htL,
+          #c(
+            #paste(
+              #'<li class="',
+              #paste(classLi,collapse=","),
+              #'">'
+              #)
+            #)
+          #)
+        #htL <- listToHtmlClass(
+          #subL, 
+          #exclude=exclude,
+          #title=nL[[i]],
+          #htL=htL,
+          #c=c,
+          #classUl=classUl,
+          #classLi=classLi,
+          #dict = dict,
+          #language = language
+          #)
+      #}
+    #}
+    #htL<-append(htL,'</li></ul></div></div>') # close
+
+  #}else if(is.character(listInput) || is.numeric(listInput)){
+    #if(!is.null(dict)){
+      #title <- d(title,dict=dict,lang=language)
+      #if(noDataCheck(title)) title <- title
+    #}
+    #htL<-append(
+      #htL,
+      #sprintf(
+        #"
+        #<span class='mx-list-title'>%1$s: </span>
+        #<span class='mx-list-content'>%2$s</span>
+        #"
+        #, title
+        #, listInput
+        #)
+      #)
+
+  #}
+  #return(HTML(paste(htL,collapse='')))
+#} 
+
+
+
+##' R list to html list
+##'
+##' Create a html list and apply a class for <ul> and <li>
+##'
+##' @param listInput list in inptu
+##' @param htL List to append to
+##' @param h Value of the first level of html header
+##' @param exclude list named item to exclude
+##' @return HTML list 
+##' @export
+#listToHtmlClassOld <- function(listInput, exclude=NULL,title=NULL,c=0, htL="",classUl="list-group",classLi="list-group-item"){
+
+  #c = c+1 #next
+
+  #if(is.null(listInput)) listInput = character(1);
+
+  #if(is.list(listInput) ){
+    #nL <- names(listInput)
+    #htL <- append(
+      #htL,
+      #paste(
+        #'<b class="mx-list-title">',toupper(title),'</b>',
+        #'<ul class="',
+        #paste(
+          #classUl,
+          #collapse=","
+          #),
+        #'">'
+        #)
+      #) # open
+
+    #if(length(listInput)>0){
+      #for(i in 1:length(listInput)){
+
+        #subL <- listInput[[i]]
+
+        #htL<-append(
+          #htL,
+          #c(
+            #paste(
+              #'<li class="',
+              #paste(classLi,collapse=","),
+              #'">'
+              #)
+            #)
+          #)
+        #htL <- listToHtmlClass(
+          #subL, 
+          #exclude=exclude,
+          #title=nL[[i]],
+          #htL=htL,
+          #c=c,
+          #classUl=classUl,
+          #classLi=classLi
+          #)
+      #}
+    #}
+    #htL<-append(htL,'</li></ul>') # close
+
+  #}else if(is.character(listInput) || is.numeric(listInput)){
+    #htL<-append(
+      #htL,
+      #sprintf(
+        #"
+        #<span class='mx-list-title'>%1$s: </span>
+        #<span class='mx-list-content'>%2$s</span>
+        #"
+        #, title
+        #, listInput
+        #)
+      #)
+
+  #}
+  #return(HTML(paste(htL,collapse='')))
+#} 
+ 
 

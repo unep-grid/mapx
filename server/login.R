@@ -60,14 +60,7 @@ observeEvent(input$cookies,{
       # Login with guest
       #
       reactData$loginUserEmail <- config[["mail"]][["guest"]]
-      #
-      # Enable login panel 
-      #
-      mxUiHide(
-        id = "mxPanelLogin",
-        disable = FALSE,
-        hide = FALSE
-        )
+
       # if there is no guest account, create it
       if(!mxDbEmailIsKnown(config[["mail"]][["guest"]])){
         mxDbCreateUser(config[["mail"]][["guest"]])  
@@ -256,8 +249,10 @@ observe({
         )
       # trigger actual login
       reactData$loginRequested = runif(1)
+     
       # close the panel
-      output$panelLogin <- renderUI(tags$div())
+      mxModal(id="loginCode",close=T)
+
     }else{
       # only one message is returned : 
       #  I think that most probable causes password error are, in this order : 

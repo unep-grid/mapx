@@ -3,25 +3,28 @@
 buttonAddView <- tagList(
   tags$h4(`data-lang_key`="title_tools_views"),
   actionButton(
+    label = "",
     inputId = "btnAddView",
     class = "btn btn-sm btn-default hint",
-    `data-lang_key` = "btn_add_view",
-    icon("plus")
+    `data-lang_key` = "btn_add_view"
     ))
 
 
 buttonSourceEdit <- tagList(
   tags$h4(`data-lang_key`="title_tools_sources"),
   actionButton(
+    label = "",
     inputId = "btnEditSources",
     class = "btn btn-sm btn-default hint",
-    `data-lang_key` = "btn_edit_sources",
-    icon("plus")
+    `data-lang_key` = "btn_edit_source"
+    ),
+  actionButton(
+    label = "",
+    inputId = "btnUploadSources",
+    class = "btn btn-sm btn-default hint",
+    `data-lang_key` = "btn_add_source"
     )
   )
-
-
-
 
 #
 # Set view and source ui 
@@ -59,13 +62,13 @@ observeEvent(reactUser$role,{
   if( "qgis" %in% access ){
 
     qgisInfo <- listToHtmlSimple(list(
-      name = "map-x-db",
-      host = session$clientData$url_hostname,
-      port = .get(config,c("pg","port")),
-      database =  .get(config,c("pg","dbname")),
-      username =  .get(config,c("pg","user")),
-      password =  .get(config,c("pg","password"))
+      db_name =  .get(config,c("pg","dbname")),
+      db_host = session$clientData$url_hostname,
+      db_port = .get(config,c("pg","port")),
+      db_username =  .get(config,c("pg","user")),
+      db_password =  .get(config,c("pg","password"))
       ))
+
 
     qgisInfo <- tagList(
         tags$h4(`data-lang_key`="title_tools_qgis"),

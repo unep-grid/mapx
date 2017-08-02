@@ -9,6 +9,7 @@ jed.extend.texteditor = {};
 jed.helper.render = function(id, schema, startVal, options ) {
 
   el = document.getElementById(id);
+  
   if(!el) throw("jed element " + id + "not found");
 
   var opt_final = {};
@@ -73,6 +74,7 @@ jed.helper.render = function(id, schema, startVal, options ) {
     JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend(jed.theme);
   }
 
+  el.innerHTML="";
   var editor = new JSONEditor(el,opt_final);
 
   editor.on('ready',function() {
@@ -80,8 +82,6 @@ jed.helper.render = function(id, schema, startVal, options ) {
     Shiny.onInputChange(id + '_ready', (new Date()));     
   });
 
-
-  //editor.on('change',jed.helper.debounce(function() {
   editor.on('change',function() {
     var id = editor.element.id;
 
@@ -123,7 +123,7 @@ jed.helper.render = function(id, schema, startVal, options ) {
               .classList
               .add("jed-error");
           }
-          p.pop()
+          p.pop();
         }
       }
     }
@@ -151,10 +151,6 @@ $('document').ready(function() {
     jed.helper.render(e.id,e.schema,e.startVal,e.options);
   });
   // update editor with given values
-  Shiny.addCustomMessageHandler('jedUpdate', function(e) {
-    jed.helper.update(e.id,e.val);
-  });
-  // change 
   Shiny.addCustomMessageHandler('jedUpdate', function(e) {
     jed.helper.update(e.id,e.val);
   });
@@ -751,8 +747,7 @@ jed.theme = {
   },
   getFormControl: function(label, input, description) {
     var group = document.createElement('div');
-
-
+    
     if(label && input.type === 'checkbox') {
       group.className += ' checkbox';
       label.appendChild(input);

@@ -1,7 +1,7 @@
 tags$div(
   "{{?it.data.style \\u0026\\u0026 it.data.style.rules}}",
   tags$ul(
-    "{{~it.data.style.rules :item}}",
+    "{{~it.data.style.rules.reverse() :item}}",
     "{{?item}}",
     tags$li(
       tags$div(

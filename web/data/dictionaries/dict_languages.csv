@@ -1,8 +1,9 @@
-id,en,fr,es,ru,zh,de,bn
-en,english,anglais,,,,,
-fr,french,français,,,,,
-es,spanish,espagnol,,,,,
-ru,russian,russe,,,,,
-zh,chinese,chinois,,,,,
-de,german,allemand,,,,,
-bn,bengali,bengali,,,,,
+"id","en","fr","es","ru","zh","de","bn","fa"
+"en","english","anglais",,,,,,"انگلیسی"
+"fr","french","français",,,,,,"فرانسوی"
+"es","spanish","espagnol",,,,,,"اسپانیایی"
+"ru","russian","russe",,,,,,"روسی"
+"zh","chinese","chinois",,,,,,"چینی"
+"de","german","allemand",,,,,,"آلمانی"
+"bn","bengali","bengali",,,,,,"بنگالی"
+"fa","farsi","persan",,,,,,"فارسی"

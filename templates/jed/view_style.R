@@ -28,14 +28,22 @@ mxSchemaViewStyle <- function(
   style <- def[["style"]]
 
   #
+  # shortcut to translate function
+  #
+
+  tt = function(id){
+   d(id,lang=l,web=F,asChar=T)
+  }
+
+  #
   # retrieve default
   #
-  dataDrivenTitles <- names( d(style$dataDrivenChoice, l, namedVector=T) )
-  dataDrivenChoice <- style$dataDrivenChoice 
-  dataDrivenEnable <- style$dataDrivenEnable 
-  dataDrivenMethod <- style$dataDrivenMethod
+  #dataDrivenTitles <- names( tt(style$dataDrivenChoice, l, namedVector=T) )
+  #dataDrivenChoice <- style$dataDrivenChoice 
+  #dataDrivenEnable <- style$dataDrivenEnable 
+  #dataDrivenMethod <- style$dataDrivenMethod
 
-  if(noDataCheck(dataDrivenMethod)) dataDrivenMethod = dataDrivenChoice[[1]]
+  #if(noDataCheck(dataDrivenMethod)) dataDrivenMethod = dataDrivenChoice[[1]]
 
   variableName <- def[[c("attribute","name")]]
   layerName <- def[[c("source","layerInfo","name")]]
@@ -85,7 +93,7 @@ mxSchemaViewStyle <- function(
   for(i in ll){
     r <- list(
       list(
-        title = d("schema_label",l),
+        title = tt("schema_label"),
         type = "string",
         options = list(
           hidden = i != l
@@ -101,7 +109,7 @@ mxSchemaViewStyle <- function(
 
     value <- list(
       value = list(
-        title = d("schema_value",l),
+        title = tt("schema_value"),
         type = "number",
         minLength= 1,
         #minimum = min(values),
@@ -113,7 +121,7 @@ mxSchemaViewStyle <- function(
   }else{
     value <- list(
       value = list(
-        title = d("schema_value",l),
+        title = tt("schema_value"),
         type = "string",
         enum = as.list(values),
         minLength = 1
@@ -123,7 +131,7 @@ mxSchemaViewStyle <- function(
   # color
   color <- list(
     color = list(
-      title = d("schema_color",l),
+      title = tt("schema_color"),
       type = "string",
       format = "color",
       default = "#f1f3d7"
@@ -133,7 +141,7 @@ mxSchemaViewStyle <- function(
   # opacity
   opacity <-  list(
     opacity = list(
-      title = d("schema_opacity",l),
+      title = tt("schema_opacity"),
       type = "number",
       enum = c(0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1),
       default = 0.3
@@ -143,7 +151,7 @@ mxSchemaViewStyle <- function(
   # size
   size <- list(
     size = list(
-      title = d("schema_size",l),
+      title = tt("schema_size"),
       type = "number",
       default = 1
       )
@@ -152,7 +160,7 @@ mxSchemaViewStyle <- function(
   # sprite
   sprite <-  list(
     sprite = list(
-      title = d("schema_sprite",l),
+      title = tt("schema_sprite"),
       type = "string",
       enum = c("none",sprites)
       #options = list(
@@ -168,10 +176,10 @@ mxSchemaViewStyle <- function(
     rules = list(
       type = "array",
       format = "table",
-      title = d("schema_rules"),
+      title = tt("schema_rules"),
       items = list(
         type = "object",
-        title = d("schema_rule",l),
+        title = tt("schema_rule"),
         properties = c(
           value,
           labels,
@@ -184,29 +192,29 @@ mxSchemaViewStyle <- function(
       )
     )
 
-  #
-  # Additional property
-  #
-  prop <- list(
-    dataDrivenMethod = list(
-      title = d("schema_method",l),
-      type = "string",
-      enum = as.list(dataDrivenChoice),
-      default = dataDrivenMethod,
-      minLength = ifelse(dataDrivenEnable,1,0),
-      options = list(
-        enum_titles = as.list(dataDrivenTitles),
-        hidden = ! dataDrivenEnable,
-        required =  dataDrivenEnable
-        )
-      )
-    )
+#  #
+  ## Additional property
+  ##
+  #prop <- list(
+    #dataDrivenMethod = list(
+      #title = tt("schema_method",l),
+      #type = "string",
+      #enum = as.list(dataDrivenChoice),
+      #default = dataDrivenMethod,
+      #minLength = ifelse(dataDrivenEnable,1,0),
+      #options = list(
+        #enum_titles = as.list(dataDrivenTitles),
+        #hidden = ! dataDrivenEnable,
+        #required =  dataDrivenEnable
+        #)
+      #)
+    #)
 
   #
   # main properties
   #
   properties <- c(
-    prop,
+    #prop,
     rules
     )
 
@@ -214,7 +222,7 @@ mxSchemaViewStyle <- function(
   # schema skeleton
   #
   schema <- list(
-    title = d("view",l),
+    title = tt("view"),
     type = "object",
     properties = properties
     )

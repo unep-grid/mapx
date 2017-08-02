@@ -3,6 +3,13 @@
 #
 config <- list()
 
+
+#
+# Shiny options
+#
+options(shiny.maxRequestSize=1000*1024^2) 
+
+
 #
 # get info about the host
 #
@@ -124,16 +131,17 @@ config[["map"]] <- list(
 config[["ui"]] <- list(
   colors = list(
     default = list(
-      "mx_text" = "rgba(53,53,53,1)",
-      "mx_text_faded" = "rgba(53,53,53,0.5)",
-      "mx_hidden" = "rgba(2,186,253,0)",
-      "mx_border" = "rgba(156,156,156,0.4)",
-      "mx_background" = "rgba(248,248,248,1)",
-      "mx_shadow" = "rgba(153,153,153,0.4)",
-      "mx_country_mask" = "rgba(153,153,153,0.4)",
-      "mx_water" = "rgba(102,102,102,1)",
-      "mx_road" = "rgba(0,0,0,1)",
-      "mx_admin" = "rgba(127,127,127,1)"
+      "mx_ui_text" = "rgba(53,53,53,1)",
+      "mx_ui_text_faded" = "rgba(53,53,53,0.5)",
+      "mx_ui_hidden" = "rgba(2,186,253,0)",
+      "mx_ui_border" = "rgba(156,156,156,0.4)",
+      "mx_ui_background" = "rgba(248,248,248,1)",
+      "mx_ui_shadow" = "rgba(153,153,153,0.4)",
+      "mx_map_background" = "rgba(248,248,248,1)",
+      "mx_map_mask" = "rgba(153,153,153,0.4)",
+      "mx_map_water" = "rgba(102,102,102,1)",
+      "mx_map_road" = "rgba(94,37,25,1)",
+      "mx_map_border" = "rgba(127,127,127,1)"
       )
     )
   )
@@ -143,13 +151,24 @@ config[["ui"]] <- list(
 #config[["map"]][["sources"]] = list()
 
 ## wms sources
-#config[["map"]][["sources"]][["wms"]] = list(
-  #"forestCover"="http://50.18.182.188:6080/arcgis/services/ForestCover_lossyear/ImageServer/WMSServer",
-  #"columbia.edu"="http://sedac.ciesin.columbia.edu/geoserver/wms",
-  #"preview.grid.unep.ch"="http://preview.grid.unep.ch:8080/geoserver/wms",
-  #"sampleserver6.arcgisonline.com"="http://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer",
-  #"nowcoast.noaa.gov"="http://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
-  #)
+config[["wms"]] = list(
+  list(
+    label="forestCover",
+    value="https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"
+    ),
+  list(
+    label="columbia.edu",
+    value="https://sedac.ciesin.columbia.edu/geoserver/wms"
+    ),
+  list(
+    label="sampleserver6.arcgisonline.com",
+    value="https://sampleserver6.arcgisonline.com/arcgis/services/911CallsHotspot/MapServer/WMSServer"
+    ),
+  list(
+    label="nowcoast.noaa.gov",
+    value="https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
+    )
+  )
 
 #
 # Set default variable names
@@ -173,8 +192,6 @@ config[["templates"]] <- list()
 config[[c("templates","dot")]] <-  list()
 config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("templates/dot/view_list_legend.R"))
 config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/dot/view_list.R"))
-config[[c("templates","dot","viewPopup")]] <- as.character(mxSource("templates/dot/view_popup.R"))
-config[[c("templates","dot","viewStory")]] <- as.character(mxSource("templates/dot/view_story.R"))
 
 
 config[[c("templates","html")]] <-  list()
@@ -185,22 +202,10 @@ config[[c("templates","text","email_password")]] <- paste(readLines("templates/t
 config[[c("templates","text","email_error")]] <- paste(readLines("templates/text/email_error.txt"),collapse="\n")
 
 
-
-
-
 #
 # default languages
 #
 config[["languages"]] <- list()
-
-## fallback languages
-#config[["languages"]][["default"]] <- list(
-    #"first" = "en",
-    #"second" = "fr",
-    #"third" = "es"
-    #)
-
-# list of supported language. Those names should be present in all dict files  !
 config[["languages"]][["list"]] <- list(
   "English ( english )" = "en",
   "Français ( french )" = "fr",
@@ -208,7 +213,8 @@ config[["languages"]][["list"]] <- list(
   "Русский ( russian )" = "ru",
   "中国 ( chinese )" = "zh",
   "Deutsch ( german )" = "de",
-  "বাংলা  (bengali)" = "bn"
+  "বাংলা  (bengali)" = "bn",
+  "فارسی (Dari/Persian)" = "fa"
   )
 
 #

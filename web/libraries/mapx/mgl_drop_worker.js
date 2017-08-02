@@ -110,7 +110,7 @@ onmessage = function(e) {
       errorMsg = errors.length + " errors found. check the console for more info";
       postMessage({
         progress: 100,
-        msssage: errorMsg,
+        message: errorMsg,
         errorMessage: errorMsg
       });
 
@@ -166,6 +166,8 @@ onmessage = function(e) {
 
     /**
      * Remove features without geom
+     * hack related to https://github.com/Turfjs/turf/issues/853
+     * Delete this block.
      */
 
     turf.meta.featureEach(gJson,function(f,i){

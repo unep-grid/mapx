@@ -63,31 +63,6 @@ sortButton <- tagList(
     )
   )
 
-
-##
-## Filter and sort button
-##
-#filter <-  mxFold(
-  #id = "optViewTools",
-  #labelDictKey = "fold_views_filter",
-  #content = tags$div(
-    #mxFold(
-      #id = "optViewFilter",
-      #labelDictKey = "fold_views_class",
-      #content = filterClass
-      #),
-    #mxFold(
-      #id = "optViewSorts",
-      #labelDictKey = "fold_views_sort",
-      #content = tagList(
-        #tags$div(class="sorts",
-          #sortButton
-          #)
-        #)
-      #)
-    #)
-  #)
-
 #
 # Final tab object
 #

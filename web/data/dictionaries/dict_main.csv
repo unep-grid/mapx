@@ -1,196 +1,206 @@
-id,en,fr,es,ru,zh,de,bn
-ui_language,Language of the interface,Langue de l'interface,Idioma de la interfaz.,Язык интерфейса.,界面语言。,Sprache für das Interface.,ইন্টারফেস ভাষা
-ui_country,Select country,Sélectionnez le pays,,,,,
-title_settings,Settings,Préférences,Preferencias,,,,
-title_tools,Tools,Outils,Utilidades,,,,
-title_views,Views,Vues,Vistas,,,,
-title_app,Map-x,Map-x,,,,,
-title_tools_views,Views,Vues,,,,,
-title_tools_sources,Sources,Sources,,,,,
-title_tools_qgis,Qgis connection info,Information de connection depuis qgis,,,,,
-title_tools_map,Map,Carte,,,,,
-login_send_pwd,Send,Envoyer,,,,,
-login_title,Log in,Identification ,,,,,
-login_out,Log out,Quitter,,,,,
-login_cancel,Cancel,Annuler,,,,,
-login_subtitle,Please enter your email to receive a single usage secure password.. ,"Veuillez entrer votre adresse email pour recevoir un mot de passe sécurisé,  à usage unique.",,,,,
-login_insert_pwd,Insert the single usage password,Entrez le mot de passe à usage unique,,,,,
-login_role,Role,Role,,,,,
-login_country,Project or country name in which the role applies,Projet ou nom du pays dans lequel le rôle s'applique,,,,,
-login_email,Email,Email,,,,,
-old_add_view,Add a new view,Ajouter une vue,,,,,
-view_type_select,Type of the view,Type de la vue,,,,,
-view_show_abstract_languages,Show other languages abstract,Afficher le résumé dans les autres langues,,,,,
-view_show_title_languages,Show other languages titles,Afficher le titre dans les autres langues,,,,,
-view_add_overlap_layer,Add a mask,Ajouter un masque,,,,,
-view_new_text,Create a new View and add it to the list,Créer une vue et l'ajouter à la liste,,,,,
-view_new_created,View created,Vue créée,,,,,
-view_abstract,View abstract,Résumé de la vue,,,,,
-view_text,View text, Texte de la vue,,,,,
-view_search_input,Search view,Rechercher une vue,,,,,
-view_search_values,Search values,Rechercher des valeurs,,,,,
-view_target,Target group. Who can view this.,Groupe cible. Qui peut voir cette vue.,,,,,
-view_classes,Classes,Classes,,,,,
-view_title,View title,Titre de la vue,,,,,
-view_no_layer_found,No source layer found,Pas de couche source trouvée.,,,,,
-view_id,View identifier,Identifiant de la vue,,,,,
-view_download_layer,Download the source layer,Télécharger la couche source,,,,,
-view_num_overlap,Number of overlaps,Nombre de chevauchements,,,,,
-source_meta_data,Metadata for the source,Métadonnées de la source,,,,,
-view_delete_confirm,"Click on the confirm button to delete this view, its history and all translations.","Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.",,,,,
-source_summary_check,Show variable summary,Afficher le résumé de la variable,,,,,
-categorical,Categorical,Catégorielle,,,,,
-exponential,Continuous,Continue,,,,,
-interval,Interval,Intervalle,,,,,
-source_title,Source title,Titre de la source,,,,,
-source_select_variable,Source variable,Variable,,,,,
-source_sum_sample,Sample values,Echantillon de valeurs,,,,,
-source_sum_n_null,Number of missing or null values,Nombre de valeurs manquantes ou nulles,,,,,
-source_sum_n_distinct,Number of distinct values,Nombre de valeurs distinctes,,,,,
-source_sum_title,Variable summary,Résumé des valeurs,,,,,
-source_sum_geom_type,Type of the geometry,Type de géométrie,,,,,
-source_sum_variable_type,Type of the variable,Type de la variable,,,,,
-source_sum_n_row,Number of values,Nombre de valeurs  ,,,,,
-source_select_geometry,Source geometry type,Type de géométrie,,,,,
-source_select_layer_mask,Source layer mask,Couche source masque,,,,,
-source_select_layer,Source layer,Couche source,,,,,
-source_time_range,Time range,Etendue temporelle,,,,,
-source_raster_tile_size,Size of the tiles (pixels),Taille des tuiles (pixels),,,,,
-source_raster_tile_url,Url of tiles endpoint ,Url du serveur de tuiles,,,,,
-vt,Vector tiles,Tuiles vectorielles,,,,,
-wms,Web Map Service (wms),Web Map Service (wms),,,,,
-sm,Story,Récit,,,,,
-rt,Raster tiles,Tuiles raster,,,,,
-none,None,Aucun,,,,,
-layer,Layer,Couche,,,,,
-country,Country,Pays,,,,,
-create,Create,Créer,,,,,
-publish,Publish,Publier,,,,,
-view,View,Vue,,,,,
-schema_metadata,Meta data,Meta données,,,,,
-schema_key,Key,Clé,,,,,
-schema_item,Item,Objet,,,,,
-schema_value,Value,Valeur,,,,,
-schema_method,Method,Méthode,,,,,
-schema_description,Description,Description,,,,,
-schema_value,Value,Valeur,,,,,
-schema_label,Label,Etiquette,,,,,
-schema_sprite,Symbol,Symbole,,,,,
-schema_opacity,Opacity,Opacité,,,,,
-schema_color,Color,Couleur,,,,,
-schema_size,Size,Taille,,,,,
-schema_rules,Rules,Règles,,,,,
-schema_rule,Rule,Règle,,,,,
-schema_last_rule,Last rule,Dern. règle,,,,,
-schema_class,Class,Classe,,,,,
-schema_story_title,Story,Récit,,,,,
-schema_story_author,Author of the story,Auteur du récit,,,,,
-schema_story_org,Organisation name,Nom de l’organisation,,,,,
-schema_story_step_title,Title ,Titre,,,,,
-schema_story_step_content,Content,Contenu,,,,,
-schema_story_step ,Step,Étape,,,,,
-schema_story_steps_title,Steps of the story,Étapes du récit,,,,,
-schema_story_steps,Steps,Étapes,,,,,
-schema_story_text_pos,Text position,Position du texte,,,,,
-schema_story_map_pos,Position of the map,Position de la carte,,,,,
-schema_story_pos_get,Update using current map parameters,Mettre à jour avec les paramètres actuels de la carte,,,,,
-schema_story_slide,Slide,Slide,,,,,
-schema_story_slides,Slides,Slides,,,,,
-schema_story_slide_pos_z, Depth (z axis), Profondeur (axe z),,,,,
-schema_story_slide_layout, Content layout, Disposition du contenu,,,,,
-schema_story_slide_color, Color theme, Thème,,,,,
-schema_story_slide_config,Configuration,Configuration,,,,,
-schema_story_slide_speed,Speed ratio,Vitesse de défilement,,,,,
-schema_story_slide_color_bg,Background color,Couleur de l'arrière plan,,,,,
-schema_story_slide_opacity_bg,Background opacity,Opacité de l'arrière plan,,,,,
-schema_story_slide_color_fg,Text color,Couleur du texte,,,,,
-schema_story_meta,Metadata,Métadonées,,,,,
-save,Save,Sauvegarder,,,,,
-update_view_list,Update view list,Mise à jour de la liste des vues,,,,,
-noData,[ Missing value ],[ Donnée manquante ],,,,,
-noVariable,[ Missing value ],[ Donnée manquante ],,,,,
-noTitle,[ Title missing ],[ Titre manquant ],,,,,
-noAbstract,[ Abstract missing ],[ Résumé manquant ],,,,,
-noSelect,[ Empty selection ],[ Sélection vide ],,,,,
-noLayer,[ No source layer ],[ Pas de couche source ],,,,,
-noFilter,[ No filter ],[ Sans filtre ],,,,,
-noView,[ No view available ],[ Pas de vue disponible ],,,,,
-ext,Extractive,Extractif,,,,,
-dev,Development,Dévelopement,,,,,
-soc,Social,Social,,,,,
-pol,Politics,Politique,,,,,
-env,Environment,Environnement,,,,,
-nrg,Energy,Energie,,,,,
-oth,Other,Autre,,,,,
-str,Stress,Stress,,,,,
-inf,Infrastructure,Infrastructure,,,,,
-sat,Satellite imagery,Imagerie satellite,,,,,
-polygon,Polygon,Polygone,,,,,
-line,Line,Ligne,,,,,
-point,Point,Point,,,,,
-self,Myself,Moi même,,,,,
-public,Everyone,Tout le monde,,,,,
-user,Registered users,Utilisateurs enregistrés,,,,,
-publisher,Publishers,Editeurs,,,,,
-admin,Administrators,Administrateurs,,,,,
-superuser,Superusers,Super-utilisateurs,,,,,
-loading_img,"Image loading, please wait ...","Chargement de l'image, veuillez patienter ...",,,,,
-btn_tab_views,Views,Vues,,,,,
-btn_tab_tools,Toolbox,Boîte à outils,,,,,
-btn_tab_settings,Settings ,Préférences,,,,,
-btn_language,Language,Langue  ,,,,,
-btn_login,Login window,Fenêtre d'identification,,,,,
-btn_fullscreen,Display the app in fullscreen mode,Mode plein écran,,,,,
-btn_switchui,Toggle the color of the interface,Changer les couleurs de l'interface,,,,,
-btn_cancel,Cancel,Annuler,,,,,
-btn_close,Close,Fermer,,,,,
-btn_delete,Delete,Supprimer,,,,,
-btn_update,Update  ,Mettre à jour,,,,,
-btn_save,Save,Sauvegarder,,,,,
-btn_create,Create,Créer,,,,,
-btn_finish,Finish,Finir,,,,,
-btn_send,Send,Envoyer,,,,,
-btn_confirm,Confirm,Confirmer,,,,,
-btn_zoom_in,Zoom in,Zoomer,,,,,
-btn_country,Select country,Sélectionnez le pays,,,,,
-btn_zoom_out,Zoom out,Dézoomer,,,,,
-btn_print,Print current,Imprimer,,,,,
-btn_theme_sat,Switch theme : aerial,Changer le thème : imagerie aérienne,,,,,
-btn_theme_black,Switch theme : dark,Changer le thème : sombre,,,,,
-btn_theme_orig,Switch theme : clear,Changer le thème : clair,,,,,
-btn_reset,Reset,Réinitialiser,,,,,
-btn_add_view,Add view,Ajouter une vue,,,,,
-btn_edit_sources,Edit sources,Edit sources,,,,,
-btn_add_source,Add a source layer,Ajouter une couche source,,,,,
-btn_opt_start_story,Read this story,Lire ce récit,,,,,
-btn_opt_upload_geojson,Upload this GeoJSON,Téléverser ce GeoJSON,,,,,
-btn_opt_delete_geojson,Delete this GeoJSON,Supprimer ce GeoJSON,,,,,
-btn_opt_zoom_visible,Zoom to disiplayed features,Zoomer sur les éléments affichés,,,,,
-btn_opt_zoom_all,Zoom to all features,Zoomer sur tous les éléments,,,,,
-btn_opt_search,Search and filter,Rechercher et filtrer,,,,,
-btn_opt_reset,Reset the view,Réinitialiser la vue,,,,,
-btn_opt_meta,Display metadata,Afficher les métadonnées ,,,,,
-btn_opt_download,Download the data,Télécharger les données,,,,,
-btn_opt_screenshot,Take a screenshoot,Prendre une capture d'écran,,,,,
-btn_opt_delete,Remove this view,Supprimer cette vue,,,,,
-btn_opt_edit_config,Configure this view,Configurer la vue,,,,,
-btn_opt_edit_style,Set the style of this view,Configurer le style de cette vue,,,,,
-btn_sort_desc,Description,Description,,,,,
-btn_sort_title,Title,Titre,,,,,
-btn_sort_date,Date,Date,,,,,
-btn_get_area_visible,Area of visible features,Superficie des objets visibles,,,,,
-fold_views_class,Filter views by classes,Filtrer les vues par classe,,,,,
-fold_views_sort,Sort views,Classer les vues,,,,,
-fold_views_filter,Filter options,Filtres,,,,,
-fold_view_tools,Tools,Outils,,,,,
-fold_view_legend,Legend,Légende,,,,,
-error_no_layer,No source layer set,Pas de couche source attribuée,,,,,
-error_no_source,No source layer found,Pas de couche source trouvée,,,,,
-error_view_title_exists,This title already exists,Ce titre est déjà pris,,,,,
-error_view_title_short,The title is too short,Ce titre est trop court,,,,,
-left,Left,Gauche,,,,,
-right,Right,Droite,,,,,
-center,Center,Centre,,,,,
-top,Top,En haut,,,,,
-bottom,Bottom,En bas,,,,,
-more,More,Plus,,,,,
+"id","en","fr","es","ru","zh","de","bn","fa"
+"admin","Administrator","Administrateur","","","","","","مدیران"
+"bottom","Bottom","En bas","","","","","","پایین"
+"btn_add_source","Add a source layer","Ajouter une couche source","","","","","","افزودن لایه اصلی"
+"btn_add_view","Add view","Ajouter une vue","","","","","","افزودن نمایه"
+"btn_cancel","Cancel","Annuler","","","","","","لغو "
+"btn_close","Close","Fermer","","","","","","بستن"
+"btn_confirm","Confirm","Confirmer","","","","","","تایید"
+"btn_country","Select country","Sélectionnez le pays","","","","","","انتخاب کشور"
+"btn_create","Create","Créer","","","","","","ایجاد"
+"btn_delete","Delete","Supprimer","","","","","","حذف"
+"btn_edit_source","Edit source","Editer une source","","","","","","تنظیم  منابع"
+"btn_finish","Finish","Finir","","","","","","تمام"
+"btn_upload","Upload","Téléverser","","","","","","آپلود"
+"btn_fullscreen","Display the app in fullscreen mode","Mode plein écran","","","","","","نمایش برنامه بشکل صفحه کامل"
+"btn_get_area_visible","Area of visible features","Superficie des objets visibles","","","","","","ساحه پدیده های قابل دید"
+"btn_language","Language","Langue  ","","","","","","زبان"
+"btn_login","Login window","Fenêtre d'identification","","","","","","صفحه ورودی "
+"btn_opt_transparency","Transparency","Transparence","","","","","",""
+"btn_opt_numeric","Filter by numeric value","Filtrer par valeur numerique","","","","","",""
+"btn_opt_date","Filter date","Filtrer par date","","","","","",""
+"btn_opt_delete","Remove this view","Supprimer cette vue","","","","","","حذف این نمایه"
+"btn_opt_share","Share this view","Partager cette vue","","","","","",""
+"btn_opt_delete_geojson","Delete","Supprimer","","","","","","حذف"
+"btn_opt_download","Download the data","Télécharger les données","","","","","","دانلود معلومات"
+"btn_opt_edit_config","Configure this view","Configurer la vue","","","","","","تنظیم این نمایه"
+"btn_opt_edit_style","Set the style of this view","Configurer le style de cette vue","","","","","","تنظیم ستایل این نمایه"
+"btn_opt_meta","Display metadata","Afficher les métadonnées ","","","","","","نمایش ابرداده"
+"btn_opt_reset","Reset the view","Réinitialiser la vue","","","","","","تنظیم دوباره نمایش"
+"btn_opt_screenshot","Take a screenshoot","Prendre une capture d'écran","","","","","","گرفتن تصویر"
+"btn_opt_search","Search and filter","Rechercher et filtrer","","","","","","جستجو و فلتر"
+"btn_opt_start_story","Read this story","Lire ce récit","","","","","","این تاریخ را بخوانید"
+"btn_opt_zoom_all","Zoom to all features","Zoomer sur tous les éléments","","","","","","بزرگنمایی به همه پدیده ها"
+"btn_opt_zoom_visible","Zoom to disiplayed features","Zoomer sur les éléments affichés","","","","","","بزرگنمایی به اندازه نمایش پدیده ها"
+"btn_print","Print current","Imprimer","","","","","","پرنت صفحه فعلی"
+"btn_reset","Reset","Réinitialiser","","","","","","تنظیم دوباره"
+"btn_save","Save","Sauvegarder","","","","","","ذخیره"
+"btn_send","Send","Envoyer","","","","","","ارسال"
+"btn_sort_date","Date","Date","","","","","","تاریخ"
+"btn_sort_desc","Description","Description","","","","","","توضیح"
+"btn_sort_title","Title","Titre","","","","","","عنوان"
+"btn_switchui","Toggle the color of the interface","Changer les couleurs de l'interface","","","","","","تغییر رنگ صفحه رابط"
+"btn_tab_settings","Settings ","Préférences","","","","","","تنظیمات "
+"btn_tab_tools","Toolbox","Boîte à outils","","","","","","جبعه ابزار"
+"btn_tab_views","Views","Vues","","","","","","نمایه ها"
+"btn_wms_creator","WMS","WMS","","","","","",""
+"btn_theme_black","Switch theme : dark","Changer le thème : sombre","","","","","","تاریک"
+"btn_theme_orig","Switch theme : clear","Changer le thème : clair","","","","","","صاف"
+"btn_theme_sat","Switch theme : aerial","Changer le thème : imagerie aérienne","","","","","","هوایی"
+"btn_update","Update  ","Mettre à jour","","","","","","تجدید"
+"btn_zoom_in","Zoom in","Zoomer","","","","","","بزرگنمایی"
+"btn_zoom_out","Zoom out","Dézoomer","","","","","","کوچک نمایی"
+"categorical","Categorical","Catégorielle","","","","","","طبقه ایی"
+"center","Center","Centre","","","","","","وسط"
+"country","Country","Pays","","","","","","کشور"
+"create","Create","Créer","","","","","","ایجاد"
+"dev","Development","Dévelopement","","","","","","توسعه"
+"env","Environment","Environnement","","","","","","محیط"
+"error_no_layer","No source layer set","Pas de couche source attribuée","","","","","","لایه منبع ایجاد نشد"
+"error_no_source","No source layer found","Pas de couche source trouvée","","","","","","منبع لایه مرتبط پیدا نشد"
+"error_view_title_exists","This title already exists","Ce titre est déjà pris","","","","",""," عنوان از قبل موجود میباشد"
+"error_view_title_short","The title is too short","Ce titre est trop court","","","","","","عنوان بسیار کوتاه است"
+"exponential","Continuous","Continue","","","","","","پیوسته"
+"ext","Extractive","Extractif","","","","","","مواد استخراجی"
+"fold_view_legend","Legend","Légende","","","","","","علایم"
+"fold_view_tools","Tools","Outils","","","","","","ابزار"
+"fold_views_class","Filter views by classes","Filtrer les vues par classe","","","","","","فلتر نمایه ها به اساس صنف ها"
+"fold_views_filter","Filter options","Filtres","","","","","","گزینه های فلتر"
+"fold_views_sort","Sort views","Classer les vues","","","","","","مرتب سازی نمایه ها"
+"inf","Infrastructure","Infrastructure","","","","","","زیر بنا"
+"interval","Interval","Intervalle","","","","","","فاصله"
+"layer","Layer","Couche","","","","","","لایه"
+"left","Left","Gauche","","","","","","چپ"
+"line","Line","Ligne","","","","","","خط"
+"loading_img","Image loading, please wait ...","Chargement de l'image, veuillez patienter ...","","","","","","تصویر در حال اجرا، لطفا منتظر باشید..."
+"login_cancel","Cancel","Annuler","","","","","","لغو"
+"login_country","Project or country name in which the role applies","Projet ou nom du pays dans lequel le rôle s'applique","","","","","","نام پروژه یا کشور که در آن نقش عملی میشود"
+"login_email","Email","Email","","","","","","آدرس الکترونیکی"
+"login_insert_pwd","Insert the single usage password","Entrez le mot de passe à usage unique","","","","","","رمز عبور را وارد نمایید"
+"login_out","Log out","Quitter","","","","","","خروج"
+"login_role","Role","Role","","","","","","نقش"
+"login_send_pwd","Send","Envoyer","","","","","","ارسال"
+"login_subtitle","Please enter your email to receive a single usage secure password.. ","Veuillez entrer votre adresse email pour recevoir un mot de passe sécurisé,  à usage unique.","","","","","","لطفا آدرس الکترونیکی خود را جهت دریافت رمز عبور وارد نمایید"
+"login_title","Log in","Identification ","","","","","","ورود"
+"more","More","Plus","","","","","","بیشتر"
+"noAbstract","[ Abstract missing ]","[ Résumé manquant ]","","","","","","فاقد خلاصه"
+"noData","[ Missing value ]","[ Donnée manquante ]","","","","","","فاقد قیمت"
+"noFilter","[ No filter ]","[ Sans filtre ]","","","","","","عدم موجودیت فلتر"
+"noLayer","[ No source layer ]","[ Pas de couche source ]","","","","","","فاقد لایه منبع"
+"none","None","Aucun","","","","","","هیچکدام"
+"noSelect","[ Empty selection ]","[ Sélection vide ]","","","","","","فاقد انتخاب "
+"noTitle","[ Title missing ]","[ Titre manquant ]","","","","","","فاقد عنوان"
+"noVariable","[ Missing value ]","[ Donnée manquante ]","","","","","","فاقد قیمت"
+"noView","[ No view available ]","[ Pas de vue disponible ]","","","","","","نمایش در دسترس نیست "
+"nrg","Energy","Energie","","","","","","انرژی"
+"old_add_view","Add a new view","Ajouter une vue","","","","","","افزودن نمای جدید"
+"oth","Other","Autre","","","","","","سایر"
+"point","Point","Point","","","","","","نقطه"
+"pol","Politics","Politique","","","","","","سیاست"
+"polygon","Polygon","Polygone","","","","","","چند ضلعی"
+"public","Everyone","Tout le monde","","","","","","همه"
+"publish","Publish","Publier","","","","","","نشر"
+"publisher","Publisher","Editeur","","","","","","ناشران"
+"right","Right","Droite","","","","","","راست"
+"rt","Raster tiles","Tuiles raster","","","","","","تایل راستری"
+"sat","Satellite imagery","Imagerie satellite","","","","","","تصویر ستلایتی"
+"save","Save","Sauvegarder","","","","","","ذخیره"
+"schema_class","Class","Classe","","","","","","صنف"
+"schema_color","Color","Couleur","","","","","","رنگ "
+"schema_description","Description","Description","","","","","","توضیحات"
+"schema_item","Item","Objet","","","","","","بخش"
+"schema_key","Key","Clé","","","","","","کلید"
+"schema_label","Label","Etiquette","","","","","","لیبل"
+"schema_last_rule","Last rule","Dern. règle","","","","","","قانون آخر"
+"schema_metadata","Meta data","Meta données","","","","","","ابرداده"
+"schema_method","Method","Méthode","","","","","","روش"
+"schema_opacity","Opacity","Opacité","","","","","","مکدریت"
+"schema_rule","Rule","Règle","","","","","","قانون"
+"schema_rules","Rules","Règles","","","","","","قوانین"
+"schema_size","Size","Taille","","","","","","اندازه"
+"schema_sprite","Symbol","Symbole","","","","","","سمبول"
+"schema_story_author","Author of the story","Auteur du récit","","","","","","مولف داستان"
+"schema_story_map_pos","Position of the map","Position de la carte","","","","","","موقعیت نقشه"
+"schema_story_meta","Metadata","Métadonées","","","","","","ابرداده"
+"schema_story_org","Organisation name","Nom de l’organisation","","","","","","نام سازمان"
+"schema_story_pos_get","Update using current map parameters","Mettre à jour avec les paramètres actuels de la carte","","","","","","تجدید با استفاده از پارامتر های موجود"
+"schema_story_slide","Slide","Slide","","","","","","رانش"
+"schema_story_slide_color"," Color theme"," Thème","","","","","","رنگ موضوع"
+"schema_story_slide_color_bg","Background color","Couleur de l'arrière plan","","","","","","رنگ پس زمینه"
+"schema_story_slide_color_fg","Text color","Couleur du texte","","","","","","رنگ متن"
+"schema_story_slide_config","Configuration","Configuration","","","","","","عیار سازی"
+"schema_story_slide_layout"," Content layout"," Disposition du contenu","","","","","","طراحی محتوا"
+"schema_story_slide_opacity_bg","Background opacity","Opacité de l'arrière plan","","","","","","مکدریت پس زمینه"
+"schema_story_slide_pos_z"," Depth (z axis)"," Profondeur (axe z)","","","","","","عمق (محور z)"
+"schema_story_slide_speed","Speed ratio","Vitesse de défilement","","","","","","تناسب سرعت"
+"schema_story_slides","Slides","Slides","","","","","","رانش ها"
+"schema_story_step ","Step","Étape","","","","","","مرحله"
+"schema_story_step_content","Content","Contenu","","","","","","محتویات"
+"schema_story_step_title","Title ","Titre","","","","","","عنوان"
+"schema_story_steps","Steps","Étapes","","","","","","مراحل"
+"schema_story_steps_title","Steps of the story","Étapes du récit","","","","","","مرحله از تاریخ"
+"schema_story_text_pos","Text position","Position du texte","","","","","","موقعیت متن"
+"schema_story_title","Story","Récit","","","","","","داستان"
+"schema_value","Value","Valeur","","","","","","قیمت"
+"schema_value","Value","Valeur","","","","","","قیمت"
+"schema_value","Value","Valeur","","","","","","قیمت"
+"schema_value","Value","Valeur","","","","","","قیمت"
+"self","Myself","Moi même","","","","","","بنده"
+"sm","Story","Récit","","","","","","تاریخچه"
+"soc","Social","Social","","","","","","اجتماعی"
+"source_meta_data","Metadata for the source","Métadonnées de la source","","","","","","عناوین برای منابع"
+"source_raster_tile_size","Size of the tiles (pixels)","Taille des tuiles (pixels)","","","","","","اندازه پکسل ها"
+"source_raster_tile_url","Url of tiles endpoint ","Url du serveur de tuiles","","","","","","آدرس پکسل های آخری"
+"source_select_geometry","Source geometry type","Type de géométrie","","","","","","انواع منبع هندسی"
+"source_select_layer","Source layer","Couche source","","","","","","لایه اصلی"
+"source_select_layer_mask","Source layer mask","Couche source masque","","","","","","منبع لایه ماسک"
+"source_select_variable","Source variable","Variable","","","","","","متحول اصلی"
+"source_sum_geom_type","Type of the geometry","Type de géométrie","","","","","","انواع هندسی"
+"source_sum_n_distinct","Number of distinct values","Nombre de valeurs distinctes","","","","","","تعداد  قیمت های متمایز"
+"source_sum_n_null","Number of missing or null values","Nombre de valeurs manquantes ou nulles","","","","","","تعداد  قیمت های از دست رفته یا خالی"
+"source_sum_n_row","Number of values","Nombre de valeurs  ","","","","","","تعداد قیمت ها"
+"source_sum_sample","Sample values","Echantillon de valeurs","","","","","","مقادیر نمونه"
+"source_sum_title","Variable summary","Résumé des valeurs","","","","","","خلاصه متحول "
+"source_sum_variable_type","Type of the variable","Type de la variable","","","","","","انواع متحول"
+"source_summary_check","Show variable summary","Afficher le résumé de la variable","","","","","","نمایش خلاصه متحول"
+"source_time_range","Time range","Etendue temporelle","","","","","","محدوده زمانی"
+"source_title","Source title","Titre de la source","","","","","","عنوان اصلی"
+"str","Stress","Stress","","","","","","فشار"
+"superuser","Superuser","Super-utilisateur","","","","","","ابر کاربران"
+"title_app","Map-x","Map-x","","","","","","MAP-X"
+"title_settings","Settings","Préférences","Preferencias","","","","","تنظیمات"
+"title_tools","Tools","Outils","Utilidades","","","","","ابزار"
+"title_tools_map","Map","Carte","","","","","","نقشه"
+"title_tools_qgis","Qgis connection info","Information de connection depuis qgis","","","","","","معلومات اتصال با Qgis"
+"title_tools_sources","Sources","Sources","","","","","","منابع"
+"title_tools_views","Views","Vues","","","","","","نمایش"
+"title_views","Views","Vues","Vistas","","","","","نمایش"
+"top","Top","En haut","","","","","","بالا"
+"ui_country","Select country","Sélectionnez le pays","","","","","","انتخاب کشور"
+"ui_language","Language of the interface","Langue de l'interface","Idioma de la interfaz.","Язык интерфейса.","界面语言。","Sprache für das Interface.","ইন্টারফেস ভাষা","زبان رابط"
+"update_view_list","Update view list","Mise à jour de la liste des vues","","","","","","تجدید لست نمایش"
+"user","Registered user","Utilisateur enregistré","","","","","","کاربران ثبت شده"
+"view","View","Vue","","","","","","نمایش"
+"view_abstract","View abstract","Résumé de la vue","","","","","","نمایش خلاصه"
+"view_add_overlap_layer","Add a mask","Ajouter un masque","","","","","","افزودن نقاب"
+"view_country","Country of the view","Pays de la vue","","","","","",""
+"view_countries","Other countries where the view is visible","Autres pays où la vue est visible","","","","","",""
+"view_classes","Classes","Classes","","","","","","طبقه ها"
+"view_delete_confirm","Click on the confirm button to delete this view, its history and all translations.","Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.","","","","","","بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد."
+"view_download_layer","Download the source layer","Télécharger la couche source","","","","","","دانلود لایه منبع "
+"view_id","View identifier","Identifiant de la vue","","","","","","نمایش مشخص کننده"
+"view_new_created","View created","Vue créée","","","","","","نمایه ایجاد شد"
+"view_new_text","Create a new View","Créer une vue","","","","","","ایجاد نمای جدید و افزودن آن به لست "
+"view_no_layer_found","No source layer found","Pas de couche source trouvée.","","","","",""," لایه منبع یافت نشد"
+"view_num_overlap","Number of overlaps","Nombre de chevauchements","","","","","","تعداد لایه های روی هم قرار گرفته"
+"view_search_input","Search view","Rechercher une vue","","","","",""," جستجوی نمایه"
+"view_search_values","Search values","Rechercher des valeurs","","","","",""," جستجوی ارقام"
+"view_show_abstract_languages","Show other languages abstract","Afficher le résumé dans les autres langues","","","","","","نمایش خلاصه به سایر زبانها"
+"view_show_title_languages","Show other languages titles","Afficher le titre dans les autres langues","","","","","","نمایش عناوین به سایر زبانها"
+"view_target","Target group. Who can view this.","Groupe cible. Qui peut voir cette vue.","","","","","","گروه مورد نظر، کی دیده میتواند"
+"view_text","View text"," Texte de la vue","","","","","","نمایش متن "
+"view_title","View title","Titre de la vue","","","","","","نمایش عنوان"
+"view_edit_current","Edit view","Edition de la vue","","","","","",""
+"view_type_select","Type of the view","Type de la vue","","","","","","نوع نما"
+"vt","Vector tiles","Tuiles vectorielles","","","","","","تایل ویکتوری"
+"wms","Web Map Service (wms)","Web Map Service (wms)","","","","","","خدمات آنلاین نقشه (WMS)"

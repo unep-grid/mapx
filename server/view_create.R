@@ -28,29 +28,29 @@ observeEvent(input$btnAddView,{
       )
     )
 
-  out <- mxPanel(
-    headIcon="plus",
-    subtitle = d("view_new_text",language),
-    listActionButton = buttons,
-    addCloseButton=TRUE,
-    closeButtonText=d("btn_cancel",language),
-    html = tags$div(
-      selectInput(
+  mxModal(
+    id = "createNewView",
+    title = d("view_new_text",language),
+    buttons = buttons,
+    textCloseButton = d("btn_cancel",language),
+    content = tags$div(
+      selectizeInput(
         inputId = "selectViewType",
         label = d("view_type_select",language),
-        choices = typeChoices
+        choices = typeChoices,
+        options = list(
+          dropdownParent="body"
+          )
         ),
       textInput(
         inputId="txtViewTitle",
         label=d("view_title",language),
         value = idView
         ),
-      tags$span(d("view_id",language),":",tags$b(idView)),
       uiOutput("uiTxtValidation")
       )
     )
 
-  output$panelModal <- renderUI(out)
 
 })
 
@@ -100,8 +100,7 @@ observeEvent(input$txtViewTitle,{
 observeEvent(input$btnAddViewConfirm,{
 
   if(!reactData$viewAddHasError){
-
-    country <- reactData$country
+     country <- reactData$country
     userData <- reactUser$data
     title  <- reactData$viewAddTitle
     idView <- reactData$viewAddId
@@ -156,15 +155,16 @@ observeEvent(input$btnAddViewConfirm,{
 
     reactData$updateViewListFetchOnly <- runif(1)
 
-  out <- mxPanel(
-    headIcon="check",
-    subtitle = d("view_new_created",language),
-    addCloseButton=TRUE,
-    closeButtonText=d("btn_close",language),
-    html = tags$span(d("view_new_created",language))
-    )
+   mxModal(
+      id="createNewView",
+      close=TRUE
+      )
 
-  output$panelModal <- renderUI(out)
+   mxModal(
+      id="createNewViewSuccess",
+      title=d("view_new_created",language),
+      content=tags$b(d("view_new_created",language))
+      )
 
   }
 })

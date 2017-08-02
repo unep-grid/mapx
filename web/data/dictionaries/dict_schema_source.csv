@@ -1,153 +1,153 @@
-id,en,fr,es,ru,zh,de,bn
-schemaTitle,Map-x metadata,Métadonnées map-x,,,,,
-schemaDesc,Metadata editor for map-x sources.,Editeur de métadonnées pour les sources de map-x.,,,,,
-textualTitle,Textual,Texte,,,,,
-textualDesc,"Textual description of the data using title, abstract and tags","Description de la donnée : titre, résumé et tags",,,,,
-textualDescTitle,Title,Titre,,,,,
-textualDescAbstract,Abstract,Résumé,,,,,
-originHomepageTitle,Homepage,Page d'accueil,,,,,
-originHomepageItemTitle,Homepage (URL),Page d'accueil (URL),,,,,
-originHomepageDesc,Homepage for the data,Page d'accueil de la donnée,,,,,
-textualKeywordTitle,Keywords,Mots clés,,,,,
-textualKeywordDesc,Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.,Mots clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique.,,,,,
-textualKeywordsTitle,Keywords list,Liste de mots clés,,,,,
-textualKeywordItemTitle,Keyword,Mot clé,,,,,
-temporalTitle,Temporal,Temporel,,,,,
-temporalDesc,"Description of the dataset using temporal references: periodicity, initial release, update and range","Description de la donnée au moyen de références temporelles : périodicité, date de publication, etc",,,,,
-temporalIssuanceTitle,Issuance,Emission,,,,,
-temporalIssuanceDesc,Description if the data issuance,Information sur l'émission de la donnée,,,,,
-temporalPeriodicity,Periodicity,Périodicité,,,,,
-temporalPeriodicityDesc,Frenquency with wich data is published or updated,Fréquence de publication ou de mise à jour de la donnée,,,,,
-temporalReleaseTitle,Release date,Date d'émission,,,,,
-temporalReleaseDesc,Date of formal issuance,Date d'émission officielle,,,,,
-temporalUpdateTitle,Last update,Dernière mise à jour,,,,,
-temporalUpdateDesc,Date of the latest update,Date de dernière mise à jour de la donnée,,,,,
-temporalRangeTitle,Range,Etendue,,,,,
-temporalRangeDesc,The temporal range of the data,L'étendue temporelle de la donnée,,,,,
-temporalRangeTimeless,There is no time range for this data,Il n'y a pas d'étendue temporelle pour la donnée,,,,,
-temporalRangeStart,Start,Début,,,,,
-temporalRangeEnd,End,Fin,,,,,
-spatialTitle,Spatial,Spatial,,,,,
-spatialDesc,"Description of the data using spatial reference: bounding box, and spatial reference system (SRS)",Description spatiale de la donnée avec délimitation spatiale et système de coordonnées (SRS),,,,,
-spatialSrsTitle,Spatial reference system,Système de coordonnées,,,,,
-spatialSrsDesc,Description of the spatial reference system,Description du système de coordonnées,,,,,
-spatialSrsCode,Code of the SRS,Code du système de coordonnées,,,,,
-spatialSrsDescUrl,URL to the SRS code definition,URL vers la définition du code du système de coordonnées,,,,,
-spatialBbxTitle,Bounding box,Délimitation spatiale,,,,,
-spatialBbxDesc,Spatial bounding box of the data using latitude and longitude,Délimitation spatiale en latitude et longitude,,,,,
-spatialBbxLngMin,Min. longitude,Longitude min.,,,,,
-spatialBbxLngMax,Max. longitude,Longitude max.,,,,,
-spatialBbxLatMin,Min. latitude,Latitude min.,,,,,
-spatialBbxLatMax,Max. latitude,Latitude max.,,,,,
-contactTitle,Contacts,Contacts,,,,,
-contactDesc,Information about people or organisation related to this data,Information sur les personnes ou organisations liées à la donnée,,,,,
-contactListTitle,List of contacts,Liste des contacts,,,,,
-contactItemTitle,Contact,Contact,,,,,
-contactFunction,Function,Fonction,,,,,
-contactFunctionDesc,"Name of the contact function, e.g. Administrator, Publisher","Nom de la fonction du contact : par ex. Administrateur, Editeur",,,,,
-contactName,Contact name,Nom du contact,,,,,
-contactAddress,Contact address,Addresse du contact,,,,,
-contactEmail,Contact email,Email du contact,,,,,
-targetTitle,Access,Accès,,,,,
-targetDesc,Modality and restriction of access to the data,Modalité et restriction d'accès à la donnée,,,,,
-targetRolesTitle,Roles,Rôles,,,,,
-targetRolesDesc,Roles allowed to read,Rôles autorisés à lire,,,,,
-targetRoleItemTitle,Role,Rôle,,,,,
-targetRolesListTitle,List of roles,Liste des rôles,,,,,
-originTitle,Source,Origine,,,,,
-originDesc,Origin of the data and how to retrieve it,Origine de la donnée et comment la récupérer,,,,,
-originSourcesTitle,Sources,Sources,,,,,
-originSourcesDesc,Method to retrieve the data,Méthode de récupération de la donnée,,,,,
-originSourcesList,List of sources,Liste des sources,,,,,
-originSourceTitle,Source,Source,,,,,
-originSourceUrlTitle,URL,URL,,,,,
-originSourceIsFullRequestTitle,The url contain a request to retrieve the data automatically,L'URL contient une requête pour récupérer automatiquement la donnée,,,,,
-attributesTitle,Attributes,Attributs,,,,,
-attributesDesc,Description of the attributes contained in the data,Description des attributs de la donnée,,,,,
-attributesListTitle,Attributes list,Liste d'attributs,,,,,
-attributeItemTitle,Attribute,Attribut,,,,,
-attributeNameTitle,Attribute name,Nom de l'attribut,,,,,
-attributeDescTitle,Description,Description,,,,,
-langTitle,Language,Langue,,,,,
-langDesc,Language(s) used in content,Langue(s) utilisée(s) dans le contenu,,,,,
-langListTitle,List of languages,Liste des langues,,,,,
-langListDesc,Two letters code of languages,Code de deux lettres minuscules,,,,,
-langItemTitle,Language,Langue,,,,,
-licenseTitle,Licensing,Licence,,,,,
-licenseDesc,"If any, description of the data licenses","Si applicable, description des licences de la donnée",,,,,
-licenseListTitle,List of licences,Liste des licences,,,,,
-licenseListDesc,Name and/or description of the licence,Nom et/ou description de la licence,,,,,
-licenseItemTitle,License,Licence,,,,,
-licenseName,Name,Nom,,,,,
-licenseText,Text,Texte,,,,,
-additionalDocTitle,Annexes,Annexes,,,,,
-additionalDocDesc,"If any, list of additional documents","Si applicable, liste des documents additionnels",,,,,
-additionalDocItemsTitle,List of annexes,Liste des annexes,,,,,
-additionalDocItemsDesc,Related documents such as technical information about a dataset,"Documents liés, par example documentation technique, article scientifique ou autre",,,,,
-additionalDocItemTitle,Document,Document,,,,,
-additionalDocItemUrl,URL to the document,URL pointant vers le document,,,,,
-dataIntegrityTitle,Integrity,Intégrité,,,,,
-dataIntegrityDesc,Evaluation of the data integrity,Evaluation de l'intégrité des données,,,,,
-di_1_1,Is the data documented?,La donnée est-elle documentée?,,,,,
-di_1_1_desc,"Does the data provider have the capacity to document the data and provide basic metadata (e.g. name, coordinate system, year, update frequency, description, and methodology)? ","Le fournisseur de la donnée a-t'il  la capacité de documenter la donnée et de fournir un jeu de métadonnées basique (par ex. système de coordonnées, année, fréquence de mise à jour, description, méthodologie sous-jacente) ?",,,,,
-di_1_2,Does the data provider have the relevant mandate?,Le fournisseur de la donnée fait-il autorité ?,,,,,
-di_1_2_desc,Does the data provider have a mandate or legal requirement to collect the data?,Le fournisseur de la donnée a-t'il un mandat officiel pour collecter la donnée ?,,,,,
-di_1_3,Is the data subject to internal quality control?,La donnée fait-elle l'objet d'un contrôle interne de qualité ?,,,,,
-di_1_3_desc,Has the data been subject to data quality assurance and control processes? ,La donnée a-t'elle fait l'objet de processus de contrôle et d'assurance qualité ?,,,,,
-di_1_4,Is the data subject to external quality control?,La donnée fait-elle l'objet d'un contrôle externe de qualité ?,,,,,
-di_1_4_desc,Are the data sets subject to external auditing or peer review processes?  ,Le jeu de données est-il assujetti à des processus d'audit externe ou d'examen par les pairs?,,,,,
-di_2_1,Is the data machine-readable?,La donnée est-elle lisible par la machine ?,,,,,
-di_2_1_desc,"Data is machine-readable if it is in a format that can be easily structured and exploited by a computer. Good examples of machine-readable files are SQL, JSON, XML, DBF and to a lesser extent Excel","Une donnée est 'lisible par machine' quand elle est dans un format qui peut facilement être structuré et exploité par un ordinateur. Des exemple intéressants de fichiers ‘lisibles par machine’ sont SQL, JSON, XML, DBF et dans une moindre mesure Excel",,,,,
-di_2_2,Is the data available online?,La donnée est-elle disponible en ligne ?,,,,,
-di_2_2_desc,This question addresses whether the data is available online from an official source. This does not mean that the data is necessarily updated or maintained,Cette question porte sur la disponibilité de la donnée à partir d'une source en ligne. Cela ne signifie pas que la donnée est maintenue,,,,,
-di_2_3,Is the data available in a non-fragmented state?,La donnée est-elle disponible dans un état non fragmenté ?,,,,,
-di_2_3_desc,"Data is available in bulk if the whole dataset can be downloaded or accessed easily. Conversely it is considered non-bulk if the citizens are limited to just parts of the dataset (e.g., if restricted to querying a web form and retrieving a few results at a time)","La donnée est disponible sous forme non fragmentée si l'ensemble du jeu de données peut être téléchargé ou est facilement accessible. Inversement, elle est considérée comme fragmentée si les citoyens sont limités à l'obtention d'une partie du jeu de données (p. ex., si limité à l'interrogation d'un formulaire Web et à la récupération de quelques résultats à la fois à partir d'une très grande base de données)",,,,,
-di_2_4,Does the data comply with OGC standards? ,La donnée est-elle conforme avec les standards de l'OGC ?,,,,,
-di_2_4_desc,"Is the data compliant with applicable Open Geospatial Consortium standards, e.g. Web Map Service (WMS)?","La donnée est-elle conforme avec les standards de l'Open Geospatial Consortium, par ex. le Web Map Service (WMS) ?",,,,,
-di_3_1,Is the data publicly available?,La donnée est-elle disponible publiquement?,,,,,
-di_3_1_desc,‘Publicly available’ means that the data can be accessed by the public in some form either from websites or physical documents (even if the data is available for purchase),‘Public’ signifie que le public peut accéder à la donnée depuis un site web ou sur support physique (même si la donnée est payante),,,,,
-di_3_2,Is the data accessible to the public without discrimination of users?,La donnée est-elle accessible au public sans discrimination des utiisateurs ?,,,,,
-di_3_2_desc,Can any user anonymously download the data or is registration required?,Est-ce que n'importe quel utilisateur peut télécharger la donnée de manière anonyme ou un enregistrement est-il nécessaire ?,,,,,
-di_3_3,Is the data available free of charge?,La donnée est-elle disponible gratuitement ?,,,,,
-di_3_3_desc,"Compliance with GEOSS data sharing principle #2: ""where international instruments, national policies or legislation preclude the sharing of data as Open Data, data should be made available with minimal restrictions on use and at no more than the cost of reproduction and distribution;""","Conformité avec le deuxième principe de partage de la donnée de GEOSS : ""lorsque les instruments internationaux appropriés et les politiques et législations nationales empêchent le partage de la donnée de manière ouverte, les données, métadonnées et produits seront rendus disponibles au plus vite et au coût minimal, c'est-à-dire pas plus chers que leur coût de reproduction et de distribution;""",,,,,
-di_3_4,Is there an open license for the data?,La donnée possède t'elle une license ouverte ?,,,,,
-di_3_4_desc,"This question addresses whether the dataset is openly licensed. It needs to state the terms of use or license that allow anyone to freely use, reuse or redistribute the data (subject to attribution and share alike requirements)","Cette question porte sur le fait que la donnée soit soumise à licence ouverte. Il convient de préciser les conditions d'utilisation qui permettent à quiconque d'utiliser librement, réutiliser ou redistribuer la donnée (sujet tout au plus à citation ou au partage à l'identique)",,,,,
-di_4_1,Does the data provider have the technical capacity to manage and update the layer?,Le fournisseur de la donnée a-t'il la capacité de gérer et de mettre à jour la donnée?,,,,,
-di_4_1_desc,"The data provider is able to maintain, update and publish it on a regular basis ","Le fournisseur de la donnée a la capacité de maintenir, de mettre à jour et de publier la couche de manière régulière (pas nécessairement en WMS)",,,,,
-di_4_2,Does the data provider have a long-term mandate and financial means?,Le fournisseur de la donnée a-t'il un mandat à long terme et des moyens financiers pour le mener à bien ?,,,,,
-di_4_2_desc,Does the data provider have a long-term mandate and related resources to ensure continuity in data collection and publication? ,Le fournisseur de la donnée a-t'il un mandat à long terme et les ressources nécessaires pour garantir la continuité de la collecte et la publication de la donnée ?,,,,,
-di_4_3,Can the data layer be dynamically streamed and shared using an API,La couche peut-elle être diffusée dynamiquement et partagée en utilisant une API ?,,,,,
-di_4_3_desc,Is the data interoperable with MAP-X to enable dynamic streaming/automatic updates? ,La donnée est-elle desservie par la plateforme en ligne MAP-X de manière dynamique afin de refléter les mises à jour côté fournisseur de la donnée ?,,,,,
-di_4_4,Does the data support measuring of SDGs?,La donnée supporte-t'elle la mesure des ODD ? ,,,,,
-di_4_4_desc,Can the dataset be aligned with measuring progress towards achievement of Sustainable Development Goals?,Le jeu de donnée peut-il être aligné avec la mesure du progrès dans l'accomplissement des Objectifs de Développement Durable ?,,,,,
-continual,Data is repeatedly and frequently updated,La donnée est mise à  jour en continu,,,,,
-daily,Data is updated each day,La donnée est mise à  jour chaque jour,,,,,
-weekly,Data is updated on a weekly basis,La donnée est mise à  jour chaque semaine,,,,,
-fortnightly,Data is updated every two weeks,La donnée est mise à  jour 2 fois par mois,,,,,
-monthly,Data is updated each month,La donnée est mise à  jour tous les mois,,,,,
-quarterly,Data is updated every three months,La donnée est mise à  jour tous les trois mois,,,,,
-biannually,Data is updated twice each year,La donnée est mise à  jour deux fois par an,,,,,
-annually,Data is updated every year,La donnée est mise à jour chaque année,,,,,
-asNeeded,Data is updated as deemed necessary,La donnée est mise à  jour lorsque cela est nécessaire,,,,,
-irregular,Data is updated in intervals that are uneven in duration,La donnée est mise à jour de manière irrégulière,,,,,
-notPlanned,There are no plans to update the data,La donnée n'a pas de mise à jour prévue,,,,,
-unknown,Frequency of maintenance for the data is not known,La donnée n'a pas de fréquence de mise à jour connue,,,,,
-publisher,Publisher,Editeur,,,,,
-maintainer,Maintainer,Mainteneur,,,,,
-other,Other,Autre,,,,,
-dontKnow,I don't know,Je ne sais pas,,,,,
-no,No,Non,,,,,
-partial,Partially,Partiel,,,,,
-yes,Yes,Oui,,,,,
-msgSuccessImport,Data imported successfully,Donnée importée avec succès,,,,,
-msgSuccessUpdate,Meta data successfully updated,Métadonnées mises à jour,,,,,
-msgSuccessDelete,Source successfully removed,Source supprimée avec succès,,,,,
-msgErrorImport,Data was not imported,La donnée n'a pas été importée,,,,,
-msgErrorDuplicate,This source already exists and is available for you,Cette source existe déjà et est disponible pour vous,,,,,
-msgProcessWait,"Data is processed, please wait","La donnée est préparée, veuillez attendre",,,,,
-selectOptionalViewAttribute,Select attribute,Selectionnez un attribut,,,,,
-summaryAttribute,Summary ,Résumé,,,,,
-optionalViewTitle,Optional creation of a new view,Création facultative d'une nouvelle vue,,,,,
-optionalViewText,Select an attribute from the source to create a simple view or click on finish to end the importation,"Sélectionnez un attribut de la source pour créer une vue simple ou cliquez sur finir pour terminer l'importation,",,,,,
-optionalViewShowAttributePreview,Show a summary of the attributes names and values,Afficher un résumé des attributs,,,,,
-confirmSourceRemove,Are you sure to delete the source with all related views and metadata ? This can't be undone,Êtes-vous certain de vouloir supprimer cette source ainsi que toutes les vues et métadonnées liées ? L'opération ne peut pas être annulée.,,,,,
+"id","en","fr","es","ru","zh","de","bn","fa"
+"additionalDocDesc","If any, list of additional documents","Si applicable, liste des documents additionnels",NA,NA,NA,NA,NA,"اگر هر گونه، لست اسناد اضافی"
+"additionalDocItemsDesc","Related documents such as technical information about a dataset","Documents liés, par example documentation technique, article scientifique ou autre",NA,NA,NA,NA,NA,"اسناد مرتبط مثل اطلاعات تخنیکی در باره مجموعه اطلاعات"
+"additionalDocItemsTitle","List of annexes","Liste des annexes",NA,NA,NA,NA,NA,"لست ضمایم"
+"additionalDocItemTitle","Document","Document",NA,NA,NA,NA,NA,"سند"
+"additionalDocItemUrl","URL to the document","URL pointant vers le document",NA,NA,NA,NA,NA,"برای سند URL "
+"additionalDocTitle","Annexes","Annexes",NA,NA,NA,NA,NA,"ضمایم "
+"annually","Data is updated every year","La donnée est mise à jour chaque année",NA,NA,NA,NA,NA,"اطلاعات هر ساله تجدید می شوند"
+"asNeeded","Data is updated as deemed necessary","La donnée est mise à  jour lorsque cela est nécessaire",NA,NA,NA,NA,NA,"اطلاعات به صورت ضروری تجدید می شوند"
+"attributeDescTitle","Description","Description",NA,NA,NA,NA,NA,"شرح"
+"attributeItemTitle","Attribute","Attribut",NA,NA,NA,NA,NA,"ویژه گی "
+"attributeNameTitle","Attribute name","Nom de l'attribut",NA,NA,NA,NA,NA,"نام ویژه گی "
+"attributesDesc","Description of the attributes contained in the data","Description des attributs de la donnée",NA,NA,NA,NA,NA,"شرح ویژه گی های که در اطلاعات موجود می باشد"
+"attributesListTitle","Attributes list","Liste d'attributs",NA,NA,NA,NA,NA,"لست ویژه گی ها"
+"attributesTitle","Attributes","Attributs",NA,NA,NA,NA,NA,"ویژه گی ها"
+"biannually","Data is updated twice each year","La donnée est mise à  jour deux fois par an",NA,NA,NA,NA,NA,"اطلاعات دو بار در سال تجدید می شوند"
+"confirmSourceRemove","Are you sure to delete the source with all related views and metadata ? This can't be undone","Êtes-vous certain de vouloir supprimer cette source ainsi que toutes les vues et métadonnées liées ? L'opération ne peut pas être annulée.",NA,NA,NA,NA,NA,"آیا مطمئن هستید که منبع را با تمام مشاهدات و ابرداده های مرتبط حذف شود؟ این کار را نمیتوان لغو کرد"
+"contactAddress","Contact address","Addresse du contact",NA,NA,NA,NA,NA,"آدرس مخاطب"
+"contactDesc","Information about people or organisation related to this data","Information sur les personnes ou organisations liées à la donnée",NA,NA,NA,NA,NA,"معلومات مربوط به افراد یا سازمان مرتبط به این اطلاعات"
+"contactEmail","Contact email","Email du contact",NA,NA,NA,NA,NA,"ایمل مخاطب"
+"contactFunction","Function","Fonction",NA,NA,NA,NA,NA,"عملکرد"
+"contactFunctionDesc","Name of the contact function, e.g. Administrator, Publisher","Nom de la fonction du contact : par ex. Administrateur, Editeur",NA,NA,NA,NA,NA,"نام مخاطب عمل کننده، مثل مدیر، ناشر "
+"contactItemTitle","Contact","Contact",NA,NA,NA,NA,NA,"مخاطب"
+"contactListTitle","List of contacts","Liste des contacts",NA,NA,NA,NA,NA,"لست مخاطبین"
+"contactName","Contact name","Nom du contact",NA,NA,NA,NA,NA,"نام مخاطب  "
+"contactTitle","Contacts","Contacts",NA,NA,NA,NA,NA,"مخاطبین"
+"continual","Data is repeatedly and frequently updated","La donnée est mise à  jour en continu",NA,NA,NA,NA,NA,"اطلاعات مکرراَ و دوره ایی تجدید شده اند"
+"daily","Data is updated each day","La donnée est mise à  jour chaque jour",NA,NA,NA,NA,NA,"اطلاعات هر روز تجدید شده اند"
+"dataIntegrityDesc","Evaluation of the data integrity","Evaluation de l'intégrité des données",NA,NA,NA,NA,NA,"ارزیابی یکپارچگی اطلاعات "
+"dataIntegrityTitle","Integrity","Intégrité",NA,NA,NA,NA,NA,"یکپارچگی "
+"di_1_1","Is the data documented?","La donnée est-elle documentée?",NA,NA,NA,NA,NA,"آیا اطلاعات مستند شده اند؟"
+"di_1_1_desc","Does the data provider have the capacity to document the data and provide basic metadata (e.g. name, coordinate system, year, update frequency, description, and methodology)? ","Le fournisseur de la donnée a-t'il  la capacité de documenter la donnée et de fournir un jeu de métadonnées basique (par ex. système de coordonnées, année, fréquence de mise à jour, description, méthodologie sous-jacente) ?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات ظرفیت سند سازی اطلاعات و تهیه ابرداده اولیه را  (مثل. نام، سیستم کواردینات، سال، دوره به روز رسانی، شرح، و روش ) دارند؟"
+"di_1_2","Does the data provider have the relevant mandate?","Le fournisseur de la donnée fait-il autorité ?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات حکم مرتبط را دارد؟"
+"di_1_2_desc","Does the data provider have a mandate or legal requirement to collect the data?","Le fournisseur de la donnée a-t'il un mandat officiel pour collecter la donnée ?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات حکم یا تقاضای قانونی برای جمع آوری اطلاعات دارد؟"
+"di_1_3","Is the data subject to internal quality control?","La donnée fait-elle l'objet d'un contrôle interne de qualité ?",NA,NA,NA,NA,NA,"آیا اطلاعات به کنترول کیفیت داخلی می پردازند؟"
+"di_1_3_desc","Has the data been subject to data quality assurance and control processes? ","La donnée a-t'elle fait l'objet de processus de contrôle et d'assurance qualité ?",NA,NA,NA,NA,NA,"آیا اطلاعات به فرآیندهای اطمینان و کنترل پروسه کیفیت اطلاعات پرداخته اند؟"
+"di_1_4","Is the data subject to external quality control?","La donnée fait-elle l'objet d'un contrôle externe de qualité ?",NA,NA,NA,NA,NA,"آیا اطلاعات تحت کنترول کیفیت خارجی قرار گرفته است؟"
+"di_1_4_desc","Are the data sets subject to external auditing or peer review processes?  ","Le jeu de données est-il assujetti à des processus d'audit externe ou d'examen par les pairs?",NA,NA,NA,NA,NA,"آیا اطلاعات تحت تفتیش خارجی یا  پروسه مرور  قرار گرفته است؟"
+"di_2_1","Is the data machine-readable?","La donnée est-elle lisible par la machine ?",NA,NA,NA,NA,NA,"آیا اطلاعات  قابل خواندن برای ماشین است؟"
+"di_2_1_desc","Data is machine-readable if it is in a format that can be easily structured and exploited by a computer. Good examples of machine-readable files are SQL, JSON, XML, DBF and to a lesser extent Excel","Une donnée est 'lisible par machine' quand elle est dans un format qui peut facilement être structuré et exploité par un ordinateur. Des exemple intéressants de fichiers ‘lisibles par machine’ sont SQL, JSON, XML, DBF et dans une moindre mesure Excel",NA,NA,NA,NA,NA,"اگر اطلاعات دارای ساختار آسان بوده و  توسط کمپیوتر به آسانی قابل استفاده باشد قابلیت خوانش توسط ماشین را داراست. مثال های خوب فایل های که قابلیت خوانش توسط ماشین را دارد SQL، JSON، XML، DBF و حجم کم اکسل میباشند"
+"di_2_2","Is the data available online?","La donnée est-elle disponible en ligne ?",NA,NA,NA,NA,NA,"آیا اطلاعات آنلاین در دسترس است؟"
+"di_2_2_desc","This question addresses whether the data is available online from an official source. This does not mean that the data is necessarily updated or maintained","Cette question porte sur la disponibilité de la donnée à partir d'une source en ligne. Cela ne signifie pas que la donnée est maintenue",NA,NA,NA,NA,NA,"این سوال بیانگر این است که آیا اطلاعات از یک منبع رسمی آنلاین در دسترس است. این بدان معنا نیست که داده ها لزوما تجدید و یا نگهداری شده است."
+"di_2_3","Is the data available in a non-fragmented state?","La donnée est-elle disponible dans un état non fragmenté ?",NA,NA,NA,NA,NA,"آیا اطلاعات در یک حالت غیر تفکیک شده در دسترس هستند؟"
+"di_2_3_desc","Data is available in bulk if the whole dataset can be downloaded or accessed easily. Conversely it is considered non-bulk if the citizens are limited to just parts of the dataset (e.g., if restricted to querying a web form and retrieving a few results at a time)","La donnée est disponible sous forme non fragmentée si l'ensemble du jeu de données peut être téléchargé ou est facilement accessible. Inversement, elle est considérée comme fragmentée si les citoyens sont limités à l'obtention d'une partie du jeu de données (p. ex., si limité à l'interrogation d'un formulaire Web et à la récupération de quelques résultats à la fois à partir d'une très grande base de données)",NA,NA,NA,NA,NA,"اطلاعات به طور توده‌یی در دسترس هستند اگر  مجموعه اطلاعات به راحتی قابل دانلود و یا دسترسی میباشد. برعکس، اطلاعات غیر توده‌یی هستند٬‌در صورتیکه شهروندان تنها به بخش هایی از مجموعه اطلاعات دسترسی داشته باشند. (مثلا٬ اگر به پرس و جوی یک فورم انترنیتی محدودیت وجود داشته و نتایج اندک در یک زمان بدست آید)"
+"di_2_4","Does the data comply with OGC standards? ","La donnée est-elle conforme avec les standards de l'OGC ?",NA,NA,NA,NA,NA,"آیا اطلاعات با ستندردهای OGC مطابقت دارد؟"
+"di_2_4_desc","Is the data compliant with applicable Open Geospatial Consortium standards, e.g. Web Map Service (WMS)?","La donnée est-elle conforme avec les standards de l'Open Geospatial Consortium, par ex. le Web Map Service (WMS) ?",NA,NA,NA,NA,NA,"آیا اطلاعات با استانداردهای کنسرسیوم مجتمع باز جغرافیایی مطابقت دارد؟ به عنوان مثال سرویس نقشه ویب (WMS)"
+"di_3_1","Is the data publicly available?","La donnée est-elle disponible publiquement?",NA,NA,NA,NA,NA,"آیا اطلاعات به صورت عمومی در دسترس هستند؟"
+"di_3_1_desc","‘Publicly available’ means that the data can be accessed by the public in some form either from websites or physical documents (even if the data is available for purchase)","‘Public’ signifie que le public peut accéder à la donnée depuis un site web ou sur support physique (même si la donnée est payante)",NA,NA,NA,NA,NA," دسترس عموم"" بدین معنی است که اطلاعات توسط برخی افراد از طریق وب سایت ها یا اسناد فیزیکی قابل دسترس می باشند (حتی اگر اطلاعات برای خرید در دسترس باشند)"
+"di_3_2","Is the data accessible to the public without discrimination of users?","La donnée est-elle accessible au public sans discrimination des utiisateurs ?",NA,NA,NA,NA,NA,"آیا اطلاعات بدون تبعیض کاربران قابل دسترس است؟"
+"di_3_2_desc","Can any user anonymously download the data or is registration required?","Est-ce que n'importe quel utilisateur peut télécharger la donnée de manière anonyme ou un enregistrement est-il nécessaire ?",NA,NA,NA,NA,NA,"آیا هر کاربر ناشناس می تواند اطلاعات را دانلود کند یا ثبت نام لازم است؟"
+"di_3_3","Is the data available free of charge?","La donnée est-elle disponible gratuitement ?",NA,NA,NA,NA,NA,"آیا اطلاعات به صورت رایگان در دسترس هستند؟"
+"di_3_3_desc","Compliance with GEOSS data sharing principle #2: ""where international instruments, national policies or legislation preclude the sharing of data as Open Data, data should be made available with minimal restrictions on use and at no more than the cost of reproduction and distribution;""","Conformité avec le deuxième principe de partage de la donnée de GEOSS : ""lorsque les instruments internationaux appropriés et les politiques et législations nationales empêchent le partage de la donnée de manière ouverte, les données, métadonnées et produits seront rendus disponibles au plus vite et au coût minimal, c'est-à-dire pas plus chers que leur coût de reproduction et de distribution;""",NA,NA,NA,NA,NA,"مطابقت با اصل شریک سازی اطلاعات GEOSS # 2: زمانی که ابزارهای بین المللی، سیاست های ملی یا قوانین مانع شریک سازی اطلاعات به عنوان داده های باز ٬ می شود، داده ها باید با حداقل محدودیت های استفاده و نباید بالاتر از هزینه تولید و توزیع در دسترس قرار گیرد"""
+"di_3_4","Is there an open license for the data?","La donnée possède t'elle une license ouverte ?",NA,NA,NA,NA,NA,"آیا یک مجوز باز برای اطلاعات وجود دارد؟"
+"di_3_4_desc","This question addresses whether the dataset is openly licensed. It needs to state the terms of use or license that allow anyone to freely use, reuse or redistribute the data (subject to attribution and share alike requirements)","Cette question porte sur le fait que la donnée soit soumise à licence ouverte. Il convient de préciser les conditions d'utilisation qui permettent à quiconque d'utiliser librement, réutiliser ou redistribuer la donnée (sujet tout au plus à citation ou au partage à l'identique)",NA,NA,NA,NA,NA,"این سوال بیانگر این است که آیا مجموعه اطلاعات به صورت باز قابل مجوز است. لازم است که شرایط استفاده یا مجوز  مشخص شود تا هرکسی بتواند آزادانه استفاده، استفاده مجدد یا توزیع مجدد داده ها را کند.  (با توجه به تخصیص و اشتراک گذاری الزامات مشترک)"
+"di_4_1","Does the data provider have the technical capacity to manage and update the layer?","Le fournisseur de la donnée a-t'il la capacité de gérer et de mettre à jour la donnée?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات دارای ظرفیت تخصصی برای مدیریت و تجدید لایه هستند؟"
+"di_4_1_desc","The data provider is able to maintain, update and publish it on a regular basis ","Le fournisseur de la donnée a la capacité de maintenir, de mettre à jour et de publier la couche de manière régulière (pas nécessairement en WMS)",NA,NA,NA,NA,NA,"تولید کننده اطلاعات قادر به حفظ، تجدید و انتشار آن به طور منظم است"
+"di_4_2","Does the data provider have a long-term mandate and financial means?","Le fournisseur de la donnée a-t'il un mandat à long terme et des moyens financiers pour le mener à bien ?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات دارای یک وظیفه درازمدت و با امکانات مالی است؟"
+"di_4_2_desc","Does the data provider have a long-term mandate and related resources to ensure continuity in data collection and publication? ","Le fournisseur de la donnée a-t'il un mandat à long terme et les ressources nécessaires pour garantir la continuité de la collecte et la publication de la donnée ?",NA,NA,NA,NA,NA,"آیا تولید کننده اطلاعات دارای مجوز دراز مدت و منابع مرتبط برای اطمینان از تداوم در جمع آوری و انتشار اطلاعات است؟"
+"di_4_3","Can the data layer be dynamically streamed and shared using an API","La couche peut-elle être diffusée dynamiquement et partagée en utilisant une API ?",NA,NA,NA,NA,NA,"لایه اطلاعات می تواند به صورت دینامیک جریان داده شده و با استفاده از یک API به اشتراک گذاشته شود"
+"di_4_3_desc","Is the data interoperable with MAP-X to enable dynamic streaming/automatic updates? ","La donnée est-elle desservie par la plateforme en ligne MAP-X de manière dynamique afin de refléter les mises à jour côté fournisseur de la donnée ?",NA,NA,NA,NA,NA,"
+آیا اطلاعات با MAP-X همکاری می کنند تا قابلیت های جریان دینامیکی / تجدید خودکار را فعال کنند؟"
+"di_4_4","Does the data support measuring of SDGs?","La donnée supporte-t'elle la mesure des ODD ? ",NA,NA,NA,NA,NA,"آیا اطلاعات از SDGs پشتبانی می کند؟"
+"di_4_4_desc","Can the dataset be aligned with measuring progress towards achievement of Sustainable Development Goals?","Le jeu de donnée peut-il être aligné avec la mesure du progrès dans l'accomplissement des Objectifs de Développement Durable ?",NA,NA,NA,NA,NA,"آیا  مجموعه اطلاعات با اندازه گیری پیشرفت جهت دستیابی به اهداف انکشاف پایدار٬‌همسو خواهد بود؟"
+"dontKnow","I don't know","Je ne sais pas",NA,NA,NA,NA,NA,"من نمی دانم"
+"fortnightly","Data is updated every two weeks","La donnée est mise à  jour 2 fois par mois",NA,NA,NA,NA,NA,"اطلاعات هر دو هفته تجدید می شوند"
+"irregular","Data is updated in intervals that are uneven in duration","La donnée est mise à jour de manière irrégulière",NA,NA,NA,NA,NA,"اطلاعات در فواصل زمانی که در طول زمان ناهموار هستند تحدید می شوند"
+"langDesc","Language(s) used in content","Langue(s) utilisée(s) dans le contenu",NA,NA,NA,NA,NA,"زبان (زبانهای) که در محتوا استفاده شده است"
+"langItemTitle","Language","Langue",NA,NA,NA,NA,NA,"زبان"
+"langListDesc","Two letters code of languages","Code de deux lettres minuscules",NA,NA,NA,NA,NA,"دو دستورالعمل نامه از زبان ها"
+"langListTitle","List of languages","Liste des langues",NA,NA,NA,NA,NA,"لست زبان ها"
+"langTitle","Language","Langue",NA,NA,NA,NA,NA,"زبان"
+"licenseDesc","If any, description of the data licenses","Si applicable, description des licences de la donnée",NA,NA,NA,NA,NA,"اگر هر گونه، شرح مجوز اطلاعات"
+"licenseItemTitle","License","Licence",NA,NA,NA,NA,NA,"مجوز"
+"licenseListDesc","Name and/or description of the licence","Nom et/ou description de la licence",NA,NA,NA,NA,NA,"نام و/یا شرح مجوز"
+"licenseListTitle","List of licences","Liste des licences",NA,NA,NA,NA,NA,"لست مجوز "
+"licenseName","Name","Nom",NA,NA,NA,NA,NA,"نام"
+"licenseText","Text","Texte",NA,NA,NA,NA,NA,"متن"
+"licenseTitle","Licensing","Licence",NA,NA,NA,NA,NA,"صدور مجوز"
+"maintainer","Maintainer","Mainteneur",NA,NA,NA,NA,NA,"نگهدارنده"
+"monthly","Data is updated each month","La donnée est mise à  jour tous les mois",NA,NA,NA,NA,NA,"اطلاعات هر ماه تجدید می شوند"
+"msgErrorDuplicate","This source already exists and is available for you","Cette source existe déjà et est disponible pour vous",NA,NA,NA,NA,NA,"این منبع از قبل موجود و در دسترس شما است"
+"msgErrorImport","Data was not imported","La donnée n'a pas été importée",NA,NA,NA,NA,NA,"اطلاعات وارد نشد "
+"msgProcessWait","Data is processed, please wait","La donnée est préparée, veuillez attendre",NA,NA,NA,NA,NA,"اطلاعات پروسس شد، لطفا صبر نمایید"
+"msgSuccessDelete","Source successfully removed","Source supprimée avec succès",NA,NA,NA,NA,NA,"ابرداده با موفقیت حذف شد"
+"msgSuccessImport","Data imported successfully","Donnée importée avec succès",NA,NA,NA,NA,NA,"اطلاعات با موفقیت وارد شدند"
+"msgSuccessUpdate","Meta data successfully updated","Métadonnées mises à jour",NA,NA,NA,NA,NA,"ابرداده با موفقیت به روز شد "
+"no","No","Non",NA,NA,NA,NA,NA,"نخیر"
+"notPlanned","There are no plans to update the data","La donnée n'a pas de mise à jour prévue",NA,NA,NA,NA,NA,"هیچ برنامه ای برای تجدید اطلاعات وجود ندارد"
+"optionalViewShowAttributePreview","Show a summary of the attributes names and values","Afficher un résumé des attributs",NA,NA,NA,NA,NA,"خلاصه ای از نام های ویژه گی و مقادیر را نمایش دهید"
+"optionalViewText","Select an attribute from the source to create a simple view or click on finish to end the importation","Sélectionnez un attribut de la source pour créer une vue simple ou cliquez sur finir pour terminer l'importation,",NA,NA,NA,NA,NA,"یک ویژگی از منبع برای ایجاد یک نمای ساده انتخاب کنید یا روی دکمه پایان کلیک کنید تا واردات را پایان دهید"
+"optionalViewTitle","Optional creation of a new view","Création facultative d'une nouvelle vue",NA,NA,NA,NA,NA,"ایجاد اختیاری یک نمای جدید"
+"originDesc","Origin of the data and how to retrieve it","Origine de la donnée et comment la récupérer",NA,NA,NA,NA,NA,"اصلیت اطلاعات و روش بازیابی آن"
+"originHomepageDesc","Homepage for the data","Page d'accueil de la donnée",NA,NA,NA,NA,NA,"صفحه اصلی برای اطلاعات"
+"originHomepageItemTitle","Homepage (URL)","Page d'accueil (URL)",NA,NA,NA,NA,NA,"صفحه اصلی (URL)"
+"originHomepageTitle","Homepage","Page d'accueil",NA,NA,NA,NA,NA,"صفحه اصلی"
+"originSourceIsFullRequestTitle","The url contain a request to retrieve the data automatically","L'URL contient une requête pour récupérer automatiquement la donnée",NA,NA,NA,NA,NA," دارایی یک درخواست جهت بازیابی اطلاعات به شکل خودکار میباشد URL"
+"originSourcesDesc","Method to retrieve the data","Méthode de récupération de la donnée",NA,NA,NA,NA,NA,"روش بازیابی اطلاعات"
+"originSourcesList","List of sources","Liste des sources",NA,NA,NA,NA,NA,"لست منابع"
+"originSourcesTitle","Sources","Sources",NA,NA,NA,NA,NA,"منابع"
+"originSourceTitle","Source","Source",NA,NA,NA,NA,NA,"منبع"
+"originSourceUrlTitle","URL","URL",NA,NA,NA,NA,NA,"URL"
+"originTitle","Source","Origine",NA,NA,NA,NA,NA,"منبع"
+"other","Other","Autre",NA,NA,NA,NA,NA,"سایر"
+"partial","Partially","Partiel",NA,NA,NA,NA,NA,"تا اندازه ای"
+"quarterly","Data is updated every three months","La donnée est mise à  jour tous les trois mois",NA,NA,NA,NA,NA,"اطلاعات هر سه ماه تجدید می شوند"
+"schemaDesc","Metadata editor for map-x sources.","Editeur de métadonnées pour les sources de map-x.",NA,NA,NA,NA,NA,"ویرایشگر ابرداده برای منابع MAP-X"
+"schemaTitle","Map-x metadata","Métadonnées map-x",NA,NA,NA,NA,NA,"ابرداده یی MAP-X"
+"selectOptionalViewAttribute","Select attribute","Selectionnez un attribut",NA,NA,NA,NA,NA,"ویژه گی را انتخاب نمایید"
+"spatialBbxDesc","Spatial bounding box of the data using latitude and longitude","Délimitation spatiale en latitude et longitude",NA,NA,NA,NA,NA,"جبعه محدود فضایی  اطلاعات که از عرض و طول جغرافیایی استفاده می کنند"
+"spatialBbxLatMax","Max. latitude","Latitude max.",NA,NA,NA,NA,NA,"بیشترین. عرض جغرافیای "
+"spatialBbxLatMin","Min. latitude","Latitude min.",NA,NA,NA,NA,NA,"کمترین. عرض جغرافیایی"
+"spatialBbxLngMax","Max. longitude","Longitude max.",NA,NA,NA,NA,NA,"بیشترین. طول جغرافیای "
+"spatialBbxLngMin","Min. longitude","Longitude min.",NA,NA,NA,NA,NA,"کمترین. طول جغرافیایی"
+"spatialBbxTitle","Bounding box","Délimitation spatiale",NA,NA,NA,NA,NA,"جبعه محدود"
+"spatialDesc","Description of the data using spatial reference: bounding box, and spatial reference system (SRS)","Description spatiale de la donnée avec délimitation spatiale et système de coordonnées (SRS)",NA,NA,NA,NA,NA,"شرح اطلاعات که منبع فضایی استفاده می کنند: جبعه محدود، و سیستم منبع فضایی (SRS)"
+"spatialSrsCode","Code of the SRS","Code du système de coordonnées",NA,NA,NA,NA,NA,"دستورالعمل SRS"
+"spatialSrsDesc","Description of the spatial reference system","Description du système de coordonnées",NA,NA,NA,NA,NA,"شرح سیستم منبع فضایی"
+"spatialSrsDescUrl","URL to the SRS code definition","URL vers la définition du code du système de coordonnées",NA,NA,NA,NA,NA," SRS برای تعریف دستورالعمل URL"
+"spatialSrsTitle","Spatial reference system","Système de coordonnées",NA,NA,NA,NA,NA,"سیستم منبع فضایی"
+"spatialTitle","Spatial","Spatial",NA,NA,NA,NA,NA,"فضایی"
+"summaryAttribute","Summary ","Résumé",NA,NA,NA,NA,NA,"خلاصه"
+"targetDesc","Modality and restriction of access to the data","Modalité et restriction d'accès à la donnée",NA,NA,NA,NA,NA,"چگونگی محدودیت دسترسی به اطلاعات"
+"targetRoleItemTitle","Role","Rôle",NA,NA,NA,NA,NA,"نقش"
+"targetRolesDesc","Roles allowed to read","Rôles autorisés à lire",NA,NA,NA,NA,NA,"نقش های مجاز برای خواندن"
+"targetRolesListTitle","List of roles","Liste des rôles",NA,NA,NA,NA,NA,"لست نقش ها"
+"targetRolesTitle","Roles","Rôles",NA,NA,NA,NA,NA,"نقش ها"
+"targetTitle","Access","Accès",NA,NA,NA,NA,NA,"دسترسی"
+"temporalDesc","Description of the dataset using temporal references: periodicity, initial release, update and range","Description de la donnée au moyen de références temporelles : périodicité, date de publication, etc",NA,NA,NA,NA,NA,"شرح مجموعه اطلاعات با استفاده منابع موقتی: پخش اولیه، تجدید و محدوده"
+"temporalIssuanceDesc","Description if the data issuance","Information sur l'émission de la donnée",NA,NA,NA,NA,NA,"شرح انتشار اطلاعات"
+"temporalIssuanceTitle","Issuance","Emission",NA,NA,NA,NA,NA,"صدور  "
+"temporalPeriodicity","Periodicity","Périodicité",NA,NA,NA,NA,NA,"دوره ایی"
+"temporalPeriodicityDesc","Frenquency with wich data is published or updated","Fréquence de publication ou de mise à jour de la donnée",NA,NA,NA,NA,NA,"دوره ای که در آن اطلاعات پخش یا تجدید می شود"
+"temporalRangeDesc","The temporal range of the data","L'étendue temporelle de la donnée",NA,NA,NA,NA,NA,"محدوده موقتی اطلاعات"
+"temporalRangeEnd","End","Fin",NA,NA,NA,NA,NA,"ختم"
+"temporalRangeStart","Start","Début",NA,NA,NA,NA,NA,"شروع"
+"temporalRangeTimeless","There is no time range for this data","Il n'y a pas d'étendue temporelle pour la donnée",NA,NA,NA,NA,NA,"محدوده زمانی برای این اطلاعات موجود نمی باشد "
+"temporalRangeTitle","Range","Etendue",NA,NA,NA,NA,NA,"محدوده"
+"temporalReleaseDesc","Date of formal issuance","Date d'émission officielle",NA,NA,NA,NA,NA,"تاریخ صدور رسمی "
+"temporalReleaseTitle","Release date","Date d'émission",NA,NA,NA,NA,NA,"تاریخ پخش "
+"temporalTitle","Temporal","Temporel",NA,NA,NA,NA,NA,"موقتی"
+"temporalUpdateDesc","Date of the latest update","Date de dernière mise à jour de la donnée",NA,NA,NA,NA,NA,"تاریخ آخرین تجدید"
+"temporalUpdateTitle","Last update","Dernière mise à jour",NA,NA,NA,NA,NA,"اخرین تجدید"
+"textualDesc","Textual description of the data using title, abstract and tags","Description de la donnée : titre, résumé et tags",NA,NA,NA,NA,NA,"شرح متنی اطلاعات با استفاده عنوان، چکیده و علامت ها"
+"textualDescAbstract","Abstract","Résumé",NA,NA,NA,NA,NA,"چکیده"
+"textualDescTitle","Title","Titre",NA,NA,NA,NA,NA,"عنوان"
+"textualKeywordDesc","Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.","Mots clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique.",NA,NA,NA,NA,NA,"کلید واژه ها (یا علامت ها) کاربران را  برای کشف اطلاعات شان  کمک می کند. لطفاً اصطلاحات را که  توسط کاربران تخصصی و غیر تخصصی مورد استفاده قرار میگیرد٬ را اضافه نمایید."
+"textualKeywordItemTitle","Keyword","Mot clé",NA,NA,NA,NA,NA,"کلید واژه"
+"textualKeywordsTitle","Keywords list","Liste de mots clés",NA,NA,NA,NA,NA,"لست کلید واژه ها"
+"textualKeywordTitle","Keywords","Mots clés",NA,NA,NA,NA,NA,"کلید واژه ها"
+"textualTitle","Textual","Texte",NA,NA,NA,NA,NA,"متنی"
+"unknown","Frequency of maintenance for the data is not known","La donnée n'a pas de fréquence de mise à jour connue",NA,NA,NA,NA,NA,"فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست"
+"weekly","Data is updated on a weekly basis","La donnée est mise à  jour chaque semaine",NA,NA,NA,NA,NA,"اطلاعات به صورت هفته وار تجدید می شوند"
+"yes","Yes","Oui",NA,NA,NA,NA,NA,"بلی "

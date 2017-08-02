@@ -13,46 +13,53 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
   #  
   mxCounter(reset=T)
 
+  t <- function(i=NULL){
+    d(id=i,lang=language,dict=dict,web=F,asChar=T)
+  }
+
   #
   # Final object
   #
   out = list(
-    title = d("schemaTitle",lang=language,dict=dict),
-    description = d("schemaDesc",lang=language,dict=dict),
+    title = t("schemaTitle"),
+    description = t("schemaDesc"),
     type = "object",
     required = list(),
     properties = list(
       text = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title =  d("textualTitle",lang=language,dict=dict),
-        description = d("textualDesc",lang=language,dict=dict),
+        title =  t("textualTitle"),
+        description = t("textualDesc"),
         options = list(collapsed = TRUE),
         properties = list(
           title = mxSchemaMultiLingualInput(
             keyTitle="textualDescTitle",
-            default= list(en=title)
+            default= list(en=title),
+            dict = dict
             ),
           abstract = mxSchemaMultiLingualInput(
             keyTitle="textualDescAbstract",
             default = list(en=abstract),
-            type="string",format="textarea"
+            type="string",
+            format="textarea",
+            dict = dict
             ),
           keywords = list(
             propertyOrder = mxCounter("b"),
             type = "object",
             options = list(collapsed = TRUE),
-            title = d("textualKeywordTitle",lang=language,dict=dict),
-            description = d("textualKeywordDesc",lang=language,dict=dict),
+            title = t("textualKeywordTitle"),
+            description = t("textualKeywordDesc"),
             properties = list(
                keys = list(
-                title = d("textualKeywordsTitle",lang=language,dict=dict),
+                title = t("textualKeywordsTitle"),
                 type = "array",
                 format = "table",
                 minItems = 1,
                 items = list(
                   type = "string",
-                  title = d("textualKeywordItemTitle",lang=language,dict=dict)
+                  title = t("textualKeywordItemTitle")
                   )
                 )
               )
@@ -60,8 +67,8 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
           attributes = list(
             propertyOrder = mxCounter("b"),
             type = "object",
-            title = d("attributesTitle",lang=language,dict=dict),
-            description = d("attributesDesc",lang=language,dict=dict), 
+            title = t("attributesTitle"),
+            description = t("attributesDesc"), 
             options = list(collapsed = TRUE),
             properties = mxSchemaAttributeInput(
                 format="textarea",
@@ -69,25 +76,26 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                 keyCounter="attr",
                 type="string",
                 collapsed=TRUE,
-                attributes=attributesNames
+                attributes=attributesNames,
+                dict = dict
                 )  
             ),
           language = list(
             propertyOrder = mxCounter("b"),
             type = "object",
-            title = d("langTitle",lang=language,dict=dict), 
-            description = d("langDesc",lang=language,dict=dict),
+            title = t("langTitle"), 
+            description = t("langDesc"),
             options = list(collapsed = TRUE),
             properties = list(
               codes = list(
                 type = "array",
-                title = d("langListTitle",lang=language,dict=dict),
-                description = d("langListDesc",lang=language,dict=dict),
+                title = t("langListTitle"),
+                description = t("langListDesc"),
                 format = "table",
                 items = list(
                   type = "object",
                   options = list(collapsed = TRUE),
-                  title = d("langItemTitle",lang=language,dict=dict),
+                  title = t("langItemTitle"),
                   properties = list(
                     code = list(
                       type = "string",
@@ -103,19 +111,19 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         ),
       access = list(
         propertyOrder = mxCounter("a"),
-        title = d("targetTitle",lang=language,dict=dict),
-        description = d("targetDesc",lang=language,dict=dict),
+        title = t("targetTitle"),
+        description = t("targetDesc"),
         type = "object",
         options = list(collapsed = TRUE),
         properties = list(
           roles = list(
-            title = d("targetRolesTitle",lang=language,dict=dict),
-            description = d("targetRolesDesc",lang=language,dict=dict),
+            title = t("targetRolesTitle"),
+            description = t("targetRolesDesc"),
             type =  "object",
             options = list(collapsed = TRUE),
             properties = list(
               names = list(
-                title = d("targetRolesListTitle",lang=language,dict=dict),
+                title = t("targetRolesListTitle"),
                 type = "array",
                 format = "table",
                 minItems = 1,
@@ -124,12 +132,12 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                   options = list(collapsed = TRUE),
                   properties = list(
                     role = list(
-                      title = d("targetRoleItemTitle",lang=language,dict=dict),
+                      title = t("targetRoleItemTitle"),
                       type = "string",
                       enum =  rolesTarget,
                       default = "self",
                       options = list(
-                        enum_titles = names(d(rolesTarget,language))
+                        enum_titles = names(t(rolesTarget))
                         )
                       )
                     )
@@ -142,19 +150,19 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       temporal = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title = d("temporalTitle",lang=language,dict=dict),
-        description = d("temporalDesc",lang=language,dict=dict),
+        title = t("temporalTitle"),
+        description = t("temporalDesc"),
         options = list(collapsed = TRUE),
         properties = list(
           issuance = list(
             type = "object",
-            title =  d("temporalIssuanceTitle",lang=language,dict=dict),
-            description =  d("temporalIssuanceDesc",lang=language,dict=dict),
+            title =  t("temporalIssuanceTitle"),
+            description =  t("temporalIssuanceDesc"),
             options = list(collapsed=TRUE),
             properties = list(
               periodicity = list(
-                title = d("temporalPeriodicity",lang=language,dict=dict),
-                description = d("temporalPeriodicityDesc",lang=language,dict=dict),
+                title = t("temporalPeriodicity"),
+                description = t("temporalPeriodicityDesc"),
                 type = "string",
                 enum = c(     
                   "continual",
@@ -171,7 +179,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                   "unknown"
                   ),
                 options = list(enum_titles = 
-                  names(d(c(     
+                  names(t(c(     
                         "continual",
                         "daily",
                         "weekly",
@@ -184,11 +192,11 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                         "irregular",
                         "notPlanned",
                         "unknown"
-                        ),lang=language,dict=dict)))
+                        ))))
                 ),
               released_at = list(
-                title = d("temporalReleaseTitle",lang=language,dict=dict),
-                description = d("temporalReleaseDesc",lang=language,dict=dict),
+                title = t("temporalReleaseTitle"),
+                description = t("temporalReleaseDesc"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -196,8 +204,8 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                 default = "0001-01-01"
                 ),
               modified_at = list(
-                title = d("temporalUpdateTitle",lang=language,dict=dict),
-                description = d("temporalUpdateDesc",lang=language,dict=dict),
+                title = t("temporalUpdateTitle"),
+                description = t("temporalUpdateDesc"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -206,25 +214,25 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
               )
             ),
           range = list(
-            title = d("temporalRangeTitle",lang=language,dict=dict),
-            description = d("temporalRangeDesc",lang=language,dict=dict),
+            title = t("temporalRangeTitle"),
+            description = t("temporalRangeDesc"),
             type = "object",
             options = list(collapsed = TRUE),
             properties = list(
               is_timeless = list(
-                title = d("temporalRangeTimeless",lang=language,dict=dict),
+                title = t("temporalRangeTimeless"),
                 type = "boolean",
                 format = "checkbox"
                 ),
               start_at = list(
-                title = d("temporalRangeStart",lang=language,dict=dict),
+                title = t("temporalRangeStart"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
                 default = "0001-01-01"
                 ),
               end_at = list(
-                title = d("temporalRangeEnd",lang=language,dict=dict),
+                title = t("temporalRangeEnd"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -237,58 +245,58 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       spatial = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title = d("spatialTitle",lang=language,dict=dict),
-        description = d("spatialDesc",lang=language,dict=dict),
+        title = t("spatialTitle"),
+        description = t("spatialDesc"),
         options = list(collapsed = TRUE),
         properties = list(
           crs = list(
-            title = d("spatialSrsTitle",lang=language,dict=dict),
-            description = d("spatialSrsDesc",lang=language,dict=dict),
+            title = t("spatialSrsTitle"),
+            description = t("spatialSrsDesc"),
             type = "object",
             format = "table",
             options = list(collapsed = TRUE),
             properties = list(
               code = list(
-                title = d("spatialSrsCode",lang=language,dict=dict),
+                title = t("spatialSrsCode"),
                 type = "string",
                 default = "EPSG:4326"
                 ),
               url = list(
-                title = d("spatialSrsDescUrl",lang=language,dict=dict),
+                title = t("spatialSrsDescUrl"),
                 type = "string",
                 default = "http://spatialreference.org/ref/epsg/4326/"
                 )
               )
             ),
           bbox = list(
-            title = d("spatialBbxTitle",lang=language,dict=dict),
-            description = d("spatialBbxDesc",lang=language,dict=dict),
+            title = t("spatialBbxTitle"),
+            description = t("spatialBbxDesc"),
             type = "object",
             options = list(collapsed = TRUE),
             properties = list(
               lng_min = list(
-                title = d("spatialBbxLngMin",lang=language,dict=dict),
+                title = t("spatialBbxLngMin"),
                 type = "number",
                 minimum = -180,
                 maximum = 180,
                 default = .get(extent,"lng1")
                 ),
               lng_max = list(
-                title = d("spatialBbxLngMax",lang=language,dict=dict),
+                title = t("spatialBbxLngMax"),
                 type = "number",
                 minumum = -180,
                 maximum = 180,
                 default = .get(extent,"lng2")
                 ),
               lat_min = list(
-                title = d("spatialBbxLatMin",lang=language,dict=dict),
+                title = t("spatialBbxLatMin"),
                 type = "number",
                 minumum = -90,
                 maximum = 90,
                 default = .get(extent,"lat1") 
                 ),
               lat_max = list(
-                title = d("spatialBbxLatMax",lang=language,dict=dict),
+                title = t("spatialBbxLatMax"),
                 type = "number",
                 minumum = -90,
                 maximum = 90, 
@@ -301,33 +309,33 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
     contact = list(
       propertyOrder = mxCounter("a"),
       type = "object",
-      title = d("contactTitle",lang=language,dict=dict),
-      description = d("contactDesc",lang=language,dict=dict),
+      title = t("contactTitle"),
+      description = t("contactDesc"),
       options = list(collapsed = TRUE),
       properties = list(
         contacts = list(
-          title = d("contactListTitle",lang=language,dict=dict),
+          title = t("contactListTitle"),
           type = "array",
           items = list(
-            title = d("contactItemTitle",lang=language,dict=dict),
+            title = t("contactItemTitle"),
             type = "object",
             options = list(collapsed = TRUE),
             properties = list(
               "function" = list(
                 type = "string",
-                title = d("contactFunction",lang=language,dict=dict),
-                description = d("contactFunctionDesc",lang=language,dict=dict)
+                title = t("contactFunction"),
+                description = t("contactFunctionDesc")
                 ),
               name = list(
-                title = d("contactName",lang=language,dict=dict),
+                title = t("contactName"),
                 type = "string"
                 ),
               address = list(
-                title = d("contactAddress",lang=language,dict=dict),
+                title = t("contactAddress"),
                 type = "string"
                 ),
               email = list(
-                title = d("contactEmail",lang=language,dict=dict),
+                title = t("contactEmail"),
                 type = "string")
               )
             )
@@ -336,19 +344,19 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       ),
     origin = list(
       propertyOrder = mxCounter("a"),
-      title = d("originTitle",lang=language,dict=dict),
-      description = d("originDesc",lang=language,dict=dict),
+      title = t("originTitle"),
+      description = t("originDesc"),
       options = list(collapsed = TRUE),
       type = "object",
       properties = list(
         homepage = list(
           type = "object",
-          title = d("originHomepageTitle",lang=language,dict=dict),
-          description = d("originHomepageDesc",lang=language,dict=dict),
+          title = t("originHomepageTitle"),
+          description = t("originHomepageDesc"),
           options = list(collapsed = TRUE),
           properties =list(
             url = list(
-              title = d("originHomepageItemTitle",lang=language,dict=dict),
+              title = t("originHomepageItemTitle"),
               type = "string",
               format = "uri"
               )
@@ -357,28 +365,28 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         `source` = list(
           type = "object",
           options = list(collapsed = TRUE),
-          title = d("originSourcesTitle",lang=language,dict=dict),
-          description = d("originSourcesDesc",lang=language,dict=dict),
+          title = t("originSourcesTitle"),
+          description = t("originSourcesDesc"),
           properties = list(
             urls = list(
               type = "array",
-              title = d("originSourcesList",lang=language,dict=dict),
+              title = t("originSourcesList"),
               minItems = 1,
               uniqueItems = TRUE,
               items = list(
                 type = "object",
-                title = d("originSourceTitle",lang=language,dict=dict),
+                title = t("originSourceTitle"),
                 required = "url",
                 options = list(collapsed = TRUE),
                 properties = list(
                   is_download_link = list(
-                    title = d("originSourceIsFullRequestTitle",lang=language,dict=dict),
+                    title = t("originSourceIsFullRequestTitle"),
                     type = "boolean",
                     format = "checkbox",
                     default = FALSE
                     ),
                   url = list(
-                    title = d("originSourceUrlTitle",lang=language,dict=dict),
+                    title = t("originSourceUrlTitle"),
                     type = "string",
                     format = "uri"
                     )
@@ -392,27 +400,27 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
     license = list(
       propertyOrder = mxCounter("a"),
       type = "object",
-      title = d("licenseTitle",lang=language,dict=dict),
-      description = d("licenseDesc",lang=language,dict=dict),
+      title = t("licenseTitle"),
+      description = t("licenseDesc"),
       options = list(
         collapsed = TRUE
         ),
       properties = list(
         licenses = list(
           type = "array",
-          title = d("licenseListTitle",lang=language,dict=dict),
-          description = d("licenseListDesc",lang=language,dict=dict),
+          title = t("licenseListTitle"),
+          description = t("licenseListDesc"),
           items = list(
             type = "object",
-            title = d("licenseItemTitle",lang=language,dict=dict),
+            title = t("licenseItemTitle"),
             options = list(collapsed = TRUE),
             properties = list(
               name = list(
-                title = d("licenseName",lang=language,dict=dict),
+                title = t("licenseName"),
                 type = "string"
                 ),
               text = list(
-                title = d("licenseText",lang=language,dict=dict),
+                title = t("licenseText"),
                 type="string",
                 format="textarea"
                 )
@@ -424,23 +432,23 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
     annex = list(
       propertyOrder = mxCounter("a"),
       type = "object",
-      title = d("additionalDocTitle",lang=language,dict=dict),
-      description = d("additionalDocDesc",lang=language,dict=dict),
+      title = t("additionalDocTitle"),
+      description = t("additionalDocDesc"),
       options = list(
         collapsed = TRUE
         ),
       properties = list(
         references = list(
           type = "array",
-          title = d("additionalDocItemsTitle",lang=language,dict=dict),
-          description = d("additionalDocItemsDesc",lang=language,dict=dict),
+          title = t("additionalDocItemsTitle"),
+          description = t("additionalDocItemsDesc"),
           items = list(
             type = "object",
-            title = d("additionalDocItemTitle",lang=language,dict=dict),
+            title = t("additionalDocItemTitle"),
             options = list(collapsed = TRUE),
             properties = list(
               url = list(
-                title =d("additionalDocItemUrl",lang=language,dict=dict), 
+                title =t("additionalDocItemUrl"), 
                 type = "string",
                 format = "uri"
                 )
@@ -452,8 +460,8 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       ),
     integrity = list(
       propertyOrder = mxCounter("a"),
-      title = d("dataIntegrityTitle",lang=language,dict=dict),
-      description = d("dataIntegrityDesc",lang=language,dict=dict),
+      title = t("dataIntegrityTitle"),
+      description = t("dataIntegrityDesc"),
       type = "object",
       options = list(collapsed = TRUE),
       properties = list(

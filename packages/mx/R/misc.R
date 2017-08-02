@@ -20,6 +20,16 @@ mxSource <- function(path){
 }
 
 
+#' Get md5 of a file or R object
+#' @param f File or Object 
+#' @return md5 sum
+#' @export
+mxMd5 <- function(f){
+  fileOk = ! "try-error" %in% class(try(file.exists(f),silent=T))
+  if(fileOk) fileOk = file.exists(f) 
+  digest::digest(f,serialize=TRUE,file=fileOk)
+}
+
 #' Deparse a list from a json file path
 #' @param path {string} Path to the json file
 #' @export
@@ -74,6 +84,9 @@ mxSchemaMultiLingualInput = function(
     language = get("language",envir=parent.frame())
   }
 
+  if(noDataCheck(dict)){
+    dict = dynGet("dict",ifnotfound=config$dict)
+  }
 
   if(nchar(titlePrefix)>0){
     titlePrefix = paste(toupper(titlePrefix),":")
@@ -81,17 +94,20 @@ mxSchemaMultiLingualInput = function(
 
     prop = lapply(languages,function(x){
       list(
-        title = paste(d(keyTitle,lang=x)," ( ",d(x,lang=language), " )"),
+        title = sprintf("%1$s (%2$s)",
+          d(keyTitle,lang=x,dict=dict,web=F),
+          d(x,lang=language,dict=dict,web=F)
+          ),
         type = type,
         format = format,
         minLength = ifelse(x=="en",1,0),
-        default = .get(default,x)
+        default = .get(default,x,default="")
         )
     })
     names(prop) <- languages
     list(
       propertyOrder = mxCounter(keyCounter),
-      title = paste(titlePrefix,d(keyTitle,lang=language)),
+      title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict,web=F)),
       type = "object",
       options = list(collapsed = collapsed),
       properties = prop
@@ -111,8 +127,8 @@ mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){
   }
 
   list(
-    title = d(keyTitle,lang=language,dict=dict),
-    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict),
+    title = d(keyTitle,lang=language,dict=dict,web=F),
+    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict,web=F),
     type = "string",
     propertyOrder = mxCounter("dataIntegrity"),
     minlength = 1,
@@ -129,8 +145,10 @@ mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){
             "partial",
             "yes"),
           lang = language,
-          dict = dict
-          ))
+          dict = dict,
+          web=F
+          )
+        )
       )
     )
 }
@@ -273,7 +291,7 @@ mxSetResourcePath <- function(resources){
 }
 
 
-#' Extract label and template from dictionnary
+#' Get dictionnary entry by key for a given language (translate)
 #' @param id {string} Id of element to extract
 #' @param lang {string} Two letters code for given language
 #' @return Translated value
@@ -285,30 +303,42 @@ mxSetResourcePath <- function(resources){
 #'    before :  0.012 [s]
 #'    after : 0.001 [s]
 #' @export
-mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL){
+mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL,web=T,asChar=F){
   out <- NULL
 
+  #mxTimer("start","tr")
+  # if no dictionary provided, search for one in parent env
   if(noDataCheck(dict)){
     dict=dynGet("dict",inherits=T)
   }
 
+  # if no dict found, get the default. Else, append default and provided
   if(noDataCheck(dict)){ 
-      dict = .get(config,"dict")
+    dict = .get(config,"dict")
   }else{
     dict = rbind(dict,.get(config,"dict"))
   }
 
   d <- dict
 
-  if(is.null(lang)){
-    lang <- config[["languages"]][["list"]][[1]]
-    if(is.null(lang)) lang <- langDefault
+  # if no language, get the default or the first of the language available
+  if(noDataCheck(lang)){
+    lang=dynGet("lang",inherits=T)
+    if(noDataCheck(lang)){
+      lang <- langDefault
+      if(noDataCheck(lang)){
+        lang <- config[["languages"]][["list"]][[1]]
+      }
+    }
   }
 
   # test for missing language
   langExists = c(lang,langDefault) %in% names(d)
   if(!all(langExists)) stop(sprintf("Language %s not found",c(lang, langDefault)[!langExists]))
 
+  #
+  # Start search
+  # 
   if(is.null(id)){
     #
     # All id 
@@ -332,7 +362,7 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
       if( length(lang) !=1 ) stop("if id > 1, language should be 1")
 
       sub <- d[d$id %in% id, c("id",lang,langDefault)]
-      
+
       out = id
       dat = vapply(id,
         function(x){
@@ -353,9 +383,14 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
       out <- d[d$id == id,lang][1]
       if(noDataCheck(out)) out <- d[d$id == id,langDefault][1]
       if(noDataCheck(out)) out <- id
+      if(web) out <- tags$div(out,`data-lang_key`=id)
+      if(asChar) out <- as.character(out)
     }
   }
+
+  #mxTimer("stop","tr")
   return(out)
+
 }
 # shortcut
 d <- mxDictTranslate
@@ -439,8 +474,7 @@ mxToggleButton <- function(id,disable=TRUE,warning=FALSE,session=shiny:::getDefa
 #' @param listTemplates {list} named list containing html. list("id"="HTML")
 #' @param session Shiny session object.
 #' @export
-sendTemplates <- function(listTemplates,session=shiny:::getDefaultReactiveDomain()) {
-  mxDebugMsg("Send templates to client")
+mxSetTemplates <- function(listTemplates,session=shiny:::getDefaultReactiveDomain()) {
   session$sendCustomMessage(
     type="mxSetTemplates",
     listTemplates
@@ -639,23 +673,6 @@ mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
 }
 
 
-#
-#' Update existing panel
-#'
-#' Use output object to update the panel with a known id. E.g. for updating uiOutput("panelTest"), use mxUpdatePanel with panelId "panelTest"
-#'
-#' @param panelId Id of the existing panel
-#' @param session Shiny reactive object of the session
-#' @param ... Other mxPanel options
-#' @export
-mxUpdatePanel <- function(panelId=NULL,session=shiny:::getDefaultReactiveDomain(),...){
-  session$output[[panelId]] <- renderUI(mxPanel(id=panelId,...))
-}
-
-
-
-
-
 mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDefaultReactiveDomain()){
 
   if(!exists("cdata") || noDataCheck(cdata)){
@@ -686,13 +703,21 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
     #
     # outut message
     #
-    if(!noDataCheck(session)){
-    session$output$panelAlert <- renderUI({
-      mxPanelAlert(
-        title="error",
-        message=tagList(p("Something went wrong, sorry!"))
-        )
-    })
+    if(!noDataCheck(session)){   
+      mxModal(
+      id=randomString(),
+      title="Unexpected issue",
+      content=tagList(
+        tags$b("Something went wrong, sorry"),
+        tags$p("We received a report and we will fix this as soon as possible."),
+        mxFold(
+          labelText="More info",
+          tags$div(
+            class="well",
+            tags$p(err$message)
+            )
+          ))
+      )
     }
   }
 
@@ -1174,66 +1199,6 @@ mxSetCookie <- function(
 }
 
 
-
-
-
-
-##' Create a formated list of available palettes
-##' @export
-#mxCreatePaletteList <- function(){
-  #pals <- RColorBrewer::brewer.pal.info
-  ## Get palettes names
-  #colsPals <- row.names(pals)
-  ## create UI visible names 
-  #palsName <- paste(
-    #colsPals,
-    #" (n=",pals$maxcolors,
-    #"; cat=",pals$category,
-    #"; ", ifelse(pals$colorblind,"cb=ok","cb=warning"),
-    #")",sep="")
-  ## put then together
-  #names(colsPals) <- palsName
-  ## return
-  #return(colsPals)
-
-#}
-
-
-##' Create a formated list of country center from eiti countries table
-##' @export
-#mxEitiGetCountryCenter <- function(eitiCountryTable){
-  ## Country default coordinates and zoom
-  #iso3codes <- eitiCountryTable$code_iso_3
-  ## Extract country center
-  #countryCenter <- lapply(
-    #iso3codes,function(x){
-      #res=eitiCountryTable[iso3codes==x,c('lat','lng','zoom')]
-      #res
-    #}
-    #)
-  ## set names
-  #names(countryCenter) <- iso3codes
-  ## return
-  #return(countryCenter)
-#}
-
-
-##' Create a formated list for selectize input from eiti countries table
-##' @export
-#mxEitiGetCountrySelectizeList <- function(eitiCountryTable){
-  #eitiCountryTable$map_x_pending <- as.logical(eitiCountryTable$map_x_pending)
-  #eitiCountryTable$name_ui <- paste(eitiCountryTable$name_un,'(',eitiCountryTable$name_official,')')
-  #countryList <- list(
-    #"completed" = NULL,
-    #"pending"= as.list(eitiCountryTable[eitiCountryTable$map_x_pending,"code_iso_3"])  ,
-    #"potential"= as.list(eitiCountryTable[!eitiCountryTable$map_x_pending,"code_iso_3"])
-    #)
-  #names(countryList$pending) = eitiCountryTable[eitiCountryTable$map_x_pending,"name_ui"]
-  #names(countryList$potential) = eitiCountryTable[!eitiCountryTable$map_x_pending,"name_ui"]
-
-  #return(countryList)
-#}
-
 #' Create WDI indicators list
 #' @export
 mxGetWdiIndicators <- function(){
@@ -1433,17 +1398,20 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
 #' @param listInput Input named list
 #' @param path Path inside the list
 #' @param keepNames Keep list names 
+#' @param default If nothing found, value returning
 #' @return value extracted or NULL
 #' @export
-mxGetListValue <- function(listInput,path,flattenList=F){
-  if(!is.list(listInput) || length(listInput) == 0) return()
-  out = NULL
+mxGetListValue <- function(listInput,path,flattenList=F,default=NULL){
+  out <- default
+  if(!is.list(listInput) || length(listInput) == 0) return(out)
   res <- try(silent=T,{
     out <- listInput[[path]]
   })
-  if(flattenList && !noDataCheck(out) && is.list(out)){
-  
+  if(flattenList && !noDataCheck(out) && is.list(out)){ 
     out <- as.list(unlist(out,use.names=F))
+  }
+  if(noDataCheck(out)){
+  out <- default
   }
   return(out)
 }
@@ -1576,8 +1544,9 @@ mxShort <- function(str="",n=10){
 
 #' Remove multiple space or new line char
 #' @param {character} string go clean
-mxCleanString <- function(str){
-    gsub("\\s+"," ",str)
+#' @param {character} rep replacement char
+mxCleanString <- function(str,rep=" "){
+    gsub("\\s+",rep,str)
 }
 
 
@@ -1715,4 +1684,106 @@ mxProgress = function(id="default",text="",percent=1,enable=TRUE,session=shiny::
     res
     )
 }
+
+
+
+
+#' Cache wms get capability cache
+#'
+#'
+mxGetWmsLayersCache = list()
+
+
+#' Get wms layer list
+#' @param service Service to query
+mxGetWmsLayers <- function(service,useCache=T){
+  layers = list()
+  if(!useCache || noDataCheck(mxGetWmsLayersCache[[service]])){
+    mxDebugMsg("not using cache")
+    stopifnot(!noDataCheck(service)) ;
+    req <- sprintf("%1$s?%2$s",service,"service=WMS&request=GetCapabilities")
+
+    test <- try({
+      res = xml2::read_xml(req,options="NOCDATA")
+    },silent=T)
+
+    if(!"try-error"%in%class(test)){
+      resList = xml2::as_list(res)
+      layers =  mxGetWmsLayersFromCapabilities(resList)
+      mxGetWmsLayersCache[[service]] <<- layers 
+    }
+  }else{
+    mxDebugMsg("using cache")
+    layers = mxGetWmsLayersCache[service]
+  }
+
+  return(layers)
+}
+
+
+
+#' Get list of available layers and name.
+#' @param getCapabilitiesList List that contains a list of a parsed GetCapabilities on a wms server (esri or ogc should work)
+mxGetWmsLayersFromCapabilities <- function(getCapabilitiesList){
+
+  # TODO: check if the structure could be :
+  # At each level, if a name and a title are provided, take every nested layers as first layer's component.
+  # for now, this works for a 1,2 or 3 levels, but this is empiric.
+
+  dat <- getCapabilitiesList
+  if(class(dat) != "list"){
+    stop("mxGetWmsLayers failed to analyse the response. Probable cause : A structured document expected of class'list' expected")
+  }
+  layers <- dat[['Capability']][['Layer']]
+  
+  layersNested <- layers[names(layers)=="Layer"]
+
+
+  # if there is only one level of layers, but the layer in a list.
+  if(length(layersNested)>0){
+    layers <- layersNested 
+  }else{
+    layers <- list(Layer=layers)
+  
+  }
+
+  nLayer <- length(layers)
+  res <- list()
+  for(i in 1:nLayer){
+    j <- layers[[i]]
+    k <- j[names(j) == "Layer"]
+    n <- length(k)
+    ln <- j[['Name']]
+    lt <- na.omit(j[['Title']][[1]])
+    if(n>0){
+      for(l in 1:n){
+        kn <- k[[l]][['Name']]
+        if(!is.null(kn)){
+          ln<-c(ln,kn)
+        }
+      }
+    }
+    ln<-paste(ln,collapse=",")
+    if(!isTRUE(nchar(lt)>0)){
+      ln <-paste("[ no title ", randomString()," ]",sep="")
+    }
+    if(isTRUE(nchar(ln)>0)){
+      res[[i]]<-list("label"=lt,"value"=ln)
+    }
+  }
+  return(res)
+}
+
+
+#' Update selectize input
+#' @param {character} id of the input
+#' @param {list} List of items. Keys should be the same as the input. eg "list(list('label'='label','value'='test'))"
+mxUpdateSelectizeItems <- function(id,items,session=shiny:::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mxUpdateSelectizeItems",list(
+      id=id,
+      items=items
+      ))
+}
+
+
 

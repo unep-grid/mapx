@@ -47,11 +47,11 @@ tagList(
       type = "text/css",
       href = "mx/nouislider/nouislider.min.css"
       ),
-    tags$link(
-      rel = "stylesheet",
-      type = "text/css",
-      href = "mx/chartist/chartist.min.css"
-      ),
+#    tags$link(
+      #rel = "stylesheet",
+      #type = "text/css",
+      #href = "mx/chartist/chartist.min.css"
+      #),
     tags$link(
       rel = "stylesheet",
       type = "text/css",
@@ -81,9 +81,9 @@ tagList(
     tags$script(
       src="mx/nouislider/nouislider.min.js"
       ),
-    tags$script(
-      src="mx/chartist/chartist.min.js"
-      ),
+#    tags$script(
+      #src="mx/chartist/chartist.min.js"
+      #),
     tags$script(
       src="mx/jszip/jszip.min.js"
       ),
@@ -103,7 +103,7 @@ tagList(
       src="mx/dot/doT.min.js"
       ),
     tags$script(
-      src="mx/turf/turf_mx.min.js"
+      src="mx/turf/turf.min.js"
       ),
     tags$script(
       src="mx/shapefile/shapefile.js"

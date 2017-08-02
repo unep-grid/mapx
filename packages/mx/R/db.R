@@ -99,8 +99,26 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,onError=function(x){stop(x)
 
 #' Get number of view by country
 #' @export
-mxDbGetViewsByCountry <- function(){
- mxDbGetQuery("select count(t.id), t.country from (select distinct id, country from mx_views) t group by t.country;")
+mxDbGetViewsByCountry <- function(idUser,read){
+  
+  read <- read[read != "self"]
+  read <- paste(paste0("'",read,"'"),collapse=",")
+
+ q = sprintf("
+   SELECT count(t.id) n, t.country 
+   FROM (
+     SELECT distinct id, country 
+     FROM mx_views
+     WHERE target ?| array[%1$s] OR (editor = '%2$s' AND target ?| array['self'])
+     ) t 
+   GROUP BY t.country
+   "
+   , read
+   , idUser
+   )
+ 
+ mxDbGetQuery(q)
+
 }
 
 
@@ -421,7 +439,7 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
 #' @param userId Integer user id
 #' @param language language for layer name. Default is english.
 #' @export
-mxDbGetLayerTable <- function(project, userId, target="public",language="en"){
+mxDbGetLayerTable <- function(project, projects, userId, target="public",language="en"){
 
   target <- paste(paste0("'",target,"'"),collapse=",")
 
@@ -463,6 +481,7 @@ mxDbGetLayerTable <- function(project, userId, target="public",language="en"){
 
 
 #' @rdname mxDbGetViews
+#' @param views {list|vector} Views id to fetch. Optional, replace any other logic
 #' @param project {character} Iso 3 country code
 #' @param read {vector} Name of the groups the user can read
 #' @param edit {vector} Name of the group the user can edit
@@ -471,8 +490,9 @@ mxDbGetLayerTable <- function(project, userId, target="public",language="en"){
 #' @param from {integer} Position of the row to start with
 #' @param to {integer} Position of the row to end with
 #' @export 
-mxDbGetViews <- function(project, read, edit, userId, id=NULL, from=0, to=5){
+mxDbGetViews <- function(views, project, read, edit, userId, id=NULL, from=0, to=5){
 
+  out <- list()
   conf <- mxGetDefaultConfig()
   tableName <- .get(conf,c("pg","tables","views"))
 
@@ -490,50 +510,84 @@ mxDbGetViews <- function(project, read, edit, userId, id=NULL, from=0, to=5){
     filter <- sprintf("AND t1.id='%s'",id)
   }
 
-  out <- list()
 
-  # extract(epoch from t1.date_modified) date_modified, 
-  # search for most version of the view only, filter by country, target and id.
-  q <- gsub("\n|\\s\\s+"," ",sprintf("
-      SELECT json_agg(row_to_json(t)) res from (
-        SELECT 
-        t1.*,
-        exists(
-          SELECT id 
-          FROM %1$s 
-          WHERE t1.target ?| array[%5$s] 
-          OR (
-            t1.editor = '%4$s' 
-            AND t1.target ?| array['self'])
-          ) as _edit
-        FROM %1$s t1 
-        WHERE date_modified = (
-          SELECT MAX(date_modified)
-          FROM %1$s t2
-          WHERE t2.id = t1.id
-          %6$s
-          )
-        AND t1.country ='%2$s' 
-        AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
-        %6$s
-        ORDER BY date_modified DESC
-        OFFSET %7$s
-        LIMIT %8$s
-        ) t
-      "
-      , tableName
-      , project
-      , read
-      , userId
-      , edit
-      , filter
-      , from
-      , to - from 
+
+  if(!noDataCheck(views)){
+    views = paste(paste0("'",views,"'"),collapse=",")
+
+    q <- gsub("\n|\\s\\s+"," ",sprintf("
+        SELECT json_agg(row_to_json(t)) res from (
+          SELECT 
+          t1.*,
+          exists(
+            SELECT id 
+            FROM %1$s 
+            WHERE 
+            (t1.country ='%2$s') AND 
+            ((t1.target ?| array[%4$s]) OR (t1.editor = '%3$s' AND t1.target ?| array['self']))
+            ) as _edit
+          FROM %1$s t1
+          WHERE date_modified = (
+            SELECT MAX(date_modified)
+            FROM %1$s t2
+            WHERE t2.id = t1.id
+            AND ( t1.id in (%5$s))
+            ) AND
+          ( t1.id in (%5$s) )
+          ORDER BY date_modified DESC
+          ) t
+        "
+        , tableName
+        , project
+        , userId
+        , edit
+        , views
+        )
       )
-    )
-
+  }else{
+    # extract(epoch from t1.date_modified) date_modified, 
+    # search for most version of the view only, filter by country, target and id.
+    q <- gsub("\n|\\s\\s+"," ",sprintf("
+        SELECT json_agg(row_to_json(t)) res from (
+          SELECT 
+          t1.*,
+          exists(
+            SELECT id 
+            FROM %1$s 
+            WHERE 
+            (t1.country ='%2$s') AND 
+            ((t1.target ?| array[%5$s]) OR (t1.editor = '%4$s' AND t1.target ?| array['self']))
+            ) as _edit
+          FROM %1$s t1 
+          WHERE date_modified = (
+            SELECT MAX(date_modified)
+            FROM %1$s t2
+            WHERE t2.id = t1.id
+            %6$s
+            )
+          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['WLD']))
+          AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
+          %6$s
+          ORDER BY date_modified DESC
+          OFFSET %7$s
+          LIMIT %8$s
+          ) t
+        "
+        , tableName
+        , project
+        , read
+        , userId
+        , edit
+        , filter
+        , from
+        , to - from 
+        )
+      )
+  }
 
   res <- na.omit(mxDbGetQuery(q))
+
+
 
   out <- mxJsonToListMem(res$res)
 
@@ -848,7 +902,7 @@ mxDbGetFilterCenter<-function(table=NULL,column=NULL,value=NULL,geomColumn='geom
 #' @param geojsonList list containing the geojson data
 #' @param geojsonPath path to the geojson
 #' @param tableName Name of the postgis layer / table 
-mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,archiveIfExists=T,archivePrefix="mx_archives"){
+mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,archiveIfExists=T,archivePrefix="mx_archives",onProgress=function(x){}){
 
   conf <- mxGetDefaultConfig()
   d <-config[['pg']]
@@ -914,47 +968,58 @@ mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,ar
     #
 
 
-    test <- try(silent=TRUE,{
-      tD <- sprintf("PG:dbname=%s host=%s port=%s user=%s password=%s",
-        d$dbname,d$host,d$port,d$user,d$password
-        )
+    nFeatures <- mxDbGeojsonCountFeatures(gP) 
 
-      cmd = sprintf(
-        "ogr2ogr \\
-        -t_srs \"EPSG:4326\" \\
-        -s_srs \"EPSG:4326\" \\
-        -geomfield \"geom\" \\
-        -lco FID=\"gid\" \\
-        -lco GEOMETRY_NAME=\"geom\" \\
-        -lco SCHEMA=\"public\" \\
-        -f \"PostgreSQL\" \\
-        -overwrite \\
-        -nln \"%1$s\" \\
-        -nlt \"PROMOTE_TO_MULTI\" \\
-        \'%2$s\' \\
-        \'%3$s\' \\
-        \"OGRGeoJSON\""
-        ,tN
-        ,tD
-        ,gP
-        )
+    if(nFeatures==0){
+      stop("Can't get the number of features :( ")
+    }
 
-      # 
-      # Execute command
-      #
-      system(cmd,intern=TRUE)
-      })
+    tD <- sprintf("PG:dbname=%s host=%s port=%s user=%s password=%s",
+      d$dbname,d$host,d$port,d$user,d$password
+      )
 
-    if("try-catch" %in% class(test)) stop("Something went wrong during the transfert to the database.")
+    cmd = sprintf(
+      "ogr2ogr \\
+      -gt 1000 \\
+      -t_srs \"EPSG:4326\" \\
+      -s_srs \"EPSG:4326\" \\
+      -geomfield \"geom\" \\
+      -lco FID=\"gid\" \\
+      -lco GEOMETRY_NAME=\"geom\" \\
+      -lco SCHEMA=\"public\" \\
+      -f \"PostgreSQL\" \\
+      -overwrite \\
+      -nln \"%1$s\" \\
+      -nlt \"PROMOTE_TO_MULTI\" \\
+      \'%2$s\' \\
+      \'%3$s\' \\
+      \"OGRGeoJSON\""
+      , tN
+      , tD
+      , gP
+      )
+
+    system(cmd,wait=F)
 
   }
-
-
 
 }
 
 
+mxDbGeojsonCountFeatures <- function(path){
+  nFeatures <- 0
 
+  try(silent=T,{
+    if(file.exists(path)){
+      cmdCount <- sprintf("ogrinfo %1$s  OGRGeoJSON -ro -so | grep \"Feature Count\" | sed \"s/^.*:\\s*//g\"",path)
+      nFeatures <- system(cmdCount, intern=T)
+      if(!noDataCheck(cmdCount)){
+        nFeatures = as.numeric(nFeatures)
+    }}
+  })
+
+  nFeatures
+}
 
 
 
@@ -1772,46 +1837,19 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, variables=NULL, geomTy
   #
   ui = list()
 
-  summaryHtml <- tags$ul(class="list-group",
-    tags$li(class="list-group-item",
-      tags$b(
-        d("source_sum_sample",language)),
-      tags$span(paste(summary$sampleData,collapse=" "))
+  summaryHtml <- listToHtmlSimple(
+    list(
+      "source_sum_sample"=paste(summary$sampleData,collapse="; "),
+      "source_sum_n_distinct"=summary$numberOfDistinct,
+      "source_sum_n_row"=summary$numberOfRow,
+      "source_sum_n_null"=summary$numberOfNull,
+      "source_sum_variable_type"=summary$type,
+      "source_sum_geom_type"=d(summary$geomType,language,web=F),
+      "source_time_range"=summary$timeExtent,
+      "source_meta"=summary$layerMeta
       ),
-    tags$li(class="list-group-item",
-      tags$b(d("source_sum_n_distinct",language)),
-      tags$span(summary$numberOfDistinct)
-      ),
-    tags$li(class="list-group-item",
-      tags$b(d("source_sum_n_row",language)),
-      tags$span(summary$numberOfRow)
-      ),
-    tags$li(class="list-group-item",
-      tags$b(d("source_sum_n_null",language)),
-      tags$span(summary$numberOfNull)
-      ),
-    tags$li(class="list-group-item",
-      tags$b(d("source_sum_variable_type",language)),
-      tags$span(summary$type)
-      ),
-    tags$li(class="list-group-item",
-      tags$b(d("source_sum_geom_type",language)),
-      tags$span(d(summary$geomType,language))
-      ),
-    tags$li(class="list-group-item",
-      listToHtmlClass(
-        summary$timeExtent,
-        titleMain = d("source_time_range",language)
-        )
-      ),
-    tags$li(class="list-group-item",
-      listToHtmlClass(
-        summary$layerMeta,
-        titleMain=d("source_meta",language),
-        dict=.get(config,c("dictionaries","schemaMetadata")),
-        language = language
-        )
-      )
+    lang=language,
+    dict=.get(config,c("dictionaries","schemaMetadata"))
     )
 
   list(

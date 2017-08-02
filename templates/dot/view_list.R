@@ -29,6 +29,38 @@ divLegend <- tags$div(
   "{{?}}"
   ) 
 
+
+
+
+#
+# Opacity slider input
+#
+divTransparency = tags$div(
+  class="mx-slider-container",
+  tags$div(
+    class="mx-slider-title",
+    `data-lang_key`="btn_opt_transparency",
+    `data-lang_type`="text"
+    ),
+  tags$div(
+    class="mx-slider mx-slider-numeric",
+    `data-transparency_for`="{{=view.id}}"
+    ),
+  tags$div(
+    class="mx-slider-range",
+    tags$div(
+      class="mx-slider-range-min",
+      "0%"
+      ),
+    tags$div(
+      class="mx-slider-range-max",
+      "100%"
+      )
+    )
+  )
+
+
+
 #
 # Input for vector tiles
 #
@@ -39,22 +71,17 @@ divSearchVectorTiles <- tags$div(
   #
   # Search input for vector tile search
   #
-#  tags$input(
-    #`data-lang_key`="view_search_values",
-    #`data-lang_type`="placeholder",
-    #`data-view_action_key`="view_search_value",
-    #`data-view_action_target`="{{=view.id}}",
-    #type="text",
-    #class="form-control",
-    #value=""
-    #),
-  #tags$div(`data-search-box`="{{=view.id}}",onload="mgl.helper.makeSelectrViewSearchBox()"),
   "{{?path(view,'data.attribute.type') == 'string'}}",
     tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
   "{{?}}",
   "{{?path(view,'data.attribute.type') == 'number'}}",
   tags$div(
     class="mx-slider-container",
+  tags$div(
+    class="mx-slider-title",
+    `data-lang_key`="btn_opt_numeric",
+    `data-lang_type`="text"
+    ),
     tags$div(
       class="mx-slider-dyn",
       tags$div(
@@ -89,6 +116,11 @@ divSearchVectorTiles <- tags$div(
   "{{?prop \\u0026\\u0026 prop.indexOf('mx_t0') \\u003E -1 \\u0026\\u0026 vExt \\u0026\\u0026 vExt.min \\u0026\\u0026 vExt.max}}",
   tags$div(
     class="mx-slider-container",
+  tags$div(
+    class="mx-slider-title",
+    `data-lang_key`="btn_opt_date",
+    `data-lang_type`="text"
+    ),
     tags$div(
       class="mx-slider-dyn",
       tags$div(
@@ -115,7 +147,8 @@ divSearchVectorTiles <- tags$div(
       )
     ),
   "{{?}}",
-  "{{?}}" 
+  "{{?}}",
+  divTransparency
   )
 
 #
@@ -153,6 +186,7 @@ liControlsVectorTiles <- tagList(
       class="fa fa-undo"
       )
     ),
+  "{{?}}",
   tags$li(
     class="mx-pointer hint--bottom-right",
     `data-view_action_key`="btn_opt_search",
@@ -160,10 +194,9 @@ liControlsVectorTiles <- tagList(
     `data-lang_key`="btn_opt_search",
     `data-lang_type`="tooltip",
     tags$div(
-      class="fa fa-filter"
+      class="fa fa-cog"
       )
     ),
-  "{{?}}",
   "{{?view.type=='vt' }}",
   tags$li(
     class="mx-pointer hint--bottom-right",
@@ -224,9 +257,9 @@ liControlsGeoJson <- tagList(
   # Button to upload geojson
   tags$li(
     class="mx-pointer hint--bottom-left",
-    `data-lang_key`="btn_opt_upload_geojson",
+    `data-lang_key`="btn_upload",
     `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_opt_upload_geojson",
+    `data-view_action_key`="btn_upload_geojson",
     `data-view_action_handler`="shiny",
     `data-view_action_target`="{{=view.id}}",
     tags$div(
@@ -262,6 +295,21 @@ liControlsScreenShot <- tagList(
     )
   )
 
+# controls share
+liControlsShare <- tagList(
+  tags$li(
+    class="mx-pointer hint--bottom-right",
+    `data-lang_key`="btn_opt_share",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_share",
+    `data-view_action_target`="{{=view.id}}",
+    tags$div(
+      class="fa fa-external-link"
+      )
+    )
+)
+
+
 #
 # Controls if edit tag is set 
 #
@@ -280,6 +328,7 @@ liControlsEdit <- tagList(
       )
     ),
   "{{?view.type=='vt'}}",
+  "{{?path(view,'data.attribute.name')}}",
   # Button to edit view
   tags$li(
     class="mx-pointer hint--bottom-left",
@@ -292,6 +341,7 @@ liControlsEdit <- tagList(
       class="fa fa-paint-brush"
       )
     ),
+  "{{?}}",
   "{{?}}",
   # Button to remove view
   tags$li(
@@ -321,7 +371,8 @@ ulControls <- tags$div(
       liControlsRasterTiles,
       liControlsGeoJson,
       liControlsScreenShot,
-      liControlsEdit
+      liControlsEdit,
+      liControlsShare
       )
     )
   )

@@ -16,8 +16,7 @@ areaLiveCalc  <- tags$div(
       `data-lang_key`="btn_get_area_visible"
       )
     ),
-  tags$div(class="form-control",id="txtAreaSum"),
-  tags$div(class="input-group-addon","Km^2")
+  tags$div(class="form-control",id="txtAreaSum")
   )
 
 #
@@ -25,6 +24,7 @@ areaLiveCalc  <- tags$div(
 #
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
+sourceUpload <- uiOutput("uiBtnSourceUpload")
 qgisInfo <- uiOutput("uiListQgisInfo")
 
 
@@ -37,6 +37,7 @@ tagList(
   tags$h4(`data-lang_key`="title_tools_map"),
   areaLiveCalc,
   viewAdd,
+  sourceUpload,
   sourceEdit,
   qgisInfo
   )

@@ -1,3 +1,5 @@
+
+
 #' Shiny bindings for jed
 #'
 #' Output and render functions for using jed within Shiny  applications and interactive Rmd documents.
@@ -8,6 +10,10 @@
 #'
 #' @name jed-shiny
 jedSchema <- function(id, schema, startVal = list(), options = list(), session=shiny::getDefaultReactiveDomain()){
+
+  mxDebugMsg(id);
+
+
   session$sendCustomMessage(
     type="jedInit",
     list(
@@ -23,33 +29,35 @@ jedSchema <- function(id, schema, startVal = list(), options = list(), session=s
 #'
 #' @export
 jedOutput <- function(id){
-  
+
+
   shiny::addResourcePath("jed",system.file("www", package="jed"))
 
-  tagList(
-  singleton(
-    tagList(
-      tags$head(
-        tags$script(src = "jed/jsoneditor/jsoneditor.min.js"),
-        tags$script(src = "jed/jed/jed.js"),
-        tags$script(src = "jed/medium/medium-editor.min.js"),
-        tags$script(src = "jed/jed/jed-medium-file-dragging.js"),
-        tags$link(rel="stylesheet",type="text/css",href="jed/jed/jed.css"),
-        tags$link(rel="stylesheet",type="text/css",href="jed/medium/medium-editor.min.css"),
-        tags$link(rel="stylesheet",type="text/css",href="jed/jed/jed-medium-flat.css")
+  session = shiny:::getDefaultReactiveDomain()
+
+  session$sendCustomMessage("mxInjectHead",list(
+      scripts = list(
+        "jed/jsoneditor/jsoneditor.min.js",
+        "jed/jed/jed.js",
+        "jed/medium/medium-editor.min.js",
+        "jed/jed/jed-medium-file-dragging.js"
+        ),
+      css= list(
+        "jed/jed/jed.css",
+        "jed/medium/medium-editor.min.css",
+        "jed/jed/jed-medium-flat.css"
+        )))
+
+  return(
+    tags$div(class="jed-container",
+      tags$div(id=id,tags$span("Loading schema...")),
+      tags$input(
+        type="number",
+        id=sprintf("%s_init",id),
+        class="form-control mx-hide",
+        value=runif(1)
         )
-      )
-    ),
-  tags$div(class="jed-container",
-    tags$div(id=id),
-    tags$input(
-      type="number",
-      id=sprintf("%s_init",id),
-      class="form-control mx-hide",
-      value=runif(1)
-      )
-    )
-  )
+      ))
 }
 
 

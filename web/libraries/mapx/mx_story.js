@@ -105,7 +105,7 @@ mgl.helper.story.read = function(o){
     currentStep : 0,
     hasAerial : mgl.helper.btnToggleLayer({
       id:'map_main',
-      idLayer:'here-aerial',
+      idLayer:'here_aerial',
       idSwitch:'btnThemeAerial',
       action:'hide'
     })
@@ -401,7 +401,7 @@ mgl.helper.story.updateSlides = function(o) {
          from : start,
          to : end,
          during : 3000,
-         using : "easeOut"
+         using : "easeInOut"
        }); 
     };
 

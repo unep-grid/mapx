@@ -3,7 +3,8 @@ mx.util = {};
 mx.listener = {};
 mx.language = "en";
 mx.templates = {};
-
+mx.data = {};
+mx.data.headItems = {};
 /**
  * Do something on next frame
  * @param {Function} cb Callback function to execute on next animation frame
@@ -45,6 +46,183 @@ if (undefined !== style.WebkitTransform) {
   return "transform";
 }
   }();
+
+
+
+
+
+mx.util.uiToggleBtn = function(o){
+  var label = o.label || "";
+  //var onCheckedTrue = o.onCheckedTrue || function(){};
+  //var onCheckedFalse = o.onCheckedFalse || function(){};
+  var onChange = o.onChange || function(e,el){};
+  var data = o.data || {};
+  var checked = o.checked || false;
+  var classToggle = "check-toggle";
+  var classLabel = "btn btn-default btn-xs check-toggle-label";
+  var classInput = "check-toggle-input"; 
+  var id =  mx.util.makeId();
+  var elContainer = document.createElement("div");
+  var elInput = document.createElement("input");
+  var elLabel = document.createElement("label");
+  elInput.type="checkbox";
+  elInput.id = id;
+  elInput.checked=checked;
+  elLabel.setAttribute("for",id);
+  elLabel.className = classLabel;
+  elInput.className = classInput;
+  elContainer.className= classToggle;
+  elLabel.innerText = label;
+
+  for(var d in data){
+    elInput.dataset[d]=data[d];
+  }
+
+  elInput.onchange = function(e){
+    var el = this;
+    onChange(e,el);
+  };
+
+  elContainer.appendChild(elInput);
+  elContainer.appendChild(elLabel);
+
+  return elContainer;
+
+};
+
+
+
+
+/**
+* Create a foldable element
+* @param {Object} o options
+* @param {Element} o.content Element to fold
+* @param {String} o.label Label displayed in switch
+* @param {Boolean} o.open Default state
+*/
+mx.util.uiFold = function(o){
+  var content = o.content;
+  var label = o.label;
+  var open = o.open;
+  var onChange = o.onChange;
+  var classContainer = "fold-container";
+  var classContent = "fold-content";
+  var classLabel = "fold-label";
+  var classSwitch = "fold-switch";
+  var id =  mx.util.makeId();
+
+  if(!content) return;
+  open = open || false; 
+  label = label || "";
+
+  var elInput = document.createElement("input");
+  if(onChange){
+     elInput.onchange=onChange;
+  }
+  elInput.setAttribute("type","checkbox");
+  var elContainer = document.createElement("div");
+  var elContent = document.createElement("div");
+  var elLabel = document.createElement("label");
+  elContainer.classList.add(classContainer);
+  elContent.classList.add(classContent);
+  elLabel.classList.add(classLabel);
+  elLabel.setAttribute("for",id);
+  elInput.id = id;
+  elInput.classList.add("fold-switch");
+  elInput.checked = open;
+  elLabel.innerHTML = label;
+
+  elContent.appendChild(content);
+  elContainer.appendChild(elInput);
+  elContainer.appendChild(elLabel);
+  elContainer.appendChild(elContent);
+
+  return elContainer;
+};
+
+/**
+* String containting html to html elements
+* @param {String} text
+* @return {HTML}
+*/
+mx.util.textToHtml = function(text){
+ var el =  document.createElement("div");
+  el.innerHTML=text;
+  return el.children[0];
+};
+
+
+
+/**
+* Convert a simple object to an HTML list
+* @param {Object} obj Object to convert
+* @return {Element} Html ul element
+*/
+mx.util.objectToHtml = function(obj,classValue){
+
+  var classGroup = "list-group";
+  var classGroupItem = "list-group-item";
+  var classGroupItemValue = ["list-group-item-member"]; 
+
+  if(classValue) classGroupItemValue.concat(classValue);
+
+  return makeUl(obj);
+
+  function makeUl(u){
+    var ul = document.createElement("ul");
+    ul.classList.add(classGroup);
+    for(var l in u){
+      ul.appendChild(makeLi(u[l],l));
+    }
+    return ul;
+  }
+
+  function makeLi(l,t){
+    var li = document.createElement("li");
+    var content = document.createElement("div");
+    li.classList.add(classGroupItem);
+
+    if ( l.constructor == Object ){
+      content = makeUl(l); 
+    }else{ 
+
+      if(l.constructor != Array){
+        l = [l]; 
+      }
+
+      l.forEach(function(i){
+        var span = document.createElement("span");
+        classGroupItemValue.forEach(function(c){ 
+          span.classList.add(c);
+        });
+        span.innerHTML = i;
+        content.appendChild(span);
+      });
+
+    }
+
+    li.appendChild(
+      mx.util.uiFold({
+        content:content,
+        label:t,
+        open:false
+      })
+    );
+    return li;
+
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 /** 
@@ -557,6 +735,186 @@ mx.util.createWorker = function(fun) {
   return (new Worker(blobUrl));
 };
 
+
+
+mx.util.doPar = function(o) {
+
+  var fun = o.fun || function(){};
+  var data = o.data || {};
+  var script = o.script || undefined;
+  var s ="";
+  var mm = {
+    message : o.onMessage || console.log,
+    progress : o.onProgress || console.log,
+    end : o.onEnd || console.log
+  };
+
+  //if(script) script = script.constructor == Array?script:[script];
+  //if(script) s = 'self.importScripts("'+script.join('","')+'");';
+  if(script) s = "importScripts('" + self.origin + "/" + script + "');";
+  var m = "var sendMessage = " + function(m){postMessage({message:m});} + ";";
+  var p = "var sendProgress= " + function(m){postMessage({progress:m});} + ";";
+  var e = "var sendEnd= " + function(m){postMessage({end:m});} + ";";
+  var d = "var data= " + JSON.stringify(data) + ";";
+
+  fun = fun.toString();
+  fun = fun
+    .substring(
+      fun.indexOf("{") + 1,
+      fun.lastIndexOf("}")
+    );
+  var b = s+d+m+p+e+fun;
+
+  var blob = new Blob(
+    [b], {
+      type: "application/javascript"
+    }
+  );
+
+  var blobUrl = URL.createObjectURL(blob);
+  var ww = new Worker(blobUrl);
+
+  ww.onmessage=function(e){
+    var m = e.data;
+    for(var k in m){
+      mm[k](m[k]);
+    }
+  };
+
+  return;
+};
+
+
+
+mx.util.modal = function(o){
+
+
+  var id = o.id || mx.util.makeId();
+  var idBackground = "mx_modal_background";
+  var background = document.getElementById(idBackground) || document.createElement("div"); 
+  var modal = document.getElementById(o.id) || document.createElement("div");
+  if(o.close){
+    close();
+    return;
+  }
+  if(modal.id && o.replace){
+    if(Shiny) Shiny.unbindAll(modal);
+    modal.remove();
+    modal = document.createElement("div");
+  }
+  if(modal.id && !o.replace){
+    return;
+  }
+
+  var top = document.createElement("div");
+  var head = document.createElement("div");
+  var body = document.createElement("div");
+  var content = document.createElement("div");
+  var footer = document.createElement("div");
+  var buttons = document.createElement("div");
+  var dialog = document.createElement("div");
+
+  function close(){  
+    if(Shiny) Shiny.unbindAll(modal);
+    modal.remove();
+    var modals = document.querySelectorAll(".mx-modal-container");
+    if(modals.length === 0){
+      background.remove();
+    }
+  }
+
+  modal.appendChild(top);
+  modal.appendChild(head);
+  modal.appendChild(body);
+  modal.appendChild(footer);
+
+  modal.classList.add("mx-modal-container");
+  modal.id=id;
+  top.classList.add("mx-modal-drag-enable");
+  top.classList.add("mx-modal-top");
+  top.innerHTML = o.title;
+  if(top.children.length>0){
+    mx.util.forEachEl({
+      els:top.children,
+      callback:function(el){
+        el.classList.add("mx-modal-drag-enable");
+      }});
+  }
+  head.classList.add("mx-modal-head");
+  body.classList.add("mx-modal-body");
+  footer.classList.add("mx-modal-foot");
+  buttons.classList.add("btn-group");
+  background.id = idBackground;
+  background.classList.add("mx-modal-background");
+  dialog.classList.add("shiny-text-output");
+  dialog.id = id + "_txt";
+
+  if(!o.removeCloseButton){
+    b = document.createElement("button");
+    b.className="btn btn-default";
+    b.innerHTML = o.textCloseButton || "ok";  
+    b.onclick=close;
+    buttons.appendChild(b);
+  }
+
+  if(o.buttons && o.buttons.constructor == Array){
+    o.buttons.forEach(function(f){
+      var bb = mx.util.textToHtml(f);
+      buttons.appendChild(bb);
+    });
+  }
+
+  content.innerHTML = o.content;
+  body.appendChild(content);
+  footer.appendChild(dialog);
+  footer.appendChild(buttons);
+  document.body.appendChild(modal);
+  if(o.addBackground) document.body.appendChild(background);
+  if(Shiny) Shiny.bindAll(modal);
+  if(Selectize) {
+    var selects = $(modal).find("select");
+    selects.each(function(i,s){
+      var script = modal.querySelector("script[data-for="+s.id+"]");
+      var data = script?script.innerHTML:null;
+      var options = {dropdownParent:"body"};
+      if(data){
+        options = JSON.parse(data);
+        if(options.renderFun){
+          options.render={
+            option : mx.util[options.renderFun]
+          };
+        }
+      }
+      options.inputClass="form-control selectize-input";
+      mx.listener[s.id] = $(s).selectize(options);
+    });
+  }
+  mx.util.draggable({
+    id:id,
+    disable:[]
+  });
+};
+
+
+mx.util.parseCountryOptions = function(item, escape) {
+  return "<div>" + escape(item.name) +"<span class=\'badge pull-right\'>" + escape(item.count) + "</span></div>";
+};
+
+
+mx.util.updateSelectizeItems = function(o){
+  var items = o.items;
+  var id = o.id;
+  var s = mx.listener[id];
+  if(!s) return;
+  if(!items) return;
+  var ss = s[0].selectize;
+  
+  ss.clearOptions();
+  ss.addOption(items);
+  ss.refreshOptions();
+};
+
+
 /** Toggle button disabled state and warning or danger bootstrap classes
  * @param {Object} r options
  * @param {String} r.id Id of the button to toggle
@@ -569,7 +927,7 @@ mx.util.buttonToggle = function(r) {
       .removeClass("btn-default")
       .removeClass("btn-warning")
       .attr("disabled", true);
-  } else if (r.warming === true) {
+  } else if (r.warning === true) {
     $("#" + r.id)
       .addClass("btn-warning")
       .removeClass("btn-default")
@@ -824,6 +1182,7 @@ mx.util.setLanguage = function(m) {
     if (mx.util.isElement(el)) {
       var type = el.dataset.lang_type;
       var id = el.dataset.lang_key;
+      var text = el.innerText;
 
       /*
       * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
@@ -844,15 +1203,20 @@ mx.util.setLanguage = function(m) {
             if (!label) {
               // if label no in dict, take the default
               label = m.dict[j][langDefault];
-              if (!label) {
-                // if no label in default language, use id.
-                label = id;
-              }
             }
           }
         }
       }
-
+      /*
+      * Fallback
+      */
+      if (!label) {
+        if(text){
+          label = text;
+        }else{
+          label = id;
+        }
+      }
       setValue[type](el);
     }
 
@@ -1349,96 +1713,6 @@ mx.util.sortable = function(o){
 
 
 /**
- * Sortable list
- * Modified from http://jsfiddle.net/RubaXa/zLq5J/6/
- * @param {Object} o options
- * @param {Element} o.elRoot Element to listen too
- * @param {Function} o.onUpdate Function to call after updating
- */
-mx.util.sortable_old = function(o){
-
-  var body, dragEl, nextEl, handleEl, ghostEl, emptyEl;
-
-  rootEl =  o.elRoot;
-  onUpdate =  o.onUpdate ? o.onUpdate : console.log;
-
-  body = document.getElementsByTagName("body")[0];
-
-  mx.util.forEachEl({
-    els : rootEl.children,
-    callback : function(el){
-      el.draggable = true;
-    }
-  });
-
-  function onDragOver(evt) {
-    evt.preventDefault();
-    evt.dataTransfer.dropEffect = 'move';
-    var target = evt.target;
-    if (target && target !== dragEl && target.nodeName == 'LI') {
-      var rect = target.getBoundingClientRect();
-      var next = (evt.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-      rootEl.insertBefore(dragEl, next && target.nextSibling || target);
-      mx.util.classAction({
-        selector : dragEl,
-        class : "mx-dragged-ghost",
-        action : "add"
-      });
-    }
-  }
-
-  function onDragEnd(evt) {
-    evt.preventDefault();
-    mx.util.classAction({
-      selector : dragEl,
-      class : "mx-dragged-ghost",
-      action : "remove"
-    });
-    rootEl.removeEventListener('dragover', onDragOver, false);
-    rootEl.removeEventListener('dragend', onDragEnd, false);
-    ghostEl.remove();
-    if (nextEl !== dragEl.nextSibling) {
-      onUpdate(dragEl);
-    }
-  }
-
-
-  onDragStart =  function(evt) {
-    isGrip = handleEl.className.indexOf("mx-grip") > -1 ;
-    if(!isGrip){
-      evt.preventDefault();
-    }else{
-      dragEl = evt.target;
-      nextEl = dragEl.nextSibling;
-
-      ghostEl = document.createElement("span");
-      ghostEl.innerHTML="";
-      body.appendChild(ghostEl);
-
-      evt.dataTransfer.setDragImage(ghostEl, 0, 0);
-
-      setTimeout(function(){
-        ghostEl.style.display = "none";
-      },0);
-
-      evt.dataTransfer.setData("text/plain", dragEl.id);
-
-      rootEl.addEventListener('dragover', onDragOver, false);
-      rootEl.addEventListener('dragend', onDragEnd, false);
-    }
-  };
-
-  rootEl.addEventListener("mousedown",function(e){
-    handleEl = e.target;
-  },false);
-
-  rootEl.addEventListener('dragstart',onDragStart, false);
-
-  return onDragStart ;
-};
-
-
-/**
  * Set element attributes
  * @param {object} o options
  * @param {string} o.selector element selector
@@ -1720,6 +1994,33 @@ mx.util.htmlToData =  function(o) {
 
 
 
+mx.util.injectHead = function(items){
+  var s = items.scripts || [];
+  var c = items.css || [];
+
+  s.forEach(function(i){
+    if(!mx.data.headItems[i]){
+      mx.data.headItems[i]=true;
+      var script = document.createElement("script");
+      script.src=i;
+      script.async=false;
+      document.head.appendChild(script);
+    }
+  });
+
+  c.forEach(function(i){
+    if(!mx.data.headItems[i]){
+      mx.data.headItems[i]=true;
+      var link = document.createElement("link");
+      link.rel="stylesheet";
+      link.type="text/css";
+      link.href=i;
+      document.head.appendChild(link);
+    }
+  });
+
+};
+
 
 
 
@@ -1728,8 +2029,10 @@ if( typeof(Shiny) != "undefined" ){
   /** 
    * Add Shiny bling bling binding dinging dong
    */
+
+  Shiny.addCustomMessageHandler('mxModal', mx.util.modal);
   Shiny.addCustomMessageHandler('mxSetTemplates', mx.util.setTemplates);
-  Shiny.addCustomMessageHandler('mxDebugMsg', function(x){console.log(x);});
+  //Shiny.addCustomMessageHandler('mxDebugMsg', function(x){console.log(x);});
   Shiny.addCustomMessageHandler('mxSetElementAttribute', mx.util.setElementAttribute);
   Shiny.addCustomMessageHandler("mxSetImageAttributes", mx.util.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", mx.util.hide);
@@ -1739,6 +2042,8 @@ if( typeof(Shiny) != "undefined" ){
   Shiny.addCustomMessageHandler("mxSetLanguage", mx.util.setLanguage);
   Shiny.addCustomMessageHandler("mxJsonToObj", mx.util.jsonToObj);
   Shiny.addCustomMessageHandler("mxProgress",mx.util.progressScreen);
+  Shiny.addCustomMessageHandler("mxInjectHead",mx.util.injectHead);
+  Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",mx.util.updateSelectizeItems);
 }
 
 

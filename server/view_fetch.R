@@ -15,9 +15,13 @@ reactViews <- reactive({
   hasData <- !noDataCheck(userData)
   hasCountry <- !noDataCheck(country)
 
+  viewsId <- query$views
   if( !hasRole || !hasData || !hasCountry ) return()
 
+  query$views <<- NULL
+
   out <-  mxDbGetViews(
+    views = viewsId, 
     project = country,
     read = userRole$read,
     edit = userRole$edit,

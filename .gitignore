@@ -17,6 +17,21 @@ vignettes/*.pdf
 packrat-scenario*/
 # libre office temp file
 .~lock*
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+
+# Session
+Session.vim
+
+# Temporary
+.netrwhist
+*~
+# Auto-generated tag files
+tags
 # node module
 node_modules
 
