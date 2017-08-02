@@ -46,7 +46,6 @@ mgl.settings = {};
 mgl.settings.separators = {};
 mgl.settings.separators.sublayer = "_@_";
 mgl.settings.country="";
-mgl.settings.vtUrl= "http://localhost:3030/tile/{z}/{x}/{y}.mvt";
 /**
 * Data unrelated to specific map
 */
@@ -3855,10 +3854,12 @@ mgl.helper.initMap = function(o){
   }
 
   // save vt config
-  if(o.vtUrl){
-    debugger;
-    mgl.settings.vtUrl = o.vtUrl;
+  if(o.vtPort){
+    mgl.settings.vtPort = o.vtPort;
   }
+
+  // set vt template
+  mgl.settings.vtUrl =  location.protocol +"//"+ location.hostname + mgl.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
 
 
   /**

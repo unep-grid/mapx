@@ -33,20 +33,21 @@ observe({
     # on the same location as the current app
     #
 
-    cdata <- list(
-      protocol = session$clientData$url_protocol,
-      hostname = session$clientData$url_hostname,
-      pathname = session$clientData$url_pathname,
-      port = session$clientData$url_port,
-      search = session$clientData$url_search
-      )
+    #cdata <- list(
+      #protocol = session$clientData$url_protocol,
+      #hostname = session$clientData$url_hostname,
+      #pathname = session$clientData$url_pathname,
+      #port = session$clientData$url_port,
+      #search = session$clientData$url_search
+      #)
 
-    vtBaseUrl <- sprintf("%1$s//%2$s%3$s/tile/{z}/{x}/{y}.mvt",
-      cdata$protocol,
-      cdata$hostname,
-      .get(config,c("vt","port"))
-      )
+    #vtBaseUrl <- sprintf("%1$s//%2$s%3$s/tile/{z}/{x}/{y}.mvt",
+      #cdata$protocol,
+      #cdata$hostname,
+      #.get(config,c("vt","port"))
+      #)
 
+    #browser()
     #
     # Set map options
     # 
@@ -54,7 +55,7 @@ observe({
       #
       # Vector tile service : base url
       #
-      vtUrl = vtBaseUrl,
+      vtPort = .get(config,c("vt","port")),
       #
       # Default from user
       #
