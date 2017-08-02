@@ -3856,6 +3856,7 @@ mgl.helper.initMap = function(o){
 
   // save vt config
   if(o.vtUrl){
+    debugger;
     mgl.settings.vtUrl = o.vtUrl;
   }
 
