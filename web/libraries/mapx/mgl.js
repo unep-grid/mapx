@@ -46,6 +46,7 @@ mgl.settings = {};
 mgl.settings.separators = {};
 mgl.settings.separators.sublayer = "_@_";
 mgl.settings.country="";
+mgl.settings.vtPort = "";
 /**
 * Data unrelated to specific map
 */

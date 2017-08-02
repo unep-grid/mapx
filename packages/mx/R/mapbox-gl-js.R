@@ -147,7 +147,8 @@ mglInit <- function( config, session=shiny::getDefaultReactiveDomain()) {
     jsonlite::toJSON(
       config,
       keep_vec_names=FALSE,
-      auto_unbox=TRUE
+      auto_unbox=TRUE,
+      null="null"
       )
     )
 }
