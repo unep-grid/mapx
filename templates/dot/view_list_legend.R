@@ -15,10 +15,11 @@ tags$div(
           `name`='{{=it.id}}_{{=item.value}}',
           id='{{=it.id}}_{{=item.value}}'
           ),
-        tags$div(class="mx-legend-item-arrow",">"),
+        tags$div(class="mx-legend-item-arrow",""),
         tags$label(
-          class="mx-legend-item-color",
           `for`="{{=it.id}}_{{=item.value}}",
+          tags$div(
+          class="mx-legend-item-color",
           style=paste( 
             "{{?path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022 }}",
             "height:{{=item.size*2}}px;",
@@ -49,6 +50,7 @@ tags$div(
             "{{??}}",
             "{{=item.value}}",
             "{{?}}",sep="")
+          )   
           )
         )
       ),

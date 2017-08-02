@@ -2486,6 +2486,7 @@ mgl.helper.addViewVt = function(o){
     time = path(view,"data.period"),
     rules =  path(view,"data.style.rules"),
     geomType = path(view,"data.geometry.type"),
+    source =  path(view,"data.source"),
     num = 0,
     hasStyle = false,
     hasTime = false,
@@ -2495,6 +2496,7 @@ mgl.helper.addViewVt = function(o){
     ruleValues = [];
 
 
+  if( ! source ) return;
   /* check style and rules*/
   if( style && rules && rules.length > 0 ){
 
@@ -2776,8 +2778,6 @@ mgl.helper.addView = function(o){
       });
     },
     vt : function(){
-
-     if(!path(view,"data.source.tiles")) return ;   
 
       mgl.helper.addViewVt({
         view : view,

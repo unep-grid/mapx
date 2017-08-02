@@ -29,26 +29,16 @@ display:none;
   list-style: none;
   padding: 0px;
   margin: 0px;
-  display: flex;
-  display: -webkit-flex;
-  flex-direction:column;
-  -webkit-flex-direction:column;
 }
 
 .mx-view-item-legend li 
 {
-  display: flex;
-  display: -webkit-flex;
   padding-left:2px;
 }
 
 .mx-legend-item-container 
 {
   height: 20px;
-  display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  justify-content:center; 
 }
 
 
@@ -67,6 +57,7 @@ display:none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor:pointer;
 }
 
 .mx-legend-item-arrow {
@@ -74,6 +65,7 @@ display:none;
 }
 
 input:checked ~ .mx-legend-item-arrow {
- display:block;
+  display:inline-block;
+  vertical-align: top;
 }
 
