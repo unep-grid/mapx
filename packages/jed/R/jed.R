@@ -30,9 +30,6 @@ jedSchema <- function(id, schema, startVal = list(), options = list(), session=s
 #' @export
 jedOutput <- function(id){
 
-
-  shiny::addResourcePath("jed",system.file("www", package="jed"))
-
   session = shiny:::getDefaultReactiveDomain()
 
   session$sendCustomMessage("mxInjectHead",list(

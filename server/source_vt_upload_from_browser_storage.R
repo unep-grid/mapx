@@ -211,7 +211,7 @@ observeEvent(input$btnSaveNewSource,{
         sep = "_"
         )
 
-      mxProgress(id=idProgress, text= "Start importation into database", percent=1)
+      mxProgress(id=idProgress, text= "Start importation, please wait", percent=1)
       #
       # Create new row
       #
