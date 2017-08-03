@@ -1584,6 +1584,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       extent = .get(sourceData,c("extent"))
       ))
 
+  viewTable <- .get(sourceData,c("table"))
+
   viewData <- .set(viewData,c("attribute"),list(
       name = .get(sourceData,c("variableName")),
       names = unique(c(
@@ -1594,8 +1596,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       type = .get(sourceData,c("type")),
       table = .get(sourceData,c("table")),
       sample = .get(sourceData,c("sampleData")),
-      min = min(.get(sourceData,c("table","values"))),
-      max = max(.get(sourceData,c("table","values"))),
+      min = min(viewTable$values),
+      max = max(viewTable$values),
       rows = .get(sourceData,c("numberOfRow")),
       nulls =  .get(sourceData,c("numberOfNull")),
       distincts = .get(sourceData,c("numberOfDistinct"))

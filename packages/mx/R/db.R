@@ -1889,7 +1889,7 @@ mxDbGetLayerMeta <- function(layer){
   res <- res[length(res)]
 
   if(isTRUE(nchar(res)>0)){
-    res <- jsonlite::fromJSON(res,simplifyVector=F)
+    res <- jsonlite::fromJSON(res,simplifyVector=F, simplifyDataFrame=F)
   }else{
     res <- list()
   }
