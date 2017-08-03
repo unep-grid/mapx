@@ -1013,7 +1013,7 @@ mxDbGeojsonCountFeatures <- function(path){
     if(file.exists(path)){
       #cmdCount <- sprintf("awk '/{/ {d++} /}/ {d--} /{/ && d==1 {count++} END{print count}' %1$s",path)
       #cmdCount <- sprintf("jq -nc --stream 'fromstream(1|truncate_stream(inputs)) | length' %1$s",path)
-      cmdCount <- sprintf("grep -o '\"type\"\\s*:\\s*\"Feature\"'  %1$s | wc -l",path)
+      cmdCount <- sprintf("grep -o '\"Feature\"'  %1$s | wc -l",path)
       nFeatures <- system(cmdCount, intern=T)
       
       if(!noDataCheck(nFeatures)){
