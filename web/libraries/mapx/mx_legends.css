@@ -53,11 +53,12 @@ display:none;
 }
 
 .mx-legend-item-label {
-  font-familly : "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor:pointer;
+  cursor: pointer;
+  font-weight: normal;
 }
 
 .mx-legend-item-arrow {
