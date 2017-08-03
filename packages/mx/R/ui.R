@@ -540,7 +540,7 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict){
 
   makeLi = function(it,ti){
     ti <- d(ti,lang=lang,dict=dict);
-    if (is.list(it)){
+    if (is.list(it) && length(names(it)>0)){
       content = mxFold(
         content = makeUL(it),
         labelUi = ti
