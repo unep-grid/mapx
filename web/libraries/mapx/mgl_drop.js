@@ -93,6 +93,25 @@
   // handle worker
   util.startWorker = function(f) {
     return function(e) {
+
+        // Test for size
+      if(f && f.size && f.size > mgl.settings.maxByteUpload){
+        var msg = "<p>The file size reached the current limit.</p>";
+        msg = msg + "<p>The file size is " + f.size + " byte </p>";
+        msg = msg + "<p>The limit is " + mgl.settings.maxByteUpload + " byte </p>";
+        msg = msg + "<p> Registered users can upload big dataset in the toolbox section </p>";
+        mx.util.modal({
+          content:msg,
+          title:"Max size reached"
+        });
+        mx.util.progressScreen({
+          enable : false,
+          id :f.name
+        });
+        return;
+      }
+
+
         // Create a worker to handle this file
         var w = new Worker("mx/mapx/mgl_drop_worker.js");
 
@@ -103,6 +122,9 @@
         var map = mgl.maps[o.id].map; 
         var data = e.target.result;
         var gJson = {};
+
+        
+
 
         if(f.fileType == 'kml') gJson =  toGeoJSON.kml((new DOMParser()).parseFromString(data, 'text/xml'));
         if(f.fileType == 'gpx') gJson =  toGeoJSON.gpx((new DOMParser()).parseFromString(data, 'text/xml'));

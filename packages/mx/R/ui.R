@@ -26,7 +26,7 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
-mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,addBackground=F,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
 
   stopifnot(!noDataCheck(id))
 

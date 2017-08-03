@@ -52,6 +52,7 @@ observeEvent(input$btnDeleteSource,{
 
   language <- reactData$language
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
+
   #
   # Button to confirm the source removal
   #
@@ -69,7 +70,8 @@ observeEvent(input$btnDeleteSource,{
     title="Confirm source remove",
     content=tags$span(d("confirmSourceRemove",lang=language,dict=dict)),
     buttons=btnList,
-    textCloseButton=d("btn_close",language)
+    textCloseButton=d("btn_close",language),
+    addBackground=T
     )
 })
 

@@ -980,7 +980,7 @@ mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,ar
 
     cmd = sprintf(
       "ogr2ogr \\
-      -gt 1000 \\
+      -gt 1001 \\
       -t_srs \"EPSG:4326\" \\
       -s_srs \"EPSG:4326\" \\
       -geomfield \"geom\" \\
@@ -1011,10 +1011,13 @@ mxDbGeojsonCountFeatures <- function(path){
 
   try(silent=T,{
     if(file.exists(path)){
-      cmdCount <- sprintf("ogrinfo %1$s  OGRGeoJSON -ro -so | grep \"Feature Count\" | sed \"s/^.*:\\s*//g\"",path)
+      #cmdCount <- sprintf("awk '/{/ {d++} /}/ {d--} /{/ && d==1 {count++} END{print count}' %1$s",path)
+      #cmdCount <- sprintf("jq -nc --stream 'fromstream(1|truncate_stream(inputs)) | length' %1$s",path)
+      cmdCount <- sprintf("grep -o '\"type\"\\s*:\\s*\"Feature\"'  %1$s | wc -l",path)
       nFeatures <- system(cmdCount, intern=T)
-      if(!noDataCheck(cmdCount)){
-        nFeatures = as.numeric(nFeatures)
+      
+      if(!noDataCheck(nFeatures)){
+        nFeatures = as.numeric(nFeatures) 
     }}
   })
 

@@ -33,8 +33,9 @@ server <- function(input,output,session){
           #
           # source handler
           #
-          "source_vt_create.R",
-          "source_vt_upload.R",
+          "source_vt_upload_from_browser_storage.R",
+          "source_vt_upload_from_file_explorer.R",
+          "source_vt_upload_progress.R",
           "source_vt_upload_optional_view.R",
           "source_edit.R",
           #

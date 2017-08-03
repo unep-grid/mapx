@@ -788,11 +788,11 @@ mx.util.doPar = function(o) {
 
 mx.util.modal = function(o){
 
-
   var id = o.id || mx.util.makeId();
-  var idBackground = "mx_modal_background";
-  var background = document.getElementById(idBackground) || document.createElement("div"); 
+  var idBackground = "mx_background_for_" + id;
   var modal = document.getElementById(o.id) || document.createElement("div");
+  var background = document.getElementById(idBackground) || document.createElement("div"); 
+
   if(o.close){
     close();
     return;
@@ -817,10 +817,11 @@ mx.util.modal = function(o){
   function close(){  
     if(Shiny) Shiny.unbindAll(modal);
     modal.remove();
-    var modals = document.querySelectorAll(".mx-modal-container");
-    if(modals.length === 0){
-      background.remove();
-    }
+    background.remove();
+/*    var modals = document.querySelectorAll(".mx-modal-container");*/
+    //if(modals.length === 0){
+      //background.remove();
+    /*}*/
   }
 
   modal.appendChild(top);
@@ -868,8 +869,8 @@ mx.util.modal = function(o){
   body.appendChild(content);
   footer.appendChild(dialog);
   footer.appendChild(buttons);
-  document.body.appendChild(modal);
   if(o.addBackground) document.body.appendChild(background);
+  document.body.appendChild(modal);
   if(Shiny) Shiny.bindAll(modal);
   if(Selectize) {
     var selects = $(modal).find("select");

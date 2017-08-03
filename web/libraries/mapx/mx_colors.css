@@ -85,6 +85,10 @@
     border : 1px solid var(--mx_ui_border);
 }
 
+.mx .jed-container .jed-error {
+  border-left: 1px solid red !important;
+}
+
 .mx .transparent:hover {
   background-color: var(--mx_ui_background);
 }

@@ -3,16 +3,18 @@ observeEvent(input$uploadGeojson,{
   mxCatch(
     title="Upload Geojson",
     onError = function(){
-      mxProgress(id="dataUploaded", percent=100, enable=F)
+      mxProgress(id=idProgress, percent=100, enable=F)
      },
     {
     language <- reactData$language 
     country <- reactData$country
     dict <- .get(config,c("dictionaries","schemaMetadata")) 
-    msgSave <- d("msgProcessWait", lang=language, dict=dict)
+    #msgSave <- d("msgProcessWait", lang=language, dict=dict)
     idUser <- .get(reactUser$data,c("id"))
     canRead <- .get(reactUser$role,c("desc","read"))
-    mxProgress(id="dataUploaded", text=paste(msgSave," :  md5 sum " ), percent=50)
+    idProgress <- "dataUpload"
+    idModal <- idProgress
+    mxProgress(id=idProgress, text="Check md5 sum", percent=50)
 
     #
     # Get geojson
@@ -27,7 +29,7 @@ observeEvent(input$uploadGeojson,{
     #
     # Check if the data alredy exists and available to the user
     # 
-    mxProgress(id="dataUploaded", text=paste(msgSave," : duplicate analysis " ), percent=50)
+    mxProgress(id=idProgress, text=paste(" Duplicate analysis " ), percent=50)
 
     duplicates = mxDbGetQuery(sprintf(
         "select id,editor,data#>>'{\"meta\",\"text\",\"title\"}' title from %1$s where data#>>'{\"md5\"}' = '%2$s' limit 1",
@@ -59,10 +61,10 @@ observeEvent(input$uploadGeojson,{
         listToHtmlSimple(list("source_title"=titles),lang=language)
         )
 
-      mxProgress(id="importSource", percent=100, enable=F)
+      mxProgress(id=idProgress, percent=100, enable=F)
 
       mxModal(
-          id="uiErrorDuplicate",
+          id=idModal,
           content=uiOut,
           addBackground=TRUE,
           textCloseButton=d("btn_close",language)
@@ -94,7 +96,7 @@ observeEvent(input$uploadGeojson,{
       # Generate the modal panel
       #
       mxModal(
-          id="modalSourceCreate",
+          id=idModal,
           content=uiOut,
           buttons=btnList,
           addBackground=TRUE,
@@ -112,14 +114,15 @@ observeEvent(input$sourceNew_init,{
   mxCatch(
     title="Init Schema for source edition",
     onError = function(){
-      mxProgress(id="dataUploaded", percent=100, enable=F)
-      mxModal(id="modalSourceCreate",close=T)
+      mxProgress(id=idProgress, percent=100, enable=F)
+      mxModal(id=idModal,close=T)
     },
     {
       language <- reactData$language 
       rolesTarget <- .get(reactUser$role,c("desc","publish"))
-
       view <- reactData$viewSourceGeojson 
+      idProgress <- "dataUpload"
+      idModal <- idProgress
 
       startVal <- NULL
 
@@ -167,25 +170,34 @@ observeEvent(input$btnSaveNewSource,{
   mxCatch(
     title="Save new source",
     onError = function(){
-      mxProgress(id="dataUploaded", percent=100, enable=F)
-      mxModal(id="modalSourceCreate",close=T)
+      mxProgress(id=idProgress, percent=100, enable=F)
+      mxModal(id=idModal,close=T)
       mxDbGetQuery(sprintf("delete from mx_sources where id='%s'",idSource)) ;
       mxDbGetQuery(sprintf("drop table if exists %s",idSource)) ;
     },
     {
+
+      idModal <- "dataUpload"
+      idProgress <- "dataUpload"
       meta <-input$sourceNew_values$msg
       country <- reactData$country
       language <- reactData$language
       user <- reactUser$data$id
       view <- reactData$viewSourceGeojson
+      hasIssue <- reactData$viewSourceHasIssues
       type <- "vector"
       gj <- .get(view,c("data","source","data"))
       dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
-      msgSave <- d("msgProcessWait", lang=language, dict=dict)
+      #msgSave <- d("msgProcessWait", lang=language, dict=dict)
 
-      mxProgress(id="importSource", text= paste(msgSave,": import in DB"), percent=1)
-      if(reactData$viewSourceHasIssues) return()
+
+      if( isTRUE(hasIssue) ) stop("View source had issues, but save button was pressed")
+
+      #
+      # Close modal
+      #
+      mxModal(id=idModal,close=T)
 
       #
       # Source id = layer id = table name
@@ -199,6 +211,7 @@ observeEvent(input$btnSaveNewSource,{
         sep = "_"
         )
 
+      mxProgress(id=idProgress, text= "Start importation into database", percent=1)
       #
       # Create new row
       #
@@ -221,25 +234,28 @@ observeEvent(input$btnSaveNewSource,{
       mxDbAddGeoJSON(
         geojsonList=gj,
         tableName=idSource,
-        onProgress=function(x){
-          mxProgress(id="importSource", text= paste(msgSave,": import in DB"), percent=x)
+        )
+
+      #
+      # Trigger progress
+      #
+      reactData$geojsonProgressData <- list(
+        nFeatures = length(gj$features),
+        sourceRow = sourceRow,
+        idSource = idSource,
+        idProgress = idProgress,
+        onDone =  function(){
+          #
+          # Remove original geojson
+          #
+          mglRemoveView(
+            idView = .get(view,"id") 
+            )
+
         }
         )
-      #
-      # Add source row to DB
-      #
-      mxDbAddRow(
-        data=sourceRow,
-        table=.get(config,c("pg","tables","sources"))
-        )
 
-      #
-      # Trigger new view panel
-      #
-      reactData$triggerNewViewForSourceId <- idSource
-      reactData$updateSourceLayerList <- runif(1)  
 
-      mxProgress(id="importSource", percent=100, enable=F)
     })
 })
 

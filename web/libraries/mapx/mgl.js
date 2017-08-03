@@ -47,6 +47,7 @@ mgl.settings.separators = {};
 mgl.settings.separators.sublayer = "_@_";
 mgl.settings.country="";
 mgl.settings.vtPort = "";
+mgl.settings.maxByteUpload =  Math.pow(1024,2)*100; //100 MiB
 /**
 * Data unrelated to specific map
 */

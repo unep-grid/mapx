@@ -256,7 +256,7 @@ liControlsGeoJson <- tagList(
   "{{?view.type == 'gj'}}",
   # Button to upload geojson
   tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_upload",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_upload_geojson",
@@ -267,7 +267,7 @@ liControlsGeoJson <- tagList(
       )
     ),
   tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_delete_geojson",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_delete_geojson",
@@ -284,7 +284,7 @@ liControlsGeoJson <- tagList(
 #
 liControlsScreenShot <- tagList(
    tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_screenshot",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_screenshot",
@@ -297,6 +297,7 @@ liControlsScreenShot <- tagList(
 
 # controls share
 liControlsShare <- tagList(
+  "{{?view.type == 'vt' \\u007c\\u007c view.type == 'rt' }}",
   tags$li(
     class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_share",
@@ -306,7 +307,8 @@ liControlsShare <- tagList(
     tags$div(
       class="fa fa-external-link"
       )
-    )
+    ),
+  "{{?}}"
 )
 
 
@@ -317,7 +319,7 @@ liControlsEdit <- tagList(
    "{{?view._edit}}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_edit_config",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_config",
@@ -331,7 +333,7 @@ liControlsEdit <- tagList(
   "{{?path(view,'data.attribute.name')}}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_edit_style",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_style",
@@ -345,7 +347,7 @@ liControlsEdit <- tagList(
   "{{?}}",
   # Button to remove view
   tags$li(
-    class="mx-pointer hint--bottom-left",
+    class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_delete",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_delete",

@@ -191,13 +191,6 @@ observeEvent(input$btnOptionalViewCreate,{
         )
 
       #
-      # Remove original geojson
-      #
-      mglRemoveView(
-        idView = .get(view,"id") 
-        )
-
-      #
       # Generate the fina lmodal panel
       #
       mxModal(
