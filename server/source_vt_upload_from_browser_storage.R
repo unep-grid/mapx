@@ -41,35 +41,28 @@ observeEvent(input$uploadGeojson,{
 # Send the json data when the ui is generated
 #
 observeEvent(input$sourceNew_init,{
-  mxCatch(
-    title="Init Schema for source edition",
-    onError = function(){
-      mxProgress(id=idProgress, percent=100, enable=F)
-      mxModal(id=idModal,close=T)
-    },
-    {
-      language <- reactData$language 
-      rolesTarget <- .get(reactUser$role,c("desc","publish"))
-      view <- reactData$viewSourceGeojson 
-      idProgress <- "dataUpload"
-      idModal <- idProgress
 
-      startVal <- NULL
+  language <- reactData$language 
+  rolesTarget <- .get(reactUser$role,c("desc","publish"))
+  view <- input$uploadGeojson 
+  idProgress <- "dataUpload"
+  idModal <- idProgress
 
-      jedSchema(
-        id="sourceNew",
-        schema = mxSchemaSourceMeta(
-          language = language,
-          rolesTarget = rolesTarget,
-          title = .get(view, c("data","title","en")),
-          abstract =.get(view, c("data","abstract","en")), 
-          extent = .get(view, c("data","geometry","extent")),
-          attributesNames = names(.get(view, c("data","attributes")))
-          ),
-        startVal = startVal,
-        options = list("no_additional_properties"=FALSE)
-        )
-    })
+  startVal <- NULL
+
+  jedSchema(
+    id="sourceNew",
+    schema = mxSchemaSourceMeta(
+      language = language,
+      rolesTarget = rolesTarget,
+      title = .get(view, c("data","title","en")),
+      abstract =.get(view, c("data","abstract","en")), 
+      extent = .get(view, c("data","geometry","extent")),
+      attributesNames = names(.get(view, c("data","attributes")))
+      ),
+    startVal = startVal,
+    options = list("no_additional_properties"=FALSE)
+    )
 })
 
 #
