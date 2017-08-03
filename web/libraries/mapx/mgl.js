@@ -2501,9 +2501,6 @@ mgl.helper.addViewVt = function(o){
   /* check style and rules*/
   if( style && rules && rules.length > 0 ){
 
-    /* Reverse the rules to match the order in the editor*/
-    rules = rules.reverse();
-
     /* the view has at least one style */
     hasStyle = true;
     /* 
@@ -2577,9 +2574,14 @@ mgl.helper.addViewVt = function(o){
      * evaluate rules
      */
 
+
+
+
+
     rules.forEach(function(rule,i){
       var value = rule.value;
       var max = path(view,"data.attribute.max")+1;
+      var min = path(view,"data.attribute.min")-1;
       var nextRule = rules[i+1];
       var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
       var isNumeric = path(view,"data.attribute.type") == "number";
@@ -2591,17 +2593,16 @@ mgl.helper.addViewVt = function(o){
       var paint = {};
       var layerSprite = {};
 
-
       /**
        * Set filter
        */
 
+      filter.push(["has", attr]);
+
       if(isNumeric){
-        filter.push(["has", attr]);
         filter.push([">=", attr, value]);
         filter.push(["<", attr, nextValue]);
       }else{
-        filter.push(["has", attr]);
         filter.push(["==", attr, value]);
       }
       /** 
@@ -2678,6 +2679,7 @@ mgl.helper.addViewVt = function(o){
     /*
      * Add layers to map
      */
+    layers = layers.reverse();
       layers.forEach(function(x){
         map.addLayer(x);
       });
