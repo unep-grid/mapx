@@ -1,109 +1,39 @@
 
 observeEvent(input$uploadGeojson,{
-  mxCatch(
-    title="Upload Geojson",
-    onError = function(){
-      mxProgress(id=idProgress, percent=100, enable=F)
-     },
-    {
-    language <- reactData$language 
-    country <- reactData$country
-    dict <- .get(config,c("dictionaries","schemaMetadata")) 
-    #msgSave <- d("msgProcessWait", lang=language, dict=dict)
-    idUser <- .get(reactUser$data,c("id"))
-    canRead <- .get(reactUser$role,c("desc","read"))
-    idProgress <- "dataUpload"
-    idModal <- idProgress
-    mxProgress(id=idProgress, text="Check md5 sum", percent=50)
+  language <- reactData$language 
+  country <- reactData$country
+  dict <- .get(config,c("dictionaries","schemaMetadata")) 
+  idProgress <- "dataUpload"
+  idModal <- idProgress
 
-    #
-    # Get geojson
-    #
+  #
+  # json editor output
+  #
+  uiOut = tagList(
+    jedOutput(id="sourceNew")
+    )
 
-    view  <- input$uploadGeojson
-    gj <- .get(view,c("data","source","data"))
-    md5 <- mxMd5(jsonlite::toJSON(gj))
-    view <- .set(view,c("data","source","md5"),md5)
+  #
+  # List of button for the modal window
+  #
+  btnList <- list(
+    actionButton(
+      inputId="btnSaveNewSource",
+      label=d("btn_save",language)
+      )
+    )
 
-    isDuplicate <- FALSE
-    #
-    # Check if the data alredy exists and available to the user
-    # 
-    mxProgress(id=idProgress, text=paste(" Duplicate analysis " ), percent=50)
+  #
+  # Generate the modal panel
+  #
+  mxModal(
+    id=idModal,
+    content=uiOut,
+    buttons=btnList,
+    addBackground=TRUE,
+    textCloseButton=d("btn_close",language)
+    )
 
-    duplicates = mxDbGetQuery(sprintf(
-        "select id,editor,data#>>'{\"meta\",\"text\",\"title\"}' title from %1$s where data#>>'{\"md5\"}' = '%2$s' limit 1",
-        .get(config,c("pg","tables","sources")),
-        .get(view,c("data","source","md5"))
-        ))
-
-    if(!noDataCheck(duplicates)){
-
-      layers <-  mxDbGetLayerTable(
-        project = country,
-        userId = idUser,
-        target = canRead,
-        language = language
-        )
-
-      isDuplicate <- isTRUE(duplicates$id %in% layers$id)
-    }
-
-    if(isDuplicate){
-
-      titles <- lapply(duplicates$title,jsonlite::fromJSON,simplifyVector=F)[[1]]
-
-      names(titles) <- names(d(names(titles),language))
-
-      uiOut <- tagList(
-        tags$p(d("msgErrorImport",dict=dict,lang=language)),
-        tags$p(d("msgErrorDuplicate",dict=dict,lang=language),': '),
-        listToHtmlSimple(list("source_title"=titles),lang=language)
-        )
-
-      mxProgress(id=idProgress, percent=100, enable=F)
-
-      mxModal(
-          id=idModal,
-          content=uiOut,
-          addBackground=TRUE,
-          textCloseButton=d("btn_close",language)
-          )
-    }else{
-
-      # save state
-      reactData$viewSourceGeojson <- view
-
-      mxProgress(id="dataUploaded", percent=100, enable=F)
-      #
-      # json editor output
-      #
-      uiOut = tagList(
-        jedOutput(id="sourceNew")
-        )
-
-      #
-      # List of button for the modal window
-      #
-      btnList <- list(
-        actionButton(
-          inputId="btnSaveNewSource",
-          label=d("btn_save",language)
-          )
-        )
-
-      #
-      # Generate the modal panel
-      #
-      mxModal(
-          id=idModal,
-          content=uiOut,
-          buttons=btnList,
-          addBackground=TRUE,
-          textCloseButton=d("btn_close",language)
-          )
-    }
-})
 }) 
 
 
@@ -183,7 +113,7 @@ observeEvent(input$btnSaveNewSource,{
       country <- reactData$country
       language <- reactData$language
       user <- reactUser$data$id
-      view <- reactData$viewSourceGeojson
+      view <- input$uploadGeojson
       hasIssue <- reactData$viewSourceHasIssues
       type <- "vector"
       gj <- .get(view,c("data","source","data"))
