@@ -30,6 +30,7 @@ tags$div(
           `for`="{{=it.id}}_{{=item.value}}",
           tags$div(
             class="mx-legend-item-color-container",
+            style="opacity:{{=item.opacity}};",
             tags$div(
               class="mx-legend-item-color",
               style=paste( 
@@ -42,7 +43,6 @@ tags$div(
                 "border-radius:100%;",
                 "{{?}}",
                 "background-color:{{=item.color}};",
-                "background-opacity:{{=item.opacity}};",
                 "{{? item.sprite }}",
                 "background-image:{{=item.sprite}};",
                 "{{?}}",
