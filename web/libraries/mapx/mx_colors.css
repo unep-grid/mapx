@@ -124,14 +124,17 @@
 
 .mx .mx-modal-container,
 .mx .selectize-dropdown,
+.mx .mapboxgl-ctrl.mapboxgl-ctrl-scale,
+.mx .mapboxgl-ctrl.mx-north-arrow, 
 .mx .mapboxgl-popup-content
 {
-border : 1px solid var(--mx_ui_border);
-background-color: var(--mx_ui_background);
+  border : 1px solid var(--mx_ui_border);
+  background-color: var(--mx_ui_background);
   -webkit-box-shadow:  2px 2px 5px 0 var(--mx_ui_shadow);  
   -moz-box-shadow:  2px 2px 5px 0 var(--mx_ui_shadow);
   box-shadow :  2px 2px 5px 0 var(--mx_ui_shadow);
 }
+
 
 .mx .mx-modal-top ,
 .mx .mx-modal-top * {
@@ -139,8 +142,8 @@ background-color: var(--mx_ui_background);
 }
 
 .mx .mx-modal-top {
-  background-color:var(--mx_ui_shadow);
-  border-bottom: 1px solid var(--mx_ui_text);
+  background-color:var(--mx_ui_text);
+  /*border-bottom: 1px solid var(--mx_ui_text);*/
 }
 
 /* Note : see also loading screen background*/

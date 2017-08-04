@@ -271,7 +271,7 @@ observe({
                       selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
-                        choices = reactSourceLayer(),
+                        choices = list(),
                         selected = .get(viewData,c("data","source","layerInfo","maskName")),
                         options=list(
                           dropdownParent="body"
@@ -1081,6 +1081,43 @@ reactSourceLayer <- reactive({
  return(layers)
 
 })
+
+
+observeEvent(input$selectSourceLayerMain,{
+  layer <- input$selectSourceLayerMain
+  out <- list()
+  
+  if(!noDataCheck(layer)){
+  layers <- reactSourceLayer()
+  layers <- layers[!layers %in% layer]
+
+  if(length(layers)>0){
+  
+  geomTypesCheck <- sapply(layers,function(x){
+    geomType <- mxDbGetLayerGeomTypes(x)$geom_type
+    geomOk <- isTRUE(geomType != "point")
+    return(geomOk)
+    })
+  
+  out <- layers[geomTypesCheck]
+  
+  }
+  
+  }
+
+  updateSelectInput(
+    session,
+    "selectSourceLayerMask",
+    choices=out
+    
+    )
+
+
+})
+
+
+
+
 
 #
 # reactLayerMaskSummary

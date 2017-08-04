@@ -136,7 +136,7 @@ mgl.control.Main.prototype.onAdd = function(map) {
     var hide = o.hide || !btns.btnToggleBtns.hidden;
     var action = hide ? 'add':'remove';  
     var idToggle = ["#tabLayers","#tabTools","#tabSettings"];
-    var idSkip = ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
+    var idSkip = o.skip || ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
     btns.btnToggleBtns.hidden = hide;
 
     for(var key in btns){  
@@ -256,9 +256,6 @@ mgl.control.Main.prototype.onAdd = function(map) {
         mgl.helper.story.controller({
           enable : false
         });
-        mgl.helper.toggleControls({
-          hide : false
-        });
       }
     },
     btnZoomIn:{
@@ -297,7 +294,7 @@ mgl.control.Main.prototype.onAdd = function(map) {
       el.dataset.lang_type = "tooltip";
       el.classList.add("btn");
       el.classList.add("btn-default");
-      el.classList.add("hint--bottom");
+      el.classList.add("hint--bottom-right");
       el.onclick = btn.action;
       ulAll.appendChild(el);
     }
@@ -378,11 +375,11 @@ mgl.helper.addSourceFromView = function(o){
 * Save view list to views
 
 * @param {object} o options
-* @param {object} o.viewList views list
 * @param {string} o.id ID of the map 
+* @param {object} o.viewList views list
 * @param {boolean} o.add Append to existing
 * @param {string} o.country code
-* @param {function} o.feedback Feedback function
+* @param {function} o.feedback Feedback function. Default is renderViewsList
 */
 mgl.helper.setSourcesFromViews = function(o){
 
@@ -458,13 +455,17 @@ mgl.helper.setSourcesFromViews = function(o){
         }
       });
 
-    }else if( ! isFullList && hasViews ){
+    }else{
+    //}else if( ! isFullList && hasViews ){
 
       /**
       * If this is not an array and the mgl map opbject already as views,
       * add the view and feedback
       */
-      m.views.unshift( views );
+      if(hasViews){
+        m.views.unshift( views );
+      }
+      
 
       mgl.helper.addSourceFromView({
         m : m,
@@ -1796,8 +1797,9 @@ mgl.helper.renderViewsList = function(o){
 
 
   if( !o.views || o.views.constructor !== Array ||  o.views.length < 1 || !mx.templates.viewList ){
-    if( ! o.add ){ 
-      elViewsList.innerHTML = "<span>" + mx.util.getLanguage("noView",mx.language) + "</span>" ;
+    if( ! o.add ){
+      console.log("No view to render");
+      //elViewsList.innerHTML = "<span>" + mx.util.getLanguage("noView",mx.language) + "</span>" ;
     }
   }else{
 
@@ -3620,6 +3622,7 @@ mgl.helper.setUiColorScheme = function(o){
   c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
   c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
   c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
 
   /**
   * create / update input color
@@ -3731,6 +3734,12 @@ mgl.helper.setUiColorScheme = function(o){
       "id":["boundaries_2","boundaries_3-4"],
       "paint":{
         "line-color":c.mx_map_admin
+      }
+    },
+    {
+      "id":["boundaries_disputed"],
+      "paint":{
+        "line-color":c.mx_map_admin_disputed
       }
     },
     {
@@ -3943,8 +3952,8 @@ mgl.helper.initMap = function(o){
      * Add controls to the map
      */
       map.addControl(new mgl.control.Main(),'top-left');
-      map.addControl(new mgl.control.North(),'top-right');
       map.addControl(new mapboxgl.ScaleControl({ maxWidth: 80}),'top-right');
+      map.addControl(new mgl.control.North(),'top-right');
       map.addControl(new mgl.control.LiveCoord(),'bottom-right');
 
 

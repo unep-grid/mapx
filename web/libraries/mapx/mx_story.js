@@ -71,10 +71,11 @@ mgl.helper.story.read = function(o){
   /* set id view  */
   o.idView = o.idView || o.view.id;
 
-  /* toggle main controls */
-    mgl.helper.toggleControls({
-      hide : true
-    });
+/*  [> toggle main controls <]*/
+    //mgl.helper.toggleControls({
+      //hide : true,
+      //skip : ["btnStoryUnlockMap","btnStoryClose"]
+    /*});*/
 
     /* display story controls */
     mgl.helper.story.controller({
@@ -141,20 +142,50 @@ mgl.helper.story.read = function(o){
 * @param {Boolean} o.disable Disable/Hide story ?
 */
 mgl.helper.story.controller = function(o){
-  o.selector = o.selector || ["#btnStoryUnlockMap","#btnStoryClose","#story"];
-  o.disable = o.disable || !o.enable || false;
-  o.action = o.disable ? 'add': 'remove';
-  o.classe = o.classe || 'mx-hide';
-  o.id = o.id || "map_main";
-  var out = {
-    selector : o.selector,
-    action : o.action,
-    class : o.classe
+  o.selectorDisable = o.selectorDisable || [
+    "#btnToggleBtns",
+    "#btnPrint",
+    "#btnTabTools",
+    "#btnThemeAerial",
+    "#btnTabSettings",
+    "#btnTabView",
+    "#btnShowLanguage",
+    "#btnShowCountry",
+    "#btnShowLogin",
+    "#btnZoomIn",
+    "#btnZoomOut",
+    "#btnFullscreen",
+    ".tab-layers"
+  ];
+  o.selectorEnable = o.selectorEnable || [
+    "#btnStoryUnlockMap",
+    "#btnStoryClose",
+    "#story"
+  ];
+
+
+  o.disable = !o.enable;
+
+  var toDisable = {
+    selector : o.enable ? o.selectorDisable : o.selectorEnable,
+    action : "add",
+    class : "mx-hide"
   };
-  mx.util.classAction(out);
 
-  if(mgl.helper.story.cache && o.disable){
+  var toEnable = {
+    selector : o.enable ? o.selectorEnable : o.selectorDisable,
+    action : "remove",
+    class : "mx-hide"
+  };
 
+  mx.util.classAction(toEnable);
+  mx.util.classAction(toDisable);
+
+
+  o.id = o.id || "map_main";
+
+
+  if(o.disable){
     /**
     * Remove layers added by the story
     */
@@ -162,7 +193,12 @@ mgl.helper.story.controller = function(o){
       id:'map_main',
       prefix:"MX-"
     });
+ 
+  }
 
+
+   if(mgl.helper.story.cache && o.disable){
+ 
     /**
     * Get previous stored data
     */
@@ -175,7 +211,7 @@ mgl.helper.story.controller = function(o){
     if(d.hasAerial){
       mgl.helper.btnToggleLayer({
         id:'map_main',
-        idLayer:'here-aerial',
+        idLayer:'here_aerial',
         idSwitch:'btnThemeAerial',
         action:'show'
       });

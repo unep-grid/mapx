@@ -1,5 +1,9 @@
 tags$div(
   "{{?it.data.style \\u0026\\u0026 it.data.style.rules}}",
+  "{{ var isPoint = path(it,\\u0022data.geometry.type\\u0022) == \\u0022point\\u0022; }}",
+  "{{ var isLine = path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022; }}",
+  "{{ var isPolygon = path(it,\\u0022data.geometry.type\\u0022) == \\u0022polygon\\u0022; }}",
+  "{{ var isNumeric = path(it,\\u0022data.attribute.type\\u0022) != \\u0022string\\u0022; }}",
   tags$ul(
     "{{~it.data.style.rules :item}}",
     "{{?item}}",
@@ -15,27 +19,36 @@ tags$div(
           `name`='{{=it.id}}_{{=item.value}}',
           id='{{=it.id}}_{{=item.value}}'
           ),
-        tags$div(class="mx-legend-item-arrow",""),
+        tags$div(class="mx-legend-item-arrow",
+            "{{?isNumeric }}",
+            "≥",
+            "{{??}}",
+            "=",
+            "{{?}}"
+          ),
         tags$label(
           `for`="{{=it.id}}_{{=item.value}}",
           tags$div(
-          class="mx-legend-item-color",
-          style=paste( 
-            "{{?path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022 }}",
-            "height:{{=item.size*2}}px;",
-            "{{?}}",
-            "{{?path(it,\\u0022data.geometry.type\\u0022) == \\u0022point\\u0022 }}",
-            "width:{{=Math.log(0+item.size*10)*2}}px;",
-            "height:{{=Math.log(0+item.size*10)*2}}px;",
-            "border-radius:100%;",
-            "{{?}}",
-            "background-color:{{=item.color}};",
-            "background-opacity:{{=item.opacity}};",
-            "{{? item.sprite }}",
-            "background-image:{{=item.sprite}};",
-            "{{?}}",
-            sep="")
-          ),
+            class="mx-legend-item-color-container",
+            tags$div(
+              class="mx-legend-item-color",
+              style=paste( 
+                "{{?isLine }}",
+                "height:{{=item.size*2}}px;",
+                "{{?}}",
+                "{{?isPoint }}",
+                "width:{{=Math.log(0+item.size*10)*2}}px;",
+                "height:{{=Math.log(0+item.size*10)*2}}px;",
+                "border-radius:100%;",
+                "{{?}}",
+                "background-color:{{=item.color}};",
+                "background-opacity:{{=item.opacity}};",
+                "{{? item.sprite }}",
+                "background-image:{{=item.sprite}};",
+                "{{?}}",
+                sep="")
+              )
+            ),
         tags$div(
           class = "mx-legend-item-label",
           title = paste(

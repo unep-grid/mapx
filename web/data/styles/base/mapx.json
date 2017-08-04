@@ -1265,7 +1265,7 @@
         }
       },
       {
-        "id": "boundaries_conflict",
+        "id": "boundaries_disputed",
         "type": "line",
         "source": "mapbox_base",
         "source-layer": "admin",

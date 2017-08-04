@@ -124,6 +124,20 @@ html, body, .full-page {
     float: none;
 }
 
+.mapboxgl-ctrl-top-right .mapboxgl-ctrl {
+    margin: 5px 5px 0 0;
+    float: right;
+}
+.mapboxgl-ctrl.mapboxgl-ctrl-scale,
+.mapboxgl-ctrl.mx-north-arrow
+{
+  border-radius:5px;
+  text-align: center;
+}
+
+.mapboxgl-ctrl-scale {
+ height:30px;
+}
 .list-group .list-group-title {
   font-size: 10px;
   font-weight: bold;
@@ -270,6 +284,7 @@ html, body, .full-page {
 /**
 * General layout
 */
+
 .left-column {
   border: 1px solid;
   border-radius: 5px;

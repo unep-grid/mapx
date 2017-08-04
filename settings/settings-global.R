@@ -141,7 +141,8 @@ config[["ui"]] <- list(
       "mx_map_mask" = "rgba(153,153,153,0.4)",
       "mx_map_water" = "rgba(102,102,102,1)",
       "mx_map_road" = "rgba(94,37,25,1)",
-      "mx_map_border" = "rgba(127,127,127,1)"
+      "mx_map_admin" = "rgba(127,127,127,1)",
+      "mx_map_admin_disputed" = "rgba(255,0,0,1)"
       )
     )
   )

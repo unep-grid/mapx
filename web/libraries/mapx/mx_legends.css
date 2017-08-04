@@ -17,7 +17,7 @@ display:none;
 {
   width: 100%;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   text-overflow: ellipsis;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -41,15 +41,23 @@ display:none;
   height: 20px;
 }
 
+.mx-legend-item-color-container {
+  float: left;
+  cursor:pointer;
+  position: relative;
+  height:20px;
+  width:20px;
+}
 
 .mx-legend-item-color {
   background-color: #000;
   background-image: none;
-  float: left;
-  margin: 0px 10px 0px 0px;
-  width: 20px;
-  height: 20px;
-  cursor:pointer;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .mx-legend-item-label {
@@ -59,6 +67,7 @@ display:none;
   text-overflow: ellipsis;
   cursor: pointer;
   font-weight: normal;
+  padding-left: 5px;
 }
 
 .mx-legend-item-arrow {

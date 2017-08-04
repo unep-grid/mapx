@@ -5,11 +5,10 @@
 observe({
   lang_def <- .get(config,c("languages","list"))[[1]]
   lang_ui <- input$selectLanguage
-  lang_db <- reactUser$data[["data"]][["user"]][["cache"]][["last_language"]]
+  lang_db <- .get(reactUser$data,c("data","user","cache","last_language"))
 
   isolate({
 
-    isGuest <- isTRUE(reactUser[["role"]][["role"]] == "guest")
     lang_react <- reactData$language
 
     if(noDataCheck(lang_react) && !noDataCheck(lang_db)){
@@ -20,7 +19,7 @@ observe({
       lang_out <- lang_def
     }
 
-    if( isGuest || noDataCheck(lang_out)){
+    if(noDataCheck(lang_out)){
       lang_out <- lang_def
     }
     reactData$language <- lang_out
@@ -33,12 +32,15 @@ observe({
 observeEvent(reactData$language,{
 
   language <- reactData$language
-  # update reactive value and db if needed
-  mxDbUpdateUserData(reactUser,
-    path = c("user","cache","last_language"),
-    value = language
-    )
 
+  isGuest <- isTRUE(.get(reactUser$data,c("email")) == .get(config,c("mail","guest")))
+  if(!isGuest){
+    # update reactive value and db if needed
+    mxDbUpdateUserData(reactUser,
+      path = c("user","cache","last_language"),
+      value = language
+      )
+  }
 
 })
 
