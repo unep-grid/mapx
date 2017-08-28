@@ -6,6 +6,7 @@ tags$div(
   "{{ var isNumeric = path(it,\\u0022data.attribute.type\\u0022) != \\u0022string\\u0022; }}",
   tags$ul(
     "{{~it.data.style.rules :item}}",
+    "{{ var lang = mx.util.checkLanguage({obj:item, path:\\u0022label_\\u0022, concat:true}) ; }}",
     "{{?item}}",
     tags$li(
       tags$div(
@@ -52,14 +53,15 @@ tags$div(
         tags$div(
           class = "mx-legend-item-label",
           title = paste(
-            "{{?item[\\u0022label_\\u0022 + mx.language]}}",
-            "{{=item[\\u0022label_\\u0022 + mx.language]}}",
+            
+            "{{?item[\\u0022label_\\u0022 + lang]}}",
+            "{{=item[\\u0022label_\\u0022 + lang]}}",
             "{{??}}",
             "{{=item.value}}",
             "{{?}}",sep=""),
           paste(
-            "{{?item[\\u0022label_\\u0022 + mx.language]}}",
-            "{{=item[\u0022label_\u0022 + mx.language]}}",
+            "{{?item[\\u0022label_\\u0022 + lang]}}",
+            "{{=item[\u0022label_\u0022 + lang]}}",
             "{{??}}",
             "{{=item.value}}",
             "{{?}}",sep="")

@@ -1294,6 +1294,7 @@ mx.util.getLanguageFromObjectPath = function(o){
 * @param {string} o.path path to the string to check
 * @param {string} o.language language code expected
 * @param {array} o.languages code for fallback
+* @param {boolean} o.concat concat language with path instead of select children
 * @example
 *     mx.util.checkLanguage({
 *         obj : it,
@@ -1306,6 +1307,7 @@ mx.util.checkLanguage = function(o){
   
   var langs = o.languages || mx.util.objectToArray(mx.languages);
   var lang = o.language || mx.language || langs[0];
+  var concat = !! o.concat;
   var out = lang;
   var found = false;
 
@@ -1313,7 +1315,8 @@ mx.util.checkLanguage = function(o){
   * Test if lang value return something
   */
   function test(){
-    found = !!path( o.obj, o.path + "." + lang ) ;
+    var p = concat ? o.path + lang : o.path + "." + lang;
+    found = !!path( o.obj, p ) ;
   }
 
   /**
