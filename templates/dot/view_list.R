@@ -26,8 +26,14 @@ divLegend <- tags$div(
       id="check_view_legend_{{=view.id}}"
       ),
   "{{?}}",
+  "{{?}}",
+  "{{?view.type=='rt'}}",
+    tags$div(
+      class="mx-view-item-legend-raster",
+      id="check_view_legend_{{=view.id}}"
+      ),
   "{{?}}"
-  ) 
+  )
 
 
 

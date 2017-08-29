@@ -290,12 +290,22 @@ observe({
               #
               if(viewType=="rt"){
                 url <- .get(viewData,c("data","source","tiles"))
+                legend <- .get(viewData,c("data","source","legend"))
                 if(noDataCheck(url)) url = list()
                 url <-  unlist(url[1])
 
                 uiType <- tagList(
+                  selectizeInput(
+                    inputId = "selectRasterTileSize",
+                    label = d("source_raster_tile_size",language),
+                    selected = .get(viewData,c("data","source","tileSize")),
+                    choices = c(512,256),
+                    options=list(
+                      dropdownParent="body"
+                      )
+                    ),
                   mxFold(
-                    labelText="WMS configurator",
+                    labelText="WMS generator",
                     classContainer="fold-container well",
                     content = tagList(
                       tags$label("Select a predefined service"),
@@ -359,26 +369,22 @@ observe({
                               type="button",
                               class="form-control btn btn-default action-button",
                               disabled=TRUE,
-                              "Set tiles url"
+                              "Generate tiles url"
                               )
                             )
                           )
                         )
                       )
                     ),
-                  selectizeInput(
-                    inputId = "selectRasterTileSize",
-                    label = d("source_raster_tile_size",language),
-                    selected = .get(viewData,c("data","source","tileSize")),
-                    choices = c(512,256),
-                    options=list(
-                      dropdownParent="body"
-                      )
-                    ),
                   textAreaInput(
                     inputId = "textRasterTileUrl",
                     label = d("source_raster_tile_url",language),
                     value = url 
+                    ),
+                  textAreaInput(
+                    inputId = "textRasterTileLegend",
+                    label = d("source_raster_tile_legend",language),
+                    value = legend 
                     )
                   )
               }
@@ -768,6 +774,7 @@ observeEvent(input$btnViewUpdate,{
     view[[c("data","source")]] <- list(
       type = "raster",
       tiles =  rep(input$textRasterTileUrl,2),
+      legend = input$textRasterTileLegend,
       tileSize = as.integer(input$selectRasterTileSize)
       )
 

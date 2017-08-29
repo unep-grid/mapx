@@ -46,6 +46,11 @@ observe({
 
 
 observeEvent(input$btnFetchLayers,{
+  mxUiHide(
+    id="btnFetchLayers",
+    disable=TRUE,
+    hide=FALSE
+    )
   wmsService <- input$textWmsService
   layers <- mxGetWmsLayers(wmsService)
   mxUpdateSelectizeItems(
@@ -78,10 +83,32 @@ observeEvent(input$btnUptateTileUrl,{
     layer,
     tileSize
     )
+
+  legend <- sprintf(
+    mxCleanString(
+    "%1$s?
+    service=WMS&
+    version=1.1.1&
+    styles=&
+    request=GetLegendGraphic&
+    layer=%2$s&
+    format=image/png&
+    transparent=true",""),
+    url,
+    layer
+    )
+    
+
   updateTextInput(
     session=shiny::getDefaultReactiveDomain(),
     inputId="textRasterTileUrl",
     value=request
+    )
+
+  updateTextInput(
+    session=shiny::getDefaultReactiveDomain(),
+    inputId="textRasterTileLegend",
+    value=legend
     )
 
 })

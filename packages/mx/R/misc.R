@@ -1595,8 +1595,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       type = .get(sourceData,c("type")),
       table = .get(sourceData,c("table")),
       sample = .get(sourceData,c("sampleData")),
-      min = min(viewTable$values),
-      max = max(viewTable$values),
+      min = min(viewTable$values,na.rm=T),
+      max = max(viewTable$values,na.rm=T),
       rows = .get(sourceData,c("numberOfRow")),
       nulls =  .get(sourceData,c("numberOfNull")),
       distincts = .get(sourceData,c("numberOfDistinct"))
@@ -1688,34 +1688,23 @@ mxProgress = function(id="default",text="",percent=1,enable=TRUE,session=shiny::
 
 
 
-
-#' Cache wms get capability cache
-#'
-#'
-mxGetWmsLayersCache = list()
-
-
-#' Get wms layer list
+#' Get wms layers
 #' @param service Service to query
 mxGetWmsLayers <- function(service,useCache=T){
-  layers = list()
-  if(!useCache || noDataCheck(mxGetWmsLayersCache[[service]])){
-    mxDebugMsg("not using cache")
-    stopifnot(!noDataCheck(service)) ;
+  
+  if(!exists("config")) config <- list()
+  if(noDataCheck(config$.wms_layers)) config$.wms_layers <- list()
+  layers <- config$.wms_layers[[service]]
+
+  if(!useCache || noDataCheck(layers)){
+   
     req <- sprintf("%1$s?%2$s",service,"service=WMS&request=GetCapabilities")
 
-    test <- try({
-      res = xml2::read_xml(req,options="NOCDATA")
-    },silent=T)
+      res <- xml2::read_xml(req, options="NOCDATA")
+      resList <- xml2::as_list(res)
+      layers <- mxGetWmsLayersFromCapabilities(resList)
+      config$.wms_layers[[service]] <<- layers
 
-    if(!"try-error"%in%class(test)){
-      resList = xml2::as_list(res)
-      layers =  mxGetWmsLayersFromCapabilities(resList)
-      mxGetWmsLayersCache[[service]] <<- layers 
-    }
-  }else{
-    mxDebugMsg("using cache")
-    layers = mxGetWmsLayersCache[service]
   }
 
   return(layers)
