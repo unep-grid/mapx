@@ -52,11 +52,15 @@ observeEvent(input$btnFetchLayers,{
     hide=FALSE
     )
   wmsService <- input$textWmsService
-  layers <- mxGetWmsLayers(wmsService)
-  mxUpdateSelectizeItems(
-    id="selectWmsLayer",
-    items=layers
-    )
+
+  mxCatch("Get wms layer",{
+    layers <- mxGetWmsLayers(wmsService)
+    mxUpdateSelectizeItems(
+      id="selectWmsLayer",
+      items=layers
+      )
+    })
+
 })
 
 observeEvent(input$btnUptateTileUrl,{
