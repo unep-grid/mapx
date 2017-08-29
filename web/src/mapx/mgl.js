@@ -2786,7 +2786,7 @@ mgl.helper.addView = function(o){
 
       var legend = path(view,"data.source.legend");
 
-      debugger;
+      console.log("add legend for " + view.id);
       if(legend){
         var elLegend = document.querySelector("#check_view_legend_"+view.id);
         var oldImg = document.querySelector("img");
