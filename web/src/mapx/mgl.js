@@ -2781,6 +2781,23 @@ mgl.helper.addView = function(o){
         type : "raster",
         source: view.id + "-SRC"
       });
+     
+     /* IMG */ 
+
+      var legend = path(view,"data.source.legend");
+
+      debugger;
+      if(legend){
+        var elLegend = document.querySelector("#check_view_legend_"+view.id);
+        var oldImg = document.querySelector("img");
+        if(!oldImg){
+          var img = new Image();
+          img.src = legend;
+          img.alt = "Legend"; 
+          elLegend.appendChild(img); 
+        }
+      }
+
     },
     vt : function(){
 

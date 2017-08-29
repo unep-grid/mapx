@@ -33,8 +33,8 @@ var inFile = [
 
 
 var result = UglifyJS.minify(inFile,{
-  mangle : true,
-  compress : true
+  mangle : false,
+  compress : false
 });
 
 fs.writeFile(outFile, result.code, function(err) {

@@ -151,6 +151,7 @@
 "source_meta_data","Metadata for the source","Métadonnées de la source","","","","","","عناوین برای منابع"
 "source_raster_tile_size","Size of the tiles (pixels)","Taille des tuiles (pixels)","","","","","","اندازه پکسل ها"
 "source_raster_tile_url","Url of tiles endpoint ","Url du serveur de tuiles","","","","","","آدرس پکسل های آخری"
+"source_raster_tile_legend","Url of the legend (png)","Url de la legend (png)","","","","","",""
 "source_select_geometry","Source geometry type","Type de géométrie","","","","","","انواع منبع هندسی"
 "source_select_layer","Source layer","Couche source","","","","","","لایه اصلی"
 "source_select_layer_mask","Source layer mask","Couche source masque","","","","","","منبع لایه ماسک"
