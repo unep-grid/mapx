@@ -1,0 +1,18 @@
+{
+  "name": "mapx",
+  "version": "0.0.1",
+  "description": "mapx ",
+  "main": "build.js",
+  "dependencies": {
+    "clean-css": "^4.1.7",
+    "glob": "^7.1.2",
+    "uglify-js": "^3.0.28",
+    "webpack": "^3.5.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

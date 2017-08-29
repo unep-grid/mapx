@@ -3,6 +3,7 @@
 
   if(typeof(mgl) == "undefined" || typeof(mgl.data.geojson) == "undefined") alert("mgl must be loaded first");
 
+  var workerPath = "src/mapx/mgl_drop_worker.js";
   var db = mgl.data.geojson;
   var util = mgl.helper;
 
@@ -113,7 +114,7 @@
 
 
         // Create a worker to handle this file
-        var w = new Worker("mx/mapx/mgl_drop_worker.js");
+        var w = new Worker(workerPath);
 
         var o = {
           id : "map_main"

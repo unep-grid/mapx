@@ -3605,6 +3605,7 @@ mgl.helper.setUiColorScheme = function(o){
 
   if(!mx_colors) {
     alert("mx_colors rules not found");
+    return;
   }
 
   var c = o.colors;

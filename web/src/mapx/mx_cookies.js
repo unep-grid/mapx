@@ -36,7 +36,7 @@ function writeCookie(e)
   if(!e.path) e.path = "";
   if(!e.domain) e.domain = "";
 
-  if( e.expiresInSec == 0 ){
+  if( e.expiresInSec === 0 ){
     exp = (new Date()/1) + (10 * 365 * 24 * 60 * 60) ;
   }else{
     exp = e.expiresInSec;
@@ -65,7 +65,7 @@ function writeCookie(e)
 /* Shiny message handler for mxSetCookie function
 */
 
-Shiny.addCustomMessageHandler("mxSetCookie",writeCookie)
+Shiny.addCustomMessageHandler("mxSetCookie",writeCookie);
 
 
 /**
@@ -76,14 +76,24 @@ Shiny.addCustomMessageHandler("mxSetCookie",writeCookie)
  * of the element. 
  * @example  <div id="cookies" class="shinyCookies"></div>
  */
-var shinyCookieInputBinding = new Shiny.InputBinding();
-$.extend(shinyCookieInputBinding, {
-  find: function(scope) {
-    return  $(scope).find(".shinyCookies");
-  },
-  getValue: function(el) { 
-    return readCookie();
-  } 
+//var shinyCookieInputBinding = new Shiny.InputBinding();
+//$.extend(shinyCookieInputBinding, {
+  //find: function(scope) {
+    //return  $(scope).find(".shinyCookies");
+  //},
+  //getValue: function(el) { 
+    //return readCookie();
+  //} 
+//});
+//Shiny.inputBindings.register(shinyCookieInputBinding);
+
+
+/*
+ * First cookie read as soon as shiny is connected
+ */
+$(document).on('shiny:connected', function(event) {
+  console.log("connected");
+  Shiny.onInputChange('cookies', readCookie());
 });
-Shiny.inputBindings.register(shinyCookieInputBinding);
+
 

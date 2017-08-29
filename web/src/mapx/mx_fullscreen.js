@@ -12,17 +12,17 @@ function toggleFullScreen(id) {
   if(screenfull.enabled){
     if(!screenfull.isFullscreen){
       if(btnImg){
-        btnImg.className = "fa fa-compress"
+        btnImg.className = "fa fa-compress";
       }
       screenfull.request();
     }else{
       if(btnImg){
-        btnImg.className = "fa fa-expand"
+        btnImg.className = "fa fa-expand";
       }
       screenfull.exit();
     }
   }else{
-    alert("Fullscreen not enabled, sorry")
+    alert("Fullscreen not enabled, sorry");
   }
 
 }
