@@ -49,7 +49,8 @@ config[["resources"]]  =  list(
       "countries"  = file.path("web","data","countries"),
       "sprites" = file.path("web","data","styles","sprites"),
       "styles" = file.path("web","data","styles"),
-      "mx" = file.path("web","libraries"),
+      "src" = file.path("web","src"),
+      "dist" = file.path("web","dist"),
       "userdata" = file.path("/vagrant/data/userdata") ## expected shared folder from vagrant
     )
 

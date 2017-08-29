@@ -280,8 +280,7 @@ mxSourceSrv <- function(files=NULL){
 #' Set web ressource path
 mxSetResourcePath <- function(resources){
   if(is.null(resources)){
-    conf <- mxGetDefaultConfig()
-    res <- conf[["resources"]]
+    res <- .get(config,"resources")
   }else{
     res =  resources
   }
