@@ -13,9 +13,10 @@ mxSetResourcePath(config[["resources"]])
 #
 tagList(
   tags$head(
-
-
     suppressDependencies("jquery","shiny","babel-polyfill","json2"),
+  includeScript(
+    "web/dist/app.shiny.min.js"
+    ),
     #
     # Load metadata, title, header
     #
@@ -42,9 +43,7 @@ tagList(
   #
   # Scripts
   #
-  includeScript(
-    "web/dist/app.shiny.min.js"
-    ),
+
   includeScript(
     "web/dist/app.mapx.min.js"
     )
