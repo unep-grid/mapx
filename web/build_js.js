@@ -3,9 +3,18 @@ var fs = require("fs");
 var UglifyJS = require("uglify-js");
 var path = require("path");
 var p = function(p){return fs.readFileSync(path.join(__dirname,'src/'+p),"utf8");};
-var outFile = path.join(__dirname,"dist/app.min.js");
+var outFileMapx = path.join(__dirname,"dist/app.mapx.min.js");
+var outFileShiny = path.join(__dirname,"dist/app.shiny.min.js");
 
-var inFile = [
+
+var inFileShiny = [
+    p("shiny/jquery.min.js"),
+    p("shiny/json2-min.js"),
+    p("shiny/shiny.min.js"),
+    p("shiny/babel-polyfill.min.js")
+];
+
+var inFileMapx = [
     p("localForage/localforage.min.js"),
     p("nouislider/nouislider.min.js"),
     p("jszip/jszip.min.js"),
@@ -31,17 +40,27 @@ var inFile = [
     p("mapx/mx_story.js")
   ];
 
-
-var result = UglifyJS.minify(inFile,{
+var shinyMin = UglifyJS.minify(inFileShiny,{
   mangle : true,
   compress : true
 });
 
-fs.writeFile(outFile, result.code, function(err) {
+fs.writeFile(outFileShiny, shinyMin.code, function(err) {
   if(err) {
     return console.log(err);
   }
 }); 
 
+
+var mapxMin = UglifyJS.minify(inFileMapx,{
+  mangle : true,
+  compress : true
+});
+
+fs.writeFile(outFileMapx, mapxMin.code, function(err) {
+  if(err) {
+    return console.log(err);
+  }
+}); 
 
 

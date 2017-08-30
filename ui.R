@@ -7,12 +7,15 @@
 #
 mxSetResourcePath(config[["resources"]])
 
+
 #
 # main ui frame
 #
 tagList(
   tags$head(
 
+
+    suppressDependencies("jquery","shiny","babel-polyfill","json2"),
     #
     # Load metadata, title, header
     #
@@ -20,17 +23,8 @@ tagList(
     #
     # Styles
     #
-    tags$link(
-      rel="stylesheet",
-      type="text/css",
-      href="dist/app.min.css"
-      ),
-    tags$link(
-      rel="stylesheet",
-      type="text/css",
-      title="mx_colors",
-      href="dist/app.colors.min.css"
-      )
+    includeCSS("web/dist/app.min.css"),
+    includeCSS("web/dist/app.colors.min.css",title="mx_colors")
     ),
   tags$body(
     class="full-page mx",
@@ -41,15 +35,19 @@ tagList(
     #
     # Ui components
     #
-    mxSource("ui/modals.R"),
+    #mxSource("ui/modals.R"),
     mxSource("ui/bar_main.R"),
     mxSource("ui/map.R")
     ),
   #
   # Scripts
   #
-  tags$script(
-    src="dist/app.min.js"
+  includeScript(
+    "web/dist/app.shiny.min.js"
+    ),
+  includeScript(
+    "web/dist/app.mapx.min.js"
     )
+
   )
 
