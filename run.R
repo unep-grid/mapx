@@ -1,3 +1,12 @@
-#' Shortcut to launch shiny
+#
+# Launch manualy the app
+#
 library(shiny)
-runApp(".",launch.browser=F,port=3434)
+
+rs = function(){
+  runApp(".",launch.browser=FALSE,port=3434)
+}
+
+rs()
+
+

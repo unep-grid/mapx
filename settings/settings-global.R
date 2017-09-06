@@ -44,45 +44,52 @@ config[["pg"]] = list(
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
 #  http://localhost:8080/dict/dict.csv
+#config[["resources"]]  =  list(
+      #"dict"  = file.path("src","data","dictionaries"),
+      #"countries"  = file.path("src","data","countries"),
+      #"sprites" = file.path("src","data","styles","sprites"),
+      #"styles" = file.path("src","data","styles"),
+      #"src" = file.path("src","src"),
+      #"dist" = file.path("src","dist"),
+      #"userdata" = file.path("/vagrant/data/userdata") # expected shared folder from vagrant
+    #)
 config[["resources"]]  =  list(
-      "dict"  = file.path("web","data","dictionaries"),
-      "countries"  = file.path("web","data","countries"),
-      "sprites" = file.path("web","data","styles","sprites"),
-      "styles" = file.path("web","data","styles"),
-      "src" = file.path("web","src"),
-      "dist" = file.path("web","dist"),
+      "data"  = file.path("src","data"),
+      "sprites" = file.path("src","data","sprites"),
+      "src" = file.path("src"),
+      "dist" = file.path("www"),
       "userdata" = file.path("/vagrant/data/userdata") ## expected shared folder from vagrant
     )
-
 #
 # Server and UI folder path
 #
-config[["srvPath"]] = "server"
-config[["uiPath"]] = "ui"
+config[["srvPath"]] = file.path("src","server")
+config[["uiPath"]] = file.path("src","ui")
+
 
 
 #
 # Import dictionaries
 #
 config[["dictionaries"]] <- list(
-  main = import(
+  main = read.csv(
     file.path(
-      config[[c("resources","dict")]],"dict_main.csv"
+      config[[c("resources","data")]],"dict_main.csv"
       )
     ),
-  countries = import(
+  countries = read.csv(
     file.path(
-      config[[c("resources","dict")]],"dict_countries.csv"
+      config[[c("resources","data")]],"dict_countries.csv"
       )
     ),
-  languages = import(
+  languages = read.csv(
     file.path(
-      config[[c("resources","dict")]],"dict_languages.csv"
+      config[[c("resources","data")]],"dict_languages.csv"
       )
     ),
-  schemaMetadata = import(
+  schemaMetadata = read.csv(
     file.path(
-      config[[c("resources","dict")]],"dict_schema_source.csv"
+      config[[c("resources","data")]],"dict_schema_source.csv"
       )
     )
   )
@@ -191,18 +198,17 @@ config[["templates"]] <- list()
 #config[[c("templates","pgViewOverlap")]] <- mxReadText("templates/pg/view_overlap.sql",clean=TRUE)
 # js dot renderer
 
-config[[c("templates","dot")]] <-  list()
-config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("templates/dot/view_list_legend.R"))
-config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/dot/view_list.R"))
+#config[[c("templates","dot")]] <-  list()
+#config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("templates/dot/view_list_legend.R"))
+#config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/dot/view_list.R"))
 
 
 config[[c("templates","html")]] <-  list()
-config[[c("templates","html","email")]] <- paste(readLines("templates/html/email_simple.html"),collapse="\n")
+config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_simple.html"),collapse="\n")
 
 config[[c("templates","text")]] <-  list()
-config[[c("templates","text","email_password")]] <- paste(readLines("templates/text/email_password.txt"),collapse="\n")
-config[[c("templates","text","email_error")]] <- paste(readLines("templates/text/email_error.txt"),collapse="\n")
-
+config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
+config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
 
 #
 # default languages
@@ -232,9 +238,9 @@ config[["countries"]][["default"]] <- list(
   )
 
 # read countriea
-config[["countries"]]$table <- import(
+config[["countries"]]$table <- read.csv(
   file.path(
-    config[[c("resources","countries")]],"countries.csv"
+    config[[c("resources","data")]],"countries.csv"
     )
   )
 

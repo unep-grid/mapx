@@ -1,0 +1,82 @@
+<body class="full-page mx">
+  <noscript>
+    <p>Please enable JavaScript to use map-x</p>
+    <style type="text/css">.mx .left-column {display:none}</style>
+  </noscript>
+  <div class="left-column transparent shadow tabs-main tab-layers" id="tabLayers">
+    <div id="viewListContainer" class="mx-views-container">
+      <div class="mx-views-header">
+        <div id="viewsTools">
+          <input class="search form-control" type="text" data-lang_key="view_search_input" data-lang_type="placeholder"/>
+        </div>
+        <div class="filters">
+          <div class="check-toggle-group">
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_oth" data-filter="oth"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_oth" data-lang_key="oth"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_sat" data-filter="sat"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_sat" data-lang_key="sat"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_ext" data-filter="ext"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_ext" data-lang_key="ext"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_dev" data-filter="dev"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_dev" data-lang_key="dev"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_soc" data-filter="soc"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_soc" data-lang_key="soc"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_pol" data-filter="pol"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_pol" data-lang_key="pol"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_env" data-filter="env"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_env" data-lang_key="env"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_nrg" data-filter="nrg"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_nrg" data-lang_key="nrg"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_inf" data-filter="inf"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_inf" data-lang_key="inf"></label>
+            </div>
+            <div class="check-toggle">
+              <input class="filter check-toggle-input" type="checkbox" id="cl_str" data-filter="str"/>
+              <label class="btn btn-default btn-xs check-toggle-label" for="cl_str" data-lang_key="str"></label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-views-content">
+        <ul class="mx-views-list"></ul>
+      </div>
+      <div class="mx-views-footer"></div>
+    </div>
+  </div>
+  <div class="left-column transparent shadow tabs-main tab-tools mx-hide" id="tabTools">
+    <h3 data-lang_key="title_tools"></h3>
+    <h4 data-lang_key="title_tools_map"></h4>
+    <div class="input-group">
+      <div class="input-group-btn">
+        <button id="btn_get_area_visible" class="btn btn-default" data-lang_key="btn_get_area_visible"></button>
+      </div>
+      <div class="form-control" id="txtAreaSum"></div>
+    </div>
+    <div id="uiBtnViewAdd" class="shiny-html-output"></div>
+    <div id="uiBtnSourceUpload" class="shiny-html-output"></div>
+    <div id="uiBtnSourceEdit" class="shiny-html-output"></div>
+    <div id="uiListDbInfo" class="shiny-html-output"></div>
+  </div>
+  <div class="left-column transparent shadow tabs-main tab-settings mx-hide" id="tabSettings">
+    <h3 data-lang_key="title_settings"></h3>
+    <div id="inputThemeColors"></div>
+  </div>
+  <div id="map_main"></div>
+</body>
