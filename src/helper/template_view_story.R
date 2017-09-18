@@ -135,7 +135,8 @@ mxSchemaViewStory <- function(view,views,language){
     
   for( i in ll ){
     slideText[[c("properties")]][[i]] <- list(
-      type ="texteditor",
+      type ="string",
+      format="medium",
       title = "",
       propertyOrder = 2,
       options = list(

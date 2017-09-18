@@ -158,7 +158,6 @@ observe({
 
               if(!viewIsEditable) return()
 
-
               uiDesc <- tagList(
                 #
                 # Title and abstract (schema based)
@@ -185,7 +184,7 @@ observe({
                 selectizeInput(
                   inputId="selViewCountriesUpdate",
                   label=d("view_countries",language),
-                  choices=d(config$countries$codes$id,language),
+                  choices=d(c(config$countries$codes$id,"GLB"),language),
                   selected=.get(viewData,c("data","countries")),
                   multiple=TRUE,
                   options=list(
@@ -240,7 +239,6 @@ observe({
                 uiType =  tagList(
                   jedOutput(id="storyEdit")
                   )
-
 
               }
 
@@ -399,12 +397,26 @@ observe({
               #
               # Buttons 
               #
-              btnList <- list(
+              btnList <- tagList(
                 actionButton(
-                  inputId="btnViewUpdate",
-                  label=d("btn_update",language)
+                  inputId="btnViewSave",
+                  label=d("btn_save",language)
                   )
                 )
+
+              #
+              # Add button preview 
+              #
+              if(viewType=="sm"){
+              btnList = tagList(
+                btnList,
+                 actionButton(
+                  inputId="btnViewUpdateStory",
+                  label=d("btn_update",language),
+                  `data-keep` = TRUE
+                  )
+                )
+              }
               #}
 
               #
@@ -427,13 +439,13 @@ observe({
 
               btnList <- list(
                 actionButton(
-                  inputId="btnViewUpdateStyle",
-                  label=d("btn_update",language)
-                  ),
-                actionButton(
-                  inputId="btnViewResetStyle",
-                  label=d("btn_reset",language)
+                  inputId="btnViewSaveStyle",
+                  label=d("btn_save",language)
                   )
+#                actionButton(
+                  #inputId="btnViewResetStyle",
+                  #label=d("btn_reset",language)
+                  #)
                 )
 
               mxModal(
@@ -495,55 +507,97 @@ observeEvent(input$viewAbstractSchema_init,{
 # NOTE: shiny seems to convert date to UTC with jsonlite.. Be careful here.
 #
 observeEvent(input$localStory,{
-  useDbVersion = TRUE
-  viewDb = reactData$viewDataEdited
+  useServerVersion = TRUE
+  viewServer = reactData$viewDataEdited
   viewClient = input$localStory$item
   sysTimeZone = Sys.timezone()
 
   if(noDataCheck(viewClient)){
-    useDbVersion = TRUE
+    useServerVersion = TRUE
   }else{
-    dateClient= viewClient$date_modified
-    dateDb = viewDb$date_modified
+    dateClient <- viewClient$date_modified
+    dateServer <- viewServer$date_modified
     # format UTC string to  posixct
-    dateClientCt = as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
+    dateClientCt <- as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
     # convert UTC to sysTimeZone string
-    dateClientCt = format(dateClientCt,tz=sysTimeZone,usetz=TRUE)
+    dateClientCt <- format(dateClientCt,tz=sysTimeZone,usetz=TRUE)
     # convert string back to posixct
-    dateClientCt =  as.POSIXct(dateClientCt,tz=sysTimeZone)
+    dateClientCt <-  as.POSIXct(dateClientCt,tz=sysTimeZone)
     # get db version time 
-    dateDbCt = as.POSIXct(dateDb,format="%Y-%m-%d%tT%T",tz=sysTimeZone)
+    dateServerCt <- as.POSIXct(dateServer,format="%Y-%m-%d%tT%T",tz=sysTimeZone)
     # check which is the more recent
-    useDbVersion = dateDbCt > dateClientCt
+    useServerVersion <- dateServerCt > dateClientCt
   }
 
   #
   # Update reactData 
   #
-  if(useDbVersion){
-    view = viewDb
+  if( useServerVersion ){
+    reactData$viewStory <- list(
+      view = viewServer,
+      dbVersion = useServerVersion
+      )
   }else{
+    mxModal(
+      id="modalViewEditLoadStorage",
+      content=tagList(
+        p("A draft has been found on your computer, would you use it ?"),
+        checkboxInput("checkUseClientStory","Yes"),
+        mxFold(
+          labelText="Inspect draft",
+          tags$div(id="draftStoryInspect")
+          )
+        ),
+      buttons=tagList(
+        actionButton("btnSetStoryVersion","Confirm")
+        ),
+      removeCloseButton = T
+      )
+    #
+    # Send json to html
+    #
+    mxJsonToHtml(
+      id="draftStoryInspect",
+      data=viewClient$data$story
+      )
+  }
+})
+
+
+#
+# View story check which version use
+#
+observeEvent(input$btnSetStoryVersion,{
+
+  viewServer <- reactData$viewDataEdited
+  viewClient <- input$localStory$item
+  useClientStory <- isTRUE(input$checkUseClientStory)
+
+  if(useClientStory){
     view = viewClient
+  }else{
+    view = viewServer
   }
 
   reactData$viewStory <- list(
     view = view,
-    dbVersion = useDbVersion
+    dbVersion = !useClientStory
     )
 
-})
+
+ })
+
 
 #
 # View story : render schema
 #
-observeEvent(input$storyEdit_init,{
+#observeEvent(input$storyEdit_init,{
+observeEvent(reactData$viewStory,{
 
-  viewStory <- reactData$viewStory
-  isDbVersion <- viewStory$dbVersion
-  language <- reactData$language 
-  view <- viewStory$view
-  
-  story <- view[[c("data","story")]]
+  view <- reactData$viewStory$view
+  isDbVersion <- reactData$viewStory$dbVersion
+  language <- reactData$language  
+  story <- .get(view,c("data","story"))
 
   if(!isTRUE(view[["_edit"]])) return()
 
@@ -556,6 +610,7 @@ observeEvent(input$storyEdit_init,{
     from = 0,
     to = 1000
     )
+
   reactData$viewsAllAvailable = views
 
   schema <- mxSchemaViewStory(
@@ -577,12 +632,12 @@ observeEvent(input$storyEdit_init,{
       )
   }
 
-})
+ })
 
 #
 # Update story changes
 #
-observeEvent(input$storyEdit_values,{
+observeEvent(input$btnViewUpdateStory,{
 
   story <- input$storyEdit_values$msg
 
@@ -635,7 +690,7 @@ observeEvent(input$styleEdit_init,{
 
     if(length(errors)>0 || length(warnings) >0){
       mxToggleButton(
-        id="btnViewUpdateStyle",
+        id="btnViewSaveStyle",
         disable=TRUE
         )
       mxToggleButton(
@@ -687,7 +742,7 @@ observeEvent(input$btnViewDeleteConfirm,{
 #
 # View vt, rt, sm : save
 #
-observeEvent(input$btnViewUpdate,{
+observeEvent(input$btnViewSave,{
 
   #
   # Retrieve view value
@@ -887,7 +942,7 @@ observeEvent(input$styleEdit_values,{
 #
 # View style save
 #
-observeEvent(input$btnViewUpdateStyle,{
+observeEvent(input$btnViewSaveStyle,{
 
   view <- reactData$viewDataEdited
   country <- reactData$country
@@ -1107,7 +1162,7 @@ observeEvent(input$selectSourceLayerMain,{
     })
   
   out <- layers[geomTypesCheck]
-  
+ 
   }
   
   }
@@ -1121,10 +1176,6 @@ observeEvent(input$selectSourceLayerMain,{
 
 
 })
-
-
-
-
 
 #
 # reactLayerMaskSummary
@@ -1193,39 +1244,4 @@ reactLayerSummary <- reactive({
 })
 
 
-
-##
-## Select mask layer logic : layer selection 
-##
-## NOTE: why reactivity on layer main ? the mask can't be the same as the main.
-## NOTE: removed this observer because it was not working with madal panel :
-## If the modal panel was closed and then reopenned, this observer were not triggered, which 
-## resulted in empty input. 
-#observe({
-
-  #layerMain <- input$selectSourceLayerMain
-
-  #if(noDataCheck(layerMain)) return()
-
-  #isolate({
-
-    #viewData <- reactData$viewDataEdited
-
-    #layerList <-  reactSourceLayer()
-
-    #layerList <- layerList[!layerList %in% layerMain]
-
-    #layerMask <- viewData[[c("data","definition","layer","nameMask")]]
-
-    #language <- reactData$language
-
-    #nLayers = length(layerList)
-
-    #updateSelectInput(session,
-      #inputId = "selectSourceLayerMask",
-      #choices = layerList,
-      #selected = layerMask
-      #)
-  #})
-#})
 

@@ -48,10 +48,9 @@ export function errorProgress(f) {
 // handle zip to geojson
 export function zipToGeojson(data){
 
-  var helper = this;
   var shapefile,JSZip, shp, dbf;
 
-  Promise.all([
+  return Promise.all([
     System.import("jszip"),
     System.import("shapefile")
   ])
@@ -63,7 +62,7 @@ export function zipToGeojson(data){
     .then(function(files){
       var f = files.files;
       for(var dat in f){
-        var ext = helper.getExtension(dat);
+        var ext = mx.helpers.getExtension(dat);
         if(ext == ".dbf") dbf = f[dat];
         if(ext == ".shp") shp = f[dat]; 
       }
@@ -88,8 +87,48 @@ export function zipToGeojson(data){
     .then(function(gj){
       return(gj);
     });  
-  return dat;
 }
+
+
+/**
+* Convert data to geojson 
+* @param {String} data data to parse
+* @param {String} Data type. Eg. kml, gpx, geojson
+*/
+
+export function parseDataToGeojson(data,fileType){
+
+  var out;
+  switch(fileType) {
+    case 'kml':
+      out = System.import("togeojson").then(function(toGeoJSON){
+        return toGeoJSON.kml((new DOMParser()).parseFromString(data, 'text/xml'));
+      });    
+      break;
+    case 'gpx':
+      out = System.import("togeojson").then(function(toGeoJSON){
+        return toGeoJSON.gpx((new DOMParser()).parseFromString(data, 'text/xml'));
+      });
+      break;
+    case 'zip':
+      out = mx.helpers.zipToGeojson(data);
+      break;
+    case 'geojson':
+      out = new Promise(function(resolve, reject){
+        resolve(JSON.parse(data));
+      });
+      break;
+    default:
+      out = new Promise(function(resolve,reject){
+        console.log("Can't read data in " + format + " format");
+      });
+      break;
+  }
+
+  return out;
+
+}
+
 
 
 // handle worker
@@ -98,7 +137,8 @@ export function startWorker(f) {
 
   return function(e) {
 
-    var workerPath = "src/js/mx_handler_dragdrop_worker.js";
+    var geojsonWorker = require("./mx_helper_map_dragdrop.worker.js");
+
     // Test for size
     if(f && f.size && f.size > mx.settings.maxByteUpload){
       var msg = "<p>The file size reached the current limit.</p>";
@@ -116,9 +156,7 @@ export function startWorker(f) {
       return;
     }
 
-
-    // Create a worker to handle this file
-    var w = new Worker(workerPath);
+    var w = new geojsonWorker();
 
     var o = {
       id : "map_main"
@@ -129,143 +167,136 @@ export function startWorker(f) {
     var gJson = {};
     var db = mx.data.geojson;
 
+    mx.helpers.parseDataToGeojson(data,f.fileType).then(function(gJson){
 
+      // Message to pass to the worker
+      var res = {
+        data : gJson,
+        fileName: f.name,
+        fileType: f.fileType
+      };
 
+      // handle message received
+      w.onmessage = function(e) {
+        var m = e.data;
+        if ( m.progress ) {
+          console.log(m.message);
+          helper.progressScreen({
+            enable : true,
+            id :f.name,
+            percent : m.progress,
+            text : f.name + ": " + m.message
+          });
+        }
 
-    if(f.fileType == 'kml') gJson =  toGeoJSON.kml((new DOMParser()).parseFromString(data, 'text/xml'));
-    if(f.fileType == 'gpx') gJson =  toGeoJSON.gpx((new DOMParser()).parseFromString(data, 'text/xml'));
-    if(f.fileType == 'geojson') gJson =  JSON.parse(data);
-    if(f.fileType == 'zip') gJson = helper.zipToGeojson(data);
-    // Message to pass to the worker
-    var res = {
-      data : gJson,
-      fileName: f.name,
-      fileType: f.fileType
-    };
+        // send alert for errors message
+        if( m.errorMessage ){
+          alert(m.errorMessage);
+        }
 
-    // handle message received
-    w.onmessage = function(e) {
-      var m = e.data;
-      if ( m.progress ) {
-        console.log(m.message);
-        helper.progressScreen({
-          enable : true,
-          id :f.name,
-          percent : m.progress,
-          text : f.name + ": " + m.message
-        });
-      }
+        // If extent is received
+        if (m.extent) {
+          // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
+          // here, quick hack
+          if(m.extent[0] < -179) m.extent[0] = -179;
+          if(m.extent[1] < -85) m.extent[1] = -85;
+          if(m.extent[2] > 179) m.extent[2] = 179;
+          if(m.extent[3] > 85) m.extent[3] = 85;
 
-      // send alert for errors message
-      if( m.errorMessage ){
-        alert(m.errorMessage);
-      }
+          var a = new mx.mapboxgl.LngLatBounds(
+            new mx.mapboxgl.LngLat(m.extent[0],m.extent[1]),
+            new mx.mapboxgl.LngLat(m.extent[2],m.extent[3])
+          );
+          map.fitBounds(a);
+        }
 
-      // If extent is received
-      if (m.extent) {
-        // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
-        // here, quick hack
-        if(m.extent[0] < -179) m.extent[0] = -179;
-        if(m.extent[1] < -85) m.extent[1] = -85;
-        if(m.extent[2] > 179) m.extent[2] = 179;
-        if(m.extent[3] > 85) m.extent[3] = 85;
+        // If layer is valid and returned
+        if (m.layer) {
 
-        var a = new mx.mapboxgl.LngLatBounds(
-          new mx.mapboxgl.LngLat(m.extent[0],m.extent[1]),
-          new mx.mapboxgl.LngLat(m.extent[2],m.extent[3])
-        );
-        map.fitBounds(a);
-      }
-
-      // If layer is valid and returned
-      if (m.layer) {
-
-        helper.progressScreen({
-          enable : true,
-          id : f.name,
-          percent : 100,
-          text : f.name + " done"
-        });
-
-        // mx default view
-        var view = {
-          id : m.id,
-          type : "gj",
-          country : mx.settings.country,
-          date_modified : (new Date()).toLocaleDateString(),
-          data : {
-            title : { en : f.name.split('.')[0] },             
-            attributes : m.attributes,
-            abstract : {en : f.name},
-            geometry : {
-              extent : {
-                lng1 : m.extent[0],
-                lat1 : m.extent[1],
-                lng2 : m.extent[2],
-                lat2 : m.extent[3],
-              }
-            },
-            layer : m.layer,
-            source : {
-              type:"geojson",
-              data: m.geojson
-            }
-          }
-        };
-
-
-        // save geojson in database
-        db.setItem(m.id,{
-          view : view
-        }).then(function(){
-
-          // Add source from view
-          helper.setSourcesFromViews({
-            id : o.id,
-            viewsList : view
+          helper.progressScreen({
+            enable : true,
+            id : f.name,
+            percent : 100,
+            text : f.name + " done"
           });
 
-        });
+          // mx default view
+          var view = {
+            id : m.id,
+            type : "gj",
+            country : mx.settings.country,
+            date_modified : (new Date()).toLocaleDateString(),
+            data : {
+              title : { en : f.name.split('.')[0] },             
+              attributes : m.attributes,
+              abstract : {en : f.name},
+              geometry : {
+                extent : {
+                  lng1 : m.extent[0],
+                  lat1 : m.extent[1],
+                  lng2 : m.extent[2],
+                  lat2 : m.extent[3],
+                }
+              },
+              layer : m.layer,
+              source : {
+                type:"geojson",
+                data: m.geojson
+              }
+            }
+          };
 
-        // close worker
-        w.terminate();
+
+          // save geojson in database
+          db.setItem(m.id,{
+            view : view
+          }).then(function(){
+
+            // Add source from view
+            helper.setSourcesFromViews({
+              id : o.id,
+              viewsList : view
+            });
+
+          });
+
+          // close worker
+          w.terminate();
+        }
+
+      };
+
+      // launch process
+      if(res.data.then){
+        res
+          .data
+          .then(function(gJson){
+            res.data = gJson;
+            w.postMessage(res);
+          })
+          .catch(function(err){
+            alert(err);
+            helper.errorProgress(f)();
+            w.terminate();
+          });
+
+      }else{ 
+        w.postMessage(res);
       }
 
-    };
-
-    // launch process
-    if(res.data.then){
-      res
-        .data
-        .then(function(gJson){
-          res.data = gJson;
-          w.postMessage(res);
-        })
-        .catch(function(err){
-          alert(err);
-          helper.errorProgress(f)();
-          w.terminate();
-        });
-
-    }else{ 
-      w.postMessage(res);
-    }
+    });
   };
 }
 
-export function updateLayerList(f) {
-  return function(e) {};
-}
 
-export function getExtension(str){
-  return str.toLowerCase().match(/.[a-z0-9]+$/)[0];
-}
+
+
 // handle drop event
 export function handleUploadFileEvent(evt) {
 
   evt.stopPropagation();
   evt.preventDefault();
-  var helper = this;
+  var helper = mx.helpers;
   var files = evt.dataTransfer.files;
 
   var nFiles = files.length;
@@ -299,7 +330,7 @@ export function handleUploadFileEvent(evt) {
     reader.onerror = (helper.errorProgress)(f);
 
     reader.onload = (helper.startWorker)(f);
-    reader.onloadend = (helper.updateLayerList)(f);
+    //reader.onloadend = (helper.updateLayerList)(f);
 
     // read the geojson
     if(f.fileType == "zip" ){

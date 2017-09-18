@@ -9,6 +9,10 @@
 tagList(
   tags$title("map-x"),
   tags$meta(
+    name="viewport",
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    ),
+  tags$meta(
     `http-equiv`="X-UA-Compatible", 
     content="IE=edge"
     ),
@@ -16,9 +20,6 @@ tagList(
     `http-equiv`="Cache-control",
     content="private"
     ),
-  tags$meta(
-    name="viewport",
-    content="width=device-width, initial-scale=1" ),
   tags$meta(
     name="description",
     content="map-x"

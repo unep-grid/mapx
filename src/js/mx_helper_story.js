@@ -1,4 +1,361 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 6 , node: true */
+//'use strict';
+import * as mx from './mx_init.js';
+
+//var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
+
+
+
+/**
+* Read and evaluate story map
+* @param {Object} o o.options
+* @param {String} o.id Map id
+* @param {String} o.idView View id. If no view is given, fetch one by id
+* @param {Object} o.view A view object containing a story in data
+* @param {Boolean} o.save Save the given view in localstorage by id
+* @param 
+*/ 
+export function storyRead(o){
+
+  /* Fetch view if not given */
+  if(!o.view && o.id && o.idView ){
+    var view =  mx.helpers.getViews(o);
+    o.view = view;
+  }
+
+  if ( !mx.helpers.path(o,"view.data.story") ) {
+    console.log("No story to read, abord");
+    return ;
+  }
+
+  /* set id view  */
+  o.idView = o.idView || o.view.id;
+
+    /* display story controls */
+    mx.helpers.storyController({
+      enable : true
+    });
+
+  var db = mx.data.stories; 
+  
+  if(o.save){
+    /* save current view in db */
+    db.setItem(
+      o.idView,
+      o.view
+    ).then(function(){
+      console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
+    });
+  }
+
+
+  /* Save current values */
+  mx.data.storyCache = {
+    views : mx.helpers.getLayerNamesByPrefix({
+      id: o.id,
+      prefix: "MX-"
+    }),
+    position : mx.helpers.getMapPos(o),
+    currentStep : 0,
+    hasAerial : mx.helpers.btnToggleLayer({
+      id:'map_main',
+      idLayer:'here_aerial',
+      idSwitch:'btnThemeAerial',
+      action:'hide'
+    })
+  };
+  
+  /* Remove existing map-x layers */
+  mx.helpers.removeLayersByPrefix({
+    id:"map_main",
+    prefix:"MX-"
+  });
+
+  /* Generate story ui */
+  mx.helpers.storyBuild(o);
+
+  /* Attach listener for key down*/
+  window.addEventListener("keydown", mx.helpers.storyHandleKeyDown);
+
+  /* Listen to scroll on the main container. */
+  mx.helpers.storyOnScroll({
+    selector: "#story",
+    callback: mx.helpers.storyUpdateSlides,
+    view: o.view
+  });
+
+  /* Set lock map pan to current value */
+  mx.helpers.storyControlMapPan({
+    recalc:true
+  });
+
+}
+
+
+/**
+ * On scroll, do something
+ * @param {Object} o Options
+ * @param {String|Element} o.selector
+ * @param {Function} o.callback Callback function. All options will be provided to this callback function
+ */
+export function storyOnScroll(o) {
+
+
+  /*
+   * store scroll data in object onScrollData
+   * elScroll : div to get/set the scroll position
+   * contentHeight : the content height
+   * height : the visible part of elScroll
+   * trigger : the trigger position
+   * distTop,distBottom,distTrigger,distStart : initials distances 
+   */
+  var elScroll = document.querySelector(o.selector);
+  if(!elScroll) console.log(o.selector + "not found");
+
+  o.onScrollData = {
+    elScroll: elScroll,
+    contentHeight: elScroll.firstElementChild.clientHeight,
+    height: elScroll.clientHeight,
+    trigger: elScroll.clientHeight * 0.5,
+    distTop: -1,
+    distBottom: -1,
+    distTrigger: -1,
+    distStart: elScroll.dataset.start_scroll
+  };
+
+  /*
+   * Loop : run a function if scroll is done on an element
+   */
+  function loop() {
+
+    var posNow = elScroll.scrollTop;
+    var posLast = o.onScrollData.distTop;
+
+    if (posLast == posNow) {
+      mx.helpers.onNextFrame(loop);
+      return false;
+    } else {
+      o.onScrollData.distTop = posNow;
+      o.onScrollData.distBottom = posNow + o.onScrollData.height;
+      o.onScrollData.distTrigger = posNow + o.onScrollData.trigger;
+    }
+
+    if (o.callback && o.callback.constructor == Function) {
+      o.callback(o);
+    }
+
+    mx.helpers.onNextFrame(loop);
+
+  }
+
+  /*
+   * init loop
+   */
+  loop();
+}
+
+
+/*
+ * Update slides transform value;
+ * @param {Object} o options
+ * @param {Object} o.onScrollData Data from onScroll function
+ * @param {Object} o.view View object
+ */
+export function storyUpdateSlides(o) {
+  var s, l;
+  var bullet, bullets, top, trigger, bottom, config, rect, slide, slides, slideConfig, step, steps, percent, stepNum;
+  var data = o.onScrollData;
+
+  /*
+   * Initial configuration
+   */
+  if (!data.stepsConfig) {
+
+    /*
+     * local functions
+     */
+    var getBulletScrollTo = function() {
+      var start = data.elScroll.scrollTop;
+      var end = this.dataset.to;
+        
+       mx.helpers.srollFromTo({
+         el : data.elScroll,
+         from : start,
+         to : end,
+         during : 3000,
+         using : "easeInOut"
+       }); 
+    };
+
+    /*
+     * Steps configuration
+     */
+
+    data.stepsConfig = [];
+    steps = data.elScroll.querySelectorAll(".mx-story-step");
+    bullets = document.createElement("div");
+    bullets.classList.add("mx-story-step-bullets");
+    data.elScroll.appendChild(bullets);
+
+
+    for (s = 0; s < steps.length; s++) {
+
+      /*
+       * config init
+       */
+      config = {};
+      step = steps[s];
+      rect = step.getBoundingClientRect();
+      slides = step.querySelectorAll(".mx-story-slide");
+      config.slides = slides;
+      config.slidesConfig = [];
+
+      /*
+       * Save step dimension
+       */
+      config.start = rect.top;
+      config.end = rect.bottom;
+      config.height = rect.height;
+      config.width = rect.width;
+
+
+      /*
+       * Bullets init
+       */
+      bullet = document.createElement("div");
+
+      bullet.classList.add("mx-story-step-bullet");
+
+
+      bullet.dataset.to = config.start;
+      bullet.dataset.step = s;
+      bullet.innerHTML = s+1;
+      bullet.classList.add("hint--top");
+      bullet.setAttribute("aria-label","Go to step " + (s+1));
+      bullets.appendChild(bullet);
+      bullet.onclick = getBulletScrollTo;
+      config.bullet = bullet;
+
+
+      if (s === 0){
+        bullet
+          .classList
+          .add("mx-story-step-active");
+      }
+
+      /*
+       * Evaluate slides and save in config
+       */
+      for (l = 0; l < slides.length; l++) {
+        slideConfig = JSON.parse(
+          slides[l]
+            .dataset
+            .slide_config || '[]'
+        );
+        config.slidesConfig.push(slideConfig);
+
+      }
+
+      data.stepsConfig.push(config);
+
+    }
+    
+    /*
+    * Save steps config
+    */
+    mx.data.storyCache.stepsConfig = data.stepsConfig;
+    /**
+     * Set initial scroll position
+     */
+    if(o.onScrollData.distStart){
+      data.elScroll.scrollTop = o.onScrollData.distStart*1;
+    }
+  }
+
+
+  /*
+   * Apply style
+   */
+
+  top = data.distTop;
+  bottom = data.distBottom;
+  trigger = data.distTrigger;
+
+  for (s = 0; s < data.stepsConfig.length; s++) {
+
+    config = data.stepsConfig[s];
+
+    if (config.start < bottom) {
+      config
+        .bullet
+        .classList
+        .add("mx-story-step-active");
+    } else {
+      config
+        .bullet
+        .classList
+        .remove("mx-story-step-active");
+    }
+
+    if (config.start <= bottom && config.end >= top) {
+
+      percent = 100 * (1 - (config.end - top) / (data.height + config.height));
+
+
+      if( percent < 75 && percent >= 25 ){
+        if(data.stepActive !== s){
+          data.stepActive = s;
+          mx.helpers.storyPlayStep({
+            id : 'map_main',
+            view : o.view,
+            stepNum :s
+          });
+        }
+      }
+
+      slides = config.slides;
+
+      for (l = 0; l < slides.length; l++) {
+        var slideTransform = mx.helpers.storySetTransform({
+          data: config.slidesConfig[l],
+          percent: percent
+        });
+        slides[l].style[mx.helpers.cssTransformFun()] = slideTransform;
+      }
+    }
+  }
+}
+
+
+
+
+
+/*
+ * listen for keydown
+ */
+  function storyHandleKeyDown(event){
+     if (event.defaultPrevented) {
+      return; // Do nothing if the event was already processed
+    }
+
+switch (event.key) {
+  case "ArrowDown":
+    break;
+  case "ArrowUp":
+    // Do something for "up arrow" key press.
+    break;
+  case "ArrowLeft":
+    // Do something for "left arrow" key press.
+    break;
+  case "ArrowRight":
+    // Do something for "right arrow" key press.
+    break;
+} 
+  }
+
+
+
+
 /**
 * Control map pan during story map
 * @param {Object} o options
@@ -7,6 +364,7 @@
 * @param {Boolean} o.toggle Inverse the current state
 */
 export function storyControlMapPan(o){
+  
   o = o||{};
   var toUnlock = true;
   var liBtn = document.getElementById("btnStoryUnlockMap");
@@ -27,104 +385,14 @@ export function storyControlMapPan(o){
   if(toUnlock){
     btn.classList.remove("fa-lock");
     btn.classList.add("fa-unlock");
-    storyclassList.add("mx-events-off");
+    story.classList.add("mx-events-off");
   }else{
     btn.classList.add("fa-lock");
     btn.classList.remove("fa-unlock");
-    storyclassList.remove("mx-events-off");
+    story.classList.remove("mx-events-off");
   }
 }
 
-
-
-/**
-* Read and evaluate story map
-* @param {Object} o o.options
-* @param {String} o.id Map id
-* @param {String} o.idView View id. If no view is given, fetch one by id
-* @param {Object} o.view A view object containing a story in data
-* @param {Boolean} o.save Save the given view in localstorage by id
-* @param 
-*/ 
-export function storyRead(o){
-
-  /* Fetch view if not given */
-  if(!o.view && o.id && o.idView ){
-    var view =  mx.helper.getViews(o);
-    o.view = view;
-  }
-
-  if ( !path(o,"view.data.story") ) {
-    console.log("No story to read, abord");
-    return ;
-  }
-
-  /* set id view  */
-  o.idView = o.idView || o.view.id;
-
-/*  [> toggle main controls <]*/
-    //mx.helper.toggleControls({
-      //hide : true,
-      //skip : ["btnStoryUnlockMap","btnStoryClose"]
-    /*});*/
-
-    /* display story controls */
-    mx.helper.storycontroller({
-      enable : true
-    });
-
-
-  var db = mx.data.stories; 
-  
-  if(o.save){
-    /* save current view in db */
-    db.setItem(
-      o.idView,
-      o.view
-    ).then(function(){
-      console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
-    });
-  }
-
-
-  /* Save current values */
-  mx.data.storyCache = {
-    views : mx.helper.getLayersNamesByPrefix({
-      id: o.id,
-      prefix: "MX-"
-    }),
-    position : mx.helper.getMapPos(o),
-    currentStep : 0,
-    hasAerial : mx.helper.btnToggleLayer({
-      id:'map_main',
-      idLayer:'here_aerial',
-      idSwitch:'btnThemeAerial',
-      action:'hide'
-    })
-  };
-  
-  /* Remove existing map-x layers */
-  mx.helper.removeLayersByPrefix({
-    id:"map_main",
-    prefix:"MX-"
-  });
-
-  /* Generate story ui */
-  mx.helper.storyBuild(o);
-
-  /* Listen to scroll on the main container. */
-  mx.helper.storyOnScroll({
-    selector: "#story",
-    callback: mx.helper.storyUpdateSlides,
-    view: o.view
-  });
-
-  /* Set lock map pan to current value */
-  mx.helper.storyControlMapPan({
-    recalc:true
-  });
-
-}
 
 /*
 * Enable or disable story map controls
@@ -146,7 +414,8 @@ export function storyController(o){
     "#btnZoomIn",
     "#btnZoomOut",
     "#btnFullscreen",
-    ".tab-layers"
+    ".panel-layers",
+    ".mx-panel-dashboard-container"
   ];
   o.selectorEnable = o.selectorEnable || [
     "#btnStoryUnlockMap",
@@ -169,8 +438,8 @@ export function storyController(o){
     class : "mx-hide"
   };
 
-  mx.util.classAction(toEnable);
-  mx.util.classAction(toDisable);
+  mx.helpers.classAction(toEnable);
+  mx.helpers.classAction(toDisable);
 
 
   o.id = o.id || "map_main";
@@ -180,7 +449,8 @@ export function storyController(o){
     /**
     * Remove layers added by the story
     */
-    mx.helper.removeLayersByPrefix({
+    console.log("remove story layers");
+    mx.helpers.removeLayersByPrefix({
       id:'map_main',
       prefix:"MX-"
     });
@@ -193,14 +463,15 @@ export function storyController(o){
     /**
     * Get previous stored data
     */
-    d = mx.data.storyCache;
+    var d = mx.data.storyCache;
 
 
     /**
     *
     */
     if(d.hasAerial){
-      mx.helper.btnToggleLayer({
+
+      mx.helpers.btnToggleLayer({
         id:'map_main',
         idLayer:'here_aerial',
         idSwitch:'btnThemeAerial',
@@ -212,7 +483,9 @@ export function storyController(o){
      * Enable previously enabled layers
      */
     for( var l = 0 ; l < d.views.length ; l ++){
-      mx.helper.addView({
+
+    console.log("Add previously enabled layers");
+      mx.helpers.addView({
         id : o.id,
         idView: d.views[l]
       });
@@ -222,16 +495,20 @@ export function storyController(o){
      */   
     if(d.position){
       var pos =  d.position;
-
-      m.map.flyTo({
+      var map = mx.maps[o.id].map;
+      map.flyTo({
         speed : 3,
-        easing : mx.util.easingFun({type:"easeIn",power:1}),
+        easing : mx.helpers.easingFun({type:"easeIn",power:1}),
         zoom : pos.z,
         bearing : pos.b,
         pitch :  pos.p,
         center : [ pos.lng, pos.lat ] 
       });
 
+      /**
+      * Remove listener
+      */
+     //window.removeEventListener("keydown",mx.helpers.storyHandleKeyDown);
 
     }
 
@@ -249,9 +526,8 @@ export function storyController(o){
 */
 export function storyBuild(o){
 
-  var story = path(o,"view.data.story");
-
-  if(!story || !storysteps || storysteps.length < 1) return;
+  var story = mx.helpers.path(o,"view.data.story");
+  if(!story || !story.steps || story.steps.length < 1) return;
 
   /**
   * Set default
@@ -273,11 +549,12 @@ export function storyBuild(o){
   /**
    * Story base div
    */
-  var divOldStory = document.getElementById(o.idStory);
+  var doc = window.document;
+  var divOldStory = doc.getElementById(o.idStory);
   var startScroll = 0;
-  var body = document.body;
-  var divStory = document.createElement("div");
-  var divStoryContainer = document.createElement("div");
+  var body = doc.body;
+  var divStory = doc.createElement("div");
+  var divStoryContainer = doc.createElement("div");
   var stepNum = 0;
 
  /* remove old story if exists. */
@@ -296,18 +573,18 @@ export function storyBuild(o){
   /**
   * For each steps, build content
   */
-  storysteps.forEach(function(step){
+  story.steps.forEach(function(step){
 
     if(!step.slides) return ;
     var slides = step.slides ;
-    var divStep = document.createElement("div");
+    var divStep = doc.createElement("div");
     divStep.classList.add(o.classStep);
     divStep.dataset.step_num = stepNum++;
     slides.forEach(function(slide){
-      var divSlide = document.createElement("div");
-      var divSlideFront = document.createElement("div");
-      var divSlideBack = document.createElement("div");
-      var lang = mx.util.checkLanguage({
+      var divSlide = doc.createElement("div");
+      var divSlideFront = doc.createElement("div");
+      var divSlideBack = doc.createElement("div");
+      var lang = mx.helpers.checkLanguage({
         obj: slide,
         path: 'html'
       });
@@ -400,182 +677,18 @@ export function storySetTransform(o) {
 }
 
 
-/*
- * Update slides transform value;
- * @param {Object} o options
- * @param {Object} o.onScrollData Data from onScroll function
- * @param {Object} o.view View object
- */
-export function storyUpdateSlides(o) {
-  var s, l;
-  var bullet, bullets, bulletPlay, activate, axis, top, trigger, bottom, config, rect, slide, slides, slideConfig, step, steps, percent, stepNum;
-  var data = o.onScrollData;
-
-  /*
-   * Initial configuration
-   */
-  if (!data.stepsConfig) {
-
-    /*
-     * local functions
-     */
-    var getBulletScrollTo = function() {
-      var start = data.elScroll.scrollTop;
-      var end = this.dataset.to;
-        
-       mx.util.srollFromTo({
-         el : data.elScroll,
-         from : start,
-         to : end,
-         during : 3000,
-         using : "easeInOut"
-       }); 
-    };
-
-    /*
-     * Steps configuration
-     */
-
-    data.stepsConfig = [];
-    data.views =
-    steps = data.elScroll.querySelectorAll(".mx-story-step");
-    bullets = document.createElement("div");
-    bullets.classList.add("mx-story-step-bullets");
-    data.elScroll.appendChild(bullets);
-
-    for (s = 0; s < steps.length; s++) {
-
-      /*
-       * config init
-       */
-      config = {};
-      step = steps[s];
-      rect = step.getBoundingClientRect();
-      slides = step.querySelectorAll(".mx-story-slide");
-      config.slides = slides;
-      config.slidesConfig = [];
-
-      /*
-       * Save step dimension
-       */
-      config.start = rect.top;
-      config.end = rect.bottom;
-      config.height = rect.height;
-      config.width = rect.width;
-
-      /*
-       * Bullets init
-       */
-      bullet = document.createElement("div");
-
-      bullet.classList.add("mx-story-step-bullet");
-
-
-      bullet.dataset.to = config.start;
-      bullet.dataset.step = s;
-      bullet.innerHTML = s+1;
-      bullet.classList.add("hint--top");
-      bullet.setAttribute("aria-label","Go to step " + (s+1));
-      bullets.appendChild(bullet);
-      bullet.onclick = getBulletScrollTo;
-      config.bullet = bullet;
-
-
-      if (s === 0){
-        bullet
-          .classList
-          .add("mx-story-step-active");
-      }
-
-      /*
-       * Evaluate slides and save in config
-       */
-      for (l = 0; l < slides.length; l++) {
-        slideConfig = JSON.parse(
-          slides[l]
-            .dataset
-            .slide_config || '[]'
-        );
-        config.slidesConfig.push(slideConfig);
-
-      }
-
-      data.stepsConfig.push(config);
-    }
-    /**
-     * Set initial scroll position
-     */
-    if(o.onScrollData.distStart){
-      data.elScroll.scrollTop = o.onScrollData.distStart*1;
-    }
-  }
-
-
-  /*
-   * Apply style
-   */
-
-  top = data.distTop;
-  bottom = data.distBottom;
-  trigger = data.distTrigger;
-
-  for (s = 0; s < data.stepsConfig.length; s++) {
-
-    config = data.stepsConfig[s];
-
-    if (config.start < bottom) {
-      config
-        .bullet
-        .classList
-        .add("mx-story-step-active");
-    } else {
-      config
-        .bullet
-        .classList
-        .remove("mx-story-step-active");
-    }
-
-    if (config.start <= bottom && config.end >= top) {
-
-      percent = 100 * (1 - (config.end - top) / (data.height + config.height));
-
-
-      if( percent < 75 && percent >= 25 ){
-        if(data.stepActive !== s){
-          data.stepActive = s;
-          mx.helper.storyPlayStep({
-            id : 'map_main',
-            view : o.view,
-            stepNum :s
-          });
-        }
-      }
-
-      slides = config.slides;
-
-      for (l = 0; l < slides.length; l++) {
-        var slideTransform = mx.helper.storySetTransform({
-          data: config.slidesConfig[l],
-          percent: percent
-        });
-        slides[l].style[mx.util.cssTransformFun] = slideTransform;
-      }
-    }
-  }
-}
-
-
 
 export function storyPlayStep(o){
   o = o || {};
   o.id = o.id||"map_main";
   var view =  o.view;
-  var steps = path(o,"view.data.storysteps");
+  var steps = mx.helpers.path(o,"view.data.story.steps");
   var stepNum = o.stepNum;
   var step, pos, views, vToShow, vVisible, vToRemove;
+  var m = mx.maps[o.id];
 
   function getViewsVisible(){
-    return  mx.helper.getLayersNamesByPrefix({
+    return  mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: "MX-",
       base: true
@@ -599,7 +712,7 @@ export function storyPlayStep(o){
    */
   m.map.flyTo({
     speed : 0.5,
-    easing : mx.util.easingFun({type:"easeOut",power:1}),
+    easing : mx.helpers.easingFun({type:"easeOut",power:1}),
     zoom : pos.z,
     bearing : pos.bearing,
     pitch :  pos.pitch,
@@ -612,12 +725,12 @@ export function storyPlayStep(o){
   vVisible = getViewsVisible();
 
 
-  for( v = 0; v < views.length ; v++){
-    vn = views[v].view;
-    fi = views[v].filter;
+  for( var v = 0; v < views.length ; v++){
+    var vn = views[v].view;
+    var fi = views[v].filter;
 
     if( vVisible.indexOf(vn) == -1 ){
-      mx.helper.addView({
+      mx.helpers.addView({
         id : o.id,
         idView: vn
       }); 
@@ -632,12 +745,12 @@ export function storyPlayStep(o){
    * old view to remove
    */
   for( v = 0; v < vVisible.length ; v++){
-    vo = vVisible[v];
+    var vo = vVisible[v];
 
     var toRemove =  vToShow.indexOf(vo) == -1;
 
     if( toRemove ){
-      mx.helper.removeLayersByPrefix({
+      mx.helpers.removeLayersByPrefix({
         id : o.id,
         prefix : vo
       });
@@ -649,66 +762,5 @@ export function storyPlayStep(o){
 
 
 
-/**
- * On scroll, do something
- * @param {Object} o Options
- * @param {String|Element} o.selector
- * @param {Function} o.callback Callback function. All options will be provided to this callback function
- */
-export function storyOnScroll(o) {
-
-
-  /*
-   * store scroll data in object onScrollData
-   * elScroll : div to get/set the scroll position
-   * contentHeight : the content height
-   * height : the visible part of elScroll
-   * trigger : the trigger position
-   * distTop,distBottom,distTrigger,distStart : initials distances 
-   */
-  var elScroll = document.querySelector(o.selector);
-  if(!elScroll) console.log(o.selector + "not found");
-
-  o.onScrollData = {
-    elScroll: elScroll,
-    contentHeight: elScroll.firstElementChild.clientHeight,
-    height: elScroll.clientHeight,
-    trigger: elScroll.clientHeight * 0.5,
-    distTop: -1,
-    distBottom: -1,
-    distTrigger: -1,
-    distStart: elScroll.dataset.start_scroll
-  };
-
-  /*
-   * Loop : run a function if scroll is done on an element
-   */
-  function loop() {
-
-    var posNow = elScroll.scrollTop;
-    var posLast = o.onScrollData.distTop;
-
-    if (posLast == posNow) {
-      mx.util.onNextFrame(loop);
-      return false;
-    } else {
-      o.onScrollData.distTop = posNow;
-      o.onScrollData.distBottom = posNow + o.onScrollData.height;
-      o.onScrollData.distTrigger = posNow + o.onScrollData.trigger;
-    }
-
-    if (o.callback && o.callback.constructor == Function) {
-      o.callback(o);
-    }
-
-    mx.util.onNextFrame(loop);
-
-  }
-
-  /*
-   * init loop
-   */
-  loop();
-}
 
 

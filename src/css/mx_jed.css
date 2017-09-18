@@ -1,0 +1,92 @@
+/**
+ *
+ * JED FIXES
+ *
+ */
+
+
+.jed-container .jed-error {
+  border-left: 1px solid red;
+  margin-left: 1px;
+}
+
+.jed-container .table>tbody>tr>td, 
+.jed-container .table>tbody>tr>th, 
+.jed-container .table>tfoot>tr>td, 
+.jed-container .table>tfoot>tr>th, 
+.jed-container .table>thead>tr>td, 
+.jed-container .table>thead>tr>th {
+  padding: 1px;
+  border: 0px;
+}
+
+
+.jed-container .btn-group > .btn {
+ border-radius : 5px !important;
+}
+
+
+
+
+.jed-container table .selectize-input {
+  min-height: 34px;
+  max-height: 34px;
+}
+
+.jed-container table .selectize-input .item {
+  max-width: 150px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jed-container td .btn-group {
+  width: 60px!important;
+}
+
+.jed-container td .btn-group > .btn {
+    width: 20px;
+    padding: 4px;
+    float:left;
+}
+
+.jed-container .table {
+  border: 0px 1px 0px 1px;
+}
+
+.jed-container td input[type='color']:focus
+{
+  min-width:0px;
+}
+
+.jed-container .btn-group-wide {
+   width:100%
+}
+
+.jed-container .well {
+  padding: 10px 5px 10px 5px;
+  border: none;
+  box-shadow: none;
+  --webkit-box-shadow: none;
+}
+
+.jed-container .btn.btn-default {
+      border: none;
+  }
+
+/*.form-group textarea.form-control {*/
+  /*resize: vertical;*/
+/*}*/
+
+.jed-container .table {
+  min-width: 100%;
+  border: 0px;
+}
+
+.jed-container div[data-schematype='object'] {
+    padding: 15px;
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+

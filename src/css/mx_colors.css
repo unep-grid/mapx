@@ -195,8 +195,6 @@ color: #FFF;
   border-radius: 5px;
   border-color: var(--mx_ui_border);
   background-color: var(--mx_ui_background);
-  -webkit-box-shadow: none;
-  box-shadow: none;
 } 
 
 .list-group .list-group-item-member {
@@ -221,10 +219,6 @@ color: #FFF;
   border-color: var(--mx_ui_border);
 }
 
-.mx .btn-circle:hover,
-.mx .btn-circle:focus,
-.mx .btn-circle:hover i:before,
-.mx .btn-circle:focus i:before, 
 .mx .selectize-dropdown .active,
 .mx .selectize-dropdown [data-selectable] .highlight,
 .mx .btn:hover,
@@ -360,6 +354,22 @@ color: #FFF;
   color:var(--mx_ui_background);
 }
 
+/**
+* controls
+*/
 
+.mx .mx-scale-text,
+.mx .mapboxgl-ctrl-attrib *
+{
+text-align:center;
+color:var(--mx_ui_text);
+}
+
+.mx .mx-scale-box {
+  width: 78.0685px;
+  border-bottom: 1px solid var(--mx_ui_text);
+  border-left: 1px solid var(--mx_ui_text);
+  border-right: 1px solid var(--mx_ui_text);
+}
 
 

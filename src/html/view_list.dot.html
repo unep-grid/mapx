@@ -1,12 +1,12 @@
 {{~it :view}}
-{{ var lang = mx.util.checkLanguage({obj:view,path:'data.title'}) ; }}
+{{ var lang = mx.helpers.checkLanguage({obj:view,path:'data.title'}) ; }}
 <li data-view_id="{{=view.id}}" class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item">
   <input data-view_action_key="btn_toggle_view" data-view_action_target="{{=view.id}}" id="check_view_enable_{{=view.id}}" class="mx-view-item-checkbox" type="checkbox"/>
   <label class="mx-view-item-checkbox-label mx-pointer" for="check_view_enable_{{=view.id}}">
     <div class="fa fa-bars mx-sort-li-handle"></div>
     <span class="mx-view-item-title">{{=view.data.title[lang]}}</span>
     <span class="mx-view-item-classes">{{=view.data.classes}},{{=view.type}}</span>
-    <span class="mx-view-item-index">{{=mx.util.getDistinctIndexWords(view)}}</span>
+    <span class="mx-view-item-index">{{=mx.helpers.getDistinctIndexWords(view)}}</span>
     <div class="hint--bottom-left hint-medium mx-view-item-indicator" aria-label="{{=view.date_modified.substr(0,10)}}">
       <div class="fa fa-circle-thin mx-view-item-switch"></div>
     </div>
@@ -19,7 +19,7 @@
     </div>
     <div>
       {{?view.type=='vt'}}
-      {{ var rules = path(view,'data.style.rules'); }}
+      {{ var rules = mx.helpers.path(view,'data.style.rules'); }}
       {{?rules \u0026\u0026 rules.length \u003e 0 }}
       <div class="mx-view-item-legend" id="check_view_legend_{{=view.id}}"></div>
       {{?}}
@@ -74,7 +74,7 @@
             <div class="fa fa-pencil"></div>
           </li>
           {{?view.type=='vt'}}
-          {{?path(view,'data.attribute.name')}}
+          {{?mx.helpers.path(view,'data.attribute.name')}}
           <li class="mx-pointer hint--bottom-right" data-lang_key="btn_opt_edit_style" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_style" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
             <div class="fa fa-paint-brush"></div>
           </li>
@@ -94,15 +94,17 @@
     </div>
     <div id="mx-search-tool-{{=view.id}}" class="mx-hide">
       {{?view.type == 'vt' \u007c\u007c view.type == 'gj' }}
-      {{?path(view,'data.attribute.type') == 'string'}}
+      {{?mx.helpers.path(view,'data.attribute.type') == 'string'}}
       <select data-search_box_for="{{=view.id}}" class="mx-search-box" multiple="TRUE"></select>
       {{?}}
-      {{?path(view,'data.attribute.type') == 'number'}}
+      {{?mx.helpers.path(view,'data.attribute.type') == 'number'}}
       <div class="mx-slider-container">
-        <div class="mx-slider-title" data-lang_key="btn_opt_numeric" data-lang_type="text"></div>
-        <div class="mx-slider-dyn">
-          <div class="mx-slider-dyn-min"></div>
-          <div class="mx-slider-dyn-max"></div>
+        <div class="mx-slider-header">
+          <div class="mx-slider-title" data-lang_key="btn_opt_numeric" data-lang_type="text"></div>
+          <div class="mx-slider-dyn">
+            <div class="mx-slider-dyn-min"></div>
+            <div class="mx-slider-dyn-max"></div>
+          </div>
         </div>
         <div class="mx-slider mx-slider-numeric" data-range_numeric_for="{{=view.id}}"></div>
         <div class="mx-slider-range">
@@ -111,25 +113,29 @@
         </div>
       </div>
       {{?}}
-      {{ var prop = path(view,'data.attribute.names'); }}
-      {{ var vExt = path(view,'data.period.extent'); }}
+      {{ var prop = mx.helpers.path(view,'data.attribute.names'); }}
+      {{ var vExt = mx.helpers.path(view,'data.period.extent'); }}
       {{?prop \u0026\u0026 prop.indexOf('mx_t0') \u003E -1 \u0026\u0026 vExt \u0026\u0026 vExt.min \u0026\u0026 vExt.max}}
       <div class="mx-slider-container">
-        <div class="mx-slider-title" data-lang_key="btn_opt_date" data-lang_type="text"></div>
-        <div class="mx-slider-dyn">
-          <div class="mx-slider-dyn-min"></div>
-          <div class="mx-slider-dyn-max"></div>
+        <div class="mx-slider-header">
+          <div class="mx-slider-title" data-lang_key="btn_opt_date" data-lang_type="text"></div>
+          <div class="mx-slider-dyn">
+            <div class="mx-slider-dyn-min"></div>
+            <div class="mx-slider-dyn-max"></div>
+          </div>
         </div>
         <div class="mx-slider mx-slider-date" data-range_time_for="{{=view.id}}"></div>
         <div class="mx-slider-range">
-          <div class="mx-slider-range-min">{{=mx.util.date(vExt.min*1000)}}</div>
-          <div class="mx-slider-range-max">{{=mx.util.date(vExt.max*1000)}}</div>
+          <div class="mx-slider-range-min">{{=mx.helpers.date(vExt.min*1000)}}</div>
+          <div class="mx-slider-range-max">{{=mx.helpers.date(vExt.max*1000)}}</div>
         </div>
       </div>
       {{?}}
       {{?}}
       <div class="mx-slider-container">
-        <div class="mx-slider-title" data-lang_key="btn_opt_transparency" data-lang_type="text"></div>
+        <div class="mx-slider-header">
+          <div class="mx-slider-title" data-lang_key="btn_opt_transparency" data-lang_type="text"></div>
+        </div>
         <div class="mx-slider mx-slider-numeric" data-transparency_for="{{=view.id}}"></div>
         <div class="mx-slider-range">
           <div class="mx-slider-range-min">0%</div>

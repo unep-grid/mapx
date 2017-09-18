@@ -381,12 +381,13 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
       out = id
       dat = vapply(id,
         function(x){
-
-          r = d[d$id == x, c(lang,langDefault)]
+          r = d[d$id == as.character(x), c(lang,langDefault)]
           o = r[,lang]
           if(noDataCheck(o)) o = r[,langDefault]
           if(noDataCheck(o)) o = x
+
           return(paste(o,collapse="/"))
+
         },
         "")
       names(out) = dat 
@@ -688,7 +689,9 @@ mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
 }
 
 
-mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDefaultReactiveDomain()){
+mxCatchHandler <- function(type="error",message="",session=shiny::getDefaultReactiveDomain()){
+
+  sysStack <- paste(shiny:::formatStackTrace(sys.calls()),collapse="\n")
 
   if(!exists("cdata") || noDataCheck(cdata)){
     cdata = "<unkown>"
@@ -697,19 +700,14 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
   if(noDataCheck(type)){
     type = "<unknown>"
   }
-
-  if(noDataCheck(message)){
-    message = "<empty message>"
-  }
-
-  if(noDataCheck(call)){
-    message = "<empty call>"
+if(noDataCheck(message)){
+    message = "<no message>"
   }
 
   err <- list(
     type = type,
-    message = as.character(message),
-    call = paste(call,sep=";",collapse="; "),
+    stack = sysStack,
+    message = message,
     time = as.character(Sys.time()),
     cdata = as.character(cdata)
     )
@@ -720,20 +718,15 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
     #
     if(!noDataCheck(session)){   
       mxModal(
-      id=randomString(),
-      title="Unexpected issue",
-      content=tagList(
-        tags$b("Something went wrong, sorry"),
-        tags$p("We received a report and we will fix this as soon as possible."),
-        mxFold(
-          labelText="More info",
-          tags$div(
-            class="well",
-            tags$p(err$message)
-            )
-          ))
-      )
+        id=randomString(),
+        title="Unexpected issue",
+        content=tagList(
+          tags$b("You discovered a bug !"),
+          tags$p("Well done. An anonymous report has been sent to our developer. Probably me. Until he solves this issue, what you are trying to do will certainly to work as expected. Sorry. ")
+          )
+        )
     }
+
   }
 
   text <- .get(config,c("templates","text","email_error"))
@@ -741,7 +734,7 @@ mxCatchHandler <- function(type="error",message="",call="",session=shiny::getDef
   text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
   text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
   text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
-  text <- gsub("\\{\\{CALL\\}\\}",err$call,text)
+  text <- gsub("\\{\\{CALL\\}\\}",err$stack,text)
 
   if(noDataCheck(text)) text = "<no text>"
   #
@@ -777,17 +770,18 @@ mxCatch <- function(
   onWarning = function(){},
   onMessage = function(){}
   ){
+  res = NULL;
   #
   # try this and catch errors !
   # 
+
   tryCatch({
     expression
   },error = function(e){
 
     mxCatchHandler(
       type = "error",
-      message = as.character(e$message),
-      call = as.character(e$call)
+      message = as.character(e$message)
       )
 
     onError()
@@ -796,8 +790,7 @@ mxCatch <- function(
 
     mxCatchHandler(
       type = "warning",
-      message = as.character(e$message),
-      call = as.character(e$call)
+      message = as.character(e$message)
       )
 
     onWarning()
@@ -807,8 +800,7 @@ mxCatch <- function(
     if(debug){
       mxCatchHandler(
         type = "message",
-        message = as.character(e$message),
-        call = as.character(e$call)
+        message = as.character(e$message)
         )
     }
 
@@ -1123,7 +1115,27 @@ mxUpdateValue <- function(id,value,session=shiny:::getDefaultReactiveDomain()){
   }
 }
 
-
+#' Convert list to html, client side
+#'
+#' Search for given id and update value. 
+#' 
+#' @param session Shiny session
+#' @param id Id of the element
+#' @param  data List to convert
+#' @export
+mxJsonToHtml <- function(id,data,session=shiny:::getDefaultReactiveDomain()){
+  if(is.null(data) || is.null(id)){
+    return()
+  }else{
+    session$sendCustomMessage(
+      type="mxJsonToHtml",
+      list(
+        id = id,
+        data = jsonlite::toJSON(data,auto_unbox=T)
+        )
+      )
+  }
+}
 
 
 
@@ -1397,8 +1409,10 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
 
   if( isLocal ){
 
-    mxDebugMsg(body)
-    mxDebugMsg(command)
+    #mxDebugMsg(body)
+    #mxDebugMsg(command)
+    write(body,"_logs.txt")
+    mxDebugMsg("Error written in _logs.txt")
 
   }else{
 
@@ -2324,27 +2338,30 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
 #'
 #' Create a html list and apply a class for <ul> and <li>
 #'
-#' @param listInput list in inptu
+#' @param listInput list in input
 listToHtmlSimple <- function(listInput,lang="en",dict=config$dict){
 
-  makeUL = function(li){
+  makeUL <- function(li){
     nL <- names(li)
+    lL <- length(li)
     content <- tagList()
-    for( n in nL){ 
-      content <- tagList(content, makeLi(li[[n]],n))
+    for( i in 1:lL){ 
+      n <-  nL[[i]]
+      if(noDataCheck(n)){ n <- i }
+      content <- tagList(content, makeLi(li[[i]],n))
     }
     tags$ul(content,class="list-group")
   }
 
-  makeLi = function(it,ti){
+  makeLi <- function(it,ti){
     ti <- d(ti,lang=lang,dict=dict);
-    if (is.list(it) && length(names(it)>0)){
-      content = mxFold(
+    if (is.list(it) && length(it)>0){
+      content <- mxFold(
         content = makeUL(it),
         labelUi = ti
         )
     }else{
-      content = tags$div(
+      content <- tags$div(
         tags$span(class="list-group-title",ti),
         tags$span(it)
         )

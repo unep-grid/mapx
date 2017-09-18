@@ -25,7 +25,7 @@
 
         var container; 
 
-        var addPos, idMap, mapPos, divBtnPos, btnPos;
+        var addPos, idMap, mapPos, divBtnPos, btnPos, btnLabel;
         /**
          * Add button to get position from a map
          */  
@@ -34,7 +34,7 @@
           addPos = function(){
             idMap =  self.options.idMap;
             if(!idMap) console.log("no id map provided in position editor as an option");
-            mapPos = mx.helper.getMapPos({id:idMap});
+            mapPos = mx.helpers.getMapPos({id:idMap});
             self.setValue({
               z : mapPos.z,
               lat : mapPos.lat,

@@ -2,18 +2,18 @@
 import * as mx from "./mx_init.js";
 
 /**
-* Control for live coordinate
-*/
+ * Control for live coordinate
+ */
 
 export function mapControlLiveCoord(){}
 mapControlLiveCoord.prototype.onAdd = function(map){
-  
+
   var helper = mx.helpers;
   var coord = document.createElement("a");
   map.on('mousemove',function(e){
     var pos =  e.lngLat;
-    var lat = helper.round(pos.lat,3);
-    var lng = helper.round(pos.lng,3);
+    var lat = helper.formatZeros(pos.lat,3);
+    var lng = helper.formatZeros(pos.lng,3);
     coord.innerText = " Lat: "+lat+" - Lng: "+lng;
   });
   this._map = map;
@@ -31,25 +31,26 @@ mapControlLiveCoord.prototype.onRemove = function() {
 
 
 /**
-* North arrow
-*/
+ * North arrow
+ */
 export function mapControlNorth(){}
 mapControlNorth.prototype.onAdd = function(map){
   var helper = mx.helpers;
   var northArrow = document.createElement("div");
   northArrow.id="mx_north";
-  northArrow.style[helper.cssTransformFun] = "rotateZ("+(-90)+"deg)";
+  northArrow.style[helper.cssTransformFun()] = "rotateZ("+(-90)+"deg)";
   northArrow.onclick=function(){map.setBearing(0);};
   northArrow.innerText='\u27A4';
 
   map.on("rotate",function(e){
     var r = map.getBearing();
-    northArrow.style[helper.cssTransformFun] = "rotateZ("+(r-90)+"deg)";
+    northArrow.style[helper.cssTransformFun()] = "rotateZ("+(r-90)+"deg)";
   });
 
   this._map = map;
   this._container = document.createElement('div');
   this._container.className = 'mapboxgl-ctrl mx-north-arrow';
+  this._container.style.borderRadius = "50%";
   this._container.appendChild(northArrow);
   return this._container;
 };
@@ -60,9 +61,9 @@ mapControlNorth.prototype.onRemove = function() {
 };
 
 /**
-* Create the prototype containing additional control / button.
-* Some of the actions are related to shiny framework
-*/
+ * Create the prototype containing additional control / button.
+ * Some of the actions are related to shiny framework
+ */
 export function mapControlMain(){}
 mapControlMain.prototype.onAdd = function(map) {
 
@@ -101,7 +102,7 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-sign-in",
       key:"btn_login",
       action:function(){ 
-        val = {
+        var val = {
           time : new Date(),
           value : 'showLogin' 
         };
@@ -112,7 +113,7 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-globe",
       key:"btn_country",
       action:function(){
-        val = {
+        var val = {
           time : new Date(),
           value : 'showCountry' 
         };
@@ -123,7 +124,7 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-language",
       key:"btn_language",
       action:function(){ 
-        val = {
+        var val = {
           time : new Date(),
           value : 'showLanguage' 
         };
@@ -134,33 +135,39 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-newspaper-o",
       key:"btn_tab_views",
       action:function(){ 
-        helper.tabEnable('tabs-main','tab-layers');
+        helper.panelEnable('panels-main','panel-layers');
       }
     },
     btnTabSettings:{
       classes:"fa fa-sliders",
       key:"btn_tab_settings",
       action:function(){ 
-        helper.tabEnable('tabs-main','tab-settings');
+        helper.panelEnable('panels-main','panel-settings');
       }
     },
     btnTabTools:{
       classes:"fa fa-cogs",
       key:"btn_tab_tools",
       action:function(){ 
-        helper.tabEnable('tabs-main','tab-tools');
+        helper.panelEnable('panels-main','panel-tools');
       }
     },
-
+    btnTabDashboard:{
+      classes:"fa fa-pie-chart",
+      key:"btn_tab_views",
+      action:function(){ 
+        helper.panelEnable('panels-bottom','panel-dashboard');
+      }
+    },
     btnPrint:{
       classes:"fa fa-print",
       key:"btn_print",
       action:function(){
         System.import("downloadjs")
           .then(function(d){
-         var png = map.getCanvas().toDataURL();
-        d(png,"mx-export.png");
-        });
+            var png = map.getCanvas().toDataURL();
+            d(png,"mx-export.png");
+          });
       }
     },
     btnFullScreen:{
@@ -219,10 +226,10 @@ mapControlMain.prototype.onAdd = function(map) {
   function createList(){
     var ulAll, id, btn, el, elBtn;
     ulAll =  document.createElement("ul");
-    ulAll.className = "mx-controls-ul btn-group shadow";
+    ulAll.className = "mx-controls-ul";
     for( id in btns ){
       btn = btns[id];
-      
+
       el = document.createElement("li");
       elBtn = document.createElement("div");
 
@@ -236,6 +243,7 @@ mapControlMain.prototype.onAdd = function(map) {
       el.classList.add("btn");
       el.classList.add("btn-default");
       el.classList.add("hint--bottom-right");
+      el.classList.add("shadow");
       el.onclick = btn.action;
       ulAll.appendChild(el);
     }
@@ -255,5 +263,72 @@ mapControlMain.prototype.onRemove = function() {
   this._map = undefined;
 };
 
+/**
+* Create a nested scale indicator : text,box and container. Not possible by the original method.
+* This is a hack based on mapbox-gl-js/src/ui/control/scale_control.js
+*/
+export function mapControlScale(){}
+
+mapControlScale.prototype.onAdd = function(map){
+  var container = document.createElement("div");
+  var text = document.createElement("div");
+  var scale = document.createElement("div");
+  container.className = "mapboxgl-ctrl mapboxgl-ctrl-attrib";
+  text.className="mx-scale-text";
+  scale.className="mx-scale-box";
+  scale.appendChild(text);
+  container.appendChild(scale);
+
+  map.on("move",function(e){
+    let unit = "m";
+    const maxWidth = 100;
+    const y = map._container.clientHeight / 2;
+    const maxMeters = getDistance(map.unproject([0, y]), map.unproject([maxWidth, y]));
+    let distance = getRoundNum(maxMeters);
+    const ratio = distance / maxMeters;
+    if ( distance >= 1000) {
+      distance = distance / 1000;
+      unit = 'km';
+    }
+
+    scale.style.width = (maxWidth * ratio) + "px";
+    text.innerHTML = distance + unit;
+  });
+
+  this._container = container;
+
+  return this._container;
+};
+
+mapControlScale.prototype.onRemove = function() {
+  this._container.parentNode.removeChild(this._container);
+  this._map = undefined;
+};
 
 
+function getDistance(latlng1, latlng2) {
+  // Uses spherical law of cosines approximation.
+  const R = 6371000;
+
+  const rad = Math.PI / 180,
+    lat1 = latlng1.lat * rad,
+    lat2 = latlng2.lat * rad,
+    a = Math.sin(lat1) * Math.sin(lat2) +
+    Math.cos(lat1) * Math.cos(lat2) * Math.cos((latlng2.lng - latlng1.lng) * rad);
+
+  const maxMeters = R * Math.acos(Math.min(a, 1));
+  return maxMeters;
+
+}
+
+function getRoundNum(num) {
+  const pow10 = Math.pow(10, (`${Math.floor(num)}`).length - 1);
+  let d = num / pow10;
+
+  d = d >= 10 ? 10 :
+    d >= 5 ? 5 :
+    d >= 3 ? 3 :
+    d >= 2 ? 2 : 1;
+
+  return pow10 * d;
+}

@@ -9,7 +9,6 @@ config <- list()
 #
 options(shiny.maxRequestSize=1000*1024^2) 
 
-
 #
 # get info about the host
 #
@@ -55,7 +54,7 @@ config[["pg"]] = list(
     #)
 config[["resources"]]  =  list(
       "data"  = file.path("src","data"),
-      "sprites" = file.path("src","data","sprites"),
+      "sprites" = file.path("src","sprites"),
       "src" = file.path("src"),
       "dist" = file.path("www"),
       "userdata" = file.path("/vagrant/data/userdata") ## expected shared folder from vagrant
@@ -75,22 +74,26 @@ config[["dictionaries"]] <- list(
   main = read.csv(
     file.path(
       config[[c("resources","data")]],"dict_main.csv"
-      )
+      ),
+     stringsAsFactors=F
     ),
   countries = read.csv(
     file.path(
       config[[c("resources","data")]],"dict_countries.csv"
-      )
+      ),
+     stringsAsFactors=F
     ),
   languages = read.csv(
     file.path(
       config[[c("resources","data")]],"dict_languages.csv"
-      )
+      ),
+     stringsAsFactors=F
     ),
   schemaMetadata = read.csv(
     file.path(
       config[[c("resources","data")]],"dict_schema_source.csv"
-      )
+      ),
+     stringsAsFactors=F
     )
   )
 
@@ -126,9 +129,9 @@ config[["map"]] <- list(
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
   paths = list(
-    style= "styles/base/mapx.json"
+    #style = "styles/base/mapx.json",
+    sprite = "sprites/sprite"
     #, themes="styles/themes/mapx.json"
-    , sprite="styles/sprites/sprite"
     #, style = "styles/base/simple.json"
     )
   )
@@ -193,19 +196,17 @@ config[[c("variables","time")]] <- list(
 # Templates
 #
 config[["templates"]] <- list()
-# R wiskers renderer
-#config[[c("templates","pgViewSimple")]] <- mxReadText("templates/pg/view_simple.sql",clean=TRUE)
-#config[[c("templates","pgViewOverlap")]] <- mxReadText("templates/pg/view_overlap.sql",clean=TRUE)
+
 # js dot renderer
+config[[c("templates","dot")]] <-  list()
+config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("src/ui/view_list_legend.dot.R"))
+config[[c("templates","dot","viewList")]] <- as.character(mxSource("src/ui/view_list.dot.R"))
 
-#config[[c("templates","dot")]] <-  list()
-#config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("templates/dot/view_list_legend.R"))
-#config[[c("templates","dot","viewList")]] <- as.character(mxSource("templates/dot/view_list.R"))
-
-
+# html template
 config[[c("templates","html")]] <-  list()
 config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_simple.html"),collapse="\n")
 
+# text template
 config[[c("templates","text")]] <-  list()
 config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
 config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
@@ -241,7 +242,8 @@ config[["countries"]][["default"]] <- list(
 config[["countries"]]$table <- read.csv(
   file.path(
     config[[c("resources","data")]],"countries.csv"
-    )
+    ),
+  stringsAsFactors=F
   )
 
 # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data

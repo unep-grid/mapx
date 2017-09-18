@@ -8,30 +8,31 @@ module.exports = {
     fs : 'empty'
   },
   entry: {
-    'app':'./src/js/index.js',
+    'app':'./src/js/index.js'
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common' // Specify the common bundle's name.
     }),
-    new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery"
-    }),
     new HtmlWebpackPlugin({
-      template: './src/html/index.html',
-      title: 'mapx'
+      template : './src/html/index.html'
     }),
   ],
   module: {
+    noParse: /(mapbox-gl)\.js$/,
     rules: [
+      { test: /worker\.js$/, loader: 'worker-loader'},
       { test: /\.js$/, loader:'babel-loader', options:{presets:['es2015']},exclude: /node_modules/},
-      { test: /\.dot.html$/, use: 'dot-loader' },
-      { test: /\.css$/, loader: ['style-loader','css-loader'] },
-      {
-        test: /\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/,
-        loader: 'url-loader'
-      }
+      { test: /\.dot$/, use: 'dot-loader' },
+      { test: /.css$/, 
+        use : [
+          { loader: 'style-loader'},
+          { loader: 'css-loader' }
+        ]
+      },
+
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
     ]
   },
   output: {

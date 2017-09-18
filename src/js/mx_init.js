@@ -1,6 +1,7 @@
 /*jshint esversion: 6, node: true  */
 'use strict';
-import * as deps from "./mx_helper.js";
+window.$ = window.jQuery = require("jquery");
+import * as deps from "./mx_helper_main.js";
 
 export let mapboxgl = {};
 export let localforage = {};
@@ -9,6 +10,7 @@ export let helpers = deps;
 export let maps = {};
 export let data = {};
 export let controls = {};
+export let listener = {};
 export let settings = {
     language : "en",
     separators : {
@@ -18,4 +20,11 @@ export let settings = {
     vtPort : "",
     maxByteUpload :  Math.pow(1024,2)*100, //100 MiB 
 };
+export let editors = {};
+export let extend = {
+  position : {},
+  texteditor : {}
+};
+
+
 

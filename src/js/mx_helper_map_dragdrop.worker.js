@@ -1,9 +1,12 @@
+/* jshint esversion : 6*/
 // Importation of helpers
-importScripts(
-  "../geojsonhint/geojsonhint.js",
-  "../turf/turf.min.js",
-  "mx.js"
-);
+
+import * as geojsonhint from "geojsonhint";
+import { featureEach, propEach } from "@turf/meta";
+import bbox from "@turf/bbox";
+import * as stat from './mx_helper_stat.js';
+import * as color from './mx_helper_colors.js';
+
 
 // geojson type to mapbox gl type
 var typeSwitcher = {
@@ -15,6 +18,9 @@ var typeSwitcher = {
   "MultiPolygon": "fill",
   "GeometryCollection": "fill"
 };
+
+
+
 
 
 // Inital message
@@ -36,13 +42,13 @@ onmessage = function(e) {
     var errorMsg = "";
     var warningMsg = "";
     var dat = e.data;
-    var data = dat.data;
     var gJson = dat.data;
     var fileName = dat.fileName;
     var fileType = dat.fileType;
 
+
     // set basic timing function
-    timerVal = 0;
+    var timerVal = 0;
 
     // start timer
     var timerStart = function() {
@@ -125,7 +131,7 @@ onmessage = function(e) {
      * Avoid multi type : we don't handle them for now
      */
 
-    var geomType = [];
+    var geomTypes = [];
     if( gJson.features ){
       // array of types in data
       geomTypes  = gJson.features
@@ -148,21 +154,21 @@ onmessage = function(e) {
       message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
     });
 
-    // if more than one type, return an error
-    if ( geomTypes.length>1 ) {
-      var msg = "Multi geometry not yet implemented";
+/*    // if more than one type, return an error*/
+    //if ( geomTypes.length>1 ) {
+      //var msg = "Multi geometry not yet implemented";
 
-      postMessage({
-        progress: 100,
-        msssage: msg,
-        errorMessage: fileName + ": " + msg
-      });
+      //postMessage({
+        //progress: 100,
+        //msssage: msg,
+        //errorMessage: fileName + ": " + msg
+      //});
 
-      console.log({
-        "errors": fileName + ": " + msg + ".(" + geomTypes + ")"
-      });
-      return;
-    }
+      //console.log({
+        //"errors": fileName + ": " + msg + ".(" + geomTypes + ")"
+      //});
+      //return;
+    /*}*/
 
     /**
      * Remove features without geom
@@ -170,7 +176,7 @@ onmessage = function(e) {
      * Delete this block.
      */
 
-    turf.meta.featureEach(gJson,function(f,i){
+    featureEach(gJson,function(f,i){
       if(f.geometry===null){
         f.geometry={
           type: geomTypes[0],
@@ -186,7 +192,7 @@ onmessage = function(e) {
     var p;
     attributes.tmp = {};
     attributes.init = false;
-    turf.meta.propEach(gJson,
+    propEach(gJson,
       function(prop){
         // init attributes with empty array
         if(!attributes.init){
@@ -205,7 +211,7 @@ onmessage = function(e) {
     );
       
     for(p in attributes.tmp){
-      attributes[p] = mx.util.getArrayStat({
+      attributes[p] = stat.getArrayStat({
         arr : attributes.tmp[p],
         stat : "distinct"
       });
@@ -219,7 +225,7 @@ onmessage = function(e) {
      * Get extent : get extent using a Turf bbox
      */
 
-    var extent = turf.bbox(gJson);
+    var extent = bbox(gJson);
 
     // Quick extent validation 
     if (
@@ -256,8 +262,8 @@ onmessage = function(e) {
     var idSource = id + "-SRC";
     // Set random color
     var ran = Math.random();
-    var colA = mx.util.randomHsl(0.3, ran);
-    var colB = mx.util.randomHsl(0.9, ran);
+    var colA = color.randomHsl(0.3, ran);
+    var colB = color.randomHsl(0.9, ran);
 
     // Set default type from geojson type
     var typ = typeSwitcher[geomTypes[0]];

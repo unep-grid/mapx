@@ -24,7 +24,7 @@ divAbstract <- tags$div(class="float-left",
 #
 divLegend <- tags$div(
   "{{?view.type=='vt'}}",
-  "{{ var rules = path(view,'data.style.rules'); }}",
+  "{{ var rules = mx.helpers.path(view,'data.style.rules'); }}",
   "{{?rules \\u0026\\u0026 rules.length \\u003e 0 }}",
     tags$div(
       class="mx-view-item-legend",
@@ -49,10 +49,13 @@ divLegend <- tags$div(
 divTransparency = tags$div(
   class="mx-slider-container",
   tags$div(
-    class="mx-slider-title",
-    `data-lang_key`="btn_opt_transparency",
-    `data-lang_type`="text"
-    ),
+    class="mx-slider-header",
+    tags$div(
+      class="mx-slider-title",
+      `data-lang_key`="btn_opt_transparency",
+      `data-lang_type`="text"
+      )
+    ), 
   tags$div(
     class="mx-slider mx-slider-numeric",
     `data-transparency_for`="{{=view.id}}"
@@ -82,24 +85,27 @@ divSearchVectorTiles <- tags$div(
   #
   # Search input for vector tile search
   #
-  "{{?path(view,'data.attribute.type') == 'string'}}",
+  "{{?mx.helpers.path(view,'data.attribute.type') == 'string'}}",
     tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
   "{{?}}",
-  "{{?path(view,'data.attribute.type') == 'number'}}",
+  "{{?mx.helpers.path(view,'data.attribute.type') == 'number'}}",
   tags$div(
     class="mx-slider-container",
-  tags$div(
-    class="mx-slider-title",
-    `data-lang_key`="btn_opt_numeric",
-    `data-lang_type`="text"
-    ),
     tags$div(
-      class="mx-slider-dyn",
+      class="mx-slider-header",
       tags$div(
-        class="mx-slider-dyn-min"
+        class="mx-slider-title",
+        `data-lang_key`="btn_opt_numeric",
+        `data-lang_type`="text"
         ),
       tags$div(
-        class="mx-slider-dyn-max"
+        class="mx-slider-dyn",
+        tags$div(
+          class="mx-slider-dyn-min"
+          ),
+        tags$div(
+          class="mx-slider-dyn-max"
+          )
         )
       ),
     tags$div(
@@ -118,49 +124,52 @@ divSearchVectorTiles <- tags$div(
         )
       )
     ),
-  "{{?}}",
-  #
-  # Time slider input for vector tile
-  #
-  "{{ var prop = path(view,'data.attribute.names'); }}",
-  "{{ var vExt = path(view,'data.period.extent'); }}",
-  "{{?prop \\u0026\\u0026 prop.indexOf('mx_t0') \\u003E -1 \\u0026\\u0026 vExt \\u0026\\u0026 vExt.min \\u0026\\u0026 vExt.max}}",
-  tags$div(
-    class="mx-slider-container",
-  tags$div(
-    class="mx-slider-title",
-    `data-lang_key`="btn_opt_date",
-    `data-lang_type`="text"
-    ),
+    "{{?}}",
+    #
+    # Time slider input for vector tile
+    #
+    "{{ var prop = mx.helpers.path(view,'data.attribute.names'); }}",
+    "{{ var vExt = mx.helpers.path(view,'data.period.extent'); }}",
+    "{{?prop \\u0026\\u0026 prop.indexOf('mx_t0') \\u003E -1 \\u0026\\u0026 vExt \\u0026\\u0026 vExt.min \\u0026\\u0026 vExt.max}}",
     tags$div(
-      class="mx-slider-dyn",
+      class="mx-slider-container",
       tags$div(
-        class="mx-slider-dyn-min"
+        class="mx-slider-header",
+        tags$div(
+          class="mx-slider-title",
+          `data-lang_key`="btn_opt_date",
+          `data-lang_type`="text"
+          ),
+        tags$div(
+          class="mx-slider-dyn",
+          tags$div(
+            class="mx-slider-dyn-min"
+            ),
+          tags$div(
+            class="mx-slider-dyn-max"
+            )
+          )
         ),
       tags$div(
-        class="mx-slider-dyn-max"
-        )
-      ),
-    tags$div(
-      class="mx-slider mx-slider-date",
-      `data-range_time_for`="{{=view.id}}"
-      ),
-    tags$div(
-      class="mx-slider-range",
-      tags$div(
-        class="mx-slider-range-min",
-        "{{=mx.util.date(vExt.min*1000)}}"
+        class="mx-slider mx-slider-date",
+        `data-range_time_for`="{{=view.id}}"
         ),
       tags$div(
-        class="mx-slider-range-max",
-        "{{=mx.util.date(vExt.max*1000)}}"
+        class="mx-slider-range",
+        tags$div(
+          class="mx-slider-range-min",
+          "{{=mx.helpers.date(vExt.min*1000)}}"
+          ),
+        tags$div(
+          class="mx-slider-range-max",
+          "{{=mx.helpers.date(vExt.max*1000)}}"
+          )
         )
-      )
-    ),
-  "{{?}}",
-  "{{?}}",
-  divTransparency
-  )
+      ),
+    "{{?}}",
+    "{{?}}",
+    divTransparency
+    )
 
 #
 # Controls for vector tiles views
@@ -341,7 +350,7 @@ liControlsEdit <- tagList(
       )
     ),
   "{{?view.type=='vt'}}",
-  "{{?path(view,'data.attribute.name')}}",
+  "{{?mx.helpers.path(view,'data.attribute.name')}}",
   # Button to edit view
   tags$li(
     class="mx-pointer hint--bottom-right",
@@ -440,7 +449,7 @@ divHeader <- tagList(
     ),
     tags$span(
       class="mx-view-item-index",
-      "{{=mx.util.getDistinctIndexWords(view)}}"
+      "{{=mx.helpers.getDistinctIndexWords(view)}}"
       ),
     #
     # Visibility indicator
@@ -465,7 +474,7 @@ divHeader <- tagList(
 #
 tagList(
   "{{~it :view}}",
-  "{{ var lang = mx.util.checkLanguage({obj:view,path:'data.title'}) ; }}",
+  "{{ var lang = mx.helpers.checkLanguage({obj:view,path:'data.title'}) ; }}",
   tags$li(
     `data-view_id`="{{=view.id}}",
     class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item",

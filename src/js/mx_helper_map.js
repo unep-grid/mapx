@@ -1,5 +1,6 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 6 , node: true */
 import * as mx from './mx_init.js';
+//var escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 /**
  * Get local forage item and send it to shiny server
@@ -8,8 +9,7 @@ import * as mx from './mx_init.js';
  * @param {String} o.idKey Key to retrieve
  * @param {String} o.idInput Which id to trigger in Shiny
  */
-export function getLocalForageData(o){
-  'use strict';
+export function getLocalForageData(o){ 
   var db = mx.data[o.idStore];
   db.getItem(o.idKey).then(function(item){
     Shiny.onInputChange(o.idInput,{
@@ -26,12 +26,12 @@ export function getLocalForageData(o){
  * @param {oject} o.view View object
  */
 export function addSourceFromView(o){
-  'use strict';
-  if(o.m && path(o.view,"data.source")){
+  
+  if(o.m && mx.helpers.path(o.view,"data.source")){
 
     var country = mx.settings.country;
-    var countryView = path(mx,"settings.country") ;
-    var countriesView = path(o.view,"data.countries") || [];
+    var countryView = mx.helpers.path(mx,"settings.country") ;
+    var countriesView = mx.helpers.path(o.view,"data.countries") || [];
 
     var isLocationOk = countryView == country || countriesView.indexOf(country) > -1;
 
@@ -69,7 +69,7 @@ export function addSourceFromView(o){
  * @param {function} o.feedback Feedback function. Default is renderViewsList
  */
 export function setSourcesFromViews(o){
-  'use strict';
+  
   var m = mx.maps[o.id];
   var view, views, sourceId, sourceExists, sourceStore, isFullList;
   var isArray, hasViews;
@@ -80,7 +80,7 @@ export function setSourcesFromViews(o){
     isFullList = views instanceof Array ;
     hasViews = m.views.length > 0;
 
-    if( !o.feedback ) o.feedback = renderViewsList;
+    if( !o.feedback ) o.feedback = mx.helpers.renderViewsList;
 
     if( isFullList ){ 
       /**
@@ -91,7 +91,7 @@ export function setSourcesFromViews(o){
       /**
        * remove existing layers
        */
-      removeLayersByPrefix({
+      mx.helpers.removeLayersByPrefix({
         id:o.id,
         prefix:"MX-"
       });
@@ -107,7 +107,7 @@ export function setSourcesFromViews(o){
         /**
          * add source from views list
          */
-        addSourceFromView({
+        mx.helpers.addSourceFromView({
           m : m,
           view : m.views[i]
         });
@@ -129,7 +129,7 @@ export function setSourcesFromViews(o){
           m.views.unshift(value.view);
 
 
-          addSourceFromView({
+          mx.helpers.addSourceFromView({
             m : m ,
             view : view
           });
@@ -143,7 +143,6 @@ export function setSourcesFromViews(o){
       });
 
     }else{
-      //}else if( ! isFullList && hasViews ){
 
       /**
        * If this is not an array and the mgl map opbject already as views,
@@ -153,8 +152,7 @@ export function setSourcesFromViews(o){
         m.views.unshift( views );
       }
 
-
-      addSourceFromView({
+      mx.helpers.addSourceFromView({
         m : m,
         view : views
       });
@@ -181,7 +179,7 @@ export function setSourcesFromViews(o){
  * @returns {*}
  */
 export function path(obj, path, def){
-  'use strict';
+  
   var i, len;
   if(!def) def = null;
 
@@ -199,17 +197,17 @@ export function path(obj, path, def){
  *  View controler : evalutate view state and enable/disable it depending on ui state
  */
 export function viewControler(o){
-  'use strict';
+  
 
   var m = mx.maps[o.id];
   var i,els,view,views,viewStyle,geomType,idSource;
 
   if(m.views){ 
 
-    views = getViews(o);
+    views = mx.helpers.getViews(o);
     els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
 
-    var loaded = getLayersNamesByPrefix({
+    var loaded = mx.helpers.getLayerNamesByPrefix({
       id:o.id,
       prefix:"MX-",
       base : true
@@ -229,7 +227,7 @@ export function viewControler(o){
 
         if( toRemove ){
 
-          removeLayersByPrefix({
+          mx.helpers.removeLayersByPrefix({
             id : o.id,
             prefix: id
           }); 
@@ -238,7 +236,7 @@ export function viewControler(o){
 
         if( toAdd ){
 
-          addView({
+          mx.helpers.addView({
             id : o.id,
             viewData : view,
             idViewsList : o.idViewsList,
@@ -264,7 +262,7 @@ export function viewControler(o){
  * @param {string} o.action Action :  "check", "uncheck"
  */
 export function viewLiAction(o){
-  'use strict';
+  
 
   if(!o.id || !o.idView || !o.action) return;
 
@@ -287,10 +285,10 @@ export function viewLiAction(o){
  * @param {object} o.idView view/story id
  */
 export function parseStory(o){
-  'use strict';
+  
 
   var m, view, story, steps, storyContainer, storyBody;
-  view = getViews(o);
+  view = mx.helpers.getViews(o);
   m = mx.maps[o.id];
 
   if( !mx.templates.viewStory ) return;
@@ -299,7 +297,7 @@ export function parseStory(o){
   /**
    * extract values
    */
-  story =  path(view,"data.story");
+  story =  mx.helpers.path(view,"data.story");
   steps = story.steps;
 
   /*
@@ -307,7 +305,7 @@ export function parseStory(o){
    */
 
   m.storyCache = {
-    views : getLayersNamesByPrefix({
+    views : mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: "MX-"
     }),
@@ -318,7 +316,7 @@ export function parseStory(o){
   /*
    * Remove existing layers
    */
-  removeLayersByPrefix({
+  mx.helpers.removeLayersByPrefix({
     id:"map_main",
     prefix:"MX"
   });
@@ -369,7 +367,7 @@ export function parseStory(o){
     storyBounds =  storyBody.getBoundingClientRect();
     limit =  storyBounds.top + ( storyBounds.height / 2 );
 
-    vVisible = getLayersNamesByPrefix({
+    vVisible = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: "MX-",
       base: true
@@ -431,7 +429,7 @@ export function parseStory(o){
           fi = step.views[v].filter;
 
           if( vVisible.indexOf(vn) == -1 ){
-            addView({
+            mx.helpers.addView({
               id : o.id,
               idView: vn
             });
@@ -459,7 +457,7 @@ export function parseStory(o){
           }
         }
 
-        vVisible = getLayersNamesByPrefix({
+        vVisible = mx.helpers.getLayerNamesByPrefix({
           id: o.id,
           prefix: "MX-",
           base: true
@@ -474,7 +472,7 @@ export function parseStory(o){
 
           if( toRemove ){
 
-            removeLayersByPrefix({
+            mx.helpers.removeLayersByPrefix({
               id : o.id,
               prefix : vo
             });
@@ -532,7 +530,7 @@ export function parseStory(o){
             close : function(){  /* Close the story map and show panels */
               storyContainer.remove();
 
-              removeLayersByPrefix({
+              mx.helpers.removeLayersByPrefix({
                 id:"map_main",
                 prefix:"MX"
               });
@@ -560,7 +558,7 @@ export function parseStory(o){
                */
 
               for( var l = 0 ; l < m.storyCache.views.length ; l ++){
-                addView({
+                amx.helpers.ddView({
                   id : o.id,
                   idView: m.storyCache.views[l]
                 });
@@ -607,9 +605,9 @@ export function parseStory(o){
  * @param {string} o.idView view id
  */
 export function getViewVariable(o){
-  'use strict';
-  var view = getViews(o);
-  return path(view,"data.attribute.name");
+  
+  var view = mx.helpers.getViews(o);
+  return mx.helpers.path(view,"data.attribute.name");
 }
 
 /**
@@ -623,7 +621,7 @@ export function getViewVariable(o){
 # @param {string} o.sprite
 */
 export function defaultStyle(o){
-  'use strict';
+  
 
   var ran, colA, colB, style;
 
@@ -637,8 +635,8 @@ export function defaultStyle(o){
     colA = mx.helpers.randomHsl(0.5, ran);
     colB = mx.helpers.randomHsl(0.8, ran);
   }else{
-    colA = hex2rgba(o.hexColor,o.opacity );
-    colB = hex2rgba(o.hexColor,o.opacity + 0.6);
+    colA = mx.helpers.hex2rgba(o.hexColor,o.opacity );
+    colB = mx.helpers.hex2rgba(o.hexColor,o.opacity + 0.6);
   }
 
   style = {
@@ -688,7 +686,7 @@ export function defaultStyle(o){
  * @param 
  */
 export function updateViewOrder (o){
-  'use strict';
+  
 
   var displayedOrig  = {};
   var order = getViewOrder(o);
@@ -700,7 +698,7 @@ export function updateViewOrder (o){
 
   if(!order) return;
 
-  displayed = getLayersNamesByPrefix({
+  displayed = mx.helpers.getLayerNamesByPrefix({
     id:o.id,
     prefix:"MX-"
   });
@@ -734,7 +732,7 @@ export function updateViewOrder (o){
  * @return {array} view id array
  */
 export function getViewOrder(o){
-  'use strict';
+  
 
   var m = mx.maps[o.id];
   var res = [];
@@ -761,7 +759,7 @@ export function getViewOrder(o){
  * @param {object} o.viewClasses View classes
  */
 export function handleListFilterClass(o){
-  'use strict';
+  
 
   return function(event){
     if( event.target == event.currentTarget ) return ;
@@ -799,7 +797,7 @@ export function handleListFilterClass(o){
 @param {String} o.idMap Map id
 */
 export function makeTransparencySlider(o) {
-  'use strict';
+  
 
   var view = o.view;
   var idMap = o.idMap;
@@ -812,7 +810,12 @@ export function makeTransparencySlider(o) {
 
   function makeSlider(){
 
-    System.import("nouislider").then(function(noUiSlider){
+    Promise.all([
+    System.import("nouislider"),
+    System.import("../../node_modules/nouislider/distribute/nouislider.css")
+    ]).then(function(module){
+
+      var noUiSlider = module[0];
 
       var slider = noUiSlider.create(el, {
         range: {min:0,max:100},
@@ -849,7 +852,7 @@ export function makeTransparencySlider(o) {
 @param {String} o.idMap Map id
 */
 export function makeNumericSlider(o) {
-  'use strict';
+  
 
   var view = o.view;
   var idMap = o.idMap;
@@ -863,8 +866,8 @@ export function makeNumericSlider(o) {
   function makeSlider(){
     var idView = view.id;
     var attrName = view.data.attribute.name;
-    var min = path(view,"data.attribute.min");
-    var max = path(view,"data.attribute.max");
+    var min = mx.helpers.path(view,"data.attribute.min");
+    var max = mx.helpers.path(view,"data.attribute.max");
 
     if(view && min !== null && max !== null){
 
@@ -938,7 +941,7 @@ export function makeNumericSlider(o) {
  * Create and listen to time sliders
  */
 export function makeTimeSlider(o) {
-  'use strict';
+  
   var k = {};
   k.t0 = "mx_t0";
   k.t1 = "mx_t1";
@@ -973,8 +976,8 @@ export function makeTimeSlider(o) {
   function makeSlider(){
 
     if( view.data.period ){
-      var time = path(view,"data.period");
-      var prop = path(view,"data.attribute.names");
+      var time = mx.helpers.path(view,"data.period");
+      var prop = mx.helpers.path(view,"data.attribute.names");
       var start = [];
       var tooltips = [];
       var nowIsIn = now > time.extent.min && now < time.extent.max;
@@ -1024,19 +1027,15 @@ export function makeTimeSlider(o) {
          * create distribution plot in time slider
          */
         /* NOTE: removed chart. Removed dependencies to chartist
-plotTimeSliderData({
-data: time.density,
-el: el,
-type: "density"
-});
-*/
 
         /*
          * 
          */
         slider.on("slide", mx.helpers.debounce(function(t, h) {
+          var filterAll = [];
+          var filter = [];
           var view = this.targetView;
-          var layerExists, filter;
+          var layerExists;
           var elContainer = this.target.parentElement;
           var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
           var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
@@ -1046,10 +1045,10 @@ type: "density"
 
           /* Update text values*/
           if (t[0]) {
-            elDMin.innerHTML = date(t[0]);
+            elDMin.innerHTML = mx.helpers.date(t[0]);
           }
           if (t[1]) {
-            elDMax.innerHTML = " – " + date(t[1]);
+            elDMax.innerHTML = " – " + mx.helpers.date(t[1]);
           }
 
           filter = ['any'];
@@ -1088,13 +1087,13 @@ type: "density"
  * @param {string} o.id map id
  */
 export function handleViewValueFilterText(o){
-  'use strict';
+  
   /*
    * Set listener for each view search input
    * NOTE: keyup is set globaly, on the whole view list
    */
   return function(event) {
-    var el, idView, viewVar, search, options;
+    var action, el, idView, viewVar, search, options;
     el = event.target;
 
     idView = el.dataset.view_action_target;
@@ -1122,7 +1121,7 @@ export function handleViewValueFilterText(o){
  * @param {string} o.idView view id
  */
 export function removeView(o){
-  'use strict';
+  
 
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
@@ -1144,7 +1143,7 @@ export function removeView(o){
     return x.id != o.idView ; 
   });
 
-  removeLayersByPrefix({
+  mx.helpers.removeLayersByPrefix({
     id : o.id,
     prefix : o.idView
   });
@@ -1161,7 +1160,7 @@ export function removeView(o){
  * @param o options
  */
 export function handleViewClick(o){
-  'use strict';
+  
 
   return function (event) {
     var el, t, isIcon;
@@ -1211,7 +1210,7 @@ export function handleViewClick(o){
 
             var view = x.view;
             var json = JSON.stringify(view);
-            var chunk = chunkString(json,size);
+            var chunk = mx.helpers.chunkString(json,size);
             var chunkL = chunk.length;
 
             for(var i = 1; i < chunkL + 1 ; i++){
@@ -1222,7 +1221,7 @@ export function handleViewClick(o){
               setTimeout(function(){
                 var percent =  Math.round(( part / chunkL ) * 100);
 
-                progressScreen({
+                mx.helpers.progressScreen({
                   enable : part != chunkL,
                   id : "upload_geojson",
                   percent : percent,
@@ -1248,7 +1247,7 @@ export function handleViewClick(o){
           //id : o.id,
           //idView : el.dataset.view_action_target
           /*});*/
-          story.read({
+          mx.helpers.storyRead({
             id : o.id,
             idView : el.dataset.view_action_target,
             save : false
@@ -1275,17 +1274,11 @@ export function handleViewClick(o){
           var link =  location.origin + location.pathname + "?views=" + idView + "&country="+mx.settings.country;
           var idLink = "share_"+idView;
           var input = "<textarea class='form-control form-input-line'>"+link+"</textarea>";
-          modal({
-            title : getLanguage("btn_opt_share",mx.settings.language),
+          mx.helpers.modal({
+            title : mx.helpers.getLanguage("btn_opt_share",mx.settings.language),
             id : idLink,
             content : input
           });
-
-
-
-
-
-
         }
       },
       {
@@ -1293,7 +1286,7 @@ export function handleViewClick(o){
         comment :"target is zoom to extent",
         isTrue : el.dataset.view_action_key == "btn_opt_zoom_all",
         action : function(){
-          zoomToViewId({
+          mx.helpers.zoomToViewId({
             id : o.id,
             idView : el.dataset.view_action_target
           });
@@ -1305,7 +1298,7 @@ export function handleViewClick(o){
         isTrue : el.dataset.view_action_key == "btn_opt_search",
         action : function(){
 
-          elSearch =  document.getElementById(el.dataset.view_action_target);
+          var elSearch =  document.getElementById(el.dataset.view_action_target);
 
           mx.helpers.classAction({
             selector : elSearch,
@@ -1323,16 +1316,16 @@ export function handleViewClick(o){
            * for other values to filter using "OR" logical operator
            */
           var viewValues = [],
-            legendContainer = parentFinder({
+            legendContainer = mx.helpers.parentFinder({
               selector : el,
               class : "mx-view-item-legend" 
             }),
             legendInputs = legendContainer.querySelectorAll("input") 
           ;
           var idView = el.dataset.view_action_target;
-          var view = getViews({id:'map_main',idView:idView});
-          var attribute = path(view,'data.attribute.name');
-          var type = path(view,'data.attribute.type');
+          var view = mx.helpers.getViews({id:'map_main',idView:idView});
+          var attribute = mx.helpers.path(view,'data.attribute.name');
+          var type = mx.helpers.path(view,'data.attribute.type');
           var op = "==";
           var  filter = ["any"];
           if(type=="number") op = ">=";
@@ -1341,7 +1334,7 @@ export function handleViewClick(o){
           for(var i = 0, il = legendInputs.length; i < il ; i++){
             var li =  legendInputs[i];
             if(li.checked){
-              viewValue = li.dataset.view_action_value; 
+              var viewValue = li.dataset.view_action_value; 
               if(viewValue){
                 if(type=="number") viewValue = viewValue * 1;
                 filter.push([op,attribute,viewValue]);
@@ -1420,13 +1413,13 @@ export function handleViewClick(o){
  * @param {String} o.lang Two letter language code. see mx.settings.languages.
  */
 export function updateViewsListLanguage(o){
-  'use strict';
-  elsViews = document.getElementsByClassName("mx-view-item");
+  
+  var elsViews = document.getElementsByClassName("mx-view-item");
   var views = mx.maps[o.id].views;
 
-  o.langs = objectToArray(mx.settings.languages);
+  o.langs = mx.helpers.objectToArray(mx.settings.languages);
 
-  forEachEl({
+  mx.helpers.forEachEl({
     els : elsViews,
     callback : function(el){
       var l =  o.lang,
@@ -1440,9 +1433,9 @@ export function updateViewsListLanguage(o){
         elLegend.innerHTML = mx.templates.viewListLegend(v);
       }
 
-      if(elTitle){ 
-        elTitle.innerHTML = getLanguageFromObjectPath({
-          obj :v,
+      if(elTitle){
+        elTitle.innerHTML = mx.helpers.getLanguageFromObjectPath({
+          obj : v,
           path : "data.title",
           lang : o.lang,
           langs : o.langs,
@@ -1450,7 +1443,7 @@ export function updateViewsListLanguage(o){
         });
       }
       if(elText){ 
-        elText.innerHTML = getLanguageFromObjectPath({
+        elText.innerHTML = mx.helpers.getLanguageFromObjectPath({
           obj : v,
           path : "data.abstract",
           lang : o.lang,
@@ -1475,14 +1468,11 @@ export function updateViewsListLanguage(o){
  * @param {boolean} o.add Add views to an existing list
  */
 export function renderViewsList(o){
-  'use strict';
-
+  
   var m = mx.maps[o.id];
-  elViewsContainer = document.querySelector(".mx-views-container");
-  elViewsContent = elViewsContainer.querySelector(".mx-views-content");
-  elViewsList = elViewsContainer.querySelector(".mx-views-list");
-
-  //o.add = o.add === undefined ? false : o.add; 
+  var elViewsContainer = document.querySelector(".mx-views-container");
+  var elViewsContent = elViewsContainer.querySelector(".mx-views-content");
+  var elViewsList = elViewsContainer.querySelector(".mx-views-list");
 
   if( ! o.views ){ 
     o.views = m.views;
@@ -1496,6 +1486,7 @@ export function renderViewsList(o){
     o.add = true;
   }
 
+
   /* TODO: set as options */
 
   var viewClasses = {
@@ -1507,11 +1498,9 @@ export function renderViewsList(o){
 
   var elFilters, activeFilters = [];
 
-
   if( !o.views || o.views.constructor !== Array ||  o.views.length < 1 || !mx.templates.viewList ){
     if( ! o.add ){
       console.log("No view to render");
-      //elViewsList.innerHTML = "<span>" + getLanguage("noView",mx.settings.language) + "</span>" ;
     }
   }else{
 
@@ -1544,7 +1533,7 @@ export function renderViewsList(o){
     /*
      * translate based on dict key
      */
-    setLanguage({
+    mx.helpers.setLanguage({
       el:elViewsContainer
     });
 
@@ -1554,9 +1543,11 @@ export function renderViewsList(o){
      * Create searchable list.js object
      */
     if( ! m.tools.viewListJs ){
-      m.tools.viewsListJs = new List( elViewsContainer, {
-        valueNames: objectToArray(viewClasses),
-        listClass : "mx-views-list"
+      System.import('list.js').then(function(List){
+        m.tools.viewsListJs = new List( elViewsContainer, {
+          valueNames: mx.helpers.objectToArray(viewClasses),
+          listClass : "mx-views-list"
+        });
       });
     }else{
       m.tools.viewsListJs.reIndex();
@@ -1566,7 +1557,7 @@ export function renderViewsList(o){
      * Create Sortable list
      */
     if( ! m.listener.viewsListSortable ){
-      m.listener.viewsListSortable = sortable({
+      m.listener.viewsListSortable = mx.helpers.sortable({
         selector : elViewsList,
         callback : function(x){
           updateViewOrder(o);
@@ -1579,7 +1570,7 @@ export function renderViewsList(o){
      */
     if( ! m.listener.viewsListFilterClass ){
 
-      m.listener.viewsListFilterClass =  handleListFilterClass({
+      m.listener.viewsListFilterClass =  mx.helpers.handleListFilterClass({
         activeFilters : activeFilters,
         viewClasses : viewClasses,
         m: m
@@ -1592,7 +1583,7 @@ export function renderViewsList(o){
      * View values filter by text
      */
     if( ! m.listener.viewsValueFilterText ){ 
-      m.listener.viewsValueFilterText =  handleViewValueFilterText({
+      m.listener.viewsValueFilterText =  mx.helpers.handleViewValueFilterText({
         id: o.id
       });
       /* NOTE: keyup on the whole list */
@@ -1603,7 +1594,7 @@ export function renderViewsList(o){
      * Listen to click inside the list
      */
     if( ! m.listener.viewsListClick ){
-      m.listener.viewsListClick = handleViewClick(o);
+      m.listener.viewsListClick = mx.helpers.handleViewClick(o);
       elViewsList.addEventListener("click",m.listener.viewsListClick,false);
     }
 
@@ -1651,7 +1642,7 @@ export function renderViewsList(o){
  */
 export function viewSetFilter(o){
   /*jshint validthis:true*/
-  'use strict';
+  
   o = o||{};
   var view = this;
   var idView = view.id;
@@ -1661,7 +1652,7 @@ export function viewSetFilter(o){
   var type = o.type ? o.type : "default";
   var idMap = view._idMap ? view._idMap : "map_main";
   var m = mx.maps[idMap].map;
-  var layers = getLayersByPrefix({id:idMap,prefix:idView});
+  var layers = mx.helpers.getLayerByPrefix({id:idMap,prefix:idView});
 
   if(filter && filter.constructor == Array && filter.length > 1){  
     filters[type] = filter;
@@ -1676,7 +1667,7 @@ export function viewSetFilter(o){
 
   for(var l=0,ll=layers.length;l<ll;l++){
     var layer = layers[l];
-    var origFilter = path(layer,"metadata.filter_base");
+    var origFilter = mx.helpers.path(layer,"metadata.filter_base");
     var filterFinal = [];
     if(!origFilter){
       filterFinal = filterNew;
@@ -1684,6 +1675,7 @@ export function viewSetFilter(o){
       filterFinal = filterNew.concat([origFilter]);
     }
     m.setFilter(layer.id, filterFinal);
+    m.fire("rechart");
   }
 }
 
@@ -1695,14 +1687,14 @@ export function viewSetFilter(o){
  */
 export function viewSetOpacity(o){
 /*jshint validthis:true*/
-  'use strict';
+  
   o = o||{};
   var view = this;
   var idView = view.id;
   var opacity = o.opacity;
   var idMap = view._idMap ? view._idMap : "map_main";
   var m = mx.maps[idMap].map;
-  var layers = getLayersByPrefix({id:idMap,prefix:idView});
+  var layers = mx.helpers.getLayerByPrefix({id:idMap,prefix:idView});
 
   for(var l=0,ll=layers.length;l<ll;l++){
     var layer = layers[l];
@@ -1721,7 +1713,7 @@ export function viewSetOpacity(o){
 # @param {string} o.type Type of plot. By default = density
 */
 export function plotTimeSliderData(o){
-  'use strict';
+  
 
   var data = o.data;
   var el = o.el;
@@ -1772,29 +1764,29 @@ export function plotTimeSliderData(o){
  * @parma {string} o.idView view id
  */
 export function downloadMapPng(o){
-  'use strict';
+  
 
   var map = mx.maps[o.id].map;
   var body = document.querySelector("body");
   var legend = document.getElementById("check_view_legend_"+o.idView);
-  var scale = document.querySelector(".mx.mapboxgl-ctrl-top-right");
+  var scale = document.querySelector(".mapboxgl-ctrl-top-right");
   var imgMap = map.getCanvas().toDataURL();
   var imgLegend ;
   var imgScale;
   var kml;
   var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
-  var view = getViews(o);
+  var view = mx.helpers.getViews(o);
 
-  var layers = getLayersNamesByPrefix({
+  var layers = mx.helpers.getLayerNamesByPrefix({
     id: o.id,
     prefix: o.idView
   });
 
   if( layers.length > 0 ){
 
-    var attr = path(view,'data.attribute.name');
-    var rules = path(view,'data.style.rules');
-    var gType = path(view,'data.geometry.type');
+    var attr = mx.helpers.path(view,'data.attribute.name');
+    var rules = mx.helpers.path(view,'data.style.rules');
+    var gType = mx.helpers.path(view,'data.geometry.type');
 
     var simpleColor = {
       'polygon':'fill',
@@ -1821,7 +1813,7 @@ export function downloadMapPng(o){
       // add properties for simplestyle conversion
       if(rules && simpleColor){
         var v = feature.properties[attr];
-        var n = isNumeric(v);
+        var n = mx.helpers.isNumeric(v);
         rules.forEach(function(r){
           if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
             feature.properties[simpleColor] = r.color;
@@ -1889,74 +1881,6 @@ export function downloadMapPng(o){
 
 }
 
-/**
- * convert hex to rgb or rgba
- * @param {string} hex Hex color
- * @param {number} opacity Value of opacity, from 0 to 1
- */
-export function hex2rgba(hex, opacity) {
-  'use strict';
-  var h = hex.replace("#", "");
-  var rgba =  "rgba";
-  var rgb =  "rgb";
-  var out = "";
-  var i;
-  h = h.match(new RegExp("(.{" + h.length / 3 + "})", "g"));
-
-  for ( i = 0; i < h.length; i++ ) {
-    h[i] = parseInt(h[i].length == 1 ? h[i] + h[i] : h[i], 16);
-  }
-
-  if (typeof opacity != "undefined") {
-    if(opacity>1) opacity=1;
-    if(opacity<0) opacity=0;
-    h.push(opacity);
-    rgb = rgba;
-  }
-
-  return rgb + "(" + h.join(",") + ")";
-}
-
-/**
- * convert rgb|a to hex
- * @param {string} rgba string
- */
-export function rgba2hex(rgb){
-  'use strict';
-  rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-  return (rgb && rgb.length === 4) ? "#" +
-    ("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
-    ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
-    ("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
-}
-/**
- * convert any color to obj with key alpha and hex color
- * @param {string} color string. e.g. hsl(10%,10%,0)
- */
-export function color2obj(color){
-  'use strict';
-  var alpha;
-  var col;
-  var out = {
-    alpha : 1,
-    color: "#000"
-  };
-  var div = document.createElement("div");
-  div.style.color = color;
-  div.style.height = 0;
-  div.style.width = 0;
-  document.body.appendChild(div);
-  col = window.getComputedStyle(div).color;
-  if(col){
-    alpha = col.split(", ")[3];
-    if(alpha){
-      out.alpha = alpha.replace("\)",'')*1;
-    }
-    out.color = rgba2hex(col);
-  }
-  div.remove();
-  return out;
-}
 
 
 /**
@@ -1967,8 +1891,8 @@ export function color2obj(color){
  * @return {array} list of layers
  *
  */
-export function getLayersByPrefix(o) {
-  'use strict';
+export function getLayerByPrefix(o) {
+  
   var mapId = o.id,
     prefix = o.prefix,
     result = [],
@@ -1999,7 +1923,7 @@ export function getLayersByPrefix(o) {
  *
  */
 export function getLayerById(o) {
-  'use strict';
+  
   var hasMap, result, map, layer;
   hasMap  = checkMap(o.id);
   result = [];
@@ -2023,8 +1947,8 @@ export function getLayerById(o) {
  * @return {Boolean} o.base should return base layer only
  *
  */
-export function getLayersNamesByPrefix(o) {
-  'use strict';
+export function getLayerNamesByPrefix(o) {
+  
   var mapId, prefix, base, result, hasMap, map, layers, l;
   var out = [];
   mapId = o.id;
@@ -2052,7 +1976,7 @@ export function getLayersNamesByPrefix(o) {
     }
   }
 
-  out =  getArrayStat({arr:result,stat:"distinct"});
+  out =  mx.helpers.getArrayStat({arr:result,stat:"distinct"});
 
   return out;
 }
@@ -2065,18 +1989,18 @@ export function getLayersNamesByPrefix(o) {
  * @return {array} List of removed layer 
  */
 export function removeLayersByPrefix(o) {
-  'use strict';
-  var result = [], hasMap, legend, map, layers, l;
+  
+  var result = [], hasMap, legend, map, layers;
 
   hasMap = checkMap(o.id);
 
   if( hasMap ){
     map  = mx.maps[o.id].map;
-    layers = getLayersNamesByPrefix(o);
+    layers = mx.helpers.getLayerNamesByPrefix(o);
     var rExp = new RegExp("^" + o.prefix + ".*");
 
-    for(i = 0 ; i < layers.length ; i++ ){
-      l = layers[i];
+    for(var i = 0 ; i < layers.length ; i++ ){
+      var l = layers[i];
       if(l.indexOf(o.prefix) > -1 && l.search(rExp) > -1){
         map.removeLayer(l);
         result.push(l);
@@ -2094,7 +2018,7 @@ export function removeLayersByPrefix(o) {
  * @param {boolean} [o.enabled=false]  Enable synchronisation
  */
 export function syncAll(o) {
-  'use strict';
+  
   var enabled, maps, ids;
 
   enabled = o.enabled;
@@ -2169,7 +2093,7 @@ export function syncAll(o) {
  * @return {boolean} exists (or not depending of inverse)
  */
 export function existsInList(li, it, val, inverse) {
-  'use strict';
+  
   /*jshint validthis:true*/
   // TODO: find a ways to pass an operator for more flexibility "a" "!=" "yelloe"
   // TODO: Syntastic return a warning with when using eval()... 
@@ -2208,17 +2132,17 @@ export function existsInList(li, it, val, inverse) {
  * @param {Object} o.map Map object
  */
 export function addViewVt(o){
-  'use strict';
+  
   var view =  o.view,
     map =  o.map,
     layers = [],
-    def = path(view,"data"),
+    def = mx.helpers.path(view,"data"),
     idSource = view.id + "-SRC",
-    style = path(view,"data.style"),
-    time = path(view,"data.period"),
-    rules =  path(view,"data.style.rules"),
-    geomType = path(view,"data.geometry.type"),
-    source =  path(view,"data.source"),
+    style = mx.helpers.path(view,"data.style"),
+    time = mx.helpers.path(view,"data.period"),
+    rules =  mx.helpers.path(view,"data.style.rules"),
+    geomType = mx.helpers.path(view,"data.geometry.type"),
+    source =  mx.helpers.path(view,"data.source"),
     num = 0,
     hasStyle = false,
     hasTime = false,
@@ -2227,7 +2151,8 @@ export function addViewVt(o){
     defaultColor, defaultOpacity,
     ruleValues = [];
 
-
+  console.log("add view");
+  console.log(view);
   if( ! source ) return;
   /* check style and rules*/
   if( style && rules && rules.length > 0 ){
@@ -2273,7 +2198,7 @@ export function addViewVt(o){
    * Apply default style is no style is defined
    */
   if ( ! hasStyle ) {
-    layer = defaultStyle({
+    var layer = defaultStyle({
       id : view.id,
       idSource : idSource,
       geomType : geomType
@@ -2288,8 +2213,8 @@ export function addViewVt(o){
 
     /* convert opacity to rgba */
     rules.forEach(function(x) {
-      x.rgba = hex2rgba(x.color, x.opacity);
-      x.rgb  = hex2rgba(x.color);
+      x.rgba = mx.helpers.hex2rgba(x.color, x.opacity);
+      x.rgb  = mx.helpers.hex2rgba(x.color);
     });
 
     /*    [> always sort by value if data driven <]*/
@@ -2305,17 +2230,13 @@ export function addViewVt(o){
      * evaluate rules
      */
 
-
-
-
-
     rules.forEach(function(rule,i){
       var value = rule.value;
-      var max = path(view,"data.attribute.max")+1;
-      var min = path(view,"data.attribute.min")-1;
+      var max = mx.helpers.path(view,"data.attribute.max")+1;
+      var min = mx.helpers.path(view,"data.attribute.min")-1;
       var nextRule = rules[i+1];
       var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
-      var isNumeric = path(view,"data.attribute.type") == "number";
+      var isNumeric = mx.helpers.path(view,"data.attribute.type") == "number";
       var idView = view.id;
       var sepLayer = mx.settings.separators.sublayer; 
       var getIdLayer = function(){ return idView + sepLayer + num++ ; };
@@ -2356,7 +2277,7 @@ export function addViewVt(o){
            * Handle sprite based circle
            */
           if(rule.sprite && rule.sprite != 'none'){
-            layerSprite = clone(layer);
+            layerSprite = mx.helpers.clone(layer);
             layerSprite.layout = {
               'icon-image': rule.sprite,
               'icon-size': rule.size / 10
@@ -2380,7 +2301,7 @@ export function addViewVt(o){
           layer.type = "fill";
 
           if(rule.sprite && rule.sprite != 'none'){
-            layerSprite = clone(layer);
+            layerSprite = mx.helpers.clone(layer);
             layerSprite.paint = {
               'fill-pattern': rule.sprite
             };
@@ -2421,18 +2342,18 @@ export function addViewVt(o){
 
     if(!o.noLegend){
 
-      rules = path(view, "data.style.rules") ;
+      rules = mx.helpers.path(view, "data.style.rules") ;
 
       if(!rules) return;
 
-      rId = [];
-      rNew = [];
+      var rId = [];
+      var rNew = [];
 
       for(var i = 0 ; i < rules.length ; i++){
         if(rules[i]){
-          ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
-          nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
-          nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
+          var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
+          var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
+          var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
 
           if( ruleHasSprite ){
             rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
@@ -2473,7 +2394,7 @@ export function addViewVt(o){
  *  @param 
  */
 export function addView(o){
-  'use strict';
+  
 
   if(!o.viewData && !o.idView) {
     console.log("Add view called without idView or view Data. Options :");
@@ -2486,8 +2407,8 @@ export function addView(o){
 
   if(o.idView){
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-    view = getViews(o);
-  }  
+    view = mx.helpers.getViews(o);
+  } 
 
   if( !view.id ){
     console.log("View " + o.idView + " not found");
@@ -2495,16 +2416,16 @@ export function addView(o){
   }
 
   /* Remove previous layer if needed */
-  removeLayersByPrefix({
+  mx.helpers.removeLayersByPrefix({
     id: o.id,
     prefix : view.id
   });
 
   /* Switch on view type*/
-  handler = {
+  var handler = {
     rt : function(){
 
-      if(!path(view,"data.source.tiles")) return ;   
+      if(!mx.helpers.path(view,"data.source.tiles")) return ;   
 
       m.map.addLayer({
         id: view.id,
@@ -2514,12 +2435,12 @@ export function addView(o){
 
       /* IMG */ 
 
-      var legend = path(view,"data.source.legend");
+      var legend = mx.helpers.path(view,"data.source.legend");
 
       console.log("add legend for " + view.id);
       if(legend){
         var elLegend = document.querySelector("#check_view_legend_"+view.id);
-        var oldImg = document.querySelector("img");
+        var oldImg = elLegend.querySelector("img");
         if(!oldImg){
           var img = new Image();
           img.src = legend;
@@ -2538,7 +2459,7 @@ export function addView(o){
     },
     gj : function(){
       m.map.addLayer(
-        path(view,"data.layer"),
+        mx.helpers.path(view,"data.layer"),
         "mxlayers"
       );
     },
@@ -2546,7 +2467,7 @@ export function addView(o){
       /*
        * Check if there is additional views
        */
-      viewsStory = path(view,"data.views");
+      var viewsStory = mx.helpers.path(view,"data.views");
       if(viewsStory){
 
         /**
@@ -2562,7 +2483,7 @@ export function addView(o){
          */
         viewsStory.forEach(function(v){
           if(ids.indexOf(v.id)==-1){
-            addSourceFromView({
+            mx.helpers.addSourceFromView({
               m : m,
               view : v
             });
@@ -2586,7 +2507,7 @@ export function addView(o){
  * @param {Object} o.source Source values
  */
 export function addSource(o) {
-  'use strict';
+  
 
   var hasMap = checkMap(o.id);
 
@@ -2614,7 +2535,7 @@ export function addSource(o) {
  * @param {array} o.filter Filter array to apply
  */
 export function setFilter(o){
-  'use strict';
+  
   var exists = !!document.getElementById(o.id);
   if (exists) {
     var m = mx.maps[o.id].map;
@@ -2627,9 +2548,14 @@ export function setFilter(o){
  * @param {string} id map id
  */
 export function checkMap(id){
-  'use strict';
+  
   return !!  mx.maps[id] && mx.maps[id].map;
 }
+
+
+
+
+
 
 /**
  * Get estimated area of visible layer by prefix of layer names
@@ -2640,83 +2566,62 @@ export function checkMap(id){
  * @return {number} area in km2
  */
 export function getRenderedLayersArea(o){
-  'use strict';
 
-  msg = o.onMessage || console.log;
+  var msg = o.onMessage || console.log;
+
   function getBoundsArray(map){
     var a = map.getBounds();
     return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
   } 
 
   if ( checkMap(o.id) ){
-
+    var calcAreaWorker = require("./mx_helper_calc_area.worker.js");  
     var map = mx.maps[o.id].map;
-    var layers = getLayersNamesByPrefix({
+    var layers = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: o.prefix
     });
 
     if( layers.length > 0 ){
+      
+      var features = map.queryRenderedFeatures({layers:layers});
 
+      var geomTemp = {
+        type : "FeatureCollection",
+        features : [] 
+      };
 
+      features.forEach(function(f){    
+        geomTemp
+          .features
+          .push({
+            type : "Feature",
+            properties:{},
+            geometry : f.geometry
+          });
+      });
 
       var data = { 
-        features : map.queryRenderedFeatures({layers:layers}),
+        geojson : geomTemp,
         bbox : getBoundsArray(map)
       };
 
-      var ff = function(){
-        var area = 0;
-        var geomTemp = {
-          type : "FeatureCollection",
-          features : [] 
-        };
-
-        var featuresLength = data.features.length;
-        // get all abject in one
-        sendMessage("Extracting geometry from " + featuresLength + " features ...");
-        data.features.forEach(function(feature){
-          geomTemp
-            .features
-            .push({
-              "type" : "Feature",
-              "properties":{},
-              "geometry":feature.geometry
-            });
-        });
-
-        sendMessage("Combine " + featuresLength + " features ...");
-        geomTemp = turf.combine(geomTemp);
-
-        sendMessage("Calculating enveloppe ...");
-        geomTemp = turf.buffer(geomTemp,0);
-
-        sendMessage("Clipping data to selected extent ...");
-        geomTemp = turf.bboxClip(geomTemp.features[0],data.bbox);
-
-        sendMessage("Calculating area ...");
-        area = turf.area(geomTemp) * 1e-6;
-
-        sendEnd(Math.round(area));
-      };
-
-      doPar({
-        fun : ff,
-        script : "dist/common.bundle.js",
-        data : data,
-        onMessage : o.onMessage,
-        onEnd : o.onEnd
+     
+     var worker = new calcAreaWorker();
+      worker.postMessage(data);
+      worker.addEventListener("message",function(e){
+        if(e.data.message)  o.onMessage(e.data.message);
+        if(e.data.end)  o.onEnd(e.data.end);
       });
-
     }
   }
 }
 
 export function sendRenderedLayersAreaToUi(o){
-  'use strict';
-  el =  document.getElementById(o.idEl);
+  
+  var el =  document.getElementById(o.idEl);
   if(el){
-    area = getRenderedLayersArea({
+   var area = getRenderedLayersArea({
       id : o.id, 
       prefix: o.prefix,
       onMessage : function(msg){  
@@ -2728,6 +2633,57 @@ export function sendRenderedLayersAreaToUi(o){
     });
   }
 }
+
+
+/**
+ * Get layer data
+ * @param {object} o options
+ * @param {string} o.id map id
+ * @param {string} o.idLayer Original id layer
+ * @param {string} o.gid Geometry id name default is "gid"
+ * @param {function} o.onMessage Function to deal with messages
+ * @return {number} table
+ */
+export function getRenderedLayersData(o){
+  mx.helpers.debounce(function(){
+      var start = new Date(); 
+
+      var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
+      var msg = o.onMessage || console.log;
+      var gid = o.gid || "gid";
+
+      function getBoundsArray(map){
+        var a = map.getBounds();
+        return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
+      }
+
+      if ( checkMap(o.id) ){
+
+        var map = mx.maps[o.id].map;
+        var layers = mx.helpers.getLayerNamesByPrefix({
+          id: o.id,
+          prefix: o.idLayer
+        });
+
+        if( layers.length > 0 ){
+
+          var features =  map.queryRenderedFeatures({layers:layers});
+          var featuresUniques = {};
+          var out = [];
+          features.forEach(function(f){
+            featuresUniques[f.properties.gid] = f;
+          });
+          for(var fu in featuresUniques){
+            out.push(featuresUniques[fu].properties);
+          }
+          console.log(out.length + " fetched in " + ((new Date()-start)/1000) + " [s]");
+        }
+      }
+  }(),400);
+}
+
+
+
 
 
 /**
@@ -2825,7 +2781,7 @@ export function sendRenderedLayersAreaToUi(o){
 
 //function makeSelectr(){
 
-//var table = path(view,"data.attribute.table");
+//var table = mx.helpers.path(view,"data.attribute.table");
 //var idView = view.id;
 //var data = tableToData(table);  
 //var selectr = new Selectr(el,{
@@ -2862,7 +2818,7 @@ export function sendRenderedLayersAreaToUi(o){
 //}
 /*};*/
 export function makeSearchBox_choicejs(o){
-  'use strict';
+  
 
   view = o.view;
   idMap = o.idMap;
@@ -2891,7 +2847,7 @@ export function makeSearchBox_choicejs(o){
 
   function makeSelectr(){
 
-    var table = path(view,"data.attribute.table");
+    var table = mx.helpers.path(view,"data.attribute.table");
     var idView = view.id;
     var data = tableToData(table);
 
@@ -2911,7 +2867,7 @@ export function makeSearchBox_choicejs(o){
     el.addEventListener('change', function(event) {
       var listObj = searchBox.getValue();
       var view = searchBox.targetView;
-      var attr = path(view,"data.attribute.name");
+      var attr = mx.helpers.path(view,"data.attribute.name");
       var filter = ['any'];
       listObj.forEach(function(x){
         filter.push(["==",attr,x.value]);
@@ -2925,20 +2881,19 @@ export function makeSearchBox_choicejs(o){
 }
 /*selectize version*/
 export function makeSearchBox(o){
-  'use strict';
+  
 
-  view = o.view;
-  idMap = o.idMap;
-  m = mx.maps[idMap];
-
-  el = document.querySelector("[data-search_box_for='"+view.id+"']");
+  var view = o.view;
+  var idMap = o.idMap;
+  var m = mx.maps[idMap];
+  var el = document.querySelector("[data-search_box_for='"+view.id+"']");
 
   if(!el) return;
 
   makeSelectize();
 
   function tableToData(table){
-    var r, res;
+    var r,row, res;
     var data = [];
     for(r = 0 ; r < table.length ; r++ ){
       row = table[r];
@@ -2951,47 +2906,48 @@ export function makeSearchBox(o){
   }
 
   function makeSelectize(){
-    var idView = view.id;
-    var table = path(view,"data.attribute.table");
-    var attr = path(view,"data.attribute.name");
-    var data = tableToData(table);
+    System.import("selectize").then(function(Selectize){
+      var idView = view.id;
+      var table = mx.helpers.path(view,"data.attribute.table");
+      var attr = mx.helpers.path(view,"data.attribute.name");
+      var data = tableToData(table);
 
-    selectOnChange = function(value) {
-      var view = this.view;
-      var listObj = this.getValue();
-      var filter = ['any'];
-      listObj.forEach(function(x){
-        filter.push(["==",attr,x]);
-      });
-      view._setFilter({
-        filter : filter,
-        type : "search_box"
-      });
-    };
+      var selectOnChange = function(value) {
+        var view = this.view;
+        var listObj = this.getValue();
+        var filter = ['any'];
+        listObj.forEach(function(x){
+          filter.push(["==",attr,x]);
+        });
+        view._setFilter({
+          filter : filter,
+          type : "search_box"
+        });
+      };
 
-    var searchBox = $(el).selectize({
-      placeholder : "Filter values",
-      choices : data,
-      valueField : 'value',
-      labelField : 'label',
-      searchField :['value'],
-      options : data,
-      onChange : selectOnChange
-    })
-      .data()
-      .selectize;
-    /**
-     * Save selectr object in the view
-     */
-    searchBox.view = view;
-    view._interactive.searchBox = searchBox;
+      var searchBox = $(el).selectize({
+        placeholder : "Filter values",
+        choices : data,
+        valueField : 'value',
+        labelField : 'label',
+        searchField :['value'],
+        options : data,
+        onChange : selectOnChange
+      })
+        .data()
+        .selectize;
+      /**
+       * Save selectr object in the view
+       */
+      searchBox.view = view;
+      view._interactive.searchBox = searchBox;
 
-
+    });
   }
 }
 
 export function filterViewValues(o){
-  'use strict';
+  
 
   var attr,idMap,idView,search;
   var view, views, map, features, values, filter, op, dat;
@@ -3005,8 +2961,8 @@ export function filterViewValues(o){
   filterType = o.filterType || "filter";
 
   search = search.trim();
-  isNumeric = isNumeric(search);
-  view = getViews({id:idMap,idView:idView});
+  isNumeric = mx.helpers.isNumeric(search);
+  view = mx.helpers.getViews({id:idMap,idView:idView});
 
   filter = ["all"];
 
@@ -3051,7 +3007,7 @@ export function filterViewValues(o){
  * @param {string} o.before
  */
 export function addLayer(o) {
-  'use strict';
+  
   var hasMap = checkMap(o.id); 
   if ( hasMap ) {
     map = mx.maps[o.id].map;
@@ -3071,27 +3027,27 @@ export function addLayer(o) {
  * @param {string} o.idView view id
  */
 export function zoomToViewId(o){
-  'use strict';
+  var view, map, isArray, extent, llb; 
   var hasMap = checkMap(o.id); 
 
   if ( hasMap ) {
     
-    var isArray = o.idView.constructor === Array;
+    isArray = o.idView.constructor === Array;
 
     o.idView = isArray ? o.idView[0] : o.idView;
     /* in case of layer group */
     o.idView = o.idView.split(mx.settings.separators.sublayer )[0];
     /* get map and view */
     map =  mx.maps[o.id].map;
-    view = getViews(o);
+    view = mx.helpers.getViews(o);
 
     if( !view ) return ;
 
-    var extent = path(view,"data.geometry.extent");
+    extent = mx.helpers.path(view,"data.geometry.extent");
 
     if( !extent ) return;
 
-    var llb = new mx.mapboxgl.LngLatBounds(
+    llb = new mx.mapboxgl.LngLatBounds(
       [extent.lng1, extent.lat1], 
       [extent.lng2, extent.lat2] 
     );
@@ -3115,9 +3071,10 @@ export function zoomToViewId(o){
  * @param {string} o.idView view id
  */
 export function zoomToViewIdVisible(o){
-  'use strict';
+ 
+ System.import("@turf/turf").then(function(turf){ 
 
-  var geomTemp, exists, isArray;
+  var geomTemp, exists, isArray, hasMap, map, idLayerAll, features;
 
   geomTemp = {
     type : "FeatureCollection",
@@ -3131,7 +3088,7 @@ export function zoomToViewIdVisible(o){
     try {
       map =  mx.maps[o.id].map;
 
-      idLayerAll =  getLayersNamesByPrefix({
+      idLayerAll =  mx.helpers.getLayerNamesByPrefix({
         id : o.id,
         prefix: o.idView
       });
@@ -3158,15 +3115,16 @@ export function zoomToViewIdVisible(o){
       console.log("fit bound failed: " + err);
     }
   }
+ });
 }
 
 export function resetViewStyle(o){
-  'use strict';
+  
 
   if( ! o.id || ! o.idView) return;
 
   mx
-    .helper
+    .helpers
     .addView({
       id : o.id,
       idView: o.idView
@@ -3188,7 +3146,7 @@ export function resetViewStyle(o){
  * @param {number} o.speed
  */
 export function flyTo(o) {
-  'use strict';
+  
 
   var hasMap = checkMap(o.id);
 
@@ -3214,7 +3172,7 @@ export function flyTo(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export function setMapLanguage(o) {
-  'use strict';
+  
 
   var hasMap = checkMap(o.id);
   var mapLang = ["en","es","fr","de","ru","zh","pt","ar"];
@@ -3256,7 +3214,7 @@ export function setMapLanguage(o) {
 
     for(var i = 0; i < layers.length ; i++){
       var layer = layers[i];
-      var layerExists = getLayersNamesByPrefix({
+      var layerExists = mx.helpers.getLayerNamesByPrefix({
         id: o.id,
         prefix: layer
       }).length > 0;
@@ -3285,7 +3243,8 @@ export function setMapLanguage(o) {
  * @return {String} Toggled
  */
 export function btnToggleLayer(o){
-  'use strict';
+  
+  var shades;
 
   o.id = o.id || "map_main";
   var map = mx.maps[o.id].map;
@@ -3308,7 +3267,7 @@ export function btnToggleLayer(o){
   var toToggle = o.action == 'toggle' || toShow && !isVisible || toHide && isVisible;
 
   if(isAerial){
-    shades = getLayersNamesByPrefix({id:o.id,prefix:'shade'});
+    shades = mx.helpers.getLayerNamesByPrefix({id:o.id,prefix:'shade'});
   }
 
   if(toToggle){
@@ -3349,190 +3308,190 @@ export function btnToggleLayer(o){
  *
  */
 export function setUiColorScheme(o){
-  'use strict';
-
+  
+  var mx_colors; // colors from stylesheet from the rule ".mx *";
   var init = false;
-  var mx_colors;
   var map = mx.maps[o.id||"map_main"].map;
-  var styles = document.styleSheets;
-  for(var i= 0,iL=styles.length;i<iL;i++){
-    if(styles[i].title == "mx_colors"){
-      var rules = styles[i].rules||styles[i].cssRules||[];
-      for(var j=0,jL=rules.length;j<jL;j++){
-        if(rules[j].selectorText == ".mx *"){
-          mx_colors=rules[j];
-        }
-      }
-    }
-  }
-
-  if(!mx_colors) {
-    alert("mx_colors rules not found");
-    return;
-  }
-
   var c = o.colors;
   init = c !== undefined;
   c = c||{};
-  c.mx_ui_text = c.mx_ui_text || "hsl(0, 0%, 21%)";
-  c.mx_ui_text_faded = c.mx_ui_text_faded || "hsla(0, 0%, 21%, 0.6)";
-  c.mx_ui_hidden = c.mx_ui_hidden || "hsla(196, 98%, 50%,0)";
-  c.mx_ui_border = c.mx_ui_border || "hsl(0, 0%, 61%)";
-  c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
-  c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
-  c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
-  c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
-  c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
 
   /**
-   * create / update input color
-   */
-
-  var inputs = document.getElementById("inputThemeColors");
-  inputs.classList.add("mx-settings-colors");
-  inputs.classList.add("mx-views-content");
-
-  if(inputs && inputs.children.length>0){
-    forEachEl({
-      els:inputs.children,
-      callback:function(el){
-        var colorIn = el.querySelector("[type='color']").value;
-        var alphaIn = el.querySelector("[type='range']").value;
-        var idIn = el.id;
-        c[idIn] = hex2rgba(colorIn,alphaIn);
-      }
-    });
-  }
-
-  if(init){
-    inputs.innerHTML="";
-    var inputType = ["color","range"];
-    for(var cid in c){
-      var container = document.createElement("div");
-      container.id = cid;
-      var container_inputs = document.createElement("div");
-      var lab = document.createElement("label");
-      container_inputs.id = cid + "_inputs";
-      var color = color2obj(c[cid]);
-
-      for(var ityp=0,itypL=inputType.length;ityp<itypL;ityp++ ){
-        var typ = inputType[ityp];
-        var input = document.createElement("input");
-        input.onchange=setUiColorScheme;
-        input.type = typ;
-        input.id = cid + "_" + typ;
-        if( typ == "range" ){
-          input.min = 0;
-          input.max = 1;
-          input.step = 0.1;
-        }
-        input.value = typ == "range" ? color.alpha : color.color;
-        container_inputs.appendChild(input);
-      }
-      lab.innerHTML = cid;
-      //lab.dataset.lang_key = cid;
-      //lab.dataset.lang_type = "tooltip";
-      lab.setAttribute("aria-label", cid);
-      lab.classList.add("hint--right");
-      lab.for = cid;
-      container.appendChild(lab);
-      container.appendChild(container_inputs);
-      inputs.appendChild(container);
-    }
-  }
-  /**
-   * Ui color
-   */
-
-  for(var col in c){
-    mx_colors.style.setProperty("--"+col,c[col]);
-  }
-
-
-  /**
-   * Map colors NOTE: PUT THIS OBJECT AS THEME
-   */ 
-  var layers = [
-    {
-      "id":["background"],
-      "paint": {
-        "background-color": c.mx_map_background 
-      }
-    },
-    {
-      "id":["maritime"],
-      "paint": {
-        "line-color": c.mx_map_background 
-      }
-    },
-    {
-      "id":["water"],
-      "paint": {
-        "fill-color": c.mx_map_water,
-        "fill-outline-color" : c.mx_map_water
-      }
-    },
-    {
-      "id":["waterway"],
-      "paint": {
-        "line-color": c.mx_map_water
-      }
-    },
-    {
-      "id":["country-code"],
-      "paint":{
-        "fill-color": c.mx_map_mask
-      }
-    },
-    {
-      "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
-      "paint":{
-        "line-color":c.mx_map_road
-      }
-    },
-    {
-      "id":["boundaries_2","boundaries_3-4"],
-      "paint":{
-        "line-color":c.mx_map_admin
-      }
-    },
-    {
-      "id":["boundaries_disputed"],
-      "paint":{
-        "line-color":c.mx_map_admin_disputed
-      }
-    },
-    {
-      "id":["country-label","place-label-capital","place-label-city"],
-      "paint":{          
-        "text-color": c.mx_map_text
-      }
-    } 
-  ];
-
-  for(var k = 0,kL = layers.length; k<kL; k++ ){
-    var grp = layers[k];
-    for( l = 0, lL = grp.id.length; l < lL; l++ ){
-      var lid = grp.id[l];
-      var lay = map.getLayer(lid);
-      if( lay ){
-        for(var p in grp.paint){
-          map.setPaintProperty(lid,p,grp.paint[p]); 
-        }
+  * Extract main rules. NOTE: this seems fragile, find another technique
+  */
+  var styles = document.styleSheets;
+  for(var i= 0, iL=styles.length;i<iL;i++){
+    var rules = styles[i].rules||styles[i].cssRules||[];
+    for(var j=0, jL=rules.length;j<jL;j++){
+      if(rules[j].selectorText == ".mx *"){
+        mx_colors=rules[j];
       }
     }
   }
+  /*
+   * Hard coded default if no stylsheet defined or user defined colors is set
+   */
+    c.mx_ui_text = c.mx_ui_text || "hsl(0, 0%, 21%)";
+    c.mx_ui_text_faded = c.mx_ui_text_faded || "hsla(0, 0%, 21%, 0.6)";
+    c.mx_ui_hidden = c.mx_ui_hidden || "hsla(196, 98%, 50%,0)";
+    c.mx_ui_border = c.mx_ui_border || "hsl(0, 0%, 61%)";
+    c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
+    c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
+    c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
+    c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
+    c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
+    c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
+    c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
+    c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
+    c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
 
-}
+    /**
+     * create / update input color
+     */
+
+    var inputs = document.getElementById("inputThemeColors");
+    inputs.classList.add("mx-settings-colors");
+    inputs.classList.add("mx-views-content");
+
+    if(inputs && inputs.children.length>0){
+      mx.helpers.forEachEl({
+        els:inputs.children,
+        callback:function(el){
+          var colorIn = el.querySelector("[type='color']").value;
+          var alphaIn = el.querySelector("[type='range']").value;
+          var idIn = el.id;
+          c[idIn] = mx.helpers.hex2rgba(colorIn,alphaIn);
+        }
+      });
+    }
+
+    if(init){
+      inputs.innerHTML="";
+      var inputType = ["color","range"];
+      for(var cid in c){
+        var container = document.createElement("div");
+        container.id = cid;
+        var container_inputs = document.createElement("div");
+        var lab = document.createElement("label");
+        container_inputs.id = cid + "_inputs";
+        var color = mx.helpers.color2obj(c[cid]);
+
+        for(var ityp=0, itypL=inputType.length;ityp<itypL;ityp++ ){
+          var typ = inputType[ityp];
+          var input = document.createElement("input");
+          input.onchange=mx.helpers.setUiColorScheme;
+          input.type = typ;
+          input.id = cid + "_" + typ;
+          if( typ == "range" ){
+            input.min = 0;
+            input.max = 1;
+            input.step = 0.1;
+          }
+          input.value = typ == "range" ? color.alpha : color.color;
+          container_inputs.appendChild(input);
+        }
+        lab.innerHTML = cid;
+        //lab.dataset.lang_key = cid;
+        //lab.dataset.lang_type = "tooltip";
+        lab.setAttribute("aria-label", cid);
+        lab.classList.add("hint--right");
+        lab.for = cid;
+        container.appendChild(lab);
+        container.appendChild(container_inputs);
+        inputs.appendChild(container);
+      }
+    }
+    /**
+     * Ui color
+     */
+
+    for(var col in c){
+      mx_colors.style.setProperty("--"+col,c[col]);
+    }
+
+
+    /**
+     * Map colors NOTE: PUT THIS OBJECT AS THEME
+     */ 
+    var layers = [
+      {
+        "id":["background"],
+        "paint": {
+          "background-color": c.mx_map_background 
+        }
+      },
+      {
+        "id":["maritime"],
+        "paint": {
+          "line-color": c.mx_map_background 
+        }
+      },
+      {
+        "id":["water"],
+        "paint": {
+          "fill-color": c.mx_map_water,
+          "fill-outline-color" : c.mx_map_water
+        }
+      },
+      {
+        "id":["waterway"],
+        "paint": {
+          "line-color": c.mx_map_water
+        }
+      },
+      {
+        "id":["country-code"],
+        "paint":{
+          "fill-color": c.mx_map_mask
+        }
+      },
+      {
+        "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
+        "paint":{
+          "line-color":c.mx_map_road
+        }
+      },
+      {
+        "id":["boundaries_2","boundaries_3-4"],
+        "paint":{
+          "line-color":c.mx_map_admin
+        }
+      },
+      {
+        "id":["boundaries_disputed"],
+        "paint":{
+          "line-color":c.mx_map_admin_disputed
+        }
+      },
+      {
+        "id":["country-label","place-label-capital","place-label-city"],
+        "paint":{          
+          "text-color": c.mx_map_text
+        }
+      } 
+    ];
+
+    for(var k = 0,kL = layers.length; k<kL; k++ ){
+      var grp = layers[k];
+      for(var l = 0, lL = grp.id.length; l < lL; l++ ){
+        var lid = grp.id[l];
+        var lay = map.getLayer(lid);
+        if( lay ){
+          for(var p in grp.paint){
+            map.setPaintProperty(lid,p,grp.paint[p]); 
+          }
+        }
+      }
+    }
+
+
+  //})
+ }
 
 
 
 /**
- * Initial mgl and mx.mapboxgl
+ * Initial mgl and mapboxgl
  * @param {string} o options
  * @param {string} o.idMap id
  * @param {string} o.token Mapbox token
@@ -3547,9 +3506,7 @@ export function setUiColorScheme(o){
 
 */
 export function initMap(o){
-  /*jshint validthis:true*/
-  'use strict';
-
+  
   var elMap = document.getElementById(o.id);
   var hasShiny = !! window.Shiny ;
 
@@ -3559,23 +3516,25 @@ export function initMap(o){
   }
 
   Promise.all([
-  System.import("mapbox-gl"),
+  System.import("mapbox-gl/dist/mapbox-gl"),
   System.import("localforage"),
-  System.import("../data/style_simple.json")
+  System.import("../data/style_mapx.json")
   ]).then(function(m){
 
-    mx.mapboxgl = m[0];
-    mx.localforage = m[1];
+    var  mapboxgl = m[0];
+    var    localforage = m[1];
+    mx.mapboxgl = mapboxgl;
+    mx.localforage = localforage;
     mx.data.style = m[2];
 
-    mx.data.geojson = mx.localforage.createInstance({
+    mx.data.geojson = localforage.createInstance({
       name:  "geojson"
     });
-    mx.data.images = mx.localforage.createInstance({
+    mx.data.images = localforage.createInstance({
       name : "images"
     });
     
-    mx.data.stories = mx.localforage.createInstance({
+    mx.data.stories = localforage.createInstance({
       name : "stories"
     });
     mx.data.storyCache = {};
@@ -3596,14 +3555,14 @@ export function initMap(o){
   /**
    * Set mapbox gl token
    */
-  if (!mx.mapboxgl.accessToken && o.token) {
-    mx.mapboxgl.accessToken = o.token;
+  if (!mapboxgl.accessToken && o.token) {
+    mapboxgl.accessToken = o.token;
   }
 
   /**
    * TEst if mapbox gl is supported
    */
-  if ( !mx.mapboxgl.supported() ) {
+  if ( !mapboxgl.supported() ) {
     alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
     return;
   }
@@ -3625,24 +3584,10 @@ export function initMap(o){
   mx.settings.vtPort = o.vtPort = o.vtPort || 8080;
   mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
   // set path using current location. 
-  //This means that styles files must be on the current server.
-/*  if(o.paths.style){*/
-    //o.paths.style = o.location + o.paths.style;
-  /*}*/
-  /*  if(o.paths.themes){*/
-  //o.paths.themes = o.location + o.paths.themes;
-  /*}*/
-  /*if(o.paths.sprite){*/
-    //o.paths.sprite = o.location + o.paths.sprite;
-  //}
-
-  // save all available languages
-
-  // save default language
-
-
-  // set vt template
-
+  
+  if(o.paths.sprite){
+    o.paths.sprite = o.location + o.paths.sprite;
+  }
 
   /**
    * Init mgl data store
@@ -3662,39 +3607,18 @@ export function initMap(o){
     //themes : {}
   };
 
-  /*
-   * Get style object
-   */
-/*  getJSON({*/
-    //url : o.paths.style,
-    //onError : console.log,
-    //onSuccess : function(style) { 
-      /*
-       * Get the theme object
-       */
-      /*      getJSON({*/
-      //url : o.paths.themes,
-      //onError : console.log,
-      /*onSuccess : function(themes) {*/
-
-      /* save theme and sytle object, used in switchui */
-      //mx.maps[o.id].themes = themes;
-      //mx.maps[o.id].style = style;
       var style = mx.maps[o.id].style = mx.data.style;
-
-      /*  Set sprite url : relative path does not work..*/
-      //style.sprite = o.paths.sprite;
+      style.sprite = o.paths.sprite;
+      mx.maps[o.id].style = style;
 
       /* Create map object */
-      var map = new mx.mapboxgl.Map({
+      var map = new mapboxgl.Map({
         container: o.id, // container id
-        //style: style,
+        style: style,
         center: [o.lng,o.lat],
         zoom: o.zoom,
         maxZoom: o.maxZoom,
-        minZoom: o.minZoom,
-        //preserveDrawingBuffer: true
-        //renderWorldCopies:false
+        minZoom: o.minZoom
       });
 
       /* save map in mgl data */
@@ -3707,7 +3631,7 @@ export function initMap(o){
         if(hasShiny)
           Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
         if(o.colorScheme){
-          setUiColorScheme({colors:o.colorScheme});
+          mx.helpers.setUiColorScheme({colors:o.colorScheme});
         }
       });
 
@@ -3721,11 +3645,11 @@ export function initMap(o){
       /**
        * Add controls to the map
        */
+      
       map.addControl(new mx.helpers.mapControlMain(),'top-left');
       map.addControl(new mx.helpers.mapControlNorth(),'top-right');
       map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
-
-      map.addControl(new mx.mapboxgl.ScaleControl({ maxWidth: 80}),'top-right');
+      map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
 
       /**
        * Trigger country change on double click
@@ -3735,20 +3659,22 @@ export function initMap(o){
         var cntry, features ;
         if(o.countries){
           features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
-          cntry = path(features[0],"properties.iso3code");
+          cntry = mx.helpers.path(features[0],"properties.iso3code");
           if(o.countries.indexOf(cntry) > -1 && hasShiny ) {
             Shiny.onInputChange( "selectCountry", cntry);
           }
         }
       });
 
+    map.on("rechart",updateChart);
+    map.on("moveend",updateChart);
 
       /**
        * Click event : it's a popup.
        */
       map.on('click', function(e) {
 
-        popup = new mx.mapboxgl.Popup()
+        var popup = new mapboxgl.Popup()
           .setLngLat(map.unproject(e.point))
           .addTo(map);
 
@@ -3766,15 +3692,30 @@ export function initMap(o){
 
 }
 
-export function queryFeatures(o){
-  'use strict';
+/**
+* Update existing chart / widget in dashboards
+*/
+export function updateChart(e){
+   console.log("update chart");
+  //console.log(e);
+}
+
+
+/*
+* Get extract features values at given point, group by properties
+* @param {Object} o Options
+* @param {String} o.id Map id
+* @param {Array} o.point Array of coordinates
+*/
+export function getFeaturesValuesByLayers(o){
+  
   var props = {}; 
   var sep = mx.settings.separators.sublayer;
-  var layers = getLayersNamesByPrefix({
+  var layers = mx.helpers.getLayerNamesByPrefix({
     id: o.id,
     prefix: "MX-"
   });
-  var excludeProp = ['mx_t0','mx_t1'];
+  var excludeProp = ['mx_t0','mx_t1','gid'];
   var map = mx.maps[o.id].map;
   var features = map.queryRenderedFeatures(o.point,{layers:layers});
 
@@ -3788,7 +3729,7 @@ export function queryFeatures(o){
         var value = f.properties[p];
         var values = props[baseLayer][p] || [];
         values = values.concat(value);
-        props[baseLayer][p] = getArrayStat({
+        props[baseLayer][p] = mx.helpers.getArrayStat({
           stat:"distinct",
           arr:values
         });
@@ -3799,19 +3740,23 @@ export function queryFeatures(o){
   return props;
 }
 
-
-
-
+/*
+* Convert result from getFeaturesValuesByLayers to HTML 
+* @param {Object} o Options
+* @param {String} o.id Map id
+* @param {Array} o.point Array of coordinates
+* @param {Object} o.popup Mapbox-gl popup object
+*/
 export function featuresToHtml(o){
-  'use strict';
+  
   var classGroup = "list-group";
   var classGroupItem = "list-group-item";
   var classGroupItemMember = "list-group-item-member"; 
   var popup = o.popup;
-  var langs = objectToArray(mx.settings.languages) || ["en"];
+  var langs = mx.helpers.objectToArray(mx.settings.languages) || ["en"];
   var lang = mx.settings.language || langs[0];
-  var views = getViews(o);
-  var layers = queryFeatures({
+  var views = mx.helpers.getViews(o);
+  var layers = mx.helpers.getFeaturesValuesByLayers({
     id : o.id,
     point : o.point
   });
@@ -3828,7 +3773,7 @@ export function featuresToHtml(o){
   elContainer.classList.add("mx-popup-container");
 
   function getTitle(id){
-    return  getLanguageFromObjectPath({
+    return  mx.helpers.getLanguageFromObjectPath({
       obj :views[id],
       path : "data.title",
       lang : lang,
@@ -3855,7 +3800,7 @@ export function featuresToHtml(o){
     var  elChecks = popup._content.querySelectorAll(".check-toggle input");
     filters = {}; // reset filter at each request
 
-    forEachEl({
+    mx.helpers.forEachEl({
       els:elChecks,
       callback:buildFilters
     });
@@ -3875,7 +3820,7 @@ export function featuresToHtml(o){
       var l = el.dataset.l;
       var p = el.dataset.p;
       var add = el.checked;
-      var isNum = isNumeric(v);
+      var isNum = mx.helpers.isNumeric(v);
       var rule = [];
 
       if( !filters[l] ) filters[l]=['any'];
@@ -3904,7 +3849,7 @@ export function featuresToHtml(o){
       for(var i=0, iL=values.length; i<iL; i++){
         var v = values[i];
 
-        var elValue = uiToggleBtn({
+        var elValue = mx.helpers.uiToggleBtn({
           label:v,
           onChange:filterValues,
           data:{
@@ -3918,7 +3863,7 @@ export function featuresToHtml(o){
         elValues.appendChild(elValue); 
       }
       elProps.appendChild(
-        uiFold({
+        mx.helpers.uiFold({
           content:elValues,
           label:p,
           open:false
@@ -3928,11 +3873,12 @@ export function featuresToHtml(o){
     }
 
     elLayers.appendChild(
-      uiFold({
+      mx.helpers.uiFold({
         content:elLayer,
         label:title,
         open:false,
-        onChange:updatePopup})
+        onChange:updatePopup
+      })
     );   
 
   }
@@ -3953,10 +3899,10 @@ export function featuresToHtml(o){
  * @param {string} o.id map id
  */
 export function getMapPos(o){
-  'use strict';
+  
 
-  var map, bounds, center, zoom, bearing, pitch;
-  var r = round;
+  var out, map, bounds, center, zoom, bearing, pitch;
+  var r = mx.helpers.round;
   map = mx.maps[o.id].map;
 
   bounds = map.getBounds();
@@ -3988,8 +3934,7 @@ export function getMapPos(o){
  * @param {String} o.idView Optional. Filter view to return. Default = all.
  */
 export function getViews(o){
-  'use strict';
-
+  
   var dat, out = {};
 
   dat = mx.maps[o.id];
@@ -4014,8 +3959,8 @@ export function getViews(o){
  */
 export function makeLayerJiggle(mapId, prefix) {
   /*jshint validthis:true*/
-  'use strict';
-  var layersName = this.getLayersNamesByPrefix({
+  
+  var layersName = mx.helpers.getLayerNamesByPrefix({
     id: mapId,
     prefix: prefix
   });
@@ -4060,7 +4005,7 @@ export function makeLayerJiggle(mapId, prefix) {
  * @param {string} mapId Map identifier
  */
 export function randomFillAll(mapId) {
-  'use strict';
+  
   setInterval(function() {
     var map = mx.maps[mapId].map;
     var layers = map.style._layers;

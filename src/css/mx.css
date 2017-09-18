@@ -37,6 +37,11 @@ html, body, .full-page {
   pointer-events: none;
 }
 
+.mx-events-on,
+.mx-events-on *
+{
+  pointer-events: auto;
+}
 
 .mx-hide,
 .mx-hide-bis
@@ -104,8 +109,9 @@ html, body, .full-page {
 /**
 * mapbox gl popup 
 */
-
-
+.mapboxgl-popup{
+ z-index:101;
+}
 .mapboxgl-popup-content {
   padding: 20px;
 }
@@ -173,7 +179,7 @@ html, body, .full-page {
 }
 
 .mx-slider-container .noUi-connect {
-  height: 3px;
+  height: 2px;
   box-shadow: none;
   transition: none;
   top: 6px;  
@@ -249,13 +255,24 @@ html, body, .full-page {
 
 
 .mx-controls-ul li {
-  font-size: 13px;
-  width: 38px;
+  font-size: 12px;
+  width: 50px;
+  margin-right: 5px;
   height: 30px;
   position: relative;
   display: inline-block;
 }
-
+@media (max-width: 800px) {
+  .mx-controls-ul li {
+    font-size: 11px;
+    width: 40px;
+    margin-right: 5px;
+    height: 30px;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+}
 .mx-controls-top .mx-controls-ul li {
  border-radius : 5px;
  background:none;
@@ -285,37 +302,56 @@ html, body, .full-page {
 * General layout
 */
 
-.left-column {
-  border: 1px solid;
-  border-radius: 5px;
+.mx-panel {
+   border: 1px solid;
+   border-radius: 5px;
+   z-index: 100;
+   padding:10px;
+   position: absolute;
+}
+
+.mx-panel-left {
   max-height: 100%;
-  z-index: 100;
   float: left;
   margin-left: 5px;
   margin-bottom: 5px;
   padding-bottom: 30px;
-  width: 445px;
+  width: 435px;
   min-height: 100px;
-  padding:10px;
   bottom: 30px;
   top: 40px;
-  position: absolute;
 }
 
+.mx-panel-bottom {
+  max-height: 50%;
+  height: 50%;
+  min-height: 100px;
+  left: 445px;
+  right: 5px;
+  bottom: 35px;
+  z-index: 99;
+  overflow-y:scroll;
+}
+
+
+
+
 @media (max-width: 800px) {
-  .left-column {
-  border-radius:0px;
-  z-index: 100;
-  float: left;
-  margin: 0px;
-  width: 100%;
-  min-height: 60px;
-  max-height: 100%;
-  height:50%;
-  padding: 3px;
-  bottom: 0px;
-  top:auto;
-  position: absolute;
+  .mx-panel {
+    border-radius:0px;
+  }
+  .mx-panel-left {
+    margin: 0px;
+    width: 100%;
+    min-height: 60px;
+    max-height: 100%;
+    height:50%;
+    padding: 3px;
+    bottom: 0px;
+    top:auto;
+  }
+  .mx-panel-dashboard {
+    display:none;
   }
 }
 
@@ -356,6 +392,7 @@ html, body, .full-page {
 }
 
 
+
 .mx-settings-colors {
   padding:10px;
   border-radius:5px;
@@ -365,6 +402,16 @@ html, body, .full-page {
 .mx-settings-colors * {
   color : black !important;
 }
+
+/*
+ * Dashboard
+ */
+.mx-dashboard-container {
+  /*overflow-y: hidden;*/
+  /*overflow-x: auto;*/
+  /*margin-top: 5px;*/
+}
+
 
 
 
@@ -397,6 +444,36 @@ html, body, .full-page {
   transition: all .3s ease-in-out;
 }
 
+.btn-circle {
+  opacity:0.5;
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  background: #FFF;
+  border: 1px solid #ccc;
+  float: right;
+  text-align: center;
+  line-height: 10px;
+  padding: 0px;
+  padding-bottom: 3px;
+  margin: 0px;
+  font-size: 10px;
+  transition: opacity 0.3s ease-in-out;
+  z-index:100;
+}
+.btn-circle:hover {
+ opacity:1;
+}
+.btn-circle--right {
+  position: absolute;
+  right: 0px;
+}
+
+.btn-circle--left {
+  position: absolute;
+  left: 0px;
+}
+
 .btn-icon {
   font-size: 13px;
   width: 30px;
@@ -425,91 +502,26 @@ html, body, .full-page {
     line-height: 1.5;
 }
 
-/**
- * Scrollbar
- *
- */
-
-.selectize-dropdown {
-  z-index:1000;
-}
-
-
-/**
- *
- * JED FIXES
- *
- */
-
-
-.jed-container .jed-error {
-  border-left: 1px solid red;
-  margin-left: 1px;
-}
-
-.jed-container .table>tbody>tr>td, 
-.jed-container .table>tbody>tr>th, 
-.jed-container .table>tfoot>tr>td, 
-.jed-container .table>tfoot>tr>th, 
-.jed-container .table>thead>tr>td, 
-.jed-container .table>thead>tr>th {
-  padding: 1px;
-  border: 0px;
-  vertical-align: bottom;
-}
-
-.jed-container td .btn-group {
-  display: inline-flex;
-    width: 71px;
-}
-
-.jed-container .table {
-  border: 0px;
-}
-
-.jed-container td input[type='color']:focus
-{
-  min-width:0px;
-}
-
-.jed-container .btn-group-wide {
-   width:100%
-}
-
-.jed-container .well {
-  padding: 10px 5px 10px 5px;
-  border: none;
-  box-shadow: none;
-  --webkit-box-shadow: none;
-}
-
-.jed-container .btn.btn-default {
-      border: none;
-    }
-
-.form-group textarea.form-control {
-  resize: vertical;
-}
-
-.jed-container .table {
-  min-width: 100%;
-  border: 0px;
-}
-
-.jed-container div[data-schematype='object'] {
-    padding: 15px;
-    max-width: 100%;
-    margin-bottom: 20px;
-}
 
 
 /*
 * bootstrap fixes
 */
-.input-group .form-control .selectize-dropdown {
-  position: absolute;
+.input-group .form-control {
+  /*position: absolute;*/
 }
 
+
+/*
+ * Forms
+ */
+
+.mx .form-control,
+.mx .shiny-input-container:not(.shiny-input-container-inline) {
+  max-width: 100%;
+  display: block;
+  width: 100%;
+}
 /**
 * Modal panel
 */
@@ -544,7 +556,7 @@ html, body, .full-page {
   position: absolute;
   flex-direction: column;
   min-width: 280px;
-  max-width: 600px;
+  max-width: 700px;
   min-height: 200px;
   max-height: 90%;
   width: 60%;
@@ -825,12 +837,14 @@ html, body, .full-page {
 
 .fold-container .fold-switch::after {
   visibility: visible;
-  content: '\f067';
+  content: '\f067'; /*+*/
+  content: '\f0da'; /*>*/
 }
 
 .fold-container .fold-switch:checked::after {
   visibility: visible;
-  content: '\f068';
+  content: '\f068'; /*-*/
+  content: '\f0d7'; /*^*/
 }
 
 .fold-container .fold-switch:not(checked) ~ .fold-content {
@@ -849,19 +863,32 @@ html, body, .full-page {
     padding-top: 5px;
 }
 
-.mx-slider-dyn,
+/*.mx-slider-dyn,*/
+
+.mx-slider-title {
+  display:inline-block;
+  float:left;
+}
+
+.mx-slider-header {
+  height:20px;
+}
+.mx-slider-dyn {
+  float:right;
+}
+
 .mx-slider-range {
-   width:100%;
-   display:inline-block;
-   text-align:center;
+  width:100%;
+  display:inline-block;
+  text-align:center;
 }
 
 .mx-slider-dyn-min {
-  display:inline;
+  display:inline-block;
 }
 
 .mx-slider-dyn-max {
-  display:inline;
+  display:inline-block;
 }
 
 .mx-slider-range-min {
@@ -890,10 +917,7 @@ html, body, .full-page {
 }
 
 
-/*
-YUI 3.18.1 (build f7e7bcb)
-Copyright 2014 Yahoo! Inc. All rights reserved.
-Licensed under the BSD License.
-http://yuilibrary.com/license/
-*/
-.mx-reset html{color:#000;background:#FFF}.mx-reset body,.mx-reset div,.mx-reset dl,.mx-reset dt,.mx-reset dd,.mx-reset ul,.mx-reset ol,.mx-reset li,.mx-reset h1,.mx-reset h2,.mx-reset h3,.mx-reset h4,.mx-reset h5,.mx-reset h6,.mx-reset pre,.mx-reset code,.mx-reset form,.mx-reset fieldset,.mx-reset legend,.mx-reset input,.mx-reset textarea,.mx-reset p,.mx-reset blockquote,.mx-reset th,.mx-reset td{margin:0;padding:0}.mx-reset table{border-collapse:collapse;border-spacing:0}.mx-reset fieldset,.mx-reset img{border:0}.mx-reset address,.mx-reset caption,.mx-reset cite,.mx-reset code,.mx-reset dfn,.mx-reset em,.mx-reset strong,.mx-reset th,.mx-reset var{font-style:normal;font-weight:normal}.mx-reset ol,.mx-reset ul{list-style:none}.mx-reset caption,.mx-reset th{text-align:left}.mx-reset h1,.mx-reset h2,.mx-reset h3,.mx-reset h4,.mx-reset h5,.mx-reset h6{font-size:100%;font-weight:normal}.mx-reset q:before,.mx-reset q:after{content:''}.mx-reset abbr,.mx-reset acronym{border:0;font-variant:normal}.mx-reset sup{vertical-align:text-top}.mx-reset sub{vertical-align:text-bottom}.mx-reset input,.mx-reset textarea,.mx-reset select{font-family:inherit;font-size:inherit;font-weight:inherit}.mx-reset input,.mx-reset textarea,.mx-reset select{*font-size:100%}.mx-reset legend{color:#000}#yui3-css-stamp.cssreset-context{display:none}
+
+
+
+

@@ -1,7 +1,13 @@
 /*jshint esversion: 6 */
+
+
+/**
+* Script to launch a script after an evenement occurs in a folder
+*/
 const fs = require("fs");
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
+let watcher;
 
 function watchFilePlugin(options) {
   this.options = options;
@@ -27,11 +33,13 @@ watchFilePlugin.prototype.apply = function(compiler) {
   }
 
   compiler.plugin("emit", function(compilation, callback) {
-    that.watcher = fs.watch(watchFolder,{interval:5000},function(eventType,filename){
+    if(watcher) watcher.close();
+
+    watcher = fs.watch(watchFolder,{interval:5000},function(eventType,filename){
       if(filename){
         console.log(script);
         handleScript(script) ;      
-        that.watcher.close();
+        watcher.close();
       }
 
     });

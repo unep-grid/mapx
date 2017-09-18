@@ -1,4 +1,5 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 6 , node: true */
+
 /** 
  * Read all cookies
  * 
@@ -46,7 +47,7 @@ export function writeCookie(e)
 
     if( e.deleteAll ){
       exp = '01/01/1989';
-      e.cookie = this.readCookie();
+      e.cookie = mx.helpers.readCookie();
     }
 
     for( var c  in e.cookie ){

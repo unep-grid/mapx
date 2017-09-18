@@ -1,16 +1,8 @@
-/*jshint esversion: 6 */
+/*jshint esversion: 6 , node: true */
+//'use strict';
 import * as mx from './mx_init.js';
 
-export function test(){
-  var helper = this;
-  return function(){
-     util.onNextFrame(function(){
-      console.log("done");
-     });
-  };
-
-}
-
+//var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 /**
  * Do something on next frame
@@ -84,6 +76,7 @@ export function uiToggleBtn(o){
   }
 
   elInput.onchange = function(e){
+    /*jshint validthis:true */
     var el = this;
     onChange(e,el);
   };
@@ -160,63 +153,76 @@ export function textToHtml(text){
 
 /**
 * Convert a simple object to an HTML list
-* @param {Object} obj Object to convert
+* @param {Object} o Options
+* @param {Object} o.data Object to convert
+* @param {String} o.id of element to fill (optional)
+* @param {String} o.classValue Group item additional class (optional)
 * @return {Element} Html ul element
 */
-export function objectToHtml(obj,classValue){
+export function objectToHTML(o){
 
+  // if data and id : send by mxJsonToHtml, convert. 
+  var obj = o.data;
+  var id = o.id;
+  var classValue;
   var classGroup = "list-group";
   var classGroupItem = "list-group-item";
   var classGroupItemValue = ["list-group-item-member"]; 
 
   if(classValue) classGroupItemValue.concat(classValue);
 
-  return makeUl(obj);
+  var html = makeUl(obj);
 
-  function makeUl(u){
+  if(id){
+   document.getElementById(id).appendChild(html);
+  }else{
+   return html;
+  }
+
+  function makeUl(li){
+    var l, k, keys = [];
     var ul = document.createElement("ul");
     ul.classList.add(classGroup);
-    for(var l in u){
-      ul.appendChild(makeLi(u[l],l));
+      var isObject = li.constructor == Object;
+      var isArray =  li.constructor == Array;
+    if( isObject ) keys = Object.keys(li);
+    if( isArray ) for(var i=0,iL=li.length;i<iL;i++){keys.push(i);}
+
+    for(var j =0,jL=keys.length;j<jL;j++){ 
+      k = keys[j];
+      l = isArray ? k+1 : k;
+      ul.appendChild(makeLi(li[k],l));
     }
     return ul;
   }
 
-  function makeLi(l,t){
+  function makeLi(it,ti){
     var li = document.createElement("li");
     var content = document.createElement("div");
     li.classList.add(classGroupItem);
 
-    if ( l.constructor == Object ){
-      content = makeUl(l); 
-    }else{ 
+    if ( it.constructor == Object || it.constructor == Array ){
 
-      if(l.constructor != Array){
-        l = [l]; 
-      }
+     content.appendChild( uiFold({
+        content : makeUl(it),
+        label : ti,
+        open : false
+      })
+     );
 
-      l.forEach(function(i){
-        var span = document.createElement("span");
-        classGroupItemValue.forEach(function(c){ 
-          span.classList.add(c);
-        });
-        span.innerHTML = i;
-        content.appendChild(span);
-      });
+    }else{
+      content.innerHTML = "<div>"+
+        "<span class='list-group-title'>" + ti + "</span>"+
+        "<span>"+it+"</span>"+
+        "</div>";
 
     }
 
-    li.appendChild(
-      uiFold({
-        content:content,
-        label:t,
-        open:false
-      })
-    );
+    li.appendChild( content );
     return li;
-
   }
 }
+
 
 
 
@@ -267,10 +273,26 @@ export function isNumeric(n){
  * @param d Exponent. By default = 3
  */
 export function round(n,d){
-  d=d?d:6;
+  d=d?d:3;
   var e = Math.pow(10,d);
   return Math.round(n*e)/e ;
 }
+
+export function formatZeros(num,n){
+  if(typeof num !== "number") return num;
+  num=mx.helpers.round(num,n);
+  num=num+""||"0";
+  n=n||3;
+  var a = num.split('.');
+  var b = a[1];
+  if(!b) b= "";
+  for(var i=0;b.length<n;i++){
+    b = b + "0";
+  }
+  return a[0]+"."+b;
+}
+
+
 
 /**
  * Replace unicode char by string
@@ -291,12 +313,13 @@ export function unicodeToChar(text) {
  * @param {string} o.template html string for legend
  */
 export function setTemplates(o) {
-  console.log("Generate templates");
-  for( var id in o ){
-    template = unicodeToChar(o[id]);
-    mx.templates[id] = doT.template(template);
-  }
-}
+  System.import("dot").then(function(doT){
+    for( var id in o ){
+      var template = mx.helpers.unicodeToChar(o[id]);
+      mx.templates[id] = doT.template(template);
+    }
+  });
+ }
 
 /**
  *  * Returns a function, that, as long as it continues to be invoked, will not
@@ -348,7 +371,7 @@ export function getDistinctIndexWords(view){
     toString( view.data.abstract ) ;
 
   str = str.replace(/[^0-9a-zA-Z]+/g,";").split(";") ;
-  str = getArrayStat({arr:str,stat:"distinct"});
+  str = mx.helpers.getArrayStat({arr:str,stat:"distinct"});
   return str.join(" ") ;
 }
 
@@ -409,7 +432,7 @@ export function sendAjax(o) {
  * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function getJSON(o) {
-  this.sendAjax({
+   mx.helpers.sendAjax({
     type: 'get',
     url: o.url,
     beforeSend: function(xhr) {
@@ -427,122 +450,6 @@ export function getJSON(o) {
 }
 
 
-/* Get stat of an array
- * @param {Object} o options
- * @param {Array} o.arr Numeric array
- * @param {String} o.stat Stat string : min, max, mean, median, distinct, quantile. Default = max;
- * @param {Number|Array} o.percentile : percentile to use for quantile
- */
-export function getArrayStat(o){
-
-  if( 
-    o.arr === undefined ||
-    o.arr.constructor != Array ||
-    o.arr.length === 0
-  ) return [];
- 
-  if(
-    o.stat == "quantile" &&
-    o.percentile && 
-    o.percentile.constructor == Array
-  ) o.stat = "quantiles";
-
-  var arr = cloneArray( o.arr );
-  var stat =  o.stat ? o.stat : "max";
-  var len_o = arr.length;
-  var len = len_o;
-
-  function sortNumber(a,b) {
-    return a - b;
-  }
-
-  opt = {
-    "max" : function(){ 
-      var max = -Infinity ;
-      var v = 0 ;
-      while ( len-- ){
-        v = arr.pop();
-        if ( v > max ) {
-          max = v;
-        }
-      }
-      return max;
-    },
-    "min" : function(){ 
-      var min = Infinity;
-      while( len-- ){
-        v = arr.pop();
-        if (v < min){
-          min = v;
-        }
-      }
-      return min;
-    },
-    "sum":function(){
-      var sum = 0; 
-      while( len-- ){ 
-        sum += arr.pop() ;
-      }
-      return sum ;
-    },
-    "mean":function(){
-      var sum = getArrayStat({
-        stat : "sum",
-        arr : arr
-      });
-      return sum / len_o;
-    },
-    "median":function(){
-      var median = getArrayStat({
-        stat : "quantile",
-        arr : arr,
-        percentile : 50
-      });
-      return median;
-    },
-    "quantile":function(){
-      arr.sort(sortNumber);
-      o.percentile = o.percentile? o.percentile : 50;
-      index = o.percentile/100 * (arr.length-1);
-      if (Math.floor(index) == index) {
-        result = arr[index];
-      } else {
-        i = Math.floor(index);
-        fraction = index - i;
-        result = arr[i] + (arr[i+1] - arr[i]) * fraction;
-      }
-      return result;
-    },
-    "quantiles":function(){
-      var quantiles = {};
-      o.percentile.forEach(function(x){
-        var res =  getArrayStat({
-          stat : "quantile",
-          arr : arr,
-          percentile : x
-        });
-        quantiles[x] = res;  
-      });
-      return quantiles;
-    },
-    "distinct":function(){
-      var n = {}, r = [];
-      
-      while( len-- ) 
-      {
-        if (!n[arr[len]])
-        {
-          n[arr[len]] = true; 
-          r.push(arr[len]); 
-        }
-      }
-      return r;
-    }  
-  };
-
-  return(opt[stat](o));
-
-}
 
 
 
@@ -650,42 +557,19 @@ export function distance(s, t) {
 
 export function distanceScore(a,b){
 
-  a = a
+ a = a
     .replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g,"")
     .toLowerCase();
-  b = b
+ b = b
     .replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g,"")
     .toLowerCase();
 
-  a = cleanDiacritic(a);
-  b = cleanDiacritic(b);
+  a = mx.helpers.cleanDiacritic(a);
+  b = mx.helpers.cleanDiacritic(b);
 
   var l = a.length + b.length;
 
 return 100 - (distance(a,b)/l) * 100  ;
-}
-
-
-
-
-
-/**
- * Generate a random hsla color string, with fixed saturation and lightness
- * @param {number} opacity opacity from 0 to 1
- * @param {number} random value from 0 to 1
- * @param {number} saturation from 0 to 100
- * @param {number} lightness from 0 to 100
- */
-export function randomHsl(opacity, random, saturation, lightness) {
-  if (!opacity) opacity = 1;
-  if (!saturation) saturation = 100;
-  if (!lightness) lightness = 50;
-  if (!random) random = Math.random();
-  res = "hsla(" + (random * 360) +
-    ", " + saturation + "% " +
-    ", " + lightness + "% " +
-    ", " + opacity + ")";
-  return res;
 }
 
 
@@ -736,7 +620,6 @@ export function doPar(o) {
   var fun = o.fun || function(){};
   var data = o.data || {};
   var script = o.script || undefined;
-  var importScript = o.importScript || undefined;
   var s ="";
   var mm = {
     message : o.onMessage || console.log,
@@ -744,8 +627,6 @@ export function doPar(o) {
     end : o.onEnd || console.log
   };
 
-  //if(script) script = script.constructor == Array?script:[script];
-  //if(script) s = 'self.importScripts("'+script.join('","')+'");';
   if(script) s = "importScripts('" + self.origin + "/" + script + "');";
   var m = "var sendMessage = " + function(m){postMessage({message:m});} + ";";
   var p = "var sendProgress= " + function(m){postMessage({progress:m});} + ";";
@@ -758,6 +639,7 @@ export function doPar(o) {
       fun.indexOf("{") + 1,
       fun.lastIndexOf("}")
     );
+
   var b = s+d+m+p+e+fun;
 
   var blob = new Blob(
@@ -783,6 +665,8 @@ export function doPar(o) {
 
 export function modal(o){
 
+  System.import("selectize").then(function(Selectize){
+  
   var id = o.id || makeId();
   var idBackground = "mx_background_for_" + id;
   var modal = document.getElementById(o.id) || document.createElement("div");
@@ -811,12 +695,12 @@ export function modal(o){
   var buttons = document.createElement("div");
   var dialog = document.createElement("div");
 
-  function close(){  
+  function close(e){
     if(hasShiny) Shiny.unbindAll(modal);
     modal.remove();
     background.remove();
   }
-
+ 
   modal.appendChild(top);
   modal.appendChild(head);
   modal.appendChild(body);
@@ -844,28 +728,41 @@ export function modal(o){
   dialog.id = id + "_txt";
 
   if(!o.removeCloseButton){
-    b = document.createElement("button");
+    var b = document.createElement("button");
     b.className="btn btn-default";
     b.innerHTML = o.textCloseButton || "ok";  
-    b.onclick=close;
+    b.addEventListener("click",close);
     buttons.appendChild(b);
   }
 
   if(o.buttons && o.buttons.constructor == Array){
     o.buttons.forEach(function(f){
       var bb = textToHtml(f);
-      buttons.appendChild(bb);
+      console.log(bb);
+         buttons.appendChild(bb);
     });
   }
+ 
+    // add event on container : if added to the button directly,
+    // close function will prevent shiny event to be emitted.
+    // Using event bubbling, listening to the container is the way to go.
+   buttons.addEventListener("click",function(e){
+     var t = e.target;
+     if( t.nodeName == "BUTTON" && t.dataset.keep != "TRUE" ){
+       close();
+     }
+   });
 
+
+  
   content.innerHTML = o.content;
   body.appendChild(content);
   footer.appendChild(dialog);
   footer.appendChild(buttons);
-  if(o.addBackground) document.body.appendChild(background);
+  if( o.addBackground ) document.body.appendChild(background);
   document.body.appendChild(modal);
-  if(hasShiny) Shiny.bindAll(modal);
-  if(hasSelectize) {
+  if( hasShiny ) Shiny.bindAll(modal);
+  if( hasSelectize ) {
     var selects = $(modal).find("select");
     selects.each(function(i,s){
       var script = modal.querySelector("script[data-for="+s.id+"]");
@@ -875,7 +772,7 @@ export function modal(o){
         options = JSON.parse(data);
         if(options.renderFun){
           options.render={
-            option : mx.util[options.renderFun]
+            option : mx.helpers[options.renderFun]
           };
         }
       }
@@ -883,9 +780,11 @@ export function modal(o){
       mx.listener[s.id] = $(s).selectize(options);
     });
   }
-  draggable({
+  mx.helpers.draggable({
     id:id,
     disable:[]
+  });
+
   });
 }
 
@@ -944,7 +843,7 @@ export function buttonToggle(r) {
 export function updateText(o) {
   var el = document.getElementById(o.id);
   if (el) {
-    str = o.txt.toString();
+    var str = o.txt.toString();
     el.innerHTML = b64_to_utf8(str);
   }
 }
@@ -986,6 +885,39 @@ export function chunkString(str, size) {
 
   return chunks;
 }
+
+
+/**
+* Get extention from filename
+* @param {String} str Filename
+*/
+export function getExtension(str){
+  return str.toLowerCase().match(/.[a-z0-9]+$/)[0];
+}
+
+
+/**
+* Simple timer
+* @method start Start the timer
+* @method stop Start the timer
+* @example
+*  var a = new timer();
+* timer.start();
+* timer.stop();
+*/
+
+export function timer(){
+  var start = 0;
+}
+
+timer.prototype.start = function(){
+  this.start = window.performance.now(); 
+};
+
+timer.prototype.stop = function(){
+  return window.performance.now()-this.start;
+};
+
 
 
 /**
@@ -1143,12 +1075,12 @@ export function setLanguage(m) {
   if (!m.dict) return;
 
   var els, el, doc, label, found, setLabel = {};
-  langDefault = m.default ? m.default : "en";
-  lang = m.lang ? m.lang : mx.settings.language ? mx.settings.language : langDefault;
+  var langDefault = m.default ? m.default : "en";
+  var lang = m.lang ? m.lang : mx.settings.language ? mx.settings.language : langDefault;
 
   // set value selector
 
-  setValue = {
+   var setValue = {
     "tooltip": function(el) {
       el.setAttribute("aria-label", label);
       if (el.className.indexOf("hint--") == -1) {
@@ -1237,7 +1169,7 @@ export function getLanguage(key, lang, def) {
      keys.push(key);
   }
 
-  res = [];
+  var res = [];
 
   for (var k = 0, klen = keys.length; k < klen; k++) {
     key = keys[k];
@@ -1266,11 +1198,11 @@ export function getLanguageFromObjectPath(o){
   o.lang = o.lang ? o.lang : mx.settings.language;
   o.langs = o.langs ? o.langs : objectToArray(mx.settings.languages);
   o.defaultKey = o.defaultKey ? o.defaultKey : "noData";
-  var out = path( o.obj, o.path + "." + o.lang );
+  var out = mx.helpers.path( o.obj, o.path + "." + o.lang );
   if( !out ){
     for( var i = 0; i < o.langs.length ; i++ ){
       if( ! out ){
-        out  = path( o.obj, o.path + "." + o.langs[i] );
+        out  = mx.helpers.path( o.obj, o.path + "." + o.langs[i] );
       }
     }
     if( ! out ) out = getLanguage([ o.defaultKey ],o.lang);
@@ -1308,7 +1240,7 @@ export function checkLanguage(o){
   */
   function test(){
     var p = concat ? o.path + lang : o.path + "." + lang;
-    found = !!path( o.obj, p ) ;
+    found = !!mx.helpers.path( o.obj, p ) ;
   }
 
   /**
@@ -1397,19 +1329,19 @@ export function hide(m) {
 }
 
 
-/** Simple tab system using classes
+/** Toggle panel visibility in panels group.
  * @param {string} classGroup Class of tab group 
  * @param {string} classItem Class of tab item to show
  * @param {string} classHide Class to apply for hiding
  */
-export function tabEnable(classGroup, classItem, classHide) {
-  g = document.querySelectorAll("." + classGroup);
+export function panelEnable(classGroup, classItem, classHide) {
+  var g = document.querySelectorAll("." + classGroup);
   if (!classHide) classHide = "mx-hide";
   if (g.length > 0) {
-    for (i = 0; i < g.length; i++) {
-      c = g[i].className.split(" ");
-      posItem = c.indexOf(classItem);
-      posHide = c.indexOf(classHide);
+    for (var i = 0; i < g.length; i++) {
+      var c = g[i].className.split(" ");
+      var posItem = c.indexOf(classItem);
+      var posHide = c.indexOf(classHide);
       if (posItem > 0) {
         if (posHide > 0) {
           c.splice(posHide, 1);
@@ -1589,6 +1521,10 @@ export function parentFinder(o) {
   return el;
 }
 
+
+
+
+
 /**
  * Handle sort event on list
  * 
@@ -1601,6 +1537,7 @@ export function parentFinder(o) {
  * @param {Function} o.callback Function to call after sort
  */
 export function sortable(o){
+  var ulRoot;
   if (o.selector instanceof Node) {
     ulRoot = o.selector;
   } else {
@@ -1680,8 +1617,8 @@ export function sortable(o){
    * mouse down
    */
   function onMouseDown(e) {
-    elHandle = e.target;
-    liFrom = parentFinder({
+    var elHandle = e.target;
+    liFrom = mx.helpers.parentFinder({
       selector : elHandle,
       class : classFrom
     });
@@ -1689,8 +1626,8 @@ export function sortable(o){
     if (isValidHandle(elHandle) && liFrom) {
       e.preventDefault();
       liGhost = liFrom.cloneNode(true);
-      liFromStyle = liGhost.style;
-      liFromRect = liFrom.getBoundingClientRect();
+      var liFromStyle = liGhost.style;
+      var liFromRect = liFrom.getBoundingClientRect();
       liGhost.classList.add("mx-sort-li-ghost");
       liFrom.classList.add("mx-sort-li-dim");
       ulRoot.appendChild(liGhost);
@@ -1706,7 +1643,6 @@ export function sortable(o){
 
 
 }
-
 
 /**
  * Set element attributes
@@ -1749,13 +1685,16 @@ export function setImageAttributes(o) {
  */
 export function progressScreen(o) {
 
-  id = o.id;
-  enable = o.enable !== undefined ? o.enable : false;
-  percent = o.percent !== undefined ? o.percent : 0;
-  text = o.text !== undefined ? o.text : "";
+  var lItem, lItems, lScreen, lBody, lScreenBack, lScreenContainer;
+  var pBarIn, pBarOut, pBarTxt;
+  var id = o.id;
+  var enable = o.enable !== undefined ? o.enable : false;
+  var percent = o.percent !== undefined ? o.percent : 0;
+  var text = o.text !== undefined ? o.text : "";
 
   lScreen = document.querySelector(".loading-screen");
   lScreenBack = document.querySelector(".loading-screen-background");
+  lScreenContainer = document.querySelector(".loading-container");
 
   if (!enable) {
     if (lScreen) lScreen.remove();
@@ -1838,16 +1777,6 @@ export function clone(obj){
     return obj;
   }
 }
-/** 
-* Clone an array
-* @param {Array} Source to clone
-*/
-export function cloneArray(arr){
-  var i = arr.length;
-  var clone = [];
-  while(i--) { clone[i] = arr[i]; }
-  return(clone);
-}
 
 
 /**
@@ -1858,7 +1787,7 @@ export function cloneArray(arr){
  * @param {Function} o.callback Callback function with one param : canvas
  */
 export function htmlToData(o) {
-  var el, elClone, elRect, tagToRemove;
+  var el, elClone, elCloneRect, elRect, tagToRemove;
 
   var out = {
     svg : "",
@@ -1910,7 +1839,7 @@ export function htmlToData(o) {
     "</svg>";
 
   elClone.remove();
-  url = buildSvgImageUrl(data);
+  var url = buildSvgImageUrl(data);
   setImage(url, o.callback);
 
   /**
@@ -1918,7 +1847,7 @@ export function htmlToData(o) {
    */
 
   function buildSvgImageUrl(svg) {
-    b64 = utf8_to_b64(svg);
+    var b64 = mx.helpers.utf8_to_b64(svg);
     return "data:image/svg+xml;base64," + b64;
   }
 
@@ -1949,7 +1878,7 @@ export function htmlToData(o) {
         }
       }
     }
-    return getArrayStat({arr:result,stat:"distinct"}).join(" ");
+    return mx.helpers.getArrayStat({arr:result,stat:"distinct"}).join(" ");
   }
 
   // looping through the element's children
@@ -1960,7 +1889,7 @@ export function htmlToData(o) {
       return styles;  
     }, []);
 
-    return getArrayStat({arr:res,stat:"distinct"}).join(" ");
+    return mx.helpers.getArrayStat({arr:res,stat:"distinct"}).join(" ");
   }
 
   function setImage(url, callback) {

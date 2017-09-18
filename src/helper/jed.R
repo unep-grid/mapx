@@ -32,19 +32,6 @@ jedOutput <- function(id){
 
   session = shiny:::getDefaultReactiveDomain()
 
-  session$sendCustomMessage("mxInjectHead",list(
-      scripts = list(
-        "jed/jsoneditor/jsoneditor.min.js",
-        "jed/jed/jed.js",
-        "jed/medium/medium-editor.min.js",
-        "jed/jed/jed-medium-file-dragging.js"
-        ),
-      css= list(
-        "jed/jed/jed.css",
-        "jed/medium/medium-editor.min.css",
-        "jed/jed/jed-medium-flat.css"
-        )))
-
   return(
     tags$div(class="jed-container",
       tags$div(id=id,tags$span("Loading schema...")),

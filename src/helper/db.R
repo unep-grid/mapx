@@ -565,7 +565,7 @@ mxDbGetViews <- function(views, project, read, edit, userId, id=NULL, from=0, to
             WHERE t2.id = t1.id
             %6$s
             )
-          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['WLD']))
+          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['GLB']))
           AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
           %6$s
           ORDER BY date_modified DESC

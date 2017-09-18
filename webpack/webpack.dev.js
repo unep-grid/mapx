@@ -10,7 +10,7 @@ module.exports = merge(common, {
   },
   plugins: [
     new watchUi({
-      watchFolder: "./src/ui/",
+      watchFolder: "./src/ui",
       script: 'Rscript ./src/script/utils_ui/build_ui.R'
     })
   ]

@@ -15,7 +15,8 @@ areaLiveCalc  <- tags$div(
     tags$button(
       id="btn_get_area_visible",
       class="btn btn-default",
-      `data-lang_key`="btn_get_area_visible"
+      `data-lang_key`="btn_get_area_visible",
+      onClick="mx.helpers.sendRenderedLayersAreaToUi({id:'map_main',prefix:'MX-',idEl:'txtAreaSum'})"
       )
     ),
   tags$div(class="form-control",id="txtAreaSum")

@@ -8,13 +8,13 @@
 
 tags$div(
   "{{?it.data.style \\u0026\\u0026 it.data.style.rules}}",
-  "{{ var isPoint = path(it,\\u0022data.geometry.type\\u0022) == \\u0022point\\u0022; }}",
-  "{{ var isLine = path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022; }}",
-  "{{ var isPolygon = path(it,\\u0022data.geometry.type\\u0022) == \\u0022polygon\\u0022; }}",
-  "{{ var isNumeric = path(it,\\u0022data.attribute.type\\u0022) != \\u0022string\\u0022; }}",
+  "{{ var isPoint = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022point\\u0022; }}",
+  "{{ var isLine = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022; }}",
+  "{{ var isPolygon = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022polygon\\u0022; }}",
+  "{{ var isNumeric = mx.helpers.path(it,\\u0022data.attribute.type\\u0022) != \\u0022string\\u0022; }}",
   tags$ul(
     "{{~it.data.style.rules :item}}",
-    "{{ var lang = mx.util.checkLanguage({obj:item, path:\\u0022label_\\u0022, concat:true}) ; }}",
+    "{{ var lang = mx.helpers.checkLanguage({obj:item, path:\\u0022label_\\u0022, concat:true}) ; }}",
     "{{?item}}",
     tags$li(
       tags$div(

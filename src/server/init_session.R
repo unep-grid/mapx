@@ -19,9 +19,14 @@ if(!noDataCheck(query$views)){
 #
 # Send templates
 #
-#mxSetTemplates(config[[c("templates","dot")]])
+mxSetTemplates(config[[c("templates","dot")]])
 
 #
 # Add ressource path for jed
 #
 #shiny::addResourcePath("jed",system.file("www", package="jed"))
+
+#
+# Set ressource path
+#
+mxSetResourcePath(.get(config,c("resources")))
