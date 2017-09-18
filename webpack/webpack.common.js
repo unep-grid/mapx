@@ -15,6 +15,7 @@ module.exports = {
       name: 'common' // Specify the common bundle's name.
     }),
     new HtmlWebpackPlugin({
+      inject: 'head',
       template : './src/html/index.html'
     }),
   ],
