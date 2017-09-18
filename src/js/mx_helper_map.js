@@ -3581,7 +3581,7 @@ export function initMap(o){
   o.location = o.location || window.location.origin + window.location.pathname;
   mx.settings.languages = o.languages = o.languages || ["en","fr"];
   mx.settings.language = o.language = o.language || o.languages[0];
-  mx.settings.vtPort = o.vtPort = o.vtPort || 8080;
+  mx.settings.vtPort = o.vtPort = o.vtPort || "";
   mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
   // set path using current location. 
   
