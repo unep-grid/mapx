@@ -1,6 +1,6 @@
 /*jshint esversion: 6 */
 import * as mx from "./mx_init.js";
-
+//import svgNorthArrow from 
 /**
  * Control for live coordinate
  */
@@ -30,35 +30,56 @@ mapControlLiveCoord.prototype.onRemove = function() {
 };
 
 
-/**
- * North arrow
- */
-export function mapControlNorth(){}
-mapControlNorth.prototype.onAdd = function(map){
-  var helper = mx.helpers;
-  var northArrow = document.createElement("div");
-  northArrow.id="mx_north";
-  northArrow.style[helper.cssTransformFun()] = "rotateZ("+(-90)+"deg)";
-  northArrow.onclick=function(){map.setBearing(0);};
-  northArrow.innerText='\u27A4';
 
-  map.on("rotate",function(e){
-    var r = map.getBearing();
-    northArrow.style[helper.cssTransformFun()] = "rotateZ("+(r-90)+"deg)";
-  });
+export function mapxLogo(){}
+mapxLogo.prototype.onAdd = function(map){
+  var logo =  document.createElement("a");
+  logo.classList.add("mx-logo");
 
-  this._map = map;
-  this._container = document.createElement('div');
-  this._container.className = 'mapboxgl-ctrl mx-north-arrow';
-  this._container.style.borderRadius = "50%";
-  this._container.appendChild(northArrow);
+  logo.style.backgroundImage = "url("+require("../img/mapx_blue_small.svg")+")";
+  this._container = document.createElement("div");
+  this._container.className = 'mapboxgl-ctrl';
+  this._container.style.display = "inline-block";
+  this._container.style.float = "none";
+  this._container.appendChild(logo);
   return this._container;
 };
 
-mapControlNorth.prototype.onRemove = function() {
+mapxLogo.prototype.onRemove = function() {
   this._container.parentNode.removeChild(this._container);
   this._map = undefined;
 };
+
+
+/**
+ * North arrow
+ */
+//export function mapControlNorth(){}
+//mapControlNorth.prototype.onAdd = function(map){
+  //var helper = mx.helpers;
+  //var northArrow = document.createElement("div");
+  //northArrow.id="mx_north";
+  //northArrow.style[helper.cssTransformFun()] = "rotateZ("+(-90)+"deg)";
+  //northArrow.onclick=function(){map.setBearing(0);};
+  //northArrow.innerText='\u27A4';
+
+  //map.on("rotate",function(e){
+    //var r = map.getBearing();
+    //northArrow.style[helper.cssTransformFun()] = "rotateZ("+(r-90)+"deg)";
+  //});
+
+  //this._map = map;
+  //this._container = document.createElement('div');
+  //this._container.className = 'mapboxgl-ctrl mx-north-arrow';
+  //this._container.style.borderRadius = "50%";
+  //this._container.appendChild(northArrow);
+  //return this._container;
+//};
+
+//mapControlNorth.prototype.onRemove = function() {
+  //this._container.parentNode.removeChild(this._container);
+  //this._map = undefined;
+//};
 
 /**
  * Create the prototype containing additional control / button.
@@ -135,28 +156,44 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-newspaper-o",
       key:"btn_tab_views",
       action:function(){ 
-        helper.panelEnable('panels-main','panel-layers');
+        helper.panelEnable(
+          'panels-main',
+          'panel-layers',
+          'mx-hide'
+        );
       }
     },
     btnTabSettings:{
       classes:"fa fa-sliders",
       key:"btn_tab_settings",
       action:function(){ 
-        helper.panelEnable('panels-main','panel-settings');
+        helper.panelEnable(
+          'panels-main',
+          'panel-settings',
+          'mx-hide'
+        );
       }
     },
     btnTabTools:{
       classes:"fa fa-cogs",
       key:"btn_tab_tools",
       action:function(){ 
-        helper.panelEnable('panels-main','panel-tools');
+        helper.panelEnable(
+          'panels-main',
+          'panel-tools',
+          'mx-hide'
+        );
       }
     },
     btnTabDashboard:{
       classes:"fa fa-pie-chart",
-      key:"btn_tab_views",
+      key:"btn_tab_dashboard",
       action:function(){ 
-        helper.panelEnable('panels-bottom','panel-dashboard');
+        helper.panelEnable(
+          'mx-panel-dashboard',
+          'dashboard',
+          'mx-hide'
+        );
       }
     },
     btnPrint:{
@@ -219,8 +256,19 @@ mapControlMain.prototype.onAdd = function(map) {
       action:function(){
         map.zoomOut();
       }
+    },
+    btnSetNorth:{
+      classes:"",
+      key:"btn_north_arrow",
+      hidden:false,
+      img : require("../img/north_001.svg"),
+      action:function(){
+        var map =  mx.helpers.path(mx,"maps.map_main.map");
+        if(map){
+          map.setBearing(0);
+        }
+      }
     }
-
   }; 
 
   function createList(){
@@ -236,6 +284,14 @@ mapControlMain.prototype.onAdd = function(map) {
       if(btn.liClasses) el.className = btn.liClasses;
       if(btn.classes) elBtn.className = btn.classes;
       if(btn.liData) for(var k in btn.liData){el.dataset[k]=btn.liData[k];}
+      if(btn.img){
+        var test = "url(" + btn.img + ")";
+        elBtn.style.backgroundImage = test; 
+        elBtn.style.backgroundRepeat = "no-repeat";
+        elBtn.style.width = "17px";
+        elBtn.style.height = "17px";
+        elBtn.id = id + "_img";
+      }
       el.id = id;
       el.appendChild(elBtn);
       el.dataset.lang_key = btn.key;

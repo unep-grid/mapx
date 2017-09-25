@@ -3,7 +3,7 @@
 buttonAddView <- tagList(
   tags$h4(`data-lang_key`="title_tools_views"),
   actionButton(
-    label = "",
+    label = "Add view",
     inputId = "btnAddView",
     class = "btn btn-sm btn-default hint",
     `data-lang_key` = "btn_add_view"
@@ -13,13 +13,13 @@ buttonAddView <- tagList(
 buttonSourceEdit <- tagList(
   tags$h4(`data-lang_key`="title_tools_sources"),
   actionButton(
-    label = "",
+    label = "Edit source",
     inputId = "btnEditSources",
     class = "btn btn-sm btn-default hint",
     `data-lang_key` = "btn_edit_source"
     ),
   actionButton(
-    label = "",
+    label = "Upload source",
     inputId = "btnUploadSources",
     class = "btn btn-sm btn-default hint",
     `data-lang_key` = "btn_add_source"
@@ -55,33 +55,53 @@ observeEvent(reactUser$role,{
 observeEvent(reactUser$role,{
 
   access <- .get(reactUser,c("role","access"))
-
+  language <- reactData$language
   dbInfo <- tags$div()
 
+
+  if( "db" %in% access  ){
+
+    dbInfo <- tagList(
+      tags$h4(d("title_tools_db",language)),
+      actionButton(
+        label = "Show db info",
+        inputId = "btnShowDbInfo",
+        class = "btn btn-sm btn-default hint",
+        `data-lang_key` = "btn_show_db_info"
+        )
+      )
+
+  }else{
+    dbInfo = div()
+  }
+
+  output$uiBtnShowDbInfo <- renderUI(dbInfo)
+
+})
+
+
+observeEvent(input$btnShowDbInfo,{
+
+  access <- .get(reactUser,c("role","access"))
 
   if( "db" %in% access ){
 
     dbInfo <- listToHtmlSimple(list(
-      db_name =  .get(config,c("pg","dbname")),
-      db_host = session$clientData$url_hostname,
-      db_port = .get(config,c("pg","port")),
-      db_username =  .get(config,c("pg","user")),
-      db_password =  .get(config,c("pg","password"))
-      ))
+        db_name =  .get(config,c("pg","dbname")),
+        db_host = session$clientData$url_hostname,
+        db_port = .get(config,c("pg","port")),
+        db_username =  .get(config,c("pg","user")),
+        db_password =  .get(config,c("pg","password"))
+        ))
 
-
-    dbInfo <- tagList(
-        tags$h4(`data-lang_key`="title_tools_db"),
-        dbInfo
+    mxModal(
+      id = "dbInfo",
+      title = "Postgres info",
+      content = dbInfo
       )
-
   }
 
-
-  output$uiListDbInfo <- renderUI(dbInfo)
-
 })
-
 
 
 

@@ -52,11 +52,13 @@ observeEvent(input$selectOptionalViewAttribute,{
       mxProgress(id="dataUploaded", percent=100, enable=F)
     },
     {
-
       sourceId <- reactData$triggerNewViewForSourceId 
       attribute <- input$selectOptionalViewAttribute
       language <- reactData$language 
       dict <- .get(config,c("dictionaries","schemaMetadata")) 
+      summary <- list()
+
+      tryCatch({
 
       summary <-  mxDbGetLayerSummary(
         layer=sourceId,
@@ -64,6 +66,9 @@ observeEvent(input$selectOptionalViewAttribute,{
         geomType=NULL,
         language=language
         )
+      },error=function(){
+        mxDebugMsg(c);
+      })
 
       output$summaryOptionalViewAttribute <- renderUI(summary$html)
     })

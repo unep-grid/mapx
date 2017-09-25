@@ -616,7 +616,6 @@ export function createWorker(fun) {
 
 
 export function doPar(o) {
-
   var fun = o.fun || function(){};
   var data = o.data || {};
   var script = o.script || undefined;
@@ -983,15 +982,20 @@ export function getSizeOf(obj){
 * @param {Number} o.during Duration in ms for 1000 px
 * @param {String} o.using Easing function name
 */
-export function srollFromTo(o){
+export function scrollFromTo(o){
 
-  var start,duration;
+  var start, duration, easing;
   var diff = o.to - o.from;
-  var easing = easingFun({
-    type:o.using || "easeInOut",
-    power:2
+  if( o.using && o.using.constructor ==  Function ){
+    easing = o.using;
+  }else{
+   easing = easingFun({
+    type : o.using || "easeInOut",
+    power : 2
   });
-  var bodyHeight = document.body.clientHeight || 800;
+ 
+  }
+    var bodyHeight = document.body.clientHeight || 800;
 
   if (!diff || diff === 0) return;
 
@@ -1011,8 +1015,9 @@ export function srollFromTo(o){
       o.el.scrollTop = o.from + diff * percent;
 
       if (time < duration) {
-        window.requestAnimationFrame(step);
+        onNextFrame(step);
       }
+
     });
   }
 }
@@ -1330,30 +1335,38 @@ export function hide(m) {
 
 
 /** Toggle panel visibility in panels group.
- * @param {string} classGroup Class of tab group 
- * @param {string} classItem Class of tab item to show
- * @param {string} classHide Class to apply for hiding
+ * @param {String} classGroup Class of tab group 
+ * @param {String} classItem Class of tab item to show
+ * @param {String} classHide Class to add for hiding
+ * @param {Function} callback Callback function with one argument : state of item hide/show;
  */
-export function panelEnable(classGroup, classItem, classHide) {
-  var g = document.querySelectorAll("." + classGroup);
+export function panelEnable(classGroup, classItem, classHide, callback) {
+  var elsGroup = document.querySelectorAll("." + classGroup);
+  
   if (!classHide) classHide = "mx-hide";
-  if (g.length > 0) {
-    for (var i = 0; i < g.length; i++) {
-      var c = g[i].className.split(" ");
-      var posItem = c.indexOf(classItem);
-      var posHide = c.indexOf(classHide);
-      if (posItem > 0) {
-        if (posHide > 0) {
-          c.splice(posHide, 1);
-        } else {
-          c.push(classHide);
+
+    mx.helpers.forEachEl({
+      els : elsGroup,
+      callback : function(el){    
+         var isItem = el.classList.contains(classItem);
+         var isHidden = el.classList.contains(classHide);
+        
+        if(isItem && isHidden){
+          el.classList.remove(classHide);
+          if(callback) callback("on");
         }
-      } else {
-        if (posHide == -1) c.push(classHide);
+
+        if(isItem && ! isHidden){
+         el.classList.add(classHide);
+          if(callback) callback("off");
+        }
+
+        if(!isItem){
+         el.classList.add(classHide);
+        }
       }
-      g[i].className = c.join(" ");
-    }
-  }
+    });
+
 }
 
 
@@ -1480,7 +1493,7 @@ export function draggable(o) {
  * Apply function on HTMLCollection
  * @param {Object} o options
  * @param {Object} o.els HTMLCollection egl div.children
- * @param {Function} o.callback Function to apply. Argument = element
+ * @param {Function} o.callback Function to apply. Argument = element, iterator
  *
  */
 export function forEachEl(o){
@@ -1488,7 +1501,7 @@ export function forEachEl(o){
     o.callback(o.els);
   }else{
     for (var i = 0; i < o.els.length; ++i) {
-      o.callback(o.els[i]);
+      o.callback(o.els[i],i);
     }
   }
 }
@@ -1946,4 +1959,4 @@ export function injectHead(items){
 
 }
 
- 
+

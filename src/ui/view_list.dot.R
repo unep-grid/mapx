@@ -363,6 +363,18 @@ liControlsEdit <- tagList(
       class="fa fa-paint-brush"
       )
     ),
+  # Button to edit view
+  tags$li(
+    class="mx-pointer hint--bottom-right",
+    `data-lang_key`="btn_opt_edit_dashboard",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_edit_dashboard",
+    `data-view_action_handler`="shiny",
+    `data-view_action_target`="{{=view.id}}",
+    tags$div(
+      class="fa fa-pie-chart"
+      )
+    ),
   "{{?}}",
   "{{?}}",
   # Button to remove view
@@ -438,7 +450,9 @@ divHeader <- tagList(
     #
     tags$span(
       class="mx-view-item-title",
-      "{{=view.data.title[lang]}}"
+      "{{?view.data.title}}",
+      "{{=view.data.title[lang]}}",
+      "{{?}}"
     ),
     #
     # Hidden index term for search filter

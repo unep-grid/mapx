@@ -79,6 +79,10 @@ observe({
         )
     }
 
+    mglReset(
+      id =.get(config, c("map","id"))
+      )
+
     mglSetFilter(
       id=config[["map"]][["id"]],
       layer="country-code",

@@ -26,7 +26,8 @@ areaLiveCalc  <- tags$div(
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
 sourceUpload <- uiOutput("uiBtnSourceUpload")
-qgisInfo <- uiOutput("uiListDbInfo")
+dbInfo <- uiOutput("uiBtnShowDbInfo")
+
 
 # Full block
 tagList(
@@ -36,5 +37,5 @@ tagList(
   viewAdd,
   sourceUpload,
   sourceEdit,
-  qgisInfo
+  dbInfo
   )

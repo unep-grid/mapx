@@ -4,7 +4,11 @@
   <input data-view_action_key="btn_toggle_view" data-view_action_target="{{=view.id}}" id="check_view_enable_{{=view.id}}" class="mx-view-item-checkbox" type="checkbox"/>
   <label class="mx-view-item-checkbox-label mx-pointer" for="check_view_enable_{{=view.id}}">
     <div class="fa fa-bars mx-sort-li-handle"></div>
-    <span class="mx-view-item-title">{{=view.data.title[lang]}}</span>
+    <span class="mx-view-item-title">
+      {{?view.data.title}}
+      {{=view.data.title[lang]}}
+      {{?}}
+    </span>
     <span class="mx-view-item-classes">{{=view.data.classes}},{{=view.type}}</span>
     <span class="mx-view-item-index">{{=mx.helpers.getDistinctIndexWords(view)}}</span>
     <div class="hint--bottom-left hint-medium mx-view-item-indicator" aria-label="{{=view.date_modified.substr(0,10)}}">
@@ -77,6 +81,9 @@
           {{?mx.helpers.path(view,'data.attribute.name')}}
           <li class="mx-pointer hint--bottom-right" data-lang_key="btn_opt_edit_style" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_style" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
             <div class="fa fa-paint-brush"></div>
+          </li>
+          <li class="mx-pointer hint--bottom-right" data-lang_key="btn_opt_edit_dashboard" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_dashboard" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+            <div class="fa fa-pie-chart"></div>
           </li>
           {{?}}
           {{?}}

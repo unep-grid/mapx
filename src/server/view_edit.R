@@ -1,10 +1,8 @@
 
-
-
-
 #
 # View action handler
 #
+
 observe({
   mxCatch("view_edit.R",{
     #
@@ -39,15 +37,21 @@ observe({
 
 
           if(noDataCheck(viewData)) return()
-          
+          #
+          # Keep a version of the view edited
+          #
+          reactData$viewDataEdited <- viewData
+
+         
+          #
+          # Check if the request gave edit flag to the user
+          #
           viewIsEditable <- isTRUE(.get(viewData,c("_edit")))
           
           #
-          # Get title and descrition in current language
+          # Get type and title
           #
-
           viewType <- viewData[["type"]]
-
           viewTitle <- .get(viewData, c("data","title",language))
           #viewAbstract <- .get(viewData, c("data","abstract",language))
 
@@ -63,26 +67,8 @@ observe({
           classesTags <- config[[c("views","classes")]]
           classesCurrent <- viewData[[c("data","classes")]]
 
-#          #
-          ## Create a list with other languages titles and description
-          ##
-          #viewTitleAll <- lapply(
-            #config[[c("languages","list")]], function(x){
-              #.get(viewData,c("data","title",x))
-            #})
-
-          #viewAbstractAll <- lapply(
-            #config[["languages"]][["list"]], function(x){
-              #.get(viewData, c("data","abstract",x))
-            #})
-
           #
-          # Keep a version of the view edited
-          #
-          reactData$viewDataEdited <- viewData
-
-          #
-          # Initial button list
+          # Initial button list for the modal
           #
           btnList <- list()
 
@@ -260,12 +246,17 @@ observe({
                       dropdownParent="body"
                       )
                     ),
+
                   uiOutput("uiViewEditVtMain"),
+
                   #
                   # mask / overlap layer
                   #
                   mxFold(
-                    tagList(
+                    id =  "checkAddMaskLayer",
+                    labelText = d("view_add_overlap_layer",language),
+                    open = !noDataCheck(.get(viewData,c("data","source","layerInfo","maskName"))),
+                    content = tagList(
                       selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
@@ -276,10 +267,7 @@ observe({
                           )
                         ),         
                       uiOutput("uiViewEditVtMask")
-                      ),
-                    id =  "checkAddMaskLayer",
-                    labelText = d("view_add_overlap_layer",language),
-                    open = !noDataCheck(.get(viewData,c("data","source","layerInfo","maskName")))
+                      )
                     )
                   )
               }
@@ -400,7 +388,8 @@ observe({
               btnList <- tagList(
                 actionButton(
                   inputId="btnViewSave",
-                  label=d("btn_save",language)
+                  label=d("btn_save",language),
+                  `data-keep` = TRUE
                   )
                 )
 
@@ -411,8 +400,8 @@ observe({
               btnList = tagList(
                 btnList,
                  actionButton(
-                  inputId="btnViewUpdateStory",
-                  label=d("btn_update",language),
+                  inputId="btnViewPreviewStory",
+                  label=d("btn_preview",language),
                   `data-keep` = TRUE
                   )
                 )
@@ -429,6 +418,31 @@ observe({
                 buttons = btnList,
                 addBackground = FALSE,
                 textCloseButton= d("btn_close",language)
+                )
+
+            },
+            "btn_opt_edit_dashboard"={
+ 
+              if(!viewIsEditable) return()
+              if(viewType != "vt") return()
+
+              btnList <- list(
+                actionButton(
+                  inputId="btnViewSaveDashboard",
+                  label=d("btn_save",language)
+                  )
+                )
+
+              mxModal(
+                id="modalViewEdit",
+                title=sprintf("Edit dashboard %s",viewTitle),
+                addBackground=FALSE,
+                content=tagList(
+                  uiOutput("txtValidSchema"),
+                  jedOutput(id="dashboardEdit")
+                  ),
+                buttons=btnList,
+                textCloseButton=d("btn_close",language)
                 )
 
             },
@@ -637,7 +651,7 @@ observeEvent(reactData$viewStory,{
 #
 # Update story changes
 #
-observeEvent(input$btnViewUpdateStory,{
+observeEvent(input$btnViewPreviewStory,{
 
   story <- input$storyEdit_values$msg
 
@@ -655,65 +669,6 @@ observeEvent(input$btnViewUpdateStory,{
   mglReadStory(view=view)
 
 })
-#
-# View vt style : render schema
-#
-observeEvent(input$styleEdit_init,{
-
-  view <- reactData$viewDataEdited
-
-  if(!isTRUE(.get(view,c("_edit")))) return()
-
-  style <- .get(view,c("data","style"))
-  language <- reactData$language 
-  hasLayer <- !noDataCheck(.get(view,c("data","source","layerInfo","name")))
-  hasSources <- !noDataCheck(reactSourceLayer())
-  hasStyle <- !noDataCheck(style)
-
-  if(!hasStyle) style = NULL
-  if(!hasLayer || ! hasSources){
-
-  errors <- logical(0)
-  warnings <- logical(0)
-
-    if(!hasLayer) warnings["error_no_layer"] <- TRUE
-    if(!hasSources) errors["error_no_source"] <- TRUE
-    
-    output$txtValidSchema <- renderUI({
-      mxErrorsToUi(
-      errors=errors,
-      warning=warnings,
-      language=language
-      )
-
-    })
-
-    if(length(errors)>0 || length(warnings) >0){
-      mxToggleButton(
-        id="btnViewSaveStyle",
-        disable=TRUE
-        )
-      mxToggleButton(
-        id="btnViewResetStyle",
-        disable=TRUE
-        )
-    }
-
-  }else{
-
-    schema <- mxSchemaViewStyle(
-      view=view,
-      language=language
-      )
-
-    jedSchema(
-      id="styleEdit",
-      schema = schema,
-      startVal = style
-      )
-  }
-})
-
 #
 # View removal
 #
@@ -818,6 +773,7 @@ observeEvent(input$btnViewSave,{
     # Update view data 
     #
     view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask)
+
   }
   #
   # raster tiles
@@ -921,76 +877,10 @@ observeEvent(input$btnViewSave,{
 })
 
 #
-# Vew style change
-#
-observeEvent(input$styleEdit_values,{
-
-  style <- input$styleEdit_values$msg
-
-  if(noDataCheck(style)) return();
-
-  view <- reactData$viewDataEdited
-  view <- .set(view,c("data","style","rules"), style$rules)
-  view <- .set(view, c("data","style","dataDrivenMethod"),style$dataDrivenMethod)
-
-  mglAddView(
-    viewData = view
-    )
-
-})
-
-#
-# View style save
-#
-observeEvent(input$btnViewSaveStyle,{
-
-  view <- reactData$viewDataEdited
-  country <- reactData$country
-
-  if( view[["_edit"]] && view[["type"]] == "vt" ){
-    view[["_edit"]] = NULL
-
-    style <- input$styleEdit_values$msg
-
-    if(!noDataCheck(style)){
-
-      view <- .set(view, c("date_modified"), Sys.time() )
-      view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-      view <- .set(view, c("data", "style", "dataDrivenMethod"), .get(style,c("dataDrivenMethod")))
-      view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
-      view <- .set(view,c("data"), as.list(.get(view,"data")))
-
-      mxDbAddRow(
-        data=view,
-        table=.get(config,c("pg","tables","views"))
-        )
-
-      #
-      # Trigger update
-      #
-      mglRemoveView(
-        idView=view$id
-        )
-
-      # edit flag
-      view$`_edit` = TRUE 
-
-      # add this as new (empty) source
-      mglSetSourcesFromViews(
-        id = .get(config,c("map","id")),
-        viewsList = view,
-        render = FALSE,
-        country = country
-        )
-      reactData$updateViewListFetchOnly <- runif(1)
-    }
-  }
-})
-
-#
 # Select layer logic : geomType, and variable name
 #
-observe({
+observeEvent(input$selectSourceLayerMain,{
+
   layerMain <- input$selectSourceLayerMain
   viewData <- reactData$viewDataEdited
 
@@ -1055,16 +945,17 @@ observe({
 #
 # Main layer summary
 #
-observeEvent(input$selectSourceLayerMainVariable,{
 
+
+
+output$uiViewEditVtMainSummary <- renderUI({
   layerMain <- input$selectSourceLayerMain
   variable <- input$selectSourceLayerMainVariable 
 
-  output$uiViewEditVtMainSummary <- renderUI({
-    reactLayerSummary()$html
-  })
+  reactLayerSummary()$html
 
 })
+
 
 #
 # Number of overlap indication

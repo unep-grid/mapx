@@ -74,10 +74,11 @@ export function storyRead(o){
   /* Generate story ui */
   mx.helpers.storyBuild(o);
 
-  /* Attach listener for key down*/
-  window.addEventListener("keydown", mx.helpers.storyHandleKeyDown);
 
-  /* Listen to scroll on the main container. */
+  window.addEventListener("keydown", storyHandleKeyDown );
+
+
+    /* Listen to scroll on the main container. */
   mx.helpers.storyOnScroll({
     selector: "#story",
     callback: mx.helpers.storyUpdateSlides,
@@ -100,7 +101,6 @@ export function storyRead(o){
  */
 export function storyOnScroll(o) {
 
-
   /*
    * store scroll data in object onScrollData
    * elScroll : div to get/set the scroll position
@@ -122,6 +122,7 @@ export function storyOnScroll(o) {
     distTrigger: -1,
     distStart: elScroll.dataset.start_scroll
   };
+
 
   /*
    * Loop : run a function if scroll is done on an element
@@ -178,13 +179,14 @@ export function storyUpdateSlides(o) {
       var start = data.elScroll.scrollTop;
       var end = this.dataset.to;
         
-       mx.helpers.srollFromTo({
+       mx.helpers.scrollFromTo({
          el : data.elScroll,
          from : start,
          to : end,
-         during : 3000,
-         using : "easeInOut"
+         during : 1000,
+         using : mx.helpers.easingFun({type:"easeInOut",power:2})
        }); 
+
     };
 
     /*
@@ -333,25 +335,60 @@ export function storyUpdateSlides(o) {
 /*
  * listen for keydown
  */
-  function storyHandleKeyDown(event){
-     if (event.defaultPrevented) {
+
+
+
+function storyHandleKeyDown(event){
+
+  mx.helpers.onNextFrame(function(){
+
+    if (event.defaultPrevented) {
       return; // Do nothing if the event was already processed
     }
+    var step,currentStep,nextStep,previousStep,maxStep,scrollStop;  
+    var steps = mx.helpers.path(mx,"data.storyCache.stepsConfig");
+    var storyContainer =  document.querySelector(".mx-story-container");
+    var scrollStart = storyContainer.scrollTop;
 
-switch (event.key) {
-  case "ArrowDown":
-    break;
-  case "ArrowUp":
-    // Do something for "up arrow" key press.
-    break;
-  case "ArrowLeft":
-    // Do something for "left arrow" key press.
-    break;
-  case "ArrowRight":
-    // Do something for "right arrow" key press.
-    break;
-} 
-  }
+    for(var i=0,iL=steps.length;i<iL;i++){
+      step = steps[i];
+      if((scrollStart >= step.start) && (scrollStart < step.end)){
+        currentStep=i;
+      }
+    }
+
+    maxStep = steps.length -1;
+    nextStep = currentStep + 1 ;
+    previousStep = currentStep - 1 ;
+    nextStep = nextStep >= maxStep ? maxStep : nextStep;
+    previousStep = previousStep <= 0 ? 0 : previousStep;
+
+    switch (event.key) {
+      case "ArrowDown":
+        scrollStop = steps[nextStep].start;
+        break;
+      case "ArrowUp":
+        scrollStop = steps[previousStep].start;
+        break;
+      case "ArrowLeft":
+        scrollStop = steps[previousStep].start;
+        break;
+      case "ArrowRight":
+        scrollStop = steps[nextStep].start;
+        break;
+    } 
+
+    mx.helpers.scrollFromTo({
+      el : storyContainer,
+      from : scrollStart,
+      to : scrollStop,
+      during : 1000,
+      using : mx.helpers.easingFun({type:"easeInOut",power:2})
+    });
+
+  });
+
+}
 
 
 
@@ -402,6 +439,8 @@ export function storyControlMapPan(o){
 */
 export function storyController(o){
   o.selectorDisable = o.selectorDisable || [
+    "#mxDashboards",
+    "#btnTabDashboard",
     "#btnToggleBtns",
     "#btnPrint",
     "#btnTabTools",
@@ -415,7 +454,6 @@ export function storyController(o){
     "#btnZoomOut",
     "#btnFullscreen",
     ".panel-layers",
-    ".mx-panel-dashboard-container"
   ];
   o.selectorEnable = o.selectorEnable || [
     "#btnStoryUnlockMap",
@@ -508,7 +546,7 @@ export function storyController(o){
       /**
       * Remove listener
       */
-     //window.removeEventListener("keydown",mx.helpers.storyHandleKeyDown);
+     window.removeEventListener("keydown",storyHandleKeyDown);
 
     }
 

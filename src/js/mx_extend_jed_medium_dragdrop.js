@@ -93,9 +93,9 @@
               var img = new Image();
               var p = document.createElement('p');
               var span = document.createElement('span');
-              var id = mx.helper.makeId(10);
+              var id = window.mx.helpers.makeId(10);
               img.id = id;
-              span.innerHTML = "[" + mx.helper.getLanguage(["loading_img"]) + " ]";
+              span.innerHTML = "[" + window.mx.helpers.getLanguage(["loading_img"]) + " ]";
               p.appendChild(img);
               p.appendChild(span);
               var base = this.base;

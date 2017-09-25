@@ -1,0 +1,33 @@
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+MAP-X MAIL SYSTEM 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+date : 2017-09-24 18:21:43.4226
+type : error
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+MESSAGE
+
+object 'dict' not found
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+CALL
+
+    78: mxCatchHandler
+    77: value[[3L]] [src/helper/misc.R#786]
+    76: tryCatchOne
+    75: tryCatchList
+    74: doTryCatch
+    73: tryCatchOne
+    72: tryCatchList
+    71: doTryCatch
+    70: tryCatchOne
+    69: tryCatchList
+    68: tryCatch
+    67: mxCatch [src/helper/misc.R#781]
+    66: observeEventHandler [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/view_edit_dashboard.R#3]
+     2: runApp
+     1: rs [run.R#7]
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+CDATA
+
+<unkown>
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+

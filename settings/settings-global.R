@@ -210,6 +210,7 @@ config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_
 config[[c("templates","text")]] <-  list()
 config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
 config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
+config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
 
 #
 # default languages
@@ -439,7 +440,7 @@ config[["users"]][["roles"]]<- list(
     name="superuser",
     level=0,
     #desc = list(
-      access = c("qgis"),
+      access = c("db"),
       read = c("self","public","user","publisher","admin","superuser"),
       publish = c("self","public","user","publisher","admin","superuser"),
       edit = c("self","public","user","publisher","admin","superuser"),

@@ -21,11 +21,21 @@ mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactive
 mglSetLegendTemplate <- function( template, session=shiny::getDefaultReactiveDomain()) {
   session$sendCustomMessage("mglSetLegendTemplate",
     list(
-      template = tempalte
+      template = template
       )
     )
 }
 
+#' Reset map, view and dashboards
+#' @param idMap {character} map id
+#' @export
+mglReset <- function( idMap, session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglReset",
+    list(
+      idMap = idMap
+      )
+    )
+}
 
 
 #' Get client localForage object 

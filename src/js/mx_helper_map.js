@@ -19,6 +19,29 @@ export function getLocalForageData(o){
   });
 }
 
+
+/**
+* Reset project : remove view, dashboards, etc
+* @param {String} idMap map id
+*/
+export function reset(o){
+
+  var views = mx.maps[o.idMap].views ;
+  var elViewList = document.querySelectorAll(".mx-views-list");
+
+  views.forEach(function(view){
+  if( view._dashboard ) view._dashboard.destroy();
+  }) ;
+
+  mx.maps[o.idMap].views = [] ;
+
+  elViewList.innerHTML="";
+
+}
+
+
+
+
 /** 
  * Add source from view object 
  * @param {Object} o options
@@ -230,7 +253,11 @@ export function viewControler(o){
           mx.helpers.removeLayersByPrefix({
             id : o.id,
             prefix: id
-          }); 
+          });
+
+         if(view._dashboard){
+           view._dashboard.destroy();
+         }
 
         }
 
@@ -244,6 +271,7 @@ export function viewControler(o){
 
           view._setFilter();
 
+          mx.helpers.makeDashboard({ view: view, idMap: o.id });
 
         }
       } 
@@ -278,325 +306,6 @@ export function viewLiAction(o){
 
 }
 
-/**
- * Parse a view containting a story map
- * @param {object} o Options
- * @param {string} o.id Id of the map
- * @param {object} o.idView view/story id
- */
-export function parseStory(o){
-  
-
-  var m, view, story, steps, storyContainer, storyBody;
-  view = mx.helpers.getViews(o);
-  m = mx.maps[o.id];
-
-  if( !mx.templates.viewStory ) return;
-  if( !view ) return;
-
-  /**
-   * extract values
-   */
-  story =  mx.helpers.path(view,"data.story");
-  steps = story.steps;
-
-  /*
-   * Object to hold state of the app : displayed view, map position, background color, etc
-   */
-
-  m.storyCache = {
-    views : mx.helpers.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: "MX-"
-    }),
-    position : getMapPos(o),
-    currentStep : 0
-  };
-
-  /*
-   * Remove existing layers
-   */
-  mx.helpers.removeLayersByPrefix({
-    id:"map_main",
-    prefix:"MX"
-  });
-
-  /**
-   * Request or create story container
-   */
-  storyContainer =  document.querySelectorAll("mx-story-container");
-  
-  if(!storyContainer || storyContainer.length === 0){
-    storyContainer = document.createElement("div");
-    storyContainer.className = "mx-story-container";
-    document.body.appendChild(storyContainer); 
-  }
-
-  storyContainer.id = "mxStory_" + view.id;
-  storyContainer.innerHTML = mx.templates.viewStory(view);
-  storyBody = document.querySelector(".mx-story-body");
-
-  /**
-   * Hide menu and left column
-   */
-
-  mx.helpers.classAction({
-    selector :  ".tabs-main",
-    action : "add",
-    class : "mx-hide" 
-  });
-
-  mx.helpers.classAction({
-    selector :  ".mx-controls-top",
-    action : "add",
-    class : "mx-hide" 
-  });
-
-  /**
-   * Scroll event
-   */
-
-  m.listener.viewStoryScroll = mx.helpers.debounce(function (event) {
-
-    var el, els, bounds, storyBounds, limit, isVisible;
-    var vVisible = [], vToShow = [];
-    var stepNum, step, pos;
-    var n, p, v, vn, vo, fi;
-
-    els = document.querySelectorAll("div[data-story-step-num]");
-    storyBounds =  storyBody.getBoundingClientRect();
-    limit =  storyBounds.top + ( storyBounds.height / 2 );
-
-    vVisible = mx.helpers.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: "MX-",
-      base: true
-    });
-
-    for( n = 0 ; n < els.length ; n++ ){
-      el = els[n];
-      bounds =  el.getBoundingClientRect();
-      stepNum = el.getAttribute("data-story-step-num");
-      isVisible = bounds.top < limit && bounds.bottom >= limit;
-      /**
-       *
-       *  Top of the window is zero, bottom is max.
-       *
-       * | a -  e _
-       * |         |
-       * | b -  d _|
-       * |
-       * | c -
-       *  
-       *  a : story top; b : limit  c: story bottom or height
-       * 
-       *  view is visible when e < b && d >= limit
-       */
-      if( isVisible ){
-        /*
-         * If the current step is in cache, return;
-         */
-
-        if( m.storyCache.currentStep && stepNum == m.storyCache.currentStep) return;
-
-        m.storyCache.currentStep = stepNum;
-        /**
-         * retrieve step information
-         */
-        step = steps[stepNum];
-        pos = step.mapPosition; 
-        vToShow = [];
-
-        /**
-         * Fly to position
-         */  
-
-        m.map.flyTo({
-          speed : 0.5,
-          easing : mx.helpers.easingFun({type:"easeOut",power:5}),
-          zoom : pos.z,
-          bearing : pos.bearing,
-          pitch :  pos.pitch,
-          center : [ pos.lng, pos.lat ] 
-        });
-
-        /**
-         * Add view if not alredy visible, apply filter.
-         */
-        for( v = 0; v < step.views.length ; v++){
-
-          vn = step.views[v].view;
-          fi = step.views[v].filter;
-
-          if( vVisible.indexOf(vn) == -1 ){
-            mx.helpers.addView({
-              id : o.id,
-              idView: vn
-            });
-          }
-
-          vToShow.push(vn);
-          /*
-           * Apply filter to main variable
-           */
-          if(fi){
-
-            var fiVariable = getViewVariable({
-              id:o.id,
-              idView:vn
-            });
-
-            if( !fiVariable ) return;
-
-            filterViewValues({
-              id : o.id,
-              idView : vn,
-              attribute : fiVariable,
-              search : fi
-            }); 
-          }
-        }
-
-        vVisible = mx.helpers.getLayerNamesByPrefix({
-          id: o.id,
-          prefix: "MX-",
-          base: true
-        });
-        /**
-         * old view to remove
-         */
-        for( v = 0; v < vVisible.length ; v++){
-          vo = vVisible[v];
-
-          var toRemove =  vToShow.indexOf(vo) == -1;
-
-          if( toRemove ){
-
-            mx.helpers.removeLayersByPrefix({
-              id : o.id,
-              prefix : vo
-            });
-          }
-        }
-      }
-    }
-  },100);
-
-
-  /**
-   * Add listener to window scroll
-   */
-  storyBody.addEventListener("scroll",m.listener.viewStoryScroll, false);
-
-  /**
-   * Trigger the first step without event;
-   */
-  m.listener.viewStoryScroll();
-
-  /**
-   * Click event : handle clicks on story map controls
-   */
-  m.listener.viewStoryClick = function (event) {
-    var el, t;
-
-    el = event.target;
-
-    t = [
-      {
-        id : "viewStory",
-        comment :"target is the container",
-        isTrue : event.target == event.currentTarget,
-        action : function(){
-          return;
-        }
-      },
-      {
-        id : "storyAction",
-        comment :"target has a data-story-action",
-        isTrue : !! el.getAttribute("data-story-action"),
-        action : function(){
-          var action, actions, out;
-
-          action = el.getAttribute("data-story-action");
-
-          actions = {
-            interact : function(){ /* half panel for map interaction */
-              mx.helpers.classAction({
-                selector : storyContainer,
-                action : "toggle",
-                class : "mx-story-container-half"
-              });
-            },
-            close : function(){  /* Close the story map and show panels */
-              storyContainer.remove();
-
-              mx.helpers.removeLayersByPrefix({
-                id:"map_main",
-                prefix:"MX"
-              });
-
-              mx.helpers.classAction({
-                selector : storyContainer,
-                action : "add",
-                class : "mx-hide" 
-              });
-
-              mx.helpers.classAction({
-                selector : ".tabs-main",
-                action : "remove",
-                class : "mx-hide" 
-              });
-
-              mx.helpers.classAction({
-                selector :  ".mx-controls-top",
-                action : "remove",
-                class : "mx-hide" 
-              });
-
-              /**
-               * Enable previously enabled layers
-               */
-
-              for( var l = 0 ; l < m.storyCache.views.length ; l ++){
-                amx.helpers.ddView({
-                  id : o.id,
-                  idView: m.storyCache.views[l]
-                });
-              }
-              if(m.storyCache.position){
-                var pos =  m.storyCache.position;
-
-                m.map.flyTo({
-                  speed : 3,
-                  easing : mx.helpers.easingFun({type:"easeIn",power:1}),
-                  zoom : pos.z,
-                  bearing : pos.b,
-                  pitch :  pos.p,
-                  center : [ pos.lng, pos.lat ] 
-                });
-
-
-              }
-            }
-          };
-
-          out = actions[action];
-          return out;
-        }()
-      }
-    ];
-
-    t.forEach(function(x){
-      if(x.isTrue){
-        x.action();
-      }
-    });
-  };
-
-  storyContainer.addEventListener("click",m.listener.viewStoryClick, false);
-
-
-}
 
 /**
  * Get main variable for a vt view
@@ -1121,7 +830,6 @@ export function handleViewValueFilterText(o){
  * @param {string} o.idView view id
  */
 export function removeView(o){
-  
 
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
@@ -1137,6 +845,10 @@ export function removeView(o){
   if( view.type == "gj" ){
     var data =  mx.data.geojson ;
     data.removeItem( o.idView );
+  }
+
+  if( view._dashboard ){
+     view._dashboard.destroy();
   }
 
   m.views = views.filter(function(x){
@@ -1498,6 +1210,7 @@ export function renderViewsList(o){
 
   var elFilters, activeFilters = [];
 
+
   if( !o.views || o.views.constructor !== Array ||  o.views.length < 1 || !mx.templates.viewList ){
     if( ! o.add ){
       console.log("No view to render");
@@ -1618,10 +1331,10 @@ export function renderViewsList(o){
       x._setFilter = viewSetFilter;
       x._setOpacity = viewSetOpacity;
 
-      makeTimeSlider({ view: x , idMap: o.id }); 
-      makeNumericSlider({ view: x, idMap: o.id });
-      makeTransparencySlider({ view: x, idMap: o.id});
-      makeSearchBox({ view: x, idMap: o.id });
+      mx.helpers.makeTimeSlider({ view: x , idMap: o.id }); 
+      mx.helpers.makeNumericSlider({ view: x, idMap: o.id });
+      mx.helpers.makeTransparencySlider({ view: x, idMap: o.id});
+      mx.helpers.makeSearchBox({ view: x, idMap: o.id });
     });
     //}
 
@@ -1675,8 +1388,8 @@ export function viewSetFilter(o){
       filterFinal = filterNew.concat([origFilter]);
     }
     m.setFilter(layer.id, filterFinal);
-    m.fire("rechart");
   }
+  //m.fire("filter");
 }
 
 
@@ -2151,8 +1864,6 @@ export function addViewVt(o){
     defaultColor, defaultOpacity,
     ruleValues = [];
 
-  console.log("add view");
-  console.log(view);
   if( ! source ) return;
   /* check style and rules*/
   if( style && rules && rules.length > 0 ){
@@ -2333,7 +2044,7 @@ export function addViewVt(o){
      */
     layers = layers.reverse();
     layers.forEach(function(x){
-      map.addLayer(x);
+      map.addLayer(x,"mxlayers");
     });
 
     /**
@@ -2431,7 +2142,7 @@ export function addView(o){
         id: view.id,
         type : "raster",
         source: view.id + "-SRC"
-      });
+      },"mxlayers");
 
       /* IMG */ 
 
@@ -2641,45 +2352,47 @@ export function sendRenderedLayersAreaToUi(o){
  * @param {string} o.id map id
  * @param {string} o.idLayer Original id layer
  * @param {string} o.gid Geometry id name default is "gid"
- * @param {function} o.onMessage Function to deal with messages
- * @return {number} table
+ * @return {array} table
  */
 export function getRenderedLayersData(o){
-  mx.helpers.debounce(function(){
-      var start = new Date(); 
 
-      var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
-      var msg = o.onMessage || console.log;
-      var gid = o.gid || "gid";
+  return new Promise(function(resolve, reject) {
+    var out = [];
+    var start = new Date(); 
+    var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
+    var msg = o.onMessage || console.log;
+    var gid = o.gid || "gid";
 
-      function getBoundsArray(map){
-        var a = map.getBounds();
-        return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
-      }
+    function getBoundsArray(map){
+      var a = map.getBounds();
+      return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
+    }
 
-      if ( checkMap(o.id) ){
+    if ( checkMap(o.id) ){
 
-        var map = mx.maps[o.id].map;
-        var layers = mx.helpers.getLayerNamesByPrefix({
-          id: o.id,
-          prefix: o.idLayer
+      var map = mx.maps[o.id].map;
+      var layers = mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: o.idLayer
+      });
+
+      if( layers.length > 0 ){
+
+        var features =  map.queryRenderedFeatures({layers:layers});
+        var featuresUniques = {};
+        features.forEach(function(f){
+          featuresUniques[f.properties.gid] = f;
         });
-
-        if( layers.length > 0 ){
-
-          var features =  map.queryRenderedFeatures({layers:layers});
-          var featuresUniques = {};
-          var out = [];
-          features.forEach(function(f){
-            featuresUniques[f.properties.gid] = f;
-          });
-          for(var fu in featuresUniques){
-            out.push(featuresUniques[fu].properties);
-          }
-          console.log(out.length + " fetched in " + ((new Date()-start)/1000) + " [s]");
+        for(var fu in featuresUniques){
+          out.push(featuresUniques[fu].properties);
         }
+        //console.log(out.length + " fetched in " + ((new Date()-start)/1000) + " [s]");
       }
-  }(),400);
+
+    }
+
+    resolve(out);
+  });
 }
 
 
@@ -3647,9 +3360,9 @@ export function initMap(o){
        */
       
       map.addControl(new mx.helpers.mapControlMain(),'top-left');
-      map.addControl(new mx.helpers.mapControlNorth(),'top-right');
       map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
       map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
+      map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
 
       /**
        * Trigger country change on double click
@@ -3666,25 +3379,14 @@ export function initMap(o){
         }
       });
 
-    map.on("rechart",updateChart);
-    map.on("moveend",updateChart);
+    map.on("render" , mx.helpers.handleEvent);
+    map.on("click", mx.helpers.handleEvent);
+    map.on("rotate",function(e){
+      var r = map.getBearing();
+      var northArrow = document.getElementById("btnSetNorth_img");
+      northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
+    });
 
-      /**
-       * Click event : it's a popup.
-       */
-      map.on('click', function(e) {
-
-        var popup = new mapboxgl.Popup()
-          .setLngLat(map.unproject(e.point))
-          .addTo(map);
-
-        var propsRendered = featuresToHtml({
-          id : o.id,
-          point : e.point,
-          popup : popup
-        });
-
-      });
 
     //}
   //});
@@ -3692,19 +3394,14 @@ export function initMap(o){
 
 }
 
-/**
-* Update existing chart / widget in dashboards
-*/
-export function updateChart(e){
-   console.log("update chart");
-  //console.log(e);
-}
+
 
 
 /*
 * Get extract features values at given point, group by properties
 * @param {Object} o Options
 * @param {String} o.id Map id
+* @param {String} o.prefix Layer prefix Default = "MX-"
 * @param {Array} o.point Array of coordinates
 */
 export function getFeaturesValuesByLayers(o){
@@ -3713,7 +3410,7 @@ export function getFeaturesValuesByLayers(o){
   var sep = mx.settings.separators.sublayer;
   var layers = mx.helpers.getLayerNamesByPrefix({
     id: o.id,
-    prefix: "MX-"
+    prefix: o.prefix || "MX-"
   });
   var excludeProp = ['mx_t0','mx_t1','gid'];
   var map = mx.maps[o.id].map;
@@ -3801,8 +3498,8 @@ export function featuresToHtml(o){
     filters = {}; // reset filter at each request
 
     mx.helpers.forEachEl({
-      els:elChecks,
-      callback:buildFilters
+      els : elChecks,
+      callback : buildFilters
     });
 
     for(var idV in filters){

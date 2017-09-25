@@ -4,7 +4,8 @@
 
 .grid {
   height: 100%;
-  width: auto;
+  min-width: 100%;
+  width:100%;
 }
 
 /* clear fix */
@@ -15,6 +16,10 @@
 }
 
 /* ---- .grid-item ---- */
+
+.grid-item {
+  position: relative;
+}
 
 .grid-sizer{
   width:150px;
@@ -47,13 +52,16 @@
 .grid-item--content {
   background:#fff;
   border:1px solid #ddd ;
-  border-radius:10px;
+  border-radius:5px;
   width:100%;
   height:100%;
   padding-top:10px;
   overflow:hidden;
 }
 
+.widget {
+  margin:5px;
+}
 
 .packery-drop-placeholder {
   border: 1px dotted #333;

@@ -27,9 +27,8 @@ div(
       )
     ),
   div(
-    class="mx-panel mx-panel-bottom transparent shadow panels-bottom panel-dashboard mx-hide",
-    id="tabSettings",
-    mxSource("src/ui/panel_dashboard.R")
+    class="mx-events-off mx-panel-bottom",
+    id="mxDashboards"
     )
   )
 

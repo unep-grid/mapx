@@ -394,12 +394,18 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
     q <- sprintf("
       SELECT 
       ST_AsGeoJSON(
-        ST_Extent(%1$s)
-        ) AS ext 
+        ST_Extent(
+          ST_Buffer( %1$s::geography , 1 )::geometry
+        )) AS ext 
       FROM %2$s"
       , geomColumn
       , table
       )
+    #
+    # Get extent
+    #
+    ext =  mxDbGetQuery(q)
+    
 
     #
     # Extract coordinates from json
@@ -490,7 +496,7 @@ mxDbGetLayerTable <- function(project, projects, userId, target="public",languag
 #' @param from {integer} Position of the row to start with
 #' @param to {integer} Position of the row to end with
 #' @export 
-mxDbGetViews <- function(views, project, read, edit, userId, id=NULL, from=0, to=5){
+mxDbGetViews <- function(views=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5){
 
   out <- list()
   conf <- mxGetDefaultConfig()
@@ -587,9 +593,7 @@ mxDbGetViews <- function(views, project, read, edit, userId, id=NULL, from=0, to
 
   res <- na.omit(mxDbGetQuery(q))
 
-
-
-  out <- mxJsonToListMem(res$res)
+  out <- mxJsonToList(res$res)
 
   return(out)
 }
@@ -604,7 +608,7 @@ mxJsonToList <- function(res){
   return(out)
 }
 
-mxJsonToListMem <- memoise(mxJsonToList)
+#mxJsonToListMem <- memoise(mxJsonToList)
 
 
 #' Build encrypted query for a vt view

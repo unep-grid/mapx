@@ -5,12 +5,12 @@ import * as mx from './mx_init.js';
 
 
 /**
-* @param {Object} o options
-* @param {String} o.id Id of target element
-* @param {Object} o.schema JSON schema to render
-* @param {Object} o.startVal JSON of initial values
-* @param {Object} o.options JSONEditor options
-*/
+ * @param {Object} o options
+ * @param {String} o.id Id of target element
+ * @param {Object} o.schema JSON schema to render
+ * @param {Object} o.startVal JSON of initial values
+ * @param {Object} o.options JSONEditor options
+ */
 export function jedRender(o) {
 
   var id = o.id;
@@ -20,12 +20,12 @@ export function jedRender(o) {
 
   System.import("json-editor")
     .then(function(){
-     return Promise.all([
-       System.import("./mx_extend_jed_medium.js"),
-       System.import("./mx_extend_jed_position.js")
+      return Promise.all([
+        System.import("./mx_extend_jed_medium.js"),
+        System.import("./mx_extend_jed_position.js"),
+        System.import("./mx_extend_jed_ace.js")
       ]);
-    })
-    .then(function(){
+    }).then(function(){
       var JSONEditor = window.JSONEditor;
       var el = document.getElementById(id);
       var jed = window.jed ;
@@ -41,7 +41,7 @@ export function jedRender(o) {
       }
 
       if(!el) throw("jed element " + id + "not found");
-
+      JSONEditor.plugins.ace.theme = 'github';
       JSONEditor.plugins.selectize.enable = true;
 
       var opt_final = {};
@@ -142,15 +142,14 @@ export function jedRender(o) {
       });
 
       jed.editors[id] = editor; 
-
     });
 } 
 
 /** Update jed editor
-* @param {Object} o options
-* @param {String} o.id Id of target element
-* @param {Object} o.val JSON of initial values
-*/
+ * @param {Object} o options
+ * @param {String} o.id Id of target element
+ * @param {Object} o.val JSON of initial values
+ */
 export function jedUpdate(o) {
 
   var id = o.id;

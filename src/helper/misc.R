@@ -95,18 +95,17 @@ mxCounter =  function(id,reset=F){
 #' @param collapsed {Boolean} Collapse state of the object
 #' @param lanaguages {Character} Vector of languages code
 mxSchemaMultiLingualInput = function(
-    format = NULL,
-    default = list(),
-    keyTitle = "",
-    titlePrefix = "",
-    keyCounter = "b",
-    type = "string",
-    collapsed = TRUE,
-    language = "en",
-    languages = unlist(config[["languages"]]),
-    dict = NULL
-    ){
-
+  format = NULL,
+  default = list(),
+  keyTitle = "",
+  titlePrefix = "",
+  keyCounter = "b",
+  type = "string",
+  collapsed = TRUE,
+  language = "en",
+  languages = unlist(config[["languages"]]),
+  dict = NULL
+  ){
 
   if(noDataCheck(language)){
     language = get("language",envir=parent.frame())
@@ -116,31 +115,35 @@ mxSchemaMultiLingualInput = function(
     dict = dynGet("dict",ifnotfound=config$dict)
   }
 
+  if(noDataCheck(dict)){
+    dict = config$dict
+  }
+
   if(nchar(titlePrefix)>0){
     titlePrefix = paste(toupper(titlePrefix),":")
   }
 
-    prop = lapply(languages,function(x){
-      list(
-        title = sprintf("%1$s (%2$s)",
-          d(keyTitle,lang=x,dict=dict,web=F),
-          d(x,lang=language,dict=dict,web=F)
-          ),
-        type = type,
-        format = format,
-        minLength = ifelse(x=="en",1,0),
-        default = .get(default,x,default="")
-        )
-    })
-    names(prop) <- languages
+  prop = lapply(languages,function(x){
     list(
-      propertyOrder = mxCounter(keyCounter),
-      title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict,web=F)),
-      type = "object",
-      options = list(collapsed = collapsed),
-      properties = prop
+      title = sprintf("%1$s (%2$s)",
+        d(keyTitle,lang=x,dict=dict,web=F),
+        d(x,lang=language,dict=dict,web=F)
+        ),
+      type = type,
+      format = format,
+      minLength = ifelse(x=="en",1,0),
+      default = .get(default,x,default="")
       )
-  }
+  })
+  names(prop) <- languages
+  list(
+    propertyOrder = mxCounter(keyCounter),
+    title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict,web=F)),
+    type = "object",
+    options = list(collapsed = collapsed),
+    properties = prop
+    )
+}
 
 #' Create object for data integrity framework
 #' @param keyTitle {Character} Translation key of the title
@@ -779,6 +782,7 @@ mxCatch <- function(
     expression
   },error = function(e){
 
+
     mxCatchHandler(
       type = "error",
       message = as.character(e$message)
@@ -1411,8 +1415,8 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
 
     #mxDebugMsg(body)
     #mxDebugMsg(command)
-    write(body,"_logs.txt")
-    mxDebugMsg("Error written in _logs.txt")
+    write(body,"_mail.txt")
+    mxDebugMsg("Mail written in _mail.txt")
 
   }else{
 
@@ -2309,7 +2313,7 @@ mxScroll <- function(content){
 #' @param classLabel {character} Name of the class for the label
 #' @export
 #mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
-mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
+mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label"){
   if(noDataCheck(id)) id <- randomString()
 
   elInput = tags$input(type="checkbox",id=id,class="fold-switch")
