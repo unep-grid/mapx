@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import 'selectize';
 import 'selectize/dist/css/selectize.css';
 import 'selectize/dist/css/selectize.bootstrap3.css';
+import 'hint.css';
 import '../css/mx.css';
 import '../css/mx_shiny.css';
 import '../css/mx_legends.css';
