@@ -265,7 +265,7 @@ mapControlMain.prototype.onAdd = function(map) {
       action:function(){
         var map =  mx.helpers.path(mx,"maps.map_main.map");
         if(map){
-          map.setBearing(0);
+          map.easeTo({bearing:0,pitch:0});
         }
       }
     }

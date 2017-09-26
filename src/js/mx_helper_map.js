@@ -3418,7 +3418,7 @@ export function getFeaturesValuesByLayers(o){
 
   features.forEach(function(f){
     var baseLayer = f.layer.id.split(sep)[0];
-    if(!props[baseLayer]){
+    if( !props[baseLayer] ){
       props[baseLayer] = {};
     }
     for(var p in f.properties){
@@ -3428,7 +3428,7 @@ export function getFeaturesValuesByLayers(o){
         values = values.concat(value);
         props[baseLayer][p] = mx.helpers.getArrayStat({
           stat:"distinct",
-          arr:values
+          arr: values
         });
       }
     }

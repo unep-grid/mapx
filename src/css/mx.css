@@ -354,7 +354,7 @@ html, body, .full-page {
   right: 5px;
   bottom: 35px;
   z-index: 99;
-  overflow-y:scroll;
+  overflow-y:auto;
 }
 
 .mx-panel-dashboard {

@@ -115,7 +115,7 @@ export function getArrayStat(o){
 
       while( len-- ) 
       {
-        if (!n[arr[len]])
+        if ( !n[arr[len]] )
         {
           n[arr[len]] = true; 
           r.push(arr[len]); 
