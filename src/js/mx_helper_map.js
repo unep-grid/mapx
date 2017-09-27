@@ -30,10 +30,10 @@ export function reset(o){
   var elViewList = document.querySelectorAll(".mx-views-list");
 
   views.forEach(function(view){
-  if( view._dashboard ) view._dashboard.destroy();
+    if( view._dashboard ) view._dashboard.destroy();
   }) ;
 
-  mx.maps[o.idMap].views = [] ;
+  //mx.maps[o.idMap].views = [] ;
 
   elViewList.innerHTML="";
 
@@ -112,7 +112,6 @@ export function setSourcesFromViews(o){
        */
       //m.views = views;
 
-      m.views = views;
       mx.maps[o.id].views = views;
       /**
        * remove existing layers
@@ -129,13 +128,13 @@ export function setSourcesFromViews(o){
       /**
        * Init 
        */
-      for( var i = 0 ; i < m.views.length ; i++ ){
+      for( var i = 0 ; i < views.length ; i++ ){
         /**
          * add source from views list
          */
         mx.helpers.addSourceFromView({
           m : m,
-          view : m.views[i]
+          view : views[i]
         });
 
 
@@ -143,7 +142,7 @@ export function setSourcesFromViews(o){
 
       o.feedback({
         id : o.id,
-        views : m.views
+        views : views
       });
 
       /**
@@ -193,8 +192,6 @@ export function setSourcesFromViews(o){
   }
 
 }
-
-
 
 /**
  * Retrieve nested item from object/array
@@ -1188,19 +1185,13 @@ export function renderViewsList(o){
   var elViewsContainer = document.querySelector(".mx-views-container");
   var elViewsContent = elViewsContainer.querySelector(".mx-views-content");
   var elViewsList = elViewsContainer.querySelector(".mx-views-list");
+  var views = o.views;
+  var add = o.add;
 
-  if( ! o.views ){ 
-    o.views = m.views;
+  if( views.constructor === Object ){
+    views = [ views ];
+    add = true;
   }
-  if( ! o.views ){
-    return;
-  }
-
-  if( ! (o.views instanceof Array ) ){
-    o.views = [o.views];
-    o.add = true;
-  }
-
 
   /* TODO: set as options */
 
@@ -1213,9 +1204,8 @@ export function renderViewsList(o){
 
   var elFilters, activeFilters = [];
 
-
-  if( !o.views || o.views.constructor !== Array ||  o.views.length < 1 || !mx.templates.viewList ){
-    if( ! o.add ){
+  if( views === undefined || views.constructor !== Array ||  views.length < 1 || !mx.templates.viewList ){
+    if( ! add ){
       elViewsList.innerHTML = mx.helpers.getLanguage("noView"); 
     }
   }else{
@@ -1226,13 +1216,13 @@ export function renderViewsList(o){
     /**
      * Render view items
      */
-    if( ! o.add ){ 
-      elViewsList.innerHTML = mx.templates.viewList(o.views);
+    if( ! add ){ 
+      elViewsList.innerHTML = mx.templates.viewList(views);
     }else{
       var emptyDiv, newItem, newInput ; 
-      o.views.forEach(function(v){m.views.push(v);});
+      views.forEach(function(v){m.views.push(v);});
       emptyDiv = document.createElement("div");
-      emptyDiv.innerHTML = mx.templates.viewList(o.views);
+      emptyDiv.innerHTML = mx.templates.viewList(views);
       newItem = emptyDiv.querySelector("li");
       newInput =  newItem.querySelector(".mx-view-item-checkbox");
       newInput.checked = true;
@@ -1246,15 +1236,7 @@ export function renderViewsList(o){
      */
     elFilters = elViewsContainer.querySelector(".filters");
 
-    /*
-     * translate based on dict key
-     */
-    mx.helpers.setLanguage({
-      el:elViewsContainer
-    });
-
-
-
+ 
     /**
      * Create searchable list.js object
      */
@@ -1321,7 +1303,7 @@ export function renderViewsList(o){
     /*
      * Init interactive tools for views
      */
-    o.views.forEach(function(x){ 
+    views.forEach(function(x){ 
       x._idMap = o.id;
       x._interactive = {};
       x._filters = {
@@ -1345,7 +1327,6 @@ export function renderViewsList(o){
      * inital view controler after view rendering
      */
     viewControler(o);
-
 
   } 
 }
