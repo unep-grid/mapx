@@ -20,7 +20,7 @@ module.exports = merge(common, {
       },
       uglifyOptions: {
         ie8: false,
-        mangle : true,
+        mangle : false,
         compress: {
           warnings: false,
           comparisons: false 
