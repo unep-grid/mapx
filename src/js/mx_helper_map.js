@@ -110,7 +110,10 @@ export function setSourcesFromViews(o){
        * if there is multiple view in array, use them as main views list.
        * Set country, add each views to sources and feedback.
        */
+      //m.views = views;
+
       m.views = views;
+      mx.maps[o.id].views = views;
       /**
        * remove existing layers
        */
