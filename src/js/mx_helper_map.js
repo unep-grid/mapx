@@ -1236,7 +1236,13 @@ export function renderViewsList(o){
      */
     elFilters = elViewsContainer.querySelector(".filters");
 
- 
+    /*
+     * translate based on dict key
+     */
+    mx.helpers.setLanguage({
+      el:elViewsContainer
+    });
+    
     /**
      * Create searchable list.js object
      */

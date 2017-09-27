@@ -27,7 +27,7 @@ div(
       )
     ),
   div(
-    class="mx-panel-bottom mx-panel transparent shadow panel-bottom panel-dashboard mx-hide",
+    class="mx-panel-bottom mx-panel transparent shadow panel-bottom panel-dashboard mx-hide-back",
     div(
       class="mx-panel-dashboards",
       id="mxDashboards"

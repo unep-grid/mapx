@@ -192,7 +192,7 @@ mapControlMain.prototype.onAdd = function(map) {
         helper.panelEnable(
           'panel-bottom',
           'panel-dashboard',
-          'mx-hide'
+          'mx-hide-back'
         );
       }
     },

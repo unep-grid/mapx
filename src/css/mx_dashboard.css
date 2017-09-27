@@ -25,37 +25,41 @@
   width:150px;
 }
 
+/**
+* gutter size of 5,grid of 50 : ƒ (n){return (n + ((n / 50) * 5)-5)}
+*/
 
 .grid-item.y50{
  height:50px;
 }
 .grid-item.y1 {
- height:150px;  
+ height:160px;  
 }
 .grid-item.y2 {
- height:300px;  
+ height:325px;  
 }
 .grid-item.y3 {
- height:450px; 
+ height:490px; 
 }
 .grid-item.y3 {
- height:600px; 
+ height:655px; 
 }
 .grid-item.x50{
  width:50px;
 }
 .grid-item.x1 {
-  width:150px;
+  width:160px;
 }
 .grid-item.x2 {
-  width:300px;
+  width:325px;
 }
 .grid-item.x3 {
-  width:450px;
+  width:490px;
 }
 .grid-item.x4 {
-  width:600px;
+  width:665px;
 }
+
 .grid-item--content {
   background:#fff;
   border:1px solid #ddd ;

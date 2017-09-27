@@ -174,6 +174,7 @@ function Dashboard(idContainer,view) {
                */
               widget.id = widget.randomValue();
               widget.modules = dashboard.modules;
+            
               widget.config =  config;
               dashboard.store.push(widget);
               widget.add();
