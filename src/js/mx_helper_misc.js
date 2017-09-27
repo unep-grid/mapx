@@ -1797,135 +1797,147 @@ export function clone(obj){
  * @param {Object} o Options
  * @param {String|Element} o.selector Selector
  * @param {Number} o.scale Scale factor for output sizing
- * @param {Function} o.callback Callback function with one param : canvas
+ * @param {String} o.style Add style rules to element
  */
 export function htmlToData(o) {
-  var el, elClone, elCloneRect, elRect, tagToRemove;
 
-  var out = {
-    svg : "",
-    png : "",
-    canvas : ""
-  };
+  return new Promise(function(resolve,reject){
+    var el, elClone, elCloneRect, elRect, tagToRemove;
 
-  if (o.selector instanceof Node) {
-    el = o.selector;
-  } else {
-    el = document.querySelector(o.selector);
-  }
-  if(!o.scale) o.scale=1;
-  /**
-   * Clone element and clean it. 
-   * Some elements like input seems to break the SVG. Not Sure why.
-   * Remove them is the way. Replace them by another tag does not work.
-   */
-  elClone = el.cloneNode(true);
-  tagToRemove = ["input"];
-  for(var i = 0 ; i < tagToRemove.length ; i++){
-    elClone
-      .querySelectorAll(tagToRemove[i])
-      .forEach(function(x){
-        x.remove();
-      });
-  }
-
-  elClone.style.margin = 0;
-  elClone.style.padding = 0;
-  el.parentElement.appendChild(elClone);
-  elCloneRect = elClone.getBoundingClientRect();
-  /**
-   * SVG create
-   */
-
-  var data =
-    "<svg xmlns='http://www.w3.org/2000/svg' width='" + elCloneRect.width*o.scale + "' height='" +elCloneRect.height*o.scale + "'>" +
-    "<defs>" +
-    "<style type='text/css'>" +
-    readStyles([elClone]) +
-    "</style>" +
-    "</defs>" +
-    "<foreignObject width='100%' height='100%'>" +
-    "<div xmlns='http://www.w3.org/1999/xhtml'>" +
-    elClone.outerHTML +
-    "</div>" +
-    "</foreignObject>" +
-    "</svg>";
-
-  elClone.remove();
-  var url = buildSvgImageUrl(data);
-  setImage(url, o.callback);
-
-  /**
-   * functions
-   */
-
-  function buildSvgImageUrl(svg) {
-    var b64 = mx.helpers.utf8_to_b64(svg);
-    return "data:image/svg+xml;base64," + b64;
-  }
-
-  /**
-   * Css steal : krasimir/css-steal
-   */ 
-
-  // elements to array
-  function toArray(obj, ignoreFalsy) {
-    var arr = [], i;
-    for (i = 0; i < obj.length; i++) {
-      if (!ignoreFalsy || obj[i]) {
-        arr[i] = obj[i];
-      }
-    }
-    return arr;
-  }
-
-  // looping through the styles and matching
-  function getRules(el) {
-    var sheets = document.styleSheets, result = [];
-    el.matches = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector;
-    for (var i in sheets) {
-      var rules = sheets[i].rules || sheets[i].cssRules;
-      for (var r in rules) {
-        if (el.matches(rules[r].selectorText)) {
-          result.push(rules[r].cssText);
-        }
-      }
-    }
-    return mx.helpers.getArrayStat({arr:result,stat:"distinct"}).join(" ");
-  }
-
-  // looping through the element's children
-  function readStyles(els) {
-    var res = els.reduce(function (styles, el) {
-      styles.push(getRules(el));
-      styles = styles.concat(readStyles(toArray(el.children)));
-      return styles;  
-    }, []);
-
-    return mx.helpers.getArrayStat({arr:res,stat:"distinct"}).join(" ");
-  }
-
-  function setImage(url, callback) {
-    var image = new Image();
-
-    image.onload = function() {
-      var canvas = document.createElement('canvas');
-      var ctx = canvas.getContext("2d");
-      canvas.width = elCloneRect.width * o.scale;
-      canvas.height = elCloneRect.height * o.scale;
-      ctx.scale(o.scale, o.scale);
-      ctx.drawImage(this, 0, 0);
-      out = {
-        png :  canvas.toDataURL(),
-        svg : url,
-        canvas : canvas
-      };
-      callback(out);
+    var out = {
+      svg : "",
+      png : "",
+      canvas : ""
     };
 
-    image.src = url;
-  }
+    if (o.selector instanceof Node) {
+      el = o.selector;
+    } else {
+      el = document.querySelector(o.selector);
+    }
+    if(!el) resolve(undefined);
 
+    if(!o.scale) o.scale=1;
+    /**
+     * Clone element and clean it. 
+     * Some elements like input seems to break the SVG. Not Sure why.
+     * Remove them is the way. Replace them by another tag does not work.
+     */
+    elClone = el.cloneNode(true);
+    tagToRemove = ["input"];
+    for(var i = 0 ; i < tagToRemove.length ; i++){
+      elClone
+        .querySelectorAll(tagToRemove[i])
+        .forEach(function(x){
+          x.remove();
+        });
+    }
+
+    var addStyle = "padding:0px;margin:0px" + (o.style?";"+o.style:"");
+    elClone.style = addStyle;
+    el.parentElement.appendChild(elClone);
+    elCloneRect = elClone.getBoundingClientRect();
+    /**
+     * SVG create
+     */
+
+    var data =
+      "<svg xmlns='http://www.w3.org/2000/svg' width='" + elCloneRect.width*o.scale + "' height='" +elCloneRect.height*o.scale + "'>" +
+      "<defs>" +
+      "<style type='text/css'>" +
+      readStyles([elClone]) +
+      "</style>" +
+      "</defs>" +
+      "<foreignObject width='100%' height='100%'>" +
+      "<div xmlns='http://www.w3.org/1999/xhtml'>" +
+      elClone.outerHTML +
+      "</div>" +
+      "</foreignObject>" +
+      "</svg>";
+
+    var url = buildSvgImageUrl(data);
+
+    elClone.remove();
+
+    // resolve promise
+    setImage(
+      url,
+      resolve,
+      reject
+    );
+
+    /**
+     * functions
+     */
+
+    function buildSvgImageUrl(svg) {
+      var b64 = mx.helpers.utf8_to_b64(svg);
+      return "data:image/svg+xml;base64," + b64;
+    }
+
+    /**
+     * Css steal : krasimir/css-steal
+     */ 
+
+    // elements to array
+    function toArray(obj, ignoreFalsy) {
+      var arr = [], i;
+      for (i = 0; i < obj.length; i++) {
+        if (!ignoreFalsy || obj[i]) {
+          arr[i] = obj[i];
+        }
+      }
+      return arr;
+    }
+
+    // looping through the styles and matching
+    function getRules(el) {
+      var sheets = document.styleSheets, result = [];
+      el.matches = el.matches || el.webkitMatchesSelector || el.mozMatchesSelector || el.msMatchesSelector || el.oMatchesSelector;
+      for (var i in sheets) {
+        var rules = sheets[i].rules || sheets[i].cssRules;
+        for (var r in rules) {
+          if (el.matches(rules[r].selectorText)) {
+            result.push(rules[r].cssText);
+          }
+        }
+      }
+      return mx.helpers.getArrayStat({arr:result,stat:"distinct"}).join(" ");
+    }
+
+    // looping through the element's children
+    function readStyles(els) {
+      var res = els.reduce(function (styles, el) {
+        styles.push(getRules(el));
+        styles = styles.concat(readStyles(toArray(el.children)));
+        return styles;  
+      }, []);
+
+      return mx.helpers.getArrayStat({arr:res,stat:"distinct"}).join(" ");
+    }
+
+    function setImage(url, resolve, reject) {
+      var image = new Image();
+      image.onload = function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext("2d");
+        canvas.width = elCloneRect.width * o.scale;
+        canvas.height = elCloneRect.height * o.scale;
+        ctx.scale(o.scale, o.scale);
+        ctx.drawImage(this, 0, 0);
+        out = {
+          png :  canvas.toDataURL(),
+          svg : url,
+          canvas : canvas
+        };
+        resolve(out);
+      };
+      image.onerror = function(e) {
+        reject(e);
+      };
+      image.src = url;
+    }
+  });
 }
 
 

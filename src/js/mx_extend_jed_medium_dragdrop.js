@@ -1,9 +1,8 @@
 /*jshint esversion: 6 */
 
-(function () {
+export function addDragDropToMedium(MediumEditor) {
     'use strict';
 
-    var MediumEditor = require('medium-editor');
     var CLASS_DRAG_OVER = 'medium-editor-dragover';
 
     function clearClassNames(element) {
@@ -119,4 +118,4 @@
     MediumEditor.extensions.fileDragging = FileDragging;
 
 
-}());
+}

@@ -190,8 +190,8 @@ mapControlMain.prototype.onAdd = function(map) {
       key:"btn_tab_dashboard",
       action:function(){ 
         helper.panelEnable(
-          'mx-panel-dashboard',
-          'dashboard',
+          'panel-bottom',
+          'panel-dashboard',
           'mx-hide'
         );
       }

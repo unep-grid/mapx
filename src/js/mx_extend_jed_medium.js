@@ -57,7 +57,8 @@
         var self = this, options;
 
         // Code editor
-        if(!self.options.hidden ){
+        if( !self.options.hidden && !self._init ){
+          self._init = true;
 
           Promise.all([
             System.import("medium-editor"),
@@ -67,6 +68,7 @@
             System.import('./mx_extend_jed_medium_dragdrop.js')
           ]).then(function(m){
             var MediumEditor = m[0]; 
+            m[4].addDragDropToMedium(MediumEditor);
 
             self.medium_container = document.createElement("div");
             self.medium_container.innerHTML = self.input.value;

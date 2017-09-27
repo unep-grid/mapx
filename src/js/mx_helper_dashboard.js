@@ -73,13 +73,16 @@ export function handleEvent(e){
               break;
             case "layerClick":
               if(type === "click"){
-                data = mx.helpers.getFeaturesValuesByLayers({
-                  id : o.id,
-                  prefix : idView,
-                  point : e.point 
-                });
 
-                w.setData(data[idView]);
+
+                mx.helpers.getRenderedLayersData({
+                  id : o.id,
+                  idLayer : idView,
+                  point : e.point
+                }).then(function(data){
+                  w.setData(data);
+                });
+                
                 rendered = true;
               }
               break;
@@ -129,13 +132,15 @@ function Dashboard(idContainer,view) {
       dashboard.modules.highcharts= m[2].Highcharts;
       dashboard.elContainer = document.getElementById(idContainer);
       dashboard.el = document.createElement("div");
-      dashboard.el.className="mx-events-on mx-panel mx-panel-dashboard transparent shadow dashboard grid";
+      dashboard.el.className="mx-dashboard grid";
       dashboard.elContainer.appendChild(dashboard.el);
       dashboard.store = [];
 
       dashboard.packery = new dashboard.modules.packery( dashboard.el, {
         itemSelector: '.grid-item',
-        columnWidth: 150,
+        //columnWidth: 150,
+        columnWidth: 50,
+        rowHeight: 50,
         gutter : 5
       });
 
@@ -245,7 +250,7 @@ function Dashboard(idContainer,view) {
 
 
         widget.setData = function(d) {
-          if( widget.data != d ) {
+          if( widget.data !== d && d instanceof Array && d.length > 0 ) {
             widget.data = d;
             widget.onData();
           }

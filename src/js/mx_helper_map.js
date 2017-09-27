@@ -1213,7 +1213,7 @@ export function renderViewsList(o){
 
   if( !o.views || o.views.constructor !== Array ||  o.views.length < 1 || !mx.templates.viewList ){
     if( ! o.add ){
-      console.log("No view to render");
+      elViewsList.innerHTML = mx.helpers.getLanguage("noView"); 
     }
   }else{
 
@@ -1477,121 +1477,181 @@ export function plotTimeSliderData(o){
  * @parma {string} o.idView view id
  */
 export function downloadMapPng(o){
+
+  Promise.all([
+    System.import("tokml"),
+    System.import("jszip"),
+    System.import("downloadjs"),
+    System.import("@turf/turf"),
+    System.import("../img/north_001.svg")
+    //System.import("dom-to-image"),
+    //System.import("html2canvas"),
+  ]).then(function(m){
+
+    var toKml = m[0];
+    var JSZip = m[1];
+    var download = m[2];
+    var turf = m[3];
+    var northArrowPath = m[4];
+    //var domtoimage = m[4];
+    
+    var kml,zip,folder;
+    var qf = [];
+    var map = mx.maps[o.id].map;
+    var elMap = document.getElementById("#map_main");
+    var elLegend = document.getElementById("check_view_legend_"+o.idView);
+    var elScale = document.querySelector(".mx-scale-box");
+    //var elNorthArrow = document.querySelector("#btnSetNorth_img");
+    var imgMap = map.getCanvas().toDataURL();
+
+    //var imgLegend ;
+    //var imgScale;
+    var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
+    var view = mx.helpers.getViews(o);
+     
+    var layers = mx.helpers.getLayerNamesByPrefix({
+      id: o.id,
+      prefix: o.idView
+    });
+
+    if( layers.length > 0 ){
+
+      var attr = mx.helpers.path(view,'data.attribute.name');
+      var rules = mx.helpers.path(view,'data.style.rules');
+      var gType = mx.helpers.path(view,'data.geometry.type');
+
+      var simpleColor = {
+        'polygon':'fill',
+        'line':'stroke',
+        'point':'marker-color'
+      }[gType];
+
+      var simpleOpacity = {
+        'polygon':'fill-opacity',
+        'line':'stroke-opacity',
+        'point':null
+      }[gType];
+
+      var geomTemp = {
+        type : "FeatureCollection",
+        features : [] 
+      };
+
+      qf = map.queryRenderedFeatures({layers:layers});
+
+      // get all abject in one
+      qf.forEach(function(feature){
+
+        // add properties for simplestyle conversion
+        if(rules && simpleColor){
+          var v = feature.properties[attr];
+          var n = mx.helpers.isNumeric(v);
+          rules.forEach(function(r){
+            if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
+              feature.properties[simpleColor] = r.color;
+              if(simpleOpacity){
+                feature.properties[simpleOpacity] = r.opacity;
+              }
+            }
+          });
+        }
+
+        // Push featre in main geojson NOTE: This include duplicated due to tiles 
+        geomTemp
+          .features
+          .push({
+            "type" : "Feature",
+            "properties":feature.properties,
+            "geometry":feature.geometry
+          });
+      });
+
+      
+      geomTemp = turf.dissolve(geomTemp,"gid");
+
+      kml = toKml(geomTemp,{
+        simplestyle:true
+      });
+
+    }
+   
+
+    // set nort arrow img
+
+    function getNorthArrow(){
+      return new Promise(function(resolve,reject){
+        var imgNorthArrow = new Image();
+        imgNorthArrow.onload = function(){
+              resolve(imgNorthArrow);
+        };
+        imgNorthArrow.onerror = function(e) {
+              reject(e);
+        };
+        imgNorthArrow.src = northArrowPath;
+        imgNorthArrow.style.width="150px";
+        imgNorthArrow.style.height="150px";
+        imgNorthArrow.style.position="absolute";
+        imgNorthArrow.style.zIndex="-1";
+        imgNorthArrow.style[mx.helpers.cssTransformFun()] = "rotateZ("+(map.getBearing())+"deg) ";
+        document.body.appendChild(imgNorthArrow);
+      });
+    }
   
 
-  var map = mx.maps[o.id].map;
-  var body = document.querySelector("body");
-  var legend = document.getElementById("check_view_legend_"+o.idView);
-  var scale = document.querySelector(".mapboxgl-ctrl-top-right");
-  var imgMap = map.getCanvas().toDataURL();
-  var imgLegend ;
-  var imgScale;
-  var kml;
-  var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
-  var view = mx.helpers.getViews(o);
+    zip = new JSZip();
+    folder = zip.folder("mx-data");
 
-  var layers = mx.helpers.getLayerNamesByPrefix({
-    id: o.id,
-    prefix: o.idView
-  });
+    var promScale = mx.helpers.htmlToData({
+      selector : elScale,
+      scale : 1,
+      style : "border:1px solid black; border-top:none"
+     }).catch(function(e){
+         console.log(e);
+      });
+    
+    var promLegend = mx.helpers.htmlToData({
+      selector : elLegend,
+      scale : 10 
+     }).catch(function(e){
+         console.log(e);
+      });
 
-  if( layers.length > 0 ){
+    Promise.all([
+      //promArrow,
+      promScale,
+      promLegend
+    ]).then(function(r){
 
-    var attr = mx.helpers.path(view,'data.attribute.name');
-    var rules = mx.helpers.path(view,'data.style.rules');
-    var gType = mx.helpers.path(view,'data.geometry.type');
-
-    var simpleColor = {
-      'polygon':'fill',
-      'line':'stroke',
-      'point':'marker-color'
-    }[gType];
-
-    var simpleOpacity = {
-      'polygon':'fill-opacity',
-      'line':'stroke-opacity',
-      'point':null
-    }[gType];
-
-    var geomTemp = {
-      type : "FeatureCollection",
-      features : [] 
-    };
-
-    qf = map.queryRenderedFeatures({layers:layers});
-
-    // get all abject in one
-    qf.forEach(function(feature){
-
-      // add properties for simplestyle conversion
-      if(rules && simpleColor){
-        var v = feature.properties[attr];
-        var n = mx.helpers.isNumeric(v);
-        rules.forEach(function(r){
-          if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
-            feature.properties[simpleColor] = r.color;
-            if(simpleOpacity){
-              feature.properties[simpleOpacity] = r.opacity;
-            }
-          }
-        });
+      if(kml){
+        folder.file("mx-data.kml",kml);
       }
 
-      // Push featre in main geojson NOTE: This include duplicated due to tiles 
-      geomTemp
-        .features
-        .push({
-          "type" : "Feature",
-          "properties":feature.properties,
-          "geometry":feature.geometry
-        });
-    });
-    kml = tokml(geomTemp,{
-      simplestyle:true
-    });
+      //if(r[0]){
+        //folder.file("mx-north.png", r[0].png.split(",")[1], {base64: true});
+        //folder.file("mx-north.svg", r[0].svg.split(",")[1], {base64: true});
+      /*}*/
+      if(r[0]){
+        folder.file("mx-scale.png", r[0].png.split(",")[1], {base64: true});
+        folder.file("mx-scale.svg", r[0].svg.split(",")[1], {base64: true});
+      }
+      if(r[1]){
+        folder.file("mx-legend.png", r[1].png.split(",")[1], {base64: true});
+        folder.file("mx-legend.svg", r[1].svg.split(",")[1], {base64: true});
+      }
 
-  }
-  var zip, folder ;
-  zip = new JSZip();
-  folder = zip.folder("mx-data");
-
-  htmlToData({
-    selector : scale,
-    scale : 1,
-    callback : function(scaleData){
-      if(legend){ 
-        htmlToData({
-          selector: legend,
-          scale: 10,
-          callback: function(out) {         
-            if(kml){
-              folder.file("mx-data.kml",kml);
-            }
-            folder.file("mx-scale.png", scaleData.png.split(",")[1], {base64: true});
-            folder.file("mx-scale.svg", scaleData.svg.split(",")[1], {base64: true});
-            folder.file("mx-legend.png", out.png.split(",")[1], {base64: true});
-            folder.file("mx-legend.svg", out.svg.split(",")[1], {base64: true});
-            folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
-            zip.generateAsync({type:"blob"}).then(function(content) {
-              download(content, fileName);
-            });
-          }
-        });
-
-      }else{
-
+      if(imgMap){
         folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
-        folder.file("mx-scale.png", scaleData.png.split(",")[1], {base64: true});
-        folder.file("mx-scale.svg", scaleData.svg.split(",")[1], {base64: true});
-
-        zip.generateAsync({type:"blob"}).then(function(content) {
+      }
+      zip.generateAsync({type:"blob"})
+        .then(function(content) {
           download(content, fileName);
         });
+    })
+      .catch(function(e){
+        console.log(e);
+      });
 
-      }
-    }
   });
-
 }
 
 
@@ -2352,11 +2412,13 @@ export function sendRenderedLayersAreaToUi(o){
  * @param {string} o.id map id
  * @param {string} o.idLayer Original id layer
  * @param {string} o.gid Geometry id name default is "gid"
+ * @param {PointLike} o.point optional point
  * @return {array} table
  */
 export function getRenderedLayersData(o){
 
   return new Promise(function(resolve, reject) {
+    var point = o.point || undefined;
     var out = [];
     var start = new Date(); 
     var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
@@ -2378,7 +2440,7 @@ export function getRenderedLayersData(o){
 
       if( layers.length > 0 ){
 
-        var features =  map.queryRenderedFeatures({layers:layers});
+        var features =  map.queryRenderedFeatures(point,{layers:layers});
         var featuresUniques = {};
         features.forEach(function(f){
           featuresUniques[f.properties.gid] = f;
@@ -3235,7 +3297,7 @@ export function initMap(o){
   ]).then(function(m){
 
     var  mapboxgl = m[0];
-    var    localforage = m[1];
+    var  localforage = m[1];
     mx.mapboxgl = mapboxgl;
     mx.localforage = localforage;
     mx.data.style = m[2];
@@ -3331,7 +3393,8 @@ export function initMap(o){
         center: [o.lng,o.lat],
         zoom: o.zoom,
         maxZoom: o.maxZoom,
-        minZoom: o.minZoom
+        minZoom: o.minZoom,
+        preserveDrawingBuffer:true
       });
 
       /* save map in mgl data */

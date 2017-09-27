@@ -48,17 +48,17 @@ observeEvent(input$dashboardEdit_init,{
                 `width` = list(
                   title = t("view_dashboard_txt_width"),
                   type = "string",
-                  enum = list("x1","x2","x3","x4"),
+                  enum = list("x50","x1","x2","x3","x4"),
                   options = list(
-                    enum_titles = list("150px","300px","450px","600px")
+                    enum_titles = list("50px","150px","300px","450px","600px")
                     )
                   ),
                 `height` = list(
                   title = t("view_dashboard_txt_height"),
                   type = "string",
-                  enum = list("y1","y2","y3","y4"),
+                  enum = list("y50","y1","y2","y3","y4"),
                   options = list(
-                    enum_titles = list("150px","300px","450px","600px")
+                    enum_titles = list("50px","150px","300px","450px","600px")
                     )
                   ),
                 `script` = list(

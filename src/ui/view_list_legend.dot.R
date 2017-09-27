@@ -7,7 +7,7 @@
 #
 
 tags$div(
-  "{{?it.data.style \\u0026\\u0026 it.data.style.rules}}",
+  "{{?it \\u0026\\u0026 it.data.style \\u0026\\u0026 it.data.style.rules}}",
   "{{ var isPoint = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022point\\u0022; }}",
   "{{ var isLine = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022line\\u0022; }}",
   "{{ var isPolygon = mx.helpers.path(it,\\u0022data.geometry.type\\u0022) == \\u0022polygon\\u0022; }}",

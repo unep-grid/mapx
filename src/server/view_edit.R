@@ -144,6 +144,14 @@ observe({
 
               if(!viewIsEditable) return()
 
+              #
+              # Specific ui for each type (sm,vt,rt). Default empty ;        
+              #
+              uiType <- tags$div();
+
+              #
+              # Common ui 
+              #
               uiDesc <- tagList(
                 #
                 # Title and abstract (schema based)
@@ -768,11 +776,12 @@ observeEvent(input$btnViewSave,{
     #
     sourceData <- reactLayerSummary()$list
     sourceDataMask <- reactLayerMaskSummary()$list
-    
+    additionalAttributes <- input$selectSourceLayerOtherVariables
+
     #
     # Update view data 
     #
-    view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask)
+    view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask,additionalAttributes)
 
   }
   #
@@ -1098,7 +1107,6 @@ reactLayerSummary <- reactive({
   layerName <- input$selectSourceLayerMain
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
-  variableNames <- input$selectSourceLayerOtherVariables
   language <- reactData$language
 
   hasVariable <- !noDataCheck(variableName)
@@ -1113,7 +1121,6 @@ reactLayerSummary <- reactive({
 
     geomTypes <- mxDbGetLayerGeomTypes(layerName)
     isVariableOk <- isTRUE(variableName %in% reactSourceVariables())
-    areVariablesOk <- isTRUE(all(variableNames %in% reactSourceVariables()))
     isLayerOk <- isTRUE(layerName %in% reactSourceLayer())
     isGeomOk <- isTRUE(geomType %in% geomTypes$geom_type)
 
@@ -1124,7 +1131,6 @@ reactLayerSummary <- reactive({
       out <- mxDbGetLayerSummary(
         layer = layerName,
         variable = variableName,
-        variables = variableNames,
         geomType = geomType,
         language = language
         )

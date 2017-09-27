@@ -27,8 +27,11 @@ div(
       )
     ),
   div(
-    class="mx-events-off mx-panel-bottom",
-    id="mxDashboards"
+    class="mx-panel-bottom mx-panel transparent shadow panel-bottom panel-dashboard mx-hide",
+    div(
+      class="mx-panel-dashboards",
+      id="mxDashboards"
+      )
     )
   )
 

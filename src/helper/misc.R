@@ -1605,9 +1605,10 @@ mxReadText <- function(fileName,clean=FALSE){
 #' @param {list} view View list
 #' @param {list} sourceData List from reactLayerSummary reactive object
 #' @param {list} sourceDataMask List from sourceMaskData reactive object
+#' @param {list} additionalAttributes List of additional attributes
 #' @return view list updated
 #' @export 
-mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
+mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additionalAttributes=NULL){
   #
   # update meta data
   #
@@ -1628,7 +1629,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL){
       names = unique(c(
         .get(sourceData,c("timeVariables")),
         .get(sourceData,c("variableName")),
-        .get(sourceData,c("variableNames"))
+        additionalAttributes
         )),
       type = .get(sourceData,c("type")),
       table = .get(sourceData,c("table")),
