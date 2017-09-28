@@ -317,7 +317,7 @@ liControlsScreenShot <- tagList(
 
 # controls share
 liControlsShare <- tagList(
-  "{{?view.type == 'vt' \\u007c\\u007c view.type == 'rt' }}",
+  "{{?view.type == 'vt' \\u007c\\u007c view.type == 'rt' \\u007c\\u007c view.type == 'sm' }}",
   tags$li(
     class="mx-pointer hint--bottom-right",
     `data-lang_key`="btn_opt_share",
