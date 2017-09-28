@@ -24,7 +24,10 @@ observeEvent(input$dashboardEdit_init,{
           widgets = list(
             type = "array",
             title=t("view_dashboard_widgets"),
-            uniqueItems = TRUE,
+            options = list(
+              disable_array_delete = TRUE
+              ),
+            uniqueItems = FALSE,
             items = list(
               type = "object",
               title = t("view_dashboard_widget"),
