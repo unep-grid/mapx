@@ -1,7 +1,10 @@
 // Importation of helpers
 importScripts(
   "../geojsonhint/geojsonhint.js",
-  "../turf/turf.min.js",
+  //"../shapefile/shapefile.js",
+  //"../toGeoJSON/togeojson.js",
+  //"../jszip/jszip.min.js",
+  "../turf/turf_mx.min.js",
   "mx.js"
 );
 
@@ -66,6 +69,14 @@ onmessage = function(e) {
 
 
     /**
+    * Convert if not geojson
+    */
+
+    //if(fileType == 'kml') gJson =  toGeoJSON.kml(gJson);
+    //if(fileType == 'gpx') gJson =  toGeoJSON.gpx(gJson);
+    //if(fileType == 'geojson') gJson =  JSON.parse(gJson);
+
+    /**
      * validation : geojson validation with geojsonhint
      */
 
@@ -120,62 +131,6 @@ onmessage = function(e) {
 
       return;
     }
-
-    /**
-     * Avoid multi type : we don't handle them for now
-     */
-
-    var geomType = [];
-    if( gJson.features ){
-      // array of types in data
-      geomTypes  = gJson.features
-        .map(function(x){
-          if(x.geometry && x.geometry.type){
-            return x.geometry.type;
-          }else{
-            return undefined; 
-          }
-        })
-      .filter(function(v,i,s){
-        return s.indexOf(v) === i && v !== undefined;
-      });
-    }else{
-      geomTypes = [gJson.geometry.type];
-    }
-
-    postMessage({
-      progress: 90,
-      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
-    });
-
-    // if more than one type, return an error
-    if ( geomTypes.length>1 ) {
-      var msg = "Multi geometry not yet implemented";
-
-      postMessage({
-        progress: 100,
-        msssage: msg,
-        errorMessage: fileName + ": " + msg
-      });
-
-      console.log({
-        "errors": fileName + ": " + msg + ".(" + geomTypes + ")"
-      });
-      return;
-    }
-
-    /**
-     * Remove features without geom
-     */
-
-    turf.meta.featureEach(gJson,function(f,i){
-      if(f.geometry===null){
-        f.geometry={
-          type: geomTypes[0],
-          coordinates: []
-        };
-      }
-    });
 
     /**
     * Get table of all attributes. 
@@ -246,6 +201,46 @@ onmessage = function(e) {
       message: " extent (" + extent +") found in " + timerLapString()
     });
     /**
+     * Avoid multi type : we don't handle them for now
+     */
+
+    var geomType = [];
+    if( gJson.features ){
+      // array of types in data
+      geomTypes  = gJson.features
+        .map(function(x){
+          return typeSwitcher[x.geometry.type];
+        })
+      .filter(function(v,i,s){
+        return s.indexOf(v) === i;
+      });
+    }else{
+      geomTypes = [typeSwitcher[gJson.geometry.type]];
+    }
+
+    postMessage({
+      progress: 90,
+      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
+    });
+
+    // if more than one type, return an error
+    if ( geomTypes.length>1 ) {
+      var msg = "Multi geometry not yet implemented";
+
+      postMessage({
+        progress: 100,
+        msssage: msg,
+        errorMessage: fileName + ": " + msg
+      });
+
+      console.log({
+        "errors": fileName + ": " + msg + ".(" + geomTypes + ")"
+      });
+      return;
+    }
+
+
+    /**
      * Set default for a new layer
      */
 
@@ -258,7 +253,7 @@ onmessage = function(e) {
     var colB = mx.util.randomHsl(0.9, ran);
 
     // Set default type from geojson type
-    var typ = typeSwitcher[geomTypes[0]];
+    var typ = geomTypes[0];
 
     // Set up default style
     var dummyStyle = {
