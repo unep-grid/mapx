@@ -204,7 +204,8 @@ export function setSourcesFromViews(o){
 export function path(obj, path, def){
   
   var i, len;
-  if(!def) def = null;
+  if( typeof def === "undefined" ) def = null;
+  if( typeof path !== "string" ) return def;
 
   for(i = 0,path = path.split('.'), len = path.length; i < len; i++){
     if(!obj || typeof obj !== 'object') return def;
@@ -278,7 +279,16 @@ export function viewControler(o){
     }
 
     updateViewOrder(o);
+
+    /**
+    * Update packery layout
+    */
+    if( mx.maps[o.id].tools.viewsListPackery ){
+      mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+    }
+
   }
+
 }
 
 
@@ -412,7 +422,6 @@ export function updateViewOrder (o){
     prefix:"MX-"
   });
 
-
   displayed.sort(
     function(a,b){
       var posA = order.indexOf(a.split(mx.settings.separators.sublayer )[0]);
@@ -442,8 +451,8 @@ export function updateViewOrder (o){
  */
 export function getViewOrder(o){
   
-
   var m = mx.maps[o.id];
+  var obj = {};
   var res = [];
   var viewContainer, els, vid, i;
 
@@ -452,50 +461,16 @@ export function getViewOrder(o){
   viewContainer = document.querySelector(".mx-views-list");
   els = viewContainer.querySelectorAll(".mx-view-item");
 
-  for( i = 0 ; i < els.length; i++){
-    vid = els[i].dataset.view_id;
-    res.push(vid);
+  for( i = 0 ; i < els.length; i++ ){
+    obj[els[i].offsetTop]=els[i].dataset.view_id;
   }
-
-  return res;
-}
-
-/**
- * Listener for view list filter
- * @param {object}  o options
- * @param {array} o.activeFilters Current active filters
- * @param {object} o.m Mgl data item
- * @param {object} o.viewClasses View classes
- */
-export function handleListFilterClass(o){
   
+  for( i in obj ){
+    res.push(obj[i]);
+  }
+ 
+  return res;
 
-  return function(event){
-    if( event.target == event.currentTarget ) return ;
-    var el = event.target ;
-    var isChecked = el.checked;
-    var filter = el.getAttribute("data-filter");
-
-    /* pupulate active filters*/
-    if( isChecked ){
-      o.activeFilters.push(filter);
-    }else{
-      o.activeFilters.splice(o.activeFilters.indexOf(filter),1);
-    }
-    /* For each view item check if checked if the view contain checked class */
-    o.m.tools.viewsListJs.filter(function (view) { 
-      if( o.activeFilters.length > 0 ){
-        var value = view
-          .values()[ o.viewClasses.classes ]
-          .split(",") ; 
-        return o.activeFilters.every(function(f){
-          return value.indexOf(f)>-1;
-        });
-      }
-      /* defaut, return all view*/
-      return true;
-    });
-  };
 }
 
 
@@ -834,7 +809,7 @@ export function removeView(o){
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
   var m  = mx.maps[ o.id ];
-  var list = m.tools.viewsListJs;
+  var pckry = m.tools.viewsListPackery;
   var views = m.views;
   var view = views.filter(function(x){
     return x.id == o.idView ;
@@ -861,10 +836,11 @@ export function removeView(o){
   });
 
   if(li){
+    pckry.remove(li); 
+    pckry.layout();
     li.remove();
   }
 
-  list.reIndex();
 }
 
 /**
@@ -910,44 +886,79 @@ export function handleViewClick(o){
         comment :"target is the upload geojson button",
         isTrue : el.dataset.view_action_key == "btn_upload_geojson",
         action : function(){
-          var target = el.dataset.view_action_target;
-          /**
-           * Extract view data and send it to shiny in chunk
-           */
-          mx.data.geojson.getItem(target).then(function(x){
+          var idView = el.dataset.view_action_target;
+          var progress = 1;
 
-            var data, part, 
-              size = 100000,
-              delay = 1000;
+          function updateProgress(){
+            console.log(progress);
+            mx.helpers.progressScreen({
+              enable : progress < 100,
+              id : "upload_geojson",
+              percent : progress,
+              text : "Processing " + idView + " ( " + progress.toFixed(2) + "% )"
+            });
 
-            var view = x.view;
-            var json = JSON.stringify(view);
-            var chunk = mx.helpers.chunkString(json,size);
-            var chunkL = chunk.length;
+            if(progress>=100) clearInterval(timer);
 
-            for(var i = 1; i < chunkL + 1 ; i++){
-              sendPart(i,chunk[i-1]);
-            }
+          }
 
-            function sendPart(part,data){
-              setTimeout(function(){
-                var percent =  Math.round(( part / chunkL ) * 100);
+          setTimeout(updateProgress,10);
+          var timer = setInterval(updateProgress,1000);
+          var id = mx.helpers.makeId(10);
 
-                mx.helpers.progressScreen({
-                  enable : part != chunkL,
-                  id : "upload_geojson",
-                  percent : percent,
-                  text : "Upload " + view.data.title.en + " (" + percent + "%)"
-                });
+          setTimeout(function(){
+          try{
+            /**
+             * Extract view data and send it to shiny in chunk
+             */
+            mx.data.geojson.getItem(idView).then(function(item){
+
+              var sliceSize = 100000;
+              var geojson  = mx.helpers.path(item,"view.data.source.data");
+              var title =  mx.helpers.path(item,"view.data.title.en"); 
+              if(!title) title = idView;
+              if(!geojson) return;
+                 
+              var fileName = title + ".geojson";
+              var string = JSON.stringify(geojson);
+              var chunks = mx.helpers.chunkString(string,sliceSize);
+              var i = 0;
+              var iL = chunks.length;
+
+              mx.helpers.onNextFrame(loop);
+
+              function loop() {
+                sendPart(id,fileName,i,iL,chunks[i]);
+                i++;
+                if (i<iL) {
+                  setTimeout(loop,1);
+                }else{
+                  progress = 100;
+                }
+              }
+
+              function sendPart(id,fileName,i,iL,data){
+
                 Shiny.onInputChange("uploadGeojson:mx.jsonchunk",{
-                  length : chunkL,
-                  part : part,
+                  id : id,
+                  length : iL,
+                  idPart : mx.helpers.paddy(i,7),
                   data : data,
-                  time : (new Date())
+                  time : (new Date()),
+                  fileName : fileName
                 });
-              },delay*part);
-            }
-          });
+
+                progress  =  Math.round(( i / iL ) * 100) ;
+              }
+            });
+          }catch(e){
+            progress=100;
+            updateProgress();
+            clearInterval(timer);
+            console.log(e);
+            mx.helpers.modal({title:'Error',content:'An error occured, check the console'});
+          }
+          },100);
         }
       },
       {
@@ -1016,6 +1027,9 @@ export function handleViewClick(o){
             selector : elSearch,
             action : "toggle"
           });
+          
+           mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+
         }
       },
       {
@@ -1173,6 +1187,7 @@ export function updateViewsListLanguage(o){
 
 
 /**
+
  * Render views HTML list in viewStore
  * @param {object} o options
  * @param {string} o.id map id
@@ -1180,7 +1195,8 @@ export function updateViewsListLanguage(o){
  * @param {boolean} o.add Add views to an existing list
  */
 export function renderViewsList(o){
-  
+
+  var elDiv, elNewItem, elNewInput ; 
   var m = mx.maps[o.id];
   var elViewsContainer = document.querySelector(".mx-views-container");
   var elViewsContent = elViewsContainer.querySelector(".mx-views-content");
@@ -1213,21 +1229,46 @@ export function renderViewsList(o){
     if( !m.listener ) m.listener = {};
     if( !m.tools ) m.tools = {};
 
-    /**
-     * Render view items
-     */
     if( ! add ){ 
+
+      /**
+       * Render all view items
+       */
+      if( m.tools.viewsListPackery ){
+        m.tools.viewsListPackery.destroy();
+      }
+
       elViewsList.innerHTML = mx.templates.viewList(views);
+
     }else{
-      var emptyDiv, newItem, newInput ; 
+
+      /**
+       * Render given view items
+       */
       views.forEach(function(v){m.views.push(v);});
-      emptyDiv = document.createElement("div");
-      emptyDiv.innerHTML = mx.templates.viewList(views);
-      newItem = emptyDiv.querySelector("li");
-      newInput =  newItem.querySelector(".mx-view-item-checkbox");
-      newInput.checked = true;
-      elViewsList.insertBefore(newItem,elViewsList.childNodes[0]);
+      elDiv = document.createElement("div");
+      elDiv.innerHTML = mx.templates.viewList(views);
+      elNewItem = elDiv.querySelector("li");
+      elNewInput =  elNewItem.querySelector(".mx-view-tgl-input");
+      elNewInput.checked = true;
+      elViewsList.insertBefore(elNewItem,elViewsList.childNodes[0]);
     }
+
+    /**
+    * Handle draggable and sortable
+    */
+    mx.helpers.makeViewsSortable({
+      add : add,
+      pckry : m.tools.viewsListPackery,
+      id : o.id,
+      selectorAll : elViewsList,
+      selectorAdd : elNewItem,
+      callback : function(x){
+        updateViewOrder(o);
+      }
+    }).then(function(packery){
+      m.tools.viewsListPackery = packery;
+    });
 
     /** 
      * Get components 
@@ -1242,45 +1283,41 @@ export function renderViewsList(o){
     mx.helpers.setLanguage({
       el:elViewsContainer
     });
-    
-    /**
-     * Create searchable list.js object
-     */
-    if( ! m.tools.viewListJs ){
-      System.import('list.js').then(function(List){
-        m.tools.viewsListJs = new List( elViewsContainer, {
-          valueNames: mx.helpers.objectToArray(viewClasses),
-          listClass : "mx-views-list"
-        });
-      });
-    }else{
-      m.tools.viewsListJs.reIndex();
-    }
 
-    /**
-     * Create Sortable list
-     */
-    if( ! m.listener.viewsListSortable ){
-      m.listener.viewsListSortable = mx.helpers.sortable({
-        selector : elViewsList,
-        callback : function(x){
-          updateViewOrder(o);
+    /*
+    * List filter by text
+    */
+
+    if( ! m.listener.viewsListFilterText ){
+
+      m.listener.viewsListFilterText = mx.helpers.filterViewsListText({
+        selectorInput : "#viewsTextFilter" ,
+        classHide : "mx-filter-text",
+        classSkip : "mx-filter-class",
+        idMap : o.id,
+        onFiltered : function(){
+          m.tools.viewsListPackery.shiftLayout();
         }
       });
+    }else{
+      m.listener.viewsListFilterText();
     }
-
     /*
      * List filter by classes
      */
-    if( ! m.listener.viewsListFilterClass ){
+    if( ! m.listener.viewsListFilterCheckbox ){
 
-      m.listener.viewsListFilterClass =  mx.helpers.handleListFilterClass({
-        activeFilters : activeFilters,
-        viewClasses : viewClasses,
-        m: m
+      m.listener.viewsListFilterCheckbox = mx.helpers.filterViewsListCheckbox({
+        selectorInput : "#viewsClassFilter",
+        idMap : o.id ,
+        classHide : "mx-filter-class",
+        classSkip : "mx-filter-text",
+        onFiltered : function(){
+          m.tools.viewsListPackery.shiftLayout();
+        }
       });
-
-      elFilters.addEventListener("change", m.listener.viewsListFilterClass);
+    }else{
+      m.listener.viewsListFilterCheckbox();
     }
 
     /*
@@ -1301,33 +1338,6 @@ export function renderViewsList(o){
       m.listener.viewsListClick = mx.helpers.handleViewClick(o);
       elViewsList.addEventListener("click",m.listener.viewsListClick,false);
     }
-
-    /**
-     * Time sliders and search module 
-     */
-    //if( !o.add ) {
-    /*
-     * Init interactive tools for views
-     */
-    views.forEach(function(x){ 
-      x._idMap = o.id;
-      x._interactive = {};
-      x._filters = {
-        style : ['all'],
-        legend : ['all'],
-        time_slider : ['all'],
-        search_box : ['all'],
-        numeric_slider : ['all']
-      };
-      x._setFilter = viewSetFilter;
-      x._setOpacity = viewSetOpacity;
-
-      mx.helpers.makeTimeSlider({ view: x , idMap: o.id }); 
-      mx.helpers.makeNumericSlider({ view: x, idMap: o.id });
-      mx.helpers.makeTransparencySlider({ view: x, idMap: o.id});
-      mx.helpers.makeSearchBox({ view: x, idMap: o.id });
-    });
-    //}
 
     /*
      * inital view controler after view rendering
@@ -2135,7 +2145,6 @@ export function addViewVt(o){
       /*
        * Add legend and update view order
        */
-
       var legend = document.querySelector("#check_view_legend_" + view.id);
       if(legend){
         legend.innerHTML = mx.templates.viewListLegend(view);
@@ -2144,6 +2153,49 @@ export function addViewVt(o){
     }
   }
 }
+
+
+/**
+* Add option and legend box for the given view
+* @param {Object} o Options
+* @param {String} o.id map id
+* @param {Object} o.view View item
+*/
+export function addOptions(o){
+
+  var view = o.view;
+  var idMap = o.id;
+  var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
+
+  if(elOptions) elOptions.innerHTML = mx.templates.viewListOptions(view);
+
+  view._idMap = o.id;
+  view._interactive = {};
+  view._filters = {
+    style : ['all'],
+    legend : ['all'],
+    time_slider : ['all'],
+    search_box : ['all'],
+    numeric_slider : ['all']
+  };
+  view._setFilter = mx.helpers.viewSetFilter;
+  view._setOpacity = mx.helpers.viewSetOpacity;
+
+  mx.helpers.makeTimeSlider({ view: view , idMap: o.id }); 
+  mx.helpers.makeNumericSlider({ view: view, idMap: o.id });
+  mx.helpers.makeTransparencySlider({ view: view, idMap: o.id});
+  mx.helpers.makeSearchBox({ view: view, idMap: o.id });
+
+
+  /*
+   * translate based on dict key
+   */
+    mx.helpers.setLanguage({
+      el:elOptions
+    });
+}
+
+
 
 /** 
  *  Add map-x view on the map
@@ -2181,6 +2233,15 @@ export function addView(o){
     id: o.id,
     prefix : view.id
   });
+  
+  /**
+  * Add options
+  */
+  mx.helpers.addOptions({
+   id : o.id,
+   view : view
+  });
+
 
   /* Switch on view type*/
   var handler = {
@@ -2198,7 +2259,6 @@ export function addView(o){
 
       var legend = mx.helpers.path(view,"data.source.legend");
 
-      console.log("add legend for " + view.id);
       if(legend){
         var elLegend = document.querySelector("#check_view_legend_"+view.id);
         var oldImg = elLegend.querySelector("img");
@@ -2207,6 +2267,9 @@ export function addView(o){
           img.src = legend;
           img.alt = "Legend"; 
           elLegend.appendChild(img); 
+          img.onload = function(){
+            mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+          };
         }
       }
 
@@ -3081,6 +3144,8 @@ export function setUiColorScheme(o){
   init = c !== undefined;
   c = c||{};
 
+  mx.settings.colors = c;
+  console.log(c);
   /**
   * Extract main rules. NOTE: this seems fragile, find another technique
   */
@@ -3115,7 +3180,6 @@ export function setUiColorScheme(o){
      */
 
     var inputs = document.getElementById("inputThemeColors");
-    inputs.classList.add("mx-settings-colors");
     inputs.classList.add("mx-views-content");
 
     if(inputs && inputs.children.length>0){
@@ -3271,7 +3335,7 @@ export function setUiColorScheme(o){
 
 */
 export function initMap(o){
-  
+
   var elMap = document.getElementById(o.id);
   var hasShiny = !! window.Shiny ;
 
@@ -3281,9 +3345,12 @@ export function initMap(o){
   }
 
   Promise.all([
-  System.import("mapbox-gl/dist/mapbox-gl"),
-  System.import("localforage"),
-  System.import("../data/style_mapx.json")
+    System.import("mapbox-gl/dist/mapbox-gl"),
+    System.import("localforage"),
+    System.import("../data/style_mapx.json"),
+    System.import("../html/view_list.dot"),
+    System.import("../html/view_list_legend.dot"),
+    System.import("../html/view_list_options.dot")
   ]).then(function(m){
 
     var  mapboxgl = m[0];
@@ -3292,107 +3359,111 @@ export function initMap(o){
     mx.localforage = localforage;
     mx.data.style = m[2];
 
+    mx.templates.viewList = m[3];
+    mx.templates.viewListLegend = m[4];
+    mx.templates.viewListOptions = m[5];
+
     mx.data.geojson = localforage.createInstance({
       name:  "geojson"
     });
     mx.data.images = localforage.createInstance({
       name : "images"
     });
-    
+
     mx.data.stories = localforage.createInstance({
       name : "stories"
     });
     mx.data.storyCache = {};
 
 
-  /**
-   * Confirm user quit
-   */
+    /**
+     * Confirm user quit
+     */
 
-  if(false){
-    window.onbeforeunload = function(e) {
-      var dialogText = 'Are you sure you want to quit?';
-      e.returnValue = dialogText;
-      return dialogText;
+    if(false){
+      window.onbeforeunload = function(e) {
+        var dialogText = 'Are you sure you want to quit?';
+        e.returnValue = dialogText;
+        return dialogText;
+      };
+    }
+
+    /**
+     * Set mapbox gl token
+     */
+    if (!mapboxgl.accessToken && o.token) {
+      mapboxgl.accessToken = o.token;
+    }
+
+    /**
+     * TEst if mapbox gl is supported
+     */
+    if ( !mapboxgl.supported() ) {
+      alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
+      return;
+    }
+
+
+
+    /**
+     * Set default
+     */
+    o.center = o.center || [0,0];
+    o.lat = o.lat || 90;
+    o.lng = o.lng || 0;
+    o.zoom = o.zoom  || 4;
+    o.maxZoom = o.maxZoom || 20;
+    o.minZoom = o.minZoom || 0;
+    o.location = o.location || window.location.origin + window.location.pathname;
+    mx.settings.languages = o.languages = o.languages || ["en","fr"];
+    mx.settings.language = o.language = o.language || o.languages[0];
+    mx.settings.vtPort = o.vtPort = o.vtPort || "";
+    mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
+    // set path using current location. 
+
+    if(o.paths.sprite){
+      o.paths.sprite = o.location + o.paths.sprite;
+    }
+
+    /**
+     * Init mgl data store
+     */  
+    if (!mx.maps) {
+      mx.maps = {};
+    }
+    /**
+     * Mgl data : keep reference on options, listener, views, etc...
+     */
+    mx.maps[o.id] = {
+      options : o,
+      map: {},
+      listener: {},
+      views : [],
+      style : {}
+      //themes : {}
     };
-  }
 
-  /**
-   * Set mapbox gl token
-   */
-  if (!mapboxgl.accessToken && o.token) {
-    mapboxgl.accessToken = o.token;
-  }
+    var style = mx.maps[o.id].style = mx.data.style;
+    style.sprite = o.paths.sprite;
+    mx.maps[o.id].style = style;
 
-  /**
-   * TEst if mapbox gl is supported
-   */
-  if ( !mapboxgl.supported() ) {
-    alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
-    return;
-  }
+    /* Create map object */
+    var map = new mapboxgl.Map({
+      container: o.id, // container id
+      style: style,
+      center: [o.lng,o.lat],
+      zoom: o.zoom,
+      maxZoom: o.maxZoom,
+      minZoom: o.minZoom,
+      preserveDrawingBuffer:true
+    });
 
+    /* save map in mgl data */
+    mx.maps[o.id].map =  map;
 
-
-  /**
-   * Set default
-   */
-  o.center = o.center || [0,0];
-  o.lat = o.lat || 90;
-  o.lng = o.lng || 0;
-  o.zoom = o.zoom  || 4;
-  o.maxZoom = o.maxZoom || 20;
-  o.minZoom = o.minZoom || 0;
-  o.location = o.location || window.location.origin + window.location.pathname;
-  mx.settings.languages = o.languages = o.languages || ["en","fr"];
-  mx.settings.language = o.language = o.language || o.languages[0];
-  mx.settings.vtPort = o.vtPort = o.vtPort || "";
-  mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
-  // set path using current location. 
-  
-  if(o.paths.sprite){
-    o.paths.sprite = o.location + o.paths.sprite;
-  }
-
-  /**
-   * Init mgl data store
-   */  
-  if (!mx.maps) {
-    mx.maps = {};
-  }
-  /**
-   * Mgl data : keep reference on options, listener, views, etc...
-   */
-  mx.maps[o.id] = {
-    options : o,
-    map: {},
-    listener: {},
-    views : [],
-    style : {}
-    //themes : {}
-  };
-
-      var style = mx.maps[o.id].style = mx.data.style;
-      style.sprite = o.paths.sprite;
-      mx.maps[o.id].style = style;
-
-      /* Create map object */
-      var map = new mapboxgl.Map({
-        container: o.id, // container id
-        style: style,
-        center: [o.lng,o.lat],
-        zoom: o.zoom,
-        maxZoom: o.maxZoom,
-        minZoom: o.minZoom,
-        preserveDrawingBuffer:true
-      });
-
-      /* save map in mgl data */
-      mx.maps[o.id].map =  map;
-
-      /**
-       * Send loading confirmation to shiny
-       */
+    /**
+     * Send loading confirmation to shiny
+     */
       map.on('load', function() {
         if(hasShiny)
           Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
@@ -3404,14 +3475,15 @@ export function initMap(o){
       /**
        * Handle drop geojson event
        */
-      if(mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver){
-        elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
-        elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
-      }
-      /**
-       * Add controls to the map
-       */
-      
+    if(mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver){
+      elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
+      elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
+    }
+
+    /**
+     * Add controls to the map
+     */
+
       map.addControl(new mx.helpers.mapControlMain(),'top-left');
       map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
       map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
@@ -3421,16 +3493,16 @@ export function initMap(o){
        * Trigger country change on double click
        * NOTE: experimental. layers and input id should be moved as options.
        */
-      map.on('dblclick',function(e){
-        var cntry, features ;
-        if(o.countries){
-          features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
-          cntry = mx.helpers.path(features[0],"properties.iso3code");
-          if(o.countries.indexOf(cntry) > -1 && hasShiny ) {
-            Shiny.onInputChange( "selectCountry", cntry);
-          }
+    map.on('dblclick',function(e){
+      var cntry, features ;
+      if(o.countries){
+        features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
+        cntry = mx.helpers.path(features[0],"properties.iso3code");
+        if(o.countries.indexOf(cntry) > -1 && hasShiny ) {
+          Shiny.onInputChange( "selectCountry", cntry);
         }
-      });
+      }
+    });
 
     map.on("render" , mx.helpers.handleEvent);
     map.on("click", mx.helpers.handleEvent);
@@ -3441,8 +3513,6 @@ export function initMap(o){
     });
 
 
-    //}
-  //});
   });
 
 }

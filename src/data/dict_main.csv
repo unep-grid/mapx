@@ -33,6 +33,7 @@
 "btn_opt_screenshot","Take a screenshoot","Prendre une capture d'écran","","","","","","گرفتن تصویر"
 "btn_opt_search","Settings","Préférences","","","","","","جستجو و فلتر"
 "btn_opt_start_story","Read this story","Lire ce récit","","","","","","این تاریخ را بخوانید"
+"btn_opt_edit_story","Edit story","Editer le récit","","","","","",""
 "btn_opt_zoom_all","Zoom to all features","Zoomer sur tous les éléments","","","","","","بزرگنمایی به همه پدیده ها"
 "btn_opt_zoom_visible","Zoom on displayed features","Zoomer sur les éléments affichés","","","","","","بزرگنمایی به اندازه نمایش پدیده ها"
 "btn_print","Print current","Imprimer","","","","","","پرنت صفحه فعلی"

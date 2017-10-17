@@ -58,7 +58,6 @@ onmessage = function(e) {
     // give intermediate time, reset timer
     var timerLap = function() {
       var lap = new Date() - timerVal;
-      timerStart();
       return lap;
     };
 
@@ -86,18 +85,18 @@ onmessage = function(e) {
       return x.level == "message";
     });
 
-    // set a message with summary
-    var logMessage = " geojson validation " +
-      " n errors = " + errors.length +
-      " n warnings = " + warnings.length + " done in" +
-      timerLapString();
+/*    // set a message with summary*/
+    //var logMessage = " geojson validation " +
+      //" n errors = " + errors.length +
+      //" n warnings = " + warnings.length + " done in" +
+      //timerLapString();
 
-    console.log(fileName + " summary :  " + logMessage);
+    //console.log(fileName + " summary :  " + logMessage);
 
     // send message
     postMessage({
       progress: 60,
-      message: logMessage
+      message: "Validation done in " + timerLapString()
     });
 
     // validation : warnings
@@ -105,15 +104,16 @@ onmessage = function(e) {
       warningMsg = warnings.length + " warning message(s) found. Check the console for more info";
       postMessage({
         progress: 75,
-        msssage: warningMsg
+        message: warnings.length + " warnings found. Please check the console."
       });
+
       warnings.forEach(function(x) {
         console.log({file:fileName,warnings:JSON.stringify(x)});
       });
     }
     // varlidation: errors
     if (errors.length > 0) {
-      errorMsg = errors.length + " errors found. check the console for more info";
+      errorMsg = errors.length + " errors found. Please check the console.";
       postMessage({
         progress: 100,
         message: errorMsg,
@@ -151,24 +151,8 @@ onmessage = function(e) {
 
     postMessage({
       progress: 90,
-      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
+      message: "Geometry type found in " + timerLapString()
     });
-
-/*    // if more than one type, return an error*/
-    //if ( geomTypes.length>1 ) {
-      //var msg = "Multi geometry not yet implemented";
-
-      //postMessage({
-        //progress: 100,
-        //msssage: msg,
-        //errorMessage: fileName + ": " + msg
-      //});
-
-      //console.log({
-        //"errors": fileName + ": " + msg + ".(" + geomTypes + ")"
-      //});
-      //return;
-    /*}*/
 
     /**
      * Remove features without geom
@@ -251,7 +235,7 @@ onmessage = function(e) {
 
     postMessage({
       progress: 80,
-      message: " extent (" + extent +") found in " + timerLapString()
+      message: "extent found in " + timerLapString()
     });
     /**
      * Set default for a new layer
@@ -304,7 +288,7 @@ onmessage = function(e) {
 
     postMessage({
       progress: 99,
-      message: "Add layer",
+      message: "Worker job done in "+ timerLapString(),
       id: id,
       extent: extent,
       attributes : attributes,

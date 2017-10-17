@@ -48,16 +48,16 @@ mx_init_checkpoint <- function(){
       c(
         require(shiny),
         require(RPostgreSQL),
-        require(roxygen2),
-        require(memoise),
+        #require(roxygen2),
+        #require(memoise),
         require(jsonlite),
         #require(devtools),
-        require(rio),
+        #require(rio),
         require(magrittr),
         require(base64),
         #require(infuser),
-        require(WDI),
-        require(rgdal),
+        #require(WDI),
+        #require(rgdal),
         require(parallel)
         )
       )

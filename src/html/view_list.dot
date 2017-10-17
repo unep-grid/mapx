@@ -1,0 +1,22 @@
+{{ var h = mx.helpers ; }}
+{{~it :view}}
+{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}
+<li id="{{=view.id}}" data-view_id="{{=view.id}}" class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect">
+  <input data-view_action_key="btn_toggle_view" data-view_action_target="{{=view.id}}" id="check_view_enable_{{=view.id}}" class="mx-view-tgl-input" type="checkbox"/>
+  <label class="mx-view-tgl-content" for="check_view_enable_{{=view.id}}">
+    <div class="mx-view-tgl-btn-container">
+      <div class="mx-view-tgl-btn"></div>
+    </div>
+    <span class="mx-view-tgl-title">
+      {{?view.data.title}}
+      {{=view.data.title[lang]}}
+      {{?}}
+    </span>
+    <span class="mx-view-item-classes">{{=view.data.classes}},{{=view.type}}</span>
+    <span class="mx-view-item-index">{{=mx.helpers.getDistinctIndexWords(view)}}</span>
+  </label>
+  <div class="mx-view-tgl-more-container">
+    <div class="mx-view-tgl-more" data-view_options_for="{{=view.id}}"></div>
+  </div>
+</li>
+{{~}}

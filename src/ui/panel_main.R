@@ -7,30 +7,27 @@
 # UI for the tabs : views, tools and settings 
 #
 div(
-  class="mx-panels",
+  class="mx-panels-container",
   div(
-    class="mx-panels-main",
-    div(
-      class="mx-panel mx-panel-left transparent shadow panels-main panel-layers",
-      id="tabLayers",
-      mxSource("src/ui/panel_views.R")
-      ),
-    div(
-      class="mx-panel mx-panel-left transparent shadow panels-main panel-tools mx-hide",
-      id="tabTools",
-      mxSource("src/ui/panel_tools.R")
-      ),
-    div(
-      class="mx-panel mx-panel-left transparent shadow panels-main panel-settings mx-hide",
-      id="tabSettings",
-      mxSource("src/ui/panel_settings.R")
-      )
+    class="mx-panel-left mx-panel-views transparent shadow",
+    mxSource("src/ui/panel_views.R")
     ),
   div(
-    class="mx-panel-bottom mx-panel transparent shadow panel-bottom panel-dashboard mx-hide-back",
+    class="mx-panel-left mx-panel-tools transparent shadow mx-hide",
+    mxSource("src/ui/panel_tools.R")
+    ),
+  div(
+    class="mx-panel-left mx-panel-settings transparent shadow mx-hide",
+    mxSource("src/ui/panel_settings.R")
+    ),
+  div(
+    class="mx-panel-right mx-events-off",
     div(
-      class="mx-panel-dashboards",
-      id="mxDashboards"
+      class="mx-panel-dashboards shadow",
+      div(
+        class="mx-panel-dashboards-scroll mx-events-on",
+        id="mxDashboards"
+        )
       )
     )
   )

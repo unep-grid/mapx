@@ -64,7 +64,7 @@ config[["resources"]]  =  list(
 #
 config[["srvPath"]] = file.path("src","server")
 config[["uiPath"]] = file.path("src","ui")
-
+config[["uploadDirPath"]] = tempdir()
 
 
 #
@@ -136,6 +136,7 @@ config[["map"]] <- list(
     )
   )
 
+
 #
 # Default ui and map colors
 #
@@ -146,7 +147,7 @@ config[["ui"]] <- list(
       "mx_ui_text_faded" = "rgba(53,53,53,0.5)",
       "mx_ui_hidden" = "rgba(2,186,253,0)",
       "mx_ui_border" = "rgba(156,156,156,0.4)",
-      "mx_ui_background" = "rgba(248,248,248,1)",
+      "mx_ui_background" = "rgba(248,248,248,0.92)",
       "mx_ui_shadow" = "rgba(153,153,153,0.4)",
       "mx_map_background" = "rgba(248,248,248,1)",
       "mx_map_mask" = "rgba(153,153,153,0.4)",
@@ -200,6 +201,7 @@ config[["templates"]] <- list()
 # js dot renderer
 config[[c("templates","dot")]] <-  list()
 config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("src/ui/view_list_legend.dot.R"))
+config[[c("templates","dot","viewListOptions")]] <- as.character(mxSource("src/ui/view_list_options.dot.R"))
 config[[c("templates","dot","viewList")]] <- as.character(mxSource("src/ui/view_list.dot.R"))
 
 # html template

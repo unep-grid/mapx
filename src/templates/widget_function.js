@@ -6,17 +6,22 @@
  */
 return {
   onAdd : function() {
-    console.log("widget added");
+    var widget = this;
 
   },
   onRemove : function() {
-
-    console.log("widget removed");
+    var widget = this;
 
   },
   onData : function() {
-    console.log("widget receive data");
-    console.log(this.data);
+    var data = this.data;
+    var widget = this;
 
   }
 };
+
+/**
+* Available method on widget 
+* 
+* 
+*/

@@ -11,3 +11,5 @@ export * from './mx_helper_diacritics.js';
 export * from './mx_helper_fullscreen.js';
 export * from './mx_helper_colors.js';
 export * from './mx_helper_jed.js';
+export * from './mx_helper_filter_views.js';
+

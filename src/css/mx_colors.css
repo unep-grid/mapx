@@ -3,15 +3,6 @@
 *
 */
 
-/*.mx * {   */
-  /*--mx_ui_text : hsla(196, 98%, 50%,1);*/
-  /*--mx_ui_hidden : hsla(196, 98%, 50%,0);*/
-  /*--mx_ui_border : hsla(196, 98%, 20%,0.9);*/
-  /*--mx_ui_background : hsla(196, 98%, 10%,0.8);*/
-  /*--mx_ui_shadow : hsla(196, 98%, 30%, 0.3);*/
-  /*border-color : var(--mx_ui_border);*/
-  /*color: var(--mx_ui_text);*/
-/*}*/
 .mx * {   
   --mx_ui_text: hsl(0, 0%, 21%);
   --mx_ui_text_faded: hsla(0, 0%, 21%,0.5);
@@ -32,13 +23,13 @@
   -moz-appearance: none;
   appearance: none;
 } 
-/* targeting ie 9 and 10*/
-@media screen and (min-width:0{{ content }}) {
-  select {
-    background:none;
-    padding: 5px;
-  }
-}
+/*[> targeting ie 9 and 10<]*/
+/*@media screen and (min-width:0{{ content }}) {*/
+  /*select {*/
+    /*background:none;*/
+    /*padding: 5px;*/
+  /*}*/
+/*}*/
 
 .mx .theme_colors label {
   color : var(--mx_ui_text); 
@@ -54,7 +45,6 @@
   -webkit-box-box-shadow : 1px 1px 4px 0px var(--mx_ui_shadow);
   -moz-box-shadow : 1px 1px 4px 0px var(--mx_ui_shadow);
   box-shadow : 1px 1px 4px 0px var(--mx_ui_shadow);
-  transition: box-shadow 0.1s ease-in-out;
 }
 
 
@@ -302,25 +292,25 @@ color: #FFF;
 }
 
 .loading-container {
-  background-color : var(--mx_ui_background);
-  color: var(--mx_ui_text) ;
+  background-color : var(--mx_ui_text);
+  color: var(--mx_ui_background) ;
 }
 
 /* Note : see also modal background*/
 .loading-screen-background {
-  background-color : var(--mx_ui_shadow);
-  opacity:0.3;
+  background-color : var(--mx_ui_text);
+  opacity:0.1;
 }
 .loading-bar-out { 
-  border:1px solid var(--mx_ui_text);
+  border:1px solid var(--mx_ui_background);
 }
 
 .loading-bar-in {
-  background-color: var(--mx_ui_text) ;
+  background-color: var(--mx_ui_background) ;
 }
 
 .loading-bar-txt {
-  color: var(--mx_ui_text) ;
+  color: var(--mx_ui_background) ;
 }
 
 /**
@@ -370,6 +360,18 @@ color:var(--mx_ui_text);
   border-bottom: 1px solid var(--mx_ui_text);
   border-left: 1px solid var(--mx_ui_text);
   border-right: 1px solid var(--mx_ui_text);
+}
+
+/**
+ * View toggle
+ */
+.mx .mx-view-tgl-btn-container {
+  background: var(--mx_ui_text_faded);
+}
+
+.mx-view-tgl-btn {
+  background-color: var(--mx_ui_text);
+  border-color: solid var(--mx_ui_text);
 }
 
 

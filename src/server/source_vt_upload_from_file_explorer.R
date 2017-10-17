@@ -1,4 +1,5 @@
 
+
 observeEvent(input$btnUploadSources,{
 
   language <- reactData$language 
@@ -40,6 +41,45 @@ observeEvent(input$btnUploadSources,{
 
 
 #
+# Check if uploadGeojson event
+#
+observeEvent(input$uploadGeojson,{
+
+  language <- reactData$language 
+
+  #
+  # json editor output
+  #
+  uiOut = tagList(
+     jedOutput(id="sourceNewUpload")
+    )
+
+  #
+  # List of button for the modal window
+  #
+  btnList <- list(
+    actionButton(
+      inputId="btnImportNewSource",
+      label=d("btn_save",language)
+      )
+    )
+
+  #
+  # Generate the modal panel
+  #
+  mxModal(
+    id="modalSourceCreate",
+    content=uiOut,
+    buttons=btnList,
+    addBackground=TRUE,
+    textCloseButton=d("btn_close",language)
+    )
+
+})
+
+
+
+#
 # Init schema editor
 #
 observeEvent(input$sourceNewUpload_init,{
@@ -59,16 +99,28 @@ observeEvent(input$sourceNewUpload_init,{
 })
 
 
+
+
+observeEvent(input$fileGeojson,{
+  reactData$geojsonPath <- input$fileGeojson.datapath
+})
+
+observeEvent(input$uploadGeojson,{
+  reactData$geojsonPath <- input$uploadGeojson
+})
+
+
 #
-# File is there
+# Btn save toggle
 #
 observe({
-  
+ 
   msg <- input$sourceNewUpload_issues$msg
-  file <- input$fileGeojson$datapath
-  noFile <- noDataCheck(file) || !file.exists(file)
+  file <- reactData$geojsonPath
+  noFile <- noDataCheck(file) || isTRUE(!file.exists(file))
   hasIssues <- !noDataCheck(msg) || length(msg) > 0
   disableUpload <- noFile || hasIssues 
+
 
   mxToggleButton(
     id="btnImportNewSource",
@@ -96,8 +148,8 @@ observeEvent(input$btnImportNewSource,{
         disable = TRUE
         )
 
-
-      filePath <- input$fileGeojson$datapath
+      #filePath <- input$fileGeojson$datapath
+      filePath <- reactData$geojsonPath 
       meta <- input$sourceNewUpload_values$msg
       country <- reactData$country
       language <- reactData$language
@@ -119,7 +171,8 @@ observeEvent(input$btnImportNewSource,{
       #
       # Start progress
       #
-      mxProgress(id=idSource, text= "Start importation, please wait", percent=1)
+      mxProgress(id=idSource, text= "Reading file, this could take a while", percent=1)
+
       #
       # Create new row
       #

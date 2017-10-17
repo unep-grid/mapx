@@ -8,6 +8,8 @@
 
 tagList(
   tags$h3(`data-lang_key`="title_settings"),
-  tags$div(id="inputThemeColors")
-)
+  tags$div(class="mx-settings-colors",
+    tags$div(id="inputThemeColors")
+    )
+  )
 

@@ -1,5 +1,6 @@
 
-observeEvent(input$uploadGeojson,{
+
+observeEvent(input$uploadGeojson_old,{
   language <- reactData$language 
   country <- reactData$country
   dict <- .get(config,c("dictionaries","schemaMetadata")) 

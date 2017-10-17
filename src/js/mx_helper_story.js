@@ -453,7 +453,7 @@ export function storyController(o){
     "#btnZoomIn",
     "#btnZoomOut",
     "#btnFullscreen",
-    ".panel-layers",
+    ".mx-panel-views"
   ];
   o.selectorEnable = o.selectorEnable || [
     "#btnStoryUnlockMap",
@@ -534,14 +534,22 @@ export function storyController(o){
     if(d.position){
       var pos =  d.position;
       var map = mx.maps[o.id].map;
-      map.flyTo({
-        speed : 3,
-        easing : mx.helpers.easingFun({type:"easeIn",power:1}),
+      map.easeTo({
+        //speed : 3,
+        easing : mx.helpers.easingFun({type:"easeOut",power:1}),
         zoom : pos.z,
         bearing : pos.b,
         pitch :  pos.p,
         center : [ pos.lng, pos.lat ] 
       });
+
+
+    /**
+    * Update packery layout
+    */
+    if( mx.maps[o.id].tools.viewsListPackery ){
+      mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+    }
 
       /**
       * Remove listener
@@ -638,10 +646,12 @@ export function storyBuild(o){
       divSlideFront.style.overflowY = slide.scroll_enable ? 'scroll' : 'hidden';
       divSlide.setAttribute("data-slide_config",JSON.stringify(slide.effects || []));
       divSlideBack.style.backgroundColor = slide.color_bg || o.colors.bg;
-      divSlideBack.style.opacity = slide.opacity_bg || o.colors.alpha;
+      divSlideBack.style.opacity = (slide.opacity_bg == 0) ? 0 : slide.opacity_bg || o.colors.alpha;
       divSlide.appendChild(divSlideBack);
+
       divSlide.appendChild(divSlideFront);
       divStep.appendChild(divSlide);
+      console.log(divStep);
     });
     /* add step to steps */
     divStory.appendChild(divStep);
@@ -749,7 +759,7 @@ export function storyPlayStep(o){
    * Fly to position
    */
   m.map.flyTo({
-    speed : 0.5,
+    speed : 0.3,
     easing : mx.helpers.easingFun({type:"easeOut",power:1}),
     zoom : pos.z,
     bearing : pos.bearing,

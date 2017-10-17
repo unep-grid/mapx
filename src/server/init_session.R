@@ -19,7 +19,7 @@ if(!noDataCheck(query$views)){
 #
 # Send templates
 #
-mxSetTemplates(config[[c("templates","dot")]])
+#mxSetTemplates(config[[c("templates","dot")]])
 
 #
 # Add ressource path for jed

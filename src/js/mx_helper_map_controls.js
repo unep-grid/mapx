@@ -87,7 +87,7 @@ mapxLogo.prototype.onRemove = function() {
  */
 export function mapControlMain(){}
 mapControlMain.prototype.onAdd = function(map) {
-
+  var idMap = map._container.id;
   var helper = mx.helpers;
 
   helper.toggleControls = function(o){
@@ -156,10 +156,18 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-newspaper-o",
       key:"btn_tab_views",
       action:function(){ 
-        helper.panelEnable(
-          'panels-main',
-          'panel-layers',
-          'mx-hide'
+        helper.panelSwitch(
+          'mx-panel-left',
+          'mx-panel-views',
+          'mx-hide',
+          // Set a callback : if present, reset views layout
+          function(state){
+            if(state=="on"){
+              try{
+              mx.maps[idMap].tools.viewsListPackery.shiftLayout();
+              }catch(e){console.log(e);}
+            }
+          }
         );
       }
     },
@@ -167,9 +175,9 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-sliders",
       key:"btn_tab_settings",
       action:function(){ 
-        helper.panelEnable(
-          'panels-main',
-          'panel-settings',
+        helper.panelSwitch(
+          'mx-panel-left',
+          'mx-panel-settings',
           'mx-hide'
         );
       }
@@ -178,9 +186,9 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-cogs",
       key:"btn_tab_tools",
       action:function(){ 
-        helper.panelEnable(
-          'panels-main',
-          'panel-tools',
+        helper.panelSwitch(
+          'mx-panel-left',
+          'mx-panel-tools',
           'mx-hide'
         );
       }
@@ -189,11 +197,10 @@ mapControlMain.prototype.onAdd = function(map) {
       classes:"fa fa-pie-chart",
       key:"btn_tab_dashboard",
       action:function(){ 
-        helper.panelEnable(
-          'panel-bottom',
-          'panel-dashboard',
-          'mx-hide-back'
-        );
+        helper.classAction({
+          selector : '.mx-panel-dashboards',
+          class : 'enabled'
+        });
       }
     },
     btnPrint:{

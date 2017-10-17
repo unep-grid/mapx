@@ -1,31 +1,34 @@
 
 
-
-geojson <- c()
-
 removeInputHandler("mx.jsonchunk")
 
 registerInputHandler("mx.jsonchunk", function(chunk,session,name){
 
-  mxDebugMsg(paste("Received chunk",chunk$part,"on",chunk$length))
+  dirUpload <- config[["uploadDirPath"]]
+  fileName <- chunk$fileName
+  process <- chunk$id
+  chunkLength <- chunk$length
 
-  if(chunk$part == 1) geojson <<- c()
+  filePath <- paste(dirUpload,fileName,sep="/")
+  if(file.exists(filePath)){
+    file.remove(filePath)
+  }
 
-  geojson[chunk$part] <<- chunk$data
+  cat(chunk$data,file=sprintf("%1$s/%2$s.%3$s",dirUpload,process,chunk$idPart))
+  fileList <- list.files(dirUpload,pattern=sprintf("^%1$s",process),full.names=T)
 
-  if(chunk$part==chunk$length){
-  
-    data <- paste(geojson,collapse="")
-   
-    valid <- jsonlite::validate(data)
 
-    if(!valid) {
-      browser()
-      stop(attributes(valid)$err)
+   if( length(fileList) == chunkLength ){
+
+    file.create(filePath)
+
+    for(f in fileList){
+      file.append(filePath,f)
+      file.remove(f)
     }
-    return(jsonlite::fromJSON(data,simplifyVector=FALSE))
-  }else{
-    return(NULL)
+
+    return(filePath)
+
   }
 
 })

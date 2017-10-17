@@ -1,8 +1,63 @@
-/*jshint esversion: 6 , node: true */
-//'use strict';
+/*jshint esversion: 6 , node: true */ //'use strict';
 import * as mx from './mx_init.js';
 
 //var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
+
+
+/**
+* Custom operator to avoid escaping js operator in html templates
+*/
+export function all(a){
+  var r = true;
+  a.forEach(function(o,i){
+    r=r&&Boolean(o);
+  });
+  return r;
+}
+export function greaterThan(a,b){
+  return a > b;
+}
+
+export function any(a){
+  var r=true;
+  a.forEach(function(o,i){
+    r=r||Boolean(o);
+  });
+  return r;
+}
+export function not(a){
+  var r=true;
+  a.forEach(function(o,i){
+    r=!r||!Boolean(o);
+  });
+  return r;
+}
+
+export function hasIndex(a,b){
+  return a instanceof Array ? a.indexOf(b) > -1: false;
+}
+export function firstOf(a){
+  for( var i=0, iL=a.length; i<iL; i++ ){
+    if(a[i] === 0 || a[i]){return a[i];}
+  }
+}
+/** test firstOf([,"",0,"a"]) === 0 */
+
+
+/**
+* Fill with zeros
+* @param {Number} n Number
+* @param {Number} p Number of digit
+* @param {String} c Value instead of zeros
+* @note https://stackoverflow.com/questions/1267283/how-can-i-pad-a-value-with-leading-zeros
+*/
+export function paddy(n, p, c) {
+    var pad_char = typeof c !== 'undefined' ? c : '0';
+    var pad = new Array(1 + p).join(pad_char);
+    return (pad + n).slice(-pad.length);
+}
+
+
 
 /**
  * Do something on next frame
@@ -391,11 +446,13 @@ export function getDistinctIndexWords(view){
  * @param {integer} o.maxWait Maximum wainting time. Default = 5000 ms
  */
 export function sendAjax(o) {
+  var time = new Date().getTime() + "";
+  var timeStr = ( o.url.indexOf("?") > 0 ) ? "&time="+time:"?time="+time;
   var xhr = new XMLHttpRequest();
   o.type = o.type ? o.type : "get";
   o.maxWait = o.maxWait ? o.maxWait : 5000; // in ms
   o.useCache = o.useCache === undefined ? window.location.hostname !== "localhost" : o.useCache;
-  o.url = o.useCache ? o.url + '?' + new Date().getTime() : o.url;
+  o.url = o.useCache ? o.url + timeStr : o.url;
   o.onError = o.onError ? o.onError : console.log;
   o.onSuccess = o.onSuccess ? o.onSuccess : console.log;
   o.onComplete = o.onComplete ? o.onComplete : function() {};
@@ -737,7 +794,6 @@ export function modal(o){
   if(o.buttons && o.buttons.constructor == Array){
     o.buttons.forEach(function(f){
       var bb = textToHtml(f);
-      console.log(bb);
          buttons.appendChild(bb);
     });
   }
@@ -979,13 +1035,16 @@ export function getSizeOf(obj){
 * @param {Element} o.el Element to scroll on
 * @param {Number} o.from Starting point in px
 * @param {Number} o.to Ending point in px
+* @param {String} o.axis x (left) or y (top) ;
 * @param {Number} o.during Duration in ms for 1000 px
 * @param {String} o.using Easing function name
 */
 export function scrollFromTo(o){
 
-  var start, duration, easing;
+  var start, duration, easing, bodyDim;
   var diff = o.to - o.from;
+  var axis = o.axis || "y";
+
   if( o.using && o.using.constructor ==  Function ){
     easing = o.using;
   }else{
@@ -995,13 +1054,16 @@ export function scrollFromTo(o){
   });
  
   }
-    var bodyHeight = document.body.clientHeight || 800;
-
+  
+  if( axis === "y" ) bodyDim = document.body.clientHeight || 800; 
+  if( axis === "x" ) bodyDim = document.body.clientWidth || 800; 
   if (!diff || diff === 0) return;
 
-  if( Math.abs(diff) > ( bodyHeight * 1.5 )){
+  if( Math.abs(diff) > ( bodyDim * 1.5 )){
     // instant scroll
-    o.el.scrollTop = o.to;
+    if(axis == "y" ) o.el.scrollTop = o.to;
+    if(axis == "x" ) o.el.scrollLeft = o.to;
+
   }else{
     // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
     duration = (o.during || 1000); 
@@ -1012,7 +1074,8 @@ export function scrollFromTo(o){
       var percent = Math.min(time / duration, 1);
       percent = easing(percent);
 
-      o.el.scrollTop = o.from + diff * percent;
+      if(axis == "y" ) o.el.scrollTop = o.from + diff * percent;
+      if(axis == "x" ) o.el.scrollLeft = o.from + diff * percent;
 
       if (time < duration) {
         onNextFrame(step);
@@ -1340,11 +1403,9 @@ export function hide(m) {
  * @param {String} classHide Class to add for hiding
  * @param {Function} callback Callback function with one argument : state of item hide/show;
  */
-export function panelEnable(classGroup, classItem, classHide, callback) {
-  var elsGroup = document.querySelectorAll("." + classGroup);
-  
+export function panelSwitch(classGroup, classItem, classHide, callback) {
+  var elsGroup = document.querySelectorAll("." + classGroup); 
   if (!classHide) classHide = "mx-hide";
-
     mx.helpers.forEachEl({
       els : elsGroup,
       callback : function(el){    
@@ -1415,7 +1476,6 @@ export function classAction(o) {
       o.class.forEach(function(cl){
 
         hasClass = el.classList.contains(cl);
-
         if (hasClass && (o.action == "remove" || o.action == "toggle")) {
           el.classList.remove(cl);
         }
@@ -1536,6 +1596,63 @@ export function parentFinder(o) {
 
 
 
+export function makeViewsSortable(o){
+  var elSelectorAll,elSelectorAdd,draggie;
+  var selectorItem = ".mx-view-item";
+  var selectorHandle = ".mx-view-tgl-title";
+  var add = o.add || false;
+  var pckry = o.pckry;
+  
+  return Promise.all([
+   System.import("packery"),
+   System.import("draggabilly")
+  ]).then(function(m){
+    var Packery = m[0];
+    var Draggabilly = m[1];
+
+    if (o.selectorAll instanceof Node) {
+      elSelectorAll = o.selectorAll;
+    } else {
+      elSelectorAll = document.querySelector(o.selectorAll);
+    }
+
+    if (o.selectorAdd instanceof Node) {
+      elSelectorAdd = o.selectorAdd;
+    } else {
+      elSelectorAdd = document.querySelector(o.selectorAdd);
+    }
+
+    if( add && pckry && elSelectorAdd ){
+
+     // pckry.prepended(elSelectorAdd);
+      pckry.addItems(elSelectorAdd);
+      draggie = new Draggabilly(elSelectorAdd,{
+          handle: selectorHandle
+      });
+      pckry.bindDraggabillyEvents(draggie);
+      pckry.fit(elSelectorAdd,0,0);
+    }else{
+
+      pckry = new Packery(elSelectorAll, {
+        selectorItem: selectorItem,
+        columnWidth: 100,
+        transitionDuration: '0.3s'
+      });
+
+      pckry.getItemElements().forEach(function(elItem) {
+        var draggie = new Draggabilly(elItem, {
+          handle: selectorHandle
+        });
+        pckry.bindDraggabillyEvents(draggie);
+      });
+
+      pckry.on('dragItemPositioned',o.callback);
+    
+    }
+       return pckry;
+  });
+}
+
 
 
 /**
@@ -1549,7 +1666,7 @@ export function parentFinder(o) {
  * @param {Element|String} o.selector Selector string or element for the ul root
  * @param {Function} o.callback Function to call after sort
  */
-export function sortable(o){
+export function sortable_old(o){
   var ulRoot;
   if (o.selector instanceof Node) {
     ulRoot = o.selector;
@@ -1697,7 +1814,6 @@ export function setImageAttributes(o) {
  * @param {string} o.text Optional text
  */
 export function progressScreen(o) {
-
   var lItem, lItems, lScreen, lBody, lScreenBack, lScreenContainer;
   var pBarIn, pBarOut, pBarTxt;
   var id = o.id;

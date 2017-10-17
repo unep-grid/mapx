@@ -1,12 +1,14 @@
+{{ var h = mx.helpers ; }}
 <div>
-  {{?it \u0026\u0026 it.data.style \u0026\u0026 it.data.style.rules}}
-  {{ var isPoint = mx.helpers.path(it,\u0022data.geometry.type\u0022) == \u0022point\u0022; }}
-  {{ var isLine = mx.helpers.path(it,\u0022data.geometry.type\u0022) == \u0022line\u0022; }}
-  {{ var isPolygon = mx.helpers.path(it,\u0022data.geometry.type\u0022) == \u0022polygon\u0022; }}
-  {{ var isNumeric = mx.helpers.path(it,\u0022data.attribute.type\u0022) != \u0022string\u0022; }}
+  {{? h.all([ it, h.path(it,'data.style'), h.path(it,'data.style.rules') ]) }}
+  {{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}
+  {{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}
+  {{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
+  {{ var isNumeric = h.path(it,'data.attribute.type') !== 'u0022string'; }}
   <ul>
     {{~it.data.style.rules :item}}
-    {{ var lang = mx.helpers.checkLanguage({obj:item, path:\u0022label_\u0022, concat:true}) ; }}
+    {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
+    {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
     {{?item}}
     <li>
       <div class="mx-legend-item-container">
@@ -22,7 +24,7 @@
           <div class="mx-legend-item-color-container" style="opacity:{{=item.opacity}};">
             <div class="mx-legend-item-color" style="{{?isLine }}height:{{=item.size*2}}px;{{?}}{{?isPoint }}width:{{=Math.log(0+item.size*10)*2}}px;height:{{=Math.log(0+item.size*10)*2}}px;border-radius:100%;{{?}}background-color:{{=item.color}};{{? item.sprite }}background-image:{{=item.sprite}};{{?}}"></div>
           </div>
-          <div class="mx-legend-item-label" title="{{?item[\u0022label_\u0022 + lang]}}{{=item[\u0022label_\u0022 + lang]}}{{??}}{{=item.value}}{{?}}">{{?item[\u0022label_\u0022 + lang]}}{{=item["label_" + lang]}}{{??}}{{=item.value}}{{?}}</div>
+          <div class="mx-legend-item-label" title="{{=label}}">{{=label}}</div>
         </label>
       </div>
     </li>

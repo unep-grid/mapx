@@ -24,7 +24,8 @@ export function makeDashboard(o){
           height: w.height,
           width: w.width,
           script: w.script,
-          map: mx.maps[o.id],
+          map: mx.maps[o.idMap].map,
+          packery:dashboard.packery,
           view: view
         };
 
@@ -39,6 +40,37 @@ export function makeDashboard(o){
 }
 
 
+function hasWidgets(){
+  return document.querySelectorAll(".grid-item").length > 0;
+}
+
+function hasDashboards(){
+  return document.querySelectorAll(".mx-dashboard").length > 0;
+}
+function hasDashboardsVisible(){
+  var res = false;
+  var d = document.querySelector(".mx-panel-dashboards");
+  if( d ){ 
+    res = hasDashboards() && d.classList.contains("enabled");
+  }
+  return(res);
+}
+
+function hideDashboards(){
+  var d = document.querySelector(".mx-panel-dashboards");
+  d.classList.remove("enabled");
+}
+function showDashboards(){
+  var d = document.querySelector(".mx-panel-dashboards");
+  d.classList.add("enabled");
+}
+function autoShowDashboards(){
+  if(hasDashboards()){
+    showDashboards();
+  }else{
+    hideDashboards();
+  }
+}
 
 
 
@@ -55,6 +87,7 @@ export function handleEvent(e){
     var map =  mx.maps[o.id].map;
     var rendered = false;
 
+  if(hasDashboardsVisible()){
     views.forEach(function(v){
       if(v._dashboard){
         var d = v._dashboard.store;
@@ -90,6 +123,7 @@ export function handleEvent(e){
         });
       }  
     });
+  }
 
     if(!rendered && type === "click"){
       /**
@@ -131,37 +165,67 @@ function Dashboard(idContainer,view) {
       dashboard.modules.draggabilly = m[1];
       dashboard.modules.highcharts= m[2].Highcharts;
       dashboard.elContainer = document.getElementById(idContainer);
-      dashboard.el = document.createElement("div");
-      dashboard.el.className="mx-dashboard grid";
-      dashboard.elContainer.appendChild(dashboard.el);
+      //dashboard.elContent = document.createElement("div");
+      dashboard.elGrid = document.createElement("div");
+      //dashboard.elContent.className = "mx-dashboard mx-events-on";
+      dashboard.elGrid.className = "grid mx-dashboard";
+      //dashboard.elContent.appendChild(dashboard.elGrid);
+      dashboard.elContainer.appendChild(dashboard.elGrid);
       dashboard.store = [];
 
-      dashboard.packery = new dashboard.modules.packery( dashboard.el, {
+      dashboard.packery = new dashboard.modules.packery( dashboard.elGrid, {
         itemSelector: '.grid-item',
-        //columnWidth: 150,
         columnWidth: 50,
         rowHeight: 50,
         gutter : 5
       });
 
-      dashboard.destroy = function(){
-        dashboard.store.forEach(function(w){
-          dashboard.packery.remove(w.el);
-        });
-        
-        dashboard.el.remove();
+      /**
+       * Remove dashboard from the window, delete from view
+       */     
+      dashboard.remove =  function(){
+        dashboard.elGrid.remove();
         dashboard.packery.destroy();
         delete view._dashboard;
+        autoShowDashboards();
       };
 
+      /**
+       * Destroy dashboard content and/or remove on callback
+       */
+      dashboard.destroy = function(){
+        // loop on stored widgets 
+        var w = dashboard.store;        
+
+        if( w.length  === 0 ){
+          // remove it now
+          dashboard.remove();           
+        }else{ 
+          // remove all widget first. Remove after "removeComplete" event. See bellow
+          for( var i=w.length-1; i>=0; i-- ){
+            // remove 
+            if(w[i]) w[i].remove();
+          }
+        }
+      };
+
+      /**
+      * Widget method
+      */ 
       dashboard.Widget = function(config) {
         var widget = this;
 
         widget.init = function( config ) {
           if(widget._init) return ;
 
+          /*
+          * If dashboard is not visible, show it.
+          */
+          autoShowDashboards();
+
+
           /**
-           * Read the script, dump error in console
+           * Eval the script, dump error in console
            */
           widget.strToObj( config.script )
             .then(function(register) {
@@ -172,9 +236,8 @@ function Dashboard(idContainer,view) {
               /**
                * Keep config, modules and set id
                */
-              widget.id = widget.randomValue();
+              widget.id = config.id || widget.randomValue();
               widget.modules = dashboard.modules;
-            
               widget.config =  config;
               dashboard.store.push(widget);
               widget.add();
@@ -183,7 +246,7 @@ function Dashboard(idContainer,view) {
                */
               if(config.source === "viewFreqTable"){
                 var d = mx.helpers.path(config,"view.data.attribute.table");
-                widget.setData(d);
+                if(d) widget.setData(d);
               }
               /**
                * Set init flag to true
@@ -199,10 +262,11 @@ function Dashboard(idContainer,view) {
         widget.add = function() {
           var buttonClose = document.createElement("button");
           var buttonHandle = document.createElement("button");
+          var buttonGroup = document.createElement("div");
           widget.el = document.createElement("div");
           widget.elContent = document.createElement("div");
-
-          buttonClose.addEventListener("click", widget.hide);
+          buttonGroup.className="btn-circle--group-top";
+          buttonClose.addEventListener("click", widget.remove);
           buttonClose.className="btn-circle btn-circle--right";
           buttonHandle.className="btn-circle btn-circle--left handle";
           buttonClose.innerText = "x";
@@ -211,35 +275,45 @@ function Dashboard(idContainer,view) {
           widget.el.className =
             "noselect grid-item"+" " + (widget.config.width || 1) +
             " " + (widget.config.height || 1);
-          widget.el.appendChild(buttonClose);
-          widget.el.appendChild(buttonHandle);
+          buttonGroup.appendChild(buttonClose);
+          buttonGroup.appendChild(buttonHandle);
+          widget.el.appendChild(buttonGroup);
+          //widget.el.appendChild(buttonHandle);
           widget.el.appendChild(widget.elContent);
-          dashboard.el.appendChild(widget.el);
+          dashboard.elGrid.appendChild(widget.el);
           dashboard.packery.appended(widget.el);
           var itDg = new dashboard.modules.draggabilly( widget.el , {handle:".handle"} );
           dashboard.packery.bindDraggabillyEvents( itDg , {});
+          widget.config.draggie = itDg;
           widget.onAdd();
         };
 
         widget.remove = function() {
+          /**
+          * Remove the widget.
+          */
           var id = dashboard.store.indexOf(widget);
-          if (id > -1) {
-            dashboard.packery.remove(widget.el);
-            dashboard.packery.shiftLayout();
-            dashboard.store.splice(id, 1);
+          if ( id !== -1 ) {
+            if( widget.timer ) {
+              window.clearInterval(widget.timer);
+              window.clearTimeout(widget.timer);
+            }
+            dashboard.packery
+              .once("removeComplete",function(){
+                 dashboard.store.splice(id,1);
+                 if(dashboard.store.length === 0){
+                   dashboard.remove();
+                 }
+              });
+
+            dashboard.packery
+              .remove(widget.el);
+
+            dashboard.packery
+              .shiftLayout();
+
             widget.onRemove();
           }
-          if(dashboard.store.length == 0){
-            dashboard.destroy();
-          }
-        };
-
-        widget.hide = function(){
-          widget.el.classList.add("mx-hide");
-        };
-
-        widget.show = function(){
-          widget.el.classList.remove("mx-hide");
         };
 
         widget.setContent = function(c) {
@@ -258,8 +332,11 @@ function Dashboard(idContainer,view) {
         };
 
         widget.strToObj = function(str) {
+          
           return new Promise(function(resolve, reject) {
-            var r = new Function(str)();
+            var r = function(){};
+            //return new Function();
+            if(str) r = new Function(str)();
             if (r) {
               resolve(r);
             } else {

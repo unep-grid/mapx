@@ -11,6 +11,7 @@
 viewFilterInput <-  tags$div(
   id="viewsTools",
   tags$input(
+    id = "viewsTextFilter",
     class="search form-control", 
     type="text",
     `data-lang_key`="view_search_input",
@@ -21,6 +22,7 @@ viewFilterInput <-  tags$div(
 # Filter class by tag
 viewFilterButton <- tags$div(
   class="filters",
+  id = "viewsClassFilter",
   tags$div(
     class="check-toggle-group", 
     lapply(c(config[[c("views","classes")]]),function(x){
@@ -69,8 +71,11 @@ tags$div(
     viewFilterInput,
     viewFilterButton
     ),
-  tags$div(class="mx-views-content",
-    tags$ul(class="mx-views-list")
+  tags$div(class="mx-views-content mx-scroll-container",
+    tags$div(
+        class="mx-scroll-content-y",
+        tags$ul(class="mx-views-list")
+      )
     ),
   tags$div(class="mx-views-footer"
     )

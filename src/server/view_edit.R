@@ -216,28 +216,6 @@ observe({
                 )
 
               #
-              # Story map
-              #
-              if(viewType=="sm"){
-                #
-                # First, get latest stored version of the story, if any.
-                #
-                mglGetLocalForageData(
-                    idStore = "stories",
-                    idInput = "localStory",
-                    idKey = viewId
-                    )
-                #
-                # Then initiate jsonEditor output
-                #
-                uiType =  tagList(
-                  jedOutput(id="storyEdit")
-                  )
-
-              }
-
-
-              #
               # vector tile specific
               #
               if(viewType=="vt"){
@@ -402,21 +380,6 @@ observe({
                 )
 
               #
-              # Add button preview 
-              #
-              if(viewType=="sm"){
-              btnList = tagList(
-                btnList,
-                 actionButton(
-                  inputId="btnViewPreviewStory",
-                  label=d("btn_preview",language),
-                  `data-keep` = TRUE
-                  )
-                )
-              }
-              #}
-
-              #
               # Final edit modal panel
               #
               mxModal(
@@ -454,6 +417,45 @@ observe({
                 )
 
             },
+            "btn_opt_edit_story"={
+ 
+              if(!viewIsEditable) return()
+              if(viewType != "sm") return()
+
+              #
+              # First, get latest stored version of the story, if any.
+              #
+              mglGetLocalForageData(
+                idStore = "stories",
+                idInput = "localStory",
+                idKey = viewId
+                )
+
+              btnList <- list(
+                actionButton(
+                  inputId="btnViewSaveStory",
+                  label=d("btn_save",language),
+                  `data-keep` = TRUE
+                  ),
+                 actionButton(
+                  inputId="btnViewPreviewStory",
+                  label=d("btn_preview",language),
+                  `data-keep` = TRUE
+                  )
+                )
+
+              mxModal(
+                id="modalViewEdit",
+                title=sprintf("Edit story map %s",viewTitle),
+                addBackground=FALSE,
+                content=tagList(
+                  uiOutput("txtValidSchema"),
+                  jedOutput(id="storyEdit")
+                  ),
+                buttons=btnList,
+                textCloseButton=d("btn_close",language)
+                )
+            },
             "btn_opt_edit_style"={
 
               if(!viewIsEditable) return()
@@ -464,10 +466,6 @@ observe({
                   inputId="btnViewSaveStyle",
                   label=d("btn_save",language)
                   )
-#                actionButton(
-                  #inputId="btnViewResetStyle",
-                  #label=d("btn_reset",language)
-                  #)
                 )
 
               mxModal(
@@ -522,160 +520,6 @@ observeEvent(input$viewAbstractSchema_init,{
     schema=schema,
     startVal=abstracts
     )
-})
-
-#
-# Evaluate client and db story
-# NOTE: shiny seems to convert date to UTC with jsonlite.. Be careful here.
-#
-observeEvent(input$localStory,{
-  useServerVersion = TRUE
-  viewServer = reactData$viewDataEdited
-  viewClient = input$localStory$item
-  sysTimeZone = Sys.timezone()
-
-  if(noDataCheck(viewClient)){
-    useServerVersion = TRUE
-  }else{
-    dateClient <- viewClient$date_modified
-    dateServer <- viewServer$date_modified
-    # format UTC string to  posixct
-    dateClientCt <- as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
-    # convert UTC to sysTimeZone string
-    dateClientCt <- format(dateClientCt,tz=sysTimeZone,usetz=TRUE)
-    # convert string back to posixct
-    dateClientCt <-  as.POSIXct(dateClientCt,tz=sysTimeZone)
-    # get db version time 
-    dateServerCt <- as.POSIXct(dateServer,format="%Y-%m-%d%tT%T",tz=sysTimeZone)
-    # check which is the more recent
-    useServerVersion <- dateServerCt > dateClientCt
-  }
-
-  #
-  # Update reactData 
-  #
-  if( useServerVersion ){
-    reactData$viewStory <- list(
-      view = viewServer,
-      dbVersion = useServerVersion
-      )
-  }else{
-    mxModal(
-      id="modalViewEditLoadStorage",
-      content=tagList(
-        p("A draft has been found on your computer, would you use it ?"),
-        checkboxInput("checkUseClientStory","Yes"),
-        mxFold(
-          labelText="Inspect draft",
-          tags$div(id="draftStoryInspect")
-          )
-        ),
-      buttons=tagList(
-        actionButton("btnSetStoryVersion","Confirm")
-        ),
-      removeCloseButton = T
-      )
-    #
-    # Send json to html
-    #
-    mxJsonToHtml(
-      id="draftStoryInspect",
-      data=viewClient$data$story
-      )
-  }
-})
-
-
-#
-# View story check which version use
-#
-observeEvent(input$btnSetStoryVersion,{
-
-  viewServer <- reactData$viewDataEdited
-  viewClient <- input$localStory$item
-  useClientStory <- isTRUE(input$checkUseClientStory)
-
-  if(useClientStory){
-    view = viewClient
-  }else{
-    view = viewServer
-  }
-
-  reactData$viewStory <- list(
-    view = view,
-    dbVersion = !useClientStory
-    )
-
-
- })
-
-
-#
-# View story : render schema
-#
-#observeEvent(input$storyEdit_init,{
-observeEvent(reactData$viewStory,{
-
-  view <- reactData$viewStory$view
-  isDbVersion <- reactData$viewStory$dbVersion
-  language <- reactData$language  
-  story <- .get(view,c("data","story"))
-
-  if(!isTRUE(view[["_edit"]])) return()
-
-  views = mxDbGetViews(
-    views = NULL,
-    project = reactData$country,
-    read = reactUser$role$read,
-    edit = reactUser$role$edit,
-    userId = reactUser$data$id,
-    from = 0,
-    to = 1000
-    )
-
-  reactData$viewsAllAvailable = views
-
-  schema <- mxSchemaViewStory(
-    view=view,
-    views=views,
-    language=language
-    )
-
-  jedSchema(
-    id="storyEdit",
-    schema = schema,
-    startVal = story
-    )
-
-  if(!isDbVersion){
-    mxUpdateText(
-      id = "modalViewEdit_txt",
-      text = "Unsaved draft"
-      )
-  }
-
- })
-
-#
-# Update story changes
-#
-observeEvent(input$btnViewPreviewStory,{
-
-  story <- input$storyEdit_values$msg
-
-  if(noDataCheck(story)) return();
-
-  view <- reactData$viewDataEdited
-  view <- .set(view,c("data","story"), story)
-  view <- .set(view,c("date_modified"), Sys.time())
-
-  mxUpdateText(
-    id = "modalViewEdit_txt",
-    text = "Unsaved draft"
-    )
-
-  mglReadStory(view=view)
-
 })
 #
 # View removal
@@ -757,9 +601,6 @@ observeEvent(input$btnViewSave,{
   view[[c("data","title")]] <- input$viewTitleSchema_values$msg
   view[[c("data","abstract")]] <- input$viewAbstractSchema_values$msg
 
-  #view[[c("data","title",language)]] <- input$txtViewTitleUpdate
-  #view[[c("data","abstract",language)]] <- input$txtViewAbstractUpdate
-
   #
   # Update first level values
   #
@@ -801,55 +642,8 @@ observeEvent(input$btnViewSave,{
   }
 
   #
-  # story map
-  # 
-  if( view[["type"]] == "sm" ){
-    #
-    # Update view data
-    #
-    story <-  input$storyEdit_values$msg
-    errors <- input$storyEdit_errors$msg
-    story <- input$storyEdit_values$msg
-
-    view[[c("data","story")]] <- story
-
-
-    #
-    # Retrieve and store data for all views used in story.
-    #
-   
-    
-    views = list()
-
-    try(silent=T,{
-      viewsId = list()
-      
-      viewsStory = lapply(story$steps,function(s){
-        lapply(s$views,function(v){v})
-      })
-
-      viewsId = list(unique(unlist(viewsStory)))
-      if(!noDataCheck(viewsId)){
-      views = mxDbGetViews(
-        views = viewsId,
-        project = reactData$country,
-        read = reactUser$role$read,
-        edit = reactUser$role$edit,
-        userId = reactUser$data$id,
-        from = 0,
-        to = 1000
-        )}
-
-      })
-  
-    view[[c("data","views")]] <- views
-
-  }
-
-  #
   # save a version in db
   #
-
   mxDbAddRow(
     data=view,
     table=.get(config,c("pg","tables","views"))
@@ -862,10 +656,10 @@ observeEvent(input$btnViewSave,{
     idView=view$id
     )
 
-    # edit flag
-    view$`_edit` = TRUE 
+  # edit flag
+  view$`_edit` = TRUE 
 
-   # add this as new (empty) source
+  # add this as new (empty) source
   mglSetSourcesFromViews(
     id = .get(config,c("map","id")),
     viewsList = view,
