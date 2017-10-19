@@ -98,11 +98,8 @@ observeEvent(input$sourceNewUpload_init,{
 
 })
 
-
-
-
 observeEvent(input$fileGeojson,{
-  reactData$geojsonPath <- input$fileGeojson.datapath
+  reactData$geojsonPath <- input$fileGeojson$datapath
 })
 
 observeEvent(input$uploadGeojson,{

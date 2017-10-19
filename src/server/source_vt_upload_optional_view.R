@@ -21,18 +21,23 @@ observeEvent(reactData$triggerNewViewForSourceId,{
     ui <- tagList(
       tags$h3(d("optionalViewTitle",lang=language,dict=dict)),
       tags$p(d("optionalViewText",lang=language,dict=dict)),
-      selectInput("selectOptionalViewAttribute",
+      selectizeInput("selectOptionalViewAttribute",
         label = d("selectOptionalViewAttribute",lang=language,dict=dict),
-        choices = tolower(attributes)
+        choices = tolower(attributes),
+        options=list(
+          dropdownParent="body"
+          )
         ),
-      uiOutput("summaryOptionalViewAttribute")
+      actionButton(
+        inputId = "btnOptionalLayerSummary",
+        label = d("btn_get_layer_summary",language)
+        )
       )
 
     btnList <- list(
       actionButton("btnOptionalViewCreate",label=d("btn_create",lang=language)),
       actionButton("btnOptionalViewCancel",label=d("btn_finish",lang=language)) 
       )
-
 
     mxModal(
       id="modalSourceCreate",
@@ -44,36 +49,63 @@ observeEvent(reactData$triggerNewViewForSourceId,{
     })
 })
 
-
-observeEvent(input$selectOptionalViewAttribute,{
-  mxCatch(
-    title="Select optional view attribute",
-    onError = function(){
-      mxProgress(id="dataUploaded", percent=100, enable=F)
-    },
-    {
-      sourceId <- reactData$triggerNewViewForSourceId 
-      attribute <- input$selectOptionalViewAttribute
-      language <- reactData$language 
-      dict <- .get(config,c("dictionaries","schemaMetadata")) 
-      summary <- list()
-
-      tryCatch({
-
-      summary <-  mxDbGetLayerSummary(
-        layer=sourceId,
-        variable=attribute,
-        geomType=NULL,
-        language=language
-        )
-      },error=function(){
-        mxDebugMsg(c);
-      })
-
-      output$summaryOptionalViewAttribute <- renderUI(summary$html)
-    })
+#
+# Main layer summary
+#
+observeEvent(input$btnOptionalLayerSummary,{
+  mxModal(
+    id =  "layerSummary",
+    title = d("Layer Summary",reactData$language),
+    content = tagList(
+      tags$input(
+        type="number",
+        id="triggerBtnGetOptionalLayerSummary",
+        class="form-control mx-hide",
+        value=runif(1)
+        ),
+      tags$label("Summary"),
+      uiOutput("uiOptionalLayerSummary")
+      )
+    )
 })
 
+output$uiOptionalLayerSummary <- renderUI({
+  input$triggerBtnGetOptionalLayerSummary
+  reactOptionalLayerSummary()$html
+})
+
+
+#
+# reactLayerSummary
+#
+
+reactOptionalLayerSummary <- reactive({
+ 
+  layerName <- reactData$triggerNewViewForSourceId 
+  variableName <- input$selectOptionalViewAttribute
+  language <- reactData$language 
+
+  hasVariable <- !noDataCheck(variableName)
+  hasLayer <- !noDataCheck(layerName)
+
+  out <- list()
+  out$html <- tags$div()
+  out$list <- list()
+
+  if(hasVariable && hasLayer){
+      #
+      # Get layer summary
+      #
+      out <- mxDbGetLayerSummary(
+        layer = layerName,
+        variable = variableName,
+        geomType = NULL,
+        language = language
+        )
+  }
+
+  return(out)
+})
 
 
 #

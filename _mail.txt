@@ -1,28 +1,28 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MAP-X MAIL SYSTEM 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-date : 2017-10-18 00:16:20.7063
+date : 2017-10-19 14:59:22.6078
 type : error
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MESSAGE
 
-Can't get the number of features :( 
+unused argument (options = list(dropdownParent = "body"))
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 CALL
 
-    82: mxCatchHandler
-    81: value[[3L]] [src/helper/misc.R#786]
-    80: tryCatchOne
-    79: tryCatchList
-    78: doTryCatch
-    77: tryCatchOne
-    76: tryCatchList
-    75: doTryCatch
-    74: tryCatchOne
-    73: tryCatchList
-    72: tryCatch
-    71: mxCatch [src/helper/misc.R#781]
-    70: observeEventHandler [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/source_vt_upload_from_file_explorer.R#137]
+    56: mxCatchHandler
+    55: value[[3L]] [src/helper/misc.R#786]
+    54: tryCatchOne
+    53: tryCatchList
+    52: doTryCatch
+    51: tryCatchOne
+    50: tryCatchList
+    49: doTryCatch
+    48: tryCatchOne
+    47: tryCatchList
+    46: tryCatch
+    45: mxCatch [src/helper/misc.R#781]
+    44: observeEventHandler [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/source_vt_upload_optional_view.R#7]
      6: runApp
      5: rs [run.R#7]
      4: eval [run.R#10]

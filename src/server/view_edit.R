@@ -722,7 +722,7 @@ observeEvent(input$selectSourceLayerMain,{
       ),
     selectizeInput(
       inputId="selectSourceLayerMainVariable",
-      label=d("source_select_variable"),
+      label=d("source_select_variable",language),
       choices=variables,
       selected=variableName,
       options=list(
@@ -731,7 +731,7 @@ observeEvent(input$selectSourceLayerMain,{
       ),
   selectizeInput(
       inputId="selectSourceLayerOtherVariables",
-      label=d("source_select_variable"),
+      label=d("source_select_variable_alt",language),
       choices=variables,
       selected=variableNames,
       multiple=TRUE,
@@ -739,7 +739,10 @@ observeEvent(input$selectSourceLayerMain,{
         dropdownParent="body"
         )
       ),
-    uiOutput("uiViewEditVtMainSummary") 
+   actionButton(
+     inputId = "btnGetLayerSummary",
+     label = d("btn_get_layer_summary",language)
+     )
     )
   })
   })
@@ -748,16 +751,29 @@ observeEvent(input$selectSourceLayerMain,{
 #
 # Main layer summary
 #
-
-
-
-output$uiViewEditVtMainSummary <- renderUI({
-  layerMain <- input$selectSourceLayerMain
-  variable <- input$selectSourceLayerMainVariable 
-
-  reactLayerSummary()$html
-
+observeEvent(input$btnGetLayerSummary,{
+  mxModal(
+    id =  "layerSummary",
+    title = d("Layer Summary",reactData$language),
+    content = tagList(
+      tags$input(
+        type="number",
+        id="triggerBtnGetLayerSummary",
+        class="form-control mx-hide",
+        value=runif(1)
+        ),
+      tags$label("Summary"),
+      uiOutput("uiLayerSummary")
+      )
+    )
 })
+
+output$uiLayerSummary <- renderUI({
+  input$triggerBtnGetLayerSummary
+  reactLayerSummary()$html
+})
+
+
 
 
 #
