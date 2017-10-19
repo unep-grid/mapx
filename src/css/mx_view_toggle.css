@@ -60,20 +60,20 @@
 
 .mx-view-tgl-btn {
   position: relative;
-  border-radius:5px;
-  width: 10px;
-  height: 10px;
+  border-radius:50%;
+  width: 12px;
+  height: 12px;
   margin-left: 10px;
+  margin-top:-2px;
   background-color: black;
   border-color: black;
   transition: margin-left 0.2s ease-in-out;
 }
 
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn {
-  background-color: #7bf75e;
-  margin-left: 0px;
-  border: 2px solid #333;
+  margin-left: -2px;
 }
+
 
 /**
 * View list
@@ -143,6 +143,7 @@
 
 .mx-view-item-desc {
   font-size:12px;
+  padding: 25px;
 }
 
 .mx-view-item-index,

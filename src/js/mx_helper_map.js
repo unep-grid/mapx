@@ -20,6 +20,12 @@ export function getLocalForageData(o){
 }
 
 
+
+
+
+
+
+
 /**
 * Reset project : remove view, dashboards, etc
 * @param {String} idMap map id
@@ -283,9 +289,7 @@ export function viewControler(o){
     /**
     * Update packery layout
     */
-    if( mx.maps[o.id].tools.viewsListPackery ){
-      mx.maps[o.id].tools.viewsListPackery.shiftLayout();
-    }
+    updateViewsListLayout({idMap:o.id,timeOut:100});
 
   }
 
@@ -1028,7 +1032,7 @@ export function handleViewClick(o){
             action : "toggle"
           });
           
-           mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+          updateViewsListLayout({idMap:o.id,timeOut:100});
 
         }
       },
@@ -1184,7 +1188,19 @@ export function updateViewsListLanguage(o){
 }
 
 
-
+/**
+* Update view layout
+*/
+function updateViewsListLayout(o){
+  var  id = o.idMap || "map_main";
+  var m = mx.maps[id];
+  var time = o.timeOut || 200;
+  setTimeout(function(){
+    if(m.tools && m.tools.viewsListPackery){
+      m.tools.viewsListPackery.shiftLayout();
+    }
+  },time);
+}
 
 /**
 
@@ -1296,7 +1312,7 @@ export function renderViewsList(o){
         classSkip : "mx-filter-class",
         idMap : o.id,
         onFiltered : function(){
-          m.tools.viewsListPackery.shiftLayout();
+            updateViewsListLayout({idMap:o.id,timeOut:100});
         }
       });
     }else{
@@ -1313,7 +1329,7 @@ export function renderViewsList(o){
         classHide : "mx-filter-class",
         classSkip : "mx-filter-text",
         onFiltered : function(){
-          m.tools.viewsListPackery.shiftLayout();
+            updateViewsListLayout({idMap:o.id,timeOut:100});
         }
       });
     }else{
@@ -2268,7 +2284,7 @@ export function addView(o){
           img.alt = "Legend"; 
           elLegend.appendChild(img); 
           img.onload = function(){
-            mx.maps[o.id].tools.viewsListPackery.shiftLayout();
+            updateViewsListLayout({idMap:o.id,timeOut:10});
           };
         }
       }

@@ -1636,7 +1636,8 @@ export function makeViewsSortable(o){
       pckry = new Packery(elSelectorAll, {
         selectorItem: selectorItem,
         columnWidth: 100,
-        transitionDuration: '0.3s'
+        transitionDuration: '0.2s',
+        stagger:0
       });
 
       pckry.getItemElements().forEach(function(elItem) {
@@ -1652,7 +1653,6 @@ export function makeViewsSortable(o){
        return pckry;
   });
 }
-
 
 
 /**

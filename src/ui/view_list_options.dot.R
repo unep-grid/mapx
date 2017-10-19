@@ -4,7 +4,7 @@
 # View text long
 #
 divAbstract <- tags$div(class="float-left",
-  "{{? h.all([h.path(view,'data.abstract'), h.path(view,'data.abstract['+lang+']')]) }}",
+  "{{? h.all([h.path(view,'data.abstract'), h.path(view,'data.abstract.'+lang)]) }}",
     tags$p(
       class="mx-view-item-desc",
       id="view_text_{{=view.id}}",

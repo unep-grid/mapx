@@ -363,15 +363,18 @@ color:var(--mx_ui_text);
 }
 
 /**
- * View toggle
+ * View toggle button
  */
 .mx .mx-view-tgl-btn-container {
   background: var(--mx_ui_text_faded);
+  transition: background-color 1s;
+  border:1px solid var(--mx_ui_border);
 }
 
-.mx-view-tgl-btn {
+.mx .mx-view-tgl-btn {
   background-color: var(--mx_ui_text);
   border-color: solid var(--mx_ui_text);
 }
-
-
+.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-container {
+  background-color: #7bf75e;
+}
