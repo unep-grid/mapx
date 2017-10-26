@@ -23,10 +23,8 @@ observeEvent(input$dashboardEdit_init,{
             ),
           widgets = list(
             type = "array",
+            format = "confirmDelete",
             title=t("view_dashboard_widgets"),
-            options = list(
-              disable_array_delete = TRUE
-              ),
             uniqueItems = FALSE,
             items = list(
               type = "object",
@@ -88,13 +86,6 @@ observeEvent(input$dashboardEdit_init,{
 })
 })
 
-observeEvent(input$dashboardEdit_values,{
-
-  res = input$dashboardEdit_values$msg;
-
-  #browser()
-})
-
 
 #
 # Vew style change
@@ -119,46 +110,56 @@ observeEvent(input$dashboardEdit_values,{
 #
 observeEvent(input$btnViewSaveDashboard,{
 
+  mxToggleButton(
+    id="btnViewSaveDashboard",
+    disable = TRUE
+    )
+
   view <- reactData$viewDataEdited
   country <- reactData$country
+  time <- Sys.time()
 
   if( view[["_edit"]] && view[["type"]] == "vt" ){
     view[["_edit"]] = NULL
 
     dashboard <- input$dashboardEdit_values$msg
 
-    if(!noDataCheck(dashboard)){
+    view <- .set(view, c("date_modified"), time )
+    view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+    view <- .set(view, c("data", "dashboard"), dashboard)
+    view <- .set(view,c("data"), as.list(.get(view,"data")))
 
-      view <- .set(view, c("date_modified"), Sys.time() )
-      view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-      view <- .set(view, c("data", "dashboard"), dashboard)
-      view <- .set(view,c("data"), as.list(.get(view,"data")))
+    mxDbAddRow(
+      data=view,
+      table=.get(config,c("pg","tables","views"))
+      )
 
-      mxDbAddRow(
-        data=view,
-        table=.get(config,c("pg","tables","views"))
-        )
+    mglRemoveView(
+      idView=view$id
+      )
 
-      #
-      # Trigger update
-      #
-      mglRemoveView(
-        idView=view$id
-        )
+    # edit flag
+    view$`_edit` = TRUE 
 
-      # edit flag
-      view$`_edit` = TRUE 
-
-      # add this as new (empty) source
-      mglSetSourcesFromViews(
-        id = .get(config,c("map","id")),
-        viewsList = view,
-        render = FALSE,
-        country = country
-        )
-      reactData$updateViewListFetchOnly <- runif(1)
-    }
+    # add this as new (empty) source
+    mglSetSourcesFromViews(
+      id = .get(config,c("map","id")),
+      viewsList = view,
+      render = FALSE,
+      country = country
+      )
+    reactData$updateViewListFetchOnly <- runif(1)
   }
+
+  mxUpdateText(
+    id = "modalViewEdit_txt",
+    text = sprintf("Saved at %s",time)
+    )
+
+  mxToggleButton(
+    id="btnViewSaveDashboard",
+    disable = FALSE
+    )
 })
 
 

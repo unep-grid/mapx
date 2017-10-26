@@ -15,6 +15,9 @@ if(!noDataCheck(query$views)){
   query$views <- unlist(strsplit(query$views,","))
 }
 
+if(!noDataCheck(query$collections)){
+  query$collections <- unlist(strsplit(query$collections,","))
+}
 
 #
 # Send templates

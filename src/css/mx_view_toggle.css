@@ -141,10 +141,23 @@
 }
 
 
+.mx-view-item-desc-container
+{
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  margin: 5px;
+}
+
 
 .mx-view-item-desc {
-  font-size:12px;
-  padding: 25px;
+  font-size: 12px;
+  padding: 5px;
+  max-height: 100px;
+  overflow-y: scroll;
+  margin: 0px;
+  margin-top: 4px;
+  margin-right : -100px;
+  padding-right : 100px;
 }
 
 .mx-view-item-index,

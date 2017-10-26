@@ -177,7 +177,9 @@ function Dashboard(idContainer,view) {
         itemSelector: '.grid-item',
         columnWidth: 50,
         rowHeight: 50,
-        gutter : 5
+        gutter : 5,
+        transitionDuration: 100,
+        stagger : 0
       });
 
       /**

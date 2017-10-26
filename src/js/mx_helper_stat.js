@@ -115,7 +115,7 @@ export function getArrayStat(o){
 
       while( len-- ) 
       {
-        if ( !n[arr[len]] )
+        if ( arr[len] && !n[arr[len]]  )
         {
           n[arr[len]] = true; 
           r.push(arr[len]); 
@@ -124,19 +124,31 @@ export function getArrayStat(o){
       return r;
     },
     "frequency":function(){
+      var areObjects = (arr[0] && typeof arr[0] == "object" && arr[0].constructor == Object) ;
       var colNames = o.colNames;
-      if(colNames.constructor != Array) throw("colnames must be array");
-      if(colNames.length==0) colNames = Object.keys(arr[1]);
+      if(areObjects){
+        if(colNames.constructor != Array) throw("colnames must be array");
+        if(colNames.length==0) colNames = Object.keys(arr[0]);
+      }else{
+       colNames = getArrayStat({
+         stat:"distinct",
+         arr:arr
+       });
+      }
       var table = {};
       var val,prevVal;
       var colName;
 
       for(var j=0,jL=colNames.length;j<jL;j++){
         colName = colNames[j];
-        table[colName] = {};
-        for(var i=0,iL=arr.length;i<iL;i++){
-          val = arr[i][colName]||null;
-          table[colName][val]=table[colName][val]+1||1;
+        table[colName] = areObjects?{}:0;
+        for( var i=0, iL=arr.length; i<iL; i++ ){
+          if( areObjects ){
+             val = arr[i][colName] || null;
+             table[colName][val] = table[colName][val]+1||1;  
+          }else{
+            if(arr[i] == colName) table[colName]++;
+          }
         }
       }
       return table;

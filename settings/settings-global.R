@@ -163,8 +163,14 @@ config[["ui"]] <- list(
 # config map sources
 #config[["map"]][["sources"]] = list()
 
-## wms sources
+#
+# wms sources
+#
 config[["wms"]] = list(
+  list(
+    label="preview",
+    value="https://preview.grid.unep.ch/geoserver/wms"
+    ),
   list(
     label="forestCover",
     value="https://gis-gfw.wri.org/arcgis/services/forest_change/MapServer/WMSServer"

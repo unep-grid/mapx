@@ -196,6 +196,7 @@
 "view_country","Country of the view","Pays de la vue","","","","","",""
 "view_countries","Other countries where the view is visible","Autres pays où la vue est visible","","","","","",""
 "view_classes","Classes","Classes","","","","","","طبقه ها"
+"view_collections","Collections","Collections","","","","","",""
 "view_delete_confirm","Click on the confirm button to delete this view, its history and all translations.","Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.","","","","","","بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد."
 "view_download_layer","Download the source layer","Télécharger la couche source","","","","","","دانلود لایه منبع "
 "view_id","View identifier","Identifiant de la vue","","","","","","نمایش مشخص کننده"

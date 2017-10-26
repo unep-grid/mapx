@@ -8,25 +8,29 @@ import * as mx from './mx_init.js';
 * Custom operator to avoid escaping js operator in html templates
 */
 export function all(a){
-  var r = true;
+  var r = false;
   a.forEach(function(o,i){
     r=r&&Boolean(o);
   });
   return r;
 }
+
 export function greaterThan(a,b){
   return a > b;
 }
 
 export function any(a){
-  var r=true;
+  var r;
   a.forEach(function(o,i){
     r=r||Boolean(o);
   });
   return r;
 }
+// test mx.helpers.any([null,0,"a",true])
+
+
 export function not(a){
-  var r=true;
+  var r = true;
   a.forEach(function(o,i){
     r=!r||!Boolean(o);
   });
@@ -36,6 +40,7 @@ export function not(a){
 export function hasIndex(a,b){
   return a instanceof Array ? a.indexOf(b) > -1: false;
 }
+
 export function firstOf(a){
   for( var i=0, iL=a.length; i<iL; i++ ){
     if(a[i] === 0 || a[i]){return a[i];}
@@ -199,7 +204,7 @@ export function uiFold(o){
 * @return {HTML}
 */
 export function textToHtml(text){
- var el =  document.createElement("div");
+  var el =  document.createElement("div");
   el.innerHTML=text;
   return el.children[0];
 }
@@ -722,123 +727,115 @@ export function doPar(o) {
 export function modal(o){
 
   System.import("selectize").then(function(Selectize){
-  
-  var id = o.id || makeId();
-  var idBackground = "mx_background_for_" + id;
-  var modal = document.getElementById(o.id) || document.createElement("div");
-  var background = document.getElementById(idBackground) || document.createElement("div"); 
-  var hasShiny = typeof Shiny !== "undefined";
-  var hasSelectize = typeof Selectize !== "undefined";
 
-  if(o.close){
-    close();
-    return;
-  }
-  if(modal.id && o.replace){
-    if(hasShiny) Shiny.unbindAll(modal);
-    modal.remove();
-    modal = document.createElement("div");
-  }
-  if(modal.id && !o.replace){
-    return;
-  }
+    var id = o.id || makeId();
+    var idBackground = "mx_background_for_" + id;
+    var modal = document.getElementById(o.id) || document.createElement("div");
+    var background = document.getElementById(idBackground) || document.createElement("div"); 
+    var hasShiny = typeof Shiny !== "undefined";
+    var hasSelectize = typeof Selectize !== "undefined";
 
-  var top = document.createElement("div");
-  var head = document.createElement("div");
-  var body = document.createElement("div");
-  var content = document.createElement("div");
-  var footer = document.createElement("div");
-  var buttons = document.createElement("div");
-  var dialog = document.createElement("div");
+    if(o.close){
+      close();
+      return;
+    }
+    if(modal.id && o.replace){
+      if(hasShiny) Shiny.unbindAll(modal);
+      modal.remove();
+      modal = document.createElement("div");
+    }
+    if(modal.id && !o.replace){
+      return;
+    }
 
-  function close(e){
-    if(hasShiny) Shiny.unbindAll(modal);
-    modal.remove();
-    background.remove();
-  }
- 
-  modal.appendChild(top);
-  modal.appendChild(head);
-  modal.appendChild(body);
-  modal.appendChild(footer);
+    var top = document.createElement("div");
+    var head = document.createElement("div");
+    var body = document.createElement("div");
+    var content = document.createElement("div");
+    var footer = document.createElement("div");
+    var buttons = document.createElement("div");
+    var dialog = document.createElement("div");
 
-  modal.classList.add("mx-modal-container");
-  modal.id=id;
-  top.classList.add("mx-modal-drag-enable");
-  top.classList.add("mx-modal-top");
-  top.innerHTML = o.title;
-  if(top.children.length>0){
-    forEachEl({
-      els:top.children,
-      callback:function(el){
-        el.classList.add("mx-modal-drag-enable");
-      }});
-  }
-  head.classList.add("mx-modal-head");
-  body.classList.add("mx-modal-body");
-  footer.classList.add("mx-modal-foot");
-  buttons.classList.add("btn-group");
-  background.id = idBackground;
-  background.classList.add("mx-modal-background");
-  dialog.classList.add("shiny-text-output");
-  dialog.id = id + "_txt";
+    function close(e){
+      if(hasShiny) Shiny.unbindAll(modal);
+      modal.remove();
+      background.remove();
+    }
 
-  if(!o.removeCloseButton){
-    var b = document.createElement("button");
-    b.className="btn btn-default";
-    b.innerHTML = o.textCloseButton || "ok";  
-    b.addEventListener("click",close);
-    buttons.appendChild(b);
-  }
+    modal.appendChild(top);
+    modal.appendChild(head);
+    modal.appendChild(body);
+    modal.appendChild(footer);
+    modal.classList.add("mx-modal-container");
+    modal.id=id;
 
-  if(o.buttons && o.buttons.constructor == Array){
-    o.buttons.forEach(function(f){
-      var bb = textToHtml(f);
-         buttons.appendChild(bb);
-    });
-  }
- 
-    // add event on container : if added to the button directly,
-    // close function will prevent shiny event to be emitted.
-    // Using event bubbling, listening to the container is the way to go.
-   buttons.addEventListener("click",function(e){
-     var t = e.target;
-     if( t.nodeName == "BUTTON" && t.dataset.keep != "TRUE" ){
-       close();
-     }
-   });
+    top.classList.add("mx-modal-drag-enable");
+    top.classList.add("mx-modal-top");
+    top.innerHTML = o.title;
+    if(top.children.length>0){
+      forEachEl({
+        els:top.children,
+        callback:function(el){
+          el.classList.add("mx-modal-drag-enable");
+        }});
+    }
+    head.classList.add("mx-modal-head");
+    body.classList.add("mx-modal-body");
+    content.classList.add("mx-modal-content");
+    footer.classList.add("mx-modal-foot");
+    buttons.classList.add("btn-group");
+    background.id = idBackground;
+    background.classList.add("mx-modal-background");
+    dialog.classList.add("shiny-text-output");
+    dialog.id = id + "_txt";
+    dialog.classList.add("mx-modal-foot-text");
 
+    if( !o.removeCloseButton ){
+      var b = document.createElement("button");
+      b.className="btn btn-default";
+      b.innerHTML = o.textCloseButton || "close"; 
+      b.addEventListener("click",close);
+      buttons.appendChild(b);
+    }
 
-  
-  content.innerHTML = o.content;
-  body.appendChild(content);
-  footer.appendChild(dialog);
-  footer.appendChild(buttons);
-  if( o.addBackground ) document.body.appendChild(background);
-  document.body.appendChild(modal);
-  if( hasShiny ) Shiny.bindAll(modal);
-  if( hasSelectize ) {
-    var selects = $(modal).find("select");
-    selects.each(function(i,s){
-      var script = modal.querySelector("script[data-for="+s.id+"]");
-      var data = script?script.innerHTML:null;
-      var options = {dropdownParent:"body"};
-      if(data){
-        options = JSON.parse(data);
-        if(options.renderFun){
-          options.render={
-            option : mx.helpers[options.renderFun]
-          };
+    if( o.buttons && o.buttons.constructor == Array ){
+      o.buttons.forEach(function(b){
+        if( typeof b === "string" ){
+          b = textToHtml(b);
         }
-      }
-      options.inputClass="form-control selectize-input";
-      mx.listener[s.id] = $(s).selectize(options);
+        buttons.appendChild(b);
+      });
+    }
+
+    content.innerHTML = o.content;
+    body.appendChild(content);
+    footer.appendChild(dialog);
+    footer.appendChild(buttons);
+    if( o.addBackground ) document.body.appendChild(background);
+    document.body.appendChild(modal);
+    if( hasShiny ) Shiny.bindAll(modal);
+    if( hasSelectize ) {
+      var selects = $(modal).find("select");
+      selects.each(function(i,s){
+        var script = modal.querySelector("script[data-for="+s.id+"]");
+        var data = script?script.innerHTML:null;
+        var options = {dropdownParent:"body"};
+        if(data){
+          options = JSON.parse(data);
+          if(options.renderFun){
+            options.render={
+              option : mx.helpers[options.renderFun]
+            };
+          }
+        }
+        options.inputClass="form-control selectize-input";
+        mx.listener[s.id] = $(s).selectize(options);
+      });
+    }
+    mx.helpers.draggable({
+      id:id,
+      disable:[]
     });
-  }
-  mx.helpers.draggable({
-    id:id,
-    disable:[]
-  });
 
   });
 }
@@ -1221,33 +1218,38 @@ export function setLanguage(m) {
  * Get value from the dictionary for a given key and language. Fallback to "def"
  * @param {string} key Key to look for in the dictionnary
  * @param {string} lang  Two letters language code
- * @param {string} def Two lettters language code. Fallback to "en"
+ * @param {string} langDef Two lettters language code. Fallback to "en"
  */
-export function getLanguage(key, lang, def) {
+export function getLanguage(key, lang, defLang, defOut) {
 
-  var v, keys = [];
+  var keys = [];
   var dict = window.dict;
+  defOut = defOut || key;
   if (!dict) return;
-  if (!def) def = "en";
-  if (!lang) lang = def;
+  lang = lang || defLang || "en";
 
   if( key.constructor == Array ){
       keys = key;
   }else{ 
-     keys.push(key);
+     keys = keys.concat(key);
   }
 
   var res = [];
 
   for (var k = 0, klen = keys.length; k < klen; k++) {
     key = keys[k];
-    for (var i = 0, dlen = dict.length ; i < dlen ; i++) {
-      if (dict[i].id === key) {
-        v = dict[i][lang];
-        if (!v) v = dict[i][def];
-        res.push(v);
+    var found = false;
+    var val = defOut;
+    for ( var i = 0, dlen = dict.length ; i < dlen ; i++ ) {
+      if(!found){
+        if ( dict[i].id === key ) {
+          found = true;
+          val = dict[i][lang];
+          if (!val) val = dict[i][defLang] || defOut;
+        }
       }
     }
+    res.push(val);
   }
 
   return (res);
@@ -1596,65 +1598,6 @@ export function parentFinder(o) {
 
 
 
-export function makeViewsSortable(o){
-  var elSelectorAll,elSelectorAdd,draggie;
-  var selectorItem = ".mx-view-item";
-  var selectorHandle = ".mx-view-tgl-title";
-  var add = o.add || false;
-  var pckry = o.pckry;
-  
-  return Promise.all([
-   System.import("packery"),
-   System.import("draggabilly")
-  ]).then(function(m){
-    var Packery = m[0];
-    var Draggabilly = m[1];
-
-    if (o.selectorAll instanceof Node) {
-      elSelectorAll = o.selectorAll;
-    } else {
-      elSelectorAll = document.querySelector(o.selectorAll);
-    }
-
-    if (o.selectorAdd instanceof Node) {
-      elSelectorAdd = o.selectorAdd;
-    } else {
-      elSelectorAdd = document.querySelector(o.selectorAdd);
-    }
-
-    if( add && pckry && elSelectorAdd ){
-
-     // pckry.prepended(elSelectorAdd);
-      pckry.addItems(elSelectorAdd);
-      draggie = new Draggabilly(elSelectorAdd,{
-          handle: selectorHandle
-      });
-      pckry.bindDraggabillyEvents(draggie);
-      pckry.fit(elSelectorAdd,0,0);
-    }else{
-
-      pckry = new Packery(elSelectorAll, {
-        selectorItem: selectorItem,
-        columnWidth: 100,
-        transitionDuration: '0.2s',
-        stagger:0
-      });
-
-      pckry.getItemElements().forEach(function(elItem) {
-        var draggie = new Draggabilly(elItem, {
-          handle: selectorHandle
-        });
-        pckry.bindDraggabillyEvents(draggie);
-      });
-
-      pckry.on('dragItemPositioned',o.callback);
-    
-    }
-       return pckry;
-  });
-}
-
-
 /**
  * Handle sort event on list
  * 
@@ -1920,11 +1863,7 @@ export function htmlToData(o) {
   return new Promise(function(resolve,reject){
     var el, elClone, elCloneRect, elRect, tagToRemove;
 
-    var out = {
-      svg : "",
-      png : "",
-      canvas : ""
-    };
+    var out = "";
 
     if (o.selector instanceof Node) {
       el = o.selector;
@@ -2034,6 +1973,7 @@ export function htmlToData(o) {
 
     function setImage(url, resolve, reject) {
       var image = new Image();
+      image.crossOrigin = 'Anonymous';
       image.onload = function() {
         var canvas = document.createElement('canvas');
         var ctx = canvas.getContext("2d");
@@ -2041,12 +1981,8 @@ export function htmlToData(o) {
         canvas.height = elCloneRect.height * o.scale;
         ctx.scale(o.scale, o.scale);
         ctx.drawImage(this, 0, 0);
-        out = {
-          png :  canvas.toDataURL(),
-          svg : url,
-          canvas : canvas
-        };
-        resolve(out);
+        var data = canvas.toDataURL();
+        resolve(data);
       };
       image.onerror = function(e) {
         reject(e);

@@ -66,6 +66,11 @@ observeEvent(input$localStory,{
 #
 observeEvent(input$btnSetStoryVersion,{
 
+  mxModal(
+    id = "modalViewEditLoadStorage",
+    close = TRUE
+    )
+
   viewServer <- reactData$viewDataEdited
   viewClient <- input$localStory$item
   useClientStory <- isTRUE(input$checkUseClientStory)
@@ -158,6 +163,11 @@ observeEvent(input$btnViewPreviewStory,{
 #
 observeEvent(input$btnViewSaveStory,{
 
+  mxToggleButton(
+    id="btnViewSaveStory",
+    disable = TRUE
+    )
+
   time <- Sys.time()
   view <- reactData$viewDataEdited
   country <- reactData$country
@@ -240,6 +250,17 @@ observeEvent(input$btnViewSaveStory,{
       )
     reactData$updateViewListFetchOnly <- runif(1)
   }
+
+  mxUpdateText(
+    id = "modalViewEdit_txt",
+    text = sprintf("Saved at %s",time)
+    )
+
+  mxToggleButton(
+    id="btnViewSaveStory",
+    disable = FALSE
+    )
+
 })
 
 

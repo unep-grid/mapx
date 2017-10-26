@@ -651,56 +651,78 @@ html, body, .full-page {
 }
 
 .mx-modal-container {
+  position: absolute;
   border-radius:3px;
   z-index:500;
-  display: flex;
-  position: absolute;
-  flex-direction: column;
   min-width: 280px;
-  max-width: 700px;
-  min-height: 200px;
+  max-width: 100%;
+  min-height: 300px;
   max-height: 90%;
-  width: 60%;
+  width: 500px;
   right:0;
   left:0;
   top: 5px;
   margin: auto;
   resize: both;
-  overflow: auto;
+  overflow: hidden;
 }
+
+@media (max-width: 500px) {
+  .mx .mx-modal-container {
+    max-width: 80%;
+  }
+}
+
 
 .mx .mx-modal-top ,
 .mx .mx-modal-top * {
-  font-size:18px;
+  font-size:14px;
 }
 .mx-modal-top {
+  position:absolute;
+  top:0px;
+  left:0px;
+  max-height:40px;
+  height:30px;
   padding: 10px;
-  border-radius: 3px 3px 0px 0px;
-  text-align: center;
+  text-align: left;
+  width:100%;
 }
 
 .mx-modal-head {
-  padding: 10px;
-  text-align: center;
 }
 
 .mx-modal-body {
-  margin: 10px;
+  position:absolute;
+  top:40px;
+  bottom:50px;
+  width:100%;
   padding: 10px;
-  padding: 5px;
-  overflow: auto;
-  border: none;
-  border-radius: 0px;
-  -webkit-box-shadow: none;
-  box-shadow: none;
+  overflow: hidden;
+}
+
+.mx-modal-content {
+  padding-right:100px;
+  margin-right:-100px;  
+  height:100%;
+  overflow-y:auto;
 }
 
 .mx-modal-foot
 {
+  position:absolute;
+  bottom:0px;
+  height:auto;
+  max-height:50px;
   padding: 10px;
-  text-align: right;
+  text-align: left;
 }
 
+.mx-modal-foot-text
+{
+  float:right;
+  margin:5px;
+}
 /**
  * Error list
  */
@@ -786,12 +808,19 @@ html, body, .full-page {
   display:inline-block;
 }
 
-.check-toggle .check-toggle-label {
+.check-toggle .check-toggle-label,
+.check-toggle .check-toggle-label *{
   margin-top: 3px;
-  max-width: 300px;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 10px;
+  font-weight: 500;
+  margin: 3px;
+}
+
+.check-toggle .check-toggle-label:hover {
+  border-bottom: 1px solid;
+  margin-bottom: 2px;
 }
 
 .check-toggle .check-toggle-label:before {
@@ -807,8 +836,6 @@ html, body, .full-page {
 .check-toggle .check-toggle-input:checked ~.check-toggle-label:before {
   content : '\f192';
 }
-
-
 
 /**
 * Switch to show or hide additional content.

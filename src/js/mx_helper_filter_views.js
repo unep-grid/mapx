@@ -102,7 +102,10 @@ export function filterViewsListCheckbox(o){
 
     for( var f = 0, fL = elFilters.length ; f < fL ; f++ ){
       elFilter = elFilters[f];
-      if(elFilter.checked) filters.push(elFilter.dataset.filter);
+      if(elFilter.checked) filters.push({
+        filter:elFilter.dataset.filter,
+        type:elFilter.dataset.type
+      });
     }
 
     var displayAll = filters.length == 0;
@@ -119,9 +122,22 @@ export function filterViewsListCheckbox(o){
 
           for(var j = 0, jL=filters.length ; j < jL ; j++ ){
             if( ! found ){ 
-              var filter = filters[j];
-              try{ 
-                found = v.data.classes.indexOf(filter) > -1;
+              var filter = filters[j].filter;
+              var type = filters[j].type;
+              try{
+                switch(type){
+                  case  "classes" :
+                    found = v.data.classes.indexOf(filter) > -1;
+                    break;
+                  case  "collections" :
+                    found = v.data.collections.indexOf(filter) > -1; 
+                    break;
+                  case  "type" :
+                    found = v.type.indexOf(filter) > -1 ;
+                    break;               
+                  default:
+                    found = false;
+                }
               }catch(e){}
             }
           }

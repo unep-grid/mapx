@@ -6,26 +6,26 @@
 
 observe({
   mxCatch("map.R",{
+    
+    
+    country <- reactData$country
+    language <- reactData$language
+    eventMapName <-  sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
+    map <- input[[eventMapName]]
 
-    hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[["map"]][["id"]]) ]])
+    if(!noDataCheck(map)) return()
+    if(noDataCheck(country)) return()
+    if(noDataCheck(language)) return()
 
-    if(hasMap) return()
+    #if(noDataCheck(language)){
+      #language <- .get(config,c("languages","default","first"))
+    #}
 
-    dat <- reactUser$data
-
-    language <- .get(dat,c("data","user","cache","last_language"))
-    country <- .get(dat,c("data","user","cache","last_project"))
-
-    if(noDataCheck(language)){
-      language <- .get(config,c("languages","default","first"))
-    }
-
-    if(noDataCheck(country)){
-      country =  .get(config,c("countries","default","first"))
-    }
+    #if(noDataCheck(country)){
+      #country =  .get(config,c("countries","default","first"))
+    #}
 
     countryData <- .get(config,c("countries","table"))
-
     countryData <- countryData[countryData$iso3 == country,][1,]
 
     #

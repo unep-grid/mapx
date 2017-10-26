@@ -1096,6 +1096,10 @@ export function handleViewClick(o){
             id:o.id,
             idView:el.dataset.view_action_target
           });
+         updateViewsListLayout({
+           idMap:o.id,
+           timeOut:0
+         });
         }
       },
       {
@@ -1103,7 +1107,7 @@ export function handleViewClick(o){
         comment: "target is the png screenshoot button",
         isTrue :  el.dataset.view_action_key == "btn_opt_screenshot",
         action:function(){
-          downloadMapPng({
+          downloadMapPdf({
             id: o.id, 
             idView: el.dataset.view_action_target
           });
@@ -1261,7 +1265,20 @@ export function renderViewsList(o){
       /**
        * Render given view items
        */
-      views.forEach(function(v){m.views.push(v);});
+      views.forEach(function(v){
+        // remove old views if present
+        var oldPos ;
+         m.views.forEach(function(f){
+          if(f.id==v.id){
+            oldPos = m.views.indexOf(f); 
+          }
+        });
+        if( oldPos>-1 ){
+          m.views.splice(oldPos,1);
+        }
+        // add new/update view
+        m.views.push(v);
+        });
       elDiv = document.createElement("div");
       elDiv.innerHTML = mx.templates.viewList(views);
       elNewItem = elDiv.querySelector("li");
@@ -1273,7 +1290,7 @@ export function renderViewsList(o){
     /**
     * Handle draggable and sortable
     */
-    mx.helpers.makeViewsSortable({
+    makeViewsSortable({
       add : add,
       pckry : m.tools.viewsListPackery,
       id : o.id,
@@ -1285,6 +1302,14 @@ export function renderViewsList(o){
     }).then(function(packery){
       m.tools.viewsListPackery = packery;
     });
+
+
+
+    /**
+    * Generate filter
+    */
+    var tableTags = getTagsGroupFromView(m.views); 
+    tagsTableToLabel(tableTags,"#viewsTagsFilterToggles");
 
     /** 
      * Get components 
@@ -1324,7 +1349,7 @@ export function renderViewsList(o){
     if( ! m.listener.viewsListFilterCheckbox ){
 
       m.listener.viewsListFilterCheckbox = mx.helpers.filterViewsListCheckbox({
-        selectorInput : "#viewsClassFilter",
+        selectorInput : "#viewsTagsFilter",
         idMap : o.id ,
         classHide : "mx-filter-class",
         classSkip : "mx-filter-text",
@@ -1362,6 +1387,168 @@ export function renderViewsList(o){
 
   } 
 }
+
+
+/** 
+* Build views list and make it sortable using packery and draggabilly
+* @param {Object} o options
+*/
+function makeViewsSortable(o){
+
+  var elSelectorAll,elSelectorAdd,draggie;
+  var selectorItem = ".mx-view-item";
+  var selectorHandle = ".mx-view-tgl-title";
+  var add = o.add || false;
+  var pckry = o.pckry;
+  
+  return Promise.all([
+   System.import("packery"),
+   System.import("draggabilly")
+  ]).then(function(m){
+
+    var Packery = m[0];
+    var Draggabilly = m[1];
+
+    if (o.selectorAll instanceof Node) {
+      elSelectorAll = o.selectorAll;
+    } else {
+      elSelectorAll = document.querySelector(o.selectorAll);
+    }
+
+    if (o.selectorAdd instanceof Node) {
+      elSelectorAdd = o.selectorAdd;
+    } else {
+      elSelectorAdd = document.querySelector(o.selectorAdd);
+    }
+
+    if( add && pckry && elSelectorAdd ){
+
+     // pckry.prepended(elSelectorAdd);
+      pckry.addItems(elSelectorAdd);
+      draggie = new Draggabilly(elSelectorAdd,{
+          handle: selectorHandle
+      });
+      pckry.bindDraggabillyEvents(draggie);
+      pckry.fit(elSelectorAdd,0,0);
+    }else{
+
+      pckry = new Packery(elSelectorAll, {
+        selectorItem: selectorItem,
+        columnWidth: 100,
+        transitionDuration: 100,
+        stagger: 0
+      });
+
+      pckry.getItemElements().forEach(function(elItem) {
+        var draggie = new Draggabilly(elItem, {
+          handle: selectorHandle
+        });
+        pckry.bindDraggabillyEvents(draggie);
+      });
+
+      pckry.on('dragItemPositioned',o.callback);
+    
+    }
+       return pckry;
+  });
+}
+
+
+
+
+/**
+* Extract tags from various path in given views list and produce frequency tables
+* @param {Array} v Views list
+* @note : expect type, data.classes and data.collections
+*/
+function getTagsGroupFromView(views){
+
+  var tags = {
+    type : [],
+    classes : [],
+    collections : []
+  };
+
+  views.map(function(v){ 
+    tags.type  = tags.type.concat( mx.helpers.path(v,"type"));
+    tags.classes = tags.classes.concat( mx.helpers.path(v,"data.classes"));
+    tags.collections = tags.collections.concat( mx.helpers.path(v,"data.collections"));
+  });
+
+  tags.type = mx.helpers.getArrayStat({
+    arr:tags.type,
+    stat:'frequency'
+  });
+
+  tags.classes = mx.helpers.getArrayStat({
+    arr:tags.classes,
+    stat:'frequency'
+  });
+
+  tags.collections = mx.helpers.getArrayStat({
+    arr:tags.collections,
+    stat:'frequency'
+  });
+  return tags;
+}
+
+
+/**
+* Create filter tags label using freqency table from getTagsGroupFromView
+* @param {Object} table Object containing the count for each key :
+* @param {Object} table.count Count of key.
+* @param {Element|Selector} Container to store the resulting label
+*/
+function tagsTableToLabel(table,containerSelector){
+
+  var elContainer = containerSelector instanceof Node ? containerSelector : document.querySelector(containerSelector);
+  
+  // Reset content
+  elContainer.innerHTML="";
+
+  var types =  Object.keys(table);
+  var tags = [];
+
+  types.forEach(function(t){
+    var tbl = table[t];
+    var keys = Object.keys(tbl);
+    keys.forEach(function(k){
+      var label = mx.helpers.getLanguage(k,mx.settings.language,"en");
+      tags.push({key:k,count:tbl[k],label:label[0],type:t});
+    });
+  });
+ 
+  tags = tags.sort(function(a,b){
+    return b.count-a.count;
+  });
+
+  tags.forEach(function(t){
+    var el =  makeEl(t.key,t.label,t.count,t.type);
+    elContainer.appendChild(el);
+  });
+
+
+  function makeEl(id,label,number,type){
+    var checkToggle = document.createElement("div");
+    var checkToggleLabel = document.createElement("label");
+    var checkToggleInput = document.createElement("input");
+    checkToggle.className =  "check-toggle";
+    checkToggleInput.className = "filter check-toggle-input";
+    checkToggleInput.setAttribute("type", "checkbox");
+    checkToggleLabel.className = "check-toggle-label";
+    checkToggleInput.id = "filter_"+id;
+    checkToggleInput.dataset.filter = id;
+    checkToggleInput.dataset.type = type;
+    checkToggleLabel.setAttribute("for","filter_"+id);
+    checkToggleLabel.innerHTML =  label.toUpperCase() + "<span class='check-toggle-badge'> (" + number + ") </span>";
+    checkToggle.appendChild(checkToggleInput);
+    checkToggle.appendChild(checkToggleLabel);
+    return(checkToggle);
+  }
+}
+
+
+
 
 /**
  * Filter current view and store rules
@@ -1492,183 +1679,490 @@ export function plotTimeSliderData(o){
  * @param {string} o.id map id
  * @parma {string} o.idView view id
  */
-export function downloadMapPng(o){
+//export function downloadMapPng(o){
 
+  //Promise.all([
+    //System.import("tokml"),
+    //System.import("jszip"),
+    //System.import("downloadjs"),
+    //System.import("@turf/turf"),
+    //System.import("../img/north_001.svg")
+    ////System.import("dom-to-image"),
+    ////System.import("html2canvas"),
+  //]).then(function(m){
+
+    //var toKml = m[0];
+    //var JSZip = m[1];
+    //var download = m[2];
+    //var turf = m[3];
+    //var northArrowPath = m[4];
+    ////var domtoimage = m[4];
+    
+    //var kml,zip,folder;
+    //var qf = [];
+    //var map = mx.maps[o.id].map;
+    //var elMap = document.getElementById("#map_main");
+    //var elLegend = document.getElementById("check_view_legend_"+o.idView);
+    //var elScale = document.querySelector(".mx-scale-box");
+    ////var elNorthArrow = document.querySelector("#btnSetNorth_img");
+    //var imgMap = map.getCanvas().toDataURL();
+
+    ////var imgLegend ;
+    ////var imgScale;
+    //var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
+    //var view = mx.helpers.getViews(o);
+     
+    //var layers = mx.helpers.getLayerNamesByPrefix({
+      //id: o.id,
+      //prefix: o.idView
+    //});
+
+    //if( layers.length > 0 && view.type == "vt" ){
+
+      //var attr = mx.helpers.path(view,'data.attribute.name');
+      //var rules = mx.helpers.path(view,'data.style.rules');
+      //var gType = mx.helpers.path(view,'data.geometry.type');
+
+      //var simpleColor = {
+        //'polygon':'fill',
+        //'line':'stroke',
+        //'point':'marker-color'
+      //}[gType];
+
+      //var simpleOpacity = {
+        //'polygon':'fill-opacity',
+        //'line':'stroke-opacity',
+        //'point':null
+      //}[gType];
+
+      //var geomTemp = {
+        //type : "FeatureCollection",
+        //features : [] 
+      //};
+
+      //qf = map.queryRenderedFeatures({layers:layers});
+
+      //// get all abject in one
+      //qf.forEach(function(feature){
+
+        //// add properties for simplestyle conversion
+        //if(rules && simpleColor){
+          //var v = feature.properties[attr];
+          //var n = mx.helpers.isNumeric(v);
+          //rules.forEach(function(r){
+            //if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
+              //feature.properties[simpleColor] = r.color;
+              //if(simpleOpacity){
+                //feature.properties[simpleOpacity] = r.opacity;
+              //}
+            //}
+          //});
+        //}
+
+        //// Push featre in main geojson NOTE: This include duplicated due to tiles 
+        //geomTemp
+          //.features
+          //.push({
+            //"type" : "Feature",
+            //"properties":feature.properties,
+            //"geometry":feature.geometry
+          //});
+      //});
+
+      //// remove duplicated geom 
+      //geomTemp = turf.dissolve(geomTemp,"gid");
+
+      //// Save as kml
+      //kml = toKml(geomTemp,{
+        //simplestyle:true
+      //});
+
+    //}
+   
+
+    //// set nort arrow img
+
+    //function getNorthArrow(){
+      //return new Promise(function(resolve,reject){
+        //var imgNorthArrow = new Image();
+        //imgNorthArrow.onload = function(){
+              //resolve(imgNorthArrow);
+        //};
+        //imgNorthArrow.onerror = function(e) {
+              //reject(e);
+        //};
+        //imgNorthArrow.src = northArrowPath;
+        //imgNorthArrow.style.width="150px";
+        //imgNorthArrow.style.height="150px";
+        //imgNorthArrow.style.position="absolute";
+        //imgNorthArrow.style.zIndex="-1";
+        //imgNorthArrow.style[mx.helpers.cssTransformFun()] = "rotateZ("+(map.getBearing())+"deg) ";
+        //document.body.appendChild(imgNorthArrow);
+      //});
+    //}
+  
+
+    //zip = new JSZip();
+    //folder = zip.folder("mx-data");
+
+    //var promScale = mx.helpers.htmlToData({
+      //selector : elScale,
+      //scale : 1,
+      //style : "border:1px solid black; border-top:none"
+     //}).catch(function(e){
+         //console.log(e);
+      //});
+   
+    //Promise.all([
+      ////promArrow,
+      //promScale,
+      //promLegend
+    //]).then(function(r){
+
+      //if(kml){
+        //folder.file("mx-data.kml",kml);
+      //}
+       //var imgLeg =  elLegend;
+      ////if(r[0]){
+        ////folder.file("mx-north.png", r[0].png.split(",")[1], {base64: true});
+        ////folder.file("mx-north.svg", r[0].svg.split(",")[1], {base64: true});
+      //[>}<]
+      //if(r[0]){
+        //folder.file("mx-scale.png", r[0].png.split(",")[1], {base64: true});
+        //folder.file("mx-scale.svg", r[0].svg.split(",")[1], {base64: true});
+      //}
+      //if(r[1]){
+        //folder.file("mx-legend.png", r[1].png.split(",")[1], {base64: true});
+        //folder.file("mx-legend.svg", r[1].svg.split(",")[1], {base64: true});
+      //}
+
+      //if(imgMap){
+        //folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
+      //}
+      //zip.generateAsync({type:"blob"})
+        //.then(function(content) {
+          //download(content, fileName);
+        //});
+    //})
+      //.catch(function(e){
+        //console.log(e);
+      //});
+
+  //});
+/*}*/
+
+/** 
+ * Download screenshot
+ * @param {object} o options;
+ * @param {string} o.id map id
+ * @parma {string} o.idView view id
+ */
+export function downloadMapPdf(o){
+
+  /**
+   * Check asynchron progress
+   */
+  var progress = 1;
+  var timer = setInterval(updateProgress,1000);
+  updateProgress();
+  function updateProgress(){
+    mx.helpers.progressScreen({
+      enable : progress < 100,
+      id : "Screenshot",
+      percent : progress,
+      text : "Screenshot generation, please wait"
+    });
+
+    if(progress>=100) clearInterval(timer);
+
+  }
+
+  /**
+   * Launch the process
+   */
+  setTimeout(function(){
+
+    /**
+     * Load external libraries
+     */
   Promise.all([
+    System.import("jspdf"),
     System.import("tokml"),
     System.import("jszip"),
     System.import("downloadjs"),
     System.import("@turf/turf"),
     System.import("../img/north_001.svg")
-    //System.import("dom-to-image"),
-    //System.import("html2canvas"),
   ]).then(function(m){
 
-    var toKml = m[0];
-    var JSZip = m[1];
-    var download = m[2];
-    var turf = m[3];
-    var northArrowPath = m[4];
-    //var domtoimage = m[4];
-    
-    var kml,zip,folder;
+    progress = 10;
+
+    var jsPDF = m[0];
+    var toKml = m[1];
+    var JSZip = m[2];
+    var download = m[3];
+    var turf = m[4];
+    var northArrowPath = m[5];
+    var dataMap,dataKml,zip,folder,dataLegend,dataScale,dataNorth;
+    var promKml,promLegend,promScale,promNorth;
     var qf = [];
     var map = mx.maps[o.id].map;
-    var elMap = document.getElementById("#map_main");
+    var elMap = document.getElementById("map_main");
+    var mapDim =  elMap.getBoundingClientRect();
+    var paperWidth = 297;
+    var paperHeight = 210;
+    var mapHeight = mapDim.height / (mapDim.width / paperWidth);
+    var link = location.origin + location.pathname + "?views=" + o.idView + "&country="+mx.settings.country;
     var elLegend = document.getElementById("check_view_legend_"+o.idView);
     var elScale = document.querySelector(".mx-scale-box");
-    //var elNorthArrow = document.querySelector("#btnSetNorth_img");
-    var imgMap = map.getCanvas().toDataURL();
-
-    //var imgLegend ;
-    //var imgScale;
     var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
     var view = mx.helpers.getViews(o);
-     
-    var layers = mx.helpers.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: o.idView
+    var lang = mx.settings.language;
+    var langs = mx.settings.languages;
+
+    var title = mx.helpers.getLanguageFromObjectPath({
+      obj : view,
+      path : "data.title",
+      lang : lang,
+      langs : langs,
+      defaultKey : view.id
     });
-
-    if( layers.length > 0 ){
-
-      var attr = mx.helpers.path(view,'data.attribute.name');
-      var rules = mx.helpers.path(view,'data.style.rules');
-      var gType = mx.helpers.path(view,'data.geometry.type');
-
-      var simpleColor = {
-        'polygon':'fill',
-        'line':'stroke',
-        'point':'marker-color'
-      }[gType];
-
-      var simpleOpacity = {
-        'polygon':'fill-opacity',
-        'line':'stroke-opacity',
-        'point':null
-      }[gType];
-
-      var geomTemp = {
-        type : "FeatureCollection",
-        features : [] 
-      };
-
-      qf = map.queryRenderedFeatures({layers:layers});
-
-      // get all abject in one
-      qf.forEach(function(feature){
-
-        // add properties for simplestyle conversion
-        if(rules && simpleColor){
-          var v = feature.properties[attr];
-          var n = mx.helpers.isNumeric(v);
-          rules.forEach(function(r){
-            if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
-              feature.properties[simpleColor] = r.color;
-              if(simpleOpacity){
-                feature.properties[simpleOpacity] = r.opacity;
-              }
-            }
-          });
-        }
-
-        // Push featre in main geojson NOTE: This include duplicated due to tiles 
-        geomTemp
-          .features
-          .push({
-            "type" : "Feature",
-            "properties":feature.properties,
-            "geometry":feature.geometry
-          });
-      });
-
-      
-      geomTemp = turf.dissolve(geomTemp,"gid");
-
-      kml = toKml(geomTemp,{
-        simplestyle:true
-      });
-
-    }
-   
-
-    // set nort arrow img
-
-    function getNorthArrow(){
-      return new Promise(function(resolve,reject){
-        var imgNorthArrow = new Image();
-        imgNorthArrow.onload = function(){
-              resolve(imgNorthArrow);
+    /**
+     * Legend
+     */
+    if( view.type == "rt" ){
+      var imgLegend = elLegend.querySelector("img");
+      promLegend = new Promise(function(resolve,reject){
+        if(!imgLegend) resolve();
+        var img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = function(){
+          var canvas = document.createElement('canvas');
+          var ctx = canvas.getContext("2d");
+          canvas.width = this.width;
+          canvas.height = this.height;
+          ctx.drawImage(this, 0, 0);
+          var data = canvas.toDataURL();
+          resolve(data);
         };
-        imgNorthArrow.onerror = function(e) {
-              reject(e);
+        img.onerror = function(e) {
+          reject(e);
         };
-        imgNorthArrow.src = northArrowPath;
-        imgNorthArrow.style.width="150px";
-        imgNorthArrow.style.height="150px";
-        imgNorthArrow.style.position="absolute";
-        imgNorthArrow.style.zIndex="-1";
-        imgNorthArrow.style[mx.helpers.cssTransformFun()] = "rotateZ("+(map.getBearing())+"deg) ";
-        document.body.appendChild(imgNorthArrow);
+        img.src = imgLegend.src;
+
+      }).then(function(data){
+        progress += 20;
+        return(data); 
       });
     }
-  
 
-    zip = new JSZip();
-    folder = zip.folder("mx-data");
+    if( view.type == "vt" ){
+      promLegend = mx.helpers.htmlToData({
+        selector : elLegend,
+        scale : 1,
+        format :"png"
+      }).then(function(data){
+        progress += 20;
+        return(data); 
+      });
+    }
 
-    var promScale = mx.helpers.htmlToData({
+    /**
+     * Scale
+     */
+    promScale = mx.helpers.htmlToData({
       selector : elScale,
       scale : 1,
-      style : "border:1px solid black; border-top:none"
-     }).catch(function(e){
-         console.log(e);
-      });
-    
-    var promLegend = mx.helpers.htmlToData({
-      selector : elLegend,
-      scale : 10 
-     }).catch(function(e){
-         console.log(e);
-      });
+      style : "border:1px solid black; border-top:none",
+      format :"png"
+    }).then(function(data){
+      progress += 20;
+      return(data); 
+    });
 
-    Promise.all([
-      //promArrow,
-      promScale,
-      promLegend
-    ]).then(function(r){
+    /**
+     * North Arrow
+     */
+    promNorth = new Promise(function(resolve,reject){
+      var canvas = document.createElement('canvas');
+      var rotation = map.getBearing()*Math.PI/180;
+      var imgNorthArrow = new Image();
+      var ctx = canvas.getContext("2d");
+      function drawImage(image, x, y, scale, rotation){
+        ctx.setTransform(scale, 0, 0, scale, x, y); // sets scale and origin
+        ctx.rotate(rotation);
+        ctx.drawImage(image, -image.width / 2, -image.height / 2);
+      } 
 
-      if(kml){
-        folder.file("mx-data.kml",kml);
-      }
+      imgNorthArrow.onload = function(){
+        canvas.width = this.width;
+        canvas.height = this.height;
+        canvas.style="position:absolute;top:0;z-index:1000";
+        drawImage(this, canvas.width / 2, canvas.height / 2, 1, rotation);
+        var data = canvas.toDataURL();
+        resolve(data);
+      }; 
+      imgNorthArrow.onerror = function(e) {
+        imgNorthArrow.remove();
+        reject(e);
+      };
+      imgNorthArrow.src = northArrowPath;
+    }).then(function(data){
+      progress += 20;
+      return(data); 
+    });
 
-      //if(r[0]){
-        //folder.file("mx-north.png", r[0].png.split(",")[1], {base64: true});
-        //folder.file("mx-north.svg", r[0].svg.split(",")[1], {base64: true});
-      /*}*/
-      if(r[0]){
-        folder.file("mx-scale.png", r[0].png.split(",")[1], {base64: true});
-        folder.file("mx-scale.svg", r[0].svg.split(",")[1], {base64: true});
+    /**
+     * Kml 
+     */
+      if( view.type !== "vt"){
+        progress += 20;
       }
-      if(r[1]){
-        folder.file("mx-legend.png", r[1].png.split(",")[1], {base64: true});
-        folder.file("mx-legend.svg", r[1].svg.split(",")[1], {base64: true});
-      }
+      if( view.type == "vt" ){
 
-      if(imgMap){
-        folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
-      }
-      zip.generateAsync({type:"blob"})
-        .then(function(content) {
-          download(content, fileName);
+        promKml =  new Promise(function(resolve,reject){
+
+          var layers = mx.helpers.getLayerNamesByPrefix({
+            id: o.id,
+            prefix: o.idView
+          });
+
+          if( layers.length > 0 ){
+            var attr = mx.helpers.path(view,'data.attribute.name');
+            var rules = mx.helpers.path(view,'data.style.rules');
+            var gType = mx.helpers.path(view,'data.geometry.type');
+
+            var simpleColor = {
+              'polygon':'fill',
+              'line':'stroke',
+              'point':'marker-color'
+            }[gType];
+
+            var simpleOpacity = {
+              'polygon':'fill-opacity',
+              'line':'stroke-opacity',
+              'point':null
+            }[gType];
+
+            var geomTemp = {
+              type : "FeatureCollection",
+              features : [] 
+            };
+
+            qf = map.queryRenderedFeatures({layers:layers});
+
+            // get all abject in one
+            qf.forEach(function(feature){
+
+            // add properties for simplestyle conversion
+              if(rules && simpleColor){
+                var v = feature.properties[attr];
+                var n = mx.helpers.isNumeric(v);
+                rules.forEach(function(r){
+                  if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
+                    feature.properties[simpleColor] = r.color;
+                    if(simpleOpacity){
+                      feature.properties[simpleOpacity] = r.opacity;
+                    }
+                  }
+                });
+              }
+
+            // Push featre in main geojson NOTE: This include duplicated due to tiles 
+              geomTemp
+                .features
+                .push({
+                  "type" : "Feature",
+                  "properties":feature.properties,
+                  "geometry":feature.geometry
+                });
+            });
+
+            // remove duplicated geom 
+            geomTemp = turf.dissolve(geomTemp,"gid");
+
+            // Save as kml
+            resolve(
+              toKml(geomTemp,{
+                simplestyle:true
+              })
+            );
+          } 
+        }).then(function(data){
+          progress += 20;
+          return(data); 
         });
-    })
-      .catch(function(e){
-        console.log(e);
-      });
+      }
 
-  });
-}
+
+
+
+        Promise.all([
+          promKml,
+          promNorth,
+          promScale,
+          promLegend
+        ]).then(function(r){
+
+          dataMap = map.getCanvas().toDataURL();
+          dataKml = r[0]?r[0]:dataKml;
+          dataNorth = r[1]?r[1]:dataNorth;
+          dataScale = r[2]?r[2]:dataScale;
+          dataLegend = r[3]?r[3]:dataLegend;
+
+          var doc = new jsPDF({orientation: 'landscape'});
+          if( dataMap ) doc.addImage(dataMap, 'PNG', 0, 0, 297, mapHeight );
+          if( dataNorth ) doc.addImage(dataNorth, 'PNG', 280, 5,10,10 );
+          if( dataScale ) doc.addImage(dataScale, 'PNG', 270, 190 );
+          if( dataLegend ){
+            doc.setFillColor(0,0,0,0); // white
+            doc.roundedRect(5, 15, 80 , 180 , 2, 2, 'F');
+            doc.addImage(dataLegend, 'PNG', 9, 24 );
+          }
+          if( link ){
+            doc.setFontSize(10);
+            doc.text(10, 205, link);
+          }
+          if( title ){
+            doc.setFontSize(20);
+            doc.text(5, 10, title);
+          }
+
+          var dataPdf =  doc.output();
+
+          zip = new JSZip();
+          folder = zip.folder("mx-data");
+
+          if(dataKml){
+            folder.file("mx-data.kml",dataKml);
+          }
+
+          if(dataScale){
+            folder.file("mx-scale.png", dataScale.split(",")[1], {base64: true});
+          }
+          if(dataLegend){
+            folder.file("mx-legend.png", dataLegend.split(",")[1], {base64: true});
+          }
+          if(dataMap){
+            folder.file("mx-map.png", dataMap.split(",")[1], {base64: true});
+          }
+          if(dataPdf){
+            folder.file("mx-map.pdf", dataPdf, {binary:true});
+          }
+
+          zip.generateAsync({type:"blob"})
+            .then(function(content) {
+              progress += 100;
+              download(content, fileName);
+            });
+        })
+          .catch(function(e){
+            progress=100;
+            console.log(e);
+          });
+
+      });
+  },10);
+    }
 
 
 
@@ -3161,7 +3655,6 @@ export function setUiColorScheme(o){
   c = c||{};
 
   mx.settings.colors = c;
-  console.log(c);
   /**
   * Extract main rules. NOTE: this seems fragile, find another technique
   */
@@ -3518,6 +4011,17 @@ export function initMap(o){
           Shiny.onInputChange( "selectCountry", cntry);
         }
       }
+    });
+
+    map.on('mousemove', function(e) {
+
+      var layers = mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: "MX-"
+      });
+
+      var features = map.queryRenderedFeatures(e.point,{layers:layers});
+      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
 
     map.on("render" , mx.helpers.handleEvent);

@@ -3,12 +3,12 @@
 #
 # View text long
 #
-divAbstract <- tags$div(class="float-left",
-  "{{? h.all([h.path(view,'data.abstract'), h.path(view,'data.abstract.'+lang)]) }}",
+divAbstract <- tags$div(class="float-left mx-view-item-desc-container",
+  "{{? h.path(view,'data.abstract.'+langAbstract) }}",
     tags$p(
       class="mx-view-item-desc",
       id="view_text_{{=view.id}}",
-      "{{=view.data.abstract[lang]}}"
+      "{{=view.data.abstract[langAbstract]}}"
       ),
   "{{?}}"
   )
@@ -19,7 +19,7 @@ divAbstract <- tags$div(class="float-left",
 divLegend <- tags$div(
   "{{?view.type=='vt'}}",
   "{{ var rules = h.path(view,'data.style.rules'); }}",
-  "{{? h.all([rules, h.greaterThan(h.path(rules,'length'), 0) ]) }}",
+  "{{?h.greaterThan(h.path(rules,'length'),0)}}",
     tags$div(
       class="mx-view-item-legend",
       id="check_view_legend_{{=view.id}}"
@@ -171,7 +171,7 @@ divSearchVectorTiles <- tags$div(
 # Controls for vector tiles views
 #
 liControlsVectorTiles <- tagList(
-  "{{?h.any([ view.type=='gj', view.type=='vt' ]) }}",
+  "{{? h.any([ view.type == 'gj', view.type == 'vt' ]) }}",
   tags$li(
     class="mx-pointer hint--right",
     `data-view_action_key`="btn_opt_zoom_all",
@@ -203,6 +203,7 @@ liControlsVectorTiles <- tagList(
       )
     ),
   "{{?}}",
+  "{{? h.any([ view.type == 'gj', view.type == 'vt', view.type == 'rt' ]) }}",
   tags$li(
     class="mx-pointer hint--right",
     `data-view_action_key`="btn_opt_search",
@@ -213,6 +214,7 @@ liControlsVectorTiles <- tagList(
       class="fa fa-cog"
       )
     ),
+  "{{?}}",
   "{{?view.type=='vt' }}",
   tags$li(
     class="mx-pointer hint--right",
@@ -312,6 +314,7 @@ liControlsGeoJson <- tagList(
 # Controls for the screenshot / print
 #
 liControlsScreenShot <- tagList(
+  "{{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}",
    tags$li(
     class="mx-pointer hint--right",
     `data-lang_key`="btn_opt_screenshot",
@@ -321,13 +324,13 @@ liControlsScreenShot <- tagList(
     tags$div(
       class="fa fa-camera"
       )
-    )
+    ),
+   "{{?}}"
   )
 
 # controls share
 liControlsShare <- tagList(
-  #"{{?h.any([view.type == 'vt', view.type == 'rt', view.type == 'sm']) }}",
-  "{{?h.not([view.type == 'gj']) }}",
+  "{{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}",
   tags$li(
     class="mx-pointer hint--left",
     `data-lang_key`="btn_opt_share",
@@ -425,7 +428,8 @@ ulControls <- tags$div(
 tagList(
   "{{ var view = it ; }}",
   "{{ var h = mx.helpers ; }}",
-  "{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}",
+  "{{ var langTitle = h.checkLanguage({obj:view,path:'data.title'}) ; }}",
+  "{{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}",
   divAbstract,
   divLegend,
   ulControls,

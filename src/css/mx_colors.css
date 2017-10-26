@@ -51,13 +51,27 @@
 /**
 * Filter toggle view class label 
 */
-.mx .check-toggle .check-toggle-label {
+.mx .check-toggle .check-toggle-label,
+.mx .check-toggle-badge {
   color:var(--mx_ui_text_faded);
 }
+
+
+/**
+* View list items content
+*/
 
 .mx-views-content {
   border-bottom: 1px solid var(--mx_ui_border);
   border-top: 1px solid var(--mx_ui_border);
+}
+
+.mx .mx-view-item-desc {
+  color: var(--mx_ui_text_faded);
+}
+
+.mx .mx-view-item-desc:hover {
+  color: var(--mx_ui_text);
 }
 
 
@@ -177,6 +191,7 @@ color: #FFF;
 .mx .selectize-control.single .selectize-input,
 .mx .selectize-control.single .selectize-input.input-active,
 .mx .selectize-control.single .selectize-input .dropdown-active,
+.mx .selectize-dropdown .create *
 .mx .selectize-input,
 .mx .selectize-control.multi .selectize-input > div,
 .mx .list-group-item
@@ -186,6 +201,7 @@ color: #FFF;
   border-color: var(--mx_ui_border);
   background-color: var(--mx_ui_background);
 } 
+
 
 .list-group .list-group-item-member {
   border: 1px solid var(--mx_ui_border);
@@ -204,13 +220,19 @@ color: #FFF;
 
 .mx .selectize-control.single .selectize-input:after,
 .mx .selectize-control.single .selectize-input.dropdown-active:after,
+
 .mx .selectize-dropdown.form-control{
   background-color: var(--mx_ui_background);
   border-color: var(--mx_ui_border);
 }
 
+.mx .selectize-dropdown [data-selectable] .highlight { 
+  background-color: yellow;
+}
+
 .mx .selectize-dropdown .active,
-.mx .selectize-dropdown [data-selectable] .highlight,
+.mx .selectize-dropdown .active.create,
+.mx .selectize-dropdown .active.create *,
 .mx .btn:hover,
 .mx .btn:hover div,
 .mx .btn:hover i,
@@ -319,6 +341,7 @@ color: #FFF;
 .mx .mx-slider-container .noUi-horizontal .noUi-handle {
   background-color: var(--mx_ui_background);
   border: 1px solid var(--mx_ui_border);
+  outline:none;
 }
 
 .mx .mx-slider-container .noUi-target {
@@ -378,3 +401,8 @@ color:var(--mx_ui_text);
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-container {
   background-color: #7bf75e;
 }
+
+
+
+
+

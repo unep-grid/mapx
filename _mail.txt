@@ -1,28 +1,28 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MAP-X MAIL SYSTEM 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-date : 2017-10-19 14:59:22.6078
+date : 2017-10-25 17:31:42.8757
 type : error
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MESSAGE
 
-unused argument (options = list(dropdownParent = "body"))
+object 'hasMap' not found
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 CALL
 
-    56: mxCatchHandler
-    55: value[[3L]] [src/helper/misc.R#786]
-    54: tryCatchOne
-    53: tryCatchList
-    52: doTryCatch
-    51: tryCatchOne
-    50: tryCatchList
-    49: doTryCatch
-    48: tryCatchOne
-    47: tryCatchList
-    46: tryCatch
-    45: mxCatch [src/helper/misc.R#781]
-    44: observeEventHandler [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/source_vt_upload_optional_view.R#7]
+    73: mxCatchHandler
+    72: value[[3L]] [src/helper/misc.R#786]
+    71: tryCatchOne
+    70: tryCatchList
+    69: doTryCatch
+    68: tryCatchOne
+    67: tryCatchList
+    66: doTryCatch
+    65: tryCatchOne
+    64: tryCatchList
+    63: tryCatch
+    62: mxCatch [src/helper/misc.R#781]
+    61: observerFunc [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/map.R#8]
      6: runApp
      5: rs [run.R#7]
      4: eval [run.R#10]

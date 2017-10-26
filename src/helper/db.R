@@ -123,6 +123,168 @@ mxDbGetViewsByCountry <- function(idUser,read){
 
 
 
+
+#' @rdname mxDbGetDistinctCollectionsTags
+#' @param {character} table Table name
+mxDbGetDistinctCollectionsTags <- function(table){
+
+  sql = sprintf("
+    SELECT jsonb_build_array(dist.tags) ->> 0 as res from (
+    SELECT DISTINCT tags  FROM
+    ( SELECT
+      case
+      when jsonb_typeof(data->'collections') = 'string' then jsonb_array_elements(jsonb_build_array(data->'collections'))
+    else (JSONB_ARRAY_ELEMENTS(data->'collections'))
+    end AS tags
+    FROM %1$s
+    WHERE data->'collections' IS NOT NULL
+    ) as foo ) dist",table)
+
+    tags <- mxDbGetQuery(sql)$res;
+
+    return(tags)
+}
+
+
+
+
+#' @rdname mxDbGetViews
+#' @param views {list|vector} Views id to fetch. Optional, replace any other logic
+#' @param collections {list|vector} Collection(s) to fetch. Optional, add to selected views and replace any other logic
+#' @param project {character} Iso 3 country code
+#' @param read {vector} Name of the groups the user can read
+#' @param edit {vector} Name of the group the user can edit
+#' @param userId {integer} User id
+#' @param id {character} Unique view id to fetch
+#' @param from {integer} Position of the row to start with
+#' @param to {integer} Position of the row to end with
+#' @export 
+mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5){
+
+  out <- list()
+  conf <- mxGetDefaultConfig()
+  tableName <- .get(conf,c("pg","tables","views"))
+
+  # paste read for psql array
+  read <- read[read != "self"]
+  read <- paste(paste0("'",read,"'"),collapse=",")
+
+  # paste edit for psql array 
+  edit <- edit[edit != "self"]
+  edit <- paste(paste0("'",edit,"'"),collapse=",")
+
+  # filter view id
+  filter <- ""
+  if(!is.null(id)){
+    filter <- sprintf("AND t1.id='%s'",id)
+  }
+
+  if(!noDataCheck(collections)){
+    sql =  sprintf("
+      SELECT DISTINCT id 
+      FROM mx_views a
+      WHERE data->'collections' ?| array['%1$s']
+      AND ((country = '%2$s') 
+        OR (data->'countries' ?| array['%2$s']) 
+        OR (data ->'countries' ?| array['GLB']))
+      AND date_modified = (
+        SELECT MAX(date_modified)
+        FROM mx_views b
+        WHERE b.id = a.id
+        )
+      ",
+      paste(collections,collapse="','"),
+      project
+      )
+
+    views = c(
+      views,
+      mxDbGetQuery(sql)$id
+      )
+  }
+
+  if(!noDataCheck(views)){
+
+    views = paste(paste0("'",views,"'"),collapse=",")
+
+    q <- gsub("\n|\\s\\s+"," ",sprintf("
+        SELECT json_agg(row_to_json(t)) res from (
+          SELECT 
+          t1.*,
+          exists(
+            SELECT id 
+            FROM %1$s 
+            WHERE 
+            (t1.country ='%2$s') AND 
+            ((t1.target ?| array[%4$s]) OR (t1.editor = '%3$s' AND t1.target ?| array['self']))
+            ) as _edit
+          FROM %1$s t1
+          WHERE date_modified = (
+            SELECT MAX(date_modified)
+            FROM %1$s t2
+            WHERE t2.id = t1.id
+            AND ( t1.id in (%5$s))
+            ) AND
+          ( t1.id in (%5$s) )
+          ORDER BY date_modified DESC
+          ) t
+        "
+        , tableName
+        , project
+        , userId
+        , edit
+        , views
+        )
+      )
+  }else{
+    # extract(epoch from t1.date_modified) date_modified, 
+    # search for most version of the view only, filter by country, target and id.
+    q <- gsub("\n|\\s\\s+"," ",sprintf("
+        SELECT json_agg(row_to_json(t)) res from (
+          SELECT 
+          t1.*,
+          exists(
+            SELECT id 
+            FROM %1$s 
+            WHERE 
+            (t1.country ='%2$s') AND 
+            ((t1.target ?| array[%5$s]) OR (t1.editor = '%4$s' AND t1.target ?| array['self']))
+            ) as _edit
+          FROM %1$s t1 
+          WHERE date_modified = (
+            SELECT MAX(date_modified)
+            FROM %1$s t2
+            WHERE t2.id = t1.id
+            %6$s
+            )
+          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['GLB']))
+          AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
+          %6$s
+          ORDER BY date_modified DESC
+          OFFSET %7$s
+          LIMIT %8$s
+          ) t
+        "
+        , tableName
+        , project
+        , read
+        , userId
+        , edit
+        , filter
+        , from
+        , to - from 
+        )
+      )
+  }
+
+  res <- na.omit(mxDbGetQuery(q))
+
+  out <- mxJsonToList(res$res)
+
+  return(out)
+}
+
+
 #' Update a single value of a table
 #' @param table Table to update
 #' @param column Column to update
@@ -484,119 +646,6 @@ mxDbGetLayerTable <- function(project, projects, userId, target="public",languag
 
 }
 
-
-
-#' @rdname mxDbGetViews
-#' @param views {list|vector} Views id to fetch. Optional, replace any other logic
-#' @param project {character} Iso 3 country code
-#' @param read {vector} Name of the groups the user can read
-#' @param edit {vector} Name of the group the user can edit
-#' @param userId {integer} User id
-#' @param id {character} Unique view id to fetch
-#' @param from {integer} Position of the row to start with
-#' @param to {integer} Position of the row to end with
-#' @export 
-mxDbGetViews <- function(views=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5){
-
-  out <- list()
-  conf <- mxGetDefaultConfig()
-  tableName <- .get(conf,c("pg","tables","views"))
-
-  # paste read for psql array
-  read <- read[read != "self"]
-  read <- paste(paste0("'",read,"'"),collapse=",")
-
-  # paste edit for psql array 
-  edit <- edit[edit != "self"]
-  edit <- paste(paste0("'",edit,"'"),collapse=",")
-
-  # filter view id
-  filter <- ""
-  if(!is.null(id)){
-    filter <- sprintf("AND t1.id='%s'",id)
-  }
-
-
-
-  if(!noDataCheck(views)){
-    views = paste(paste0("'",views,"'"),collapse=",")
-
-    q <- gsub("\n|\\s\\s+"," ",sprintf("
-        SELECT json_agg(row_to_json(t)) res from (
-          SELECT 
-          t1.*,
-          exists(
-            SELECT id 
-            FROM %1$s 
-            WHERE 
-            (t1.country ='%2$s') AND 
-            ((t1.target ?| array[%4$s]) OR (t1.editor = '%3$s' AND t1.target ?| array['self']))
-            ) as _edit
-          FROM %1$s t1
-          WHERE date_modified = (
-            SELECT MAX(date_modified)
-            FROM %1$s t2
-            WHERE t2.id = t1.id
-            AND ( t1.id in (%5$s))
-            ) AND
-          ( t1.id in (%5$s) )
-          ORDER BY date_modified DESC
-          ) t
-        "
-        , tableName
-        , project
-        , userId
-        , edit
-        , views
-        )
-      )
-  }else{
-    # extract(epoch from t1.date_modified) date_modified, 
-    # search for most version of the view only, filter by country, target and id.
-    q <- gsub("\n|\\s\\s+"," ",sprintf("
-        SELECT json_agg(row_to_json(t)) res from (
-          SELECT 
-          t1.*,
-          exists(
-            SELECT id 
-            FROM %1$s 
-            WHERE 
-            (t1.country ='%2$s') AND 
-            ((t1.target ?| array[%5$s]) OR (t1.editor = '%4$s' AND t1.target ?| array['self']))
-            ) as _edit
-          FROM %1$s t1 
-          WHERE date_modified = (
-            SELECT MAX(date_modified)
-            FROM %1$s t2
-            WHERE t2.id = t1.id
-            %6$s
-            )
-          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['GLB']))
-          AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
-          %6$s
-          ORDER BY date_modified DESC
-          OFFSET %7$s
-          LIMIT %8$s
-          ) t
-        "
-        , tableName
-        , project
-        , read
-        , userId
-        , edit
-        , filter
-        , from
-        , to - from 
-        )
-      )
-  }
-
-  res <- na.omit(mxDbGetQuery(q))
-
-  out <- mxJsonToList(res$res)
-
-  return(out)
-}
 
 #' Json string to list 
 #' @param {character} res json string  

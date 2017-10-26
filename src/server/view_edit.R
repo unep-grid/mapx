@@ -56,7 +56,7 @@ observe({
           #viewAbstract <- .get(viewData, c("data","abstract",language))
 
           #
-          # User publish right
+          # Who can view this
           #
           targetGroups <- reactUser$role[[c("publish")]]
           targetCurrent <- viewData[["target"]]
@@ -66,6 +66,12 @@ observe({
           #
           classesTags <- config[[c("views","classes")]]
           classesCurrent <- viewData[[c("data","classes")]]
+
+          #
+          # View collection
+          #
+          collectionsTags <- mxDbGetDistinctCollectionsTags("mx_views")
+          collectionsCurrent <- viewData[[c("data","collections")]]
 
           #
           # Initial button list for the modal
@@ -211,7 +217,20 @@ observe({
                   options=list(
                     dropdownParent="body"
                     )
-
+                  ),
+                #
+                # Collections
+                #
+                selectizeInput(
+                  inputId="selViewCollectionsUpdate",
+                  label=d("view_collections",language),
+                  choices=collectionsTags,
+                  selected=collectionsCurrent,
+                  multiple=TRUE,
+                  options=list(
+                    dropdownParent="body",
+                    create = TRUE
+                    )
                   )
                 )
 
@@ -238,11 +257,14 @@ observe({
                   #
                   # mask / overlap layer
                   #
-                  mxFold(
-                    id =  "checkAddMaskLayer",
-                    labelText = d("view_add_overlap_layer",language),
-                    open = !noDataCheck(.get(viewData,c("data","source","layerInfo","maskName"))),
-                    content = tagList(
+                  checkboxInput(
+                    inputId = "checkAddMaskLayer",
+                    label =  d("view_add_overlap_layer",language),
+                    value = !noDataCheck(.get(viewData,c("data","source","layerInfo","maskName")))
+                    ),
+                  conditionalPanel(
+                    condition = "input.checkAddMaskLayer",
+                     tagList(
                       selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
@@ -375,6 +397,7 @@ observe({
                 actionButton(
                   inputId="btnViewSave",
                   label=d("btn_save",language),
+                  disabled="disabled",
                   `data-keep` = TRUE
                   )
                 )
@@ -546,11 +569,40 @@ observeEvent(input$btnViewDeleteConfirm,{
     )
 })
 
+
+#
+# Button save disabling
+#
+observe({
+
+  #
+  # Title and description
+  #
+  errors <- list()
+
+  errors <- c(    
+    input$viewTitleSchema_issues$msg,
+    input$viewAbstractSchema_issues$msg
+    )
+
+  mxToggleButton(
+    id="btnViewSave",
+    disable = length( errors ) > 0
+    )
+
+})
+
+
+
 #
 # View vt, rt, sm : save
 #
 observeEvent(input$btnViewSave,{
 
+  mxToggleButton(
+    id="btnViewSave",
+    disable = TRUE
+    )
   #
   # Retrieve view value
   #
@@ -594,6 +646,12 @@ observeEvent(input$btnViewSave,{
   classes <- input$selViewClassesUpdate
   if(noDataCheck(classes)) classes <- config[[c("views","classes")]][[1]]
   view[[c("data","classes")]] <- as.list(classes)
+
+  #
+  # Update collections
+  #
+  collections <- input$selViewCollectionsUpdate
+  view[[c("data","collections")]] <- as.list(collections)
 
   #
   # Title and description
@@ -677,6 +735,10 @@ observeEvent(input$btnViewSave,{
     text = sprintf("Saved at %s",time)
     )
 
+  mxToggleButton(
+    id="btnViewSave",
+    disable = FALSE
+    )
 })
 
 #
@@ -779,27 +841,31 @@ output$uiLayerSummary <- renderUI({
 #
 # Number of overlap indication
 #
-observeEvent(input$selectSourceLayerMask,{
+observe({
 
   layerMask <- input$selectSourceLayerMask
-  layerMain <- input$selectSourceLayerMain
-  
-  if(noDataCheck(layerMain) || noDataCheck(layerMask)) return()
-  
-  language <- reactData$language
-  
-  output$uiViewEditVtMask <- renderUI({
-    numOverlapping = mxDbGetOverlapsCount(layerMain,layerMask)
-    
-    listToHtmlSimple(
-      list(
-        "view_num_overlap"=numOverlapping
-        ),
+  layerMain <- input$selectSourceLayerMain 
+  useMask <- isTRUE(input$checkAddMaskLayer)
+
+  if(!useMask || noDataCheck(layerMain) || noDataCheck(layerMask) ) return()
+
+  isolate({
+
+    language <- reactData$language
+
+    output$uiViewEditVtMask <- renderUI({
+   
+      numOverlapping = mxDbGetOverlapsCount(layerMain,layerMask)
+
+      listToHtmlSimple(
+        list(
+          "view_num_overlap"=numOverlapping
+          ),
         lang=language
-      )
- })
+        )
+    })
 
-
+  })
 })
 
 #
@@ -855,36 +921,40 @@ reactSourceLayer <- reactive({
 })
 
 
-observeEvent(input$selectSourceLayerMain,{
+observe({
+
+  useMask <- isTRUE(input$checkAddMaskLayer)
   layer <- input$selectSourceLayerMain
   out <- list()
-  
-  if(!noDataCheck(layer)){
-  layers <- reactSourceLayer()
-  layers <- layers[!layers %in% layer]
 
-  if(length(layers)>0){
-  
-  geomTypesCheck <- sapply(layers,function(x){
-    geomType <- mxDbGetLayerGeomTypes(x)$geom_type
-    geomOk <- isTRUE(geomType != "point")
-    return(geomOk)
+  isolate({
+
+    if(!noDataCheck(layer)){
+      layers <- reactSourceLayer()
+      layers <- layers[!layers %in% layer]
+
+      if(length(layers)>0){
+
+        geomTypesCheck <- sapply(layers,function(x){
+          geomType <- mxDbGetLayerGeomTypes(x)$geom_type
+          geomOk <- isTRUE(geomType != "point")
+          return(geomOk)
     })
-  
-  out <- layers[geomTypesCheck]
- 
-  }
-  
-  }
 
-  updateSelectInput(
-    session,
-    "selectSourceLayerMask",
-    choices=out
-    
-    )
+        out <- layers[geomTypesCheck]
 
+      }
 
+    }
+
+    updateSelectInput(
+      session,
+      "selectSourceLayerMask",
+      choices=out
+
+      )
+
+  })
 })
 
 #

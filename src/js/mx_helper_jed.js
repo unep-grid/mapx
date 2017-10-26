@@ -23,7 +23,8 @@ export function jedRender(o) {
       return Promise.all([
         System.import("./mx_extend_jed_medium.js"),
         System.import("./mx_extend_jed_position.js"),
-        System.import("./mx_extend_jed_ace.js")
+        System.import("./mx_extend_jed_ace.js"),
+        System.import("./mx_extend_jed_array2.js")
       ]);
     }).then(function(){
       var JSONEditor = window.JSONEditor;

@@ -11,7 +11,8 @@ tagList(
     #
     # Avoid all item without rules or style
     #
-    "{{? h.all([ it, h.path(it,'data.style'), h.path(it,'data.style.rules') ]) }}",
+    #"{{? h.all([ it, h.path(it,'data.style'), h.path(it,'data.style.rules') ]) }}",
+    "{{?h.greaterThan(h.path(it,'data.style.rules.length'),0)}}",
     #
     # Shortcut
     #

@@ -1,15 +1,16 @@
 {{ var view = it ; }}
 {{ var h = mx.helpers ; }}
-{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}
-<div class="float-left">
-  {{? h.all([h.path(view,'data.abstract'), h.path(view,'data.abstract.'+lang)]) }}
-  <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[lang]}}</p>
+{{ var langTitle = h.checkLanguage({obj:view,path:'data.title'}) ; }}
+{{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
+<div class="float-left mx-view-item-desc-container">
+  {{? h.path(view,'data.abstract.'+langAbstract) }}
+  <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[langAbstract]}}</p>
   {{?}}
 </div>
 <div>
   {{?view.type=='vt'}}
   {{ var rules = h.path(view,'data.style.rules'); }}
-  {{? h.all([rules, h.greaterThan(h.path(rules,'length'), 0) ]) }}
+  {{?h.greaterThan(h.path(rules,'length'),0)}}
   <div class="mx-view-item-legend" id="check_view_legend_{{=view.id}}"></div>
   {{?}}
   {{?}}
@@ -30,7 +31,7 @@
       </li>
       {{?}}
       {{?}}
-      {{?h.any([ view.type=='gj', view.type=='vt' ]) }}
+      {{? h.any([ view.type == 'gj', view.type == 'vt' ]) }}
       <li class="mx-pointer hint--right" data-view_action_key="btn_opt_zoom_all" data-view_action_target="{{=view.id}}" data-lang_key="btn_opt_zoom_all" data-lang_type="tooltip">
         <div class="fa fa-search-minus"></div>
       </li>
@@ -41,9 +42,11 @@
         <div class="fa fa-undo"></div>
       </li>
       {{?}}
+      {{? h.any([ view.type == 'gj', view.type == 'vt', view.type == 'rt' ]) }}
       <li class="mx-pointer hint--right" data-view_action_key="btn_opt_search" data-view_action_target="mx-search-tool-{{=view.id}}" data-lang_key="btn_opt_search" data-lang_type="tooltip">
         <div class="fa fa-cog"></div>
       </li>
+      {{?}}
       {{?view.type=='vt' }}
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-info-circle"></div>
@@ -60,9 +63,11 @@
         <div class="fa fa-trash-o"></div>
       </li>
       {{?}}
+      {{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_screenshot" data-lang_type="tooltip" data-view_action_key="btn_opt_screenshot" data-view_action_target="{{=view.id}}">
         <div class="fa fa-camera"></div>
       </li>
+      {{?}}
       {{?view._edit}}
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_edit_config" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_config" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-pencil"></div>
@@ -79,7 +84,7 @@
         <div class="fa fa-trash-o"></div>
       </li>
       {{?}}
-      {{?h.not([view.type == 'gj']) }}
+      {{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}
       <li class="mx-pointer hint--left" data-lang_key="btn_opt_share" data-lang_type="tooltip" data-view_action_key="btn_opt_share" data-view_action_target="{{=view.id}}">
         <div class="fa fa-external-link"></div>
       </li>

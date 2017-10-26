@@ -81,8 +81,14 @@ observeEvent(input$styleEdit_values,{
 #
 observeEvent(input$btnViewSaveStyle,{
 
+  mxToggleButton(
+    id="btnViewSaveStyle",
+    disable = TRUE
+    )
+
   view <- reactData$viewDataEdited
   country <- reactData$country
+  time <- Sys.time()
 
   if( view[["_edit"]] && view[["type"]] == "vt" ){
     view[["_edit"]] = NULL
@@ -91,7 +97,7 @@ observeEvent(input$btnViewSaveStyle,{
 
     if(!noDataCheck(style)){
 
-      view <- .set(view, c("date_modified"), Sys.time() )
+      view <- .set(view, c("date_modified"), time )
       view <- .set(view, c("target"), as.list(.get(view,c("target"))))
       view <- .set(view, c("data", "style", "dataDrivenMethod"), .get(style,c("dataDrivenMethod")))
       view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
@@ -122,6 +128,16 @@ observeEvent(input$btnViewSaveStyle,{
       reactData$updateViewListFetchOnly <- runif(1)
     }
   }
+
+  mxUpdateText(
+    id = "modalViewEdit_txt",
+    text = sprintf("Saved at %s",time)
+    )
+
+  mxToggleButton(
+    id="btnViewSaveStyle",
+    disable = FALSE
+    )
 })
 
 

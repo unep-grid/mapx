@@ -19,29 +19,41 @@ viewFilterInput <-  tags$div(
     )
   )
 
+## Filter class by tag
+#viewFilterButton <- tags$div(
+  #class="filters",
+  #id = "viewsClassFilter",
+  #tags$div(
+    #class="check-toggle-group", 
+    #lapply(c(config[[c("views","classes")]]),function(x){
+      #cl_id <- sprintf("cl_%s", x)
+      #tags$div( class="check-toggle",
+        #tags$input(
+          #class="filter check-toggle-input",
+          #type="checkbox",
+          #id = cl_id,
+          #`data-filter`=x
+          #),
+        #tags$label(
+          #class="btn btn-default btn-xs check-toggle-label",
+          #`for`=cl_id,
+          #"data-lang_key"=x
+          #)
+        #)})
+    #)
+  #)
+
+
 # Filter class by tag
 viewFilterButton <- tags$div(
   class="filters",
-  id = "viewsClassFilter",
+  id = "viewsTagsFilter",
   tags$div(
-    class="check-toggle-group", 
-    lapply(c(config[[c("views","classes")]]),function(x){
-      cl_id <- sprintf("cl_%s", x)
-      tags$div( class="check-toggle",
-        tags$input(
-          class="filter check-toggle-input",
-          type="checkbox",
-          id = cl_id,
-          `data-filter`=x
-          ),
-        tags$label(
-          class="btn btn-default btn-xs check-toggle-label",
-          `for`=cl_id,
-          "data-lang_key"=x
-          )
-        )})
+    class="check-toggle-group",
+    id = "viewsTagsFilterToggles"
     )
   )
+
 
 # Sort button
 sortButton <- tagList(
