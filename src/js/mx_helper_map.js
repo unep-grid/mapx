@@ -1514,7 +1514,7 @@ function tagsTableToLabel(table,containerSelector){
     var keys = Object.keys(tbl);
     keys.forEach(function(k){
       var label = mx.helpers.getLanguage(k,mx.settings.language,"en");
-      tags.push({key:k,count:tbl[k],label:label[0],type:t});
+      tags.push({key:k,count:tbl[k],label:label[0]||k,type:t});
     });
   });
  
