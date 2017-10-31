@@ -630,21 +630,33 @@ mxDbGetLayerTable <- function(project, projects, userId, target="public",languag
       ))
 
   #
-  # Automatically delete orphaned layers
-  #
-  orphan <- dat[!dat$id %in% mxDbListTable(),'id']
-  if(!noDataCheck(orphan)){
-    sapply( orphan, mxDbDropLayer )
-    dat <- dat[dat$id %in% mxDbListTable(),]
-  }
-
-  #
   # Return 
   #
 
   return(dat)
 
 }
+
+
+#' Get list of table/layer not refered in mx_source
+#' @param tableSource Default to mx_sources
+#' @param exludes Default to mx_sources, mx_users, mx_views
+#' 
+mxDbGetUnregisteredTable <- function(tableSource="mx_sources",excludes=c("mx_users","mx_sources","mx_views","spatial_ref_sys")){
+
+  tbls <- c()
+
+  tryCatch({
+  ids <- mxDbGetQuery(sprintf("SELECT distinct id FROM %1$s",tableSource))$id
+  tbls <- mxDbListTable()
+  tbls <- tbls[ !tbls %in% excludes ]
+  tbls <- tbls[ !tbls %in% ids ]
+  },error=function(err){})
+
+  return(tbls)
+
+}
+
 
 
 #' Json string to list 
