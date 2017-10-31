@@ -1839,11 +1839,12 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 #' @param subtitle {character|shiny.tag} Optional subtitle
 #' @param content {character|shiny.tag} Optional content
 #' @param buttons {list} Optional ActionButton list
+#' @param minHeight {String} Optional min height of the modal window. String. Eg. "500px"
 #' @param addBackground {logical} Add a background
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
-mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,minHeight=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
 
   stopifnot(!noDataCheck(id))
 
@@ -1860,6 +1861,7 @@ mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NU
       subtitle=as.character(subtitle),
       textCloseButton=as.character(textCloseButton),
       buttons=buttons,
+      minHeight=minHeight,
       content=as.character(content),
       addBackground=as.logical(addBackground),
       removeCloseButton=as.logical(removeCloseButton),

@@ -39,6 +39,10 @@ server <- function(input,output,session){
           "view_edit_dashboard.R",
           "view_edit_story_map.R",
           #
+          # Tools
+          #
+          "share.R",
+          #
           # source handler
           #
           "source_vt_upload_from_browser_storage.R",

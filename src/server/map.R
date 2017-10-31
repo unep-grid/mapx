@@ -56,7 +56,7 @@ observe({
       #
       # Colorscheme
       #
-      colorScheme = .get(config,c("ui","colors","default")),
+      colorScheme =  query$style,
       #
       # Elements : id of element for listener setting
       #

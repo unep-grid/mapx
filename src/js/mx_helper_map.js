@@ -1004,7 +1004,8 @@ export function handleViewClick(o){
           mx.helpers.modal({
             title : mx.helpers.getLanguage("btn_opt_share",mx.settings.language),
             id : idLink,
-            content : input
+            content : input,
+            minHeight :'200px'
           });
         }
       },
@@ -1112,7 +1113,26 @@ export function handleViewClick(o){
             idView: el.dataset.view_action_target
           });
         }
-      },{
+      },
+      {
+        id: "viewMetadataRasterLink",
+        comment: "target is the raster metadata link",
+        isTrue :  el.dataset.view_action_key == "btn_opt_meta_external",
+        action:function(){
+          var idView =  el.dataset.view_action_target;
+          var view = mx.helpers.getViews({id:'map_main',idView:idView});
+          var link = mx.helpers.path(view,"data.source.urlMetadata");
+          var title = mx.helpers.getLanguage("source_raster_tile_url_metadata",mx.settings.language);
+          var href = "<a href="+link+" target='_blank'>" + title + "</a>";
+          mx.helpers.modal({
+            title : title,
+            id : "modalMetaData",
+            content : href,
+            minHeight:"150px"
+          });
+        }
+      },
+      {
         id : "shinyAction",
         comment: "target is a shiny action button",
         isTrue : el.dataset.view_action_handler == "shiny",
@@ -1513,8 +1533,8 @@ function tagsTableToLabel(table,containerSelector){
     var tbl = table[t];
     var keys = Object.keys(tbl);
     keys.forEach(function(k){
-      var label = mx.helpers.getLanguage(k,mx.settings.language,"en");
-      tags.push({key:k,count:tbl[k],label:label[0]||k,type:t});
+      var label = mx.helpers.getLanguage(k,mx.settings.language,"en") || k;
+      tags.push({key:k,count:tbl[k],label:label[0],type:t});
     });
   });
  
@@ -3646,7 +3666,7 @@ export function btnToggleLayer(o){
  *
  */
 export function setUiColorScheme(o){
-  
+
   var mx_colors; // colors from stylesheet from the rule ".mx *";
   var init = false;
   var map = mx.maps[o.id||"map_main"].map;
@@ -3656,8 +3676,8 @@ export function setUiColorScheme(o){
 
   mx.settings.colors = c;
   /**
-  * Extract main rules. NOTE: this seems fragile, find another technique
-  */
+   * Extract main rules. NOTE: this seems fragile, find another technique
+   */
   var styles = document.styleSheets;
   for(var i= 0, iL=styles.length;i<iL;i++){
     var rules = styles[i].rules||styles[i].cssRules||[];
@@ -3670,25 +3690,26 @@ export function setUiColorScheme(o){
   /*
    * Hard coded default if no stylsheet defined or user defined colors is set
    */
-    c.mx_ui_text = c.mx_ui_text || "hsl(0, 0%, 21%)";
-    c.mx_ui_text_faded = c.mx_ui_text_faded || "hsla(0, 0%, 21%, 0.6)";
-    c.mx_ui_hidden = c.mx_ui_hidden || "hsla(196, 98%, 50%,0)";
-    c.mx_ui_border = c.mx_ui_border || "hsl(0, 0%, 61%)";
-    c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
-    c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
-    c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
-    c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
-    c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
-    c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
-    c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
-    c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
-    c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_ui_text = c.mx_ui_text || "hsl(0, 0%, 21%)";
+  c.mx_ui_text_faded = c.mx_ui_text_faded || "hsla(0, 0%, 21%, 0.6)";
+  c.mx_ui_hidden = c.mx_ui_hidden || "hsla(196, 98%, 50%,0)";
+  c.mx_ui_border = c.mx_ui_border || "hsl(0, 0%, 61%)";
+  c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
+  c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
+  c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
+  c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
+  c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
 
-    /**
-     * create / update input color
-     */
+  /**
+   * create / update input color
+   */
 
     var inputs = document.getElementById("inputThemeColors");
+
     inputs.classList.add("mx-views-content");
 
     if(inputs && inputs.children.length>0){
@@ -3702,6 +3723,10 @@ export function setUiColorScheme(o){
         }
       });
     }
+
+  if(typeof Shiny !== "undefined"){
+    Shiny.onInputChange("uiColorScheme",JSON.stringify(c,0,2));
+  }
 
     if(init){
       inputs.innerHTML="";
@@ -3729,8 +3754,8 @@ export function setUiColorScheme(o){
           container_inputs.appendChild(input);
         }
         lab.innerHTML = cid;
-        //lab.dataset.lang_key = cid;
-        //lab.dataset.lang_type = "tooltip";
+  //lab.dataset.lang_key = cid;
+  //lab.dataset.lang_type = "tooltip";
         lab.setAttribute("aria-label", cid);
         lab.classList.add("hint--right");
         lab.for = cid;
@@ -3743,14 +3768,14 @@ export function setUiColorScheme(o){
      * Ui color
      */
 
-    for(var col in c){
-      mx_colors.style.setProperty("--"+col,c[col]);
-    }
+  for(var col in c){
+    mx_colors.style.setProperty("--"+col,c[col]);
+  }
 
 
-    /**
-     * Map colors NOTE: PUT THIS OBJECT AS THEME
-     */ 
+  /**
+   * Map colors NOTE: PUT THIS OBJECT AS THEME
+   */ 
     var layers = [
       {
         "id":["background"],
@@ -3823,8 +3848,44 @@ export function setUiColorScheme(o){
     }
 
 
-  //})
+        //})
  }
+
+
+/**
+* Quick iframe builder
+*/
+//export function iframeBuilder(btnId){
+
+  //var btn = document.getElementById(btnSelector);
+  //var str = "" ;
+
+  //function buildInput(label,callback){
+    //var id  mx.helpers.makeId();
+    //checkContainer =  document.createElement("div");
+    //checkInput = document.createElement("input");
+    //labelInput = document.createElement("label");
+    //checkContainer.className = "mx-form-list-item";
+    //checkInput.id = id;
+    //labelInput.innerText = label;
+    //labelInput.setAttribute("for",id );
+    //checkContainer.appenChild(checkInput);
+    //checkContainer.appenChild(checkLabel);
+    //return(checkContainer);
+  //};
+
+  //var checkCountry = buildInput("Use country",)
+
+
+  //btn.addEventListener("click",function(){
+    //var form = 
+  
+  
+  //})
+
+
+/*}*/
+
 
 
 
@@ -3933,6 +3994,14 @@ export function initMap(o){
     if(o.paths.sprite){
       o.paths.sprite = o.location + o.paths.sprite;
     }
+
+
+    /**
+    * Iframe builder. NOTE: not the right place to write it, but...
+    */
+    
+
+
 
     /**
      * Init mgl data store

@@ -51,27 +51,27 @@ observe({
           #
           # Get type and title
           #
-          viewType <- viewData[["type"]]
+          viewType <- .get(viewData,c("type"))
           viewTitle <- .get(viewData, c("data","title",language))
           #viewAbstract <- .get(viewData, c("data","abstract",language))
 
           #
           # Who can view this
           #
-          targetGroups <- reactUser$role[[c("publish")]]
-          targetCurrent <- viewData[["target"]]
+          targetGroups <- .get(reactUser$role,c("publish"))
+          targetCurrent <- .get(viewData,c("target"))
 
           #
           # View classes
           #
-          classesTags <- config[[c("views","classes")]]
-          classesCurrent <- viewData[[c("data","classes")]]
+          classesTags <- .get(config,c("views","classes"))
+          classesCurrent <- .get(viewData,c("data","classes"))
 
           #
           # View collection
           #
           collectionsTags <- mxDbGetDistinctCollectionsTags("mx_views")
-          collectionsCurrent <- viewData[[c("data","collections")]]
+          collectionsCurrent <- .get(viewData,c("data","collections"))
 
           #
           # Initial button list for the modal
@@ -95,7 +95,8 @@ observe({
                   id="modalViewEdit",
                   title=tags$b(viewTitle),
                   content=uiOut,
-                  textCloseButton=d("btn_close",language)
+                  textCloseButton=d("btn_close",language),
+                  minHeight = "200px"
                 )
 
             },
@@ -116,7 +117,8 @@ observe({
                   id="modalViewEdit",
                   title=tags$b(viewTitle),
                   content=uiOut,
-                  textCloseButton=d("btn_close",language)
+                  textCloseButton=d("btn_close",language),
+                  minHeight="80%"
                 )
 
             },
@@ -142,7 +144,8 @@ observe({
                 title=tags$b(sprintf("Delete %s",viewTitle)),
                 content=uiOut,
                 textCloseButton=d("btn_close",language),
-                buttons=btnList
+                buttons=btnList,
+                minHeight="200px"
                 )
 
             },
@@ -285,6 +288,7 @@ observe({
               if(viewType=="rt"){
                 url <- .get(viewData,c("data","source","tiles"))
                 legend <- .get(viewData,c("data","source","legend"))
+                urlMetadata <- .get(viewData,c("data","source","urlMetadata"))
                 if(noDataCheck(url)) url = list()
                 url <-  unlist(url[1])
 
@@ -379,6 +383,11 @@ observe({
                     inputId = "textRasterTileLegend",
                     label = d("source_raster_tile_legend",language),
                     value = legend 
+                    ),
+                  textAreaInput(
+                    inputId = "textRasterTileUrlMetadata",
+                    label = d("source_raster_tile_url_metadata",language),
+                    value = urlMetadata
                     )
                   )
               }
@@ -411,7 +420,8 @@ observe({
                 content = uiOut,
                 buttons = btnList,
                 addBackground = FALSE,
-                textCloseButton= d("btn_close",language)
+                textCloseButton= d("btn_close",language),
+                minHeight = "80%"
                 )
 
             },
@@ -436,7 +446,8 @@ observe({
                   jedOutput(id="dashboardEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language)
+                textCloseButton=d("btn_close",language),
+                minHeight = "80%"
                 )
 
             },
@@ -476,7 +487,8 @@ observe({
                   jedOutput(id="storyEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language)
+                textCloseButton=d("btn_close",language),
+                minHeight = "80%"
                 )
             },
             "btn_opt_edit_style"={
@@ -500,7 +512,8 @@ observe({
                   jedOutput(id="styleEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language)
+                textCloseButton=d("btn_close",language),
+                minHeight = "80%"
                 )
 
             })
@@ -636,7 +649,10 @@ observeEvent(input$btnViewSave,{
   if(noDataCheck(countriesUpdate)) countriesUpdate = list()
   country = countryUpdate
   countries = as.list(countriesUpdate)
+  editor = reactUser$data$id
 
+
+  view[[c("editor")]] <- editor
   view[[c("data","countries")]] <- countries
   view[[c("country")]] <- country
 
@@ -694,6 +710,7 @@ observeEvent(input$btnViewSave,{
       type = "raster",
       tiles =  rep(input$textRasterTileUrl,2),
       legend = input$textRasterTileLegend,
+      urlMetadata = input$textRasterTileUrlMetadata,
       tileSize = as.integer(input$selectRasterTileSize)
       )
 
@@ -816,6 +833,7 @@ observeEvent(input$selectSourceLayerMain,{
 observeEvent(input$btnGetLayerSummary,{
   mxModal(
     id =  "layerSummary",
+    minHeight = "80%",
     title = d("Layer Summary",reactData$language),
     content = tagList(
       tags$input(

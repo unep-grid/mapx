@@ -215,6 +215,20 @@ liControlsVectorTiles <- tagList(
       )
     ),
   "{{?}}",
+  "{{ var urlMeta = h.path(view,'data.source.urlMetadata'); }}",
+  "{{? h.all([ view.type == 'rt', urlMeta]) }}",
+  tags$li(
+    class="mx-pointer hint--right",
+    `data-lang_key`="btn_opt_meta",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_meta_external",
+    `data-view_action_target`="{{=view.id}}",
+    `data-meta_link`="{{=urlMeta}}",
+    tags$div(
+      class="fa fa-info-circle"
+      )
+    ),
+  "{{?}}",
   "{{?view.type=='vt' }}",
   tags$li(
     class="mx-pointer hint--right",

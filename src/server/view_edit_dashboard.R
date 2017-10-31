@@ -116,6 +116,7 @@ observeEvent(input$btnViewSaveDashboard,{
     )
 
   view <- reactData$viewDataEdited
+  editor <- reactUser$data$id
   country <- reactData$country
   time <- Sys.time()
 
@@ -128,7 +129,8 @@ observeEvent(input$btnViewSaveDashboard,{
     view <- .set(view, c("target"), as.list(.get(view,c("target"))))
     view <- .set(view, c("data", "dashboard"), dashboard)
     view <- .set(view,c("data"), as.list(.get(view,"data")))
-
+    view <- .set(view,c("editor"),editor)
+    
     mxDbAddRow(
       data=view,
       table=.get(config,c("pg","tables","views"))

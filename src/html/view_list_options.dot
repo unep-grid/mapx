@@ -47,6 +47,12 @@
         <div class="fa fa-cog"></div>
       </li>
       {{?}}
+      {{ var urlMeta = h.path(view,'data.source.urlMetadata'); }}
+      {{? h.all([ view.type == 'rt', urlMeta]) }}
+      <li class="mx-pointer hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta_external" data-view_action_target="{{=view.id}}" data-meta_link="{{=urlMeta}}">
+        <div class="fa fa-info-circle"></div>
+      </li>
+      {{?}}
       {{?view.type=='vt' }}
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-info-circle"></div>

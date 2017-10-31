@@ -89,6 +89,7 @@ observeEvent(input$btnViewSaveStyle,{
   view <- reactData$viewDataEdited
   country <- reactData$country
   time <- Sys.time()
+  editor <- reactUser$data$id
 
   if( view[["_edit"]] && view[["type"]] == "vt" ){
     view[["_edit"]] = NULL
@@ -102,6 +103,7 @@ observeEvent(input$btnViewSaveStyle,{
       view <- .set(view, c("data", "style", "dataDrivenMethod"), .get(style,c("dataDrivenMethod")))
       view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
       view <- .set(view,c("data"), as.list(.get(view,"data")))
+      view <- .set(view,c("editor"),editor)
 
       mxDbAddRow(
         data=view,

@@ -5,48 +5,89 @@ import * as mx from './mx_init.js';
 
 
 /**
-* Custom operator to avoid escaping js operator in html templates
+* All member should be true, return boolean
+* @param {Array} a input array
+* @example all([null,0,"a",true]) === false
+* @example all(["",1,"a",true]) === true
+* @return {Boolean} 
 */
 export function all(a){
-  var r = false;
+  var r = false ;
+  var l ;
   a.forEach(function(o,i){
-    r=r&&Boolean(o);
+    l = Boolean(o);
+    r=i==0?l:r&&l;
   });
   return r;
 }
 
+/**
+* At least member should be true
+* @param {Array} a input array
+* @example any([null,0,"a",true]) === true
+* @example any([null]) === false
+* @return {Boolean} 
+*/
+export function any(a){
+  var r = false;
+  var l;
+  a.forEach(function(o,i){
+    l = Boolean(o);
+    r=i==0?l:r||l;
+  });
+  return r;
+}
+
+/**
+* A is greater than b
+* @param {Number} a A
+* @param {Number} b b
+*/
 export function greaterThan(a,b){
   return a > b;
 }
 
-export function any(a){
-  var r;
-  a.forEach(function(o,i){
-    r=r||Boolean(o);
-  });
-  return r;
-}
-// test mx.helpers.any([null,0,"a",true])
 
-
-export function not(a){
-  var r = true;
-  a.forEach(function(o,i){
-    r=!r||!Boolean(o);
-  });
-  return r;
-}
-
+/**
+* Check if array a has index named b
+* @param {Array} a Array to test
+* @param {String} b Name to test 
+* @example hasIndex([null,0,"a",true],"a") === true
+* @return {Boolean} 
+*/
 export function hasIndex(a,b){
   return a instanceof Array ? a.indexOf(b) > -1: false;
 }
 
+/**
+* Return the first not empty member
+* @param {Array} a Input array
+* @example firstOf([,"",0,"a"]) === 0
+*/
 export function firstOf(a){
   for( var i=0, iL=a.length; i<iL; i++ ){
     if(a[i] === 0 || a[i]){return a[i];}
   }
 }
-/** test firstOf([,"",0,"a"]) === 0 */
+
+
+
+/**
+* Get url query parameter by name
+* @param {String} name Name of the query request name
+* @note http://www.netlobo.com/url_query_string_javascript.html
+*/
+export function getUrlParameter( name )
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
 
 
 /**
@@ -203,12 +244,22 @@ export function uiFold(o){
 * @param {String} text
 * @return {HTML}
 */
-export function textToHtml(text){
+export function textToDom(text){
   var el =  document.createElement("div");
   el.innerHTML=text;
   return el.children[0];
 }
 
+/**
+* Dom element to text
+* @param {Element} dom Dom element to convert
+* @return {String}
+*/
+export function domToText(dom){
+  var el = document.createElement("div");
+  el.appendChild(dom);
+  console.log(el.innerHTML);
+}
 
 
 /**
@@ -494,7 +545,7 @@ export function sendAjax(o) {
  * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function getJSON(o) {
-   mx.helpers.sendAjax({
+   sendAjax({
     type: 'get',
     url: o.url,
     beforeSend: function(xhr) {
@@ -506,15 +557,253 @@ export function getJSON(o) {
       }
     },
     onError: o.onError,
-    onComplete: o.onCcomplete,
+    onComplete: o.onComplete,
+    useCache: o.useCache
+  });
+}
+/**
+ * Get XML
+ * @param {Object} o options
+ * @param {String} o.url url pointing to the xml
+ * @param {Function} o.onSuccess Function to call on success
+ * @param {Function} o.onError Function to call on error
+ * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
+ */
+export function getXML(o) {
+  sendAjax({
+    type: 'get',
+    url: o.url,
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Accept', 'application/xml');
+    },
+    onSuccess: function(res) {
+      if (res) {
+        o.onSuccess(parseXml(res));
+      }
+    },
+    onError: o.onError,
+    onComplete: o.onComplete,
     useCache: o.useCache
   });
 }
 
+/**
+* Parse xml
+* @param {String} xml string
+* @note http://goessner.net/download/prj/jsonxml/
+* @return {DOM}
+*/
+export function parseXml(xml) {
+  var dom = null;
+  if (window.DOMParser) {
+    try {
+      dom = (new DOMParser()).parseFromString(xml, "text/xml");
+    } catch (e) {
+      dom = null;
+    }
+  } else if (window.ActiveXObject) {
+    try {
+      dom = new ActiveXObject('Microsoft.XMLDOM');
+      dom.async = false;
+      if (!dom.loadXML(xml)) // parse error ..
 
+        window.alert(dom.parseError.reason + dom.parseError.srcText);
+    } catch (e) {
+      dom = null;
+    }
+  } else
+    alert("cannot parse xml string!");
+  return dom;
+}
 
+/**
+* Convert json to xml
+* @param {Object} o object to convert
+* @param {Boolean|String} tab or indent character 
+* @return {String} xml string
+* @note http://goessner.net/download/prj/jsonxml/
+*/
+export function json2xml(o, tab) {
+  var toXml = function(v, name, ind) {
+      var xml = "";
+      if (v instanceof Array) {
+        for (var i = 0, n = v.length; i < n; i++)
+          xml += ind + toXml(v[i], name, ind + "\t") + "\n";
+      } else if (typeof(v) == "object") {
+        var hasChild = false;
+        xml += ind + "<" + name;
+        for (var x in v) {
+          if (x.charAt(0) == "@")
+            xml += " " + x.substr(1) + "=\"" + v[x].toString() + "\"";
+          else
+            hasChild = true;
+        }
+        xml += hasChild ? ">" : "/>";
+        if (hasChild) {
+          for (var m in v) {
+            if (m == "#text")
+              xml += v[m];
+            else if (m == "#cdata")
+              xml += "<![CDATA[" + v[m] + "]]>";
+            else if (m.charAt(0) != "@")
+              xml += toXml(v[m], m, ind + "\t");
+          }
+          xml += (xml.charAt(xml.length - 1) == "\n" ? ind : "") + "</" + name + ">";
+        }
+      } else {
+        xml += ind + "<" + name + ">" + v.toString() + "</" + name + ">";
+      }
+      return xml;
+    },
+    xml = "";
+  for (var m in o)
+    xml += toXml(o[m], m, "");
+  return tab ? xml.replace(/\t/g, tab) : xml.replace(/\t|\n/g, "");
+}
 
-
+/**
+* Convert xml to json
+* @param {Element|Node} xml to convert
+* @param {Boolean|String} tab or indent character 
+* @note http://goessner.net/download/prj/jsonxml/
+*/
+export function xml2json(xml, tab) {
+  var X = {
+    toObj: function(xml) {
+      var o = {};
+      if (xml.nodeType == 1) { // element node ..
+        if (xml.attributes.length) // element with attributes  ..
+          for (var i = 0; i < xml.attributes.length; i++)
+          o["@" + xml.attributes[i].nodeName] = (xml.attributes[i].nodeValue || "").toString();
+        if (xml.firstChild) { // element has child nodes ..
+          var textChild = 0,
+            cdataChild = 0,
+            hasElementChild = false;
+          for (var n = xml.firstChild; n; n = n.nextSibling) {
+            if (n.nodeType == 1) hasElementChild = true;
+            else if (n.nodeType == 3 && n.nodeValue.match(/[^ \f\n\r\t\v]/)) textChild++; // non-whitespace text
+            else if (n.nodeType == 4) cdataChild++; // cdata section node
+          }
+          if (hasElementChild) {
+            if (textChild < 2 && cdataChild < 2) { // structured element with evtl. a single text or/and cdata node ..
+              X.removeWhite(xml);
+              for (var x = xml.firstChild; x; x = x.nextSibling) {
+                if (x.nodeType == 3) // text node
+                  o["#text"] = X.escape(x.nodeValue);
+                else if (n.nodeType == 4) // cdata node
+                  o["#cdata"] = X.escape(x.nodeValue);
+                else if (o[x.nodeName]) { // multiple occurence of element ..
+                  if (o[x.nodeName] instanceof Array)
+                    o[x.nodeName][o[x.nodeName].length] = X.toObj(x);
+                  else
+                    o[x.nodeName] = [o[x.nodeName], X.toObj(x)];
+                } else // first occurence of element..
+                  o[x.nodeName] = X.toObj(x);
+              }
+            } else { // mixed content
+              if (!xml.attributes.length)
+                o = X.escape(X.innerXml(xml));
+              else
+                o["#text"] = X.escape(X.innerXml(xml));
+            }
+          } else if (textChild) { // pure text
+            if (!xml.attributes.length)
+              o = X.escape(X.innerXml(xml));
+            else
+              o["#text"] = X.escape(X.innerXml(xml));
+          } else if (cdataChild) { // cdata
+            if (cdataChild > 1)
+              o = X.escape(X.innerXml(xml));
+            else
+              for (var p = xml.firstChild; p; p = p.nextSibling)
+                o["#cdata"] = X.escape(p.nodeValue);
+          }
+        }
+        if (!xml.attributes.length && !xml.firstChild) o = null;
+      } else if (xml.nodeType == 9) { // document.node
+        o = X.toObj(xml.documentElement);
+      } else
+        alert("unhandled node type: " + xml.nodeType);
+      return o;
+    },
+    toJson: function(o, name, ind) {
+      var json = name ? ("\"" + name + "\"") : "";
+      if (o instanceof Array) {
+        for (var i = 0, n = o.length; i < n; i++)
+          o[i] = X.toJson(o[i], "", ind + "\t");
+        json += (name ? ":[" : "[") + (o.length > 1 ? ("\n" + ind + "\t" + o.join(",\n" + ind + "\t") + "\n" + ind) : o.join("")) + "]";
+      } else if (o == null)
+        json += (name && ":") + "null";
+      else if (typeof(o) == "object") {
+        var arr = [];
+        for (var m in o)
+          arr[arr.length] = X.toJson(o[m], m, ind + "\t");
+        json += (name ? ":{" : "{") + (arr.length > 1 ? ("\n" + ind + "\t" + arr.join(",\n" + ind + "\t") + "\n" + ind) : arr.join("")) + "}";
+      } else if (typeof(o) == "string")
+        json += (name && ":") + "\"" + o.toString() + "\"";
+      else
+        json += (name && ":") + o.toString();
+      return json;
+    },
+    innerXml: function(node) {
+      var s = "";
+      if ("innerHTML" in node)
+        s = node.innerHTML;
+      else {
+        var asXml = function(n) {
+          var s = "";
+          if (n.nodeType == 1) {
+            s += "<" + n.nodeName;
+            for (var i = 0; i < n.attributes.length; i++)
+              s += " " + n.attributes[i].nodeName + "=\"" + (n.attributes[i].nodeValue || "").toString() + "\"";
+            if (n.firstChild) {
+              s += ">";
+              for (var c = n.firstChild; c; c = c.nextSibling)
+                s += asXml(c);
+              s += "</" + n.nodeName + ">";
+            } else
+              s += "/>";
+          } else if (n.nodeType == 3)
+            s += n.nodeValue;
+          else if (n.nodeType == 4)
+            s += "<![CDATA[" + n.nodeValue + "]]>";
+          return s;
+        };
+        for (var c = node.firstChild; c; c = c.nextSibling)
+          s += asXml(c);
+      }
+      return s;
+    },
+    escape: function(txt) {
+      return txt.replace(/[\\]/g, "\\\\")
+        .replace(/[\"]/g, '\\"')
+        .replace(/[\n]/g, '\\n')
+        .replace(/[\r]/g, '\\r');
+    },
+    removeWhite: function(e) {
+      e.normalize();
+      for (var n = e.firstChild; n;) {
+        if (n.nodeType == 3) { // text node
+          if (!n.nodeValue.match(/[^ \f\n\r\t\v]/)) { // pure whitespace text node
+            var nxt = n.nextSibling;
+            e.removeChild(n);
+            n = nxt;
+          } else
+            n = n.nextSibling;
+        } else if (n.nodeType == 1) { // element node
+          X.removeWhite(n);
+          n = n.nextSibling;
+        } else // any other node
+          n = n.nextSibling;
+      }
+      return e;
+    }
+  };
+  if (xml.nodeType == 9) // document node
+    xml = xml.documentElement;
+  var json = X.toJson(X.toObj(X.removeWhite(xml)), xml.nodeName, "\t");
+  return "{\n" + tab + (tab ? json.replace(/\t/g, tab) : json.replace(/\t|\n/g, "")) + "\n}";
+}
 /**
 * Get Levenshtein distance by Gustaf Andersson
 * @note https://jsperf.com/levenshtein-distance/25
@@ -748,6 +1037,10 @@ export function modal(o){
       return;
     }
 
+    if(o.minHeight){
+      modal.style.minHeight = o.minHeight + "";
+    }
+
     var top = document.createElement("div");
     var head = document.createElement("div");
     var body = document.createElement("div");
@@ -801,7 +1094,7 @@ export function modal(o){
     if( o.buttons && o.buttons.constructor == Array ){
       o.buttons.forEach(function(b){
         if( typeof b === "string" ){
-          b = textToHtml(b);
+          b = textToDom(b);
         }
         buttons.appendChild(b);
       });

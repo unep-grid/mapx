@@ -5,6 +5,11 @@
 #
 # UI for the tools 
 #
+btnIframeBuilder <- tags$button(
+  id = "btnIframeBuilder",
+  `data-lang_key`="btn_iframe_builder",
+  class = "btn btn-default btn-sm action-button hint shiny-bound-input"
+  )
 
 
 # calc current polygon area
@@ -34,8 +39,12 @@ tagList(
   tags$h3(`data-lang_key`="title_tools"),
   tags$h4(`data-lang_key`="title_tools_map"),
   areaLiveCalc,
+  tags$h4(`data-lang_key`="title_tools_share"),
+  btnIframeBuilder,
   viewAdd,
   sourceUpload,
   sourceEdit,
   dbInfo
   )
+
+

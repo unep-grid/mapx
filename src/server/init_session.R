@@ -18,6 +18,12 @@ if(!noDataCheck(query$views)){
 if(!noDataCheck(query$collections)){
   query$collections <- unlist(strsplit(query$collections,","))
 }
+if(!noDataCheck(query$style)){
+  query$style <- jsonlite::fromJSON(mxDecode(query$style))
+}else{
+  query$style <- .get(config,c("ui","colors","default"))
+}
+
 
 #
 # Send templates

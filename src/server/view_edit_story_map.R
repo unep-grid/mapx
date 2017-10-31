@@ -171,6 +171,7 @@ observeEvent(input$btnViewSaveStory,{
   time <- Sys.time()
   view <- reactData$viewDataEdited
   country <- reactData$country
+  editor <- reactUser$data$id
 
   if( view[["_edit"]] && view[["type"]] == "sm" ){
     view[["_edit"]] = NULL
@@ -187,6 +188,7 @@ observeEvent(input$btnViewSaveStory,{
     view <- .set(view, c("target"), as.list(.get(view,c("target"))))
     view <- .set(view, c("data", "story"), story)
     view <- .set(view,c("data"), as.list(.get(view,"data")))
+    view <- .set(view,c("editor"), editor)
 
     #
     # Retrieve and store data for all views used in story.
@@ -199,7 +201,8 @@ observeEvent(input$btnViewSaveStory,{
         lapply(s$views,function(v){v})
         })
       # Final view list
-      viewsId = list(unique(unlist(viewsStory)))
+      viewsId = unique(unlist(viewsStory))
+      viewsId = as.list(viewsId)
 
       # If there is at least on views used, get views object.
       if(!noDataCheck(viewsId)){
@@ -211,7 +214,8 @@ observeEvent(input$btnViewSaveStory,{
           userId = reactUser$data$id,
           from = 0,
           to = 1000
-          )}
+          )
+      }
     })
 
     #
