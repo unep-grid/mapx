@@ -153,7 +153,7 @@ observeEvent(input$btnAddViewConfirm,{
     country = country
     )
 
-    reactData$updateViewListFetchOnly <- runif(1)
+  reactData$updateViewListFetchOnly <- runif(1)
 
    mxModal(
       id="createNewView",

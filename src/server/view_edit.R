@@ -28,13 +28,22 @@ observe({
           #
           # Get view data and check if user can edit
           #
+
           views <- reactViews()
           viewId <- viewAction[["target"]]
+          viewData <- list()
 
-          viewData <- views[ sapply( views, function(x){
-            x[["id"]] == viewId
-}) ][[1]]
+          viewSelect <-  sapply(
+            views, 
+            function(x){
+              x[["id"]] == viewId 
+            })
 
+          viewData <- views[ viewSelect ]
+
+          if(length(viewData)>0){
+            viewData <- viewData[[1]]
+          }
 
           if(noDataCheck(viewData)) return()
           #
@@ -625,6 +634,7 @@ observeEvent(input$btnViewSave,{
   country <- reactData$country
   userData <- reactUser$data
   language <- reactData$language
+  hideView <- FALSE # remove view from ui after save
 
   #
   # check for edit right, remove temporary edit mark
@@ -668,7 +678,7 @@ observeEvent(input$btnViewSave,{
   #
   collections <- input$selViewCollectionsUpdate
   view[[c("data","collections")]] <- as.list(collections)
-
+  if( !any( collections %in% query$collections )) hideView <- TRUE
   #
   # Title and description
   #
@@ -734,13 +744,19 @@ observeEvent(input$btnViewSave,{
   # edit flag
   view$`_edit` = TRUE 
 
-  # add this as new (empty) source
-  mglSetSourcesFromViews(
-    id = .get(config,c("map","id")),
-    viewsList = view,
-    render = FALSE,
-    country = country
-    )
+
+  if(!hideView){
+    # add this as new (empty) source
+    mglSetSourcesFromViews(
+      id = .get(config,c("map","id")),
+      viewsList = view,
+      render = FALSE,
+      country = country
+      )
+  }
+  #
+  # Trigger next reactViews call
+  #
   reactData$updateViewListFetchOnly <- runif(1)
 
   #

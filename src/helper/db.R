@@ -136,8 +136,14 @@ mxDbGetDistinctCollectionsTags <- function(table){
       when jsonb_typeof(data->'collections') = 'string' then jsonb_array_elements(jsonb_build_array(data->'collections'))
     else (JSONB_ARRAY_ELEMENTS(data->'collections'))
     end AS tags
-    FROM %1$s
-    WHERE data->'collections' IS NOT NULL
+    FROM %1$s as a
+    WHERE 
+    data->'collections' IS NOT NULL
+    AND date_modified = (
+      SELECT MAX(date_modified)
+      FROM mx_views b
+      WHERE b.id = a.id
+      )
     ) as foo ) dist",table)
 
     tags <- mxDbGetQuery(sql)$res;

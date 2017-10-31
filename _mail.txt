@@ -1,12 +1,12 @@
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MAP-X MAIL SYSTEM 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-date : 2017-10-25 17:31:42.8757
+date : 2017-10-31 16:13:28.2135
 type : error
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 MESSAGE
 
-object 'hasMap' not found
+attempt to select less than one element in integerOneIndex
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 CALL
 
@@ -22,7 +22,7 @@ CALL
     64: tryCatchList
     63: tryCatch
     62: mxCatch [src/helper/misc.R#781]
-    61: observerFunc [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/map.R#8]
+    61: observerFunc [/Users/fxi/Documents/unep_grid/map-x/git/map-x-mgl/src/server/view_edit.R#7]
      6: runApp
      5: rs [run.R#7]
      4: eval [run.R#10]
