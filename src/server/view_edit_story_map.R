@@ -193,6 +193,7 @@ observeEvent(input$btnViewSaveStory,{
     #
     # Retrieve and store data for all views used in story.
     #
+
     views = list()
     try(silent=T,{
 

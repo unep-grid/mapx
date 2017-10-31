@@ -106,7 +106,7 @@ observeEvent(input$btnAddViewConfirm,{
     idView <- reactData$viewAddId
 
     language <- reactData$language
-
+    collections <- query$collections
     viewType <- input$selectViewType
      
     #languageList <- config[[c("languages","list")]]
@@ -123,6 +123,7 @@ observeEvent(input$btnAddViewConfirm,{
     # Set values data text
     #
     data[[c("title", language )]] <- title
+    data[[c("collections")]] <- as.list(collections)
 
     #
     # Row to add in db

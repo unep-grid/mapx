@@ -678,7 +678,7 @@ observeEvent(input$btnViewSave,{
   #
   collections <- input$selViewCollectionsUpdate
   view[[c("data","collections")]] <- as.list(collections)
-  if( !any( collections %in% query$collections )) hideView <- TRUE
+  hideView <- !noDataCheck(query$collections) && !any( collections %in% query$collections )
   #
   # Title and description
   #
