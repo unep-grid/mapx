@@ -1256,11 +1256,10 @@ mxDbAddRow <- function(data,table){
 
   if(!is.list(data)) data <- as.list(data)
 
+  data <- data[!names(data) == 'pid']
   tName <- names(data)
   tClass <- sapply(data,class)
   rName <- mxDbGetLayerColumnsNames(table)
-
-
 
   if(!all(tName %in% rName)){
     wText <- sprintf("mxDbAddData: append to %1$s. Name(s) not in remote table: '%2$s', remote name not in local table '%3$s'",
@@ -1273,6 +1272,7 @@ mxDbAddRow <- function(data,table){
 
   }  # handle date
   dataProc <- lapply(data,function(x){
+    
     switch(class(x)[[1]],
       "list"={
         sprintf("'%s'",mxToJsonForDb(x))
@@ -1303,7 +1303,6 @@ mxDbAddRow <- function(data,table){
     paste(paste0("\"",tName,"\""),collapse=","),
     paste(dataProc,collapse=",")
     )
-
 
   mxDbGetQuery(q)
 
