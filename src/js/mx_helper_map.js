@@ -2176,8 +2176,8 @@ export function downloadMapPdf(o){
     var view = mx.helpers.getViews(o);
     var lang = mx.settings.language;
     var langs = mx.settings.languages;
-
-    var title = mx.helpers.getLabelItemFromObjectPath({
+    
+    var title = mx.helpers.getLabelFromObjectPath({
       obj : view,
       path : "data.title",
       lang : lang,

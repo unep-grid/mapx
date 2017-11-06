@@ -95,18 +95,19 @@ mapControlMain.prototype.onAdd = function(map) {
     o = o || {};
     var hide = o.hide || !btns.btnToggleBtns.hidden;
     var action = hide ? 'add':'remove';  
-    var idToggle = ["#tabLayers","#tabTools","#tabSettings"];
+     //idToggle = ["#tabLayers","#tabTools","#tabSettings"];
+    var selectorToggle = [".mx-panel-views",".mx-panel-tools",".mx-panel-settings"];
     var idSkip = o.skip || ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
     btns.btnToggleBtns.hidden = hide;
 
     for(var key in btns){  
-      if(idSkip.indexOf(key) == -1){
-        idToggle.push("#"+key);
+      if( idSkip.indexOf(key) == -1 ){
+        selectorToggle.push("#"+key);
       }
     }
 
     helper.classAction({
-      selector:idToggle,
+      selector:selectorToggle,
       action:action,
       class:'mx-hide-bis'
     });
