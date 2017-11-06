@@ -41,13 +41,13 @@ export function filterViewsListText(o){
           if( displayAll ){
             el.classList.remove( classHide );
           }else{
-            var txt = mx.helpers.getLanguageFromObjectPath({
+            var txt = mx.helpers.getLabelFromObjectPath({
               obj: v,
               path: "data.title",
               lang: mx.settings.language,
               defaultKey : ""
             }) +
-              mx.helpers.getLanguageFromObjectPath({
+              mx.helpers.getLabelFromObjectPath({
                 obj: v,
                 path: "data.abstract",
                 lang: mx.settings.language,
