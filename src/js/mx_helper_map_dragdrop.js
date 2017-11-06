@@ -60,11 +60,12 @@ export function zipToGeojson(data){
       return JSZip.loadAsync(data);
     })
     .then(function(files){
-      var f = files.files;
-      for(var dat in f){
-        var ext = mx.helpers.getExtension(dat);
-        if(ext == ".dbf") dbf = f[dat];
-        if(ext == ".shp") shp = f[dat]; 
+      var fileData = files.files;
+
+      for(var f in fileData){
+        var ext = mx.helpers.getExtension(f);
+        if(ext == ".dbf") dbf = fileData[f];
+        if(ext == ".shp") shp = fileData[f]; 
       }
 
       if(!shp){
@@ -86,7 +87,7 @@ export function zipToGeojson(data){
     })
     .then(function(gj){
       return(gj);
-    });  
+    });
 }
 
 
@@ -167,7 +168,8 @@ export function startWorker(f) {
     var gJson = {};
     var db = mx.data.geojson;
 
-    mx.helpers.parseDataToGeojson(data,f.fileType).then(function(gJson){
+    mx.helpers.parseDataToGeojson(data,f.fileType)
+      .then(function(gJson){
 
       // Message to pass to the worker
       var res = {
@@ -284,6 +286,8 @@ export function startWorker(f) {
         w.postMessage(res);
       }
 
+    }).catch(function(e){
+        helper.errorProgress(f)();
     });
   };
 }
