@@ -2,13 +2,13 @@
 {{ var z = it.length ; }}
 {{~it :view}}
 {{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}
-<li style="z-index:{{=z--}}" id="{{=view.id}}" data-view_id="{{=view.id}}" class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect">
+<li style="z-index:{{=z--}}" id="{{=view.id}}" data-view_id="{{=view.id}}" class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable">
   <input data-view_action_key="btn_toggle_view" data-view_action_target="{{=view.id}}" id="check_view_enable_{{=view.id}}" class="mx-view-tgl-input" type="checkbox"/>
   <label class="mx-view-tgl-content" for="check_view_enable_{{=view.id}}">
     <div class="mx-view-tgl-btn-container">
       <div class="mx-view-tgl-btn"></div>
     </div>
-    <span class="mx-view-tgl-title">
+    <span class="mx-view-tgl-title mx-drag-handle">
       {{?view.data.title}}
       {{=view.data.title[lang]}}
       {{?}}

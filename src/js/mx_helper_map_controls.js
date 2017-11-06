@@ -163,25 +163,23 @@ mapControlMain.prototype.onAdd = function(map) {
           // Set a callback : if present, reset views layout
           function(state){
             if(state=="on"){
-              try{
-              mx.maps[idMap].tools.viewsListPackery.shiftLayout();
-              }catch(e){console.log(e);}
+              console.log("panel view enabled");
             }
           }
         );
       }
     },
-    btnTabSettings:{
-      classes:"fa fa-sliders",
-      key:"btn_tab_settings",
-      action:function(){ 
-        helper.panelSwitch(
-          'mx-panel-left',
-          'mx-panel-settings',
-          'mx-hide'
-        );
-      }
-    },
+/*    btnTabSettings:{*/
+      //classes:"fa fa-sliders",
+      //key:"btn_tab_settings",
+      //action:function(){ 
+        //helper.panelSwitch(
+          //'mx-panel-left',
+          //'mx-panel-settings',
+          //'mx-hide'
+        //);
+      //}
+    /*},*/
     btnTabTools:{
       classes:"fa fa-cogs",
       key:"btn_tab_tools",

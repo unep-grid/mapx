@@ -1,9 +1,0 @@
-
-#
-# Views handling
-#
-mxSourceSrv(
-  c(
-    )
-  )
-

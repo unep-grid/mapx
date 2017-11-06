@@ -11,7 +11,11 @@ module.exports = merge(common, {
   plugins: [
     new watchUi({
       watchFolder: "./src/ui",
-      script: 'Rscript ./src/script/utils_ui/build_ui.R'
+      script: 'Rscript ./src/script/build_html.R'
+    }),
+    new watchUi({
+      watchFolder: "./src/data",
+      script: 'Rscript ./src/script/build_dict_json.R'
     })
   ]
 });

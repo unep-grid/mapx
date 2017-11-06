@@ -283,9 +283,13 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
       )
   }
 
+  time <- mxTimeDiff("Get view : query")
   res <- na.omit(mxDbGetQuery(q))
+  mxTimeDiff(time)
 
+  time <- mxTimeDiff("Get view : json to list")
   out <- mxJsonToList(res$res)
+  mxTimeDiff(time)
 
   return(out)
 }
@@ -675,7 +679,7 @@ mxJsonToList <- function(res){
   return(out)
 }
 
-#mxJsonToListMem <- memoise(mxJsonToList)
+mxJsonToList <- memoise(mxJsonToList)
 
 
 #' Build encrypted query for a vt view

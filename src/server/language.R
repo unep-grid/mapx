@@ -32,8 +32,8 @@ observe({
 observeEvent(reactData$language,{
 
   language <- reactData$language
+  isGuest <- isGuestUser()
 
-  isGuest <- isTRUE(.get(reactUser$data,c("email")) == .get(config,c("mail","guest")))
   if(!isGuest){
     # update reactive value and db if needed
     mxDbUpdateUserData(reactUser,
@@ -46,44 +46,16 @@ observeEvent(reactData$language,{
 
 
 #
-# Update map label
+# Update language
 #
-observe({
+observeEvent(input$selectLanguage,{
+  language <- input$selectLanguage
 
-  language <- reactData$language
-
-  hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[["map"]][["id"]]) ]])
-  hasLang <- !noDataCheck(language)
-
-  if( hasMap && hasLang ){
-
-    # subset dictionary for default and choosen language
-    val <- d(lang=language)
-
-    # create dict object for ui
-    dict <- list(
-      lang = language,
-      default = config[[c("languages","list")]][[1]],
-      dict = val
+  session$sendCustomMessage(
+    "mxUpdateLanguage",
+    list(
+      lang=language
       )
-
-    # send dict to ui
-    # TODO: mglSetLanguage to this ?
-    #
-    session$sendCustomMessage(
-      "mxSetLanguage",
-      jsonlite::toJSON(dict,auto_unbox=T)
-      )
-
-    # update map language
-    mglSetLanguage(
-      id = config[["map"]][["id"]],
-      language = language,
-      labelLayer = "country-label"
-      )
-
-  }
-
+    )
 })
-
 

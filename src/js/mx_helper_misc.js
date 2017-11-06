@@ -1038,7 +1038,7 @@ export function modal(o){
     }
 
     if(o.minHeight){
-      modal.style.minHeight = o.minHeight + "";
+      //modal.style.minHeight = o.minHeight + "";
     }
 
     var top = document.createElement("div");
@@ -1060,9 +1060,10 @@ export function modal(o){
     modal.appendChild(body);
     modal.appendChild(footer);
     modal.classList.add("mx-modal-container");
+    modal.classList.add("mx-draggable");
     modal.id=id;
 
-    top.classList.add("mx-modal-drag-enable");
+    top.classList.add("mx-drag-handle");
     top.classList.add("mx-modal-top");
     top.innerHTML = o.title;
     if(top.children.length>0){
@@ -1126,8 +1127,8 @@ export function modal(o){
       });
     }
     mx.helpers.draggable({
-      id:id,
-      disable:[]
+      selector : modal,
+      debounceTime :10
     });
 
   });
@@ -1413,218 +1414,6 @@ export function exists(x){
 }
 
 
-/** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
- * @param {Object} m 
- * @param {Object} m.dict dictionary
- * @param {element} m.el Target element. If omitted, the whole document will be translated.
- * @example
- * setLanguage({dict:[{id:"hello","fr":"Bonjour",en:"Hello"}]})
- */
-export function setLanguage(m) {
-
-  if(!m) m = {};
-
-  if (m.dict) {
-    window.dict = m.dict;
-  } else {
-    m.dict = window.dict;
-  }
-
-  if (!m.dict) return;
-
-  var els, el, doc, label, found, setLabel = {};
-  var langDefault = m.default ? m.default : "en";
-  var lang = m.lang ? m.lang : mx.settings.language ? mx.settings.language : langDefault;
-
-  // set value selector
-
-   var setValue = {
-    "tooltip": function(el) {
-      el.setAttribute("aria-label", label);
-      if (el.className.indexOf("hint--") == -1) {
-        el.className += " hint--left";
-      }
-    },
-    "placeholder": function(el) {
-      el.setAttribute("placeholder", label);
-    },
-    "text": function(el) {
-      el.innerHTML = label;
-    }
-  };
-
-  // if no el to look at, serach the whole document
-  doc = m.el ? m.el : document;
-
-  // fetch all elements with data-lang_key attr 
-  els = doc.querySelectorAll("[data-lang_key]");
-   
-  for (var i = 0; i < els.length; i++) {
-    el = els[i];
-
-    if (isElement(el)) {
-      var type = el.dataset.lang_type;
-      var id = el.dataset.lang_key;
-      var text = el.innerText;
-
-      /*
-      * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
-      */
-      if(!type) type = el.getAttribute("data-lang_type");
-      
-      // Default is text. Maybe not the most clever default.
-      if (!type) type = "text";
-      
-      found = false;
-      label = "";
-      
-      for (var j = 0; j < m.dict.length; j++) {
-        if (!found) {
-          if (m.dict[j].id == id) {
-            found = true;
-            label = m.dict[j][lang];
-            if (!label) {
-              // if label no in dict, take the default
-              label = m.dict[j][langDefault];
-            }
-          }
-        }
-      }
-      /*
-      * Fallback
-      */
-      if (!label) {
-        if(text){
-          label = text;
-        }else{
-          label = id;
-        }
-      }
-      setValue[type](el);
-    }
-
-  }
-}
-
-
-/**
- * Get value from the dictionary for a given key and language. Fallback to "def"
- * @param {string} key Key to look for in the dictionnary
- * @param {string} lang  Two letters language code
- * @param {string} langDef Two lettters language code. Fallback to "en"
- */
-export function getLanguage(key, lang, defLang, defOut) {
-
-  var keys = [];
-  var dict = window.dict;
-  defOut = defOut || key;
-  if (!dict) return;
-  lang = lang || defLang || "en";
-
-  if( key.constructor == Array ){
-      keys = key;
-  }else{ 
-     keys = keys.concat(key);
-  }
-
-  var res = [];
-
-  for (var k = 0, klen = keys.length; k < klen; k++) {
-    key = keys[k];
-    var found = false;
-    var val = defOut;
-    for ( var i = 0, dlen = dict.length ; i < dlen ; i++ ) {
-      if(!found){
-        if ( dict[i].id === key ) {
-          found = true;
-          val = dict[i][lang];
-          if (!val) val = dict[i][defLang] || defOut;
-        }
-      }
-    }
-    res.push(val);
-  }
-
-  return (res);
-}
-
-/**
-* Get language value from an object path.
-* @param {Object} o Options
-* @param {string} o.lang Selected language two letter code. Default = mx.settings.language
-* @param {Array} o.langs Array of other language code. Default = mx.settings.languages
-* @param {string} o.defaultKey Default key if no other value found. Default = "noData"
-* @param {Object} o.obj Object containing the value
-* @param {String} o.path Path to the value container. Eg. "data.title"
-*/
-export function getLanguageFromObjectPath(o){
-  o.lang = o.lang ? o.lang : mx.settings.language;
-  o.langs = o.langs ? o.langs : objectToArray(mx.settings.languages);
-  o.defaultKey = o.defaultKey ? o.defaultKey : "noData";
-  var out = mx.helpers.path( o.obj, o.path + "." + o.lang );
-  if( !out ){
-    for( var i = 0; i < o.langs.length ; i++ ){
-      if( ! out ){
-        out  = mx.helpers.path( o.obj, o.path + "." + o.langs[i] );
-      }
-    }
-    if( ! out ) out = getLanguage([ o.defaultKey ],o.lang);
-  }
-  return(out);
-}
-
-
-/**
-* Check language code for the view item and control fallback
-* @param {object} o options
-* @param {object} o.obj object to check
-* @param {string} o.path path to the string to check
-* @param {string} o.language language code expected
-* @param {array} o.languages code for fallback
-* @param {boolean} o.concat concat language with path instead of select children
-* @example
-*     checkLanguage({
-*         obj : it,
-*         path : "data.title", 
-*         language : "fr",
-*         languages :  ["en","de","ru"]
-*     })
-*/
-export function checkLanguage(o){
-  
-  var langs = o.languages || objectToArray(mx.settings.languages);
-  var lang = o.language || mx.settings.language || langs[0];
-  var concat = !! o.concat;
-  var out = lang;
-  var found = false;
-
-  /**
-  * Test if lang value return something
-  */
-  function test(){
-    var p = concat ? o.path + lang : o.path + "." + lang;
-    found = !!mx.helpers.path( o.obj, p ) ;
-  }
-
-  /**
-  * Initial language test
-  */
-  test();
-
-  /**
-  * If nothing found, iterrate through languages
-  */
-  if( !found ){
-    for( var l in langs ){
-        lang = langs[l];
-        test();
-        if(found) return lang ;
-    }
-  }
-
-  return out;
-
-}
 
 
 
@@ -1783,67 +1572,6 @@ export function classAction(o) {
   }
 }
 
-
-/**
- * Enable drag listener on id
- * @param {object} o Options
- * @param {string} o.id Div id to move
- * @param {array} o.enableClass class to use as draggable area
- * @param {array} o.disableClass Array of class on with drag is not listen
- */
-export function draggable(o) {
-  var el = document.getElementById(o.id);
-  var x, y, x_to, y_to, isDragArea;
-
-  if (!o.enableClass) o.enableClass = "mx-modal-drag-enable";
-
-  mx.listener[o.id] = {};
-
-  /**
-   * mouse down + move : chage element coordinate
-   */
-  mx.listener[o.id].mousemove = debounce(function(event) {
-    event.preventDefault();
-    el.style.margin = "initial";
-    el.style.left = x + event.clientX - x_to + 'px';
-    el.style.top = y + event.clientY - y_to + 'px';
-  });
-
-  /*
-   * mouse up :  remove "up" and "move" listener
-   */
-  mx.listener[o.id].mouseup = function(event) {
-    event.preventDefault();
-    window.removeEventListener('mousemove', mx.listener[o.id].mousemove, false);
-    window.removeEventListener('mouseup', mx.listener[o.id].mouseup, false);
-  };
-
-  /**
-   * mouse down : if it's draggable
-   */
-  mx.listener[o.id].mousedown = function(event) {
-
-    isDragArea = event.target.className.indexOf(o.enableClass) > -1;
-
-    if (isDragArea) {
-
-      event.preventDefault();
-
-      x = el.offsetLeft;
-      y = el.offsetTop;
-      x_to = event.clientX;
-      y_to = event.clientY;
-
-      window.addEventListener('mousemove', mx.listener[o.id].mousemove, false);
-      window.addEventListener('mouseup', mx.listener[o.id].mouseup, false);
-
-    }
-  };
-
-  el.addEventListener('mousedown', mx.listener[o.id].mousedown, false);
-
-}
-
 /**
  * Apply function on HTMLCollection
  * @param {Object} o options
@@ -1900,6 +1628,7 @@ export function parentFinder(o) {
  *
  * @param {Object} o options
  * @param {Element|String} o.selector Selector string or element for the ul root
+ * @param {String} o.classHandle Class for the handle
  * @param {Function} o.callback Function to call after sort
  */
 export function sortable_old(o){
@@ -1917,7 +1646,7 @@ export function sortable_old(o){
     liSet,
     liGhost,
     classFrom = "mx-sort-li-item",
-    classHandle = "mx-sort-li-handle";
+    classHandle = o.classHandle || "mx-sort-li-handle";
 
   function setPos(el, l, t) {
     l = l + "px";
@@ -2005,8 +1734,6 @@ export function sortable_old(o){
   }
 
   ulRoot.addEventListener('mousedown', onMouseDown, false);
-
-
 
 }
 

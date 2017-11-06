@@ -5,11 +5,19 @@
 observe({
 
   country_db <- .get(reactUser$data,c("data","user","cache","last_project"))
-
   country_def <- config[[c("countries","default","first")]]
   country_query <- query$country
-  country_ui <- input$selectCountry
-  
+  country_ui <- input$selectCountry 
+
+  # user info
+  userRole <- getUserRole()
+  isGuest <- isGuestUser()
+
+  # If this is guest, over ride db country
+  if( isGuest ){
+    country_db <- country_def
+  }
+
   isolate({
 
     # check current country
@@ -23,23 +31,17 @@ observe({
       # priority to query
       country_out <- country_query
     }else{
-            # IF this is guest, use the default country
-      isGuest <- isTRUE(.get(reactUser,c("role","name") == "guest"))
-
-      if( isGuest ){
-        country_db <- country_def
-      }
 
       # if there is no already defined country but there is something grom the db, use the later
       if(noDataCheck(country_react) && !noDataCheck(country_db)){
         country_out <- country_db
-        
+
         # if the change comes from the ui, apply
       }else if(!noDataCheck(country_ui)){
-        
+
         country_out <- country_ui
       }else{
-         # nothing to do
+        # nothing to do
         return()
       }
     }
@@ -58,10 +60,16 @@ observe({
 
   # data
   country <- reactData$country
+
   hasCountry <- !noDataCheck(country)
   hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[[c("map","id")]]) ]])
+  isGuest <- isGuestUser()
 
   if(hasMap && hasCountry){
+
+    
+    mxDebugMsg("Fly to " + country )
+
 
     tbl <- config[[c("countries","table")]]
     bnd <- tbl[tbl$iso3 == country,c("lat","lng","zoom")][1,]
@@ -79,10 +87,6 @@ observe({
         )
     }
 
-    mglReset(
-      id =.get(config, c("map","id"))
-      )
-
     mglSetFilter(
       id=config[["map"]][["id"]],
       layer="country-code",
@@ -96,12 +100,15 @@ observe({
       zoom = bnd[["zoom"]]
       )
 
-    # update reactive value and db if needed
-    mxDbUpdateUserData(reactUser,
-      path = c("user","cache","last_project"),
-      value = country
-      )
+    if(!isGuest){
+      # update reactive value and db if needed
+      mxDbUpdateUserData(reactUser,
+        path = c("user","cache","last_project"),
+        value = country
+        )
 
+
+    }
   }
 })
 

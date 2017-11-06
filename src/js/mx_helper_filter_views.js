@@ -34,35 +34,38 @@ export function filterViewsListText(o){
       var found = true;
       var v = views[i];
       var el = document.getElementById(v.id);
-      var hasSkip = el.classList.contains(classSkip);
-      if( !hasSkip ){
-        if( displayAll ){
-          el.classList.remove( classHide );
-        }else{
-          var txt = mx.helpers.getLanguageFromObjectPath({
-            obj: v,
-            path: "data.title",
-            lang: mx.settings.language,
-            defaultKey : ""
-          }) +
-            mx.helpers.getLanguageFromObjectPath({
+
+      if(el){
+        var hasSkip = el.classList.contains(classSkip);
+        if( !hasSkip ){
+          if( displayAll ){
+            el.classList.remove( classHide );
+          }else{
+            var txt = mx.helpers.getLanguageFromObjectPath({
               obj: v,
-              path: "data.abstract",
+              path: "data.title",
               lang: mx.settings.language,
               defaultKey : ""
-            });
+            }) +
+              mx.helpers.getLanguageFromObjectPath({
+                obj: v,
+                path: "data.abstract",
+                lang: mx.settings.language,
+                defaultKey : ""
+              });
 
-          try{
-            found = txt.toLowerCase().indexOf(search)>-1;
-          }
-          catch(e){
-            found = true;
-          }
+            try{
+              found = txt.toLowerCase().indexOf(search)>-1;
+            }
+            catch(e){
+              found = true;
+            }
 
-          if(found){
-            el.classList.remove(classHide);
-          }else{
-            el.classList.add(classHide);
+            if(found){
+              el.classList.remove(classHide);
+            }else{
+              el.classList.add(classHide);
+            }
           }
         }
       }
@@ -114,37 +117,39 @@ export function filterViewsListCheckbox(o){
       var found = false;
       var v = views[i];
       var el = document.getElementById(v.id);
-      var hasFilterText = el.classList.contains(classSkip);
-      if(!hasFilterText){
-        if(displayAll){
-          el.classList.remove(classHide);
-        }else{ 
-
-          for(var j = 0, jL=filters.length ; j < jL ; j++ ){
-            if( ! found ){ 
-              var filter = filters[j].filter;
-              var type = filters[j].type;
-              try{
-                switch(type){
-                  case  "classes" :
-                    found = v.data.classes.indexOf(filter) > -1;
-                    break;
-                  case  "collections" :
-                    found = v.data.collections.indexOf(filter) > -1; 
-                    break;
-                  case  "type" :
-                    found = v.type.indexOf(filter) > -1 ;
-                    break;               
-                  default:
-                    found = false;
-                }
-              }catch(e){}
-            }
-          }
-          if(found){
+      if(el){
+        var hasFilterText = el.classList.contains(classSkip);
+        if(!hasFilterText){
+          if(displayAll){
             el.classList.remove(classHide);
-          }else{
-            el.classList.add(classHide);
+          }else{ 
+
+            for(var j = 0, jL=filters.length ; j < jL ; j++ ){
+              if( ! found ){ 
+                var filter = filters[j].filter;
+                var type = filters[j].type;
+                try{
+                  switch(type){
+                    case  "classes" :
+                      found = v.data.classes.indexOf(filter) > -1;
+                      break;
+                    case  "collections" :
+                      found = v.data.collections.indexOf(filter) > -1; 
+                      break;
+                    case  "type" :
+                      found = v.type.indexOf(filter) > -1 ;
+                      break;               
+                    default:
+                      found = false;
+                  }
+                }catch(e){}
+              }
+            }
+            if(found){
+              el.classList.remove(classHide);
+            }else{
+              el.classList.add(classHide);
+            }
           }
         }
       }

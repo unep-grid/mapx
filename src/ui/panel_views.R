@@ -83,10 +83,10 @@ tags$div(
     viewFilterInput,
     viewFilterButton
     ),
-  tags$div(class="mx-views-content mx-scroll-container",
-    tags$div(
-        class="mx-scroll-content-y",
-        tags$ul(class="mx-views-list")
+  tags$div(
+    class="mx-views-content",
+    tags$ul(
+      class="mx-views-list"
       )
     ),
   tags$div(class="mx-views-footer"

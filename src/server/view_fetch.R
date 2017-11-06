@@ -5,23 +5,35 @@
 #
 reactViews <- reactive({
 
+  timer <- mxTimeDiff("Fetching view")
+  
+  #
+  # Ivalidated by :
+  #
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
-  userRole <- reactUser$role
   userData <- reactUser$data
   country <- reactData$country
 
-  hasRole <- !noDataCheck(userRole)
-  hasData <- !noDataCheck(userData)
-  hasCountry <- !noDataCheck(country)
+  #
+  # Get user role
+  #
+  userRole <- getUserRole()
 
+  #
+  # Value from request
+  #
   viewsId <- query$views
   collections <- query$collections
   
-  if( !hasRole || !hasData || !hasCountry ) return()
+  #
+  # Set logic
+  #
+  hasRole <- !noDataCheck(userRole)
+
+  if( !hasRole ) return()
 
   query$views <<- NULL
-  #query$collections <<- NULL
 
   out <-  mxDbGetViews(
     views = viewsId, 
@@ -34,42 +46,41 @@ reactViews <- reactive({
     to = 1000
     )
 
+  mxTimeDiff(timer)
   return(out)
 })
 
 #
-# After role, data or country update, send updated views list
+# After country change, send new set of views (initial set of views send when map init)
 #
 observe({
-  userRole <- reactUser$role
-  userData <- reactUser$data
+
   country <- reactData$country
-
-  hasRole <- !noDataCheck(userRole)
-  hasData <- !noDataCheck(userData)
-  hasCountry <- !noDataCheck(country)
-  
-  update <- reactData$updateViewList
-
-  hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[["map"]][["id"]]) ]])
+  userData <- reactUser$data
 
   isolate({
 
-    
+
+    mapIsReady <- isMapReady()
+    role <- getUserRole()
+
+    if(!mapIsReady) return()
+    if(noDataCheck(role)) return()
+    if(noDataCheck(country)) return()
+
     views <- reactViews()
 
-  if( !hasRole || !hasData || !hasCountry || !hasMap ) return()
-  
-  mxDebugMsg("Send and render views list")
+    timer <- mxTimeDiff("Sending view")
 
-  mglSetSourcesFromViews(
-      id = config[["map"]][["id"]],
+    mglSetSourcesFromViews(
+      id = .get(config,c("map","id")),
       viewsList = views,
       render = FALSE,
       country = country
       )
+
+    mxTimeDiff(timer)
   })
-  
 })
 
 

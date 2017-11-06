@@ -3,39 +3,71 @@
 #
 # View text long
 #
-divAbstract <- tags$div(class="float-left mx-view-item-desc-container",
-  "{{? h.path(view,'data.abstract.'+langAbstract) }}",
-    tags$p(
-      class="mx-view-item-desc",
-      id="view_text_{{=view.id}}",
-      "{{=view.data.abstract[langAbstract]}}"
-      ),
-  "{{?}}"
+divAbstract <- tags$div(
+  "{{ var foldId = mx.helpers.makeId(10); }}",
+  class = "fold-container",
+  tags$input(
+    type="checkbox",
+    id="{{=foldId}}",
+    class="fold-switch"
+    ),
+  tags$label(
+    class="fold-label",
+    `for`="{{=foldId}}",
+    "Abstract"
+    ),
+  tags$div(
+    class="fold-content",
+    tags$div(
+      class="float-left mx-view-item-desc-container",
+      "{{? h.path(view,'data.abstract.'+langAbstract) }}",
+      tags$p(
+        class="mx-view-item-desc",
+        id="view_text_{{=view.id}}",
+        "{{=view.data.abstract[langAbstract]}}"
+        ),
+      "{{?}}"
+      )
+    )
   )
 
 #
 # View legend
 #
 divLegend <- tags$div(
-  "{{?view.type=='vt'}}",
-  "{{ var rules = h.path(view,'data.style.rules'); }}",
-  "{{?h.greaterThan(h.path(rules,'length'),0)}}",
+  "{{ var foldId = mx.helpers.makeId(10); }}",
+  "{{?view.type!='sm'}}",
+  class = "fold-container",
+  tags$input(
+    type="checkbox",
+    id="{{=foldId}}",
+    class="fold-switch"
+    ),
+  tags$label(
+    class="fold-label",
+    `for`="{{=foldId}}",
+    "Legends"
+    ),
+  tags$div(
+    class="fold-content",
+    "{{?view.type=='vt'}}",
+    "{{ var rules = h.path(view,'data.style.rules'); }}",
+    "{{?h.greaterThan(h.path(rules,'length'),0)}}",
     tags$div(
       class="mx-view-item-legend",
       id="check_view_legend_{{=view.id}}"
       ),
-  "{{?}}",
-  "{{?}}",
-  "{{?view.type=='rt'}}",
+    "{{?}}",
+    "{{?}}",
+    "{{?view.type=='rt'}}",
     tags$div(
       class="mx-view-item-legend-raster",
       id="check_view_legend_{{=view.id}}"
       ),
+    "{{?}}"
+    ),
   "{{?}}"
   )
-
-
-
 
 #
 # Opacity slider input
@@ -376,6 +408,20 @@ liControlsEdit <- tagList(
       class="fa fa-pencil"
       )
     ),
+  "{{? view.type=='vt' }}",
+  # Button to edit view
+  tags$li(
+    class="mx-pointer hint--left",
+    `data-lang_key`="btn_opt_edit_dashboard",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_edit_dashboard",
+    `data-view_action_handler`="shiny",
+    `data-view_action_target`="{{=view.id}}",
+    tags$div(
+      class="fa fa-pie-chart"
+      )
+    ),
+  "{{?}}",
   "{{?h.all([ view.type=='vt', h.path(view,'data.attribute.name') ]) }}",
   # Button to edit view
   tags$li(
@@ -387,18 +433,6 @@ liControlsEdit <- tagList(
     `data-view_action_target`="{{=view.id}}",
     tags$div(
       class="fa fa-paint-brush"
-      )
-    ),
-  # Button to edit view
-  tags$li(
-    class="mx-pointer hint--left",
-    `data-lang_key`="btn_opt_edit_dashboard",
-    `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_opt_edit_dashboard",
-    `data-view_action_handler`="shiny",
-    `data-view_action_target`="{{=view.id}}",
-    tags$div(
-      class="fa fa-pie-chart"
       )
     ),
   "{{?}}",

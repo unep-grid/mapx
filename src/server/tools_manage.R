@@ -29,9 +29,11 @@ buttonSourceEdit <- tagList(
 #
 # Set view and source ui 
 #
-observeEvent(reactUser$role,{
+observe({
 
-  role <- reactUser$role$name
+  userRole <- getUserRole()
+
+  role <- userRole$name
 
   if( role == "public" ){
     uiSourceEdit = div()

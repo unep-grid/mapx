@@ -12,11 +12,12 @@ module.exports = {
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'common' // Specify the common bundle's name.
+      //name: 'common' // Specify the common bundle's name.
+      name: ['runtime']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template : './src/html/index.html'
+      template : './src/built/index.html'
     }),
   ],
   module: {
@@ -31,13 +32,21 @@ module.exports = {
           { loader: 'css-loader' }
         ]
       },
-
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
-      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" }
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },
+      {
+        test: /\.csv$/,
+          loader: 'csv-loader',
+          options: {
+            dynamicTyping: true,
+              header: true,
+              skipEmptyLines: true
+          }
+      }
     ]
   },
   output: {
-    filename: '[name].bundle.js',
+    filename: '[name].[chunkhash].bundle.js',
     path: path.resolve(__dirname, '../www')
   }
 };

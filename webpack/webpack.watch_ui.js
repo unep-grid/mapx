@@ -7,7 +7,9 @@
 const fs = require("fs");
 const spawn = require('child_process').spawn;
 const exec = require('child_process').exec;
-let watcher;
+
+
+let watcher = {};
 
 function watchFilePlugin(options) {
   this.options = options;
@@ -29,17 +31,17 @@ watchFilePlugin.prototype.apply = function(compiler) {
   function handleScript(script){
     const {command, args} = serializeScript(script);
     const proc = spawn(command, args, {stdio: 'inherit'});
-    proc.on('close', function(error,stdout,stderr){if(error) throw error;});
+    proc.on('close', function(error,stdout,stderr){if(error)console.log(error);});
   }
 
   compiler.plugin("emit", function(compilation, callback) {
-    if(watcher) watcher.close();
+    if(watcher[watchFolder]) watcher[watchFolder].close();
 
-    watcher = fs.watch(watchFolder,{interval:5000},function(eventType,filename){
+    watcher[watchFolder] = fs.watch(watchFolder,{interval:5000},function(eventType,filename){
       if(filename){
         console.log(script);
         handleScript(script) ;      
-        watcher.close();
+        watcher[watchFolder].close();
       }
 
     });

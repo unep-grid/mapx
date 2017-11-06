@@ -17,6 +17,7 @@ import '../css/mx_dashboard.css';
 import '../css/mx_selectize.css';
 import '../css/mx_colors.css';
 import './mx_bindings.js';
+
 import * as mx from './mx_init.js';
 window.mx = mx;
 import './mx_shiny.min.js';

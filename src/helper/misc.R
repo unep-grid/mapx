@@ -226,12 +226,18 @@ mxSchemaAttributeInput = function(
 #' @param fixed {boolean} search for fixed string
 #' @param ext {string} search for file with this extension
 #' @export
-whereIs <- function(exp,fixed=TRUE,ext=NULL){
+whereIs <- function(exp,fixed=TRUE,ext=NULL,excludeDir="node_modules"){
+
   cmd <- ifelse(fixed,"grep -RFl","grep -REL")
   if(!is.null(ext)){
     cmd <- sprintf("%1$s %2$s",cmd,paste(sprintf("--include \\*.%1$s",ext),collapse=""))
   }
-  system(sprintf("%1$s '%2$s' .",cmd,exp))
+if(!is.null(excludeDir)){
+    cmd <- sprintf("%1$s --exclude %2$s",cmd,excludeDir)
+  }
+  cmd <- sprintf("%1$s '%2$s' .",cmd,exp)
+  mxDebugMsg(cmd)
+  system(cmd)
 }
 
 #' Check for "empty" value
@@ -247,9 +253,7 @@ whereIs <- function(exp,fixed=TRUE,ext=NULL){
 #' @export
 noDataCheck <- function( val = NULL, debug = FALSE ){
   
-  if(debug) mxTimer("start","noDataCheck")
   
-
   noDatas <- config$noData;
 
   res = isTRUE(
@@ -269,7 +273,6 @@ noDataCheck <- function( val = NULL, debug = FALSE ){
           nchar(val[[1]]) == 0 )
       )
     )
-  if(debug)  mxTimer("stop")
 
   return 
   res
@@ -324,7 +327,6 @@ mxSetResourcePath <- function(resources){
 mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL,web=T,asChar=F){
   out <- NULL
 
-  #mxTimer("start","tr")
   # if no dictionary provided, search for one in parent env
   if(noDataCheck(dict)){
     dict=dynGet("dict",inherits=T)
@@ -407,7 +409,6 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
     }
   }
 
-  #mxTimer("stop","tr")
   return(out)
 
 }
@@ -579,6 +580,32 @@ mxTimer <- function(action=c("stop","start"),timerTitle="Mapx timer"){
   }
   return(now)
 }
+
+
+mxTimeDiff <- function(titleOrTimer="test"){
+
+  dat <- titleOrTimer 
+  now <- Sys.time()
+
+  if("mx_timer" %in% class(dat)){
+
+    diff <- paste(round(difftime(now,dat$start,units="secs"),3))
+    mxDebugMsg(paste(dat$title,diff,"s"))
+
+  }else{
+    out = list(
+      start = Sys.time(),
+      title = dat
+      )
+
+    class(out) <- c(class(out),"mx_timer")
+
+    return(out) 
+
+  }
+
+}
+
 
 
 #' Test for internet connection. 
@@ -830,6 +857,7 @@ mxCatch <- function(
 #' @return  Random string of letters, with prefix and suffix
 #' @export
 randomString <- function(prefix=NULL,suffix=NULL,n=15,sep="_",addSymbols=F,addLetters=T,addLETTERS=F,splitIn=1,splitSep="_"){
+  library("magrittr")
   prefix <- subPunct(prefix,sep)
   suffix <- subPunct(suffix,sep)
   src <- 0:9

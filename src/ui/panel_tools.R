@@ -27,6 +27,20 @@ areaLiveCalc  <- tags$div(
   tags$div(class="form-control",id="txtAreaSum")
   )
 
+
+themeColor <- tagList(
+  tags$h4(`data-lang_key`="title_settings_colors"),
+  mxFold(
+  labelText= "Edit",
+  content = tagList(
+    tags$div(
+      class="mx-settings-colors",
+      tags$div(id="inputThemeColors")
+      )
+    )
+  )
+)
+
 # View and source edit buttons. Generated in tools_manage.R
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
@@ -44,7 +58,8 @@ tagList(
   viewAdd,
   sourceUpload,
   sourceEdit,
-  dbInfo
+  dbInfo,
+  themeColor
   )
 
 

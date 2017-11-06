@@ -7,15 +7,18 @@
 observe({
   mxCatch("map.R",{
     
-    
+    userRole <- getUserRole()
     country <- reactData$country
     language <- reactData$language
     eventMapName <-  sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
     map <- input[[eventMapName]]
 
+    if(noDataCheck(userRole)) return()
     if(!noDataCheck(map)) return()
     if(noDataCheck(country)) return()
     if(noDataCheck(language)) return()
+
+    timer <- mxTimeDiff("Init map")
 
     #if(noDataCheck(language)){
       #language <- .get(config,c("languages","default","first"))
@@ -32,6 +35,10 @@ observe({
     # Set map options
     # 
     mapConfig<- list(
+      #
+      # Intial views
+      #
+      viewsList = reactViews(),
       #
       # Vector tile service : base url
       #
@@ -66,7 +73,15 @@ observe({
 
     # init map
     mglInit(mapConfig)
+    mxTimeDiff(timer)
 })
 })
 
+isMapReady <- reactive({
 
+  eventMapName <-  sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
+  map <- input[[eventMapName]]
+
+  return(!noDataCheck(map))
+
+})

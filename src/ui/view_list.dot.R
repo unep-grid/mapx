@@ -41,7 +41,7 @@ divHeader <- tagList(
     # View Title
     #
     tags$span(
-      class="mx-view-tgl-title",
+      class="mx-view-tgl-title mx-drag-handle",
       "{{?view.data.title}}",
       "{{=view.data.title[lang]}}",
       "{{?}}"
@@ -85,7 +85,7 @@ tagList(
     style = "z-index:{{=z--}}",
     id = "{{=view.id}}",
     `data-view_id`="{{=view.id}}",
-    class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect",
+    class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
     divHeader
     ),
   "{{~}}"

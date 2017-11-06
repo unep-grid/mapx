@@ -15,12 +15,12 @@ reactUser$data <- list()
 # Handle reconnection from cookie stored information
 #
 observeEvent(input$cookies,{
-  mxCatch(title="Reconnection from cookie",{
+  mxCatch(title="Users data",{
 
     dat <- NULL
     res <- NULL
     cookies <- input$cookies
-    
+
     #
     # If there is values in cookies
     #
@@ -28,7 +28,7 @@ observeEvent(input$cookies,{
       #
       # Look for the default cookie name (e.g. mx_data)
       #
-      dat <- mxDbDecrypt(cookies[[config[["users"]][["cookieName"]]]])
+      dat <- mxDbDecrypt(cookies[[.get(config,c("users","cookieName"))]])
       #
       # If there is no error, fetch current email from stored id
       #
@@ -59,14 +59,14 @@ observeEvent(input$cookies,{
       #
       # Login with guest
       #
-      reactData$loginUserEmail <- config[["mail"]][["guest"]]
+      emailGuest <- .get(config,c("mail","guest"))
+      reactData$loginUserEmail <- emailGuest
 
       # if there is no guest account, create it
-      if(!mxDbEmailIsKnown(config[["mail"]][["guest"]])){
-        mxDbCreateUser(config[["mail"]][["guest"]])  
+      if(!mxDbEmailIsKnown(emailGuest)){
+        mxDbCreateUser(emailGuest)  
       }
     }
-
 
     #
     # Trigger login observer
@@ -80,7 +80,7 @@ observeEvent(input$cookies,{
 # Hamdle logout process
 #
 observeEvent(input$btnLogout,{
-mxCatch(title="Logout",{
+  mxCatch(title="Logout",{
     reactUser <- reactiveValues()
     reactData <- reactiveValues()
     mxUpdateValue(id="loginUserEmail",value="")
@@ -105,10 +105,10 @@ observeEvent(input$loginUserEmail,{
 
   #  login validation timing 2-9 ms
   mxCatch(title="Login email validation",{
-    
+
     email <- input$loginUserEmail
     emailIsValid <- mxEmailIsValid(email)
-    
+
     if(emailIsValid){
       emailIsKnown <- mxDbEmailIsKnown(email) 
     }
@@ -156,19 +156,19 @@ observeEvent(input$btnSendLoginKey,{
         )
       # send mail
       res <- try({
-      
-       template <- .get(config,c("templates","text","email_password"))
-       
-       text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginSecret,template)
 
-       mxSendMail(
-            from = config[["mail"]][["bot"]],
-            to = email,
-            body = text,
-            type = "text",
-            subject = "MAP-X SECURE PASSWORD",
-            wait = F
-            )
+        template <- .get(config,c("templates","text","email_password"))
+
+        text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginSecret,template)
+
+        mxSendMail(
+          from = config[["mail"]][["bot"]],
+          to = email,
+          body = text,
+          type = "text",
+          subject = "MAP-X SECURE PASSWORD",
+          wait = F
+          )
       })
 
       if("try-error" %in% class(res)){ 
@@ -176,13 +176,13 @@ observeEvent(input$btnSendLoginKey,{
 
       }else{
         msg <- "An email has been send, please check your email and copy the received password in the box."
-       #
-       # save the provided address as the input could be change during the interval.
         #
-       reactData$loginUserEmail <- email
-       #
-       # Update UI
-       #
+        # save the provided address as the input could be change during the interval.
+        #
+        reactData$loginUserEmail <- email
+        #
+        # Update UI
+        #
         mxUiHide(
           id="btnSendLoginKey",
           disable=TRUE,
@@ -249,7 +249,7 @@ observe({
         )
       # trigger actual login
       reactData$loginRequested = runif(1)
-     
+
       # close the panel
       mxModal(id="loginCode",close=T)
 
@@ -282,21 +282,22 @@ observeEvent(reactData$loginRequested,{
 
     # get the email adress provided in input
     email <- reactData$loginUserEmail
+    timeStamp <- Sys.time()
 
-    timeStamp <- mxTimer("start",sprintf("Login process: logic done for %s in",email))
+    timer <- mxTimeDiff(sprintf("Login process for %s : ",email))
 
     # Last email validation
     if(!mxEmailIsValid(email)) stop(sprintf("Invalid email: %s",email))
-    
+
     # Check if this is a new account (unknown email)
     newAccount <- !mxDbEmailIsKnown(email)
 
     # get default user table name
-    userTable <-  config[["pg"]][["tables"]][["users"]]
+    userTable <-  .get(config,c("pg","tables","users"))
 
 
     # check if the account is "guest"
-    isGuest <- isTRUE(email == config[[c("mail","guest")]])
+    isGuest <- isTRUE(email == .get(config,c("mail","guest")))
 
     if(newAccount){
 
@@ -348,11 +349,11 @@ observeEvent(reactData$loginRequested,{
     # save in a list 
     ck <- list(ck)
     # name it
-    names(ck) <- config[["users"]][["cookieName"]]
+    names(ck) <- .get(config,c("users","cookieName"))
     # save it
     mxSetCookie(
       cookie = ck,
-      expireDays = config[["users"]][["cookieExpireDays"]]
+      expireDays = .get(config,c("users","cookieExpireDays"))
       ) 
 
     #
@@ -365,82 +366,94 @@ observeEvent(reactData$loginRequested,{
     #
     reactUser$data <- userInfo 
 
-    mxTimer("stop")
+    mxTimeDiff(timer)
 })
 })
+
+
+#
+# Test if current logged user is guest
+#
+isGuestUser <- reactive({
+   a <-  .get(reactUser,c("data","email"))
+   b <-  .get(config,c("mail","guest"))   
+   if(noDataCheck(a)||noDataCheck(b)) stop("User can't be identified")
+   return(a == b)
+})
+
+#
+# Get user role
+#
+getUserRole <- reactive({
+
+  cntry <- reactData$country 
+  userInfo <- reactUser$data
+
+  hasInfo <- !noDataCheck(userInfo)
+  hasCountry <- !noDataCheck(cntry)   
+
+  roles <- list()
+
+  if(hasInfo && hasCountry){
+
+    # Get roles
+    roles <- mxGetMaxRole(
+      project = cntry,
+      userInfo = userInfo
+      )
+
+    #
+    # Extract role description value
+    #
+
+    mxDebugMsg(sprintf("%1$s connected as %2$s in %3$s",
+      roles$data$email,
+      roles$role$name,
+        cntry
+        ))
+
+  }
+  return(roles)
+
+})
+
+
 
 #
 # Update role
 #
-observe({
-  mxCatch(title="Role attribution",{
-    cntry <- reactData$country 
-    userInfo <- reactUser$data
+#observe({
+  #mxCatch(title="Role attribution",{
+    #cntry <- reactData$country 
+    #userInfo <- reactUser$data
 
-    hasInfo <- !noDataCheck(userInfo)
-    hasCountry <- !noDataCheck(cntry)   
+    #hasInfo <- !noDataCheck(userInfo)
+    #hasCountry <- !noDataCheck(cntry)   
 
-    isolate({
+    #isolate({
 
 
-      if(hasInfo && hasCountry){
+      #if(hasInfo && hasCountry){
 
-        # Get roles
-        reactUser$role <- mxGetMaxRole(
-          project=cntry,
-          userInfo=userInfo
-          )
+        ## Get roles
+        #reactUser$role <- mxGetMaxRole(
+          #project=cntry,
+          #userInfo=userInfo
+          #)
 
-        #
-        # Extract role description value
-        #
-        role <- reactUser$role
-        
-        mxDebugMsg(sprintf("%1$s connected as %2$s in %3$s",
-            reactUser$data$email,
-            reactUser$role$name,
-            cntry
-            ))
-        
         ##
-        ## Set user access
+        ## Extract role description value
         ##
+        #role <- reactUser$role
 
-        #reactUser$allowStoryCreator <- isTRUE("storymap_creator" %in% access)
-        #reactUser$allowStoryReader <-  isTRUE("storymap" %in% access)
-        #reactUser$allowViewsCreator <-isTRUE("view_creator" %in% access)
-        #reactUser$allowUpload <- isTRUE("data_upload" %in% access)
-        #reactUser$allowAnalysisOverlap <- isTRUE("analysis_overlap" %in% access)
-        #reactUser$allowPolygonOfInterest <- isTRUE("polygon_of_interest" %in% access)
-        #reactUser$allowMap <- isTRUE("map" %in% access)
-        #reactUser$allowAdmin <- isTRUE("admin" %in% access)
-        #reactUser$allowProfile <- isTRUE("profile" %in% access)
-        ##
-        ## Update select publishing / editing target
-        ##
+        #mxDebugMsg(sprintf("%1$s connected as %2$s in %3$s",
+            #reactUser$data$email,
+            #reactUser$role$name,
+            #cntry
+            #))
 
-        #if("data_upload" %in% access){
-          #updateSelectInput(session,
-            #inputId="selNewLayerVisibility",
-            #choices=publish
-            #)
-        #}
-
-        #if("view_creator" %in% access){
-          #updateSelectInput(session,
-            #inputId="selNewViewVisibility",
-            #choices=publish
-            #)
-        #}
-
-        #if("storymap_creator" %in% access){
-          #updateSelectInput(session,
-            #inputId="selStoryVisibility",
-            #choices=publish
-            #)
-        #}
-      }
-    })
-})
-})
+      #}
+    #})
+#})
+#})
 

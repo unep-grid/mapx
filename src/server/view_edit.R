@@ -9,7 +9,7 @@ observe({
     # Extract action type
     #
     viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
-
+    userRole <- getUserRole()
 
     if(!noDataCheck(viewAction)){
 
@@ -67,7 +67,7 @@ observe({
           #
           # Who can view this
           #
-          targetGroups <- .get(reactUser$role,c("publish"))
+          targetGroups <- .get(userRole,c("publish"))
           targetCurrent <- .get(viewData,c("target"))
 
           #
@@ -931,8 +931,11 @@ reactSourceVariables <- reactive({
 #
 reactSourceLayer <- reactive({
 
-  userCanRead <- reactUser$role[[c("read")]]
-  userId <- reactUser$data[["id"]]
+  userRole <- getUserRole()
+  userCanRead <- .get(userRole,c("read"))
+
+  userId <- .get(reactUser,c("data","id"))
+
   country <- reactData$country
   language <- reactData$language
   updateSourceLayer <- reactData$updateSourceLayerList

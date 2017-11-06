@@ -10,7 +10,12 @@
     -123.33769000071862,
     49.70378630133243
   ],
-  "sources":{},
+  "sources":{
+    "mapbox_unepgrid_countries": {
+      "url": "mapbox://unepgrid.6idtkx33",
+      "type": "vector"
+    }
+  },
   "layers":[ 
     {
       "id": "background",
@@ -18,12 +23,8 @@
       "layout": {
         "visibility": "visible"
       },
-      "paint.black": {
+      "paint": {
         "background-color": "rgb(47,47,47)",
-        "background-opacity": 1
-      },
-      "paint.white": {
-        "background-color": "rgb(255,255,255)",
         "background-opacity": 1
       }
     },
@@ -32,15 +33,31 @@
       "type": "background",
       "layout": {
         "visibility": "none"
-      },
-      "paint.black": {
-        "background-color": "rgb(255,0,0)",
-        "background-opacity": 0
-      },
-      "paint.white": {
-        "background-color": "rgb(255,0,0)",
-        "background-opacity": 0
       }
-    }
+    },
+      {
+        "id": "country-code",
+        "type": "fill",
+        "source": "mapbox_unepgrid_countries",
+        "source-layer": "mx_country_un_iso3code",
+        "filter": [
+          "all",
+          [
+            "!has",
+            "iso3code"
+          ],
+          [
+            "==",
+            "$type",
+            "Polygon"
+          ]
+        ],
+        "layout": {
+          "visibility": "visible"
+        },
+        "paint": {
+          "fill-color": "rgba(220,220,220,0.8)"
+        }
+      }
   ]
 }

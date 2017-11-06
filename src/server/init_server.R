@@ -49,7 +49,7 @@ mx_init_checkpoint <- function(){
         require(shiny),
         require(RPostgreSQL),
         #require(roxygen2),
-        #require(memoise),
+        require(memoise),
         require(jsonlite),
         #require(devtools),
         #require(rio),
@@ -85,8 +85,10 @@ mx_init_checkpoint <- function(){
 
   }else{
 
-    # load helper
+    # load main helper
     source("src/helper/misc.R",local=.GlobalEnv)
+
+    # load helpers
     mxSource("src/helper/mgl.R")
     mxSource("src/helper/jed.R")
     mxSource("src/helper/doFork.R")
@@ -98,7 +100,9 @@ mx_init_checkpoint <- function(){
     # load config
     mxSource("settings/settings-global.R")
     mxSource("settings/settings-local.R")
-
+    
+    # set ressource path
+    mxSetResourcePath(.get(config,c("resources")))
 
   }
 }

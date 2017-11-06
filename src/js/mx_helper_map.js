@@ -1,6 +1,238 @@
-/*jshint esversion: 6 , node: true */
 import * as mx from './mx_init.js';
 //var escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
+
+
+
+
+/**
+ * Initial mgl and mapboxgl
+ * @param {string} o options
+ * @param {string} o.idMap id
+ * @param {string} o.token Mapbox token
+ * @param {array} [o.center=[0,0]] Array of lat,lng for center 
+ * @param {number} [o.zoom=0] Zoom level
+ * @param {number} [o.minZoom=4] Min zoom level
+ * @param {number} [o.maxZoom=10] Max zoom level
+ * @param {string} o.language Initial language code 
+ * @param {string} o.languages Languages code list 
+ * @param {string} o.path relative path to resource (style, theme, sprite , ...)
+ * @param {Object} o.vtUrl Base url for fetching vector tiles. eg. http://localhost:3030/tile/{z}/{x}/{y}.mvt 
+
+*/
+export function initMapx(o){
+
+  var elMap = document.getElementById(o.id);
+  var hasShiny = !! window.Shiny ;
+
+  if(! elMap ){
+    alert("Map element with id "+ o.id  +" not found");
+    return ;
+  }
+
+  Promise.all([
+    System.import("mapbox-gl/dist/mapbox-gl"),
+    System.import("localforage"),
+    System.import("../data/style_mapx.json"),
+    //System.import("../data/style_simple.json"),
+    System.import("../built/view_list.dot"),
+    System.import("../built/view_list_legend.dot"),
+    System.import("../built/view_list_options.dot")
+  ]).then(function(m){
+
+    var  mapboxgl = m[0];
+    var  localforage = m[1];
+    mx.mapboxgl = mapboxgl;
+    mx.localforage = localforage;
+    mx.data.style = m[2];
+
+    mx.templates.viewList = m[3];
+    mx.templates.viewListLegend = m[4];
+    mx.templates.viewListOptions = m[5];
+
+    mx.data.geojson = localforage.createInstance({
+      name:  "geojson"
+    });
+    mx.data.images = localforage.createInstance({
+      name : "images"
+    });
+
+    mx.data.stories = localforage.createInstance({
+      name : "stories"
+    });
+    mx.data.storyCache = {};
+
+
+    /**
+     * Confirm user quit
+     */
+
+    if(false){
+      window.onbeforeunload = function(e) {
+        var dialogText = 'Are you sure you want to quit?';
+        e.returnValue = dialogText;
+        return dialogText;
+      };
+    }
+
+    /**
+     * Set mapbox gl token
+     */
+    if (!mapboxgl.accessToken && o.token) {
+      mapboxgl.accessToken = o.token;
+    }
+
+    /**
+     * TEst if mapbox gl is supported
+     */
+    if ( !mapboxgl.supported() ) {
+      alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
+      return;
+    }
+
+    /**
+     * Set default
+     */
+    o.center = o.center || [0,0];
+    o.lat = o.lat || 90;
+    o.lng = o.lng || 0;
+    o.zoom = o.zoom  || 4;
+    o.maxZoom = o.maxZoom || 20;
+    o.minZoom = o.minZoom || 0;
+    o.location = o.location || window.location.origin + window.location.pathname;
+    mx.settings.languages = o.languages = o.languages || ["en","fr"];
+    mx.settings.language = o.language = o.language || o.languages[0];
+    mx.settings.vtPort = o.vtPort = o.vtPort || "";
+    mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
+    // set path using current location. 
+
+    if(o.paths.sprite){
+      o.paths.sprite = o.location + o.paths.sprite;
+    }
+
+    /**
+     * Init mgl data store
+     */  
+    if (!mx.maps) {
+      mx.maps = {};
+    }
+    /**
+     * Mgl data : keep reference on options, listener, views, etc...
+     */
+    mx.maps[o.id] = {
+      options : o,
+      map: {},
+      listener: {},
+      views : [],
+      style : {}
+    };
+
+    var style = mx.maps[o.id].style = mx.data.style;
+    style.sprite = o.paths.sprite;
+    mx.maps[o.id].style = style;
+
+    /* Create map object */
+    var map = new mapboxgl.Map({
+      container: o.id, // container id
+      style: style,
+      center: [o.lng,o.lat],
+      zoom: o.zoom,
+      maxZoom: o.maxZoom,
+      minZoom: o.minZoom,
+      preserveDrawingBuffer:true
+    });
+
+    /* save map in mgl data */
+    mx.maps[o.id].map =  map;
+
+    /**
+     * Send loading confirmation to shiny
+     */
+      map.on('load', function() {
+        
+
+        /*
+        * render views
+        */
+        mx.helpers.setSourcesFromViews(o);
+
+        /*
+        *  First map language 
+        */
+        mx.helpers.updateLanguage(o);
+        //mx.helpers.updateLanguageMap({lang:o.language});
+
+        /*
+        * If shiny, trigger read event
+        */
+        if(hasShiny){
+          Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
+        }
+        /**
+        * Apply coloscheme if any
+        */ 
+        if(o.colorScheme){
+          mx.helpers.setUiColorScheme({colors:o.colorScheme});
+        }
+      });
+
+      /**
+       * Handle drop geojson event
+       */
+    if(mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver){
+      elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
+      elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
+    }
+
+    /**
+     * Add controls to the map
+     */
+
+      map.addControl(new mx.helpers.mapControlMain(),'top-left');
+      map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
+      map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
+      map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
+
+      /**
+       * Trigger country change on double click
+       * NOTE: experimental. layers and input id should be moved as options.
+       */
+    map.on('dblclick',function(e){
+      var cntry, features ;
+      if(o.countries){
+        features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
+        cntry = mx.helpers.path(features[0],"properties.iso3code");
+        if(o.countries.indexOf(cntry) > -1 && hasShiny ) {
+          Shiny.onInputChange( "selectCountry", cntry);
+        }
+      }
+    });
+
+    map.on('mousemove', function(e) {
+
+      var layers = mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: "MX-"
+      });
+
+      var features = map.queryRenderedFeatures(e.point,{layers:layers});
+      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
+    });
+
+    map.on("render" , mx.helpers.handleEvent);
+    map.on("click", mx.helpers.handleEvent);
+    map.on("rotate",function(e){
+      var r = map.getBearing();
+      var northArrow = document.getElementById("btnSetNorth_img");
+      northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
+    });
+
+
+  });
+
+}
+
+
+
 
 /**
  * Get local forage item and send it to shiny server
@@ -19,13 +251,6 @@ export function getLocalForageData(o){
   });
 }
 
-
-
-
-
-
-
-
 /**
 * Reset project : remove view, dashboards, etc
 * @param {String} idMap map id
@@ -35,18 +260,27 @@ export function reset(o){
   var views = mx.maps[o.idMap].views ;
   var elViewList = document.querySelectorAll(".mx-views-list");
 
+  /**
+   * remove existing layers
+   */
+  mx.helpers.removeLayersByPrefix({
+    id:o.idMap,
+    prefix:"MX-"
+  });
+
+  /*
+  * Removing dashboard
+  */
+
   views.forEach(function(view){
     if( view._dashboard ) view._dashboard.destroy();
   }) ;
 
-  //mx.maps[o.idMap].views = [] ;
-
+  /**
+  * Remove list
+  */
   elViewList.innerHTML="";
-
 }
-
-
-
 
 /** 
  * Add source from view object 
@@ -112,6 +346,12 @@ export function setSourcesFromViews(o){
     if( !o.feedback ) o.feedback = mx.helpers.renderViewsList;
 
     if( isFullList ){ 
+      /*
+      * Reset old views and dashboards
+      */
+      mx.helpers.reset({
+        idMap:o.id
+      });
       /**
        * if there is multiple view in array, use them as main views list.
        * Set country, add each views to sources and feedback.
@@ -119,13 +359,7 @@ export function setSourcesFromViews(o){
       //m.views = views;
 
       mx.maps[o.id].views = views;
-      /**
-       * remove existing layers
-       */
-      mx.helpers.removeLayersByPrefix({
-        id:o.id,
-        prefix:"MX-"
-      });
+
       /**
        * Reset the current country
        */
@@ -285,11 +519,6 @@ export function viewControler(o){
     }
 
     updateViewOrder(o);
-
-    /**
-    * Update packery layout
-    */
-    updateViewsListLayout({idMap:o.id,timeOut:100});
 
   }
 
@@ -813,7 +1042,6 @@ export function removeView(o){
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
   var m  = mx.maps[ o.id ];
-  var pckry = m.tools.viewsListPackery;
   var views = m.views;
   var view = views.filter(function(x){
     return x.id == o.idView ;
@@ -840,8 +1068,6 @@ export function removeView(o){
   });
 
   if(li){
-    pckry.remove(li); 
-    pckry.layout();
     li.remove();
   }
 
@@ -1001,11 +1227,13 @@ export function handleViewClick(o){
           var link =  location.origin + location.pathname + "?views=" + idView + "&country="+mx.settings.country;
           var idLink = "share_"+idView;
           var input = "<textarea class='form-control form-input-line'>"+link+"</textarea>";
-          mx.helpers.modal({
-            title : mx.helpers.getLanguage("btn_opt_share",mx.settings.language),
-            id : idLink,
-            content : input,
-            minHeight :'200px'
+          mx.helpers.getDictItem("btn_opt_share").then(function(title){
+            mx.helpers.modal({
+              title : title,
+              id : idLink,
+              content : input,
+              minHeight :'200px'
+            });
           });
         }
       },
@@ -1033,7 +1261,6 @@ export function handleViewClick(o){
             action : "toggle"
           });
           
-          updateViewsListLayout({idMap:o.id,timeOut:100});
 
         }
       },
@@ -1097,10 +1324,6 @@ export function handleViewClick(o){
             id:o.id,
             idView:el.dataset.view_action_target
           });
-         updateViewsListLayout({
-           idMap:o.id,
-           timeOut:0
-         });
         }
       },
       {
@@ -1122,13 +1345,15 @@ export function handleViewClick(o){
           var idView =  el.dataset.view_action_target;
           var view = mx.helpers.getViews({id:'map_main',idView:idView});
           var link = mx.helpers.path(view,"data.source.urlMetadata");
-          var title = mx.helpers.getLanguage("source_raster_tile_url_metadata",mx.settings.language);
           var href = "<a href="+link+" target='_blank'>" + title + "</a>";
-          mx.helpers.modal({
-            title : title,
-            id : "modalMetaData",
-            content : href,
-            minHeight:"150px"
+
+          mx.helpers.getDictItem("source_raster_tile_url_metadata").then(function(title){
+            mx.helpers.modal({
+              title : title,
+              id : "modalMetaData",
+              content : href,
+              minHeight:"150px"
+            });         
           });
         }
       },
@@ -1166,65 +1391,21 @@ export function handleViewClick(o){
  * @param {String} o.id Maps item id
  * @param {String} o.lang Two letter language code. see mx.settings.languages.
  */
-export function updateViewsListLanguage(o){
-  
-  var elsViews = document.getElementsByClassName("mx-view-item");
-  var views = mx.maps[o.id].views;
 
-  o.langs = mx.helpers.objectToArray(mx.settings.languages);
-
-  mx.helpers.forEachEl({
-    els : elsViews,
-    callback : function(el){
-      var l =  o.lang,
-        id = el.dataset.view_id,
-        v = views.filter(function(v){ return v.id == id ; })[0],
-        elTitle = el.querySelector(".mx-view-item-title"),
-        elText = el.querySelector(".mx-view-item-desc"),
-        elLegend = el.querySelector(".mx-view-item-legend");
-
-      if(elLegend){
-        elLegend.innerHTML = mx.templates.viewListLegend(v);
-      }
-
-      if(elTitle){
-        elTitle.innerHTML = mx.helpers.getLanguageFromObjectPath({
-          obj : v,
-          path : "data.title",
-          lang : o.lang,
-          langs : o.langs,
-          defaultKey : "noTitle"
-        });
-      }
-      if(elText){ 
-        elText.innerHTML = mx.helpers.getLanguageFromObjectPath({
-          obj : v,
-          path : "data.abstract",
-          lang : o.lang,
-          langs : o.langs,
-          defaultKey : "noAbstract"
-        });
-      }
-    }
-  });
-
-
-}
 
 
 /**
 * Update view layout
 */
-function updateViewsListLayout(o){
-  var  id = o.idMap || "map_main";
-  var m = mx.maps[id];
-  var time = o.timeOut || 200;
-  setTimeout(function(){
-    if(m.tools && m.tools.viewsListPackery){
-      m.tools.viewsListPackery.shiftLayout();
-    }
-  },time);
-}
+//function updateViewsListLayout(o){
+  //var  id = o.idMap || "map_main";
+  //var m = mx.maps[id];
+  //var time = o.timeOut || 200;
+  //setTimeout(function(){
+    //if(m.tools && m.tools.viewsListPackery){
+    //}
+  //},time);
+/*}*/
 
 /**
 
@@ -1262,7 +1443,9 @@ export function renderViewsList(o){
 
   if( views === undefined || views.constructor !== Array ||  views.length < 1 || !mx.templates.viewList ){
     if( ! add ){
-      elViewsList.innerHTML = mx.helpers.getLanguage("noView"); 
+      mx.helpers.getDictItem("noView").then(function(item){
+        elViewsList.innerHTML = item ;
+      });
     }
   }else{
 
@@ -1310,19 +1493,45 @@ export function renderViewsList(o){
     /**
     * Handle draggable and sortable
     */
-    makeViewsSortable({
-      add : add,
-      pckry : m.tools.viewsListPackery,
-      id : o.id,
-      selectorAll : elViewsList,
-      selectorAdd : elNewItem,
-      callback : function(x){
+    mx.helpers.sortable({
+      selector : elViewsList,
+      onSorted : function(){
         updateViewOrder(o);
       }
-    }).then(function(packery){
-      m.tools.viewsListPackery = packery;
     });
+    /*});*/
+    /*makeViewsSortable({*/
+      //add : add,
+      //pckry : m.tools.viewsListPackery,
+      //id : o.id,
+      //selectorAll : elViewsList,
+      //selectorAdd : elNewItem,
+      //callback : function(x){
+        //updateViewOrder(o);
+      //}
+    //}).then(function(packery){
+      //m.tools.viewsListPackery = packery;
+    //});
 
+/*    System.import("html5sortable").then(function(sortable){*/
+      //sortable(elViewsList,{
+        //handle: ".mx-view-tgl-title",
+      //})[0].addEventListener('sortupdate', function(e) {
+           //updateViewOrder(o);
+      //});
+    //});
+
+
+
+    //System.import("sortablejs").then(function(Sortable){
+      //m.tools.viewsListSortable = new Sortable(elViewsList,{
+        //handle: ".mx-view-tgl-title",
+        //animation: 150,
+         //onSort : function(){
+           //updateViewOrder(o);
+         //}
+      //});
+    /*});*/
 
 
     /**
@@ -1341,7 +1550,7 @@ export function renderViewsList(o){
     /*
      * translate based on dict key
      */
-    mx.helpers.setLanguage({
+    mx.helpers.updateLanguageElements({
       el:elViewsContainer
     });
 
@@ -1357,7 +1566,6 @@ export function renderViewsList(o){
         classSkip : "mx-filter-class",
         idMap : o.id,
         onFiltered : function(){
-            updateViewsListLayout({idMap:o.id,timeOut:100});
         }
       });
     }else{
@@ -1374,7 +1582,6 @@ export function renderViewsList(o){
         classHide : "mx-filter-class",
         classSkip : "mx-filter-text",
         onFiltered : function(){
-            updateViewsListLayout({idMap:o.id,timeOut:100});
         }
       });
     }else{
@@ -1413,65 +1620,65 @@ export function renderViewsList(o){
 * Build views list and make it sortable using packery and draggabilly
 * @param {Object} o options
 */
-function makeViewsSortable(o){
+//function makeViewsSortable(o){
 
-  var elSelectorAll,elSelectorAdd,draggie;
-  var selectorItem = ".mx-view-item";
-  var selectorHandle = ".mx-view-tgl-title";
-  var add = o.add || false;
-  var pckry = o.pckry;
+  //var elSelectorAll,elSelectorAdd,draggie;
+  //var selectorItem = ".mx-view-item";
+  //var selectorHandle = ".mx-view-tgl-title";
+  //var add = o.add || false;
+  //var pckry = o.pckry;
   
-  return Promise.all([
-   System.import("packery"),
-   System.import("draggabilly")
-  ]).then(function(m){
+  //return Promise.all([
+   //System.import("packery"),
+   //System.import("draggabilly")
+  //]).then(function(m){
 
-    var Packery = m[0];
-    var Draggabilly = m[1];
+    //var Packery = m[0];
+    //var Draggabilly = m[1];
 
-    if (o.selectorAll instanceof Node) {
-      elSelectorAll = o.selectorAll;
-    } else {
-      elSelectorAll = document.querySelector(o.selectorAll);
-    }
+    //if (o.selectorAll instanceof Node) {
+      //elSelectorAll = o.selectorAll;
+    //} else {
+      //elSelectorAll = document.querySelector(o.selectorAll);
+    //}
 
-    if (o.selectorAdd instanceof Node) {
-      elSelectorAdd = o.selectorAdd;
-    } else {
-      elSelectorAdd = document.querySelector(o.selectorAdd);
-    }
+    //if (o.selectorAdd instanceof Node) {
+      //elSelectorAdd = o.selectorAdd;
+    //} else {
+      //elSelectorAdd = document.querySelector(o.selectorAdd);
+    //}
 
-    if( add && pckry && elSelectorAdd ){
+    //if( add && pckry && elSelectorAdd ){
 
-     // pckry.prepended(elSelectorAdd);
-      pckry.addItems(elSelectorAdd);
-      draggie = new Draggabilly(elSelectorAdd,{
-          handle: selectorHandle
-      });
-      pckry.bindDraggabillyEvents(draggie);
-      pckry.fit(elSelectorAdd,0,0);
-    }else{
+     //// pckry.prepended(elSelectorAdd);
+      //pckry.addItems(elSelectorAdd);
+      //draggie = new Draggabilly(elSelectorAdd,{
+          //handle: selectorHandle
+      //});
+      //pckry.bindDraggabillyEvents(draggie);
+      //pckry.fit(elSelectorAdd,0,0);
+    //}else{
 
-      pckry = new Packery(elSelectorAll, {
-        selectorItem: selectorItem,
-        columnWidth: 100,
-        transitionDuration: 100,
-        stagger: 0
-      });
+      //pckry = new Packery(elSelectorAll, {
+        //selectorItem: selectorItem,
+        //columnWidth: 100,
+        //transitionDuration: 100,
+        //stagger: 0
+      //});
 
-      pckry.getItemElements().forEach(function(elItem) {
-        var draggie = new Draggabilly(elItem, {
-          handle: selectorHandle
-        });
-        pckry.bindDraggabillyEvents(draggie);
-      });
+      //pckry.getItemElements().forEach(function(elItem) {
+        //var draggie = new Draggabilly(elItem, {
+          //handle: selectorHandle
+        //});
+        //pckry.bindDraggabillyEvents(draggie);
+      //});
 
-      pckry.on('dragItemPositioned',o.callback);
+      //pckry.on('dragItemPositioned',o.callback);
     
-    }
-       return pckry;
-  });
-}
+    //}
+       //return pckry;
+  //});
+//}
 
 
 
@@ -1483,33 +1690,39 @@ function makeViewsSortable(o){
 */
 function getTagsGroupFromView(views){
 
+  var h = mx.helpers;
+
   var tags = {
     type : [],
     classes : [],
     collections : []
   };
 
+  var stat = {};
+
   views.map(function(v){ 
-    tags.type  = tags.type.concat( mx.helpers.path(v,"type"));
-    tags.classes = tags.classes.concat( mx.helpers.path(v,"data.classes"));
-    tags.collections = tags.collections.concat( mx.helpers.path(v,"data.collections"));
+    tags.type  = tags.type.concat( h.path(v,"type"));
+    tags.classes = tags.classes.concat( h.path(v,"data.classes"));
+    tags.collections = tags.collections.concat( h.path(v,"data.collections"));
   });
 
-  tags.type = mx.helpers.getArrayStat({
+  // grouprs
+  stat.type = mx.helpers.getArrayStat({
     arr:tags.type,
     stat:'frequency'
   });
 
-  tags.classes = mx.helpers.getArrayStat({
+  stat.classes = mx.helpers.getArrayStat({
     arr:tags.classes,
     stat:'frequency'
   });
 
-  tags.collections = mx.helpers.getArrayStat({
+  stat.collections = mx.helpers.getArrayStat({
     arr:tags.collections,
     stat:'frequency'
   });
-  return tags;
+
+  return stat;
 }
 
 
@@ -1521,32 +1734,57 @@ function getTagsGroupFromView(views){
 */
 function tagsTableToLabel(table,containerSelector){
 
+  var h = mx.helpers;
+  var l = mx.settings.language;
   var elContainer = containerSelector instanceof Node ? containerSelector : document.querySelector(containerSelector);
-  
+
   // Reset content
   elContainer.innerHTML="";
 
   var types =  Object.keys(table);
-  var tags = [];
 
   types.forEach(function(t){
+    var tags = [];
     var tbl = table[t];
     var keys = Object.keys(tbl);
-    keys.forEach(function(k){
-      var label = mx.helpers.getLanguage(k,mx.settings.language,"en") || k;
-      tags.push({key:k,count:tbl[k],label:label[0],type:t});
-    });
-  });
- 
-  tags = tags.sort(function(a,b){
-    return b.count-a.count;
-  });
+    var elGroup = document.createElement("div");
+    var elFold,label,el;
 
-  tags.forEach(function(t){
-    var el =  makeEl(t.key,t.label,t.count,t.type);
-    elContainer.appendChild(el);
-  });
+    elGroup.className="filter-group";
 
+    h.getDictItem(t,l)
+      .then(function(label){
+
+        elFold = h.uiFold({
+          content : elGroup,
+          label : label
+        });
+
+        elContainer.appendChild(elFold);
+
+      }).then(function(){
+
+        return Promise.all(
+        keys.map(function(k){
+          return h.getDictItem(k,l)
+            .then(function(label){
+              tags.push({key:k,count:tbl[k],label:label,type:t});
+            });
+        }));
+      
+      }).then(function(){
+
+        tags = tags.sort(function(a,b){
+          return b.count-a.count;
+        });
+
+        tags.forEach(function(t){
+          var el =  makeEl(t.key,t.label,t.count,t.type);
+          elGroup.appendChild(el);
+        });
+      });
+
+  });
 
   function makeEl(id,label,number,type){
     var checkToggle = document.createElement("div");
@@ -1939,7 +2177,7 @@ export function downloadMapPdf(o){
     var lang = mx.settings.language;
     var langs = mx.settings.languages;
 
-    var title = mx.helpers.getLanguageFromObjectPath({
+    var title = mx.helpers.getLabelItemFromObjectPath({
       obj : view,
       path : "data.title",
       lang : lang,
@@ -2720,9 +2958,9 @@ export function addOptions(o){
   /*
    * translate based on dict key
    */
-    mx.helpers.setLanguage({
-      el:elOptions
-    });
+  mx.helpers.updateLanguageElements({
+    el:elOptions
+  });
 }
 
 
@@ -2791,15 +3029,16 @@ export function addView(o){
 
       if(legend){
         var elLegend = document.querySelector("#check_view_legend_"+view.id);
-        var oldImg = elLegend.querySelector("img");
-        if(!oldImg){
-          var img = new Image();
-          img.src = legend;
-          img.alt = "Legend"; 
-          elLegend.appendChild(img); 
-          img.onload = function(){
-            updateViewsListLayout({idMap:o.id,timeOut:10});
-          };
+        if(elLegend){
+          var oldImg = elLegend.querySelector("img");
+          if(!oldImg){
+            var img = new Image();
+            img.src = legend;
+            img.alt = "Legend"; 
+            elLegend.appendChild(img); 
+            img.onload = function(){
+            };
+          }
         }
       }
 
@@ -3040,203 +3279,6 @@ export function getRenderedLayersData(o){
   });
 }
 
-
-
-
-
-/**
- * Method to convert string with logical operators to regex search function
- * & and | are implemented. E.g.
- * makeStringFilterFun("Diamant & Au")("Diamant, Au") is true
- * @param {String} re string to convert
- */
-/*makeStringFilterFun = function(re){*/
-
-//if( ! re | re == "all" ){
-//re = ".*";
-//}
-////[>else{<]
-////re = re.replace(/[^0-9A-zÀ-ÿ\,\&\|\$]/g," ");
-////}
-
-//try {
-//re = re
-//.trim()
-//.toLowerCase();
-
-//if( re.indexOf(",")){
-//re = re.replace(",","&");
-//}
-
-//if( re.indexOf("|") >-1 ){
-//re = re
-//.split( "|" )
-//.map(function(r){
-////return "(?=.*"+r.trim()+".*)";
-//return "^"+r.trim()+"$";
-//}).join("|");
-//}
-
-//if(re.indexOf("&")>-1){
-//re = re
-//.split( "&" )
-//.map(function(r){
-//return "(?=.*"+r.trim()+".*)";
-//}).join("");
-//}
-
-//re =  new RegExp(re);
-//}
-//catch( err ){
-//console.log( "make filter fun failed: "+err );
-//}
-
-//return function(t){
-//t  = t.toLowerCase();
-//return t.search(re)>-1;
-//};
-
-
-/*};*/
-
-
-//makeStringFilterFun = function(re){
-//return(function(t){
-//var score = distanceScore(re,t) ;
-//return score;
-//});
-/*};*/
-
-/**
- * Create search box for each views
- * @param {Object} o Options
- * @param {String} o.id Id of the map
- */
-/*makeSearchBox = function(o){*/
-
-//view = o.view;
-//idMap = o.idMap;
-//m = mx.maps[idMap];
-
-//el = document.querySelector("[data-search_box_for='"+view.id+"']");
-
-//if(!el) return;
-
-//makeSelectr();
-
-//function tableToData(table){
-//var r, res;
-//var data = [];
-//for(r = 0 ; r < table.length ; r++ ){
-//row = table[r];
-//res = {};
-//res.value = row.values;
-//res.text = row.values;
-//data.push(res);
-//}
-//return data;
-//}
-
-//function makeSelectr(){
-
-//var table = mx.helpers.path(view,"data.attribute.table");
-//var idView = view.id;
-//var data = tableToData(table);  
-//var selectr = new Selectr(el,{
-//data : data,
-//pagination : 10,
-//placeholder : getLanguage("view_search_values",mx.settings.language),
-//multiple : true,
-//clearable : true
-//});
-/**
- * Save selectr object in the view
- */
-//view.interactive.searchBoxe = selectr;
-/**
- * Set event logic
- */
-//selectr.on("selectr.select",function(el){
-//filterSelectr(this.selectedValues); 
-//});
-//selectr.on("selectr.deselect",function(el){
-//filterSelectr(this.selectedValues);
-//});
-
-/*
- * Filter selected values
- */
-//function filterSelectr(values){
-//filterViewValues({
-//id : idMap,
-//search : values,
-//idView : idView
-//});
-//}
-//}
-/*};*/
-export function makeSearchBox_choicejs(o){
-  
-
-  view = o.view;
-  idMap = o.idMap;
-  m = mx.maps[idMap];
-
-  el = document.querySelector("[data-search_box_for='"+view.id+"']");
-
-  if(!el) return;
-
-  makeSelectr();
-
-  function tableToData(table){
-    var r, res;
-    var data = [];
-    for(r = 0 ; r < table.length ; r++ ){
-      row = table[r];
-      res = {};
-      res.value = row.values;
-      res.label = row.values;
-      res.selected = false;
-      res.disabled = false;
-      data.push(res);
-    }
-    return data;
-  }
-
-  function makeSelectr(){
-
-    var table = mx.helpers.path(view,"data.attribute.table");
-    var idView = view.id;
-    var data = tableToData(table);
-
-    var searchBox = new Choices(el,{
-      choices : data,
-      placeholderValue : getLanguage("view_search_values",mx.settings.language)
-    });
-
-    /**
-     * Save selectr object in the view
-     */
-    searchBox.targetView = view;
-    view._interactive.searchBox = searchBox;
-    /**
-     * Set event logic
-     */
-    el.addEventListener('change', function(event) {
-      var listObj = searchBox.getValue();
-      var view = searchBox.targetView;
-      var attr = mx.helpers.path(view,"data.attribute.name");
-      var filter = ['any'];
-      listObj.forEach(function(x){
-        filter.push(["==",attr,x.value]);
-      });
-      view._setFilter({
-        filter : filter,
-        type : "search_box"
-      });
-    });
-  }
-}
 /*selectize version*/
 export function makeSearchBox(o){
   
@@ -3523,71 +3565,6 @@ export function flyTo(o) {
   }
 }
 
-/** 
- * Set or Update language of a layer, based on text-field attribute. 
- * @param {object} o Options 
- * @param {string} o.mapId Map id
- * @param {string} [o.language='en'] Two letter language code
- */
-export function setMapLanguage(o) {
-  
-
-  var hasMap = checkMap(o.id);
-  var mapLang = ["en","es","fr","de","ru","zh","pt","ar"];
-  var defaultLang = "en";
-  var layers = ["place-label-city","place-label-capital","country-label","water-label","poi-label"];
-
-  if (hasMap) {
-    var m = mx.maps[o.id].map;
-
-    if (!o.language || mapLang.indexOf(o.language) == -1) {
-      o.language = mx.settings.language;
-    }
-
-    if (!o.language) {
-      o.language = defaultLang;
-    }
-
-    mx.settings.language = o.language;
-
-    /**
-     * Set language in views list
-     */
-    updateViewsListLanguage({
-      id:o.id,
-      lang:o.language
-    });
-
-    /*
-     * set default to english for the map layers if not in language set
-     */
-    if (mapLang.indexOf(o.language) == -1) {
-      o.language = defaultLang;
-    }
-
-
-    /**
-     * Set language in layers
-     */
-
-    for(var i = 0; i < layers.length ; i++){
-      var layer = layers[i];
-      var layerExists = mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
-        prefix: layer
-      }).length > 0;
-
-      if( layerExists ) {
-        m.setLayoutProperty(
-          layer, "text-field", "{name_" + o.language + "}"
-        );
-      }
-
-    }
-
-  }
-}
-
 
 
 /**
@@ -3710,7 +3687,7 @@ export function setUiColorScheme(o){
 
     var inputs = document.getElementById("inputThemeColors");
 
-    inputs.classList.add("mx-views-content");
+    //inputs.classList.add("mx-views-content");
 
     if(inputs && inputs.children.length>0){
       mx.helpers.forEachEl({
@@ -3737,6 +3714,7 @@ export function setUiColorScheme(o){
         var container_inputs = document.createElement("div");
         var lab = document.createElement("label");
         container_inputs.id = cid + "_inputs";
+        container_inputs.className="mx-settings-colors-input";
         var color = mx.helpers.color2obj(c[cid]);
 
         for(var ityp=0, itypL=inputType.length;ityp<itypL;ityp++ ){
@@ -3889,223 +3867,6 @@ export function setUiColorScheme(o){
 
 
 
-/**
- * Initial mgl and mapboxgl
- * @param {string} o options
- * @param {string} o.idMap id
- * @param {string} o.token Mapbox token
- * @param {array} [o.center=[0,0]] Array of lat,lng for center 
- * @param {number} [o.zoom=0] Zoom level
- * @param {number} [o.minZoom=4] Min zoom level
- * @param {number} [o.maxZoom=10] Max zoom level
- * @param {string} o.language Initial language code 
- * @param {string} o.languages Languages code list 
- * @param {string} o.path relative path to resource (style, theme, sprite , ...)
- * @param {Object} o.vtUrl Base url for fetching vector tiles. eg. http://localhost:3030/tile/{z}/{x}/{y}.mvt 
-
-*/
-export function initMap(o){
-
-  var elMap = document.getElementById(o.id);
-  var hasShiny = !! window.Shiny ;
-
-  if(! elMap ){
-    alert("Map element with id "+ o.id  +" not found");
-    return ;
-  }
-
-  Promise.all([
-    System.import("mapbox-gl/dist/mapbox-gl"),
-    System.import("localforage"),
-    System.import("../data/style_mapx.json"),
-    System.import("../html/view_list.dot"),
-    System.import("../html/view_list_legend.dot"),
-    System.import("../html/view_list_options.dot")
-  ]).then(function(m){
-
-    var  mapboxgl = m[0];
-    var  localforage = m[1];
-    mx.mapboxgl = mapboxgl;
-    mx.localforage = localforage;
-    mx.data.style = m[2];
-
-    mx.templates.viewList = m[3];
-    mx.templates.viewListLegend = m[4];
-    mx.templates.viewListOptions = m[5];
-
-    mx.data.geojson = localforage.createInstance({
-      name:  "geojson"
-    });
-    mx.data.images = localforage.createInstance({
-      name : "images"
-    });
-
-    mx.data.stories = localforage.createInstance({
-      name : "stories"
-    });
-    mx.data.storyCache = {};
-
-
-    /**
-     * Confirm user quit
-     */
-
-    if(false){
-      window.onbeforeunload = function(e) {
-        var dialogText = 'Are you sure you want to quit?';
-        e.returnValue = dialogText;
-        return dialogText;
-      };
-    }
-
-    /**
-     * Set mapbox gl token
-     */
-    if (!mapboxgl.accessToken && o.token) {
-      mapboxgl.accessToken = o.token;
-    }
-
-    /**
-     * TEst if mapbox gl is supported
-     */
-    if ( !mapboxgl.supported() ) {
-      alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
-      return;
-    }
-
-
-
-    /**
-     * Set default
-     */
-    o.center = o.center || [0,0];
-    o.lat = o.lat || 90;
-    o.lng = o.lng || 0;
-    o.zoom = o.zoom  || 4;
-    o.maxZoom = o.maxZoom || 20;
-    o.minZoom = o.minZoom || 0;
-    o.location = o.location || window.location.origin + window.location.pathname;
-    mx.settings.languages = o.languages = o.languages || ["en","fr"];
-    mx.settings.language = o.language = o.language || o.languages[0];
-    mx.settings.vtPort = o.vtPort = o.vtPort || "";
-    mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
-    // set path using current location. 
-
-    if(o.paths.sprite){
-      o.paths.sprite = o.location + o.paths.sprite;
-    }
-
-
-    /**
-    * Iframe builder. NOTE: not the right place to write it, but...
-    */
-    
-
-
-
-    /**
-     * Init mgl data store
-     */  
-    if (!mx.maps) {
-      mx.maps = {};
-    }
-    /**
-     * Mgl data : keep reference on options, listener, views, etc...
-     */
-    mx.maps[o.id] = {
-      options : o,
-      map: {},
-      listener: {},
-      views : [],
-      style : {}
-      //themes : {}
-    };
-
-    var style = mx.maps[o.id].style = mx.data.style;
-    style.sprite = o.paths.sprite;
-    mx.maps[o.id].style = style;
-
-    /* Create map object */
-    var map = new mapboxgl.Map({
-      container: o.id, // container id
-      style: style,
-      center: [o.lng,o.lat],
-      zoom: o.zoom,
-      maxZoom: o.maxZoom,
-      minZoom: o.minZoom,
-      preserveDrawingBuffer:true
-    });
-
-    /* save map in mgl data */
-    mx.maps[o.id].map =  map;
-
-    /**
-     * Send loading confirmation to shiny
-     */
-      map.on('load', function() {
-        if(hasShiny)
-          Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
-        if(o.colorScheme){
-          mx.helpers.setUiColorScheme({colors:o.colorScheme});
-        }
-      });
-
-      /**
-       * Handle drop geojson event
-       */
-    if(mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver){
-      elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
-      elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
-    }
-
-    /**
-     * Add controls to the map
-     */
-
-      map.addControl(new mx.helpers.mapControlMain(),'top-left');
-      map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
-      map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
-      map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
-
-      /**
-       * Trigger country change on double click
-       * NOTE: experimental. layers and input id should be moved as options.
-       */
-    map.on('dblclick',function(e){
-      var cntry, features ;
-      if(o.countries){
-        features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
-        cntry = mx.helpers.path(features[0],"properties.iso3code");
-        if(o.countries.indexOf(cntry) > -1 && hasShiny ) {
-          Shiny.onInputChange( "selectCountry", cntry);
-        }
-      }
-    });
-
-    map.on('mousemove', function(e) {
-
-      var layers = mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
-        prefix: "MX-"
-      });
-
-      var features = map.queryRenderedFeatures(e.point,{layers:layers});
-      map.getCanvas().style.cursor = features.length ? 'pointer' : '';
-    });
-
-    map.on("render" , mx.helpers.handleEvent);
-    map.on("click", mx.helpers.handleEvent);
-    map.on("rotate",function(e){
-      var r = map.getBearing();
-      var northArrow = document.getElementById("btnSetNorth_img");
-      northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
-    });
-
-
-  });
-
-}
-
 
 
 
@@ -4165,6 +3926,7 @@ export function featuresToHtml(o){
   var langs = mx.helpers.objectToArray(mx.settings.languages) || ["en"];
   var lang = mx.settings.language || langs[0];
   var views = mx.helpers.getViews(o);
+
   var layers = mx.helpers.getFeaturesValuesByLayers({
     id : o.id,
     point : o.point
@@ -4182,7 +3944,7 @@ export function featuresToHtml(o){
   elContainer.classList.add("mx-popup-container");
 
   function getTitle(id){
-    return  mx.helpers.getLanguageFromObjectPath({
+    return  mx.helpers.getLabelFromObjectPath({
       obj :views[id],
       path : "data.title",
       lang : lang,

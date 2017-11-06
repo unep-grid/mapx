@@ -29,7 +29,8 @@ observeEvent(input$btn_control,{
         country <- reactData$country
         language <- reactData$language
         idUser  <- reactUser$data$id
-        canRead <-  reactUser$role$read
+        roles <- getUserRole()
+        canRead <-  roles$read
 
         #countries <- unique(config[[c("countries","table")]]$iso3)
         countries <- .get(config,c("dictionaries","countries","id"))

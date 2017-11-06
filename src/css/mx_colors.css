@@ -49,29 +49,15 @@
 
 
 /**
-* Filter toggle view class label 
-*/
-.mx .check-toggle .check-toggle-label,
-.mx .check-toggle-badge {
-  color:var(--mx_ui_text_faded);
-}
-
-
-/**
 * View list items content
 */
-
 .mx-views-content {
   border-bottom: 1px solid var(--mx_ui_border);
   border-top: 1px solid var(--mx_ui_border);
 }
 
 .mx .mx-view-item-desc {
-  color: var(--mx_ui_text_faded);
-}
-
-.mx .mx-view-item-desc:hover {
-  color: var(--mx_ui_text);
+  color: var(--mx_ui_text_text);
 }
 
 
