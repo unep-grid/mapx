@@ -27,6 +27,7 @@ module.exports = merge(common, {
         },
       }
     })
+
 /*    new ClosureCompilerPlugin({*/
       //compiler: {
         ////jar: 'path/to/your/custom/compiler.jar', //optional
@@ -37,7 +38,7 @@ module.exports = merge(common, {
       //concurrency: 3,
     /*})*/
   ]
-
+  
 });
 
 
