@@ -1,30 +1,5 @@
 
 
-buttonAddView <- tagList(
-  tags$h4(`data-lang_key`="title_tools_views"),
-  actionButton(
-    label = "Add view",
-    inputId = "btnAddView",
-    class = "btn btn-sm btn-default hint",
-    `data-lang_key` = "btn_add_view"
-    ))
-
-
-buttonSourceEdit <- tagList(
-  tags$h4(`data-lang_key`="title_tools_sources"),
-  actionButton(
-    label = "Edit source",
-    inputId = "btnEditSources",
-    class = "btn btn-sm btn-default hint",
-    `data-lang_key` = "btn_edit_source"
-    ),
-  actionButton(
-    label = "Upload source",
-    inputId = "btnUploadSources",
-    class = "btn btn-sm btn-default hint",
-    `data-lang_key` = "btn_add_source"
-    )
-  )
 
 #
 # Set view and source ui 
@@ -32,59 +7,87 @@ buttonSourceEdit <- tagList(
 observe({
 
   userRole <- getUserRole()
-
   role <- userRole$name
 
-  if( role == "public" ){
-    uiSourceEdit = div()
-    uiViewAdd =  div()
+  isolate({
+    language <- reactData$language
 
-  }else{
+    if(  "public" %in% role ){
+      uiSourceEdit = div()
+      uiViewAdd =  div()
 
-    uiSourceEdit <- buttonSourceEdit
-    uiViewAdd <- buttonAddView
+    }else{
 
-  }
+      uiViewAdd <- tagList(
+        tags$h4(`data-lang_key`="title_tools_views",d("title_tools_views",language)),
+        actionButton(
+          label = "Add view",
+          inputId = "btnAddView",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_add_view"
+          ))
 
-  output$uiBtnViewAdd <- renderUI(uiViewAdd)
-  output$uiBtnSourceEdit <- renderUI(uiSourceEdit)
 
+      uiSourceEdit <- tagList(
+        tags$h4(`data-lang_key`="title_tools_sources",d("title_tools_sources",language)),
+        actionButton(
+          label = "Edit source",
+          inputId = "btnEditSources",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_edit_source"
+          ),
+        actionButton(
+          label = "Upload source",
+          inputId = "btnUploadSources",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_add_source"
+          )
+        )
+    }
+
+    output$uiBtnViewAdd <- renderUI(uiViewAdd)
+    output$uiBtnSourceEdit <- renderUI(uiSourceEdit)
+
+    })
 })
 
 #
 # Set view and source ui 
 #
-observeEvent(reactUser$role,{
+observe({
 
-  access <- .get(reactUser,c("role","access"))
-  language <- reactData$language
-  dbInfo <- tags$div()
+  userRole <- getUserRole()
+  access <- .get(userRole,c("access"))
+
+  isolate({
+    language <- reactData$language
+    dbInfo <- tags$div()
 
 
-  if( "db" %in% access  ){
+    if( "db" %in% access  ){
 
-    dbInfo <- tagList(
-      tags$h4(d("title_tools_db",language)),
-      actionButton(
-        label = "Show db info",
-        inputId = "btnShowDbInfo",
-        class = "btn btn-sm btn-default hint",
-        `data-lang_key` = "btn_show_db_info"
+      dbInfo <- tagList(
+        tags$h4(d("title_tools_db",language)),
+        actionButton(
+          label = "Show db info",
+          inputId = "btnShowDbInfo",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_show_db_info"
+          )
         )
-      )
 
-  }else{
-    dbInfo = div()
-  }
+    }
 
-  output$uiBtnShowDbInfo <- renderUI(dbInfo)
+    output$uiBtnShowDbInfo <- renderUI(dbInfo)
 
+  })
 })
 
 
 observeEvent(input$btnShowDbInfo,{
 
-  access <- .get(reactUser,c("role","access"))
+  userRole <- getUserRole()
+  access <- .get(userRole,c("access"))
 
   if( "db" %in% access ){
 

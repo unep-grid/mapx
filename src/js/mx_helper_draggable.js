@@ -167,19 +167,22 @@ export function draggable(o) {
   /**
    * mouse down + move : change element coordinate
    */
-  o.listener.mousemove = function(event) {
+  o.listener.mousemove = mx.helpers.debounce(function(event) {
+    if( o.block === false ){
     event.preventDefault();
     event.stopImmediatePropagation();
     o.setPosElement(o.el, event.clientX, event.clientY);
 
     if (o.onDragMove instanceof Function) o.onDragMove(o, event);
-
-  };
+    }
+  },o.debouceTime);
 
   /*
    * mouse up : remove "up" and "move" listener
    */
   o.listener.mouseup = function(event) {
+
+    o.block = true;
 
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -212,6 +215,7 @@ export function draggable(o) {
         margin : o.el.style.margin
       };
 
+      o.block = false;
       o.sumScroll =  sumScrollY(o.el) ;
 
       o.rect = o.el.getBoundingClientRect();

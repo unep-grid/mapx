@@ -567,7 +567,7 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
       SELECT 
       ST_AsGeoJSON(
         ST_Extent(
-          ST_Buffer( %1$s::geography , 1 )::geometry
+          ST_Buffer( %1$s::geography , 2 )::geometry
         )) AS ext 
       FROM %2$s"
       , geomColumn
@@ -1892,6 +1892,7 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, geomType=NULL,language
     geomColumn = "geom",
     geomType = geomType
     )
+
 
   summary$timeVariables <- mxDbGetLayerTimeVariables(layer)
   summary$timeExtent <- mxDbGetLayerTimeExtent(layer)

@@ -535,6 +535,34 @@ export function sendAjax(o) {
   xhr.send();
 }
 
+/**
+ * Get STRING
+ * @param {Object} o options
+ * @param {String} o.url url pointing to the json
+ * @param {Function} o.onSuccess Function to call on success
+ * @param {Function} o.onError Function to call on error
+ * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
+ */
+export function getCSV(o) {
+   sendAjax({
+    type: 'get',
+    url: o.url,
+    beforeSend: function(xhr) {
+      xhr.setRequestHeader('Accept', 'text/csv; charset=utf-8');
+    },
+    onSuccess: function(res) {
+      if(res){
+        System.import("csvjson").then(function(csvjson){
+         var data  = csvjson.toObject(res);
+          o.onSuccess(data);
+        });
+      }
+    },
+    onError: o.onError,
+    onComplete: o.onComplete,
+    useCache: o.useCache
+  });
+}
 
 /**
  * Get JSON

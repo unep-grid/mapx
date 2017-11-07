@@ -3,6 +3,9 @@
 observeEvent(input$btn_control,{
 
   mxCatch("controls.R",{
+
+    userRole <- getUserRole()
+
     switch(input$btn_control$value,
       "showLanguage"={
 
@@ -28,9 +31,8 @@ observeEvent(input$btn_control,{
 
         country <- reactData$country
         language <- reactData$language
-        idUser  <- reactUser$data$id
-        roles <- getUserRole()
-        canRead <-  roles$read
+        idUser  <- .get(reactUser,c("data","id"))
+        canRead <-  .get(userRole,c("read"))
 
         #countries <- unique(config[[c("countries","table")]]$iso3)
         countries <- .get(config,c("dictionaries","countries","id"))
@@ -166,11 +168,10 @@ observeEvent(input$btn_control,{
           #sessionDuration <- mxGetSessionDurationHMS(reactUser$data$id)
 
           loginInput <- listToHtmlSimple(list(
-               "login_email"=reactUser$data$email,
-               "login_role"=reactUser$role$name,
+               "login_email"=.get(reactUser,c("data","email")),
+               "login_role"=.get(userRole,c("name")),
                "login_country"=d(country,language,web=F)
               ),lang=language)
-
 
           btn <-list(
             actionButton(

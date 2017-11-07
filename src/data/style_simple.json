@@ -2,8 +2,6 @@
   "version": 8,
   "name": "simple",
   "zoom": 8.0306256113636,
-  "bearing": 0,
-  "pitch": 0,
   "glyphs": "mapbox://fonts/unepgrid/{fontstack}/{range}.pbf",
   "sprite": "/sprites/sprite",
   "center": [

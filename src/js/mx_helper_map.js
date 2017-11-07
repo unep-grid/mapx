@@ -487,7 +487,7 @@ export function viewControler(o){
         var isChecked =  els[i].checked === true;
         var isLoaded = loaded.indexOf(id) > -1;
         var toAdd = isChecked && !isLoaded ;
-        var toRemove = !isChecked && isLoaded ;
+        var toRemove = !isChecked ;
 
         if( toRemove ){
 
@@ -3648,10 +3648,11 @@ export function setUiColorScheme(o){
   var init = false;
   var map = mx.maps[o.id||"map_main"].map;
   var c = o.colors;
-  init = c !== undefined;
+  init = c !== undefined && mx.settings.colors === undefined;
   c = c||{};
 
   mx.settings.colors = c;
+  
   /**
    * Extract main rules. NOTE: this seems fragile, find another technique
    */
@@ -3750,6 +3751,7 @@ export function setUiColorScheme(o){
     mx_colors.style.setProperty("--"+col,c[col]);
   }
 
+  console.log(c.mx_map_background);
 
   /**
    * Map colors NOTE: PUT THIS OBJECT AS THEME
@@ -4201,6 +4203,30 @@ export function randomFillAll(mapId) {
       }
     }
   }, 100);
+}
+
+
+
+export function randomUicolor(){
+
+  mx.helpers.setUiColorScheme({
+    colors: {
+      mx_ui_text :mx.helpers.randomHsl(1),
+      mx_ui_text_faded :mx.helpers.randomHsl(1),
+      mx_ui_hidden : mx.helpers.randomHsl(1) ,
+      mx_ui_border : mx.helpers.randomHsl(1) ,
+      mx_ui_background : mx.helpers.randomHsl(1) ,
+      mx_ui_shadow : mx.helpers.randomHsl(1) ,
+      mx_map_text : mx.helpers.randomHsl(1) ,
+      mx_map_background : mx.helpers.randomHsl(1) ,
+      mx_map_mask : mx.helpers.randomHsl(1) ,
+      mx_map_water : mx.helpers.randomHsl(1) ,
+      mx_map_road : mx.helpers.randomHsl(1) ,
+      mx_map_admin : mx.helpers.randomHsl(1) ,
+      mx_map_admin_disputed : mx.helpers.randomHsl(1) 
+    }
+  });
+
 }
 
 
