@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>map-x</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Cache-control" content="private"/>
+    <meta name="description" content="map-x"/>
+    <meta name="author" content="Unep sience division; Fred Moser"/>
+    <meta name="robots" content="noindex"/>
+  <script type="text/javascript" src="runtime.bc94705657bbafad1f46.bundle.js"></script><script type="text/javascript" src="app.a496a06ca8e5fc56dbf0.bundle.js"></script></head>
+  <body class="full-page mx">
+    <noscript>
+      <p>Please enable JavaScript to use map-x</p>
+      <style type="text/css">.mx .left-column {display:none}</style>
+    </noscript>
+    <div class="mx-panels-container">
+      <div class="mx-panel-left mx-panel-views transparent shadow">
+        <div id="viewListContainer" class="mx-views-container">
+          <div class="mx-views-header">
+            <div id="viewsTools">
+              <input id="viewsTextFilter" class="search form-control" type="text" data-lang_key="view_search_input" data-lang_type="placeholder"/>
+            </div>
+            <div class="filters" id="viewsTagsFilter">
+              <div class="check-toggle-group" id="viewsTagsFilterToggles"></div>
+            </div>
+          </div>
+          <div class="mx-views-content">
+            <ul class="mx-views-list"></ul>
+          </div>
+          <div class="mx-views-footer"></div>
+        </div>
+      </div>
+      <div class="mx-panel-left mx-panel-tools transparent shadow mx-hide">
+        <h3 data-lang_key="title_tools"></h3>
+        <h4 data-lang_key="title_tools_map"></h4>
+        <div class="input-group">
+          <div class="input-group-btn">
+            <button id="btn_get_area_visible" class="btn btn-default" data-lang_key="btn_get_area_visible" onClick="mx.helpers.sendRenderedLayersAreaToUi({id:&#39;map_main&#39;,prefix:&#39;MX-&#39;,idEl:&#39;txtAreaSum&#39;})"></button>
+          </div>
+          <div class="form-control" id="txtAreaSum"></div>
+        </div>
+        <h4 data-lang_key="title_tools_share"></h4>
+        <button id="btnIframeBuilder" data-lang_key="btn_iframe_builder" class="btn btn-default btn-sm action-button hint shiny-bound-input"></button>
+        <div id="uiBtnViewAdd" class="shiny-html-output"></div>
+        <div id="uiBtnSourceUpload" class="shiny-html-output"></div>
+        <div id="uiBtnSourceEdit" class="shiny-html-output"></div>
+        <div id="uiBtnShowDbInfo" class="shiny-html-output"></div>
+        <h4 data-lang_key="title_settings_colors"></h4>
+        <div class="fold-container form-group shiny-input-container">
+          <input type="checkbox" id="tst8va3d638437j" class="fold-switch"/>
+          <label class="fold-label" for="tst8va3d638437j">Edit</label>
+          <div class="fold-content">
+            <div class="mx-settings-colors">
+              <div id="inputThemeColors"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mx-panel-left mx-panel-settings transparent shadow mx-hide">
+        <h3 data-lang_key="title_settings"></h3>
+      </div>
+      <div class="mx-panel-right mx-events-off">
+        <div class="mx-panel-dashboards shadow">
+          <div class="mx-panel-dashboards-scroll mx-events-on" id="mxDashboards"></div>
+        </div>
+      </div>
+    </div>
+    <div id="map_main"></div>
+  </body>
+</html>
