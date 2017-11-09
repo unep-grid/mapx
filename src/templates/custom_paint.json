@@ -1,0 +1,10 @@
+{
+  "enable":false,
+  "paint":{},
+  "layout":{},
+  "filter":[],
+  "minzoom":0,
+  "maxzoom":22,
+  "type":"circle"
+}
+

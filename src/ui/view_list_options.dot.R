@@ -64,6 +64,12 @@ divLegend <- tags$div(
       class="mx-view-item-legend-raster",
       id="check_view_legend_{{=view.id}}"
       ),
+    "{{?}}",
+    "{{?view.type=='cc'}}",
+    tags$div(
+      class="mx-view-item-legend-custom",
+      id="check_view_legend_{{=view.id}}"
+      ),
     "{{?}}"
     ),
   "{{?}}"
@@ -419,6 +425,20 @@ liControlsEdit <- tagList(
     `data-view_action_target`="{{=view.id}}",
     tags$div(
       class="fa fa-pie-chart"
+      )
+    ),
+  "{{?}}",
+  "{{? view.type=='cc' }}",
+  # Button to edit view
+  tags$li(
+    class="mx-pointer hint--right",
+    `data-lang_key`="btn_opt_edit_custom_code",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_edit_custom_code",
+    `data-view_action_handler`="shiny",
+    `data-view_action_target`="{{=view.id}}",
+    tags$div(
+      class="fa fa-terminal"
       )
     ),
   "{{?}}",

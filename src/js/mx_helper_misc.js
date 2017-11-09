@@ -1039,7 +1039,16 @@ export function doPar(o) {
   return;
 }
 
-
+/**
+* Display a panel modal
+* @param {Object} o Options
+* @param {String} o.id Id of the box. Default : random
+* @param {Boolean} o.replace If a modal is displayed twice with the same id, delete the previous one. Default : true
+* @param {String} o.styleString Style string to apply to modal window. Default : empty
+* @param {String|Element} o.content Body content of the modal. Default  : undefined
+* @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
+*
+*/
 
 export function modal(o){
 
@@ -1065,8 +1074,8 @@ export function modal(o){
       return;
     }
 
-    if(o.minHeight){
-      //modal.style.minHeight = o.minHeight + "";
+    if(o.styleString){
+      modal.style = o.styleString;
     }
 
     var top = document.createElement("div");
@@ -1093,7 +1102,8 @@ export function modal(o){
 
     top.classList.add("mx-drag-handle");
     top.classList.add("mx-modal-top");
-    top.innerHTML = o.title;
+
+
     if(top.children.length>0){
       forEachEl({
         els:top.children,
@@ -1129,7 +1139,17 @@ export function modal(o){
       });
     }
 
-    content.innerHTML = o.content;
+    if( o.title && o.title instanceof Node ){
+       top.appendChild(o.title);
+    }else{
+      top.innerHTML =  o.title || "";
+    }
+
+    if(o.content && o.content instanceof Node){
+       content.appendChild(o.content);
+    }else{
+       content.innerHTML = o.content;
+    }
     body.appendChild(content);
     footer.appendChild(dialog);
     footer.appendChild(buttons);

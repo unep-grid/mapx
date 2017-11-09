@@ -29,6 +29,9 @@
     {{?view.type=='rt'}}
     <div class="mx-view-item-legend-raster" id="check_view_legend_{{=view.id}}"></div>
     {{?}}
+    {{?view.type=='cc'}}
+    <div class="mx-view-item-legend-custom" id="check_view_legend_{{=view.id}}"></div>
+    {{?}}
   </div>
   {{?}}
 </div>
@@ -95,6 +98,11 @@
       {{? view.type=='vt' }}
       <li class="mx-pointer hint--left" data-lang_key="btn_opt_edit_dashboard" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_dashboard" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-pie-chart"></div>
+      </li>
+      {{?}}
+      {{? view.type=='cc' }}
+      <li class="mx-pointer hint--right" data-lang_key="btn_opt_edit_custom_code" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_custom_code" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-terminal"></div>
       </li>
       {{?}}
       {{?h.all([ view.type=='vt', h.path(view,'data.attribute.name') ]) }}

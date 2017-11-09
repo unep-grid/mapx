@@ -9,12 +9,12 @@ observe({
     # Extract action type
     #
     viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
-    userRole <- getUserRole()
 
     if(!noDataCheck(viewAction)){
-
+ 
       isolate({
 
+        userRole <- getUserRole()
         language <- reactData$language
 
         if(viewAction[["action"]] == "btn_upload_geojson" ){
@@ -28,7 +28,6 @@ observe({
           #
           # Get view data and check if user can edit
           #
-
           views <- reactViews()
           viewId <- viewAction[["target"]]
           viewData <- list()
@@ -50,7 +49,6 @@ observe({
           # Keep a version of the view edited
           #
           reactData$viewDataEdited <- viewData
-
          
           #
           # Check if the request gave edit flag to the user
@@ -81,6 +79,7 @@ observe({
           #
           collectionsTags <- mxDbGetDistinctCollectionsTags("mx_views")
           collectionsCurrent <- .get(viewData,c("data","collections"))
+
 
           #
           # Initial button list for the modal
@@ -113,6 +112,8 @@ observe({
 
               viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
               layerMeta <- mxDbGetLayerMeta(viewLayerName)
+
+              ## add key to the list : the actual layer name
               layerMeta$db <- list(id = viewLayerName)
               
               uiOut<-tagList(
@@ -126,8 +127,7 @@ observe({
                   id="modalViewEdit",
                   title=tags$b(viewTitle),
                   content=uiOut,
-                  textCloseButton=d("btn_close",language),
-                  minHeight="80%"
+                  textCloseButton=d("btn_close",language)
                 )
 
             },
@@ -158,7 +158,7 @@ observe({
                 )
 
             },
-            "btn_opt_edit_config"={
+            "btn_opt_edit_config" = {
 
               if(!viewIsEditable) return()
 
@@ -250,6 +250,7 @@ observe({
               # vector tile specific
               #
               if(viewType=="vt"){
+
                 uiType <- tagList(
                   #
                   # main layer
@@ -434,6 +435,30 @@ observe({
                 )
 
             },
+            "btn_opt_edit_custom_code" = {
+ 
+              if(!viewIsEditable) return()
+              if(viewType != "cc") return()
+
+              btnList <- list(
+                actionButton(
+                  inputId="btnViewSaveCustomCode",
+                  label=d("btn_save",language)
+                  )
+                )
+
+              mxModal(
+                id="modalViewEdit",
+                title=sprintf("Edit custom code for %s",viewTitle),
+                addBackground=FALSE,
+                content=tagList(
+                  jedOutput(id="customCodeEdit")
+                  ),
+                buttons=btnList,
+                textCloseButton=d("btn_close",language)
+                )
+
+            },
             "btn_opt_edit_dashboard"={
  
               if(!viewIsEditable) return()
@@ -566,6 +591,8 @@ observeEvent(input$viewAbstractSchema_init,{
     startVal=abstracts
     )
 })
+
+
 #
 # View removal
 #
@@ -583,8 +610,9 @@ observeEvent(input$btnViewDeleteConfirm,{
       ))
 
   mglRemoveView(
-    idView = id 
+    idView = id
     )
+
   mxModal(
     id="modalViewEdit",
     close=TRUE
@@ -777,19 +805,18 @@ observeEvent(input$btnViewSave,{
 #
 # Select layer logic : geomType, and variable name
 #
-observeEvent(input$selectSourceLayerMain,{
+observe({
 
   layerMain <- input$selectSourceLayerMain
   viewData <- reactData$viewDataEdited
+
+  isolate({
 
   if(noDataCheck(layerMain)) return()
   if(noDataCheck(viewData)) return()
   if(viewData$type != "vt") return()
    
-
-  isolate({
   language <- reactData$language
-
   
   geomTypesDf <- mxDbGetLayerGeomTypes(layerMain)
 
@@ -803,6 +830,7 @@ observeEvent(input$selectSourceLayerMain,{
   geomType <- .get(viewData,c("data","geometry","type"))
   variableName <- .get(viewData,c("data","attribute","name"))
   variableNames <- .get(viewData,c("data","attribute","names"))
+
 
   output$uiViewEditVtMain <- renderUI({
     tagList(
@@ -932,28 +960,28 @@ reactSourceVariables <- reactive({
 reactSourceLayer <- reactive({
 
   userRole <- getUserRole()
-  userCanRead <- .get(userRole,c("read"))
-
   userId <- .get(reactUser,c("data","id"))
-
   country <- reactData$country
   language <- reactData$language
   updateSourceLayer <- reactData$updateSourceLayerList
 
- layers <-  mxDbGetLayerTable(
+  ## non reactif
+  userCanRead <- .get(userRole,c("read"))
+
+   layers <-  mxDbGetLayerTable(
     project = country,
     userId = userId,
     target = userCanRead,
     language = language
     )
 
- if(noDataCheck(layers)){
-   layers <- list("noLayer")
- }else{ 
-   layers <- mxGetLayerNamedList( layers, language )
- }
+  if(noDataCheck(layers)){
+    layers <- list("noLayer")
+  }else{ 
+    layers <- mxGetLayerNamedList( layers, language )
+  }
 
- return(layers)
+  return(layers)
 
 })
 
@@ -974,21 +1002,19 @@ observe({
 
         geomTypesCheck <- sapply(layers,function(x){
           geomType <- mxDbGetLayerGeomTypes(x)$geom_type
-          geomOk <- isTRUE(geomType != "point")
+          geomOk <- isTRUE( geomType != "point" )
           return(geomOk)
     })
 
-        out <- layers[geomTypesCheck]
+        out <- layers[ geomTypesCheck ]
 
       }
-
     }
 
-    updateSelectInput(
+     updateSelectInput(
       session,
       "selectSourceLayerMask",
-      choices=out
-
+      choices = out
       )
 
   })

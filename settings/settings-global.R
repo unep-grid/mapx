@@ -219,6 +219,9 @@ config[[c("templates","text")]] <-  list()
 config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
 config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
 config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
+config[[c("templates","text","custom_view")]] <- paste(readLines("src/templates/custom_view.js"),collapse="\n")
+config[[c("templates","text","custom_paint")]] <- paste(readLines("src/templates/custom_paint.json"),collapse="\n")
+config[[c("templates","text","custom_paint_example")]] <- paste(readLines("src/templates/custom_paint_example.json"),collapse="\n")
 
 #
 # default languages
@@ -292,11 +295,11 @@ config[[c("views","classes")]] <- list(
   )
 
 config[[c("views","type")]] <- list(
-  "vt",
-  "rt",
-  "sm"
+  "vt", # vector tiles
+  "rt", # raster tiles
+  "sm", # story map
+  "cc" # custom code
   )
-
 
 #
 # data format

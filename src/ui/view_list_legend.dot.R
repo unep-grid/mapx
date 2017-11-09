@@ -26,9 +26,9 @@ tagList(
           #
           # For each rule, check if the language is set. Get default if needed.
           #
+          "{{?item}}",
           "{{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}",
           "{{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}",
-          "{{?item}}",
           tags$li(
             tags$div(
               class="mx-legend-item-container",

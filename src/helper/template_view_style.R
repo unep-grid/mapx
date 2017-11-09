@@ -6,6 +6,8 @@ mxSchemaViewStyle <- function(
   conf <- mxGetDefaultConfig()
 
   view <- viewData
+  jsonPaint <- .get(conf,c("templates","text","custom_paint"))
+  jsonPaintExample <- .get(conf,c("templates","text","custom_paint_example"))
 
   if(noDataCheck(view)) return()
 
@@ -15,17 +17,17 @@ mxSchemaViewStyle <- function(
   l <- language
 
   # all languages
-  ll <- conf[["languages"]][["list"]]
+  ll <- .get(conf,c("languages","list"))
 
   #
-  # def
+  # data
   #
-  def <- view[[c("data")]]
+  data <- .get(view,c("data"))
 
   #
   # import style
   #
-  style <- def[["style"]]
+  style <- .get(data,c("style"))
 
   #
   # shortcut to translate function
@@ -38,16 +40,11 @@ mxSchemaViewStyle <- function(
   #
   # retrieve default
   #
-  #dataDrivenTitles <- names( tt(style$dataDrivenChoice, l, namedVector=T) )
-  #dataDrivenChoice <- style$dataDrivenChoice 
-  #dataDrivenEnable <- style$dataDrivenEnable 
-  #dataDrivenMethod <- style$dataDrivenMethod
 
-  #if(noDataCheck(dataDrivenMethod)) dataDrivenMethod = dataDrivenChoice[[1]]
-
-  variableName <- def[[c("attribute","name")]]
-  layerName <- def[[c("source","layerInfo","name")]]
-
+  variableName <- .get(data,c("attribute","name"))
+  variableNames <- .get(data,c("attribute","names"))
+  layerName <- .get(data,c("source","layerInfo","name"))
+  
   #
   # Get distinct available value in
   # This is already done during view creation :  view.data.attribute.table
@@ -72,7 +69,7 @@ mxSchemaViewStyle <- function(
   # sprite settings
   #
   jsonSpritePath <- file.path(
-    conf[["resources"]][["sprites"]],
+    .get(conf,c("resources","sprites")),
     "sprite.json"
     )
 
@@ -81,7 +78,6 @@ mxSchemaViewStyle <- function(
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
-
 
   #
   # style property
@@ -112,8 +108,6 @@ mxSchemaViewStyle <- function(
         title = tt("schema_value"),
         type = "number",
         minLength= 1,
-        #minimum = min(values),
-        #maximum = max(values),
         default = min(values)
         )
       )
@@ -163,14 +157,11 @@ mxSchemaViewStyle <- function(
       title = tt("schema_sprite"),
       type = "string",
       enum = c("none",sprites)
-      #options = list(
-      #hidden = ! spriteEnable
-      #)
       )
     )
 
   #
-  # Append everything in style
+  #  set rules list
   # 
   rules <- list(
     rules = list(
@@ -192,32 +183,58 @@ mxSchemaViewStyle <- function(
       )
     )
 
-#  #
-  ## Additional property
-  ##
-  #prop <- list(
-    #dataDrivenMethod = list(
-      #title = tt("schema_method",l),
-      #type = "string",
-      #enum = as.list(dataDrivenChoice),
-      #default = dataDrivenMethod,
-      #minLength = ifelse(dataDrivenEnable,1,0),
-      #options = list(
-        #enum_titles = as.list(dataDrivenTitles),
-        #hidden = ! dataDrivenEnable,
-        #required =  dataDrivenEnable
-        #)
-      #)
-    #)
+  #
+  # set paint
+  #
+
+  htmlHelp = as.character(
+    tags$div(
+      tags$p(
+        sprintf("
+          This editor can set and overwrite rules values.
+          Rules are still used for legend.
+          Current secondary variables are : zoom;  %1$s
+          ",
+          paste(variableNames,collapse="; ")
+          )
+        ),
+      mxFold(content=tags$code(jsonPaintExample),labelText="Example")
+      )
+    )
+
+  custom = list(
+    custom = list (
+      type = "object",
+      title = "Custom style",
+      options = list(
+        collapsed = TRUE
+        ),
+      properties = c(
+        json = list(
+          list(
+            title = "Custom style",
+            options = list(
+              language = "javascript",
+              editor = "ace",
+              htmlHelp = htmlHelp
+              ),
+            type = "string",
+            format = "textarea",
+            default = jsonPaint
+            )
+          )
+        )
+      )
+    )
+
 
   #
   # main properties
   #
   properties <- c(
-    #prop,
-    rules
+    rules,
+    custom
     )
-
   #
   # schema skeleton
   #
@@ -226,7 +243,6 @@ mxSchemaViewStyle <- function(
     type = "object",
     properties = properties
     )
-
 
   return(schema)
 }

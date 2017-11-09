@@ -30,7 +30,7 @@ module.exports = {
           'img-loader'
         ]
       },
-      { test: /worker\.js$/, loader: 'worker-loader'},
+      { test: /worker\.js$/, use: { loader: 'worker-loader' }},
       { test: /\.js$/, loader:'babel-loader', options:{presets:['es2015']},exclude: /node_modules/},
       { test: /\.dot$/, use: 'dot-loader' },
       { test: /.css$/, 
@@ -59,7 +59,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name].[chunkhash].bundle.js',
+    filename: '[name].bundle.js',
     path: path.resolve(__dirname, '../www')
   }
 };

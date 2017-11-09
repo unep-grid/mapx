@@ -621,7 +621,7 @@ mxDbGetLayerTable <- function(project, projects, userId, target="public",languag
 
   target <- paste(paste0("'",target,"'"),collapse=",")
 
-  type <- "vector"
+  type <- "vector" 
 
   dat <- mxDbGetQuery(sprintf(
       "SELECT id, 
@@ -629,7 +629,7 @@ mxDbGetLayerTable <- function(project, projects, userId, target="public",languag
       data#>>'{\"meta\",\"text\",\"title\",\"en\"}' title_en,
       date_modified
       FROM mx_sources
-      WHERE country='%2$s' AND
+      WHERE ( country='%2$s' ) AND
       type='%3$s' AND
       ( target ?| array[%4$s] OR editor = '%5$s' )",
       language,

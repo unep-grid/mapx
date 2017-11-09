@@ -100,7 +100,7 @@ observeEvent(input$txtViewTitle,{
 observeEvent(input$btnAddViewConfirm,{
 
   if(!reactData$viewAddHasError){
-     country <- reactData$country
+    country <- reactData$country
     userData <- reactUser$data
     title  <- reactData$viewAddTitle
     idView <- reactData$viewAddId

@@ -194,7 +194,8 @@ color: #FFF;
 }
 
 .mx .jed-container .well {
-  border-left: var(--mx_ui_border);
+  border : none;
+  background-color: rgba(1,1,1,0);
 }
 
 
@@ -387,8 +388,22 @@ color:var(--mx_ui_text);
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-container {
   background-color: #7bf75e;
 }
+.mx-view-item-sm {
+  border-left : 2px solid blue!important;
+}
+.mx-view-item-vt {
+  border-left : 2px solid green!important;
+}
+.mx-view-item-rt {
+  border-left : 2px solid orange!important;
 
-
+}
+.mx-view-item-gj {
+  border-left : 2px solid red!important;
+}
+.mx-view-item-cc {
+  border-left : 2px solid black!important;
+}
 
 
 

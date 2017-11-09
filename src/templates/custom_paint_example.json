@@ -1,0 +1,16 @@
+{
+  "enable":true,
+  "paint": {
+    "circle-radius": {
+      "property": "rating",
+      "stops": [
+        [{"zoom": 0, "value": 0}, 0],
+        [{"zoom": 0, "value": 5}, 5],
+        [{"zoom": 20, "value": 0}, 0],
+        [{"zoom": 20, "value": 5}, 20]
+      ]
+    }
+
+  },
+  "layout": {}
+}

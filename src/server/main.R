@@ -65,6 +65,7 @@ server <- function(input,output,session){
         "view_edit_style.R",
         "view_edit_dashboard.R",
         "view_edit_story_map.R",
+        "view_edit_custom.R",
         #
         # Tools
         #

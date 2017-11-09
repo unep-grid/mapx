@@ -60,19 +60,7 @@
     margin: 1px;
   }
 }
-.mx-view-item-sm {
-  border-left : 2px solid blue!important;
-}
-.mx-view-item-vt {
-  border-left : 2px solid green!important;
-}
-.mx-view-item-rt {
-  border-left : 2px solid orange!important;
 
-}
-.mx-view-item-gj {
-  border-left : 2px solid red!important;
-}
 .mx-view-item-checkbox-label {
   padding: 10px;
   width: 100%;

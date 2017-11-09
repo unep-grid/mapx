@@ -1,3 +1,5 @@
+/* jshint esversion:6, evil: true */
+
 import * as mx from './mx_init.js';
 //var escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
@@ -207,6 +209,7 @@ export function initMapx(o){
       }
     });
 
+    if(false){
     map.on('mousemove', function(e) {
 
       var layers = mx.helpers.getLayerNamesByPrefix({
@@ -217,6 +220,7 @@ export function initMapx(o){
       var features = map.queryRenderedFeatures(e.point,{layers:layers});
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
+    }
 
     map.on("render" , mx.helpers.handleEvent);
     map.on("click", mx.helpers.handleEvent);
@@ -269,18 +273,37 @@ export function reset(o){
   });
 
   /*
-  * Removing dashboard
+  * apply remove method
   */
-
-  views.forEach(function(view){
-    if( view._dashboard ) view._dashboard.destroy();
-  }) ;
+  cleanRemoveModules(views);
 
   /**
   * Remove list
   */
   elViewList.innerHTML="";
 }
+
+
+/**
+* Clean stored modules : dashboard, custom view, etc.
+*/
+function cleanRemoveModules(views){
+  
+  views = views instanceof Array ? views : [views];
+
+  views.forEach(function(view){
+    if( view._onRemoveCustomView instanceof Function ){
+      view._onRemoveCustomView();
+    }
+    if( view._onRemoveDashboard instanceof Function ){ 
+      view._onRemoveDashboard();
+    }
+  }) ;
+
+}
+
+
+
 
 /** 
  * Add source from view object 
@@ -496,9 +519,7 @@ export function viewControler(o){
             prefix: id
           });
 
-         if(view._dashboard){
-           view._dashboard.destroy();
-         }
+          cleanRemoveModules(view);
 
         }
 
@@ -1054,9 +1075,7 @@ export function removeView(o){
     data.removeItem( o.idView );
   }
 
-  if( view._dashboard ){
-     view._dashboard.destroy();
-  }
+  cleanRemoveModules(view);
 
   m.views = views.filter(function(x){
     return x.id != o.idView ; 
@@ -1457,16 +1476,13 @@ export function renderViewsList(o){
       /**
        * Render all view items
        */
-      if( m.tools.viewsListPackery ){
-        m.tools.viewsListPackery.destroy();
-      }
-
+   
       elViewsList.innerHTML = mx.templates.viewList(views);
 
     }else{
 
       /**
-       * Render given view items
+       * Render given view items only
        */
       views.forEach(function(v){
         // remove old views if present
@@ -2673,252 +2689,288 @@ export function existsInList(li, it, val, inverse) {
  * @param {Object} o.map Map object
  */
 export function addViewVt(o){
-  
-  var view =  o.view,
-    map =  o.map,
-    layers = [],
-    def = mx.helpers.path(view,"data"),
-    idSource = view.id + "-SRC",
-    style = mx.helpers.path(view,"data.style"),
-    time = mx.helpers.path(view,"data.period"),
-    rules =  mx.helpers.path(view,"data.style.rules"),
-    geomType = mx.helpers.path(view,"data.geometry.type"),
-    source =  mx.helpers.path(view,"data.source"),
-    num = 0,
-    hasStyle = false,
-    hasTime = false,
-    hasSprite = false,
-    hasStyleDefault = false,
-    defaultColor, defaultOpacity,
-    ruleValues = [];
 
-  if( ! source ) return;
-  /* check style and rules*/
-  if( style && rules && rules.length > 0 ){
+  try{  
+    var view =  o.view,
+      map =  o.map,
+      layers = [],
+      def = mx.helpers.path(view,"data"),
+      idSource = view.id + "-SRC",
+      idView = view.id,
+      style = mx.helpers.path(view,"data.style"),
+      time = mx.helpers.path(view,"data.period"),
+      rules =  mx.helpers.path(view,"data.style.rules"),
+      geomType = mx.helpers.path(view,"data.geometry.type"),
+      source =  mx.helpers.path(view,"data.source"),
+      num = 0,
+      defaultColor, defaultOpacity,
+      ruleValues = [],
+      styleCustom;
 
-    /* the view has at least one style */
-    hasStyle = true;
-    /* 
-     * Loop on style rules
-     */
-    rules.forEach(function(x){
-      /*
-       * save used values
-       */
-      ruleValues.push(x.value);
-      /* 
-       * sprite
-       */
-      if( !hasSprite && x.sprite ) hasSprite = true;
-      /*
-       * default style
-       */
-      if( !hasStyleDefault && x.value && x.value=="all" ){
+    try{
+     styleCustom = JSON.parse(mx.helpers.path(style,"custom.json"));
+    }catch(e){
+      console.log("Can't parse custom view json : " + e);
+    }
+    var hasStyle = false;
+    var hasTime = false;
+    var hasSprite = false;
+    var hasStyleDefault = false;
+    var hasStyleCustom = styleCustom && styleCustom instanceof Object && styleCustom.enable === true ;
 
-        layer = defaultStyle({
-          id : view.id,
-          idSource : idSource,
-          geomType : geomType,
-          hexColor : x.color,
-          opacity : x.opacity,
-          size : x.size,
-          sprite :x.sprite
-        });
-        /* add the default layer */
-        layers.push(layer);
-        /* save style default state */
-        hasStyleDefault = true;
-      }
-    });
+    var hasStyleRules = style && rules && rules.length > 0 ;
 
-  }
+    if( ! source ) return;
 
-  /*
-   * Apply default style is no style is defined
-   */
-  if ( ! hasStyle ) {
-    var layer = defaultStyle({
-      id : view.id,
-      idSource : idSource,
-      geomType : geomType
-    });
-    /* add the default layer */
-    layers.push(layer); 
-  }
-  /*
-   * Apply style if avaialble
-   */
-  if( hasStyle && !hasStyleDefault ){
-
-    /* convert opacity to rgba */
-    rules.forEach(function(x) {
-      x.rgba = mx.helpers.hex2rgba(x.color, x.opacity);
-      x.rgb  = mx.helpers.hex2rgba(x.color);
-    });
-
-    /*    [> always sort by value if data driven <]*/
-    //if (style.dataDrivenEnable && style.valueType=="numeric") {
-    //style.rules = style.rules.sort(function(a, b) {
-    //if (a.value > b.value) return (1);
-    //if (b.value > a.value) return (-1);
-    //return (0);
-    //});
-    /*}*/
 
     /**
-     * evaluate rules
-     */
+    * Make custom layer
+    */
+    if( hasStyleCustom ){
 
-    rules.forEach(function(rule,i){
-      var value = rule.value;
-      var max = mx.helpers.path(view,"data.attribute.max")+1;
-      var min = mx.helpers.path(view,"data.attribute.min")-1;
-      var nextRule = rules[i+1];
-      var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
-      var isNumeric = mx.helpers.path(view,"data.attribute.type") == "number";
-      var idView = view.id;
-      var sepLayer = mx.settings.separators.sublayer; 
-      var getIdLayer = function(){ return idView + sepLayer + num++ ; };
-      var filter = ["all"];
-      var attr = def.attribute.name;
-      var paint = {};
-      var layerSprite = {};
-
-      /**
-       * Set filter
-       */
-
-      filter.push(["has", attr]);
-
-      if(isNumeric){
-        filter.push([">=", attr, value]);
-        filter.push(["<", attr, nextValue]);
-      }else{
-        filter.push(["==", attr, value]);
-      }
-      /** 
-       * layer skeleton
-       */
-      var layer = {
-        'id': getIdLayer(),
+      var layerCustom = {
+        'id': idView,
         'source': idSource,
         'source-layer': idView,
-        'filter': filter,
-        'metadata': {
-          'filter_base':filter
-        }
+        'type':styleCustom.type||{},
+        'filter':styleCustom.filter||['all'],
+        'paint':styleCustom.paint||{},
+        'layout':styleCustom.layout||{},
+        'minzoom':styleCustom.minzoom||0,
+        'maxzoom':styleCustom.maxzoom||22,
       };
 
-      switch(geomType) {
-        case "point":
-          layer.type = 'circle';
-          /**
-           * Handle sprite based circle
-           */
-          if(rule.sprite && rule.sprite != 'none'){
-            layerSprite = mx.helpers.clone(layer);
-            layerSprite.layout = {
-              'icon-image': rule.sprite,
-              'icon-size': rule.size / 10
-            };
-            layerSprite.paint = {
-              'icon-opacity': 1,
-              'icon-halo-width': 2,
-              'icon-halo-color': rule.rgb
-            };
-            layerSprite.id = getIdLayer();
-            layers.push(layerSprite); 
-          }
-
-          layer.paint = {
-            "circle-color" : rule.rgba,
-            "circle-radius": rule.size
-          };
-          layers.push(layer); 
-          break;
-        case "polygon":
-          layer.type = "fill";
-
-          if(rule.sprite && rule.sprite != 'none'){
-            layerSprite = mx.helpers.clone(layer);
-            layerSprite.paint = {
-              'fill-pattern': rule.sprite
-            };
-            layerSprite.id = getIdLayer();
-            layers.push(layerSprite); 
-          }
-
-          layer.paint = {
-            "fill-color" : rule.rgba
-          };
-          layers.push(layer);
-          break;
-        case "line":
-          layer.type = "line";
-          layer.paint = {
-            'line-color': rule.rgba,
-            'line-width': rule.size
-          };
-          layers.push(layer);
-          break;
-      }
-    });
-  }
-
-  if(layers.length>0){
-
-    /*
-     * Add layers to map
-     */
-    layers = layers.reverse();
-    layers.forEach(function(x){
-      map.addLayer(x,"mxlayers");
-    });
+      layers.push(layerCustom); 
+    }
 
     /**
-     * remove duplicated rules based on value and merge sprite 
-     */
+    * Search if any rule value as "all", set default style
+    */
+    if( hasStyleRules && !hasStyleCustom ){
+      
+      rules.forEach(function(x){
+        
+        ruleValues.push(x.value);
 
-    if(!o.noLegend){
+        if( !hasSprite && x.sprite ) hasSprite = true;
 
-      rules = mx.helpers.path(view, "data.style.rules") ;
+        if( x.value && x.value=="all" ){
 
-      if(!rules) return;
+          layer = defaultStyle({
+            id : view.id,
+            idSource : idSource,
+            geomType : geomType,
+            hexColor : x.color,
+            opacity : x.opacity,
+            size : x.size,
+            sprite :x.sprite
+          });
 
-      var rId = [];
-      var rNew = [];
-
-      for(var i = 0 ; i < rules.length ; i++){
-        if(rules[i]){
-          var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
-          var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
-          var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
-
-          if( ruleHasSprite ){
-            rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
-          }else{
-            rules[i].sprite = null;
-          }
-
-          if( nextRuleIsSame ){
-            if( nextRuleHasSprite ){
-              rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
-            }
-            rules[i+1] = null;
-          }
+          /* add the default layer */
+          layers.push(layer);
+          /* save style default state */
+          hasStyleDefault = true;
         }
-      }
-      view.data.style.rules = rules;
+      });
+
+      hasStyle = !hasStyleDefault;
+
+    }
+
+    /*
+     * Apply default style is no style is defined
+     */
+    if ( !hasStyleRules && !hasStyleCustom ) {
+
+      var layer = defaultStyle({
+        id : view.id,
+        idSource : idSource,
+        geomType : geomType
+      });
+      /* add the default layer */
+      layers.push(layer); 
+    }
+
+    /*
+     * Apply style if avaialble
+     */
+    if( hasStyle && !hasStyleDefault && !hasStyleCustom ){
+
+      /* convert opacity to rgba */
+      rules.forEach(function(x) {
+        x.rgba = mx.helpers.hex2rgba(x.color, x.opacity);
+        x.rgb  = mx.helpers.hex2rgba(x.color);
+      });
+
+      /**
+       * evaluate rules
+       */
+
+      rules.forEach(function(rule,i){
+        var value = rule.value;
+        var max = mx.helpers.path(view,"data.attribute.max")+1;
+        var min = mx.helpers.path(view,"data.attribute.min")-1;
+        var nextRule = rules[i+1];
+        var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
+        var isNumeric = mx.helpers.path(view,"data.attribute.type") == "number";
+        var idView = view.id;
+        var sepLayer = mx.settings.separators.sublayer; 
+        var getIdLayer = function(){ return idView + sepLayer + num++ ; };
+        var filter = ["all"];
+        var attr = def.attribute.name;
+        var paint = {};
+        var layerSprite = {};
+
+        /**
+         * Set filter
+         */
+
+        filter.push(["has", attr]);
+
+        if(isNumeric){
+          filter.push([">=", attr, value]);
+          filter.push(["<", attr, nextValue]);
+        }else{
+          filter.push(["==", attr, value]);
+        }
+        /** 
+         * layer skeleton
+         */
+        var layer = {
+          'id': getIdLayer(),
+          'source': idSource,
+          'source-layer': idView,
+          'filter': filter,
+          'metadata': {
+            'filter_base':filter
+          }
+        };
+
+        switch(geomType) {
+          case "point":
+            layer.type = 'circle';
+            /**
+             * Handle sprite based circle
+             */
+            if(rule.sprite && rule.sprite != 'none'){
+              layerSprite = mx.helpers.clone(layer);
+              layerSprite.layout = {
+                'icon-image': rule.sprite,
+                'icon-size': rule.size / 10
+              };
+              layerSprite.paint = {
+                'icon-opacity': 1,
+                'icon-halo-width': 2,
+                'icon-halo-color': rule.rgb
+              };
+              layerSprite.id = getIdLayer();
+              layers.push(layerSprite); 
+            }
+
+            layer.paint = {
+              "circle-color" : rule.rgba,
+              "circle-radius": rule.size
+            };
+            layers.push(layer); 
+            break;
+          case "polygon":
+            layer.type = "fill";
+
+            if(rule.sprite && rule.sprite != 'none'){
+              layerSprite = mx.helpers.clone(layer);
+              layerSprite.paint = {
+                'fill-pattern': rule.sprite
+              };
+              layerSprite.id = getIdLayer();
+              layers.push(layerSprite); 
+            }
+
+            layer.paint = {
+              "fill-color" : rule.rgba
+            };
+            layers.push(layer);
+            break;
+          case "line":
+            layer.type = "line";
+            layer.paint = {
+              'line-color': rule.rgba,
+              'line-width': rule.size
+            };
+            layers.push(layer);
+            break;
+        }
+      });
+    }
+
+    if(layers.length>0){
 
       /*
-       * Add legend and update view order
+       * Add layers to map
        */
-      var legend = document.querySelector("#check_view_legend_" + view.id);
-      if(legend){
-        legend.innerHTML = mx.templates.viewListLegend(view);
+      layers = layers.reverse();
+      layers.forEach(function(x){
+
+        try{
+          map.addLayer(x,"mxlayers");
+        }catch(e){
+          console.log("Can't add layer : " + e);
+        }
+
+      });
+
+      /**
+       * remove duplicated rules based on value and merge sprite 
+       */
+
+      if( !o.noLegend ){
+
+        rules = mx.helpers.path(view, "data.style.rules") ;
+
+        if(!rules) return;
+
+        var rId = [];
+        var rNew = [];
+
+        for(var i = 0 ; i < rules.length ; i++){
+          if(rules[i]){
+            var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
+            var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
+            var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
+
+            if( ruleHasSprite ){
+              rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
+            }else{
+              rules[i].sprite = null;
+            }
+
+            if( nextRuleIsSame ){
+              if( nextRuleHasSprite ){
+                rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
+              }
+              rules[i+1] = null;
+            }
+          }
+        }
+        view.data.style.rules = rules;
+
+        /*
+         * Add legend and update view order
+         */
+        var legend = document.querySelector("#check_view_legend_" + view.id);
+        if(legend){
+          legend.innerHTML = mx.templates.viewListLegend(view);
+        }
+        updateViewOrder(o);
       }
-      updateViewOrder(o);
     }
+
+  }catch(e){
+
+    mx.helpers.modal({
+      id :  "modalError",
+      title : "Error",
+      content : "<p>Error during custom layer evaluation :" + e 
+    });
   }
 }
 
@@ -3042,6 +3094,66 @@ export function addView(o){
         }
       }
 
+    },
+    cc : function(){
+      var methods = mx.helpers.path(view,"data.methods");
+    
+      if( !methods ) return;
+      var getMethod =  new Promise(function(resolve, reject) {
+        var r = new Function(methods)();
+        if (r) {
+          resolve(r);
+        } else {
+          reject(methods);
+        }
+      })
+        .then(function(cc){
+          if( 
+            ! ( cc.onInit instanceof Function ) || 
+              ! ( cc.onClose instanceof Function)
+          ) return;
+
+          var opt = {
+            map : m.map,
+            view : view,
+            idView : view.id,
+            idSource : view.id + "-SRC",
+            idLegend : "check_view_legend_" + view.id,
+            onClose : cc.onClose,
+            onInit : cc.onInit
+          };
+
+          opt.elLegend = document.getElementById(opt.idLegend);
+
+
+          if(opt.map.getSource(opt.idSource)){
+            opt.map.removeSource(opt.idSource);
+          }
+
+
+          mx.helpers.removeLayersByPrefix({
+            prefix : opt.idView,
+            id : "map_main"
+          });
+
+          view._onRemoveCustomView = function(){
+            opt.onClose(opt);
+          };
+
+          
+          /**
+          * Init custom map
+          */
+          opt.onInit(opt);
+
+
+        }).catch(function(e){
+          mx.helpers.modal({
+            id :  "modalError",
+            title : "Error",
+            content : "<p>Error during methods evaluation :" + e 
+          });
+        });
     },
     vt : function(){
 

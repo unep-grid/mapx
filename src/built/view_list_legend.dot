@@ -7,9 +7,9 @@
   {{ var isNumeric = h.path(it,'data.attribute.type') !== 'u0022string'; }}
   <ul>
     {{~it.data.style.rules :item}}
+    {{?item}}
     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
-    {{?item}}
     <li>
       <div class="mx-legend-item-container">
         <input type="checkbox" data-view_action_key="btn_legend_filter" data-view_action_target="{{=it.id}}" data-view_action_value="{{=item.value}}" data-view_action_variable="{{=it.data.attribute.name}}" name="{{=it.id}}_{{=item.value}}" id="{{=it.id}}_{{=item.value}}"/>

@@ -35,6 +35,12 @@ export function makeDashboard(o){
 
       view._dashboard = dashboard;
 
+      view._onRemoveDashboard =  function(){
+        if(view._dashboard && view._dashboard.destroy instanceof Function){
+          view._dashboard.destroy();
+        }
+      };
+
     });
 
 }
@@ -165,11 +171,8 @@ function Dashboard(idContainer,view) {
       dashboard.modules.draggabilly = m[1];
       dashboard.modules.highcharts= m[2].Highcharts;
       dashboard.elContainer = document.getElementById(idContainer);
-      //dashboard.elContent = document.createElement("div");
       dashboard.elGrid = document.createElement("div");
-      //dashboard.elContent.className = "mx-dashboard mx-events-on";
       dashboard.elGrid.className = "grid mx-dashboard";
-      //dashboard.elContent.appendChild(dashboard.elGrid);
       dashboard.elContainer.appendChild(dashboard.elGrid);
       dashboard.store = [];
 
@@ -337,7 +340,6 @@ function Dashboard(idContainer,view) {
           
           return new Promise(function(resolve, reject) {
             var r = function(){};
-            //return new Function();
             if(str) r = new Function(str)();
             if (r) {
               resolve(r);
@@ -346,27 +348,6 @@ function Dashboard(idContainer,view) {
             }
           });
         };
-
-        /*widget.getData = function() {*/
-          //var data;
-          //switch (widget.config.source) {
-            //case "view":
-              //data = widget.config.view.data.attribute.table;
-              //break;
-            //case "static":
-
-              //break;
-            //case "map":
-              //data = widget.randomData(2);
-              //break;
-
-            //default:
-
-              //data = data;
-
-          //}
-          //widget.setData(data);
-        //};
 
         widget.randomValue = function(from, to) {
           from = from || 0;
