@@ -57,7 +57,7 @@ observeEvent(input$btnAddView,{
 
 observeEvent(input$txtViewTitle,{
 
-  title <- mxStringToAscii(input$txtViewTitle)
+  title <- subPunct(input$txtViewTitle," ")
   country <- reactData$country
   language <- reactData$language
 

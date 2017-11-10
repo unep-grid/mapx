@@ -889,7 +889,7 @@ randomString <- function(prefix=NULL,suffix=NULL,n=15,sep="_",addSymbols=F,addLe
 #' @param rmLeadingSep Logical argument : no leading separator returned
 #' @param rmDuplicateSep Logical argument : no consecutive separator returned
 #' @export
-mxStringToAscii <- function(str,sep='_',rmTrailingSep=T,rmLeadingSep=T,rmDuplicateSep=T,useTransliteration=T){
+subPunct <- function(str,sep='_',rmTrailingSep=T,rmLeadingSep=T,rmDuplicateSep=T,useTransliteration=T){
   if(useTransliteration){
     str<-gsub("'",'',iconv(str, to='ASCII//TRANSLIT'))
   }
