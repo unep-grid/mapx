@@ -822,7 +822,7 @@ export function makeNumericSlider(o) {
     System.import("nouislider").then(function(noUiSlider){
      var slider = noUiSlider.create(el, {
         range: range,
-        step: ( min + max ) / 100,
+        step: ( min + max ) / 1000,
         start: [ min, max ],
         connect: true,
         behaviour: 'drag',
