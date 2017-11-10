@@ -653,14 +653,6 @@ html, body, .full-page {
   display:inline-block;
 }
 
-/*.mx-modal-top.mx-modal-drag-enable{*/
-   /*cursor:move;*/
-/*}*/
-
-
-
-
-
 .mx-modal-background {
   opacity:0.2; 
   width:100%;
@@ -677,8 +669,8 @@ html, body, .full-page {
   flex-direction:column;
   width:500px;
   overflow:hidden;
-  max-height:80%;
-  max-width: 80%;
+  max-height: calc(100% - 10px);
+  max-width: 100%;
   border-radius:5px;
   z-index:500;
   right:0;
