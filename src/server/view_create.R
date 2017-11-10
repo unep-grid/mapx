@@ -57,7 +57,7 @@ observeEvent(input$btnAddView,{
 
 observeEvent(input$txtViewTitle,{
 
-  title <- input$txtViewTitle
+  title <- mxStringToAscii(input$txtViewTitle)
   country <- reactData$country
   language <- reactData$language
 
@@ -75,6 +75,7 @@ observeEvent(input$txtViewTitle,{
     )
 
   errors <- errors[errors]
+
 
   hasError <- length(errors) > 0
 
