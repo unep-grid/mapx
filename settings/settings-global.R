@@ -168,6 +168,10 @@ config[["ui"]] <- list(
 #
 config[["wms"]] = list(
   list(
+    label="datacore",
+    value="https://datacore.unepgrid.ch/geoserver/wms"
+    ),
+  list(
     label="preview",
     value="https://preview.grid.unep.ch/geoserver/wms"
     ),
