@@ -25,6 +25,11 @@ reactViews <- reactive({
   #
   viewsId <- query$views
   collections <- query$collections
+
+  #
+  # don't use requested views twice
+  #
+  query$views <<- NULL
   
   #
   # Set logic
@@ -32,8 +37,6 @@ reactViews <- reactive({
   hasRole <- !noDataCheck(userRole)
 
   if( !hasRole ) return()
-
-  query$views <<- NULL
 
   out <-  mxDbGetViews(
     views = viewsId, 

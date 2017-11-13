@@ -67,10 +67,12 @@ mxDbAutoCon <- function(){
 #'
 #' @param query SQL query
 #' @export
-mxDbGetQuery <- function(query,stringAsFactors=FALSE,onError=function(x){stop(x)}){
+mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(x){stop(x)}){
   res <- NULL
   data <- data.frame()
-  con <- mxDbAutoCon()
+  if(noDataCheck(con)){
+    con <- mxDbAutoCon()
+  }
 
   tryCatch({    
     suppressWarnings({
@@ -165,126 +167,127 @@ mxDbGetDistinctCollectionsTags <- function(table){
 #' @param from {integer} Position of the row to start with
 #' @param to {integer} Position of the row to end with
 #' @export 
-mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5){
+mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5,idOnly=FALSE){
 
-  out <- list()
-  conf <- mxGetDefaultConfig()
-  tableName <- .get(conf,c("pg","tables","views"))
+  #  temp table name
+  tableTempName= randomString("MX_SUB_VIEW")
 
-  # paste read for psql array
-  read <- read[read != "self"]
-  read <- paste(paste0("'",read,"'"),collapse=",")
+  #
+  # Keep the same con for all request
+  #
+  con <- mxDbAutoCon()
 
-  # paste edit for psql array 
-  edit <- edit[edit != "self"]
-  edit <- paste(paste0("'",edit,"'"),collapse=",")
+  #
+  # Catch and clean
+  #
+  tryCatch({
 
-  # filter view id
-  filter <- ""
-  if(!is.null(id)){
-    filter <- sprintf("AND t1.id='%s'",id)
-  }
+    out <- list()
+    conf <- mxGetDefaultConfig()
+    tableName <- .get(conf,c("pg","tables","views"))
+
+    # paste read for psql array
+    read <- read[read != "self"]
+    read <- paste(paste0("'",read,"'"),collapse=",")
+
+    # paste edit for psql array 
+    edit <- edit[edit != "self"]
+    edit <- paste(paste0("'",edit,"'"),collapse=",")
+
+    if(!noDataCheck(collections)){
+      collections <- paste(collections,collapse="','")
+    }
+
+    # filter view id
+    filter <- ""
+    if(!is.null(id)){
+      filter <- sprintf("AND t1.id='%s'",id)
+    }
+
+
+    queryMain = sprintf("CREATE TEMPORARY TABLE %1$s AS (
+      WITH a AS (
+        SELECT id as id_a, MAX(date_modified) AS latest_date
+        FROM %2$s
+        GROUP BY id_a
+        ),
+      c as (
+        SELECT *, b.data ->'countries' as countries, b.data -> 'collections' as collections
+        FROM %2$s b
+        JOIN a ON a.id_a = b.id AND a.latest_date = b.date_modified
+        WHERE
+        ( 
+          ( target ?| array[%3$s] ) OR
+          ( editor = '%4$s' AND b.target ?| array['self']) 
+          )
+        )
+      SELECT *
+        FROM c
+      WHERE
+      (
+        (country ='%5$s') OR
+        (countries ?& array['%5$s']) OR
+        (countries ?& array['GLB'])
+        )
+      )"
+    , tableTempName
+    , tableName
+    , read
+    , userId
+    , project
+    )
+
+  mxDbGetQuery(queryMain,con=con)
 
   if(!noDataCheck(collections)){
+
     sql =  sprintf("
       SELECT DISTINCT id 
-      FROM mx_views a
-      WHERE data->'collections' ?| array['%1$s']
-      AND ((country = '%2$s') 
-        OR (data->'countries' ?| array['%2$s']) 
-        OR (data ->'countries' ?| array['GLB']))
-      AND date_modified = (
-        SELECT MAX(date_modified)
-        FROM mx_views b
-        WHERE b.id = a.id
-        )
+      FROM %1$s a
+      WHERE data->'collections' ?| array['%2$s']
       ",
-      paste(collections,collapse="','"),
-      project
+      tableTempName,
+      collections
       )
 
     views = c(
       views,
-      mxDbGetQuery(sql)$id
+      mxDbGetQuery(sql,con=con)$id
       )
   }
 
   if(!noDataCheck(views)){
 
-    views = paste(paste0("'",views,"'"),collapse=",")
-
-    q <- gsub("\n|\\s\\s+"," ",sprintf("
-        SELECT json_agg(row_to_json(t)) res from (
-          SELECT 
-          t1.*,
-          exists(
-            SELECT id 
-            FROM %1$s 
-            WHERE 
-            (t1.country ='%2$s') AND 
-            ((t1.target ?| array[%4$s]) OR (t1.editor = '%3$s' AND t1.target ?| array['self']))
-            ) as _edit
-          FROM %1$s t1
-          WHERE date_modified = (
-            SELECT MAX(date_modified)
-            FROM %1$s t2
-            WHERE t2.id = t1.id
-            AND ( t1.id in (%5$s))
-            ) AND
-          ( t1.id in (%5$s) )
-          ORDER BY date_modified DESC
-          ) t
-        "
-        , tableName
-        , project
-        , userId
-        , edit
+    if(idOnly){
+      return(views)
+    }else{
+      views <- paste(paste0("'",views,"'"),collapse=",")
+      q <- sprintf("
+        SELECT json_agg(row_to_json(a)) res from %1$s as a
+        WHERE  a.id in (%2$s)"
+        , tableTempName
         , views
         )
-      )
-  }else{
-    # extract(epoch from t1.date_modified) date_modified, 
-    # search for most version of the view only, filter by country, target and id.
-    q <- gsub("\n|\\s\\s+"," ",sprintf("
-        SELECT json_agg(row_to_json(t)) res from (
-          SELECT 
-          t1.*,
-          exists(
-            SELECT id 
-            FROM %1$s 
-            WHERE 
-            (t1.country ='%2$s') AND 
-            ((t1.target ?| array[%5$s]) OR (t1.editor = '%4$s' AND t1.target ?| array['self']))
-            ) as _edit
-          FROM %1$s t1 
-          WHERE date_modified = (
-            SELECT MAX(date_modified)
-            FROM %1$s t2
-            WHERE t2.id = t1.id
-            %6$s
-            )
-          AND ((t1.country ='%2$s') OR (data#>'{\"countries\"}' ?& array['%2$s']) OR (data#>'{\"countries\"}' ?& array['GLB']))
-          AND ( t1.target ?| array[%3$s] OR (t1.editor = '%4$s' AND t1.target ?| array['self']) )
-          %6$s
-          ORDER BY date_modified DESC
-          OFFSET %7$s
-          LIMIT %8$s
-          ) t
-        "
-        , tableName
-        , project
-        , read
-        , userId
-        , edit
-        , filter
-        , from
-        , to - from 
+    }
+
+  } else {
+
+    if(idOnly){
+      q <- sprintf("
+        SELECT id from %1$"
+        , tableTempName
+        ) 
+      return(mxDbGetQuery(q)$id,con=con)
+    }else{
+      q <- sprintf("
+        SELECT json_agg(row_to_json(a)) res from %1$s as a"
+        , tableTempName
         )
-      )
+    }
   }
 
   time <- mxTimeDiff("Get view : query")
-  res <- na.omit(mxDbGetQuery(q))
+  res <- na.omit(mxDbGetQuery(q,con=con))
   mxTimeDiff(time)
 
   time <- mxTimeDiff("Get view : json to list")
@@ -292,6 +295,10 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
   mxTimeDiff(time)
 
   return(out)
+
+  },finally= {
+    mxDbGetQuery(sprintf("DROP TABLE %1$s",tableTempName),con=con)
+  })
 }
 
 
