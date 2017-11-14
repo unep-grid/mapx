@@ -166,6 +166,7 @@ mxDbGetDistinctCollectionsTags <- function(table){
 #' @param id {character} Unique view id to fetch
 #' @param from {integer} Position of the row to start with
 #' @param to {integer} Position of the row to end with
+#' @param idOnly {boolean} Return only list of id instead of full view record.
 #' @export 
 mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5,idOnly=FALSE){
 
@@ -220,21 +221,36 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
           ( target ?| array[%3$s] ) OR
           ( editor = '%4$s' AND b.target ?| array['self']) 
           )
-        )
+        ),
+      d as (
       SELECT *
-        FROM c
+      FROM c
       WHERE
       (
         (country ='%5$s') OR
         (countries ?& array['%5$s']) OR
         (countries ?& array['GLB'])
         )
+      )
+      
+      SELECT *, 
+      exists(
+        SELECT id 
+        FROM d 
+        WHERE d.target ?| array[%6$s] 
+        OR (
+          d.editor = '%4$s' 
+          AND d.target ?| array['self']
+          )
+        ) as _edit
+      FROM d
       )"
     , tableTempName
     , tableName
     , read
     , userId
     , project
+    , edit
     )
 
   mxDbGetQuery(queryMain,con=con)
@@ -257,7 +273,10 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
   }
 
   if(!noDataCheck(views)){
-
+    
+    #
+    # Filtered list of record
+    #
     if(idOnly){
       return(views)
     }else{
@@ -272,6 +291,9 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
 
   } else {
 
+    #
+    # Full list of records
+    #
     if(idOnly){
       q <- sprintf("
         SELECT id from %1$"
@@ -296,7 +318,7 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
 
   return(out)
 
-  },finally= {
+  },finally = {
     mxDbGetQuery(sprintf("DROP TABLE %1$s",tableTempName),con=con)
   })
 }
