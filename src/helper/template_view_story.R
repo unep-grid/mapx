@@ -18,39 +18,26 @@ mxSchemaViewStory <- function(view,views,language){
   }
 
 
-
-
   #
   # Get view list and titles
   #
   views <- views[sapply(views,function(x){x$type}) %in% c("vt","rt")] # don't use story map 
 
-  viewListId <- sapply(views,function(x){
-    return(x[["id"]])
-});
 
-  viewListTitles <- sapply(views,function(x){
-    
-   if( "public" %in% x$target ){
-      warning = "[private]"
-   }else{
-     warning = "[public]"
-   }
+  viewListId <- sapply(views, function(v){
+    return(v$id)
+}) 
 
-    t = x[[c("data","title",l)]]
-    if(noDataCheck(t)){
-      for(al in ll){
-        if(noDataCheck(t)){
-          t = .get(x, c("data","title",al))
-        }
-      }
-    }
+  viewListTitles <- sapply(views, function(v){
 
+    title = v$`_title`;
 
-    if(noDataCheck(t)) t <- tt("noTitle")
-    t = paste( t , warning )
-    return(t)
-})
+    if(noDataCheck(title)) title = v$id;
+    target = ifelse("public" %in% v$target," (public)"," (private)") 
+
+    return( "("+v$country + ") " + title + target)
+}) 
+
 
   #
   # Multiple associated view object
@@ -72,7 +59,10 @@ mxSchemaViewStory <- function(view,views,language){
           minLength = 1,
           enum = as.list(viewListId),
           options = list(
-            enum_titles = as.list(viewListTitles)
+            enum_titles = as.list(viewListTitles),
+            selectize_options = list(
+              dropdownParent = "body"
+              )
             )
           )
         )

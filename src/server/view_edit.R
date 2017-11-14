@@ -14,8 +14,10 @@ observe({
  
       isolate({
 
+        userData <- reactUser$data
         userRole <- getUserRole()
         language <- reactData$language
+        country <- reactData$country
 
         if(viewAction[["action"]] == "btn_upload_geojson" ){
 
@@ -28,17 +30,18 @@ observe({
           #
           # Get view data and check if user can edit
           #
-          views <- reactViews()
+         
+
           viewId <- viewAction[["target"]]
-          viewData <- list()
 
-          viewSelect <-  sapply(
-            views, 
-            function(x){
-              x[["id"]] == viewId 
-            })
-
-          viewData <- views[ viewSelect ]
+          viewData <-  mxDbGetViews(
+            views = viewId, 
+            project = country,
+            read = userRole$read,
+            edit = userRole$edit,
+            userId = userData$id,
+            language = language,
+            )
 
           if(length(viewData)>0){
             viewData <- viewData[[1]]

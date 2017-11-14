@@ -160,15 +160,17 @@ mxDbGetDistinctCollectionsTags <- function(table){
 #' @param views {list|vector} Views id to fetch. Optional, replace any other logic
 #' @param collections {list|vector} Collection(s) to fetch. Optional, add to selected views and replace any other logic
 #' @param project {character} Iso 3 country code
+#' @param allCountry {boolean} return data for all countries
 #' @param read {vector} Name of the groups the user can read
 #' @param edit {vector} Name of the group the user can edit
 #' @param userId {integer} User id
 #' @param id {character} Unique view id to fetch
 #' @param from {integer} Position of the row to start with
 #' @param to {integer} Position of the row to end with
-#' @param idOnly {boolean} Return only list of id instead of full view record.
+#' @param keys {NULL|vector} Subset returned keys. If NULL, full dataset.
+#' @param language {character} Default language for data #> '{"title",<language>}'
 #' @export 
-mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5,idOnly=FALSE){
+mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD", allCountry=FALSE, read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5, language="en"){
 
   #  temp table name
   tableTempName= randomString("MX_SUB_VIEW")
@@ -199,23 +201,23 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
       collections <- paste(collections,collapse="','")
     }
 
-    # filter view id
-    filter <- ""
-    if(!is.null(id)){
-      filter <- sprintf("AND t1.id='%s'",id)
+    if(!noDataCheck(keys)){
+      keys <- unique(c("id",keys))
+      keys <- sprintf("\"%1$s\"",paste(keys,collapse="\",\""))
+    }else{
+      keys <- "*" 
     }
-
 
     queryMain = sprintf("CREATE TEMPORARY TABLE %1$s AS (
       WITH a AS (
-        SELECT id as id_a, MAX(date_modified) AS latest_date
+        SELECT id as _id, MAX(date_modified) AS _date_latest
         FROM %2$s
-        GROUP BY id_a
+        GROUP BY _id
         ),
       c as (
-        SELECT *, b.data ->'countries' as countries, b.data -> 'collections' as collections
+        SELECT *, b.data ->'countries' as _countries, b.data -> 'collections' as _collections
         FROM %2$s b
-        JOIN a ON a.id_a = b.id AND a.latest_date = b.date_modified
+        JOIN a ON a._id = b.id AND a._date_latest = b.date_modified
         WHERE
         ( 
           ( target ?| array[%3$s] ) OR
@@ -226,14 +228,17 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
       SELECT *
       FROM c
       WHERE
+      
       (
+        ( %7$s ) OR
         (country ='%5$s') OR
-        (countries ?& array['%5$s']) OR
-        (countries ?& array['GLB'])
+        (_countries ?& array['%5$s']) OR
+        (_countries ?& array['GLB'])
         )
       )
       
       SELECT *, 
+      data #> '{\"title\",\"%8$s\"}' as _title,
       exists(
         SELECT id 
         FROM d 
@@ -251,6 +256,8 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
     , userId
     , project
     , edit
+    , allCountry
+    , language
     )
 
   mxDbGetQuery(queryMain,con=con)
@@ -260,7 +267,7 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
     sql =  sprintf("
       SELECT DISTINCT id 
       FROM %1$s a
-      WHERE data->'collections' ?| array['%2$s']
+      WHERE _collections ?| array['%2$s']
       ",
       tableTempName,
       collections
@@ -273,42 +280,40 @@ mxDbGetViews <- function(views=NULL, collections=NULL, project="WLD", read=c("pu
   }
 
   if(!noDataCheck(views)){
-    
+  
+    views <- paste(paste0("'",views,"'"),collapse=",")
     #
     # Filtered list of record
     #
-    if(idOnly){
-      return(views)
-    }else{
-      views <- paste(paste0("'",views,"'"),collapse=",")
-      q <- sprintf("
-        SELECT json_agg(row_to_json(a)) res from %1$s as a
-        WHERE  a.id in (%2$s)"
-        , tableTempName
-        , views
-        )
-    }
-
+    q <- sprintf("
+      SELECT json_agg(row_to_json(a)) res from 
+      (
+        SELECT %3$s
+        FROM %1$s
+        ) a
+      WHERE  a.id in (%2$s)"
+      , tableTempName
+      , views
+      , keys
+      )
   } else {
 
     #
     # Full list of records
     #
-    if(idOnly){
-      q <- sprintf("
-        SELECT id from %1$"
-        , tableTempName
-        ) 
-      return(mxDbGetQuery(q)$id,con=con)
-    }else{
-      q <- sprintf("
-        SELECT json_agg(row_to_json(a)) res from %1$s as a"
-        , tableTempName
-        )
-    }
+    q <- sprintf("
+      SELECT json_agg(row_to_json(a)) res from
+        (
+        SELECT %2$s
+        FROM %1$s
+        ) a "
+      , tableTempName
+      , keys
+      )
   }
 
   time <- mxTimeDiff("Get view : query")
+  
   res <- na.omit(mxDbGetQuery(q,con=con))
   mxTimeDiff(time)
 
@@ -1296,20 +1301,17 @@ mxDbAddRow <- function(data,table){
   if(!is.list(data)) data <- as.list(data)
 
   data <- data[!names(data) == 'pid']
-  tName <- names(data)
   tClass <- sapply(data,class)
+
+  #
+  # Compare names in table vs names in db table 
+  #
+  tName <- names(data)
   rName <- mxDbGetLayerColumnsNames(table)
+  # Subset only existing
+  data <- data[ tName %in% rName ]
+  fName <- names(data)
 
-  if(!all(tName %in% rName)){
-    wText <- sprintf("mxDbAddData: append to %1$s. Name(s) not in remote table: '%2$s', remote name not in local table '%3$s'",
-      table,
-      paste(tName[!tName %in% rName],collapse="; "),
-      paste(rName[!rName %in% tName],collapse="; ")
-      )
-    stop(wText)
-
-
-  }  # handle date
   dataProc <- lapply(data,function(x){
     
     switch(class(x)[[1]],
@@ -1339,7 +1341,7 @@ mxDbAddRow <- function(data,table){
   q <- sprintf(
     "INSERT INTO %1$s (%2$s) VALUES (%3$s)",
     table,
-    paste(paste0("\"",tName,"\""),collapse=","),
+    paste(paste0("\"",fName,"\""),collapse=","),
     paste(dataProc,collapse=",")
     )
 

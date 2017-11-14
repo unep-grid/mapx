@@ -39,6 +39,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.jed-container table .selectize-input.dropdown-active {
+  min-width: 300px;
+}
 
 .jed-container td .btn-group {
   width: 60px!important;
@@ -68,7 +71,7 @@
   border: none;
   box-shadow: none;
   --webkit-box-shadow: none;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .jed-container .btn.btn-default {

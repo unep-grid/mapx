@@ -28,69 +28,158 @@ export function storyRead(o){
     return ;
   }
 
-  /* set id view  */
-  o.idView = o.idView || o.view.id;
+  checkMissingView(o)
+    .then(function(){
+
+    /* set id view  */
+    o.idView = o.idView || o.view.id;
 
     /* display story controls */
     mx.helpers.storyController({
       enable : true
     });
 
-  var db = mx.data.stories; 
-  
-  if(o.save){
-    /* save current view in db */
-    db.setItem(
-      o.idView,
-      o.view
-    ).then(function(){
-      console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
+    var db = mx.data.stories; 
+
+    if(o.save){
+      /* save current view in db */
+      db.setItem(
+        o.idView,
+        o.view
+      ).then(function(){
+        console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
+      });
+    }
+
+    /* Save current values */
+    mx.data.storyCache = {
+      views : mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: "MX-"
+      }),
+      position : mx.helpers.getMapPos(o),
+      currentStep : 0,
+      hasAerial : mx.helpers.btnToggleLayer({
+        id:'map_main',
+        idLayer:'here_aerial',
+        idSwitch:'btnThemeAerial',
+        action:'hide'
+      })
+    };
+
+    /* Remove existing map-x layers */
+    mx.helpers.removeLayersByPrefix({
+      id:"map_main",
+      prefix:"MX-"
     });
-  }
+
+    /* Generate story ui */
+    mx.helpers.storyBuild(o);
 
 
-  /* Save current values */
-  mx.data.storyCache = {
-    views : mx.helpers.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: "MX-"
-    }),
-    position : mx.helpers.getMapPos(o),
-    currentStep : 0,
-    hasAerial : mx.helpers.btnToggleLayer({
-      id:'map_main',
-      idLayer:'here_aerial',
-      idSwitch:'btnThemeAerial',
-      action:'hide'
-    })
-  };
-  
-  /* Remove existing map-x layers */
-  mx.helpers.removeLayersByPrefix({
-    id:"map_main",
-    prefix:"MX-"
-  });
-
-  /* Generate story ui */
-  mx.helpers.storyBuild(o);
-
-
-  window.addEventListener("keydown", storyHandleKeyDown );
+    window.addEventListener("keydown", storyHandleKeyDown );
 
 
     /* Listen to scroll on the main container. */
-  mx.helpers.storyOnScroll({
-    selector: "#story",
-    callback: mx.helpers.storyUpdateSlides,
-    view: o.view
-  });
+    mx.helpers.storyOnScroll({
+      selector: "#story",
+      callback: mx.helpers.storyUpdateSlides,
+      view: o.view
+    });
 
-  /* Set lock map pan to current value */
-  mx.helpers.storyControlMapPan({
-    recalc:true
-  });
+    /* Set lock map pan to current value */
+    mx.helpers.storyControlMapPan({
+      recalc:true
+    });
 
+  });
 }
+
+function checkMissingView(o){
+
+  var view =  o.view;
+  var m = mx.maps[o.id];
+  /*
+   * Check if there is additional views
+   */
+  return new Promise(function(resolve,reject){
+
+    var viewsStory = mx.helpers.path(view,"data.views");
+
+    if(!viewsStory){
+      resolve(true);
+    }else{
+
+      var viewsToAdd = [];
+      var vtUrlViews = mx.settings.vtUrlViews;
+
+      /**
+       * Create a list of view to add
+       */
+      viewsStory.forEach(function(vs){
+        var found = false;
+
+        m.views.forEach(function(v){
+          if( !found ){
+            if( v.id == vs.id ){
+              found = true;
+            }
+          }
+        });
+
+        if(!found){
+          console.log(vs);
+          viewsToAdd.push(vs);
+        }
+
+      });
+
+      /**
+       * Fetch missing view assnychrounously
+       */
+      if( viewsToAdd.length == 0 ){
+        resolve(true);
+      }else{
+        var viewsAdded = [];
+        var vL = viewsToAdd.length ;
+
+        viewsToAdd.forEach(function(v,i){
+
+          mx.helpers.getJSON({
+            url :  vtUrlViews + v.id,
+            onSuccess : function(view){
+              /*
+               * Add it to the view list
+               */
+              m.views = m.views.concat(view);
+              /*
+               * register source
+               */
+              mx.helpers.addSourceFromView({
+                m : m,
+                view : view
+              });
+
+              /**
+              * Added : resolve if last one
+              */
+              viewsAdded.push(view);
+              if(viewsAdded.length == vL){
+                 resolve(true);
+              }
+            }});
+
+        });
+      }
+
+    }
+
+  })
+}
+
+
+
+
 
 
 /**
@@ -522,7 +611,6 @@ export function storyController(o){
      */
     for( var l = 0 ; l < d.views.length ; l ++){
 
-    console.log("Add previously enabled layers");
       mx.helpers.addView({
         id : o.id,
         idView: d.views[l]
@@ -651,7 +739,6 @@ export function storyBuild(o){
 
       divSlide.appendChild(divSlideFront);
       divStep.appendChild(divSlide);
-      console.log(divStep);
     });
     /* add step to steps */
     divStory.appendChild(divStep);

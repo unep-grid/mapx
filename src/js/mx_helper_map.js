@@ -105,6 +105,8 @@ export function initMapx(o){
     mx.settings.language = o.language = o.language || o.languages[0];
     mx.settings.vtPort = o.vtPort = o.vtPort || "";
     mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
+    mx.settings.vtUrlViews = o.vtUrlViews = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/views/";
+
     // set path using current location. 
 
     if(o.paths.sprite){
@@ -150,12 +152,33 @@ export function initMapx(o){
      * Send loading confirmation to shiny
      */
       map.on('load', function() {
-        
 
-        /*
-        * render views
-        */
-        mx.helpers.setSourcesFromViews(o);
+      mx.helpers.setSourcesFromViews(o);
+
+
+/*        var initViews = [];*/
+
+        //var viewsL = o.viewsList.length;
+        //var initViewsL = 0;
+
+
+        //o.viewsList.forEach(function(v){
+          //var urlFetchView = o.vtUrlViews + v.id;
+          //var edit = v._edit;
+          //mx.helpers.getJSON({
+            //url : urlFetchView,
+            //onSuccess : function(view){
+              //view._edit = edit; 
+              //initViews.push( view );
+              //initViewsL = initViews.length;
+              //console.log(initViewsL + "/" + viewsL );
+
+              //if( initViewsL === viewsL  ){
+                //o.viewsList = initViews;
+              //}
+             //}
+          //});
+        /*});*/
 
         /*
         *  First map language 
@@ -288,7 +311,7 @@ export function reset(o){
 * Clean stored modules : dashboard, custom view, etc.
 */
 function cleanRemoveModules(views){
-  
+
   views = views instanceof Array ? views : [views];
 
   views.forEach(function(view){
@@ -312,7 +335,7 @@ function cleanRemoveModules(views){
  * @param {oject} o.view View object
  */
 export function addSourceFromView(o){
-  
+
   if(o.m && mx.helpers.path(o.view,"data.source")){
 
     var country = mx.settings.country;
@@ -352,109 +375,179 @@ export function addSourceFromView(o){
  * @param {object} o.viewList views list
  * @param {boolean} o.add Append to existing
  * @param {string} o.country code
+ * @param {Boolean} o.resetViews should this reset stored views list on map
+ * @param {Boolean} o.compact the view list is compact
  * @param {function} o.feedback Feedback function. Default is renderViewsList
  */
 export function setSourcesFromViews(o){
-  
+
   var m = mx.maps[o.id];
-  var view, views, sourceId, sourceExists, sourceStore, isFullList;
+
+  var view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
   var isArray, hasViews;
 
-  if(m){
+  if( !m || !o.viewsList ) return;
+  if( o.country ) mx.settings.country = o.country;
+  if( typeof o.resetViews == "undefined" ) o.resetViews = true;
 
-    views = o.viewsList ;
-    isFullList = views instanceof Array ;
-    hasViews = m.views.length > 0;
+  views = o.viewsList ;
+  singleView = views instanceof Object && views.id;
+  hasViews = m.views.length > 0;
 
-    if( !o.feedback ) o.feedback = mx.helpers.renderViewsList;
+  if( !o.feedback ) o.feedback = mx.helpers.renderViewsList;
 
-    if( isFullList ){ 
-      /*
-      * Reset old views and dashboards
-      */
+  if( singleView ){
+    /**
+     * If this is not an array and the mgl map opbject already as views,
+     * add the view and feedback
+     */
+    if( hasViews ){
+      m.views.unshift( views );
+    }
+
+    mx.helpers.addSourceFromView({
+      m : m,
+      view : views
+    });
+
+    o.feedback({
+      id : o.id,
+      views : views,
+      add : true
+    });
+
+    return views ;
+  }
+
+  if( ! singleView ){
+    /*
+     * Reset old views and dashboards
+     */
+    if( o.resetViews ){
       mx.helpers.reset({
         idMap:o.id
       });
-      /**
-       * if there is multiple view in array, use them as main views list.
-       * Set country, add each views to sources and feedback.
+    }
+
+    if(o.compact){
+      /*
+       * If compact, use asynchronous view fetch
        */
-      //m.views = views;
+      var viewsL = views.length;
+      var initViews = [];
+      var initViewsL = 0;
+      var vtUrlViews = mx.settings.vtUrlViews;
+
+      views.forEach(function(v){
+        mx.helpers.getJSON({
+          url :  vtUrlViews + v.id,
+          onSuccess : function(view){
+            view._edit = v._edit; 
+            initViews.push( view );
+            initViewsL = initViews.length;
+            console.log(initViewsL + "/" + viewsL );
+            /**
+             * add sources for each 
+             */
+            mx.helpers.addSourceFromView({
+              m : m,
+              view : view
+            });
+
+            if( initViewsL === viewsL  ){
+              /*
+               * update current map views
+               */
+              mx.maps[o.id].views = initViews;
+              /*
+               * Render the full thing
+               */
+              o.feedback({
+                id : o.id,
+                views : initViews
+              });
+
+
+              /**
+              * Load geojson
+              */
+              loadGeojsonFromStorage(o);
+            }
+          }
+        });
+      });
+
+    }else{
+      /**
+       * Save the view list as it
+       */
 
       mx.maps[o.id].views = views;
-
       /**
-       * Reset the current country
+       * add sources for each 
        */
-      if( o.country ) mx.settings.country = o.country;
-
-      /**
-       * Init 
-       */
-      for( var i = 0 ; i < views.length ; i++ ){
-        /**
-         * add source from views list
-         */
+      views.forEach(function(view){
         mx.helpers.addSourceFromView({
           m : m,
-          view : views[i]
+          view : view
         });
+      });
 
-
-      }
-
+      /*
+       * Render the full thing
+       */
       o.feedback({
         id : o.id,
         views : views
       });
 
       /**
-       * extract views from local storage
+       * Load geojson from storage
        */
-      mx.data.geojson.iterate(function( value, key, i ){
-        view = value.view;
-        if( view.country == mx.settings.country ){
-          m.views.unshift(value.view);
-
-
-          mx.helpers.addSourceFromView({
-            m : m ,
-            view : view
-          });
-
-          o.feedback({
-            id : o.id,
-            views : view,
-            add : true
-          });
-        }
-      });
-
-    }else{
-
-      /**
-       * If this is not an array and the mgl map opbject already as views,
-       * add the view and feedback
-       */
-      if(hasViews){
-        m.views.unshift( views );
-      }
-
-      mx.helpers.addSourceFromView({
-        m : m,
-        view : views
-      });
-
-      o.feedback({
-        id : o.id,
-        views : views,
-        add : true
-      });
-
+      loadGeojsonFromStorage(o);
     }
   }
-
 }
+
+
+/**
+* Load geojson from localstorage,save it in views list and render item
+* @param {Object} o options
+* @param {String} o.id Map id
+* @param {String} o.country Current country to filter geojson view. Default to settings.country
+*/
+function loadGeojsonFromStorage(o){
+  var m = mx.maps[o.id] ;
+
+  if( !mx.data || !mx.data.geojson || !m ) return;
+
+  var country = o.country || mx.settings.country;
+  /**
+   * extract views from local storage
+   */
+  mx.data.geojson.iterate(function( value, key, i ){
+    var view = value.view;
+    if( view.country == country ){
+      m.views.unshift( view );
+
+      mx.helpers.addSourceFromView({
+        m : m ,
+        view : view
+      });
+
+      mx.helpers.renderViewsList({
+        id : o.id,
+        views : view,
+        add : true
+      });
+    }
+  });
+}
+
+
+
+
+
 
 /**
  * Retrieve nested item from object/array
@@ -1068,6 +1161,7 @@ export function removeView(o){
     return x.id == o.idView ;
   })[0];
 
+
   if(!view) return;
 
   if( view.type == "gj" ){
@@ -1080,6 +1174,7 @@ export function removeView(o){
   m.views = views.filter(function(x){
     return x.id != o.idView ; 
   });
+
 
   mx.helpers.removeLayersByPrefix({
     id : o.id,
@@ -3097,7 +3192,7 @@ export function addView(o){
     },
     cc : function(){
       var methods = mx.helpers.path(view,"data.methods");
-    
+
       if( !methods ) return;
       var getMethod =  new Promise(function(resolve, reject) {
         var r = new Function(methods)();
@@ -3140,10 +3235,10 @@ export function addView(o){
             opt.onClose(opt);
           };
 
-          
+
           /**
-          * Init custom map
-          */
+           * Init custom map
+           */
           opt.onInit(opt);
 
 
@@ -3169,34 +3264,8 @@ export function addView(o){
       );
     },
     sm : function(){
-      /*
-       * Check if there is additional views
-       */
-      var viewsStory = mx.helpers.path(view,"data.views");
-      if(viewsStory){
 
-        /**
-         * Get current view ids
-         */
-        var ids = [];
-        m.views.forEach(function(v){
-          ids.push(v.id);
-        });
-
-        /*
-         * Add source for each, ignore duplicate
-         */
-        viewsStory.forEach(function(v){
-          if(ids.indexOf(v.id)==-1){
-            mx.helpers.addSourceFromView({
-              m : m,
-              view : v
-            });
-            m.views = m.views.concat(v);
-          }
-        });
-      }
-    } 
+    }
   };
 
   /* Call function according to view type */

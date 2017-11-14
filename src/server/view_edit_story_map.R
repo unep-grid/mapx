@@ -95,6 +95,8 @@ observeEvent(input$btnSetStoryVersion,{
 #
 observeEvent(reactData$viewStory,{
 
+  userRole <- getUserRole()
+  userData <- reactUser$data
   view <- reactData$viewStory$view
   isDbVersion <- reactData$viewStory$dbVersion
   language <- reactData$language  
@@ -103,22 +105,21 @@ observeEvent(reactData$viewStory,{
   if(!isTRUE(view[["_edit"]])) return()
 
   views = mxDbGetViews(
-    views = NULL,
-    project = reactData$country,
-    read = reactUser$role$read,
-    edit = reactUser$role$edit,
-    userId = reactUser$data$id,
-    from = 0,
-    to = 1000
+    read = userRole$read,
+    edit = userRole$edit,
+    userId = userData$id,
+    allCountry = TRUE,
+    keys = c("id","country","type","_title","target")
     )
 
-  reactData$viewsAllAvailable = views
+  reactData$viewsAllAvailable <- views
 
   schema <- mxSchemaViewStory(
     view=view,
     views=views,
     language=language
     )
+
 
   jedSchema(
     id="storyEdit",
@@ -171,7 +172,11 @@ observeEvent(input$btnViewSaveStory,{
   time <- Sys.time()
   view <- reactData$viewDataEdited
   country <- reactData$country
+  language <- reactData$language
   editor <- reactUser$data$id
+  userData <- reactUser$data
+  userRole <- getUserRole()
+  allViews <- reactData$viewsAllAvailable
 
   if( view[["_edit"]] && view[["type"]] == "sm" ){
     view[["_edit"]] = NULL
@@ -187,37 +192,26 @@ observeEvent(input$btnViewSaveStory,{
     view <- .set(view, c("date_modified"), Sys.time() )
     view <- .set(view, c("target"), as.list(.get(view,c("target"))))
     view <- .set(view, c("data", "story"), story)
-    view <- .set(view,c("data"), as.list(.get(view,"data")))
-    view <- .set(view,c("editor"), editor)
+    view <- .set(view, c("data"), as.list(.get(view,"data")))
+    view <- .set(view, c("editor"), editor)
 
     #
     # Retrieve and store data for all views used in story.
     #
-
     views = list()
-    try(silent=T,{
 
-      # All views id extracted from the story
-      viewsStory = lapply(story$steps,function(s){
-        lapply(s$views,function(v){v})
-        })
-      # Final view list
-      viewsId = unique(unlist(viewsStory))
-      viewsId = as.list(viewsId)
-
-      # If there is at least on views used, get views object.
-      if(!noDataCheck(viewsId)){
-        views = mxDbGetViews(
-          views = viewsId,
-          project = reactData$country,
-          read = reactUser$role$read,
-          edit = reactUser$role$edit,
-          userId = reactUser$data$id,
-          from = 0,
-          to = 1000
-          )
-      }
+    # All views id extracted from the story
+    viewsStory = lapply(story$steps,function(s){
+      lapply(s$views,function(v){v})
     })
+    # Final view list
+    viewsId = unique(unlist(viewsStory))
+    viewsId = as.list(viewsId)
+
+    # If there is at least on views used, get views object.
+    if(!noDataCheck(viewsId)){
+      views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
+    }
 
     #
     # Save local views from story, if any

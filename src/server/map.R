@@ -38,7 +38,8 @@ observe({
       #
       # Intial views
       #
-      viewsList = reactViews(),
+      viewsList = reactViewsCompact(),
+      compact = TRUE,
       #
       # Vector tile service : base url
       #
