@@ -28,7 +28,7 @@
     "latinize": "^0.4.0",
     "list": "^1.0.0",
     "localforage": "^1.5.0",
-    "mapbox-gl": "^0.41.0",
+    "mapbox-gl": "^0.42.0",
     "medium-editor": "^5.23.2",
     "nouislider": "^10.1.0",
     "packery": "^2.1.1",
@@ -43,7 +43,8 @@
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
     "webpack": "^3.5.5",
-    "webpack-bundle-analyzer": "^2.9.0"
+    "webpack-bundle-analyzer": "^2.9.0",
+    "worker-loader": "^1.0.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -79,7 +80,7 @@
     "webpack-closure-compiler": "^2.1.5",
     "webpack-merge": "^4.1.0",
     "webpack-shell-plugin": "^0.5.0",
-    "worker-loader": "github:webpack-contrib/worker-loader"
+    "worker-loader": "1.0.0"
   },
   "scripts": {
     "test": "-",
