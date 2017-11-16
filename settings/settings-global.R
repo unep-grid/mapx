@@ -365,7 +365,7 @@ config[[c("users","data","public")]] <- list(
     roles =  list(
       list(
         project = "world",
-        role = "public"
+        role = "user"
         )
       )
     )
@@ -406,62 +406,52 @@ config[["users"]][["roles"]]<- list(
   list(
     name="public",
     level=4,
-    #desc = list(
-      access = c(),
-      read = c("public"),
-      publish = c(),
-      edit = c(),
-      profile = c(),
-      admin = c()
-      #)
+    access = c(),
+    read = c("public"),
+    publish = c(),
+    edit = c(),
+    profile = c(),
+    admin = c()
     ),
   list(
     name="user",
     level=3,
-    #desc=list(
-      access = c(),
-      read = c("self","public","user"),
-      publish = c("self","publisher"),
-      edit = c("self"),
-      profile = c("self"),
-      admin = c()
-      #)
+    access = c(),
+    read = c("self","public","user"),
+    publish = c("self","publisher"),
+    edit = c("self"),
+    profile = c("self"),
+    admin = c()
     ),
   list(
     name="publisher",
     level=2,
-    #desc = list(
-      access = c(),
-      read = c("self","public","user","publisher"),
-      publish = c("self","public","user","publisher"),
-      edit = c("self","public","user","publisher"),
-      profile = c("self"),
-      admin = c()
-      #)
+    access = c(),
+    read = c("self","public","user","publisher"),
+    publish = c("self","public","user","publisher"),
+    edit = c("self","public","user","publisher"),
+    profile = c("self"),
+    admin = c()
     ),
   list(
     name="admin",
     level=1,
-    #desc = list(
-      access = c(),
-      read = c("self","public","user","publisher","admin"),
-      publish = c("self","public","user","publisher","admin"),
-      edit = c("self","public","user","publisher","admin"),
-      profile = c("self","public","user","publisher","admin"),
-      admin = c("self","public","user","publisher")
-      #)
+    access = c(),
+    read = c("self","public","user","publisher","admin"),
+    publish = c("self","public","user","publisher","admin"),
+    edit = c("self","public","user","publisher","admin"),
+    profile = c("self","public","user","publisher","admin"),
+    admin = c("self","public","user","publisher")
     ),
   list(
     name="superuser",
     level=0,
-    #desc = list(
-      access = c("db"),
-      read = c("self","public","user","publisher","admin","superuser"),
-      publish = c("self","public","user","publisher","admin","superuser"),
-      edit = c("self","public","user","publisher","admin","superuser"),
-      profile = c("self","public","user","publisher","admin","superuser"),
-      admin = c("public","user","publisher","admin","superuser")
-      #)
+    access = c("db"),
+    read = c("self","public","user","publisher","admin","superuser"),
+    publish = c("self","public","user","publisher","admin","superuser"),
+    edit = c("self","public","user","publisher","admin","superuser"),
+    profile = c("self","public","user","publisher","admin","superuser"),
+    admin = c("public","user","publisher","admin","superuser")
     )
   )
 
