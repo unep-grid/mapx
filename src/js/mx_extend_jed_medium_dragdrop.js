@@ -1,4 +1,5 @@
 /*jshint esversion: 6 */
+import * as mx from './mx_init.js';
 
 export function addDragDropToMedium(MediumEditor) {
     'use strict';
@@ -87,14 +88,16 @@ export function addDragDropToMedium(MediumEditor) {
 
             // attach the onload event handler, makes it easier to listen in with jasmine
             fileReader.addEventListener('load', function (e) {
-              var mx = require('./mx_helper_misc.js');
+              //var mx = require('./mx_helper_misc.js');
               var selectedParent = this.base.getSelectedParentElement();
               var img = new Image();
               var p = document.createElement('p');
               var span = document.createElement('span');
-              var id = window.mx.helpers.makeId(10);
+              var id = mx.helpers.makeId(10);
               img.id = id;
-              span.innerHTML = "[" + window.mx.helpers.getLanguage(["loading_img"]) + " ]";
+              mx.helpers.getDictItem("loading_img").then(function(str){
+                  span.innerHTML = "[" + str + " ]";
+              });
               p.appendChild(img);
               p.appendChild(span);
               var base = this.base;
