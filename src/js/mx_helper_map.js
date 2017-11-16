@@ -105,7 +105,7 @@ export function initMapx(o){
     mx.settings.language = o.language = o.language || o.languages[0];
     mx.settings.vtPort = o.vtPort = o.vtPort || "";
     mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
-    mx.settings.vtUrlViews = o.vtUrlViews = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/views/";
+    mx.settings.vtUrlViews = o.vtUrlViews = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/view/";
 
     // set path using current location. 
 
@@ -151,58 +151,33 @@ export function initMapx(o){
     /**
      * Send loading confirmation to shiny
      */
-      map.on('load', function() {
+    map.on('load', function() {
 
       mx.helpers.setSourcesFromViews(o);
 
-
-/*        var initViews = [];*/
-
-        //var viewsL = o.viewsList.length;
-        //var initViewsL = 0;
-
-
-        //o.viewsList.forEach(function(v){
-          //var urlFetchView = o.vtUrlViews + v.id;
-          //var edit = v._edit;
-          //mx.helpers.getJSON({
-            //url : urlFetchView,
-            //onSuccess : function(view){
-              //view._edit = edit; 
-              //initViews.push( view );
-              //initViewsL = initViews.length;
-              //console.log(initViewsL + "/" + viewsL );
-
-              //if( initViewsL === viewsL  ){
-                //o.viewsList = initViews;
-              //}
-             //}
-          //});
-        /*});*/
-
-        /*
-        *  First map language 
-        */
+      /*
+       *  First map language 
+       */
         mx.helpers.updateLanguage(o);
-        //mx.helpers.updateLanguageMap({lang:o.language});
+      //mx.helpers.updateLanguageMap({lang:o.language});
 
-        /*
-        * If shiny, trigger read event
-        */
+      /*
+       * If shiny, trigger read event
+       */
         if(hasShiny){
           Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
         }
         /**
-        * Apply coloscheme if any
-        */ 
-        if(o.colorScheme){
-          mx.helpers.setUiColorScheme({colors:o.colorScheme});
-        }
-      });
+         * Apply coloscheme if any
+         */ 
+      if(o.colorScheme){
+        mx.helpers.setUiColorScheme({colors:o.colorScheme});
+      }
+    });
 
-      /**
-       * Handle drop geojson event
-       */
+    /**
+     * Handle drop geojson event
+     */
     if(mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver){
       elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
       elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
@@ -212,15 +187,15 @@ export function initMapx(o){
      * Add controls to the map
      */
 
-      map.addControl(new mx.helpers.mapControlMain(),'top-left');
-      map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
-      map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
-      map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
+    map.addControl(new mx.helpers.mapControlMain(),'top-left');
+    map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
+    map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
+    map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
 
-      /**
-       * Trigger country change on double click
-       * NOTE: experimental. layers and input id should be moved as options.
-       */
+    /**
+     * Trigger country change on double click
+     * NOTE: experimental. layers and input id should be moved as options.
+     */
     map.on('dblclick',function(e){
       var cntry, features ;
       if(o.countries){
@@ -438,7 +413,7 @@ export function setSourcesFromViews(o){
 
       views.forEach(function(v){
         mx.helpers.getJSON({
-          url :  vtUrlViews + v.id,
+          url :  vtUrlViews + v.id + "/row/" + v.pid,
           onSuccess : function(view){
             view._edit = v._edit; 
             initViews.push( view );
