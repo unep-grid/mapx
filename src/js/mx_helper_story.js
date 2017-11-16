@@ -114,7 +114,8 @@ function checkMissingView(o){
       var vtUrlViews = mx.settings.vtUrlViews;
 
       /**
-       * Create a list of view to add
+       * Create a list of view to download
+       * ( e.g. if they are from another country )
        */
       viewsStory.forEach(function(vs){
         var found = false;
@@ -128,7 +129,6 @@ function checkMissingView(o){
         });
 
         if(!found){
-          console.log(vs);
           viewsToAdd.push(vs);
         }
 
@@ -144,7 +144,7 @@ function checkMissingView(o){
         var vL = viewsToAdd.length ;
 
         viewsToAdd.forEach(function(v,i){
-
+         
           mx.helpers.getJSON({
             url :  vtUrlViews + v.id,
             onSuccess : function(view){
@@ -174,7 +174,7 @@ function checkMissingView(o){
 
     }
 
-  })
+  });
 }
 
 
