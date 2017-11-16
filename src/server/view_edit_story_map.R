@@ -109,7 +109,7 @@ observeEvent(reactData$viewStory,{
     edit = userRole$edit,
     userId = userData$id,
     allCountry = TRUE,
-    keys = c("id","country","type","_title","target")
+    keys = c("id","pid","country","type","_title","target")
     )
 
   reactData$viewsAllAvailable <- views
@@ -172,8 +172,6 @@ observeEvent(input$btnViewPreviewStory,{
   # Save local views from story, if any
   #
   view <- .set(view,c("data","views"),views)
-
-
 
   mxUpdateText(
     id = "modalViewEdit_txt",

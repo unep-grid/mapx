@@ -146,7 +146,7 @@ function checkMissingView(o){
         viewsToAdd.forEach(function(v,i){
          
           mx.helpers.getJSON({
-            url :  vtUrlViews + v.id,
+            url :  vtUrlViews + v.id + "/row/" + v.pid,
             onSuccess : function(view){
               /*
                * Add it to the view list
