@@ -232,7 +232,6 @@ export function initMapx(o){
       }
     });
 
-    if(false){
     map.on('mousemove', function(e) {
 
       var layers = mx.helpers.getLayerNamesByPrefix({
@@ -243,7 +242,6 @@ export function initMapx(o){
       var features = map.queryRenderedFeatures(e.point,{layers:layers});
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
-    }
 
     map.on("render" , mx.helpers.handleEvent);
     map.on("click", mx.helpers.handleEvent);
