@@ -145,9 +145,35 @@ observeEvent(input$btnViewPreviewStory,{
 
   if(noDataCheck(story)) return();
 
+  allViews <- reactData$viewsAllAvailable
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","story"), story)
   view <- .set(view,c("date_modified"), Sys.time())
+
+  #
+  # Retrieve and store data for all views used in story.
+  #
+  views = list()
+
+  # All views id extracted from the story
+  viewsStory = lapply(story$steps,function(s){
+    lapply(s$views,function(v){v})
+      })
+  # Final view list
+  viewsId = unique(unlist(viewsStory))
+  viewsId = as.list(viewsId)
+
+  # If there is at least on views used, get views object.
+  if(!noDataCheck(viewsId)){
+    views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
+  }
+
+  #
+  # Save local views from story, if any
+  #
+  view <- .set(view,c("data","views"),views)
+
+
 
   mxUpdateText(
     id = "modalViewEdit_txt",
