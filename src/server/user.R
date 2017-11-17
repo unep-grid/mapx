@@ -360,7 +360,7 @@ observeEvent(reactData$loginRequested,{
     # Get user info
     #
     userInfo <- mxDbGetUserInfoList(id=res$id)
-
+    
     #
     # Update reactive item
     #
@@ -394,7 +394,7 @@ getUserRole <- reactive({
 
   roles <- list()
 
-  if(hasInfo && hasCountry){
+  if( hasInfo && hasCountry ){
 
     # Get roles
     roles <- mxGetMaxRole(
