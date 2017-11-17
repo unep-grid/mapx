@@ -1561,8 +1561,8 @@ mxGetMaxRole <- function(project,userInfo){
   roleInProject <- mxRecursiveSearch(
     li=userRoles,"project","==",project
     )[[1]]$role
-  # Get role for world
 
+  # Get role for world
   roleInWorld <- mxRecursiveSearch(
     li=userRoles,"project","==","world"
     )[[1]]$role
@@ -1570,7 +1570,7 @@ mxGetMaxRole <- function(project,userInfo){
   hasRoleInProject <- !noDataCheck(roleInProject)
   hasRoleInWorld <- !noDataCheck(roleInWorld)
 
-  if(!hasRoleInWorld && !hasRoleInWorld) stop("No role found!")
+  if(!hasRoleInWorld && !hasRoleInProject) stop("No role found!")
 
   if(hasRoleInProject){
     levelProject <- mxRecursiveSearch(
