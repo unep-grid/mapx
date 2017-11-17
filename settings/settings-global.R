@@ -405,7 +405,7 @@ config[["users"]][["data"]][["superUser"]]  <- list(
 config[["users"]][["roles"]]<- list(
   list(
     name="public",
-    level=4,
+    level = 4,
     access = c(),
     read = c("public"),
     publish = c(),
@@ -414,8 +414,8 @@ config[["users"]][["roles"]]<- list(
     admin = c()
     ),
   list(
-    name="user",
-    level=3,
+    name = "user",
+    level = 3,
     access = c(),
     read = c("self","public","user"),
     publish = c("self","publisher"),
@@ -424,8 +424,8 @@ config[["users"]][["roles"]]<- list(
     admin = c()
     ),
   list(
-    name="publisher",
-    level=2,
+    name = "publisher",
+    level = 2,
     access = c(),
     read = c("self","public","user","publisher"),
     publish = c("self","public","user","publisher"),
@@ -434,8 +434,8 @@ config[["users"]][["roles"]]<- list(
     admin = c()
     ),
   list(
-    name="admin",
-    level=1,
+    name = "admin",
+    level = 1,
     access = c(),
     read = c("self","public","user","publisher","admin"),
     publish = c("self","public","user","publisher","admin"),
@@ -444,8 +444,8 @@ config[["users"]][["roles"]]<- list(
     admin = c("self","public","user","publisher")
     ),
   list(
-    name="superuser",
-    level=0,
+    name = "superuser",
+    level = 0,
     access = c("db"),
     read = c("self","public","user","publisher","admin","superuser"),
     publish = c("self","public","user","publisher","admin","superuser"),
