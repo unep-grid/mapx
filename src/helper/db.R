@@ -239,15 +239,21 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
       
       SELECT *, 
       data #> '{\"title\",\"%8$s\"}' as _title,
-      exists(
-        SELECT id 
-        FROM d 
-        WHERE d.target ?| array[%6$s] 
+      ( 
+      CASE WHEN 
+        (
+          country = '%5$s' AND 
+          (
+          d.target ?| array[%6$s] 
         OR (
           d.editor = '%4$s' 
           AND d.target ?| array['self']
           )
-        ) as _edit
+        )
+          ) THEN true 
+      ELSE false
+      END
+      ) as _edit
       FROM d
       )"
     , tableTempName
@@ -260,7 +266,7 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
     , language
     )
 
-  mxDbGetQuery(queryMain,con=con)
+    mxDbGetQuery(queryMain,con=con)
 
   if(!noDataCheck(collections)){
 
@@ -313,7 +319,7 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
   }
 
   time <- mxTimeDiff("Get view : query")
-  
+ 
   res <- na.omit(mxDbGetQuery(q,con=con))
   mxTimeDiff(time)
 
