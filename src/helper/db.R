@@ -215,7 +215,7 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
         GROUP BY _id
         ),
       c as (
-        SELECT *, b.data ->'countries' as _countries, b.data -> 'collections' as _collections
+        SELECT *, b.data -> 'countries' as _countries, b.data -> 'collections' as _collections
         FROM %2$s b
         JOIN a ON a._id = b.id AND a._date_latest = b.date_modified
         WHERE
@@ -228,7 +228,6 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
       SELECT *
       FROM c
       WHERE
-      
       (
         ( %7$s ) OR
         (country ='%5$s') OR
@@ -240,9 +239,13 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
       SELECT *, 
       data #> '{\"title\",\"%8$s\"}' as _title,
       ( 
-      CASE WHEN 
+      CASE WHEN
         (
-          country = '%5$s' AND 
+          ( 
+           country = '%5$s' OR 
+          _countries ?| array['%5$s']
+          )
+          AND
           (
           d.target ?| array[%6$s] 
         OR (
