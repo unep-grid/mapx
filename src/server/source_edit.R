@@ -211,6 +211,11 @@ observeEvent(input$btnUpdateSource,{
     textCloseButton=d("btn_close",language)
     )
 
+  #
+  # Invalidate source list
+  #
+
+  reactData$updateSourceLayerList <- runif(1)  
 })
 
 
