@@ -239,7 +239,8 @@ config[["languages"]][["list"]] <- list(
   "中国 ( chinese )" = "zh",
   "Deutsch ( german )" = "de",
   "বাংলা  (bengali)" = "bn",
-  "فارسی (Dari/Persian)" = "fa"
+  "فارسی (Dari/Persian)" = "fa",
+  "پښتو (Pashto)"="ps"
   )
 
 #
@@ -295,7 +296,7 @@ config[[c("views","classes")]] <- list(
   "env", # environment
   "nrg", # energy
   "inf", # infrastructure
-  "str" # stresses
+  "str"
   )
 
 config[[c("views","type")]] <- list(
@@ -405,7 +406,7 @@ config[["users"]][["data"]][["superUser"]]  <- list(
 config[["users"]][["roles"]]<- list(
   list(
     name="public",
-    level = 4,
+    level = 5,
     access = c(),
     read = c("public"),
     publish = c(),
@@ -415,7 +416,7 @@ config[["users"]][["roles"]]<- list(
     ),
   list(
     name = "user",
-    level = 3,
+    level = 4,
     access = c(),
     read = c("self","public","user"),
     publish = c("self","publisher"),
@@ -425,8 +426,18 @@ config[["users"]][["roles"]]<- list(
     ),
   list(
     name = "publisher",
-    level = 2,
+    level = 3,
     access = c(),
+    read = c("self","public","user","publisher"),
+    publish = c("self","public","user","publisher"),
+    edit = c("self","public","user","publisher"),
+    profile = c("self"),
+    admin = c()
+    ),
+  list(
+    name = "developer",
+    level = 2,
+    access = c("editCustomView","editDashboard"),
     read = c("self","public","user","publisher"),
     publish = c("self","public","user","publisher"),
     edit = c("self","public","user","publisher"),
