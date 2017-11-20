@@ -382,8 +382,8 @@ color:var(--mx_ui_text);
 }
 
 .mx .mx-view-tgl-btn {
-  background-color: var(--mx_ui_text);
-  border-color: solid var(--mx_ui_text);
+  background-color: var(--mx_ui_background);
+  border-color: 1px solid var(--mx_ui_border);
 }
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-container {
   background-color: #7bf75e;

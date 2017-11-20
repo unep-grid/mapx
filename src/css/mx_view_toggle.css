@@ -40,7 +40,7 @@
   overflow:hidden;
   position: relative;
   margin-top: 5px;
-  border-radius: 5px;
+  border-radius: 3px;
   width: 100%;
   z-index: 3;
   padding: 10px;
@@ -155,18 +155,18 @@
 
 .mx-view-tgl-btn {
   position: relative;
-  border-radius:50%;
-  width: 12px;
-  height: 12px;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
   margin-left: 10px;
-  margin-top:-2px;
+  margin-top: 0px;
   background-color: black;
   border-color: black;
   transition: margin-left 0.2s ease-in-out;
 }
 
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn {
-  margin-left: -2px;
+  margin-left: 0px;
 }
 
 

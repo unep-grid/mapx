@@ -178,7 +178,7 @@ html, body, .full-page {
 .mapboxgl-ctrl.mapboxgl-ctrl-scale,
 .mapboxgl-ctrl.mx-north-arrow
 {
-  border-radius:5px;
+  border-radius: 3px;
   text-align: center;
 }
 
@@ -196,7 +196,7 @@ html, body, .full-page {
   font-weight: normal;
   margin: 2px;
   padding: 2px 5px 2px 5px;
-  border-radius: 5px;
+  border-radius: 3px;
   line-height: 2.2;
   font-size: 10px;
 }
@@ -304,7 +304,7 @@ html, body, .full-page {
 .mx-controls-ul {
    margin: 0;
    padding: 0;
-   border-radius:5px;
+   border-radius:3px;
    max-height:25px;
 }
 
@@ -339,7 +339,7 @@ html, body, .full-page {
 }
 
 .mx-controls-top .mx-controls-ul li {
- border-radius : 5px;
+ border-radius : 3px;
  background:none;
 }
 .mx-controls-view .mx-controls-ul li {
@@ -392,7 +392,7 @@ html, body, .full-page {
   z-index: 90;
   border: 1px solid;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 3px;
 }
 
 .mx-panel-right {
@@ -471,7 +471,6 @@ html, body, .full-page {
 */
 
 .mx-settings-colors {
-  /*border-radius:5px;*/
   display: flex;
   flex-direction: column;
   width:100%;
@@ -631,7 +630,7 @@ html, body, .full-page {
 }
 
 .mx-drag-drop-area {
-  border-radius: 5px;
+  border-radius: 3px;
   width: 100%;
   height: 10px;
   background: rgba(212, 212, 212, 0.34);
@@ -671,7 +670,7 @@ html, body, .full-page {
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
-  border-radius:5px;
+  border-radius:3px;
   z-index:500;
   right:0;
   left:0;
@@ -803,7 +802,7 @@ html.shiny-busy body::after {
   margin-right: auto;
   margin-left: auto;
   background: white;
-  border-radius:5px;
+  border-radius:3px;
 }
 
 .loading-item {
@@ -1010,7 +1009,7 @@ html.shiny-busy body::after {
   border: none;
   background: hsla(0, 0%, 0%, 0.1);
   margin-top:5px;
-  border-radius:5px;
+  border-radius:3px;
   -webkit-transition: -webkit-transform 0.2s;
   transition: transform 0.2s;
 
