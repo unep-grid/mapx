@@ -418,7 +418,6 @@ export function setSourcesFromViews(o){
             view._edit = v._edit; 
             initViews.push( view );
             initViewsL = initViews.length;
-            console.log(initViewsL + "/" + viewsL );
             /**
              * add sources for each 
              */
