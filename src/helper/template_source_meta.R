@@ -1,6 +1,6 @@
 
 
-mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=c(),extent=list(),title="",abstract=""){
+mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=c(),extent=list(),title="",abstract="",notes=""){
 
   #
   # 
@@ -21,25 +21,27 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
   # Final object
   #
   out = list(
-    title = t("schemaTitle"),
-    description = t("schemaDesc"),
+    title = t("schema_title"),
+    description = t("schema_desc"),
     type = "object",
     required = list(),
     properties = list(
       text = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title =  t("textualTitle"),
-        description = t("textualDesc"),
+        title =  t("textual_title"),
+        description = t("textual_desc"),
         options = list(collapsed = TRUE),
         properties = list(
           title = mxSchemaMultiLingualInput(
-            keyTitle="textualDescTitle",
-            default= list(en=title),
+            language =  language,
+            keyTitle = "textual_desc_title",
+            default = list(en=title),
             dict = dict
             ),
           abstract = mxSchemaMultiLingualInput(
-            keyTitle="textualDescAbstract",
+            language =  language,
+            keyTitle="textual_desc_abstract",
             default = list(en=abstract),
             type="string",
             format="textarea",
@@ -49,17 +51,17 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
             propertyOrder = mxCounter("b"),
             type = "object",
             options = list(collapsed = TRUE),
-            title = t("textualKeywordTitle"),
-            description = t("textualKeywordDesc"),
+            title = t("textual_keyword_title"),
+            description = t("textual_keyword_desc"),
             properties = list(
-               keys = list(
-                title = t("textualKeywordsTitle"),
+              keys = list(
+                title = t("textual_keywords_title"),
                 type = "array",
                 format = "table",
                 minItems = 1,
                 items = list(
                   type = "string",
-                  title = t("textualKeywordItemTitle")
+                  title = t("textual_keyword_item_title")
                   )
                 )
               )
@@ -67,35 +69,44 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
           attributes = list(
             propertyOrder = mxCounter("b"),
             type = "object",
-            title = t("attributesTitle"),
-            description = t("attributesDesc"), 
+            title = t("attributes_title"),
+            description = t("attributes_desc"), 
             options = list(collapsed = TRUE),
             properties = mxSchemaAttributeInput(
-                format="textarea",
-                keyTitle="attributeDescTitle",
-                keyCounter="attr",
-                type="string",
-                collapsed=TRUE,
-                attributes=attributesNames,
-                dict = dict
-                )  
+              format="textarea",
+              keyTitle="attribute_desc_title",
+              keyCounter="attr",
+              type="string",
+              collapsed=TRUE,
+              attributes=attributesNames,
+              dict = dict
+              )  
+            ),
+          notes = mxSchemaMultiLingualInput(
+            language =  language,
+            keyTitle="textual_desc_notes",
+            default = list(en=notes),
+            type="string",
+            format="textarea",
+            dict = dict,
+            englishRequired = F
             ),
           language = list(
             propertyOrder = mxCounter("b"),
             type = "object",
-            title = t("langTitle"), 
-            description = t("langDesc"),
+            title = t("lang_title"), 
+            description = t("lang_desc"),
             options = list(collapsed = TRUE),
             properties = list(
               codes = list(
                 type = "array",
-                title = t("langListTitle"),
-                description = t("langListDesc"),
+                title = t("lang_list_title"),
+                description = t("lang_list_desc"),
                 format = "table",
                 items = list(
                   type = "object",
                   options = list(collapsed = TRUE),
-                  title = t("langItemTitle"),
+                  title = t("lang_item_title"),
                   properties = list(
                     code = list(
                       type = "string",
@@ -111,37 +122,22 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         ),
       access = list(
         propertyOrder = mxCounter("a"),
-        title = t("targetTitle"),
-        description = t("targetDesc"),
+        title = t("target_title"),
+        description = t("target_desc"),
         type = "object",
         options = list(collapsed = TRUE),
         properties = list(
-          roles = list(
-            title = t("targetRolesTitle"),
-            description = t("targetRolesDesc"),
-            type =  "object",
-            options = list(collapsed = TRUE),
-            properties = list(
-              names = list(
-                title = t("targetRolesListTitle"),
-                type = "array",
-                format = "table",
-                minItems = 1,
-                items = list(
-                  type = "object",
-                  options = list(collapsed = TRUE),
-                  properties = list(
-                    role = list(
-                      title = t("targetRoleItemTitle"),
-                      type = "string",
-                      enum =  rolesTarget,
-                      default = "self",
-                      options = list(
-                        enum_titles = names(t(rolesTarget))
-                        )
-                      )
-                    )
-                  )
+          rolesRead = list(
+            title = t("target_roles_desc"),
+            type =  "array",
+            format = "checkbox",
+            uniqueItems = TRUE,
+            items = list(
+              type = "string",
+              enum = as.list(rolesTarget),
+              default = "self",
+              options = list(
+                enum_titles = names(t(rolesTarget))
                 )
               )
             )
@@ -150,19 +146,19 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       temporal = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title = t("temporalTitle"),
-        description = t("temporalDesc"),
+        title = t("temporal_title"),
+        description = t("temporal_desc"),
         options = list(collapsed = TRUE),
         properties = list(
           issuance = list(
             type = "object",
-            title =  t("temporalIssuanceTitle"),
-            description =  t("temporalIssuanceDesc"),
+            title =  t("temporal_issuance_title"),
+            description =  t("temporal_issuance_desc"),
             options = list(collapsed=TRUE),
             properties = list(
               periodicity = list(
-                title = t("temporalPeriodicity"),
-                description = t("temporalPeriodicityDesc"),
+                title = t("temporal_periodicity"),
+                description = t("temporal_periodicity_desc"),
                 type = "string",
                 enum = c(     
                   "continual",
@@ -173,9 +169,9 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                   "quarterly",
                   "biannually",
                   "annually",
-                  "asNeeded",
+                  "as_needed",
                   "irregular",
-                  "notPlanned",
+                  "not_planned",
                   "unknown"
                   ),
                 options = list(enum_titles = 
@@ -188,15 +184,15 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                         "quarterly",
                         "biannually",
                         "annually",
-                        "asNeeded",
+                        "as_needed",
                         "irregular",
-                        "notPlanned",
+                        "not_planned",
                         "unknown"
                         ))))
                 ),
               released_at = list(
-                title = t("temporalReleaseTitle"),
-                description = t("temporalReleaseDesc"),
+                title = t("temporal_release_title"),
+                description = t("temporal_release_desc"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -204,8 +200,8 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                 default = "0001-01-01"
                 ),
               modified_at = list(
-                title = t("temporalUpdateTitle"),
-                description = t("temporalUpdateDesc"),
+                title = t("temporal_update_title"),
+                description = t("temporal_update_desc"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -214,25 +210,25 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
               )
             ),
           range = list(
-            title = t("temporalRangeTitle"),
-            description = t("temporalRangeDesc"),
+            title = t("temporal_range_title"),
+            description = t("temporal_range_desc"),
             type = "object",
             options = list(collapsed = TRUE),
             properties = list(
               is_timeless = list(
-                title = t("temporalRangeTimeless"),
+                title = t("temporal_range_timeless"),
                 type = "boolean",
                 format = "checkbox"
                 ),
               start_at = list(
-                title = t("temporalRangeStart"),
+                title = t("temporal_range_start"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
                 default = "0001-01-01"
                 ),
               end_at = list(
-                title = t("temporalRangeEnd"),
+                title = t("temporal_range_end"),
                 type = "string",
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
@@ -245,58 +241,58 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
       spatial = list(
         propertyOrder = mxCounter("a"),
         type = "object",
-        title = t("spatialTitle"),
-        description = t("spatialDesc"),
+        title = t("spatial_title"),
+        description = t("spatial_desc"),
         options = list(collapsed = TRUE),
         properties = list(
           crs = list(
-            title = t("spatialSrsTitle"),
-            description = t("spatialSrsDesc"),
+            title = t("spatial_srs_title"),
+            description = t("spatial_srs_desc"),
             type = "object",
             format = "table",
             options = list(collapsed = TRUE),
             properties = list(
               code = list(
-                title = t("spatialSrsCode"),
+                title = t("spatial_srs_code"),
                 type = "string",
                 default = "EPSG:4326"
                 ),
               url = list(
-                title = t("spatialSrsDescUrl"),
+                title = t("spatial_srs_desc_url"),
                 type = "string",
                 default = "http://spatialreference.org/ref/epsg/4326/"
                 )
               )
             ),
           bbox = list(
-            title = t("spatialBbxTitle"),
-            description = t("spatialBbxDesc"),
+            title = t("spatial_bbx_title"),
+            description = t("spatial_bbx_desc"),
             type = "object",
             options = list(collapsed = TRUE),
             properties = list(
               lng_min = list(
-                title = t("spatialBbxLngMin"),
+                title = t("spatial_bbx_lng_min"),
                 type = "number",
                 minimum = -180,
                 maximum = 180,
                 default = .get(extent,"lng1")
                 ),
               lng_max = list(
-                title = t("spatialBbxLngMax"),
+                title = t("spatial_bbx_lng_max"),
                 type = "number",
                 minumum = -180,
                 maximum = 180,
                 default = .get(extent,"lng2")
                 ),
               lat_min = list(
-                title = t("spatialBbxLatMin"),
+                title = t("spatial_bbx_lat_min"),
                 type = "number",
                 minumum = -90,
                 maximum = 90,
                 default = .get(extent,"lat1") 
                 ),
               lat_max = list(
-                title = t("spatialBbxLatMax"),
+                title = t("spatial_bbx_lat_max"),
                 type = "number",
                 minumum = -90,
                 maximum = 90, 
@@ -305,186 +301,186 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
               )
             )
           )
-      ),
-    contact = list(
-      propertyOrder = mxCounter("a"),
-      type = "object",
-      title = t("contactTitle"),
-      description = t("contactDesc"),
-      options = list(collapsed = TRUE),
-      properties = list(
-        contacts = list(
-          title = t("contactListTitle"),
-          type = "array",
-          items = list(
-            title = t("contactItemTitle"),
-            type = "object",
-            options = list(collapsed = TRUE),
-            properties = list(
-              "function" = list(
-                type = "string",
-                title = t("contactFunction"),
-                description = t("contactFunctionDesc")
-                ),
-              name = list(
-                title = t("contactName"),
-                type = "string"
-                ),
-              address = list(
-                title = t("contactAddress"),
-                type = "string"
-                ),
-              email = list(
-                title = t("contactEmail"),
-                type = "string")
+        ),
+      contact = list(
+        propertyOrder = mxCounter("a"),
+        type = "object",
+        title = t("contact_title"),
+        description = t("contact_desc"),
+        options = list(collapsed = TRUE),
+        properties = list(
+          contacts = list(
+            title = t("contact_list_title"),
+            type = "array",
+            items = list(
+              title = t("contact_item_title"),
+              type = "object",
+              options = list(collapsed = TRUE),
+              properties = list(
+                "function" = list(
+                  type = "string",
+                  title = t("contact_function"),
+                  description = t("contact_function_desc")
+                  ),
+                name = list(
+                  title = t("contact_name"),
+                  type = "string"
+                  ),
+                address = list(
+                  title = t("contact_address"),
+                  type = "string"
+                  ),
+                email = list(
+                  title = t("contact_email"),
+                  type = "string")
+                )
               )
             )
           )
-        )
-      ),
-    origin = list(
-      propertyOrder = mxCounter("a"),
-      title = t("originTitle"),
-      description = t("originDesc"),
-      options = list(collapsed = TRUE),
-      type = "object",
-      properties = list(
-        homepage = list(
-          type = "object",
-          title = t("originHomepageTitle"),
-          description = t("originHomepageDesc"),
-          options = list(collapsed = TRUE),
-          properties =list(
-            url = list(
-              title = t("originHomepageItemTitle"),
-              type = "string",
-              format = "uri"
+        ),
+      origin = list(
+        propertyOrder = mxCounter("a"),
+        title = t("origin_title"),
+        description = t("origin_desc"),
+        options = list(collapsed = TRUE),
+        type = "object",
+        properties = list(
+          homepage = list(
+            type = "object",
+            title = t("origin_homepage_title"),
+            description = t("origin_homepage_desc"),
+            options = list(collapsed = TRUE),
+            properties =list(
+              url = list(
+                title = t("origin_homepage_item_title"),
+                type = "string",
+                format = "uri"
+                )
               )
-            )
-          ),
-        `source` = list(
-          type = "object",
-          options = list(collapsed = TRUE),
-          title = t("originSourcesTitle"),
-          description = t("originSourcesDesc"),
-          properties = list(
-            urls = list(
-              type = "array",
-              title = t("originSourcesList"),
-              minItems = 1,
-              uniqueItems = TRUE,
-              items = list(
-                type = "object",
-                title = t("originSourceTitle"),
-                required = "url",
-                options = list(collapsed = TRUE),
-                properties = list(
-                  is_download_link = list(
-                    title = t("originSourceIsFullRequestTitle"),
-                    type = "boolean",
-                    format = "checkbox",
-                    default = FALSE
-                    ),
-                  url = list(
-                    title = t("originSourceUrlTitle"),
-                    type = "string",
-                    format = "uri"
+            ),
+          `source` = list(
+            type = "object",
+            options = list(collapsed = TRUE),
+            title = t("origin_sources_title"),
+            description = t("origin_sources_desc"),
+            properties = list(
+              urls = list(
+                type = "array",
+                title = t("origin_sources_list"),
+                minItems = 1,
+                uniqueItems = TRUE,
+                items = list(
+                  type = "object",
+                  title = t("origin_source_title"),
+                  required = "url",
+                  options = list(collapsed = TRUE),
+                  properties = list(
+                    is_download_link = list(
+                      title = t("origin_source_is_full_request_title"),
+                      type = "boolean",
+                      format = "checkbox",
+                      default = FALSE
+                      ),
+                    url = list(
+                      title = t("origin_source_url_title"),
+                      type = "string",
+                      format = "uri"
+                      )
                     )
                   )
                 )
               )
             )
           )
-        )
-      ),
-    license = list(
-      propertyOrder = mxCounter("a"),
-      type = "object",
-      title = t("licenseTitle"),
-      description = t("licenseDesc"),
-      options = list(
-        collapsed = TRUE
         ),
-      properties = list(
-        licenses = list(
-          type = "array",
-          title = t("licenseListTitle"),
-          description = t("licenseListDesc"),
-          items = list(
-            type = "object",
-            title = t("licenseItemTitle"),
-            options = list(collapsed = TRUE),
-            properties = list(
-              name = list(
-                title = t("licenseName"),
-                type = "string"
-                ),
-              text = list(
-                title = t("licenseText"),
-                type="string",
-                format="textarea"
+      license = list(
+        propertyOrder = mxCounter("a"),
+        type = "object",
+        title = t("license_title"),
+        description = t("license_desc"),
+        options = list(
+          collapsed = TRUE
+          ),
+        properties = list(
+          licenses = list(
+            type = "array",
+            title = t("license_list_title"),
+            description = t("license_list_desc"),
+            items = list(
+              type = "object",
+              title = t("license_item_title"),
+              options = list(collapsed = TRUE),
+              properties = list(
+                name = list(
+                  title = t("license_name"),
+                  type = "string"
+                  ),
+                text = list(
+                  title = t("license_text"),
+                  type="string",
+                  format="textarea"
+                  )
                 )
               )
             )
           )
-        )
-      ),
-    annex = list(
-      propertyOrder = mxCounter("a"),
-      type = "object",
-      title = t("additionalDocTitle"),
-      description = t("additionalDocDesc"),
-      options = list(
-        collapsed = TRUE
         ),
-      properties = list(
-        references = list(
-          type = "array",
-          title = t("additionalDocItemsTitle"),
-          description = t("additionalDocItemsDesc"),
-          items = list(
-            type = "object",
-            title = t("additionalDocItemTitle"),
-            options = list(collapsed = TRUE),
-            properties = list(
-              url = list(
-                title =t("additionalDocItemUrl"), 
-                type = "string",
-                format = "uri"
+      annex = list(
+        propertyOrder = mxCounter("a"),
+        type = "object",
+        title = t("additional_doc_title"),
+        description = t("additional_doc_desc"),
+        options = list(
+          collapsed = TRUE
+          ),
+        properties = list(
+          references = list(
+            type = "array",
+            title = t("additional_doc_items_title"),
+            description = t("additional_doc_items_desc"),
+            items = list(
+              type = "object",
+              title = t("additional_doc_item_title"),
+              options = list(collapsed = TRUE),
+              properties = list(
+                url = list(
+                  title =t("additional_doc_item_url"), 
+                  type = "string",
+                  format = "uri"
+                  )
                 )
-              )
-            ),
-          minItems = 1,
-          uniqueItems = TRUE)
-        )
-      ),
-    integrity = list(
-      propertyOrder = mxCounter("a"),
-      title = t("dataIntegrityTitle"),
-      description = t("dataIntegrityDesc"),
-      type = "object",
-      options = list(collapsed = TRUE),
-      properties = list(
-        "di_1_1" = mxSchemaDataIntegrityQuestion("di_1_1"),
-        "di_1_2" = mxSchemaDataIntegrityQuestion("di_1_2"), 
-        "di_1_3" = mxSchemaDataIntegrityQuestion("di_1_3"),
-        "di_1_4" = mxSchemaDataIntegrityQuestion("di_1_4"),
-        "di_2_1" = mxSchemaDataIntegrityQuestion("di_2_1"),
-        "di_2_2" = mxSchemaDataIntegrityQuestion("di_2_2"),
-        "di_2_3" = mxSchemaDataIntegrityQuestion("di_2_3"),
-        "di_2_4" = mxSchemaDataIntegrityQuestion("di_2_4"),
-        "di_3_1" = mxSchemaDataIntegrityQuestion("di_3_1"),
-        "di_3_2" = mxSchemaDataIntegrityQuestion("di_3_2"),
-        "di_3_3" = mxSchemaDataIntegrityQuestion("di_3_3"),
-        "di_3_4" = mxSchemaDataIntegrityQuestion("di_3_4"),
-        "di_4_1" = mxSchemaDataIntegrityQuestion("di_4_1"),
-        "di_4_2" = mxSchemaDataIntegrityQuestion("di_4_2"),
-        "di_4_3" = mxSchemaDataIntegrityQuestion("di_4_3"),
-        "di_4_4" = mxSchemaDataIntegrityQuestion("di_4_4")
+              ),
+            minItems = 1,
+            uniqueItems = TRUE)
+          )
+        ),
+      integrity = list(
+        propertyOrder = mxCounter("a"),
+        title = t("data_integrity_title"),
+        description = t("data_integrity_desc"),
+        type = "object",
+        options = list(collapsed = TRUE),
+        properties = list(
+          "di_1_1" = mxSchemaDataIntegrityQuestion("di_1_1"),
+          "di_1_2" = mxSchemaDataIntegrityQuestion("di_1_2"), 
+          "di_1_3" = mxSchemaDataIntegrityQuestion("di_1_3"),
+          "di_1_4" = mxSchemaDataIntegrityQuestion("di_1_4"),
+          "di_2_1" = mxSchemaDataIntegrityQuestion("di_2_1"),
+          "di_2_2" = mxSchemaDataIntegrityQuestion("di_2_2"),
+          "di_2_3" = mxSchemaDataIntegrityQuestion("di_2_3"),
+          "di_2_4" = mxSchemaDataIntegrityQuestion("di_2_4"),
+          "di_3_1" = mxSchemaDataIntegrityQuestion("di_3_1"),
+          "di_3_2" = mxSchemaDataIntegrityQuestion("di_3_2"),
+          "di_3_3" = mxSchemaDataIntegrityQuestion("di_3_3"),
+          "di_3_4" = mxSchemaDataIntegrityQuestion("di_3_4"),
+          "di_4_1" = mxSchemaDataIntegrityQuestion("di_4_1"),
+          "di_4_2" = mxSchemaDataIntegrityQuestion("di_4_2"),
+          "di_4_3" = mxSchemaDataIntegrityQuestion("di_4_3"),
+          "di_4_4" = mxSchemaDataIntegrityQuestion("di_4_4")
+          )
         )
       )
     )
-  )
 
 
   return(out)

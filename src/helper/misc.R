@@ -93,7 +93,9 @@ mxCounter =  function(id,reset=F){
 #' @param keyCounter {Character|Numeric} Id of the counter to set
 #' @param type {Character} Input type
 #' @param collapsed {Boolean} Collapse state of the object
-#' @param lanaguages {Character} Vector of languages code
+#' @param language {Character} Two letter code of language for labels
+#' @param languages {Character} Vector of languages code
+#' @param englishRequired {Boolean} Is english (en) a required field ?
 mxSchemaMultiLingualInput = function(
   format = NULL,
   default = list(),
@@ -104,6 +106,7 @@ mxSchemaMultiLingualInput = function(
   collapsed = TRUE,
   language = "en",
   languages = unlist(config[["languages"]]),
+  englishRequired = TRUE,
   dict = NULL
   ){
 
@@ -124,6 +127,17 @@ mxSchemaMultiLingualInput = function(
   }
 
   prop = lapply(languages,function(x){
+
+    #
+    # Required ?
+    #
+    minLength = 0 
+    if( englishRequired && x=="en" ){
+     minLength = 1
+    }
+    #
+    # Output entry
+    #
     list(
       title = sprintf("%1$s (%2$s)",
         d(keyTitle,lang=x,dict=dict,web=F),
@@ -131,7 +145,7 @@ mxSchemaMultiLingualInput = function(
         ),
       type = type,
       format = format,
-      minLength = ifelse(x=="en",1,0),
+      minLength = minLength,
       default = .get(default,x,default="")
       )
   })
@@ -171,7 +185,7 @@ mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){
     options = list(
       enum_titles = names(d(
           c(
-            "dontKnow",
+            "dont_know",
             "no",
             "partial",
             "yes"),

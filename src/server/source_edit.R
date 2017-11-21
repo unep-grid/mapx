@@ -68,7 +68,7 @@ observeEvent(input$btnDeleteSource,{
   mxModal(
     id="uiConfirmSourceRemove",
     title="Confirm source remove",
-    content=tags$span(d("confirmSourceRemove",lang=language,dict=dict)),
+    content=tags$span(d("confirm_source_remove",lang=language,dict=dict)),
     buttons=btnList,
     textCloseButton=d("btn_close",language),
     addBackground=T
@@ -104,7 +104,7 @@ observeEvent(input$btnDeleteSourceConfirm,{
   mxModal(
     id="uiConfirmSourceRemoveDone",
     title="Success delete source",
-    content=tags$span(d("msgSuccessDelete",lang=language,dict=dict)),
+    content=tags$span(d("msg_success_delete",lang=language,dict=dict)),
     textCloseButton=d("btn_close",language)
     )
 
@@ -120,17 +120,17 @@ observeEvent({
   init <- input$sourceEdit_init
   language <- reactData$language
   layer <- input$selectSourceLayerEdit 
+  
+  userRoles <- getUserRole()
 
   if(noDataCheck(layer) || noDataCheck(init)) return;
 
 
   meta <- mxDbGetLayerMeta(layer)
-  rolesTarget <- .get(reactUser$role,c("publish"))
-
+  rolesTarget <- .get(userRoles,c("publish"))
+  
   attributesNames <- mxDbGetLayerColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1"))
   
-
-
   # Clean meta : 
   # - remove old attributes names 
   # - remove old schema values NOTE : once stable, remove those lines
@@ -145,7 +145,18 @@ observeEvent({
   meta = .set(meta,c("origin","sources"),NULL)
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
- 
+
+  oldRoles  = .get(meta,c("access","roles","names"))
+
+  if(!noDataCheck( oldRoles )){
+    meta  = .set(meta,c("access","roles","names"),NULL)
+    roles = unlist(oldRoles) 
+    names(roles)=NULL
+    meta = .set(meta,c("access","rolesRead"),roles) 
+  }
+
+  meta = .set(meta,c("access","roles"),NULL)
+
   schema = mxSchemaSourceMeta(
       language = language,
       rolesTarget = rolesTarget,
@@ -189,6 +200,8 @@ observeEvent(input$btnUpdateSource,{
   user <- reactUser$data$id
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
+
+
   if(reactData$viewSourceEditHasIssues) return()
 
   mxDbUpdate(
@@ -207,7 +220,7 @@ observeEvent(input$btnUpdateSource,{
   mxModal(
     id="uiConfirmSourceInit",
     title="Success update",
-    content=tags$p(d("msgSuccessUpdate",dict=dict,lang=language)),
+    content=tags$p(d("msg_success_update",dict=dict,lang=language)),
     textCloseButton=d("btn_close",language)
     )
 

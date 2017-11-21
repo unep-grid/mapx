@@ -85,7 +85,7 @@ observeEvent(input$uploadGeojson,{
 observeEvent(input$sourceNewUpload_init,{
 
   language <- reactData$language 
-  rolesTarget <- .get(reactUser$role,c("desc","publish"))
+  rolesTarget <- getUserRole()$publish
 
   jedSchema(
     id="sourceNewUpload",
@@ -177,7 +177,7 @@ observeEvent(input$btnImportNewSource,{
         id = idSource,
         country = country,
         editor = user,
-        target = .get(meta,c("access","roles","names"),flattenList=T),
+        target = .get(meta,c("access","rolesRead"),flattenList=T),
         date_modified = Sys.time(),
         data = list(
           meta = meta,
