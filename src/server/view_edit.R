@@ -633,14 +633,19 @@ observe({
   #
   errors <- list()
 
-  errors <- c(    
-    input$viewTitleSchema_issues$msg,
-    input$viewAbstractSchema_issues$msg
+  hasNoLayer <-  ! input$selectSourceLayerMain %in% reactSourceLayer()
+  hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
+  hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
+
+  errors <- c(
+     hasNoLayer,
+     hasTitleIssues,
+     hasAbstractIssues
     )
 
-  mxToggleButton(
+   mxToggleButton(
     id="btnViewSave",
-    disable = length( errors ) > 0
+    disable = any(errors)
     )
 
 })
