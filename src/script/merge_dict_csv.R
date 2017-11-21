@@ -27,8 +27,6 @@ for(i in b$id){
   valB = b[b$id==i,lang]
   valA = a[a$id==i,lang]
 
-  print(valB)
-  print(valA)
   if(isEmpty(valA) && !isEmpty(valB)){
     a[a$id==i,lang] <- valB
   }

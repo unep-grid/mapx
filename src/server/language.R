@@ -46,7 +46,9 @@ observeEvent(reactData$language,{
 
 
 #
-# Update language
+# Update language. Based on generated json files.
+#
+# See also : "src/js/mx_helper_language.js"
 #
 observeEvent(input$selectLanguage,{
   language <- input$selectLanguage

@@ -38,6 +38,9 @@ export function getDict(lang){
     case "fa" :
       out = System.import("../built/dict_fa.json");
       break;
+    case "ps" :
+      out = System.import("../built/dict_ps.json");
+      break;
     case "bn" :
       out = System.import("../built/dict_bn.json");
       break;

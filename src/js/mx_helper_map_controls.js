@@ -116,7 +116,7 @@ mapControlMain.prototype.onAdd = function(map) {
   var btns = {
     btnToggleBtns:{
       classes:"fa fa-bars",
-      key:"btn_togle_btns",
+      key:"btn_toggle_all",
       hidden:false,
       action:helper.toggleControls
     },
