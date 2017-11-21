@@ -7,7 +7,6 @@ import bbox from "@turf/bbox";
 import * as stat from './mx_helper_stat.js';
 import * as color from './mx_helper_colors.js';
 
-
 // geojson type to mapbox gl type
 var typeSwitcher = {
   "Point": "circle",
@@ -69,6 +68,14 @@ onmessage = function(e) {
     // start timer
     timerStart();
 
+
+    /**
+    * Convert if not geojson
+    */
+
+    //if(fileType == 'kml') gJson =  toGeoJSON.kml(gJson);
+    //if(fileType == 'gpx') gJson =  toGeoJSON.gpx(gJson);
+    //if(fileType == 'geojson') gJson =  JSON.parse(gJson);
 
     /**
      * validation : geojson validation with geojsonhint
@@ -238,6 +245,46 @@ onmessage = function(e) {
       message: "extent found in " + timerLapString()
     });
     /**
+     * Avoid multi type : we don't handle them for now
+     */
+
+    var geomType = [];
+    if( gJson.features ){
+      // array of types in data
+      geomTypes  = gJson.features
+        .map(function(x){
+          return typeSwitcher[x.geometry.type];
+        })
+      .filter(function(v,i,s){
+        return s.indexOf(v) === i;
+      });
+    }else{
+      geomTypes = [typeSwitcher[gJson.geometry.type]];
+    }
+
+    postMessage({
+      progress: 90,
+      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
+    });
+
+    // if more than one type, return an error
+    if ( geomTypes.length>1 ) {
+      var msg = "Multi geometry not yet implemented";
+
+      postMessage({
+        progress: 100,
+        msssage: msg,
+        errorMessage: fileName + ": " + msg
+      });
+
+      console.log({
+        "errors": fileName + ": " + msg + ".(" + geomTypes + ")"
+      });
+      return;
+    }
+
+
+    /**
      * Set default for a new layer
      */
 
@@ -250,7 +297,7 @@ onmessage = function(e) {
     var colB = color.randomHsl(0.9, ran);
 
     // Set default type from geojson type
-    var typ = typeSwitcher[geomTypes[0]];
+    var typ = geomTypes[0];
 
     // Set up default style
     var dummyStyle = {
