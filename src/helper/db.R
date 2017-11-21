@@ -1136,7 +1136,7 @@ mxDbGeojsonCountFeatures <- function(path){
 
   try(silent=T,{
     if(file.exists(path)){
-      cmdCount <- sprintf("grep -o '\"geometry\":'  %1$s | wc -l",path)
+      cmdCount <- sprintf("grep -o '\"geometry\"'  %1$s | wc -l",path)
       nFeatures <- system(cmdCount, intern=T)
       
       if(!noDataCheck(nFeatures)){
@@ -1352,7 +1352,6 @@ mxDbAddRow <- function(data,table){
       sprintf("'%1$s'",x)
       )
       })
-
 
   q <- sprintf(
     "INSERT INTO %1$s (%2$s) VALUES (%3$s)",

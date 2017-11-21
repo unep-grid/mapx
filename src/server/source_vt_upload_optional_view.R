@@ -19,10 +19,10 @@ observeEvent(reactData$triggerNewViewForSourceId,{
 
 
     ui <- tagList(
-      tags$h3(d("optionalViewTitle",lang=language,dict=dict)),
-      tags$p(d("optionalViewText",lang=language,dict=dict)),
+      tags$h3(d("optional_view_title",lang=language,dict=dict)),
+      tags$p(d("optional_view_text",lang=language,dict=dict)),
       selectizeInput("selectOptionalViewAttribute",
-        label = d("selectOptionalViewAttribute",lang=language,dict=dict),
+        label = d("select_optional_view_attribute",lang=language,dict=dict),
         choices = tolower(attributes),
         options=list(
           dropdownParent="body"
@@ -127,7 +127,7 @@ observeEvent(input$btnOptionalViewCancel,{
       #
       mxModal(
         id="modalSourceCreate",
-        content=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
+        content=tags$p(d("msg_success_import",dict=dict,lang=language)),
         addBackground=TRUE,
         textCloseButton=d("btn_close",language)
         )
@@ -158,7 +158,7 @@ observeEvent(input$btnOptionalViewCreate,{
       country <- reactData$country
       user <- reactUser$data$id
       meta <- mxDbGetLayerMeta(idSource)
-      msgSave <- d("msgProcessWait", lang=language, dict=dict)
+      msgSave <- d("msg_process_wait", lang=language, dict=dict)
 
       # 
       # New view id
@@ -232,7 +232,7 @@ observeEvent(input$btnOptionalViewCreate,{
       #
       mxModal(
         id="modalSourceCreate",
-        content=tags$p(d("msgSuccessImport",dict=dict,lang=language)),
+        content=tags$p(d("msg_success_import",dict=dict,lang=language)),
         addBackground=TRUE,
         textCloseButton=d("btn_close",language)
         )

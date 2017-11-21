@@ -152,6 +152,16 @@ observeEvent(input$btnImportNewSource,{
       language <- reactData$language
       user <- reactUser$data$id
       type <- "vector"
+      userRoles <- getUserRole()
+      #
+      # Control roles
+      #
+      metaRoles <- .get(meta,c("access","rolesRead"))
+      hasValidRoles <- !noDataCheck(metaRoles) && all( metaRoles %in% userRoles$publish)
+      
+      if(!hasValidRoles){
+        meta <- .set(meta,c("access","rolesRead"),list("self"))
+      }
 
       #
       # Source id = layer id = table name
@@ -185,7 +195,7 @@ observeEvent(input$btnImportNewSource,{
           ),
         type = "vector"
         )
-
+      
       #
       # Add view to the DB
       #

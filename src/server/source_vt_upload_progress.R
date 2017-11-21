@@ -36,6 +36,7 @@ observeEvent(reactData$geojsonProgressData,{
           #
           # Add source row to DB
           #
+        
           mxDbAddRow(
             data = sourceRow,
             table = .get(config,c("pg","tables","sources"))

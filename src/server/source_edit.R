@@ -198,9 +198,19 @@ observeEvent(input$btnUpdateSource,{
   country <- reactData$country
   language <- reactData$language
   user <- reactUser$data$id
+  userRoles <- getUserRole()
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
-
+  #
+  # Control roles
+  #
+  metaRoles <- .get(meta,c("access","rolesRead"))
+  hasValidRoles <- !noDataCheck(metaRoles) && all( metaRoles %in% userRoles$publish)
+  
+  if(!hasValidRoles){
+    metaRoles = list("self")
+    meta =  .set(meta,c("access","rolesRead"),metaRoles)
+  }
 
   if(reactData$viewSourceEditHasIssues) return()
 
@@ -211,6 +221,14 @@ observeEvent(input$btnUpdateSource,{
     column = "data",
     path = c("meta"),
     value = meta
+    )
+
+  mxDbUpdate(
+    table = .get(config,c("pg","tables","sources")),
+    idCol = "id",
+    id = layer,
+    column = "target",
+    value = metaRoles
     )
 
   #
