@@ -1020,7 +1020,14 @@ mxDbGetFilterCenter<-function(table=NULL,column=NULL,value=NULL,geomColumn='geom
 #' @param geojsonList list containing the geojson data
 #' @param geojsonPath path to the geojson
 #' @param tableName Name of the postgis layer / table 
-mxDbAddGeoJSON  <-  function(geojsonList=NULL,geojsonPath=NULL,tableName=NULL,archiveIfExists=T,archivePrefix="mx_archives",onProgress=function(x){}){
+mxDbAddGeoJSON  <-  function(
+  geojsonList=NULL,
+  geojsonPath=NULL,
+  tableName=NULL,
+  archiveIfExists=T,
+  archivePrefix="mx_archives",
+  onProgress=function(x){}
+  ){
 
   conf <- mxGetDefaultConfig()
   d <-config[['pg']]
