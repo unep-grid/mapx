@@ -720,10 +720,15 @@ observeEvent(input$btnSourceDownload,{
     id="modalViewEdit",
     content=tagList(
       tags$p("A email will be sent to " + emailUser + " has soon as the data is extracted"),
-      tags$p("The data will be download at this URL"),
-      tags$a(url)
+      tags$p("The at this URL :"),
+      tags$p(
+        tags$a(
+          href=url,
+          url
+          )
+        )
+      )
     )
-  )
 
 
   #
