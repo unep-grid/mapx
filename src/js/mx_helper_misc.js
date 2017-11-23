@@ -1327,10 +1327,12 @@ timer.prototype.stop = function(){
 * Estimate memory size of object
 * @note https://gist.github.com/zensh/4975495
 * @param {Object} object to evaluate
+* @param {Boolean} humanReadable Output the result in formated text with units bytes; KiB; MiB, etc.. instead of bytes
 */
-export function getSizeOf(obj){
+export function getSizeOf(obj,humanReadable){
   var bytes = 0;
   var seenObjects = [];
+  humanReadable = humanReadable === undefined ? true : humanReadable ;
 
   function sizeOf(obj) {
     if(obj !== null && obj !== undefined) {
@@ -1361,20 +1363,27 @@ export function getSizeOf(obj){
     }
   }
 
-  function formatByteSize(bytes) {
-    if(bytes < 1024) return bytes + " bytes";
-    else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
-    else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
-    else return(bytes / 1073741824).toFixed(3) + " GiB";
+
+
+  var res =  sizeOf(obj);
+
+  if(!humanReadable){
+    return res ;
+  }else{
+    return formatByteSize(res);
   }
-
-  return formatByteSize(sizeOf(obj));
-
 }
 
 
-
-
+/**
+ * Format byte to human readable value
+ */
+export function formatByteSize(bytes) {
+  if(bytes < 1024) return bytes + " bytes";
+  else if(bytes < 1048576) return(bytes / 1024).toFixed(3) + " KiB";
+  else if(bytes < 1073741824) return(bytes / 1048576).toFixed(3) + " MiB";
+  else return(bytes / 1073741824).toFixed(3) + " GiB";
+}
 
 /**
 * Smooth scroll

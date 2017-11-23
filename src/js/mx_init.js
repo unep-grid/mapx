@@ -12,13 +12,14 @@ export let data = {};
 export let controls = {};
 export let listener = {};
 export let settings = {
-    language : "en",
-    separators : {
-      sublayer : "_@_",
-    },
-    country:"",
-    vtPort : "",
-    maxByteUpload : Math.pow(1024,2)*1000, //1000 MiB 
+  language : "en",
+  separators : {
+    sublayer : "_@_",
+  },
+  country:"",
+  vtPort : "",
+  maxByteUpload : Math.pow(1024,2)*1000, //1000 MiB 
+  maxByteJed : 100000 // 100 Kb  
 };
 export let editors = {};
 export let extend = {
