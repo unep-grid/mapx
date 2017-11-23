@@ -637,19 +637,22 @@ mxDbExport <- function(
   #
   d <- .get(config,c('pg'))
 
+
+  clean <- function(p){
+    gsub("\\$","\\\\$",p)
+  }
+
   postgresData <- 
       "PG:\"dbname='"+ d$dbname +"'" +
       " host='" + d$host + "'" +
       " port='" + d$port + "'" +
       " user='" + d$user + "'" +
-      " password='$MXPWD'\"" +
+      " password='"+ clean(d$password) + "'\"" +
       " \""+ idTable + "\""
   #
   # Init
   #
-  cmdInit <- 
-    "cd " + pathDirDownload + " && " + 
-    "MXPWD=\"" + d$password + "\""
+  cmdInit <- "cd " + pathDirDownload  
 
   #
   # Command to ogr
