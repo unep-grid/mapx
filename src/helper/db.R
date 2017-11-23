@@ -616,7 +616,6 @@ mxDbExport <- function(
   nameDirDownloadFile <- fileNameNoExt 
   pathDirDownloadFile <- file.path(pathDirDownload,nameDirDownloadFile)
   pathFileZip <- file.path(pathDirDownload,fileNameZip)
-  dir.create(pathDirDownloadFile,showWarnings=F,recursive=TRUE)
   isShapeFile <- formatOut == "ESRI Shapefile"
   pathFile <- ifelse(isShapeFile,pathDirDownloadFile,file.path(pathDirDownloadFile,fileName))
   fileNameError <- "error_" + fileNameNoExt + ".txt"
@@ -625,18 +624,20 @@ mxDbExport <- function(
   #
   # cleaning
   #
-  if(file.exists(pathFile)){
-    unlink(pathFile,recursive=T)
+  if(file.exists(pathDirDownloadFile)){
+    unlink(pathDirDownloadFile,recursive=T)
   }
+
   if(file.exists(pathFileZip)){
     unlink(pathFile,recursive=T)
   }
+
+  dir.create(pathDirDownloadFile,showWarnings=F,recursive=TRUE)
 
   #
   # Postgres config
   #
   d <- .get(config,c('pg'))
-
 
   clean <- function(p){
     gsub("\\$","\\\\$",p)
@@ -671,8 +672,9 @@ mxDbExport <- function(
       " " + fileNameNoExt +
       " 2> " + fileNameError
   
-  cmdClean <- "rm -rf" +
-      " " + pathDirDownloadFile 
+  cmdClean <-
+      " rm -rf  " + pathDirDownloadFile +
+      " rm -rf  " + file.path(pathDirDownload,"*.txt") 
 
   #
   # Try catch 
@@ -681,11 +683,9 @@ mxDbExport <- function(
     cmdInit + " && " + 
     cmdOgr +" && " + 
     cmdZip + " && " + 
-    cmdClean + " && " + 
     onEnd() + " ; } || { " + 
     onErrorClient() + " && " + 
-    onErrorAdmin(pathFileError) + " ; }";
-
+    onErrorAdmin(pathFileError) + " ; } " + cmdClean + " ;"
 
   system(cmd,wait=FALSE,ignore.stderr=TRUE)
   onStart()
