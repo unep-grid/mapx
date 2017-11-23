@@ -647,7 +647,7 @@ mxDbExport <- function(
   #
   # Init
   #
-  cmdInit <- "cd " + dirDownload  
+  cmdInit <- "cd " + pathDirDownload 
 
   #
   # Command to ogr
