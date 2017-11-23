@@ -666,7 +666,7 @@ mxDbExport <- function(
       " -nln " + fileNameNoExt + 
       " 2> " + fileNameError
 
-  cmdZip <- "zip -r" +
+  cmdZip <- "zip " +
       " " + fileNameZip +
       " " + fileNameNoExt +
       " 2> " + fileNameError

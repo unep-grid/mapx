@@ -5,13 +5,14 @@
 
 observe({
   mxCatch("view_edit.R",{
+
     #
     # Extract action type
     #
     viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
 
     if(!noDataCheck(viewAction)){
- 
+
       isolate({
 
         userData <- reactUser$data
@@ -691,7 +692,8 @@ observeEvent(input$btnSourceDownload,{
   # Session info to build url
   #
   cd <- session$clientData
-  url <- cd$url_protocol + "//" + cd$url_hostname +":"+ cd$url_port + "/downloads/" + fileNameZip
+  port <- ifelse(noDataCheck(cd$url_port),"", ":" + cd$url_port)
+  url <- cd$url_protocol + "//" + cd$url_hostname + port + cd$url_pathname + "downloads/" + fileNameZip
   subject <-  "MAP-X DOWNLOAD " + fileName
 
   #
