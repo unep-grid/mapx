@@ -102,6 +102,7 @@ observe({
 
               formats <- .get(config,c("data","format"))              
               formatsNames <- sapply(formats,function(x){if(x$type=="vector"){return(x$name)}})
+              fileName <- subPunct(viewTitle) + ".shp"
 
               uiOut <- tagList(
                 selectizeInput("selectDownloadFormat",
@@ -114,7 +115,7 @@ observe({
                   ),
                  textInput("txtDownloadFileName",
                    label = d("download_file_name",language),
-                   value = ""
+                   value = fileName
                    )
                 )
 
@@ -134,8 +135,6 @@ observe({
                 buttons = btnList
                 )
 
-
-            reactData$triggerDownloadName <- runif(1)
 
             },
             "btn_opt_meta"={
@@ -595,68 +594,71 @@ observe({
 observe({
 
   format <- input$selectDownloadFormat
-  trigger <- reactData$triggerDownloadName 
-
-  if(noDataCheck(format)) return()
+  btnEnable <- FALSE
 
   isolate({
 
+    if(!noDataCheck(format)){
+      #
+      # get values
+      #
+      ext <- ""
+      language <- reactData$language
+      viewData <- reactData$viewDataEdited
+      viewTitle <- .get(viewData,c("data","title",language))
+      idSource <- .get(viewData,c("data","source","layerInfo","name"))
+      formats <- .get(config,c("data","format"))
 
-    #
-    # Set values
-    #
-    language <- reactData$language
-    btnEnable <- FALSE
-    viewData <- reactData$viewDataEdited
-    viewTitle <- .get(viewData,c("data","title",language))
-    
-    if(noDataCheck(viewTitle)){
-      viewTitle <- .get(viewData,c("data","title","en"))
+      if(noDataCheck(viewTitle)){
+        viewTitle <- .get(viewData,c("data","title","en"))
+      }
+
+      #
+      # Update name
+      #
+      fileName <- input$txtDownloadFileName
+      fileNameNoExt <- removeExtension(fileName)
+      hasFileName <- !noDataCheck(fileNameNoExt)
+      fileName <- ifelse(hasFileName,fileNameNoExt,subPunct(viewTitle))
+
+      for(f in formats){
+        if( f$name == format ){
+          ext <- f$fileExt[[1]]
+        }
+      }
+
+      fileName <- paste0(fileName,ext)
+
+      updateTextInput(session,
+        inputId="txtDownloadFileName",
+        value=fileName
+        )
+
+      #
+      # TESTS
+      #
+      fileNameNoExt <- removeExtension(fileName)
+      hasFileName <- !noDataCheck(fileNameNoExt)
+      hasViewData <- viewData$id %in% sapply(reactViewsCompact(),`[[`,"id")
+      hasIdSource <- idSource %in% reactSourceLayer()
+      hasFormat <- !noDataCheck(format)
+
+      btnEnable <- all(hasFileName,hasViewData,hasIdSource,hasFormat)
+
     }
 
-    fileName <- input$txtDownloadFileName
-    fileNameNoExt <- removeExtension(fileName)
-    idSource <- .get(viewData,c("data","source","layerInfo","name"))
-
     #
-    # Tests
+    # Change the button state
     #
-    hasFileName <- !noDataCheck(fileNameNoExt)
-    hasViewData <- viewData$id %in% sapply(reactViewsCompact(),`[[`,"id")
-    hasIdSource <- idSource %in% reactSourceLayer()
-    hasFormat <- !noDataCheck(format)
-
-    btnEnable <- all(hasViewData,hasIdSource,hasFormat)
-
     mxToggleButton(
       id="btnSourceDownload",
       disable = !btnEnable
       )
 
-    #
-    # Update name
-    #
-    fileName <- ifelse(hasFileName,fileNameNoExt,subPunct(viewTitle))
-    formats <- .get(config,c("data","format"))
-    ext <- ""
-
-    for(f in formats){
-      if( f$name == format ){
-        ext <- f$fileExt[[1]]
-      }
-    }
-
-    fileName <- paste0(fileName,ext)
-
-    updateTextInput(session,
-      inputId="txtDownloadFileName",
-      value=fileName
-      )
-
   })
 
-})
 
+})
 
 observeEvent(input$btnSourceDownload,{
 
@@ -718,10 +720,12 @@ observeEvent(input$btnSourceDownload,{
 
   mxModal(
     id="modalViewEdit",
+    title="Command sent, email ahead",
     content=tagList(
-      tags$p("A email will be sent to " + emailUser + " has soon as the data is extracted"),
-      tags$p("The at this URL :"),
+      tags$p("An email will be sent to " + emailUser + " has soon as the data is available"),
+      tags$p("Once done, the data will be available here :"),
       tags$p(
+        style="max-width:100%; overflow-x:scroll;",
         tags$a(
           href=url,
           url

@@ -644,12 +644,12 @@ mxDbExport <- function(
   }
 
   postgresData <- 
-      "PG:\"dbname='"+ d$dbname +"'" +
-      " host='" + d$host + "'" +
-      " port='" + d$port + "'" +
-      " user='" + d$user + "'" +
-      " password='"+ clean(d$password) + "'\"" +
-      " \""+ idTable + "\""
+    "PG:\"dbname='"+ d$dbname +"'" +
+    " host='" + d$host + "'" +
+    " port='" + d$port + "'" +
+    " user='" + d$user + "'" +
+    " password='"+ clean(d$password) + "'\"" +
+    " \""+ idTable + "\""
   #
   # Init
   #
@@ -659,22 +659,22 @@ mxDbExport <- function(
   # Command to ogr
   #
   cmdOgr <- "ogr2ogr" + 
-      " -f '" + formatOut + "'"+
-      " " + pathFile +
-      " " + postgresData +
-      " -t_srs 'EPSG:" + toSrid + "'" +
-      " -s_srs 'EPSG:" + fromSrid + "'" +
-      " -nln " + fileNameNoExt + 
-      " 2> " + fileNameError
+    " -f '" + formatOut + "'"+
+    " " + pathFile +
+    " " + postgresData +
+    " -t_srs 'EPSG:" + toSrid + "'" +
+    " -s_srs 'EPSG:" + fromSrid + "'" +
+    " -nln " + fileNameNoExt + 
+    " 2> " + fileNameError
 
   cmdZip <- "zip -r " +
-      " " + fileNameZip +
-      " " + fileNameNoExt +
-      " 2> " + fileNameError
-  
+    " " + fileNameZip +
+    " " + fileNameNoExt +
+    " 2> " + fileNameError
+
   cmdClean <-
-      " rm -rf  " + pathDirDownloadFile +
-      " rm -rf  " + file.path(pathDirDownload,"*.txt") 
+    " rm -rf  " + pathDirDownloadFile + " && " +
+    " rm -rf  " + file.path(pathDirDownload,"*.txt") 
 
   #
   # Try catch 
@@ -685,7 +685,7 @@ mxDbExport <- function(
     cmdZip + " && " + 
     onEnd() + " ; } || { " + 
     onErrorClient() + " && " + 
-    onErrorAdmin(pathFileError) + " ; } " + cmdClean + " ;"
+    onErrorAdmin(pathFileError) + " ; } ; " + cmdClean + " ;"
 
   system(cmd,wait=FALSE,ignore.stderr=TRUE)
   onStart()
