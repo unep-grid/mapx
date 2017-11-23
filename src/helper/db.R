@@ -642,12 +642,14 @@ mxDbExport <- function(
       " host='" + d$host + "'" +
       " port='" + d$port + "'" +
       " user='" + d$user + "'" +
-      " password='" + d$password +"'\"" +
+      " password='$MXPWD'\"" +
       " \""+ idTable + "\""
   #
   # Init
   #
-  cmdInit <- "cd " + pathDirDownload 
+  cmdInit <- 
+    "cd " + pathDirDownload + " && " + 
+    "MXPWD=\"" + d$password + "\""
 
   #
   # Command to ogr
