@@ -559,8 +559,9 @@ mxRecursiveSearch <- function(li,column="",operator="==",search="",filter=""){
 #' @return file without extension
 #' @export
 removeExtension <- function(file){
+  if(noDataCheck(file)) return("")
  file <- basename(file)
- sub("([^.]+)\\.([[:alnum:]]+$)", "\\1",file)
+ sub("([^.]*)\\.([[:alnum:]]+$)", "\\1",file)
 }
 
 
@@ -1403,13 +1404,15 @@ mxHtmlMailTemplate <- function(title = NULL,subject=NULL,content=NULL ){
 #' @param from String. Valid email for  sender
 #' @param to String. Valid email for Recipient
 #' @param body String. Text of the body
+#' @param filePath String. Path to file to send as body. Overwrite body.
 #' @param type String. "text" or "html"
 #' @param subject. String. Test for the subject 
 #' @export
-mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL, subject=NULL, wait=FALSE ){
+mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL, filePath=NULL, subject=NULL, wait=FALSE, getCommandOnly=FALSE ){
 
 
   isLocal = Sys.info()[["user"]] != "shiny"
+  hasFilePath = !noDataCheck(filePath)
 
   if(noDataCheck(from)){
     from <- .get(config,c("mail","bot"))
@@ -1427,45 +1430,54 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
     body = "empty"
   }
 
-
-  if( ! mxEmailIsValid(from) | ! mxEmailIsValid(to)) stop(paste("mxSendMail : email not valid. From: ", from, " To: ", to))
-
-  tempFile <- tempfile()
-
   contentType = ifelse(isTRUE(type== "html"),
     "text/html",
     "text/plain"
     )
 
-  if(isTRUE(type == "html")){
-    body <- mxHtmlMailTemplate(
-      title = subject, 
-      subject = subject,
-      content = body 
-      )
+  if( ! mxEmailIsValid(from) | ! mxEmailIsValid(to)) stop(paste("mxSendMail : email not valid. From: ", from, " To: ", to))
+
+  if( !hasFilePath ){
+    filePath <- tempfile()
+
+    if(isTRUE(type == "html")){
+      body <- mxHtmlMailTemplate(
+        title = subject, 
+        subject = subject,
+        content = body 
+        )
+    }
+
+    write(body,filePath)
+
   }
 
-  command = sprintf("cat %1$s | mail -s '%2$s' -a 'From: %3$s' -a 'Content-Type: %4$s' %5$s"
-    , tempFile
-    , subject
-    , from
-    , contentType
-    , to
-    )
 
   if( isLocal ){
+    localDir <- getwd()
 
-    #mxDebugMsg(body)
-    #mxDebugMsg(command)
-    write(body,"_mail.txt")
-    mxDebugMsg("Mail written in _mail.txt")
+    command <- 
+      "cat " + filePath +
+      " >>  " + file.path( localDir, "_mail.txt" )
 
   }else{
-
-    write(body,tempFile)
-    system(command,wait=wait)
+    command <- sprintf("cat %1$s | mail -s '%2$s' -a 'From: %3$s' -a 'Content-Type: %4$s' %5$s"
+      , filePath
+      , subject
+      , from
+      , contentType
+      , to
+      ) 
 
   }
+
+  if( getCommandOnly ){
+
+    return( command )
+
+  }
+
+  system(command,wait=wait)
 
 }
 

@@ -57,8 +57,15 @@ config[["resources"]]  =  list(
       "sprites" = file.path("src","sprites"),
       "src" = file.path("src"),
       "dist" = file.path("www"),
-      "userdata" = file.path("/vagrant/data/userdata") ## expected shared folder from vagrant
+      "userdata" = file.path("/vagrant/data/userdata"), ## expected shared folder from vagrant
+      "downloads" = file.path("/tmp/mapx/downloads")
     )
+
+#
+# create temp dirs if not exists
+#
+dir.create(.get(config,c("resources","downloads")),showWarnings=F,recursive=TRUE)
+
 #
 # Server and UI folder path
 #
@@ -316,25 +323,59 @@ config[["data"]] <- list()
 # http://www.w3schools.com/tags/att_input_accept.asp
 config[[c("data","format")]] <- list(
   list(
-    name = "shapefile",
+    name = "ESRI Shapefile",
     type = "vector",
     fileExt = c(".shp",".shx",".dbf",".prj"),
     multiple = TRUE
     ),
   list(
-    name = "geojson",
+    name = "GeoJSON",
     type = "vector",
     fileExt = c(".geojson",".json"),
     multiple = FALSE
+    ),
+  list(
+    name = "KML",
+    type = "vector",
+    fileExt = c(".kml"),
+    multiple = FALSE
+    ),
+  list(
+    name = "SQLite",
+    type = "vector",
+    fileExt = c(".sqlite"),
+    multiple = FALSE
+    ),
+  list(
+    name = "DXF",
+    type = "vector",
+    fileExt = c(".dxf"),
+    multiple = FALSE
+    ),
+  list(
+    name = "PDF",
+    type = "vector",
+    fileExt = c(".pdf"),
+    multiple = FALSE
     )
+  #
+  # GPX does not support multipolygon
+  #
+  #  list(
+  #name = "GPX",
+  #type = "vector",
+  #fileExt = c(".gpx"),
+  #multiple = FALSE
+  #)
   )
+
 
 #
 # email default
 #
 config[["mail"]] =  list(
   "bot" = "Map-x bot <mapx.admin@unepgrid.ch>",
-  "guest" = "guest@mapx.io",
+  "guest" = "guest@mapx.org",
   "admin" = "frederic.moser@unepgrid.ch"
   )
 

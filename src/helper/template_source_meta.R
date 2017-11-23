@@ -128,7 +128,21 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         options = list(collapsed = TRUE),
         properties = list(
           rolesRead = list(
-            title = t("target_roles_desc"),
+            title = t("target_roles_read_title"),
+            type =  "array",
+            format = "checkbox",
+            uniqueItems = TRUE,
+            items = list(
+              type = "string",
+              enum = as.list(rolesTarget),
+              default = "self",
+              options = list(
+                enum_titles = names(t(rolesTarget))
+                )
+              )
+            ),
+          rolesGet = list(
+            title = t("target_roles_get_title"),
             type =  "array",
             format = "checkbox",
             uniqueItems = TRUE,

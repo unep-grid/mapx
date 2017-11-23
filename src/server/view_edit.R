@@ -63,6 +63,10 @@ observe({
           #
           viewType <- .get(viewData,c("type"))
           viewTitle <- .get(viewData, c("data","title",language))
+          if(noDataCheck(viewTitle)){
+            viewTitle <- .get(viewData, c("data","title","en"))
+          }
+
           #viewAbstract <- .get(viewData, c("data","abstract",language))
 
           #
@@ -95,20 +99,42 @@ observe({
           switch(viewAction$action,
             "btn_opt_download"={
 
-              uiOut<-tagList(
-                tags$h4(
-                  tags$span(d("view_download_layer",language))
+              formats <- .get(config,c("data","format"))              
+              formatsNames <- sapply(formats,function(x){if(x$type=="vector"){return(x$name)}})
+
+              uiOut <- tagList(
+                selectizeInput("selectDownloadFormat",
+                  label = d("download_select_format_vector",language),
+                  choices = formatsNames,
+                  multiple=FALSE,
+                  options=list(
+                    dropdownParent="body"
+                    )
                   ),
-                p("download layer",.get(viewData,c("data","source","layerInfo","name")))
+                 textInput("txtDownloadFileName",
+                   label = d("download_file_name",language),
+                   value = ""
+                   )
                 )
 
-                mxModal(
-                  id="modalViewEdit",
-                  title=tags$b(viewTitle),
-                  content=uiOut,
-                  textCloseButton=d("btn_close",language),
-                  minHeight = "200px"
+              btnList <- list(
+                actionButton(
+                  inputId = "btnSourceDownload",
+                  label = d("btn_confirm",language),
+                  disabled = TRUE
+                  )
                 )
+
+              mxModal(
+                id = "modalViewEdit",
+                title = tags$b(viewTitle),
+                content = uiOut,
+                textCloseButton = d("btn_close",language),
+                buttons = btnList
+                )
+
+
+            reactData$triggerDownloadName <- runif(1)
 
             },
             "btn_opt_meta"={
@@ -560,6 +586,182 @@ observe({
 })
 })
 
+
+
+#
+# Validation of download format
+# 
+observe({
+
+  format <- input$selectDownloadFormat
+  trigger <- reactData$triggerDownloadName 
+
+  if(noDataCheck(format)) return()
+
+  isolate({
+
+
+    #
+    # Set values
+    #
+    language <- reactData$language
+    btnEnable <- FALSE
+    viewData <- reactData$viewDataEdited
+    viewTitle <- .get(viewData,c("data","title",language))
+    
+    if(noDataCheck(viewTitle)){
+      viewTitle <- .get(viewData,c("data","title","en"))
+    }
+
+    fileName <- input$txtDownloadFileName
+    fileNameNoExt <- removeExtension(fileName)
+    idSource <- .get(viewData,c("data","source","layerInfo","name"))
+
+    #
+    # Tests
+    #
+    hasFileName <- !noDataCheck(fileNameNoExt)
+    hasViewData <- viewData$id %in% sapply(reactViewsCompact(),`[[`,"id")
+    hasIdSource <- idSource %in% reactSourceLayer()
+    hasFormat <- !noDataCheck(format)
+
+    btnEnable <- all(hasViewData,hasIdSource,hasFormat)
+
+    mxToggleButton(
+      id="btnSourceDownload",
+      disable = !btnEnable
+      )
+
+    #
+    # Update name
+    #
+    fileName <- ifelse(hasFileName,fileNameNoExt,subPunct(viewTitle))
+    formats <- .get(config,c("data","format"))
+    ext <- ""
+
+    for(f in formats){
+      if( f$name == format ){
+        ext <- f$fileExt[[1]]
+      }
+    }
+
+    fileName <- paste0(fileName,ext)
+
+    updateTextInput(session,
+      inputId="txtDownloadFileName",
+      value=fileName
+      )
+
+  })
+
+})
+
+
+observeEvent(input$btnSourceDownload,{
+
+  #
+  # Get values
+  # 
+  viewData <- reactData$viewDataEdited
+  format <- input$selectDownloadFormat
+  emailUser <- reactUser$data$email
+  emailAdmin <- .get(config,c("mail","admin"))
+  idSource <- .get(viewData,c("data","source","layerInfo","name"))
+  fileName <- input$txtDownloadFileName
+
+  #
+  # File name formating
+  #
+  fileNameNoExt <- removeExtension(fileName)
+  hasFileName <- !noDataCheck(fileNameNoExt)
+  fileName <- ifelse(hasFileName,fileNameNoExt,idSource)
+  fileNameZip <- idSource + ".zip"
+  formats <- .get(config,c("data","format"))
+  ext <- ""
+
+  for(f in formats){
+    if( f$name == format ){
+      ext <- f$fileExt[[1]]
+    }
+  }
+
+  fileName <- paste0(fileName, ext)
+
+  #
+  # Session info to build url
+  #
+  cd <- session$clientData
+  url <- cd$url_protocol + "//" + cd$url_hostname +":"+ cd$url_port + "/downloads/" + fileNameZip
+  subject <-  "MAP-X DOWNLOAD " + fileName
+
+  #
+  # Mail handler
+  #
+  mailCmd <- function(message=NULL,filePathMessage=NULL,email){
+    mxSendMail(
+      from = .get(config,c("mail","bot")),
+      to = email,
+      body = message,
+      type = "text",
+      subject = subject,
+      filePath = filePathMessage,
+      wait = FALSE,
+      getCommandOnly = TRUE
+      )
+  }
+
+  #
+  # Update select
+  #
+
+  mxModal(
+    id="modalViewEdit",
+    content=tagList(
+      tags$p("A email will be sent to " + emailUser + " has soon as the data is extracted"),
+      tags$p("The data will be download at this URL"),
+      tags$a(url)
+    )
+  )
+
+
+  #
+  # Command to export source
+  #
+  mxDbExport(
+    idTable = idSource,
+    fileName = fileName,
+    fileNameZip = fileNameZip,
+    fromSrid = "4326",
+    toSrid = "4326",
+    formatOut = format,
+    onStart = function(){
+
+      mailCmd(
+        message = "Extraction started; the file will be available here " + url,
+        email = emailUser
+        )
+    },
+    onEnd = function(){
+      mailCmd(
+        message =  "Extraction done; file available here " + url,
+        email = emailUser
+        )
+    },
+    onErrorClient = function(){
+      mailCmd(
+        message = "Extraction failed, sorry. An email has been sent to our team.",
+        email = emailUser
+        )
+    },
+    onErrorAdmin = function(filePathError){
+      mailCmd(
+        filePathMessage = filePathError,
+        email = emailAdmin
+        )
+    }
+    )
+
+})
 
 observeEvent(input$viewTitleSchema_init,{
   view = reactData$viewDataEdited
@@ -1027,6 +1229,7 @@ observe({
 
   })
 })
+
 
 #
 # reactLayerMaskSummary

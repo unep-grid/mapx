@@ -121,7 +121,8 @@ spatial_title,Spatial,Spatial,Espacial,NA,NA,NA,NA,فضایی,فضایي
 summary_attribute,Summary ,Résumé,Resumen,NA,NA,NA,NA,خلاصه,لنډیز
 target_desc,Modality and restriction of access to the data,Modalité et restriction d'accès à la donnée,Modalidad de restricción de acceso a los datos,NA,NA,NA,NA,چگونگی محدودیت دسترسی به اطلاعات,ډیټا ته د لاسرسي څرنګوالئ او محدودیت
 target_role_item_title,Role,Rôle,Rol,NA,NA,NA,NA,نقش,نقش
-target_roles_desc,Roles allowed to read,Rôles autorisés à lire,Roles autorizados para leer,NA,NA,NA,NA,نقش های مجاز برای خواندن, د لوستلو لپاره مجاز نقشونه
+target_roles_read_title,Roles allowed to read,Rôles autorisés à lire,Roles autorizados para leer,NA,NA,NA,NA,نقش های مجاز برای خواندن, د لوستلو لپاره مجاز نقشونه
+target_roles_get_title,Roles allowed to download,Rôles autorisés à télécharger,NA,NA,NA,NA,NA,NA,NA
 target_roles_list_title,List of roles,Liste des rôles,Lista de roles,NA,NA,NA,NA,لست نقش ها,د نقشونو نوملړ
 target_roles_title,Roles,Rôles,Roles,NA,NA,NA,NA,نقش ها,قوانین
 target_title,Access,Accès,Acceso,NA,NA,NA,NA,دسترسی,لاسرسی
@@ -148,7 +149,7 @@ textual_keyword_desc,Keywords (or tags) help users discover your dataset. Please
 textual_keyword_item_title,Keyword,Mot clé,Palabra clave,NA,NA,NA,NA,کلید واژه,
 textual_keywords_title,Keywords list,Liste de mots clés,Lista de palabras claves,NA,NA,NA,NA,لست کلید واژه ها,
 textual_keyword_title,Keywords,Mots clés,Palabras claves,NA,NA,NA,NA,کلید واژه ها,
-textual_title,Textual,texte,Texto,NA,NA,NA,NA,متنی,
+textual_title,Textual,Texte,Texto,NA,NA,NA,NA,متنی,
 unknown,Frequency of maintenance for the data is not known,La donnée n'a pas de fréquence de mise à jour connue,La frecuencia de actualización de los datos no se conoce,NA,NA,NA,NA,فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست,
 weekly,Data is updated on a weekly basis,La donnée est mise à  jour chaque semaine,Los datos son actualizados cada semana,NA,NA,NA,NA,اطلاعات به صورت هفته وار تجدید می شوند,
 yes,Yes,Oui,Si,NA,NA,NA,NA,بلی ,

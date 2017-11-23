@@ -594,6 +594,99 @@ mxDbGetGeoJSON<-function(query,fromSrid="4326",toSrid="4326",asList=FALSE){
     return(tmp)
   }
 }
+
+mxDbExport <- function(
+  idTable = NULL,
+  fileName = NULL,
+  fileNameZip = NULL,
+  fromSrid = "4326",
+  toSrid = "4326",
+  formatOut = "GeoJSON",
+  onStart = function(){},
+  onEnd = function(){},
+  onErrorClient = function(){},
+  onErrorAdmin = function(){}
+  ){
+
+  #
+  # Init variables
+  #
+  fileNameNoExt <- removeExtension(fileName) 
+  pathDirDownload <- .get(config,c("resources","downloads"))
+  nameDirDownloadFile <- fileNameNoExt 
+  pathDirDownloadFile <- file.path(pathDirDownload,nameDirDownloadFile)
+  pathFileZip <- file.path(pathDirDownload,fileNameZip)
+  dir.create(pathDirDownloadFile,showWarnings=F,recursive=TRUE)
+  isShapeFile <- formatOut == "ESRI Shapefile"
+  pathFile <- ifelse(isShapeFile,pathDirDownloadFile,file.path(pathDirDownloadFile,fileName))
+  fileNameError <- "error_" + fileNameNoExt + ".txt"
+  pathFileError <- file.path(pathDirDownload,fileNameError)
+
+  #
+  # cleaning
+  #
+  if(file.exists(pathFile)){
+    unlink(pathFile,recursive=T)
+  }
+  if(file.exists(pathFileZip)){
+    unlink(pathFile,recursive=T)
+  }
+
+  #
+  # Postgres config
+  #
+  d <- .get(config,c('pg'))
+
+  postgresData <- 
+      "PG:\"dbname='"+ d$dbname +"'" +
+      " host='" + d$host + "'" +
+      " port='" + d$port + "'" +
+      " user='" + d$user + "'" +
+      " password='" + d$password +"'\"" +
+      " \""+ idTable + "\""
+  #
+  # Init
+  #
+  cmdInit <- "cd " + dirDownload  
+
+  #
+  # Command to ogr
+  #
+  cmdOgr <- "ogr2ogr" + 
+      " -f '" + formatOut + "'"+
+      " " + pathFile +
+      " " + postgresData +
+      " -t_srs 'EPSG:" + toSrid + "'" +
+      " -s_srs 'EPSG:" + fromSrid + "'" +
+      " -nln " + fileNameNoExt + 
+      " 2> " + fileNameError
+
+  cmdZip <- "zip -r" +
+      " " + fileNameZip +
+      " " + fileNameNoExt +
+      " 2> " + fileNameError
+  
+  cmdClean <- "rm -rf" +
+      " " + pathDirDownloadFile 
+
+  #
+  # Try catch 
+  # 
+  cmd = " { " + 
+    cmdInit + " && " + 
+    cmdOgr +" && " + 
+    cmdZip + " && " + 
+    cmdClean + " && " + 
+    onEnd() + " ; } || { " + 
+    onErrorClient() + " && " + 
+    onErrorAdmin(pathFileError) + " ; }";
+
+
+  system(cmd,wait=FALSE,ignore.stderr=TRUE)
+  onStart()
+
+}
+
 #' Get layer extent
 #' @param table Table/layer from which extract extent
 #' @param geomColumn set geometry column

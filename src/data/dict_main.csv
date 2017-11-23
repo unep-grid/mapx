@@ -167,6 +167,8 @@
 "source_select_layer_mask","Source layer mask","Couche source masque","","","","","","منبع لایه ماسک","د ماسک لایې سرچینه"
 "source_select_variable","Source variable","Variable","","","","","","متحول اصلی","اصلي متغیر"
 "source_select_variable_alt","Secondary source variables","Variables secondaires","","","","","","",NA
+"download_select_format_vector","Output format","Format de sortie","","","","","","",NA
+"download_file_name","Filename","Nom du fichier","","","","","","",NA
 "source_sum_geom_type","Type of the geometry","Type de géométrie","","","","","","انواع هندسی","هندسي ډولونه"
 "source_sum_n_distinct","Number of distinct values","Nombre de valeurs distinctes","","","","","","تعداد  قیمت های متمایز","د مختلفو ارزښتونو تعداد"
 "source_sum_n_null","Number of missing or null values","Nombre de valeurs manquantes ou nulles","","","","","","تعداد  قیمت های از دست رفته یا خالی","د لاسه وتلو او یا خالي قیمتونو تعداد"
