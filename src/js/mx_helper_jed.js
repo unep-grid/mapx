@@ -108,7 +108,6 @@ export function jedRender(o) {
 
         new Promise(function(resolve,reject){
           var res = mx.helpers.getSizeOf(values,false);
-          console.log(res);
           resolve(res);
         }).then(function(size){
           if( size > mx.settings.maxByteJed){
@@ -116,8 +115,8 @@ export function jedRender(o) {
 
             mx.helpers.modal({
               id:"warningSize",
-              title:"Warning : too big",
-              content:"Warning: this form content is quite big in size for text only data (" + sizeReadable + "). Consider removing some uncessary parts or serve content from a dedicated server. Consider also slow netork connection: you are responsible to provide lightweight content for anyone to read."
+              title:"Warning : size greater than " + mx.settings.maxByteJed + " ( " + sizeReadable + ")",
+              content:"Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server."
             });
           }
         });

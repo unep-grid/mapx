@@ -45,11 +45,12 @@ export function makeDashboard(o){
 
 }
 
-
+/**
+* Quick check NOTE: Implement this as methods.
+*/
 function hasWidgets(){
   return document.querySelectorAll(".grid-item").length > 0;
 }
-
 function hasDashboards(){
   return document.querySelectorAll(".mx-dashboard").length > 0;
 }
@@ -61,7 +62,6 @@ function hasDashboardsVisible(){
   }
   return(res);
 }
-
 function hideDashboards(){
   var d = document.querySelector(".mx-panel-dashboards");
   d.classList.remove("enabled");
@@ -77,8 +77,6 @@ function autoShowDashboards(){
     hideDashboards();
   }
 }
-
-
 
 /**
 * Update existing chart / widget in dashboards
@@ -260,7 +258,6 @@ function Dashboard(idContainer,view) {
             }).catch(function(e) {
 
               widget.remove();
-              console.log(e);
             });
         };
 
@@ -277,9 +274,12 @@ function Dashboard(idContainer,view) {
           buttonClose.innerText = "x";
           buttonHandle.innerText = "+";
           widget.elContent.className="grid-item--content shadow";
-          widget.el.className =
-            "noselect grid-item"+" " + (widget.config.width || 1) +
-            " " + (widget.config.height || 1);
+          widget.el.className = "noselect grid-item";
+          widget.setSize(
+          widget.config.height,
+            widget.config.width
+          );
+
           buttonGroup.appendChild(buttonClose);
           buttonGroup.appendChild(buttonHandle);
           widget.el.appendChild(buttonGroup);
@@ -291,6 +291,48 @@ function Dashboard(idContainer,view) {
           dashboard.packery.bindDraggabillyEvents( itDg , {});
           widget.config.draggie = itDg;
           widget.onAdd();
+        };
+
+
+        /*
+        * Set dim + adding gutter size
+        * @param {Number} size size
+        * @param {Number} sizeGrid width/height of grid
+        * @param {Number} sizeGutter gutter width
+        */
+        function sizeWithGutter(size,sizeGrid,sizeGutter){
+          var s = size*1||100;
+          var gu = sizeGutter/2 || 5;
+          var gr = sizeGrid*1 || 50;
+          return s + ((s / gr) * gu)-gu ;
+        }
+
+        /**
+        * Backward compability for classes 
+        */
+        function toDim(dim){
+
+          var oldClasses = {
+            "x50":50,
+            "x1":150,
+            "x2":300,
+            "x3":450,
+            "x4":600,
+            "y50":50,
+            "y1":150,
+            "y2":300,
+            "y3":450,
+            "y4":600         
+          };
+
+          return dim*1?dim:oldClasses[dim]||100;
+        }
+
+        widget.setSize = function(height,width){
+          var h = toDim(height);
+          var w = toDim(width);
+          this.el.style.width = sizeWithGutter(w) + "px";
+          this.el.style.height = sizeWithGutter(h) + "px";
         };
 
         widget.remove = function() {

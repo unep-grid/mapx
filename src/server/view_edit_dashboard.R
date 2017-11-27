@@ -4,11 +4,51 @@ observeEvent(input$dashboardEdit_init,{
     view = reactData$viewDataEdited
     language = reactData$language
     dashboard = .get(view,c("data","dashboard"))
+    widgets = .get(dashboard,c("widgets"))
     titles = .get(view,c("data","title"))
 
     t <- function(i=NULL){
       d(id=i,lang=language,dict=config$dict,web=F,asChar=T)
     }
+
+    #
+    # Backward compatibility for size
+    #
+    toDim <- function(dim){
+
+      oldClasses <- list(
+        "x50" = 50,
+        "x1" = 150,
+        "x2" = 300,
+        "x3" = 450,
+        "x4" = 600,
+        "y50" = 50,
+        "y1" = 150,
+        "y2" = 300,
+        "y3" = 450,
+        "y4" = 600         
+        )
+
+      out <- oldClasses[[dim]] 
+
+      out <- ifelse(noDataCheck(out), dim,out ) 
+      out <- ifelse(noDataCheck(out), "100", out) 
+
+      return(out)
+    }
+
+
+    if(length(widgets)>0){
+
+      for(i in 1:length(widgets)){
+        widgets[[i]]$height <- toDim(widgets[[i]]$height)
+        widgets[[i]]$width <- toDim(widgets[[i]]$width)
+      }
+      dashboard$widgets <- widgets;
+    }
+
+
+
 
     sc = list(
       title = t("view_dashboard"), 
@@ -49,17 +89,17 @@ observeEvent(input$dashboardEdit_init,{
                 `width` = list(
                   title = t("view_dashboard_txt_width"),
                   type = "string",
-                  enum = list("x50","x1","x2","x3","x4"),
+                  enum = as.list(paste(seq(0,600,50))),
                   options = list(
-                    enum_titles = list("50px","150px","300px","450px","600px")
+                    enum_titles = as.list(paste(seq(0,600,50),"px"))
                     )
                   ),
                 `height` = list(
                   title = t("view_dashboard_txt_height"),
                   type = "string",
-                  enum = list("y50","y1","y2","y3","y4"),
+                  enum = as.list(paste(seq(0,600,50))),
                   options = list(
-                    enum_titles = list("50px","150px","300px","450px","600px")
+                    enum_titles = as.list(paste(seq(0,600,50),"px"))
                     )
                   ),
                 `script` = list(
