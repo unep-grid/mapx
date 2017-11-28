@@ -3812,7 +3812,7 @@ export function btnToggleLayer(o){
   var isAerial = o.idLayer == 'here_aerial';// hide also shades...
   var toShow = o.action == 'show';
   var toHide = o.action == 'hide';
-  var isVisible = lay.layout.visibility === "visible";
+  var isVisible = lay.visibility === "visible";
   var toToggle = o.action == 'toggle' || toShow && !isVisible || toHide && isVisible;
 
   if(isAerial){
