@@ -97,9 +97,9 @@ observeEvent(input$dashboardEdit_init,{
                 `height` = list(
                   title = t("view_dashboard_txt_height"),
                   type = "string",
-                  enum = as.list(paste(seq(0,600,50))),
+                  enum = as.list(paste(seq(50,600,50))),
                   options = list(
-                    enum_titles = as.list(paste(seq(0,600,50),"px"))
+                    enum_titles = as.list(paste(seq(50,600,50),"px"))
                     )
                   ),
                 `script` = list(
