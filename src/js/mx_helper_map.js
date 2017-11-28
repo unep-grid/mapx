@@ -649,24 +649,26 @@ export function getViewVariable(o){
 }
 
 /**
- * Create a default random style 
+ * Create a simple layer 
  * @param {object} o Options
- * @param {string} o.id Id of the view
- * @param {string} o.idSource id of the source
-# @param {string} o.geomType Geometry type, once of point, line, polygon
-# @param {string} o.hexColor Hex color. If not provided, random color will be generated
-# @param {Number} o.size 
-# @param {string} o.sprite
+ * @param {string} o.id Id of the layer
+ * @param {string} o.idSourceLayer Id of the source layer / id of the view
+ * @param {string} o.idSource Id of the source
+ * @param {string} o.geomType Geometry type (point, line, polygon)
+ * @param {string} o.hexColor Hex color. If not provided, random color will be generated
+ * @param {array} o.filter
+ * @param {Number} o.size 
+ * @param {string} o.sprite
 */
-export function defaultStyle(o){
-  
+export function makeSimpleLayer(o){
 
-  var ran, colA, colB, style;
+  var ran, colA, colB, layer;
 
   var size = o.size || 2;
   var sprite = o.sprite || "";
   var opA = o.opacity || 0.7;
   var opB = (opA + 0.5 * (1-opA)) || 1 ;
+  var filter = o.filter || ["all"];
 
   if(!o.hexColor){
     ran = Math.random();
@@ -674,45 +676,63 @@ export function defaultStyle(o){
     colB = mx.helpers.randomHsl(0.8, ran);
   }else{
     colA = mx.helpers.hex2rgba(o.hexColor,o.opacity );
-    colB = mx.helpers.hex2rgba(o.hexColor,o.opacity + 0.6);
+    colB = mx.helpers.hex2rgba(o.hexColor,o.opacity + 0.2);
   }
 
-  style = {
+  layer = {
+    "symbol" : {
+      "type" : "symbol",
+      "layout" : {
+        'icon-image': sprite,
+        'icon-size' : size / 10
+      },
+      "paint" : {
+        "icon-opacity" : 1,
+        "icon-halo-width" : 2,
+        "icon-halo-color" : colB
+      }
+    },
     "point": {
-      "id": o.id,
-      "source": o.idSource,
-      "source-layer":o.id,
-      "type": "circle",
-      "paint": {
-        "circle-color": colA,
-        "circle-radius": size,
-        "circle-stroke-width":1,
-        "circle-stroke-color":colB
+      "type" : "circle",
+      "paint" : {
+        "circle-color" : colA,
+        "circle-radius" : size
+        //"circle-stroke-width" : 1,
+        //"circle-stroke-color" : colB
       }
     },
     "polygon": {
-      "id": o.id,
-      "source": o.idSource,
-      "source-layer":o.id,
       "type": "fill",
       "paint": {
-        "fill-color": colA,
-        "fill-outline-color": colB
+        "fill-color" : colA,
+        "fill-outline-color" : colB
+        //"fill-pattern": sprite
+      }
+    },
+    "pattern": {
+      "type": "fill",
+      "paint": {
+        "fill-pattern": sprite
       }
     },
     "line": {
-      "id": o.id,
-      "source": o.idSource,
-      "source-layer":o.id,
-      "type": "line",
-      "paint": {
-        "line-color": colA,
-        "line-width": size
+      "type" : "line",
+      "paint" : {
+        "line-color" : colA,
+        "line-width" : size
       }
     }
   };
 
-  return(style[o.geomType]);
+  layer = layer[o.geomType];
+  layer.id = o.id;
+  layer.source =  o.idSource;
+  layer["source-layer"] = o.idSourceLayer;
+  layer.filter = filter;
+  layer.metadata = {};
+  layer.metadata.filter_base = filter;
+
+  return(layer);
 
 }
 
@@ -2613,8 +2633,8 @@ export function getLayerNamesByPrefix(o) {
  * @return {array} List of removed layer 
  */
 export function removeLayersByPrefix(o) {
-  
-  var result = [], hasMap, legend, map, layers;
+
+  var result = [], hasMap, legend, map, layers, layersToRemove;
 
   hasMap = checkMap(o.id);
 
@@ -2623,13 +2643,12 @@ export function removeLayersByPrefix(o) {
     layers = mx.helpers.getLayerNamesByPrefix(o);
     var rExp = new RegExp("^" + o.prefix + ".*");
 
-    for(var i = 0 ; i < layers.length ; i++ ){
-      var l = layers[i];
-      if(l.indexOf(o.prefix) > -1 && l.search(rExp) > -1){
+    layers.forEach(function(l){
+      if(rExp.test(l)){
         map.removeLayer(l);
         result.push(l);
       }
-    }
+    });
   }
 
   return result;
@@ -2757,90 +2776,126 @@ export function existsInList(li, it, val, inverse) {
  */
 export function addViewVt(o){
 
+  var p = mx.helpers.path;
+
   try{  
     var view =  o.view,
       map =  o.map,
       layers = [],
-      def = mx.helpers.path(view,"data"),
+      def = p(view,"data"),
       idSource = view.id + "-SRC",
       idView = view.id,
-      style = mx.helpers.path(view,"data.style"),
-      time = mx.helpers.path(view,"data.period"),
-      rules =  mx.helpers.path(view,"data.style.rules"),
-      geomType = mx.helpers.path(view,"data.geometry.type"),
-      source =  mx.helpers.path(view,"data.source"),
+      style = p(view,"data.style"),
+      time = p(view,"data.period"),
+      rules =  p(view,"data.style.rules") || [],
+      geomType = p(view,"data.geometry.type"),
+      source =  p(view,"data.source"),
       num = 0,
       defaultColor, defaultOpacity,
-      ruleValues = [],
       styleCustom;
 
+    if( ! source ) return;
+
     try{
-     styleCustom = JSON.parse(mx.helpers.path(style,"custom.json"));
+      styleCustom = JSON.parse(p(style,"custom.json"));
     }catch(e){
       console.log("Can't parse custom view json : " + e);
     }
+
+    var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
+    var ruleAll = rules.filter(function(r){ return r.value=="all" ; });
+    var getIdLayer = function(){ return idView + sepLayer + num++ ; };
+
     var hasStyle = false;
     var hasTime = false;
     var hasSprite = false;
     var hasStyleDefault = false;
     var hasStyleCustom = styleCustom && styleCustom instanceof Object && styleCustom.enable === true ;
+    var hasStyleRules = rules.length > 0 ;
+    var hasRuleAll = ruleAll.length > 0;
 
-    var hasStyleRules = style && rules && rules.length > 0 ;
 
-    if( ! source ) return;
 
 
     /**
-    * Make custom layer
-    */
+     * Make custom layer
+     */
     if( hasStyleCustom ){
 
       var layerCustom = {
-        'id': idView,
+        'id': getIdLayer(),
         'source': idSource,
         'source-layer': idView,
-        'type':styleCustom.type||{},
-        'filter':styleCustom.filter||['all'],
-        'paint':styleCustom.paint||{},
-        'layout':styleCustom.layout||{},
-        'minzoom':styleCustom.minzoom||0,
-        'maxzoom':styleCustom.maxzoom||22,
+        'type' : styleCustom.type || "circle",
+        'filter' : styleCustom.filter || ['all'],
+        'paint' : styleCustom.paint || {},
+        'layout' : styleCustom.layout || {},
+        'minzoom' : styleCustom.minzoom || 0,
+        'maxzoom' : styleCustom.maxzoom || 22,
       };
 
       layers.push(layerCustom); 
     }
 
     /**
-    * Search if any rule value as "all", set default style
-    */
-    if( hasStyleRules && !hasStyleCustom ){
-      
-      rules.forEach(function(x){
-        
-        ruleValues.push(x.value);
+     * Create layer for single rule covering all values
+     */
+    if( hasRuleAll && !hasStyleCustom ){
 
-        if( !hasSprite && x.sprite ) hasSprite = true;
+      var rule = ruleAll.splice(0,1,1)[0];
 
-        if( x.value && x.value=="all" ){
+      /**
+       * add a second layer for symbol if point + sprite
+       */
+      if( rule.sprite && rule.sprite != "none" && geomType == "point" ){
 
-          layer = defaultStyle({
-            id : view.id,
-            idSource : idSource,
-            geomType : geomType,
-            hexColor : x.color,
-            opacity : x.opacity,
-            size : x.size,
-            sprite :x.sprite
-          });
+        var layerSprite = makeSimpleLayer({
+          id : getIdLayer(),
+          idSource : idSource,
+          idSourceLayer : idView,
+          geomType : "symbol",
+          hexColor : rule.color,
+          opacity : rule.opacity,
+          size : rule.size,
+          sprite : rule.sprite
+        });
 
-          /* add the default layer */
-          layers.push(layer);
-          /* save style default state */
-          hasStyleDefault = true;
-        }
+        layers.push(layerSprite);
+
+      }
+
+      if( rule.sprite && rule.sprite != "none" && geomType == "polygon" ){
+
+        var layerPattern = makeSimpleLayer({
+          id : getIdLayer(),
+          idSource : idSource,
+          idSourceLayer : idView,
+          geomType : "pattern",
+          hexColor : rule.color,
+          opacity : rule.opacity,
+          size : rule.size,
+          sprite : rule.sprite
+        });
+
+        layers.push(layerPattern);
+
+      }
+
+      /*
+       * add the layer for all
+       */
+      var layerAll = makeSimpleLayer({
+        id : getIdLayer(),
+        idSourceLayer : idView,
+        idSource : idSource,
+        geomType : geomType,
+        hexColor : rule.color,
+        opacity : rule.opacity,
+        size : rule.size,
+        sprite : rule.sprite
       });
 
-      hasStyle = !hasStyleDefault;
+      layers.push(layerAll);
 
     }
 
@@ -2849,40 +2904,39 @@ export function addViewVt(o){
      */
     if ( !hasStyleRules && !hasStyleCustom ) {
 
-      var layer = defaultStyle({
-        id : view.id,
+      var layerDefault = makeSimpleLayer({
+        id : getIdLayer(),
         idSource : idSource,
+        idSourceLayer : idView,
         geomType : geomType
       });
-      /* add the default layer */
-      layers.push(layer); 
+
+      layers.push(layerDefault); 
+
     }
 
     /*
      * Apply style if avaialble
      */
-    if( hasStyle && !hasStyleDefault && !hasStyleCustom ){
+    if( hasStyleRules && !hasRuleAll && !hasStyleCustom ){
 
       /* convert opacity to rgba */
-      rules.forEach(function(x) {
-        x.rgba = mx.helpers.hex2rgba(x.color, x.opacity);
-        x.rgb  = mx.helpers.hex2rgba(x.color);
+      rules.forEach(function(rule) {
+        rule.rgba = mx.helpers.hex2rgba(rule.color, rule.opacity);
+        rule.rgb  = mx.helpers.hex2rgba(rule.color);
       });
 
       /**
        * evaluate rules
        */
-
       rules.forEach(function(rule,i){
         var value = rule.value;
-        var max = mx.helpers.path(view,"data.attribute.max")+1;
-        var min = mx.helpers.path(view,"data.attribute.min")-1;
+        var max = p(view,"data.attribute.max")+1;
+        var min = p(view,"data.attribute.min")-1;
         var nextRule = rules[i+1];
         var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
-        var isNumeric = mx.helpers.path(view,"data.attribute.type") == "number";
+        var isNumeric = p(view,"data.attribute.type") == "number";
         var idView = view.id;
-        var sepLayer = mx.settings.separators.sublayer; 
-        var getIdLayer = function(){ return idView + sepLayer + num++ ; };
         var filter = ["all"];
         var attr = def.attribute.name;
         var paint = {};
@@ -2891,7 +2945,6 @@ export function addViewVt(o){
         /**
          * Set filter
          */
-
         filter.push(["has", attr]);
 
         if(isNumeric){
@@ -2900,134 +2953,143 @@ export function addViewVt(o){
         }else{
           filter.push(["==", attr, value]);
         }
-        /** 
-         * layer skeleton
+
+        /**
+         * Add layer for symbols
          */
-        var layer = {
-          'id': getIdLayer(),
-          'source': idSource,
-          'source-layer': idView,
-          'filter': filter,
-          'metadata': {
-            'filter_base':filter
-          }
-        };
+        if( rule.sprite && rule.sprite != "none" && geomType == "point"){
 
-        switch(geomType) {
-          case "point":
-            layer.type = 'circle';
-            /**
-             * Handle sprite based circle
-             */
-            if(rule.sprite && rule.sprite != 'none'){
-              layerSprite = mx.helpers.clone(layer);
-              layerSprite.layout = {
-                'icon-image': rule.sprite,
-                'icon-size': rule.size / 10
-              };
-              layerSprite.paint = {
-                'icon-opacity': 1,
-                'icon-halo-width': 2,
-                'icon-halo-color': rule.rgb
-              };
-              layerSprite.id = getIdLayer();
-              layers.push(layerSprite); 
-            }
+          var layerSymbol = makeSimpleLayer({
+            id : getIdLayer(),
+            idSource : idSource,
+            idSourceLayer : idView,
+            geomType : "symbol",
+            hexColor : rule.color,
+            opacity : rule.opacity,
+            size : rule.size,
+            sprite : rule.sprite,
+            filter : filter
+          });
 
-            layer.paint = {
-              "circle-color" : rule.rgba,
-              "circle-radius": rule.size
-            };
-            layers.push(layer); 
-            break;
-          case "polygon":
-            layer.type = "fill";
+          layers.push(layerSymbol);
 
-            if(rule.sprite && rule.sprite != 'none'){
-              layerSprite = mx.helpers.clone(layer);
-              layerSprite.paint = {
-                'fill-pattern': rule.sprite
-              };
-              layerSprite.id = getIdLayer();
-              layers.push(layerSprite); 
-            }
-
-            layer.paint = {
-              "fill-color" : rule.rgba
-            };
-            layers.push(layer);
-            break;
-          case "line":
-            layer.type = "line";
-            layer.paint = {
-              'line-color': rule.rgba,
-              'line-width': rule.size
-            };
-            layers.push(layer);
-            break;
         }
+
+        if( rule.sprite && rule.sprite != "none" && geomType == "polygon" ){
+
+          var layerPattern = makeSimpleLayer({
+            id : getIdLayer(),
+            idSource : idSource,
+            idSourceLayer : idView,
+            geomType : "pattern",
+            hexColor : rule.color,
+            opacity : rule.opacity,
+            size : rule.size,
+            sprite : rule.sprite,
+            filter : filter
+          });
+
+          layers.push(layerPattern);
+
+        }
+
+        /**
+         * Add layer for curent rule
+         */
+        var layerMain = makeSimpleLayer({
+          id : getIdLayer(),
+          idSource : idSource,
+          idSourceLayer : idView,
+          geomType : geomType,
+          hexColor : rule.color,
+          opacity : rule.opacity,
+          size : rule.size,
+          sprite : rule.sprite,
+          filter : filter
+        });
+
+        layers.push(layerMain);
+
       });
     }
 
-    if(layers.length>0){
+    /**
+     * Add layer and legends
+     */
+    if( layers.length > 0 ){
+
 
       /*
        * Add layers to map
        */
       layers = layers.reverse();
-      layers.forEach(function(x){
+
+      layers.forEach(function(layer){
 
         try{
-          map.addLayer(x,"mxlayers");
+          setTimeout(function(){
+            map.addLayer(layer,"mxlayers");
+          },1);
         }catch(e){
-          console.log("Can't add layer : " + e);
+          console.log("Can't add layer :");
+          console.log(layer);
+          console.log(e);
         }
 
       });
 
-      /**
-       * remove duplicated rules based on value and merge sprite 
+
+      /*
+       * Update layer order based in displayed list
        */
+      updateViewOrder(o);
 
-      if( !o.noLegend ){
+      /**
+       * Evaluate rules;
+       * - If next rules is identical, remove it from legend
+       * - Set sprite path
+       */
+      if( ! o.noLegend && hasStyleRules ){
 
-        rules = mx.helpers.path(view, "data.style.rules") ;
+        var legend = document.querySelector("#check_view_legend_" + view.id);
 
-        if(!rules) return;
+        if( legend ){
 
-        var rId = [];
-        var rNew = [];
+          var rId = [];
+          var rNew = [];
 
-        for(var i = 0 ; i < rules.length ; i++){
-          if(rules[i]){
-            var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
-            var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
-            var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
+          for( var i = 0 ; i < rules.length ; i++ ){
 
-            if( ruleHasSprite ){
-              rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
-            }else{
-              rules[i].sprite = null;
-            }
+            if( rules[i] ){
+              var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
+              var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
+              var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
 
-            if( nextRuleIsSame ){
-              if( nextRuleHasSprite ){
-                rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
+              if( ruleHasSprite ){
+                rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
+              }else{
+                rules[i].sprite = null;
               }
-              rules[i+1] = null;
+
+              if( nextRuleIsSame ){
+                if( nextRuleHasSprite ){
+                  rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
+                }
+                rules[i+1] = null;
+              }
             }
           }
-        }
-        view.data.style.rules = rules;
+          /**
+           * Update rules
+           */
+          view.data.style.rules = rules;
 
-        /*
-         * Add legend and update view order
-         */
-        var legend = document.querySelector("#check_view_legend_" + view.id);
-        if(legend){
+          /*
+           * Add legend using template
+           */
           legend.innerHTML = mx.templates.viewListLegend(view);
         }
-        updateViewOrder(o);
+
       }
     }
 
@@ -3120,7 +3182,7 @@ export function addView(o){
     id: o.id,
     prefix : view.id
   });
-  
+ 
   /**
   * Add options
   */
@@ -3128,7 +3190,6 @@ export function addView(o){
    id : o.id,
    view : view
   });
-
 
   /* Switch on view type*/
   var handler = {

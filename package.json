@@ -28,7 +28,7 @@
     "latinize": "^0.4.0",
     "list": "^1.0.0",
     "localforage": "^1.5.0",
-    "mapbox-gl": "^0.42.0",
+    "mapbox-gl": "^0.42.2",
     "medium-editor": "^5.23.2",
     "nouislider": "^10.1.0",
     "packery": "^2.1.1",
