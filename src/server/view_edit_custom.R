@@ -1,6 +1,10 @@
 
 observeEvent(input$customCodeEdit_init,{
 
+  mxToggleButton(
+    id="btnViewSaveCustomCode",
+    disable = TRUE
+    )
     view = reactData$viewDataEdited
     language = reactData$language
     methods = .get(view,c("data","methods"))
@@ -26,7 +30,40 @@ observeEvent(input$customCodeEdit_init,{
     startVal = methods
     )
 
+  mxToggleButton(
+    id="btnViewSaveCustomCode",
+    disable = FALSE
+    )
+
 })
+
+#
+# Custom code preview
+#
+observeEvent(input$btnViewPreviewCustomCode,{
+  
+  methods <- input$customCodeEdit_values$msg
+  country <- reactData$country
+
+  if(noDataCheck(methods)) return();
+
+  view <- reactData$viewDataEdited
+  view <- .set(view,c("data","methods"), methods)
+
+  mglRemoveView(
+    idView=view$id
+    )
+
+  # add this as new (empty) source
+  mglSetSourcesFromViews(
+    id = .get(config,c("map","id")),
+    viewsList = view,
+    render = FALSE,
+    country = country
+    )
+
+})
+
 
 #
 # View custom style save
