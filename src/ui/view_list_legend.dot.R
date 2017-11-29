@@ -20,7 +20,7 @@ tagList(
         "{{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}",
         "{{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}",
         "{{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}",
-        "{{ var isNumeric = h.path(it,'data.attribute.type') !== 'u0022string'; }}",
+        "{{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}",
         tags$ul(
           "{{~it.data.style.rules :item}}",
           #
