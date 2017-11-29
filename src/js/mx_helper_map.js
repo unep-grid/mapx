@@ -2051,184 +2051,6 @@ export function plotTimeSliderData(o){
  * @param {string} o.id map id
  * @parma {string} o.idView view id
  */
-//export function downloadMapPng(o){
-
-  //Promise.all([
-    //System.import("tokml"),
-    //System.import("jszip"),
-    //System.import("downloadjs"),
-    //System.import("@turf/turf"),
-    //System.import("../img/north_001.svg")
-    ////System.import("dom-to-image"),
-    ////System.import("html2canvas"),
-  //]).then(function(m){
-
-    //var toKml = m[0];
-    //var JSZip = m[1];
-    //var download = m[2];
-    //var turf = m[3];
-    //var northArrowPath = m[4];
-    ////var domtoimage = m[4];
-    
-    //var kml,zip,folder;
-    //var qf = [];
-    //var map = mx.maps[o.id].map;
-    //var elMap = document.getElementById("#map_main");
-    //var elLegend = document.getElementById("check_view_legend_"+o.idView);
-    //var elScale = document.querySelector(".mx-scale-box");
-    ////var elNorthArrow = document.querySelector("#btnSetNorth_img");
-    //var imgMap = map.getCanvas().toDataURL();
-
-    ////var imgLegend ;
-    ////var imgScale;
-    //var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
-    //var view = mx.helpers.getViews(o);
-     
-    //var layers = mx.helpers.getLayerNamesByPrefix({
-      //id: o.id,
-      //prefix: o.idView
-    //});
-
-    //if( layers.length > 0 && view.type == "vt" ){
-
-      //var attr = mx.helpers.path(view,'data.attribute.name');
-      //var rules = mx.helpers.path(view,'data.style.rules');
-      //var gType = mx.helpers.path(view,'data.geometry.type');
-
-      //var simpleColor = {
-        //'polygon':'fill',
-        //'line':'stroke',
-        //'point':'marker-color'
-      //}[gType];
-
-      //var simpleOpacity = {
-        //'polygon':'fill-opacity',
-        //'line':'stroke-opacity',
-        //'point':null
-      //}[gType];
-
-      //var geomTemp = {
-        //type : "FeatureCollection",
-        //features : [] 
-      //};
-
-      //qf = map.queryRenderedFeatures({layers:layers});
-
-      //// get all abject in one
-      //qf.forEach(function(feature){
-
-        //// add properties for simplestyle conversion
-        //if(rules && simpleColor){
-          //var v = feature.properties[attr];
-          //var n = mx.helpers.isNumeric(v);
-          //rules.forEach(function(r){
-            //if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
-              //feature.properties[simpleColor] = r.color;
-              //if(simpleOpacity){
-                //feature.properties[simpleOpacity] = r.opacity;
-              //}
-            //}
-          //});
-        //}
-
-        //// Push featre in main geojson NOTE: This include duplicated due to tiles 
-        //geomTemp
-          //.features
-          //.push({
-            //"type" : "Feature",
-            //"properties":feature.properties,
-            //"geometry":feature.geometry
-          //});
-      //});
-
-      //// remove duplicated geom 
-      //geomTemp = turf.dissolve(geomTemp,"gid");
-
-      //// Save as kml
-      //kml = toKml(geomTemp,{
-        //simplestyle:true
-      //});
-
-    //}
-   
-
-    //// set nort arrow img
-
-    //function getNorthArrow(){
-      //return new Promise(function(resolve,reject){
-        //var imgNorthArrow = new Image();
-        //imgNorthArrow.onload = function(){
-              //resolve(imgNorthArrow);
-        //};
-        //imgNorthArrow.onerror = function(e) {
-              //reject(e);
-        //};
-        //imgNorthArrow.src = northArrowPath;
-        //imgNorthArrow.style.width="150px";
-        //imgNorthArrow.style.height="150px";
-        //imgNorthArrow.style.position="absolute";
-        //imgNorthArrow.style.zIndex="-1";
-        //imgNorthArrow.style[mx.helpers.cssTransformFun()] = "rotateZ("+(map.getBearing())+"deg) ";
-        //document.body.appendChild(imgNorthArrow);
-      //});
-    //}
-  
-
-    //zip = new JSZip();
-    //folder = zip.folder("mx-data");
-
-    //var promScale = mx.helpers.htmlToData({
-      //selector : elScale,
-      //scale : 1,
-      //style : "border:1px solid black; border-top:none"
-     //}).catch(function(e){
-         //console.log(e);
-      //});
-   
-    //Promise.all([
-      ////promArrow,
-      //promScale,
-      //promLegend
-    //]).then(function(r){
-
-      //if(kml){
-        //folder.file("mx-data.kml",kml);
-      //}
-       //var imgLeg =  elLegend;
-      ////if(r[0]){
-        ////folder.file("mx-north.png", r[0].png.split(",")[1], {base64: true});
-        ////folder.file("mx-north.svg", r[0].svg.split(",")[1], {base64: true});
-      //[>}<]
-      //if(r[0]){
-        //folder.file("mx-scale.png", r[0].png.split(",")[1], {base64: true});
-        //folder.file("mx-scale.svg", r[0].svg.split(",")[1], {base64: true});
-      //}
-      //if(r[1]){
-        //folder.file("mx-legend.png", r[1].png.split(",")[1], {base64: true});
-        //folder.file("mx-legend.svg", r[1].svg.split(",")[1], {base64: true});
-      //}
-
-      //if(imgMap){
-        //folder.file("mx-map.png", imgMap.split(",")[1], {base64: true});
-      //}
-      //zip.generateAsync({type:"blob"})
-        //.then(function(content) {
-          //download(content, fileName);
-        //});
-    //})
-      //.catch(function(e){
-        //console.log(e);
-      //});
-
-  //});
-/*}*/
-
-/** 
- * Download screenshot
- * @param {object} o options;
- * @param {string} o.id map id
- * @parma {string} o.idView view id
- */
 export function downloadMapPdf(o){
 
   /**
@@ -2259,23 +2081,19 @@ export function downloadMapPdf(o){
      */
   Promise.all([
     System.import("jspdf"),
-    System.import("tokml"),
     System.import("jszip"),
     System.import("downloadjs"),
-    System.import("@turf/turf"),
     System.import("../img/north_001.svg")
   ]).then(function(m){
 
     progress = 10;
 
     var jsPDF = m[0];
-    var toKml = m[1];
-    var JSZip = m[2];
-    var download = m[3];
-    var turf = m[4];
-    var northArrowPath = m[5];
-    var dataMap,dataKml,zip,folder,dataLegend,dataScale,dataNorth;
-    var promKml,promLegend,promScale,promNorth;
+    var JSZip = m[1];
+    var download = m[2];
+    var northArrowPath = m[3];
+    var dataMap,zip,folder,dataLegend,dataScale,dataNorth;
+    var promLegend,promScale,promNorth;
     var qf = [];
     var map = mx.maps[o.id].map;
     var elMap = document.getElementById("map_main");
@@ -2390,96 +2208,23 @@ export function downloadMapPdf(o){
         progress += 20;
       }
       if( view.type == "vt" ){
-
-        promKml =  new Promise(function(resolve,reject){
-
-          var layers = mx.helpers.getLayerNamesByPrefix({
-            id: o.id,
-            prefix: o.idView
-          });
-
-          if( layers.length > 0 ){
-            var attr = mx.helpers.path(view,'data.attribute.name');
-            var rules = mx.helpers.path(view,'data.style.rules');
-            var gType = mx.helpers.path(view,'data.geometry.type');
-
-            var simpleColor = {
-              'polygon':'fill',
-              'line':'stroke',
-              'point':'marker-color'
-            }[gType];
-
-            var simpleOpacity = {
-              'polygon':'fill-opacity',
-              'line':'stroke-opacity',
-              'point':null
-            }[gType];
-
-            var geomTemp = {
-              type : "FeatureCollection",
-              features : [] 
-            };
-
-            qf = map.queryRenderedFeatures({layers:layers});
-
-            // get all abject in one
-            qf.forEach(function(feature){
-
-            // add properties for simplestyle conversion
-              if(rules && simpleColor){
-                var v = feature.properties[attr];
-                var n = mx.helpers.isNumeric(v);
-                rules.forEach(function(r){
-                  if(r.value == "all" || (n && v>= r.value) || (!n && v == r.value)){
-                    feature.properties[simpleColor] = r.color;
-                    if(simpleOpacity){
-                      feature.properties[simpleOpacity] = r.opacity;
-                    }
-                  }
-                });
-              }
-
-            // Push featre in main geojson NOTE: This include duplicated due to tiles 
-              geomTemp
-                .features
-                .push({
-                  "type" : "Feature",
-                  "properties":feature.properties,
-                  "geometry":feature.geometry
-                });
-            });
-
-            // remove duplicated geom 
-            geomTemp = turf.dissolve(geomTemp,"gid");
-
-            // Save as kml
-            resolve(
-              toKml(geomTemp,{
-                simplestyle:true
-              })
-            );
-          } 
-        }).then(function(data){
-          progress += 20;
-          return(data); 
-        });
+        progress +=20;
+        /*
+        * Code removed, use download feature for kml instead
+        */
       }
 
 
-
-
         Promise.all([
-          promKml,
           promNorth,
           promScale,
           promLegend
         ]).then(function(r){
 
           dataMap = map.getCanvas().toDataURL();
-          dataKml = r[0]?r[0]:dataKml;
-          dataNorth = r[1]?r[1]:dataNorth;
-          dataScale = r[2]?r[2]:dataScale;
-          dataLegend = r[3]?r[3]:dataLegend;
+          dataNorth = r[0]?r[0]:dataNorth;
+          dataScale = r[1]?r[1]:dataScale;
+          dataLegend = r[2]?r[2]:dataLegend;
 
           var doc = new jsPDF({orientation: 'landscape'});
           if( dataMap ) doc.addImage(dataMap, 'PNG', 0, 0, 297, mapHeight );
@@ -2503,10 +2248,6 @@ export function downloadMapPdf(o){
 
           zip = new JSZip();
           folder = zip.folder("mx-data");
-
-          if(dataKml){
-            folder.file("mx-data.kml",dataKml);
-          }
 
           if(dataScale){
             folder.file("mx-scale.png", dataScale.split(",")[1], {base64: true});
@@ -2804,6 +2545,13 @@ export function addViewVt(o){
       num = 0,
       defaultColor, defaultOpacity,
       styleCustom;
+
+
+    /**
+    * clean values
+    */ 
+    rules = rules instanceof Array ? rules : [rules];
+
 
     if( ! source ) return;
 
@@ -3109,7 +2857,7 @@ export function addViewVt(o){
     mx.helpers.modal({
       id :  "modalError",
       title : "Error",
-      content : "<p>Error during custom layer evaluation :" + e 
+      content : "<p>Error during layer evaluation :" + e 
     });
   }
 }
