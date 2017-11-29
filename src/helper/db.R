@@ -632,6 +632,15 @@ mxDbExport <- function(
     unlink(pathFile,recursive=T)
   }
 
+  files <- list.files(pathDirDownload)
+
+  for(f in files){
+    old <- isTRUE(difftime(Sys.time(),file.info(f)$mtime,units="secs") > 84400)
+    if(old){
+      file.remove(f)
+    }
+  }
+
   dir.create(pathDirDownloadFile,showWarnings=F,recursive=TRUE)
 
   #
