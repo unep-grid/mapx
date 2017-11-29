@@ -430,7 +430,18 @@ export function setSourcesFromViews(o){
               /*
                * update current map views
                */
+              var d = mx.helpers.date;
+
+              /**
+              * Sort view list
+              */
+              initViews.sort(function(a,b){
+              return d(b.date_modified) - d(a.date_modified);
+              });
+
+
               mx.maps[o.id].views = initViews;
+              
               /*
                * Render the full thing
                */
