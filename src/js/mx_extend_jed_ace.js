@@ -90,7 +90,7 @@
           that.ace_container = document.createElement('div');
           that.ace_container.style.width = '100%';
           that.ace_container.style.position = 'relative';
-          that.ace_container.style.height = '400px';
+          //that.ace_container.style.height = '400px';
           that.input.parentNode.insertBefore(that.ace_container,that.input);
           that.input.style.display = 'none';
           that.ace_editor = window.ace.edit(that.ace_container);
@@ -98,7 +98,10 @@
           that.ace_editor.getSession().setMode('ace/mode/'+mode);
           that.ace_editor.getSession().selection.clearSelection();
           that.ace_editor.setTheme('ace/theme/github');
-
+          that.ace_editor.setOptions({
+             minLines : 5, 
+             maxLines : Infinity
+          });
 
           // Listen for changes
           that.ace_editor.on('change',function() {
