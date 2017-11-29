@@ -58,9 +58,9 @@ observeEvent(input$styleEdit_init,{
 })
 
 #
-# Vew style change
+# View style change
 #
-observeEvent(input$styleEdit_values,{
+observeEvent(input$btnViewPreviewStyle,{
 
   style <- input$styleEdit_values$msg
 
