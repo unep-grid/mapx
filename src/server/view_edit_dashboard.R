@@ -1,6 +1,12 @@
 
 observeEvent(input$dashboardEdit_init,{
   mxCatch("dashboard build",{
+
+    mxToggleButton(
+      id="btnViewSaveDashboard",
+      disable = TRUE
+      )
+
     view = reactData$viewDataEdited
     language = reactData$language
     dashboard = .get(view,c("data","dashboard"))
@@ -47,8 +53,14 @@ observeEvent(input$dashboardEdit_init,{
       dashboard$widgets <- widgets;
     }
 
-
-
+   
+    #
+    # Set widget size choices
+    #
+    
+    widgetSizes <- seq(50,600,50)
+    widgetSizesValues <- as.list(paste(widgetSizes))
+    widgetSizesLabels <- as.list(paste(widgetSizes,"px"))
 
     sc = list(
       title = t("view_dashboard"), 
@@ -89,17 +101,17 @@ observeEvent(input$dashboardEdit_init,{
                 `width` = list(
                   title = t("view_dashboard_txt_width"),
                   type = "string",
-                  enum = as.list(paste(seq(50,600,50))),
+                  enum = widgetSizesValues,
                   options = list(
-                    enum_titles = as.list(paste(seq(50,600,50),"px"))
+                    enum_titles = widgetSizesLabels
                     )
                   ),
                 `height` = list(
                   title = t("view_dashboard_txt_height"),
                   type = "string",
-                  enum = as.list(paste(seq(50,600,50))),
+                  enum = widgetSizesValues,
                   options = list(
-                    enum_titles = as.list(paste(seq(50,600,50),"px"))
+                    enum_titles = widgetSizesLabels
                     )
                   ),
                 `script` = list(
@@ -123,6 +135,11 @@ observeEvent(input$dashboardEdit_init,{
       schema=sc,
       startVal=dashboard
       )
+
+    mxToggleButton(
+      id="btnViewSaveDashboard",
+      disable = FALSE
+      )
 })
 })
 
@@ -130,17 +147,39 @@ observeEvent(input$dashboardEdit_init,{
 #
 # Vew style change
 #
-observeEvent(input$dashboardEdit_values,{
+observeEvent(input$btnViewPreviewDashboard,{
+
+  mxToggleButton(
+    id="btnViewPreviewDashboard",
+    disable = TRUE
+    )
 
   dashboard <- input$dashboardEdit_values$msg
+  country <- reactData$country
 
   if(noDataCheck(dashboard)) return();
 
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","dashboard"), dashboard)
 
-  mglAddView(
-    viewData = view
+  #
+  # has dashboard method for removing are triggered by remove the view, remove the view
+  #
+  mglRemoveView(
+    idView=view$id
+    )
+
+  # add this as new (empty) source
+  mglSetSourcesFromViews(
+    id = .get(config,c("map","id")),
+    viewsList = view,
+    render = FALSE,
+    country = country
+    )
+
+  mxToggleButton(
+    id="btnViewPreviewDashboard",
+    disable = FALSE
     )
 
 })
