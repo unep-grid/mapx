@@ -1873,7 +1873,7 @@ mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NUL
 
 
   qTable <- sprintf(
-    "SELECT count(\"%1$s\") AS count,\"%1$s\" AS values
+    "SELECT count(\"%1$s\") AS count,\"%1$s\" AS value
     FROM \"%2$s\"
     %3$s
     GROUP BY \"%1$s\"
