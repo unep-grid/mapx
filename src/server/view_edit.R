@@ -473,6 +473,10 @@ observe({
                 actionButton(
                   inputId="btnViewSaveCustomCode",
                   label=d("btn_save",language)
+                  ),
+                actionButton(
+                  inputId="btnViewPreviewCustomCode",
+                  label=d("btn_preview",language)
                   )
                 )
 
@@ -497,6 +501,10 @@ observe({
                 actionButton(
                   inputId="btnViewSaveDashboard",
                   label=d("btn_save",language)
+                  ),
+                actionButton(
+                  inputId="btnViewPreviewDashboard",
+                  label=d("btn_preview",language)
                   )
                 )
 
@@ -563,6 +571,10 @@ observe({
                 actionButton(
                   inputId="btnViewSaveStyle",
                   label=d("btn_save",language)
+                  ),
+                actionButton(
+                  inputId="btnViewPreviewStyle",
+                  label=d("btn_preview",language)
                   )
                 )
 
@@ -678,7 +690,7 @@ observeEvent(input$btnSourceDownload,{
   fileNameNoExt <- removeExtension(fileName)
   hasFileName <- !noDataCheck(fileNameNoExt)
   fileName <- ifelse(hasFileName,fileNameNoExt,idSource)
-  fileNameZip <- idSource + ".zip"
+  fileNameZip <- idSource + randomString( "_", n=5 ) + ".zip"
   formats <- .get(config,c("data","format"))
   ext <- ""
 
