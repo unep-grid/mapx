@@ -620,6 +620,7 @@ mxDbExport <- function(
   pathFile <- ifelse(isShapeFile,pathDirDownloadFile,file.path(pathDirDownloadFile,fileName))
   fileNameError <- "error_" + fileNameNoExt + ".txt"
   pathFileError <- file.path(pathDirDownload,fileNameError)
+  fileCommand <- tempfile()
 
   #
   # cleaning
@@ -688,15 +689,19 @@ mxDbExport <- function(
   #
   # Try catch 
   # 
-  cmd = " { " + 
+  cmd = "sleep 10;  ({ " + 
     cmdInit + " && " + 
     cmdOgr +" && " + 
     cmdZip + " && " + 
     onEnd() + " ; } || { " + 
     onErrorClient() + " && " + 
-    onErrorAdmin(pathFileError) + " ; } ; " + cmdClean + " ;"
+    onErrorAdmin(pathFileError) + " ; } ; " + cmdClean + ") "
 
-  system(cmd,wait=FALSE,ignore.stderr=TRUE)
+  #
+  #
+  #
+  write(cmd,fileCommand)
+  system("sh " + fileCommand, wait=FALSE)
   onStart()
 
 }
