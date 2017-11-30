@@ -51,7 +51,7 @@ mxSchemaViewStyle <- function(
   # NOTE: why do it here again ?
   #
   values <- mxDbGetQuery(sprintf(
-      "SELECT DISTINCT(%1$s) from %2$s WHERE %1$s IS NOT NULL ORDER BY %1$s ASC "
+      "SELECT DISTINCT(\"%1$s\") from %2$s WHERE \"%1$s\" IS NOT NULL ORDER BY \"%1$s\" ASC "
       ,variableName
       ,layerName
       )
