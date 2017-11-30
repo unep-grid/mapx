@@ -2570,11 +2570,8 @@ export function addViewVt(o){
     var hasSprite = false;
     var hasStyleDefault = false;
     var hasStyleCustom = styleCustom && styleCustom instanceof Object && styleCustom.enable === true ;
-    var hasStyleRules = rules.length > 0 ;
+    var hasStyleRules = rules.length > 0 && rules[0].value !== undefined ;
     var hasRuleAll = ruleAll.length > 0;
-
-
-
 
     /**
      * Make custom layer
@@ -2853,7 +2850,6 @@ export function addViewVt(o){
     }
 
   }catch(e){
-
     mx.helpers.modal({
       id :  "modalError",
       title : "Error",
