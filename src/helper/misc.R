@@ -1489,21 +1489,23 @@ mxSendMail <- function( from=NULL, to=NULL, replyTo=NULL, type="text", body=NULL
 #' @return value extracted or NULL
 #' @export
 mxGetListValue <- function(listInput,path,flattenList=FALSE,default=NULL){
+  tryCatch({
   out <- default
-  if( "reactivevalues" %in% class(listInput)) listInput <- reactiveValuesToList(listInput)
-  if(!is.list(listInput) || length(listInput) == 0) return(out)
-  test = try({
-   out <- listInput[[path]]
-  },silent=T)
-  if("try-error" %in% class(test)){
-     return(out)
+  if( "reactivevalues" %in% class(listInput)){
+    listInput <- reactiveValuesToList(listInput)
   }
+  if(!is.list(listInput) || length(listInput) == 0) return(out)
+  out <- listInput[[path]]
   if(flattenList && !noDataCheck(out) && is.list(out)){ 
     out <- as.list(unlist(out,use.names=F))
   }
   if(noDataCheck(out)){
     out <- default
   }
+  },error=function(e){
+    # remove error like "no such index at level"
+   out <- default
+  })
   return(out)
 }
 .get <- mxGetListValue
@@ -1668,7 +1670,8 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   #
 
   viewData <- .get(view,c("data"))
-  meta <- mxDbGetLayerMeta(.get(sourceData,c("layerName")))
+  layerName <- .get(sourceData,c("layerName"))
+  meta <- mxDbGetLayerMeta(layerName)
 
   viewData <- .set(viewData,c("geometry"),list(
       type = .get(sourceData,c("geomType")),
@@ -1678,22 +1681,24 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
 
   viewTable <- .get(sourceData,c("table"))
 
-  viewData <- .set(viewData,c("attribute"),list(
-      name = .get(sourceData,c("variableName")),
-      names = unique(c(
+  attributes <- list(
+    name = .get(sourceData,c("variableName")),
+    names = unique(c(
         .get(sourceData,c("timeVariables")),
         .get(sourceData,c("variableName")),
         additionalAttributes
         )),
-      type = .get(sourceData,c("type")),
-      table = .get(sourceData,c("table")),
-      sample = .get(sourceData,c("sampleData")),
-      min = min(viewTable$values,na.rm=T),
-      max = max(viewTable$values,na.rm=T),
-      rows = .get(sourceData,c("numberOfRow")),
-      nulls =  .get(sourceData,c("numberOfNull")),
-      distincts = .get(sourceData,c("numberOfDistinct"))
-      ))
+    type = .get(sourceData,c("type")),
+    table = .get(sourceData,c("table")),
+    sample = sourceData[[c("sampleData")]],
+    min = min(viewTable$value,na.rm=T),
+    max = max(viewTable$value,na.rm=T),
+    rows = .get(sourceData,c("numberOfRow")),
+    nulls =  .get(sourceData,c("numberOfNull")),
+    distincts = .get(sourceData,c("numberOfDistinct"))
+    )
+
+  viewData <- .set(viewData, c("attribute"), attributes )
 
   viewData <- .set(viewData,c("period"),list(
       extent = .get(sourceData,c("timeExtent")),
@@ -1702,12 +1707,11 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
 
   viewData <- .set(viewData,c("source"),list(
       type = "vector",
-      attribution = as.character(tags$a(href=.get(meta,c("oigin","homepage","url")))),
+      attribution = as.character(tags$a(href=meta[[c("origin","homepage","url")]])),
       layerInfo = list(
         name =  .get(sourceData,c("layerName")),
-        maskName = .get(sourceDataMask,c("layerMaskName")),
-        meta = .get(sourceData,c("layerMeta"))
-        )      
+        maskName = .get(sourceDataMask,c("layerMaskName"))
+        )
       ))
 
   #
@@ -1724,35 +1728,22 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   if( geomType == "lines" ){
 
     viewData <- .set(viewData,c("style"),list(
-       spriteEnable = FALSE,
-      dataDrivenEnable = FALSE,
-      dataDrivenChoice = "none",
-      rules = .get(viewData,c("style","rules")),
-      dataDrivenMethod = .get(viewData,c("style","dataDrivenMethod"))
+        spriteEnable = FALSE,
+        rules = .get(viewData,c("style","rules"))
         ))
 
   }else{
 
     isNumeric <- isTRUE(.get(sourceData,c("type")) == "number")
-    # set data type choic      
-    if( isNumeric ){
-      dataDrivenChoice <- list("categorical","exponential","interval")
-    }else{
-      dataDrivenChoice <- list("categorical")
-    }
 
     viewData <- .set(viewData,c("style"),list(
-      rules = .get(viewData,c("style","rules")),
-      dataDrivenMethod = .get(viewData,c("style","dataDrivenMethod")),
-      spriteEnable = TRUE,
-      dataDrivenEnable = TRUE,
-      dataDrivenChoice = dataDrivenChoice
-      ))
+        rules = .get(viewData,c("style","rules")),
+        spriteEnable = TRUE
+        ))
 
   }
 
   view <- .set(view,c("data"),viewData)
-
 
   return(view)
 

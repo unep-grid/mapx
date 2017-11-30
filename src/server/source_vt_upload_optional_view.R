@@ -158,7 +158,7 @@ observeEvent(input$btnOptionalViewCreate,{
       country <- reactData$country
       user <- reactUser$data$id
       meta <- mxDbGetLayerMeta(idSource)
-      msgSave <- d("msg_process_wait", lang=language, dict=dict)
+      msgSave <- d("msg_process_wait", lang=language, dict=dict, web=F)
 
       # 
       # New view id
@@ -172,7 +172,7 @@ observeEvent(input$btnOptionalViewCreate,{
         sep = "-"
         )
 
-      mxProgress(id="importSource", text=paste(msgSave,": create a new empty view "), percent=90)
+      mxProgress(id="importSource", text=paste(msgSave,": create a view "), percent=90)
 
       #
       # New view squeleton
@@ -194,15 +194,19 @@ observeEvent(input$btnOptionalViewCreate,{
       #
       # Get layer summary and feed the view data
       #
-      sourceSummary <- mxDbGetLayerSummary(
+      sourceData <- mxDbGetLayerSummary(
         layer = idSource,
         variable = selectedAttribute
-        )
+        )$list
 
+      #
+      # Update view data 
+      #
       newView <- mxUpdateDefViewVt(
         view = newView, 
-        sourceData = sourceSummary$list
+        sourceData = sourceData
         )
+
 
       #
       # Add the view to the db

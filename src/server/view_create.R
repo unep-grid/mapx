@@ -92,6 +92,7 @@ observeEvent(input$txtViewTitle,{
       language=language
       )
     )
+
   reactData$viewAddHasError <- hasError
   reactData$viewAddTitle <- title
 
