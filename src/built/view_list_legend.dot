@@ -1,12 +1,13 @@
 {{ var h = mx.helpers ; }}
 <div>
-  {{?h.greaterThan(h.path(it,'data.style.rules.length'),0)}}
+  {{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}
+  {{?h.greaterThan(rules.length,0)}}
   {{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}
   {{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}
   {{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
   {{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}
   <ul>
-    {{~it.data.style.rules :item}}
+    {{~rules :item}}
     {{?item}}
     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}

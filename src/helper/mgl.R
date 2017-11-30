@@ -74,13 +74,13 @@ mglRemoveView <- function( id=NULL, idView, session=shiny::getDefaultReactiveDom
 #' Send view list to js
 #' @param viewsList {list} List of view to save
 #' @param id {character} Id of the map to associate views
-#' @param compact {boolean} For compact views list (ask remote server for full view)
+#' @param viewsCompact {boolean} For compact views list (ask remote server for full view)
 #' @param country {character} Country iso3 code
 #' @param idViewsList {character} Id of the view list where to put views
 #' @param idViewsListContainer {character} Id of the view list container
 #' @note mgl init has already saved idViewsList and idViewsListContainer. Duplicate ? 
 #' @export
-mglSetSourcesFromViews <- function(viewsList, id=NULL, country=NULL, compact=FALSE, idViewsList=NULL, idViewsListContainer=NULL, render=TRUE, session=shiny::getDefaultReactiveDomain()) {
+mglSetSourcesFromViews <- function(viewsList, id=NULL, country=NULL, viewsCompact=FALSE, idViewsList=NULL, idViewsListContainer=NULL, render=TRUE, session=shiny::getDefaultReactiveDomain()) {
 
   conf <- mxGetDefaultConfig()
 
@@ -103,7 +103,7 @@ mglSetSourcesFromViews <- function(viewsList, id=NULL, country=NULL, compact=FAL
       idViewsListContainer = idViewsListContainer,
       render = render,
       country = country,
-      compact = compact
+      viewsCompact = viewsCompact
       ))
 
 }

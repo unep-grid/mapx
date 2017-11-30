@@ -1,6 +1,13 @@
 import * as mx from './mx_init.js';
 
 
+
+/**
+* Update language : Element, view list and map
+* @param {Object} o Options
+* @param {String} o.id Map id
+* @param {String} o.lang Language code
+*/
 export function updateLanguage(o){
 
   o.id = "map_main";
@@ -57,8 +64,8 @@ export function getDict(lang){
 
 /** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
  * @param {Object} o 
- * @param {element} o.el Target element. If omitted, the whole document will be translated.
- * @param {string} o.lang Language code. e.g. "en" or "fr".
+ * @param {Element} o.el Target element. If omitted, the whole document will be translated.
+ * @param {String} o.lang Language code. e.g. "en" or "fr".
  */
 export function updateLanguageElements(o) {
   "use strict";

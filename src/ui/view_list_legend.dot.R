@@ -11,9 +11,8 @@ tagList(
     #
     # Avoid all item without rules or style
     #
-    #"{{? h.all([ it, h.path(it,'data.style'), h.path(it,'data.style.rules') ]) }}",
-    "{{?h.greaterThan(h.path(it,'data.style.rules.length'),0)}}",
-
+    "{{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}",
+    "{{?h.greaterThan(rules.length,0)}}",
         #
         # Shortcut
         #
@@ -22,7 +21,7 @@ tagList(
         "{{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}",
         "{{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}",
         tags$ul(
-          "{{~it.data.style.rules :item}}",
+          "{{~rules :item}}",
           #
           # For each rule, check if the language is set. Get default if needed.
           #

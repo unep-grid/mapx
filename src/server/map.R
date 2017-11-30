@@ -39,7 +39,7 @@ observe({
       # Intial views
       #
       viewsList = reactViewsCompact(),
-      compact = TRUE,
+      viewsCompact = TRUE,
       #
       # Vector tile service : base url
       #
@@ -47,6 +47,7 @@ observe({
       #
       # Default from user
       #
+      country = country,
       language = language,
       lat = countryData$lat, 
       lng =  countryData$lng, 

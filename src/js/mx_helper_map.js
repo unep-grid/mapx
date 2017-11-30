@@ -54,6 +54,7 @@ export function initMapx(o){
     mx.data.geojson = localforage.createInstance({
       name:  "geojson"
     });
+
     mx.data.images = localforage.createInstance({
       name : "images"
     });
@@ -61,6 +62,7 @@ export function initMapx(o){
     mx.data.stories = localforage.createInstance({
       name : "stories"
     });
+
     mx.data.storyCache = {};
 
 
@@ -106,6 +108,7 @@ export function initMapx(o){
     mx.settings.vtPort = o.vtPort = o.vtPort || "";
     mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
     mx.settings.vtUrlViews = o.vtUrlViews = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/view/";
+
 
     // set path using current location. 
 
@@ -153,25 +156,39 @@ export function initMapx(o){
      */
     map.on('load', function() {
 
-      mx.helpers.setSourcesFromViews(o);
+      /*
+       * Add views and set source
+       */
+      mx.helpers.setSourcesFromViews({
+        id : o.id,
+        viewsList : o.viewsList,
+        viewsCompact : o.viewsCompact,
+        country : o.country,
+        resetViews : true
+      });
 
       /*
        *  First map language 
        */
-        mx.helpers.updateLanguage(o);
-      //mx.helpers.updateLanguageMap({lang:o.language});
+      mx.helpers.updateLanguage({
+        lang : o.language,
+        id : o.id
+      });
+
+      /**
+       * Apply colorscheme if any
+       */ 
+      if(o.colorScheme){
+        mx.helpers.setUiColorScheme({
+          colors : o.colorScheme
+        });
+      }
 
       /*
        * If shiny, trigger read event
        */
-        if(hasShiny){
-          Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
-        }
-        /**
-         * Apply coloscheme if any
-         */ 
-      if(o.colorScheme){
-        mx.helpers.setUiColorScheme({colors:o.colorScheme});
+      if(hasShiny){
+        Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
       }
     });
 
@@ -263,6 +280,7 @@ export function reset(o){
   /**
    * remove existing layers
    */
+  console.log("RESET views : remove all displayed layer");
   mx.helpers.removeLayersByPrefix({
     id:o.idMap,
     prefix:"MX-"
@@ -271,11 +289,15 @@ export function reset(o){
   /*
   * apply remove method
   */
+
+  console.log("RESET views : clean view modules");
   cleanRemoveModules(views);
 
   /**
   * Remove list
   */
+
+  console.log("RESET views : empty list elements container");
   elViewList.innerHTML="";
 }
 
@@ -304,34 +326,33 @@ function cleanRemoveModules(views){
 /** 
  * Add source from view object 
  * @param {Object} o options
- * @param {Object} o.m Mgl maps item e.g. mx.maps.map_main
+ * @param {Object} o.map Map object
  * @param {oject} o.view View object
  */
 export function addSourceFromView(o){
 
-  if(o.m && mx.helpers.path(o.view,"data.source")){
+  if(o.map && mx.helpers.path(o.view,"data.source")){
 
-    var country = mx.settings.country;
-    var countryView = mx.helpers.path(mx,"settings.country") ;
+    var country = mx.helpers.path(mx,"settings.country");
+    var countryView = mx.helpers.path(o.view,"country") ;
     var countriesView = mx.helpers.path(o.view,"data.countries") || [];
-
-    var isLocationOk = countryView == country || countriesView.indexOf(country) > -1;
+    var isLocationOk = countryView == country || countriesView.indexOf(country) > -1 || countriesView.indexOf("GLB") > -1;
 
     if( isLocationOk ){
       var sourceId = o.view.id + "-SRC";
-      var sourceExists = !!o.m.map.getSource(sourceId);
+      var sourceExists = !!o.map.getSource(sourceId);
 
       if( sourceExists ) {
-        o.m.map.removeSource( sourceId ) ;
+        o.map.removeSource( sourceId ) ;
       }
 
-      if(o.view.type == "vt"){
+      if( o.view.type == "vt" ){
         var baseUrl = mx.settings.vtUrl;
         var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
         o.view.data.source.tiles = [url,url] ;
       }
 
-      o.m.map.addSource(
+      o.map.addSource(
         sourceId,
         o.view.data.source
       );
@@ -346,23 +367,23 @@ export function addSourceFromView(o){
  * @param {object} o options
  * @param {string} o.id ID of the map 
  * @param {object} o.viewList views list
+ * @param {Boolean} o.viewsCompact The view list is in compact form (id and row only)
  * @param {boolean} o.add Append to existing
  * @param {string} o.country code
  * @param {Boolean} o.resetViews should this reset stored views list on map
- * @param {Boolean} o.compact the view list is compact
  * @param {function} o.feedback Feedback function. Default is renderViewsList
  */
 export function setSourcesFromViews(o){
 
   var m = mx.maps[o.id];
-
-  var view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
+  var map, view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
   var isArray, hasViews;
 
-  if( !m || !o.viewsList ) return;
+  if( !m || !o.viewsList || !m.map ) return;
   if( o.country ) mx.settings.country = o.country;
   if( typeof o.resetViews == "undefined" ) o.resetViews = true;
 
+  map = m.map;
   views = o.viewsList ;
   singleView = views instanceof Object && views.id;
   hasViews = m.views.length > 0;
@@ -379,7 +400,7 @@ export function setSourcesFromViews(o){
     }
 
     mx.helpers.addSourceFromView({
-      m : m,
+      map : map,
       view : views
     });
 
@@ -402,7 +423,7 @@ export function setSourcesFromViews(o){
       });
     }
 
-    if(o.compact){
+    if( o.viewsCompact ){
       /*
        * If compact, use asynchronous view fetch
        */
@@ -422,7 +443,7 @@ export function setSourcesFromViews(o){
              * add sources for each 
              */
             mx.helpers.addSourceFromView({
-              m : m,
+              map : map,
               view : view
             });
 
@@ -433,15 +454,15 @@ export function setSourcesFromViews(o){
               var d = mx.helpers.date;
 
               /**
-              * Sort view list
-              */
+               * Sort view list
+               */
               initViews.sort(function(a,b){
-              return d(b.date_modified) - d(a.date_modified);
+                return d(b.date_modified) - d(a.date_modified);
               });
 
 
-              mx.maps[o.id].views = initViews;
-              
+              m.views = initViews;
+
               /*
                * Render the full thing
                */
@@ -452,8 +473,8 @@ export function setSourcesFromViews(o){
 
 
               /**
-              * Load geojson
-              */
+               * Load geojson
+               */
               loadGeojsonFromStorage(o);
             }
           }
@@ -465,13 +486,13 @@ export function setSourcesFromViews(o){
        * Save the view list as it
        */
 
-      mx.maps[o.id].views = views;
+      m.views = views;
       /**
        * add sources for each 
        */
       views.forEach(function(view){
         mx.helpers.addSourceFromView({
-          m : m,
+          map : map,
           view : view
         });
       });
@@ -504,6 +525,7 @@ function loadGeojsonFromStorage(o){
 
   if( !mx.data || !mx.data.geojson || !m ) return;
 
+  var map = m.map;
   var country = o.country || mx.settings.country;
   /**
    * extract views from local storage
@@ -514,7 +536,7 @@ function loadGeojsonFromStorage(o){
       m.views.unshift( view );
 
       mx.helpers.addSourceFromView({
-        m : m ,
+        map : map,
         view : view
       });
 
@@ -1341,7 +1363,7 @@ export function handleViewClick(o){
         isTrue : el.dataset.view_action_key == "btn_opt_share",
         action : function(){
           var idView =  el.dataset.view_action_target;
-          var link =  location.origin + location.pathname + "?views=" + idView + "&country="+mx.settings.country;
+          var link =  location.origin + "?views=" + idView + "&country=" + mx.settings.country || "WLD";
           var idLink = "share_"+idView;
           var input = "<textarea class='form-control form-input-line'>"+link+"</textarea>";
           mx.helpers.getDictItem("btn_opt_share").then(function(title){
@@ -2101,7 +2123,7 @@ export function downloadMapPdf(o){
     var paperWidth = 297;
     var paperHeight = 210;
     var mapHeight = mapDim.height / (mapDim.width / paperWidth);
-    var link = location.origin + location.pathname + "?views=" + o.idView + "&country="+mx.settings.country;
+    var link = location.origin + "?views=" + o.idView + "&country=" + mx.settings.country;
     var elLegend = document.getElementById("check_view_legend_"+o.idView);
     var elScale = document.querySelector(".mx-scale-box");
     var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
@@ -2562,6 +2584,8 @@ export function addViewVt(o){
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
+    
+    var rules = rules.filter(function(r){return r&&r.value != undefined;});
     var ruleAll = rules.filter(function(r){ return r.value=="all" ; });
     var getIdLayer = function(){ return idView + sepLayer + num++ ; };
 
@@ -2808,37 +2832,37 @@ export function addViewVt(o){
       if( ! o.noLegend && hasStyleRules ){
 
         var legend = document.querySelector("#check_view_legend_" + view.id);
-
+        var rulesCopy = mx.helpers.clone(rules);
         if( legend ){
 
           var rId = [];
           var rNew = [];
 
-          for( var i = 0 ; i < rules.length ; i++ ){
+          for( var i = 0 ; i < rulesCopy.length ; i++ ){
 
-            if( rules[i] ){
-              var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
-              var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
-              var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
+            if( rulesCopy[i] ){
+              var ruleHasSprite = rulesCopy[i].sprite && rulesCopy[i].sprite != "none";
+              var nextRuleIsSame =  !!rulesCopy[i+1] && rulesCopy[i+1].value == rulesCopy[i].value;
+              var nextRuleHasSprite = !!rulesCopy[i+1] && rulesCopy[i+1].sprite && rulesCopy[i+1].sprite != "none";
 
               if( ruleHasSprite ){
-                rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
+                rulesCopy[i].sprite = "url(sprites/svg/" + rulesCopy[i].sprite + ".svg)";
               }else{
-                rules[i].sprite = null;
+                rulesCopy[i].sprite = null;
               }
 
               if( nextRuleIsSame ){
                 if( nextRuleHasSprite ){
-                  rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
+                  rulesCopy[i].sprite = rulesCopy[i].sprite + "," + "url(sprites/svg/" + rulesCopy[i+1].sprite + ".svg)";
                 }
-                rules[i+1] = null;
+                rulesCopy[i+1] = null;
               }
             }
           }
           /**
-           * Update rules
+           * Update rulesCopy
            */
-          view.data.style.rules = rules;
+          view.data.style.rulesCopy = rulesCopy;
 
           /*
            * Add legend using template

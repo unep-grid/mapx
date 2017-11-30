@@ -76,7 +76,7 @@ observe({
     mglSetSourcesFromViews(
       id = .get(config,c("map","id")),
       viewsList = reactViewsCompact(),
-      compact = TRUE,
+      viewsCompact = TRUE,
       render = FALSE,
       country = country,
       )
