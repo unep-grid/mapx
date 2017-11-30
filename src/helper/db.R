@@ -1910,7 +1910,7 @@ mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NUL
       
     # number of distinct
    qCountDistinct <- sprintf(
-        "SELECT COUNT(DISTINCT(%2$s)) as count
+        "SELECT COUNT(DISTINCT(\"%2$s\")) as count
         FROM %1$s 
         %3$s"
         , table
@@ -1921,7 +1921,7 @@ mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NUL
     # number of null
     qCountNull <-sprintf(
         "SELECT count(*) as count 
-        FROM (SELECT * FROM %1$s WHERE %2$s IS NULL ) t2
+        FROM (SELECT * FROM %1$s WHERE \"%2$s\" IS NULL ) t2
         %3$s"
         , table
         , column
