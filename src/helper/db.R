@@ -1933,7 +1933,7 @@ mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NUL
   out$numberOfRow <- mxDbGetQuery(qCountRows)$count
   out$numberOfNull <- mxDbGetQuery(qCountNull)$count 
   out$numberOfDistinct <- mxDbGetQuery(qCountDistinct)$count
-  out$type <- ifelse(is.numeric(out$table$values),"number","string")
+  out$type <- ifelse(is.numeric(out$table$value),"number","string")
 
  return(out)
 
@@ -2057,12 +2057,12 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, geomType=NULL,language
   summary$timeDensity <- mxDbGetLayerTimeDensity(layer)
   summary$extent <- mxDbGetLayerExtent(layer)
   summary$centroid <- mxDbGetLayerCentroid(layer)
-  summary$layerMeta <- mxDbGetLayerMeta(layer)
+  #summary$layerMeta <- mxDbGetLayerMeta(layer)
   summary$layerName <- layer 
   summary$variableName <- variable
   #summary$variableNames <- variables
   summary$geomType <- geomType
-  summary$sampleData <- head(summary$table$values,10)
+  summary$sampleData <- head(summary$table$value,10)
 
   class(summary) <- c(class(summary),"mxSourceSummary")
 
@@ -2079,8 +2079,8 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, geomType=NULL,language
       "source_sum_n_null"=summary$numberOfNull,
       "source_sum_variable_type"=summary$type,
       "source_sum_geom_type"=d(summary$geomType,language,web=F),
-      "source_time_range"=summary$timeExtent,
-      "source_meta"=summary$layerMeta
+      "source_time_range"=summary$timeExtent
+      #"source_meta"=summary$layerMeta
       ),
     lang=language,
     dict=.get(config,c("dictionaries","schemaMetadata"))

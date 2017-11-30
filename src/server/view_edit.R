@@ -1040,8 +1040,10 @@ observeEvent(input$btnViewSave,{
 #
 observe({
 
+  timer <- mxTimeDiff("Layer logic")
   layerMain <- input$selectSourceLayerMain
   viewData <- reactData$viewDataEdited
+
 
   isolate({
 
@@ -1102,6 +1104,8 @@ observe({
     )
   })
   })
+
+  mxTimeDiffDifftimer)
 })
 
 #
@@ -1281,6 +1285,8 @@ reactLayerMaskSummary <- reactive({
 
 reactLayerSummary <- reactive({
 
+  timer <- mxTimeDiff("Layer summary")
+
   layerName <- input$selectSourceLayerMain
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
@@ -1314,6 +1320,7 @@ reactLayerSummary <- reactive({
     }
   }
 
+  mxTimeDiff(timer)
   return(out)
 })
 
