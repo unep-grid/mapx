@@ -1654,6 +1654,22 @@ mxDbGetUserByRoles <- function(roles="user", userTable="mx_users"){
 }
 
 
+#' Get roles list for user
+#' @param id  User id
+#' @param userTable User table
+mxDbGetUserRoles <- function(id=1,userTable="mx_users"){
+
+  roles <- mxDbGetQuery("SELECT data#>>'{\"admin\",\"roles\"}' as roles from mx_users where id=" + id)
+  roles <- jsonlite::fromJSON(roles$roles,simplifyDataFrame=F)
+
+  return(roles)
+
+}
+
+
+
+
+
 #' Add 
 mxDbCreateUser <- function(
   email=NULL,

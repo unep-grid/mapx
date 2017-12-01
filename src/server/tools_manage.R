@@ -108,7 +108,195 @@ observeEvent(input$btnShowDbInfo,{
 
 })
 
+#
+# User role
+#
+observe({
+
+  userRole <- getUserRole()
+  access <- .get(userRole,c("access"))
+
+  isolate({
+    language <- reactData$language
+    editRoles <- tags$div()
+
+
+    if( "editRoles" %in% access  ){
+
+      editRoles <- tagList(
+        tags$h4(d("title_tools_admin",language)),
+        actionButton(
+          label = "Show roles ",
+          inputId = "btnShowRoleManager",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_show_role_manager"
+          )
+        )
+
+    }
+
+    output$uiBtnShowRoleManager <- renderUI(editRoles)
+
+  })
+})
 
 
 
 
+reactTableEditableUsers <- reactive({
+  out <- data.frame()
+  userRole <- getUserRole()
+  userData <- reactUser$data
+  country <- reactData$country
+  access <- .get(userRole,c("access"))
+  if( "editRoles" %in% access ){
+
+    userList <- list() 
+    canEdit <- userRole$edit
+    users <- mxDbGetUserByRoles(roles=canEdit)
+    out <- users
+
+  }
+
+  return(out)
+
+})
+
+
+observeEvent(input$btnShowRoleManager,{
+
+  userRole <- getUserRole()
+  userData <- reactUser$data
+  country <- reactData$country
+  access <- .get(userRole,c("access"))
+
+  if( "editRoles" %in% access ){
+
+    userList <- list() 
+    users <- reactTableEditableUsers()
+    users <- users[!duplicated(users$id),]
+    userList <- users$id
+    names(userList) <- users$email
+    #
+    # Update user list
+    #
+    ui <- tagList(
+      selectizeInput(
+        "selectUserForEditRole",
+        label = "User to edit role",
+        choices = userList,
+        options=list(
+          dropdownParent="body"
+          )
+        ),
+      jedOutput("roleEdit")
+      )
+
+    mxModal(
+      id = "roleInfo",
+      title = "Role administration",
+      content = ui
+      )
+  }
+
+})
+
+
+
+reactEditedUserRoles = reactive({
+  out <- list()
+  users <- reactTableEditableUsers()
+  editedUser <- input$selectUserForEditRole 
+  if(!noDataCheck(editedUser)){
+    userId <- users[users$id == editedUser ,c("id")][[1]]
+    out <- mxDbGetUserRoles(userId)
+  }
+  return(out)
+})
+
+
+
+
+observeEvent(input$roleEdit_init,{
+
+  userRole <- getUserRole()
+  countries <- c("world",.get(config,c("countries","codes","id")))
+  edit <- userRole$admin
+
+  schema = list(
+    title = "Roles",
+    type = "array",
+    format = "table",
+    uniqueItems = TRUE,
+    items = list(
+      type = "object",
+      title = "Role",
+      properties = list(
+        role = list(
+          title = "Role",
+          type = "string",
+          enum =  edit,
+          required = TRUE
+          ),
+        project = list(
+          title = "Project",
+          type = "string",
+          enum = countries,
+          required = TRUE
+          )
+        )
+      )
+    )
+
+
+  jedSchema(
+    id="roleEdit",
+    schema=schema,
+    startVal=reactEditedUserRoles()
+    )
+
+})
+
+observeEvent(input$selectUserForEditRole,{
+
+  jedUpdate(
+    id="roleEdit",
+    values = reactEditedUserRoles()
+    )
+
+})
+
+
+observeEvent(input$roleEdit_values,{
+
+  userRole <- getUserRole()
+  access <- .get(userRole,c("access"))
+
+  if( "editRoles" %in% access ){
+
+    users <- reactTableEditableUsers()
+    roles <- input$roleEdit_values$msg
+    oldRoles <- reactEditedUserRoles()
+    userId <- input$selectUserForEditRole
+    tableUser <- .get(config,c("pg","tables","users"))
+    hasUser <- userId %in% users$id
+    hasValues <- !noDataCheck(roles)
+    areIdentical <- identical(oldRoles,roles)
+    if(!hasValues || !hasUser || areIdentical ) return();
+
+    mxDebugMsg("Update roles in db.")
+    #
+    # Update json value, given a path and id
+    #
+
+    mxDbUpdate(
+      table = tableUser,
+      idCol = 'id',
+      id = userId,
+      column = 'data',
+      value = roles,
+      path = c("admin","roles")
+      )
+
+  }
+})

@@ -174,8 +174,7 @@ export function jedUpdate(o) {
 
   var id = o.id;
   var val = o.val;
-
-  var jed = mx.editors[[id]];
+  var jed = mx.helpers.path(window,"jed.editors."+id);
   if(jed){
     jed.setValue(val);
   }

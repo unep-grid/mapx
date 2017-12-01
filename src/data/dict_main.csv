@@ -43,6 +43,7 @@
 "btn_save","Save","Sauvegarder","","","","","","ذخیره","ساتل"
 "btn_send","Send","Envoyer","","","","","","ارسال","لیږل"
 "btn_show_db_info","Show DB info","Afficher les infos de la BDD","","","","","","",NA
+"btn_show_role_manager","Show roles manager","Afficher l'éditeur de roles","","","","","","",NA
 "btn_sort_date","Date","Date","","","","","","تاریخ","نیټه"
 "btn_sort_desc","Description","Description","","","","","","توضیح","تفصیل"
 "btn_sort_title","Title","Titre","","","","","","عنوان","عنوان"
@@ -186,6 +187,7 @@
 "title_settings_colors","Theme config","Configurateur de themes","","","","","","",NA
 "title_tools","Tools","Outils","Utilidades","","","","","ابزار","توکي"
 "title_tools_db","Database","Base de données","","","","","","DB",NA
+"title_tools_admin","Admin","Admin","","","","","","DB",NA
 "title_tools_map","Map","Carte","","","","","","نقشه","نقشه"
 "title_tools_share","Share","Partager","","","","","","",NA
 "title_tools_sources","Sources","Sources","","","","","","منابع","سرچینې"

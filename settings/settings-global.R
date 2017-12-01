@@ -488,7 +488,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "admin",
     level = 1,
-    access = c(),
+    access = c("editRoles"),
     read = c("self","public","user","publisher","admin"),
     publish = c("self","public","user","publisher","admin"),
     edit = c("self","public","user","publisher","admin"),
@@ -498,7 +498,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "superuser",
     level = 0,
-    access = c("db"),
+    access = c("db","editRoles"),
     read = c("self","public","user","publisher","admin","superuser"),
     publish = c("self","public","user","publisher","admin","superuser"),
     edit = c("self","public","user","publisher","admin","superuser"),

@@ -360,11 +360,12 @@ observeEvent(reactData$loginRequested,{
     # Get user info
     #
     userInfo <- mxDbGetUserInfoList(id=res$id)
-    
+  
     #
     # Update reactive item
     #
     reactUser$data <- userInfo 
+
 
     mxTimeDiff(timer)
 })
@@ -416,6 +417,12 @@ getUserRole <- reactive({
   return(roles)
 
 })
+
+#
+# Update role
+#
+
+
 
 
 
