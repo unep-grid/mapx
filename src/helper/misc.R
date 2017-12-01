@@ -8,6 +8,42 @@
 #' @name mapxhelper 
 
 
+#' Add or update views from story steps to view dependencies
+#' @param {List} story list
+#' @param {List} view list
+#' @param {List} views compact list
+updateStoryViews <- function(story,view,allViews){
+
+  #
+  # Retrieve and store data for all views used in story.
+  #
+  views = list()
+
+  #
+  # All views id extracted from the story
+  #
+  viewsStory = lapply(story$steps,function(s){
+    lapply(s$views,function(v){v})
+ })
+
+  # Final view list
+  viewsId = unique(unlist(viewsStory))
+  viewsId = as.list(viewsId)
+
+  # If there is at least on views used, get views object.
+  if(!noDataCheck(viewsId)){
+    views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
+  }
+
+  #
+  # Save local views from story, if any
+  #
+  view <- .set(view,c("data","views"),views)
+  return(view)
+
+}
+
+
 
 #' Load external ui file value in shiny app
 #'

@@ -104,15 +104,7 @@ observeEvent(reactData$viewStory,{
 
   if(!isTRUE(view[["_edit"]])) return()
 
-  views = mxDbGetViews(
-    read = userRole$read,
-    edit = userRole$edit,
-    userId = userData$id,
-    allCountry = TRUE,
-    keys = c("id","pid","country","type","_title","target")
-    )
-
-  reactData$viewsAllAvailable <- views
+  views <- reactViewsCompactAll()
 
   schema <- mxSchemaViewStory(
     view=view,
@@ -136,42 +128,33 @@ observeEvent(reactData$viewStory,{
 
  })
 
+
+
+
+
+
 #
 # Update story changes
 #
 observeEvent(input$btnViewPreviewStory,{
 
+  timer <- mxTimeDiff("Preview story logic")
+
   story <- input$storyEdit_values$msg
 
   if(noDataCheck(story)) return();
 
-  allViews <- reactData$viewsAllAvailable
+  allViews <- reactViewsCompactAll()
+     
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","story"), story)
   view <- .set(view,c("date_modified"), Sys.time())
 
-  #
-  # Retrieve and store data for all views used in story.
-  #
-  views = list()
-
-  # All views id extracted from the story
-  viewsStory = lapply(story$steps,function(s){
-    lapply(s$views,function(v){v})
-      })
-  # Final view list
-  viewsId = unique(unlist(viewsStory))
-  viewsId = as.list(viewsId)
-
-  # If there is at least on views used, get views object.
-  if(!noDataCheck(viewsId)){
-    views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
-  }
-
-  #
-  # Save local views from story, if any
-  #
-  view <- .set(view,c("data","views"),views)
+  view <- updateStoryViews(
+    story = story,
+    view = view,
+    allViews = allViews
+    )
 
   mxUpdateText(
     id = "modalViewEdit_txt",
@@ -179,6 +162,8 @@ observeEvent(input$btnViewPreviewStory,{
     )
 
   mglReadStory(view=view)
+
+   mxTimeDiff(timer)
 
 })
 
@@ -200,7 +185,7 @@ observeEvent(input$btnViewSaveStory,{
   editor <- reactUser$data$id
   userData <- reactUser$data
   userRole <- getUserRole()
-  allViews <- reactData$viewsAllAvailable
+  allViews <- reactViewsCompactAll()
 
   if( view[["_edit"]] && view[["type"]] == "sm" ){
     view[["_edit"]] = NULL
@@ -220,27 +205,13 @@ observeEvent(input$btnViewSaveStory,{
     view <- .set(view, c("editor"), editor)
 
     #
-    # Retrieve and store data for all views used in story.
+    # Update / add step views to dependencies "data>views"
     #
-    views = list()
-
-    # All views id extracted from the story
-    viewsStory = lapply(story$steps,function(s){
-      lapply(s$views,function(v){v})
-    })
-    # Final view list
-    viewsId = unique(unlist(viewsStory))
-    viewsId = as.list(viewsId)
-
-    # If there is at least on views used, get views object.
-    if(!noDataCheck(viewsId)){
-      views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
-    }
-
-    #
-    # Save local views from story, if any
-    #
-    view <- .set(view,c("data","views"),views)
+    view <- updateStoryViews(
+      story = story,
+      view = view,
+      allViews = allViews
+      )
 
     #
     # Add row to db

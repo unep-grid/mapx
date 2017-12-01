@@ -54,6 +54,50 @@ reactViewsCompact <- reactive({
   mxTimeDiff(timer)
   return(out)
 })
+
+reactViewsCompactAll <- reactive({
+
+  timer <- mxTimeDiff("Fetching all view")
+  
+  #
+  # Ivalidated by :
+  #
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+  userData <- reactUser$data
+  country <- reactData$country
+  language <- reactData$language
+
+  #
+  # Get user role
+  #
+  userRole <- getUserRole()
+
+  #
+  # Set logic
+  #
+  hasRole <- !noDataCheck(userRole)
+
+  if( !hasRole ) return()
+
+
+  out <- mxDbGetViews(
+    read = userRole$read,
+    edit = userRole$edit,
+    userId = userData$id,
+    allCountry = TRUE,
+    keys = c("id","pid","country","type","_title","target")
+    )
+
+  mxTimeDiff(timer)
+  return(out)
+
+})
+
+
+
+
+
 #
 # After country change, send new set of views (initial set of views send when map init)
 #

@@ -327,7 +327,8 @@ function cleanRemoveModules(views){
  * Add source from view object 
  * @param {Object} o options
  * @param {Object} o.map Map object
- * @param {oject} o.view View object
+ * @param {Oject} o.view View object
+ * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
 export function addSourceFromView(o){
 
@@ -336,7 +337,7 @@ export function addSourceFromView(o){
     var country = mx.helpers.path(mx,"settings.country");
     var countryView = mx.helpers.path(o.view,"country") ;
     var countriesView = mx.helpers.path(o.view,"data.countries") || [];
-    var isLocationOk = countryView == country || countriesView.indexOf(country) > -1 || countriesView.indexOf("GLB") > -1;
+    var isLocationOk = o.noLocationCheck || countryView == country || countriesView.indexOf(country) > -1 || countriesView.indexOf("GLB") > -1;
 
     if( isLocationOk ){
       var sourceId = o.view.id + "-SRC";
@@ -2585,7 +2586,7 @@ export function addViewVt(o){
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
     
-    var rules = rules.filter(function(r){return r&&r.value != undefined;});
+    rules = rules.filter(function(r){return r&&r.value != undefined;});
     var ruleAll = rules.filter(function(r){ return r.value=="all" ; });
     var getIdLayer = function(){ return idView + sepLayer + num++ ; };
 

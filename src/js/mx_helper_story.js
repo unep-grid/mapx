@@ -99,6 +99,7 @@ function checkMissingView(o){
 
   var view =  o.view;
   var m = mx.maps[o.id];
+  var map = m.map;
   /*
    * Check if there is additional views
    */
@@ -145,8 +146,11 @@ function checkMissingView(o){
 
         viewsToAdd.forEach(function(v,i){
          
+          var url =  vtUrlViews + v.id + "/row/" + v.pid; 
+          console.log(url);
+
           mx.helpers.getJSON({
-            url :  vtUrlViews + v.id + "/row/" + v.pid,
+            url : url,
             onSuccess : function(view){
               /*
                * Add it to the view list
@@ -156,8 +160,9 @@ function checkMissingView(o){
                * register source
                */
               mx.helpers.addSourceFromView({
-                m : m,
-                view : view
+                map : map,
+                view : view,
+                noLocationCheck : true
               });
 
               /**
