@@ -13,6 +13,8 @@ tags$html(
     class="full-page mx",
     # Display something if no js
     mxSource("src/ui/no_js.R"),
+    # Display loading spinner
+    mxSource("src/ui/loader.R"),
     # Controls and left panel
     mxSource("src/ui/panel_main.R"),
     # Map element
