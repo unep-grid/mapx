@@ -181,8 +181,10 @@
   height: 30px;
   position: relative;
   margin-right : 5px;
- border-radius : 3px;
- display: inline-block;
+  border-radius : 3px;
+  display: inline-block;
+  margin-top:5px;
+  float:left;
 }
 
 
