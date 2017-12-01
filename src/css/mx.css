@@ -746,41 +746,6 @@ html, body, .full-page {
 }
 
 
-
-/**
-* Shiny busy
-*/
-
-
-body::after,
-body::before {
-  content:"";
-  top: 0px;
-  width: 100%;
-  bottom:0px;
-  display: block;
-  position:absolute;
-  opacity:0;
-  pointer-events: none!important;
-  transition: opacity 1s 0s ease-in-out;
-}
-body::after {
-  background: url(../img/loading_2.gif) no-repeat center center fixed; 
-  z-index:2000;
-}
-body::before {
-  background:rgba(245, 245, 245, 0.5);
-  z-index:1999;
-}
-
-html.shiny-busy body::before,
-html.shiny-busy body::after {
-  transition: opacity 1s 1s ease-in-out;
-  opacity:1;
-  pointer-events: all;
-}
-
-
 /**
 * Progress bar
 */
