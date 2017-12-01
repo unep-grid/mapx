@@ -8,6 +8,7 @@ import 'selectize/dist/css/selectize.css';
 import 'selectize/dist/css/selectize.bootstrap3.css';
 import 'hint.css';
 import '../css/mx.css';
+import '../css/mx_loader.css';
 import '../css/mx_view_toggle.css';
 import '../css/mx_shiny.css';
 import '../css/mx_legends.css';
