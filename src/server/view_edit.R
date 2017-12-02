@@ -857,12 +857,18 @@ observe({
   # Title and description
   #
   errors <- list()
+  hasNoLayer <- noDataCheck(input$selectSourceLayerMain)
+  hasInvalidLayer <- TRUE
 
-  hasNoLayer <-  ! input$selectSourceLayerMain %in% reactSourceLayer()
+  if(!hasNoLayer){
+    hasInvalidLayer <-  !input$selectSourceLayerMain %in% reactSourceLayer()
+  }
+
   hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
   hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
 
   errors <- c(
+     hasInvalidLayer,
      hasNoLayer,
      hasTitleIssues,
      hasAbstractIssues
