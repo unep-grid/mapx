@@ -154,7 +154,8 @@
 }
 
 
-.mx .badge
+.mx .badge,
+.mx .badge a
 {
 background-color: #F00;
 color: #FFF;

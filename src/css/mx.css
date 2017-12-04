@@ -185,6 +185,21 @@ html, body, .full-page {
 .mapboxgl-ctrl-scale {
  height:30px;
 }
+
+
+
+/**
+* boostrap list-group 
+*/
+
+.list-group-item > .badge
+{
+  max-width: 270px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .list-group .list-group-title {
   font-size: 10px;
   font-weight: bold;
@@ -845,6 +860,8 @@ html, body, .full-page {
   color:red;
 }
 
+
+
 /**
 * Switch to show or hide additional content.
 * based on a checkbox.
@@ -862,7 +879,6 @@ html, body, .full-page {
 .fold-container .fold-content {
   text-align: left;
   overflow-y:auto;
-  transition: max-height ease-in-out 0.3s,opacity ease-in-out 0.3s;
 }
 
 .fold-container .fold-switch,
@@ -888,14 +904,14 @@ html, body, .full-page {
 
 .fold-container .fold-switch:not(checked) ~ .fold-label::before{
   margin-right:3px;
-  content: '\f204'; /*>*/
+  content: '\f204'; 
   font-family: fontawesome;
 }
 
 .fold-container .fold-switch:checked ~ .fold-label::before {
   margin-right:3px;
   font-family: fontawesome;
-  content: '\f205'; /*^*/
+  content: '\f205'; 
 }
 
 
@@ -903,12 +919,15 @@ html, body, .full-page {
   opacity:0;
   max-height:0;
   font-size:0;
+  transition: max-height ease-in-out 0.3s, opacity ease-in-out 0.3s;
+  overflow:hidden;
 }
 
 .fold-container .fold-switch:checked ~ .fold-content {
   opacity:1;
-  max-height:200px;
+  max-height: 200vh;
   font-size:inherit;
+  /*transition: opacity ease-in-out 0.3s, max-height ease-in-out 0.3s;*/
 }
 
 /**
