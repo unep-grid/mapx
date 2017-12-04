@@ -225,38 +225,37 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
           )
         ),
       d as (
-      SELECT *
-      FROM c
-      WHERE
-      (
-        ( %7$s ) OR
-        (country ='%5$s') OR
-        (_countries ?& array['%5$s']) OR
-        (_countries ?& array['GLB'])
+        SELECT *
+          FROM c
+        WHERE
+        (
+          ( %7$s ) OR
+          (country ='%5$s') OR
+          (_countries ?& array['%5$s']) OR
+          (_countries ?& array['GLB'])
+          )
         )
-      )
-      
+
       SELECT *, 
       data #> '{\"title\",\"%8$s\"}' as _title,
       ( 
-      CASE WHEN
+        CASE WHEN
         (
-          ( 
-           country = '%5$s' OR 
-          _countries ?| array['%5$s']
-          )
+          (
+            country = '%5$s' 
+            )
           AND
           (
-          d.target ?| array[%6$s] 
-        OR (
-          d.editor = '%4$s' 
-          AND d.target ?| array['self']
-          )
-        )
+            d.target ?| array[%6$s] 
+            OR (
+              d.editor = '%4$s' 
+              AND d.target ?| array['self']
+              )
+            )
           ) THEN true 
-      ELSE false
-      END
-      ) as _edit
+        ELSE false
+        END
+        ) as _edit
       FROM d
       )"
     , tableTempName
