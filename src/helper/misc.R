@@ -283,7 +283,7 @@ whereIs <- function(exp,fixed=TRUE,ext=NULL,excludeDir="node_modules"){
     cmd <- sprintf("%1$s %2$s",cmd,paste(sprintf("--include \\*.%1$s",ext),collapse=""))
   }
 if(!is.null(excludeDir)){
-    cmd <- sprintf("%1$s --exclude %2$s",cmd,excludeDir)
+    cmd <- sprintf("%1$s --exclude-dir=%2$s",cmd,excludeDir)
   }
   cmd <- sprintf("%1$s '%2$s' .",cmd,exp)
   mxDebugMsg(cmd)
