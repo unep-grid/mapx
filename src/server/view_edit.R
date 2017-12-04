@@ -139,18 +139,61 @@ observe({
             },
             "btn_opt_meta"={
 
+              #
+              # Get layer name 
+              #
               viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
               layerMeta <- mxDbGetLayerMeta(viewLayerName)
+              idSource <- toupper(viewLayerName)
+              idView <- toupper(viewData$id)
+              viewLayerMaskName  <- .get(viewData, c("data","source","layerInfo","maskName"))
+              dateCreated <- mxDbGetQuery("SELECT date_modified from mx_views where id = '" + idView + "' ORDER BY date_modified ASC LIMIT 1 ")$date_modified
+              dateModified <- viewData$date_modified
+              numberUpdate <- mxDbGetQuery("SELECT count(pid) from mx_views where id = '" + idView +"'")$count
+              idUsers <- mxDbGetQuery("SELECT distinct(editor) as id from (SELECT editor from mx_views WHERE id = '" + idView +"' ORDER BY date_modified DESC) as b")$id
+              idUser <- viewData$editor
+              homepage <- .get(layerMeta,c("origin","homepage","url")) 
+            
+              dateSourceRangeStart <- .get(layerMeta,c("temporal","range","start_at"))
+              dateSourceRangeEnd <- .get(layerMeta,c("temporal","range","end_at"))
 
-              ## add key to the list : the actual layer name
-              layerMeta$db <- list(id = viewLayerName)
-              
-              uiOut<-tagList(
-                  listToHtmlSimple(
-                    list("source_meta_data"=layerMeta),
-                    lang=language
+              dateModified <- format(as.Date(dateModified),"%a %d %B %Y")
+              dateCreated <- format(as.Date(dateCreated),"%a %d %B %Y")
+              dateSourceCreated <- 
+
+              integrityData <- .get(layerMeta,c("integrity"))
+              integrityScore <- round(((sum(as.numeric(unlist(integrityData)))/(3*16))*100),1)
+
+              country <- .get(viewData,c("country"))
+              countries <- .get(viewData,c("data","countries"))
+              target <- .get(viewData,c("target"))
+
+              uiOut <- tagList(
+                tags$ul(class="list-group",
+                  tags$li(class="list-group-item", tags$b("Last editor id"), tags$span(class="badge",idUser)),
+                  tags$li(class="list-group-item", tags$b("All editors id"), tags$span(class="badge", paste(idUsers,collapse=","))),
+                  tags$li(class="list-group-item", tags$b("Number of changes"), tags$span(class="badge",numberUpdate)),
+                  tags$li(class="list-group-item", tags$b("View title"), tags$span(class="badge",viewTitle)),
+                  tags$li(class="list-group-item", tags$b("View id"), tags$span(class="badge",idView)),
+                  tags$li(class="list-group-item", tags$b("View date modified"), tags$span(class="badge",dateModified)),
+                  tags$li(class="list-group-item", tags$b("View date created"), tags$span(class="badge",dateCreated)),
+                  tags$li(class="list-group-item", tags$b("View target role(s)"), tags$span(class="badge",paste(target,collapse=", "))),
+                  tags$li(class="list-group-item", tags$b("View country"), tags$span(class="badge",country)),
+                  tags$li(class="list-group-item", tags$b("View secondary countries"), tags$span(class="badge",paste(countries,collapse=", "))),
+                  tags$li(class="list-group-item", tags$b("Source id"), tags$span(class="badge",idSource)),
+                  tags$li(class="list-group-item", tags$b("Source homepage"), tags$span(class="badge",tags$a(href=homepage,target="_blank",homepage))),
+                  tags$li(class="list-group-item", tags$b("Source integrity score"), tags$span(class="badge",integrityScore+"%")),
+                  tags$li(class="list-group-item", tags$b("Source time range"), 
+                    tags$span(class="badge","to : " + dateSourceRangeEnd),
+                    tags$span(class="badge","from: " + dateSourceRangeStart) 
                     )
+                  ),
+                listToHtmlSimple(
+                  list("source_meta_data"=layerMeta),
+                  lang=language
+                  )
                 )
+              
 
               mxModal(
                   id="modalViewEdit",
@@ -158,6 +201,7 @@ observe({
                   content=uiOut,
                   textCloseButton=d("btn_close",language)
                 )
+
 
             },
             "btn_opt_delete"={
@@ -1254,7 +1298,7 @@ observe({
       }
     }
 
-     updateSelectInput(
+    updateSelectInput(
       session,
       "selectSourceLayerMask",
       choices = out
