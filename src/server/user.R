@@ -175,7 +175,7 @@ observeEvent(input$btnSendLoginKey,{
         msg <- "An error occured, sorry, We can't send you an email right now."
 
       }else{
-        msg <- "An email has been send, please check your email and copy the received password in the box."
+        msg <- "An email has been sent, please check your email and copy the received password in the box."
         #
         # save the provided address as the input could be change during the interval.
         #
@@ -262,7 +262,7 @@ observe({
       # 4. time limit reached.
       if(!k$isEmpty){
         if(k$isOld) msg <- "Time is up, please request a new password."
-        if(k$isWrong) msg <- "The password is wrong"
+        if(k$isWrong) msg <- "The password is not correct"
         if(k$isMalformed) msg <- "The password in not valid"
         mxUpdateText(
           id="txtLoginDialog",
