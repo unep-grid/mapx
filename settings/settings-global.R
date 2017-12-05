@@ -493,7 +493,7 @@ config[["users"]][["roles"]]<- list(
     publish = c("self","public","user","publisher","admin"),
     edit = c("self","public","user","publisher","admin"),
     profile = c("self","public","user","publisher","admin"),
-    admin = c("self","public","user","publisher")
+    admin = c("public","user","publisher")
     ),
   list(
     name = "superuser",

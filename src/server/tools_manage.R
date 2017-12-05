@@ -175,6 +175,7 @@ observeEvent(input$btnShowRoleManager,{
     userList <- list() 
     users <- reactTableEditableUsers()
     users <- users[!duplicated(users$id),]
+    users <- users[!users$id == userData$id,]
     userList <- users$id
     names(userList) <- users$email
     #
