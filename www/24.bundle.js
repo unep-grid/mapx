@@ -1,4 +1,4 @@
-webpackJsonp([24],{109:function(t,e){/*! JSON Editor v0.7.28 - JSON Schema -> HTML Editor
+webpackJsonp([24],{108:function(t,e){/*! JSON Editor v0.7.28 - JSON Schema -> HTML Editor
  * By Jeremy Dorn - https://github.com/jdorn/json-editor/
  * Released under the MIT license
  *
