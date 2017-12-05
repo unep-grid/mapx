@@ -1,6 +1,39 @@
 
 
 
+#
+# react source edit layer
+#
+
+reactSourcesListEdit <- reactive({
+
+  userRole <- getUserRole()
+  userId <- .get(reactUser,c("data","id"))
+  country <- reactData$country
+  language <- reactData$language
+  updateSourceLayer <- reactData$updateSourceLayerList
+
+  targetEdit <- .get(userRole,c("edit"))
+
+  layers <-  mxDbGetLayerTable(
+    project = country,
+    userId = userId,
+    target = targetEdit,
+    language = language
+    )
+
+  if(noDataCheck(layers)){
+    layers <- list("noLayer")
+  }else{
+    layers <- mxGetLayerNamedList( layers, language )
+  }
+
+  return(layers)
+
+})
+
+
+
 observeEvent(input$btnEditSources,{
   language <- reactData$language 
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
@@ -13,7 +46,7 @@ observeEvent(input$btnEditSources,{
     selectizeInput(
       inputId = "selectSourceLayerEdit",
       label = d("source_select_layer",language),
-      choices = reactSourceLayer(),
+      choices = reactSourcesListEdit(),
       options=list(
         dropdownParent="body"
         )
@@ -123,8 +156,26 @@ observeEvent({
   
   userRoles <- getUserRole()
 
-  if(noDataCheck(layer) || noDataCheck(init)) return;
+  hasNoData <- noDataCheck(layer) || noDataCheck(init)
 
+  mxToggleButton(
+    id="btnUpdateSource",
+    disable = hasNoData
+    )
+
+  mxToggleButton(
+    id="btnDeleteSource",
+    disable = hasNoData
+    )
+
+  mxUiHide(
+    id="sourceEdit",
+    hide = hasNoData,
+    )
+
+  if(hasNoData){
+    return()
+  }
 
   meta <- mxDbGetLayerMeta(layer)
   rolesTarget <- .get(userRoles,c("publish"))
@@ -205,11 +256,11 @@ observeEvent(input$btnUpdateSource,{
   # Control roles
   #
   metaRoles <- .get(meta,c("access","rolesRead"))
-  hasValidRoles <- !noDataCheck(metaRoles) && all( metaRoles %in% userRoles$publish)
+  hasValidRoles <- !noDataCheck(metaRoles) && all( metaRoles %in% userRoles$publish )
   
   if(!hasValidRoles){
-    metaRoles = list("self")
-    meta =  .set(meta,c("access","rolesRead"),metaRoles)
+    metaRoles <- list("self")
+    meta <- .set(meta,c("access","rolesRead"),metaRoles)
   }
 
   if(reactData$viewSourceEditHasIssues) return()
@@ -231,6 +282,13 @@ observeEvent(input$btnUpdateSource,{
     value = metaRoles
     )
 
+  mxDbUpdate(
+    table = .get(config,c("pg","tables","sources")),
+    idCol = "id",
+    id = layer,
+    column = "editor",
+    value = user
+    )
   #
   # Generate the modal panel
   #

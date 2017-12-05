@@ -302,8 +302,7 @@ if(!is.null(excludeDir)){
 #' @return Boolean TRUE if empty
 #' @export
 noDataCheck <- function( val = NULL, debug = FALSE ){
-  
-  
+   
   noDatas <- config$noData;
 
   res = isTRUE(
@@ -1040,8 +1039,6 @@ mxUiAccess <- function(logged,roleNum,roleLowerLimit,uiDefault,uiRestricted){
 #' @param enable Boolean. Enable or not.
 #' @export
 mxUiHide <- function(id=NULL,class=NULL,disable=TRUE,hide=TRUE,hideClass="mx-hide",session=shiny:::getDefaultReactiveDomain()){
-
-
 
   out = jsonlite::toJSON(list(
       id = id,

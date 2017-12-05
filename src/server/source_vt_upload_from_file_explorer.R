@@ -84,19 +84,43 @@ observeEvent(input$uploadGeojson,{
 #
 observeEvent(input$sourceNewUpload_init,{
 
-  language <- reactData$language 
-  rolesTarget <- getUserRole()$publish
+  language <- .get(reactData,c("language"))
+  country <- .get(reactData,c("country"))
+  rolesTarget <- .get(getUserRole(),c("publish"))
+  type <- "vector"
 
+  #
+  # Source id = layer id = table name
+  #
+  idSource <- randomString(
+    prefix=sprintf("mx_%1$s_%2$s_",tolower(country),type),
+    splitIn=3,
+    addLETTERS=F,
+    addLetters=T,
+    splitSep="_",
+    sep = "_"
+    )
+
+  reactData$idNewSource <- idSource
+
+
+  #
+  # Create schema with default
+  #
   jedSchema(
     id="sourceNewUpload",
     schema = mxSchemaSourceMeta(
+      rolesTarget = rolesTarget,
       language = language,
-      rolesTarget = rolesTarget
+      title = idSource,
+      abstract = idSource,
+      attributesNames = list()
       ),
     startVal = NULL
     )
 
 })
+
 
 observeEvent(input$fileGeojson,{
   reactData$geojsonPath <- input$fileGeojson$datapath
@@ -166,15 +190,9 @@ observeEvent(input$btnImportNewSource,{
       #
       # Source id = layer id = table name
       #
-      idSource <- randomString(
-        prefix=sprintf("mx_%1$s_%2$s_",tolower(country),type),
-        splitIn=3,
-        addLETTERS=F,
-        addLetters=T,
-        splitSep="_",
-        sep = "_"
-        )
+      idSource <- reactData$idNewSource
 
+      if(noDataCheck(idSource)) stop("empty id source, stop process")
       #
       # Start progress
       #

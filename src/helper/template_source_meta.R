@@ -73,21 +73,21 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
             description = t("attributes_desc"), 
             options = list(collapsed = TRUE),
             properties = mxSchemaAttributeInput(
-              format="textarea",
-              keyTitle="attribute_desc_title",
-              keyCounter="attr",
-              type="string",
-              collapsed=TRUE,
-              attributes=attributesNames,
+              format = "textarea",
+              keyTitle = "attribute_desc_title",
+              keyCounter = "attr",
+              type = "string",
+              collapsed = TRUE,
+              attributes = attributesNames,
               dict = dict
               )  
             ),
           notes = mxSchemaMultiLingualInput(
             language =  language,
-            keyTitle="textual_desc_notes",
+            keyTitle = "textual_desc_notes",
             default = list(en=notes),
-            type="string",
-            format="textarea",
+            type = "string",
+            format = "textarea",
             dict = dict,
             englishRequired = F
             ),

@@ -773,25 +773,33 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
 #' @export
 mxDbGetLayerTable <- function(project, projects, userId, target="public",language="en"){
 
+  target <- target[target!="self"]
   target <- paste(paste0("'",target,"'"),collapse=",")
 
   type <- "vector" 
 
-  dat <- mxDbGetQuery(sprintf(
-      "SELECT id, 
-      data#>>'{\"meta\",\"text\",\"title\",\"%1$s\"}' title_%1$s,
-      data#>>'{\"meta\",\"text\",\"title\",\"en\"}' title_en,
-      date_modified
-      FROM mx_sources
-      WHERE ( country='%2$s' ) AND
-      type='%3$s' AND
-      ( target ?| array[%4$s] OR editor = '%5$s' )",
-      language,
-      project,
-      type,
-      target,
-      userId
-      ))
+  sql <- sprintf(
+    "SELECT id, 
+    data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}' title_%1$s,
+    data #>> '{\"meta\",\"text\",\"title\",\"en\"}' title_en,
+    date_modified
+    FROM mx_sources
+    WHERE ( country='%2$s' ) AND
+    type='%3$s' AND
+    (
+      target ?| array[%4$s] OR 
+      (
+        editor = '%5$s' AND target ?| array['self']
+        )
+      )",
+    language,
+    project,
+    type,
+    target,
+    userId
+    )
+
+  dat <- mxDbGetQuery(sql)
 
   #
   # Return 
