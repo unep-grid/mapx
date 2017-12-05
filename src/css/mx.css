@@ -357,6 +357,7 @@ html, body, .full-page {
  border-radius : 3px;
  background:none;
 }
+
 .mx-controls-view .mx-controls-ul li {
   width: 25px;
   height: 25px;
@@ -396,6 +397,10 @@ html, body, .full-page {
   bottom: 0px;
   left: 0px;
   right: 0px;
+}
+
+.mx-panel-tools {
+  overflow:auto;
 }
 
 .mx-panel-left {
@@ -927,7 +932,7 @@ html, body, .full-page {
   opacity:1;
   max-height: 200vh;
   font-size:inherit;
-  /*transition: opacity ease-in-out 0.3s, max-height ease-in-out 0.3s;*/
+  overflow:auto;
 }
 
 /**

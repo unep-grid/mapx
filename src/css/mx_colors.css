@@ -51,7 +51,8 @@
 /**
 * View list items content
 */
-.mx-views-content {
+.mx-views-content,
+.mx-tools-content {
   border-bottom: 1px solid var(--mx_ui_border);
   border-top: 1px solid var(--mx_ui_border);
 }

@@ -50,17 +50,20 @@ roleManager <- uiOutput("uiBtnShowRoleManager")
 
 # Full block
 tagList(
-  tags$h3(`data-lang_key`="title_tools"),
-  tags$h4(`data-lang_key`="title_tools_map"),
-  areaLiveCalc,
-  tags$h4(`data-lang_key`="title_tools_share"),
-  btnIframeBuilder,
-  viewAdd,
-  sourceUpload,
-  sourceEdit,
-  dbInfo,
-  roleManager,
-  themeColor
+  tags$div(class="mx-tools-container",
+    tags$div(class="mx-tools-content",
+      tags$h3(`data-lang_key`="title_tools"),
+      tags$h4(`data-lang_key`="title_tools_map"),
+      areaLiveCalc,
+      tags$h4(`data-lang_key`="title_tools_share"),
+      btnIframeBuilder,
+      viewAdd,
+      sourceUpload,
+      sourceEdit,
+      dbInfo,
+      roleManager,
+      themeColor
+      )
+    )
   )
-
 
