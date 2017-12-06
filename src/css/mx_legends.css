@@ -19,8 +19,8 @@ display:none;
   white-space: nowrap;
   overflow: visible;
   text-overflow: ellipsis;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 0px;
   background: rgba(0,0,0,0);
 }
 

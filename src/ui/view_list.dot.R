@@ -75,17 +75,15 @@ divHeader <- tagList(
 #
 tagList(
   "{{ var h = mx.helpers ; }}",
-  "{{ var z = it.length ; }}",
   "{{~it :view}}",
   #
   # Get current view title. Use falback if needed.
   #
   "{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}",
   tags$li(
-    style = "z-index:{{=z--}}",
     id = "{{=view.id}}",
     `data-view_id`="{{=view.id}}",
-    class="mx-view-item shadow transparent mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
+    class="mx-view-item shadow mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
     divHeader
     ),
   "{{~}}"

@@ -2394,7 +2394,7 @@ mxScroll <- function(content){
 #' @param classLabel {character} Name of the class for the label
 #' @export
 #mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
-mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label"){
+mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label",classScroll="mx-scroll-styled"){
   if(noDataCheck(id)) id <- randomString()
 
   elInput = tags$input(type="checkbox",id=id,class="fold-switch")
@@ -2412,7 +2412,7 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
   tags$div(class=classContainer,
     elInput,
     label,
-    tags$div(class=classContent,
+    tags$div(class= paste(classContent,classScroll),
       content
       )
     )

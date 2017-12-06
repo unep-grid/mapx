@@ -84,7 +84,7 @@ tags$div(
     viewFilterButton
     ),
   tags$div(
-    class="mx-views-content",
+    class="mx-views-content mx-scroll-styled",
     tags$ul(
       class="mx-views-list"
       )

@@ -17,7 +17,7 @@ divAbstract <- tags$div(
     "Abstract"
     ),
   tags$div(
-    class="fold-content",
+    class="fold-content mx-scroll-styled",
     tags$div(
       class="float-left mx-view-item-desc-container",
       "{{? h.path(view,'data.abstract.'+langAbstract) }}",
@@ -49,7 +49,7 @@ divLegend <- tags$div(
     "Legends"
     ),
   tags$div(
-    class="fold-content",
+    class="fold-content mx-scroll-styled",
     "{{?view.type=='vt'}}",
     "{{ var rules = h.path(view,'data.style.rules'); }}",
     "{{?h.greaterThan(h.path(rules,'length'),0)}}",

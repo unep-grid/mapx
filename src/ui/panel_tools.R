@@ -51,7 +51,7 @@ roleManager <- uiOutput("uiBtnShowRoleManager")
 # Full block
 tagList(
   tags$div(class="mx-tools-container",
-    tags$div(class="mx-tools-content",
+    tags$div(class="mx-tools-content mx-scroll-styled",
       tags$h3(`data-lang_key`="title_tools"),
       tags$h4(`data-lang_key`="title_tools_map"),
       areaLiveCalc,

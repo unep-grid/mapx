@@ -3938,6 +3938,7 @@ export function featuresToHtml(o){
   var elContainer = document.createElement("div");
   elLayers.classList.add("list-group");
   elContainer.classList.add("mx-popup-container");
+  elContainer.classList.add("mx-scroll-styled");
 
   function getTitle(id){
     return  mx.helpers.getLabelFromObjectPath({

@@ -206,6 +206,7 @@ export function uiFold(o){
   var onChange = o.onChange;
   var classContainer = "fold-container";
   var classContent = "fold-content";
+  var classScroll = "mx-scroll-styled";
   var classLabel = "fold-label";
   var classSwitch = "fold-switch";
   var id =  makeId();
@@ -224,6 +225,7 @@ export function uiFold(o){
   var elLabel = document.createElement("label");
   elContainer.classList.add(classContainer);
   elContent.classList.add(classContent);
+  elContent.classList.add(classScroll);
   elLabel.classList.add(classLabel);
   elLabel.setAttribute("for",id);
   elInput.id = id;
@@ -1113,6 +1115,7 @@ export function modal(o){
     }
     head.classList.add("mx-modal-head");
     body.classList.add("mx-modal-body");
+    body.classList.add("mx-scroll-styled");
     content.classList.add("mx-modal-content");
     footer.classList.add("mx-modal-foot");
     buttons.classList.add("btn-group");

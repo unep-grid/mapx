@@ -18,8 +18,9 @@
   border-bottom: 1px solid #ccc;
   border-top: 1px solid #ccc;
   flex: 1 1 auto;
-  overflow-y: auto;
+  /*overflow-y: auto;*/
   min-height: 0px;
+  perspective:600px;
 }
 
 .mx-views-footer{
@@ -42,13 +43,17 @@
 }
 
 .mx-view-item {
-  overflow:hidden;
+  overflow: hidden;
   position: relative;
   margin-top: 5px;
   border-radius: 3px;
   width: 100%;
   z-index: 3;
-  padding: 10px;
+  padding: 15px 10px 15px 10px;
+  transition: transform 0.2s ease-in-out;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  background-color:#FFF;
 }
 
 .mx-view-item.is-dragging{
@@ -115,9 +120,9 @@
 }
 
 .mx-view-tgl-title {
-  font-weight: 400;
+  font-weight: 600;
   font-size: 13px;
-  text-transform: uppercase;
+  /*text-transform: uppercase;*/
   letter-spacing: 1.2;
 }
 
