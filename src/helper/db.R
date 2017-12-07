@@ -771,33 +771,36 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
 #' @param userId Integer user id
 #' @param language language for layer name. Default is english.
 #' @export
-mxDbGetLayerTable <- function(project, projects, userId, target="public",language="en"){
+mxDbGetLayerTable <- function(project, projects, userId, target="public",language="en",additionalSourcesIds=c()){
 
   target <- target[target!="self"]
   target <- paste(paste0("'",target,"'"),collapse=",")
-
+  sourceIds <- paste(paste0("'",additionalSourcesIds,"'"),collapse=",")
   type <- "vector" 
 
-  sql <- sprintf(
+  sql <-
     "SELECT id, 
-    data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}' title_%1$s,
-    data #>> '{\"meta\",\"text\",\"title\",\"en\"}' title_en,
-    date_modified
-    FROM mx_sources
-    WHERE ( country='%2$s' ) AND
-    type='%3$s' AND
+  data #>> '{\"meta\",\"text\",\"title\",\"%1$s\"}' title_" + language + ",
+  data #>> '{\"meta\",\"text\",\"title\",\"en\"}' title_default,
+  date_modified
+  FROM mx_sources
+  WHERE 
+  ( country = '" + project +"' )
+  AND 
+  (
     (
-      target ?| array[%4$s] OR 
+      id in ("+ sourceIds +") 
+      ) OR (
+      type='" + type + "' AND
       (
-        editor = '%5$s' AND target ?| array['self']
+        target ?| array[" + target + "] OR 
+        (
+          editor = '" + userId + "' AND target ?| array['self']
+          )
         )
-      )",
-    language,
-    project,
-    type,
-    target,
-    userId
-    )
+      )
+    )"
+
 
   dat <- mxDbGetQuery(sql)
 

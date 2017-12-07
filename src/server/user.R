@@ -157,6 +157,13 @@ observeEvent(input$btnSendLoginKey,{
       # send mail
       res <- try({
 
+
+    mxModal(
+      id="loginCodeTEST",
+      content=tags$p(reactData$loginSecret)
+      )
+
+
         template <- .get(config,c("templates","text","email_password"))
 
         text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginSecret,template)

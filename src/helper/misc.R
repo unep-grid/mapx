@@ -474,10 +474,10 @@ mxGetLayerNamedList <- function( layerTable, language ){
   out <- as.list(layerTable$id)
 
   titleLang <- layerTable[,sprintf("title_%s",language)]
-  titleEn <- layerTable[,"title_en"]
+  titleDefault <- layerTable[,"title_default"]
 
-  for(i in 1:length(titleLang)){
-     if(noDataCheck(titleLang[i])) titleLang[i] <- titleEn[i]
+  for(i in 1:length(titleDefault)){
+     if(noDataCheck(titleLang[i])) titleLang[i] <- titleDefault[i]
   }
 
   date <- layerTable$date_modified
@@ -489,6 +489,35 @@ mxGetLayerNamedList <- function( layerTable, language ){
   return(as.list(out))
 
 }
+
+
+#' Get title of source using its id
+#' @param id {String} Source id
+#' @param language {String} Two letter language code
+#' @return title string
+mxGetTitleFromSourceID <- function(id,language="en"){
+
+  sql = "
+  SELECT 
+  data#>>'{\"meta\",\"text\",\"title\",\"" + language + "\"}' as " + language + ", 
+  data#>>'{\"meta\",\"text\",\"title\",\"en\"}' as en
+  FROM mx_sources 
+  WHERE id ='"+ id+"' "
+
+  df <- mxDbGetQuery(sql)
+  out <- df[,"en"]
+  hasLanguage <- !noDataCheck(df[,language])
+
+  if(hasLanguage){
+    out <- df[,language]
+  }
+
+  return(out)
+
+}
+
+
+
 
 #' Translate geom type name
 #' @param {data.frame} geomTypes Geometry type data.frame as returned by mxDbGetLayerGeomTypes
@@ -1631,6 +1660,12 @@ mxGetMaxRole <- function(project,userInfo){
   hasRoleInProject <- !noDataCheck(roleInProject)
   hasRoleInWorld <- !noDataCheck(roleInWorld)
 
+  if( !hasRoleInWorld && !hasRoleInProject ){
+    hasRoleInWorld = TRUE
+    roleInWorld = "user"
+  }
+
+
   if(!hasRoleInWorld && !hasRoleInProject) stop("No role found!")
 
   if(hasRoleInProject){
@@ -1701,7 +1736,6 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   #
   # update meta data
   #
-
   viewData <- .get(view,c("data"))
   layerName <- .get(sourceData,c("layerName"))
   meta <- mxDbGetLayerMeta(layerName)
@@ -1740,6 +1774,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
 
   viewData <- .set(viewData,c("source"),list(
       type = "vector",
+      allowDownload = .get(meta,c("license","allowDownload")),
       attribution = as.character(tags$a(href=meta[[c("origin","homepage","url")]])),
       layerInfo = list(
         name =  .get(sourceData,c("layerName")),

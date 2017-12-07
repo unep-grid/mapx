@@ -140,20 +140,6 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
                 enum_titles = names(t(rolesTarget))
                 )
               )
-            ),
-          rolesGet = list(
-            title = t("target_roles_get_title"),
-            type =  "array",
-            format = "checkbox",
-            uniqueItems = TRUE,
-            items = list(
-              type = "string",
-              enum = as.list(rolesTarget),
-              default = "self",
-              options = list(
-                enum_titles = names(t(rolesTarget))
-                )
-              )
             )
           )
         ),
@@ -416,6 +402,12 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
           collapsed = TRUE
           ),
         properties = list(
+          allowDownload = list(
+            type = "boolean",
+            format = "checkbox",
+            title = t("license_allow_download"),
+            default = TRUE
+            ),
           licenses = list(
             type = "array",
             title = t("license_list_title"),

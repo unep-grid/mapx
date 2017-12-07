@@ -69,6 +69,7 @@ lang_item_title,Language,Langue,Lengua,NA,NA,NA,NA,زبان,ژبه
 lang_list_desc,Two letters code of languages,Code de deux lettres minuscules,Código de dos letras en minúscula ,NA,NA,NA,NA,دو دستورالعمل نامه از زبان ها,د ژبې دوه توریز کوډ
 lang_list_title,List of languages,Liste des langues,Lista de lenguas,NA,NA,NA,NA,لست زبان ها,د ژبو نوملړ
 lang_title,Language,Langue,Lengua,NA,NA,NA,NA,زبان,ژبه
+license_allow_download,Allow download source,Autoriser le téléchargement,NA,NA,NA,NA,NA
 license_desc,"If any, description of the data licenses","Si applicable, description des licences de la donnée","Si aplica, descripción de la licencias de los datos",NA,NA,NA,NA,اگر هر گونه، شرح مجوز اطلاعات,که د ډیټا د جواز هر ډول تشریح
 license_item_title,License,Licence,Licencia,NA,NA,NA,NA,مجوز,جواز
 license_list_desc,Name and/or description of the licence,Nom et/ou description de la licence,Nombre o descripción de la licencia,NA,NA,NA,NA,نام و/یا شرح مجوز,د جواز نوم او یا تشریح

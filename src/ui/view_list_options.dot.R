@@ -279,6 +279,7 @@ liControlsVectorTiles <- tagList(
       class="fa fa-info-circle"
       )
     ),
+  "{{?h.path(view,'data.source.allowDownload') }}",
   tags$li(
     class="mx-pointer hint--right",
     `data-lang_key`="btn_opt_download",
@@ -290,6 +291,7 @@ liControlsVectorTiles <- tagList(
       class="fa fa-cloud-download"
       )
     ),
+  "{{?}}",
   "{{?}}"
   )
 

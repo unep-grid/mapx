@@ -324,6 +324,22 @@ observe({
               #
               if(viewType=="vt"){
 
+                srcAvailable <- reactSourceLayer()
+                srcSet <- .get(viewData,c("data","source","layerInfo","name"))
+                hasSource <- srcSet %in% srcAvailable
+
+                if( !noDataCheck(srcSet) && !hasSource ){
+
+                  names( srcSet ) <- mxGetTitleFromSourceID(
+                    id = srcSet,
+                    language = language
+                    )
+
+                  srcAvailable <- c(srcSet,srcAvailable)
+
+                }
+
+
                 uiType <- tagList(
                   #
                   # main layer
@@ -331,8 +347,8 @@ observe({
                   selectizeInput(
                     inputId = "selectSourceLayerMain",
                     label = d("source_select_layer",language),
-                    choices = reactSourceLayer(),
-                    selected = .get(viewData,c("data","source","layerInfo","name")),
+                    choices = srcAvailable,
+                    selected = srcSet,
                     options=list(
                       dropdownParent="body"
                       )
@@ -340,6 +356,7 @@ observe({
 
                   uiOutput("uiViewEditVtMain"),
 
+                
                   #
                   # mask / overlap layer
                   #
@@ -896,33 +913,48 @@ observeEvent(input$btnViewDeleteConfirm,{
 # Button save disabling
 #
 observe({
-
   #
   # Title and description
   #
   errors <- list()
-  hasNoLayer <- noDataCheck(input$selectSourceLayerMain)
+  layer <- input$selectSourceLayerMain
+  view <- reactData$viewDataEdited 
+
+  hasLayer <- !noDataCheck(layer) 
+  hasView <- !noDataCheck(view)
   hasInvalidLayer <- TRUE
 
-  if(!hasNoLayer){
-    hasInvalidLayer <-  !input$selectSourceLayerMain %in% reactSourceLayer()
+  if( hasView && hasLayer ){
+    #
+    # Get allowed layers
+    #
+    layers <- reactSourceLayer()
+
+    #
+    # Check for invalid layers
+    #
+    hasInvalidLayer <-  !layer %in% layers
+
+    #
+    # Other input check
+    #
+    hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
+    hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
+
+    errors <- c(
+      !hasLayer,
+      hasInvalidLayer,
+      hasTitleIssues,
+      hasAbstractIssues
+      )
+
+
+    mxToggleButton(
+      id="btnViewSave",
+      disable = any(errors)
+      )
+
   }
-
-  hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
-  hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
-
-  errors <- c(
-     hasInvalidLayer,
-     hasNoLayer,
-     hasTitleIssues,
-     hasAbstractIssues
-    )
-
-   mxToggleButton(
-    id="btnViewSave",
-    disable = any(errors)
-    )
-
 })
 
 
@@ -1116,7 +1148,6 @@ observe({
   variableName <- .get(viewData,c("data","attribute","name"))
   variableNames <- .get(viewData,c("data","attribute","names"))
 
-
   output$uiViewEditVtMain <- renderUI({
     tagList(
     selectizeInput(
@@ -1253,19 +1284,62 @@ reactSourceLayer <- reactive({
   updateSourceLayer <- reactData$updateSourceLayerList
 
   ## non reactif
+  additionalLayers <- c()
   userCanRead <- .get(userRole,c("read"))
 
-   layers <-  mxDbGetLayerTable(
+  views <- reactViewsCompact() 
+
+  #
+  # Extract all sources id set in views and add them in the layer list. 
+  #
+  if(!noDataCheck(views)){
+    #
+    # Filter edit
+    #
+    viewsEdit <- views[sapply(views,`[[`,"_edit")]
+    #
+    # Get ids
+    #
+    viewsIds <- sapply(viewsEdit,.get,c("id"))
+
+    #
+    # convert to string
+    #
+    viewsIdsString <- paste(paste0("'",viewsIds,"'"),collapse=",")
+
+    sql = "
+    WITH a AS (
+      SELECT id as _id, MAX(date_modified) AS _date
+      FROM mx_views
+      WHERE id in (" + viewsIdsString +")
+      GROUP BY id
+      )
+    SELECT distinct(data#>>'{\"source\",\"layerInfo\",\"name\"}') as idsource
+    FROM mx_views b 
+    JOIN a 
+    ON a._id = b.id 
+    AND a._date = b.date_modified"
+
+    additionalLayers <- mxDbGetQuery(sql)$idsource
+    additionalLayers <- additionalLayers[!is.na(additionalLayers)] 
+  }
+ 
+  #
+  # Get layer table
+  #
+  layers <-  mxDbGetLayerTable(
     project = country,
     userId = userId,
     target = userCanRead,
-    language = language
+    language = language,
+    additionalSourcesIds = additionalLayers
     )
+
 
   if(noDataCheck(layers)){
     layers <- list("noLayer")
   }else{ 
-    layers <- mxGetLayerNamedList( layers, language )
+    layers <-  mxGetLayerNamedList( layers, language )
   }
 
   return(layers)
@@ -1275,27 +1349,43 @@ reactSourceLayer <- reactive({
 
 observe({
 
-  useMask <- isTRUE(input$checkAddMaskLayer)
-  layer <- input$selectSourceLayerMain
   out <- list()
+
+  layer <- input$selectSourceLayerMain
+  hasLayer <- !noDataCheck(layer)
+  useMask <- isTRUE(input$checkAddMaskLayer)
 
   isolate({
 
-    if(!noDataCheck(layer)){
+    if( hasLayer && useMask ){
+      language <- reactData$language
+      layerMask <- input$selectSourceLayerMask
       layers <- reactSourceLayer()
       layers <- layers[!layers %in% layer]
 
-      if(length(layers)>0){
+      if( length(layers) > 0 ){
 
-        geomTypesCheck <- sapply(layers,function(x){
-          geomType <- mxDbGetLayerGeomTypes(x)$geom_type
-          geomOk <- isTRUE( geomType != "point" )
-          return(geomOk)
-    })
+        geomTypesCheck <- sapply(layers,
+          function(x){
+            #
+            # Get geomtype for this layer
+            #
+            geomType <- mxDbGetLayerGeomTypes(x)$geom_type
 
+            #
+            # Not a point
+            #
+            geomOk <- isTRUE( geomType != "point" )
+            return(geomOk)
+          })
+
+        #
+        # Filter layer by geom
+        #
         out <- layers[ geomTypesCheck ]
 
       }
+
     }
 
     updateSelectInput(
