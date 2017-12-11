@@ -1773,6 +1773,54 @@ mxToJsonForDb<- function(listInput){
 }
 
 
+
+#' Get a list of view id currently associated with a source
+#' @param idSource Source (layer) id
+#'
+mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
+
+  sql <- "
+  WITH latest AS (
+    SELECT id, 
+    MAX(date_modified) as _date
+    FROM mx_views
+    GROUP by id
+    ),
+  subset AS (
+    SELECT mx_views.editor, mx_views.id, mx_views.pid, mx_views.data
+    FROM mx_views
+    JOIN latest
+    ON mx_views.date_modified = latest._date 
+    AND mx_views.id = latest.id
+    ),
+  views_table AS (
+    SELECT 
+    subset.editor, subset.id , subset.pid,
+    CASE
+    WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
+    THEN data#>>'{\"title\",\"" + language + "\"}'
+    ELSE data#>>'{\"title\",\"en\"}'
+    END AS title
+    FROM subset
+    WHERE 
+      data#>>'{\"source\",\"layerInfo\",\"name\"}' = '" + idSource +"' OR
+      data#>>'{\"source\",\"layerInfo\",\"maskName\"}' = '" + idSource +"'
+    )
+
+  SELECT views_table.*, mx_users.email
+    FROM views_table 
+    JOIN mx_users 
+    ON views_table.editor = mx_users.id
+  "
+
+  out <- mxDbGetQuery(sql)
+
+  return(out)
+
+}
+
+
+
 #' Drop layer and associated views
 #' @param layerName Layer to remove
 #' @export
@@ -1785,17 +1833,14 @@ mxDbDropLayer <- function(layerName){
   , layerName
   ))$id
 
-  idView <- mxDbGetQuery(sprintf("
-    SELECT id
-    FROM mx_views
-    WHERE data#>>'{\"source\",\"layerInfo\",\"name\"}' = '%1$s'"
-  , layerName))$id
-
-
+  viewsTable <- mxDbGetViewsIdBySourceId(layerName)
   existsTable <- isTRUE(mxDbExistsTable(layerName))
   existsEntry <- !noDataCheck(idSource)
-  existsViews <- !noDataCheck(idView)
+  existViews <- !noDataCheck(viewsTable)
 
+  if(existViews){
+   stop("Attempt to remove source layer with active view depending on it")
+  }
 
   if(existsTable){
     mxDbGetQuery(sprintf("DROP table %1$s",layerName))
@@ -1807,18 +1852,8 @@ mxDbDropLayer <- function(layerName){
     }
   }
 
-  if(existsViews){ 
-    for(i in idView){ 
-      mxDbGetQuery(sprintf("DELETE FROM mx_views WHERE id='%1$s'",i))
-    }
-  }
 
-  return(
-    list(
-      idSources = idSource,
-      idView = idView  
-      )
-    )
+  return()
 
 }
 

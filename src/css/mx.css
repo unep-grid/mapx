@@ -199,11 +199,22 @@ html, body, .full-page {
   text-overflow: ellipsis;
 }
 
-.list-group .list-group-title {
+.list-group .list-group-title-small {
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
   display:block;
+  margin-top:10px;
+}
+
+.list-group .list-group-title-big {
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.list-group {
+  word-wrap: break-word;
 }
 
 .list-group .list-group-item-member {
@@ -214,6 +225,12 @@ html, body, .full-page {
   line-height: 2.2;
   font-size: 10px;
 }
+
+.list-group  .list-light {
+  list-style : none;
+  padding-left : 4px;
+}
+
 
 /**
 * slider
@@ -954,7 +971,7 @@ html, body, .full-page {
 
 .fold-container .fold-switch:checked ~ .fold-content {
   opacity:1;
-  max-height:200px;
+  max-height:1000px;
   font-size:inherit;
 }
 

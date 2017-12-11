@@ -42,7 +42,6 @@ observeEvent(input$btnEditSources,{
   # json editor output
   #
   uiOut = tagList(
-
     selectizeInput(
       inputId = "selectSourceLayerEdit",
       label = d("source_select_layer",language),
@@ -51,6 +50,9 @@ observeEvent(input$btnEditSources,{
         dropdownParent="body"
         )
       ),
+    tags$label("Table of views depending on selected source"),
+    tableOutput("tblViewsUsingSource"),
+    tags$label("Metadata"),
     jedOutput(id="sourceEdit")
     )
 
@@ -80,6 +82,61 @@ observeEvent(input$btnEditSources,{
     )
 
 })
+
+#
+# Reactive table of views depending on selected source
+#
+reactTableViewsUsingSource <- reactive({
+  #
+  # Trigger
+  #
+  idSource <- input$selectSourceLayerEdit 
+  language <- reactData$language
+  idViewSource <-input$selectSourceLayerMain
+  idViewSourceMask <- input$selectSourceLayerMask
+  #
+  # Get views table
+  #
+  mxDbGetViewsIdBySourceId(idSource,language)
+})
+
+
+#
+# Render a table of viers depending on selected source
+#
+output$tblViewsUsingSource <- renderTable({
+  idSource <- input$selectSourceLayerEdit 
+  data <- reactTableViewsUsingSource()
+  language <- reactData$language
+  hasRow <- nrow(data) > 0
+
+
+  if(!hasRow){
+    data <- data.frame("title"="<emtpy>","email"="<empty>")
+  }
+
+  data <- data[,c("title","email")]
+
+  names(data) <- c(
+    d("view_title",w=F,lang=language),
+    d("login_email",w=F,lang=language)
+    )
+
+  #
+  # Change the delete source button state
+  #
+  mxToggleButton(
+    id="btnDeleteSource",
+    disable = hasRow
+    )
+  mxToggleButton(
+    id="btnDeleteSourceConfirm",
+    disable = !noDataCheck(data)
+    )
+
+  return(data);
+})
+
 
 observeEvent(input$btnDeleteSource,{
 
@@ -123,15 +180,10 @@ observeEvent(input$btnDeleteSourceConfirm,{
   selectedSource <- input$selectSourceLayerEdit 
   language <- reactData$language
 
-  removed <- mxDbDropLayer(selectedSource)
+  mxDbDropLayer(selectedSource)
 
   dict <- .get(config,c("dictionaries","schemaMetadata")) 
 
-  for(i in removed$idView){
-    mglRemoveView(idView=i)
-  }
-
-  reactData$updateViewListFetchOnly <- runif(1)
   reactData$updateSourceLayerList <- runif(1)  
 
   mxModal(
@@ -184,7 +236,6 @@ observeEvent({
   
   # Clean meta : 
   # - remove old attributes names 
-  # - remove old schema values NOTE : once stable, remove those lines
 
   attributesOld <- names(.get(meta,c("text","attributes")))
   attributesRemoved <- attributesOld[ ! attributesOld %in% attributesNames]
@@ -193,6 +244,7 @@ observeEvent({
     meta = .set(meta,c("text","attributes",a),NULL)
   }
 
+  # - remove old schema values NOTE : once stable, remove those lines
   meta = .set(meta,c("origin","sources"),NULL)
   meta = .set(meta,c("text","keywords","words"),NULL)
   meta = .set(meta,c("text","language","languages"),NULL)
@@ -206,8 +258,8 @@ observeEvent({
     meta = .set(meta,c("access","rolesRead"),roles) 
   }
 
-  meta = .set(meta,c("access","roles"),NULL)
-
+  meta <- .set(meta,c("access","roles"),NULL)
+  
   schema = mxSchemaSourceMeta(
       language = language,
       rolesTarget = rolesTarget,

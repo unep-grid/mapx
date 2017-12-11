@@ -159,7 +159,7 @@ observe({
 
               dateModified <- format(as.Date(dateModified),"%a %d %B %Y")
               dateCreated <- format(as.Date(dateCreated),"%a %d %B %Y")
-              dateSourceCreated <- 
+              #dateSourceCreated <- 
 
               integrityData <- .get(layerMeta,c("integrity"))
               integrityScore <- round(((sum(as.numeric(unlist(integrityData)))/(3*16))*100),1)
@@ -168,33 +168,52 @@ observe({
               countries <- .get(viewData,c("data","countries"))
               target <- .get(viewData,c("target"))
 
+
+              subsetMeta <- list(
+                meta_last_editor_id=idUser,
+                meta_all_editor_id=paste(idUsers,collapse=","),
+                meta_number_changes=numberUpdate,
+                meta_view_title=viewTitle,
+                meta_view_id=idView,
+                meta_date_modified=dateModified,
+                meta_date_created=dateCreated,
+                meta_target_roles=paste(target,collapse=","),
+                meta_view_country=country,
+                meta_view_countries=paste(countries,collapse=","),
+                meta_source_id=idSource,
+                meta_source_homepage=homepage,
+                meta_source_integrity_score=integrityScore + "%",
+                meta_source_time_range = list(
+                   meta_source_time_range_min = dateSourceRangeStart,
+                   meta_source_time_range_max =dateSourceRangeEnd
+                  )
+                )
+
+              meta <- list(
+                source_meta_data = layerMeta
+                )
+              
+              dictSchema =  .get(config,c("dictionaries","schemaMetadata"))
+
               uiOut <- tagList(
-                tags$ul(class="list-group",
-                  tags$li(class="list-group-item", tags$b("Last editor id"), tags$span(class="badge",idUser)),
-                  tags$li(class="list-group-item", tags$b("All editors id"), tags$span(class="badge", paste(idUsers,collapse=","))),
-                  tags$li(class="list-group-item", tags$b("Number of changes"), tags$span(class="badge",numberUpdate)),
-                  tags$li(class="list-group-item", tags$b("View title"), tags$span(class="badge",viewTitle)),
-                  tags$li(class="list-group-item", tags$b("View id"), tags$span(class="badge",idView)),
-                  tags$li(class="list-group-item", tags$b("View date modified"), tags$span(class="badge",dateModified)),
-                  tags$li(class="list-group-item", tags$b("View date created"), tags$span(class="badge",dateCreated)),
-                  tags$li(class="list-group-item", tags$b("View target role(s)"), tags$span(class="badge",paste(target,collapse=", "))),
-                  tags$li(class="list-group-item", tags$b("View country"), tags$span(class="badge",country)),
-                  tags$li(class="list-group-item", tags$b("View secondary countries"), tags$span(class="badge",paste(countries,collapse=", "))),
-                  tags$li(class="list-group-item", tags$b("Source id"), tags$span(class="badge",idSource)),
-                  tags$li(class="list-group-item", tags$b("Source homepage"), tags$span(class="badge",tags$a(href=homepage,target="_blank",homepage))),
-                  tags$li(class="list-group-item", tags$b("Source integrity score"), tags$span(class="badge",integrityScore+"%")),
-                  tags$li(class="list-group-item", tags$b("Source time range"), 
-                    tags$span(class="badge","to : " + dateSourceRangeEnd),
-                    tags$span(class="badge","from: " + dateSourceRangeStart) 
-                    )
-                  ),
+                tags$h4(d("meta_display_view_title",lang=language,dict=dictSchema)),
                 listToHtmlSimple(
-                  list("source_meta_data"=layerMeta),
-                  lang=language
+                  listInput = subsetMeta,
+                  lang = language,
+                  useFold = FALSE,
+                  unboxText = FALSE,
+                  dict = dictSchema
+                  ),
+                tags$h4(d("meta_display_source_title",lang=language,dict=dictSchema)),
+                listToHtmlSimple(
+                  listInput = meta,
+                  lang = language,
+                  useFold = TRUE,
+                  unboxText = TRUE,
+                  dict = dictSchema
                   )
                 )
               
-
               mxModal(
                   id="modalViewEdit",
                   title=tags$b(viewTitle),
@@ -326,6 +345,8 @@ observe({
 
                 srcAvailable <- reactSourceLayer()
                 srcSet <- .get(viewData,c("data","source","layerInfo","name"))
+                srcSetMask <- .get(viewData,c("data","source","layerInfo","maskName"))
+                srcAvailableMask <- srcAvailable[! srcAvailable %in% srcSet ]
                 hasSource <- srcSet %in% srcAvailable
 
                 if( !noDataCheck(srcSet) && !hasSource ){
@@ -338,7 +359,6 @@ observe({
                   srcAvailable <- c(srcSet,srcAvailable)
 
                 }
-
 
                 uiType <- tagList(
                   #
@@ -363,7 +383,7 @@ observe({
                   checkboxInput(
                     inputId = "checkAddMaskLayer",
                     label =  d("view_add_overlap_layer",language),
-                    value = !noDataCheck(.get(viewData,c("data","source","layerInfo","maskName")))
+                    value = !noDataCheck(srcSetMask)
                     ),
                   conditionalPanel(
                     condition = "input.checkAddMaskLayer",
@@ -371,8 +391,8 @@ observe({
                       selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
-                        choices = list(),
-                        selected = .get(viewData,c("data","source","layerInfo","maskName")),
+                        choices = srcAvailableMask,
+                        selected = srcSetMask,
                         options=list(
                           dropdownParent="body"
                           )
@@ -926,14 +946,9 @@ observe({
 
   if( hasView && hasLayer ){
     #
-    # Get allowed layers
-    #
-    layers <- reactSourceLayer()
-
-    #
     # Check for invalid layers
     #
-    hasInvalidLayer <-  !layer %in% layers
+    hasInvalidLayer <-  !layer %in% reactSourceLayer()
 
     #
     # Other input check
@@ -1049,7 +1064,7 @@ observeEvent(input$btnViewSave,{
     #
     # Update view data 
     #
-    view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask,additionalAttributes)
+    view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask, additionalAttributes)
 
   }
   #
@@ -1350,6 +1365,7 @@ reactSourceLayer <- reactive({
 observe({
 
   out <- list()
+  layerMask <- NULL
 
   layer <- input$selectSourceLayerMain
   hasLayer <- !noDataCheck(layer)
@@ -1388,10 +1404,12 @@ observe({
 
     }
 
+
     updateSelectInput(
       session,
       "selectSourceLayerMask",
-      choices = out
+      choices = out,
+      selected = layerMask
       )
 
   })

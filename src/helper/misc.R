@@ -2459,38 +2459,69 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
 #' Create a html list and apply a class for <ul> and <li>
 #'
 #' @param listInput list in input
-listToHtmlSimple <- function(listInput,lang="en",dict=config$dict){
+listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE){
+
+  r = 0
 
   makeUL <- function(li){
+    r <<- r + 1
     nL <- names(li)
     lL <- length(li)
     content <- tagList()
     for( i in 1:lL){ 
       n <-  nL[[i]]
-      if(noDataCheck(n)){ n <- i }
+      if(noDataCheck(n)){ n <- ifelse(numberArray,i,"") }
       content <- tagList(content, makeLi(li[[i]],n))
     }
+    r <<- r - 1
     tags$ul(content,class="list-group")
   }
 
   makeLi <- function(it,ti){
     ti <- d(ti,lang=lang,dict=dict);
     if (is.list(it) && length(it)>0){
-      content <- mxFold(
-        content = makeUL(it),
-        labelUi = ti
+      
+      classList <- "list-group-item"
+
+      if ( useFold && r <= maxFold ){
+        content <- mxFold(
+          content = makeUL(it),
+          labelUi = ti
+          )
+      }else{
+        content <- tags$div(
+          tags$b(class="list-group-title-big",ti),
+          tags$div(makeUL(it))
+          )
+      }
+
+      return(
+        tags$li(
+          class = classList,
+          content
+          )
         )
+
     }else{
-      content <- tags$div(
-        tags$span(class="list-group-title",ti),
-        tags$span(it)
+
+      if(unboxText){
+      return(
+        tags$div(
+          tags$span(class="list-group-title-small",ti),
+          tags$span(it)
+          )
+        )}else{
+       return(
+        tags$li(
+          class = "list-group-item",
+          tags$span(class="list-group-title-small",ti),
+          tags$span(it)
+          )
         )
+
+      }
     }
 
-    tags$li(
-      class = "list-group-item",
-      content
-      )
   }
 
   makeUL(listInput)         
