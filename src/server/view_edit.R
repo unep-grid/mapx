@@ -937,19 +937,29 @@ observe({
   # Title and description
   #
   errors <- list()
-  layer <- input$selectSourceLayerMain
   view <- reactData$viewDataEdited 
 
-  hasLayer <- !noDataCheck(layer) 
   hasView <- !noDataCheck(view)
   hasInvalidLayer <- TRUE
 
-  if( hasView && hasLayer ){
-    #
-    # Check for invalid layers
-    #
-    hasInvalidLayer <-  !layer %in% reactSourceLayer()
 
+  if( hasView ){
+
+    isVectorTile <- isTRUE(.get(view,c("type")) == "vt") 
+
+    #
+    # Vector layer error
+    #
+    if( isVectorTile ){
+    layer <- input$selectSourceLayerMain
+    errors <- c(
+        noDataCheck(layer),
+        !layer %in% reactSourceLayer()
+      )
+    }
+
+
+   
     #
     # Other input check
     #
@@ -957,16 +967,14 @@ observe({
     hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
 
     errors <- c(
-      !hasLayer,
-      hasInvalidLayer,
+      errors,
       hasTitleIssues,
       hasAbstractIssues
       )
 
-
     mxToggleButton(
       id="btnViewSave",
-      disable = any(errors)
+      disable = any(sapply(errors,isTRUE))
       )
 
   }
