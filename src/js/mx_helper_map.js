@@ -2715,7 +2715,7 @@ export function addViewVt(o){
         var max = p(view,"data.attribute.max")+1;
         var min = p(view,"data.attribute.min")-1;
         var nextRule = rules[i+1];
-        var nextValue = nextRule ? nextRule.value ? nextRule.value : max : max;
+        var nextValue = nextRule ? nextRule.value !== undefined ? nextRule.value : max : max;
         var isNumeric = p(view,"data.attribute.type") == "number";
         var idView = view.id;
         var filter = ["all"];
