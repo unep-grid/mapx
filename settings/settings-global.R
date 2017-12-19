@@ -8,7 +8,8 @@ config <- list()
 # Shiny options
 #
 options(shiny.maxRequestSize=1000*1024^2) 
-options(shiny.reactlog=TRUE)
+options(shiny.reactlog=FALSE)
+
 #
 # get info about the host
 #
