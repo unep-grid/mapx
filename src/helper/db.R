@@ -717,28 +717,26 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
 
   if(mxDbExistsTable(table)){
 
-    q <- sprintf("
-      SELECT 
-      ST_AsGeoJSON(
-        ST_Extent(
-          ST_Buffer( %1$s::geography , 2 )::geometry
-        )) AS ext 
-      FROM %2$s"
-      , geomColumn
-      , table
-      )
     #
     # Get extent
     #
-    ext =  mxDbGetQuery(q)
-    
+    ext <- mxDbGetQuery("
+      SELECT 
+      ST_AsGeojson(
+        ST_Extent(
+          ST_buffer(
+            ST_Envelope(" + geomColumn + ")::geography
+            , 1 )::geometry
+          )
+        ) as ext FROM " + table + ""
+      )
 
     #
     # Extract coordinates from json
     #
     res <- .get(
       jsonlite::fromJSON(
-        mxDbGetQuery(q)$ext,  
+        ext$ext,  
         simplifyVector=F 
         ),c("coordinates")
       )[[1]]
