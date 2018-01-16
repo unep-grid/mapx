@@ -479,7 +479,7 @@ blockquote {
 .mx-panel-right {
   top: 40px;
   position: absolute;
-  left: 445px;
+  left: 460px;
   right: 5px;
   bottom: 40px;
   z-index: 90;
@@ -978,7 +978,6 @@ blockquote {
 
 .check-toggle {
   display:inline-block;
-  float : right;
 }
 
 .check-toggle .check-toggle-label {

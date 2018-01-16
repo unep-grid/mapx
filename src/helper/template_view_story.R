@@ -124,10 +124,10 @@ mxSchemaViewStory <- function(view,views,language){
   slideText <- mxSchemaMultiLingualInput(
     format = "textarea",
     options = list(
-      editor = "ace",
-      language ="html",
-      addLiveEditBtn = TRUE,
-      selectorLiveEdit = ".mx-story"
+      #editor = "ace",
+      #language ="html",
+      #addLiveEditBtn = TRUE,
+      #selectorLiveEdit = ".mx-story"
       ),
     language =  l,
     languagesRequired = c("en"),

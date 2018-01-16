@@ -57,7 +57,6 @@ observeEvent(input$btnIframeBuilder,{
 })
 
 
-
 observe({
 
   urlHost <- session$clientData[["url_hostname"]]  
@@ -98,17 +97,3 @@ observe({
     )
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-

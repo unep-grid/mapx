@@ -439,26 +439,7 @@ color:var(--mx_ui_text);
   background-color: hsla(30, 100%, 28%, 1);
 }
 
-
 .mx-view-item {
   background-color:var(--mx_ui_background);
 }
-/*.mx-view-item-sm {*/
-  /*border-left : 2px solid blue!important;*/
-/*}*/
-/*.mx-view-item-vt {*/
-  /*border-left : 2px solid green!important;*/
-/*}*/
-/*.mx-view-item-rt {*/
-  /*border-left : 2px solid orange!important;*/
-
-/*}*/
-/*.mx-view-item-gj {*/
-  /*border-left : 2px solid red!important;*/
-/*}*/
-/*.mx-view-item-cc {*/
-  /*border-left : 2px solid black!important;*/
-/*}*/
-
-
 
