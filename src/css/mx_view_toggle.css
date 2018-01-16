@@ -21,7 +21,10 @@
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0px;
-  perspective:600px;
+}
+
+.mx-tools-content {
+ padding:20px;
 }
 
 .mx-views-footer{

@@ -315,7 +315,6 @@ export function reset(o){
   * apply remove method
   */
 
-  console.log("RESET views : clean view modules");
   cleanRemoveModules(views);
 
   /**
@@ -332,7 +331,7 @@ export function reset(o){
 */
 function cleanRemoveModules(view){
 
-  view = view instanceof String ? mx.helpers.getViews({id:'map_main',idView:view}) : view;
+  view = typeof view === "string" ? mx.helpers.getViews({id:'map_main',idView:view}) : view;
   view = view instanceof Array ? view : [view];
 
   view.forEach(function(v){
@@ -665,6 +664,7 @@ export function viewControler(o){
         id : idMap,
         prefix : v
       });
+
       cleanRemoveModules(v);
     });
 
