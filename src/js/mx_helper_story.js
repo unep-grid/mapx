@@ -186,10 +186,14 @@ function initEditing(o){
     if(!ContentTools._init){
       ContentTools.IMAGE_UPLOADER = imageUploader;
       ContentTools.StylePalette.add([
+        /* Table classes from bootstrap */
         new ContentTools.Style('Table base', 'table', ['table']),
         new ContentTools.Style('Table bordered', 'table-bordered', ['table']),
         new ContentTools.Style('Table striped', 'table-striped', ['table']),
-        new ContentTools.Style('Table hover', 'table-hover', ['table'])
+        new ContentTools.Style('Table hover', 'table-hover', ['table']),
+        /* custom mapx classes */
+        new ContentTools.Style('Image cover', 'mx-image-cover', ['img'])
+
       ]);
       ContentTools._init = true;
     }
