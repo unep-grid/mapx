@@ -205,7 +205,7 @@ function initEditing(o){
        */
       var elBtnModalPreview = document.getElementById("btnViewPreviewStory");
       var elBtnModalSave = document.getElementById("btnViewSaveStory");
-      var elBtnStoryClose = document.getElementById("btnStoryClose");
+      var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
       /**
        * Set a remove function for custom buttons
        */      
