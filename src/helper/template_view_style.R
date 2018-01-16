@@ -12,6 +12,11 @@ mxSchemaViewStyle <- function(
   if(noDataCheck(view)) return()
 
   #
+  # Keep track of property order
+  #
+  mxCounter(reset=T)
+
+  #
   # language settings
   #
   l <- language
@@ -78,6 +83,18 @@ mxSchemaViewStyle <- function(
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
+
+  #
+  # Legend title
+  #
+  titleLegend = list(
+    titleLegend = mxSchemaMultiLingualInput(
+      language = l,
+      keyTitle="style_title_legend",
+      default = list(en="Legend"),
+      type="string"
+      )
+    )
 
   #
   # style property
@@ -165,6 +182,7 @@ mxSchemaViewStyle <- function(
   # 
   rules <- list(
     rules = list(
+      propertyOrder = 0,
       type = "array",
       format = "table",
       title = tt("schema_rules"),
@@ -233,6 +251,7 @@ mxSchemaViewStyle <- function(
   #
   properties <- c(
     rules,
+    titleLegend,
     custom
     )
   #

@@ -339,6 +339,24 @@ observeEvent(reactData$loginRequested,{
     if(!isTRUE(is.integer(res$id))) stop(sprintf("No data for %s",email))
 
     #
+    # Token
+    #
+    tk = "";
+    if( ! isGuest ){
+      tk = randomString(prefix="mx-tk",splitIn=5)
+
+      mxDbUpdate(
+        table=userTable,
+        idCol='id',
+        id=res$id,
+        column='data',
+        path = c("admin","token"),
+        value = tk
+        )   
+    }
+
+
+    #
     # Encrypt and save cookie
     #
     ck <- mxDbEncrypt(
@@ -346,6 +364,7 @@ observeEvent(reactData$loginRequested,{
         id=res$id
         )
       )
+    
     # save in a list 
     ck <- list(ck)
     # name it
@@ -356,6 +375,13 @@ observeEvent(reactData$loginRequested,{
       expireDays = .get(config,c("users","cookieExpireDays"))
       ) 
 
+     #
+    # Save user id in mx.settings.user.id
+    #
+    mglSetUserData(list(
+       id = res$id,
+       token = tk
+    ));
     #
     # Get user info
     #
@@ -366,6 +392,8 @@ observeEvent(reactData$loginRequested,{
     #
     reactUser$data <- userInfo 
 
+
+    
 
     mxTimeDiff(timer)
 })

@@ -27,6 +27,7 @@
 "btn_opt_edit_dashboard","Edit dashboard","Editer le dashboard","","","","","","",NA
 "btn_opt_edit_story","Edit story","Editer le récit","","","","","","",NA
 "btn_opt_edit_style","Set the style of this view","Configurer le style de cette vue","","","","","","تنظیم ستایل این نمایه","ددې لیدنې شکل تنظیم کړئ"
+"style_title_legend","Legend title","Titre de la légende","","","","","","",""
 "btn_opt_meta","Display metadata","Afficher les métadonnées ","","","","","","نمایش ابرداده","میتا ډیټا ښکاره کړئ"
 "btn_opt_numeric","Filter by numeric value","Filtrer par valeur numerique","","","","","","",NA
 "btn_opt_reset","Reset the view","Réinitialiser la vue","","","","","","تنظیم دوباره نمایش","د ټولو لیدنو بیا کتنه"
@@ -47,6 +48,11 @@
 "btn_sort_date","Date","Date","","","","","","تاریخ","نیټه"
 "btn_sort_desc","Description","Description","","","","","","توضیح","تفصیل"
 "btn_sort_title","Title","Titre","","","","","","عنوان","عنوان"
+"btn_story_unlock_map","Toggle map interaction","Permettre l'interaction avec la carte","","","","","","",""
+"btn_story_close","Back to the map explorer","Revenir à l'explorateur","","","","","","",""
+"btn_story_edit_cancel","Cancel edition","Annuler l'édition","","","","","","",""
+"btn_story_edit_save","Save edition","Sauvegarder l'édition","","","","","","",""
+"btn_story_edit","Start edition","Démarrer l'édition","","","","","","",""
 "btn_switchui","Toggle the color of the interface","Changer les couleurs de l'interface","","","","","","تغییر رنگ صفحه رابط","د نښلونکې صفحې رنګ ته بدلون ورکړئ"
 "btn_tab_dashboard","Toggle dashboards","Dashboards","","","","","","",NA
 "btn_tab_settings","Settings ","Préférences","","","","","","تنظیمات ","امستنې (تنظیمات)"
@@ -66,6 +72,7 @@
 "center","Center","Centre","","","","","","وسط","مابین"
 "country","Country","Pays","","","","","","کشور","هیواد"
 "create","Create","Créer","","","","","","ایجاد","جوړ کړئ"
+"content","Content","Contenu","","","","","","",""
 "dev","Development","Dévelopement","","","","","","توسعه","پرمختیا"
 "env","Environment","Environnement","","","","","","محیط","چاپېریال"
 "error_no_layer","No source layer set","Pas de couche source attribuée","","","","","","لایه منبع ایجاد نشد","د سرچینې لایه نده جوړه شوې"
@@ -229,7 +236,7 @@
 "view_new_text","Create a new View","Créer une vue","","","","","","ایجاد نمای جدید و افزودن آن به لست ","نوې لیدنه جوړه او لست ته یې اضافه کړئ"
 "view_no_layer_found","No source layer found","Pas de couche source trouvée.","","","","",""," لایه منبع یافت نشد","د لایې سرچینه و نه موندل شوه"
 "view_num_overlap","Number of overlaps","Nombre de chevauchements","","","","","","تعداد لایه های روی هم قرار گرفته","پر یوبل باندې د پرتو لایو شکیر"
-"view_search_input","Search view","Rechercher une vue","","","","",""," جستجوی نمایه","لټون وګوری"
+"view_filter_input","Filter views ...","Filtrer les vues ...","","","","",""," جستجوی نمایه","لټون وګوری"
 "view_search_values","Search values","Rechercher des valeurs","","","","",""," جستجوی ارقام","د لټون اندازه"
 "view_show_abstract_languages","Show other languages abstract","Afficher le résumé dans les autres langues","","","","","","نمایش خلاصه به سایر زبانها","د نورو ژبو خلاصه (لنډیز)"
 "view_show_title_languages","Show other languages titles","Afficher le titre dans les autres langues","","","","","","نمایش عناوین به سایر زبانها","د نورو ژبو د عنوانونو ښودل"

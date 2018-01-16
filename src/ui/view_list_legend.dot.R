@@ -12,7 +12,12 @@ tagList(
     # Avoid all item without rules or style
     #
     "{{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}",
+    "{{ var langTitle = h.checkLanguage({obj:it, path:'data.style.titleLegend', concat:true}) ; }}",
+    "{{ var titleLegend = h.path(it,'data.style.titleLegend.'+langTitle) || 'Legend' ; }}",
     "{{?h.greaterThan(rules.length,0)}}",
+     tags$label(class="mx-view-legend",
+       "{{=titleLegend}}"
+       ),
         #
         # Shortcut
         #
@@ -66,6 +71,7 @@ tagList(
                       "background-color:{{=item.color}};",
                       "{{? item.sprite }}",
                       "background-image:{{=item.sprite}};",
+                      "background-size:contain;",
                       "{{?}}",
                       sep="")
                     )

@@ -34,7 +34,10 @@ divHeader <- tagList(
     tags$div(
       class = "mx-view-tgl-btn-container",
       tags$div(
-        class="mx-view-tgl-btn"
+        class = "mx-view-tgl-btn-content",
+        tags$div(
+          class="mx-view-tgl-btn"
+          )
         )
       ),
     #
@@ -83,7 +86,7 @@ tagList(
   tags$li(
     id = "{{=view.id}}",
     `data-view_id`="{{=view.id}}",
-    class="mx-view-item shadow mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
+    class="mx-view-item mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
     divHeader
     ),
   "{{~}}"

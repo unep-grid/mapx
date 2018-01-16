@@ -89,7 +89,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
             type = "string",
             format = "textarea",
             dict = dict,
-            englishRequired = F
+            languagesRequired = c() 
             ),
           language = list(
             propertyOrder = mxCounter("b"),

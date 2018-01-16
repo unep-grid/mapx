@@ -2,10 +2,6 @@
 //'use strict';
 import * as mx from './mx_init.js';
 
-//var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
-
-
-
 /**
 * Read and evaluate story map
 * @param {Object} o o.options
@@ -23,81 +19,492 @@ export function storyRead(o){
     o.view = view;
   }
 
+  /* If no story, quit*/
   if ( !mx.helpers.path(o,"view.data.story") ) {
-    console.log("No story to read, abord");
+    console.log("No story to handle, abord");
     return ;
   }
+  /* local save : save in localforage instance */
+  if( o.save ){
+    handleLocalSave(o);      
+  }
 
+  /* close last story, stored in mx.data. */
+  if(o.close){
+    var close = mx.helpers.path(mx.data,"story.store.close");
+    if(close instanceof Function){
+      close();
+    }
+    return;
+  }
+
+  /**
+   * Remvove registered listener
+   */
+  listenerManager(o,{
+    action : 'removeAll'
+  });
+
+
+  o.enable = true;
+
+  /**
+   * Check missing and download view
+   */
   checkMissingView(o)
     .then(function(){
 
-    /* set id view  */
-    o.idView = o.idView || o.view.id;
+      /* set id view  */
+      o.idView = o.idView || o.view.id;
 
-    /* display story controls */
-    mx.helpers.storyController({
-      enable : true
-    });
+      /* display story controls */
+      mx.helpers.storyController(o);
 
-    var db = mx.data.stories; 
 
-    if(o.save){
-      /* save current view in db */
-      db.setItem(
-        o.idView,
-        o.view
-      ).then(function(){
-        console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
+
+      /* Save data object */
+      mx.data.story = o;
+
+      /* Generate story ui */
+      mx.helpers.storyBuild(o);
+
+      /* enable editing */
+      if( o.edit  === true ){
+        initEditing(o);
+      }
+
+      /* Alter wrapper class */
+      o.store.classWrapper = mx.helpers.path(o.view,"data.story.settings.class_wrapper");
+
+      if( o.store.classWrapper ){
+        initAdaptiveScreen(o);
+      }
+
+      /** 
+       * Handle key events
+       */
+      if( ! o.edit ){
+        initKeydownListener(o);
+      }
+
+      /* Listen to scroll on the main container. */
+      storyOnScroll({
+        selector: "#story",
+        callback: mx.helpers.storyUpdateSlides,
+        view: o.view,
+        store : o.store,
+        enable : o.enable
       });
-    }
 
-    /* Save current values */
-    mx.data.storyCache = {
-      views : mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
-        prefix: "MX-"
-      }),
-      position : mx.helpers.getMapPos(o),
-      currentStep : 0,
-      hasAerial : mx.helpers.btnToggleLayer({
-        id:'map_main',
-        idLayer:'here_aerial',
-        idSwitch:'btnThemeAerial',
-        action:'hide'
-      })
-    };
+      /* Set lock map pan to current value */
+      mx.helpers.storyControlMapPan({
+        recalc : true
+      });
 
-    /* Remove existing map-x layers */
-    mx.helpers.removeLayersByPrefix({
-      id:"map_main",
-      prefix:"MX-"
     });
+}
 
-    /* Generate story ui */
-    mx.helpers.storyBuild(o);
-
-
-    window.addEventListener("keydown", storyHandleKeyDown );
-
-
-    /* Listen to scroll on the main container. */
-    mx.helpers.storyOnScroll({
-      selector: "#story",
-      callback: mx.helpers.storyUpdateSlides,
-      view: o.view
+/**
+* Save the view object in local db
+* @param {Object} o Story options
+*/
+function handleLocalSave(o){
+  if(mx.data.stories){
+    mx.data.stories.setItem(
+      o.view.id,
+      o.view
+    ).then(function(){
+      console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
     });
+  }
+}
 
-    /* Set lock map pan to current value */
-    mx.helpers.storyControlMapPan({
-      recalc:true
-    });
-
+/**
+* Init listener for keydown event on window
+# @param {Object} o Story options
+*/
+function initKeydownListener(o){
+  listenerManager(o,{
+    action : 'add',
+    target : window,
+    event : "keydown",
+    listener : storyHandleKeyDown 
   });
 }
 
+/**
+* Init values for screen adaptiveness/scaling function
+* @param {Object} o story options
+*/
+function initAdaptiveScreen(o){
+
+  var classBase = "mx-story-screen"; 
+  var classWrapper = "mx-wrapper";
+  var classWrapperStory = o.store.classWrapper;
+  o.store.elWrapper = document.querySelector("." + classWrapper);
+
+  var mapCanvas = o.store.map.getCanvas();
+  o.store.elWrapper.classList.add(classWrapperStory);
+  o.store.elWrapper.classList.add(classBase);
+  o.store.classesWrapper = [classWrapperStory,classBase];
+  mapCanvas.style.position = "relative";
+  o.store.elWrapper.style.transform = "";
+  o.store.map.resize();
+
+  var elWrapperRect = o.store.elWrapper.getBoundingClientRect();
+  var elWrapperHeight = elWrapperRect.height;
+  var elWrapperWidth = elWrapperRect.width;
+
+  o.store.setWrapperLayout =  function(o) {
+
+    var w, h, scale, origin;
+    var scaleWrapper = Math.min(
+      window.innerWidth / elWrapperWidth,
+      window.innerHeight / elWrapperHeight
+    );
+    o.store.scaleWrapper = scaleWrapper;
+    o.store.elWrapper.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) " + "scale(" + scaleWrapper + ")";
+
+  };
+
+}
+
+/**
+* Init editing function
+* @param {Options} o story options
+*/
+function initEditing(o){
+
+  Promise.all([
+    System.import('ContentTools'),
+    System.import('ContentTools/build/content-tools.min.css')
+  ]).then(function(m){
+    /*
+     * Get ContentTools and set upload logic
+     */
+    var ContentTools = m[0];
+    if(!ContentTools._init){
+      ContentTools.IMAGE_UPLOADER = imageUploader;
+      ContentTools.StylePalette.add([
+        new ContentTools.Style('Table base', 'table', ['table']),
+        new ContentTools.Style('Table bordered', 'table-bordered', ['table']),
+        new ContentTools.Style('Table striped', 'table-striped', ['table']),
+        new ContentTools.Style('Table hover', 'table-hover', ['table'])
+      ]);
+      ContentTools._init = true;
+    }
+    /**
+     * If not already set, create a new editor instance
+     */
+    if( !o.store.ct_editor ){
+
+      o.store.ct_editor = ContentTools.EditorApp.get();
+
+      /**
+       * Add custom button logic
+       */
+      var elBtnModalPreview = document.getElementById("btnViewPreviewStory");
+      var elBtnModalSave = document.getElementById("btnViewSaveStory");
+      var elBtnStoryClose = document.getElementById("btnStoryClose");
+      /**
+       * Set a remove function for custom buttons
+       */      
+      o.store.ct_editor.remove = function(){
+        o.store.ct_editor.destroy();      
+      };
+
+      /**
+       * Init editor
+       */
+      o.store.ct_editor.init(
+        '*[data-editable]', // class of region editable
+        'data-name', // name of regions
+        null, // fixture test
+        true
+      );
+
+      /**
+       * On start
+       */
+      o.store.ct_editor.addEventListener('start',function(ev){
+
+        elBtnModalSave.setAttribute("disabled",true);
+        elBtnModalPreview.setAttribute("disabled",true);
+        elBtnStoryClose.setAttribute("disabled",true);
+        /* If jed has an story editor, disable it during edition */
+        if(jed.editors.storyEdit){
+          jed.editors.storyEdit.disable();
+        }
+
+      });
+
+      /**
+       * On cancel
+       */
+      o.store.ct_editor.addEventListener('revert', function(ev) {
+
+        elBtnModalSave.removeAttribute("disabled");
+        elBtnModalPreview.removeAttribute("disabled");
+
+        elBtnStoryClose.removeAttribute("disabled");
+        if(jed.editors.storyEdit){
+          jed.editors.storyEdit.enable();
+        }     
+      });
+
+      /**
+       * On save
+       */
+      o.store.ct_editor.addEventListener('saved', function (ev) {
+        var regions;
+
+        elBtnModalSave.removeAttribute("disabled");
+        elBtnModalPreview.removeAttribute("disabled");
+        elBtnStoryClose.removeAttribute("disabled");
+        // Check that something changed
+        regions = ev.detail().regions;
+        if(jed.editors.storyEdit){
+          jed.editors.storyEdit.enable();
+        }
+        if (Object.keys(regions).length == 0) {
+          return;
+        }
+
+        if(jed.editors.storyEdit){
+          var j = jed.editors.storyEdit;
+          this.busy(true);
+
+          for(var k in regions){
+            var t =  regions[k];
+            var s = k.split(":");
+            var step = +s[0];
+            var slide = +s[1];
+            var lang = mx.settings.language;
+            var e = j.getEditor("root.steps."+ step +".slides."+ slide + ".html." + lang);
+            if(e && e.setValue){
+              e.setValue(t);
+            }
+          }
+
+          if(mx.data.stories){
+            var story = j.getValue();
+            var view = o.view;
+            view.data.story = story;
+            view.date_modified = +(new Date());
+
+            mx.data.stories.setItem(
+              o.idView,
+              view
+            ).then(function(){
+              console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
+            });
+          }
+          this.busy(false);
+        }
+      });
+    }
+  });
+}
+
+
+function imageUploader(dialog) {
+  var file, image,url, xhr, height, width, type;
+
+  /**
+   * Cancel upload
+   */
+  dialog.addEventListener('imageuploader.cancelupload', function () {
+
+    if (xhr) {
+      xhr.upload.removeEventListener('progress', xhrProgress);
+      xhr.removeEventListener('readystatechange', xhrComplete);
+      xhr.abort();
+    }
+
+    dialog.state('empty');
+  });
+
+  /**
+   * Clear image
+   */
+  dialog.addEventListener('imageuploader.clear', function () {
+    // Clear the current image
+    dialog.clear();
+    image = null;
+  });
+
+  /**
+   * File is loaded
+   */
+  dialog.addEventListener('imageuploader.fileready', function (ev) {
+    var fileReader = new FileReader();
+    file = ev.detail().file;
+    type = file.type;
+    image = new Image();
+    fileReader.readAsDataURL(file);
+    fileReader.addEventListener('load', function (e) {
+      url  = e.target.result;
+      image.src = url;
+      image.onload = function(){
+        width = this.width;
+        height = this.height;
+        setMaxWidth(1200,function(url,width,height){
+          dialog.populate(url,[width,height]);
+        });
+      };
+    });
+  });
+
+  /**
+   * Insert image
+   */
+  dialog.addEventListener('imageuploader.save', function () {
+    var canvas, ctx, form, blob;
+    canvas = document.createElement("canvas");
+    canvas.height = height;
+    canvas.width = width;
+    ctx = canvas.getContext("2d");
+    ctx.drawImage(image,0,0);
+    ctx.save();
+    canvas.toBlob(function(blob){
+      var form = new FormData();
+      form.append("image",blob);
+      form.append("width",width);
+      form.append("height",height);   
+      form.append("token",mx.helpers.path(mx,"settings.user.token")); 
+      form.append("idUser",mx.helpers.path(mx,"settings.user.id")); 
+
+      mx.helpers.sendData({
+        url : mx.settings.vtUrlUploadImage,
+        data : form,
+        onProgress : function(progress){
+          dialog.progress( progress * 100 );
+        },
+        onSuccess : function(data){
+          dialog.save(
+            data.url,
+            data.size,
+            {
+              'alt': "img",
+              'data-ce-max-width': data.size[0]
+            });
+        },
+        onError: function(er){
+          mx.helpers.modal({
+            title : "Error during the upload",
+            content : "An error occured during the upload : " + er,
+            styleString : "z-index:11000"
+          });
+        }
+      });
+
+      // Set the dialog state to uploading and reset the progress bar to 0
+      dialog.state('uploading');
+      dialog.progress(0);
+    },type||'image/jpeg', 0.95);
+  });
+
+  dialog.addEventListener('imageuploader.rotateccw', function () {
+
+    dialog.busy(true);
+    rotateImage(-90);
+    dialog.busy(false);
+  });
+
+  dialog.addEventListener('imageuploader.rotatecw', function () {
+    dialog.busy(true);
+    rotateImage(90);
+    dialog.busy(false);
+  });
+
+
+  function setMaxWidth(maxWidth,onLoad){
+    
+    var ratio, scale, canvas, ctx, newWidth, newHeight;
+    
+    ratio = height / width;
+    scale = maxWidth / width;
+
+    if( width <= maxWidth){
+      onLoad(url,width,height);
+    }else{
+      newWidth = maxWidth;
+      newHeight = newWidth * ratio;
+      canvas = document.createElement('canvas');
+      canvas.height = newHeight;
+      canvas.width = newWidth;
+      ctx = canvas.getContext("2d");
+      ctx.save();
+      ctx.drawImage(image, 
+        0, 0,
+        width , height, 
+        0, 0, 
+        newWidth, newHeight);
+      ctx.restore(); 
+      url = canvas.toDataURL();
+      image.src = url;
+      image.onload = function(){
+        width = this.width;
+        height = this.height; 
+        onLoad(url,width,height);
+      };    
+    }
+  }
+
+  function rotateImage(degrees) {
+    var angle, canvas, ctx, to_radians, x, y, origWidth,origHeight;
+    angle = degrees % 360;
+    to_radians = Math.PI / 180;
+    canvas = document.createElement('canvas');
+
+    origWidth = width;
+    origHeight = height;
+    if (angle === 90 || angle === -270 || angle === 270 || angle === -90) {
+      width = origHeight;
+      height = origWidth;
+      x = width / 2;
+      y = height / 2;
+    } else if (angle === 180) {
+      width = origWidth;
+      height = origHeight;
+      x = width / 2;
+      y = height / 2;
+    } else {
+      width = Math.sqrt(Math.pow(origWidth, 2) + Math.pow(origHeight, 2));
+      height = width;
+      x = origHeight / 2;
+      y = origWidth / 2;
+    }
+
+    canvas.width = width;
+    canvas.height = height;
+
+    ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle * to_radians);
+    ctx.drawImage(image, -origWidth/2, -origHeight/2);
+    ctx.restore();
+    
+    url = canvas.toDataURL();
+    image.src = url;
+    
+    image.onload = function(){
+      width = this.width;
+      height = this.height; 
+      dialog.populate(url,[width,height]);
+    };
+  }
+
+}
+
+
+/**
+* Evaluate missing view and fetch them if needed
+*/
 function checkMissingView(o){
 
-  var view =  o.view;
+  var view = o.view;
   var m = mx.maps[o.id];
   var map = m.map;
   /*
@@ -146,7 +553,7 @@ function checkMissingView(o){
 
         viewsToAdd.forEach(function(v,i){
          
-          var url =  vtUrlViews + v.id + "/row/" + v.pid; 
+          var url =  vtUrlViews + v.id + "@" + v.pid; 
           console.log(url);
 
           mx.helpers.getJSON({
@@ -184,7 +591,28 @@ function checkMissingView(o){
 
 
 
+/**
+* Set scroll data values
+* @param {Object} o Options 
+* @param {Object} o.scrollData Scroll data to update
+* @param {String} o.selector Selector of the scrollable
+*/
+function setScrollData(o){
 
+  var data = o.onScrollData;
+  var elScroll = document.querySelector(o.selector);
+  var rectElScroll = elScroll.getBoundingClientRect();
+  o.store.elScroll = elScroll;
+  data.scaleWrapper = o.store.scaleWrapper;
+  data.elScroll = elScroll;
+  data.rectElScroll = rectElScroll;
+  data.height =  rectElScroll.height;
+  data.trigger = rectElScroll.height * 0.5;
+  data.distTop = -1;
+  data.distStart = elScroll.dataset.start_scroll;
+  data.scrollFun  = mx.helpers.cssTransformFun();
+
+}
 
 
 /**
@@ -193,95 +621,75 @@ function checkMissingView(o){
  * @param {String|Element} o.selector
  * @param {Function} o.callback Callback function. All options will be provided to this callback function
  */
-export function storyOnScroll(o) {
+function storyOnScroll(o) {
+
+  var start,data, posNow, posLast;
+  var nf = mx.helpers.onNextFrame;
 
   /*
-   * store scroll data in object onScrollData
-   * elScroll : div to get/set the scroll position
-   * contentHeight : the content height
-   * height : the visible part of elScroll
-   * trigger : the trigger position
-   * distTop,distBottom,distTrigger,distStart : initials distances 
+   * Store start values
    */
-  var elScroll = document.querySelector(o.selector);
-  if(!elScroll) console.log(o.selector + "not found");
+  o.onScrollData = {};
 
-  o.onScrollData = {
-    elScroll: elScroll,
-    contentHeight: elScroll.firstElementChild.clientHeight,
-    height: elScroll.clientHeight,
-    trigger: elScroll.clientHeight * 0.5,
-    distTop: -1,
-    distBottom: -1,
-    distTrigger: -1,
-    distStart: elScroll.dataset.start_scroll
-  };
+  /*
+   * Start loop
+   */
+  updateLayout();
+  loop(); 
+    /**
+   * Trigger step config
+   */
+  listenerManager(o,{
+    action : 'add',
+    target : window,
+    event : "resize",
+    listener : updateLayout
+  });
 
+  function updateLayout(){
+    o.store.setWrapperLayout(o);
+    setScrollData(o);
+    setStepConfig(o);
+  }
 
   /*
    * Loop : run a function if scroll is done on an element
    */
   function loop() {
+    if( o.store.enabled ){
+      data = o.onScrollData;
+      // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
+      posNow = data.elScroll.scrollTop * (data.scaleWrapper || 1) ;
+      posLast = data.distTop;
+      if ( posLast == posNow ) {
+        nf(loop);
+        return false;
+      } else {
+        o.onScrollData.distTop = posNow;
+      }
 
-    var posNow = elScroll.scrollTop;
-    var posLast = o.onScrollData.distTop;
-
-    if (posLast == posNow) {
-      mx.helpers.onNextFrame(loop);
-      return false;
-    } else {
-      o.onScrollData.distTop = posNow;
-      o.onScrollData.distBottom = posNow + o.onScrollData.height;
-      o.onScrollData.distTrigger = posNow + o.onScrollData.trigger;
-    }
-
-    if (o.callback && o.callback.constructor == Function) {
       o.callback(o);
+      nf(loop);
     }
-
-    mx.helpers.onNextFrame(loop);
-
   }
-
-  /*
-   * init loop
-   */
-  loop();
 }
 
+/**
+* Set step config : dimention, number, bullets
+*/
+function setStepConfig(o){
 
-/*
- * Update slides transform value;
- * @param {Object} o options
- * @param {Object} o.onScrollData Data from onScroll function
- * @param {Object} o.view View object
- */
-export function storyUpdateSlides(o) {
-  var s, l;
-  var bullet, bullets, top, trigger, bottom, config, rect, slide, slides, slideConfig, step, steps, percent, stepNum;
   var data = o.onScrollData;
-
+  var bullet, bullets, config, rect, slides, step, steps, stepName;
+  var slideConfig;
+  
   /*
-   * Initial configuration
+   * Set bullet 
    */
-  if (!data.stepsConfig) {
-
-    /*
-     * local functions
-     */
-    var getBulletScrollTo = function() {
-      var start = data.elScroll.scrollTop;
-      var end = this.dataset.to;
-        
-       mx.helpers.scrollFromTo({
-         el : data.elScroll,
-         from : start,
-         to : end,
-         during : 1000,
-         using : mx.helpers.easingFun({type:"easeInOut",power:2})
-       }); 
-
-    };
+  function bulletScrollTo() {
+    var dest = this.dataset.step;
+    mx.helpers.storyGoTo(dest);
+  }
 
     /*
      * Steps configuration
@@ -293,45 +701,41 @@ export function storyUpdateSlides(o) {
     bullets.classList.add("mx-story-step-bullets");
     data.elScroll.appendChild(bullets);
 
-
-    for (s = 0; s < steps.length; s++) {
+    for (var s = 0; s < steps.length; s++) {
 
       /*
        * config init
        */
       config = {};
       step = steps[s];
+      stepName = step.dataset.step_name;
       rect = step.getBoundingClientRect();
       slides = step.querySelectorAll(".mx-story-slide");
       config.slides = slides;
       config.slidesConfig = [];
 
       /*
-       * Save step dimension
+       * Save step dimensions
        */
-      config.start = rect.top;
-      config.end = rect.bottom;
+      config.end = (s+1)*rect.height;
+      config.start = config.end - rect.height;
+      config.startUnscaled = config.start * (1 / data.scaleWrapper);
       config.height = rect.height;
       config.width = rect.width;
-
 
       /*
        * Bullets init
        */
       bullet = document.createElement("div");
-
       bullet.classList.add("mx-story-step-bullet");
-
-
-      bullet.dataset.to = config.start;
+      bullet.dataset.to = config.startUnscaled;
       bullet.dataset.step = s;
       bullet.innerHTML = s+1;
       bullet.classList.add("hint--top");
-      bullet.setAttribute("aria-label","Go to step " + (s+1));
+      bullet.setAttribute("aria-label","Go to step " + (s+1) + ": " + stepName );
       bullets.appendChild(bullet);
-      bullet.onclick = getBulletScrollTo;
+      bullet.onclick = bulletScrollTo;
       config.bullet = bullet;
-
 
       if (s === 0){
         bullet
@@ -342,8 +746,8 @@ export function storyUpdateSlides(o) {
       /*
        * Evaluate slides and save in config
        */
-      for (l = 0; l < slides.length; l++) {
-        slideConfig = JSON.parse(
+      for (var l = 0; l < slides.length; l++) {
+         slideConfig = JSON.parse(
           slides[l]
             .dataset
             .slide_config || '[]'
@@ -359,132 +763,224 @@ export function storyUpdateSlides(o) {
     /*
     * Save steps config
     */
-    mx.data.storyCache.stepsConfig = data.stepsConfig;
+   o.store.stepsConfig = data.stepsConfig;
+
     /**
      * Set initial scroll position
      */
-    if(o.onScrollData.distStart){
+   if(o.onScrollData.distStart){
       data.elScroll.scrollTop = o.onScrollData.distStart*1;
     }
-  }
 
+}
+
+/*
+ * Update slides transform value;
+ * @param {Object} o options
+ * @param {Object} o.onScrollData Data from onScroll function
+ * @param {Object} o.view View object
+ */
+export function storyUpdateSlides(o) {
 
   /*
    * Apply style
    */
+  var data = o.onScrollData;
+  var percent = 0;
+  var elsSlides, elSlide ;
+  var config;
+  var isActive, isInRange,isInRangeAnim, toActivate, toRemove;
+  var classActive = "mx-story-step-active";
 
-  top = data.distTop;
-  bottom = data.distBottom;
-  trigger = data.distTrigger;
-
-  for (s = 0; s < data.stepsConfig.length; s++) {
-
+  for ( var s = 0,sL = data.stepsConfig.length ; s < sL; s++ ) {
+      /**
+      *   1       2       s       e       5       6
+      *   |.......|.......|.......|.......|.......|
+      *                t|.......|b
+      */
     config = data.stepsConfig[s];
+    percent = ( config.end - data.distTop) / ( config.height * 2 ) * 100;
+    
+    isInRange = percent < 75 && percent >= 25;
+    isInRangeAnim = percent < 100 && percent >= 0;
+    isActive = data.stepActive == s;
+    toActivate = isInRange && !isActive;
+    toRemove = !isInRange && isActive;
 
-    if (config.start < bottom) {
-      config
-        .bullet
-        .classList
-        .add("mx-story-step-active");
-    } else {
-      config
-        .bullet
-        .classList
-        .remove("mx-story-step-active");
-    }
+    /**
+    * Update slide animation
+    */
+    if( isInRangeAnim ){
 
-    if (config.start <= bottom && config.end >= top) {
-
-      percent = 100 * (1 - (config.end - top) / (data.height + config.height));
-
-
-      if( percent < 75 && percent >= 25 ){
-        if(data.stepActive !== s){
-          data.stepActive = s;
-          mx.helpers.storyPlayStep({
-            id : 'map_main',
-            view : o.view,
-            stepNum :s
-          });
-        }
-      }
-
-      slides = config.slides;
-
-      for (l = 0; l < slides.length; l++) {
+      elsSlides = config.slides;
+       for( var l = 0, lL = config.slides.length; l<lL ; l++ ){
         var slideTransform = mx.helpers.storySetTransform({
           data: config.slidesConfig[l],
           percent: percent
         });
-        slides[l].style[mx.helpers.cssTransformFun()] = slideTransform;
+        config
+           .slides[l]
+           .style[data.scrollFun] = slideTransform;
+      }
+    }
+
+    /**
+    * Play step
+    */
+    if( toActivate ){
+      mx.helpers.storyPlayStep({
+        id : 'map_main',
+        view : o.view,
+        stepNum : s
+      });
+      data.stepActive = s;
+
+      /**
+       * Update bullet values
+       */
+      for( var b = 0,bL = data.stepsConfig.length ; b < bL; b++){
+       
+        var bullet = data.stepsConfig[b].bullet;
+        if( b <= s ){
+          bullet.classList.add("mx-story-step-active");
+        }else{
+          bullet.classList.remove("mx-story-step-active");
+        }
       }
     }
   }
 }
 
-
-
-
-
 /*
  * listen for keydown
  */
-
-
-
 function storyHandleKeyDown(event){
 
-  mx.helpers.onNextFrame(function(){
+  event.preventDefault();
+  event.stopPropagation();
+  var h = mx.helpers;
+  
+  switch (event.key) {
+    case " ":
+      h.storyAutoplay("start");
+      break;
+    case "ArrowDown":
+    case "ArrowRight":
+      storyAutoplayStop(true);
+      h.storyGoTo("next");
+      break;
+    case "ArrowUp":
+    case "ArrowLeft":
+      storyAutoplayStop(true);
+      h.storyGoTo("previous");
+      break;
+    default : 
+      return;
+  }
 
-    if (event.defaultPrevented) {
-      return; // Do nothing if the event was already processed
-    }
-    var step,currentStep,nextStep,previousStep,maxStep,scrollStop;  
-    var steps = mx.helpers.path(mx,"data.storyCache.stepsConfig");
-    var storyContainer =  document.querySelector(".mx-story-container");
-    var scrollStart = storyContainer.scrollTop;
+}
 
-    for(var i=0,iL=steps.length;i<iL;i++){
-      step = steps[i];
-      if((scrollStart >= step.start) && (scrollStart < step.end)){
-        currentStep=i;
-      }
-    }
+export function storyGoTo(to,useTimeout,funStop){
 
-    maxStep = steps.length -1;
-    nextStep = currentStep + 1 ;
-    previousStep = currentStep - 1 ;
-    nextStep = nextStep >= maxStep ? maxStep : nextStep;
-    previousStep = previousStep <= 0 ? 0 : previousStep;
+  var h = mx.helpers;
+  var data = h.path(mx,"data.story");
+  if(!data || !data.store || !data.store.stepsConfig) return;
+  var steps = h.path(data,"view.data.story.steps");
+  var stepsDim = h.path(data,"store.stepsConfig");
+  var elStory = data.store.elScroll;
+  var start = elStory.scrollTop;
+  var stop = 0;
+  var timeout = 0;
+  var currentStep = h.path(data,"store.currentStep") || 0;
+  var step,maxStep, nextStep, previousStep, destStep,duration, easing, easing_p;
 
-    switch (event.key) {
-      case "ArrowDown":
-        scrollStop = steps[nextStep].start;
-        break;
-      case "ArrowUp":
-        scrollStop = steps[previousStep].start;
-        break;
-      case "ArrowLeft":
-        scrollStop = steps[previousStep].start;
-        break;
-      case "ArrowRight":
-        scrollStop = steps[nextStep].start;
-        break;
-    } 
+  maxStep = steps.length - 1;
 
-    mx.helpers.scrollFromTo({
-      el : storyContainer,
-      from : scrollStart,
-      to : scrollStop,
-      during : 1000,
-      using : mx.helpers.easingFun({type:"easeInOut",power:2})
-    });
+  if(isFinite(to)){
+    destStep = to >= maxStep ? maxStep : to < 0 ? 0 :to ; 
+  }else if(to==="next" || to === "n"){
+    nextStep = currentStep + 1;
+    destStep = nextStep > maxStep ? 0 : nextStep ;
+  }else if(to=="previous" || to === "p"){
+    previousStep = currentStep - 1;
+    destStep = previousStep < 0 ? maxStep : previousStep;
+  }else{
+    return;
+  }
 
+  stop =  stepsDim[destStep].startUnscaled;
+  step = steps[currentStep];
+
+  easing = h.path(step,"autoplay.easing") || "easeIn";
+  duration =  h.path(step,"autoplay.duration") || 1000;
+  easing_p = h.path(step,"autoplay.easing_power") || 1;
+
+  if(useTimeout){
+    timeout = h.path(step,"autoplay.timeout") || 1000;
+  }
+
+ return h.scrollFromTo({
+    emergencyStop : funStop,
+    timeout : timeout,
+    el : elStory,
+    from : start,
+    to : stop,
+    during : duration,
+    using : h.easingFun({
+      type: easing,
+      power: easing_p
+    })
+  }).then(function(){
+    return {
+      step : destStep,
+      end : destStep == maxStep
+    };
   });
 
 }
 
+function storyAutoplayStop(stop){  
+  var h = mx.helpers;
+  var store = h.path(mx.data,"story.store");
+  if( store ){
+    if( typeof(stop) === "boolean" ){
+      store.autoplayStop = stop;
+    }
+    return store.autoplayStop === true;
+  }
+}
 
+export function storyAutoplay(cmd){
+  var h = mx.helpers;
+  var store = h.path(mx.data,"story.store");
+
+  if(store){
+
+    var stop = storyAutoplayStop();
+
+    if( cmd === "start"){
+      stop = !stop;
+      if( !stop ){
+        h.iconFlash("play");
+        storyAutoplayStop(false);
+      }
+    }
+
+    if( stop ){
+
+      storyAutoplayStop(true);
+      h.iconFlash("stop");
+      return;
+
+    }else{
+
+      h.storyGoTo("next",true,storyAutoplayStop)
+        .then(function(res){
+          storyAutoplay("continue");
+        });
+    }
+  }
+}
 
 
 /**
@@ -524,14 +1020,16 @@ export function storyControlMapPan(o){
   }
 }
 
-
 /*
 * Enable or disable story map controls
 * @param {Object} o options 
-* @param {String} o.selector Story control selector
-* @param {Boolean} o.disable Disable/Hide story ?
+* @param {Object} o.store Story props and cache
+* @param {Boolean} o.enable Enable / start story
 */
 export function storyController(o){
+
+  var h = mx.helpers;
+
   o.selectorDisable = o.selectorDisable || [
     "#mxDashboards",
     "#btnTabDashboard",
@@ -555,8 +1053,8 @@ export function storyController(o){
     "#story"
   ];
 
-
-  o.disable = !o.enable;
+  var elBtnClose =  document.querySelector("#btnStoryClose");
+  var elBtnPreview =  document.querySelector("#btnViewPreviewStory");
 
   var toDisable = {
     selector : o.enable ? o.selectorDisable : o.selectorEnable,
@@ -570,92 +1068,195 @@ export function storyController(o){
     class : "mx-hide"
   };
 
-  mx.helpers.classAction(toEnable);
-  mx.helpers.classAction(toDisable);
-
+  h.classAction(toEnable);
+  h.classAction(toDisable);
 
   o.id = o.id || "map_main";
 
-
-  if(o.disable){
-    /**
-    * Remove layers added by the story
-    */
-    console.log("remove story layers");
-    mx.helpers.removeLayersByPrefix({
-      id:'map_main',
-      prefix:"MX-"
-    });
- 
-  }
-
-
-   if(mx.data.storyCache && o.disable){
- 
-    /**
-    * Get previous stored data
-    */
-    var d = mx.data.storyCache;
+  if( o.enable ){
 
 
     /**
-    *
+    *Check for previews views list ( in case of update );
     */
-    if(d.hasAerial){
+    var oldViews = h.path(mx.data,"story.store.views");
 
-      mx.helpers.btnToggleLayer({
+    if(! (oldViews instanceof Array) ){
+      oldViews =  mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: "MX-"
+      });
+    }
+
+    /* Save current values */
+    o.store = {
+      enabled : true,
+      map : mx.maps[o.id].map,
+      views : oldViews,
+      position : mx.helpers.getMapPos(o),
+      currentStep : 0,
+      hasAerial : mx.helpers.btnToggleLayer({
         id:'map_main',
         idLayer:'here_aerial',
         idSwitch:'btnThemeAerial',
-        action:'show'
-      });
-    }
+        action:'hide'
+      }),
+      listeners : [],
+      autoplayStop : true
+    };
+
+    /* Remove existing map-x layers */
+    mx.helpers.removeLayersByPrefix({
+      id:"map_main",
+      prefix:"MX-"
+    });
+
+
+    o.store.close =  function(){
+      if(this && this.hasAttribute && this.hasAttribute("disabled")) return;
+      o.enable = false;
+      storyController(o);
+    };
+
+    listenerManager(o,{
+      action : 'add',
+      target : elBtnClose,
+      event : "click",
+      listener : o.store.close
+    });
+
+  }else{
 
     /**
-     * Enable previously enabled layers
-     */
-    for( var l = 0 ; l < d.views.length ; l ++){
-
-      mx.helpers.addView({
-        id : o.id,
-        idView: d.views[l]
-      });
-    }
-     /**
-     * Rest previous position
-     */   
-    if(d.position){
-      var pos =  d.position;
-      var map = mx.maps[o.id].map;
-      map.easeTo({
-        //speed : 3,
-        easing : mx.helpers.easingFun({type:"easeOut",power:1}),
-        zoom : pos.z,
-        bearing : pos.b,
-        pitch :  pos.p,
-        center : [ pos.lng, pos.lat ] 
-      });
-
-
-    /**
-    * Update packery layout
+    * Remvove registered listener
     */
-    if( mx.maps[o.id].tools.viewsListPackery ){
-      mx.maps[o.id].tools.viewsListPackery.shiftLayout();
-    }
+    listenerManager(o,{
+      action : 'removeAll'
+    });
+
+    /**
+     * Remove layers added by the story
+     */
+    h.removeLayersByPrefix({
+      id:'map_main',
+      prefix:"MX-",
+    });
+
+    /**
+     * Get previous stored data
+     */
+
+    if( o.store  ){
 
       /**
-      * Remove listener
+      * Set the story as disabled
       */
-     window.removeEventListener("keydown",storyHandleKeyDown);
+    o.store.enabled = false;
 
+      /**
+       * if edit mode, remove editor
+       */
+      if( o.store.ct_editor && o.store.ct_editor.remove ){
+        o.store.ct_editor.remove();
+      }
+
+      /**
+       *
+       */
+      if(o.store.hasAerial){
+        h.btnToggleLayer({
+          id:'map_main',
+          idLayer:'here_aerial',
+          idSwitch:'btnThemeAerial',
+          action:'show'
+        });
+      }
+
+      /**
+       * Enable previously enabled layers
+       */
+      o.store.views.forEach(function(idView){  
+        h.addView({
+          id : o.id,
+          idView: idView,
+          debug : true
+        });
+      });
+
+      /**
+       * Rest previous position
+       */   
+      if( o.store.position ){
+        var pos =  o.store.position;
+        o.store.map.jumpTo({
+          zoom : pos.z,
+          bearing : pos.b,
+          pitch :  pos.p,
+          center : [ pos.lng, pos.lat ] 
+        });
+      }
+
+      /**
+       * Remove classes added to wrapper
+       */
+      if( o.store.classesWrapper instanceof Array ){
+
+        o.store.classesWrapper.forEach(function(c){
+          o.store.elWrapper.classList.remove(c);    
+        });
+
+        o.store.elWrapper.style.transform = null;
+        o.store.map.resize();
+      }
+      /**
+       * clean data storage
+       */
+
+      if(mx.data.story){
+        mx.data.story = {};
+      }
     }
-
-
   }
 
+  /**
+   * If button preview exist, set disabled to false
+   */
+
+  if(elBtnPreview){
+    elBtnPreview.removeAttribute("disabled"); 
+  }
 
 }
+
+/**
+* Listener manager
+* @param {Object} o Story options
+* @param {Object} config Config
+* @param {Element} config.target Target element
+* @param {Element} config.action `add`,`remove`,`removeAll`
+* @param {String} config.event name
+* @param {Function} config.listener Listener function
+*/
+function listenerManager(o,config){
+  var c = config;
+  var h = mx.helpers;
+  if(c.action === 'add'){
+    c.target.addEventListener(c.event,c.listener);
+    c.destroy = function(){
+      c.target.removeEventListener(c.event,c.listener);
+    };
+    o.store.listeners.push(c);
+  }else{
+    var listeners = h.path(o,"store.listeners") || h.path(mx.data,"story.store.listeners");
+    if(listeners){
+      listeners.forEach(function(l){
+        l.destroy();
+      });
+    }
+  }
+}
+
+
 
 
 /**
@@ -675,12 +1276,13 @@ export function storyBuild(o){
   o.classStory =  o.classStory || "mx-story";
   o.classStep = o.classStep || "mx-story-step";
   o.classSlide = o.classSlide || "mx-story-slide";
+  o.classWrapper = o.classWrapper || "mx-wrapper";
   o.classSlideBack = o.classSlideBack || "mx-story-slide-back";
   o.classSlideFront = o.classSlideFront || "mx-story-slide-front";
   o.classContainer = o.classContainer || "mx-story-container";
   o.colors = o.colors || {};
   o.sizes = o.sizes || {};
-  o.sizes.text = o.sizes.text || 100;
+  o.sizes.text = o.sizes.text || 40;
   o.colors.bg = o.colors.bg || "#FFF";
   o.colors.fg = o.colors.fg || "#000";
   o.colors.alpha = o.colors.alpha || 1;
@@ -691,10 +1293,10 @@ export function storyBuild(o){
   var doc = window.document;
   var divOldStory = doc.getElementById(o.idStory);
   var startScroll = 0;
-  var body = doc.body;
+  var wrapper = doc.querySelector("." + o.classWrapper );
   var divStory = doc.createElement("div");
   var divStoryContainer = doc.createElement("div");
-  var stepNum = 0;
+  //var stepNum = 0;
 
  /* remove old story if exists. */
   if(divOldStory){
@@ -712,14 +1314,14 @@ export function storyBuild(o){
   /**
   * For each steps, build content
   */
-  story.steps.forEach(function(step){
+  story.steps.forEach(function(step,stepNum){
 
     if(!step.slides) return ;
     var slides = step.slides ;
     var divStep = doc.createElement("div");
     divStep.classList.add(o.classStep);
-    divStep.dataset.step_num = stepNum++;
-    slides.forEach(function(slide){
+
+    slides.forEach(function(slide,slideNum){
       var divSlide = doc.createElement("div");
       var divSlideFront = doc.createElement("div");
       var divSlideBack = doc.createElement("div");
@@ -731,11 +1333,18 @@ export function storyBuild(o){
       divSlideBack.classList.add(o.classSlideBack);
       divSlideFront.innerHTML = slide.html[lang];
       divSlideFront.classList.add(o.classSlideFront);
+      /**
+       * Add ref for contentTools editor
+       */    
+      divSlideFront.dataset.editable = true;
+      divSlideFront.dataset.name = stepNum + ":" + slideNum;
+       
       slide.classes.forEach(function(classe){
         divSlide.classList.add(o.classStory +"-"+ classe.name);
       });
       divSlideFront.style.color = slide.color_fg || o.colors.fg;
-      divSlideFront.style.zoom = slide.size_text+"%" || o.sizes.text+"%";
+      divSlideFront.style.borderColor = slide.color_fg || o.colors.fg;
+      divSlideFront.style.fontSize = slide.size_text + "px" || o.sizes.text + "px" ;
       divSlideFront.style.overflowY = slide.scroll_enable ? 'scroll' : 'hidden';
       divSlide.setAttribute("data-slide_config",JSON.stringify(slide.effects || []));
       divSlideBack.style.backgroundColor = slide.color_bg || o.colors.bg;
@@ -750,10 +1359,10 @@ export function storyBuild(o){
   });
 
   /**
-  * Finish building by adding container  to body.
+  * Finish building by adding container  to wrapper.
   */
   divStoryContainer.appendChild(divStory);
-  body.appendChild(divStoryContainer);
+  wrapper.appendChild(divStoryContainer);
 }
 
 /*
@@ -762,7 +1371,6 @@ export function storyBuild(o){
  * @param {Array} o.data Style config array
  * @param {Number} o.percent Percent of anim
  */
-
 export function storySetTransform(o) {
   var tf = {
     0: function(p) {
@@ -823,9 +1431,12 @@ export function storyPlayStep(o){
   o.id = o.id||"map_main";
   var view =  o.view;
   var steps = mx.helpers.path(o,"view.data.story.steps");
+  var store = mx.helpers.path(mx.data,"story.store");
   var stepNum = o.stepNum;
-  var step, pos, views, vToShow, vVisible, vToRemove;
+  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
   var m = mx.maps[o.id];
+
+  store.currentStep = stepNum;
 
   function getViewsVisible(){
     return  mx.helpers.getLayerNamesByPrefix({
@@ -844,16 +1455,17 @@ export function storyPlayStep(o){
    */
   step = steps[stepNum];
   pos = step.position;
-  views = step.views;
-  vToShow = [];
+  anim = step.animation || {duration:1000,easing:"easeIn",easing_power:1,method:"easeTo"};
+  vStep = step.views.map(function(v){return v.view;});
+  easing = mx.helpers.easingFun({type:anim.easing,power:anim.easing_power});
 
   /**
    * Fly to position
    */
-  m.map.flyTo({
-    speed : 0.3,
-    easing : mx.helpers.easingFun({type:"easeOut",power:1}),
+  m.map[anim.method]({
+    duration: anim.duration,
     zoom : pos.z,
+    easing : easing,
     bearing : pos.bearing,
     pitch :  pos.pitch,
     center : [ pos.lng, pos.lat ] 
@@ -862,41 +1474,26 @@ export function storyPlayStep(o){
   /**
    * Add view if not alredy visible
    */
-  vVisible = getViewsVisible();
+  mx.helpers.onNextFrame(function(){
+    vVisible = getViewsVisible();
 
+    vToRemove = mx.helpers.arrayDiff(vVisible,vStep);
+    vToAdd = mx.helpers.arrayDiff(vStep,vVisible);
 
-  for( var v = 0; v < views.length ; v++){
-    var vn = views[v].view;
-    var fi = views[v].filter;
-
-    if( vVisible.indexOf(vn) == -1 ){
+    vToAdd.forEach(function(v){
       mx.helpers.addView({
         id : o.id,
-        idView: vn
+        idView: v
       }); 
-    }
+    });
 
-    vToShow.push(vn);
-  }
-
-  vVisible = getViewsVisible() ;
-
-  /**
-   * old view to remove
-   */
-  for( v = 0; v < vVisible.length ; v++){
-    var vo = vVisible[v];
-
-    var toRemove =  vToShow.indexOf(vo) == -1;
-
-    if( toRemove ){
+    vToRemove.forEach(function(v){
       mx.helpers.removeLayersByPrefix({
         id : o.id,
-        prefix : vo
+        prefix : v
       });
-    }
-
-  }
+    });
+  });
 
 }
 

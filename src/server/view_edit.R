@@ -68,8 +68,6 @@ observe({
             viewTitle <- .get(viewData, c("data","title","en"))
           }
 
-          #viewAbstract <- .get(viewData, c("data","abstract",language))
-
           #
           # Who can view this
           #
@@ -627,20 +625,25 @@ observe({
                   inputId="btnViewPreviewStory",
                   label=d("btn_preview",language),
                   `data-keep` = TRUE
+                  ),
+                 actionButton(
+                  inputId="btnViewStoryCancel",
+                  label=d("btn_cancel",language),
+                  `data-keep` = TRUE
                   )
                 )
 
               mxModal(
-                id="modalViewEdit",
-                title=sprintf("Edit story map %s",viewTitle),
-                addBackground=FALSE,
-                content=tagList(
+                id = "modalViewEdit",
+                title = sprintf("Edit story map %s",viewTitle),
+                addBackground = FALSE,
+                content = tagList(
                   uiOutput("txtValidSchema"),
                   jedOutput(id="storyEdit")
                   ),
-                buttons=btnList,
-                textCloseButton=d("btn_close",language),
-                minHeight = "80%"
+                buttons = btnList,
+                #textCloseButton=d("btn_close",language),
+                removeCloseButton = T
                 )
             },
             "btn_opt_edit_style"={
@@ -870,12 +873,15 @@ observeEvent(input$btnSourceDownload,{
 observeEvent(input$viewTitleSchema_init,{
   view = reactData$viewDataEdited
   language = reactData$language
+  languages = .get(config,c("languages","list"))
   titles = .get(view,c("data","title"))
   schema =  mxSchemaMultiLingualInput(
     keyTitle = "view_title",
     format = "text",
     default = titles,
-    language = language
+    language = language,
+    languagesRequired = c("en"),
+    languagesHidden = languages[!languages %in% language]
     )
   jedSchema(
     id="viewTitleSchema",
@@ -887,12 +893,15 @@ observeEvent(input$viewTitleSchema_init,{
 observeEvent(input$viewAbstractSchema_init,{
   view = reactData$viewDataEdited
   language = reactData$language
+  languages = .get(config,c("languages","list"))
   abstracts = .get(view,c("data","abstract"))
   schema =  mxSchemaMultiLingualInput(
     keyTitle = "view_abstract",
     format = "textarea",
     default = abstracts,
-    language = language
+    language = language,
+    languagesRequired = c("en"),
+    languagesHidden = languages[!languages %in% language]
     )
   jedSchema(
     id="viewAbstractSchema",
@@ -1451,8 +1460,6 @@ reactLayerMaskSummary <- reactive({
 
 reactLayerSummary <- reactive({
 
-  timer <- mxTimeDiff("Layer summary")
-
   layerName <- input$selectSourceLayerMain
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
@@ -1486,7 +1493,6 @@ reactLayerSummary <- reactive({
     }
   }
 
-  mxTimeDiff(timer)
   return(out)
 })
 

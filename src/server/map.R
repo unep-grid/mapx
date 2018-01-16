@@ -20,14 +20,6 @@ observe({
 
     timer <- mxTimeDiff("Init map")
 
-    #if(noDataCheck(language)){
-      #language <- .get(config,c("languages","default","first"))
-    #}
-
-    #if(noDataCheck(country)){
-      #country =  .get(config,c("countries","default","first"))
-    #}
-
     countryData <- .get(config,c("countries","table"))
     countryData <- countryData[countryData$iso3 == country,][1,]
 

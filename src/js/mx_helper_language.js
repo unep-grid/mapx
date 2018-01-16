@@ -14,6 +14,9 @@ export function updateLanguage(o){
   o.lang = o.lang || mx.settings.language || "en" ;
   mx.settings.language = o.lang;
 
+  // Set language for the document
+  document.querySelector("html").setAttribute("lang",o.lang);
+
   updateLanguageElements(o);
   updateLanguageViewsList(o);
   updateLanguageMap(o);

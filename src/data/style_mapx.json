@@ -608,7 +608,7 @@
             ]
           },
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ]
         },
@@ -648,7 +648,7 @@
           "text-max-angle": 45,
           "text-transform": "uppercase",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "symbol-placement": "line",
@@ -693,7 +693,7 @@
           },
           "text-transform": "uppercase",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "symbol-placement": "point",
@@ -778,7 +778,7 @@
           },
           "text-transform": "uppercase",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "symbol-placement": "point",
@@ -858,7 +858,7 @@
           },
           "text-transform": "uppercase",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "symbol-placement": "point",
@@ -945,7 +945,7 @@
           "text-max-angle": 45,
           "text-transform": "uppercase",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "symbol-placement": "line",
@@ -996,7 +996,7 @@
           "visibility": "visible",
           "text-field": "{name_en}",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "text-size": {
@@ -1039,7 +1039,7 @@
           "visibility": "visible",
           "text-field": "{name_en}",
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "text-size": {
@@ -1133,7 +1133,7 @@
         ],
         "layout": {
           "text-font": [
-            "Roboto Mono Light",
+            "Open Sans Regular",
             "Arial Unicode MS Regular"
           ],
           "text-anchor":"bottom-right",

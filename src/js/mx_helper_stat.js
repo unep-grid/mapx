@@ -39,8 +39,29 @@ export function getArrayStat(o){
   function sortNumber(a,b) {
     return a - b;
   }
+  // https://gist.github.com/devinus/453520
+  var numGroups = /(-?\d*\.?\d+)/g;
+
+  var naturalSort = function (a, b) {
+    var aa = String(a).split(numGroups),
+      bb = String(b).split(numGroups),
+      min = Math.min(aa.length, bb.length);
+
+    for (var i = 0; i < min; i++) {
+      var x = parseFloat(aa[i]) || aa[i].toLowerCase(),
+        y = parseFloat(bb[i]) || bb[i].toLowerCase();
+      if (x < y) return -1;
+      else if (x > y) return 1;
+    }
+
+    return 0;
+  };
+
 
   var opt = {
+    "sortNatural" : function(){
+      return arr.sort(naturalSort);
+    },
     "max" : function(){ 
       var max = -Infinity ;
       var v = 0 ;
@@ -123,6 +144,7 @@ export function getArrayStat(o){
       }
       return r;
     },
+    "diff":function(){},
     "frequency":function(){
       var areObjects = (arr[0] && typeof arr[0] == "object" && arr[0].constructor == Object) ;
       var colNames = o.colNames;
@@ -176,3 +198,15 @@ export function getArrayStat(o){
   return(opt[stat](o));
 
 }
+
+
+/**
+* Get diff between two arrays. Return a not in b;
+* @param {Array} a Array to filter
+* @param {Array} b Array of reference
+*/
+export function arrayDiff(a, b) {
+  var bSet = new Set(b);
+  return a.filter(function(x) { return !bSet.has(x); });
+}
+

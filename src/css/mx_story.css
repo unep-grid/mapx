@@ -1,3 +1,45 @@
+/**
+* Screen mode for body size
+*/
+
+.mx-wrapper{
+}
+
+.mx-story-screen {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  -webkit-transform-origin: center center;
+  tranform-origin: center center;
+}
+
+
+.mx-story-screen-240p {
+  height : 240px;
+  width : 426px;
+}
+.mx-story-screen-360p {
+  height : 360px;
+  width : 640px;
+}
+.mx-story-screen-480p {
+  height : 480px;
+  width : 854px;
+}
+.mx-story-screen-720p {
+  height : 720px;
+  width : 1280px;
+}
+.mx-story-screen-1080p {
+  height : 1080px;
+  width : 1920px;
+}
+.mx-story-screen-1440p {
+  height : 1440px;
+  width : 2560px;
+}
 
 
 .mx-story-container {
@@ -23,9 +65,7 @@
 
 .mx-story-step {
   position: relative;
-  height: 500px;
-  height: 100vh;
-  /*border: 1px solid #000;*/
+  height: 100%;
   perspective: 1000px;
   overflow: hidden;
 }
@@ -36,7 +76,6 @@
   -ms-backface-visibility: hidden;
   backface-visibility: hidden;
   font-family: sans-serif;
-  font-size: 12px;  
   position: absolute;
   /*border: 1px solid red;*/  
   border-radius: 5px;
@@ -45,7 +84,6 @@
   height: 100%;
   width: 100%;
   will-change: transform;
-  /*transition: transform 0.01s ease;*/
 }
 
 .mx-story-slide-front,
@@ -59,35 +97,46 @@
   overflow-x:hidden;
 }
 
+.mx-story-slide-back {
+  pointer-events: none;
+}
 
+
+/**
+* Apply the fg color to all slide children (p,span, etc);
+*/
 .mx-story-slide-front:not(img) * {
   color:inherit!important;
-  zoom:120%; 
+  border-color:inherit!important;
 }
 
 .mx-story-slide-front {
   padding:5%;
 }
 
-
 .mx-story-slide img {
   max-width:100%;
 }
-
 
 .mx-story-slide {
   overflow:hidden;
 }
 
 .mx-story-slide.mx-story-image-cover img,
+.mx-story-slide.mx-story-image-cover .ce-element--type-image,
 .mx-story-slide.mx-story-image-cover iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  zoom: 100%;
-  min-height:100%;
-  min-width:100%;
-  object-fit: cover;
+  position: absolute!important;
+  top: 0!important;
+  left: 0!important;
+  zoom: 100%!important;
+  min-height:100%!important;
+  min-width:100%!important;
+  object-fit: cover!important;
+  z-index:-1;
+  width: 100%!important;
+  height: 100%!important;
+  background-size: cover;
+  background-position: center;
 }
 
 .mx-story-slide.mx-story-card.mx-story-cube-face {
@@ -107,14 +156,13 @@
 }
 
 .mx-story-slide.mx-story-card { 
-  text-align: center;
   overflow: auto;
   padding:15px;
 }
 
 .mx-story-slide.mx-story-card h1 {
-  font-size : 40px;
 }
+
 .mx-story-slide.mx-story-back {
   z-index: -1;
 }
@@ -124,6 +172,15 @@
 .mx-story-slide.mx-story-text-center {
   text-align: center;
 }
+.mx-story-slide.mx-story-titles-center h1,
+.mx-story-slide.mx-story-titles-center h2,
+.mx-story-slide.mx-story-titles-center h3,
+.mx-story-slide.mx-story-titles-center h4,
+.mx-story-slide.mx-story-titles-center h5
+{
+  text-align: center;
+}
+
 .mx-story-slide.mx-story-text-left {
   text-align: left;
 }
@@ -187,21 +244,34 @@
   float:left;
 }
 
-
-
-/*.mx-story-step-bullet {*/
-  /*cursor:pointer;*/
-  /*border-radius: 50%;*/
-  /*display: inline-block;*/
-  /*width: 15px;*/
-  /*height: 15px;*/
-  /*background: #FFF;*/
-  /*transition: background-color 0.5s;*/
-  /*border: 1px solid #ccc;*/
-/*}*/
-
 .mx-story-step-bullet.mx-story-step-active ,
 .mx-story-step-bullet:hover {
   background: #ddd;
+}
+
+
+/**
+ * simple reactive table
+ * source : https://gist.github.com/AllThingsSmitty/cb32e5a377716bc8f147
+ */
+.mx-story table {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin:0;
+  padding:0;
+  width: 100%;
+}
+.mx-story table tr {
+  border: 1px solid #ddd;
+  padding: 5px;
+}
+.mx-story table th, .mx-story table td {
+  padding: 10px;
+  text-align: center;
+}
+.mx-story table th {
+  font-size: 14px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 

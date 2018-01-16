@@ -52,36 +52,6 @@ mapxLogo.prototype.onRemove = function() {
 
 
 /**
- * North arrow
- */
-//export function mapControlNorth(){}
-//mapControlNorth.prototype.onAdd = function(map){
-  //var helper = mx.helpers;
-  //var northArrow = document.createElement("div");
-  //northArrow.id="mx_north";
-  //northArrow.style[helper.cssTransformFun()] = "rotateZ("+(-90)+"deg)";
-  //northArrow.onclick=function(){map.setBearing(0);};
-  //northArrow.innerText='\u27A4';
-
-  //map.on("rotate",function(e){
-    //var r = map.getBearing();
-    //northArrow.style[helper.cssTransformFun()] = "rotateZ("+(r-90)+"deg)";
-  //});
-
-  //this._map = map;
-  //this._container = document.createElement('div');
-  //this._container.className = 'mapboxgl-ctrl mx-north-arrow';
-  //this._container.style.borderRadius = "50%";
-  //this._container.appendChild(northArrow);
-  //return this._container;
-//};
-
-//mapControlNorth.prototype.onRemove = function() {
-  //this._container.parentNode.removeChild(this._container);
-  //this._map = undefined;
-//};
-
-/**
  * Create the prototype containing additional control / button.
  * Some of the actions are related to shiny framework
  */
@@ -170,17 +140,6 @@ mapControlMain.prototype.onAdd = function(map) {
         );
       }
     },
-/*    btnTabSettings:{*/
-      //classes:"fa fa-sliders",
-      //key:"btn_tab_settings",
-      //action:function(){ 
-        //helper.panelSwitch(
-          //'mx-panel-left',
-          //'mx-panel-settings',
-          //'mx-hide'
-        //);
-      //}
-    /*},*/
     btnTabTools:{
       classes:"fa fa-cogs",
       key:"btn_tab_tools",
@@ -232,22 +191,10 @@ mapControlMain.prototype.onAdd = function(map) {
         });
       }
     },
-    btnStoryUnlockMap:{
-      classes: "fa fa-lock",
-      liClasses: "mx-hide",
-      liData: {"map_unlock":"off"},
-      key: "btn_story_unlock_map", 
-      action : helper.storyControlMapPan 
-    },
     btnStoryClose:{
-      classes:"fa fa-close",
+      classes:"fa fa-arrow-left",
       liClasses:"mx-hide",
-      key:"btn_story_close",
-      action:function(){  
-        helper.storyController({
-          enable : false
-        });
-      }
+      key:"btn_story_close"
     },
     btnZoomIn:{
       classes:"fa fa-plus",
@@ -262,6 +209,13 @@ mapControlMain.prototype.onAdd = function(map) {
       action:function(){
         map.zoomOut();
       }
+    },
+    btnStoryUnlockMap:{
+      classes: "fa fa-lock",
+      liClasses: "mx-hide",
+      liData: {"map_unlock":"off"},
+      key: "btn_story_unlock_map", 
+      action : helper.storyControlMapPan 
     },
     btnSetNorth:{
       classes:"",

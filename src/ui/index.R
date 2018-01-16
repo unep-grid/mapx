@@ -11,14 +11,16 @@ tags$html(
   #
   tags$body(
     class="full-page mx",
-    # Display something if no js
-    mxSource("src/ui/no_js.R"),
-    # Display loading spinner
-    mxSource("src/ui/loader.R"),
-    # Controls and left panel
-    mxSource("src/ui/panel_main.R"),
-    # Map element
-    mxSource("src/ui/map.R")
+    tags$div(
+      class="mx-wrapper",
+      # Display something if no js
+      mxSource("src/ui/no_js.R"),
+      # Display loading spinner
+      mxSource("src/ui/loader.R"),
+      # Controls and left panel
+      mxSource("src/ui/panel_main.R"),
+      # Map element
+      mxSource("src/ui/map.R")
+      )
     )
-
   )

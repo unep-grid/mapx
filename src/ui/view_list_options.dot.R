@@ -4,22 +4,11 @@
 # View text long
 #
 divAbstract <- tags$div(
-  "{{ var foldId = mx.helpers.makeId(10); }}",
-  class = "fold-container",
-  tags$input(
-    type="checkbox",
-    id="{{=foldId}}",
-    class="fold-switch"
-    ),
-  tags$label(
-    class="fold-label",
-    `for`="{{=foldId}}",
-    "Abstract"
-    ),
   tags$div(
-    class="fold-content mx-scroll-styled",
+    class="make-readmore",
     tags$div(
       class="float-left mx-view-item-desc-container",
+      lang="{{langAbstract;}}",
       "{{? h.path(view,'data.abstract.'+langAbstract) }}",
       tags$p(
         class="mx-view-item-desc",
@@ -35,22 +24,10 @@ divAbstract <- tags$div(
 # View legend
 #
 divLegend <- tags$div(
-  "{{ var foldId = mx.helpers.makeId(10); }}",
   "{{?view.type!='sm'}}",
-  class = "fold-container",
-  tags$input(
-    type="checkbox",
-    id="{{=foldId}}",
-    class="fold-switch"
-    ),
-  tags$label(
-    class="fold-label",
-    `for`="{{=foldId}}",
-    "Legends"
-    ),
+  class = "make-readmore",
   tags$div(
-    class="fold-content mx-scroll-styled",
-    "{{?view.type=='vt'}}",
+   "{{?view.type=='vt'}}",
     "{{ var rules = h.path(view,'data.style.rules'); }}",
     "{{?h.greaterThan(h.path(rules,'length'),0)}}",
     tags$div(

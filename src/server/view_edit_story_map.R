@@ -14,8 +14,15 @@ observeEvent(input$localStory,{
   }else{
     dateClient <- viewClient$date_modified
     dateServer <- viewServer$date_modified
-    # format UTC string to  posixct
-    dateClientCt <- as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
+
+    if(is.numeric(dateClient)){
+      # This is most certainly a posix from the client, generated with js. Tz is unknown...
+      dateClientCt <- as.POSIXct(dateClient/1000,origin="1970-01-01",tz="UTC");
+    }else{
+      # format UTC string to  posixct
+      dateClientCt <- as.POSIXct(dateClient,format="%Y-%m-%d%tT%T",tz="UTC")
+    }
+
     # convert UTC to sysTimeZone string
     dateClientCt <- format(dateClientCt,tz=sysTimeZone,usetz=TRUE)
     # convert string back to posixct
@@ -32,21 +39,23 @@ observeEvent(input$localStory,{
   if( useServerVersion ){
     reactData$viewStory <- list(
       view = viewServer,
-      dbVersion = useServerVersion
+      dbVersion = useServerVersion,
+      time = Sys.time()
       )
   }else{
     mxModal(
       id="modalViewEditLoadStorage",
       content=tagList(
         p("A draft has been found on your computer, would you use it ?"),
-        checkboxInput("checkUseClientStory","Yes"),
+        #checkboxInput("checkUseClientStory","Yes"),
         mxFold(
           labelText="Inspect draft",
           tags$div(id="draftStoryInspect")
           )
         ),
       buttons=tagList(
-        actionButton("btnSetStoryVersion","Confirm")
+        actionButton("btnSetStoryVersionClient","Yes, use draft"),
+        actionButton("btnSetStoryVersionServer","No, edit old story")
         ),
       removeCloseButton = T
       )
@@ -61,34 +70,48 @@ observeEvent(input$localStory,{
 })
 
 
+
 #
-# View story check which version use
+# Use draft
 #
-observeEvent(input$btnSetStoryVersion,{
+
+observeEvent(input$btnSetStoryVersionClient,{
 
   mxModal(
     id = "modalViewEditLoadStorage",
     close = TRUE
     )
 
-  viewServer <- reactData$viewDataEdited
-  viewClient <- input$localStory$item
-  useClientStory <- isTRUE(input$checkUseClientStory)
-
-  if(useClientStory){
-    view = viewClient
-  }else{
-    view = viewServer
-  }
+  view <- input$localStory$item
 
   reactData$viewStory <- list(
     view = view,
-    dbVersion = !useClientStory
+    dbVersion = FALSE,
+    time = Sys.time()
     )
 
+})
 
- })
 
+#
+# Use server version
+#
+observeEvent(input$btnSetStoryVersionServer,{
+
+  mxModal(
+    id = "modalViewEditLoadStorage",
+    close = TRUE
+    )
+
+  view <- reactData$viewDataEdited
+
+  reactData$viewStory <- list(
+    view = view,
+    dbVersion = TRUE,
+    time = Sys.time()
+    )
+
+})
 
 #
 # View story : render schema
@@ -111,7 +134,6 @@ observeEvent(reactData$viewStory,{
     views=views,
     language=language
     )
-
 
   jedSchema(
     id="storyEdit",
@@ -138,7 +160,10 @@ observeEvent(reactData$viewStory,{
 #
 observeEvent(input$btnViewPreviewStory,{
 
-  timer <- mxTimeDiff("Preview story logic")
+  mxToggleButton(
+    id="btnViewPreviewStory",
+    disable = TRUE
+    )
 
   story <- input$storyEdit_values$msg
 
@@ -161,11 +186,83 @@ observeEvent(input$btnViewPreviewStory,{
     text = "Unsaved draft"
     )
 
-  mglReadStory(view=view)
+  mglReadStory(
+    view = view,
+    save = TRUE,
+    edit = TRUE
+    )
 
-   mxTimeDiff(timer)
 
 })
+
+
+#
+# Cancel and save draft
+#
+observeEvent(input$btnViewStoryCancel,{
+
+  story <- input$storyEdit_values$msg
+
+  if(noDataCheck(story)) return();
+
+  allViews <- reactViewsCompactAll()
+
+  view <- reactData$viewDataEdited
+
+  hasChanged <- mxViewChanged(.get(view,c("data","story")),story)
+
+  if( hasChanged ){
+    #
+    # Something changed ! Save as draft
+    #
+    mxDebugMsg("Cancel story but something changed, save it in client db");
+
+    view <- .set(view,c("data","story"), story)
+    view <- .set(view,c("date_modified"), Sys.time())
+
+    view <- updateStoryViews(
+      story = story,
+      view = view,
+      allViews = allViews
+      )
+
+    mxUpdateText(
+      id = "modalViewEdit_txt",
+      text = "Draft saved client side"
+      )
+
+    mglReadStory(
+      view = view,
+      save = TRUE,
+      edit = FALSE,
+      close = TRUE
+      )
+
+  }
+
+  #
+  # Close the modal
+  #
+  mxModal(
+    id = "modalViewEdit",
+    close = TRUE
+    )
+
+})
+
+
+mxViewChanged <- function(a,b){
+  a <- sort(unlist(a,use.names=F))
+  b <- sort(unlist(b,use.names=F))
+  d <- setdiff(a,b)
+  c <- isTRUE(length(d) >0)
+
+  if(c){
+    mxDebugMsg(d)
+  }
+
+  return(c)
+}
 
 
 #
@@ -232,10 +329,19 @@ observeEvent(input$btnViewSaveStory,{
       idView=view$id
       )
 
+    #
+    # Close the preview
+    #
+    mglReadStory(
+      view = view,
+      close = TRUE,
+      save = FALSE
+      )
+
     # edit flag
     view$`_edit` = TRUE 
 
-    # add this as new (empty) source
+    # add this as new source
     mglSetSourcesFromViews(
       id = .get(config,c("map","id")),
       viewsList = view,
@@ -243,6 +349,13 @@ observeEvent(input$btnViewSaveStory,{
       country = country
       )
     reactData$updateViewListFetchOnly <- runif(1)
+
+    #
+    # Update view edited to check for later changes 
+    # e.g. when cancel, check with edited story
+    #
+    reactData$viewDataEdited <- view
+
   }
 
   mxUpdateText(
@@ -256,5 +369,11 @@ observeEvent(input$btnViewSaveStory,{
     )
 
 })
+
+
+
+
+
+
 
 

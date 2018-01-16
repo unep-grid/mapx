@@ -14,61 +14,67 @@
   });
 
   JSONEditor.defaults.editors.medium = JSONEditor.defaults.editors.string.extend({
-  setValue: function(value,initial,from_template) {
-    var self = this;
-    
-    if(this.template && !from_template) {
-      return;
-    }
-    
-    if(value === null || typeof value === 'undefined') value = "";
-    else if(typeof value === "object") value = JSON.stringify(value);
-    else if(typeof value !== "string") value = ""+value;
-    
-    if(value === this.serialized) return;
+    setValue: function(value,initial,from_template) {
+      var self = this;
 
-    // Sanitize value before setting it
-    var sanitized = this.sanitize(value);
+      if(this.template && !from_template) {
+        return;
+      }
 
-    if(this.input.value === sanitized) {
-      return;
-    }
+      if(value === null || typeof value === 'undefined') value = "";
+      else if(typeof value === "object") value = JSON.stringify(value);
+      else if(typeof value !== "string") value = ""+value;
 
-    this.input.value = sanitized;
+      if(value === this.serialized) return;
 
-    if(this.medium_editor){
+      // Sanitize value before setting it
+      var sanitized = this.sanitize(value);
+
+      if(this.input.value === sanitized) {
+        return;
+      }
+
+      this.input.value = sanitized;
+
+      if(this.medium_editor){
         this.medium_editor.setContent(sanitized);
-    }
-   
-    var changed = from_template || this.getValue() !== value;
-    
-    this.refreshValue();
-    
-    if(initial) this.is_dirty = false;
-    else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
-    
-    if(this.adjust_height) this.adjust_height(this.input);
+      }
 
-    // Bubble this setValue to parents if the value changed
-    this.onChange(changed);
-  },
-      afterInputReady: function() {
+      var changed = from_template || this.getValue() !== value;
 
-        var self = this, options;
+      this.refreshValue();
 
-        // Code editor
-        if( !self.options.hidden && !self._init ){
-          self._init = true;
+      if(initial) this.is_dirty = false;
+      else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
+
+      if(this.adjust_height) this.adjust_height(this.input);
+
+      // Bubble this setValue to parents if the value changed
+      this.onChange(changed);
+    },
+    afterInputReady: function() {
+
+      var self = this, options;
+
+      // Code editor
+      if( !self.options.hidden && !self._init ){
+        self._init = true;
+
+        System.import("medium-editor").then(function(MediumEditor){
+
+          // medium-editor-tables need Medium editor on window...
+          window.MediumEditor = MediumEditor;
 
           Promise.all([
-            System.import("medium-editor"),
+            System.import('medium-editor-tables'),
             System.import('medium-editor/dist/css/medium-editor.min.css'),
             System.import('medium-editor/dist/css/themes/flat.min.css'),
+            System.import('medium-editor-tables/dist/css/medium-editor-tables.css'),
             System.import('../css/mx_jed_medium_flat.css'),
             System.import('./mx_extend_jed_medium_dragdrop.js')
           ]).then(function(m){
-            var MediumEditor = m[0]; 
-            m[4].addDragDropToMedium(MediumEditor);
+            var MediumEditorTable = m[0];
+            m[5].addDragDropToMedium(MediumEditor);
 
             self.medium_container = document.createElement("div");
             self.medium_container.innerHTML = self.input.value;
@@ -79,12 +85,15 @@
             self.medium_editor = new MediumEditor(self.medium_container,{
               buttonLabels:"fontawesome",
               toolbar: {
-                buttons: ['h1','h2','h3','bold', 'italic', 'quote', 'anchor','unorderedlist']
+                buttons: ['table','h1','h2','h3','bold', 'italic', 'quote', 'anchor','unorderedlist',"justifyLeft","justifyCenter","justifyRight","justifyFull"]
+              },
+              extensions: {
+                table: new MediumEditorTable()
               }
             });
 
             self.medium_editor.setContent(self.getValue());
-            
+
             self.medium_editor.subscribe('editableInput', function (event, editable) {
               self.input.value = editable.innerHTML;
               self.refreshValue();
@@ -94,10 +103,11 @@
 
           });
 
-        }
+        });
+      }
 
-        self.theme.afterInputReady(self.input);
-      },
+      self.theme.afterInputReady(self.input);
+    },
     destroy: function() {
       if(this.medium_editor) {
         this.medium_editor.destroy();

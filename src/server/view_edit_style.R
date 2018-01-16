@@ -70,6 +70,7 @@ observeEvent(input$btnViewPreviewStyle,{
    
   view <- .set(view,c("data","style","rules"), style$rules)
   view <- .set(view, c("data","style","custom"), style$custom)
+  view <- .set(view, c("data","style","titleLegend"), style$titleLegend)
 
   mglAddView(
     viewData = view
@@ -103,6 +104,7 @@ observeEvent(input$btnViewSaveStyle,{
       view <- .set(view, c("target"), as.list(.get(view,c("target"))))
       view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
       view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
+      view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
       view <- .set(view, c("data"), as.list(.get(view,"data")))
       view <- .set(view, c("editor"), editor)
 

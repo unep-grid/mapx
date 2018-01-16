@@ -37,6 +37,12 @@ mglReset <- function( idMap, session=shiny::getDefaultReactiveDomain()) {
     )
 }
 
+#' Set user id
+#' @param userData {list} list of user data such as id, email, nickname
+#' @export
+mglSetUserData <- function( userData, session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglSetUserData",userData)
+}
 
 #' Get client localForage object 
 #' @param idStore localforage store id
@@ -292,9 +298,12 @@ mglAddAutoLayer <- function(id=NULL, style=NULL, before=NULL, session=shiny::get
 
 #' Live preview story map
 #' @param id Map id
-#' @param view View object
+#' @param view View data
+#' @param save Save data in local storage client side
+#' @param edit Enable view edition 
+#' @param close Close the current story
 #' @param session Shiny session object
-mglReadStory <- function(id=NULL,view=list(), session=shiny::getDefaultReactiveDomain()){
+mglReadStory <- function(id=NULL,view=list(),save=TRUE,edit=TRUE,close=FALSE, session=shiny::getDefaultReactiveDomain()){
 
   if(noDataCheck(id)){
     id <- .get(config,c("map","id"))
@@ -304,7 +313,9 @@ mglReadStory <- function(id=NULL,view=list(), session=shiny::getDefaultReactiveD
     list(
       id = id,
       view = view,
-      save = TRUE
+      save = save,
+      edit = edit,
+      close = close
       )
     )
 }

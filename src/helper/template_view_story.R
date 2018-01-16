@@ -38,6 +38,7 @@ mxSchemaViewStory <- function(view,views,language){
     return( "("+v$country + ") " + title + target)
 }) 
 
+  mxCounter(reset=T)
 
   #
   # Multiple associated view object
@@ -47,7 +48,9 @@ mxSchemaViewStory <- function(view,views,language){
     format = "table",
     title = "Views to activate",
     options = list(
-      collapsed=TRUE
+      collapsed = TRUE,
+      disable_array_delete_all_rows = TRUE,
+      disable_array_delete_last_row = TRUE
       ),
     items = list(
       type = "object",
@@ -73,8 +76,8 @@ mxSchemaViewStory <- function(view,views,language){
   # Map position
   #
   stepMapPosition <- list(
-    type = "position",
-    format = "grid",
+    type = "object",
+    format = "position",
     title = tt("schema_story_map_pos"),
     options = list(
       addButtonPos = TRUE,
@@ -115,25 +118,25 @@ mxSchemaViewStory <- function(view,views,language){
 
 
   # 
-  # Text
+  # Text / html
   #
-  slideText <- list(
-      type = "object", 
-      title = "Text",
-      properties = list()
-      )
-    
-  for( i in ll ){
-    slideText[[c("properties")]][[i]] <- list(
-      type ="string",
-      format="medium",
-      title = "",
-      propertyOrder = 2,
-      options = list(
-        hidden = i != l
-        )
-      )
-  }
+
+  slideText <- mxSchemaMultiLingualInput(
+    format = "textarea",
+    options = list(
+      editor = "ace",
+      language ="html",
+      addLiveEditBtn = TRUE,
+      selectorLiveEdit = ".mx-story"
+      ),
+    language =  l,
+    languagesRequired = c("en"),
+    languagesHidden = ll[!ll%in%l],
+    languagesReadOnly = ll[!ll%in%l],
+    keyTitle = d("content",web=F),
+    dict = config$dict
+    )
+
   #
   # Slide classes 
   #
@@ -141,13 +144,32 @@ mxSchemaViewStory <- function(view,views,language){
     type = "array",
     format = "table",
     title = "Slide classes", 
+    options =  list(
+      disable_array_delete_all_rows = TRUE,
+      disable_array_delete_last_row = TRUE
+      ),
     items = list(
       type = "object",
       title = "Classe",
       properties = list(
         name = list(
           type = "string",
-          enum = c("card","image-cover","shadow","half-vertical-center","half-horizontal-center","half-right","half-left","half-top","half-bottom","cube-face")
+          enum = c(
+            "card",
+            "image-cover",
+            "shadow",
+            "text-center",
+            "text-left",
+            "text-right",
+            "titles-center",
+            "half-vertical-center",
+            "half-horizontal-center",
+            "half-right",
+            "half-left",
+            "half-top",
+            "half-bottom",
+            "cube-face"
+            )
           )
         )
       )
@@ -167,9 +189,11 @@ mxSchemaViewStory <- function(view,views,language){
   # Slide background color
   #
   slideScroll <- list(
-    title = "Allow scroll",
+    title = "Allow scrolling",
+    description = "If the slide content goes outside the container, a scrollbar will be displayed.",
     type = "boolean",
-    format = "checkbox"
+    format = "checkbox",
+    defaut = TRUE
   )
   #
   # Slide background opacity
@@ -196,20 +220,24 @@ mxSchemaViewStory <- function(view,views,language){
   # Slide text size
   #
   slideSizeText <- list(
-    title = "Text size percent",
+    title = "Base text size in pixels",
     type = "number",
     min = 0,
-    default = 100
+    default = 40
     )
-
 
   # 
   # Slide effect
   #
   slideEffects = list(
     type = "array",
-    format = "table", 
+    format = "confirmDelete",
     title = "Effects", 
+    options = list(
+      disable_array_delete_all_rows = TRUE,
+      disable_array_delete_last_row = TRUE,
+      collapsed = TRUE
+      ),
     items = list(
       type = "object", 
       title = "Effect", 
@@ -262,42 +290,202 @@ mxSchemaViewStory <- function(view,views,language){
       )
     )
 
+  slideName = list(
+    type ="string",
+    title ="Slide name"
+    )
+
   #
   # All slide config
   #
   stepSlide <- list(
     type="array",
+    format = "confirmDelete",
+    options = list(
+      disable_array_delete_all_rows = TRUE,
+      disable_array_delete_last_row = TRUE,
+      collapsed = TRUE
+      ),
     title="Slides",
     items = list(
       type = "object",
       title = "Slide",
+      headerTemplate = "{{ i1 }}. {{ self.name }} ",
       properties = list(
-        scroll_enable = slideScroll,
-        html = slideText,
-        classes = slideClasses,
         color_fg = slideColorText,
         color_bg = slideColorBg,
         opacity_bg = slideOpacityBg,
         size_text = slideSizeText,
-        effects = slideEffects
+        effects = slideEffects,
+        scroll_enable = slideScroll,
+        classes = slideClasses,
+        html = slideText,
+        name = slideName
         )
+      ),
+    options = list(
+      collapsed = TRUE,
+      disable_edit_json = TRUE
+      )          
+    )
+
+
+
+  #
+  # Map animation
+  #
+  animDuration <- list(
+    title = "Animation duration [ms]",
+     description = "Change the total animation duration",
+    type = "number",
+    min = 0,
+    default = 1000
+    )
+  
+  animPathMethod <- list(
+    title = "Trajectory method",
+     description = "Set the traveling method of the camera during the animation",
+    type = "string",
+    enum = list("flyTo","easeTo","jumpTo"),
+    default = "jumpTo",
+    options = list(
+        enum_titles = list(
+          "Fly to ( follow a flight path ) ",
+          "Ease to ( follow a linear path ) ",
+          "Jump to ( move directly to the position )"
+          )
       )
+    )
+
+  animFunction = list(
+    title = "Animation function",
+     description = "Change the default animation function. Ease the start and/or end of the animation.",
+    type =  "string",
+    enum =  list("easeIn","easeOut","easeInOut")
+    )
+
+  animFunctionPower = list(
+     title = "Animation function exponent",
+     description = "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+     type =  "number",
+     min = 0,
+     max = 10,
+     default =1
+    )
+
+  stepMapAnimation <- list(
+    type = "object",
+    title = "Map animation",
+    properties = list(
+      duration = animDuration,
+      method = animPathMethod,
+      easing = animFunction,
+      easing_power = animFunctionPower
+      ),
+    options = list(
+      collapsed = TRUE
+      )
+    )
+
+
+  autoplayTimeout <- list(
+    title = "timeout [ms]",
+    description = "Waiting time before going to the next step.",
+    type = "number",
+    min = 0,
+    default = 1000
+    )
+
+  autoplayTransition <- list(
+    title = "transition [ms]",
+    description = "Duration of the transition between steps.",
+    type = "number",
+    min = 0,
+    default = 1000
+    )
+
+  autoplayAnimFunction = list(
+    title = "Animation function",
+    description = "Change the default animation function. Ease the start and/or end of the animation.",
+    type =  "string",
+    enum =  list("easeIn","easeOut","easeInOut")
+    )
+
+  autoplayAnimFunctionPower = list(
+    title = "Animation function exponent",
+    description = "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    type =  "number",
+    min = 0,
+    max = 10,
+    default =1
+    )
+
+  stepAutoplay <- list(
+    type = "object",
+    title = "Autoplay settings",
+    properties = list(
+      timeout = autoplayTimeout,
+      duration = autoplayTransition,
+      easing = autoplayAnimFunction,
+      easing_power = autoplayAnimFunctionPower
+      ),
+    options = list(
+      collapsed = TRUE
+      )
+    )
+
+  stepName = list(
+    type ="string",
+    title ="Step name"
     )
 
   stepConfig = list(
     type = "object",
     title = "Step",
+    headerTemplate = "{{ i1 }}. {{ self.name }}",
     options = list(
-      collapsed=TRUE
+      collapsed = TRUE,
+      disable_edit_json = TRUE
       ),
     properties = list(
-      position = stepMapPosition,
+      slides = stepSlide,
       views = stepMapViews,
-      slides = stepSlide
+      position = stepMapPosition,
+      animation = stepMapAnimation,
+      autoplay = stepAutoplay,
+      name = stepName
       )
     )
 
 
+  #
+  # Settings page resolution
+  #
+  settingsPageClass = list(
+    type = "string",
+    title = "Screen resolution",
+    minLength = 1,
+    description = "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating",
+    enum = list(
+      "mx-story-screen-240p",
+      "mx-story-screen-360p",
+      "mx-story-screen-480p",
+      "mx-story-screen-720p",
+      "mx-story-screen-1080p",
+      "mx-story-screen-1440p"
+      ),
+    options = list(
+      enum_titles = list(
+        "240p (16:9)",
+        "360p (16:9)",
+        "480p (16:9)",
+        "720p (16:9)",
+        "1080p (16:9)",
+        "1440p (16:9)"
+        )
+      ),
+    default = "mx-story-screen-720p"
+    )
 
   #
   # Final schema
@@ -306,8 +494,24 @@ mxSchemaViewStory <- function(view,views,language){
     title = "Story",
     type = "object", 
     properties = list(
+      settings = list(
+        type = "object",
+        title = "Settings",
+        options = list(
+          collapsed = TRUE
+          ),
+        properties = list(
+          class_wrapper = settingsPageClass
+          )
+        ),
       steps = list(
         type = "array", 
+        options = list(
+          disable_array_delete_all_rows = TRUE,
+          disable_array_delete_last_row = TRUE,
+          collapsed = TRUE
+          ),
+        format = "confirmDelete",
         title = "Steps", 
         items = stepConfig
         )

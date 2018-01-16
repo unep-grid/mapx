@@ -2,24 +2,18 @@
 {{ var h = mx.helpers ; }}
 {{ var langTitle = h.checkLanguage({obj:view,path:'data.title'}) ; }}
 {{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
-<div class="fold-container">
-  {{ var foldId = mx.helpers.makeId(10); }}
-  <input type="checkbox" id="{{=foldId}}" class="fold-switch"/>
-  <label class="fold-label" for="{{=foldId}}">Abstract</label>
-  <div class="fold-content mx-scroll-styled">
-    <div class="float-left mx-view-item-desc-container">
+<div>
+  <div class="make-readmore">
+    <div class="float-left mx-view-item-desc-container" lang="{{langAbstract;}}">
       {{? h.path(view,'data.abstract.'+langAbstract) }}
       <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[langAbstract]}}</p>
       {{?}}
     </div>
   </div>
 </div>
-<div class="fold-container">
-  {{ var foldId = mx.helpers.makeId(10); }}
+<div class="make-readmore">
   {{?view.type!='sm'}}
-  <input type="checkbox" id="{{=foldId}}" class="fold-switch"/>
-  <label class="fold-label" for="{{=foldId}}">Legends</label>
-  <div class="fold-content mx-scroll-styled">
+  <div>
     {{?view.type=='vt'}}
     {{ var rules = h.path(view,'data.style.rules'); }}
     {{?h.greaterThan(h.path(rules,'length'),0)}}

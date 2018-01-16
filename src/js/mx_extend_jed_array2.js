@@ -1,5 +1,5 @@
 /*
- * mx_extend_jed_medium.js
+ * Add an array format asking user to confirm removal
  *
  */
 (function(){

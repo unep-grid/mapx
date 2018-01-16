@@ -1,9 +1,18 @@
 /* jshint esversion:6, evil: true */
-
 import * as mx from './mx_init.js';
-//var escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 
+
+
+/**
+* Settings of the user
+* @param {Object} o Object that contains user data such as id, email, nickname, etc..
+*/
+export function setUserData(o){
+  for(var i in o){
+    mx.settings.user[i] = o[i];
+  }
+}
 
 
 /**
@@ -63,9 +72,6 @@ export function initMapx(o){
       name : "stories"
     });
 
-    mx.data.storyCache = {};
-
-
     /**
      * Confirm user quit
      */
@@ -106,9 +112,10 @@ export function initMapx(o){
     mx.settings.languages = o.languages = o.languages || ["en","fr"];
     mx.settings.language = o.language = o.language || o.languages[0];
     mx.settings.vtPort = o.vtPort = o.vtPort || "";
-    mx.settings.vtUrl = o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/tile/{z}/{x}/{y}.mvt";
-    mx.settings.vtUrlViews = o.vtUrlViews = location.protocol +"//"+ location.hostname + mx.settings.vtPort + "/view/";
-
+    mx.settings.vtUrlBase =  o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort ;
+    mx.settings.vtUrl = mx.settings.vtUrlBase + "/tile/{z}/{x}/{y}.mvt";
+    mx.settings.vtUrlViews = mx.settings.vtUrlBase + "/view/";
+    mx.settings.vtUrlUploadImage = mx.settings.vtUrlBase + "/upload/image/";
 
     // set path using current location. 
 
@@ -224,6 +231,24 @@ export function initMapx(o){
       }
     });
 
+
+
+    /**
+    * Error handling
+    */
+    map.on('error',function(e){
+
+      var msg = mx.helpers.path(e,"error.message");
+
+      if(msg){
+        if(msg.indexOf("http status 200")>0) return;
+      }
+      throw new Error(msg);
+    });
+
+    /**
+    * Mouse move handling
+    */
     map.on('mousemove', function(e) {
 
       var layers = mx.helpers.getLayerNamesByPrefix({
@@ -305,19 +330,19 @@ export function reset(o){
 /**
 * Clean stored modules : dashboard, custom view, etc.
 */
-function cleanRemoveModules(views){
+function cleanRemoveModules(view){
 
-  views = views instanceof Array ? views : [views];
+  view = view instanceof String ? mx.helpers.getViews({id:'map_main',idView:view}) : view;
+  view = view instanceof Array ? view : [view];
 
-  views.forEach(function(view){
-    if( view._onRemoveCustomView instanceof Function ){
-      view._onRemoveCustomView();
+  view.forEach(function(v){
+    if( v._onRemoveCustomView instanceof Function ){
+      v._onRemoveCustomView();
     }
-    if( view._onRemoveDashboard instanceof Function ){ 
-      view._onRemoveDashboard();
+    if( v._onRemoveDashboard instanceof Function ){ 
+      v._onRemoveDashboard();
     }
-  }) ;
-
+  });
 }
 
 
@@ -435,7 +460,7 @@ export function setSourcesFromViews(o){
 
       views.forEach(function(v){
         mx.helpers.getJSON({
-          url :  vtUrlViews + v.id + "/row/" + v.pid,
+          url :  vtUrlViews + v.id + "@" + v.pid,
           onSuccess : function(view){
             view._edit = v._edit; 
             initViews.push( view );
@@ -583,65 +608,68 @@ export function path(obj, path, def){
  *  View controler : evalutate view state and enable/disable it depending on ui state
  */
 export function viewControler(o){
-  
 
-  var m = mx.maps[o.id];
-  var i,els,view,views,viewStyle,geomType,idSource;
+  var vToAdd = [], vToRemove = [], vVisible = [], vChecked = [];
+  var view, isChecked,id;
+  var idMap = o.id || "map_main";
+  var idViewsList = o.idViewsList || "mx-views-list";
+  var els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
 
-  if(m.views){ 
-
-    views = mx.helpers.getViews(o);
-    els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
-
-    var loaded = mx.helpers.getLayerNamesByPrefix({
-      id:o.id,
-      prefix:"MX-",
-      base : true
-    }) ;
-
-    for( i = 0; i < els.length ; i++ ){
-      var id = els[i].dataset.view_action_target;
-
-      view = views[id];
-
-      if( view ){
-
-        var isChecked =  els[i].checked === true;
-        var isLoaded = loaded.indexOf(id) > -1;
-        var toAdd = isChecked && !isLoaded ;
-        var toRemove = !isChecked ;
-
-        if( toRemove ){
-
-          mx.helpers.removeLayersByPrefix({
-            id : o.id,
-            prefix: id
-          });
-
-          cleanRemoveModules(view);
-
-        }
-
-        if( toAdd ){
-
-          mx.helpers.addView({
-            id : o.id,
-            viewData : view,
-            idViewsList : o.idViewsList,
-          });
-
-          view._setFilter();
-
-          mx.helpers.makeDashboard({ view: view, idMap: o.id });
-
-        }
-      } 
+  for(var i = 0; i < els.length ; i++ ){
+    id = els[i].dataset.view_action_target;
+    isChecked =  els[i].checked === true;
+    if(isChecked){
+      vChecked.push(id);
     }
-
-    updateViewOrder(o);
-
   }
 
+  mx.helpers.onNextFrame(function(){
+    vVisible = mx.helpers.getLayerNamesByPrefix({
+      id:idMap,
+      prefix:"MX-",
+      base : true
+    });
+
+    vToRemove = mx.helpers.arrayDiff(vVisible,vChecked);
+
+    vToAdd = mx.helpers.arrayDiff(vChecked,vVisible);
+
+    /**
+     * View to add
+     */
+    vToAdd.forEach(function(v){
+      view = mx.helpers.getViews({
+        id:idMap,
+        idView:v
+      });
+      mx.helpers.addView({
+        id : idMap,
+        viewData : view,
+        idViewsList : idViewsList
+      });
+
+      //view._setFilter();
+
+      mx.helpers.makeDashboard({ 
+        view: view, 
+        idMap: idMap
+      });  
+    });
+
+    /**
+     * View to remove
+     */
+    vToRemove.forEach(function(v){
+
+      mx.helpers.removeLayersByPrefix({
+        id : idMap,
+        prefix : v
+      });
+      cleanRemoveModules(v);
+    });
+
+    updateViewOrder(o);
+  });
 }
 
 
@@ -809,7 +837,6 @@ export function updateViewOrder (o){
     if(posBefore > -1 ){
       layerBefore = displayed[posBefore];
     }
-
     m.map.moveLayer(x,layerBefore);
 
   });
@@ -1336,10 +1363,6 @@ export function handleViewClick(o){
         comment :"target is the play button",
         isTrue : el.dataset.view_action_key == "btn_opt_start_story",
         action : function(){
-          /*          parseStory({*/
-          //id : o.id,
-          //idView : el.dataset.view_action_target
-          /*});*/
           mx.helpers.storyRead({
             id : o.id,
             idView : el.dataset.view_action_target,
@@ -1393,15 +1416,11 @@ export function handleViewClick(o){
         comment :"target is tool search",
         isTrue : el.dataset.view_action_key == "btn_opt_search",
         action : function(){
-
           var elSearch =  document.getElementById(el.dataset.view_action_target);
-
           mx.helpers.classAction({
             selector : elSearch,
             action : "toggle"
           });
-          
-
         }
       },
       {
@@ -1579,8 +1598,6 @@ export function renderViewsList(o){
     "classes" : "mx-view-item-classes"
   };
 
-  var elFilters, activeFilters = [];
-
   if( views === undefined || views.constructor !== Array ||  views.length < 1 || !mx.templates.viewList ){
     if( ! add ){
       mx.helpers.getDictItem("noView").then(function(item){
@@ -1597,7 +1614,6 @@ export function renderViewsList(o){
       /**
        * Render all view items
        */
-   
       elViewsList.innerHTML = mx.templates.viewList(views);
 
     }else{
@@ -1622,7 +1638,7 @@ export function renderViewsList(o){
       elDiv = document.createElement("div");
       elDiv.innerHTML = mx.templates.viewList(views);
       elNewItem = elDiv.querySelector("li");
-      elNewInput =  elNewItem.querySelector(".mx-view-tgl-input");
+      elNewInput = elNewItem.querySelector(".mx-view-tgl-input");
       elNewInput.checked = true;
       elViewsList.insertBefore(elNewItem,elViewsList.childNodes[0]);
     }
@@ -1636,53 +1652,15 @@ export function renderViewsList(o){
         updateViewOrder(o);
       }
     });
-    /*});*/
-    /*makeViewsSortable({*/
-      //add : add,
-      //pckry : m.tools.viewsListPackery,
-      //id : o.id,
-      //selectorAll : elViewsList,
-      //selectorAdd : elNewItem,
-      //callback : function(x){
-        //updateViewOrder(o);
-      //}
-    //}).then(function(packery){
-      //m.tools.viewsListPackery = packery;
-    //});
-
-/*    System.import("html5sortable").then(function(sortable){*/
-      //sortable(elViewsList,{
-        //handle: ".mx-view-tgl-title",
-      //})[0].addEventListener('sortupdate', function(e) {
-           //updateViewOrder(o);
-      //});
-    //});
-
-
-
-    //System.import("sortablejs").then(function(Sortable){
-      //m.tools.viewsListSortable = new Sortable(elViewsList,{
-        //handle: ".mx-view-tgl-title",
-        //animation: 150,
-         //onSort : function(){
-           //updateViewOrder(o);
-         //}
-      //});
-    /*});*/
-
 
     /**
     * Generate filter
     */
-    var tableTags = getTagsGroupFromView(m.views); 
-    tagsTableToLabel(tableTags,"#viewsTagsFilterToggles");
-
-    /** 
-     * Get components 
-     * elFilters = filter view list by classes
-     * elTimeSlider =  filter views list and content by time
-     */
-    elFilters = elViewsContainer.querySelector(".filters");
+    makeViewsFilter({
+      tagsTable : getTagsGroupsFromView(m.views),
+      optionsButtons : makeViewsFilterOptionsButtons(m.views),
+      selectorContainer : "#viewsFilterContainer"
+    });
 
     /*
      * translate based on dict key
@@ -1692,13 +1670,12 @@ export function renderViewsList(o){
     });
 
     /*
-    * List filter by text
+    * filter view  by text input
     */
-
     if( ! m.listener.viewsListFilterText ){
 
       m.listener.viewsListFilterText = mx.helpers.filterViewsListText({
-        selectorInput : "#viewsTextFilter" ,
+        selectorInput : "#viewsFilterText",
         classHide : "mx-filter-text",
         classSkip : "mx-filter-class",
         idMap : o.id,
@@ -1714,7 +1691,7 @@ export function renderViewsList(o){
     if( ! m.listener.viewsListFilterCheckbox ){
 
       m.listener.viewsListFilterCheckbox = mx.helpers.filterViewsListCheckbox({
-        selectorInput : "#viewsTagsFilter",
+        selectorInput : "#viewsFilterContainer",
         idMap : o.id ,
         classHide : "mx-filter-class",
         classSkip : "mx-filter-text",
@@ -1753,71 +1730,40 @@ export function renderViewsList(o){
 }
 
 
-/** 
-* Build views list and make it sortable using packery and draggabilly
-* @param {Object} o options
+/**
+* Add Additional button to filters
+* @param {Object} views list of views
 */
-//function makeViewsSortable(o){
+function makeViewsFilterOptionsButtons(views){
 
-  //var elSelectorAll,elSelectorAdd,draggie;
-  //var selectorItem = ".mx-view-item";
-  //var selectorHandle = ".mx-view-tgl-title";
-  //var add = o.add || false;
-  //var pckry = o.pckry;
-  
-  //return Promise.all([
-   //System.import("packery"),
-   //System.import("draggabilly")
-  //]).then(function(m){
+  /*
+   * Add additional filters
+   */
+  var labelCheckDisplay = "Display only selected";
+  var elFilterCheckDisplayed = mx.helpers.uiToggleBtn({
+    label : labelCheckDisplay.toUpperCase() ,
+    onChange : function(e,elToggle){
 
-    //var Packery = m[0];
-    //var Draggabilly = m[1];
+      for (var i = 0, iL = views.length; i < iL; i++) {
+        var v = views[i];
+        var elLi = document.getElementById(v.id);
+        var elInput = elLi.querySelector(".mx-view-tgl-input");
+        if(elToggle.checked && elLi && elInput && !elInput.checked){
+          elLi.classList.add("mx-filter-displayed");
+        }else{
+          if(elLi){
+            elLi.classList.remove("mx-filter-displayed");
+          }
 
-    //if (o.selectorAll instanceof Node) {
-      //elSelectorAll = o.selectorAll;
-    //} else {
-      //elSelectorAll = document.querySelector(o.selectorAll);
-    //}
+        }
+      }
+    }
+  });
 
-    //if (o.selectorAdd instanceof Node) {
-      //elSelectorAdd = o.selectorAdd;
-    //} else {
-      //elSelectorAdd = document.querySelector(o.selectorAdd);
-    //}
-
-    //if( add && pckry && elSelectorAdd ){
-
-     //// pckry.prepended(elSelectorAdd);
-      //pckry.addItems(elSelectorAdd);
-      //draggie = new Draggabilly(elSelectorAdd,{
-          //handle: selectorHandle
-      //});
-      //pckry.bindDraggabillyEvents(draggie);
-      //pckry.fit(elSelectorAdd,0,0);
-    //}else{
-
-      //pckry = new Packery(elSelectorAll, {
-        //selectorItem: selectorItem,
-        //columnWidth: 100,
-        //transitionDuration: 100,
-        //stagger: 0
-      //});
-
-      //pckry.getItemElements().forEach(function(elItem) {
-        //var draggie = new Draggabilly(elItem, {
-          //handle: selectorHandle
-        //});
-        //pckry.bindDraggabillyEvents(draggie);
-      //});
-
-      //pckry.on('dragItemPositioned',o.callback);
-    
-    //}
-       //return pckry;
-  //});
-//}
-
-
+  return [
+    elFilterCheckDisplayed  
+  ];
+}
 
 
 /**
@@ -1825,7 +1771,7 @@ export function renderViewsList(o){
 * @param {Array} v Views list
 * @note : expect type, data.classes and data.collections
 */
-function getTagsGroupFromView(views){
+function getTagsGroupsFromView(views){
 
   var h = mx.helpers;
 
@@ -1865,29 +1811,54 @@ function getTagsGroupFromView(views){
 
 /**
 * Create filter tags label using freqency table from getTagsGroupFromView
-* @param {Object} table Object containing the count for each key :
-* @param {Object} table.count Count of key.
-* @param {Element|Selector} Container to store the resulting label
+* @param {Object} o options
+* @param {Array} o.optionsButton Array of buttons to add in options list of filter
+* @param {Object} o.tagsTable Object containing the count for each key :
+* @param {Object} o.tagsTable.count Count of key.
+* @param {Element|Selector} o.selectorContainer Container to store the resulting label
 */
-function tagsTableToLabel(table,containerSelector){
+function makeViewsFilter(o){
 
   var h = mx.helpers;
   var l = mx.settings.language;
-  var elContainer = containerSelector instanceof Node ? containerSelector : document.querySelector(containerSelector);
+  var elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
 
   // Reset content
   elContainer.innerHTML="";
 
-  var types =  Object.keys(table);
+  
+  /**
+  * Add options
+  */
+  if(o.optionsButtons instanceof Array && o.optionsButtons.length > 0){
+
+    var elGroupOptions = document.createElement("div");
+    elGroupOptions.className = "filter-group";
+    o.optionsButtons.forEach(function(b){   
+      elGroupOptions.appendChild(b);
+    });
+
+    var elFoldOptions = h.uiFold({
+      content : elGroupOptions,
+      label : "options"
+    });
+    elContainer.appendChild(elFoldOptions);
+
+  }
+
+  /**
+  * Add filter by class, type, ... 
+  */
+  var types =  Object.keys(o.tagsTable);
 
   types.forEach(function(t){
     var tags = [];
-    var tbl = table[t];
+    var tbl = o.tagsTable[t];
     var keys = Object.keys(tbl);
     var elGroup = document.createElement("div");
     var elFold,label,el;
 
-    elGroup.className="filter-group";
+    elGroup.className = "filter-group";
 
     h.getDictItem(t,l)
       .then(function(label){
@@ -2367,7 +2338,8 @@ export function getLayerById(o) {
  *
  */
 export function getLayerNamesByPrefix(o) {
-  
+ 
+  o = o ||{id:'map_main',prefix:'MX-'};
   var mapId, prefix, base, result, hasMap, map, layers, l;
   var out = [];
   mapId = o.id;
@@ -2409,20 +2381,17 @@ export function getLayerNamesByPrefix(o) {
  */
 export function removeLayersByPrefix(o) {
 
-  var result = [], hasMap, legend, map, layers, layersToRemove;
+  var result = [], hasMap, map, layers;
 
   hasMap = checkMap(o.id);
 
   if( hasMap ){
     map  = mx.maps[o.id].map;
     layers = mx.helpers.getLayerNamesByPrefix(o);
-    var rExp = new RegExp("^" + o.prefix + ".*");
-
     layers.forEach(function(l){
-      if(rExp.test(l)){
-        map.removeLayer(l);
-        result.push(l);
-      }
+      console.log("Remove layer id "+ l);
+      map.removeLayer(l);
+      result.push(l);
     });
   }
 
@@ -2574,7 +2543,6 @@ export function addViewVt(o){
     * clean values
     */ 
     rules = rules instanceof Array ? rules : [rules];
-
 
     if( ! source ) return;
 
@@ -2806,19 +2774,11 @@ export function addViewVt(o){
       layers = layers.reverse();
 
       layers.forEach(function(layer){
-
-        try{
-          setTimeout(function(){
-            map.addLayer(layer,"mxlayers");
-          },1);
-        }catch(e){
-          console.log("Can't add layer :");
-          console.log(layer);
-          console.log(e);
+        if(true){
+          console.log("add layer"+layer.id);
         }
-
+        map.addLayer(layer,"mxlayers");
       });
-
 
       /*
        * Update layer order based in displayed list
@@ -2896,7 +2856,19 @@ export function addOptions(o){
   var idMap = o.id;
   var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
 
-  if(elOptions) elOptions.innerHTML = mx.templates.viewListOptions(view);
+  if(elOptions){
+    var optMade = new Promise(function(resolve,reject){
+      elOptions.innerHTML = mx.templates.viewListOptions(view);
+      resolve(elOptions); 
+    });
+    optMade.then(function(el){
+      mx.helpers.uiReadMore('.make-readmore',{
+        selectorParent : el,
+        maxHeightClosed : 105,
+        maxHeightOpened : 400
+      });
+    });
+  }
 
   view._idMap = o.id;
   view._interactive = {};
@@ -2936,7 +2908,6 @@ export function addOptions(o){
  *  @param 
  */
 export function addView(o){
-  
 
   if(!o.viewData && !o.idView) {
     console.log("Add view called without idView or view Data. Options :");
@@ -2962,128 +2933,139 @@ export function addView(o){
     id: o.id,
     prefix : view.id
   });
- 
+
   /**
-  * Add options
-  */
+   * Add options
+   */
   mx.helpers.addOptions({
-   id : o.id,
-   view : view
+    id : o.id,
+    view : view
   });
 
-  /* Switch on view type*/
-  var handler = {
-    rt : function(){
+  /**
+  * Add view
+  */
+  handler(view.type);
 
-      if(!mx.helpers.path(view,"data.source.tiles")) return ;   
+  /**
+  * handler based on view type
+  */
+  function handler(viewType){
 
-      m.map.addLayer({
-        id: view.id,
-        type : "raster",
-        source: view.id + "-SRC"
-      },"mxlayers");
+    /* Switch on view type*/
+    var handler = {
+      rt : function(){
 
-      /* IMG */ 
+        if(!mx.helpers.path(view,"data.source.tiles")) return ;   
 
-      var legend = mx.helpers.path(view,"data.source.legend");
+        m.map.addLayer({
+          id: view.id,
+          type : "raster",
+          source: view.id + "-SRC"
+        },"mxlayers");
 
-      if(legend){
-        var elLegend = document.querySelector("#check_view_legend_"+view.id);
-        if(elLegend){
-          var oldImg = elLegend.querySelector("img");
-          if(!oldImg){
-            var img = new Image();
-            img.src = legend;
-            img.alt = "Legend"; 
-            elLegend.appendChild(img); 
-            img.onload = function(){
+        /* IMG */ 
+
+        var legend = mx.helpers.path(view,"data.source.legend");
+
+        if(legend){
+          var elLegend = document.querySelector("#check_view_legend_"+view.id);
+          if(elLegend){
+            var oldImg = elLegend.querySelector("img");
+            if(!oldImg){
+              var img = new Image();
+              img.src = legend;
+              img.alt = "Legend"; 
+              elLegend.appendChild(img); 
+              img.onload = function(){
+              };
+            }
+          }
+        }
+
+      },
+      cc : function(){
+        var methods = mx.helpers.path(view,"data.methods");
+
+        if( !methods ) return;
+        var getMethod =  new Promise(function(resolve, reject) {
+          var r = new Function(methods)();
+          if (r) {
+            resolve(r);
+          } else {
+            reject(methods);
+          }
+        })
+          .then(function(cc){
+            if( 
+              ! ( cc.onInit instanceof Function ) || 
+                ! ( cc.onClose instanceof Function)
+            ) return;
+
+            var opt = {
+              map : m.map,
+              view : view,
+              idView : view.id,
+              idSource : view.id + "-SRC",
+              idLegend : "check_view_legend_" + view.id,
+              onClose : cc.onClose,
+              onInit : cc.onInit
             };
-          }
-        }
-      }
 
-    },
-    cc : function(){
-      var methods = mx.helpers.path(view,"data.methods");
-
-      if( !methods ) return;
-      var getMethod =  new Promise(function(resolve, reject) {
-        var r = new Function(methods)();
-        if (r) {
-          resolve(r);
-        } else {
-          reject(methods);
-        }
-      })
-        .then(function(cc){
-          if( 
-            ! ( cc.onInit instanceof Function ) || 
-              ! ( cc.onClose instanceof Function)
-          ) return;
-
-          var opt = {
-            map : m.map,
-            view : view,
-            idView : view.id,
-            idSource : view.id + "-SRC",
-            idLegend : "check_view_legend_" + view.id,
-            onClose : cc.onClose,
-            onInit : cc.onInit
-          };
-
-          opt.elLegend = document.getElementById(opt.idLegend);
+            opt.elLegend = document.getElementById(opt.idLegend);
 
 
-          if(opt.map.getSource(opt.idSource)){
-            opt.map.removeSource(opt.idSource);
-          }
+            if(opt.map.getSource(opt.idSource)){
+              opt.map.removeSource(opt.idSource);
+            }
 
 
-          mx.helpers.removeLayersByPrefix({
-            prefix : opt.idView,
-            id : "map_main"
+            mx.helpers.removeLayersByPrefix({
+              prefix : opt.idView,
+              id : "map_main"
+            });
+
+            view._onRemoveCustomView = function(){
+              opt.onClose(opt);
+            };
+
+
+            /**
+             * Init custom map
+             */
+            opt.onInit(opt);
+
+
+          }).catch(function(e){
+            mx.helpers.modal({
+              id :  "modalError",
+              title : "Error",
+              content : "<p>Error during methods evaluation :" + e 
+            });
           });
-
-          view._onRemoveCustomView = function(){
-            opt.onClose(opt);
-          };
-
-
-          /**
-           * Init custom map
-           */
-          opt.onInit(opt);
-
-
-        }).catch(function(e){
-          mx.helpers.modal({
-            id :  "modalError",
-            title : "Error",
-            content : "<p>Error during methods evaluation :" + e 
-          });
+      },
+      vt : function(){
+        addViewVt({
+          view : view,
+          map : m.map,
+          debug : o.debug
         });
-    },
-    vt : function(){
+      },
+      gj : function(){
+        m.map.addLayer(
+          mx.helpers.path(view,"data.layer"),
+          "mxlayers"
+        );
+      },
+      sm : function(){
 
-      addViewVt({
-        view : view,
-        map : m.map
-      });
-    },
-    gj : function(){
-      m.map.addLayer(
-        mx.helpers.path(view,"data.layer"),
-        "mxlayers"
-      );
-    },
-    sm : function(){
+      }
+    };
 
-    }
-  };
+    /* Call function according to view type */
+    handler[viewType]();
 
-  /* Call function according to view type */
-  handler[view.type]();
-
+  }
 }
 
 /**
@@ -3922,7 +3904,9 @@ export function featuresToHtml(o){
   var langs = mx.helpers.objectToArray(mx.settings.languages) || ["en"];
   var lang = mx.settings.language || langs[0];
   var views = mx.helpers.getViews(o);
-
+  var cEl = function(type){
+   return document.createElement(type);
+  };
   var layers = mx.helpers.getFeaturesValuesByLayers({
     id : o.id,
     point : o.point
@@ -3934,9 +3918,9 @@ export function featuresToHtml(o){
   }
 
   var filters = {};
-  var elLayers = document.createElement("ul");
-  var elContainer = document.createElement("div");
-  elLayers.classList.add("list-group");
+  //var elLayers = cEl("ul");
+  var elContainer = cEl("div");
+  //elLayers.classList.add("list-group");
   elContainer.classList.add("mx-popup-container");
   elContainer.classList.add("mx-scroll-styled");
 
@@ -4005,15 +3989,29 @@ export function featuresToHtml(o){
 
   for(var l in layers){
     var lay = layers[l];
-    var elLayer = document.createElement("div");
-    elLayer.classList.add("mx-layer-group");
+    var elLayer = cEl("div");
+    var elProps = cEl("div");
+    var elTitle = cEl("label");
+    elLayer.className = "mx-prop-group";
     elLayer.dataset.l=l;
-    var elProps = document.createElement("div");
-    var title = getTitle(l);
+    elTitle.innerText = getTitle(l);
+    elLayer.appendChild(elTitle);
 
     for(var p in lay){
-      var values = lay[p];
-      var elValues = document.createElement("div");
+      
+      var values = mx.helpers.getArrayStat({
+         stat:"sortNatural",
+         arr: lay[p]
+      });
+
+
+      var elProp = cEl("div");
+      var elPropContent = cEl("div");
+      var elPropTitle = cEl("h4");
+      elProp.classList.add("mx-prop-read-more");
+      elPropTitle.innerText = p;
+      elPropContent.appendChild(elPropTitle);
+
       for(var i=0, iL=values.length; i<iL; i++){
         var v = values[i];
 
@@ -4025,37 +4023,32 @@ export function featuresToHtml(o){
             p:p,
             v:v
           },
-          checked:false
+          labelBoxed : true,
+          checked : false
         });
 
-        elValues.appendChild(elValue); 
+        elPropContent.appendChild(elValue); 
       }
-      elProps.appendChild(
-        mx.helpers.uiFold({
-          content:elValues,
-          label:p,
-          open:false
-        })
-      );
+      elProp.appendChild(elPropContent);
+      elProps.appendChild(elProp);  
       elLayer.appendChild(elProps);
     }
-
-    elLayers.appendChild(
-      mx.helpers.uiFold({
-        content:elLayer,
-        label:title,
-        open:false,
-        onChange:updatePopup
-      })
-    );   
-
+    
+    elContainer.appendChild(elLayer);
   }
 
-  elContainer.appendChild(elLayers);
-  /*
-   * Update popup content
-   */
-  popup.setDOMContent(elContainer);
+  var uiBuilt = new Promise(function(resolve,reject){
+    popup.setDOMContent(elContainer);
+    resolve(elContainer);
+  });
+
+  uiBuilt.then(function(elContainer){ 
+    mx.helpers.uiReadMore(".mx-prop-read-more",{
+     maxHeightClosed : 100,
+     selectorParent : elContainer,
+     boxedContent : true
+    });
+  });
 }
 
 

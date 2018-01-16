@@ -24,6 +24,10 @@ html.shiny-busy .mx-loader-container {
   opacity : 1;
 }
 
+html:not(.shiny-busy) .mx-loader-spinner {
+  display:none;
+}
+
 .mx-loader-spinner-container {    
     width: 200px;
     height: 200px;
@@ -33,10 +37,10 @@ html.shiny-busy .mx-loader-container {
 
 @keyframes mx-loader-spinner {
   0% {
-    transform: rotate(0)
+    transform: translate3d(0, 0, 0) rotate(0);
   }
   100% {
-    transform: rotate(360deg)
+    transform: translate3d(0, 0, 0) rotate(360deg);
   }
 }
 
@@ -50,6 +54,7 @@ html.shiny-busy .mx-loader-container {
   border: 20px solid #fff;
   border-color: #fff transparent transparent transparent;
   animation: mx-loader-spinner 1.5s cubic-bezier(0.5,0,0.5,1) infinite;
+  will-change: transform;
 }
 
 .mx-loader-spinner > div:nth-child(2) {

@@ -91,6 +91,32 @@ export function getUrlParameter( name )
 
 
 /**
+* Flash an icon
+* @param {String} icon fontawesome name
+*/
+export function iconFlash(icon) {
+  icon = icon || "cog";
+  var elContainer = document.createElement("div");
+  var elIcon = document.createElement("i");
+
+  elContainer.classList.add("mx-flash");
+  elIcon.className = "fa fa-" + icon;
+  elContainer.appendChild(elIcon);
+
+  document.body.appendChild(elContainer);
+
+  setTimeout(function() {
+    elIcon.classList.add("active");
+  }, 0);
+
+  setTimeout(function() {
+    elContainer.remove();
+  }, 1000);
+
+}
+
+
+/**
 * Fill with zeros
 * @param {Number} n Number
 * @param {Number} p Number of digit
@@ -104,22 +130,24 @@ export function paddy(n, p, c) {
 }
 
 
+var nf = window.requestAnimationFrame ||
+  window.webkitRequestAnimationFrame ||
+  window.mozRequestAnimationFrame ||
+  window.msRequestAnimationFrame ||
+  window.oRequestAnimationFrame ||
+  function(callback) {
+    window.setTimeout(callback, 1000 / 60);
+  };
 
 /**
  * Do something on next frame
  * @param {Function} cb Callback function to execute on next animation frame
  */
-export function onNextFrame(cb) { 
-  var nf = window.requestAnimationFrame ||
-    window.webkitRequestAnimationFrame ||
-    window.mozRequestAnimationFrame ||
-    window.msRequestAnimationFrame ||
-    window.oRequestAnimationFrame ||
-    function(callback) {
-      window.setTimeout(callback, 1000 / 60);
-    };
-  return nf(cb);
+export function onNextFrame(cb){
+    nf(cb);
 }
+
+
 
 /**
  * Get the correct css transform function
@@ -151,13 +179,11 @@ export function cssTransformFun(){
 
 export function uiToggleBtn(o){
   var label = o.label || "";
-  //var onCheckedTrue = o.onCheckedTrue || function(){};
-  //var onCheckedFalse = o.onCheckedFalse || function(){};
   var onChange = o.onChange || function(e,el){};
   var data = o.data || {};
   var checked = o.checked || false;
   var classToggle = "check-toggle";
-  var classLabel = "btn btn-default btn-xs check-toggle-label";
+  var classLabel = "check-toggle-label " + (o.labelBoxed ? "check-toggle-label-boxed":"");
   var classInput = "check-toggle-input"; 
   var id =  makeId();
   var elContainer = document.createElement("div");
@@ -187,6 +213,140 @@ export function uiToggleBtn(o){
 
   return elContainer;
 
+}
+
+
+
+
+
+/**
+* Add a read more button under a div that is too high.
+* @param {Element|Selector} selector Select div to update or set content
+* @param {Object} options Options
+* @param {String|Element} options.content. Optional content to update the container with.
+* @param {String|Element} options.selectorParent. Selector of parent. default = document.
+* @param {Number} options.maxHeightClosed Maximum height when closed : if more, add the readmore div and hide the remaining
+* @param {Number} options.maxHeightOpened Maximum height when opened : if more, add a scrollbar
+* @param {Boolean} options.boxedContent Add a box around content
+*/
+export function uiReadMore(selector, options) {
+  options = options || {};
+
+  var selectorParent = options.selectorParent;
+  var elParent = selectorParent ? selectorParent instanceof Node ? selectorParent : document.querySelector(selectorParent) : document;
+  var elContainers = selector instanceof Node ? [selector] : elParent.querySelectorAll(selector);
+  var  cEl = function(x) {
+    return document.createElement(x);
+  };
+
+  var sty,pad;
+  /**
+   * Iterate through all readmore divs
+   */
+  for (var i=0, iL = elContainers.length; i < iL; i++) {
+
+
+    /* 
+     * Set default divs and variables
+     */
+    var elContainer = elContainers[i];
+    var rect,
+      id = Math.random().toString(36),
+      elReadMore = cEl("div"),
+      elCheckbox = cEl("input"),
+      elContent = cEl("div"),
+      elLabelMore = cEl("label"),
+      elLabelCaret = cEl("div");
+
+    /**
+     * Set content
+     */
+    if ( ! options.content) {
+      /**
+       * Default. Use first child.
+       */
+      elContent = elContainer.querySelector("*");
+      /* if null, maybe a test content / text node outside 
+       * a div was found: extract innerHTML, remove it from container.
+       */
+      if(!elContent){
+        elContent = cEl("div");
+        elContent.innerHTML = elContainer.innerHTML;
+        elContainer.innerHTML="";
+      }
+
+    } else {
+      /**
+       * If content is given as a node or as text, 
+       * set elContent
+       */
+      if (options.content instanceof Node) {
+        elContent = options.content;
+      } else {
+        elContent.innerHTML = options.content;
+      }
+    }
+
+
+    /**
+     * If no content found or is already readmore, skip it
+     */
+    if(!elContent || elContent.classList.contains("readmore") || elContent.childElementCount === 0){
+      console.log("skip");
+    }else{
+      /**
+       * Set elements attributes
+       */
+      elReadMore.className = "readmore";
+      elCheckbox.className = "readmore-check";
+      elContent.className = "readmore-content";
+      if(options.boxedContent){
+        elContent.classList.add("readmore-content-boxed");
+      }
+      elLabelMore.className = "readmore-label";
+      elLabelCaret.className = "readmore-label-caret fa fa-chevron-down";
+
+      elCheckbox.id = id;
+      elCheckbox.setAttribute("type", "checkbox");
+      elCheckbox.setAttribute("role", "button");
+      elLabelMore.setAttribute("for", id);
+
+      elReadMore.appendChild(elContent);
+      elContainer.appendChild(elReadMore);
+      /**
+       * As the div is rendered, we can extract 
+       * the client rect values.
+       */
+      rect = elReadMore.getBoundingClientRect();
+      sty  = window.getComputedStyle(elReadMore);
+      pad = parseFloat(sty.paddingTop) + parseFloat(sty.paddingBottom);
+      /**
+       * When the displayed height is higher than
+       * the maximum allowed, add the read more div
+       * else, keep it without the toggle.
+       */
+
+      if ( (rect.height - pad ) > options.maxHeightClosed) {
+        /**
+         * The max height of the container (elReadMore) is set to create
+         * a starting point for the animation, as the content (elContent)
+         * inherit max-height.
+         */
+
+        elReadMore.style.maxHeight = options.maxHeightOpened ? options.maxHeightOpened + "px" : (rect.height+pad) + "px";
+        elLabelMore.appendChild(elLabelCaret);
+        elContent.style.maxHeight = options.maxHeightClosed + "px";
+        elReadMore.insertBefore(elCheckbox, elContent);
+        elReadMore.insertBefore(elLabelMore, elContent);
+
+     
+      }
+      
+      if ( options.maxHeightOpened && isFinite(options.maxHeightOpened ) && rect.height > options.maxHeightOpened ){
+          elContent.style.overflow = "auto";
+      }
+    }
+  }
 }
 
 
@@ -497,8 +657,10 @@ export function getDistinctIndexWords(view){
  * @param {Object} o options
  * @param {String} o.type set/get
  * @param {String} o.url url to use
+ * @param {Object} o.data data to send
  * @param {Function} o.onSuccess Function to call on success
  * @param {Function} o.onError Function to call on error
+ * @param {Function} o.onTimeout Function to call on time out (o.maxWait);
  * @param {Function} o.beforeSend Function to call before sending ajax
  * @param {Boolean} o.useCache Use browser cache. Default is true, except for localhost
  * @param {integer} o.maxWait Maximum wainting time. Default = 5000 ms
@@ -506,35 +668,51 @@ export function getDistinctIndexWords(view){
 export function sendAjax(o) {
   var time = new Date().getTime() + "";
   var timeStr = ( o.url.indexOf("?") > 0 ) ? "&time="+time:"?time="+time;
-  var xhr = new XMLHttpRequest();
+  o.xhr = new XMLHttpRequest();
   o.type = o.type ? o.type : "get";
-  o.maxWait = o.maxWait ? o.maxWait : 5000; // in ms
+  o.maxWait = o.maxWait ? o.maxWait : 20000; // in ms
   o.useCache = o.useCache === undefined ? window.location.hostname !== "localhost" : o.useCache;
   o.url = o.useCache ? o.url + timeStr : o.url;
-  o.onError = o.onError ? o.onError : console.log;
+  o.onError = o.onError ? o.onError : function(er){throw new Error(er);};
+  o.onTimeout = o.onTimeout ? o.onTimeout : function(){throw new Error("Send ajax: max wait reached after "+ o.maxWait + "[ms]");};
+
   o.onSuccess = o.onSuccess ? o.onSuccess : console.log;
   o.onComplete = o.onComplete ? o.onComplete : function() {};
   o.beforeSend = o.beforeSend ? o.beforeSend : function() {};
-  o.timer = setTimeout(function() { // if xhr won't finish after timeout-> trigger fail
-    xhr.abort();
-    o.onError();
+  /* Set thet timer  */
+  o.timer = setTimeout(function() {
+    o.xhr.abort();
+    o.onTimeout();
     o.onComplete();
   }, o.maxWait);
-  xhr.open(o.type, o.url);
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === 4) {
+
+  /* open get/post/<method> with provided url */
+  o.xhr.open(o.type, o.url);
+  
+  /* set the on progress function */
+  if( o.onProgress ){
+    o.xhr.upload.addEventListener("progress", function (e) {
+      if (e.lengthComputable) {
+        o.onProgress( e.loaded / e.total );
+      }
+    }); 
+  }
+
+  o.xhr.onreadystatechange = function() {
+    if (o.xhr.readyState === 4) {
       clearTimeout(o.timer);
-      if (xhr.status === 200 || xhr.status === 0) {
-        o.onSuccess(xhr.responseText);
+      if (o.xhr.status === 200 || o.xhr.status === 0) {
+        o.onSuccess(o.xhr.responseText);
         o.onComplete();
       } else {
-        o.onError(xhr.responseText);
+        o.onError(o.xhr.responseText);
         o.onComplete();
       }
     }
   };
-  o.beforeSend(xhr);
-  xhr.send();
+  o.beforeSend(o.xhr);
+  o.xhr.send(o.data);
+  return o;
 }
 
 /**
@@ -565,6 +743,38 @@ export function getCSV(o) {
     useCache: o.useCache
   });
 }
+
+
+
+
+/**
+ * POST data
+ * @param {Object} o options
+ * @param {String} o.url post url
+ * @param {Object} o.data e.g. form data
+ * @param {Function} o.onSuccess Function to call on success
+ * @param {Function} o.onError Function to call on error
+ * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
+ */
+export function sendData(o) {
+  return sendAjax({
+    type: 'post',
+    url: o.url,
+    data : o.data,
+    beforeSend: function(xhr) { },
+    onSuccess: function(res) {
+      if(res){
+        o.onSuccess(JSON.parse(res));
+      }
+    },
+    onError: o.onError,
+    onComplete: o.onComplete,
+    onProgress: o.onProgress,
+    useCache: false
+  });
+}
+
+
 
 /**
  * Get JSON
@@ -1211,24 +1421,31 @@ export function updateSelectizeItems(o){
  * @param {boolean} r.warning Use warning state instead of danger
  */
 export function buttonToggle(r) {
-  if (r.disable === true) {
-    $("#" + r.id)
-      .addClass("btn-danger")
-      .removeClass("btn-default")
-      .removeClass("btn-warning")
-      .attr("disabled", true);
-  } else if (r.warning === true) {
-    $("#" + r.id)
-      .addClass("btn-warning")
-      .removeClass("btn-default")
-      .removeClass("btn-danger")
-      .attr("disabled", false);
-  } else {
-    $("#" + r.id)
-      .addClass("btn-default")
-      .removeClass("btn-danger")
-      .removeClass("btn-warning")
-      .attr("disabled", false);
+
+  var elBtn = document.getElementById(r.id);
+  if(elBtn){
+    var c = elBtn.classList;
+
+    if (r.disable === true) {
+
+      c.add("btn-danger");
+      c.remove("btn-warning");
+      c.remove("btn-default");
+      elBtn.setAttribute("disabled",true);
+
+    } else if (r.warning === true) {
+      c.add("btn-warning");
+      c.remove("btn-danger");
+      c.remove("btn-default");
+      elBtn.removeAttribute("disabled");
+
+    } else {
+      c.add("btn-default");
+      c.remove("btn-danger");
+      c.remove("btn-warning");
+      elBtn.removeAttribute("disabled");
+
+    }
   }
 }
 /**
@@ -1398,51 +1615,61 @@ export function formatByteSize(bytes) {
 * @param {String} o.axis x (left) or y (top) ;
 * @param {Number} o.during Duration in ms for 1000 px
 * @param {String} o.using Easing function name
+* @param {Number} o.timeout Set a timeout before moving. Default to 0;
+* @param {Function} o.emergencyStop Function called during animation. If return true, animation is stoped.
 */
 export function scrollFromTo(o){
 
-  var start, duration, easing, bodyDim;
+  var start,time,percent,stop, duration, easing, bodyDim;
   var diff = o.to - o.from;
   var axis = o.axis || "y";
 
   if( o.using && o.using.constructor ==  Function ){
     easing = o.using;
   }else{
-   easing = easingFun({
-    type : o.using || "easeInOut",
-    power : 2
-  });
- 
-  }
-  
-  if( axis === "y" ) bodyDim = document.body.clientHeight || 800; 
-  if( axis === "x" ) bodyDim = document.body.clientWidth || 800; 
-  if (!diff || diff === 0) return;
-
-  if( Math.abs(diff) > ( bodyDim * 1.5 )){
-    // instant scroll
-    if(axis == "y" ) o.el.scrollTop = o.to;
-    if(axis == "x" ) o.el.scrollLeft = o.to;
-
-  }else{
-    // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
-    duration = (o.during || 1000); 
-    // scroll on next frame
-    onNextFrame(function step(timestamp) {
-      if (!start) start = timestamp;
-      var time = timestamp - start;
-      var percent = Math.min(time / duration, 1);
-      percent = easing(percent);
-
-      if(axis == "y" ) o.el.scrollTop = o.from + diff * percent;
-      if(axis == "x" ) o.el.scrollLeft = o.from + diff * percent;
-
-      if (time < duration) {
-        onNextFrame(step);
-      }
-
+    easing = easingFun({
+      type : o.using || "easeInOut",
+      power : 2
     });
   }
+
+  stop = o.emergencyStop instanceof Function ? o.emergencyStop : null;
+
+  return new Promise(function(resolve,reject){
+    setTimeout(function(){
+      if( axis === "y" ) bodyDim = document.body.clientHeight || 800; 
+      if( axis === "x" ) bodyDim = document.body.clientWidth || 800; 
+      if (!diff || diff === 0){
+        resolve(true);
+
+      } else if ( Math.abs(diff) > ( bodyDim * 1.5 )){
+        // instant scroll
+        if(axis == "y" ) o.el.scrollTop = o.to;
+        if(axis == "x" ) o.el.scrollLeft = o.to;
+
+        resolve(true);
+      }else{
+        // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
+        duration = (o.during || 1000); 
+        // scroll on next frame
+        onNextFrame(function step(timestamp) {
+          if (!start) start = timestamp;
+          
+          time = timestamp - start;
+          percent = easing(Math.min(time / duration, 1));
+          
+          if(axis == "y" ) o.el.scrollTop = o.from + diff * percent;
+          if(axis == "x" ) o.el.scrollLeft = o.from + diff * percent;
+
+          if ( time < duration && !(stop && stop()) ) {
+            onNextFrame(step);
+          }else{
+            resolve(true);
+          }
+        });
+      }
+    },o.timeout||0);
+  });
 }
 
 /**
@@ -1688,6 +1915,35 @@ export function parentFinder(o) {
 
 
 
+/*export function ulSort(selectorUl,selectorSorting){*/
+  //var elUl = selectorUl instanceof Node ? selectorUl : document.querySelector(selectorUl);
+  //var elements = elUl.querySelectorAll("li");
+
+  ////Create our function generator
+  //function sortBy(prop){
+    //return function(a, b){
+      //var filter_a = parseInt( a.style[prop] );
+      //var filter_b = parseInt( b.style[prop] );
+      //return filter_a < filter_b? -1 :
+        //(filter_a > filter_b ? 1 : 0);
+    //};
+  //}
+
+  //function sortDom(filter){
+    ////Transform our nodeList into array and apply sort function
+    //return [].map.call(elements, function(elm){
+      //return elm;
+    //}).sort(sortBy(filter));
+  //}
+
+  ////Sort by left style property
+  //var byLeft = sortDom('left');
+  ////Sort by top style property
+  //var byTop = sortDom('top');
+
+/*}*/
+
+
 /**
  * Handle sort event on list
  * 
@@ -1700,111 +1956,111 @@ export function parentFinder(o) {
  * @param {String} o.classHandle Class for the handle
  * @param {Function} o.callback Function to call after sort
  */
-export function sortable_old(o){
-  var ulRoot;
-  if (o.selector instanceof Node) {
-    ulRoot = o.selector;
-  } else {
-    ulRoot = document.querySelector(o.selector);
-  }
-  var body = document.querySelector("body");
-  var liHandle,
-    liFrom,
-    liTo,
-    liNext,
-    liSet,
-    liGhost,
-    classFrom = "mx-sort-li-item",
-    classHandle = o.classHandle || "mx-sort-li-handle";
+/*export function sortable_old(o){*/
+  //var ulRoot;
+  //if (o.selector instanceof Node) {
+    //ulRoot = o.selector;
+  //} else {
+    //ulRoot = document.querySelector(o.selector);
+  //}
+  //var body = document.querySelector("body");
+  //var liHandle,
+    //liFrom,
+    //liTo,
+    //liNext,
+    //liSet,
+    //liGhost,
+    //classFrom = "mx-sort-li-item",
+    //classHandle = o.classHandle || "mx-sort-li-handle";
 
-  function setPos(el, l, t) {
-    l = l + "px";
-    t = t + "px";
-    el.style.left = l;
-    el.style.top = t;
-  }
-
-
-  function areTouching(a, b) {
-    var rectA = a.getBoundingClientRect();
-    var rectB = b.getBoundingClientRect();
-    var overlaps =
-      rectA.top < rectB.bottom &&
-      rectA.bottom > rectB.top &&
-      rectA.right > rectB.left &&
-      rectA.left < rectB.right;
-    return overlaps;
-  }
+  //function setPos(el, l, t) {
+    //l = l + "px";
+    //t = t + "px";
+    //el.style.left = l;
+    //el.style.top = t;
+  //}
 
 
-  function isValidHandle(el) {
-    return el.classList.contains(classHandle);
-  }
-  function isValidLi(el) {
-    return el.classList.contains(classFrom);
-  }
+  //function areTouching(a, b) {
+    //var rectA = a.getBoundingClientRect();
+    //var rectB = b.getBoundingClientRect();
+    //var overlaps =
+      //rectA.top < rectB.bottom &&
+      //rectA.bottom > rectB.top &&
+      //rectA.right > rectB.left &&
+      //rectA.left < rectB.right;
+    //return overlaps;
+  //}
+
+
+  //function isValidHandle(el) {
+    //return el.classList.contains(classHandle);
+  //}
+  //function isValidLi(el) {
+    //return el.classList.contains(classFrom);
+  //}
   /**
    * mouse move
    */
-  function onMouseMove(e) {
+  //function onMouseMove(e) {
 
-    liTo = e.target;
-    setPos(liGhost, e.clientX, e.clientY);
+    //liTo = e.target;
+    //setPos(liGhost, e.clientX, e.clientY);
 
-    if (isValidLi(liTo)) {
-      e.preventDefault();
-      var rect = liTo.getBoundingClientRect();
-      liNext = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-      liSet = liNext && liTo.nextSibling || liTo;
-      ulRoot.insertBefore(liFrom, liSet);
-    }
+    //if (isValidLi(liTo)) {
+      //e.preventDefault();
+      //var rect = liTo.getBoundingClientRect();
+      //liNext = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+      //liSet = liNext && liTo.nextSibling || liTo;
+      //ulRoot.insertBefore(liFrom, liSet);
+    //}
 
-    if (!areTouching(liGhost, body)) {
-      onMouseUp(e);
-    }
+    //if (!areTouching(liGhost, body)) {
+      //onMouseUp(e);
+    //}
 
-  }
+  //}
 
   /*
    * mouse up 
    */
-  function onMouseUp(e) {
-    e.preventDefault();
-    liFrom.classList.remove("mx-sort-li-dim");
-    liGhost.remove();
-    o.callback();
-    window.removeEventListener('mousemove', onMouseMove, false);
-    window.removeEventListener('mouseup', onMouseUp, false);
-  }
+  //function onMouseUp(e) {
+    //e.preventDefault();
+    //liFrom.classList.remove("mx-sort-li-dim");
+    //liGhost.remove();
+    //o.callback();
+    //window.removeEventListener('mousemove', onMouseMove, false);
+    //window.removeEventListener('mouseup', onMouseUp, false);
+  //}
 
   /**
    * mouse down
    */
-  function onMouseDown(e) {
-    var elHandle = e.target;
-    liFrom = mx.helpers.parentFinder({
-      selector : elHandle,
-      class : classFrom
-    });
+  //function onMouseDown(e) {
+    //var elHandle = e.target;
+    //liFrom = mx.helpers.parentFinder({
+      //selector : elHandle,
+      //class : classFrom
+    //});
 
-    if (isValidHandle(elHandle) && liFrom) {
-      e.preventDefault();
-      liGhost = liFrom.cloneNode(true);
-      var liFromStyle = liGhost.style;
-      var liFromRect = liFrom.getBoundingClientRect();
-      liGhost.classList.add("mx-sort-li-ghost");
-      liFrom.classList.add("mx-sort-li-dim");
-      ulRoot.appendChild(liGhost);
-      onMouseMove(e);
-      window.addEventListener('mousemove', onMouseMove, false);
-      window.addEventListener('mouseup', onMouseUp, false);
-    }
+    //if (isValidHandle(elHandle) && liFrom) {
+      //e.preventDefault();
+      //liGhost = liFrom.cloneNode(true);
+      //var liFromStyle = liGhost.style;
+      //var liFromRect = liFrom.getBoundingClientRect();
+      //liGhost.classList.add("mx-sort-li-ghost");
+      //liFrom.classList.add("mx-sort-li-dim");
+      //ulRoot.appendChild(liGhost);
+      //onMouseMove(e);
+      //window.addEventListener('mousemove', onMouseMove, false);
+      //window.addEventListener('mouseup', onMouseUp, false);
+    //}
 
-  }
+  //}
 
-  ulRoot.addEventListener('mousedown', onMouseDown, false);
+  //ulRoot.addEventListener('mousedown', onMouseDown, false);
 
-}
+/*}*/
 
 /**
  * Set element attributes

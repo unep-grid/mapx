@@ -216,7 +216,11 @@ export function draggable(o) {
       };
 
       o.block = false;
-      o.sumScroll =  sumScrollY(o.el) ;
+      
+      // sumScroll was an attempt to add the scrolled
+      // part to offsetLeft.
+      // not needed anymore ?
+      //o.sumScroll =  sumSrollY(o.el) ;
 
       o.rect = o.el.getBoundingClientRect();
       o.x = o.el.offsetLeft;
@@ -259,7 +263,7 @@ export function draggable(o) {
 }
 
 /**
-* Sum scroll offset for el
+* Cumulative sum of all el parents.
 */
 function sumScrollY(el) {
   var offsetY = 0;

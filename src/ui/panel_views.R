@@ -11,46 +11,21 @@
 viewFilterInput <-  tags$div(
   id="viewsTools",
   tags$input(
-    id = "viewsTextFilter",
-    class="search form-control", 
+    id = "viewsFilterText",
+    class="form-control", 
     type="text",
-    `data-lang_key`="view_search_input",
+    `data-lang_key`="view_filter_input",
     `data-lang_type`="placeholder"
     )
   )
 
-## Filter class by tag
-#viewFilterButton <- tags$div(
-  #class="filters",
-  #id = "viewsClassFilter",
-  #tags$div(
-    #class="check-toggle-group", 
-    #lapply(c(config[[c("views","classes")]]),function(x){
-      #cl_id <- sprintf("cl_%s", x)
-      #tags$div( class="check-toggle",
-        #tags$input(
-          #class="filter check-toggle-input",
-          #type="checkbox",
-          #id = cl_id,
-          #`data-filter`=x
-          #),
-        #tags$label(
-          #class="btn btn-default btn-xs check-toggle-label",
-          #`for`=cl_id,
-          #"data-lang_key"=x
-          #)
-        #)})
-    #)
-  #)
-
 
 # Filter class by tag
 viewFilterButton <- tags$div(
-  class="filters",
-  id = "viewsTagsFilter",
+  id = "viewsFilter",
   tags$div(
     class="check-toggle-group",
-    id = "viewsTagsFilterToggles"
+    id = "viewsFilterContainer"
     )
   )
 
@@ -80,16 +55,16 @@ tags$div(
   id=config[[c("map","idViewsListContainer")]],
   class="mx-views-container", 
   tags$div(class="mx-views-header",
-    viewFilterInput,
-    viewFilterButton
+    viewFilterInput
     ),
   tags$div(
-    class="mx-views-content mx-scroll-styled",
+    class="mx-views-content",
     tags$ul(
       class="mx-views-list"
       )
     ),
-  tags$div(class="mx-views-footer"
+  tags$div(class="mx-views-footer",
+    viewFilterButton
     )
   )
 

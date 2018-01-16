@@ -131,7 +131,11 @@ mxCounter =  function(id,reset=F){
 #' @param collapsed {Boolean} Collapse state of the object
 #' @param language {Character} Two letter code of language for labels
 #' @param languages {Character} Vector of languages code
-#' @param englishRequired {Boolean} Is english (en) a required field ?
+#' @param languagesRequired {Character} Vector of languages code where value isrequired
+#' @param languagesHidden {Character} Vector of languages code where editor is hidden
+#' @param languagesReadOnly {Character} Vector of languages code where editor is visible, but not editable
+#' @param dict {Data.frame} Dictionarry to use
+#' @param options {List} List of option given to the json editor client side
 mxSchemaMultiLingualInput = function(
   format = NULL,
   default = list(),
@@ -142,8 +146,11 @@ mxSchemaMultiLingualInput = function(
   collapsed = TRUE,
   language = "en",
   languages = unlist(config[["languages"]]),
-  englishRequired = TRUE,
-  dict = NULL
+  languagesRequired = c("en"),
+  languagesHidden = c(),
+  languagesReadOnly = c(),
+  dict = NULL,
+  options = list()
   ){
 
   if(noDataCheck(language)){
@@ -164,26 +171,37 @@ mxSchemaMultiLingualInput = function(
 
   prop = lapply(languages,function(x){
 
+    opt = options
     #
     # Required ?
     #
     minLength = 0 
-    if( englishRequired && x=="en" ){
+    if( x %in% languagesRequired ){
      minLength = 1
     }
+
+    #
+    # Hidden ?
+    #
+    opt$readOnly = isTRUE( x %in% languagesReadOnly )
+    opt$hidden = isTRUE( x %in% languagesHidden && !x %in% languagesRequired )
+
     #
     # Output entry
     #
     list(
-      title = sprintf("%1$s (%2$s)",
+      title = sprintf("%1$s (%2$s%3$s)",
         d(keyTitle,lang=x,dict=dict,web=F),
-        d(x,lang=language,dict=dict,web=F)
+        d(x,lang=language,dict=dict,web=F),
+        ifelse(opt$readOnly,", read only","")
         ),
       type = type,
       format = format,
+      options = opt,
       minLength = minLength,
-      default = .get(default,x,default="")
+      default = .get(default,c(x),default="")
       )
+  
   })
   names(prop) <- languages
   list(
