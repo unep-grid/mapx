@@ -978,6 +978,7 @@ blockquote {
 
 .check-toggle {
   display:inline-block;
+  float : right;
 }
 
 .check-toggle .check-toggle-label {

@@ -1093,6 +1093,7 @@ export function storyController(o){
       enabled : true,
       map : mx.maps[o.id].map,
       views : oldViews,
+      setWrapperLayout : function(o){},
       position : mx.helpers.getMapPos(o),
       currentStep : 0,
       hasAerial : mx.helpers.btnToggleLayer({
