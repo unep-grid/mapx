@@ -354,11 +354,18 @@ config[[c("data","format")]] <- list(
     multiple = FALSE
     ),
   list(
-    name = "PDF",
+    name = "GPKG",
     type = "vector",
-    fileExt = c(".pdf"),
-    multiple = FALSE
+    fileExt = c(".gpkg"),
+    multiple= FALSE
     )
+ #  list(
+    #name = "PDF",
+    #type = "vector",
+    #fileExt = c(".pdf"),
+    #multiple = FALSE
+    #),
+ 
   #
   # GPX does not support multipolygon
   #
