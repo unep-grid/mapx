@@ -220,6 +220,7 @@ function initEditing(o){
       var elBtnModalPreview = document.getElementById("btnViewPreviewStory");
       var elBtnModalSave = document.getElementById("btnViewSaveStory");
       var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
+      var elModalEditView = document.getElementById("modalViewEdit");
       /**
        * Set a remove function for custom buttons
        */      
@@ -245,6 +246,7 @@ function initEditing(o){
         elBtnModalSave.setAttribute("disabled",true);
         elBtnModalPreview.setAttribute("disabled",true);
         elBtnStoryClose.setAttribute("disabled",true);
+        elModalEditView.classList.add("mx-hide");
         /* If jed has an story editor, disable it during edition */
         if(jed.editors.storyEdit){
           jed.editors.storyEdit.disable();
@@ -259,7 +261,7 @@ function initEditing(o){
 
         elBtnModalSave.removeAttribute("disabled");
         elBtnModalPreview.removeAttribute("disabled");
-
+        elModalEditView.classList.remove("mx-hide");
         elBtnStoryClose.removeAttribute("disabled");
         if(jed.editors.storyEdit){
           jed.editors.storyEdit.enable();
@@ -275,6 +277,7 @@ function initEditing(o){
         elBtnModalSave.removeAttribute("disabled");
         elBtnModalPreview.removeAttribute("disabled");
         elBtnStoryClose.removeAttribute("disabled");
+        elModalEditView.classList.remove("mx-hide");
         // Check that something changed
         regions = ev.detail().regions;
         if(jed.editors.storyEdit){
