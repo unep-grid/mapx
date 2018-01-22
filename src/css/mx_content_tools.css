@@ -27,6 +27,44 @@
   margin-left: 0.5em;
 }
 
+[data-editable] .absolute-top {
+  position:absolute;
+  top:0px;
+}
+[data-editable] .absolute-left {
+  position:absolute;
+  left:0px;
+}
+[data-editable] .absolute-right {
+  position:absolute;
+  right:0px;
+}
+[data-editable] .absolute-bottom {
+  position:absolute;
+  bottom:0px;
+}
+[data-editable] .absolute-50-top {
+  position:absolute;
+  top:50%;
+}
+[data-editable] .absolute-50-left {
+  position:absolute;
+  left:50%;
+}
+[data-editable] .absolute-50-right {
+  position:absolute;
+  right:50%;
+}
+[data-editable] .absolute-50-bottom {
+  position:absolute;
+  bottom:50%;
+}
+[data-editable] .block-center {
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 /* Alignment styles for text in editable regions */
 [data-editable] .text-center {
   text-align: center;

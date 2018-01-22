@@ -192,8 +192,18 @@ function initEditing(o){
         new ContentTools.Style('Table striped', 'table-striped', ['table']),
         new ContentTools.Style('Table hover', 'table-hover', ['table']),
         /* custom mapx classes */
-        new ContentTools.Style('Image cover', 'mx-image-cover', ['img'])
-
+        new ContentTools.Style('Image cover', 'mx-image-cover', ['img']),
+        new ContentTools.Style('Align right', 'align-right', ['img']),
+        new ContentTools.Style('Align left', 'align-left',['img']),
+        new ContentTools.Style('Center', 'block-center',['img']),
+        new ContentTools.Style('Absolute top', 'absolute-top',['img']),
+        new ContentTools.Style('Absolute left', 'absolute-left',['img']),
+        new ContentTools.Style('Absolute right', 'absolute-right',['img']),
+        new ContentTools.Style('Absolute bottom', 'absolute-bottom',['img']),
+        new ContentTools.Style('Absolute 50% top', 'absolute-50-top',['img']),
+        new ContentTools.Style('Absolute 50% left', 'absolute-50-left',['img']),
+        new ContentTools.Style('Absolute 50% right', 'absolute-50-right',['img']),
+        new ContentTools.Style('Absolute 50% bottom', 'absolute-50-bottom',['img'])
       ]);
       ContentTools._init = true;
     }
