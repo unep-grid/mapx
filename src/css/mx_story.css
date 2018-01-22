@@ -197,18 +197,18 @@
   text-align: right;
 }
 .mx-story-slide.mx-story-full {
-  height: 100vh;
+  height: 100%;
   padding-left: 20%;
   padding-right: 20%;
 }
 .mx-story-slide.mx-story-half-bottom {
   bottom: 0px;
-  height: 50vh;
-  margin-top: 50vh;
+  height: 50%;
+  margin-top: 50%;
 }
 .mx-story-slide.mx-story-half-top {
   bottom: 0px;
-  height: 50vh;
+  height: 50%;
   top: 0px;
 }
 .mx-story-slide.mx-story-half-left {
