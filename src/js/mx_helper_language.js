@@ -286,7 +286,7 @@ export function updateLanguageViewsList(o){
     callback : function(el){
        var id = el.dataset.view_id;
        var v = views.find(function(v){ return v.id == id ; });
-       var elTitle = el.querySelector(".mx-view-item-title");
+       var elTitle = el.querySelector(".mx-view-tgl-title");
        var elText = el.querySelector(".mx-view-item-desc");
        var elLegend = el.querySelector(".mx-view-item-legend");
 
@@ -294,6 +294,7 @@ export function updateLanguageViewsList(o){
         elLegend.innerHTML = mx.templates.viewListLegend(v);
       }
 
+      console.log(elTitle);
       if(elTitle){
         elTitle.innerHTML = mx.helpers.getLabelFromObjectPath({
           lang : lang,

@@ -220,7 +220,7 @@ export function draggable(o) {
       // sumScroll was an attempt to add the scrolled
       // part to offsetLeft.
       // not needed anymore ?
-      //o.sumScroll =  sumSrollY(o.el) ;
+      o.sumScroll =  sumScrollY(o.el) ;
 
       o.rect = o.el.getBoundingClientRect();
       o.x = o.el.offsetLeft;

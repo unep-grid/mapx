@@ -113,9 +113,9 @@ export function initMapx(o){
     mx.settings.language = o.language = o.language || o.languages[0];
     mx.settings.vtPort = o.vtPort = o.vtPort || "";
     mx.settings.vtUrlBase =  o.vtUrl = location.protocol +"//"+ location.hostname + mx.settings.vtPort ;
-    mx.settings.vtUrl = mx.settings.vtUrlBase + "/tile/{z}/{x}/{y}.mvt";
-    mx.settings.vtUrlViews = mx.settings.vtUrlBase + "/view/";
-    mx.settings.vtUrlUploadImage = mx.settings.vtUrlBase + "/upload/image/";
+    mx.settings.vtUrl = mx.settings.vtUrlBase + "/vt/tile/{z}/{x}/{y}.mvt";
+    mx.settings.vtUrlViews = mx.settings.vtUrlBase + "/vt/view/";
+    mx.settings.vtUrlUploadImage = mx.settings.vtUrlBase + "/vt/upload/image/";
 
     // set path using current location. 
 
