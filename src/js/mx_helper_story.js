@@ -30,12 +30,9 @@ export function storyRead(o){
   }
 
   /* close last story, stored in mx.data. */
-  if(o.close){
-    var close = mx.helpers.path(mx.data,"story.store.close");
-    if(close instanceof Function){
-      close();
-    }
-    return;
+  var close = mx.helpers.path(mx.data,"story.store.close");
+  if(close instanceof Function){
+    close();
   }
 
   /**
@@ -59,8 +56,6 @@ export function storyRead(o){
 
       /* display story controls */
       mx.helpers.storyController(o);
-
-
 
       /* Save data object */
       mx.data.story = o;
@@ -89,7 +84,7 @@ export function storyRead(o){
 
       /* Listen to scroll on the main container. */
       storyOnScroll({
-        selector: "#story",
+        selector: ".mx-story",
         callback: mx.helpers.storyUpdateSlides,
         view: o.view,
         store : o.store,
@@ -138,33 +133,36 @@ function initKeydownListener(o){
 */
 function initAdaptiveScreen(o){
 
-  var classBase = "mx-story-screen"; 
-  var classWrapper = "mx-wrapper";
-  var classWrapperStory = o.store.classWrapper;
-  o.store.elWrapper = document.querySelector("." + classWrapper);
+  //var classBase = "mx-story-screen"; 
+  //var classWrapper = "mx-wrapper";
+  var classWrapper = o.store.classWrapper;
+  //o.store.elWrapper = document.querySelector("." + classWrapper);
+  o.store.elStory = document.querySelector("." + o.classContainer);
+  o.store.elMap = o.store.map.getContainer();
+  
+  o.store.elStory.classList.add(o.store.classWrapper);
+  o.store.rectStory = o.store.elStory.getBoundingClientRect();
+  o.store.classMap = o.store.elMap.className;
+  o.store.styleMap = o.store.elMap.style;
 
-  var mapCanvas = o.store.map.getCanvas();
-  o.store.elWrapper.classList.add(classWrapperStory);
-  o.store.elWrapper.classList.add(classBase);
-  o.store.classesWrapper = [classWrapperStory,classBase];
-  mapCanvas.style.position = "relative";
-  o.store.elWrapper.style.transform = "";
-  o.store.map.resize();
-
-  var elWrapperRect = o.store.elWrapper.getBoundingClientRect();
-  var elWrapperHeight = elWrapperRect.height;
-  var elWrapperWidth = elWrapperRect.width;
-
+  o.store.elMap.classList.add(o.classContainer);
+  o.store.elMap.classList.add(o.store.classWrapper);
+  
+   
   o.store.setWrapperLayout =  function(o) {
 
     var w, h, scale, origin;
     var scaleWrapper = Math.min(
-      window.innerWidth / elWrapperWidth,
-      window.innerHeight / elWrapperHeight
+      window.innerWidth / o.store.rectStory.width,
+      window.innerHeight / o.store.rectStory.height
     );
     o.store.scaleWrapper = scaleWrapper;
-    o.store.elWrapper.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) " + "scale(" + scaleWrapper + ")";
-
+    o.store.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
+    o.store.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
+    o.store.elMap.style.height = o.store.rectStory.height * scaleWrapper;
+    o.store.elMap.style.width = o.store.rectStory.width * scaleWrapper;
+    o.store.elMap.style[mx.helpers.cssTransform] =  "translate(-50%,-50%)";
+    o.store.map.resize();
   };
 
 }
@@ -627,7 +625,7 @@ function setScrollData(o){
   data.trigger = rectElScroll.height * 0.5;
   data.distTop = -1;
   data.distStart = elScroll.dataset.start_scroll;
-  data.scrollFun  = mx.helpers.cssTransformFun();
+  data.scrollFun  = mx.helpers.cssTransform;
 
 }
 
@@ -699,7 +697,7 @@ function setStepConfig(o){
   var data = o.onScrollData;
   var bullet, bullets, config, rect, slides, step, steps, stepName;
   var slideConfig;
-  
+
   /*
    * Set bullet 
    */
@@ -708,86 +706,91 @@ function setStepConfig(o){
     mx.helpers.storyGoTo(dest);
   }
 
+  /*
+   * Steps configuration
+   */
+
+  data.stepsConfig = [];
+  steps = data.elScroll.querySelectorAll(".mx-story-step");
+  bullets = document.createElement("div");
+  bullets.classList.add("mx-story-step-bullets");
+  bullets.classList.add("noselect");
+
+  o.store.elBullets = bullets;
+  o.store.elMap.appendChild(bullets);
+
+  //data.elScroll.appendChild(bullets);
+
+  for (var s = 0; s < steps.length; s++) {
+
     /*
-     * Steps configuration
+     * config init
      */
+    config = {};
+    step = steps[s];
+    stepName = step.dataset.step_name;
+    rect = step.getBoundingClientRect();
+    slides = step.querySelectorAll(".mx-story-slide");
+    config.slides = slides;
+    config.slidesConfig = [];
 
-    data.stepsConfig = [];
-    steps = data.elScroll.querySelectorAll(".mx-story-step");
-    bullets = document.createElement("div");
-    bullets.classList.add("mx-story-step-bullets");
-    data.elScroll.appendChild(bullets);
+    /*
+     * Save step dimensions
+     */
+    config.end = (s+1)*rect.height;
+    config.start = config.end - rect.height;
+    config.startUnscaled = config.start * (1 / data.scaleWrapper);
+    config.height = rect.height;
+    config.width = rect.width;
 
-    for (var s = 0; s < steps.length; s++) {
+    /*
+     * Bullets init
+     */
+    bullet = document.createElement("div");
+    bullet.classList.add("mx-story-step-bullet");
+    bullet.dataset.to = config.startUnscaled;
+    bullet.dataset.step = s;
+    bullet.innerHTML = s+1;
+    bullet.classList.add("hint--top");
+    bullet.setAttribute("aria-label", stepName ? stepName : "Step " + (s+1) );
+    bullets.appendChild(bullet);
+    bullet.onclick = bulletScrollTo;
+    config.bullet = bullet;
 
-      /*
-       * config init
-       */
-      config = {};
-      step = steps[s];
-      stepName = step.dataset.step_name;
-      rect = step.getBoundingClientRect();
-      slides = step.querySelectorAll(".mx-story-slide");
-      config.slides = slides;
-      config.slidesConfig = [];
+    if (s === 0){
+      bullet
+        .classList
+        .add("mx-story-step-active");
+    }
 
-      /*
-       * Save step dimensions
-       */
-      config.end = (s+1)*rect.height;
-      config.start = config.end - rect.height;
-      config.startUnscaled = config.start * (1 / data.scaleWrapper);
-      config.height = rect.height;
-      config.width = rect.width;
-
-      /*
-       * Bullets init
-       */
-      bullet = document.createElement("div");
-      bullet.classList.add("mx-story-step-bullet");
-      bullet.dataset.to = config.startUnscaled;
-      bullet.dataset.step = s;
-      bullet.innerHTML = s+1;
-      bullet.classList.add("hint--top");
-      bullet.setAttribute("aria-label","Go to step " + (s+1) + ": " + stepName );
-      bullets.appendChild(bullet);
-      bullet.onclick = bulletScrollTo;
-      config.bullet = bullet;
-
-      if (s === 0){
-        bullet
-          .classList
-          .add("mx-story-step-active");
-      }
-
-      /*
-       * Evaluate slides and save in config
-       */
-      for (var l = 0; l < slides.length; l++) {
-         slideConfig = JSON.parse(
-          slides[l]
-            .dataset
-            .slide_config || '[]'
-        );
-        config.slidesConfig.push(slideConfig);
-
-      }
-
-      data.stepsConfig.push(config);
+    /*
+     * Evaluate slides and save in config
+     */
+    for (var l = 0; l < slides.length; l++) {
+      slideConfig = JSON.parse(
+        slides[l]
+          .dataset
+          .slide_config || '[]'
+      );
+      config.slidesConfig.push(slideConfig);
 
     }
-    
-    /*
-    * Save steps config
-    */
-   o.store.stepsConfig = data.stepsConfig;
 
-    /**
-     * Set initial scroll position
-     */
-   if(o.onScrollData.distStart){
-      data.elScroll.scrollTop = o.onScrollData.distStart*1;
-    }
+    data.stepsConfig.push(config);
+
+  }
+
+  /*
+   * Save steps config
+   */
+  o.store.stepsConfig = data.stepsConfig;
+
+  /**
+   * Set initial scroll position
+   */
+  if(o.onScrollData.distStart){
+    data.elScroll.scrollTop = o.onScrollData.distStart*1;
+  }
 
 }
 
@@ -1214,18 +1217,27 @@ export function storyController(o){
         });
       }
 
-      /**
-       * Remove classes added to wrapper
-       */
-      if( o.store.classesWrapper instanceof Array ){
-
-        o.store.classesWrapper.forEach(function(c){
-          o.store.elWrapper.classList.remove(c);    
-        });
-
-        o.store.elWrapper.style.transform = null;
-        o.store.map.resize();
+      if( o.store.elBullets ){
+        o.store.elBullets.remove();
       }
+
+      if( o.store.elScroll ){
+        o.store.elScroll.remove();
+      }
+
+      if( o.store.elStory ){
+        o.store.elStory.remove();
+      }
+      
+      if( o.store.styleMap ){
+        o.store.elMap.style = o.store.styleMap;
+      }
+      if( o.store.classMap ){
+        o.store.elMap.className = o.store.classMap;
+      }
+
+      o.store.map.resize();
+
       /**
        * clean data storage
        */
@@ -1294,10 +1306,10 @@ export function storyBuild(o){
   o.classStory =  o.classStory || "mx-story";
   o.classStep = o.classStep || "mx-story-step";
   o.classSlide = o.classSlide || "mx-story-slide";
-  o.classWrapper = o.classWrapper || "mx-wrapper";
+  //o.classWrapper = o.classWrapper || "mx-wrapper";
   o.classSlideBack = o.classSlideBack || "mx-story-slide-back";
   o.classSlideFront = o.classSlideFront || "mx-story-slide-front";
-  o.classContainer = o.classContainer || "mx-story-container";
+  o.classContainer = o.classContainer || "mx-story-layout";
   o.colors = o.colors || {};
   o.sizes = o.sizes || {};
   o.sizes.text = o.sizes.text || 40;
@@ -1314,6 +1326,7 @@ export function storyBuild(o){
   var wrapper = doc.querySelector("." + o.classWrapper );
   var divStory = doc.createElement("div");
   var divStoryContainer = doc.createElement("div");
+  var divMap = o.store.map.getContainer();
   //var stepNum = 0;
 
  /* remove old story if exists. */
@@ -1337,6 +1350,7 @@ export function storyBuild(o){
     if(!step.slides) return ;
     var slides = step.slides ;
     var divStep = doc.createElement("div");
+    divStep.dataset.step_name = step.name;
     divStep.classList.add(o.classStep);
 
     slides.forEach(function(slide,slideNum){
@@ -1380,7 +1394,7 @@ export function storyBuild(o){
   * Finish building by adding container  to wrapper.
   */
   divStoryContainer.appendChild(divStory);
-  wrapper.appendChild(divStoryContainer);
+  divMap.appendChild(divStoryContainer);
 }
 
 /*

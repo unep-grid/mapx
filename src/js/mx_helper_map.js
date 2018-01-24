@@ -43,8 +43,8 @@ export function initMapx(o){
   Promise.all([
     System.import("mapbox-gl/dist/mapbox-gl"),
     System.import("localforage"),
-    System.import("../data/style_mapx.json"),
-    //System.import("../data/style_simple.json"),
+    //System.import("../data/style_mapx.json"),
+    System.import("../data/style_simple.json"),
     System.import("../built/view_list.dot"),
     System.import("../built/view_list_legend.dot"),
     System.import("../built/view_list_options.dot")
@@ -245,6 +245,23 @@ export function initMapx(o){
       }
       throw new Error(msg);
     });
+
+
+    map.resize2 = function (){
+      var dim = [];
+      var elContainer = this._container;
+      var rect = elContainer.getBoundingClientRect();
+      var w = rect.width;
+      var h = rect.height;
+      this.transform.resize(w,h);
+      this.painter.resize(w,h);
+    };
+  /*  map._containerDimensions = function (){*/
+      //var dim = [];
+      //var elContainer = this._container;
+      //var rect = elContainer.getBoundingClientRect();
+      //return [rect.width,rect.height];
+    /*};*/
 
     /**
     * Mouse move handling

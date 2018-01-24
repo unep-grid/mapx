@@ -11,8 +11,8 @@ tags$html(
   #
   tags$body(
     class="full-page mx",
-    tags$div(
-      class="mx-wrapper",
+    #tags$div(
+      #class="mx-wrapper",
       # Display something if no js
       mxSource("src/ui/no_js.R"),
       # Display loading spinner
@@ -22,5 +22,5 @@ tags$html(
       # Map element
       mxSource("src/ui/map.R")
       )
-    )
+    #)
   )

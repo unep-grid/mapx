@@ -23,37 +23,37 @@ body {
 }
 
 h1 {
-  font-size: 1.602em;
+  font-size: 1.602rem;
 }
 
 h2 {
-  font-size: 1.424em;
+  font-size: 1.424rem;
 }
 
 h3 {
-  font-size: 1.266em;
+  font-size: 1.266rem;
 }
 
 h4 {
-  font-size: 1.125em;
+  font-size: 1.125rem;
 }
 
 h5 {
-  font-size: 0.889em;
+  font-size: 0.889rem;
 }
 
 h6 {
-  font-size: 0.79em;
+  font-size: 0.79rem;
 }
 
 p {
-  font-size: 1em;
+  font-size: 1rem;
 }
 label {
-  font-size: 1.2em;
+  font-size: 1.2rem;
 }
 blockquote {
-  font-size: 1.1em;
+  font-size: 1.1rem;
 }
 
 
@@ -525,7 +525,7 @@ blockquote {
   overflow:auto;
 }
 
-::-webkit-scrollbar {
+.mx ::-webkit-scrollbar {
   width:4px;
   height:6px;
   border-left:0;
@@ -533,15 +533,15 @@ blockquote {
   background:rgba(0,0,0,0.0);
 }
 
-::-webkit-scrollbar:hover {
+.mx ::-webkit-scrollbar:hover {
   background: rgba(0,0,0,0.1);
 }
 
-::-webkit-scrollbar-track {
+.mx ::-webkit-scrollbar-track {
   background:none;
 }
 
-::-webkit-scrollbar-thumb {
+.mx ::-webkit-scrollbar-thumb {
   background:#ccc;
 }
 

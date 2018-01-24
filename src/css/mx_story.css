@@ -42,24 +42,18 @@
 }
 
 
-.mx-story-container {
-  overflow: auto;
-  max-width: 100%;
-  max-height: 100%;
-  width: 100%;
-  height: 100%;
-  top: 0px;
-  left: 0px;
+.mx-story-layout {
+  overflow: hidden;
+  top: 50%;
+  left: 50%;
   bottom: 0px;
   right: 0px;
   position: absolute;
-  z-index: 2;
 }
 
 .mx-story {
-  /*height: 100%;*/
-  /*overflow-y: auto;*/
-  /*overflow: hidden;*/
+  height: 100%;
+  overflow-x:auto;
 }
 
 
@@ -251,6 +245,7 @@
   display: inline-block;
   margin-top:5px;
   float:left;
+  line-height: 1.3em;
 }
 
 .mx-story-step-bullet.mx-story-step-active ,
@@ -283,4 +278,25 @@
   letter-spacing: 1px;
   text-transform: uppercase;
 }
+
+.mx-story::-webkit-scrollbar {
+  width:0px;
+  height:0px;
+  border-left:0;
+  border-radius:0px;
+  background:rgba(0,0,0,0.0);
+}
+
+.mx-story::-webkit-scrollbar:hover {
+  background: rgba(0,0,0,0.1);
+}
+
+.mx-story::-webkit-scrollbar-track {
+  background:none;
+}
+
+.mx-story::-webkit-scrollbar-thumb {
+  background:#ccc;
+}
+
 

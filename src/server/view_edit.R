@@ -628,7 +628,7 @@ observe({
                   ),
                  actionButton(
                   inputId="btnViewStoryCancel",
-                  label=d("btn_cancel",language),
+                  label=d("btn_close",language),
                   `data-keep` = TRUE
                   )
                 )
@@ -642,7 +642,6 @@ observe({
                   jedOutput(id="storyEdit")
                   ),
                 buttons = btnList,
-                #textCloseButton=d("btn_close",language),
                 removeCloseButton = T
                 )
             },
