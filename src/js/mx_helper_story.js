@@ -30,17 +30,10 @@ export function storyRead(o){
   }
 
   /* close last story, stored in mx.data. */
-  var close = mx.helpers.path(mx.data,"story.store.close");
+  var close = mx.helpers.path(mx.data,"story.data.close");
   if(close instanceof Function){
     close();
   }
-
-  /**
-   * Remvove registered listener
-   */
-  listenerManager(o,{
-    action : 'removeAll'
-  });
 
 
   o.enable = true;
@@ -69,9 +62,9 @@ export function storyRead(o){
       }
 
       /* Alter wrapper class */
-      o.store.classWrapper = mx.helpers.path(o.view,"data.story.settings.class_wrapper");
+      o.data.classWrapper = mx.helpers.path(o.view,"data.story.settings.class_wrapper");
 
-      if( o.store.classWrapper ){
+      if( o.data.classWrapper ){
         initAdaptiveScreen(o);
       }
 
@@ -87,7 +80,7 @@ export function storyRead(o){
         selector: ".mx-story",
         callback: mx.helpers.storyUpdateSlides,
         view: o.view,
-        store : o.store,
+        data : o.data,
         enable : o.enable
       });
 
@@ -135,37 +128,70 @@ function initAdaptiveScreen(o){
 
   //var classBase = "mx-story-screen"; 
   //var classWrapper = "mx-wrapper";
-  var classWrapper = o.store.classWrapper;
-  //o.store.elWrapper = document.querySelector("." + classWrapper);
-  o.store.elStory = document.querySelector("." + o.classContainer);
-  o.store.elMap = o.store.map.getContainer();
+  var classWrapper = o.data.classWrapper;
+  //o.data.elWrapper = document.querySelector("." + classWrapper);
+  o.data.elStory = document.querySelector("." + o.classContainer);
+  o.data.elMap = o.data.map.getContainer();
   
-  o.store.elStory.classList.add(o.store.classWrapper);
-  o.store.rectStory = o.store.elStory.getBoundingClientRect();
-  o.store.classMap = o.store.elMap.className;
-  o.store.styleMap = o.store.elMap.style;
+  o.data.elStory.classList.add(o.data.classWrapper);
+  o.data.rectStory = o.data.elStory.getBoundingClientRect();
+  o.data.classMap = o.data.elMap.className;
+  o.data.styleMap = o.data.elMap.style;
 
-  o.store.elMap.classList.add(o.classContainer);
-  o.store.elMap.classList.add(o.store.classWrapper);
+  o.data.elMap.classList.add(o.classContainer);
+  o.data.elMap.classList.add(o.data.classWrapper);
   
    
-  o.store.setWrapperLayout =  function(o) {
+  o.data.setWrapperLayout =  function(o) {
 
     var w, h, scale, origin;
     var scaleWrapper = Math.min(
-      window.innerWidth / o.store.rectStory.width,
-      window.innerHeight / o.store.rectStory.height
+      window.innerWidth / o.data.rectStory.width,
+      window.innerHeight / o.data.rectStory.height
     );
-    o.store.scaleWrapper = scaleWrapper;
-    o.store.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
-    o.store.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
-    o.store.elMap.style.height = o.store.rectStory.height * scaleWrapper;
-    o.store.elMap.style.width = o.store.rectStory.width * scaleWrapper;
-    o.store.elMap.style[mx.helpers.cssTransform] =  "translate(-50%,-50%)";
-    o.store.map.resize();
+    o.data.scaleWrapper = scaleWrapper;
+    o.data.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
+    o.data.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
+    o.data.elMap.style.height = o.data.rectStory.height * scaleWrapper;
+    o.data.elMap.style.width = o.data.rectStory.width * scaleWrapper;
+    o.data.elMap.style[mx.helpers.cssTransform] =  "translate(-50%,-50%)";
+    o.data.map.resize();
   };
 
 }
+
+
+var customStyle = [
+  /* Table classes from bootstrap */
+  {t:'Table base',c:'table', f:['table']},
+  {t:'Table bordered', c:'table-bordered', f:['table']},
+  {t:'Table striped', c:'table-striped', f:['table']},
+  {t:'Table hover', c:'table-hover', f:['table']},
+  /* custom mapx classes */
+  {t:'Image cover', c:'mx-image-cover',f:['img']},
+  {t:"Margin top 5%",c:"margin-top-5p"},
+  {t:"Width 100%",c:"width-100p"},
+  {t:"Margin right 5%",c:"margin-right-5p"},
+  {t:"Margin left 5%",c:"margin-left-5p"},
+  {t:"Margin bottom 5%",c:"margin-bottom-5p"},
+  {t:"Margin top 10%",c:"margin-top-10p"},
+  {t:"Margin right 10%",c:"margin-right-10p"},
+  {t:"Margin left 10%",c:"margin-left-10p"},
+  {t:"Margin bottom 10%",c:"margin-bottom-10p"},
+  {t:'Align right' ,c:'align-right'},
+  {t:'Align left' ,c:'align-left'},
+  {t:'Center' ,c:'block-center'},
+  {t:'Absolute top' ,c:'absolute-top'},
+  {t:'Absolute left' ,c:'absolute-left'},
+  {t:'Absolute right' ,c:'absolute-right'},
+  {t:'Absolute bottom' ,c:'absolute-bottom'},
+  {t:'Absolute 50% top' ,c:'absolute-50-top'},
+  {t:'Absolute 50% left' ,c:'absolute-50-left'},
+  {t:'Absolute 50% right' ,c:'absolute-50-right'},
+  {t:'Absolute 50% bottom' ,c:'absolute-50-bottom'}
+];
+
+
 
 /**
 * Init editing function
@@ -182,35 +208,20 @@ function initEditing(o){
      */
     var ContentTools = m[0];
     if(!ContentTools._init){
+      
+      var style = customStyle.map(function(s){
+          return new ContentTools.Style(s.t,s.c,s.f);
+        });
+      ContentTools.StylePalette.add(style);
       ContentTools.IMAGE_UPLOADER = imageUploader;
-      ContentTools.StylePalette.add([
-        /* Table classes from bootstrap */
-        new ContentTools.Style('Table base', 'table', ['table']),
-        new ContentTools.Style('Table bordered', 'table-bordered', ['table']),
-        new ContentTools.Style('Table striped', 'table-striped', ['table']),
-        new ContentTools.Style('Table hover', 'table-hover', ['table']),
-        /* custom mapx classes */
-        new ContentTools.Style('Image cover', 'mx-image-cover', ['img']),
-        new ContentTools.Style('Align right', 'align-right', ['img']),
-        new ContentTools.Style('Align left', 'align-left',['img']),
-        new ContentTools.Style('Center', 'block-center',['img']),
-        new ContentTools.Style('Absolute top', 'absolute-top',['img']),
-        new ContentTools.Style('Absolute left', 'absolute-left',['img']),
-        new ContentTools.Style('Absolute right', 'absolute-right',['img']),
-        new ContentTools.Style('Absolute bottom', 'absolute-bottom',['img']),
-        new ContentTools.Style('Absolute 50% top', 'absolute-50-top',['img']),
-        new ContentTools.Style('Absolute 50% left', 'absolute-50-left',['img']),
-        new ContentTools.Style('Absolute 50% right', 'absolute-50-right',['img']),
-        new ContentTools.Style('Absolute 50% bottom', 'absolute-50-bottom',['img'])
-      ]);
       ContentTools._init = true;
     }
     /**
      * If not already set, create a new editor instance
      */
-    if( !o.store.ct_editor ){
+    if( !o.data.ct_editor ){
 
-      o.store.ct_editor = ContentTools.EditorApp.get();
+      o.data.ct_editor = ContentTools.EditorApp.get();
 
       /**
        * Add custom button logic
@@ -222,14 +233,14 @@ function initEditing(o){
       /**
        * Set a remove function for custom buttons
        */      
-      o.store.ct_editor.remove = function(){
-        o.store.ct_editor.destroy();      
+      o.data.ct_editor.remove = function(){
+        o.data.ct_editor.destroy();      
       };
 
       /**
        * Init editor
        */
-      o.store.ct_editor.init(
+      o.data.ct_editor.init(
         '*[data-editable]', // class of region editable
         'data-name', // name of regions
         null, // fixture test
@@ -239,7 +250,7 @@ function initEditing(o){
       /**
        * On start
        */
-      o.store.ct_editor.addEventListener('start',function(ev){
+      o.data.ct_editor.addEventListener('start',function(ev){
 
         elBtnModalSave.setAttribute("disabled",true);
         elBtnModalPreview.setAttribute("disabled",true);
@@ -255,7 +266,7 @@ function initEditing(o){
       /**
        * On cancel
        */
-      o.store.ct_editor.addEventListener('revert', function(ev) {
+      o.data.ct_editor.addEventListener('revert', function(ev) {
 
         elBtnModalSave.removeAttribute("disabled");
         elBtnModalPreview.removeAttribute("disabled");
@@ -269,7 +280,7 @@ function initEditing(o){
       /**
        * On save
        */
-      o.store.ct_editor.addEventListener('saved', function (ev) {
+      o.data.ct_editor.addEventListener('saved', function (ev) {
         var regions;
 
         elBtnModalSave.removeAttribute("disabled");
@@ -617,8 +628,8 @@ function setScrollData(o){
   var data = o.onScrollData;
   var elScroll = document.querySelector(o.selector);
   var rectElScroll = elScroll.getBoundingClientRect();
-  o.store.elScroll = elScroll;
-  data.scaleWrapper = o.store.scaleWrapper;
+  o.data.elScroll = elScroll;
+  data.scaleWrapper = o.data.scaleWrapper;
   data.elScroll = elScroll;
   data.rectElScroll = rectElScroll;
   data.height =  rectElScroll.height;
@@ -662,7 +673,7 @@ function storyOnScroll(o) {
   });
 
   function updateLayout(){
-    o.store.setWrapperLayout(o);
+    o.data.setWrapperLayout(o);
     setScrollData(o);
     setStepConfig(o);
   }
@@ -671,7 +682,7 @@ function storyOnScroll(o) {
    * Loop : run a function if scroll is done on an element
    */
   function loop() {
-    if( o.store.enabled ){
+    if( o.data.enabled ){
       data = o.onScrollData;
       // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
       posNow = data.elScroll.scrollTop * (data.scaleWrapper || 1) ;
@@ -716,8 +727,8 @@ function setStepConfig(o){
   bullets.classList.add("mx-story-step-bullets");
   bullets.classList.add("noselect");
 
-  o.store.elBullets = bullets;
-  o.store.elMap.appendChild(bullets);
+  o.data.elBullets = bullets;
+  o.data.elMap.appendChild(bullets);
 
   //data.elScroll.appendChild(bullets);
 
@@ -783,7 +794,7 @@ function setStepConfig(o){
   /*
    * Save steps config
    */
-  o.store.stepsConfig = data.stepsConfig;
+  o.data.stepsConfig = data.stepsConfig;
 
   /**
    * Set initial scroll position
@@ -904,14 +915,14 @@ export function storyGoTo(to,useTimeout,funStop){
 
   var h = mx.helpers;
   var data = h.path(mx,"data.story");
-  if(!data || !data.store || !data.store.stepsConfig) return;
+  if(!data || !data.data || !data.data.stepsConfig) return;
   var steps = h.path(data,"view.data.story.steps");
-  var stepsDim = h.path(data,"store.stepsConfig");
-  var elStory = data.store.elScroll;
+  var stepsDim = h.path(data,"data.stepsConfig");
+  var elStory = data.data.elScroll;
   var start = elStory.scrollTop;
   var stop = 0;
   var timeout = 0;
-  var currentStep = h.path(data,"store.currentStep") || 0;
+  var currentStep = h.path(data,"data.currentStep") || 0;
   var step,maxStep, nextStep, previousStep, destStep,duration, easing, easing_p;
 
   maxStep = steps.length - 1;
@@ -961,20 +972,20 @@ export function storyGoTo(to,useTimeout,funStop){
 
 function storyAutoplayStop(stop){  
   var h = mx.helpers;
-  var store = h.path(mx.data,"story.store");
-  if( store ){
+  var data = h.path(mx.data,"story.data");
+  if( data ){
     if( typeof(stop) === "boolean" ){
-      store.autoplayStop = stop;
+      data.autoplayStop = stop;
     }
-    return store.autoplayStop === true;
+    return data.autoplayStop === true;
   }
 }
 
 export function storyAutoplay(cmd){
   var h = mx.helpers;
-  var store = h.path(mx.data,"story.store");
+  var data = h.path(mx.data,"story.data");
 
-  if(store){
+  if(data){
 
     var stop = storyAutoplayStop();
 
@@ -1043,7 +1054,7 @@ export function storyControlMapPan(o){
 /*
 * Enable or disable story map controls
 * @param {Object} o options 
-* @param {Object} o.store Story props and cache
+* @param {Object} o.data Story props and cache
 * @param {Boolean} o.enable Enable / start story
 */
 export function storyController(o){
@@ -1077,13 +1088,13 @@ export function storyController(o){
   var elBtnPreview =  document.querySelector("#btnViewPreviewStory");
 
   var toDisable = {
-    selector : o.enable ? o.selectorDisable : o.selectorEnable,
+    selector : o.enable === true ? o.selectorDisable : o.selectorEnable,
     action : "add",
     class : "mx-hide"
   };
 
   var toEnable = {
-    selector : o.enable ? o.selectorEnable : o.selectorDisable,
+    selector : o.enable === true ? o.selectorEnable : o.selectorDisable,
     action : "remove",
     class : "mx-hide"
   };
@@ -1093,13 +1104,19 @@ export function storyController(o){
 
   o.id = o.id || "map_main";
 
-  if( o.enable ){
+  if( o.enable === true ){
 
 
     /**
     *Check for previews views list ( in case of update );
     */
-    var oldViews = h.path(mx.data,"story.store.views");
+    var oldViews = h.path(mx.data,"story.data.views");
+
+    if(oldViews){
+      debugger;
+    
+    }
+
 
     if(! (oldViews instanceof Array) ){
       oldViews =  mx.helpers.getLayerNamesByPrefix({
@@ -1109,7 +1126,7 @@ export function storyController(o){
     }
 
     /* Save current values */
-    o.store = {
+    o.data = {
       enabled : true,
       map : mx.maps[o.id].map,
       views : oldViews,
@@ -1133,7 +1150,7 @@ export function storyController(o){
     });
 
 
-    o.store.close =  function(){
+    o.data.close =  function(){
       if(this && this.hasAttribute && this.hasAttribute("disabled")) return;
       o.enable = false;
       storyController(o);
@@ -1143,7 +1160,7 @@ export function storyController(o){
       action : 'add',
       target : elBtnClose,
       event : "click",
-      listener : o.store.close
+      listener : o.data.close
     });
 
   }else{
@@ -1167,24 +1184,24 @@ export function storyController(o){
      * Get previous stored data
      */
 
-    if( o.store  ){
+    if( o.data  ){
 
       /**
       * Set the story as disabled
       */
-    o.store.enabled = false;
+    o.data.enabled = false;
 
       /**
        * if edit mode, remove editor
        */
-      if( o.store.ct_editor && o.store.ct_editor.remove ){
-        o.store.ct_editor.remove();
+      if( o.data.ct_editor && o.data.ct_editor.remove ){
+        o.data.ct_editor.remove();
       }
 
       /**
        *
        */
-      if(o.store.hasAerial){
+      if(o.data.hasAerial){
         h.btnToggleLayer({
           id:'map_main',
           idLayer:'here_aerial',
@@ -1196,7 +1213,7 @@ export function storyController(o){
       /**
        * Enable previously enabled layers
        */
-      o.store.views.forEach(function(idView){  
+      o.data.views.forEach(function(idView){  
         h.addView({
           id : o.id,
           idView: idView,
@@ -1207,9 +1224,9 @@ export function storyController(o){
       /**
        * Rest previous position
        */   
-      if( o.store.position ){
-        var pos =  o.store.position;
-        o.store.map.jumpTo({
+      if( o.data.position ){
+        var pos =  o.data.position;
+        o.data.map.jumpTo({
           zoom : pos.z,
           bearing : pos.b,
           pitch :  pos.p,
@@ -1217,26 +1234,26 @@ export function storyController(o){
         });
       }
 
-      if( o.store.elBullets ){
-        o.store.elBullets.remove();
+      if( o.data.elBullets ){
+        o.data.elBullets.remove();
       }
 
-      if( o.store.elScroll ){
-        o.store.elScroll.remove();
+      if( o.data.elScroll ){
+        o.data.elScroll.remove();
       }
 
-      if( o.store.elStory ){
-        o.store.elStory.remove();
+      if( o.data.elStory ){
+        o.data.elStory.remove();
       }
       
-      if( o.store.styleMap ){
-        o.store.elMap.style = o.store.styleMap;
+      if( o.data.styleMap ){
+        o.data.elMap.style = o.data.styleMap;
       }
-      if( o.store.classMap ){
-        o.store.elMap.className = o.store.classMap;
+      if( o.data.classMap ){
+        o.data.elMap.className = o.data.classMap;
       }
 
-      o.store.map.resize();
+      o.data.map.resize();
 
       /**
        * clean data storage
@@ -1275,9 +1292,9 @@ function listenerManager(o,config){
     c.destroy = function(){
       c.target.removeEventListener(c.event,c.listener);
     };
-    o.store.listeners.push(c);
+    o.data.listeners.push(c);
   }else{
-    var listeners = h.path(o,"store.listeners") || h.path(mx.data,"story.store.listeners");
+    var listeners = h.path(o,"data.listeners") || h.path(mx.data,"story.data.listeners");
     if(listeners){
       listeners.forEach(function(l){
         l.destroy();
@@ -1326,7 +1343,7 @@ export function storyBuild(o){
   var wrapper = doc.querySelector("." + o.classWrapper );
   var divStory = doc.createElement("div");
   var divStoryContainer = doc.createElement("div");
-  var divMap = o.store.map.getContainer();
+  var divMap = o.data.map.getContainer();
   //var stepNum = 0;
 
  /* remove old story if exists. */
@@ -1463,12 +1480,12 @@ export function storyPlayStep(o){
   o.id = o.id||"map_main";
   var view =  o.view;
   var steps = mx.helpers.path(o,"view.data.story.steps");
-  var store = mx.helpers.path(mx.data,"story.store");
+  var data = mx.helpers.path(mx.data,"story.data");
   var stepNum = o.stepNum;
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
   var m = mx.maps[o.id];
 
-  store.currentStep = stepNum;
+  data.currentStep = stepNum;
 
   function getViewsVisible(){
     return  mx.helpers.getLayerNamesByPrefix({

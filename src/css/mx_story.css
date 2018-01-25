@@ -125,6 +125,7 @@
   overflow:hidden;
 }
 
+.image-cover,
 .mx-image-cover,
 .mx-image-cover.ce-element--type-image,
 .mx-story-slide.mx-story-image-cover img,
@@ -263,9 +264,6 @@
 .mx-story table {
   border: 1px solid #ccc;
   border-collapse: collapse;
-  margin:0;
-  padding:0;
-  width: 100%;
 }
 .mx-story table tr {
   border: 1px solid #ddd;
@@ -281,24 +279,53 @@
   text-transform: uppercase;
 }
 
+.mx-story .width-100p {
+  width:100%;
+}
+
+/**
+* Custom margin
+*/
+.mx-story .margin-top-10p {
+  margin-top : 10%;
+}
+.mx-story .margin-bottom-10p {
+  margin-bottom : 10%;
+}
+.mx-story .margin-left-10p {
+  margin-left : 10%;
+}
+.mx-story .margin-right-10p {
+  margin-right : 10%;
+}
+.mx-story .margin-top-5p {
+  margin-top : 5%;
+}
+.mx-story .margin-bottom-5p {
+  margin-bottom : 5%;
+}
+.mx-story .margin-left-5p {
+  margin-left : 5%;
+}
+.mx-story .margin-right-5p {
+  margin-right : 5%;
+}
+
+
 .mx-story::-webkit-scrollbar {
-  width:0px;
-  height:0px;
-  border-left:0;
-  border-radius:0px;
-  background:rgba(0,0,0,0.0);
+  display:none;
 }
 
 .mx-story::-webkit-scrollbar:hover {
-  background: rgba(0,0,0,0.1);
+  display:none
 }
 
 .mx-story::-webkit-scrollbar-track {
-  background:none;
+  display:none
 }
 
 .mx-story::-webkit-scrollbar-thumb {
-  background:#ccc;
+  display:none;
 }
 
 

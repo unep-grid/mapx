@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -19,6 +20,7 @@ module.exports = {
       inject: 'head',
       template : './src/built/index.html'
     }),
+    new FaviconsWebpackPlugin('./src/img/mapx_blue_single.png')
   ],
   module: {
     noParse: /(mapbox-gl)\.js$/,

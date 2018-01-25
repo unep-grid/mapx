@@ -60,6 +60,7 @@
     "dom-to-image": "^2.5.2",
     "dot": "^1.1.2",
     "dot-loader": "^0.1.1",
+    "favicons-webpack-plugin": "0.0.7",
     "fontawesome": "^4.7.2",
     "geojsonhint": "^2.0.0",
     "highcharts-more": "^0.1.2",
