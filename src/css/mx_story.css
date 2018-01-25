@@ -53,8 +53,8 @@
 
 .mx-story {
   height: 100%;
-  overflow-x:auto;
-  line-height: 2em;
+  overflow-y:auto;
+  line-height: 1.4;
   font-size: 20px;
 }
 
