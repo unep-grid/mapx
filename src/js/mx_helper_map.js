@@ -3929,15 +3929,15 @@ export function featuresToHtml(o){
     point : o.point
   });
 
-  if( Object.keys(layers).length === 0 ){
+  var idViews = Object.keys(layers);
+
+  if( idViews.length === 0 ){
     popup.remove();
     return ;
   }
 
   var filters = {};
-  //var elLayers = cEl("ul");
   var elContainer = cEl("div");
-  //elLayers.classList.add("list-group");
   elContainer.classList.add("mx-popup-container");
   elContainer.classList.add("mx-scroll-styled");
 
@@ -3968,7 +3968,7 @@ export function featuresToHtml(o){
   function filterValues(e,el){
     var  elChecks = popup._content.querySelectorAll(".check-toggle input");
     filters = {}; // reset filter at each request
-
+    
     mx.helpers.forEachEl({
       els : elChecks,
       callback : buildFilters
@@ -4004,7 +4004,9 @@ export function featuresToHtml(o){
     }
   }
 
-  for(var l in layers){
+  idViews.forEach(function(l){
+    var view = views[l];
+    var attributes = mx.helpers.path(view,"data.attribute.names");
     var lay = layers[l];
     var elLayer = cEl("div");
     var elProps = cEl("div");
@@ -4014,11 +4016,13 @@ export function featuresToHtml(o){
     elTitle.innerText = getTitle(l);
     elLayer.appendChild(elTitle);
 
-    for(var p in lay){
-      
+    if(  ! (attributes instanceof Array) ) attributes = [attributes];
+    
+    attributes.forEach(function(p){
+
       var values = mx.helpers.getArrayStat({
-         stat:"sortNatural",
-         arr: lay[p]
+        stat:"sortNatural",
+        arr: lay[p]
       });
 
 
@@ -4049,10 +4053,10 @@ export function featuresToHtml(o){
       elProp.appendChild(elPropContent);
       elProps.appendChild(elProp);  
       elLayer.appendChild(elProps);
-    }
-    
+    });
+
     elContainer.appendChild(elLayer);
-  }
+  });
 
   var uiBuilt = new Promise(function(resolve,reject){
     popup.setDOMContent(elContainer);
