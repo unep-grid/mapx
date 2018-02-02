@@ -18,7 +18,7 @@ export let settings = {
   },
   country:"",
   vtPort : "",
-  maxByteUpload : Math.pow(1024,2)*1000, //1000 MiB 
+  maxByteUpload : Math.pow(1024,2)*100, //100 MiB 
   maxByteJed : 100000, // 100 Kb  
   user : {}
 };
