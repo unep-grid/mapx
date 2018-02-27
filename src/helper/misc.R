@@ -127,6 +127,7 @@ mxCounter =  function(id,reset=F){
 #' @param keyTitle {Character} Translation key of the title
 #' @param titlePrefix {Character} 
 #' @param keyCounter {Character|Numeric} Id of the counter to set
+#' @param propertyOrder {Numeric} If counter id is not provided, set the property order using this value
 #' @param type {Character} Input type
 #' @param collapsed {Boolean} Collapse state of the object
 #' @param language {Character} Two letter code of language for labels
@@ -142,6 +143,7 @@ mxSchemaMultiLingualInput = function(
   keyTitle = "",
   titlePrefix = "",
   keyCounter = "b",
+  propertyOrder = 0,
   type = "string",
   collapsed = TRUE,
   language = "en",
@@ -204,8 +206,12 @@ mxSchemaMultiLingualInput = function(
   
   })
   names(prop) <- languages
+  
+ propOrder = ifelse(noDataCheck(keyCounter),mxCounter(keyCounter),propertyOrder)
+
+
   list(
-    propertyOrder = mxCounter(keyCounter),
+    propertyOrder = propOrder,
     title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict,web=F)),
     type = "object",
     options = list(collapsed = collapsed),
@@ -1792,8 +1798,10 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
 
   viewData <- .set(viewData,c("source"),list(
       type = "vector",
-      allowDownload = .get(meta,c("license","allowDownload")),
-      attribution = as.character(tags$a(href=meta[[c("origin","homepage","url")]])),
+      attribution = as.character(tags$a(
+          href = .get(meta,c("origin","homepage","url")),
+            .get(meta,c("text","title","en"))
+          )),
       layerInfo = list(
         name =  .get(sourceData,c("layerName")),
         maskName = .get(sourceDataMask,c("layerMaskName"))
@@ -1807,26 +1815,11 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   style <- .get(viewData,c("style"))
 
   if(noDataCheck(style)){
-    viewData[["style"]] =  list()
+    viewData <- .set(viewData,c("style"), list())
   }
 
-  #for now, data driven style for lines is not working
   if( geomType == "lines" ){
-
-    viewData <- .set(viewData,c("style"),list(
-        spriteEnable = FALSE,
-        rules = .get(viewData,c("style","rules"))
-        ))
-
-  }else{
-
-    isNumeric <- isTRUE(.get(sourceData,c("type")) == "number")
-
-    viewData <- .set(viewData,c("style"),list(
-        rules = .get(viewData,c("style","rules")),
-        spriteEnable = TRUE
-        ))
-
+    viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
   }
 
   view <- .set(view,c("data"),viewData)
@@ -2497,7 +2490,7 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,n
 
   makeLi <- function(it,ti){
     ti <- d(ti,lang=lang,dict=dict);
-    if (is.list(it) && length(it)>0){
+    if (is.list(it) && length(it)>0 && class(it) != "shiny.tag" ){
       
       classList <- "list-group-item"
 

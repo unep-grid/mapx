@@ -92,7 +92,22 @@ mxSchemaViewStyle <- function(
       language = l,
       keyTitle="style_title_legend",
       default = list(en="Legend"),
-      type="string"
+      type="string",
+      propertyOrder=3
+      )
+    )
+
+  #
+  # Reverse layer order
+  #
+
+  reverseLayer <- list(
+    reverseLayer = list(
+       propertyOrder = 2,
+       title = tt("style_reverse_order"),
+       description = tt("style_reverse_order_desc"),
+       type = "boolean",
+       format = "checkbox"
       )
     )
 
@@ -182,7 +197,7 @@ mxSchemaViewStyle <- function(
   # 
   rules <- list(
     rules = list(
-      propertyOrder = 0,
+      propertyOrder = 1,
       type = "array",
       format = "table",
       title = tt("schema_rules"),
@@ -223,6 +238,7 @@ mxSchemaViewStyle <- function(
   custom = list(
     custom = list (
       type = "object",
+      propertyOrder = 4,
       title = "Custom style",
       options = list(
         collapsed = TRUE
@@ -250,6 +266,7 @@ mxSchemaViewStyle <- function(
   # main properties
   #
   properties <- c(
+    reverseLayer,
     rules,
     titleLegend,
     custom

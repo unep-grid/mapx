@@ -92,14 +92,6 @@ onmessage = function(e) {
       return x.level == "message";
     });
 
-/*    // set a message with summary*/
-    //var logMessage = " geojson validation " +
-      //" n errors = " + errors.length +
-      //" n warnings = " + warnings.length + " done in" +
-      //timerLapString();
-
-    //console.log(fileName + " summary :  " + logMessage);
-
     // send message
     postMessage({
       progress: 60,

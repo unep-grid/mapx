@@ -156,14 +156,31 @@ blockquote {
 /**
 * Search box
 */
-#viewsFilterText {
+.mx-views-filter-text-input{
   border:none;
-  /*border-bottom:1px solid #ccc;*/
   -webkit-box-shadow: none;
   box-shadow: none; 
   -webkit-transition: none; 
   -o-transition: none;
   transition: none;
+  padding: 10px;
+  flex-grow:1;
+}
+
+.mx-views-country-language-bar {
+  display:flex;
+  flex-direction:row;
+}
+
+.mx-views-country-language-bar > span {
+  border-right: 1px solid  #ccc;
+  padding:10px;
+  cursor:pointer;
+}
+
+.mx-views-country-language-bar > span:hover {
+  background-color:#000;
+  color:#fff;
 }
 
 /*.mx-sort-li-ghost {*/
@@ -221,7 +238,6 @@ blockquote {
   padding : 5px;
 }
 
-
 .mapboxgl-ctrl {
   clear: both;
   pointer-events: auto;
@@ -247,6 +263,19 @@ blockquote {
 }
 
 
+.mapboxgl-map.mx-story-layout .mapboxgl-ctrl.mx-story-hide-control {
+  opacity :0 ;
+  transition: opacity ease-in-out 1s;
+}
+
+.mapboxgl-map.mx-story-layout .mapboxgl-ctrl:not(.mx-story-hide-control) {
+  opacity :1 ;
+  transition: opacity ease-in-out 1s;
+}
+
+.mapboxgl-map.mx-story-layout.mx-story-hide-control {
+  cursor:none;
+}
 
 /**
 * boostrap list-group 
@@ -309,6 +338,7 @@ blockquote {
   top: -3px;
   box-shadow: none;
   border-radius: 50%;
+  margin-right: 7px;
 }
 
 .mx-slider-container .noUi-connect {
@@ -1166,6 +1196,9 @@ blockquote {
 * bootstrap fixes
 */
 
+.help-block {
+ font-size:0.8em;
+}
 
 
 /**

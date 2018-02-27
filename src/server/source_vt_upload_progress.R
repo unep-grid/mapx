@@ -19,11 +19,7 @@ observeEvent(reactData$geojsonProgressData,{
 
       if(tableExists){
 
-        count <- mxDbGetQuery(sprintf("
-            SELECT count(*) as total
-            FROM %1$s"
-            ,idSource))
-        count <- count$total
+        count <- mxDbGetQuery("SELECT COUNT(*) FROM " + idSource)$count
         percent <- ((count/nFeatures)*100)-1
 
         mxProgress(

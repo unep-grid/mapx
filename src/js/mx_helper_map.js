@@ -152,7 +152,8 @@ export function initMapx(o){
       zoom: o.zoom,
       maxZoom: o.maxZoom,
       minZoom: o.minZoom,
-      preserveDrawingBuffer:true
+      preserveDrawingBuffer:true,
+      attributionControl: false
     });
 
     /* save map in mgl data */
@@ -210,11 +211,14 @@ export function initMapx(o){
     /**
      * Add controls to the map
      */
-
+/*    map.addControl(new mapboxgl.AttributionControl({*/
+        //compact: true
+    /*}),'top-right');*/
     map.addControl(new mx.helpers.mapControlMain(),'top-left');
     map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
     map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
     map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
+
 
     /**
      * Trigger country change on double click
@@ -422,7 +426,24 @@ export function setSourcesFromViews(o){
   var isArray, hasViews;
 
   if( !m || !o.viewsList || !m.map ) return;
-  if( o.country ) mx.settings.country = o.country;
+  if( o.country ){
+
+    mx.settings.country = o.country;
+    /*
+     * Update country button
+     */
+    var elBtnCountry = document.querySelector("#btnShowCountry");
+    elBtnCountry.dataset.lang_key = mx.settings.country; 
+    mx.helpers.getDictItem(mx.settings.country,mx.settings.language).then(function(title){
+      elBtnCountry.innerText = title;
+    });
+
+  }
+
+
+
+
+
   if( typeof o.resetViews == "undefined" ) o.resetViews = true;
 
   map = m.map;
@@ -776,8 +797,6 @@ export function makeSimpleLayer(o){
       "paint" : {
         "circle-color" : colA,
         "circle-radius" : size
-        //"circle-stroke-width" : 1,
-        //"circle-stroke-color" : colB
       }
     },
     "polygon": {
@@ -785,7 +804,6 @@ export function makeSimpleLayer(o){
       "paint": {
         "fill-color" : colA,
         "fill-outline-color" : colB
-        //"fill-pattern": sprite
       }
     },
     "pattern": {
@@ -819,19 +837,16 @@ export function makeSimpleLayer(o){
  * Update layer order based on view list position
  * @param {object} o Options
  * @param {string} o.id Id of the map
- * @param {string} o.idViewsList Id of the list containing view items
+ * @param {string} o.order Array of layer base name. If empty, use `getViewOrder`
  * @param 
  */
 export function updateViewOrder (o){
   
-
   var displayedOrig  = {};
-  var order = getViewOrder(o);
+  var order = o.order || getViewOrder(o) || [];
   var displayed = [];
-  var m = mx.maps[o.id];
-  var viewContainer = document.getElementById(o.idViewsList);
-  var orderSubset = [];
-  var layerBefore = "mxlayers"; 
+  var map = mx.maps[o.id||"map_main"].map;
+  var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
 
@@ -842,8 +857,8 @@ export function updateViewOrder (o){
 
   displayed.sort(
     function(a,b){
-      var posA = order.indexOf(a.split(mx.settings.separators.sublayer )[0]);
-      var posB = order.indexOf(b.split(mx.settings.separators.sublayer )[0]);
+      var posA = order.indexOf(mx.helpers.getLayerBaseName(a));
+      var posB = order.indexOf(mx.helpers.getLayerBaseName(b));
       return posA-posB;
     });
 
@@ -854,7 +869,7 @@ export function updateViewOrder (o){
     if(posBefore > -1 ){
       layerBefore = displayed[posBefore];
     }
-    m.map.moveLayer(x,layerBefore);
+    map.moveLayer(x,layerBefore);
 
   });
 
@@ -1521,13 +1536,15 @@ export function handleViewClick(o){
           var idView =  el.dataset.view_action_target;
           var view = mx.helpers.getViews({id:'map_main',idView:idView});
           var link = mx.helpers.path(view,"data.source.urlMetadata");
-          var href = "<a href="+link+" target='_blank'>" + title + "</a>";
+          var title =  mx.helpers.path(view,"data.title." + mx.settings.language) || 
+            mx.helpers.path(view,"data.title.en");
+          if(!title) title = idView;
 
-          mx.helpers.getDictItem("source_raster_tile_url_metadata").then(function(title){
+          mx.helpers.getDictItem("source_raster_tile_url_metadata").then(function(modalTitle){
             mx.helpers.modal({
-              title : title,
+              title : modalTitle,
               id : "modalMetaData",
-              content : href,
+              content : "<b>" + modalTitle + "</b>: <a href=" + link + " target='_blank'>" + title + "</a>",
               minHeight:"150px"
             });         
           });
@@ -2347,6 +2364,15 @@ export function getLayerById(o) {
 }
 
 /**
+* Get the layer base name
+* @param {String} str Layer name to convert
+*/
+export function getLayerBaseName(str){
+  return str.split(mx.settings.separators.sublayer )[0];
+}
+
+
+/**
  * Get layer names by prefix
  * @param  {Object} o options
  * @param {String} o.id Map id
@@ -2375,7 +2401,7 @@ export function getLayerNamesByPrefix(o) {
       layers = map.style._layers;
       for ( l in layers ) {
         if(base){
-          l = l.split(mx.settings.separators.sublayer )[0];
+          l = getLayerBaseName(l);
         }
         if (l.indexOf(prefix) > -1) {
           result.push(l);
@@ -2406,7 +2432,6 @@ export function removeLayersByPrefix(o) {
     map  = mx.maps[o.id].map;
     layers = mx.helpers.getLayerNamesByPrefix(o);
     layers.forEach(function(l){
-      console.log("Remove layer id "+ l);
       map.removeLayer(l);
       result.push(l);
     });
@@ -2534,6 +2559,7 @@ export function existsInList(li, it, val, inverse) {
  * @param {Object} o Options
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
+ * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function addViewVt(o){
 
@@ -2553,7 +2579,8 @@ export function addViewVt(o){
       source =  p(view,"data.source"),
       num = 0,
       defaultColor, defaultOpacity,
-      styleCustom;
+      styleCustom,
+      defaultOrder = true;
 
 
     /**
@@ -2570,10 +2597,19 @@ export function addViewVt(o){
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
-    
     rules = rules.filter(function(r){return r&&r.value != undefined;});
+
+    if( style && ( style.reverseLayer === true ) ){
+      defaultOrder = false;
+      num = rules.length || 1;
+    }
+
     var ruleAll = rules.filter(function(r){ return r.value=="all" ; });
-    var getIdLayer = function(){ return idView + sepLayer + num++ ; };
+    var idLayer;
+    var getIdLayer = function(){
+      idLayer = idView + sepLayer + ( defaultOrder ? num++ : num-- ) ; 
+      return idLayer;
+    };
 
     var hasStyle = false;
     var hasTime = false;
@@ -2593,7 +2629,6 @@ export function addViewVt(o){
         'source': idSource,
         'source-layer': idView,
         'type' : styleCustom.type || "circle",
-        'filter' : styleCustom.filter || ['all'],
         'paint' : styleCustom.paint || {},
         'layout' : styleCustom.layout || {},
         'minzoom' : styleCustom.minzoom || 0,
@@ -2601,6 +2636,12 @@ export function addViewVt(o){
       };
 
       layers.push(layerCustom); 
+
+      view._setFilter({
+        filter : styleCustom.filter || ['all'],
+        type : "custom_style"
+      });
+
     }
 
     /**
@@ -2783,18 +2824,20 @@ export function addViewVt(o){
      * Add layer and legends
      */
     if( layers.length > 0 ){
+      
 
+      /**
+      * handle order
+      */
+      if( defaultOrder ){
+       layers = layers.reverse();
+      }
 
       /*
        * Add layers to map
        */
-      layers = layers.reverse();
-
       layers.forEach(function(layer){
-        if(true){
-          console.log("add layer"+layer.id);
-        }
-        map.addLayer(layer,"mxlayers");
+        map.addLayer(layer,o.before);
       });
 
       /*
@@ -2857,6 +2900,7 @@ export function addViewVt(o){
       title : "Error",
       content : "<p>Error during layer evaluation :" + e 
     });
+    throw e;
   }
 }
 
@@ -2894,7 +2938,8 @@ export function addOptions(o){
     legend : ['all'],
     time_slider : ['all'],
     search_box : ['all'],
-    numeric_slider : ['all']
+    numeric_slider : ['all'],
+    custom_style : ['all']
   };
   view._setFilter = mx.helpers.viewSetFilter;
   view._setOpacity = mx.helpers.viewSetOpacity;
@@ -2916,13 +2961,14 @@ export function addOptions(o){
 
 
 /** 
- *  Add map-x view on the map
- *  @param {object} o Options
- *  @param {string} o.id map id
- *  @param {string} o.idView view id
- *  @param {objsect} o.viewData view 
- *  @param {string} o.idViewsList id of ui views list element
- *  @param 
+ * Add map-x view on the map
+ * @param {object} o Options
+ * @param {string} o.id map id
+ * @param {string} o.idView view id
+ * @param {objsect} o.viewData view 
+ * @param {string} o.idViewsList id of ui views list element
+ * @param {string} o.before Layer before which insert this view layer(s)
+ * @param 
  */
 export function addView(o){
 
@@ -2934,6 +2980,17 @@ export function addView(o){
 
   var m = mx.maps[o.id];
   var view = o.viewData;
+
+  if(o.before){
+    var l = mx.helpers.getLayerNamesByPrefix({
+      id : o.id,
+      prefix : o.before
+    });
+    o.before = l[0];
+  }else{
+    o.before = mx.settings.layerBefore;
+  }
+
 
   if(o.idView){
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
@@ -2960,13 +3017,13 @@ export function addView(o){
   });
 
   /**
-  * Add view
-  */
+   * Add view
+   */
   handler(view.type);
 
   /**
-  * handler based on view type
-  */
+   * handler based on view type
+   */
   function handler(viewType){
 
     /* Switch on view type*/
@@ -2979,7 +3036,7 @@ export function addView(o){
           id: view.id,
           type : "raster",
           source: view.id + "-SRC"
-        },"mxlayers");
+        },o.before);
 
         /* IMG */ 
 
@@ -3065,13 +3122,14 @@ export function addView(o){
         addViewVt({
           view : view,
           map : m.map,
-          debug : o.debug
+          debug : o.debug,
+          before : o.before
         });
       },
       gj : function(){
         m.map.addLayer(
           mx.helpers.path(view,"data.layer"),
-          "mxlayers"
+          o.before
         );
       },
       sm : function(){
@@ -3140,6 +3198,281 @@ export function checkMap(id){
 
 
 
+/** 
+* Return the intersect between two Polygons or multiPolygon
+* @param {Object} poly1 
+* @param {Object} poly2 
+* @return {Object} Intersect or null
+*/
+function intersect(poly1, poly2) {
+
+  var martinez = require("martinez-polygon-clipping");
+  var helpers = require("@turf/helpers");
+
+  var polygon = helpers.polygon;
+  var multiPolygon = helpers.multiPolygon;
+
+  var geom1 = poly1.geometry;
+  var geom2 = poly2.geometry;
+  var properties = poly1.properties || {};
+
+  var intersection = martinez.intersection(geom1.coordinates, geom2.coordinates);
+  if (intersection === null || intersection.length === 0) return null;
+  if (intersection.length === 1) {
+    var start = intersection[0][0][0];
+    var end = intersection[0][0][intersection[0][0].length - 1];
+    if (start[0] === end[0] && start[1] === end[1]) return polygon(intersection[0], properties);
+    return null;
+  }
+  return multiPolygon(intersection, properties);
+}
+
+/**
+ * Get estimated area of visible layer by prefix of layer names
+ * @param {object} o options
+ * @param {string} o.id map id
+ * @param {string} o.prefix Prefix to find layers
+ * @param {function} o.onMessage Function to deal with messages
+ * @return {number} area in km2
+ */
+export function getRenderedLayersIntersect(o){
+
+  o.onMessage = o.onMessage || console.log;
+  o.onEnd = o.onEnd || console.log;
+  o.id = o.id || "map_main";
+
+  if ( checkMap(o.id) ){
+    Promise.all([
+      System.import("./mx_helper_overlap.worker.js"),
+      System.import("@turf/helpers"),
+      System.import("@turf/buffer"),
+      //System.import('@turf/intersect'),
+      System.import('@turf/combine'),
+      System.import('@turf/bbox-clip'),
+      System.import('@turf/boolean-overlap'),
+      System.import('@turf/flatten')
+      //System.import('@turf/difference')
+    ]).then(function(m){
+
+      var getIntersectWorker = m[0];
+      var featureCollection = m[1].featureCollection;
+      var buffer = m[2].default;
+      //var intersect = m[3].default;
+      var combine = m[3].default;
+      var bboxClip = m[4].default;
+      var booleanOverlap= m[5].default;
+      var flatten = m[6].default;
+      //var difference = m[4].default;
+
+      var map = mx.maps[o.id].map;
+      var elMapContainer = map.getContainer();
+      
+      var elCompo = elMapContainer.querySelector("#map-x-compo");
+      if(!elCompo){
+        elCompo = document.createElement("div");
+        elCompo.style = "visibility:hidden;width:100%;height:100%;position:absolute;top:0;left:0";
+        elCompo.className = "mx-events-off";
+        elMapContainer.appendChild(elCompo);
+      }
+
+      var layers = mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: o.prefix||"MX-",
+        base:true
+      });
+
+      var featsGroup = [];
+      var featsCol;
+      var feats;
+      var featsQuery ;
+      var featsFlat ;
+      var polyOut ;
+
+      if( layers.length > 1 ){
+
+        layers.forEach(function(l){
+
+          var allLayers = mx.helpers.getLayerNamesByPrefix({
+            id : o.id,
+            prefix : l
+          });
+
+          featsQuery = map.queryRenderedFeatures({layers:allLayers});
+
+          feats = [];
+          featsQuery.forEach(function(f,i){ 
+            if(f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon"){
+                f = flatten(f);
+                f.features.forEach(function(f){
+                  f.properties = {id:l};
+                  feats.push(f);
+              });
+            }
+          });
+
+          featsGroup.push(featureCollection(feats));
+        });
+
+        var addCanvasToMap = function(compo){
+          var canvas = compo.canvas;
+
+          canvas.id="geocampo";
+
+          canvas.toBlob(function(blob){
+            var url = window.URL.createObjectURL(blob);
+
+            var b = compo.getCanvasBounds();
+
+            var l = {
+              id: "geocampo",
+              source: {
+                type: 'image',
+                url : url,
+                coordinates: [
+                  [b.minLng,b.maxLat],
+                  [b.maxLng,b.maxLat],
+                  [b.maxLng,b.minLat],
+                  [b.minLng,b.minLat]
+                ]
+              },
+              type: 'raster',
+              paint: {
+                'raster-opacity': 0.8,
+              }
+            };
+
+            var s = map.getSource('geocampo');
+            if(s){
+              map.removeLayer("geocampo");
+              map.removeSource("geocampo");
+            }
+              map.addLayer(l);
+
+          });
+
+        };
+
+
+
+        window.compo = new mx.helpers.GeoCompo({
+          el : elCompo,
+          map : map,
+          program : [
+            { clear : true},
+            { addGeojsonArray : featsGroup },
+            { render : "source-in" },
+            { callback : addCanvasToMap }
+          ]
+        });
+
+      }
+    });
+  }
+}
+
+
+
+
+
+/**
+ * Get estimated area of visible layer by prefix of layer names
+ * @param {object} o options
+ * @param {string} o.id map id
+ * @param {string} o.prefix Prefix to find layers
+ */
+export function getRenderedLayersIntersect_old(o){
+
+  o.onMessage = o.onMessage || console.log;
+  o.onEnd = o.onEnd || console.log;
+  o.id = o.id || "map_main";
+
+  if ( checkMap(o.id) ){
+
+    return import("./mx_helper_overlap.worker.js")
+      .then(function(worker){
+    
+      var w = new worker();
+      var id, feats, featsLayers = [], featsQuery, allLayers;
+      var geom, properties;
+      var map = mx.maps[o.id].map;
+    
+      var layers = mx.helpers.getLayerNamesByPrefix({
+        id: o.id,
+        prefix: o.prefix||"MX-",
+        base:true
+      });
+
+        if( layers.length > 1 ){
+
+          id = mx.helpers.makeId();
+
+          layers.forEach(function(l){
+
+            allLayers = mx.helpers.getLayerNamesByPrefix({
+              id : o.id,
+              prefix : l
+            });
+
+            feats = [];
+            featsQuery = map.queryRenderedFeatures({layers:allLayers});
+
+            featsQuery = featsQuery.filter(function(f){
+              return f.geometry.type == "Polygon" || f.geometry.type == "MultiPolygon";
+            });
+
+
+            featsQuery.forEach(function(f){
+              feats.push({
+                properties:{id:l},
+                geometry:f._geometry,
+                type : "Feature"
+              });
+            });
+
+            featsLayers.push({
+              id : l,
+              features : feats
+            });
+
+          });
+
+          w.postMessage({
+            featsLayers : featsLayers
+          });
+
+          w.addEventListener("message",function(e){
+            if(e.data.message)  o.onMessage(e.data.message);
+            if(e.data.end){
+              var oldLayer = map.getLayer("test");
+              if(oldLayer){
+                map.removeLayer("test");
+                map.removeSource("test");
+              }
+
+              map.addLayer({
+                id: "test",
+                type: "fill",
+                source: {
+                  type: "geojson",
+                  data : e.data.end 
+                },
+                paint : {
+                  'fill-color':'#FF0000',
+                  'fill-opacity': 0.6,
+                  'fill-outline-color':'#FF0000'
+                }
+              });
+
+            }
+
+
+            o.onEnd(e.data.end);
+          });
+        }
+
+    });
+  }
+}
 
 
 
@@ -3154,11 +3487,6 @@ export function checkMap(id){
 export function getRenderedLayersArea(o){
 
   var msg = o.onMessage || console.log;
-
-  function getBoundsArray(map){
-    var a = map.getBounds();
-    return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
-  } 
 
   if ( checkMap(o.id) ){
     var calcAreaWorker = require("./mx_helper_calc_area.worker.js");  
@@ -3189,7 +3517,7 @@ export function getRenderedLayersArea(o){
 
       var data = { 
         geojson : geomTemp,
-        bbox : getBoundsArray(map)
+        bbox : getBoundsArray(o)
       };
 
      
@@ -3220,6 +3548,17 @@ export function sendRenderedLayersAreaToUi(o){
   }
 }
 
+/**
+* Get map bounds as array
+* @param {Object} o options
+* @param {String} o.id Map id
+* @param {Object} o.map Map (optional, overwrite id)
+*/
+export function getBoundsArray(o){
+  var map = o.map || mx.maps[o.id].map;
+  var a = map.getBounds();
+  return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
+}
 
 /**
  * Get layer data
@@ -3240,10 +3579,7 @@ export function getRenderedLayersData(o){
     var msg = o.onMessage || console.log;
     var gid = o.gid || "gid";
 
-    function getBoundsArray(map){
-      var a = map.getBounds();
-      return [a.getWest(),a.getSouth(),a.getEast(),a.getNorth()];
-    }
+
 
     if ( checkMap(o.id) ){
 
@@ -3286,20 +3622,20 @@ export function makeSearchBox(o){
   makeSelectize();
 
   function tableToData(table){
-    var r,row, res;
+    var r,rL,row, res;
     var data = [];
-    for(r = 0 ; r < table.length ; r++ ){
+    for(r = 0,rL=table.length; r < rL ; r++ ){
       row = table[r];
       res = {};
-      res.value = row.values;
-      res.label = row.values;
+      res.value = row.value;
+      res.label = row.value;
       data.push(res);
     }
     return data;
   }
 
   function makeSelectize(){
-    System.import("selectize").then(function(Selectize){
+    return import("selectize").then(function(Selectize){
       var idView = view.id;
       var table = mx.helpers.path(view,"data.attribute.table");
       var attr = mx.helpers.path(view,"data.attribute.name");
@@ -4006,8 +4342,8 @@ export function featuresToHtml(o){
 
   idViews.forEach(function(l){
     var view = views[l];
-    var attributes = mx.helpers.path(view,"data.attribute.names");
     var lay = layers[l];
+    var attributes = mx.helpers.path(view,"data.attribute.names") || Object.keys(lay);
     var elLayer = cEl("div");
     var elProps = cEl("div");
     var elTitle = cEl("label");

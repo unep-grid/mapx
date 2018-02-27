@@ -8,25 +8,33 @@
 
 
 # Toolbar
-viewFilterInput <-  tags$div(
-  id="viewsTools",
-  tags$input(
-    id = "viewsFilterText",
-    class="form-control", 
-    type="text",
-    `data-lang_key`="view_filter_input",
-    `data-lang_type`="placeholder"
+viewPanelHeader <-  tags$div(
+  tags$div(
+    class="mx-views-country-language-bar",
+    tags$span(id="btnShowCountry",`data-lang_key`="COD","",onclick="mx.helpers.showSelectCountry()"),
+    tags$span(id="btnShowLanguage",`data-lang_key`="en","",onclick="mx.helpers.showSelectLanguage()"),
+    tags$input(
+      id = "viewsFilterText",
+      class="mx-views-filter-text-input", 
+      type="text",
+      `data-lang_key`="view_filter_input",
+      `data-lang_type`="placeholder"
+      )
     )
   )
 
-
 # Filter class by tag
-viewFilterButton <- tags$div(
+viewPanelFilterButton <- tags$div(
   id = "viewsFilter",
   tags$div(
     class="check-toggle-group",
     id = "viewsFilterContainer"
     )
+  )
+
+viewPanelFooter <- tags$div(
+  viewPanelFilterButton
+
   )
 
 
@@ -54,8 +62,9 @@ sortButton <- tagList(
 tags$div(
   id=config[[c("map","idViewsListContainer")]],
   class="mx-views-container", 
-  tags$div(class="mx-views-header",
-    viewFilterInput
+  tags$div(
+    class="mx-views-header",
+    viewPanelHeader
     ),
   tags$div(
     class="mx-views-content",
@@ -64,7 +73,7 @@ tags$div(
       )
     ),
   tags$div(class="mx-views-footer",
-    viewFilterButton
+    viewPanelFooter
     )
   )
 

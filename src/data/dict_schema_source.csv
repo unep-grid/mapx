@@ -123,6 +123,7 @@ summary_attribute,Summary ,Résumé,Resumen,NA,NA,NA,NA,خلاصه,لنډیز
 target_desc,Modality and restriction of access to the data,Modalité et restriction d'accès à la donnée,Modalidad de restricción de acceso a los datos,NA,NA,NA,NA,چگونگی محدودیت دسترسی به اطلاعات,ډیټا ته د لاسرسي څرنګوالئ او محدودیت
 target_role_item_title,Role,Rôle,Rol,NA,NA,NA,NA,نقش,نقش
 target_roles_read_title,Roles allowed to read,Rôles autorisés à lire,Roles autorizados para leer,NA,NA,NA,NA,نقش های مجاز برای خواندن, د لوستلو لپاره مجاز نقشونه
+target_roles_admin_title,Roles allowed to manage,Rôles autorisés à administrer,NA,NA,NA,NA,NA,,
 target_roles_get_title,Roles allowed to download,Rôles autorisés à télécharger,NA,NA,NA,NA,NA,NA,NA
 target_roles_list_title,List of roles,Liste des rôles,Lista de roles,NA,NA,NA,NA,لست نقش ها,د نقشونو نوملړ
 target_roles_title,Roles,Rôles,Roles,NA,NA,NA,NA,نقش ها,قوانین

@@ -30,11 +30,13 @@ export function storyRead(o){
   }
 
   /* close last story, stored in mx.data. */
-  var close = mx.helpers.path(mx.data,"story.data.close");
-  if(close instanceof Function){
-    close();
+  var oldData = mx.helpers.path(mx.data,"story.data");
+  if(oldData){
+    o.startScroll = oldData.elScroll.scrollTop;
   }
-
+  if(oldData && oldData.close instanceof Function){
+    oldData.close();
+  }
 
   o.enable = true;
 
@@ -56,11 +58,6 @@ export function storyRead(o){
       /* Generate story ui */
       mx.helpers.storyBuild(o);
 
-      /* enable editing */
-      if( o.edit  === true ){
-        initEditing(o);
-      }
-
       /* Alter wrapper class */
       o.data.classWrapper = mx.helpers.path(o.view,"data.story.settings.class_wrapper");
 
@@ -73,6 +70,9 @@ export function storyRead(o){
        */
       if( ! o.edit ){
         initKeydownListener(o);
+        initMouseMoveListener(o);
+      }else{
+        initEditing(o);
       }
 
       /* Listen to scroll on the main container. */
@@ -81,7 +81,8 @@ export function storyRead(o){
         callback: mx.helpers.storyUpdateSlides,
         view: o.view,
         data : o.data,
-        enable : o.enable
+        enable : o.enable,
+        startPos : o.startScroll
       });
 
       /* Set lock map pan to current value */
@@ -120,6 +121,47 @@ function initKeydownListener(o){
   });
 }
 
+
+/**
+* Init listener for mousemove event on window
+# @param {Object} o Story options
+*/
+function initMouseMoveListener(o){
+
+  var timer;
+
+  listenerManager(o,{
+    action : 'add',
+    target : window,
+    event : "mousemove",
+    listener : function(event){
+
+      if(timer){
+        clearTimeout(timer);
+      }
+
+      var elsCtrl =  o.data.elMap.querySelectorAll(".mapboxgl-ctrl");
+      var el;
+
+      o.data.elMap.classList.remove("mx-story-hide-control");
+      for(var i=0,iL=elsCtrl.length;i<iL;i++){
+        el = elsCtrl[i];
+        el.classList.remove("mx-story-hide-control");
+      }
+
+      timer = setTimeout(function(){
+        console.log("hide controls");
+        for(var i=0,iL=elsCtrl.length;i<iL;i++){
+          el = elsCtrl[i];
+          el.classList.add("mx-story-hide-control");
+          o.data.elMap.classList.add("mx-story-hide-control");
+        }
+      },1500);
+    }
+  });
+}
+
+
 /**
 * Init values for screen adaptiveness/scaling function
 * @param {Object} o story options
@@ -132,7 +174,7 @@ function initAdaptiveScreen(o){
   //o.data.elWrapper = document.querySelector("." + classWrapper);
   o.data.elStory = document.querySelector("." + o.classContainer);
   o.data.elMap = o.data.map.getContainer();
-  
+  o.data.elMapControls = o.data.elMap.querySelector(".mapboxgl-control-container"); 
   o.data.elStory.classList.add(o.data.classWrapper);
   o.data.rectStory = o.data.elStory.getBoundingClientRect();
   o.data.classMap = o.data.elMap.className;
@@ -199,21 +241,65 @@ var customStyle = [
 */
 function initEditing(o){
 
+  var ContentTools;
+
   Promise.all([
-    System.import('ContentTools'),
-    System.import('ContentTools/build/content-tools.min.css')
+    import('ContentTools'),
+    import('ContentTools/build/content-tools.min.css')
   ]).then(function(m){
+    ContentTools = m[0];
+    return import("./../coffee/mx_extend_content_tools.coffee");
+  }).then(function(){
+   
     /*
      * Get ContentTools and set upload logic
      */
-    var ContentTools = m[0];
+    
     if(!ContentTools._init){
-      
+
+      ContentTools.DEFAULT_TOOLS = [
+        [
+          'h1',
+          'h2',
+          'h3',
+          'h4',
+          'h5',
+          'paragraph',
+          'blockquote',
+          'preformatted'
+        ],
+        [
+          'italic',
+          'bold'
+        ], 
+        [
+          'align-left',
+          'align-center',
+          'align-right'
+        ],
+        [
+          'unordered-list',
+          'ordered-list',
+          'table',
+          'indent',
+          'unindent',
+          'line-break'
+        ], [
+          'link',
+          'image',
+          'video',
+        ], [
+          'undo',
+          'redo',
+          'remove'
+        ]
+      ];
+
       var style = customStyle.map(function(s){
           return new ContentTools.Style(s.t,s.c,s.f);
         });
       ContentTools.StylePalette.add(style);
-      ContentTools.IMAGE_UPLOADER = imageUploader;
+      ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
       ContentTools._init = true;
     }
     /**
@@ -333,7 +419,9 @@ function initEditing(o){
 }
 
 
-function imageUploader(dialog) {
+
+
+function contentToolsImageUploader(dialog) {
   var file, image,url, xhr, height, width, type;
 
   /**
@@ -397,7 +485,7 @@ function imageUploader(dialog) {
       form.append("image",blob);
       form.append("width",width);
       form.append("height",height);   
-      form.append("token",mx.helpers.path(mx,"settings.user.token")); 
+      form.append("token",mx.helpers.readCookie().mx_data);
       form.append("idUser",mx.helpers.path(mx,"settings.user.id")); 
 
       mx.helpers.sendData({
@@ -628,6 +716,11 @@ function setScrollData(o){
   var data = o.onScrollData;
   var elScroll = document.querySelector(o.selector);
   var rectElScroll = elScroll.getBoundingClientRect();
+
+  if(o.startPos){
+    elScroll.scrollTop = o.startPos;
+    o.startPos = null;
+  }
   o.data.elScroll = elScroll;
   data.scaleWrapper = o.data.scaleWrapper;
   data.elScroll = elScroll;
@@ -635,9 +728,7 @@ function setScrollData(o){
   data.height =  rectElScroll.height;
   data.trigger = rectElScroll.height * 0.5;
   data.distTop = -1;
-  data.distStart = elScroll.dataset.start_scroll;
   data.scrollFun  = mx.helpers.cssTransform;
-
 }
 
 
@@ -725,10 +816,11 @@ function setStepConfig(o){
   steps = data.elScroll.querySelectorAll(".mx-story-step");
   bullets = document.createElement("div");
   bullets.classList.add("mx-story-step-bullets");
+  bullets.classList.add("mapboxgl-ctrl");
   bullets.classList.add("noselect");
 
   o.data.elBullets = bullets;
-  o.data.elMap.appendChild(bullets);
+  o.data.elMapControls.appendChild(bullets);
 
   //data.elScroll.appendChild(bullets);
 
@@ -890,20 +982,22 @@ function storyHandleKeyDown(event){
   event.preventDefault();
   event.stopPropagation();
   var h = mx.helpers;
-  
+
   switch (event.key) {
     case " ":
-      h.storyAutoplay("start");
+      h.storyAutoPlay("start");
       break;
     case "ArrowDown":
     case "ArrowRight":
-      storyAutoplayStop(true);
-      h.storyGoTo("next");
+      h.storyAutoPlay("stop").then(function(autoplay){
+        h.storyGoTo("next");
+      });
       break;
     case "ArrowUp":
     case "ArrowLeft":
-      storyAutoplayStop(true);
-      h.storyGoTo("previous");
+      h.storyAutoPlay("stop").then(function(autoplay){
+        h.storyGoTo("previous");
+      });
       break;
     default : 
       return;
@@ -970,48 +1064,94 @@ export function storyGoTo(to,useTimeout,funStop){
 
 }
 
-function storyAutoplayStop(stop){  
+
+export function storyAutoPlay(cmd){
   var h = mx.helpers;
-  var data = h.path(mx.data,"story.data");
-  if( data ){
-    if( typeof(stop) === "boolean" ){
-      data.autoplayStop = stop;
-    }
-    return data.autoplayStop === true;
-  }
-}
+  var data = h.path(mx.data,"story.data",{});
+  var enabled = data.autoplay || false;
+  console.log("enabled: " + enabled);
+  var playStart = cmd === "start" && !enabled;
+  var playStop = ( cmd === "stop" && enabled ) || ( cmd === "start" && enabled );
+  var playNext = cmd == "next" && enabled;
 
-export function storyAutoplay(cmd){
-  var h = mx.helpers;
-  var data = h.path(mx.data,"story.data");
+  return new Promise(function(resolve,reject){
+    var stopControl = function(){
+      return data.autoplay === false;
+    };
 
-  if(data){
-
-    var stop = storyAutoplayStop();
-
-    if( cmd === "start"){
-      stop = !stop;
-      if( !stop ){
-        h.iconFlash("play");
-        storyAutoplayStop(false);
-      }
+    if(playStart){
+      console.log("start");
+      h.iconFlash("play");
+      data.autoplay = true;
+      storyAutoPlay("next");
     }
 
-    if( stop ){
-
-      storyAutoplayStop(true);
+    if(playStop){ 
+      console.log("stop");
+      data.autoplay = false;
       h.iconFlash("stop");
-      return;
-
-    }else{
-
-      h.storyGoTo("next",true,storyAutoplayStop)
-        .then(function(res){
-          storyAutoplay("continue");
-        });
     }
-  }
+
+    if(playNext){
+      console.log("next");
+      h.storyGoTo("next",true,stopControl)
+        .then(function(res){
+          if(data.autoplay){
+            storyAutoPlay("next");
+          }
+        });
+
+    }
+    resolve(data.autoplay);
+  });
+
 }
+
+
+
+
+//function storyAutoplayStop(stop){  
+  //var h = mx.helpers;
+  //var data = h.path(mx.data,"story.data");
+  //if( data ){
+    //if( typeof(stop) === "boolean" ){
+      //data.autoplayStop = stop;
+    //}
+    //return data.autoplayStop === true;
+  //}
+//}
+
+//export function storyAutoplay(cmd){
+  //var h = mx.helpers;
+  //var data = h.path(mx.data,"story.data");
+
+  //if(data){
+
+    //var stop = storyAutoplayStop();
+
+    //if( cmd === "start"){
+      //stop = !stop;
+      //if( !stop ){
+        //h.iconFlash("play");
+        //storyAutoplayStop(false);
+      //}
+    //}
+
+    //if( stop ){
+
+      //storyAutoplayStop(true);
+      //h.iconFlash("stop");
+      //return;
+
+    //}else{
+
+      //h.storyGoTo("next",true,storyAutoplayStop)
+        //.then(function(res){
+          //storyAutoplay("continue");
+        //});
+    //}
+  //}
+//}
 
 
 /**
@@ -1111,12 +1251,6 @@ export function storyController(o){
     *Check for previews views list ( in case of update );
     */
     var oldViews = h.path(mx.data,"story.data.views");
-
-    if(oldViews){
-      debugger;
-    
-    }
-
 
     if(! (oldViews instanceof Array) ){
       oldViews =  mx.helpers.getLayerNamesByPrefix({
@@ -1339,21 +1473,11 @@ export function storyBuild(o){
    */
   var doc = window.document;
   var divOldStory = doc.getElementById(o.idStory);
-  var startScroll = 0;
   var wrapper = doc.querySelector("." + o.classWrapper );
   var divStory = doc.createElement("div");
   var divStoryContainer = doc.createElement("div");
   var divMap = o.data.map.getContainer();
-  //var stepNum = 0;
-
- /* remove old story if exists. */
-  if(divOldStory){
-    startScroll = divOldStory.scrollTop;
-    divOldStory.remove();
-  }
-
-  divStoryContainer.dataset.start_scroll = startScroll;
-
+  
   /* Add container and story classes */
   divStory.classList.add(o.classStory);
   divStoryContainer.classList.add(o.classContainer);
@@ -1380,7 +1504,17 @@ export function storyBuild(o){
       });
       divSlide.classList.add(o.classSlide);
       divSlideBack.classList.add(o.classSlideBack);
-      divSlideFront.innerHTML = slide.html[lang];
+
+      /**
+       *  Check if content is html. If not, add it in a paragraph
+       */ 
+      var content = slide.html[lang] || "" ;
+
+      if(!mx.helpers.isHTML(content)){
+        content = "<p>"+content+"<\p>";
+      }
+
+      divSlideFront.innerHTML = content;
       divSlideFront.classList.add(o.classSlideFront);
       /**
        * Add ref for contentTools editor
@@ -1410,8 +1544,12 @@ export function storyBuild(o){
   /**
   * Finish building by adding container  to wrapper.
   */
+  
   divStoryContainer.appendChild(divStory);
   divMap.appendChild(divStoryContainer);
+  /**
+  * Set scroll to previous state
+  */ 
 }
 
 /*
@@ -1426,48 +1564,52 @@ export function storySetTransform(o) {
       return "";
     },
     1: function(p) {
-      return "translateX(" + p + "%)";
+      return "translate3d(" + p + "%,0,0)";
     },
     2: function(p) {
-      return "translateY(" + p + "%)";
+      return "translate3d(0," + p + "%,0)";
     },
     3: function(p) {
-      return "translateZ(" + p + "px)";
+      return "translate3d(0,0," + p + "px)";
     },
     4: function(p) {
-      p = p * 3.6;
-      return "rotateX(" + p + "deg)";
+      p = (p * 3.6 ) ;
+      return "rotate3d(1,0,0," + p +"deg)";
     },
     5: function(p) {
-      p = p * 3.6;
-      return "rotateY(" + p + "deg)";
+      p = (p * 3.6 );
+      return "rotate3d(0,1,0," + p + "deg)";
     },
     6: function(p) {
-      p = p * 3.6;
-      return "rotateZ(" + p + "deg)";
+      p = (p * 3.6 ) ;
+      return "rotate3d(0,0,1," + p + "deg)";
     },
     7: function(p) {
       p = (p / 100) + 1;
       return "scale(" + p + ")";
     }
   };
+  /* all transformations */
   var tt = [];
+  /* Reverse percentage : start at 0, finish at 100 */
+  var p = 100 - o.percent;
 
   for (var i = 0; i < o.data.length; i++) {
     var d = o.data[i];
-    var p = o.percent;
-    var t = d.t;
 
-
+    /* limit percentage to start->end range*/
     if (p <= d.s) p = d.s;
     if (p >= d.e) p = d.e;
-    p = ((p - d.s + d.o) * d.f);
 
-    tt.push(tf[t](p));
+    /* modify the offset. Default middle is expected to be at 50%*/
+    p = p - 50 + d.o ;
 
-
+    /* add a factor to transformation percentage */
+    p = p * d.f;
+  
+    /* add to transformations */
+    tt.push(tf[d.t](p));
   }
-
 
   return tt.join(" ");
 
@@ -1482,7 +1624,7 @@ export function storyPlayStep(o){
   var steps = mx.helpers.path(o,"view.data.story.steps");
   var data = mx.helpers.path(mx.data,"story.data");
   var stepNum = o.stepNum;
-  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
+  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove, vBefore;
   var m = mx.maps[o.id];
 
   data.currentStep = stepNum;
@@ -1511,29 +1653,45 @@ export function storyPlayStep(o){
   /**
    * Fly to position
    */
-  m.map[anim.method]({
-    duration: anim.duration,
-    zoom : pos.z,
-    easing : easing,
-    bearing : pos.bearing,
-    pitch :  pos.pitch,
-    center : [ pos.lng, pos.lat ] 
-  });
+  if( anim.method == "fitBounds" ){
+   
+   if( pos.s && pos.n && pos.e && pos.w ){
+     m.map.fitBounds([pos.w,pos.s,pos.e,pos.n]);
+     m.map.once("moveend",function(){
+       m.map.easeTo({pitch:0.0});
+    });
+   }else{
+    throw new Error("Missing position to fitbounds");
+   }
+
+  }else{
+    m.map[anim.method]({
+      duration: anim.duration,
+      zoom : pos.z,
+      easing : easing,
+      bearing : pos.bearing,
+      pitch :  pos.pitch,
+      center : [ pos.lng, pos.lat ] 
+    }); 
+
+  }
 
   /**
    * Add view if not alredy visible
    */
   mx.helpers.onNextFrame(function(){
+    
     vVisible = getViewsVisible();
-
     vToRemove = mx.helpers.arrayDiff(vVisible,vStep);
     vToAdd = mx.helpers.arrayDiff(vStep,vVisible);
 
-    vToAdd.forEach(function(v){
+    vToAdd.forEach(function(v,i){
+      var vPrevious =  vStep[i-1] || mx.settings.layerBefore;
       mx.helpers.addView({
         id : o.id,
-        idView: v
-      }); 
+        idView: v,
+        before : vPrevious
+      });
     });
 
     vToRemove.forEach(function(v){
@@ -1542,11 +1700,14 @@ export function storyPlayStep(o){
         prefix : v
       });
     });
+
+    mx.helpers.updateViewOrder({
+      order : vStep,
+      id : o.id
+    });
+
+
   });
 
 }
-
-
-
-
 

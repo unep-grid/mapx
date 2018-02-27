@@ -169,8 +169,9 @@ mxDbGetDistinctCollectionsTags <- function(table){
 #' @param to {integer} Position of the row to end with
 #' @param keys {NULL|vector} Subset returned keys. If NULL, full dataset.
 #' @param language {character} Default language for data #> '{"title",<language>}'
+#' @param editMode {boolean} Avoid readOnly evaluation (when views is provided without collection, the readOnly mode is set). When TRUE, editability is evaluated according to `edit` targets parameter
 #' @export 
-mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD", allCountry=FALSE, read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5, language="en"){
+mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD", allCountry=FALSE, read=c("public"), edit=c(), userId=1, id=NULL, from=0, to=5, language="en", editMode=FALSE){
 
   #  temp table name
   tableTempName= randomString("MX_SUB_VIEW")
@@ -179,6 +180,12 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
   # Keep the same con for all request
   #
   con <- mxDbAutoCon()
+
+
+  #
+  # If views is provided, readonly is set
+  #
+  readOnly = ( !noDataCheck(views) && length(views) > 0 && noDataCheck(collections) )
 
   #
   # Catch and clean
@@ -208,20 +215,22 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
       keys <- "*" 
     }
 
-    queryMain = sprintf("CREATE TEMPORARY TABLE %1$s AS (
+    queryMain = "
+    CREATE TEMPORARY TABLE " + tableTempName + " AS (
       WITH a AS (
         SELECT id as _id, MAX(date_modified) AS _date_latest
-        FROM %2$s
+        FROM " + tableName + "
         GROUP BY _id
         ),
       c as (
         SELECT *, b.data -> 'countries' as _countries, b.data -> 'collections' as _collections
-        FROM %2$s b
+        FROM " + tableName + " b
         JOIN a ON a._id = b.id AND a._date_latest = b.date_modified
         WHERE
         ( 
-          ( target ?| array[%3$s] ) OR
-          ( editor = '%4$s' AND b.target ?| array['self']) 
+          ( target ?| array[" + read + "] ) OR
+          ( editor = '" + userId + "' AND b.target ?| array['self']) OR
+          " + readOnly + "
           )
         ),
       d as (
@@ -229,26 +238,31 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
           FROM c
         WHERE
         (
-          ( %7$s ) OR
-          (country ='%5$s') OR
-          (_countries ?& array['%5$s']) OR
+          ( " + allCountry +" ) OR
+          (country ='" + project + "') OR
+          (_countries ?& array['" + project + "']) OR
           (_countries ?& array['GLB'])
           )
         )
 
       SELECT *, 
-      data #> '{\"title\",\"%8$s\"}' as _title,
+      data #> '{\"title\",\"" + language + "\"}' as _title,
       ( 
         CASE WHEN
         (
           (
-            country = '%5$s' 
+            NOT " + readOnly + "
+            OR " + editMode + "
             )
           AND
           (
-            d.target ?| array[%6$s] 
+            country = '" + project + "' 
+            )
+          AND
+          (
+            d.target ?| array[" + edit + "] 
             OR (
-              d.editor = '%4$s' 
+              d.editor = '" + userId + "' 
               AND d.target ?| array['self']
               )
             )
@@ -258,28 +272,16 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
         ) as _edit
       FROM d
       )"
-    , tableTempName
-    , tableName
-    , read
-    , userId
-    , project
-    , edit
-    , allCountry
-    , language
-    )
 
     mxDbGetQuery(queryMain,con=con)
 
   if(!noDataCheck(collections)){
 
-    sql =  sprintf("
+    sql = "
       SELECT DISTINCT id 
-      FROM %1$s a
-      WHERE _collections ?| array['%2$s']
-      ",
-      tableTempName,
-      collections
-      )
+      FROM " + tableTempName +" a
+      WHERE _collections ?| array['" + collections + "']
+      "
 
     views = c(
       views,
@@ -293,35 +295,29 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
     #
     # Filtered list of record
     #
-    q <- sprintf("
+    q <- "
       SELECT json_agg(row_to_json(a)) res from 
       (
-        SELECT %3$s
-        FROM %1$s
+        SELECT " + keys + "
+        FROM " + tableTempName + "
         ) a
-      WHERE  a.id in (%2$s)"
-      , tableTempName
-      , views
-      , keys
-      )
+      WHERE  a.id in ("+ views +")"
+
   } else {
 
     #
     # Full list of records
     #
-    q <- sprintf("
-      SELECT json_agg(row_to_json(a)) res from
-        (
-        SELECT %2$s
-        FROM %1$s
-        ) a "
-      , tableTempName
-      , keys
-      )
+    q <- "
+    SELECT json_agg(row_to_json(a)) res from
+    (
+      SELECT " + keys + "
+      FROM " + tableTempName + "
+      ) a "
   }
 
   time <- mxTimeDiff("Get view : query")
- 
+
   res <- na.omit(mxDbGetQuery(q,con=con))
   mxTimeDiff(time)
 
@@ -1256,9 +1252,13 @@ mxDbGeojsonCountFeatures <- function(path){
 
   try(silent=T,{
     if(file.exists(path)){
-      cmdCount <- sprintf("grep -o '\"geometry\"'  '%1$s' | wc -l",path)
+      #
+      # NOTE:
+      # Fragile method, but on large file, very fast. More than node,or jq. 
+      # But very fragile
+      #
+      cmdCount <- sprintf("grep -o '\"geometry\": *{'  '%1$s' | wc -l",path)
       nFeatures <- system(cmdCount, intern=T)
-      
       if(!noDataCheck(nFeatures)){
         nFeatures = as.numeric(nFeatures) 
     }}
@@ -1776,7 +1776,7 @@ mxToJsonForDb<- function(listInput){
 #' @param idSource Source (layer) id
 #'
 mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
-
+ 
   sql <- "
   WITH latest AS (
     SELECT id, 
@@ -1793,7 +1793,7 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
     ),
   views_table AS (
     SELECT 
-    subset.editor, subset.id , subset.pid,
+    subset.editor, subset.id , subset.data#>>'{\"attribute\",\"name\"}' as variable, subset.pid, 
     CASE
     WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
     THEN data#>>'{\"title\",\"" + language + "\"}'
@@ -2186,53 +2186,6 @@ mxDbGetLayerMeta <- function(layer){
   return(res)
 }
 
-##' Get view data as list
-##' @param idView Vector of view id(s) for which to retrieve data
-##' @export
-#mxDbGetViewData <- function(idView){
-
-  #if(is.null(idView)) return()
-
-  #dat <- list()
-  #conf <- mxGetDefaultConfig()
-  #tableName <- conf[["pg"]][["tables"]][["views"]]
-
-  ## test if style is requested
-
-  ## search for most version of the view only, filter by country, target and id.
-  #q <- gsub("\n|\\s\\s+"," ",sprintf("
-      #SELECT json_agg(row_to_json(t)) res from (
-        #SELECT 
-        #t1.id, 
-        #t1.country, 
-        #t1.editor,
-        #t1.type, 
-        #t1.target, 
-        #t1.date_modified, 
-        #t1.data
-        #FROM %1$s t1 
-        #WHERE date_modified = (
-          #SELECT MAX(date_modified)
-          #FROM %1$s t2
-          #WHERE t2.id = t1.id
-          #)
-        #AND t1.id ='%2$s' 
-        #limit 1
-        #) t
-      #"
-      #, tableName
-      #, idView
-      #)
-    #)
-
-  #res <- na.omit(mxDbGetQuery(q)$res)
-
-  #if(length(res)>0){ 
-    #dat <- fromJSON(res,simplifyDataFrame=F)[[1]]
-  #}
-
-  #return(dat)
-#}
 
 #' Encrypt or decrypt data using postgres pg_sym_encrypt
 #' 
@@ -2488,10 +2441,34 @@ mxDbEmailIsKnown <- function(email=NULL,userTable="mx_users",active=TRUE,validat
 
 
 mxDbGetEmailFromId <- function(id,userTable="mx_users"){
-  mxDbGetQuery(sprintf("SELECT email from mx_users where id = 2",id))$email
+  mxDbGetQuery(sprintf("SELECT email from mx_users where id = %1$s",id))$email
 }
 
 
+#' Update view data according to source value
+#' @param idSource Source/Layer id
+#' @return null
+mxDbUpdateAllViewDataFromSource <- function(idSource){
 
+  idSource <- tolower(idSource)
+  viewsData <- mxDbGetViewsIdBySourceId(idSource)
 
+  for(i in viewsData$id ){
+    view <-viewsData[viewsData$id==i,]
+    viewData <- mxDbGetViews(views=view$id,allCountry=TRUE,userId=view$editor)[[1]]
+    sourceData <- mxDbGetLayerSummary(idSource,view$variable,language="en")$list
+    viewUpdated <- mxUpdateDefViewVt(viewData, sourceData)
+    viewUpdated[["date_modified"]] <- Sys.time()
+    viewUpdated[["target"]] <- as.list(viewUpdated$target)  
+    #
+    # save a version in db
+    #
+    mxDbAddRow(
+      data=viewUpdated,
+      table=.get(config,c("pg","tables","views"))
+      )
+
+    mxDebugMsg("Updated view " + i + " for source id" + idSource )
+  }
+}
 

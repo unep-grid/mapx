@@ -85,6 +85,7 @@ reactViewsCompactAll <- reactive({
     read = userRole$read,
     edit = userRole$edit,
     userId = userData$id,
+    language = language,
     allCountry = TRUE,
     keys = c("id","pid","country","type","_title","target")
     )

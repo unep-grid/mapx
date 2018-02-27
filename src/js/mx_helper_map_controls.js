@@ -9,7 +9,7 @@ export function mapControlLiveCoord(){}
 mapControlLiveCoord.prototype.onAdd = function(map){
 
   var helper = mx.helpers;
-  var coord = document.createElement("a");
+  var coord = document.createElement("div");
   map.on('mousemove',function(e){
     var pos =  e.lngLat;
     var lat = helper.formatZeros(pos.lat,3);
@@ -51,6 +51,24 @@ mapxLogo.prototype.onRemove = function() {
 };
 
 
+export function showSelectCountry(){
+  var val = {
+    time : new Date(),
+    value : 'showCountry' 
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+export function showSelectLanguage(){
+  var val = {
+    time : new Date(),
+    value : 'showLanguage' 
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+
+
 /**
  * Create the prototype containing additional control / button.
  * Some of the actions are related to shiny framework
@@ -60,15 +78,20 @@ mapControlMain.prototype.onAdd = function(map) {
   var idMap = map._container.id;
   var helper = mx.helpers;
 
+  /**
+  * Toggle controls (btnToggleBtns)
+  */
   helper.toggleControls = function(o){
 
     o = o || {};
-    var hide = o.hide || !btns.btnToggleBtns.hidden;
-    var action = hide ? 'add':'remove';  
-     //idToggle = ["#tabLayers","#tabTools","#tabSettings"];
+    var hide = o.hide || !btns.btnToggleBtns.hidden; // state saved in buttons list
+    var action = hide ? 'add' : 'remove';  
     var selectorToggle = [".mx-panel-views",".mx-panel-tools",".mx-panel-settings"];
     var idSkip = o.skip || ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
-    btns.btnToggleBtns.hidden = hide;
+    var btnToggle = btns.btnToggleBtns;
+
+    btnToggle.hidden = hide;
+    btnToggle.elBtn.className = hide ? btnToggle.classesHidden : btnToggle.classes;
 
     for(var key in btns){  
       if( idSkip.indexOf(key) == -1 ){
@@ -77,18 +100,22 @@ mapControlMain.prototype.onAdd = function(map) {
     }
 
     helper.classAction({
-      selector:selectorToggle,
-      action:action,
-      class:'mx-hide-bis'
+      selector : selectorToggle,
+      action : action,
+      class : 'mx-hide-bis'
     });
   };
 
+  /**
+  * Build buttons list
+  */
   var btns = {
-    btnToggleBtns:{
-      classes:"fa fa-bars",
-      key:"btn_toggle_all",
-      hidden:false,
-      action:helper.toggleControls
+    btnToggleBtns : {
+      classes :"fa fa-arrow-left",
+      classesHidden : "fa fa-arrow-right",
+      key : "btn_toggle_all",
+      hidden : false,
+      action : helper.toggleControls
     },
     btnShowLogin:{
       classes:"fa fa-sign-in",
@@ -101,30 +128,8 @@ mapControlMain.prototype.onAdd = function(map) {
         Shiny.onInputChange('btn_control', val);
       }
     },
-    btnShowCountry:{
-      classes:"fa fa-globe",
-      key:"btn_country",
-      action:function(){
-        var val = {
-          time : new Date(),
-          value : 'showCountry' 
-        };
-        Shiny.onInputChange('btn_control', val);
-      }
-    },
-    btnShowLanguage:{
-      classes:"fa fa-language",
-      key:"btn_language",
-      action:function(){ 
-        var val = {
-          time : new Date(),
-          value : 'showLanguage' 
-        };
-        Shiny.onInputChange('btn_control', val);
-      }
-    },
     btnTabView:{
-      classes:"fa fa-newspaper-o",
+      classes:"fa fa-list-ul",
       key:"btn_tab_views",
       action:function(){ 
         helper.panelSwitch(
@@ -240,6 +245,7 @@ mapControlMain.prototype.onAdd = function(map) {
 
       el = document.createElement("li");
       elBtn = document.createElement("div");
+      btn.elBtn = elBtn;
 
       if(btn.liClasses) el.className = btn.liClasses;
       if(btn.classes) elBtn.className = btn.classes;

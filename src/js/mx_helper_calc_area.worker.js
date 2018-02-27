@@ -24,7 +24,7 @@ onmessage = function(e) {
   sendMessage("Combine " + featuresLength + " features ...");
   g = combine(g);
 
-  sendMessage("Calculating enveloppe ...");
+  sendMessage("Calculating out ...");
   g = buffer(g,0);
 
   sendMessage("Clipping data to selected extent ..."); 

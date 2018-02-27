@@ -93,11 +93,25 @@ observe({
       filter=filter
       )
 
+    lat = bnd[['lat']]
+    lng = bnd[['lng']]
+    zoom = bnd[['zoom']]
+
+    if(!noDataCheck(query$lat) && !noDataCheck(query$lng) && !noDataCheck(query$zoom)){
+      lat  = as.numeric(query$lat)
+      lng = as.numeric(query$lng)
+      zoom = as.numeric(query$zoom)
+     
+      query$lat <<- NULL
+      query$lng <<- NULL
+      query$zoom <<- NULL
+    }
+
     mglFlyTo(
       id = config[["map"]][["id"]],
-      lat = bnd[["lat"]],
-      lng = bnd[["lng"]],
-      zoom = bnd[["zoom"]]
+      lat = lat,
+      lng = lng,
+      zoom = zoom
       )
 
     if(!isGuest){

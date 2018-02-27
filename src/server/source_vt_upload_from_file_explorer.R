@@ -218,8 +218,8 @@ observeEvent(input$btnImportNewSource,{
       # Add view to the DB
       #
       mxDbAddGeoJSON(
-        geojsonPath=filePath,
-        tableName=idSource
+        geojsonPath = filePath,
+        tableName = idSource
         )
 
       reactData$geojsonProgressData <- list(

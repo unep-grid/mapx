@@ -322,7 +322,7 @@ export function handleUploadFileEvent(evt) {
 
     // Only process geojson files. Validate later.
     if (!f.fileType) {
-      alert(f.name + " : filename not valid. Should be .zip, .kml, .json, .geojson or .gpx");
+      alert(f.name + " : filename not valid. Supported files – based on file extension – are " + JSON.stringify(Object.keys(exts)));
       continue;
     }
 
@@ -332,11 +332,11 @@ export function handleUploadFileEvent(evt) {
     reader.onloadstart = (helper.startProgress)(f);
     reader.onprogress = (helper.updateProgress)(f);
     reader.onerror = (helper.errorProgress)(f);
-
     reader.onload = (helper.startWorker)(f);
-    //reader.onloadend = (helper.updateLayerList)(f);
 
-    // read the geojson
+    /*
+     * read the data
+    */
     if(f.fileType == "zip" ){
       reader.readAsArrayBuffer(f);
     }else{ 

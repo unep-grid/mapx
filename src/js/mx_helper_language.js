@@ -17,6 +17,7 @@ export function updateLanguage(o){
   // Set language for the document
   document.querySelector("html").setAttribute("lang",o.lang);
 
+  //updateButtons(o);
   updateLanguageElements(o);
   updateLanguageViewsList(o);
   updateLanguageMap(o);
@@ -81,6 +82,10 @@ export function updateLanguageElements(o) {
 
       var els, el, doc, label, found, setLabel = {};
       var lang = o.lang;
+
+     // custom buttons
+      var elBtnLanguage = document.querySelector("#btnShowLanguage");
+      elBtnLanguage.dataset.lang_key = o.lang; 
 
       // set value selector
 
@@ -294,7 +299,6 @@ export function updateLanguageViewsList(o){
         elLegend.innerHTML = mx.templates.viewListLegend(v);
       }
 
-      console.log(elTitle);
       if(elTitle){
         elTitle.innerHTML = mx.helpers.getLabelFromObjectPath({
           lang : lang,

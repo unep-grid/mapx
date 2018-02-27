@@ -369,6 +369,7 @@ observeEvent(reactData$loginRequested,{
     ck <- list(ck)
     # name it
     names(ck) <- .get(config,c("users","cookieName"))
+
     # save it
     mxSetCookie(
       cookie = ck,

@@ -44,10 +44,10 @@
       {{?}}
       {{? h.any([ view.type == 'gj', view.type == 'vt' ]) }}
       <li class="mx-pointer hint--right" data-view_action_key="btn_opt_zoom_all" data-view_action_target="{{=view.id}}" data-lang_key="btn_opt_zoom_all" data-lang_type="tooltip">
-        <div class="fa fa-search-minus"></div>
+        <div class="fa fa-arrows-alt"></div>
       </li>
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_zoom_visible" data-lang_type="tooltip" data-view_action_key="btn_opt_zoom_visible" data-view_action_target="{{=view.id}}">
-        <div class="fa fa-search-plus"></div>
+        <div class="fa fa-search"></div>
       </li>
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_reset" data-lang_type="tooltip" data-view_action_key="btn_opt_reset" data-view_action_target="{{=view.id}}">
         <div class="fa fa-undo"></div>
@@ -68,11 +68,9 @@
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-info-circle"></div>
       </li>
-      {{?h.path(view,'data.source.allowDownload') }}
       <li class="mx-pointer hint--right" data-lang_key="btn_opt_download" data-lang_type="tooltip" data-view_action_key="btn_opt_download" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-cloud-download"></div>
       </li>
-      {{?}}
       {{?}}
       {{?view.type == 'gj'}}
       <li class="mx-pointer hint--right" data-lang_key="btn_upload" data-lang_type="tooltip" data-view_action_key="btn_upload_geojson" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">

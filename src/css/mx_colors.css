@@ -1,6 +1,6 @@
 
-/** Black modifiers
-*
+/** 
+* Set colors of mapx
 */
 
 .mx * {   
@@ -10,8 +10,16 @@
   --mx_ui_border: hsl(0, 0%, 81%);
   --mx_ui_background: hsla(0, 0%, 97%, 0.95);
   --mx_ui_shadow: hsla(0, 0%, 60%, 0.3);
+  --mx_ui_link : #12b0f8;
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
+}
+
+
+.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo) {
+  color: var(--mx_ui_link);
+  text-decoration: none;
+  border-bottom:1px solid var(--mx_ui_link);
 }
 
 
@@ -43,13 +51,6 @@
   -moz-appearance: none;
   appearance: none;
 } 
-/*[> targeting ie 9 and 10<]*/
-/*@media screen and (min-width:0{{ content }}) {*/
-  /*select {*/
-    /*background:none;*/
-    /*padding: 5px;*/
-  /*}*/
-/*}*/
 
 .mx .theme_colors label {
   color : var(--mx_ui_text); 
@@ -77,19 +78,25 @@
   border-top: 1px solid var(--mx_ui_border);
 }
 
+
+/*.mx-views-country-language-bar {*/
+  /*border-bottom: 1px solid var(--mx_ui_border);*/
+/*}*/
+.mx-views-country-language-bar > span {
+  border-right: 1px solid var(--mx_ui_border);
+}
+.mx-views-country-language-bar > span:hover {
+  background-color:var(--mx_ui_text);
+  color:var(--mx_ui_background);
+}
+
 .mx .mx-view-item-desc {
   color: var(--mx_ui_text_text);
 }
 
-
-/*.mx .shadow-inset {*/
-  /*position:relative;*/
-  /*-webkit-box-shadow: inset  2px 2px 5px 0 var(--mx_ui_shadow);  */
-  /*-moz-box-shadow: inset  2px 2px 5px 0 var(--mx_ui_shadow);*/
-  /*box-shadow : inset 2px 2px 5px 0 var(--mx_ui_shadow);*/
-  /*pointer-events:none;*/
-  /*z-index:2;*/
-/*}*/
+.mx-views-filter-text-input {
+    background: var(--mx_ui_background);
+}
 
 .mx .jed-container div[data-schematype='object'] {
     border-radius: 0px;

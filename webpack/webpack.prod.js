@@ -26,13 +26,10 @@ module.exports = merge(common, {
     }),
     new BundleAnalyzerPlugin(),
     new UglifyJSPlugin({
-      parallel: {
-        cache: true,
-        workers: 4 // for e.g
-      },
+      parallel : true,
+      cache : true,
       uglifyOptions: {
         ie8: false,
-        //mangle : false,
         mangle : true,
         compress: {
           warnings: false,

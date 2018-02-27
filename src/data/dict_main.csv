@@ -13,6 +13,7 @@
 "btn_finish","Finish","Finir","","","","","","تمام","تمام"
 "btn_fullscreen","Display the app in fullscreen mode","Mode plein écran","","","","","","نمایش برنامه بشکل صفحه کامل","اپلیکیشن په بشپړه صفحه کې ښکاره کړئ"
 "btn_get_area_visible","Area of visible features","Superficie des objets visibles","","","","","","ساحه پدیده های قابل دید","د لیدلو وړ ځانګړتیاوو ځای"
+"btn_get_overlap_visible","Overlaps to geojson","Chevauchements vers geojson","","","","","","",""
 "btn_get_layer_summary","Get layer summary","Visualiser le résumé de la source","","","","","","تنظیم  منابع",NA
 "btn_iframe_builder","Embed mapx","Intégration mapx","","","","","","",NA
 "btn_language","Language","Langue  ","","","","","","زبان","ژبه"
@@ -28,6 +29,8 @@
 "btn_opt_edit_story","Edit story","Editer le récit","","","","","","",NA
 "btn_opt_edit_style","Set the style of this view","Configurer le style de cette vue","","","","","","تنظیم ستایل این نمایه","ددې لیدنې شکل تنظیم کړئ"
 "style_title_legend","Legend title","Titre de la légende","","","","","","",""
+"style_reverse_order","Reverse displayed layers order","Inverser l'ordre des couches sur la carte","","","","","","",""
+"style_reverse_order_desc","If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack","Si coché, la pile de couches sera inversée : la première règle défininira la couche à la base de la pile","","","","","","",""
 "btn_opt_meta","Display metadata","Afficher les métadonnées ","","","","","","نمایش ابرداده","میتا ډیټا ښکاره کړئ"
 "btn_opt_numeric","Filter by numeric value","Filtrer par valeur numerique","","","","","","",NA
 "btn_opt_reset","Reset the view","Réinitialiser la vue","","","","","","تنظیم دوباره نمایش","د ټولو لیدنو بیا کتنه"
@@ -246,3 +249,7 @@
 "view_type_select","Type of the view","Type de la vue","","","","","","نوع نما","د لیدنې ډول"
 "vt","Vector tiles","Tuiles vectorielles","","","","","","تایل ویکتوری","ویکتوري ټیلونه"
 "wms","Web Map Service (wms)","Web Map Service (wms)","","","","","","خدمات آنلاین نقشه (WMS)","د نقشې آنلاین خدمتونه"
+"src_download_issues","The source can't be downloaded","La source ne peut être téléchargée","","","","","","",""
+"you_not_logged_in","you are not logged in","vous n'êtes pas loggé","","","","","","",""
+"src_download_disabled","the source download is not allowed","le téléchargement n'est pas permis","","","","","","",""
+

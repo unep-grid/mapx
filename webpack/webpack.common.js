@@ -2,7 +2,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const webpack = require('webpack');
+//const babelEnvDeps = require('webpack-babel-env-deps');
+          //babelEnvDeps.exclude(),
+const webpack = require( 'webpack');
 
 module.exports = {
   node : {
@@ -33,18 +35,32 @@ module.exports = {
         ]
       },
       { test: /worker\.js$/, use: { loader: 'worker-loader' }},
-      { test: /\.js$/, loader:'babel-loader', options:{presets:['es2015']},exclude: /node_modules/},
-      { test: /\.dot$/, use: 'dot-loader' },
+      { test: /\.js$/, 
+        exclude: /node_modules/,
+        use : {
+          loader:'babel-loader', 
+          options:{
+            presets: [
+              [ '@babel/preset-env',{
+                "targets": {
+                  "browsers": ["defaults"] // https://github.com/ai/browserslist#queries
+                }
+              }            
+              ]
+            ],
+            plugins:['loop-optimizer','dynamic-import-node']
+          }
+        }
+      },
+      { test: /\.dot$/, use: 'dot-loader' }, 
+      {
+        test: /\.coffee$/,
+        use: 'coffee-loader'      //used mainly to extend ContentTools
+      },
       { test: /.css$/, 
         use : [
           { loader: 'style-loader'},
           { loader: 'css-loader' }
-/*          { loader: 'postcss-loader', options: { */
-            //config:{
-              //path:'webpack/postcss.config.js'
-            //}
-          /*} */
-          //}
         ]
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },

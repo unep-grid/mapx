@@ -15,7 +15,7 @@ observeEvent(input$btn_control,{
 
         mxModal(
           id="uiSelectLanguage",
-          textCloseButton=d("btn_cancel",language),
+          textCloseButton=d("btn_close",language),
           content = selectizeInput(
             inputId="selectLanguage",
             choices=languages,
@@ -93,7 +93,7 @@ observeEvent(input$btn_control,{
         mxModal(
           id="uiSelectCountry",
           content=selectCountry,    
-          textCloseButton=d("btn_cancel",language),
+          textCloseButton=d("btn_close",language),
           )
 
 #selectizeInput(

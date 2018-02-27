@@ -12,6 +12,7 @@ export let data = {};
 export let controls = {};
 export let listener = {};
 export let settings = {
+  layerBefore : "mxlayers",
   language : "en",
   separators : {
     sublayer : "_@_",

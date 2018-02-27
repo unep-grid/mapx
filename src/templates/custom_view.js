@@ -64,6 +64,6 @@ return {
     * Set layer and source
     */
     o.map.addSource(o.idSource,o.source);
-    o.map.addLayer(o.layer,"mxlayers");
+    o.map.addLayer(o.layer,mx.settings.layerBefore);
   }
 };

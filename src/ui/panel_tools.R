@@ -27,6 +27,13 @@ areaLiveCalc  <- tags$div(
   tags$div(class="form-control",id="txtAreaSum")
   )
 
+## calc current polygon area
+#overlapLiveCalc  <-tags$button(
+  #id="btn_get_overlap_visible",
+  #class="btn btn-default",
+  #`data-lang_key`="btn_get_overlap_visible",
+  #onClick="mx.helpers.overlapToGeojson({id:'map_main',prefix:'MX-'})"
+  #)
 
 themeColor <- tagList(
   tags$h4(`data-lang_key`="title_settings_colors"),

@@ -1,6 +1,5 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 import * as mx from './mx_init.js';
-
 //var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 
@@ -95,26 +94,40 @@ export function getUrlParameter( name )
 * @param {String} icon fontawesome name
 */
 export function iconFlash(icon) {
+
   icon = icon || "cog";
-  var elContainer = document.createElement("div");
-  var elIcon = document.createElement("i");
 
-  elContainer.classList.add("mx-flash");
-  elIcon.className = "fa fa-" + icon;
-  elContainer.appendChild(elIcon);
+  var elContainer;
+  var elIcon;
 
-  document.body.appendChild(elContainer);
+  new Promise(function(resolve,reject){
 
-  setTimeout(function() {
-    elIcon.classList.add("active");
-  }, 0);
+    elContainer = document.createElement("div");
+    elIcon = document.createElement("i");
+    elContainer.classList.add("mx-flash");
+    elIcon.className = "fa fa-" + icon;
+    elContainer.appendChild(elIcon);
+    document.body.appendChild(elContainer);
 
-  setTimeout(function() {
-    elContainer.remove();
-  }, 1000);
+    resolve(true);
 
+  }).then(function(){
+
+    return new Promise(function(resolve, reject){
+      setTimeout(function() {
+        elIcon.classList.add("active");
+        resolve(true);
+      }, 0);
+    });
+
+  }).then(function(){
+
+    setTimeout(function() {
+      elContainer.remove();
+    }, 1000);
+
+  });
 }
-
 
 /**
 * Fill with zeros
@@ -541,6 +554,17 @@ export function date(val){
 export function isNumeric(n){
   return !isNaN(parseFloat(n)) && isFinite(n);
 }
+
+/**
+* Test if string contain HTML
+* @param {String} n string to test
+* @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193
+*/
+export function isHTML(str){
+  var test = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
+  return test(str);
+}
+
 
 
 /**

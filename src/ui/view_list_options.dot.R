@@ -194,7 +194,7 @@ liControlsVectorTiles <- tagList(
     `data-lang_key`="btn_opt_zoom_all",
     `data-lang_type`="tooltip",
     tags$div(
-      class="fa fa-search-minus"
+      class="fa fa-arrows-alt"
       )
     ),
   tags$li(
@@ -204,7 +204,7 @@ liControlsVectorTiles <- tagList(
     `data-view_action_key`="btn_opt_zoom_visible",
     `data-view_action_target`="{{=view.id}}",
     tags$div(
-      class="fa fa-search-plus"
+      class="fa fa-search"
       )
     ),
   tags$li(
@@ -256,7 +256,6 @@ liControlsVectorTiles <- tagList(
       class="fa fa-info-circle"
       )
     ),
-  "{{?h.path(view,'data.source.allowDownload') }}",
   tags$li(
     class="mx-pointer hint--right",
     `data-lang_key`="btn_opt_download",
@@ -268,7 +267,6 @@ liControlsVectorTiles <- tagList(
       class="fa fa-cloud-download"
       )
     ),
-  "{{?}}",
   "{{?}}"
   )
 

@@ -128,7 +128,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
         options = list(collapsed = TRUE),
         properties = list(
           rolesRead = list(
-            title = t("target_roles_read_title"),
+            title = t("target_roles_admin_title"),
             type =  "array",
             format = "checkbox",
             uniqueItems = TRUE,
@@ -406,7 +406,7 @@ mxSchemaSourceMeta <- function(language=NULL,rolesTarget="self",attributesNames=
             type = "boolean",
             format = "checkbox",
             title = t("license_allow_download"),
-            default = TRUE
+            default = FALSE
             ),
           licenses = list(
             type = "array",

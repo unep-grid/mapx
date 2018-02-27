@@ -15,6 +15,7 @@ observe({
 
       isolate({
 
+        isGuest <- isGuestUser()
         userData <- reactUser$data
         userRole <- getUserRole()
         language <- reactData$language
@@ -42,6 +43,7 @@ observe({
             edit = userRole$edit,
             userId = userData$id,
             language = language,
+            editMode = TRUE
             )
 
           if(length(viewData)>0){
@@ -97,34 +99,65 @@ observe({
           #
           switch(viewAction$action,
             "btn_opt_download"={
+              
+              idSource <- .get(viewData,c("data","source","layerInfo","name"))
+              
 
-              formats <- .get(config,c("data","format"))              
-              formatsNames <- sapply(formats,function(x){if(x$type=="vector"){return(x$name)}})
-              fileName <- subPunct(viewTitle) + ".shp"
+              if(noDataCheck(idSource)){ return() }
 
-              uiOut <- tagList(
-                selectizeInput("selectDownloadFormat",
-                  label = d("download_select_format_vector",language),
-                  choices = formatsNames,
-                  multiple=FALSE,
-                  options=list(
-                    dropdownParent="body"
+              
+              isGuest <- isGuestUser()
+              meta <- mxDbGetLayerMeta(idSource)
+              isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
+              
+                if(!isDownloadable || isGuest){
+
+                   uiDl = tags$h3(d("src_download_issues",language))
+
+                  if( isGuest ) {
+                    uiDl = tagList(uiDl, d("you_not_logged_in",language))
+                  }
+                  if( !isDownloadable ){
+                    uiDl = tagList(uiDl, d("src_download_disabled",language))
+                  }
+
+                  uiOut <- tagList(
+                    tags$p(uiDl)
+                    )   
+
+                }else{
+
+                  formats <- .get(config,c("data","format"))              
+                  formatsNames <- sapply(formats,function(x){if(x$type=="vector"){return(x$name)}})
+                  fileName <- subPunct(viewTitle) + ".shp"
+
+                  uiOut <- tagList(
+                    selectizeInput("selectDownloadFormat",
+                      label = d("download_select_format_vector",language),
+                      choices = formatsNames,
+                      multiple=FALSE,
+                      options=list(
+                        dropdownParent="body"
+                        )
+                      ),
+                    textInput("txtDownloadFileName",
+                      label = d("download_file_name",language),
+                      value = fileName
+                      )
                     )
-                  ),
-                 textInput("txtDownloadFileName",
-                   label = d("download_file_name",language),
-                   value = fileName
-                   )
-                )
 
-              btnList <- list(
-                actionButton(
-                  inputId = "btnSourceDownload",
-                  label = d("btn_confirm",language),
-                  disabled = TRUE
-                  )
-                )
+                  btnList <- list(
+                    actionButton(
+                      inputId = "btnSourceDownload",
+                      label = d("btn_confirm",language),
+                      disabled = TRUE
+                      )
+                    )
+                }
 
+                #
+                # create modal
+                #
               mxModal(
                 id = "modalViewEdit",
                 title = tags$b(viewTitle),
@@ -150,14 +183,15 @@ observe({
               numberUpdate <- mxDbGetQuery("SELECT count(pid) from mx_views where id = '" + idView +"'")$count
               idUsers <- mxDbGetQuery("SELECT distinct(editor) as id from (SELECT editor from mx_views WHERE id = '" + idView +"' ORDER BY date_modified DESC) as b")$id
               idUser <- viewData$editor
-              homepage <- .get(layerMeta,c("origin","homepage","url")) 
+              srcTitle <- .get(layerMeta,c("text","title",language))
+              if(noDataCheck(srcTitle)) srcTitle <- .get(layerMeta,c("text","title","en"))
+              homepage <- tags$a(target="_blank",href=.get(layerMeta,c("origin","homepage","url")),srcTitle) 
             
               dateSourceRangeStart <- .get(layerMeta,c("temporal","range","start_at"))
               dateSourceRangeEnd <- .get(layerMeta,c("temporal","range","end_at"))
 
               dateModified <- format(as.Date(dateModified),"%a %d %B %Y")
               dateCreated <- format(as.Date(dateCreated),"%a %d %B %Y")
-              #dateSourceCreated <- 
 
               integrityData <- .get(layerMeta,c("integrity"))
               integrityScore <- round(((sum(as.numeric(unlist(integrityData)))/(3*16))*100),1)
@@ -178,7 +212,7 @@ observe({
                 meta_target_roles=paste(target,collapse=","),
                 meta_view_country=country,
                 meta_view_countries=paste(countries,collapse=","),
-                meta_source_id=idSource,
+                meta_source_id=tolower(idSource),
                 meta_source_homepage=homepage,
                 meta_source_integrity_score=integrityScore + "%",
                 meta_source_time_range = list(
@@ -1034,7 +1068,6 @@ observeEvent(input$btnViewSave,{
   country = countryUpdate
   countries = as.list(countriesUpdate)
   editor = reactUser$data$id
-
 
   view[[c("editor")]] <- editor
   view[[c("data","countries")]] <- countries

@@ -42,7 +42,11 @@
             lat : mapPos.lat,
             lng : mapPos.lng,
             pitch : mapPos.p,
-            bearing : mapPos.b
+            bearing : mapPos.b,
+            n : mapPos.n,
+            s : mapPos.s,
+            e : mapPos.e,
+            w : mapPos.w
           });
         };
         btnPos = document.createElement("button");

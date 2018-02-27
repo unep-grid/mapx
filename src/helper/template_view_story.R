@@ -108,6 +108,18 @@ mxSchemaViewStory <- function(view,views,language){
         ),
       bearing = list(
         type = "number"
+        ),
+      n = list(
+        type = "number"
+        ),
+      s = list(
+        type = "number"
+        ),
+      e = list(
+        type = "number"
+        ),
+      w = list(
+        type = "number"
         )
       )
     )
@@ -324,8 +336,7 @@ mxSchemaViewStory <- function(view,views,language){
         )
       ),
     options = list(
-      collapsed = TRUE,
-      disable_edit_json = TRUE
+      collapsed = TRUE
       )          
     )
 
@@ -346,13 +357,14 @@ mxSchemaViewStory <- function(view,views,language){
     title = "Trajectory method",
      description = "Set the traveling method of the camera during the animation",
     type = "string",
-    enum = list("flyTo","easeTo","jumpTo"),
+    enum = list("flyTo","easeTo","jumpTo","fitBounds"),
     default = "jumpTo",
     options = list(
         enum_titles = list(
           "Fly to ( follow a flight path ) ",
           "Ease to ( follow a linear path ) ",
-          "Jump to ( move directly to the position )"
+          "Jump to ( move directly to the position )",
+          "Fit bounds ( Fit exactly the saved extend )"
           )
       )
     )
@@ -444,8 +456,7 @@ mxSchemaViewStory <- function(view,views,language){
     title = "Step",
     headerTemplate = "{{ i1 }}. {{ self.name }}",
     options = list(
-      collapsed = TRUE,
-      disable_edit_json = TRUE
+      collapsed = TRUE
       ),
     properties = list(
       slides = stepSlide,
