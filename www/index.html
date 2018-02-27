@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>map-x</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta http-equiv="Cache-control" content="private"/>
     <meta name="description" content="map-x"/>
@@ -27,16 +27,22 @@
       <div class="mx-panel-left mx-panel-views transparent shadow">
         <div id="viewListContainer" class="mx-views-container">
           <div class="mx-views-header">
-            <div id="viewsTools">
-              <input id="viewsFilterText" class="form-control" type="text" data-lang_key="view_filter_input" data-lang_type="placeholder"/>
+            <div>
+              <div class="mx-views-country-language-bar">
+                <span id="btnShowCountry" data-lang_key="COD" onclick="mx.helpers.showSelectCountry()"></span>
+                <span id="btnShowLanguage" data-lang_key="en" onclick="mx.helpers.showSelectLanguage()"></span>
+                <input id="viewsFilterText" class="mx-views-filter-text-input" type="text" data-lang_key="view_filter_input" data-lang_type="placeholder"/>
+              </div>
             </div>
           </div>
           <div class="mx-views-content">
             <ul class="mx-views-list"></ul>
           </div>
           <div class="mx-views-footer">
-            <div id="viewsFilter">
-              <div class="check-toggle-group" id="viewsFilterContainer"></div>
+            <div>
+              <div id="viewsFilter">
+                <div class="check-toggle-group" id="viewsFilterContainer"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -61,8 +67,8 @@
             <div id="uiBtnShowRoleManager" class="shiny-html-output"></div>
             <h4 data-lang_key="title_settings_colors"></h4>
             <div class="fold-container form-group shiny-input-container">
-              <input type="checkbox" id="1mtt360oodg3fr3" class="fold-switch"/>
-              <label class="fold-label" for="1mtt360oodg3fr3">Edit</label>
+              <input type="checkbox" id="jj4vsuswy2aheq7" class="fold-switch"/>
+              <label class="fold-label" for="jj4vsuswy2aheq7">Edit</label>
               <div class="fold-content mx-scroll-styled">
                 <div class="mx-settings-colors">
                   <div id="inputThemeColors"></div>
