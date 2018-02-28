@@ -1460,37 +1460,36 @@ export function handleViewClick(o){
         comment : "target is a legend filter",
         isTrue : el.dataset.view_action_key == "btn_legend_filter",
         action : function(){
+          var h = mx.helpers;
           /*
            * After click on legend, select all sibling to check 
            * for other values to filter using "OR" logical operator
            */
           var viewValues = [],
-            legendContainer = mx.helpers.parentFinder({
+            legendContainer = h.parentFinder({
               selector : el,
               class : "mx-view-item-legend" 
             }),
             legendInputs = legendContainer.querySelectorAll("input") 
           ;
           var idView = el.dataset.view_action_target;
-          var view = mx.helpers.getViews({id:'map_main',idView:idView});
-          var attribute = mx.helpers.path(view,'data.attribute.name');
-          var type = mx.helpers.path(view,'data.attribute.type');
-          var op = "==";
+          var view = h.getViews({id:'map_main',idView:idView});
+          var attribute = h.path(view,'data.attribute.name');
+          var type = h.path(view,'data.attribute.type');
+
           var  filter = ["any"];
-          if(type=="number") op = ">=";
+          var rules = h.path(view,"data.style.rulesCopy",[]);
 
-
-          for(var i = 0, il = legendInputs.length; i < il ; i++){
+          for(var i = 0, iL = legendInputs.length; i < iL ; i++){
             var li =  legendInputs[i];
             if(li.checked){
-              var viewValue = li.dataset.view_action_value; 
-              if(viewValue){
-                if(type=="number") viewValue = viewValue * 1;
-                filter.push([op,attribute,viewValue]);
-              }
+              var index = li.dataset.view_action_index*1;
+              var ruleIndex = rules[index];
+              if( typeof ruleIndex !== "undefined" && typeof ruleIndex.filter !== "undefined"  ) filter.push(ruleIndex.filter);
             }
           }
 
+          console.log(filter);
           view._setFilter({
             type : "legend", 
             filter : filter 
@@ -1992,7 +1991,6 @@ export function viewSetFilter(o){
     }
     m.setFilter(layer.id, filterFinal);
   }
-  //m.fire("filter");
 }
 
 
@@ -2574,7 +2572,8 @@ export function addViewVt(o){
       idView = view.id,
       style = p(view,"data.style"),
       time = p(view,"data.period"),
-      rules =  p(view,"data.style.rules") || [],
+      rules =  p(view,"data.style.rules",[]),
+      nulls = p(view,"data.style.nulls",[])[0],
       geomType = p(view,"data.geometry.type"),
       source =  p(view,"data.source"),
       num = 0,
@@ -2582,11 +2581,6 @@ export function addViewVt(o){
       styleCustom,
       defaultOrder = true;
 
-
-    /**
-    * clean values
-    */ 
-    rules = rules instanceof Array ? rules : [rules];
 
     if( ! source ) return;
 
@@ -2597,7 +2591,19 @@ export function addViewVt(o){
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
+
+    /**
+    * clean values
+    */ 
     rules = rules.filter(function(r){return r&&r.value != undefined;});
+    rules = rules instanceof Array ? rules : [rules];
+    rules = mx.helpers.clone(rules);
+
+    if(nulls){
+      nulls.isNull = true;
+      nulls.value = nulls.value == "" || typeof nulls.value === undefined ? null : nulls.value;
+      rules.push(nulls);
+    }
 
     if( style && ( style.reverseLayer === true ) ){
       defaultOrder = false;
@@ -2738,10 +2744,12 @@ export function addViewVt(o){
        */
       rules.forEach(function(rule,i){
         var value = rule.value;
+        var isNull = rule.isNull === true;
         var max = p(view,"data.attribute.max")+1;
         var min = p(view,"data.attribute.min")-1;
         var nextRule = rules[i+1];
-        var nextValue = nextRule ? nextRule.value !== undefined ? nextRule.value : max : max;
+        var nextRuleIsNull = nextRule && nextRule.isNull;
+        var nextValue = nextRule && !nextRuleIsNull ? nextRule.value !== undefined ? nextRule.value : max : max;
         var isNumeric = p(view,"data.attribute.type") == "number";
         var idView = view.id;
         var filter = ["all"];
@@ -2752,14 +2760,26 @@ export function addViewVt(o){
         /**
          * Set filter
          */
-        filter.push(["has", attr]);
+        if( value !== null){ 
+          filter.push(["has", attr]);
+        }
+       
+        if( isNull && isNumeric && value !== null ){
+          value = value * 1;
+        }
 
-        if(isNumeric){
+        if( isNumeric && !isNull ){
           filter.push([">=", attr, value]);
           filter.push(["<", attr, nextValue]);
         }else{
-          filter.push(["==", attr, value]);
+          if( isNull && value === null ){
+            filter.push(["!has", attr]);
+          }else{
+            filter.push(["==", attr, value]);
+          }
         }
+
+        rule.filter = filter;
 
         /**
          * Add layer for symbols
@@ -2819,7 +2839,7 @@ export function addViewVt(o){
 
       });
     }
-
+    
     /**
      * Add layer and legends
      */
@@ -2853,37 +2873,38 @@ export function addViewVt(o){
       if( ! o.noLegend && hasStyleRules ){
 
         var legend = document.querySelector("#check_view_legend_" + view.id);
-        var rulesCopy = mx.helpers.clone(rules);
+
         if( legend ){
 
           var rId = [];
           var rNew = [];
 
-          for( var i = 0 ; i < rulesCopy.length ; i++ ){
 
-            if( rulesCopy[i] ){
-              var ruleHasSprite = rulesCopy[i].sprite && rulesCopy[i].sprite != "none";
-              var nextRuleIsSame =  !!rulesCopy[i+1] && rulesCopy[i+1].value == rulesCopy[i].value;
-              var nextRuleHasSprite = !!rulesCopy[i+1] && rulesCopy[i+1].sprite && rulesCopy[i+1].sprite != "none";
+          for( var i = 0 ; i < rules.length ; i++ ){
+
+            if( rules[i] ){
+              var ruleHasSprite = rules[i].sprite && rules[i].sprite != "none";
+              var nextRuleIsSame =  !!rules[i+1] && rules[i+1].value == rules[i].value;
+              var nextRuleHasSprite = !!rules[i+1] && rules[i+1].sprite && rules[i+1].sprite != "none";
 
               if( ruleHasSprite ){
-                rulesCopy[i].sprite = "url(sprites/svg/" + rulesCopy[i].sprite + ".svg)";
+                rules[i].sprite = "url(sprites/svg/" + rules[i].sprite + ".svg)";
               }else{
-                rulesCopy[i].sprite = null;
+                rules[i].sprite = null;
               }
 
               if( nextRuleIsSame ){
                 if( nextRuleHasSprite ){
-                  rulesCopy[i].sprite = rulesCopy[i].sprite + "," + "url(sprites/svg/" + rulesCopy[i+1].sprite + ".svg)";
+                  rules[i].sprite = rules[i].sprite + "," + "url(sprites/svg/" + rules[i+1].sprite + ".svg)";
                 }
-                rulesCopy[i+1] = null;
+                rules[i+1] = null;
               }
             }
           }
           /**
-           * Update rulesCopy
+           * Update rules
            */
-          view.data.style.rulesCopy = rulesCopy;
+          view.data.style.rulesCopy = rules;
 
           /*
            * Add legend using template
@@ -2977,10 +2998,6 @@ export function addView(o){
     console.log(o);
     return;
   }
-
-  var m = mx.maps[o.id];
-  var view = o.viewData;
-
   if(o.before){
     var l = mx.helpers.getLayerNamesByPrefix({
       id : o.id,
@@ -2991,6 +3008,23 @@ export function addView(o){
     o.before = mx.settings.layerBefore;
   }
 
+  var m = mx.maps[o.id];
+  var view = o.viewData;
+
+  /* replace it to have current values */
+  if(view && view.id){
+    var viewIndex ;
+
+    var oldView =  mx.helpers.getViews({
+      id : o.id,
+      idView : view.id
+    });
+
+    if( oldView ){
+      viewIndex = m.views.indexOf(oldView);
+      m.views[viewIndex] = view;
+    }
+  }
 
   if(o.idView){
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
@@ -4361,7 +4395,10 @@ export function featuresToHtml(o){
         arr: lay[p]
       });
 
+      var hasValues =  values.length > 0;
+      values = hasValues ? values : ["-"];
 
+      var elValue;
       var elProp = cEl("div");
       var elPropContent = cEl("div");
       var elPropTitle = cEl("h4");
@@ -4372,17 +4409,22 @@ export function featuresToHtml(o){
       for(var i=0, iL=values.length; i<iL; i++){
         var v = values[i];
 
-        var elValue = mx.helpers.uiToggleBtn({
-          label:v,
-          onChange:filterValues,
-          data:{
-            l:l,
-            p:p,
-            v:v
-          },
-          labelBoxed : true,
-          checked : false
-        });
+        if(hasValues){
+          elValue = mx.helpers.uiToggleBtn({
+            label:v,
+            onChange:filterValues,
+            data:{
+              l:l,
+              p:p,
+              v:v
+            },
+            labelBoxed : true,
+            checked : false
+          });
+        }else{
+          elValue = cEl("span");
+          elValue.innerText=v;
+        }
 
         elPropContent.appendChild(elValue); 
       }

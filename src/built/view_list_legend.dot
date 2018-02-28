@@ -10,13 +10,13 @@
   {{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
   {{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}
   <ul>
-    {{~rules :item}}
+    {{~rules :item:index}}
     {{?item}}
     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
     <li>
       <div class="mx-legend-item-container">
-        <input type="checkbox" data-view_action_key="btn_legend_filter" data-view_action_target="{{=it.id}}" data-view_action_value="{{=item.value}}" data-view_action_variable="{{=it.data.attribute.name}}" name="{{=it.id}}_{{=item.value}}" id="{{=it.id}}_{{=item.value}}"/>
+        <input type="checkbox" data-view_action_key="btn_legend_filter" data-view_action_target="{{=it.id}}" data-view_action_index="{{=index}}" name="{{=it.id}}_{{=item.value}}" id="{{=it.id}}_{{=item.value}}"/>
         <div class="mx-legend-item-arrow">
           {{?isNumeric }}
           ≥

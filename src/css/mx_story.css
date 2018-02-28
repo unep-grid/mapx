@@ -328,4 +328,19 @@
   display:none;
 }
 
+/*.mapboxgl-control-container {*/
+  /*opacity :1 ;*/
+  /*transition: opacity ease-in-out 1s;*/
+/*}*/
+
+/*.mapboxgl-control-container.mx-story-hide-control {*/
+  /*opacity : 0 ;*/
+/*}*/
+
+/*.mx-story-layout.mx-story-hide-control {*/
+  /*cursor:none;*/
+/*}*/
+
+
+
 

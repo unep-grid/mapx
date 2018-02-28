@@ -128,36 +128,70 @@ function initKeydownListener(o){
 */
 function initMouseMoveListener(o){
 
-  var timer;
+  mx.helpers.onNextFrame(function(){
 
-  listenerManager(o,{
-    action : 'add',
-    target : window,
-    event : "mousemove",
-    listener : function(event){
+    var timer;
+    var el;
+    var destroyed = false;
+    var elBody = document.body;
+    var elsCtrls = o.data.elMap.querySelectorAll(".mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-left");
 
-      if(timer){
-        clearTimeout(timer);
-      }
+    var classOpacitySmooth = "mx-smooth-opacity";
+    var classNoCursor = "nocursor";
 
-      var elsCtrl =  o.data.elMap.querySelectorAll(".mapboxgl-ctrl");
-      var el;
+    elsCtrls.forEach(function(el){
+      el.classList.add(classOpacitySmooth);
+    });
 
-      o.data.elMap.classList.remove("mx-story-hide-control");
-      for(var i=0,iL=elsCtrl.length;i<iL;i++){
-        el = elsCtrl[i];
-        el.classList.remove("mx-story-hide-control");
-      }
+    listenerManager(o,{
+      action : 'add',
+      target : window,
+      event : "mousemove",
+      onDestroy : destroy,
+      listener : function(event){
 
-      timer = setTimeout(function(){
-        console.log("hide controls");
-        for(var i=0,iL=elsCtrl.length;i<iL;i++){
-          el = elsCtrl[i];
-          el.classList.add("mx-story-hide-control");
-          o.data.elMap.classList.add("mx-story-hide-control");
+        if(timer){
+          clearTimeout(timer);
         }
-      },1500);
+
+        show();
+
+        timer = setTimeout(function(){
+
+          if(!destroyed){
+            hide();
+          }
+
+        },1500);
+      }
+    });
+
+    function hide(){
+      elsCtrls.forEach(function(el){
+        el.style.opacity = 0.0;
+      });
+      elBody.classList.add(classNoCursor);
     }
+
+    function show(){
+      elsCtrls.forEach(function(el){
+        el.style.opacity = 1;
+      });
+      elBody.classList.remove(classNoCursor);
+    }
+
+    function clean(){
+      elsCtrls.forEach(function(el){
+        el.classList.remove(classOpacitySmooth);
+      }); 
+    }
+
+    function destroy(){
+      destroyed = true;
+      show();
+      clean();
+    }
+
   });
 }
 
@@ -244,8 +278,8 @@ function initEditing(o){
   var ContentTools;
 
   Promise.all([
-    import('ContentTools'),
-    import('ContentTools/build/content-tools.min.css')
+    System.import('ContentTools'),
+    System.import('ContentTools/build/content-tools.min.css')
   ]).then(function(m){
     ContentTools = m[0];
     return import("./../coffee/mx_extend_content_tools.coffee");
@@ -816,7 +850,6 @@ function setStepConfig(o){
   steps = data.elScroll.querySelectorAll(".mx-story-step");
   bullets = document.createElement("div");
   bullets.classList.add("mx-story-step-bullets");
-  bullets.classList.add("mapboxgl-ctrl");
   bullets.classList.add("noselect");
 
   o.data.elBullets = bullets;
@@ -1396,6 +1429,7 @@ export function storyController(o){
       if(mx.data.story){
         mx.data.story = {};
       }
+
     }
   }
 
@@ -1414,6 +1448,7 @@ export function storyController(o){
 * @param {Object} o Story options
 * @param {Object} config Config
 * @param {Element} config.target Target element
+* @param {Function} config.onDestroy Function to run on destroy
 * @param {Element} config.action `add`,`remove`,`removeAll`
 * @param {String} config.event name
 * @param {Function} config.listener Listener function
@@ -1422,14 +1457,23 @@ function listenerManager(o,config){
   var c = config;
   var h = mx.helpers;
   if(c.action === 'add'){
+
     c.target.addEventListener(c.event,c.listener);
+
     c.destroy = function(){
-      c.target.removeEventListener(c.event,c.listener);
+      var e = c.event;
+      var l = c.listener;
+      var onDestroy = c.onDestroy||function(){};
+      c.target.removeEventListener(e,l);
+      onDestroy();
     };
+
     o.data.listeners.push(c);
+
   }else{
     var listeners = h.path(o,"data.listeners") || h.path(mx.data,"story.data.listeners");
     if(listeners){
+
       listeners.forEach(function(l){
         l.destroy();
       });

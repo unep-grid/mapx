@@ -93,7 +93,7 @@ mxSchemaViewStyle <- function(
       keyTitle="style_title_legend",
       default = list(en="Legend"),
       type="string",
-      propertyOrder=3
+      propertyOrder=4
       )
     )
 
@@ -139,8 +139,7 @@ mxSchemaViewStyle <- function(
       value = list(
         title = tt("schema_value"),
         type = "number",
-        minLength= 1,
-        default = min(values)
+        minLength = 0
         )
       )
 
@@ -150,7 +149,7 @@ mxSchemaViewStyle <- function(
         title = tt("schema_value"),
         type = "string",
         enum = as.list(values),
-        minLength = 1
+        minLength = 0
         )
       )
   }
@@ -217,6 +216,44 @@ mxSchemaViewStyle <- function(
     )
 
   #
+  #  set rules list
+  # 
+
+  nullsValue <- list(
+    value = list(
+      title = tt("schema_value"),
+      type = "string",
+      minLength = 0
+      )
+    )
+
+  nulls <- list(
+    nulls = list(
+      propertyOrder = 3,
+      type = "array",
+      format = "table",
+      title = tt("schema_nulls"),
+      options = list(
+        disable_array_add = TRUE,
+        disable_array_delete = TRUE,
+        collapsed = TRUE
+        ),
+      items = list(
+        type = "object",
+        title = tt("schema_nulls"),
+        properties = c(
+          nullsValue,
+          labels,
+          color,
+          opacity,
+          size,
+          sprite
+          )
+        ),
+        default = list(list(value=NULL,labels=list("en"="NA"),color="#000",opacity=1,size=1,sprite=""))
+      )
+    )
+  #
   # set paint
   #
 
@@ -238,7 +275,7 @@ mxSchemaViewStyle <- function(
   custom = list(
     custom = list (
       type = "object",
-      propertyOrder = 4,
+      propertyOrder = 5,
       title = "Custom style",
       options = list(
         collapsed = TRUE
@@ -268,6 +305,7 @@ mxSchemaViewStyle <- function(
   properties <- c(
     reverseLayer,
     rules,
+    nulls,
     titleLegend,
     custom
     )

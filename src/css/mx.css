@@ -101,6 +101,10 @@ blockquote {
   supported by Chrome and Opera */
 }
 
+.nocursor {
+  cursor : none;
+}
+
 .mx-hide-back,
 .mx-hide-back *
 {
@@ -120,8 +124,13 @@ blockquote {
   right:-100000px!important;
 }
 
-
-
+.mx-smooth-opacity {
+  opacity: 1;
+  -webkit-transition: opacity ease-in-out 0.3s;
+  -moz-transition: opacity ease-in-out 0.3s;
+  -o-transition: opacity ease-in-out 0.3s;
+  transition: opacity ease-in-out 0.3s;
+}
 
 
 .mx-north-arrow
@@ -263,19 +272,6 @@ blockquote {
 }
 
 
-.mapboxgl-map.mx-story-layout .mapboxgl-ctrl.mx-story-hide-control {
-  opacity :0 ;
-  transition: opacity ease-in-out 1s;
-}
-
-.mapboxgl-map.mx-story-layout .mapboxgl-ctrl:not(.mx-story-hide-control) {
-  opacity :1 ;
-  transition: opacity ease-in-out 1s;
-}
-
-.mapboxgl-map.mx-story-layout.mx-story-hide-control {
-  cursor:none;
-}
 
 /**
 * boostrap list-group 

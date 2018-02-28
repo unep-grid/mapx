@@ -129,6 +129,7 @@
 "sat","Satellite imagery","Imagerie satellite","","","","","","تصویر ستلایتی","سټلایټي تصویر"
 "save","Save","Sauvegarder","","","","","","ذخیره","ساتل"
 "schema_class","Class","Classe","","","","","","صنف","صنف"
+"schema_nulls","NA values","Valeur nulle","","","","","","",""
 "schema_color","Color","Couleur","","","","","","رنگ ","رنګ"
 "schema_description","Description","Description","","","","","","توضیحات","تفصیل"
 "schema_item","Item","Objet","","","","","","بخش","توکی"

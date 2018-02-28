@@ -26,7 +26,7 @@ tagList(
         "{{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}",
         "{{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}",
         tags$ul(
-          "{{~rules :item}}",
+          "{{~rules :item:index}}",
           #
           # For each rule, check if the language is set. Get default if needed.
           #
@@ -40,8 +40,8 @@ tagList(
                 type="checkbox",
                 `data-view_action_key`="btn_legend_filter",
                 `data-view_action_target`="{{=it.id}}",
-                `data-view_action_value`="{{=item.value}}",
-                `data-view_action_variable`="{{=it.data.attribute.name}}",
+                `data-view_action_index`="{{=index}}",
+                #`data-view_action_variable`="{{=it.data.attribute.name}}",
                 `name`='{{=it.id}}_{{=item.value}}',
                 id='{{=it.id}}_{{=item.value}}'
                 ),
