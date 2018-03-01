@@ -284,8 +284,8 @@ export function initMapx(o){
     map.on("render" , mx.helpers.handleEvent);
     map.on("click", mx.helpers.handleEvent);
     map.on("rotate",function(e){
-      var r = map.getBearing();
-      var northArrow = document.getElementById("btnSetNorth_img");
+      var r = -map.getBearing();
+      var northArrow = document.querySelector(".mx-north-arrow-utf8");
       northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
     });
 

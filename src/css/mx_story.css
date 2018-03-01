@@ -238,17 +238,12 @@
 }
 
 .mx-story-step-bullet{
-  cursor: pointer;
-  font-size: 23px;
-  width: 40px;
-  height: 30px;
+  cursor: pointer; 
   position: relative;
-  margin-right : 5px;
-  border-radius : 3px;
+  border-radius: 0px;
   display: inline-block;
-  margin-top:5px;
-  float:left;
-  line-height: 1.3em;
+  float: left;
+  border: none;
 }
 
 .mx-story-step-bullet.mx-story-step-active ,

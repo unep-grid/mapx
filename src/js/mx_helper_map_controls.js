@@ -223,10 +223,10 @@ mapControlMain.prototype.onAdd = function(map) {
       action : helper.storyControlMapPan 
     },
     btnSetNorth:{
-      classes:"",
+      classes:"mx-north-arrow-utf8",
       key:"btn_north_arrow",
-      hidden:false,
-      img : require("../img/north_001.svg"),
+      //hidden:false,
+      //img : require("../img/north_001.svg"),
       action:function(){
         var map =  mx.helpers.path(mx,"maps.map_main.map");
         if(map){

@@ -188,7 +188,7 @@ divSearchVectorTiles <- tags$div(
 liControlsVectorTiles <- tagList(
   "{{? h.any([ view.type == 'gj', view.type == 'vt' ]) }}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-view_action_key`="btn_opt_zoom_all",
     `data-view_action_target`="{{=view.id}}",
     `data-lang_key`="btn_opt_zoom_all",
@@ -198,7 +198,7 @@ liControlsVectorTiles <- tagList(
       )
     ),
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_zoom_visible",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_zoom_visible",
@@ -208,7 +208,7 @@ liControlsVectorTiles <- tagList(
       )
     ),
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_reset",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_reset",
@@ -220,7 +220,7 @@ liControlsVectorTiles <- tagList(
   "{{?}}",
   "{{? h.any([ view.type == 'gj', view.type == 'vt', view.type == 'rt' ]) }}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-view_action_key`="btn_opt_search",
     `data-view_action_target`="mx-search-tool-{{=view.id}}",
     `data-lang_key`="btn_opt_search",
@@ -233,7 +233,7 @@ liControlsVectorTiles <- tagList(
   "{{ var urlMeta = h.path(view,'data.source.urlMetadata'); }}",
   "{{? h.all([ view.type == 'rt', urlMeta]) }}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_meta",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_meta_external",
@@ -246,7 +246,7 @@ liControlsVectorTiles <- tagList(
   "{{?}}",
   "{{?view.type=='vt' }}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_meta",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_meta",
@@ -257,7 +257,7 @@ liControlsVectorTiles <- tagList(
       )
     ),
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_download",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_download",
@@ -284,7 +284,7 @@ liControlsRasterTiles <- tagList(
 liControlsStoryMaps<- tagList(
   "{{?view.type=='sm'}}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_start_story",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_start_story",
@@ -295,7 +295,7 @@ liControlsStoryMaps<- tagList(
     ),
   "{{?view._edit}}",
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_edit_story",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_story",
@@ -316,7 +316,7 @@ liControlsGeoJson <- tagList(
   "{{?view.type == 'gj'}}",
   # Button to upload geojson
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_upload",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_upload_geojson",
@@ -327,7 +327,7 @@ liControlsGeoJson <- tagList(
       )
     ),
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_delete_geojson",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_delete_geojson",
@@ -345,7 +345,7 @@ liControlsGeoJson <- tagList(
 liControlsScreenShot <- tagList(
   "{{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}",
    tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_screenshot",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_screenshot",
@@ -361,7 +361,7 @@ liControlsScreenShot <- tagList(
 liControlsShare <- tagList(
   "{{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}",
   tags$li(
-    class="mx-pointer hint--left",
+    class="btn mx-pointer hint--left",
     `data-lang_key`="btn_opt_share",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_share",
@@ -381,7 +381,7 @@ liControlsEdit <- tagList(
    "{{?view._edit}}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_edit_config",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_config",
@@ -394,7 +394,7 @@ liControlsEdit <- tagList(
   "{{? view.type=='vt' }}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--left",
+    class="btn mx-pointer hint--left",
     `data-lang_key`="btn_opt_edit_dashboard",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_dashboard",
@@ -408,7 +408,7 @@ liControlsEdit <- tagList(
   "{{? view.type=='cc' }}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--right",
+    class="btn mx-pointer hint--right",
     `data-lang_key`="btn_opt_edit_custom_code",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_custom_code",
@@ -422,7 +422,7 @@ liControlsEdit <- tagList(
   "{{?h.all([ view.type=='vt', h.path(view,'data.attribute.name') ]) }}",
   # Button to edit view
   tags$li(
-    class="mx-pointer hint--left",
+    class="btn mx-pointer hint--left",
     `data-lang_key`="btn_opt_edit_style",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_edit_style",
@@ -435,7 +435,7 @@ liControlsEdit <- tagList(
   "{{?}}",
   # Button to remove view
   tags$li(
-    class="mx-pointer hint--left",
+    class="btn mx-pointer hint--left",
     `data-lang_key`="btn_opt_delete",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_delete",

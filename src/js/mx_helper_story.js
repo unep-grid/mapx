@@ -149,20 +149,33 @@ function initMouseMoveListener(o){
       event : "mousemove",
       onDestroy : destroy,
       listener : function(event){
-
         if(timer){
           clearTimeout(timer);
         }
-
         show();
-
         timer = setTimeout(function(){
-
           if(!destroyed){
             hide();
           }
+        },2000);
+      }
+    });
 
-        },1500);
+    listenerManager(o,{
+      action : 'add',
+      target : window,
+      event : "keydown",
+      onDestroy : destroy,
+      listener : function(event){
+        if(timer){
+          clearTimeout(timer);
+        }
+        show();
+        timer = setTimeout(function(){
+          if(!destroyed){
+            hide();
+          }
+        },2000);
       }
     });
 
@@ -884,6 +897,8 @@ function setStepConfig(o){
      */
     bullet = document.createElement("div");
     bullet.classList.add("mx-story-step-bullet");
+    bullet.classList.add("mx-pointer");
+    bullet.classList.add("btn");
     bullet.dataset.to = config.startUnscaled;
     bullet.dataset.step = s;
     bullet.innerHTML = s+1;
