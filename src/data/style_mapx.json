@@ -9,7 +9,7 @@
         "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v7"
       },
       "mapbox_unepgrid_countries": {
-        "url": "mapbox://unepgrid.6idtkx33",
+        "url": "mapbox://helsinki.mx_country_un_iso3code",
         "type": "vector"
       },
       "here_aerial":{
@@ -119,7 +119,7 @@
           "visibility": "visible"
         },
         "paint": {
-          "fill-color": "rgba(220,220,220,0.8)"
+          "fill-color": "rgba(0,0,0,0)"
         }
       },
       {

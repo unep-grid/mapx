@@ -132,7 +132,7 @@ config[["map"]] <- list(
   lng = 17.3440031,
   maxZoom = 22,
   minZoom = 0,
-  token = "pk.eyJ1IjoidW5lcGdyaWQiLCJhIjoiY2lrd293Z3RhMDAzNHd4bTR4YjE4MHM0byJ9.9c-Yt3p0aKFSO2tX6CR26Q",
+  token = "pk.eyJ1IjoiaGVsc2lua2kiLCJhIjoia1lFZVlNZyJ9.dVxyXwMZWRmnrXnmOuWAMQ",
   id = "map_main",
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
