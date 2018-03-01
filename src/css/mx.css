@@ -11,6 +11,7 @@ html, body, .full-page {
   margin:0px;
   overflow:hidden;
   position: fixed;
+  -webkit-text-size-adjust: 100%;
 }
 
 /**
