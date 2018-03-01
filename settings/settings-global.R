@@ -33,7 +33,8 @@ config[["pg"]] = list(
     tables = list(
       "users"="mx_users",
       "views"="mx_views",
-      "sources"="mx_sources"
+      "sources"="mx_sources",
+      "config"="mx_config"
       )
   )
 

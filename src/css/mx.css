@@ -134,26 +134,6 @@ blockquote {
 }
 
 
-.mx-north-arrow
-{
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  text-align: center;
-  line-height: 15px;
-  border-radius: 50%;
-  border: 2px solid black;
-  padding: 5px;
-  background-color: rgba(255,255,255,0.75);
-  cursor: pointer;
-}
-
-/*.mx-north-arrow:before{*/
-/*content:'';*/
-/*}*/
-
-
-
 /**
 * map 
 */
@@ -162,17 +142,9 @@ blockquote {
   height: 100%; 
 }
 
-
-.mx-north-arrow-utf8 {
-  background: none!important;
+.mx-north-arrow:before {
+  icon-font: url('../svg/arrow-north.svg');
 }
-
-.mx-north-arrow-utf8::before {
- content : '◭';
- font-size: 2em;;
-}
-
-
 
 /**
 * Search box

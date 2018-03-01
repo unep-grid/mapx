@@ -211,8 +211,8 @@ export function initMapx(o){
     /**
      * Add controls to the map
      */
-/*    map.addControl(new mapboxgl.AttributionControl({*/
-        //compact: true
+    /*    map.addControl(new mapboxgl.AttributionControl({*/
+    //compact: true
     /*}),'top-right');*/
     map.addControl(new mx.helpers.mapControlMain(),'top-left');
     map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
@@ -238,8 +238,8 @@ export function initMapx(o){
 
 
     /**
-    * Error handling
-    */
+     * Error handling
+     */
     map.on('error',function(e){
 
       var msg = mx.helpers.path(e,"error.message");
@@ -260,16 +260,16 @@ export function initMapx(o){
       this.transform.resize(w,h);
       this.painter.resize(w,h);
     };
-  /*  map._containerDimensions = function (){*/
-      //var dim = [];
-      //var elContainer = this._container;
-      //var rect = elContainer.getBoundingClientRect();
-      //return [rect.width,rect.height];
+    /*  map._containerDimensions = function (){*/
+    //var dim = [];
+    //var elContainer = this._container;
+    //var rect = elContainer.getBoundingClientRect();
+    //return [rect.width,rect.height];
     /*};*/
 
     /**
-    * Mouse move handling
-    */
+     * Mouse move handling
+     */
     map.on('mousemove', function(e) {
 
       var layers = mx.helpers.getLayerNamesByPrefix({
@@ -285,10 +285,9 @@ export function initMapx(o){
     map.on("click", mx.helpers.handleEvent);
     map.on("rotate",function(e){
       var r = -map.getBearing();
-      var northArrow = document.querySelector(".mx-north-arrow-utf8");
+      var northArrow = document.querySelector(".mx-north-arrow");
       northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
     });
-
 
   });
 
@@ -2109,7 +2108,7 @@ export function downloadMapPdf(o){
     System.import("jspdf"),
     System.import("jszip"),
     System.import("downloadjs"),
-    System.import("../img/north_001.svg")
+    System.import("../svg/arrow-north-n.svg")
   ]).then(function(m){
 
     progress = 10;

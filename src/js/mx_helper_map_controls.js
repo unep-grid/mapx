@@ -1,6 +1,5 @@
 /*jshint esversion: 6 */
 import * as mx from "./mx_init.js";
-//import svgNorthArrow from 
 /**
  * Control for live coordinate
  */
@@ -36,7 +35,7 @@ mapxLogo.prototype.onAdd = function(map){
   var logo =  document.createElement("a");
   logo.classList.add("mx-logo");
 
-  logo.style.backgroundImage = "url("+require("../img/mapx_blue_small.svg")+")";
+  logo.style.backgroundImage = "url("+require("../svg/map-x-logo-full.svg")+")";
   this._container = document.createElement("div");
   this._container.className = 'mapboxgl-ctrl';
   this._container.style.display = "inline-block";
@@ -223,10 +222,8 @@ mapControlMain.prototype.onAdd = function(map) {
       action : helper.storyControlMapPan 
     },
     btnSetNorth:{
-      classes:"mx-north-arrow-utf8",
+      classes:"mx-north-arrow",
       key:"btn_north_arrow",
-      //hidden:false,
-      //img : require("../img/north_001.svg"),
       action:function(){
         var map =  mx.helpers.path(mx,"maps.map_main.map");
         if(map){
@@ -234,7 +231,7 @@ mapControlMain.prototype.onAdd = function(map) {
         }
       }
     }
-  }; 
+  };
 
   function createList(){
     var ulAll, id, btn, el, elBtn;

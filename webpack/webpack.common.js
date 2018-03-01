@@ -1,9 +1,8 @@
 /*jshint esversion: 6 */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-//const babelEnvDeps = require('webpack-babel-env-deps');
-          //babelEnvDeps.exclude(),
+const IconFontPlugin = require('icon-font-loader').Plugin;
+
 const webpack = require( 'webpack');
 
 module.exports = {
@@ -22,11 +21,16 @@ module.exports = {
       inject: 'head',
       template : './src/built/index.html'
     }),
-    new FaviconsWebpackPlugin('./src/img/mapx_blue_single.png')
+    new IconFontPlugin({
+      fontName : "mx-icons-font"
+    })
   ],
   module: {
     noParse: /(mapbox-gl)\.js$/,
     rules: [
+      { test: /.css$/, 
+        use : ['style-loader','css-loader','icon-font-loader']
+      },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: [
@@ -34,8 +38,11 @@ module.exports = {
           'img-loader'
         ]
       },
-      { test: /worker\.js$/, use: { loader: 'worker-loader' }},
-      { test: /\.js$/, 
+      { 
+        test: /worker\.js$/, 
+        use: { loader: 'worker-loader' }},
+      { 
+        test: /\.js$/, 
         exclude: /node_modules/,
         use : {
           loader:'babel-loader', 
@@ -56,12 +63,6 @@ module.exports = {
       {
         test: /\.coffee$/,
         use: 'coffee-loader'      //used mainly to extend ContentTools
-      },
-      { test: /.css$/, 
-        use : [
-          { loader: 'style-loader'},
-          { loader: 'css-loader' }
-        ]
       },
       { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "url-loader?limit=10000&mimetype=application/font-woff" },
       { test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file-loader" },

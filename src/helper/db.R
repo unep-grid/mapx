@@ -340,10 +340,9 @@ mxDbGetViews <- function(views=NULL, collections=NULL, keys=NULL, project="WLD",
 #' @param id Identification value
 #' @param value Replacement value
 #' @param expectedRowsAffected Number of row expected to be affected. If the update change a different number of row than expected, the function will rollback
-#' @param createMissing If path is given, should the function create missing path in record ?
 #' @return Boolean worked or not
 #' @export
-mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAffected=1,createMissing=TRUE){   
+mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAffected=1){   
 
   # explicit check
   stopifnot(mxDbExistsTable(table))
@@ -440,6 +439,10 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   }
 
   }
+  # End path 
+
+
+ # default update
   if(is.null(query)){
     # if it's a list, convert to json
     if(is.list(value)) value <- mxToJsonForDb(value)
@@ -455,7 +458,7 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
       ,id
       )
   }
- 
+
   dbGetQuery(con, "BEGIN TRANSACTION")
   rs <- dbSendQuery(con,gsub("\\n| +"," ",query))   
   ra <- dbGetInfo(rs,what="rowsAffected")[[1]]
@@ -1868,7 +1871,7 @@ mxDbUpdateUserData <- function(reactUser,path,value){
 
   conf <- mxGetDefaultConfig()
 
-  userTableName <- conf[["pg"]][["tables"]][["users"]]
+  userTableName <- .get(conf,c("pg","tables","users"))
   #
   # Check last value
   #
@@ -1895,6 +1898,59 @@ mxDbUpdateUserData <- function(reactUser,path,value){
       value = value
       )
   }
+}
+
+
+#' Helper to update a value in a data jsonb column in db and reactUser$data, given a path
+#' @param value {List} Value to update
+#' @param key {String} Key of the value 
+#' @param action {String} "set" or "get" value
+#' @export
+mxDbConfigData <- function(key,value,action=c("set","get")){
+
+  action <- match.arg(action)
+  conf <- mxGetDefaultConfig()
+  configTableName <- .get(conf,c("pg","tables","config"))
+  keyExists = mxDbGetQuery("SELECT count(*) FROM " + configTableName +" WHERE key = '" + key + "'")$count > 0;
+
+  if(action=="get"){
+    data <- mxDbGetQuery("SELECT data from " + configTableName + " WHERE key = '" + key + "'")$data
+    if(!noDataCheck(data)){
+      return(jsonlite::fromJSON(data))
+      }
+    return(NULL)
+  } 
+
+  if(keyExists){
+    mxDbUpdate(
+      table = configTableName,
+      idCol = 'key',
+      id = key,
+      column = 'data',
+      value = value
+      )
+    mxDbUpdate(
+      table = configTableName,
+      idCol = 'key',
+      id = key,
+      column = 'date_modified',
+      value = Sys.time()
+      )
+
+  }else{
+    mxDbAddRow(list(
+        key = key,
+        value = value,
+        date_modified = Sys.time()
+        ),configTableName)
+
+  }
+}
+mxDbGetConfigData <- function(key){
+  return(mxDbConfigData(key,NULL,"get"))
+}
+mxDbSetConfigData <-function(key,value){
+  return(mxDbConfigData(key,value,"set"))
 }
 
 

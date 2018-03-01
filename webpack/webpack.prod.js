@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 
 module.exports = merge(common, {
   devtool : false,
@@ -36,8 +37,8 @@ module.exports = merge(common, {
           comparisons: false 
         }
       }
-    })
-
+    }),
+    new FaviconsWebpackPlugin('./src/png/map-x-logo.png')
     /*    new ClosureCompilerPlugin({*/
     //compiler: {
     ////jar: 'path/to/your/custom/compiler.jar', //optional
