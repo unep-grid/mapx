@@ -167,8 +167,8 @@ blockquote {
 }
 
 .mx-north-arrow-utf8::before {
-content : '◭';
-font-size: 35px;
+ content : '◭';
+ font-size: 2em;;
 }
 
 

@@ -53,9 +53,10 @@
 
 .mx-story {
   height: 100%;
-  overflow-y:auto;
   line-height: 1.4;
   font-size: 20px;
+  overflow-y: scroll; /* has to be scroll, not auto */
+  -webkit-overflow-scrolling: touch;
 }
 
 
