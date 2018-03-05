@@ -31,13 +31,13 @@ observe({
       uiSourceEdit <- tagList(
         tags$h4(`data-lang_key`="title_tools_sources",d("title_tools_sources",language)),
         actionButton(
-          label = "Edit source",
+          label = d("btn_edit_source",language),
           inputId = "btnEditSources",
           class = "btn btn-sm btn-default hint",
           `data-lang_key` = "btn_edit_source"
           ),
         actionButton(
-          label = "Upload source",
+          label = d("btn_add_source",language),
           inputId = "btnUploadSources",
           class = "btn btn-sm btn-default hint",
           `data-lang_key` = "btn_add_source"
@@ -52,7 +52,7 @@ observe({
 })
 
 #
-# Set view and source ui 
+# Access to database info
 #
 observe({
 

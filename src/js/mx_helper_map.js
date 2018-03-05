@@ -43,8 +43,8 @@ export function initMapx(o){
   Promise.all([
     System.import("mapbox-gl/dist/mapbox-gl"),
     System.import("localforage"),
-    System.import("../data/style_mapx.json"),
-    //System.import("../data/style_simple.json"),
+    //System.import("../data/style_mapx.json"),
+    System.import("../data/style_simple.json"),
     System.import("../built/view_list.dot"),
     System.import("../built/view_list_legend.dot"),
     System.import("../built/view_list_options.dot")

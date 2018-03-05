@@ -230,6 +230,17 @@ mapControlMain.prototype.onAdd = function(map) {
           map.easeTo({bearing:0,pitch:0});
         }
       }
+    },
+    btnShowAbout:{
+      classes:"fa fa-info",
+      key:"btn_about",
+      action:function(){ 
+        var val = {
+          time : new Date(),
+          value : 'showAbout' 
+        };
+        Shiny.onInputChange('btn_control', val);
+      }
     }
   };
 

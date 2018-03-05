@@ -7,6 +7,41 @@ observeEvent(input$btn_control,{
     userRole <- getUserRole()
 
     switch(input$btn_control$value,
+      "showAbout"= {
+
+        language <- reactData$language
+        languages <- config[["languages"]][["list"]]
+        languageDefault <- config$languages$list[[1]]
+        about <- mxDbGetConfigData("about")
+
+        out = tagList()
+
+        if(!noDataCheck(about) && typeof(about) == "list"){
+
+          out <- lapply(about,function(ab){
+            title <- .get(ab,c("title",language))
+            if(noDataCheck(title)) title <- .get(ab,c("title",languageDefault))
+            content = .get(ab,c("content",language))
+            if(noDataCheck(content)) content = .get(ab,c("content",languageDefault))
+
+            section <- tags$section(
+              tags$h4(title),
+              tags$p(HTML(content))
+              )
+
+            return(section)
+
+          })
+        }
+
+
+        mxModal(
+          id="uiSelectLanguage",
+          title=d("title_about",language),
+          textCloseButton=d("btn_close",language),
+          content = tagList(out)
+          )
+      },
       "showLanguage"={
 
         language <- reactData$language
@@ -95,19 +130,6 @@ observeEvent(input$btn_control,{
           content=selectCountry,    
           textCloseButton=d("btn_close",language),
           )
-
-#selectizeInput(
-            #inputId = "selectCountry",
-            #label=d("ui_country",language),
-            #selected = country,
-            #choices = countries,
-            #options =list(
-              #dropdownParent = "body",
-              #options = jsonlite::toJSON(countriesDf),
-              #renderFun = 'parseCountryOptions'
-              #)
-          #)
-
       },
       "showLogin"={
         btn <- list()

@@ -84,6 +84,7 @@ server <- function(input,output,session){
         # tools handler
         #
         "tools_manage.R",
+        "tools_admin_app_config.R",
         #
         # images handler
         #

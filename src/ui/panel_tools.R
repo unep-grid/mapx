@@ -54,6 +54,7 @@ sourceEdit <- uiOutput("uiBtnSourceEdit")
 sourceUpload <- uiOutput("uiBtnSourceUpload")
 dbInfo <- uiOutput("uiBtnShowDbInfo")
 roleManager <- uiOutput("uiBtnShowRoleManager")
+appConfig <- uiOutput("uiBtnShowAppConfig")
 
 # Full block
 tagList(
@@ -69,6 +70,7 @@ tagList(
       sourceEdit,
       dbInfo,
       roleManager,
+      appConfig,
       themeColor
       )
     )

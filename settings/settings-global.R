@@ -507,7 +507,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "superuser",
     level = 0,
-    access = c("db","editRoles"),
+    access = c("db","editRoles","appConfig"),
     read = c("self","public","user","publisher","admin","superuser"),
     publish = c("self","public","user","publisher","admin","superuser"),
     edit = c("self","public","user","publisher","admin","superuser"),

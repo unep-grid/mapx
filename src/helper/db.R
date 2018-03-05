@@ -1916,7 +1916,7 @@ mxDbConfigData <- function(key,value,action=c("set","get")){
   if(action=="get"){
     data <- mxDbGetQuery("SELECT data from " + configTableName + " WHERE key = '" + key + "'")$data
     if(!noDataCheck(data)){
-      return(jsonlite::fromJSON(data))
+      return(jsonlite::fromJSON(data,simplifyVector=F, simplifyDataFrame=F))
       }
     return(NULL)
   } 

@@ -112,7 +112,9 @@
             that.ace_editor.setTheme('ace/theme/github');
             that.ace_editor.setOptions({
               minLines : 1, 
-              maxLines : Infinity
+              maxLines : Infinity,
+              wrap: true,
+              indentedSoftWrap: false
             });
 
             // Listen for changes
