@@ -9,45 +9,46 @@
 "btn_country","Select country","Sélectionnez le pays","","","","","","انتخاب کشور","هیواد وټاکی"
 "btn_create","Create","Créer","","","","","","ایجاد","جوړ کړئ"
 "btn_delete","Delete","Supprimer","","","","","","حذف","پاک کړئ"
-"btn_edit_source","Edit source","Editer une source","","","","","","تنظیم  منابع",NA
+"btn_edit_source","Manage sources","Gérer les sources","","","","","",""""
 "btn_finish","Finish","Finir","","","","","","تمام","تمام"
 "btn_fullscreen","Display the app in fullscreen mode","Mode plein écran","","","","","","نمایش برنامه بشکل صفحه کامل","اپلیکیشن په بشپړه صفحه کې ښکاره کړئ"
 "btn_get_area_visible","Area of visible features","Superficie des objets visibles","","","","","","ساحه پدیده های قابل دید","د لیدلو وړ ځانګړتیاوو ځای"
 "btn_get_overlap_visible","Overlaps to geojson","Chevauchements vers geojson","","","","","","",""
-"btn_get_layer_summary","Get layer summary","Visualiser le résumé de la source","","","","","","تنظیم  منابع",NA
-"btn_iframe_builder","Embed mapx","Intégration mapx","","","","","","",NA
+"btn_get_layer_summary","Get layer summary","Visualiser le résumé de la source","","","","","","تنظیم  منابع"""
+"btn_iframe_builder","Embed mapx","Intégration mapx","","","","","",""""
 "btn_language","Language","Langue  ","","","","","","زبان","ژبه"
 "btn_login","Login window","Fenêtre d'identification","","","","","","صفحه ورودی ","د ننوتلو کړکۍ"
-"btn_north_arrow","Reset bearing","Reset bearing","","","","","","",NA
-"btn_opt_date","Filter date","Filtrer par date","","","","","","",NA
+"btn_north_arrow","Reset bearing","Reset bearing","","","","","",""""
+"btn_opt_date","Filter date","Filtrer par date","","","","","",""""
 "btn_opt_delete","Remove this view","Supprimer cette vue","","","","","","حذف این نمایه","دا لید لرې کړئ"
 "btn_opt_delete_geojson","Delete","Supprimer","","","","","","حذف","دا GeoJSON پاک کړئ"
 "btn_opt_download","Download the data","Télécharger les données","","","","","","دانلود معلومات","ډیټا ډانلوډ کړئ"
 "btn_opt_edit_config","Configure this view","Configurer la vue","","","","","","تنظیم این نمایه","دا لید په لاره واچوئ"
-"btn_opt_edit_custom_code","Edit code","Editer le code","","","","","","",NA
-"btn_opt_edit_dashboard","Edit dashboard","Editer le dashboard","","","","","","",NA
-"btn_opt_edit_story","Edit story","Editer le récit","","","","","","",NA
+"btn_opt_edit_custom_code","Edit code","Editer le code","","","","","",""""
+"btn_opt_edit_dashboard","Edit dashboard","Editer le dashboard","","","","","",""""
+"btn_opt_edit_story","Edit story","Editer le récit","","","","","",""""
 "btn_opt_edit_style","Set the style of this view","Configurer le style de cette vue","","","","","","تنظیم ستایل این نمایه","ددې لیدنې شکل تنظیم کړئ"
 "style_title_legend","Legend title","Titre de la légende","","","","","","",""
 "style_reverse_order","Reverse displayed layers order","Inverser l'ordre des couches sur la carte","","","","","","",""
 "style_reverse_order_desc","If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack","Si coché, la pile de couches sera inversée : la première règle défininira la couche à la base de la pile","","","","","","",""
 "btn_opt_meta","Display metadata","Afficher les métadonnées ","","","","","","نمایش ابرداده","میتا ډیټا ښکاره کړئ"
-"btn_opt_numeric","Filter by numeric value","Filtrer par valeur numerique","","","","","","",NA
+"btn_opt_numeric","Filter by numeric value","Filtrer par valeur numerique","","","","","",""""
 "btn_opt_reset","Reset the view","Réinitialiser la vue","","","","","","تنظیم دوباره نمایش","د ټولو لیدنو بیا کتنه"
 "btn_opt_screenshot","Take a screenshoot","Prendre une capture d'écran","","","","","","گرفتن تصویر","د صفحې تصویر واخلئ"
 "btn_opt_search","Settings","Préférences","","","","","","جستجو و فلتر","ټول فلټرونه ولټوئ"
-"btn_opt_share","Share this view","Partager cette vue","","","","","","",NA
+"btn_opt_share","Share this view","Partager cette vue","","","","","",""""
 "btn_opt_start_story","Read this story","Lire ce récit","","","","","","این تاریخ را بخوانید","دا تاریخچه ولولئ"
-"btn_opt_transparency","Transparency","Transparence","","","","","","",NA
+"btn_opt_transparency","Transparency","Transparence","","","","","",""""
 "btn_opt_zoom_all","Zoom to all features","Zoomer sur tous les éléments","","","","","","بزرگنمایی به همه پدیده ها","د ټولو ځانګړتیاوو لپاره یې زوم کړئ"
 "btn_opt_zoom_visible","Zoom on displayed features","Zoomer sur les éléments affichés","","","","","","بزرگنمایی به اندازه نمایش پدیده ها","د ځانګړتیاوو د لیدلو لپاره یی زوم کړئ"
-"btn_preview","Preview","Aperçu","","","","","","",NA
+"btn_preview","Preview","Aperçu","","","","","",""""
 "btn_print","Print current","Imprimer","","","","","","پرنت صفحه فعلی","اوسنۍ صفحه پرینټ کړئ"
 "btn_reset","Reset","Réinitialiser","","","","","","تنظیم دوباره","بیا کتنه"
 "btn_save","Save","Sauvegarder","","","","","","ذخیره","ساتل"
 "btn_send","Send","Envoyer","","","","","","ارسال","لیږل"
-"btn_show_db_info","Show DB info","Afficher les infos de la BDD","","","","","","",NA
-"btn_show_role_manager","Show roles manager","Afficher l'éditeur de roles","","","","","","",NA
+"btn_show_db_info","Show DB info","Afficher les infos de la BDD","","","","","",""""
+"btn_show_app_config","Configuration","Configuration","","","","","",""""
+"btn_show_role_manager","Show roles manager","Afficher l'éditeur de roles","","","","","",""""
 "btn_sort_date","Date","Date","","","","","","تاریخ","نیټه"
 "btn_sort_desc","Description","Description","","","","","","توضیح","تفصیل"
 "btn_sort_title","Title","Titre","","","","","","عنوان","عنوان"
@@ -57,7 +58,7 @@
 "btn_story_edit_save","Save edition","Sauvegarder l'édition","","","","","","",""
 "btn_story_edit","Start edition","Démarrer l'édition","","","","","","",""
 "btn_switchui","Toggle the color of the interface","Changer les couleurs de l'interface","","","","","","تغییر رنگ صفحه رابط","د نښلونکې صفحې رنګ ته بدلون ورکړئ"
-"btn_tab_dashboard","Toggle dashboards","Dashboards","","","","","","",NA
+"btn_tab_dashboard","Toggle dashboards","Dashboards","","","","","",""""
 "btn_tab_settings","Settings ","Préférences","","","","","","تنظیمات ","امستنې (تنظیمات)"
 "btn_tab_tools","Toolbox","Boîte à outils","","","","","","جبعه ابزار","د وسایلو بکس"
 "btn_tab_views","Views","Vues","","","","","","نمایه ها","لیدنې"
@@ -66,16 +67,17 @@
 "btn_theme_sat","Switch theme : aerial","Changer le thème : imagerie aérienne","","","","","","هوایی","هوایي"
 "btn_toggle_all","Hide/Show all","Afficher/Cacher tout","","","","","","",""
 "btn_update","Update  ","Mettre à jour","","","","","","تجدید","آپډیټ کړئ"
-"btn_upload","Upload","Téléverser","","","","","","آپلود",NA
-"btn_wms_creator","WMS","WMS","","","","","","",NA
+"btn_upload","Upload","Téléverser","","","","","","آپلود"""
+"btn_wms_creator","WMS","WMS","","","","","",""""
 "btn_zoom_in","Zoom in","Zoomer","","","","","","بزرگنمایی","غټ ښودل"
 "btn_zoom_out","Zoom out","Dézoomer","","","","","","کوچک نمایی","کوچوني ښودل"
 "categorical","Categorical","Catégorielle","","","","","","طبقه ایی","قطعي"
-"cc","Custom code","Code personnalisé","","","","","","",NA
+"cc","Custom code","Code personnalisé","","","","","",""""
 "center","Center","Centre","","","","","","وسط","مابین"
 "country","Country","Pays","","","","","","کشور","هیواد"
 "create","Create","Créer","","","","","","ایجاد","جوړ کړئ"
 "content","Content","Contenu","","","","","","",""
+"title","Title","Titre","","","","","","",""
 "dev","Development","Dévelopement","","","","","","توسعه","پرمختیا"
 "env","Environment","Environnement","","","","","","محیط","چاپېریال"
 "error_no_layer","No source layer set","Pas de couche source attribuée","","","","","","لایه منبع ایجاد نشد","د سرچینې لایه نده جوړه شوې"
@@ -89,7 +91,7 @@
 "fold_views_class","Filter views by classes","Filtrer les vues par classe","","","","","","فلتر نمایه ها به اساس صنف ها","د صنفونو په اساس لیدنې فلټر کړئ"
 "fold_views_filter","Filter options","Filtres","","","","","","گزینه های فلتر","د فلټر انتخابونه"
 "fold_views_sort","Sort views","Classer les vues","","","","","","مرتب سازی نمایه ها","لیدنې ترتیب کړئ"
-"gj","Local GeoJSON","GeoJSON local","","","","","","",NA
+"gj","Local GeoJSON","GeoJSON local","","","","","",""""
 "inf","Infrastructure","Infrastructure","","","","","","زیر بنا","زیربنا"
 "interval","Interval","Intervalle","","","","","","فاصله","انټروال"
 "layer","Layer","Couche","","","","","","لایه","لایه"
@@ -170,17 +172,17 @@
 "sm","Story","Récit","","","","","","تاریخچه","تاریخچه"
 "soc","Social","Social","","","","","","اجتماعی","ټولنیز"
 "source_meta_data","Metadata for the source","Métadonnées de la source","","","","","","عناوین برای منابع","د سرچینو لپاره عنوانونه"
-"source_raster_tile_legend","Url of the legend (png)","Url de la legend (png)","","","","","","",NA
+"source_raster_tile_legend","Url of the legend (png)","Url de la legend (png)","","","","","",""""
 "source_raster_tile_size","Size of the tiles (pixels)","Taille des tuiles (pixels)","","","","","","اندازه پکسل ها","د پکسلونو اندازه"
 "source_raster_tile_url","Url of tiles endpoint ","Url du serveur de tuiles","","","","","","آدرس پکسل های آخری","د وروستیو پکسلونو پته"
-"source_raster_tile_url_metadata","Link to the metadata","Lien vers les métadonnées","","","","","","",NA
+"source_raster_tile_url_metadata","Link to the metadata","Lien vers les métadonnées","","","","","",""""
 "source_select_geometry","Source geometry type","Type de géométrie","","","","","","انواع منبع هندسی","د هندسي ډولونو سرچینه"
 "source_select_layer","Source layer","Couche source","","","","","","لایه اصلی","د سرچینې لایه"
 "source_select_layer_mask","Source layer mask","Couche source masque","","","","","","منبع لایه ماسک","د ماسک لایې سرچینه"
 "source_select_variable","Source variable","Variable","","","","","","متحول اصلی","اصلي متغیر"
-"source_select_variable_alt","Secondary source variables","Variables secondaires","","","","","","",NA
-"download_select_format_vector","Output format","Format de sortie","","","","","","",NA
-"download_file_name","Filename","Nom du fichier","","","","","","",NA
+"source_select_variable_alt","Secondary source variables","Variables secondaires","","","","","",""""
+"download_select_format_vector","Output format","Format de sortie","","","","","",""""
+"download_file_name","Filename","Nom du fichier","","","","","",""""
 "source_sum_geom_type","Type of the geometry","Type de géométrie","","","","","","انواع هندسی","هندسي ډولونه"
 "source_sum_n_distinct","Number of distinct values","Nombre de valeurs distinctes","","","","","","تعداد  قیمت های متمایز","د مختلفو ارزښتونو تعداد"
 "source_sum_n_null","Number of missing or null values","Nombre de valeurs manquantes ou nulles","","","","","","تعداد  قیمت های از دست رفته یا خالی","د لاسه وتلو او یا خالي قیمتونو تعداد"
@@ -195,15 +197,17 @@
 "superuser","Superuser","Super-utilisateur","","","","","","ابر کاربران","لوی ګټه اخیستونکي"
 "title_app","Map-x","Map-x","","","","","","MAP-X","MAP-X"
 "title_settings","Settings","Préférences","Preferencias","","","","","تنظیمات","امستنې (تنظیمات)"
-"title_settings_colors","Theme config","Configurateur de themes","","","","","","",NA
+"title_settings_colors","Theme config","Configurateur de themes","","","","","",""""
 "title_tools","Tools","Outils","Utilidades","","","","","ابزار","توکي"
-"title_tools_db","Database","Base de données","","","","","","DB",NA
-"title_tools_admin","Admin","Admin","","","","","","DB",NA
+"title_tools_db","Database","Base de données","","","","","","DB"""
+"title_tools_admin","Admin","Admin","","","","","","",""
+"title_tools_config","Configuration","Configuration","","","","","","",""
 "title_tools_map","Map","Carte","","","","","","نقشه","نقشه"
-"title_tools_share","Share","Partager","","","","","","",NA
+"title_tools_share","Share","Partager","","","","","",""""
 "title_tools_sources","Sources","Sources","","","","","","منابع","سرچینې"
 "title_tools_views","Views","Vues","","","","","","نمایش","لیدنې"
 "title_views","Views","Vues","Vistas","","","","","نمایش","نظرونه"
+"title_about","About","À propos","","","","","","",""
 "top","Top","En haut","","","","","","بالا","پورته"
 "ui_country","Select country","Sélectionnez le pays","","","","","","انتخاب کشور","هیواد وټاکی"
 "ui_language","Language of the interface","Langue de l'interface","Idioma de la interfaz.","Язык интерфейса.","界面语言。","Sprache für das Interface.","ইন্টারফেস ভাষা","زبان رابط","د اړیکې ژبه"
@@ -211,30 +215,30 @@
 "user","Registered user","Utilisateur enregistré","","","","","","کاربران ثبت شده","ثبت شوي ګټه اخیستونکي"
 "view","View","Vue","","","","","","نمایش","ښکاره کول"
 "view_abstract","View abstract","Résumé de la vue","","","","","","نمایش خلاصه","لنډیز وګورئ"
-"view_add_dashboard","Add a dashboard","Ajouter un dashboard","","","","","","",NA
-"view_add_download_btn","Allow download of the source","Autoriser le téléchargement de la source","","","","","","",NA
+"view_add_dashboard","Add a dashboard","Ajouter un dashboard","","","","","",""""
+"view_add_download_btn","Allow download of the source","Autoriser le téléchargement de la source","","","","","",""""
 "view_add_overlap_layer","Add a mask","Ajouter un masque","","","","","","افزودن نقاب","د ماسک زیاتول"
 "view_classes","Classes","Classes","","","","","","طبقه ها","صنفونه"
-"view_collections","Collections","Collections","","","","","","",NA
-"view_countries","Other countries where the view is visible","Autres pays où la vue est visible","","","","","","",NA
-"view_country","Country of the view","Pays de la vue","","","","","","",NA
-"view_dashboard","Dashboard","Dashboard","","","","","","",NA
-"view_dashboard_config","Configure a dashboard","Configurer un dashboard","","","","","","",NA
-"view_dashboard_script","Your script","Votre script","","","","","","",NA
-"view_dashboard_src_layerChange","All attributes and values from the displayed features","Tous les attributs et valeurs affichés de la couche affichée","","","","","","",NA
-"view_dashboard_src_layerClick","All attributes and values from the clicked feature","Tous les attributs et valeurs de l'élement cliqué","","","","","","",NA
-"view_dashboard_src_none","None. Value provided by the script.","Aucune. Valeurs données dans le script","","","","","","",NA
-"view_dashboard_src_view","The frequency table of the selected attribute","La table de fréquence de l'attribut sélectionné","","","","","","",NA
-"view_dashboard_title","Dashboard title","Titre du dashboard","","","","","","",NA
-"view_dashboard_txt_height","Height class","Classe pour la hauteur","","","","","","",NA
-"view_dashboard_txt_script","Your script","Votre script","","","","","","",NA
-"view_dashboard_txt_which_data","Which source to use for the data ?","Quelle source utiliser pour les données?","","","","","","",NA
-"view_dashboard_txt_width","Width class","Classe pour la largeur","","","","","","",NA
-"view_dashboard_widget","Widget","Widget","","","","","","",NA
-"view_dashboard_widgets","Widgets","Widgets","","","","","","",NA
+"view_collections","Collections","Collections","","","","","",""""
+"view_countries","Other countries where the view is visible","Autres pays où la vue est visible","","","","","",""""
+"view_country","Country of the view","Pays de la vue","","","","","",""""
+"view_dashboard","Dashboard","Dashboard","","","","","",""""
+"view_dashboard_config","Configure a dashboard","Configurer un dashboard","","","","","",""""
+"view_dashboard_script","Your script","Votre script","","","","","",""""
+"view_dashboard_src_layerChange","All attributes and values from the displayed features","Tous les attributs et valeurs affichés de la couche affichée","","","","","",""""
+"view_dashboard_src_layerClick","All attributes and values from the clicked feature","Tous les attributs et valeurs de l'élement cliqué","","","","","",""""
+"view_dashboard_src_none","None. Value provided by the script.","Aucune. Valeurs données dans le script","","","","","",""""
+"view_dashboard_src_view","The frequency table of the selected attribute","La table de fréquence de l'attribut sélectionné","","","","","",""""
+"view_dashboard_title","Dashboard title","Titre du dashboard","","","","","",""""
+"view_dashboard_txt_height","Height class","Classe pour la hauteur","","","","","",""""
+"view_dashboard_txt_script","Your script","Votre script","","","","","",""""
+"view_dashboard_txt_which_data","Which source to use for the data ?","Quelle source utiliser pour les données?","","","","","",""""
+"view_dashboard_txt_width","Width class","Classe pour la largeur","","","","","",""""
+"view_dashboard_widget","Widget","Widget","","","","","",""""
+"view_dashboard_widgets","Widgets","Widgets","","","","","",""""
 "view_delete_confirm","Click on the confirm button to delete this view, its history and all translations.","Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions.","","","","","","بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد.","ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ "
 "view_download_layer","Download the source layer","Télécharger la couche source","","","","","","دانلود لایه منبع ","د لایې سرچینه ډانلوډ کړئ"
-"view_edit_current","Edit view","Edition de la vue","","","","","","",NA
+"view_edit_current","Edit view","Edition de la vue","","","","","",""""
 "view_id","View identifier","Identifiant de la vue","","","","","","نمایش مشخص کننده","پېژندونکی وګورئ"
 "view_new_created","View created","Vue créée","","","","","","نمایه ایجاد شد","لیدنه جوړه شوه"
 "view_new_text","Create a new View","Créer une vue","","","","","","ایجاد نمای جدید و افزودن آن به لست ","نوې لیدنه جوړه او لست ته یې اضافه کړئ"
