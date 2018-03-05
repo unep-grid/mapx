@@ -783,6 +783,9 @@ blockquote {
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
+  min-height:30vh;
+  min-height: 200px;
+  min-width: 300px;
   border-radius:3px;
   z-index:500;
   right:0;
