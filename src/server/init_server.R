@@ -93,9 +93,9 @@ mx_init_checkpoint <- function(){
     mxSource("src/helper/jed.R")
     mxSource("src/helper/doFork.R")
     mxSource("src/helper/db.R")
-    mxSource("src/helper/template_source_meta.R")
-    mxSource("src/helper/template_view_story.R")
-    mxSource("src/helper/template_view_style.R")
+    mxSource("src/helper/schema_source_meta.R")
+    mxSource("src/helper/schema_view_story.R")
+    mxSource("src/helper/schema_view_style.R")
     
     # load config
     mxSource("settings/settings-global.R")
