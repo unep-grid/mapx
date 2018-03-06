@@ -2263,7 +2263,7 @@ export function downloadMapPdf(o){
     ])
       .then(function(r){
         dataItems = r;
-        return  takeMapScreenshoot(map);
+        return  mx.helpers.takeMapScreenshot(map);
       })
       .then(function(dataMap){
         var r = dataItems;
