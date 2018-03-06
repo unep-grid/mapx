@@ -124,7 +124,7 @@ observeEvent(input$appConfigEdit_init,{
         id = "appConfigEdit",
         schema = schema,
         startVal = list(
-          about = mxDbGetConfigData("about")
+          about = mxDbConfigGet("about")
           )
         )
 
@@ -144,7 +144,7 @@ observeEvent(input$appConfigEdit_values,{
 
   if( "appConfig" %in% access  && !hasIssues ){
     for(name in names(data)){
-      mxDbSetConfigData(name,data[[name]])
+      mxDbConfigSet(name,data[[name]])
     }
 
     mxUpdateText(

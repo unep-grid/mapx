@@ -1901,36 +1901,43 @@ mxDbUpdateUserData <- function(reactUser,path,value){
 }
 
 
-#' Helper to update a value in a data jsonb column in db and reactUser$data, given a path
-#' @param value {List} Value to update
+#' Get or set key value data in given key-value table
+#' 
+#' Table should have columns :
+#' pid: serial PRIMARY KE
+#' key: citext unique
+#' data: jsonb 
+#' date_modified timestamp with time zone default current_timestamp
+#'
+#' @param value {List} Value to set
 #' @param key {String} Key of the value 
 #' @param action {String} "set" or "get" value
 #' @export
-mxDbConfigData <- function(key,value,action=c("set","get")){
+mxDbKeyValue <- function(key,value,action=c("set","get"),table="mx_config"){
 
   action <- match.arg(action)
-  conf <- mxGetDefaultConfig()
-  configTableName <- .get(conf,c("pg","tables","config"))
-  keyExists = mxDbGetQuery("SELECT count(*) FROM " + configTableName +" WHERE key = '" + key + "'")$count > 0;
+  tableName <- ifelse(mxDbExistsTable(table),.get(config,c("pg","tables","config")),table)
+
+  keyExists = mxDbGetQuery("SELECT count(*) FROM " + tableName +" WHERE key = '" + key + "'")$count > 0;
 
   if(action=="get"){
-    data <- mxDbGetQuery("SELECT data from " + configTableName + " WHERE key = '" + key + "'")$data
+    data <- mxDbGetQuery("SELECT data from " + tableName + " WHERE key = '" + key + "'")$data
     if(!noDataCheck(data)){
       return(jsonlite::fromJSON(data,simplifyVector=F, simplifyDataFrame=F))
-      }
+    }
     return(NULL)
   } 
 
   if(keyExists){
     mxDbUpdate(
-      table = configTableName,
+      table = tableName,
       idCol = 'key',
       id = key,
       column = 'data',
       value = value
       )
     mxDbUpdate(
-      table = configTableName,
+      table = tableName,
       idCol = 'key',
       id = key,
       column = 'date_modified',
@@ -1942,17 +1949,22 @@ mxDbConfigData <- function(key,value,action=c("set","get")){
         key = key,
         value = value,
         date_modified = Sys.time()
-        ),configTableName)
+        ),tableName)
 
   }
 }
-mxDbGetConfigData <- function(key){
-  return(mxDbConfigData(key,NULL,"get"))
+mxDbKeyValueGet <- function(key,table){
+  return(mxDbKeyValueData(key,NULL,"get",table))
 }
-mxDbSetConfigData <-function(key,value){
-  return(mxDbConfigData(key,value,"set"))
+mxDbKeyValueSet <- function(key,value,table){
+  return(mxDbKeyValueData(key,value,"set",table))
 }
-
+mxDbConfigGet <- function(key){
+  return(mxDbKeyValueData(key,NULL,"get",.get(config,c("pg","tables","config"))))
+}
+mxDbConfigSet <- function(key,value){
+  return(mxDbKeyValueData(key,value,"set",.get(config,c("pg","tables","config"))))
+}
 
 #' Get layer geom types
 #' @param table {character} Layer name
