@@ -1755,7 +1755,7 @@ export function storyPlayStep(o){
         id : o.id,
         idView: v,
         before : vPrevious,
-        noOptions : true
+        noUi : true
       });
     });
 

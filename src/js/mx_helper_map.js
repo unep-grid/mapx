@@ -2950,26 +2950,12 @@ export function addViewVt(o){
 * @param {Object} o Options
 * @param {String} o.id map id
 * @param {Object} o.view View item
+* @param {Boolean} o.noUi Don't add ui components
 */
 export function addOptions(o){
-  
+
   var view = o.view;
   var idMap = o.id;
-  var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
-
-  if(elOptions){
-    var optMade = new Promise(function(resolve,reject){
-      elOptions.innerHTML = mx.templates.viewListOptions(view);
-      resolve(elOptions); 
-    });
-    optMade.then(function(el){
-      mx.helpers.uiReadMore('.make-readmore',{
-        selectorParent : el,
-        maxHeightClosed : 105,
-        maxHeightOpened : 400
-      });
-    });
-  }
 
   view._idMap = o.id;
   view._interactive = {};
@@ -2984,18 +2970,39 @@ export function addOptions(o){
   view._setFilter = mx.helpers.viewSetFilter;
   view._setOpacity = mx.helpers.viewSetOpacity;
 
-  mx.helpers.makeTimeSlider({ view: view , idMap: o.id }); 
-  mx.helpers.makeNumericSlider({ view: view, idMap: o.id });
-  mx.helpers.makeTransparencySlider({ view: view, idMap: o.id});
-  mx.helpers.makeSearchBox({ view: view, idMap: o.id });
+  if(!o.noUi){
+
+    var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
+
+    if(elOptions){
+      var optMade = new Promise(function(resolve,reject){
+        elOptions.innerHTML = mx.templates.viewListOptions(view);
+        resolve(elOptions); 
+      });
+      optMade.then(function(el){
+        mx.helpers.uiReadMore('.make-readmore',{
+          selectorParent : el,
+          maxHeightClosed : 105,
+          maxHeightOpened : 400
+        });
+      });
 
 
-  /*
-   * translate based on dict key
-   */
-  mx.helpers.updateLanguageElements({
-    el:elOptions
-  });
+
+      mx.helpers.makeTimeSlider({ view: view , idMap: o.id }); 
+      mx.helpers.makeNumericSlider({ view: view, idMap: o.id });
+      mx.helpers.makeTransparencySlider({ view: view, idMap: o.id});
+      mx.helpers.makeSearchBox({ view: view, idMap: o.id });
+
+
+      /*
+       * translate based on dict key
+       */
+      mx.helpers.updateLanguageElements({
+        el:elOptions
+      });
+    }
+  }
 }
 
 
@@ -3006,10 +3013,11 @@ export function addOptions(o){
  * @param {string} o.id map id
  * @param {string} o.idView view id
  * @param {objsect} o.viewData view 
+ * @param {Boolean} o.noUi Don't add ui components
  * @param {string} o.idViewsList id of ui views list element
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param 
- */
+*/
 export function addView(o){
 
   if(!o.viewData && !o.idView) {
@@ -3062,15 +3070,14 @@ export function addView(o){
   });
 
 
-  if( ! o.noOptions ){
-    /**
-     * Add options
-     */
+  /**
+   * Add options
+   */
     mx.helpers.addOptions({
       id : o.id,
-      view : view
+      view : view,
+      noUi : o.noUi
     });
-  }  
   /**
    * Add view
    */
