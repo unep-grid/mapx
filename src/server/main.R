@@ -40,7 +40,6 @@ server <- function(input,output,session){
       query$style <- .get(config,c("ui","colors","default"))
     }
 
-
     #
     # Source server function 
     # 

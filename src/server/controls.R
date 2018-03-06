@@ -12,7 +12,7 @@ observeEvent(input$btn_control,{
         language <- reactData$language
         languages <- config[["languages"]][["list"]]
         languageDefault <- config$languages$list[[1]]
-        about <- mxDbGetConfigData("about")
+        about <- mxDbConfigGet("about")
 
         out = tagList()
 

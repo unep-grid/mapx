@@ -16,7 +16,8 @@ options(shiny.reactlog=FALSE)
 config[["system"]] <- list(
   os = Sys.info()[["sysname"]],
   hostname = Sys.info()[["nodename"]],
-  hostnameRemote = "map-x-full"
+  hostnameRemote = "map-x-full",
+  urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
   )
 #
 # postgres configuration

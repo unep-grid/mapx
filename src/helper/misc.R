@@ -854,8 +854,9 @@ if(noDataCheck(message)){
         id=randomString(),
         title="Unexpected issue",
         content=tagList(
-          tags$b("You discovered a bug !"),
-          tags$p("Well done. An anonymous report has been sent to our developer. Probably me. Until he solves this issue, what you are trying to do will certainly to work as expected. Sorry. ")
+          tags$b("Something went wrong :/"),
+          tags$p("An unexpected issue happened : our team has received a notification about it. If this keeps happening, you can also post something here:"),
+          tags$a(href=.get(config,c("system","urlRepositoryIssues")),target="_blank",.get(config,c("system","urlRepositoryIssues")))
           )
         )
     }

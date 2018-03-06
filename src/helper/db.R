@@ -1954,16 +1954,16 @@ mxDbKeyValue <- function(key,value,action=c("set","get"),table="mx_config"){
   }
 }
 mxDbKeyValueGet <- function(key,table){
-  return(mxDbKeyValueData(key,NULL,"get",table))
+  return(mxDbKeyValue(key,NULL,"get",table))
 }
 mxDbKeyValueSet <- function(key,value,table){
-  return(mxDbKeyValueData(key,value,"set",table))
+  return(mxDbKeyValue(key,value,"set",table))
 }
 mxDbConfigGet <- function(key){
-  return(mxDbKeyValueData(key,NULL,"get",.get(config,c("pg","tables","config"))))
+  return(mxDbKeyValue(key,NULL,"get",.get(config,c("pg","tables","config"))))
 }
 mxDbConfigSet <- function(key,value){
-  return(mxDbKeyValueData(key,value,"set",.get(config,c("pg","tables","config"))))
+  return(mxDbKeyValue(key,value,"set",.get(config,c("pg","tables","config"))))
 }
 
 #' Get layer geom types
