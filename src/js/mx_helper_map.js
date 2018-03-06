@@ -16,6 +16,21 @@ export function setUserData(o){
 
 
 /**
+* Take a screen show of the map, even if preserveDrawingBuffer is false
+* @param {Object} map A mapbox gl js object
+*/
+export function takeMapScreenshot(map) {
+  return new Promise(function(resolve, reject) {
+    map.once("render", function() {
+      resolve(map.getCanvas().toDataURL());
+    });
+    /* trigger render */
+    map.setBearing(map.getBearing());
+  });
+}
+
+
+/**
  * Initial mgl and mapboxgl
  * @param {string} o options
  * @param {string} o.idMap id
@@ -152,7 +167,7 @@ export function initMapx(o){
       zoom: o.zoom,
       maxZoom: o.maxZoom,
       minZoom: o.minZoom,
-      preserveDrawingBuffer:true,
+      preserveDrawingBuffer:false,
       attributionControl: false
     });
 
@@ -2239,68 +2254,73 @@ export function downloadMapPdf(o){
         */
       }
 
+    var dataItems = [];
 
-        Promise.all([
-          promNorth,
-          promScale,
-          promLegend
-        ]).then(function(r){
+    Promise.all([
+      promNorth,
+      promScale,
+      promLegend
+    ])
+      .then(function(r){
+        dataItems = r;
+        return  takeMapScreenshoot(map);
+      })
+      .then(function(dataMap){
+        var r = dataItems;
+        dataNorth = r[0]?r[0]:dataNorth;
+        dataScale = r[1]?r[1]:dataScale;
+        dataLegend = r[2]?r[2]:dataLegend;
 
-          dataMap = map.getCanvas().toDataURL();
-          dataNorth = r[0]?r[0]:dataNorth;
-          dataScale = r[1]?r[1]:dataScale;
-          dataLegend = r[2]?r[2]:dataLegend;
+        var doc = new jsPDF({orientation: 'landscape'});
+        if( dataMap ) doc.addImage(dataMap, 'PNG', 0, 0, 297, mapHeight );
+        if( dataNorth ) doc.addImage(dataNorth, 'PNG', 280, 5,10,10 );
+        if( dataScale ) doc.addImage(dataScale, 'PNG', 270, 190 );
+        if( dataLegend ){
+          doc.setFillColor(0,0,0,0); // white
+          doc.roundedRect(5, 15, 80 , 180 , 2, 2, 'F');
+          doc.addImage(dataLegend, 'PNG', 9, 24 );
+        }
+        if( link ){
+          doc.setFontSize(10);
+          doc.text(10, 205, link);
+        }
+        if( title ){
+          doc.setFontSize(20);
+          doc.text(5, 10, title);
+        }
 
-          var doc = new jsPDF({orientation: 'landscape'});
-          if( dataMap ) doc.addImage(dataMap, 'PNG', 0, 0, 297, mapHeight );
-          if( dataNorth ) doc.addImage(dataNorth, 'PNG', 280, 5,10,10 );
-          if( dataScale ) doc.addImage(dataScale, 'PNG', 270, 190 );
-          if( dataLegend ){
-            doc.setFillColor(0,0,0,0); // white
-            doc.roundedRect(5, 15, 80 , 180 , 2, 2, 'F');
-            doc.addImage(dataLegend, 'PNG', 9, 24 );
-          }
-          if( link ){
-            doc.setFontSize(10);
-            doc.text(10, 205, link);
-          }
-          if( title ){
-            doc.setFontSize(20);
-            doc.text(5, 10, title);
-          }
+        var dataPdf =  doc.output();
 
-          var dataPdf =  doc.output();
+        zip = new JSZip();
+        folder = zip.folder("mx-data");
 
-          zip = new JSZip();
-          folder = zip.folder("mx-data");
+        if(dataScale){
+          folder.file("mx-scale.png", dataScale.split(",")[1], {base64: true});
+        }
+        if(dataLegend){
+          folder.file("mx-legend.png", dataLegend.split(",")[1], {base64: true});
+        }
+        if(dataMap){
+          folder.file("mx-map.png", dataMap.split(",")[1], {base64: true});
+        }
+        if(dataPdf){
+          folder.file("mx-map.pdf", dataPdf, {binary:true});
+        }
 
-          if(dataScale){
-            folder.file("mx-scale.png", dataScale.split(",")[1], {base64: true});
-          }
-          if(dataLegend){
-            folder.file("mx-legend.png", dataLegend.split(",")[1], {base64: true});
-          }
-          if(dataMap){
-            folder.file("mx-map.png", dataMap.split(",")[1], {base64: true});
-          }
-          if(dataPdf){
-            folder.file("mx-map.pdf", dataPdf, {binary:true});
-          }
-
-          zip.generateAsync({type:"blob"})
-            .then(function(content) {
-              progress += 100;
-              download(content, fileName);
-            });
-        })
-          .catch(function(e){
-            progress=100;
-            console.log(e);
+        zip.generateAsync({type:"blob"})
+          .then(function(content) {
+            progress += 100;
+            download(content, fileName);
           });
-
+      })
+      .catch(function(e){
+        progress=100;
+        console.log(e);
       });
+
+  });
   },10);
-    }
+}
 
 
 

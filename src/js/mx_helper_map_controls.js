@@ -171,8 +171,10 @@ mapControlMain.prototype.onAdd = function(map) {
       action:function(){
         System.import("downloadjs")
           .then(function(d){
-            var png = map.getCanvas().toDataURL();
-            d(png,"mx-export.png");
+            mx.helpers.takeMapScreenshot(map)
+            .then(function(data){
+              d(data,"mx-export.png");
+            });
           });
       }
     },

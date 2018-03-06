@@ -137,6 +137,7 @@ function initMouseMoveListener(o){
     var elsCtrls = o.data.elMap.querySelectorAll(".mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-left");
 
     var classOpacitySmooth = "mx-smooth-opacity";
+    var classOpacityHide =  "hide";
     var classNoCursor = "nocursor";
 
     elsCtrls.forEach(function(el){
@@ -161,40 +162,45 @@ function initMouseMoveListener(o){
       }
     });
 
-    listenerManager(o,{
-      action : 'add',
-      target : window,
-      event : "keydown",
-      onDestroy : destroy,
-      listener : function(event){
-        if(timer){
-          clearTimeout(timer);
-        }
-        show();
-        timer = setTimeout(function(){
-          if(!destroyed){
-            hide();
-          }
-        },2000);
-      }
-    });
+/*    listenerManager(o,{*/
+      //action : 'add',
+      //target : window,
+      //event : "keydown",
+      //onDestroy : destroy,
+      //listener : function(event){
+        //if(timer){
+          //clearTimeout(timer);
+        //}
+        //show();
+        //timer = setTimeout(function(){
+          //if(!destroyed){
+            //hide();
+          //}
+        //},2000);
+      //}
+    /*});*/
 
     function hide(){
-      elsCtrls.forEach(function(el){
-        el.style.opacity = 0.0;
+      mx.helpers.onNextFrame(function(){
+        elsCtrls.forEach(function(el){
+          el.classList.add(classOpacityHide);
+        });
+        elBody.classList.add(classNoCursor);
       });
-      elBody.classList.add(classNoCursor);
     }
 
     function show(){
-      elsCtrls.forEach(function(el){
-        el.style.opacity = 1;
+      mx.helpers.onNextFrame(function(){
+        elsCtrls.forEach(function(el){
+          el.classList.remove(classOpacityHide);
+        });
+        elBody.classList.remove(classNoCursor);
       });
-      elBody.classList.remove(classNoCursor);
     }
 
     function clean(){
       elsCtrls.forEach(function(el){
+        el.classList.remove(classOpacityHide);
         el.classList.remove(classOpacitySmooth);
       }); 
     }
@@ -800,7 +806,7 @@ function storyOnScroll(o) {
    */
   updateLayout();
   loop(); 
-    /**
+  /**
    * Trigger step config
    */
   listenerManager(o,{
@@ -823,7 +829,7 @@ function storyOnScroll(o) {
     if( o.data.enabled ){
       data = o.onScrollData;
       // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
-      posNow = data.elScroll.scrollTop * (data.scaleWrapper || 1) ;
+      posNow =  data.elScroll.scrollTop * data.scaleWrapper || 1 ;
       posLast = data.distTop;
       if ( posLast == posNow ) {
         nf(loop);
@@ -831,7 +837,6 @@ function storyOnScroll(o) {
       } else {
         o.onScrollData.distTop = posNow;
       }
-
       o.callback(o);
       nf(loop);
     }

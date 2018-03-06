@@ -132,6 +132,10 @@ blockquote {
   -o-transition: opacity ease-in-out 1s;
   transition: opacity ease-in-out 1s;
 }
+.mx-smooth-opacity.hide {
+  opacity: 0;
+}
+
 
 
 /**

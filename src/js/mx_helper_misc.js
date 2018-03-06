@@ -161,6 +161,15 @@ export function onNextFrame(cb){
 }
 
 
+var cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
+/**
+ * Cancel a requested frame id
+ * @param {Number} frame number
+ */
+export function cancelFrameRequest(id){
+    cf(id);
+}
 
 /**
  * Get the correct css transform function
@@ -1664,37 +1673,39 @@ export function scrollFromTo(o){
 
   return new Promise(function(resolve,reject){
     setTimeout(function(){
-      if( axis === "y" ) bodyDim = document.body.clientHeight || 800; 
-      if( axis === "x" ) bodyDim = document.body.clientWidth || 800; 
-      if (!diff || diff === 0){
-        resolve(true);
+      mx.helpers.onNextFrame(function(){
+        if( axis === "y" ) bodyDim = document.body.clientHeight || 800; 
+        if( axis === "x" ) bodyDim = document.body.clientWidth || 800; 
+        if (!diff || diff === 0){
+          resolve(true);
 
-      } else if ( Math.abs(diff) > ( bodyDim * 1.5 )){
-        // instant scroll
-        if(axis == "y" ) o.el.scrollTop = o.to;
-        if(axis == "x" ) o.el.scrollLeft = o.to;
+        } else if ( Math.abs(diff) > ( bodyDim * 1.5 )){
+          // instant scroll
+          if(axis == "y" ) o.el.scrollTop = o.to;
+          if(axis == "x" ) o.el.scrollLeft = o.to;
 
-        resolve(true);
-      }else{
-        // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
-        duration = (o.during || 1000); 
-        // scroll on next frame
-        onNextFrame(function step(timestamp) {
-          if (!start) start = timestamp;
-          
-          time = timestamp - start;
-          percent = easing(Math.min(time / duration, 1));
-          
-          if(axis == "y" ) o.el.scrollTop = o.from + diff * percent;
-          if(axis == "x" ) o.el.scrollLeft = o.from + diff * percent;
+          resolve(true);
+        }else{
+          // var duration = (o.during || 1000) * (Math.abs(diff)/1000); 
+          duration = (o.during || 1000); 
+          // scroll on next frame
+          onNextFrame(function step(timestamp) {
+            if (!start) start = timestamp;
 
-          if ( time < duration && !(stop && stop()) ) {
-            onNextFrame(step);
-          }else{
-            resolve(true);
-          }
-        });
-      }
+            time = timestamp - start;
+            percent = easing(Math.min(time / duration, 1));
+
+            if(axis == "y" ) o.el.scrollTop = o.from + diff * percent;
+            if(axis == "x" ) o.el.scrollLeft = o.from + diff * percent;
+
+            if ( time < duration && !(stop && stop()) ) {
+              onNextFrame(step);
+            }else{
+              resolve(true);
+            }
+          });
+        }
+      });
     },o.timeout||0);
   });
 }

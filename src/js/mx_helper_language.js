@@ -116,7 +116,6 @@ export function updateLanguageElements(o) {
         if (mx.helpers.isElement(el)) {
           var type = el.dataset.lang_type;
           var id = el.dataset.lang_key;
-          var text = el.innerText;
 
           /*
            * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
@@ -145,8 +144,8 @@ export function updateLanguageElements(o) {
            * Fallback
            */
           if (!label) {
-            if(text){
-              label = text;
+            if(el.innerText){
+              label = el.innerText;
             }else{
               label = id;
             }
