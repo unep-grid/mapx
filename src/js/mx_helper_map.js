@@ -2952,7 +2952,7 @@ export function addViewVt(o){
 * @param {Object} o.view View item
 */
 export function addOptions(o){
-
+  
   var view = o.view;
   var idMap = o.id;
   var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
@@ -3061,14 +3061,16 @@ export function addView(o){
     prefix : view.id
   });
 
-  /**
-   * Add options
-   */
-  mx.helpers.addOptions({
-    id : o.id,
-    view : view
-  });
 
+  if( ! o.noOptions ){
+    /**
+     * Add options
+     */
+    mx.helpers.addOptions({
+      id : o.id,
+      view : view
+    });
+  }  
   /**
    * Add view
    */

@@ -127,16 +127,12 @@ blockquote {
 
 .mx-smooth-opacity {
   opacity: 1;
+  will-change:opacity;
   -webkit-transition: opacity ease-in-out 1s;
   -moz-transition: opacity ease-in-out 1s;
   -o-transition: opacity ease-in-out 1s;
   transition: opacity ease-in-out 1s;
 }
-.mx-smooth-opacity.hide {
-  opacity: 0;
-}
-
-
 
 /**
 * map 

@@ -137,7 +137,7 @@ function initMouseMoveListener(o){
     var elsCtrls = o.data.elMap.querySelectorAll(".mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-left");
 
     var classOpacitySmooth = "mx-smooth-opacity";
-    var classOpacityHide =  "hide";
+    //var classOpacityHide =  "hide";
     var classNoCursor = "nocursor";
 
     elsCtrls.forEach(function(el){
@@ -183,7 +183,7 @@ function initMouseMoveListener(o){
     function hide(){
       mx.helpers.onNextFrame(function(){
         elsCtrls.forEach(function(el){
-          el.classList.add(classOpacityHide);
+          el.style.opacity = 0;
         });
         elBody.classList.add(classNoCursor);
       });
@@ -192,7 +192,7 @@ function initMouseMoveListener(o){
     function show(){
       mx.helpers.onNextFrame(function(){
         elsCtrls.forEach(function(el){
-          el.classList.remove(classOpacityHide);
+          el.style.opacity = 1;
         });
         elBody.classList.remove(classNoCursor);
       });
@@ -200,7 +200,7 @@ function initMouseMoveListener(o){
 
     function clean(){
       elsCtrls.forEach(function(el){
-        el.classList.remove(classOpacityHide);
+        el.style.opacity = 1 ;
         el.classList.remove(classOpacitySmooth);
       }); 
     }
@@ -1754,7 +1754,8 @@ export function storyPlayStep(o){
       mx.helpers.addView({
         id : o.id,
         idView: v,
-        before : vPrevious
+        before : vPrevious,
+        noOptions : true
       });
     });
 
