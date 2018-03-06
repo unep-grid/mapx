@@ -48,45 +48,82 @@ export function errorProgress(f) {
 // handle zip to geojson
 export function zipToGeojson(data){
 
-  var shapefile,JSZip, shp, dbf;
+  var shp, dbf, prj, err="";
+  var projOrig, projDest="+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
+  var helper = this;
+  var shapefile, JSZip,turf,proj4;
 
   return Promise.all([
     System.import("jszip"),
-    System.import("shapefile")
+    System.import("shapefile"),
+    System.import("proj4"),
+    System.import("@turf/meta")
   ])
     .then(function(m){
       JSZip = m[0];
       shapefile = m[1];
+      proj4 = m[2].default || m[2];
+      turf = m[3];
+
       return JSZip.loadAsync(data);
     })
     .then(function(files){
+
       var fileData = files.files;
 
       for(var f in fileData){
         var ext = mx.helpers.getExtension(f);
         if(ext == ".dbf") dbf = fileData[f];
         if(ext == ".shp") shp = fileData[f]; 
+        if(ext == ".prj") prj = fileData[f];
       }
 
+
       if(!shp){
-        throw new Error('No shp file found in archive, abord.');
+        err =  err + " No shp file found in archive, abord.";
       }
       if(!dbf){
-        throw new Error('No dbf file found in archive, abord.');
+        err = err + ' No dbf file found in archive, abord.';
+      }
+      if(!prj){
+        err = err + ' No prj file found in archive, abord.';
       }
 
       var rShp = shp.async("Uint8Array");
       var rDbf = dbf.async("Uint8Array");
+      var rPrj = prj.async("text");
 
-      return Promise.all([rShp,rDbf]);
+      return Promise.all([rShp,rDbf,rPrj]);
 
     })
     .then(function(v){
-      return shapefile
-        .read(v[0],v[1]);
+
+      projOrig = v[2];
+      
+      return shapefile.read(v[0],v[1]);
+
+    }).
+    then(function(gj){
+      var newCoord = [];
+
+      return new Promise(function(resolve,reject){
+        turf.coordEach(gj,function(coord){
+          newCoord = proj4(projOrig,projDest,coord);
+          coord[0]=newCoord[0];
+          coord[1]=newCoord[1];
+        });
+
+        resolve(gj);
+      });
+
     })
-    .then(function(gj){
-      return(gj);
+    .catch(function(e){
+
+      helper.modal({
+        content : e + " / " + err,
+        title:"Error while reading shapefile"
+      });
+
     });
 }
 

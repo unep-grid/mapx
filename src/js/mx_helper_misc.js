@@ -1544,7 +1544,7 @@ export function chunkString(str, size) {
 export function getExtension(str){
   
   // "/" represent folder in jsZip and "^__" is prefix for max os x hidden folder. Both case : invalid.
-  var isWrong = str.search(/^__|\//) > -1;
+  var isWrong = str.search(/^__/) > -1;
   var ext = str.toLowerCase().match(/.[a-z0-9]+$/);
   
   if(!isWrong && ext && ext instanceof Array){
