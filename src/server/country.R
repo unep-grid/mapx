@@ -46,6 +46,8 @@ observe({
       }
     }
 
+
+    mxModal(id="uiSelectCountry",close=T)
     query$country <<- NULL
     reactData$country <- country_out
 
