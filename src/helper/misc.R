@@ -167,6 +167,10 @@ mxSchemaMultiLingualInput = function(
     dict = config$dict
   }
 
+  if(noDataCheck(languagesHidden)){
+    languagesHidden = languages[!languages %in% language]
+  }
+
   if(nchar(titlePrefix)>0){
     titlePrefix = paste(toupper(titlePrefix),":")
   }

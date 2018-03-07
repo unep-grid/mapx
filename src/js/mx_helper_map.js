@@ -2593,6 +2593,7 @@ export function addViewVt(o){
       time = p(view,"data.period"),
       rules =  p(view,"data.style.rules",[]),
       nulls = p(view,"data.style.nulls",[])[0],
+      hideNulls = p(view,"data.style.hideNulls",false),
       geomType = p(view,"data.geometry.type"),
       source =  p(view,"data.source"),
       num = 0,
@@ -2618,7 +2619,7 @@ export function addViewVt(o){
     rules = rules instanceof Array ? rules : [rules];
     rules = mx.helpers.clone(rules);
 
-    if(nulls){
+    if( nulls && !hideNulls ){
       nulls.isNull = true;
       nulls.value = nulls.value == "" || typeof nulls.value === undefined ? null : nulls.value;
       rules.push(nulls);

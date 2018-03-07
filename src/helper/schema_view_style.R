@@ -93,23 +93,11 @@ mxSchemaViewStyle <- function(
       keyTitle="style_title_legend",
       default = list(en="Legend"),
       type="string",
-      propertyOrder=4
+      propertyOrder = 5
       )
     )
 
-  #
-  # Reverse layer order
-  #
 
-  reverseLayer <- list(
-    reverseLayer = list(
-       propertyOrder = 2,
-       title = tt("style_reverse_order"),
-       description = tt("style_reverse_order_desc"),
-       type = "boolean",
-       format = "checkbox"
-      )
-    )
 
   #
   # style property
@@ -214,7 +202,19 @@ mxSchemaViewStyle <- function(
         )
       )
     )
+  #
+  # Reverse layer order
+  #
 
+  reverseLayer <- list(
+    reverseLayer = list(
+       propertyOrder = 2,
+       title = tt("style_reverse_order"),
+       description = tt("style_reverse_order_desc"),
+       type = "boolean",
+       format = "checkbox"
+      )
+    )
   #
   #  set rules list
   # 
@@ -250,9 +250,25 @@ mxSchemaViewStyle <- function(
           sprite
           )
         ),
-        default = list(list(value=NULL,labels=list("en"="NA"),color="#000",opacity=1,size=1,sprite=""))
+        default = list(list(value=NULL,labels=list("en"="NO DATA"),color="#000",opacity=1,size=1,sprite=""))
       )
     )
+
+
+  #
+  # hide nulls
+  #
+
+  hideNulls <- list(
+    hideNulls = list(
+       propertyOrder = 4,
+       title = tt("style_hide_nulls"),
+       description = tt("style_hide_nulls_desc"),
+       type = "boolean",
+       format = "checkbox"
+      )
+    )
+
   #
   # set paint
   #
@@ -275,7 +291,7 @@ mxSchemaViewStyle <- function(
   custom = list(
     custom = list (
       type = "object",
-      propertyOrder = 5,
+      propertyOrder = 6,
       title = "Custom style",
       options = list(
         collapsed = TRUE
@@ -303,9 +319,10 @@ mxSchemaViewStyle <- function(
   # main properties
   #
   properties <- c(
-    reverseLayer,
     rules,
     nulls,
+    reverseLayer,
+    hideNulls,
     titleLegend,
     custom
     )

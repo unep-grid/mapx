@@ -70,6 +70,7 @@ observeEvent(input$btnViewPreviewStyle,{
 
   view <- .set(view,c("data","style","rules"), style$rules)
   view <- .set(view,c("data","style","nulls"), style$nulls)
+  view <- .set(view,c("data","style","hideNulls"), style$hideNulls)
   view <- .set(view, c("data","style","custom"), style$custom)
   view <- .set(view, c("data","style","titleLegend"), style$titleLegend)
   view <- .set(view, c("data","style","reverseLayer"), style$reverseLayer)
@@ -107,6 +108,7 @@ observeEvent(input$btnViewSaveStyle,{
       view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
       view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
       view <- .set(view, c("data","style","nulls"), .get(style,c("nulls")))
+      view <- .set(view, c("data","style","hideNulls"), .get(style,c("hideNulls")))
       view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
       view <- .set(view, c("data", "style", "reverseLayer"), .get(style,c("reverseLayer")))
       view <- .set(view, c("data"), as.list(.get(view,"data")))

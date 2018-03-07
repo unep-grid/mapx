@@ -224,7 +224,6 @@ function initAdaptiveScreen(o){
   //var classBase = "mx-story-screen"; 
   //var classWrapper = "mx-wrapper";
   var classWrapper = o.data.classWrapper;
-  //o.data.elWrapper = document.querySelector("." + classWrapper);
   o.data.elStory = document.querySelector("." + o.classContainer);
   o.data.elMap = o.data.map.getContainer();
   o.data.elMapControls = o.data.elMap.querySelector(".mapboxgl-control-container"); 
@@ -1536,7 +1535,8 @@ export function storyBuild(o){
    * Story base div
    */
   var doc = window.document;
-  var divOldStory = doc.getElementById(o.idStory);
+  //var divOldStory = doc.getElementById(o.idStory);
+  
   var wrapper = doc.querySelector("." + o.classWrapper );
   var divStory = doc.createElement("div");
   var divStoryContainer = doc.createElement("div");
