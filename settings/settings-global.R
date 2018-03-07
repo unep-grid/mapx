@@ -409,8 +409,7 @@ config[[c("users","data","public")]] <- list(
   user = list(
     cache = list (
       last_project = config[["countries"]][['default']][['first']],
-      last_language = config[["languages"]][["list"]][[1]],
-      last_story_map = c()
+      last_language = config[["languages"]][["list"]][[1]]
       )
     ),
   admin = list(
@@ -428,8 +427,7 @@ config[["users"]][["data"]][["superUser"]]  <- list(
   user = list(
     cache = list (
       last_country = config[["countries"]][['default']][['first']], 
-      last_language = config[["languages"]][["list"]][[1]],
-      last_story_map = c()
+      last_language = config[["languages"]][["list"]][[1]]
       )
     ),
   admin = list(
@@ -468,7 +466,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "user",
     level = 4,
-    access = c(),
+    access = c("dbSelf"),
     read = c("self","public","user"),
     publish = c("self","publisher"),
     edit = c("self"),
@@ -478,7 +476,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "publisher",
     level = 3,
-    access = c(),
+    access = c("dbSelf"),
     read = c("self","public","user","publisher"),
     publish = c("self","public","user","publisher"),
     edit = c("self","public","user","publisher"),
@@ -488,7 +486,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "developer",
     level = 2,
-    access = c("editCustomView","editDashboard"),
+    access = c("dbSelf","editCustomView","editDashboard"),
     read = c("self","public","user","publisher"),
     publish = c("self","public","user","publisher"),
     edit = c("self","public","user","publisher"),
@@ -498,7 +496,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "admin",
     level = 1,
-    access = c("editRoles"),
+    access = c("dbSelf","editRoles"),
     read = c("self","public","user","publisher","admin"),
     publish = c("self","public","user","publisher","admin"),
     edit = c("self","public","user","publisher","admin"),
@@ -508,7 +506,7 @@ config[["users"]][["roles"]]<- list(
   list(
     name = "superuser",
     level = 0,
-    access = c("db","editRoles","appConfig"),
+    access = c("dbSelf","db","editRoles","appConfig"),
     read = c("self","public","user","publisher","admin","superuser"),
     publish = c("self","public","user","publisher","admin","superuser"),
     edit = c("self","public","user","publisher","admin","superuser"),

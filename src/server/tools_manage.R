@@ -51,8 +51,9 @@ observe({
     })
 })
 
+
 #
-# Access to database info
+# Access to self table data info
 #
 observe({
 
@@ -62,25 +63,57 @@ observe({
   isolate({
     language <- reactData$language
     dbInfo <- tags$div()
-
-
-    if( "db" %in% access  ){
+    
+    if( "dbSelf" %in% access  ){
 
       dbInfo <- tagList(
         tags$h4(d("title_tools_db",language)),
         actionButton(
-          label = "Show db info",
-          inputId = "btnShowDbInfo",
+          label = d("show_db_info_self",language),
+          inputId = "btnShowDbInfoSelf",
           class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_db_info"
+          `data-lang_key` = "btn_show_db_info_self"
           )
         )
 
+      if( "db" %in% access  ){
+
+        dbInfo <- c(dbInfo,tagList(
+            actionButton(
+              label = d("show_db_info",language),
+              inputId = "btnShowDbInfo",
+              class = "btn btn-sm btn-default hint",
+              `data-lang_key` = "btn_show_db_info"
+              )
+            )
+          )
+      }
     }
+
 
     output$uiBtnShowDbInfo <- renderUI(dbInfo)
 
   })
+})
+
+
+observeEvent(input$btnShowDbInfoSelf,{
+
+  userRole <- getUserRole()
+  access <- .get(userRole,c("access"))
+
+  if( "dbSelf" %in% access ){
+
+    dbInfo <- tags$p()
+
+
+    mxModal(
+      id = "dbInfo",
+      title = "Postgres info",
+      content = dbInfo
+      )
+  }
+
 })
 
 

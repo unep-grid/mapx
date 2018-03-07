@@ -26,7 +26,7 @@ observe({
     #
     # Set map options
     # 
-    mapConfig<- list(
+    mapConfig <- list(
       #
       # Intial views
       #

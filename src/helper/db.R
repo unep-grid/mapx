@@ -61,6 +61,41 @@ mxDbAutoCon <- function(){
 
 
 
+mxDbCreateTempUser <- function(id,srcList){
+
+  con <- mxDbAutoCon()
+  email <- mxDbGetEmailFromId(id)
+  if(noDataCheck(email) || noDataCheck(srcList)) return()
+  token = mxDbGetQuery("SELECT data#>>'{admin,token}' from mx_users where id = " + id)
+  tmpUser = "mx_temp_user_" + email + "_" + randomString
+
+  dbGetQuery(con, "BEGIN TRANSACTION")
+  dbSendQuery("CREATE USER "+ tmpUser + " WITH PASSWORD " + token )
+  dbSendQuery("REVOKE ALL PRIVILEGES TO PUBLIC FROM " + tmpUser)
+  dbSendQuery("GRAND CONNECT ON DATABASE mapx TO " + tmpUser)
+  for(t in srcList){
+    dbSendQuery("GRAND SELECT,DELETE,UPDATE ON " + t + " TO " + tmpUser )
+  }
+  dbCommit(con)
+  
+  dropRights = function(){
+    dbGetQuery(con, "BEGIN TRANSACTION")
+    for(t in srcList){
+      dbSendQuery("REVOKE ALL PRIVILEGES ON " + t + " FROM " + tmpUser )
+    }
+    dbSendQuery("REVOKE ALL PRIVLEGES ON DATABASE mapx TO " + tmpUser)
+    dbSendQuery("DROP USER " + tmpUser)
+    dbCommit(con)
+  }
+
+  return(dropRights)
+
+
+}
+
+
+
+
 #' Get query result from postgresql
 #'
 #' Wrapper to execute a query 
@@ -2509,7 +2544,8 @@ mxDbEmailIsKnown <- function(email=NULL,userTable="mx_users",active=TRUE,validat
 
 
 mxDbGetEmailFromId <- function(id,userTable="mx_users"){
-  mxDbGetQuery(sprintf("SELECT email from mx_users where id = %1$s",id))$email
+  if(!is.numeric(id)) return(NULL)
+  mxDbGetQuery(sprintf("SELECT email from mx_users where id = '%1$s'",id))$email
 }
 
 
