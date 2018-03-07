@@ -315,6 +315,9 @@ liControlsStoryMaps<- tagList(
 liControlsGeoJson <- tagList(
   "{{?view.type == 'gj'}}",
   # Button to upload geojson
+
+  tagList(
+  "{{?h.path(mx,'settings.user.isUser')}}",
   tags$li(
     class="mx-pointer hint--right",
     `data-lang_key`="btn_upload",
@@ -326,6 +329,8 @@ liControlsGeoJson <- tagList(
       class="fa fa-cloud-upload"
       )
     ),
+  "{{?}}"
+  ),
   tags$li(
     class="mx-pointer hint--right",
     `data-lang_key`="btn_opt_delete_geojson",

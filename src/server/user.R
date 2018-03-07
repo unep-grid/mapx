@@ -381,7 +381,8 @@ observeEvent(reactData$loginRequested,{
     #
     mglSetUserData(list(
        id = res$id,
-       token = tk
+       token = tk,
+       isUser = !isGuest
     ));
     #
     # Get user info
