@@ -1,0 +1,27 @@
+
+.mx-flash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top : 50%;
+  left : 50%;
+  width:1px;
+  height:1px;
+  z-index:10000;
+}
+
+.mx-flash i {
+  font-size: 150px;
+  opacity:1;
+  -webkit-transition: all 0.3s ease-out;
+-moz-transition: all 0.3s ease-out;
+-o-transition: all 0.3s ease-out;
+transition: all 0.3s ease-out;
+}
+
+
+.mx-flash i.active {
+  opacity:0;
+  font-size:200px;
+}

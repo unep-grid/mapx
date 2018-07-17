@@ -1,0 +1,2894 @@
+
+#' Map-x helper functions
+#'
+#' Map-x core functions
+#'
+#'
+#' @docType package
+#' @name mapxhelper 
+
+#' Add pool of connection
+#' @return null
+mxDbInitPool <- function(){
+
+  # get configuration file
+  config <- mxGetDefaultConfig()
+
+  # db info
+  d <- .get(config,c("pg"))
+
+  if(!noDataCheck(d$pool)) stop("mxSetDbPool : Pool already defined. use poolClose to remove it ")
+
+  pool <- dbPool(
+    drv = dbDriver("PostgreSQL"),
+    dbname = d$dbname,
+    host = d$host,
+    user = d$user,
+    password = d$password,
+    port = d$port
+    )
+
+  onStop(function() {
+    poolClose(pool)
+    })
+
+  config <<- .set(config,c("pg","pool"),pool)
+
+  return(pool)
+}
+
+
+#' Add or update views from story steps to view dependencies
+#' @param {List} story list
+#' @param {List} view list
+#' @param {List} views compact list
+updateStoryViews <- function(story,view,allViews){
+
+  #
+  # Retrieve and store data for all views used in story.
+  #
+  views = list()
+
+  #
+  # All views id extracted from the story
+  #
+  viewsStory = lapply(story$steps,function(s){
+    lapply(s$views,function(v){v})
+ })
+
+  # Final view list
+  viewsId = unique(unlist(viewsStory))
+  viewsId = as.list(viewsId)
+
+  # If there is at least on views used, get views object.
+  if(!noDataCheck(viewsId)){
+    views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
+  }
+
+  #
+  # Save local views from story, if any
+  #
+  view <- .set(view,c("data","views"),views)
+  return(view)
+
+}
+
+
+#' Load external ui file value in shiny app
+#'
+#' Shortcut to load external shiny ui file
+#'
+#' @param files Path to the file(s)
+#' @param base Path enclosing folder path. Default = "./"
+#' @export
+mxSource <- function(files="",base=".",env=.GlobalEnv){
+
+  if(length(files)>1){
+   for(f in files){
+    file = normalizePath(file.path(base,f))
+    source(file, local=env)$value
+  }
+  }else{
+    file = normalizePath(file.path(base,files))
+    source(file,local=env)$value
+  }
+
+}
+
+
+##' Source additional server files
+##' @param files Vector of files to source
+##' @export
+#mxSourceSrv <- function(files=NULL){
+
+   #conf <- mxGetDefaultConfig()
+  #if(noDataCheck(files)) return;
+
+  #for(f in files){
+    #source(file.path(conf[["srvPath"]],f), local=parent.frame())
+  #}
+
+#}
+
+
+
+
+#' Get md5 of a file or R object
+#' @param f File or Object 
+#' @return md5 sum
+#' @export
+mxMd5 <- function(f){
+  fileOk = ! "try-error" %in% class(try(file.exists(f),silent=T))
+  if(fileOk) fileOk = file.exists(f) 
+  digest::digest(f,serialize=TRUE,file=fileOk)
+}
+
+#' Deparse a list from a json file path
+#' @param path {string} Path to the json file
+#' @export
+mxJsonToListSource <- function(path){
+  paste(deparse(mxJsonToList(path),control=NULL),collapse="\n")
+}
+
+
+
+#' Simple counter
+#' @param id Id of the counter
+#' @param reset Boolean Should the function reset the counter ?
+mxCounter =  function(id,reset=F){
+    if(!exists("mxCounters") || reset ){
+      mxCounters <<- list()
+    }
+    if(!reset){
+      if(noDataCheck(mxCounters[[id]])){
+        mxCounters[[id]] <<- 1
+      }else{
+        mxCounters[[id]] <<- mxCounters[[id]] + 1
+      }
+      mxCounters[[id]]
+    }
+  }
+
+
+#' Create multilingual object of input in json schema
+#' @param format {Character} Schema input format
+#' @param default {List} Default list
+#' @param keyTitle {Character} Translation key of the title
+#' @param titlePrefix {Character} 
+#' @param keyCounter {Character|Numeric} Id of the counter to set
+#' @param propertyOrder {Numeric} If counter id is not provided, set the property order using this value
+#' @param type {Character} Input type
+#' @param collapsed {Boolean} Collapse state of the object
+#' @param language {Character} Two letter code of language for labels
+#' @param languages {Character} Vector of languages code
+#' @param languagesRequired {Character} Vector of languages code where value isrequired
+#' @param languagesHidden {Character} Vector of languages code where editor is hidden
+#' @param languagesReadOnly {Character} Vector of languages code where editor is visible, but not editable
+#' @param dict {Data.frame} Dictionarry to use
+#' @param options {List} List of option given to the json editor client side
+mxSchemaMultiLingualInput = function(
+  format = NULL,
+  default = list(),
+  keyTitle = "",
+  titlePrefix = "",
+  keyCounter = "b",
+  propertyOrder = 0,
+  type = "string",
+  collapsed = TRUE,
+  language = "en",
+  languages = unlist(config[["languages"]]),
+  languagesRequired = c("en"),
+  languagesHidden = c(),
+  languagesReadOnly = c(),
+  dict = NULL,
+  options = list()
+  ){
+
+  if(noDataCheck(language)){
+    language = get("language",envir=parent.frame())
+  }
+
+  if(noDataCheck(dict)){
+    dict = dynGet("dict",ifnotfound=config$dict)
+  }
+
+  if(noDataCheck(dict)){
+    dict = config$dict
+  }
+
+  if(noDataCheck(languagesHidden)){
+    languagesHidden = languages[!languages %in% language]
+  }
+
+  if(nchar(titlePrefix)>0){
+    titlePrefix = paste(toupper(titlePrefix),":")
+  }
+
+  prop = lapply(languages,function(x){
+
+    opt = options
+    #
+    # Required ?
+    #
+    minLength = 0 
+    if( x %in% languagesRequired ){
+     minLength = 1
+    }
+
+    #
+    # Hidden ?
+    #
+    opt$readOnly = isTRUE( x %in% languagesReadOnly )
+    opt$hidden = isTRUE( x %in% languagesHidden && !x %in% languagesRequired )
+
+    #
+    # Output entry
+    #
+    list(
+      title = sprintf("%1$s (%2$s%3$s)",
+        d(keyTitle,lang=x,dict=dict,web=F),
+        d(x,lang=language,dict=dict,web=F),
+        ifelse(opt$readOnly,", read only","")
+        ),
+      type = type,
+      format = format,
+      options = opt,
+      minLength = minLength,
+      default = .get(default,c(x),default="")
+      )
+  
+  })
+  names(prop) <- languages
+  
+ propOrder = ifelse(noDataCheck(keyCounter),mxCounter(keyCounter),propertyOrder)
+
+
+  list(
+    propertyOrder = propOrder,
+    title = paste(titlePrefix,d(keyTitle,lang=language,dict=dict,web=F)),
+    type = "object",
+    options = list(collapsed = collapsed),
+    properties = prop
+    )
+}
+
+#' Create object for data integrity framework
+#' @param keyTitle {Character} Translation key of the title
+#' @param language {Character} Language code to use
+mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){ 
+
+  if(noDataCheck(language)){
+    language = get("language",envir=parent.frame())
+  }
+  if(noDataCheck(dict)){
+    dict = .get(config,c("dictionaries","schemaMetadata"))
+  }
+
+  list(
+    title = d(keyTitle,lang=language,dict=dict,web=F),
+    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict,web=F),
+    type = "string",
+    propertyOrder = mxCounter("dataIntegrity"),
+    minlength = 1,
+    default = "0",
+    enum = c("0",
+      "1",
+      "2",
+      "3"),
+    options = list(
+      enum_titles = names(d(
+          c(
+            "dont_know",
+            "no",
+            "partial",
+            "yes"),
+          lang = language,
+          dict = dict,
+          web=F
+          )
+        )
+      )
+    )
+}
+
+
+#' Create attribute description object based on multilingual input
+#' @param format {Character} Schema input format
+#' @param keyTitle {Character} Translation key of the title
+#' @param keyCounter {Character|Numeric} Id of the counter to set
+#' @param type {Character} Input type
+#' @param collapsed {Boolean} Collapse state of the object
+#' @param attributes {Character} Vector of attributes names
+#' @param dict {List} Dictionnary object. Default is "config$dictionaries$main"
+mxSchemaAttributeInput = function(
+    language="en",
+    format=NULL,
+    keyTitle="",
+    keyCounter="attr",
+    type="string",
+    collapsed=TRUE,
+    attributes=c(),
+    dict
+    ){
+
+    prop = lapply(attributes,function(x){
+         mxSchemaMultiLingualInput(
+          language = language,
+          keyTitle = keyTitle,
+          titlePrefix = x,
+          keyCounter = keyCounter,
+          type = type,
+          format = format,
+          default = list('en'='-'),
+          dict = dict
+          )
+    })
+    
+    names(prop) <- attributes
+    return(prop)
+  }
+
+
+#' Check for "empty" value
+#' 
+#' Empty values = NULL or, depending of storage mode
+#' - data.frame : empty is 0 row
+#' - list : empty is length of 0 at first level or second level
+#' - vector (without list) : empty is length of 0 OR first value in "config$defaultNoDatas" OR first value is NA or first value as character length of 0
+#'
+#' @param val object to check : data.frame, list or vector (non list). 
+#' @param debug Boolean : Should the function return timing ?. 
+#' @return Boolean TRUE if empty
+#' @export
+noDataCheck <- function( val = NULL, debug = FALSE ){
+
+    noDatas <- config$noData;
+
+    res = isTRUE(
+      is.null(val)
+      ) ||
+    isTRUE(
+      isTRUE( is.data.frame(val) && nrow(val) == 0 ) ||
+        isTRUE( is.list(val) && (
+            ( length(val) == 0 ) || 
+              ( all(sapply(val, noDataCheck )))
+            )
+          ) ||
+      isTRUE( !is.list(val) && is.vector(val) && (
+          length(val) == 0 || 
+            val[[1]] %in% noDatas || 
+            is.na(val[[1]]) || 
+            nchar(val[[1]]) == 0 )
+        )
+      )
+
+  return(res)
+}
+
+#' Concatenate text
+#' @param x {string} left string or number
+#' @param y {string} right string or number
+#' @export
+"+" = function(x,y) {
+    if(is.character(x) || is.character(y)) {
+        return(paste(x , y, sep=""))
+    } else {
+        .Primitive("+")(x,y)
+    }
+}
+
+#' Get default config from global env
+#' @export
+mxGetDefaultConfig <- function(){
+  get("config",envir=.GlobalEnv)
+}
+
+
+
+
+#' Set web ressource path
+mxSetResourcePath <- function(resources){
+  if(is.null(resources)){
+    res <- .get(config,"resources")
+  }else{
+    res =  resources
+  }
+  for(i in names(res)){
+    shiny::addResourcePath(i,res[[i]])
+  }
+}
+
+
+
+#' Get country codes list, using selected language for names
+#' @param language {Character} Two letter code for language
+#' @return list {List} Named list of countries
+mxGetCountryList <- function(language="en",includeWorld=TRUE){
+
+  out <- list()
+  countryTable <- .get(config,c("countries","codes"))[,c("id",language)]
+  out <- .get(countryTable,c("id"))
+  names(out) <- .get(countryTable,c(language))
+  if(!includeWorld){
+    out <- out[!out=="WLD"]
+  }
+  return(out)
+
+}
+
+
+
+#' Replace escaped new line by new line
+#' 
+#' @param {Character} txt Text where to replace escaped new lines
+#' @return {Character} Text with new lines
+mxUnescapeNewLine <- function(txt){
+  #ff <- tempfile()
+  txt <-  gsub("\\\\n","\n",txt)
+  #write(txt,ff)
+  #readChar(ff,file.info(ff)$size)
+  txt
+}
+
+
+#' Get dictionnary entry by key for a given language (translate)
+#' @param id {string} Id of element to extract
+#' @param lang {string} Two letters code for given language
+#' @return Translated value
+#' @note
+#'    memoisiation test
+#'    10 search  on 172'000 entries
+#'    for(i in 1:12){config[['dict']]=rbind(config[['dict']],config[['dict']])}
+#'    system.time({test = sapply(rep("hello_world",10),function(x){d(x,"fr")})})
+#'    before :  0.012 [s]
+#'    after : 0.001 [s]
+#' @export
+mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE,dict=NULL,web=FALSE,asChar=FALSE,debug=F){
+  out <- NULL
+
+  # if no dictionary provided, search for one in parent env
+  if(noDataCheck(dict)){
+    dict=dynGet("dict",inherits=T)
+  }
+
+  # if no dict found, get the default. Else, append default and provided
+  if(noDataCheck(dict)){ 
+    dict = .get(config,"dict")
+  }else{
+    dict = rbind(dict,.get(config,"dict"))
+  }
+
+  d <- dict
+
+  # if no language, get the default or the first of the language available
+  if(noDataCheck(lang)){
+    lang=dynGet("lang",inherits=T)
+    if(noDataCheck(lang)){
+      lang <- langDefault
+      if(noDataCheck(lang)){
+        lang <- config[["languages"]][["list"]][[1]]
+      }
+    }
+  }
+
+  # test for missing language
+  langExists = c(lang,langDefault) %in% names(d)
+  if(!all(langExists)) stop(sprintf("Language %s not found",c(lang, langDefault)[!langExists]))
+
+  #
+  # Start search
+  # 
+  if(is.null(id)){
+    #
+    # All id 
+    #
+    if(lang!=langDefault){
+      #
+      # Output all items for both default and selected language
+      #
+      out <- d[,c("id",c(langDefault,lang))]
+    }else{
+      #
+      # Output all items for selected language
+      #
+      out <- d[,c("id",c(lang))]
+    }
+
+  }else{ 
+
+    if( length(id) > 1 || namedVector  ){
+      #
+      # Multiple id
+      # 
+      if( length(lang) !=1 ) stop("if id > 1, language should be 1")
+
+      sub <- d[d$id %in% id, c("id",lang,langDefault)]
+
+      out <- id
+      dat <- vapply(id,
+        function(x){
+          # Subset the word in the language and default language
+          trads <- d[d$id == as.character(x), c(lang,langDefault)]
+          # Get only the selected language
+          trad <-trads[,lang]
+          # if it's empty, use the default language
+          if(noDataCheck(trad)) trad <- trads[,langDefault]
+          # if it's empty, use the id
+          if(noDataCheck(trad)) trad <- x
+          # If there is multiple match, paste. It should not happen...
+          trad <- paste(trad,collapse="/")
+          return(trad)
+        }
+        , character(1)
+        , USE.NAMES=F)
+
+      if( namedVector ){
+        names(out) = dat 
+      }else{
+        out = dat
+      }
+
+    }else{
+      #
+      # Single id
+      #
+      out <- d[d$id == id,lang][1]
+      if(noDataCheck(out)) out <- d[d$id == id,langDefault][1]
+      if(noDataCheck(out)) out <- id
+      if(web) out <- tags$div(out,`data-lang_key`=id,style="display:inline-block")
+      if(debug) browser()
+      if(asChar) out <- as.character(out)
+    }
+  }
+
+  return(out)
+
+}
+# shortcut
+d <- mxDictTranslate
+
+#' Create layer named list from layer table
+#' @param layerTable {table} table with columns "id", "title", "date_modified"
+mxGetLayerNamedList <- function( layerTable){
+
+  out <- as.list(layerTable$id)
+  titles <- layerTable$title
+  date <- layerTable$date_modified
+
+  titlesDate <- sprintf("%1$s ( %2$s )",titles, format(date,"%Y-%m-%d"))
+
+  names(out) <- titlesDate
+
+  return(as.list(out))
+
+}
+
+
+#' Get title of source using its id
+#' @param id {String} Source id
+#' @param language {String} Two letter language code
+#' @return title string
+mxGetTitleFromSourceID <- function(id,language="en"){
+
+  sql = "
+  SELECT 
+  data#>>'{\"meta\",\"text\",\"title\",\"" + language + "\"}' as " + language + ", 
+  data#>>'{\"meta\",\"text\",\"title\",\"en\"}' as en
+  FROM mx_sources 
+  WHERE id ='"+ id+"' "
+
+  df <- mxDbGetQuery(sql)
+  out <- df[,"en"]
+  hasLanguage <- !noDataCheck(df[,language])
+
+  if(hasLanguage){
+    out <- df[,language]
+  }
+
+  return(out)
+
+}
+
+
+
+
+#' Translate geom type name
+#' @param {data.frame} geomTypes Geometry type data.frame as returned by mxDbGetLayerGeomTypes
+#' @param {character} language Language code
+mxSetNameGeomType <- function(geomTypeDf,language){
+
+  geomType <- geomTypeDf$geom_type
+  geomCount <- geomTypeDf$count
+
+  geomType <- d(geomType,language,namedVector=TRUE)
+
+  names(geomType) <- sprintf("%1$s ( n= %2$s )",names(geomType),geomCount) 
+
+  return(as.list(geomType))
+
+}
+
+
+#' Get style list
+#' @param directory containgin stles
+#' @export
+mxGetViewList <- function(){
+  conf <- mxGetDefaultConfig()
+  stylePath <- file.path(conf[["ressources"]][["views"]])
+  if( ! dir.exists(stylePath )) stop(sprintf("Directory %s not found",stylePath))
+  list.files(stylePath,"(^poly|^poin|^lines|^concess).*\\.json$")
+}
+
+
+#' Toggle disabling of given button, based on its id.
+#'
+#' Action or other button can be disabled using the attribute "disabled". This function can update a button state using this method.
+#'
+#' @param id Id of the button. 
+#' @param session Shiny session object.
+#' @param disable State of the button
+#' @export
+mxToggleButton <- function(id,disable=TRUE,warning=FALSE,session=shiny:::getDefaultReactiveDomain()) {
+  res <- list(
+    id = id,
+    disable = disable,
+    warning = warning
+    )
+  session$sendCustomMessage(
+    type="mxButtonToggle",
+    res
+    )
+}
+
+#' Send and compile templates.
+#'
+#' @param listTemplates {list} named list containing html. list("id"="HTML")
+#' @param session Shiny session object.
+#' @export
+mxSetTemplates <- function(listTemplates,session=shiny:::getDefaultReactiveDomain()) {
+  session$sendCustomMessage(
+    type="mxSetTemplates",
+    listTemplates
+    )
+}
+
+#' Recursive search and filter on named list
+#' @param li List to evaluate
+#' @param column Named field to search on (unique)
+#' @param operator Search operator (">","<","==",">=","<=","!=","%in%")
+#' @param search Value to search
+#' @param filter Named field to keep
+#' @return list or named vector if filter is given
+#' @export
+mxRecursiveSearch <- function(li,column="",operator="==",search="",filter=""){
+  res <- NULL
+  stopifnot(operator %in% c('>','<','==','>=','<=','!=','%in%'))
+  expr <- paste("li[[column]]",operator,'search')
+  if( is.list(li)  && length(li) > 0 ){ 
+    if( column %in% names(li) &&  eval(parse(text=expr)) ){
+      return(li)
+    }else{     
+      val <- lapply(li,function(x) mxRecursiveSearch(
+          li=x,
+          search=search,
+          operator=operator,
+          column=column,
+          filter=filter
+          )
+        )
+      val <- val[sapply(val,function(x) !is.null(x))]
+      if(length(val)>0){
+        if(is.null(filter) || nchar(filter)==0){
+          res <- val
+        }else{
+          res <- unlist(val)
+          res <- res[grepl(paste0(filter,collapse='|'),names(res))]
+        }
+        return(res)
+      }
+    }
+  }
+}
+
+
+#' Remove extension
+#' @param file {string} File name
+#' @return file without extension
+#' @export
+removeExtension <- function(file){
+  if(noDataCheck(file)) return("")
+ file <- basename(file)
+ sub("([^.]*)\\.([[:alnum:]]+$)", "\\1",file)
+}
+
+
+#' Print debug message
+#'
+#' Print a defaut debug message with date as prefix. NOTE: this function should take a global parameter "debug" and a log file.
+#'
+#' @param m Message to be printed
+#' @return NULL
+#' @export
+mxDebugMsg <- function(text=""){ 
+  options(digits.secs=4)
+  cat(sprintf("{ %1$s } %2$s \n",Sys.time(), text))
+}
+
+
+#' Time interval evaluation
+#' @param action "start" or "stop" the timer
+#' @param timerTitle Title to be displayed in debug message
+#' @return
+mxTimer <- function(action=c("stop","start"),timerTitle="Mapx timer"){
+  now <- Sys.time()
+  action <- match.arg(action)
+  if(isTRUE(!is.null(action) && action=="start")){
+    .mxTimer <<- list(time=now,title=timerTitle)
+  }else{
+    if(exists(".mxTimer")){
+      diff <- paste(round(difftime(now,.mxTimer$time,units="secs"),3))
+      mxDebugMsg(paste(.mxTimer$title,diff,"s"))
+    }
+  }
+  return(now)
+}
+
+
+mxTimeDiff <- function(titleOrTimer="test"){
+
+  dat <- titleOrTimer 
+  now <- Sys.time()
+
+  if("mx_timer" %in% class(dat)){
+
+    diff <- paste(round(difftime(now,dat$start,units="secs"),3))
+    mxDebugMsg(paste(dat$title,diff,"s"))
+
+  }else{
+    out = list(
+      start = Sys.time(),
+      title = dat
+      )
+
+    class(out) <- c(class(out),"mx_timer")
+
+    return(out) 
+
+  }
+
+}
+
+
+
+#' Test for internet connection. 
+#' The idea is to reach google with a ping and determine if there is a full packet response without loss
+#' 
+#' @param host String. Host name to ping
+#' @export
+mxCanReach <- function(server="google.com",port=80){
+
+  req <- sprintf(
+    "if nc -z %1$s %2$s; then echo '1'; else echo '0';fi;",
+    server,
+    port
+    )
+
+  any( system(req,intern=T) == "1")
+
+}
+
+
+
+#' Create a chartRadar in a canvas element.
+#'
+#' Search the dom for an id a get drawing context, create a new chart object and config it with data.
+#'
+#' @param session Shiny reactive session
+#' @param main Main label
+#' @param compMain Comparative value label
+#' @param id Id of the canvas
+#' @param idLegend Id of the legend
+#' @param labels Labels for value and comparative values
+#' @param value Values
+#' @param compValues Comparative values
+#' @export
+mxUpdateChartRadar <- function(
+  session=shiny::getDefaultReactiveDomain(),
+  main,
+  compMain,
+  id,
+  idLegend,
+  labels,
+  values,
+  compValues
+  ){
+  stopifnot(is.vector(values) || is.vector(label))
+
+  colorMain = 'rgba(119,119, 119, 0.3)'
+  colorMainBorder = 'rgba(119,119, 119, 0.5)'
+  colorComp = 'rgba(255, 164, 0, 0.3)'
+  colorCompBorder = 'rgba(255, 164, 0, 0.5)'
+
+
+
+  res <- list()
+  res$id <- id
+  res$labels <- labels
+  res$idLegend <- idLegend
+  res$dataMain <-  list(
+    label = main,
+    backgroundColor = colorMain,
+    borderColor = colorMainBorder,
+    pointBackgroundColor = colorMain,
+    pointBorderColor = colorMainBorder,
+    pointHoverBackgroundColor =colorMain,
+    pointHoverBorderColor = colorMainBorder,
+    data = values
+    )
+  res$dataComp <- list(
+    label = compMain,
+    backgroundColor = colorComp,
+    borderColor = colorCompBorder,
+    pointBackgroundColor = colorComp,
+    pointBorderColor = colorCompBorder,
+    pointHoverBackgroundColor =colorComp,
+    pointHoverBorderColor = colorCompBorder,
+    data = compValues
+    )
+
+  session$sendCustomMessage(
+    type="updateChart",
+    res
+    )
+}
+
+#' Display a header message in console
+#' @param {character} text Text to display
+#' @export
+mxConsoleText <- function(text=""){
+  nc <- nchar(text)
+  lc <- 79-nc
+  mc <- lc %/% 2
+  bar <- paste(rep("-",mc),collapse="")
+  out <- paste0(bar,text,bar,"\n",sep="")
+  cat(out)
+}
+
+
+#' Send a message to js console
+#' @param {character} text Text to send
+#' @session {reactive} Shiny reactive object
+#' @export
+mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
+  if(!noDataCheck(session)){
+  res <-   session$sendCustomMessage(
+    type = "mxJsDebugMsg",
+    list(
+      date = Sys.time(),
+      msg = text
+      )
+    )
+  }else{
+  mxDebugMsg(text)
+  }
+}
+
+
+#' Extract stack trace from cond, format it as a data.frame
+#' 
+#' @note  See https://github.com/rstudio/shiny/issues/2096
+#' @param cond Cond object
+mxGetStackTrace <- function(cond,
+  full = getOption("shiny.fullstacktrace", FALSE),
+  offset = getOption("shiny.stacktraceoffset", TRUE)) {
+
+  should_drop <- !full
+  should_strip <- !full
+  should_prune <- !full
+
+  stackTraceCalls <- c(
+    attr(cond, "deep.stack.trace", exact = TRUE),
+    list(attr(cond, "stack.trace", exact = TRUE))
+    )
+
+  stackTraceParents <- lapply(stackTraceCalls, attr, which = "parents", exact = TRUE)
+  stackTraceCallNames <- lapply(stackTraceCalls, shiny:::getCallNames)
+  stackTraceCalls <- lapply(stackTraceCalls, shiny:::offsetSrcrefs, offset = offset)
+
+  # Use dropTrivialFrames logic to remove trailing bits (.handleSimpleError, h)
+  if (should_drop) {
+    # toKeep is a list of logical vectors, of which elements (stack frames) to keep
+    toKeep <- lapply(stackTraceCallNames, shiny:::dropTrivialFrames)
+    # We apply the list of logical vector indices to each data structure
+    stackTraceCalls <- mapply(stackTraceCalls, FUN = `[`, toKeep, SIMPLIFY = FALSE)
+    stackTraceCallNames <- mapply(stackTraceCallNames, FUN = `[`, toKeep, SIMPLIFY = FALSE)
+    stackTraceParents <- mapply(stackTraceParents, FUN = `[`, toKeep, SIMPLIFY = FALSE)
+  }
+
+  delayedAssign("all_true", {
+    # List of logical vectors that are all TRUE, the same shape as
+    # stackTraceCallNames. Delay the evaluation so we don't create it unless
+    # we need it, but if we need it twice then we don't pay to create it twice.
+    lapply(stackTraceCallNames, function(st) {
+      rep_len(TRUE, length(st))
+          })
+    })
+
+  # stripStackTraces and lapply(stackTraceParents, pruneStackTrace) return lists
+  # of logical vectors. Use mapply(FUN = `&`) to boolean-and each pair of the
+  # logical vectors.
+  toShow <- mapply(
+    if (should_strip) shiny:::stripStackTraces(stackTraceCallNames) else all_true,
+    if (should_prune) lapply(stackTraceParents, shiny:::pruneStackTrace) else all_true,
+    FUN = `&`,
+    SIMPLIFY = FALSE
+    )
+
+  dfs <- mapply(seq_along(stackTraceCalls), rev(stackTraceCalls), rev(stackTraceCallNames), rev(toShow), FUN = function(i, calls, nms, index) {
+    st <- data.frame(
+      num = rev(which(index)),
+      call = rev(nms[index]),
+      loc = rev(shiny:::getLocs(calls[index])),
+      category = rev(shiny:::getCallCategories(calls[index])),
+      stringsAsFactors = FALSE
+      )
+
+    if (i != 1) {
+      message("From earlier call:")
+    }
+
+    if (nrow(st) == 0) {
+      message("  [No stack trace available]")
+    } else {
+      width <- floor(log10(max(st$num))) + 1
+      formatted <- paste0(
+        "  ",
+        formatC(st$num, width = width),
+        ": ",
+        mapply(paste0(st$call, st$loc), st$category, FUN = function(name, category) {
+          if (category == "pkg")
+            crayon::silver(name)
+          else if (category == "user")
+            crayon::blue$bold(name)
+          else
+            crayon::white(name)
+            }),
+          "\n"
+          )
+    }
+
+    return(st)
+    }, SIMPLIFY = FALSE)
+
+}
+
+#' Convert data.frame to html table.
+#' @param table data.frame
+#' @return html table
+mxTableToHtml <- function(table,id=randomString(),class='mx-table',classContainer="mx-table-container"){
+  shiny::tagList(
+    tags$div(
+      class = classContainer,
+      shiny::HTML(
+        utils::capture.output(
+          print(
+            xtable::xtable(table,html=T),
+            type = 'html',
+            'html.table.attributes' = "class='table "+class+"'",
+            sanitize.text.function = identity,
+            include.rownames=FALSE
+            )
+          )
+        )
+      )
+    )
+}
+
+mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReactiveDomain()){
+  suppressWarnings({ 
+    options(show.error.locations=TRUE)
+
+    message <- as.character(cond$message)
+
+    sysStack <-  mxGetStackTrace(cond)
+    isDev <- isTRUE(Sys.getenv("API_PORT") != "80")
+
+
+    if(!exists("cdata") || noDataCheck(cdata)){
+      cdata = "<unkown>"
+    }
+
+    if(noDataCheck(type)){
+      type = "<unknown>"
+    }
+    if(noDataCheck(message)){
+      message = "<no message>"
+    }
+
+    sysStackFormated <- as.character(toJSON(sysStack))
+
+    err <- list(
+      type = type,
+      stack = sysStackFormated,
+      message = message,
+      time = as.character(Sys.time()),
+      cdata = as.character(cdata)
+      )
+
+    if(type == "error"){
+      #
+      # outut message
+      #
+      if(!noDataCheck(session)){   
+        mxModal(
+          id=randomString(),
+          title="Unexpected issue",
+          content=tagList(
+            tags$b("Something went wrong :/"),
+            tags$p("An unexpected issue happened : our team has received a notification about it. If this keeps happening, you can also post something here:"),
+            tags$a(href=.get(
+                config, c("system","urlRepositoryIssues")),
+              target="_blank",
+              .get(config,c("system","urlRepositoryIssues")
+                )
+              ),
+            mxFold(labelText="More info",
+              content = tags$div(
+                tags$span(stye="color:red",message),
+                mxTableToHtml(sysStack[[1]])
+                )
+              )
+            )
+          )
+      }
+
+    }
+
+    text <- .get(config,c("templates","text","email_error"))
+    text <- gsub("\\{\\{TYPE\\}\\}",err$type,text)
+    text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
+    text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
+    text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
+    text <- gsub("\\{\\{CALL\\}\\}",err$stack,text)
+
+    if(noDataCheck(text)) text = "<no text>"
+    #
+    # else send an email
+    #
+    subject =  paste0("[ mx-issue-",type," ]")
+
+    if(isDev){
+      mxDebugMsg(message)
+      mxDebugMsg(err)
+    }else{
+      mxSendMail(
+        from = .get(config,c("mail","bot")),
+        to = .get(config,c("mail","admin")),
+        subject = subject,
+        body = text
+        )
+    }
+  })
+}
+
+
+#' Catch errors
+#'
+#' Catch errors and return alert panel in an existing div id.
+#'
+#' @param title Title of the alert
+#' @param session Shiny session object
+#' @param debug Boolean. Return also message as alert.
+#' @param panelId Id of the output element
+#' @export
+mxCatch <- function(
+  title,
+  expression,
+  session=shiny:::getDefaultReactiveDomain(),
+  debug = TRUE,
+  onError = function(){},
+  onWarning = function(){},
+  onMessage = function(){}
+  ){
+
+
+  tryCatch({
+    captureStackTraces(eval(expression))
+  },error = function(e){
+
+    mxCatchHandler(
+      type = "error",
+      cond = e
+      )
+
+    onError()
+
+  },warning = function(e){
+
+    mxCatchHandler(
+      type = "warning",
+      cond = e
+      )
+
+    onWarning()
+
+  },message = function(e){
+
+    if(debug){
+      mxCatchHandler(
+        type = "message",
+        cond = e
+        )
+
+      onMessage()
+    }
+
+  })
+
+}
+
+
+
+#' Random string generator
+#' 
+#' Create a random string with optional settings.
+#' 
+#' @param prefix Prefix. Default = NULL
+#' @param suffix Suffix. Default = NULL
+#' @param n Number of character to include in the random string
+#' @param sep Separator for prefix or suffix
+#' @param addSymbols Add random symbols
+#' @param addLetters Add random letters (upper and lowercase)
+#' @param splitIn Split string into chunk, with separator as defined in splitSep
+#' @param splitSep Split symbos if splitIn > 1
+#' @return  Random string of letters, with prefix and suffix
+#' @export
+randomString <- function(prefix=NULL,suffix=NULL,n=15,sep="_",addSymbols=F,addLetters=T,addLETTERS=F,splitIn=1,splitSep="_"){
+  prefix <- subPunct(prefix,sep)
+  suffix <- subPunct(suffix,sep)
+  src <- 0:9
+
+  if(splitIn<1) splitIn=1
+  if(isTRUE(addSymbols)) src <- c(src,"$","?","=",")","(","/","&","%","*","+")
+  if(isTRUE(addLetters)) src <- c(letters,src)
+  if(isTRUE(addLETTERS)) src <- c(LETTERS,src)
+
+  grp <- sort(1:n%%splitIn)
+
+  rStr <- src %>% 
+     sample(size=n,replace=T) %>%
+      split(grp) %>%
+      sapply(paste,collapse="") %>%
+      paste(collapse=splitSep)
+
+  c(prefix,rStr,suffix) %>%
+  paste(collapse=sep)
+}
+
+#' Substitute ponctiation and non-ascii character
+#'
+#' Take a string and convert to ascii string with optional transliteration ponctuation convertion. 
+#'
+#' @param str String to evaluate
+#' @param sep Replace separator
+#' @param rmTrailingSep Logical argument : no trailing separator returned
+#' @param rmLeadingSep Logical argument : no leading separator returned
+#' @param rmDuplicateSep Logical argument : no consecutive separator returned
+#' @export
+subPunct <- function(str,sep='_',rmTrailingSep=T,rmLeadingSep=T,rmDuplicateSep=T,useTransliteration=T){
+ # if(useTransliteration){
+    #str<-gsub("'",'',iconv(str, to='ASCII//TRANSLIT'))
+  #}
+  res<-gsub("[[:punct:]]+|[[:blank:]]+",sep,str)#replace punctuation by sep
+  res<-gsub("\n","",res)
+  if(rmDuplicateSep){
+    if(nchar(sep)>0){
+      res<-gsub(paste0("(\\",sep,")+"),sep,res)# avoid duplicate
+    }
+  }
+  if(rmLeadingSep){
+    if(nchar(sep)>0){
+      res<-gsub(paste0("^",sep),"",res)# remove trailing sep.
+    }
+  }
+  if(rmTrailingSep){
+    if(nchar(sep)>0){
+      res<-gsub(paste0(sep,"$"),"",res)# remove trailing sep.
+    }
+  }
+  res
+}
+
+
+
+
+#' Toggle disabling of given button, based on its id.
+#'
+#' Action or other button can be disabled using the attribute "disabled". This function can update a button state using this method.
+#'
+#' @param id Id of the button. 
+#' @param session Shiny session object.
+#' @param disable State of the button
+#' @export
+mxActionButtonState <- function(id,disable=FALSE,warning=FALSE,session=shiny:::getDefaultReactiveDomain()) {
+  res <- list(
+    id = id,
+    disable = disable,
+    warning = warning
+    )
+  session$sendCustomMessage(
+    type="mxSetButonState",
+    res
+    )
+}
+
+
+#' Send command on remote server through ssh
+#'
+#' Allow sending command on a remote server, e.g. Vagrant machine, using ssh. 
+#'
+#' @param cmd Command to send
+#' @export
+remoteCmd <- function(cmd){
+
+  res <- NULL
+  opt <- character(1)
+  ssh <- mxGetDefaultConfig()[["ssh"]]
+
+  # pars ssh option
+  for(i in 1:length(ssh)){
+    o <- ssh[i]
+    opt <-  sprintf("%1$s -o '%2$s %3$s'",opt,names(o),o) 
+  }
+
+  cmdRemote <- sprintf("ssh %1$s %2$s %3$s",opt,ssh[["HostName"]],cmd)
+
+  if(!noDataCheck(cmd) && !noDataCheck(cmdRemote)) res <- system(cmdRemote,intern=T)
+  
+  return(res)
+}
+#' Control ui access
+#'  
+#' UI  manager based on login info
+#'
+#' @param logged Boolean. Is the user logged in ?
+#' @param roleNum Numeric. Role in numeric format
+#' @param roleLowerLimit Numeric. Minumum role requirement
+#' @param uiDefault TagList. Default ui.
+#' @param uiRestricted TagList. Restricted ui.
+#' @export
+mxUiAccess <- function(logged,roleNum,roleLowerLimit,uiDefault,uiRestricted){
+  uiOut <- uiDefault
+  if(isTRUE(logged) && is.numeric(roleNum)){
+    if(noDataCheck(roleLowerLimit))roleLowerLimit=0
+    if(roleNum>=roleLowerLimit){
+      uiOut<-uiRestricted
+    }
+  }
+  return(uiOut)
+}
+
+#' Control visbility of elements
+#' 
+#' Display or hide element by id, without removing element AND without having element's space empty in UI. This function add or remove mx-hide class to the element.
+#'
+#' @param session Shiny session
+#' @param id Id of element to enable/disable 
+#' @param enable Boolean. Enable or not.
+#' @export
+mxUiHide <- function(id=NULL,class=NULL,disable=TRUE,hide=TRUE,hideClass="mx-hide",session=shiny:::getDefaultReactiveDomain()){
+
+  out = jsonlite::toJSON(list(
+      id = id,
+      class = class,
+      hide = hide,
+      disable = disable,
+      hideClass = hideClass
+      ),auto_unbox=T)
+
+
+  session$sendCustomMessage(
+    type = "mxUiHide",
+    out
+    )
+
+}
+
+#' remove element by class or id
+#' @param session default shiny session
+#' @param class class name to remove
+#' @param id id to remove
+#' @export
+mxRemoveEl <- function(session=getDefaultReactiveDomain(),class=NULL,id=NULL){
+
+  if(is.null(class) && is.null(id)) return()
+
+  sel <- ifelse(
+    is.null(class),
+    paste0('#',id),
+    paste0('.',class)
+    )
+
+  res <- list(
+    element = sel
+    )
+
+  session$sendCustomMessage(
+    type="mxRemoveEl",
+    res
+    )
+
+}
+
+#' Control ui access
+#' 
+#' Use config$roleVal list to check if the curent user's role name can access to the given numeric role.
+#' 
+#' @param logged Boolean. Is the user logged in ?
+#' @param roleName Character. Role in numeric format
+#' @param roleLowerLimit Numeric. Minumum role requirement
+#' @export
+mxAllow <- function(logged,roleName,roleLowerLimit){
+  conf <- mxGetDefaultConfig()
+  allow <- FALSE
+  if(noDataCheck(roleName))return(FALSE)
+  roleNum = conf$rolesVal[[roleName]]
+  if(isTRUE(logged) && is.numeric(roleNum)){
+    if(noDataCheck(roleLowerLimit))roleLowerLimit=0
+    if(roleNum>=roleLowerLimit){
+      allow <- TRUE
+    }
+  }
+  return(allow)
+}
+
+
+
+#' Set a checkbox button with custom icon.
+#' 
+#' Create a checkbox input with a select icon.
+#'
+#' @param id Id of the element
+#' @param icon Name of the fontawesome icon. E.g. cog, times, wrench
+#' @export
+mxCheckboxIcon <- function(id,idLabel,icon,display=TRUE){
+  visible <- "display:inline-block"
+  if(!display)visible <- "display:none"
+  tagList(
+    div(id=idLabel,class="checkbox",style=paste(visible,';float:right;'),
+      tags$label(
+        tags$input(type="checkbox",class="vis-hidden",id=id),
+        tags$span(icon(icon))
+        )
+      )
+    )
+}
+
+
+#' encode in base64
+#' @param text character string to encode
+#' @export
+mxEncode <- function(text){
+jsonlite::base64_enc(charToRaw(as.character(text)))
+}
+#' decode base64 string
+#' @param base64text base64string encoded 
+#' @export
+mxDecode <- function(base64text){
+ rawToChar(jsonlite::base64_dec(base64text))
+}
+
+
+
+#' Update text by id
+#'
+#' Search for given id and update content. 
+#' 
+#' @param session Shiny session
+#' @param id Id of the element
+#' @param text New text
+#' @export
+mxUpdateText<-function(id,text=NULL,ui=NULL,addId=FALSE,session=shiny:::getDefaultReactiveDomain()){
+  if(is.null(text) && is.null(ui)){
+    return(NULL)
+  }else{
+    if(is.null(ui)){
+      textb64 <- mxEncode(text)
+      val=list(
+        id = id,
+        txt = textb64,
+        addId = addId
+        )
+      session$sendCustomMessage(
+        type="mxUpdateText",
+        val
+        )
+    }else{
+      session$output[[id]] <- renderUI(ui)
+    }
+  }
+}
+
+
+#' Update value by id
+#'
+#' Search for given id and update value. 
+#' 
+#' @param session Shiny session
+#' @param id Id of the element
+#' @param  value New text value
+#' @export
+mxUpdateValue <- function(id,value,session=shiny:::getDefaultReactiveDomain()){
+  if(is.null(value) || is.null(id)){
+    return()
+  }else{
+    res <- list(
+      id=id,
+      val=value
+      )
+    session$sendCustomMessage(
+      type="mxUpdateValue",
+      res
+      )
+  }
+}
+
+#' Convert list to html, client side
+#'
+#' Search for given id and update value. 
+#' 
+#' @param session Shiny session
+#' @param id Id of the element
+#' @param  data List to convert
+#' @export
+mxJsonToHtml <- function(id,data,session=shiny:::getDefaultReactiveDomain()){
+  if(is.null(data) || is.null(id)){
+    return()
+  }else{
+    session$sendCustomMessage(
+      type="mxJsonToHtml",
+      list(
+        id = id,
+        data = jsonlite::toJSON(data,auto_unbox=T)
+        )
+      )
+  }
+}
+
+
+
+#' Parse key value pair from text
+#'
+#' Key value text to list 
+#'
+#' @param txt unformated text with key value pair. eg. myKey = myValue
+#' @return list of value
+#' @export
+mxParseListFromText <- function(txt){
+  txt2 = txt %>%
+    strsplit(.,"(\n\\s*)",perl=T) %>%
+    unlist(.) %>%
+    gsub("^\\s*([a-z]+?)\\s*=\\s+(.+?)$","\\1 = \"\\2\"",.) %>%
+    paste(.,collapse=",")%>%
+    paste("list(",.,")")%>%
+    parse(text=.)%>%
+    eval(.)
+  return(txt2)
+}
+
+
+#' Create random secret
+#'
+#' Get a random string .
+#'
+#' @param n Number of character
+#' @export
+mxCreateSecret =  function(n=20){
+  randomString(20)
+}
+
+#' Email munging
+#' 
+#' Make email unreadable by robot
+#'
+#' @param emails vector or list
+#' @return munged emails
+mxEmailMunger <- function(emails){
+  sapply(emails,function(e){
+    e <- removeExtension(e) 
+    e <- strsplit(e,"@")[[1]] %>% gsub("\\."," ",.) %>% tools::toTitleCase()
+    domain <- toupper(e[[2]])
+    name <- e[[1]]
+   sprintf("%1$s ( %2$s )",name,domain)
+})
+}
+
+#' Check if given email is valid
+#' @param email String email address to verify
+#' @return named logic vector
+#' @export
+mxEmailIsValid <- function(email=NULL){
+
+  res = FALSE
+  if(!noDataCheck(email)){
+    email <- as.character(email)
+    tryCatch({
+      # regex expression
+      # see http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address
+      regex <- "([-!#-'*+/-9=?A-Z^-~]+(\\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \\t]|(\\\\[\\t -~]))+\")@[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?(\\.[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?)+"
+      # if there is a match, return TRUE
+      res <- sapply(email,function(e){
+        isTRUE(grep(regex,x=e,perl=T)==1)
+    })},error=function(x){
+        return()
+    })
+  }
+  return(res)
+}
+
+
+#' fromJSON wrapper and error handler
+#' 
+#' @param {Character} character string that contain JSON data.  
+#' @return {List} parsed json or mepty list
+mxFromJSON <- function(str){
+  out <- list()
+  tryCatch({
+  out <- jsonlite::fromJSON(str)
+  },error=function(err){
+    return()
+  })
+
+  return(out)
+}
+
+
+#' Save named list of value into cookie
+#'
+#' Note : don't use this for storing sensitive data, unless you have a trusted network.
+#'
+#' @param session Shiny session object. By default: default reactive domain.
+#' @param cookie Named list holding paired cookie value. e.g. (list(whoAteTheCat="Alf"))
+#' @param expireDays Integer of days for the cookie expiration
+#' @param read Boolean. Read written cookie
+#' @return NULL
+#' @export
+mxSetCookie <- function(
+  cookie=NULL,
+  expireDays=NULL,
+  deleteAll=FALSE,
+  reloadPage=FALSE,
+  session=getDefaultReactiveDomain()
+  ){
+
+  cmd = list()
+  cmd$domain <- session$url_hostname
+  cmd$path <- session$url_pathname
+  cmd$deleteAll <- deleteAll
+  cmd$cookie <- cookie
+  cmd$reload <- reloadPage
+
+  cmd$expiresInSec <- expireDays * 86400
+
+  session$sendCustomMessage(
+    type="mxSetCookie",
+    cmd
+    )
+}
+
+
+#' Create WDI indicators list
+#' @export
+mxGetWdiIndicators <- function(){
+  wdiIndicators <- WDIsearch()[,'indicator']
+  names(wdiIndicators) <- WDIsearch()[,'name']
+  wdiIndicators
+}
+
+
+#' String validation
+#' 
+#' Check if a string exists in a vector of string, if there is a duplicate, if contains at least n character, etc.. and update an existing div with a html summary. Return if the string is valid or not.
+#' 
+#' @param textTotest text to test against rules
+#' @param existingTexts  Vector of existing text
+#' @param idTextValidation Id of the ui element to update (id=example -> uiOutput("example"))
+#' @param minChar Minimum character length
+#' @param testForDuplicate Boolean test for duplicate.
+#' @param testForMinChar Boolean test for minimum number of character
+#' @param displayNameInValidation Boolean add text in validation text
+#' @return boolean : valid or not
+#' @export
+mxTextValidation <- function(textToTest,existingTexts,idTextValidation,minChar=5,testForDuplicate=TRUE,testForMinChar=TRUE,displayNameInValidation=TRUE,existsText="taken",errorColor="#FF0000"){
+
+  if(isTRUE(length(textToTest)>1)){
+    stop("mxTextValidation only validate one input item")
+  }
+
+  isValid <- FALSE
+  isDuplicate <- FALSE
+  isTooShort  <- FALSE
+  err <- character(0)
+
+  if(testForDuplicate){
+    itemExists <- isTRUE(tolower(textToTest) %in% tolower(unlist(existingTexts)))
+  }
+  if(testForMinChar){
+    itemTooShort <- isTRUE(nchar(textToTest)<minChar)
+  }
+
+
+  err <- ifelse(itemExists,existsText,character(0))
+  err <- c(err,ifelse(itemTooShort,sprintf("too short. Min %s letters",minChar),character(0)))
+  err <- na.omit(err)
+
+  if(!displayNameInValidation){
+    textToTest = ""
+  }
+
+  if(length(err)>0){
+    outTxt = (sprintf("<b style=\"color:%1$s\">(%2$s)</b> %3$s",errorColor,err,textToTest))
+    isValid = FALSE
+  }else{
+    outTxt = (sprintf("<b style=\"color:#00CC00\">(ok)</b> %s",textToTest))
+    isValid = TRUE
+  }
+
+  mxUpdateText(id=idTextValidation,text=HTML(outTxt))
+
+  return(isValid)
+
+}
+
+
+
+
+#' function to read json and save as an object
+mxSendJson <- function(pathToJson,objName,session=getDefaultReactiveDomain()){
+  stopifnot(!is.null(pathToJson))
+  stopifnot(!is.null(objName))
+  if(file.exists(pathToJson)){
+    res <- list()
+    json <- readChar(pathToJson, file.info(pathToJson)$size)
+    res$json <- json
+    res$name <- objName
+    session$sendCustomMessage(
+      type="mxJsonToObj",
+      message=res
+      )
+  }
+}
+
+
+#' Send an email using local or remote 'mail' command
+#' @param subject. String. Test for the subject 
+#' @param from String. Valid email for  sender
+#' @param to String. Valid email for Recipient
+#' @param body String. Text of the body
+#' @param type String. "text" or "html"
+#' @param wait Boolean. Wait for the mail to be sent
+#' @export
+mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL, subject=NULL, wait=F ){
+
+
+  if(noDataCheck(from)){
+    from <- .get(config,c("mail","bot"))
+  }
+
+  if(noDataCheck(subject)){
+    subject = "map-x"
+  }
+
+  if(noDataCheck(body)){
+    stop("empty message")
+  }else{
+    body <- as.character(body)
+  }
+
+  if(noDataCheck(bodyHTML)){
+    bodyHTML <- ""
+  }else{
+    bodyHTML <- as.character(bodyHTML)
+  }
+
+  if( ! mxEmailIsValid(from) | ! mxEmailIsValid(to)) stop(paste("mxSendMail : email not valid. From: ", from, " To: ", to))
+
+  msgClear <- list(
+      from = from,
+      to = to,
+      subject = subject,
+      text = body,
+      html = bodyHTML,
+      validUntil = as.character(Sys.Date() + 1)
+      )
+
+  msg <- mxDbEncrypt(msgClear)
+
+  data = toJSON(list(msg = msg ),auto_unbox=T)
+
+  if( F && Sys.getenv("API_PORT") != "80" ){
+    mxDebugMsg(msgClear)
+    return("ok")
+  }
+
+  #protocol <- .get(config,c("api","protocol"))
+  #port <- .get(config,c("api","port"))
+  #route <- "/private/mail"
+  #url <- protocol + "//" + host +":" + port + route
+  host <-  .get(config,c("api","host")) 
+  url <- "api:3030/send/mail"
+  h <- new_handle(copypostfields = data)
+
+  handle_setheaders(h,
+    "Content-Type" = "application/json",
+    "Cache-Control" = "no-cache",
+    "Host" = host 
+    )
+
+  port <- 3333
+  req <- curl_fetch_memory(url, handle = h)
+  res <- fromJSON(rawToChar(req$content))
+
+  if(to %in% res$accepted){
+    return("ok")
+  }else{
+    stop("mxSendMail : Server can't send email to " + to )
+  }
+
+}
+
+#' Extract value from a list given a path
+#' @param listInput Input named list
+#' @param path Path inside the list
+#' @param flattenList Conversion of the result to vector
+#' @param default If nothing found, value returning
+#' @return value extracted or NULL
+#' @export
+mxGetListValue <- function(listInput,path,flattenList=FALSE,default=NULL){
+  tryCatch({
+  out <- default
+  if( "reactivevalues" %in% class(listInput)){
+    listInput <- reactiveValuesToList(listInput)
+  }
+  if(!is.list(listInput) || length(listInput) == 0) return(out)
+  out <- listInput[[path]]
+  if(flattenList && !noDataCheck(out) && is.list(out)){ 
+    out <- as.list(unlist(out,use.names=F))
+  }
+  if(noDataCheck(out)){
+    out <- default
+  }
+  },error=function(e){
+    # remove error like "no such index at level"
+   out <- default
+  })
+  return(out)
+}
+.get <- mxGetListValue
+
+#' Set a value of a list element, given a path
+#'
+#' This function will update a value in a list given a path. If the path does not exist, it will be created. 
+#' If the function find a non list element before reaching destination, it will stop.
+#'
+#' @param path vector with name of path element. e.g. `c("a","b","c")`
+#' @param value value to update or create
+#' @param level starting path level, default is 0
+#' @param export
+mxSetListValue <- function(listInput,path,value,level=0){
+  level <- level+1 
+  p <- path[c(0:level)]
+  #
+  # Create parsable expression to acces non existing list element
+  #
+  liEv = paste0("listInput",paste0(paste0("[[\"",p,"\"]]",sep=""),collapse=""))
+
+  if(is.null(eval(parse(text=liEv)))){
+    #
+    # If the element does not exist, it's a list
+    # 
+    liSet = paste0(liEv,"<-list()")
+    eval(parse(text=liSet))
+  }
+  if(level == length(path)){
+    #
+    # We reached destination, set value
+    #
+    listInput[[p]] <- value
+  }else{
+    #
+    # If we encouter non-list value, stop, it's not expected.
+    #
+    if(!is.list(listInput[[p]])) stop(sprintf("Not a list at %s",paste(p,collapse=",")))
+    listInput <- mxSetListValue(listInput,path,value,level)
+  }
+  return(listInput)
+} 
+.set <- mxSetListValue 
+
+#' Return the highest role for a given user
+#' @param project Project to look for
+#' @param userInfo object of class mxUserInfoList produced with mxDbGetUserInfoList 
+#' @export
+mxGetMaxRole <- function(project,userInfo){
+
+  stopifnot(isTRUE("mxUserInfoList" %in% class(userInfo)))
+
+  levelProject <- 10
+  levelWorld <- 10
+
+  userRoles <- .get(userInfo,c("data","admin","roles"))
+  roles <- .get(config,c("users","roles"))
+
+  # NOTE: Backward compatibility with previous version.
+  if("world" %in% names(userRoles)) {
+  userRoles <- list(userRoles,list(
+    project = "world",
+    role = userRoles[["world"]]
+    ))
+  }
+  if("AFG" %in% names(userRoles) ) {
+  userRoles <- list(userRoles,list(
+    project = "AFG",
+    role = userRoles[["AFG"]]
+    ))
+  }
+  if("COD" %in% names(userRoles) ) {
+  userRoles <-list(userRoles,list(
+    project = "COD",
+    role = userRoles[["COD"]]
+    ))
+  }
+
+
+  # get role for project
+  roleInProject <- mxRecursiveSearch(
+    li=userRoles,"project","==",project
+    )[[1]]$role
+
+  # Get role for world
+  roleInWorld <- mxRecursiveSearch(
+    li=userRoles,"project","==","world"
+    )[[1]]$role
+  
+  hasRoleInProject <- !noDataCheck(roleInProject)
+  hasRoleInWorld <- !noDataCheck(roleInWorld)
+
+  if( !hasRoleInWorld && !hasRoleInProject ){
+    hasRoleInWorld = TRUE
+    roleInWorld = "user"
+  }
+
+
+  if(!hasRoleInWorld && !hasRoleInProject) stop("No role found!")
+
+  if(hasRoleInProject){
+    levelProject <- mxRecursiveSearch(
+      li=roles,"name","==",roleInProject
+      )[[1]]$level
+  }
+
+  if(hasRoleInWorld){
+    levelWorld <- mxRecursiveSearch(
+      li=roles,"name","==",roleInWorld
+      )[[1]]$level
+  }
+
+  levelUser <- min(c(levelWorld,levelProject))
+
+  out  <- mxRecursiveSearch(.get(config,c("users","roles")),"level","==",levelUser)[[1]]
+
+  return(out)
+}
+
+
+#' Trim string at given position minus and put ellipsis if needed
+#' @param str String to trim if needed
+#' @param n Maximum allowed position. If number of character exceed this, a trim will be done
+#' @return Trimed string
+#' @export
+mxShort <- function(str="",n=10){
+  stopifnot(n>=4)
+  if(nchar(str)>n){
+    sprintf("%s...",strtrim(str,n-3))
+  }else{
+    return(str)
+  }
+}
+
+
+#' Remove multiple space or new line char
+#' @param {character} string go clean
+#' @param {character} rep replacement char
+mxCleanString <- function(str,rep=" "){
+    gsub("\\s+",rep,str)
+}
+
+
+#' Fast test file reading
+#' @param {character} fileName Name of the text file to read
+#' @param {boolean} clean Should the function remove end-of-line char and more-than-one space ?
+mxReadText <- function(fileName,clean=FALSE){
+  out <- readChar(fileName, file.info(fileName)$size)
+
+  if(clean){
+    out <- mxCleanString(out)
+  }
+
+  return(out)
+
+}
+
+#' update vt view definition
+#' @param {list} view View list
+#' @param {list} sourceData List from reactLayerSummary reactive object
+#' @param {list} sourceDataMask List from sourceMaskData reactive object
+#' @param {list} additionalAttributes List of additional attributes
+#' @return view list updated
+#' @export 
+mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additionalAttributes=NULL){
+  #
+  # update meta data
+  #
+  update <- function(){
+  viewData <- .get(view,c("data"))
+  layerName <- .get(sourceData,c("layerName"))
+  meta <- mxDbGetLayerMeta(layerName)
+
+  viewData <- .set(viewData,c("geometry"),list(
+      type = .get(sourceData,c("geomType")),
+      centroid = .get(sourceData,c("centroid")),
+      extent = .get(sourceData,c("extent"))
+      ))
+
+  viewTable <- .get(sourceData,c("table"))
+
+  attributes <- list(
+    name = .get(sourceData,c("variableName")),
+    names = unique(c(
+        .get(sourceData,c("timeVariables")),
+        .get(sourceData,c("variableName")),
+        additionalAttributes
+        )),
+    type = .get(sourceData,c("type")),
+    table = .get(sourceData,c("table")),
+    sample = sourceData[[c("sampleData")]],
+    min = min(viewTable$value,na.rm=T),
+    max = max(viewTable$value,na.rm=T),
+    rows = .get(sourceData,c("numberOfRow")),
+    nulls =  .get(sourceData,c("numberOfNull")),
+    distincts = .get(sourceData,c("numberOfDistinct"))
+    )
+
+  viewData <- .set(viewData, c("attribute"), attributes )
+
+  viewData <- .set(viewData,c("period"),list(
+      extent = .get(sourceData,c("timeExtent")),
+      density = .get(sourceData,c("timeDensity")) 
+      ))
+
+  viewData <- .set(viewData,c("source"),list(
+      type = "vector",
+      attribution = as.character(tags$a(
+          href = .get(meta,c("origin","homepage","url")),
+            .get(meta,c("text","title","en"))
+          )),
+      layerInfo = list(
+        name =  .get(sourceData,c("layerName")),
+        maskName = .get(sourceDataMask,c("layerMaskName"))
+        )
+      ))
+
+  #
+  #set style default
+  #
+  geomType <- .get(sourceData,c("geomType"))
+  style <- .get(viewData,c("style"))
+
+  if(noDataCheck(style)){
+    viewData <- .set(viewData,c("style"), list())
+  }
+
+  if( geomType == "lines" ){
+    viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
+  }
+
+  view <- .set(view,c("data"),viewData)
+
+  return(view)
+
+  }
+
+  view <- update()
+
+  return(view)
+
+}
+
+#' Progress bar controller
+#' @param id id of the bar
+#' @param percent Integer progress percent
+#' @param enable Boolean progress bar enable
+#' @param text Character Text of the progress bar
+#' @param session Shiny session object
+#' @export
+mxProgress = function(id="default",text="",percent=1,enable=TRUE,session=shiny:::getDefaultReactiveDomain()){
+  res <- list(
+    id = id,
+    enable = enable,
+    text = text,
+    percent = percent
+    )
+
+  session$sendCustomMessage(
+    type="mxProgress",
+    res
+    )
+}
+
+
+
+#' Get wms layers
+#' @param service Service to query
+mxGetWmsLayers <- function(service,useCache=T){
+  
+  if(!exists("config")) config <- list()
+  if(noDataCheck(config$.wms_layers)) config$.wms_layers <- list()
+  layers <- config$.wms_layers[[service]]
+
+  if(!useCache || noDataCheck(layers)){
+  
+    req <- sprintf("%1$s?%2$s",service,"service=WMS&request=GetCapabilities")
+    #con <- curl(req)
+    
+      res <- xml2::read_xml(req, options="NOCDATA")
+      resList <- xml2::as_list(res)
+      layers <- mxGetWmsLayersFromCapabilities(resList)
+      config$.wms_layers[[service]] <<- layers
+
+  }
+
+  return(layers)
+}
+
+
+
+#' Get list of available layers and name.
+#' @param getCapabilitiesList List that contains a list of a parsed GetCapabilities on a wms server (esri or ogc should work)
+mxGetWmsLayersFromCapabilities <- function(getCapabilitiesList){
+
+  # TODO: check if the structure could be :
+  # At each level, if a name and a title are provided, take every nested layers as first layer's component.
+  # for now, this works for a 1,2 or 3 levels, but this is empiric.
+
+  dat <- getCapabilitiesList
+  if(class(dat) != "list"){
+    stop("mxGetWmsLayers failed to analyse the response. Probable cause : A structured document expected of class'list' expected")
+  }
+  layers <- dat[['Capability']][['Layer']]
+  
+  layersNested <- layers[names(layers)=="Layer"]
+
+
+  # if there is only one level of layers, but the layer in a list.
+  if(length(layersNested)>0){
+    layers <- layersNested 
+  }else{
+    layers <- list(Layer=layers)
+  
+  }
+
+  nLayer <- length(layers)
+  res <- list()
+  for(i in 1:nLayer){
+    j <- layers[[i]]
+    k <- j[names(j) == "Layer"]
+    n <- length(k)
+    ln <- j[['Name']]
+    lt <- na.omit(j[['Title']][[1]])
+    if(n>0){
+      for(l in 1:n){
+        kn <- k[[l]][['Name']]
+        if(!is.null(kn)){
+          ln<-c(ln,kn)
+        }
+      }
+    }
+    ln<-paste(ln,collapse=",")
+    if(!isTRUE(nchar(lt)>0)){
+      ln <-paste("[ no title ", randomString()," ]",sep="")
+    }
+    if(isTRUE(nchar(ln)>0)){
+      res[[i]]<-list("label"=lt,"value"=ln)
+    }
+  }
+  return(res)
+}
+
+
+#' Update selectize input
+#' @param {character} id of the input
+#' @param {list} List of items. Keys should be the same as the input. eg "list(list('label'='label','value'='test'))"
+mxUpdateSelectizeItems <- function(id,items,session=shiny:::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mxUpdateSelectizeItems",list(
+      id=id,
+      items=items
+      ))
+}
+
+
+
+
+mxButton <- function (inputId, labelId = NULL, class = NULL )
+{
+  class <- paste0(class, collapse=" ")
+  tags$button(
+    id = inputId,
+    type = "button",
+    class = sprintf("btn btn-default action-button %s",class),
+    `data-lang_key` = labelId
+    )
+}
+
+
+
+
+#' Create a modal window
+#' @param id {string} Id of the modal
+#' @param close {logical} Ask to close an existing modal
+#' @param replace {logical} Ask to replace an existing modal
+#' @param title {character|shiny.tag} Optional title 
+#' @param subtitle {character|shiny.tag} Optional subtitle
+#' @param content {character|shiny.tag} Optional content
+#' @param buttons {list} Optional ActionButton list
+#' @param minHeight {String} Optional min height of the modal window. String. Eg. "500px"
+#' @param addBackground {logical} Add a background
+#' @param removeCloseButton {logical} Remove close button
+#' @param textCloseButton {character|shiny.tag} Text of the default close button
+#' @param session {shiny.session} Default session object
+mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,minHeight=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+
+  stopifnot(!noDataCheck(id))
+
+  if(!noDataCheck(buttons) && is.list(buttons)){
+    buttons <- lapply(buttons,function(b){as.character(b)})
+  }
+
+  session$sendCustomMessage(
+    type="mxModal",
+    list(
+      id=id,
+      replace=as.logical(replace),
+      title=as.character(title),
+      subtitle=as.character(subtitle),
+      textCloseButton=as.character(textCloseButton),
+      buttons=buttons,
+      minHeight=minHeight,
+      content=as.character(content),
+      addBackground=as.logical(addBackground),
+      removeCloseButton=as.logical(removeCloseButton),
+      close=as.logical(close)
+      )
+    )
+}
+#' Create a modal panel
+#'
+#' Create a modal panel with some options as custom button, close button, html content. 
+#'
+#' @param id Panel id
+#' @param title Panel title
+#' @param subtitle Panel subtitle
+#' @param html HTML content of the panel, main text
+#' @param zIndex base zIndex for the panel and background
+#' @param listActionButton If FALSE, hide buttons. If NULL, display default close panel button, with text given in defaultButtonText. If list of buttons, list of button.
+#' @param defaultButtonText Text of the default button if listActionButton is NULL and not FALSE
+#' @param style Additional CSS style for the panel 
+#' @param class Additional class for the panel
+#' @param hideCloseButton Boolean. Hide the close panel button
+#' @param draggable Boolean. Set the panel as draggable
+#' @export
+mxPanel<- function(
+  id="default",
+  title=NULL,
+  headIcon=NULL,
+  subtitle=NULL,
+  html=NULL,
+  zIndex=500,
+  listActionButton=NULL,
+  background=TRUE,
+  addCloseButton=FALSE,
+  addOnClickClose=TRUE,
+  closeButtonText="OK",
+  style=NULL,
+  class=NULL,
+  hideHeadButtonClose=TRUE,
+  draggable=TRUE,
+  fixed=TRUE,
+  defaultTextHeight=150
+  ){ 
+
+  rand <- randomString(splitIn=1,addLetters=T)
+
+  idBack <- paste("mx_modal_background",id,rand,sep="_")
+  idContent <- paste("mx_modal_content",id,rand,sep="_")
+  jsHide <- sprintf("mx.util.hide({id:'%1$s'}); mx.util.hide({id:'%2$s'})"
+    , idContent
+    , idBack
+    )
+
+  #
+  # Handle on click close for all buttons
+  #
+  if(!is.null(listActionButton) && isTRUE(addOnClickClose)){
+    listActionButton <- lapply(
+      listActionButton,
+      function(x){
+        x$attribs$onclick<-jsHide
+        return(x)
+      }
+      )
+  }  
+
+  #
+  # Handle default close button
+  #
+  if(addCloseButton || is.null(listActionButton)){
+    listActionButton <- tagList(
+      listActionButton,
+      tags$button(onclick=jsHide,closeButtonText,class="btn btn-modal")
+      )
+  }
+
+  #
+  # Remove buttons if logical false
+  #
+  if(isTRUE(is.logical(listActionButton) && !isTRUE(listActionButton))) listActionButton=NULL
+
+  #
+  # handling close button in top
+  #
+  if(hideHeadButtonClose){
+    closeButton=NULL
+  }else{
+    closeButton=tags$button(href="#",class="btn btn-default", onclick=jsHide,icon('times'))
+  }
+
+  #
+  # Handle background removal
+  #
+  if(background){
+    backg <- div(id=idBack,class=paste("mx-modal-background"),style=sprintf("z-index:%s",zIndex))
+  }else{
+    backg <- character(0)
+  }
+
+
+  #
+  # handle draggable
+  #
+  if(draggable){
+    scr <- tags$script(sprintf('
+        mx.util.draggable({
+          id:"%1$s",
+          disable:[]
+        })'
+        , idContent
+        )
+      )
+    
+    #dragButton = tags$span(class="mx-modal-drag-button btn btn-default",icon('arrows'),style="cursor:move")
+
+    dragButton = ""
+  }else{
+    scr = ""
+    dragButton = ""
+  }
+
+  #
+  # Handle title 
+  #
+  title = div(
+    class="",
+    tags$span(
+      icon( headIcon ),
+      style = "font-size:30px"
+      ),
+    div(
+      class="",
+      title
+      ),
+    div(
+      class="",
+      subtitle
+      )
+    )
+
+
+  #
+  # Info text
+  #
+  infoText = tags$div(
+    class="mx-modal-info-text",
+    p(
+      id=sprintf("%s_infoText",id)
+      )
+    )
+
+  #
+  # Final object
+  #
+  out <- tagList(
+    backg,
+    div(
+      id=idContent,
+      style=sprintf("z-index:%s",zIndex+1),
+      class="mx-modal-container",
+      div(
+        class="mx-modal-top mx-modal-drag-enable",
+        closeButton,
+        dragButton
+        ),
+      div(
+     class="mx-modal-head",
+     title
+        ),
+      div(
+        class="mx-modal-body",
+          html
+        ),
+      div(
+        class="mx-modal-foot",
+        infoText,
+        listActionButton
+        )
+      ),
+    scr
+    )
+
+
+  return(out)
+}
+#' Alert panel
+#'
+#' Create an alert panel. This panel could be send to an output object from a reactive context. 
+#'
+#' @param title Title of the alert. Should be "error", "warning" or "message"
+#' @param subtitle Subtitle of the alert
+#' @param message html or text message for the alert
+#' @param listActionButtons List of action button for the panel
+#' @export
+mxPanelAlert <- function(title=c("error","warning","message"),subtitle=NULL,message=NULL,listActionButton=NULL,...){ 
+  title = match.arg(title)
+  switch(title,
+    'error'={title=h2(icon("frown-o"))},
+    'warning'={title=h2(icon("frown-o"))},
+    'message'={title=h2(icon("info-circle"))} 
+    )
+  mxPanel(class="panel-overall panel-fixed",title=title,subtitle=subtitle,html=message,listActionButton=listActionButton,style="position:fixed;top:100px",...)
+}
+#' Password input
+#'
+#' Create a password input.
+#' 
+#' @param inputId Input id
+#' @param label Label to display
+#' @export
+mxInputPassword <- function(inputId, label) {
+  tagList(
+    tags$input(id = inputId,placeholder=label,class="mx-login-input",type="password", value="")
+    )
+}
+
+#' User name input
+#' 
+#' Create a username input
+#' 
+#' @param inputId Input id
+#' @param label Label to display
+#' @export
+mxInputUser <- function(inputId, label,class="form-control") {
+  tags$input(
+    id = inputId, 
+    placeholder=label,
+    class=paste("mx-login-input",class),
+    value="",
+    autocomplete="off",
+    autocorrect="off", 
+    autocapitalize="off",
+    spellcheck="false"
+    )
+}
+
+
+
+
+
+#' Create a bootstrap accordion 
+#'
+#' Create a bootstrap accordion element, based on a named list.
+#'
+#' @param id Accordion group ID
+#' @param style Additional style. 
+#' @param show Vector of item number. Collapse all item except those in this list. E.g. c(1,5) will open items 1 and 5 by default. 
+#' @param itemList Nested named list of items, containing title and content items. E.g. list("foo"=list("title"="foo","content"="bar"))
+#' @examples 
+#' mxAccordionGroup(id='superTest',
+#'  itemList=list(
+#'    'a'=list('title'='superTitle',content='acontent'),
+#'    'b'=list('title'='bTitle',content='bContent'))
+#'  )
+#' @export
+mxAccordionGroup <- function(id,style=NULL,show=NULL,itemList){
+  if(is.null(style)) style <- ""
+  cnt=0
+  contentList<-lapply(itemList,function(x){
+    cnt<<-cnt+1
+    ref<-paste0(subPunct(id,'_'),cnt)
+    showItem<-ifelse(cnt %in% show,'collapse.in','collapse')
+    stopifnot(is.list(x) || !noDataCheck(x$title) || !noDataCheck(x$content))
+
+    onShow <- ifelse(noDataCheck(x$onShow),"",x$onShow)
+    onHide <- ifelse(noDataCheck(x$onHide),"",x$onHide)
+
+    if(is.null(x$condition)) x$condition="true"
+    div(
+      style=style,
+      class=paste("mx-accordion-item",x$class),
+      `data-display-if`=x$condition,
+      div(
+        class="mx-accordion-header",
+        tags$span(
+          class="mx-accordion-title",
+          tags$a('data-toggle'="collapse", 
+            'data-parent'=paste0('#',id),
+            href=paste0("#",ref),x$title
+            )
+          )
+        ),
+      div(
+        id=ref,
+        class=paste("mx-accordion-collapse",showItem
+          ),
+        div(
+          class="mx-accordion-content",
+          x$content
+          ),
+        tags$script(
+          sprintf('
+            $("#%1$s").on("show.bs.collapse", function () {
+              %2$s
+}).on("hide.bs.collapse", function () {
+%3$s
+    }); 
+            '
+            , ref
+            , onShow
+            , onHide
+            )
+          )
+        )
+      )
+})
+
+  return(div(class="mx-accordion-group",id=id,
+      contentList
+      )
+    )
+}
+#' Custom file input 
+#'
+#' Default shiny fileInput has no option for customisation. This function allows to fully customize file input using the label tag.
+#'
+#' @param inputId id of the file input
+#' @param label Label for the input
+#' @param fileAccept List of accepted file type. Could be extension.
+#' @param multiple  Boolean. Allow multiple file to be choosen. Doesn't work on all client.
+#' @export
+mxFileInput<-function (inputId, label, fileAccept=NULL, multiple=FALSE){
+  inputTag<-tags$input(
+    type='file',
+    class='upload',
+    accept=paste(fileAccept,collapse=','),
+    id=inputId,
+    name=inputId)
+  if(multiple) inputTag$attribs$multiple='multiple'
+  spanTag <- tags$span(label)
+  inputClass <- tags$label(
+    class=c('btn-browse btn btn-default'),
+    id=inputId,
+    spanTag,
+    inputTag
+    )
+  tagList(inputClass,
+    tags$div(id = paste(inputId,"_progress", sep = ""), 
+      class = "progress progress-striped active shiny-file-input-progress",
+      tags$div(class = "progress-bar"), tags$label()))
+}
+
+#' Custom select input
+#'
+#' Custom empty select input, updated later.
+#'
+#' @param inputId Element id
+#' @param labelId Id of label
+
+mxSelect <- function(inputId,class="",values=NULL,valuesLabels=NULL,optionAttr=NULL,optionAttrValues=NULL){
+
+
+  attr <- character(1)
+  opt <- character(1)
+  val <- character(1)
+
+  hasValues <- length(values) > 0
+  hasValueLabels <- !is.null(valuesLabels) && length(valuesLabels) == length(values)
+  hasAttr <- !is.null(optionAttr)
+  hasAttrOpt <- !is.null(optionAttrValues) && length(optionAttrValues) == length(values)
+
+  if(!hasValueLabels) valuesLabels <- values
+
+  if(hasAttr && hasAttrOpt) attr <- sprintf("%1$s=\"%2$s\"",optionAttr,optionAttrValues)
+
+  if(hasValues) val <- sprintf("value=\"%1$s\"",values)
+
+  if(length(valuesLabels)>0){
+    opt <- sprintf("<option %1$s %2$s >%3$s</option>\n",attr,val,valuesLabels)
+  }
+
+  #tags$div(
+    #class = sprintf("form-group shiny-input-container %s",paste(class,collapse=" ")),
+    #class = sprintf(" %s",paste(class,collapse=" ")),
+    tags$select(
+      id=inputId,
+      #class="selectpicker",
+      HTML(opt)
+      )
+    #)
+}
+
+
+
+
+
+
+
+#' Create button to change ui color
+#' @param {string} id Id of the generated button
+#' @export
+mxUiColorSwitch <- function(id,class1="white",class2="black",...){
+  tags$div(
+    class="switchui-button",
+    tags$input(type="checkbox",name="switchui-color",class="hidden",id=id,"checked"=FALSE,...),
+    tags$label(class="btn btn-circle",`for`=id,icon("adjust")),
+    tags$script(sprintf(
+        "switchUiEnable('%1$s','%2$s','%3$s')"
+        ,id
+        ,class1
+        ,class2
+        )
+      )
+    )
+}
+
+
+#' Create a container without scroolbar
+#' @param content html content
+#' @export
+mxUiNoScroll <-  function(content){
+  div(class="no-scrollbar-container no-scrollbar-container-border",
+    div(class="no-scrollbar-content",
+      content
+      )
+    )
+}
+
+#' Fill with p tags
+#' @param n integer number of row
+#' @export
+fill <- function(n=1000){
+  lapply(1:n,function(x){tags$p(x)})
+}
+
+
+#' Enable fancy scroll inside a mx-grid-container
+#' @param HTML content
+#' @export
+mxScroll <- function(content){
+  tags$ul(class="scrollY mx-grid-row-fill",
+    tags$div(class="scrollbarY",
+      tags$div(class="thumb")
+      ),
+    tags$div(class="viewport",
+      tags$div(class="content",
+        content
+        )
+      )
+    )
+}
+
+#' Fold content
+#' 
+#' Checkbox to fold / toggle visibility of an element. CSS only.
+#'
+#' @param content {ui} 
+#' @param labelDictKey {character} label key
+#' @param labelText {character} label text
+#' @param open {boolean} fold open
+#' @param classContainer {character} Name of the class for the fold container
+#' @param classContent {character} Name of the class for the fold content
+#' @param classLabel {character} Name of the class for the label
+#' @export
+#mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
+mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label",classScroll="mx-scroll-styled"){
+  if(noDataCheck(id)) id <- randomString()
+
+  elInput = tags$input(type="checkbox",id=id,class="fold-switch")
+
+  if(open){
+    elInput$attribs$checked=T
+  }
+
+  if(noDataCheck(labelUi)){
+     label = tags$label(class=classLabel,`for`=id,`data-lang_key`= labelDictKey,labelText)
+  }else{
+     label = tags$label(labelUi,class=classLabel,`for`=id)
+  }
+
+  tags$div(class=classContainer,
+    elInput,
+    label,
+    tags$div(class= paste(classContent,classScroll),
+      content
+      )
+    )
+}
+
+
+#' R list to html list
+#'
+#' Create a html list and apply a class for <ul> and <li>
+#'
+#' @param listInput list in input
+listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE){
+
+  r = 0
+
+  makeUL <- function(li){
+    r <<- r + 1
+    nL <- names(li)
+    lL <- length(li)
+    content <- tagList()
+    for( i in 1:lL){ 
+      n <-  nL[[i]]
+      if(noDataCheck(n)){ n <- ifelse(numberArray,i,"") }
+      content <- tagList(content, makeLi(li[[i]],n))
+    }
+    r <<- r - 1
+    tags$ul(content,class="list-group")
+  }
+
+  makeLi <- function(it,ti){
+    ti <- d(ti,lang=lang,dict=dict);
+    if (is.list(it) && length(it)>0 && class(it) != "shiny.tag" ){
+      
+      classList <- "list-group-item"
+
+      if ( useFold && r <= maxFold ){
+        content <- mxFold(
+          content = makeUL(it),
+          labelUi = ti
+          )
+      }else{
+        content <- tags$div(
+          tags$b(class="list-group-title-big",ti),
+          tags$div(makeUL(it))
+          )
+      }
+
+      return(
+        tags$li(
+          class = classList,
+          content
+          )
+        )
+
+    }else{
+
+      if(unboxText){
+      return(
+        tags$div(
+          tags$span(class="list-group-title-small",ti),
+          tags$span(it)
+          )
+        )}else{
+       return(
+        tags$li(
+          class = "list-group-item",
+          tags$span(class="list-group-title-small",ti),
+          tags$span(it)
+          )
+        )
+
+      }
+    }
+
+  }
+
+  makeUL(listInput)         
+
+}
+
+
+
+
+#' Checkbox with custom ui
+#'
+#' Checkbox with custom ui
+#'
+#' @param inputId {character} Id of the checkbox
+#' @param title {character} Title/Tooltip value
+#' @param contentChecked {character} Pseudo element content if checked
+#' @param contentUnchecked {character} Pseudo element content if not checked
+#' @param class {character} Additional classes
+#' @param .. additional tags
+#' @export
+mxCheckbox <- function(inputId=NULL,...,onClick=NULL,title="Toggle",contentChecked="\\f06e",contentUnchecked="\\f070",class="btn btn-default"){
+
+  name <- sprintf(
+    "check_%1$s"
+    , inputId
+    )
+
+  classLabel <- sprintf(
+    "mx-check-%1$s"
+    , inputId
+    )
+
+tags$div(
+  title=title,
+  tags$input(
+    onClick=onClick,
+    type="checkbox",
+    style="display:none",
+    name=name,
+    id=inputId,
+    value="attributes"
+    ),
+  tags$label(
+    class=paste(paste(class,collapse=" "),classLabel),
+    `for`=inputId
+  ),
+  tags$style(
+    sprintf(
+      "#%1$s ~ .%2$s:before
+      {
+      font-family:fontawesome;
+      content:\"%3$s\";
+      }
+      #%1$s:checked ~.%2$s:before
+      {
+      font-family:fontawesome;
+      content:\"%4$s\";
+      }"
+      , inputId
+      , classLabel
+      , contentChecked
+      , contentUnchecked
+      )
+    ),
+  tags$div(
+    ...
+    )
+  )
+
+
+}
+
+#' Simple profanity checker
+#' @param {Character} txt String to evaluate 
+#' @return {Boolean} pass or not
+mxProfanityChecker <- function(txt){
+  pass <- TRUE
+  words <- .get(config,c("badwords","words"))
+
+  if(!noDataCheck(txt)){
+    for(dict in words){
+      for( w in dict){
+        if(nchar(w)<5) w <- "\\b" + w + "\\b"
+        if(grepl(w,txt,ignore.case=TRUE)){
+          pass <- FALSE
+        }   
+      }
+    }
+  }
+  return(!isTRUE(pass))
+}
+
+mxErrorsToUi <- function(errors=logical(0),warning=logical(0),language="en"){
+  stopifnot(is.logical(errors))
+  stopifnot(is.logical(warning))
+
+  errors <- errors[errors]
+  warning <- warning[warning]
+
+  errorCode <- names(errors)
+  warningCode <- names(warning)
+
+  errorList <- lapply(errorCode,function(e){
+    tags$li(class="list-group-item mx-error-item",d(e,language))
+    })
+  warningList <- lapply(warningCode,function(w){
+    tags$li(class="list-group-item mx-warning-item",d(w,language))
+    })
+
+  tags$ul(class="list-group mx-error-list-container",
+    errorList,
+    warningList
+    )
+
+}
+
+mxErrorsLangToUi <- function(errorsList=list(),warningsList=list(0)){
+
+  errorList <- lapply(errorsList,function(e){
+    tags$li(class="list-group-item mx-error-item",tags$span("(" + e$language + ")"),d(e$type,e$language))
+    })
+
+  warningList <- lapply(warningsList,function(w){
+    tags$li(class="list-group-item mx-warning-item",tags$span("(" + w$language + ")"),d(w$type,w$language))
+    })
+
+  tags$ul(class="list-group mx-error-list-container",
+    errorList,
+    warningList
+    )
+
+}
+
+#' Get app url from session
+#'
+#' @param session Shiny session
+#' @return complete url of the app
+mxGetAppUrl <- function(session=shiny::getDefaultReactiveDomain()){
+  urlHost <- session$clientData[["url_hostname"]]  
+  urlPort <- session$clientData[["url_port"]] 
+  urlProtocol <- session$clientData[["url_protocol"]]
+  urlPort <- ifelse(!noDataCheck(urlPort),sprintf(":%s",urlPort),"") 
+  return(urlProtocol + "//" + urlHost + urlPort)
+}
+
+#' Create encrypted link for an action
+#' @param {Character} id of the action in query parameter
+#' @param {List|Character} Parameters of the action. 
+#' @return {Chracter} The character string of url for this action 
+mxCreateEncryptedUrlAction = function(id,value,session=shiny::getDefaultReactiveDomain()){
+
+  action = mxDbEncrypt(list(
+       id = id,
+       value = value
+      ))
+  url <- mxGetAppUrl()
+
+
+  url <- url + "?action=" + action
+
+  return(url)
+}
+
+#' Update URL params 
+#' 
+#' Update url using a list of key pair values in a list
+#'
+#' @param data {List} List of key par values. eg. list("x"=2)
+#' @param clean {Boolean} Remove everything, clean the state to /
+#' @param session {Session} Shiny session
+mxUpdateUrlParams = function(data=list(),clean=FALSE,session=shiny::getDefaultReactiveDomain()){
+
+  session$sendCustomMessage("mxObjToState",list(
+      data = data,
+      clean = clean
+      )
+    )
+
+}
+
+

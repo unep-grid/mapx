@@ -1,0 +1,23 @@
+/**
+ * Scrollbar
+ *
+ */
+
+.mx .selectize-dropdown {
+  z-index:1000;
+}
+
+/* remove minus bar in input*/
+.mx .selectize-control.single .selectize-input:after {
+    /*display: none;*/
+}
+
+/* when multiple items are selected, adapt the height. Default : 34 px */
+.mx .form-control .selectize-input {
+  height:auto;
+}
+
+.mx .form-control .selectize-input.items > .item {
+  width:100%;
+  display:block;
+}

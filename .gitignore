@@ -1,11 +1,17 @@
 
-# trash
+
+# local folder, do not add to git
 _trash
+_archives
 _mail.txt
 _logs.txt
+_prod
+_shared
+_data
 
-# settings
-settings/settings-local.R
+# Passwords
+*.env
+
 # History files
 .Rhistory
 .Rprofile
@@ -39,8 +45,6 @@ Session.vim
 # Auto-generated tag files
 tags
 
-#Update script
-mxRemoteUpdate.sh
 
 #
 # node

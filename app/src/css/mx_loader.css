@@ -1,0 +1,72 @@
+/**
+* Shiny busy
+*/
+
+/** 
+* https://loading.io/css/
+*/
+
+.mx-loader-container {
+  z-index: -1;
+  top: 0px;
+  width: 100%;
+  bottom:0px;
+  display: block;
+  position : absolute;
+  opacity : 0;
+  transition: opacity 1s 0s ease-in-out;
+  background : rgba(0,0,0,0.3);
+}
+
+html.shiny-busy .mx-loader-container {
+  z-index : 1000;
+  transition : opacity 1s 1s ease-in-out;
+  opacity : 1;
+}
+
+html:not(.shiny-busy) .mx-loader-spinner {
+  display:none;
+}
+
+.mx-loader-spinner-container {    
+    width: 200px;
+    height: 200px;
+    margin: auto;
+    transform: translate3d(0, 0, 0) scale(0.4);
+}
+
+@keyframes mx-loader-spinner {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) rotate(360deg);
+  }
+}
+
+.mx-loader-spinner > div{
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border: 20px solid #fff;
+  border-color: #fff transparent transparent transparent;
+  animation: mx-loader-spinner 1.5s cubic-bezier(0.5,0,0.5,1) infinite;
+  will-change: transform;
+}
+
+.mx-loader-spinner > div:nth-child(2) {
+  animation-delay: .1s;
+}
+
+.mx-loader-spinner > div:nth-child(3) {
+  animation-delay: .2s;
+}
+
+.mx-loader-spinner > div:nth-child(4) {
+  animation-delay: .3s;
+}
+
+

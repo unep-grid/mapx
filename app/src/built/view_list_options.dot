@@ -1,0 +1,173 @@
+{{ var view = it ; }}
+{{ var h = mx.helpers ; }}
+{{ var langTitle = h.checkLanguage({obj:view,path:'data.title'}) ; }}
+{{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
+<div class="mx-view-content">
+  <div class="mx-view-item-legend-container">
+    {{?view.type!='sm'}}
+    <div>
+      {{?view.type=='vt'}}
+      {{ var rules = h.path(view,'data.style.rules'); }}
+      {{?h.greaterThan(h.path(rules,'length'),0)}}
+      <div class="mx-view-item-legend" id="check_view_legend_{{=view.id}}"></div>
+      {{?}}
+      {{?}}
+      {{?view.type=='rt'}}
+      <div class="mx-view-item-legend-raster" id="check_view_legend_{{=view.id}}"></div>
+      {{?}}
+      {{?view.type=='cc'}}
+      <div class="mx-view-item-legend-custom" id="check_view_legend_{{=view.id}}"></div>
+      {{?}}
+    </div>
+    {{?}}
+  </div>
+  <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[langAbstract]}}</p>
+</div>
+<div>
+  <div class="mx-controls-view">
+    <ul class="mx-controls-ul">
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_move_top" data-lang_type="tooltip" data-view_action_key="btn_opt_move_top" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-level-up"></div>
+      </li>
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_move_bottom" data-lang_type="tooltip" data-view_action_key="btn_opt_move_bottom" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-level-down"></div>
+      </li>
+      {{?view.type=='sm'}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_start_story" data-lang_type="tooltip" data-view_action_key="btn_opt_start_story" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-play"></div>
+      </li>
+      {{?view._edit}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_edit_story" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_story" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-file-text"></div>
+      </li>
+      {{?}}
+      {{?}}
+      {{? h.any([ view.type == 'gj', view.type == 'vt' ]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-view_action_key="btn_opt_zoom_all" data-view_action_target="{{=view.id}}" data-lang_key="btn_opt_zoom_all" data-lang_type="tooltip">
+        <div class="fa fa-object-group"></div>
+      </li>
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_zoom_visible" data-lang_type="tooltip" data-view_action_key="btn_opt_zoom_visible" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-binoculars"></div>
+      </li>
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_reset" data-lang_type="tooltip" data-view_action_key="btn_opt_reset" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-undo"></div>
+      </li>
+      {{?}}
+      {{? h.any([ view.type == 'gj', view.type == 'vt', view.type == 'rt' ]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-view_action_key="btn_opt_search" data-view_action_target="mx-search-tool-{{=view.id}}" data-lang_key="btn_opt_search" data-lang_type="tooltip">
+        <div class="fa fa-sliders"></div>
+      </li>
+      {{?}}
+      {{ var urlMeta = h.path(view,'data.source.urlMetadata'); }}
+      {{? h.all([ view.type == 'rt', urlMeta]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta_external" data-view_action_target="{{=view.id}}" data-meta_link="{{=urlMeta}}">
+        <div class="fa fa-info-circle"></div>
+      </li>
+      {{?}}
+      {{?view.type=='vt' }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_meta" data-lang_type="tooltip" data-view_action_key="btn_opt_meta" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-info-circle"></div>
+      </li>
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_download" data-lang_type="tooltip" data-view_action_key="btn_opt_download" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-cloud-download"></div>
+      </li>
+      {{?}}
+      {{?view.type == 'gj'}}
+      {{?!h.path(mx,'settings.user.guest')}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_upload" data-lang_type="tooltip" data-view_action_key="btn_upload_geojson" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-cloud-upload"></div>
+      </li>
+      {{?}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_delete_geojson" data-lang_type="tooltip" data-view_action_key="btn_opt_delete_geojson" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-trash-o"></div>
+      </li>
+      {{?}}
+      {{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_screenshot" data-lang_type="tooltip" data-view_action_key="btn_opt_screenshot" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-camera"></div>
+      </li>
+      {{?}}
+      {{?view._edit}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_edit_config" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_config" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-pencil"></div>
+      </li>
+      {{? view.type=='vt' }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_edit_dashboard" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_dashboard" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-pie-chart"></div>
+      </li>
+      {{?}}
+      {{? view.type=='cc' }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_edit_custom_code" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_custom_code" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-terminal"></div>
+      </li>
+      {{?}}
+      {{?h.all([ view.type=='vt', h.path(view,'data.attribute.name') ]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_edit_style" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_style" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-paint-brush"></div>
+      </li>
+      {{?}}
+      <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_delete" data-lang_type="tooltip" data-view_action_key="btn_opt_delete" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-trash-o"></div>
+      </li>
+      {{?}}
+      {{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_share" data-lang_type="tooltip" data-view_action_key="btn_opt_share" data-view_action_target="{{=view.id}}" data-view_action_handler="shiny">
+        <div class="fa fa-share-alt"></div>
+      </li>
+      {{?}}
+    </ul>
+  </div>
+</div>
+<div id="mx-search-tool-{{=view.id}}" class="mx-hide">
+  {{? h.any([view.type == 'vt',view.type == 'gj']) }}
+  {{? h.path(view,'data.attribute.type') == 'string'}}
+  <select data-search_box_for="{{=view.id}}" class="mx-search-box" multiple="TRUE"></select>
+  {{?}}
+  {{? h.path(view,'data.attribute.type') == 'number'}}
+  <div class="mx-slider-container">
+    <div class="mx-slider-header">
+      <div class="mx-slider-title" data-lang_key="btn_opt_numeric" data-lang_type="text"></div>
+      <div class="mx-slider-dyn">
+        <div class="mx-slider-dyn-min"></div>
+        <div class="mx-slider-dyn-max"></div>
+      </div>
+    </div>
+    <div class="mx-slider mx-slider-numeric" data-range_numeric_for="{{=view.id}}"></div>
+    <div class="mx-slider-range">
+      <div class="mx-slider-range-min">{{=h.path(view,'data.attribute.min',0)}}</div>
+      <div class="mx-slider-range-max">{{=h.path(view.data.attribute.max,0)}}</div>
+    </div>
+  </div>
+  {{?}}
+  {{ var prop = h.path(view,'data.attribute.names'); }}
+  {{ var vExt = h.path(view,'data.period.extent'); }}
+  {{? h.all([ prop, vExt ]) }}
+  {{? h.all([ h.hasIndex(prop,'mx_t0'), vExt.min, vExt.max ]) }}
+  <div class="mx-slider-container">
+    <div class="mx-slider-header">
+      <div class="mx-slider-title" data-lang_key="btn_opt_date" data-lang_type="text"></div>
+      <div class="mx-slider-dyn">
+        <div class="mx-slider-dyn-min"></div>
+        <div class="mx-slider-dyn-max"></div>
+      </div>
+    </div>
+    <div class="mx-slider mx-slider-date" data-range_time_for="{{=view.id}}"></div>
+    <div class="mx-slider-range">
+      <div class="mx-slider-range-min">{{=h.date(vExt.min*1000)}}</div>
+      <div class="mx-slider-range-max">{{=h.date(vExt.max*1000)}}</div>
+    </div>
+  </div>
+  {{?}}
+  {{?}}
+  {{?}}
+  <div class="mx-slider-container">
+    <div class="mx-slider-header">
+      <div class="mx-slider-title" data-lang_key="btn_opt_transparency" data-lang_type="text"></div>
+    </div>
+    <div class="mx-slider mx-slider-numeric" data-transparency_for="{{=view.id}}"></div>
+    <div class="mx-slider-range">
+      <div class="mx-slider-range-min">0%</div>
+      <div class="mx-slider-range-max">100%</div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,259 @@
+/**
+ * Views container
+ */
+.mx-views-container,
+.mx-tools-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mx-views-header {
+  /*flex: 1 0 auto;*/
+  /*padding: 5px;*/
+}
+
+.mx-readers-grp{
+  padding: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  opacity:1;
+  transition: opacity ease-in-out 0.3s 0.3s;
+}
+
+.mx-readers-grp i {
+  font-size: 10px;
+  color : #ccc;
+  margin:3px;
+}
+
+.mx-views-content,
+.mx-tools-content {
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0px;
+}
+
+.mx-tools-content {
+ padding:20px;
+ margin-top:40px;
+ margin-bottom:40px;
+}
+
+.mx-views-footer{
+  /*padding: 5px;*/
+}
+
+.mx-views-filters-container{
+ /*padding:10px;*/
+}
+
+
+.mx-views-list
+{
+  list-style: none;
+  padding: 0px;
+  margin:0px;
+}
+
+.mx-view-item,
+.mx-view-item-empty {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  z-index: 3;
+  transition: transform 0.2s ease-in-out;
+  background-color:#FFF;
+  display:flex;
+  flex-direction:column;
+}
+
+.mx-view-item-empty {
+  text-align:center;
+  padding: 20px;
+  font-size: 1.1em;
+}
+
+.mx-view-item:after{
+  content:"";
+  margin-left: 20px;
+  margin-right: 20px;
+  border-bottom: 1px solid #ccc;
+}
+
+.mx-view-item.mx-filter-text,
+.mx-view-item.mx-filter-class,
+.mx-view-item.mx-filter-displayed
+{
+  display:none!important;
+}
+
+
+@media (max-width: 800px) {
+  .mx-view-item {
+    margin: 1px;
+  }
+}
+
+.mx-view-item-checkbox-label {
+  padding: 10px;
+  width: 100%;
+}
+
+.mx-view-item-checkbox
+{
+  display:none;
+}
+
+
+.mx-view-item-desc-container
+{
+  margin: 5px;
+}
+
+.mx-view-item-desc {
+  font-style:italic;
+  font-size: 0.9em;
+  padding: 0px;
+  margin: 0px;
+  text-align: justify;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  -ms-hypens: auto;
+  hyphens: auto;
+}
+
+.mx-view-item-index,
+.mx-view-item-classes
+{
+  visibility:hidden;
+  width:0px;
+  height:0px;
+  font-size:0px;
+}
+
+
+
+
+.mx-view-tgl-container {
+  position: relative;
+  width: 350px;
+  height: auto;
+}
+
+.mx-view-tgl-content {
+  position: relative;
+  width: 100%;
+  z-index:0;
+  margin: 0px;
+  padding: 15px 40px 15px 10px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.mx-view-tgl-title,
+.mx-view-legend {
+  font-weight: 400;
+  font-size: 0.9em;
+  letter-spacing: 0.1em;
+  margin-left: 20px;
+}
+
+.mx-view-item-legend-raster {
+    background: #f5f5f5;
+    border-radius: 3px;
+    padding: 8px;
+}
+
+.mx-view-tgl-input {
+  display: none;
+}
+
+.mx-view-tgl-input:checked ~ .mx-view-tgl-content ~ .mx-view-tgl-more-container {
+  opacity:1;
+  max-height:1000px;
+  font-size:inherit;
+  transition: max-height ease-in-out 0.3s 0s,opacity ease-in-out 0.3s 0.3s;
+}
+
+.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-readers-grp {
+  opacity :0;
+}
+
+.mx-view-tgl-more-container {
+  overflow:hidden;
+  max-height:0px;
+  opacity:0;
+  transition: max-height ease-in-out 0.3s 0.3s,opacity ease-in-out 0.3s;
+}
+
+.mx-view-tgl-more {
+  padding-left : 10px;
+  padding-right : 10px;
+}
+
+
+.mx-view-tgl-btn-container {
+  width:30px;
+  height:30px;
+  flex: 0 0 30px;
+}
+
+/*.mx-view-tgl-input:checked ~ .mx-view-tgl-content > div > div:before {*/
+   /*content:'\f06e';*/
+   /*font-family:'fontawesome';*/
+/*}*/
+/*.mx-view-tgl-input ~ .mx-view-tgl-content > div > div:before {*/
+   /*content:'\f070';*/
+   /*font-family:'fontawesome';*/
+/*}*/
+
+.mx-view-tgl-btn-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  border: 1px solid black;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.mx-view-tgl-btn {
+  border-radius: 50%;
+  width: calc(100% - 2px);
+  height: calc(100% - 2px);
+  background-color: black;
+  border-color: black;
+  transition: width 0.2s ease-in-out, height 0.2s ease-in-out;
+}
+
+.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn {
+  height: 30%;
+  width: 30%;
+}
+
+.mx-view-tgl-btn-container:hover .mx-view-tgl-btn-content .mx-view-tgl-btn {
+  height:calc(100% - 8px);
+  width:calc(100% - 8px);
+}
+
+/**
+*
+*/
+
+.mx-view-content {
+    column-width: 190px;
+    column-count: auto;
+    max-height: 50%;
+    column-rule: 1px solid #ccc;
+    column-gap: 20px;
+    overflow: scroll;
+}
+

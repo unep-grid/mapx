@@ -1,0 +1,8 @@
+{
+  "apps" : [{
+    "script"    : "index.js",
+    "instances" : 5,
+    "exec_mode" : "cluster" ,
+    "name"      : "mx_vt"
+  }]
+}

@@ -1,0 +1,12 @@
+shared/logs/
+shared/postgres/data
+shared/userdata
+
+node_modules/
+.git/
+
+.dockerignore
+Dockerfile
+
+.gitignore
+.prod.env

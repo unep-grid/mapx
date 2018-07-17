@@ -1,0 +1,10 @@
+Dockerfile
+node_modules
+_shared 
+_data
+_prod
+_archives
+.git
+.dockerignore
+.gitignore
+*.env

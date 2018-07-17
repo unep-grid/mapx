@@ -1,0 +1,79 @@
+version: '3.2'
+
+services:
+  traefik:
+    image: traefik
+    command: --api --docker --docker.domain=mapx.localhost
+    ports:
+      - 8880:80
+      - 8881:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+  app:
+    env_file: mapx.dev.env
+    build: ./app/.
+    image: fredmoser/mx-app-shiny:debian
+    restart: always
+    ports:
+      - 3838
+    hostname: mx_app
+    depends_on:
+      - pg
+      - traefik
+    labels:
+      - traefik.s1.frontend.rule=Host:app.mapx.localhost
+      - traefik.s1.port=3838
+      - traefik.s2.frontend.rule=Host:dev.mapx.localhost
+      - traefik.s2.port=3434
+    volumes:
+      - ./app:/srv/shiny-server/dev
+      - ./_shared:/shared
+  api:
+    env_file: mapx.dev.env
+    build: ./api/.
+    image: fredmoser/mx-api-node
+    restart: always
+    ports: 
+      - 3030
+    hostname: mx_api
+    depends_on:
+      - pg
+      - redis
+      - traefik
+    labels:
+      - traefik.s1.frontend.rule=Host:api.mapx.localhost
+      - traefik.s1.port=3030
+      - traefik.s2.frontend.rule=Host:apidev.mapx.localhost
+      - traefik.s2.port=3333
+    volumes:
+      - ./api:/api # devel only, copy in prod
+      - ./_shared:/shared
+  geoserver :
+    env_file: mapx.dev.env
+    build: ./geoserver/.
+    image: fredmoser/mx-api-geoserver
+    ports: 
+      - 8882:8080
+    volumes:
+      - ./_shared:/shared
+    labels:
+      - traefik.frontend.rule=Host:geoserver.mapx.localhost
+  pg:
+    env_file: mapx.dev.env
+    image: mdillon/postgis:10-alpine
+    restart: always
+    hostname: pg
+    volumes :
+      - ./_shared:/shared
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports :
+      - 5432:5432
+  redis:
+    image: redis:alpine
+    restart: always
+    hostname: redis
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - 6379
+
