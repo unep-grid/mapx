@@ -7,7 +7,7 @@
 #
 tagList(
   "{{ var h = mx.helpers ; }}",
-  tags$div(
+  tagList(
     #
     # Avoid all item without rules or style
     #

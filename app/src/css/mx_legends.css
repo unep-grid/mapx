@@ -37,7 +37,7 @@ display:none;
   list-style: none;
   padding: 0px;
   margin: 0px;
-  max-height: 300px;
+  max-height: 800px;
   overflow: scroll;
 }
 
@@ -86,7 +86,7 @@ display:none;
 }
 
 input:checked ~ .mx-legend-item-arrow {
-  display:inline-block;
+  display:inline;
   vertical-align: top;
 }
 

@@ -3,24 +3,24 @@
 {{ var langTitle = h.checkLanguage({obj:view,path:'data.title'}) ; }}
 {{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
 <div class="mx-view-content">
+  {{?view.type=='sm'}}
+  {{?}}
+  {{?view.type!='sm'}}
   <div class="mx-view-item-legend-container">
-    {{?view.type!='sm'}}
-    <div>
-      {{?view.type=='vt'}}
-      {{ var rules = h.path(view,'data.style.rules'); }}
-      {{?h.greaterThan(h.path(rules,'length'),0)}}
-      <div class="mx-view-item-legend" id="check_view_legend_{{=view.id}}"></div>
-      {{?}}
-      {{?}}
-      {{?view.type=='rt'}}
-      <div class="mx-view-item-legend-raster" id="check_view_legend_{{=view.id}}"></div>
-      {{?}}
-      {{?view.type=='cc'}}
-      <div class="mx-view-item-legend-custom" id="check_view_legend_{{=view.id}}"></div>
-      {{?}}
-    </div>
+    {{?view.type=='vt'}}
+    {{ var rules = h.path(view,'data.style.rules'); }}
+    {{?h.greaterThan(h.path(rules,'length'),0)}}
+    <div class="mx-view-item-legend" id="check_view_legend_{{=view.id}}"></div>
+    {{?}}
+    {{?}}
+    {{?view.type=='rt'}}
+    <div class="mx-view-item-legend-raster" id="check_view_legend_{{=view.id}}"></div>
+    {{?}}
+    {{?view.type=='cc'}}
+    <div class="mx-view-item-legend-custom" id="check_view_legend_{{=view.id}}"></div>
     {{?}}
   </div>
+  {{?}}
   <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[langAbstract]}}</p>
 </div>
 <div>

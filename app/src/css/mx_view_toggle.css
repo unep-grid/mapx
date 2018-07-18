@@ -244,16 +244,12 @@
   width:calc(100% - 8px);
 }
 
-/**
-*
-*/
-
 .mx-view-content {
-    column-width: 190px;
-    column-count: auto;
-    max-height: 50%;
-    column-rule: 1px solid #ccc;
-    column-gap: 20px;
-    overflow: scroll;
+  column-width: 190px;
+  column-count: auto;
+  /*max-height: 50%;*/
+  column-rule: 1px solid #ccc;
+  column-gap: 20px;
+  overflow: scroll;
 }
 

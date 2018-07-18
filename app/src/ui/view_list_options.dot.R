@@ -23,36 +23,40 @@ divAbstract <- tags$div(
 #
 # View legend
 #
-divLegend <- tags$div(
+divLegend <- tagList(
+  "{{?view.type=='sm'}}",
+  #tags$button(class="btn btn-cicle fa fa-play"),
+  "{{?}}",
   "{{?view.type!='sm'}}",
-  class = "mx-view-item-legend-container",
-  #class = "make-readmore",
   tags$div(
-   "{{?view.type=='vt'}}",
-    "{{ var rules = h.path(view,'data.style.rules'); }}",
-    "{{?h.greaterThan(h.path(rules,'length'),0)}}",
-    tags$div(
-      class="mx-view-item-legend",
-      id="check_view_legend_{{=view.id}}"
-      ),
-    "{{?}}",
-    "{{?}}",
-    "{{?view.type=='rt'}}",
-    tags$div(
-      class="mx-view-item-legend-raster",
-      id="check_view_legend_{{=view.id}}"
-      ),
-    "{{?}}",
-    "{{?view.type=='cc'}}",
-    tags$div(
-      class="mx-view-item-legend-custom",
-      id="check_view_legend_{{=view.id}}"
-      ),
-    "{{?}}"
+    class = "mx-view-item-legend-container",
+    #class = "make-readmore",
+    tagList(
+      "{{?view.type=='vt'}}",
+      "{{ var rules = h.path(view,'data.style.rules'); }}",
+      "{{?h.greaterThan(h.path(rules,'length'),0)}}",
+      tags$div(
+        class="mx-view-item-legend",
+        id="check_view_legend_{{=view.id}}"
+        ),
+      "{{?}}",
+      "{{?}}",
+      "{{?view.type=='rt'}}",
+      tags$div(
+        class="mx-view-item-legend-raster",
+        id="check_view_legend_{{=view.id}}"
+        ),
+      "{{?}}",
+      "{{?view.type=='cc'}}",
+      tags$div(
+        class="mx-view-item-legend-custom",
+        id="check_view_legend_{{=view.id}}"
+        ),
+      "{{?}}"
+      )
     ),
   "{{?}}"
   )
-
 
 divContent <- tags$div(
   #class="make-readmore",
