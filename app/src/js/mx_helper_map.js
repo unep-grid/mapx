@@ -294,7 +294,7 @@ export function initMapx(o){
     //o.apiUrlBase = o.apiProtocol +"//"+ 'apidev.mapx.localhost'  + o.apiPort;
     mx.settings.apiUrlDownloadCreate = o.apiUrlBase + "/get/source?data=";
     mx.settings.apiUrlDownloadGet = o.apiUrlBase + "";
-    mx.settings.apiUrlUploadImage = o.apiUrlBase + "/post/upload/image/";
+    mx.settings.apiUrlUploadImage = o.apiUrlBase + "/upload/image/";
 
     // set path using current location. 
 

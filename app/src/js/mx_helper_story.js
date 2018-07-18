@@ -517,6 +517,8 @@ function contentToolsImageUploader(dialog) {
    */
   dialog.addEventListener('imageuploader.save', function () {
     var canvas, ctx, form, blob;
+    var h = mx.helpers;
+    if(h.path(mx,'settings.user.guest')) return;
     canvas = document.createElement("canvas");
     canvas.height = height;
     canvas.width = width;
@@ -524,27 +526,37 @@ function contentToolsImageUploader(dialog) {
     ctx.drawImage(image,0,0);
     ctx.save();
     canvas.toBlob(function(blob){
+
       var form = new FormData();
       form.append("image",blob);
       form.append("width",width);
       form.append("height",height);   
-      form.append("token",mx.helpers.readCookie().mx_data);
-      form.append("idUser",mx.helpers.path(mx,"settings.user.id")); 
+      form.append("token",h.path(mx,"settings.user.token"));
+      form.append("idUser",h.path(mx,"settings.user.id"));
+      form.append("project",h.path(mx,"settings.project"));
 
       mx.helpers.sendData({
-        url : mx.settings.vtUrlUploadImage,
+        url : mx.settings.apiUrlUploadImage,
         data : form,
         onProgress : function(progress){
           dialog.progress( progress * 100 );
         },
         onSuccess : function(data){
-          dialog.save(
-            data.url,
-            data.size,
-            {
-              'alt': "img",
-              'data-ce-max-width': data.size[0]
-            });
+          data = data.split("\t\n");
+          data.forEach(d => {
+            try{d = JSON.parse(d);}catch(err){}
+            if(d.msg && d.msg.url && d.msg.size){
+              dialog.save(
+                d.msg.url,
+                d.msg.size,
+                {
+                  'alt': "img",
+                  'data-ce-max-width': d.msg.size[0]
+                });
+            }else{
+              console.log(d);
+            }
+          });
         },
         onError: function(er){
           mx.helpers.modal({

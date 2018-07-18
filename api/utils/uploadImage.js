@@ -1,5 +1,5 @@
 var s = require("./../settings");
-var auth = require("./authentification.js");
+var authenticateHandler = require("./authentification.js").authenticateHandler;
 var multer  = require('multer');
 var fs = require('fs');
 var crypto = require('crypto');
@@ -23,13 +23,20 @@ var storage = multer.diskStorage({
 
 var upload = multer({ storage: storage }).single('image');
 
-var uploadHandler = function(req,res,next){
+module.exports.upload = [
+  uploadHandler,
+  authenticateHandler,
+  moveFilesHandler,
+  sendHandler
+];
+
+function uploadHandler(req,res,next){
   upload(req,res,function(){
     next();
   });
-};
+}
 
-var moveFiles = function(req,res,next){
+function moveFilesHandler(req,res,next){
 
   var userFolder = req.body.idUser;
   var oldPath = req.file.path;
@@ -53,7 +60,7 @@ var moveFiles = function(req,res,next){
       next();
     });
   });
-};
+}
 
 
 function copyFile(source, target) {
@@ -71,17 +78,13 @@ function copyFile(source, target) {
   });
 }
 
-var send = function(req, res, next){
+function sendHandler(req, res, next){
   var data = {
     url :  req.file.url,
     size : [req.body.width,req.body.height]
   };
-  res.send(data);
-};
+  res.write(JSON.stringify({type:'message', msg:data})+'\t\n');
+  res.status(200).end();
+}
 
-module.exports.upload = [
-  uploadHandler,
-  auth.validateUserToken,
-  moveFiles,
-  send
-];
+

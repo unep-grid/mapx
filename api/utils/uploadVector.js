@@ -3,6 +3,7 @@ var multer  = require('multer');
 var fs = require('fs');
 var path = require('path');
 var sendMail= require("./mail.js").sendMail;
+var authenticateHandler = require("./authentification.js").authenticateHandler;
 var spawn =  require('child_process').spawn;
 var pgWrite = require.main.require("./db").pgWrite;
 var emailAdmin = settings.mail.config.emailAdmin;
@@ -28,78 +29,12 @@ var uploadHandler = multer({ storage: storage }).single('vector');
 */
 module.exports.upload = [
   uploadHandler,
-  validateUserHandler,
+  authenticateHandler,
+  //validateUserHandler,
   convertOgrHandler,
   addSourceHandler
 ];
 
-
-
-/**
-* Handlers 
-*/
-
-
-/**
-* Validate User
-*/
-function validateUserHandler(req, res, next){
-
-  var msgTitle = "MapX authentication: ";
-  var idUser =  req.body.idUser;
-  var userToken =  req.body.token;
-  var idProject = req.body.project;
-  var msg = msgTitle + ' user ' + idUser + ' authentification in project ' + idProject + ' ';
-  var sqlUser = 'SELECT id, email' +
-    ' FROM mx_users '+
-    ' WHERE' +
-    ' id = $1::integer AND' +
-    ' key = $2::text';
-
-  var sqlProject = 'SELECT id' +
-    ' FROM mx_projects' +
-    ' WHERE' + 
-    ' id = $1::text AND (' +
-    ' admins @> $2::jsonb OR ' +
-    ' publishers @> $2::jsonb ' +
-    ' )';
-
-  var validation = {};
-
-  pgWrite.query(sqlUser,[idUser,userToken])
-    .then(function(result){
-
-
-      console.log(result.rows[0]);
-      if ( result && result.rows && result.rows[0] ) {
-        validation.user = true;
-        if(!req.body.email) req.body.email = result.rows[0].email;
-      }
-
-      return  pgWrite.query(sqlProject,[idProject,idUser]);
-
-    })
-    .then(function(result){
-
-      var v = validation ;
-
-      if (v.user && result && result.rows && result.rows[0]) {
-        validation.project = true;
-      }
-
-      if(v.project && v.user){
-        res.write(JSON.stringify({type:'message', msg:msg+' : ok.'})+'\t\n');
-        next();
-      }else{
-        res.write(JSON.stringify({type:'message', msg:msg+' : failed.'})+'\t\n');
-        res.status("403").end();
-      }
-    })
-    .catch(function(err){
-      res.write(JSON.stringify({type:'message',msg : msg + ' : error(.' + err + ')'})+'\t\n');
-      res.status("403").end();
-    });
-}
 
 /**
 * Convert data

@@ -153,7 +153,7 @@ function getTilePg(res,hash,data){
 
   clientPgRead.query(query)
     .then(function(out) {
-      rowsToGeoJSON(out.rows)
+      rowsToGeoJSON(out.rows,out.types)
         .then(function(geojson){
           return geojsonToPbf(geojson, data);
         })
@@ -205,6 +205,8 @@ function rowsToGeoJSON(rows) {
       var properties = {};
       for (var attribute in r) {
         if (attribute !== 'geom') {
+          if( r[attribute] instanceof Date) r[attribute] = r[attribute]*1;
+          if( r[attribute] === null ) r[attribute] = ""; 
           properties[attribute] = r[attribute];
         }
       }
@@ -232,7 +234,7 @@ function geojsonToPbf(geojson, data){
     var tile = tileIndex.getTile(data.zoom, data.x, data.y);
     if(!tile) resolve(null);
     pbfOptions[data.view] = tile;
-    var buff = vtpbf.fromGeojsonVt(pbfOptions);
+    var buff = vtpbf.fromGeojsonVt(pbfOptions,{ version: 2 });
     resolve(buff);
   });
 }
