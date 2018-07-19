@@ -1,4 +1,10 @@
 
+.mx-view-legend {
+  font-weight: 400;
+  font-size: 0.9em;
+  letter-spacing: 0.1em;
+  margin-left: 20px;
+}
 
 .mx-legend-container {
   display: block;
@@ -48,3 +54,16 @@
   font-weight: normal;
 }
 
+.mx-view-item-legend-raster {
+    /*background: #f5f5f5;*/
+    /*border-radius: 3px;*/
+    /*padding: 8px;*/
+}
+
+.mx-view-item-legend-raster img {
+  max-width: 100%;
+  overflow:auto;
+  cursor:pointer;
+  cursor:zoom-in;
+  padding:10px;
+}

@@ -3930,8 +3930,25 @@ export function addView(o){
               var img = new Image();
               img.src = legend;
               img.alt = "Legend"; 
+              img.style = "cursor:zoom.in";
               elLegend.appendChild(img); 
               img.onload = function(){
+              };
+              img.onclick = function(){
+                var title = mx.helpers.getLabelFromObjectPath({
+                  obj : view,
+                  path : "data.title",
+                  defaultKey : "noTitle"
+                });
+                var imgModal = new Image();
+                imgModal.src = legend;
+                imgModal.alt = "Legend";
+                  mx.helpers.modal({
+                    title:title,
+                    id:"legend-raster-" + view.id,
+                    content:imgModal,
+                    addBackground:false
+                  });
               };
             }
           }

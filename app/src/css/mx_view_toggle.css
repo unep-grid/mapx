@@ -156,20 +156,12 @@
   flex-direction: row;
 }
 
-.mx-view-tgl-title,
-.mx-view-legend {
+.mx-view-tgl-title{
   font-weight: 400;
   font-size: 0.9em;
   letter-spacing: 0.1em;
   margin-left: 20px;
 }
-
-.mx-view-item-legend-raster {
-    background: #f5f5f5;
-    border-radius: 3px;
-    padding: 8px;
-}
-
 .mx-view-tgl-input {
   display: none;
 }
@@ -250,6 +242,6 @@
   max-height: 800px;
   column-rule: 1px solid #ccc;
   column-gap: 20px;
-  overflow: scroll;
+  overflow: auto;
 }
 
