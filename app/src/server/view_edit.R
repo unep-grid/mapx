@@ -100,7 +100,8 @@ observe({
               reactData$showShareManager <- list(
                 views = list(viewId),
                 project = project,
-                collections = collectionsCurrent 
+                collections = collectionsCurrent,
+                trigger = runif(1)
                 )
             },
             "btn_opt_download"= {
@@ -352,7 +353,7 @@ observe({
                   selected=collectionsCurrent,
                   multiple=TRUE,
                   options=list(
-                    create = userRole$admin,
+                    create = userRole$publisher,
                     sortField = "label",
                     plugins = list("remove_button")
                     )
