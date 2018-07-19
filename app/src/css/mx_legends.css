@@ -26,7 +26,8 @@
   height: 20px;
   width: 20px;
   background-color: #333;
-  /*flex: 0 0 20px;*/
+  flex-grow: 0;
+  flex-shrink: 0;
 }
 
 .mx-legend-content {
