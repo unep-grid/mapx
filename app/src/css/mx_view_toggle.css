@@ -247,7 +247,7 @@
 .mx-view-content {
   column-width: 190px;
   column-count: auto;
-  /*max-height: 50%;*/
+  max-height: 800px;
   column-rule: 1px solid #ccc;
   column-gap: 20px;
   overflow: scroll;

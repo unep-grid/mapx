@@ -1,92 +1,49 @@
 
 
-.mx-view-item-legend input[type="checkbox"]
-{
-display:none;
-}
-
-
-.mx-view-item-legend input[type="checkbox"]:checked > label::before
-{
-  font-family: 'FontAwesome';
-  content: '\f06a';
-  padding: 5px;
-}
-
-.mx-view-item-legend-container
-{
-  break-inside: avoid-column;
-  display: inline-block;
+.mx-legend-container {
+  display: block;
+  max-height: 700px;
+  overflow: auto;
   width: 202px;
-  margin-bottom:10px;
+  padding-bottom: 20px;
 }
 
-.mx-view-item-legend
-{
-  width: 100%;
-  white-space: nowrap;
-  overflow: visible;
-  text-overflow: ellipsis;
-  margin-top: 10px;
-  margin-bottom: 0px;
-  background: rgba(0,0,0,0);
+.mx-legend>.mx-legend-input {
+  display: none;
 }
 
-.mx-view-item-legend ul 
-{
-  list-style: none;
+.mx-legend>.mx-legend-input:checked~.mx-legend-content:before {
+  content: "=";
+  margin: 0 3px 0 3px;
+  font-size: 0.9em;
+  font-weight: normal;
+}
+/*.mx-legend.mx-legend-numeric>.mx-legend-input:checked~.mx-legend-content:before {*/
+  /*content: ">=";*/
+/*}*/
+
+.mx-legend-color {
+  height: 20px;
+  width: 20px;
+  background-color: #333;
+  /*flex: 0 0 20px;*/
+}
+
+.mx-legend-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   padding: 0px;
   margin: 0px;
-  max-height: 800px;
-  overflow: scroll;
 }
 
-.mx-view-item-legend li 
-{
-  padding-left:2px;
-}
-
-.mx-legend-item-container 
-{
-  height: 20px;
-}
-
-.mx-legend-item-color-container {
-  float: left;
-  cursor:pointer;
-  position: relative;
-  height:20px;
-  width:20px;
-}
-
-.mx-legend-item-color {
-  background-color: #000;
-  background-image: none;
-  margin: auto;
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-
-.mx-legend-item-label {
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+.mx-legend-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  margin-left: 10px;
+  font-size: 0.9em;
   font-weight: normal;
-  padding-left: 5px;
-  font-size: 0.7em;
-}
-
-.mx-legend-item-arrow {
-  display:none;
-}
-
-input:checked ~ .mx-legend-item-arrow {
-  display:inline;
-  vertical-align: top;
 }
 

@@ -1,5 +1,8 @@
 ## MapX : change log
 
+- 0.5.2
+  - Fixed legend label alignement
+  - Fixed long abstract #253
 - 0.5.1 
   - Solved bug where user was not able to authenticate when uploading an image,
   - Better legend and description for view content, using multi column layout.
