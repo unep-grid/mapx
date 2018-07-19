@@ -1,6 +1,7 @@
 ## MapX : change log
 
 - 0.5.2
+  - Fixed story map view selection #255
   - Fixed raster legend size : let the user click to expand the image into a modal,
   - Fixed legend label alignement.
   - Fixed long abstract #253.
