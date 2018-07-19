@@ -1449,6 +1449,7 @@ export function modal(o){
     }
 
     var top = document.createElement("div");
+    var title = document.createElement("div");
     var head = document.createElement("div");
     var body = document.createElement("div");
     var content = document.createElement("div");
@@ -1475,6 +1476,7 @@ export function modal(o){
     top.classList.add("mx-drag-handle");
     top.classList.add("mx-modal-top");
 
+    top.appendChild(title);
 
     if(top.children.length>0){
       forEachEl({
@@ -1483,6 +1485,7 @@ export function modal(o){
           el.classList.add("mx-modal-drag-enable");
         }});
     }
+    title.classList.add("mx-modal-title");
     head.classList.add("mx-modal-head");
     validation.classList.add("mx-modal-validation");
     body.classList.add("mx-modal-body");
@@ -1518,9 +1521,9 @@ export function modal(o){
     }
 
     if( o.title && o.title instanceof Node ){
-       top.appendChild(o.title);
+       title.appendChild(o.title);
     }else{
-      top.innerHTML =  o.title || "";
+      title.innerHTML =  o.title || "";
     }
 
     if(o.content && o.content instanceof Node){

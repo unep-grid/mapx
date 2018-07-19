@@ -941,6 +941,12 @@ blockquote {
 
 .mx-modal-title{
   text-align:center;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events:none;
+  padding: 7px;
 }
 
 
@@ -980,10 +986,10 @@ blockquote {
 
 .mx .mx-modal-top ,
 .mx .mx-modal-top * {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2;
-  text-align: center;
+  /*font-size: 11px;*/
+  /*text-transform: uppercase;*/
+  /*letter-spacing: 2;*/
+  /*text-align: center;*/
 }
 
 .mx-modal-top {

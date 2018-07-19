@@ -23,20 +23,29 @@ mxSchemaViewStory <- function(view,views,language){
   #
   views <- views[sapply(views,function(x){x$type}) %in% c("vt","rt")] # don't use story map 
 
+  views <- views[order(sapply(views,`[[`,"_project_title"),sapply(views,`[[`,"_title"))]
 
-  viewListId <- sapply(views, function(v){
+  viewListId <- vapply(views, function(v){
     return(v$id)
-}) 
+},character(1)) 
 
-  viewListTitles <- sapply(views, function(v){
+  viewListTitles <- vapply(views,function(v){
+    title <- ""
+    if(!noDataCheck(v$`_project_title`)) title <- title + v$`_project_title`
+    if(!noDataCheck(v$`_title`)) title <- title + " – " + v$`_title`
+    if(isTRUE(v$`_private`)) title <- title + " [ private ]"
+    return(title)
+},character(1))
 
-    title = v$`_title`;
+  #viewListTitles <- sapply(views, function(v){
 
-    if(noDataCheck(title)) title = v$id;
-    target = ifelse("public" %in% v$target," (public)"," (private)") 
+    #title = v$`_title`;
 
-    return( "("+v$project + ") " + title + target)
-}) 
+    #if(noDataCheck(title)) title = v$id;
+    #target = ifelse("public" %in% v$target," (public)"," (private)") 
+
+    #return( "("+v$project + ") " + title + target)
+#}) 
 
   mxCounter(reset=T)
 
@@ -45,7 +54,7 @@ mxSchemaViewStory <- function(view,views,language){
   #
   stepMapViews <- list(
     type = "array",
-    format = "table",
+    #format = "table",
     title = "Views to activate",
     options = list(
       collapsed = TRUE,
@@ -64,7 +73,11 @@ mxSchemaViewStory <- function(view,views,language){
           options = list(
             enum_titles = as.list(viewListTitles),
             selectize_options = list(
-              dropdownParent = "body"
+              #options = views,
+              #optgroupValueField = "_project_title",
+              #valueField = "id",
+              #labelField = "_title"
+              #dropdownParent = "body"
               )
             )
           )

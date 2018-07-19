@@ -193,7 +193,15 @@ mxDbGetViews <- function(
       WHEN 
       coalesce(data #>> '{\"title\",\"" + language + "\"}','') = ''
       THEN
-      data #>> '{\"title\",\"en\"}'
+        (
+          CASE 
+          WHEN 
+           coalesce(data #>> '{\"title\",\"en\"}','') = ''
+          THEN id
+          ELSE
+           data #>> '{\"title\",\"en\"}'
+          END
+        )
       ELSE
       data #>> '{\"title\",\"" + language + "\"}'
       END as _title,     

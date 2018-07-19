@@ -61,6 +61,12 @@ reactViewsCompact <- reactive({
   return(out)
 })
 
+
+#
+# Store project title cache. 
+#
+projects = list()
+
 reactViewsCompactAll <- reactive({
 
   timer <- mxTimeDiff("Fetching all view")
@@ -86,14 +92,36 @@ reactViewsCompactAll <- reactive({
 
   if( !hasRole ) return()
 
-
   out <- mxDbGetViews(
     rolesInProject = userRole,
     idUser = userData$id,
     language = language,
     allProject = TRUE,
-    keys = c("id","pid","project","type","_title","target")
+    keys = c("id","pid","project","type","_title","readers")
     )
+
+  #
+  # Cache project names
+  #
+
+  getProjectTitles <- function(project,language){
+    id <- project + ":" + language 
+    hasProject <- id %in% names(projects)
+    if(hasProject){
+      return(projects[id])
+    }else{
+      projectTitle <- mxDbGetProjectTitle(project,language)
+      projects[id] <<- projectTitle
+      return(projectTitle)
+    }
+  }
+
+  out <- lapply(out,function(v){
+    isPrivate <- isTRUE(!"public" %in% v$readers && !"publishers" %in% v$readers)
+    v["_private"] <- isPrivate
+    v["_project_title"] <- getProjectTitles(v$project,language)
+    return(v)
+    })
 
   mxTimeDiff(timer)
   return(out)

@@ -21,7 +21,7 @@ export function jedRender(o) {
   System.import("json-editor")
     .then(function(){
       return Promise.all([
-        System.import("./mx_extend_jed_medium.js"),
+        //System.import("./mx_extend_jed_medium.js"),
         System.import("./mx_extend_jed_position.js"),
         System.import("./mx_extend_jed_ace.js"),
         System.import("./mx_extend_jed_array2.js")
