@@ -245,7 +245,7 @@
 "source_target_readers","Groups with use access ","Groupes avec accès en utilisation","","","","","",""""
 "source_target_editors","Groups with write access","Groupes avec accès en écriture","","","","","",""""
 "download_select_format_vector","Output format","Format de sortie","","","","","",""""
-"download_select_by_countries","Country used to spatially select the data. By default = entire world","Pays utilisé(s) pour sélectionner spatialement les données. Par défaut: tous les pays.","","","","","",""""
+"download_select_by_countries","Country used to spatially select the data","Pays utilisé(s) pour sélectionner spatialement les données","","","","","",""""
 "download_file_name","Filename","Nom du fichier","","","","","",""""
 "source_sum_geom_type","Type of the geometry","Type de géométrie","","","","","","انواع هندسی","هندسي ډولونه"
 "source_sum_n_distinct","Number of distinct values","Nombre de valeurs distinctes","","","","","","تعداد  قیمت های متمایز","د مختلفو ارزښتونو تعداد"
