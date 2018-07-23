@@ -72,7 +72,38 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
 
 }
 
+#' Get a list of views title from set of views id
+#'
+#' @param idsViews Source (layer) id
+#'
+mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
 
+  tableName <- "mx_views_latest"
+
+  if(noDataCheck(idsViews)) return("")
+
+  sql <- "
+  SELECT 
+  id,
+  CASE
+  WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
+  THEN data#>>'{\"title\",\"" + language + "\"}'
+  ELSE data#>>'{\"title\",\"en\"}'
+  END AS title
+  FROM mx_views_latest
+  WHERE id IN ('" + paste(idsViews,collapse="','") + "')"
+
+  out <- mxDbGetQuery(sql)
+
+  if(asNamedList){
+    titles <- out$title
+    out <- as.list(out$id)
+    names(out)<-titles
+  }
+
+  return(out)
+
+}
 
 #' @rdname mxDbGetViews
 #' @param views {list|vector} Views id to fetch. Optional, replace any other logic
@@ -90,7 +121,7 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
 #' @param countByProject {boolean} return count of view by project
 #' @export 
 mxDbGetViews <- function(
-  views = NULL, 
+  views = NULL,
   collections = NULL, 
   collectionsSelectOperator = "ANY",
   keys = NULL,
@@ -120,7 +151,14 @@ mxDbGetViews <- function(
   #
   #
   hasCollections <- !noDataCheck(collections)
+
   #
+  # Views shared in the project
+  #
+
+  viewsProject <- mxDbProjectGetViewExternal(project)  
+  hasViewsProject <- !noDataCheck(viewsProject)
+
   # If views is provided, readonly is set
   #
   readOnly = ( !noDataCheck(views) && length(views) > 0 && hasCollections )
@@ -163,6 +201,12 @@ mxDbGetViews <- function(
       collections <- paste(collections,collapse="','")
     }
 
+    if(hasViewsProject){
+      filterViewsProject <- "OR id IN ('" + paste(viewsProject,collapse="','") + "')"
+    }else{
+      filterViewsProject <- ""
+    }
+
     if(!noDataCheck(keys)){
       keys <- unique(c("id",keys))
       keys <- sprintf("\"%1$s\"",paste(keys,collapse="\",\""))
@@ -170,21 +214,27 @@ mxDbGetViews <- function(
       keys <- "*" 
     }
 
-
     queryMain = "
     CREATE TEMPORARY TABLE " + tableTempName + " AS (
+      /**
+      * Filter By role
+      */
       WITH filteredByRole as (
         SELECT *, views.data -> 'projects' as _projects, views.data -> 'collections' as _collections
         FROM " + tableName + " views
-        WHERE "+ filterRead +"
+        WHERE (" + filterRead + ") " + filterViewsProject +"
         ),
+      /**
+      * Filter By project or all project
+      */
       filteredByProject as (
         SELECT *
           FROM filteredByRole
         WHERE (
           ( " + allProjects +" ) OR
           ( project ='" + project + "' ) OR
-          ( _projects ?| array['" + project + "'] )
+          ( _projects ?| array['" + project + "'] ) 
+          " + filterViewsProject + " 
           )
         )
 

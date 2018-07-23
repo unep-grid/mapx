@@ -5,6 +5,7 @@ observe({
 
   userRole <- getUserRole()
   isAdmin <- isTRUE(userRole$admin)
+  isPublisher <- isTRUE(userRole$publisher)
   isGuest <- isGuestUser()
  
   if( isGuest ) return()
@@ -23,6 +24,17 @@ observe({
         )
       )
 
+    if ( isPublisher ){
+      btns <- tagList(
+        btns,
+        actionButton(
+          label = d("btn_show_project_external_views",language),
+          inputId = "btnShowProjectExternalViews",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_show_project_external_views"
+          )
+        )
+    }
 
     if( isAdmin ){
 
@@ -57,7 +69,7 @@ observe({
 
     editProject <- tags$div(
       toolsTitle,
-      tags$div(class="btn-group",
+      tags$div(
         btns
         )
       )

@@ -18,8 +18,11 @@ observeEvent(reactData$showShareManager,{
    userData <- reactUser$data
    idUser <- userData$id
    projects <- mxDbGetProjectListByUser(idUser,asNamedList=T)
+   projectsPublisher <- mxDbGetProjectListByUser(idUser,asNamedList=T,whereUserRoleIs="publisher")
+   projectsPublisher <- projectsPublisher[!projectsPublisher %in% project]
+   enableShareViewProject <- !noDataCheck(projectsPublisher) && hasViews
 
-   ui = tagList(
+   uiShareUrl <- tagList(
      checkboxInput("checkShareStyle",label="Set style (default = current) "),
      conditionalPanel(
        condition="input.checkShareStyle",
@@ -67,7 +70,7 @@ observeEvent(reactData$showShareManager,{
            )
          )
        ),
-     checkboxInput("checkShareIframe",label="Include URL in an iframe"),
+     checkboxInput("checkShareIframe",label="Include link in an iframe"),
      tags$label("Link"),
       div(
         class="input-group",
@@ -105,18 +108,101 @@ observeEvent(reactData$showShareManager,{
         )
      )
 
+   uiShareAddToProject <- tagList(
+     if(enableShareViewProject){
+       tagList(
+         selectizeInput(
+           "selectProjectsToShareView",
+           label = "Projects",
+           choices = projectsPublisher,
+           selected = NULL,
+           multiple = TRUE,
+           options = list(
+             sortField = "label",
+             plugins = list("remove_button")
+             )
+           ),
+         actionButton(
+           "btnShareViewInProject",
+           label = "Add the view to selected project(s)",
+           disable = T
+           )
+         )
+     }
+     )
+
+   ui <- tagList(
+     tags$h3("Share in another project"),
+     wellPanel(
+       uiShareAddToProject
+       ),
+     tags$h3("Share Link"),
+     wellPanel(
+       uiShareUrl
+       )
+     )
+
    mxModal(
      id = "modalShare",
-     title ="Share mapx",
+     title ="Sharing manager",
      content = ui
      )
 
    reactData$updateShareProject<-runif(1)
 })
 
+#
+# block button share view if no project, or not allowed
+#
+observeEvent(input$selectProjectsToShareView,{
+  projects <- input$selectProjectsToShareView 
+  userData <- reactUser$data
+  idUser <- userData$id
+  projectsPublisher <- mxDbGetProjectListByUser(idUser,asNamedList=T,whereUserRoleIs="publisher")
+  disableBtn <- TRUE
+  hasSetProject <- !noDataCheck(projects)
+  allAllowedProjects <- isTRUE(all(projects %in% projectsPublisher))
+
+  if(allAllowedProjects && hasSetProject){
+    disableBtn <- FALSE
+  }
+
+  mxToggleButton(id="btnShareViewInProject",disable=isTRUE(disableBtn))
+})
+
+#
+# Add view to project as external view
+#
+observeEvent(input$btnShareViewInProject,{
+
+  project <- reactData$project
+  projects <- input$selectProjectsToShareView
+  userData <- reactUser$data
+  idUser <- userData$id
+  projectsPublisher <- mxDbGetProjectListByUser(idUser,asNamedList=T,whereUserRoleIs="publisher")
+  projectsPublisher <- projectsPublisher[!projectsPublisher %in% project]
+  data <- reactData$showShareManager
+  hasViews <- typeof(data) == "list" && !noDataCheck(data$views)
+  view <- data$views
+  if(!noDataCheck(projects)){
+    for(p in projects){
+      if(p %in% projectsPublisher){
+        mxDbProjectSetViewExternal(idProject=p,idView=view,action="add")
+        mxFlashIcon("floppy-o")
+      }
+    }
+  }
+
+})
+
+
+#
+# Share
+#
+
 
 observeEvent(input$selectShareProject,{
-  reactData$updateShareProject<-runif(1)
+  reactData$updateShareProject <- runif(1)
 })
 
 

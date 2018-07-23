@@ -120,9 +120,9 @@ observeEvent(input$btnAddProjectConfirm,{
     r$date_created <- Sys.time()
     r$public <- FALSE
     r$map_position <- list(lat=0,lng=0,zoom=2)
+    r$views_external <- list()
 
     mxDbAddRow(r,"mx_projects")
-
 
   btns = list(
     actionButton("btnLoadNewProject",
@@ -148,7 +148,5 @@ observeEvent(input$btnLoadNewProject,{
     id = "createNewProject",
     close = TRUE
     )
-
-
 })
 

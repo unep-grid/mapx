@@ -49,7 +49,8 @@ observeEvent(input$btnShowProjectConfig,{
       title = d("project_settings",language,web=F),
       content = ui,
       textCloseButton = d("btn_cancel",language,web=F),
-      buttons = list(btnSave)
+      buttons = list(btnSave),
+      addBackground = FALSE
       )
 
   }

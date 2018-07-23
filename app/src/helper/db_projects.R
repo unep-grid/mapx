@@ -47,6 +47,80 @@ mxDbGetProjectTitle <- function(id,language="en"){
 }
 
 
+#' Get external views shared  in the project
+#' @param {Character} idProject Id of the project
+#' @return {List} List of views id
+mxDbProjectGetViewsExternal <- function(idProject){
+  out <- list()
+
+  views <- mxDbGetQuery("
+    SELECT views_external v
+    FROM mx_projects
+    WHERE id = '" + idProject + "'"
+    )$v
+
+  if(!noDataCheck(views)) out <- as.list(fromJSON(views))
+
+  return(out)
+
+}
+
+#' Does the view exists in project ?
+#' @param {Character} idView Id of the view
+#' @param {Character} idProject Id of the project
+#' @return {Boolean} Does the view exits
+mxDbGetProjectExistsExternalView <- function(idView,idProject){
+  mxDbGetQuery("
+    SELECT EXISTS ( 
+      SELECT id 
+      FROM mx_views_latest
+      WHERE 
+      (
+        id = '" + idView + "'
+        AND project = '" + idProject + "'
+      ) OR (
+        id = '" + idView + "'
+        AND data #>'{\"projects\"}' @> '\"" + idProject + "\"'
+      )) e"
+    )$e
+}
+
+
+#' Add or remove an external view to a project
+#' @param {Character} idProject Id of the project
+#' @param {Character} idView Id of the view
+#' @return NULL 
+mxDbProjectSetViewExternal <- function(idProject,idView,action="add"){
+
+  idView <- as.character(idView)
+  idProject <- as.character(idProject)
+  
+  viewsImported <- mxDbProjectGetViewsExternal(idProject)
+  viewExistsInProject <- mxDbGetProjectExistsExternalView(idView,idProject)
+
+  hasView <- isTRUE(idView %in% viewsImported) || isTRUE(viewExistsInProject)
+
+  if( action == "add" && hasView ) return()
+  if( action == "remove" && !hasView ) return()
+
+  if( action == "add" ){ 
+    viewsImported <- c(viewsImported,idView)
+  }else{
+    viewsImported[viewsImported %in% idView] <- NULL
+  }
+
+  mxDbUpdate(
+    table = "mx_projects",
+    idCol = "id",
+    id = idProject,
+    column = "views_external",
+    value = as.list(viewsImported),
+    expectedRowsAffected = 1 
+    )
+
+}
+
+
 #' Return a table of project by user id
 #' @param {Integer} id User id
 #' @param {Character} language Language code

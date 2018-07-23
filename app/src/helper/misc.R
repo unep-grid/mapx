@@ -2891,4 +2891,10 @@ mxUpdateUrlParams = function(data=list(),clean=FALSE,session=shiny::getDefaultRe
 
 }
 
-
+#' Display an flash icon
+#' @param icon {Character} Fontawesome icon to display
+mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mxFlashIcon",list(
+      icon = icon
+      ))
+}

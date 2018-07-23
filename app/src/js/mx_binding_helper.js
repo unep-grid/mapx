@@ -35,6 +35,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler('mglSetFilter', mx.helpers.setFilter );
   Shiny.addCustomMessageHandler('mglAddLayer',  mx.helpers.addLayer );
   Shiny.addCustomMessageHandler('mglFlyTo', mx.helpers.flyTo );
+  Shiny.addCustomMessageHandler('mxFlashIcon', mx.helpers.iconFlash);
   Shiny.addCustomMessageHandler('mglSyncAllMaps', mx.helpers.syncAll );
   Shiny.addCustomMessageHandler('jedInit',mx.helpers.jedRender);
   Shiny.addCustomMessageHandler('jedUpdate',mx.helpers.jedUpdate);

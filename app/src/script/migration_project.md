@@ -34,7 +34,8 @@ create table if not exists mx_projects (
   countries jsonb,
   creator integer,
   date_created timestamp with time zone default now(),
-  date_modified timestamp with time zone default now()
+  date_modified timestamp with time zone default now(),
+  views_external jsonb default '[]'::jsonb
 );
  
 ALTER TABLE mx_projects OWNER TO mapxw;

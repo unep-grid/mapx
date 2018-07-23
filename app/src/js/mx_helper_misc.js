@@ -159,6 +159,8 @@ export function getAllUrlParamsObj() {
 * @param {String} icon fontawesome name
 */
 export function iconFlash(icon) {
+ 
+  if(typeof(icon) == "object") icon = icon.icon;
 
   icon = icon || "cog";
 

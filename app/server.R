@@ -60,6 +60,7 @@ server <- function(input,output,session){
                 "tools_project_new.R",
                 "tools_project_roles.R",
                 "tools_project_config.R",
+                "tools_project_external_views.R",
                 "tools_project_add_content.R",
                 "tools_project_add_content_form.R",
                 "tools_project_delete.R",

@@ -18,6 +18,21 @@
 }
 
 .mx .form-control .selectize-input.items > .item {
-  width:100%;
-  display:block;
+  width:95%;
+  display:inline-block;
+}
+
+.mx .selectize-control.single .selectize-input:after {
+  content: "\F0D7";
+  font-family: fontawesome;
+  display: block;
+  float: right;
+  position: inherit;
+  margin: 0px;
+  padding: 0px;
+  border: none;
+  right: 5px;
+  top: auto;
+  left: auto;
+  bottom: auto;
 }

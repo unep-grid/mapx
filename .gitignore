@@ -12,6 +12,9 @@ _data
 # Passwords
 *.env
 
+# build web files
+www/*
+
 # History files
 .Rhistory
 .Rprofile
