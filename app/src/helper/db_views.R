@@ -156,7 +156,7 @@ mxDbGetViews <- function(
   # Views shared in the project
   #
 
-  viewsProject <- mxDbProjectGetViewExternal(project)  
+  viewsProject <- mxDbProjectGetViewsExternal(project)  
   hasViewsProject <- !noDataCheck(viewsProject)
 
   # If views is provided, readonly is set
