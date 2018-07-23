@@ -4,6 +4,11 @@ _shared
 _data
 _prod
 _archives
+_trash
+_archives
+_mail.txt
+_logs.txt
+
 .git
 .dockerignore
 .gitignore
