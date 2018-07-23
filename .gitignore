@@ -13,7 +13,7 @@ _data
 *.env
 
 # build web files
-www/*
+app/www/*
 
 # History files
 .Rhistory
