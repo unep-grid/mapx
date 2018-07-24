@@ -200,6 +200,72 @@ return(out)
 
 }
 
+
+mxDbGetProjectsViewsCount <- function(idUser){
+  sql <- " WITH user_projects as(
+  SELECT
+  id,
+  to_jsonb(id::text) as _id,
+  public as _public,
+  members @> '[" + idUser +"]' as _member,
+  publishers @> '[" + idUser +"]' as _publisher,
+  admins @> '[" + idUser +"]' as _admin,
+  coalesce(jsonb_array_length(views_external),0) as _n_external
+  FROM mx_projects 
+  WHERE 
+  public OR
+  members @> '[" + idUser +"]' OR
+  publishers @> '[" + idUser +"]' OR
+  admins @> '[" + idUser +"]'
+  ),
+views_prep AS (
+  SELECT
+  id,
+  coalesce(data -> 'projects','[]')::jsonb || jsonb_build_array(project) as _projects,
+  to_jsonb(id::text) as _id,
+  editor,
+  readers,
+  editors
+  FROM
+  mx_views_latest 
+  ),
+joined AS (
+  SELECT v.id v_id, p.id p_id 
+  FROM views_prep v
+  INNER JOIN user_projects p
+  ON 
+  ( v._projects @> p._id )
+  AND (
+    ( v.editor = '" + idUser + "') OR
+    (  p._public AND v.readers @> '\"public\"') OR
+    (  p._member AND v.readers @> '\"members\"') OR
+    (  p._publisher AND v.readers @> '\"publishers\"') OR
+    (  p._admin AND v.readers @> '\"admins\"') OR
+    (  p._publisher AND v.editors @> '\"publishers\"') OR
+    (  p._admin AND v.editors @> '\"admins\"')
+    ) 
+  ),
+counted as (
+  SELECT count(p_id) count, p_id id 
+  FROM joined 
+  GROUP BY p_id
+  ),
+merged as (
+  SELECT ( c.count + p._n_external ) count, c.id
+  FROM counted c
+  INNER JOIN
+  user_projects p
+  ON p.id = c.id
+  )
+
+SELECT * from merged"
+
+mxDbGetQuery(sql)
+}
+
+
+
+
 #' Check user right on a project
 #' @param {Integer} id User id
 #' @return {list} member {Boolean}, read {Boolean}, publisher {Booelan}, admin {Boolean}

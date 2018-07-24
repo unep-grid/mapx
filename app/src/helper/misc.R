@@ -37,6 +37,31 @@ mxDbInitPool <- function(){
   return(pool)
 }
 
+#' Clean role from query with partial match
+#' @param {Character} role Role name
+#' @return {Character} matched role or "any"
+mxQueryRoleParser <- function(role="any",default=NULL){
+  out <- default
+  if(!noDataCheck(role)){
+    roles <- c("publisher","admin","member","public")
+    roleMatch <- roles[pmatch(tolower(role),roles)]
+    if(!noDataCheck(roleMatch)) out <- roleMatch
+  }
+  return(out)
+}
+
+#' Clean title from query with partial match
+#' @param {Character} role Role name
+#' @return {Character} matched role or "any"
+mxQueryTitleParser <- function(title="",default=NULL){
+  out <- default
+  if(!noDataCheck(title)){
+    out <- title
+  }
+  return(out)
+}
+
+
 
 #' Add or update views from story steps to view dependencies
 #' @param {List} story list
@@ -991,8 +1016,7 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
     message <- as.character(cond$message)
 
     sysStack <-  mxGetStackTrace(cond)
-    isDev <- isTRUE(Sys.getenv("API_PORT") != "80")
-
+    isDev <- isTRUE(as.logical(Sys.getenv("MAPX_DEV")))
 
     if(!exists("cdata") || noDataCheck(cdata)){
       cdata = "<unkown>"
@@ -1223,51 +1247,6 @@ mxActionButtonState <- function(id,disable=FALSE,warning=FALSE,session=shiny:::g
 }
 
 
-#' Send command on remote server through ssh
-#'
-#' Allow sending command on a remote server, e.g. Vagrant machine, using ssh. 
-#'
-#' @param cmd Command to send
-#' @export
-remoteCmd <- function(cmd){
-
-  res <- NULL
-  opt <- character(1)
-  ssh <- mxGetDefaultConfig()[["ssh"]]
-
-  # pars ssh option
-  for(i in 1:length(ssh)){
-    o <- ssh[i]
-    opt <-  sprintf("%1$s -o '%2$s %3$s'",opt,names(o),o) 
-  }
-
-  cmdRemote <- sprintf("ssh %1$s %2$s %3$s",opt,ssh[["HostName"]],cmd)
-
-  if(!noDataCheck(cmd) && !noDataCheck(cmdRemote)) res <- system(cmdRemote,intern=T)
-  
-  return(res)
-}
-#' Control ui access
-#'  
-#' UI  manager based on login info
-#'
-#' @param logged Boolean. Is the user logged in ?
-#' @param roleNum Numeric. Role in numeric format
-#' @param roleLowerLimit Numeric. Minumum role requirement
-#' @param uiDefault TagList. Default ui.
-#' @param uiRestricted TagList. Restricted ui.
-#' @export
-mxUiAccess <- function(logged,roleNum,roleLowerLimit,uiDefault,uiRestricted){
-  uiOut <- uiDefault
-  if(isTRUE(logged) && is.numeric(roleNum)){
-    if(noDataCheck(roleLowerLimit))roleLowerLimit=0
-    if(roleNum>=roleLowerLimit){
-      uiOut<-uiRestricted
-    }
-  }
-  return(uiOut)
-}
-
 #' Control visbility of elements
 #' 
 #' Display or hide element by id, without removing element AND without having element's space empty in UI. This function add or remove mx-hide class to the element.
@@ -1319,29 +1298,6 @@ mxRemoveEl <- function(session=getDefaultReactiveDomain(),class=NULL,id=NULL){
     )
 
 }
-
-#' Control ui access
-#' 
-#' Use config$roleVal list to check if the curent user's role name can access to the given numeric role.
-#' 
-#' @param logged Boolean. Is the user logged in ?
-#' @param roleName Character. Role in numeric format
-#' @param roleLowerLimit Numeric. Minumum role requirement
-#' @export
-mxAllow <- function(logged,roleName,roleLowerLimit){
-  conf <- mxGetDefaultConfig()
-  allow <- FALSE
-  if(noDataCheck(roleName))return(FALSE)
-  roleNum = conf$rolesVal[[roleName]]
-  if(isTRUE(logged) && is.numeric(roleNum)){
-    if(noDataCheck(roleLowerLimit))roleLowerLimit=0
-    if(roleNum>=roleLowerLimit){
-      allow <- TRUE
-    }
-  }
-  return(allow)
-}
-
 
 
 #' Set a checkbox button with custom icon.
@@ -1805,82 +1761,6 @@ mxSetListValue <- function(listInput,path,value,level=0){
   return(listInput)
 } 
 .set <- mxSetListValue 
-
-#' Return the highest role for a given user
-#' @param project Project to look for
-#' @param userInfo object of class mxUserInfoList produced with mxDbGetUserInfoList 
-#' @export
-mxGetMaxRole <- function(project,userInfo){
-
-  stopifnot(isTRUE("mxUserInfoList" %in% class(userInfo)))
-
-  levelProject <- 10
-  levelWorld <- 10
-
-  userRoles <- .get(userInfo,c("data","admin","roles"))
-  roles <- .get(config,c("users","roles"))
-
-  # NOTE: Backward compatibility with previous version.
-  if("world" %in% names(userRoles)) {
-  userRoles <- list(userRoles,list(
-    project = "world",
-    role = userRoles[["world"]]
-    ))
-  }
-  if("AFG" %in% names(userRoles) ) {
-  userRoles <- list(userRoles,list(
-    project = "AFG",
-    role = userRoles[["AFG"]]
-    ))
-  }
-  if("COD" %in% names(userRoles) ) {
-  userRoles <-list(userRoles,list(
-    project = "COD",
-    role = userRoles[["COD"]]
-    ))
-  }
-
-
-  # get role for project
-  roleInProject <- mxRecursiveSearch(
-    li=userRoles,"project","==",project
-    )[[1]]$role
-
-  # Get role for world
-  roleInWorld <- mxRecursiveSearch(
-    li=userRoles,"project","==","world"
-    )[[1]]$role
-  
-  hasRoleInProject <- !noDataCheck(roleInProject)
-  hasRoleInWorld <- !noDataCheck(roleInWorld)
-
-  if( !hasRoleInWorld && !hasRoleInProject ){
-    hasRoleInWorld = TRUE
-    roleInWorld = "user"
-  }
-
-
-  if(!hasRoleInWorld && !hasRoleInProject) stop("No role found!")
-
-  if(hasRoleInProject){
-    levelProject <- mxRecursiveSearch(
-      li=roles,"name","==",roleInProject
-      )[[1]]$level
-  }
-
-  if(hasRoleInWorld){
-    levelWorld <- mxRecursiveSearch(
-      li=roles,"name","==",roleInWorld
-      )[[1]]$level
-  }
-
-  levelUser <- min(c(levelWorld,levelProject))
-
-  out  <- mxRecursiveSearch(.get(config,c("users","roles")),"level","==",levelUser)[[1]]
-
-  return(out)
-}
-
 
 #' Trim string at given position minus and put ellipsis if needed
 #' @param str String to trim if needed

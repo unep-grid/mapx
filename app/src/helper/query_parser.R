@@ -21,6 +21,16 @@ mxParseQuery <- function(urlSearch){
 
 
   #
+  # Parse role for project list modal
+  #
+  query$showProjectsListByRole <-  mxQueryRoleParser(query$showProjectsListByRole)
+
+  #
+  # Parse project title for project list modal
+  #
+  query$showProjectsListByTitle <-  mxQueryTitleParser(query$showProjectsListByTitle)
+
+  #
   # Query action
   #
   if(!noDataCheck(query$action)){

@@ -128,7 +128,26 @@ reactViewsCompactAll <- reactive({
 
 })
 
+reactViewsCountByProjects <- reactive({
 
+  out <- data.frame(count=integer(0),id=character(0))
+  timer <- mxTimeDiff("Fetching all view count")
+
+  #
+  # Ivalidated by :
+  #
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+  userData <- reactUser$data
+  project <- reactData$project
+  language <- reactData$language
+  idUser <- userData$id
+  out  <- mxDbGetProjectsViewsCount(idUser)
+ 
+  mxTimeDiff(timer)
+  return(out)
+
+})
 
 
 

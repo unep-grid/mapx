@@ -46,11 +46,15 @@ create table if not exists mx_views (
 );
 
 
-CREATE INDEX ON mx_views (id);
-CREATE INDEX ON mx_views (country);
+CREATE INDEX ON mx_views (pid);
 CREATE INDEX ON mx_views (date_modified);
-CREATE INDEX ON mx_views (target);
 CREATE INDEX ON mx_views (editor);
+CREATE INDEX ON mx_views (editors);
+CREATE INDEX ON mx_views (id);
+CREATE INDEX ON mx_views (id, date_modified DESC NULLS LAST);
+CREATE INDEX ON mx_views (project);
+CREATE INDEX ON mx_views (readers);
+
 -- CREATE INDEX on mx_views USING GIN (data);
 ALTER TABLE mx_views OWNER TO mapxw;
 

@@ -119,8 +119,8 @@ observeEvent(reactData$showProjectsList,{
 
       return()
     }
-    filterRoles <- ifelse(noDataCheck(query$showProjectsListByRole),'any',query$showProjectsListByRole)
-    filterTitle <- ifelse(noDataCheck(query$showProjectsListByTitle),'',query$showProjectsListByTitle)
+    filterRoles <- mxQueryRoleParser(query$showProjectsListByRole,'any')
+    filterTitle <- mxQueryTitleParser(query$showProjectsListByTitle,'')
     #
     # Reset query parameters
     #
@@ -129,17 +129,9 @@ observeEvent(reactData$showProjectsList,{
 
   }
 
-
-
   btn <- list();
-  projectViewsCount <- mxDbGetViews(
-    rolesInProject = userRole,
-    idUser = idUser,
-    language = language,
-    allProject = TRUE,
-    countByProject = TRUE
-    )
 
+  projectViewsCount <- reactViewsCountByProjects()
 
   projects <- mxDbGetProjectListByUser(
     id = idUser,
@@ -149,14 +141,12 @@ observeEvent(reactData$showProjectsList,{
     asDataFrame = T
     )
 
-
   if(isTRUE(nrow(projects)>0)){
     projects = merge(
       stringsAsFactors = FALSE,
       x = projects,
-      y = projectViewsCount$countByProject,
-      by.y = "project",
-      by.x = "id",
+      y = projectViewsCount,
+      by = "id",
       all.x = T
       )
     projects[sapply(projects$count,noDataCheck),c("count")] <- 0
@@ -166,7 +156,6 @@ observeEvent(reactData$showProjectsList,{
 
     isMember <- project %in% projectsMember$id
   }
-
 
   btnJoinProject <- actionButton(
     inputId = 'btnJoinProject',
