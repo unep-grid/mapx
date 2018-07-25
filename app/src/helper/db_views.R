@@ -222,7 +222,9 @@ mxDbGetViews <- function(
       WITH filteredByRole as (
         SELECT *, views.data -> 'projects' as _projects, views.data -> 'collections' as _collections
         FROM " + tableName + " views
-        WHERE (" + filterRead + ") " + filterViewsProject +"
+        WHERE (" + filterRead + ") OR  
+        ( views.data -> 'projects' ?| array['" + project + "'] ) 
+        " + filterViewsProject +"
         ),
       /**
       * Filter By project or all project
@@ -233,7 +235,7 @@ mxDbGetViews <- function(
         WHERE (
           ( " + allProjects +" ) OR
           ( project ='" + project + "' ) OR
-          ( _projects ?| array['" + project + "'] ) 
+          ( _projects ?| array['" + project + "'] )
           " + filterViewsProject + " 
           )
         )

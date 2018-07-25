@@ -202,64 +202,72 @@ return(out)
 
 
 mxDbGetProjectsViewsCount <- function(idUser){
-  sql <- " WITH user_projects as(
+  sql <- "WITH user_projects as(
   SELECT
   id,
+  id_old,
   to_jsonb(id::text) as _id,
   public as _public,
   members @> '[" + idUser +"]' as _member,
   publishers @> '[" + idUser +"]' as _publisher,
   admins @> '[" + idUser +"]' as _admin,
-  coalesce(jsonb_array_length(views_external),0) as _n_external
-  FROM mx_projects 
-  WHERE 
+  coalesce(views_external,'[]'::jsonb) as _views_external
+  FROM mx_projects
+  WHERE
   public OR
   members @> '[" + idUser +"]' OR
   publishers @> '[" + idUser +"]' OR
   admins @> '[" + idUser +"]'
-  ),
+),
 views_prep AS (
   SELECT
   id,
-  coalesce(data -> 'projects','[]')::jsonb || jsonb_build_array(project) as _projects,
+  project,
+  coalesce(data -> 'projects','[]')::jsonb as _projects,
   to_jsonb(id::text) as _id,
   editor,
   readers,
   editors
   FROM
-  mx_views_latest 
-  ),
-joined AS (
-  SELECT v.id v_id, p.id p_id 
-  FROM views_prep v
-  INNER JOIN user_projects p
-  ON 
-  ( v._projects @> p._id )
+  mx_views_latest v
+),
+view_by_project AS (
+  SELECT v.id id_view, p.id id_project
+  FROM views_prep v, user_projects p
+  WHERE
+  ( v.project = p.id )
   AND (
-    ( v.editor = '" + idUser + "') OR
+    ( v.editor = " + idUser + ") OR
+    (  v.editors @> '[" + idUser +"]' ) OR
     (  p._public AND v.readers @> '\"public\"') OR
     (  p._member AND v.readers @> '\"members\"') OR
     (  p._publisher AND v.readers @> '\"publishers\"') OR
     (  p._admin AND v.readers @> '\"admins\"') OR
     (  p._publisher AND v.editors @> '\"publishers\"') OR
     (  p._admin AND v.editors @> '\"admins\"')
-    ) 
-  ),
-counted as (
-  SELECT count(p_id) count, p_id id 
-  FROM joined 
-  GROUP BY p_id
-  ),
-merged as (
-  SELECT ( c.count + p._n_external ) count, c.id
-  FROM counted c
-  INNER JOIN
-  user_projects p
-  ON p.id = c.id
   )
+),
+view_by_projects AS (
+  SELECT v.id id_view, p.id id_project
+  FROM views_prep v, user_projects p
+  WHERE v._projects @> p._id
+),
+view_by_external AS (
+  SELECT jsonb_array_elements(_views_external)::text id_view, p.id id_project
+  FROM  user_projects p
+),
+combined as (
+  SELECT * FROM view_by_project UNION
+  SELECT * FROM view_by_projects UNION
+  SELECT * FROM view_by_external
+),
+counted as (
+ SELECT count(id_project), id_project id
+ FROM combined
+ GROUP BY id_project
+)
 
-SELECT * from merged"
-
+SELECT * from counted"
 mxDbGetQuery(sql)
 }
 
