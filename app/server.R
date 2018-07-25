@@ -13,9 +13,15 @@ server <- function(input,output,session){
     #
     obsBrowserData <- observeEvent(input$browserData,{
       obsBrowserData$destroy()
-      #obsBrowserData.
+
+      #
+      # Read browser data, cookies, etc..
+      #
       browserData <- input$browserData;
 
+      #
+      # Launch init
+      #
       mxCatch(title="MapX main process",{
 
         mxInitBrowserData(browserData,function(email){

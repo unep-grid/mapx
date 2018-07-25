@@ -654,32 +654,40 @@ function cleanRemoveModules(view){
  */
 export function addSourceFromView(o){
 
-  if( o.map && mx.helpers.path(o.view,"data.source") ){
+  var p = mx.helpers.path;
 
-    var project = mx.helpers.path(mx,"settings.project");
-    var projectView = mx.helpers.path(o.view,"project") ;
-    var projectsView = mx.helpers.path(o.view,"data.projects") || [];
-    var isLocationOk = o.noLocationCheck || projectView == project || projectsView.indexOf(project) > -1 || projectsView.indexOf("GLB") > -1;
+  if( o.map && p(o.view,"data.source") ){
 
-    if( isLocationOk ){
-      var sourceId = o.view.id + "-SRC";
-      var sourceExists = !!o.map.getSource(sourceId);
+    var project = p(mx,"settings.project");
+    var projectView = p(o.view,"project") ;
+    var projectsView = p(o.view,"data.projects") || [];
+    var isEditable = p(o.view._edit) == true;
+    var isLocationOk = o.noLocationCheck || projectView == project || projectsView.indexOf(project) > -1;
 
-      if( sourceExists ) {
-        o.map.removeSource( sourceId ) ;
-      }
-
-      if( o.view.type == "vt" ){
-        var baseUrl = mx.settings.apiUrlTiles;
-        var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
-        o.view.data.source.tiles = [url,url] ;
-      }
-
-      o.map.addSource(
-        sourceId,
-        o.view.data.source
-      );
+    if( !isLocationOk && isEditable ){
+      /*
+      * This should be handled in DB. TODO:check why this is needed here...
+      */
+      o.view._edit = false;
     }
+
+    var sourceId = o.view.id + "-SRC";
+    var sourceExists = !!o.map.getSource(sourceId);
+
+    if( sourceExists ) {
+      o.map.removeSource( sourceId ) ;
+    }
+
+    if( o.view.type == "vt" ){
+      var baseUrl = mx.settings.apiUrlTiles;
+      var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
+      o.view.data.source.tiles = [url,url] ;
+    }
+
+    o.map.addSource(
+      sourceId,
+      o.view.data.source
+    );
   }
 }
 
@@ -795,6 +803,7 @@ export function setSourcesFromViews(o){
           m.views = views;
 
           views.forEach(function(view){
+
             mx.helpers.addSourceFromView({
               map : map,
               view : view
@@ -851,6 +860,7 @@ export function setSourcesFromViews(o){
                     initViewsL = initViews.length;
                     setLoading(initViewsL,viewsL);
                     /* add sources for each  */
+
                     mx.helpers.addSourceFromView({
                       map : map,
                       view : view

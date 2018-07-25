@@ -17,13 +17,6 @@ mxLogin <- function(email,browserData,query){
 
   forceProject <- ""
 
-  if(useAutoRegister || useConfirmMembership){
-    #
-    # Clean data in url
-    #
-    mxUpdateUrlParams(list(action=""))
-  }
-
   if( useConfirmMembership ){
     #
     # The admin clicked in the link to confirm membership.

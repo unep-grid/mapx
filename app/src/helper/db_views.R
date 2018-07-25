@@ -111,6 +111,7 @@ mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
 #' @param project {character} project code
 #' @param allProjects {boolean} return data for all projects
 #' @param rolesInProjects {list} Roles in project. Default = list(public=T,member=F,publisher=F,admin=F)
+#' @param filterViewsByRoleMax {character} Max role in project.
 #' @param userId {integer} User id
 #' @param id {character} Unique view id to fetch
 #' @param from {integer} Position of the row to start with
@@ -129,6 +130,7 @@ mxDbGetViews <- function(
   allProjects = FALSE,
   allReaders = FALSE,
   rolesInProject = list( public = T, member = F,publisher = F, admin = F), 
+  filterViewsByRoleMax = "admin",
   idUser = 96, 
   id = NULL, 
   from = 0, 
@@ -155,9 +157,53 @@ mxDbGetViews <- function(
   #
   # Views shared in the project
   #
-
   viewsProject <- mxDbProjectGetViewsExternal(project)  
   hasViewsProject <- !noDataCheck(viewsProject)
+  
+  if(noDataCheck(filterViewsByRoleMax) || !isTRUE(typeof(filterViewsByRoleMax) == "character")){
+    filterViewsByRoleMax <- "admin"
+  }
+  
+  roleMax <- switch(filterViewsByRoleMax,
+    "admin" = {
+      list(
+        "public"=TRUE,
+        "member"=TRUE,
+        "publisher"=TRUE,
+        "admin"=TRUE 
+        )
+    },
+    "publisher" = {
+      list(
+        "public"=TRUE,
+        "member"=TRUE,
+        "publisher"=TRUE,
+        "admin"=FALSE 
+        )
+    },
+    "member" = {
+      list(
+        "public"=TRUE,
+        "member"=TRUE,
+        "publisher"=FALSE,
+        "admin"=FALSE
+        )
+    },
+    "public" = {
+      list(
+        "public"=TRUE,
+        "member"=FALSE,
+        "publisher"=FALSE,
+        "admin"=FALSE
+        )
+    },
+    list(
+      "public"=TRUE,
+      "member"=TRUE,
+      "publisher"=TRUE,
+      "admin"=TRUE
+      )
+    )
 
   # If views is provided, readonly is set
   #
@@ -171,25 +217,26 @@ mxDbGetViews <- function(
    filterEdit = "false"
   }else{
 
-    if(role$public){
+    if(roleMax$public && role$public){
       filterRead = " readers ?| array['public'] OR readers @> '[" + idUser + "]' "
       filterEdit = "(editors @> '[\"" + idUser +"\"]')"
     }
 
-    if(role$member){
+    if(roleMax$member && role$member){
       filterRead = "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members'] OR readers @> '[\"" + idUser + "\"]'"
       filterEdit = "(editors @> '[\"" + idUser +"\"]')"
     }
 
-    if(role$publisher){
+    if(roleMax$publisher && role$publisher){
       filterEdit = "(editor = " + idUser + " OR editors ?| array['publishers'] OR editors @> '[\"" + idUser +"\"]')"
       filterRead = "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members','publishers'] OR readers @> '[\"" + idUser +"\"]'"
     }
 
-    if(role$admin){
+    if(roleMax$admin && role$admin){
       filterEdit = "(editor = " + idUser + " OR editors ?| array['publishers','admins'] OR editors @> '[\"" + idUser + "\"]')"
       filterRead = "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members','publishers','admins'] OR readers @> '[\"" + idUser + "\"]'"
     }
+
   }
 
   #

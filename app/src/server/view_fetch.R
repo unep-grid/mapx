@@ -29,6 +29,7 @@ reactViewsCompact <- reactive({
   collections <- query$collections
   collectionsSelectOperator <- query$collectionsSelectOperator 
   empty <- query$noViews 
+  filterViewsByRoleMax <- query$filterViewsByRoleMax 
   #
   # don't use requested views twice
   #
@@ -46,6 +47,7 @@ reactViewsCompact <- reactive({
   }else{
     out <-  mxDbGetViews(
       views = viewsId, 
+      filterViewsByRoleMax=filterViewsByRoleMax,
       collections = collections,
       collectionsSelectOperator = collectionsSelectOperator,
       project = project,

@@ -1,6 +1,7 @@
 ## MapX : change log
 
 - 0.5.5
+   - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only.
    - Added styling option for map labels :  outline color
 - 0.5.4
   - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user

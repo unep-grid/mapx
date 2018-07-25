@@ -137,8 +137,8 @@ observeEvent(reactData$showLogin,{
     title = titleModalLogin,
     #textCloseButton=d("login_cancel",language),
     textCloseButton=d("btn_close",language),
-    content=tags$div(
-      tags$b(style="color:red",msgLogin),
+    content = tags$div(
+      tags$b(msgLogin),
       tags$b(div(id="txtLoginDialog",txtSubTitle)),
       uiOut
       )

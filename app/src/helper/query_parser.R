@@ -19,22 +19,36 @@ mxParseQuery <- function(urlSearch){
   #
   query <- parseQueryString(cleanQueryString(urlSearch))
 
-
   #
   # Parse role for project list modal
   #
   query$showProjectsListByRole <-  mxQueryRoleParser(query$showProjectsListByRole)
+  if(!noDataCheck(query$showProjectsListByRole)){
+    mxUpdateUrlParams(list(showProjectsListByRole=""))
+  }
 
   #
   # Parse project title for project list modal
   #
   query$showProjectsListByTitle <-  mxQueryTitleParser(query$showProjectsListByTitle)
+  if(!noDataCheck(query$showProjectsListByTitle)){
+    mxUpdateUrlParams(list(showProjectsListByTitle=""))
+  }
 
   #
   # Query action
   #
   if(!noDataCheck(query$action)){
-  query$action <- mxDbDecrypt(query$action)
+    query$action <- mxDbDecrypt(query$action)
+    mxUpdateUrlParams(list(action=""))
+  }
+
+  #
+  # maxRole 
+  #
+  if(!noDataCheck(query$filterViewsByRoleMax)){
+    query$filterViewsByRoleMax <- mxQueryRoleParser(query$filterViewsByRoleMax)
+    mxUpdateUrlParams(list(filterViewsByRoleMax=""))
   }
 
   #
@@ -51,10 +65,19 @@ mxParseQuery <- function(urlSearch){
   }
 
   #
+  # Set the project
+  #
+  if(!noDataCheck(query$project)){
+    query$project <- mxDbProjectCheck(query$project)
+    mxUpdateUrlParams(list(project=""))
+  }
+
+  #
   # Fetch only those views
   #
   if(!noDataCheck(query$views)){
     query$views <- unlist(strsplit(query$views,","))
+    mxUpdateUrlParams(list(views=""))
   }
 
   #
@@ -62,6 +85,7 @@ mxParseQuery <- function(urlSearch){
   #
   if(!noDataCheck(query$collections)){
     query$collections <- unlist(strsplit(query$collections,","))
+    mxUpdateUrlParams(list(collections=""))
     #
     # Select method : ANY or ALL
     #
@@ -72,6 +96,7 @@ mxParseQuery <- function(urlSearch){
   # Use this style instead of the dafault style
   #
   if(!noDataCheck(query$style)){
+    mxUpdateUrlParams(list(style=""))
     query$style <- jsonlite::fromJSON(mxDecode(query$style+"="))
   }else{
     query$style <- .get(config,c("ui","colors","default"))

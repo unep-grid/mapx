@@ -43,8 +43,9 @@ mxDbInitPool <- function(){
 mxQueryRoleParser <- function(role="any",default=NULL){
   out <- default
   if(!noDataCheck(role)){
+    role <- tolower(role)
     roles <- c("publisher","admin","member","public")
-    roleMatch <- roles[pmatch(tolower(role),roles)]
+    roleMatch <- roles[pmatch(role,roles)]
     if(!noDataCheck(roleMatch)) out <- roleMatch
   }
   return(out)
@@ -561,7 +562,6 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
       if(noDataCheck(out)) out <- d[d$id == id,langDefault][1]
       if(noDataCheck(out)) out <- id
       if(web) out <- tags$div(out,`data-lang_key`=id,style="display:inline-block")
-      if(debug) browser()
       if(asChar) out <- as.character(out)
     }
   }
