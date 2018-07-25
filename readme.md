@@ -1,5 +1,7 @@
 ## MapX : change log
 
+- 0.5.5
+   - Added styling option for map labels :  outline color
 - 0.5.4
   - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user
 - 0.5.3

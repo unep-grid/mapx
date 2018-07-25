@@ -587,7 +587,7 @@
           "text-opacity": 0.75,
           "text-color": "rgba(15,15,15,1)",
           "text-halo-color": "rgba(255,255,255,1)",
-          "text-halo-blur": 0,
+          "text-halo-blur": 1,
           "text-halo-width": 1.5
         }
       },
@@ -635,7 +635,8 @@
         "paint": {
           "text-color": "rgba(48,47,47,1)",
           "text-halo-color": "rgba(252,252,252,1)",
-          "text-halo-width": 21
+          "text-halo-width": 1,
+          "text-halo-blur": 1
         }
       },
       {
@@ -979,7 +980,7 @@
               ],
               [
                 18,
-                20
+                23
               ]
             ]
           },
@@ -991,10 +992,10 @@
           "text-anchor": "bottom"
         },
         "paint": {
-          "text-color": "rgba(48,48,48,1)",
-          "text-halo-color": "#000",
+          "text-color": "#333",
+          "text-halo-color": "#FFF",
           "text-halo-blur": 0,
-          "text-halo-width": 0,
+          "text-halo-width": 0.5,
           "text-translate": [
             0,
             -5
@@ -1018,11 +1019,11 @@
             "stops": [
               [
                 1,
-                6
+                12
               ],
               [
                 18,
-                45
+                25
               ]
             ]
           },
@@ -1031,7 +1032,7 @@
         },
         "paint": {
           "text-color": "hsl(0, 0%, 0%)",
-          "text-halo-width": 0,
+          "text-halo-width": 1,
           "text-halo-color": "#FFF"
         }
       },
@@ -1145,6 +1146,9 @@
           "icon-rotation-alignment": "viewport"
         },
         "paint": {
+          "text-halo-color": "#FFF",
+          "text-halo-blur": 0,
+          "text-halo-width": 0.5,
           "icon-translate": [
             0,
             0

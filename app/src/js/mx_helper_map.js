@@ -4917,6 +4917,7 @@ export function setUiColorScheme(o){
   c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
   c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
   c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
+  c.mx_map_text_outline = c.mx_map_text_outline || "hsla(196, 98%, 50%,0)";
   c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
   c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
   c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
@@ -5065,7 +5066,8 @@ function setLabelTitle(id,label){
       {
         "id":["project-label","place-label-capital","place-label-city","country-label"],
         "paint":{          
-          "text-color": c.mx_map_text
+          "text-color": c.mx_map_text,
+          "text-halo-color": c.mx_map_text_outline
         }
       } 
     ];

@@ -350,6 +350,7 @@
 "mx_map_admin","Map: boundaries","Carte : frontières","","","","","","",""
 "mx_map_admin_disputed","Map: disputed boundaries","Carte : frontières disputées","","","","","","",""
 "mx_map_text","Map: text","Carte : texte","","","","","","",""
+"mx_map_text_outline","Map: text outline","Carte : texte bordure","","","","","","",""
 "list_publishers","List of publishers","Liste des éditeurs","","","","","","",""
 "list_members","List of members","Liste des membres","","","","","","",""
 "list_admins","List of administrators","Liste des administrateurs","","","","","","",""
