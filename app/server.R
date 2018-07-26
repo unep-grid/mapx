@@ -90,17 +90,9 @@ server <- function(input,output,session){
                 #
                 "share.R",
                 #
-                # source handler
+                # source download handler
                 #
-                "source_vt_upload_from_browser_storage.R",
-                "source_vt_upload_from_file_explorer.R",
-                "source_vt_upload_progress.R",
-                "source_vt_upload_optional_view.R",
                 "source_download.R",
-                #
-                # images handler
-                #
-                "image_import.R",
                 #
                 # misc
                 #

@@ -42,12 +42,6 @@ observe({
           class = "btn btn-sm btn-default hint",
           `data-lang_key` = "btn_edit_source_metadata"
           ),
-#        actionButton(
-          #label = d("btn_add_source",language),
-          #inputId = "btnUploadSources",
-          #class = "btn btn-sm btn-default hint",
-          #`data-lang_key` = "btn_add_source"
-          #),
         actionButton(
           label= d("btn_add_source",language),
           inputId = "btnUploadSourceApi",

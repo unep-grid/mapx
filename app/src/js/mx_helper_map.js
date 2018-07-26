@@ -2111,78 +2111,7 @@ export function handleViewClick(o){
         isTrue : el.dataset.view_action_key == "btn_upload_geojson",
         action : function(){
           var idView = el.dataset.view_action_target;
-          var progress = 1;
-
-          function updateProgress(){
-            console.log(progress);
-            mx.helpers.progressScreen({
-              enable : progress < 100,
-              id : "upload_geojson",
-              percent : progress,
-              text : "Processing " + idView + " ( " + progress.toFixed(2) + "% )"
-            });
-
-            if(progress>=100) clearInterval(timer);
-
-          }
-
-          setTimeout(updateProgress,10);
-          var timer = setInterval(updateProgress,1000);
-          var id = mx.helpers.makeId(10);
-
-          setTimeout(function(){
-          try{
-            /**
-             * Extract view data and send it to shiny in chunk
-             */
-            mx.data.geojson.getItem(idView).then(function(item){
-
-              var sliceSize = 100000;
-              var geojson  = mx.helpers.path(item,"view.data.source.data");
-              var title =  mx.helpers.path(item,"view.data.title.en"); 
-              if(!title) title = idView;
-              if(!geojson) return;
-                 
-              var fileName = title + ".geojson";
-              var string = JSON.stringify(geojson);
-              var chunks = mx.helpers.chunkString(string,sliceSize);
-              var i = 0;
-              var iL = chunks.length;
-
-              mx.helpers.onNextFrame(loop);
-
-              function loop() {
-                sendPart(id,fileName,i,iL,chunks[i]);
-                i++;
-                if (i<iL) {
-                  setTimeout(loop,1);
-                }else{
-                  progress = 100;
-                }
-              }
-
-              function sendPart(id,fileName,i,iL,data){
-
-                Shiny.onInputChange("uploadGeojson:mx.jsonchunk",{
-                  id : id,
-                  length : iL,
-                  idPart : mx.helpers.paddy(i,7),
-                  data : data,
-                  time : (new Date()),
-                  fileName : fileName
-                });
-
-                progress  =  Math.round(( i / iL ) * 100) ;
-              }
-            });
-          }catch(e){
-            progress=100;
-            updateProgress();
-            clearInterval(timer);
-            console.log(e);
-            mx.helpers.modal({title:'Error',content:'An error occured, check the console'});
-          }
-          },100);
+          mx.helpers.uploadGeojsonModal(idView);
         }
       },
       {
@@ -2208,26 +2137,6 @@ export function handleViewClick(o){
           });
         }
       },
-     /* {*/
-        //id : "viewShare",
-        //comment :"target is the share button",
-        //isTrue : el.dataset.view_action_key == "btn_opt_share",
-        //action : function(){
-          //var idView =  el.dataset.view_action_target;
-          ////Shiny.onInput
-          //var link =  location.origin + "?views=" + idView + "&project=" + mx.settings.project || "WLD";
-          //var idLink = "share_"+idView;
-          //var input = "<textarea class='form-control form-input-line'>"+link+"</textarea>";
-          //mx.helpers.getDictItem("btn_opt_share").then(function(title){
-            //mx.helpers.modal({
-              //title : title,
-              //id : idLink,
-              //content : input,
-              //minHeight :'200px'
-            //});
-          //});
-        //}
-      /*},*/
       {
         id : "viewZoomExtent",
         comment :"target is zoom to extent",
