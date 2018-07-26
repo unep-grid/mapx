@@ -1,5 +1,9 @@
 ## MapX : change log
 
+- 0.5.6 
+   - Updated version of R
+   - Added api upload for geojson stored client side
+   - Minor changes
 - 0.5.5
    - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only.
    - Added styling option for map labels :  outline color
