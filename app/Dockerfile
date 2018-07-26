@@ -5,7 +5,7 @@ MAINTAINER Fred Moser "frederic.moser@unepgrid.ch"
 #
 # R shiny launcher
 #
-ENV R_BASE_VERSION 3.5.0
+ENV R_BASE_VERSION=3.5.1
 ENV LC_ALL=en_US.UTF-8
 ENV LANG=en_US.UTF-8
 ENV SHINY_PORT=3838
