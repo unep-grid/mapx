@@ -1,0 +1,65 @@
+[
+  {
+    "id": "en",
+    "en": "English",
+    "fr": "Anglais",
+    "fa": "انگلیسی",
+    "ps": "انګلیسي"
+  },
+  {
+    "id": "fr",
+    "en": "French",
+    "fr": "Français",
+    "fa": "فرانسوی",
+    "ps": "فرانسوي"
+  },
+  {
+    "id": "es",
+    "en": "Spanish",
+    "fr": "Espagnol",
+    "fa": "اسپانیایی",
+    "ps": "هسپانیه ایی"
+  },
+  {
+    "id": "ru",
+    "en": "Russian",
+    "fr": "Russe",
+    "fa": "روسی",
+    "ps": "روسي"
+  },
+  {
+    "id": "zh",
+    "en": "Chinese",
+    "fr": "Chinois",
+    "fa": "چینی",
+    "ps": "چینایی"
+  },
+  {
+    "id": "de",
+    "en": "German",
+    "fr": "Allemand",
+    "fa": "آلمانی",
+    "ps": "جرمني"
+  },
+  {
+    "id": "bn",
+    "en": "Bengali",
+    "fr": "Bengali",
+    "fa": "بنگالی",
+    "ps": "بنګالي"
+  },
+  {
+    "id": "fa",
+    "en": "Farsi",
+    "fr": "Persan",
+    "fa": "فارسی",
+    "ps": "فارسي"
+  },
+  {
+    "id": "ps",
+    "en": "Pashto",
+    "fr": "Pashtou",
+    "fa": "پاستو",
+    "ps": "پښتو"
+  }
+]

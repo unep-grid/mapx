@@ -70,7 +70,6 @@ config[["pg"]] = list(
 # List name will be prefix 
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
-#  http://localhost:8080/dict/dict.csv
 
 config[["resources"]]  =  list(
       "data"  = file.path("src","data"),
@@ -97,29 +96,25 @@ config[["uploadDirPath"]] = tempdir()
 # Import dictionaries
 #
 config[["dictionaries"]] <- list(
-  main = read.csv(
+  main = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_main.csv"
-      ),
-     stringsAsFactors=F
+      config[[c("resources","data")]],"dict_main.json"
+      )
     ),
-  countries = read.csv(
+  countries = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_countries.csv"
-      ),
-     stringsAsFactors=F
+      config[[c("resources","data")]],"dict_countries.json"
+      )
     ),
-  languages = read.csv(
+  languages = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_languages.csv"
-      ),
-     stringsAsFactors=F
+      config[[c("resources","data")]],"dict_languages.json"
+      )
     ),
-  schemaMetadata = read.csv(
+  schemaMetadata = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_schema_source.csv"
-      ),
-     stringsAsFactors=F
+      config[[c("resources","data")]],"dict_schema_source.json"
+      )
     )
   )
 
@@ -302,11 +297,10 @@ config[["project"]] <- list()
 config[["project"]][["default"]] <- "MX-YHJ-6JJ-YLS-SCV-VL1"
 
 # read countriea
-config[["countries"]]$table <- read.csv(
+config[["countries"]]$table <- fromJSON(
   file.path(
-    config[[c("resources","data")]],"countries.csv"
-    ),
-  stringsAsFactors=F
+    config[[c("resources","data")]],"countries.json"
+    )
   )
 
 # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
