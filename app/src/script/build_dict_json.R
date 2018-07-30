@@ -8,14 +8,13 @@ pathDest <- "src/built"
 
 
 r = function(path){
-  read.csv(path,stringsAsFactors=FALSE)
+  fromJSON(path)
 }
 
 
 dicts <- rbind(
-  r("src/data/dict_main.csv"),
-  r("src/data/dict_languages.csv")
-  #r("src/data/dict_countries.csv"),
+  r("src/data/dict_main.json"),
+  r("src/data/dict_languages.json")
   )
 
 langs <- names(dicts)
