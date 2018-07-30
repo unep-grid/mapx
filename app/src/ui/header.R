@@ -23,6 +23,10 @@ tagList(
   tags$meta(
     name="author",
     content="Unep sience division; Fred Moser"
+    ),
+  tags$meta(
+    name="google",
+    content="notranslate"
     )
 #  tags$meta(
     #`http-equiv`="Cache-control",
