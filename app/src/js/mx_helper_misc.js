@@ -797,7 +797,6 @@ export function getDistinctIndexWords(view){
  * @param {Function} o.onMessage Function to call on progress
  * @param {Function} o.onTimeout Function to call on time out (o.maxWait);
  * @param {Function} o.beforeSend Function to call before sending ajax
- * @param {Boolean} o.useCache Use browser cache. Default is true, except for localhost
  * @param {integer} o.maxWait Maximum wainting time. Default = 5000 ms
  */
 export function sendAjax(o) {
@@ -806,8 +805,6 @@ export function sendAjax(o) {
   o.xhr = new XMLHttpRequest();
   o.type = o.type ? o.type : "get";
   o.maxWait = o.maxWait ? o.maxWait : 20000; // in ms
-  o.useCache = o.useCache === undefined ? window.location.hostname !== "localhost" : o.useCache;
-  o.url = o.useCache ? o.url + timeStr : o.url;
   o.onError = o.onError ? o.onError : function(er){throw new Error(er);};
   o.onTimeout = o.onTimeout ? o.onTimeout : function(){throw new Error("Send ajax: max wait reached after "+ o.maxWait + "[ms]");};
 
@@ -861,7 +858,6 @@ export function sendAjax(o) {
  * @param {String} o.url url pointing to the json
  * @param {Function} o.onSuccess Function to call on success
  * @param {Function} o.onError Function to call on error
- * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function getCSV(o) {
    sendAjax({
@@ -880,7 +876,6 @@ export function getCSV(o) {
     },
     onError: o.onError,
     onComplete: o.onComplete,
-    useCache: o.useCache
   });
 }
 
@@ -895,7 +890,6 @@ export function getCSV(o) {
  * @param {Numeric} o.maxWait max wait in [ms]
  * @param {Function} o.onSuccess Function to call on success
  * @param {Function} o.onError Function to call on error
- * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function sendData(o) {
   return sendAjax({
@@ -909,7 +903,6 @@ export function sendData(o) {
     onError: o.onError,
     onComplete: o.onComplete,
     onProgress: o.onProgress,
-    useCache: false
   });
 }
 
@@ -923,7 +916,6 @@ export function sendData(o) {
  * @param {Numeric} o.maxWait max wait in [ms]
  * @param {Function} o.onMessage Function to call on progress
  * @param {Function} o.onError Function to call on error
- * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function getJSON(o) {
 
@@ -951,7 +943,6 @@ export function getJSON(o) {
     },
     onError: o.onError,
     onComplete: o.onComplete,
-    useCache: o.useCache
   });
 }
 /**
@@ -960,7 +951,6 @@ export function getJSON(o) {
  * @param {String} o.url url pointing to the xml
  * @param {Function} o.onSuccess Function to call on success
  * @param {Function} o.onError Function to call on error
- * @param {Boolean} o.useCache Use browser cache, default true, except for localhost
  */
 export function getXML(o) {
   sendAjax({
@@ -976,7 +966,6 @@ export function getXML(o) {
     },
     onError: o.onError,
     onComplete: o.onComplete,
-    useCache: o.useCache
   });
 }
 
