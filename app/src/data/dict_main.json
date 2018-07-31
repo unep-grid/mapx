@@ -60,6 +60,30 @@
     "ps": "د سرچینې لایه اضافه کړئ"
   },
   {
+    "id": "btn_about",
+    "en": "About",
+    "fr": "À propos",
+    "es": "Acerca",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "title_about",
+    "en": "About",
+    "fr": "À propos",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_load_new_project",
     "en": "Load the new project",
     "fr": "Charger le nouveau projet",
@@ -3298,18 +3322,6 @@
     "bn": "",
     "fa": "نمایش",
     "ps": "نظرونه"
-  },
-  {
-    "id": "title_about",
-    "en": "About",
-    "fr": "À propos",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "",
-    "ps": ""
   },
   {
     "id": "top",

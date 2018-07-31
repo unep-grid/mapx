@@ -1,5 +1,9 @@
 ## MapX : change log
 
+- 1.5.7
+   - Add service worker to cache assets and tiles
+   - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily
+   - Minor changes 
 - 1.5.6 
    - Updated version of R
    - Added api upload for geojson stored client side
