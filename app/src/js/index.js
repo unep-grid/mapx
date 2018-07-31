@@ -1,5 +1,9 @@
 /*jshint esversion: 6 */
-
+(function() {
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+})();
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'mapbox-gl/dist/mapbox-gl.css';

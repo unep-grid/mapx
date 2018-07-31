@@ -2,7 +2,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
-
+const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 const webpack = require( 'webpack');
 
 module.exports = {
@@ -13,6 +13,38 @@ module.exports = {
     'app':'./src/js/index.js'
   },
   plugins: [
+    // set caching strategy
+    new SWPrecacheWebpackPlugin({
+      cacheId: 'mapx',
+      filename: 'service-worker.js',
+      minify: true,
+      runtimeCaching: [
+        {
+          urlPattern: /^https:\/\/api\.mapbox\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
+          handler: 'cacheFirst'
+        },
+       {
+          urlPattern: /^https:\/\/.*wms\?bbox=/,
+          handler: 'cacheFirst'
+        },
+       {
+          urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
+          handler: 'cacheFirst'
+        }
+      ]
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       //name: 'common' // Specify the common bundle's name.
       name: ['runtime']

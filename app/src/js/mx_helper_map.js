@@ -27,50 +27,6 @@ export function takeMapScreenshot(map) {
 }
 
 
-
-/**
-* Configure what should be cached by service workers
-* @param {Object} o Options
-* @param {Array} o.urlIncludes Array of url string that will trigger the service to be cached
-*/
-export function initCache(o){
-
-
-  window.addEventListener('install', function (event) {
-    console.log('Installing Service Worker');
-    event.waitUntil(this.skipWaiting());
-  });
-
-  window.addEventListener('activate', function (event) {
-    event.waitUntil(this.clients.claim());
-  });
-
-  window.addEventListener('fetch', function(event) {
-    var url = event.request.url;
-
-    var useCache = o.urlIncludes.every(i=>url.includes(i));
-
-    if(url.startsWith('https://') && useCache) {
-      event.respondWith(
-        caches.match(event.request).then(function(resp) {
-          return resp || fetch(event.request).then(function(response) {
-            var cacheResponse = response.clone();
-            caches.open('mapx').then(function(cache) {
-              cache.put(event.request, cacheResponse);
-            });
-            return response;
-          });
-        })
-      );
-    }
-  });
-
-
-}
-
-
-
-
 export function handlerDownloadVectorSource(o){
   var elMsg;
   var elOutput = document.getElementById(o.idHandlerContainer);
@@ -344,6 +300,13 @@ export function initMapx(o){
 
     if(o.paths.sprite){
       o.paths.sprite = o.location + o.paths.sprite;
+    }
+    /*
+    * Update cache
+    */
+    if(o.version){
+    
+    
     }
 
     /**

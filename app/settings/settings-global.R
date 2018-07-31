@@ -23,7 +23,6 @@ config[["system"]] <- list(
   urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
   )
 
-
 config[["browser"]] <- list(
   #
   # Expected params requested by getBrowserData js function 
