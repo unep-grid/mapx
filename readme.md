@@ -1,5 +1,7 @@
 ## MapX : change log
 
+- 1.5.8
+   - Solved #272 : the built date was wrong in the encrypted mail validation
 - 1.5.7
    - Add service worker to cache assets and tiles
    - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily
