@@ -4176,6 +4176,30 @@
     "ps": ""
   },
   {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "fr": "Carte : bord des routes",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "fr": "Carte : bâtiments",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "mx_map_admin",
     "en": "Map: boundaries",
     "fr": "Carte : frontières",
