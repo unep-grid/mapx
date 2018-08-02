@@ -4848,6 +4848,8 @@ export function setUiColorScheme(o){
   c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
   c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
   c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
+  c.mx_map_road_border = c.mx_map_road_border || "hsl(0, 0%, 61%)";
+  c.mx_map_building = c.mx_map_building || "hsla(0, 0%, 97%, 0.95)";
   c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
   c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
 
@@ -4975,6 +4977,18 @@ function setLabelTitle(id,label){
         "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
         "paint":{
           "line-color":c.mx_map_road
+        }
+      },
+      {
+        "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
+        "paint":{
+          "line-color":c.mx_map_road_border
+        }
+      },
+      {
+        "id":["building"],
+        "paint":{
+          "fill-color":c.mx_map_building
         }
       },
       {
@@ -5492,6 +5506,8 @@ export function randomUicolor(){
       mx_map_mask : mx.helpers.randomHsl(1) ,
       mx_map_water : mx.helpers.randomHsl(1) ,
       mx_map_road : mx.helpers.randomHsl(1) ,
+      mx_map_road_border : mx.helpers.randomHsl(1) ,
+      mx_map_building : mx.helpers.randomHsl(1) ,
       mx_map_admin : mx.helpers.randomHsl(1) ,
       mx_map_admin_disputed : mx.helpers.randomHsl(1) 
     }

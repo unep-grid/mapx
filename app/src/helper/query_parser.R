@@ -8,7 +8,7 @@ cleanQueryString <- function(query){
   out <- ""
   tryCatch({
     query <- httpuv:::decodeURIComponent(query)
-    out <- gsub('[^a-zA-Z0-9\\-_&*?,=+/ ]*',"",query,perl=T)
+    out <- gsub('[^a-zA-Z0-9\\-_&*?,=+/\\. ]*',"",query,perl=T)
   },error=function(cond){warning(cond)})
   return(out)
 }
@@ -34,6 +34,15 @@ mxParseQuery <- function(urlSearch){
   if(!noDataCheck(query$showProjectsListByTitle)){
     mxUpdateUrlParams(list(showProjectsListByTitle=""))
   }
+
+
+  #
+  # Forced map position
+  #
+  query$lat  = as.numeric(query$lat)
+  query$lng = as.numeric(query$lng)
+  query$zoom = as.numeric(query$zoom)
+
 
   #
   # Query action

@@ -246,7 +246,7 @@ observe({
       mapPos$lat  = as.numeric(query$lat)
       mapPos$lng = as.numeric(query$lng)
       mapPos$zoom = as.numeric(query$zoom)
-
+ 
       query$lat <<- NULL
       query$lng <<- NULL
       query$zoom <<- NULL
