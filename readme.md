@@ -1,27 +1,30 @@
 ## MapX : change log
 
+- 1.5.9
+   - Improvement of road style : added more than 30 layers extracted and modified from style "lè Shine" (https://frama.link/leshine),
+   - Integrated simplified colors setting for roads, road border and building in style editor.
 - 1.5.8
-   - Solved #272 : the built date was wrong in the encrypted mail validation
+   - Solved #272 : the built date was wrong in the encrypted mail validation.
 - 1.5.7
-   - Add service worker to cache assets and tiles
-   - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily
-   - Minor changes 
+   - Add service worker to cache assets and tiles,
+   - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily,
+   - Minor changes.
 - 1.5.6 
-   - Updated version of R
-   - Added api upload for geojson stored client side
-   - Minor changes
+   - Updated version of R,
+   - Added api upload for geojson stored client side,
+   - Minor changes.
 - 1.5.5
-   - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only.
-   - Added styling option for map labels :  outline color
+   - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only,
+   - Added styling option for map labels :  outline color.
 - 1.5.4
-  - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user
+  - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user.
 - 1.5.3
-  - Added a new sharing option : any view can be imported as external, non-modifiable view in a project where the user is at least a publisher.
-  - Removed www/ files from git repo : those are built with webpack, not useful to have them around 
+  - Added a new sharing option : any view can be imported as external, non-modifiable view in a project where the user is at least a publisher,
+  - Removed www/ files from git repo : those are built with webpack, not useful to have them around.
 - 1.5.2
-  - Fixed story map view selection #255
+  - Fixed story map view selection #255,
   - Fixed raster legend size : let the user click to expand the image into a modal,
-  - Fixed legend label alignment.
+  - Fixed legend label alignment,
   - Fixed long abstract #253.
 - 1.5.1 
   - Solved bug where user was not able to authenticate when uploading an image,
