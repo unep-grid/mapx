@@ -4974,13 +4974,49 @@ function setLabelTitle(id,label){
         }
       },
       {
-        "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
+        "id":[
+          "road-street-low",
+          "road-street_limited-low",
+          "road-path",
+          "road-construction",
+          "road-trunk_link",
+          "road-motorway_link",
+          "road-service-link-track",
+          "road-street_limited",
+          "road-street",
+          "road-secondary-tertiary",
+          "road-primary",
+          "road-trunk",
+          "road-motorway",
+          "road-rail",
+          "road-rail-tracks"
+        ],
         "paint":{
           "line-color":c.mx_map_road
         }
       },
       {
-        "id":["road-footway","road-cycleway","road-minor","road-major","road-street-minor"],
+        "id":[
+          "road-pedestrian-polygon",
+          "road-polygon"
+        ],
+        "paint":{
+          "fill-color":c.mx_map_road
+        }
+      },
+      {
+        "id":[
+          "road-pedestrian-polygon-case",
+          "road-service-link-track-case",
+          "road-street_limited-case",
+          "road-street-case",
+          "road-secondary-tertiary-case",
+          "road-primary-case",
+          "road-motorway_link-case",
+          "road-trunk_link-case",
+          "road-trunk-case",
+          "road-motorway-case"
+        ],
         "paint":{
           "line-color":c.mx_map_road_border
         }
@@ -5004,12 +5040,21 @@ function setLabelTitle(id,label){
         }
       },
       {
-        "id":["project-label","place-label-capital","place-label-city","country-label"],
+        "id":[
+          "project-label",
+          "place-label-capital",
+          "place-label-city",
+          "country-label",
+          "road-label",
+          "road-label-small",
+          "road-label-medium",
+          "road-label-large"
+        ],
         "paint":{          
           "text-color": c.mx_map_text,
           "text-halo-color": c.mx_map_text_outline
         }
-      } 
+      }
     ];
 
     for(var k = 0,kL = layers.length; k<kL; k++ ){
@@ -5019,7 +5064,15 @@ function setLabelTitle(id,label){
         var lay = map.getLayer(lid);
         if( lay ){
           for(var p in grp.paint){
+            try{
             map.setPaintProperty(lid,p,grp.paint[p]); 
+            } catch(err){
+              console.log({
+                err : err,
+                id : lid,
+                property:p
+              });
+            }
           }
         }
       }
