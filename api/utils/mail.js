@@ -49,10 +49,11 @@ function sendMailApi(req,res){
 
     if(!issues){
       var d = new Date();
-      var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDay()+1));
+      var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDate()));
       var dValid = new Date(conf.validUntil);
-      if(dNow && dValid && dNow > dValid){
-        issues = issues + " Date issue : date validUntil = " + dValid + " date now " + dNow;
+      var dateIsValid = dNow && dValid && dValid > dNow;
+      if( !dateIsValid ){
+        issues = issues + " invalide date";
       }
     }
 

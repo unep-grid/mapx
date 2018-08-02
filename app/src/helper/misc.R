@@ -1682,7 +1682,9 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
     )
 
   port <- 3333
+  
   req <- curl_fetch_memory(url, handle = h)
+  
   res <- fromJSON(rawToChar(req$content))
 
   if(to %in% res$accepted){
