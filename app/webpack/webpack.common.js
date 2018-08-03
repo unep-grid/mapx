@@ -2,8 +2,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
-const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 const webpack = require( 'webpack');
+const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 
 module.exports = {
   node : {
@@ -16,6 +16,7 @@ module.exports = {
     // set caching strategy
     new SWPrecacheWebpackPlugin({
       cacheId: 'mapx',
+      maximumFileSizeToCacheInBytes: 10485760,
       filename: 'service-worker.js',
       minify: true,
       runtimeCaching: [
@@ -45,6 +46,7 @@ module.exports = {
         }
       ]
     }),
+
     new webpack.optimize.CommonsChunkPlugin({
       //name: 'common' // Specify the common bundle's name.
       name: ['runtime']
