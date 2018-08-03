@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 (function() {
-  if('serviceWorker' in navigator) {
+  var hasServiceWorker = 'serviceWorker' in navigator;
+  if(  hasServiceWorker ) {
     navigator.serviceWorker.register('/service-worker.js');
   }
 })();
