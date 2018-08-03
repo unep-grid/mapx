@@ -2052,9 +2052,9 @@
     "ps": "لیدنه شتون نلري"
   },
   {
-    "id": "view_fetching",
-    "en": "[ Fetch views {{vn}}/{{vl}} ]",
-    "fr": "[ Téléchargement des vues {{vn}}/{{vl}} ]",
+    "id": "view_fetching_progress",
+    "en": "[ {{vOk}}/{{vTot}} ]",
+    "fr": "[ {{vOk}}/{{vTot}} ]",
     "es": "",
     "ru": "",
     "zh": "",
