@@ -1,5 +1,10 @@
 ## MapX : change log
 
+- 1.5.10
+   - New radial progress svg constructor
+   - Direct local storage for views object, in addition to browser cache and service worker cache. Faster. 
+   - Bug fixes : label too long in map data properties query popup. Display the full thing on hover.
+   - Code cleaning
 - 1.5.9
    - Improvement of road style : added more than 30 layers extracted and modified from style "lè Shine" (https://frama.link/leshine),
    - Integrated simplified colors setting for roads, road border and building in style editor.
