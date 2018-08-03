@@ -228,6 +228,10 @@ export function initMapx(o){
       name : "stories"
     });
 
+    mx.data.views = localforage.createInstance({
+      name : "views"
+    });
+
     /**
      * Confirm user quit
      */
@@ -439,16 +443,16 @@ export function initMapx(o){
      * Trigger project change on double click
      * NOTE: experimental. layers and input id should be moved as options.
      */
-    map.on('dblclick',function(e){
-      var cntry, features ;
-      if(o.projects){
-        features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
-        cntry = mx.helpers.path(features[0],"properties.iso3code");
-        if(o.projects.indexOf(cntry) > -1 && hasShiny ) {
-          Shiny.onInputChange( "selectProject", cntry);
-        }
-      }
-    });
+/*    map.on('dblclick',function(e){*/
+      //var cntry, features ;
+      //if(o.projects){
+        //features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
+        //cntry = mx.helpers.path(features[0],"properties.iso3code");
+        //if(o.projects.indexOf(cntry) > -1 && hasShiny ) {
+          //Shiny.onInputChange( "selectProject", cntry);
+        //}
+      //}
+    /*});*/
 
 
 
@@ -650,7 +654,21 @@ function cleanRemoveModules(view){
 }
 
 
-
+/** 
+ * Add source from views array 
+ * @param {Object} o options
+ * @param {Object} o.map Map object
+ * @param {Array} o.views Views array
+ */
+export function addSourceFromViews(o){
+if(o.views instanceof Array){
+  o.views.forEach(v=>{
+    mx.helpers.addSourceFromView({
+    map : o.map,
+    view : v
+    });
+  });
+}}
 
 /** 
  * Add source from view object 
@@ -737,7 +755,10 @@ export function setSourcesFromViews(o){
 
     var m = mx.maps[o.id];
     var mode, map, view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
+    var nCache = 0, nNetwork = 0, nTot = 0, prog;
+    if( o.viewsList && o.viewsList.length > 0 ) nTot = o.viewsList.length ;
     var isArray, hasViews;
+    var apiUrlViews = mx.settings.apiUrlViews;
 
     if( !m || !o.viewsList || !m.map ) return;
 
@@ -748,11 +769,11 @@ export function setSourcesFromViews(o){
     if(singleView) mode = "object_single";
     if(!singleView && o.viewsCompact) mode = "array_async";
     if(!singleView && !o.viewsCompact) mode = "array_sync";
- 
+
     if( typeof o.resetViews == "undefined" && !singleView ) o.resetViews = true;
     /*
-    * Set project if needed
-    */
+     * Set project if needed
+     */
     if( o.project ){
       mx.settings.project = o.project;
     }
@@ -766,158 +787,154 @@ export function setSourcesFromViews(o){
     }
 
     /**
-    * Process view list
-    */
-    processViews(mode);
+     * Process view list
+     */
+    resolve(addViews());
 
 
     /**
-    * Helper
-    */
-    function processViews(mode){
-      var switcher = {
-        object_single : function(){
-          /**
-           * SINGLE VIEW
-           * If this is not an array and the mgl map opbject already as views,
-           * add the view and feedback
-           */
+     * Helper
+     */
+    
+    /* Switch according to mode */
+    function addViews(){
+      return {
+        object_single : addSingle,
+        array_sync : addSync,
+        array_async : addAsync
+      }[mode](views);
+    }
 
-          if( hasViews ){
-            m.views.unshift( views );
+   /* Sort views by title */
+    function sortViews(views){
+
+      var aTitle,bTitle;
+
+      views.sort(function(a,b){
+        aTitle = getViewTitle(a);
+        bTitle = getViewTitle(b);
+        if( aTitle < bTitle) return -1;
+        if( aTitle > bTitle) return 1;
+        return 0;
+      });
+
+      return(views);
+    }
+
+
+    function updateProgress(){
+      if(!prog){
+        prog = new mx.helpers.RadialProgress("noViewItemText",{radius:20,stroke:3});
+      }
+      prog.update((nCache+nNetwork)/nTot);
+    }
+
+   /* get view title  */
+    function getViewTitle(view){
+      var title = mx.helpers.getLabelFromObjectPath({
+        lang : mx.settings.language,
+        obj : view,
+        path : "data.title"
+      });
+      title =  mx.helpers.cleanDiacritic(title).toLowerCase().trim();
+      return title;
+    }
+
+   /* get view object from storage or network */
+    function getViewObject(v){
+      var keyStore = v.id + "@" + v.pid;
+      var keyNet = apiUrlViews + v.id + '?' + v.pid;
+      return mx.data.views.getItem(keyStore)
+        .then(view => {
+          if(view){
+            nCache ++;
+            updateProgress();
+            return Promise.resolve(view);
+          }else{
+          return fetch( keyNet )
+            .then( r => r.json())
+            .then( d => {
+              nNetwork ++;
+              updateProgress();
+              return d;
+            })
+            .then( v => mx.data.views.setItem(keyStore,v));
           }
+        });
+    }
 
-          mx.helpers.addSourceFromView({
+    /* Add array of compact views object*/
+    function addAsync(views){
+
+      var out = views.map(getViewObject);
+
+      return Promise.all(out)
+        .then(viewsFetched => {
+
+          viewsFetched = sortViews(viewsFetched);
+
+          m.views = viewsFetched;
+
+          mx.helpers.renderViewsList({
+            id : o.id,
+            views : viewsFetched
+          });
+
+          mx.helpers.addSourceFromViews({
             map : map,
-            view : views
-          });
-
-          mx.helpers.renderViewsList({
-            id : o.id,
-            views : views,
-            add : true,
-            open : true
-          });
-
-          resolve(views);
-        },
-        array_sync : function(){
-          /**
-           * ARRAY OF VIEWS
-           * Save and render
-           */
-
-          m.views = views;
-
-          views.forEach(function(view){
-
-            mx.helpers.addSourceFromView({
-              map : map,
-              view : view
-            });
-          });
-
-          mx.helpers.renderViewsList({
-            id : o.id,
-            views : views,
+            views : viewsFetched
           });
 
           loadGeojsonFromStorage(o);
-          resolve(views);
-        },
-        array_async : function(){
-          /**
-           * ARRAY OF VIEWS, ASYNC FETCH
-           * fetch, save and render
-           */
 
-          var viewsL = views.length;
-          var initViews = [];
-          var initViewsL = 0;
-          var apiUrlViews = mx.settings.apiUrlViews;
-          var templateLoading,messageLoading ; 
-          //var elViewEmptyText = document.getElementById("noViewItemText");
+          return viewsFetched;
 
-          function setLoading(num,tot){
-            var elViewEmptyText =  document.getElementById("noViewItemText");
-            messageLoading = mx.helpers.parseTemplate(
-              templateLoading,
-              {
-               vn : num,
-                vl : tot
-              });
+        });
 
-            if(elViewEmptyText){
-              elViewEmptyText.innerHTML = messageLoading;
-            }
-          }
-          
-          /* for each compact view (id) we get the json from the api */
-          mx.helpers.getDictItem("view_fetching")
-            .then(function(t){
-              templateLoading = t;
-              
-              views.forEach(function(v){
-                mx.helpers.getJSON({
-                  url :  apiUrlViews + v.id + '?' + v.pid,
-                  onSuccess : function(res){
-                    var view = JSON.parse(res);
-                    view._edit = v._edit; 
-                    initViews.push( view );
-                    initViewsL = initViews.length;
-                    setLoading(initViewsL,viewsL);
-                    /* add sources for each  */
+    }
 
-                    mx.helpers.addSourceFromView({
-                      map : map,
-                      view : view
-                    });
+    /* Add array of coomplete views object*/
+    function addSync(view){
 
-                    if( initViewsL === viewsL  ){
-                      /**
-                      * Sort by title
-                      */
-                      var getTitle = function(item){
-                        var title = mx.helpers.getLabelFromObjectPath({
-                          lang : mx.settings.language,
-                          obj : item,
-                          path : "data.title"
-                        });
-                        title =  mx.helpers.cleanDiacritic(title).toLowerCase().trim();
-                        return title;
-                      };
+      m.views = views;
 
-                      var aTitle,bTitle;
-                      initViews.sort(function(a,b){
-                        aTitle = getTitle(a);
-                        bTitle = getTitle(b);
-                        if( aTitle < bTitle) return -1;
-                        if( aTitle > bTitle) return 1;
-                        return 0;
-                      });
+      views.forEach(function(view){
 
-                      /* update current project map views */
-                      m.views = initViews;
+        mx.helpers.addSourceFromView({
+          map : map,
+          view : view
+        });
+      });
 
-                      /* Render the full thing */
-                      mx.helpers.renderViewsList({
-                        id : o.id,
-                        views : initViews
-                      });
+      mx.helpers.renderViewsList({
+        id : o.id,
+        views : views,
+      });
 
-                      /*  Load geojson */
-                      loadGeojsonFromStorage(o);
-                      resolve(views);
-                    }
-                  }
-                });
-              });
-            });
-        }
-      };
-      var op = switcher[mode];
-      if(typeof op != "function") throw new Error("No method found for adding views");
-      return(op());
+      loadGeojsonFromStorage(o);
+      return views;
+    }
+
+    /* Add single view object */
+    function addSingle(view){
+
+      if( hasViews ){
+        m.views.unshift( view );
+      }
+
+      mx.helpers.addSourceFromView({
+        map : map,
+        view : view
+      });
+
+      mx.helpers.renderViewsList({
+        id : o.id,
+        views : view,
+        add : true,
+        open : true
+      });
+
+      return view;
     }
 
   });
@@ -5303,6 +5320,10 @@ export function featuresToHtml(o){
       /* Title */
       var elPropTitle = cEl("span");
       elPropTitle.classList.add('mx-prop-title');
+      elPropTitle.setAttribute('title',property);
+      // cant make it appear.. it seems to be hidden
+      //elPropTitle.setAttribute('aria-label', property);
+      // elPropTitle.classList.add("hint--right");
       elPropTitle.innerText = property;
 
       /* Toggles */

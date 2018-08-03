@@ -10,6 +10,7 @@ export * from './mx_helper_map.js';
 export * from './mx_helper_story.js';
 export * from './mx_helper_draggable.js';
 export * from './mx_helper_dashboard.js';
+export * from './mx_helper_progress_radial.js';
 export * from './mx_helper_map_controls.js';
 export * from './mx_helper_map_geo_compo.js';
 export * from './mx_helper_map_dragdrop.js';
