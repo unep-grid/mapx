@@ -1124,6 +1124,9 @@ blockquote {
   width: 40%;
   float: left;
   letter-spacing: 1.4;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .mx-prop-toggles {
