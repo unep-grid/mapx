@@ -1,5 +1,6 @@
 ## MapX : change log
 - 1.5.11
+   - Solved #276
    - Solved #274
    - Added a function to unregister service worker 
 - 1.5.10

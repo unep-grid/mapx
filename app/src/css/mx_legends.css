@@ -10,7 +10,7 @@
   display: block;
   max-height: 700px;
   overflow: auto;
-  width: 202px;
+  width: 100%;
   padding-bottom: 20px;
 }
 
