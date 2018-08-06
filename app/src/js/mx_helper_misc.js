@@ -4,6 +4,17 @@ import * as mx from './mx_init.js';
 
 
 
+export function removeServiceWorker(){
+  if(navigator.serviceWorker){
+    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+      for(let registration of registrations) {
+        registration.unregister();
+      } });
+  }
+}
+
+
+
 /**
 * Replace current url state using object values
 *
