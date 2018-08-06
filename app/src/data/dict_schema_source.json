@@ -5,7 +5,11 @@
     "fr": "Si applicable, liste des documents additionnels",
     "es": "Si aplica, lista de documentos adicionales",
     "fa": "اگر هر گونه، لست اسناد اضافی",
-    "ps": "که د اضافي اسنادو کوم نوملړ"
+    "ps": "که د اضافي اسنادو کوم نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "additional_doc_items_desc",
@@ -13,7 +17,11 @@
     "fr": "Documents liés, par example documentation technique, article scientifique ou autre",
     "es": "Documentos relacionados, por ejemplo documentos técnicos, artículos científicos u otros",
     "fa": "اسناد مرتبط مثل اطلاعات تخنیکی در باره مجموعه اطلاعات",
-    "ps": "ورته اسناد لکه د ډیټابیس په هکله تخنیکي معلومات"
+    "ps": "ورته اسناد لکه د ډیټابیس په هکله تخنیکي معلومات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "additional_doc_items_title",
@@ -21,7 +29,11 @@
     "fr": "Liste des annexes",
     "es": "Lista de anexos",
     "fa": "لست ضمایم",
-    "ps": "د ضمیمو نوملړ"
+    "ps": "د ضمیمو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "additional_doc_item_title",
@@ -29,7 +41,11 @@
     "fr": "Document",
     "es": "Documentos",
     "fa": "سند",
-    "ps": "اسناد"
+    "ps": "اسناد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "additional_doc_item_url",
@@ -37,7 +53,11 @@
     "fr": "URL pointant vers le document",
     "es": "URL hacia el documento",
     "fa": "برای سند URL ",
-    "ps": "د سند لپاره URL"
+    "ps": "د سند لپاره URL",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "additional_doc_title",
@@ -45,7 +65,11 @@
     "fr": "Annexes",
     "es": "Anexos",
     "fa": "ضمایم ",
-    "ps": "ضمیمې"
+    "ps": "ضمیمې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "annually",
@@ -53,7 +77,11 @@
     "fr": "La donnée est mise à jour chaque année",
     "es": "Los datos son actualizados cada año",
     "fa": "اطلاعات هر ساله تجدید می شوند",
-    "ps": "ډیټا هر کال نوې کیږي"
+    "ps": "ډیټا هر کال نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "as_needed",
@@ -61,7 +89,11 @@
     "fr": "La donnée est mise à  jour lorsque cela est nécessaire",
     "es": "Los datos son actualizados cada vez que sea necesario",
     "fa": "اطلاعات به صورت ضروری تجدید می شوند",
-    "ps": "دیټا د اړتیا په صورت کې نوې کیږي"
+    "ps": "دیټا د اړتیا په صورت کې نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attribute_desc_title",
@@ -69,7 +101,11 @@
     "fr": "Description",
     "es": "Descripción",
     "fa": "شرح",
-    "ps": "تفصیلات"
+    "ps": "تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attribute_item_title",
@@ -77,7 +113,11 @@
     "fr": "Attribut",
     "es": "Atributo",
     "fa": "ویژه گی ",
-    "ps": "ځانګېړنه"
+    "ps": "ځانګېړنه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attribute_name_title",
@@ -85,7 +125,11 @@
     "fr": "Nom de l'attribut",
     "es": "Nombre del atributo",
     "fa": "نام ویژه گی ",
-    "ps": "د ځانګېړنې نوم"
+    "ps": "د ځانګېړنې نوم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attributes_desc",
@@ -93,7 +137,11 @@
     "fr": "Description des attributs de la donnée",
     "es": "Descripción de los atributos de la base de datos",
     "fa": "شرح ویژه گی های که در اطلاعات موجود می باشد",
-    "ps": "د ځانګېړنو په هکله تفصیلات په ډیتا کې شتون لري."
+    "ps": "د ځانګېړنو په هکله تفصیلات په ډیتا کې شتون لري.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attributes_list_title",
@@ -101,7 +149,11 @@
     "fr": "Liste d'attributs",
     "es": "Lista de atributos",
     "fa": "لست ویژه گی ها",
-    "ps": "د ځانګېړنو نوملړ"
+    "ps": "د ځانګېړنو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "attributes_title",
@@ -109,7 +161,11 @@
     "fr": "Attributs",
     "es": "Atributos",
     "fa": "ویژه گی ها",
-    "ps": "ځانګېړنې"
+    "ps": "ځانګېړنې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "biannually",
@@ -117,7 +173,11 @@
     "fr": "La donnée est mise à  jour deux fois par an",
     "es": "Los datos son actualizados dos veces por año",
     "fa": "اطلاعات دو بار در سال تجدید می شوند",
-    "ps": "ډیټا په کال کې دوه ځله نوې کیږي"
+    "ps": "ډیټا په کال کې دوه ځله نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "confirm_source_remove",
@@ -125,7 +185,11 @@
     "fr": "Êtes-vous certain de vouloir supprimer cette source ainsi que toutes les vues et métadonnées liées ? L'opération ne peut pas être annulée.",
     "es": "¿Está seguro de eliminar el recurso con todas las vistas y metadatos relacionados? La operación no podrá ser anulada",
     "fa": "آیا مطمئن هستید که منبع را با تمام مشاهدات و ابرداده های مرتبط حذف شود؟ این کار را نمیتوان لغو کرد",
-    "ps": "آیا تاسو ډاډه یاست چې سرچینه د ټولو مربوطه لیدنو او میټا ډیټا سره پاکه کړئ؟ دا بیا نه موندل کیږي"
+    "ps": "آیا تاسو ډاډه یاست چې سرچینه د ټولو مربوطه لیدنو او میټا ډیټا سره پاکه کړئ؟ دا بیا نه موندل کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_address",
@@ -133,7 +197,11 @@
     "fr": "Addresse du contact",
     "es": "Dirección del contacto",
     "fa": "آدرس مخاطب",
-    "ps": "د مخاطب پته"
+    "ps": "د مخاطب پته",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_desc",
@@ -141,7 +209,11 @@
     "fr": "Information sur les personnes ou organisations liées à la donnée",
     "es": " Información de contacto de la persona o organización relacionados con datos",
     "fa": "معلومات مربوط به افراد یا سازمان مرتبط به این اطلاعات",
-    "ps": "د هغو افرادو او سازمانونو په هکله معلومات چې په دې ډیټا پورې اړه لري"
+    "ps": "د هغو افرادو او سازمانونو په هکله معلومات چې په دې ډیټا پورې اړه لري",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_email",
@@ -149,7 +221,11 @@
     "fr": "Email du contact",
     "es": "Correo electrónico del contacto",
     "fa": "ایمل مخاطب",
-    "ps": "د مخاطب د بریښنالیک پته"
+    "ps": "د مخاطب د بریښنالیک پته",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_function",
@@ -157,7 +233,11 @@
     "fr": "Fonction",
     "es": "Función",
     "fa": "عملکرد",
-    "ps": "فعالیت"
+    "ps": "فعالیت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_function_desc",
@@ -165,7 +245,11 @@
     "fr": "Nom de la fonction du contact : par ex. Administrateur, Editeur",
     "es": "Nombre de la función del contacto. Ej. Administrador",
     "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر ",
-    "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی"
+    "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_item_title",
@@ -173,7 +257,11 @@
     "fr": "Contact",
     "es": "Contacto",
     "fa": "مخاطب",
-    "ps": "مخاطبین"
+    "ps": "مخاطبین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_list_title",
@@ -181,7 +269,11 @@
     "fr": "Liste des contacts",
     "es": "Lista de contactos",
     "fa": "لست مخاطبین",
-    "ps": "د مخاطبینو نوملړ"
+    "ps": "د مخاطبینو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_name",
@@ -189,7 +281,11 @@
     "fr": "Nom du contact",
     "es": "Nombre del contacto",
     "fa": "نام مخاطب  ",
-    "ps": "د مخاطبینو نومونه"
+    "ps": "د مخاطبینو نومونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "contact_title",
@@ -197,7 +293,11 @@
     "fr": "Contacts",
     "es": "Contactos",
     "fa": "مخاطبین",
-    "ps": "مخاطبین"
+    "ps": "مخاطبین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "continual",
@@ -205,7 +305,11 @@
     "fr": "La donnée est mise à  jour en continu",
     "es": "Los datos son actualizados con frecuencia",
     "fa": "اطلاعات مکرراَ و دوره ایی تجدید شده اند",
-    "ps": "ډیټا په دوامدار او دوراني ډول نوې کیږي."
+    "ps": "ډیټا په دوامدار او دوراني ډول نوې کیږي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "daily",
@@ -213,7 +317,11 @@
     "fr": "La donnée est mise à  jour chaque jour",
     "es": "Los datos son actualizados todos los días",
     "fa": "اطلاعات هر روز تجدید شده اند",
-    "ps": "ډیټا هره ورځ نوې کیږي."
+    "ps": "ډیټا هره ورځ نوې کیږي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "data_integrity_desc",
@@ -221,7 +329,11 @@
     "fr": "Evaluation de l'intégrité des données",
     "es": "Evaluación de la integridad de los datos",
     "fa": "ارزیابی یکپارچگی اطلاعات ",
-    "ps": "د ډیټا د بشپړتیا ارزیابي"
+    "ps": "د ډیټا د بشپړتیا ارزیابي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "data_integrity_title",
@@ -229,7 +341,11 @@
     "fr": "Intégrité",
     "es": "Integridad",
     "fa": "یکپارچگی ",
-    "ps": "بشپړتیا"
+    "ps": "بشپړتیا",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_1",
@@ -237,7 +353,11 @@
     "fr": "La donnée est-elle documentée?",
     "es": "¿Los datos están documentados?",
     "fa": "آیا اطلاعات مستند شده اند؟",
-    "ps": "آیا ډیتا مستنده شوېده؟"
+    "ps": "آیا ډیتا مستنده شوېده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_1_desc",
@@ -245,7 +365,11 @@
     "fr": "Le fournisseur de la donnée a-t'il  la capacité de documenter la donnée et de fournir un jeu de métadonnées basique (par ex. système de coordonnées, année, fréquence de mise à jour, description, méthodologie sous-jacente) ?",
     "es": "Tiene el proveedor de datos la capacidad de documentar los datos y proporcionar metadatos básicos (por ejemplo",
     "fa": "آیا تولید کننده اطلاعات ظرفیت سند سازی اطلاعات و تهیه ابرداده اولیه را  (مثل. نام، سیستم کواردینات، سال، دوره به روز رسانی، شرح، و روش ) دارند؟",
-    "ps": "آيا د ډیټا تولیدوونکئ ددې وړتیا لري چي ډیټا مستنده کړي او ابتدائي میټا ډیټا (لکه: نوم، د کوردیناتو سیستم، کال، د نوي کولو نیټه، تفصیل، او میتود) وړاندې کړي؟"
+    "ps": "آيا د ډیټا تولیدوونکئ ددې وړتیا لري چي ډیټا مستنده کړي او ابتدائي میټا ډیټا (لکه: نوم، د کوردیناتو سیستم، کال، د نوي کولو نیټه، تفصیل، او میتود) وړاندې کړي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_2",
@@ -253,7 +377,11 @@
     "fr": "Le fournisseur de la donnée fait-il autorité ?",
     "es": "¿El proveedor de datos tiene un mandato relevante?",
     "fa": "آیا تولید کننده اطلاعات حکم مرتبط را دارد؟",
-    "ps": "آیا د ډیټا وړاندې کوونکئ مربوطه حکم لري؟"
+    "ps": "آیا د ډیټا وړاندې کوونکئ مربوطه حکم لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_2_desc",
@@ -261,7 +389,11 @@
     "fr": "Le fournisseur de la donnée a-t'il un mandat officiel pour collecter la donnée ?",
     "es": "¿El proveedor de datos tiene un mandato o requisito legal para recolectar los datos?",
     "fa": "آیا تولید کننده اطلاعات حکم یا تقاضای قانونی برای جمع آوری اطلاعات دارد؟",
-    "ps": "آیا د ډیټا وړاندې کوونکئ د ډیټا راټولولو قانوني جواز لري؟"
+    "ps": "آیا د ډیټا وړاندې کوونکئ د ډیټا راټولولو قانوني جواز لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_3",
@@ -269,7 +401,11 @@
     "fr": "La donnée fait-elle l'objet d'un contrôle interne de qualité ?",
     "es": "¿Están los datos sujetos al control de calidad interno?",
     "fa": "آیا اطلاعات به کنترول کیفیت داخلی می پردازند؟",
-    "ps": "آیا ډیټا د داخلي کیفیت کنټرول تابع ده؟"
+    "ps": "آیا ډیټا د داخلي کیفیت کنټرول تابع ده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_3_desc",
@@ -277,7 +413,11 @@
     "fr": "La donnée a-t'elle fait l'objet de processus de contrôle et d'assurance qualité ?",
     "es": "¿Los datos han seguido un procesos de control de calidad?",
     "fa": "آیا اطلاعات به فرآیندهای اطمینان و کنترل پروسه کیفیت اطلاعات پرداخته اند؟",
-    "ps": "آیآ د ډیټا د کیفیت څخه اطمینان حاصل شوی دی؟"
+    "ps": "آیآ د ډیټا د کیفیت څخه اطمینان حاصل شوی دی؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_4",
@@ -285,7 +425,11 @@
     "fr": "La donnée fait-elle l'objet d'un contrôle externe de qualité ?",
     "es": "¿Los datos han seguido un procesos de control de calidad externo?",
     "fa": "آیا اطلاعات تحت کنترول کیفیت خارجی قرار گرفته است؟",
-    "ps": "آیا د ډیټآ د خارجی کیفیت کنټرول شوی دی؟"
+    "ps": "آیا د ډیټآ د خارجی کیفیت کنټرول شوی دی؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_1_4_desc",
@@ -293,7 +437,11 @@
     "fr": "Le jeu de données est-il assujetti à des processus d'audit externe ou d'examen par les pairs?",
     "es": "¿Están las bases de datos sujetos a procesos de auditoría externa o revisión por pares?",
     "fa": "آیا اطلاعات تحت تفتیش خارجی یا  پروسه مرور  قرار گرفته است؟",
-    "ps": "آیا ډیټا د بهرنیو همکارانو د پلټنو او بیا کتنې پروسې طۍ کړې دي؟"
+    "ps": "آیا ډیټا د بهرنیو همکارانو د پلټنو او بیا کتنې پروسې طۍ کړې دي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_1",
@@ -301,7 +449,11 @@
     "fr": "La donnée est-elle lisible par la machine ?",
     "es": "¿Los datos son legibles por máquina?",
     "fa": "آیا اطلاعات  قابل خواندن برای ماشین است؟",
-    "ps": "آیا ډیټا د ماشین په واسطه د لوستلو وړتیا لري؟"
+    "ps": "آیا ډیټا د ماشین په واسطه د لوستلو وړتیا لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_1_desc",
@@ -309,7 +461,11 @@
     "fr": "Une donnée est 'lisible par machine' quand elle est dans un format qui peut facilement être structuré et exploité par un ordinateur. Des exemple intéressants de fichiers ‘lisibles par machine’ sont SQL, JSON, XML, DBF et dans une moindre mesure Excel",
     "es": "Los datos son legibles por máquina si se trata de un formato que puede ser fácilmente estructurado y explotado por un ordenador. Los buenos ejemplos de archivos legibles por máquina son SQL, JSON, XML, DBF y en menor medida Excel",
     "fa": "اگر اطلاعات دارای ساختار آسان بوده و  توسط کمپیوتر به آسانی قابل استفاده باشد قابلیت خوانش توسط ماشین را داراست. مثال های خوب فایل های که قابلیت خوانش توسط ماشین را دارد SQL، JSON، XML، DBF و حجم کم اکسل میباشند",
-    "ps": "که چیرې ډیټا په داسې یو چوکاټ کې وي چې په آسانه تنظیم او د کمپیوټر په واسطه د کارولو وړتیا ولري د ماشین په واسطه د لوستلو وړتیا لري. د ماشین په وسیله د لوستلو وړ فایلونو ښې بیلګې SQL، JSON، XML، DB او کم حجم لرونکې ایکسل فایلونه دي."
+    "ps": "که چیرې ډیټا په داسې یو چوکاټ کې وي چې په آسانه تنظیم او د کمپیوټر په واسطه د کارولو وړتیا ولري د ماشین په واسطه د لوستلو وړتیا لري. د ماشین په وسیله د لوستلو وړ فایلونو ښې بیلګې SQL، JSON، XML، DB او کم حجم لرونکې ایکسل فایلونه دي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_2",
@@ -317,7 +473,11 @@
     "fr": "La donnée est-elle disponible en ligne ?",
     "es": "¿Los datos están disponibles en línea?",
     "fa": "آیا اطلاعات آنلاین در دسترس است؟",
-    "ps": "آیا ډیټا په آنلاین بڼه شتون لري؟"
+    "ps": "آیا ډیټا په آنلاین بڼه شتون لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_2_desc",
@@ -325,14 +485,22 @@
     "fr": "Cette question porte sur la disponibilité de la donnée à partir d'une source en ligne. Cela ne signifie pas que la donnée est maintenue",
     "es": "Esta pregunta se refiere a si los datos están disponibles en línea desde una fuente oficial. Esto no significa que los datos sean necesariamente actualizados o mantenidos",
     "fa": "این سوال بیانگر این است که آیا اطلاعات از یک منبع رسمی آنلاین در دسترس است. این بدان معنا نیست که داده ها لزوما تجدید و یا نگهداری شده است.",
-    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډیټا په یوه رسمي سرچینه کې په آنلاین بڼه شتون لري او که نه. دا په دې معنا نه ده چې ډیټا په ضروري شکل شامله شوې او یا نوې شوې ده."
+    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډیټا په یوه رسمي سرچینه کې په آنلاین بڼه شتون لري او که نه. دا په دې معنا نه ده چې ډیټا په ضروري شکل شامله شوې او یا نوې شوې ده.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_3",
     "en": "Is the data available in a non-fragmented state?",
     "fr": "La donnée est-elle disponible dans un état non fragmenté ?",
     "fa": "آیا اطلاعات در یک حالت غیر تفکیک شده در دسترس هستند؟",
-    "ps": "آیا ډیټا په یو غیر تفکیک شوې بڼه د لاسرسي وړ ده؟"
+    "ps": "آیا ډیټا په یو غیر تفکیک شوې بڼه د لاسرسي وړ ده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_3_desc",
@@ -340,14 +508,22 @@
     "fr": "La donnée est disponible sous forme non fragmentée si l'ensemble du jeu de données peut être téléchargé ou est facilement accessible. Inversement, elle est considérée comme fragmentée si les citoyens sont limités à l'obtention d'une partie du jeu de données (p. ex., si limité à l'interrogation d'un formulaire Web et à la récupération de quelques résultats à la fois à partir d'une très grande base de données)",
     "es": "Los datos están disponibles en forma no fragmentada. Es decir, si todo el conjunto de datos puede ser descargado o es de fácil acceso en un solo paso. A la inversa, se considera fragmentada si los ciudadanos se limitan a la obtención de una porción del conjunto de datos (p. Ej., Si está restringido a consultar un formulario web y recuperar unos pocos resultados a la vez)",
     "fa": "اطلاعات به طور توده‌یی در دسترس هستند اگر  مجموعه اطلاعات به راحتی قابل دانلود و یا دسترسی میباشد. برعکس، اطلاعات غیر توده‌یی هستند٬‌در صورتیکه شهروندان تنها به بخش هایی از مجموعه اطلاعات دسترسی داشته باشند. (مثلا٬ اگر به پرس و جوی یک فورم انترنیتی محدودیت وجود داشته و نتایج اندک در یک زمان بدست آید)",
-    "ps": "که چیرې ټول ډیټاسیټ په آسانۍ سره د لاسرسي او ډانلوډ وړ وي ډیټا په پراخه کچه د لاسرسي وړ ګڼل کېږي، برعکس؛ که چېرې د ګټه اخیستونکي لاسرسئ  صرف د ډیټاسیټ یوې برخې ته محدود وي ډیټا په پراخه کچه د لاسرسي وړ نه ګڼل کېږي ( د مثال په توګه که چېرې د یوه انټرنیټي فورم د پوښتنو او پلټنو په اړه محدودیت شتون ولري او لږ معلومات په یوه وخت کې لاس ته راشي)"
+    "ps": "که چیرې ټول ډیټاسیټ په آسانۍ سره د لاسرسي او ډانلوډ وړ وي ډیټا په پراخه کچه د لاسرسي وړ ګڼل کېږي، برعکس؛ که چېرې د ګټه اخیستونکي لاسرسئ  صرف د ډیټاسیټ یوې برخې ته محدود وي ډیټا په پراخه کچه د لاسرسي وړ نه ګڼل کېږي ( د مثال په توګه که چېرې د یوه انټرنیټي فورم د پوښتنو او پلټنو په اړه محدودیت شتون ولري او لږ معلومات په یوه وخت کې لاس ته راشي)",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_4",
     "en": "Does the data comply with OGC standards? ",
     "fr": "La donnée est-elle conforme avec les standards de l'OGC ?",
     "es": "¿Los datos cumplen con los estándares OGC?",
-    "fa": "آیا اطلاعات با ستندردهای OGC مطابقت دارد؟"
+    "fa": "آیا اطلاعات با ستندردهای OGC مطابقت دارد؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_2_4_desc",
@@ -355,7 +531,11 @@
     "fr": "La donnée est-elle conforme avec les standards de l'Open Geospatial Consortium, par ex. le Web Map Service (WMS) ?",
     "es": "¿Es compatible con los estándares de Open Geospatial Consortium, ej. Servicio de mapas web (WMS)?",
     "fa": "آیا اطلاعات با استانداردهای کنسرسیوم مجتمع باز جغرافیایی مطابقت دارد؟ به عنوان مثال سرویس نقشه ویب (WMS)",
-    "ps": "آیا ډیټا د خلاص جیوفضائي کانسرسیوم د سټنډرډونو لکه د بريښنایې نقشو د خدمتونو (WMS) مطابق ده؟"
+    "ps": "آیا ډیټا د خلاص جیوفضائي کانسرسیوم د سټنډرډونو لکه د بريښنایې نقشو د خدمتونو (WMS) مطابق ده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_1",
@@ -363,7 +543,11 @@
     "fr": "La donnée est-elle disponible publiquement?",
     "es": "¿Los datos están disponibles públicamente?",
     "fa": "آیا اطلاعات به صورت عمومی در دسترس هستند؟",
-    "ps": "آیا ډیټا په عام ډول د لاسرسي وړ ده؟"
+    "ps": "آیا ډیټا په عام ډول د لاسرسي وړ ده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_1_desc",
@@ -371,7 +555,11 @@
     "fr": "‘Public’ signifie que le public peut accéder à la donnée depuis un site web ou sur support physique (même si la donnée est payante)",
     "es": "“A disposición publica\" significa que el público puede acceder a los datos de alguna forma",
     "fa": " دسترس عموم\" بدین معنی است که اطلاعات توسط برخی افراد از طریق وب سایت ها یا اسناد فیزیکی قابل دسترس می باشند (حتی اگر اطلاعات برای خرید در دسترس باشند)",
-    "ps": "په عام ډول د لاسرسی وړ په دی معنا ده چې ډیټاګانې د عامو خلکو لپاره په هارډ شکل او هم د ویب سایټ له لارې د لاسرسي وړ دی( حتا که چیرې ډیټا د پلورلو لپاره آماده وي."
+    "ps": "په عام ډول د لاسرسی وړ په دی معنا ده چې ډیټاګانې د عامو خلکو لپاره په هارډ شکل او هم د ویب سایټ له لارې د لاسرسي وړ دی( حتا که چیرې ډیټا د پلورلو لپاره آماده وي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_2",
@@ -379,7 +567,11 @@
     "fr": "La donnée est-elle accessible au public sans discrimination des utiisateurs ?",
     "es": "¿Los datos son accesibles al público sin discriminación de usuarios?",
     "fa": "آیا اطلاعات بدون تبعیض کاربران قابل دسترس است؟",
-    "ps": "آیا ډیټا د عامو خلکو لپاره بدون له کوم تبعیض څخه د لاسرسي وړ ده؟"
+    "ps": "آیا ډیټا د عامو خلکو لپاره بدون له کوم تبعیض څخه د لاسرسي وړ ده؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_2_desc",
@@ -387,7 +579,11 @@
     "fr": "Est-ce que n'importe quel utilisateur peut télécharger la donnée de manière anonyme ou un enregistrement est-il nécessaire ?",
     "es": "¿Puede cualquier usuario descargar los datos de forma anónima o se requiere registro?",
     "fa": "آیا هر کاربر ناشناس می تواند اطلاعات را دانلود کند یا ثبت نام لازم است؟",
-    "ps": "آیا هر نا معلوم ګټه اخیستونکئ کولای شي چې ډیټا ډانلوډ کړي او یا د نوم ثبتول اړین دي."
+    "ps": "آیا هر نا معلوم ګټه اخیستونکئ کولای شي چې ډیټا ډانلوډ کړي او یا د نوم ثبتول اړین دي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_3",
@@ -395,7 +591,11 @@
     "fr": "La donnée est-elle disponible gratuitement ?",
     "es": "¿Los datos están disponibles gratuitamente?",
     "fa": "آیا اطلاعات به صورت رایگان در دسترس هستند؟",
-    "ps": "آیا ډیټا په وړیا ډول د لاسرسي وړ ده او که مصرف لري؟"
+    "ps": "آیا ډیټا په وړیا ډول د لاسرسي وړ ده او که مصرف لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_3_desc",
@@ -403,21 +603,33 @@
     "fr": "Conformité avec le deuxième principe de partage de la donnée de GEOSS : \"lorsque les instruments internationaux appropriés et les politiques et législations nationales empêchent le partage de la donnée de manière ouverte, les données, métadonnées et produits seront rendus disponibles au plus vite et au coût minimal, c'est-à-dire pas plus chers que leur coût de reproduction et de distribution;\"",
     "es": "En conformidad con el segundo principio de la distribución de la información de GEOSS: \"cuando los instrumentos internacionales",
     "fa": "مطابقت با اصل شریک سازی اطلاعات GEOSS # 2: زمانی که ابزارهای بین المللی، سیاست های ملی یا قوانین مانع شریک سازی اطلاعات به عنوان داده های باز ٬ می شود، داده ها باید با حداقل محدودیت های استفاده و نباید بالاتر از هزینه تولید و توزیع در دسترس قرار گیرد\"",
-    "ps": "د GEOSS سره د ډیټا شریکولو دوهم اصل: \" په کوم ځای کې چې نړیوال وسایل، ملي پالیسۍ یا قوانین د ډیټاګانو د آزاد شریکولو مانع وي معلومات باید په ترټولو کم محدودیت او بدون د تولید له مصرف څخه د لاسرسي وړ وي."
+    "ps": "د GEOSS سره د ډیټا شریکولو دوهم اصل: \" په کوم ځای کې چې نړیوال وسایل، ملي پالیسۍ یا قوانین د ډیټاګانو د آزاد شریکولو مانع وي معلومات باید په ترټولو کم محدودیت او بدون د تولید له مصرف څخه د لاسرسي وړ وي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_4",
     "en": "Is there an open license for the data?",
     "fr": "La donnée possède t'elle une license ouverte ?",
     "fa": "آیا یک مجوز باز برای اطلاعات وجود دارد؟",
-    "ps": "آیا د ډیټا لپاره کوم آزاد جواز وجود لري"
+    "ps": "آیا د ډیټا لپاره کوم آزاد جواز وجود لري",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_3_4_desc",
     "en": "This question addresses whether the dataset is openly licensed. It needs to state the terms of use or license that allow anyone to freely use, reuse or redistribute the data (subject to attribution and share alike requirements)",
     "fr": "Cette question porte sur le fait que la donnée soit soumise à licence ouverte. Il convient de préciser les conditions d'utilisation qui permettent à quiconque d'utiliser librement, réutiliser ou redistribuer la donnée (sujet tout au plus à citation ou au partage à l'identique)",
     "fa": "این سوال بیانگر این است که آیا مجموعه اطلاعات به صورت باز قابل مجوز است. لازم است که شرایط استفاده یا مجوز  مشخص شود تا هرکسی بتواند آزادانه استفاده، استفاده مجدد یا توزیع مجدد داده ها را کند.  (با توجه به تخصیص و اشتراک گذاری الزامات مشترک)",
-    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډيټاسیت آزاد جواز لري. لازمه ګڼل کېږي چې د ګتې اخیستنې او یا جواز هغه شرطونه ذکر کړئ چې هر چاته اجازه ورکوي چې په وړیا ډول ترې ګټه واخلي، د ډیټا څخه بیا ګټه واخلي او یا بیا خپره کړي (د ګډو الزاماتو په نظر کې نیولو سره)"
+    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډيټاسیت آزاد جواز لري. لازمه ګڼل کېږي چې د ګتې اخیستنې او یا جواز هغه شرطونه ذکر کړئ چې هر چاته اجازه ورکوي چې په وړیا ډول ترې ګټه واخلي، د ډیټا څخه بیا ګټه واخلي او یا بیا خپره کړي (د ګډو الزاماتو په نظر کې نیولو سره)",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_1",
@@ -425,7 +637,11 @@
     "fr": "Le fournisseur de la donnée a-t'il la capacité de gérer et de mettre à jour la donnée?",
     "es": "¿Tiene el proveedor de datos la capacidad técnica para gestionar y actualizar la capa?",
     "fa": "آیا تولید کننده اطلاعات دارای ظرفیت تخصصی برای مدیریت و تجدید لایه هستند؟",
-    "ps": "آیا د ډیټا چمتو کوونکئ د لایو د تنظیم او نوي کولو تخنیکي ظرفیت لري؟"
+    "ps": "آیا د ډیټا چمتو کوونکئ د لایو د تنظیم او نوي کولو تخنیکي ظرفیت لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_1_desc",
@@ -433,7 +649,11 @@
     "fr": "Le fournisseur de la donnée a la capacité de maintenir, de mettre à jour et de publier la couche de manière régulière (pas nécessairement en WMS)",
     "es": "El proveedor de datos es capaz de mantener, actualizar y publicar sobre una manera regular",
     "fa": "تولید کننده اطلاعات قادر به حفظ، تجدید و انتشار آن به طور منظم است",
-    "ps": "د ډیټا چمتو کوونکئ ددې وړتیا لري چې ډیټا په نومال ډول شامله، نوې او خپره کړي."
+    "ps": "د ډیټا چمتو کوونکئ ددې وړتیا لري چې ډیټا په نومال ډول شامله، نوې او خپره کړي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_2",
@@ -441,7 +661,11 @@
     "fr": "Le fournisseur de la donnée a-t'il un mandat à long terme et des moyens financiers pour le mener à bien ?",
     "es": "¿El proveedor de datos tiene un mandato a largo plazo y medios financieros?",
     "fa": "آیا تولید کننده اطلاعات دارای یک وظیفه درازمدت و با امکانات مالی است؟",
-    "ps": "آیا د ډيټا چمتو کوونکئ یوه اوږدمهاله دنده او مالي وسایل لري؟"
+    "ps": "آیا د ډيټا چمتو کوونکئ یوه اوږدمهاله دنده او مالي وسایل لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_2_desc",
@@ -449,7 +673,11 @@
     "fr": "Le fournisseur de la donnée a-t'il un mandat à long terme et les ressources nécessaires pour garantir la continuité de la collecte et la publication de la donnée ?",
     "es": "¿El proveedor de datos tiene un mandato a largo plazo y recursos relacionados para asegurar la continuidad en la recolección y publicación de datos?",
     "fa": "آیا تولید کننده اطلاعات دارای مجوز دراز مدت و منابع مرتبط برای اطمینان از تداوم در جمع آوری و انتشار اطلاعات است؟",
-    "ps": "آیا د ډیټا چمتو کوونکئ یوه اوږدمهاله دنده او مربوطې سرچینې لري چې د ډیټا راټولولو او خپرولو د دوام څخه اطمینان ورکړي؟"
+    "ps": "آیا د ډیټا چمتو کوونکئ یوه اوږدمهاله دنده او مربوطې سرچینې لري چې د ډیټا راټولولو او خپرولو د دوام څخه اطمینان ورکړي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_3",
@@ -457,7 +685,11 @@
     "fr": "La couche peut-elle être diffusée dynamiquement et partagée en utilisant une API ?",
     "es": "¿Puede la capa de datos ser dinámicamente transmitida y compartida usando una API?",
     "fa": "لایه اطلاعات می تواند به صورت دینامیک جریان داده شده و با استفاده از یک API به اشتراک گذاشته شود",
-    "ps": "آیا د ډیټا لایه په ډینامیک ډول خپریدلای او د API څخه په ګټه اخیستنه شریکیدلای شي؟"
+    "ps": "آیا د ډیټا لایه په ډینامیک ډول خپریدلای او د API څخه په ګټه اخیستنه شریکیدلای شي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_3_desc",
@@ -465,7 +697,11 @@
     "fr": "La donnée est-elle desservie par la plateforme en ligne MAP-X de manière dynamique afin de refléter les mises à jour côté fournisseur de la donnée ?",
     "es": "¿Los datos son interoperables con MAP-X para permitir la transmisión dinámica/automática de las actualizaciones?",
     "fa": "\nآیا اطلاعات با MAP-X همکاری می کنند تا قابلیت های جریان دینامیکی / تجدید خودکار را فعال کنند؟",
-    "ps": "آیا ډیټا له MAP-X سره مطابقت لري چې په ډینامیک خپرولو او یا اتومات ډول نوي کیدلو کې مرسته وکړي؟"
+    "ps": "آیا ډیټا له MAP-X سره مطابقت لري چې په ډینامیک خپرولو او یا اتومات ډول نوي کیدلو کې مرسته وکړي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_4",
@@ -473,7 +709,11 @@
     "fr": "La donnée supporte-t'elle la mesure des ODD ? ",
     "es": "¿Los datos apoyan a la medición de los ODS?",
     "fa": "آیا اطلاعات از SDGs پشتبانی می کند؟",
-    "ps": "آیا ډيټا د SDGs په اندازه ګیرۍ کې مرسته کوي؟"
+    "ps": "آیا ډيټا د SDGs په اندازه ګیرۍ کې مرسته کوي؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "di_4_4_desc",
@@ -481,7 +721,11 @@
     "fr": "Le jeu de donnée peut-il être aligné avec la mesure du progrès dans l'accomplissement des Objectifs de Développement Durable ?",
     "es": "¿La base de datos puede estar alineada con la medición del progreso de los objetivos de desarrollo sostenible?",
     "fa": "آیا  مجموعه اطلاعات با اندازه گیری پیشرفت جهت دستیابی به اهداف انکشاف پایدار٬‌همسو خواهد بود؟",
-    "ps": "آیا د معلوماتو مجموعه د دوامدارې پراختیا د موخو له پرمختګ سره سمون لري؟"
+    "ps": "آیا د معلوماتو مجموعه د دوامدارې پراختیا د موخو له پرمختګ سره سمون لري؟",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "dont_know",
@@ -489,7 +733,11 @@
     "fr": "Je ne sais pas",
     "es": "No se sabe",
     "fa": "من نمی دانم",
-    "ps": "زه نه پوهیږم"
+    "ps": "زه نه پوهیږم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "fortnightly",
@@ -497,7 +745,11 @@
     "fr": "La donnée est mise à  jour 2 fois par mois",
     "es": "Los datos son actualizados 2 veces por mes",
     "fa": "اطلاعات هر دو هفته تجدید می شوند",
-    "ps": "ډيټا هرې دوه اوونۍ وروسته نوې کیږي"
+    "ps": "ډيټا هرې دوه اوونۍ وروسته نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "irregular",
@@ -505,7 +757,11 @@
     "fr": "La donnée est mise à jour de manière irrégulière",
     "es": "Los datos son actualizados de manera irregular",
     "fa": "اطلاعات در فواصل زمانی که در طول زمان ناهموار هستند تحدید می شوند",
-    "ps": "ډیټا د نا معلومو دورو لپاره  تازه شوي"
+    "ps": "ډیټا د نا معلومو دورو لپاره  تازه شوي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "lang_desc",
@@ -513,7 +769,11 @@
     "fr": "Langue(s) utilisée(s) dans le contenu",
     "es": "Lengua(s) utilizada(s) en el contenido",
     "fa": "زبان (زبانهای) که در محتوا استفاده شده است",
-    "ps": "په متن کې کارول شوې ژبه یا ژبې"
+    "ps": "په متن کې کارول شوې ژبه یا ژبې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "lang_item_title",
@@ -521,7 +781,11 @@
     "fr": "Langue",
     "es": "Lengua",
     "fa": "زبان",
-    "ps": "ژبه"
+    "ps": "ژبه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "lang_list_desc",
@@ -529,7 +793,11 @@
     "fr": "Code de deux lettres minuscules",
     "es": "Código de dos letras en minúscula ",
     "fa": "دو دستورالعمل نامه از زبان ها",
-    "ps": "د ژبې دوه توریز کوډ"
+    "ps": "د ژبې دوه توریز کوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "lang_list_title",
@@ -537,7 +805,11 @@
     "fr": "Liste des langues",
     "es": "Lista de lenguas",
     "fa": "لست زبان ها",
-    "ps": "د ژبو نوملړ"
+    "ps": "د ژبو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "lang_title",
@@ -545,14 +817,22 @@
     "fr": "Langue",
     "es": "Lengua",
     "fa": "زبان",
-    "ps": "ژبه"
+    "ps": "ژبه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_allow_download",
     "en": "Allow download source",
     "fr": "Autoriser le téléchargement",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_desc",
@@ -560,7 +840,11 @@
     "fr": "Si applicable, description des licences de la donnée",
     "es": "Si aplica, descripción de la licencias de los datos",
     "fa": "اگر هر گونه، شرح مجوز اطلاعات",
-    "ps": "که د ډیټا د جواز هر ډول تشریح"
+    "ps": "که د ډیټا د جواز هر ډول تشریح",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_item_title",
@@ -568,7 +852,11 @@
     "fr": "Licence",
     "es": "Licencia",
     "fa": "مجوز",
-    "ps": "جواز"
+    "ps": "جواز",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_list_desc",
@@ -576,7 +864,11 @@
     "fr": "Nom et/ou description de la licence",
     "es": "Nombre o descripción de la licencia",
     "fa": "نام و/یا شرح مجوز",
-    "ps": "د جواز نوم او یا تشریح"
+    "ps": "د جواز نوم او یا تشریح",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_list_title",
@@ -584,7 +876,11 @@
     "fr": "Liste des licences",
     "es": "Lista de licencias",
     "fa": "لست مجوز ",
-    "ps": "د جوازونو نوملړ"
+    "ps": "د جوازونو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_name",
@@ -592,7 +888,11 @@
     "fr": "Nom",
     "es": "Nombre",
     "fa": "نام",
-    "ps": "نوم"
+    "ps": "نوم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_text",
@@ -600,7 +900,11 @@
     "fr": "Texte",
     "es": "Texto",
     "fa": "متن",
-    "ps": "متن"
+    "ps": "متن",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "license_title",
@@ -608,7 +912,11 @@
     "fr": "Licence",
     "es": "Licencias",
     "fa": "صدور مجوز",
-    "ps": "جواز ورکونه"
+    "ps": "جواز ورکونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "maintainer",
@@ -616,7 +924,11 @@
     "fr": "Mainteneur",
     "es": "Encargado de mantenimiento",
     "fa": "نگهدارنده",
-    "ps": "ساتونکئ"
+    "ps": "ساتونکئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "monthly",
@@ -624,7 +936,11 @@
     "fr": "La donnée est mise à  jour tous les mois",
     "es": "Los datos son actualizados todos los meses",
     "fa": "اطلاعات هر ماه تجدید می شوند",
-    "ps": "ډیټا په میاشتني ډول نوې کیږي"
+    "ps": "ډیټا په میاشتني ډول نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_error_duplicate",
@@ -632,7 +948,11 @@
     "fr": "Cette source existe déjà et est disponible pour vous",
     "es": "Este recurso ya existe y está disponible para usted",
     "fa": "این منبع از قبل موجود و در دسترس شما است",
-    "ps": "دا سرچینه له مخکې شتون لري او ستاسو لپاره د لاسرسي وړ ده"
+    "ps": "دا سرچینه له مخکې شتون لري او ستاسو لپاره د لاسرسي وړ ده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_error_import",
@@ -640,7 +960,11 @@
     "fr": "La donnée n'a pas été importée",
     "es": "Los datos no fueron importados",
     "fa": "اطلاعات وارد نشد ",
-    "ps": "ډیټا داخله نه شوه"
+    "ps": "ډیټا داخله نه شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_process_wait",
@@ -648,7 +972,11 @@
     "fr": "La donnée est préparée, veuillez attendre",
     "es": "Procesando datos, por favor, espere",
     "fa": "اطلاعات پروسس شد، لطفا صبر نمایید",
-    "ps": "ډیټا پروسس شوه، مهرباني وکړئ په تمه اوسئ"
+    "ps": "ډیټا پروسس شوه، مهرباني وکړئ په تمه اوسئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_success_delete",
@@ -656,7 +984,11 @@
     "fr": "Source supprimée avec succès",
     "es": "Recurso eliminado exitosamente",
     "fa": "ابرداده با موفقیت حذف شد",
-    "ps": "سرچینه په بریالیتوب سره پاکه شوه"
+    "ps": "سرچینه په بریالیتوب سره پاکه شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_success_import",
@@ -664,7 +996,11 @@
     "fr": "Donnée importée avec succès",
     "es": "Datos importados exitosamente",
     "fa": "اطلاعات با موفقیت وارد شدند",
-    "ps": "ډیټا په بریالیتوب سره داخله شوه"
+    "ps": "ډیټا په بریالیتوب سره داخله شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "msg_success_update",
@@ -672,7 +1008,11 @@
     "fr": "Métadonnées mises à jour",
     "es": "Matadatos actualizados",
     "fa": "ابرداده با موفقیت به روز شد ",
-    "ps": "میټا ډیټا په بریالیتوب سره نوې شوه"
+    "ps": "میټا ډیټا په بریالیتوب سره نوې شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "no",
@@ -680,7 +1020,11 @@
     "fr": "Non",
     "es": "No",
     "fa": "نخیر",
-    "ps": "نه"
+    "ps": "نه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "not_planned",
@@ -688,7 +1032,11 @@
     "fr": "La donnée n'a pas de mise à jour prévue",
     "es": "No hay planes para actualizar los datos",
     "fa": "هیچ برنامه ای برای تجدید اطلاعات وجود ندارد",
-    "ps": "د ډیټا د نوي کولو کوم پلان شتون نلرې"
+    "ps": "د ډیټا د نوي کولو کوم پلان شتون نلرې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "optional_view_show_attribute_preview",
@@ -696,7 +1044,11 @@
     "fr": "Afficher un résumé des attributs",
     "es": "Monstrar resumen de los nombres y valores de los atributos",
     "fa": "خلاصه ای از نام های ویژه گی و مقادیر را نمایش دهید",
-    "ps": "د ځانګیړنو د نومونو او ارزښتونو لنډیز ښکاره کړئ"
+    "ps": "د ځانګیړنو د نومونو او ارزښتونو لنډیز ښکاره کړئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "optional_view_text",
@@ -704,7 +1056,11 @@
     "fr": "Sélectionnez un attribut de la source pour créer une vue simple ou cliquez sur finir pour terminer l'importation,",
     "es": "Seleccione un atributo para crear una vista simple o haga clic en Finalizar para finalizar la importación",
     "fa": "یک ویژگی از منبع برای ایجاد یک نمای ساده انتخاب کنید یا روی دکمه پایان کلیک کنید تا واردات را پایان دهید",
-    "ps": "د ساده لیدنې لپاره د سرچینې څخه ځانګیړنه وټاکئ او یا د داخلولو د پای لپاره پای کیکاږئ"
+    "ps": "د ساده لیدنې لپاره د سرچینې څخه ځانګیړنه وټاکئ او یا د داخلولو د پای لپاره پای کیکاږئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "optional_view_title",
@@ -712,7 +1068,11 @@
     "fr": "Création facultative d'une nouvelle vue",
     "es": "Creación opcional de una vista",
     "fa": "ایجاد اختیاری یک نمای جدید",
-    "ps": "د نوې لیدنې اختیاري جوړونه"
+    "ps": "د نوې لیدنې اختیاري جوړونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_desc",
@@ -720,7 +1080,11 @@
     "fr": "Origine de la donnée et comment la récupérer",
     "es": "Origen de los datos y cómo puedo obtenerlos",
     "fa": "اصلیت اطلاعات و روش بازیابی آن",
-    "ps": "د ډیټا اصلیت او د بیا ترلاسه کولو څرنګوالئ"
+    "ps": "د ډیټا اصلیت او د بیا ترلاسه کولو څرنګوالئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_homepage_desc",
@@ -728,7 +1092,11 @@
     "fr": "Page d'accueil de la donnée",
     "es": "Página principal de los datos",
     "fa": "صفحه اصلی برای اطلاعات",
-    "ps": "د اطلاعاتو لپاره اصلي صفحه"
+    "ps": "د اطلاعاتو لپاره اصلي صفحه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_homepage_item_title",
@@ -736,7 +1104,11 @@
     "fr": "Page d'accueil (URL)",
     "es": "Página principal (URL)",
     "fa": "صفحه اصلی (URL)",
-    "ps": "اصلي صفحه (URL)"
+    "ps": "اصلي صفحه (URL)",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_homepage_title",
@@ -744,7 +1116,11 @@
     "fr": "Page d'accueil",
     "es": "Página principal",
     "fa": "صفحه اصلی",
-    "ps": "اصلي صفحه"
+    "ps": "اصلي صفحه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_source_is_full_request_title",
@@ -752,7 +1128,11 @@
     "fr": "L'URL contient une requête pour récupérer automatiquement la donnée",
     "es": "La URL contiene una consulta para recuperar automáticamente los datos",
     "fa": " دارایی یک درخواست جهت بازیابی اطلاعات به شکل خودکار میباشد URL",
-    "ps": " کې په اتومات ډول سره د ډیټا د بیا ترلاسه کولو لپاره غوښتنلیک شتون لری  URLپه"
+    "ps": " کې په اتومات ډول سره د ډیټا د بیا ترلاسه کولو لپاره غوښتنلیک شتون لری  URLپه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_sources_desc",
@@ -760,7 +1140,11 @@
     "fr": "Méthode de récupération de la donnée",
     "es": "Método para obtener los datos",
     "fa": "روش بازیابی اطلاعات",
-    "ps": "د ډیټا د بیا ترلاسه کولو میټوډ"
+    "ps": "د ډیټا د بیا ترلاسه کولو میټوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_sources_list",
@@ -768,7 +1152,11 @@
     "fr": "Liste des sources",
     "es": "Lista de recursos",
     "fa": "لست منابع",
-    "ps": "د سرچینو نوملړ"
+    "ps": "د سرچینو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_sources_title",
@@ -776,7 +1164,11 @@
     "fr": "Sources",
     "es": "Recursos en línea",
     "fa": "منابع",
-    "ps": "سرچینې"
+    "ps": "سرچینې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_source_title",
@@ -784,7 +1176,11 @@
     "fr": "Source",
     "es": "Recurso",
     "fa": "منبع",
-    "ps": "سرچینه"
+    "ps": "سرچینه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_source_url_title",
@@ -792,7 +1188,11 @@
     "fr": "URL",
     "es": "URL",
     "fa": "URL",
-    "ps": "URL"
+    "ps": "URL",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "origin_title",
@@ -800,7 +1200,11 @@
     "fr": "Origine",
     "es": "Información de distribución",
     "fa": "منبع",
-    "ps": "سرچینه"
+    "ps": "سرچینه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "other",
@@ -808,7 +1212,11 @@
     "fr": "Autre",
     "es": "Otros",
     "fa": "سایر",
-    "ps": "نور"
+    "ps": "نور",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "partial",
@@ -816,7 +1224,11 @@
     "fr": "Partiel",
     "es": "Parcial",
     "fa": "تا اندازه ای",
-    "ps": "تر یو حده"
+    "ps": "تر یو حده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "quarterly",
@@ -824,7 +1236,11 @@
     "fr": "La donnée est mise à  jour tous les trois mois",
     "es": "Los datos son actualizados cada tres meses",
     "fa": "اطلاعات هر سه ماه تجدید می شوند",
-    "ps": "ډیټا هرې درې اوونۍ وروسته نوې کیږي"
+    "ps": "ډیټا هرې درې اوونۍ وروسته نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "schema_desc",
@@ -832,7 +1248,11 @@
     "fr": "Editeur de métadonnées pour les sources de map-x.",
     "es": "Editor de los metadatos para los recursos de Map-x.",
     "fa": "ویرایشگر ابرداده برای منابع MAP-X",
-    "ps": "د map-x سرچینو لپاره د میټا دیټا ایډیټ کوونکی"
+    "ps": "د map-x سرچینو لپاره د میټا دیټا ایډیټ کوونکی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "schema_title",
@@ -840,7 +1260,11 @@
     "fr": "Métadonnées map-x",
     "es": "Metadatos Map-x",
     "fa": "ابرداده یی MAP-X",
-    "ps": "د map-x میټاډیټا"
+    "ps": "د map-x میټاډیټا",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "select_optional_view_attribute",
@@ -848,7 +1272,11 @@
     "fr": "Selectionnez un attribut",
     "es": "Seleccione un atributo",
     "fa": "ویژه گی را انتخاب نمایید",
-    "ps": "ځانګیړنه وتاکئ"
+    "ps": "ځانګیړنه وتاکئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_desc",
@@ -856,7 +1284,11 @@
     "fr": "Délimitation spatiale en latitude et longitude",
     "es": "Delimitación espacial en longitud y latitud",
     "fa": "جبعه محدود فضایی  اطلاعات که از عرض و طول جغرافیایی استفاده می کنند",
-    "ps": "د ډیټا فضایي محدوده بکسه د طول البلد او عرض البلد څخه په ګټه اخیسنتې سره"
+    "ps": "د ډیټا فضایي محدوده بکسه د طول البلد او عرض البلد څخه په ګټه اخیسنتې سره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_lat_max",
@@ -864,7 +1296,11 @@
     "fr": "Latitude max.",
     "es": "Latitud max.",
     "fa": "بیشترین. عرض جغرافیای ",
-    "ps": "تر ټولو لوی عرض البلد"
+    "ps": "تر ټولو لوی عرض البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_lat_min",
@@ -872,7 +1308,11 @@
     "fr": "Latitude min.",
     "es": "Latitud min.",
     "fa": "کمترین. عرض جغرافیایی",
-    "ps": "تر ټولو کوچونی عرض البلد"
+    "ps": "تر ټولو کوچونی عرض البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_lng_max",
@@ -880,7 +1320,11 @@
     "fr": "Longitude max.",
     "es": "Longitud max.",
     "fa": "بیشترین. طول جغرافیای ",
-    "ps": "تر ټولو لوی طول البلد"
+    "ps": "تر ټولو لوی طول البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_lng_min",
@@ -888,7 +1332,11 @@
     "fr": "Longitude min.",
     "es": "Longitud min.",
     "fa": "کمترین. طول جغرافیایی",
-    "ps": "تر ټولو کوچونی طول البلد"
+    "ps": "تر ټولو کوچونی طول البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_bbx_title",
@@ -896,7 +1344,11 @@
     "fr": "Délimitation spatiale",
     "es": "Delimitación espacial",
     "fa": "جبعه محدود",
-    "ps": "محدوده بکسه"
+    "ps": "محدوده بکسه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_desc",
@@ -904,7 +1356,11 @@
     "fr": "Description spatiale de la donnée avec délimitation spatiale et système de coordonnées (SRS)",
     "es": "Descripción espacial de los datos con la delimitación espacial y sistema de coordenadas (SRS)",
     "fa": "شرح اطلاعات که منبع فضایی استفاده می کنند: جبعه محدود، و سیستم منبع فضایی (SRS)",
-    "ps": "د ډیټا په اړه تفصیلات د فضایي سرچینو څخه په ګټه اخیستنه: محدود بکس او د فضایي سرچینو سیسټم (SRS)."
+    "ps": "د ډیټا په اړه تفصیلات د فضایي سرچینو څخه په ګټه اخیستنه: محدود بکس او د فضایي سرچینو سیسټم (SRS).",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_srs_code",
@@ -912,7 +1368,11 @@
     "fr": "Code du système de coordonnées",
     "es": "Código del sistema de coordenadas",
     "fa": "دستورالعمل SRS",
-    "ps": "د SRS کوډ"
+    "ps": "د SRS کوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_srs_desc",
@@ -920,7 +1380,11 @@
     "fr": "Description du système de coordonnées",
     "es": "Descripción del sistema de coordenadas",
     "fa": "شرح سیستم منبع فضایی",
-    "ps": "د فضایي سرچینو د سیسټم په اړه تفصیلات"
+    "ps": "د فضایي سرچینو د سیسټم په اړه تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_srs_desc_url",
@@ -928,7 +1392,11 @@
     "fr": "URL vers la définition du code du système de coordonnées",
     "es": "URL de la definición del código del sistema de coordenadas",
     "fa": " SRS برای تعریف دستورالعمل URL",
-    "ps": "د SRS د URL د دستورالعمل در تعریف لپاره"
+    "ps": "د SRS د URL د دستورالعمل در تعریف لپاره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_srs_title",
@@ -936,7 +1404,11 @@
     "fr": "Système de coordonnées",
     "es": "Sistema de coordenadas",
     "fa": "سیستم منبع فضایی",
-    "ps": "د فضایي سرچینو سیسټم"
+    "ps": "د فضایي سرچینو سیسټم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "spatial_title",
@@ -944,7 +1416,11 @@
     "fr": "Spatial",
     "es": "Espacial",
     "fa": "فضایی",
-    "ps": "فضایي"
+    "ps": "فضایي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "summary_attribute",
@@ -952,7 +1428,11 @@
     "fr": "Résumé",
     "es": "Resumen",
     "fa": "خلاصه",
-    "ps": "لنډیز"
+    "ps": "لنډیز",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_desc",
@@ -960,7 +1440,11 @@
     "fr": "Modalité et restriction d'accès à la donnée",
     "es": "Modalidad de restricción de acceso a los datos",
     "fa": "چگونگی محدودیت دسترسی به اطلاعات",
-    "ps": "ډیټا ته د لاسرسي څرنګوالئ او محدودیت"
+    "ps": "ډیټا ته د لاسرسي څرنګوالئ او محدودیت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_role_item_title",
@@ -968,7 +1452,11 @@
     "fr": "Rôle",
     "es": "Rol",
     "fa": "نقش",
-    "ps": "نقش"
+    "ps": "نقش",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_roles_read_title",
@@ -976,19 +1464,31 @@
     "fr": "Rôles autorisés à lire",
     "es": "Roles autorizados para leer",
     "fa": "نقش های مجاز برای خواندن",
-    "ps": " د لوستلو لپاره مجاز نقشونه"
+    "ps": " د لوستلو لپاره مجاز نقشونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_roles_admin_title",
     "en": "Roles allowed to manage",
     "fr": "Rôles autorisés à administrer",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_roles_get_title",
     "en": "Roles allowed to download",
-    "fr": "Rôles autorisés à télécharger"
+    "fr": "Rôles autorisés à télécharger",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_roles_list_title",
@@ -996,7 +1496,11 @@
     "fr": "Liste des rôles",
     "es": "Lista de roles",
     "fa": "لست نقش ها",
-    "ps": "د نقشونو نوملړ"
+    "ps": "د نقشونو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_roles_title",
@@ -1004,7 +1508,11 @@
     "fr": "Rôles",
     "es": "Roles",
     "fa": "نقش ها",
-    "ps": "قوانین"
+    "ps": "قوانین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "target_title",
@@ -1012,7 +1520,11 @@
     "fr": "Accès",
     "es": "Acceso",
     "fa": "دسترسی",
-    "ps": "لاسرسی"
+    "ps": "لاسرسی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_desc",
@@ -1020,7 +1532,11 @@
     "fr": "Description de la donnée au moyen de références temporelles : périodicité, date de publication, etc",
     "es": "Descripción de la base de datos utilizando referencias temporales: Periodicidad, creación, actualización y rango",
     "fa": "شرح مجموعه اطلاعات با استفاده منابع موقتی: پخش اولیه، تجدید و محدوده",
-    "ps": "د ډیټابیس په اړه تفصیلات د موقتې سرچینې څخه په ګټه اخیستنه: دوره، لمړنی نشر، تازه او محدوده"
+    "ps": "د ډیټابیس په اړه تفصیلات د موقتې سرچینې څخه په ګټه اخیستنه: دوره، لمړنی نشر، تازه او محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_issuance_desc",
@@ -1028,7 +1544,11 @@
     "fr": "Information sur l'émission de la donnée",
     "es": " Información sobre la emisión de los datos",
     "fa": "شرح انتشار اطلاعات",
-    "ps": "ا اطلاعاتو د خپرولو تفصیلات"
+    "ps": "ا اطلاعاتو د خپرولو تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_issuance_title",
@@ -1036,7 +1556,11 @@
     "fr": "Emission",
     "es": "Emisión",
     "fa": "صدور  ",
-    "ps": "خپرول"
+    "ps": "خپرول",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_periodicity",
@@ -1044,7 +1568,11 @@
     "fr": "Périodicité",
     "es": "Periodicidad",
     "fa": "دوره ایی",
-    "ps": "دوره اي"
+    "ps": "دوره اي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_periodicity_desc",
@@ -1052,7 +1580,11 @@
     "fr": "Fréquence de publication ou de mise à jour de la donnée",
     "es": "Frecuencia con la que los datos son publicados o actualizados",
     "fa": "دوره ای که در آن اطلاعات پخش یا تجدید می شود",
-    "ps": "د ډیټا د خپرولو او یا نوي کولو تکراریت"
+    "ps": "د ډیټا د خپرولو او یا نوي کولو تکراریت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_range_desc",
@@ -1060,7 +1592,11 @@
     "fr": "L'étendue temporelle de la donnée",
     "es": "El rango temporal de los datos",
     "fa": "محدوده موقتی اطلاعات",
-    "ps": "د ډیټا موقتي محدوده"
+    "ps": "د ډیټا موقتي محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_range_end",
@@ -1068,7 +1604,11 @@
     "fr": "Fin",
     "es": "Final",
     "fa": "ختم",
-    "ps": "پای"
+    "ps": "پای",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_range_start",
@@ -1076,7 +1616,11 @@
     "fr": "Début",
     "es": "Inicio",
     "fa": "شروع",
-    "ps": "پیل"
+    "ps": "پیل",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_range_timeless",
@@ -1084,7 +1628,11 @@
     "fr": "Il n'y a pas d'étendue temporelle pour la donnée",
     "es": "No hay rango de tiempo para los datos",
     "fa": "محدوده زمانی برای این اطلاعات موجود نمی باشد ",
-    "ps": "ددې ډیټا لپاره د وخت محدوده شتون نلري"
+    "ps": "ددې ډیټا لپاره د وخت محدوده شتون نلري",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_range_title",
@@ -1092,7 +1640,11 @@
     "fr": "Etendue",
     "es": "Rango",
     "fa": "محدوده",
-    "ps": "محدوده"
+    "ps": "محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_release_desc",
@@ -1100,7 +1652,11 @@
     "fr": "Date d'émission officielle",
     "es": "Fecha de la emision oficial",
     "fa": "تاریخ صدور رسمی ",
-    "ps": "د خپرولو رسمي نیټه"
+    "ps": "د خپرولو رسمي نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_release_title",
@@ -1108,7 +1664,11 @@
     "fr": "Date d'émission",
     "es": " Fecha de emisión",
     "fa": "تاریخ پخش ",
-    "ps": "د خپرولو نیټه"
+    "ps": "د خپرولو نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_title",
@@ -1116,7 +1676,11 @@
     "fr": "Temporel",
     "es": "Temporal",
     "fa": "موقتی",
-    "ps": "موقتي"
+    "ps": "موقتي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_update_desc",
@@ -1124,7 +1688,11 @@
     "fr": "Date de dernière mise à jour de la donnée",
     "es": "Fecha de la última actualización",
     "fa": "تاریخ آخرین تجدید",
-    "ps": "د وروستني نوي کولو نیټه"
+    "ps": "د وروستني نوي کولو نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "temporal_update_title",
@@ -1132,7 +1700,11 @@
     "fr": "Dernière mise à jour",
     "es": "Última actualización",
     "fa": "اخرین تجدید",
-    "ps": "وروستی نوی کول"
+    "ps": "وروستی نوی کول",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_desc",
@@ -1140,13 +1712,21 @@
     "fr": "Description de la donnée : titre, résumé et tags",
     "es": "Descripción de los datos: Título, resumen y etiquetas",
     "fa": "شرح متنی اطلاعات با استفاده عنوان، چکیده و علامت ها",
-    "ps": "د ډیټا متني تفصیلات له عنوان، لنډیز او نښانو څخه په ګتې اخیستنې سره"
+    "ps": "د ډیټا متني تفصیلات له عنوان، لنډیز او نښانو څخه په ګتې اخیستنې سره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_desc_notes",
     "en": "Additional notes",
     "fr": "Notes additionnelles",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_desc_abstract",
@@ -1154,7 +1734,11 @@
     "fr": "Résumé",
     "es": "Resumen",
     "fa": "چکیده",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_desc_title",
@@ -1162,7 +1746,11 @@
     "fr": "Titre",
     "es": "Título",
     "fa": "عنوان",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_keyword_desc",
@@ -1170,7 +1758,11 @@
     "fr": "Mots clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique.",
     "es": "Las palabras claves (o etiquetas) permiten a los usuarios encontrar los datos. Inserte términos utilizados por personas con un perfil técnico y no técnico.",
     "fa": "کلید واژه ها (یا علامت ها) کاربران را  برای کشف اطلاعات شان  کمک می کند. لطفاً اصطلاحات را که  توسط کاربران تخصصی و غیر تخصصی مورد استفاده قرار میگیرد٬ را اضافه نمایید.",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_keyword_item_title",
@@ -1178,7 +1770,11 @@
     "fr": "Mot clé",
     "es": "Palabra clave",
     "fa": "کلید واژه",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_keywords_title",
@@ -1186,7 +1782,11 @@
     "fr": "Liste de mots clés",
     "es": "Lista de palabras claves",
     "fa": "لست کلید واژه ها",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_keyword_title",
@@ -1194,7 +1794,11 @@
     "fr": "Mots clés",
     "es": "Palabras claves",
     "fa": "کلید واژه ها",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "textual_title",
@@ -1202,7 +1806,11 @@
     "fr": "Texte",
     "es": "Texto",
     "fa": "متنی",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "unknown",
@@ -1210,7 +1818,11 @@
     "fr": "La donnée n'a pas de fréquence de mise à jour connue",
     "es": "La frecuencia de actualización de los datos no se conoce",
     "fa": "فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "weekly",
@@ -1218,7 +1830,11 @@
     "fr": "La donnée est mise à  jour chaque semaine",
     "es": "Los datos son actualizados cada semana",
     "fa": "اطلاعات به صورت هفته وار تجدید می شوند",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "yes",
@@ -1226,131 +1842,207 @@
     "fr": "Oui",
     "es": "Si",
     "fa": "بلی ",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_display_source_title",
     "en": "Metadata of the source",
     "fr": "Métadonnées complètes de la source",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_display_view_title",
     "en": "Summary of the view metadata",
     "fr": "Résumé des métadonnées de la vue",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_last_editor_id",
     "en": "Editor id",
     "fr": "Id de l'éditeur",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_all_editor_id",
     "en": "Id of all editors",
     "fr": "Id de tous les éditeurs",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_number_changes",
     "en": "Number of changes",
     "fr": "Nombre de changements",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_view_title",
     "en": "View title",
     "fr": "Titre de la vue",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_view_id",
     "en": "View id",
     "fr": "Id de la vue",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_date_modified",
     "en": "Modification date",
     "fr": "Date de modification",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_date_created",
     "en": "Creation date",
     "fr": "Date de création",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_target_roles",
     "en": "Target roles",
     "fr": "Rôles cibles",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_view_country",
     "en": "Country of the view",
     "fr": "Pays de la vue",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_view_countries",
     "en": "Secondary countries of the view",
     "fr": "Pays secondaires de la vue",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_id",
     "en": "Source id",
     "fr": "id de la source",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_homepage",
     "en": "Source homepage",
     "fr": "Page d'accueil de la source",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_integrity_score",
     "en": "Integrity score",
     "fr": "Score d'intégrité",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_time_range",
     "en": "Temporal range",
     "fr": "Étendue temporelle",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_time_range_min",
     "en": "From",
     "fr": "De",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   },
   {
     "id": "meta_source_time_range_max",
     "en": "To",
     "fr": "A",
     "fa": "",
-    "ps": ""
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
   }
 ]
