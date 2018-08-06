@@ -855,13 +855,13 @@ export function setSourcesFromViews(o){
           }else{
           return fetch( keyNet )
             .then( r => r.json())
-            .then( d => {
+            .then( view => {
               nNetwork ++;
               updateProgress();
               view._edit = editable;
-              return d;
+              return view;
             })
-            .then( v => mx.data.views.setItem(keyStore,v));
+            .then( view => mx.data.views.setItem(keyStore,view));
           }
         });
     }
