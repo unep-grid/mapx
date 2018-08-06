@@ -844,11 +844,13 @@ export function setSourcesFromViews(o){
     function getViewObject(v){
       var keyStore = v.id + "@" + v.pid;
       var keyNet = apiUrlViews + v.id + '?' + v.pid;
+      var editable = v._edit;
       return mx.data.views.getItem(keyStore)
         .then(view => {
           if(view){
             nCache ++;
             updateProgress();
+            view._edit = editable;
             return Promise.resolve(view);
           }else{
           return fetch( keyNet )
@@ -856,6 +858,7 @@ export function setSourcesFromViews(o){
             .then( d => {
               nNetwork ++;
               updateProgress();
+              view._edit = editable;
               return d;
             })
             .then( v => mx.data.views.setItem(keyStore,v));
