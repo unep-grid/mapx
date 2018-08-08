@@ -1,4 +1,8 @@
 ## MapX : change log
+- 1.5.12
+   - Solved an issue in view button when a zoom was applied in the browser: the nested circle was not well aligned producing a weird effect. Using SVG, the problem as been solved. 
+   - Update dependencies, see `app/package.json`
+   - Changed the service worker generator to `workbox-webpack-plugin` 
 - 1.5.11
    - Solved #276
    - Solved #274
