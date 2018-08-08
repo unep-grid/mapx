@@ -4,13 +4,46 @@ const common = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const ClosureCompilerPlugin = require('webpack-closure-compiler');
+//const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+const {GenerateSW} = require('workbox-webpack-plugin');
+const ClosurePlugin = require('closure-webpack-plugin');
 
 module.exports = merge(common, {
   devtool : false,
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new GenerateSW({
+      swDest : 'service-worker.js',
+      importWorkboxFrom : 'local',
+      runtimeCaching :  [
+        {
+          urlPattern: /^https:\/\/api\.mapbox\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/.*wms\?bbox=/,
+          handler: 'cacheFirst'
+        },
+        {
+          urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
+          handler: 'cacheFirst'
+        }
+      ]
+    }),
     // clean www before building
     new CleanWebpackPlugin(
       [
@@ -38,17 +71,10 @@ module.exports = merge(common, {
         }
       }
     }),
-    //new webpack.optimize.ModuleConcatenationPlugin(),
+    /*    new ClosurePlugin({mode: 'STANDARD'}, {*/
+    //}),
+
     new FaviconsWebpackPlugin('./src/png/map-x-logo.png')
-    /*    new ClosureCompilerPlugin({*/
-    //compiler: {
-    ////jar: 'path/to/your/custom/compiler.jar', //optional
-    //language_in: 'ECMASCRIPT6',
-    //language_out: 'ECMASCRIPT5',
-    //compilation_level: 'SIMPLE'
-    //},
-    //concurrency: 3,
-    /*})*/
   ]
 
 });

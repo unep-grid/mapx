@@ -3,7 +3,6 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
 const webpack = require( 'webpack');
-const SWPrecacheWebpackPlugin = require("sw-precache-webpack-plugin");
 
 module.exports = {
   node : {
@@ -13,42 +12,7 @@ module.exports = {
     'app':'./src/js/index.js'
   },
   plugins: [
-    // set caching strategy
-    new SWPrecacheWebpackPlugin({
-      cacheId: 'mapx',
-      maximumFileSizeToCacheInBytes: 10485760,
-      filename: 'service-worker.js',
-      minify: true,
-      runtimeCaching: [
-        {
-          urlPattern: /^https:\/\/api\.mapbox\.com\//,
-          handler: 'cacheFirst'
-        },
-        {
-          urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
-          handler: 'cacheFirst'
-        },
-        {
-          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
-          handler: 'cacheFirst'
-        },
-        {
-          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
-          handler: 'cacheFirst'
-        },
-       {
-          urlPattern: /^https:\/\/.*wms\?bbox=/,
-          handler: 'cacheFirst'
-        },
-       {
-          urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
-          handler: 'cacheFirst'
-        }
-      ]
-    }),
-
     new webpack.optimize.CommonsChunkPlugin({
-      //name: 'common' // Specify the common bundle's name.
       name: ['runtime']
     }),
     new HtmlWebpackPlugin({
@@ -60,7 +24,7 @@ module.exports = {
     })
   ],
   module: {
-    noParse: /(mapbox-gl)\.js$/,
+    //noParse: /(mapbox-gl)\.js$/,
     rules: [
       { test: /.css$/, 
         use : ['style-loader','css-loader','icon-font-loader']
@@ -74,7 +38,8 @@ module.exports = {
       },
       { 
         test: /worker\.js$/, 
-        use: { loader: 'worker-loader' }},
+        use: { loader: 'worker-loader' }
+      },
       { 
         test: /\.js$/, 
         exclude: /node_modules/,
@@ -93,7 +58,7 @@ module.exports = {
           }
         }
       },
-      { test: /\.dot$/, use: 'dot-loader' }, 
+      { test: /\.dot$/, loader: 'dot-loader',options : {} }, 
       {
         test: /\.coffee$/,
         use: 'coffee-loader'      //used mainly to extend ContentTools
