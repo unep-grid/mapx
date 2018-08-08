@@ -58,7 +58,7 @@ observeEvent(input$txtProjectConfirmName,{
   hasError <- length(errors) > 0
 
   if(!hasError){
-  warning['warning_delete_project'] <- TRUE  
+    warning['warning_delete_project'] <- TRUE  
   }
 
 
@@ -99,20 +99,19 @@ observeEvent(input$btnDeleteProject,{
       removeCloseButton = TRUE
       )
 
-
     sourcesToRemove <- mxDbGetQuery("Select id from mx_sources where project = '" + project + "'")$id
+    viewsProject <- mxDbGetQuery("Select distinct id from mx_views where project = '" + project + "'")$id
+    
     viewsToRemove <- c()
-
     #
     # Remove remaining views
     #
 
-    for(src in sourcesToRemove){
+    for( src in sourcesToRemove ){
       viewsToRemove <-  c(mxDbGetViewsIdBySourceId(src)$id,viewsToRemove)
     }
 
-    viewsProject <- mxDbGetQuery("Select distinct id from mx_views where project = '" + project + "'")$id
-    viewToRemove <- c(viewsToRemove,viewsProject)
+    viewsToRemove <- c(viewsToRemove,viewsProject)
     viewsToRemove <- unique(viewsToRemove)
 
     reactData$projectDeleteViews <- viewsToRemove
