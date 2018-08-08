@@ -6,6 +6,7 @@ import * as mx from './mx_init.js';
 
 export function removeServiceWorker(){
   if(navigator.serviceWorker){
+    caches.keys().then(k => k.forEach(i=>caches.delete(i)))
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for(let registration of registrations) {
         registration.unregister();

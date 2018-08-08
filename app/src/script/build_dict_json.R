@@ -8,7 +8,7 @@ pathDest <- "src/built"
 
 
 r = function(path){
-  fromJSON(path)
+  jsonlite::fromJSON(path)
 }
 
 

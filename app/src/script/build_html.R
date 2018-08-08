@@ -1,5 +1,6 @@
 
 library(shiny)
+library(jsonlite)
 library(magrittr)
 source("src/helper/misc.R")
 source("settings/settings-global.R")
