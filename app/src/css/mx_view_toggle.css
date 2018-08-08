@@ -195,25 +195,27 @@
   height: 30px;
   min-width: 30px;
   min-height: 30px;
+  cursor:pointer;
 }
+
 .mx-view-tgl-btn .mx-view-tgl-btn-out {
-  r:15;
   fill:red;
-  cx: 15;
-  cy: 15;
+  transition: fill 2s ease-in-out;
 }
+
 .mx-view-tgl-btn .mx-view-tgl-btn-in {
-  r:13;
   fill:white;
-  cx: 15;
-  cy: 15;
-  transition:r 0.1s ease-in;
+  transition: transform 0.3s ease-in-out;
+  transform-origin: 50% 50%;
 }
-.mx-view-tgl-btn:hover .mx-view-tgl-btn-in {
-  r:10;
+
+.mx-view-tgl-btn:hover .mx-view-tgl-btn-in,
+.mx-view-tgl-input ~ label:hover .mx-view-tgl-btn .mx-view-tgl-btn-in {
+  transform: scale(0.9);
 }
+
 .mx-view-tgl-input:checked ~ label .mx-view-tgl-btn .mx-view-tgl-btn-in {
-  r:8;
+  transform: scale(0.8);
 }
 
 /*.mx-view-tgl-btn-container {*/

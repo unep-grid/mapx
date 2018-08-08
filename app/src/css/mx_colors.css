@@ -455,9 +455,6 @@ color:var(--mx_ui_text);
 /**
  * View toggle button
  */
-.mx .mx-view-tgl-btn-out {
-  transition: background-color 1s;
-}
 
 .mx .mx-view-tgl-btn-in {
   fill: var(--mx_ui_background);

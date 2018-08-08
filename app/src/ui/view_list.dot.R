@@ -33,9 +33,9 @@ divHeader <- tagList(
     # Switch button tgl
     #
     HTML("
-      <svg class='mx-view-tgl-btn'>
-       <circle class='mx-view-tgl-btn-out'></circle>
-       <circle class='mx-view-tgl-btn-in'></circle>
+      <svg class='mx-view-tgl-btn' viewBox='0 0 30 30' width='30px' height='30px' preserveAspectRatio='xMinYMin meet'>
+       <circle class='mx-view-tgl-btn-out' r=15 cx=15 cy=15></circle>
+       <circle class='mx-view-tgl-btn-in' r=13 cx=15 cy=15></circle>
       </svg>
       "),
     #
