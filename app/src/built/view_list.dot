@@ -4,11 +4,12 @@
 <li id="{{=view.id}}" data-view_id="{{=view.id}}" data-view_date_modified="{{=view.date_modified}}" data-view_title="{{=view.data.title[lang]}}" class="mx-view-item mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable">
   <input data-view_action_key="btn_toggle_view" data-view_action_target="{{=view.id}}" id="check_view_enable_{{=view.id}}" class="mx-view-tgl-input" type="checkbox"/>
   <label class="mx-view-tgl-content" for="check_view_enable_{{=view.id}}">
-    <div class="btn-circle btn-circle-medium mx-view-tgl-btn-container">
-      <div class="mx-view-tgl-btn-content">
-        <div class="mx-view-tgl-btn  "></div>
-      </div>
-    </div>
+    
+      <svg class='mx-view-tgl-btn'>
+       <circle class='mx-view-tgl-btn-out'></circle>
+       <circle class='mx-view-tgl-btn-in'></circle>
+      </svg>
+      
     <span class="mx-view-tgl-title">
       {{?view.data.title}}
       {{=view.data.title[lang]}}

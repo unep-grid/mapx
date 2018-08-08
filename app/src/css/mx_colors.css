@@ -455,47 +455,43 @@ color:var(--mx_ui_text);
 /**
  * View toggle button
  */
-.mx .mx-view-tgl-btn-content {
-  background: var(--mx_ui_text_faded);
+.mx .mx-view-tgl-btn-out {
   transition: background-color 1s;
-  border:1px solid var(--mx_ui_border);
 }
 
-.mx .mx-view-tgl-btn {
-  background-color: var(--mx_ui_background);
-  border-color: 1px solid var(--mx_ui_border);
+.mx .mx-view-tgl-btn-in {
+  fill: var(--mx_ui_background);
 }
 
-
-.mx-view-item-vt .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(97, 100%, 64%, 1);
+.mx-view-item-vt .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(97, 100%, 64%, 1);
 }
-.mx-view-item-gj .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(30, 100%, 64%, 1);
+.mx-view-item-gj .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(30, 100%, 64%, 1);
 }
-.mx-view-item-sm .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(216, 100%, 64%, 1);
+.mx-view-item-sm .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(216, 100%, 64%, 1);
 }
-.mx-view-item-rt .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(307, 100%, 64%, 1);
+.mx-view-item-rt .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(307, 100%, 64%, 1);
 }
-.mx-view-item-cu .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(30, 100%, 64%, 1);
+.mx-view-item-cu .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(30, 100%, 64%, 1);
 }
-.mx-view-item-vt .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(97, 100%, 28%, 1);
+.mx-view-item-vt .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(97, 100%, 28%, 1);
 }
-.mx-view-item-sm .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(216, 100%, 28%, 1);
+.mx-view-item-sm .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(216, 100%, 28%, 1);
 }
-.mx-view-item-rt .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(307, 100%, 28%, 1);
+.mx-view-item-rt .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(307, 100%, 28%, 1);
 }
-.mx-view-item-cu .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(30, 100%, 28%, 1);
+.mx-view-item-cu .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(30, 100%, 28%, 1);
 }
-.mx-view-item-gj .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn-content {
-  background-color: hsla(30, 100%, 28%, 1);
+.mx-view-item-gj .mx-view-tgl-input:not(checked) ~ .mx-view-tgl-content .mx-view-tgl-btn .mx-view-tgl-btn-out {
+  fill: hsla(30, 100%, 28%, 1);
 }
 
 .mx-view-item {

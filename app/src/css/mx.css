@@ -565,19 +565,6 @@ blockquote {
     opacity: 1;
 }
 
-/*.mx-controls-view .mx-controls-ul li {*/
-  /*width: 25px;*/
-  /*height: 25px;*/
-  /*margin-right: 0px;*/
-/*}*/
-
-/*.mx-controls-ul li div {*/
-  /*position: absolute;*/
-  /*top: 50%;*/
-  /*left: 50%;*/
-  /*transform: translate(-50%, -50%);*/
-/*}*/
-
 .mx-pointer {
   cursor: pointer;
 }

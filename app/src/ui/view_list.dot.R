@@ -32,19 +32,12 @@ divHeader <- tagList(
     #
     # Switch button tgl
     #
-    tags$div(
-      class =  "btn-circle btn-circle-medium",
-  #    tags$div(
-        #class = "fa"
-        #)
-      class = "mx-view-tgl-btn-container",
-      tags$div(
-        class = "mx-view-tgl-btn-content",
-        tags$div(
-          class="mx-view-tgl-btn  "
-          )
-        )
-      ),
+    HTML("
+      <svg class='mx-view-tgl-btn'>
+       <circle class='mx-view-tgl-btn-out'></circle>
+       <circle class='mx-view-tgl-btn-in'></circle>
+      </svg>
+      "),
     #
     # View Title
     #
