@@ -1837,8 +1837,8 @@
   },
   {
     "id": "login_first_before_action",
-    "en": "You must authenticate yourself before doing this action",
-    "fr": "Vous devez vous identifier avant de faire cette action",
+    "en": "Please enter your email address to receive your login details and access your sandbox.",
+    "fr": "Entrez votre adresse email pour recevoir vos identifiants et accéder à votre espace privé.",
     "es": "",
     "ru": "",
     "zh": "",
