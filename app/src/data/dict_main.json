@@ -4885,8 +4885,8 @@
   },
   {
     "id": "view_validated",
-    "en": "View validated",
-    "fr": "Vue validée",
+    "en": "This view is publicly available",
+    "fr": "Cette vue est visible par tous les utilisateurs",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4897,8 +4897,8 @@
   },
   {
     "id": "view_editable",
-    "en": "View editable",
-    "fr": "Vue éditable",
+    "en": "You have editor rights for this view: click on the pen icon to access the edition mode",
+    "fr": "Vous disposez de droits d'édition pour cette vue: cliquez sur crayon pour accéder au mode édition",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4909,8 +4909,8 @@
   },
   {
     "id": "view_locked",
-    "en": "View locked",
-    "fr": "Vue verouillée",
+    "en": "You do not have editor rights for this view",
+    "fr": "Vous ne disposez pas de droits d'édition pour cette vue",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4922,7 +4922,7 @@
   {
     "id": "txt_too_short_min_5",
     "en": "Text too short, minimum 5 characters",
-    "fr": "Text trop court, minimum 5 caractères",
+    "fr": "Texte trop court, 5 caractères minimum",
     "es": "",
     "ru": "",
     "zh": "",
