@@ -4981,8 +4981,8 @@
   },
   {
     "id": "project_request_membership_message_sent",
-    "en": "Request sent.",
-    "fr": "Demande envoyée.",
+    "en": "Request sent – check your inbox for a validation link to access your sandbox!",
+    "fr": "Demande envoyée - vérifiez vos emails et cliquez sur le lien de confirmation pour accéder à votre espace privé!",
     "es": "",
     "ru": "",
     "zh": "",
