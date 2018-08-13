@@ -241,7 +241,8 @@ observe({
                 id = userData$id,
                 whereUserRoleIs = "publisher",
                 language = language,
-                asNamedList=TRUE
+                asNamedList = TRUE,
+                idsAdditionalProjects = .get(viewData,c("data","projects"))  
                 )
 
               #
