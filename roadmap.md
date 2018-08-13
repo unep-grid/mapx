@@ -1,4 +1,4 @@
-<b>List of future developments:<\b>
+<b>List of future developments:</b>
 
 2018
 
