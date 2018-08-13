@@ -52,7 +52,7 @@ export function sortable(o) {
     }
   };
 
-  o.elRoot.addEventListener('mousedown', o.listener.mousedown, false);
+  o.elRoot.addEventListener('pointerdown', o.listener.mousedown, false);
 
 
   /**
@@ -166,9 +166,9 @@ export function draggable(o) {
     var x = o.x + newX - o.x_to;
     var y = o.y + newY - o.y_to;
 
-    if( x >= xMax || x + o.rect.width >= xMax ) x = xMax - o.rect.width;
+    if( x + o.rectHandle.width >= xMax ) x = xMax - o.rectHandle.width ;
     if( x <= xMin ) x = xMin;
-    if( y >= yMax || y + o.rect.height >= yMax  ) y = yMax - o.rect.height;
+    if( y + o.rectHandle.height >= yMax  ) y = yMax - o.rectHandle.height;
     if( y <= yMin ) y = yMin;
     return {
       left: x,
@@ -210,8 +210,8 @@ export function draggable(o) {
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    window.removeEventListener('mousemove', o.listener.mousemove, false);
-    window.removeEventListener('mouseup', o.listener.mouseup, false);
+    window.removeEventListener('pointermove', o.listener.mousemove, false);
+    window.removeEventListener('pointerup', o.listener.mouseup, false);
 
     o.el.classList.remove(o.classDragged);
 
@@ -243,6 +243,7 @@ export function draggable(o) {
       o.sumScroll =  sumScrollY(o.el) ;
 
       o.rect = o.el.getBoundingClientRect();
+      o.rectHandle = o.elHandle.getBoundingClientRect();
       o.x = o.el.offsetLeft;
       o.y = o.el.offsetTop;
       o.x_to = event.clientX;
@@ -264,8 +265,8 @@ export function draggable(o) {
 
       o.setPosElement(o.el, event.clientX, event.clientY);
 
-      window.addEventListener('mousemove', o.listener.mousemove, false);
-      window.addEventListener('mouseup', o.listener.mouseup, false);
+      window.addEventListener('pointermove', o.listener.mousemove, false);
+      window.addEventListener('pointerup', o.listener.mouseup, false);
 
       if (o.onDragStart instanceof Function) o.onDragStart(o, event);
 
@@ -273,7 +274,7 @@ export function draggable(o) {
   };
 
   if (!o.event) {
-    o.elHandle.addEventListener('mousedown', o.listener.mousedown, false);
+    o.elHandle.addEventListener('pointerdown', o.listener.mousedown, false);
   } else {
     o.listener.mousedown(event);
   }

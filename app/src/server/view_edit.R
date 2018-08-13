@@ -611,6 +611,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
+                minWidth="785px",
                 title=sprintf("Edit dashboard %s",viewTitle),
                 addBackground=FALSE,
                 content=tagList(
@@ -618,10 +619,8 @@ observe({
                   jedOutput(id="dashboardEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language),
-                minHeight = "80%"
+                textCloseButton=d("btn_close",language)
                 )
-
             },
             "btn_opt_edit_story"={
  

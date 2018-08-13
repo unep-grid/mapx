@@ -6,7 +6,7 @@ import * as mx from './mx_init.js';
 
 export function removeServiceWorker(){
   if(navigator.serviceWorker){
-    caches.keys().then(k => k.forEach(i=>caches.delete(i)))
+    caches.keys().then(k => k.forEach(i=>caches.delete(i)));
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for(let registration of registrations) {
         registration.unregister();
@@ -1450,6 +1450,12 @@ export function modal(o){
     if(o.styleString){
       modal.style = o.styleString;
     }
+    /*if(o.minHeight){*/
+      //modal.style.minHeight = o.minHeight;
+    /*}*/
+    if(o.minWidth){
+      modal.style.minWidth = o.minWidth;
+    }
 
     var top = document.createElement("div");
     var title = document.createElement("div");
@@ -1459,6 +1465,7 @@ export function modal(o){
     var footer = document.createElement("div");
     var buttons = document.createElement("div");
     var dialog = document.createElement("div");
+    var btnMinimize = document.createElement("button");
     var validation = document.createElement("div");
 
     function close(e){
@@ -1476,18 +1483,36 @@ export function modal(o){
     modal.appendChild(validation);
     modal.id=id;
 
+    btnMinimize.className="mx-pointer mx-modal-btn-minimize fa fa-minus-square-o";
     top.classList.add("mx-drag-handle");
     top.classList.add("mx-modal-top");
-
     top.appendChild(title);
+    top.appendChild(btnMinimize);
+
+
+    btnMinimize.onclick = function(){
+      var isOpen = this.classList.contains("fa-minus-square-o");
+      
+      if(isOpen){
+        this.classList.remove("fa-minus-square-o");
+        this.classList.add("fa-plus-square-o");
+        body.classList.add("mx-hide");
+      }else{
+        this.classList.remove("fa-plus-square-o");
+        this.classList.add("fa-minus-square-o");
+        body.classList.remove("mx-hide");
+      }
+    };
+
 
     if(top.children.length>0){
-      forEachEl({
-        els:top.children,
-        callback:function(el){
-          el.classList.add("mx-modal-drag-enable");
-        }});
+   /*   forEachEl({*/
+        //els:top.children,
+        //callback:function(el){
+          //el.classList.add("mx-modal-drag-enable");
+        /*}});*/
     }
+    title.classList.add("mx-modal-drag-enable");
     title.classList.add("mx-modal-title");
     head.classList.add("mx-modal-head");
     validation.classList.add("mx-modal-validation");

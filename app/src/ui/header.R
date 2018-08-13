@@ -27,12 +27,14 @@ tagList(
   tags$meta(
     name="google",
     content="notranslate"
+    ),
+  tags$meta(
+    #
+    # Chache handled using service worker
+    #
+    `http-equiv`="Cache-control",
+    content="no-cache"
     )
-#  tags$meta(
-    #`http-equiv`="Cache-control",
-    #content="private"
-    #),
-
  # tags$meta(
     #name="robots",
     #content="noindex"
