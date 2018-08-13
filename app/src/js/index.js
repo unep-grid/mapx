@@ -13,6 +13,7 @@ import 'selectize/dist/css/selectize.css';
 import 'selectize/dist/css/selectize.bootstrap3.css';
 import 'hint.css';
 import '../css/mx.css';
+import '../css/mx_codemirror.css';
 import '../css/mx_flash.css';
 import '../css/mx_content_tools.css';
 import '../css/mx_loader.css';

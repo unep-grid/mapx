@@ -4,11 +4,9 @@ const common = require('./webpack.common.js');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-//const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
-const ClosurePlugin = require('closure-webpack-plugin');
 
 module.exports = merge(common, {
   devtool : false,
@@ -71,9 +69,6 @@ module.exports = merge(common, {
         }
       }
     }),
-    /*    new ClosurePlugin({mode: 'STANDARD'}, {*/
-    //}),
-
     new FaviconsWebpackPlugin('./src/png/map-x-logo.png')
   ]
 
