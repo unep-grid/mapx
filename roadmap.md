@@ -12,11 +12,11 @@
 - Possibility to customize, for each MapX project, the color of interface elements (such as text, borders, background, shadows) and the color of map elements (such as background, country shadow, text, text outline, water layer, roads layer, buildings layer, boundaries layer, disputed boundaries layer)
 
 <b>Q4: Alignment of MapX with international data and metadata standards</b>
-1) Bridge between MapX and GeoServer for automatic publication of MapX datasets in GeoServer
-2) Support of SLD files in MapX
-3) Export of MapX styles to SLD
-4) Ability to export MapX metadata to ISO19115
-5) Ability to import ISO19115 metadata into MapX
+- Bridge between MapX and GeoServer for automatic publication of MapX datasets in GeoServer
+- Support of SLD files in MapX
+- Export of MapX styles to SLD
+- Ability to export MapX metadata to ISO19115
+- Ability to import ISO19115 metadata into MapX
 
 <b>Q4: New functions</b>
 - A tool for monitoring user interaction with the platform (e.g., number of hits, user requests, resource consumption client/server side, views visited and average time of visit, etc.) will be implemented in MapX
