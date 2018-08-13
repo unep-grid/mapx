@@ -624,7 +624,7 @@ export function reset(o){
   * apply remove method
   */
 
-  cleanRemoveModules(views);
+  mx.helpers.cleanRemoveModules(views);
 
   /**
   * Remove list
@@ -638,7 +638,7 @@ export function reset(o){
 /**
 * Clean stored modules : dashboard, custom view, etc.
 */
-function cleanRemoveModules(view){
+export function cleanRemoveModules(view){
 
   view = typeof view === "string" ? mx.helpers.getViews({id:'map_main',idView:view}) : view;
   view = view instanceof Array ? view : [view];
@@ -1271,6 +1271,8 @@ export function path(obj, path, def){
 }
 
 
+let vStore = [];
+
 /**
  *  View controler : evalutate view state and enable/disable it depending on ui state
  */
@@ -1296,6 +1298,11 @@ export function viewControler(o){
       prefix:"MX-",
       base : true
     });
+    
+    vVisible = mx.helpers.getArrayStat({
+      arr : vStore.concat(vVisible),
+      stat : 'distinct'
+    });
 
     vToRemove = mx.helpers.arrayDiff(vVisible,vChecked);
 
@@ -1305,6 +1312,7 @@ export function viewControler(o){
      * View to add
      */
     vToAdd.forEach(function(v){
+      vStore.push(v);
       view = mx.helpers.getViews({
         id:idMap,
         idView:v
@@ -1314,9 +1322,6 @@ export function viewControler(o){
         viewData : view,
         idViewsList : idViewsList
       });
-
-      //view._setFilter();
-
       mx.helpers.makeDashboard({ 
         view: view, 
         idMap: idMap
@@ -1327,13 +1332,14 @@ export function viewControler(o){
      * View to remove
      */
     vToRemove.forEach(function(v){
+      vStore.splice(vStore.indexOf(v,1));
 
       mx.helpers.removeLayersByPrefix({
         id : idMap,
         prefix : v
       });
 
-      cleanRemoveModules(v);
+      mx.helpers.cleanRemoveModules(v);
     });
 
     updateViewOrder(o);
@@ -1603,7 +1609,6 @@ export function sortViewsListBy(o){
   /*
   * Update ui
   */
-  //if( elBtn ) debugger;
   if( elBtn && toggle ){
     if(isAsc){
      dir = "asc";
@@ -2049,7 +2054,7 @@ export function removeView(o){
     data.removeItem( o.idView );
   }
 
-  cleanRemoveModules(view);
+  mx.helpers.cleanRemoveModules(view);
 
   m.views = views.filter(function(x){
     return x.id != o.idView ; 
