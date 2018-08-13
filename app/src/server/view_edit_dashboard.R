@@ -73,6 +73,16 @@ observeEvent(input$dashboardEdit_init,{
             default = titles,
             language = language
             ),
+          `modules` = list(
+            title = t("view_dashboard_txt_which_module"),
+            description = t("view_dashboard_txt_desc_module"),
+            type = "array",
+            uniqueItems = TRUE,
+            items = list(
+              type = "string",
+              enum = list("highcharts","d3","d3-geo","topojson")
+              )
+            ),
           widgets = list(
             type = "array",
             format = "confirmDelete",
