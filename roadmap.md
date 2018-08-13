@@ -1,6 +1,6 @@
 ## <b>List of future developments:</b>
 
-### <b>2018</b>
+### 2018<
 
 <b>Q3-Q4: MapX API</b>
 - Consolidation of the server-side API
