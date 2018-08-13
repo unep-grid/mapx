@@ -1,4 +1,4 @@
-List of future developments:
+** List of future developments:**
 
 2018
 
