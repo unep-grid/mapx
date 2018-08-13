@@ -1,6 +1,6 @@
-## <b>List of future developments:</b>
+## List of future developments:
 
-### 2018<
+### 2018
 
 <b>Q3-Q4: MapX API</b>
 - Consolidation of the server-side API
@@ -30,7 +30,7 @@
 - Multiple layer query will be extended to WMS views to allow users to visualize a subset of overlapping information based on several vector or WMS layers
 - User experience will be improved. This includes simplifying the access to existing functionalities and reducing friction in the data upload process. This will prevent users from publishing data with incomplete metadata or with low integrity
 
-### <b>2019</b>
+### 2019
 
 <b>Q1: Filtering functions</b>
 - Filtering functions will be implemented for users to set their own search criteria for viewing and downloading data sets. This will be made through the use of SQL queries
