@@ -100,8 +100,8 @@
           .then(function(){
 
             that.codemirror_container = that.input;
-            that.codemirror_container.style.width = '100%';
-            that.codemirror_container.style.minHeight = '80vh';
+            //that.codemirror_container.style.width = '100%';
+            //that.codemirror_container.style.minHeight = '80vh';
             that.codemirror_container.style.position = 'relative';
             //that.input.parentNode.insertBefore(that.codemirror_container,that.input);
             //that.input.style.display = 'none';
