@@ -1621,8 +1621,8 @@
   },
   {
     "id": "fold_views_class",
-    "en": "Filter views by classes",
-    "fr": "Filtrer les vues par classe",
+    "en": "Filter views by theme",
+    "fr": "Filtrer les vues par thème",
     "es": "",
     "ru": "",
     "zh": "",
@@ -3529,8 +3529,8 @@
   },
   {
     "id": "view_classes",
-    "en": "Classes",
-    "fr": "Classes",
+    "en": "Theme",
+    "fr": "Thème",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4970,7 +4970,7 @@
   {
     "id": "txt_too_short_min_5",
     "en": "Text too short, minimum 5 characters",
-    "fr": "Text trop court, minimum 5 charactères",
+    "fr": "Text trop court, 5 caractères minimum",
     "es": "",
     "ru": "",
     "zh": "",
