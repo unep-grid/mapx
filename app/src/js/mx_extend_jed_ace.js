@@ -83,6 +83,7 @@
         return(out);
       }
 
+
       
       if( that.options.hidden ){
         that.theme.afterInputReady(that.input);
@@ -94,6 +95,7 @@
             return  Promise.all([
               getMode(mode),
               System.import('brace/theme/github'),
+              System.import('brace/ext/searchbox'),
               System.import('js-beautify')
             ]);
           })

@@ -36,3 +36,6 @@
   left: auto;
   bottom: auto;
 }
+.selectize-dropdown {
+  position: unset;
+}

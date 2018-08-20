@@ -536,7 +536,7 @@ function contentToolsImageUploader(dialog) {
       form.append("project",h.path(mx,"settings.project"));
 
       mx.helpers.sendData({
-        url : mx.settings.apiUrlUploadImage,
+        url : mx.helpers.getApiUrl('uploadImage'),
         data : form,
         onProgress : function(progress){
           dialog.progress( progress * 100 );
@@ -755,24 +755,16 @@ function checkMissingView(o){
       /**
        * Fetch missing view assnychrounously
        */
+
       if( viewsToAdd.length == 0 ){
         resolve(o);
       }else{
-        var viewsAdded = [];
-        var vL = viewsToAdd.length ;
 
-        viewsToAdd.forEach(function(v,i){
+        viewsToAdd.forEach(function(v){
 
-          var url =  apiUrlViews + v.id;
-          console.log(url);
+          mx.helpers.getViewRemote(v.id)
+            .then(view => {
 
-          mx.helpers.getJSON({
-            url : url,
-            onSuccess : function(view){
-              if(typeof(view) == "string") view = JSON.parse(view);
-              /*
-               * Add it to the view list
-               */
               m.views = m.views.concat(view);
               /*
                * register source
@@ -783,16 +775,12 @@ function checkMissingView(o){
                 noLocationCheck : true
               });
 
-              /**
-               * Added : resolve if last one
-               */
-              viewsAdded.push(view);
-              if(viewsAdded.length == vL){
-                resolve(o);
-              }
-            }});
-
+            })
+            .then(() =>{
+              resolve(o);
+            });
         });
+
       }
 
     }

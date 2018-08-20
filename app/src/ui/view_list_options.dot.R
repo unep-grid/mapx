@@ -9,7 +9,9 @@ divAbstract <- tags$div(
     tags$div(
       class="float-left mx-view-item-desc-container",
       lang="{{langAbstract;}}",
-      "{{? h.path(view,'data.abstract.'+langAbstract) }}",
+      "{{ debugger; }}",
+      "{{ var abstract = h.path(view,'data.abstract.' + langAbstract) }}",
+      "{{? abstract && abstract.length >0; }}",
       tags$p(
         class="mx-view-item-desc",
         id="view_text_{{=view.id}}",
@@ -58,16 +60,23 @@ divLegend <- tagList(
   "{{?}}"
   )
 
+divAbstract <- tags$div(
+  "{{?h.path(view,'data.abstract.' + langAbstract)}}",
+  tags$p(
+    class="mx-view-item-desc",
+    id="view_text_{{=view.id}}",
+    "{{=h.path(view,'data.abstract.' + langAbstract)}}"
+    ),
+  "{{?}}"
+  )
+
+
 divContent <- tags$div(
   #class="make-readmore",
   class="mx-view-content",
   #style = "column-width:200px;column-count:auto;max-height:50%;overflow=scroll;column-rule: 1px solid #ccc;column-gap: 20px;",
   divLegend,
-  tags$p(
-    class="mx-view-item-desc",
-    id="view_text_{{=view.id}}",
-    "{{=view.data.abstract[langAbstract]}}"
-    )
+  divAbstract
   )
 
 
@@ -397,6 +406,21 @@ liControlsShare <- tagList(
     ),
   "{{?}}"
 )
+# controls orig country
+liControlsHomeProject <- tagList(
+  "{{? view.project !== mx.settings.project }}",
+  tags$li(
+    class="mx-pointer btn-circle btn-circle-small hint--left",
+    `data-lang_key`="btn_opt_home_project",
+    `data-lang_type`="tooltip",
+    `data-view_action_key`="btn_opt_home_project",
+    `data-view_action_target`="{{=view.id}}",
+    tags$div(
+      class="fa fa-home"
+      )
+    ),
+  "{{?}}"
+)
 # controls move
 liControlsMove <- tagList(
   tags$li(
@@ -510,7 +534,8 @@ ulControls <- tags$div(
       liControlsGeoJson,
       liControlsScreenShot,
       liControlsEdit,
-      liControlsShare
+      liControlsShare,
+      liControlsHomeProject
       )
     )
   )

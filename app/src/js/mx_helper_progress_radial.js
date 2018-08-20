@@ -1,17 +1,18 @@
 
 /**
 * Build a simple radial progress svg element
-* @param {String} id of the container to insert the progress radial
+* @param {String|Element} selector  : the container selector or element to insert the progress radial
 * @param {Object} c config
 * @param {Integer} c.radius Radius of the radial input, in pixel
 * @param {Integer} c.stroke Width of the stroke in pixel
 */
-export function RadialProgress(id, c) {
+export function RadialProgress(selector, c) {
   var prog = this;
   var circumference = 2 * c.radius * Math.PI;
   prog.el = {};
-  prog.el.container = document.getElementById(id);
+  prog.el.container = selector instanceof Node ? selector : document.querySelector(selector);
 
+  if(!prog.el.container) return;
 
   c.radius = c.radius || 10;
   c.stroke = c.stroke || 3;
@@ -29,6 +30,7 @@ export function RadialProgress(id, c) {
   prog.el.container.innerHTML = c.svg;
   prog.el.circle = prog.el.container.querySelector("circle");
   prog.el.svg = prog.el.container.querySelector("svg");
+
 
   prog.destroy = function() {
     prog.el.svg.remove();

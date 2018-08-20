@@ -480,6 +480,18 @@
     "ps": "دا لید لرې کړئ"
   },
   {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "fr": "Ouvrir le project original",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_opt_move_top",
     "en": "Move to top",
     "fr": "Déplacer vers le haut",
@@ -3447,6 +3459,18 @@
     "id": "views_external",
     "en": "External views",
     "fr": "Vues externes",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_shared",
+    "en": "View shared",
+    "fr": "Vue partagée",
     "es": "",
     "ru": "",
     "zh": "",

@@ -5,11 +5,14 @@
   letter-spacing: 0.1em;
   margin-left: 20px;
 }
+.mx-legend-rules {
+  overflow: auto;
+  max-height: 170px;
+}
 
 .mx-legend-container {
   display: block;
-  max-height: 700px;
-  overflow: auto;
+  flex-direction: column;
   width: 100%;
   padding-bottom: 20px;
 }

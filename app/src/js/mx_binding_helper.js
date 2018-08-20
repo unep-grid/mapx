@@ -1,6 +1,6 @@
 /*jshint esversion: 6 , node: true */
 //'use strict';
-import * as mx from './mx_init.js';
+//import * as mx from './mx.js';
 
 $(document).on('shiny:connected', function(event) {
 
@@ -39,7 +39,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler('mglSyncAllMaps', mx.helpers.syncAll );
   Shiny.addCustomMessageHandler('jedInit',mx.helpers.jedRender);
   Shiny.addCustomMessageHandler('jedUpdate',mx.helpers.jedUpdate);
-  Shiny.addCustomMessageHandler('mglSetSourcesFromViews',mx.helpers.setSourcesFromViews );
+  Shiny.addCustomMessageHandler('mglSetSourcesFromViews',mx.helpers.setViewsList );
   Shiny.addCustomMessageHandler('mglRemoveView', mx.helpers.removeView );
   Shiny.addCustomMessageHandler('mglGetLocalForageData', mx.helpers.getLocalForageData );
   Shiny.addCustomMessageHandler('mglAddView', mx.helpers.addView );

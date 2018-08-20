@@ -8,7 +8,7 @@ reactProjectExternalViews <- reactive({
   isPublisher <- isTRUE(userRole$publisher)
   userData <- reactUser$data
   viewsExternal <- mxDbProjectGetViewsExternal(project)
-
+  
   if(isPublisher){
     viewsExternal
   }else{
