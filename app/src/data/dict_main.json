@@ -1849,8 +1849,8 @@
   },
   {
     "id": "login_first_before_action",
-    "en": "Please enter your email address to receive your login details and access your sandbox.",
-    "fr": "Entrez votre adresse email pour recevoir vos identifiants et accéder à votre espace privé.",
+    "en": "Please enter your email address to receive your login details and access your project.",
+    "fr": "Entrez votre adresse email pour recevoir vos identifiants et accéder à votre projet.",
     "es": "",
     "ru": "",
     "zh": "",
@@ -5029,8 +5029,8 @@
   },
   {
     "id": "project_request_membership_message_sent",
-    "en": "Request sent – check your inbox for a validation link to access your sandbox!",
-    "fr": "Demande envoyée - vérifiez vos emails et cliquez sur le lien de confirmation pour accéder à votre espace privé!",
+    "en": "Request sent – check your inbox for a validation link to access your project!",
+    "fr": "Demande envoyée - vérifiez vos emails et cliquez sur le lien de confirmation pour accéder à votre projet!",
     "es": "",
     "ru": "",
     "zh": "",
