@@ -128,7 +128,7 @@ mxDbProjectSetViewExternal <- function(idProject,idView,action="add"){
 #' id, 
 #' title,
 #' description
-mxDbGetProjectListByUser <- function(id,whereUserRoleIs="any",whereTitleMatch=NULL,language="en",asNamedList=FALSE,asDataFrame=FALSE){
+mxDbGetProjectListByUser <- function(id,whereUserRoleIs="any",whereTitleMatch=NULL,language="en",asNamedList=FALSE,asDataFrame=FALSE,idsAdditionalProjects=NULL){
 
   if(noDataCheck(language)) language <-"en"
 
@@ -139,12 +139,20 @@ mxDbGetProjectListByUser <- function(id,whereUserRoleIs="any",whereTitleMatch=NU
 
   if( !isTRUE(filterRole %in% c("member","publisher","admin"))) filterRole = "public OR member OR publisher OR admin"
 
+  #
+  # NOTE: "filter" for filter role will be boolean in the request. So 'WHERE publisher AND (title_en = "to remove")' is expected
+  #
   filter <- filterRole
 
   if(!noDataCheck(whereTitleMatch)){
     filter <- "(" + filterTitle + ") AND " +  "(" + filterRole + ")"
   }
- 
+
+
+  if(!noDataCheck(idsAdditionalProjects)){
+    filter <- sprintf(" %1$s OR  id in ('%2$s')",filter, paste(idsAdditionalProjects,collapse="','"))
+  }
+
   quer <- "WITH project_roles as (
   SELECT 
   id,

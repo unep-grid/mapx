@@ -291,11 +291,12 @@ export function startWorker(f) {
             view : view
           }).then(function(){
             // Add source from view
-            return helper.setSourcesFromViews({
-              id : o.id,
-              viewsList : view
+            helper.addView({
+              id : o.id ,
+              viewData : view
             });
 
+            return Promise.resolve(view);
           }).then(function(v){
             console.log("Data saved and registered as geojson source. Id = " + view.id);
           });

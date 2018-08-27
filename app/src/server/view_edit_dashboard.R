@@ -73,6 +73,16 @@ observeEvent(input$dashboardEdit_init,{
             default = titles,
             language = language
             ),
+          `modules` = list(
+            title = t("view_dashboard_txt_which_module"),
+            description = t("view_dashboard_txt_desc_module"),
+            type = "array",
+            uniqueItems = TRUE,
+            items = list(
+              type = "string",
+              enum = list("highcharts","d3","d3-geo","topojson")
+              )
+            ),
           widgets = list(
             type = "array",
             format = "confirmDelete",
@@ -161,20 +171,9 @@ observeEvent(input$btnViewPreviewDashboard,{
 
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","dashboard"), dashboard)
-
-  #
-  # has dashboard method for removing are triggered by remove the view, remove the view
-  #
-  mglRemoveView(
-    idView=view$id
-    )
-
-  # add this as new (empty) source
-  mglSetSourcesFromViews(
-    id = .get(config,c("map","id")),
-    viewsList = view,
-    render = FALSE,
-    project = project
+  
+  mglAddView(
+    viewData = view
     )
 
   mxToggleButton(
@@ -211,26 +210,24 @@ observeEvent(input$btnViewSaveDashboard,{
     view <- .set(view, c("data", "dashboard"), dashboard)
     view <- .set(view,c("data"), as.list(.get(view,"data")))
     view <- .set(view,c("editor"),editor)
-    
+
     mxDbAddRow(
       data=view,
       table=.get(config,c("pg","tables","views"))
       )
 
-    mglRemoveView(
-      idView=view$id
-      )
-
     # edit flag
     view$`_edit` = TRUE 
 
-    # add this as new (empty) source
-    mglSetSourcesFromViews(
-      id = .get(config,c("map","id")),
-      viewsList = view,
-      render = FALSE,
-      project = project
+    mglAddView(
+      viewData = view
       )
+
+    mxToggleButton(
+      id="btnViewPreviewDashboard",
+      disable = FALSE
+      )
+
     reactData$updateViewListFetchOnly <- runif(1)
   }
 

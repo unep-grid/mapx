@@ -24,7 +24,8 @@ export function jedRender(o) {
         //System.import("./mx_extend_jed_medium.js"),
         System.import("./mx_extend_jed_position.js"),
         System.import("./mx_extend_jed_ace.js"),
-        System.import("./mx_extend_jed_array2.js")
+        System.import("./mx_extend_jed_array2.js"),
+        System.import("./mx_extend_jed_codemirror.js"),
       ]);
     }).then(function(){
       var JSONEditor = window.JSONEditor;

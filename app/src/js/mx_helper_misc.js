@@ -6,7 +6,7 @@ import * as mx from './mx_init.js';
 
 export function removeServiceWorker(){
   if(navigator.serviceWorker){
-    caches.keys().then(k => k.forEach(i=>caches.delete(i)))
+    caches.keys().then(k => k.forEach(i=>caches.delete(i)));
     navigator.serviceWorker.getRegistrations().then(function(registrations) {
       for(let registration of registrations) {
         registration.unregister();
@@ -1333,6 +1333,19 @@ export function makeId(n) {
   return text;
 }
 
+/**
+* Convert an object to a blob, then to a URL
+* @param {Object} object to stringify and convert
+*/
+export function objectToUrl(object){
+  var blob = new Blob([
+    JSON.stringify(object)
+  ], {type : 'application/json'});
+
+  return window.URL.createObjectURL(blob);
+}
+
+
 
 /** Create a worker
  * @param fun {function} function to evalute by the worker
@@ -1357,7 +1370,6 @@ export function createWorker(fun) {
   // return new worker
   return (new Worker(blobUrl));
 }
-
 
 
 export function doPar(o) {
@@ -1419,154 +1431,169 @@ export function doPar(o) {
 
 export function modal(o){
 
-  System.import("selectize").then(function(Selectize){
+  var id = o.id || makeId();
+  var idBackground = "mx_background_for_" + id;
+  var modal = document.getElementById(o.id) || document.createElement("div");
+  var background = document.getElementById(idBackground) || document.createElement("div"); 
+  var hasShiny = typeof window.Shiny !== "undefined";
+  var hasJquery = typeof window.jQuery !== "undefined";
+  var hasSelectize = typeof window.Selectize !== "undefined";
+  var startBodyScrollPos = 0;
+  var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== "undefined" ? o.noShinyBinding : false;
 
-    var id = o.id || makeId();
-    var idBackground = "mx_background_for_" + id;
-    var modal = document.getElementById(o.id) || document.createElement("div");
-    var background = document.getElementById(idBackground) || document.createElement("div"); 
-    var hasShiny = typeof Shiny !== "undefined";
-    var hasSelectize = typeof Selectize !== "undefined";
-    var startBodyScrollPos = 0;
-    var noShinyBinding = typeof o.noShinyBinding !== "undefined" ? o.noShinyBinding : false;
-
-    if(o.close){
-      close();
-      return;
+  if(o.close){
+    close();
+    return;
+  }
+  if(modal.id && o.replace){
+    if( hasShiny && !noShinyBinding ) Shiny.unbindAll(modal);
+    var oldBody = modal.querySelector('.mx-modal-body');
+    if(oldBody){
+      startBodyScrollPos = oldBody.scrollTop;
     }
-    if(modal.id && o.replace){
-      if( hasShiny && !noShinyBinding ) Shiny.unbindAll(modal);
-      var oldBody = modal.querySelector('.mx-modal-body');
-      if(oldBody){
-        startBodyScrollPos = oldBody.scrollTop;
+    modal.remove();
+    modal = document.createElement("div");
+  }
+  if(modal.id && !o.replace){
+    return;
+  }
+
+  if(o.styleString){
+    modal.style = o.styleString;
+  }
+  /*if(o.minHeight){*/
+  //modal.style.minHeight = o.minHeight;
+  /*}*/
+  if(o.minWidth){
+    modal.style.minWidth = o.minWidth;
+  }
+
+  var top = document.createElement("div");
+  var title = document.createElement("div");
+  var head = document.createElement("div");
+  var body = document.createElement("div");
+  var content = document.createElement("div");
+  var footer = document.createElement("div");
+  var buttons = document.createElement("div");
+  var dialog = document.createElement("div");
+  var btnMinimize = document.createElement("button");
+  var validation = document.createElement("div");
+
+  function close(e){
+    if(hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
+    modal.remove();
+    background.remove();
+  }
+
+  modal.appendChild(top);
+  modal.appendChild(head);
+  modal.appendChild(body);
+  modal.appendChild(footer);
+  modal.classList.add("mx-modal-container");
+  modal.classList.add("mx-draggable");
+  modal.appendChild(validation);
+  modal.id=id;
+
+  btnMinimize.className="mx-pointer mx-modal-btn-minimize fa fa-minus-square-o";
+  top.classList.add("mx-drag-handle");
+  top.classList.add("mx-modal-top");
+  top.appendChild(title);
+  top.appendChild(btnMinimize);
+
+
+  btnMinimize.onclick = function(){
+    var isOpen = this.classList.contains("fa-minus-square-o");
+
+    if(isOpen){
+      this.classList.remove("fa-minus-square-o");
+      this.classList.add("fa-plus-square-o");
+      body.classList.add("mx-hide");
+    }else{
+      this.classList.remove("fa-plus-square-o");
+      this.classList.add("fa-minus-square-o");
+      body.classList.remove("mx-hide");
+    }
+  };
+
+  title.classList.add("mx-modal-drag-enable");
+  title.classList.add("mx-modal-title");
+  head.classList.add("mx-modal-head");
+  validation.classList.add("mx-modal-validation");
+  body.classList.add("mx-modal-body");
+  body.classList.add("mx-scroll-styled");
+  content.classList.add("mx-modal-content");
+  footer.classList.add("mx-modal-foot");
+  buttons.classList.add("btn-group");
+  background.id = idBackground;
+  background.classList.add("mx-modal-background");
+  dialog.classList.add("shiny-text-output");
+  dialog.id = id + "_txt";
+  dialog.classList.add("mx-modal-foot-text");
+  validation.classList.add("shiny-html-output");
+  validation.id = id + "_validation";
+
+  if( !o.removeCloseButton ){
+    var b = document.createElement("button");
+    b.className="btn btn-default";
+    b.innerHTML = o.textCloseButton || "close"; 
+    b.addEventListener("click",close);
+    buttons.appendChild(b);
+  }
+
+  if( o.buttons && o.buttons.constructor == Array ){
+    o.buttons.forEach(function(b){
+      if( typeof b === "string" ){
+        b = textToDom(b);
       }
-      modal.remove();
-      modal = document.createElement("div");
-    }
-    if(modal.id && !o.replace){
-      return;
-    }
-
-    if(o.styleString){
-      modal.style = o.styleString;
-    }
-
-    var top = document.createElement("div");
-    var title = document.createElement("div");
-    var head = document.createElement("div");
-    var body = document.createElement("div");
-    var content = document.createElement("div");
-    var footer = document.createElement("div");
-    var buttons = document.createElement("div");
-    var dialog = document.createElement("div");
-    var validation = document.createElement("div");
-
-    function close(e){
-      if(hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
-      modal.remove();
-      background.remove();
-    }
-
-    modal.appendChild(top);
-    modal.appendChild(head);
-    modal.appendChild(body);
-    modal.appendChild(footer);
-    modal.classList.add("mx-modal-container");
-    modal.classList.add("mx-draggable");
-    modal.appendChild(validation);
-    modal.id=id;
-
-    top.classList.add("mx-drag-handle");
-    top.classList.add("mx-modal-top");
-
-    top.appendChild(title);
-
-    if(top.children.length>0){
-      forEachEl({
-        els:top.children,
-        callback:function(el){
-          el.classList.add("mx-modal-drag-enable");
-        }});
-    }
-    title.classList.add("mx-modal-title");
-    head.classList.add("mx-modal-head");
-    validation.classList.add("mx-modal-validation");
-    body.classList.add("mx-modal-body");
-    body.classList.add("mx-scroll-styled");
-    content.classList.add("mx-modal-content");
-    footer.classList.add("mx-modal-foot");
-    buttons.classList.add("btn-group");
-    background.id = idBackground;
-    background.classList.add("mx-modal-background");
-    dialog.classList.add("shiny-text-output");
-    dialog.id = id + "_txt";
-    dialog.classList.add("mx-modal-foot-text");
-    validation.classList.add("shiny-html-output");
-    validation.id = id + "_validation";
-
-    if( !o.removeCloseButton ){
-      var b = document.createElement("button");
-      b.className="btn btn-default";
-      b.innerHTML = o.textCloseButton || "close"; 
-      b.addEventListener("click",close);
-      buttons.appendChild(b);
-    }
-
-    if( o.buttons && o.buttons.constructor == Array ){
-      o.buttons.forEach(function(b){
-        if( typeof b === "string" ){
-          b = textToDom(b);
-        }
-        if(b instanceof Node ){
-          buttons.appendChild(b);
-        }
-      });
-    }
-
-    if( o.title && o.title instanceof Node ){
-       title.appendChild(o.title);
-    }else{
-      title.innerHTML =  o.title || "";
-    }
-
-    if(o.content && o.content instanceof Node){
-       content.appendChild(o.content);
-    }else{
-       content.innerHTML = o.content;
-    }
-    body.appendChild(content);
-    footer.appendChild(dialog);
-    footer.appendChild(buttons);
-    if( o.addBackground ) document.body.appendChild(background);
-    document.body.appendChild(modal);
-    if( hasShiny && !noShinyBinding )  Shiny.bindAll(modal);
-    if( hasSelectize ) {
-      var selects = $(modal).find("select");
-      selects.each(function(i,s){
-        var script = modal.querySelector("script[data-for="+s.id+"]");
-        var data = script?script.innerHTML:null;
-        var options = {dropdownParent:"body"};
-        if(data){
-          options = JSON.parse(data);
-          if(options.renderFun){
-            options.render={
-              option : mx.helpers[options.renderFun]
-            };
-          }
-        }
-        options.inputClass="form-control selectize-input";
-        mx.listener[s.id] = $(s).selectize(options);
-      });
-    }
-    if(startBodyScrollPos){
-      body.scrollTop = startBodyScrollPos;
-    }
-    mx.helpers.draggable({
-      selector : modal,
-      debounceTime :10
+      if(b instanceof Node ){
+        buttons.appendChild(b);
+      }
     });
+  }
 
+  if( o.title && o.title instanceof Node ){
+    title.appendChild(o.title);
+  }else{
+    title.innerHTML =  o.title || "";
+  }
+
+  if(o.content && o.content instanceof Node){
+    content.appendChild(o.content);
+  }else{
+    content.innerHTML = o.content;
+  }
+  body.appendChild(content);
+  footer.appendChild(dialog);
+  footer.appendChild(buttons);
+  if( o.addBackground ) document.body.appendChild(background);
+  document.body.appendChild(modal);
+  if( hasShiny && !noShinyBinding )  Shiny.bindAll(modal);
+  if( hasSelectize && hasJquery ) {
+    var selects = $(modal).find("select");
+    selects.each(function(i,s){
+      var script = modal.querySelector("script[data-for="+s.id+"]");
+      var data = script?script.innerHTML:null;
+      var options = {dropdownParent:"body"};
+      if(data){
+        options = JSON.parse(data);
+        if(options.renderFun){
+          options.render={
+            option : mx.helpers[options.renderFun]
+          };
+        }
+      }
+      options.inputClass="form-control selectize-input";
+      mx.listener[s.id] = $(s).selectize(options);
+    });
+  }
+  if(startBodyScrollPos){
+    body.scrollTop = startBodyScrollPos;
+  }
+  mx.helpers.draggable({
+    selector : modal,
+    debounceTime :10
   });
+
 }
 
 
@@ -1658,8 +1685,25 @@ export function utf8_to_b64(str) {
   return window.btoa(unescape(encodeURIComponent(str)));
 }
 
+export function searchToObject() {
+  var pairs = window.location.search.substring(1).split("&"),
+    obj = {},
+    pair,
+    isJson,
+    i,key,value;
 
+  for ( i in pairs ) {
+    if ( pairs[i] === "" ) continue;
 
+    pair = pairs[i].split("=");
+    key = decodeURIComponent( pair[0] );
+    value = decodeURIComponent( pair[1] );
+    try { value = JSON.parse(value); }catch(err){}
+    obj[ key ] = value;
+  }
+
+  return obj;
+}
 /**
  * Split a string in n parts
  * @param {string} String to split

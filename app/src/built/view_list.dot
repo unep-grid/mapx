@@ -15,7 +15,7 @@
       {{=view.data.title[lang]}}
       {{?}}
     </span>
-    {{=h.getReadersIcons(view)}}
+    {{=h.getViewIcons(view)}}
     <span class="mx-view-item-classes">{{=view.data.classes}},{{=view.type}}</span>
     <span class="mx-view-item-index">{{=mx.helpers.getDistinctIndexWords(view)}}</span>
   </label>

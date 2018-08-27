@@ -934,9 +934,13 @@ blockquote {
   text-overflow: ellipsis;
   pointer-events:none;
   padding: 7px;
+  flex: 1 0;
 }
 
-
+.mx-modal-btn-minimize {
+  background: none;
+  border: none;
+}
 .mx-modal-info-text {
   display:inline-block;
 }
@@ -959,8 +963,6 @@ blockquote {
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
-  min-height:30vh;
-  min-height: 200px;
   min-width: 300px;
   border-radius:3px;
   z-index:500;
@@ -968,15 +970,6 @@ blockquote {
   left:0;
   top: 5px;
   margin: auto;
-  resize: both;
-}
-
-.mx .mx-modal-top ,
-.mx .mx-modal-top * {
-  /*font-size: 11px;*/
-  /*text-transform: uppercase;*/
-  /*letter-spacing: 2;*/
-  /*text-align: center;*/
 }
 
 .mx-modal-top {
@@ -989,6 +982,8 @@ blockquote {
   width:100%;
   height:45px;
   padding:5px;
+  display: flex;
+  flex: 0 0;
 }
 
 .mx-modal-head {
@@ -998,7 +993,6 @@ blockquote {
   flex:1;
   overflow:auto;
 }
-
 .mx-modal-content {
   height:100%;
   padding:20px;
@@ -1276,58 +1270,67 @@ blockquote {
 /* project list by user */
 .mx-badge-role,
 .mx-badge-view-count {
-  font-size: 0.8em;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  opacity:0.5;
+  font-size:0.8em;
   padding: 0px 4px 0px 4px;
-  /*cursor:help;*/
 }
 
 .mx-list-projects {
     max-height: 300px;
     overflow: scroll;
-    /*border-bottom: 1px solid #ccc;*/
-    border-top: 1px solid #ccc;
 }
 .mx-list-projects-view-count {
   opacity:0.5;
   font-size:0.9em;
+  display:none;
 }
 .mx-list-projects-desc {
   font-style: italic;
+  opacity:0.5;
+  font-size:0.9em;
+
 }
 .mx-list-projects-row{
   width: 100%;
-  display: block;
-  border-bottom: 1px solid #ccc;
   padding: 10px;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  flex-wrap: nowrap;
+  flex-direction: column;
+}
+
+.mx-list-projects-top,
+.mx-list-projects-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mx-list-projects-opt {
+  padding-top: 9px;
+  margin-left: 30px;
 }
 
 .mx-list-projects-left,
 .mx-list-projects-right {
- width:50%
+  flex:1;
 }
 
 .mx-list-projects-right {
-  text-align:right;
 }
 .mx-list-projects-container {
-    border: 1px solid #ccc;
-    border-radius: 5px;
     overflow: hidden;
 }
 .mx-list-projects-search {
-    padding: 10px 10px 5px 5px;
-    width: 100%;
-    border: 1px solid #ccc;
-    border: none;
-    border-radius: 3px;
-    margin-bottom: 5px;
-  }
+  padding: 10px 10px 5px 5px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 5px;
+  outline:none;
+}
+.mx-list-projects-search:focus {
+  border-bottom: 2px solid #ccc;
+}
 /**
 * Switch to show or hide additional content.
 * based on a checkbox.
@@ -1489,5 +1492,6 @@ blockquote {
   -moz-transition-delay: 1000ms;
   transition-delay: 1000ms;
 }
+
 
 

@@ -121,23 +121,13 @@ observeEvent(input$btnViewSaveStyle,{
         table=.get(config,c("pg","tables","views"))
         )
 
-      #
-      # Trigger update
-      #
-      mglRemoveView(
-        idView=view$id
-        )
-
       # edit flag
       view$`_edit` = TRUE 
 
-      # add this as new (empty) source
-      mglSetSourcesFromViews(
-        id = .get(config,c("map","id")),
-        viewsList = view,
-        render = FALSE,
-        project = project
-        )
+      mglAddView(
+        viewData = view
+      )
+
       reactData$updateViewListFetchOnly <- runif(1)
     }
   }

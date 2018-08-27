@@ -2,6 +2,37 @@
 import * as mx from './mx_init.js';
 
 /**
+* Get url for api
+* @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
+*/
+export function getApiUrl(id){
+    var s = mx.settings; 
+    var urlBase = s.apiProtocol + '://' + s.apiHost  + ':' + s.apiPort;
+    return urlBase + s.apiRoute[id];
+}
+
+/**
+* Get url for path relative to the app
+* @param {String} id Id of the path : sprite, download, etc
+*/
+export function getAppPathUrl(id){
+    var s = mx.settings; 
+    var loc = window.location.origin;
+    return loc + '/' + s.paths[id];
+}
+
+/**
+* Update settings
+* @param {Options} o Option with key from settings. Overwrite settings values.
+*/
+export function updateSettings(o){
+   var s = mx.settings;
+    Object.keys(s).forEach( k => {
+      mx.settings[k] = o[k] || s[k];
+  });
+}
+
+/**
 * Settings of the user
 * @param {Object} o Object that contains user data such as id, email, nickname, etc..
 */
@@ -31,8 +62,8 @@ export function handlerDownloadVectorSource(o){
   var elMsg;
   var elOutput = document.getElementById(o.idHandlerContainer);
 
-  var dlUrlCreate = mx.settings.apiUrlDownloadCreate;
-  var dlUrlGet = mx.settings.apiUrlDownloadGet ;
+  var dlUrlCreate = mx.helpers.getApiUrl('downloadSourceCreate');
+  var dlUrlGet = mx.helpers.getApiUrl('downloadSourceGet');
 
   dlUrlCreate = dlUrlCreate + o.data ;
 
@@ -163,6 +194,8 @@ export function requestProjectMembership(idProject){
 }
 
 
+
+
 /**
  * Initial mgl and mapboxgl
  * @param {string} o options
@@ -179,58 +212,39 @@ export function requestProjectMembership(idProject){
  * @param {Object} o.mapPosition.bearing Bearing
  * @param {Object} o.mapPosition.lng Longitude center
  * @param {Object} o.mapPosition.lat Latitude center
+ * @param {Object} o.mapPosition.bounds Mapbox bounds object
  * @param {Object} o.mapPosition.fitToBounds fit map to bounds
+ * @param {Object} o.fitToViewsBounds Discard map position, use views to fit
  * @param {number} [o.minZoom=4] Min zoom level
  * @param {number} [o.maxZoom=10] Max zoom level
  * @param {string} o.language Initial language code 
  * @param {string} o.languages Languages code list 
- * @param {string} o.path relative path to resource (style, theme, sprite , ...)
  * @param {Object} o.apiUrl Base url for api 
 */
 export function initMapx(o){
 
-  var elMap = document.getElementById(o.id);
-  var hasShiny = !! window.Shiny ;
+  var styleInit;
+  
+  if( o.style ) styleInit = Promise.resolve(o.style);
 
-  if(! elMap ){
-    alert("Map element with id "+ o.id  +" not found");
-    return ;
+  if( !styleInit ){
+    styleInit = mx.data.config.getItem("style@local")
+      .then(function(style){
+        if(style) return style;
+        return mx.data.config.getItem("style@default");
+      })
+      .then(function(style){
+        if(style) return style;
+        return System.import("../data/style_mapx.json")
+          .then(function(style){
+            mx.data.config.setItem("style@default",style);
+            return style;
+          });
+      });
   }
 
-  Promise.all([
-    System.import("mapbox-gl/dist/mapbox-gl"),
-    System.import("localforage"),
-    System.import("../data/style_mapx.json"),
-    System.import("../built/view_list.dot"),
-    System.import("../built/view_list_legend.dot"),
-    System.import("../built/view_list_options.dot")
-  ]).then(function(m){
-
-    var  mapboxgl = m[0];
-    var  localforage = m[1];
-    mx.mapboxgl = mapboxgl;
-    mx.localforage = localforage;
-    mx.data.style = m[2];
-
-    mx.templates.viewList = m[3];
-    mx.templates.viewListLegend = m[4];
-    mx.templates.viewListOptions = m[5];
-
-    mx.data.geojson = localforage.createInstance({
-      name:  "geojson"
-    });
-
-    mx.data.images = localforage.createInstance({
-      name : "images"
-    });
-
-    mx.data.stories = localforage.createInstance({
-      name : "stories"
-    });
-
-    mx.data.views = localforage.createInstance({
-      name : "views"
-    });
+  styleInit
+  .then(function(style){
 
     /**
      * Confirm user quit
@@ -247,70 +261,40 @@ export function initMapx(o){
     /**
      * Set mapbox gl token
      */
-    if (!mapboxgl.accessToken && o.token) {
-      mapboxgl.accessToken = o.token;
+    if ( !mx.mapboxgl.accessToken ) {
+      mx.mapboxgl.accessToken = o.token || mx.settings.mapboxToken || '';
     }
 
     /**
      * TEst if mapbox gl is supported
      */
-    if ( !mapboxgl.supported() ) {
+    if ( !mx.mapboxgl.supported() ) {
       alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
       return;
     }
 
 
     /**
-    * Handle message from external page
-    */
-    window.addEventListener("message",function(msg){
-      if(msg.data=="getCurrentUser"){
-        window.parent.postMessage(JSON.stringify(mx.settings.user), '*');
-      }
-    });
-
-    /**
      * Set default
      */
-    //o.center = o.center || [0,0];
-    //o.lat = o.lat || 90;
-    //o.lng = o.lng || 0;
-    //o.zoom = o.zoom  || 4;
     o.maxZoom = o.maxZoom || 20;
     o.minZoom = o.minZoom || 0;
 
-    o.location = o.location || window.location.origin + window.location.pathname;
-    if(o.apiPort){
-      o.apiPort=":"+o.apiPort;
-    }
-    mx.settings.languages = o.languages = o.languages || ["en","fr"];
-    mx.settings.language = o.language = o.language || o.languages[0];
-    mx.settings.project =  o.project || "";
-    mx.settings.apiPort = o.apiPort = o.apiPort || "";
-    mx.settings.apiHost = o.apiHost = o.apiHost || location.hostname;
-    mx.settings.apiProtocol = o.apiProtocol = o.apiProtocol || location.protocol;
-    mx.settings.apiUrlBase =  o.apiUrlBase = o.apiProtocol +"//"+ o.apiHost  + o.apiPort ;
-    mx.settings.apiUrlTiles = o.apiUrlBase + "/get/tile/{x}/{y}/{z}.mvt";
-    mx.settings.apiUrlViews = o.apiUrlBase + "/get/view/";
-    /**
-    * dev only
-    */
-    //o.apiUrlBase = o.apiProtocol +"//"+ 'apidev.mapx.localhost'  + o.apiPort;
-    mx.settings.apiUrlDownloadCreate = o.apiUrlBase + "/get/source?data=";
-    mx.settings.apiUrlDownloadGet = o.apiUrlBase + "";
-    mx.settings.apiUrlUploadImage = o.apiUrlBase + "/upload/image/";
+    updateSettings({
+      mapboxToken : o.token,
+      apiPort : o.apiPort,
+      apiHost : o.apiHost,
+      project : o.project,
+      language : o.language,
+      languages : o.languages
+    });
 
-    // set path using current location. 
-
-    if(o.paths.sprite){
-      o.paths.sprite = o.location + o.paths.sprite;
-    }
     /*
-    * Update cache
-    */
+     * Update cache
+     */
     if(o.version){
-    
-    
+
+
     }
 
     /**
@@ -326,16 +310,22 @@ export function initMapx(o){
       options : o,
       map: {},
       listener: {},
-      views : [],
-      style : {}
+      views : o.viewsList || mx.maps[o.id].views,
+      style : style
     };
 
-    var style = mx.maps[o.id].style = mx.data.style;
+    style.sprite = getAppPathUrl('sprites');
     o.mapPosition = o.mapPosition || {};
     var mp = o.mapPosition;
-    style.sprite = o.paths.sprite;
     mx.maps[o.id].style = style;
 
+    /*
+     * workeround for centering based in bounds.
+     * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970 
+     */
+    if( o.fitToViewsBounds === true || mp.bounds ){
+      mp.center = mp.bounds.getCenter();
+    }
 
     /* map options */
     var mapOptions = {
@@ -345,79 +335,108 @@ export function initMapx(o){
       minZoom: o.minZoom,
       preserveDrawingBuffer: false,
       attributionControl: false,
-      zoom : mp.z || mp.zoom || 0,
+      zoom : mp.z || mp.zoom || 5,
       bearing : mp.bearing || 0,
       pitch : mp.pitch || 0,
-      center : [mp.lng||0,mp.lat||0]
+      center : mp.center || [mp.lng||0,mp.lat||0]
     };
 
-    /* Create map object */
-    var map = new mapboxgl.Map(mapOptions);
-
-    /* centering method */
-    if( o.mapPosition.fitToBounds == true ){
-      map.fitBounds([mp.w||0, mp.s||0, mp.e||0, mp.n||0]);
-    }
-    /* save map in mgl data */
+    /* 
+     * Create map object
+     */
+    var map = new mx.mapboxgl.Map(mapOptions);
     mx.maps[o.id].map =  map;
+    o.map = map;
+
+    /**
+    * Continue according to mode
+    */
+    if( ! mx.settings.modeKiosk ){
+      initMapxApp(o);   
+    }
+
+    /**
+    * Resolve with the map object
+    */
+    return map;
+  });
+
+}
+
+
+export function initMapxApp(o){
+  var map = o.map;
+  var elMap = document.getElementById(o.id);
+  var hasShiny = !! window.Shiny ;
+
+  if(! elMap ){
+    alert("Map element with id "+ o.id  +" not found");
+    return ;
+  }
 
     /**
      * Send loading confirmation to shiny
      */
-    map.on('load', function() {
+  o.map.on('load', function() {
 
-        if( ! o.storyAutoStart ){
-          showUi();
-        }
+    /*
+     * secondary centering method
+     */
+    if( o.mapPosition.fitToBounds === true ){
+      map.fitBounds( [mp.w || 0, mp.s || 0, mp.e || 0, mp.n || 0] );
+    }
 
-      /*
-       * Add views and set source
-       */
-      mx.helpers.setSourcesFromViews({
-        id : o.id,
-        viewsList : o.viewsList,
-        viewsCompact : o.viewsCompact,
-        project : o.project,
-        resetViews : true
-      }).then(function(v){
+    if( ! o.storyAutoStart ){
+      showUi();
+    }
 
-        /*
-        * Auto start story map
-        */
-        if(o.storyAutoStart){
-          mx.helpers.storyRead({
-            id : o.id,
-            view : o.viewsList[0],
-            save : false,
-            autoStart : true
-          }).then(showUi);
-        }
-      });
+    /*
+     * set views list
+     */
+    mx.helpers.setViewsList({
+      id : o.id,
+      viewsList : o.viewsList,
+      viewsCompact : o.viewsCompact === true,
+      project : o.project,
+      resetViews : true
+    }).then(function(v){
 
       /*
-       *  First map language 
+       * Auto start story map
        */
-      mx.helpers.updateLanguage({
-        lang : o.language,
-        id : o.id
-      });
-
-      /**
-       * Apply colorscheme if any
-       */ 
-      if(o.colorScheme){
-        mx.helpers.setUiColorScheme({
-          colors : o.colorScheme
-        });
-      }
-
-      /*
-       * If shiny, trigger read event
-       */
-      if(hasShiny){
-        Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
+      if(o.storyAutoStart){
+        mx.helpers.storyRead({
+          id : o.id,
+          view : o.viewsList[0],
+          save : false,
+          autoStart : true
+        }).then(showUi);
       }
     });
+
+    /**
+     * Apply colorscheme if any
+     */ 
+    if(o.colorScheme){
+      mx.helpers.setUiColorScheme({
+        colors : o.colorScheme
+      });
+    }
+
+    /*
+     *  First map language 
+     */
+    mx.helpers.updateLanguage({
+      lang : o.language,
+      id : o.id
+    });
+
+    /*
+     * If shiny, trigger read event
+     */
+    if(hasShiny){
+      Shiny.onInputChange('mglEvent_' + o.id + '_ready', (new Date())) ;
+    }
 
     /**
      * Handle drop geojson event
@@ -430,31 +449,12 @@ export function initMapx(o){
     /**
      * Add controls to the map
      */
-    /*    map.addControl(new mapboxgl.AttributionControl({*/
     //compact: true
-    /*}),'top-right');*/
     map.addControl(new mx.helpers.mapControlApp(),'top-left');
     //map.addControl(new mx.helpers.mapControlNav(),'top-right');
     map.addControl(new mx.helpers.mapControlLiveCoord(),'bottom-right');
     map.addControl(new mx.helpers.mapControlScale(),'bottom-right');
     map.addControl(new mx.helpers.mapxLogo(),'bottom-left');
-
-    /**
-     * Trigger project change on double click
-     * NOTE: experimental. layers and input id should be moved as options.
-     */
-/*    map.on('dblclick',function(e){*/
-      //var cntry, features ;
-      //if(o.projects){
-        //features = map.queryRenderedFeatures(e.point, { layers: ['country-code'] });
-        //cntry = mx.helpers.path(features[0],"properties.iso3code");
-        //if(o.projects.indexOf(cntry) > -1 && hasShiny ) {
-          //Shiny.onInputChange( "selectProject", cntry);
-        //}
-      //}
-    /*});*/
-
-
 
     /**
      * Error handling
@@ -479,7 +479,7 @@ export function initMapx(o){
       this.transform.resize(w,h);
       this.painter.resize(w,h);
     };
- 
+
     /**
      * Mouse move handling
      */
@@ -502,6 +502,7 @@ export function initMapx(o){
       northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
     });
 
+  });
 
     /**
     * local helpers
@@ -512,7 +513,6 @@ export function initMapx(o){
           el.classList.remove("mx-hide-start");
         });
     }
-  });
 
 }
 
@@ -545,10 +545,10 @@ export function geolocateUser(e){
   var lang = mx.settings.language;
   var hasGeolocator = !!navigator.geolocation;
 
-  var o = {idMap:'map_main'};
+  var o = {idMap:mx.settings.idMapDefault};
   var classesHtml = document.documentElement.classList;
   classesHtml.add("shiny-busy");
-  var map = mx.maps[o.idMap].map;
+  var map = getMap(o.idMap);
   var options = {
     enableHighAccuracy: true,
     timeout: 20000,
@@ -595,7 +595,6 @@ export function geolocateUser(e){
 export function reset(o){
 
   var views = mx.maps[o.idMap].views ;
-  var elViewList = document.querySelector(".mx-views-list");
 
   /**
    * remove existing layers
@@ -608,40 +607,41 @@ export function reset(o){
   /**
   *  Reset filters and selector
   */
+  var elViewList = document.querySelector(".mx-views-list");
+  if( elViewList ) elViewList.innerHTML="";
   var elTxtFilterInput = document.querySelector("#viewsFilterText");
-  elTxtFilterInput.value="";
+  if( elTxtFilterInput )  elTxtFilterInput.value="";
   var elBtnFilterCheck = document.querySelector("#btn_filter_checked");
-  elBtnFilterCheck.classList.remove("active");
+  if( elBtnFilterCheck ) elBtnFilterCheck.classList.remove("active");
   var elBtnSort = document.querySelectorAll(".mx-btn-sort");
-  for(var i=0,iL=elBtnSort.length;i<iL;i++){
-     elBtnSort[i].classList.remove('asc');
+  if( elBtnSort ){
+    for(var i=0,iL=elBtnSort.length;i<iL;i++){
+      elBtnSort[i].classList.remove('asc');
+    }
   }
   var elViewsFilter = document.querySelector("#viewsFilter");
-  var elFilterToggles = elViewsFilter.querySelectorAll(".check-toggle");
-  elFilterToggles.forEach(v => v.remove() );
+  if( elViewsFilter ){
+    var elFilterToggles = elViewsFilter.querySelectorAll(".check-toggle");
+    elFilterToggles.forEach(v => v.remove() );
+  }
 
   /*
   * apply remove method
   */
 
-  cleanRemoveModules(views);
-
-  /**
-  * Remove list
-  */
-  elViewList.innerHTML="";
-
-  emptyViewsList(true);
+  mx.helpers.cleanRemoveModules(views);
+  if(elViewList) setViewsListEmpty(true);
 }
 
 
 /**
 * Clean stored modules : dashboard, custom view, etc.
 */
-function cleanRemoveModules(view){
+export function cleanRemoveModules(view){
 
-  view = typeof view === "string" ? mx.helpers.getViews({id:'map_main',idView:view}) : view;
+  view = typeof view === "string" ? mx.helpers.getViews({id:mx.settings.idMapDefault,idView:view}) : view;
   view = view instanceof Array ? view : [view];
+
 
   view.forEach(function(v){
     if( v._onRemoveCustomView instanceof Function ){
@@ -653,7 +653,6 @@ function cleanRemoveModules(view){
   });
 }
 
-
 /** 
  * Add source from views array 
  * @param {Object} o options
@@ -662,7 +661,7 @@ function cleanRemoveModules(view){
  */
 export function addSourceFromViews(o){
 if(o.views instanceof Array){
-  o.views.forEach(v=>{
+  o.views.forEach( v => {
     mx.helpers.addSourceFromView({
     map : o.map,
     view : v
@@ -673,13 +672,15 @@ if(o.views instanceof Array){
 /** 
  * Add source from view object 
  * @param {Object} o options
- * @param {Object} o.map Map object
+ * @param {Object|String} o.map Map object or map id
  * @param {Oject} o.view View object
  * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
 export function addSourceFromView(o){
 
   var p = mx.helpers.path;
+
+  if( o.map )
 
   if( o.map && p(o.view,"data.source") ){
 
@@ -696,21 +697,21 @@ export function addSourceFromView(o){
       o.view._edit = false;
     }
 
-    var sourceId = o.view.id + "-SRC";
-    var sourceExists = !!o.map.getSource(sourceId);
+    var idSource = o.view.id + "-SRC";
+    var sourceExists = !!o.map.getSource(idSource);
 
     if( sourceExists ) {
-      o.map.removeSource( sourceId ) ;
+      o.map.removeSource( idSource ) ;
     }
 
     if( o.view.type == "vt" ){
-      var baseUrl = mx.settings.apiUrlTiles;
+      var baseUrl = mx.helpers.getApiUrl('tiles');
       var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
       o.view.data.source.tiles = [url,url] ;
     }
 
     o.map.addSource(
-      sourceId,
+      idSource,
       o.view.data.source
     );
   }
@@ -739,6 +740,37 @@ export function loadGeojsonViews(o){
 
 
 
+/**
+* Get remote view from latest views table
+* @param {String} idView id of the view
+* @return {Promise} Promise resolving to object
+*/
+export function getViewRemote(idView){
+
+  var apiUrlViews = mx.helpers.getApiUrl('views');
+  if( !idView || !apiUrlViews ) return Promise.reject('Missing id or fetch URL');
+
+  /* get view object from storage or network */
+  var keyNet = apiUrlViews + idView;
+
+  return fetch( keyNet )
+    .then( view => view.json())
+    .then( view => {
+      view._edit = false;
+      view._kiosk = true;
+      return view;
+    });
+}
+/**
+* Get multipler remote views from latest views table
+* @param {Array} idViews array of views id
+* @return {Promise} Promise resolving to abject
+*/
+export function getViewsRemote(idViews){
+  return Promise.all(
+    idViews.map(id => getViewRemote(id))
+  );
+}
 
 /**
  * Save view list to views
@@ -750,15 +782,16 @@ export function loadGeojsonViews(o){
  * @param {string} o.project code
  * @param {Boolean} o.resetViews should this reset stored views list on map
  */
-export function setSourcesFromViews(o){
+export function setViewsList(o){
   return new Promise(function(resolve,reject){
 
     var m = mx.maps[o.id];
     var mode, map, view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
     var nCache = 0, nNetwork = 0, nTot = 0, prog;
+    var elProgContainer;
     if( o.viewsList && o.viewsList.length > 0 ) nTot = o.viewsList.length ;
     var isArray, hasViews;
-    var apiUrlViews = mx.settings.apiUrlViews;
+    var apiUrlViews = mx.helpers.getApiUrl('views');
 
     if( !m || !o.viewsList || !m.map ) return;
 
@@ -793,9 +826,9 @@ export function setSourcesFromViews(o){
 
 
     /**
-     * Helper
+     * Helpers
      */
-    
+
     /* Switch according to mode */
     function addViews(){
       return {
@@ -805,7 +838,7 @@ export function setSourcesFromViews(o){
       }[mode](views);
     }
 
-   /* Sort views by title */
+    /* Sort views by title */
     function sortViews(views){
 
       var aTitle,bTitle;
@@ -822,14 +855,21 @@ export function setSourcesFromViews(o){
     }
 
 
+    /* update progress */
     function updateProgress(){
-      if(!prog){
-        prog = new mx.helpers.RadialProgress("noViewItemText",{radius:20,stroke:3});
+      elProgContainer = document.querySelector("#noViewItemText");
+      if(!prog && elProgContainer){
+        prog = new mx.helpers.RadialProgress(elProgContainer,{
+          radius : 20,
+          stroke : 3
+        });
       }
-      prog.update((nCache+nNetwork)/nTot);
+      if( prog && prog.update && elProgContainer ){
+        prog.update((nCache+nNetwork)/nTot);
+      }
     }
 
-   /* get view title  */
+    /* get view title  */
     function getViewTitle(view){
       var title = mx.helpers.getLabelFromObjectPath({
         lang : mx.settings.language,
@@ -840,7 +880,7 @@ export function setSourcesFromViews(o){
       return title;
     }
 
-   /* get view object from storage or network */
+    /* get view object from storage or network */
     function getViewObject(v){
       var keyStore = v.id + "@" + v.pid;
       var keyNet = apiUrlViews + v.id + '?' + v.pid;
@@ -853,15 +893,15 @@ export function setSourcesFromViews(o){
             view._edit = editable;
             return Promise.resolve(view);
           }else{
-          return fetch( keyNet )
-            .then( r => r.json())
-            .then( view => {
-              nNetwork ++;
-              updateProgress();
-              view._edit = editable;
-              return view;
-            })
-            .then( view => mx.data.views.setItem(keyStore,view));
+            return fetch( keyNet )
+              .then( r => r.json())
+              .then( view => {
+                nNetwork ++;
+                updateProgress();
+                view._edit = editable;
+                return view;
+              })
+              .then( view => mx.data.views.setItem(keyStore,view));
           }
         });
     }
@@ -883,11 +923,6 @@ export function setSourcesFromViews(o){
             views : viewsFetched
           });
 
-          mx.helpers.addSourceFromViews({
-            map : map,
-            views : viewsFetched
-          });
-
           loadGeojsonFromStorage(o);
 
           return viewsFetched;
@@ -900,14 +935,6 @@ export function setSourcesFromViews(o){
     function addSync(view){
 
       m.views = views;
-
-      views.forEach(function(view){
-
-        mx.helpers.addSourceFromView({
-          map : map,
-          view : view
-        });
-      });
 
       mx.helpers.renderViewsList({
         id : o.id,
@@ -924,11 +951,6 @@ export function setSourcesFromViews(o){
       if( hasViews ){
         m.views.unshift( view );
       }
-
-      mx.helpers.addSourceFromView({
-        map : map,
-        view : view
-      });
 
       mx.helpers.renderViewsList({
         id : o.id,
@@ -965,11 +987,6 @@ function loadGeojsonFromStorage(o){
     if( view.project == project ){
       m.views.unshift( view );
 
-      mx.helpers.addSourceFromView({
-        map : map,
-        view : view
-      });
-
       mx.helpers.renderViewsList({
         id : o.id,
         views : view,
@@ -979,270 +996,6 @@ function loadGeojsonFromStorage(o){
     }
   });
 }
-
-
-
-
-
-
-
-//[>*
- //* Save view list to views
-
- //* @param {object} o options
- //* @param {string} o.id ID of the map 
- //* @param {object} o.viewList views list
- //* @param {Boolean} o.viewsCompact The view list is in compact form (id and row only)
- //* @param {boolean} o.add Append to existing
- //* @param {string} o.project code
- //* @param {Boolean} o.resetViews should this reset stored views list on map
- //*/
-//export function setSourcesFromViews(o){
-
-  /**
-  * Settings
-  */
-  
-  //var m = mx.maps[o.id] ;
-        //var action, map, view, views, oldViews, sourceId, sourceExists, sourceStore ;
-        //var isArray, isSingleView, isFullList, hasExistingViews, hasNewViews , hasGeoJSON;
-
-
-        //if( typeof o.resetViews == "undefined" ){
-          //o.resetViews = true;
-        //}
-
-        //if( !m || !o.viewsList || !m.map ){
-          //reject(false);
-        //}
-
-        //if( o.project ){
-          //mx.settings.project = o.project;
-        //}
-
-        //map = m.map;
-        //views = o.viewsList ;
-        //oldViews = m.views ;
-        //isSingleView = views instanceof Object && typeof views.id != 'undefined';
-        //hasExistingViews = oldViews instanceof Array && oldViews.length > 0;
-        //hasNewViews = views instanceof Array && views.length > 0;
-
-  //if( !isSingleView && !hasNewViews ) action = "addNothing";
-  //if( isSingleView ) action = "addSingle";
-        //if( !isSingleView && ( hasNewViews && o.viewsCompact ) || hasGeoJSON ) action = "addViewsAsync";
-        //if( !isSingleView && ( hasNewViews && !o.viewsCompact ) || hasGeoJSON ) action = "addViewsSync";
-
-        //console.log("Render view list action = " + action);
-
-      //return new Promise(function(resolve,reject){
-
- 
-        //switch (action) {        
-          /**
-           * Add empty views list
-           */
-          //case 'addNothing':
-          //mx.helpers.renderViewsList({
-            //map : map,
-            //empty : true
-          //});
-          //resolve(views);
-
-          //oldViews = views;
-          //break;
-
-          /**
-           * Single view entry : add to the views list
-           */
-          //case 'addSingle' :
-
-          //if( hasExistingViews ){
-            //oldViews.unshift( views );
-          //}
-
-          //mx.helpers.addSourceFromView({
-            //map : map,
-            //view : views
-          //});
-
-          //mx.helpers.renderViewsList({
-            //id : o.id,
-            //views : views,
-            //add : true
-          //});
-
-          //resolve(views) ;
-
-          //break;
-          /**
-           * Multiple view entry : replace views list
-           */
-          //case 'addViewsAsync' :
-
-          //[> Reset old views and dashboards <]
-          //if( o.resetViews ){
-            //mx.helpers.reset({
-              //idMap:o.id
-            //});
-          //}
-
-          //[>  If compact, use asynchronous view fetch <]
-          //var viewsL = views.length;
-          //var renderedL = 0;
-          //var apiUrlViews = mx.settings.apiUrlViews;
-
-          //function checkForLast(){
-            //++renderedL;
-            //if(renderedL === viewsL){
-              //resolve(views);
-            //}
-          //}
-
-          //views.forEach(function(v,i){
-
-            //oldViews.push( v );
-            //var async = v.type != "gj" && !v.data;
-            ////var last = (i === v,cciewsL - 1);
-            //if( async ){
-              //mx.helpers.getJSON({
-                //url :  apiUrlViews + v.id,
-                //onSuccess : function(view){
-                  //[> set edit flag  <]
-                  //view._edit = v._edit; 
-                  /**
-                   * add sources for each 
-                   */
-                  //mx.helpers.addSourceFromView({
-                    //map : map,
-                    //view : view
-                  //});
-
-                  //mx.helpers.renderViewsList({
-                    //id : o.id,
-                    //views : view,
-                    //add : true
-                  //});
-                  //checkForLast();
-                //}
-              //});
-            //}else{
-              //mx.helpers.addSourceFromView({
-                //map : map,
-                //view : v
-              //});
-              /*
-               * Render the full thing
-               */
-              //mx.helpers.renderViewsList({
-                //id : o.id,
-                //views : v,
-                //add : true
-              //});
-
-              //checkForLast();
-            //}
-
-
-          //});
-
-
-          //break;
-          //case 'addViewsSync':
-
-          //if( o.resetViews ){
-            //mx.helpers.reset({
-              //idMap:o.id
-            //});
-          //}
-
-
-          /**
-           * Save the view list as it
-           */
-
-          //m.views = views;
-          /**
-           * add sources for each 
-           */
-          //views.forEach(function(view){
-            //mx.helpers.addSourceFromView({
-              //map : map,
-              //view : view
-            //});
-          //});
-
-          /*
-           * Render the full thing
-           */
-          //mx.helpers.renderViewsList({
-            //id : o.id,
-            //views : views
-          //});
-
-          //oldViews = views;
-          //resolve(views);
-          //break;
-          //default:
-          //console.log("no logic set, reject");
-          //oldViews = [];
-          //reject(false);
-        //}
-      //});
-
-    //}).then(function(v){
-
-      /**
-       * Set default order
-       */
-      //sortViewsListBy({
-        //type : "title",
-        //dir :'asc',
-        //onSorted:function(){
-          //viewControler(o);
-        //}
-      //});
-     //return(v);
-    //});
-//}
-
-
-/**
-* Load geojson from localstorage,save it in views list and render item
-* @param {Object} o options
-* @param {String} o.id Map id
-* @param {String} o.project Current project to filter geojson view. Default to settings.project
-*/
-//function loadGeojsonFromStorage(o){
-  //var m = mx.maps[o.id] ;
-
-  //if( !mx.data || !mx.data.geojson || !m ) return;
-
-  //var map = m.map;
-  //var project = o.project || mx.settings.project;
-  /**
-   * extract views from local storage
-   */
-  //mx.data.geojson.iterate(function( value, key, i ){
-    //var view = value.view;
-    //if( view.project == project ){
-
-      //m.views.unshift( view );
-
-      //mx.helpers.addSourceFromView({
-        //map : map,
-        //view : view
-      //});
-
-      //mx.helpers.renderViewsList({
-        //id : o.id,
-        //views : view,
-        //add : true
-      //});
-    //}
-  //});
-//}
-
-
 
 
 
@@ -1271,6 +1024,8 @@ export function path(obj, path, def){
 }
 
 
+let vStore = [];
+
 /**
  *  View controler : evalutate view state and enable/disable it depending on ui state
  */
@@ -1278,7 +1033,7 @@ export function viewControler(o){
 
   var vToAdd = [], vToRemove = [], vVisible = [], vChecked = [];
   var view, isChecked,id;
-  var idMap = o.id || "map_main";
+  var idMap = o.id || mx.settings.idMapDefault;
   var idViewsList = o.idViewsList || "mx-views-list";
   var els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
 
@@ -1296,6 +1051,11 @@ export function viewControler(o){
       prefix:"MX-",
       base : true
     });
+    
+    vVisible = mx.helpers.getArrayStat({
+      arr : vStore.concat(vVisible),
+      stat : 'distinct'
+    });
 
     vToRemove = mx.helpers.arrayDiff(vVisible,vChecked);
 
@@ -1305,6 +1065,7 @@ export function viewControler(o){
      * View to add
      */
     vToAdd.forEach(function(v){
+      vStore.push(v);
       view = mx.helpers.getViews({
         id:idMap,
         idView:v
@@ -1314,26 +1075,20 @@ export function viewControler(o){
         viewData : view,
         idViewsList : idViewsList
       });
-
-      //view._setFilter();
-
-      mx.helpers.makeDashboard({ 
-        view: view, 
-        idMap: idMap
-      });  
     });
 
     /**
      * View to remove
      */
     vToRemove.forEach(function(v){
+      vStore.splice(vStore.indexOf(v,1));
 
       mx.helpers.removeLayersByPrefix({
         id : idMap,
         prefix : v
       });
 
-      cleanRemoveModules(v);
+      mx.helpers.cleanRemoveModules(v);
     });
 
     updateViewOrder(o);
@@ -1472,9 +1227,12 @@ export function makeSimpleLayer(o){
 export function updateViewOrder (o){
   
   var displayedOrig  = {};
-  var order = o.order || getViewOrder(o) || [];
   var displayed = [];
-  var map = mx.maps[o.id||"map_main"].map;
+  var map = mx.maps[o.id||mx.settings.idMapDefault].map;
+  var views = mx.maps[o.id||mx.settings.idMapDefault].views;
+  var idsViews = views.map( v => v.id);
+
+  var order = o.order || idsViews || [];
   var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
@@ -1541,7 +1299,7 @@ export function  moveViewItem(o){
 
   }
   updateViewOrder({
-    id:'map_main'
+    id:mx.settings.idMapDefault
   });
 
 
@@ -1603,7 +1361,6 @@ export function sortViewsListBy(o){
   /*
   * Update ui
   */
-  //if( elBtn ) debugger;
   if( elBtn && toggle ){
     if(isAsc){
      dir = "asc";
@@ -1678,7 +1435,7 @@ export function sortViewsListBy(o){
  */
 export function getViewOrder(o){
   
-  var m = mx.maps[o.id||"map_main"];
+  var m = mx.maps[o.id||mx.settings.idMapDefault];
   var obj = {};
   var res = [];
   var viewContainer, els, vid, i;
@@ -2049,7 +1806,7 @@ export function removeView(o){
     data.removeItem( o.idView );
   }
 
-  cleanRemoveModules(view);
+  mx.helpers.cleanRemoveModules(view);
 
   m.views = views.filter(function(x){
     return x.id != o.idView ; 
@@ -2066,7 +1823,7 @@ export function removeView(o){
   }
 
   if( views.length === 0 ){
-    emptyViewsList(true);
+    setViewsListEmpty(true);
   }
 }
 
@@ -2093,6 +1850,19 @@ export function handleViewClick(o){
     el = isIcon ? el.parentElement: el;
 
     t = [
+    {
+        id : "loadOrigProject",
+        comment :"target is the home project button",
+        isTrue : el.dataset.view_action_key == "btn_opt_home_project",
+        action : function(){
+          var viewTarget = el.dataset.view_action_target;
+          var view = mx.helpers.getViews({
+             id : mx.settings.idMapDefault,
+            idView : viewTarget
+          });
+          mx.helpers.setProject(view.project);
+        }
+      },
       {
         id : "moveViewTop",
         comment :"target is the move top button",
@@ -2205,7 +1975,7 @@ export function handleViewClick(o){
             legendInputs = legendContainer.querySelectorAll("input") 
           ;
           var idView = el.dataset.view_action_target;
-          var view = h.getViews({id:'map_main',idView:idView});
+          var view = h.getViews({id:mx.settings.idMapDefault,idView:idView});
           var attribute = h.path(view,'data.attribute.name');
           var type = h.path(view,'data.attribute.type');
 
@@ -2264,7 +2034,7 @@ export function handleViewClick(o){
         isTrue :  el.dataset.view_action_key == "btn_opt_meta_external",
         action:function(){
           var idView =  el.dataset.view_action_target;
-          var view = mx.helpers.getViews({id:'map_main',idView:idView});
+          var view = mx.helpers.getViews({id:mx.settings.idMapDefault,idView:idView});
           var link = mx.helpers.path(view,"data.source.urlMetadata");
           var title =  mx.helpers.path(view,"data.title." + mx.settings.language) || 
             mx.helpers.path(view,"data.title.en");
@@ -2304,34 +2074,42 @@ export function handleViewClick(o){
   };
 }
 
-
-
-
 /**
- * Update views list text and title using data in views.
- * 
- * @param {Object} o options
- * @param {String} o.id Maps item id
- * @param {String} o.lang Two letter language code. see mx.settings.languages.
+ * Add components in view for an array of views
+ * @param {Array} views Array of views to update
  */
+export function setViewsComponents(views){
 
+  views.forEach( v => {
+    var components, isVt, isSm, isCc,isRt,widgets,story,overlap,attributes,customStyle;
+    var h = mx.helpers;
+    components = [];
+
+    isVt = v.type == "vt";
+    isSm = v.type == "sm";
+    isCc = v.type == "cc";
+    isRt = v.type == "rt";
+
+    widgets = h.path(v,"data.dashboard.widgets",""); 
+    story = h.path(v,"data.story.steps",""); 
+    overlap = h.path(v,"data.source.layerInfo.maskName","");
+    attributes = h.path(v,"data.attribute.names","");
+    customStyle = h.path(v,"data.style.custom","");
+
+    if(isSm && story && story.length) components.push("story_map");
+    if(isVt && widgets && widgets.length) components.push("dashboard");
+    if(!isSm) components.push("layer");
+    if(isVt && attributes && attributes.indexOf("mx_t0") >-1 )  components.push("time_slider");
+    if(isVt && typeof overlap == "string" && overlap.length )  components.push("overlap");
+    if(isVt && customStyle && customStyle.json && JSON.parse(customStyle.json).enable)  components.push("custom_style");
+    if(isCc) components.push("custom_code"); 
+    v._components = components;
+
+  });
+}
 
 
 /**
-* Update view layout
-*/
-//function updateViewsListLayout(o){
-  //var  id = o.idMap || "map_main";
-  //var m = mx.maps[id];
-  //var time = o.timeOut || 200;
-  //setTimeout(function(){
-    //if(m.tools && m.tools.viewsListPackery){
-    //}
-  //},time);
-/*}*/
-
-/**
-
  * Render views HTML list in viewStore
  * @param {object} o options
  * @param {string} o.id map id
@@ -2367,40 +2145,19 @@ export function renderViewsList(o){
   };
 
 
-  var components, isVt, isSm, isCc,isRt,widgets,story,overlap,attributes,customStyle;
-
-  views.forEach(v=>{
-    components = [];
-
-    isVt = v.type == "vt";
-    isSm = v.type == "sm";
-    isCc = v.type == "cc";
-    isRt = v.type == "rt";
-
-    widgets = h.path(v,"data.dashboard.widgets",""); 
-    story = h.path(v,"data.story.steps",""); 
-    overlap = h.path(v,"data.source.layerInfo.maskName","");
-    attributes = h.path(v,"data.attribute.names","");
-    customStyle = h.path(v,"data.style.custom","");
-
-    if(isSm && story && story.length) components.push("story_map");
-    if(isVt && widgets && widgets.length) components.push("dashboard");
-    if(!isSm) components.push("layer");
-    if(isVt && attributes && attributes.indexOf("mx_t0") >-1 )  components.push("time_slider");
-    if(isVt && typeof overlap == "string" && overlap.length )  components.push("overlap");
-    if(isVt && customStyle && customStyle.json && JSON.parse(customStyle.json).enable)  components.push("custom_style");
-    if(isCc) components.push("custom_code"); 
-    v._components = components;
-
-  });
-
-
+  /**
+  * If empty, add empty view list message
+  */
   if( ! hasList && ! add ){
-    emptyViewsList(true);
-
+    setViewsListEmpty(true);
   }else{
 
-    emptyViewsList(false);
+    setViewsListEmpty(false);
+    /**
+     * Add components (story, dashboard, vector, raster, etc..) to each view ._components
+     */
+    mx.helpers.setViewsComponents(views);
+
 
     if( !m.listener ) m.listener = {};
     if( !m.tools ) m.tools = {};
@@ -2528,30 +2285,31 @@ export function renderViewsList(o){
 /**
 * Check if there is an empty views list and add a message if needed
 */
-export function emptyViewsList(enable){
+export function setViewsListEmpty(enable){
 
   enable = enable || false;
-
   var noViewKey = "noView";
   var elViewsList = document.querySelector(".mx-views-list");
-  mx.helpers.getDictItem(noViewKey).then(function(item){
 
-    if( enable ){
-      elViewsList.innerHTML = "";
-      var elView = document.createElement("li");
-      var elTitle = document.createElement("span");
-      elTitle.dataset.lang_key = noViewKey;
-      elView.classList.add("mx-view-item-empty");
+  if( enable ){
+    elViewsList.innerHTML = "";
+    var elView = document.createElement("li");
+    var elTitle = document.createElement("span");
+    elTitle.dataset.lang_key = noViewKey;
+    elView.classList.add("mx-view-item-empty");
+    elTitle.id = "noViewItemText";
+    elView.appendChild(elTitle);
+    elViewsList.appendChild(elView) ;
+    mx.helpers.getDictItem(noViewKey).then(function(item){
+
       elTitle.innerHTML = item;
-      elTitle.id = "noViewItemText";
-      elView.appendChild(elTitle);
-      elViewsList.appendChild(elView) ;
-    }else{
-      var elToRemove = document.querySelector(".mx-view-item-empty");
-      if(elToRemove) elToRemove.remove();
-    }
+    });
+  }else{
+    var elToRemove = document.querySelector(".mx-view-item-empty");
+    if(elToRemove) elToRemove.remove();
+  }
 
-  });
+
 }
 
 /**
@@ -2742,7 +2500,7 @@ export function viewSetFilter(o){
   var filters = view._filters;
   var filterNew = ['all'];
   var type = o.type ? o.type : "default";
-  var idMap = view._idMap ? view._idMap : "map_main";
+  var idMap = view._idMap ? view._idMap : mx.settings.idMapDefault;
   var m = mx.maps[idMap].map;
   var layers = mx.helpers.getLayerByPrefix({id:idMap,prefix:idView});
 
@@ -2783,7 +2541,7 @@ export function viewSetOpacity(o){
   var view = this;
   var idView = view.id;
   var opacity = o.opacity;
-  var idMap = view._idMap ? view._idMap : "map_main";
+  var idMap = view._idMap ? view._idMap : mx.settings.idMapDefault;
   var m = mx.maps[idMap].map;
   var layers = mx.helpers.getLayerByPrefix({id:idMap,prefix:idView});
 
@@ -2899,7 +2657,7 @@ export function downloadMapPdf(o){
     var promLegend,promScale,promNorth;
     var qf = [];
     var map = mx.maps[o.id].map;
-    var elMap = document.getElementById("map_main");
+    var elMap = document.getElementById(mx.settings.idMapDefault);
     var mapDim =  elMap.getBoundingClientRect();
     var paperWidth = 297;
     var paperHeight = 210;
@@ -3162,7 +2920,7 @@ export function getLayerBaseName(str){
  */
 export function getLayerNamesByPrefix(o) {
  
-  o = o ||{id:'map_main',prefix:'MX-'};
+  o = o ||{id:mx.settings.idMapDefault,prefix:'MX-'};
   var mapId, prefix, base, result, hasMap, map, layers, l;
   var out = [];
   mapId = o.id;
@@ -3333,6 +3091,133 @@ export function existsInList(li, it, val, inverse) {
   }
 }
 
+
+/**
+ * Parse view of type cc and add it to the map
+ * @param {Object} o Options
+ * @param {Object} o.view View data
+ * @param {Object} o.map Map object
+ * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ */
+function addViewCc(o){
+  var view = o.view;
+  var map = o.map;
+  var methods = mx.helpers.path(view,"data.methods");
+
+  if( !methods ) return;
+  var getMethod =  new Promise(function(resolve, reject) {
+    var r = new Function(methods)();
+    if (r) {
+      resolve(r);
+    } else {
+      reject(methods);
+    }
+  })
+    .then(function(cc){
+      if( 
+        ! ( cc.onInit instanceof Function ) || 
+        ! ( cc.onClose instanceof Function)
+      ) return;
+
+      var opt = {
+        map : map,
+        view : view,
+        idView : view.id,
+        idSource : view.id + "-SRC",
+        idLegend : "check_view_legend_" + view.id,
+        onClose : cc.onClose,
+        onInit : cc.onInit
+      };
+
+      opt.elLegend = document.getElementById(opt.idLegend);
+
+      if(opt.map.getSource(opt.idSource)){
+        opt.map.removeSource(opt.idSource);
+      }
+
+      mx.helpers.removeLayersByPrefix({
+        prefix : opt.idView,
+        id : mx.settings.idMapDefault
+      });
+
+      view._onRemoveCustomView = function(){
+        opt.onClose(opt);
+      };
+
+      /**
+       * Init custom map
+       */
+      opt.onInit(opt);
+
+    }).catch(function(e){
+      mx.helpers.modal({
+        id :  "modalError",
+        title : "Error",
+        content : "<p>Error during methods evaluation :" + e 
+      });
+    });
+}
+
+/**
+ * Parse view of type rt and add it to the map
+ * @param {Object} o Options
+ * @param {Object} o.view View data
+ * @param {Object} o.map Map object
+ * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ */
+function addViewRt(o){
+
+  var view = o.view;
+  var map = o.map;
+
+  if(!mx.helpers.path(view,"data.source.tiles")) return ;   
+
+  /**
+   * source as already be added. Add layer
+   */
+  map.addLayer({
+    id: view.id,
+    type : "raster",
+    source: view.id + "-SRC"
+  },o.before);
+
+  /* 
+   * Add legend
+   */ 
+  var legend = mx.helpers.path(view,"data.source.legend");
+
+  if(legend){
+    var elLegend = document.querySelector("#check_view_legend_"+view.id);
+    if(elLegend){
+      var oldImg = elLegend.querySelector("img");
+      if(!oldImg){
+        var img = new Image();
+        img.src = legend;
+        img.alt = "Legend"; 
+        img.style = "cursor:zoom.in";
+        elLegend.appendChild(img); 
+        img.onload = function(){
+        };
+        img.onclick = function(){
+          var title = mx.helpers.getLabelFromObjectPath({
+            obj : view,
+            path : "data.title",
+            defaultKey : "noTitle"
+          });
+          var imgModal = new Image();
+          imgModal.src = legend;
+          imgModal.alt = "Legend";
+          mx.helpers.modal({
+            title:title,
+            id:"legend-raster-" + view.id,
+            content:imgModal,
+            addBackground:false
+          });
+        };
+      }
+    }
+  }
+}
 
 /**
  * Parse view of type vt and add it to the map
@@ -3784,12 +3669,17 @@ export function addOptions(o){
 */
 export function addView(o){
 
+  var m = mx.maps[ o.id || mx.settings.idMapDefault ];
+  var view = o.viewData;
+  var idMap = o.id;
+
   if(!o.viewData && !o.idView) {
     console.log("Add view called without idView or view Data. Options :");
     console.log(o);
     return;
   }
-  if(o.before){
+
+  if( o.before ){
     var l = mx.helpers.getLayerNamesByPrefix({
       id : o.id,
       prefix : o.before
@@ -3799,11 +3689,14 @@ export function addView(o){
     o.before = mx.settings.layerBefore;
   }
 
-  var m = mx.maps[o.id];
-  var view = o.viewData;
+  /* Remove previous layer if needed */
+  mx.helpers.removeLayersByPrefix({
+    id: o.id,
+    prefix : view ? view.id : o.idView
+  });
 
-  /* replace it to have current values */
-  if(view && view.id){
+   /* replace it to have current values */
+  if( view && view.id ){
     var viewIndex ;
 
     var oldView =  mx.helpers.getViews({
@@ -3812,11 +3705,15 @@ export function addView(o){
     });
 
     if( oldView ){
+      mx.helpers.cleanRemoveModules(oldView);
       viewIndex = m.views.indexOf(oldView);
       m.views[viewIndex] = view;
     }
   }
 
+  /*
+   * If id view, get view data
+   */
   if(o.idView){
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
     view = mx.helpers.getViews(o);
@@ -3827,25 +3724,39 @@ export function addView(o){
     return ;
   }
 
-  /* Remove previous layer if needed */
-  mx.helpers.removeLayersByPrefix({
-    id: o.id,
-    prefix : view.id
-  });
-
 
   /**
    * Add options
    */
-    mx.helpers.addOptions({
-      id : o.id,
-      view : view,
-      noUi : o.noUi
-    });
+  mx.helpers.addOptions({
+    id : o.id,
+    view : view,
+    noUi : o.noUi
+  });
+
+  /*
+   * Check if dashboard data is there and build it if needed
+   */
+  if(!o.noUi){
+    mx.helpers.makeDashboard({ 
+      view: view, 
+      idMap: idMap
+    }); 
+  }
+  /**
+  * Add source from view
+  */
+  mx.helpers.addSourceFromView({
+    map : m.map,
+    view : view
+  });
+
   /**
    * Add view
    */
+
   handler(view.type);
+
 
   /**
    * handler based on view type
@@ -3855,111 +3766,18 @@ export function addView(o){
     /* Switch on view type*/
     var handler = {
       rt : function(){
-
-        if(!mx.helpers.path(view,"data.source.tiles")) return ;   
-
-        m.map.addLayer({
-          id: view.id,
-          type : "raster",
-          source: view.id + "-SRC"
-        },o.before);
-
-        /* IMG */ 
-
-        var legend = mx.helpers.path(view,"data.source.legend");
-
-        if(legend){
-          var elLegend = document.querySelector("#check_view_legend_"+view.id);
-          if(elLegend){
-            var oldImg = elLegend.querySelector("img");
-            if(!oldImg){
-              var img = new Image();
-              img.src = legend;
-              img.alt = "Legend"; 
-              img.style = "cursor:zoom.in";
-              elLegend.appendChild(img); 
-              img.onload = function(){
-              };
-              img.onclick = function(){
-                var title = mx.helpers.getLabelFromObjectPath({
-                  obj : view,
-                  path : "data.title",
-                  defaultKey : "noTitle"
-                });
-                var imgModal = new Image();
-                imgModal.src = legend;
-                imgModal.alt = "Legend";
-                  mx.helpers.modal({
-                    title:title,
-                    id:"legend-raster-" + view.id,
-                    content:imgModal,
-                    addBackground:false
-                  });
-              };
-            }
-          }
-        }
-
+        addViewRt({
+          view : view,
+          map : m.map,
+          before : o.before
+        });
       },
       cc : function(){
-        var methods = mx.helpers.path(view,"data.methods");
-
-        if( !methods ) return;
-        var getMethod =  new Promise(function(resolve, reject) {
-          var r = new Function(methods)();
-          if (r) {
-            resolve(r);
-          } else {
-            reject(methods);
-          }
-        })
-          .then(function(cc){
-            if( 
-              ! ( cc.onInit instanceof Function ) || 
-                ! ( cc.onClose instanceof Function)
-            ) return;
-
-            var opt = {
-              map : m.map,
-              view : view,
-              idView : view.id,
-              idSource : view.id + "-SRC",
-              idLegend : "check_view_legend_" + view.id,
-              onClose : cc.onClose,
-              onInit : cc.onInit
-            };
-
-            opt.elLegend = document.getElementById(opt.idLegend);
-
-
-            if(opt.map.getSource(opt.idSource)){
-              opt.map.removeSource(opt.idSource);
-            }
-
-
-            mx.helpers.removeLayersByPrefix({
-              prefix : opt.idView,
-              id : "map_main"
-            });
-
-            view._onRemoveCustomView = function(){
-              opt.onClose(opt);
-            };
-
-
-            /**
-             * Init custom map
-             */
-            opt.onInit(opt);
-
-
-          }).catch(function(e){
-            mx.helpers.modal({
-              id :  "modalError",
-              title : "Error",
-              content : "<p>Error during methods evaluation :" + e 
-            });
-          });
+        addViewCc({
+          view : view,
+          map : m.map,
+          before : o.before
+        });
       },
       vt : function(){
         addViewVt({
@@ -4082,7 +3900,7 @@ export function getRenderedLayersIntersect(o){
 
   o.onMessage = o.onMessage || console.log;
   o.onEnd = o.onEnd || console.log;
-  o.id = o.id || "map_main";
+  o.id = o.id || mx.settings.idMapDefault;
 
   if ( checkMap(o.id) ){
     Promise.all([
@@ -4227,7 +4045,7 @@ export function getRenderedLayersIntersect_old(o){
 
   o.onMessage = o.onMessage || console.log;
   o.onEnd = o.onEnd || console.log;
-  o.id = o.id || "map_main";
+  o.id = o.id || mx.settings.idMapDefault;
 
   if ( checkMap(o.id) ){
 
@@ -4543,7 +4361,9 @@ export function filterViewValues(o){
       filter = [operator,attr,search*1];
     }else{
       map = mx.maps[idMap].map;
-      features = map.querySourceFeatures(idView+"-SRC",{sourceLayer:idView});
+      features = map.querySourceFeatures( idView + "-SRC", {
+        sourceLayer : idView
+      });
       values = {}; 
 
       features.forEach(function(f){
@@ -4635,6 +4455,52 @@ export function zoomToViewId(o){
 
   }
 }
+
+
+/**
+* Find bounds of a series of views
+* @param {Array} views Array of views
+* @return {Object} MapBox gl bounds object
+*/
+export function getViewsBounds(views){
+
+  return new Promise(function(resolve,reject){
+    var bounds;
+    var h = mx.helpers;
+    views  = views.constructor === Array ? views:[views];
+
+    var extent = {
+      lat1 : -80,
+      lat2 : 80,
+      lng1 : -180,
+      lng2 : 180
+    };
+
+    var extents = views.forEach(( v, i)  => {
+      var ext = h.path(v,'data.geometry.extent');
+      if(ext){
+        if( i == 0 ) extent = ext;
+        extent = {
+          lat1 : ext.lat1 > extent.lat1 ? ext.lat1 : extent.lat1,
+          lat2 : ext.lat2 < extent.lat2 ? ext.lat2 : extent.lat2,
+          lng1 : ext.lng1 > extent.lng1 ? ext.lng1 : extent.lng1,
+          lng2 : ext.lng2 < extent.lng2 ? ext.lng2 : extent.lng2,
+        };
+      }
+    });
+
+    bounds = new mx.mapboxgl.LngLatBounds(
+      [extent.lng1, extent.lat1], 
+      [extent.lng2, extent.lat2] 
+    );
+
+    resolve(bounds);
+
+  });
+}
+
+
+
 
 /**
  * Fly to view id using rendered features
@@ -4769,7 +4635,7 @@ export function btnToggleLayer(o){
   
   var shades;
 
-  o.id = o.id || "map_main";
+  o.id = o.id || mx.settings.idMapDefault;
   var map = mx.maps[o.id].map;
   var btn = document.getElementById(o.idSwitch);
   var lay = map.getLayer(o.idLayer);
@@ -4818,289 +4684,6 @@ export function btnToggleLayer(o){
   }
   return toToggle;
 }
-
-/**
- * Set map-x ui and map colorscheme. 
- * TODO: 
- * - Generalize this. Default in mgl settings
- * - Map modifier object as an option
- * 
- * @param {Object} o options
- * @param {String} o.id map id
- * @param {Object} o.colors Intial colors scheme.
- *
- */
-export function setUiColorScheme(o){
-
-  var mx_colors; // colors from stylesheet from the rule ".mx *";
-  var init = false;
-  var map = mx.maps[o.id||"map_main"].map;
-  var c = o.colors;
-  init = c !== undefined && mx.settings.colors === undefined;
-  c = c||{};
-
-  mx.settings.colors = c;
-  
-  /**
-   * Extract main rules. NOTE: this seems fragile, find another technique
-   */
-  var styles = document.styleSheets;
-  for(var i= 0, iL=styles.length;i<iL;i++){
-    var rules = styles[i].rules||styles[i].cssRules||[];
-    for(var j=0, jL=rules.length;j<jL;j++){
-      if(rules[j].selectorText == ".mx *"){
-        mx_colors=rules[j];
-      }
-    }
-  }
-  /*
-   * Hard coded default if no stylsheet defined or user defined colors is set
-   */
-  c.mx_ui_text = c.mx_ui_text || "hsl(0, 0%, 21%)";
-  c.mx_ui_text_faded = c.mx_ui_text_faded || "hsla(0, 0%, 21%, 0.6)";
-  c.mx_ui_hidden = c.mx_ui_hidden || "hsla(196, 98%, 50%,0)";
-  c.mx_ui_border = c.mx_ui_border || "hsl(0, 0%, 61%)";
-  c.mx_ui_background = c.mx_ui_background ||"hsla(0, 0%, 97%, 0.95)";
-  c.mx_ui_shadow = c.mx_ui_shadow || "hsla(0, 0%, 60%, 0.3)";
-  c.mx_map_text = c.mx_map_text || "hsl(0, 0%, 21%)";
-  c.mx_map_text_outline = c.mx_map_text_outline || "hsla(196, 98%, 50%,0)";
-  c.mx_map_background = c.mx_map_background ||"hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_mask = c.mx_map_mask || "hsla(0, 0%, 60%, 0.3)";
-  c.mx_map_water =  c.mx_map_water || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_road = c.mx_map_road || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_road_border = c.mx_map_road_border || "hsl(0, 0%, 61%)";
-  c.mx_map_building = c.mx_map_building || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_admin = c.mx_map_admin || "hsla(0, 0%, 97%, 0.95)";
-  c.mx_map_admin_disputed = c.mx_map_admin_disputed || "hsla(0, 0%, 97%, 0.95)";
-
-  /**
-   * create / update input color
-   */
-
-    var inputs = document.getElementById("inputThemeColors");
-
-    //inputs.classList.add("mx-views-content");
-
-    if(inputs && inputs.children.length>0){
-      mx.helpers.forEachEl({
-        els:inputs.children,
-        callback:function(el){
-          var colorIn = el.querySelector("[type='color']").value;
-          var alphaIn = el.querySelector("[type='range']").value;
-          var idIn = el.id;
-          c[idIn] = mx.helpers.hex2rgba(colorIn,alphaIn);
-        }
-      });
-    }
-
-  if(typeof Shiny !== "undefined"){
-    Shiny.onInputChange("uiColorScheme",JSON.stringify(c,0,2));
-  }
-
-
-
-  
-
-    if(init){
-      inputs.innerHTML="";
-      var inputType = ["color","range"];
-      for(var cid in c){
-        var container = document.createElement("div");
-        container.classList.add("mx-settings-color-container");
-        container.id = cid;
-        var container_inputs = document.createElement("div");
-        var lab = document.createElement("span");
-        lab.classList.add("mx-settings-color-label");
-        container_inputs.id = cid + "_inputs";
-        container_inputs.className="mx-settings-colors-input";
-        var color = mx.helpers.color2obj(c[cid]);
-
-        for(var ityp=0, itypL=inputType.length;ityp<itypL;ityp++ ){
-          var typ = inputType[ityp];
-          var input = document.createElement("input");
-          input.onchange=mx.helpers.setUiColorScheme;
-          input.type = typ;
-          input.id = cid + "_" + typ;
-          if( typ == "range" ){
-            input.min = 0;
-            input.max = 1;
-            input.step = 0.1;
-          }
-          input.value = typ == "range" ? color.alpha : color.color;
-          container_inputs.appendChild(input);
-        }
-       
-        setLabelTitle(cid,lab);
-        lab.dataset.lang_key = cid;
-        lab.setAttribute("aria-label", cid);
-        lab.classList.add("hint--right");
-        lab.for = cid;
-        container.appendChild(lab);
-        container.appendChild(container_inputs);
-        inputs.appendChild(container);
-      }
-    }
-
-  /*
-  * helpers
-  */
-function setLabelTitle(id,label){
-    mx.helpers.getDictItem(id).then(function(title){
-      label.innreHTML=title;
-    }); 
-  }
-
-    /**
-     * Ui color
-     */
-
-  for(var col in c){
-    mx_colors.style.setProperty("--"+col,c[col]);
-  }
-
-  /**
-   * Map colors NOTE: PUT THIS OBJECT AS THEME
-   */ 
-    var layers = [
-      {
-        "id":["background"],
-        "paint": {
-          "background-color": c.mx_map_background 
-        }
-      },
-      {
-        "id":["maritime"],
-        "paint": {
-          "line-color": c.mx_map_background 
-        }
-      },
-      {
-        "id":["water"],
-        "paint": {
-          "fill-color": c.mx_map_water,
-          "fill-outline-color" : c.mx_map_water
-        }
-      },
-      {
-        "id":["waterway"],
-        "paint": {
-          "line-color": c.mx_map_water
-        }
-      },
-      {
-        "id":["country-code"],
-        "paint":{
-          "fill-color": c.mx_map_mask
-        }
-      },
-      {
-        "id":[
-          "road-street-low",
-          "road-street_limited-low",
-          "road-path",
-          "road-construction",
-          "road-trunk_link",
-          "road-motorway_link",
-          "road-service-link-track",
-          "road-street_limited",
-          "road-street",
-          "road-secondary-tertiary",
-          "road-primary",
-          "road-trunk",
-          "road-motorway",
-          "road-rail",
-          "road-rail-tracks"
-        ],
-        "paint":{
-          "line-color":c.mx_map_road
-        }
-      },
-      {
-        "id":[
-          "road-pedestrian-polygon",
-          "road-polygon"
-        ],
-        "paint":{
-          "fill-color":c.mx_map_road
-        }
-      },
-      {
-        "id":[
-          "road-pedestrian-polygon-case",
-          "road-service-link-track-case",
-          "road-street_limited-case",
-          "road-street-case",
-          "road-secondary-tertiary-case",
-          "road-primary-case",
-          "road-motorway_link-case",
-          "road-trunk_link-case",
-          "road-trunk-case",
-          "road-motorway-case"
-        ],
-        "paint":{
-          "line-color":c.mx_map_road_border
-        }
-      },
-      {
-        "id":["building"],
-        "paint":{
-          "fill-color":c.mx_map_building
-        }
-      },
-      {
-        "id":["boundaries_2","boundaries_3-4"],
-        "paint":{
-          "line-color":c.mx_map_admin
-        }
-      },
-      {
-        "id":["boundaries_disputed"],
-        "paint":{
-          "line-color":c.mx_map_admin_disputed
-        }
-      },
-      {
-        "id":[
-          "project-label",
-          "place-label-capital",
-          "place-label-city",
-          "country-label",
-          "road-label",
-          "road-label-small",
-          "road-label-medium",
-          "road-label-large"
-        ],
-        "paint":{          
-          "text-color": c.mx_map_text,
-          "text-halo-color": c.mx_map_text_outline
-        }
-      }
-    ];
-
-    for(var k = 0,kL = layers.length; k<kL; k++ ){
-      var grp = layers[k];
-      for(var l = 0, lL = grp.id.length; l < lL; l++ ){
-        var lid = grp.id[l];
-        var lay = map.getLayer(lid);
-        if( lay ){
-          for(var p in grp.paint){
-            try{
-            map.setPaintProperty(lid,p,grp.paint[p]); 
-            } catch(err){
-              console.log({
-                err : err,
-                id : lid,
-                property:p
-              });
-            }
-          }
-        }
-      }
-    }
-
-
- }
-
 
 /**
 * Quick iframe builder
@@ -5421,31 +5004,75 @@ export function getMapPos(o){
 }
 
 /**
- * Create views object with id as key or single view if idView is provided in options
- * @param {Object} o options
+ * Create views array or object with id as key, or single view if idView is provided in options
+ * @param {Object | String} o options || id of the map
  * @param {String} o.id map id
+ * @param {String} o.asArray Default is false, return an object
  * @param {String} o.idView Optional. Filter view to return. Default = all.
+ * @return {Object | Array} array of views or object with views id as key
  */
 export function getViews(o){
-  
-  var dat, out = {};
+  o = o || mx.settings.idMapDefault;
+  var byMapId = typeof o === "string";
+  var out = o.asArray ? [] : {};
+  var id = byMapId ? o : o.id || mx.settings.idMapDefault;
+  var dat = mx.maps[id];
 
-  dat = mx.maps[o.id];
+  var hasNoViews = !dat || !dat.views;
 
-  if( dat && dat.views ){
-    if( dat.views.length > 0 ){
-      dat.views.forEach(function(x){
-        if( !o.idView ){ 
-          out[x.id] = x;     
-        }else if(o.idView == x.id){ 
-          out= x;     
-        }
-      });
-    }
+  if( hasNoViews ) return out;
+
+  var retFilteredArray  = ( o.asArray   && o.idView );
+  var retFullArray      = ( o.asArray   && ! o.idView );
+  var retFilteredObject = ( ! o.asArray && o.idView );
+  var retFullObject     = ( ! o.asArray && ! o.idView ) ;
+
+  var views = dat.views;
+
+  /**
+   * Return all views in array
+   */
+  if( retFullArray ) return views;
+
+  /**
+   * Return filtered view 
+   */
+  if( retFilteredArray || retFilteredObject ){
+    var v =  views.filter( v => v.id == o.idView );
+    if( retFilteredArray ) return v;
+    return v[0] || [];
   }
 
-  return out;
+  /**
+   * Return full object with id as key
+   */
+  if( retFullObject ) {
+   views.forEach( v => {
+      out[ v.id ] = v;     
+    });
+   return out;
+  }
+ 
 }
+
+/**
+* Return a single view
+* @param {String} id of the view
+* @param {String} idMap Id of the map
+*/
+export function getView(id,idMap){
+   return mx.helpers.getViews({idView:id,id:idMap});
+}
+
+/**
+* Get a map object by id
+* @param {String} idMap
+* @return {Object} map
+*/
+export function getMap(idMap){
+   return mx.maps[idMap||mx.settings.idMapDefault].map;
+}
+
 
 /**
  * Toy function to make layer move
@@ -5494,7 +5121,7 @@ export function makeLayerJiggle(mapId, prefix) {
 }
 
 
-export function getReadersIcons(view){
+export function getViewIcons(view){
   view = view || {};
   var cl;
   var elItem;
@@ -5503,6 +5130,7 @@ export function getReadersIcons(view){
   var readers = view.readers || [];
   var hasEdit = view._edit === true;
   var hasPublic = readers.indexOf("public") > -1;
+  var isShared = view.project !== mx.settings.project;
   var clAll = "fa";
   elReaders.classList.add("mx-readers-grp");
 
@@ -5511,11 +5139,22 @@ export function getReadersIcons(view){
     elSpan = document.createElement("span");
     elSpan.appendChild(elItem);
     elItem.classList.add(clAll);
-    elItem.classList.add('fa-gavel');
+    elItem.classList.add('fa-check-circle');
     elSpan.classList.add('hint--left');
     elSpan.dataset.lang_type ="tooltip";
     elSpan.dataset.lang_key ="view_validated";
     elReaders.appendChild(elSpan);
+  }
+  if( isShared ){  
+    var elShared = document.createElement("i");
+    var elSharedSpan = document.createElement("span");
+    elSharedSpan.appendChild(elShared);
+    elShared.classList.add(clAll);
+    elShared.classList.add('fa-share-alt-square');
+    elSharedSpan.classList.add('hint--left');
+    elSharedSpan.dataset.lang_type ="tooltip";
+    elSharedSpan.dataset.lang_key ="view_shared";
+    elReaders.appendChild(elSharedSpan);
   }
    
   elItem = document.createElement("i");

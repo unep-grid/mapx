@@ -85,7 +85,9 @@ export function updateLanguageElements(o) {
 
      // custom buttons
       var elBtnLanguage = document.querySelector("#btnShowLanguage");
-      elBtnLanguage.dataset.lang_key = o.lang; 
+      if(elBtnLanguage){
+        elBtnLanguage.dataset.lang_key = o.lang; 
+      }
 
       // set value selector
 

@@ -175,7 +175,7 @@ function uploadSource(o){
   /** 
    ** rebuilding formdata, as append seems to add value in UI...
    **/
-  var host = mx.settings.apiUrlBase + '/upload/vector';
+  var host = mx.helpers.getApiUrl('uploadVector');
 
   if( o.geojson ){
     o.geojson = typeof(o.geojson) == "string" ? o.geojson : JSON.stringify(o.geojson);

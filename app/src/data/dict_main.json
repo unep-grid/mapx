@@ -480,6 +480,18 @@
     "ps": "دا لید لرې کړئ"
   },
   {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "fr": "Ouvrir le project original",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_opt_move_top",
     "en": "Move to top",
     "fr": "Déplacer vers le haut",
@@ -3456,6 +3468,18 @@
     "ps": ""
   },
   {
+    "id": "view_shared",
+    "en": "View shared",
+    "fr": "Vue partagée",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "view_abstract",
     "en": "View abstract",
     "fr": "Résumé de la vue",
@@ -3504,7 +3528,7 @@
     "ps": "د ماسک زیاتول"
   },
   {
-    "id": "view_themes",
+    "id": "view_classes",
     "en": "Theme",
     "fr": "Thème",
     "es": "",
@@ -3687,6 +3711,30 @@
     "id": "view_dashboard_txt_which_data",
     "en": "Which source to use for the data ?",
     "fr": "Quelle source utiliser pour les données?",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "\"",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_which_module",
+    "en": "Which modules to load?",
+    "fr": "Quels modules charger ?",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "\"",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_desc_module",
+    "en": "Modules will be loaded under `widget.modules`",
+    "fr": "Les modules seront disponible dans `widget.modules`",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4990,7 +5038,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }
+  },
   {
     "id": "component",
     "en": "Type of views",

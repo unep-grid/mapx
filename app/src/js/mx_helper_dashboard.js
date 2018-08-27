@@ -156,18 +156,23 @@ export function handleEvent(e){
 */
 function Dashboard(idContainer,view) {
   var dashboard = this;
+  var modules = mx.helpers.path(view,'data.dashboard.modules')||['highcharts'];
 
   return  Promise.all([
     System.import("packery"),
     System.import("draggabilly"),
-    System.import("./mx_highcharts.js")
+    mx.helpers.modulesLoad(modules)
   ])
     .then(function(m){
       // Access to modules from each dashboard
       dashboard.modules = {};
       dashboard.modules.packery = m[0];
       dashboard.modules.draggabilly = m[1];
-      dashboard.modules.highcharts= m[2].Highcharts;
+     
+      modules.forEach((mod,i) => {
+        dashboard.modules[mod] = m[2][i];
+      });
+
       dashboard.elContainer = document.getElementById(idContainer);
       dashboard.elGrid = document.createElement("div");
       dashboard.elGrid.className = "grid mx-dashboard";

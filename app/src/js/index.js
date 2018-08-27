@@ -13,6 +13,7 @@ import 'selectize/dist/css/selectize.css';
 import 'selectize/dist/css/selectize.bootstrap3.css';
 import 'hint.css';
 import '../css/mx.css';
+import '../css/mx_codemirror.css';
 import '../css/mx_flash.css';
 import '../css/mx_content_tools.css';
 import '../css/mx_loader.css';
@@ -24,8 +25,9 @@ import '../css/mx_story.css';
 import '../css/mx_dashboard.css';
 import '../css/mx_selectize.css';
 import '../css/mx_colors.css';
-import './mx_bindings.js';
 import * as mx from './mx_init.js';
 window.mx = mx;
-import './mx_shiny.min.js';
+
+
+
 

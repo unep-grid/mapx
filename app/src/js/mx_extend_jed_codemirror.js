@@ -1,22 +1,19 @@
-
 /*
- * mx_extend_jed_medium.js
- * Copyright (C) 2017 fxi <fxi@mbp-fxi.home>
+ * mx_extend_jed_codemirror.js
  *
- * Distributed under terms of the MIT license.
  */
 (function(){
   'use strict';
 
   JSONEditor.defaults.resolvers.unshift(function(schema) {
     if(schema.type === "string" && schema.format === "textarea" && schema.options) {
-      if( schema.options.editor === "ace"){
-        return "ace";
+      if( schema.options.editor === "codemirror"){
+        return "codemirror";
       }
     }
   });
 
-  JSONEditor.defaults.editors.ace = JSONEditor.defaults.editors.string.extend({
+  JSONEditor.defaults.editors.codemirror = JSONEditor.defaults.editors.string.extend({
 
     refreshValue: function() {
       this.value = this.value || "";
@@ -46,8 +43,8 @@
 
       this.value = sanitized;
 
-      if(this.ace_editor) {
-        this.ace_editor.setValue(sanitized);
+      if(this.codemirror_editor) {
+        this.codemirror_editor.setValue(sanitized);
       }
 
       var changed = from_template || this.getValue() !== value;
@@ -67,82 +64,72 @@
       var that = this;
       var mode = this.options.language;
 
-      function getMode(mode){
-        var out;
-        switch(mode){
-          case "html" :
-            out = System.import("brace/mode/html");
-            break;
-          case "javascript":
-            out = System.import("brace/mode/javascript");
-            break;
-          default:
-            out = System.import("brace/mode/text");
-            break;
-        }
-        return(out);
-      }
-
-
+      //function getMode(mode){
+        //var out;
+        //switch(mode){
+          //case "html" :
+            //out = System.import("brace/mode/html");
+            //break;
+          //case "javascript":
+            //out = System.import("brace/mode/javascript");
+            //break;
+          //default:
+            //out = System.import("brace/mode/text");
+            //break;
+        //}
+        //return(out);
+      //}
+//v
       
       if( that.options.hidden ){
         that.theme.afterInputReady(that.input);
       }else{
 
-        System.import("brace")
-          .then(function(ace){
-            window.ace = ace;
-            return  Promise.all([
-              getMode(mode),
-              System.import('brace/theme/github'),
-              System.import('brace/ext/searchbox'),
-              System.import('js-beautify')
-            ]);
-          })
+
+        var CodeMirror;
+
+
+        Promise.all([
+          System.import('codemirror'),
+          System.import('codemirror/lib/codemirror.css')
+        ])
           .then(function(m){
+            CodeMirror = m[0];
+            return System.import('codemirror/mode/javascript/javascript.js');
+          })
+          .then(function(){
 
+            that.codemirror_container = that.input;
+            //that.codemirror_container.style.width = '100%';
+            //that.codemirror_container.style.minHeight = '80vh';
+            that.codemirror_container.style.position = 'relative';
+            //that.input.parentNode.insertBefore(that.codemirror_container,that.input);
+            //that.input.style.display = 'none';
 
-            that.ace_container = document.createElement('div');
-            that.ace_container.style.width = '100%';
-            that.ace_container.style.position = 'relative';
-            that.input.parentNode.insertBefore(that.ace_container,that.input);
-            that.input.style.display = 'none';
-            that.ace_editor = window.ace.edit(that.ace_container);
-            that.ace_editor.setValue(that.getValue()||"");
-            that.ace_editor.getSession().setMode('ace/mode/'+mode);
-            that.ace_editor.getSession().selection.clearSelection();
-            that.ace_editor.setTheme('ace/theme/github');
-            that.ace_editor.setOptions({
-              minLines : 1, 
-              maxLines : Infinity,
-              wrap: true,
-              indentedSoftWrap: false
+            that.codemirror_editor = CodeMirror.fromTextArea(that.codemirror_container, {
+              lineNumbers : true,              
+              mode: mode || "text",
+              readOnly : that.options.readOnly === true
             });
+            that.codemirror_editor.setSize('100%','100%');
 
+            that.codemirror_editor.setValue(that.getValue()||"");
+            
             // Listen for changes
-            that.ace_editor.on('change',function() {
-              var val = that.ace_editor.getValue()||"";
+            that.codemirror_editor.on('change',function() {
+              var val = that.codemirror_editor.getValue()||"";
               that.value = val;
               that.refreshValue();
               that.is_dirty = true;
               that.onChange(true);
             });
 
-            that.theme.afterInputReady(that.input);
 
             /**
              * Add toolbar
              */
 
             var elToolContainer  = document.createElement("div");
-
-
-            /**
-            * Set readonly if needed
-            */
-            if( that.options.readOnly === true ){
-               that.ace_editor.setReadOnly(true);
-            }
 
             /**
              * Add beautify button
@@ -153,32 +140,17 @@
               var elBeautifyBtn = document.createElement("button");
               elBeautifyBtn.className = "btn btn-info";
               elBeautifyBtn.innerHTML= "tidy";
-              elBeautifyBtn.addEventListener("click",function(){ 
-
-                var b = m[2];
-                var s =  that.ace_editor.getSession();
-
-                new Promise(function(resolve,reject){
-                  resolve(s.getValue()||"");
-                }).then(function(val){
-                  return(b(val));
-                }).then(function(tidy){
-                  s.setValue(tidy);
-                }).catch(function(e){
-                  mx.helpers.modal({
-                    id :  "modalError",
-                    title : "Error",
-                    content : "<p>Error during tidy process :" + e 
-                  });
+              elToolContainer.appendChild(elBeautifyBtn);
+              elBeautifyBtn.addEventListener("click",function(){
+              System.import('js-beautify')
+                .then(function(beautify){
+                    var val = that.codemirror_editor.getValue();
+                    var valClean = beautify(val);
+                    that.codemirror_editor.setValue(valClean);
                 });
-
               });
 
-              elToolContainer.appendChild(elBeautifyBtn);
             }
-
-
-
 
             /**
              * Add optional help panel
@@ -203,7 +175,7 @@
             /**
              * Insert toolbar before input
              */
-            that.input.parentNode.insertBefore(elToolContainer,that.ace_container);
+            that.input.parentNode.insertBefore(elToolContainer,that.codemirror_container);
           });
 
       }
@@ -211,23 +183,23 @@
     },
     disable: function() {
       this.input.disabled = true;
-      if( this.ace_editor ){
-         this.ace_editor.setReadOnly(true);
+      if( this.codemirror_editor ){
+         this.codemirror_editor.setOption('readonly',true);
       }
       this._super();
     },
     enable: function() {
       if(!this.always_disabled) {
         this.input.disabled = false;
-        if( this.ace_editor ){
-          this.ace_editor.setReadOnly(false);
+        if( this.codemirror_editor ){
+         this.codemirror_editor.setOption('readonly',false);
         }
       }
       this._super();
     },
     destroy: function() {
-      if(this.ace_editor) {
-        this.ace_editor.destroy();
+      if(this.codemirror_editor) {
+         this.codemirror_editor.toTextArea();
       }
     }
 

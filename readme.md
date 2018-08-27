@@ -1,4 +1,9 @@
 ## MapX : change log
+- 1.5.13 
+   - Removed a bug where a dashboard was not removed if no source layer where used
+   - Use pointer events instead of mouse event
+   - Added a 'minimize' button in modal windows
+   - Removed resize corner in modal windows – ( it's not widely used and it produced a bug with flexbox )
 - 1.5.12
    - Solved an issue in view button when a zoom was applied in the browser: the nested circle was not well aligned producing a weird effect. Using SVG, the problem as been solved. 
    - Update dependencies, see `app/package.json`

@@ -241,7 +241,8 @@ observe({
                 id = userData$id,
                 whereUserRoleIs = "publisher",
                 language = language,
-                asNamedList=TRUE
+                asNamedList = TRUE,
+                idsAdditionalProjects = .get(viewData,c("data","projects"))  
                 )
 
               #
@@ -611,6 +612,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
+                minWidth="785px",
                 title=sprintf("Edit dashboard %s",viewTitle),
                 addBackground=FALSE,
                 content=tagList(
@@ -618,10 +620,8 @@ observe({
                   jedOutput(id="dashboardEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language),
-                minHeight = "80%"
+                textCloseButton=d("btn_close",language)
                 )
-
             },
             "btn_opt_edit_story"={
  
@@ -946,24 +946,15 @@ observeEvent(input$btnViewSave,{
     table=.get(config,c("pg","tables","views"))
     )
 
-  #
-  # Remove old view
-  #
-  mglRemoveView(
-    idView=view$id
-    )
-
-  # edit flag
+    # edit flag
   view$`_edit` = TRUE 
 
-
   if(!hideView){
-    # add this as new (empty) source
-    mglSetSourcesFromViews(
-      id = .get(config,c("map","id")),
-      viewsList = view,
-      render = FALSE,
-      project = project
+    # edit flag
+    view$`_edit` = TRUE 
+
+    mglAddView(
+      viewData = view
       )
   }
   #

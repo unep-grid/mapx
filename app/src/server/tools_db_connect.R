@@ -146,24 +146,11 @@ observeEvent(input$btnDbSelfGenerate,{
                   text = "Update views for  source "+ id +" (" + (progress*100) + "%)"
                   )
                 if( !noDataCheck(view) && isTRUE(view$id %in% viewsList) ){
-                  #
-                  # Remove old version
-                  #
-                  mglRemoveView(
-                    idView = view$id
-                    )
-                  #
-                  # Add edit flag to have edit buttons in ui
-                  #
+
                   view$`_edit` = TRUE 
-                  #
-                  # Add updated version
-                  #
-                  mglSetSourcesFromViews(
-                    viewsList = view,
-                    render = FALSE,
-                    project = project,
-                    resetViews = FALSE
+
+                  mglAddView(
+                    viewData = view
                     )
                 }
               }

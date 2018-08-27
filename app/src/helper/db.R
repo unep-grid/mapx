@@ -163,17 +163,48 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
         sourceData <- mxDbGetLayerSummary(
           layer = idSource, 
           variable = view$variable,
-          language="en" )$list
+          language="en" 
+        )$list
 
         #
         # Update view object
         #
-        viewUpdated <- mxUpdateDefViewVt( viewData, sourceData )
+
+        viewUpdated <- mxUpdateDefViewVt(
+          view = viewData,
+          sourceData = sourceData
+          )
+        
+        #
+        # Import additional attributes, 
+        # as mxUpdateDefViewVt could have remove them
+        # TODO: Check in mapx where mxUpdateDefViewVt should replace those values
+        #
+        oldAttributes <- .get(viewData,c("data","attribute","names"))
+        newAttributes <- mxDbGetLayerColumnsNames(idSource)
+
+        viewUpdated <- .set(viewUpdated,
+          path = c("data","attribute","names"),
+          value = oldAttributes[ oldAttributes %in% newAttributes ]
+          )
+
+        #
+        # Import previous mask, 
+        #
+        viewUpdated <- .set(viewUpdated,
+          path = c("data","source","layerInfo","maskName"),
+          value = .get(viewData,c("data","source","layerInfo","maskName"))
+          )
+
+        #
+        # Set time
+        #
         viewUpdated[["date_modified"]] <- Sys.time()
+       
         #
-        # TODO: remove target entry, replaced by editors and readers 
+        # TODO: target is not used, drop column.
         #
-        viewUpdated[["target"]] <- as.list( viewUpdated$target )
+        viewUpdated[["target"]] <- list()
         #
         # TODO: Check why mxDbGetView return non-list readers and publishers
         #

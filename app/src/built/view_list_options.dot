@@ -21,7 +21,11 @@
     {{?}}
   </div>
   {{?}}
-  <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=view.data.abstract[langAbstract]}}</p>
+  <div>
+    {{?h.path(view,'data.abstract.' + langAbstract)}}
+    <p class="mx-view-item-desc" id="view_text_{{=view.id}}">{{=h.path(view,'data.abstract.' + langAbstract)}}</p>
+    {{?}}
+  </div>
 </div>
 <div>
   <div class="mx-controls-view">
@@ -113,6 +117,11 @@
       {{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}
       <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_share" data-lang_type="tooltip" data-view_action_key="btn_opt_share" data-view_action_target="{{=view.id}}" data-view_action_handler="shiny">
         <div class="fa fa-share-alt"></div>
+      </li>
+      {{?}}
+      {{? view.project !== mx.settings.project }}
+      <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_home_project" data-lang_type="tooltip" data-view_action_key="btn_opt_home_project" data-view_action_target="{{=view.id}}">
+        <div class="fa fa-home"></div>
       </li>
       {{?}}
     </ul>

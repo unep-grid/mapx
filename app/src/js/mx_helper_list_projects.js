@@ -121,20 +121,27 @@ export function renderUserProjectsList(o){
      * Create content
      */
     var dat = opt.data;
+    var elTop = cel("div","mx-list-projects-top");
+    var elBottom = cel("div","mx-list-projects-bottom");
     var elLeft = cel("div","mx-list-projects-left");
-    var elRight = cel("div","mx-list-projects-right");
-    opt.elRow.appendChild(elLeft);
-    opt.elRow.appendChild(elRight);
     var elTitle = cel("h4");
     var elDesc =  cel("p","mx-list-projects-desc");
     var elViewCount = cel("p","mx-list-projects-view-count");
-    elLeft.appendChild(elTitle);
+    var elRight = cel("div","mx-list-projects-right");
+    var elRowBadges= cel("div","mx-list-project-opt");
+    //var elRowJoin = cel("div","mx-list-project-opt");
+
+    opt.elRow.appendChild(elTop);
+    opt.elRow.appendChild(elBottom);
+    elBottom.appendChild(elLeft);
+    elBottom.appendChild(elRight);
+    elTop.appendChild(elTitle);
+    elTop.appendChild(elRowBadges);
+    //elTop.appendChild(elRowJoin);
     elLeft.appendChild(elViewCount);
     elLeft.appendChild(elDesc);
-    var elRowBadges= cel("div","mx-list-project-opt");
-    var elRowJoin = cel("div","mx-list-project-opt");
-    elRight.appendChild(elRowBadges);
-    elRight.appendChild(elRowJoin);
+    //elRight.appendChild(elRowBadges);
+    //elRight.appendChild(elRowJoin);
 
     /**
      * set values
@@ -150,11 +157,6 @@ export function renderUserProjectsList(o){
     /* Description  */
     elDesc.innerText = dat.description;
 
-    /* Join Button  */
-    makeJoinButton({
-      dat:dat,
-      elTarget:elRowJoin
-    });
 
     makeBadges({
       dat:dat,
@@ -190,6 +192,11 @@ export function renderUserProjectsList(o){
           elBadgeMember.innerText=t;
         });
       } 
+    });
+    /* Join Button if no role  */
+    makeJoinButton({
+      dat:dat,
+      elTarget:opt.elTarget
     });
   }
 
