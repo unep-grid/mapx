@@ -37,3 +37,4 @@
 
 <b>Q3: Dynamic dashboards</b>
 - Expanded dashboard functionality will be developed, with the ability to dynamically select feature types from drop-down lists, and to include temporal datasets
+
