@@ -4992,7 +4992,7 @@
     "ps": ""
   },
   {
-    "id": "membership_message",
+    "id": "project_request_membership_message",
     "en": "Hi!\\nPlease add me to the project <projectname>. \\nBest regards,\\nA motivated future member\\n",
     "fr": "Bonjour,\\nMerci de m'inscrire comme membre du projet <projectname>\\nCordialement,\\nUne future membre motivée ",
     "es": "",
