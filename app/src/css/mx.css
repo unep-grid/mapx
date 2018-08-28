@@ -1003,6 +1003,17 @@ blockquote {
   float:right;
   margin:5px;
 }
+
+
+/** 
+* login panel
+*/
+.mx-login-info {
+  font-size: 0.9em;
+  padding: 5px;
+  margin-top: 12px;
+}
+
 /**
  * Error list
  */
@@ -1319,9 +1330,11 @@ blockquote {
 }
 .mx-list-projects-container {
     overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 .mx-list-projects-search {
-  padding: 10px 10px 5px 5px;
+  padding: 10px 10px 10px 10px;
   width: 100%;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -1329,7 +1342,7 @@ blockquote {
   outline:none;
 }
 .mx-list-projects-search:focus {
-  border-bottom: 2px solid #ccc;
+  /*border-bottom: 2px solid #ccc;*/
 }
 /**
 * Switch to show or hide additional content.
