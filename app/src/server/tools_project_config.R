@@ -26,7 +26,6 @@ observeEvent(input$btnShowProjectConfig,{
         choices = mxGetCountryList(language,includeWorld=F),
         multiple = TRUE,
         options=list(
-          dropdownParent = "body",
           plugins = list("remove_button")
           )
         ),

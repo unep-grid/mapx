@@ -2541,6 +2541,7 @@ mxDbEmailIsKnown <- function(email=NULL,userTable="mx_users",active=TRUE,validat
 
   if(is.null(email)) return()
 
+  email <- trimws(tolower(email))
   filterHidden = isTRUE(!active)
   filterValidated = isTRUE(validated)
 
@@ -2564,19 +2565,33 @@ mxDbGetEmailFromId <- function(id,userTable="mx_users"){
 }
 
 mxDbGetIdFromEmail <- function(email,userTable="mx_users"){
+
+  email <- trimws(tolower(email))
   id <- mxDbGetQuery(sprintf("SELECT id from mx_users where email = '%1$s'::text",email))$id
   return(id)
 }
 
-mxDbGetEmailListFromId <- function(id=list(),userTable="mx_users"){
+mxDbGetEmailListFromId <- function(id=list(),userTable="mx_users",asNamedList=FALSE,munged=FALSE){
   if( noDataCheck(id) )  return(id)
-  id <- lapply(id,as.integer)
-  id <- id[ !sapply(id,noDataCheck) ]
+  id <- id[ !vapply(id,noDataCheck,TRUE) ]
+  id <- vapply(id,as.integer,1L)
   if( noDataCheck(id) ) return(id)
-  id <- paste("(",paste(id,collapse=","),")")
-  emails <- mxDbGetQuery(sprintf("SELECT email from mx_users where id in %1$s",id))$email
-  if(noDataCheck(emails)) emails <- id
-  return(tolower(emails))
+  idString <- paste("(",paste(id,collapse=","),")")
+  tblEmail <- mxDbGetQuery(sprintf("SELECT email,id from mx_users where id in %1$s",idString))
+ 
+  if(isTRUE(munged)){
+    tblEmail$email <- mxEmailMunger(tblEmail$email)
+  }
+ 
+  if(isTRUE(asNamedList)){
+    ids <- tblEmail$id
+    emails <- tolower(tblEmail$email)    
+    names(ids) <- emails
+    return(ids)
+  }else{
+    emails <- merge(tblEmail,data.frame(id=id),by="id")$email
+    return(tolower(emails))
+  }
 }
 
 #' Get email list

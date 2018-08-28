@@ -13,25 +13,6 @@ observeEvent(input$btnJoinProject,{
    reactData$requestProjectMembership <- list(id=reactData$project,date=Sys.time())
 })
 
-#observeEvent(reactData$requestProjectMembership,{
-
-  #data <- reactData$requestProjectMembership
-  #isGuest <- isGuestUser()
-
-  #msgGuest <- ""
-  #if(isGuest){
-    #msgGuest <- "By the way, you are not logged in. You can do so by pressing the user logo at the to of the screen."
-  #}
-
-  #mxModal(
-    #id = "Request Membership",
-    #title = "request membership",
-    #content = "this feature is not yet ready, stay tunned." + msgGuest
-    #)
-
-#})
-
-
 
 observeEvent(reactData$requestProjectMembership,{
   
@@ -106,6 +87,9 @@ observe({
   requestMessage <-  input$txtAreaRequestMembershipMessage
   email <-  input$txtEmailRquestMembership
   language <- reactData$language
+  projectRequestData <- reactData$requestProjectMembership
+  project <- projectRequestData$id
+
 
   isEmailNotValid <- !mxEmailIsValid(email)
   isMessageTooLong <- nchar(requestMessage) > 500
@@ -113,15 +97,20 @@ observe({
   isMessageBad <- mxProfanityChecker(requestMessage)
   isEmailBad <- mxProfanityChecker(email)
 
+  isEmailMember <- !isEmailNotValid && mxDbProjectCheckEmailMembership(
+     idProject = project,
+     email = email
+    )
+
   errors <- logical(0)
   warning <- logical(0)
-
 
   errors['error_msg_too_short'] <- isMessageTooShort 
   errors['error_msg_too_long'] <- isMessageTooLong
   errors['error_msg_bad'] <- isMessageBad
   errors['error_email_bad'] <- isEmailBad
   errors['error_email_not_valid'] <- isEmailNotValid
+  if(!isEmailNotValid) errors['error_email_is_member'] <- isEmailMember
 
   errors <- errors[errors]
   hasError <- length(errors) > 0

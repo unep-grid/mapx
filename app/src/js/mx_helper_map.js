@@ -7,7 +7,7 @@ import * as mx from './mx_init.js';
 */
 export function getApiUrl(id){
     var s = mx.settings; 
-    var urlBase = s.apiProtocol + '://' + s.apiHost  + ':' + s.apiPort;
+    var urlBase = s.apiProtocol + '//' + s.apiHost  + ':' + s.apiPort;
     return urlBase + s.apiRoute[id];
 }
 
@@ -224,7 +224,8 @@ export function requestProjectMembership(idProject){
 export function initMapx(o){
 
   var styleInit;
-  
+  var mp;
+
   if( o.style ) styleInit = Promise.resolve(o.style);
 
   if( !styleInit ){
@@ -281,12 +282,13 @@ export function initMapx(o){
     o.minZoom = o.minZoom || 0;
 
     updateSettings({
-      mapboxToken : o.token,
-      apiPort : o.apiPort,
+      apiProtocol : o.apiProtocol || location.protocol,
+      apiPort : o.apiPort || location.port,
       apiHost : o.apiHost,
       project : o.project,
       language : o.language,
-      languages : o.languages
+      languages : o.languages,
+      mapboxToken : o.token
     });
 
     /*
@@ -316,7 +318,7 @@ export function initMapx(o){
 
     style.sprite = getAppPathUrl('sprites');
     o.mapPosition = o.mapPosition || {};
-    var mp = o.mapPosition;
+    mp = o.mapPosition;
     mx.maps[o.id].style = style;
 
     /*
@@ -368,6 +370,7 @@ export function initMapxApp(o){
   var map = o.map;
   var elMap = document.getElementById(o.id);
   var hasShiny = !! window.Shiny ;
+  var mp = o.mapPosition;
 
   if(! elMap ){
     alert("Map element with id "+ o.id  +" not found");
@@ -382,7 +385,7 @@ export function initMapxApp(o){
     /*
      * secondary centering method
      */
-    if( o.mapPosition.fitToBounds === true ){
+    if( mp || mp.fitToBounds === true ){
       map.fitBounds( [mp.w || 0, mp.s || 0, mp.e || 0, mp.n || 0] );
     }
 
@@ -1044,7 +1047,7 @@ export function viewControler(o){
       vChecked.push(id);
     }
   }
-
+  
   mx.helpers.onNextFrame(function(){
     vVisible = mx.helpers.getLayerNamesByPrefix({
       id:idMap,
@@ -1090,6 +1093,16 @@ export function viewControler(o){
 
       mx.helpers.cleanRemoveModules(v);
     });
+
+    if(false){
+      console.log({
+        vStore : vStore,
+        vChecked : vChecked,
+        vVisible : vVisible,
+        vToRemove : vToRemove,
+        vToAdd : vToAdd
+      });
+    }
 
     updateViewOrder(o);
   });
@@ -1230,9 +1243,11 @@ export function updateViewOrder (o){
   var displayed = [];
   var map = mx.maps[o.id||mx.settings.idMapDefault].map;
   var views = mx.maps[o.id||mx.settings.idMapDefault].views;
-  var idsViews = views.map( v => v.id);
-
-  var order = o.order || idsViews || [];
+  var orderUiList = mx.helpers.getViewOrder({
+     id : o.id || mx.settings.idMapDefault
+  });
+  var orderViewList = views.map( v => v.id );
+  var order = o.order || orderUiList || orderViewList || [];
   var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
@@ -1405,6 +1420,9 @@ export function sortViewsListBy(o){
     }
   });
 
+  mx.helpers.updateViewOrder({
+    id : o.id || o.idMap ||  mx.settings.idMapDefault 
+  });
 
   function getValue(el){
     switch(type){
@@ -1825,6 +1843,8 @@ export function removeView(o){
   if( views.length === 0 ){
     setViewsListEmpty(true);
   }
+  
+  viewControler(o);       
 }
 
 /**
@@ -2196,21 +2216,10 @@ export function renderViewsList(o){
     }
 
     /**
-     * Handle draggable and sortable
-     */
-/*    h.sortable({*/
-      //selector : elViewsList,
-      //onSorted : function(){
-        //updateViewOrder(o);
-      //}
-    /*});*/
-
-    /**
      * Generate filter
      */
     makeViewsFilter({
       tagsTable : getTagsGroupsFromView(m.views),
-      //optionsButtons : makeViewsFilterOptionsButtons(m.views),
       selectorContainer : "#viewsFilterContainer"
     });
 
@@ -3705,9 +3714,15 @@ export function addView(o){
     });
 
     if( oldView ){
+      /*
+      * This is an refresh or update
+      * instead of rendering
+      * modifying things here seems reasonable
+      */
       mx.helpers.cleanRemoveModules(oldView);
       viewIndex = m.views.indexOf(oldView);
       m.views[viewIndex] = view;
+      mx.helpers.updateLanguageViewsList({id:o.id});
     }
   }
 
@@ -4277,7 +4292,7 @@ export function makeSearchBox(o){
   var idMap = o.idMap;
   var m = mx.maps[idMap];
   var el = document.querySelector("[data-search_box_for='"+view.id+"']");
-
+  var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   if(!el) return;
 
   makeSelectize();
@@ -4296,7 +4311,7 @@ export function makeSearchBox(o){
   }
 
   function makeSelectize(){
-    return import("selectize").then(function(Selectize){
+    if(hasSelectize){
       var idView = view.id;
       var table = mx.helpers.path(view,"data.attribute.table");
       var attr = mx.helpers.path(view,"data.attribute.name");
@@ -4331,8 +4346,7 @@ export function makeSearchBox(o){
        */
       searchBox.view = view;
       view._interactive.searchBox = searchBox;
-
-    });
+    }
   }
 }
 

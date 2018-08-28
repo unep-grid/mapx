@@ -1436,8 +1436,7 @@ export function modal(o){
   var modal = document.getElementById(o.id) || document.createElement("div");
   var background = document.getElementById(idBackground) || document.createElement("div"); 
   var hasShiny = typeof window.Shiny !== "undefined";
-  var hasJquery = typeof window.jQuery !== "undefined";
-  var hasSelectize = typeof window.Selectize !== "undefined";
+  var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   var startBodyScrollPos = 0;
   var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== "undefined" ? o.noShinyBinding : false;
 
@@ -1568,12 +1567,12 @@ export function modal(o){
   if( o.addBackground ) document.body.appendChild(background);
   document.body.appendChild(modal);
   if( hasShiny && !noShinyBinding )  Shiny.bindAll(modal);
-  if( hasSelectize && hasJquery ) {
+  if( hasSelectize ) {
     var selects = $(modal).find("select");
     selects.each(function(i,s){
       var script = modal.querySelector("script[data-for="+s.id+"]");
       var data = script?script.innerHTML:null;
-      var options = {dropdownParent:"body"};
+      var options = {};
       if(data){
         options = JSON.parse(data);
         if(options.renderFun){
