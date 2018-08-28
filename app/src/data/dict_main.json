@@ -1440,6 +1440,18 @@
     "ps": ""
   },
   {
+    "id": "error_email_is_member",
+    "en": "This email is already registered in this project",
+    "fr": "Cet email est déjà enregistré dans ce projet",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "error_email_bad",
     "en": "This email is not accepted",
     "fr": "Cet email n'est pas accepté",
@@ -1848,9 +1860,9 @@
     "ps": "د واحد کارولو پټ کوډ د ننه کړی"
   },
   {
-    "id": "login_first_before_action",
-    "en": "You must authenticate yourself before doing this action",
-    "fr": "Vous devez vous identifier avant de faire cette action",
+    "id": "login_info_box",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member.",
+    "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre.",
     "es": "",
     "ru": "",
     "zh": "",
@@ -3171,6 +3183,18 @@
     "id": "user_profile",
     "en": "User profile",
     "fr": "Profile de l'utilisateur",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "user_authentication",
+    "en": "Authentication",
+    "fr": "Authentification",
     "es": "",
     "ru": "",
     "zh": "",
@@ -4503,6 +4527,18 @@
     "id": "project_public",
     "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
     "fr": "Ce projet est public. Il va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "fr": "Accès refusé. Vous ne pouvez pas accéder à ce projet",
     "es": "",
     "ru": "",
     "zh": "",
