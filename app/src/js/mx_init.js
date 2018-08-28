@@ -1,5 +1,4 @@
 /*jshint esversion: 6, node: true  */
-'use strict';
 import * as mx_helpers from "./mx_helpers.js";
 
 console.log("INIT MX");
@@ -38,7 +37,7 @@ export let settings = {
   project : '',
   apiPort : '80',
   apiHost : 'api.mapx.localhost',
-  apiProtocol : 'http',
+  apiProtocol : 'http:',
   modeKiosk : false,
   idMapDefault : 'map_main',
   mapboxToken : '',

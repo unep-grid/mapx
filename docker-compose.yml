@@ -22,8 +22,10 @@ services:
       - traefik
     labels:
       - traefik.s1.frontend.rule=Host:app.mapx.localhost
+      - traefik.s1.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s1.port=3838
       - traefik.s2.frontend.rule=Host:dev.mapx.localhost
+      - traefik.s2.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s2.port=3434
     volumes:
       - ./app:/srv/shiny-server/dev
