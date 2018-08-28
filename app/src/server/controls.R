@@ -159,15 +159,13 @@ observeEvent(reactData$showLanguages,{
 
   mxModal(
     id="uiSelectLanguage",
+    title = d("ui_language",language),
     textCloseButton=d("btn_close",language),
     content = selectizeInput(
       inputId="selectLanguage",
       choices=languages,
       label=d("ui_language",language),
-      selected=language,
-      options=list(
-        dropdownParent="body"
-        )
+      selected=language
       )
     )
 

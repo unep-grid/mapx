@@ -480,6 +480,18 @@
     "ps": "دا لید لرې کړئ"
   },
   {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "fr": "Ouvrir le project original",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_opt_move_top",
     "en": "Move to top",
     "fr": "Déplacer vers le haut",
@@ -1609,8 +1621,8 @@
   },
   {
     "id": "fold_views_class",
-    "en": "Filter views by classes",
-    "fr": "Filtrer les vues par classe",
+    "en": "Filter views by theme",
+    "fr": "Filtrer les vues par thème",
     "es": "Filtrar vistas por tema",
     "ru": "",
     "zh": "",
@@ -3456,6 +3468,18 @@
     "ps": ""
   },
   {
+    "id": "view_shared",
+    "en": "View shared",
+    "fr": "Vue partagée",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "view_abstract",
     "en": "View abstract",
     "fr": "Résumé de la vue",
@@ -3505,9 +3529,9 @@
   },
   {
     "id": "view_classes",
-    "en": "Classes",
-    "fr": "Classes",
-    "es": "Clase",
+    "en": "Theme",
+    "fr": "Thème",
+    "es": "Tema",
     "ru": "",
     "zh": "",
     "de": "",
@@ -4946,7 +4970,7 @@
   {
     "id": "txt_too_short_min_5",
     "en": "Text too short, minimum 5 characters",
-    "fr": "Text trop court, minimum 5 charactères",
+    "fr": "Text trop court, 5 caractères minimum",
     "es": "Texto demasiado corto, mínimo 5 caracteres",
     "ru": "",
     "zh": "",

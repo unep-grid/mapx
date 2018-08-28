@@ -3,28 +3,41 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
 const webpack = require( 'webpack');
+const packages = require('../package.json').dependencies;
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
 
 module.exports = {
   node : {
     fs : 'empty'
   },
   entry: {
-    'app':'./src/js/index.js'
+    'common':'./src/js/index.js',
+    'app' : './src/js/init_shiny.js',
+    'kiosk' : './src/js/init_kiosk.js'
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({
-      name: ['runtime']
+      name: 'shared'
+    }),
+    new HtmlWebpackPlugin({
+      template : './src/kiosk/index.html',
+      filename: './kiosk.html',
+      chunks : ['babel-polyfill','shared','common','kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template : './src/built/index.html'
+      template : './src/built/index.html',
+      chunks : ['babel-polyfill','shared','common','app']
     }),
     new IconFontPlugin({
       fontName : "mx-icons-font"
-    })
-  ],
+    }),
+    new CopyWebpackPlugin(
+      [ { from : './src/sprites', to: 'sprites/'} ]
+    )
+    ],
   module: {
-    //noParse: /(mapbox-gl)\.js$/,
     rules: [
       { test: /.css$/, 
         use : ['style-loader','css-loader','icon-font-loader']

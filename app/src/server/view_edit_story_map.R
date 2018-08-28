@@ -192,7 +192,6 @@ observeEvent(input$btnViewPreviewStory,{
     edit = TRUE
     )
 
-
 })
 
 
@@ -324,12 +323,14 @@ observeEvent(input$btnViewSaveStory,{
       id = "modalViewEdit_txt",
       text = sprintf("Saved at %s",time)
       )
-    #
-    # Trigger update
-    #
-    mglRemoveView(
-      idView=view$id
+
+    # edit flag
+    view$`_edit` = TRUE 
+
+    mglAddView(
+      viewData = view
       )
+
 
     #
     # Close the preview
@@ -340,16 +341,6 @@ observeEvent(input$btnViewSaveStory,{
       save = FALSE
       )
 
-    # edit flag
-    view$`_edit` = TRUE 
-
-    # add this as new source
-    mglSetSourcesFromViews(
-      id = .get(config,c("map","id")),
-      viewsList = view,
-      render = FALSE,
-      project = project
-      )
     reactData$updateViewListFetchOnly <- runif(1)
 
     #

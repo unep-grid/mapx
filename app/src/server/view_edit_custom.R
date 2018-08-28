@@ -50,16 +50,8 @@ observeEvent(input$btnViewPreviewCustomCode,{
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","methods"), methods)
 
-  mglRemoveView(
-    idView=view$id
-    )
-
-  # add this as new (empty) source
-  mglSetSourcesFromViews(
-    id = .get(config,c("map","id")),
-    viewsList = view,
-    render = FALSE,
-    project = project
+  mglAddView(
+    viewData = view
     )
 
 })
@@ -98,21 +90,15 @@ observeEvent(input$btnViewSaveCustomCode,{
       table=.get(config,c("pg","tables","views"))
       )
 
-    mglRemoveView(
-      idView=view$id
-      )
-
     # edit flag
     view$`_edit` = TRUE 
 
-    # add this as new (empty) source
-    mglSetSourcesFromViews(
-      id = .get(config,c("map","id")),
-      viewsList = view,
-      render = FALSE,
-      project = project
+    mglAddView(
+      viewData = view
       )
+
     reactData$updateViewListFetchOnly <- runif(1)
+  
   }
 
   mxUpdateText(

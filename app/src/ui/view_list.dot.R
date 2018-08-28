@@ -47,7 +47,7 @@ divHeader <- tagList(
       "{{=view.data.title[lang]}}",
       "{{?}}"
       ),
-    "{{=h.getReadersIcons(view)}}",
+    "{{=h.getViewIcons(view)}}",
     #
     # Hidden index term for search filter
     #
