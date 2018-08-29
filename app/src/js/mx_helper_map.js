@@ -2382,17 +2382,17 @@ function getTagsGroupsFromView(views){
   });
 
   // grouprs
-  stat.components = mx.helpers.getArrayStat({
+  stat.view_components = mx.helpers.getArrayStat({
     arr:tags.components,
     stat:'frequency'
   });
 
-  stat.classes = mx.helpers.getArrayStat({
+  stat.view_classes = mx.helpers.getArrayStat({
     arr:tags.classes,
     stat:'frequency'
   });
 
-  stat.collections = mx.helpers.getArrayStat({
+  stat.view_collections = mx.helpers.getArrayStat({
     arr:tags.collections,
     stat:'frequency'
   });
@@ -2412,7 +2412,7 @@ function getTagsGroupsFromView(views){
 function makeViewsFilter(o){
 
   var h = mx.helpers;
-  var l = mx.settings.language;
+  //var l = mx.settings.language;
   var elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
   var elFilters = document.createElement("div");
   var elFoldFilters ;
@@ -2420,61 +2420,84 @@ function makeViewsFilter(o){
   // Reset content
   elContainer.innerHTML="";
 
-  /**
-   * Add filter by class, type, ... 
-   */
-  var types =  Object.keys(o.tagsTable);
-
-  types.forEach(function(t){
-    var tags = [];
-    var tbl = o.tagsTable[t];
-    var keys = Object.keys(tbl);
-    var elTypeContent = document.createElement("div");
-    var elTypeContainer = document.createElement("div");
-    var elTypeLabel = document.createElement("span");
-    elTypeContainer.appendChild(elTypeLabel);
-    elTypeContainer.appendChild(elTypeContent);
-    elTypeContainer.className = "filter-group";
-    elFilters.appendChild(elTypeContainer);
-
-    h.getDictItem(t,l)
-      .then(function(label){
-        elTypeLabel.innerText =  label;
-      }).then(function(){
-
-        return Promise.all(
-          keys.map(function(k){
-            return h.getDictItem(k,l)
-              .then(function(label){
-                tags.push({key:k,count:tbl[k],label:label,type:t});
-              });
-          }));
-
-      }).then(function(){
-
-        tags = tags.sort(function(a,b){
-          return b.count-a.count;
-        });
-
-        tags.forEach(function(t){
-          var el =  makeEl(t.key,t.label,t.count,t.type);
-          elTypeContent.appendChild(el);
-        });
+  h.getDictItem("view_filter_by_tags")
+    .then(function(label){
+      elFoldFilters = h.uiFold({
+        content : elFilters,
+        label : label,
+        labelKey : "view_filter_by_tags",
+        open : false
       });
-  });
+      elContainer.appendChild(elFoldFilters);
+    })
+    .then(function(){
 
-  elFoldFilters = h.uiFold({
-    content : elFilters,
-    label : "Filters"
-  });
+      /**
+       * Add filter by class, type, ... 
+       */
+      var types =  Object.keys(o.tagsTable);
 
-  elContainer.appendChild(elFoldFilters);
+      types.forEach(function(type){
+        var tags = [];
+        var tbl = o.tagsTable[type];
+        var keys = Object.keys(tbl);
+        var elTypeContent = document.createElement("div");
+        var elTypeContainer = document.createElement("div");
+        elTypeContent.classList.add("filter-tag-content");
 
+        h.getDictItem(type)
+          .then(function(label){
+
+            elTypeContainer = h.uiFold({
+              content : elTypeContent,
+              label : label,
+              labelKey : type,
+              labelClass : "filter-tag-label-light",
+              open : false
+            });
+            elFilters.appendChild(elTypeContainer);
+
+          }).then(function(){
+
+            return Promise.all(
+              keys.map(function(key){
+                return h.getDictItem(key)
+                  .then(function(label){
+                    tags.push({
+                      key: key,
+                      count: tbl[key],
+                      label: label,
+                      type: type
+                    });
+                  });
+              }));
+
+          }).then(function(){
+
+            tags = tags.sort(function(a,b){
+              return b.count-a.count;
+            });
+
+            tags.forEach(function(t){
+              var el =  makeEl(t.key,t.label,t.count,t.type);
+              elTypeContent.appendChild(el);
+            });
+
+          });
+      });
+
+    });
 
   function makeEl(id,label,number,type){
     var checkToggle = document.createElement("div");
     var checkToggleLabel = document.createElement("label");
+    var checkToggleLabelText = document.createElement("span");
+    var checkToggleLabelCount = document.createElement("span");
     var checkToggleInput = document.createElement("input");
+
+    checkToggleLabelText.innerText = label;
+    checkToggleLabelText.dataset.lang_key = id;
+    checkToggleLabelCount.innerText = "(" + number + ")";
     checkToggle.className =  "check-toggle";
     checkToggleInput.className = "filter check-toggle-input";
     checkToggleInput.setAttribute("type", "checkbox");
@@ -2482,8 +2505,11 @@ function makeViewsFilter(o){
     checkToggleInput.id = "filter_"+id;
     checkToggleInput.dataset.filter = id;
     checkToggleInput.dataset.type = type;
+
     checkToggleLabel.setAttribute("for","filter_"+id);
-    checkToggleLabel.innerHTML =  label.toUpperCase() + "<span class='check-toggle-badge'> (" + number + ") </span>";
+    //checkToggleLabel.innerHTML =  label.toUp,perCase() + "<span class='check-toggle-badge'> (" + number + ") </span>";
+    checkToggleLabel.appendChild(checkToggleLabelText);
+    checkToggleLabel.appendChild(checkToggleLabelCount);
     checkToggle.appendChild(checkToggleInput);
     checkToggle.appendChild(checkToggleLabel);
     return(checkToggle);

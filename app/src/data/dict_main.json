@@ -1823,6 +1823,30 @@
     "fa": "لغو",
     "ps": "لغوه کړی"
   },
+   {
+    "id": "login_pwd_mail_sent",
+    "en": "An email has been sent, please check your inbox and copy the received password in the field below",
+    "fr": "Un email a été envoyé, merci de relever votre courrier et de copier le mot de passe reçu dans le champ ci-dessous",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+   {
+    "id": "login_pwd_mail_sent_error",
+    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
+    "fr": "Une erreur est survenue, nous ne sommes pas en mesure de vous envoyer le mot de passe à usage unique. Merci d'essayer ultérieurement.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
   {
     "id": "login_project",
     "en": "Project or country name in which the role applies",
@@ -3564,6 +3588,30 @@
     "ps": "صنفونه"
   },
   {
+    "id": "view_component",
+    "en": "Type of views",
+    "fr": "Type de vues",
+    "es": "Tipo de vistas",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_components",
+    "en": "Type of views",
+    "fr": "Type de vues",
+    "es": "Tipo de vistas",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "view_collections",
     "en": "Collections",
     "fr": "Collections",
@@ -3910,6 +3958,18 @@
     "bn": "",
     "fa": " جستجوی نمایه",
     "ps": "لټون وګوری"
+  },
+  {
+    "id": "view_filter_by_tags",
+    "en": "Filter views by tag",
+    "fr": "Filtrer les vues par tag",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "view_search_values",
@@ -5068,30 +5128,6 @@
     "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
     "fr": "Votre demande a été envoyée à l’administrateur du projet, vous recevrez un email confirmant votre adhésion dans les prochains jours. Vérifiez régulièrement vos emails et cliquez sur le lien de confirmation pour accéder au projet!",
     "es": "Su solicitud ha sido enviada al administrador del proyecto, recibirá un email de confirmación en los próximos días. Verifique en su bandeja de entrada y haga clic en el enlace para acceder al proyecto.",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "",
-    "ps": ""
-  },
-  {
-    "id": "component",
-    "en": "Type of views",
-    "fr": "Type de vues",
-    "es": "Tipo de vistas",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "",
-    "ps": ""
-  },
-  {
-    "id": "components",
-    "en": "Type of views",
-    "fr": "Type de vues",
-    "es": "Tipo de vistas",
     "ru": "",
     "zh": "",
     "de": "",

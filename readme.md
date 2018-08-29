@@ -1,5 +1,8 @@
 ## MapX : change log
 
+- 1.5.15
+   - Added translation support in filter views list by tags
+   - Filter views by tags : use `AND` operator between filter types and `OR` within filter types. 
 - 1.5.14 
    - Removed bug where (empty) private project could be seen when pressing a shared view's "home" button
    - Added support for spanish. Thanks @GianlucaGygax !

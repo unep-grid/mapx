@@ -403,7 +403,7 @@ export function uiReadMore(selector, options) {
        */
       elReadMore.className = "readmore";
       elCheckbox.className = "readmore-check";
-      elContent.className = "readmore-content";
+      elContent.className = elContent.className + " readmore-content";
       if(options.boxedContent){
         elContent.classList.add("readmore-content-boxed");
       }
@@ -429,7 +429,6 @@ export function uiReadMore(selector, options) {
        * the maximum allowed, add the read more div
        * else, keep it without the toggle.
        */
-
       if ( (rect.height - pad ) > options.maxHeightClosed) {
         /**
          * The max height of the container (elReadMore) is set to create
@@ -461,23 +460,27 @@ export function uiReadMore(selector, options) {
 * @param {Object} o options
 * @param {Element} o.content Element to fold
 * @param {String} o.label Label displayed in switch
+* @param {String} o.labelKey Label key for dataset.key_lang
+* @param {String} o.labelClass Label class
 * @param {Boolean} o.open Default state
 */
 export function uiFold(o){
   var content = o.content;
   var label = o.label;
+  var labelKey = o.labelKey;
   var open = o.open;
   var onChange = o.onChange;
   var classContainer = "fold-container";
   var classContent = "fold-content";
   var classScroll = "mx-scroll-styled";
-  var classLabel = "fold-label";
+  var classLabel = "fold-label" ;
   var classSwitch = "fold-switch";
   var id =  makeId();
 
   if(!content) return;
   open = open || false; 
   label = label || "";
+  labelKey = labelKey || label;
 
   var elInput = document.createElement("input");
   if(onChange){
@@ -491,11 +494,13 @@ export function uiFold(o){
   elContent.classList.add(classContent);
   elContent.classList.add(classScroll);
   elLabel.classList.add(classLabel);
+  if(o.labelClass) elLabel.classList.add(o.labelClass);
   elLabel.setAttribute("for",id);
   elInput.id = id;
   elInput.classList.add("fold-switch");
   elInput.checked = open;
   elLabel.innerHTML = label;
+  elLabel.dataset.lang_key = labelKey;
 
   elContent.appendChild(content);
   elContainer.appendChild(elInput);
