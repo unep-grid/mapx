@@ -2363,7 +2363,7 @@ export function setViewsListEmpty(enable){
 * @param {Array} v Views list
 * @note : expect type, data.classes and data.collections
 */
-function getTagsGroupsFromView(views){
+export function getTagsGroupsFromView(views){
 
   var h = mx.helpers;
 
@@ -2475,7 +2475,9 @@ function makeViewsFilter(o){
           }).then(function(){
 
             tags = tags.sort(function(a,b){
-              return b.count-a.count;
+              if( a.label < b.label) return -1;
+              if( a.label > b.label) return 1;
+              return 0;
             });
 
             tags.forEach(function(t){
@@ -2497,7 +2499,14 @@ function makeViewsFilter(o){
 
     checkToggleLabelText.innerText = label;
     checkToggleLabelText.dataset.lang_key = id;
-    checkToggleLabelCount.innerText = "(" + number + ")";
+    checkToggleLabelCount.innerText = "( " + number + " )";
+    /**
+    * For update
+    */
+    checkToggleLabelCount.className = "mx-check-toggle-filter-count";
+    checkToggleLabelCount.dataset.type = type;
+    checkToggleLabelCount.dataset.id = id;
+
     checkToggle.className =  "check-toggle";
     checkToggleInput.className = "filter check-toggle-input";
     checkToggleInput.setAttribute("type", "checkbox");

@@ -113,6 +113,10 @@
 .mx-views-filter-text-input {
     background: var(--mx_ui_background);
 }
+.mx-views-filters-container .mx-check-toggle-filter-count {
+ color : var(--mx_ui_text_faded);
+}
+
 
 .mx .jed-container div[data-schematype='object'] {
     border-radius: 0px;

@@ -1,5 +1,8 @@
 ## MapX : change log
 
+- 1.5.17
+   - Improvment
+       - Add current view count in filters by category
 - 1.5.16
    - Improvement 
        - Modal Added four preset button for modal panel, added an option to resize panel horizontally.

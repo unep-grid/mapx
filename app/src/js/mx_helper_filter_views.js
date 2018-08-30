@@ -100,7 +100,7 @@ export function filterViewsListCheckbox(o){
  
 
   function listener(e) {
-    
+
     if( ! e || ! e.target.dataset.filter ) return;
     e.stopImmediatePropagation();
 
@@ -120,69 +120,96 @@ export function filterViewsListCheckbox(o){
     }
 
     /**
-    * Group filters
-    */
+     * Group filters
+     */
     var filtersTypes = filters.map(f => f.type);
+
     var toShow = [];
-    var toHide = [];
     var filter = "";
-
+    var idView ;
+    var elView ;
+    var found;
+    var exclude;
+    /**
+     * Foreach views
+     */
     views.forEach( view => {
-      var idView =  view.id;
+      idView =  view.id;
+      elView = document.getElementById(idView);
+      /**
+       * For each type
+       */
+      exclude = false;
       filtersTypes.forEach( type => {
-        var filtersType = filters.filter(f => f.type == type );
-        var found = false;
-        var isShown = toShow.indexOf(idView) > -1;
-        var isHidden = toHide.indexOf(idView) > -1;
-
-        if( !isHidden ){
-          filtersType.forEach( filterData => {
-            filter = filterData.filter;
-
-              try{
-                switch(type){
-                  case  "view_classes" :
-                    found = view.data.classes.indexOf(filter) > -1;
-                    break;
-                  case  "view_collections" :
-                    found = view.data.collections.indexOf(filter) > -1; 
-                    break;
-                  case  "view_components" :
-                    if(view._components){
-                      found = view._components.indexOf(filter) > -1 ;
-                    }
-                    break;               
-                  default:
-                    found = false;
-                }
-              }catch(e){}
-          });
-       
-        if( found && !isShown ){
-            toShow.push(idView);
-        }else if( !isHidden && !found ) {
-            toHide.push(idView);
-           } 
-        }
+        /*
+         * For each filter
+         */
+        if( exclude ) return;
         
-      });
-    });
+        found = false;
+        filters.filter(f => f.type == type ).forEach( filterData => {
+          if( found ) return;
+          filter = filterData.filter;
+          found = isFound(view,type,filter); 
+        });
+         
+        if( !found ) exclude = true;
 
-    views.forEach(v => {
-      var idView = v.id;
-      var hide = toHide.indexOf(idView) >-1;
-      var elView = document.getElementById(idView);
-      if(hide){
+      });
+
+      if( exclude ){
         elView.classList.add(classHide);
       }else{
-       elView.classList.remove(classHide);
+        toShow.push(view);
+        elView.classList.remove(classHide);
       }
-    });
   
+    });
+
+    updateCount(toShow);
+  }
+
+  function updateCount(views){
+   var elsCount = document.querySelectorAll(".mx-check-toggle-filter-count");
+   var tagsCount = mx.helpers.getTagsGroupsFromView(views);
+   elsCount.forEach(el => {
+     var count = 0;
+     var byType = tagsCount[el.dataset.type];
+     
+     if( byType ){
+        var byId = byType[el.dataset.id];
+        if(byId) count = byId;
+     }
+    el.innerText = "( " + count + " )"; 
+   });
+  }
+
+
+  function isFound (view, type, filter){
+    var found = false;
+    switch(type){
+      case  "view_classes" :
+        if( view.data && view.data.classes ){
+          found = view.data.classes.indexOf(filter) > -1;
+        }
+        break;
+      case  "view_collections" :
+        if(view.data && view.data.collections ){
+          found = view.data.collections.indexOf(filter) > -1; 
+        }
+        break;
+      case  "view_components" :
+        if(view._components){
+          found = view._components.indexOf(filter) > -1 ;
+        }
+        break;  
+      default:
+        found = false;
+    }
+    return found;
   }
 
   return listener;
-
 }
 
 

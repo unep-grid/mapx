@@ -1263,6 +1263,9 @@ blockquote {
 .mx-views-filters-container .check-toggle {
   padding:3px;
 }
+.mx-views-filters-container .mx-check-toggle-filter-count {
+ color : #ccc;
+}
 
 
 
@@ -1470,6 +1473,7 @@ blockquote {
 .mx-views-filters-container .filter-tag-content {
  max-height:150px;
  overflow:auto;
+ column-count:2;
 }
 
 
