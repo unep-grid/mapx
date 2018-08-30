@@ -332,7 +332,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -344,7 +344,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -416,7 +416,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -452,7 +452,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -464,7 +464,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -560,7 +560,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -572,7 +572,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -584,7 +584,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -680,7 +680,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -728,7 +728,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -752,7 +752,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -788,7 +788,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -800,7 +800,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -860,7 +860,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -872,7 +872,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -884,7 +884,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -896,7 +896,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -1028,7 +1028,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -1148,7 +1148,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -1196,7 +1196,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -1676,7 +1676,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -1887,7 +1887,7 @@
     "id": "login_info_box",
     "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member.",
     "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre.",
-    "es": "",
+    "es": "Si todavía no está registrado, una autenticación exitosa creará una cuenta nueva y desbloqueará nuevas características. Si ya está registrado, una autenticación exitosa le dará acceso a todos los proyectos de los que ya es miembro.",
     "ru": "",
     "zh": "",
     "de": "",
@@ -2876,7 +2876,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -2912,7 +2912,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -2972,7 +2972,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -2984,7 +2984,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -2996,7 +2996,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3008,7 +3008,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3020,7 +3020,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3032,7 +3032,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3044,7 +3044,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3248,7 +3248,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3320,7 +3320,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3548,7 +3548,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3560,7 +3560,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3577,9 +3577,9 @@
   },
   {
     "id": "view_classes",
-    "en": "Theme",
-    "fr": "Thème",
-    "es": "Tema",
+    "en": "Themes",
+    "fr": "Thèmes",
+    "es": "Temas",
     "ru": "",
     "zh": "",
     "de": "",
@@ -3601,9 +3601,9 @@
   },
   {
     "id": "view_components",
-    "en": "Type of views",
-    "fr": "Type de vues",
-    "es": "Tipo de vistas",
+    "en": "Types of views",
+    "fr": "Types de vues",
+    "es": "Tipos de vistas",
     "ru": "",
     "zh": "",
     "de": "",
@@ -3615,12 +3615,12 @@
     "id": "view_collections",
     "en": "Collections",
     "fr": "Collections",
-    "es": "Colección",
+    "es": "Colecciones",
     "ru": "",
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3632,7 +3632,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3644,7 +3644,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3656,7 +3656,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3668,7 +3668,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3680,7 +3680,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3692,7 +3692,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3704,7 +3704,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3716,7 +3716,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3728,7 +3728,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3740,7 +3740,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3752,7 +3752,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3764,7 +3764,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3776,7 +3776,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3788,7 +3788,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3800,7 +3800,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3812,7 +3812,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3824,7 +3824,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3836,7 +3836,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3848,7 +3848,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3884,7 +3884,7 @@
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "\"",
+    "fa": "",
     "ps": ""
   },
   {
@@ -3962,8 +3962,8 @@
   {
     "id": "view_filter_by_tags",
     "en": "Filter views by tag",
-    "fr": "Filtrer les vues par tag",
-    "es": "",
+    "fr": "Filtrer les vues par catégorie",
+    "es": "Filtrar vistas por etiqueta",
     "ru": "",
     "zh": "",
     "de": "",
