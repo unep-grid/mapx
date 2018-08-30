@@ -937,9 +937,15 @@ blockquote {
   flex: 1 0;
 }
 
-.mx-modal-btn-minimize {
+.mx-modal-btn-top {
   background: none;
   border: none;
+  transform: scale(0.5);
+  transition: transform 0.3s;
+}
+
+.mx-modal-btn-top:hover {
+  transform: scale(0.8);
 }
 .mx-modal-info-text {
   display:inline-block;
@@ -959,7 +965,7 @@ blockquote {
   position:absolute;
   display:flex;
   flex-direction:column;
-  width:500px;
+  width: 500px;
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
@@ -970,6 +976,7 @@ blockquote {
   left:0;
   top: 5px;
   margin: auto;
+  resize:horizontal;
 }
 
 .mx-modal-top {
@@ -1003,8 +1010,33 @@ blockquote {
   float:right;
   margin:5px;
 }
+.mx-modal-half-left {
+  position:fixed;
+  top:0px!important;
+  left:0px!important;
+  width:45%!important;
+  min-width:30%!important;
+  margin:initial!important;
+}
+.mx-modal-half-left .mx-modal-body{
+    height: 100vh!important;
+}
 
+.mx-modal-half-top {
+  position:fixed!important;
+  top:0px!important;
+  left:0px!important;
+  margin:initial!important;
+  min-width:100%;
+}
 
+.mx-modal-half-top .mx-modal-body {
+  height:30vh!important;
+}
+
+.mx-modal-body-hidden .mx-modal-body {
+  height:0vh!important;
+}
 /** 
 * login panel
 */

@@ -1,5 +1,11 @@
 ## MapX : change log
 
+- 1.5.16
+   - Improvement 
+       - Modal Added four preset button for modal panel, added an option to resize panel horizontally.
+       - Added autoprefixer for CSS in webpack config
+   - Bug fixing
+       - Dashboard modules could be ignored after a view edition. In case of only one module, the script automatically converted the value in a JSON string, and the dashboard was expecting an array. The `module` key in the `view.data.dashboard` can now be a string or an array. Or empty.
 - 1.5.15
    - Added translation support in filter views list by tags
    - Filter views by tags : use `AND` operator between filter types and `OR` within filter types. 
