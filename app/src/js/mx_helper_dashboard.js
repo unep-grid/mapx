@@ -157,7 +157,8 @@ export function handleEvent(e){
 function Dashboard(idContainer,view) {
   var dashboard = this;
   var modules = mx.helpers.path(view,'data.dashboard.modules')||['highcharts'];
-
+  if(typeof modules == "string") modules = [modules];
+  
   return  Promise.all([
     System.import("packery"),
     System.import("draggabilly"),

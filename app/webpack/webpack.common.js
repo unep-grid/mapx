@@ -39,7 +39,16 @@ module.exports = {
   module: {
     rules: [
       { test: /.css$/, 
-        use : ['style-loader','css-loader','icon-font-loader']
+        use : ['style-loader','css-loader','icon-font-loader',
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: (loader) => [
+                require('postcss-cssnext')
+              ]
+            }
+          }
+        ]
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,

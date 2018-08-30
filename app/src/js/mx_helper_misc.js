@@ -1422,6 +1422,74 @@ export function doPar(o) {
   return;
 }
 
+
+
+/**
+* Create a button containing font awesome stack icon
+* @param {Object} o options
+* @param {Element} o.elContainer Button container
+* @param {Array} o.classes classes to init the stack with
+*/
+export function StackButton(o){
+  var sb = this;
+  sb.config = {
+    hidden : o.hidden,
+    classHide : "mx-hide",
+    elContainer : o.elContainer,
+    classes : o.classes,
+    classBase : o.classBase
+  };
+}
+
+StackButton.prototype.build = function(){
+  var elBtn = document.createElement("button");
+  var elSpan = document.createElement("span");
+  var elFront = document.createElement("i");
+  var elBack = document.createElement("i");
+  elSpan.appendChild(elFront);
+  elSpan.appendChild(elBack);
+  elBtn.appendChild(elSpan);
+  this.elSpan = elSpan;
+  this.elBtn = elBtn;
+  this.elFront = elFront;
+  this.elBack = elBack;
+  if(this.config.elContainer) this.config.elContainer.appendChild(elBtn);
+  this.setClasses();
+  this.setHidden(this.config.hidden === true);
+  return(this);
+};
+
+StackButton.prototype.setClasses = function(cl){
+  cl = !!cl?cl instanceof Array?cl:[cl]:this.config.classes;
+  var elFront = this.elFront;
+  var elBack = this.elBack;
+  var elSpan = this.elSpan;
+  var elBtn = this.elBtn;
+  elSpan.className = "fa-stack";
+  elFront.className = "fa fa-stack-1x";
+  elBack.className = "fa fa-stack-2x";
+  elFront.classList.add(cl[0]);
+  elBack.classList.add(cl[1]);
+  elBtn.className = cl[2] || this.config.classBase ||'btn btn-default';
+  return(this);
+};
+StackButton.prototype.setHidden = function(hide){
+  var elBtn = this.elBtn;
+  var classHide = this.classHide;
+  if(hide === true){
+    elBtn.classList.add(this.config.classHide);
+    this.config.hidden = true;
+  }else
+    if(hide === false){
+      elBtn.classList.remove(this.config.classHide);
+      this.config.hidden = false;
+    }else{
+      elBtn.classList.toggle(this.config.classHide);
+      this.config.hidden = elBtn.classList.contains(this.config.classHide);
+    }
+  return(this);
+};
+
 /**
 * Display a panel modal
 * @param {Object} o Options
@@ -1468,11 +1536,13 @@ export function modal(o){
   /*if(o.minHeight){*/
   //modal.style.minHeight = o.minHeight;
   /*}*/
-  if(o.minWidth){
-    modal.style.minWidth = o.minWidth;
+  if( o.minWidth ){
+    //modal.style.minWidth = o.minWidth;
+    modal.style.width = o.minWidth;
   }
 
   var top = document.createElement("div");
+  var topBtns =  document.createElement("div");
   var title = document.createElement("div");
   var head = document.createElement("div");
   var body = document.createElement("div");
@@ -1480,14 +1550,19 @@ export function modal(o){
   var footer = document.createElement("div");
   var buttons = document.createElement("div");
   var dialog = document.createElement("div");
-  var btnMinimize = document.createElement("button");
   var validation = document.createElement("div");
+
+/*  var btnMinimize = document.createElement("button");*/
+  //var btnHalfTop = document.createElement("button");
+  //var btnHalfLeft = document.createElement("button");
 
   function close(e){
     if(hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
     modal.remove();
     background.remove();
   }
+
+  
 
   modal.appendChild(top);
   modal.appendChild(head);
@@ -1498,26 +1573,76 @@ export function modal(o){
   modal.appendChild(validation);
   modal.id=id;
 
-  btnMinimize.className="mx-pointer mx-modal-btn-minimize fa fa-minus-square-o";
+  var classModalOrig = modal.className;
+
+  function resetModalClass(){
+    modal.className = classModalOrig;
+  }
+  //btnMinimize.className="mx-pointer mx-modal-btn-top fa fa-minus-square-o";
+  //btnHalfTop.className="mx-pointer mx-modal-btn-top fa fa-arrow-circle-o-up";
+  //btnHalfLeft.className="mx-pointer mx-modal-btn-top fa fa-arrow-circle-o-left";
+  
   top.classList.add("mx-drag-handle");
   top.classList.add("mx-modal-top");
   top.appendChild(title);
-  top.appendChild(btnMinimize);
+  top.appendChild(topBtns);
+  
+   var sBtnReset = new StackButton({
+    hidden : true,
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-times','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
+   var sBtnMinimise = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-minus','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
-  btnMinimize.onclick = function(){
-    var isOpen = this.classList.contains("fa-minus-square-o");
+  var sBtnHalfTop = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-caret-up','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
+  var sBtnHalfLeft = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-caret-left','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
-    if(isOpen){
-      this.classList.remove("fa-minus-square-o");
-      this.classList.add("fa-plus-square-o");
-      body.classList.add("mx-hide");
-    }else{
-      this.classList.remove("fa-plus-square-o");
-      this.classList.add("fa-minus-square-o");
-      body.classList.remove("mx-hide");
-    }
+  sBtnMinimise.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-body-hidden');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
   };
+
+  sBtnHalfLeft.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-half-left');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
+  };
+
+  sBtnHalfTop.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-half-top');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
+  };
+
+  sBtnReset.elBtn.onclick = function(){
+    sBtnMinimise.setHidden(false);
+    sBtnHalfLeft.setHidden(false);
+    sBtnHalfTop.setHidden(false);
+    sBtnReset.setHidden(true);
+    resetModalClass();
+  };
+
 
   title.classList.add("mx-modal-drag-enable");
   title.classList.add("mx-modal-title");
