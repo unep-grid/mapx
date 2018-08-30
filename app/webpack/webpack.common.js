@@ -6,7 +6,6 @@ const webpack = require( 'webpack');
 const packages = require('../package.json').dependencies;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-
 module.exports = {
   node : {
     fs : 'empty'
@@ -16,19 +15,19 @@ module.exports = {
     'app' : './src/js/init_shiny.js',
     'kiosk' : './src/js/init_kiosk.js'
   },
-  plugins: [
+  plugins: [ 
     new webpack.optimize.CommonsChunkPlugin({
       name: 'shared'
     }),
     new HtmlWebpackPlugin({
       template : './src/kiosk/index.html',
       filename: './kiosk.html',
-      chunks : ['babel-polyfill','shared','common','kiosk']
+      chunks : ['shared','common','kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template : './src/built/index.html',
-      chunks : ['babel-polyfill','shared','common','app']
+      chunks : ['shared','common','app']
     }),
     new IconFontPlugin({
       fontName : "mx-icons-font"
@@ -36,7 +35,7 @@ module.exports = {
     new CopyWebpackPlugin(
       [ { from : './src/sprites', to: 'sprites/'} ]
     )
-    ],
+  ],
   module: {
     rules: [
       { test: /.css$/, 

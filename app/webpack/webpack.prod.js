@@ -13,8 +13,14 @@ module.exports = merge(common, {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new GenerateSW({
+      /**
+      * config :
+      * https://frama.link/workbox_config
+      */
       swDest : 'service-worker.js',
       importWorkboxFrom : 'local',
+      skipWaiting : true,
+      clientsClaim : true,
       runtimeCaching :  [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,

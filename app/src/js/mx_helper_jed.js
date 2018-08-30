@@ -21,11 +21,11 @@ export function jedRender(o) {
   System.import("json-editor")
     .then(function(){
       return Promise.all([
-        //System.import("./mx_extend_jed_medium.js"),
+        System.import("./mx_extend_jed_medium.js"),
         System.import("./mx_extend_jed_position.js"),
         System.import("./mx_extend_jed_ace.js"),
         System.import("./mx_extend_jed_array2.js"),
-        System.import("./mx_extend_jed_codemirror.js"),
+        System.import("./mx_extend_jed_codemirror.js")
       ]);
     }).then(function(){
       var JSONEditor = window.JSONEditor;
@@ -44,7 +44,7 @@ export function jedRender(o) {
 
       if(!el) throw("jed element " + id + "not found");
       JSONEditor.plugins.ace.theme = 'github';
-      JSONEditor.plugins.selectize.enable = true;
+      JSONEditor.plugins.selectize.enable = window.jQuery && window.jQuery().selectize;
 
       var opt_final = {};
 

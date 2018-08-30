@@ -119,7 +119,7 @@
   min-height: 102px;
   font-style:italic;
   font-size: 0.9em;
-  padding: 0px;
+  padding: 10px;
   margin: 0px;
   text-align: justify;
   -moz-hyphens: auto;
@@ -222,9 +222,9 @@
 .mx-view-content {
   column-width: 190px;
   column-count: auto;
-  max-height: 200px;
+  max-height: 230px;
   column-rule: 1px solid #ccc;
-  column-gap: 20px;
+  column-gap: 0px;
   overflow: auto;
 }
 

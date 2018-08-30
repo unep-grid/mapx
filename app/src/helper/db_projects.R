@@ -335,7 +335,21 @@ mxDbGetProjectUserRoles <- function(idUser,idProject){
 
 }
 
-
+#' Check if email is already member
+#' @param {String} email email to test
+#' @param {String} idProject Id of the project
+#' @return {Boolean} If the email is already linked to a member of the project, return TRUE
+mxDbProjectCheckEmailMembership <-function(email,idProject){
+  out <- FALSE
+  idUser <- mxDbGetIdFromEmail(email)
+  if(!noDataCheck(idUser)){
+    roles <- mxDbGetProjectUserRoles(idUser,idProject)
+    if(isTRUE(roles$member)){
+      out <- TRUE
+    }
+  } 
+  return(out)
+}
 
 #' Retrieve project data
 #' @param {String} project Project id

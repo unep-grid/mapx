@@ -32,10 +32,9 @@ observeEvent(reactData$showLogin,{
   userRole <- getUserRole()
   language <- reactData$language
   project <- reactData$project
-  titleModalLogin <- d("user_profile",language)
   projectData <- mxDbGetProjectData(project)
   projectName <- .get(projectData,c("title",language))
-  titleModalLogin <- titleModalLogin + " (" + projectName + ")"
+  #titleModalLogin <- titleModalLogin + " (" + projectName + ")"
   event <- reactData$showLogin 
   msgLogin <- ""
   reactData$onLoggedIn <- function(){}
@@ -53,7 +52,8 @@ observeEvent(reactData$showLogin,{
   if( isGuestUser() ){
 
     txtSubTitle <- d("login_subtitle",language)
-    
+    titleModalLogin <- d("user_authentication",language)
+
     uiOut <- div(
       div(id="divEmailInput",
         class="input-group mx-login-group",
@@ -79,6 +79,10 @@ observeEvent(reactData$showLogin,{
           placeholder = d("login_insert_pwd",language,web=F),
           class="form-control mx-login-input mx-login-input-black  mx-hide"
           )
+        ),
+      div(
+        class="mx-login-info",
+        tags$p(d("login_info_box",language))
         )
       )
 
@@ -90,6 +94,7 @@ observeEvent(reactData$showLogin,{
 
     idUser  <- .get(reactUser,c("data","id"))
     txtSubTitle <- d("login_user_status",language)
+    titleModalLogin <- d("user_profile",language)
     groupNames <- d(as.character(userRole$groups),lang=language)
     groupNames <- paste(groupNames,collapse=", ")
 
@@ -138,7 +143,7 @@ observeEvent(reactData$showLogin,{
     #textCloseButton=d("login_cancel",language),
     textCloseButton=d("btn_close",language),
     content = tags$div(
-      tags$b(msgLogin),
+      #tags$b(msgLogin),
       tags$b(div(id="txtLoginDialog",txtSubTitle)),
       uiOut
       )

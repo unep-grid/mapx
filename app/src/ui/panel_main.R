@@ -9,7 +9,7 @@
 div(
   class="mx-panels-container",
   div(
-    class="mx-panel-left mx-panel-views transparent shadow mx-hide-start",
+    class="mx-panel-left mx-panel-views transparent shadow",
     mxSource("src/ui/panel_views.R")
     ),
   div(

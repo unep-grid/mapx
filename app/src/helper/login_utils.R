@@ -1,6 +1,3 @@
-
-
-
 #' Login : get user info and set cookies
 #' @param {Character} email to login
 #' @param {Clist} list of data for fingerprinting browser
@@ -39,7 +36,8 @@ mxLogin <- function(email,browserData,query){
     forceProject <- .get(val,c('project'))
   }
 
-
+  # make sure to use lowercase and trimed email
+  email <- trimws(tolower(email))
 
   # Last email validation
   if(!mxEmailIsValid(email)) stop(sprintf("Invalid email: %s",email))
@@ -49,7 +47,6 @@ mxLogin <- function(email,browserData,query){
 
   # get default user table name
   userTable <-  .get(config,c("pg","tables","users"))
-
 
   # check if the account is "guest"
   isGuest <- isTRUE(email == .get(config,c("mail","guest")))

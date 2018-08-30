@@ -45,6 +45,7 @@ observeEvent(input$btnSendLoginKey,{
     emailIsValid <- mxEmailIsValid(email)
     res <- NULL
     msg <- character(0) 
+    language <- reactData$language
 
     if( !emailIsValid ){
       msg <- "Email is not valid"
@@ -92,11 +93,11 @@ observeEvent(input$btnSendLoginKey,{
 
       if("try-error" %in% class(res)){
 
-        msg <- "An error occured, sorry, We can't send you an email right now."
+        msg <- d("login_pwd_mail_sent_error",language)
 
       }else{
 
-        msg <- "An email has been sent, please check your email and copy the received password in the box."
+        msg <- d("login_pwd_mail_sent",language)
         #
         # save the provided address as the input could be change during the interval.
         #

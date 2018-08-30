@@ -247,7 +247,7 @@ blockquote {
 }
 
 .mx-bar-sort * {
-  font-size: 0.7em;
+  font-size: 0.9em;
 }
 
 
@@ -1003,6 +1003,17 @@ blockquote {
   float:right;
   margin:5px;
 }
+
+
+/** 
+* login panel
+*/
+.mx-login-info {
+  font-size: 0.9em;
+  padding: 5px;
+  margin-top: 12px;
+}
+
 /**
  * Error list
  */
@@ -1197,11 +1208,9 @@ blockquote {
 }
 
 
-
 /**
 * Text switch
 */
-
 .check-toggle-group {
   /*padding: 5px;*/
   /*display: -webkit-flex;*/
@@ -1223,13 +1232,20 @@ blockquote {
   padding:3px;
 }
 
+
+
 .check-toggle .check-toggle-label {
-  cursor:pointer;
+  cursor: pointer;
   padding: 7px;
   margin-right: 6px;
-  font-size: 10px;
+  display: inline;
+}
+
+.check-toggle .check-toggle-label span {
+  padding-right:4px;
   font-weight: normal;
-  display:inline;
+  font-size: 0.9em;
+  text-transform: capitalize;
 }
 
 .check-toggle .check-toggle-label * {
@@ -1246,23 +1262,23 @@ blockquote {
   /*margin-bottom: 2px;*/
 }
 
-/*.check-toggle .check-toggle-label:before {*/
-  /*font-family : fontawesome;*/
-  /*content: '\f204';*/
-  /*padding-right: 3px;*/
-/*}*/
-
-.check-toggle .check-toggle-input {
-  /*display: none;*/
+.check-toggle .check-toggle-label:before {
+  font-family : fontawesome;
+  content: '\f1db';
+  padding-right: 3px;
 }
 
-/*.check-toggle .check-toggle-input:checked ~.check-toggle-label:before {*/
-  /*content : '\f205';*/
-/*}*/
+.check-toggle .check-toggle-input {
+  display: none;
+}
+
+.check-toggle .check-toggle-input:checked ~.check-toggle-label:before {
+  content : '\f058';
+}
 
 .check-toggle .check-toggle-input:checked ~.check-toggle-label,
 .check-toggle .check-toggle-input:checked ~.check-toggle-label .check-toggle-badge {
-  color:red;
+  /*color:red;*/
 }
 
 
@@ -1319,9 +1335,11 @@ blockquote {
 }
 .mx-list-projects-container {
     overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 .mx-list-projects-search {
-  padding: 10px 10px 5px 5px;
+  padding: 10px 10px 10px 10px;
   width: 100%;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -1329,7 +1347,7 @@ blockquote {
   outline:none;
 }
 .mx-list-projects-search:focus {
-  border-bottom: 2px solid #ccc;
+  /*border-bottom: 2px solid #ccc;*/
 }
 /**
 * Switch to show or hide additional content.
@@ -1373,12 +1391,6 @@ blockquote {
   letter-spacing: 1.2;
 }
 
-
-.mx-views-filters-container .fold-container .fold-label {
-  padding: 0px 10px 5px 10px;
-}
-
-
 .fold-container .fold-switch:not(checked) ~ .fold-label::after{
     transition: transform 0.1s ease-in-out;
     margin: 3px;
@@ -1406,13 +1418,29 @@ blockquote {
   font-size:inherit;
 }
 
-
 /**
-* Tags filter 
+* Modifiers for filters by tag
 */
-.filter-group {
-    padding: 10px;
+
+.mx-views-filters-container .fold-container .fold-label {
+  padding: 5px 10px 5px 10px;
+  font-weight: normal;
 }
+
+.mx-views-filters-container .fold-container .fold-label.filter-tag-label-light {
+  font-size: 0.8em;
+  font-weight: normal;
+}
+.mx-views-filters-container .fold-container .fold-switch:checked ~ .fold-content {
+  border:none;
+  padding-left:10px;
+}
+.mx-views-filters-container .filter-tag-content {
+ max-height:150px;
+ overflow:auto;
+}
+
+
 
 /** 
 * time slider

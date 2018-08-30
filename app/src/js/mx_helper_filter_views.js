@@ -94,8 +94,16 @@ export function filterViewsListCheckbox(o){
   var elInput = (selectorInput instanceof Node) ? selectorInput : document.querySelector(selectorInput);
   var classHide = o.classHide;
   var classSkip = o.classSkip;
-  var listener = function() {
+
+  elInput.addEventListener("click",listener);
+
+ 
+
+  function listener(e) {
     
+    if( ! e || ! e.target.dataset.filter ) return;
+    e.stopImmediatePropagation();
+
     var elFilter ;
     var views = mx.maps[idMap].views;
     if(!views) return;
@@ -111,55 +119,68 @@ export function filterViewsListCheckbox(o){
       });
     }
 
-    var displayAll = filters.length == 0;
+    /**
+    * Group filters
+    */
+    var filtersTypes = filters.map(f => f.type);
+    var toShow = [];
+    var toHide = [];
+    var filter = "";
 
-    for (var i = 0, iL = views.length; i < iL; i++) {
-      var found = false;
-      var v = views[i];
-      var el = document.getElementById(v.id);
-      if(el){
-        var hasFilterText = el.classList.contains(classSkip);
-        if(!hasFilterText){
-          if(displayAll){
-            el.classList.remove(classHide);
-          }else{ 
+    views.forEach( view => {
+      var idView =  view.id;
+      filtersTypes.forEach( type => {
+        var filtersType = filters.filter(f => f.type == type );
+        var found = false;
+        var isShown = toShow.indexOf(idView) > -1;
+        var isHidden = toHide.indexOf(idView) > -1;
 
-            for(var j = 0, jL=filters.length ; j < jL ; j++ ){
-              if( ! found ){ 
-                var filter = filters[j].filter;
-                var type = filters[j].type;
-                try{
-                  switch(type){
-                    case  "classes" :
-                      found = v.data.classes.indexOf(filter) > -1;
-                      break;
-                    case  "collections" :
-                      found = v.data.collections.indexOf(filter) > -1; 
-                      break;
-                    case  "components" :
-                      if(v._components){
-                        found = v._components.indexOf(filter) > -1 ;
-                      }
-                      break;               
-                    default:
-                      found = false;
-                  }
-                }catch(e){}
-              }
-            }
-            if(found){
-              el.classList.remove(classHide);
-            }else{
-              el.classList.add(classHide);
-            }
-          }
+        if( !isHidden ){
+          filtersType.forEach( filterData => {
+            filter = filterData.filter;
+
+              try{
+                switch(type){
+                  case  "view_classes" :
+                    found = view.data.classes.indexOf(filter) > -1;
+                    break;
+                  case  "view_collections" :
+                    found = view.data.collections.indexOf(filter) > -1; 
+                    break;
+                  case  "view_components" :
+                    if(view._components){
+                      found = view._components.indexOf(filter) > -1 ;
+                    }
+                    break;               
+                  default:
+                    found = false;
+                }
+              }catch(e){}
+          });
+       
+        if( found && !isShown ){
+            toShow.push(idView);
+        }else if( !isHidden && !found ) {
+            toHide.push(idView);
+           } 
         }
-      }
-    }
-    if( onFiltered && onFiltered instanceof Function ) onFiltered();
-  };
+        
+      });
+    });
 
-  elInput.addEventListener("click",listener);
+    views.forEach(v => {
+      var idView = v.id;
+      var hide = toHide.indexOf(idView) >-1;
+      var elView = document.getElementById(idView);
+      if(hide){
+        elView.classList.add(classHide);
+      }else{
+       elView.classList.remove(classHide);
+      }
+    });
+  
+  }
+
   return listener;
 
 }

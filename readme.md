@@ -1,4 +1,13 @@
 ## MapX : change log
+
+- 1.5.15
+   - Added translation support in filter views list by tags
+   - Filter views by tags : use `AND` operator between filter types and `OR` within filter types. 
+- 1.5.14 
+   - Removed bug where (empty) private project could be seen when pressing a shared view's "home" button
+   - Added support for spanish. Thanks @GianlucaGygax !
+   - Updated service workers strategy. Using no-cache in traefik should solve issue where old cache were kept.
+   - Modification on entry files for webpack to enable a viewer only mode for the app.
 - 1.5.13 
    - Removed a bug where a dashboard was not removed if no source layer where used
    - Use pointer events instead of mouse event

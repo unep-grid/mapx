@@ -31,25 +31,19 @@ observeEvent(reactData$sourceDownloadRequest,{
     formats <- .get(config,c("data","format"))              
     formatsNames <- sapply(formats,function(x){if(x$type=="vector"){return(x$driver)}})
     countries <- mxDbGetProjectData(project)$countries
-    
+
     uiOut <- tagList(
       selectizeInput("selectDownloadFormat",
         label = d("download_select_format_vector",language),
         choices = formatsNames,
-        multiple = FALSE,
-        options=list(
-          dropdownParent="body"
-          )
+        multiple = FALSE
         ),
       selectizeInput(
         "selectFilterDataByCountries",
         label = d("download_select_by_countries",language,web=F),
         selected = countries,
         choices = mxGetCountryList(language,includeWorld=F),
-        multiple = TRUE,
-        options = list(
-          dropdownParent="body"
-          )
+        multiple = TRUE
         ),
       textInput("txtDownloadFileName",
         label = d("download_file_name",language),

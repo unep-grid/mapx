@@ -19,6 +19,7 @@ observe({
 
     # user info
     isGuest <- isGuestUser()
+    language <- reactData$language
 
     # If this is guest, over ride db project
     if( isGuest ){
@@ -54,7 +55,12 @@ observe({
 
         # if the change comes from the ui, apply
       }else if(!noDataCheck(project_ui)){
-
+        roles <- mxDbGetProjectUserRoles(id_user,project_ui)
+        if(!roles$public){
+          msg <- d("project_access_denied",language)
+          mxModal(id="homeProjectDenied",content = tags$b(msg))
+          project_ui <- NULL
+        }
         project_out <- project_ui
       }else{
         # nothing to do
@@ -65,7 +71,9 @@ observe({
 
     mxModal(id="uiSelectProject",close=T)
     query$project <<- NULL
-    reactData$project <- project_out
+    if(!noDataCheck(project_out)){
+      reactData$project <- project_out
+    }
 
   })
 })
