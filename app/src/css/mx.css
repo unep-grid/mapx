@@ -1260,13 +1260,6 @@ blockquote {
   display:inline-block;
 }
 
-.mx-views-filters-container .check-toggle {
-  padding:3px;
-}
-.mx-views-filters-container .mx-check-toggle-filter-count {
- color : #ccc;
-}
-
 
 
 .check-toggle .check-toggle-label {
@@ -1276,13 +1269,13 @@ blockquote {
   overflow: hidden;
   text-overflow: ellipsis;
   width: auto;
-  margin-right: 5px;
+  margin-right: 10px;
+  padding: 2px;
 }
 
 .check-toggle .check-toggle-label span {
   padding-right:4px;
   font-weight: normal;
-  font-size: 0.9em;
   text-transform: capitalize;
 }
 
@@ -1317,6 +1310,18 @@ blockquote {
 .check-toggle .check-toggle-input:checked ~.check-toggle-label,
 .check-toggle .check-toggle-input:checked ~.check-toggle-label .check-toggle-badge {
   /*color:red;*/
+}
+
+.mx-views-filters-container .check-toggle {
+  /*padding:3px;*/
+}
+.mx-views-filters-container .mx-check-toggle-filter-count {
+  display: inline-block;
+  width: 3em;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1em;
+  font-size: 0.7em;
 }
 
 
@@ -1476,7 +1481,6 @@ blockquote {
 .mx-views-filters-container .filter-tag-content {
  max-height:150px;
  overflow:auto;
- column-count:2;
 }
 
 
