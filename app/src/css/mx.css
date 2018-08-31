@@ -1271,9 +1271,12 @@ blockquote {
 
 .check-toggle .check-toggle-label {
   cursor: pointer;
-  padding: 7px;
-  margin-right: 6px;
-  display: inline;
+  display: inline-block;
+  font-weight: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: auto;
+  margin-right: 5px;
 }
 
 .check-toggle .check-toggle-label span {
@@ -1463,7 +1466,7 @@ blockquote {
 }
 
 .mx-views-filters-container .fold-container .fold-label.filter-tag-label-light {
-  font-size: 0.8em;
+  font-size: 1em;
   font-weight: normal;
 }
 .mx-views-filters-container .fold-container .fold-switch:checked ~ .fold-content {
