@@ -23,6 +23,8 @@ config[["system"]] <- list(
   urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
   )
 
+
+
 config[["browser"]] <- list(
   #
   # Expected params requested by getBrowserData js function 
@@ -39,6 +41,9 @@ config[["browser"]] <- list(
     "hasGeolocation"
     )  
   )
+
+
+
 
 
 #
@@ -294,8 +299,21 @@ for(l in .get(config,c("languages","list"))){
 config[["countries"]] <- list()
 config[["project"]] <- list()
 
-# fallback countries
-config[["project"]][["default"]] <- "MX-YHJ-6JJ-YLS-SCV-VL1"
+
+#
+# Admin default
+#
+config[["project"]] =  list(
+  default = "MX-YHJ-6JJ-YLS-SCV-VL1",
+  creation = list(
+    usersAllowed = c(1,17,55,6)
+    )
+  )
+
+
+
+
+
 
 # read countriea
 config[["countries"]]$table <- fromJSON(

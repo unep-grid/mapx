@@ -180,6 +180,18 @@
     "ps": ""
   },
   {
+    "id": "btn_show_add_project_disabled",
+    "en": "Add a new project ( disabled )",
+    "fr": "Nouveau projet ( désactivé )",
+    "es": "Nuevo proyecto ( discapacitado )",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_show_db_info_self",
     "en": "Get a temporary access to edit a dataset",
     "fr": "Obtenir un accès provisoire pour éditer une source",
@@ -880,6 +892,18 @@
     "en": "Delete this project",
     "fr": "Supprimer ce projet",
     "es": "Eliminar este proyecto",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fr": "Supprimer ce projet ( désactivé )",
+    "es": "Eliminar este proyecto ( discapacitado )",
     "ru": "",
     "zh": "",
     "de": "",
