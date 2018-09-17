@@ -1,7 +1,11 @@
 ## MapX : change log
 
+
+- 1.5.18
+   - Rollback
+      - Remove privilege to create new project for everyone. Only selected user can create new project.
 - 1.5.17
-   - Improvment
+   - Improvement
        - Add current view count in filters by category
        - Style minor change in filter by labels and filter by attributes 
 - 1.5.16
