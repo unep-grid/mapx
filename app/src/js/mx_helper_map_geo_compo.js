@@ -1,77 +1,154 @@
 /* jshint esversion :6 */
-import * as helpers from "@turf/helpers";
 
-//import {MSQR} from "msqr";
-export function GeoCompo(conf){
-  this.config = conf || {};
-  this.update();
+export function GeoCompo(map){
+  var gc = this;
+  map =  map || mx.maps.map_main.map;
+  gc.id = Math.random().toString(36);
+  gc.elements = {};
+  gc.data = {};
+  gc.map = map;
+  gc.data.features = [];
+  gc.data.contours = [];
+  gc.data.dim = {};
+  return gc.init();
 }
 
-GeoCompo.prototype.update = function(){
+GeoCompo.prototype.init = function(){
+
   var gc = this;
-  return new Promise(function(resolve,reject){
+  var data = gc.data;
+  var dim = data.dim;
+  var el = gc.elements;
 
-    var def = {
-      width : 800,
-      height : 600
-    };
+  el.mapContainer = gc.map.getContainer();
+  el.canvas = document.createElement("canvas");
+  el.canvas.id = gc.id;
+  el.canvas.style = "pointer-events:none;width:100%;height:100%;position:absolute;top:0;left:0;";
+  el.mapContainer.appendChild(el.canvas);
 
-    /**
-     * Init gc
-     */
-    gc.stack = [];
-    gc.contours = [];
-    gc.config = Object.assign(def,gc.config);
-    gc.dim = {};
-    var c = gc.config;
-    var d = gc.dim;
-
-    /**
-     * scale and bounds updated on geojson add
-     */
-    d.scaleCanvas = 0;
-    d.bounds = {
-      maxLat : -90,
-      maxLng : -180,
-      minLat : 90,
-      minLng : 180
-    };
-    d.topLeft = {x:0,y:0};
-    d.bottomRight = {x:0,y:0};
+  /**
+   * scale and bounds updated on geojson add
+   */
+  dim.scaleCanvas = 0;
+  dim.bounds = {
+    maxLat : -90,
+    maxLng : -180,
+    minLat : 90,
+    minLng : 180
+  };
+  dim.topLeft = {x:0,y:0};
+  dim.bottomRight = {x:0,y:0};
 
     /**
      * Set container dim
      */
-    d.widthBase = c.el ? c.el.clientWidth : c.width ? c.width : 1000 ;
-    d.heightBase = c.el ? c.el.clientHeight : c.height ? c.height : 1000 ;
+  dim.widthBase = el.canvas.clientWidth ;
+  dim.heightBase = el.canvas.clientHeight ;
  
-    if(c.program){
-    var waitList = [];
-      c.program.forEach(function(prog){
-        for(var f in prog ){
-          if(f!="init"){
-            waitList.push(gc[f](prog[f])); 
-          }
-        }     
+};
+
+GeoCompo.prototype.program = function(arrayProgram){
+  var gc = this;
+  var waitList = [];
+  
+  arrayProgram.forEach(function(prog){
+    for(var f in prog ){
+      if( f!= "init" ){
+        waitList.push(prom(f,prog));
+      }
+    }
+  });
+
+  function prom(f,prog){
+    var out;
+    return new Promise(function(resolve,reject){
+      out = gc[f](prog[f]);
+      resolve(out);
+    });
+  }
+
+  return Promise.all(waitList);
+
+};
+
+
+
+GeoCompo.prototype.getRenderedFeatures = function(config){
+
+  return  Promise.all([
+    System.import("@turf/helpers"),
+    System.import("@turf/flatten"),
+    System.import("@turf/buffer")
+  ])
+    .then(m => {
+
+     var helpers = m[0];
+     var flatten = m[1].default;
+     var buffer = m[2].default;
+
+      config = config || {};
+      var configDefault = {
+        prefix : 'MX-',
+        groupSeparator : '@',
+        idMap : 'map_main'
+      };
+
+      var gc = this;
+
+      /**
+       * All group name
+       */
+      var groups = mx.helpers.getLayerNamesByPrefix({
+        id: config.idMap || configDefault.idMap,
+        prefix: config.prefix || configDefault.prefix,
+        base : true
       });
 
-      resolve(Promise.all(waitList));
-    }else{
+      groups.forEach(function(l){
+        var layers = [];
+        var featuresQuery = [];
+        var features = [];
 
-      resolve(gc);
+        /**
+         * All layer in group
+         */
+        layers = mx.helpers.getLayerNamesByPrefix({
+          id : config.idMap || configDefault.idMap,
+          prefix : l
+        });
+        featuresQuery = gc.map.queryRenderedFeatures({
+          layers : layers
+        });
 
-    }
+        features = featuresQuery.map( f => {
+          var type = f.geometry.type ;
+          if( type.indexOf('Line') > -1 || type.indexOf('Point') > -1){
+             f = buffer(f,1);
+          }
+          return {
+            type: 'Feature',
+            geometry: f.geometry,
+            properties: { id: l }
+          };
+        });
 
-  });
+        features = flatten(helpers.featureCollection(features));
+        gc.data.features.push(features);
+
+      });
+
+
+    });
 };
+
 
 /*
 * Get mapbox gl bounds
 */
 GeoCompo.prototype.getMapBounds = function(){
   var gc = this;
-  if(gc.config.map){
-    var bounds = gc.config.map.getBounds();
+  if(gc.map){
+    var bounds = gc.map.getBounds();
     return {
       maxLat : bounds.getNorth(),
       maxLng : bounds.getEast(),
@@ -79,63 +156,62 @@ GeoCompo.prototype.getMapBounds = function(){
       minLng : bounds.getWest()
     };
   }else{
-    return gc.dim.bounds;
+    return gc.data.dim.bounds;
   }
 };
 
 /**
 * Add a featureCollection to the stack, set the draw function
 */
-GeoCompo.prototype.addGeojson = function(geojson){
+GeoCompo.prototype.buildDrawFunction = function(){
 
   var gc = this;
 
   return new Promise(function(resolve,reject){
 
-    geojson = geojson instanceof Array ? geojson:[geojson];
-    var d = gc.dim;
-    var c = gc.config;
+    var features = gc.data.features;
+
+
+    var d = gc.data.dim;
     var point;
-    var layer = {
-      geojson : geojson
-    };
-    gc.stack.push(layer);
 
-    /**
-    * Actual drawing function. Store it in layer for later use.
-    */
-    layer.draw = function(){
+    features.forEach( geojson => {
 
-      gc.updateBounds(geojson);
-      var canvas = gc.makeCanvas(d.widthBase,d.heightBase);
-      var context = canvas.getContext('2d');
+      /**
+       * Actual drawing function. Store it in layer for later use.
+       */
+      geojson.draw = function(){
 
-      gc.coordForEach(geojson,{
-        onFeatureStart : function(feature){
-          context.lineWidth = 1;
-          context.fillStyle = '#F00';
-          context.strokeStyle = '#F00';
-          context.beginPath();
-        },
-        onCoord : function(coord,index,type){
+        gc.updateBounds(geojson);
+        var canvas = gc.makeCanvas(d.widthBase,d.heightBase);
+        var context = canvas.getContext('2d');
 
-          point = gc.coordToPoint(coord[0], coord[1]);
+        gc.coordForEach(geojson,{
+          onFeatureStart : function(feature){
+            context.lineWidth = 1;
+            context.fillStyle = '#F00';
+            context.strokeStyle = '#F00';
+            context.beginPath();
+          },
+          onCoord : function(coord,index,type){
 
-          if ( index === 0) {
-            context.moveTo(point.x, point.y);
-          } else {
-            context.lineTo(point.x, point.y);
+            point = gc.coordToPoint(coord[0], coord[1]);
+
+            if ( index === 0) {
+              context.moveTo(point.x, point.y);
+            } else {
+              context.lineTo(point.x, point.y);
+            }
+          },
+          onFeatureEnd :  function(feature){
+            context.fill();
+            context.stroke();
           }
-        },
-        onFeatureEnd :  function(feature){
-          context.fill();
-          context.stroke();
-        }
-      });
+        });
 
-      return canvas;
-    };
-
+        return canvas;
+      };
+    });
     resolve(gc);
   });
 };
@@ -166,9 +242,12 @@ GeoCompo.prototype.callback = function(fun){
 */
 GeoCompo.prototype.clear = function(){
   var gc = this;
-  gc.stack = [];
-  gc.contours = [];
-  if(gc.context) gc.context.clearRect(0,0,gc.dim.widthBase,gc.dim.heightBase);
+  gc.data = {};
+  gc.data.features = [];
+  gc.data.contours = [];
+  gc.data.dim = {};
+
+  if(gc.context) gc.context.clearRect(0,0,gc.data.dim.widthBase,gc.data.dim.heightBase);
   return(gc);
 };
 
@@ -179,35 +258,22 @@ GeoCompo.prototype.clear = function(){
 */
 GeoCompo.prototype.render = function(method){
   var gc = this;
-  var d = gc.dim;
-  var elContainer = gc.config.el;
+  var dim = gc.data.dim;
+  var elCanvas = gc.elements.canvas;
+  var context = elCanvas.getContext('2d');
+  context.clearRect(0,0,dim.widthBase,dim.heightBase);
+  context.globalCompositeOperation = "copy";
 
   return new Promise(function(resolve, reject){
 
     gc.start = performance.now();
-    gc.canvas = gc.makeCanvas(d.widthBase,d.heightBase);
-    gc.context = gc.canvas.getContext('2d');
 
-    for(var i=0,iL=gc.stack.length; i<iL ; i++){
-      var a = i;
-      if( gc.config.reverse ) a = iL-i;
-      var layer = gc.stack[a];
+    gc.data.features.forEach((layer) => {
       var layerCanvas = layer.draw();
-      gc.context.drawImage(layerCanvas,0,0);
-      gc.context.globalCompositeOperation = method || gc.config.method || "copy";
-    }
+      context.drawImage(layerCanvas,0,0);
+      context.globalCompositeOperation = method || "copy";
+    });
 
-    if(elContainer instanceof Node){
-      var oldCanvas = elContainer.querySelector("canvas");
-      if(oldCanvas){
-        var oldContext = oldCanvas.getContext("2d");
-        oldContext.clearRect(0,0,oldCanvas.width,oldCanvas.height);
-        oldContext.drawImage(gc.canvas,0,0);
-        oldContext.globalCompositeOperation = "copy";
-      }else{
-        elContainer.appendChild(gc.canvas);
-      }
-    }
     console.log("Rendered in" + (performance.now() - gc.start));
     resolve(gc);
 
@@ -223,8 +289,8 @@ GeoCompo.prototype.render = function(method){
 GeoCompo.prototype.pointToCoord = function(point){
   var gc = this;
   return gc.metersToDegrees({
-    x : ( point.x / gc.dim.scaleCanvas ) + gc.dim.topLeft.x,
-    y : gc.dim.topLeft.y - ( point.y / gc.dim.scaleCanvas )
+    x : ( point.x / gc.data.dim.scaleCanvas ) + gc.data.dim.topLeft.x,
+    y : gc.data.dim.topLeft.y - ( point.y / gc.data.dim.scaleCanvas )
   });
 };
 
@@ -238,8 +304,8 @@ GeoCompo.prototype.coordToPoint = function(lng,lat){
 GeoCompo.prototype.pointScale = function(point){
   var gc = this;
   var out = {};
-  out.x = (point.x - gc.dim.topLeft.x) * gc.dim.scaleCanvas ;
-  out.y = (gc.dim.topLeft.y - point.y) * gc.dim.scaleCanvas ;
+  out.x = (point.x - gc.data.dim.topLeft.x) * gc.data.dim.scaleCanvas ;
+  out.y = (gc.data.dim.topLeft.y - point.y) * gc.data.dim.scaleCanvas ;
   return out;
 };
 
@@ -249,8 +315,8 @@ GeoCompo.prototype.getCanvasBounds = function(){
   var out = {};
 
   var southEast = gc.pointToCoord({
-     x : gc.dim.widthBase,
-     y : gc.dim.heightBase
+     x : gc.data.dim.widthBase,
+     y : gc.data.dim.heightBase
   });
 
   var northWest = gc.pointToCoord({
@@ -344,9 +410,9 @@ GeoCompo.prototype.updateBounds = function(geojson){
 
   var start = performance.now();
   var gc = this;
-  var dim = gc.dim;
+  var dim = gc.data.dim;
   var bounds = dim.bounds;
-  var stack = gc.stack;
+  var stack = gc.data.features;
   var layer ;
   var lat;
   var lng;
@@ -356,7 +422,7 @@ GeoCompo.prototype.updateBounds = function(geojson){
   var maxLng = dim.bounds.maxLng || -180;
 
 
-  var updateBounds =  function(lngLat){
+  function update(lngLat){
     lat = lngLat[1];
     lng = lngLat[0];
    
@@ -368,16 +434,13 @@ GeoCompo.prototype.updateBounds = function(geojson){
       if( lng < minLng ) minLng = lng; 
       if( lng > maxLng ) maxLng = lng; 
     }
-  };
-
-  for(var i=0, iL=gc.stack.length; i<iL; i++){
-    layer = stack[i];
-    if(layer.geojson){
-      gc.coordForEach(layer.geojson,{
-        onCoord : updateBounds
-      });
-    }
   }
+
+  stack.forEach( layer => {
+    gc.coordForEach(layer,{
+        onCoord : update
+      }); 
+  });
 
   /**
   * Limit to map bounds if provided
@@ -415,60 +478,66 @@ GeoCompo.prototype.updateBounds = function(geojson){
 
 GeoCompo.prototype.getDataBounds =  function(){
   var gc = this;
-  return gc.dim.bounds;
+  return gc.data.dim.bounds;
 };
 
 GeoCompo.prototype.trace = function(){
     
   var gc = this;
-  return import("d3-contour").then(function(d3){
+  
+  Promise.all([
+    System.import("d3-contour"),
+    Syetem.import("@turf/helpers")
+  ])
+    .then(function(m){
+      var d3 = m[1];
+      var h = m[0];
 
-    return new Promise(function(resolve,reject){
-      var scale = gc.dim.scaleCanvas;
-      var features = [];
-      var contour,contours, points, coord, coordFirst,path,c, k, kL, p, n, i, iL, j, jL,l,lL;
-      var geojson;
-      var pixels = gc.context.getImageData(0,0,gc.dim.widthBase,gc.dim.heightBase).data;
-      var values = [];
-      var h = helpers;
+      return new Promise(function(resolve,reject){
+        var scale = gc.data.dim.scaleCanvas;
+        var features = [];
+        var contour,contours, points, coord, coordFirst,path,c, k, kL, p, n, i, iL, j, jL,l,lL;
+        var geojson;
+        var pixels = gc.context.getImageData(0,0,gc.data.dim.widthBase,gc.data.dim.heightBase).data;
+        var values = [];
 
-      for (i = 0,  n = pixels.length; i < n; i += 4) {
-        values.push(pixels[i+3]);
-      }
+        for (i = 0,  n = pixels.length; i < n; i += 4) {
+          values.push(pixels[i+3]);
+        }
 
-      contours = d3.contours()
-        .size([gc.dim.widthBase, gc.dim.heightBase])
-        .thresholds([0,255])
-      (values);
+        contours = d3.contours()
+          .size([gc.data.dim.widthBase, gc.data.dim.heightBase])
+          .thresholds([0,255])
+        (values);
 
 
-      contour = contours[1].coordinates;
+        contour = contours[1].coordinates;
 
-      points = [];
-      for(j=0,jL=contour.length;j<jL;j++){
-        path = contour[j];
-        if(!(path instanceof Array)) path = [path];
-        for(k=0,kL=path.length;k<kL;k++){
-          p = path[k];
-          for(l=0,lL=p.length;l<lL;l++){
-            coord = p[l];
+        points = [];
+        for(j=0,jL=contour.length;j<jL;j++){
+          path = contour[j];
+          if(!(path instanceof Array)) path = [path];
+          for(k=0,kL=path.length;k<kL;k++){
+            p = path[k];
+            for(l=0,lL=p.length;l<lL;l++){
+              coord = p[l];
 
-            c = gc.metersToDegrees({
-              x : ( coord[0] / scale ) + gc.dim.topLeft.x,
-              y : gc.dim.topLeft.y - ( coord[1] / scale )
-            });
+              c = gc.metersToDegrees({
+                x : ( coord[0] / scale ) + gc.data.dim.topLeft.x,
+                y : gc.data.dim.topLeft.y - ( coord[1] / scale )
+              });
 
-            coord[0] = c.lng;
-            coord[1] = c.lat;
+              coord[0] = c.lng;
+              coord[1] = c.lat;
+            }
           }
         }
-      }
 
-      gc.contours = contours;
+        gc.contours = contours;
 
-      resolve(gc);
+        resolve(gc);
+      });
     });
-  });
 };
 
 GeoCompo.prototype.simplify = function(){
@@ -478,3 +547,4 @@ GeoCompo.prototype.simplify = function(){
   
   });
 };
+

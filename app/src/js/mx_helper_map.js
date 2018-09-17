@@ -3957,12 +3957,10 @@ export function getRenderedLayersIntersect(o){
       System.import("./mx_helper_overlap.worker.js"),
       System.import("@turf/helpers"),
       System.import("@turf/buffer"),
-      //System.import('@turf/intersect'),
       System.import('@turf/combine'),
       System.import('@turf/bbox-clip'),
       System.import('@turf/boolean-overlap'),
       System.import('@turf/flatten')
-      //System.import('@turf/difference')
     ]).then(function(m){
 
       var getIntersectWorker = m[0];
