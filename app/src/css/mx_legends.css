@@ -11,7 +11,7 @@
 }
 
 .mx-legend-container {
-  display: block;
+  display: inline-block;
   flex-direction: column;
   width: 100%;
   padding-bottom: 20px;
@@ -28,7 +28,7 @@
   font-weight: normal;
 }
 /*.mx-legend.mx-legend-numeric>.mx-legend-input:checked~.mx-legend-content:before {*/
-  /*content: ">=";*/
+/*content: ">=";*/
 /*}*/
 
 .mx-legend-color {
@@ -58,13 +58,16 @@
 }
 
 .mx-view-item-legend-raster {
-    /*background: #f5f5f5;*/
-    /*border-radius: 3px;*/
-    /*padding: 8px;*/
+  /*background: #f5f5f5;*/
+  /*border-radius: 3px;*/
+  /*padding: 8px;*/
 }
 
 .mx-view-item-legend-raster img {
   max-width: 100%;
+  height: auto;
+  /* see mx-view-content for container max height */
+  max-height: 220px;
   overflow:auto;
   cursor:pointer;
   cursor:zoom-in;
