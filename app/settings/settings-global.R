@@ -422,6 +422,13 @@ config[[c("data","format")]] <- list(
     type = "vector",
     fileExt = c(".dxf"),
     multiple = FALSE
+    ),
+  list(
+    name = "CSV",
+    driver = "CSV",
+    type = "vector",
+    fileExt = c(".csv"),
+    multiple = FALSE
     )
   )
 
