@@ -4,6 +4,7 @@
 - 1.5.18
    - Improvement 
       - Added support for download sources as CSV #212
+      - Added projection data when downloading geospatial files #322
    - Bug fixing
       - Solved issue when images in legend where broken into multiple columns #324
    - Rollback
