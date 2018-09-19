@@ -17,37 +17,89 @@ export function removeServiceWorker(){
 
 
 /**
+* Get url query parameter by name
+* @param {String} name Name of the query request name
+* @note http://www.netlobo.com/url_query_string_javascript.html
+*/
+export function getUrlParameter( name )
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
+
+/**
+ * Returns an Array of all url parameters
+ * @return {[Array]} [Key Value pairs form URL]
+ */
+export function paramsToObject(params) {
+  var param;
+  var out = {};
+  var dec = decodeURIComponent;
+  var params = params ? params.split('&') :  window.location.search.substring(1).split('&');
+  for ( var i = 0, iL = params.length; i<iL; i++ ) {
+    param = params[i].split('=');
+    out[param[0].toLowerCase()]=dec(param[1]);
+  }
+  return out;
+}
+
+/**
 * Replace current url state using object values
 *
 * @param {Object} opt Options
-* @param {Object} object to replace state with
+* @param {Object} opt.data params to replace state with
 * @param {Boolean} opt.clean remove everything
 * @return null
 */
 export function objToState(opt){
   var out = "/";
-  var params = getAllUrlParamsObj() ;
+  var params = paramsToObject();
   var keysNew = Object.keys(opt.data);
   var dat;  
+  var val;
   if(!opt.clean){
 
     keysNew.forEach(kn=>{
-      params[kn] = opt.data[kn];
-    });
-
-    var keys = Object.keys(params);
-
-    keys.forEach((k,i) => {
-      dat = params[k];
-      if(dat){
-        if(dat instanceof Array) dat = dat.join(",");
-        out = out + (i==0?"?":"&") + k + "=" + dat;
+      val = opt.data[kn];
+      if(val){
+        params[kn] = val;
+      }else{
+        delete params[kn];
       }
     });
+
+    if(params){
+      out = out + '?'+ objToParams(params);
+    }
 
   }
   history.replaceState(null,null,out);
 }
+
+
+
+
+/**
+* Convert object to params string
+*
+* @param {Object} opt Options
+* @param {Object} object to convert
+* @return {String} params string
+*/
+export function objToParams(data){
+var esc = encodeURIComponent;
+return Object.keys(data)
+    .map(k => esc(k) + '=' + esc(data[k]))
+    .join('&');
+}
+
 
 
 /**
@@ -132,39 +184,6 @@ export function parseTemplate(template, data){
       });
 }
 
-
-/**
-* Get url query parameter by name
-* @param {String} name Name of the query request name
-* @note http://www.netlobo.com/url_query_string_javascript.html
-*/
-export function getUrlParameter( name )
-{
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-  if( results == null )
-    return "";
-  else
-    return results[1];
-}
-
-
-/**
- * Returns an Array of all url parameters
- * @return {[Array]} [Key Value pairs form URL]
- */
-export function getAllUrlParamsObj() {
-  var param;
-  var out = {};
-  var params = window.location.search.substring(1).split('&');
-  for ( var i = 0, iL = params.length; i<iL; i++ ) {
-    param = params[i].split('=');
-    out[param[0]]=param[1];
-  }
-  return out;
-}
 
 /**
 * Flash an icon

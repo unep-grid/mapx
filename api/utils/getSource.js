@@ -162,6 +162,7 @@ function extractFromPostgres(config,cb){
     '-nln',layername,
     '-sql',sql,
     '-skipfailures',
+    '-s_srs', 'EPSG:4326',
     '-t_srs', 'EPSG:4326',
     '-progress',
     '-overwrite',

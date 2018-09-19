@@ -1,6 +1,9 @@
 ## MapX : change log
 
 
+- 1.5.19
+   - Improvement
+      - Added support for quering wms based raster source layer
 - 1.5.18
    - Improvement 
       - Added support for download sources as CSV #212
