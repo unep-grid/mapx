@@ -40,6 +40,8 @@ export let settings = {
   apiProtocol : 'http:',
   modeKiosk : false,
   idMapDefault : 'map_main',
+  idDashboardsPanel : 'mxDashboardsPanel',
+  idDashboards : 'mxDashboards',
   mapboxToken : '',
   paths : {
     sprites : 'sprites/sprite',
@@ -56,10 +58,12 @@ export let settings = {
   separators : {
     sublayer : "_@_",
   },
+  clickIgnoreWidgets : [],
   maxByteUpload : Math.pow(1024,2)*100, //100 MiB 
   maxByteJed : 100000, // 100 Kb  
   user : {}
 };
+export let dashboards = [];
 export let editors = {};
 export let extend = {
   position : {},

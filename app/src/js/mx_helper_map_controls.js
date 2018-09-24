@@ -205,10 +205,7 @@ mapControlApp.prototype.onAdd = function(map) {
       classes:"fa fa-pie-chart",
       key:"btn_tab_dashboard",
       action:function(){ 
-        helper.classAction({
-          selector : '.mx-panel-dashboards',
-          class : 'enabled'
-        });
+        var state = mx.helpers.Dashboard.showPanel('toggle');
       }
     },
     btnPrint:{

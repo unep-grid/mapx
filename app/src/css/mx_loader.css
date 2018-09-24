@@ -69,4 +69,13 @@ html:not(.shiny-busy) .mx-loader-spinner {
   animation-delay: .3s;
 }
 
-
+/*
+* inline
+*/
+.mx-inline-spinner-container {
+  width:100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

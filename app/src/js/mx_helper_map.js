@@ -302,7 +302,7 @@ export function initMapx(o){
     /**
      * Init mgl data store
      */  
-    if (!mx.maps) {
+    if ( !mx.maps ) {
       mx.maps = {};
     }
     /**
@@ -497,8 +497,9 @@ export function initMapxApp(o){
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
 
-    map.on("render" , mx.helpers.handleEvent);
-    map.on("click", mx.helpers.handleEvent);
+    map.on("click", function(e){
+      mx.helpers.handleClickEvent(e,o.id);
+    });
     map.on("rotate",function(e){
       var r = -map.getBearing();
       var northArrow = document.querySelector(".mx-north-arrow");
@@ -519,6 +520,35 @@ export function initMapxApp(o){
 
 }
 
+
+/**
+* Handle click event
+* @param {Object} e Mapboxgl event object
+*/
+export function handleClickEvent(e,idMap){
+  var type = e.type;
+  var hasLayer = mx.helpers.getLayerNamesByPrefix({prefix:'MX-'}).length>0 ;
+  var map = mx.helpers.getMap(idMap);
+
+  if( hasLayer && type === "click" ){
+
+    if( mx.settings.clickIgnoreWidgets.length > 0 ) return;
+    /**
+     * Click event : it's a popup.
+     */
+    var popup = new mx.mapboxgl.Popup()
+      .setLngLat(map.unproject(e.point))
+      .addTo(map);
+
+    var propsRendered = mx.helpers.featuresToHtml({
+      id : idMap,
+      point : e.point,
+      lngLat : e.lngLat,
+      popup : popup
+    });
+
+  }
+}
 
 
 
@@ -597,8 +627,10 @@ export function geolocateUser(e){
 */
 export function reset(o){
 
-  var views = mx.maps[o.idMap].views ;
-
+  var views = mx.helpers.getViews({
+    id : o.idMap,
+    asArray : true
+  });
   /**
    * remove existing layers
    */
@@ -634,6 +666,14 @@ export function reset(o){
 
   mx.helpers.cleanRemoveModules(views);
   if(elViewList) setViewsListEmpty(true);
+  
+  /*
+  * Force dashboard remove
+  */
+  
+  //mx.helpers.Dashboard.removeAllDashboards();
+
+
 }
 
 
@@ -788,7 +828,7 @@ export function getViewsRemote(idViews){
 export function setViewsList(o){
   return new Promise(function(resolve,reject){
 
-    var m = mx.maps[o.id];
+    var m = mx.helpers.getMapData(o.id);
     var mode, map, view, singleView, views, sourceId, sourceExists, sourceStore, isFullList;
     var nCache = 0, nNetwork = 0, nTot = 0, prog;
     var elProgContainer;
@@ -976,7 +1016,7 @@ export function setViewsList(o){
 * @param {String} o.project Current project to filter geojson view. Default to settings.project
 */
 function loadGeojsonFromStorage(o){
-  var m = mx.maps[o.id] ;
+  var m = mx.helpers.getMapData(o.id) ;
 
   if( !mx.data || !mx.data.geojson || !m ) return;
 
@@ -1241,11 +1281,9 @@ export function updateViewOrder (o){
   
   var displayedOrig  = {};
   var displayed = [];
-  var map = mx.maps[o.id||mx.settings.idMapDefault].map;
-  var views = mx.maps[o.id||mx.settings.idMapDefault].views;
-  var orderUiList = mx.helpers.getViewOrder({
-     id : o.id || mx.settings.idMapDefault
-  });
+  var map = mx.helpers.getMap(o.id);
+  var views = mx.helpers.getViews(o.id);
+  var orderUiList = mx.helpers.getViewOrder();
   var orderViewList = views.map( v => v.id );
   var order = o.order || orderUiList || orderViewList || [];
   var layerBefore = mx.settings.layerBefore; 
@@ -1447,30 +1485,23 @@ export function sortViewsListBy(o){
 
 /**
  * Get the current view order
- * @param {Object} o Options
- * @param {string} o.id Id of the map
  * @return {array} view id array
  */
-export function getViewOrder(o){
-  
-  var m = mx.maps[o.id||mx.settings.idMapDefault];
+export function getViewOrder(){
+
   var obj = {};
   var res = [];
-  var viewContainer, els, vid, i;
+  var viewContainer = document.querySelector(".mx-views-list");
+  var els = viewContainer.querySelectorAll(".mx-view-item");
 
-  if( !m ) return;
-
-  viewContainer = document.querySelector(".mx-views-list");
-  els = viewContainer.querySelectorAll(".mx-view-item");
-
-  for( i = 0 ; i < els.length; i++ ){
+  for( var i = 0, iL = els.length ; i < iL; i++ ){
     obj[els[i].offsetTop]=els[i].dataset.view_id;
   }
-  
-  for( i in obj ){
+
+  for( var j in obj ){
     res.push(obj[i]);
   }
- 
+
   return res;
 
 }
@@ -1487,7 +1518,7 @@ export function makeTransparencySlider(o) {
 
   var view = o.view;
   var idMap = o.idMap;
-  var m = mx.maps[idMap];
+  var m = mx.helpers.getMap(idMap);
   var el = document.querySelector("[data-transparency_for='"+view.id+"']");
 
   if(!el) return;
@@ -1542,7 +1573,7 @@ export function makeNumericSlider(o) {
 
   var view = o.view;
   var idMap = o.idMap;
-  var m = mx.maps[idMap];
+  var m = mx.helpers.getMap(idMap);
   var el = document.querySelector("[data-range_numeric_for='"+view.id+"']");
 
   if(!el) return;
@@ -1634,7 +1665,7 @@ export function makeTimeSlider(o) {
 
   var view = o.view;
   var idMap = o.idMap;
-  var m = mx.maps[idMap];
+  var m = mx.helpers.getMap(idMap);
 
   var el = document.querySelector('[data-range_time_for="'+view.id+'"]');
   if(!el) return ;
@@ -1810,7 +1841,7 @@ export function removeView(o){
 
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
-  var m  = mx.maps[ o.id ];
+  var m  = mx.helpers.getMap(o.id);
   var views = m.views;
   var view = views.filter(function(x){
     return x.id == o.idView ;
@@ -2140,7 +2171,7 @@ export function renderViewsList(o){
 
   var h = mx.helpers;
   var elDiv, elNewItem, elNewInput ; 
-  var m = mx.maps[o.id];
+  var m = mx.helpers.getMapData(o.id);
   var elViewsContainer = document.querySelector(".mx-views-container");
   var elViewsContent = elViewsContainer.querySelector(".mx-views-content");
   var elViewsList = elViewsContainer.querySelector(".mx-views-list");
@@ -2545,7 +2576,7 @@ export function viewSetFilter(o){
   var filterNew = ['all'];
   var type = o.type ? o.type : "default";
   var idMap = view._idMap ? view._idMap : mx.settings.idMapDefault;
-  var m = mx.maps[idMap].map;
+  var m = mx.helpers.getMap(idMap);
   var layers = mx.helpers.getLayerByPrefix({id:idMap,prefix:idView});
 
   if(filter && filter.constructor == Array && filter.length > 1){  
@@ -2701,7 +2732,7 @@ export function downloadMapPdf(o){
     var dataMap,zip,folder,dataLegend,dataScale,dataNorth;
     var promLegend,promScale,promNorth;
     var qf = [];
-    var map = mx.maps[o.id].map;
+    var map = mx.helpers.getMap(o.id);
     var elMap = document.getElementById(mx.settings.idMapDefault);
     var mapDim =  elMap.getBoundingClientRect();
     var paperWidth = 297;
@@ -3699,7 +3730,7 @@ export function addOptions(o){
 */
 export function addView(o){
 
-  var m = mx.maps[ o.id || mx.settings.idMapDefault ];
+  var m = mx.helpers.getMapData( o.id );
   var view = o.viewData;
   var idMap = o.id;
 
@@ -3773,11 +3804,13 @@ export function addView(o){
   /*
    * Check if dashboard data is there and build it if needed
    */
-  if(!o.noUi){
-    mx.helpers.makeDashboard({ 
-      view: view, 
-      idMap: idMap
-    }); 
+  if( ! o.noUi ){
+    mx.helpers.Dashboard.init({
+      idContainer : 'mxDashboards',
+      idDasboard : 'mx-dashboard-' + view.id,
+      idMap: idMap,
+      view: view
+    });
   }
   /**
   * Add source from view
@@ -3849,12 +3882,10 @@ export function addView(o){
  */
 export function addSource(o) {
   
+  var map = mx.helpers.getMap(o.id);
 
-  var hasMap = checkMap(o.id);
+  if ( map ) {
 
-  if (hasMap) {
-
-    var map = mx.maps[o.id].map;
     var sourceExists =  Object
       .keys( map.style.sourceCaches )
       .indexOf( o.idSource ) > -1;
@@ -3879,20 +3910,10 @@ export function setFilter(o){
   
   var exists = !!document.getElementById(o.id);
   if (exists) {
-    var m = mx.maps[o.id].map;
+    var m = mx.helpers.getMap(o.id);
     m.setFilter(o.idView, o.filter);
   }
 }
-
-/**
- * Check if map object exist
- * @param {string} id map id
- */
-export function checkMap(id){
-  
-  return !!  mx.maps[id] && mx.maps[id].map;
-}
-
 
 
 /** 
@@ -3938,7 +3959,9 @@ export function getRenderedLayersIntersect(o){
   o.onEnd = o.onEnd || console.log;
   o.id = o.id || mx.settings.idMapDefault;
 
-  if ( checkMap(o.id) ){
+  var map = mx.helpers.getMap(o.id);
+
+  if ( map ){
     Promise.all([
       System.import("./mx_helper_overlap.worker.js"),
       System.import("@turf/helpers"),
@@ -4080,8 +4103,9 @@ export function getRenderedLayersIntersect_old(o){
   o.onMessage = o.onMessage || console.log;
   o.onEnd = o.onEnd || console.log;
   o.id = o.id || mx.settings.idMapDefault;
-
-  if ( checkMap(o.id) ){
+  var map = mx.helpers.getMap(o.id);
+  
+  if ( map ){
 
     return import("./mx_helper_overlap.worker.js")
       .then(function(worker){
@@ -4089,7 +4113,6 @@ export function getRenderedLayersIntersect_old(o){
       var w = new worker();
       var id, feats, featsLayers = [], featsQuery, allLayers;
       var geom, properties;
-      var map = mx.maps[o.id].map;
     
       var layers = mx.helpers.getLayerNamesByPrefix({
         id: o.id,
@@ -4182,10 +4205,10 @@ export function getRenderedLayersIntersect_old(o){
 export function getRenderedLayersArea(o){
 
   var msg = o.onMessage || console.log;
+  var map = mx.helpers.getMap(o.id);
 
-  if ( checkMap(o.id) ){
+  if ( map ){
     var calcAreaWorker = require("./mx_helper_calc_area.worker.js");  
-    var map = mx.maps[o.id].map;
     var layers = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: o.prefix
@@ -4257,10 +4280,10 @@ export function getBoundsArray(o){
 
 /**
  * Get layer data
- * @param {object} o options
- * @param {string} o.id map id
- * @param {string} o.idLayer Original id layer
- * @param {string} o.gid Geometry id name default is "gid"
+ * @param {Object} o options
+ * @param {String| Object} o.id map id or map object
+ * @param {String} o.idLayer Original id layer
+ * @param {String} o.gid Geometry id name default is "gid"
  * @param {PointLike} o.point optional point
  * @return {array} table
  */
@@ -4273,22 +4296,15 @@ export function getRenderedLayersData(o){
     var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
     var msg = o.onMessage || console.log;
     var gid = o.gid || "gid";
+    var map = mx.helpers.getMap(o.id);
+    if ( map ){
 
-
-    if ( checkMap(o.id) ){
-
-      var map = mx.maps[o.id].map;
       var layers = mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
+        map: map,
         prefix: o.idLayer
       });
 
       if( layers.length > 0 ){
-
-        mx.helpers.queryWmsFeatures({
-          map : o.id,
-          view : o.idLayer
-        });
 
         var features =  map.queryRenderedFeatures(point,{layers:layers});
         var featuresUniques = {};
@@ -4298,7 +4314,6 @@ export function getRenderedLayersData(o){
         for(var fu in featuresUniques){
           out.push(featuresUniques[fu].properties);
         }
-        //console.log(out.length + " fetched in " + ((new Date()-start)/1000) + " [s]");
       }
 
     }
@@ -4313,7 +4328,6 @@ export function makeSearchBox(o){
 
   var view = o.view;
   var idMap = o.idMap;
-  var m = mx.maps[idMap];
   var el = document.querySelector("[data-search_box_for='"+view.id+"']");
   var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   if(!el) return;
@@ -4397,7 +4411,7 @@ export function filterViewValues(o){
     if( isNumeric ){
       filter = [operator,attr,search*1];
     }else{
-      map = mx.maps[idMap].map;
+      map = mx.helpers.getMap(idMap);
       features = map.querySourceFeatures( idView + "-SRC", {
         sourceLayer : idView
       });
@@ -4436,15 +4450,11 @@ export function filterViewValues(o){
  * @param {string} o.before
  */
 export function addLayer(o) {
-  
-  var hasMap = checkMap(o.id); 
-  if ( hasMap ) {
-    map = mx.maps[o.id].map;
-    if (map) {
-      if (o.layer.id in map.style._layers) {
-      } else {
-        map.addLayer(o.layer, o.before);
-      }
+  var map = mx.helpers.getMap(o.id);
+  if ( map ) {
+    if (o.layer.id in map.style._layers) {
+    } else {
+      map.addLayer(o.layer, o.before);
     }
   }
 }
@@ -4456,10 +4466,9 @@ export function addLayer(o) {
  * @param {string} o.idView view id
  */
 export function zoomToViewId(o){
-  var view, map, isArray, extent, llb; 
-  var hasMap = checkMap(o.id); 
-
-  if ( hasMap ) {
+  var view, isArray, extent, llb; 
+  var  map = mx.helpers.getMap(o.id);
+  if ( map ) {
     
     isArray = o.idView.constructor === Array;
 
@@ -4467,7 +4476,6 @@ export function zoomToViewId(o){
     /* in case of layer group */
     o.idView = o.idView.split(mx.settings.separators.sublayer )[0];
     /* get map and view */
-    map =  mx.maps[o.id].map;
     view = mx.helpers.getViews(o);
 
     if( !view ) return ;
@@ -4549,19 +4557,19 @@ export function zoomToViewIdVisible(o){
  
  System.import("@turf/turf").then(function(turf){ 
 
-  var geomTemp, exists, isArray, hasMap, map, idLayerAll, features;
+  var geomTemp, exists, isArray, hasMap, idLayerAll, features;
 
   geomTemp = {
     type : "FeatureCollection",
     features : [] 
   };
 
-  hasMap = checkMap(o.id);
+  var map = mx.helpers.getMap(o.id);
 
-  if (hasMap) {
+  if ( map ) {
 
     try {
-      map =  mx.maps[o.id].map;
+
 
       idLayerAll =  mx.helpers.getLayerNamesByPrefix({
         id : o.id,
@@ -4620,10 +4628,9 @@ export function resetViewStyle(o){
  */
 export function flyTo(o) {
 
-  var hasMap = checkMap(o.id);
+  var map = mx.helpers.getMap(o.id);
 
-  if ( hasMap ) {
-    var m = mx.maps[o.id].map;
+  if ( map ) {
     var p = o.param;
     if(p.z){
       p.zoom = p.z ;
@@ -4635,11 +4642,11 @@ export function flyTo(o) {
 
     if( p.fitToBounds === true ){
 
-      m.fitBounds([
-        p.w||0, 
-        p.s||0, 
-        p.e||0,
-        p.n||0
+      map.fitBounds([
+        p.w || 0, 
+        p.s || 0, 
+        p.e || 0,
+        p.n || 0
       ]);
 
     }else{
@@ -4649,7 +4656,7 @@ export function flyTo(o) {
         duration: o.duration || 3000
       };
 
-      m.flyTo(opt);
+      map.flyTo(opt);
 
     }
 
@@ -4673,7 +4680,7 @@ export function btnToggleLayer(o){
   var shades;
 
   o.id = o.id || mx.settings.idMapDefault;
-  var map = mx.maps[o.id].map;
+  var map = mx.helpers.getMap(o.id);
   var btn = document.getElementById(o.idSwitch);
   var lay = map.getLayer(o.idLayer);
 
@@ -4814,7 +4821,8 @@ export function getRasterProperties(opt){
 
   var map = mx.helpers.getMap(opt.map);
   var layers = {};
-  var proms = [];
+  var items = {};
+
   mx.helpers.getLayerNamesByPrefix({map:map,base:true})
     .map( idView => mx.helpers.getView( idView ))
     .filter( view => view.type == "rt")
@@ -4830,12 +4838,13 @@ export function getRasterProperties(opt){
     .map( item => {
       var params = item.params;
       var isWms = params && params.layers && params.service && params.service.toLowerCase() == "wms";
+      var getProperties = () => { return Promise.resolve({});};
 
       if( isWms ){
         var z = map.getZoom();
         var point = opt.point;
         var xMax = point.x + 1;
-        var xMin = point.x - 1 ;
+        var xMin = point.x - 1;
         var yMax = point.y + 1;
         var yMin = point.y - 1;
         var sw = map.unproject([xMax,yMin]);
@@ -4853,6 +4862,7 @@ export function getRasterProperties(opt){
           query_layers : params.layers,
           layers : params.layers,
           info_format : 'application/json',
+          exceptions : 'application/json',
           feature_count: 1,
           x : 5,
           y : 5,
@@ -4863,47 +4873,33 @@ export function getRasterProperties(opt){
         };
 
         var request = item.url + '?' + mx.helpers.objToParams(paramsInfo);
-
-        console.log(request);
-
-
-        var reqLater = fetch( request )
-          .then( data => data.json())
-          .then( featuresCollection => {
-            var props = {};
-
-            featuresCollection.features
-              .forEach( feature => {
-                for(var p in feature.properties){
-                  if(!props[p]) props[p] = [];
-                  props[p].push(feature.properties[p]);
-                }
-              });
-            /**
-             * In case of wms layer, return an object by layer with properties summary
-             */
-            return {
-              id : item.id,
-              title : item.title,
-              properties : props
-            };
-          });
-        proms.push(reqLater);
-
-      }else{
-        /**
-         * In case of non wms layer, return an empty obj
-         */
-        proms.push(Promise.resolve({
-          id : item.id,
-          title : item.title,
-          properties : {}
-        }));
+        getProperties = function(){ 
+          return fetch( request )
+            .then( data => data.json())
+            .then( featuresCollection => {
+              var props = {};
+              if(featuresCollection.exceptions){
+                console.log(featuresCollection.exceptions);
+                return props;
+              }
+              featuresCollection.features
+                .forEach( feature => {
+                  for(var p in feature.properties){
+                    if(!props[p]) props[p] = [];
+                    props[p].push(feature.properties[p]);
+                  }
+                });
+              return props;
+            });
+        };
       }
-
+      /**
+       * In case of non wms layer, return an empty obj
+       */
+      items[item.id] = getProperties;
     });
 
-  return(proms);
+  return(items);
 }
 
 
@@ -4949,8 +4945,14 @@ export function featuresToHtml(o){
   var layerVector = {};
   var layerRaster = {};
   var elContainer = cEl("div");
-  elContainer.classList.add("mx-popup-container");
-  elContainer.classList.add("mx-scroll-styled");
+  var elNoData = cEl("div");
+  var views = mx.helpers.getViews(o.id);
+  elContainer.appendChild(elNoData);
+  mx.helpers.getDictItem('noValue').then(txt => {
+    elNoData.innerText =  txt;
+    elNoData.dataset.lang_key = 'noValue';
+  });
+
 
   /**
   * Set on close event
@@ -4975,32 +4977,21 @@ export function featuresToHtml(o){
   /*
   * render raster properties
   */
-  var proms = mx.helpers.getRasterProperties({
+  layerRaster = mx.helpers.getRasterProperties({
     map : map,
     point : o.point
   });
 
-  Promise.all(proms)
-    .then( items => {
-      /**
-      * Merge layer values
-      */
-      items.forEach( item => {
-        layerRaster[item.id] = item.properties;
-      });
-
-      /**
-      * Render
-      */
-      render(layerRaster);
-
-    })
-  .catch( e => console.log({msg:'Error when render raster properties', err : e }));
-
+  render(layerRaster);
 
   /**
    * Helpers
    */
+
+
+  function hasActivatedLayer(){
+   return mx.helpers.getLayerNamesByPrefix().length > 0;
+  }
 
   function updateReadMore(){
     mx.helpers.uiReadMore(".mx-prop-container",{
@@ -5013,16 +5004,15 @@ export function featuresToHtml(o){
   function render(layers){
     var idViews = Object.keys(layers);
     idViews.forEach(id => renderItem(id,layers[id]));
-    updateReadMore();
   }
 
-  function renderItem(idView,layer){
+  function renderItem(idView,attributes){
     var view = mx.helpers.getView(idView);
     var isVector = view.type == "vt";
-    var lay = layer;
-    var attributes = mx.helpers.path(view,"data.attribute.names") || Object.keys(lay);
     var elLayer = cEl("div");
     var elProps = cEl("div");
+    var elWait = cEl("div");
+    var elSpinner = cEl("i");
     var elTitle = cEl("span");
 
     elTitle.classList.add("mx-prop-layer-title");
@@ -5031,76 +5021,111 @@ export function featuresToHtml(o){
     elLayer.className = "mx-prop-group";
     elLayer.dataset.l = idView;
     elLayer.appendChild(elTitle);
+    elContainer.appendChild(elLayer);
+    elContainer.classList.add("mx-popup-container");
+    elContainer.classList.add("mx-scroll-styled");
 
-    if(  ! (attributes instanceof Array) ) attributes = [attributes];
+    elWait.className = "mx-inline-spinner-container";
+    elSpinner.className = "fa fa-cog fa-spin";
+    elLayer.appendChild(elWait);
+    elWait.appendChild(elSpinner);
 
-    attributes.forEach(function(property){
+    elNoData.remove();
+    /**
+    * Asynchrone attibute request
+    */
+    var getAttributes = function(){
+      return Promise.resolve(attributes);
+    };
 
-      var values = mx.helpers.getArrayStat({
-        stat:"sortNatural",
-        arr: lay[property]
-      });
+    if(attributes instanceof Function){
+      getAttributes = attributes;
+    }
 
-      var hasValues =  values.length > 0;
-      values = hasValues ? values : ["-"];
+    /**
+    * Attributes to ui
+    */
+    getAttributes().then( attributes  =>{
+ 
+      elWait.remove();
 
-      var elValue;
+      var attrNames = Object.keys(attributes);
 
-      /* Container */
-      var elPropContainer = cEl("div");
-      elPropContainer.classList.add("mx-prop-container");
+      if( attrNames.length == 0 ){
+        var elNoDataAttr = elNoData.cloneNode(true);
+        elLayer.appendChild(elNoDataAttr);
+      }
+      attrNames.forEach(function(attribute){
 
-      /* Content */
-      var elPropContent = cEl("div");
-      elPropContent.classList.add("mx-prop-content");
+        
+          var values = mx.helpers.getArrayStat({
+          stat: "sortNatural",
+          arr: attributes[attribute]
+        });
 
-      /* Wrapper */
-      var elPropWrapper = cEl("div");
+        var hasValues =  values.length > 0;
+        values = hasValues ? values : ["-"];
 
-      /* Title */
-      var elPropTitle = cEl("span");
-      elPropTitle.classList.add('mx-prop-title');
-      elPropTitle.setAttribute('title',property);
-      elPropTitle.innerText = property;
+        var elValue;
 
-      /* Toggles */
-      var elPropToggles = cEl("div");
-      elPropToggles.classList.add("mx-prop-toggles");
+        /* Container */
+        var elPropContainer = cEl("div");
+        elPropContainer.classList.add("mx-prop-container");
 
-      /*Add a toggle for each value */
-      for(var i=0, iL=values.length; i<iL; i++){
-        var value = values[i];
+        /* Content */
+        var elPropContent = cEl("div");
+        elPropContent.classList.add("mx-prop-content");
 
-        if( hasValues && isVector ){
-          elValue = mx.helpers.uiToggleBtn({
-            label : value,
-            onChange : filterValues,
-            data : {
-              l : idView,
-              p : property,
-              v : value
-            },
-            labelBoxed : true,
-            checked : false
-          });
-        }else{
-          elValue = cEl("span");
-          elValue.innerText=value;
+        /* Wrapper */
+        var elPropWrapper = cEl("div");
+
+        /* Title */
+        var elPropTitle = cEl("span");
+        elPropTitle.classList.add('mx-prop-title');
+        elPropTitle.setAttribute('title', attribute);
+        elPropTitle.innerText = attribute;
+
+        /* Toggles */
+        var elPropToggles = cEl("div");
+        elPropToggles.classList.add("mx-prop-toggles");
+
+        /*Add a toggle for each value */
+        for(var i=0, iL=values.length; i<iL; i++){
+          var value = values[i];
+
+          if( hasValues && isVector ){
+            elValue = mx.helpers.uiToggleBtn({
+              label : value,
+              onChange : filterValues,
+              data : {
+                l : idView,
+                p : attribute,
+                v : value
+              },
+              labelBoxed : true,
+              checked : false
+            });
+          }else{
+            elValue = cEl("span");
+            elValue.innerText=value;
+          }
+
+          elPropToggles.appendChild(elValue);
         }
 
-        elPropToggles.appendChild(elValue);
-      }
+        /* Build  */
+        elPropContent.appendChild(elPropTitle);
+        elPropContent.appendChild(elPropToggles);    
+        elPropWrapper.appendChild(elPropContent);
+        elPropContainer.appendChild(elPropWrapper);
+        elProps.appendChild(elPropContainer);  
+        elLayer.appendChild(elProps);
+        updateReadMore();
+      });
 
-      /* Build  */
-      elPropContent.appendChild(elPropTitle);
-      elPropContent.appendChild(elPropToggles);    
-      elPropWrapper.appendChild(elPropContent);
-      elPropContainer.appendChild(elPropWrapper);
-      elProps.appendChild(elPropContainer);  
-      elLayer.appendChild(elProps);
+      updateReadMore();
     });
 
-    elContainer.appendChild(elLayer);
   }
 
 
@@ -5121,6 +5146,7 @@ export function featuresToHtml(o){
   }
 
   function filterValues(e,el){
+    
     var  elChecks = popup._content.querySelectorAll(".check-toggle input");
     filters = {}; // reset filter at each request
 
@@ -5190,13 +5216,14 @@ export function getViewTitle(id,lang){
 export function getMap(idMap){
   idMap = idMap || mx.settings.idMapDefault; 
   var map = {};
+  
   var isId = typeof idMap == "string";
-  var isMap = typeof idMap == "object" && idMap._canvas;
+  var isMap = !isId && ( typeof idMap == "object" && idMap._canvas );
 
   if( isMap ) return idMap;
 
   if( isId ){
-    map = mx.maps[ idMap ].map;
+    map = mx.maps[idMap].map;
     map.id = idMap;
   }
 
@@ -5262,41 +5289,41 @@ export function getMapPos(o){
 export function getViews(o){
   o = o || mx.settings.idMapDefault;
 
+  var asArray = o.asArray || false;
   var byMapId = typeof o === "string";
-  var out = o.asArray ? [] : {};
+  var out = asArray ? [] : {};
   var id = byMapId ? o : o.id;
-  o.idView = o.idView instanceof Array ? o.idView : [o.idView];
   var dat = mx.helpers.getMapData(id);
+  var idView = byMapId || !o.idView ? [] : o.idView instanceof Array ? o.idView : [o.idView];
+  var type = o.type;
 
-  var hasNoViews = !dat || !dat.views;
+  var hasNoViews = !dat || !dat.views || dat.views.length === 0;
+
+  var hasFilter = idView.length > 0 || typeof type !== "undefined";
 
   if( hasNoViews ) return out;
 
-  var retFilteredArray  = ( o.asArray   && o.idView );
-  var retFullArray      = ( o.asArray   && ! o.idView );
-  var retFilteredObject = ( ! o.asArray && o.idView );
-  var retFullObject     = ( ! o.asArray && ! o.idView ) ;
+  /**
+   * Set default
+   */
   var views = dat.views;
-   out = views;
+
+  /**
+   * Full result
+   */
+  var retFullArray      = ( asArray   && ! hasFilter );
+  var retFullObject     = ( ! asArray && ! hasFilter ) ;
+
+  /**
+   * Filtered result
+   */
+  var retFilteredArray  = ( asArray   && hasFilter );
+  var retFilteredObject = ( ! asArray && hasFilter );
 
   /**
    * Return all views in array
    */
-  if( retFullArray ) return out;
-
-  /**
-   * Return filtered view 
-   */
-  if( retFilteredArray || retFilteredObject ){
-    if( o.idView ){
-      out = out.filter( v => o.idView.indexOf(v.id) > -1 );
-    }
-    if( o.type ){
-      out = out.filter(v => v.type == o.type );
-    }
-    if( retFilteredArray ) return out;
-    return out[0] || [];
-  }
+  if( retFullArray ) return views;
 
   /**
    * Return full object with id as key
@@ -5308,6 +5335,28 @@ export function getViews(o){
     return out;
   }
 
+  /**
+   * Return filtered view 
+   */
+  if( retFilteredArray || retFilteredObject ){
+
+      out = views.filter( v => { 
+        return ( idView.indexOf(v.id) > -1 ) || ( type ? v.type == type : false );
+      });
+
+    if( retFilteredArray ){ 
+       return out ;
+    }else{
+      /*
+      * NOTE: This break the general logic. if result should returned as an object, 
+      * {'mx-id-view':{<view>}} form should be used to match retFullObject output. 
+      * Check where this is used and modify it
+      */
+      return out[0] || [];
+    }
+  }
+
+  return out;
 }
 
 /**
@@ -5345,7 +5394,7 @@ export function makeLayerJiggle(mapId, prefix) {
       'symbol': 'icon-translate'
     };
 
-    var m = mx.maps[mapId].map;
+    var m = mx.helpers.getMap(mapId);
 
     layersName.forEach(function(x) {
       var l = m.getLayer(x);
@@ -5430,7 +5479,8 @@ export function getViewIcons(view){
 export function randomFillAll(mapId) {
   
   setInterval(function() {
-    var map = mx.maps[mapId].map;
+    var map = mx.helpers.getMap(idMap);
+
     var layers = map.style._layers;
 
     //map.setBearing(Math.random() * 360);

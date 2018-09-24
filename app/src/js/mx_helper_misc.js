@@ -415,7 +415,7 @@ export function uiReadMore(selector, options) {
      * If no content found or is already readmore, skip it
      */
     if(!elContent || elContent.classList.contains("readmore") || elContent.childElementCount === 0){
-      console.log("skip");
+      //console.log("skip");
     }else{
       /**
        * Set elements attributes

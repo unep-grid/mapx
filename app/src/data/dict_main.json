@@ -2052,6 +2052,18 @@
     "ps": "د لایې سرچینه شتون نلري"
   },
   {
+    "id": "noValue",
+    "en": "[ No value ]",
+    "fr": "[ Pas de valeur ]",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "fr": "Aucun",

@@ -326,14 +326,13 @@ export function updateLanguageViewsList(o){
  * @param {string} [o.language='en'] Two letter language code
  */
 export function updateLanguageMap(o) {
-  
-  var hasMap = mx.helpers.checkMap(o.id);
+
+  var map = mx.helpers.getMap(o.id);
   var mapLang = ["en","es","fr","de","ru","zh","pt","ar"];
   var defaultLang = "en";
   var layers = ["place-label-city","place-label-capital","country-label","water-label","poi-label"];
 
-  if (hasMap) {
-    var m = mx.maps[o.id].map;
+  if ( map ) {
 
     if (!o.language || mapLang.indexOf(o.language) == -1) {
       o.language = mx.settings.language;
@@ -361,7 +360,7 @@ export function updateLanguageMap(o) {
       }).length > 0;
 
       if( layerExists ) {
-        m.setLayoutProperty(
+        map.setLayoutProperty(
           layer, "text-field", "{name_" + o.language + "}"
         );
       }

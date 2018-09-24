@@ -23,7 +23,8 @@ div(
   div(
     class="mx-panel-right mx-events-off",
     div(
-      class="mx-panel-dashboards",
+      class = "mx-panel-dashboards",
+      id = "mxDashboardsPanel",
       div(
         class="mx-panel-dashboards-scroll mx-events-on",
         id="mxDashboards"
