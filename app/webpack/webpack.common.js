@@ -39,15 +39,15 @@ module.exports = {
   module: {
     rules: [
       { test: /.css$/, 
-        use : ['style-loader','css-loader','icon-font-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: (loader) => [
-                require('postcss-cssnext')
-              ]
-            }
-          }
+        use : ['style-loader','css-loader','icon-font-loader'
+ /*         {*/
+            //loader: 'postcss-loader',
+            //options: {
+              //plugins: (loader) => [
+                //require('postcss-cssnext')
+              //]
+            //}
+          /*}*/
         ]
       },
       {
