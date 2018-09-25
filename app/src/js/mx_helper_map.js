@@ -1488,22 +1488,11 @@ export function sortViewsListBy(o){
  * @return {array} view id array
  */
 export function getViewOrder(){
-
-  var obj = {};
   var res = [];
   var viewContainer = document.querySelector(".mx-views-list");
   var els = viewContainer.querySelectorAll(".mx-view-item");
-
-  for( var i = 0, iL = els.length ; i < iL; i++ ){
-    obj[els[i].offsetTop]=els[i].dataset.view_id;
-  }
-
-  for( var j in obj ){
-    res.push(obj[i]);
-  }
-
+  els.forEach(el => res.push(el.dataset.view_id));
   return res;
-
 }
 
 
