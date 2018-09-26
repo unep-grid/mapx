@@ -1909,8 +1909,8 @@
   },
   {
     "id": "login_info_box",
-    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
-    "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre. En vous enregistrant dans MapX, vous acceptez que votre adresse électronique soit collectée et utilisée de manière anonyme pour produire des statistiques de performance de la plateforme.",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level. You can opt-out from MapX by contacting us at support@mapx.org.",
+    "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre. En vous enregistrant dans MapX, vous acceptez que votre adresse électronique soit collectée et utilisée de manière anonyme pour produire des statistiques de performance de la plateforme. Vous pouvez vous désinscrire de MapX en nous contactant à l'adresse support@mapx.org.",
     "es": "",
     "ru": "",
     "zh": "",
