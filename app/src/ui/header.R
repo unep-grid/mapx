@@ -35,8 +35,4 @@ tagList(
     `http-equiv`="Cache-control",
     content="no-cache"
     )
- # tags$meta(
-    #name="robots",
-    #content="noindex"
-    #)
   )

@@ -391,16 +391,19 @@ mapControlScale.prototype.onAdd = function(map){
   var container = document.createElement("div");
   var text = document.createElement("div");
   var scale = document.createElement("div");
+  var helper = mx.helpers;
   container.className = "mapboxgl-ctrl mapboxgl-ctrl-attrib";
   text.className="mx-scale-text";
   scale.className="mx-scale-box";
   scale.appendChild(text);
   container.appendChild(scale);
 
-  map.on("move",function(e){
+  map.on("mousemove",function(e){
+
     let unit = "m";
     const maxWidth = 100;
-    const y = map._container.clientHeight / 2;
+    //const y = map._container.clientHeight / 2;
+    const y = e.point.y;
     const maxMeters = getDistance(map.unproject([0, y]), map.unproject([maxWidth, y]));
     let distance = getRoundNum(maxMeters);
     const ratio = distance / maxMeters;

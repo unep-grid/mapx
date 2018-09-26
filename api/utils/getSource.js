@@ -31,8 +31,10 @@ var fileFormat = {
   },
   "ESRI Shapefile" : {
     ext : 'shp'
+  },
+  "CSV" : {
+    ext : 'csv'
   }
-
 };
 var formatDefault = 'GPKG';
 if( apiPort != 80 && apiPort != 443 ){
@@ -152,16 +154,21 @@ function extractFromPostgres(config,cb){
   onMessage('An email will be sent to ' + email + ' at the end of the process. The expected path will be http://' + apiHostUrl + folderUrlZip ,'message');
   onMessage('Extration from the database and conversion to '+ format +'. This could take a while, please wait ...','message');
   //'-lco','GEOMETRY_NAME=geom',
-  var args = [
+
+  var args = [];
+
+  args = args.concat([
     '-f',format,
     '-nln',layername,
     '-sql',sql,
     '-skipfailures',
+    '-s_srs', 'EPSG:4326',
+    '-t_srs', 'EPSG:4326',
     '-progress',
     '-overwrite',
     filePath,
     settings.db.stringRead
-  ];
+  ]);
 
   var cmd = 'ogr2ogr';
 

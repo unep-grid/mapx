@@ -247,7 +247,7 @@ blockquote {
 }
 
 .mx-bar-sort * {
-  font-size: 0.7em;
+  font-size: 0.9em;
 }
 
 
@@ -937,9 +937,15 @@ blockquote {
   flex: 1 0;
 }
 
-.mx-modal-btn-minimize {
+.mx-modal-btn-top {
   background: none;
   border: none;
+  transform: scale(0.5);
+  transition: transform 0.3s;
+}
+
+.mx-modal-btn-top:hover {
+  transform: scale(0.8);
 }
 .mx-modal-info-text {
   display:inline-block;
@@ -959,7 +965,7 @@ blockquote {
   position:absolute;
   display:flex;
   flex-direction:column;
-  width:500px;
+  width: 500px;
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
@@ -970,6 +976,7 @@ blockquote {
   left:0;
   top: 5px;
   margin: auto;
+  resize:horizontal;
 }
 
 .mx-modal-top {
@@ -1003,6 +1010,42 @@ blockquote {
   float:right;
   margin:5px;
 }
+.mx-modal-half-left {
+  position:fixed;
+  top:0px!important;
+  left:0px!important;
+  width:45%!important;
+  min-width:30%!important;
+  margin:initial!important;
+}
+.mx-modal-half-left .mx-modal-body{
+    height: 100vh!important;
+}
+
+.mx-modal-half-top {
+  position:fixed!important;
+  top:0px!important;
+  left:0px!important;
+  margin:initial!important;
+  min-width:100%;
+}
+
+.mx-modal-half-top .mx-modal-body {
+  height:30vh!important;
+}
+
+.mx-modal-body-hidden .mx-modal-body {
+  height:0vh!important;
+}
+/** 
+* login panel
+*/
+.mx-login-info {
+  font-size: 0.9em;
+  padding: 5px;
+  margin-top: 12px;
+}
+
 /**
  * Error list
  */
@@ -1197,11 +1240,9 @@ blockquote {
 }
 
 
-
 /**
 * Text switch
 */
-
 .check-toggle-group {
   /*padding: 5px;*/
   /*display: -webkit-flex;*/
@@ -1219,17 +1260,23 @@ blockquote {
   display:inline-block;
 }
 
-.mx-views-filters-container .check-toggle {
-  padding:3px;
-}
+
 
 .check-toggle .check-toggle-label {
-  cursor:pointer;
-  padding: 7px;
-  margin-right: 6px;
-  font-size: 10px;
+  cursor: pointer;
+  display: inline-block;
   font-weight: normal;
-  display:inline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: auto;
+  margin-right: 10px;
+  padding: 2px;
+}
+
+.check-toggle .check-toggle-label span {
+  padding-right:4px;
+  font-weight: normal;
+  text-transform: capitalize;
 }
 
 .check-toggle .check-toggle-label * {
@@ -1246,23 +1293,35 @@ blockquote {
   /*margin-bottom: 2px;*/
 }
 
-/*.check-toggle .check-toggle-label:before {*/
-  /*font-family : fontawesome;*/
-  /*content: '\f204';*/
-  /*padding-right: 3px;*/
-/*}*/
-
-.check-toggle .check-toggle-input {
-  /*display: none;*/
+.check-toggle .check-toggle-label:before {
+  font-family : fontawesome;
+  content: '\f1db';
+  padding-right: 3px;
 }
 
-/*.check-toggle .check-toggle-input:checked ~.check-toggle-label:before {*/
-  /*content : '\f205';*/
-/*}*/
+.check-toggle .check-toggle-input {
+  display: none;
+}
+
+.check-toggle .check-toggle-input:checked ~.check-toggle-label:before {
+  content : '\f058';
+}
 
 .check-toggle .check-toggle-input:checked ~.check-toggle-label,
 .check-toggle .check-toggle-input:checked ~.check-toggle-label .check-toggle-badge {
-  color:red;
+  /*color:red;*/
+}
+
+.mx-views-filters-container .check-toggle {
+  /*padding:3px;*/
+}
+.mx-views-filters-container .mx-check-toggle-filter-count {
+  display: inline-block;
+  width: 3em;
+  overflow: hidden;
+  white-space: nowrap;
+  line-height: 1em;
+  font-size: 0.7em;
 }
 
 
@@ -1319,9 +1378,11 @@ blockquote {
 }
 .mx-list-projects-container {
     overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 3px;
 }
 .mx-list-projects-search {
-  padding: 10px 10px 5px 5px;
+  padding: 10px 10px 10px 10px;
   width: 100%;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -1329,7 +1390,7 @@ blockquote {
   outline:none;
 }
 .mx-list-projects-search:focus {
-  border-bottom: 2px solid #ccc;
+  /*border-bottom: 2px solid #ccc;*/
 }
 /**
 * Switch to show or hide additional content.
@@ -1373,12 +1434,6 @@ blockquote {
   letter-spacing: 1.2;
 }
 
-
-.mx-views-filters-container .fold-container .fold-label {
-  padding: 0px 10px 5px 10px;
-}
-
-
 .fold-container .fold-switch:not(checked) ~ .fold-label::after{
     transition: transform 0.1s ease-in-out;
     margin: 3px;
@@ -1406,13 +1461,29 @@ blockquote {
   font-size:inherit;
 }
 
-
 /**
-* Tags filter 
+* Modifiers for filters by tag
 */
-.filter-group {
-    padding: 10px;
+
+.mx-views-filters-container .fold-container .fold-label {
+  padding: 5px 10px 5px 10px;
+  font-weight: normal;
 }
+
+.mx-views-filters-container .fold-container .fold-label.filter-tag-label-light {
+  font-size: 1em;
+  font-weight: normal;
+}
+.mx-views-filters-container .fold-container .fold-switch:checked ~ .fold-content {
+  border:none;
+  padding-left:10px;
+}
+.mx-views-filters-container .filter-tag-content {
+ max-height:150px;
+ overflow:auto;
+}
+
+
 
 /** 
 * time slider

@@ -94,8 +94,16 @@ export function filterViewsListCheckbox(o){
   var elInput = (selectorInput instanceof Node) ? selectorInput : document.querySelector(selectorInput);
   var classHide = o.classHide;
   var classSkip = o.classSkip;
-  var listener = function() {
-    
+
+  elInput.addEventListener("click",listener);
+
+ 
+
+  function listener(e) {
+
+    if( ! e || ! e.target.dataset.filter ) return;
+    e.stopImmediatePropagation();
+
     var elFilter ;
     var views = mx.maps[idMap].views;
     if(!views) return;
@@ -111,57 +119,97 @@ export function filterViewsListCheckbox(o){
       });
     }
 
-    var displayAll = filters.length == 0;
+    /**
+     * Group filters
+     */
+    var filtersTypes = filters.map(f => f.type);
 
-    for (var i = 0, iL = views.length; i < iL; i++) {
-      var found = false;
-      var v = views[i];
-      var el = document.getElementById(v.id);
-      if(el){
-        var hasFilterText = el.classList.contains(classSkip);
-        if(!hasFilterText){
-          if(displayAll){
-            el.classList.remove(classHide);
-          }else{ 
+    var toShow = [];
+    var filter = "";
+    var idView ;
+    var elView ;
+    var found;
+    var exclude;
+    /**
+     * Foreach views
+     */
+    views.forEach( view => {
+      idView =  view.id;
+      elView = document.getElementById(idView);
+      /**
+       * For each type
+       */
+      exclude = false;
+      filtersTypes.forEach( type => {
+        /*
+         * For each filter
+         */
+        if( exclude ) return;
+        
+        found = false;
+        filters.filter(f => f.type == type ).forEach( filterData => {
+          if( found ) return;
+          filter = filterData.filter;
+          found = isFound(view,type,filter); 
+        });
+         
+        if( !found ) exclude = true;
 
-            for(var j = 0, jL=filters.length ; j < jL ; j++ ){
-              if( ! found ){ 
-                var filter = filters[j].filter;
-                var type = filters[j].type;
-                try{
-                  switch(type){
-                    case  "classes" :
-                      found = v.data.classes.indexOf(filter) > -1;
-                      break;
-                    case  "collections" :
-                      found = v.data.collections.indexOf(filter) > -1; 
-                      break;
-                    case  "components" :
-                      if(v._components){
-                        found = v._components.indexOf(filter) > -1 ;
-                      }
-                      break;               
-                    default:
-                      found = false;
-                  }
-                }catch(e){}
-              }
-            }
-            if(found){
-              el.classList.remove(classHide);
-            }else{
-              el.classList.add(classHide);
-            }
-          }
-        }
+      });
+
+      if( exclude ){
+        elView.classList.add(classHide);
+      }else{
+        toShow.push(view);
+        elView.classList.remove(classHide);
       }
+  
+    });
+
+    updateCount(toShow);
+  }
+
+  function updateCount(views){
+   var elsCount = document.querySelectorAll(".mx-check-toggle-filter-count");
+   var tagsCount = mx.helpers.getTagsGroupsFromView(views);
+   elsCount.forEach(el => {
+     var count = 0;
+     var byType = tagsCount[el.dataset.type];
+     
+     if( byType ){
+        var byId = byType[el.dataset.id];
+        if(byId) count = byId;
+     }
+    el.innerText = "( " + count + " )"; 
+   });
+  }
+
+
+  function isFound (view, type, filter){
+    var found = false;
+    switch(type){
+      case  "view_classes" :
+        if( view.data && view.data.classes ){
+          found = view.data.classes.indexOf(filter) > -1;
+        }
+        break;
+      case  "view_collections" :
+        if(view.data && view.data.collections ){
+          found = view.data.collections.indexOf(filter) > -1; 
+        }
+        break;
+      case  "view_components" :
+        if(view._components){
+          found = view._components.indexOf(filter) > -1 ;
+        }
+        break;  
+      default:
+        found = false;
     }
-    if( onFiltered && onFiltered instanceof Function ) onFiltered();
-  };
+    return found;
+  }
 
-  elInput.addEventListener("click",listener);
   return listener;
-
 }
 
 

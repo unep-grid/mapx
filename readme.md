@@ -1,4 +1,35 @@
 ## MapX : change log
+
+
+- 1.5.19
+   - Improvement
+      - Added support for quering wms based raster source layer
+- 1.5.18
+   - Improvement 
+      - Added support for download sources as CSV #212
+      - Added projection data when downloading geospatial files #322
+   - Bug fixing
+      - Solved issue when images in legend where broken into multiple columns #324
+   - Rollback
+      - Remove privilege to create new project for everyone. Only selected user can create new project.
+- 1.5.17
+   - Improvement
+       - Add current view count in filters by category
+       - Style minor change in filter by labels and filter by attributes 
+- 1.5.16
+   - Improvement 
+       - Modal Added four preset button for modal panel, added an option to resize panel horizontally.
+       - Added autoprefixer for CSS in webpack config
+   - Bug fixing
+       - Dashboard modules could be ignored after a view edition. In case of only one module, the script automatically converted the value in a JSON string, and the dashboard was expecting an array. The `module` key in the `view.data.dashboard` can now be a string or an array. Or empty.
+- 1.5.15
+   - Added translation support in filter views list by tags
+   - Filter views by tags : use `AND` operator between filter types and `OR` within filter types. 
+- 1.5.14 
+   - Removed bug where (empty) private project could be seen when pressing a shared view's "home" button
+   - Added support for spanish. Thanks @GianlucaGygax !
+   - Updated service workers strategy. Using no-cache in traefik should solve issue where old cache were kept.
+   - Modification on entry files for webpack to enable a viewer only mode for the app.
 - 1.5.13 
    - Removed a bug where a dashboard was not removed if no source layer where used
    - Use pointer events instead of mouse event

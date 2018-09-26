@@ -291,9 +291,12 @@ export function startWorker(f) {
             view : view
           }).then(function(){
             // Add source from view
-            helper.addView({
-              id : o.id ,
-              viewData : view
+
+            mx.helpers.renderViewsList({
+              id : o.id,
+              views : view,
+              add : true,
+              open : true
             });
 
             return Promise.resolve(view);

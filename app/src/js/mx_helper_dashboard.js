@@ -95,9 +95,9 @@ export function handleEvent(e){
     views.forEach(function(v){
       if(v._dashboard){
         var d = v._dashboard.store;
-        d.forEach(function(w){
-          var idView = mx.helpers.path(w,"config.view.id");
-          switch(w.config.source){
+        d.forEach(function(widget){
+          var idView = mx.helpers.path(widget,"config.view.id");
+          switch(widget.config.source){
             case "layerChange":
               if(type !== "click"){
                 mx.helpers.getRenderedLayersData({
@@ -110,8 +110,6 @@ export function handleEvent(e){
               break;
             case "layerClick":
               if(type === "click"){
-
-
                 mx.helpers.getRenderedLayersData({
                   id : o.id,
                   idLayer : idView,
@@ -133,7 +131,6 @@ export function handleEvent(e){
       /**
        * Click event : it's a popup.
        */
-
       var popup = new mx.mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
         .addTo(map);
@@ -141,6 +138,7 @@ export function handleEvent(e){
       var propsRendered = mx.helpers.featuresToHtml({
         id : o.id,
         point : e.point,
+        lngLat : e.lngLat,
         popup : popup
       });
 
@@ -157,7 +155,8 @@ export function handleEvent(e){
 function Dashboard(idContainer,view) {
   var dashboard = this;
   var modules = mx.helpers.path(view,'data.dashboard.modules')||['highcharts'];
-
+  if(typeof modules == "string") modules = [modules];
+  
   return  Promise.all([
     System.import("packery"),
     System.import("draggabilly"),

@@ -12,7 +12,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:debian
+    image: fredmoser/mx-app-shiny:1.5.19-debian
     restart: always
     ports:
       - 3838
@@ -22,8 +22,10 @@ services:
       - traefik
     labels:
       - traefik.s1.frontend.rule=Host:app.mapx.localhost
+      - traefik.s1.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s1.port=3838
       - traefik.s2.frontend.rule=Host:dev.mapx.localhost
+      - traefik.s2.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s2.port=3434
     volumes:
       - ./app:/srv/shiny-server/dev
@@ -31,7 +33,7 @@ services:
   api:
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node
+    image: fredmoser/mx-api-node:1.5.18-alpine
     restart: always
     ports: 
       - 3030

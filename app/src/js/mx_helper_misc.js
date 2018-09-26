@@ -17,37 +17,89 @@ export function removeServiceWorker(){
 
 
 /**
+* Get url query parameter by name
+* @param {String} name Name of the query request name
+* @note http://www.netlobo.com/url_query_string_javascript.html
+*/
+export function getUrlParameter( name )
+{
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( window.location.href );
+  if( results == null )
+    return "";
+  else
+    return results[1];
+}
+
+
+/**
+ * Returns an Array of all url parameters
+ * @return {[Array]} [Key Value pairs form URL]
+ */
+export function paramsToObject(params) {
+  var param;
+  var out = {};
+  var dec = decodeURIComponent;
+  var params = params ? params.split('&') :  window.location.search.substring(1).split('&');
+  for ( var i = 0, iL = params.length; i<iL; i++ ) {
+    param = params[i].split('=');
+    out[param[0].toLowerCase()]=dec(param[1]);
+  }
+  return out;
+}
+
+/**
 * Replace current url state using object values
 *
 * @param {Object} opt Options
-* @param {Object} object to replace state with
+* @param {Object} opt.data params to replace state with
 * @param {Boolean} opt.clean remove everything
 * @return null
 */
 export function objToState(opt){
   var out = "/";
-  var params = getAllUrlParamsObj() ;
+  var params = paramsToObject();
   var keysNew = Object.keys(opt.data);
   var dat;  
+  var val;
   if(!opt.clean){
 
     keysNew.forEach(kn=>{
-      params[kn] = opt.data[kn];
-    });
-
-    var keys = Object.keys(params);
-
-    keys.forEach((k,i) => {
-      dat = params[k];
-      if(dat){
-        if(dat instanceof Array) dat = dat.join(",");
-        out = out + (i==0?"?":"&") + k + "=" + dat;
+      val = opt.data[kn];
+      if(val){
+        params[kn] = val;
+      }else{
+        delete params[kn];
       }
     });
+
+    if(params){
+      out = out + '?'+ objToParams(params);
+    }
 
   }
   history.replaceState(null,null,out);
 }
+
+
+
+
+/**
+* Convert object to params string
+*
+* @param {Object} opt Options
+* @param {Object} object to convert
+* @return {String} params string
+*/
+export function objToParams(data){
+var esc = encodeURIComponent;
+return Object.keys(data)
+    .map(k => esc(k) + '=' + esc(data[k]))
+    .join('&');
+}
+
 
 
 /**
@@ -132,39 +184,6 @@ export function parseTemplate(template, data){
       });
 }
 
-
-/**
-* Get url query parameter by name
-* @param {String} name Name of the query request name
-* @note http://www.netlobo.com/url_query_string_javascript.html
-*/
-export function getUrlParameter( name )
-{
-  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-  var regexS = "[\\?&]"+name+"=([^&#]*)";
-  var regex = new RegExp( regexS );
-  var results = regex.exec( window.location.href );
-  if( results == null )
-    return "";
-  else
-    return results[1];
-}
-
-
-/**
- * Returns an Array of all url parameters
- * @return {[Array]} [Key Value pairs form URL]
- */
-export function getAllUrlParamsObj() {
-  var param;
-  var out = {};
-  var params = window.location.search.substring(1).split('&');
-  for ( var i = 0, iL = params.length; i<iL; i++ ) {
-    param = params[i].split('=');
-    out[param[0]]=param[1];
-  }
-  return out;
-}
 
 /**
 * Flash an icon
@@ -403,7 +422,7 @@ export function uiReadMore(selector, options) {
        */
       elReadMore.className = "readmore";
       elCheckbox.className = "readmore-check";
-      elContent.className = "readmore-content";
+      elContent.className = elContent.className + " readmore-content";
       if(options.boxedContent){
         elContent.classList.add("readmore-content-boxed");
       }
@@ -429,7 +448,6 @@ export function uiReadMore(selector, options) {
        * the maximum allowed, add the read more div
        * else, keep it without the toggle.
        */
-
       if ( (rect.height - pad ) > options.maxHeightClosed) {
         /**
          * The max height of the container (elReadMore) is set to create
@@ -461,23 +479,27 @@ export function uiReadMore(selector, options) {
 * @param {Object} o options
 * @param {Element} o.content Element to fold
 * @param {String} o.label Label displayed in switch
+* @param {String} o.labelKey Label key for dataset.key_lang
+* @param {String} o.labelClass Label class
 * @param {Boolean} o.open Default state
 */
 export function uiFold(o){
   var content = o.content;
   var label = o.label;
+  var labelKey = o.labelKey;
   var open = o.open;
   var onChange = o.onChange;
   var classContainer = "fold-container";
   var classContent = "fold-content";
   var classScroll = "mx-scroll-styled";
-  var classLabel = "fold-label";
+  var classLabel = "fold-label" ;
   var classSwitch = "fold-switch";
   var id =  makeId();
 
   if(!content) return;
   open = open || false; 
   label = label || "";
+  labelKey = labelKey || label;
 
   var elInput = document.createElement("input");
   if(onChange){
@@ -491,11 +513,13 @@ export function uiFold(o){
   elContent.classList.add(classContent);
   elContent.classList.add(classScroll);
   elLabel.classList.add(classLabel);
+  if(o.labelClass) elLabel.classList.add(o.labelClass);
   elLabel.setAttribute("for",id);
   elInput.id = id;
   elInput.classList.add("fold-switch");
   elInput.checked = open;
   elLabel.innerHTML = label;
+  elLabel.dataset.lang_key = labelKey;
 
   elContent.appendChild(content);
   elContainer.appendChild(elInput);
@@ -1417,6 +1441,74 @@ export function doPar(o) {
   return;
 }
 
+
+
+/**
+* Create a button containing font awesome stack icon
+* @param {Object} o options
+* @param {Element} o.elContainer Button container
+* @param {Array} o.classes classes to init the stack with
+*/
+export function StackButton(o){
+  var sb = this;
+  sb.config = {
+    hidden : o.hidden,
+    classHide : "mx-hide",
+    elContainer : o.elContainer,
+    classes : o.classes,
+    classBase : o.classBase
+  };
+}
+
+StackButton.prototype.build = function(){
+  var elBtn = document.createElement("button");
+  var elSpan = document.createElement("span");
+  var elFront = document.createElement("i");
+  var elBack = document.createElement("i");
+  elSpan.appendChild(elFront);
+  elSpan.appendChild(elBack);
+  elBtn.appendChild(elSpan);
+  this.elSpan = elSpan;
+  this.elBtn = elBtn;
+  this.elFront = elFront;
+  this.elBack = elBack;
+  if(this.config.elContainer) this.config.elContainer.appendChild(elBtn);
+  this.setClasses();
+  this.setHidden(this.config.hidden === true);
+  return(this);
+};
+
+StackButton.prototype.setClasses = function(cl){
+  cl = !!cl?cl instanceof Array?cl:[cl]:this.config.classes;
+  var elFront = this.elFront;
+  var elBack = this.elBack;
+  var elSpan = this.elSpan;
+  var elBtn = this.elBtn;
+  elSpan.className = "fa-stack";
+  elFront.className = "fa fa-stack-1x";
+  elBack.className = "fa fa-stack-2x";
+  elFront.classList.add(cl[0]);
+  elBack.classList.add(cl[1]);
+  elBtn.className = cl[2] || this.config.classBase ||'btn btn-default';
+  return(this);
+};
+StackButton.prototype.setHidden = function(hide){
+  var elBtn = this.elBtn;
+  var classHide = this.classHide;
+  if(hide === true){
+    elBtn.classList.add(this.config.classHide);
+    this.config.hidden = true;
+  }else
+    if(hide === false){
+      elBtn.classList.remove(this.config.classHide);
+      this.config.hidden = false;
+    }else{
+      elBtn.classList.toggle(this.config.classHide);
+      this.config.hidden = elBtn.classList.contains(this.config.classHide);
+    }
+  return(this);
+};
+
 /**
 * Display a panel modal
 * @param {Object} o Options
@@ -1436,8 +1528,7 @@ export function modal(o){
   var modal = document.getElementById(o.id) || document.createElement("div");
   var background = document.getElementById(idBackground) || document.createElement("div"); 
   var hasShiny = typeof window.Shiny !== "undefined";
-  var hasJquery = typeof window.jQuery !== "undefined";
-  var hasSelectize = typeof window.Selectize !== "undefined";
+  var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   var startBodyScrollPos = 0;
   var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== "undefined" ? o.noShinyBinding : false;
 
@@ -1464,11 +1555,13 @@ export function modal(o){
   /*if(o.minHeight){*/
   //modal.style.minHeight = o.minHeight;
   /*}*/
-  if(o.minWidth){
-    modal.style.minWidth = o.minWidth;
+  if( o.minWidth ){
+    //modal.style.minWidth = o.minWidth;
+    modal.style.width = o.minWidth;
   }
 
   var top = document.createElement("div");
+  var topBtns =  document.createElement("div");
   var title = document.createElement("div");
   var head = document.createElement("div");
   var body = document.createElement("div");
@@ -1476,14 +1569,19 @@ export function modal(o){
   var footer = document.createElement("div");
   var buttons = document.createElement("div");
   var dialog = document.createElement("div");
-  var btnMinimize = document.createElement("button");
   var validation = document.createElement("div");
+
+/*  var btnMinimize = document.createElement("button");*/
+  //var btnHalfTop = document.createElement("button");
+  //var btnHalfLeft = document.createElement("button");
 
   function close(e){
     if(hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
     modal.remove();
     background.remove();
   }
+
+  
 
   modal.appendChild(top);
   modal.appendChild(head);
@@ -1494,26 +1592,76 @@ export function modal(o){
   modal.appendChild(validation);
   modal.id=id;
 
-  btnMinimize.className="mx-pointer mx-modal-btn-minimize fa fa-minus-square-o";
+  var classModalOrig = modal.className;
+
+  function resetModalClass(){
+    modal.className = classModalOrig;
+  }
+  //btnMinimize.className="mx-pointer mx-modal-btn-top fa fa-minus-square-o";
+  //btnHalfTop.className="mx-pointer mx-modal-btn-top fa fa-arrow-circle-o-up";
+  //btnHalfLeft.className="mx-pointer mx-modal-btn-top fa fa-arrow-circle-o-left";
+  
   top.classList.add("mx-drag-handle");
   top.classList.add("mx-modal-top");
   top.appendChild(title);
-  top.appendChild(btnMinimize);
+  top.appendChild(topBtns);
+  
+   var sBtnReset = new StackButton({
+    hidden : true,
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-times','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
+   var sBtnMinimise = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-minus','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
-  btnMinimize.onclick = function(){
-    var isOpen = this.classList.contains("fa-minus-square-o");
+  var sBtnHalfTop = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-caret-up','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
+  var sBtnHalfLeft = new StackButton({
+    classBase : 'mx-modal-btn-top fa',
+    classes : ['fa-caret-left','fa-circle-thin'],
+    elContainer : topBtns
+  }).build();
 
-    if(isOpen){
-      this.classList.remove("fa-minus-square-o");
-      this.classList.add("fa-plus-square-o");
-      body.classList.add("mx-hide");
-    }else{
-      this.classList.remove("fa-plus-square-o");
-      this.classList.add("fa-minus-square-o");
-      body.classList.remove("mx-hide");
-    }
+  sBtnMinimise.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-body-hidden');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
   };
+
+  sBtnHalfLeft.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-half-left');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
+  };
+
+  sBtnHalfTop.elBtn.onclick = function(){
+    modal.classList.toggle('mx-modal-half-top');
+    sBtnMinimise.setHidden(true);
+    sBtnHalfLeft.setHidden(true);
+    sBtnHalfTop.setHidden(true);
+    sBtnReset.setHidden(false);
+  };
+
+  sBtnReset.elBtn.onclick = function(){
+    sBtnMinimise.setHidden(false);
+    sBtnHalfLeft.setHidden(false);
+    sBtnHalfTop.setHidden(false);
+    sBtnReset.setHidden(true);
+    resetModalClass();
+  };
+
 
   title.classList.add("mx-modal-drag-enable");
   title.classList.add("mx-modal-title");
@@ -1568,12 +1716,12 @@ export function modal(o){
   if( o.addBackground ) document.body.appendChild(background);
   document.body.appendChild(modal);
   if( hasShiny && !noShinyBinding )  Shiny.bindAll(modal);
-  if( hasSelectize && hasJquery ) {
+  if( hasSelectize ) {
     var selects = $(modal).find("select");
     selects.each(function(i,s){
       var script = modal.querySelector("script[data-for="+s.id+"]");
       var data = script?script.innerHTML:null;
-      var options = {dropdownParent:"body"};
+      var options = {};
       if(data){
         options = JSON.parse(data);
         if(options.renderFun){

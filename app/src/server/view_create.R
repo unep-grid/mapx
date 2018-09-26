@@ -39,7 +39,6 @@ observeEvent(input$btnAddView,{
         label = d("view_type_select",language),
         choices = typeChoices,
         options = list(
-          dropdownParent="body"
           )
         ),
       textInput(

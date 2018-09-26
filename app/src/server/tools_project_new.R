@@ -6,8 +6,9 @@ observeEvent(input$btnShowAddProject,{
   isGuest <- isGuestUser()
   language <- reactData$language 
   userData <- reactUser$data
-
-  if( !isGuest ){
+  isProjectCreator <- reactData$projectAllowedToCreate
+  
+  if( isGuest || !isProjectCreator ) return();
 
     language <- reactData$language
     idProject <- randomString(
@@ -42,7 +43,6 @@ observeEvent(input$btnShowAddProject,{
           )
         )
       )
-  } 
 })
 
 #
@@ -50,7 +50,9 @@ observeEvent(input$btnShowAddProject,{
 #
 observeEvent(input$txtProjectTitle,{
 
-  projectTitle <- subPunct(input$txtProjectTitle," ")
+  if(!isTRUE(reactData$projectAllowedToCreate)) return()
+
+  projectTitle <- input$txtProjectTitle
   language <- reactData$language 
   errors <- logical(0)
   warning <- logical(0)
@@ -87,42 +89,42 @@ observeEvent(input$txtProjectTitle,{
 
 observeEvent(input$btnAddProjectConfirm,{
 
-  hasError <- reactData$projectAddHasError
+  if(!isTRUE(reactData$projectAllowedToCreate)) return()
+  if(isTRUE(reactData$projectAddHasError)) return()
+
   userRole <- getUserRole()
-  isGuest <- isGuestUser()
-  if( !isGuest && !hasError ){
 
-    project <- reactData$project 
-    language <- reactData$language
-    userData <- reactUser$data
-    title <- reactData$projectAddTitle
-    titles <- list()
-    titles[language] <- title
-    descriptions <- list()
-    descriptions[language] <- title
+  project <- reactData$project 
+  language <- reactData$language
+  userData <- reactUser$data
+  title <- reactData$projectAddTitle
+  titles <- list()
+  titles[language] <- title
+  descriptions <- list()
+  descriptions[language] <- title
 
-    idProject <- reactData$projectAddId
-    idCreator <- userData$id
+  idProject <- reactData$projectAddId
+  idCreator <- userData$id
 
-    r <- mxDbGetProjectData(project)
-    r$pid <- NULL
-    r$id <- idProject 
-    r$id_old <- NULL
-    r$title <- titles
-    r$description <- descriptions
-    r$countries <- list()
-    r$active <- TRUE
-    r$creator <- idCreator
-    r$admins <- list(idCreator)
-    r$publishers <- list()
-    r$members <- list()
-    r$date_modified <- Sys.time()
-    r$date_created <- Sys.time()
-    r$public <- FALSE
-    r$map_position <- list(lat=0,lng=0,zoom=2)
-    r$views_external <- list()
+  r <- mxDbGetProjectData(project)
+  r$pid <- NULL
+  r$id <- idProject 
+  r$id_old <- NULL
+  r$title <- titles
+  r$description <- descriptions
+  r$countries <- list()
+  r$active <- TRUE
+  r$creator <- idCreator
+  r$admins <- list(idCreator)
+  r$publishers <- list()
+  r$members <- list()
+  r$date_modified <- Sys.time()
+  r$date_created <- Sys.time()
+  r$public <- FALSE
+  r$map_position <- list(lat=0,lng=0,zoom=2)
+  r$views_external <- list()
 
-    mxDbAddRow(r,"mx_projects")
+  mxDbAddRow(r,"mx_projects")
 
   btns = list(
     actionButton("btnLoadNewProject",
@@ -138,7 +140,6 @@ observeEvent(input$btnAddProjectConfirm,{
     content = tags$span(sprintf(d("project_created",language,web=F),title))
     )
 
-  }
 })
 
 

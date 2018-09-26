@@ -73,11 +73,6 @@ mxSchemaViewStory <- function(view,views,language){
           options = list(
             enum_titles = as.list(viewListTitles),
             selectize_options = list(
-              #options = views,
-              #optgroupValueField = "_project_title",
-              #valueField = "id",
-              #labelField = "_title"
-              #dropdownParent = "body"
               )
             )
           )

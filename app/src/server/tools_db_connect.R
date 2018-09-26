@@ -59,10 +59,7 @@ observeEvent(input$btnShowDbInfoSelf,{
         selectizeInput(
           "selectDbSelfSource",
           label = d("source_select_layer",language),
-          choices = sourcesList,
-          options = list(
-            dropdownParent="body"
-            )
+          choices = sourcesList
           ),
         uiOutput("uiValidateDbSelfSource")
         )

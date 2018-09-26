@@ -113,6 +113,10 @@
 .mx-views-filter-text-input {
     background: var(--mx_ui_background);
 }
+.mx-views-filters-container .mx-check-toggle-filter-count {
+ color : var(--mx_ui_text_faded);
+}
+
 
 .mx .jed-container div[data-schematype='object'] {
     border-radius: 0px;
@@ -169,6 +173,12 @@
   box-shadow :  2px 2px 5px 0 var(--mx_ui_shadow);
 }
 
+.mx-login-info p {
+ color: var(--mx_ui_text_faded);
+}
+.mx-login-info p:hover {
+ color: var(--mx_ui_text);
+}
 
 .mx .mx-modal-top ,
 .mx .mx-modal-top * {

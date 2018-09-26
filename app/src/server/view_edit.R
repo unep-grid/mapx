@@ -72,7 +72,6 @@ observe({
           viewEditTarget <- c("publishers","admins")
           viewReaders <- .get(viewData,c("readers")) 
           viewEditors <- .get(viewData,c("editors")) 
-
             
           #
           # View classes
@@ -251,8 +250,10 @@ observe({
               projectData <- mxDbGetProjectData(project)
               members <- unique(projectData$members)
               members <- members[is.numeric(members)]
-              emailList <- mxDbGetEmailListFromId(members)
-              names(members) <- mxEmailMunger(emailList)
+              members <- mxDbGetEmailListFromId(members
+                , asNamedList=TRUE
+                , munged=TRUE
+                )
 
               #
               # Create named lists for editors and members
@@ -455,7 +456,6 @@ observe({
                       tags$script(
                         `data-for`="selectWmsService",
                         jsonlite::toJSON(list(
-                            dropdownParent="body",
                             options=config$wms,
                             valueField = 'value',
                             labelField = 'label'
@@ -494,7 +494,6 @@ observe({
                           tags$script(
                             `data-for`="selectWmsLayer",
                             jsonlite::toJSON(list(
-                                dropdownParent="body",
                                 options=list(),
                                 valueField = 'value',
                                 labelField = 'label'
@@ -808,13 +807,17 @@ observe({
     #
     # Other input check
     #
+    hasNoSchemaTitle <- noDataCheck( input$viewTitleSchema_values )
+    hasNoSchemaAbstract <- noDataCheck( input$viewAbstractSchema_values )
     hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
     hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
 
     errors <- c(
       errors,
       hasTitleIssues,
-      hasAbstractIssues
+      hasAbstractIssues,
+      hasNoSchemaTitle,
+      hasNoSchemaAbstract
       )
 
     disabled =  any(sapply(errors,isTRUE))
@@ -876,6 +879,9 @@ observeEvent(input$btnViewSave,{
   view[[c("data","projects")]] <- projects
   #view[[c("project")]] <- project
 
+  if(noDataCheck(editors)) editors <- c((editor+""))
+  if(!isTRUE( (editor+"") %in% editors)) editors <- c(editors+"",editor)
+
   #
   # Update classes
   #
@@ -936,7 +942,6 @@ observeEvent(input$btnViewSave,{
       )
 
   }
-
 
   #
   # save a version in db
