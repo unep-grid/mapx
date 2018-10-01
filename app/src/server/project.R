@@ -149,7 +149,7 @@ observeEvent(reactData$showProjectsList,{
     asDataFrame = T
     )
 
-  if(isTRUE(nrow(projects)>0)){
+  if(isTRUE(nrow(projects)>0) && isTRUE(nrow(projectViewsCount)>0)){
     projects = merge(
       stringsAsFactors = FALSE,
       x = projects,
