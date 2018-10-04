@@ -64,6 +64,15 @@
               </div>
               <div class="form-control" id="txtAreaSum"></div>
             </div>
+            <div id="formOverlapFinder" class="input-group">
+              <div class="input-group-btn">
+                <button id="btn_find_overlap" class="btn btn-default" data-lang_key="btn_find_overlap" onClick="mx.helpers.handleOverlapFinder(&#39;formOverlapFinder&#39;)"></button>
+              </div>
+              <div class="form-control">
+                <label for="checkFormOverlapFinderAuto">auto update</label>
+                <input id="checkFormOverlapFinderAuto txtAreaSumOverlap" type="checkbox"/>
+              </div>
+            </div>
             <h4 data-lang_key="title_tools_share"></h4>
             <button id="btnIframeBuilder" data-lang_key="btn_iframe_builder" class=" btn btn-default btn-sm action-button hint shiny-bound-input"></button>
             <div id="uiBtnViewAdd" class="shiny-html-output"></div>
