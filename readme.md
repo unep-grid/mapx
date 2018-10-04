@@ -1,6 +1,11 @@
 ## MapX : change log
 
-
+- 1.5.20
+   - Improvement
+      - Added an experimental tool to highlight potential overlaps between vector layers
+    - Bug fixing
+      - Story map bullets werent removed due to a DOM issue 
+      - Confidentiality issue : a publisher with edit access to a story map editor was able to list and use views from a private projects to which she had no access. This could still occurs if the view is purposely shared or imported as public view to another non-private project.
 - 1.5.19
    - Improvement
       - Added support for quering wms based raster source layer
