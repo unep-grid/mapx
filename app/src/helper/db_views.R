@@ -91,7 +91,8 @@ mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
   ELSE data#>>'{\"title\",\"en\"}'
   END AS title
   FROM mx_views_latest
-  WHERE id IN ('" + paste(idsViews,collapse="','") + "')"
+  WHERE id IN ('" + paste(idsViews,collapse="','") + "')
+  ORDER BY title asc"
 
   out <- mxDbGetQuery(sql)
 
@@ -104,6 +105,61 @@ mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
   return(out)
 
 }
+
+
+mxDbGetViewsAllPublicProject <- function( idProject, includeType = c('vt','cc','rt') ){
+
+
+  types = "('" + paste(includeType,collapse="','") + "')"
+
+
+  idViewsProjects <- mxDbGetQuery("WITH
+
+    views_external as (
+      SELECT jsonb_array_elements_text(views_external) id_view
+      FROM mx_projects
+      WHERE id != '" + idProject +"' AND public = true
+      ),
+
+    views_external_type  as (
+      SELECT id id_view 
+      FROM mx_views_latest v, views_external ve
+      WHERE type IN " + types +"
+      AND v.id = ve.id_view
+      ),
+
+    projects_public  as ( 
+      SELECT id id_project
+      FROM mx_projects
+      WHERE public = true
+      AND id != '" + idProject +"' AND public = true
+      ),
+
+    views_projects as (
+      SELECT id id_view, type, jsonb_array_elements_text(data #> '{\"projects\"}') id_project
+      FROM mx_views_latest
+      WHERE jsonb_typeof(data #> '{\"projects\"}') = 'array' 
+      ),
+
+    views_public as (
+      SELECT distinct v.id_view id_view
+      FROM projects_public p, views_projects v
+      WHERE v.id_project = p.id_project
+      AND v.type IN " + types +"
+      )
+
+    select distinct id_view from views_public
+    UNION
+    select distinct id_view from views_external_type
+    ")
+
+    return(idViewsProjects)
+
+}
+
+
+
+
 
 #' @rdname mxDbGetViews
 #' @param views {list|vector} Views id to fetch. Optional, replace any other logic
@@ -157,8 +213,8 @@ mxDbGetViews <- function(
   #
   # Views shared in the project
   #
-  viewsProject <- mxDbProjectGetViewsExternal(project)  
-  hasViewsProject <- !noDataCheck(viewsProject)
+  viewsExternal<- mxDbProjectGetViewsExternal(project)  
+  hasViewsExternal <- !noDataCheck(viewsExternal)
   
   if(noDataCheck(filterViewsByRoleMax) || !isTRUE(typeof(filterViewsByRoleMax) == "character")){
     filterViewsByRoleMax <- "admin"
@@ -248,8 +304,8 @@ mxDbGetViews <- function(
       collections <- paste(collections,collapse="','")
     }
 
-    if(hasViewsProject){
-      filterViewsProject <- "OR id IN ('" + paste(viewsProject,collapse="','") + "')"
+    if(hasViewsExternal){
+      filterViewsProject <- "OR id IN ('" + paste(viewsExternal,collapse="','") + "')"
     }else{
       filterViewsProject <- ""
     }
@@ -405,5 +461,16 @@ mxDbGetViews <- function(
     poolReturn(con)
   })
 }
+
+
+
+
+
+
+
+
+
+
+
 
 

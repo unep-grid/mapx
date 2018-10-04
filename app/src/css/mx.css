@@ -971,7 +971,7 @@ blockquote {
   max-width: 100%;
   min-width: 300px;
   border-radius:3px;
-  z-index:500;
+  z-index:1000;
   right:0;
   left:0;
   top: 5px;
@@ -1563,6 +1563,12 @@ blockquote {
   -moz-transition-delay: 1000ms;
   transition-delay: 1000ms;
 }
-
+/**
+* Multiline support
+* https://github.com/chinchang/hint.css/issues/24#issuecomment-311977579
+*/
+[class*="hint--"]:after {
+    white-space: pre;
+}
 
 

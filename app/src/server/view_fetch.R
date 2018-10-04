@@ -51,7 +51,7 @@ reactViewsCompact <- reactive({
       collections = collections,
       collectionsSelectOperator = collectionsSelectOperator,
       project = project,
-      rolesInProject=userRole,
+      rolesInProject = userRole,
       idUser = userData$id,
       language = language,
       keys = c("id","pid","project","_edit","_title")
@@ -64,15 +64,10 @@ reactViewsCompact <- reactive({
 })
 
 
-#
-# Store project title cache. 
-#
-projects = list()
-
 reactViewsCompactAll <- reactive({
 
   timer <- mxTimeDiff("Fetching all view")
-  
+
   #
   # Ivalidated by :
   #
@@ -82,53 +77,29 @@ reactViewsCompactAll <- reactive({
   project <- reactData$project
   language <- reactData$language
 
-  #
-  # Get user role
-  #
-  userRole <- getUserRole()
+  viewsList <- reactViewsCompact()
+  idViews <- sapply(viewsList,`[[`,'id')
+  idViewsPublic <- mxDbGetViewsAllPublicProject(project)
 
-  #
-  # Set logic
-  #
-  hasRole <- !noDataCheck(userRole)
+  viewsPublic <- mxDbGetViewsTitle(idViewsPublic$id,asNamedList=TRUE,language)
+  views <- mxDbGetViewsTitle(idViews,asNamedList=TRUE,language)
 
-  if( !hasRole ) return()
-
-  out <- mxDbGetViews(
-    rolesInProject = userRole,
-    idUser = userData$id,
-    language = language,
-    allProject = TRUE,
-    keys = c("id","pid","project","type","_title","readers")
+  out <- list(
+    views_project = views,
+    views_external = viewsPublic
     )
 
-  #
-  # Cache project names
-  #
-
-  getProjectTitles <- function(project,language){
-    id <- project + ":" + language 
-    hasProject <- id %in% names(projects)
-    if(hasProject){
-      return(projects[id])
-    }else{
-      projectTitle <- mxDbGetProjectTitle(project,language)
-      projects[id] <<- projectTitle
-      return(projectTitle)
-    }
-  }
-
-  out <- lapply(out,function(v){
-    isPrivate <- isTRUE(!"public" %in% v$readers && !"publishers" %in% v$readers)
-    v["_private"] <- isPrivate
-    v["_project_title"] <- getProjectTitles(v$project,language)
-    return(v)
-    })
+  names(out) <- c(
+    d('views_project',language),
+    d('views_external',language)
+    )
 
   mxTimeDiff(timer)
   return(out)
 
 })
+
+
 
 reactViewsCountByProjects <- reactive({
 

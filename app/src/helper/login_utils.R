@@ -201,9 +201,13 @@ mxInitBrowserData <- function(browserData,callback){
     # Check for issues
     #
 
+    #
+    # NOTE: dat is not used, check for try-error on cookieData ?
+    #
     hasNoError <- !isTRUE("try-error" %in% class(dat))
     hasLength <- isTRUE(length(cookieData)>0)
     browserParams <- .get(config,c("browser","params"))
+    
     hasExpectedKeys <- isTRUE(all(c(
         browserParams %in% names(cookieData),
         browserParams %in% names(browserData)

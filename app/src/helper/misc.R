@@ -74,13 +74,14 @@ updateStoryViews <- function(story,view,allViews){
   # Retrieve and store data for all views used in story.
   #
   views = list()
+  allViews = unlist(allViews)
 
   #
   # All views id extracted from the story
   #
   viewsStory = lapply(story$steps,function(s){
     lapply(s$views,function(v){v})
- })
+    })
 
   # Final view list
   viewsId = unique(unlist(viewsStory))
@@ -88,13 +89,13 @@ updateStoryViews <- function(story,view,allViews){
 
   # If there is at least on views used, get views object.
   if(!noDataCheck(viewsId)){
-    views = allViews[sapply(allViews,function(v){v$id %in% viewsId })]
+    views = unique(allViews[sapply(allViews,function(v){v %in% viewsId })])
   }
 
   #
   # Save local views from story, if any
   #
-  view <- .set(view,c("data","views"),views)
+  view <- .set(view,c("data","views"),as.list(views))
   return(view)
 
 }

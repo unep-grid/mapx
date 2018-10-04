@@ -740,13 +740,13 @@ function checkMissingView(o){
 
         m.views.forEach(function(v){
           if( !found ){
-            if( v.id == vs.id ){
+            if( v.id == vs.id || v == vs.id ){
               found = true;
             }
           }
         });
 
-        if(!found){
+        if( !found ){
           viewsToAdd.push(vs);
         }
 
@@ -762,7 +762,7 @@ function checkMissingView(o){
 
         viewsToAdd.forEach(function(v){
 
-          mx.helpers.getViewRemote(v.id)
+          mx.helpers.getViewRemote( v.id || v )
             .then(view => {
 
               m.views = m.views.concat(view);
@@ -1392,8 +1392,8 @@ export function storyController(o){
   }else{
 
     /**
-    * Remvove registered listener
-    */
+     * Remvove registered listener
+     */
     listenerManager(o,{
       action : 'removeAll'
     });
@@ -1413,9 +1413,9 @@ export function storyController(o){
     if( o.data  ){
 
       /**
-      * Set the story as disabled
-      */
-    o.data.enabled = false;
+       * Set the story as disabled
+       */
+      o.data.enabled = false;
 
       /**
        * if edit mode, remove editor
@@ -1460,35 +1460,44 @@ export function storyController(o){
         });
       }
 
-      if( o.data.elBullets ){
-        o.data.elBullets.remove();
-      }
 
-      if( o.data.elScroll ){
-        o.data.elScroll.remove();
-      }
+      setTimeout(function(){
 
-      if( o.data.elStory ){
-        o.data.elStory.remove();
-      }
-      
-      if( o.data.styleMap ){
-        o.data.elMap.style = o.data.styleMap;
-      }
-      if( o.data.classMap ){
-        o.data.elMap.className = o.data.classMap;
-      }
+        if( o.data.elBullets ){
+          o.data.elBullets.remove();
+        }
 
-      o.data.map.resize();
+        if( o.data.elScroll ){
+          o.data.elScroll.remove();
+        }
 
-      /**
-       * clean data storage
-       */
+        if( o.data.elStory ){
+          o.data.elStory.remove();
+        }
 
-      if(mx.data.story){
-        mx.data.story = {};
-      }
+        if( o.data.styleMap ){
+          o.data.elMap.style = o.data.styleMap;
+        }
+        if( o.data.classMap ){
+          o.data.elMap.className = o.data.classMap;
+        }
 
+        /**
+         * Resize map
+         */
+
+        o.data.map.resize();
+
+        /**
+         * clean data storage
+         */
+
+        if(mx.data.story){
+          mx.data.story = {};
+        }
+
+
+      },10);
     }
   }
 

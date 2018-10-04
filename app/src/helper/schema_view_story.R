@@ -18,24 +18,24 @@ mxSchemaViewStory <- function(view,views,language){
   }
 
 
-  #
-  # Get view list and titles
-  #
-  views <- views[sapply(views,function(x){x$type}) %in% c("vt","rt")] # don't use story map 
+  ##
+  ## Get view list and titles
+  ##
+  #views <- views[sapply(views,function(x){x$type}) %in% c("vt","rt")] # don't use story map 
 
-  views <- views[order(sapply(views,`[[`,"_project_title"),sapply(views,`[[`,"_title"))]
+  #views <- views[order(sapply(views,`[[`,"_project_title"),sapply(views,`[[`,"_title"))]
 
-  viewListId <- vapply(views, function(v){
-    return(v$id)
-},character(1)) 
+  #viewListId <- vapply(views, function(v){
+    #return(v$id)
+#},character(1)) 
 
-  viewListTitles <- vapply(views,function(v){
-    title <- ""
-    if(!noDataCheck(v$`_project_title`)) title <- title + v$`_project_title`
-    if(!noDataCheck(v$`_title`)) title <- title + " – " + v$`_title`
-    if(isTRUE(v$`_private`)) title <- title + " [ private ]"
-    return(title)
-},character(1))
+  #viewListTitles <- vapply(views,function(v){
+    #title <- ""
+    #if(!noDataCheck(v$`_project_title`)) title <- title + v$`_project_title`
+    #if(!noDataCheck(v$`_title`)) title <- title + " – " + v$`_title`
+    #if(isTRUE(v$`_private`)) title <- title + " [ private ]"
+    #return(title)
+#},character(1))
 
   #viewListTitles <- sapply(views, function(v){
 
@@ -46,6 +46,14 @@ mxSchemaViewStory <- function(view,views,language){
 
     #return( "("+v$project + ") " + title + target)
 #}) 
+
+  viewsProjNames <- paste(d('view_project_short',language),names(views[[1]]))
+  viewsExtNames <- paste(d('view_external_short',language),names(views[[2]]))
+  viewListTitles <- unlist(c(viewsProjNames,viewsExtNames))
+  viewListId <- as.list(c(views[[1]],views[[2]]))
+  names(viewListId) <- NULL
+  viewListId <- unlist(viewListId)
+
 
   mxCounter(reset=T)
 
@@ -69,9 +77,9 @@ mxSchemaViewStory <- function(view,views,language){
           title = "View",
           type = "string",
           minLength = 1,
-          enum = as.list(viewListId),
+          enum = viewListId,
           options = list(
-            enum_titles = as.list(viewListTitles),
+            enum_titles = viewListTitles,
             selectize_options = list(
               )
             )
