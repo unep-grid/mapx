@@ -1,6 +1,27 @@
 /* jshint esversion:6, evil: true */
 import * as mx from './mx_init.js';
 
+
+
+export function degreesToMeters(lngLat) {
+  var x = lngLat.lng * 20037508.34 / 180;
+  var y = Math.log(Math.tan((90 + lng.lat) * Math.PI / 360)) / (Math.PI / 180);
+  y = y * 20037508.34 / 180;
+  return {
+    x : x,
+    y : y
+  };
+}
+
+export function metersToDegrees(point) {
+  var lng = point.x *  180 / 20037508.34 ;
+  var lat = Math.atan(Math.exp(point.y * Math.PI / 20037508.34)) * 360 / Math.PI - 90; 
+  return {
+    lat : lat,
+    lng : lng
+  };
+}
+
 /**
 * Get url for api
 * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
@@ -381,6 +402,13 @@ export function initMapxApp(o){
      * Send loading confirmation to shiny
      */
   o.map.on('load', function() {
+    
+    /*
+    * Init pixop instance
+    */
+    mx.pixop = new mx.helpers.PixOp({
+       debug: true
+    });
 
     /*
      * secondary centering method
@@ -744,6 +772,17 @@ export function addSourceFromView(o){
     var sourceExists = !!o.map.getSource(idSource);
 
     if( sourceExists ) {
+      /**
+      * Handle case when old layers remain in map
+      * This could prevent source removal
+      */
+      mx.helpers.removeLayersByPrefix({
+        prefix : o.view.id,
+        map : o.map
+      });
+      /**
+      * Remove old source 
+      */
       o.map.removeSource( idSource ) ;
     }
 
@@ -1118,6 +1157,8 @@ export function viewControler(o){
         viewData : view,
         idViewsList : idViewsList
       });
+
+      mx.helpers.fire("view_add");
     });
 
     /**
@@ -1132,6 +1173,8 @@ export function viewControler(o){
       });
 
       mx.helpers.cleanRemoveModules(v);
+
+      mx.helpers.fire("view_remove");
     });
 
     if(false){
@@ -1312,9 +1355,42 @@ export function updateViewOrder (o){
     map.moveLayer(x,layerBefore);
 
   });
-
 }
 
+/**
+* Event mapx : fire event
+* @param {String} type
+*/
+export function fire(type){
+  if(!mx.events[type]) mx.events[type] = [];
+  setTimeout(function(){
+    mx.events[type].forEach(cb => cb(type));
+  },500);
+}
+/**
+* Event mapx : add event listener
+* @param {String} type
+* @param {Function} callback
+*/
+export function on(type,cb){
+  if(!mx.events[type]) mx.events[type] = [];
+  var id = mx.events[type].indexOf(cb) ; 
+  if( id == -1 ){
+    mx.events[type].push(cb);
+  }
+}
+/**
+* Event mapx : remove event listener
+* @param {String} type
+* @param {Function} callback
+*/
+export function off(type,cb){
+  if(!mx.events[type]) mx.events[type] = [];
+  var id = mx.events[type].indexOf(cb) ; 
+  if( id > -1 ){
+    mx.events[type].splice(id,1);
+  }
+}
 
 export function  moveViewItem(o){
 
@@ -1831,7 +1907,7 @@ export function removeView(o){
   var li  = document.querySelector("[data-view_id='" + o.idView + "']") ;
 
   var m  = mx.helpers.getMap(o.id);
-  var views = m.views;
+  var views = mx.helpers.getViews({asArray:true});
   var view = views.filter(function(x){
     return x.id == o.idView ;
   })[0];
@@ -2437,8 +2513,7 @@ function makeViewsFilter(o){
   var elFilters = document.createElement("div");
   var elFoldFilters ;
 
-  // Reset content
-  elContainer.innerHTML="";
+  elContainer.innerHTML = '';
 
   h.getDictItem("view_filter_by_tags")
     .then(function(label){
@@ -2556,7 +2631,7 @@ function makeViewsFilter(o){
  */
 export function viewSetFilter(o){
   /*jshint validthis:true*/
-  
+
   o = o||{};
   var view = this;
   var idView = view.id;
@@ -2590,6 +2665,29 @@ export function viewSetFilter(o){
     }
     m.setFilter(layer.id, filterFinal);
   }
+
+  mx.helpers.fire("view_filter");
+}
+
+
+export function overlapsSpotlightUpdate(){
+
+  mx.pixop.render({
+    type : 'overlap-spotlight',
+    debug : true,
+    canvas : { 
+      add : true,
+      cicleRadius : 1000,
+      bufferSpotlight : 10
+    },
+    geojson:{ 
+      add :false 
+    }
+  });
+}
+
+export function overlapsSpotlightClear(){
+  mx.pixop.clear();
 }
 
 
@@ -3913,274 +4011,34 @@ export function setFilter(o){
 */
 function intersect(poly1, poly2) {
 
-  var martinez = require("martinez-polygon-clipping");
-  var helpers = require("@turf/helpers");
+ return Promise.all([
+    System.import("martinez-polygon-clipping"),
+    System.import("@turf/helpers")
+  ])
+    .then(m => {
 
-  var polygon = helpers.polygon;
-  var multiPolygon = helpers.multiPolygon;
+      var martinez = m[0];
+      var helpers = m[1];
 
-  var geom1 = poly1.geometry;
-  var geom2 = poly2.geometry;
-  var properties = poly1.properties || {};
+      var polygon = helpers.polygon;
+      var multiPolygon = helpers.multiPolygon;
 
-  var intersection = martinez.intersection(geom1.coordinates, geom2.coordinates);
-  if (intersection === null || intersection.length === 0) return null;
-  if (intersection.length === 1) {
-    var start = intersection[0][0][0];
-    var end = intersection[0][0][intersection[0][0].length - 1];
-    if (start[0] === end[0] && start[1] === end[1]) return polygon(intersection[0], properties);
-    return null;
-  }
-  return multiPolygon(intersection, properties);
-}
+      var geom1 = poly1.geometry;
+      var geom2 = poly2.geometry;
+      var properties = poly1.properties || {};
 
-/**
- * Get estimated area of visible layer by prefix of layer names
- * @param {object} o options
- * @param {string} o.id map id
- * @param {string} o.prefix Prefix to find layers
- * @param {function} o.onMessage Function to deal with messages
- * @return {number} area in km2
- */
-export function getRenderedLayersIntersect(o){
-
-  o.onMessage = o.onMessage || console.log;
-  o.onEnd = o.onEnd || console.log;
-  o.id = o.id || mx.settings.idMapDefault;
-
-  var map = mx.helpers.getMap(o.id);
-
-  if ( map ){
-    Promise.all([
-      System.import("./mx_helper_overlap.worker.js"),
-      System.import("@turf/helpers"),
-      System.import("@turf/buffer"),
-      System.import('@turf/combine'),
-      System.import('@turf/bbox-clip'),
-      System.import('@turf/boolean-overlap'),
-      System.import('@turf/flatten')
-    ]).then(function(m){
-
-      var getIntersectWorker = m[0];
-      var featureCollection = m[1].featureCollection;
-      var buffer = m[2].default;
-      //var intersect = m[3].default;
-      var combine = m[3].default;
-      var bboxClip = m[4].default;
-      var booleanOverlap= m[5].default;
-      var flatten = m[6].default;
-      //var difference = m[4].default;
-
-      var map = mx.maps[o.id].map;
-      var elMapContainer = map.getContainer();
-      
-      var elCompo = elMapContainer.querySelector("#map-x-compo");
-      if(!elCompo){
-        elCompo = document.createElement("div");
-        elCompo.style = "visibility:hidden;width:100%;height:100%;position:absolute;top:0;left:0";
-        elCompo.className = "mx-events-off";
-        elMapContainer.appendChild(elCompo);
+      var intersection = martinez.intersection(geom1.coordinates, geom2.coordinates);
+      if (intersection === null || intersection.length === 0) return null;
+      if (intersection.length === 1) {
+        var start = intersection[0][0][0];
+        var end = intersection[0][0][intersection[0][0].length - 1];
+        if (start[0] === end[0] && start[1] === end[1]) return polygon(intersection[0], properties);
+        return null;
       }
-
-      var layers = mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
-        prefix: o.prefix||"MX-",
-        base:true
-      });
-
-      var featsGroup = [];
-      var featsCol;
-      var feats;
-      var featsQuery ;
-      var featsFlat ;
-      var polyOut ;
-
-      if( layers.length > 1 ){
-
-        layers.forEach(function(l){
-
-          var allLayers = mx.helpers.getLayerNamesByPrefix({
-            id : o.id,
-            prefix : l
-          });
-
-          featsQuery = map.queryRenderedFeatures({layers:allLayers});
-
-          feats = [];
-          featsQuery.forEach(function(f,i){ 
-            if(f.geometry.type === "Polygon" || f.geometry.type === "MultiPolygon"){
-                f = flatten(f);
-                f.features.forEach(function(f){
-                  f.properties = {id:l};
-                  feats.push(f);
-              });
-            }
-          });
-
-          featsGroup.push(featureCollection(feats));
-        });
-
-        var addCanvasToMap = function(compo){
-          var canvas = compo.canvas;
-
-          canvas.id="geocampo";
-
-          canvas.toBlob(function(blob){
-            var url = window.URL.createObjectURL(blob);
-
-            var b = compo.getCanvasBounds();
-
-            var l = {
-              id: "geocampo",
-              source: {
-                type: 'image',
-                url : url,
-                coordinates: [
-                  [b.minLng,b.maxLat],
-                  [b.maxLng,b.maxLat],
-                  [b.maxLng,b.minLat],
-                  [b.minLng,b.minLat]
-                ]
-              },
-              type: 'raster',
-              paint: {
-                'raster-opacity': 0.8,
-              }
-            };
-
-            var s = map.getSource('geocampo');
-            if(s){
-              map.removeLayer("geocampo");
-              map.removeSource("geocampo");
-            }
-              map.addLayer(l);
-
-          });
-
-        };
-
-
-
-        window.compo = new mx.helpers.GeoCompo({
-          el : elCompo,
-          map : map,
-          program : [
-            { clear : true},
-            { addGeojsonArray : featsGroup },
-            { render : "source-in" },
-            { callback : addCanvasToMap }
-          ]
-        });
-
-      }
-    });
-  }
-}
-
-
-
-
-
-/**
- * Get estimated area of visible layer by prefix of layer names
- * @param {object} o options
- * @param {string} o.id map id
- * @param {string} o.prefix Prefix to find layers
- */
-export function getRenderedLayersIntersect_old(o){
-
-  o.onMessage = o.onMessage || console.log;
-  o.onEnd = o.onEnd || console.log;
-  o.id = o.id || mx.settings.idMapDefault;
-  var map = mx.helpers.getMap(o.id);
-  
-  if ( map ){
-
-    return import("./mx_helper_overlap.worker.js")
-      .then(function(worker){
-    
-      var w = new worker();
-      var id, feats, featsLayers = [], featsQuery, allLayers;
-      var geom, properties;
-    
-      var layers = mx.helpers.getLayerNamesByPrefix({
-        id: o.id,
-        prefix: o.prefix||"MX-",
-        base:true
-      });
-
-        if( layers.length > 1 ){
-
-          id = mx.helpers.makeId();
-
-          layers.forEach(function(l){
-
-            allLayers = mx.helpers.getLayerNamesByPrefix({
-              id : o.id,
-              prefix : l
-            });
-
-            feats = [];
-            featsQuery = map.queryRenderedFeatures({layers:allLayers});
-
-            featsQuery = featsQuery.filter(function(f){
-              return f.geometry.type == "Polygon" || f.geometry.type == "MultiPolygon";
-            });
-
-
-            featsQuery.forEach(function(f){
-              feats.push({
-                properties:{id:l},
-                geometry:f._geometry,
-                type : "Feature"
-              });
-            });
-
-            featsLayers.push({
-              id : l,
-              features : feats
-            });
-
-          });
-
-          w.postMessage({
-            featsLayers : featsLayers
-          });
-
-          w.addEventListener("message",function(e){
-            if(e.data.message)  o.onMessage(e.data.message);
-            if(e.data.end){
-              var oldLayer = map.getLayer("test");
-              if(oldLayer){
-                map.removeLayer("test");
-                map.removeSource("test");
-              }
-
-              map.addLayer({
-                id: "test",
-                type: "fill",
-                source: {
-                  type: "geojson",
-                  data : e.data.end 
-                },
-                paint : {
-                  'fill-color':'#FF0000',
-                  'fill-opacity': 0.6,
-                  'fill-outline-color':'#FF0000'
-                }
-              });
-
-            }
-
-
-            o.onEnd(e.data.end);
-          });
-        }
+      return multiPolygon(intersection, properties);
 
     });
-  }
 }
-
 
 
 /**
@@ -5459,6 +5317,20 @@ export function getViewIcons(view){
   return elReaders.outerHTML;
 }
 
+
+export function handleOverlapFinder(id){
+
+  mx.pixop.render({
+    type:'overlap',
+    debug:true,
+    geojson: {
+      add: true,
+      buffer: 10000,
+      simplify: 0.01
+    }
+  });
+
+}
 
 
 /**

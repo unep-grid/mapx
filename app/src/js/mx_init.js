@@ -29,6 +29,8 @@ export let data = {
     name : "config"
   })
 };
+
+export let events = {};
 export let controls = {};
 export let listener = {};
 export let settings = {
@@ -63,6 +65,7 @@ export let settings = {
   maxByteJed : 100000, // 100 Kb  
   user : {}
 };
+export let pixop = {};
 export let dashboards = [];
 export let editors = {};
 export let extend = {

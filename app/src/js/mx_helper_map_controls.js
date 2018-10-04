@@ -283,11 +283,36 @@ mapControlApp.prototype.onAdd = function(map) {
         map.zoomOut();
       }
     },
+    btnOverlapSpotlight:{
+      classes:"fa fa-bullseye",
+      key:"btn_overlap_spotlight",
+      action:function(e){
+        var isActive = this.classList.contains('active');
+        var clear = mx.helpers.overlapsSpotlightClear;
+        var update = mx.helpers.overlapsSpotlightUpdate;
+        var map = mx.helpers.getMap();
+        if(!isActive){
+          this.classList.add('active');
+          update();
+          mx.helpers.on('view_add',update);
+          mx.helpers.on('view_remove',update);
+          mx.helpers.on('view_filter',update);
+          map.on('moveend',update);
+        }else{
+          clear();
+          this.classList.remove('active');
+          mx.helpers.off('view_add',update);
+          mx.helpers.off('view_remove',update);
+          mx.helpers.off('view_filter',update);
+          map.off('moveend',update);
+        }
+      }
+    },
     btnSetNorth:{
       classes:"mx-north-arrow",
       key:"btn_north_arrow",
       action:function(){
-        var map =  mx.helpers.path(mx,"maps.map_main.map");
+        var map =  mx.helpers.getMap();
         if(map){
           map.easeTo({bearing:0,pitch:0});
         }
@@ -303,6 +328,7 @@ mapControlApp.prototype.onAdd = function(map) {
   this._container.appendChild(btnList);
   return this._container;
 };
+
 mapControlApp.prototype.onRemove = function() {
   this._container.parentNode.removeChild(this._container);
   this._map = undefined;

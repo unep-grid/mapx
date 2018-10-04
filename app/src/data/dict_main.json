@@ -1200,6 +1200,18 @@
     "ps": "کوچوني ښودل"
   },
   {
+    "id": "btn_overlap_spotlight",
+    "en": "Highlight vector overlaps at current zoom",
+    "fr": "Mettre en évidence les chevauchements au niveau de zoom actuel",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "categorical",
     "en": "Categorical",
     "fr": "Catégorielle",
@@ -3544,6 +3556,30 @@
     "en": "External views",
     "fr": "Vues externes",
     "es": "Vistas exteriores",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_project_short",
+    "en": "( p )",
+    "fr": "( p )",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_external_short",
+    "en": "( e )",
+    "fr": "( e )",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

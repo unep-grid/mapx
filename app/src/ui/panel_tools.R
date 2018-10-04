@@ -27,7 +27,6 @@ areaLiveCalc  <- tags$div(
   tags$div(class="form-control",id="txtAreaSum")
   )
 
-
 themeColor <- tagList(
   tags$h4(`data-lang_key`="title_settings_colors"),
   tags$div(
