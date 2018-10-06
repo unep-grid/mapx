@@ -537,11 +537,11 @@ PixOp.prototype.getDataBounds = function(){
     }
   }
 
-  px.data.features.forEach( layer => {
-    px.onEachFeatureCoords(layer,{
+  //px.data.features.forEach( layer => {
+    px.onEachFeatureCoords(features,{
       onCoord : update
     }); 
-  });
+  //});
 
   return b;
 };
@@ -582,6 +582,7 @@ PixOp.prototype.getFeatures = function(){
     prefix: config.layer_prefix,
     base : true
   });
+
 
   layerBaseNames.forEach(function(l){
 
@@ -654,43 +655,60 @@ PixOp.prototype.layerToCanvas = function(layer){
   ctx.strokeStyle = opt.canvas.strokeColor;
 
 
+  var isPoly = false;
+  var isLine = false;
+  var isPoint = false;
+
+
+
+
+
   /**
    * Render the coordinates of each layer geometry 
    * to the canvas
    */
   px.onEachFeatureCoords(layer,{
     onFeatureStart : function(feature,type){
-      if( type != "Point" ){
-        ctx.beginPath();
-      }
+
+      isPoly = type == "Polygon" || type == "MultiPolygon";
+      isPoint = type == "Point" || type === "MultiPoint";
+      isLine = type == "LineString" || type == "MultiLineString";
     },
-    onCoord : function(coord,type,index){
+    onCoord : function(coord,type,first,last){
 
-      point = px.coordToPoint(coord[0], coord[1]);
+      try{
+        point = px.coordToPoint(coord[0], coord[1]);
 
-      if(type == "Point" ){
-        radius = opt.canvas.circleRadius / px.getPixelSizeMeterAtLat(coord[1]);
-        circle = px.getCircle( radius );
-        ctx.drawImage(circle,point.x-radius,point.y-radius);
-      }else{
-        if ( index === 0) {
-          ctx.moveTo(point.x, point.y);
-        } else {
-          ctx.lineTo(point.x, point.y);
+        if( isPoint ){
+          radius = opt.canvas.circleRadius / px.getPixelSizeMeterAtLat(coord[1]);
+          circle = px.getCircle( radius );
+          ctx.drawImage(circle,point.x-radius,point.y-radius);
+        }else{
+          if ( first ) {
+            ctx.moveTo(point.x, point.y);
+            ctx.beginPath();
+          } else {
+            ctx.lineTo(point.x, point.y);
+            if( last ){
+              if( isLine ){
+                ctx.stroke();
+              }
+              if( isPoly ){
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fill();
+              }
+            }
+          }
         }
       }
+      catch(e){ if( px.debug ) console.log(e); }
     },
     onFeatureEnd :  function(feature,type){
 
-      ctx.stroke();
-
-      if(type.indexOf("Line") == -1){
-
-        ctx.fill();
-
-      }
     }
   });
+
 
   return canvas;
 
@@ -821,15 +839,22 @@ PixOp.prototype.onEachFeatureCoords = function(geojson,options){
 };
 
 PixOp.prototype.onEachCoord = function(coords,type,cb){
-  var index = 0;
-  getCoord(coords);
-  function getCoord(a){
+  var last = false;
+  var first = false;
+  var length = 0;
+
+  getCoord(coords,0);
+
+  function getCoord(a,index){
     if(a[0] instanceof Array){
-      a.forEach( b => {
-        getCoord(b);
+      length = a.length;
+      a.forEach( ( b , i) => {
+        getCoord(b,i);
       });
     }else{
-      cb(a,type,index ++);
+      first = index == 0;
+      last = index == length-1;
+      cb(a,type,first,last);
     }
   }
 };
