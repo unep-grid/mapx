@@ -229,7 +229,8 @@ function geojsonToPbf(geojson, data){
     var pbfOptions = {};
     var tileIndex = geojsonvt(geojson, {
       maxZoom: data.zoom+1,
-      indexMaxZoom: data.zoom-1
+      indexMaxZoom: data.zoom-1,
+      tolerence :  2000/(512*( Math.pow(data.zoom,2)))
     });
     var tile = tileIndex.getTile(data.zoom, data.x, data.y);
     if(!tile) resolve(null);

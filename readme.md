@@ -1,5 +1,8 @@
 ## MapX : change log
 
+- 1.5.21
+   - Improvement
+      - API : Removed pre-simplification in postgres, let geojson-vt handle this. Slower, but preserve topology. 
 - 1.5.20
    - Improvement
       - Added an experimental tool to highlight potential overlaps between vector layers

@@ -4,7 +4,8 @@ WITH bboxLatLong AS (
 tileExtent as (
   SELECT
   {{attributes}},
-  ST_simplify(layer.{{geom}},(50/(512*(({{zoom}}+1)^2)))) geom
+  -- ST_simplify(layer.{{geom}},(50/(512*(({{zoom}}+1)^2)))) geom
+  layer.{{geom}} geom
   FROM
   {{layer}} layer,
   bboxLatLong bbox
