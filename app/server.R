@@ -25,7 +25,7 @@ server <- function(input,output,session){
       mxCatch(title="MapX main process",{
 
         mxInitBrowserData(browserData,function(email){
-          
+
           #
           # Get query parameters
           #

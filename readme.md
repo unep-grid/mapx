@@ -1,5 +1,10 @@
 ## MapX : change log
 
+- 1.5.23
+    - Improvement
+      - APP : save and update query parameters: project, language, lat, lng, zoom. 
+    - Bug fixing
+     - APP : Overlaps using pixop, numbers of layers to take in account did not unterstood "All layers". Should be ok
 - 1.5.22
     - Improvement
       - APP/API Let the user provide a projection system for download
