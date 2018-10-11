@@ -3394,10 +3394,9 @@ export function addViewVt(o){
     rules = rules.filter(function(r){return r&&r.value != undefined;});
     rules = rules instanceof Array ? rules : [rules];
     rules = mx.helpers.clone(rules);
-
     if( nulls && !hideNulls ){
-      nulls.isNull = true;
-      nulls.value = nulls.value == "" || typeof nulls.value === undefined ? null : nulls.value;
+      nulls.isNullRule = true;
+      //nulls.value = nulls.value == "" || typeof nulls.value === undefined ? null : nulls.value;
       rules.push(nulls);
     }
 
@@ -3540,12 +3539,12 @@ export function addViewVt(o){
        */
       rules.forEach(function(rule,i){
         var value = rule.value;
-        var isNull = rule.isNull === true;
+        var isNullRule = rule.isNullRule === true;
         var max = p(view,"data.attribute.max")+1;
         var min = p(view,"data.attribute.min")-1;
         var nextRule = rules[i+1];
-        var nextRuleIsNull = nextRule && nextRule.isNull;
-        var nextValue = nextRule && !nextRuleIsNull ? nextRule.value !== undefined ? nextRule.value : max : max;
+        var nextRuleIsNullRule = nextRule && nextRule.isNullRule;
+        var nextValue = nextRule && !nextRuleIsNullRule ? nextRule.value !== undefined ? nextRule.value : max : max;
         var isNumeric = p(view,"data.attribute.type") == "number";
         var idView = view.id;
         var filter = ["all"];
@@ -3556,25 +3555,68 @@ export function addViewVt(o){
         /**
          * Set filter
          */
-        if( value !== null){ 
-          filter.push(["has", attr]);
-        }
-       
-        if( isNull && isNumeric && value !== null ){
-          value = value * 1;
-        }
 
-        if( isNumeric && !isNull ){
-          filter.push([">=", attr, value]);
-          filter.push(["<", attr, nextValue]);
-        }else{
-          if( isNull && value === null ){
-            filter.push(["!has", attr]);
+        //if( isNullRule && isNumeric && value !== null ){
+          //if( value || value === 0 ){
+            //value = value * 1;
+          //}else{
+            //value = null;
+          //}
+        /*}*/
+
+
+        if( !isNullRule ){
+
+          if( isNumeric ){
+            /**
+             * Case where attr to filter is numeric
+             */
+            filter.push([">=", attr, value]);
+            filter.push(["<", attr, nextValue]);
           }else{
+            /**
+             * String and boolean
+             */
             filter.push(["==", attr, value]);
           }
+
+        }else{
+
+          if( isNumeric ){
+
+            if( value ){
+              /**
+               * Convert to numeric if there is a value, included 0
+               */
+
+              filter.push(["==", attr, value * 1]);
+
+            }else{
+              /**
+               * As we can't [==, attr, null], try to use has
+               */
+              filter.push(["==",attr,'']);
+
+            }
+
+
+          }else{
+
+            if( value || value === false ){
+
+              filter.push(["==", attr, value ]);
+
+            }else{
+
+              filter.push(["==",attr,'']);
+
+            }
+
+          }
+
         }
 
+        console.log(filter);
         rule.filter = filter;
 
         /**
