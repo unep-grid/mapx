@@ -1,8 +1,12 @@
 ## MapX : change log
 
+- 1.5.22
+    - Improvement
+      - APP/API Let the user provide a projection system for download
 - 1.5.21
    - Improvement
-      - API : Removed pre-simplification in postgres, let geojson-vt handle this. Slower, but preserve topology. 
+      - API : Set pre-simplification only for zoom > 10 in postgres. 
+      - APP : Added new environment variables for handling mapbox token and allowed project creators
 - 1.5.20
    - Improvement
       - Added an experimental tool to highlight potential overlaps between vector layers
