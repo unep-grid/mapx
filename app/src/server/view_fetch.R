@@ -38,6 +38,7 @@ reactViewsCompact <- reactive({
   #
   # Set logic
   #
+
   hasRole <- !noDataCheck(userRole)
 
   if( !hasRole ) return()
@@ -56,9 +57,8 @@ reactViewsCompact <- reactive({
       language = language,
       keys = c("id","pid","type","project","_edit","_title")
       )
-
-
   }
+
   mxTimeDiff(timer)
   return(out)
 })

@@ -413,10 +413,7 @@ export function initMapxApp(o){
     /*
      * secondary centering method
      */
-    if( mp || mp.fitToBounds === true ){
-      map.fitBounds( [mp.w || 0, mp.s || 0, mp.e || 0, mp.n || 0] );
-    }
-
+   
     if( ! o.storyAutoStart ){
       showUi();
     }
@@ -533,7 +530,17 @@ export function initMapxApp(o){
       var northArrow = document.querySelector(".mx-north-arrow");
       northArrow.style[mx.helpers.cssTransformFun()] = "translate(-50%, -50%) rotateZ("+(r)+"deg) ";
     });
-
+    map.on("moveend",function(e){
+      var c = map.getCenter();
+      var z = map.getZoom();
+      mx.helpers.objToState({
+        data : {
+          lat : c.lat,
+          lng : c.lng,
+          zoom : z
+        }
+      });
+    });
   });
 
     /**
@@ -1188,6 +1195,9 @@ export function viewControler(o){
     }
 
     updateViewOrder(o);
+    /**
+    * updateViewParams(o);
+    **/
   });
 }
 
@@ -1320,10 +1330,8 @@ export function makeSimpleLayer(o){
  * @param {string} o.order Array of layer base name. If empty, use `getViewOrder`
  * @param 
  */
-export function updateViewOrder (o){
-  
-  var displayedOrig  = {};
-  var displayed = [];
+export function updateViewOrder(o){
+
   var map = mx.helpers.getMap(o.id);
   var views = mx.helpers.getViews(o.id);
   var orderUiList = mx.helpers.getViewOrder();
@@ -1332,30 +1340,61 @@ export function updateViewOrder (o){
   var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
-
-  displayed = mx.helpers.getLayerNamesByPrefix({
+  
+  var  displayed = mx.helpers.getLayerNamesByPrefix({
     id:o.id,
     prefix:"MX-"
   });
 
-  displayed.sort(
-    function(a,b){
-      var posA = order.indexOf(mx.helpers.getLayerBaseName(a));
-      var posB = order.indexOf(mx.helpers.getLayerBaseName(b));
-      return posA-posB;
+  mx.helpers.onNextFrame(function(){
+
+    
+    displayed.sort(
+      function(a,b){
+        var posA = order.indexOf(mx.helpers.getLayerBaseName(a));
+        var posB = order.indexOf(mx.helpers.getLayerBaseName(b));
+        return posA-posB;
+      });
+
+    displayed.forEach(function(x){
+
+      var posBefore = displayed.indexOf(x)-1;
+
+      if(posBefore > -1 ){
+        layerBefore = displayed[posBefore];
+      }
+      
+      map.moveLayer(x,layerBefore);
+
     });
-
-  displayed.forEach(function(x){
-
-    var posBefore = displayed.indexOf(x)-1;
-
-    if(posBefore > -1 ){
-      layerBefore = displayed[posBefore];
-    }
-    map.moveLayer(x,layerBefore);
 
   });
 }
+
+/**
+* Update view in params
+*/
+export function updateViewParams(o){
+
+  o = o || {id:mx.helpers.getMap()};
+
+  var  displayed = mx.helpers.getLayerNamesByPrefix({
+    id:o.id,
+    prefix:"MX-",
+    base :true
+  });
+
+
+  mx.helpers.objToState({
+    data : {
+      views: displayed
+    }
+  });
+}
+
+
+
+
 
 /**
 * Event mapx : fire event
@@ -3616,7 +3655,6 @@ export function addViewVt(o){
 
         }
 
-        console.log(filter);
         rule.filter = filter;
 
         /**
@@ -4482,11 +4520,6 @@ export function resetViewStyle(o){
       idView: o.idView
     });
 
-  //zoomToViewId({
-  //id: o.id,
-  //idView: o.idView
-  /*});*/
-
 }
 
 /**
@@ -4501,15 +4534,8 @@ export function flyTo(o) {
 
   if ( map ) {
     var p = o.param;
-    if(p.z){
-      p.zoom = p.z ;
-    }
 
-    if (p.zoom && p.zoom == -1) {
-      p.zoom = m.getZoom();
-    }
-
-    if( p.fitToBounds === true ){
+    if( !o.fromQuery && p.fitToBounds === true ){
 
       map.fitBounds([
         p.w || 0, 
@@ -4520,7 +4546,7 @@ export function flyTo(o) {
 
     }else{
       var opt = {
-        center: [p.lng||0,p.lat||0],
+        center: [ p.lng || 0, p.lat || 0 ],
         zoom: p.zoom || 0,
         duration: o.duration || 3000
       };

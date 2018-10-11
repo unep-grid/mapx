@@ -90,6 +90,19 @@ mxParseQuery <- function(urlSearch){
   }
 
   #
+  # Validate language
+  #
+
+  if(!noDataCheck(query$language)){
+  
+    languages <- .get(config,c('languages','list'))
+    if( ! query$language %in% languages ){
+       query$language <- NULL
+    }
+  
+  }
+
+  #
   # Collections selection
   #
   if(!noDataCheck(query$collections)){

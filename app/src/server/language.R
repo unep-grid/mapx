@@ -5,23 +5,30 @@
 observe({
   lang_def <- .get(config,c("languages","list"))[[1]]
   lang_ui <- input$selectLanguage
+  lang_query <- query$language
   lang_db <- .get(reactUser$data,c("data","user","cache","last_language"))
 
   isolate({
 
     lang_react <- reactData$language
 
-    if(noDataCheck(lang_react) && !noDataCheck(lang_db)){
-      lang_out <- lang_db
-    }else if(!noDataCheck(lang_ui)){
-      lang_out <- lang_ui
+    if(!noDataCheck(lang_query)){
+      query$language <<- NULL
+      lang_out <- lang_query
     }else{
-      lang_out <- lang_def
-    }
+      if(noDataCheck(lang_react) && !noDataCheck(lang_db)){
+        lang_out <- lang_db
+      }else if(!noDataCheck(lang_ui)){
+        lang_out <- lang_ui
+      }else{
+        lang_out <- lang_def
+      }
 
-    if(noDataCheck(lang_out)){
-      lang_out <- lang_def
+      if(noDataCheck(lang_out)){
+        lang_out <- lang_def
+      }
     }
+    mxUpdateUrlParams(list(language=lang_out))
     reactData$language <- lang_out
   })
 })

@@ -72,6 +72,7 @@ observe({
     mxModal(id="uiSelectProject",close=T)
     query$project <<- NULL
     if(!noDataCheck(project_out)){
+      mxUpdateUrlParams(list(project=project_out))
       reactData$project <- project_out
     }
 
@@ -242,11 +243,10 @@ observe({
       filter=filter
       )
 
-    lat <- mapPos[['lat']]
-    lng <- mapPos[['lng']]
-    zoom <- mapPos[['zoom']]
-    if(noDataCheck(zoom)) zoom <- mapPos[['z']]
-
+    if(noDataCheck(mapPos$zoom)){
+      mapPos$zoom <- mapPos$z
+      mapPos$z <- NULL
+    }
     #
     # Read map position from query
     #
@@ -254,14 +254,14 @@ observe({
       mapPos$lat  = as.numeric(query$lat)
       mapPos$lng = as.numeric(query$lng)
       mapPos$zoom = as.numeric(query$zoom)
- 
+      mapPos$fromQuery = TRUE 
       query$lat <<- NULL
       query$lng <<- NULL
       query$zoom <<- NULL
     }
 
     mglFlyTo(
-      id = config[["map"]][["id"]],
+      id = idMap,
       mapPos
       )
 

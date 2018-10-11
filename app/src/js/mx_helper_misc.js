@@ -59,28 +59,31 @@ export function paramsToObject(params) {
 * @return null
 */
 export function objToState(opt){
-  var out = "/";
-  var params = paramsToObject();
-  var keysNew = Object.keys(opt.data);
-  var dat;  
-  var val;
-  if(!opt.clean){
+  mx.helpers.onNextFrame(function(){
 
-    keysNew.forEach(kn=>{
-      val = opt.data[kn];
-      if(val){
-        params[kn] = val;
-      }else{
-        delete params[kn];
+    var out = "/";
+    var params = paramsToObject();
+    var keysNew = Object.keys(opt.data);
+    var dat;  
+    var val;
+    if(!opt.clean){
+      keysNew.forEach(kn=>{
+        val = opt.data[kn];
+        if(val){
+          params[kn] = val;
+        }else{
+          delete params[kn];
+        }
+      });
+
+      if(params){
+        out = out + '?'+ objToParams(params);
       }
-    });
 
-    if(params){
-      out = out + '?'+ objToParams(params);
     }
+    history.replaceState(null,null,out);
 
-  }
-  history.replaceState(null,null,out);
+  });
 }
 
 
@@ -94,10 +97,18 @@ export function objToState(opt){
 * @return {String} params string
 */
 export function objToParams(data){
-var esc = encodeURIComponent;
-return Object.keys(data)
-    .map(k => esc(k) + '=' + esc(data[k]))
-    .join('&');
+  var esc = encodeURIComponent;
+  var params = [];
+
+  Object.keys(data)
+    .forEach(k => {
+      if(k){
+        params.push(esc(k) + '=' + esc(data[k]));
+      }
+    });
+
+  return params.join('&');
+
 }
 
 
