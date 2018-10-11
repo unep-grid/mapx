@@ -54,7 +54,7 @@ reactViewsCompact <- reactive({
       rolesInProject = userRole,
       idUser = userData$id,
       language = language,
-      keys = c("id","pid","project","_edit","_title")
+      keys = c("id","pid","type","project","_edit","_title")
       )
 
 
@@ -78,9 +78,13 @@ reactViewsCompactAll <- reactive({
   language <- reactData$language
 
   viewsList <- reactViewsCompact()
-  idViews <- sapply(viewsList,`[[`,'id')
-  idViewsPublic <- mxDbGetViewsAllPublicProject(project)
 
+  idViews <- sapply(viewsList,`[[`,'id')
+  types <- sapply(viewsList,`[[`,'type')
+
+  idViews <- idViews[types %in% c('cc','vt','rt')]
+  idViewsPublic <- mxDbGetViewsAllPublicProject(project)
+  
   viewsPublic <- mxDbGetViewsTitle(idViewsPublic$id,asNamedList=TRUE,language)
   views <- mxDbGetViewsTitle(idViews,asNamedList=TRUE,language)
 

@@ -115,15 +115,15 @@ mxDbGetViewsAllPublicProject <- function( idProject, includeType = c('vt','cc','
 
   idViewsProjects <- mxDbGetQuery("WITH
 
-    views_external as (
+    views_external_project as (
       SELECT jsonb_array_elements_text(views_external) id_view
       FROM mx_projects
       WHERE id != '" + idProject +"' AND public = true
       ),
 
-    views_external_type  as (
+    views_external  as (
       SELECT id id_view 
-      FROM mx_views_latest v, views_external ve
+      FROM mx_views_latest v, views_external_project ve
       WHERE type IN " + types +"
       AND v.id = ve.id_view
       ),
@@ -141,16 +141,27 @@ mxDbGetViewsAllPublicProject <- function( idProject, includeType = c('vt','cc','
       WHERE jsonb_typeof(data #> '{\"projects\"}') = 'array' 
       ),
 
-    views_public as (
+    views_shared_public as (
       SELECT distinct v.id_view id_view
       FROM projects_public p, views_projects v
       WHERE v.id_project = p.id_project
       AND v.type IN " + types +"
+      ),
+
+    views_public as (
+      SELECT distinct v.id id_view
+      FROM projects_public p, mx_views_latest v 
+      WHERE v.project = p.id_project
+      AND v.type IN " + types +"
+      AND v.readers @> '[\"public\"]'
       )
+
 
     select distinct id_view from views_public
     UNION
-    select distinct id_view from views_external_type
+    select distinct id_view from views_shared_public
+    UNION
+    select distinct id_view from views_external
     ")
 
     return(idViewsProjects)
