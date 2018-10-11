@@ -407,6 +407,7 @@
     "fa": "",
     "ps": ""
   },
+
   {
     "id": "btn_get_layer_summary",
     "en": "Get layer summary",
@@ -1201,8 +1202,32 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector overlaps at current zoom",
-    "fr": "Mettre en évidence les chevauchements au niveau de zoom actuel",
+    "en": " [ experimental feature ] \n Highlight vector overlaps at current zoom",
+    "fr": " [ fonctionnalité expérimentale ] \n Mettre en évidence les chevauchements vectoriels au niveau de zoom actuel",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+{
+    "id": "title_config_overlap",
+    "en": "Overlap tool configuration",
+    "fr": "Configuration de l'outil de mise en évidence des chevauchements",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "select_overlap_number_layer",
+    "en": "Minimum number of intersects",
+    "fr": "Nombre de chevauchements minimum",
     "es": "",
     "ru": "",
     "zh": "",
@@ -5206,5 +5231,17 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }
+  },
+  {
+    "id": "set_projection_epsg_code",
+    "en": "Set the projection, using a code from the EPSG format",
+    "fr": "Définir la projection en utilisant un code du format EPSG",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }  
 ]
