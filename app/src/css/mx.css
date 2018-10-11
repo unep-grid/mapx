@@ -1554,6 +1554,19 @@ blockquote {
  font-size:0.8em;
 }
 
+/**
+* EPSG epsg ; projection code select group list
+*/
+.epsgio-box {
+  display: block;
+  padding: 10px;
+  margin: 5px;
+}
+.epsgio-box .epsgio-btn-choose {
+  width:100%;
+  margin:2px;
+}
+
 
 /**
 * Hint default

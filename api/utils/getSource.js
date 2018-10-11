@@ -92,6 +92,7 @@ function extractFromPostgres(config,cb){
   var id = config.layer;
   var email = config.email;
   var format = config.format;
+  var epsgCode = config.epsgCode || 4326;
   var iso3codes = config.iso3codes;
   var filename = config.filename || id;
   var onStop = cb.onStop;
@@ -163,7 +164,7 @@ function extractFromPostgres(config,cb){
     '-sql',sql,
     '-skipfailures',
     '-s_srs', 'EPSG:4326',
-    '-t_srs', 'EPSG:4326',
+    '-t_srs', 'EPSG:'+ epsgCode,
     '-progress',
     '-overwrite',
     filePath,

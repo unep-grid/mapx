@@ -45,11 +45,16 @@ observeEvent(reactData$sourceDownloadRequest,{
         choices = mxGetCountryList(language,includeWorld=F),
         multiple = TRUE
         ),
+      numericInput(
+        "numEpsgCode",
+        label = d("set_projection_epsg_code",language),
+        value = 4326,
+        ),
       textInput("txtDownloadFileName",
         label = d("download_file_name",language),
         value = subPunct(sourceTitle)
         ),
-        uiOutput("uiValidateDownload")
+      uiOutput("uiValidateDownload")
       )
 
     btnList <- list(
@@ -71,6 +76,16 @@ observeEvent(reactData$sourceDownloadRequest,{
     textCloseButton = d("btn_close",language),
     buttons = btnList
     )
+  #
+  # Update epsg handler
+  #
+
+  if( isDownloadable ){
+    mxEpsgBuildSearchBox('#numEpsgCode', list(
+        txtButtonSearch = d('search',language)    
+        ))
+  }
+
 })
 
 #
@@ -100,8 +115,10 @@ observe({
   })
 })
 
+
 observeEvent(input$btnSourceDownload,{
   mxCatch(title="btnSourceDownload",{
+  
 
     #
     # Get values
@@ -110,6 +127,7 @@ observeEvent(input$btnSourceDownload,{
     language <- reactData$language
     idSource <- conf$idSource
     format <- input$selectDownloadFormat
+    epsgCode <- as.numeric(input$numEpsgCode)
     emailUser <- reactUser$data$email
     emailAdmin <- .get(config,c("mail","admin"))
     filename <- removeExtension(input$txtDownloadFileName)
@@ -122,7 +140,8 @@ observeEvent(input$btnSourceDownload,{
         email =  emailUser,
         filename = filename,
         format = format,
-        iso3codes = iso3codes
+        iso3codes = iso3codes,
+        epsgCode = epsgCode
         ))
 
     mxModal(

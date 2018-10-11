@@ -23,6 +23,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler("mxUiHide", mx.helpers.hide);
   Shiny.addCustomMessageHandler("mxObjToState", mx.helpers.objToState);
   Shiny.addCustomMessageHandler("mxUpdateText", mx.helpers.updateText);
+  Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", mx.helpers.epsgBuildSearchBox);
   Shiny.addCustomMessageHandler("mxJsDebugMsg", mx.helpers.jsDebugMsg);
   Shiny.addCustomMessageHandler("mxButtonToggle", mx.helpers.buttonToggle);
   Shiny.addCustomMessageHandler("mxJsonToObj", mx.helpers.jsonToObj);
@@ -47,6 +48,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler('mglReset', mx.helpers.reset );
   Shiny.addCustomMessageHandler('mglSetUserData', mx.helpers.setUserData );
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', mx.helpers.handlerDownloadVectorSource);
+
   //Shiny.addCustomMessageHandler('mglTriggerUploadForm', mx.helpers.triggerUploadForm);
 
 });
