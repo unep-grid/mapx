@@ -147,7 +147,7 @@ config[["map"]] <- list(
   lng = 17.3440031,
   maxZoom = 22,
   minZoom = 0,
-  token = "pk.eyJ1IjoiaGVsc2lua2kiLCJhIjoia1lFZVlNZyJ9.dVxyXwMZWRmnrXnmOuWAMQ",
+  token = "",
   id = "map_main",
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
@@ -306,12 +306,9 @@ config[["project"]] <- list()
 config[["project"]] =  list(
   default = "MX-YHJ-6JJ-YLS-SCV-VL1",
   creation = list(
-    usersAllowed = c(1,17,55,6)
+    usersAllowed = c(1)
     )
   )
-
-
-
 
 
 

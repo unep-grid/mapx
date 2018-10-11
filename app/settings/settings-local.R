@@ -11,6 +11,7 @@ config$pg$password <- Sys.getenv("POSTGRES_USER_WRITE_PASSWORD")
 config$pg$host <- Sys.getenv("POSTGRES_HOST")
 config$pg$host <- Sys.getenv("POSTGRES_HOST")
 config$project$default <- Sys.getenv("MAPX_PROJECT_DEFAULT")
-
+config$project$creation$usersAllowed <- jsonlite::fromJSON(Sys.getenv("MAPX_PROJECT_CREATORS"))
+config$map$token <- Sys.getenv("MAPX_MAPBOX_TOKEN")
 
 

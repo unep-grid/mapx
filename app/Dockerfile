@@ -59,6 +59,10 @@ RUN apt-get update \
 
 #
 # Config server
+# 
+# NOTE: shiny-server does not allow reading env variables, 
+# that's why I've made a script to rewrite settings-local.R 
+# when the image is built.
 #
 RUN dest=${MAPX_PATH_APP}/settings/settings-local.R\
     && echo "\
@@ -72,6 +76,9 @@ RUN dest=${MAPX_PATH_APP}/settings/settings-local.R\
     echo 'config\$pg\$password <- '\\\"\$POSTGRES_USER_WRITE_PASSWORD\\\" >>  $dest \n\
     echo 'config\$pg\$host <- '\\\"\$POSTGRES_HOST\\\" >>  $dest \n\
     echo 'config\$project\$default <- '\\\"\$MAPX_PROJECT_DEFAULT\\\" >>  $dest \n\
+    echo 'projectCreators <- '\\\"\$MAPX_PROJECT_CREATORS\\\" >>  $dest \n\
+    echo 'config\$project\$creation\$usersAllowed <- jsonlite::fromJSON(projectCreators)' >>  $dest \n\
+    echo 'config\$map\$token <- '\\\"\$MAPX_MAPBOX_TOKEN\\\" >>  $dest \n\
     mkdir -p "${MAPX_PATH_LOG}" \n\
     chown shiny:shiny "${MAPX_PATH_LOG}" \n\
     exec shiny-server 2>&1 " > /usr/bin/shiny-server.sh \
