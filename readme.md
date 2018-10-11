@@ -3,6 +3,9 @@
 - 1.5.22
     - Improvement
       - APP/API Let the user provide a projection system for download
+      - APP : add basic option for highlight overlap tools
+      - APP/API : new environment variable to store tokens and allowed user id as creator
+      - APP : Add public view from public project in story maps available views
 - 1.5.21
    - Improvement
       - API : Set pre-simplification only for zoom > 10 in postgres. 
