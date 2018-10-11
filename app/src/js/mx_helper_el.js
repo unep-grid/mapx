@@ -1,5 +1,4 @@
 /* jshint esversion:6 */
-import * as mx from './mx_init.js';
 
 export function el(type, ...opt) {
   var el = document.createElement(type);
@@ -10,6 +9,14 @@ export function el(type, ...opt) {
         item = o[a];
         if( a == "on" && item instanceof Array && typeof(item[0]) === "string" && typeof(item[1]) === "function"){
           el.addEventListener(item[0],item[1]);
+        }else if( a == "innerText" && typeof item == "string" ){
+          el.innerText = item;
+        }else if( (a == "dataset" || a == "style") && typeof item == "object" ){
+          Object.keys(item).forEach(i => {
+            el[a][i] = item[i];
+          }); 
+        }else if( a == "class" && item instanceof Array ){
+          item.forEach(c => el.classList.add(c));
         }else{
           el.setAttribute(a, o[a]);
         }});
