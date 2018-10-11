@@ -53,6 +53,7 @@ PixOp.prototype.initConfig = function(){
   px.map = px.config.map;
   px.id = px.config.id;
 
+
   px._timing('init_config','stop');
 };
 
@@ -70,6 +71,9 @@ PixOp.prototype.getDefault = function(type){
       canvas : {}
     },
     render_options : {
+      overlap : {
+        nLayersOverlap : 2
+      },
       type : 'overlap',
       debug : false,
       canvas : {
@@ -181,7 +185,7 @@ PixOp.prototype.render = function(opt){
   var px = this;
   var res = {};
   var map = px.map;
-
+  opt = opt || {};
   render();
 
   function render(){
@@ -189,7 +193,7 @@ PixOp.prototype.render = function(opt){
     px._timing('render','start',true);
 
     px.reset()
-      .updateOptions(opt)
+      .updateRenderOptions(opt)
       .updateMapParams()
       .updateFeatures()
       .layersToPixelsStore()
@@ -372,6 +376,7 @@ PixOp.prototype._findOverlap = function(){
   var count = 0, countAll = 0;
   var store = px.data.pixels;
   var nLayer = store.length;
+  var nLayersOverlap = ( opt.overlap.nLayersOverlap ) || nLayer; // 0 means all
 
   for ( i = 0; i < nPix; i++ ) {
     k =  i * 4;
@@ -380,8 +385,7 @@ PixOp.prototype._findOverlap = function(){
     for (j = 0; j < nLayer; j++) {
       if( store[j][k+3]  > 0 ) count++;
     }
-
-    if (count > 1) {
+    if ( count >= nLayersOverlap ) {
       data[k] = 255;
       data[k+1] = 0;
       data[k+2] = 0;
@@ -417,6 +421,8 @@ PixOp.prototype._findOverlapSpotlight = function(){
   var hasOverlap = false;
   var off = px.makeCanvas({width:width,height:height}); 
   var ctxOff = off.getContext("2d",{ alpha: false }); 
+  var nLayersOverlap = ( opt.overlap.nLayersOverlap ) || nLayer; // 0 means all
+
   /**
    * Black rect as starting point. 
    * everything else will be dest-out : like an eraser, new shapes
@@ -444,7 +450,7 @@ PixOp.prototype._findOverlapSpotlight = function(){
         if( ! hasOverlap ){
           if( store[ j ][k+3]  > 0 ){
             count++;
-            if ( count > 1 ) {
+            if ( count >= nLayersOverlap ) {
               hasOverlap = true;
               countAll += count;
               ctxOff.drawImage(buffer,x-radius,y-radius);
@@ -483,7 +489,7 @@ PixOp.prototype.getCircle = function(radius){
 };
 
 
-PixOp.prototype.updateOptions = function(opt){
+PixOp.prototype.updateRenderOptions = function(opt){
   var px = this;
   var def = px.getDefault('render_options');
   opt = opt || def;
@@ -695,7 +701,7 @@ PixOp.prototype.layerToCanvas = function(layer){
               }
               if( isPoly ){
                 ctx.closePath();
-                ctx.stroke();
+                //ctx.stroke();
                 ctx.fill();
               }
             }
@@ -1154,4 +1160,89 @@ PixOp.prototype.loadVectorModules = function(){
   });
 
 };
+
+
+/**
+* Pixop interface handler
+*/
+export function overlapsSpotlightUpdate(){
+
+  var state = overlapsSpotlightState();
+
+  if( ! state.enabled ) return;
+
+  mx.pixop.render({
+    type : 'overlap-spotlight',
+    debug : true,
+    overlap : {
+      nLayersOverlap : state.nLayers || 0
+    },
+    canvas : { 
+      add : true,
+      cicleRadius : 1000,
+      bufferSpotlight : 10
+    },
+    geojson:{ 
+      add :false 
+    }
+  });
+}
+
+export function overlapsSpotlightClear(){
+  mx.pixop.clear();
+}
+
+export function overlapsSpotlightToggle(){
+  var state = mx.helpers.overlapsSpotlightState;
+  var clear = mx.helpers.overlapsSpotlightClear;
+  var update = mx.helpers.overlapsSpotlightUpdate;
+  var map = mx.helpers.getMap();
+  var currState = state();
+
+  if(! currState.enabled ){
+    state(true);
+    update();
+    mx.helpers.on('view_add',update);
+    mx.helpers.on('view_remove',update);
+    mx.helpers.on('view_filter',update);
+    map.on('moveend',update);
+    currState.elNum.addEventListener('change',update);
+  }else{
+    state(false);
+    clear();
+    mx.helpers.off('view_add',update);
+    mx.helpers.off('view_remove',update);
+    mx.helpers.off('view_filter',update);
+    map.off('moveend',update);
+    currState.elNum.removeEventListener('change',update);
+  }
+
+}
+
+export function overlapsSpotlightState(set){
+
+  var clActive = 'active';
+  var elBtn = document.getElementById("btnOverlapSpotlight");
+  var elSelectNum = document.getElementById("selectNLayersOverlap");
+
+  if( set != null ){
+
+    if(set==true){
+      elBtn.classList.add(clActive);
+    }else{
+      elBtn.classList.remove(clActive);
+    }
+  }
+
+  return {
+    elNum : elSelectNum,
+    elBtn : elBtn,
+    enabled : elBtn
+    .classList
+    .contains('active'),
+    nLayers :elSelectNum.value
+  };
+
+}
+
 

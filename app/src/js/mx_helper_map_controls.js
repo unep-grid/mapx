@@ -287,25 +287,7 @@ mapControlApp.prototype.onAdd = function(map) {
       classes:"fa fa-bullseye",
       key:"btn_overlap_spotlight",
       action:function(e){
-        var isActive = this.classList.contains('active');
-        var clear = mx.helpers.overlapsSpotlightClear;
-        var update = mx.helpers.overlapsSpotlightUpdate;
-        var map = mx.helpers.getMap();
-        if(!isActive){
-          this.classList.add('active');
-          update();
-          mx.helpers.on('view_add',update);
-          mx.helpers.on('view_remove',update);
-          mx.helpers.on('view_filter',update);
-          map.on('moveend',update);
-        }else{
-          clear();
-          this.classList.remove('active');
-          mx.helpers.off('view_add',update);
-          mx.helpers.off('view_remove',update);
-          mx.helpers.off('view_filter',update);
-          map.off('moveend',update);
-        }
+        mx.helpers.overlapsSpotlightToggle();
       }
     },
     btnSetNorth:{

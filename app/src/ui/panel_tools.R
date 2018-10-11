@@ -27,8 +27,27 @@ areaLiveCalc  <- tags$div(
   tags$div(class="form-control",id="txtAreaSum")
   )
 
+overlapConfig <- tags$div(
+  tags$h4(`data-lang_key`="title_config_overlap"),
+  tags$div(class="well",
+    tags$div(class="form-group shiny-input-container",
+      tags$label(class="control-label",`data-lang_key`="select_overlap_number_layer",`for`="selectNLayersOverlap","nLayers"),
+      tags$div(
+        tags$select( id = "selectNLayersOverlap",
+          tags$option(value="all",'All'),
+          tags$option(value="1",'1'),
+          tags$option(selected=TRUE,value="2",'2'),
+          tags$option(value="3",'3'),
+          tags$option(value="4",'4'),
+          tags$option(value="5",'5')
+          )
+        )
+      )
+    )
+  )
+
 themeColor <- tagList(
-  tags$h4(`data-lang_key`="title_settings_colors"),
+  tags$h3(`data-lang_key`="title_settings_colors"),
   tags$div(
     class="mx-settings-colors",
     tags$div(id="inputThemeColors")
@@ -50,10 +69,11 @@ queryMaker <- uiOutput("uiBtnQueryMaker")
 tagList(
   tags$div(class="mx-tools-container",
     tags$div(class="mx-tools-content mx-scroll-styled",
-      tags$h3(`data-lang_key`="title_tools"),
-      tags$h4(`data-lang_key`="title_tools_map"),
+      tags$h2(`data-lang_key`="title_tools"),
+      tags$h3(`data-lang_key`="title_tools_map"),
       areaLiveCalc,
-      tags$h4(`data-lang_key`="title_tools_share"),
+      overlapConfig,
+      tags$h3(`data-lang_key`="title_tools_share"),
       btnIframeBuilder,
       viewAdd,
       sourceUpload,

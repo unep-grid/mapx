@@ -2670,26 +2670,6 @@ export function viewSetFilter(o){
 }
 
 
-export function overlapsSpotlightUpdate(){
-
-  mx.pixop.render({
-    type : 'overlap-spotlight',
-    debug : true,
-    canvas : { 
-      add : true,
-      cicleRadius : 1000,
-      bufferSpotlight : 10
-    },
-    geojson:{ 
-      add :false 
-    }
-  });
-}
-
-export function overlapsSpotlightClear(){
-  mx.pixop.clear();
-}
-
 
 /**
  * Set this view opacity
