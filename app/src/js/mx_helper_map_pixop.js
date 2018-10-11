@@ -376,7 +376,8 @@ PixOp.prototype._findOverlap = function(){
   var count = 0, countAll = 0;
   var store = px.data.pixels;
   var nLayer = store.length;
-  var nLayersOverlap = ( opt.overlap.nLayersOverlap ) || nLayer; // 0 means all
+  var nLayersOverlap = ( opt.overlap.nLayersOverlap * 1 ) || nLayer; // 0 means all
+
 
   for ( i = 0; i < nPix; i++ ) {
     k =  i * 4;
@@ -421,7 +422,7 @@ PixOp.prototype._findOverlapSpotlight = function(){
   var hasOverlap = false;
   var off = px.makeCanvas({width:width,height:height}); 
   var ctxOff = off.getContext("2d",{ alpha: false }); 
-  var nLayersOverlap = ( opt.overlap.nLayersOverlap ) || nLayer; // 0 means all
+  var nLayersOverlap = ( opt.overlap.nLayersOverlap * 1 ) || nLayer; // 0 means all
 
   /**
    * Black rect as starting point. 
@@ -1224,6 +1225,7 @@ export function overlapsSpotlightState(set){
   var clActive = 'active';
   var elBtn = document.getElementById("btnOverlapSpotlight");
   var elSelectNum = document.getElementById("selectNLayersOverlap");
+  var enabled = false;
 
   if( set != null ){
 
@@ -1234,13 +1236,15 @@ export function overlapsSpotlightState(set){
     }
   }
 
+  enabled = elBtn
+    .classList
+    .contains('active');
+
   return {
     elNum : elSelectNum,
     elBtn : elBtn,
-    enabled : elBtn
-    .classList
-    .contains('active'),
-    nLayers :elSelectNum.value
+    enabled : enabled,
+    nLayers : elSelectNum.value == 'all' ? 0 : elSelectNum.value * 1
   };
 
 }
