@@ -1461,11 +1461,11 @@ export function storyController(o){
       }
 
 
-      setTimeout(function(){
-
-        if( o.data.elBullets ){
+      if( o.data.elBullets ){
+        setTimeout(function(){
           o.data.elBullets.remove();
-        }
+        },10);
+      }
 
         if( o.data.elScroll ){
           o.data.elScroll.remove();
@@ -1497,7 +1497,6 @@ export function storyController(o){
         }
 
 
-      },10);
     }
   }
 
