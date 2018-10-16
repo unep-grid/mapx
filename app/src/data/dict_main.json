@@ -1946,9 +1946,9 @@
   },
   {
     "id": "login_info_box",
-    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member.",
-    "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre.",
-    "es": "Si todavía no está registrado, una autenticación exitosa creará una cuenta nueva y desbloqueará nuevas características. Si ya está registrado, una autenticación exitosa le dará acceso a todos los proyectos de los que ya es miembro.",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
+    "fr": "Si vous n'êtes pas encore enregistré, une authentification réussie créera un nouveau compte et vous donnera accès à de nouvelles fonctionnalités. Si vous êtes déjà enregistré, une authentification réussie vous permettra en plus d'accéder à tous les projets dont vous êtes déjà membre. En vous enregistrant dans MapX, vous acceptez que votre adresse électronique soit collectée et utilisée de manière anonyme pour produire des statistiques de performance de la plateforme.",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
