@@ -692,8 +692,8 @@ PixOp.prototype.layerToCanvas = function(layer){
           ctx.drawImage(circle,point.x-radius,point.y-radius);
         }else{
           if ( first ) {
-            ctx.moveTo(point.x, point.y);
             ctx.beginPath();
+            ctx.moveTo(point.x, point.y);
           } else {
             ctx.lineTo(point.x, point.y);
             if( last ){
@@ -702,7 +702,6 @@ PixOp.prototype.layerToCanvas = function(layer){
               }
               if( isPoly ){
                 ctx.closePath();
-                //ctx.stroke();
                 ctx.fill();
               }
             }
