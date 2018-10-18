@@ -14,6 +14,7 @@ _data
 
 # build web files
 app/www/*
+app/src/built/*
 
 # History files
 .Rhistory
