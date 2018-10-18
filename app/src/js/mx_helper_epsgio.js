@@ -157,7 +157,7 @@ export function epsgBuildSearchBox(opt){
   */
 export function epsgQuery(code,cb){
 
-  var url = "http://epsg.io/?q=" + code + "&format=json";
+  var url = "https://epsg.io/?q=" + code + "&format=json";
 
   if (!code){
     cb([]);
