@@ -5,7 +5,7 @@ server <- function(input,output,session){
   #
   # Allow reconnection
   #
-  session$allowReconnect(true)
+  session$allowReconnect(TRUE)
     #
     # Context specific reactive values
     #
