@@ -2,6 +2,10 @@
 #  SERVER FUNCTION
 #
 server <- function(input,output,session){
+  #
+  # Allow reconnection
+  #
+  session$allowReconnect(true)
     #
     # Context specific reactive values
     #

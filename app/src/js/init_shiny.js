@@ -16,7 +16,7 @@ import '../css/mx_jed.css';
 
 import "./mx_binding_helper.js";
 import "./mx_binding_pwd.js";
-import "./shiny.min.js";
+import "./shiny.js";
 
 console.log("INIT SHINY");
 
