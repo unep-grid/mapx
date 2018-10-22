@@ -1,5 +1,10 @@
 ## MapX : change log
 
+- 1.5.24
+    - Improvement
+      - APP : Testing session reconnection
+    - Bug fixing
+      - APP : Overlap function in PixOp had issue with lines: the first coordinate of each line could have been omited.
 - 1.5.23
     - Improvement
       - APP : save and update query parameters: project, language, lat, lng, zoom. 
