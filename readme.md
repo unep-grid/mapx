@@ -3,6 +3,7 @@
 - 1.5.24
     - Improvement
       - APP : Testing session reconnection
+      - APP : Instant estimate of overlap area
     - Bug fixing
       - APP : Overlap function in PixOp had issue with lines: the first coordinate of each line could have been omited.
 - 1.5.23
