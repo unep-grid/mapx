@@ -98,7 +98,7 @@ module.exports = {
     ]
   },
   output: {
-    filename: '[name]-[hash].bundle.js',
+    filename: 'mx_[id].bundle.js',
     path: path.resolve(__dirname, '../www')
   }
 };

@@ -489,6 +489,7 @@ export function uiReadMore(selector, options) {
 * Create a foldable element
 * @param {Object} o options
 * @param {Element} o.content Element to fold
+* @param {String} o type 'caret' or 'checkbox'
 * @param {String} o.label Label displayed in switch
 * @param {String} o.labelKey Label key for dataset.key_lang
 * @param {String} o.labelClass Label class
@@ -505,13 +506,14 @@ export function uiFold(o){
   var classScroll = "mx-scroll-styled";
   var classLabel = "fold-label" ;
   var classSwitch = "fold-switch";
+  var classSwitchCaret = "fold-caret";
   var id =  makeId();
+  var type = o.type || 'caret';
 
   if(!content) return;
   open = open || false; 
   label = label || "";
   labelKey = labelKey || label;
-
   var elInput = document.createElement("input");
   if(onChange){
      elInput.onchange=onChange;
@@ -527,7 +529,10 @@ export function uiFold(o){
   if(o.labelClass) elLabel.classList.add(o.labelClass);
   elLabel.setAttribute("for",id);
   elInput.id = id;
-  elInput.classList.add("fold-switch");
+  elInput.classList.add(classSwitch);
+  if( type == "caret" ){
+    elInput.classList.add(classSwitchCaret);
+  }
   elInput.checked = open;
   elLabel.innerHTML = label;
   elLabel.dataset.lang_key = labelKey;

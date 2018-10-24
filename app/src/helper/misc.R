@@ -2497,16 +2497,20 @@ mxScroll <- function(content){
 #' @param content {ui} 
 #' @param labelDictKey {character} label key
 #' @param labelText {character} label text
+#' @param type {character} fold type : caret or checkbox
 #' @param open {boolean} fold open
 #' @param classContainer {character} Name of the class for the fold container
 #' @param classContent {character} Name of the class for the fold content
 #' @param classLabel {character} Name of the class for the label
 #' @export
 #mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
-mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL, open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label",classScroll="mx-scroll-styled"){
+mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL,type = 'caret', open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label",classScroll="mx-scroll-styled"){
   if(noDataCheck(id)) id <- randomString()
 
-  elInput = tags$input(type="checkbox",id=id,class="fold-switch")
+  foldType = ifelse( type == "caret",'fold-caret','fold-check' )
+
+
+  elInput = tags$input(type="checkbox",id=id,class="fold-switch" + " " + foldType )
 
   if(open){
     elInput$attribs$checked=T
@@ -2518,7 +2522,7 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
      label = tags$label(labelUi,class=classLabel,`for`=id)
   }
 
-  tags$div(class=classContainer,
+  tags$div(class=classContainer + " " + foldType,
     elInput,
     label,
     tags$div(class= paste(classContent,classScroll),

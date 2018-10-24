@@ -51,7 +51,7 @@ module.exports = merge(common, {
     // clean www before building
     new CleanWebpackPlugin(
       [
-        '../www'
+        '../www/*'
       ],
       {
         exclude:  [],

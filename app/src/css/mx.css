@@ -183,8 +183,8 @@ blockquote {
 /**
 * Tools
 */
-.mx-tools-content .btn,
-.mx-tools-content .form-control {
+.mx-tools-content .btn.action-button {
+/*.mx-tools-content .form-control {*/
   width: 100%;
   text-align: left;
   margin: 5px;
@@ -319,7 +319,7 @@ blockquote {
   background: var(--mx_ui_background);
   color: var(--mx_map_text);
   padding: 30px;
-  border-radius: 10px;
+  border-radius: 3px;
 }
 .mx #ss-connect-dialog label {
   color: var(--mx_map_text);
@@ -606,7 +606,7 @@ blockquote {
   z-index: 90;
   border: 1px solid;
   padding: 0px;
-  border-radius: 0px;
+  border-radius: 3px;
   overflow: auto;
   resize: both;
   max-height: calc(100vh - 80px);
@@ -890,7 +890,7 @@ blockquote {
   max-width: 100%;
   display: block;
   width: 100%;
-  border-radius:0px;
+  /*border-radius:0px;*/
 }
 
 
@@ -1243,19 +1243,6 @@ blockquote {
 /**
 * Text switch
 */
-.check-toggle-group {
-  /*padding: 5px;*/
-  /*display: -webkit-flex;*/
-  /*display: flex;*/
-  /*flex-flow: row wrap;*/
-}
-
-.check-toggle-group > .fold-container {
-  /*width: 50%;*/
-  /*padding-right: 0px; */
-  /*margin: 0px; */
-}
-
 .check-toggle {
   display:inline-block;
 }
@@ -1399,8 +1386,7 @@ blockquote {
 */
 
 .fold-container { 
-  /*padding-right: 7px;*/
-  /*margin: 2px;*/
+  margin:0px;
 }
 
 .fold-container .fold-content {
@@ -1414,10 +1400,7 @@ blockquote {
   cursor:pointer;
 }
 
-
-
-
-.fold-container .fold-switch {
+.fold-container .fold-switch.fold-caret {
   display: none;
   max-width:0px;
   visibility: hidden;
@@ -1427,14 +1410,12 @@ blockquote {
 .fold-container .fold-label {
   padding:10px;
   margin: 0px;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
+  font-weight: normal;
   font-size: 13px;
   letter-spacing: 1.2;
 }
 
-.fold-container .fold-switch:not(checked) ~ .fold-label::after{
+.fold-container .fold-switch.fold-caret:not(checked) ~ .fold-label::after{
     transition: transform 0.1s ease-in-out;
     margin: 3px;
     margin-top: 8px;
@@ -1443,7 +1424,7 @@ blockquote {
     font-family: fontawesome;
 }
 
-.fold-container .fold-switch:checked ~ .fold-label::after {
+.fold-container .fold-switch:checked.fold-caret ~ .fold-label::after {
   transform : rotate(90deg);
 }
 

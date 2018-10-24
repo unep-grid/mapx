@@ -42,6 +42,41 @@ overlapConfig <- tags$div(
           tags$option(value="5",'5')
           )
         )
+      ),
+    mxFold(
+      type = 'checkbox',
+      labelDictKey = "label_check_instant_overlap",
+      id = "checkEnableOverlapArea",
+      content = tagList(
+        tags$div(
+          class="form-group",
+          tags$label(
+            `data-lang_key`='label_area_instant_overlap'
+            ),
+          tags$div(
+            class="form-control",
+            id="txtAreaOverlap"
+            ),
+          tags$small(
+            `data-lang_key`='label_help_area_instant_overlap',
+            class = 'text-muted'
+            )
+          ),
+        tags$div(
+          class="form-group",
+          tags$label(
+            `data-lang_key`='label_resol_instant_overlap'
+            ),
+          tags$div(
+            class="form-control",
+            id="txtResolOverlap"
+            ),
+          tags$small(
+            `data-lang_key`='label_help_resol_instant_overlap',
+            class = 'text-muted'
+            )
+          )
+        )
       )
     )
   )
