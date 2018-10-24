@@ -5,8 +5,11 @@ server <- function(input,output,session){
   #
   # Allow reconnection
   #
-  session$allowReconnect(TRUE)
-    #
+  # session$allowReconnect(TRUE) # DEFAULT FALSE.
+  #  NOTE: good idea but... will send ALL input included
+  #  forms, email request, project deletion, creation, etc... 
+  #
+  #
     # Context specific reactive values
     #
     reactUser <- reactiveValues()
