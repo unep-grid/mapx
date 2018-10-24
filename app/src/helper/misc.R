@@ -1471,8 +1471,8 @@ mxEmailIsValid <- function(email=NULL){
     email <- as.character(email)
     tryCatch({
       # regex expression
-      # see http://stackoverflow.com/questions/201323/using-a-regular-expression-to-validate-an-email-address
-      regex <- "([-!#-'*+/-9=?A-Z^-~]+(\\.[-!#-'*+/-9=?A-Z^-~]+)*|\"([]!#-[^-~ \\t]|(\\\\[\\t -~]))+\")@[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?(\\.[0-9A-Za-z]([0-9A-Za-z-]{0,61}[0-9A-Za-z])?)+"
+      # see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/email
+      regex <- "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
       # if there is a match, return TRUE
       res <- sapply(email,function(e){
         isTRUE(grep(regex,x=e,perl=T)==1)
@@ -1482,7 +1482,6 @@ mxEmailIsValid <- function(email=NULL){
   }
   return(res)
 }
-
 
 #' fromJSON wrapper and error handler
 #' 
