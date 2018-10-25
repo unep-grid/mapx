@@ -157,7 +157,7 @@ divSearchVectorTiles <- tags$div(
         ),
       tags$div(
         class="mx-slider-range-max",
-        "{{=h.path(view.data.attribute.max,0)}}"
+        "{{=h.path(view,'data.attribute.max',0)}}"
         )
       )
     ),
