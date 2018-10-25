@@ -7,6 +7,8 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+
 
 module.exports = merge(common, {
   devtool : false,
@@ -75,7 +77,22 @@ module.exports = merge(common, {
         }
       }
     }),
-    new FaviconsWebpackPlugin('./src/png/map-x-logo.png')
+    //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
+    new FaviconsWebpackPlugin('./src/svg/map-x-logo.svg'),
+    new WebpackPwaManifest({
+      name: 'MapX',
+      short_name: 'MapX',
+      description: 'A cloud solution for mapping and monitoring the sustainable use of natural resources',
+      background_color: '#15b0f8',
+      theme_color: '#15b0f8',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      icons: [
+        {
+          src: './src/svg/map-x-logo.svg',
+          sizes: [96, 128, 192, 256, 384, 512,1024] // multiple sizes
+        }
+      ]
+    })
   ]
 
 });
