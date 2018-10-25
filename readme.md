@@ -1,5 +1,11 @@
 ## MapX : change log
 
+- 1.5.25
+    - Improvement 
+      - APP 
+          - Upgrade all dependencies, fixes related issues
+          - Upgrade build system to Webpack 4
+          - Solve issues with translation rendering in metadata viewer 
 - 1.5.24
     - Improvement
       - APP : Testing session reconnection
