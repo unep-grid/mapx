@@ -1,4 +1,4 @@
-/* jshint esversion:6, evil: true */
+/* jshint evil:true, esversion:6  */
 import * as mx from './mx_init.js';
 
 
@@ -257,8 +257,8 @@ export function initMapx(o){
       })
       .then(function(style){
         if(style) return style;
-        return System.import("../data/style_mapx.json")
-          .then(function(style){
+        var promStyle = import("../data/style_mapx.json");
+        promStyle.then(function(style){
             mx.data.config.setItem("style@default",style);
             return style;
           });
@@ -402,13 +402,11 @@ export function initMapxApp(o){
      * Send loading confirmation to shiny
      */
   o.map.on('load', function() {
-    
+
     /*
-    * Init pixop instance
+    * Init pixop
     */
-    mx.pixop = new mx.helpers.PixOp({
-       debug: true
-    });
+    mx.helpers.initPixop();
 
     /*
      * secondary centering method
@@ -1632,8 +1630,8 @@ export function makeTransparencySlider(o) {
   function makeSlider(){
 
     Promise.all([
-    System.import("nouislider"),
-    System.import("../../node_modules/nouislider/distribute/nouislider.css")
+    import("nouislider"),
+    import("../../node_modules/nouislider/distribute/nouislider.css")
     ]).then(function(module){
 
       var noUiSlider = module[0];
@@ -1702,58 +1700,64 @@ export function makeNumericSlider(o) {
         max: max
       };
 
-    System.import("nouislider").then(function(noUiSlider){
-     var slider = noUiSlider.create(el, {
-        range: range,
-        step: ( min + max ) / 1000,
-        start: [ min, max ],
-        connect: true,
-        behaviour: 'drag',
-        tooltips: false
-      });
+      Promise.all([
+        import("nouislider"),
+        import("../../node_modules/nouislider/distribute/nouislider.css")
+      ]).then(function(module){
 
-      slider.targetView = view;
+        var noUiSlider = module[0];
 
-      /*
-       * Save the slider in the view
-       */
-      view._interactive.numericSlider = slider;
-
-      /*
-       * 
-       */
-      slider.on("slide", mx.helpers.debounce(function(n, h) {
-        var view =  this.targetView;
-        var layerExists, filter;
-
-        var elContainer = this.target.parentElement;
-        var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-        var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-        var k = view.data.attribute.name;
-
-        /* Update text values*/
-        if (n[0]) {
-          elDMin.innerHTML = n[0];
-        }
-        if (n[1]) {
-          elDMax.innerHTML = " – " + n[1];
-        }
-
-        filter = ['any', 
-          ['all', 
-            ['<=', k, n[1]*1],
-            ['>=', k, n[0]*1],
-          ],
-          ['!has', k],
-        ];
-
-        view._setFilter({
-          filter : filter,
-          type : "numeric_slider"
+        var slider = noUiSlider.create(el, {
+          range: range,
+          step: ( min + max ) / 1000,
+          start: [ min, max ],
+          connect: true,
+          behaviour: 'drag',
+          tooltips: false
         });
 
-      }, 10 ));
-    });
+        slider.targetView = view;
+
+        /*
+         * Save the slider in the view
+         */
+        view._interactive.numericSlider = slider;
+
+        /*
+         * 
+         */
+        slider.on("slide", mx.helpers.debounce(function(n, h) {
+          var view =  this.targetView;
+          var layerExists, filter;
+
+          var elContainer = this.target.parentElement;
+          var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+          var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+          var k = view.data.attribute.name;
+
+          /* Update text values*/
+          if (n[0]) {
+            elDMin.innerHTML = n[0];
+          }
+          if (n[1]) {
+            elDMax.innerHTML = " – " + n[1];
+          }
+
+          filter = ['any', 
+            ['all', 
+              ['<=', k, n[1]*1],
+              ['>=', k, n[0]*1],
+            ],
+            ['!has', k],
+          ];
+
+          view._setFilter({
+            filter : filter,
+            type : "numeric_slider"
+          });
+
+        }, 10 ));
+      });
     }
   }
 }
@@ -1824,76 +1828,83 @@ export function makeTimeSlider(o) {
         start.push(min);
         start.push(max);
 
-    System.import("nouislider").then(function(noUiSlider){
-        var  slider = noUiSlider.create(el, {
-          range: range,
-          step: 24 * 60 * 60 * 1000,
-          start: start,
-          connect: true,
-          behaviour: 'drag',
-          tooltips: false,
-          format: {
-            to: fTo,
-            from: fFrom
-          }
-        });
 
-        /**
-         * Save slider in the view and view ref in target
-         */
-        slider.targetView = view;
-        view._interactive.timeSlider = slider;
+        Promise.all([
+          import("nouislider"),
+          import("../../node_modules/nouislider/distribute/nouislider.css")
+        ]).then(function(module){
 
-        /*
-         * create distribution plot in time slider
-         */
-        /* NOTE: removed chart. Removed dependencies to chartist
+          var noUiSlider = module[0];
 
-        /*
-         * 
-         */
-        slider.on("slide", mx.helpers.debounce(function(t, h) {
-          var filterAll = [];
-          var filter = [];
-          var view = this.targetView;
-          var layerExists;
-          var elContainer = this.target.parentElement;
-          var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-          var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-
-          /* save current time value */
-          //ime.extent.set = t;
-
-          /* Update text values*/
-          if (t[0]) {
-            elDMin.innerHTML = mx.helpers.date(t[0]);
-          }
-          if (t[1]) {
-            elDMax.innerHTML = " – " + mx.helpers.date(t[1]);
-          }
-
-          filter = ['any'];
-          filterAll = ["all"];
-          filter.push(["==",k.t0,-9e10]);
-          filter.push(["==",k.t1,-9e10]);
-
-          if ( hasT0 && hasT1 ) {
-            filterAll.push( ['<=', k.t0, t[1] / 1000] ); 
-            filterAll.push( ['>=', k.t1, t[0] / 1000] );
-          } else if (hasT0) {
-            filterAll.push( ['>=', k.t0, t[0] / 1000] );
-            filterAll.push( ['<=', k.t0, t[1] / 1000] );
-          }         
-          filter.push(filterAll);
-
-          view._setFilter({
-            filter : filter,
-            type : "time_slider"
+          var  slider = noUiSlider.create(el, {
+            range: range,
+            step: 24 * 60 * 60 * 1000,
+            start: start,
+            connect: true,
+            behaviour: 'drag',
+            tooltips: false,
+            format: {
+              to: fTo,
+              from: fFrom
+            }
           });
 
-        }, 10 ));
+          /**
+           * Save slider in the view and view ref in target
+           */
+          slider.targetView = view;
+          view._interactive.timeSlider = slider;
 
-       });
+          /*
+           * create distribution plot in time slider
+           */
+          /* NOTE: removed chart. Removed dependencies to chartist
+
+          /*
+           * 
+           */
+          slider.on("slide", mx.helpers.debounce(function(t, h) {
+            var filterAll = [];
+            var filter = [];
+            var view = this.targetView;
+            var layerExists;
+            var elContainer = this.target.parentElement;
+            var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+            var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+
+            /* save current time value */
+            //ime.extent.set = t;
+
+            /* Update text values*/
+            if (t[0]) {
+              elDMin.innerHTML = mx.helpers.date(t[0]);
+            }
+            if (t[1]) {
+              elDMax.innerHTML = " – " + mx.helpers.date(t[1]);
+            }
+
+            filter = ['any'];
+            filterAll = ["all"];
+            filter.push(["==",k.t0,-9e10]);
+            filter.push(["==",k.t1,-9e10]);
+
+            if ( hasT0 && hasT1 ) {
+              filterAll.push( ['<=', k.t0, t[1] / 1000] ); 
+              filterAll.push( ['>=', k.t1, t[0] / 1000] );
+            } else if (hasT0) {
+              filterAll.push( ['>=', k.t0, t[0] / 1000] );
+              filterAll.push( ['<=', k.t0, t[1] / 1000] );
+            }         
+            filter.push(filterAll);
+
+            view._setFilter({
+              filter : filter,
+              type : "time_slider"
+            });
+
+          }, 10 ));
+
+        });
       }
 
     }
@@ -2823,10 +2834,10 @@ export function downloadMapPdf(o){
      * Load external libraries
      */
   Promise.all([
-    System.import("jspdf"),
-    System.import("jszip"),
-    System.import("downloadjs"),
-    System.import("../svg/arrow-north-n.svg")
+    import("jspdf"),
+    import("jszip"),
+    import("downloadjs"),
+    import("../svg/arrow-north-n.svg")
   ]).then(function(m){
 
     progress = 10;
@@ -4072,8 +4083,8 @@ export function setFilter(o){
 function intersect(poly1, poly2) {
 
  return Promise.all([
-    System.import("martinez-polygon-clipping"),
-    System.import("@turf/helpers")
+    import("martinez-polygon-clipping"),
+    import("@turf/helpers")
   ])
     .then(m => {
 
@@ -4462,7 +4473,7 @@ export function getViewsBounds(views){
  */
 export function zoomToViewIdVisible(o){
  
- System.import("@turf/turf").then(function(turf){ 
+  return import("@turf/bbox").then(({ "default": bbox }) => {
 
   var geomTemp, exists, isArray, hasMap, idLayerAll, features;
 
@@ -4494,7 +4505,7 @@ export function zoomToViewIdVisible(o){
       });
 
       if( geomTemp.features.length>0 ){
-        var bbx = turf.bbox(geomTemp);
+        var bbx = bbox(geomTemp);
         var sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
         var ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
         var llb = new mx.mapboxgl.LngLatBounds(sw, ne);
@@ -5363,21 +5374,6 @@ export function getViewIcons(view){
   elReaders.appendChild(elSpan);
 
   return elReaders.outerHTML;
-}
-
-
-export function handleOverlapFinder(id){
-
-  mx.pixop.render({
-    type:'overlap',
-    debug:true,
-    geojson: {
-      add: true,
-      buffer: 10000,
-      simplify: 0.01
-    }
-  });
-
 }
 
 

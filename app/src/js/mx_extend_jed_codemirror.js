@@ -63,23 +63,6 @@
     afterInputReady: function() {
       var that = this;
       var mode = this.options.language;
-
-      //function getMode(mode){
-        //var out;
-        //switch(mode){
-          //case "html" :
-            //out = System.import("brace/mode/html");
-            //break;
-          //case "javascript":
-            //out = System.import("brace/mode/javascript");
-            //break;
-          //default:
-            //out = System.import("brace/mode/text");
-            //break;
-        //}
-        //return(out);
-      //}
-//v
       
       if( that.options.hidden ){
         that.theme.afterInputReady(that.input);
@@ -90,12 +73,12 @@
 
 
         Promise.all([
-          System.import('codemirror'),
-          System.import('codemirror/lib/codemirror.css')
+          import('codemirror'),
+          import('codemirror/lib/codemirror.css')
         ])
           .then(function(m){
             CodeMirror = m[0];
-            return System.import('codemirror/mode/javascript/javascript.js');
+            return import('codemirror/mode/javascript/javascript.js');
           })
           .then(function(){
 
@@ -142,8 +125,8 @@
               elBeautifyBtn.innerHTML= "tidy";
               elToolContainer.appendChild(elBeautifyBtn);
               elBeautifyBtn.addEventListener("click",function(){
-              System.import('js-beautify')
-                .then(function(beautify){
+              var jsBeautify = import('js-beautify');
+              jsBeautify.then(({"default":beautify}) => {
                     var val = that.codemirror_editor.getValue();
                     var valClean = beautify(val);
                     that.codemirror_editor.setValue(valClean);

@@ -54,17 +54,16 @@ export function zipToGeojson(data){
   var shapefile, JSZip,turf,proj4;
 
   return Promise.all([
-    System.import("jszip"),
-    System.import("shapefile"),
-    System.import("proj4"),
-    System.import("@turf/meta")
+    import("jszip"),
+    import("shapefile"),
+    import("proj4"),
+    import("@turf/meta")
   ])
     .then(function(m){
       JSZip = m[0];
       shapefile = m[1];
       proj4 = m[2].default || m[2];
       turf = m[3];
-
       return JSZip.loadAsync(data);
     })
     .then(function(files){
@@ -139,12 +138,12 @@ export function parseDataToGeojson(data,fileType){
   var out;
   switch(fileType) {
     case 'kml':
-      out = System.import("togeojson").then(function(toGeoJSON){
+      out = import("togeojson").then(function(toGeoJSON){
         return toGeoJSON.kml((new DOMParser()).parseFromString(data, 'text/xml'));
       });    
       break;
     case 'gpx':
-      out = System.import("togeojson").then(function(toGeoJSON){
+      out = import("togeojson").then(function(toGeoJSON){
         return toGeoJSON.gpx((new DOMParser()).parseFromString(data, 'text/xml'));
       });
       break;

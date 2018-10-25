@@ -9,6 +9,9 @@ if ('serviceWorker' in navigator) {
 import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
+import Selectize from 'selectize';
+window.Selectize = Selectize;
+
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';

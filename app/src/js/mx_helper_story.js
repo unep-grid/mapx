@@ -286,9 +286,9 @@ function initEditing(o){
 
   var ContentTools;
 
-  Promise.all([
-    System.import('ContentTools'),
-    System.import('ContentTools/build/content-tools.min.css')
+  return Promise.all([
+    import('ContentTools'),
+    import('ContentTools/build/content-tools.min.css')
   ]).then(function(m){
     ContentTools = m[0];
     return import("./../coffee/mx_extend_content_tools.coffee");

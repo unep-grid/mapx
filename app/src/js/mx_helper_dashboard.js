@@ -20,8 +20,8 @@ export function Dashboard(idContainer,idDashboard,view) {
    * Fetch module 
    */
   return  Promise.all([
-    System.import("packery"),
-    System.import("draggabilly"),
+    import("packery"),
+    import("draggabilly"),
     mx.helpers.modulesLoad(modules)
   ])
     .then(function(m){

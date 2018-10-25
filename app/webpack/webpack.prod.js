@@ -11,14 +11,33 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 
 module.exports = merge(common, {
-  devtool : false,
+  mode: 'production',
+  optimization: {
+    runtimeChunk: false,
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+      },
+    },
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true
+      })
+    ]
+  },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new GenerateSW({
       /**
-      * config :
-      * https://frama.link/workbox_config
-      */
+       * config :
+       * https://frama.link/workbox_config
+       */
       swDest : 'service-worker.js',
       importWorkboxFrom : 'local',
       skipWaiting : true,
@@ -61,22 +80,22 @@ module.exports = merge(common, {
         allowExternal: true
       }
     ),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': '"production"'
-    }),
-    new BundleAnalyzerPlugin(),
-    new UglifyJSPlugin({
-      parallel : true,
-      cache : true,
-      uglifyOptions: {
-        ie8: false,
-        mangle : true,
-        compress: {
-          warnings: false,
-          comparisons: false 
-        }
-      }
-    }),
+    /*  new webpack.DefinePlugin({*/
+    //'process.env.NODE_ENV': '"production"'
+    /*}),*/
+    /*    new BundleAnalyzerPlugin(),*/
+    //new UglifyJSPlugin({
+    //parallel : true,
+    //cache : true,
+    //uglifyOptions: {
+    //ie8: false,
+    //mangle : true,
+    //compress: {
+    //warnings: false,
+    //comparisons: false 
+    //}
+    //}
+    /*}),*/
     //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
     new FaviconsWebpackPlugin('./src/svg/map-x-logo.svg'),
     new WebpackPwaManifest({

@@ -65,12 +65,11 @@ export let settings = {
   maxByteJed : 100000, // 100 Kb  
   user : {}
 };
-export let pixop = {};
+//export let pixop = {};
 export let dashboards = [];
 export let editors = {};
 export let extend = {
   position : {},
   texteditor : {}
 };
-
 

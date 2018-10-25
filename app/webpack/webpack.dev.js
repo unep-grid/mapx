@@ -5,6 +5,7 @@ const watchUi = require('./webpack.watch_ui.js');
 const {GenerateSW} = require('workbox-webpack-plugin');
 
 module.exports = merge(common, {
+  mode: 'development',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './www'

@@ -71,36 +71,33 @@
         var out;
         switch(mode){
           case "html" :
-            out = System.import("brace/mode/html");
+            out = import("brace/mode/html");
             break;
           case "javascript":
-            out = System.import("brace/mode/javascript");
+            out = import("brace/mode/javascript");
             break;
           default:
-            out = System.import("brace/mode/text");
+            out = import("brace/mode/text");
             break;
         }
         return(out);
       }
-
-
       
       if( that.options.hidden ){
         that.theme.afterInputReady(that.input);
       }else{
 
-        System.import("brace")
+        return import("brace")
           .then(function(ace){
             window.ace = ace;
             return  Promise.all([
               getMode(mode),
-              System.import('brace/theme/github'),
-              System.import('brace/ext/searchbox'),
-              System.import('js-beautify')
+              import('brace/theme/github'),
+              import('brace/ext/searchbox'),
+              import('js-beautify')
             ]);
           })
           .then(function(m){
-
 
             that.ace_container = document.createElement('div');
             that.ace_container.style.width = '100%';
@@ -150,14 +147,13 @@
             if( (mode == "javascript" || mode == "json" ) && that.options.readOnly !== true ){
 
 
+
               var elBeautifyBtn = document.createElement("button");
               elBeautifyBtn.className = "btn btn-info";
               elBeautifyBtn.innerHTML= "tidy";
               elBeautifyBtn.addEventListener("click",function(){ 
-
-                var b = m[2];
+                var b = m[3].js;
                 var s =  that.ace_editor.getSession();
-
                 new Promise(function(resolve,reject){
                   resolve(s.getValue()||"");
                 }).then(function(val){

@@ -32,7 +32,7 @@ export function readCookie()
 
 export function writeCookie(e)
 {
-  System.import("cookies-js").then(function(Cookies){
+  return import("cookies-js").then(function(Cookies){
     let exp = 0;
 
     if(!e.expiresInSec) e.expiresInSec = 0;

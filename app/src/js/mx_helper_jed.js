@@ -18,14 +18,14 @@ export function jedRender(o) {
   var startVal = o.startVal;
   var options = o.options;
 
-  System.import("json-editor")
+  return import("json-editor")
     .then(function(){
       return Promise.all([
-        System.import("./mx_extend_jed_medium.js"),
-        System.import("./mx_extend_jed_position.js"),
-        System.import("./mx_extend_jed_ace.js"),
-        System.import("./mx_extend_jed_array2.js"),
-        System.import("./mx_extend_jed_codemirror.js")
+       import("./mx_extend_jed_medium.js"),
+       import("./mx_extend_jed_position.js"),
+       import("./mx_extend_jed_ace.js"),
+       import("./mx_extend_jed_array2.js"),
+       import("./mx_extend_jed_codemirror.js")
       ]);
     }).then(function(){
       var JSONEditor = window.JSONEditor;

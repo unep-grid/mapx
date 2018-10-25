@@ -59,54 +59,55 @@
       // Code editor
       if( !self.options.hidden && !self._init ){
         self._init = true;
+        self.theme.afterInputReady(self.input);
 
-        System.import("medium-editor").then(function(MediumEditor){
+        return import('medium-editor')
+          .then(({ "default": MediumEditor }) => {
 
-          // medium-editor-tables need Medium editor on window...
-          window.MediumEditor = MediumEditor;
+            // medium-editor-tables need Medium editor on window...
+            window.MediumEditor = MediumEditor;
 
-          Promise.all([
-            System.import('medium-editor-tables'),
-            System.import('medium-editor/dist/css/medium-editor.min.css'),
-            System.import('medium-editor/dist/css/themes/flat.min.css'),
-            System.import('medium-editor-tables/dist/css/medium-editor-tables.css'),
-            System.import('../css/mx_jed_medium_flat.css'),
-            System.import('./mx_extend_jed_medium_dragdrop.js')
-          ]).then(function(m){
-            var MediumEditorTable = m[0];
-            m[5].addDragDropToMedium(MediumEditor);
+            Promise.all([
+              import('medium-editor-tables'),
+              import('medium-editor/dist/css/medium-editor.min.css'),
+              import('medium-editor/dist/css/themes/flat.min.css'),
+              import('medium-editor-tables/dist/css/medium-editor-tables.css'),
+              import('../css/mx_jed_medium_flat.css'),
+              import('./mx_extend_jed_medium_dragdrop.js')
+            ]).then(function(m){
+              var MediumEditorTable = m[0];
+              m[5].addDragDropToMedium(MediumEditor);
 
-            self.medium_container = document.createElement("div");
-            self.medium_container.innerHTML = self.input.value;
+              self.medium_container = document.createElement("div");
+              self.medium_container.innerHTML = self.input.value;
 
-            self.input.parentNode.insertBefore(self.medium_container,self.input);
-            self.input.style.display = 'none';
+              self.input.parentNode.insertBefore(self.medium_container,self.input);
+              self.input.style.display = 'none';
 
-            self.medium_editor = new MediumEditor(self.medium_container,{
-              buttonLabels:"fontawesome",
-              toolbar: {
-                buttons: ['table','h1','h2','h3','bold', 'italic', 'quote', 'anchor','unorderedlist',"justifyLeft","justifyCenter","justifyRight","justifyFull"]
-              },
-              extensions: {
-                table: new MediumEditorTable()
-              }
-            });
+              self.medium_editor = new MediumEditor(self.medium_container,{
+                buttonLabels:"fontawesome",
+                toolbar: {
+                  buttons: ['table','h1','h2','h3','bold', 'italic', 'quote', 'anchor','unorderedlist',"justifyLeft","justifyCenter","justifyRight","justifyFull"]
+                },
+                extensions: {
+                  table: new MediumEditorTable()
+                }
+              });
 
-            self.medium_editor.setContent(self.getValue());
+              self.medium_editor.setContent(self.getValue());
 
-            self.medium_editor.subscribe('editableInput', function (event, editable) {
-              self.input.value = editable.innerHTML;
-              self.refreshValue();
-              self.is_dirty = true;
-              self.onChange(true);
+              self.medium_editor.subscribe('editableInput', function (event, editable) {
+                self.input.value = editable.innerHTML;
+                self.refreshValue();
+                self.is_dirty = true;
+                self.onChange(true);
+              });
+
             });
 
           });
-
-        });
       }
 
-      self.theme.afterInputReady(self.input);
     },
     destroy: function() {
       if(this.medium_editor) {

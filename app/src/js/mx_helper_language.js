@@ -32,34 +32,34 @@ export function getDict(lang){
   var out;
   switch(lang){
     case "en" :
-      out = System.import("../built/dict_en.json");
+      out = import("../built/dict_en.json");
       break;
     case "fr" :
-      out = System.import("../built/dict_fr.json");
+      out = import("../built/dict_fr.json");
       break;
     case "es" :
-      out = System.import("../built/dict_es.json");
+      out = import("../built/dict_es.json");
       break;
     case "de" :
-      out = System.import("../built/dict_de.json");
+      out = import("../built/dict_de.json");
       break;
     case "ru" :
-      out = System.import("../built/dict_ru.json");
+      out = import("../built/dict_ru.json");
       break;
     case "fa" :
-      out = System.import("../built/dict_fa.json");
+      out = import("../built/dict_fa.json");
       break;
     case "ps" :
-      out = System.import("../built/dict_ps.json");
+      out = import("../built/dict_ps.json");
       break;
     case "bn" :
-      out = System.import("../built/dict_bn.json");
+      out = import("../built/dict_bn.json");
       break;
     case "zh" :
-      out = System.import("../built/dict_zh.json");
+      out = import("../built/dict_zh.json");
       break;
     default:
-      out = System.import("../built/dict_en.json");
+      out = import("../built/dict_en.json");
       break;
   }
   return out ;
@@ -79,7 +79,8 @@ export function updateLanguageElements(o) {
 
   getDict(o.lang)
     .then(function(dict){
-
+      if(!(dict instanceof Array)) dict = mx.helpers.objectToArray(dict);
+      
       var els, el, doc, label, found, setLabel = {};
       var lang = o.lang;
 
@@ -175,6 +176,9 @@ export function getDictItem(key, lang) {
   lang = lang || mx.settings.language || defaultLang ;
 
   return getDict(lang).then(function(dict){
+
+      if(!(dict instanceof Array)) dict = mx.helpers.objectToArray(dict);
+
 
     if( isArray ){
       keys = key;

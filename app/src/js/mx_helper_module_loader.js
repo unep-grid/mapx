@@ -5,16 +5,16 @@ export function moduleLoad(name){
   "use strict";
   switch(name){
     case "topojson":
-      return System.import("topojson-client");
+      return import("topojson-client");
     case "d3" :
-      return System.import("d3");
+      return import("d3");
     case "d3-geo" :
-      return System.import("d3-geo");
+      return import("d3-geo");
     case "highcharts" :
       return Promise.all([
-        System.import("highcharts"),
-        System.import("highcharts-more"),
-        System.import("highcharts-solid-gauge")
+        import("highcharts"),
+        import("highcharts-more"),
+        import("highcharts-solid-gauge")
       ])
         .then(m => {
           m[1](m[0]);

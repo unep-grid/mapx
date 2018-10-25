@@ -771,7 +771,7 @@ export function unicodeToChar(text) {
  * @param {string} o.template html string for legend
  */
 export function setTemplates(o) {
-  System.import("dot").then(function(doT){
+  return import("dot").then(function(doT){
     for( var id in o ){
       var template = mx.helpers.unicodeToChar(o[id]);
       mx.templates[id] = doT.template(template);
@@ -912,22 +912,22 @@ export function sendAjax(o) {
  * @param {Function} o.onError Function to call on error
  */
 export function getCSV(o) {
-   sendAjax({
-    type: 'get',
-    url: o.url,
-    beforeSend: function(xhr) {
-      xhr.setRequestHeader('Accept', 'text/csv; charset=utf-8');
-    },
-    onSuccess: function(res) {
-      if(res){
-        System.import("csvjson").then(function(csvjson){
-         var data  = csvjson.toObject(res);
+  return import("csvjson").then(function(csvjson){
+    sendAjax({
+      type: 'get',
+      url: o.url,
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Accept', 'text/csv; charset=utf-8');
+      },
+      onSuccess: function(res) {
+        if(res){
+          var data  = csvjson.toObject(res);
           o.onSuccess(data);
-        });
-      }
-    },
-    onError: o.onError,
-    onComplete: o.onComplete,
+        }
+      },
+      onError: o.onError,
+      onComplete: o.onComplete,
+    });
   });
 }
 
@@ -1586,7 +1586,7 @@ export function modal(o){
   var modal = document.getElementById(o.id) || document.createElement("div");
   var background = document.getElementById(idBackground) || document.createElement("div"); 
   var hasShiny = typeof window.Shiny !== "undefined";
-  var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
+  var hasSelectize = typeof window.jQuery === "function" && typeof window.Selectize == "function";
   var startBodyScrollPos = 0;
   var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== "undefined" ? o.noShinyBinding : false;
 

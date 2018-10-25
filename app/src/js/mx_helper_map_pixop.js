@@ -1,4 +1,3 @@
-
 /**
 * Pixop interface handler
 */
@@ -33,6 +32,11 @@ export function overlapsSpotlightUpdate(){
 
 }
 
+export function initPixop(){
+  if(mx && !(mx.pixop instanceof mx.helpers.PixOp) ){
+    mx.pixop = new mx.helpers.PixOp();
+  }
+}
 
 function formatDist(v,squared){
   v = v || 0;
@@ -45,10 +49,7 @@ function formatDist(v,squared){
   }else{
     return (Math.round(v*1000)/1000)+ " m" + suffix;
   }
-
 }
-
-
 
 export function overlapsSpotlightClear(){
   mx.pixop.clear();

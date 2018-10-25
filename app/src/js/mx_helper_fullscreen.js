@@ -5,30 +5,35 @@ import * as mx from './mx_init.js';
 //var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 export function toggleFullScreen(id) {
-  var screenfull =  require("screenfull");
 
-  var el = document.body;
-  var btn;
+  return Promise.all([
+    import("screenfull")]
+  ).then(m => {
 
-  btn = document.getElementById(id).querySelector(".fa");
+    debugger;
+    var el = document.body;
+    var btn;
 
-  if(screenfull.enabled){
-    if(!screenfull.isFullscreen){
-      if(btn){
-        btn.classList.add("fa-compress");
-        btn.classList.remove("fa-expand");
+    btn = document.getElementById(id).querySelector(".fa");
+
+    if(screenfull.enabled){
+      if(!screenfull.isFullscreen){
+        if(btn){
+          btn.classList.add("fa-compress");
+          btn.classList.remove("fa-expand");
+        }
+        screenfull.request();
+      }else{
+        if(btn){
+          btn.classList.remove("fa-compress");
+          btn.classList.add("fa-expand");
+        }
+        screenfull.exit();
       }
-      screenfull.request();
     }else{
-      if(btn){
-        btn.classList.remove("fa-compress");
-        btn.classList.add("fa-expand");
-      }
-      screenfull.exit();
+      alert("Fullscreen not enabled, sorry");
     }
-  }else{
-    alert("Fullscreen not enabled, sorry");
-  }
+  });
 }
 
 

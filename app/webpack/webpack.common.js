@@ -7,6 +7,7 @@ const packages = require('../package.json').dependencies;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
+  target: 'web',
   node : {
     fs : 'empty'
   },
@@ -15,10 +16,7 @@ module.exports = {
     'app' : './src/js/init_shiny.js',
     'kiosk' : './src/js/init_kiosk.js'
   },
-  plugins: [ 
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'shared'
-    }),
+  plugins: [
     new HtmlWebpackPlugin({
       template : './src/kiosk/index.html',
       filename: './kiosk.html',
@@ -39,16 +37,7 @@ module.exports = {
   module: {
     rules: [
       { test: /.css$/, 
-        use : ['style-loader','css-loader','icon-font-loader'
- /*         {*/
-            //loader: 'postcss-loader',
-            //options: {
-              //plugins: (loader) => [
-                //require('postcss-cssnext')
-              //]
-            //}
-          /*}*/
-        ]
+        use : ['style-loader','css-loader','icon-font-loader']
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
