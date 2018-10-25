@@ -189,7 +189,18 @@ observe({
                   lang = language,
                   useFold = TRUE,
                   unboxText = TRUE,
-                  dict = dictSchema
+                  dict = dictSchema,
+                  valReplace = function(val,dict=dictSchema){
+                    if( val %in% c("0","1","2","3")){
+                      val = switch(val,
+                        "0" = dd('dont_know',dict,language),
+                        "1" = dd('no',dict,language),
+                        "2" = dd('partial',dict,language),
+                        "3" = dd('yes',dict,language)
+                        )
+                    }
+                    return(val)
+                  }
                   )
                 )
               

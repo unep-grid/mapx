@@ -279,44 +279,7 @@ mxSchemaMultiLingualInput = function(
     )
 }
 
-#' Create object for data integrity framework
-#' @param keyTitle {Character} Translation key of the title
-#' @param language {Character} Language code to use
-mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){ 
 
-  if(noDataCheck(language)){
-    language = get("language",envir=parent.frame())
-  }
-  if(noDataCheck(dict)){
-    dict = .get(config,c("dictionaries","schemaMetadata"))
-  }
-
-  list(
-    title = d(keyTitle,lang=language,dict=dict,web=F),
-    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict,web=F),
-    type = "string",
-    propertyOrder = mxCounter("dataIntegrity"),
-    minlength = 1,
-    default = "0",
-    enum = c("0",
-      "1",
-      "2",
-      "3"),
-    options = list(
-      enum_titles = names(d(
-          c(
-            "dont_know",
-            "no",
-            "partial",
-            "yes"),
-          lang = language,
-          dict = dict,
-          web=F
-          )
-        )
-      )
-    )
-}
 
 
 #' Create attribute description object based on multilingual input
@@ -456,6 +419,20 @@ mxUnescapeNewLine <- function(txt){
   #readChar(ff,file.info(ff)$size)
   txt
 }
+
+
+mxDictTranslateSimple <- function(id,dict=.get(config,"dict"),language='en'){
+
+  if(noDataCheck(dict)) return(id);
+  out <- dict[ dict$id == id, language ]
+  if(noDataCheck(out))   out <- dict[dict$id==id,'en']
+  if(noDataCheck(out))   out <- id
+ 
+  return(out)
+
+}
+
+dd <- mxDictTranslateSimple
 
 
 #' Get dictionnary entry by key for a given language (translate)
@@ -2536,7 +2513,7 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
 #' Create a html list and apply a class for <ul> and <li>
 #'
 #' @param listInput list in input
-listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE){
+listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE,valReplace=NULL){
 
   r = 0
 
@@ -2555,7 +2532,8 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,n
   }
 
   makeLi <- function(it,ti){
-    ti <- d(ti,lang=lang,dict=dict);
+    #ti <- d(ti,lang=lang,dict=dict);
+    ti <- dd(ti,language=lang,dict=dict);
     if (is.list(it) && length(it)>0 && class(it) != "shiny.tag" ){
       
       classList <- "list-group-item"
@@ -2581,20 +2559,25 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,n
 
     }else{
 
+        if(!noDataCheck(valReplace)){
+          if(!noDataCheck(it)){
+            it <- valReplace(it)
+          }
+        }
       if(unboxText){
-      return(
-        tags$div(
-          tags$span(class="list-group-title-small",ti),
-          tags$span(it)
-          )
-        )}else{
-       return(
-        tags$li(
-          class = "list-group-item",
-          tags$span(class="list-group-title-small",ti),
-          tags$span(it)
-          )
-        )
+        return(
+          tags$div(
+            tags$span(class="list-group-title-small",ti),
+            tags$span(it)
+            )
+          )}else{
+          return(
+            tags$li(
+              class = "list-group-item",
+              tags$span(class="list-group-title-small",ti),
+              tags$span(it)
+              )
+            )
 
       }
     }
@@ -2785,4 +2768,39 @@ mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefa
   session$sendCustomMessage("mxFlashIcon",list(
       icon = icon
       ))
+}
+
+#' Create object for data integrity framework
+#' @param keyTitle {Character} Translation key of the title
+#' @param language {Character} Language code to use
+mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){ 
+
+  if(noDataCheck(language)){
+    language = get("language",envir=parent.frame())
+  }
+  if(noDataCheck(dict)){
+    dict = .get(config,c("dictionaries","schemaMetadata"))
+  }
+
+  list(
+    title = d(keyTitle,lang=language,dict=dict,web=F),
+    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict,web=F),
+    type = "string",
+    propertyOrder = mxCounter("dataIntegrity"),
+    minlength = 1,
+    default = "0",
+    enum = c("0",
+      "1",
+      "2",
+      "3"),
+    options = list(
+      enum_titles = 
+        list(
+          dd('dont_know',dict,language),
+          dd('no',dict,language),
+          dd('partial',dict,language),
+          dd('yes',dict,language),
+          )
+      )
+    )
 }
