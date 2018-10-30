@@ -1,5 +1,4 @@
-/* jshint esversion:6, evil: true */
-import * as mx from './mx_init.js';
+/* jshint esversion:6 */
 
 export function triggerUploadForm(opt){
   var el = mx.helpers.el;

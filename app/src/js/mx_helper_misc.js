@@ -1,6 +1,4 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
-import * as mx from './mx_init.js';
-//var Image, Node,escape,unescape,$,postMessage,Shiny,self,Blob,URL,Worker,XMLHttpRequest, window, document, System;
 
 
 

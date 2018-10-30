@@ -1,10 +1,11 @@
 /*jshint esversion: 6 */
 const path = require('path');
+const webpack = require( 'webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
-const webpack = require( 'webpack');
-const packages = require('../package.json').dependencies;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+//const ManifestPlugin = require('webpack-manifest-plugin');
 
 module.exports = {
   target: 'web',
@@ -12,20 +13,44 @@ module.exports = {
     fs : 'empty'
   },
   entry: {
-    'common':'./src/js/index.js',
-    'app' : './src/js/init_shiny.js',
-    'kiosk' : './src/js/init_kiosk.js'
+    common:'./src/js/init_common.js',
+    app : './src/js/init_shiny.js',
+    kiosk : './src/js/init_kiosk.js'
+  },
+  output: {
+    filename: '[name].bundle.js',
+    chunkFilename: "[name].chunk.js",
+    path: path.resolve(__dirname, '../www'),
+    publicPath: "/"
   },
   plugins: [
     new HtmlWebpackPlugin({
       template : './src/kiosk/index.html',
       filename: './kiosk.html',
-      chunks : ['shared','common','kiosk']
+      chunks : ['common','kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template : './src/built/index.html',
-      chunks : ['shared','common','app']
+      chunks : ['common','app']
+    }),
+    new WebpackPwaManifest({
+      filename : "manifest.json",
+      inject:true, /* added manually in header.R */
+      name: 'MapX',
+      start_url:'/',
+      short_name: 'MapX',
+      description: 'A cloud solution for mapping and monitoring the sustainable use of natural resources',
+      background_color: '#15b0f8',
+      'theme-color': '#15b0f8',
+      theme_color: '#15b0f8',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      icons: [
+        {
+          src: './src/svg/map-x-logo.svg',
+          sizes: [96, 128, 192, 256, 384, 512,1024] // multiple sizes
+        }
+      ]
     }),
     new IconFontPlugin({
       fontName : "mx-icons-font"
@@ -60,11 +85,12 @@ module.exports = {
               [ '@babel/preset-env',{
                 "targets": {
                   "browsers": ["defaults"] // https://github.com/ai/browserslist#queries
-                }
+                },
+                modules: false 
               }            
               ]
             ],
-            plugins:['loop-optimizer','dynamic-import-node']
+            plugins:['loop-optimizer','@babel/syntax-dynamic-import']
           }
         }
       },
@@ -85,9 +111,5 @@ module.exports = {
         }
       }
     ]
-  },
-  output: {
-    filename: 'mx_[id].bundle.js',
-    path: path.resolve(__dirname, '../www')
   }
 };

@@ -1,14 +1,21 @@
 version: '3.2'
 
+# ports : host:container
 services:
   traefik:
     image: traefik
-    command: --api --docker --docker.domain=mapx.localhost
+    command: 
+      - --api
+      #- --logLevel=DEBUG
+      - --docker
+      - --docker.domain=mapx.localhost
+      - --defaultentrypoints=http
     ports:
       - 8880:80
       - 8881:8080
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./_data/certs:/certs
   app:
     env_file: mapx.dev.env
     build: ./app/.

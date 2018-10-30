@@ -29,8 +29,8 @@ export function Dashboard(idContainer,idDashboard,view) {
        * Add modules in dashboard instance for quick ref 
        * from the editor
        */
-      dashboard.modules.packery = m[0];
-      dashboard.modules.draggabilly = m[1];
+      dashboard.modules.packery = m[0].default;
+      dashboard.modules.draggabilly = m[1].default;
 
       modules.forEach((mod,i) => {
         dashboard.modules[mod] = m[2][i];

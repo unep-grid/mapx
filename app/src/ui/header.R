@@ -34,5 +34,13 @@ tagList(
     #
     `http-equiv`="Cache-control",
     content="no-cache"
+    ),
+  tags$meta(
+    name="theme-color",
+    content='#15b0f8'
+    ),
+  tags$link(
+    rel="manifest",
+    href="/manifest.json"
     )
   )

@@ -1,10 +1,10 @@
 /*jshint esversion: 6, node: true  */
-import * as mx_helpers from "./mx_helpers.js";
+import * as helpers from "./mx_helpers.js";
 
-console.log("INIT MX");
-export let helpers = mx_helpers;
-export let mapboxgl = require('mapbox-gl');
-export let localforage = require('localforage');
+import mapboxgl from 'mapbox-gl';
+import localforage  from 'localforage';
+
+export { mapboxgl, localforage, helpers };
 export let templates = {
   viewList : require('../built/view_list.dot'),
   viewListLegend : require('../built/view_list_legend.dot'),
@@ -48,6 +48,7 @@ export let settings = {
   paths : {
     sprites : 'sprites/sprite',
   },
+  style : require("../data/style_mapx.json"),
   apiRoute : { 
     tiles : '/get/tile/{x}/{y}/{z}.mvt',
     views : '/get/view/',
@@ -73,3 +74,4 @@ export let extend = {
   texteditor : {}
 };
 
+console.log("INIT MX");

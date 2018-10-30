@@ -17,8 +17,8 @@ export function moduleLoad(name){
         import("highcharts-solid-gauge")
       ])
         .then(m => {
-          m[1](m[0]);
-          m[2](m[0]);
+          m[1].default(m[0]);
+          m[2].default(m[0]);
           return Promise.resolve(m[0]);
         });
     default:

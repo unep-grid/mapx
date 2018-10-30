@@ -1,6 +1,4 @@
 /*jshint esversion: 6 , node: true */
-//'use strict';
-import * as mx from './mx_init.js';
 
 /**
 * Read and evaluate story map

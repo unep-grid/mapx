@@ -1,4 +1,3 @@
-import * as mx from './mx_init.js';
 /**
  * Set map-x ui and map colorscheme. 
  * TODO: 

@@ -6,11 +6,22 @@ const {GenerateSW} = require('workbox-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'development',
-  devtool: 'inline-source-map',
   devServer: {
     contentBase: './www'
   },
   plugins: [
+    new watchUi({
+      watchFolder: "./src/ui",
+      script: 'Rscript ./src/script/build_html.R'
+    }),
+    new watchUi({
+      watchFolder: "./src/data",
+      script: 'Rscript ./src/script/build_dict_json.R'
+    }),
+    /**
+    * Dev service worker : do not store js, html, css, only runtime
+    *
+    */
     new GenerateSW({
       swDest : 'service-worker.js',
       importWorkboxFrom : 'local',
@@ -41,14 +52,6 @@ module.exports = merge(common, {
           handler: 'cacheFirst'
         }
       ]
-    }),
-    new watchUi({
-      watchFolder: "./src/ui",
-      script: 'Rscript ./src/script/build_html.R'
-    }),
-    new watchUi({
-      watchFolder: "./src/data",
-      script: 'Rscript ./src/script/build_dict_json.R'
     })
   ]
 });

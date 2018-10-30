@@ -1,5 +1,4 @@
 /*jshint esversion: 6 */
-import * as mx from "./mx_init.js";
 /**
  * Control for live coordinate
  */

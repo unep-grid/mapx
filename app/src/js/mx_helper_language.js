@@ -1,6 +1,3 @@
-import * as mx from './mx_init.js';
-
-
 
 /**
 * Update language : Element, view list and map
@@ -30,6 +27,7 @@ export function getDict(lang){
   "use strict";
   lang = lang || mx.settings.language || "en" ;
   var out;
+  
   switch(lang){
     case "en" :
       out = import("../built/dict_en.json");

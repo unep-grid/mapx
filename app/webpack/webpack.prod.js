@@ -1,47 +1,44 @@
 /*jshint esversion: 6 */
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-
 
 module.exports = merge(common, {
   mode: 'production',
   optimization: {
-    runtimeChunk: false,
     splitChunks: {
-      cacheGroups: {
-        commons: {
-          test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            chunks: 'all',
-          },
-      },
-    },
-    minimizer: [
-      new UglifyJsPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: true
-      })
-    ]
+      chunks: 'all'
+    }
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
+// clean www before building
+    new CleanWebpackPlugin(
+      [
+        '../www/*'
+      ],
+      {
+        exclude:  [],
+        dry: false,
+        allowExternal: true
+      }
+    ),
+    new BundleAnalyzerPlugin(),
+    //new FaviconsWebpackPlugin('./src/svg/map-x-logo.svg'),
+    /**
+    * last step, generate service worker
+    * Configuration : https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#configuration
+    * more info here : https://developers.google.com/web/tools/workbox/guides/codelabs/webpack
+    */
     new GenerateSW({
-      /**
-       * config :
-       * https://frama.link/workbox_config
-       */
       swDest : 'service-worker.js',
       importWorkboxFrom : 'local',
-      skipWaiting : true,
-      clientsClaim : true,
+      skipWaiting : true, /* do not wait on other clients */
+      clientsClaim : true, /* handle all clients as soon as it's activated */
       runtimeCaching :  [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,
@@ -69,49 +66,6 @@ module.exports = merge(common, {
         }
       ]
     }),
-    // clean www before building
-    new CleanWebpackPlugin(
-      [
-        '../www/*'
-      ],
-      {
-        exclude:  [],
-        dry: false,
-        allowExternal: true
-      }
-    ),
-    /*  new webpack.DefinePlugin({*/
-    //'process.env.NODE_ENV': '"production"'
-    /*}),*/
-    /*    new BundleAnalyzerPlugin(),*/
-    //new UglifyJSPlugin({
-    //parallel : true,
-    //cache : true,
-    //uglifyOptions: {
-    //ie8: false,
-    //mangle : true,
-    //compress: {
-    //warnings: false,
-    //comparisons: false 
-    //}
-    //}
-    /*}),*/
-    //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
-    new FaviconsWebpackPlugin('./src/svg/map-x-logo.svg'),
-    new WebpackPwaManifest({
-      name: 'MapX',
-      short_name: 'MapX',
-      description: 'A cloud solution for mapping and monitoring the sustainable use of natural resources',
-      background_color: '#15b0f8',
-      theme_color: '#15b0f8',
-      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
-      icons: [
-        {
-          src: './src/svg/map-x-logo.svg',
-          sizes: [96, 128, 192, 256, 384, 512,1024] // multiple sizes
-        }
-      ]
-    })
   ]
 
 });

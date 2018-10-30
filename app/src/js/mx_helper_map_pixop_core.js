@@ -1,6 +1,5 @@
 /* jshint esversion :6 */
 
-import * as mx from './mx_init.js';
 
 export function PixOp(config){
 "use strict";
