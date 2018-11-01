@@ -2799,7 +2799,7 @@ mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){
           dd('dont_know',dict,language),
           dd('no',dict,language),
           dd('partial',dict,language),
-          dd('yes',dict,language),
+          dd('yes',dict,language)
           )
       )
     )
