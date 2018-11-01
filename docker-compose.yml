@@ -40,7 +40,7 @@ services:
   api:
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node:1.5.22-alpine
+    image: fredmoser/mx-api-node:1.5.26-alpine
     restart: always
     ports: 
       - 3030

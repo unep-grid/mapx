@@ -1,9 +1,12 @@
 ## MapX : change log
 
+-
 - 1.5.26
     - Improvement
       - APP
           - Update build process : use smaller chunks – issue with babel loader that produced huge chunks –; add promise polyfill, manually add manifest, minor changes;
+      - API
+          - Added new numeric parser to avoid bug in tiles where numeric was converted to string. This is related to style on numeric columns not correctly handled.
 - 1.5.25
     - Improvement 
       - APP 
