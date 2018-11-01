@@ -1,6 +1,15 @@
 const s = require("./../settings");
-const { Pool } = require("pg");
+const { Pool, types } = require("pg");
 const redis = require("redis");
+
+/*
+* custom type parsing
+*/
+types.setTypeParser(1700, // numeric
+  function(val) {
+  return parseFloat(val);
+});
+
 
 exports.pgWrite = new Pool({
   host : s.db.host,
