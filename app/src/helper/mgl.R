@@ -15,6 +15,15 @@ mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactive
     )
 }
 
+#' Update all source metadata of loaded views
+#' @param overwrite {logical} Overwrite existing meta
+#' @export
+mglUpdateAllViewsSourceMetadata <- function(overwrite=TRUE,session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglUpdateAllViewsSourceMetadata",
+    overwrite
+    )
+}
+
 #' Set legend html template
 #' @param template {character} Dot.js compatible template for displaying legend
 #' @export

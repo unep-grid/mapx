@@ -336,6 +336,18 @@
     "ps": "پاک کړئ"
   },
   {
+    "id": "btn_edit_selected",
+    "en": "Edit selected",
+    "fr": "Éditer la sélection",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_edit_source",
     "en": "Manage sources",
     "fr": "Gérer les sources",
@@ -4037,6 +4049,18 @@
     "en": "Edit view",
     "fr": "Edition de la vue",
     "es": "Editar la vista",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "source_edit_metadata",
+    "en": "Edit source metadata",
+    "fr": "Édition des métadonnées de la source",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

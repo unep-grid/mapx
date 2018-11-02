@@ -76,6 +76,66 @@ export function takeMapScreenshot(map) {
 }
 
 
+/**
+* Get view's source metadata
+* @param {String} id Name/Id of the source layer
+*/
+export function getSourceMetadata(id,force){
+  
+  force = force || false;
+
+  var urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
+
+  if( !id || !urlSourceMeta) return Promise.reject('Missing id or fetch URL');
+
+  /* get view object from storage or network */
+  var url = urlSourceMeta + id + ( force ? '?date=' + performance.now() : '');
+
+  return fetch( url )
+    .then( meta=> meta.json())
+    .then( meta => {
+      return meta;
+    });
+
+}
+
+/**
+* Add source meta object to given view
+* @param {Obejct} view object 
+* @param {Boolean} force force / replace meta object
+*/
+export function addSourceMetadataToView(view,force){
+  force = force || false;
+  var idSourceLayer = mx.helpers.path(view,"data.source.layerInfo.name","");
+  if( idSourceLayer && ( !view._meta || force ) ){
+    return mx.helpers.getSourceMetadata(idSourceLayer,force)
+      .then(meta => {
+        if(meta && meta.text){
+          view._meta = meta; 
+        }
+      });
+  }
+}
+/**
+* For all current view, update the mata object
+* @param {Boolean} ovewrite Overwrite existing meta 
+* @return null
+*/
+export function updateAllViewsSourceMetadata(overwrite){
+  overwrite = overwrite || false;
+
+  var views = mx.helpers.getViews({
+    id: mx.settings.idMapDefault,
+    asArray : true
+  });
+  views.forEach(function(v){
+    if( v._meta && overwrite ){
+      mx.helpers.addSourceMetadataToView(v,true);
+    }
+  });
+}
+
+
 export function handlerDownloadVectorSource(o){
   var elMsg;
   var elOutput = document.getElementById(o.idHandlerContainer);
@@ -694,9 +754,11 @@ export function reset(o){
 */
 export function cleanRemoveModules(view){
 
-  view = typeof view === "string" ? mx.helpers.getViews({id:mx.settings.idMapDefault,idView:view}) : view;
-  view = view instanceof Array ? view : [view];
+  view = typeof view === "string" ? mx.helpers.getViews({
+    id: mx.settings.idMapDefault,
+    idView:view}) : view;
 
+  view = view instanceof Array ? view : [view];
 
   view.forEach(function(v){
     if( v._onRemoveCustomView instanceof Function ){
@@ -3406,13 +3468,21 @@ export function addViewVt(o){
       styleCustom,
       defaultOrder = true;
 
-
-    if( ! source ) return;
+    var idSourceLayer = mx.helpers.path(source,'layerInfo.name');
+    if( ! idSourceLayer ) return;
 
     try{
       styleCustom = JSON.parse(p(style,"custom.json"));
     }catch(e){
       console.log("Can't parse custom view json : " + e);
+    }
+
+    /**
+    * Add source meta
+    */
+
+    if(!view._meta){
+      mx.helpers.addSourceMetadataToView(view,true);
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
@@ -4893,13 +4963,14 @@ export function featuresToHtml(o){
 
   function renderItem(idView,attributes){
     var view = mx.helpers.getView(idView);
+    var language = mx.settings.language;
+    var labels = mx.helpers.path(view,'_meta.text.attributes_alias');
     var isVector = view.type == "vt";
     var elLayer = cEl("div");
     var elProps = cEl("div");
     var elWait = cEl("div");
     var elSpinner = cEl("i");
     var elTitle = cEl("span");
-
     elTitle.classList.add("mx-prop-layer-title");
     elTitle.innerText = mx.helpers.getViewTitle(idView);
 
@@ -4940,10 +5011,10 @@ export function featuresToHtml(o){
         var elNoDataAttr = elNoData.cloneNode(true);
         elLayer.appendChild(elNoDataAttr);
       }
-      attrNames.forEach(function(attribute){
 
+      attrNames.forEach(function(attribute){
         
-          var values = mx.helpers.getArrayStat({
+        var values = mx.helpers.getArrayStat({
           stat: "sortNatural",
           arr: attributes[attribute]
         });
@@ -4968,8 +5039,14 @@ export function featuresToHtml(o){
         var elPropTitle = cEl("span");
         elPropTitle.classList.add('mx-prop-title');
         elPropTitle.setAttribute('title', attribute);
-        elPropTitle.innerText = attribute;
 
+        var label = attribute;
+        if( labels && labels[attribute]){
+          label = labels[attribute][language] || labels[attribute].en || attribute ;
+        }
+
+        elPropTitle.innerText = label;
+        
         /* Toggles */
         var elPropToggles = cEl("div");
         elPropToggles.classList.add("mx-prop-toggles");

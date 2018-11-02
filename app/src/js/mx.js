@@ -52,6 +52,7 @@ export let settings = {
   apiRoute : { 
     tiles : '/get/tile/{x}/{y}/{z}.mvt',
     views : '/get/view/',
+    sourceMetadata : '/get/source/metadata/',
     downloadSourceCreate : '/get/source?data=',
     downloadSourceGet : '',
     uploadImage : '/upload/image/',
