@@ -103,6 +103,7 @@ exports.attrToPgCol = function(attribute,attributes){
 */
 exports.view = require('./getView.js');
 exports.source = require('./getSource.js');
+exports.sourceMetadata = require('./getSourceMetadata.js');
 exports.image = require('./uploadImage.js');
 exports.vector = require('./uploadVector.js');
 exports.mail = require('./mail.js');

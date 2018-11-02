@@ -6,4 +6,4 @@ exports.userValidation = u.readTxt("./templates/sql/getUserValidation.sql");
 exports.viewFull = u.readTxt("./templates/sql/getViewFull.sql");
 exports.viewRowsId = u.readTxt("./templates/sql/getViewRowsId.sql");
 exports.layerIntersectsCountry = u.readTxt("./templates/sql/getIntersectsCountry.sql");
-
+exports.getSourceMetadata = u.readTxt("./templates/sql/getSourceMetadata.sql");

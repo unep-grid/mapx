@@ -21,6 +21,7 @@ app.get('/get/view/:id', utils.view.get);
 app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get );
 app.get('/get/source/', utils.source.get);
+app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
 app.get('/get/ip',utils.ip.get);
 
 app.post('/upload/image/', utils.image.upload);  
