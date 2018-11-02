@@ -7,7 +7,7 @@
 */
 
 .mx-loader-container {
-  z-index: -1;
+  z-index: 100000;
   top: 0px;
   width: 100%;
   bottom:0px;
@@ -16,12 +16,12 @@
   opacity : 0;
   transition: opacity 1s 0s ease-in-out;
   background : rgba(0,0,0,0.3);
+  pointer-events:none;
 }
 
 html.shiny-busy .mx-loader-container {
-  z-index : 1000;
-  transition : opacity 1s 1s ease-in-out;
   opacity : 1;
+  pointer-events:auto;
 }
 
 html:not(.shiny-busy) .mx-loader-spinner {
