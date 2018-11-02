@@ -291,32 +291,32 @@ mxSchemaMultiLingualInput = function(
 #' @param attributes {Character} Vector of attributes names
 #' @param dict {List} Dictionnary object. Default is "config$dictionaries$main"
 mxSchemaAttributeInput = function(
-    language="en",
-    format=NULL,
-    keyTitle="",
-    keyCounter="attr",
-    type="string",
-    collapsed=TRUE,
-    attributes=c(),
-    dict
-    ){
+  language="en",
+  format=NULL,
+  keyTitle="",
+  keyCounter="attr",
+  type="string",
+  collapsed=TRUE,
+  attributes=c(),
+  dict
+  ){
 
-    prop = lapply(attributes,function(x){
-         mxSchemaMultiLingualInput(
-          language = language,
-          keyTitle = keyTitle,
-          titlePrefix = x,
-          keyCounter = keyCounter,
-          type = type,
-          format = format,
-          default = list('en'='-'),
-          dict = dict
-          )
-    })
-    
-    names(prop) <- attributes
-    return(prop)
-  }
+  prop = lapply(attributes,function(x){
+    mxSchemaMultiLingualInput(
+      language = language,
+      keyTitle = keyTitle,
+      titlePrefix = x,
+      keyCounter = keyCounter,
+      type = type,
+      format = format,
+      default = list('en'=x),
+      dict = dict
+      )
+  })
+
+  names(prop) <- attributes
+  return(prop)
+}
 
 
 #' Check for "empty" value

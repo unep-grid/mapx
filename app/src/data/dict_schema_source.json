@@ -95,18 +95,7 @@
     "bn": "",
     "de": ""
   },
-  {
-    "id": "attribute_desc_title",
-    "en": "Description",
-    "fr": "Description",
-    "es": "Descripción",
-    "fa": "شرح",
-    "ps": "تفصیلات",
-    "zh": "",
-    "ru": "",
-    "bn": "",
-    "de": ""
-  },
+
   {
     "id": "attribute_item_title",
     "en": "Attribute",
@@ -132,18 +121,6 @@
     "de": ""
   },
   {
-    "id": "attributes_desc",
-    "en": "Description of the attributes contained in the data",
-    "fr": "Description des attributs de la donnée",
-    "es": "Descripción de los atributos de la base de datos",
-    "fa": "شرح ویژه گی های که در اطلاعات موجود می باشد",
-    "ps": "د ځانګېړنو په هکله تفصیلات په ډیتا کې شتون لري.",
-    "zh": "",
-    "ru": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "attributes_list_title",
     "en": "Attributes list",
     "fr": "Liste d'attributs",
@@ -156,12 +133,72 @@
     "de": ""
   },
   {
-    "id": "attributes_title",
-    "en": "Attributes",
-    "fr": "Attributs",
-    "es": "Atributos",
-    "fa": "ویژه گی ها",
-    "ps": "ځانګېړنې",
+    "id": "attributes_desc_title",
+    "en": "Attributes description",
+    "fr": "Description des attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_desc_desc",
+    "en": "Description of the attributes contained in the data",
+    "fr": "Description des attributs de la donnée",
+    "es": "Descripción de los atributos de la base de datos",
+    "fa": "شرح ویژه گی های که در اطلاعات موجود می باشد",
+    "ps": "د ځانګېړنو په هکله تفصیلات په ډیتا کې شتون لري.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attribute_desc_item_title",
+    "en": "Description",
+    "fr": "Description",
+    "es": "Descripción",
+    "fa": "شرح",
+    "ps": "تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_alias_title",
+    "en": "Alias for attributes names",
+    "fr": "Alias des noms d'attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_alias_desc",
+    "en": "Set attributes short names (alias)",
+    "fr": "Définir des noms courts (alias) pour les attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attribute_alias_item_title",
+    "en": "Alias",
+    "fr": "Alias",
+    "es": "",
+    "fa": "",
+    "ps": "",
     "zh": "",
     "ru": "",
     "bn": "",

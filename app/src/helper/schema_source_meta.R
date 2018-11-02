@@ -68,19 +68,36 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
           attributes = list(
             propertyOrder = mxCounter("b"),
             type = "object",
-            title = t("attributes_title"),
-            description = t("attributes_desc"), 
+            title = t("attributes_desc_title"),
+            description = t("attributes_desc_desc"),
             options = list(collapsed = TRUE),
             properties = mxSchemaAttributeInput(
               language = language,
               format = "textarea",
-              keyTitle = "attribute_desc_title",
+              keyTitle = "attribute_desc_item_title",
               keyCounter = "attr",
               type = "string",
               collapsed = TRUE,
               attributes = attributesNames,
               dict = dict
               )  
+            ),
+          attributes_alias = list(
+            propertyOrder = mxCounter("b"),
+            type = "object",
+            title = t("attributes_alias_title"),
+            description = t("attributes_alias_desc"), 
+            options = list(collapsed = TRUE),
+            properties = mxSchemaAttributeInput(
+              language = language,
+              format = "text",
+              keyTitle = "attribute_alias_item_title",
+              keyCounter = "attr",
+              type = "string",
+              collapsed = TRUE,
+              attributes = attributesNames,
+              dict = dict
+              )
             ),
           notes = mxSchemaMultiLingualInput(
             language =  language,
