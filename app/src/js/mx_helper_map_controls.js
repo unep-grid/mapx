@@ -211,8 +211,9 @@ mapControlApp.prototype.onAdd = function(map) {
       classes:"fa fa-print",
       key:"btn_print",
       action:function(){
-          var dl = import("downloadjs");
-          dl.then(function(d){
+          return import("downloadjs")
+          .then( m => {
+            var d = m.default;
             mx.helpers.takeMapScreenshot(map)
             .then(function(data){
               d(data,"mx-export.png");
