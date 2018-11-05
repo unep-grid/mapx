@@ -403,12 +403,20 @@ mapControlScale.prototype.onAdd = function(map){
   scale.appendChild(text);
   container.appendChild(scale);
 
-  map.on("mousemove",function(e){
 
+  map.on("mousemove",function(e){
+    const y = e.point.y;
+    render(100,y);
+  });
+
+  map.once('moveend',function(e){
+    render(100,0);
+  });
+
+  function render(x,y){
     let unit = "m";
     const maxWidth = 100;
     //const y = map._container.clientHeight / 2;
-    const y = e.point.y;
     const maxMeters = getDistance(map.unproject([0, y]), map.unproject([maxWidth, y]));
     let distance = getRoundNum(maxMeters);
     const ratio = distance / maxMeters;
@@ -418,8 +426,8 @@ mapControlScale.prototype.onAdd = function(map){
     }
 
     scale.style.width = (maxWidth * ratio) + "px";
-    text.innerHTML = distance + unit;
-  });
+    text.innerHTML = distance + unit;  
+  }
 
   this._container = container;
 
