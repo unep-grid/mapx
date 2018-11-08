@@ -62,21 +62,6 @@ export function setUserData(o){
 
 
 /**
-* Take a screen show of the map, even if preserveDrawingBuffer is false
-* @param {Object} map A mapbox gl js object
-*/
-export function takeMapScreenshot(map) {
-  return new Promise(function(resolve, reject) {
-    map.once("render", function() {
-      resolve(map.getCanvas().toDataURL());
-    });
-    /* trigger render */
-    map.setBearing(map.getBearing());
-  });
-}
-
-
-/**
 * Get view's source metadata
 * @param {String} id Name/Id of the source layer
 */
@@ -2229,7 +2214,7 @@ export function handleViewClick(o){
         comment: "target is the png screenshoot button",
         isTrue :  el.dataset.view_action_key == "btn_opt_screenshot",
         action:function(){
-          downloadMapPdf({
+          mx.helpers.downloadMapPdf({
             id: o.id, 
             idView: el.dataset.view_action_target
           });
@@ -2840,243 +2825,6 @@ export function plotTimeSliderData(o){
 
 }
 
-/** 
- * Download screenshot
- * @param {object} o options;
- * @param {string} o.id map id
- * @parma {string} o.idView view id
- */
-export function downloadMapPdf(o){
-
-  /**
-   * Check asynchron progress
-   */
-  var progress = 1;
-  var timer = setInterval(updateProgress,1000);
-  updateProgress();
-  function updateProgress(){
-    mx.helpers.progressScreen({
-      enable : progress < 100,
-      id : "Screenshot",
-      percent : progress,
-      text : "Screenshot generation, please wait"
-    });
-
-    if(progress>=100) clearInterval(timer);
-
-  }
-
-  /**
-   * Launch the process
-   */
-  setTimeout(function(){
-
-    /**
-     * Load external libraries
-     */
-  Promise.all([
-    import("jspdf"),
-    import("jszip"),
-    import("downloadjs"),
-    import("../svg/arrow-north-n.svg")
-  ]).then(function(m){
-
-    progress = 10;
-
-    var jsPDF = m[0];
-    var JSZip = m[1];
-    var download = m[2];
-    var northArrowPath = m[3];
-    var dataMap,zip,folder,dataLegend,dataScale,dataNorth;
-    var promLegend,promScale,promNorth;
-    var qf = [];
-    var map = mx.helpers.getMap(o.id);
-    var elMap = document.getElementById(mx.settings.idMapDefault);
-    var mapDim =  elMap.getBoundingClientRect();
-    var paperWidth = 297;
-    var paperHeight = 210;
-    var mapHeight = mapDim.height / (mapDim.width / paperWidth);
-    var link = location.origin + "?views=" + o.idView + "&project=" + mx.settings.project;
-    var elLegend = document.getElementById("check_view_legend_"+o.idView);
-    var elScale = document.querySelector(".mx-scale-box");
-    var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
-    var view = mx.helpers.getViews(o);
-    var lang = mx.settings.language;
-    var langs = mx.settings.languages;
-    
-    var title = mx.helpers.getLabelFromObjectPath({
-      obj : view,
-      path : "data.title",
-      lang : lang,
-      langs : langs,
-      defaultKey : view.id
-    });
-    /**
-     * Legend
-     */
-    if( view.type == "rt" ){
-      var imgLegend = elLegend.querySelector("img");
-      promLegend = new Promise(function(resolve,reject){
-        if(!imgLegend) resolve();
-        var img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.onload = function(){
-          var canvas = document.createElement('canvas');
-          var ctx = canvas.getContext("2d");
-          canvas.width = this.width;
-          canvas.height = this.height;
-          ctx.drawImage(this, 0, 0);
-          var data = canvas.toDataURL();
-          resolve(data);
-        };
-        img.onerror = function(e) {
-          reject(e);
-        };
-        img.src = imgLegend.src;
-
-      }).then(function(data){
-        progress += 20;
-        return(data); 
-      });
-    }
-
-    if( view.type == "vt" ){
-      promLegend = mx.helpers.htmlToData({
-        selector : elLegend,
-        scale : 1,
-        format :"png"
-      }).then(function(data){
-        progress += 20;
-        return(data); 
-      });
-    }
-
-    /**
-     * Scale
-     */
-    promScale = mx.helpers.htmlToData({
-      selector : elScale,
-      scale : 1,
-      style : "border:1px solid black; border-top:none",
-      format :"png"
-    }).then(function(data){
-      progress += 20;
-      return(data); 
-    });
-
-    /**
-     * North Arrow
-     */
-    promNorth = new Promise(function(resolve,reject){
-      var canvas = document.createElement('canvas');
-      var rotation = map.getBearing()*Math.PI/180;
-      var imgNorthArrow = new Image();
-      var ctx = canvas.getContext("2d");
-      function drawImage(image, x, y, scale, rotation){
-        ctx.setTransform(scale, 0, 0, scale, x, y); // sets scale and origin
-        ctx.rotate(rotation);
-        ctx.drawImage(image, -image.width / 2, -image.height / 2);
-      } 
-
-      imgNorthArrow.onload = function(){
-        canvas.width = this.width;
-        canvas.height = this.height;
-        canvas.style="position:absolute;top:0;z-index:1000";
-        drawImage(this, canvas.width / 2, canvas.height / 2, 1, rotation);
-        var data = canvas.toDataURL();
-        resolve(data);
-      }; 
-      imgNorthArrow.onerror = function(e) {
-        imgNorthArrow.remove();
-        reject(e);
-      };
-      imgNorthArrow.src = northArrowPath;
-    }).then(function(data){
-      progress += 20;
-      return(data); 
-    });
-
-    /**
-     * Kml 
-     */
-      if( view.type !== "vt"){
-        progress += 20;
-      }
-      if( view.type == "vt" ){
-        progress +=20;
-        /*
-        * Code removed, use download feature for kml instead
-        */
-      }
-
-    var dataItems = [];
-
-    Promise.all([
-      promNorth,
-      promScale,
-      promLegend
-    ])
-      .then(function(r){
-        dataItems = r;
-        return  mx.helpers.takeMapScreenshot(map);
-      })
-      .then(function(dataMap){
-        var r = dataItems;
-        dataNorth = r[0]?r[0]:dataNorth;
-        dataScale = r[1]?r[1]:dataScale;
-        dataLegend = r[2]?r[2]:dataLegend;
-
-        var doc = new jsPDF({orientation: 'landscape'});
-        if( dataMap ) doc.addImage(dataMap, 'PNG', 0, 0, 297, mapHeight );
-        if( dataNorth ) doc.addImage(dataNorth, 'PNG', 280, 5,10,10 );
-        if( dataScale ) doc.addImage(dataScale, 'PNG', 270, 190 );
-        if( dataLegend ){
-          doc.setFillColor(0,0,0,0); // white
-          doc.roundedRect(5, 15, 80 , 180 , 2, 2, 'F');
-          doc.addImage(dataLegend, 'PNG', 9, 24 );
-        }
-        if( link ){
-          doc.setFontSize(10);
-          doc.text(10, 205, link);
-        }
-        if( title ){
-          doc.setFontSize(20);
-          doc.text(5, 10, title);
-        }
-
-        var dataPdf =  doc.output();
-
-        zip = new JSZip();
-        folder = zip.folder("mx-data");
-
-        if(dataScale){
-          folder.file("mx-scale.png", dataScale.split(",")[1], {base64: true});
-        }
-        if(dataLegend){
-          folder.file("mx-legend.png", dataLegend.split(",")[1], {base64: true});
-        }
-        if(dataMap){
-          folder.file("mx-map.png", dataMap.split(",")[1], {base64: true});
-        }
-        if(dataPdf){
-          folder.file("mx-map.pdf", dataPdf, {binary:true});
-        }
-
-        zip.generateAsync({type:"blob"})
-          .then(function(content) {
-            progress += 100;
-            download(content, fileName);
-          });
-      })
-      .catch(function(e){
-        progress=100;
-        console.log(e);
-      });
-
-  });
-  },10);
-}
-
 
 
 /**
@@ -3406,6 +3154,12 @@ function addViewRt(o){
   var legend = mx.helpers.path(view,"data.source.legend");
 
   if(legend){
+    
+    var defaultImg = function(){
+      this.onerror = null;
+      this.src = require("../../src/svg/no_legend.svg");
+    };
+
     var elLegend = document.querySelector("#check_view_legend_"+view.id);
     if(elLegend){
       var oldImg = elLegend.querySelector("img");
@@ -3413,6 +3167,8 @@ function addViewRt(o){
         var img = new Image();
         img.src = legend;
         img.alt = "Legend"; 
+        img.setAttribute("crossorigin","anonymous");
+        img.onerror = defaultImg;
         img.style = "cursor:zoom.in";
         elLegend.appendChild(img); 
         img.onload = function(){
@@ -3425,6 +3181,8 @@ function addViewRt(o){
           });
           var imgModal = new Image();
           imgModal.src = legend;
+          imgModal.setAttribute("crossorigin","anonymous");
+          imgModal.onerror = defaultImg;
           imgModal.alt = "Legend";
           mx.helpers.modal({
             title:title,

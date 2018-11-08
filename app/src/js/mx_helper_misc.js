@@ -13,7 +13,6 @@ export function removeServiceWorker(){
 }
 
 
-
 /**
 * Get url query parameter by name
 * @param {String} name Name of the query request name
@@ -1569,6 +1568,7 @@ StackButton.prototype.setHidden = function(hide){
 * Display a panel modal
 * @param {Object} o Options
 * @param {String} o.id Id of the box. Default : random
+* @param {Numeric} o.zIndex set zIndex. Default : value in css
 * @param {Boolean} o.replace If a modal is displayed twice with the same id, delete the previous one. Default : true
 * @param {Boolean} o.noShinyBinding  By default, the modal panel will try to bind automatically input elements. In some case, this is not wanted. Default : false
 * @param {String} o.styleString Style string to apply to modal window. Default : empty
@@ -1576,7 +1576,6 @@ StackButton.prototype.setHidden = function(hide){
 * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
 *
 */
-
 export function modal(o){
 
   var id = o.id || makeId();
@@ -1607,6 +1606,9 @@ export function modal(o){
 
   if(o.styleString){
     modal.style = o.styleString;
+  }
+  if(o.zIndex){
+    modal.style.zIndex = o.zIndex;
   }
   /*if(o.minHeight){*/
   //modal.style.minHeight = o.minHeight;

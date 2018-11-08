@@ -114,7 +114,7 @@ export function uploadGeojsonModal(idView){
       elBtnUpload.setAttribute('disabled',true);
       elBtnUpload.remove();
       uploadSource({
-        title : title,
+        title : elInput.value || title || idView,
         geojson : geojson,
         selectorProgressContainer : elProgress
       });
@@ -164,7 +164,7 @@ export function uploadGeojsonModal(idView){
 * @param {Node|String} o.selectorProgressContainer Selector or element where to put the progress bar container 
 */
 function uploadSource(o){
-  
+
 
   /* Server will validate token, 
    * but we can avoid much trouble here
@@ -181,8 +181,8 @@ function uploadSource(o){
     o.file = new File([o.geojson], mx.helpers.makeId(12) + '.geojson',{type: "application/json"});
   }
   /*
-  * create upload form
-  */
+   * create upload form
+   */
   var form = new FormData(); 
   form.append('vector',o.file || o.geojson);
   form.append('token',o.token || mx.settings.user.token);
@@ -257,6 +257,7 @@ function uploadSource(o){
         var elUpDone = el("div","Process done,the data should be available in sources list");
         elProgressBar.style.width = 100 + "%";
         elProgressMessage.appendChild(elUpDone);
+        updateLayerList();
         break;
       case 'progress' :
         elProgressBar.style.width = msg + "%";
@@ -277,6 +278,13 @@ function uploadSource(o){
 
   var msgs = [];
   var uploadDone = false;
+
+  function updateLayerList(){
+    Shiny.onInputChange( 'mglEvent_update_source_list',{
+      date : new Date() * 1
+    });
+  }
+
   function cleanMsg(res){
     if(typeof res === "number"){ 
       elProgressLabel.innerText = "Upload progress";
