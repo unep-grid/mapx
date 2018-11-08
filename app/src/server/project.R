@@ -140,8 +140,6 @@ observeEvent(reactData$showProjectsList,{
 
   btn <- list();
 
-  projectViewsCount <- reactViewsCountByProjects()
-
   projects <- mxDbGetProjectListByUser(
     id = idUser,
     language = language,
@@ -150,21 +148,9 @@ observeEvent(reactData$showProjectsList,{
     asDataFrame = T
     )
 
-  if(isTRUE(nrow(projects)>0) && isTRUE(nrow(projectViewsCount)>0)){
-    projects = merge(
-      stringsAsFactors = FALSE,
-      x = projects,
-      y = projectViewsCount,
-      by = "id",
-      all.x = T
-      )
-    projects[sapply(projects$count,noDataCheck),c("count")] <- 0
-
-    projects <- projects[with(projects, order(-admin,-publisher,-member,title)),]
-    projectsMember <- projects[projects$member,]
-
-    isMember <- project %in% projectsMember$id
-  }
+  projects <- projects[with(projects, order(-admin,-publisher,-member,title)),]
+  projectsMember <- projects[projects$member,]
+  isMember <- project %in% projectsMember$id
 
   btnJoinProject <- actionButton(
     inputId = 'btnJoinProject',

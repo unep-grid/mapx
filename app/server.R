@@ -2,41 +2,54 @@
 #  SERVER FUNCTION
 #
 server <- function(input,output,session){
+  
+  
   #
-  # Allow reconnection
+  # As soon as the document is ready, source every listeners
   #
-  # session$allowReconnect(TRUE) # DEFAULT FALSE.
-  #  NOTE: good idea but... will send ALL input included
-  #  forms, email request, project deletion, creation, etc... 
-  #
-  #
-    # Context specific reactive values
+  obsBrowserData <- observeEvent(input$browserData,{
     #
-    reactUser <- reactiveValues()
-    reactData <- reactiveValues()
+    # Get query parameters
+    #
+    query <- mxParseQuery(session$clientData$url_search)
+
+    
+    #
+    # observe only once, then destroy
+    #
+    obsBrowserData$destroy()
 
     #
-    # As soon as the document is ready, source every listeners
+    # Read browser data, cookies, etc..
     #
-    obsBrowserData <- observeEvent(input$browserData,{
-      obsBrowserData$destroy()
+    browserData <- input$browserData;
 
-      #
-      # Read browser data, cookies, etc..
-      #
-      browserData <- input$browserData;
+    #
+    # Launch init
+    #
+    mxCatch(title="MapX main process",{
 
-      #
-      # Launch init
-      #
-      mxCatch(title="MapX main process",{
+      mxInitBrowserData(browserData,function(email){
 
-        mxInitBrowserData(browserData,function(email){
+        if(!isTRUE(query$kioskMode)){
 
           #
-          # Get query parameters
+          # Init reactive objects
           #
-          query <- mxParseQuery(session$clientData$url_search)
+          mxSource(
+            base = config$srvPath,
+            env = environment(),
+            files = c(
+              "react_login_key_status.R",
+              "react_objects.R",
+              "react_source_list.R",
+              "react_source_summary.R",
+              "react_view_list.R",
+              "react_map.R",
+              "react_roles.R",
+              "react_project_members.R"
+              )
+            )
 
           #
           # Set initial login
@@ -45,75 +58,71 @@ server <- function(input,output,session){
           #
           reactUser$data <- mxLogin(email,browserData,query);
 
-          if(!isTRUE(query$kioskMode)){
 
-            #
-            # Source server function 
-            # 
-            mxSource(
-              base = config$srvPath,
-              env = environment(),
-              files = c(
-                #
-                # Base
-                #
-                "login.R",
-                "roles.R",
-                "project.R",
-                "language.R",
-                "controls.R",
-                "map.R",
-                "input_register.R",
-                #
-                # Tools panel handler
-                #
-                "tools_db_connect.R",
-                "tools_app_config.R",
-                "tools_project_main.R",
-                "tools_project_new.R",
-                "tools_project_roles.R",
-                "tools_project_config.R",
-                "tools_project_external_views.R",
-                "tools_project_add_content.R",
-                "tools_project_add_content_form.R",
-                "tools_project_delete.R",
-                "tools_project_join.R",
-                "tools_project_invite.R",
-                "tools_query_maker.R",
-                "tools_source_edit_metadata.R",
-                "tools_source_manage.R",
-                #
-                # Views handler
-                #
-                "view_create.R",
-                "view_fetch.R",
-                "view_edit.R",
-                "view_edit_style.R",
-                "view_edit_dashboard.R",
-                "view_edit_story_map.R",
-                "view_edit_custom.R",
-                #
-                # Tools
-                #
-                "share.R",
-                #
-                # source download handler
-                #
-                "source_download.R",
-                #
-                # misc
-                #
-                "wms_creator.R"
-                )
+          mxSource(
+            base = config$srvPath,
+            env = environment(),
+            files = c(
+              #
+              # Base
+              #
+              "login.R",
+              #"roles.R",
+              "project.R",
+              "language.R",
+              "controls.R",
+              "map.R",
+              "input_register.R",
+              #
+              # Tools panel handler
+              #
+              "tools_db_connect.R",
+              "tools_app_config.R",
+              "tools_project_main.R",
+              "tools_project_new.R",
+              "tools_project_roles.R",
+              "tools_project_config.R",
+              "tools_project_external_views.R",
+              "tools_project_add_content.R",
+              "tools_project_add_content_form.R",
+              "tools_project_delete.R",
+              "tools_project_join.R",
+              "tools_project_invite.R",
+              "tools_query_maker.R",
+              "tools_source_edit_metadata.R",
+              "tools_source_manage.R",
+              #
+              # Views handler
+              #
+              "view_update_client.R",
+              "view_create.R",
+              "view_edit.R",
+              "view_edit_style.R",
+              "view_edit_dashboard.R",
+              "view_edit_story_map.R",
+              "view_edit_custom.R",
+              #
+              # Tools
+              #
+              "share.R",
+              #
+              # source download handler
+              #
+              "source_download.R",
+              #
+              # misc
+              #
+              "wms_creator.R"
               )
-          }
+            )
+        }
 
 
 })
 
 
 })
-})
+    })
 }
 
 

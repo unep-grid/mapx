@@ -78,8 +78,3 @@ observe({
   reactData$mapIsReady <- isReady
 })
 
-isMapReady <- reactive({
-  return(reactData$mapIsReady)
-})
-
-

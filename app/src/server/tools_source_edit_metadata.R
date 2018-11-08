@@ -1,30 +1,6 @@
 
 
 
-reactLayersList = reactive({
-
-  userRole <- getUserRole()
-  language <- reactData$language
-  layer <- input$selectSourceLayerForMeta
-  idUser <- reactUser$data$id
-  project <- reactData$project
-
-  layers <-  mxDbGetLayerTable(
-    project = project,
-    idUser = idUser,
-    roleInProject = userRole,
-    language = language,
-    editableOnly = TRUE
-    )
-
-  layers <- mxGetLayerNamedList( layers )
-
-  return(layers)
-
-})
-
-
-
 observeEvent(input$btnEditSourcesMetadata,{
 
   mxCatch(title="btn edit source meta",{
@@ -38,7 +14,7 @@ observeEvent(input$btnEditSourcesMetadata,{
 
     }else{
 
-      layers <- reactLayersList()  
+      layers <- reactListEditSources()  
       disabled <- NULL
       if(noDataCheck(layers)){
         layers <- list("noLayer")
@@ -85,7 +61,7 @@ observeEvent(input$selectSourceLayerForMeta,{
 
   language <- reactData$language
   layer <- input$selectSourceLayerForMeta
-  layers <- reactLayersList()
+  layers <- reactListEditSources()
   isAllowed <- layer %in% layers
 
   mxToggleButton(
@@ -104,7 +80,7 @@ observeEvent(input$btnEditSourceMetadata,{
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
     layer <- input$selectSourceLayerForMeta
-    layers <- reactLayersList()
+    layers <- reactListEditSources()
     isAllowed <- layer %in% layers
     project <- reactData$project
 
@@ -226,7 +202,7 @@ observeEvent(input$btnSaveSourceMetadata,{
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
     layer <- input$selectSourceLayerForMeta
-    layers <- reactLayersList()
+    layers <- reactListEditSources()
     idSource <- layer
     issues <- input$jedSourceMetadata_issues$msg
     meta <- input$jedSourceMetadata_values$msg

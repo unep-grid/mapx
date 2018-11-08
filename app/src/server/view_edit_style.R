@@ -10,7 +10,7 @@ observeEvent(input$styleEdit_init,{
   style <- .get(view,c("data","style"))
   language <- reactData$language 
   hasLayer <- !noDataCheck(.get(view,c("data","source","layerInfo","name")))
-  hasSources <- !noDataCheck(reactSourceLayer())
+  hasSources <- !noDataCheck(reactListReadSources())
   hasStyle <- !noDataCheck(style)
 
   if(!hasStyle) style = NULL

@@ -378,7 +378,7 @@ observe({
               #
               if(viewType=="vt"){
 
-                srcAvailable <- reactSourceLayer()
+                srcAvailable <- reactListReadSources()
                 srcSet <- .get(viewData,c("data","source","layerInfo","name"))
                 srcSetMask <- .get(viewData,c("data","source","layerInfo","maskName"))
                 srcAvailableMask <- srcAvailable[! srcAvailable %in% srcSet ]
@@ -809,7 +809,7 @@ observe({
     layer <- input$selectSourceLayerMain
     errors <- c(
         noDataCheck(layer),
-        !layer %in% reactSourceLayer()
+        !layer %in% reactListReadSources()
       )
     }
 
@@ -848,149 +848,151 @@ observe({
 #
 observeEvent(input$btnViewSave,{
 
-  mxToggleButton(
-    id="btnViewSave",
-    disable = TRUE
-    )
-  #
-  # Retrieve view value
-  #
-  time <- Sys.time()
-  view <- reactData$viewDataEdited 
-  idView <- .get(view,c("id"))
-  project <- reactData$project
-  userData <- reactUser$data
-  language <- reactData$language
-  hideView <- FALSE # remove view from ui after save
-
-  #
-  # check for edit right, remove temporary edit mark
-  #
-  if(!isTRUE(view[["_edit"]])) return()
-  view[["_edit"]] <- NULL
-
-  #
-  # Update target
-  #
-  readers <- input$selViewReadersUpdate
-  editors <- input$selViewEditorsUpdate
-  
-  #
-  # Update project
-  #
-  #projectUpdate = input$selViewProjectUpdate
-  projectsUpdate = input$selViewProjectsUpdate
-  #if(noDataCheck(projectUpdate)) projectUpdate = project
-  if(noDataCheck(projectsUpdate)) projectsUpdate = list()
-  #project = projectUpdate
-  projects = as.list(projectsUpdate)
-  editor = reactUser$data$id
-
-  view[[c("editor")]] <- editor
-  view[[c("data","projects")]] <- projects
-  #view[[c("project")]] <- project
-
-  if(noDataCheck(editors)) editors <- c((editor+""))
-  if(!isTRUE( (editor+"") %in% editors)) editors <- c(editors+"",editor)
-
-  #
-  # Update classes
-  #
-  classes <- input$selViewClassesUpdate
-  if(noDataCheck(classes)) classes <- config[[c("views","classes")]][[1]]
-  view[[c("data","classes")]] <- as.list(classes)
-
-  #
-  # Update collections
-  #
-  collections <- input$selViewCollectionsUpdate
-  view[[c("data","collections")]] <- as.list(collections)
-  hideView <- !noDataCheck(query$collections) && !any( collections %in% query$collections )
-  #
-  # Title and description
-  #
-  view[[c("data","title")]] <- input$viewTitleSchema_values$msg
-  view[[c("data","abstract")]] <- input$viewAbstractSchema_values$msg
-
-  #
-  # Update first level values
-  #
-  view[["data"]] <- as.list(view$data)
-  view[["date_modified"]] <- time
-  view[[c("readers")]] <- as.list(readers)
-  view[[c("editors")]] <- as.list(editors)
-  view[[c("target")]] <- NULL
-  #
-  # vector tiles
-  #
-  if( view[["type"]] == "vt" ){
+  mxCatch("Save view",{
+    mxToggleButton(
+      id="btnViewSave",
+      disable = TRUE
+      )
     #
-    # Get reactive data source summary
+    # Retrieve view value
     #
-    sourceData <- reactLayerSummary()$list
-    sourceDataMask <- reactLayerMaskSummary()$list
-    additionalAttributes <- input$selectSourceLayerOtherVariables
+    time <- Sys.time()
+    view <- reactData$viewDataEdited 
+    idView <- .get(view,c("id"))
+    project <- reactData$project
+    userData <- reactUser$data
+    language <- reactData$language
+    hideView <- FALSE # remove view from ui after save
 
     #
-    # Update view data 
+    # check for edit right, remove temporary edit mark
     #
-    view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask, additionalAttributes)
+    if(!isTRUE(view[["_edit"]])) return()
+    view[["_edit"]] <- NULL
 
-  }
-  #
-  # raster tiles
-  # 
-  if( view[["type"]] == "rt" ){
     #
-    # Update view  NOTE: write a function like in vt type
+    # Update target
     #
-    view[[c("data","source")]] <- list(
-      type = "raster",
-      tiles =  rep(input$textRasterTileUrl,2),
-      legend = input$textRasterTileLegend,
-      urlMetadata = input$textRasterTileUrlMetadata,
-      tileSize = as.integer(input$selectRasterTileSize)
+    readers <- input$selViewReadersUpdate
+    editors <- input$selViewEditorsUpdate
+
+    #
+    # Update project
+    #
+    #projectUpdate = input$selViewProjectUpdate
+    projectsUpdate = input$selViewProjectsUpdate
+    #if(noDataCheck(projectUpdate)) projectUpdate = project
+    if(noDataCheck(projectsUpdate)) projectsUpdate = list()
+    #project = projectUpdate
+    projects = as.list(projectsUpdate)
+    editor = reactUser$data$id
+
+    view[[c("editor")]] <- editor
+    view[[c("data","projects")]] <- projects
+    #view[[c("project")]] <- project
+
+    if(noDataCheck(editors)) editors <- c((editor+""))
+    if(!isTRUE( (editor+"") %in% editors)) editors <- c(editors+"",editor)
+
+    #
+    # Update classes
+    #
+    classes <- input$selViewClassesUpdate
+    if(noDataCheck(classes)) classes <- config[[c("views","classes")]][[1]]
+    view[[c("data","classes")]] <- as.list(classes)
+
+    #
+    # Update collections
+    #
+    collections <- input$selViewCollectionsUpdate
+    view[[c("data","collections")]] <- as.list(collections)
+    hideView <- !noDataCheck(query$collections) && !any( collections %in% query$collections )
+    #
+    # Title and description
+    #
+    view[[c("data","title")]] <- input$viewTitleSchema_values$msg
+    view[[c("data","abstract")]] <- input$viewAbstractSchema_values$msg
+
+    #
+    # Update first level values
+    #
+    view[["data"]] <- as.list(view$data)
+    view[["date_modified"]] <- time
+    view[[c("readers")]] <- as.list(readers)
+    view[[c("editors")]] <- as.list(editors)
+    view[[c("target")]] <- NULL
+    #
+    # vector tiles
+    #
+    if( view[["type"]] == "vt" ){
+      #
+      # Get reactive data source summary
+      #
+      sourceData <- reactLayerSummary()$list
+      sourceDataMask <- reactLayerMaskSummary()$list
+      additionalAttributes <- input$selectSourceLayerOtherVariables
+
+      #
+      # Update view data 
+      #
+      view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask, additionalAttributes)
+
+    }
+    #
+    # raster tiles
+    # 
+    if( view[["type"]] == "rt" ){
+      #
+      # Update view  NOTE: write a function like in vt type
+      #
+      view[[c("data","source")]] <- list(
+        type = "raster",
+        tiles =  rep(input$textRasterTileUrl,2),
+        legend = input$textRasterTileLegend,
+        urlMetadata = input$textRasterTileUrlMetadata,
+        tileSize = as.integer(input$selectRasterTileSize)
+        )
+
+    }
+
+    #
+    # save a version in db
+    #
+    mxDbAddRow(
+      data=view,
+      table=.get(config,c("pg","tables","views"))
       )
 
-  }
-
-  #
-  # save a version in db
-  #
-  mxDbAddRow(
-    data=view,
-    table=.get(config,c("pg","tables","views"))
-    )
-
-    # edit flag
-  view$`_edit` = TRUE 
-
-  if(!hideView){
     # edit flag
     view$`_edit` = TRUE 
 
-    mglAddView(
-      viewData = view
+    if(!hideView){
+      # edit flag
+      view$`_edit` = TRUE 
+
+      mglAddView(
+        viewData = view
+        )
+    }
+    #
+    # Trigger next reactViews call
+    #
+    reactData$updateViewListFetchOnly <- runif(1)
+
+    #
+    # Display info text
+    #
+
+    mxUpdateText(
+      id = "modalViewEdit_txt",
+      text = sprintf("Saved at %s",time)
       )
-  }
-  #
-  # Trigger next reactViews call
-  #
-  reactData$updateViewListFetchOnly <- runif(1)
 
-  #
-  # Display info text
-  #
-
-  mxUpdateText(
-    id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",time)
-    )
-
-  mxToggleButton(
-    id="btnViewSave",
-    disable = FALSE
-    )
+    mxToggleButton(
+      id="btnViewSave",
+      disable = FALSE
+      )
+      })
 })
 
 #
@@ -1118,89 +1120,6 @@ observe({
   })
 })
 
-#
-# List of variable
-#
-reactSourceVariables <- reactive({
-
-  layerName <- input$selectSourceLayerMain
-  hasLayer <- !noDataCheck(layerName)
-  language <- reactData$language
-
-  out <- "noVariable"
-  names(out) <- d(out,language)
-
-  if(hasLayer){
-    isLayerOk <- isTRUE(layerName %in% reactSourceLayer())
-
-    if(isLayerOk){
-      outLocal <- mxDbGetLayerColumnsNames(layerName,notIn=c("geom","gid"))
-
-      if(!noDataCheck(outLocal)) out <- outLocal
-    }
-  }
-  return(out)
-})
-
-#
-# List of layers
-#
-reactSourceLayer <- reactive({
-
-  userRole <- getUserRole()
-  idUser <- .get(reactUser,c("data","id"))
-  project <- reactData$project
-  language <- reactData$language
-  updateSourceLayer <- reactData$updateSourceLayerList
-
-  ## non reactif
-  additionalLayers <- c()
-  userCanRead <- .get(userRole,c("read"))
-
-  views <- reactViewsCompact() 
-
-  #
-  # Extract all sources id set in views and add them in the layer list. 
-  #
-  if(!noDataCheck(views)){
-    #
-    # Filter edit
-    #
-    viewsEdit <- views[sapply(views,`[[`,"_edit")]
-    #
-    # Get ids
-    #
-    viewsIds <- sapply(viewsEdit,.get,c("id"))
-
-    #
-    # Get related source layer
-    #
-    additionalLayers = mxDbGetLayerListByViews(viewsIds)
-
-  }
- 
-  #
-  # Get layer table
-  #
-  layers <-  mxDbGetLayerTable(
-    project = project,
-    idUser = idUser,
-    roleInProject = userRole,
-    language = language,
-    additionalSourcesIds = additionalLayers,
-    editableOnly = F
-    )
-
-  if(noDataCheck(layers)){
-    layers <- list("noLayer")
-  }else{ 
-    layers <-  mxGetLayerNamedList( layers )
-  }
-
-  return(layers)
-
-})
-
 
 observe({
 
@@ -1216,7 +1135,7 @@ observe({
     if( hasLayer && useMask ){
       language <- reactData$language
       layerMask <- input$selectSourceLayerMask
-      layers <- reactSourceLayer()
+      layers <- reactListReadSources()
       layers <- layers[!layers %in% layer]
 
       if( length(layers) > 0 ){
@@ -1254,70 +1173,5 @@ observe({
 
   })
 })
-
-
-#
-# reactLayerMaskSummary
-#
-reactLayerMaskSummary <- reactive({
-
-  out <- list()
-  out$list <- list()
-
-  useMask <- input$checkAddMaskLayer
-  layerMaskName <- input$selectSourceLayerMask
-  isLayerOk <- isTRUE(layerMaskName %in% reactSourceLayer())
-
-  if(useMask && isLayerOk){
-    out$list$layerMaskName <- layerMaskName
-    out$list$useMask <- useMask
-  }
-
-  return(out)
-
-})
-
-#
-# reactLayerSummary
-#
-
-reactLayerSummary <- reactive({
-
-  layerName <- input$selectSourceLayerMain
-  geomType <- input$selectSourceLayerMainGeom
-  variableName <- input$selectSourceLayerMainVariable
-  language <- reactData$language
-
-  hasVariable <- !noDataCheck(variableName)
-  hasLayer <- !noDataCheck(layerName)
-
-  out <- list()
-
-  out$html <- tags$div()
-  out$list <- list()
-
-  if(hasVariable && hasLayer){
-
-    geomTypes <- mxDbGetLayerGeomTypes(layerName)
-    isVariableOk <- isTRUE(variableName %in% reactSourceVariables())
-    isLayerOk <- isTRUE(layerName %in% reactSourceLayer())
-    isGeomOk <- isTRUE(geomType %in% geomTypes$geom_type)
-
-    if(isLayerOk && isGeomOk && isVariableOk){
-      #
-      # Get layer summary
-      #
-      out <- mxDbGetLayerSummary(
-        layer = layerName,
-        variable = variableName,
-        geomType = geomType,
-        language = language
-        )
-    }
-  }
-
-  return(out)
-})
-
 
 

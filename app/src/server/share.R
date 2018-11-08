@@ -8,147 +8,150 @@ observeEvent(input$btnIframeBuilder,{
 
 observeEvent(reactData$showShareManager,{
 
-   data <- reactData$showShareManager 
+  data <- reactData$showShareManager 
 
-   hasViews <- typeof(data) == "list" && !noDataCheck(data$views)
-   reactData$iframeString = "";
-   project <- reactData$project
-   language <- reactData$language
-   colorScheme <- input$uiColorScheme;
-   userData <- reactUser$data
-   idUser <- userData$id
-   projects <- mxDbGetProjectListByUser(idUser,asNamedList=T)
-   projectsPublisher <- mxDbGetProjectListByUser(idUser,asNamedList=T,whereUserRoleIs="publisher")
-   projectsPublisher <- projectsPublisher[!projectsPublisher %in% project]
-   enableShareViewProject <- !noDataCheck(projectsPublisher) && hasViews
+  hasViews <- typeof(data) == "list" && !noDataCheck(data$views)
+  reactData$iframeString = "";
+  project <- reactData$project
+  language <- reactData$language
+  colorScheme <- input$uiColorScheme;
+  userData <- reactUser$data
+  idUser <- userData$id
+  projects <- mxDbGetProjectListByUser(idUser,asNamedList=T)
+  projectsPublisher <- mxDbGetProjectListByUser(idUser,asNamedList=T,whereUserRoleIs="publisher")
+  projectsPublisher <- projectsPublisher[!projectsPublisher %in% project]
+  enableShareViewProject <- !noDataCheck(projectsPublisher) && hasViews
 
-   uiShareUrl <- tagList(
-     checkboxInput("checkShareStyle",label="Set style (default = current) "),
-     conditionalPanel(
-       condition="input.checkShareStyle",
-       textInput(
-         inputId="txtShareStyle",
-         label=NULL,
-         value=colorScheme
-         )
-       ),
-     checkboxInput("checkShareProject",label="Set project (default = current) ",value=TRUE),
-     conditionalPanel(condition="input.checkShareProject",
-       selectInput("selectShareProject",
-         label = NULL,
-         choices= projects,
-         selected = project
-         )
-       ),
-     checkboxInput("checkShareCollections",label="Set collections"),
-     conditionalPanel(
-       condition="input.checkShareCollections",
-       selectizeInput(
-         "selectShareCollections",
-         label = NULL,
-         choices = list(),
-         multiple = TRUE,
-         selected = query$collections,
-         options = list(
-           sortField = "label",
-           plugins = list("remove_button")
-           )
-         )
-       ),
-     checkboxInput("checkShareViews",label="Set views",value=hasViews),
-     conditionalPanel(
-       condition="input.checkShareViews",
-       selectizeInput(
-         "selectShareViews",
-         label = NULL,
-         choices = list(),
-         multiple = TRUE,
-         selected = query,
-         options = list(
-           sortField = "label",
-           plugins = list("remove_button")
-           )
-         )
-       ),
-     checkboxInput("checkShareIframe",label="Include link in an iframe"),
-     tags$label("Link"),
-      div(
-        class="input-group",
-        style ="margin-bottom:10px",
-        textInput(
-          "txtShareBuilt",
-          label = NULL,
-          value = ""
-          ),
-        tags$input(
-          type="text",
-          class="mx-hide-here",
-          id = "txtShareLink",
-          label = NULL,
-          value = ""
-          ),
-        tags$span(
-          class="input-group-btn",   
-          tags$button(
-            id = "btnCopyShareLink",
-            class = "form-control btn-square btn-black",
-            icon("clipboard"),
-            onclick="mx.helpers.copyText('txtShareBuilt')"
-            )
-          ),
-        tags$span(
-          class="input-group-btn",   
-          tags$button(
-            id = "btnTwitterShareLink",
-            class = "form-control btn-square btn-black ",
-            onclick="mx.helpers.shareTwitter('txtShareLink')",
-            icon("twitter")
-            )
+  uiShareUrl <- tagList(
+    checkboxInput("checkShareStyle",label="Set style (default = current) "),
+    conditionalPanel(
+      condition="input.checkShareStyle",
+      textInput(
+        inputId="txtShareStyle",
+        label=NULL,
+        value=colorScheme
+        )
+      ),
+    checkboxInput("checkShareProject",label="Set project (default = current) ",value=TRUE),
+    conditionalPanel(condition="input.checkShareProject",
+      selectInput("selectShareProject",
+        label = NULL,
+        choices= projects,
+        selected = project
+        )
+      ),
+    checkboxInput("checkShareCollections",label="Set collections"),
+    conditionalPanel(
+      condition="input.checkShareCollections",
+      selectizeInput(
+        "selectShareCollections",
+        label = NULL,
+        choices = list(),
+        multiple = TRUE,
+        selected = query$collections,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
           )
         )
-     )
+      ),
+    checkboxInput("checkShareViews",label="Set views",value=hasViews),
+    conditionalPanel(
+      condition="input.checkShareViews",
+      selectizeInput(
+        "selectShareViews",
+        label = NULL,
+        choices = list(),
+        multiple = TRUE,
+        selected = query,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+          )
+        )
+      ),
+    checkboxInput("checkShareIframe",label="Include link in an iframe"),
+    tags$label("Link"),
+    div(
+      class="input-group",
+      style ="margin-bottom:10px",
+      textInput(
+        "txtShareBuilt",
+        label = NULL,
+        value = ""
+        ),
+      tags$input(
+        type="text",
+        class="mx-hide-here",
+        id = "txtShareLink",
+        label = NULL,
+        value = ""
+        ),
+      tags$span(
+        class="input-group-btn",   
+        tags$button(
+          id = "btnCopyShareLink",
+          class = "form-control btn-square btn-black",
+          icon("clipboard"),
+          onclick="mx.helpers.copyText('txtShareBuilt')"
+          )
+        ),
+      tags$span(
+        class="input-group-btn",   
+        tags$button(
+          id = "btnTwitterShareLink",
+          class = "form-control btn-square btn-black ",
+          onclick="mx.helpers.shareTwitter('txtShareLink')",
+          icon("twitter")
+          )
+        )
+      )
+    )
 
-   uiShareAddToProject <- tagList(
-     if(enableShareViewProject){
-       tagList(
-         selectizeInput(
-           "selectProjectsToShareView",
-           label = "Projects",
-           choices = projectsPublisher,
-           selected = NULL,
-           multiple = TRUE,
-           options = list(
-             sortField = "label",
-             plugins = list("remove_button")
-             )
-           ),
-         actionButton(
-           "btnShareViewInProject",
-           label = "Add the view to selected project(s)",
-           disable = T
-           )
-         )
-     }
-     )
+  uiShareAddToProject <- tagList(
+    tags$h3("Publish in another project"),
+    wellPanel(
+      selectizeInput(
+        "selectProjectsToShareView",
+        label = "Projects",
+        choices = projectsPublisher,
+        selected = NULL,
+        multiple = TRUE,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+          )
+        ),
+      actionButton(
+        "btnShareViewInProject",
+        label = "Add the view to selected project(s)",
+        disable = T
+        )
+      )
+    )
 
-   ui <- tagList(
-     tags$h3("Share in another project"),
-     wellPanel(
-       uiShareAddToProject
-       ),
-     tags$h3("Share Link"),
-     wellPanel(
-       uiShareUrl
-       )
-     )
+  uiShareUrl <- tagList(
+    tags$h3("Share Link"),
+    wellPanel(
+      uiShareUrl
+      )
+    )
 
-   mxModal(
-     id = "modalShare",
-     title ="Sharing manager",
-     content = ui
-     )
+  if(enableShareViewProject){
+    ui <- tagList(
+      uiShareAddToProject,
+      uiShareUrl
+      )
+  }else{
+    ui <- uiShareUrl
+  }
+  mxModal(
+    id = "modalShare",
+    title ="Sharing manager",
+    content = ui
+    )
 
-   reactData$updateShareProject<-runif(1)
+  reactData$updateShareProject<-runif(1)
 })
 
 #
@@ -305,7 +308,7 @@ observe({
     inputId="txtShareLink",
     value=url
     )
-updateTextAreaInput(
+  updateTextAreaInput(
     session=shiny::getDefaultReactiveDomain(),
     inputId="txtShareBuilt",
     value=out

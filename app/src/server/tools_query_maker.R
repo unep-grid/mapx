@@ -24,7 +24,7 @@ observeEvent(input$btnShowQueryMaker,{
         mxFold(
           labelUi=d("label_layer_available",language),
           content = listToHtmlSimple(
-            listInput = reactSourceLayer(),
+            listInput = reactListReadSources(),
             useFold = TRUE,
             unboxText = FALSE
             )
@@ -55,7 +55,7 @@ observeEvent(input$btnMakeQuery,{
 
   if( isMember ){
     tablesQuery <- c(mxDbGetDistinctTableFromSql(sql))
-    tablesAllowed <- c("mx_countries",reactSourceLayer())
+    tablesAllowed <- c("mx_countries",reactListReadSources())
     
     err[['query_not_valid']] <- isTRUE(noDataCheck(sql) || noDataCheck(tablesQuery))
     err[["query_not_allowed"]] <- !isTRUE(all(tablesQuery %in% tablesAllowed))

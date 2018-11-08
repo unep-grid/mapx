@@ -1,25 +1,5 @@
 
 
-reactProjectExternalViews <- reactive({
-
-  update <- reactData$triggerExternalViews
-  userRole <- getUserRole()
-  project <- reactData$project
-  isPublisher <- isTRUE(userRole$publisher)
-  userData <- reactUser$data
-  viewsExternal <- mxDbProjectGetViewsExternal(project)
-  
-  if(isPublisher){
-    viewsExternal
-  }else{
-    list()
-  }
-
-
-})
-
-
-
 observeEvent(input$btnShowProjectExternalViews,{
 
   userRole <- getUserRole()
@@ -28,7 +8,7 @@ observeEvent(input$btnShowProjectExternalViews,{
   isPublisher <- isTRUE(userRole$publisher)
   userData <- reactUser$data
   projectIsPublic <- mxDbGetProjectIsPublic(project)
-  viewsExternal <- reactProjectExternalViews() 
+  viewsExternal <- reactViewsExternal() 
 
   if( isPublisher ){
 
@@ -68,7 +48,7 @@ observeEvent(input$btnShowProjectExternalViews,{
 
 observe({
   viewsSelected <- as.list(input$selectProjectExternalViews)
-  viewsExternal <- reactProjectExternalViews() 
+  viewsExternal <- reactViewsExternal() 
   noChange <- identical(viewsExternal,viewsSelected)
   mxToggleButton("btnSaveProjectExternalViews",disable=noChange)
 })
@@ -81,7 +61,7 @@ observeEvent(input$btnSaveProjectExternalViews,{
   language <- reactData$language 
   isPublisher <- isTRUE(userRole$publisher)
   userData <- reactUser$data
-  viewsExternal <- reactProjectExternalViews() 
+  viewsExternal <- reactViewsExternal() 
   viewsSelected <- as.list(input$selectProjectExternalViews)
 
   if( isPublisher ){
