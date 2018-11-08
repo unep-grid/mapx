@@ -882,87 +882,93 @@ mxDebugToJs<-function(text,session=getDefaultReactiveDomain()){
 #' @note  See https://github.com/rstudio/shiny/issues/2096
 #' @param cond Cond object
 mxGetStackTrace <- function(cond,
-  full = getOption("shiny.fullstacktrace", FALSE),
-  offset = getOption("shiny.stacktraceoffset", TRUE)) {
+    full = getOption("shiny.fullstacktrace", FALSE),
+    offset = getOption("shiny.stacktraceoffset", TRUE)) {
 
-  should_drop <- !full
-  should_strip <- !full
-  should_prune <- !full
+  tryCatch({
+    should_drop <- !full
+    should_strip <- !full
+    should_prune <- !full
 
-  stackTraceCalls <- c(
-    attr(cond, "deep.stack.trace", exact = TRUE),
-    list(attr(cond, "stack.trace", exact = TRUE))
-    )
-
-  stackTraceParents <- lapply(stackTraceCalls, attr, which = "parents", exact = TRUE)
-  stackTraceCallNames <- lapply(stackTraceCalls, shiny:::getCallNames)
-  stackTraceCalls <- lapply(stackTraceCalls, shiny:::offsetSrcrefs, offset = offset)
-
-  # Use dropTrivialFrames logic to remove trailing bits (.handleSimpleError, h)
-  if (should_drop) {
-    # toKeep is a list of logical vectors, of which elements (stack frames) to keep
-    toKeep <- lapply(stackTraceCallNames, shiny:::dropTrivialFrames)
-    # We apply the list of logical vector indices to each data structure
-    stackTraceCalls <- mapply(stackTraceCalls, FUN = `[`, toKeep, SIMPLIFY = FALSE)
-    stackTraceCallNames <- mapply(stackTraceCallNames, FUN = `[`, toKeep, SIMPLIFY = FALSE)
-    stackTraceParents <- mapply(stackTraceParents, FUN = `[`, toKeep, SIMPLIFY = FALSE)
-  }
-
-  delayedAssign("all_true", {
-    # List of logical vectors that are all TRUE, the same shape as
-    # stackTraceCallNames. Delay the evaluation so we don't create it unless
-    # we need it, but if we need it twice then we don't pay to create it twice.
-    lapply(stackTraceCallNames, function(st) {
-      rep_len(TRUE, length(st))
-          })
-    })
-
-  # stripStackTraces and lapply(stackTraceParents, pruneStackTrace) return lists
-  # of logical vectors. Use mapply(FUN = `&`) to boolean-and each pair of the
-  # logical vectors.
-  toShow <- mapply(
-    if (should_strip) shiny:::stripStackTraces(stackTraceCallNames) else all_true,
-    if (should_prune) lapply(stackTraceParents, shiny:::pruneStackTrace) else all_true,
-    FUN = `&`,
-    SIMPLIFY = FALSE
-    )
-
-  dfs <- mapply(seq_along(stackTraceCalls), rev(stackTraceCalls), rev(stackTraceCallNames), rev(toShow), FUN = function(i, calls, nms, index) {
-    st <- data.frame(
-      num = rev(which(index)),
-      call = rev(nms[index]),
-      loc = rev(shiny:::getLocs(calls[index])),
-      category = rev(shiny:::getCallCategories(calls[index])),
-      stringsAsFactors = FALSE
+    stackTraceCalls <- c(
+      attr(cond, "deep.stack.trace", exact = TRUE),
+      list(attr(cond, "stack.trace", exact = TRUE))
       )
 
-    if (i != 1) {
-      message("From earlier call:")
+    stackTraceParents <- lapply(stackTraceCalls, attr, which = "parents", exact = TRUE)
+    stackTraceCallNames <- lapply(stackTraceCalls, shiny:::getCallNames)
+    stackTraceCalls <- lapply(stackTraceCalls, shiny:::offsetSrcrefs, offset = offset)
+
+    # Use dropTrivialFrames logic to remove trailing bits (.handleSimpleError, h)
+    if (should_drop) {
+      # toKeep is a list of logical vectors, of which elements (stack frames) to keep
+      toKeep <- lapply(stackTraceCallNames, shiny:::dropTrivialFrames)
+      # We apply the list of logical vector indices to each data structure
+      stackTraceCalls <- mapply(stackTraceCalls, FUN = `[`, toKeep, SIMPLIFY = FALSE)
+      stackTraceCallNames <- mapply(stackTraceCallNames, FUN = `[`, toKeep, SIMPLIFY = FALSE)
+      stackTraceParents <- mapply(stackTraceParents, FUN = `[`, toKeep, SIMPLIFY = FALSE)
     }
 
-    if (nrow(st) == 0) {
-      message("  [No stack trace available]")
-    } else {
-      width <- floor(log10(max(st$num))) + 1
-      formatted <- paste0(
-        "  ",
-        formatC(st$num, width = width),
-        ": ",
-        mapply(paste0(st$call, st$loc), st$category, FUN = function(name, category) {
-          if (category == "pkg")
-            crayon::silver(name)
-          else if (category == "user")
-            crayon::blue$bold(name)
-          else
-            crayon::white(name)
-            }),
-          "\n"
-          )
-    }
+    delayedAssign("all_true", {
+      # List of logical vectors that are all TRUE, the same shape as
+      # stackTraceCallNames. Delay the evaluation so we don't create it unless
+      # we need it, but if we need it twice then we don't pay to create it twice.
+      lapply(stackTraceCallNames, function(st) {
+        rep_len(TRUE, length(st))
+            })
+      })
 
-    return(st)
-    }, SIMPLIFY = FALSE)
+    # stripStackTraces and lapply(stackTraceParents, pruneStackTrace) return lists
+    # of logical vectors. Use mapply(FUN = `&`) to boolean-and each pair of the
+    # logical vectors.
+    toShow <- mapply(
+      if (should_strip) shiny:::stripStackTraces(stackTraceCallNames) else all_true,
+      if (should_prune) lapply(stackTraceParents, shiny:::pruneStackTrace) else all_true,
+      FUN = `&`,
+      SIMPLIFY = FALSE
+      )
 
+    dfs <- mapply(seq_along(stackTraceCalls), rev(stackTraceCalls), rev(stackTraceCallNames), rev(toShow), FUN = function(i, calls, nms, index) {
+      st <- data.frame(
+        num = rev(which(index)),
+        call = rev(nms[index]),
+        loc = rev(shiny:::getLocs(calls[index])),
+        category = rev(shiny:::getCallCategories(calls[index])),
+        stringsAsFactors = FALSE
+        )
+
+      if (i != 1) {
+        message("From earlier call:")
+      }
+
+      if (nrow(st) == 0) {
+        message("  [No stack trace available]")
+      } else {
+        width <- floor(log10(max(st$num))) + 1
+        formatted <- paste0(
+          "  ",
+          formatC(st$num, width = width),
+          ": ",
+          mapply(paste0(st$call, st$loc), st$category, FUN = function(name, category) {
+            if (category == "pkg")
+              crayon::silver(name)
+            else if (category == "user")
+              crayon::blue$bold(name)
+            else
+              crayon::white(name)}),
+            "\n"
+            )
+      }
+      return(st)
+      }, SIMPLIFY = FALSE)
+  },
+  error=function(c){
+    return(list(
+        errInternal = c$message,
+        errApp = cond$message
+        ))
+  }
+  )
 }
 
 #' Convert data.frame to html table.
@@ -975,7 +981,7 @@ mxTableToHtml <- function(table,id=randomString(),class='mx-table',classContaine
       shiny::HTML(
         utils::capture.output(
           print(
-            xtable::xtable(table,html=T),
+            xtable::xtable(as.data.frame(table),html=T),
             type = 'html',
             'html.table.attributes' = "class='table "+class+"'",
             sanitize.text.function = identity,
@@ -1024,6 +1030,7 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
       if(!noDataCheck(session)){   
         mxModal(
           id=randomString(),
+          zIndex=100000,
           title="Unexpected issue",
           content=tagList(
             tags$b("Something went wrong :/"),
@@ -1790,71 +1797,71 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   # update meta data
   #
   update <- function(){
-  viewData <- .get(view,c("data"))
-  layerName <- .get(sourceData,c("layerName"))
-  meta <- mxDbGetLayerMeta(layerName)
+    viewData <- .get(view,c("data"))
+    layerName <- .get(sourceData,c("layerName"))
+    meta <- mxDbGetLayerMeta(layerName)
 
-  viewData <- .set(viewData,c("geometry"),list(
-      type = .get(sourceData,c("geomType")),
-      centroid = .get(sourceData,c("centroid")),
-      extent = .get(sourceData,c("extent"))
-      ))
+    viewData <- .set(viewData,c("geometry"),list(
+        type = .get(sourceData,c("geomType")),
+        centroid = .get(sourceData,c("centroid")),
+        extent = .get(sourceData,c("extent"))
+        ))
 
-  viewTable <- .get(sourceData,c("table"))
+    viewTable <- .get(sourceData,c("table"))
 
-  attributes <- list(
-    name = .get(sourceData,c("variableName")),
-    names = unique(c(
-        .get(sourceData,c("timeVariables")),
-        .get(sourceData,c("variableName")),
-        additionalAttributes
-        )),
-    type = .get(sourceData,c("type")),
-    table = .get(sourceData,c("table")),
-    sample = sourceData[[c("sampleData")]],
-    min = min(viewTable$value,na.rm=T),
-    max = max(viewTable$value,na.rm=T),
-    rows = .get(sourceData,c("numberOfRow")),
-    nulls =  .get(sourceData,c("numberOfNull")),
-    distincts = .get(sourceData,c("numberOfDistinct"))
-    )
-
-  viewData <- .set(viewData, c("attribute"), attributes )
-
-  viewData <- .set(viewData,c("period"),list(
-      extent = .get(sourceData,c("timeExtent")),
-      density = .get(sourceData,c("timeDensity")) 
-      ))
-
-  viewData <- .set(viewData,c("source"),list(
-      type = "vector",
-      attribution = as.character(tags$a(
-          href = .get(meta,c("origin","homepage","url")),
-            .get(meta,c("text","title","en"))
+    attributes <- list(
+      name = .get(sourceData,c("variableName")),
+      names = unique(c(
+          .get(sourceData,c("timeVariables")),
+          .get(sourceData,c("variableName")),
+          additionalAttributes
           )),
-      layerInfo = list(
-        name =  .get(sourceData,c("layerName")),
-        maskName = .get(sourceDataMask,c("layerMaskName"))
-        )
-      ))
+      type = .get(sourceData,c("type")),
+      table = .get(sourceData,c("table")),
+      sample = sourceData[[c("sampleData")]],
+      min = min(.get(viewTable,'value',-Inf),na.rm=T),
+      max = max(.get(viewTable,'value',Inf),na.rm=T),
+      rows = .get(sourceData,c("numberOfRow")),
+      nulls =  .get(sourceData,c("numberOfNull")),
+      distincts = .get(sourceData,c("numberOfDistinct"))
+      )
 
-  #
-  #set style default
-  #
-  geomType <- .get(sourceData,c("geomType"))
-  style <- .get(viewData,c("style"))
+    viewData <- .set(viewData, c("attribute"), attributes )
 
-  if(noDataCheck(style)){
-    viewData <- .set(viewData,c("style"), list())
-  }
+    viewData <- .set(viewData,c("period"),list(
+        extent = .get(sourceData,c("timeExtent")),
+        density = .get(sourceData,c("timeDensity")) 
+        ))
 
-  if( geomType == "lines" ){
-    viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
-  }
+    viewData <- .set(viewData,c("source"),list(
+        type = "vector",
+        attribution = as.character(tags$a(
+            href = .get(meta,c("origin","homepage","url")),
+            .get(meta,c("text","title","en"))
+            )),
+        layerInfo = list(
+          name =  .get(sourceData,c("layerName")),
+          maskName = .get(sourceDataMask,c("layerMaskName"))
+          )
+        ))
 
-  view <- .set(view,c("data"),viewData)
+    #
+    #set style default
+    #
+    geomType <- .get(sourceData,c("geomType"))
+    style <- .get(viewData,c("style"))
 
-  return(view)
+    if(noDataCheck(style)){
+      viewData <- .set(viewData,c("style"), list())
+    }
+
+    if( geomType == "lines" ){
+      viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
+    }
+
+    view <- .set(view,c("data"),viewData)
+
+    return(view)
 
   }
 
@@ -1997,6 +2004,7 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 #' @param close {logical} Ask to close an existing modal
 #' @param replace {logical} Ask to replace an existing modal
 #' @param title {character|shiny.tag} Optional title 
+#' @param zIndex {Number} set zIndex
 #' @param subtitle {character|shiny.tag} Optional subtitle
 #' @param content {character|shiny.tag} Optional content
 #' @param buttons {list} Optional ActionButton list
@@ -2006,7 +2014,7 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
-mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,minHeight=NULL,minWidth=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+mxModal = function(id=NULL,close=F,replace=T,zIndex=NULL,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,minHeight=NULL,minWidth=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
 
   stopifnot(!noDataCheck(id))
 
@@ -2019,6 +2027,7 @@ mxModal = function(id=NULL,close=F,replace=T,title=NULL,subtitle=NULL,content=NU
     list(
       id=id,
       replace=as.logical(replace),
+      zIndex=zIndex,
       title=as.character(title),
       subtitle=as.character(subtitle),
       textCloseButton=as.character(textCloseButton),
