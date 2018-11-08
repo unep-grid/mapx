@@ -19,7 +19,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.5.26-debian
+    image: fredmoser/mx-app-shiny:1.5.27-debian
     restart: always
     ports:
       - 3838
@@ -40,7 +40,7 @@ services:
   api:
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node:1.5.26-alpine
+    image: fredmoser/mx-api-node:1.5.27-alpine
     restart: always
     ports: 
       - 3030
@@ -80,6 +80,7 @@ services:
     image: redis:alpine
     restart: always
     hostname: redis
+    command: redis-server /usr/local/etc/redis/redis.conf 
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
