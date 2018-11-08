@@ -1660,7 +1660,7 @@ export function makeTransparencySlider(o) {
     import("../../node_modules/nouislider/distribute/nouislider.css")
     ]).then(function(module){
 
-      var noUiSlider = module[0];
+      var noUiSlider = module[0].default;
 
       var slider = noUiSlider.create(el, {
         range: {min:0,max:100},
@@ -1731,7 +1731,7 @@ export function makeNumericSlider(o) {
         import("../../node_modules/nouislider/distribute/nouislider.css")
       ]).then(function(module){
 
-        var noUiSlider = module[0];
+        var noUiSlider = module[0].default;
 
         var slider = noUiSlider.create(el, {
           range: range,
@@ -1860,7 +1860,7 @@ export function makeTimeSlider(o) {
           import("../../node_modules/nouislider/distribute/nouislider.css")
         ]).then(function(module){
 
-          var noUiSlider = module[0];
+          var noUiSlider = module[0].default;
 
           var  slider = noUiSlider.create(el, {
             range: range,
@@ -2120,7 +2120,7 @@ export function handleViewClick(o){
         comment :"target is the search button",
         isTrue : el.dataset.view_action_key == "btn_opt_zoom_visible",
         action : function(){
-          zoomToViewIdVisible({
+          mx.helpers.zoomToViewIdVisible({
             id : o.id,
             idView : el.dataset.view_action_target
           });
@@ -4279,51 +4279,49 @@ export function getViewsBounds(views){
  * @param {string} o.idView view id
  */
 export function zoomToViewIdVisible(o){
- 
-  return import("@turf/bbox").then(({ "default": bbox }) => {
 
-  var geomTemp, exists, isArray, hasMap, idLayerAll, features;
+  return import("@turf/bbox")
+    .then(({ "default": bbox }) => {
 
-  geomTemp = {
-    type : "FeatureCollection",
-    features : [] 
-  };
+      var geomTemp, exists, isArray, hasMap, idLayerAll, features;
 
-  var map = mx.helpers.getMap(o.id);
+      geomTemp = {
+        type : "FeatureCollection",
+        features : [] 
+      };
 
-  if ( map ) {
+      var map = mx.helpers.getMap(o.id);
 
-    try {
+      if ( map ) {
 
+        idLayerAll =  mx.helpers.getLayerNamesByPrefix({
+          id : o.id,
+          prefix: o.idView
+        });
 
-      idLayerAll =  mx.helpers.getLayerNamesByPrefix({
-        id : o.id,
-        prefix: o.idView
-      });
+        features =  map.queryRenderedFeatures({ 
+          layers: idLayerAll
+        });
 
-      features =  map.queryRenderedFeatures({ 
-        layers: idLayerAll
-      });
+        features.forEach(function(x){
+          geomTemp
+            .features
+            .push( x );
+        });
 
-      features.forEach(function(x){
-        geomTemp
-          .features
-          .push( x );
-      });
-
-      if( geomTemp.features.length>0 ){
-        var bbx = bbox(geomTemp);
-        var sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
-        var ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
-        var llb = new mx.mapboxgl.LngLatBounds(sw, ne);
-        map.fitBounds(llb);
+        if( geomTemp.features.length>0 ){
+          var bbx = bbox(geomTemp);
+          var sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
+          var ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
+          var llb = new mx.mapboxgl.LngLatBounds(sw, ne);
+          map.fitBounds(llb);
+        }
       }
-    }
-    catch(err) {
-      console.log("fit bound failed: " + err);
-    }
-  }
- });
+
+    })
+    .catch(err => {
+      throw new Error(err);
+    });
 }
 
 export function resetViewStyle(o){
