@@ -103,7 +103,7 @@ function addSourceHandler(req,res,next){
       */
       cleanFile();
       msg = 'Added new entry ' + title + ' ( id:' + idSource + ' ) in project ' + idProject;       
-      res.write(JSON.stringify({type:'message',msg:msg})+'\t\n');
+      res.write(JSON.stringify({type:'end',msg:msg})+'\t\n');
 
 
       if(email){
