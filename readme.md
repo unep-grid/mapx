@@ -1,4 +1,4 @@
-# MapX
+﻿# MapX
 
 MapX is a spatial data infrastructure that aims to support the sustainable use of natural resources and the environment by increasing access to the best available geospatial information and related monitoring technologies. MapX is supported by an online platform that provides authoritative spatial data at local, national and global scales, an authentication data integrity framework using a scorecard and a set of on-line tools to visualize, analyse and access geospatial data. Originally created for stakeholders involved in the extractives sector, MapX has expanded in 2017 to other fields where spatial data can help inform stakeholder dialogue, prioritization of investments and impact monitoring such as disaster risk reduction, chemicals management, biodiversity planning, renewable energy and environmental security.
 
@@ -17,7 +17,7 @@ MapX is a spatial data infrastructure that aims to support the sustainable use o
           - Code refactoring : regroup reactive function by type. Should solve actions duplicate.
     - New feature
       - API 
-          - Method to get source metadata : "/get/souce/metadata:id"
+          - Method to get source metadata : "/get/source/metadata:id"
 - <a href="https://github.com/fxi/map-x-mgl/tree/11f89e4fea966169df9089d5c2ca15b301a575c5" target="_blank">1.5.26</a>
     - Improvement
       - APP
