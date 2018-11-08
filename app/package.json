@@ -80,6 +80,7 @@
     "highcharts-more": "^0.1.7",
     "highcharts-solid-gauge": "^0.1.7",
     "hint.css": "^2.5.0",
+    "html2canvas": "^1.0.0-alpha.12",
     "jquery": "^3.3.1",
     "js-beautify": "^1.8.8",
     "jscolor-picker": "^2.0.4",
