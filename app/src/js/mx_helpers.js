@@ -2,6 +2,7 @@
 export * from './mx_helper_cookies.js';
 export * from './mx_helper_el.js'; /* createElement / simple framework */
 export * from './mx_helper_misc.js';
+export * from './mx_helper_modal.js';
 export * from './mx_helper_language.js';
 export * from './mx_helper_stat.js';
 export * from './mx_helper_list_projects.js';

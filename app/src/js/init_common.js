@@ -13,6 +13,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import 'hint.css';
 import '../css/mx.css';
+import '../css/mx_modal.css';
 import '../css/mx_story.css';
 import '../css/mx_dashboard.css';
 import '../css/mx_colors.css';
