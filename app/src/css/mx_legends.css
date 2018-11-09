@@ -8,6 +8,8 @@
 .mx-legend-rules {
   overflow: auto;
   max-height: 200px;
+  display: block;
+  break-inside: avoid-column;
 }
 
 .mx-legend-container {
@@ -63,13 +65,18 @@
   /*padding: 8px;*/
 }
 
-.mx-view-item-legend-raster img {
+.mx-view-item-legend-raster {
+  /* see mx-view-content for container max height */
   max-width: 100%;
   height: auto;
-  /* see mx-view-content for container max height */
   max-height: 220px;
-  overflow:auto;
-  cursor:pointer;
+  overflow-x:hidden;
+  overflow-y:auto;
+  padding:5px;
+}
+
+.mx-view-item-legend-raster img {
   cursor:zoom-in;
-  padding:10px;
+  display: block;
+  break-inside: avoid-column;
 }

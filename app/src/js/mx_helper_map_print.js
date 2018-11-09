@@ -145,9 +145,9 @@ export function getLegendPng(selector,opt){
   styleClone.position = "fixed";
   styleClone.zIndex = -1;
   styleClone.top = 0;
+
   styleClone.height = opt.style.height || "auto";
   styleClone.width = opt.style.width || "auto";
-  styleClone.overflow = opt.style.overflow || 'hidden';
   styleClone.maxHeight = opt.style.maxHeight || "none";
 
   if( hasRules ){
@@ -155,6 +155,13 @@ export function getLegendPng(selector,opt){
     elCloneRules.style.maxHeight = "none";
     elCloneRules.style.overflow = "hidden";
   }
+
+  if( hasImage ){
+    elClone.className = "";
+    elCloneImage.style.height="auto";
+    elCloneImage.style.maxHeight = "none";
+  }
+
 
   promImage = new Promise((resolve,reject)=>{
     if(!hasImage){
@@ -267,7 +274,7 @@ export function downloadMapPdf(o){
       promLegend = mx.helpers.getLegendPng(elLegend,{
         style : {
           width : "5.5cm",
-          maxHeight : "17cm"
+          maxHeight : "auto"
         }
       });
 
