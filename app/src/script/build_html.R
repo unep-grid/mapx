@@ -4,7 +4,7 @@ library(jsonlite)
 library(magrittr)
 source("src/helper/misc.R")
 source("settings/settings-global.R")
-
+dir.create('src/built',showWarnings=F)
 rt <- htmltools::doRenderTags
 
 write('<!DOCTYPE html>','src/built/index.html')

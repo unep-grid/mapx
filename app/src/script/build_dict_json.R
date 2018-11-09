@@ -5,7 +5,7 @@
 library("jsonlite")
 
 pathDest <- "src/built"
-
+dir.create(pathDest,showWarnings=F)
 
 r = function(path){
   jsonlite::fromJSON(path)
