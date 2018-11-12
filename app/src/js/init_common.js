@@ -1,10 +1,5 @@
 /*jshint esversion: 6 */
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', function() {
-    navigator.serviceWorker.register('/service-worker.js');
-  });
-}
 import 'selectize/dist/css/selectize.css';
 import 'selectize/dist/css/selectize.bootstrap3.css';
 import '../css/mx_selectize.css';

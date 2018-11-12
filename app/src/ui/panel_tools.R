@@ -89,6 +89,19 @@ themeColor <- tagList(
     )
   )
 
+systemTools <- tagList(
+  tags$h3(`data-lang_key`="title_utilities"),
+  tags$button('btn',class="btn btn-default",onClick="mx.helpers.clearCache()",`data-lang_key`='btn_clear_cache')
+  )
+
+version <- tagList(
+  tags$div(
+    tags$hr(),
+    tags$small( class="text-muted","Version app server :",tags$span(class="text-muted",config$version)),
+    tags$br(),
+    tags$small( class="text-muted","Version app client :",tags$span(class="text-muted",id="mxVersion"))
+    )
+  )
 # View and source edit buttons. Generated in tools_manage.R
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
@@ -100,9 +113,10 @@ projectConfig <- uiOutput("uiBtnProjectConfig")
 queryMaker <- uiOutput("uiBtnQueryMaker")
 
 
+browser()
 # Full block
 tagList(
-  tags$div(class="mx-tools-container",
+  tags$div(class="mx-tools-container", 
     tags$div(class="mx-tools-content mx-scroll-styled",
       tags$h2(`data-lang_key`="title_tools"),
       tags$h3(`data-lang_key`="title_tools_map"),
@@ -117,7 +131,9 @@ tagList(
       roleManager,
       appConfig,
       projectConfig,
-      themeColor
+      themeColor,
+      systemTools,
+      version
       )
     )
   )

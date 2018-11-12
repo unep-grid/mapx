@@ -23,6 +23,7 @@ config[["system"]] <- list(
   urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
   )
 
+config$version = jsonlite::fromJSON('package.json')$version
 
 
 config[["browser"]] <- list(

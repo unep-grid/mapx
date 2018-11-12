@@ -5,6 +5,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
 
@@ -16,7 +17,6 @@ module.exports = merge(common, {
     }
   },
   plugins: [
-// clean www before building
     new CleanWebpackPlugin(
       [
         '../www/*'
@@ -27,18 +27,22 @@ module.exports = merge(common, {
         allowExternal: true
       }
     ),
-    new BundleAnalyzerPlugin(),
-    //new FaviconsWebpackPlugin('./src/svg/map-x-logo.svg'),
+    //new BundleAnalyzerPlugin(),
+    //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
     /**
     * last step, generate service worker
     * Configuration : https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#configuration
     * more info here : https://developers.google.com/web/tools/workbox/guides/codelabs/webpack
     */
+    new CopyWebpackPlugin(
+      [ { from : './webpack/sw_listen_skip_waiting_install.js', to: 'sw_listen_skip_waiting_install.js'} ]
+    ),
     new GenerateSW({
       swDest : 'service-worker.js',
       importWorkboxFrom : 'local',
-      skipWaiting : true, /* do not wait on other clients */
-      clientsClaim : true, /* handle all clients as soon as it's activated */
+      skipWaiting : false, 
+      clientsClaim : true, 
+      importScripts : ['sw_listen_skip_waiting_install.js'],
       runtimeCaching :  [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,

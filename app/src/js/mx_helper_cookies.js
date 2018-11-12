@@ -59,7 +59,7 @@ export function writeCookie(e)
     }
 
     if(e.reload){
-      window.location.reload();
+      mx.helpers.reload();
     }
   });
 }

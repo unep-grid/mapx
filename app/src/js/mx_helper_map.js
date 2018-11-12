@@ -338,11 +338,11 @@ export function initMapx(o){
   });
 
   /*
-   * Update cache
+   * Update version
    */
-  if(o.version){
-
-
+  if(true){
+    var elVersion = document.getElementById("mxVersion");
+    if(elVersion) elVersion.innerText= mx.helpers.getVersion().join('.');
   }
 
   /**

@@ -235,6 +235,7 @@ export function iconFlash(icon) {
   });
 }
 
+
 /**
 * Fill with zeros
 * @param {Number} n Number

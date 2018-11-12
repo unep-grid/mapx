@@ -12,8 +12,9 @@
 *
 */
 export function modal(o){
-
-  var id = o.id || makeId();
+  o = o || {};
+  var h = mx.helpers;
+  var id = o.id || h.makeId();
   var idBackground = "mx_background_for_" + id;
   var modal = document.getElementById(o.id) || document.createElement("div");
   var background = document.getElementById(idBackground) || document.createElement("div"); 

@@ -6,13 +6,17 @@ const IconFontPlugin = require('icon-font-loader').Plugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 //const ManifestPlugin = require('webpack-manifest-plugin');
-
+/**
+* To remove in dev
+*/
+//const {GenerateSW} = require('workbox-webpack-plugin');
 module.exports = {
   target: 'web',
   node : {
     fs : 'empty'
   },
   entry: {
+    sw : './src/js/init_sw.js',
     common:'./src/js/init_common.js',
     app : './src/js/init_shiny.js',
     kiosk : './src/js/init_kiosk.js'
@@ -27,12 +31,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template : './src/kiosk/index.html',
       filename: './kiosk.html',
-      chunks : ['common','kiosk']
+      chunks : ['common','sw','kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template : './src/built/index.html',
-      chunks : ['common','app']
+      chunks : ['common','sw','app']
     }),
     new WebpackPwaManifest({
       filename : "manifest.json",
@@ -57,7 +61,47 @@ module.exports = {
     }),
     new CopyWebpackPlugin(
       [ { from : './src/sprites', to: 'sprites/'} ]
-    )
+    ),
+    /**
+    * To remmove in dev!
+    */
+    //new CopyWebpackPlugin(
+      //[ { from : './webpack/sw_listen_skip_waiting_install.js', to: 'sw_listen_skip_waiting_install.js'} ]
+    //),
+    //new GenerateSW({
+      //swDest : 'service-worker.js',
+      //importWorkboxFrom : 'local',
+      //skipWaiting : false, [> do not wait on other clients <]
+      //clientsClaim : true, [> handle all clients as soon as it's activated <]
+      //importScripts : ['sw_listen_skip_waiting_install.js'],
+      //runtimeCaching :  [
+        //{
+          //urlPattern: /^https:\/\/api\.mapbox\.com\//,
+          //handler: 'cacheFirst'
+        //},
+        //{
+          //urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
+          //handler: 'cacheFirst'
+        //},
+        //{
+          //urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
+          //handler: 'cacheFirst'
+        //},
+        //{
+          //urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
+          //handler: 'cacheFirst'
+        //},
+        //{
+          //urlPattern: /^https:\/\/.*wms\?bbox=/,
+          //handler: 'cacheFirst'
+        //},
+        //{
+          //urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
+          //handler: 'cacheFirst'
+        //}
+      //]
+    //}),
+
   ],
   module: {
     rules: [

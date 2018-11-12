@@ -33,6 +33,7 @@ export let data = {
 export let events = {};
 export let controls = {};
 export let listener = {};
+export let info = require('../../package.json');
 export let settings = {
   language : 'en',
   languages : ['en','fr'],

@@ -5327,5 +5327,65 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }  
+  },
+ {
+    "id": "update_app_msg",
+    "en": "MapX has been updated, click on the button to install new version",
+    "fr": "MapX a été mis à jour, cliquez sur le bouton pour installer",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+   {
+    "id": "btn_clear_cache",
+    "en": "Clear cached data",
+    "fr": "Supprimer les données en cache",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+   {
+    "id": "title_utilities",
+    "en": "Utilities",
+    "fr": "Utilitaires",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "update_app_title",
+    "en": "Update",
+    "fr": "Mise à jour",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_install_update",
+    "en": "Install and reload",
+    "fr": "Installer et recharger",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }
 ]
