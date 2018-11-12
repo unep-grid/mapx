@@ -19,7 +19,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.5.27-debian
+    image: fredmoser/mx-app-shiny:1.5.28-debian
     restart: always
     ports:
       - 3838
