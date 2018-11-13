@@ -63,25 +63,34 @@ function onNewServiceWorker(registration, callback) {
  */
 function showRefreshUI(registration) {
   var h = mx.helpers;
+  // test if has mx.info. ( version before 1.5.28 ) 
+  var oldVersion = !!mx.info ;
 
   h.getDictItem(['btn_install_update','update_app_title','update_app_msg'])
     .then((w) => {
 
-      var btn = h.el('button',w[0],{
-        class:'btn btn-default'
-      });
+      if( oldVersion ){
+        // force version update the first time after installing 1.5.28.
+        update();
+      }else{
 
-      var txt = h.el('p',w[2]);
-      var msg = h.el('div',txt,btn);
+        var btn = h.el('button',w[0],{
+          class:'btn btn-default'
+        });
 
-      btn.addEventListener('click',update);
+        var txt = h.el('p',w[2]);
+        var msg = h.el('div',txt,btn);
 
-      h.modal({
-        zIndex:100000,
-        title:w[1],
-        id:'a',
-        content:msg
-      });
+        btn.addEventListener('click',update);
+
+        h.modal({
+          zIndex:100000,
+          title:w[1],
+          id:'a',
+          content:msg
+        });
+
+      }
 
       function update(){
         if (!registration.waiting) {
