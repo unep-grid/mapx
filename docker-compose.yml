@@ -40,7 +40,7 @@ services:
   api:
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node:1.5.27-alpine
+    image: fredmoser/mx-api-node:1.5.29-alpine
     restart: always
     ports: 
       - 3030
@@ -55,6 +55,7 @@ services:
       - traefik.s2.frontend.rule=Host:apidev.mapx.localhost
       - traefik.s2.port=3333
     volumes:
+      - ./api:/apidev
       - ./_shared:/shared
   geoserver :
     env_file: mapx.dev.env

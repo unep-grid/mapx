@@ -95,7 +95,21 @@ function addSourceHandler(req,res,next){
     ' $3::text,'+
     ' \'{"meta":{"text":{"title":{"en":"'+ title +'"}}}}\' '+
     ')';
-
+  /**
+  *  Uncomment to use escaped multiline 
+  */
+/*  var sqlAddSource = `INSERT INTO mx_sources (*/
+    //id, editor, readers, editors, date_modified, type, project, data
+  //) VALUES (
+    //$1::text, 
+    //$2::integer,
+    //'["publishers"]',
+    //'["publishers"]',
+    //now(),
+    //'vector', 
+    //$3::text,
+    //'{"meta":{"text":{"title":{"en":"${title}"}}}}'
+  /*)`;*/
   pgWrite.query(sqlAddSource,[idSource, idUser, idProject])
     .then(function(result){
       /**

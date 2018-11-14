@@ -4,7 +4,14 @@ const app = express();
 const appDev = express();
 const utils = require('./utils');
 const pg = require("./db").pgRead;
-const port = 3030;
+
+let port = 3030;
+process.argv.forEach(function (val, index, array) {
+  val = val.split("=");
+  if(val[0]=='port'){
+    port = val[1];
+  }
+});
 //const port = 3333;
 
 app.use(function(req, res, next) {
@@ -22,6 +29,7 @@ app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get );
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
+app.get('/get/source/overlap/',utils.sourceOverlap.get);//countries=[]&layers=[]&='area';
 app.get('/get/ip',utils.ip.get);
 
 app.post('/upload/image/', utils.image.upload);  
