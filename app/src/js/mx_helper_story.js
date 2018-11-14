@@ -235,8 +235,8 @@ function initAdaptiveScreen(o){
     o.data.scaleWrapper = scaleWrapper;
     o.data.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
     o.data.elStory.style[mx.helpers.cssTransform] =  "translate(-50%,-50%) scale("+ scaleWrapper +")";
-    o.data.elMap.style.height = o.data.rectStory.height * scaleWrapper;
-    o.data.elMap.style.width = o.data.rectStory.width * scaleWrapper;
+    o.data.elMap.style.height = o.data.rectStory.height * scaleWrapper + "px";
+    o.data.elMap.style.width = o.data.rectStory.width * scaleWrapper + "px";
     o.data.elMap.style[mx.helpers.cssTransform] =  "translate(-50%,-50%)";
     o.data.map.resize();
   };
@@ -288,10 +288,11 @@ function initEditing(o){
     import('ContentTools'),
     import('ContentTools/build/content-tools.min.css')
   ]).then(function(m){
-    ContentTools = m[0];
+    ContentTools = m[0].default;
     return import("./../coffee/mx_extend_content_tools.coffee");
   }).then(function(){
    
+
     /*
      * Get ContentTools and set upload logic
      */
@@ -1462,7 +1463,7 @@ export function storyController(o){
       if( o.data.elBullets ){
         setTimeout(function(){
           o.data.elBullets.remove();
-        },10);
+        },100);
       }
 
         if( o.data.elScroll ){
