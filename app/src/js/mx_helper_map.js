@@ -20,40 +20,40 @@ export function metersToDegrees(point) {
 }
 
 /**
-* Get url for api
-* @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
-*/
+ * Get url for api
+ * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
+ */
 export function getApiUrl(id){
-    var s = mx.settings; 
-    var urlBase = s.apiProtocol + '//' + s.apiHost  + ':' + s.apiPort;
-    return urlBase + s.apiRoute[id];
+  var s = mx.settings; 
+  var urlBase = s.apiProtocol + '//' + s.apiHost  + ':' + s.apiPort;
+  return urlBase + s.apiRoute[id];
 }
 
 /**
-* Get url for path relative to the app
-* @param {String} id Id of the path : sprite, download, etc
-*/
+ * Get url for path relative to the app
+ * @param {String} id Id of the path : sprite, download, etc
+ */
 export function getAppPathUrl(id){
-    var s = mx.settings; 
-    var loc = window.location.origin;
-    return loc + '/' + s.paths[id];
+  var s = mx.settings; 
+  var loc = window.location.origin;
+  return loc + '/' + s.paths[id];
 }
 
 /**
-* Update settings
-* @param {Options} o Option with key from settings. Overwrite settings values.
-*/
+ * Update settings
+ * @param {Options} o Option with key from settings. Overwrite settings values.
+ */
 export function updateSettings(o){
-   var s = mx.settings;
-    Object.keys(s).forEach( k => {
-      mx.settings[k] = o[k] || s[k];
+  var s = mx.settings;
+  Object.keys(s).forEach( k => {
+    mx.settings[k] = o[k] || s[k];
   });
 }
 
 /**
-* Settings of the user
-* @param {Object} o Object that contains user data such as id, email, nickname, etc..
-*/
+ * Settings of the user
+ * @param {Object} o Object that contains user data such as id, email, nickname, etc..
+ */
 export function setUserData(o){
   for(var i in o){
     mx.settings.user[i] = o[i];
@@ -62,11 +62,11 @@ export function setUserData(o){
 
 
 /**
-* Get view's source metadata
-* @param {String} id Name/Id of the source layer
-*/
+ * Get view's source metadata
+ * @param {String} id Name/Id of the source layer
+ */
 export function getSourceMetadata(id,force){
-  
+
   force = force || false;
 
   var urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
@@ -85,10 +85,10 @@ export function getSourceMetadata(id,force){
 }
 
 /**
-* Add source meta object to given view
-* @param {Obejct} view object 
-* @param {Boolean} force force / replace meta object
-*/
+ * Add source meta object to given view
+ * @param {Obejct} view object 
+ * @param {Boolean} force force / replace meta object
+ */
 export function addSourceMetadataToView(view,force){
   force = force || false;
   var idSourceLayer = mx.helpers.path(view,"data.source.layerInfo.name","");
@@ -102,10 +102,10 @@ export function addSourceMetadataToView(view,force){
   }
 }
 /**
-* For all current view, update the mata object
-* @param {Boolean} ovewrite Overwrite existing meta 
-* @return null
-*/
+ * For all current view, update the mata object
+ * @param {Boolean} ovewrite Overwrite existing meta 
+ * @return null
+ */
 export function updateAllViewsSourceMetadata(overwrite){
   overwrite = overwrite || false;
 
@@ -135,7 +135,7 @@ export function handlerDownloadVectorSource(o){
   }
 
   var cEl = function(type){
-   return document.createElement(type);
+    return document.createElement(type);
   };
 
   var progressMsg = "";
@@ -211,12 +211,12 @@ export function handlerDownloadVectorSource(o){
   var msgs = [];
   function cleanMsg(res){
     /**
-    * Hacky way of splitting appended message
-    * The '\t\n' value is set server side at the end of each write.
-    * Here, the result keeps appending new value ( why ? ), so we needed a way to get only the last message to avoid duplicate.
-    * It does not sounds very clean ...
-    * Maybe a websocket message would be better here.
-    */
+     * Hacky way of splitting appended message
+     * The '\t\n' value is set server side at the end of each write.
+     * Here, the result keeps appending new value ( why ? ), so we needed a way to get only the last message to avoid duplicate.
+     * It does not sounds very clean ...
+     * Maybe a websocket message would be better here.
+     */
     return res.split("\t\n").map(function(j){
       if(j){
         if(msgs.indexOf(j) == -1){
@@ -227,7 +227,7 @@ export function handlerDownloadVectorSource(o){
       }
     });
   }
-  
+
   mx.helpers.getJSON({
     maxWait : 1e3 * 60 * 60,
     url : dlUrlCreate,
@@ -235,7 +235,7 @@ export function handlerDownloadVectorSource(o){
       cleanMsg(d);
     },
     onSuccess : function(d){
-        cleanMsg(d);
+      cleanMsg(d);
     },
     onError : function(res){
       cleanMsg(d);
@@ -244,10 +244,10 @@ export function handlerDownloadVectorSource(o){
 }
 
 /**
-* Set the project manually
-* @param {String} idProject project to load
-* @return null
-*/
+ * Set the project manually
+ * @param {String} idProject project to load
+ * @return null
+ */
 export function setProject(idProject){
   Shiny.onInputChange("selectProject",idProject);
 }
@@ -283,7 +283,7 @@ export function requestProjectMembership(idProject){
  * @param {string} o.language Initial language code 
  * @param {string} o.languages Languages code list 
  * @param {Object} o.apiUrl Base url for api 
-*/
+ */
 export function initMapx(o){
 
   var styleInit;
@@ -422,20 +422,20 @@ export function initMapxApp(o){
     return ;
   }
 
-    /**
-     * Send loading confirmation to shiny
-     */
+  /**
+   * Send loading confirmation to shiny
+   */
   o.map.on('load', function() {
 
     /*
-    * Init pixop
-    */
+     * Init pixop
+     */
     mx.helpers.initPixop();
 
     /*
      * secondary centering method
      */
-   
+
     if( ! o.storyAutoStart ){
       showUi();
     }
@@ -565,23 +565,23 @@ export function initMapxApp(o){
     });
   });
 
-    /**
-    * local helpers
-    */
-    function showUi(){
-      document.querySelectorAll(".mx-hide-start")
-        .forEach(function(el){
-          el.classList.remove("mx-hide-start");
-        });
-    }
+  /**
+   * local helpers
+   */
+  function showUi(){
+    document.querySelectorAll(".mx-hide-start")
+      .forEach(function(el){
+        el.classList.remove("mx-hide-start");
+      });
+  }
 
 }
 
 
 /**
-* Handle click event
-* @param {Object} e Mapboxgl event object
-*/
+ * Handle click event
+ * @param {Object} e Mapboxgl event object
+ */
 export function handleClickEvent(e,idMap){
   var type = e.type;
   var hasLayer = mx.helpers.getLayerNamesByPrefix({prefix:'MX-'}).length>0 ;
@@ -628,9 +628,9 @@ export function getLocalForageData(o){
 
 
 /**
-* Geolocate user on click
-* @return null
-*/
+ * Geolocate user on click
+ * @return null
+ */
 export function geolocateUser(e){
   var lang = mx.settings.language;
   var hasGeolocator = !!navigator.geolocation;
@@ -660,9 +660,9 @@ export function geolocateUser(e){
       .then(it => {    
         classesHtml.remove("shiny-busy");
         mx.helpers.modal({
-         id : "geolocate_error",
-         title : it[1],
-         content : "<p> " + it[0] + "</p> <p> ( "+ err.message +" ) </p>"
+          id : "geolocate_error",
+          title : it[1],
+          content : "<p> " + it[0] + "</p> <p> ( "+ err.message +" ) </p>"
         });
       });
   }
@@ -678,10 +678,10 @@ export function geolocateUser(e){
 
 
 /**
-* Reset project : remove view, dashboards, etc
-* 
-* @param {String} idMap map id
-*/
+ * Reset project : remove view, dashboards, etc
+ * 
+ * @param {String} idMap map id
+ */
 export function reset(o){
 
   var views = mx.helpers.getViews({
@@ -695,10 +695,10 @@ export function reset(o){
     id:o.idMap,
     prefix:"MX-"
   });
-  
+
   /**
-  *  Reset filters and selector
-  */
+   *  Reset filters and selector
+   */
   var elViewList = document.querySelector(".mx-views-list");
   if( elViewList ) elViewList.innerHTML="";
   var elTxtFilterInput = document.querySelector("#viewsFilterText");
@@ -718,16 +718,16 @@ export function reset(o){
   }
 
   /*
-  * apply remove method
-  */
+   * apply remove method
+   */
 
   mx.helpers.cleanRemoveModules(views);
   if(elViewList) setViewsListEmpty(true);
-  
+
   /*
-  * Force dashboard remove
-  */
-  
+   * Force dashboard remove
+   */
+
   //mx.helpers.Dashboard.removeAllDashboards();
 
 
@@ -735,8 +735,8 @@ export function reset(o){
 
 
 /**
-* Clean stored modules : dashboard, custom view, etc.
-*/
+ * Clean stored modules : dashboard, custom view, etc.
+ */
 export function cleanRemoveModules(view){
 
   view = typeof view === "string" ? mx.helpers.getViews({
@@ -762,14 +762,14 @@ export function cleanRemoveModules(view){
  * @param {Array} o.views Views array
  */
 export function addSourceFromViews(o){
-if(o.views instanceof Array){
-  o.views.forEach( v => {
-    mx.helpers.addSourceFromView({
-    map : o.map,
-    view : v
+  if(o.views instanceof Array){
+    o.views.forEach( v => {
+      mx.helpers.addSourceFromView({
+        map : o.map,
+        view : v
+      });
     });
-  });
-}}
+  }}
 
 /** 
  * Add source from view object 
@@ -784,56 +784,56 @@ export function addSourceFromView(o){
 
   if( o.map )
 
-  if( o.map && p(o.view,"data.source") ){
+    if( o.map && p(o.view,"data.source") ){
 
-    var project = p(mx,"settings.project");
-    var projectView = p(o.view,"project") ;
-    var projectsView = p(o.view,"data.projects") || [];
-    var isEditable = p(o.view._edit) == true;
-    var isLocationOk = o.noLocationCheck || projectView == project || projectsView.indexOf(project) > -1;
+      var project = p(mx,"settings.project");
+      var projectView = p(o.view,"project") ;
+      var projectsView = p(o.view,"data.projects") || [];
+      var isEditable = p(o.view._edit) == true;
+      var isLocationOk = o.noLocationCheck || projectView == project || projectsView.indexOf(project) > -1;
 
-    if( !isLocationOk && isEditable ){
-      /*
-      * This should be handled in DB. TODO:check why this is needed here...
-      */
-      o.view._edit = false;
+      if( !isLocationOk && isEditable ){
+        /*
+         * This should be handled in DB. TODO:check why this is needed here...
+         */
+        o.view._edit = false;
+      }
+
+      var idSource = o.view.id + "-SRC";
+      var sourceExists = !!o.map.getSource(idSource);
+
+      if( sourceExists ) {
+        /**
+         * Handle case when old layers remain in map
+         * This could prevent source removal
+         */
+        mx.helpers.removeLayersByPrefix({
+          prefix : o.view.id,
+          map : o.map
+        });
+        /**
+         * Remove old source 
+         */
+        o.map.removeSource( idSource ) ;
+      }
+
+      if( o.view.type == "vt" ){
+        var baseUrl = mx.helpers.getApiUrl('tiles');
+        var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
+        o.view.data.source.tiles = [url,url] ;
+      }
+
+      o.map.addSource(
+        idSource,
+        o.view.data.source
+      );
     }
-
-    var idSource = o.view.id + "-SRC";
-    var sourceExists = !!o.map.getSource(idSource);
-
-    if( sourceExists ) {
-      /**
-      * Handle case when old layers remain in map
-      * This could prevent source removal
-      */
-      mx.helpers.removeLayersByPrefix({
-        prefix : o.view.id,
-        map : o.map
-      });
-      /**
-      * Remove old source 
-      */
-      o.map.removeSource( idSource ) ;
-    }
-
-    if( o.view.type == "vt" ){
-      var baseUrl = mx.helpers.getApiUrl('tiles');
-      var url =  baseUrl + "?view=" + o.view.id + "&date=" + o.view.date_modified ;
-      o.view.data.source.tiles = [url,url] ;
-    }
-
-    o.map.addSource(
-      idSource,
-      o.view.data.source
-    );
-  }
 }
 
 
 export function loadGeojsonViews(o){
 
- var project = mx.settings.project;
+  var project = mx.settings.project;
   var viewsGj = [];
 
   var getProjectGj =  function(gj, key, i){ 
@@ -844,20 +844,20 @@ export function loadGeojsonViews(o){
     return viewsGj;
   };
 
- mx.data.geojson.iterate(getProjectGj)
-  .then(function(gj){
-    console.log(gj);
-  });
+  mx.data.geojson.iterate(getProjectGj)
+    .then(function(gj){
+      console.log(gj);
+    });
 
 }
 
 
 
 /**
-* Get remote view from latest views table
-* @param {String} idView id of the view
-* @return {Promise} Promise resolving to object
-*/
+ * Get remote view from latest views table
+ * @param {String} idView id of the view
+ * @return {Promise} Promise resolving to object
+ */
 export function getViewRemote(idView){
 
   var apiUrlViews = mx.helpers.getApiUrl('views');
@@ -875,10 +875,10 @@ export function getViewRemote(idView){
     });
 }
 /**
-* Get multipler remote views from latest views table
-* @param {Array} idViews array of views id
-* @return {Promise} Promise resolving to abject
-*/
+ * Get multipler remote views from latest views table
+ * @param {Array} idViews array of views id
+ * @return {Promise} Promise resolving to abject
+ */
 export function getViewsRemote(idViews){
   return Promise.all(
     idViews.map(id => getViewRemote(id))
@@ -1080,11 +1080,11 @@ export function setViewsList(o){
 
 
 /**
-* Load geojson from localstorage,save it in views list and render item
-* @param {Object} o options
-* @param {String} o.id Map id
-* @param {String} o.project Current project to filter geojson view. Default to settings.project
-*/
+ * Load geojson from localstorage,save it in views list and render item
+ * @param {Object} o options
+ * @param {String} o.id Map id
+ * @param {String} o.project Current project to filter geojson view. Default to settings.project
+ */
 function loadGeojsonFromStorage(o){
   var m = mx.helpers.getMapData(o.id) ;
 
@@ -1122,7 +1122,7 @@ function loadGeojsonFromStorage(o){
  * @returns {*}
  */
 export function path(obj, path, def){
-  
+
   var i, len;
   if( typeof def === "undefined" ) def = null;
   if( typeof path !== "string" ) return def;
@@ -1157,14 +1157,14 @@ export function viewControler(o){
       vChecked.push(id);
     }
   }
-  
+
   mx.helpers.onNextFrame(function(){
     vVisible = mx.helpers.getLayerNamesByPrefix({
       id:idMap,
       prefix:"MX-",
       base : true
     });
-    
+
     vVisible = mx.helpers.getArrayStat({
       arr : vStore.concat(vVisible),
       stat : 'distinct'
@@ -1220,8 +1220,8 @@ export function viewControler(o){
 
     updateViewOrder(o);
     /**
-    * updateViewParams(o);
-    **/
+     * updateViewParams(o);
+     **/
   });
 }
 
@@ -1234,11 +1234,11 @@ export function viewControler(o){
  * @param {string} o.action Action :  "check", "uncheck"
  */
 export function viewLiAction(o){
-  
+
 
   if(!o.id || !o.idView || !o.action) return;
 
-   var el = document.querySelector("input[data-view-toggle='" + o.idView + "']");
+  var el = document.querySelector("input[data-view-toggle='" + o.idView + "']");
 
   if( o.action == "check"  && el && !el.checked ) {
     el.checked = true;
@@ -1273,7 +1273,7 @@ export function getViewVariable(o){
  * @param {array} o.filter
  * @param {Number} o.size 
  * @param {string} o.sprite
-*/
+ */
 export function makeSimpleLayer(o){
 
   var ran, colA, colB, layer;
@@ -1364,7 +1364,7 @@ export function updateViewOrder(o){
   var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
-  
+
   var  displayed = mx.helpers.getLayerNamesByPrefix({
     id:o.id,
     prefix:"MX-"
@@ -1372,7 +1372,7 @@ export function updateViewOrder(o){
 
   mx.helpers.onNextFrame(function(){
 
-    
+
     displayed.sort(
       function(a,b){
         var posA = order.indexOf(mx.helpers.getLayerBaseName(a));
@@ -1387,7 +1387,7 @@ export function updateViewOrder(o){
       if(posBefore > -1 ){
         layerBefore = displayed[posBefore];
       }
-      
+
       map.moveLayer(x,layerBefore);
 
     });
@@ -1396,8 +1396,8 @@ export function updateViewOrder(o){
 }
 
 /**
-* Update view in params
-*/
+ * Update view in params
+ */
 export function updateViewParams(o){
 
   o = o || {id:mx.helpers.getMap()};
@@ -1421,9 +1421,9 @@ export function updateViewParams(o){
 
 
 /**
-* Event mapx : fire event
-* @param {String} type
-*/
+ * Event mapx : fire event
+ * @param {String} type
+ */
 export function fire(type){
   if(!mx.events[type]) mx.events[type] = [];
   setTimeout(function(){
@@ -1431,10 +1431,10 @@ export function fire(type){
   },500);
 }
 /**
-* Event mapx : add event listener
-* @param {String} type
-* @param {Function} callback
-*/
+ * Event mapx : add event listener
+ * @param {String} type
+ * @param {Function} callback
+ */
 export function on(type,cb){
   if(!mx.events[type]) mx.events[type] = [];
   var id = mx.events[type].indexOf(cb) ; 
@@ -1443,10 +1443,10 @@ export function on(type,cb){
   }
 }
 /**
-* Event mapx : remove event listener
-* @param {String} type
-* @param {Function} callback
-*/
+ * Event mapx : remove event listener
+ * @param {String} type
+ * @param {Function} callback
+ */
 export function off(type,cb){
   if(!mx.events[type]) mx.events[type] = [];
   var id = mx.events[type].indexOf(cb) ; 
@@ -1529,8 +1529,8 @@ export function filterActiveViews(o){
 export function sortViewsListBy(o){
 
   /**
-  * Get elements and element state
-  */
+   * Get elements and element state
+   */
   var elList = document.querySelector(".mx-views-list");
   var elItems = elList.querySelectorAll(".mx-view-item");
   var elItemFirst = elItems[0];
@@ -1543,34 +1543,34 @@ export function sortViewsListBy(o){
   if(elBtn) isAsc = elBtn.classList.contains("asc");
 
   /*
-  * Set options based on arguments
-  */
+   * Set options based on arguments
+   */
   var dir = o.dir ||  "asc";
   var toggle = dir === "toggle";
   var type = o.type || "title";
   var onSorted = o.onSorted || "";
 
   /*
-  * Update ui
-  */
+   * Update ui
+   */
   if( elBtn && toggle ){
     if(isAsc){
-     dir = "asc";
-     elBtn.classList.remove("asc");
+      dir = "asc";
+      elBtn.classList.remove("asc");
     }else{ 
-     dir = "desc";
-     elBtn.classList.add("asc");
+      dir = "desc";
+      elBtn.classList.add("asc");
     }
   }
 
   /**
-  * Set direction 
-  */ 
+   * Set direction 
+   */ 
   var gt = dir == 'desc' ? 1 : -1;
   var lt = dir == 'desc' ? -1 : 1;
   /*
-  * value in array
-  */
+   * value in array
+   */
   var values = [];
   elItems.forEach(function(el) {
     values.push({
@@ -1612,12 +1612,12 @@ export function sortViewsListBy(o){
 
   function prep(val){
     switch(typeof(val)){
-     case 'boolean': return val;
-     case 'string': return mx.helpers.cleanDiacritic(val).toLowerCase();
-     case 'number':return val;
+      case 'boolean': return val;
+      case 'string': return mx.helpers.cleanDiacritic(val).toLowerCase();
+      case 'number':return val;
     }
   }
-  
+
 }
 
 
@@ -1642,7 +1642,7 @@ export function getViewOrder(){
 @param {String} o.idMap Map id
 */
 export function makeTransparencySlider(o) {
-  
+
 
   var view = o.view;
   var idMap = o.idMap;
@@ -1656,8 +1656,8 @@ export function makeTransparencySlider(o) {
   function makeSlider(){
 
     Promise.all([
-    import("nouislider"),
-    import("../../node_modules/nouislider/distribute/nouislider.css")
+      import("nouislider"),
+      import("../../node_modules/nouislider/distribute/nouislider.css")
     ]).then(function(module){
 
       var noUiSlider = module[0].default;
@@ -1697,7 +1697,7 @@ export function makeTransparencySlider(o) {
 @param {String} o.idMap Map id
 */
 export function makeNumericSlider(o) {
-  
+
 
   var view = o.view;
   var idMap = o.idMap;
@@ -1792,7 +1792,7 @@ export function makeNumericSlider(o) {
  * Create and listen to time sliders
  */
 export function makeTimeSlider(o) {
-  
+
   var k = {};
   k.t0 = "mx_t0";
   k.t1 = "mx_t1";
@@ -1945,7 +1945,7 @@ export function makeTimeSlider(o) {
  * @param {string} o.id map id
  */
 export function handleViewValueFilterText(o){
-  
+
   /*
    * Set listener for each view search input
    * NOTE: keyup is set globaly, on the whole view list
@@ -2015,7 +2015,7 @@ export function removeView(o){
   if( views.length === 0 ){
     setViewsListEmpty(true);
   }
-  
+
   viewControler(o);       
 }
 
@@ -2024,7 +2024,7 @@ export function removeView(o){
  * @param o options
  */
 export function handleViewClick(o){
-  
+
 
   return function (event) {
     var el, t, isIcon;
@@ -2042,14 +2042,14 @@ export function handleViewClick(o){
     el = isIcon ? el.parentElement: el;
 
     t = [
-    {
+      {
         id : "loadOrigProject",
         comment :"target is the home project button",
         isTrue : el.dataset.view_action_key == "btn_opt_home_project",
         action : function(){
           var viewTarget = el.dataset.view_action_target;
           var view = mx.helpers.getViews({
-             id : mx.settings.idMapDefault,
+            id : mx.settings.idMapDefault,
             idView : viewTarget
           });
           mx.helpers.setProject(view.project);
@@ -2062,7 +2062,7 @@ export function handleViewClick(o){
         action : function(){
           var viewTarget = el.dataset.view_action_target;
           mx.helpers.moveViewItem({
-             id : viewTarget,
+            id : viewTarget,
             mode : "top"
           });
         }
@@ -2074,7 +2074,7 @@ export function handleViewClick(o){
         action : function(){
           var viewTarget = el.dataset.view_action_target;
           mx.helpers.moveViewItem({
-             id : viewTarget,
+            id : viewTarget,
             mode : "bottom"
           });
         }
@@ -2162,7 +2162,7 @@ export function handleViewClick(o){
           var viewValues = [],
             legendContainer = h.parentFinder({
               selector : el,
-              class : "mx-view-item-legend" 
+              class : "mx-view-item-legend-vt" 
             }),
             legendInputs = legendContainer.querySelectorAll("input") 
           ;
@@ -2338,8 +2338,8 @@ export function renderViewsList(o){
 
 
   /**
-  * If empty, add empty view list message
-  */
+   * If empty, add empty view list message
+   */
   if( ! hasList && ! add ){
     setViewsListEmpty(true);
   }else{
@@ -2455,8 +2455,8 @@ export function renderViewsList(o){
     }
 
     /**
-    * Trigger view controler
-    */
+     * Trigger view controler
+     */
     h.viewControler(o);
 
   }
@@ -2464,8 +2464,8 @@ export function renderViewsList(o){
 
 
 /**
-* Check if there is an empty views list and add a message if needed
-*/
+ * Check if there is an empty views list and add a message if needed
+ */
 export function setViewsListEmpty(enable){
 
   enable = enable || false;
@@ -2494,47 +2494,47 @@ export function setViewsListEmpty(enable){
 }
 
 /**
-* Add Additional button to filters
-* @param {Object} views list of views
-*/
+ * Add Additional button to filters
+ * @param {Object} views list of views
+ */
 //function makeViewsFilterOptionsButtons(views){
 
-  /*
-   * Add additional filters
-   */
-  //var labelCheckDisplay = "Display only selected";
-  //var elFilterCheckDisplayed = mx.helpers.uiToggleBtn({
-    //label : labelCheckDisplay.toUpperCase() ,
-    //onChange : function(e,elToggle){
+/*
+ * Add additional filters
+ */
+//var labelCheckDisplay = "Display only selected";
+//var elFilterCheckDisplayed = mx.helpers.uiToggleBtn({
+//label : labelCheckDisplay.toUpperCase() ,
+//onChange : function(e,elToggle){
 
-      //for (var i = 0, iL = views.length; i < iL; i++) {
-        //var v = views[i];
-        //var elLi = document.getElementById(v.id);
-        //if(!elLi) return;
-        //var elInput = elLi.querySelector(".mx-view-tgl-input");
-        //if(elToggle.checked && elLi && elInput && !elInput.checked){
-          //elLi.classList.add("mx-filter-displayed");
-        //}else{
-          //if(elLi){
-            //elLi.classList.remove("mx-filter-displayed");
-          //}
+//for (var i = 0, iL = views.length; i < iL; i++) {
+//var v = views[i];
+//var elLi = document.getElementById(v.id);
+//if(!elLi) return;
+//var elInput = elLi.querySelector(".mx-view-tgl-input");
+//if(elToggle.checked && elLi && elInput && !elInput.checked){
+//elLi.classList.add("mx-filter-displayed");
+//}else{
+//if(elLi){
+//elLi.classList.remove("mx-filter-displayed");
+//}
 
-        //}
-      //}
-    //}
-  //});
+//}
+//}
+//}
+//});
 
-  //return [
-    //elFilterCheckDisplayed  
-  //];
+//return [
+//elFilterCheckDisplayed  
+//];
 /*}*/
 
 
 /**
-* Extract tags from various path in given views list and produce frequency tables
-* @param {Array} v Views list
-* @note : expect type, data.classes and data.collections
-*/
+ * Extract tags from various path in given views list and produce frequency tables
+ * @param {Array} v Views list
+ * @note : expect type, data.classes and data.collections
+ */
 export function getTagsGroupsFromView(views){
 
   var h = mx.helpers;
@@ -2574,13 +2574,13 @@ export function getTagsGroupsFromView(views){
 
 
 /**
-* Create filter tags label using freqency table from getTagsGroupFromView
-* @param {Object} o options
-* @param {Array} o.optionsButton Array of buttons to add in options list of filter
-* @param {Object} o.tagsTable Object containing the count for each key :
-* @param {Object} o.tagsTable.count Count of key.
-* @param {Element|Selector} o.selectorContainer Container to store the resulting label
-*/
+ * Create filter tags label using freqency table from getTagsGroupFromView
+ * @param {Object} o options
+ * @param {Array} o.optionsButton Array of buttons to add in options list of filter
+ * @param {Object} o.tagsTable Object containing the count for each key :
+ * @param {Object} o.tagsTable.count Count of key.
+ * @param {Element|Selector} o.selectorContainer Container to store the resulting label
+ */
 function makeViewsFilter(o){
 
   var h = mx.helpers;
@@ -2672,8 +2672,8 @@ function makeViewsFilter(o){
     checkToggleLabelText.dataset.lang_key = id;
     checkToggleLabelCount.innerText = "( " + number + " )";
     /**
-    * For update
-    */
+     * For update
+     */
     checkToggleLabelCount.className = "mx-check-toggle-filter-count";
     checkToggleLabelCount.dataset.type = type;
     checkToggleLabelCount.dataset.id = id;
@@ -2781,7 +2781,7 @@ export function viewSetOpacity(o){
 # @param {string} o.type Type of plot. By default = density
 */
 export function plotTimeSliderData(o){
-  
+
 
   var data = o.data;
   var el = o.el;
@@ -2877,9 +2877,9 @@ export function getLayerById(o) {
 }
 
 /**
-* Get the layer base name
-* @param {String} str Layer name to convert
-*/
+ * Get the layer base name
+ * @param {String} str Layer name to convert
+ */
 export function getLayerBaseName(str){
   return str.split(mx.settings.separators.sublayer )[0];
 }
@@ -2952,7 +2952,7 @@ export function removeLayersByPrefix(o) {
  * @param {boolean} [o.enabled=false]  Enable synchronisation
  */
 export function syncAll(o) {
-  
+
   var enabled, maps, ids;
 
   enabled = o.enabled;
@@ -3027,7 +3027,7 @@ export function syncAll(o) {
  * @return {boolean} exists (or not depending of inverse)
  */
 export function existsInList(li, it, val, inverse) {
-  
+
   /*jshint validthis:true*/
   // TODO: find a ways to pass an operator for more flexibility "a" "!=" "yelloe"
   // TODO: Syntastic return a warning with when using eval()... 
@@ -3035,7 +3035,7 @@ export function existsInList(li, it, val, inverse) {
     for (var i in li) {
       if (i === it && (
         li[i] === val ||
-          (typeof(val) === "object" && JSON.stringify(li[i]) === JSON.stringify(val))
+        (typeof(val) === "object" && JSON.stringify(li[i]) === JSON.stringify(val))
       )) {
         return (true);
       } else if (typeof(li[i]) == "object") {
@@ -3047,7 +3047,7 @@ export function existsInList(li, it, val, inverse) {
     for (var j in li) {
       if (j === it && (
         li[j] !== val ||
-          (typeof(val) === "object" && JSON.stringify(li[j]) !== JSON.stringify(val))
+        (typeof(val) === "object" && JSON.stringify(li[j]) !== JSON.stringify(val))
       )) {
         return (true);
       } else if (typeof(li[j]) == "object") {
@@ -3071,8 +3071,9 @@ function addViewCc(o){
   var map = o.map;
   var methods = mx.helpers.path(view,"data.methods");
 
-  if( !methods ) return;
-  var getMethod =  new Promise(function(resolve, reject) {
+  if( !methods ) return Promise.resolve(true);
+
+  return new Promise(function(resolve, reject) {
     var r = new Function(methods)();
     if (r) {
       resolve(r);
@@ -3116,12 +3117,6 @@ function addViewCc(o){
        */
       opt.onInit(opt);
 
-    }).catch(function(e){
-      mx.helpers.modal({
-        id :  "modalError",
-        title : "Error",
-        content : "<p>Error during methods evaluation :" + e 
-      });
     });
 }
 
@@ -3136,64 +3131,68 @@ function addViewRt(o){
 
   var view = o.view;
   var map = o.map;
+  return new Promise((resolve,reject) =>{
 
-  if(!mx.helpers.path(view,"data.source.tiles")) return ;   
+    if(!mx.helpers.path(view,"data.source.tiles")) resolve(false);   
 
-  /**
-   * source as already be added. Add layer
-   */
-  map.addLayer({
-    id: view.id,
-    type : "raster",
-    source: view.id + "-SRC"
-  },o.before);
+    /**
+     * source as already be added. Add layer
+     */
+    map.addLayer({
+      id: view.id,
+      type : "raster",
+      source: view.id + "-SRC"
+    },o.before);
 
-  /* 
-   * Add legend
-   */ 
-  var legend = mx.helpers.path(view,"data.source.legend");
+    /* 
+     * Add legend
+     */ 
+    var legend = mx.helpers.path(view,"data.source.legend");
 
-  if(legend){
-    
-    var defaultImg = function(){
-      this.onerror = null;
-      this.src = require("../../src/svg/no_legend.svg");
-    };
+    if(legend){
 
-    var elLegend = document.querySelector("#check_view_legend_"+view.id);
-    if(elLegend){
-      var oldImg = elLegend.querySelector("img");
-      if(!oldImg){
-        var img = new Image();
-        img.src = legend;
-        img.alt = "Legend"; 
-        img.setAttribute("crossorigin","anonymous");
-        img.onerror = defaultImg;
-        img.style = "cursor:zoom.in";
-        elLegend.appendChild(img); 
-        img.onload = function(){
-        };
-        img.onclick = function(){
-          var title = mx.helpers.getLabelFromObjectPath({
-            obj : view,
-            path : "data.title",
-            defaultKey : "noTitle"
-          });
-          var imgModal = new Image();
-          imgModal.src = legend;
-          imgModal.setAttribute("crossorigin","anonymous");
-          imgModal.onerror = defaultImg;
-          imgModal.alt = "Legend";
-          mx.helpers.modal({
-            title:title,
-            id:"legend-raster-" + view.id,
-            content:imgModal,
-            addBackground:false
-          });
-        };
+      var defaultImg = function(){
+        this.onerror = null;
+        this.src = require("../../src/svg/no_legend.svg");
+      };
+
+      var elLegend = document.querySelector("#check_view_legend_"+view.id);
+      if(elLegend){
+        var oldImg = elLegend.querySelector("img");
+        if(!oldImg){
+          var img = new Image();
+          img.src = legend;
+          img.alt = "Legend"; 
+          img.setAttribute("crossorigin","anonymous");
+          img.onerror = defaultImg;
+          img.style = "cursor:zoom.in";
+          elLegend.appendChild(img); 
+          img.onload = function(){
+            elLegend.classList.add('mx-legend-box');
+          };
+          elLegend.onclick = function(){
+            var title = mx.helpers.getLabelFromObjectPath({
+              obj : view,
+              path : "data.title",
+              defaultKey : "noTitle"
+            });
+            var imgModal = new Image();
+            imgModal.src = legend;
+            imgModal.setAttribute("crossorigin","anonymous");
+            imgModal.onerror = defaultImg;
+            imgModal.alt = "Legend";
+            mx.helpers.modal({
+              title:title,
+              id:"legend-raster-" + view.id,
+              content:imgModal,
+              addBackground:false
+            });
+          };
+        }
       }
     }
-  }
+    resolve(true);
+  });
 }
 
 /**
@@ -3207,7 +3206,8 @@ export function addViewVt(o){
 
   var p = mx.helpers.path;
 
-  try{  
+  return new Promise((resolve,reject) => {
+
     var view =  o.view,
       map =  o.map,
       layers = [],
@@ -3227,17 +3227,13 @@ export function addViewVt(o){
       defaultOrder = true;
 
     var idSourceLayer = mx.helpers.path(source,'layerInfo.name');
-    if( ! idSourceLayer ) return;
+    if( ! idSourceLayer ) resolve(false);
 
-    try{
-      styleCustom = JSON.parse(p(style,"custom.json"));
-    }catch(e){
-      console.log("Can't parse custom view json : " + e);
-    }
+    styleCustom = JSON.parse(p(style,"custom.json"));
 
     /**
-    * Add source meta
-    */
+     * Add source meta
+     */
 
     if(!view._meta){
       mx.helpers.addSourceMetadataToView(view,true);
@@ -3246,8 +3242,8 @@ export function addViewVt(o){
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
 
     /**
-    * clean values
-    */ 
+     * clean values
+     */ 
     rules = rules.filter(function(r){return r&&r.value != undefined;});
     rules = rules instanceof Array ? rules : [rules];
     rules = mx.helpers.clone(rules);
@@ -3414,11 +3410,11 @@ export function addViewVt(o){
          */
 
         //if( isNullRule && isNumeric && value !== null ){
-          //if( value || value === 0 ){
-            //value = value * 1;
-          //}else{
-            //value = null;
-          //}
+        //if( value || value === 0 ){
+        //value = value * 1;
+        //}else{
+        //value = null;
+        //}
         /*}*/
 
 
@@ -3533,18 +3529,18 @@ export function addViewVt(o){
 
       });
     }
-    
+
     /**
      * Add layer and legends
      */
     if( layers.length > 0 ){
-      
+
 
       /**
-      * handle order
-      */
+       * handle order
+       */
       if( defaultOrder ){
-       layers = layers.reverse();
+        layers = layers.reverse();
       }
 
       /*
@@ -3604,29 +3600,25 @@ export function addViewVt(o){
            * Add legend using template
            */
           elLegend.innerHTML = mx.templates.viewListLegend(view);
+
         }
 
       }
     }
 
-  }catch(e){
-    mx.helpers.modal({
-      id :  "modalError",
-      title : "Error",
-      content : "<p>Error during layer evaluation :" + e 
-    });
-    throw e;
-  }
+    resolve(true);
+
+  });
 }
 
 
 /**
-* Add option and legend box for the given view
-* @param {Object} o Options
-* @param {String} o.id map id
-* @param {Object} o.view View item
-* @param {Boolean} o.noUi Don't add ui components
-*/
+ * Add option and legend box for the given view
+ * @param {Object} o Options
+ * @param {String} o.id map id
+ * @param {Object} o.view View item
+ * @param {Boolean} o.noUi Don't add ui components
+ */
 export function addOptions(o){
 
   var view = o.view;
@@ -3650,20 +3642,19 @@ export function addOptions(o){
     var elOptions = document.querySelector("[data-view_options_for='"+view.id+"']");
 
     if(elOptions){
-      var optMade = new Promise(function(resolve,reject){
-        elOptions.innerHTML = mx.templates.viewListOptions(view);
-        resolve(elOptions); 
-      });
-      optMade.then(function(el){
-        mx.helpers.uiReadMore('.make-readmore',{
-          selectorParent : el,
-          maxHeightClosed : 105,
-          maxHeightOpened : 400
-        });
-      });
+      //var optMade = new Promise(function(resolve,reject){
+      //resolve(elOptions); 
+      //});
+      //optMade.then(function(el){
+      /*  mx.helpers.uiReadMore('.make-readmore',{*/
+      //selectorParent : el,
+      //maxHeightClosed : 105,
+      //maxHeightOpened : 400
+      //});
+      //});
 
 
-
+      elOptions.innerHTML = mx.templates.viewListOptions(view);
       mx.helpers.makeTimeSlider({ view: view , idMap: o.id }); 
       mx.helpers.makeNumericSlider({ view: view, idMap: o.id });
       mx.helpers.makeTransparencySlider({ view: view, idMap: o.id});
@@ -3692,7 +3683,7 @@ export function addOptions(o){
  * @param {string} o.idViewsList id of ui views list element
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param 
-*/
+ */
 export function addView(o){
 
   var m = mx.helpers.getMapData( o.id );
@@ -3721,7 +3712,7 @@ export function addView(o){
     prefix : view ? view.id : o.idView
   });
 
-   /* replace it to have current values */
+  /* replace it to have current values */
   if( view && view.id ){
     var viewIndex ;
 
@@ -3732,10 +3723,10 @@ export function addView(o){
 
     if( oldView ){
       /*
-      * This is an refresh or update
-      * instead of rendering
-      * modifying things here seems reasonable
-      */
+       * This is an refresh or update
+       * instead of rendering
+       * modifying things here seems reasonable
+       */
       mx.helpers.cleanRemoveModules(oldView);
       viewIndex = m.views.indexOf(oldView);
       m.views[viewIndex] = view;
@@ -3778,8 +3769,8 @@ export function addView(o){
     });
   }
   /**
-  * Add source from view
-  */
+   * Add source from view
+   */
   mx.helpers.addSourceFromView({
     map : m.map,
     view : view
@@ -3800,21 +3791,21 @@ export function addView(o){
     /* Switch on view type*/
     var handler = {
       rt : function(){
-        addViewRt({
+        return addViewRt({
           view : view,
           map : m.map,
           before : o.before
         });
       },
       cc : function(){
-        addViewCc({
+        return addViewCc({
           view : view,
           map : m.map,
           before : o.before
         });
       },
       vt : function(){
-        addViewVt({
+        return addViewVt({
           view : view,
           map : m.map,
           debug : o.debug,
@@ -3822,21 +3813,45 @@ export function addView(o){
         });
       },
       gj : function(){
-        m.map.addLayer(
-          mx.helpers.path(view,"data.layer"),
-          o.before
-        );
+        return addViewGj({
+          view : view,
+          map : m.map,
+          before : o.before
+        });
       },
       sm : function(){
-
+        return Promise.resolve(true);
       }
     };
 
     /* Call function according to view type */
-    handler[viewType]();
+    handler[viewType]()
+      .catch(function(e){
+        mx.helpers.modal({
+          id :  "modalError",
+          title : "Error",
+          content : "<p>Error during methods evaluation :" + e 
+        });
+      });
 
   }
 }
+
+export function addViewGj(opt){
+
+  return new Promise((resolve,reject)=>{
+
+    opt.map.addLayer(
+      mx.helpers.path(opt.view,"data.layer"),
+      opt.before
+    );
+
+    resolve(true);
+
+  });
+
+}
+
 
 /**
  * Add source, handle existing 
@@ -3846,7 +3861,7 @@ export function addView(o){
  * @param {Object} o.source Source values
  */
 export function addSource(o) {
-  
+
   var map = mx.helpers.getMap(o.id);
 
   if ( map ) {
@@ -3872,7 +3887,7 @@ export function addSource(o) {
  * @param {array} o.filter Filter array to apply
  */
 export function setFilter(o){
-  
+
   var exists = !!document.getElementById(o.id);
   if (exists) {
     var m = mx.helpers.getMap(o.id);
@@ -3882,14 +3897,14 @@ export function setFilter(o){
 
 
 /** 
-* Return the intersect between two Polygons or multiPolygon
-* @param {Object} poly1 
-* @param {Object} poly2 
-* @return {Object} Intersect or null
-*/
+ * Return the intersect between two Polygons or multiPolygon
+ * @param {Object} poly1 
+ * @param {Object} poly2 
+ * @return {Object} Intersect or null
+ */
 function intersect(poly1, poly2) {
 
- return Promise.all([
+  return Promise.all([
     import("martinez-polygon-clipping"),
     import("@turf/helpers")
   ])
@@ -3940,7 +3955,7 @@ export function getRenderedLayersArea(o){
     });
 
     if( layers.length > 0 ){
-      
+
       var features = map.queryRenderedFeatures({layers:layers});
 
       var geomTemp = {
@@ -3963,8 +3978,8 @@ export function getRenderedLayersArea(o){
         bbox : getBoundsArray(o)
       };
 
-     
-     var worker = new calcAreaWorker();
+
+      var worker = new calcAreaWorker();
       worker.postMessage(data);
       worker.addEventListener("message",function(e){
         if(e.data.message)  o.onMessage(e.data.message);
@@ -3975,10 +3990,10 @@ export function getRenderedLayersArea(o){
 }
 
 export function sendRenderedLayersAreaToUi(o){
-  
+
   var el =  document.getElementById(o.idEl);
   if(el){
-   var area = getRenderedLayersArea({
+    var area = getRenderedLayersArea({
       id : o.id, 
       prefix: o.prefix,
       onMessage : function(msg){  
@@ -3992,11 +4007,11 @@ export function sendRenderedLayersAreaToUi(o){
 }
 
 /**
-* Get map bounds as array
-* @param {Object} o options
-* @param {String} o.id Map id
-* @param {Object} o.map Map (optional, overwrite id)
-*/
+ * Get map bounds as array
+ * @param {Object} o options
+ * @param {String} o.id Map id
+ * @param {Object} o.map Map (optional, overwrite id)
+ */
 export function getBoundsArray(o){
   var map = o.map || mx.maps[o.id].map;
   var a = map.getBounds();
@@ -4049,7 +4064,7 @@ export function getRenderedLayersData(o){
 
 /*selectize version*/
 export function makeSearchBox(o){
-  
+
 
   var view = o.view;
   var idMap = o.idMap;
@@ -4113,7 +4128,7 @@ export function makeSearchBox(o){
 }
 
 export function filterViewValues(o){
-  
+
 
   var attr,idMap,idView,search;
   var view, views, map, features, values, filter, op, dat;
@@ -4194,7 +4209,7 @@ export function zoomToViewId(o){
   var view, isArray, extent, llb; 
   var  map = mx.helpers.getMap(o.id);
   if ( map ) {
-    
+
     isArray = o.idView.constructor === Array;
 
     o.idView = isArray ? o.idView[0] : o.idView;
@@ -4228,10 +4243,10 @@ export function zoomToViewId(o){
 
 
 /**
-* Find bounds of a series of views
-* @param {Array} views Array of views
-* @return {Object} MapBox gl bounds object
-*/
+ * Find bounds of a series of views
+ * @param {Array} views Array of views
+ * @return {Object} MapBox gl bounds object
+ */
 export function getViewsBounds(views){
 
   return new Promise(function(resolve,reject){
@@ -4325,7 +4340,7 @@ export function zoomToViewIdVisible(o){
 }
 
 export function resetViewStyle(o){
-  
+
 
   if( ! o.id || ! o.idView) return;
 
@@ -4387,7 +4402,7 @@ export function flyTo(o) {
  * @return {String} Toggled
  */
 export function btnToggleLayer(o){
-  
+
   var shades;
 
   o.id = o.id || mx.settings.idMapDefault;
@@ -4441,35 +4456,35 @@ export function btnToggleLayer(o){
 }
 
 /**
-* Quick iframe builder
-*/
+ * Quick iframe builder
+ */
 //export function iframeBuilder(btnId){
 
-  //var btn = document.getElementById(btnSelector);
-  //var str = "" ;
+//var btn = document.getElementById(btnSelector);
+//var str = "" ;
 
-  //function buildInput(label,callback){
-    //var id  mx.helpers.makeId();
-    //checkContainer =  document.createElement("div");
-    //checkInput = document.createElement("input");
-    //labelInput = document.createElement("label");
-    //checkContainer.className = "mx-form-list-item";
-    //checkInput.id = id;
-    //labelInput.innerText = label;
-    //labelInput.setAttribute("for",id );
-    //checkContainer.appenChild(checkInput);
-    //checkContainer.appenChild(checkLabel);
-    //return(checkContainer);
-  //};
+//function buildInput(label,callback){
+//var id  mx.helpers.makeId();
+//checkContainer =  document.createElement("div");
+//checkInput = document.createElement("input");
+//labelInput = document.createElement("label");
+//checkContainer.className = "mx-form-list-item";
+//checkInput.id = id;
+//labelInput.innerText = label;
+//labelInput.setAttribute("for",id );
+//checkContainer.appenChild(checkInput);
+//checkContainer.appenChild(checkLabel);
+//return(checkContainer);
+//};
 
-  //var checkProject = buildInput("Use project",)
+//var checkProject = buildInput("Use project",)
 
 
-  //btn.addEventListener("click",function(){
-    //var form = 
-  
-  
-  //})
+//btn.addEventListener("click",function(){
+//var form = 
+
+
+//})
 
 
 /*}*/
@@ -4481,14 +4496,14 @@ export function btnToggleLayer(o){
 
 
 /*
-* Get extract features values at given point, group by properties
-* @param {Object} o Options
-* @param {String} o.id Map id
-* @param {String} o.prefix Layer prefix Default = "MX-"
-* @param {Array} o.point Array of coordinates
-*/
+ * Get extract features values at given point, group by properties
+ * @param {Object} o Options
+ * @param {String} o.id Map id
+ * @param {String} o.prefix Layer prefix Default = "MX-"
+ * @param {Array} o.point Array of coordinates
+ */
 export function getVectorProperties(o){
-  
+
   var props = {}; 
   var sep = mx.settings.separators.sublayer;
   var layers = mx.helpers.getLayerNamesByPrefix({
@@ -4522,12 +4537,12 @@ export function getVectorProperties(o){
 
 
 /** 
-* Query WMS with getFeatureInfo
-* @param {Object} opt Options
-* @param {Object||String} opt.map Map object or id of the map
-* @param {Object} opt.point
-* @param 
-*/
+ * Query WMS with getFeatureInfo
+ * @param {Object} opt Options
+ * @param {Object||String} opt.map Map object or id of the map
+ * @param {Object} opt.point
+ * @param 
+ */
 export function getRasterProperties(opt){
 
   var map = mx.helpers.getMap(opt.map);
@@ -4634,12 +4649,12 @@ export function getMercCoords(x, y, z) {
 
 
 /*
-* Convert result from getFeaturesValuesByLayers to HTML 
-* @param {Object} o Options
-* @param {String} o.id Map id
-* @param {Array} o.point Array of coordinates
-* @param {Object} o.popup Mapbox-gl popup object
-*/
+ * Convert result from getFeaturesValuesByLayers to HTML 
+ * @param {Object} o Options
+ * @param {String} o.id Map id
+ * @param {Array} o.point Array of coordinates
+ * @param {Object} o.popup Mapbox-gl popup object
+ */
 export function featuresToHtml(o){
 
   var classGroup = "list-group";
@@ -4666,8 +4681,8 @@ export function featuresToHtml(o){
 
 
   /**
-  * Set on close event
-  */
+   * Set on close event
+   */
   popup.on('close',resetFilter);
 
   /**
@@ -4676,8 +4691,8 @@ export function featuresToHtml(o){
   popup.setDOMContent(elContainer);
 
   /*
-  * render vector properties 
-  */ 
+   * render vector properties 
+   */ 
   layerVector = mx.helpers.getVectorProperties({
     map : o.id,
     point : o.point
@@ -4686,8 +4701,8 @@ export function featuresToHtml(o){
   render(layerVector);
 
   /*
-  * render raster properties
-  */
+   * render raster properties
+   */
   layerRaster = mx.helpers.getRasterProperties({
     map : map,
     point : o.point
@@ -4701,7 +4716,7 @@ export function featuresToHtml(o){
 
 
   function hasActivatedLayer(){
-   return mx.helpers.getLayerNamesByPrefix().length > 0;
+    return mx.helpers.getLayerNamesByPrefix().length > 0;
   }
 
   function updateReadMore(){
@@ -4744,8 +4759,8 @@ export function featuresToHtml(o){
 
     elNoData.remove();
     /**
-    * Asynchrone attibute request
-    */
+     * Asynchrone attibute request
+     */
     var getAttributes = function(){
       return Promise.resolve(attributes);
     };
@@ -4755,10 +4770,10 @@ export function featuresToHtml(o){
     }
 
     /**
-    * Attributes to ui
-    */
+     * Attributes to ui
+     */
     getAttributes().then( attributes  =>{
- 
+
       elWait.remove();
 
       var attrNames = Object.keys(attributes);
@@ -4769,7 +4784,7 @@ export function featuresToHtml(o){
       }
 
       attrNames.forEach(function(attribute){
-        
+
         var values = mx.helpers.getArrayStat({
           stat: "sortNatural",
           arr: attributes[attribute]
@@ -4802,7 +4817,7 @@ export function featuresToHtml(o){
         }
 
         elPropTitle.innerText = label;
-        
+
         /* Toggles */
         var elPropToggles = cEl("div");
         elPropToggles.classList.add("mx-prop-toggles");
@@ -4864,7 +4879,7 @@ export function featuresToHtml(o){
   }
 
   function filterValues(e,el){
-    
+
     var  elChecks = popup._content.querySelectorAll(".check-toggle input");
     filters = {}; // reset filter at each request
 
@@ -4905,11 +4920,11 @@ export function featuresToHtml(o){
 }
 
 /**
-* Get a view title by id or view object
-* @param {String|Object} id  View id or view
-* @param {String} lang Optional. Language : e.g. fr, en, sp ..
-* @return {String} title
-*/
+ * Get a view title by id or view object
+ * @param {String|Object} id  View id or view
+ * @param {String} lang Optional. Language : e.g. fr, en, sp ..
+ * @return {String} title
+ */
 export function getViewTitle(id,lang){
   var view = id;
   if(typeof id == "string") view = mx.helpers.getView(id);
@@ -4927,14 +4942,14 @@ export function getViewTitle(id,lang){
 
 
 /**
-* Get a map object by id
-* @param {String|Object} idMap Id of the map or the map itself.
-* @return {Object} map
-*/
+ * Get a map object by id
+ * @param {String|Object} idMap Id of the map or the map itself.
+ * @return {Object} map
+ */
 export function getMap(idMap){
   idMap = idMap || mx.settings.idMapDefault; 
   var map = {};
-  
+
   var isId = typeof idMap == "string";
   var isMap = !isId && ( typeof idMap == "object" && idMap._canvas );
 
@@ -4951,10 +4966,10 @@ export function getMap(idMap){
 
 
 /**
-* Get a map data object (map and views) by id of the map
-* @param {String} idMap Id of the map
-* @return {Object} data
-*/
+ * Get a map data object (map and views) by id of the map
+ * @param {String} idMap Id of the map
+ * @return {Object} data
+ */
 export function getMapData(idMap){
   idMap = idMap || mx.settings.idMapDefault; 
   var data = mx.maps[ idMap || mx.settings.idMapDefault ];
@@ -4967,7 +4982,7 @@ export function getMapData(idMap){
  * @param {string} o.id map id
  */
 export function getMapPos(o){
-  
+
   o = o || {};
   var out, map, bounds, center, zoom, bearing, pitch;
   var r = mx.helpers.round;
@@ -5058,18 +5073,18 @@ export function getViews(o){
    */
   if( retFilteredArray || retFilteredObject ){
 
-      out = views.filter( v => { 
-        return ( idView.indexOf(v.id) > -1 ) || ( type ? v.type == type : false );
-      });
+    out = views.filter( v => { 
+      return ( idView.indexOf(v.id) > -1 ) || ( type ? v.type == type : false );
+    });
 
     if( retFilteredArray ){ 
-       return out ;
+      return out ;
     }else{
       /*
-      * NOTE: This break the general logic. if result should returned as an object, 
-      * {'mx-id-view':{<view>}} form should be used to match retFullObject output. 
-      * Check where this is used and modify it
-      */
+       * NOTE: This break the general logic. if result should returned as an object, 
+       * {'mx-id-view':{<view>}} form should be used to match retFullObject output. 
+       * Check where this is used and modify it
+       */
       return out[0] || [];
     }
   }
@@ -5078,16 +5093,16 @@ export function getViews(o){
 }
 
 /**
-* Return a single view
-* @param {String} id of the view
-* @param {String} idMap Id of the map
-*/
+ * Return a single view
+ * @param {String} id of the view
+ * @param {String} idMap Id of the map
+ */
 export function getView(id,idMap){
-   if(typeof id == "string"){
-     return mx.helpers.getViews({idView:id,id:idMap});
-   }else{
-     return id;
-   }
+  if(typeof id == "string"){
+    return mx.helpers.getViews({idView:id,id:idMap});
+  }else{
+    return id;
+  }
 }
 
 
@@ -5097,7 +5112,7 @@ export function getView(id,idMap){
  */
 export function makeLayerJiggle(mapId, prefix) {
   /*jshint validthis:true*/
-  
+
   var layersName = mx.helpers.getLayerNamesByPrefix({
     id: mapId,
     prefix: prefix
@@ -5174,7 +5189,7 @@ export function getViewIcons(view){
     elSharedSpan.dataset.lang_key ="view_shared";
     elReaders.appendChild(elSharedSpan);
   }
-   
+
   elItem = document.createElement("i");
   elSpan = document.createElement("span");
   elSpan.appendChild(elItem);
@@ -5194,7 +5209,7 @@ export function getViewIcons(view){
  * @param {string} mapId Map identifier
  */
 export function randomFillAll(mapId) {
-  
+
   setInterval(function() {
     var map = mx.helpers.getMap(idMap);
 

@@ -296,7 +296,7 @@ export function updateLanguageViewsList(o){
        var v = views.find(function(v){ return v.id == id ; });
        var elTitle = el.querySelector(".mx-view-tgl-title");
        var elText = el.querySelector(".mx-view-item-desc");
-       var elLegend = el.querySelector(".mx-view-item-legend");
+       var elLegend = el.querySelector(".mx-view-item-legend-vt");
 
       if(elLegend){
         elLegend.innerHTML = mx.templates.viewListLegend(v);

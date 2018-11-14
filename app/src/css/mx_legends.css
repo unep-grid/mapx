@@ -1,39 +1,61 @@
+.mx-view-item-legend-vt,
+.mx-view-item-legend-rt,
+.mx-view-item-legend-cc{
+}
 
-.mx-view-legend {
+
+.mx-legend-box {
+  max-height: 150px;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:5px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+/**
+* Legend for raster
+*/
+.mx-view-item-legend-rt{
+  cursor:zoom-in;
+}
+
+.mx-view-item-legend-rt img {
+  display: block;
+}
+
+/**
+* Legend for vector
+*/
+.mx-legend-vt-container {
+}
+
+.mx-legend-vt-title {
   font-weight: 400;
-  font-size: 0.9em;
   letter-spacing: 0.1em;
   margin-left: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-left: 10px;
+  font-size: 0.9em;
 }
-.mx-legend-rules {
-  overflow: auto;
-  max-height: 200px;
-  display: block;
-  break-inside: avoid-column;
-}
-
-.mx-legend-container {
-  display: inline-block;
-  flex-direction: column;
-  width: 100%;
-  padding-bottom: 20px;
+.mx-legend-vt-rules {
+  padding: 10px;
 }
 
-.mx-legend>.mx-legend-input {
+.mx-legend-vt-rule>.mx-legend-vt-rule-input {
   display: none;
 }
 
-.mx-legend>.mx-legend-input:checked~.mx-legend-content:before {
+.mx-legend-vt-rule>.mx-legend-vt-rule-input:checked~.mx-legend-vt-rule-content:before {
   content: "=";
   margin: 0 3px 0 3px;
   font-size: 0.9em;
   font-weight: normal;
 }
-/*.mx-legend.mx-legend-numeric>.mx-legend-input:checked~.mx-legend-content:before {*/
-/*content: ">=";*/
-/*}*/
 
-.mx-legend-color {
+.mx-legend-vt-rule-color {
   height: 20px;
   width: 20px;
   background-color: #333;
@@ -41,7 +63,7 @@
   flex-shrink: 0;
 }
 
-.mx-legend-content {
+.mx-legend-vt-rule-content {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -49,7 +71,7 @@
   margin: 0px;
 }
 
-.mx-legend-label {
+.mx-legend-vt-rule-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -59,24 +81,3 @@
   font-weight: normal;
 }
 
-.mx-view-item-legend-raster {
-  /*background: #f5f5f5;*/
-  /*border-radius: 3px;*/
-  /*padding: 8px;*/
-}
-
-.mx-view-item-legend-raster {
-  /* see mx-view-content for container max height */
-  max-width: 100%;
-  height: auto;
-  max-height: 220px;
-  overflow-x:hidden;
-  overflow-y:auto;
-  padding:5px;
-}
-
-.mx-view-item-legend-raster img {
-  cursor:zoom-in;
-  display: block;
-  break-inside: avoid-column;
-}

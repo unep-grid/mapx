@@ -26,7 +26,6 @@ divHeader <- tagList(
     type = "checkbox"
     ), 
   tags$label(
-    # class = "mx-view-tgl-content mx-drag-handle",
     class = "mx-view-tgl-content",
     `for` = "check_view_enable_{{=view.id}}",
     #

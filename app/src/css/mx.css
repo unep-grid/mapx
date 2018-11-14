@@ -1209,7 +1209,7 @@ blockquote {
 
 .mx-list-projects {
     max-height: 300px;
-    overflow: scroll;
+    overflow: auto;
 }
 .mx-list-projects-view-count {
   opacity:0.5;

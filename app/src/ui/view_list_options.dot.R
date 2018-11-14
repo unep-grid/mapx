@@ -1,61 +1,33 @@
-
-
-#
-# View text long
-#
-divAbstract <- tags$div(
-  tags$div(
-    class="make-readmore",
-    tags$div(
-      class="float-left mx-view-item-desc-container",
-      lang="{{langAbstract;}}",
-      "{{ debugger; }}",
-      "{{ var abstract = h.path(view,'data.abstract.' + langAbstract) }}",
-      "{{? abstract && abstract.length >0; }}",
-      tags$p(
-        class="mx-view-item-desc",
-        id="view_text_{{=view.id}}",
-        "{{=view.data.abstract[langAbstract]}}"
-        ),
-      "{{?}}"
-      )
-    )
-  )
-
 #
 # View legend
 #
 divLegend <- tagList(
   "{{?view.type=='sm'}}",
-  #tags$button(class="btn btn-cicle fa fa-play"),
   "{{?}}",
   "{{?view.type!='sm'}}",
-  tags$div(
-    class = "mx-view-item-legend-container",
-    #class = "make-readmore",
-    tagList(
-      "{{?view.type=='vt'}}",
-      "{{ var rules = h.path(view,'data.style.rules'); }}",
-      "{{?h.greaterThan(h.path(rules,'length'),0)}}",
-      tags$div(
-        class="mx-view-item-legend",
-        id="check_view_legend_{{=view.id}}"
-        ),
-      "{{?}}",
-      "{{?}}",
-      "{{?view.type=='rt'}}",
-      tags$div(
-        class="mx-view-item-legend-raster",
-        id="check_view_legend_{{=view.id}}"
-        ),
-      "{{?}}",
-      "{{?view.type=='cc'}}",
-      tags$div(
-        class="mx-view-item-legend-custom",
-        id="check_view_legend_{{=view.id}}"
-        ),
-      "{{?}}"
-      )
+  tagList(
+    "{{?view.type=='vt'}}",
+    "{{ var rules = h.path(view,'data.style.rules'); }}",
+    "{{?h.greaterThan(h.path(rules,'length'),0)}}",
+    tags$div(
+      class="mx-view-item-legend-vt",
+      id="check_view_legend_{{=view.id}}"
+      ),
+    "{{?}}",
+    "{{?}}",
+    "{{?view.type=='rt'}}",
+    tags$div(
+      class="mx-view-item-legend-rt",
+      id="check_view_legend_{{=view.id}}"
+      ),
+    "{{?}}",
+    "{{?view.type=='cc'}}",
+    tags$div(
+      class="make-readmore",
+      class="mx-view-item-legend-cc",
+      id="check_view_legend_{{=view.id}}"
+      ),
+    "{{?}}"
     ),
   "{{?}}"
   )
@@ -72,9 +44,7 @@ divAbstract <- tags$div(
 
 
 divContent <- tags$div(
-  #class="make-readmore",
-  class="mx-view-content",
-  #style = "column-width:200px;column-count:auto;max-height:50%;overflow=scroll;column-rule: 1px solid #ccc;column-gap: 20px;",
+  #class="mx-view-content",
   divLegend,
   divAbstract
   )

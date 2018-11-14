@@ -20,12 +20,12 @@ tagList(
     "{{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}",
     "{{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}",
     tags$div(
-      class="mx-legend-container",
-      tags$label(class="mx-view-legend",
+      class="mx-legend-vt-container",
+      tags$label(class="mx-legend-vt-title",
         "{{=titleLegend}}"
         ),
       tags$div(
-        class = "mx-legend-rules",
+        class = "mx-legend-vt-rules mx-legend-box",
         "{{~rules :item:index}}",
         #
         # For each rule, check if the language is set. Get default if needed.
@@ -34,9 +34,9 @@ tagList(
         "{{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}",
         "{{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}",
         tags$div(
-          class="mx-legend {{?isNumeric }} mx-legend-numeric {{?}}",
+          class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}",
           tags$input(
-            class="mx-legend-input",
+            class="mx-legend-vt-rule-input",
             type="checkbox",
             `data-view_action_key`="btn_legend_filter",
             `data-view_action_target`="{{=it.id}}",
@@ -47,9 +47,9 @@ tagList(
             ),
           tags$label(
             `for`="{{=it.id}}_{{=item.value}}",
-            class="mx-legend-content",
+            class="mx-legend-vt-rule-content",
             tags$div(
-              class="mx-legend-color",
+              class="mx-legend-vt-rule-color",
               style=paste0("opacity:{{=item.opacity}};",
                 "{{?isLine }}",
                 "height:{{=item.size*2}}px;",
@@ -70,7 +70,7 @@ tagList(
                 )
               ),
             tags$div(
-              class = "mx-legend-label",
+              class = "mx-legend-vt-rule-label",
               title = "{{=label}}",
               "{{=label}}"
               )

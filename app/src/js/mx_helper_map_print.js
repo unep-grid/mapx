@@ -128,7 +128,7 @@ export function getLegendPng(selector,opt){
   /**
    * Get rule block if any
    */
-  var elCloneRules = elClone.querySelector('.mx-legend-rules');
+  var elCloneRules = elClone.querySelector('.mx-legend-vt-rules');
   /**
    * Get first image, if any
    */
@@ -274,7 +274,7 @@ export function downloadMapPdf(o){
       promLegend = mx.helpers.getLegendPng(elLegend,{
         style : {
           width : "5.5cm",
-          maxHeight : "auto"
+          maxHeight : "none"
         }
       });
 

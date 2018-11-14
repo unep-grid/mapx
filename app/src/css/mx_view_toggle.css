@@ -116,7 +116,6 @@
 }
 
 .mx-view-item-desc {
-  min-height: 102px;
   font-style:italic;
   font-size: 0.9em;
   padding: 10px;
@@ -126,6 +125,14 @@
   -webkit-hyphens: auto;
   -ms-hypens: auto;
   hyphens: auto;
+  max-height: 220px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  column-count: auto;
+  column-width: 160px;
+  column-count: auto;
+  column-rule: 1px solid #ccc;
+  column-gap: 10px;
 }
 
 .mx-view-item-index,
