@@ -1364,14 +1364,12 @@ export function updateViewOrder(o){
   var layerBefore = mx.settings.layerBefore; 
 
   if(!order) return;
-
-  var  displayed = mx.helpers.getLayerNamesByPrefix({
-    id:o.id,
-    prefix:"MX-"
-  });
-
   mx.helpers.onNextFrame(function(){
 
+    var  displayed = mx.helpers.getLayerNamesByPrefix({
+      id:o.id,
+      prefix:"MX-"
+    });
 
     displayed.sort(
       function(a,b){
@@ -1382,14 +1380,15 @@ export function updateViewOrder(o){
 
     displayed.forEach(function(x){
 
-      var posBefore = displayed.indexOf(x)-1;
+      if(map.getLayer(x)){
+        var posBefore = displayed.indexOf(x)-1;
 
-      if(posBefore > -1 ){
-        layerBefore = displayed[posBefore];
+        if(posBefore > -1 ){
+          layerBefore = displayed[posBefore];
+        }
+
+        map.moveLayer(x,layerBefore);
       }
-
-      map.moveLayer(x,layerBefore);
-
     });
 
   });
@@ -2938,8 +2937,10 @@ export function removeLayersByPrefix(o) {
   });
 
   layers.forEach(function(l){
-    map.removeLayer(l);
-    result.push(l);
+    if(map.getLayer(l)){
+      map.removeLayer(l);
+      result.push(l);
+    }
   });
 
   return result;

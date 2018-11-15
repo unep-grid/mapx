@@ -1619,13 +1619,14 @@ export function storyBuild(o){
       /**
        *  Check if content is html. If not, add it in a paragraph
        */ 
-      var content = slide.html[lang] || "" ;
+      var content = slide.html[lang] || slide.html.en || "" ;
 
       if(!mx.helpers.isHTML(content)){
         content = "<p>"+content+"<\p>";
       }
 
       divSlideFront.innerHTML = content;
+      
       divSlideFront.classList.add(o.classSlideFront);
       /**
        * Add ref for contentTools editor
