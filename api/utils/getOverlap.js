@@ -19,11 +19,6 @@ exports.get = function (req, res, next) {
           type: 'message',
           msg: msg
         }));
-        res.write(toString({
-          type: 'timing',
-          msg: Date.now() - start,
-          unit: 'ms'
-        }));
       },
       result: function (msg) {
 
