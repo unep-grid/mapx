@@ -28,18 +28,18 @@ areaLiveCalc  <- tags$div(
   )
 
 overlapConfig <- tags$div(
-  tags$h4(`data-lang_key`="title_config_overlap"),
+  tags$h4(`data-lang_key`="title_config_highlight"),
   tags$div(class="well",
     tags$div(class="form-group shiny-input-container",
-      tags$label(class="control-label",`data-lang_key`="select_overlap_number_layer",`for`="selectNLayersOverlap","nLayers"),
+      tags$label(class="control-label",`data-lang_key`="select_highlight_mode",`for`="selectNLayersOverlap","highlight_mode"),
       tags$div(
         tags$select( id = "selectNLayersOverlap",
-          tags$option(value="all",'All'),
-          tags$option(value="1",'1'),
-          tags$option(selected=TRUE,value="2",'2'),
-          tags$option(value="3",'3'),
-          tags$option(value="4",'4'),
-          tags$option(value="5",'5')
+          tags$option(value="all",'Highlight zones where all layers overlap'),
+          tags$option(value="1",'Highlight any visible features'),
+          tags$option(selected=TRUE,value="2",'Highlight zones where at least two layers overlap'),
+          tags$option(value="3",'Highlight zones where at least three layers overlap'),
+          tags$option(value="4",'Highlight zones where at least four layers overlap'),
+          tags$option(value="5",'Highlight zones where at least five layers overlap')
           )
         )
       ),
@@ -105,6 +105,7 @@ version <- tagList(
 # View and source edit buttons. Generated in tools_manage.R
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
+sourceOverlap <- uiOutput("uiBtnSourceOverlap")
 sourceUpload <- uiOutput("uiBtnSourceUpload")
 dbInfo <- uiOutput("uiBtnShowDbInfo")
 roleManager <- uiOutput("uiBtnShowRoleManager")
@@ -127,6 +128,7 @@ tagList(
       viewAdd,
       sourceUpload,
       sourceEdit,
+      sourceOverlap,
       dbInfo,
       roleManager,
       appConfig,

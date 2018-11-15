@@ -1225,9 +1225,9 @@
     "ps": ""
   },
 {
-    "id": "title_config_overlap",
-    "en": "Overlap tool configuration",
-    "fr": "Configuration de l'outil de mise en évidence des chevauchements",
+    "id": "title_config_highlight",
+    "en": "Highlight tool configuration",
+    "fr": "Configuration de l'outil de mise en évidence",
     "es": "",
     "ru": "",
     "zh": "",
@@ -1237,9 +1237,9 @@
     "ps": ""
   },
   {
-    "id": "select_overlap_number_layer",
-    "en": "Minimum number of layer that must intersects",
-    "fr": "Nombre de couche devant se chevaucher",
+    "id": "select_highlight_mode",
+    "en": "Select highlight mode",
+    "fr": "Mode de mise en évidence",
     "es": "",
     "ru": "",
     "zh": "",
