@@ -1461,9 +1461,16 @@ export function storyController(o){
 
 
       if( o.data.elBullets ){
+        o.data.elBullets.remove();
+        /* Sometimes it stays...*/
         setTimeout(function(){
-          o.data.elBullets.remove();
-        },100);
+          var leftOverBullets = document.querySelector(".mx-story-step-bullets");
+          if( leftOverBullets ){
+            leftOverBullets.remove();
+          }
+        },300);
+      }else{
+        console.log('no bullets');
       }
 
         if( o.data.elScroll ){
