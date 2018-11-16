@@ -66,7 +66,7 @@ observeEvent(input$btnAnalysisOverlap,{
       #
       mxModal(
         id = "modalOverlapTool",
-        title = "title_overlap_tools",
+        title = d("title_overlap_tools",language),
         content = uiOut,
         textCloseButton = d("btn_close",language),
         buttons = btnList

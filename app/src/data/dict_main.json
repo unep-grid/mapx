@@ -456,6 +456,18 @@
     "ps": ""
   },
   {
+    "id": "title_overlap_tools",
+    "en": "Overlap utilities",
+    "fr": "Utilitaire d'analyse de chevauchement",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
     "fr": "Editer les métadonnées des sources",
