@@ -83,7 +83,7 @@ server <- function(input,output,session){
               "tools_project_roles.R",
               "tools_project_config.R",
               "tools_project_external_views.R",
-              "tools_project_add_content.R",
+              "tools_project_sources_views.R",
               "tools_project_add_content_form.R",
               "tools_project_delete.R",
               "tools_project_join.R",
@@ -91,6 +91,7 @@ server <- function(input,output,session){
               "tools_query_maker.R",
               "tools_source_edit_metadata.R",
               "tools_source_manage.R",
+              "tools_source_overlap.R",
               #
               # Views handler
               #

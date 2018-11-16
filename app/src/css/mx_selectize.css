@@ -39,3 +39,6 @@
 .selectize-dropdown {
   position: unset;
 }
+.selectize-control.multi .selectize-input.has-items {
+  height:auto
+}

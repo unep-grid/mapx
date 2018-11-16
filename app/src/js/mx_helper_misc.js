@@ -2449,3 +2449,81 @@ export function shareTwitter(id) {
 
   mx.helpers.iconFlash("twitter");
 }
+
+
+export function handleRequestMessage(msg,msgs,on){
+
+  msgs = msgs || {};
+  on = on || {};
+
+  on.message = on.message || console.log;
+  on.progress = on.progress || console.log;
+  on.timing = on.timing || console.log;
+  on.error = on.error || console.log;
+  on.end = on.end || console.log;
+  on.result = on.result || console.log;
+  on.default = on.default || console.log;
+
+  return cleanMsg(msg);
+
+  function isJson(str) {
+    try {
+      JSON.parse(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  function addMsg(msg,type){
+
+    switch(type){
+      case 'end' :
+        on.end(msg);
+        break;
+      case 'progress' :
+        on.progress(msg);
+        break;
+      case 'message': 
+        on.message(msg);
+        break;
+      case 'error':
+        on.error(msg);
+        break;
+      case 'result':
+        on.result(msg);
+        break;
+      default :
+        on.default(msg);
+    }
+  }
+
+  function cleanMsg(res){
+    res = res + "";
+    res.split("\t\n").forEach(function(j){
+      if(j){
+        if(mx.helpers.isNumeric(j)){
+          j = j *100;
+          addMsg(j,"progress");
+        }else{
+
+          if( isJson(j) ){
+            j = JSON.parse(j);
+          }
+
+          var isObject = typeof j === "object";
+          var msg = isObject ? j.msg : j;
+
+          if( msgs[msg] ) return;
+
+          msgs[msg] = true;
+          addMsg(msg, j.type || 'default');
+        }
+        
+      }
+    });
+  }
+}
+
+
+

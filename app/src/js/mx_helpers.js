@@ -9,6 +9,7 @@ export * from './mx_helper_stat.js';
 export * from './mx_helper_app_utils.js';
 export * from './mx_helper_list_projects.js';
 export * from './mx_helper_upload_source.js';
+export * from './mx_helper_overlap_tool.js';
 export * from './mx_helper_map.js';
 export * from './mx_helper_ui_color.js';
 export * from './mx_helper_story.js';

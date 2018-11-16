@@ -69,20 +69,23 @@ function showRefreshUI(registration) {
   h.getDictItem(['btn_install_update','update_app_title','update_app_msg'])
     .then((w) => {
 
+      var btn = h.el('button',w[0],{
+        class:'btn btn-default'
+      });
+
+      var txt = h.el('p',w[2]);
+      var msg = h.el('div',
+        txt,
+        btn
+      );
+
+      btn.addEventListener('click',update);
+
+
       if( oldVersion ){
         // force version update the first time after installing 1.5.28.
         update();
       }else{
-
-        var btn = h.el('button',w[0],{
-          class:'btn btn-default'
-        });
-
-        var txt = h.el('p',w[2]);
-        var msg = h.el('div',txt,btn);
-
-        btn.addEventListener('click',update);
-
         h.modal({
           zIndex:100000,
           title:w[1],
@@ -96,9 +99,19 @@ function showRefreshUI(registration) {
         if (!registration.waiting) {
           return;
         }
-        btn.removeEventListener('click',update);
-        btn.disabled = true;
+        /**
+        * install command
+        */
         registration.waiting.postMessage('mx_install');
+
+        /**
+        * If update using the modal button
+        * disable it
+        */
+        if( typeof btn != "undefined" ){
+          btn.removeEventListener('click',update);
+          btn.disabled = true;
+        }
       }
     });
 

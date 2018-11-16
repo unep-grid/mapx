@@ -360,6 +360,102 @@
     "ps": ""
   },
   {
+    "id": "btn_source_overlap_utilities",
+    "en": "Overlap utilities",
+    "fr": "Utilitaires d'analyse de chevauchement",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_calculate_area",
+    "en": "Calculate overlap area",
+    "fr": "Calculer l'aire de chevauchement",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "calc_area_result",
+    "en": "Overlaping area (km2)",
+    "fr": "Aire de chevauchement (km2)",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "select_overlap_layers",
+    "en": "Layers (min 1, max 3)",
+    "fr": "Couches (min 1, max 3)",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "select_overlap_countries",
+    "en": "Country",
+    "fr": "Pays",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "n_layers_more_3",
+    "en": "More than three layers selected",
+    "fr": "Plus que trois couches séléctionnées",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "n_layers_less_1",
+    "en": "Less that one layer selected",
+    "fr": "Moins d'une couche séléctionnées",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "n_country_not_1",
+    "en": "Only one country should be selected",
+    "fr": "Seul un pays peut être sélectionné",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
     "fr": "Editer les métadonnées des sources",
@@ -3227,7 +3323,7 @@
     "bn": "",
     "fa": "تعداد  قیمت های از دست رفته یا خالی",
     "ps": "د لاسه وتلو او یا خالي قیمتونو تعداد"
-  },
+  },  
   {
     "id": "source_sum_n_row",
     "en": "Number of values",

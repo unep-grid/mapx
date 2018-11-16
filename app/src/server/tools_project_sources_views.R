@@ -31,6 +31,12 @@ observe({
       uiSourceEdit <- tagList(
         tags$h4(`data-lang_key`="title_tools_sources",d("title_tools_sources",language)),
         actionButton(
+          label = d("btn_source_overlap_utilities",language),
+          inputId = "btnAnalysisOverlap",
+          class = "btn btn-sm btn-default hint",
+          `data-lang_key` = "btn_source_overlap_utilities"
+          ),
+        actionButton(
           label = d("btn_edit_source",language),
           inputId = "btnEditSources",
           class = "btn btn-sm btn-default hint",

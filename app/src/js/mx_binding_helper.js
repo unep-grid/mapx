@@ -51,6 +51,8 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler('mglReset', mx.helpers.reset );
   Shiny.addCustomMessageHandler('mglSetUserData', mx.helpers.setUserData );
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', mx.helpers.handlerDownloadVectorSource);
+  Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', mx.helpers.getOverlapAnalysis);
+
 
   //Shiny.addCustomMessageHandler('mglTriggerUploadForm', mx.helpers.triggerUploadForm);
 

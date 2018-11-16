@@ -24,6 +24,15 @@ mglUpdateAllViewsSourceMetadata <- function(overwrite=TRUE,session=shiny::getDef
     )
 }
 
+#' Get overlap result
+#' @param opt {List} list of option : idTextResult, layers, countries, method
+#' @export
+mglGetOverlapAnalysis <- function(opt,session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglGetOverlapAnalysis",
+    opt
+    )
+}
+
 #' Set legend html template
 #' @param template {character} Dot.js compatible template for displaying legend
 #' @export

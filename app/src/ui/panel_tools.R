@@ -27,7 +27,7 @@ areaLiveCalc  <- tags$div(
   tags$div(class="form-control",id="txtAreaSum")
   )
 
-overlapConfig <- tags$div(
+highlightConfig <- tags$div(
   tags$h4(`data-lang_key`="title_config_highlight"),
   tags$div(class="well",
     tags$div(class="form-group shiny-input-container",
@@ -105,7 +105,6 @@ version <- tagList(
 # View and source edit buttons. Generated in tools_manage.R
 viewAdd <- uiOutput("uiBtnViewAdd")
 sourceEdit <- uiOutput("uiBtnSourceEdit")
-sourceOverlap <- uiOutput("uiBtnSourceOverlap")
 sourceUpload <- uiOutput("uiBtnSourceUpload")
 dbInfo <- uiOutput("uiBtnShowDbInfo")
 roleManager <- uiOutput("uiBtnShowRoleManager")
@@ -122,13 +121,12 @@ tagList(
       tags$h2(`data-lang_key`="title_tools"),
       tags$h3(`data-lang_key`="title_tools_map"),
       areaLiveCalc,
-      overlapConfig,
+      highlightConfig,
       tags$h3(`data-lang_key`="title_tools_share"),
       btnIframeBuilder,
       viewAdd,
       sourceUpload,
       sourceEdit,
-      sourceOverlap,
       dbInfo,
       roleManager,
       appConfig,
