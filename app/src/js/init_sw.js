@@ -5,9 +5,9 @@
  * SEE also sw_listen_skip_waiting_install.js in ./webpack folder
  */
 
+console.log("INIT SW");
 if ('serviceWorker' in navigator) {
 
-  console.log("INIT SW");
   window.addEventListener('load', function() {
 
     navigator.serviceWorker.register('/service-worker.js')
