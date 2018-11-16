@@ -10,7 +10,7 @@ export function clearCache(){
         caches.delete(cacheName);
       });
     });
-    mx.localforage.clear()
+    mx.localforage.clear();
     mx.helpers.clearServiceWorker();
     mx.helpers.reload();
   }

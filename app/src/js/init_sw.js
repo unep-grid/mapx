@@ -25,7 +25,12 @@ if ('serviceWorker' in navigator) {
         navigator.serviceWorker.addEventListener('controllerchange', function(event) {
           if (blockReload) return;
           blockReload = true;
-          mx.helpers.reload();
+          if( mx.helpers.reload ){
+            mx.helpers.reload()
+          }else{
+            window.location.reload();
+          }
+
         });
         onNewServiceWorker(registration, function() {
           showRefreshUI(registration);
@@ -100,14 +105,14 @@ function showRefreshUI(registration) {
           return;
         }
         /**
-        * install command
-        */
+         * install command
+         */
         registration.waiting.postMessage('mx_install');
 
         /**
-        * If update using the modal button
-        * disable it
-        */
+         * If update using the modal button
+         * disable it
+         */
         if( typeof btn != "undefined" ){
           btn.removeEventListener('click',update);
           btn.disabled = true;
