@@ -26,7 +26,7 @@ if ('serviceWorker' in navigator) {
           if (blockReload) return;
           blockReload = true;
           if( mx.helpers.reload ){
-            mx.helpers.reload()
+            mx.helpers.reload();
           }else{
             window.location.reload();
           }
@@ -68,57 +68,58 @@ function onNewServiceWorker(registration, callback) {
  */
 function showRefreshUI(registration) {
   var h = mx.helpers;
-  // test if has mx.info. ( version before 1.5.28 ) 
-  var oldVersion = !!mx.info ;
+  var skipWaiting = !!(!mx || !mx.info || !h || !h.el || !h.modal || !h.getDictItem);
 
-  h.getDictItem(['btn_install_update','update_app_title','update_app_msg'])
-    .then((w) => {
+  if( skipWaiting ){
+    console.log("Skip waiting");
+    update();
+  }else{
+    console.log("Ask the user to install");
+    buildModal();
+  }
 
-      var btn = h.el('button',w[0],{
-        class:'btn btn-default'
-      });
+  function update(){
+    if (!registration.waiting) {
+      return;
+    }
+    registration.waiting.postMessage('mx_install');
+  }
 
-      var txt = h.el('p',w[2]);
-      var msg = h.el('div',
-        txt,
-        btn
-      );
+  function buildModal(){
+    h.getDictItem(['btn_install_update','update_app_title','update_app_msg'])
+      .then((w) => {
 
-      btn.addEventListener('click',update);
+        var txtButton = w[0];
+        var titleModal = w[1];
+        var txtMsg = w[2];
 
-
-      if( oldVersion ){
-        // force version update the first time after installing 1.5.28.
-        update();
-      }else{
-        h.modal({
-          zIndex:100000,
-          title:w[1],
-          id:'a',
-          content:msg
+        var btn = h.el('button',txtButton,{
+          class:'btn btn-default'
         });
 
-      }
+        var txt = h.el('p',txtMsg);
+        var msg = h.el('div',
+          txt,
+          btn
+        );
 
-      function update(){
-        if (!registration.waiting) {
-          return;
-        }
-        /**
-         * install command
-         */
-        registration.waiting.postMessage('mx_install');
-
-        /**
-         * If update using the modal button
-         * disable it
-         */
-        if( typeof btn != "undefined" ){
+        btn.addEventListener('click',function(){
+          update();
           btn.removeEventListener('click',update);
           btn.disabled = true;
-        }
-      }
-    });
+        });
+
+        h.modal({
+          zIndex: 100000,
+          title: titleModal,
+          id: 'a',
+          content: msg
+        });
+
+      });
+  }
+
+
 
 }
 
