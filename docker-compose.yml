@@ -6,16 +6,20 @@ services:
     image: traefik
     command: 
       - --api
-      #- --logLevel=DEBUG
+      - --logLevel=DEBUG
       - --docker
       - --docker.domain=mapx.test
       - --defaultentrypoints=http
+      #- --defaultentrypoints=https
+      #- --entrypoints=Name:http Address::80 Redirect.EntryPoint:https
+      #- --entrypoints=Name:https Address::443 TLS.DefaultCertificate.Cert:/certs/wekan.crt TLS.DefaultCertificate.Key:/certs/wekan1.key
     ports:
       - 8880:80
       - 8881:8080
+      #- 8888:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./_data/certs:/certs
+      - ./_shared/traefik/certs:/certs
   app:
     env_file: mapx.dev.env
     build: ./app/.
@@ -86,4 +90,5 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - 6379
+
 
