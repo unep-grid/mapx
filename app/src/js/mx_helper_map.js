@@ -1862,10 +1862,8 @@ export function removeView(o){
 
   var m  = mx.helpers.getMap(o.id);
   var views = mx.helpers.getViews({asArray:true});
-  var view = views.filter(function(x){
-    return x.id == o.idView ;
-  })[0];
-
+  var view = mx.helpers.getView(o.idView);
+  var vIndex = views.indexOf(view);
 
   if(!view) return;
 
@@ -1875,10 +1873,6 @@ export function removeView(o){
   }
 
   mx.helpers.cleanRemoveModules(view);
-
-  m.views = views.filter(function(x){
-    return x.id != o.idView ; 
-  });
 
 
   mx.helpers.removeLayersByPrefix({
@@ -1894,7 +1888,9 @@ export function removeView(o){
     setViewsListEmpty(true);
   }
 
-  viewControler(o);       
+  views.splice(vIndex, 1);
+  mx.helpers.updateViewsFilter();
+  mx.helpers.viewControler(o);       
 }
 
 /**
@@ -2073,7 +2069,7 @@ export function handleViewClick(o){
         comment : "target is the label/input for the view to toggle",
         isTrue : el.dataset.view_action_key == "btn_toggle_view", 
         action : function(){
-          viewControler(o);       
+          mx.helpers.viewControler(o);       
         } 
       },
       {
@@ -2268,10 +2264,7 @@ export function renderViewsList(o){
     /**
      * Generate filter
      */
-    makeViewsFilter({
-      tagsTable : getTagsGroupsFromView(m.views),
-      selectorContainer : "#viewsFilterContainer"
-    });
+    h.updateViewsFilter();
 
     /*
      * translate based on dict key
@@ -2372,43 +2365,6 @@ export function setViewsListEmpty(enable){
 }
 
 /**
- * Add Additional button to filters
- * @param {Object} views list of views
- */
-//function makeViewsFilterOptionsButtons(views){
-
-/*
- * Add additional filters
- */
-//var labelCheckDisplay = "Display only selected";
-//var elFilterCheckDisplayed = mx.helpers.uiToggleBtn({
-//label : labelCheckDisplay.toUpperCase() ,
-//onChange : function(e,elToggle){
-
-//for (var i = 0, iL = views.length; i < iL; i++) {
-//var v = views[i];
-//var elLi = document.getElementById(v.id);
-//if(!elLi) return;
-//var elInput = elLi.querySelector(".mx-view-tgl-input");
-//if(elToggle.checked && elLi && elInput && !elInput.checked){
-//elLi.classList.add("mx-filter-displayed");
-//}else{
-//if(elLi){
-//elLi.classList.remove("mx-filter-displayed");
-//}
-
-//}
-//}
-//}
-//});
-
-//return [
-//elFilterCheckDisplayed  
-//];
-/*}*/
-
-
-/**
  * Extract tags from various path in given views list and produce frequency tables
  * @param {Array} v Views list
  * @note : expect type, data.classes and data.collections
@@ -2454,15 +2410,19 @@ export function getTagsGroupsFromView(views){
 /**
  * Create filter tags label using freqency table from getTagsGroupFromView
  * @param {Object} o options
- * @param {Array} o.optionsButton Array of buttons to add in options list of filter
  * @param {Object} o.tagsTable Object containing the count for each key :
  * @param {Object} o.tagsTable.count Count of key.
  * @param {Element|Selector} o.selectorContainer Container to store the resulting label
  */
-function makeViewsFilter(o){
+export function updateViewsFilter(o){
+
+  o = o || {};
 
   var h = mx.helpers;
-  //var l = mx.settings.language;
+  var views = h.getViews({asArray:true});
+  o.selectorContainer = o.selectorContainer ||  "#viewsFilterContainer";
+  o.tagsTable = o.tagsTable ||  h.getTagsGroupsFromView(views);
+
   var elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
   var elFilters = document.createElement("div");
   var elFoldFilters ;
@@ -3611,7 +3571,10 @@ export function addView(o){
       viewIndex = m.views.indexOf(oldView);
       m.views[viewIndex] = view;
       mx.helpers.updateLanguageViewsList({id:o.id});
+
     }
+
+    mx.helpers.updateViewsFilter();
   }
 
   /*

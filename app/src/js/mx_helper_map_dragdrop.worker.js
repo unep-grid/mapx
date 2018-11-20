@@ -1,5 +1,4 @@
 /* jshint esversion : 6*/
-// Importation of helpers
 
 import * as geojsonhint from "geojsonhint";
 import { featureEach, propEach } from "@turf/meta";
@@ -19,7 +18,10 @@ var typeSwitcher = {
 };
 
 
-
+function makeId(n){
+  n = n || 10;
+ return (Math.random().toString(36)+'00000000000000000').slice(2, n+2);
+}
 
 
 // Inital message
@@ -281,7 +283,7 @@ onmessage = function(e) {
      */
 
     // Set random id for source and layer
-    var id = "MX-DROP-" + fileName ;
+    var id = "MX-DROP-" + makeId(10) + fileName ;
     var idSource = id + "-SRC";
     // Set random color
     var ran = Math.random();
