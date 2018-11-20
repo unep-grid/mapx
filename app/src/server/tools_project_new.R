@@ -100,8 +100,10 @@ observeEvent(input$btnAddProjectConfirm,{
   title <- reactData$projectAddTitle
   titles <- list()
   titles[language] <- title
+  titles['en'] <- title
   descriptions <- list()
   descriptions[language] <- title
+  descriptions['en'] <- title
 
   idProject <- reactData$projectAddId
   idCreator <- userData$id
