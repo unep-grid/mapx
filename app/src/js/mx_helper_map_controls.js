@@ -121,7 +121,7 @@ mapControlApp.prototype.onAdd = function(map) {
     o = o || {};
     var hide = o.hide || !btns.btnToggleBtns.hidden; // state saved in buttons list
     var action = hide ? 'add' : 'remove';  
-    var selectorToggle = [".mx-panel-views",".mapboxgl-ctrl-bottom-left",".mapboxgl-ctrl-bottom-right",".mapboxgl-ctrl-top-right",".mx-panel-tools",".mx-panel-settings"];
+    var selectorToggle = [".mx-panel-right",".mx-panel-views",".mapboxgl-ctrl-bottom-left",".mapboxgl-ctrl-bottom-right",".mapboxgl-ctrl-top-right",".mx-panel-tools",".mx-panel-settings"];
     var idSkip = o.skip || ["btnStoryUnlockMap","btnStoryClose","btnToggleBtns"];
     var btnToggle = btns.btnToggleBtns;
 
