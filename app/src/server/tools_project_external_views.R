@@ -88,7 +88,8 @@ observeEvent(input$btnSaveProjectExternalViews,{
 
     updateSelectizeInput(session,
       inputId="selectProjectExternalViews",
-      choice = viewsExternal
+      choice = viewsExternal,
+      selected = viewsExternal
       )
     mxFlashIcon("floppy-o")
 
