@@ -67,6 +67,8 @@ export function setUserData(o){
  */
 export function getSourceMetadata(id,force){
 
+  if( !id ) return Promise.resolve({});
+
   force = force || false;
 
   var urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');

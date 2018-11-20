@@ -12,6 +12,7 @@ tagList(
     # Avoid all item without rules or style
     #
     "{{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}",
+    "{{?rules}}",
     "{{ var langTitle = h.checkLanguage({obj:it, path:'data.style.titleLegend', concat:true}) ; }}",
     "{{ var titleLegend = h.path(it,'data.style.titleLegend.'+langTitle) || 'Legend' ; }}",
     "{{?h.greaterThan(rules.length,0)}}",
@@ -81,6 +82,7 @@ tagList(
         "{{~}}"
         )
       ),
+    "{{?}}",
     "{{?}}"
     )
   )

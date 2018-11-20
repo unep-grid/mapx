@@ -2,16 +2,29 @@
 /**
  * Take a screen show of the map, even if preserveDrawingBuffer is false
  * @param {Object} map A mapbox gl js object
+ * @param {String} idView Use only this view
  */
-export function takeMapScreenshot(map) {
+export function takeMapScreenshot(map,idView) {
 
   return new Promise(function(resolve, reject) {
     var data = "";
+    var allLayers = mx.helpers.getLayerNamesByPrefix({prefix:"MX-"});
+    var otherLayers = allLayers.filter(l => l.indexOf(idView) == -1 );
+
+    otherLayers.forEach(l => {
+      map.setLayoutProperty(l,'visibility','none'); 
+    });
 
     map.once("render", function() {
       data =  map.getCanvas().toDataURL();
+      
+      otherLayers.forEach(l => {
+        map.setLayoutProperty(l,'visibility','visible'); 
+      });
+
       resolve(data);
     });
+
     /* trigger render */
     map.setBearing(map.getBearing());
   });
@@ -121,9 +134,13 @@ export function getLegendPng(selector,opt){
     overflow : "hidden",
     maxHeight : "none"
   };
+ 
+
   var imgDim,imgData;
   var isNode = selector instanceof Node ;
   var el = isNode ? selector : document.querySelector(selector);
+  
+  if( !el ) return Promise.resolve(false);
   var elClone = el.cloneNode(true);
   /**
    * Get rule block if any
@@ -240,8 +257,8 @@ export function downloadMapPdf(o){
       var jsPDF = m[0].default;
       var JSZip = m[1].default;
       var download = m[2].default;
-      var dataMap,zip,folder,dataLegend,dataScale,dataNorth;
-      var promLegend,promScale,promNorth,promMap;
+      var dataMap,zip,folder,dataLegend,dataScale,dataNorth,dataMeta;
+      var promLegend,promScale,promNorth,promMap,promMeta;
       var qf = [];
       var map = mx.helpers.getMap(o.id);
       var elMap = document.getElementById(mx.settings.idMapDefault);
@@ -253,7 +270,6 @@ export function downloadMapPdf(o){
       var mapHeight = mapDim.height / mapScale;
       var link = location.origin + "?views=" + o.idView + "&project=" + mx.settings.project;
       var elLegend = document.getElementById("check_view_legend_"+o.idView);
-      var legendDim = elLegend.getBoundingClientRect();
       var elScale = document.querySelector(".mx-scale-box");
       var scaleDim =  elScale.getBoundingClientRect();
       var fileName = "mx_data_" + (new Date()+"").split(" ")[4].replace(/:/g,"_",true) +".zip";
@@ -287,6 +303,10 @@ export function downloadMapPdf(o){
         /*}*/
       });
 
+      /**
+      * Metadata
+      */
+      promMeta = mx.helpers.getSourceMetadata(mx.helpers.path(view,'data.source.layerInfo.name'),true);
 
       /**
        * North arrow
@@ -296,7 +316,7 @@ export function downloadMapPdf(o){
       /**
        * Map
        */
-      promMap =  mx.helpers.takeMapScreenshot(map);
+      promMap =  mx.helpers.takeMapScreenshot(map,view.id);
 
 
       progress += 20;
@@ -306,13 +326,15 @@ export function downloadMapPdf(o){
         promMap,
         promNorth,
         promScale,
-        promLegend
+        promLegend,
+        promMeta
       ])
         .then(function(r){
           dataMap = r[0]?r[0]:dataMap;
           dataNorth = r[1]?r[1]:dataNorth;
           dataScale = r[2]?r[2]:dataScale;
           dataLegend = r[3]?r[3]:dataLegend;
+          dataMeta = r[4]?r[4]:dataMeta;
           /**
            * Produce a PDF doc
            */
@@ -391,6 +413,9 @@ export function downloadMapPdf(o){
           }
           if(dataPdf){
               folder.file("mx-map.pdf", dataPdf, {binary:true});
+          }
+          if(dataMeta){
+            folder.file("mx-meta.json", JSON.stringify(dataMeta,0,1));
           }
 
           zip.generateAsync({type:"blob"})
