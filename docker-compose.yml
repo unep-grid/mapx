@@ -6,7 +6,7 @@ services:
     image: traefik
     command: 
       - --api
-      - --logLevel=DEBUG
+      #- --logLevel=DEBUG
       - --docker
       - --docker.domain=mapx.test
       - --defaultentrypoints=http

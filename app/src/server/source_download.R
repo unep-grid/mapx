@@ -153,7 +153,7 @@ observeEvent(input$btnSourceDownload,{
       textCloseButton = d("btn_close",language)
       )
 
-    mglDownloadHandler(list(
+    mglHandlerDownloadVectorSource(list(
         data = request,
         idHandlerContainer = "mxDownloadHandler"
         ))

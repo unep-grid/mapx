@@ -3278,9 +3278,9 @@
   },
   {
     "id": "download_select_by_countries",
-    "en": "Country used to spatially select the data",
-    "fr": "Pays utilisé(s) pour sélectionner spatialement les données",
-    "es": "País utilizado para seleccionar datos espaciales",
+    "en": "Country used to spatially extract the data (clip)",
+    "fr": "Pays utilisé(s) pour extraire spatialement les données (clip)",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

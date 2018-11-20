@@ -1,12 +1,10 @@
 
 var path = require("path");
 
-
 /**
 * Conversion of array of column names to pg columns
 */
 function toPgColumn(arr){
-  arr.push("gid");
   return  '"'+arr.join('","')+'"' ;
 }
 
@@ -30,13 +28,16 @@ exports.getDistinct = getDistinct;
 /**
  * Simple template parsing
  */
-exports.parseTemplate = function(template, data){  
+function parseTemplate(template, data){  
   return template
     .replace(/{{([^{}]+)}}/g, 
       function(matched, key) {
         return data[key] ;
       });
-};
+}
+exports.parseTemplate = parseTemplate;
+  
+
 
 
 /**
@@ -85,6 +86,25 @@ exports.ip = {
   }
 };
 
+/**
+* Get source metadata
+* @param {String} idLayer id of the layer
+*/
+exports.getSourceMetadata = function(id){
+var pgRead = require.main.require("./db").pgRead;
+  var template = require("../templates");
+  var  sql = parseTemplate(
+    template.getSourceMetadata,
+    { 
+      idSource: id
+    }
+  );
+
+  return pgRead.query(sql);
+
+};
+
+
 
 /**
 * Attributes to pg col
@@ -95,6 +115,7 @@ exports.attrToPgCol = function(attribute,attributes){
   if(attribute.constructor !== Array ) attribute = [attribute];
   if(attributes.constructor !== Array ) attributes = [attributes];
   var attr = getDistinct(attribute.concat(attributes));
+  if(attr.indexOf('gid') < 0) attr.push("gid");
   return toPgColumn(attr);
 };
 

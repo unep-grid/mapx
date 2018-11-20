@@ -58,7 +58,7 @@ mglReset <- function( idMap, session=shiny::getDefaultReactiveDomain()) {
 #' Reset map, view and dashboards
 #' @param idMap {character} map id
 #' @export
-mglDownloadHandler <- function( config, session=shiny::getDefaultReactiveDomain()) {
+mglHandlerDownloadVectorSource <- function( config, session=shiny::getDefaultReactiveDomain()) {
   session$sendCustomMessage("mglHandlerDownloadVectorSource",config);
 }
 
