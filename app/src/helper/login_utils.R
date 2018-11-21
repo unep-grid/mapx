@@ -5,6 +5,11 @@
 #' @return {List} user data
 mxLogin <- function(email,browserData,query){
 
+  hasExpired <- FALSE
+  hasInvalidMail <- FALSE
+
+  isGuest <- FALSE
+  emailGuest <- .get(config,c("mail","guest"))
   emailNewMember <- ""
   timeStamp <- Sys.time()
   nowPosix <- as.numeric(timeStamp)
@@ -34,13 +39,36 @@ mxLogin <- function(email,browserData,query){
     val <- .get(query,c("action","value"))
     email <- .get(val,c('email'))
     forceProject <- .get(val,c('project'))
+    validUntil <- .get(val,c('valid_until'))
+    hasExpired <- noDataCheck(validUntil) || isTRUE(nowPosix > validUntil)
   }
-
+  
   # make sure to use lowercase and trimed email
   email <- trimws(tolower(email))
 
-  # Last email validation
-  if(!mxEmailIsValid(email)) stop(sprintf("Invalid email: %s",email))
+  # test for invalid email
+  hasInvalidMail <- !mxEmailIsValid(email)
+
+
+  #
+  # Modal with issue if any
+  # if any, set email to emailGuest
+  #
+  if( hasInvalidMail || hasExpired ){
+    err <- tagList()
+
+    if(hasInvalidMail) err <- tagList(err,p(d("error_email_not_valid")))
+    if(hasExpired) err <-  tagList(err,p(d("error_email_confirm_too_old")))
+
+    mxModal(
+      id = 'valid_issue',
+      content = err
+      )
+
+    email <- emailGuest
+    isGuest <- TRUE
+  }
+
 
   # Check if this is a new account (unknown email)
   newAccount <- !mxDbEmailIsKnown(email)
@@ -49,9 +77,9 @@ mxLogin <- function(email,browserData,query){
   userTable <-  .get(config,c("pg","tables","users"))
 
   # check if the account is "guest"
-  isGuest <- isTRUE(email == .get(config,c("mail","guest")))
+  isGuest <- isGuest || isTRUE(email == .get(config,c("mail","guest")))
 
-  if(newAccount){
+  if( newAccount ){
 
     #
     # Create new user
@@ -76,8 +104,6 @@ mxLogin <- function(email,browserData,query){
 
   }
 
-
-
   #
   # Get user ID
   #
@@ -91,13 +117,19 @@ mxLogin <- function(email,browserData,query){
   hasValidId <- isTRUE(is.integer(res$id))
 
   # if it's empty or not an integer, stop
-  if( !hasValidId ) isGuest <- TRUE
+  if( !hasValidId ) {
+    
+    email <- emailGuest
+    isGuest <- TRUE
+
+  }
 
   #
   # Handle autoregister after account validation
   #
 
-  if( useAutoRegister ){
+  if( !isGuest && useAutoRegister ){
+
     projectData <- mxDbGetProjectData(forceProject)
     members <- unique(c(projectData$members,list(res$id)))
 
@@ -114,7 +146,7 @@ mxLogin <- function(email,browserData,query){
   # If query action was performed, forceProject is set and
   # bypass last_project value. 
   #
-  if( (useAutoRegister || useConfirmMembership ) && !noDataCheck(forceProject) ){
+  if( !isGuest && (useAutoRegister || useConfirmMembership ) && !noDataCheck(forceProject) ){
     mxDbUpdate(
       table=userTable,
       idCol='id',

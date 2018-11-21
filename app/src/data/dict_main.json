@@ -1705,10 +1705,10 @@
     "ps": ""
   },
   {
-    "id": "error_msg_bad",
-    "en": "This message is not accepted",
-    "fr": "Ce message n'est pas accepté",
-    "es": "Este mensaje no es aceptado",
+    "id": "error_email_confirm_too_old",
+    "en": "This confirmation email is too old",
+    "fr": "Ce message de confirmation est trop ancien",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5488,6 +5488,18 @@
     "id": "btn_install_update",
     "en": "Install and reload",
     "fr": "Installer et recharger",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "tbl_views_depending_source",
+    "en": "Table of views depending on the source",
+    "fr": "Table des vues dépendantes de la source",
     "es": "",
     "ru": "",
     "zh": "",

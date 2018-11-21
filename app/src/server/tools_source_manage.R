@@ -143,7 +143,7 @@ output$tblViewsUsingSource <- renderUI({
     )
 
   out <- tagList(
-    tags$label("Table of sources depending on selected source"),
+    tags$label(d("tbl_views_depending_source",language)),
     mxTableToHtml(data)
     )
 

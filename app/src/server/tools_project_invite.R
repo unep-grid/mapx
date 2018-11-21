@@ -220,10 +220,11 @@ observeEvent(input$btnSendInviteMessage,{
 
     if( isValid  && isAdmin ){
 
-      urlAction <- mxCreateEncryptedUrlAction("autoregister",list(
+     urlAction <- mxCreateEncryptedUrlAction("autoregister",list(
           email = email,
           project = project,
-          role = "member"
+          role = "member",
+          valid_until = as.numeric((Sys.time()+2*60*60*24))
           ))
 
       if(!grepl("<link>",msgInvite)) msgInvite <- msgInvite +"/n"+"<link>"

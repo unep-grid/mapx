@@ -238,6 +238,8 @@ observeEvent(input$btnSaveSourceMetadata,{
 
       mxUpdateText("editSourceMetadata_txt","Saved at " + Sys.time())
       mglUpdateAllViewsSourceMetadata(overwrite=TRUE)
+      
+      reactData$updateSourceLayerList <- runif(1)
     }
 
     })
