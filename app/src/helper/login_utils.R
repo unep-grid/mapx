@@ -49,7 +49,6 @@ mxLogin <- function(email,browserData,query){
   # test for invalid email
   hasInvalidMail <- !mxEmailIsValid(email)
 
-
   #
   # Modal with issue if any
   # if any, set email to emailGuest
@@ -77,7 +76,7 @@ mxLogin <- function(email,browserData,query){
   userTable <-  .get(config,c("pg","tables","users"))
 
   # check if the account is "guest"
-  isGuest <- isGuest || isTRUE(email == .get(config,c("mail","guest")))
+  isGuest <- isGuest || isTRUE(email == .get(config,c("mail","guest")))
 
   if( newAccount ){
 
