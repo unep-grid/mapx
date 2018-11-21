@@ -6,10 +6,12 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
+
+//const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
 
 module.exports = merge(common, {
+  cache: false,
   mode: 'production',
   optimization: {
     splitChunks: {

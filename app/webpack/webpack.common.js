@@ -60,47 +60,11 @@ module.exports = {
       fontName : "mx-icons-font"
     }),
     new CopyWebpackPlugin(
-      [ { from : './src/sprites', to: 'sprites/'} ]
-    ),
-    /**
-    * To remmove in dev!
-    */
-    //new CopyWebpackPlugin(
-      //[ { from : './webpack/sw_listen_skip_waiting_install.js', to: 'sw_listen_skip_waiting_install.js'} ]
-    //),
-    //new GenerateSW({
-      //swDest : 'service-worker.js',
-      //importWorkboxFrom : 'local',
-      //skipWaiting : false, [> do not wait on other clients <]
-      //clientsClaim : true, [> handle all clients as soon as it's activated <]
-      //importScripts : ['sw_listen_skip_waiting_install.js'],
-      //runtimeCaching :  [
-        //{
-          //urlPattern: /^https:\/\/api\.mapbox\.com\//,
-          //handler: 'cacheFirst'
-        //},
-        //{
-          //urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
-          //handler: 'cacheFirst'
-        //},
-        //{
-          //urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
-          //handler: 'cacheFirst'
-        //},
-        //{
-          //urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
-          //handler: 'cacheFirst'
-        //},
-        //{
-          //urlPattern: /^https:\/\/.*wms\?bbox=/,
-          //handler: 'cacheFirst'
-        //},
-        //{
-          //urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
-          //handler: 'cacheFirst'
-        //}
-      //]
-    //}),
+      [ 
+        { from : './src/sprites', to: 'sprites/'},
+        { from : './src/favicons', to: '.'}
+      ]
+    )
 
   ],
   module: {
