@@ -476,6 +476,10 @@ export function handleClickEvent(e,idMap){
       .setLngLat(map.unproject(e.point))
       .addTo(map);
 
+    mx.helpers.once('view_remove',function(){
+      popup.remove();
+    });
+
     var propsRendered = mx.helpers.featuresToHtml({
       id : idMap,
       point : e.point,
@@ -1303,9 +1307,19 @@ export function updateViewParams(o){
  * @param {String} type
  */
 export function fire(type){
-  if(!mx.events[type]) mx.events[type] = [];
   setTimeout(function(){
-    mx.events[type].forEach(cb => cb(type));
+    if(!mx.events[type]) mx.events[type] = [];
+    var evts = mx.events[type];
+
+    evts.forEach(cb => {
+      mx.helpers.onNextFrame(()=>{ 
+        cb(type);
+        if(cb.once === true){
+          var id = evts.indexOf(cb) ; 
+          evts.splice(id,1);
+        }
+      });
+    });
   },500);
 }
 /**
@@ -1319,6 +1333,16 @@ export function on(type,cb){
   if( id == -1 ){
     mx.events[type].push(cb);
   }
+}
+
+/**
+ * Event mapx : once event listener
+ * @param {String} type
+ * @param {Function} callback
+ */
+export function once(type,cb){
+  cb.once=true;
+  mx.helpers.on(type,cb);
 }
 /**
  * Event mapx : remove event listener
@@ -2088,7 +2112,7 @@ export function handleViewClick(o){
         comment: "target is the png screenshoot button",
         isTrue :  el.dataset.view_action_key == "btn_opt_screenshot",
         action:function(){
-          mx.helpers.downloadMapPdf({
+          mx.helpers.downloadScreenshotPdf({
             id: o.id, 
             idView: el.dataset.view_action_target
           });

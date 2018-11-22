@@ -30,6 +30,7 @@ export let data = {
   })
 };
 
+export let queue = [];
 export let events = {};
 export let controls = {};
 export let listener = {};
