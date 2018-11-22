@@ -393,7 +393,10 @@ mxDbSaveProjectData <- function(project,values = list(
 
   for( n in c("title","description","admins","members","publishers","map_position","countries")){
     v <- values[[n]]
-    if(notNull(v)){
+    isCountries <- n=="countries"
+    toUpdate <- notNull(v) || isCountries
+
+    if(toUpdate){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
