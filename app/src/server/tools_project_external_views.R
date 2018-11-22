@@ -86,6 +86,8 @@ observeEvent(input$btnSaveProjectExternalViews,{
       }
     }
 
+    viewsExternal <- mxDbGetViewsTitle(viewsExternal,asNamedList=TRUE,language=language)
+
     updateSelectizeInput(session,
       inputId="selectProjectExternalViews",
       choice = viewsExternal,
