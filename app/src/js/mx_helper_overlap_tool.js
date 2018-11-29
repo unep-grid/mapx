@@ -5,28 +5,40 @@ export function getOverlapAnalysis(opt){
 
   if(mx.settings.user.guest) return;
 
-  var elTextResult = document.getElementById(opt.idTextResult);
-  var host = mx.helpers.getApiUrl('sourceOverlap');
-  var layers = opt.layers.join(',');
-  var countries = opt.countries.join(',');
-  var method = opt.method || "getArea";
+  var h = mx.helpers;  
+  var elForm = document.getElementById(opt.idForm);
+  var elButtonCompute = document.getElementById(opt.idButtonAnalyse);
+  var elTextAreaResult = elForm.querySelector('#'+opt.idTextResult);
+  var elListMessage = elForm.querySelector('#'+opt.idListMessage);
 
-  var url = host + "?layers=" + layers + "&countries=" + countries + "&method=" + method ;
+  var host = h.getApiUrl('sourceOverlap');
+  var query = {
+    layers : opt.layers.join(','),
+    countries : opt.countries.join(','),
+    method : opt.method || "getArea",
+    idUser : mx.settings.user.id,
+    token : mx.settings.user.token,
+    idProject : mx.settings.project,
+    sourceTitle : opt.sourceTitle
+  };
 
-  mx.helpers.getJSON({
+  var params = h.objToParams(query);
+  var url = host + "?" + params;
+
+  elButtonCompute.setAttribute("disabled","disabled");
+
+  h.getJSON({
     maxWait : 1e3 * 120,
     url : url,
-    onProgress : function(progress){
-      cleanMsg(progress);
-    },
-    onMessage : function(data){
-      cleanMsg(data);
-    },
-    onSuccess : function(data){
-      cleanMsg(data);
-    },
-    onError: function(er){
-      cleanMsg(er);
+    onProgress : handleMessage,
+    onMessage : handleMessage,
+    onSuccess : handleMessage,
+    onError:  handleMessage,
+    onTimeout : function(err){
+      console.log(err);
+      var elTimeout = h.el('li',"Timeout reached, cancelled analysis.");
+      elListMessage.appendChild(elTimeout);
+      elButtonCompute.removeAttribute("disabled");
     }
   });
 
@@ -38,22 +50,49 @@ export function getOverlapAnalysis(opt){
 
   var messageStore = {};
 
-  function cleanMsg(msg){
-    return mx.helpers.handleRequestMessage( msg, messageStore ,{
+  function handleMessage(msg){
+    return h.handleRequestMessage( msg, messageStore ,{
       result : function(msg){
-        msg = msg / 1e6;
-        elTextResult.innerText = (Math.round(msg*1000))/1000;
+
+        if( msg.content == 'area'){
+          var area  = msg.value ;
+          var elArea =  h.el('li',"Area = "+ area + "["+ msg.unit +"]");
+          elListMessage.appendChild(elArea);
+          if( msg.unit == 'm2' ) area = area / 1e6;
+          elTextAreaResult.innerText = (Math.round(area*1000))/1000; 
+          
+        }
+        if( msg.content == 'sourceMeta'){
+          var m = msg.value;
+          console.log(m);
+          updateLayerList();
+        }
+
       },
       error :function(msg){
-        elTextResult.innerText = msg;
+        var elErr = h.el('li',JSON.stringify(msg));
+        elListMessage.appendChild(elErr);
+        elButtonCompute.removeAttribute("disabled");
       },
       message : function(msg){
-        elTextResult.innerText = msg;
+        var elMsg = h.el('li',msg);
+        elListMessage.appendChild(elMsg);
+
       },
-      timging : function(){
+      timing : function(msg){
         console.log(msg);
+        var txtTiming = 'duration = ' + msg.duration + '[' + msg.unit + ']';
+        var elTiming = h.el('li',txtTiming);
+        elListMessage.appendChild(elTiming);
+      },
+      end : function(msg){
+        var elEnd = h.el('li',msg);
+        elListMessage.appendChild(elEnd);
+        elButtonCompute.removeAttribute("disabled");
       }
     });
   }
 
 }
+
+

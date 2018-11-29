@@ -2,6 +2,7 @@
 var archiver = require('archiver');
 var tar = require('tar');
 var fs = require("fs");
+var getColumnsNames = require('./db.js').getColumnsNames;
 var sendMail= require("./mail.js").sendMail;
 var spawn =  require('child_process').spawn;
 var settings = require.main.require("./settings");
@@ -108,24 +109,6 @@ function decrypt(str){
 
       return data;
     });
-}
-
-
-/**
-* Get layer columns names
-* @param {String} id of the layer
-*/
-function getColumnsNames(idLayer){
-  var queryAttributes = {
-    text: `SELECT column_name AS names 
-    FROM information_schema.columns 
-    WHERE table_name=$1`,
-    values: [idLayer]
-  };
-  return pgRead.query(queryAttributes)
-  .then(r => { 
-    return r.rows.map(a => a.names);
-  });
 }
 
 

@@ -30,23 +30,45 @@ var uploadHandler = multer({ storage: storage }).single('vector');
 module.exports.upload = [
   uploadHandler,
   authenticateHandler,
-  //validateUserHandler,
   convertOgrHandler,
   addSourceHandler
 ];
 
+/*
+* Export other utils
+*/
+
+module.exports.convertOgrHandler = convertOgrHandler;
+module.exports.fileToPostgres = fileToPostgres;
 
 /**
 * Convert data
 */
 function convertOgrHandler(req,res,next){
   msg = "";
-  var email = req.body.email || '';
+  var sourceSrs,fileName, idUser, userToken, idProject;
+  var hasBody = typeof req.body == "object";
+
+  if( hasBody ){
+    idUser = req.body.idUser ;
+    idProject = req.body.idProject || req.body.project ;
+    userToken = req.body.token ;
+    userEmail = req.body.email;
+    sourceSrs = req.body.sourceSrs;
+    fileName = req.body.fileName;
+  }else{
+    idUser = req.query.idUser;
+    idProject = req.query.idProject || req.query.project ;
+    userToken = req.query.token;
+    userEmail =  req.query.email;
+    sourceSrs = req.query.sourceSrs;
+    fileName = req.query.fileName;
+  }
 
   fileToPostgres(
-    fileName = req.file.filename,
-    idUser = req.body.idUser,
-    sourceSrs = req.body.sourceSrs,
+    fileName = fileName,
+    idUser = idUser,
+    sourceSrs = sourceSrs,
     onMessage = function(data){
       if(data.msg){
         res.write(JSON.stringify({ type:data.type, msg :data.msg })+'\t\n');
@@ -55,7 +77,7 @@ function convertOgrHandler(req,res,next){
     onError = function(data){
 
       sendMail({
-        to : [email,emailAdmin].join(','),
+        to : [userEmail,emailAdmin].join(','),
         text : data.msg,
         subject : 'MapX import error'
       });
@@ -67,9 +89,8 @@ function convertOgrHandler(req,res,next){
       next();
     }
   );
-
-
 }
+
 /**
 * Handler for adding reccord in source table
 */

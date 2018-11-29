@@ -893,8 +893,26 @@ blockquote {
   /*border-radius:0px;*/
 }
 
+.mx .form-control.logs {
+  height:auto;
+  max-height:200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #353535;
+  padding:5px;
+}
 
-.mx-draggable {
+.mx .form-control.logs *{
+  color: #f5a60b;
+  font-family: monospace;
+  font-size: 0.9em;
+}
+
+.mx .form-control.logs li{
+  list-style: none;
+}
+.mx .form-control.logs ul{
+  padding:0px;
 }
 
 .mx-dragged {

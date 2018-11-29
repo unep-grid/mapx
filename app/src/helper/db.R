@@ -1357,7 +1357,7 @@ mxDbGeojsonCountFeatures <- function(path){
 #' @export
 mxDbListTable<- function(){
   con <- mxDbAutoCon()
-  res <- dbListTables()
+  res <- dbListTables(con)
   return(res)
 }
 

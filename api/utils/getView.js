@@ -31,7 +31,8 @@ exports.get =  function(req,res){
   );
 
   if(!sql){
-    return res.sendStatus(500).json({error:'no valid query'});
+    //return res.sendStatus(500).json({error:'no valid query'});
+    return sendError(res,{error:'no valid query'});
   }
 
   clientPgRead.query(sql)
@@ -70,7 +71,7 @@ exports.getTile = function(req, res, next){
     data
   );
 
-  clientPgRead.query(sqlViewInfo)
+  return clientPgRead.query(sqlViewInfo)
     .then(function(result) {
       /*
        * Get view data. Keys ;
@@ -101,7 +102,7 @@ exports.getTile = function(req, res, next){
 
       //sql = utils.parseTemplate(sql,data);
 
-      getTile(res,hash,data);
+      return getTile(res,hash,data);
 
     })
     .catch(function(err){
@@ -126,10 +127,10 @@ function getTile(res,hash,data){
       console.log(err);
     }
     if(!err && zTile64){
-      console.log("Get tile from cache !");
+      //console.log("Get tile from cache !");
       sendTileZip(res,Buffer(zTile64,'base64'));
     }else{
-      console.log("Get tile from pg !");
+      //console.log("Get tile from pg !");
       getTilePg(res,hash,data);
     }
   });
@@ -196,7 +197,7 @@ function sendEmpty(res){
 
 function sendError(res,err){
   res.setHeader('Content-Type', 'application/x-protobuf');
-  res.status(500).send(err);
+  res.status(500).send(JSON.stringify(err));
 }
 
 function rowsToGeoJSON(rows) {

@@ -836,6 +836,7 @@ export function getJSON(o) {
 
   o.onSuccess =  o.onSuccess || function(){};
   o.onError =  o.onError || function(){};
+  o.onTimeout =  o.onTimeout || function(){};
   o.onMessage = o.onMessage || function(){};
   o.onComplete =  o.onComplete || function(){};
 
@@ -854,6 +855,11 @@ export function getJSON(o) {
     onSuccess: function(res) {
       if(res){
         o.onSuccess(res);
+      }
+    },
+    onTimeout: function(res) {
+      if(res){
+        o.onTimeout(res);
       }
     },
     onError: o.onError,

@@ -372,9 +372,21 @@
     "ps": ""
   },
   {
-    "id": "btn_calculate_area",
-    "en": "Calculate overlap area",
-    "fr": "Calculer l'aire de chevauchement",
+    "id": "btn_analyse",
+    "en": "Launch analysis",
+    "fr": "Lancer l'analyse",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "analysis_log",
+    "en": "Analysis logs",
+    "fr": "Logs de l'analyse",
     "es": "",
     "ru": "",
     "zh": "",
@@ -387,6 +399,18 @@
     "id": "calc_area_result",
     "en": "Overlaping area (km2)",
     "fr": "Aire de chevauchement (km2)",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "create_overlap_source",
+    "en": "Create a new source based on the result",
+    "fr": "Creer une nouvelle source avec le résultat",
     "es": "",
     "ru": "",
     "zh": "",
@@ -1619,6 +1643,18 @@
     "bn": "",
     "fa": "عنوان بسیار کوتاه است",
     "ps": "عنوان ډیر لنډ دی"
+  },
+  {
+    "id": "error_title_not_valid",
+    "en": "The title is not valid",
+    "fr": "Ce titre n'est pas valid",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "error_description_short",

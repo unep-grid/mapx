@@ -38,7 +38,13 @@ function parseTemplate(template, data){
 exports.parseTemplate = parseTemplate;
   
 
-
+/**
+ * Send string for result message
+ * @param {Object} obj object to be converted in string for messages
+ */
+exports.toRes =function(obj) {
+  return JSON.stringify(obj) + "\t\n";
+};
 
 /**
 * Random string composer : such as mx_mb9oa_6qmem_pkq9q_ajyer
@@ -66,7 +72,8 @@ exports.randomString = function(prefix, nRep, nChar,toLower,toUpper) {
   if(toUpper) out = out.toUpperCase();
   return out;
 };
-  
+
+
 /*
 * Read text sync
 */
@@ -115,7 +122,7 @@ exports.attrToPgCol = function(attribute,attributes){
   if(attribute.constructor !== Array ) attribute = [attribute];
   if(attributes.constructor !== Array ) attributes = [attributes];
   var attr = getDistinct(attribute.concat(attributes));
-  if(attr.indexOf('gid') < 0) attr.push("gid");
+  if(attr.indexOf('gid') == -1) attr.push("gid");
   return toPgColumn(attr);
 };
 
@@ -130,5 +137,5 @@ exports.image = require('./uploadImage.js');
 exports.vector = require('./uploadVector.js');
 exports.mail = require('./mail.js');
 exports.query = require('./query.js');
-
+exports.db = require('./db.js');
 
