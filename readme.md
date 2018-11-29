@@ -4,9 +4,14 @@ MapX is a spatial data infrastructure that aims to support the sustainable use o
 
 ## Version history
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1f1d8b5">1.5.29</a>
+- <a href="https://github.com/fxi/map-x-mgl/tree/bbb37f">1.5.30</a>
+    -Improvement
+      - API/APP
+          - Create new source based on overlap analysis
+- <a href="https://github.com/fxi/map-x-mgl/tree/ce3d0d54c1">1.5.29</a>
     - Iprovement
       - APP
+          - Batch screenshot creation
           - New layout for view description, should solve a bug in windows Chrome browser where legends were not rendered
           - Set application update as optional. At least, warn the user that an update is ready.
           - Better modal window
