@@ -69,9 +69,9 @@ observeEvent(input$btnAnalysisOverlap,{
             ),
           tags$div(
             class="form-groups",
-            tags$label(d('analysis_log',language)),
+            tags$label(d('logs',language)),
             tags$div(
-              class="form-control logs",
+              class="form-control mx-logs",
               tags$ul(id="ulOverlapMessages")
               )
             ),

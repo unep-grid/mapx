@@ -193,8 +193,10 @@ observeEvent(reactData$loginRequested,{
     #
     # Login : set cookies and get userdata
     #
-    reactUser$data <- mxLogin(email,input$browserData);
+    userInfo <- mxLogin(email,input$browserData);
 
+    reactUser$data <- userInfo$info;
+    reactUser$token <- userInfo$token;
 
     #
     # Execute login callback

@@ -1,18 +1,21 @@
 //var ogr2ogr = require("ogr2ogr");
-var archiver = require('archiver');
-var tar = require('tar');
-var fs = require("fs");
-var getColumnsNames = require('./db.js').getColumnsNames;
-var sendMail= require("./mail.js").sendMail;
-var spawn =  require('child_process').spawn;
-var settings = require.main.require("./settings");
-var cryptoKey =  settings.db.crypto.key;
-var apiHostUrl = settings.api.host;
-var apiPort = settings.api.port;
-var emailAdmin = settings.mail.config.emailAdmin;
-var template = require("../templates");
-var utils = require("./utils.js");
-var pgRead = require.main.require("./db").pgRead;
+const archiver = require('archiver');
+const tar = require('tar');
+const fs = require("fs");
+const getColumnsNames = require('./db.js').getColumnsNames;
+const sendMail= require("./mail.js").sendMail;
+const spawn =  require('child_process').spawn;
+const settings = require.main.require("./settings");
+const cryptoKey =  settings.db.crypto.key;
+const emailAdmin = settings.mail.config.emailAdmin;
+const template = require("../templates");
+const utils = require("./utils.js");
+const pgRead = require.main.require("./db").pgRead;
+const authenticateHandler = require("./authentification.js").authenticateHandler;
+const isLayerValid = require('./db.js').isLayerValid;
+const apiPort = settings.api.port;
+let apiHostUrl = settings.api.host;
+
 var fileFormat = {
   "GPKG" : {
     ext : 'gpkg'
@@ -43,40 +46,36 @@ if( apiPort != 80 && apiPort != 443 ){
 
 
 /**
-* Request handler / middleware
-*/
+ * Request handler / middleware
+ */
 
-exports.get =  function(req,res){
+module.exports.get = [
+  authenticateHandler,
+  exportHandler
+];
+
+function exportHandler(req,res){
   var data = '';
   var query = '';
+  var config = req.query;
   res.setHeader('Content-Type', 'application/json');
 
-  decrypt(req.query.data)
-    .then( data => {
-      
-      if( !data ){
-        res.status(403).send('Empty query');
-        return;
-      }
-
-      return extractFromPostgres(data,{
-        onMessage : function(msg,type){
-          type =  type || 'message';
-          res.write(JSON.stringify({
-            type: type,
-            msg: msg
-          })+"\t\n");
-        },
-        onEnd : function(msg){
-          res.write(JSON.stringify({
-            type: 'end', 
-            msg: msg
-          })+"\t\n");
-          res.end();
-        }
-      });
-
-    })
+  return extractFromPostgres(config,{
+    onMessage : function(msg,type){
+      type =  type || 'message';
+      res.write(JSON.stringify({
+        type: type,
+        msg: msg
+      })+"\t\n");
+    },
+    onEnd : function(msg){
+      res.write(JSON.stringify({
+        type: 'end', 
+        msg: msg
+      })+"\t\n");
+      res.end();
+    }
+  })
     .catch( e => {
       console.log(e);
       res.write(JSON.stringify({
@@ -85,38 +84,13 @@ exports.get =  function(req,res){
       })+"\t\n");
       res.end();
     });
-};
-
-/**
-* Decrypt utility
-* @param {String} str string to decrypt
-*/
-function decrypt(str){
-
-  var sqlDecrypt = {
-    text: `SELECT mx_decrypt($1, $2) AS data`,
-    values: [str,cryptoKey]
-  };
-
-  return  pgRead.query(sqlDecrypt)
-    .then(function(sqlRes){
-
-      if( sqlRes && sqlRes.rows instanceof Array && sqlRes.rows[0] ){
-        data = JSON.parse(sqlRes.rows[0].data);
-      }else{
-        data = null;
-      }
-
-      return data;
-    });
 }
 
-
 /**
-* Exportation script
-*/
+ * Exportation script
+ */
 function extractFromPostgres(config,cb){
-  var id = config.layer;
+  var id = config.layer || config.idSource;
   var metadata = [];
   var email = config.email;
   var format = config.format;
@@ -163,31 +137,62 @@ function extractFromPostgres(config,cb){
 
   return utils.getSourceMetadata(id)
     .then(m => {
+
       if(m.rows[0] && m.rows[0].metadata){
         metadata = m.rows[0].metadata;
       }
+
+      onMessage( 'Extracted metadata');
       return getColumnsNames(id);
     })
     .then( attr => {
-      attributes = attr.filter( a => a != 'geom');
-      attributesPg = utils.attrToPgCol(attributes);
+
+      var hasCountryClip = iso3codes && iso3codes.constructor === Array && iso3codes.length > 0;
+
+
 
       /**
        * If intersection, crop by country
        */
-      if( iso3codes && iso3codes.constructor === Array && iso3codes.length > 0){
-        iso3codes = "'"+iso3codes.join("','")+"'";
+      if( !hasCountryClip) {
+        onMessage( 'Request without country clipping, continue');
+        return Promise.resolve({valid:true});
+      }else{
+        /**
+         * Validity check
+         */
+        onMessage( 'Request with country clipping, test for invalid geometry');
+        return isLayerValid(id)
+          .then( test => {
+            if( test.valid === true ){
+              /**
+               * Test seems to be ok
+               */
+              onMessage('Geometry seems valid, continue');
+              sqlOGR = getSqlClip(id,iso3codes,attr);
+            }else{
+              /**
+               * Test failed. at least one feature presented bad geometry
+               */
+              var err = 'Layer ' + test.id + '( '+ test.title +' )' +
+                ' has invalid geometry and can\'t be clipped by country.' +
+                ' Please correct it, then try again';
+              onMessage(err,'error');
 
-        sqlOGR = utils.parseTemplate(
-          template.layerIntersectionCountry,
-          { 
-            idLayer : id,
-            attributes : attributesPg,
-            idLayerCountry : "mx_countries",
-            idIso3 : iso3codes
-          }
-        );
+              throw new Error("Invalid geometry found");
+
+            }
+            return test;
+          });
+
       }
+    })
+    .then ( test => {
+
+      if( ! test || !test.valid ){
+        throw new Error("Issue with geometry validation, unknown state");
+      }
+
       /**
        * Create folder
        */
@@ -247,7 +252,7 @@ function extractFromPostgres(config,cb){
 
       ogr.stderr.on('data', function (data) {
         data  = data.toString('utf8');
-        onMessage(data,'error');
+        onMessage(data,'warning');
       });
 
       ogr.on('exit', function (code, signal) {
@@ -315,17 +320,15 @@ function extractFromPostgres(config,cb){
         });
 
 
-        // good practice to catch warnings (ie stat failures and other non-blocking errors)
         archive.on('warning', function(err) {
           if (err.code === 'ENOENT') {
-            onMessage(err,'message');
+            onMessage(err,'warning');
           } else {
             onMessage(err,'error');
             throw err;
           }
         });
 
-        // good practice to catch this error explicitly
         archive.on('error', function(err) {
           onMessage(err,'error');
           throw err;
@@ -350,15 +353,38 @@ function extractFromPostgres(config,cb){
 
 }
 
+
+function getSqlClip(idSource,iso3codes,attributes){
+
+  attributes = attributes.filter( a => a != 'geom');
+  attributesPg = utils.attrToPgCol(attributes);
+
+  iso3codes = "'"+iso3codes.join("','")+"'";
+
+  var sql = utils.parseTemplate(
+    template.layerIntersectionCountry,
+    { 
+      idLayer : idSource,
+      attributes : attributesPg,
+      idLayerCountry : "mx_countries",
+      idIso3 : iso3codes
+    }
+  );
+
+  return sql;
+
+}
+
+
 function stringToProgress(str,cb){ 
   var hasProg = false;
   var progressNums = str.split('.');
-    progressNums.forEach(function(prog){
-      prog = parseFloat(prog);
-      if(!isNaN(prog) && isFinite(prog)){
-        hasProg = true;
-        cb(prog);
-      }
-    });
+  progressNums.forEach(function(prog){
+    prog = parseFloat(prog);
+    if(!isNaN(prog) && isFinite(prog)){
+      hasProg = true;
+      cb(prog);
+    }
+  });
   return hasProg;
 }

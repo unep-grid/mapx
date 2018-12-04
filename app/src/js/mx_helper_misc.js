@@ -2457,6 +2457,16 @@ export function shareTwitter(id) {
 }
 
 
+
+
+export function updateLogScroll(selector){
+  selector = selector || '.mx-logs';
+  var elLogs = selector instanceof Element ? selector : document.querySelector(selector);
+  if(!elLogs) return;
+  var h = elLogs.getBoundingClientRect();
+  elLogs.scrollTop=h.height;
+}
+
 export function handleRequestMessage(msg,msgs,on){
 
   msgs = msgs || {};
@@ -2466,6 +2476,7 @@ export function handleRequestMessage(msg,msgs,on){
   on.progress = on.progress || console.log;
   on.timing = on.timing || console.log;
   on.error = on.error || console.log;
+  on.warning = on.warning || console.log;
   on.end = on.end || console.log;
   on.result = on.result || console.log;
   on.default = on.default || console.log;
@@ -2496,34 +2507,45 @@ export function handleRequestMessage(msg,msgs,on){
       case 'error':
         on.error(msg);
         break;
+      case 'warning':
+        on.warning(msg);
+        break;
       case 'result':
         on.result(msg);
         break;
       default :
         on.default(msg);
     }
+    updateLogScroll('.mx-logs');
   }
 
   function cleanMsg(res){
     res = res + "";
-    res.split("\t\n").forEach(function(j){
-      if(j){
-        if(mx.helpers.isNumeric(j)){
-          j = j *100;
-          addMsg(j,"progress");
+    res.split("\t\n").forEach(function(m){
+      if(m){
+        if(mx.helpers.isNumeric(m)){
+          m = m *100;
+          addMsg(m,"progress");
         }else{
 
-          if( isJson(j) ){
-            j = JSON.parse(j);
+          if( isJson(m) ){
+            m = JSON.parse(m);
           }
 
-          var isObject = typeof j === "object";
-          var msg = isObject ? j.msg : j;
+          var isObject = typeof m === "object";
+          var msg = isObject ? m.msg : m;
+          var type = m.type || 'default';
 
           if( msgs[msg] ) return;
 
           msgs[msg] = true;
-          addMsg(msg, j.type || 'default');
+
+          console.log({
+            msg : msg,
+            type : type
+          });
+
+          addMsg(msg, type);
         }
         
       }

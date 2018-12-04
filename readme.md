@@ -5,9 +5,18 @@ MapX is a spatial data infrastructure that aims to support the sustainable use o
 ## Version history
 
 - <a href="https://github.com/fxi/map-x-mgl/tree/bbb37f">1.5.30</a>
-    -Improvement
+    - Improvement
       - API/APP
           - Create new source based on overlap analysis
+          - Download authentication. Now, same method as upload and overlap, with encrypted token
+          - Download and clip : validate beforehand instead of failing in ogr2ogr step
+          - Color in logs
+          - Download, uploads and overlap have an unified interface for logs
+          - Logs autoscroll
+          - Version in tools panel solved : index.html was not re-build when webpack build prod version
+    - Bug fixes
+          - Broken uploader
+       
 - <a href="https://github.com/fxi/map-x-mgl/tree/ce3d0d54c1">1.5.29</a>
     - Iprovement
       - APP

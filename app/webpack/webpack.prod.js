@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackShellPlugin = require('webpack-shell-plugin');
 
 //const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
@@ -19,6 +20,13 @@ module.exports = merge(common, {
     }
   },
   plugins: [
+    new WebpackShellPlugin({
+      onBuildStart:[
+        'Rscript ./src/script/build_html.R',
+        'Rscript ./src/script/build_dict_json.R'
+      ],
+      onBuildEnd:['echo "Webpack End"']
+    }),
     new CleanWebpackPlugin(
       [
         '../www/*'

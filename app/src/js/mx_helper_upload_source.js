@@ -184,13 +184,12 @@ function uploadSource(o){
    * create upload form
    */
   var form = new FormData(); 
+  form.append('title',o.title);
   form.append('vector',o.file || o.geojson);
   form.append('token',o.token || mx.settings.user.token);
   form.append('idUser',o.idUser || mx.settings.user.id);
   form.append('email',o.email || mx.settings.user.email);
   form.append('project',o.idProject || mx.settings.project);
-  form.append('title',o.title);
-
 
   /**
    * Create ui
@@ -200,22 +199,29 @@ function uploadSource(o){
   var elProgressTarget = o.selectorProgressContainer instanceof Node ? o.selectorProgressContainer : document.querySelector(o.selectorProgressContainer);
   var el = mx.helpers.el;
   var elProgressLabel =  el("label","Progress");
+  var elLogLabel =  el("label","Logs");
+
 
   /* progress bar */
-  var elProgressBar = el("div",{class:'mx-inline-progress-bar'});
-  var elProgressBarContainer = el("div",{class:'mx-inline-progress-container'},elProgressBar);
-  var elProgressMessage = el("pre");
-  var elProgressIssues = el("pre");
-  var elProgressIssuesContainer = mx.helpers.uiFold({
-    label : 'Issues',
-    content : elProgressIssues
+  var elProgressBar = el("div",{
+    class: 'mx-inline-progress-bar'
   });
+  var elProgressBarContainer = el("div",{
+    class: 'mx-inline-progress-container'
+  },elProgressBar);
+  var elProgressMessageContainer = el("div",{
+    class: ['form-control', 'mx-logs']
+  });
+
+  var elProgressMessage = el("ul");
+
+  elProgressMessageContainer.appendChild(elProgressMessage);
 
   var elProgressContainer = el("div",
     elProgressLabel,
     elProgressBarContainer,
-    elProgressMessage,
-    elProgressIssuesContainer
+    elLogLabel,
+    elProgressMessageContainer
   );
 
   elProgressTarget.appendChild(elProgressContainer);
@@ -251,43 +257,43 @@ function uploadSource(o){
   function cleanMsg(msg){
     return mx.helpers.handleRequestMessage( msg, messageStore ,{
       end : function(msg){
-        var elUpDone = el("div","Process done,the data should be available in sources list");
-        elProgressBar.style.width = 100 + "%";
-        elProgressMessage.appendChild(elUpDone);
+        var li = el("li",{
+          class : ['mx-log-item','mx-log-green'] 
+        },"Process done,the data should be available in sources list");
+        elProgressMessage.appendChild(li);
         updateLayerList();
       },
       error :function(msg){
-        var p = el("p");
-        p.className = "error";
-        p.innerText = msg ;
-        elProgressIssues.appendChild(p);
+        var li = el("li",{
+          class:['mx-log-item','mx-log-red']},
+          msg);
+        elProgressMessage.appendChild(li);
       },
       message : function(msg){
-        var p = el("p");
-        p.className = "message";
+        var li = el("li",{
+          class:['mx-log-item','mx-log-gray']},
+          msg);
         elProgressLabel.innertText = "Importation progress";
-        p.innerText = msg ;
-        elProgressMessage.appendChild(p);
+        elProgressMessage.appendChild(li);
       },
       progress : function(progress){
         elProgressLabel.innerText = "Upload progress";
         elProgressBar.style.width = progress + "%";
         if( progress >= 99.9 && !uploadDone ){
           uploadDone = true;
-          var p = el("p");
           var msg = "Upload done. Importation in DB, please wait, this could take a while...";
-          p.innerText = msg ;
-
-          p.className = "progress";
-          elProgressMessage.appendChild(p);
+          var li = el("li",{
+            class:['mx-log-item','mx-log-white']},
+            msg);
+          elProgressMessage.appendChild(li);
         }
       },
       default : function(msg){
         if(msg && msg.length>3){
-          var p = el("p");
-          p.className = "default";
-          p.innterText=msg;
-          elProgressMessage.appendChild(p);
+          var li = el("li",{
+            class:['mx-log-item','mx-log-gray']},
+            msg);
+          elProgressMessage.appendChild(li);
         }
       }
     });
@@ -295,75 +301,4 @@ function uploadSource(o){
 }
 
 
-
-
-
-
-  //function isJson(str) {
-    //try {
-      //JSON.parse(str);
-    //} catch (e) {
-      //return false;
-    //}
-    //return true;
-  //}
-
-  //function addMsg(msg,type){
-    //if(type=="error") console.log(msg);
-
-    //var p = el("p");
-    //switch(type){
-      //case 'end' :
-        //var elUpDone = el("div","Process done,the data should be available in sources list");
-        //elProgressBar.style.width = 100 + "%";
-        //elProgressMessage.appendChild(elUpDone);
-        //updateLayerList();
-        //break;
-      //case 'progress' :
-        //elProgressBar.style.width = msg + "%";
-        //break;
-      //case 'message': 
-        //p.innerText = msg ;
-        //elProgressMessage.appendChild(p);
-        //break;
-      //case 'error':
-        //p.innerText = msg ;
-        //elProgressIssues.appendChild(p);
-        //break;
-      //default :
-        //p.innerText = msg ;
-        //elProgressMessage.appendChild(p);
-    //}
-  //}
-
-  //var msgs = [];
-  //var uploadDone = false;
-
-  //function updateLayerList(){
-    //Shiny.onInputChange( 'mglEvent_update_source_list',{
-      //date : new Date() * 1
-    //});
-  //}
-
-  //function cleanMsg(res){
-    //if(typeof res === "number"){ 
-      //elProgressLabel.innerText = "Upload progress";
-      //addMsg(res*100,"progress");
-      //if(res>=0.99 && !uploadDone){
-        //uploadDone = true;
-        //addMsg("Upload done. Importation in DB, please wait, this could take a while...","message");
-      //}
-    //}else{
-      //res.split("\t\n").forEach(function(j){
-        //if(j){
-          //if(msgs.indexOf(j) == -1){
-            //elProgressLabel.innertText = "Importation progress";
-            //msgs.push(j);
-            //var val =  JSON.parse(j);
-            //addMsg(val.msg,val.type);
-          //}
-        //}
-      //});
-    //}
-  //}
 

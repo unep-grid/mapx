@@ -384,9 +384,9 @@
     "ps": ""
   },
   {
-    "id": "analysis_log",
-    "en": "Analysis logs",
-    "fr": "Logs de l'analyse",
+    "id": "logs",
+    "en": "Logs",
+    "fr": "Logs",
     "es": "",
     "ru": "",
     "zh": "",
@@ -1346,8 +1346,8 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": " [ experimental feature ] \n Highlight vector overlaps at current zoom",
-    "fr": " [ fonctionnalité expérimentale ] \n Mettre en évidence les chevauchements vectoriels au niveau de zoom actuel",
+    "en": "Highlight vector features \n – See options and overlap settings \n in the toolbox panel – ",
+    "fr": "Mise en évidence des objets vectoriels \n – Voir options et mode de chevauchement \n dans le panneau des outils –",
     "es": "",
     "ru": "",
     "zh": "",

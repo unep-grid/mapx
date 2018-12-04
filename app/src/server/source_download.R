@@ -126,23 +126,29 @@ observeEvent(input$btnSourceDownload,{
     conf <- reactData$sourceDownloadRequest
     language <- reactData$language
     idSource <- conf$idSource
+    idUser <- reactUser$data$id
+    idProject <- reactData$project
     format <- input$selectDownloadFormat
     epsgCode <- as.numeric(input$numEpsgCode)
     emailUser <- reactUser$data$email
+    token <- reactUser$token
     emailAdmin <- .get(config,c("mail","admin"))
     filename <- removeExtension(input$txtDownloadFileName)
     filename <- subPunct(filename)
     iso3codes <- input$selectFilterDataByCountries
     sourceTitle <- mxDbGetLayerTitle(idSource,language) 
 
-    request = mxDbEncrypt(list(
-        layer = idSource,
+    request = list(
+        idSource = idSource,
         email =  emailUser,
         filename = filename,
         format = format,
         iso3codes = iso3codes,
-        epsgCode = epsgCode
-        ))
+        epsgCode = epsgCode,
+        idUser = idUser,
+        token = token,
+        idProject = idProject
+        )
 
     mxModal(
       id = "modalSourceDownload",
@@ -154,7 +160,7 @@ observeEvent(input$btnSourceDownload,{
       )
 
     mglHandlerDownloadVectorSource(list(
-        data = request,
+        request = request,
         idHandlerContainer = "mxDownloadHandler"
         ))
 

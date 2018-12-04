@@ -56,8 +56,9 @@ server <- function(input,output,session){
           # and store browserData client side, 
           # in cookie, for fingerprinting
           #
-          reactUser$data <- mxLogin(email,browserData,query);
-
+          userInfo <- mxLogin(email,browserData, query);
+          reactUser$data <- userInfo$info;
+          reactUser$token <- userInfo$token;
 
           mxSource(
             base = config$srvPath,

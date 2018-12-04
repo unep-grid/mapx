@@ -42,7 +42,7 @@ mxLogin <- function(email,browserData,query){
     validUntil <- .get(val,c('valid_until'))
     hasExpired <- noDataCheck(validUntil) || isTRUE(nowPosix > validUntil)
   }
-  
+
   # make sure to use lowercase and trimed email
   email <- trimws(tolower(email))
 
@@ -117,7 +117,7 @@ mxLogin <- function(email,browserData,query){
 
   # if it's empty or not an integer, stop
   if( !hasValidId ) {
-    
+
     email <- emailGuest
     isGuest <- TRUE
 
@@ -184,21 +184,25 @@ mxLogin <- function(email,browserData,query){
   #
   # Save user id in mx.settings.user.id
   #
-  token <- list(
+  token <- mxDbEncrypt(list(
     token = ifelse(isGuest,"",res$key),
     valid_until = as.numeric(Sys.time()) + 2 * 86400
-    )
+    ))
+  
   mglSetUserData(list(
       id = res$id,
       guest = isGuest,
       email =  ifelse(isGuest,"",email),
-      token = mxDbEncrypt(token)
-  ));
+      token = token
+      ));
   #
   # Get user info
   #
   mxDebugMsg(" User " + email +" loged in.")
-  return(mxDbGetUserInfoList(id=res$id))
+  return(list(
+      info = mxDbGetUserInfoList(id=res$id),
+      token = token
+      ))
 
 }
 

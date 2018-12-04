@@ -893,26 +893,54 @@ blockquote {
   /*border-radius:0px;*/
 }
 
-.mx .form-control.logs {
-  height:auto;
-  max-height:200px;
+.mx .mx-logs,
+.mx .form-control.mx-logs {
+  height: auto;
+  max-height: 200px;
   overflow-y: auto;
   overflow-x: hidden;
   background: #353535;
-  padding:5px;
-}
-
-.mx .form-control.logs *{
-  color: #f5a60b;
-  font-family: monospace;
-  font-size: 0.9em;
-}
-
-.mx .form-control.logs li{
-  list-style: none;
-}
-.mx .form-control.logs ul{
+  padding: 5px;
   padding:0px;
+}
+
+
+.mx .mx-logs ul {
+ padding:5px;
+}
+
+.mx .mx-logs .mx-log-item,
+.mx .mx-logs .mx-log-item * {
+  color: #a2a1a1;
+  list-style: none;
+  padding:4px;
+}
+
+.mx .mx-logs .mx-log-item.mx-log-red,
+.mx .mx-logs .mx-log-item.mx-log-red * {
+  color: #f00;
+}
+.mx .mx-logs .mx-log-item.mx-log-green,
+.mx .mx-logs .mx-log-item.mx-log-green * {
+  color: #0f0;
+  /*Links cab be log-green and have border-bottom, see mx_colors*/
+  border-color: #0f0;
+}
+.mx .mx-logs .mx-log-item.mx-log-orange,
+.mx .mx-logs .mx-log-item.mx-log-orange * {
+  color: #ffa900;
+}
+.mx .mx-logs .mx-log-item.mx-log-blue,
+.mx .mx-logs .mx-log-item.mx-log-blue * {
+  color: #00f;
+}
+.mx .mx-logs .mx-log-item.mx-log-white,
+.mx .mx-logs .mx-log-item.mx-log-white * {
+  color: #fff;
+}
+.mx .mx-logs .mx-log-item.mx-log-gray,
+.mx .mx-logs .mx-log-item.mx-log-gray * {
+  color: #a2a1a1;
 }
 
 .mx-dragged {
@@ -1467,6 +1495,7 @@ blockquote {
 */
 [class*="hint--"]:after {
     white-space: pre;
+    line-height: 20px;
 }
 
 

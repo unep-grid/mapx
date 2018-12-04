@@ -18,6 +18,7 @@ function authenticate(req, res, next){
   var msgTitle = "MapX authentication: ";
   var idUser, userToken, idProject;
   var hasBody = typeof req.body == "object";
+  
   if( hasBody ){
     idUser = req.body.idUser ;
     idProject = req.body.idProject || req.body.project ;

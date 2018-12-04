@@ -35,8 +35,8 @@ highlightConfig <- tags$div(
       tags$div(
         tags$select( id = "selectNLayersOverlap",
           tags$option(value="all",'Highlight zones where all layers overlap'),
-          tags$option(value="1",'Highlight any visible features'),
-          tags$option(selected=TRUE,value="2",'Highlight zones where at least two layers overlap'),
+          tags$option(selected=TRUE,value="1",'Highlight any visible features'),
+          tags$option(value="2",'Highlight zones where at least two layers overlap'),
           tags$option(value="3",'Highlight zones where at least three layers overlap'),
           tags$option(value="4",'Highlight zones where at least four layers overlap'),
           tags$option(value="5",'Highlight zones where at least five layers overlap')

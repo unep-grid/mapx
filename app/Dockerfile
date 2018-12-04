@@ -65,6 +65,7 @@ RUN apt-get update \
 # when the image is built.
 #
 RUN dest=${MAPX_PATH_APP}/settings/settings-local.R\
+    && rm -rf /var/lib/apt/lists/* \
     && echo "\
     #!/bin/sh \n
     echo 'config\$api\$port <- '\\\"\$API_PORT\\\" >  $dest \n\

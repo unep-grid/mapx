@@ -56,7 +56,7 @@ export function getOverlapAnalysis(opt){
 
         if( msg.content == 'area'){
           var area  = msg.value ;
-          var elArea =  h.el('li',"Area = "+ area + "["+ msg.unit +"]");
+          var elArea =  h.el('li',{class:['mx-log-item','mx-log-white']},"Area = "+ area + "["+ msg.unit +"]");
           elListMessage.appendChild(elArea);
           if( msg.unit == 'm2' ) area = area / 1e6;
           elTextAreaResult.innerText = (Math.round(area*1000))/1000; 
@@ -70,23 +70,22 @@ export function getOverlapAnalysis(opt){
 
       },
       error :function(msg){
-        var elErr = h.el('li',JSON.stringify(msg));
+        var elErr = h.el('li',{class:['mx-log-item','mx-log-red']},JSON.stringify(msg));
         elListMessage.appendChild(elErr);
         elButtonCompute.removeAttribute("disabled");
       },
       message : function(msg){
-        var elMsg = h.el('li',msg);
+        var elMsg = h.el('li',{class:['mx-log-item','mx-log-gray']},msg);
         elListMessage.appendChild(elMsg);
-
       },
       timing : function(msg){
         console.log(msg);
         var txtTiming = 'duration = ' + msg.duration + '[' + msg.unit + ']';
-        var elTiming = h.el('li',txtTiming);
+        var elTiming = h.el('li',{class:['mx-log-item','mx-log-blue']},txtTiming);
         elListMessage.appendChild(elTiming);
       },
       end : function(msg){
-        var elEnd = h.el('li',msg);
+        var elEnd = h.el('li',{class:['mx-log-item','mx-log-green']},msg);
         elListMessage.appendChild(elEnd);
         elButtonCompute.removeAttribute("disabled");
       }

@@ -6,7 +6,7 @@ export function handlerDownloadVectorSource(o){
   var dlUrlCreate = mx.helpers.getApiUrl('downloadSourceCreate');
   var dlUrlGet = mx.helpers.getApiUrl('downloadSourceGet');
 
-  dlUrlCreate = dlUrlCreate + o.data ;
+  dlUrlCreate = dlUrlCreate +'?'+ mx.helpers.objToParams(o.request);
 
   if(!elOutput){
     throw new Error("No handler container");
@@ -14,29 +14,36 @@ export function handlerDownloadVectorSource(o){
 
   var el = mx.helpers.el;
 
-  var progressMsg = "";
-  var elProgressContainer = el("div",
-    el("label",'Extraction progress')
-  );
 
   /* progress bar */
+  var progressMsg = "";
+  var elProgressLabel =  el("label","Progress");
+
   var elProgressBar = el("div",{
-    class : 'mx-inline-progress-bar'
+    class: 'mx-inline-progress-bar'
   });
   var elProgressBarContainer = el("div",{
-    class : 'mx-inline-progress-container'
-  });
-  var elProgressMessage = el("pre");
-  var elProgressIssues = el("pre");
-  var elProgressIssuesContainer = mx.helpers.uiFold({
-    label : 'Issues',
-    content : elProgressIssues
+    class: 'mx-inline-progress-container'
+  },
+    elProgressBar
+  );
+  /* log messages */
+  var elLogLabel =  el("label","Logs");
+  var elProgressMessageContainer = el("div",{
+    class: ['form-control', 'mx-logs']
   });
 
-  elProgressBarContainer.appendChild(elProgressBar);
-  elProgressContainer.appendChild(elProgressBarContainer);
-  elProgressContainer.appendChild(elProgressMessage);
-  elProgressContainer.appendChild(elProgressIssuesContainer);
+  var elProgressMessage = el("ul");
+
+  elProgressMessageContainer.appendChild(elProgressMessage);
+
+  var elProgressContainer = el("div",
+    elProgressLabel,
+    elProgressBarContainer,
+    elLogLabel,
+    elProgressMessageContainer
+  );
+
   elOutput.appendChild(elProgressContainer);
 
   mx.helpers.getJSON({
@@ -56,52 +63,54 @@ export function handlerDownloadVectorSource(o){
     }
   });
 
-  function updateLayerList(){
-    Shiny.onInputChange( 'mglEvent_update_source_list',{
-      date : new Date() * 1
-    });
-  }
-
   var messageStore = {};
 
   function cleanMsg(msg){
     return mx.helpers.handleRequestMessage( msg, messageStore ,{
       end : function(msg){
-        var dlMsg = el("span");
-        var dlButton = el("button");
-        dlButton.classList.add("btn");
-        dlButton.innerText = "Download";
-        dlButton.onclick = function(){
-          window.open(dlUrlGet + msg.filepath,'_blank');
-        };
-        elProgressBar.style.width = 100 + "%";
-        dlMsg.innerText = "Process done, the data is available for download";
-        elProgressMessage.appendChild(dlMsg);
-        elProgressMessage.appendChild(dlButton);
+        var li = el("li",{
+          class : ['mx-log-item','mx-log-green'] 
+        },el('p','Process done, the data is available for',
+          el('a','download',{
+            href  : dlUrlGet + msg.filepath,
+            target : '_blank'
+          })
+        ));
+        elProgressMessage.appendChild(li);
       },
-      error :function(msg){
-        var pErr = el("p");
-        var pMsg = el("p");
-        pMsg.innerText = "An issue occured. Learn more in the issues box below";
-        pErr.innerText = JSON.stringify(msg) ;
-        elProgressIssues.appendChild(pErr);
-        elProgressMessage.appendChild(pMsg);
+      error :function(err){
+        var li = el("li",{
+          class:['mx-log-item','mx-log-red']},
+          err
+        );
+        elProgressMessage.appendChild(li);
+      },
+      warning :function(err){
+        var li = el("li",{
+          class:['mx-log-item','mx-log-orange']},
+          err
+        );
+        elProgressMessage.appendChild(li);
       },
       message : function(msg){
-        var p = el("p");
-        p.innerText = msg ;
-        elProgressMessage.appendChild(p);
+        var li = el("li",{
+          class:['mx-log-item','mx-log-gray']},
+          msg
+        );
+        elProgressMessage.appendChild(li);
       },
-      progress : function(prog){
-        elProgressBar.style.width = prog + "%";
+      progress : function(progress){
+        elProgressBar.style.width = progress + "%";
       },
       default : function(msg){
-        var p = el("p");
-        p.innerText = msg ;
-        elProgressMessage.appendChild(p);
+        if(msg && msg.length>3){
+          var li = el("li",{
+            class:['mx-log-item','mx-log-gray']},
+            msg);
+          elProgressMessage.appendChild(li);
+        }
       }
     });
   }
-
 }
 

@@ -50,12 +50,12 @@ function convertOgrHandler(req,res,next){
   var hasBody = typeof req.body == "object";
 
   if( hasBody ){
-    idUser = req.body.idUser ;
+    idUser = req.body.idUser *1 ;
     idProject = req.body.idProject || req.body.project ;
     userToken = req.body.token ;
     userEmail = req.body.email;
     sourceSrs = req.body.sourceSrs;
-    fileName = req.body.fileName;
+    fileName = req.body.fileName || req.file ? req.file.filename : "";
   }else{
     idUser = req.query.idUser;
     idProject = req.query.idProject || req.query.project ;
@@ -224,6 +224,9 @@ function fileToPostgres(fileName,idUser,sourceSrs, onMessage, onError, onSuccess
   process.chdir(settings.vector.path.temporary);
 
   var isZip = fileName.search(/.zip$|.gz$/) !== -1;
+
+  if(!fileName) throw new Error("No filename given");
+
 
   if(isZip){
     fileName = '/vsizip/'+fileName;
