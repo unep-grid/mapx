@@ -3145,6 +3145,42 @@
     "ps": ""
   },
   {
+    "id": "source_allow_download",
+    "en": "Allow download",
+    "fr": "Autoriser le téléchargement",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "source_allow_WMS",
+    "en": "Activate WMS access to this source",
+    "fr": "Activer l'accès WMS à cette source",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "source_allow_WFS",
+    "en": "Activate WFS access to this source",
+    "fr": "Activer l'accès WFS à cette source",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "source_removed",
     "en": "Source deleted",
     "fr": "Source supprimée",

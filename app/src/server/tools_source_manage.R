@@ -44,6 +44,21 @@ observeEvent(input$btnEditSources,{
         conditionalPanel(
           condition="input.selectSourceLayerEdit",
           tagList(
+            checkboxInput(
+              'checkSourceAllowDownload',
+              label = d('source_allow_download',language),
+              value = FALSE
+              ),
+            checkboxInput(
+              'checkSourceAllowWMS',
+              label = d('source_allow_WMS',language),
+              value = FALSE
+              ),
+            checkboxInput(
+              'checkSourceAllowWFS',
+              label = d('source_allow_WFS',language),
+              value = FALSE
+              ),
             #
             # Who can see this ?
             #
