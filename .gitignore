@@ -8,6 +8,7 @@ _logs.txt
 _prod
 _shared
 _data
+_*
 
 # Passwords
 *.env
