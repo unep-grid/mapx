@@ -3158,8 +3158,8 @@
   },
   {
     "id": "source_allow_WMS",
-    "en": "Activate WMS access to this source",
-    "fr": "Activer l'accès WMS à cette source",
+    "en": "Activate WMS",
+    "fr": "Activer WMS",
     "es": "",
     "ru": "",
     "zh": "",
@@ -3170,8 +3170,8 @@
   },
   {
     "id": "source_allow_WFS",
-    "en": "Activate WFS access to this source",
-    "fr": "Activer l'accès WFS à cette source",
+    "en": "Activate WFS",
+    "fr": "Activer WFS",
     "es": "",
     "ru": "",
     "zh": "",

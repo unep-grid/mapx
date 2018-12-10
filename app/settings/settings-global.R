@@ -55,6 +55,10 @@ config[["pg"]] = list(
     dbname = 'mapx',
     port = '5432',
     user = 'mapxw',
+    read = list(
+      user = "mapxr",
+      password=""
+      ),
     encryptKey = "",
     password= "",
     conPool = 5,
@@ -69,6 +73,16 @@ config[["pg"]] = list(
       )
   )
 
+#
+# Geoserver
+#
+config[["geoserver"]] = list(
+  url ='localhost:8080/geoserver',
+  urlPublic='http://127.0.0.1:8080/geoserver',
+  user = 'admin',
+  password = '1234',
+  dataDir = "/tmp/"
+  )
 #
 # web resources : will be exposed to the client using shiny::addRessourcePath. 
 #

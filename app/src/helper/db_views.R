@@ -49,7 +49,8 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
     " + tableName + ".id, 
     " + tableName + ".data#>>'{\"attribute\",\"name\"}' as variable, 
     " + tableName + ".pid,
-    " + tableName + ".project, 
+    " + tableName + ".project,
+    " + tableName + ".readers@>'\"public\"' as is_public,
     CASE
     WHEN data#>>'{\"title\",\"" + language + "\"}' != ''
     THEN data#>>'{\"title\",\"" + language + "\"}'
@@ -70,6 +71,28 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
 
   return(out)
 
+}
+
+#' Get a view's project
+#'
+#' @param idView {Character} id of the view
+#'
+mxDbGetViewProject <- function(idView){
+  mxDbGetQuery("
+    SELECT project 
+    FROM mx_views_latest 
+    WHERE id='" + idView + "'")$project
+}
+
+#' Get a view's source
+#'
+#' @param idView {Character} id of the view
+#'
+mxDbGetViewMainSource <- function(idView){
+  mxDbGetQuery("
+    SELECT data#>>'{\"source\",\"layerInfo\",\"name\"}' id 
+    FROM mx_views_latest 
+    WHERE id='" + idView + "'")$id
 }
 
 #' Get a list of views title from set of views id

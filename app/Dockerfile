@@ -1,30 +1,22 @@
-FROM r-base:latest
+FROM r-base:3.5.1
 
 MAINTAINER Fred Moser "frederic.moser@unepgrid.ch"
 
 #
-# R shiny launcher
+# Settings 
 #
-ENV R_BASE_VERSION=3.5.1
-ENV LC_ALL=en_US.UTF-8
-ENV LANG=en_US.UTF-8
-ENV SHINY_PORT=3838
-ENV SHINY_PORT_DEV=3434
-ENV MAPX_PATH_SHARED="/shared"
-ENV MAPX_PATH_USERDATA="/shared/userdata"
-ENV MAPX_PATH_DOWNLOAD="/shared/download"
-ENV MAPX_PATH_LOG="/shared/logs"
-ENV MAPX_PATH_APP="/srv/shiny-server/mapx"
 ENV DEBIAN_FRONTEND noninteractive
-
-ARG r_deps_dev="r-base-dev="${R_BASE_VERSION}-*
-ARG r_deps_sys="gdal-bin libpq-dev libcurl4-gnutls-dev libxml2-dev ca-certificates"
-ARG r_deps_shiny_server="sudo gdebi-core pandoc pandoc-citeproc libcairo2-dev/unstable libxt-dev"
-ARG r_packages_date="2018-06-02"
-ARG r_packages="c('RPostgreSQL','shiny','rmarkdown','memoise','jsonlite','magrittr','curl','later','pool','xml2')"
-
 VOLUME /shared
 WORKDIR /build
+
+ARG r_base_version=3.5.1
+ARG r_deps_dev="r-base-dev="${r_base_version}-*" libcurl4-gnutls-dev libxml2-dev libssl-dev/unstable libcairo2-dev/unstable libxt-dev"
+ARG r_deps_sys="gdal-bin libpq-dev ca-certificates"
+ARG r_deps_shiny_server="sudo gdebi-core pandoc pandoc-citeproc"
+ARG r_packages_date="2018-12-04"
+ARG r_packages="c('RPostgreSQL','shiny','rmarkdown','memoise','jsonlite','magrittr','curl','later','pool','geosapi','xml2')"
+ARG r_app_path="/srv/shiny-server/mapx"
+
 #
 # SHINY SERVER
 #
@@ -38,6 +30,9 @@ RUN apt-get update \
       && rm -f version.txt ss-latest.deb \
       && rm -rf /srv/shiny-server \
       && mkdir -p /srv/shiny-server \
+      && apt-get clean \
+      && apt-get autoclean \
+      && apt-get autoremove \
       && rm -rf /var/lib/apt/lists/* 
 
 #
@@ -55,46 +50,11 @@ RUN apt-get update \
     && apt-get purge -y --auto-remove $r_deps_dev \
     && apt-get clean \
     && apt-get autoclean \
-    && apt-get autoremove 
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/* 
 
-#
-# Config server
-# 
-# NOTE: shiny-server does not allow reading env variables, 
-# that's why I've made a script to rewrite settings-local.R 
-# when the image is built.
-#
-RUN dest=${MAPX_PATH_APP}/settings/settings-local.R\
-    && rm -rf /var/lib/apt/lists/* \
-    && echo "\
-    #!/bin/sh \n
-    echo 'config\$api\$port <- '\\\"\$API_PORT\\\" >  $dest \n\
-    echo 'config\$api\$host <- '\\\"\$API_HOST\\\" >>  $dest \n\
-    echo 'config\$resources\$userdata <- '\\\"\$MAPX_PATH_USERDATA\\\" >>  $dest \n\
-    echo 'config\$resources\$download <- '\\\"\$MAPX_PATH_DOWNLOAD\\\" >>  $dest \n\
-    echo 'config\$pg\$encryptKey <- '\\\"\$POSTGRES_KEY_ENCRYPT\\\" >>  $dest \n\
-    echo 'config\$pg\$user <- '\\\"\$POSTGRES_USER_WRITE\\\" >>  $dest \n\
-    echo 'config\$pg\$password <- '\\\"\$POSTGRES_USER_WRITE_PASSWORD\\\" >>  $dest \n\
-    echo 'config\$pg\$host <- '\\\"\$POSTGRES_HOST\\\" >>  $dest \n\
-    echo 'config\$project\$default <- '\\\"\$MAPX_PROJECT_DEFAULT\\\" >>  $dest \n\
-    echo 'projectCreators <- '\\\"\$MAPX_PROJECT_CREATORS\\\" >>  $dest \n\
-    echo 'config\$project\$creation\$usersAllowed <- jsonlite::fromJSON(projectCreators)' >>  $dest \n\
-    echo 'config\$map\$token <- '\\\"\$MAPX_MAPBOX_TOKEN\\\" >>  $dest \n\
-    mkdir -p "${MAPX_PATH_LOG}" \n\
-    chown shiny:shiny "${MAPX_PATH_LOG}" \n\
-    exec shiny-server 2>&1 " > /usr/bin/shiny-server.sh \
-    && cat /usr/bin/shiny-server.sh \
-    && chmod +x /usr/bin/shiny-server.sh \
-    && echo "\
-    run_as shiny; \
-    server { \
-    listen "${SHINY_PORT}";\
-    location / { \
-      app_dir "${MAPX_PATH_APP}"; \
-      log_dir "${MAPX_PATH_LOG}"; \
-    }}" > /etc/shiny-server/shiny-server.conf
+COPY . /srv/shiny-server/mapx
+COPY ./start_mapx.sh /usr/bin/start_mapx.sh
 
-COPY . ${MAPX_PATH_APP}/
-
-CMD ["sh","/usr/bin/shiny-server.sh"]
+CMD ["sh","/usr/bin/start_mapx.sh"]
 

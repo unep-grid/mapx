@@ -23,7 +23,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.5.30-debian
+    image: fredmoser/mx-app-shiny:1.5.31-debian
     restart: always
     ports:
       - 3838
@@ -64,7 +64,7 @@ services:
   geoserver :
     env_file: mapx.dev.env
     build: ./geoserver/.
-    image: fredmoser/mx-api-geoserver
+    image: fredmoser/mx-api-geoserver:2.14.1-alpine
     ports: 
       - 8882:8080
     volumes:

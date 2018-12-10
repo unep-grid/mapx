@@ -10,6 +10,7 @@ library(parallel)
 library(curl)
 library(xml2)
 library(pool)
+library(geosapi)
 
 #
 # Load helpers
@@ -20,6 +21,7 @@ mxSource("src/helper/query_parser.R")
 mxSource("src/helper/mgl.R")
 mxSource("src/helper/epsgio.R")
 mxSource("src/helper/jed.R")
+mxSource("src/helper/geoserver.R")
 mxSource("src/helper/story_auto_start.R")
 mxSource("src/helper/db.R")
 mxSource("src/helper/db_projects.R")
