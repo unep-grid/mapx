@@ -1,7 +1,6 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
 
-
 export function removeServiceWorker(){
   if(navigator.serviceWorker){
     caches.keys().then(k => k.forEach(i=>caches.delete(i)));

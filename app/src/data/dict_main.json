@@ -5891,5 +5891,17 @@
     "bn": "",
     "fa": "",
     "ps": ""
+ },
+ {
+    "id": "tooltip_diaf_score",
+    "en": "Integrity (diaf) \n Score: {{score}} Positive: {{yes}} Negative: {{no}} Partial: {{part}} Unknown: {{unknown}} ",
+    "fr": "Integrity (diaf) \n Score: {{score}} Positif: {{yes}} Negatif: {{no}} Partiel: {{part}} No renseigné: {{unknown}} ",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
  }
 ]

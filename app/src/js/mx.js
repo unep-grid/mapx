@@ -36,6 +36,7 @@ export let controls = {};
 export let listener = {};
 export let info = require('../../package.json');
 export let settings = {
+  devicePixelRatio : 0, // updated by getPixelRatio()
   language : 'en',
   languages : ['en','fr'],
   project : '',

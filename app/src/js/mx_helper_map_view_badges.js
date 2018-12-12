@@ -1,6 +1,6 @@
 /* jshint evil:true, esversion:6  */
 
-export function createViewIcon(opt){
+export function createViewBadge(opt){
   var el = mx.helpers.el;
   return el("span",
     {
@@ -22,11 +22,12 @@ export function setViewBadges(view){
   view = view || {};
   var h = mx.helpers;
   var cl;
-  var elIconPublicValid,elIconPublicNotValid,elIconShared,elIconEdit;
+  var elBadgePublicValid,elBadgePublicNotValid,elBadgeShared,elBadgeEdit,elBadgeDiaf;
   var elBadges = document.createElement("div");
   var readers = view.readers || [];
   var hasEdit = view._edit === true;
   var isValidable = view.type == "rt" || view.type == "vt";
+  var hasDiaf = view.type == "vt";
   var hasPublic = readers.indexOf("public") > -1;
   var isShared = view.project !== mx.settings.project;
   var elViewBadgesContainer = document.getElementById("view_badges_" + view.id);
@@ -34,9 +35,34 @@ export function setViewBadges(view){
   elViewBadgesContainer.innerHTML = "";
   elViewBadgesContainer.appendChild(elBadges);
   elBadges.classList.add("mx-view-badges");
-  
+
+
+
+  /* Data integrity framework  handling */
+  if( hasDiaf ){
+    h.evaluateDiafView(view)
+      .then( result => {
+        var elStar = result.elStar;
+
+        elBadges.appendChild(elStar);
+
+        elStar.addEventListener("click", e => {
+          e.preventDefault();
+          e.stopPropagation(); // don't propagate to view oppening
+          Shiny.onInputChange( 'mglEvent_' + mx.settings.idMapDefault + '_view_action',{
+            target : result.idView,
+            action : 'btn_opt_meta',
+            time : new Date()
+          });
+        });
+      });
+
+  }
+
+
+
   if( hasPublic ){  
-    elIconPublicValid = createViewIcon({
+    elBadgePublicValid = createViewBadge({
       iconClasses : ["mx-view-public-valid","fa","fa-check-circle"],
       tooltipClasses : ["hint--left"],
       tooltipKey : "view_public_valid"
@@ -44,7 +70,7 @@ export function setViewBadges(view){
     /**
     * Add public badge
     */
-    elBadges.appendChild(elIconPublicValid);
+    elBadges.appendChild(elBadgePublicValid);
 
     /**
     * Check if it's valid, add the validate badge
@@ -61,7 +87,7 @@ export function setViewBadges(view){
              * Add not valid badge
              */
             var results = h.path(validation,'results');
-            elIconPublicNotValid = createViewIcon({
+            elBadgePublicNotValid = createViewBadge({
               iconClasses : ["mx-view-public-not-valid","fa","fa-exclamation-triangle"],
               style : {
                 color : "red"
@@ -70,7 +96,7 @@ export function setViewBadges(view){
               tooltipKey : "view_public_not_valid"
             });
 
-            elIconPublicNotValid.addEventListener("click",function(e){
+            elBadgePublicNotValid.addEventListener("click",function(e){
               e.preventDefault();
               e.stopPropagation(); // don't propagate to view oppening
               h.getDictItem("validate_meta_title")
@@ -84,7 +110,7 @@ export function setViewBadges(view){
                 });
             });
 
-            elBadges.appendChild(elIconPublicNotValid);
+            elBadges.appendChild(elBadgePublicNotValid);
             mx.helpers.onNextFrame(()=>{
               h.updateLanguageElements({
                 el: elBadges
@@ -98,32 +124,35 @@ export function setViewBadges(view){
 
   }
 
+
+
   if( isShared ){ 
     /**
     * Add shared badge
     */
-    elIconShared = createViewIcon({
+    elBadgeShared = createViewBadge({
       iconClasses : ["fa","fa-share-alt-square"],
       tooltipClasses : ["hint--left"],
       tooltipKey : "view_shared"
     });
-    elBadges.appendChild(elIconShared);
+    elBadges.appendChild(elBadgeShared);
   }
 
   /**
   * Add editable badge
   */
-  elIconEdit = createViewIcon({
+  elBadgeEdit = createViewBadge({
     iconClasses : ["fa", hasEdit ? "fa-unlock" : "fa-lock" ],
     tooltipClasses : ["hint--left"],
     tooltipKey : hasEdit ? "view_editable" : "view_locked"
   });
 
-  elBadges.appendChild(elIconEdit);
+  elBadges.appendChild(elBadgeEdit);
 
 }
 
 export function updateViewsBadges(o){
+  console.log("Updae all views badges");
   o = o || {};
   var h = mx.helpers;
   var views = h.getViews({asArray:true});
