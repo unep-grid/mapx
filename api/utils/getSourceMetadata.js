@@ -5,7 +5,8 @@ const zlib = require("zlib");
 
 exports.get =  function(req,res){
   var buffer ;
-  var out = {};
+  var meta = {};
+  var out;
   var id = req.params.id;
   var format = req.params.format || "mapx-json" || "iso-xml";
   var sql = "";
@@ -29,10 +30,15 @@ exports.get =  function(req,res){
     .then(function(result){
       if (result && result.rows) {
         out = result.rows[0];
+        meta = out.metadata;
+        
+        if( ! meta ) return res.status(204).send();
+         
+        meta._emailEditor = out.email_editor;
+        meta._dateModified = out.date_modified;
 
-        if( ! out.metadata) return res.status(204).send();
+        buffer = new Buffer(JSON.stringify(meta), 'utf-8');
 
-        buffer = new Buffer(JSON.stringify(out.metadata), 'utf-8');
 
         zlib.gzip(buffer, function (err, zOut ) {
           if(err){
@@ -41,7 +47,6 @@ exports.get =  function(req,res){
           res.setHeader('Cache-Control', 'public, max-age=3600');
           res.setHeader('Content-Type', 'application/json');
           res.setHeader('Content-Encoding', 'gzip');
-
           res.send(zOut);
         });
       }else{
