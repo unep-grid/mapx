@@ -21,3 +21,5 @@ config[['geoserver']][['user']] <- Sys.getenv('GEOSERVER_ADMIN_USERNAME')
 config[['geoserver']][['password']] <- Sys.getenv('GEOSERVER_ADMIN_PASSWORD')
 config[['geoserver']][['dataDir']] <- Sys.getenv('GEOSERVER_DATA_DIR')
 
+## NOTE: see mx_helper_map_view_validation.js
+#config[["validation"]][["view"]][["rules"]] <- Sys.getenv("MAPX_VIEW_VALIDATION_RULES")

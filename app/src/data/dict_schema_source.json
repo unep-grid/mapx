@@ -1951,6 +1951,39 @@
     "de": ""
   },
   {
+    "id": "meta_source_title",
+    "en": "Source title",
+    "fr": "Titre de la source",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_project",
+    "en": "Project of the view",
+    "fr": "Projet de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects of the view",
+    "fr": "Projets de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_view_id",
     "en": "View id",
     "fr": "Id de la vue",

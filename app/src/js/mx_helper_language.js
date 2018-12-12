@@ -110,7 +110,6 @@ export function updateLanguageElements(o) {
 
       // fetch all elements with data-lang_key attr 
       els = doc.querySelectorAll("[data-lang_key]");
-
       for (var i = 0; i < els.length; i++) {
         el = els[i];
 

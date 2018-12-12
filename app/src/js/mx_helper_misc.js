@@ -438,14 +438,11 @@ export function domToText(dom){
 * https://stackoverflow.com/questions/27936772/how-to-deep-merge-instead-of-shallow-merge
 *
 */
-function isObject(item) {
-  return (item && typeof item === 'object' && !Array.isArray(item));
-}
 export function mergeDeep(target, source) {
   let output = Object.assign({}, target);
-  if (isObject(target) && isObject(source)) {
+  if (mx.helpers.isObject(target) && mx.helpers.isObject(source)) {
     Object.keys(source).forEach(key => {
-      if (isObject(source[key])) {
+      if (mx.helpers.isObject(source[key])) {
         if (!(key in target))
           Object.assign(output, { [key]: source[key] });
         else
@@ -492,8 +489,9 @@ export function objectToHTML(o){
     var l, k, keys = [];
     var ul = document.createElement("ul");
     ul.classList.add(classGroup);
-      var isObject = li.constructor == Object;
-      var isArray =  li.constructor == Array;
+    var isObject = mx.helpers.isObject(li); 
+    var isArray =  mx.helpers.isArray(li);
+
     if( isObject ) keys = Object.keys(li);
     if( isArray ) for(var i=0,iL=li.length;i<iL;i++){keys.push(i);}
 
@@ -566,26 +564,6 @@ export function date(val){
   return out;
 
 }
-
-/**
-* Test if entry is numeric
-* @param {String|Number} n string or number to test
-*/
-export function isNumeric(n){
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
-
-
-/**
-* Test if string contain HTML
-* @param {String} n string to test
-* @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193
-*/
-export function isHTML(str){
-  var test = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
-  return test(str);
-}
-
 
 
 /**
@@ -1328,44 +1306,6 @@ export function doPar(o) {
 
 
 
-/**
-* Test for object equality
-*
-* @note asnwer by Ebrahim Byagowi at https://stackoverflow.com/questions/201183/how-to-determine-equality-for-two-javascript-objects
-*
-* @param {Object} x First object to compare
-* @param {Object} y Second object to compare
-* @return {Boolean} Are those object equal ?
-*/
-export function isEqual(x,y){
-  'use strict';
-   /**
-   * 
-   *
-   */
-  if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
-  // after this just checking type of one would be enough
-  if (x.constructor !== y.constructor) { return false; }
-  // if they are functions, they should exactly refer to same one (because of closures)
-  if (x instanceof Function) { return x === y; }
-  // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
-  if (x instanceof RegExp) { return x === y; }
-  if (x === y || x.valueOf() === y.valueOf()) { return true; }
-  if (Array.isArray(x) && x.length !== y.length) { return false; }
-
-  // if they are dates, they must had equal valueOf
-  if (x instanceof Date) { return false; }
-
-  // if they are strictly equal, they both need to be object at least
-  if (!(x instanceof Object)) { return false; }
-  if (!(y instanceof Object)) { return false; }
-
-  // recursive object equality check
-  var p = Object.keys(x);
-  return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
-    p.every(function (i) { return isEqual(x[i], y[i]); });
-
-}
 
 
 
@@ -1506,7 +1446,6 @@ export function searchToObject() {
   var pairs = window.location.search.substring(1).split("&"),
     obj = {},
     pair,
-    isJson,
     i,key,value;
 
   for ( i in pairs ) {
@@ -1555,6 +1494,9 @@ export function getExtension(str){
 
   return "";
 }
+
+
+
 
 
 /**
@@ -1853,14 +1795,6 @@ export function panelSwitch(classGroup, classItem, classHide, callback) {
 
 
 
-/**
- * Check if an object is a html element
- * @param {Object} obj object to test
- */
-export function isElement(obj) {
-  return obj instanceof Node;
-}
-
 
 /**
  * Class handling : add, remove and toggle
@@ -1879,7 +1813,7 @@ export function classAction(o) {
     o.class = o.class.split(/\s+/);
   }
 
-  if (isElement(o.selector)) {
+  if (mx.helpers.isElement(o.selector)) {
     el = o.selector;
   } else {
     el = document.querySelectorAll(o.selector);
@@ -1916,7 +1850,7 @@ export function classAction(o) {
  *
  */
 export function forEachEl(o){
-  if( isElement(o.els) ){
+  if( mx.helpers.isElement(o.els) ){
     o.callback(o.els);
   }else{
     for (var i = 0; i < o.els.length; ++i) {
@@ -1952,155 +1886,6 @@ export function parentFinder(o) {
   while ((el = el.parentElement) && !el.classList.contains(o.class));
   return el;
 }
-
-
-
-/*export function ulSort(selectorUl,selectorSorting){*/
-  //var elUl = selectorUl instanceof Node ? selectorUl : document.querySelector(selectorUl);
-  //var elements = elUl.querySelectorAll("li");
-
-  ////Create our function generator
-  //function sortBy(prop){
-    //return function(a, b){
-      //var filter_a = parseInt( a.style[prop] );
-      //var filter_b = parseInt( b.style[prop] );
-      //return filter_a < filter_b? -1 :
-        //(filter_a > filter_b ? 1 : 0);
-    //};
-  //}
-
-  //function sortDom(filter){
-    ////Transform our nodeList into array and apply sort function
-    //return [].map.call(elements, function(elm){
-      //return elm;
-    //}).sort(sortBy(filter));
-  //}
-
-  ////Sort by left style property
-  //var byLeft = sortDom('left');
-  ////Sort by top style property
-  //var byTop = sortDom('top');
-
-/*}*/
-
-
-/**
- * Handle sort event on list
- * 
- * Class for ul : sort-li-container
- * Class for li : sort-li-item
- * Class for handle : sort-li-handle (should be at first level in li);
- *
- * @param {Object} o options
- * @param {Element|String} o.selector Selector string or element for the ul root
- * @param {String} o.classHandle Class for the handle
- * @param {Function} o.callback Function to call after sort
- */
-/*export function sortable_old(o){*/
-  //var ulRoot;
-  //if (o.selector instanceof Node) {
-    //ulRoot = o.selector;
-  //} else {
-    //ulRoot = document.querySelector(o.selector);
-  //}
-  //var body = document.querySelector("body");
-  //var liHandle,
-    //liFrom,
-    //liTo,
-    //liNext,
-    //liSet,
-    //liGhost,
-    //classFrom = "mx-sort-li-item",
-    //classHandle = o.classHandle || "mx-sort-li-handle";
-
-  //function setPos(el, l, t) {
-    //l = l + "px";
-    //t = t + "px";
-    //el.style.left = l;
-    //el.style.top = t;
-  //}
-
-
-  //function areTouching(a, b) {
-    //var rectA = a.getBoundingClientRect();
-    //var rectB = b.getBoundingClientRect();
-    //var overlaps =
-      //rectA.top < rectB.bottom &&
-      //rectA.bottom > rectB.top &&
-      //rectA.right > rectB.left &&
-      //rectA.left < rectB.right;
-    //return overlaps;
-  //}
-
-
-  //function isValidHandle(el) {
-    //return el.classList.contains(classHandle);
-  //}
-  //function isValidLi(el) {
-    //return el.classList.contains(classFrom);
-  //}
-  /**
-   * mouse move
-   */
-  //function onMouseMove(e) {
-
-    //liTo = e.target;
-    //setPos(liGhost, e.clientX, e.clientY);
-
-    //if (isValidLi(liTo)) {
-      //e.preventDefault();
-      //var rect = liTo.getBoundingClientRect();
-      //liNext = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
-      //liSet = liNext && liTo.nextSibling || liTo;
-      //ulRoot.insertBefore(liFrom, liSet);
-    //}
-
-    //if (!areTouching(liGhost, body)) {
-      //onMouseUp(e);
-    //}
-
-  //}
-
-  /*
-   * mouse up 
-   */
-  //function onMouseUp(e) {
-    //e.preventDefault();
-    //liFrom.classList.remove("mx-sort-li-dim");
-    //liGhost.remove();
-    //o.callback();
-    //window.removeEventListener('mousemove', onMouseMove, false);
-    //window.removeEventListener('mouseup', onMouseUp, false);
-  //}
-
-  /**
-   * mouse down
-   */
-  //function onMouseDown(e) {
-    //var elHandle = e.target;
-    //liFrom = mx.helpers.parentFinder({
-      //selector : elHandle,
-      //class : classFrom
-    //});
-
-    //if (isValidHandle(elHandle) && liFrom) {
-      //e.preventDefault();
-      //liGhost = liFrom.cloneNode(true);
-      //var liFromStyle = liGhost.style;
-      //var liFromRect = liFrom.getBoundingClientRect();
-      //liGhost.classList.add("mx-sort-li-ghost");
-      //liFrom.classList.add("mx-sort-li-dim");
-      //ulRoot.appendChild(liGhost);
-      //onMouseMove(e);
-      //window.addEventListener('mousemove', onMouseMove, false);
-      //window.addEventListener('mouseup', onMouseUp, false);
-    //}
-
-  //}
-
-  //ulRoot.addEventListener('mousedown', onMouseDown, false);
-
-/*}*/
 
 /**
  * Set element attributes
@@ -2483,15 +2268,6 @@ export function handleRequestMessage(msg,msgs,on){
 
   return cleanMsg(msg);
 
-  function isJson(str) {
-    try {
-      JSON.parse(str);
-    } catch (e) {
-      return false;
-    }
-    return true;
-  }
-
   function addMsg(msg,type){
 
     switch(type){
@@ -2528,11 +2304,11 @@ export function handleRequestMessage(msg,msgs,on){
           addMsg(m,"progress");
         }else{
 
-          if( isJson(m) ){
+          if( mx.helpers.isJson(m) ){
             m = JSON.parse(m);
           }
 
-          var isObject = typeof m === "object";
+          var isObject = mx.helpers.isObject(m);
           var msg = isObject ? m.msg : m;
           var type = m.type || 'default';
 

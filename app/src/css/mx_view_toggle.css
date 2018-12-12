@@ -13,7 +13,7 @@
   /*padding: 5px;*/
 }
 
-.mx-readers-grp{
+.mx-view-badges {
   padding: 10px;
   position: absolute;
   right: 0;
@@ -22,11 +22,15 @@
   transition: opacity ease-in-out 0.3s 0.3s;
 }
 
-.mx-readers-grp i {
+.mx-view-badges i {
   font-size: 10px;
   color : #ccc;
   margin:3px;
 }
+.mx-view-badges .mx-view-public-not-valid {
+  color:#ffa900
+}
+
 
 .mx-views-content,
 .mx-tools-content {
@@ -181,7 +185,7 @@
   transition: max-height ease-in-out 0.3s 0s,opacity ease-in-out 0.3s 0.3s;
 }
 
-.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-readers-grp {
+.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-badges {
   opacity :0;
 }
 

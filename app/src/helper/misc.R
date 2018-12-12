@@ -2693,6 +2693,21 @@ mxUpdateUrlParams = function(data=list(),clean=FALSE,session=shiny::getDefaultRe
 
 }
 
+#' Validate metadata
+#' 
+#' Update url using a list of key pair values in a list
+#'
+#' @param metadata {List} Metadata to validate
+#' @param session {Session} Shiny session
+mxValidateMetadataModal = function(metadata=list(),session=shiny::getDefaultReactiveDomain()){
+
+  session$sendCustomMessage("mxValidateMetadataModal",list(
+      metadata = metadata
+      )
+    )
+
+}
+
 #' Display an flash icon
 #' @param icon {Character} Fontawesome icon to display
 mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefaultReactiveDomain()){
@@ -2700,6 +2715,7 @@ mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefa
       icon = icon
       ))
 }
+
 
 #' Create object for data integrity framework
 #' @param keyTitle {Character} Translation key of the title

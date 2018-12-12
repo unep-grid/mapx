@@ -18,12 +18,14 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler("mglUpdateAllViewsSourceMetadata",
     mx.helpers.updateAllViewsSourceMetadata
   );
+  Shiny.addCustomMessageHandler("mglUpdateViewsBadges", mx.helpers.updateViewsBadges);
   Shiny.addCustomMessageHandler("mxSetCookie",mx.helpers.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', mx.helpers.modal);
   Shiny.addCustomMessageHandler('mxSetTemplates', mx.helpers.setTemplates);
   Shiny.addCustomMessageHandler('mxSetElementAttribute', mx.helpers.setElementAttribute);
   Shiny.addCustomMessageHandler("mxSetImageAttributes", mx.helpers.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", mx.helpers.hide);
+  Shiny.addCustomMessageHandler("mxValidateMetadataModal", mx.helpers.validateMetadataModal);
   Shiny.addCustomMessageHandler("mxObjToState", mx.helpers.objToState);
   Shiny.addCustomMessageHandler("mxUpdateText", mx.helpers.updateText);
   Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", mx.helpers.epsgBuildSearchBox);

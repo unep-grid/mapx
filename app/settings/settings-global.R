@@ -44,7 +44,14 @@ config[["browser"]] <- list(
   )
 
 
-
+## NOTE: see mx_helper_map_view_validation.js
+## View validation
+##
+#config[["validation"]] <- list(
+  #view = list(
+    #rules = list("meta_missing_abstract")
+    #)
+  #)
 
 
 #

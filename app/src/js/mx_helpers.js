@@ -1,6 +1,7 @@
 /* jshint esversion :6 */
 export * from './mx_helper_cookies.js';
 export * from './mx_helper_el.js'; /* createElement / simple framework */
+export * from './mx_helper_is_test.js'; /* test "is" isArray, isObject, isNumeric, is... */
 export * from './mx_helper_misc.js';
 export * from './mx_helper_read_more.js';
 export * from './mx_helper_modal.js';
@@ -22,6 +23,10 @@ export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_print.js';
 export * from './mx_helper_map_pixop_core.js';
 export * from './mx_helper_map_dragdrop.js';
+export * from './mx_helper_map_view_icons.js';
+export * from './mx_helper_map_view_validation.js';
+export * from './mx_helper_map_view_metadata.js';
+export * from './mx_helper_map_features_popup.js';
 export * from './mx_helper_diacritics.js';
 export * from './mx_helper_fullscreen.js';
 export * from './mx_helper_colors.js';

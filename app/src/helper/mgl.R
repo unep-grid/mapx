@@ -23,6 +23,20 @@ mglUpdateAllViewsSourceMetadata <- function(overwrite=TRUE,session=shiny::getDef
     overwrite
     )
 }
+#' Validate metadata
+#' 
+#' Update url using a list of key pair values in a list
+#'
+#' @param metadata {List} Metadata to validate
+#' @param session {Session} Shiny session
+mglUpdateViewsBadges = function(session=shiny::getDefaultReactiveDomain()){
+
+  session$sendCustomMessage("mglUpdateViewsBadges",list(
+      date = Sys.time()
+      )
+    )
+
+}
 
 #' Get overlap result
 #' @param opt {List} list of option : idTextResult, layers, countries, method

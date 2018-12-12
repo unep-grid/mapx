@@ -60,68 +60,6 @@ export function setUserData(o){
   }
 }
 
-
-/**
- * Get view's source metadata
- * @param {String} id Name/Id of the source layer
- */
-export function getSourceMetadata(id,force){
-
-  if( !id ) return Promise.resolve({});
-
-  force = force || false;
-
-  var urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
-
-  if( !id || !urlSourceMeta) return Promise.reject('Missing id or fetch URL');
-
-  /* get view object from storage or network */
-  var url = urlSourceMeta + id + ( force ? '?date=' + performance.now() : '');
-
-  return fetch( url )
-    .then( meta=> meta.json())
-    .then( meta => {
-      return meta;
-    });
-
-}
-
-/**
- * Add source meta object to given view
- * @param {Obejct} view object 
- * @param {Boolean} force force / replace meta object
- */
-export function addSourceMetadataToView(view,force){
-  force = force || false;
-  var idSourceLayer = mx.helpers.path(view,"data.source.layerInfo.name","");
-  if( idSourceLayer && ( !view._meta || force ) ){
-    return mx.helpers.getSourceMetadata(idSourceLayer,force)
-      .then(meta => {
-        if(meta && meta.text){
-          view._meta = meta; 
-        }
-      });
-  }
-}
-/**
- * For all current view, update the mata object
- * @param {Boolean} ovewrite Overwrite existing meta 
- * @return null
- */
-export function updateAllViewsSourceMetadata(overwrite){
-  overwrite = overwrite || false;
-
-  var views = mx.helpers.getViews({
-    id: mx.settings.idMapDefault,
-    asArray : true
-  });
-  views.forEach(function(v){
-    if( v._meta && overwrite ){
-      mx.helpers.addSourceMetadataToView(v,true);
-    }
-  });
-}
-
 /**
  * Set the project manually
  * @param {String} idProject project to load
@@ -134,7 +72,6 @@ export function setProject(idProject){
 export function requestProjectMembership(idProject){
   Shiny.onInputChange("requestProjectMembership",{id:idProject,date:(new Date())});
 }
-
 
 
 
@@ -480,6 +417,9 @@ export function handleClickEvent(e,idMap){
       popup.remove();
     });
 
+    /**
+    * NOTE: see mx_helper_map_features_popoup.js
+    */
     var propsRendered = mx.helpers.featuresToHtml({
       id : idMap,
       point : e.point,
@@ -2290,6 +2230,11 @@ export function renderViewsList(o){
      */
     h.updateViewsFilter();
 
+    /**
+    * Add views badges
+    */
+    h.updateViewsBadges();
+
     /*
      * translate based on dict key
      */
@@ -3098,9 +3043,11 @@ export function addViewVt(o){
     /**
      * Add source meta
      */
-
-    if(!view._meta){
-      mx.helpers.addSourceMetadataToView(view,true);
+    if(! view._meta ){
+      /**
+      * ! metadata are added erlier in mx_map_view_validation.
+      */
+      //mx.helpers.addSourceMetadataToView(view,true);
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 
@@ -4322,179 +4269,6 @@ export function btnToggleLayer(o){
   return toToggle;
 }
 
-/**
- * Quick iframe builder
- */
-//export function iframeBuilder(btnId){
-
-//var btn = document.getElementById(btnSelector);
-//var str = "" ;
-
-//function buildInput(label,callback){
-//var id  mx.helpers.makeId();
-//checkContainer =  document.createElement("div");
-//checkInput = document.createElement("input");
-//labelInput = document.createElement("label");
-//checkContainer.className = "mx-form-list-item";
-//checkInput.id = id;
-//labelInput.innerText = label;
-//labelInput.setAttribute("for",id );
-//checkContainer.appenChild(checkInput);
-//checkContainer.appenChild(checkLabel);
-//return(checkContainer);
-//};
-
-//var checkProject = buildInput("Use project",)
-
-
-//btn.addEventListener("click",function(){
-//var form = 
-
-
-//})
-
-
-/*}*/
-
-
-
-
-
-
-
-/*
- * Get extract features values at given point, group by properties
- * @param {Object} o Options
- * @param {String} o.id Map id
- * @param {String} o.prefix Layer prefix Default = "MX-"
- * @param {Array} o.point Array of coordinates
- */
-export function getVectorProperties(o){
-
-  var props = {}; 
-  var sep = mx.settings.separators.sublayer;
-  var layers = mx.helpers.getLayerNamesByPrefix({
-    id: o.map,
-    prefix: o.prefix || "MX-"
-  });
-  var excludeProp = ['mx_t0','mx_t1','gid'];
-  var map = mx.helpers.getMap(o.map);
-  var features = map.queryRenderedFeatures(o.point,{layers:layers});
-
-  features.forEach(function(f){
-    var baseLayer = f.layer.id.split(sep)[0];
-    if( !props[baseLayer] ){
-      props[baseLayer] = {};
-    }
-    for(var p in f.properties){
-      if( excludeProp.indexOf(p) == -1 ){
-        var value = f.properties[p];
-        var values = props[baseLayer][p] || [];
-        values = values.concat(value);
-        props[baseLayer][p] = mx.helpers.getArrayStat({
-          stat:"distinct",
-          arr: values
-        });
-      }
-    }
-  });
-
-  return props;
-}
-
-
-/** 
- * Query WMS with getFeatureInfo
- * @param {Object} opt Options
- * @param {Object||String} opt.map Map object or id of the map
- * @param {Object} opt.point
- * @param 
- */
-export function getRasterProperties(opt){
-
-  var map = mx.helpers.getMap(opt.map);
-  var layers = {};
-  var items = {};
-
-  mx.helpers.getLayerNamesByPrefix({map:map,base:true})
-    .map( idView => mx.helpers.getView( idView ))
-    .filter( view => view.type == "rt")
-    .map( view => {
-      var url = mx.helpers.path( view, 'data.source.tiles',[])[0].split('?');
-      return {
-        id : view.id, 
-        title : mx.helpers.getViewTitle(view), 
-        url : url[0],
-        params : mx.helpers.paramsToObject(url[1])
-      };
-    })
-    .map( item => {
-      var params = item.params;
-      var isWms = params && params.layers && params.service && params.service.toLowerCase() == "wms";
-      var getProperties = () => { return Promise.resolve({});};
-
-      if( isWms ){
-        var z = map.getZoom();
-        var point = opt.point;
-        var xMax = point.x + 1;
-        var xMin = point.x - 1;
-        var yMax = point.y + 1;
-        var yMin = point.y - 1;
-        var sw = map.unproject([xMax,yMin]);
-        var ne = map.unproject([xMin,yMax]);
-        var minLat = Math.min(sw.lat,ne.lat);
-        var minLng = Math.min(sw.lng,ne.lng);
-        var maxLat = Math.max(sw.lat,ne.lat);
-        var maxLng = Math.max(sw.lng,ne.lng);
-
-        var paramsInfo = {
-          service : 'WMS',
-          request : 'GetFeatureInfo',
-          format : 'image/png',
-          transparent : true,
-          query_layers : params.layers,
-          layers : params.layers,
-          info_format : 'application/json',
-          exceptions : 'application/json',
-          feature_count: 1,
-          x : 5,
-          y : 5,
-          width : 9,
-          height : 9,
-          src : 'EPSG:4326',
-          bbox : minLng + ',' + minLat + ',' + maxLng + ',' + maxLat
-        };
-
-        var request = item.url + '?' + mx.helpers.objToParams(paramsInfo);
-        getProperties = function(){ 
-          return fetch( request )
-            .then( data => data.json())
-            .then( featuresCollection => {
-              var props = {};
-              if(featuresCollection.exceptions){
-                console.log(featuresCollection.exceptions);
-                return props;
-              }
-              featuresCollection.features
-                .forEach( feature => {
-                  for(var p in feature.properties){
-                    if(!props[p]) props[p] = [];
-                    props[p].push(feature.properties[p]);
-                  }
-                });
-              return props;
-            });
-        };
-      }
-      /**
-       * In case of non wms layer, return an empty obj
-       */
-      items[item.id] = getProperties;
-    });
-
-  return(items);
-}
-
 
 /**
  * getMercCoords
@@ -4514,277 +4288,6 @@ export function getMercCoords(x, y, z) {
   return [merc_x, merc_y];
 }
 
-
-/*
- * Convert result from getFeaturesValuesByLayers to HTML 
- * @param {Object} o Options
- * @param {String} o.id Map id
- * @param {Array} o.point Array of coordinates
- * @param {Object} o.popup Mapbox-gl popup object
- */
-export function featuresToHtml(o){
-
-  var classGroup = "list-group";
-  var classGroupItem = "list-group-item";
-  var classGroupItemMember = "list-group-item-member"; 
-  var popup = o.popup;
-  var langs = mx.helpers.objectToArray(mx.settings.languages) || ["en"];
-  var lang = mx.settings.language || langs[0];
-  var cEl = function(type){
-    return document.createElement(type);
-  };
-  var map = mx.helpers.getMap(o.id);
-  var filters = {};
-  var layerVector = {};
-  var layerRaster = {};
-  var elContainer = cEl("div");
-  var elNoData = cEl("div");
-  var views = mx.helpers.getViews(o.id);
-  elContainer.appendChild(elNoData);
-  mx.helpers.getDictItem('noValue').then(txt => {
-    elNoData.innerText =  txt;
-    elNoData.dataset.lang_key = 'noValue';
-  });
-
-
-  /**
-   * Set on close event
-   */
-  popup.on('close',resetFilter);
-
-  /**
-   * Update popup with yet empty content
-   */
-  popup.setDOMContent(elContainer);
-
-  /*
-   * render vector properties 
-   */ 
-  layerVector = mx.helpers.getVectorProperties({
-    map : o.id,
-    point : o.point
-  });
-
-  render(layerVector);
-
-  /*
-   * render raster properties
-   */
-  layerRaster = mx.helpers.getRasterProperties({
-    map : map,
-    point : o.point
-  });
-
-  render(layerRaster);
-
-  /**
-   * Helpers
-   */
-
-
-  function hasActivatedLayer(){
-    return mx.helpers.getLayerNamesByPrefix().length > 0;
-  }
-
-  function updateReadMore(){
-    mx.helpers.uiReadMore(".mx-prop-container",{
-      maxHeightClosed : 100,
-      selectorParent : elContainer,
-      boxedContent : false
-    });
-  }
-
-  function render(layers){
-    var idViews = Object.keys(layers);
-    idViews.forEach(id => renderItem(id,layers[id]));
-  }
-
-  function renderItem(idView,attributes){
-    var view = mx.helpers.getView(idView);
-    var language = mx.settings.language;
-    var labels = mx.helpers.path(view,'_meta.text.attributes_alias');
-    var isVector = view.type == "vt";
-    var elLayer = cEl("div");
-    var elProps = cEl("div");
-    var elWait = cEl("div");
-    var elSpinner = cEl("i");
-    var elTitle = cEl("span");
-    elTitle.classList.add("mx-prop-layer-title");
-    elTitle.innerText = mx.helpers.getViewTitle(idView);
-
-    elLayer.className = "mx-prop-group";
-    elLayer.dataset.l = idView;
-    elLayer.appendChild(elTitle);
-    elContainer.appendChild(elLayer);
-    elContainer.classList.add("mx-popup-container");
-    elContainer.classList.add("mx-scroll-styled");
-
-    elWait.className = "mx-inline-spinner-container";
-    elSpinner.className = "fa fa-cog fa-spin";
-    elLayer.appendChild(elWait);
-    elWait.appendChild(elSpinner);
-
-    elNoData.remove();
-    /**
-     * Asynchrone attibute request
-     */
-    var getAttributes = function(){
-      return Promise.resolve(attributes);
-    };
-
-    if(attributes instanceof Function){
-      getAttributes = attributes;
-    }
-
-    /**
-     * Attributes to ui
-     */
-    getAttributes().then( attributes  =>{
-
-      elWait.remove();
-
-      var attrNames = Object.keys(attributes);
-
-      if( attrNames.length == 0 ){
-        var elNoDataAttr = elNoData.cloneNode(true);
-        elLayer.appendChild(elNoDataAttr);
-      }
-
-      attrNames.forEach(function(attribute){
-
-        var values = mx.helpers.getArrayStat({
-          stat: "sortNatural",
-          arr: attributes[attribute]
-        });
-
-        var hasValues =  values.length > 0;
-        values = hasValues ? values : ["-"];
-
-        var elValue;
-
-        /* Container */
-        var elPropContainer = cEl("div");
-        elPropContainer.classList.add("mx-prop-container");
-
-        /* Content */
-        var elPropContent = cEl("div");
-        elPropContent.classList.add("mx-prop-content");
-
-        /* Wrapper */
-        var elPropWrapper = cEl("div");
-
-        /* Title */
-        var elPropTitle = cEl("span");
-        elPropTitle.classList.add('mx-prop-title');
-        elPropTitle.setAttribute('title', attribute);
-
-        var label = attribute;
-        if( labels && labels[attribute]){
-          label = labels[attribute][language] || labels[attribute].en || attribute ;
-        }
-
-        elPropTitle.innerText = label;
-
-        /* Toggles */
-        var elPropToggles = cEl("div");
-        elPropToggles.classList.add("mx-prop-toggles");
-
-        /*Add a toggle for each value */
-        for(var i=0, iL=values.length; i<iL; i++){
-          var value = values[i];
-
-          if( hasValues && isVector ){
-            elValue = mx.helpers.uiToggleBtn({
-              label : value,
-              onChange : filterValues,
-              data : {
-                l : idView,
-                p : attribute,
-                v : value
-              },
-              labelBoxed : true,
-              checked : false
-            });
-          }else{
-            elValue = cEl("span");
-            elValue.innerText=value;
-          }
-
-          elPropToggles.appendChild(elValue);
-        }
-
-        /* Build  */
-        elPropContent.appendChild(elPropTitle);
-        elPropContent.appendChild(elPropToggles);    
-        elPropWrapper.appendChild(elPropContent);
-        elPropContainer.appendChild(elPropWrapper);
-        elProps.appendChild(elPropContainer);  
-        elLayer.appendChild(elProps);
-        updateReadMore();
-      });
-
-      updateReadMore();
-    });
-
-  }
-
-
-  function resetFilter(){
-    for(var idV in filters){
-      var view = views[idV];
-      view._setFilter({
-        filter : ['all'],
-        type : "popup_filter"
-      });
-    }
-  }
-
-
-
-  function updatePopup(){
-    popup._update();
-  }
-
-  function filterValues(e,el){
-
-    var  elChecks = popup._content.querySelectorAll(".check-toggle input");
-    filters = {}; // reset filter at each request
-
-    mx.helpers.forEachEl({
-      els : elChecks,
-      callback : buildFilters
-    });
-
-    for(var idV in filters){
-      var filter = filters[idV];
-      var view = views[idV];
-
-      view._setFilter({
-        filter : filter,
-        type : "popup_filter"
-      });
-    }
-
-    function buildFilters(el){
-      var v = el.dataset.v;
-      var l = el.dataset.l;
-      var p = el.dataset.p;
-      var add = el.checked;
-      var isNum = mx.helpers.isNumeric(v);
-      var rule = [];
-
-      if( !filters[l] ) filters[l]=['any'];
-      if( add ){
-        if(isNum){
-          rule = ['any',["==",p,v],["==",p,v*1]];
-        }else{
-          rule = ["==",p,v];
-        }
-        filters[l].push(rule);
-      }
-    }
-  }
-}
 
 /**
  * Get a view title by id or view object
@@ -4843,6 +4346,7 @@ export function getMapData(idMap){
   data.id = idMap;
   return data;
 }
+
 /**
  * Get map position summary
  * @param {object} o options 
@@ -5021,55 +4525,6 @@ export function makeLayerJiggle(mapId, prefix) {
 }
 
 
-export function getViewIcons(view){
-  view = view || {};
-  var cl;
-  var elItem;
-  var elSpan;
-  var elReaders = document.createElement("div");
-  var readers = view.readers || [];
-  var hasEdit = view._edit === true;
-  var hasPublic = readers.indexOf("public") > -1;
-  var isShared = view.project !== mx.settings.project;
-  var clAll = "fa";
-  elReaders.classList.add("mx-readers-grp");
-
-  if( hasPublic ){  
-    elItem = document.createElement("i");
-    elSpan = document.createElement("span");
-    elSpan.appendChild(elItem);
-    elItem.classList.add(clAll);
-    elItem.classList.add('fa-check-circle');
-    elSpan.classList.add('hint--left');
-    elSpan.dataset.lang_type ="tooltip";
-    elSpan.dataset.lang_key ="view_validated";
-    elReaders.appendChild(elSpan);
-  }
-  if( isShared ){  
-    var elShared = document.createElement("i");
-    var elSharedSpan = document.createElement("span");
-    elSharedSpan.appendChild(elShared);
-    elShared.classList.add(clAll);
-    elShared.classList.add('fa-share-alt-square');
-    elSharedSpan.classList.add('hint--left');
-    elSharedSpan.dataset.lang_type ="tooltip";
-    elSharedSpan.dataset.lang_key ="view_shared";
-    elReaders.appendChild(elSharedSpan);
-  }
-
-  elItem = document.createElement("i");
-  elSpan = document.createElement("span");
-  elSpan.appendChild(elItem);
-  elItem.classList.add(clAll);
-  elSpan.classList.add('hint--left');
-  elSpan.dataset.lang_type ="tooltip";
-  elSpan.dataset.lang_key = hasEdit?"view_editable":"view_locked";
-  elItem.classList.add(hasEdit?'fa-unlock':'fa-lock');
-  elReaders.appendChild(elSpan);
-
-  return elReaders.outerHTML;
-}
-
 
 /**
  * Take every layer and randomly change the color  
@@ -5103,8 +4558,6 @@ export function randomFillAll(mapId) {
     }
   }, 100);
 }
-
-
 
 
 export function randomUicolor(){

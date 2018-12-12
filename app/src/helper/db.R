@@ -2297,7 +2297,7 @@ mxDbGetLayerTitle <- function(layer,language="en"){
     data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}'
   END as title
   FROM mx_sources
-  WHERE id = '"+ layer + "'"
+  WHERE id = '"+ tolower(layer) + "'"
 
   mxDbGetQuery(sql)$title
 }

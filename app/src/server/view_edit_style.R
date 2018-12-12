@@ -132,9 +132,10 @@ observeEvent(input$btnViewSaveStyle,{
     }
   }
 
+  mxFlashIcon("floppy-o")
   mxUpdateText(
     id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",time)
+    text = sprintf("Saved at %s",format(time,'%H:%M'))
     )
 
   mxToggleButton(

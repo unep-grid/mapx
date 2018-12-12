@@ -231,9 +231,10 @@ observeEvent(input$btnViewSaveDashboard,{
     reactData$updateViewListFetchOnly <- runif(1)
   }
 
+  mxFlashIcon("floppy-o")
   mxUpdateText(
     id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",time)
+    text = sprintf("Saved at %s",format(time,'%H:%M'))
     )
 
   mxToggleButton(

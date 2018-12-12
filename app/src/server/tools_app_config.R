@@ -147,9 +147,10 @@ observeEvent(input$appConfigEdit_values,{
       mxDbConfigSet(name,data[[name]])
     }
 
+    mxFlashIcon("floppy-o")
     mxUpdateText(
       id = "appConfig_txt",
-      text = sprintf("Saved at %s",Sys.time())
+      text = sprintf("Saved at %s",format(time,'%H:%M'))
       )
   }
 

@@ -30,7 +30,9 @@ CONF_MAPX="\
   config[['geoserver']][['urlPublic']] <- '$GEOSERVER_URL_PUBLIC'\n\
   config[['geoserver']][['user']] <- '$GEOSERVER_ADMIN_USERNAME'\n\
   config[['geoserver']][['password']] <- '$GEOSERVER_ADMIN_PASSWORD'\n\
-  config[['geoserver']][['dataDir']] <- '$GEOSERVER_DATA_DIR'\n"
+  config[['geoserver']][['dataDir']] <- '$GEOSERVER_DATA_DIR' " 
+
+#config[['validation']][['view']][['rules']] <- jsonlite::fromJSON('$MAPX_VIEW_VALIDATION_RULES')"
 
 CONF_SHINY_SERVER="\
   run_as shiny; \n\

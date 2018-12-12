@@ -31,7 +31,7 @@
   position:absolute;
   display:flex;
   flex-direction:column;
-  width: 500px;
+  width: 550px;
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;

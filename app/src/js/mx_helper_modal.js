@@ -17,6 +17,7 @@ export function modal(o){
   var id = o.id || h.makeId();
   var idBackground = "mx_background_for_" + id;
   var modal = document.getElementById(o.id) || document.createElement("div");
+  var rectModal = modal.getBoundingClientRect();
   var background = document.getElementById(idBackground) || document.createElement("div"); 
   var hasShiny = typeof window.Shiny !== "undefined";
   var hasSelectize = typeof window.jQuery === "function" && typeof window.Selectize == "function";
@@ -33,8 +34,11 @@ export function modal(o){
     if(oldBody){
       startBodyScrollPos = oldBody.scrollTop;
     }
+    
     modal.remove();
     modal = document.createElement("div");
+    modal.style.left = rectModal.left + "px";
+    modal.style.top = rectModal.top + "px";
   }
   if(modal.id && !o.replace){
     return;

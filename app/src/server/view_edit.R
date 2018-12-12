@@ -147,7 +147,6 @@ observe({
               projects <- .get(viewData,c("data","projects"))
               target <- .get(viewData,c("target"))
 
-
               subsetMeta <- list(
                 meta_last_editor_id=emailUser,
                 #meta_all_editor_id=paste(emailUsers,collapse=", "),
@@ -159,6 +158,7 @@ observe({
                 meta_target_roles=paste(target,collapse=","),
                 meta_view_project=project,
                 meta_view_projects=paste(projects,collapse=","),
+                meta_source_title=mxDbGetLayerTitle(idSource,language),
                 meta_source_id=tolower(idSource),
                 meta_source_homepage=homepage,
                 meta_source_integrity_score=integrityScore + "%",
@@ -982,10 +982,10 @@ observeEvent(input$btnViewSave,{
     #
     # Display info text
     #
-
+    mxFlashIcon("floppy-o")
     mxUpdateText(
       id = "modalViewEdit_txt",
-      text = sprintf("Saved at %s",time)
+      text = sprintf("Saved at %s",format(time,'%H:%M'))
       )
 
     mxToggleButton(

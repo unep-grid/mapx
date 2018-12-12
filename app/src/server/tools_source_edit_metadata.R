@@ -101,6 +101,10 @@ observeEvent(input$btnEditSourceMetadata,{
           "btnSaveSourceMetadata",
           d("btn_save",language),
           disabled = TRUE
+          ),
+        actionButton(
+          "btnValidateMetadata",
+          d("btn_validate_metadata",language)
           )
         )
 
@@ -186,7 +190,18 @@ observe({
 
 })
 
+#
+# Validate metadata
+#
+observeEvent(input$btnValidateMetadata,{
+  meta <- input$jedSourceMetadata_values$msg
+  
+  mxValidateMetadataModal(meta)
+})
 
+#
+# Save
+#
 observeEvent(input$btnSaveSourceMetadata,{
 
   mxToggleButton(
@@ -236,9 +251,11 @@ observeEvent(input$btnSaveSourceMetadata,{
         value = idUser
         )
 
-      mxUpdateText("editSourceMetadata_txt","Saved at " + Sys.time())
+      mxFlashIcon("floppy-o")
+format(Sys.time(),"%H:%M")
+      mxUpdateText("editSourceMetadata_txt","Saved at " + format(Sys.time(),"%H:%M"))
       mglUpdateAllViewsSourceMetadata(overwrite=TRUE)
-      
+      mglUpdateViewsBadges()
       reactData$updateSourceLayerList <- runif(1)
     }
 
