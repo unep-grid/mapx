@@ -17,6 +17,11 @@
   height:auto;
 }
 
+
+.mx .form-control .selectize-input input {
+  min-width:50%;
+}
+
 .mx .form-control .selectize-input.items > .item {
   width:95%;
   display:inline-block;

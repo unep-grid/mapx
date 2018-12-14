@@ -1,9 +1,11 @@
 /* jshint  esversion:6  */
 
-export function validateMetadataView(view) {
+export function validateMetadataView(opt) {
 
+  opt = opt || {};
+  var view = opt.view || {}; 
+  var forceUpdateMeta = opt.forceUpdateMeta || false;
   var h = mx.helpers;
-
   var type = h.path(view, "type");
   var isRt = type == "rt";
   var isVt = type == "vt";
@@ -18,12 +20,23 @@ export function validateMetadataView(view) {
    * Type raster tiles / wms
    */
   if (isRt) {
+    /*
+    * TODO: wrap this in a propre validation function, 
+    * like VT metadata validation. E.g. validateSource
+    */
     out.valid = h.isUrl(h.path(view, 'data.source.urlMetadata',''));
+    var reasons = [];
+
+    if(!out.valid){
+      reasons.push("validate_meta_invalid_external_link");
+    }
+
     out.validated = true;
     out.results = {
       tests : [{
         type: 'url',
-        valid: out.valid
+        valid: out.valid,
+        reasons :reasons
       }]
     };
     return Promise.resolve(out);
@@ -33,7 +46,10 @@ export function validateMetadataView(view) {
    * Type vector tiles
    */
   if (isVt) {
-    return mx.helpers.addSourceMetadataToView(view)
+    return mx.helpers.addSourceMetadataToView({
+       view : view,
+       forceUpdateMeta : forceUpdateMeta
+    })
       .then(meta => {
         var attr = h.path(view, "data.attribute.name");
         var results = validateMetadataTests( meta, attr );
@@ -353,7 +369,7 @@ export function validationMetadataTestsToHTML(results){
   /**
    * Add editor info
    */
-  if(meta._emailEditor){
+  if( meta && meta._emailEditor){
     elEditorInfo = h.el("div",
       h.el("hr"),
       h.el("h4",{

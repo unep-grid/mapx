@@ -25,6 +25,7 @@ export * from './mx_helper_map_print.js';
 export * from './mx_helper_map_pixop_core.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
+export * from './mx_helper_map_view_click.js';
 export * from './mx_helper_metadata_validation.js';
 export * from './mx_helper_map_view_metadata.js';
 export * from './mx_helper_map_features_popup.js';

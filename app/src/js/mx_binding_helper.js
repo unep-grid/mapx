@@ -15,9 +15,6 @@ $(document).on('shiny:connected', function(event) {
 
   Shiny.addCustomMessageHandler('mglInit', mx.helpers.initMapx );
   Shiny.addCustomMessageHandler("mxUpdateLanguage", mx.helpers.updateLanguage);
-  Shiny.addCustomMessageHandler("mglUpdateAllViewsSourceMetadata",
-    mx.helpers.updateAllViewsSourceMetadata
-  );
   Shiny.addCustomMessageHandler("mglUpdateViewsBadges", mx.helpers.updateViewsBadges);
   Shiny.addCustomMessageHandler("mxSetCookie",mx.helpers.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', mx.helpers.modal);

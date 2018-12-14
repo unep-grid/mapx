@@ -17,7 +17,9 @@ exports.decrypt = function(txt){
     });
 };
 
-exports.registerSource = function(idSource,idUser,idProject,title){
+exports.registerSource = registerSource;
+
+function registerSource(idSource,idUser,idProject,title){
 
   var options = {};
 
@@ -30,24 +32,90 @@ exports.registerSource = function(idSource,idUser,idProject,title){
   }
 
   var sqlAddSource = `INSERT INTO mx_sources (
-     id, editor, readers, editors, date_modified, type, project, data
-    ) VALUES (
-     $1::text,
-     $2::integer,
-     '["publishers"]',
-     '["publishers"]',
-     now(),
-     'vector',
-     $3::text,
-     '{"meta":{"text":{"title":{"en":"${ title }"}}}}' 
-    )`;
+    id, editor, readers, editors, date_modified, type, project, data
+  ) VALUES (
+    $1::text,
+    $2::integer,
+    '["publishers"]',
+    '["publishers"]',
+    now(),
+    'vector',
+    $3::text,
+    '{"meta":{"text":{"title":{"en":"${ title }"}}}}' 
+  )`;
 
   return  pgWrite.query(sqlAddSource,[idSource, idUser, idProject])
-  .then(res => {
-    return true;
-  });
+    .then(res => {
+      return true;
+    });
 
+}
+
+
+/**
+* Test empty table : if no records, remove table, else register it as source
+* @param {String|Object} idSource id of the layer to add, or object with idSource, idUser, idProject, title.
+*/
+exports.registerOrRemoveSource = function(idSource,idUser,idProject,title){
+
+  if(typeof idSource == 'object'){
+    options = idSource;
+    idSource = options.idSource;
+    idUser = options.idUser*1;
+    idProject = options.idProject;
+    title = options.sourceTitle || options.layerTitle || options.title;
+  }
+
+  var sqlCountRow = {
+    text: `SELECT count(*) n FROM ${idSource}`
+  };
+
+  return pgRead.query(sqlCountRow)
+    .then(r => {
+      var count = r.rowCount > 0 ? r.rows[0].n*1 : 0;
+      if( count === 0){
+        return removeSource(idSource)
+          .then(()=>{
+            return {removed:true};
+          });
+      }else{
+        return Promise.resolve({removed:false});
+      }
+    })
+    .then(res => {
+
+      if( res.removed === true){
+        return Promise.resolve({registered:false});
+      }else{
+        return registerSource(idSource,idUser,idProject,title)
+          .then(()=>{
+            return {registered:true};
+          });
+      }
+    });
 };
+
+
+/**
+* Remove source
+* @param {String} idSource Source to remove
+*/
+function removeSource(idSource){
+  var sqlDelete = {
+    text: `DELETE FROM mx_sources WHERE id = $1::text`,
+    values : [idSource]
+  };
+  var sqlDrop= {
+    text: `DROP TABLE IF EXISTS ${idSource}`,
+  };
+  console.log("Remove source entry in mx_sources for " + idSource);
+  return pgWrite.query(sqlDrop)
+    .then(()=>{
+      console.log("Remove table " + idSource);
+      return pgWrite.query(sqlDelete);
+    });
+}
+exports.removeSource = removeSource;
 
 /**
 * Get layer columns names

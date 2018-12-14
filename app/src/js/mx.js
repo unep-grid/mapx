@@ -12,6 +12,7 @@ export let templates = {
 };
 
 export let maps = {};
+
 export let data = {
   geojson : localforage.createInstance({
     name:  "geojson"
@@ -30,10 +31,10 @@ export let data = {
   })
 };
 
+export let listener = {}; // global listener, not map related. Modals can store listener here.
 export let queue = [];
 export let events = {};
 export let controls = {};
-export let listener = {};
 export let info = require('../../package.json');
 export let settings = {
   devicePixelRatio : 0, // updated by getPixelRatio()

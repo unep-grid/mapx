@@ -21,16 +21,12 @@
 
 
 
-
 observeEvent(input$btnEditSources,{
 
-  mxCatch("Edit source panel",{
+  mxCatch(title="btn edit source",{
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
-    project <- reactData$project
-    userData <- reactUser
-    idUser <- .get(userData,c("data","id"))
 
     if( !isPublisher ){
 
@@ -38,21 +34,12 @@ observeEvent(input$btnEditSources,{
 
     }else{
 
-
-      layers <- reactTableEditSources()
-
+      layers <- reactListEditSources()  
+      disabled <- NULL
       if(noDataCheck(layers)){
         layers <- list("noLayer")
-      }else{
-        layers <- mxGetLayerNamedList( layers )
+        disabled <- TRUE
       }
-
-
-      #
-      # Who can view this
-      #
-      sourceReadTarget <- c("publishers","admins") 
-      sourceEditTarget <- c("publishers","admins")
 
       uiOut <- tagList(
         selectizeInput(
@@ -63,38 +50,120 @@ observeEvent(input$btnEditSources,{
           options = list(
             sortField="label"
             )
+          )
+        )
+
+      btn <- list(
+        actionButton(
+          "btnEditSourceManage",
+          d("btn_edit_selected",language),
+          disabled = disabled
+          )
+        )
+
+      mxModal(
+        id = "editSourceManage",
+        title = d("source_edit",language),
+        content = uiOut,
+        buttons = btn,
+        textCloseButton = d("btn_close",language)
+        )
+
+    }
+})
+})
+
+
+#
+# Disable btn edit if not allowed
+#
+observeEvent(input$selectSourceLayerEdit,{
+
+  language <- reactData$language
+  layer <- input$selectSourceLayerEdit
+  layers <- reactListEditSources()
+  isAllowed <- layer %in% layers
+
+  mxToggleButton(
+    id="btnEditSourceManage",
+    disable = !isAllowed 
+    )
+
+})
+
+observeEvent(input$btnEditSourceManage,{
+
+  mxCatch(title="Save source manage",{
+    userRole <- getUserRole()
+    isPublisher <- "publishers" %in% userRole$groups
+    language <- reactData$language
+    layer <- input$selectSourceLayerEdit
+    layers <- reactListEditSources()
+    isAllowed <- layer %in% layers
+    project <- reactData$project
+
+    if( !isPublisher || !isAllowed ){
+
+      return()
+
+    }else{
+
+      idSource <- input$selectSourceLayerEdit 
+      target <-  mxDbGetQuery("select readers, editors from mx_sources where id ='"+idSource+"'")
+      readers <- mxFromJSON(target$readers)
+      editors <- mxFromJSON(target$editors)
+      #
+      # Who can view this
+      #
+      sourceReadTarget <- c("publishers","admins") 
+      sourceEditTarget <- c("publishers","admins")
+      #
+      # Format view list by email 
+      #
+      data <- reactTableViewsUsingSource()
+      data <- data[,c("title","email")]
+      hasRow <- isTRUE(nrow(data) > 0)
+
+      if( hasRow ){
+        names(data) <- c(
+          d("view_title",w=F,lang=language),
+          d("login_email",w=F,lang=language)
+          )       
+
+        tblViews <- tagList(
+          tags$label(d("tbl_views_depending_source",language)),
+          mxTableToHtml(data)
+          )
+
+      }else{
+        tblViews <- tagList()
+      }
+
+
+      uiOut <- tagList(
+        selectizeInput(
+          inputId="selectSourceReadersUpdate",
+          label=d("source_target_readers",language),
+          choices=sourceReadTarget,
+          selected=readers,
+          multiple=TRUE,
+          options=list(
+            sortField = "label",
+            plugins = list("remove_button")
+            )
           ),
-        conditionalPanel(
-          condition="input.selectSourceLayerEdit",
-                       
-            #
-            # Who can see this ?
-            #
-            selectizeInput(
-              inputId="selectSourceReadersUpdate",
-              label=d("source_target_readers",language),
-              choices=sourceReadTarget,
-              selected=NULL,
-              multiple=TRUE,
-              options=list(
-                sortField = "label",
-                plugins = list("remove_button")
-                )
-              ),
-            selectizeInput(
-              inputId="selectSourceEditorsUpdate",
-              label=d("source_target_editors",language),
-              choices=sourceEditTarget,
-              selected=NULL,
-              multiple=TRUE,
-              options=list(
-                sortField = "label",
-                plugins = list("remove_button")
-                )
-              ),
-            uiOutput("tblViewsUsingSource")
-            #)
+        selectizeInput(
+          inputId="selectSourceEditorsUpdate",
+          label=d("source_target_editors",language),
+          choices=sourceEditTarget,
+          selected=editors,
+          multiple=TRUE,
+          options=list(
+            sortField = "label",
+            plugins = list("remove_button")
+            )
           ),
+        tblViews,    
         uiOutput("uiValidateSourceEdit")
         )
 
@@ -110,7 +179,7 @@ observeEvent(input$btnEditSources,{
         )
 
       mxModal(
-        id="uiEditSource",
+        id="editSourceManage",
         title="Edit sources",
         content=uiOut,
         buttons=btnList,
@@ -118,138 +187,14 @@ observeEvent(input$btnEditSources,{
         )
 
     }
-})
+
+    })
 })
 
 
 #
-# Update readers and editors
+# Validation
 #
-observeEvent(input$selectSourceLayerEdit,{
-  idSource <- input$selectSourceLayerEdit 
-  if(!noDataCheck(idSource)){
-    target <-  mxDbGetQuery("select readers, editors from mx_sources where id ='"+idSource+"'")
-    readers <- mxFromJSON(target$readers)
-    editors <- mxFromJSON(target$editors)
-    updateSelectizeInput(session,"selectSourceEditorsUpdate",selected=editors)
-    updateSelectizeInput(session,"selectSourceReadersUpdate",selected=readers)
-  }
-})
-
-
-
-
-#
-# Render a table of viers depending on selected source
-#
-
-output$tblViewsUsingSource <- renderUI({
-
-  idSource <- input$selectSourceLayerEdit 
-  data <- reactTableViewsUsingSource()
-  layers <- reactListEditSources()
-  language <- reactData$language
-  hasRow <- isTRUE(nrow(data) > 0)
-  hasSource <- isTRUE(idSource %in% layers)
-  out <- tagList()
-
-
-  if( !hasRow || !hasSource ){
-    return(out)
-  }
-
-  data <- data[,c("title","email")]
-
-  names(data) <- c(
-    d("view_title",w=F,lang=language),
-    d("login_email",w=F,lang=language)
-    )
-
-  out <- tagList(
-    tags$label(d("tbl_views_depending_source",language)),
-    mxTableToHtml(data)
-    )
-
-  return(out);
-})
-
-
-
-observeEvent(input$btnDeleteSource,{
-
-  language <- reactData$language
-
-  blockDelete <- isTRUE(reactData$sourceEditBlockDelete)
-
-  if(blockDelete) return()
-
-  #
-  # Button to confirm the source removal
-  #
-  btnList <- list(
-    actionButton(
-      inputId="btnDeleteSourceConfirm",
-      label=d("btn_confirm",language)
-      )
-    )
-  #
-  # Generate the modal panel
-  #
-  mxModal(
-    id="uiConfirmSourceRemove",
-    title=d("source_confirm_remove",language),
-    content=tags$span(d("source_confirm_remove",language)),
-    buttons=btnList,
-    textCloseButton=d("btn_close",language),
-    addBackground=T
-    )
-})
-
-
-observeEvent(input$btnDeleteSourceConfirm,{
-
-  blockDelete <- isTRUE(reactData$sourceEditBlockDelete)
-
-  if(blockDelete) return()
-
-
-  idSource <- input$selectSourceLayerEdit 
-  project <- reactData$project
-  language <- reactData$language
-  idUser <- reactUser$data$id
-  userRoles <- getUserRole()
-
-  mxModal(
-    id="uiConfirmSourceRemove",
-    close=TRUE
-    )
-
-  mxDbDropLayer(idSource)
-
-  reactData$updateEditSourceLayerList <- runif(1)  
-
-  layers <- reactListEditSources()
-
-  layers <- layers[!layers %in% idSource]
-
-
-  updateSelectizeInput(session, 
-    inputId="selectSourceLayerEdit",
-    choice = layers,
-    selected = input$selectSourceLayerEdit
-    )
-
-
-  mxModal(
-    id="uiConfirmSourceRemoveDone",
-    title=d("source_removed"),
-    content=tags$span(d("source_removed",lang=language)),
-    textCloseButton=d("btn_close",language)
-    )
-
-})
-
-
 observe({
   layer <- input$selectSourceLayerEdit 
   language <- reactData$language
@@ -289,7 +234,6 @@ observe({
         )
       )
 
-
     mxToggleButton(
       id="btnUpdateSource",
       disable = blockUpdate  
@@ -303,6 +247,86 @@ observe({
   })
 })
 
+
+#
+# Delete confirmation
+#
+observeEvent(input$btnDeleteSource,{
+
+  language <- reactData$language
+
+  blockDelete <- isTRUE(reactData$sourceEditBlockDelete)
+
+  if(blockDelete) return()
+
+  #
+  # Button to confirm the source removal
+  #
+  btnList <- list(
+    actionButton(
+      inputId="btnDeleteSourceConfirm",
+      label=d("btn_confirm",language)
+      )
+    )
+  #
+  # Generate the modal panel
+  #
+  mxModal(
+    id="editSourceManageDeleteConfirm",
+    title=d("source_confirm_remove",language),
+    content=tags$span(d("source_confirm_remove",language)),
+    buttons=btnList,
+    textCloseButton=d("btn_close",language),
+    addBackground=T
+    )
+})
+
+
+
+#
+# Source delete final
+#
+observeEvent(input$btnDeleteSourceConfirm,{
+
+  blockDelete <- isTRUE(reactData$sourceEditBlockDelete)
+
+  if(blockDelete) return()
+
+  idSource <- input$selectSourceLayerEdit 
+  project <- reactData$project
+  language <- reactData$language
+  idUser <- reactUser$data$id
+  userRoles <- getUserRole()
+
+  mxModal(
+    id="editSourceManageDeleteConfirm",
+    close=TRUE
+    )
+
+  mxModal(
+    id="editSourceManage",
+    close=TRUE
+    )
+
+  mxDbDropLayer(idSource)
+
+  reactData$updateEditSourceLayerList <- runif(1)  
+
+  layers <- reactListEditSources()
+
+  mxModal(
+    id="uiConfirmSourceRemoveDone",
+    title=d("source_removed"),
+    content=tags$span(d("source_removed",lang=language)),
+    textCloseButton=d("btn_close",language)
+    )
+
+})
+
+
+#
+# Update source 
+#
 observeEvent(input$btnUpdateSource,{
 
   idSource <- input$selectSourceLayerEdit 
@@ -355,13 +379,8 @@ observeEvent(input$btnUpdateSource,{
   #
   # Generate the modal panel
   #
-
-  mxModal(
-    id="uiConfirmSourceInit",
-    title="Success update",
-    content=tags$p(d("success_update",lang=language)),
-    textCloseButton=d("btn_close",language)
-    )
+  mxFlashIcon("floppy-o")
+  mxUpdateText("editSourceManage_txt","Saved at " + format(Sys.time(),"%H:%M"))
 
   #
   # Invalidate source list
@@ -369,6 +388,5 @@ observeEvent(input$btnUpdateSource,{
 
   reactData$updateEditSourceLayerList <- runif(1)
 })
-
 
 

@@ -183,7 +183,7 @@ mapControlApp.prototype.onAdd = function(map) {
           // Set a callback : if present, reset views layout
           function(state){
             if(state=="on"){
-              console.log("panel view enabled");
+              //console.log("panel view enabled");
             }
           }
         );

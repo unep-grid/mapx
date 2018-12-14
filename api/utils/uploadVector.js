@@ -9,6 +9,7 @@ var pgWrite = require.main.require("./db").pgWrite;
 var emailAdmin = settings.mail.config.emailAdmin;
 var template = require("../templates");
 var utils = require("./utils.js");
+var removeSource = require('./db.js').removeSource;
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -96,6 +97,9 @@ function convertOgrHandler(req,res,next){
 */
 function addSourceHandler(req,res,next){
 
+  /**
+  * TODO: use dedicated function registerOrRemoveSource in db.js
+  */
   var title = req.body.title;
   var email = req.body.email;
   var idProject = req.body.project;
@@ -117,25 +121,25 @@ function addSourceHandler(req,res,next){
     ' \'{"meta":{"text":{"title":{"en":"'+ title +'"}}}}\' '+
     ')';
   /**
-  *  Uncomment to use escaped multiline 
-  */
-/*  var sqlAddSource = `INSERT INTO mx_sources (*/
-    //id, editor, readers, editors, date_modified, type, project, data
+   *  Uncomment to use escaped multiline 
+   */
+  /*  var sqlAddSource = `INSERT INTO mx_sources (*/
+  //id, editor, readers, editors, date_modified, type, project, data
   //) VALUES (
-    //$1::text, 
-    //$2::integer,
-    //'["publishers"]',
-    //'["publishers"]',
-    //now(),
-    //'vector', 
-    //$3::text,
-    //'{"meta":{"text":{"title":{"en":"${title}"}}}}'
+  //$1::text, 
+  //$2::integer,
+  //'["publishers"]',
+  //'["publishers"]',
+  //now(),
+  //'vector', 
+  //$3::text,
+  //'{"meta":{"text":{"title":{"en":"${title}"}}}}'
   /*)`;*/
   pgWrite.query(sqlAddSource,[idSource, idUser, idProject])
     .then(function(result){
       /**
-      * Final step : send a message
-      */
+       * Final step : send a message
+       */
       cleanFile();
       msg = 'Added new entry ' + title + ' ( id:' + idSource + ' ) in project ' + idProject;       
       res.write(JSON.stringify({type:'end',msg:msg})+'\t\n');
@@ -158,11 +162,11 @@ function addSourceHandler(req,res,next){
         .then(function(){
 
           /**
-          * In case of error, send maio 
-          */
+           * In case of error, send maio 
+           */
           msg = 'Failed to create a new entry ( ' + err + ' )';
           res.write(JSON.stringify({type:'message',msg:msg})+'\t\n');
-         
+
           sendMail({
             to : [email,emailAdmin].join(','),
             text : msg,
@@ -194,18 +198,11 @@ function addSourceHandler(req,res,next){
   function cleanAll(){
     cleanFile();  
     var msgCleanAll = "";
-    return new Promise(function(){
-      pgWrite.query('DROP TABLE IF EXISTS %s',[idSource])
-        .then(function(){ 
-          pgWrite.query('DELETE FROM mx_sources WHERE id = \'%s\'',[idSource]);
-          msgCleanAll = 'New entry and table were removed, if needed.'; 
-          res.write(JSON.stringify({type:'message',msg:msgCleanAll})+'\t\n');
-        })
-        .catch(function(err){
-          msgCleanAll = 'Error during importation cleaning (' + err + ')';
-          res.write(JSON.stringify({type:'message',msg:msgCleanAll})+'\t\n');
-        });
-    });
+    return removeSource(idSource)
+      .then(()=>{
+        msgCleanAll = 'New entry and table were removed, if needed.'; 
+        res.write(JSON.stringify({type:'message',msg:msgCleanAll})+'\t\n');
+      });
   }
 
 }

@@ -4249,6 +4249,18 @@
     "ps": ""
   },
   {
+    "id": "source_edit",
+    "en": "Edit source",
+    "fr": "Édition de la source",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "view_id",
     "en": "View identifier",
     "fr": "Identifiant de la vue",
@@ -5872,6 +5884,18 @@
     "id": "validate_meta_invalid_source",
     "en": "Invalid source",
     "fr": "Source invalide",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+ },
+ {
+    "id": "validate_meta_invalid_external_link",
+    "en": "Invalid external link",
+    "fr": "Lien externe invalide",
     "es": "",
     "ru": "",
     "zh": "",

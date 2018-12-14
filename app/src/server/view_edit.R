@@ -987,7 +987,6 @@ observeEvent(input$btnViewSave,{
       id = "modalViewEdit_txt",
       text = sprintf("Saved at %s",format(time,'%H:%M'))
       )
-
     mxToggleButton(
       id="btnViewSave",
       disable = FALSE

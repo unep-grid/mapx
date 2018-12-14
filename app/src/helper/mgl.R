@@ -15,27 +15,14 @@ mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactive
     )
 }
 
-#' Update all source metadata of loaded views
-#' @param overwrite {logical} Overwrite existing meta
+
+#' Update all view badges, and linked metadata if needed
+#' @param opt {List} list of option : forceUpadateMeta : force update of the metadata
 #' @export
-mglUpdateAllViewsSourceMetadata <- function(overwrite=TRUE,session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglUpdateAllViewsSourceMetadata",
-    overwrite
+mglUpdateViewsBadges <- function(opt,session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglUpdateViewsBadges",
+    opt
     )
-}
-#' Validate metadata
-#' 
-#' Update url using a list of key pair values in a list
-#'
-#' @param metadata {List} Metadata to validate
-#' @param session {Session} Shiny session
-mglUpdateViewsBadges = function(session=shiny::getDefaultReactiveDomain()){
-
-  session$sendCustomMessage("mglUpdateViewsBadges",list(
-      date = Sys.time()
-      )
-    )
-
 }
 
 #' Get overlap result

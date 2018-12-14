@@ -252,10 +252,7 @@ observeEvent(input$btnSaveSourceMetadata,{
         )
 
       mxFlashIcon("floppy-o")
-format(Sys.time(),"%H:%M")
       mxUpdateText("editSourceMetadata_txt","Saved at " + format(Sys.time(),"%H:%M"))
-      mglUpdateAllViewsSourceMetadata(overwrite=TRUE)
-      mglUpdateViewsBadges()
       reactData$updateSourceLayerList <- runif(1)
     }
 

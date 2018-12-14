@@ -22,12 +22,9 @@ export function renderUserProjectsList(o){
   function render(cb){
     elDest = document.getElementById(o.idList);
     if(cnt++ < 5){
-      console.log("try n"+cnt);
       if(elDest){
-        console.log("build");
         build();
       }else{
-        console.log("wait");
         wait();
       }
     }

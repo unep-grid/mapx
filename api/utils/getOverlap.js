@@ -7,7 +7,8 @@ const clientPgRead = require.main.require("./db").pgWrite;
 const authenticateHandler = require("./authentification.js").authenticateHandler;
 const utils = require('./utils.js');
 const toRes = utils.toRes;
-const registerSource = require('./db.js').registerSource;
+const registerOrRemoveSource = require('./db.js').registerOrRemoveSource;
+const removeSource = require('./db.js').removeSource;
 const getColumnsNames = require('./db.js').getColumnsNames;
 const areLayersValid = require('./db.js').areLayersValid;
 const getLayerTitle = require('./db.js').getLayerTitle;
@@ -112,12 +113,22 @@ function getOverlapHandler(req, res, next) {
         return getOverlapArea(config);
       }
     })
+    .then(()=>{
+      config.send.end('Done');
+    })
     .catch(e => {
+
       res.write(toRes({
         type: 'error',
         msg: e.message
       }));
       res.end();
+
+      /**
+       * Cleaning if needed
+       */
+      return removeSource(idSource)
+        .catch(e => console.error(e));
     });
 }
 
@@ -217,20 +228,22 @@ function getOverlapCreateSource(options){
 
     })
     .then(res => {
-      return registerSource(options);
+      return registerOrRemoveSource(options);
     })
-    .then(res => {
+    .then( res => {
 
-      send.message('New source "' + options.sourceTitle +'" created ( id "' + options.idSource+ '" )'  );
+      if( res.registered == false ){
+        send.message('No records, table removed');
+      }else{
+        send.message('New source "' + options.sourceTitle +'" created ( id "' + options.idSource+ '" )'  );
 
-      send.sourceMeta({
-        idSource : options.idSource,
-        idUser : options.idUser,
-        idProject : options.idProject,
-        sourceTitle : options.sourceTitle
-      });
-
-      send.end('Done!');
+        send.sourceMeta({
+          idSource : options.idSource,
+          idUser : options.idUser,
+          idProject : options.idProject,
+          sourceTitle : options.sourceTitle
+        });
+      }
     });
 
 }
@@ -382,7 +395,6 @@ function getOverlapArea(options) {
         }
       }
       send.area(area);
-      send.end('Done!');
       return true;
     });
 }
@@ -438,7 +450,7 @@ function buildOverlapSource(data,options){
        * Register created source
        */
       if(res){
-        return registerSource(options);
+        return registerOrRemoveSource(options);
       }else{
         return Promise.resolve(false);
       }

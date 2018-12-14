@@ -203,7 +203,7 @@ config[["ui"]] <- list(
       "mx_map_road_border" = "rgba(220,220,220,0.5)",
       "mx_map_building" = "rgba(220,220,220,0.5)",
       "mx_map_admin" = "rgba(127,127,127,1)",
-      "mx_map_admin_disputed" = "rgba(255,0,0,1)"
+      "mx_map_admin_disputed" = "rgba(127,127,127,1)"
       )
     )
   )

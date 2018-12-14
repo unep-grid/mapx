@@ -29,8 +29,10 @@ export function getSourceMetadata(id,force){
  * @param {Obejct} view object 
  * @param {Boolean} force force / replace meta object
  */
-export function addSourceMetadataToView(view,force){
-  force = force || false;
+export function addSourceMetadataToView(opt){
+  opt = opt || {};
+  var view = opt.view || {}; 
+  var force = opt.forceUpdateMeta || false;
   var idSourceLayer = mx.helpers.path(view,"data.source.layerInfo.name","");
   var empty = {};
 
@@ -48,21 +50,4 @@ export function addSourceMetadataToView(view,force){
     });
 
 }
-/**
- * For all current view, update the mata object
- * @param {Boolean} ovewrite Overwrite existing meta 
- * @return null
- */
-export function updateAllViewsSourceMetadata(overwrite){
-  overwrite = overwrite || false;
 
-  var views = mx.helpers.getViews({
-    id: mx.settings.idMapDefault,
-    asArray : true
-  });
-  views.forEach(function(v){
-    if( v._meta && overwrite ){
-      mx.helpers.addSourceMetadataToView(v,true);
-    }
-  });
-}

@@ -379,6 +379,7 @@ export function initMapxApp(o){
         }
       });
     });
+
   });
 
   /**
@@ -1858,253 +1859,6 @@ export function removeView(o){
 }
 
 /**
- * Handle view click events
- * @param o options
- */
-export function handleViewClick(o){
-
-
-  return function (event) {
-    var el, t, isIcon;
-
-    if( event.target == event.currentTarget ) return ;
-
-    el = event.target;
-
-    if(el.dataset){
-      event.stopPropagation();
-    }
-    /* Skip icon. The */
-    isIcon = el.classList.contains("fa");
-
-    el = isIcon ? el.parentElement: el;
-
-    t = [
-      {
-        id : "loadOrigProject",
-        comment :"target is the home project button",
-        isTrue : el.dataset.view_action_key == "btn_opt_home_project",
-        action : function(){
-          var viewTarget = el.dataset.view_action_target;
-          var view = mx.helpers.getViews({
-            id : mx.settings.idMapDefault,
-            idView : viewTarget
-          });
-          mx.helpers.setProject(view.project);
-        }
-      },
-      {
-        id : "moveViewTop",
-        comment :"target is the move top button",
-        isTrue : el.dataset.view_action_key == "btn_opt_move_top",
-        action : function(){
-          var viewTarget = el.dataset.view_action_target;
-          mx.helpers.moveViewItem({
-            id : viewTarget,
-            mode : "top"
-          });
-        }
-      },
-      {
-        id : "moveViewBottom",
-        comment :"target is the move bottom button",
-        isTrue : el.dataset.view_action_key == "btn_opt_move_bottom",
-        action : function(){
-          var viewTarget = el.dataset.view_action_target;
-          mx.helpers.moveViewItem({
-            id : viewTarget,
-            mode : "bottom"
-          });
-        }
-      },
-      {
-        id : "viewDeleteGeojson",
-        comment :"target is the delete geojson button",
-        isTrue : el.dataset.view_action_key == "btn_opt_delete_geojson",
-        action : function(){
-
-          var arg =  el.dataset ;
-
-          removeView({
-            id : o.id,
-            idView : arg.view_action_target
-          });
-
-        }
-      },
-      {
-        id : "viewUploadGeojson",
-        comment :"target is the upload geojson button",
-        isTrue : el.dataset.view_action_key == "btn_upload_geojson",
-        action : function(){
-          var idView = el.dataset.view_action_target;
-          mx.helpers.uploadGeojsonModal(idView);
-        }
-      },
-      {
-        id : "viewStoryPlay",
-        comment :"target is the play button",
-        isTrue : el.dataset.view_action_key == "btn_opt_start_story",
-        action : function(){
-          mx.helpers.storyRead({
-            id : o.id,
-            idView : el.dataset.view_action_target,
-            save : false
-          });
-        }
-      },
-      {
-        id : "viewZoom",
-        comment :"target is the search button",
-        isTrue : el.dataset.view_action_key == "btn_opt_zoom_visible",
-        action : function(){
-          mx.helpers.zoomToViewIdVisible({
-            id : o.id,
-            idView : el.dataset.view_action_target
-          });
-        }
-      },
-      {
-        id : "viewZoomExtent",
-        comment :"target is zoom to extent",
-        isTrue : el.dataset.view_action_key == "btn_opt_zoom_all",
-        action : function(){
-          mx.helpers.zoomToViewId({
-            id : o.id,
-            idView : el.dataset.view_action_target
-          });
-        }
-      },
-      {
-        id : "viewShowSearch",
-        comment :"target is tool search",
-        isTrue : el.dataset.view_action_key == "btn_opt_search",
-        action : function(){
-          var elSearch =  document.getElementById(el.dataset.view_action_target);
-          mx.helpers.classAction({
-            selector : elSearch,
-            action : "toggle"
-          });
-        }
-      },
-      {
-        id : "viewLegendFilter",
-        comment : "target is a legend filter",
-        isTrue : el.dataset.view_action_key == "btn_legend_filter",
-        action : function(){
-          var h = mx.helpers;
-          /*
-           * After click on legend, select all sibling to check 
-           * for other values to filter using "OR" logical operator
-           */
-          var viewValues = [],
-            legendContainer = h.parentFinder({
-              selector : el,
-              class : "mx-view-item-legend-vt" 
-            }),
-            legendInputs = legendContainer.querySelectorAll("input") 
-          ;
-          var idView = el.dataset.view_action_target;
-          var view = h.getViews({id:mx.settings.idMapDefault,idView:idView});
-          var attribute = h.path(view,'data.attribute.name');
-          var type = h.path(view,'data.attribute.type');
-
-          var  filter = ["any"];
-          var rules = h.path(view,"data.style.rulesCopy",[]);
-
-          for(var i = 0, iL = legendInputs.length; i < iL ; i++){
-            var li =  legendInputs[i];
-            if(li.checked){
-              var index = li.dataset.view_action_index*1;
-              var ruleIndex = rules[index];
-              if( typeof ruleIndex !== "undefined" && typeof ruleIndex.filter !== "undefined"  ) filter.push(ruleIndex.filter);
-            }
-          }
-
-          view._setFilter({
-            type : "legend", 
-            filter : filter 
-          });
-
-        } 
-      },
-      {
-        id : "viewToggle",
-        comment : "target is the label/input for the view to toggle",
-        isTrue : el.dataset.view_action_key == "btn_toggle_view", 
-        action : function(){
-          mx.helpers.viewControler(o);       
-        } 
-      },
-      {
-        id : "viewReset",
-        comment : "target is the reset button",
-        isTrue :  el.dataset.view_action_key == "btn_opt_reset",
-        action :function(){
-          resetViewStyle({
-            id:o.id,
-            idView:el.dataset.view_action_target
-          });
-        }
-      },
-      {
-        id: "pngScreenshot",
-        comment: "target is the png screenshoot button",
-        isTrue :  el.dataset.view_action_key == "btn_opt_screenshot",
-        action:function(){
-          mx.helpers.downloadScreenshotPdf({
-            id: o.id, 
-            idView: el.dataset.view_action_target
-          });
-        }
-      },
-      {
-        id: "viewMetadataRasterLink",
-        comment: "target is the raster metadata link",
-        isTrue :  el.dataset.view_action_key == "btn_opt_meta_external",
-        action:function(){
-          var idView =  el.dataset.view_action_target;
-          var view = mx.helpers.getViews({id:mx.settings.idMapDefault,idView:idView});
-          var link = mx.helpers.path(view,"data.source.urlMetadata");
-          var title =  mx.helpers.path(view,"data.title." + mx.settings.language) || 
-            mx.helpers.path(view,"data.title.en");
-          if(!title) title = idView;
-
-          mx.helpers.getDictItem("source_raster_tile_url_metadata").then(function(modalTitle){
-            mx.helpers.modal({
-              title : modalTitle,
-              id : "modalMetaData",
-              content : "<b>" + modalTitle + "</b>: <a href=" + link + " target='_blank'>" + title + "</a>",
-              minHeight:"150px"
-            });         
-          });
-        }
-      },
-      {
-        id : "shinyAction",
-        comment: "target is a shiny action button",
-        isTrue : el.dataset.view_action_handler == "shiny",
-        action : function(){
-          Shiny.onInputChange( 'mglEvent_' + o.id + '_view_action',{
-            target : el.dataset.view_action_target,
-            action : el.dataset.view_action_key,
-            time : new Date()
-          });
-        }
-      }
-    ];
-
-    for(var i = 0; i < t.length ; i++ ){
-      if( t[i].isTrue ){
-        event.stopPropagation();
-        t[i].action();
-      }
-    } 
-
-  };
-}
-
-/**
  * Add components in view for an array of views
  * @param {Array} views Array of views to update
  */
@@ -2409,6 +2163,8 @@ export function updateViewsFilter(o){
       elContainer.appendChild(elFoldFilters);
     })
     .then(function(){
+
+      console.log("Update view filter")
 
       /**
        * Add filter by class, type, ... 
@@ -3045,9 +2801,9 @@ export function addViewVt(o){
      */
     if(! view._meta ){
       /**
-      * ! metadata are added erlier in mx_map_view_validation.
+      * ! metadata are added erlier, using mx.helpers.addSourceMetadataToView()
       */
-      //mx.helpers.addSourceMetadataToView(view,true);
+      view._meta = {};
     }
 
     var sepLayer = p(mx,"settings.separators.sublayer")||"@"; 

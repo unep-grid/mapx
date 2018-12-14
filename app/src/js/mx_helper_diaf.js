@@ -1,18 +1,28 @@
 
 
 
-export function evaluateDiafView(view){
+export function evaluateDiafView(opt){
+  opt = opt || {};
+  var view = opt.view || {};
+  var forceUpdateMeta = opt.forceUpdateMeta || false;
   var h = mx.helpers;
   var txtTooltip;
 
   return mx.helpers.getDictItem("tooltip_diaf_score")
     .then(txt => {
       txtTooltip = txt;
-      return mx.helpers.addSourceMetadataToView(view);
+      /**
+      * Make sure metadata are there. 
+      * Force update if needed
+      */
+      return mx.helpers.addSourceMetadataToView({
+         view : view,
+         forceUpdateMeta : forceUpdateMeta
+      });
     })
     .then(meta => {
       var integrity = h.path(meta,"integrity",{});
-      var threshold = 0.7;
+      var threshold = 0.8;
       var items = Object.keys(integrity);
       var maxScore = items.length * 3;
 

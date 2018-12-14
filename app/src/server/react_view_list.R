@@ -1,3 +1,25 @@
+
+#
+# Update view badges and metadata
+#
+observe({
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+  update <- reactData$updateSourceLayerList
+
+  isolate({
+    isMapReady <- isTRUE(reactData$mapIsReady)
+
+    if(isMapReady){
+      mglUpdateViewsBadges(list(
+          forceUpdateMeta = TRUE
+          ))
+    }
+  })
+})
+
+
+
 #
 # Reactive views. Used in fetch and edit
 #
@@ -82,7 +104,7 @@ reactViewsCompactAll <- reactive({
 
   idViews <- idViews[types %in% c('cc','vt','rt')]
   idViewsPublic <- mxDbGetViewsAllPublicProject(project)
-  
+
   viewsPublic <- mxDbGetViewsTitle(idViewsPublic$id,asNamedList=TRUE,language)
   views <- mxDbGetViewsTitle(idViews,asNamedList=TRUE,language)
 
@@ -118,7 +140,7 @@ reactViewsCountByProjects <- reactive({
   language <- reactData$language
   idUser <- userData$id
   out  <- mxDbGetProjectsViewsCount(idUser)
- 
+
   mxTimeDiff(timer)
   return(out)
 
@@ -133,7 +155,7 @@ reactViewsExternal <- reactive({
   isPublisher <- isTRUE(userRole$publisher)
   userData <- reactUser$data
   viewsExternal <- mxDbProjectGetViewsExternal(project)
-  
+
   if(isPublisher){
     viewsExternal
   }else{
