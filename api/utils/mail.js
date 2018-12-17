@@ -2,9 +2,9 @@ var nodemailer = require('nodemailer');
 var settings = require.main.require("./settings");
 var bodyParser = require('body-parser');
 var auth = require("./authentification.js");
-var key =  settings.db.crypto.key;
 var mailAdmin = settings.mail.config.admin;
 var clientPgRead = require.main.require("./db").pgRead;
+var decrypt = require("./db.js").decrypt;
 
 module.exports.sendMailApi = [
   bodyParser.urlencoded({ extended: false }),
@@ -25,57 +25,55 @@ function sendMailApi(req,res){
   /*
    * Decrypt the message
    */
-  var sql = 'SELECT mx_decrypt(\'' + dat.msg + '\',\'' + key + '\') msg';
-  clientPgRead.query(sql, function(err, result) {
-    /**
-     * Set the config object
-     */
-    var issues = "";
-    var idKeys = ["from","validUntil","subject","to","text","html"];
-    var conf = {};
-    if( !err && result && result.rows instanceof Array ){
-      conf = JSON.parse(result.rows[0].msg);
-    }else{
-      issues = err ;
-    }
-    /**
-     * Test
-     */
-    Object.keys(conf).forEach(function(k){
-      if( idKeys.indexOf(k) == -1 ){
-        issues = issues + " key " + k + " not valid; ";
-      }
-    });
 
-    if(!issues){
-      var d = new Date();
-      var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDate()));
-      var dValid = new Date(conf.validUntil);
-      var dateIsValid = dNow && dValid && dValid > dNow;
-      if( !dateIsValid ){
-        issues = issues + " invalide date";
-      }
-    }
-
-    if(issues){
-      res.status(500).send(issues);
-    }else{
+  decrypt(dat.msg)
+    .then( conf => {
       /**
-       * Send mail
+       * Set the config object
        */
-      sendMail({
-        subject : conf.subject,
-        to : conf.to || mailAdmin,
-        text : conf.text,
-        html : conf.html
-      }).then(function(msg){
-        res.send(msg);
-      }).catch(function(er){
-        console.error(er);
-        res.status(500).send(er);
+      var issues = "";
+      var idKeys = ["from","validUntil","subject","to","text","html"];
+
+      /**
+       * Test
+       */
+      Object.keys(conf).forEach(function(k){
+        if( idKeys.indexOf(k) == -1 ){
+          issues = issues + " key " + k + " not valid; ";
+        }
       });
-    }
-  });
+
+      if(!issues){
+        var d = new Date();
+        var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDate()));
+        var dValid = new Date(conf.validUntil);
+        var dateIsValid = dNow && dValid && dValid > dNow;
+        if( !dateIsValid ){
+          issues = issues + " invalide date";
+        }
+      }
+
+      if(issues){
+        throw new Error(issues);
+      }else{
+        /**
+         * Send mail
+         */
+        sendMail({
+          subject : conf.subject,
+          to : conf.to || mailAdmin,
+          text : conf.text,
+          html : conf.html
+        }).then(function(msg){
+          res.send(msg);
+        }).catch(function(er){
+          console.error(er);
+          res.status(500).send(er);
+        });
+      }
+    }).catch(function(err){
+      res.status(403).send("Bad request " + err);
+    });
 
 }
 

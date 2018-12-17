@@ -4,16 +4,14 @@ const settings = require.main.require("./settings");
 const key =  settings.db.crypto.key;
 
 exports.decrypt = function(txt){
-  var sqlDecrypt = 'SELECT mx_decrypt(\'' + txt + '\',\'' + key + '\') query';
-
+  var sqlDecrypt = 'SELECT mx_decrypt(\'' + txt + '\',\'' + key + '\') as msg';
   return pgRead.query(sqlDecrypt)
-    .then(function(sqlRes){
-      if( sqlRes && sqlRes.rows instanceof Array && sqlRes.rows[0] ){
-        data = JSON.parse(sqlRes.rows[0].query);
+    .then(function(result){
+      if( result.rowCount > 0 ){
+        return JSON.parse(result.rows[0].msg);
       }else{
-        data = null;
+        return {};
       }
-      return data;
     });
 };
 
