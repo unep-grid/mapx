@@ -14,7 +14,7 @@ ARG r_deps_dev="r-base-dev="${r_base_version}-*" libcurl4-gnutls-dev libxml2-dev
 ARG r_deps_sys="gdal-bin libpq-dev ca-certificates"
 ARG r_deps_shiny_server="sudo gdebi-core pandoc pandoc-citeproc"
 ARG r_packages_date="2018-12-04"
-ARG r_packages="c('RPostgreSQL','shiny','rmarkdown','memoise','jsonlite','magrittr','curl','later','pool','geosapi','xml2')"
+ARG r_packages="c('RPostgreSQL','shiny','rmarkdown','memoise','jsonlite','magrittr','curl','later','pool','xml2','geosapi','devtools')"
 ARG r_app_path="/srv/shiny-server/mapx"
 
 #
@@ -45,7 +45,9 @@ RUN apt-get update \
     rep <- getOption('repos'); \
     rep['CRAN'] <- 'https://mran.microsoft.com/snapshot/"$r_packages_date"'; \
     options(repos = rep); \
-    install.packages("$r_packages")" > install.R \
+    install.packages("$r_packages"); \n \
+    library(devtools) ; \n \
+    install_github('eblondel/geosapi');" > install.R \
     && Rscript install.R \ 
     && apt-get purge -y --auto-remove $r_deps_dev \
     && apt-get clean \
