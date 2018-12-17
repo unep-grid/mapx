@@ -321,7 +321,6 @@ liControlsGeoJson <- tagList(
     `data-lang_key`="btn_upload",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_upload_geojson",
-    `data-view_action_handler`="shiny",
     `data-view_action_target`="{{=view.id}}",
     tags$div(
       class="fa fa-cloud-upload"
