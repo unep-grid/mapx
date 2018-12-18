@@ -1,6 +1,8 @@
 #!/bin/bash
 
-
+#
+# Script to build and push new image in remote docker repository
+#
 NEW_VERSION=$1
 OLD_VERSION=`cat version.txt`
 echo $NEW_VERSION
