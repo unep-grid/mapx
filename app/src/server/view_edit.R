@@ -119,6 +119,11 @@ observe({
               # Get layer name 
               #
               viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
+              if(noDataCheck(viewLayerName)) return()
+              
+              #
+              # TODO: put this in a function, the in a list and produce the ui client side.
+              #
               layerMeta <- mxDbGetLayerMeta(viewLayerName)
               idSource <- toupper(viewLayerName)
               idView <- toupper(viewData$id)
@@ -900,8 +905,8 @@ observeEvent(input$btnViewSave,{
     view[[c("data","projects")]] <- projects
     #view[[c("project")]] <- project
 
-    if(noDataCheck(editors)) editors <- c((editor+""))
-    if(!isTRUE( (editor+"") %in% editors)) editors <- c(editors+"",editor)
+    if(noDataCheck(editors)) editors <- c(as.character(editor))
+    if(!isTRUE( as.character(editor) %in% editors )) editors <- c(editors,as.character(editor))
 
     #
     # Update classes

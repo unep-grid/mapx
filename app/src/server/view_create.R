@@ -64,8 +64,8 @@ observeEvent(input$txtViewTitle,{
   errors <- logical(0)
   warning <- logical(0)
 
-  errors['error_title_short'] <- noDataCheck(title) || nchar(title) < 5
-
+  errors['error_title_short'] <- noDataCheck(title) || nchar(title) < 3
+  errors['error_title_bad'] <- mxProfanityChecker(title)
   errors['error_title_exists'] <-  mxDbViewTitleExists(
     title = title,
     project= project,

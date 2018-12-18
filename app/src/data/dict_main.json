@@ -5449,10 +5449,10 @@
     "ps": ""
   },
   {
-    "id": "txt_too_short_min_5",
-    "en": "Text too short, minimum 5 characters",
-    "fr": "Texte trop court, 5 caractères minimum",
-    "es": "Texto demasiado corto, mínimo 5 caracteres",
+    "id": "txt_too_short_min_3",
+    "en": "Text too short, minimum 3 characters",
+    "fr": "Texte trop court, 3 caractères minimum",
+    "es": "Texto demasiado corto, mínimo 3 caracteres",
     "ru": "",
     "zh": "",
     "de": "",

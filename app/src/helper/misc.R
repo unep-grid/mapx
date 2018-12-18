@@ -239,7 +239,7 @@ mxSchemaMultiLingualInput = function(
     #
     minLength = 0 
     if( x %in% languagesRequired ){
-     minLength = 1
+     minLength = 3
     }
 
     #
@@ -1707,92 +1707,6 @@ mxReadText <- function(fileName,clean=FALSE){
 
 }
 
-#' update vt view definition
-#' @param {list} view View list
-#' @param {list} sourceData List from reactLayerSummary reactive object
-#' @param {list} sourceDataMask List from sourceMaskData reactive object
-#' @param {list} additionalAttributes List of additional attributes
-#' @return view list updated
-#' @export 
-mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additionalAttributes=NULL){
-  #
-  # update meta data
-  #
-  update <- function(){
-    viewData <- .get(view,c("data"))
-    layerName <- .get(sourceData,c("layerName"))
-    meta <- mxDbGetLayerMeta(layerName)
-
-    viewData <- .set(viewData,c("geometry"),list(
-        type = .get(sourceData,c("geomType")),
-        centroid = .get(sourceData,c("centroid")),
-        extent = .get(sourceData,c("extent"))
-        ))
-
-    viewTable <- .get(sourceData,c("table"))
-
-    attributes <- list(
-      name = .get(sourceData,c("variableName")),
-      names = unique(c(
-          .get(sourceData,c("timeVariables")),
-          .get(sourceData,c("variableName")),
-          additionalAttributes
-          )),
-      type = .get(sourceData,c("type")),
-      table = .get(sourceData,c("table")),
-      sample = sourceData[[c("sampleData")]],
-      min = min(.get(viewTable,'value',-Inf),na.rm=T),
-      max = max(.get(viewTable,'value',Inf),na.rm=T),
-      rows = .get(sourceData,c("numberOfRow")),
-      nulls =  .get(sourceData,c("numberOfNull")),
-      distincts = .get(sourceData,c("numberOfDistinct"))
-      )
-
-    viewData <- .set(viewData, c("attribute"), attributes )
-
-    viewData <- .set(viewData,c("period"),list(
-        extent = .get(sourceData,c("timeExtent")),
-        density = .get(sourceData,c("timeDensity")) 
-        ))
-
-    viewData <- .set(viewData,c("source"),list(
-        type = "vector",
-        attribution = as.character(tags$a(
-            href = .get(meta,c("origin","homepage","url")),
-            .get(meta,c("text","title","en"))
-            )),
-        layerInfo = list(
-          name =  .get(sourceData,c("layerName")),
-          maskName = .get(sourceDataMask,c("layerMaskName"))
-          )
-        ))
-
-    #
-    #set style default
-    #
-    geomType <- .get(sourceData,c("geomType"))
-    style <- .get(viewData,c("style"))
-
-    if(noDataCheck(style)){
-      viewData <- .set(viewData,c("style"), list())
-    }
-
-    if( geomType == "lines" ){
-      viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
-    }
-
-    view <- .set(view,c("data"),viewData)
-
-    return(view)
-
-  }
-
-  view <- update()
-
-  return(view)
-
-}
-
 #' Progress bar controller
 #' @param id id of the bar
 #' @param percent Integer progress percent
@@ -2751,3 +2665,90 @@ mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){
       )
     )
 }
+
+#' update vt view definition
+#' @param {list} view View list
+#' @param {list} sourceData List from reactLayerSummary reactive object
+#' @param {list} sourceDataMask List from sourceMaskData reactive object
+#' @param {list} additionalAttributes List of additional attributes
+#' @return view list updated
+#' @export 
+mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additionalAttributes=NULL){
+  #
+  # update meta data
+  #
+  update <- function(){
+    viewData <- .get(view,c("data"))
+    layerName <- .get(sourceData,c("layerName"))
+    meta <- mxDbGetLayerMeta(layerName)
+
+    viewData <- .set(viewData,c("geometry"),list(
+        type = .get(sourceData,c("geomType")),
+        centroid = .get(sourceData,c("centroid")),
+        extent = .get(sourceData,c("extent"))
+        ))
+
+    viewTable <- .get(sourceData,c("table"))
+
+    attributes <- list(
+      name = .get(sourceData,c("variableName")),
+      names = unique(c(
+          .get(sourceData,c("timeVariables")),
+          .get(sourceData,c("variableName")),
+          additionalAttributes
+          )),
+      type = .get(sourceData,c("type")),
+      table = .get(sourceData,c("table")),
+      sample = sourceData[[c("sampleData")]],
+      min = min(viewTable[,"value"],na.rm=T),
+      max = max(viewTable[,"value"],na.rm=T),
+      rows = .get(sourceData,c("numberOfRow")),
+      nulls =  .get(sourceData,c("numberOfNull")),
+      distincts = .get(sourceData,c("numberOfDistinct"))
+      )
+
+    viewData <- .set(viewData, c("attribute"), attributes )
+
+    viewData <- .set(viewData,c("period"),list(
+        extent = .get(sourceData,c("timeExtent")),
+        density = .get(sourceData,c("timeDensity")) 
+        ))
+
+    viewData <- .set(viewData,c("source"),list(
+        type = "vector",
+        attribution = as.character(tags$a(
+            href = .get(meta,c("origin","homepage","url")),
+            .get(meta,c("text","title","en"))
+            )),
+        layerInfo = list(
+          name =  .get(sourceData,c("layerName")),
+          maskName = .get(sourceDataMask,c("layerMaskName"))
+          )
+        ))
+
+    #
+    #set style default
+    #
+    geomType <- .get(sourceData,c("geomType"))
+    style <- .get(viewData,c("style"))
+
+    if(noDataCheck(style)){
+      viewData <- .set(viewData,c("style"), list())
+    }
+
+    if( geomType == "lines" ){
+      viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
+    }
+
+    view <- .set(view,c("data"),viewData)
+
+    return(view)
+
+  }
+
+  view <- update()
+
+  return(view)
+
+}
+

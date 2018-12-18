@@ -57,7 +57,7 @@ observeEvent(input$txtProjectTitle,{
   errors <- logical(0)
   warning <- logical(0)
 
-  errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < 5
+  errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < 3
   errors['error_title_long'] <- nchar(projectTitle) > 50
   errors['error_title_bad'] <- mxProfanityChecker(projectTitle)
   errors['error_title_exists'] <-  mxDbProjectTitleExists(projectTitle)

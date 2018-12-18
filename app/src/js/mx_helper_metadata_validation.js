@@ -77,8 +77,8 @@ export function validateMetadataTests(meta, attr){
 
   var tests = [
     validateAttribute(meta, attr, 3),
-    validateAbstract(meta,5),
-    validateTitle(meta,5),
+    validateAbstract(meta,3),
+    validateTitle(meta,3),
     validateKeywords(meta),
     validateContact(meta),
     validateIssuance(meta),
@@ -130,7 +130,7 @@ function validateAttribute(meta, attr,n) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateAbstract(meta,n) {
-  n = n || 5;
+  n = n || 3;
   var reasons = [];
   var h = mx.helpers;
   var str = h.path(meta, "text.abstract.en", "");
@@ -154,7 +154,7 @@ function validateAbstract(meta,n) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateTitle(meta,n) {
-  n = n || 5;
+  n = n || 3;
   var reasons = [];
   var h = mx.helpers;
   var str = h.path(meta, "text.title.en", "");
@@ -178,6 +178,7 @@ function validateTitle(meta,n) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateKeywords(meta,n) {
+  n = n || 3;
   var reasons = [];
   var h = mx.helpers;
   var keywords= h.path(meta, "text.keywords.keys", []);
@@ -257,7 +258,7 @@ function validateIssuance(meta) {
  */
 function validateLicense(meta,n) {
   var reasons = [];
-  n = n || 5;
+  n = n || 3;
   var h = mx.helpers;
   var licenses = h.path(meta, "license.licenses", []);
   var hasLicense= ! h.isEmpty(licenses);

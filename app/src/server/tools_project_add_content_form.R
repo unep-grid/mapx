@@ -75,7 +75,8 @@ observe({
     hasFileName <- !noDataCheck(filename)
     hasEmail <- mxEmailIsValid(email)
 
-    err[['txt_too_short_min_5']] <- !hasFileName || nchar(filename) < 5
+    err[['txt_too_short_min_3']] <- !hasFileName || nchar(filename) < 3
+    err[['error_title_bad']] <- mxProfanityChecker(filename)
     err[['txt_email_not_valid']] <- !hasEmail 
 
     output$uiValidateSourceUpload <- renderUI(mxErrorsToUi(errors=err,language=language))

@@ -57,7 +57,6 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
                 title = t("textual_keywords_title"),
                 type = "array",
                 format = "table",
-                minItems = 1,
                 items = list(
                   type = "string",
                   title = t("textual_keyword_item_title"),
@@ -387,7 +386,6 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
               urls = list(
                 type = "array",
                 title = t("origin_sources_list"),
-                minItems = 1,
                 uniqueItems = TRUE,
                 items = list(
                   type = "object",
@@ -476,7 +474,6 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
                   )
                 )
               ),
-            minItems = 1,
             uniqueItems = TRUE)
           )
         ),
