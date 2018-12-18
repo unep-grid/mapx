@@ -1,7 +1,12 @@
 
 
+observe({
+  if( isTRUE(input$btnEditSourcesMetadata > 0) || isTRUE(input$btnViewEditMetadata > 0) ){
+    reactData$triggerModalEditMetadata <- runif(1)
+  }
+})
 
-observeEvent(input$btnEditSourcesMetadata,{
+observeEvent(reactData$triggerModalEditMetadata,{
 
   mxCatch(title="btn edit source meta",{
     userRole <- getUserRole()
@@ -14,11 +19,25 @@ observeEvent(input$btnEditSourcesMetadata,{
 
     }else{
 
+
       layers <- reactListEditSources()  
       disabled <- NULL
       if(noDataCheck(layers)){
         layers <- list("noLayer")
         disabled <- TRUE
+      }
+
+
+      #
+      # Use the layer from the last edited view as default
+      #
+      view <- reactData$viewDataEdited
+      viewLayerName  <- .get(view, c("data","source","layerInfo","name"))
+
+      if( !noDataCheck(viewLayerName) && viewLayerName %in% layers ){
+        selectedLayer <- viewLayerName
+      }else{
+        selectedLayer <- NULL
       }
 
       uiOut <- tagList(
@@ -27,6 +46,7 @@ observeEvent(input$btnEditSourcesMetadata,{
           label = d("source_select_layer",language),
           choices = layers,
           multiple = FALSE,
+          selected = selectedLayer, 
           options = list(
             sortField="label"
             )

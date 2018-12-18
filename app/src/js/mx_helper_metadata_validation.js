@@ -107,7 +107,7 @@ function validateAttribute(meta, attr,n) {
   // if no attr given, get the first one.
   attr = attr || Object.keys(attributes)[0];
   var str = h.path(attributes, attr + ".en", "");
-  var hasAttr =  h.isStringRange(attr, n) && 
+  var hasAttr =  h.isStringRange(attr) && 
     h.isStringRange( str, n);
 
   if(!hasAttr) reasons.push("validate_meta_invalid_attribute");

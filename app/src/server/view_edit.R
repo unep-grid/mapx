@@ -203,12 +203,24 @@ observe({
                   }
                   )
                 )
+             
+              if(viewLayerName %in% reactListEditSources()){
+                btnList <- list(
+                  actionButton(
+                    inputId="btnViewEditMetadata",
+                    label=d("btn_edit_source_metadata",language)
+                    )
+                  )
+              }else{
+                btnList <- NULL 
+              }
               
               mxModal(
-                  id="modalViewEdit",
-                  title=tags$b(viewTitle),
-                  content=uiOut,
-                  textCloseButton=d("btn_close",language)
+                id="modalViewEdit",
+                title=tags$b(viewTitle),
+                content=uiOut,
+                textCloseButton=d("btn_close",language),
+                buttons = btnList
                 )
 
 
@@ -712,9 +724,6 @@ observe({
     }
 })
 })
-
-
-
 
 observeEvent(input$viewTitleSchema_init,{
   view = reactData$viewDataEdited

@@ -14,7 +14,11 @@ export function getSourceMetadata(id,force){
   if( !id || !urlSourceMeta) return Promise.reject('Missing id or fetch URL');
 
   /* get view object from storage or network */
-  var url = urlSourceMeta + id + ( force ? '?date=' + performance.now() : '');
+  //var url = urlSourceMeta + id + ( force ? '?date=' + performance.now() : '');
+  /*
+  * TODO: Find a way to cache metadata request...
+  */
+  var url = urlSourceMeta + id + '?date=' + performance.now();
 
   return fetch( url )
     .then( meta=> meta.json())

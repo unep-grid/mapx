@@ -60,7 +60,8 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
                 minItems = 1,
                 items = list(
                   type = "string",
-                  title = t("textual_keyword_item_title")
+                  title = t("textual_keyword_item_title"),
+                  minLength = 3
                   )
                 )
               )
@@ -349,7 +350,9 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
                   ),
                 email = list(
                   title = t("contact_email"),
-                  type = "string")
+                  type = "string",
+                  minLength = 3
+                  )
                 )
               )
             )

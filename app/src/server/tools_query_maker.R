@@ -13,6 +13,11 @@ observeEvent(input$btnShowQueryMaker,{
       )
     )
 
+  #
+  # Hack to clean up old link. No idea why it stays.
+  #
+  output$uiQueryEncrypted <- renderUI(tagList())
+
   if( isMember ){
     mxModal(
       id="test",
