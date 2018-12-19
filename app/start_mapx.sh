@@ -37,7 +37,6 @@ CONF_MAPX="\
 CONF_SHINY_SERVER="\
   run_as shiny; \n\
   server { \n\
-  disable_protocols websocket; \n\
   listen '$SHINY_PORT';\n\
   location / { \n\
   app_dir '$MAPX_PATH_APP'; \n\
