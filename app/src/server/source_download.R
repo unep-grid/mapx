@@ -6,8 +6,9 @@ observeEvent(reactData$sourceDownloadRequest,{
   project <- reactData$project
   language <- reactData$language
   isGuest <- isGuestUser()
-  meta <- mxDbGetLayerMeta(idSource)
-  isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
+  #meta <- mxDbGetLayerMeta(idSource)
+  #isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
+  isDownloadable <- "download" %in%  mxDbGetLayerServices(idSource)
   sourceTitle <- mxDbGetLayerTitle(idSource,language) 
   btnList = list()
 

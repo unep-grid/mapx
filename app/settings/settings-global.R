@@ -88,7 +88,18 @@ config[["geoserver"]] = list(
   urlPublic='http://127.0.0.1:8080/geoserver',
   user = 'admin',
   password = '1234',
-  dataDir = "/tmp/"
+  dataDir = "/tmp/",
+  dataStore = list(
+    sep = "@"
+    ),
+  servicesGroups = list(
+    idServices = c("WMS","WFS","WCS"),
+    groups = list(
+      "gs_ws_a" = c("WMS","WFS","WCS")[1],
+      "gs_ws_a" = c("WMS","WFS","WCS")
+      ),
+    groupSep = "@"
+    )
   )
 #
 # web resources : will be exposed to the client using shiny::addRessourcePath. 

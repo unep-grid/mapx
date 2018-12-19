@@ -2280,6 +2280,28 @@ mxDbGetLayerMeta <- function(layer){
   return(res)
 }
 
+#' Get layer services in default layer table
+#' @param layer Postgis layer stored in layer table.
+#' @export
+mxDbGetLayerServices <- function(idSource){
+  isDownloadableOld <-  isTRUE(mxDbGetQuery("
+      SELECT data#>>'{\"meta\",\"license\",\"allowDownload\"}' as allow_download
+      FROM mx_sources 
+      WHERE id ='" + idSource + "'")$allow_download == 'true')
+
+  services <- as.character(mxFromJSON(mxDbGetQuery("
+        SELECT services
+        FROM mx_sources 
+        WHERE id ='" + idSource + "'")$services))
+
+  if( isDownloadableOld && ( ! "mx_download" %in% services) ){
+    services = c("mx_download",services)
+  }
+
+  return(as.list(services))
+
+}
+
 #' Get layer title
 #' @param layer Postgis layer stored in layer table.
 #' @export
@@ -2302,6 +2324,13 @@ mxDbGetLayerTitle <- function(layer,language="en"){
   mxDbGetQuery(sql)$title
 }
 
+
+#' Get layer project id
+#' @param layer Postgis layer stored in layer table.
+#' @export
+mxDbGetLayerProject <- function(layer){
+  mxDbGetQuery("SELECT project FROM mx_sources where id = '" + tolower(layer) + "'" )$project
+}
 
 
 #' Encrypt or decrypt data using postgres pg_sym_encrypt

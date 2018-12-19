@@ -791,6 +791,11 @@ observeEvent(input$btnViewDeleteConfirm,{
     idView = id
     )
 
+  #
+  # Update geoserver publication
+  #
+  mxUnublishGeoServerView(idView)
+
   mxModal(
     id="modalViewEdit",
     close=TRUE
@@ -951,6 +956,14 @@ observeEvent(input$btnViewSave,{
       #
       view <- mxUpdateDefViewVt(view, sourceData, sourceDataMask, additionalAttributes)
 
+      #
+      # Update geoserver publication
+      #
+      if("public" %in% readers){
+        mxPublishGeoServerView(idView)
+      }else{
+        mxUnpublishGeoServerView(idView)
+      }
     }
     #
     # raster tiles

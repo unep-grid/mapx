@@ -2,22 +2,6 @@
 #
 # Geoserver manage
 #
-#tagList(
-#checkboxInput(
-#'checkSourceAllowDownload',
-#label = d('source_allow_download',language),
-#value = FALSE
-#),
-#checkboxInput(
-#'checkSourceAllowWMS',
-#label = d('source_allow_WMS',language),
-#value = FALSE
-#),
-#checkboxInput(
-#'checkSourceAllowWFS',
-#label = d('source_allow_WFS',language),
-#value = FALSE
-#),
 
 
 
@@ -109,14 +93,22 @@ observeEvent(input$btnEditSourceManage,{
     }else{
 
       idSource <- input$selectSourceLayerEdit 
-      target <-  mxDbGetQuery("select readers, editors from mx_sources where id ='"+idSource+"'")
+      target <-  mxDbGetQuery("SELECT readers, editors FROM mx_sources WHERE id ='"+idSource+"'")
+      services <- mxDbGetLayerServices(idSource)
       readers <- mxFromJSON(target$readers)
       editors <- mxFromJSON(target$editors)
       #
       # Who can view this
       #
-      sourceReadTarget <- c("publishers","admins") 
+      sourceReadTarget <- c("publishers","admins")
       sourceEditTarget <- c("publishers","admins")
+      sourceEditServices <- c("mx_download","gs_ws_a","gs_ws_b") # set in dict_main,settings-global. Used in geoserver.R.
+      names(sourceEditServices) <- d(sourceEditServices,lang=language)
+
+      # mx_download -> MapX : button download in each view
+      # ogc_read -> Geoserver : workspace_a, wms
+      # ogc_download -> geoserver : workspace_b, wms, wmts, wcs/wfs
+
       #
       # Format view list by email 
       #
@@ -157,6 +149,17 @@ observeEvent(input$btnEditSourceManage,{
           label=d("source_target_editors",language),
           choices=sourceEditTarget,
           selected=editors,
+          multiple=TRUE,
+          options=list(
+            sortField = "label",
+            plugins = list("remove_button")
+            )
+          ),
+        selectizeInput(
+          inputId="selectSourceServicesUpdate",
+          label=d("source_services",language),
+          choices=sourceEditServices,
+          selected=as.list(services),
           multiple=TRUE,
           options=list(
             sortField = "label",
@@ -338,8 +341,8 @@ observeEvent(input$btnUpdateSource,{
   blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
   if(blockUpdate) return()
-
-
+  oldServices <- mxDbGetLayerServices(idSource)
+  services <- input$selectSourceServicesUpdate
   readers <- input$selectSourceReadersUpdate
   editors <- input$selectSourceEditorsUpdate
   #
@@ -351,6 +354,14 @@ observeEvent(input$btnUpdateSource,{
     id = idSource,
     column = "date_modified",
     value = Sys.time()
+    )
+
+  mxDbUpdate(
+    table = .get(config,c("pg","tables","sources")),
+    idCol = "id",
+    id = idSource,
+    column = "services",
+    value = as.list(services)
     )
 
   mxDbUpdate(
@@ -376,6 +387,13 @@ observeEvent(input$btnUpdateSource,{
     column = "editors",
     value = as.list(editors)
     )
+
+  mxUpdateGeoserverSourcePublishing(
+    idSource = idSource,
+    oldServices = as.list(oldServices),
+    newServices = as.list(services)
+    )
+
   #
   # Generate the modal panel
   #
@@ -387,6 +405,7 @@ observeEvent(input$btnUpdateSource,{
   #
 
   reactData$updateEditSourceLayerList <- runif(1)
+
 })
 
 

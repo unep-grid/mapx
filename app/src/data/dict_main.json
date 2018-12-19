@@ -3337,6 +3337,18 @@
     "ps": ""
   },
   {
+    "id": "source_services",
+    "en": "Services",
+    "fr": "Services",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "download_select_format_vector",
     "en": "Output format",
     "fr": "Format de sortie",
@@ -4475,6 +4487,42 @@
     "bn": "",
     "fa": "خدمات آنلاین نقشه (WMS)",
     "ps": "د نقشې آنلاین خدمتونه"
+  },
+  {
+    "id": "mx_download",
+    "en": "Allow this source to be downloaded",
+    "fr": "Autoriser le téléchargement de cette source",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "gs_ws_a",
+    "en": "Publish all related views via WMS",
+    "fr": "Publier toutes les vues liées via WMS",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "gs_ws_b",
+    "en": "Publish all related views via WFS/WCS",
+    "fr": "Publier toutes les vues liées via WFS/WCS",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "src_download_issues",
