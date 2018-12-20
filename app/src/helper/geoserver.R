@@ -1,14 +1,29 @@
 
+#' idGroup = Id of the group of services. 
+#' idService = Id of the service in services.name 
+#' idSource= Id of the source
+#' idView = id of the view
+
 
 #' Get a list of service group config
 #'
 #' @return {List} List of group by services
-#
-#
-mxGetGeoServerServicesGroups <- function(){
-  .get(config,c("geoserver","servicesGroups"))
+mxGetGeoServerServices <- function(){
+  .get(config,c("geoserver","services"))
 }
 
+
+#' Try to connect to geoerver
+#' @param {GSManager} Geosapi object
+#' @return {Logical} success
+mxGetGeoServerTryConnect <- function(gMan){
+  out <- TRUE;
+  tryCatch(gMan$connect(),
+    error = function(err){
+      out <- FALSE
+    })
+  return(out)
+}
 
 #' Get default geoserver manager object
 #'
@@ -17,7 +32,7 @@ mxGetGeoServerManager = function(){
 
   gMan <- .get(config,c("geoserver","manager"))
 
-  if(noDataCheck(gMan)){
+  if( noDataCheck(gMan) || ! mxGetGeoServerTryConnect(gMan) ){
     gC <- config$geoserver
 
     gMan <- GSManager$new(
@@ -27,11 +42,11 @@ mxGetGeoServerManager = function(){
       logger = NULL 
       )
 
-   .set(config, c("geoserver","manager"),gMan)
+    config[["geoserver"]][["manager"]] <<- gMan
 
   }
 
-return(gMan)
+  return(gMan)
 }
 
 #' Get workspace(s) of the given source
@@ -39,11 +54,11 @@ return(gMan)
 #' @param {Chracter} idSource Id of the source
 #' @param {Chracter} idGroup Group of services
 #' @return Names of the workspaces 
-mxGetGeoServerSourceWorkspaceNames <- function(idSource,idGroup){
+mxGetGeoServerSourceWorkspaceNames <- function(idSource,idGroup=NULL){
 
   idProject <- mxDbGetLayerProject(idSource) 
   if(noDataCheck(idGroup)) idGroup <- mxDbGetLayerServices(idSource)
-  groups <- names(mxGetGeoServerServicesGroups()$groups)
+  groups <- names(mxGetGeoServerServices()$groups)
   groups <- groups[groups %in% idGroup]
 
   workspaces <- sapply(groups,function(idGroup){
@@ -59,8 +74,8 @@ mxGetGeoServerSourceWorkspaceNames <- function(idSource,idGroup){
 #' @param {Character} idGroup  Id of the service group (gs_ws_a, gs_ws_b, etc. Group sets in settings-global)
 #' @return {Character} workspace name
 mxGetGeoServerWorkspaceName <- function(idProject,idGroup = "gs_ws_a"){
-  groupSep <- mxGetGeoServerServicesGroups()$groupSep
-  idWorkspace <- idProject + groupSep + idGroup
+  groupSep <- mxGetGeoServerServices()$groupSep
+  idWorkspace <- idProject + groupSep + idGroup 
   return(idWorkspace)
 }
 
@@ -70,11 +85,10 @@ mxGetGeoServerWorkspaceName <- function(idProject,idGroup = "gs_ws_a"){
 #' @param {Chracter} idSource Id of the source
 #' @return Names of source groups
 mxGetGeoServerSourceGroupNames <- function(idSource){
-
   services <- mxDbGetLayerServices(idSource)
-  groups <- names(mxGetGeoServerServicesGroups()$groups)
-  groups <- groups[groups %in% services]
-  return(groups)
+  idGroup <- names(mxGetGeoServerServices()$groups)
+  idGroup <- idGroup[idGroup %in% services]
+  return(idGroups)
 }
 
 #' Save geoserver workspace for a project
@@ -83,18 +97,20 @@ mxGetGeoServerSourceGroupNames <- function(idSource){
 #' @return {Logical} success
 mxSaveGeoServerWorkspace = function(idProject){
 
+  mxDebugMsg("mx auto save workspace")
   gMan <- mxGetGeoServerManager()
   if(noDataCheck(idProject)) return()
   res <- FALSE
   workspaces <- gMan$getWorkspaceNames()
   #
-  # Each MapX project = 2 workspace. <id_project>_a and <id_project>_b
+  # Each MapX project = 2 workspace. gs-ws-a__<idproject> and gs-ws-b__<idproject>
   #
-  servicesGroups <- mxGetGeoServerServicesGroups()
-  idServices <- servicesGroups$idServices
-  groups <- servicesGroups$groups
+  services <- mxGetGeoServerServices()
+  idServices <- services$names
+  groups <- services$groups
 
-  for(idGroup in names(groups)){
+  ok <- sapply(names(groups),function(idGroup){
+
 
     #
     # Set the workspace name
@@ -115,17 +131,23 @@ mxSaveGeoServerWorkspace = function(idProject){
     #
     # Set or update services
     #
-    group <- groups[idGroup]
-    for( idS in idServices ){
+    group <- groups[[idGroup]]
+
+    updated <- sapply(idServices,function(idS){
+      enableService <- idS %in% group
       sSet <- GSServiceSettings$new( service = idS )
-      sSet$setTitle(mxDbGetProjectTitle(idProject,"en") + ":"+ s)
-      sSet.setEnabled( idS %in% group )
-      gMan$updateServiceSettings(sSet, service = idS, ws = idWorkspace)
-    }
+      sSet$setTitle(mxDbGetProjectTitle(idProject,"en") + ": "+ idS)
+      sSet$setEnabled( enableService )
+      updated <- gMan$updateServiceSettings(sSet, service = idS, ws = idWorkspace)
+      return(updated)
 
-  }
+})
 
-  return(TRUE)
+    return(all(updated))
+
+      })
+
+  return(all(ok))
 }
 
 
@@ -134,6 +156,7 @@ mxSaveGeoServerWorkspace = function(idProject){
 #' @param {Chracter} idWorkspace Id of the workspace
 #' @return {Logical} success
 mxSaveGeoServerPostgisDatastore = function(idWorkspace){
+  mxDebugMsg("mx gs save geoserver postgis datasource in " + idWorkspace)
   gMan <- mxGetGeoServerManager()
   datastore <- mxGetGeoServerDatastoreName(idWorkspace,'pg')
   datastores <- gMan$getDataStoreNames(idWorkspace)
@@ -151,7 +174,7 @@ mxSaveGeoServerPostgisDatastore = function(idWorkspace){
   }else{
     ds <- gMan$getDataStore(idWorkspace, datastore)
   }
- 
+
   ds$setConnectionParameter('host',.get(config,c('pg','host')))
   ds$setConnectionParameter('user',.get(config,c('pg','read','user')))
   ds$setConnectionParameter('passwd',.get(config,c('pg','read','password')))
@@ -159,12 +182,9 @@ mxSaveGeoServerPostgisDatastore = function(idWorkspace){
   ds$setConnectionParameter('port',.get(config,c('pg','port')))
   ds$setConnectionParameter('schema','public')
   ds$setConnectionParameter('dbtype','postgis')
-
-  if(exists){
-    res <- gMan$updateDataStore(idWorkspace, ds)
-  }else{
-    res <- gMan$createDataStore(idWorkspace, ds)
-  }
+    
+  res <- gMan$updateDataStore(idWorkspace, ds)
+  mxDebugMsg("mx gs end save geoserver postgis datasource in " + idWorkspace)
   return(res)
 }
 
@@ -174,21 +194,24 @@ mxSaveGeoServerPostgisDatastore = function(idWorkspace){
 #' @return {Character} name of the datastore
 mxGetGeoServerDatastoreName <- function(idWorkspace,type='pg'){
   sep <- .get(config,c("geoserver","dataStore","sep"))
-  type + sep + idWorkspace
+  idWorkspace + sep + type
 }
 
 #' Delete a geoserver workspace
 #'
 #' @param {Character} idWorkspace Id of the workspace
 #' @return {Logical} success
-mxDeleteGeoServerWorkspace <- function(idWorkpace){
+mxDeleteGeoServerWorkspace <- function(idWorkspace){
   gMan <- mxGetGeoServerManager()
   workspaces <- gMan$getWorkspaceNames()
-  res <- FALSE
-  if( idWorkspace %in% workspaces ){
-    res <- gMan$deleteWorkspace(idWorkspace,recurse=TRUE)
-  }
-  return(res)
+  res <- sapply(idWorkspace,function(idW){
+    res <- TRUE
+    if( idW %in% workspaces ){
+      res <- gMan$deleteWorkspace(idW,recurse=TRUE)
+    }
+    return(res)
+  })
+  return(all(res))
 }
 
 #' Publish a single view in a group of workspace
@@ -196,7 +219,7 @@ mxDeleteGeoServerWorkspace <- function(idWorkpace){
 #' @param {Character} idView Id of the view to publish
 #' @param {Character} idWorkspace id of the workspace. Default = all source workspaces. Multiple allowed.
 #' @return {Logical} success
-mxPublishGeoServerView <- function(idView,idWorkspace){
+mxPublishGeoServerView <- function(idView,idWorkspace=NULL){
   
   gMan <- mxGetGeoServerManager()
   idProject <- mxDbGetViewProject(idView)
@@ -209,6 +232,7 @@ mxPublishGeoServerView <- function(idView,idWorkspace){
   viewTitle <- mxDbGetViewsTitle(idView,asNamedList=F)$title
   bbox <- mxDbGetLayerExtent(idSource)
 
+  mxDebugMsg("Publish view " + idView + " in workspaces " + paste(idWorkspace,collapse=","))
   published <- sapply(idWorkspace,function(idW){
 
     idDataSource <- mxGetGeoServerDatastoreName(idW,'pg')
@@ -250,6 +274,7 @@ mxPublishGeoServerView <- function(idView,idWorkspace){
     layer$addStyle("generic")
 
     # try to publish the complete layer (featuretype + layer)
+    
     published <- gMan$publishLayer(idW, idDataSource, featureType, layer)
       })
   return(all(published))
@@ -260,25 +285,43 @@ mxPublishGeoServerView <- function(idView,idWorkspace){
 #' @param {Character} idView Id of the view
 #' @param {Character} idWorkspace id of the workspace. Default = all source workspaces. Multiple allowed.
 #' @return {Logical} success
-mxUnpublishGeoServerView <- function(idView,idWorkspace){
+mxUnpublishGeoServerView <- function(idView,idWorkspace=NULL){
 
   gMan <- mxGetGeoServerManager()
   idSource <- mxDbGetViewMainSource(idView)
-  
+
   if(noDataCheck(idSource)) stop("mxUnublishGeoServerView : source not defined ")
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
   if(noDataCheck(idWorkspace)) return(FALSE)
 
   unpublished <- sapply(idWorkspace,function(idW){
+
+
+    layerRemoved <- FALSE
+    featureTypeRemoved <- FALSE
     idDataSource <- mxGetGeoServerDatastoreName(idW,'pg')
-    layerName <- idWorkspace + ":" + idView 
+    dsNames <- gMan$getFeatureTypeNames(idW,idDataSource)
+    layerName <- idW + ":" + idView 
     layerNames <- gMan$getLayerNames()
     res <- TRUE
-    if(layerName %in% layerNames){
-      res <- gMan$unpublishLayer(idWorkspace,idDataSource,layerName)
+    rmLayer <- layerName %in% layerNames
+    rmFeatureType <- idView %in% dsNames
+
+    #
+    # NOTE: unpublishLayer does not 
+    #
+    if( rmLayer ){
+      layerRemoved <- gMan$deleteLayer(layerName)
     }
+
+    if( rmFeatureType ){
+      featureTypeRemoved <- gMan$deleteFeatureType(idW,idDataSource,idView)
+    }
+
+    res <- layerRemoved && featureTypeRemoved 
+    
     return(res)
-      })
+  })
 
   return(all(unpublished))
 }
@@ -312,7 +355,7 @@ mxPublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
 #' @param {Character} idSource Id of the source
 #' @param {Character} idWorkspace id of the workspace. Default = all source workspaces. Multiple allowed.
 #' @return {Logical} success
-mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
+mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace=NULL){
 
   if(noDataCheck(idSource)) stop("mxUnpublishGeoServerAllViewBySource: no source")
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
@@ -322,9 +365,9 @@ mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
   idViews <- idViews[idViews$is_public,c('id')]
 
   res <- sapply(idViews,function(id){
-    published <- mxUnpublishGeoServerAllViewsBySource(id,idWorkspace) 
+    published <- mxUnpublishGeoServerView(id,idWorkspace) 
     return(published)
-      })
+  })
 
   return(all(res))
 
@@ -333,25 +376,44 @@ mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
 #' Update automatic publishing of all public views
 #' 
 #' @param {Character} idSource Id of the source
-#' @param {Character} oldServices previous services
-#' @param {Character} newServices new services
+#' @param {Character} idProject Id of the project
+#' @param {Character} idGroups Groups of service e.g. gs_ws_a
+#' @param {Character} idGroupsOld Groups of service e.g. gs_ws_a
 #' @return {Logical} success
-mxUpdateGeoserverSourcePublishing <- function(idSource,oldServices,newServices){
+mxUpdateGeoserverSourcePublishing <- function(idSource,idProject=NULL,idGroups=list(),idGroupsOld=list()){
 
+  if(noDataCheck(idProject)) idProject <- mxDbGetLayerProject(idSource)
+  if(noDataCheck(idSource)) return(FALSE)
 
-  serviceRemoved <- oldServices[!oldServices %in% newServices] 
-  serviceAdded <- newServices[!newServices %in% oldServices]
+  mxSaveGeoServerWorkspace(idProject)
 
+  idGroupsAll <- names(mxGetGeoServerServices()$groups)
 
-  idWorkspaceWhereAddViews <- mxGetGeoServerSourceWorkspaceNames(idSource,serviceAdded)
-  idWorkspaceWhereRemoveViews <- mxGetGeoServerSourceWorkspaceNames(idSource,serviceAdded)
+  idWorkspaceWhereRemoveViews <- mxGetGeoServerSourceWorkspaceNames(idSource,idGroupsAll)
+  idWorkspaceWhereAddViews <- mxGetGeoServerSourceWorkspaceNames(idSource,idGroups)
 
-  browser()
-  if(!noDataCheck(serviceRemoved)) mxUnpublishGeoServerAllViewsBySource(idSource,idWorkspaceWhereRemoveViews)
-  if(!noDataCheck(serviceAdded)) mxPublishGeoServerAllViewsBySource(idSource,idWorkspaceWhereAddViews)
+  mxUnpublishGeoServerAllViewsBySource(idSource,idWorkspaceWhereRemoveViews)
+  mxPublishGeoServerAllViewsBySource(idSource,idWorkspaceWhereAddViews)
 
   return(TRUE)
 }
+
+#' Delete automatically all workspace of a project.
+#' 
+#' @param {Character} idProject Id of the project
+#
+mxDeleteGeoServerAllProjectWorkspace <- function(idProject){
+
+  idGroupsAll <- names(mxGetGeoServerServices()$groups)
+
+  res <- sapply(idGroupsAll,function(idGroup){
+    idWorkspace <- mxGetGeoServerWorkspaceName(idProject,idGroup) 
+    mxDeleteGeoServerWorkspace(idWorkspace)
+  })
+
+  return(all(res))
+}
+
 
 
 

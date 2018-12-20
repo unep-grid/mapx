@@ -2,15 +2,15 @@
 observeEvent(input$btnShowProjectDelete,{
 
   userRole <- getUserRole()
-  project <- reactData$project
+  idProject <- reactData$project
   language <- reactData$language 
   isAdmin <- isTRUE(userRole$admin)
   userData <- reactUser$data
-  isProjectDefault <- isTRUE(project == config[[c("project","default")]])
+  isProjectDefault <- isTRUE(idProject == config[[c("project","default")]])
 
   if( isAdmin && !isProjectDefault ){
     
-    projectData <- mxDbGetProjectData(project)
+    projectData <- mxDbGetProjectData(idProject)
     projectTitle <- .get(projectData,c("title",language))
     reactData$projectTitle <- projectTitle
     if(noDataCheck(projectTitle)) return()
@@ -149,10 +149,10 @@ observeEvent(input$btnDeleteProjectConfirm,{
   sources <-  unique(reactData$projectDeleteSources)
 
   userRole <- getUserRole()
-  project <- reactData$project
+  idProject <- reactData$project
   language <- reactData$language 
   isAdmin <- isTRUE(userRole$admin)
-  isProjectDefault <- isTRUE(project == config[[c("project","default")]])
+  isProjectDefault <- isTRUE(idProject == config[[c("project","default")]])
 
   if( !isAdmin || isProjectDefault ) return()
 
@@ -172,7 +172,13 @@ observeEvent(input$btnDeleteProjectConfirm,{
   #
   # Remove project itself
   #
-  mxDbGetQuery("delete from mx_projects where id = '" + project + "'")
+  mxDbGetQuery("delete from mx_projects where id = '" + idProject + "'")
+
+  #
+  # Remove Services
+  #
+  mxDeleteGeoServerAllProjectWorkspace(idProject)
+
 
   reactUser <- reactiveValues()
   reactData <- reactiveValues()

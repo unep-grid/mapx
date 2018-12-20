@@ -103,7 +103,7 @@ observe({
     btnEnable <- FALSE
     hasFileName <- !noDataCheck(filename)
 
-    err[['txt_too_short_min_5']] <- !hasFileName || nchar(filename) < 5
+    err[['txt_too_short_min_3']] <- !hasFileName || nchar(filename) < 5
 
     output$uiValidateDownload <- renderUI(mxErrorsToUi(errors=err,language=language))
 

@@ -4514,8 +4514,8 @@
   },
   {
     "id": "gs_ws_b",
-    "en": "Publish all related views via WFS/WCS",
-    "fr": "Publier toutes les vues liées via WFS/WCS",
+    "en": "Publish all related views via WMS/WFS/WCS",
+    "fr": "Publier toutes les vues liées via WMS/WFS/WCS",
     "es": "",
     "ru": "",
     "zh": "",

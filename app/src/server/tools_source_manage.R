@@ -341,8 +341,9 @@ observeEvent(input$btnUpdateSource,{
   blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
   if(blockUpdate) return()
-  oldServices <- mxDbGetLayerServices(idSource)
-  services <- input$selectSourceServicesUpdate
+  idGroupsServicesOld <- mxDbGetLayerServices(idSource)
+  idGroupsServices <- input$selectSourceServicesUpdate
+
   readers <- input$selectSourceReadersUpdate
   editors <- input$selectSourceEditorsUpdate
   #
@@ -361,7 +362,7 @@ observeEvent(input$btnUpdateSource,{
     idCol = "id",
     id = idSource,
     column = "services",
-    value = as.list(services)
+    value = as.list(idGroupsServices)
     )
 
   mxDbUpdate(
@@ -389,9 +390,10 @@ observeEvent(input$btnUpdateSource,{
     )
 
   mxUpdateGeoserverSourcePublishing(
+    idProject = project,
     idSource = idSource,
-    oldServices = as.list(oldServices),
-    newServices = as.list(services)
+    idGroups = as.list(idGroupsServices),
+    idGroupsOld = as.list(idGroupsServicesOld)
     )
 
   #

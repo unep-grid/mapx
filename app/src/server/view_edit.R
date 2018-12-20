@@ -959,11 +959,22 @@ observeEvent(input$btnViewSave,{
       #
       # Update geoserver publication
       #
-      if("public" %in% readers){
-        mxPublishGeoServerView(idView)
-      }else{
-        mxUnpublishGeoServerView(idView)
-      }
+      tryCatch({
+       idGroupsServices <- mxDbGetLayerServices(sourceData$layerName)
+       idGroupsAll <- names(mxGetGeoServerServices()$groups)
+       hasServices <- any(idGroupsServices %in% idGroupsAll)
+
+       if(hasServices){
+         if("public" %in% readers){
+           mxPublishGeoServerView(idView)
+         }else{
+           mxUnpublishGeoServerView(idView)
+         }
+       }
+
+      },error = function(err){
+        warning(err)
+      })
     }
     #
     # raster tiles
@@ -1005,6 +1016,7 @@ observeEvent(input$btnViewSave,{
     # Trigger next reactViews call
     #
     reactData$updateViewListFetchOnly <- runif(1)
+
 
     #
     # Display info text

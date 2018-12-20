@@ -92,11 +92,11 @@ config[["geoserver"]] = list(
   dataStore = list(
     sep = "@"
     ),
-  servicesGroups = list(
-    idServices = c("WMS","WFS","WCS"),
+  services = list(
+    names = c("WMS","WFS","WCS"),
     groups = list(
       "gs_ws_a" = c("WMS","WFS","WCS")[1],
-      "gs_ws_a" = c("WMS","WFS","WCS")
+      "gs_ws_b" = c("WMS","WFS","WCS")
       ),
     groupSep = "@"
     )

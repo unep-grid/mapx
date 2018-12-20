@@ -32,7 +32,8 @@
   display:flex;
   flex-direction:column;
   width: 550px;
-  height:auto!important;
+  height:auto;
+  /*height:auto!important;*/
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;

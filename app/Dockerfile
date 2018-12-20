@@ -47,7 +47,7 @@ RUN apt-get update \
     options(repos = rep); \
     install.packages("$r_packages"); \n \
     library(devtools) ; \n \
-    install_github('eblondel/geosapi');" > install.R \
+    install_github('eblondel/geosapi',ref='2b22ff9');" > install.R \
     && Rscript install.R \ 
     && apt-get purge -y --auto-remove $r_deps_dev \
     && apt-get clean \
