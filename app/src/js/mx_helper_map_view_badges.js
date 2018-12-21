@@ -197,8 +197,7 @@ function addBadgeDiaf(opt){
     .then( result => {
       var elStar = result.elStar;
       elBadges.appendChild(elStar);
-      elStar.dataset.view_action_key = "btn_opt_meta";
-      elStar.dataset.view_action_handler = "shiny";
+      elStar.dataset.view_action_key = "btn_opt_diaf_modal";
       elStar.dataset.view_action_target = result.idView;
     });
 }

@@ -240,6 +240,7 @@ export function modal(o){
     debounceTime :10
   });
 
+  return(modal);
 }
 
 

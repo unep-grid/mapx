@@ -65,6 +65,15 @@ export function handleViewClick(o){
         }
       },
       {
+        comment :"target is the view meta diaf badge",
+        test : el.dataset.view_action_key == "btn_opt_diaf_modal",
+        action : function(){
+          var viewTarget = el.dataset.view_action_target;
+          var view = h.getView(viewTarget);
+          h.displayDiafModal(view);
+        }
+      },
+      {
         comment :"target is the move top button",
         test : el.dataset.view_action_key == "btn_opt_move_top",
         action : function(){

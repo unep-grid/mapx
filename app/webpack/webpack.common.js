@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const CompressionPlugin = require('compression-webpack-plugin');
 //const ManifestPlugin = require('webpack-manifest-plugin');
 /**
 * To remove in dev
@@ -55,6 +56,9 @@ module.exports = {
           sizes: [96, 128, 192, 256, 384, 512,1024] // multiple sizes
         }
       ]
+    }),
+    new CompressionPlugin({
+      test: /\.js(\?.*)?$/i
     }),
     new IconFontPlugin({
       fontName : "mx-icons-font"

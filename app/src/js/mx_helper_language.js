@@ -21,7 +21,9 @@ export function updateLanguage(o){
 
 }
 
-
+export function splitnwords(str){
+  return str.split(/((?:\w+ ){6})/g).filter(Boolean).join("\n");
+}
 
 export function getDict(lang){
   "use strict";
@@ -92,6 +94,9 @@ export function updateLanguageElements(o) {
 
       var setValue = {
         "tooltip": function(el) {
+          if(el.dataset.lang_split){
+            label = splitnwords(label);
+          }
           el.setAttribute("aria-label", label);
           if (el.className.indexOf("hint--") == -1) {
             el.className += " hint--left";
