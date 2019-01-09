@@ -1854,7 +1854,7 @@ export function removeView(o){
   }
 
   views.splice(vIndex, 1);
-  mx.helpers.updateViewsFilter();
+  mx.helpers.updateViewsFilter({from:'removeView'});
   mx.helpers.viewControler(o);       
 }
 
@@ -1880,6 +1880,9 @@ export function setViewsComponents(views){
     attributes = h.path(v,"data.attribute.names","");
     customStyle = h.path(v,"data.style.custom","");
 
+    
+    if(isVt) components.push("vt");
+    if(isRt) components.push("rt");
     if(isSm && story && story.length) components.push("story_map");
     if(isVt && widgets && widgets.length) components.push("dashboard");
     if(!isSm) components.push("layer");
@@ -1982,7 +1985,7 @@ export function renderViewsList(o){
     /**
      * Generate filter
      */
-    h.updateViewsFilter();
+    h.updateViewsFilter({from:'renderViewsList'});
 
     /**
     * Add views badges
@@ -2149,7 +2152,7 @@ export function updateViewsFilter(o){
   var elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
   var elFilters = document.createElement("div");
   var elFoldFilters ;
-
+  var t0 =  performance.now();
   elContainer.innerHTML = '';
 
   h.getDictItem("view_filter_by_tags")
@@ -2163,9 +2166,6 @@ export function updateViewsFilter(o){
       elContainer.appendChild(elFoldFilters);
     })
     .then(function(){
-
-      console.log("Update view filter")
-
       /**
        * Add filter by class, type, ... 
        */
@@ -2218,6 +2218,10 @@ export function updateViewsFilter(o){
               var el =  makeEl(t.key,t.label,t.count,t.type);
               elTypeContent.appendChild(el);
             });
+
+            var t1 = performance.now();
+
+            console.log("View filter for type " + type + " generated in " + Math.round((t1 - t0)) + " [ms] from " + o.from );
 
           });
       });
@@ -3288,20 +3292,23 @@ export function addView(o){
       idView : view.id
     });
 
-    if( oldView ){
+    /*
+     * NOTE: this should be passed as an option:
+     * update a view should not be evaluated by comparison..
+     */
+    var hasChanged = !mx.helpers.isEqual(oldView,view);
+
+    if( hasChanged ){
       /*
        * This is an refresh or update
-       * instead of rendering
-       * modifying things here seems reasonable
        */
       mx.helpers.cleanRemoveModules(oldView);
       viewIndex = m.views.indexOf(oldView);
       m.views[viewIndex] = view;
       mx.helpers.updateLanguageViewsList({id:o.id});
-
+      mx.helpers.updateViewsFilter();
     }
 
-    mx.helpers.updateViewsFilter();
   }
 
   /*
@@ -3349,9 +3356,7 @@ export function addView(o){
   /**
    * Add view
    */
-
   handler(view.type);
-
 
   /**
    * handler based on view type

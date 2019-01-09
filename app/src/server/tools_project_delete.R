@@ -12,8 +12,10 @@ observeEvent(input$btnShowProjectDelete,{
     
     projectData <- mxDbGetProjectData(idProject)
     projectTitle <- .get(projectData,c("title",language))
+    if(noDataCheck(projectTitle)){
+      projectTitle <- .get(projectData,c("title","en"))
+    }
     reactData$projectTitle <- projectTitle
-    if(noDataCheck(projectTitle)) return()
 
     #
     # Set public mode and 

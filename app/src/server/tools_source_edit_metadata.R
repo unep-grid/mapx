@@ -161,11 +161,6 @@ observeEvent(input$btnEditSourceMetadata,{
         meta = .set(meta,c("text","attributes",a),NULL)
       }
 
-      #  #
-      ## Update extent
-      ##
-      #extent <- mxDbGetLayerExtent(layer)
-
       #
       # Create schema for source metadata,
       # Use attributes to generate attributes object

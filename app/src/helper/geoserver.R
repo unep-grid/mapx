@@ -160,7 +160,7 @@ mxSaveGeoServerPostgisDatastore = function(idWorkspace){
   gMan <- mxGetGeoServerManager()
   datastore <- mxGetGeoServerDatastoreName(idWorkspace,'pg')
   datastores <- gMan$getDataStoreNames(idWorkspace)
-  
+
   ds <- NULL
   exists <- datastore %in% datastores
 
@@ -182,7 +182,7 @@ mxSaveGeoServerPostgisDatastore = function(idWorkspace){
   ds$setConnectionParameter('port',.get(config,c('pg','port')))
   ds$setConnectionParameter('schema','public')
   ds$setConnectionParameter('dbtype','postgis')
-    
+
   res <- gMan$updateDataStore(idWorkspace, ds)
   mxDebugMsg("mx gs end save geoserver postgis datasource in " + idWorkspace)
   return(res)
@@ -210,7 +210,7 @@ mxDeleteGeoServerWorkspace <- function(idWorkspace){
       res <- gMan$deleteWorkspace(idW,recurse=TRUE)
     }
     return(res)
-  })
+      })
   return(all(res))
 }
 
@@ -220,12 +220,18 @@ mxDeleteGeoServerWorkspace <- function(idWorkspace){
 #' @param {Character} idWorkspace id of the workspace. Default = all source workspaces. Multiple allowed.
 #' @return {Logical} success
 mxPublishGeoServerView <- function(idView,idWorkspace=NULL){
-  
+
   gMan <- mxGetGeoServerManager()
   idProject <- mxDbGetViewProject(idView)
   idSource <- mxDbGetViewMainSource(idView)
-  
-  if(noDataCheck(idSource)) stop("mxPublishGeoServerView : source not defined ")
+
+  #if(noDataCheck(idSource)) return(FALSE)
+  if(noDataCheck(idSource)) {
+    mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
+    return(FALSE)
+  }
+
+
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
   if(noDataCheck(idWorkspace)) return(FALSE)
 
@@ -274,7 +280,7 @@ mxPublishGeoServerView <- function(idView,idWorkspace=NULL){
     layer$addStyle("generic")
 
     # try to publish the complete layer (featuretype + layer)
-    
+
     published <- gMan$publishLayer(idW, idDataSource, featureType, layer)
       })
   return(all(published))
@@ -290,7 +296,12 @@ mxUnpublishGeoServerView <- function(idView,idWorkspace=NULL){
   gMan <- mxGetGeoServerManager()
   idSource <- mxDbGetViewMainSource(idView)
 
-  if(noDataCheck(idSource)) stop("mxUnublishGeoServerView : source not defined ")
+  #if(noDataCheck(idSource)) return(FALSE)
+  if(noDataCheck(idSource)) {
+    mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
+    return(FALSE)
+  }
+
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
   if(noDataCheck(idWorkspace)) return(FALSE)
 
@@ -319,9 +330,9 @@ mxUnpublishGeoServerView <- function(idView,idWorkspace=NULL){
     }
 
     res <- layerRemoved && featureTypeRemoved 
-    
+
     return(res)
-  })
+      })
 
   return(all(unpublished))
 }
@@ -334,7 +345,12 @@ mxUnpublishGeoServerView <- function(idView,idWorkspace=NULL){
 #' @return {Logical} success
 mxPublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
 
-  if(noDataCheck(idSource)) stop("mxPublishGeoServerAllViewBySource: no source")
+  #if(noDataCheck(idSource)) stop("mxPublishGeoServerAllViewBySource: no source")
+  if(noDataCheck(idSource)) {
+    mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
+    return(FALSE)
+  }
+
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
   if(noDataCheck(idWorkspace)) return(FALSE)
 
@@ -357,7 +373,10 @@ mxPublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
 #' @return {Logical} success
 mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace=NULL){
 
-  if(noDataCheck(idSource)) stop("mxUnpublishGeoServerAllViewBySource: no source")
+  if(noDataCheck(idSource)) {
+    mxDebugMsg("mxUnpublishGeoServerAllViewsBySource no source")
+    return(FALSE)
+  }
   if(noDataCheck(idWorkspace)) idWorkspace <- mxGetGeoServerSourceWorkspaceNames(idSource)
   if(noDataCheck(idWorkspace)) return(FALSE)
 
@@ -367,7 +386,7 @@ mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace=NULL){
   res <- sapply(idViews,function(id){
     published <- mxUnpublishGeoServerView(id,idWorkspace) 
     return(published)
-  })
+      })
 
   return(all(res))
 
@@ -383,7 +402,10 @@ mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace=NULL){
 mxUpdateGeoserverSourcePublishing <- function(idSource,idProject=NULL,idGroups=list(),idGroupsOld=list()){
 
   if(noDataCheck(idProject)) idProject <- mxDbGetLayerProject(idSource)
-  if(noDataCheck(idSource)) return(FALSE)
+  if(noDataCheck(idSource)) {
+    mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
+    return(FALSE)
+  }
 
   mxSaveGeoServerWorkspace(idProject)
 
@@ -409,7 +431,7 @@ mxDeleteGeoServerAllProjectWorkspace <- function(idProject){
   res <- sapply(idGroupsAll,function(idGroup){
     idWorkspace <- mxGetGeoServerWorkspaceName(idProject,idGroup) 
     mxDeleteGeoServerWorkspace(idWorkspace)
-  })
+      })
 
   return(all(res))
 }

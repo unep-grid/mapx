@@ -17,7 +17,7 @@ export function jedRender(o) {
   return import("json-editor")
     .then(function(){
       return Promise.all([
-       import("./mx_extend_jed_medium.js"),
+       //import("./mx_extend_jed_medium.js"),
        import("./mx_extend_jed_position.js"),
        import("./mx_extend_jed_ace.js"),
        import("./mx_extend_jed_array2.js"),
@@ -40,7 +40,6 @@ export function jedRender(o) {
 
       if(!el) throw("jed element " + id + "not found");
       JSONEditor.plugins.ace.theme = 'github';
-      JSONEditor.plugins.selectize.enable = window.jQuery && window.jQuery().selectize;
 
       var opt_final = {};
 
@@ -69,6 +68,10 @@ export function jedRender(o) {
 
       if(jed.editors[id]){
         jed.editors[id].destroy();
+        
+        if(window.Selectize){
+          mx.helpers.removeSelectizeGroupById(id);
+        }
       }
 
       el.innerHTML="";
@@ -76,6 +79,12 @@ export function jedRender(o) {
 
       editor.on('ready',function() {
         var id = editor.element.id;
+        if(window.Selectize){
+           mx.helpers.initSelectizeAll({
+             selector : editor.element,
+             id : id
+           });
+        }
         if(window.Shiny){
           Shiny.onInputChange(id + '_ready', (new Date()));     
         }else{

@@ -982,26 +982,25 @@ blockquote {
  * Error list
  */
 .mx-error-list-container {
-  padding: 5px;
-  margin:0px;
-}
-
-.mx-error-item {
-  padding: 5px;
   margin: 0px;
 }
 
-.mx-error-item:before{
+.mx-error-list-container .mx-error-item {
+  padding: 5px;
+  margin: 5px;
+}
+
+.mx-error-list-container .mx-error-item:before{
   font-family: 'FontAwesome';
   content: '\f06a';
   padding: 5px;
 }
-.mx-warning-item {
+.mx-error-list-container .mx-warning-item {
   padding: 5px;
   margin: 3px;
 }
 
-.mx-warning-item:before{
+.mx-error-list-container .mx-warning-item:before{
   font-family: 'FontAwesome';
   content: '\f071';
   padding: 5px;
@@ -1232,8 +1231,12 @@ blockquote {
 }
 
 .mx-views-filters-container .check-toggle {
-  /*padding:3px;*/
+  padding-left: 20px;
+  margin: 0px;
+  width: 100%;
+  font-size: 0.9em;
 }
+
 .mx-views-filters-container .mx-check-toggle-filter-count {
   display: inline-block;
   width: 3em;
@@ -1345,6 +1348,7 @@ blockquote {
   font-weight: normal;
   font-size: 13px;
   letter-spacing: 1.2;
+  display: inline;
 }
 
 .fold-container .fold-switch.fold-caret:not(checked) ~ .fold-label::after{
@@ -1378,6 +1382,10 @@ blockquote {
 * Modifiers for filters by tag
 */
 
+
+.mx-views-filters-container {
+ padding:5px;
+}
 .mx-views-filters-container .fold-container .fold-label {
   padding: 5px 10px 5px 10px;
   font-weight: normal;
@@ -1392,8 +1400,10 @@ blockquote {
   padding-left:10px;
 }
 .mx-views-filters-container .filter-tag-content {
- max-height:150px;
- overflow:auto;
+  max-height: 150px;
+  border-top: 1px solid #ccc;
+  overflow: auto;
+  border-bottom: 1px solid #ccc;
 }
 
 
@@ -1464,8 +1474,14 @@ blockquote {
 */
 
 .help-block {
- font-size:0.8em;
+  font-size: 0.8em;
 }
+.text-muted {
+  font-size: 0.9em;
+  text-align: justify;
+  hyphens: auto;
+}
+
 
 /**
 * EPSG epsg ; projection code select group list

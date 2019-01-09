@@ -8,7 +8,7 @@ observeEvent(reactData$sourceDownloadRequest,{
   isGuest <- isGuestUser()
   #meta <- mxDbGetLayerMeta(idSource)
   #isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
-  isDownloadable <- "download" %in%  mxDbGetLayerServices(idSource)
+  isDownloadable <- "mx_download" %in%  mxDbGetLayerServices(idSource)
   sourceTitle <- mxDbGetLayerTitle(idSource,language) 
   btnList = list()
 
@@ -103,7 +103,7 @@ observe({
     btnEnable <- FALSE
     hasFileName <- !noDataCheck(filename)
 
-    err[['txt_too_short_min_3']] <- !hasFileName || nchar(filename) < 5
+    err[['txt_too_short_min_3']] <- !hasFileName || nchar(filename) < 3
 
     output$uiValidateDownload <- renderUI(mxErrorsToUi(errors=err,language=language))
 

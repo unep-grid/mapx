@@ -34,6 +34,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler("mxRenderUserProjectsList",mx.helpers.renderUserProjectsList);
   Shiny.addCustomMessageHandler("mxInjectHead",mx.helpers.injectHead);
   Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",mx.helpers.updateSelectizeItems);
+  Shiny.addCustomMessageHandler("mxInitSelectizeAll",mx.helpers.initSelectizeAll);
   Shiny.addCustomMessageHandler('mglRenderViewsList', mx.helpers.renderViewsList ); 
   Shiny.addCustomMessageHandler('mglSetFilter', mx.helpers.setFilter );
   Shiny.addCustomMessageHandler('mglAddLayer',  mx.helpers.addLayer );

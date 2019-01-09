@@ -5929,6 +5929,18 @@
     "ps": ""
  },
  {
+    "id": "validate_meta_no_source",
+    "en": "Source missing",
+    "fr": "Source manquante",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+ },
+ {
     "id": "validate_meta_invalid_source",
     "en": "Invalid source",
     "fr": "Source invalide",
@@ -6002,8 +6014,8 @@
   },
   {
     "id": "data_integrity_table_key",
-    "en": "Key",
-    "fr": "Clef",
+    "en": "Question",
+    "fr": "Question",
     "es": "",
     "fa": "",
     "ps": "",

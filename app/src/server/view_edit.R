@@ -252,8 +252,7 @@ observe({
                 title=tags$b(sprintf("Delete %s",viewTitle)),
                 content=uiOut,
                 textCloseButton=d("btn_close",language),
-                buttons=btnList,
-                minHeight="200px"
+                buttons=btnList
                 )
 
             },
@@ -400,6 +399,11 @@ observe({
                 srcSetMask <- .get(viewData,c("data","source","layerInfo","maskName"))
                 srcAvailableMask <- srcAvailable[! srcAvailable %in% srcSet ]
                 hasSource <- srcSet %in% srcAvailable
+                reactData$sourceLayerFromView <- list(
+                    trigger = Sys.time(),
+                    srcSet = srcSet,
+                    srcSetMask = srcSetMask
+                  )
 
                 if( !noDataCheck(srcSet) && !hasSource ){
 
@@ -420,13 +424,40 @@ observe({
                     inputId = "selectSourceLayerMain",
                     label = d("source_select_layer",language),
                     choices = srcAvailable,
-                    selected = srcSet,
+                    selected = NULL,
                     options=list(
                       sortField = "label"
                       )
                     ),
-
-                  uiOutput("uiViewEditVtMain"),
+                  tagList(
+                    selectizeInput(
+                      inputId="selectSourceLayerMainGeom",
+                      label=d("source_select_geometry",language),
+                      choices=NULL,
+                      selected=NULL
+                      ),
+                    selectizeInput(
+                      inputId="selectSourceLayerMainVariable",
+                      label=d("source_select_variable",language),
+                      choices=NULL,
+                      selected=NULL
+                      ),
+                    selectizeInput(
+                      inputId="selectSourceLayerOtherVariables",
+                      label=d("source_select_variable_alt",language),
+                      choices=NULL,
+                      selected=NULL,
+                      multiple=TRUE,
+                      options=list(
+                        plugins = list("remove_button")
+                        )
+                      ),
+                    actionButton(
+                      inputId = "btnGetLayerSummary",
+                      label = d("btn_get_layer_summary",language)
+                      )
+                    ),
+                  #uiOutput("uiViewEditVtMain"),
 
                 
                   #
@@ -444,7 +475,7 @@ observe({
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
                         choices = srcAvailableMask,
-                        selected = srcSetMask,
+                        selected = NULL,
                         options=list(
                           sortField = "label"
                           )
@@ -588,8 +619,7 @@ observe({
                 content = uiOut,
                 buttons = btnList,
                 addBackground = FALSE,
-                textCloseButton= d("btn_close",language),
-                minHeight = "80%"
+                textCloseButton= d("btn_close",language)
                 )
 
             },
@@ -639,7 +669,6 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                minWidth="785px",
                 title=sprintf("Edit dashboard %s",viewTitle),
                 addBackground=FALSE,
                 content=tagList(
@@ -719,8 +748,7 @@ observe({
                   jedOutput(id="styleEdit")
                   ),
                 buttons=btnList,
-                textCloseButton=d("btn_close",language),
-                minHeight = "80%"
+                textCloseButton=d("btn_close",language)
                 )
 
             })
@@ -776,25 +804,25 @@ observeEvent(input$viewAbstractSchema_init,{
 #
 observeEvent(input$btnViewDeleteConfirm,{
 
-  id <- .get(reactData$viewDataEdited, c("id")) 
+  idView <- .get(reactData$viewDataEdited, c("id")) 
 
-  if(noDataCheck(id)) mxDebugMsg("View to delete not found")
+  if(noDataCheck(idView)) mxDebugMsg("View to delete not found")
 
   mxDbGetQuery(sprintf("
       DELETE FROM %1$s 
       WHERE id='%2$s'",
       .get(config,c("pg","tables","views")),
-      id
+      idView
       ))
 
   mglRemoveView(
-    idView = id
+    idView = idView
     )
 
   #
   # Update geoserver publication
   #
-  mxUnublishGeoServerView(idView)
+  mxUnpublishGeoServerView(idView)
 
   mxModal(
     id="modalViewEdit",
@@ -1037,13 +1065,24 @@ observeEvent(input$btnViewSave,{
 # Select layer logic : geomType, and variable name
 #
 observe({
+  src = reactData$sourceLayerFromView
+  isolate({
+    updateSelectizeInput(session,"selectSourceLayerMain",
+      selected = src$srcSet
+      )
+    updateSelectizeInput(session,"selectSourceLayerMask",
+      selected = src$srcSetMask
+      )
+  })
+})
+observe({
 
   timer <- mxTimeDiff("Layer logic")
   layerMain <- input$selectSourceLayerMain
-  viewData <- reactData$viewDataEdited
-
 
   isolate({
+
+    viewData <- reactData$viewDataEdited
 
     if(noDataCheck(layerMain)) return()
     if(noDataCheck(viewData)) return()
@@ -1064,36 +1103,34 @@ observe({
     variableName <- .get(viewData,c("data","attribute","name"))
     variableNames <- .get(viewData,c("data","attribute","names"))
 
-    output$uiViewEditVtMain <- renderUI({
-      tagList(
-        selectizeInput(
-          inputId="selectSourceLayerMainGeom",
-          label=d("source_select_geometry",language),
-          choices=geomTypes,
-          selected=geomType
-          ),
-        selectizeInput(
-          inputId="selectSourceLayerMainVariable",
-          label=d("source_select_variable",language),
-          choices=variables,
-          selected=variableName
-          ),
-        selectizeInput(
-          inputId="selectSourceLayerOtherVariables",
-          label=d("source_select_variable_alt",language),
-          choices=variables,
-          selected=variableNames,
-          multiple=TRUE,
-          options=list(
-            plugins = list("remove_button")
-            )
-          ),
-        actionButton(
-          inputId = "btnGetLayerSummary",
-          label = d("btn_get_layer_summary",language)
-          )
-        )
-    })
+    if(isTRUE(geomType %in% geomTypes)){
+      geomTypeSelected <- geomType
+    }else{
+      geomTypeSelected <- geomTypes[[1]]
+    }
+    if(isTRUE(variableName %in% variables)){
+      variableMainSelected <- variableName
+    }else{
+      variableMainSelected <- variables[[1]]
+    }
+    if(isTRUE(all(variableNames %in% variables))){
+      variablesOtherSelected <- variableNames
+    }else{
+      variablesOtherSelected <- NULL
+    }
+
+    updateSelectizeInput(session,"selectSourceLayerMainGeom",
+      choices = geomTypes,
+      selected = geomTypeSelected
+      )
+    updateSelectizeInput(session,"selectSourceLayerMainVariable",
+      choices = variables,
+      selected = variableMainSelected
+      )
+    updateSelectizeInput(session,"selectSourceLayerOtherVariables",
+      choices = variables,
+      selected = variablesOtherSelected
+      )
   })
 
   mxTimeDiff(timer)
@@ -1105,7 +1142,6 @@ observe({
 observeEvent(input$btnGetLayerSummary,{
   mxModal(
     id =  "layerSummary",
-    minHeight = "80%",
     title = d("Layer Summary",reactData$language),
     content = tagList(
       tags$input(

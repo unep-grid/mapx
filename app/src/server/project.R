@@ -55,6 +55,7 @@ observe({
 
         # if the change comes from the ui, apply
       }else if(!noDataCheck(project_ui)){
+        mxModal(id="uiSelectProject",close=T)
         roles <- mxDbGetProjectUserRoles(id_user,project_ui)
         if(!roles$public){
           msg <- d("project_access_denied",language)
@@ -69,7 +70,6 @@ observe({
     }
 
 
-    mxModal(id="uiSelectProject",close=T)
     query$project <<- NULL
     if(!noDataCheck(project_out)){
       mxUpdateUrlParams(list(project=project_out))

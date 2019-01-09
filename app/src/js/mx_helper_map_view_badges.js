@@ -59,20 +59,22 @@ export function setViewBadges(opt){
       elBadges : elBadges
     });
 
+   }
+
     /**
      * Check if it's valid, add the validate badge
      */
-    if( isValidable ){
+  if( isValidable ){
 
-      /**
-       * Validate asynchronously metadata
-       */
-      h.validateMetadataView({
-        view : view,
-        forceUpdateMeta : opt.forceUpdateMeta
-      })
-        .then( validation => {
-
+    /**
+     * Validate asynchronously metadata
+     */
+    h.validateMetadataView({
+      view : view,
+      forceUpdateMeta : opt.forceUpdateMeta
+    })
+      .then( validation => {
+        if( hasPublic ){
           if( ! validation.valid ){
 
             /**
@@ -85,27 +87,27 @@ export function setViewBadges(opt){
 
           }else if(hasDiaf){
 
-            /**
-             * Validation passed. Test DIAF
-             */
-            addBadgeDiaf({
-              elBadges : elBadges,
-              view : view
-            });
-
+            if( hasPublic ){
+              /**
+               * Validation passed. Test DIAF
+               */
+              addBadgeDiaf({
+                elBadges : elBadges,
+                view : view
+              });
+            }
           }
-
-        })
-        .then(()=>{
-          /**
-           * Update languages
-           */
-          h.updateLanguageElements({
-            el: elBadges
-          });
-
+        }
+      })
+      .then(()=>{
+        /**
+         * Update languages
+         */
+        h.updateLanguageElements({
+          el: elBadges
         });
-    }
+
+      });
   }
 
   if( isShared ){ 
@@ -119,7 +121,8 @@ export function setViewBadges(opt){
   }
 
   /**
-   * Add editable badge
+   * Add editable badge:
+   * lock open or closed
    */
   addBadgeEdit({
     elBadges : elBadges,
@@ -129,7 +132,6 @@ export function setViewBadges(opt){
   /**
   * Update languages
   */
-
   h.updateLanguageElements({
     el: elBadges
   });

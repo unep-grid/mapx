@@ -420,12 +420,12 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
           collapsed = TRUE
           ),
         properties = list(
-          allowDownload = list(
-            type = "boolean",
-            format = "checkbox",
-            title = t("license_allow_download"),
-            default = FALSE
-            ),
+          #allowDownload = list(
+            #type = "boolean",
+            #format = "checkbox",
+            #title = t("license_allow_download"),
+            #default = FALSE
+            #),
           licenses = list(
             type = "array",
             title = t("license_list_title"),

@@ -18,7 +18,7 @@
 }
 
 
-.mx .form-control .selectize-input input {
+.mx .form-control .selectize-input.dropdown-active input {
   min-width:50%;
 }
 

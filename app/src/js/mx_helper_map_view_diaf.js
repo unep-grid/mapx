@@ -49,6 +49,7 @@ export function displayDiafModal(view) {
           }),
           el("th", {
             scope: 'col',
+            class : 'col-33',
             dataset: {
               lang_key: 'data_integrity_table_value'
             }
@@ -65,21 +66,20 @@ export function displayDiafModal(view) {
           return el("tr",
             el("td", 
               el("div", 
-                {
-                  class : 'hint--right',
-                  dataset : {
-                    lang_key : desc(id),
-                    lang_type : "tooltip",
-                    lang_split : true
-                  }
-                },
                 el("bold", {
                   dataset : {
                     lang_key : id
                   }
+                }),
+                el("p",{
+                  class : 'text-muted',
+                  dataset : {
+                    lang_key : desc(id)
+                  }
                 })
               )),
             el("td",{
+              class : 'col-33',
               dataset : {
                 lang_key : ans[di] 
               }

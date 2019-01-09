@@ -29,15 +29,13 @@
 
 .mx-modal-container {
   position:absolute;
-  display:flex;
-  flex-direction:column;
   width: 550px;
   height:auto;
-  /*height:auto!important;*/
   overflow:hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
   min-width: 300px;
+  min-height: 150px;
   border-radius:3px;
   z-index:1000;
   right:0;
@@ -45,6 +43,8 @@
   top: 5px;
   margin: auto;
   resize:both;
+  display:flex;
+  flex-direction:column;
 }
 
 .mx-modal-top {
@@ -63,9 +63,10 @@
 }
 
 .mx-modal-body {
-  flex:1;
   overflow:auto;
+  flex:1;
 }
+
 .mx-modal-content {
   height:100%;
   padding:20px;

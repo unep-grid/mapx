@@ -37,8 +37,15 @@ var fileFormat = {
   },
   "CSV" : {
     ext : 'csv'
+  },
+  "DXF" : {
+    ext : 'dxf'
+  },
+  "SQLite": {
+    ext : ".sqlite"
   }
 };
+
 var formatDefault = 'GPKG';
 if( apiPort != 80 && apiPort != 443 ){
   apiHostUrl = apiHostUrl + ":" + apiPort;

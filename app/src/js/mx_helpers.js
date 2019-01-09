@@ -5,6 +5,7 @@ export * from './mx_helper_is_test.js'; /* test "is" isArray, isObject, isNumeri
 export * from './mx_helper_misc.js';
 export * from './mx_helper_read_more.js';
 export * from './mx_helper_modal.js';
+export * from './mx_helper_selectize.js';
 export * from './mx_helper_language.js';
 export * from './mx_helper_stat.js';
 export * from './mx_helper_app_utils.js';

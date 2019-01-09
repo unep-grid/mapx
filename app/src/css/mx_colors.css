@@ -117,6 +117,12 @@
  color : var(--mx_ui_text_faded);
 }
 
+.mx-views-filters-container .filter-tag-content {
+  border-color:  var(--mx_ui_border);
+}
+
+
+
 
 .mx .jed-container div[data-schematype='object'] {
     border-radius: 0px;

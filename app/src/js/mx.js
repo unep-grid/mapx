@@ -31,7 +31,8 @@ export let data = {
   })
 };
 
-export let listener = {}; // global listener, not map related. Modals can store listener here.
+export let listener = {};
+export let selectize = {};
 export let queue = [];
 export let events = {};
 export let controls = {};

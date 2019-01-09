@@ -12,3 +12,7 @@ table tbody tr {
   width: 100%;
   table-layout: fixed;
 }
+
+table .col-33 {
+  width: 33%;
+}

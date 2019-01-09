@@ -1819,6 +1819,14 @@ mxUpdateSelectizeItems <- function(id,items,session=shiny:::getDefaultReactiveDo
 }
 
 
+#' Init all selectize input in children elements
+#' @param {character} id of the input
+mxInitSelectizeAll <- function(id,session=shiny:::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mxInitSelectizeAll",list(
+      selector= "#"+id,
+      ))
+};
+
 
 
 mxButton <- function (inputId, labelId = NULL, class = NULL )
