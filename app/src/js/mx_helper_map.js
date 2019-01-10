@@ -108,6 +108,12 @@ export function initMapx(o){
 
   if( o.style ) style = o.style ;
 
+  /**
+  * Set db log levels
+  */
+  if( o.dbLogLevels ){
+    mx.settings.dbLogLevels = o.dbLogLevels ;
+  }
 
   /**
    * Confirm user quit
@@ -216,7 +222,8 @@ export function initMapx(o){
    * Continue according to mode
    */
   if( ! mx.settings.modeKiosk ){
-    initMapxApp(o);   
+    mx.helpers.initMapxApp(o);
+    mx.helpers.initLog();
   }
 
   /**
@@ -473,9 +480,9 @@ export function geolocateUser(e){
     classesHtml.remove("shiny-busy");
     var crd = pos.coords;
     map.flyTo({center:[crd.longitude,crd.latitude],zoom:10});
-    console.log(`Latitude : ${crd.latitude}`);
-    console.log(`Longitude: ${crd.longitude}`);
-    console.log(`More or less ${crd.accuracy} meters.`);
+    //console.log(`Latitude : ${crd.latitude}`);
+    //console.log(`Longitude: ${crd.longitude}`);
+    //console.log(`More or less ${crd.accuracy} meters.`);
   }
 
   function error(err) {
@@ -969,7 +976,7 @@ let vStore = [];
 export function viewControler(o){
 
   var vToAdd = [], vToRemove = [], vVisible = [], vChecked = [];
-  var view, isChecked,id;
+  var view, isChecked,id, viewDuration;
   var idMap = o.id || mx.settings.idMapDefault;
   var idViewsList = o.idViewsList || "mx-views-list";
   var els = document.querySelectorAll("[data-view_action_key='btn_toggle_view']");
@@ -1003,17 +1010,19 @@ export function viewControler(o){
      */
     vToAdd.forEach(function(v){
       vStore.push(v);
-      view = mx.helpers.getViews({
-        id : idMap,
-        idView : v
-      });
+      view = mx.helpers.getView(v);
+      view._addTime = Date.now();
+
       mx.helpers.addView({
         id : idMap,
         viewData : view,
         idViewsList : idViewsList
       });
 
-      mx.helpers.fire("view_add");
+      mx.helpers.fire("view_add",{
+        idView : v
+      });
+
     });
 
     /**
@@ -1022,6 +1031,9 @@ export function viewControler(o){
     vToRemove.forEach(function(v){
       vStore.splice(vStore.indexOf(v,1));
 
+      view = mx.helpers.getView(v);
+      viewDuration = Date.now() - view._addTime || 0;
+
       mx.helpers.removeLayersByPrefix({
         id : idMap,
         prefix : v
@@ -1029,7 +1041,11 @@ export function viewControler(o){
 
       mx.helpers.cleanRemoveModules(v);
 
-      mx.helpers.fire("view_remove");
+      mx.helpers.fire("view_remove",{
+        idView : v,
+        viewDuration : viewDuration
+      });
+    
     });
 
     if(false){
@@ -1239,22 +1255,18 @@ export function updateViewParams(o){
   });
 }
 
-
-
-
-
 /**
  * Event mapx : fire event
  * @param {String} type
  */
-export function fire(type){
+export function fire(type,data){
+  data = data || {};
   setTimeout(function(){
     if(!mx.events[type]) mx.events[type] = [];
     var evts = mx.events[type];
-
     evts.forEach(cb => {
       mx.helpers.onNextFrame(()=>{ 
-        cb(type);
+        cb(data);
         if(cb.once === true){
           var id = evts.indexOf(cb) ; 
           evts.splice(id,1);

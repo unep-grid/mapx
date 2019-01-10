@@ -38,6 +38,8 @@ export let events = {};
 export let controls = {};
 export let info = require('../../package.json');
 export let settings = {
+  dbLogLevels : ['ERROR'],
+  dbLogLevelsAll : ["ERROR","WARNING","MESSAGE","LOG","USER_ACTION"],
   devicePixelRatio : 0, // updated by getPixelRatio()
   language : 'en',
   languages : ['en','fr'],

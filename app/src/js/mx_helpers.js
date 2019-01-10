@@ -1,5 +1,6 @@
 /* jshint esversion :6 */
 export * from './mx_helper_cookies.js';
+export * from './mx_helper_log.js';
 export * from './mx_helper_el.js'; /* createElement / simple framework */
 export * from './mx_helper_is_test.js'; /* test "is" isArray, isObject, isNumeric, is... */
 export * from './mx_helper_misc.js';

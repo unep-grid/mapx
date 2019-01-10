@@ -114,7 +114,8 @@ server <- function(input,output,session){
               #
               # misc
               #
-              "wms_creator.R"
+              "wms_creator.R",
+              "db_logger.R"
               )
             )
         }

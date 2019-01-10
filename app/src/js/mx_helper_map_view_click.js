@@ -228,6 +228,7 @@ export function handleViewClick(o){
         }
       },
       {
+        idAction : "click_meta_raster_open",
         comment: "target is the raster metadata link",
         test :  el.dataset.view_action_key == "btn_opt_meta_external",
         action:function(){
@@ -254,9 +255,14 @@ export function handleViewClick(o){
 
     for(var i = 0; i < t.length ; i++ ){
       if( !found && t[i].test == true ){
-        found = true;
+        found = true;  
         t[i].action();
-      
+
+        mx.helpers.fire("view_panel_click",{
+          idView : el.dataset.view_action_target,
+          idAction : el.dataset.view_action_key,
+        });
+
         if( ! t[i].allowDefault ){
           /* Skip default */
           event.preventDefault();

@@ -26,6 +26,10 @@ observe({
     # 
     mapConfig <- list(
       #
+      # Log level to report
+      #
+      dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
+      #
       # Intial views
       #
       viewsList = reactViewsCompact(),

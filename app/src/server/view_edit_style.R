@@ -52,7 +52,10 @@ observeEvent(input$styleEdit_init,{
     jedSchema(
       id="styleEdit",
       schema = schema,
-      startVal = style
+      startVal = style,
+      options = list(
+        disableSelectize = TRUE
+        )
       )
   }
 })

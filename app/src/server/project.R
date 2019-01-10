@@ -74,6 +74,23 @@ observe({
     if(!noDataCheck(project_out)){
       mxUpdateUrlParams(list(project=project_out))
       reactData$project <- project_out
+
+      #
+      # Log any project change or load
+      #
+      mxDbLogger("USER_ACTION", list(
+          side = "app",
+          id_log = "project_load",
+          id_project = project_out,
+          id_user = id_user,
+          is_guest = isGuest,
+          data = list(
+            new_project = project_out,
+            old_project = project_react
+            )
+          ))
+
+
     }
 
   })

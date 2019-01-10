@@ -9,9 +9,10 @@ config <- list()
 #
 options(shiny.maxRequestSize=1000*1024^2) 
 options(shiny.reactlog=FALSE)
-#options(shiny.error = function(e=NULL,b=NULL){
-  #browser()
-#})
+
+config[["db_log"]] <-  list(
+  levels = c("ERROR") # c("LOG","MESSAGE","WARNING","ERROR","USER_ACTION")
+  )
 
 #
 # get info about the host
@@ -71,6 +72,7 @@ config[["pg"]] = list(
     conPool = 5,
     geomCol = "geom",
     tables = list(
+      "logs"="mx_logs",
       "users"="mx_users",
       "views"="mx_views",
       "views_latest"="mx_views_latest",

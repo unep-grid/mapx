@@ -7,7 +7,6 @@ observe({
   lang_ui <- input$selectLanguage
   lang_query <- query$language
   lang_db <- .get(reactUser$data,c("data","user","cache","last_language"))
-
   isolate({
 
     lang_react <- reactData$language
@@ -20,6 +19,23 @@ observe({
         lang_out <- lang_db
       }else if(!noDataCheck(lang_ui)){
         lang_out <- lang_ui
+
+        #
+        # Logger language change from UI
+        #
+        if( lang_ui != lang_react ){
+          mxDbLogger("USER_ACTION", list(
+              side = "app",
+              id_log = "language_change",
+              id_project = reactData$project,
+              id_user = reactUser$data$id,
+              is_guest = isGuestUser(),
+              data = list(
+                language = lang_out
+                )
+              ))
+        }
+
       }else{
         lang_out <- lang_def
       }
@@ -28,7 +44,7 @@ observe({
         lang_out <- lang_def
       }
     }
-    mxUpdateUrlParams(list(language=lang_out))
+    mxUpdateUrlParams(list(language=lang_out)) 
     reactData$language <- lang_out
   })
 })

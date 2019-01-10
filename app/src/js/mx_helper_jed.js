@@ -79,7 +79,7 @@ export function jedRender(o) {
 
       editor.on('ready',function() {
         var id = editor.element.id;
-        if(window.Selectize){
+        if(window.Selectize && !options.disableSelectize ){
            mx.helpers.initSelectizeAll({
              selector : editor.element,
              id : id
