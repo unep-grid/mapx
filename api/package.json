@@ -9,6 +9,7 @@
   "author": "Fred Moser",
   "license": "MIT",
   "dependencies": {
+    "request":"^2.88.0",
     "@turf/turf": "^5.1.6",
     "archiver": "^2.1.1",
     "express": "^4.16.3",

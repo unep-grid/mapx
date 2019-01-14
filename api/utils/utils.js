@@ -131,6 +131,7 @@ exports.attrToPgCol = function(attribute,attributes){
 */
 exports.view = require('./getView.js');
 exports.source = require('./getSource.js');
+exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');
 exports.sourceOverlap = require('./getOverlap.js');
 exports.image = require('./uploadImage.js');

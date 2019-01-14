@@ -27,6 +27,7 @@ app.use('/download', express.static(settings.vector.path.download));
 app.get('/get/view/:id', utils.view.get);
 app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get );
+app.get('/get/mirror/', utils.mirror.get );
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
 app.get('/get/source/overlap/',utils.sourceOverlap.get);//countries=[]&layers=[]&='area';
@@ -38,7 +39,6 @@ app.post('/send/mail/', utils.mail.sendMailApi);
 
 console.log("listen to " + port);
 app.listen(port);
-
 
 
 
