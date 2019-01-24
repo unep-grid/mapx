@@ -50,7 +50,7 @@
     "webpack-babel-env-deps": "^1.4.1",
     "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.10",
+    "webpack-dev-server": "^3.1.14",
     "webpack-manifest-plugin": "^2.0.4",
     "webpack-merge": "^4.1.4",
     "webpack-pwa-manifest": "^3.7.1",
@@ -86,6 +86,8 @@
     "js-beautify": "^1.8.8",
     "jscolor-picker": "^2.0.4",
     "json-editor": "^0.7.28",
+    "json-formatter-js": "^2.2.1",
+    "jsondiffpatch": "^0.3.11",
     "jspdf": "^1.4.1",
     "jszip": "^3.1.4",
     "mapbox-gl": "^0.50.0",
@@ -103,7 +105,8 @@
     "svg-inline-loader": "^0.8.0",
     "togeojson": "^0.16.0",
     "tokml": "^0.4.0",
-    "topojson-client": "^3.0.0"
+    "topojson-client": "^3.0.0",
+    "webpack-jquery-ui": "^2.0.1"
   },
   "scripts": {
     "test": "-",

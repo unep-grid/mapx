@@ -1048,14 +1048,15 @@ export function viewControler(o){
     
     });
 
-    if(false){
-      console.log({
+    if(true){
+      var summary = {
         vStore : vStore,
         vChecked : vChecked,
         vVisible : vVisible,
         vToRemove : vToRemove,
         vToAdd : vToAdd
-      });
+      };
+      Shiny.onInputChange('mglEvent_' + idMap + '_views_status', summary ) ;
     }
 
     updateViewOrder(o);
@@ -1510,37 +1511,35 @@ export function makeTransparencySlider(o) {
 
   function makeSlider(){
 
-    Promise.all([
-      import("nouislider"),
-      import("../../node_modules/nouislider/distribute/nouislider.css")
-    ]).then(function(module){
+    mx.helpers.moduleLoad("nouislider")
+      .then(function(module){
 
-      var noUiSlider = module[0].default;
+        var noUiSlider = module[0].default;
 
-      var slider = noUiSlider.create(el, {
-        range: {min:0,max:100},
-        step:  1,
-        start: 0,
-        tooltips: false
+        var slider = noUiSlider.create(el, {
+          range: {min:0,max:100},
+          step:  1,
+          start: 0,
+          tooltips: false
+        });
+
+        slider.targetView = view;
+
+        /*
+         * Save the slider in the view
+         */
+        view._interactive.transparencySlider = slider;
+
+        /*
+         * 
+         */
+        slider.on("slide", mx.helpers.debounce(function(n, h) {
+          var view =  this.targetView;
+          var opacity = 1-n[h]*0.01;
+          view._setOpacity({opacity:opacity});
+        }, 10 ));
+
       });
-
-      slider.targetView = view;
-
-      /*
-       * Save the slider in the view
-       */
-      view._interactive.transparencySlider = slider;
-
-      /*
-       * 
-       */
-      slider.on("slide", mx.helpers.debounce(function(n, h) {
-        var view =  this.targetView;
-        var opacity = 1-n[h]*0.01;
-        view._setOpacity({opacity:opacity});
-      }, 10 ));
-
-    });
   }
 }
 
@@ -1581,11 +1580,8 @@ export function makeNumericSlider(o) {
         max: max
       };
 
-      Promise.all([
-        import("nouislider"),
-        import("../../node_modules/nouislider/distribute/nouislider.css")
-      ]).then(function(module){
-
+    mx.helpers.moduleLoad("nouislider")
+      .then( module => { 
         var noUiSlider = module[0].default;
 
         var slider = noUiSlider.create(el, {
@@ -1710,82 +1706,80 @@ export function makeTimeSlider(o) {
         start.push(max);
 
 
-        Promise.all([
-          import("nouislider"),
-          import("../../node_modules/nouislider/distribute/nouislider.css")
-        ]).then(function(module){
+    mx.helpers.moduleLoad("nouislider")
+          .then(function(module){
 
-          var noUiSlider = module[0].default;
+            var noUiSlider = module[0].default;
 
-          var  slider = noUiSlider.create(el, {
-            range: range,
-            step: 24 * 60 * 60 * 1000,
-            start: start,
-            connect: true,
-            behaviour: 'drag',
-            tooltips: false,
-            format: {
-              to: fTo,
-              from: fFrom
-            }
-          });
-
-          /**
-           * Save slider in the view and view ref in target
-           */
-          slider.targetView = view;
-          view._interactive.timeSlider = slider;
-
-          /*
-           * create distribution plot in time slider
-           */
-          /* NOTE: removed chart. Removed dependencies to chartist
-
-          /*
-           * 
-           */
-          slider.on("slide", mx.helpers.debounce(function(t, h) {
-            var filterAll = [];
-            var filter = [];
-            var view = this.targetView;
-            var layerExists;
-            var elContainer = this.target.parentElement;
-            var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-            var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-
-            /* save current time value */
-            //ime.extent.set = t;
-
-            /* Update text values*/
-            if (t[0]) {
-              elDMin.innerHTML = mx.helpers.date(t[0]);
-            }
-            if (t[1]) {
-              elDMax.innerHTML = " – " + mx.helpers.date(t[1]);
-            }
-
-            filter = ['any'];
-            filterAll = ["all"];
-            filter.push(["==",k.t0,-9e10]);
-            filter.push(["==",k.t1,-9e10]);
-
-            if ( hasT0 && hasT1 ) {
-              filterAll.push( ['<=', k.t0, t[1] / 1000] ); 
-              filterAll.push( ['>=', k.t1, t[0] / 1000] );
-            } else if (hasT0) {
-              filterAll.push( ['>=', k.t0, t[0] / 1000] );
-              filterAll.push( ['<=', k.t0, t[1] / 1000] );
-            }         
-            filter.push(filterAll);
-
-            view._setFilter({
-              filter : filter,
-              type : "time_slider"
+            var  slider = noUiSlider.create(el, {
+              range: range,
+              step: 24 * 60 * 60 * 1000,
+              start: start,
+              connect: true,
+              behaviour: 'drag',
+              tooltips: false,
+              format: {
+                to: fTo,
+                from: fFrom
+              }
             });
 
-          }, 10 ));
+            /**
+             * Save slider in the view and view ref in target
+             */
+            slider.targetView = view;
+            view._interactive.timeSlider = slider;
 
-        });
+            /*
+             * create distribution plot in time slider
+             */
+            /* NOTE: removed chart. Removed dependencies to chartist
+
+            /*
+             * 
+             */
+            slider.on("slide", mx.helpers.debounce(function(t, h) {
+              var filterAll = [];
+              var filter = [];
+              var view = this.targetView;
+              var layerExists;
+              var elContainer = this.target.parentElement;
+              var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+              var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+
+              /* save current time value */
+              //ime.extent.set = t;
+
+              /* Update text values*/
+              if (t[0]) {
+                elDMin.innerHTML = mx.helpers.date(t[0]);
+              }
+              if (t[1]) {
+                elDMax.innerHTML = " – " + mx.helpers.date(t[1]);
+              }
+
+              filter = ['any'];
+              filterAll = ["all"];
+              filter.push(["==",k.t0,-9e10]);
+              filter.push(["==",k.t1,-9e10]);
+
+              if ( hasT0 && hasT1 ) {
+                filterAll.push( ['<=', k.t0, t[1] / 1000] ); 
+                filterAll.push( ['>=', k.t1, t[0] / 1000] );
+              } else if (hasT0) {
+                filterAll.push( ['>=', k.t0, t[0] / 1000] );
+                filterAll.push( ['<=', k.t0, t[1] / 1000] );
+              }         
+              filter.push(filterAll);
+
+              view._setFilter({
+                filter : filter,
+                type : "time_slider"
+              });
+
+            }, 10 ));
+
+          });
       }
 
     }
@@ -2232,9 +2226,6 @@ export function updateViewsFilter(o){
             });
 
             var t1 = performance.now();
-
-            console.log("View filter for type " + type + " generated in " + Math.round((t1 - t0)) + " [ms] from " + o.from );
-
           });
       });
 
@@ -3481,6 +3472,37 @@ export function setFilter(o){
     m.setFilter(o.idView, o.filter);
   }
 }
+/**
+ * Apply a filter on country-code
+ * @param {object} o Options
+ * @param {string} o.id Map id
+ * @param {string} o.idLayer layer id
+ * @param {array} o.countries Array of countries code
+ */
+export function setHighlightedCountries(o){
+
+  var countries = o.countries || null;
+  var filter = [];
+  var m = mx.helpers.getMap(o.id);
+  var hasCountries = mx.helpers.isArray(countries) && countries.length > 0;
+  var hasWorld = hasCountries && countries.indexOf("WLD") > -1;
+  var rule = ["==","iso3code",""];
+  mx.settings.highlightedCountries = hasCountries ? countries : [];
+
+  if( hasCountries && !hasWorld ){
+    rule = ["!in","iso3code"].concat(countries);
+  }
+
+  filter = [
+    "any",
+    rule,
+    ["!has","iso3code"]
+  ];
+
+  m.setFilter(o.idLayer,filter);
+
+}
+
 
 
 /** 
@@ -3656,7 +3678,7 @@ export function makeSearchBox(o){
   var view = o.view;
   var idMap = o.idMap;
   var el = document.querySelector("[data-search_box_for='"+view.id+"']");
-  var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
+  //var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   if(!el) return;
 
   makeSelectize();
@@ -3675,42 +3697,46 @@ export function makeSearchBox(o){
   }
 
   function makeSelectize(){
-    if(hasSelectize){
-      var idView = view.id;
-      var table = mx.helpers.path(view,"data.attribute.table");
-      var attr = mx.helpers.path(view,"data.attribute.name");
-      var data = tableToData(table);
+    return mx.helpers.moduleLoad("selectize")
+      .then(s => {
 
-      var selectOnChange = function(value) {
-        var view = this.view;
-        var listObj = this.getValue();
-        var filter = ['any'];
-        listObj.forEach(function(x){
-          filter.push(["==",attr,x]);
-        });
-        view._setFilter({
-          filter : filter,
-          type : "search_box"
-        });
-      };
 
-      var searchBox = $(el).selectize({
-        placeholder : "Filter values",
-        choices : data,
-        valueField : 'value',
-        labelField : 'label',
-        searchField :['value'],
-        options : data,
-        onChange : selectOnChange
-      })
-        .data()
-        .selectize;
-      /**
-       * Save selectr object in the view
-       */
-      searchBox.view = view;
-      view._interactive.searchBox = searchBox;
-    }
+        var idView = view.id;
+        var table = mx.helpers.path(view,"data.attribute.table");
+        var attr = mx.helpers.path(view,"data.attribute.name");
+        var data = tableToData(table);
+
+        var selectOnChange = function(value) {
+          var view = this.view;
+          var listObj = this.getValue();
+          var filter = ['any'];
+          listObj.forEach(function(x){
+            filter.push(["==",attr,x]);
+          });
+          view._setFilter({
+            filter : filter,
+            type : "search_box"
+          });
+        };
+
+        var searchBox = $(el).selectize({
+          placeholder : "Filter values",
+          choices : data,
+          valueField : 'value',
+          labelField : 'label',
+          searchField :['value'],
+          options : data,
+          onChange : selectOnChange
+        })
+          .data()
+          .selectize;
+        /**
+         * Save selectr object in the view
+         */
+        searchBox.view = view;
+        view._interactive.searchBox = searchBox;
+
+      });
   }
 }
 

@@ -7,7 +7,7 @@ observeEvent(input$customCodeEdit_init,{
     )
     view = reactData$viewDataEdited
     language = reactData$language
-    methods = .get(view,c("data","methods"))
+    customCode = .get(view,c("data","methods"))
 
     t <- function(i=NULL){
       d(id=i,lang=language,dict=config$dict,web=F,asChar=T)
@@ -23,11 +23,19 @@ observeEvent(input$customCodeEdit_init,{
     format = "textarea",
     default =.get(config,c("templates","text","custom_view"))
     )
+  
+  viewTimeStamp <- as.numeric(
+    as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
+    )
 
   jedSchema(
     id = "customCodeEdit",
     schema = cc,
-    startVal = methods
+    startVal = customCode,
+    options = list(
+      draftAutoSaveId = view$id,
+      draftAutoSaveDbTimestamp= viewTimeStamp
+      )
     )
 
   mxToggleButton(
@@ -38,77 +46,93 @@ observeEvent(input$customCodeEdit_init,{
 })
 
 #
-# Custom code preview
+# Vew custom code preview 
 #
 observeEvent(input$btnViewPreviewCustomCode,{
-  
-  methods <- input$customCodeEdit_values$msg
-  project <- reactData$project
-
-  if(noDataCheck(methods)) return();
-
-  view <- reactData$viewDataEdited
-  view <- .set(view,c("data","methods"), methods)
-
-  mglAddView(
-    viewData = view
-    )
-
-})
-
-
-#
-# View custom style save
-#
-observeEvent(input$btnViewSaveCustomCode,{
-
   mxToggleButton(
     id="btnViewSaveCustomCode",
     disable = TRUE
     )
+  mxToggleButton(
+    id="btnViewPreviewCustomCode",
+    disable = TRUE
+    )
+  jedTriggerGetValues("customCodeEdit","preview")
+})
+#
+# View custom code save
+#
+observeEvent(input$btnViewSaveCustomCode,{
+  mxToggleButton(
+    id="btnViewSaveCustomCode",
+    disable = TRUE
+    )
+  mxToggleButton(
+    id="btnViewPreviewCustomCode",
+    disable = TRUE
+    )
+  jedTriggerGetValues("customCodeEdit","save")
+})
 
-  view <- reactData$viewDataEdited
+
+observeEvent(input$customCodeEdit_values,{
+
+  values <- input$customCodeEdit_values
+  if(noDataCheck(values)) return();
+
+  customCode <- values$data;
+  idEvent <- values$idEvent;
   editor <- reactUser$data$id
   project <- reactData$project
-  time <- Sys.time()
+  view <- reactData$viewDataEdited
+  isEditable <- view[["_edit"]] && view[["type"]] == "cc"
 
-  if( view[["_edit"]] && view[["type"]] == "cc" ){
-    view[["_edit"]] = NULL
+  if(isEditable){
 
-    methods <- input$customCodeEdit_values$msg
+    time <- Sys.time()
+    view <- .set(view,c("data","methods"), customCode)
 
-    view <- .set(view, c("date_modified"), time )
-    view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-    view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
-    view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
-    view <- .set(view, c("data", "methods"), methods)
-    view <- .set(view,c("data"), as.list(.get(view,"data")))
-    view <- .set(view,c("editor"),editor)
-    
-    mxDbAddRow(
-      data=view,
-      table=.get(config,c("pg","tables","views"))
-      )
+    switch(idEvent,
+      "preview"= {
+        mglAddView(
+          viewData = view
+          )
+      },
+      "save" = {
+        view[["_edit"]] = NULL
+        view <- .set(view, c("date_modified"), time )
+        view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+        view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
+        view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
+        view <- .set(view, c("data", "methods"), customCode)
+        view <- .set(view, c("data"), as.list(.get(view,"data")))
+        view <- .set(view, c("editor"),editor)
 
-    # edit flag
-    view$`_edit` = TRUE 
+        mxDbAddRow(
+          data=view,
+          table=.get(config,c("pg","tables","views"))
+          )
+        # edit flag
+        view$`_edit` = TRUE 
 
-    mglAddView(
-      viewData = view
-      )
+        mglAddView(
+          viewData = view
+          )
 
-    reactData$updateViewListFetchOnly <- runif(1)
-  
-  }
+        reactData$updateViewListFetchOnly <- runif(1)
 
-  mxFlashIcon("floppy-o")
-  mxUpdateText(
-    id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",format(time,'%H:%M'))
-    )
+        mxFlashIcon("floppy-o")
+      })
+  } 
 
   mxToggleButton(
     id="btnViewSaveCustomCode",
     disable = FALSE
     )
+  mxToggleButton(
+    id="btnViewPreviewCustomCode",
+    disable = FALSE
+    )
+
 })
+

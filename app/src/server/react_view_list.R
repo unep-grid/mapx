@@ -75,7 +75,7 @@ reactViewsCompact <- reactive({
       rolesInProject = userRole,
       idUser = userData$id,
       language = language,
-      keys = c("id","pid","type","project","_edit","_title")
+      keys = c("id","pid","type","project","_edit","_title","_source")
       )
   }
 
@@ -121,6 +121,25 @@ reactViewsCompactAll <- reactive({
   mxTimeDiff(timer)
   return(out)
 
+})
+
+reactViewsCompactListVector <- reactive({
+  views <- reactViewsCompact()
+  views <- views[sapply(views,function(v){v$type %in% c("vt")})]
+  idViews <- sapply(views,`[[`,'id')
+  names(idViews) <- sapply(views,`[[`,'_title')
+  return(idViews)
+})
+
+
+reactViewsCheckedList <- reactive({
+  eventMapViewsStatus <-  sprintf("mglEvent_%s_views_status",.get(config,c("map","id"))) 
+  viewsStatus <- input[[eventMapViewsStatus]]
+  viewsChecked <- .get(viewsStatus,c("vChecked"),default=list())
+  if(noDataCheck(viewsChecked)){
+   viewsChecked = list()
+  }
+  return(viewsChecked)
 })
 
 

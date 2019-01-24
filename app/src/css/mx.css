@@ -194,6 +194,8 @@ blockquote {
 * Search box
 */
 .mx-views-filter-text-input{
+  border-radius: 0px;
+  outline: none;
   border:none;
   -webkit-box-shadow: none;
   box-shadow: none; 
@@ -890,8 +892,20 @@ blockquote {
   max-width: 100%;
   display: block;
   width: 100%;
-  /*border-radius:0px;*/
 }
+
+.mx .mx-diff-items {
+}
+
+.mx .mx-diff-item {
+  background-color: #e8e8e8;
+  border-radius: 5px;
+  padding: 10px;
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 200px;
+}
+
 
 .mx .mx-logs,
 .mx .form-control.mx-logs {
@@ -1213,7 +1227,7 @@ blockquote {
 
 .check-toggle .check-toggle-label:before {
   font-family : fontawesome;
-  content: '\f1db';
+  content: '\f096';
   padding-right: 3px;
 }
 
@@ -1222,7 +1236,7 @@ blockquote {
 }
 
 .check-toggle .check-toggle-input:checked ~.check-toggle-label:before {
-  content : '\f058';
+  content : '\f14a';
 }
 
 .check-toggle .check-toggle-input:checked ~.check-toggle-label,
@@ -1233,8 +1247,8 @@ blockquote {
 .mx-views-filters-container .check-toggle {
   padding-left: 20px;
   margin: 0px;
-  width: 100%;
   font-size: 0.9em;
+  height: 20px;
 }
 
 .mx-views-filters-container .mx-check-toggle-filter-count {
@@ -1392,7 +1406,7 @@ blockquote {
 }
 
 .mx-views-filters-container .fold-container .fold-label.filter-tag-label-light {
-  font-size: 1em;
+  font-size: 0.8em;
   font-weight: normal;
 }
 .mx-views-filters-container .fold-container .fold-switch:checked ~ .fold-content {
@@ -1404,6 +1418,9 @@ blockquote {
   border-top: 1px solid #ccc;
   overflow: auto;
   border-bottom: 1px solid #ccc;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 

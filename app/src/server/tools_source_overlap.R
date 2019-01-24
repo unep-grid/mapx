@@ -14,29 +14,44 @@ observeEvent(input$btnAnalysisOverlap,{
       return()
 
     }else{
-
-
-      layers <- reactTableEditSources()
-
-      if(noDataCheck(layers)){
-        layers <- list("noLayer")
-      }else{
-        layers <- mxGetLayerNamedList( layers )
-      }
-
+      layers <- reactListEditSources()
       countries <- mxDbGetProjectData(project)$countries
-
 
       uiOut <- tags$form(id='formOverlapTool',tagList(
           selectizeInput(
             inputId = "selectOverlapLayers",
             label = d("select_overlap_layers",language),
             choices = layers,
-            selected = layers[[1]],
+            selected = NULL,
             multiple = TRUE,
             options=list(
-              plugins = list("remove_button"),
-              sortField="label"
+              plugins = list(
+                "remove_button",
+                "drag_drop"
+                )
+              )
+            ),
+          checkboxInput(
+            inputId='checkOverlapAddSourceFromView',
+            label = d('check_add_source_from_view',language)
+            ),
+          conditionalPanel(
+            condition = "input.checkOverlapAddSourceFromView",
+            wellPanel(
+              selectizeInput(
+                inputId = "selectOverlapSourceFromView",
+                label = d("select_overlap_source_from_view",language),
+                choices = reactViewsCompactListVector(),
+                selected = reactViewsCheckedList(),
+                multiple = TRUE,
+                options=list(
+                  plugins = list("remove_button")
+                  )
+                ),
+              actionButton(
+                inputId = "btnOverlapAddSourceFromView",
+                label = d("btn_add_source_from_view",language)
+                )
               )
             ),
           selectInput(
@@ -45,6 +60,8 @@ observeEvent(input$btnAnalysisOverlap,{
             choices = mxGetCountryList(language,includeWorld=F),
             selected = countries
             ),
+
+
           checkboxInput(
             inputId='checkOverlapCreateSource',
             label = d('create_overlap_source',language)
@@ -140,6 +157,50 @@ observe({
       )
   })
 })
+
+
+observeEvent(input$btnOverlapAddSourceFromView,{
+
+  mxCatch("Update overlap source list from view list",{
+  language <- reactData$language
+  #
+  # Get views list, get linked source
+  #
+  views <- reactViewsCompact()
+  idViewsSelected <- input$selectOverlapSourceFromView
+  if(noDataCheck(idViewsSelected)) return()
+
+  viewsSubset <- views[sapply(views,function(v){v$id %in% idViewsSelected})]
+  idSourcesViews <- lapply(viewsSubset,`[[`,"_source")
+ 
+  #
+  # Build all source list
+  #
+  idSourcesAll <- unique(c(reactListEditSources(),idSourcesViews))
+  idSourcesAll <-  mxDbGetLayerTitle(idSourcesAll,asNamedList=TRUE, language=language)
+  
+  #
+  # Build selected list
+  #
+  idSourcesSelected <- input$selectOverlapLayers
+  if(noDataCheck(idSourcesSelected)){
+    idSourcesSelected <- list()
+  }
+  idSourcesSelected <- unique(c(as.list(idSourcesSelected),as.list(idSourcesViews)))
+
+  #
+  # Update select input
+  #
+  updateSelectizeInput(
+    session = session,
+    inputId = 'selectOverlapLayers',
+    selected = idSourcesSelected,
+    choices = idSourcesAll
+    )
+
+  })
+})
+
 
 observeEvent(input$btnOverlapAnalyse,{
 

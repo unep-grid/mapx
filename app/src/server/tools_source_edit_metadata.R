@@ -170,21 +170,28 @@ observeEvent(input$btnEditSourceMetadata,{
         attributesNames =  attributesNames
         )
 
-      #options = list("no_additional_properties" = FALSE)
+      sourceTimeLastModified <- mxDbGetSourceLastDateModified(layer)
+      sourceTimeStamp <- as.numeric(
+        as.POSIXct(sourceTimeLastModified,format="%Y-%m-%d%tT%T",tz="UTC")
+        )
 
       jedSchema(
         id="jedSourceMetadata",
         schema = schema,
-        startVal = meta
-        )
-
+        startVal = meta,
+        options = list(
+          disableSelectize = FALSE,
+          draftAutoSaveId = layer,
+          draftAutoSaveDbTimestamp = sourceTimeStamp,
+          getValidationOnChange = TRUE
+          ))
     }
-      })
+    })
 })
 
 observe({
 
-  msg <- input$jedSourceMetadata_issues$msg
+  msg <- .get(input$jedSourceMetadata_issues,c("data"))
   err <- logical(0)
 
   isolate({
@@ -209,73 +216,90 @@ observe({
 # Validate metadata
 #
 observeEvent(input$btnValidateMetadata,{
-  meta <- input$jedSourceMetadata_values$msg
-  
-  mxValidateMetadataModal(meta)
+  jedTriggerGetValues("jedSourceMetadata","validate")
 })
 
 #
 # Save
 #
 observeEvent(input$btnSaveSourceMetadata,{
+  jedTriggerGetValues("jedSourceMetadata","save")
+})
 
-  mxToggleButton(
-    id="btnSaveSourceMetadata",
-    disable = TRUE
-    )
 
-  mxCatch(title="Save source meta",{
+observeEvent(input$jedSourceMetadata_values,{
 
-    userRole <- getUserRole()
-    userData <- reactUser$data
-    idUser <- .get(userData,c("id"))
-    isPublisher <- "publishers" %in% userRole$groups
-    language <- reactData$language
-    layer <- input$selectSourceLayerForMeta
-    layers <- reactListEditSources()
-    idSource <- layer
-    issues <- input$jedSourceMetadata_issues$msg
-    meta <- input$jedSourceMetadata_values$msg
-    hasNoIssues <- noDataCheck(issues)
-    isAllowed <- isPublisher && layer %in% layers
+  values = input$jedSourceMetadata_values
 
-    if( hasNoIssues && isAllowed ){
+  if(noDataCheck(values)) return()
 
-      mxDbUpdate(
-        table = .get(config,c("pg","tables","sources")),
-        idCol = "id",
-        id = idSource,
-        column = "data",
-        path = c("meta"),
-        value = meta
+  meta <- .get(values,c("data"))
+  idEvent <- .get(values,c("idEvent"))
+
+  switch(idEvent,
+    "validate"= {
+      mxValidateMetadataModal(meta)
+    },
+    "save" = {
+
+      mxToggleButton(
+        id="btnSaveSourceMetadata",
+        disable = TRUE
         )
 
-      mxDbUpdate(
-        table = .get(config,c("pg","tables","sources")),
-        idCol = "id",
-        id = idSource,
-        column = "date_modified",
-        value = Sys.time()
+      mxCatch(title="Save source meta",{
+
+        userRole <- getUserRole()
+        userData <- reactUser$data
+        idUser <- .get(userData,c("id"))
+        isPublisher <- "publishers" %in% userRole$groups
+        language <- reactData$language
+        layer <- input$selectSourceLayerForMeta
+        idSource <- layer
+        layers <- reactListEditSources()
+        issues <- .get(input$jedSourceMetadata_issues,c("data"))
+        hasNoIssues <- noDataCheck(issues)
+        isAllowed <- isPublisher && layer %in% layers
+
+        if( hasNoIssues && isAllowed ){
+
+          mxDbUpdate(
+            table = .get(config,c("pg","tables","sources")),
+            idCol = "id",
+            id = idSource,
+            column = "data",
+            path = c("meta"),
+            value = meta
+            )
+
+          mxDbUpdate(
+            table = .get(config,c("pg","tables","sources")),
+            idCol = "id",
+            id = idSource,
+            column = "date_modified",
+            value = Sys.time()
+            )
+
+          mxDbUpdate(
+            table = .get(config,c("pg","tables","sources")),
+            idCol = "id",
+            id = idSource,
+            column = "editor",
+            value = idUser
+            )
+
+          mxFlashIcon("floppy-o")
+          mxUpdateText("editSourceMetadata_txt","Saved at " + format(Sys.time(),"%H:%M"))
+          reactData$updateSourceLayerList <- runif(1)
+        }
+
+        })
+
+      mxToggleButton(
+        id="btnSaveSourceMetadata",
+        disable = FALSE
         )
-
-      mxDbUpdate(
-        table = .get(config,c("pg","tables","sources")),
-        idCol = "id",
-        id = idSource,
-        column = "editor",
-        value = idUser
-        )
-
-      mxFlashIcon("floppy-o")
-      mxUpdateText("editSourceMetadata_txt","Saved at " + format(Sys.time(),"%H:%M"))
-      reactData$updateSourceLayerList <- runif(1)
-    }
-
     })
-  mxToggleButton(
-    id="btnSaveSourceMetadata",
-    disable = FALSE
-    )
 })
 
 

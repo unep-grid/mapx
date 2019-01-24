@@ -146,7 +146,7 @@ mxSchemaViewStyle <- function(
     color = list(
       title = tt("schema_color"),
       type = "string",
-      format = "color",
+      format = "color-picker",
       default = "#f1f3d7"
       )
     )

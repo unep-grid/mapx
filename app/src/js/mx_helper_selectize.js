@@ -16,38 +16,46 @@ export function updateSelectizeItems(o) {
   });
 }
 
+
+
+
 export function initSelectizeAll(opt) {
   opt = opt || {};
-  var selector = mx.helpers.isElement(opt.selector) ? opt.selector : document.querySelector(opt.selector);
-  var out = [];
-  opt.id = opt.id || 'global';
-  if (!mx.helpers.isEmpty(mx.selectize[opt.id])) return; // don't touch if it's not empty
-  mx.selectize[opt.id] = out;
-
-  var selects = $(selector).find('select');
-  var $select;
-  selects.each(function(i, s) {
-    if(s.id){
-      var script = selector.querySelector('script[data-for=' + s.id + ']');
-      var data = script ? script.innerHTML : null;
-      var options = {};
-      if (data) {
-        options = JSON.parse(data);
-        if (options.renderFun) {
-          options.render = {
-            option: mx.helpers[options.renderFun],
-          };
-        }
+  mx.helpers.moduleLoad("selectize")
+    .then(Selectize => {
+      var selector = mx.helpers.isElement(opt.selector) ? opt.selector : document.querySelector(opt.selector);
+      var out = [];
+      opt.id = opt.id || 'global';
+      if (!mx.helpers.isEmpty(mx.selectize[opt.id])){
+        removeSelectizeGroupById(opt.id); 
       }
-      options.inputClass = 'form-control selectize-input';
-      $select = $(s).selectize(options);
-    }else{
-      $select = $(s).selectize();
-    }
-    var selectize = $select[0].selectize;
-    out.push(selectize);
-  });
-  return out;
+      mx.selectize[opt.id] = out;
+      var selects = $(selector).find('select');
+      var $select;
+      selects.each(function(i, s) {
+        if(s.id){
+          var script = selector.querySelector('script[data-for=' + s.id + ']');
+          var data = script ? script.innerHTML : null;
+          var options = opt.options || {};
+          if (data) {
+            options = JSON.parse(data);
+            if (options.renderFun) {
+              options.render = {
+                option: mx.helpers[options.renderFun],
+              };
+            }
+          }
+          options.inputClass = 'form-control selectize-input';
+          $select = $(s).selectize(options);
+        }else{
+          $select = $(s).selectize();
+        }
+        var selectize = $select[0].selectize;
+        out.push(selectize);
+      });
+      return out;
+
+    });
 }
 
 export function removeSelectizeGroupById(id) {

@@ -378,6 +378,7 @@ mxDbGetViews <- function(
         )
 
       SELECT *, 
+      data#>'{\"source\",\"layerInfo\",\"name\"}' as _source,
       CASE 
       WHEN 
       coalesce(data #>> '{\"title\",\"" + language + "\"}','') = ''

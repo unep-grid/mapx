@@ -420,9 +420,45 @@
     "ps": ""
   },
   {
+    "id": "check_add_source_from_view",
+    "en": "Add sources by views",
+    "fr": "Ajout de sources par vues",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "select_overlap_source_from_view",
+    "en": "Select views",
+    "fr": "Sélectionner les vues",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_add_source_from_view",
+    "en": "Add sources from those views",
+    "fr": "Ajouter les sources de ces vues",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "select_overlap_layers",
-    "en": "Layers (min 1, max 3)",
-    "fr": "Couches (min 1, max 3)",
+    "en": "Layers : minimum 1, maximum 3, reorder if needed ",
+    "fr": "Couches : minimum 1, maximum 3, reordonner si besoin ",
     "es": "",
     "ru": "",
     "zh": "",

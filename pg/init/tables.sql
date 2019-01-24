@@ -20,6 +20,22 @@ create table mx_users (
 
 ALTER TABLE mx_users OWNER TO mapxw;
 
+DROP TABLE IF EXISTS mx_logs ;
+
+create table mx_logs (
+  pid serial PRIMARY KEY,
+  level character varying(40),
+  side character varying(10),
+  id_log character varying(40),
+  id_user integer,
+  is_guest boolean,
+  id_project character varying(22),
+  date_modified timestamp with time zone,
+  data jsonb
+);
+
+ALTER TABLE mx_logs OWNER TO mapxw;
+
 
 
 DROP TABLE IF EXISTS mx_config ;

@@ -1,8 +1,5 @@
 /*jshint esversion: 6 */
 
-import 'selectize/dist/css/selectize.css';
-import 'selectize/dist/css/selectize.bootstrap3.css';
-import '../css/mx_selectize.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -19,8 +16,6 @@ import 'promise-polyfill/src/polyfill';
 import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
-import Selectize from 'selectize';
-window.Selectize = Selectize;
 
 import * as mx from './mx.js';
 window.mx = mx;

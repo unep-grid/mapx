@@ -80,7 +80,7 @@ observeEvent(input$dashboardEdit_init,{
             uniqueItems = TRUE,
             items = list(
               type = "string",
-              enum = list("highcharts","d3","d3-geo","topojson")
+              enum = list("highcharts","d3","d3-geo","topojson","selectize","nouislider")
               )
             ),
           widgets = list(
@@ -140,10 +140,18 @@ observeEvent(input$dashboardEdit_init,{
           )
       )
 
+    viewTimeStamp <- as.numeric(
+      as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
+      )
+
     jedSchema(
-      id="dashboardEdit",
-      schema=sc,
-      startVal=dashboard
+      id= "dashboardEdit",
+      schema= sc,
+      startVal= dashboard,
+      options = list(
+        draftAutoSaveId = view$id,
+        draftAutoSaveDbTimestamp= viewTimeStamp
+        )
       )
 
     mxToggleButton(
@@ -155,92 +163,102 @@ observeEvent(input$dashboardEdit_init,{
 
 
 #
-# Vew style change
+# Vew dashboard change
 #
 observeEvent(input$btnViewPreviewDashboard,{
-
+  mxToggleButton(
+    id="btnViewSaveDashboard",
+    disable = FALSE
+    )
   mxToggleButton(
     id="btnViewPreviewDashboard",
     disable = TRUE
     )
-
-  dashboard <- input$dashboardEdit_values$msg
-  project <- reactData$project
-
-  if(noDataCheck(dashboard)) return();
-
-  view <- reactData$viewDataEdited
-  view <- .set(view,c("data","dashboard"), dashboard)
-  
-  mglAddView(
-    viewData = view
-    )
-
-  mxToggleButton(
-    id="btnViewPreviewDashboard",
-    disable = FALSE
-    )
-
+  jedTriggerGetValues("dashboardEdit","preview")
 })
 
 #
 # View style save
 #
 observeEvent(input$btnViewSaveDashboard,{
-
   mxToggleButton(
     id="btnViewSaveDashboard",
     disable = TRUE
     )
+  mxToggleButton(
+    id="btnViewPreviewDashboard",
+    disable = TRUE
+    )
+  jedTriggerGetValues("dashboardEdit","save")
+})
 
-  view <- reactData$viewDataEdited
+observeEvent(input$dashboardEdit_values,{
+
+  values <- input$dashboardEdit_values;
+  if(noDataCheck(values)) return();
+
+  dashboard <- values$data;
+  idEvent <- values$idEvent;
   editor <- reactUser$data$id
   project <- reactData$project
+  view <- reactData$viewDataEdited
+  view <- .set(view,c("data","dashboard"), dashboard)
   time <- Sys.time()
 
-  if( view[["_edit"]] && view[["type"]] == "vt" ){
-    view[["_edit"]] = NULL
+  switch(idEvent,
+    "preview"= {
+      mglAddView(
+        viewData = view
+        )
+    },
+    "save"={
 
-    dashboard <- input$dashboardEdit_values$msg
+      if( view[["_edit"]] && view[["type"]] == "vt" ){
+        view[["_edit"]] = NULL
 
-    view <- .set(view, c("date_modified"), time )
-    view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-    view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
-    view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
-    view <- .set(view, c("data", "dashboard"), dashboard)
-    view <- .set(view,c("data"), as.list(.get(view,"data")))
-    view <- .set(view,c("editor"),editor)
+        view <- .set(view, c("date_modified"), time )
+        view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+        view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
+        view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
+        view <- .set(view, c("data", "dashboard"), dashboard)
+        view <- .set(view, c("data"), as.list(.get(view,"data")))
+        view <- .set(view, c("editor"),editor)
 
-    mxDbAddRow(
-      data=view,
-      table=.get(config,c("pg","tables","views"))
-      )
+        mxDbAddRow(
+          data=view,
+          table=.get(config,c("pg","tables","views"))
+          )
 
-    # edit flag
-    view$`_edit` = TRUE 
+        # edit flag
+        view$`_edit` = TRUE 
 
-    mglAddView(
-      viewData = view
-      )
+        mglAddView(
+          viewData = view
+          )
 
-    mxToggleButton(
-      id="btnViewPreviewDashboard",
-      disable = FALSE
-      )
+        jedRemoveDraft("dashboardEdit",view$id);
 
-    reactData$updateViewListFetchOnly <- runif(1)
-  }
+        reactData$updateViewListFetchOnly <- runif(1)
+      }
 
-  mxFlashIcon("floppy-o")
-  mxUpdateText(
-    id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",format(time,'%H:%M'))
+      mxFlashIcon("floppy-o")
+
+      mxUpdateText(
+        id = "modalViewEdit_txt",
+        text = sprintf("Saved at %s",format(time,'%H:%M'))
+        )
+
+
+    })
+
+  mxToggleButton(
+    id="btnViewPreviewDashboard",
+    disable = FALSE
     )
-
   mxToggleButton(
     id="btnViewSaveDashboard",
     disable = FALSE
     )
-})
 
+})
 

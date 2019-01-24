@@ -16,6 +16,24 @@ mglSetFilter <- function( id, layerId, filter, session=shiny::getDefaultReactive
 }
 
 
+#' Set filter based on a list of rules
+#' @param id {Character } Map id
+#' @param countrieses {List} List of countries
+#' @param idLayer {Character} country layer id
+#' @export
+mglSetHighlightedCountries <- function( id, countries, idLayer="country-code",session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglSetHighlightedCountries",
+    list(
+      id = id,
+      idLayer = idLayer,
+      countries = countries
+      )
+    )
+}
+
+
+
+
 #' Update all view badges, and linked metadata if needed
 #' @param opt {List} list of option : forceUpadateMeta : force update of the metadata
 #' @export

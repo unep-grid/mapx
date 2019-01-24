@@ -1396,6 +1396,23 @@ mxDbGetLayerColumnsNames <- function(table,notIn=NULL){
   return(res)
 }
 
+#' Get layer source last edit
+#'
+#' Shortcut to get column name for a table
+#'
+#' @param idSource {character} id source / layer
+#' @export
+mxDbGetSourceLastDateModified <- function(idSource){
+
+  timeSourceDb <- mxDbGetQuery("
+    SELECT date_modified as date 
+    FROM mx_sources 
+    WHERE id = '"+ idSource +"' 
+    LIMIT 1")$date
+
+    return(timeSourceDb)
+}
+
 #' List existing column type from postgresql table
 #'
 #' Shortcut to get column type for a table
@@ -2305,23 +2322,35 @@ mxDbGetLayerServices <- function(idSource){
 #' Get layer title
 #' @param layer Postgis layer stored in layer table.
 #' @export
-mxDbGetLayerTitle <- function(layer,language="en"){
+mxDbGetLayerTitle <- function(layer,asNamedList=TRUE,language="en"){
+
+  layer <- paste(paste0("'",layer,"'"),collapse=",")
 
   # query
   sql <-"
   SELECT id, 
   CASE 
-    WHEN  
-      coalesce(data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}','') = ''
+  WHEN  
+  coalesce(data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}','') = ''
   THEN
-    data #>> '{\"meta\",\"text\",\"title\",\"en\"}'
+  data #>> '{\"meta\",\"text\",\"title\",\"en\"}'
   ELSE
-    data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}'
+  data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}'
   END as title
   FROM mx_sources
-  WHERE id = '"+ tolower(layer) + "'"
+  WHERE id in ("+ layer +")"
 
-  mxDbGetQuery(sql)$title
+  out <- mxDbGetQuery(sql)
+
+  if(asNamedList){
+    idLayer <- as.list(out$id)
+    names(idLayer) <- out$title
+    out <- idLayer
+  }
+
+  return(out)
+
+
 }
 
 

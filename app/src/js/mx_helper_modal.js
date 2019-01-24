@@ -12,6 +12,7 @@
  */
 export function modal(o) {
   o = o || {};
+  var that = this;
   var h = mx.helpers;
   var id = o.id || h.makeId();
   var idBackground = 'mx_background_for_' + id;
@@ -20,6 +21,8 @@ export function modal(o) {
   var background = document.getElementById(idBackground) || document.createElement('div');
   var hasJquery = typeof window.jQuery === 'function';
   var hasShiny = typeof window.Shiny !== 'undefined';
+  var hasJed = false;
+  var elJedContainers;
   var hasSelectize = hasJquery && typeof window.Selectize == 'function';
   var startBodyScrollPos = 0;
   var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== 'undefined' ? o.noShinyBinding : false;
@@ -65,7 +68,7 @@ export function modal(o) {
   var buttons = document.createElement('div');
   var dialog = document.createElement('div');
   var validation = document.createElement('div');
-
+   
   modal.appendChild(top);
   modal.appendChild(head);
   modal.appendChild(body);
@@ -133,9 +136,11 @@ export function modal(o) {
   footer.appendChild(buttons);
   document.body.appendChild(modal);
 
+  
+
   if (o.addBackground) document.body.appendChild(background);
   if (hasShiny && !noShinyBinding) Shiny.bindAll(modal);
-  if (hasSelectize) {
+  if (true) {
     mx.helpers.initSelectizeAll({
       id: id,
       selector: modal,
@@ -149,9 +154,22 @@ export function modal(o) {
     debounceTime: 10,
   });
 
+
+  modal.close = close;
+
   return modal;
 
   function close(e) {
+    if( mx.helpers.isElement(content)  ) {
+      elJedContainers = content.querySelectorAll('[data-jed_id]');
+      elJedContainers.forEach(elJed => {
+        var jedId = elJed.dataset.jed_id;
+        if(jed.editors[jedId] && mx.helpers.isFunction(jed.editors[jedId].destroy)){
+          console.log("destroy " + jedId );
+          jed.editors[jedId].destroy();
+        }
+      });
+    }
     if (hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
     if (hasSelectize) mx.helpers.removeSelectizeGroupById(id);
     if (hasJquery) {
@@ -161,6 +179,7 @@ export function modal(o) {
       modal.remove();
       background.remove();
     }
+  
   }
 
 

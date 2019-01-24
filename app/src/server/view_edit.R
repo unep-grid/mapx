@@ -684,14 +684,14 @@ observe({
               if(!viewIsEditable) return()
               if(viewType != "sm") return()
 
-              #
-              # First, get latest stored version of the story, if any.
-              #
-              mglGetLocalForageData(
-                idStore = "stories",
-                idInput = "localStory",
-                idKey = viewId
-                )
+              ##
+              ## First, get latest stored version of the story, if any.
+              ##
+              #mglGetLocalForageData(
+                #idStore = "stories",
+                #idInput = "localStory",
+                #idKey = viewId
+                #)
 
               btnList <- list(
                 actionButton(
@@ -703,12 +703,12 @@ observe({
                   inputId="btnViewPreviewStory",
                   label=d("btn_preview",language),
                   `data-keep` = TRUE
-                  ),
-                 actionButton(
-                  inputId="btnViewStoryCancel",
-                  label=d("btn_close",language),
-                  `data-keep` = TRUE
                   )
+                 #actionButton(
+                  #inputId="btnViewStoryCancel",
+                  #label=d("btn_close",language),
+                  #`data-keep` = TRUE
+                  #)
                 )
 
               mxModal(
@@ -720,7 +720,8 @@ observe({
                   jedOutput(id="storyEdit")
                   ),
                 buttons = btnList,
-                removeCloseButton = T
+                textCloseButton=d("btn_close",language)
+                #removeCloseButton = T
                 )
             },
             "btn_opt_edit_style"={
@@ -772,9 +773,13 @@ observeEvent(input$viewTitleSchema_init,{
     languagesHidden = languages[!languages %in% language]
     )
   jedSchema(
-    id="viewTitleSchema",
-    schema=schema,
-    startVal=titles
+    id = "viewTitleSchema",
+    schema = schema,
+    startVal = titles,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+      )
     )
 })
 
@@ -792,9 +797,13 @@ observeEvent(input$viewAbstractSchema_init,{
     languagesHidden = languages[!languages %in% language]
     )
   jedSchema(
-    id="viewAbstractSchema",
-    schema=schema,
-    startVal=abstracts
+    id = "viewAbstractSchema",
+    schema = schema,
+    startVal = abstracts,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+      )
     )
 })
 
@@ -865,10 +874,15 @@ observe({
     #
     # Other input check
     #
-    hasNoSchemaTitle <- noDataCheck( input$viewTitleSchema_values )
-    hasNoSchemaAbstract <- noDataCheck( input$viewAbstractSchema_values )
-    hasTitleIssues <- !noDataCheck( input$viewTitleSchema_issues$msg )
-    hasAbstractIssues <- !noDataCheck( input$viewAbstractSchema_issues$msg )
+    titleValues <- input$viewTitleSchema_values
+    titleIssues <- input$viewTitleSchema_issues
+    abstractValues <- input$viewAbstractSchema_values
+    abstractIssues <- input$viewAbstractSchema_issues
+
+    hasNoSchemaTitle <- noDataCheck( .get(titleValues, c("data","en")) )
+    hasNoSchemaAbstract <- noDataCheck( .get(abstractValues, c("data","en")) )
+    hasTitleIssues <- !noDataCheck( .get(titleIssues, c("data")) )
+    hasAbstractIssues <- !noDataCheck( .get(abstractIssues, c("data")) )
 
     errors <- c(
       errors,
@@ -957,8 +971,8 @@ observeEvent(input$btnViewSave,{
     #
     # Title and description
     #
-    view[[c("data","title")]] <- input$viewTitleSchema_values$msg
-    view[[c("data","abstract")]] <- input$viewAbstractSchema_values$msg
+    view[[c("data","title")]] <- input$viewTitleSchema_values$data
+    view[[c("data","abstract")]] <- input$viewAbstractSchema_values$data
 
     #
     # Update first level values

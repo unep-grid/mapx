@@ -83,11 +83,12 @@ tagList(
   # Get current view title. Use falback if needed.
   #
   "{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}",
+  "{{ var title = view.data.title ? view.data.title[lang] : 'undefined' ; }}",
   tags$li(
     id = "{{=view.id}}",
     `data-view_id`="{{=view.id}}",
     `data-view_date_modified`="{{=view.date_modified}}",
-    `data-view_title`="{{=view.data.title[lang]}}",
+    `data-view_title`="{{=title}}",
     class="mx-view-item mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
     divHeader
     ),

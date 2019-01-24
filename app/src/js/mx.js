@@ -1,4 +1,5 @@
 /*jshint esversion: 6, node: true  */
+
 import * as helpers from "./mx_helpers.js";
 
 import mapboxgl from 'mapbox-gl';
@@ -28,6 +29,9 @@ export let data = {
   }),
   config : localforage.createInstance({
     name : "config"
+  }),
+  draft : localforage.createInstance({
+    name : "draft"
   })
 };
 
@@ -43,6 +47,7 @@ export let settings = {
   devicePixelRatio : 0, // updated by getPixelRatio()
   language : 'en',
   languages : ['en','fr'],
+  highlightedCountries : [],
   project : '',
   apiPort : '80',
   apiHost : 'api.mapx.localhost',

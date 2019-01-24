@@ -10,10 +10,6 @@
 #'
 #' @name jed-shiny
 jedSchema <- function(id, schema, startVal = list(), options = list(), session=shiny::getDefaultReactiveDomain()){
-
-  mxDebugMsg(id);
-
-
   session$sendCustomMessage(
     type="jedInit",
     list(
@@ -45,16 +41,40 @@ jedOutput <- function(id){
 }
 
 
+#' @rdname jed-shiny
+#' @export
+jedRemoveDraft <- function(id,idItem,session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage(
+    type="jedRemoveDraft",
+    list(
+      id = id,
+      idItem = idItem
+      )
+    )
+}
 
 #' @rdname jed-shiny
 #' @export 
-jedGetValues <- function(id=NULL,session=shiny::getDefaultReactiveDomain()){
-    session$input[[sprintf("%s_values",id)]]
+jedTriggerGetValues <- function(id=NULL,idEvent="info",session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage(
+    type="jedTriggerGetValues",
+    list(
+      id = id,
+      idEvent = idEvent
+      )
+    )
 }
+
 #' @rdname jed-shiny
 #' @export 
-jedGetIssues <- function(id=NULL,session=shiny::getDefaultReactiveDomain()){
-    session$input[[sprintf("%s_issues",id)]]
+jedTriggerGetValidation <- function(id=NULL,idEvent="info",session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage(
+    type="jedTriggerGetValidation",
+    list(
+      id = id,
+      idEvent = idEvent
+      )
+    )
 }
 
 #' @rdname jed-shiny

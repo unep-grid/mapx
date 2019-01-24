@@ -6,8 +6,11 @@
 export function Dashboard(idContainer,idDashboard,view) {
 
   var dashboard = this;
-  var modules = mx.helpers.path(view,'data.dashboard.modules')||['highcharts'];
-  if(typeof modules == "string") modules = [modules];
+  var modules = mx.helpers.path(view,'data.dashboard.modules');
+  if( typeof modules == "string" ) modules = [modules];
+  if( !modules || modules.length == 0 ){
+    modules = ['highcharts'];
+  }
   /**
    * Init
    */
@@ -25,6 +28,7 @@ export function Dashboard(idContainer,idDashboard,view) {
     mx.helpers.modulesLoad(modules)
   ])
     .then(function(m){
+      
       /**
        * Add modules in dashboard instance for quick ref 
        * from the editor
@@ -156,8 +160,8 @@ Dashboard.prototype.Widget = function(config) {
          */
         widget._init = true;
       }).catch(function(e) {
-        console.log(e);
         widget.remove();
+        throw new Error(e);
       });
   };
     
@@ -488,6 +492,7 @@ Dashboard.init = function(o){
     .then(function(dashboard){
 
       dashboardData.widgets.forEach(function(w){
+
 
         var config = {
           dashboard : dashboard,

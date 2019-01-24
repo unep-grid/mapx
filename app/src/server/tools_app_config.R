@@ -125,6 +125,10 @@ observeEvent(input$appConfigEdit_init,{
         schema = schema,
         startVal = list(
           about = mxDbConfigGet("about")
+          ),
+        options = list(
+          getValidationOnChange = TRUE,
+          getValuesOnChange = TRUE
           )
         )
 
@@ -139,19 +143,13 @@ observeEvent(input$appConfigEdit_values,{
 
   userRole <- getUserRole()
   access <- .get(userRole,c("access"))
-  data <- input$appConfigEdit_values$msg;
-  hasIssues <- length(input$appConfigEdit_issues$msg)>0
+  data <- input$appConfigEdit_values$data;
+  hasIssues <- length(input$appConfigEdit_issues$data)>0
 
   if( "appConfig" %in% access  && !hasIssues ){
     for(name in names(data)){
       mxDbConfigSet(name,data[[name]])
     }
-
-    mxFlashIcon("floppy-o")
-    mxUpdateText(
-      id = "appConfig_txt",
-      text = sprintf("Saved at %s",format(time,'%H:%M'))
-      )
   }
 
 })

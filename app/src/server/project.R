@@ -38,10 +38,10 @@ observe({
 
       if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
 
-      roles <- mxDbGetProjectUserRoles(id_user,project_query)
-      if(!roles$public){
-        project_query <- NULL
-      }
+      #roles <- mxDbGetProjectUserRoles(id_user,project_query)
+      #if(!roles$public){
+        #project_query <- NULL
+      #}
     }
 
     if(!noDataCheck(project_query)){
@@ -51,17 +51,18 @@ observe({
 
       # if there is no already defined project but there is something from the db, use the later
       if(noDataCheck(project_react) && !noDataCheck(project_db)){
+
         project_out <- project_db
 
         # if the change comes from the ui, apply
       }else if(!noDataCheck(project_ui)){
         mxModal(id="uiSelectProject",close=T)
-        roles <- mxDbGetProjectUserRoles(id_user,project_ui)
-        if(!roles$public){
-          msg <- d("project_access_denied",language)
-          mxModal(id="homeProjectDenied",content = tags$b(msg))
-          project_ui <- NULL
-        }
+      #  roles <- mxDbGetProjectUserRoles(id_user,project_ui)
+        #if(!roles$public){
+          #msg <- d("project_access_denied",language)
+          #mxModal(id="homeProjectDenied",content = tags$b(msg))
+          #project_ui <- NULL
+        #}
         project_out <- project_ui
       }else{
         # nothing to do
@@ -72,6 +73,14 @@ observe({
 
     query$project <<- NULL
     if(!noDataCheck(project_out)){
+      
+      #
+      # Last check
+      #
+      roles <- mxDbGetProjectUserRoles(id_user,project_out)
+      if(noDataCheck(roles$groups)) project_out = project_def;
+
+
       mxUpdateUrlParams(list(project=project_out))
       reactData$project <- project_out
 
@@ -218,69 +227,77 @@ observe({
   isGuest <- isGuestUser()
   update <- reactData$updateProject
 
-  if( hasMap && hasProject ){
+  isolate({
+    if( hasMap && hasProject ){
 
-    projectData <- mxDbGetProjectData(project)
-    countryClip <- projectData$countries
-    mapPos <- projectData$map_position 
-    language <- reactData$language
+      projectData <- mxDbGetProjectData(project)
+      countryClip <- projectData$countries
+      mapPos <- projectData$map_position 
+      language <- reactData$language
 
-    hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
+      hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
 
-    if( hasNoClip ){
-      filter = list(
-        "all", 
-        list("in","iso3code",project)
+      mglSetHighlightedCountries(
+        id = idMap,
+        idLayer = 'country-code',
+        countries = as.list(countryClip)
         )
-    }else{
-      filter = list(
-        "any",
-        c(list("!in","iso3code"),as.list(countryClip)),
-        list("!has","iso3code")
+
+      #if( hasNoClip ){
+      #filter = list(
+      #"all", 
+      #list("in","iso3code",project)
+      #)
+      #}else{
+      #filter = list(
+      #"any",
+      #c(list("!in","iso3code"),as.list(countryClip)),
+      #list("!has","iso3code")
+      #)
+      #}
+
+      #mglSetFilter(
+      #id=idMap,
+      #layer="country-code",
+      #filter=filter
+      #)
+
+      if(noDataCheck(mapPos$zoom)){
+        mapPos$zoom <- mapPos$z
+        mapPos$z <- NULL
+      }
+      #
+      # Read map position from query
+      #
+      if(!noDataCheck(query$lat) && !noDataCheck(query$lng) && !noDataCheck(query$zoom)){
+        mapPos$lat  = as.numeric(query$lat)
+        mapPos$lng = as.numeric(query$lng)
+        mapPos$zoom = as.numeric(query$zoom)
+        mapPos$fromQuery = TRUE 
+        query$lat <<- NULL
+        query$lng <<- NULL
+        query$zoom <<- NULL
+      }
+
+      mglFlyTo(
+        id = idMap,
+        mapPos
         )
-    }
 
-    mglSetFilter(
-      id=idMap,
-      layer="country-code",
-      filter=filter
-      )
-
-    if(noDataCheck(mapPos$zoom)){
-      mapPos$zoom <- mapPos$z
-      mapPos$z <- NULL
-    }
-    #
-    # Read map position from query
-    #
-    if(!noDataCheck(query$lat) && !noDataCheck(query$lng) && !noDataCheck(query$zoom)){
-      mapPos$lat  = as.numeric(query$lat)
-      mapPos$lng = as.numeric(query$lng)
-      mapPos$zoom = as.numeric(query$zoom)
-      mapPos$fromQuery = TRUE 
-      query$lat <<- NULL
-      query$lng <<- NULL
-      query$zoom <<- NULL
-    }
-
-    mglFlyTo(
-      id = idMap,
-      mapPos
-      )
-
-    mxUpdateText(
-      "btnShowProject",
-       mxDbGetProjectTitle(project,language)
-      )
-
-    if(!isGuest){
-      # update reactive value and db if needed
-      mxDbUpdateUserData(reactUser,
-        path = c("user","cache","last_project"),
-        value = project
+      mxUpdateText(
+        "btnShowProject",
+        mxDbGetProjectTitle(project,language)
         )
+
+      if(!isGuest){
+        # update reactive value and db if needed
+        mxDbUpdateUserData(reactUser,
+          path = c("user","cache","last_project"),
+          value = project
+          )
+      }
     }
-  }
+  })
 })
 
 

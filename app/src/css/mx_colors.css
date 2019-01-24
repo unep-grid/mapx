@@ -126,7 +126,11 @@
 
 .mx .jed-container div[data-schematype='object'] {
     border-radius: 0px;
-    border : 1px solid var(--mx_ui_border);
+    border-color : var(--mx_ui_border);
+}
+
+.jed-container .color-picker { 
+    border-color : var(--mx_ui_border);
 }
 
 .mx .jed-container .jed-error {
@@ -513,3 +517,11 @@ color:var(--mx_ui_text);
   background-color:var(--mx_ui_background);
 }
 
+/**
+* Boostrap fixes
+*/
+.mx pre{
+  color: var(--mx_ui_text);
+  background-color: inherit;
+  border: 1px solid var(--mx_ui_text);
+}

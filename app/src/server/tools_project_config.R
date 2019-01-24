@@ -77,8 +77,8 @@ observe({
     warningsList <- list()
 
     project <- reactData$project
-    projectTitle <- input$projectTitleSchema_values$msg
-    projectDesc <- input$projectDescriptionSchema_values$msg
+    projectTitle <- input$projectTitleSchema_values$data
+    projectDesc <- input$projectDescriptionSchema_values$data
 
     isProjectDefaultNotPublic <- !isTRUE(input$checkProjectPublic) && .get(config,c("project","default")) == project
 
@@ -211,11 +211,15 @@ observeEvent(input$projectMapPosition_init,{
       )
     )
 
-   jedSchema(
-      id="projectMapPosition",
-      schema=schema,
-      startVal=mapPosition
+  jedSchema(
+    id="projectMapPosition",
+    schema=schema,
+    startVal=mapPosition,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
       )
+    )
 
   } 
 })
@@ -246,7 +250,11 @@ observeEvent(input$projectTitleSchema_init,{
     jedSchema(
       id="projectTitleSchema",
       schema=schema,
-      startVal=titles
+      startVal=titles,
+      options = list(
+        getValidationOnChange = TRUE,
+        getValuesOnChange = TRUE
+        )
       )
   }
 })
@@ -276,7 +284,11 @@ observeEvent(input$projectDescriptionSchema_init,{
     jedSchema(
       id="projectDescriptionSchema",
       schema=schema,
-      startVal=descriptions
+      startVal=descriptions,
+      options = list(
+        getValidationOnChange = TRUE,
+        getValuesOnChange = TRUE
+        )
       )
   }
 })
@@ -284,24 +296,29 @@ observeEvent(input$projectDescriptionSchema_init,{
 
 observeEvent(input$btnSaveProjectConfig,{
 
+  mxToggleButton(
+    id="btnSaveProjectConfig",
+    disable = TRUE
+    )
+
   userRole <- getUserRole()
   project <- reactData$project
   language <- reactData$language 
   isAdmin <- isTRUE(userRole$admin)
   isValid <- isTRUE(reactData$projectConfigValid)
   isPublic <- isTRUE(input$checkProjectPublic) || .get(config,c("project","default")) == project
-  
+
   if(isAdmin && isValid){
 
     mxDbSaveProjectData(project,list(
         public = isPublic,
         active = TRUE,
-        title = input$projectTitleSchema_values$msg,
-        description = input$projectDescriptionSchema_values$msg,
+        title = input$projectTitleSchema_values$data,
+        description = input$projectDescriptionSchema_values$data,
         admins = NULL,
         members = NULL,
         publishers = NULL,
-        map_position = input$projectMapPosition_values$msg,
+        map_position = input$projectMapPosition_values$data,
         countries = input$selectProjectConfigCountries,
         creator = NULL
         )
@@ -310,14 +327,15 @@ observeEvent(input$btnSaveProjectConfig,{
 
     reactData$updateProject <- runif(1)
 
-
-    ui <- tags$span(d("project_saved",language))
-    mxModal(
-      id = "projectConfig",
-      title = d("project_settings",language,web=F),
-      content = ui,
-      textCloseButton = d("btn_close",language,web=F),
+    mxUpdateText(
+      id = "projectConfig_txt",
+      text = sprintf("Saved at %s",format(Sys.time(),'%H:%M'))
       )
+    mxToggleButton(
+      id="btnSaveProjectConfig",
+      disable = FALSE
+      )
+    mxFlashIcon("floppy-o")
 
   }
 })

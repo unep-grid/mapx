@@ -16,18 +16,18 @@ observeEvent(input$styleEdit_init,{
   if(!hasStyle) style = NULL
   if(!hasLayer || ! hasSources){
 
-  errors <- logical(0)
-  warnings <- logical(0)
+    errors <- logical(0)
+    warnings <- logical(0)
 
     if(!hasLayer) warnings["error_no_layer"] <- TRUE
     if(!hasSources) errors["error_no_source"] <- TRUE
-    
+
     output$txtValidSchema <- renderUI({
       mxErrorsToUi(
-      errors=errors,
-      warning=warnings,
-      language=language
-      )
+        errors=errors,
+        warning=warnings,
+        language=language
+        )
 
     })
 
@@ -49,102 +49,126 @@ observeEvent(input$styleEdit_init,{
       language=language
       )
 
+    viewTimeStamp <- as.numeric(
+      as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
+      )
+
     jedSchema(
       id="styleEdit",
       schema = schema,
       startVal = style,
       options = list(
-        disableSelectize = TRUE
+        enablePickolor = TRUE,
+        disableSelectize = TRUE,
+        draftAutoSaveId = view$id,
+        draftAutoSaveDbTimestamp= viewTimeStamp
         )
       )
   }
 })
 
 #
-# View style change
+# Vew style preview 
 #
 observeEvent(input$btnViewPreviewStyle,{
-
-  style <- input$styleEdit_values$msg
-
-  if(noDataCheck(style)) return();
-
-  view <- reactData$viewDataEdited
-
-  view <- .set(view,c("data","style","rules"), style$rules)
-  view <- .set(view,c("data","style","nulls"), style$nulls)
-  view <- .set(view,c("data","style","hideNulls"), style$hideNulls)
-  view <- .set(view, c("data","style","custom"), style$custom)
-  view <- .set(view, c("data","style","titleLegend"), style$titleLegend)
-  view <- .set(view, c("data","style","reverseLayer"), style$reverseLayer)
-
-  mglAddView(
-    viewData = view
-    )
-
-})
-
-#
-# View style save
-#
-observeEvent(input$btnViewSaveStyle,{
-
   mxToggleButton(
     id="btnViewSaveStyle",
     disable = TRUE
     )
-
-  view <- reactData$viewDataEdited
-  project <- reactData$project
-  time <- Sys.time()
-  editor <- reactUser$data$id
-
-  if( view[["_edit"]] && view[["type"]] == "vt" ){
-    view[["_edit"]] = NULL
-
-    style <- input$styleEdit_values$msg
-
-    if(!noDataCheck(style)){
-
-      view <- .set(view, c("date_modified"), time )
-      view <- .set(view, c("target"), as.list(.get(view,c("target"))))
-      view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
-      view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
-      view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
-      view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
-      view <- .set(view, c("data","style","nulls"), .get(style,c("nulls")))
-      view <- .set(view, c("data","style","hideNulls"), .get(style,c("hideNulls")))
-      view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
-      view <- .set(view, c("data", "style", "reverseLayer"), .get(style,c("reverseLayer")))
-      view <- .set(view, c("data"), as.list(.get(view,"data")))
-      view <- .set(view, c("editor"), editor)
-
-      mxDbAddRow(
-        data=view,
-        table=.get(config,c("pg","tables","views"))
-        )
-
-      # edit flag
-      view$`_edit` = TRUE 
-
-      mglAddView(
-        viewData = view
-      )
-
-      reactData$updateViewListFetchOnly <- runif(1)
-    }
-  }
-
-  mxFlashIcon("floppy-o")
-  mxUpdateText(
-    id = "modalViewEdit_txt",
-    text = sprintf("Saved at %s",format(time,'%H:%M'))
+  mxToggleButton(
+    id="btnViewPreviewStyle",
+    disable = TRUE
     )
+  jedTriggerGetValues("styleEdit","preview")
+})
+#
+# View style save
+#
+observeEvent(input$btnViewSaveStyle,{
+  mxToggleButton(
+    id="btnViewSaveStyle",
+    disable = TRUE
+    )
+  mxToggleButton(
+    id="btnViewPreviewStyle",
+    disable = TRUE
+    )
+  jedTriggerGetValues("styleEdit","save")
+})
 
+
+observeEvent(input$styleEdit_values,{
+
+  values <- input$styleEdit_values;
+  if(noDataCheck(values)) return();
+
+  style <- values$data;
+  idEvent <- values$idEvent;
+  editor <- reactUser$data$id
+  project <- reactData$project
+  view <- reactData$viewDataEdited
+  isEditable <- view[["_edit"]] && view[["type"]] == "vt"
+
+  if(isEditable){
+
+    time <- Sys.time()
+
+    view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
+    view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
+    view <- .set(view, c("data","style", "nulls"), .get(style,c("nulls")))
+    view <- .set(view, c("data","style", "hideNulls"), .get(style,c("hideNulls")))
+    view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
+    view <- .set(view, c("data", "style", "reverseLayer"), .get(style,c("reverseLayer")))
+
+    switch(idEvent,
+      "preview"= {
+        mglAddView(
+          viewData = view
+          )
+      },
+      "save" = {
+        view[["_edit"]] = NULL
+        view <- .set(view, c("date_modified"), time )
+        view <- .set(view, c("editor"), editor)
+        view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+        view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
+        view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
+        view <- .set(view, c("data"), as.list(.get(view,"data")))
+
+        mxDbAddRow(
+          data=view,
+          table=.get(config,c("pg","tables","views"))
+          )
+
+        # edit flag
+        view$`_edit` = TRUE 
+
+        mglAddView(
+          viewData = view
+          )
+
+        mxUpdateText(
+          id = "modalViewEdit_txt",
+          text = sprintf("Saved at %s",format(time,'%H:%M'))
+          )
+
+        mxFlashIcon("floppy-o")
+        reactData$updateViewListFetchOnly <- runif(1)
+
+
+      })
+
+  }
   mxToggleButton(
     id="btnViewSaveStyle",
     disable = FALSE
     )
-})
+  mxToggleButton(
+    id="btnViewPreviewStyle",
+    disable = FALSE
+    )
 
+
+})
+ 
 

@@ -6,7 +6,6 @@
 * @param {String} o.id Map id
 * @param {String} o.idView View id. If no view is given, fetch one by id
 * @param {Object} o.view A view object containing a story in data
-* @param {Boolean} o.save Save the given view in localstorage by id
 * @param {Boolean} o.storyAutoStart Bypass everything, start story, don't display back button
 * @param 
 */ 
@@ -79,22 +78,6 @@ function setListeners(o){
     /* Return options */
     resolve(o);
   });
-}
-
-
-/**
-* Save the view object in local db
-* @param {Object} o Story options
-*/
-function handleLocalSave(o){
-  if(mx.data.stories){
-    mx.data.stories.setItem(
-      o.view.id,
-      o.view
-    ).then(function(){
-      console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
-    });
-  }
 }
 
 /**
@@ -356,7 +339,7 @@ function initEditing(o){
        */
       var elBtnModalPreview = document.getElementById("btnViewPreviewStory");
       var elBtnModalSave = document.getElementById("btnViewSaveStory");
-      var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
+      //var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
       var elModalEditView = document.getElementById("modalViewEdit");
       /**
        * Set a remove function for custom buttons
@@ -382,7 +365,7 @@ function initEditing(o){
 
         elBtnModalSave.setAttribute("disabled",true);
         elBtnModalPreview.setAttribute("disabled",true);
-        elBtnStoryClose.setAttribute("disabled",true);
+        //elBtnStoryClose.setAttribute("disabled",true);
         elModalEditView.classList.add("mx-hide");
         /* If jed has an story editor, disable it during edition */
         if(jed.editors.storyEdit){
@@ -399,7 +382,7 @@ function initEditing(o){
         elBtnModalSave.removeAttribute("disabled");
         elBtnModalPreview.removeAttribute("disabled");
         elModalEditView.classList.remove("mx-hide");
-        elBtnStoryClose.removeAttribute("disabled");
+        //elBtnStoryClose.removeAttribute("disabled");
         if(jed.editors.storyEdit){
           jed.editors.storyEdit.enable();
         }     
@@ -413,7 +396,7 @@ function initEditing(o){
 
         elBtnModalSave.removeAttribute("disabled");
         elBtnModalPreview.removeAttribute("disabled");
-        elBtnStoryClose.removeAttribute("disabled");
+        //elBtnStoryClose.removeAttribute("disabled");
         elModalEditView.classList.remove("mx-hide");
         // Check that something changed
         regions = ev.detail().regions;
@@ -438,20 +421,6 @@ function initEditing(o){
             if(e && e.setValue){
               e.setValue(t);
             }
-          }
-
-          if(mx.data.stories){
-            var story = j.getValue();
-            var view = o.view;
-            view.data.story = story;
-            view.date_modified = +(new Date());
-
-            mx.data.stories.setItem(
-              o.idView,
-              view
-            ).then(function(){
-              console.log("saved story id" + o.view.id + " with date modified set at " +o.view.date_modified );
-            });
           }
           this.busy(false);
         }
@@ -687,13 +656,10 @@ function cleanInit(o){
       console.log("No story to handle, abord");
       return ;
     }
-    /* local save : save in localforage instance */
-    if( o.save ){
-      handleLocalSave(o);      
-    }
-
-    /* close last story, stored in mx.data. */
+    
+    /** Remove old stuff if any */
     var oldData = mx.helpers.path(mx.data,"story.data");
+
     if(oldData){
       o.startScroll = oldData.elScroll.scrollTop;
     }
@@ -1462,45 +1428,38 @@ export function storyController(o){
 
       if( o.data.elBullets ){
         o.data.elBullets.remove();
-        /* Sometimes it stays...*/
-        setTimeout(function(){
-          var leftOverBullets = document.querySelector(".mx-story-step-bullets");
-          if( leftOverBullets ){
-            leftOverBullets.remove();
-          }
-        },300);
       }else{
         console.log('no bullets');
       }
 
-        if( o.data.elScroll ){
-          o.data.elScroll.remove();
-        }
+      if( o.data.elScroll ){
+        o.data.elScroll.remove();
+      }
 
-        if( o.data.elStory ){
-          o.data.elStory.remove();
-        }
+      if( o.data.elStory ){
+        o.data.elStory.remove();
+      }
 
-        if( o.data.styleMap ){
-          o.data.elMap.style = o.data.styleMap;
-        }
-        if( o.data.classMap ){
-          o.data.elMap.className = o.data.classMap;
-        }
+      if( o.data.styleMap ){
+        o.data.elMap.style = o.data.styleMap;
+      }
+      if( o.data.classMap ){
+        o.data.elMap.className = o.data.classMap;
+      }
 
-        /**
-         * Resize map
-         */
+      /**
+       * Resize map
+       */
 
-        o.data.map.resize();
+      o.data.map.resize();
 
-        /**
-         * clean data storage
-         */
+      /**
+       * clean data storage
+       */
 
-        if(mx.data.story){
-          mx.data.story = {};
-        }
+      if(mx.data.story){
+        mx.data.story = {};
+      }
 
 
     }
@@ -1660,10 +1619,27 @@ export function storyBuild(o){
     divStory.appendChild(divStep);
   });
 
+
+
+  /**
+  * Handle broken images
+  */
+
+  //var imgs = divStory.querySelectorAll("img");
+
+  //imgs.forEach(img => {
+     //img.onerror = function(e){
+       //var imgRect = img.getBoundingClientRect();
+       //var w = Math.ceil(imgRect.width);
+       //var h = Math.ceil(imgRect.height);
+       //img.src = "http://placekitten.com/"+w+"/"+h+"";
+     //};
+  /*});*/
+
   /**
   * Finish building by adding container  to wrapper.
   */
-  
+
   divStoryContainer.appendChild(divStory);
   divMap.appendChild(divStoryContainer);
   /**

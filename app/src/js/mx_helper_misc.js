@@ -426,7 +426,6 @@ export function textToDom(text){
 export function domToText(dom){
   var el = document.createElement("div");
   el.appendChild(dom);
-  console.log(el.innerHTML);
 }
 
 
@@ -2314,11 +2313,6 @@ export function handleRequestMessage(msg,msgs,on){
           if( msgs[msg] ) return;
 
           msgs[msg] = true;
-
-          console.log({
-            msg : msg,
-            type : type
-          });
 
           addMsg(msg, type);
         }

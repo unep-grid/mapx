@@ -1,0 +1,131 @@
+.pickolor {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 3px;
+  overflow: auto;
+  background-color: #efeded;
+  -webkit-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.18);
+  -moz-box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.18);
+  box-shadow: 2px 2px 8px 1px rgba(0,0,0,0.18);
+}
+.pickolor .tabs {
+  display: flex;
+  justify-content: space-between;
+}
+.pickolor .slider-container input {
+  font-size: 0.7em;
+  width: 30px;
+  color: #474747;
+  margin: 0px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border: none;
+  padding: 5px;
+  border-radius: 3px;
+}
+.pickolor .top-group-input {
+    display: flex;
+}
+.pickolor .top-group-input .button {
+  margin: 2px;
+  color: #fff;
+  background-color: #474747;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.pickolor .toggle-tools {
+  display: none;
+}
+.pickolor .toggle-tools-label {
+  font-size: 0.7em;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  cursor:pointer;
+}
+.pickolor .color-input {
+  font-size: 1.2em;
+  width: auto;
+  width: calc(100% - 22px);
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #474747;
+  color: #fff;
+  display: flex;
+  border-radius: 3px;
+  margin: 2px;
+}
+
+.pickolor .tab-sliders {
+  border-radius: 3px;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  -webkit-box-shadow: inset 2px 2px 8px 1px rgba(173,173,173,0.29);
+  -moz-box-shadow: inset 2px 2px 8px 1px rgba(173,173,173,0.29);
+  box-shadow: inset 2px 2px 8px 1px rgba(173,173,173,0.29);
+}
+
+.pickolor .slider-container {
+}
+
+.pickolor .slider-min-max-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.pickolor .slider-min-max-container span {
+  font-size: 0.7em;
+}
+
+.pickolor .slider {
+  margin: 10px;
+}
+
+.pickolor .slider.toggle {
+  width: 50px;
+}
+
+.pickolor .item {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+.pickolor .item input {
+  display: none;
+}
+
+.pickolor .item label {
+  display: block;
+  border-radius: 0%;
+  height: 50px;
+  background-color: #f00;
+  border: 0px;
+  padding: 0px;
+  margin: 0px;
+  cursor:pointer;
+}
+
+.pickolor .items {
+  padding: 10px;
+  border-radius: 3px;
+  background-color: #474747;
+  display: flex;
+  overflow-x: auto;
+  margin: 2px;
+}
+
+.pickolor .text-area-input-json {
+  border-radius: 3px;
+  background: #474747;
+  color: #fff;
+  width: calc( 100% - 20px );
+  resize: vertical;
+  padding: 10px;
+  min-height: 200px;
+}
+.pickolor .item input:checked ~ label,
+.pickolor .item label:hover {
+  margin-top: 5px;
+  min-width: 5px;
+}

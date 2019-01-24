@@ -90,6 +90,28 @@
     padding: 15px;
     max-width: 100%;
     margin-bottom: 20px;
+    border: 1px solid #ccc;
 }
 
+/**
+* Pickr modifier
+*/
+.jed-container .pickr {
+  visibility:hidden;
+  font-size:0;
+  line-height:0;
+  padding:0;
+  margin:0;
+  height:1px;
+  width:1px;
+}
+.jed-container .color-picker {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 5px;
+  cursor: pointer;
+}
 
+.jed-container .color-picker > .color-picker-content {
+  height: 22px;
+}
