@@ -82,5 +82,9 @@ observeEvent(input$selectLanguage,{
       lang=language
       )
     )
+  mxUpdateText(
+    "btnShowProject",
+    mxDbGetProjectTitle(reactData$project,language)
+    )
 })
 

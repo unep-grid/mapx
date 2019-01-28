@@ -90,20 +90,9 @@ observeEvent(input$btnSendLoginKey,{
           wait = F
           )
 
-        mxModal(
-          id=randomString(),
-          zIndex=100000,
-          title="Unexpected issue",
-          content=tagList(
-            tags$b("An error occured while sending the message"),
-            ),
-          mxFold(labelText="More info",
-            content = tags$div(
-              tags$span(stye="color:red",res),
-              )
-            )
-          )
-
+        if(!noDataCheck(res)){
+          stop("Can't send email")
+        }
       })
 
       if("try-error" %in% class(res)){
