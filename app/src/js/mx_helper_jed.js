@@ -53,7 +53,8 @@ export function jedInit(o) {
         disable_collapse : false,
         disable_properties : true,
         disableSelectize: false,
-        enablePickolor : false,
+        pickolorEnable : false,
+        pickolorId : null,
         disable_edit_json : false,
         required_by_default : true,
         show_errors : "always",
@@ -101,7 +102,7 @@ export function jedInit(o) {
         /**
         * Configure pickolor
         */
-        if( opt_final.enablePickolor ){
+        if( opt_final.pickolorEnable ){
           var pk = window.pk;
           if(pk){
             pk.destroy();
@@ -109,6 +110,7 @@ export function jedInit(o) {
           mx.helpers.moduleLoad("pickolor")
             .then(Pickolor => {
               window.pk = new Pickolor({
+                idPalette : opt_final.pickolorId || null,
                 container : el,
                 onInitColor : ( target ) => {
                   return target.style.backgroundColor;

@@ -230,8 +230,8 @@ Pickolor.prototype.buildTabSliders = function(){
       id: s.id,
     });
 
-    elContainer.appendChild(elTitle);
     elContainerMinMax.appendChild(elMin);
+    elContainerMinMax.appendChild(elTitle);
     elContainerMinMax.appendChild(elMax);
     elContainer.appendChild(elContainerMinMax);
     elContainer.appendChild(elSlider);
@@ -247,11 +247,11 @@ Pickolor.prototype.buildTabSliders = function(){
     };
     if (s.type == 'boolean') {
       elSlider.classList.add('toggle');
-      elMin.style.display = 'none';
-      elMax.style.display = 'none';
+      elMin.style.visibility = 'hidden';
+      elMax.style.visibility = 'hidden';
     }
     if(s.type == 'numeric') {
-      elMax.style.display = 'none';
+      elMax.style.visibility = 'hidden';
     }
     slider.on('slide', pk.update.bind(pk));
     pk.sliders.push({
@@ -643,7 +643,7 @@ Pickolor.prototype.update = function() {
     colors : colors
   };
 
-  pk.db.setItem('default', backup);
+  pk.db.setItem(pk.options.idPalette || 'default', backup);
 
   pk.elInputJson.value = JSON.stringify(backup,0,2);
 
@@ -668,7 +668,7 @@ Pickolor.prototype.restore = function(){
   /*
    * Check for saved data
    */
-  pk.db.getItem('default')
+  pk.db.getItem(pk.options.idPalette || 'default')
     .then(data => {
       pk.set(data);
       pk.update();

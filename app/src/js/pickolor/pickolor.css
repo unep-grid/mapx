@@ -107,6 +107,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
 }
 .pickolor .slider-min-max-container span {
   font-size: 0.7em;
@@ -147,7 +148,7 @@
   display: flex;
   overflow: hidden;
   margin: 2px;
-  max-height: 50px;
+  max-height: 70px;
 }
 
 .pickolor .text-area-input-json {

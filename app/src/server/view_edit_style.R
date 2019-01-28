@@ -58,7 +58,8 @@ observeEvent(input$styleEdit_init,{
       schema = schema,
       startVal = style,
       options = list(
-        enablePickolor = TRUE,
+        pickolorEnable = TRUE,
+        pickolorId = view$id,
         disableSelectize = TRUE,
         draftAutoSaveId = view$id,
         draftAutoSaveDbTimestamp= viewTimeStamp
