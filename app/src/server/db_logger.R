@@ -2,7 +2,7 @@
 
 
 observe({
-  reactData$dbLogger <- input$dbLogger
+  dbLog <- input$dbLogger
   isolate({
     idUser <- reactUser$data$id
     idProject <- reactData$project
