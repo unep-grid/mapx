@@ -2346,6 +2346,8 @@ mxDbGetLayerTitle <- function(layer,asNamedList=TRUE,language="en"){
     idLayer <- as.list(out$id)
     names(idLayer) <- out$title
     out <- idLayer
+  }else{
+    out <- out$title
   }
 
   return(out)

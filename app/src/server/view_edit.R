@@ -163,7 +163,7 @@ observe({
                 meta_target_roles=paste(target,collapse=","),
                 meta_view_project=project,
                 meta_view_projects=paste(projects,collapse=","),
-                meta_source_title=mxDbGetLayerTitle(idSource,language),
+                meta_source_title=mxDbGetLayerTitle(tolower(idSource),language=language,asNamedList=F),
                 meta_source_id=tolower(idSource),
                 meta_source_homepage=homepage,
                 meta_source_integrity_score=integrityScore + "%",

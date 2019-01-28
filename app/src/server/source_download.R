@@ -9,7 +9,7 @@ observeEvent(reactData$sourceDownloadRequest,{
   #meta <- mxDbGetLayerMeta(idSource)
   #isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
   isDownloadable <- "mx_download" %in%  mxDbGetLayerServices(idSource)
-  sourceTitle <- mxDbGetLayerTitle(idSource,language) 
+  sourceTitle <- mxDbGetLayerTitle(idSource,language=language,asNamedList=FALSE) 
   btnList = list()
 
   if( !isDownloadable || isGuest ){
@@ -137,7 +137,7 @@ observeEvent(input$btnSourceDownload,{
     filename <- removeExtension(input$txtDownloadFileName)
     filename <- subPunct(filename)
     iso3codes <- input$selectFilterDataByCountries
-    sourceTitle <- mxDbGetLayerTitle(idSource,language) 
+    sourceTitle <- mxDbGetLayerTitle(idSource,language=language,asNamedList=FALSE)
 
     request = list(
         idSource = idSource,
