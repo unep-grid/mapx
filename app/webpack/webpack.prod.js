@@ -48,7 +48,7 @@ module.exports = merge(common, {
       [ { from : './webpack/sw_listen_skip_waiting_install.js', to: 'sw_listen_skip_waiting_install.js'} ]
     ),
     new GenerateSW({
-      swDest : 'service-worker.js',
+      swDest : './service-worker.js',
       importWorkboxFrom : 'local',
       skipWaiting : false, 
       clientsClaim : true, 

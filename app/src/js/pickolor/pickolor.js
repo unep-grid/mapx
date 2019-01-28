@@ -15,7 +15,6 @@ function Pickolor(opt) {
   var pk = this;
   pk._built = false;
   pk._destroyed = false;
-
   pk.db = localforage.createInstance({
     name:  'pickolor'
   });

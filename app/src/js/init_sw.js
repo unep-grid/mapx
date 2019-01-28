@@ -78,10 +78,13 @@ function showRefreshUI(registration) {
     buildModal();
   }
 
-  function update(){
-    console.log("Update...");
+  function update(e){
     if (!registration.waiting) {
       return;
+    }
+    if( e && e.target && e.target instanceof Element ){
+     e.target.removeEventListener("click",update);
+     e.target.setAttribute("disabled",true);
     }
     registration.waiting.postMessage('mx_install');
   }
@@ -104,11 +107,7 @@ function showRefreshUI(registration) {
           btn
         );
 
-        btn.addEventListener('click',function(e){
-          e.target.removeEventListener('click',update);
-          e.target.btn.disabled = true;
-          update();
-        });
+        btn.addEventListener('click',update);
 
         h.modal({
           zIndex: 100000,
