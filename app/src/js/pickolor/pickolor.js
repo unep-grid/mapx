@@ -17,11 +17,11 @@ function Pickolor(opt) {
   pk._destroyed = false;
 
   pk.db = localforage.createInstance({
-    name:  "pickolor"
+    name:  'pickolor'
   });
   pk.defaultColors = { 
-    bright : "#ffffff",
-    dark :  "#474747"
+    bright : '#ffffff',
+    dark :  '#474747'
   };
   pk.options = opt;
   pk.sliders = [];
@@ -29,7 +29,7 @@ function Pickolor(opt) {
   pk.bind = {};
   pk.config = {};
   pk.colors = [];
-  pk.color = "";
+  pk.color = '';
   pk.sliderValues = {};
   pk.observer = {};
   // Set intial cb and values;
@@ -117,154 +117,84 @@ Pickolor.prototype.open = function(e){
   });
 };
 
-Pickolor.prototype.build = function() {
-  var pk = this;
-  if(pk._built){
-    pk.show();
-    return;
-  }
-  pk._built = true;
 
-  pk.id = Math.random().toString(32);
-  var elContainer = pk.elContainer || pk.options.el;
-  var sliders = pk.sliders;
-  var elDest = buel("div");
 
-  var elHandle = buel("div",{
-    class: 'handle'
-  });
-
-  var elInputColor = buel('input',{
-    class : ['color-input'],
-    placeholder : '#fff',
-    dataset : {
-      action : 'input-text-color'
-    }
-  });
-
-  var elBtnAdd = buel("button","add",{
-    type: "button",
-    class : ["button"],
-    dataset : {
-      action : 'btn-select-color'
-    }
-  });
-
-  var elBtnClose = buel("button","close",{
-    type: "button",
-    class : ["button"],
-    dataset :{
-      action : 'btn-close'
-    }
-  });
-
-  var elInputGroup = buel("div",
-    {
-      class : ['top-group-input']
-    },
-    elInputColor,
-    elBtnAdd,
-    elBtnClose
-  );
-
+Pickolor.prototype.buildTabs = function(){
+ var pk = this;
+  
   var elTabSliders = buel('div',{
     class : ['tab-sliders'],
-    style : {
-      display : 'none'
-    }
-  });
-  var elItems = buel('div', {
-    class: ['items'],
+  }); 
+   var elTabJsonEdit = buel('div',{
+    class : ['tab-sliders'],
+  }); 
+   var elTabSaveLoad = buel('div',{
+    class : ['tab-sliders'],
   });
 
-  var elToggleTabSliders = buel("div",
-    buel('input', {
-      id : 'toggleTools' + pk.id,
-      type: "checkbox",
-      class: ['toggle-tools'],
-      dataset : {
-        action : 'check-toggle-slider'
-      }
+  var elTabsRadio = buel('div',
+    {
+      class : ['pickolor-tabs']
+    },
+    buel('input',{
+      type:'radio',
+      name:'pickolor-tabs',
+      class : 'pickolor-tab-radio',
+      value : 'pickolor-tab-sliders',
+      id : 'pickolor-tab-sliders-radio',
     }),
-    buel('label','Settings', {
-      for: 'toggleTools' + pk.id,
-      type: "checkbox",
-      class: ['toggle-tools-label'],
-    }
+    buel('label',{
+      for : 'pickolor-tab-sliders-radio'
+    },'Settings'),
+    buel('input',{
+      type:'radio',
+      name:'pickolor-tabs',
+      class : 'pickolor-tab-radio',
+      value:'pickolor-tab-load-save',
+      id : 'pickolor-tab-load-save-radio',
+    }),
+    buel('label',{
+      for : 'pickolor-tab-load-save-radio'
+    },'Palettes'),
+    buel('input',{
+      type:'radio',
+      name:'pickolor-tabs',
+      class : 'pickolor-tab-radio',
+      value:'pickolor-tab-json-edit',
+      id : 'pickolor-tab-json-edit-radio',
+    }),
+    buel('label',{
+      for : 'pickolor-tab-json-edit-radio'
+    },'Edit JSON'
+    ),
+    buel('div',
+      {
+        class : ['pickolor-tabs-content']
+      },
+      buel('div',{
+        id : 'pickolor-tab-sliders-content',
+        class : 'pickolor-tab-content'
+      },elTabSliders),
+      buel('div',{
+        id : 'pickolor-tab-load-save-content',
+        class : 'pickolor-tab-content'
+      },elTabSaveLoad),
+      buel('div',{
+        id : 'pickolor-tab-json-edit-content',
+        class : 'pickolor-tab-content'
+      },elTabJsonEdit)
     )
   );
 
-  var elToggleTabJson = buel("div",
-    buel('input', {
-      id : 'toggleJSONinput' + pk.id,
-      type: "checkbox",
-      class: ['toggle-tools'],
-      dataset : {
-        action : 'check-toggle-json'
-      }
-    }),
-    buel('label','Edit values', {
-      for: 'toggleJSONinput' + pk.id,
-      type: "checkbox",
-      class: ['toggle-tools-label'],
-    })
-  );
-
-  var elTabs = buel("div",
-    {
-      class : ["tabs"]
-    },
-    elToggleTabSliders,
-    elToggleTabJson
-  );
-
-  var elInputJson = buel('textarea',{
-    class : ['text-area-input-json']
-  });
-
-  var elTabInputJson = buel("div",{
-    class : ['tab-json'],
-    style : {
-      display : "none"
-    }
-  },
-    elInputJson,
-    buel("button","update",{
-      class : "button",
-      dataset : {
-        action : "btn-update-json"
-      }
-    })
-  );
-
-  elDest.classList.add('pickolor');
-  elDest.classList.add('handle');
-  elDest.style.width = pk.options.width || '300px';
-  //elDest.style.height = pk.options.height || '400px';
-  pk.el = elDest;
-  pk.elItems = elItems;
-  pk.elInputColor = elInputColor;
-  pk.elInputGroup = elInputGroup;
-  pk.elInputJson = elInputJson;
-  pk.elTabInputJson = elTabInputJson;
   pk.elTabSliders = elTabSliders;
-  elDest.appendChild(elHandle);
-  elDest.appendChild(elInputGroup);
-  elDest.appendChild(elItems);
-  elDest.appendChild(elTabs);
-  elDest.appendChild(elTabSliders);
-  elDest.appendChild(elTabInputJson);
-  elContainer.appendChild(elDest);
+  pk.elTabJsonEdit = elTabJsonEdit;
+  pk.elTabSaveLoad = elTabSaveLoad;
+  pk.elTabsRadio = elTabsRadio;
+  pk.el.appendChild(elTabsRadio); 
+};
 
-
-  /**
-   * Event delegation
-   */
-  pk.listenClick = pk.handleClick.bind(pk);
-  pk.listenChange = pk.handleChange.bind(pk);
-  pk.el.addEventListener("click",pk.listenClick);
-  pk.el.addEventListener("change",pk.listenChange);
-
+Pickolor.prototype.buildTabSliders = function(){
+  pk = this;
   /**
    * Build sliders
    */
@@ -285,14 +215,14 @@ Pickolor.prototype.build = function() {
     var elMin = buel('input',{
       type:'text',// avoid browser things..
       dataset : {
-        action : "input-update-value-slider",
+        action : 'input-update-value-slider',
         idSlider : s.id
       }
     });
     var elMax = buel('input',{
       type:'text',// avoid browser things
       dataset : {
-        action : "input-update-value-slider",
+        action : 'input-update-value-slider',
         idSlider : s.id
       }
     });
@@ -305,7 +235,7 @@ Pickolor.prototype.build = function() {
     elContainerMinMax.appendChild(elMax);
     elContainer.appendChild(elContainerMinMax);
     elContainer.appendChild(elSlider);
-    elTabSliders.appendChild(elContainer);
+    pk.elTabSliders.appendChild(elContainer);
 
     /**
      * Settings
@@ -317,14 +247,14 @@ Pickolor.prototype.build = function() {
     };
     if (s.type == 'boolean') {
       elSlider.classList.add('toggle');
-      elMin.style.display = "none";
-      elMax.style.display = "none";
+      elMin.style.display = 'none';
+      elMax.style.display = 'none';
     }
-    if(s.type == "numeric") {
-      elMax.style.display = "none";
+    if(s.type == 'numeric') {
+      elMax.style.display = 'none';
     }
     slider.on('slide', pk.update.bind(pk));
-    sliders.push({
+    pk.sliders.push({
       slider: slider,
       config: s,
       elMin: elMin,
@@ -332,6 +262,123 @@ Pickolor.prototype.build = function() {
     });
   });
 
+};
+
+Pickolor.prototype.buildTabJsonEdit = function(){
+  var pk = this;
+
+  var elInputJson = buel('textarea',{
+    class : ['text-area-input-json']
+  });
+
+  var elContainer = buel('div',
+    elInputJson,
+    buel('button','update',{
+      class : 'button',
+      dataset : {
+        action : 'btn-update-json'
+      }
+    })
+  );
+
+  pk.elTabJsonEdit.appendChild(elContainer);
+  pk.elInputJson = elInputJson;
+
+};
+
+Pickolor.prototype.buildPanel = function(){
+  var pk = this;
+  pk.id = Math.random().toString(32);
+
+  var elContainer = pk.elContainer || pk.options.el;
+
+  var elDest = buel('div');
+  var elHandle = buel('div',{
+    class: 'handle'
+  });
+  var elInputColor = buel('input',{
+    class : ['color-input'],
+    placeholder : '#fff',
+    dataset : {
+      action : 'input-text-color'
+    }
+  });
+
+  var elBtnAdd = buel('button','add',{
+    type: 'button',
+    class : ['button'],
+    dataset : {
+      action : 'btn-select-color'
+    }
+  });
+
+  var elBtnClose = buel('button','close',{
+    type: 'button',
+    class : ['button'],
+    dataset :{
+      action : 'btn-close'
+    }
+  });
+
+  var elInputGroup = buel('div',
+    {
+      class : ['top-group-input']
+    },
+    elInputColor,
+    elBtnAdd,
+    elBtnClose
+  );
+
+  var elItems = buel('div', {
+    class: ['items'],
+  });
+
+  elDest.appendChild(elHandle);
+  elDest.appendChild(elInputGroup);
+  elDest.appendChild(elItems);
+  elContainer.appendChild(elDest);
+  elDest.classList.add('pickolor');
+  //elDest.classList.add('handle');
+  elDest.style.width = pk.options.width || '300px';
+  pk.elItems = elItems;
+  pk.elInputColor = elInputColor;
+  pk.elInputGroup = elInputGroup;
+
+  pk.el = elDest;
+};
+
+Pickolor.prototype.buildTabSaveLoad = function(){
+  var elContent = buel('span','Available soon:',
+    buel('ul',
+      buel('li','Browse standard palettes'),
+      buel('li','Save your own palettes'),
+      buel('li','Share palettes')
+    )
+  );
+  pk.elTabSaveLoad.appendChild(elContent);
+};
+
+Pickolor.prototype.build = function() {
+  var pk = this;
+  if(pk._built){
+    pk.show();
+    return;
+  }
+  pk._built = true;
+
+  pk.buildPanel();
+  pk.buildTabs();
+  pk.buildTabSliders();
+  pk.buildTabSaveLoad();
+  pk.buildTabJsonEdit();
+
+  /**
+   * Event delegation
+   */
+  pk.listenClick = pk.handleClick.bind(pk);
+  pk.listenChange = pk.handleChange.bind(pk);
+  pk.el.addEventListener('click',pk.listenClick);
+  pk.el.addEventListener('change',pk.listenChange);
   /**
   * Restore value if any
   */
@@ -343,7 +390,7 @@ Pickolor.prototype.build = function() {
   if( ! pk.options.disableDraggable ){
     
     draggable({
-      selector : elDest,
+      selector : pk.el,
       classHandle: 'handle',
       elcontainer: pk.elContainer
     });
@@ -383,7 +430,7 @@ Pickolor.prototype.observeMutation = function(){
 Pickolor.prototype.validateBindEl = function(el){
   var pk = this;
   return el instanceof Element &&
-    el.dataset.pickolor_trigger == "true";
+    el.dataset.pickolor_trigger == 'true';
 };
 
 
@@ -393,25 +440,25 @@ Pickolor.prototype.handleClick = function(e){
   var target = e.target;
   var action = target.dataset.action;
 
-  if( action == "btn-select-color"){
+  if( action == 'btn-select-color'){
     var color = pk.getColorInput();
     pk.onPick(color,pk.bind);
   }
-  if( action == "btn-close"){
+  if( action == 'btn-close'){
     pk.hide();
   }
-  if( action == "check-toggle-slider"){
-    pk.toggleTabJson(false);
-    pk.toggleTabSliders();
-  }
-   if( action == "check-toggle-json"){
-    pk.toggleTabSliders(false);
-    pk.toggleTabJson();
-  }
-  if( action == "item-get-color"){
+/*  if( action == 'check-toggle-slider'){*/
+    //pk.toggleTabJson(false);
+    //pk.toggleTabSliders();
+  //}
+   //if( action == 'check-toggle-json'){
+    //pk.toggleTabSliders(false);
+    //pk.toggleTabJson();
+  /*}*/
+  if( action == 'item-get-color'){
     pk.getColor(e);
   }
-  if(action == "btn-update-json"){
+  if(action == 'btn-update-json'){
     pk.set(pk.elInputJson.value);
     pk.update();  
   }
@@ -421,14 +468,14 @@ Pickolor.prototype.handleChange = function(e){
   var pk = this;
   var action = e.target.dataset.action;
 
-  if(action == "input-text-color"){
+  if(action == 'input-text-color'){
     var color = pk.getColorInput();
     pk.setColorInput({
       color : color,
       updateColorOnly : true
     });
   }
-  if(action == "input-update-value-slider"){
+  if(action == 'input-update-value-slider'){
     var id = e.target.dataset.idSlider;
     pk.updateValueSlider(id);
     pk.update();  
@@ -453,7 +500,7 @@ Pickolor.prototype.getValidColor = function(color){
   var pk = this;
   var isValid = pk.validateColor(color);
   if(!isValid){
-    color = "#fff";
+    color = '#fff';
   }
   return chroma(color).hex();
 };
@@ -475,30 +522,30 @@ Pickolor.prototype.setColorInput = function(opt){
 
 };
 
-Pickolor.prototype.toggleTabSliders = function(visible){
-  var pk = this;
-  var el = pk.elTabSliders;
-  var dis = el.style.display;
-  visible = typeof visible == "boolean" ? visible : dis == "none";
-  el.style.display = visible ? "" : "none";
-};
+//Pickolor.prototype.toggleTabSliders = function(visible){
+  //var pk = this;
+  //var el = pk.elTabSliders;
+  //var dis = el.style.display;
+  //visible = typeof visible == 'boolean' ? visible : dis == 'none';
+  //el.style.display = visible ? '' : 'none';
+//};
 
-Pickolor.prototype.toggleTabJson = function(visible){
-  var pk = this;
-  var el = pk.elTabInputJson;
-  var dis = el.style.display;
-  visible = typeof visible == "boolean" ? visible : dis == "none";
-  el.style.display = visible ? "" : "none";
-};
+//Pickolor.prototype.toggleTabJson = function(visible){
+  //var pk = this;
+  //var el = pk.elTabInputJson;
+  //var dis = el.style.display;
+  //visible = typeof visible == 'boolean' ? visible : dis == 'none';
+  //el.style.display = visible ? '' : 'none';
+//};
 
 Pickolor.prototype.hide = function() {
   var pk = this;
-  pk.el.style.display = "none";
+  pk.el.style.display = 'none';
 };
 
 Pickolor.prototype.show = function() {
   var pk = this;
-  pk.el.style.display = "";
+  pk.el.style.display = '';
 };
 
 Pickolor.prototype.destroy = function() {
@@ -512,8 +559,8 @@ Pickolor.prototype.destroy = function() {
     b.el.removeEventListener('click',b.listener);
   });
   if(pk.el) {
-    pk.el.removeEventListener("click",pk.listenClick);
-    pk.el.removeEventListener("change",pk.listenChange);
+    pk.el.removeEventListener('click',pk.listenClick);
+    pk.el.removeEventListener('change',pk.listenChange);
     pk.el.remove();
   }
   pk._destroyed = true;
@@ -596,7 +643,7 @@ Pickolor.prototype.update = function() {
     colors : colors
   };
 
-  pk.db.setItem("default", backup);
+  pk.db.setItem('default', backup);
 
   pk.elInputJson.value = JSON.stringify(backup,0,2);
 
@@ -621,7 +668,7 @@ Pickolor.prototype.restore = function(){
   /*
    * Check for saved data
    */
-  pk.db.getItem("default")
+  pk.db.getItem('default')
     .then(data => {
       pk.set(data);
       pk.update();
@@ -631,12 +678,12 @@ Pickolor.prototype.restore = function(){
 Pickolor.prototype.set = function(data){
   var pk = this;
   data = data || {};
-  data = typeof data == "string" && isJSON(data) ? JSON.parse(data) : data ;
+  data = typeof data == 'string' && isJSON(data) ? JSON.parse(data) : data ;
   if( pk.validateDataInput(data)){
     pk.sliders.forEach(s => {
       var id = s.config.id;
       var values = data.slidersValues[id];
-      if( typeof values != "undefined" ){
+      if( typeof values != 'undefined' ){
         s.slider.set(values);
       }
     });
@@ -704,8 +751,6 @@ function getColors(o) {
   var cols = splitIn(o.colMin, o.colMax, o.count, o.colRotation, o.colShift);
   var lums = splitIn(o.lumMin, o.lumMax, o.count);
 
-  //if(o.colRotation > 0){
-
   /**
    * Sinusoidal version
    *
@@ -719,7 +764,6 @@ function getColors(o) {
    *    return o.colMin + d + o.colShift;
    *  });
    */
-  //}
 
   for (var i = 0; i < o.count; i++) {
     c = 'hsl(' + cols[i] + ',' + sats[i] * 100 + '%,' + lums[i] * 100 + '%)';
@@ -727,8 +771,23 @@ function getColors(o) {
   }
   if (o.random) colors = shuffle(colors);
   if (o.reverse) colors.reverse();
-
   if (o.diverge) colors = diverge(colors);
+
+  var col,cn,dist,distMin = 100;
+
+  for(var j=0,jL=colors.length;j<jL;j++){
+     c = colors[j];
+     cn = colors[j+1];
+    if(cn){
+      dist = chroma.distance(c,cn);
+      if(dist<distMin){
+        distMin = dist;
+      }
+    }
+  }
+
+  console.log(distMin);
+
   return colors;
 }
 
@@ -869,17 +928,17 @@ export function draggable(o) {
   var xMin,xMax,yMin,yMax,x,y;
 
 
-  o.classHandle = o.classHandle || "mx-drag-handle";
-  o.classDraggable = o.classDraggable || "mx-draggable";
-  o.classDragged = o.classDragged || "mx-dragged";
+  o.classHandle = o.classHandle || 'mx-drag-handle';
+  o.classDraggable = o.classDraggable || 'mx-draggable';
+  o.classDragged = o.classDragged || 'mx-dragged';
 
   o.el = o.selector instanceof Element ? o.selector : document.querySelector(o.selector);
   o.elHandle = o.selectorHandle instanceof Element ? o.selectorHandle : o.el.querySelector(o.selectorHandle) || o.el;
   o.elContainer = o.selectorContainer instanceof Element ? o.selectorContainer : document.querySelector(o.selectorContainer) || document.body;
 
   o.el.style.zIndex = 1000;
-  o.el.style.position = "absolute";
-  o.el.style.top ="0px";
+  o.el.style.position = 'absolute';
+  o.el.style.top ='0px';
 
   o.forceDim = o.forceDim || false;
   o.listener = {};
@@ -913,8 +972,8 @@ export function draggable(o) {
   o.setPosElement = function(el, newX, newY) {
     //o.rect = el.getBoundingClientRect();
     o.pos = o.setPos(newX, newY);
-    o.el.style.left = o.pos.left + "px";
-    o.el.style.top = o.pos.top + "px";
+    o.el.style.left = o.pos.left + 'px';
+    o.el.style.top = o.pos.top + 'px';
     o.block = false;
   };
 
@@ -932,7 +991,7 @@ export function draggable(o) {
   };
 
   /*
-   * mouse up : remove "up" and "move" listener
+   * mouse up : remove 'up' and 'move' listener
    */
   o.listener.mouseup = function(event) {
 
@@ -982,12 +1041,12 @@ export function draggable(o) {
 
       if( o.forceDim ){
         o.el.style.zIndex = 1000;
-        o.el.style.width = o.rect.width + "px";
-        o.el.style.height = o.rect.height + "px";
+        o.el.style.width = o.rect.width + 'px';
+        o.el.style.height = o.rect.height + 'px';
       }
 
-      o.el.style.position = "absolute";
-      o.el.style.margin = "initial";
+      o.el.style.position = 'absolute';
+      o.el.style.margin = 'initial';
       o.el.classList.add(o.classDragged);
 
       o.setPosElement(o.el, event.clientX, event.clientY);
@@ -1053,15 +1112,15 @@ function shuffle(array) {
 
 function diverge(array) {
   var a = array;
-  var b = a.filter((v,i) => i % 2 == 0 );
-  var c = b.map(v => v);
-  c.reverse();
-  if( a.length % 2 !== 0 ){
-    c.shift();
-  }
-  b = b.concat(c);
-  return b;
+  var center = a.pop();
+  var set = a.filter((v,i) => i % 2 == 0);
+  var copy = set.map(v => v);
+  copy.reverse();
+  set = set.concat(center);
+  set = set.concat(copy);
+  return set;
 }
+
 
 function isJSON(str) {
   try {
