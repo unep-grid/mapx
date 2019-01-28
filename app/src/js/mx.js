@@ -2,10 +2,9 @@
 
 import * as helpers from "./mx_helpers.js";
 
-import mapboxgl from 'mapbox-gl';
 import localforage  from 'localforage';
 
-export { mapboxgl, localforage, helpers };
+export { localforage, helpers };
 export let templates = {
   viewList : require('../built/view_list.dot'),
   viewListLegend : require('../built/view_list_legend.dot'),

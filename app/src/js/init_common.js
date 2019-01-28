@@ -2,7 +2,6 @@
 
 import 'bootstrap/dist/css/bootstrap.css';
 import 'font-awesome/css/font-awesome.min.css';
-import 'mapbox-gl/dist/mapbox-gl.css';
 import 'hint.css';
 import '../css/mx.css';
 import '../css/mx_modal.css';

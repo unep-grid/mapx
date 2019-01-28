@@ -102,135 +102,140 @@ export function requestProjectMembership(idProject){
  */
 export function initMapx(o){
 
-  var styleInit;
-  var mp;
-  var style = mx.settings.style;
+  return mx.helpers.moduleLoad("mapbox-gj-js")
+    .then(mapboxgl => {
 
-  if( o.style ) style = o.style ;
+      mx.mapboxgl = mapboxgl;
+      
+      var styleInit;
+      var mp;
+      var style = mx.settings.style;
 
-  /**
-  * Set db log levels
-  */
-  if( o.dbLogLevels ){
-    mx.settings.dbLogLevels = o.dbLogLevels ;
-  }
+      if( o.style ) style = o.style ;
 
-  /**
-   * Confirm user quit
-   */
+      /**
+       * Set db log levels
+       */
+      if( o.dbLogLevels ){
+        mx.settings.dbLogLevels = o.dbLogLevels ;
+      }
 
-  if(false){
-    window.onbeforeunload = function(e) {
-      var dialogText = 'Are you sure you want to quit?';
-      e.returnValue = dialogText;
-      return dialogText;
-    };
-  }
+      /**
+       * Confirm user quit
+       */
 
-  /**
-   * Set mapbox gl token
-   */
-  if ( !mx.mapboxgl.accessToken ) {
-    mx.mapboxgl.accessToken = o.token || mx.settings.mapboxToken || '';
-  }
+      if(false){
+        window.onbeforeunload = function(e) {
+          var dialogText = 'Are you sure you want to quit?';
+          e.returnValue = dialogText;
+          return dialogText;
+        };
+      }
 
-  /**
-   * TEst if mapbox gl is supported
-   */
-  if ( !mx.mapboxgl.supported() ) {
-    alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
-    return;
-  }
+      /**
+       * Set mapbox gl token
+       */
+      if ( !mx.mapboxgl.accessToken ) {
+        mx.mapboxgl.accessToken = o.token || mx.settings.mapboxToken || '';
+      }
+
+      /**
+       * TEst if mapbox gl is supported
+       */
+      if ( !mx.mapboxgl.supported() ) {
+        alert("This website will not work with your browser. Please upgrade it or use a compatible one.");
+        return;
+      }
 
 
-  /**
-   * Set default
-   */
-  o.maxZoom = o.maxZoom || 20;
-  o.minZoom = o.minZoom || 0;
+      /**
+       * Set default
+       */
+      o.maxZoom = o.maxZoom || 20;
+      o.minZoom = o.minZoom || 0;
 
-  updateSettings({
-    apiProtocol : o.apiProtocol || location.protocol,
-    apiPort : o.apiPort || location.port,
-    apiHost : o.apiHost,
-    project : o.project,
-    language : o.language,
-    languages : o.languages,
-    mapboxToken : o.token
-  });
+      updateSettings({
+        apiProtocol : o.apiProtocol || location.protocol,
+        apiPort : o.apiPort || location.port,
+        apiHost : o.apiHost,
+        project : o.project,
+        language : o.language,
+        languages : o.languages,
+        mapboxToken : o.token
+      });
 
-  /*
-   * Update version
-   */
-  if(true){
-    var elVersion = document.getElementById("mxVersion");
-    if(elVersion) elVersion.innerText= mx.helpers.getVersion().join('.');
-  }
+      /*
+       * Update version
+       */
+      if(true){
+        var elVersion = document.getElementById("mxVersion");
+        if(elVersion) elVersion.innerText= mx.helpers.getVersion().join('.');
+      }
 
-  /**
-   * Init mgl data store
-   */  
-  if ( !mx.maps ) {
-    mx.maps = {};
-  }
-  /**
-   * Mgl data : keep reference on options, listener, views, etc...
-   */
-  mx.maps[o.id] = {
-    options : o,
-    map: {},
-    listener: {},
-    views : o.viewsList || mx.maps[o.id].views,
-    style : style
-  };
+      /**
+       * Init mgl data store
+       */  
+      if ( !mx.maps ) {
+        mx.maps = {};
+      }
+      /**
+       * Mgl data : keep reference on options, listener, views, etc...
+       */
+      mx.maps[o.id] = {
+        options : o,
+        map: {},
+        listener: {},
+        views : o.viewsList || mx.maps[o.id].views,
+        style : style
+      };
 
-  style.sprite = getAppPathUrl('sprites');
-  o.mapPosition = o.mapPosition || {};
-  mp = o.mapPosition;
-  //mx.maps[o.id].style = style;
+      style.sprite = getAppPathUrl('sprites');
+      o.mapPosition = o.mapPosition || {};
+      mp = o.mapPosition;
+      //mx.maps[o.id].style = style;
 
-  /*
-   * workeround for centering based in bounds.
-   * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970 
-   */
-  if( o.fitToViewsBounds === true || mp.bounds ){
-    mp.center = mp.bounds.getCenter();
-  }
+      /*
+       * workeround for centering based in bounds.
+       * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970 
+       */
+      if( o.fitToViewsBounds === true || mp.bounds ){
+        mp.center = mp.bounds.getCenter();
+      }
 
-  /* map options */
-  var mapOptions = {
-    container: o.id, // container id
-    style: style,
-    maxZoom: o.maxZoom,
-    minZoom: o.minZoom,
-    preserveDrawingBuffer: false,
-    attributionControl: false,
-    zoom : mp.z || mp.zoom || 5,
-    bearing : mp.bearing || 0,
-    pitch : mp.pitch || 0,
-    center : mp.center || [mp.lng||0,mp.lat||0]
-  };
+      /* map options */
+      var mapOptions = {
+        container: o.id, // container id
+        style: style,
+        maxZoom: o.maxZoom,
+        minZoom: o.minZoom,
+        preserveDrawingBuffer: false,
+        attributionControl: false,
+        zoom : mp.z || mp.zoom || 5,
+        bearing : mp.bearing || 0,
+        pitch : mp.pitch || 0,
+        center : mp.center || [mp.lng||0,mp.lat||0]
+      };
 
-  /* 
-   * Create map object
-   */
-  var map = new mx.mapboxgl.Map(mapOptions);
-  mx.maps[o.id].map =  map;
-  o.map = map;
+      /* 
+       * Create map object
+       */
+      var map = new mx.mapboxgl.Map(mapOptions);
+      mx.maps[o.id].map =  map;
+      o.map = map;
 
-  /**
-   * Continue according to mode
-   */
-  if( ! mx.settings.modeKiosk ){
-    mx.helpers.initMapxApp(o);
-    mx.helpers.initLog();
-  }
+      /**
+       * Continue according to mode
+       */
+      if( ! mx.settings.modeKiosk ){
+        mx.helpers.initMapxApp(o);
+        mx.helpers.initLog();
+      }
 
-  /**
-   * Resolve with the map object
-   */
-  return map;
-
+      /**
+       * Resolve with the map object
+       */
+      return map;
+    });
 }
 
 

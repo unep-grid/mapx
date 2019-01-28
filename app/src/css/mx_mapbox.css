@@ -1,0 +1,7 @@
+
+/**
+* Mapbox gl modifiers
+*/
+.mx .mapboxgl-popup-content {
+  padding-top : 25px;
+}

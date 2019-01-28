@@ -1414,13 +1414,13 @@ blockquote {
   padding-left:10px;
 }
 .mx-views-filters-container .filter-tag-content {
-  max-height: 150px;
+  height: 150px;
   border-top: 1px solid #ccc;
   overflow: auto;
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  flex-direction: column;
 }
 
 

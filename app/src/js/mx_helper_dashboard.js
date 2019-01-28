@@ -135,17 +135,19 @@ Dashboard.prototype.Widget = function(config) {
   var dashboard = config.dashboard;
 
   widget.init = function( config ) {
-    if(widget._init) return ;
+    if(widget._init) return Promise.resolve(false) ;
 
     /**
      * Eval the script, dump error in console
      */
-    widget.strToObj( config.script )
+    return widget.strToObj( config.script )
       .then(function(register) {
         for (var r in register) {
           widget[r] = register[r];
         }
-      }).then(function() { 
+      })
+      .then(function() { 
+        
         /**
          * Keep config, modules and set id
          */
@@ -159,10 +161,8 @@ Dashboard.prototype.Widget = function(config) {
          * Set init flag to true
          */
         widget._init = true;
-      }).catch(function(e) {
-        widget.remove();
-        throw new Error(e);
       });
+      
   };
     
     /**
@@ -464,8 +464,7 @@ Dashboard.prototype.Widget = function(config) {
     });
   };
 
-  widget.init(config);
-
+  return widget.init(config);
 };
 
 
@@ -490,8 +489,21 @@ Dashboard.init = function(o){
 
   new Dashboard(idContainer, idDashboard, view)
     .then(function(dashboard){
+      /**
+       * Keep a ref to the dashboard in view
+       */
+      view._dashboard = dashboard;
 
-      dashboardData.widgets.forEach(function(w){
+      view._onRemoveDashboard =  function(){
+        if(view._dashboard && view._dashboard.destroy instanceof Function){
+          view._dashboard.destroy();
+        }
+      };
+
+      /** 
+       * Add widgets
+       */
+      return dashboardData.widgets.map(function(w){
 
 
         var config = {
@@ -505,22 +517,15 @@ Dashboard.init = function(o){
           view: view
         };
 
-        new dashboard.Widget(config);
+        return new dashboard.Widget(config);
 
       });
 
-      /**
-      * Keep a ref to the dashboard in view
-      */
-      view._dashboard = dashboard;
 
-      view._onRemoveDashboard =  function(){
-        if(view._dashboard && view._dashboard.destroy instanceof Function){
-          view._dashboard.destroy();
-        }
-      };
-
-    });
+    })
+    .catch(e => {
+      throw new Error(e);
+    })
 
 };
 

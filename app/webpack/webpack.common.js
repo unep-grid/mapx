@@ -40,16 +40,16 @@ module.exports = {
       chunks : ['common','sw','app']
     }),
     new WebpackPwaManifest({
-      filename : "manifest.json",
-      inject:true, /* added manually in header.R */
       name: 'MapX',
-      start_url:'/',
       short_name: 'MapX',
       description: 'A cloud solution for mapping and monitoring the sustainable use of natural resources',
       background_color: '#15b0f8',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      filename : "manifest.json",
+      inject:true, /* added manually in header.R */
+      start_url:'/',
       'theme-color': '#15b0f8',
       theme_color: '#15b0f8',
-      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
       icons: [
         {
           src: './src/svg/map-x-logo.svg',
@@ -68,8 +68,14 @@ module.exports = {
         { from : './src/sprites', to: 'sprites/'},
         { from : './src/favicons', to: '.'}
       ]
-    )
-
+    ),
+/*   new webpack.ProvidePlugin({*/
+      //$: "jquery",
+      //jQuery: "jquery"
+    /*})*/
+/*   new webpack.ProvidePlugin({*/
+     //mx: "./mx.js",
+    /*})*/
   ],
   module: {
     rules: [

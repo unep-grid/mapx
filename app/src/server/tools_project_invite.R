@@ -231,24 +231,40 @@ observeEvent(input$btnSendInviteMessage,{
 
       msgInvite <- gsub("<link>",urlAction,msgInvite)
 
-      mxSendMail(
+      res <- mxSendMail(
         from = emailAdmin,
         to = email,
         body = msgInvite,
         subject = projectTitle    
         )
 
-      mxModal(
-      close = T,
-      id  =  "modalSendProjectInvite"
-      )
+      if(!noDataCheck(res)){
+        mxModal(
+          id=randomString(),
+          zIndex=100000,
+          title="Unexpected issue",
+          content=tagList(
+            tags$b("An error occured while sending the message"),
+            mxFold(labelText="More info",
+              content = tags$div(
+                tags$span(stye="color:red",res)
+                )
+              )
+            )
+          )
+      }else{
 
-      mxModal(
-        id = "modalSendProjectInvite",
-        title = modalTitle,
-        content = d('project_invite_message_sent',language)
-        )
+        mxModal(
+          close = T,
+          id  =  "modalSendProjectInvite"
+          )
 
+        mxModal(
+          id = "modalSendProjectInvite",
+          title = modalTitle,
+          content = d('project_invite_message_sent',language)
+          )
+      }
     }
 
 })

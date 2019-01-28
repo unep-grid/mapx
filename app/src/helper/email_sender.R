@@ -64,9 +64,9 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
   res <- fromJSON(rawToChar(req$content))
 
   if(to %in% res$accepted){
-    return("ok")
+    return()
   }else{
-    stop("mxSendMail : Server can't send email to " + to )
+    return("Server can't send this message. Reason" + toJSON(res))
   }
 
 }

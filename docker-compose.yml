@@ -8,7 +8,7 @@ services:
       - --api
       #- --logLevel=DEBUG
       - --docker
-      - --docker.domain=mapx.test
+      - --docker.domain=mapx.localhost
       - --defaultentrypoints=http
       #- --defaultentrypoints=https
       #- --entrypoints=Name:http Address::80 Redirect.EntryPoint:https
@@ -32,10 +32,10 @@ services:
       - pg
       - traefik
     labels:
-      - traefik.s1.frontend.rule=Host:app.mapx.test
+      - traefik.s1.frontend.rule=Host:app.mapx.localhost
       - traefik.s1.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s1.port=3838
-      - traefik.s2.frontend.rule=Host:dev.mapx.test
+      - traefik.s2.frontend.rule=Host:dev.mapx.localhost
       - traefik.s2.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
       - traefik.s2.port=3434
     volumes:
@@ -54,9 +54,9 @@ services:
       - redis
       - traefik
     labels:
-      - traefik.s1.frontend.rule=Host:api.mapx.test
+      - traefik.s1.frontend.rule=Host:api.mapx.localhost
       - traefik.s1.port=3030
-      - traefik.s2.frontend.rule=Host:apidev.mapx.test
+      - traefik.s2.frontend.rule=Host:apidev.mapx.localhost
       - traefik.s2.port=3333
     volumes:
       - ./api:/apidev
@@ -70,7 +70,7 @@ services:
     volumes:
       - ./_shared:/shared
     labels:
-      - traefik.frontend.rule=Host:geoserver.mapx.test
+      - traefik.frontend.rule=Host:geoserver.mapx.localhost
   pg:
     env_file: mapx.dev.env
     image: mdillon/postgis:10-alpine

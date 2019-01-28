@@ -81,7 +81,7 @@ observeEvent(input$btnSendLoginKey,{
 
         text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginSecret,template)
 
-        mxSendMail(
+        res <- mxSendMail(
           from = .get(config,c("mail","bot")),
           to = email,
           body = text,
@@ -89,6 +89,21 @@ observeEvent(input$btnSendLoginKey,{
           subject = "MAP-X SECURE PASSWORD",
           wait = F
           )
+
+        mxModal(
+          id=randomString(),
+          zIndex=100000,
+          title="Unexpected issue",
+          content=tagList(
+            tags$b("An error occured while sending the message"),
+            ),
+          mxFold(labelText="More info",
+            content = tags$div(
+              tags$span(stye="color:red",res),
+              )
+            )
+          )
+
       })
 
       if("try-error" %in% class(res)){

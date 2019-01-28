@@ -1070,16 +1070,31 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
       mxDebugMsg(message)
       mxDebugMsg(err)
     }else{
-      mxSendMail(
+      res <- mxSendMail(
         from = .get(config,c("mail","bot")),
         to = .get(config,c("mail","admin")),
         subject = subject,
         body = text
         )
+
+      if(!noDataCheck(res)){
+        mxModal(
+          id=randomString(),
+          zIndex=100000,
+          title="Unexpected issue",
+          content=tagList(
+            tags$b("An error occured while sending the message"),
+            mxFold(labelText="More info",
+              content = tags$div(
+                tags$span(stye="color:red",res)
+                )
+              )
+            )
+          )
+      }
     }
   })
 }
-
 
 #' Catch errors
 #'

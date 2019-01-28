@@ -79,6 +79,7 @@ function showRefreshUI(registration) {
   }
 
   function update(){
+    console.log("Update...");
     if (!registration.waiting) {
       return;
     }
@@ -103,10 +104,10 @@ function showRefreshUI(registration) {
           btn
         );
 
-        btn.addEventListener('click',function(){
+        btn.addEventListener('click',function(e){
+          e.target.removeEventListener('click',update);
+          e.target.btn.disabled = true;
           update();
-          btn.removeEventListener('click',update);
-          btn.disabled = true;
         });
 
         h.modal({

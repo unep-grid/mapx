@@ -43,6 +43,7 @@ function sendMailApi(req,res){
         }
       });
 
+      console.log( conf );
       if(!issues){
         var d = new Date();
         var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDate()));
@@ -67,7 +68,6 @@ function sendMailApi(req,res){
         }).then(function(msg){
           res.send(msg);
         }).catch(function(er){
-          console.error(er);
           res.status(500).send(er);
         });
       }
@@ -104,6 +104,7 @@ function  sendMail(opt){
     transporter.sendMail(options, function(error, info){
 
       if(error){
+        console.log(error);
         reject(error);
       }else{
         resolve(info);

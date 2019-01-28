@@ -171,24 +171,41 @@ observeEvent(input$btnSendRequestMembershipMessage,{
     msgRequest <- gsub("<data>",toJSON(projectRequestData),msgRequest)
 
 
-    mxSendMail(
+    res <- mxSendMail(
       from = emailUser,
       to = emailAdmin,
       body = msgRequest,
       subject = "[ membership request ]" + projectTitle    
       )
 
-    mxModal(
-      close = T,
-      id  =  "modalSendProjectRequestMembership"
-      )
 
-    mxModal(
-      id = "modalSendProjectRequestMembership",
-      title = projectTitle,
-      content = d('project_request_membership_message_sent',language)
-      )
+    if(!noDataCheck(res)){
+      mxModal(
+        id=randomString(),
+        zIndex=100000,
+        title="Unexpected issue",
+        content=tagList(
+          tags$b("An error occured while sending the message"),
+          mxFold(labelText="More info",
+            content = tags$div(
+              tags$span(stye="color:red",res)
+              )
+            )
+          )
+        )
+    }else{
+      mxModal(
+        close = T,
+        id  =  "modalSendProjectRequestMembership"
+        )
 
+      mxModal(
+        id = "modalSendProjectRequestMembership",
+        title = projectTitle,
+        content = d('project_request_membership_message_sent',language)
+        )
+
+    }
     })
 
 
