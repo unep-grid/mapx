@@ -336,78 +336,80 @@ observeEvent(input$btnUpdateSource,{
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id
-  userRoles <- getUserRole()
 
-  blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
+  mxCatch(title="btn update manage source",{
+    userRoles <- getUserRole()
 
-  if(blockUpdate) return()
-  idGroupsServicesOld <- mxDbGetLayerServices(idSource)
-  idGroupsServices <- input$selectSourceServicesUpdate
+    blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
-  readers <- input$selectSourceReadersUpdate
-  editors <- input$selectSourceEditorsUpdate
-  #
-  # Control roles
-  #
-  mxDbUpdate(
-    table = .get(config,c("pg","tables","sources")),
-    idCol = "id",
-    id = idSource,
-    column = "date_modified",
-    value = Sys.time()
-    )
+    if(blockUpdate) return()
+    idGroupsServicesOld <- mxDbGetLayerServices(idSource)
+    idGroupsServices <- input$selectSourceServicesUpdate
 
-  mxDbUpdate(
-    table = .get(config,c("pg","tables","sources")),
-    idCol = "id",
-    id = idSource,
-    column = "services",
-    value = as.list(idGroupsServices)
-    )
+    readers <- input$selectSourceReadersUpdate
+    editors <- input$selectSourceEditorsUpdate
+    #
+    # Control roles
+    #
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","sources")),
+      idCol = "id",
+      id = idSource,
+      column = "date_modified",
+      value = Sys.time()
+      )
 
-  mxDbUpdate(
-    table = .get(config,c("pg","tables","sources")),
-    idCol = "id",
-    id = idSource,
-    column = "readers",
-    value = as.list(readers)
-    )
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","sources")),
+      idCol = "id",
+      id = idSource,
+      column = "services",
+      value = as.list(idGroupsServices)
+      )
 
-  mxDbUpdate(
-    table = .get(config,c("pg","tables","sources")),
-    idCol = "id",
-    id = idSource,
-    column = "editor",
-    value = idUser
-    )
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","sources")),
+      idCol = "id",
+      id = idSource,
+      column = "readers",
+      value = as.list(readers)
+      )
 
-  mxDbUpdate(
-    table = .get(config,c("pg","tables","sources")),
-    idCol = "id",
-    id = idSource,
-    column = "editors",
-    value = as.list(editors)
-    )
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","sources")),
+      idCol = "id",
+      id = idSource,
+      column = "editor",
+      value = idUser
+      )
 
-  mxUpdateGeoserverSourcePublishing(
-    idProject = project,
-    idSource = idSource,
-    idGroups = as.list(idGroupsServices),
-    idGroupsOld = as.list(idGroupsServicesOld)
-    )
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","sources")),
+      idCol = "id",
+      id = idSource,
+      column = "editors",
+      value = as.list(editors)
+      )
 
-  #
-  # Generate the modal panel
-  #
-  mxFlashIcon("floppy-o")
-  mxUpdateText("editSourceManage_txt","Saved at " + format(Sys.time(),"%H:%M"))
+    mxUpdateGeoserverSourcePublishing(
+      idProject = project,
+      idSource = idSource,
+      idGroups = as.list(idGroupsServices),
+      idGroupsOld = as.list(idGroupsServicesOld)
+      )
 
-  #
-  # Invalidate source list
-  #
+    #
+    # Generate the modal panel
+    #
+    mxFlashIcon("floppy-o")
+    mxUpdateText("editSourceManage_txt","Saved at " + format(Sys.time(),"%H:%M"))
 
-  reactData$updateEditSourceLayerList <- runif(1)
+    #
+    # Invalidate source list
+    #
 
+    reactData$updateEditSourceLayerList <- runif(1)
+    })
 })
 
 
