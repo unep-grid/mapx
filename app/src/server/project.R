@@ -37,6 +37,8 @@ observe({
     if(!noDataCheck(project_query)){
 
       if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
+      if(TRUE) project_query <- mxDbGetProjectIdByAlias(project_query)
+      project_query <- mxDbProjectCheck(project_query)
 
       #roles <- mxDbGetProjectUserRoles(id_user,project_query)
       #if(!roles$public){

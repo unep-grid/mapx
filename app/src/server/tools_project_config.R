@@ -29,6 +29,18 @@ observeEvent(input$btnShowProjectConfig,{
           plugins = list("remove_button")
           )
         ),
+      tags$div(class="well",
+        tagList(
+          textInput('txtProjectNameAlias',
+            d("project_alias_name",language,web=F),
+            value = projectData$alias,
+            placeholder = project
+            ),
+          p(class="text-muted",
+            d("project_alias_name_desc",language,web=F)
+            )
+          )
+        ),
       checkboxInput(
         "checkProjectPublic",
         label = d("project_public",language),
@@ -66,7 +78,7 @@ observe({
   input$projectTitleSchema_values
   input$projectDescriptionSchema_values
   input$checkProjectPublic
-
+  input$txtProjectNameAlias
   isolate({
     #
     # Other input check
@@ -79,8 +91,12 @@ observe({
     project <- reactData$project
     projectTitle <- input$projectTitleSchema_values$data
     projectDesc <- input$projectDescriptionSchema_values$data
+    projectAlias <- input$txtProjectNameAlias
 
     isProjectDefaultNotPublic <- !isTRUE(input$checkProjectPublic) && .get(config,c("project","default")) == project
+
+    hasProjectAlias <- isTRUE(!noDataCheck(projectAlias) && nchar(projectAlias) >= 5)
+    isProjectAliasValid <- isTRUE(hasProjectAlias && mxDbValidateProjectAlias(projectAlias))
 
     if(language != "en"){
       languagesTest <- c("en",language)
@@ -97,6 +113,8 @@ observe({
         errorsList <<- c(errorsList,list(err))
       }
     }
+    
+
 
     for(l in languagesTest){
       errTest(l,"error_description_short", noDataCheck(projectDesc[[l]]) || nchar(projectDesc[[l]]) < 5)
@@ -108,10 +126,12 @@ observe({
       errTest(l,'error_title_exists', mxDbProjectTitleExists(projectTitle[[l]],ignore=project))
     }
 
-    if(isProjectDefaultNotPublic){
+    if( isProjectDefaultNotPublic ){
       errorsList <- c(errorsList,list(list(type="error_project_default_not_public",language=language)))
     }
-
+    if( hasProjectAlias && !isProjectAliasValid ){
+      errorsList <- c(errorsList,list(list(type="error_project_alias_not_valid",language=language)))
+    }
 
     disabled =  isTRUE(length(errorsList) > 0)
 
@@ -307,6 +327,8 @@ observeEvent(input$btnSaveProjectConfig,{
   isAdmin <- isTRUE(userRole$admin)
   isValid <- isTRUE(reactData$projectConfigValid)
   isPublic <- isTRUE(input$checkProjectPublic) || .get(config,c("project","default")) == project
+  aliasProject <- input$txtProjectNameAlias
+  aliasProject <- ifelse(isTRUE(mxDbValidateProjectAlias(aliasProject)),aliasProject,"")
 
   if(isAdmin && isValid){
 
@@ -315,6 +337,7 @@ observeEvent(input$btnSaveProjectConfig,{
         active = TRUE,
         title = input$projectTitleSchema_values$data,
         description = input$projectDescriptionSchema_values$data,
+        alias = aliasProject,
         admins = NULL,
         members = NULL,
         publishers = NULL,
@@ -323,7 +346,6 @@ observeEvent(input$btnSaveProjectConfig,{
         creator = NULL
         )
       )
-
 
     reactData$updateProject <- runif(1)
 

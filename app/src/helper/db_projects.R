@@ -11,7 +11,26 @@ mxDbGetProjectIdByOldId <- function(id){
   return(out)
 }
 
+#' Validate project alias 
+#' @param alias {character} Project alias
+#' @return id {character} new id
+mxDbValidateProjectAlias <- function(alias){
+  if(noDataCheck(alias)) return(FALSE)
+  isProjectAliasValid <- isTRUE(grepl("^[a-z0-9\\_\\-]*$",alias,perl=T))
+  isLengthOk <- isTRUE(nchar(alias) >= 5 && nchar(alias) <= 30)
+  out <-  isLengthOk && isProjectAliasValid && mxDbGetQuery("SELECT count(*) FROM mx_projects WHERE alias ='"+ alias +"'" )$count == 0
+  return(out)
+}
 
+#' Get project id by alias (or id);
+#' @param alias {character} Project alias
+#' @return id {character} new id
+mxDbGetProjectIdByAlias <- function(alias){
+  alias <- tolower(alias)
+  out <- mxDbGetQuery("SELECT id FROM mx_projects WHERE alias ='"+ alias +"'" )$id
+if(noDataCheck(out)) return(alias)
+  return(out)
+}
 
 
 #' Get project title using id and language
@@ -374,6 +393,7 @@ mxDbSaveProjectData <- function(project,values = list(
     public = NULL,
     active = NULL,
     title = NULL,
+    alias = NULL,
     description = NULL,
     admins = NULL,
     members = NULL,
@@ -429,6 +449,19 @@ mxDbSaveProjectData <- function(project,values = list(
         id = project,
         column = n,
         value = as.integer(v)
+        )
+    }
+  }
+
+  for( n in c("alias")){
+    v <- values[[n]]
+    if(notNull(v)){
+      mxDbUpdate(
+        table = "mx_projects",
+        idCol = 'id',
+        id = project,
+        column = n,
+        value = as.character(v)
         )
     }
   }

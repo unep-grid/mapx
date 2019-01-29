@@ -77,7 +77,7 @@ mxParseQuery <- function(urlSearch){
   # Set the project
   #
   if(!noDataCheck(query$project)){
-    query$project <- mxDbProjectCheck(query$project)
+    query$project <- query$project
     mxUpdateUrlParams(list(project=""))
   }
 

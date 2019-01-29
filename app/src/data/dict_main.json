@@ -5053,6 +5053,42 @@
     "ps": ""
   },
   {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "fr": "Alias de project",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 5, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "fr": "Minimum 5, maximum 30 charactères parmis les lettre minuscules ASCII  [a-z], les chiffres [0-9], le tiret court [-] ainsi que le charactère de soulignement [_]",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "fr": "Alias de projet non valide ou déjà existant",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "project_access_denied",
     "en": "Access denied. You cannot access the requested project",
     "fr": "Accès refusé. Vous ne pouvez pas accéder à ce projet",
