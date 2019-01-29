@@ -52,7 +52,7 @@ module.exports = {
       theme_color: '#15b0f8',
       icons: [
         {
-          src: './src/svg/map-x-logo.svg',
+          src: './src/png/map-x-logo_1024.png',
           sizes: [96, 128, 192, 256, 384, 512,1024] // multiple sizes
         }
       ]
