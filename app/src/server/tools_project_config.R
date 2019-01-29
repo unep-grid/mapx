@@ -96,7 +96,7 @@ observe({
     isProjectDefaultNotPublic <- !isTRUE(input$checkProjectPublic) && .get(config,c("project","default")) == project
 
     hasProjectAlias <- isTRUE(!noDataCheck(projectAlias) && nchar(projectAlias) >= 5)
-    isProjectAliasValid <- isTRUE(hasProjectAlias && mxDbValidateProjectAlias(projectAlias))
+    isProjectAliasValid <- isTRUE(hasProjectAlias && mxDbValidateProjectAlias(projectAlias,project))
 
     if(language != "en"){
       languagesTest <- c("en",language)
@@ -328,7 +328,7 @@ observeEvent(input$btnSaveProjectConfig,{
   isValid <- isTRUE(reactData$projectConfigValid)
   isPublic <- isTRUE(input$checkProjectPublic) || .get(config,c("project","default")) == project
   aliasProject <- input$txtProjectNameAlias
-  aliasProject <- ifelse(isTRUE(mxDbValidateProjectAlias(aliasProject)),aliasProject,"")
+  aliasProject <- ifelse(isTRUE(mxDbValidateProjectAlias(aliasProject,project)),aliasProject,"")
 
   if(isAdmin && isValid){
 
