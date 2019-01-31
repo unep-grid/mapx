@@ -3,6 +3,12 @@ const pgWrite = require.main.require("./db").pgWrite;
 const settings = require.main.require("./settings");
 const key =  settings.db.crypto.key;
 
+
+/**
+* Decrypt message using default key
+* @param {String} txt Message to decrypt
+* @return {String} decrypted message
+*/
 exports.decrypt = function(txt){
   var sqlDecrypt = 'SELECT mx_decrypt(\'' + txt + '\',\'' + key + '\') as msg';
   return pgRead.query(sqlDecrypt)
@@ -15,6 +21,15 @@ exports.decrypt = function(txt){
     });
 };
 
+
+/**
+* Register a source in mx_sources
+* @param {String} idSource Id of the source
+* @param {Integer} idUser Id of the user
+* @param {String} idProject Id of the project
+* @param {String} title English title
+* @return {Boolean} inserted
+*/
 exports.registerSource = registerSource;
 
 function registerSource(idSource,idUser,idProject,title){

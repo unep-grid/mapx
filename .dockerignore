@@ -2,7 +2,6 @@ Dockerfile
 node_modules
 _shared 
 _data
-_prod
 _archives
 _trash
 _archives

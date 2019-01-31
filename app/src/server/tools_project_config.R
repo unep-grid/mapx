@@ -95,8 +95,7 @@ observe({
 
     isProjectDefaultNotPublic <- !isTRUE(input$checkProjectPublic) && .get(config,c("project","default")) == project
 
-    hasProjectAlias <- isTRUE(!noDataCheck(projectAlias) && nchar(projectAlias) >= 5)
-    isProjectAliasValid <- isTRUE(hasProjectAlias && mxDbValidateProjectAlias(projectAlias,project))
+    isProjectAliasValid <- mxDbValidateProjectAlias(projectAlias,project)
 
     if(language != "en"){
       languagesTest <- c("en",language)
@@ -129,7 +128,7 @@ observe({
     if( isProjectDefaultNotPublic ){
       errorsList <- c(errorsList,list(list(type="error_project_default_not_public",language=language)))
     }
-    if( hasProjectAlias && !isProjectAliasValid ){
+    if( !isProjectAliasValid ){
       errorsList <- c(errorsList,list(list(type="error_project_alias_not_valid",language=language)))
     }
 

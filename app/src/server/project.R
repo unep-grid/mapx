@@ -75,7 +75,9 @@ observe({
 
     query$project <<- NULL
     if(!noDataCheck(project_out)){
-      
+     
+      project_out <- toupper(project_out)
+
       #
       # Last check
       #
