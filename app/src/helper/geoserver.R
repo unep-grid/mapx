@@ -97,13 +97,12 @@ mxGetGeoServerSourceGroupNames <- function(idSource){
 #' @return {Logical} success
 mxSaveGeoServerWorkspace = function(idProject){
 
-  mxDebugMsg("mx auto save workspace")
   gMan <- mxGetGeoServerManager()
   if(noDataCheck(idProject)) return()
   res <- FALSE
   workspaces <- gMan$getWorkspaceNames()
   #
-  # Each MapX project = 2 workspace. gs-ws-a__<idproject> and gs-ws-b__<idproject>
+  # Each MapX project = 2 workspace. <id_project>@gs_ws_a and <id_project>@gs_ws_b
   #
   services <- mxGetGeoServerServices()
   idServices <- services$names
