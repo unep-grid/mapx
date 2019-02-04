@@ -1951,11 +1951,6 @@ export function renderViewsList(o){
   }else{
 
     setViewsListEmpty(false);
-    /**
-     * Add components (story, dashboard, vector, raster, etc..) to each view ._components
-     */
-    mx.helpers.setViewsComponents(views);
-
 
     if( !m.listener ) m.listener = {};
     if( !m.tools ) m.tools = {};
@@ -2158,6 +2153,15 @@ export function updateViewsFilter(o){
   var h = mx.helpers;
   var views = h.getViews({asArray:true});
   o.selectorContainer = o.selectorContainer ||  "#viewsFilterContainer";
+  
+  /**
+   * Add components (story, dashboard, vector, raster, etc..) to each view ._components
+   */
+  mx.helpers.setViewsComponents(views);
+
+  /**
+   * Build tags table
+   */
   o.tagsTable = o.tagsTable ||  h.getTagsGroupsFromView(views);
 
   var elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
