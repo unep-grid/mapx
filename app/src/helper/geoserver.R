@@ -110,7 +110,6 @@ mxSaveGeoServerWorkspace = function(idProject){
 
   ok <- sapply(names(groups),function(idGroup){
 
-
     #
     # Set the workspace name
     #
@@ -139,7 +138,6 @@ mxSaveGeoServerWorkspace = function(idProject){
       sSet$setEnabled( enableService )
       updated <- gMan$updateServiceSettings(sSet, service = idS, ws = idWorkspace)
       return(updated)
-
 })
 
     return(all(updated))
