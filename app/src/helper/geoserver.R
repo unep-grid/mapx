@@ -105,10 +105,15 @@ mxSaveGeoServerWorkspace = function(idProject){
   # Each MapX project = 2 workspace. <id_project>@gs_ws_a and <id_project>@gs_ws_b
   #
   services <- mxGetGeoServerServices()
-  idServices <- services$names
+  idServicesAll <- services$names
   groups <- services$groups
 
   ok <- sapply(names(groups),function(idGroup){
+
+    #
+    # Get services associated with the group : wms, wfs, etc.
+    #
+    idServicesGroup <- groups[[idGroup]]
 
     #
     # Set the workspace name
@@ -129,14 +134,31 @@ mxSaveGeoServerWorkspace = function(idProject){
     #
     # Set or update services
     #
-    group <- groups[[idGroup]]
 
-    updated <- sapply(idServices,function(idS){
-      enableService <- idS %in% group
-      sSet <- GSServiceSettings$new( service = idS )
-      sSet$setTitle(mxDbGetProjectTitle(idProject,"en") + ": "+ idS)
-      sSet$setEnabled( enableService )
-      updated <- gMan$updateServiceSettings(sSet, service = idS, ws = idWorkspace)
+    updated <- sapply(idServicesAll,function(idS){
+
+      updated <- FALSE
+      enableService <- idS %in% idServicesGroup
+
+      if( enableService ){
+        #
+        # Update options
+        #
+        sSet <- GSServiceSettings$new( service = idS )
+        sSet$setTitle(mxDbGetProjectTitle(idProject,"en") + ": "+ idS)
+        updated <- gMan$updateServiceSettings(sSet, service = idS, ws = idWorkspace)
+
+        #
+        # Enable services
+        #
+        gMan[['enable'+toupper(idS)]]( idWorkspace )
+      }else{
+        #
+        # Disable
+        #
+        gMan[['disable'+toupper(idS)]]( idWorkspace )
+      }
+
       return(updated)
 })
 
@@ -210,6 +232,34 @@ mxDeleteGeoServerWorkspace <- function(idWorkspace){
       })
   return(all(res))
 }
+
+#' Publish or Unpublish a single view
+#'
+#' @param {Character} idView Id of the view to publish
+#' @param {Character} idSource Id of the view's source
+#' @param {logical} publish Boolean should the view be published ?
+#' @return {Logical} success
+mxPublishGeoServerViewAuto <- function(idView,idSource=NULL,publish=FALSE){
+  updated <- FALSE
+  if(noDataCheck(idView)) return(updated)
+  if(noDataCheck(idSource)) idSource <- mxDbGetViewMainSource(idView)
+  if(noDataCheck(idSource)) return(updated)
+  if(noDataCheck(publish)) return(updated)
+
+  idGroupsServices <- mxDbGetLayerServices(idSource)
+  idGroupsAll <- names(mxGetGeoServerServices()$groups)
+  hasServices <- any(idGroupsServices %in% idGroupsAll)
+  
+  if(hasServices){
+    if( publish ){
+      updated <- mxPublishGeoServerView(idView)
+    }else{
+      updated <- mxUnpublishGeoServerView(idView)
+    }
+  }
+  return(updated)
+}
+
 
 #' Publish a single view in a group of workspace
 #'
@@ -344,7 +394,7 @@ mxPublishGeoServerAllViewsBySource <- function(idSource,idWorkspace){
 
   #if(noDataCheck(idSource)) stop("mxPublishGeoServerAllViewBySource: no source")
   if(noDataCheck(idSource)) {
-    mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
+    mxDebugMsg("mxPublishGeoServerAllViewsBySource no source")
     return(FALSE)
   }
 

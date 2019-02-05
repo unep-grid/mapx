@@ -817,6 +817,14 @@ observeEvent(input$btnViewDeleteConfirm,{
 
   if(noDataCheck(idView)) mxDebugMsg("View to delete not found")
 
+  #
+  # Update geoserver publication
+  #
+  mxPublishGeoServerViewAuto(idView, publish = FALSE)
+
+  #
+  # Remove all views rows
+  #
   mxDbGetQuery(sprintf("
       DELETE FROM %1$s 
       WHERE id='%2$s'",
@@ -824,15 +832,17 @@ observeEvent(input$btnViewDeleteConfirm,{
       idView
       ))
 
+  #
+  # Remove client view
+  #
   mglRemoveView(
     idView = idView
     )
 
-  #
-  # Update geoserver publication
-  #
-  mxUnpublishGeoServerView(idView)
 
+  #
+  # Close modal window
+  #
   mxModal(
     id="modalViewEdit",
     close=TRUE
@@ -992,6 +1002,7 @@ observeEvent(input$btnViewSave,{
       sourceData <- reactLayerSummary()$list
       sourceDataMask <- reactLayerMaskSummary()$list
       additionalAttributes <- input$selectSourceLayerOtherVariables
+      isPublishable <- "public" %in% readers
 
       #
       # Update view data 
@@ -1001,22 +1012,8 @@ observeEvent(input$btnViewSave,{
       #
       # Update geoserver publication
       #
-      tryCatch({
-       idGroupsServices <- mxDbGetLayerServices(sourceData$layerName)
-       idGroupsAll <- names(mxGetGeoServerServices()$groups)
-       hasServices <- any(idGroupsServices %in% idGroupsAll)
-
-       if(hasServices){
-         if("public" %in% readers){
-           mxPublishGeoServerView(idView)
-         }else{
-           mxUnpublishGeoServerView(idView)
-         }
-       }
-
-      },error = function(err){
-        warning(err)
-      })
+      mxPublishGeoServerViewAuto(idView, publish = isPublishable)
+      
     }
     #
     # raster tiles
@@ -1091,12 +1088,19 @@ observe({
 })
 observe({
 
-  timer <- mxTimeDiff("Layer logic")
+  timer <- mxTimeDiff("Layer properties timing ")
   layerMain <- input$selectSourceLayerMain
-
+  #
+  # In case of of reopening same view, this oberver is not
+  # invalidated. Meaning properties not updated
+  # Using init from viewTitleSchema_init make sure to invalidate 
+  # this. 
+  #
+  update <- input$viewTitleSchema_init
   isolate({
 
     viewData <- reactData$viewDataEdited
+    mxDebugMsg("Layer properties update")
 
     if(noDataCheck(layerMain)) return()
     if(noDataCheck(viewData)) return()

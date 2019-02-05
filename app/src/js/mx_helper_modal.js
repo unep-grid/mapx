@@ -161,17 +161,32 @@ export function modal(o) {
 
   function close(e) {
     if( mx.helpers.isElement(content)  ) {
+      /**
+      * Remove jed editors
+      */
       elJedContainers = content.querySelectorAll('[data-jed_id]');
       elJedContainers.forEach(elJed => {
         var jedId = elJed.dataset.jed_id;
         if(jed.editors[jedId] && mx.helpers.isFunction(jed.editors[jedId].destroy)){
-          console.log("destroy " + jedId );
           jed.editors[jedId].destroy();
         }
       });
     }
-    if (hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
-    if (hasSelectize) mx.helpers.removeSelectizeGroupById(id);
+    /**
+     * Renove shiny binding
+     */
+    if (hasShiny && !noShinyBinding){
+      Shiny.unbindAll(modal);
+    } 
+    /**
+    * Remove selectize
+    */
+    if (hasSelectize){
+      mx.helpers.removeSelectizeGroupById(id);
+    }
+    /**
+    * Remove using jquery or DOM method.
+    */
     if (hasJquery) {
       $(modal).remove();
       $(background).remove();
