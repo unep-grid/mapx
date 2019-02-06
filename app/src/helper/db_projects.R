@@ -391,7 +391,7 @@ mxDbGetProjectData <- function(idProject){
   return(projectData)
 }
 
-mxDbSaveProjectData <- function(project,values = list(
+mxDbSaveProjectData <- function(idProject,values = list(
     public = NULL,
     active = NULL,
     title = NULL,
@@ -422,7 +422,7 @@ mxDbSaveProjectData <- function(project,values = list(
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
-        id = project,
+        id = idProject,
         column = n,
         value = as.list(v)
         )
@@ -435,7 +435,7 @@ mxDbSaveProjectData <- function(project,values = list(
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
-        id = project,
+        id = idProject,
         column = n,
         value = isTRUE(v)
         )
@@ -448,7 +448,7 @@ mxDbSaveProjectData <- function(project,values = list(
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
-        id = project,
+        id = idProject,
         column = n,
         value = as.integer(v)
         )
@@ -461,7 +461,7 @@ mxDbSaveProjectData <- function(project,values = list(
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
-        id = project,
+        id = idProject,
         column = n,
         value = as.character(v)
         )
@@ -472,7 +472,7 @@ mxDbSaveProjectData <- function(project,values = list(
     mxDbUpdate(
       table = "mx_projects",
       idCol = 'id',
-      id = project,
+      id = idProject,
       column = "date_modified",
       value = Sys.time()
       )
