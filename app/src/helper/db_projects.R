@@ -489,16 +489,15 @@ mxDbSaveProjectData <- function(idProject,values = list(
 mxDbGetProjectMembers <- function(idProject){
 
   members <- mxDbGetQuery("SELECT json_build_object(
-    'members', members,
-    'publishers', publishers,
+    'members', members || publishers || admins,
+    'publishers', publishers || admins,
     'admins', admins
     ) as members from mx_projects where id='" + idProject + "'")
 
   members <- fromJSON(members$members) 
 
-
   sapply(c("members","publishers","admins"),function(m){
-    group <- as.list(members[[m]])
+    group <- unique(as.list(members[[m]]))
     if(!noDataCheck(group)){
       group[sapply(group,is.character)] <- NULL 
       names(group) <- sapply(group,mxDbGetEmailFromId)

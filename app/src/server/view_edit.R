@@ -72,6 +72,7 @@ observe({
           viewEditTarget <- c("publishers","admins")
           viewReaders <- .get(viewData,c("readers")) 
           viewEditors <- .get(viewData,c("editors")) 
+          viewEditors <- unique(c(viewEditors,.get(viewData,c("editor"))))
             
           #
           # View classes
@@ -274,13 +275,14 @@ observe({
               #
               # Get additional editors from members
               #
-              projectData <- mxDbGetProjectData(project)
-              members <- unique(projectData$members)
-              members <- members[is.numeric(members)]
-              members <- mxDbGetEmailListFromId(members
-                , asNamedList=TRUE
-                , munged=TRUE
-                )
+              members <- reactTableUsers()$members
+              #projectData <- mxDbGetProjectData(project)
+              #members <- unique(projectData$members)
+              #members <- members[is.numeric(members)]
+              #members <- mxDbGetEmailListFromId(members
+                #, asNamedList=TRUE
+                #, munged=TRUE
+                #)
 
               #
               # Create named lists for editors and members

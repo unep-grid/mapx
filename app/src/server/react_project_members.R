@@ -1,21 +1,21 @@
 #
 # Project members
 #
-reactTableEditableUsers <- reactive({
-
+reactTableUsers <- reactive({
   update <- reactData$updateRoleList
-  out <- data.frame()
-  userData <- reactUser$data
   project <- reactData$project
+  out <- mxDbGetProjectMembers(project)
+  return(out)
+})
+
+reactTableEditableUsers <- reactive({
+  out <- data.frame()
   userRole <- getUserRole()
   isAdmin <- isTRUE(userRole$admin)
-
   if( isAdmin ){
-    out <-  mxDbGetProjectMembers(project)
+    out <-  reactTableUsers()
   }
-
   return(out)
-
 })
 
 
