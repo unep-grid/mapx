@@ -681,14 +681,19 @@ function checkMissingView(o){
   var view = o.view;
   var m = mx.maps[o.id];
   var map = m.map;
+  var h = mx.helpers;
   /*
    * Check if there is additional views
    */
   return new Promise(function(resolve,reject){
 
-    var viewsStory = mx.helpers.path(view,"data.views");
+    var viewsStory = h.path(view,"data.views");
+    var isViewsArray = h.isArray(viewsStory);
+    var isViewsString = h.isStringRange(viewsStory,1);
 
-    if(!viewsStory){
+    viewsStory = isViewsArray ? viewsStory : isViewsString ? [viewsStory] : null;
+
+    if( !viewsStory ||  viewsStory.length == 0 ){
       resolve(o);
     }else{
 
@@ -727,14 +732,14 @@ function checkMissingView(o){
 
         viewsToAdd.forEach(function(v){
 
-          mx.helpers.getViewRemote( v.id || v )
+          h.getViewRemote( v.id || v )
             .then(view => {
 
               m.views = m.views.concat(view);
               /*
                * register source
                */
-              mx.helpers.addSourceFromView({
+              h.addSourceFromView({
                 map : map,
                 view : view,
                 noLocationCheck : true
