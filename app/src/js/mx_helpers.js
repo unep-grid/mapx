@@ -40,6 +40,7 @@ export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
 export * from './mx_helper_epsgio.js';
+export * from './mx_helper_wms.js';
 export * from './mx_helper_filter_views.js';
 export * from './mx_helper_module_loader.js';
 

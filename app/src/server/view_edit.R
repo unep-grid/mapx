@@ -280,9 +280,9 @@ observe({
               #members <- unique(projectData$members)
               #members <- members[is.numeric(members)]
               #members <- mxDbGetEmailListFromId(members
-                #, asNamedList=TRUE
-                #, munged=TRUE
-                #)
+              #, asNamedList=TRUE
+              #, munged=TRUE
+              #)
 
               #
               # Create named lists for editors and members
@@ -293,7 +293,7 @@ observe({
               viewEditTarget <- list(Groups=d(viewEditTarget,language,namedVector=T),Users=members)
               names(viewReadTarget) <- targetNamesReaders
               names(viewEditTarget) <- targetNamesEditors
-              
+
               #
               # Specific ui for each type (sm,vt,rt). Default empty ;        
               #
@@ -311,16 +311,16 @@ observe({
                 #
                 # Country of the view ?
                 # 
-#                selectizeInput(
-                  #inputId="selViewProjectUpdate",
-                  #label=d("view_project",language),
-                  #choices=projectsList,
-                  #selected=.get(viewData,c("project")),
-                  #multiple=FALSE,
-                  #options=list(
-                    #sortField="label"
-                    #)
-                  #),
+                #                selectizeInput(
+                #inputId="selViewProjectUpdate",
+                #label=d("view_project",language),
+                #choices=projectsList,
+                #selected=.get(viewData,c("project")),
+                #multiple=FALSE,
+                #options=list(
+                #sortField="label"
+                #)
+                #),
                 #
                 # Projects of the view ?
                 #
@@ -402,9 +402,9 @@ observe({
                 srcAvailableMask <- srcAvailable[! srcAvailable %in% srcSet ]
                 hasSource <- srcSet %in% srcAvailable
                 reactData$sourceLayerFromView <- list(
-                    trigger = Sys.time(),
-                    srcSet = srcSet,
-                    srcSetMask = srcSetMask
+                  trigger = Sys.time(),
+                  srcSet = srcSet,
+                  srcSetMask = srcSetMask
                   )
 
                 if( !noDataCheck(srcSet) && !hasSource ){
@@ -461,7 +461,7 @@ observe({
                     ),
                   #uiOutput("uiViewEditVtMain"),
 
-                
+
                   #
                   # mask / overlap layer
                   #
@@ -472,7 +472,7 @@ observe({
                     ),
                   conditionalPanel(
                     condition = "input.checkAddMaskLayer",
-                     tagList(
+                    tagList(
                       selectizeInput(
                         inputId = "selectSourceLayerMask",
                         label =d("source_select_layer_mask",language),
@@ -504,74 +504,16 @@ observe({
                     selected = .get(viewData,c("data","source","tileSize")),
                     choices = c(512,256)
                     ),
-                  mxFold(
-                    labelText="WMS generator",
-                    classContainer="fold-container well",
-                    content = tagList(
-                      tags$label("Select a predefined service"),
-                      tags$select(
-                        type = "select",
-                        id = "selectWmsService",
-                        class = "form-control"
-                        ), 
-                      tags$script(
-                        `data-for`="selectWmsService",
-                        jsonlite::toJSON(list(
-                            options=config$wms,
-                            valueField = 'value',
-                            labelField = 'label'
-                            ),auto_unbox=T)
-                        ),
-                      tagList(
-                        tags$label("WMS service url"),
-                        tags$div(
-                          class="input-group",
-                          tags$input(
-                            type="text",
-                            id = "textWmsService",
-                            class= "form-control"
-                            ),
-                          tags$span(
-                            class="input-group-btn",
-                            tags$button(
-                              id="btnFetchLayers",
-                              type="button",
-                              class="form-control btn btn-default action-button",
-                              disabled=TRUE,
-                              "Get layers"
-                              )
-                            )
-                          )
-                        ),
-                      tagList(
-                        tags$label("Layers"),
-                        tags$div(
-                          class="input-group",
-                          tags$select(
-                            type="select",
-                            id = "selectWmsLayer",
-                            class= "form-control"
-                            ),
-                          tags$script(
-                            `data-for`="selectWmsLayer",
-                            jsonlite::toJSON(list(
-                                options=list(),
-                                valueField = 'value',
-                                labelField = 'label'
-                                ),auto_unbox=T)
-                            ),
-                          tags$span(
-                            class="input-group-btn",
-                            tags$button(
-                              id="btnUptateTileUrl",
-                              type="button",
-                              class="form-control btn btn-default action-button",
-                              disabled=TRUE,
-                              "Generate tiles url"
-                              )
-                            )
-                          )
-                        )
+                  checkboxInput(
+                    inputId = "checkShowWmsGenerator",
+                    label = "Display WMS tools"
+                    ),
+                  conditionalPanel(condition="input.checkShowWmsGenerator == true",
+                    tags$div(
+                      class = "well",
+                      tags$h3("WMS URL helper"),
+                      tags$hr(),
+                      tags$div(id="wmsGenerator")
                       )
                     ),
                   textAreaInput(
@@ -623,6 +565,19 @@ observe({
                 addBackground = FALSE,
                 textCloseButton= d("btn_close",language)
                 )
+
+              if(viewType=="rt"){
+                #
+                # Build wms generator
+                #
+                mxWmsBuildQueryUi(list(
+                    services = .get(config,c("wms")),
+                    selectorParent = '#wmsGenerator',
+                    selectorTileInput = '#textRasterTileUrl',
+                    selectorLegendInput = '#textRasterTileLegend',
+                    selectorMetaInput = '#textRasterTileUrlMetadata'
+                    ))
+              }
 
             },
             "btn_opt_edit_custom_code" = {

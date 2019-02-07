@@ -1409,18 +1409,21 @@ blockquote {
   font-size: 0.8em;
   font-weight: normal;
 }
+
 .mx-views-filters-container .fold-container .fold-switch:checked ~ .fold-content {
   border:none;
-  padding-left:10px;
 }
+
 .mx-views-filters-container .filter-tag-content {
-  height: 150px;
+  max-height: 140px;
   border-top: 1px solid #ccc;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   border-bottom: 1px solid #ccc;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
+  padding:10px;
 }
 
 

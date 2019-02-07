@@ -47,3 +47,17 @@
 .selectize-control.multi .selectize-input.has-items {
   height:auto
 }
+
+.mx .selectize-dropdown [data-selectable] {
+ padding: 5px;
+}
+
+.mx .selectize-control .item-label {
+  font-size : 1em;
+  margin : 5px;
+}
+
+.mx .selectize-control .item-desc {
+  font-size : 0.9em;
+  margin : 5px;
+}

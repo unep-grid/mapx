@@ -1345,18 +1345,6 @@
     "ps": ""
   },
   {
-    "id": "btn_wms_creator",
-    "en": "WMS",
-    "fr": "WMS",
-    "es": "WMS",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "",
-    "ps": ""
-  },
-  {
     "id": "btn_zoom_in",
     "en": "Zoom in",
     "fr": "Zoomer",
@@ -3230,9 +3218,9 @@
   },
   {
     "id": "source_raster_tile_legend",
-    "en": "Url of the legend (png)",
-    "fr": "Url de la legend (png)",
-    "es": "Url de la leyenda (png)",
+    "en": "URL of the legend (png)",
+    "fr": "URL de la legend (png)",
+    "es": "URL de la leyenda (png)",
     "ru": "",
     "zh": "",
     "de": "",
@@ -3254,8 +3242,8 @@
   },
   {
     "id": "source_raster_tile_url",
-    "en": "Url of tiles endpoint ",
-    "fr": "Url du serveur de tuiles",
+    "en": "URL of tiles endpoint ",
+    "fr": "URL du serveur de tuiles",
     "es": "",
     "ru": "",
     "zh": "",
@@ -6535,5 +6523,65 @@
     "ru": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select stored service",
+    "fr": "Séléctionner un service enregistré",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }, 
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "fr": "Séléctionner la couche",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }, 
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "fr": "Entrez l'URL du service",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }, 
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "fr": "Mettre à jour les URL ( serveur de tuile, légendes )",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }, 
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "fr": "Mettre à jour la liste des couches",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   }
 ]

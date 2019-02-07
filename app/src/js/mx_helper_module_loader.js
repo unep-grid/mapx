@@ -8,6 +8,7 @@ const modules = {
   'mapbox-gj-js': loadMapboxGlJs,
   'pickolor': loadPickolor,
   'nouislider': loadNoUiSlider,
+  'wms-capabilities' : loadWmsCapabilities
 };
 
 export function moduleLoad(name) {
@@ -35,6 +36,12 @@ function loadMapboxGlJs(){
     });
 }
 
+function loadWmsCapabilities() {
+  return import('wms-capabilities')
+    .then(m => {
+      return  m.default;
+    });
+}
 
 function loadTopoJSON() {
   return import('topojson-client');

@@ -205,6 +205,25 @@ export function getDictItem(key, lang) {
 }
 
 /**
+* Create a tag and set translation item in it
+ * @param {String} keys Key to look for in the dictionnary
+ * @param {String} lang  Two letters language code
+ * @return {Element} span element with dataset-lang_key
+*/
+export function getTranslationTag(key,lang){
+  var el = mx.helpers.el("span",{
+    dataset : {
+     lang_key : key
+    }
+  });
+
+  getDictItem(key,lang)
+  .then(item => el.innerText=item);
+
+  return el;
+}
+
+/**
  * Get label value from an object path.
  * @param {Object} o Options
  * @param {string} o.lang Selected language two letter code. Default = mx.settings.language

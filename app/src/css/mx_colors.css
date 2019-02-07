@@ -183,10 +183,13 @@
   box-shadow :  2px 2px 5px 0 var(--mx_ui_shadow);
 }
 
+.mx .selectize-control .item .item-desc,
 .mx-login-info p,
 .text-muted {
  color: var(--mx_ui_text_faded);
 }
+
+.mx .selectize-control .item .item-desc:hover,
 .mx-login-info p:hover,
 .text-muted:hover {
  color: var(--mx_ui_text);
@@ -258,7 +261,7 @@ span.mx-badge-role {
 } 
 
 
-.mx .selectize-control.multi .selectize-input > div.active {
+.mx .selectize-control.multi .selectize-input > .active {
   color: var(--mx_ui_background);
   background-color: var(--mx_ui_text);
 }
@@ -314,8 +317,10 @@ span.mx-badge-role {
   border-color: var(--mx_ui_border);
 }
 
-.mx .selectize-dropdown [data-selectable] .highlight { 
-  background-color: yellow;
+.mx .selectize-dropdown [data-selectable].active ,
+.mx .selectize-dropdown [data-selectable].active span {
+  color:var(--mx_ui_background);
+  background:var(--mx_ui_text);
 }
 
 .mx .selectize-dropdown .active,
@@ -325,6 +330,7 @@ span.mx-badge-role {
 .mx .selectize-dropdown .active.create *,
 .mx .btn-default:hover,
 .mx .btn-default:hover div,
+.mx .btn-default:hover span,
 .mx .btn-default:hover i,
 .mx [class*=hint--]:after
 {

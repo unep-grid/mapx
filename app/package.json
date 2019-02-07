@@ -64,6 +64,7 @@
     "ContentTools": "^1.6.10",
     "bootstrap": "^3.4.0",
     "brace": "^0.11.1",
+    "buel": "0.0.2",
     "codemirror": "^5.43.0",
     "cookies-js": "^1.2.3",
     "csvjson": "^5.1.0",
@@ -104,7 +105,8 @@
     "togeojson": "^0.16.0",
     "tokml": "^0.4.0",
     "topojson-client": "^3.0.0",
-    "webpack-jquery-ui": "^2.0.1"
+    "webpack-jquery-ui": "^2.0.1",
+    "wms-capabilities": "^0.4.0"
   },
   "scripts": {
     "test": "-",

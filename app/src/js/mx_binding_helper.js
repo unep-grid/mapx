@@ -21,6 +21,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler("mxObjToState", mx.helpers.objToState);
   Shiny.addCustomMessageHandler("mxUpdateText", mx.helpers.updateText);
   Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", mx.helpers.epsgBuildSearchBox);
+  Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", mx.helpers.wmsBuildQueryUi);
   Shiny.addCustomMessageHandler("mxJsDebugMsg", mx.helpers.jsDebugMsg);
   Shiny.addCustomMessageHandler("mxButtonToggle", mx.helpers.buttonToggle);
   Shiny.addCustomMessageHandler("mxJsonToObj", mx.helpers.jsonToObj);
