@@ -7,6 +7,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 //const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
@@ -37,6 +38,17 @@ module.exports = merge(common, {
         allowExternal: true
       }
     ),
+    new HtmlWebpackPlugin({
+      template : './src/kiosk/index.html',
+      filename: './kiosk.html',
+      chunks : ['common','sw','kiosk']
+    }),
+    new HtmlWebpackPlugin({
+      inject: 'head',
+      template : './src/built/index.html',
+      chunks : ['common','sw','app']
+    }),
+
     //new BundleAnalyzerPlugin(),
     //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
     /**

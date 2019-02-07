@@ -1,16 +1,13 @@
 /*jshint esversion: 6 */
 const path = require('path');
 const webpack = require( 'webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const IconFontPlugin = require('icon-font-loader').Plugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
-//const ManifestPlugin = require('webpack-manifest-plugin');
 /**
 * To remove in dev
 */
-//const {GenerateSW} = require('workbox-webpack-plugin');
 module.exports = {
   target: 'web',
   node : {
@@ -29,16 +26,6 @@ module.exports = {
     publicPath: "/"
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template : './src/kiosk/index.html',
-      filename: './kiosk.html',
-      chunks : ['common','sw','kiosk']
-    }),
-    new HtmlWebpackPlugin({
-      inject: 'head',
-      template : './src/built/index.html',
-      chunks : ['common','sw','app']
-    }),
     new WebpackPwaManifest({
       name: 'MapX',
       short_name: 'MapX',
@@ -57,9 +44,6 @@ module.exports = {
         }
       ]
     }),
-    new CompressionPlugin({
-      test: /\.js(\?.*)?$/i
-    }),
     new IconFontPlugin({
       fontName : "mx-icons-font"
     }),
@@ -68,14 +52,7 @@ module.exports = {
         { from : './src/sprites', to: 'sprites/'},
         { from : './src/favicons', to: '.'}
       ]
-    ),
-/*   new webpack.ProvidePlugin({*/
-      //$: "jquery",
-      //jQuery: "jquery"
-    /*})*/
-/*   new webpack.ProvidePlugin({*/
-     //mx: "./mx.js",
-    /*})*/
+    )
   ],
   module: {
     rules: [
