@@ -1,7 +1,6 @@
 
 export function renderUserProjectsList(o){
 
-
   var elDest;
   var cnt = 0;
   var dat = o.data;
@@ -9,17 +8,25 @@ export function renderUserProjectsList(o){
   var nRow = dat[idCol].length;
   var titles = Object.keys(dat);
   var nCol = titles.length;
-
+  var elContainer = cel("div","mx-list-projects-container");
+  var elProjects = cel("div","mx-list-projects");
+  var elSearchInput =  cel("input","mx-list-projects-search");
+  var elsRows = [cel("div")]; // empty array of rows.
 
   /* render */
+ 
   render();
 
+  /**
+  * Helpers
+  */
 
   function wait(cb){
     window.setTimeout(render,1000);
   }
 
   function render(cb){
+    var t0 = performance.now();
     elDest = document.getElementById(o.idList);
     if(cnt++ < 5){
       if(elDest){
@@ -32,34 +39,75 @@ export function renderUserProjectsList(o){
   
   function build(){
     var i,iL,j,jL;
-
-    var elContainer = cel("div","mx-list-projects-container");
-    var elProjects = cel("div","mx-list-projects");
-    var elSearchInput =  cel("input","mx-list-projects-search");
-
     elContainer.appendChild(elSearchInput);
     elContainer.appendChild(elProjects);
     elDest.appendChild(elContainer);
 
-    buildSearch({
-      elInput : elSearchInput,
-      elList : elProjects
-    });
-
-    for( i=0, iL=nRow; i<iL; i++ ){
-      var elRow = cel('div',"mx-list-projects-row");
-      elProjects.appendChild(elRow);
-      var row = {};
-      for( j=0, jL=nCol; j<jL; j++){
-        row[titles[j]] = dat[titles[j]][i];
-      }
-      buildRow({
-        data : row,
-        elRow : elRow
-      });
-    }
-
+    buildSearch();
+    buildRows();
+    listen();
   }
+
+  /**
+  * Clean remove listener
+  */
+  function detach(){
+    elContainer.removeEventListener('keyup',filterList);
+    elContainer.removeEventListener('click',handleClick);
+  }
+
+  /**
+  * Enable listener
+  */
+  function listen(){
+   elContainer.addEventListener('keyup',filterList);
+   elContainer.addEventListener('click',handleClick);
+  }
+
+
+  /**
+  * Handle click
+  */
+  function handleClick(e){
+    var el = e.target;
+    var ds = el.dataset;
+    var actions = {
+      "request_membership": function(){
+        mx.helpers.requestProjectMembership(ds.request_membership);
+      },
+      "load_project" : function(){
+        detach();
+        mx.helpers.setProject(ds.load_project);
+      }
+    };
+    Object.keys(actions).forEach(a => {
+      if(ds[a]){
+        actions[a]();
+      }
+    }); 
+  }
+
+  /**
+  * Update list
+  */
+  function filterList(e){
+    var elTarget = e.target;
+    var elRow,elRowString,textSearch,textRow;
+    var i,iL,j,jL;
+    if( elTarget && elTarget.dataset.project_search ){
+      textSearch = cleanString(elTarget.value);
+      for( i=0, iL = elsRows.length; i < iL ; i++ ){
+        elRow = elsRows[i];
+        textRow = cleanString(elRow.innerText);
+        if(textRow.match(textSearch)){
+          elRow.classList.remove("mx-hide");
+        }else{
+          elRow.classList.add("mx-hide");
+        }
+      }
+    }
+  }
+  
 
   /*
    * Create environment wrapper
@@ -72,37 +120,36 @@ export function renderUserProjectsList(o){
     return el;  
   }
 
+
+  /**
+  * Build rows
+  */
+  function buildRows(){
+    var i, iL, j, jL, row = {};
+    for( i=0, iL=nRow; i<iL; i++ ){
+      var elRow = cel('div',"mx-list-projects-row");
+      elProjects.appendChild(elRow);
+      row = {};
+      for( j=0, jL=nCol; j<jL; j++){
+        row[titles[j]] = dat[titles[j]][i];
+      }
+      buildRow({
+        data : row,
+        elRow : elRow
+      });
+    }
+
+    elsRows = elProjects.querySelectorAll('.mx-list-projects-row');
+  }
+
   /**
    * Simple search tool
    */
-  function buildSearch(opt){
-    var elInput = opt.elInput;
-
-
+  function buildSearch(){
+    elSearchInput.dataset.project_search = true;
     mx.helpers.getDictItem("project_search_values").then(function(txt){
-      elInput.placeholder = txt;
+      elSearchInput.placeholder = txt;
     });
-
-    var elList = opt.elList;
-    var elRow,elRowString,textSearch,textRow;
-    var i,iL,j,jL;
-    var elsRows ;
-    elInput.addEventListener('keyup',function(e){
-      elsRows = elList.querySelectorAll('.mx-list-projects-row');
-      textSearch = cleanString(e.target.value);
-      for( i=0,iL=elsRows.length;i<iL;i++){
-        elRow = elsRows[i];
-        textRow = cleanString(elRow.innerText);
-        if(textRow.match(textSearch)){
-          elRow.classList.remove("mx-hide");
-        }else{
-          elRow.classList.add("mx-hide");
-        }
-      }
-
-    });
-
-
   }
 
   /**
@@ -134,11 +181,8 @@ export function renderUserProjectsList(o){
     elBottom.appendChild(elRight);
     elTop.appendChild(elTitle);
     elTop.appendChild(elRowBadges);
-    //elTop.appendChild(elRowJoin);
     elLeft.appendChild(elViewCount);
     elLeft.appendChild(elDesc);
-    //elRight.appendChild(elRowBadges);
-    //elRight.appendChild(elRowJoin);
 
     /**
      * set values
@@ -164,7 +208,6 @@ export function renderUserProjectsList(o){
       dat:dat,
       elTarget:elViewCount
     });
-
 
   }
 
@@ -202,7 +245,7 @@ export function renderUserProjectsList(o){
     var elBtn = cel('a');
     if(!(dat.member || dat.admin || dat.publisher)){
       elBtn.href = '#';
-      elBtn.onclick=function(){mx.helpers.requestProjectMembership(dat[idCol]);};
+      elBtn.dataset.request_membership = dat[idCol];
       mx.helpers.getDictItem('btn_join_project',mx.settings.language)
         .then(function(it){
           elBtn.innerText = it;
@@ -214,7 +257,7 @@ export function renderUserProjectsList(o){
   function makeSwitchProjectButton(opt){
     var elBtn = cel('a');
     elBtn.href = '#';
-    elBtn.onclick=function(){mx.helpers.setProject(opt.id);};
+    elBtn.dataset.load_project =  opt.id;
     elBtn.innerText = opt.label ;
     opt.elTitle.appendChild(elBtn);
   }
