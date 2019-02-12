@@ -28,8 +28,7 @@ mxDbValidateProjectAlias <- function(alias,id){
 #' @param alias {character} Project alias
 #' @return id {character} new id
 mxDbGetProjectIdByAlias <- function(alias){
-  alias <- tolower(alias)
-  out <- mxDbGetQuery("SELECT id FROM mx_projects WHERE alias ='"+ alias +"'" )$id
+  out <- mxDbGetQuery("SELECT id FROM mx_projects WHERE alias ='"+ tolower(alias) +"'" )$id
 if(noDataCheck(out)) return(alias)
   return(out)
 }

@@ -77,15 +77,12 @@ observe({
     if(!noDataCheck(project_out)){
      
       project_out <- toupper(project_out)
-
       #
       # Last check
       #
       roles <- mxDbGetProjectUserRoles(id_user,project_out)
-      if(noDataCheck(roles$groups)) project_out = project_def;
-
-
-      mxUpdateUrlParams(list(project=project_out))
+      if(noDataCheck(roles$groups)) project_out <- project_def;
+      mxUpdateUrlParams(list(project = project_out))
       reactData$project <- project_out
 
       #
@@ -102,7 +99,6 @@ observe({
             old_project = project_react
             )
           ))
-
 
     }
 
@@ -193,7 +189,6 @@ observeEvent(reactData$showProjectsList,{
     trigger = runif(1)
     )
 
-
   uiProjects <- tagList(
     tags$h3(d("project_list",language)),
     tags$p(d("project_list_select_desc",language)),
@@ -207,12 +202,13 @@ observeEvent(reactData$showProjectsList,{
       )
   }
 
+  
   mxModal(
-    id="uiSelectProject",
-    buttons=btn,
-    title=d("project_list",language),
-    content=uiProjects,
-    textCloseButton=d("btn_close",language)
+    id = "uiSelectProject",
+    buttons = btn,
+    title = d("project_list",language),
+    content = uiProjects,
+    textCloseButton = d("btn_close",language)
     )
 
 })
@@ -246,25 +242,6 @@ observe({
         idLayer = 'country-code',
         countries = as.list(countryClip)
         )
-
-      #if( hasNoClip ){
-      #filter = list(
-      #"all", 
-      #list("in","iso3code",project)
-      #)
-      #}else{
-      #filter = list(
-      #"any",
-      #c(list("!in","iso3code"),as.list(countryClip)),
-      #list("!has","iso3code")
-      #)
-      #}
-
-      #mglSetFilter(
-      #id=idMap,
-      #layer="country-code",
-      #filter=filter
-      #)
 
       if(noDataCheck(mapPos$zoom)){
         mapPos$zoom <- mapPos$z
@@ -301,6 +278,7 @@ observe({
           )
       }
     }
+
   })
 })
 
