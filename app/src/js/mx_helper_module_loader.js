@@ -2,6 +2,7 @@ const modules = {
   'topojson': loadTopoJSON,
   'd3': loadD3,
   'd3-geo': loadD3Geo,
+  'turf-bbox':loadTurfBbox,
   'highcharts': loadHighcharts,
   'json-editor': loadJsonEditor,
   'selectize': loadSelectize,
@@ -26,6 +27,14 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+
+function loadTurfBbox(){
+  return import('@turf/bbox')
+    .then(m => {
+      return m.default;
+    });
+}
+
 function loadMapboxGlJs(){
   return Promise.all([
     import('mapbox-gl/dist/mapbox-gl.css'),
