@@ -3,33 +3,31 @@
 #
 # Script to build and push new image in remote docker repository
 #
+BRANCH=master
+REMOTE=github
 NEW_VERSION=$1
 OLD_VERSION=`cat version.txt`
 echo $NEW_VERSION
 FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
+CHANGES_CHECK=$(git status --porcelain | wc -l)
+CUR_HASH=$(git rev-parse HEAD)
 
-if [ -z "$NEW_VERSION" ]
-then
-  echo "NOT updated ! Old version version =  $OLD_VERSION new version = $NEW_VERSION"
-  exit 1
-fi
-
-echo -e "Updating from version $FG_GREEN$OLD_VERSION$FG_NORMAL to $FG_GREEN$NEW_VERSION$FG_NORMAL. This script will:"
-echo "- Blindly replace those values in app and api package.json, docker-compose.yml and version.txt;"
-echo "- Build the prod version of the app"
-echo "- Build new images and push them to remote repository set in the docker file."
-
-echo "enter YES to confirm"
-read continue
-
-
-if [ "$continue" != "YES"  ]
+if [ $CHANGES_CHECK -gt 0 ]
 then 
-  echo "Stop here"
+  echo "This project as uncommited changes, stop here"
   exit 1
 fi
 
+if [ -z "$NEW_VERSION" ] || [ "$NEW_VERSION" == "$OLD_VERSION" ]
+then
+  echo "Wrong or missing version. Old version version =  $OLD_VERSION new version = $NEW_VERSION"
+  exit 1
+fi
+
+#
+# Update version + verification
+#
 
 echo "Update package.json"
 REP_PACKAGE_VERSION='s/"version": "'"$OLD_VERSION"'"/"version": "'"$NEW_VERSION"'"/g'
@@ -45,29 +43,60 @@ perl -pi -e $REP_API_TAG ./docker-compose.yml
 perl -pi -e $REP_APP_TAG ./docker-compose.yml
 
 
-git --no-pager diff --minimal docker-compose.yml app/package.json api/package.json version.txt
+git --no-pager diff --minimal 
 
-echo "Verify git diff and enter YES to build and push"
-read continue
+echo "Verify git diff of versioning changes. If its ok, type YES, else NO"
+read confirm_diff
 
+if [ "$confirm_diff" != "YES"  ]
+then 
+  echo "Stop here, stash changes. rollback to $CUR_HASH " 
+  git stash
+  exit 1
+fi
 
-if [ "$continue" != "YES"  ]
+#
+# Options
+#
+echo "Options"
+echo -e "Updating from version $FG_GREEN$OLD_VERSION$FG_NORMAL to $FG_GREEN$NEW_VERSION$FG_NORMAL."
+echo "Options: "
+echo "1) Quit"
+echo "2) Update version files, Build Webpack, APP and API"
+echo "3) All 2 + push images + git stage, commit, tag + push"
+read option
+
+if [ "$option" -eq 1  ]
 then 
   echo "Stop here"
   exit 1
 fi
 
 
-echo "Build webpack prod"
-cd ./app
-npm run prod
-cd ../
 
-echo "Build app"
-docker-compose build app && docker-compose push app
 
-echo "Build api"
-docker-compose build api && docker-compose push api
+if [ "$option" -eq 2  ] || [ "$option" -eq 3  ]
+then 
+  echo "Build webpack prod"
+  cd ./app
+  npm run prod
+  cd ../
+  echo "Build app"
+  docker-compose build app 
+  echo "Build api"
+  docker-compose build api 
+fi
+
+if [ "$option" -eq 3  ]
+then 
+  echo "Push images, git stage, commit, tag"
+  docker-compose push api
+  docker-compose push app
+  git add .
+  git commit -m "auto build version $NEW_VERSION"
+  git tag $NEW_VERSION
+  git push $REMOTE $BRANCH --tags
+fi
 
 echo "Done"
 
