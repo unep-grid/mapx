@@ -12,7 +12,7 @@ FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
 CUR_HASH=$(git rev-parse HEAD)
-USAGE="bash build.sh $OLD_VERSION"
+USAGE="Usage : bash build.sh $OLD_VERSION"
 
 if [ $CHANGES_CHECK -gt 0 ]
 then 
