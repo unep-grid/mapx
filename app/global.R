@@ -51,21 +51,25 @@ mxSetResourcePath(.get(config,c("resources")))
 #
 # Creating db pool
 #
-pg <- .get(config,c("pg"))
-
-mxDebugMsg("pool create")
-config <- .set(config,c("db","pool"),
-  dbPool(
-    drv = dbDriver("PostgreSQL"),
-    dbname = pg$dbname,
-    host = pg$host,
-    user = pg$user,
-    password = pg$password,
-    port = pg$port
+if( ! ("MAINTENANCE" %in% .get(config,c("mode")) )){
+  mxDebugMsg("pool create")
+  pg <- .get(config,c("pg"))
+  config <- .set(config,c("db","pool"),
+    dbPool(
+      drv = dbDriver("PostgreSQL"),
+      dbname = pg$dbname,
+      host = pg$host,
+      user = pg$user,
+      password = pg$password,
+      port = pg$port
+      )
     )
-  )
+}
 onStop(function() {
   pool <- .get(config,c("db","pool"))
+  if(!noDataCheck(pool)){
+  
   mxDebugMsg("pool close")
   poolClose(pool)
-  })
+  }
+})

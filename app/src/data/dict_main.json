@@ -6583,5 +6583,29 @@
     "bn": "",
     "fa": "",
     "ps": ""
+  },
+  {
+    "id": "app_maintenance_title",
+    "en": "Maintenance",
+    "fr": "Maintenance",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "app_maintenance_text",
+    "en": "MapX is currently unavailable due to server maintenance. </br> Come back later in the day !  </br> </br> Sincerely, your MapX team",
+    "fr": "MapX est temporairement indisisponible, des travaux de maintenance sont en cours. </br> Merci de revenir plus tard dans la journée ! </br></br> Votre équipe MapX.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   }
 ]

@@ -14,6 +14,7 @@ chown shiny:shiny $MAPX_PATH_LOG
 #
 CONF_MAPX="\
   config[['db_log']][['levels']] <- jsonlite::fromJSON('$MAPX_DB_LOG_LEVELS') \n\
+  config[['mode']] <- jsonlite::fromJSON('$MAPX_MODE') \n\
   config[['api']][['port']] <- '$API_PORT' \n\
   config[['api']][['host']] <- '$API_HOST' \n\
   config[['resources']][['userdata']] <- '$MAPX_PATH_USERDATA'\n\

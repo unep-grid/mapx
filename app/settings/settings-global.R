@@ -26,6 +26,10 @@ config[["system"]] <- list(
 
 config$version = jsonlite::fromJSON('package.json')$version
 
+#config[["mode"]] <- c("MAINTENANCE")
+config[["mode"]] <- c("MAINTENANCE")
+#config[["mode"]] <- c()
+
 
 config[["browser"]] <- list(
   #
@@ -33,6 +37,7 @@ config[["browser"]] <- list(
   # and stored in cookies
   #
   params = c(
+    "language",
     "userAgent",
     #"screenHeight",
     #"screenWidth",

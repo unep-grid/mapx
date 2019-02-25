@@ -12,6 +12,7 @@ FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
 CUR_HASH=$(git rev-parse HEAD)
+USAGE="bash build.sh $OLD_VERSION"
 
 if [ $CHANGES_CHECK -gt 0 ]
 then 
@@ -22,6 +23,7 @@ fi
 if [ -z "$NEW_VERSION" ] || [ "$NEW_VERSION" == "$OLD_VERSION" ]
 then
   echo "Wrong or missing version. Old version version =  $OLD_VERSION new version = $NEW_VERSION"
+  echo "$USAGE"
   exit 1
 fi
 
@@ -41,7 +43,6 @@ REP_API_TAG='s/mx-api-node:'"$OLD_VERSION"'-alpine/mx-api-node:'"$NEW_VERSION"'-
 REP_APP_TAG='s/mx-app-shiny:'"$OLD_VERSION"'-debian/mx-app-shiny:'"$NEW_VERSION"'-debian/g'
 perl -pi -e $REP_API_TAG ./docker-compose.yml
 perl -pi -e $REP_APP_TAG ./docker-compose.yml
-
 
 git --no-pager diff --minimal 
 

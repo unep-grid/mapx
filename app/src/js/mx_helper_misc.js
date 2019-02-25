@@ -2194,6 +2194,7 @@ export function injectHead(items){
 
 export function getBrowserData() {
   return { 
+    language : navigator.language.substr(0,2),
     cookies : mx.helpers.readCookie(),
     userAgent : navigator.userAgent,
     //screenHeight : screen.height,
