@@ -27,8 +27,7 @@ config[["system"]] <- list(
 config$version = jsonlite::fromJSON('package.json')$version
 
 #config[["mode"]] <- c("MAINTENANCE")
-config[["mode"]] <- c("MAINTENANCE")
-#config[["mode"]] <- c()
+config[["mode"]] <- c()
 
 
 config[["browser"]] <- list(
