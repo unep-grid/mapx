@@ -560,7 +560,9 @@ mxGetLayerNamedList <- function( layerTable){
 
   titlesDate <- sprintf("%1$s ( %2$s )",titles, format(date,"%Y-%m-%d"))
 
-  names(out) <- titlesDate
+  names(out) <- trimws(titlesDate)
+
+  out <- out[order(names(out))]
 
   return(as.list(out))
 

@@ -53,6 +53,7 @@ $(document).on('shiny:connected', function(event) {
   Shiny.addCustomMessageHandler('mglSetUserData', mx.helpers.setUserData );
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', mx.helpers.handlerDownloadVectorSource);
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', mx.helpers.getOverlapAnalysis);
+  Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', mx.helpers.getValidateSourceGeom);
   Shiny.addCustomMessageHandler('mglInit', mx.helpers.initMapx );
   
   /**

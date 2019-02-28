@@ -75,8 +75,14 @@ export function getOverlapAnalysis(opt){
         elButtonCompute.removeAttribute("disabled");
       },
       message : function(msg){
-        var elMsg = h.el('li',{class:['mx-log-item','mx-log-gray']},msg);
+        var elMsg = h.el('li',{class:['mx-log-item','mx-log-blue']},msg);
         elListMessage.appendChild(elMsg);
+      },
+      warning : function(msg){
+        var li = el("li",{
+          class:['mx-log-item','mx-log-orange']},
+          msg);
+        elProgressMessage.appendChild(li);
       },
       timing : function(msg){
         console.log(msg);
@@ -88,6 +94,7 @@ export function getOverlapAnalysis(opt){
         var elEnd = h.el('li',{class:['mx-log-item','mx-log-green']},msg);
         elListMessage.appendChild(elEnd);
         elButtonCompute.removeAttribute("disabled");
+        elListMessage.appendChild(h.el('hr'));
       }
     });
   }

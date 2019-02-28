@@ -271,9 +271,15 @@ function uploadSource(o){
       },
       message : function(msg){
         var li = el("li",{
-          class:['mx-log-item','mx-log-gray']},
+          class:['mx-log-item','mx-log-blue']},
           msg);
         elProgressLabel.innertText = "Importation progress";
+        elProgressMessage.appendChild(li);
+      },
+      warning : function(msg){
+        var li = el("li",{
+          class:['mx-log-item','mx-log-orange']},
+          msg);
         elProgressMessage.appendChild(li);
       },
       progress : function(progress){

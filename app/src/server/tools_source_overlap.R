@@ -7,6 +7,7 @@ observeEvent(input$btnAnalysisOverlap,{
     project <- reactData$project
     userData <- reactUser
     idUser <- .get(userData,c("data","id"))
+    emailUser <- .get(userData,c("data","email"))
 
     if( !isPublisher ){
 
@@ -44,8 +45,9 @@ observeEvent(input$btnAnalysisOverlap,{
                 choices = reactViewsCompactListVector(),
                 selected = reactViewsCheckedList(),
                 multiple = TRUE,
-                options=list(
-                  plugins = list("remove_button")
+                options = list(
+                  plugins = list("remove_button"),
+                  sortField = "label"
                   )
                 ),
               actionButton(
@@ -60,21 +62,30 @@ observeEvent(input$btnAnalysisOverlap,{
             choices = mxGetCountryList(language,includeWorld=F),
             selected = countries
             ),
-
-
-          checkboxInput(
-            inputId='checkOverlapCreateSource',
-            label = d('create_overlap_source',language)
-            ),
-          conditionalPanel(
-            condition='input.checkOverlapCreateSource==true',
-            textInput(
-              inputId='txtSourceTitle',
-              label=d('source_title',language)  
+          radioButtons("radioOverlapMode", d("radio_source_overlap_mode"),
+            choiceNames = list(
+              d('source_overlap_mode_area'),
+              d('source_overlap_mode_create_source')
+              ),
+            choiceValues = list(
+              "getArea","createSource"
               )
             ),
           conditionalPanel(
-            condition='input.checkOverlapCreateSource==false',
+            condition='input.radioOverlapMode=="createSource"',
+            textInput(
+              inputId='txtSourceTitle',
+              label=d('source_title',language)  
+              ),
+             p(class="text-muted",
+               sprintf(
+                 d("source_overlap_new_source_email_info",language),
+                   emailUser
+                 )
+               )
+            ),
+          conditionalPanel(
+            condition='input.radioOverlapMode=="getArea"',
             tags$div(
               class="form-group",
               tags$label(d('calc_area_result',language)),
@@ -131,7 +142,7 @@ observe({
   layers <- input$selectOverlapLayers
   countries <- input$selectOverlapCountries
   title <- input$txtSourceTitle
-  createMode <- isTRUE(input$checkOverlapCreateSource)
+  createMode <- isTRUE(input$radioOverlapMode == "createSource")
 
   isolate({
     language <- reactData$language
@@ -214,7 +225,7 @@ observeEvent(input$btnOverlapAnalyse,{
   mglGetOverlapAnalysis(list(
       layers = as.list(input$selectOverlapLayers),
       countries = as.list(input$selectOverlapCountries),
-      method = ifelse(input$checkOverlapCreateSource,'createSource','getArea'), 
+      method = input$radioOverlapMode, 
       sourceTitle = input$txtSourceTitle,
       idTextResult = "txtAreaResult",
       idListMessage = "ulOverlapMessages",

@@ -127,7 +127,8 @@ reactViewsCompactListVector <- reactive({
   views <- reactViewsCompact()
   views <- views[sapply(views,function(v){v$type %in% c("vt")})]
   idViews <- sapply(views,`[[`,'id')
-  names(idViews) <- sapply(views,`[[`,'_title')
+  names(idViews) <- trimws(sapply(views,`[[`,'_title'))
+  idViews <- idViews[order(names(idViews))]
   return(idViews)
 })
 

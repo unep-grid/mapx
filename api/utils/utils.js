@@ -46,6 +46,28 @@ exports.toRes =function(obj) {
   return JSON.stringify(obj) + "\t\n";
 };
 
+
+/**
+* Simple boolean converter. 
+* @param {*} value Value to convert
+* @param {Boolean} def Default value
+* @return {Boolean}
+*/
+exports.toBoolean = function(value,def){
+
+  var tDef = typeof def;
+  var tValue = typeof value;
+
+  if(tDef != 'boolean') throw new Error('toBoolean : default not boolean'); 
+  if(tValue == 'boolean') return value;
+  if(tValue == 'undefined') return def;
+  if(value == "true" || value == "t") return true;
+  if(value == "false" || value == "f") return false;
+  return Boolean(value);
+
+};
+
+
 /**
 * Random string composer : such as mx_mb9oa_6qmem_pkq9q_ajyer
 */
@@ -134,6 +156,7 @@ exports.source = require('./getSource.js');
 exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');
 exports.sourceOverlap = require('./getOverlap.js');
+exports.sourceValidityGeom = require('./getSourceValidityGeom.js');
 exports.image = require('./uploadImage.js');
 exports.vector = require('./uploadVector.js');
 exports.mail = require('./mail.js');

@@ -15,6 +15,7 @@ export * from './mx_helper_list_projects.js';
 export * from './mx_helper_upload_source.js';
 export * from './mx_helper_download_source.js';
 export * from './mx_helper_overlap_tool.js';
+export * from './mx_helper_validate_geom_tool.js';
 export * from './mx_helper_map.js';
 export * from './mx_helper_diaf.js';
 export * from './mx_helper_ui_color.js';

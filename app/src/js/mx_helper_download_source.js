@@ -94,7 +94,7 @@ export function handlerDownloadVectorSource(o){
       },
       message : function(msg){
         var li = el("li",{
-          class:['mx-log-item','mx-log-gray']},
+          class:['mx-log-item','mx-log-blue']},
           msg
         );
         elProgressMessage.appendChild(li);
