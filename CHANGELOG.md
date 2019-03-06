@@ -1,5 +1,15 @@
 ## Changelog
 
+ - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40">1.5.40</a>
+
+    - Improvement 
+      - APP 
+        - Unified methods to retrieve click based map query on MapX layers : one function is used for dashboard events, map popup event, for both raster and vector source 
+    - New features 
+      - APP 
+         - Raster views and custom code views have a dashboard functionality 
+         - The click event in dashboard is usable for querying raster sources.
+
 - <a href="https://github.com/fxi/map-x-mgl/tree/bbb37f">1.5.30</a>
     - Improvement
       - API/APP

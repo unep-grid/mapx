@@ -3,7 +3,7 @@ CUR_VERSION=`cat version.txt`
 CHANGELOG_FILE="CHANGELOG.md"
 BASE_URL_CHANGELOG="https://github.com/fxi/map-x-mgl/tree/"
 PREVIOUS_LOG=$(git log -3 --pretty=%B)
-LATEST_HASH=$(git log -1 --pretty=%T)
+LATEST_HASH=$(git log -1 --pretty=%h)
 UPDATE_URL='-<a href="'$BASE_URL_CHANGELOG$LATEST_HASH'">'$CUR_VERSION'</a>'
 UPDATE_TXT=$UPDATE_URL"\n"$PREVIOUS_LOG"\n"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
@@ -11,7 +11,7 @@ CHANGES_CHECK=$(git status --porcelain | wc -l)
 if [ $CHANGES_CHECK -gt 0 ]
 then 
   echo "This project as uncommited changes, stop here"
-  exit 1
+  #exit 1
 fi
 
 echo "---- EXTRACTED CHANGELOG ---"
@@ -24,8 +24,10 @@ read confirm_changelog_edit
 if [ "$confirm_changelog_edit" = "YES"  ]
 then 
   # edit changelog
-  CMD='print "'$UPDATE_TXT'" if $. == 2'
-  perl -pi -e $CMD $CHANGELOG_FILE
+  mv $CHANGELOG_FILE $CHANGELOG_FILE"_tmp"
+  echo -e $UPDATE_TXT > $CHANGELOG_FILE 
+  cat $CHANGELOG_FILE"_tmp" >> $CHANGELOG_FILE 
+  rm $CHANGELOG_FILE"_tmp"
   vim $CHANGELOG_FILE
   # Check changes
   git --no-pager diff --minimal 
@@ -38,7 +40,7 @@ then
     git commit -m "auto update changelog"
     git push $REMOTE $BRANCH
   else
-    echo "Uncommited changes"
+    git checkout -- $CHANGELOG_FILE
   fi
 
 fi
