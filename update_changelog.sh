@@ -3,10 +3,11 @@ CUR_VERSION=`cat version.txt`
 CHANGELOG_FILE="CHANGELOG.md"
 BASE_URL_CHANGELOG="https://github.com/fxi/map-x-mgl/tree/"
 PREVIOUS_LOG=$(git log -3 --pretty=%B)
-LATEST_HASH=$(git log -1 --pretty=%h)
-UPDATE_URL='-<a href="'$BASE_URL_CHANGELOG$LATEST_HASH'">'$CUR_VERSION'</a>'
+UPDATE_URL='-<a href="'$BASE_URL_CHANGELOG$CUR_VERSION'">'$CUR_VERSION'</a>'
 UPDATE_TXT=$UPDATE_URL"\n"$PREVIOUS_LOG"\n"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
+BRANCH=master
+REMOTE=github
 
 if [ $CHANGES_CHECK -gt 0 ]
 then 
