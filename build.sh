@@ -11,12 +11,10 @@ echo $NEW_VERSION
 FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
-CUR_HASH=$(git rev-parse HEAD)
-USAGE="Usage : bash build.sh $OLD_VERSION"
-PREVIOUS_LOG=$(git log -1 --pretty=%B)
-CHANGELOG_FILE="CHANGELOG.md"
-BASE_URL_CHANGELOG="https://github.com/fxi/map-x-mgl/tree/"
 
+CUR_HASH=$(git rev-parse HEAD)
+
+USAGE="Usage : bash build.sh $OLD_VERSION"
 
 if [ $CHANGES_CHECK -gt 0 ]
 then 
@@ -101,31 +99,6 @@ then
   git commit -m "auto build version $NEW_VERSION"
   git tag $NEW_VERSION
   git push $REMOTE $BRANCH --tags
-fi
-
-echo "Paste latest hash and message to the changelog ? [YES/NO]"
-read confirm_changelog_edit
-
-if [ "$confirm_changelog_edit" = "YES"  ]
-then 
-  LATEST_HASH=$(git log -1 --pretty=%T)
-  UPDATE_URL='-<a href="'$BASE_URL_CHANGELOG$LATEST_HASH'">'$NEW_VERSION'</a>'
-  UPDATE_TXT=$UPDATE_URL"\n"$PREVIOUS_LOG"\n"
-  # edit changelog
-  perl -pi -e 'print "'$UPDATE_TXT'" if $. == 2' $CHANGELOG_FILE
-  vim CHANGELOG_FILE
-  # Check changes
-  git --no-pager diff --minimal 
-  echo "Confirm changelog commit ? [YES/NO]"
-  read confirm_changelog_commit
-
-  if [ "$confirm_changelog_commit" = "YES"  ]
-    git add .
-    git commit -m "auto update changelog"
-    git push $REMOTE $BRANCH
-  then 
-    echo "Uncommited changes"
-  fi
 fi
 
 echo "Done"
