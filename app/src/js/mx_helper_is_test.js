@@ -11,11 +11,29 @@ export function isEmpty(item){
 }
 
 /**
- * Test if entry is an aray
- * @param {Array} item
+ * Test if entry is an object
+ * @param {Object} item
  */
 export function isObject(item) {
   return (!!item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+* Test if it's a MapX view. 
+* @param {Object} item to test
+*/
+export function isView(item){
+  return mx.helpers.isObject(item) && 
+  mx.helpers.isString(item.type) &&
+  !!item.type.match(/^(vt|rt|cc||sm)$/);
+}
+
+/**
+* Test for promise
+* @param {Promise} item item to test
+*/
+export function isPromise(item){
+  return item instanceof Promise;
 }
 
 /**

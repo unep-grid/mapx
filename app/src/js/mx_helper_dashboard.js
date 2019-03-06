@@ -14,9 +14,8 @@ export function Dashboard(idContainer,idDashboard,view) {
   /**
    * Init
    */
-  dashboard.store = Dashboard.getStore() || [];
-
   dashboard.elContainer = document.getElementById(idContainer);
+  dashboard.store = Dashboard.getStore() || [];
   dashboard.modules = {};
 
   /**
@@ -147,12 +146,12 @@ Dashboard.prototype.Widget = function(config) {
         }
       })
       .then(function() { 
-        
+
         /**
          * Keep config, modules and set id
          */
         widget.config =  config;
-        widget.id = config.id || widget.randomValue();
+        widget.id = widget.randomValue();
         widget.modules = dashboard.modules;
         dashboard.widgets.push(widget);
         widget.add();
@@ -162,56 +161,76 @@ Dashboard.prototype.Widget = function(config) {
          */
         widget._init = true;
       });
-      
-  };
-    
-    /**
-    * Add widget
-    */
-    
-    widget.add = function() {
-      var buttonClose = document.createElement("button");
-      var buttonHandle = document.createElement("button");
-      var buttonGroup = document.createElement("div");
-      widget.el = document.createElement("div");
-      widget.elContent = document.createElement("div");
-      buttonGroup.className="btn-widget-group";
-      buttonClose.addEventListener("click", widget.remove);
-      buttonClose.className="btn-circle btn-widget btn-widget-right";
-      buttonHandle.className="btn-circle btn-widget btn-widget-left handle";
-      buttonClose.innerText = "x";
-      buttonHandle.innerText = "+";
-      widget.elContent.className="grid-item--content shadow";
-      widget.el.className = "noselect grid-item";
-      widget.setSize(
-        widget.config.height,
-        widget.config.width
-      );
-      buttonGroup.appendChild(buttonClose);
-      buttonGroup.appendChild(buttonHandle);
-      widget.el.appendChild(buttonGroup);
-      widget.el.appendChild(widget.elContent);
-      dashboard.elGrid.appendChild(widget.el);
-      dashboard.packery.appended(widget.el);
-      var itDg = new dashboard.modules.draggabilly( widget.el , {handle:".handle"} );
-      dashboard.packery.bindDraggabillyEvents( itDg , {});
-      widget.config.draggie = itDg;
-      widget.onAdd();
-    };
 
+  };
+
+  /**
+   * Add widget
+   */
+
+  widget.add = function() {
+    var buttonClose = document.createElement("button");
+    var buttonHandle = document.createElement("button");
+    var buttonGroup = document.createElement("div");
+    widget.el = document.createElement("div");
+    widget.elContent = document.createElement("div");
+    buttonGroup.className="btn-widget-group";
+    buttonClose.addEventListener("click", widget.remove);
+    buttonClose.className="btn-circle btn-widget btn-widget-right";
+    buttonHandle.className="btn-circle btn-widget btn-widget-left handle";
+    buttonClose.innerText = "x";
+    buttonHandle.innerText = "+";
+    widget.elContent.className="grid-item--content shadow";
+    widget.el.className = "noselect grid-item";
+    widget.setSize(
+      widget.config.height,
+      widget.config.width
+    );
+    buttonGroup.appendChild(buttonClose);
+    buttonGroup.appendChild(buttonHandle);
+    widget.el.appendChild(buttonGroup);
+    widget.el.appendChild(widget.elContent);
+    dashboard.elGrid.appendChild(widget.el);
+    dashboard.packery.appended(widget.el);
+    var itDg = new dashboard.modules.draggabilly( widget.el , {handle:".handle"} );
+    dashboard.packery.bindDraggabillyEvents( itDg , {});
+    widget.config.draggie = itDg;
+    widget.onAdd();
+  };
+
+  /**
+   * Update widget data using attributes
+   */
   widget.updateDataFromAttribute = function(){
     var d = mx.helpers.path(config,"view.data.attribute.table");
     widget.setData( d || []);
   };
 
-  widget.updateDataFromLayerClick = function(e){
-     updateDataFromLayers(e,true);
+  /**
+   * Update widget data after a click
+   */
+  widget.updateDataFromLayerOnClick = function(e){
+    getWidgetDataFromLinkedView({
+      point : e.point
+    })
+      .then(function(data){
+        widget.setData(data);
+      });
   };
 
- widget.updateDataFromLayerRender = function(e){
-     updateDataFromLayers(e,false);
+  /**
+   * Update widget data after any map rendering
+   */
+  widget.updateDataFromLayerOnRender = function(e){
+    getWidgetDataFromLinkedView()
+      .then(function(data){
+        widget.setData(data);
+      });
   };
 
+  /**
+   * Instantiate widget method for setting data
+   */
   widget.setUpdateDataMethod = function(){
     var map = widget.config.map;
     var update;
@@ -224,13 +243,13 @@ Dashboard.prototype.Widget = function(config) {
         widget.updateDataFromAttribute();
         break;
       case "layerChange":
-        update = widget.updateDataFromLayerRender;
+        update = widget.updateDataFromLayerOnRender;
         map.on('render',update);
         widget._removeMapListener = function(){map.off('render',update);};
         break;
       case "layerClick":
         setClickIgnore(true);
-        update = widget.updateDataFromLayerClick;
+        update = widget.updateDataFromLayerOnClick;
         map.on('click',update);
         widget._removeMapListener = function(){
           setClickIgnore(false);
@@ -239,75 +258,6 @@ Dashboard.prototype.Widget = function(config) {
     }
   };
 
-  function setClickIgnore(enable){
-    var widgets = mx.settings.clickIgnoreWidgets; 
-    var idWidget =  widget.id;
-    var posWidget =  widgets.indexOf(idWidget);
-    var hasWidget = posWidget > -1; 
-    var toAdd = enable && !hasWidget;
-    var toRemove = !enable && hasWidget;
-
-    if( toAdd ){
-      widgets.push(idWidget);
-    }
-
-    if( toRemove ){
-      widgets.splice(posWidget,1);
-    } 
-  }
-
-  /**
-  * Data from layers
-  * @param {Object} e Event
-  * @param {Boolean} useCoord : use coords instead of event
-  */
-  function updateDataFromLayers(e,useCoord){
-    if( ! useCoord ) e = null;
-    mx.helpers.getRenderedLayersData({
-      id : widget.config.map,
-      point : useCoord ? e.point : undefined,
-      idLayer : widget.config.view.id
-    }).then(function(data){
-      widget.setData(data);
-    });
-  }
-
-
-
-
-  /*
-   * Set dim + adding gutter size
-   * @param {Number} size size
-   * @param {Number} sizeGrid width/height of grid
-   * @param {Number} sizeGutter gutter width
-   */
-  function sizeWithGutter(size,sizeGrid,sizeGutter){
-    var s = size*1||100;
-    var gu = sizeGutter/2 || 5;
-    var gr = sizeGrid*1 || 50;
-    return s + ((s / gr) * gu)-gu ;
-  }
-
-  /**
-   * Backward compability for classes 
-   */
-  function toDim(dim){
-
-    var oldClasses = {
-      "x50":50,
-      "x1":150,
-      "x2":300,
-      "x3":450,
-      "x4":600,
-      "y50":50,
-      "y1":150,
-      "y2":300,
-      "y3":450,
-      "y4":600         
-    };
-
-    return dim*1?dim:oldClasses[dim]||100;
-  }
 
   widget.setSize = function(height,width){
     var h = toDim(height);
@@ -345,7 +295,7 @@ Dashboard.prototype.Widget = function(config) {
     }
 
     if( widget._removeMapListener instanceof Function ) {
-        widget._removeMapListener();
+      widget._removeMapListener();
     }
     /**
      * Register a unique event
@@ -390,12 +340,12 @@ Dashboard.prototype.Widget = function(config) {
   };
 
 
-  widget.setData = function(d) {
-    if( widget.data !== d && d instanceof Array && d.length > 0 ) {
+  widget.setData = mx.helpers.debounce(function(d) {
+    if( widget.data !== d ) {
       widget.data = d;
       widget.onData();
     }
-  };
+  },100);
 
   widget.strToObj = function(str) {
 
@@ -465,6 +415,77 @@ Dashboard.prototype.Widget = function(config) {
   };
 
   return widget.init(config);
+
+  /**
+   * Helpers
+   */
+  function setClickIgnore(enable){
+    var widgets = mx.settings.clickIgnoreWidgets; 
+    var idWidget =  widget.id;
+    var posWidget =  widgets.indexOf(idWidget);
+    var hasWidget = posWidget > -1; 
+    var toAdd = enable && !hasWidget;
+    var toRemove = !enable && hasWidget;
+
+    if( toAdd ){
+      widgets.push(idWidget);
+    }
+
+    if( toRemove ){
+      widgets.splice(posWidget,1);
+    } 
+  }
+
+  /**
+   * Data from layers
+   * @param {Object} opt Options
+   * @param {Object} opt.point Point data
+   */
+  function getWidgetDataFromLinkedView(opt){
+    var h = mx.helpers;
+    var id = widget.config.id;
+    var items = h.getLayersPropertiesAtPoint({
+      map: widget.config.map,
+      type : widget.config.type,
+      point : opt.point,
+      idView : id
+    });
+    return items[id];
+  }
+
+  /*
+   * Set dim + adding gutter size
+   * @param {Number} size size
+   * @param {Number} sizeGrid width/height of grid
+   * @param {Number} sizeGutter gutter width
+   */
+  function sizeWithGutter(size,sizeGrid,sizeGutter){
+    var s = size*1||100;
+    var gu = sizeGutter/2 || 5;
+    var gr = sizeGrid*1 || 50;
+    return s + ((s / gr) * gu)-gu ;
+  }
+
+  /**
+   * Backward compability for classes 
+   */
+  function toDim(dim){
+
+    var oldClasses = {
+      "x50":50,
+      "x1":150,
+      "x2":300,
+      "x3":450,
+      "x4":600,
+      "y50":50,
+      "y1":150,
+      "y2":300,
+      "y3":450,
+      "y4":600         
+    };
+
+    return dim*1?dim:oldClasses[dim]||100;
+  }
 };
 
 
@@ -507,6 +528,7 @@ Dashboard.init = function(o){
 
 
         var config = {
+          id : view.id,
           dashboard : dashboard,
           source: w.source,
           height: w.height,
@@ -514,7 +536,8 @@ Dashboard.init = function(o){
           script: w.script,
           map: mx.helpers.getMap(o.idMap),
           packery: dashboard.packery,
-          view: view
+          view: view,
+          type : view.type
         };
 
         return new dashboard.Widget(config);
@@ -525,7 +548,7 @@ Dashboard.init = function(o){
     })
     .catch(e => {
       throw new Error(e);
-    })
+    });
 
 };
 

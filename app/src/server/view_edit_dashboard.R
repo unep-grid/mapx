@@ -12,6 +12,8 @@ observeEvent(input$dashboardEdit_init,{
     dashboard = .get(view,c("data","dashboard"))
     widgets = .get(dashboard,c("widgets"))
     titles = .get(view,c("data","title"))
+    viewType = .get(view,c('type'))
+
 
     t <- function(i=NULL){
       d(id=i,lang=language,dict=config$dict,web=F,asChar=T)
@@ -53,7 +55,31 @@ observeEvent(input$dashboardEdit_init,{
       dashboard$widgets <- widgets;
     }
 
-   
+    #
+    # Data source according to type
+    #
+    if(viewType == "vt"){
+      srcDataOption = list("viewFreqTable","layerChange","layerClick","none")
+      srcDataLabels = list(
+        t("view_dashboard_src_view"),
+        t("view_dashboard_src_layerChange"),
+        t("view_dashboard_src_layerClick"),
+        t("view_dashboard_src_none")
+        ) 
+    }
+    if(viewType == "rt"){
+      srcDataOption = list("layerClick","none")
+      srcDataLabels = list(
+        t("view_dashboard_src_layerClick"),
+        t("view_dashboard_src_none")
+        ) 
+    }
+    if(viewType == "cc"){
+      srcDataOption = list("none")
+      srcDataLabels = list(
+        t("view_dashboard_src_none")
+        ) 
+    }
     #
     # Set widget size choices
     #
@@ -98,14 +124,9 @@ observeEvent(input$dashboardEdit_init,{
                 `source` = list(
                   title = t("view_dashboard_txt_which_data"),
                   type = "string",
-                  enum = list("viewFreqTable","layerChange","layerClick","none"),
+                  enum = srcDataOption,
                   options = list(
-                    enum_titles = list(
-                      t("view_dashboard_src_view"),
-                      t("view_dashboard_src_layerChange"),
-                      t("view_dashboard_src_layerClick"),
-                      t("view_dashboard_src_none")
-                      )
+                    enum_titles = srcDataLabels
                     )
                   ),
                 `width` = list(
@@ -213,7 +234,7 @@ observeEvent(input$dashboardEdit_values,{
     },
     "save"={
 
-      if( view[["_edit"]] && view[["type"]] == "vt" ){
+      if( view[["_edit"]] && view[["type"]] %in% c('vt','rt','cc') ){
         view[["_edit"]] = NULL
 
         view <- .set(view, c("date_modified"), time )

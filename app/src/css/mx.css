@@ -1105,6 +1105,10 @@ blockquote {
   border-left:1px solid #ccc;
 }
 
+.mx-prop-static {
+  padding:5px;
+}
+
 /**
 * Read more (uiReadMore) css
 */

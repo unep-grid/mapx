@@ -431,7 +431,7 @@ liControlsEdit <- tagList(
       class="fa fa-pencil"
       )
     ),
-  "{{? view.type=='vt' }}",
+  "{{? h.any([ view.type == 'vt',view.type == 'rt',view.type == 'cc']) }}",
   # Button to edit view
   tags$li(
     class="mx-pointer btn-circle btn-circle-small hint--left",

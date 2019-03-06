@@ -3256,6 +3256,7 @@ export function addView(o) {
       view: view
     });
   }
+
   /**
    * Add source from view
    */
@@ -3504,45 +3505,146 @@ export function getBoundsArray(o) {
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
 }
 
+
 /**
- * Get layer data
- * @param {Object} o options
- * @param {String| Object} o.id map id or map object
- * @param {String} o.idLayer Original id layer
- * @param {String} o.gid Geometry id name default is "gid"
- * @param {PointLike} o.point optional point
- * @return {array} table
+ * Query layers properties at point
+ * @param {Object} opt Options
+ * @param {Object||String} opt.map Map object or id of the map
+ * @param {Object} opt.point
+ * @param {String} opt.type Type : vt or rt
+ * @param {String} opt.idView Use only given view id
+ * @param {Boolean} opt.asObject Return an object of array `{a:[2,1]}` instead of an array of object `[{a:2},{a:1}]`.
+ * @return {Object} Object with view id as keys
  */
-export function getRenderedLayersData(o) {
-  return new Promise(function(resolve, reject) {
-    var point = o.point || undefined;
-    var out = [];
-    var start = new Date();
-    var idLayer = o.idLayer.split(mx.settings.separators.sublayer)[0];
-    var msg = o.onMessage || console.log;
-    var gid = o.gid || 'gid';
-    var map = mx.helpers.getMap(o.id);
-    if (map) {
-      var layers = mx.helpers.getLayerNamesByPrefix({
+export function getLayersPropertiesAtPoint(opt) {
+  var h = mx.helpers;
+  var map = h.getMap(opt.map);
+  var hasViewId = h.isString(opt.idView);
+  var modeObject = opt.asObject == true || false;
+  var items = {};
+  var idViews = [];
+  var excludeProp = ['mx_t0', 'mx_t1', 'gid'];
+  var type = opt.type || 'vt' || 'rt';
+  /**
+   * Use id from idView as array OR get all mapx displayed base layer
+   * to get array of view ID.
+   */
+  idViews = hasViewId
+    ? [opt.idView]
+    : h.getLayerNamesByPrefix({
         map: map,
-        prefix: o.idLayer
+        base: true,
+        prefix: 'MX-'
       });
 
-      if (layers.length > 0) {
-        var features = map.queryRenderedFeatures(point, {layers: layers});
-        var featuresUniques = {};
-        features.forEach(function(f) {
-          featuresUniques[f.properties.gid] = f;
-        });
-        for (var fu in featuresUniques) {
-          out.push(featuresUniques[fu].properties);
-        }
-      }
-    }
+  if (idViews.length == 0) {
+    return items;
+  }
 
-    resolve(out);
-  });
+  /**
+   * Fetch view data for one or many views
+   * and fetch properties
+   */
+  idViews
+    .map((idView) => h.getView(idView))
+    .filter((view) => view.type == type)
+    .forEach((view) => {
+      if (type == 'rt') {
+       items[view.id] = fetchRasterProp(view);
+      } else {
+       items[view.id] = fetchVectorProp(view);
+      }
+    });
+
+  return items;
+
+  /**
+   * Fetch properties on raster WMS layer
+   */
+  function fetchRasterProp(view) {
+    var url = h.path(view, 'data.source.tiles', [])[0].split('?');
+    var endpoint = url[0];
+    var params = h.paramsToObject(url[1]);
+    var id = view.id;
+    var out = modeObject ? {} : [];
+    /**
+     * Check if this is a WMS valid param object
+     */
+    var isWms =
+      params &&
+      params.layers &&
+      params.service &&
+      params.service.toLowerCase() == 'wms';
+
+    if (isWms) {
+      return h.queryWms({
+        point: opt.point,
+        layers: params.layers,
+        url: endpoint,
+        asObject : modeObject
+      });
+    } else {
+      return Promise.resolve(out);
+    }
+  }
+
+  /**
+   * Fetch properties on vector layer
+   */
+  function fetchVectorProp(view) {
+
+    return new Promise((resolve,reject)=>{
+
+    var id = view.id;
+
+      var layers = h.getLayerNamesByPrefix({
+        map: map,
+        prefix: id
+      });
+
+      var features = map.queryRenderedFeatures(opt.point, {
+        layers: layers
+      });
+
+    var out = modeObject ? {} : [];
+
+      features.forEach((f) => {
+        if(modeObject){
+          for (var p in f.properties) {
+            /**
+            * Exclude prop (time, gid, etc)
+            */
+            if (excludeProp.indexOf(p) == -1) {
+              /**
+              * Aggregate value by attribute
+              */
+              var value = f.properties[p];
+              var values = out[p] || [];
+              values = values.concat(value);
+              out[p] = h.getArrayStat({
+                stat: 'distinct',
+                arr: values
+              });
+            }
+          }
+        }else{
+          /*
+          * Raw properties
+          */
+           out.push(f.properties);
+        }
+      });
+
+      resolve(out)
+    })
+
+  }
 }
+
+
+
+
+
 
 /*selectize version*/
 export function makeSearchBox(o) {

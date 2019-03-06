@@ -611,7 +611,7 @@ observe({
             "btn_opt_edit_dashboard"={
  
               if(!viewIsEditable) return()
-              if(viewType != "vt") return()
+              if(viewType == "sm" || viewType == "gj" ) return()
 
               btnList <- list(
                 actionButton(
