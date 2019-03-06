@@ -12,7 +12,7 @@ REMOTE=github
 if [ $CHANGES_CHECK -gt 0 ]
 then 
   echo "This project as uncommited changes, stop here"
-  #exit 1
+  exit 1
 fi
 
 echo "---- EXTRACTED CHANGELOG ---"
