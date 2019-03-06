@@ -111,7 +111,8 @@
   "scripts": {
     "test": "-",
     "prod": "webpack --config ./webpack/webpack.prod.js",
-    "dev": "webpack --watch --config ./webpack/webpack.dev.js"
+    "dev": "webpack --watch --config ./webpack/webpack.dev.js",
+    "lint": "eslint"
   },
   "author": "",
   "license": "ISC"
