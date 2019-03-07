@@ -1,4 +1,14 @@
 ## Changelog
+ 
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.1">1.5.40.1</a>
+
+    - Bug fixes 
+      - API 
+        - Fix bug where overlap analysis produced an auto-correction 
+    - New features 
+      - APP
+        - Draw tool. `mapbox-gl-draw`
+        - Geojson view creation using resulting draw 
 
  - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40">1.5.40</a>
 
