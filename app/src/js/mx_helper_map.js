@@ -105,7 +105,7 @@ export function requestProjectMembership(idProject) {
  * @param {Object} o.apiUrl Base url for api
  */
 export function initMapx(o) {
-  return mx.helpers.moduleLoad('mapbox-gj-js').then((mapboxgl) => {
+  return mx.helpers.moduleLoad('mapbox-gl-js').then((mapboxgl) => {
     mx.mapboxgl = mapboxgl;
 
     var styleInit;

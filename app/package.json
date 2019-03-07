@@ -60,6 +60,7 @@
     "worker-loader": "^2.0.0"
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-draw": "^1.1.1",
     "@turf/turf": "^5.1.6",
     "ContentTools": "^1.6.10",
     "bootstrap": "^3.4.0",

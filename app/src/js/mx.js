@@ -31,6 +31,9 @@ export let data = {
   }),
   draft : localforage.createInstance({
     name : "draft"
+  }),
+draw : localforage.createInstance({
+    name : "draw"
   })
 };
 

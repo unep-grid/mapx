@@ -1,52 +1,47 @@
 /* jshint esversion : 6*/
 
-import * as geojsonhint from "geojsonhint";
-import { featureEach, propEach } from "@turf/meta";
-import bbox from "@turf/bbox";
+import * as geojsonhint from 'geojsonhint';
+import {featureEach, propEach} from '@turf/meta';
+import bbox from '@turf/bbox';
 import * as stat from './mx_helper_stat.js';
 import * as color from './mx_helper_colors.js';
 
 // geojson type to mapbox gl type
 var typeSwitcher = {
-  "Point": "circle",
-  "MultiPoint": "line",
-  "LineString": "line",
-  "MultiLineString": "line",
-  "Polygon": "fill",
-  "MultiPolygon": "fill",
-  "GeometryCollection": "fill"
+  Point: 'circle',
+  MultiPoint: 'line',
+  LineString: 'line',
+  MultiLineString: 'line',
+  Polygon: 'fill',
+  MultiPolygon: 'fill',
+  GeometryCollection: 'fill'
 };
 
-
-function makeId(n){
+function makeId(n) {
   n = n || 10;
- return (Math.random().toString(36)+'00000000000000000').slice(2, n+2);
+  return (Math.random().toString(36) + '00000000000000000').slice(2, n + 2);
 }
-
 
 // Inital message
 postMessage({
   progress: 0,
-  message: "start"
+  message: 'start'
 });
-
 
 // handle message send from the main thread
 onmessage = function(e) {
   try {
-
     /**
      * Initialisation : set local helper and variables
      */
 
     // init variables
-    var errorMsg = "";
-    var warningMsg = "";
+    var errorMsg = '';
+    var warningMsg = '';
     var dat = e.data;
     var gJson = dat.data;
     var fileName = dat.fileName;
     var fileType = dat.fileType;
-
 
     // set basic timing function
     var timerVal = 0;
@@ -64,57 +59,51 @@ onmessage = function(e) {
 
     // printable version of timerLaè
     var timerLapString = function() {
-      return " " + timerLap() + " ms ";
+      return ' ' + timerLap() + ' ms ';
     };
 
     // start timer
     timerStart();
 
-
-    /**
-    * Convert if not geojson
-    */
-
-    //if(fileType == 'kml') gJson =  toGeoJSON.kml(gJson);
-    //if(fileType == 'gpx') gJson =  toGeoJSON.gpx(gJson);
-    //if(fileType == 'geojson') gJson =  JSON.parse(gJson);
-
     /**
      * validation : geojson validation with geojsonhint
      */
-
-    // Validation. Is that a valid geojson ?
     var messages = geojsonhint.hint(gJson);
-    // extract errors
-    var errors = messages.filter(function(x){
-      return x.level == "error";
+
+    var errors = messages.filter(function(x) {
+      return x.level == 'error';
     });
-    // extract message
-    var warnings = messages.filter(function(x){
-      return x.level == "message";
+
+    var warnings = messages.filter(function(x) {
+      return x.level == 'message';
     });
 
     // send message
     postMessage({
       progress: 60,
-      message: "Validation done in " + timerLapString()
+      message: 'Validation done in ' + timerLapString()
     });
 
     // validation : warnings
     if (warnings.length > 0) {
-      warningMsg = warnings.length + " warning message(s) found. Check the console for more info";
+      warningMsg =
+        warnings.length +
+        ' warning message(s) found. Check the console for more info';
+
       postMessage({
         progress: 75,
-        message: warnings.length + " warnings found. Please check the console."
+        message: warnings.length + ' warnings found. Please check the console.'
       });
 
       warnings.forEach(function(x) {
-        console.log({file:fileName,warnings:JSON.stringify(x)});
+        console.log({file: fileName, warnings: JSON.stringify(x)});
       });
     }
     // varlidation: errors
     if (errors.length > 0) {
-      errorMsg = errors.length + " errors found. Please check the console.";
+      
+      errorMsg = errors.length + ' errors found. Please check the console.';
+
       postMessage({
         progress: 100,
         message: errorMsg,
@@ -122,7 +111,7 @@ onmessage = function(e) {
       });
 
       errors.forEach(function(x) {
-        console.log({file:fileName,errors:x});
+        console.log({file: fileName, errors: x});
       });
 
       return;
@@ -131,28 +120,27 @@ onmessage = function(e) {
     /**
      * Avoid multi type : we don't handle them for now
      */
-
     var geomTypes = [];
-    if( gJson.features ){
+    if (gJson.features) {
       // array of types in data
-      geomTypes  = gJson.features
-        .map(function(x){
-          if(x.geometry && x.geometry.type){
+      geomTypes = gJson.features
+        .map(function(x) {
+          if (x.geometry && x.geometry.type) {
             return x.geometry.type;
-          }else{
-            return undefined; 
+          } else {
+            return undefined;
           }
         })
-      .filter(function(v,i,s){
-        return s.indexOf(v) === i && v !== undefined;
-      });
-    }else{
+        .filter(function(v, i, s) {
+          return s.indexOf(v) === i && v !== undefined;
+        });
+    } else {
       geomTypes = [gJson.geometry.type];
     }
 
     postMessage({
       progress: 90,
-      message: "Geometry type found in " + timerLapString()
+      message: 'Geometry type found in ' + timerLapString()
     });
 
     /**
@@ -161,9 +149,9 @@ onmessage = function(e) {
      * Delete this block.
      */
 
-    featureEach(gJson,function(f,i){
-      if(f.geometry===null){
-        f.geometry={
+    featureEach(gJson, function(f, i) {
+      if (f.geometry === null) {
+        f.geometry = {
           type: geomTypes[0],
           coordinates: []
         };
@@ -171,40 +159,37 @@ onmessage = function(e) {
     });
 
     /**
-    * Get table of all attributes. 
-    */
+     * Get table of all attributes.
+     */
     var attributes = {};
     var p;
     attributes.tmp = {};
     attributes.init = false;
-    propEach(gJson,
-      function(prop){
-        // init attributes with empty array
-        if(!attributes.init){
-          for(p in prop){
-            attributes.tmp[p] = [];
-          }
-          attributes.init = true;
+    propEach(gJson, function(prop) {
+      // init attributes with empty array
+      if (!attributes.init) {
+        for (p in prop) {
+          attributes.tmp[p] = [];
         }
-        // 
-        for(p in prop){
-          if(attributes.tmp[p] && prop[p]){
-            attributes.tmp[p].push(prop[p]);
-          }
+        attributes.init = true;
+      }
+      //
+      for (p in prop) {
+        if (attributes.tmp[p] && prop[p]) {
+          attributes.tmp[p].push(prop[p]);
         }
       }
-    );
-      
-    for(p in attributes.tmp){
+    });
+
+    for (p in attributes.tmp) {
       attributes[p] = stat.getArrayStat({
-        arr : attributes.tmp[p],
-        stat : "distinct"
+        arr: attributes.tmp[p],
+        stat: 'distinct'
       });
     }
-    
+
     delete attributes.tmp;
     delete attributes.init;
-
 
     /**
      * Get extent : get extent using a Turf bbox
@@ -212,15 +197,18 @@ onmessage = function(e) {
 
     var extent = bbox(gJson);
 
-    // Quick extent validation 
+    // Quick extent validation
     if (
-        Math.round(extent[0]) > 180 || Math.round(extent[0]) < -180 ||
-        Math.round(extent[1]) > 90 || Math.round(extent[1]) < -90 ||
-        Math.round(extent[2]) > 180 || Math.round(extent[2]) < -180 ||
-        Math.round(extent[3]) > 90 || Math.round(extent[3]) < -90
-       ) {
-      
-      errorMsg = fileName + " : extent seems to be out of range: " + extent;
+      Math.round(extent[0]) > 180 ||
+      Math.round(extent[0]) < -180 ||
+      Math.round(extent[1]) > 90 ||
+      Math.round(extent[1]) < -90 ||
+      Math.round(extent[2]) > 180 ||
+      Math.round(extent[2]) < -180 ||
+      Math.round(extent[3]) > 90 ||
+      Math.round(extent[3]) < -90
+    ) {
+      errorMsg = fileName + ' : extent seems to be out of range: ' + extent;
 
       postMessage({
         progress: 100,
@@ -229,62 +217,61 @@ onmessage = function(e) {
       });
 
       console.log({
-        "errors": errorMsg
+        errors: errorMsg
       });
       return;
     }
 
     postMessage({
       progress: 80,
-      message: "extent found in " + timerLapString()
+      message: 'extent found in ' + timerLapString()
     });
     /**
      * Avoid multi type : we don't handle them for now
      */
 
     var geomType = [];
-    if( gJson.features ){
+    if (gJson.features) {
       // array of types in data
-      geomTypes  = gJson.features
-        .map(function(x){
+      geomTypes = gJson.features
+        .map(function(x) {
           return typeSwitcher[x.geometry.type];
         })
-      .filter(function(v,i,s){
-        return s.indexOf(v) === i;
-      });
-    }else{
+        .filter(function(v, i, s) {
+          return s.indexOf(v) === i;
+        });
+    } else {
       geomTypes = [typeSwitcher[gJson.geometry.type]];
     }
 
     postMessage({
       progress: 90,
-      message: "Geom type is " + geomTypes + ". Found in " + timerLapString()
+      message: 'Geom type is ' + geomTypes + '. Found in ' + timerLapString()
     });
 
     // if more than one type, return an error
-    if ( geomTypes.length>1 ) {
-      var msg = "Multi geometry not yet implemented";
+    if (geomTypes.length > 1) {
+      var msg = 'Multi geometry not yet implemented';
 
       postMessage({
         progress: 100,
         msssage: msg,
-        errorMessage: fileName + ": " + msg
+        errorMessage: fileName + ': ' + msg
       });
 
       console.log({
-        "errors": fileName + ": " + msg + ".(" + geomTypes + ")"
+        errors: fileName + ': ' + msg + '.(' + geomTypes + ')'
       });
       return;
     }
-
 
     /**
      * Set default for a new layer
      */
 
     // Set random id for source and layer
-    var id = "MX-DROP-" + makeId(10) + fileName ;
-    var idSource = id + "-SRC";
+    var id = 'MX-DROP-' + makeId(10) + fileName;
+    var idSource = id + '-SRC';
     // Set random color
     var ran = Math.random();
     var colA = color.randomHsl(0.3, ran);
@@ -295,55 +282,51 @@ onmessage = function(e) {
 
     // Set up default style
     var dummyStyle = {
-      "circle": {
-        "id": id,
-        "source": idSource,
-        "type": typ,
-        "paint": {
-          "circle-color": colA,
-          "circle-radius":10,
-          "circle-stroke-width":1,
-          "circle-stroke-color":colB
+      circle: {
+        id: id,
+        source: idSource,
+        type: typ,
+        paint: {
+          'circle-color': colA,
+          'circle-radius': 10,
+          'circle-stroke-width': 1,
+          'circle-stroke-color': colB
         }
       },
-      "fill": {
-        "id": id,
-        "source": idSource,
-        "type": typ,
-        "paint": {
-          "fill-color": colA,
-          "fill-outline-color": colB
+      fill: {
+        id: id,
+        source: idSource,
+        type: typ,
+        paint: {
+          'fill-color': colA,
+          'fill-outline-color': colB
         }
       },
-      "line": {
-        "id": id,
-        "source": idSource,
-        "type": typ,
-        "paint": {
-          "line-color": colA,
-          "line-width": 10
+      line: {
+        id: id,
+        source: idSource,
+        type: typ,
+        paint: {
+          'line-color': colA,
+          'line-width': 10
         }
       }
     };
 
-
     postMessage({
       progress: 99,
-      message: "Worker job done in "+ timerLapString(),
+      message: 'Worker job done in ' + timerLapString(),
       id: id,
       extent: extent,
-      attributes : attributes,
+      attributes: attributes,
       layer: dummyStyle[typ],
-      geojson : gJson
+      geojson: gJson
     });
-  }
-
-  catch(err) {
+  } catch (err) {
     console.log(err);
     postMessage({
       progress: 100,
-      errorMessage : "An error occured, check the console"
+      errorMessage: 'An error occured, check the console'
     });
   }
 };
-

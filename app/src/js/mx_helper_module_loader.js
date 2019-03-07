@@ -6,10 +6,12 @@ const modules = {
   'highcharts': loadHighcharts,
   'json-editor': loadJsonEditor,
   'selectize': loadSelectize,
-  'mapbox-gj-js': loadMapboxGlJs,
+  'mapbox-gl-js': loadMapboxGlJs,
+  'mapbox-gl-draw': loadMapboxGlDraw,
   'pickolor': loadPickolor,
   'nouislider': loadNoUiSlider,
-  'wms-capabilities' : loadWmsCapabilities
+  'wms-capabilities' : loadWmsCapabilities,
+  'mx-drag-drop-worker' : loadDragDropWorker
 };
 
 export function moduleLoad(name) {
@@ -43,6 +45,23 @@ function loadMapboxGlJs(){
     .then(m => {
       return m[2].default;
     });
+}
+
+function loadMapboxGlDraw(){
+  return Promise.all([
+    import("@mapbox/mapbox-gl-draw"),
+    import('@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css')
+    ])
+    .then(m => {
+      return m[0].default;
+    });
+}
+
+function loadDragDropWorker(){
+  return import('./mx_helper_map_dragdrop.worker.js')
+    .then((m) => {
+      return m.default;
+    })
 }
 
 function loadWmsCapabilities() {

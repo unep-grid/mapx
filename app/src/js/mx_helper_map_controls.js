@@ -1,4 +1,3 @@
-/*jshint esversion: 6 */
 /**
  * Control for live coordinate
  */
@@ -262,6 +261,20 @@ mapControlApp.prototype.onAdd = function(map) {
         });
       }
     },
+    btnOverlapSpotlight:{
+      classes:"fa fa-bullseye",
+      key:"btn_overlap_spotlight",
+      action:function(e){
+        mx.helpers.overlapsSpotlightToggle();
+      }
+    },
+    btnDrawMode:{
+      classes:"fa fa-pencil",
+      key:"btn_draw_mode",
+      action:function(e){
+        mx.helpers.drawModeToggle(e);
+      }
+    },
     btnZoomIn:{
       classes:"fa fa-plus",
       key:"btn_zoom_in",
@@ -276,13 +289,6 @@ mapControlApp.prototype.onAdd = function(map) {
         map.zoomOut();
       }
     },
-    btnOverlapSpotlight:{
-      classes:"fa fa-bullseye",
-      key:"btn_overlap_spotlight",
-      action:function(e){
-        mx.helpers.overlapsSpotlightToggle();
-      }
-    },
     btnSetNorth:{
       classes:"mx-north-arrow",
       key:"btn_north_arrow",
@@ -292,7 +298,7 @@ mapControlApp.prototype.onAdd = function(map) {
           map.easeTo({bearing:0,pitch:0});
         }
       }
-    }
+    },
   };
 
   var btnList = createControlBtns(btns);
