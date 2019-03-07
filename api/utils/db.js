@@ -164,8 +164,8 @@ exports.getLayerTitle = getLayerTitle;
 function isLayerValid(idLayer, useCache, autoCorrect) {
   var title = '';
   var idColumn = '_mx_valid';
-  useCache = utils.toBoolean(useCache,true);
-  autCorrect = utils.toBoolean(autoCorrect,false);  
+  useCache = utils.toBoolean(useCache, true);
+  autCorrect = utils.toBoolean(autoCorrect, false);
 
   var sqlNewColumn = `
   ALTER TABLE ${idLayer} 
@@ -213,9 +213,9 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
       return pgWrite.query(sqlNewColumn);
     })
     .then(() => {
-      if(autoCorrect){
+      if (autoCorrect) {
         return pgWrite.query(sqlAutoCorrect);
-      }else{
+      } else {
         return Promise.resolve();
       }
     })
@@ -250,10 +250,9 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
         title: title,
         status: out,
         useCache: useCache,
-        autoCorrect : autoCorrect
+        autoCorrect: autoCorrect
       };
     });
-
 }
 exports.isLayerValid = isLayerValid;
 
@@ -262,9 +261,10 @@ exports.isLayerValid = isLayerValid;
  * @param {Array} idsLayer Array of id of layer to check
  * @param {Boolean} force Force revalidation of previously wrong geom
  */
-exports.areLayersValid = function(idsLayers, force) {
-  force = force || false;
+exports.areLayersValid = function(idsLayers, useCache, autoCorrect) {
   idsLayers = idsLayers instanceof Array ? idsLayers : [idsLayers];
-  var queries = idsLayers.map(isLayerValid, force);
+  var queries = idsLayers.map(function(id) {
+    isLayerValid(id, useCache, autoCorrect);
+  });
   return Promise.all(queries);
 };

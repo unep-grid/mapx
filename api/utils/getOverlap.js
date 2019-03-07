@@ -114,7 +114,7 @@ function getOverlapHandler(req, res, next) {
     })
   );
 
-  return areLayersValid(layers)
+  return areLayersValid(layers,true,false)
     .then((layers) => {
       layers.forEach((layer) => {
         if (!layer.valid) {

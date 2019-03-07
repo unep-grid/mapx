@@ -169,7 +169,7 @@ function extractFromPostgres(config,cb){
          * Validity check
          */
         onMessage( 'Request with country clipping, test for invalid geometry');
-        return isLayerValid(id)
+        return isLayerValid(id,true,false)
           .then( test => {
             if( test.valid === true ){
               /**
