@@ -1,9 +1,6 @@
 /*jshint esversion: 6 */
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const webpack = require('webpack');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackShellPlugin = require('webpack-shell-plugin');
@@ -22,50 +19,48 @@ module.exports = merge(common, {
   },
   plugins: [
     new WebpackShellPlugin({
-      onBuildStart:[
+      onBuildStart: [
         'Rscript ./src/script/build_html.R',
         'Rscript ./src/script/build_dict_json.R'
       ],
-      onBuildEnd:['echo "Webpack End"']
+      onBuildEnd: ['echo "Webpack End"']
     }),
-    new CleanWebpackPlugin(
-      [
-        '../www/*'
-      ],
-      {
-        exclude:  [],
-        dry: false,
-        allowExternal: true
-      }
-    ),
+    new CleanWebpackPlugin(['../www/*'], {
+      exclude: [],
+      dry: false,
+      allowExternal: true
+    }),
     new HtmlWebpackPlugin({
-      template : './src/kiosk/index.html',
+      template: './src/kiosk/index.html',
       filename: './kiosk.html',
-      chunks : ['common','sw','kiosk']
+      chunks: ['common', 'sw', 'kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template : './src/built/index.html',
-      chunks : ['common','sw','app']
+      template: './src/built/index.html',
+      chunks: ['common', 'sw', 'app']
     }),
 
     //new BundleAnalyzerPlugin(),
     //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
     /**
-    * last step, generate service worker
-    * Configuration : https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#configuration
-    * more info here : https://developers.google.com/web/tools/workbox/guides/codelabs/webpack
-    */
-    new CopyWebpackPlugin(
-      [ { from : './webpack/sw_listen_skip_waiting_install.js', to: 'sw_listen_skip_waiting_install.js'} ]
-    ),
+     * last step, generate service worker
+     * Configuration : https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#configuration
+     * more info here : https://developers.google.com/web/tools/workbox/guides/codelabs/webpack
+     */
+    new CopyWebpackPlugin([
+      {
+        from: './webpack/sw_listen_skip_waiting_install.js',
+        to: 'sw_listen_skip_waiting_install.js'
+      }
+    ]),
     new GenerateSW({
-      swDest : './service-worker.js',
-      importWorkboxFrom : 'local',
-      skipWaiting : false, 
-      clientsClaim : true, 
-      importScripts : ['sw_listen_skip_waiting_install.js'],
-      runtimeCaching :  [
+      swDest: './service-worker.js',
+      importWorkboxFrom: 'local',
+      skipWaiting: false,
+      clientsClaim: true,
+      importScripts: ['sw_listen_skip_waiting_install.js'],
+      runtimeCaching: [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,
           handler: 'cacheFirst'
@@ -91,9 +86,6 @@ module.exports = merge(common, {
           handler: 'cacheFirst'
         }
       ]
-    }),
+    })
   ]
-
 });
-
-
