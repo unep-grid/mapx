@@ -1,5 +1,15 @@
 ## Changelog
- 
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.2">1.5.40.2</a>
+    - Improvement
+      - APP/API
+        - Starting code style validation using JSHint. See .jshintrc. This implies majors changes in all js, css, and html files. This will be a long incremential work.
+      - APP
+        - Dashboard button activate when there are widgets.
+        - In draw mode, popup does not show anymore if clicked on a feature
+    - Bug fixes
+        - API
+        - Issue with geometry validation: auto-correction / validation did not work due to typos and logic Separate json and xml utilities
+
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.1">1.5.40.1</a>
 
     - Bug fixes 
