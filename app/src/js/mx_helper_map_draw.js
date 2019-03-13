@@ -36,7 +36,7 @@ function initDraw() {
 
     c.map.addControl(drawBar, c.position);
 
-    c.map.on('draw.delete', function(e) {
+    c.map.on('draw.delete', function() {
       console.log('deleted');
     });
 
@@ -52,25 +52,39 @@ function disableDraw() {
   c.map.removeControl(c.draw, c.position);
   c.draw = null;
   c.enabled = false;
+  mx.helpers.setClickHandler({
+    type: 'draw',
+    enable: c.enabled 
+  });
 }
 
 function enableDraw() {
   var c = drawConfig;
-  c.elBtn.classList.add('active');
-  if (c.draw) disableDraw();
-  initDraw();
   c.enabled = true;
+  c.elBtn.classList.add('active');
+  if (c.draw){
+    disableDraw();
+  }
+  initDraw();
+  mx.helpers.setClickHandler({
+    type: 'draw',
+    enable: c.enabled 
+  });
 }
 
 function save() {
   var c = drawConfig;
   var gj = c.draw.getAll();
+  var fileName = 'MX-GJ-' + mx.helpers.makeId(10) + '.geojson';
 
-  if (gj.features.length == 0) return;
+  if (gj.features.length === 0) {
+    return;
+  }
 
   return mx.helpers
     .saveSpatialDataAsView({
-      fileName: 'test',
+      title : ' New layer ( ' + (new Date()).toLocaleString() + ' )' ,
+      fileName: fileName,
       fileType: 'geojson',
       data: gj
     })

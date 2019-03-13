@@ -40,6 +40,7 @@ draw : localforage.createInstance({
 export let listener = {};
 export let selectize = {};
 export let queue = [];
+export let widgets = [];
 export let events = {};
 export let controls = {};
 export let info = require('../../package.json');
@@ -57,6 +58,7 @@ export let settings = {
   modeKiosk : false,
   idMapDefault : 'map_main',
   idDashboardsPanel : 'mxDashboardsPanel',
+  idDashboardsButton : 'btnTabDashboard',
   idDashboards : 'mxDashboards',
   mapboxToken : '',
   paths : {
@@ -78,7 +80,7 @@ export let settings = {
   separators : {
     sublayer : "_@_",
   },
-  clickIgnoreWidgets : [],
+  clickHandlers : [],
   maxByteUpload : Math.pow(1024,2)*100, //100 MiB 
   maxByteJed : 100000, // 100 Kb  
   user : {}

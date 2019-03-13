@@ -92,7 +92,7 @@ observeEvent(reactData$showShareManager,{
         tags$button(
           id = "btnCopyShareLink",
           class = "form-control btn-square btn-black",
-          icon("clipboard"),
+          tags$i(class="fa fa-clipboard"),
           onclick="mx.helpers.copyText('txtShareBuilt')"
           )
         ),
@@ -102,7 +102,7 @@ observeEvent(reactData$showShareManager,{
           id = "btnTwitterShareLink",
           class = "form-control btn-square btn-black ",
           onclick="mx.helpers.shareTwitter('txtShareLink')",
-          icon("twitter")
+          tags$i(class="fa fa-twitter")
           )
         )
       )

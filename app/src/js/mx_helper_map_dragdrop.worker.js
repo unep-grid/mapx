@@ -9,18 +9,13 @@ import * as color from './mx_helper_colors.js';
 // geojson type to mapbox gl type
 var typeSwitcher = {
   Point: 'circle',
-  MultiPoint: 'line',
+  MultiPoint: 'circle',
   LineString: 'line',
   MultiLineString: 'line',
   Polygon: 'fill',
   MultiPolygon: 'fill',
   GeometryCollection: 'fill'
 };
-
-function makeId(n) {
-  n = n || 10;
-  return (Math.random().toString(36) + '00000000000000000').slice(2, n + 2);
-}
 
 // Inital message
 postMessage({
@@ -41,7 +36,8 @@ onmessage = function(e) {
     var dat = e.data;
     var gJson = dat.data;
     var fileName = dat.fileName;
-    var fileType = dat.fileType;
+    var id = dat.id;
+    var idSource = id + '-SRC';
 
     // set basic timing function
     var timerVal = 0;
@@ -71,11 +67,11 @@ onmessage = function(e) {
     var messages = geojsonhint.hint(gJson);
 
     var errors = messages.filter(function(x) {
-      return x.level == 'error';
+      return x.level === 'error';
     });
 
     var warnings = messages.filter(function(x) {
-      return x.level == 'message';
+      return x.level === 'message';
     });
 
     // send message
@@ -101,7 +97,6 @@ onmessage = function(e) {
     }
     // varlidation: errors
     if (errors.length > 0) {
-      
       errorMsg = errors.length + ' errors found. Please check the console.';
 
       postMessage({
@@ -149,7 +144,7 @@ onmessage = function(e) {
      * Delete this block.
      */
 
-    featureEach(gJson, function(f, i) {
+    featureEach(gJson, function(f) {
       if (f.geometry === null) {
         f.geometry = {
           type: geomTypes[0],
@@ -194,7 +189,6 @@ onmessage = function(e) {
     /**
      * Get extent : get extent using a Turf bbox
      */
-
     var extent = bbox(gJson);
 
     // Quick extent validation
@@ -230,7 +224,6 @@ onmessage = function(e) {
      * Avoid multi type : we don't handle them for now
      */
 
-    var geomType = [];
     if (gJson.features) {
       // array of types in data
       geomTypes = gJson.features
@@ -251,7 +244,7 @@ onmessage = function(e) {
 
     // if more than one type, return an error
     if (geomTypes.length > 1) {
-      var msg = 'Multi geometry not yet implemented';
+      var msg = 'Support for mixed geometry types not yet implemented';
 
       postMessage({
         progress: 100,
@@ -270,9 +263,7 @@ onmessage = function(e) {
      */
 
     // Set random id for source and layer
-    var id = 'MX-DROP-' + makeId(10) + fileName;
-    var idSource = id + '-SRC';
-    // Set random color
+        // Set random color
     var ran = Math.random();
     var colA = color.randomHsl(0.3, ran);
     var colB = color.randomHsl(0.9, ran);
@@ -309,6 +300,10 @@ onmessage = function(e) {
         paint: {
           'line-color': colA,
           'line-width': 10
+        },
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round'
         }
       }
     };

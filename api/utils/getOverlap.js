@@ -1,8 +1,6 @@
 const wktToJson = require('wellknown').parse;
-const geomToWkt = require('wellknown').stringify;
 const martinez = require('martinez-polygon-clipping');
 const turf = require('@turf/turf');
-const clientPgWrite = require.main.require('./db').pgWrite;
 const clientPgRead = require.main.require('./db').pgWrite;
 const authenticateHandler = require('./authentification.js')
   .authenticateHandler;
@@ -12,7 +10,6 @@ const registerOrRemoveSource = require('./db.js').registerOrRemoveSource;
 const removeSource = require('./db.js').removeSource;
 const getColumnsNames = require('./db.js').getColumnsNames;
 const areLayersValid = require('./db.js').areLayersValid;
-const getLayerTitle = require('./db.js').getLayerTitle;
 const sendMail = require('./mail.js').sendMail;
 
 /**
@@ -20,7 +17,7 @@ const sendMail = require('./mail.js').sendMail;
  */
 module.exports.get = [authenticateHandler, getOverlapHandler];
 
-function getOverlapHandler(req, res, next) {
+function getOverlapHandler(req, res) {
   var start = Date.now();
   var layers = req.query.layers ? req.query.layers.split(',') || [] : [];
   var countries = req.query.countries ? req.query.countries.split(',') || [] : [];
@@ -136,7 +133,7 @@ function getOverlapHandler(req, res, next) {
       });
     })
     .then(() => {
-      if (method == 'createSource') {
+      if (method === 'createSource') {
         return getOverlapCreateSource(config);
       } else {
         return getOverlapArea(config);
@@ -153,7 +150,7 @@ function getOverlapHandler(req, res, next) {
         })
       );
 
-      if( method == 'createSource' && config$emailUser ){
+      if( method === 'createSource' && config$emailUser ){
         sendMail({
           to: [config.emailUser],
           text: `Source '${config.sourceTitle}' not created. Error : ${e.message}`,
@@ -187,7 +184,7 @@ function getOverlapCreateSource(options) {
 
   return getColumnsNames(options.mainLayer)
     .then((attrOut) => {
-      attrOut = attrOut.filter((a) => a != 'geom');
+      attrOut = attrOut.filter((a) => a !== 'geom');
       attrOut = utils.attrToPgCol(attrOut);
 
       send.message('Build query');
@@ -213,7 +210,7 @@ function getOverlapCreateSource(options) {
        * Layers block
        */
       for (var i = nLayers - 1; i >= 0; i--) {
-        finalBlock = i == 0;
+        finalBlock = i === 0;
         layerCurrent = layers[i];
         layerAlias = 'layer_' + i;
         layerAliasPrevious = layerAliasPrevious ? 'layer_' + (i + 1) : 'countries';
@@ -269,11 +266,11 @@ function getOverlapCreateSource(options) {
         values: [options.countries]
       });
     })
-    .then((res) => {
+    .then(() => {
       return registerOrRemoveSource(options);
     })
     .then((res) => {
-      if (res.registered == false) {
+      if (res.registered === false) {
         send.message('No records, table removed');
         if(options.emailUser){
           sendMail({
@@ -317,7 +314,7 @@ function getOverlapArea(options) {
   send.message = send.message || console.log;
   send.area = send.area || console.log;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     send.message(
       'Start overlap with countries = ' +
         JSON.stringify(countries) +
@@ -399,7 +396,7 @@ function getOverlapArea(options) {
       send.message('Data extracted : ' + dataLayersJSON.length + ' layers');
 
       var dataLayersJSONFiltered = dataLayersJSON.filter(function(el) {
-        return el != null;
+        return el !== null;
       });
 
       if (
@@ -492,96 +489,3 @@ function wktArrayToJson(a) {
   return out;
 }
 
-/**
- * Create a new source based on data, a geometry produced by
- * martinez and option, main configuration option.
- */
-function buildOverlapSource(data, options) {
-  var geom = turf.buffer(data.geometry, 0);
-  var wktOverlap = geomToWkt(geom);
-
-  /**
-   * Get a list of column to reimport
-   */
-  return getColumnsNames(options.mainLayer)
-    .then((attr) => {
-      /**
-       * Extract and clip data using overlap geometry as WKT
-       */
-      return addLayerOverlap(wktOverlap, attr, options);
-    })
-    .then((res) => {
-      /**
-       * Register created source
-       */
-      if (res) {
-        return registerOrRemoveSource(options);
-      } else {
-        return Promise.resolve(false);
-      }
-    })
-    .then((res) => {
-      /**
-       * Return options as sourceMeta;
-       */
-      var sourceMeta = options;
-      return sourceMeta;
-    });
-}
-
-/**
- * Create a posgis table with the
- * result from the intersect (data)
- * using selected atribute list
- * and the source to build the intersction
- *
- */
-function addLayerOverlap(data, attr, options) {
-  attr = attr.filter((a) => a != 'geom');
-  var attributesPg = utils.attrToPgCol(attr);
-
-  var idSourceToCreate = options.idSource;
-  var idUser = options.idUser;
-  var idSourceToClip = options.mainLayer;
-
-  /**
-   * Create actual new source
-   */
-  var queryNewSource = {
-    values: [data],
-    text:
-      `CREATE TABLE ` +
-      idSourceToCreate +
-      ` AS
-
-    WITH overlap AS (
-      SELECT ST_SetSRID(ST_GeomFromText($1::text),4326) geom
-    ),
-    layerSubset AS (
-      SELECT ` +
-      attributesPg +
-      `, a.geom
-      FROM ` +
-      idSourceToClip +
-      ` AS a, overlap AS b
-      WHERE a.geom && b.geom
-      AND ST_Intersects(a.geom, b.geom) 
-    )
-
-    SELECT ` +
-      attributesPg +
-      `, ST_Intersection(a.geom,b.geom) geom
-    FROM layerSubset a, overlap b
-    `
-  };
-
-  var start = getTime();
-
-  return clientPgWrite.query(queryNewSource).then((d) => {
-    return true;
-  });
-
-  function getTime() {
-    return new Date().getTime();
-  }
-}

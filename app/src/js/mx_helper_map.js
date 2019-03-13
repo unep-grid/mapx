@@ -108,12 +108,12 @@ export function initMapx(o) {
   return mx.helpers.moduleLoad('mapbox-gl-js').then((mapboxgl) => {
     mx.mapboxgl = mapboxgl;
 
-    var styleInit;
     var mp;
     var style = mx.settings.style;
 
-    if (o.style) style = o.style;
-
+    if (o.style) {
+      style = o.style;
+    }
     /**
      * Set db log levels
      */
@@ -171,7 +171,9 @@ export function initMapx(o) {
      */
     if (true) {
       var elVersion = document.getElementById('mxVersion');
-      if (elVersion) elVersion.innerText = mx.helpers.getVersion().join('.');
+      if (elVersion) {
+        elVersion.innerText = mx.helpers.getVersion().join('.');
+      }
     }
 
     /**
@@ -245,7 +247,7 @@ export function initMapxApp(o) {
   var map = o.map;
   var elMap = document.getElementById(o.id);
   var hasShiny = !!window.Shiny;
-  var mp = o.mapPosition;
+  //var mp = o.mapPosition;
 
   if (!elMap) {
     alert('Map element with id ' + o.id + ' not found');
@@ -280,7 +282,7 @@ export function initMapxApp(o) {
         project: o.project,
         resetViews: true
       })
-      .then(function(v) {
+      .then(function() {
         /*
          * Auto start story map
          */
@@ -346,13 +348,14 @@ export function initMapxApp(o) {
       var msg = mx.helpers.path(e, 'error.message');
 
       if (msg) {
-        if (msg.indexOf('http status 200') > 0) return;
+        if (msg.indexOf('http status 200') > 0) {
+          return;
+        }
       }
       throw new Error(msg);
     });
 
     map.resize2 = function() {
-      var dim = [];
       var elContainer = this._container;
       var rect = elContainer.getBoundingClientRect();
       var w = rect.width;
@@ -377,13 +380,13 @@ export function initMapxApp(o) {
     map.on('click', function(e) {
       mx.helpers.handleClickEvent(e, o.id);
     });
-    map.on('rotate', function(e) {
+    map.on('rotate', function() {
       var r = -map.getBearing();
       var northArrow = document.querySelector('.mx-north-arrow');
       northArrow.style[mx.helpers.cssTransformFun()] =
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
-    map.on('moveend', function(e) {
+    map.on('moveend', function() {
       var c = map.getCenter();
       var z = map.getZoom();
       mx.helpers.objToState({
@@ -414,29 +417,58 @@ export function handleClickEvent(e, idMap) {
   var type = e.type;
   var hasLayer = mx.helpers.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
   var map = mx.helpers.getMap(idMap);
+  var clickModes = mx.helpers.getClickHandlers();
+  var hasDashboard = clickModes.indexOf('dashboard') > -1;
+  var hasDraw = clickModes.indexOf('draw') > -1;
 
   if (hasLayer && type === 'click') {
-    if (mx.settings.clickIgnoreWidgets.length > 0) return;
-    /**
-     * Click event : it's a popup.
-     */
-    var popup = new mx.mapboxgl.Popup()
-      .setLngLat(map.unproject(e.point))
-      .addTo(map);
+    if ( hasDashboard ) {
+      /**
+       * Probably handled by dashboards
+       */
+      return;
+    }else if( hasDraw ){
+      /**
+       * Handle draw function ; edit selected feature.
+       *
+       * var layerGJ = mx.helpers.getLayerNamesByPrefix({prefix:'MX-GJ'});
+       *if(layerGJ.length>0){
+       *  var id = layerGJ[0];
+       *  var feature = map.queryRenderedFeatures(e.point,{layers:[id]})[0];
+       *  if(!feature){
+       *    return;
+       *  }
+       *  mx.data.geojson.getItem(id)
+       *    .then( data => {
+       *      var featuresOrig = mx.helpers.path(data,'view.data.source.data.features'); 
+       *      var featureQuery = feature; 
+       *  });
+       *}
+       */
+      return;
+    }else{
 
-    mx.helpers.once('view_remove', function() {
-      popup.remove();
-    });
+      /**
+       * Click event : make a popup with attributes
+       */
+      var popup = new mx.mapboxgl.Popup()
+        .setLngLat(map.unproject(e.point))
+        .addTo(map);
 
-    /**
-     * NOTE: see mx_helper_map_features_popoup.js
-     */
-    var propsRendered = mx.helpers.featuresToHtml({
-      id: idMap,
-      point: e.point,
-      lngLat: e.lngLat,
-      popup: popup
-    });
+      mx.helpers.once('view_remove', function() {
+        popup.remove();
+      });
+
+      /**
+       * NOTE: see mx_helper_map_features_popoup.js
+       */
+      mx.helpers.featuresToHtml({
+        id: idMap,
+        point: e.point,
+        lngLat: e.lngLat,
+        popup: popup
+      });
+    }
   }
 }
 
@@ -461,7 +493,7 @@ export function getLocalForageData(o) {
  * Geolocate user on click
  * @return null
  */
-export function geolocateUser(e) {
+export function geolocateUser() {
   var lang = mx.settings.language;
   var hasGeolocator = !!navigator.geolocation;
 
@@ -526,11 +558,17 @@ export function reset(o) {
    *  Reset filters and selector
    */
   var elViewList = document.querySelector('.mx-views-list');
-  if (elViewList) elViewList.innerHTML = '';
+  if (elViewList) {
+    elViewList.innerHTML = '';
+  }
   var elTxtFilterInput = document.querySelector('#viewsFilterText');
-  if (elTxtFilterInput) elTxtFilterInput.value = '';
+  if (elTxtFilterInput) {
+    elTxtFilterInput.value = '';
+  }
   var elBtnFilterCheck = document.querySelector('#btn_filter_checked');
-  if (elBtnFilterCheck) elBtnFilterCheck.classList.remove('active');
+  if (elBtnFilterCheck) {
+    elBtnFilterCheck.classList.remove('active');
+  }
   var elBtnSort = document.querySelectorAll('.mx-btn-sort');
   if (elBtnSort) {
     for (var i = 0, iL = elBtnSort.length; i < iL; i++) {
@@ -548,7 +586,9 @@ export function reset(o) {
    */
 
   mx.helpers.cleanRemoveModules(views);
-  if (elViewList) setViewsListEmpty(true);
+  if (elViewList) {
+    setViewsListEmpty(true);
+  }
 
   /*
    * Force dashboard remove
@@ -608,58 +648,57 @@ export function addSourceFromViews(o) {
 export function addSourceFromView(o) {
   var p = mx.helpers.path;
 
-  if (o.map)
-    if (o.map && p(o.view, 'data.source')) {
-      var project = p(mx, 'settings.project');
-      var projectView = p(o.view, 'project');
-      var projectsView = p(o.view, 'data.projects') || [];
-      var isEditable = p(o.view._edit) == true;
-      var isLocationOk =
-        o.noLocationCheck ||
-        projectView == project ||
-        projectsView.indexOf(project) > -1;
+  if (o.map && p(o.view, 'data.source')) {
+    var project = p(mx, 'settings.project');
+    var projectView = p(o.view, 'project');
+    var projectsView = p(o.view, 'data.projects') || [];
+    var isEditable = p(o.view._edit) === true;
+    var isLocationOk =
+      o.noLocationCheck ||
+      projectView === project ||
+      projectsView.indexOf(project) > -1;
 
-      if (!isLocationOk && isEditable) {
-        /*
-         * This should be handled in DB. TODO:check why this is needed here...
-         */
-        o.view._edit = false;
-      }
-
-      var idSource = o.view.id + '-SRC';
-      var sourceExists = !!o.map.getSource(idSource);
-
-      if (sourceExists) {
-        /**
-         * Handle case when old layers remain in map
-         * This could prevent source removal
-         */
-        mx.helpers.removeLayersByPrefix({
-          prefix: o.view.id,
-          map: o.map
-        });
-        /**
-         * Remove old source
-         */
-        o.map.removeSource(idSource);
-      }
-
-      if (o.view.type == 'vt') {
-        var baseUrl = mx.helpers.getApiUrl('tiles');
-        var url =
-          baseUrl + '?view=' + o.view.id + '&date=' + o.view.date_modified;
-        o.view.data.source.tiles = [url, url];
-      }
-
-      o.map.addSource(idSource, o.view.data.source);
+    if (!isLocationOk && isEditable) {
+      /*
+       * This should be handled in DB. TODO:check why this is needed here...
+       */
+      o.view._edit = false;
     }
+
+    var idSource = o.view.id + '-SRC';
+    var sourceExists = !!o.map.getSource(idSource);
+
+    if (sourceExists) {
+      /**
+       * Handle case when old layers remain in map
+       * This could prevent source removal
+       */
+      mx.helpers.removeLayersByPrefix({
+        prefix: o.view.id,
+        map: o.map
+      });
+      /**
+       * Remove old source
+       */
+      o.map.removeSource(idSource);
+    }
+
+    if (o.view.type === 'vt') {
+      var baseUrl = mx.helpers.getApiUrl('tiles');
+      var url =
+        baseUrl + '?view=' + o.view.id + '&date=' + o.view.date_modified;
+      o.view.data.source.tiles = [url, url];
+    }
+
+    o.map.addSource(idSource, o.view.data.source);
+  }
 }
 
-export function loadGeojsonViews(o) {
+export function loadGeojsonViews() {
   var project = mx.settings.project;
   var viewsGj = [];
 
-  var getProjectGj = function(gj, key, i) {
+  var getProjectGj = function(gj) {
     var v = gj.view;
     if (v && v.project === project) {
       viewsGj.push(v);
@@ -679,7 +718,9 @@ export function loadGeojsonViews(o) {
  */
 export function getViewRemote(idView) {
   var apiUrlViews = mx.helpers.getApiUrl('views');
-  if (!idView || !apiUrlViews) return Promise.reject('Missing id or fetch URL');
+  if (!idView || !apiUrlViews) {
+    return Promise.reject('Missing id or fetch URL');
+  }
 
   /* get view object from storage or network */
   var keyNet = apiUrlViews + idView;
@@ -712,37 +753,41 @@ export function getViewsRemote(idViews) {
  * @param {Boolean} o.resetViews should this reset stored views list on map
  */
 export function setViewsList(o) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var m = mx.helpers.getMapData(o.id);
-    var mode,
-      map,
-      view,
-      singleView,
-      views,
-      sourceId,
-      sourceExists,
-      sourceStore,
-      isFullList;
+    var mode, map, singleView, views;
     var nCache = 0,
       nNetwork = 0,
       nTot = 0,
       prog;
     var elProgContainer;
-    if (o.viewsList && o.viewsList.length > 0) nTot = o.viewsList.length;
-    var isArray, hasViews;
+    var hasViews;
     var apiUrlViews = mx.helpers.getApiUrl('views');
 
-    if (!m || !o.viewsList || !m.map) return;
+    if (o.viewsList && o.viewsList.length > 0) {
+      nTot = o.viewsList.length;
+    }
+    if (!m || !o.viewsList || !m.map) {
+      return;
+    }
 
     map = m.map;
     views = o.viewsList;
     singleView = views instanceof Object && views.id;
     hasViews = m.views.length > 0;
-    if (singleView) mode = 'object_single';
-    if (!singleView && o.viewsCompact) mode = 'array_async';
-    if (!singleView && !o.viewsCompact) mode = 'array_sync';
+    if (singleView) {
+      mode = 'object_single';
+    }
+    if (!singleView && o.viewsCompact) {
+      mode = 'array_async';
+    }
+    if (!singleView && !o.viewsCompact) {
+      mode = 'array_sync';
+    }
 
-    if (typeof o.resetViews == 'undefined' && !singleView) o.resetViews = true;
+    if (typeof o.resetViews === 'undefined' && !singleView) {
+      o.resetViews = true;
+    }
     /*
      * Set project if needed
      */
@@ -783,8 +828,12 @@ export function setViewsList(o) {
       views.sort(function(a, b) {
         aTitle = getViewTitle(a);
         bTitle = getViewTitle(b);
-        if (aTitle < bTitle) return -1;
-        if (aTitle > bTitle) return 1;
+        if (aTitle < bTitle) {
+          return -1;
+        }
+        if (aTitle > bTitle) {
+          return 1;
+        }
         return 0;
       });
 
@@ -865,7 +914,7 @@ export function setViewsList(o) {
     }
 
     /* Add array of coomplete views object*/
-    function addSync(view) {
+    function addSync() {
       m.views = views;
 
       mx.helpers.renderViewsList({
@@ -904,16 +953,17 @@ export function setViewsList(o) {
 function loadGeojsonFromStorage(o) {
   var m = mx.helpers.getMapData(o.id);
 
-  if (!mx.data || !mx.data.geojson || !m) return;
+  if (!mx.data || !mx.data.geojson || !m) {
+    return;
+  }
 
-  var map = m.map;
   var project = o.project || mx.settings.project;
   /**
    * extract views from local storage
    */
-  mx.data.geojson.iterate(function(value, key, i) {
+  mx.data.geojson.iterate(function(value) {
     var view = value.view;
-    if (view.project == project) {
+    if (view.project === project) {
       m.views.unshift(view);
 
       mx.helpers.renderViewsList({
@@ -936,15 +986,22 @@ function loadGeojsonFromStorage(o) {
  */
 export function path(obj, path, def) {
   var i, len;
-  if (typeof def === 'undefined') def = null;
-  if (typeof path !== 'string') return def;
-
+  if (typeof def === 'undefined') {
+    def = null;
+  }
+  if (typeof path !== 'string') {
+    return def;
+  }
   for (i = 0, path = path.split('.'), len = path.length; i < len; i++) {
-    if (!obj || typeof obj !== 'object') return def;
+    if (!obj || typeof obj !== 'object') {
+      return def;
+    }
     obj = obj[path[i]];
   }
 
-  if (obj === undefined) return def;
+  if (obj === undefined) {
+    return def;
+  }
   return obj;
 }
 
@@ -1056,15 +1113,17 @@ export function viewControler(o) {
  * @param {string} o.action Action :  "check", "uncheck"
  */
 export function viewLiAction(o) {
-  if (!o.id || !o.idView || !o.action) return;
+  if (!o.id || !o.idView || !o.action) {
+    return;
+  }
 
   var el = document.querySelector("input[data-view-toggle='" + o.idView + "']");
 
-  if (o.action == 'check' && el && !el.checked) {
+  if (o.action === 'check' && el && !el.checked) {
     el.checked = true;
   }
 
-  if (o.action == 'uncheck' && el && el.checked) {
+  if (o.action === 'uncheck' && el && el.checked) {
     el.checked = false;
   }
 }
@@ -1097,8 +1156,6 @@ export function makeSimpleLayer(o) {
 
   var size = o.size || 2;
   var sprite = o.sprite || '';
-  var opA = o.opacity || 0.7;
-  var opB = opA + 0.5 * (1 - opA) || 1;
   var filter = o.filter || ['all'];
 
   if (!o.hexColor) {
@@ -1178,7 +1235,9 @@ export function updateViewOrder(o) {
   var order = o.order || orderUiList || orderViewList || [];
   var layerBefore = mx.settings.layerBefore;
 
-  if (!order) return;
+  if (!order) {
+    return;
+  }
   mx.helpers.onNextFrame(function() {
     var displayed = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
@@ -1231,7 +1290,9 @@ export function updateViewParams(o) {
 export function fire(type, data) {
   data = data || {};
   setTimeout(function() {
-    if (!mx.events[type]) mx.events[type] = [];
+    if (!mx.events[type]) {
+      mx.events[type] = [];
+    }
     var evts = mx.events[type];
     evts.forEach((cb) => {
       mx.helpers.onNextFrame(() => {
@@ -1250,9 +1311,11 @@ export function fire(type, data) {
  * @param {Function} callback
  */
 export function on(type, cb) {
-  if (!mx.events[type]) mx.events[type] = [];
+  if (!mx.events[type]) {
+    mx.events[type] = [];
+  }
   var id = mx.events[type].indexOf(cb);
-  if (id == -1) {
+  if (id === -1) {
     mx.events[type].push(cb);
   }
 }
@@ -1272,7 +1335,9 @@ export function once(type, cb) {
  * @param {Function} callback
  */
 export function off(type, cb) {
-  if (!mx.events[type]) mx.events[type] = [];
+  if (!mx.events[type]) {
+    mx.events[type] = [];
+  }
   var id = mx.events[type].indexOf(cb);
   if (id > -1) {
     mx.events[type].splice(id, 1);
@@ -1346,13 +1411,15 @@ export function sortViewsListBy(o) {
   var elList = document.querySelector('.mx-views-list');
   var elItems = elList.querySelectorAll('.mx-view-item');
   var elItemFirst = elItems[0];
-  var elItemNext;
-  var elItemPrev;
   var idBtn = o.idBtn || '';
   var elBtn;
   var isAsc = false;
-  if (idBtn) elBtn = document.getElementById(idBtn);
-  if (elBtn) isAsc = elBtn.classList.contains('asc');
+  if (idBtn) {
+    elBtn = document.getElementById(idBtn);
+  }
+  if (elBtn) {
+    isAsc = elBtn.classList.contains('asc');
+  }
 
   /*
    * Set options based on arguments
@@ -1360,7 +1427,6 @@ export function sortViewsListBy(o) {
   var dir = o.dir || 'asc';
   var toggle = dir === 'toggle';
   var type = o.type || 'title';
-  var onSorted = o.onSorted || '';
 
   /*
    * Update ui
@@ -1379,8 +1445,8 @@ export function sortViewsListBy(o) {
    * Set direction
    */
 
-  var gt = dir == 'desc' ? 1 : -1;
-  var lt = dir == 'desc' ? -1 : 1;
+  var gt = dir === 'desc' ? 1 : -1;
+  var lt = dir === 'desc' ? -1 : 1;
   /*
    * value in array
    */
@@ -1403,7 +1469,7 @@ export function sortViewsListBy(o) {
   });
 
   values.forEach(function(v, i) {
-    if (i == 0) {
+    if (i === 0) {
       elList.insertBefore(v.el, elItemFirst);
     } else {
       elList.insertBefore(v.el, values[i - 1].el);
@@ -1459,11 +1525,11 @@ export function getViewOrder() {
 */
 export function makeTransparencySlider(o) {
   var view = o.view;
-  var idMap = o.idMap;
-  var m = mx.helpers.getMap(idMap);
   var el = document.querySelector("[data-transparency_for='" + view.id + "']");
 
-  if (!el) return;
+  if (!el) {
+    return;
+  }
 
   makeSlider();
 
@@ -1508,22 +1574,20 @@ export function makeTransparencySlider(o) {
 */
 export function makeNumericSlider(o) {
   var view = o.view;
-  var idMap = o.idMap;
-  var m = mx.helpers.getMap(idMap);
   var el = document.querySelector("[data-range_numeric_for='" + view.id + "']");
 
-  if (!el) return;
+  if (!el) {
+    return;
+  }
 
   makeSlider();
 
   function makeSlider() {
-    var idView = view.id;
-    var attrName = view.data.attribute.name;
     var min = mx.helpers.path(view, 'data.attribute.min');
     var max = mx.helpers.path(view, 'data.attribute.max');
 
     if (view && min !== null && max !== null) {
-      if (min == max) {
+      if (min === max) {
         min = min - 1;
         max = max + 1;
       }
@@ -1557,9 +1621,9 @@ export function makeNumericSlider(o) {
          */
         slider.on(
           'slide',
-          mx.helpers.debounce(function(n, h) {
+          mx.helpers.debounce(function(n) {
             var view = this.targetView;
-            var layerExists, filter;
+            var filter;
 
             var elContainer = this.target.parentElement;
             var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
@@ -1584,7 +1648,7 @@ export function makeNumericSlider(o) {
               filter: filter,
               type: 'numeric_slider'
             });
-          }, 10)
+          }, 100)
         );
       });
     }
@@ -1600,11 +1664,11 @@ export function makeTimeSlider(o) {
   k.t1 = 'mx_t1';
 
   var view = o.view;
-  var idMap = o.idMap;
-  var m = mx.helpers.getMap(idMap);
 
   var el = document.querySelector('[data-range_time_for="' + view.id + '"]');
-  if (!el) return;
+  if (!el) {
+    return;
+  }
 
   /*
    * Create a time slider for each time enabled view
@@ -1618,11 +1682,11 @@ export function makeTimeSlider(o) {
     return Math.round(x);
   };
 
-  var now = new Date().getTime() / 1000;
-  var dateForm = {
-    to: now,
-    from: true
-  };
+  //var now = new Date().getTime() / 1000;
+  /*  var dateForm = {*/
+  //to: now,
+  //from: true
+  /*};*/
 
   makeSlider();
 
@@ -1631,9 +1695,6 @@ export function makeTimeSlider(o) {
       var time = mx.helpers.path(view, 'data.period');
       var prop = mx.helpers.path(view, 'data.attribute.names');
       var start = [];
-      var tooltips = [];
-      var nowIsIn = now > time.extent.min && now < time.extent.max;
-      var idView = view.id;
 
       if (time.extent.min && time.extent.max) {
         var hasT0 = prop.indexOf(k.t0) > -1;
@@ -1641,7 +1702,7 @@ export function makeTimeSlider(o) {
         var min = time.extent.min * 1000;
         var max = time.extent.max * 1000;
 
-        if (min == max) {
+        if (min === max) {
           min = min - 1;
           max = max + 1;
         }
@@ -1686,11 +1747,10 @@ export function makeTimeSlider(o) {
              */
           slider.on(
             'slide',
-            mx.helpers.debounce(function(t, h) {
+            mx.helpers.debounce(function(t) {
               var filterAll = [];
               var filter = [];
               var view = this.targetView;
-              var layerExists;
               var elContainer = this.target.parentElement;
               var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
               var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
@@ -1743,13 +1803,15 @@ export function handleViewValueFilterText(o) {
    * NOTE: keyup is set globaly, on the whole view list
    */
   return function(event) {
-    var action, el, idView, viewVar, search, options;
+    var action, el, idView, search, options;
     el = event.target;
 
     idView = el.dataset.view_action_target;
     action = el.dataset.view_action_key;
 
-    if (!idView || action != 'view_search_value') return;
+    if (!idView || action !== 'view_search_value') {
+      return;
+    }
 
     search = event.target.value;
 
@@ -1772,16 +1834,17 @@ export function handleViewValueFilterText(o) {
 export function removeView(o) {
   var li = document.querySelector("[data-view_id='" + o.idView + "']");
 
-  var m = mx.helpers.getMap(o.id);
   var views = mx.helpers.getViews({asArray: true});
   var view = mx.helpers.getView(o.idView);
   var vIndex = views.indexOf(view);
 
-  if (!view) return;
+  if (!view) {
+    return;
+  }
 
   mx.helpers.closeView(o);
 
-  if (view.type == 'gj') {
+  if (view.type === 'gj') {
     var data = mx.data.geojson;
     data.removeItem(o.idView);
   }
@@ -1806,11 +1869,11 @@ export function removeView(o) {
  * @param {string} o.idView view id
  */
 export function closeView(o) {
-  var views = mx.helpers.getViews({asArray: true});
   var view = mx.helpers.getView(o.idView);
-  var vIndex = views.indexOf(view);
 
-  if (!view) return;
+  if (!view) {
+    return;
+  }
 
   mx.helpers.cleanRemoveModules(view);
 
@@ -1839,10 +1902,10 @@ export function setViewsComponents(views) {
     var h = mx.helpers;
     components = [];
 
-    isVt = v.type == 'vt';
-    isSm = v.type == 'sm';
-    isCc = v.type == 'cc';
-    isRt = v.type == 'rt';
+    isVt = v.type === 'vt';
+    isSm = v.type === 'sm';
+    isCc = v.type === 'cc';
+    isRt = v.type === 'rt';
 
     widgets = h.path(v, 'data.dashboard.widgets', '');
     story = h.path(v, 'data.story.steps', '');
@@ -1850,23 +1913,38 @@ export function setViewsComponents(views) {
     attributes = h.path(v, 'data.attribute.names', '');
     customStyle = h.path(v, 'data.style.custom', '');
 
-    if (isVt) components.push('vt');
-    if (isRt) components.push('rt');
-    if (isSm && story && story.length) components.push('story_map');
-    if (isVt && widgets && widgets.length) components.push('dashboard');
-    if (!isSm) components.push('layer');
-    if (isVt && attributes && attributes.indexOf('mx_t0') > -1)
+    if (isVt) {
+      components.push('vt');
+    }
+    if (isRt) {
+      components.push('rt');
+    }
+    if (isSm && story && story.length) {
+      components.push('story_map');
+    }
+    if (isVt && widgets && widgets.length) {
+      components.push('dashboard');
+    }
+    if (!isSm) {
+      components.push('layer');
+    }
+    if (isVt && attributes && attributes.indexOf('mx_t0') > -1) {
       components.push('time_slider');
-    if (isVt && typeof overlap == 'string' && overlap.length)
+    }
+    if (isVt && typeof overlap === 'string' && overlap.length) {
       components.push('overlap');
+    }
     if (
       isVt &&
       customStyle &&
       customStyle.json &&
       JSON.parse(customStyle.json).enable
-    )
+    ) {
       components.push('custom_style');
-    if (isCc) components.push('custom_code');
+    }
+    if (isCc) {
+      components.push('custom_code');
+    }
     v._components = components;
   });
 }
@@ -1883,7 +1961,6 @@ export function renderViewsList(o) {
   var elDiv, elNewItem, elNewInput;
   var m = mx.helpers.getMapData(o.id);
   var elViewsContainer = document.querySelector('.mx-views-container');
-  var elViewsContent = elViewsContainer.querySelector('.mx-views-content');
   var elViewsList = elViewsContainer.querySelector('.mx-views-list');
   var views = o.views;
   var add = o.add || false;
@@ -1901,15 +1978,6 @@ export function renderViewsList(o) {
     add = true;
   }
 
-  /* TODO: set as options */
-
-  var viewClasses = {
-    title: 'mx-view-item-title',
-    meta: 'mx-view-item-index',
-    type: 'mx-view-item-type',
-    classes: 'mx-view-item-classes'
-  };
-
   /**
    * If empty, add empty view list message
    */
@@ -1918,8 +1986,12 @@ export function renderViewsList(o) {
   } else {
     setViewsListEmpty(false);
 
-    if (!m.listener) m.listener = {};
-    if (!m.tools) m.tools = {};
+    if (!m.listener) {
+      m.listener = {};
+    }
+    if (!m.tools) {
+      m.tools = {};
+    }
     if (!add) {
       /**
        * Render all view items
@@ -1933,7 +2005,7 @@ export function renderViewsList(o) {
         // remove old views if present
         var oldPos;
         m.views.forEach(function(f) {
-          if (f.id == v.id) {
+          if (f.id === v.id) {
             oldPos = m.views.indexOf(f);
           }
         });
@@ -2045,7 +2117,9 @@ export function setViewsListEmpty(enable) {
     });
   } else {
     var elToRemove = document.querySelector('.mx-view-item-empty');
-    if (elToRemove) elToRemove.remove();
+    if (elToRemove) {
+      elToRemove.remove();
+    }
   }
 }
 
@@ -2120,7 +2194,6 @@ export function updateViewsFilter(o) {
       : document.querySelector(o.selectorContainer);
   var elFilters = document.createElement('div');
   var elFoldFilters;
-  var t0 = performance.now();
   elContainer.innerHTML = '';
 
   h.getDictItem('view_filter_by_tags')
@@ -2174,8 +2247,12 @@ export function updateViewsFilter(o) {
           })
           .then(function() {
             tags = tags.sort(function(a, b) {
-              if (a.label < b.label) return -1;
-              if (a.label > b.label) return 1;
+              if (a.label < b.label) {
+                return -1;
+              }
+              if (a.label > b.label) {
+                return 1;
+              }
               return 0;
             });
 
@@ -2183,8 +2260,6 @@ export function updateViewsFilter(o) {
               var el = makeEl(t.key, t.label, t.count, t.type);
               elTypeContent.appendChild(el);
             });
-
-            var t1 = performance.now();
           });
       });
     });
@@ -2244,7 +2319,7 @@ export function viewSetFilter(o) {
   var m = mx.helpers.getMap(idMap);
   var layers = mx.helpers.getLayerByPrefix({id: idMap, prefix: idView});
 
-  if (filter && filter.constructor == Array && filter.length > 1) {
+  if (filter && filter.constructor === Array && filter.length > 1) {
     filters[type] = filter;
   } else {
     filters[type] = ['all'];
@@ -2305,7 +2380,9 @@ export function plotTimeSliderData(o) {
   var el = o.el;
   o.type = o.type ? o.type : 'density';
 
-  if (!data || !data.year || !data.n) return;
+  if (!data || !data.year || !data.n) {
+    return;
+  }
 
   var obj = {
     labels: data.year,
@@ -2419,7 +2496,7 @@ export function getLayerNamesByPrefix(o) {
       if (o.base) {
         l = getLayerBaseName(l);
       }
-      if (l.indexOf(o.prefix) > -1 && out.indexOf(l) == -1) {
+      if (l.indexOf(o.prefix) > -1 && out.indexOf(l) === -1) {
         out.push(l);
       }
     }
@@ -2441,7 +2518,9 @@ export function removeLayersByPrefix(o) {
     layers;
   var map = o.map || mx.helpers.getMap(o.id);
 
-  if (!map) return result;
+  if (!map) {
+    return result;
+  }
 
   layers = mx.helpers.getLayerNamesByPrefix({
     map: map,
@@ -2485,7 +2564,7 @@ export function syncAll(o) {
     others = [];
 
     ids.forEach(function(i) {
-      if (i != x) {
+      if (i !== x) {
         others.push(i);
       }
     });
@@ -2496,7 +2575,7 @@ export function syncAll(o) {
 
     if (enabled) {
       if (!exists) {
-        maps[x].listener.sync = function(e) {
+        maps[x].listener.sync = function() {
           if (!locked) {
             pos = {
               center: m.getCenter(),
@@ -2535,9 +2614,6 @@ export function syncAll(o) {
  * @return {boolean} exists (or not depending of inverse)
  */
 export function existsInList(li, it, val, inverse) {
-  /*jshint validthis:true*/
-  // TODO: find a ways to pass an operator for more flexibility "a" "!=" "yelloe"
-  // TODO: Syntastic return a warning with when using eval()...
   if (!inverse) {
     for (var i in li) {
       if (
@@ -2547,8 +2623,10 @@ export function existsInList(li, it, val, inverse) {
             JSON.stringify(li[i]) === JSON.stringify(val)))
       ) {
         return true;
-      } else if (typeof li[i] == 'object') {
-        if (this.existsInList(li[i], it, val, inverse)) return true;
+      } else if (typeof li[i] === 'object') {
+        if (this.existsInList(li[i], it, val, inverse)) {
+          return true;
+        }
       }
     }
     return false;
@@ -2561,8 +2639,10 @@ export function existsInList(li, it, val, inverse) {
             JSON.stringify(li[j]) !== JSON.stringify(val)))
       ) {
         return true;
-      } else if (typeof li[j] == 'object') {
-        if (this.existsInList(li[j], it, val, inverse)) return true;
+      } else if (typeof li[j] === 'object') {
+        if (this.existsInList(li[j], it, val, inverse)) {
+          return true;
+        }
       }
     }
     return false;
@@ -2581,7 +2661,9 @@ function addViewCc(o) {
   var map = o.map;
   var methods = mx.helpers.path(view, 'data.methods');
 
-  if (!methods) return Promise.resolve(true);
+  if (!methods) {
+    return Promise.resolve(true);
+  }
 
   return new Promise(function(resolve, reject) {
     var r = new Function(methods)();
@@ -2591,8 +2673,9 @@ function addViewCc(o) {
       reject(methods);
     }
   }).then(function(cc) {
-    if (!(cc.onInit instanceof Function) || !(cc.onClose instanceof Function))
+    if (!(cc.onInit instanceof Function) || !(cc.onClose instanceof Function)) {
       return;
+    }
 
     var opt = {
       map: map,
@@ -2636,8 +2719,10 @@ function addViewCc(o) {
 function addViewRt(o) {
   var view = o.view;
   var map = o.map;
-  return new Promise((resolve, reject) => {
-    if (!mx.helpers.path(view, 'data.source.tiles')) resolve(false);
+  return new Promise((resolve) => {
+    if (!mx.helpers.path(view, 'data.source.tiles')) {
+      resolve(false);
+    }
 
     /**
      * source as already be added. Add layer
@@ -2712,7 +2797,7 @@ function addViewRt(o) {
 export function addViewVt(o) {
   var p = mx.helpers.path;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     var view = o.view,
       map = o.map,
       layers = [],
@@ -2720,20 +2805,19 @@ export function addViewVt(o) {
       idSource = view.id + '-SRC',
       idView = view.id,
       style = p(view, 'data.style'),
-      time = p(view, 'data.period'),
       rules = p(view, 'data.style.rules', []),
       nulls = p(view, 'data.style.nulls', [])[0],
       hideNulls = p(view, 'data.style.hideNulls', false),
       geomType = p(view, 'data.geometry.type'),
       source = p(view, 'data.source'),
       num = 0,
-      defaultColor,
-      defaultOpacity,
       styleCustom,
       defaultOrder = true;
 
     var idSourceLayer = mx.helpers.path(source, 'layerInfo.name');
-    if (!idSourceLayer) resolve(false);
+    if (!idSourceLayer) {
+      resolve(false);
+    }
 
     styleCustom = JSON.parse(p(style, 'custom.json'));
 
@@ -2754,13 +2838,12 @@ export function addViewVt(o) {
      */
 
     rules = rules.filter(function(r) {
-      return r && r.value != undefined;
+      return r && r.value !== undefined;
     });
     rules = rules instanceof Array ? rules : [rules];
     rules = mx.helpers.clone(rules);
     if (nulls && !hideNulls) {
       nulls.isNullRule = true;
-      //nulls.value = nulls.value == "" || typeof nulls.value === undefined ? null : nulls.value;
       rules.push(nulls);
     }
 
@@ -2770,7 +2853,7 @@ export function addViewVt(o) {
     }
 
     var ruleAll = rules.filter(function(r) {
-      return r.value == 'all';
+      return r.value === 'all';
     });
     var idLayer;
     var getIdLayer = function() {
@@ -2778,10 +2861,6 @@ export function addViewVt(o) {
       return idLayer;
     };
 
-    var hasStyle = false;
-    var hasTime = false;
-    var hasSprite = false;
-    var hasStyleDefault = false;
     var hasStyleCustom =
       styleCustom &&
       styleCustom instanceof Object &&
@@ -2821,7 +2900,7 @@ export function addViewVt(o) {
       /**
        * add a second layer for symbol if point + sprite
        */
-      if (rule.sprite && rule.sprite != 'none' && geomType == 'point') {
+      if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
         var layerSprite = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
@@ -2836,7 +2915,7 @@ export function addViewVt(o) {
         layers.push(layerSprite);
       }
 
-      if (rule.sprite && rule.sprite != 'none' && geomType == 'polygon') {
+      if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
         var layerPattern = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
@@ -2899,7 +2978,7 @@ export function addViewVt(o) {
         var value = rule.value;
         var isNullRule = rule.isNullRule === true;
         var max = p(view, 'data.attribute.max') + 1;
-        var min = p(view, 'data.attribute.min') - 1;
+        //var min = p(view, 'data.attribute.min') - 1;
         var nextRule = rules[i + 1];
         var nextRuleIsNullRule = nextRule && nextRule.isNullRule;
         var nextValue =
@@ -2908,12 +2987,12 @@ export function addViewVt(o) {
               ? nextRule.value
               : max
             : max;
-        var isNumeric = p(view, 'data.attribute.type') == 'number';
+        var isNumeric = p(view, 'data.attribute.type') === 'number';
         var idView = view.id;
         var filter = ['all'];
         var attr = def.attribute.name;
-        var paint = {};
-        var layerSprite = {};
+        //var paint = {};
+        //var layerSprite = {};
 
         /**
          * Set filter
@@ -2968,7 +3047,7 @@ export function addViewVt(o) {
         /**
          * Add layer for symbols
          */
-        if (rule.sprite && rule.sprite != 'none' && geomType == 'point') {
+        if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
           var layerSymbol = makeSimpleLayer({
             id: getIdLayer(),
             idSource: idSource,
@@ -2984,7 +3063,7 @@ export function addViewVt(o) {
           layers.push(layerSymbol);
         }
 
-        if (rule.sprite && rule.sprite != 'none' && geomType == 'polygon') {
+        if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
           var layerPattern = makeSimpleLayer({
             id: getIdLayer(),
             idSource: idSource,
@@ -3051,18 +3130,15 @@ export function addViewVt(o) {
         var elLegend = document.querySelector('#check_view_legend_' + view.id);
 
         if (elLegend) {
-          var rId = [];
-          var rNew = [];
-
           for (var i = 0; i < rules.length; i++) {
             if (rules[i]) {
-              var ruleHasSprite = rules[i].sprite && rules[i].sprite != 'none';
+              var ruleHasSprite = rules[i].sprite && rules[i].sprite !== 'none';
               var nextRuleIsSame =
-                !!rules[i + 1] && rules[i + 1].value == rules[i].value;
+                !!rules[i + 1] && rules[i + 1].value === rules[i].value;
               var nextRuleHasSprite =
                 !!rules[i + 1] &&
                 rules[i + 1].sprite &&
-                rules[i + 1].sprite != 'none';
+                rules[i + 1].sprite !== 'none';
 
               if (ruleHasSprite) {
                 rules[i].sprite =
@@ -3110,7 +3186,6 @@ export function addViewVt(o) {
  */
 export function addOptions(o) {
   var view = o.view;
-  var idMap = o.id;
 
   view._idMap = o.id;
   view._interactive = {};
@@ -3322,9 +3397,9 @@ export function addView(o) {
 }
 
 export function addViewGj(opt) {
-  return new Promise((resolve, reject) => {
-    opt.map.addLayer(mx.helpers.path(opt.view, 'data.layer'), opt.before);
-
+  return new Promise((resolve) => {
+    var layer = mx.helpers.path(opt.view, 'data.layer'); 
+    opt.map.addLayer(layer, opt.before);
     resolve(true);
   });
 }
@@ -3396,7 +3471,7 @@ export function setHighlightedCountries(o) {
  * @param {Object} poly2
  * @return {Object} Intersect or null
  */
-function intersect(poly1, poly2) {
+export function intersect(poly1, poly2) {
   return Promise.all([
     import('martinez-polygon-clipping'),
     import('@turf/helpers')
@@ -3415,12 +3490,15 @@ function intersect(poly1, poly2) {
       geom1.coordinates,
       geom2.coordinates
     );
-    if (intersection === null || intersection.length === 0) return null;
+    if (intersection === null || intersection.length === 0) {
+      return null;
+    }
     if (intersection.length === 1) {
       var start = intersection[0][0][0];
       var end = intersection[0][0][intersection[0][0].length - 1];
-      if (start[0] === end[0] && start[1] === end[1])
+      if (start[0] === end[0] && start[1] === end[1]) {
         return polygon(intersection[0], properties);
+      }
       return null;
     }
     return multiPolygon(intersection, properties);
@@ -3436,7 +3514,6 @@ function intersect(poly1, poly2) {
  * @return {number} area in km2
  */
 export function getRenderedLayersArea(o) {
-  var msg = o.onMessage || console.log;
   var map = mx.helpers.getMap(o.id);
 
   if (map) {
@@ -3470,8 +3547,12 @@ export function getRenderedLayersArea(o) {
       var worker = new calcAreaWorker();
       worker.postMessage(data);
       worker.addEventListener('message', function(e) {
-        if (e.data.message) o.onMessage(e.data.message);
-        if (e.data.end) o.onEnd(e.data.end);
+        if (e.data.message) {
+          o.onMessage(e.data.message);
+        }
+        if (e.data.end) {
+          o.onEnd(e.data.end);
+        }
       });
     }
   }
@@ -3480,7 +3561,7 @@ export function getRenderedLayersArea(o) {
 export function sendRenderedLayersAreaToUi(o) {
   var el = document.getElementById(o.idEl);
   if (el) {
-    var area = getRenderedLayersArea({
+    getRenderedLayersArea({
       id: o.id,
       prefix: o.prefix,
       onMessage: function(msg) {
@@ -3505,7 +3586,6 @@ export function getBoundsArray(o) {
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
 }
 
-
 /**
  * Query layers properties at point
  * @param {Object} opt Options
@@ -3520,11 +3600,12 @@ export function getLayersPropertiesAtPoint(opt) {
   var h = mx.helpers;
   var map = h.getMap(opt.map);
   var hasViewId = h.isString(opt.idView);
-  var modeObject = opt.asObject == true || false;
+  var modeObject = opt.asObject === true || false;
   var items = {};
   var idViews = [];
   var excludeProp = ['mx_t0', 'mx_t1', 'gid'];
-  var type = opt.type || 'vt' || 'rt';
+  var type = opt.type || 'vt' || 'rt' || 'gj';
+  type  = h.isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
    * to get array of view ID.
@@ -3537,7 +3618,7 @@ export function getLayersPropertiesAtPoint(opt) {
         prefix: 'MX-'
       });
 
-  if (idViews.length == 0) {
+  if (idViews.length === 0) {
     return items;
   }
 
@@ -3547,12 +3628,12 @@ export function getLayersPropertiesAtPoint(opt) {
    */
   idViews
     .map((idView) => h.getView(idView))
-    .filter((view) => view.type == type)
+    .filter((view) => type.indexOf(view.type) > -1)
     .forEach((view) => {
-      if (type == 'rt') {
-       items[view.id] = fetchRasterProp(view);
+      if ( view.type === 'rt') {
+        items[view.id] = fetchRasterProp(view);
       } else {
-       items[view.id] = fetchVectorProp(view);
+        items[view.id] = fetchVectorProp(view);
       }
     });
 
@@ -3565,7 +3646,6 @@ export function getLayersPropertiesAtPoint(opt) {
     var url = h.path(view, 'data.source.tiles', [])[0].split('?');
     var endpoint = url[0];
     var params = h.paramsToObject(url[1]);
-    var id = view.id;
     var out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
@@ -3574,14 +3654,14 @@ export function getLayersPropertiesAtPoint(opt) {
       params &&
       params.layers &&
       params.service &&
-      params.service.toLowerCase() == 'wms';
+      params.service.toLowerCase() === 'wms';
 
     if (isWms) {
       return h.queryWms({
         point: opt.point,
         layers: params.layers,
         url: endpoint,
-        asObject : modeObject
+        asObject: modeObject
       });
     } else {
       return Promise.resolve(out);
@@ -3592,10 +3672,8 @@ export function getLayersPropertiesAtPoint(opt) {
    * Fetch properties on vector layer
    */
   function fetchVectorProp(view) {
-
-    return new Promise((resolve,reject)=>{
-
-    var id = view.id;
+    return new Promise((resolve) => {
+      var id = view.id;
 
       var layers = h.getLayerNamesByPrefix({
         map: map,
@@ -3606,18 +3684,18 @@ export function getLayersPropertiesAtPoint(opt) {
         layers: layers
       });
 
-    var out = modeObject ? {} : [];
+      var out = modeObject ? {} : [];
 
       features.forEach((f) => {
-        if(modeObject){
+        if (modeObject) {
           for (var p in f.properties) {
             /**
-            * Exclude prop (time, gid, etc)
-            */
-            if (excludeProp.indexOf(p) == -1) {
+             * Exclude prop (time, gid, etc)
+             */
+            if (excludeProp.indexOf(p) === -1) {
               /**
-              * Aggregate value by attribute
-              */
+               * Aggregate value by attribute
+               */
               var value = f.properties[p];
               var values = out[p] || [];
               values = values.concat(value);
@@ -3627,32 +3705,27 @@ export function getLayersPropertiesAtPoint(opt) {
               });
             }
           }
-        }else{
+        } else {
           /*
-          * Raw properties
-          */
-           out.push(f.properties);
+           * Raw properties
+           */
+          out.push(f.properties);
         }
       });
 
-      resolve(out)
-    })
-
+      resolve(out);
+    });
   }
 }
-
-
-
-
-
 
 /*selectize version*/
 export function makeSearchBox(o) {
   var view = o.view;
-  var idMap = o.idMap;
   var el = document.querySelector("[data-search_box_for='" + view.id + "']");
   //var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
-  if (!el) return;
+  if (!el) {
+    return;
+  }
 
   makeSelectize();
 
@@ -3670,13 +3743,12 @@ export function makeSearchBox(o) {
   }
 
   function makeSelectize() {
-    return mx.helpers.moduleLoad('selectize').then((s) => {
-      var idView = view.id;
+    return mx.helpers.moduleLoad('selectize').then(() => {
       var table = mx.helpers.path(view, 'data.attribute.table');
       var attr = mx.helpers.path(view, 'data.attribute.name');
       var data = tableToData(table);
 
-      var selectOnChange = function(value) {
+      var selectOnChange = function() {
         var view = this.view;
         var listObj = this.getValue();
         var filter = ['any'];
@@ -3711,8 +3783,8 @@ export function makeSearchBox(o) {
 
 export function filterViewValues(o) {
   var attr, idMap, idView, search;
-  var view, views, map, features, values, filter, op, dat;
-  var isEl, isNumeric;
+  var view, map, features, values, filter;
+  var isNumeric;
 
   attr = o.attribute;
   idMap = o.id;
@@ -3770,6 +3842,7 @@ export function addLayer(o) {
   var map = mx.helpers.getMap(o.id);
   if (map) {
     if (o.layer.id in map.style._layers) {
+      console.log('Layer already exists');
     } else {
       map.addLayer(o.layer, o.before);
     }
@@ -3794,11 +3867,15 @@ export function zoomToViewId(o) {
     /* get map and view */
     view = mx.helpers.getViews(o);
 
-    if (!view) return;
+    if (!view) {
+      return;
+    }
 
     extent = mx.helpers.path(view, 'data.geometry.extent');
 
-    if (!extent) return;
+    if (!extent) {
+      return;
+    }
 
     llb = new mx.mapboxgl.LngLatBounds(
       [extent.lng1, extent.lat1],
@@ -3821,7 +3898,7 @@ export function zoomToViewId(o) {
  * @return {Object} MapBox gl bounds object
  */
 export function getViewsBounds(views) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var bounds;
     var h = mx.helpers;
     views = views.constructor === Array ? views : [views];
@@ -3833,10 +3910,12 @@ export function getViewsBounds(views) {
       lng2: 180
     };
 
-    var extents = views.forEach((v, i) => {
+    views.forEach((v, i) => {
       var ext = h.path(v, 'data.geometry.extent');
       if (ext) {
-        if (i == 0) extent = ext;
+        if (i === 0) {
+          extent = ext;
+        }
         extent = {
           lat1: ext.lat1 > extent.lat1 ? ext.lat1 : extent.lat1,
           lat2: ext.lat2 < extent.lat2 ? ext.lat2 : extent.lat2,
@@ -3865,7 +3944,7 @@ export function zoomToViewIdVisible(o) {
   return mx.helpers
     .moduleLoad('turf-bbox')
     .then((bbox) => {
-      var geomTemp, exists, isArray, hasMap, idLayerAll, features;
+      var geomTemp, idLayerAll, features;
 
       geomTemp = {
         type: 'FeatureCollection',
@@ -3903,7 +3982,9 @@ export function zoomToViewIdVisible(o) {
 }
 
 export function resetViewStyle(o) {
-  if (!o.id || !o.idView) return;
+  if (!o.id || !o.idView) {
+    return;
+  }
 
   mx.helpers.addView({
     id: o.id,
@@ -3960,16 +4041,13 @@ export function btnToggleLayer(o) {
     return;
   }
 
-  var layersToShow = [];
-  var layersToHide = [];
-
   o.action = o.action || 'toggle';
-  var isAerial = o.idLayer == 'here_aerial'; // hide also shades...
-  var toShow = o.action == 'show';
-  var toHide = o.action == 'hide';
+  var isAerial = o.idLayer === 'here_aerial'; // hide also shades...
+  var toShow = o.action === 'show';
+  var toHide = o.action === 'hide';
   var isVisible = lay.visibility === 'visible';
   var toToggle =
-    o.action == 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
+    o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
 
   if (isAerial) {
     shades = mx.helpers.getLayerNamesByPrefix({id: o.id, prefix: 'shade'});
@@ -4027,8 +4105,10 @@ export function getMercCoords(x, y, z) {
  */
 export function getViewTitle(id, lang) {
   var view = id;
-  if (typeof id == 'string') view = mx.helpers.getView(id);
-  lang = lang | mx.settings.language;
+  if (typeof id === 'string') {
+    view = mx.helpers.getView(id);
+  }
+  lang = lang || mx.settings.language;
   var langs = mx.helpers.objectToArray(mx.settings.languages);
 
   return mx.helpers.getLabelFromObjectPath({
@@ -4049,10 +4129,12 @@ export function getMap(idMap) {
   idMap = idMap || mx.settings.idMapDefault;
   var map = {};
 
-  var isId = typeof idMap == 'string';
-  var isMap = !isId && (typeof idMap == 'object' && idMap._canvas);
+  var isId = typeof idMap === 'string';
+  var isMap = !isId && (typeof idMap === 'object' && idMap._canvas);
 
-  if (isMap) return idMap;
+  if (isMap) {
+    return idMap;
+  }
 
   if (isId) {
     map = mx.maps[idMap].map;
@@ -4135,7 +4217,9 @@ export function getViews(o) {
 
   var hasFilter = idView.length > 0 || typeof type !== 'undefined';
 
-  if (hasNoViews) return out;
+  if (hasNoViews) {
+    return out;
+  }
 
   /**
    * Set default
@@ -4157,7 +4241,9 @@ export function getViews(o) {
   /**
    * Return all views in array
    */
-  if (retFullArray) return views;
+  if (retFullArray) {
+    return views;
+  }
 
   /**
    * Return full object with id as key
@@ -4174,7 +4260,7 @@ export function getViews(o) {
    */
   if (retFilteredArray || retFilteredObject) {
     out = views.filter((v) => {
-      return idView.indexOf(v.id) > -1 || (type ? v.type == type : false);
+      return idView.indexOf(v.id) > -1 || (type ? v.type === type : false);
     });
 
     if (retFilteredArray) {
@@ -4198,7 +4284,7 @@ export function getViews(o) {
  * @param {String} idMap Id of the map
  */
 export function getView(id, idMap) {
-  if (typeof id == 'string') {
+  if (typeof id === 'string') {
     return mx.helpers.getViews({idView: id, id: idMap});
   } else {
     return id;
@@ -4251,7 +4337,7 @@ export function makeLayerJiggle(mapId, prefix) {
  * Take every layer and randomly change the color
  * @param {string} mapId Map identifier
  */
-export function randomFillAll(mapId) {
+export function randomFillAll() {
   setInterval(function() {
     var map = mx.helpers.getMap(idMap);
 

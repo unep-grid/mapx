@@ -7,15 +7,7 @@
  */
 export function featuresToHtml(o) {
   var h = mx.helpers;
-  var classGroup = 'list-group';
-  var classGroupItem = 'list-group-item';
-  var classGroupItemMember = 'list-group-item-member';
   var popup = o.popup;
-  var langs = h.objectToArray(mx.settings.languages) || ['en'];
-  var lang = mx.settings.language || langs[0];
-  /*  var el = function(type) {*/
-  //return document.createElement(type);
-  /*};*/
   var el = mx.helpers.el;
   var map = h.getMap(o.id);
   var filters = {};
@@ -55,7 +47,7 @@ export function featuresToHtml(o) {
   layerVector = h.getLayersPropertiesAtPoint({
     map: map,
     point: o.point,
-    type: 'vt',
+    type: ['vt','gj'],
     asObject: true
   });
   render(layerVector);
@@ -74,9 +66,9 @@ export function featuresToHtml(o) {
   /**
    * Helpers
    */
-  function hasActivatedLayer() {
-    return h.getLayerNamesByPrefix().length > 0;
-  }
+  /*  function hasActivatedLayer() {*/
+  //return h.getLayerNamesByPrefix().length > 0;
+  /*}*/
 
   function updateReadMore() {
     h.uiReadMore('.mx-prop-container', {
@@ -87,8 +79,11 @@ export function featuresToHtml(o) {
   }
 
   function render(layers) {
-    for (var idView in layers) {
-      renderItem(idView, layers[idView]);
+    var idView;
+    for (idView in layers) {
+      if (true) {
+        renderItem(idView, layers[idView]);
+      }
     }
   }
 
@@ -96,7 +91,7 @@ export function featuresToHtml(o) {
     var view = h.getView(idView);
     var language = mx.settings.language;
     var labels = h.path(view, '_meta.text.attributes_alias');
-    var isVector = view.type == 'vt';
+    var isVector = view.type === 'vt';
     var title = h.getViewTitle(idView);
     var elLayer, elProps, elWait, elSpinner, elTitle;
 
@@ -145,7 +140,7 @@ export function featuresToHtml(o) {
 
       var attrNames = Object.keys(attributes);
 
-      if (attrNames.length == 0) {
+      if (attrNames.length === 0) {
         var elNoDataAttr = elNoData.cloneNode(true);
         elLayer.appendChild(elNoDataAttr);
       }
@@ -206,7 +201,6 @@ export function featuresToHtml(o) {
         );
 
         elProps.appendChild(elPropContainer);
-        console.log(elProps);
         /*
          * Add a toggle or span for each value
          */
@@ -233,6 +227,7 @@ export function featuresToHtml(o) {
              * In other cases, add values as span
              */
             elValue = el('div');
+            /* jshint ignore:start */
             if (h.isArray(value)) {
               value.forEach((v) => {
                 elValue.appendChild(
@@ -251,6 +246,8 @@ export function featuresToHtml(o) {
               });
               elValue.innerText = value;
             }
+
+            /* jshint ignore:end*/
           }
 
           /**
@@ -277,11 +274,8 @@ export function featuresToHtml(o) {
     }
   }
 
-  function updatePopup() {
-    popup._update();
-  }
 
-  function filterValues(e, el) {
+  function filterValues() {
     var elChecks = popup._content.querySelectorAll('.check-toggle input');
     filters = {}; // reset filter at each request
 
@@ -308,7 +302,9 @@ export function featuresToHtml(o) {
       var isNum = h.isNumeric(v);
       var rule = [];
 
-      if (!filters[l]) filters[l] = ['any'];
+      if (!filters[l]) {
+        filters[l] = ['any'];
+      }
       if (add) {
         if (isNum) {
           rule = ['any', ['==', p, v], ['==', p, v * 1]];

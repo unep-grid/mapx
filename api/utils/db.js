@@ -33,7 +33,7 @@ exports.registerSource = registerSource;
 function registerSource(idSource, idUser, idProject, title) {
   var options = {};
 
-  if (typeof idSource == 'object') {
+  if (typeof idSource === 'object') {
     options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
@@ -54,11 +54,9 @@ function registerSource(idSource, idUser, idProject, title) {
     '{"meta":{"text":{"title":{"en":"${title}"}}}}' 
   )`;
 
-  return pgWrite
-    .query(sqlAddSource, [idSource, idUser, idProject])
-    .then((res) => {
-      return true;
-    });
+  return pgWrite.query(sqlAddSource, [idSource, idUser, idProject]).then(() => {
+    return true;
+  });
 }
 
 /**
@@ -66,7 +64,7 @@ function registerSource(idSource, idUser, idProject, title) {
  * @param {String|Object} idSource id of the layer to add, or object with idSource, idUser, idProject, title.
  */
 exports.registerOrRemoveSource = function(idSource, idUser, idProject, title) {
-  if (typeof idSource == 'object') {
+  if (typeof idSource === 'object') {
     options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
@@ -162,21 +160,33 @@ exports.getLayerTitle = getLayerTitle;
  * @param {Boolean} autoCorrect Try an automatic correction
  */
 function isLayerValid(idLayer, useCache, autoCorrect) {
-  var title = '';
-  var idColumn = '_mx_valid';
   useCache = utils.toBoolean(useCache, true);
-  autCorrect = utils.toBoolean(autoCorrect, false);
+  autoCorrect = utils.toBoolean(autoCorrect, false);
 
+  var title = '';
+  var idValidColumn = '_mx_valid';
+
+  /**
+   * Cache column creation
+   */
   var sqlNewColumn = `
   ALTER TABLE ${idLayer} 
-  ADD COLUMN IF NOT EXISTS ${idColumn} BOOLEAN
+  ADD COLUMN IF NOT EXISTS ${idValidColumn} BOOLEAN
   DEFAULT null
   `;
 
+  /*
+   * Validation query
+   */
   var sqlValidate = `
   UPDATE ${idLayer} 
-  SET ${idColumn} = ST_IsValid(geom)`;
+  SET ${idValidColumn} = ST_IsValid(geom)
+  WHERE ${idValidColumn} IS null
+  `;
 
+  /**
+   * Autocorrect query
+   */
   var sqlAutoCorrect = `
   UPDATE ${idLayer}
   SET geom = 
@@ -184,33 +194,47 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
       WHEN GeometryType(geom) ~* 'POLYGON'
       THEN ST_Multi(ST_Buffer(geom,0))
       ELSE ST_MakeValid(geom)
-    END
+    END,
+    ${idValidColumn} = ST_isValid(geom) 
   WHERE 
-    NOT ST_isValid(geom)
+    NOT ${idValidColumn} 
   `;
 
-  if (useCache) {
-    /**
-     * If use cache, don't evaluate where validity
-     * is true or false. Evaluate where validity is
-     * null only
-     */
-    sqlValidate =
-      sqlValidate +
-      `
-    WHERE ${idColumn} is null
-    `;
-  }
+  /*
+   * Set cache to true
+   */
+  var sqlInvalidate = `
+  UPDATE ${idLayer} 
+  SET ${idValidColumn} = null`;
 
+  /**
+   * Count valid query
+   */
   var sqlValidityStatus = `
-  SELECT count(${idColumn}) as n, ${idColumn} as valid
+  SELECT count(${idValidColumn}) as n, ${idValidColumn} as valid
   FROM  ${idLayer}
-  GROUP BY ${idColumn}`;
+  GROUP BY ${idValidColumn}`;
 
   return getLayerTitle(idLayer)
     .then((t) => {
       title = t;
       return pgWrite.query(sqlNewColumn);
+    })
+    .then(() => {
+      if (useCache) {
+        return Promise.resolve();
+      } else {
+        /**
+         * Invalidate if not use cache
+         */
+        return pgWrite.query(sqlInvalidate);
+      }
+    })
+    .then(() => {
+      /**
+       * Validate if null
+       */
+      return pgWrite.query(sqlValidate);
     })
     .then(() => {
       if (autoCorrect) {
@@ -220,21 +244,24 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
       }
     })
     .then(() => {
-      return pgWrite.query(sqlValidate);
-    })
-
-    .then(() => {
+      /**
+      * Get summary
+      */
       return pgRead.query(sqlValidityStatus);
     })
     .then((res) => {
+
+      /**
+      * Default
+      */
       var out = {
         nValid: 0,
         nInvalid: 0
       };
 
-      res.rows.forEach((r) => {
-        var n = r.n ? r.n * 1 || 0 : 0;
-        switch (r.valid) {
+      res.rows.forEach((row) => {
+        var n = row.n ? row.n * 1 || 0 : 0;
+        switch (row.valid) {
           case true:
             out.nValid = n;
             break;
@@ -246,7 +273,7 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
 
       return {
         id: idLayer,
-        valid: out.nInvalid == 0,
+        valid: out.nInvalid === 0,
         title: title,
         status: out,
         useCache: useCache,
@@ -264,7 +291,7 @@ exports.isLayerValid = isLayerValid;
 exports.areLayersValid = function(idsLayers, useCache, autoCorrect) {
   idsLayers = idsLayers instanceof Array ? idsLayers : [idsLayers];
   var queries = idsLayers.map(function(id) {
-    isLayerValid(id, useCache, autoCorrect);
+    return isLayerValid(id, useCache, autoCorrect);
   });
   return Promise.all(queries);
 };
