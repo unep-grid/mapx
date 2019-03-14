@@ -177,6 +177,8 @@
   transition: max-height ease-in-out 0.3s 0s,opacity ease-in-out 0.3s 0.3s;
 }
 
+
+
 .mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-badges {
   opacity :0;
 }
@@ -193,6 +195,9 @@
   padding-right : 10px;
 }
 
+.mx-view-tgl-more label {
+  font-size:0.9em;
+}
 
 .mx-view-tgl-btn {
   width: 30px;

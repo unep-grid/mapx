@@ -3763,7 +3763,7 @@ export function makeSearchBox(o) {
 
       var searchBox = $(el)
         .selectize({
-          placeholder: 'Filter values',
+          placeholder: 'Search',
           choices: data,
           valueField: 'value',
           labelField: 'label',

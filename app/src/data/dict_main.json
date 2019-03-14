@@ -687,7 +687,7 @@
   {
     "id": "btn_north_arrow",
     "en": "Reset bearing",
-    "fr": "Reset bearing",
+    "fr": "Réinitialiser l'orientation",
     "es": "Reajustar mapa",
     "ru": "",
     "zh": "",
@@ -807,7 +807,7 @@
   {
     "id": "btn_opt_edit_dashboard",
     "en": "Edit dashboard",
-    "fr": "Editer le dashboard",
+    "fr": "Editer le tableau de bord",
     "es": "Editar el dashboard",
     "ru": "",
     "zh": "",
@@ -818,9 +818,9 @@
   },
   {
     "id": "btn_opt_edit_story",
-    "en": "Edit story",
-    "fr": "Editer le récit",
-    "es": "Editar story",
+    "en": "Edit story map",
+    "fr": "Editer la carte narrative",
+    "es": "Editar mapa narrativo",
     "ru": "",
     "zh": "",
     "de": "",
@@ -974,8 +974,8 @@
   },
   {
     "id": "btn_opt_start_story",
-    "en": "Read this story",
-    "fr": "Lire ce récit",
+    "en": "Read this story map",
+    "fr": "Lire la carte narrative ",
     "es": "Leer esta story",
     "ru": "",
     "zh": "",
@@ -1275,7 +1275,7 @@
   {
     "id": "btn_tab_dashboard",
     "en": "Toggle dashboards",
-    "fr": "Dashboards",
+    "fr": "Tableau de bord",
     "es": "Dashboards",
     "ru": "",
     "zh": "",
@@ -2067,7 +2067,7 @@
   {
     "id": "time_slider",
     "en": "Time slider",
-    "fr": "Slider temporel",
+    "fr": "Curseur temporel",
     "es": "Slider temporal",
     "ru": "",
     "zh": "",
@@ -2103,7 +2103,7 @@
   {
     "id": "story_map",
     "en": "Story map",
-    "fr": "Story map",
+    "fr": "Carte narrative",
     "es": "Mapa narrativo",
     "ru": "",
     "zh": "",
@@ -2115,7 +2115,7 @@
   {
     "id": "dashboard",
     "en": "Dashboard",
-    "fr": "Dashboard",
+    "fr": "Tableau de bord",
     "es": "Dashboard",
     "ru": "",
     "zh": "",
@@ -2883,7 +2883,7 @@
   {
     "id": "schema_story_author",
     "en": "Author of the story",
-    "fr": "Auteur du récit",
+    "fr": "Auteur de la carte narrative",
     "es": "Autor(a) del mapa narrativo",
     "ru": "",
     "zh": "",
@@ -2954,8 +2954,8 @@
   },
   {
     "id": "schema_story_slide_color",
-    "en": " Color theme",
-    "fr": " Thème",
+    "en": "Color theme",
+    "fr": "Thème",
     "es": "Tema de color",
     "ru": "",
     "zh": "",
@@ -3002,8 +3002,8 @@
   },
   {
     "id": "schema_story_slide_layout",
-    "en": " Content layout",
-    "fr": " Disposition du contenu",
+    "en": "Content layout",
+    "fr": "Disposition du contenu",
     "es": "Diseño del contenido",
     "ru": "",
     "zh": "",
@@ -3026,8 +3026,8 @@
   },
   {
     "id": "schema_story_slide_pos_z",
-    "en": " Depth (z axis)",
-    "fr": " Profondeur (axe z)",
+    "en": "Depth (z axis)",
+    "fr": "Profondeur (axe z)",
     "es": "Profundidad (eje z)",
     "ru": "",
     "zh": "",
@@ -3111,7 +3111,7 @@
   {
     "id": "schema_story_steps_title",
     "en": "Steps of the story",
-    "fr": "Étapes du récit",
+    "fr": "Étapes de la carte narrative",
     "es": "Etapa del mapa narrativo",
     "ru": "",
     "zh": "",
@@ -3170,9 +3170,9 @@
   },
   {
     "id": "sm",
-    "en": "Story",
-    "fr": "Récit",
-    "es": "Story",
+    "en": "Story map",
+    "fr": "Carte narrative",
+    "es": "Mapa narrativo",
     "ru": "",
     "zh": "",
     "de": "",
@@ -4035,7 +4035,7 @@
   {
     "id": "view_add_dashboard",
     "en": "Add a dashboard",
-    "fr": "Ajouter un dashboard",
+    "fr": "Ajouter un tableau de bord",
     "es": "Añadir un dashboard",
     "ru": "",
     "zh": "",
@@ -4058,7 +4058,7 @@
   },
   {
     "id": "view_add_overlap_layer",
-    "en": "Add a mask",
+    "en": "Add an mask",
     "fr": "Ajouter un masque",
     "es": "Añadir una máscara",
     "ru": "",
@@ -4155,7 +4155,7 @@
   {
     "id": "view_dashboard",
     "en": "Dashboard",
-    "fr": "Dashboard",
+    "fr": "Tableau de bord",
     "es": "Dashboard",
     "ru": "",
     "zh": "",
@@ -4167,7 +4167,7 @@
   {
     "id": "view_dashboard_config",
     "en": "Configure a dashboard",
-    "fr": "Configurer un dashboard",
+    "fr": "Configurer un tableau de bord",
     "es": "Configurar un dashboard",
     "ru": "",
     "zh": "",
@@ -4239,7 +4239,7 @@
   {
     "id": "view_dashboard_title",
     "en": "Dashboard title",
-    "fr": "Titre du dashboard",
+    "fr": "Titre du tableau de bord",
     "es": "Título del dashboard",
     "ru": "",
     "zh": "",
@@ -4499,6 +4499,18 @@
     "bn": "",
     "fa": " جستجوی ارقام",
     "ps": "د لټون اندازه"
+  },
+  {
+    "id": "view_filter_by_values",
+    "en": "Filter by values",
+    "fr": "Filtrer par valeurs",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "view_show_abstract_languages",

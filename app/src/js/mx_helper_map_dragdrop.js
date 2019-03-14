@@ -291,7 +291,7 @@ export function saveSpatialDataAsView(opt) {
               }, 
               attributes: m.attributes,
               abstract: {
-                en: '-'
+                en: c.title 
               },
               geometry: {
                 extent: {

@@ -57,7 +57,7 @@ divTransparency = tags$div(
   class="mx-slider-container",
   tags$div(
     class="mx-slider-header",
-    tags$div(
+    tags$label(
       class="mx-slider-title",
       `data-lang_key`="btn_opt_transparency",
       `data-lang_type`="text"
@@ -93,7 +93,15 @@ divSearchVectorTiles <- tags$div(
   # Search input for vector tile search
   #
   "{{? h.path(view,'data.attribute.type') == 'string'}}",
-    tags$select(`data-search_box_for`="{{=view.id}}",class="mx-search-box",multiple=TRUE),
+    tags$label(
+      `for`="view_filter_by_values_{{=view.id}}",   
+      `data-lang_key`="view_filter_by_values"
+      ),
+    tags$select(
+      id="view_filter_by_values_{{=view.id}}",   
+     `data-search_box_for`="{{=view.id}}",
+     class="mx-search-box",multiple=TRUE
+     ),
   "{{?}}",
   "{{? h.path(view,'data.attribute.type') == 'number'}}",
   tags$div(

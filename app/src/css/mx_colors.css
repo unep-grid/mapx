@@ -185,12 +185,16 @@
 
 .mx .selectize-control .item .item-desc,
 .mx-login-info p,
+.mx .mx-view-tgl-more label,
+.mx .list-group .list-group-title-small,
 .text-muted {
  color: var(--mx_ui_text_faded);
 }
 
 .mx .selectize-control .item .item-desc:hover,
 .mx-login-info p:hover,
+.mx .mx-view-tgl-more label:hover,
+.mx .list-group .list-group-title-small:hover,
 .text-muted:hover {
  color: var(--mx_ui_text);
 }
