@@ -1619,7 +1619,7 @@ export function classAction(o) {
     o.action = 'toggle';
   }
 
-  if (mx.helper.isArray(o.class)) {
+  if (!mx.helpers.isArray(o.class)) {
     o.class = o.class.split(/\s+/);
   }
 

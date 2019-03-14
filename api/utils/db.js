@@ -195,7 +195,7 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
       THEN ST_Multi(ST_Buffer(geom,0))
       ELSE ST_MakeValid(geom)
     END,
-    ${idValidColumn} = ST_isValid(geom) 
+    ${idValidColumn} = true 
   WHERE 
     NOT ${idValidColumn} 
   `;

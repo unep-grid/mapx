@@ -1,5 +1,3 @@
-/* jshint evil:true, esversion:6, laxbreak:true */
-
 /**
  * Read and evaluate story map
  * @param {Object} o o.options
@@ -21,7 +19,7 @@ export function storyRead(o) {
  * Add controller and build UI
  */
 function setUi(o) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     /* display story controls */
     mx.helpers.storyController(o);
 
@@ -47,7 +45,7 @@ function setUi(o) {
  */
 
 function setListeners(o) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     if (o.data.classWrapper) {
       initAdaptiveScreen(o);
     }
@@ -102,7 +100,6 @@ function initKeydownListener(o) {
 function initMouseMoveListener(o) {
   mx.helpers.onNextFrame(function() {
     var timer;
-    var el;
     var destroyed = false;
     var elBody = document.body;
     var elsCtrls = o.data.elMap.querySelectorAll(
@@ -122,7 +119,7 @@ function initMouseMoveListener(o) {
       target: window,
       event: 'mousemove',
       onDestroy: destroy,
-      listener: function(event) {
+      listener: function() {
         if (timer) {
           clearTimeout(timer);
         }
@@ -193,7 +190,6 @@ function initMouseMoveListener(o) {
 function initAdaptiveScreen(o) {
   //var classBase = "mx-story-screen";
   //var classWrapper = "mx-wrapper";
-  var classWrapper = o.data.classWrapper;
   o.data.elStory = document.querySelector('.' + o.classContainer);
   o.data.elMap = o.data.map.getContainer();
   o.data.elMapControls = o.data.elMap.querySelector(
@@ -208,7 +204,6 @@ function initAdaptiveScreen(o) {
   o.data.elMap.classList.add(o.data.classWrapper);
 
   o.data.setWrapperLayout = function(o) {
-    var w, h, scale, origin;
     var scaleWrapper = Math.min(
       window.innerWidth / o.data.rectStory.width,
       window.innerHeight / o.data.rectStory.height
@@ -342,7 +337,7 @@ function initEditing(o) {
         /**
          * On start
          */
-        o.data.ct_editor.addEventListener('start', function(ev) {
+        o.data.ct_editor.addEventListener('start', function() {
           elBtnModalSave.setAttribute('disabled', true);
           elBtnModalPreview.setAttribute('disabled', true);
           //elBtnStoryClose.setAttribute("disabled",true);
@@ -356,7 +351,7 @@ function initEditing(o) {
         /**
          * On cancel
          */
-        o.data.ct_editor.addEventListener('revert', function(ev) {
+        o.data.ct_editor.addEventListener('revert', function() {
           elBtnModalSave.removeAttribute('disabled');
           elBtnModalPreview.removeAttribute('disabled');
           elModalEditView.classList.remove('mx-hide');
@@ -381,7 +376,7 @@ function initEditing(o) {
           if (jed.editors.storyEdit) {
             jed.editors.storyEdit.enable();
           }
-          if (Object.keys(regions).length == 0) {
+          if (Object.keys(regions).length === 0) {
             return;
           }
 
@@ -460,9 +455,11 @@ function contentToolsImageUploader(dialog) {
    * Insert image
    */
   dialog.addEventListener('imageuploader.save', function() {
-    var canvas, ctx, form, blob;
+    var canvas, ctx;
     var h = mx.helpers;
-    if (h.path(mx, 'settings.user.guest')) return;
+    if (h.path(mx, 'settings.user.guest')) {
+      return;
+    }
     canvas = document.createElement('canvas');
     canvas.height = height;
     canvas.width = width;
@@ -609,7 +606,7 @@ function contentToolsImageUploader(dialog) {
  * Clean + init
  */
 function cleanInit(o) {
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     /* Fetch view if not given */
     if (!o.view && o.id && o.idView) {
       var view = mx.helpers.getViews(o);
@@ -651,12 +648,11 @@ function checkMissingView(o) {
   var idViews = views.map((v) => v.id);
   var map = h.getMap(o.id);
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var idViewsStory = h.path(view, 'data.views');
     var isViewsArray = h.isArray(idViewsStory);
     var isViewsString = h.isStringRange(idViewsStory, 1);
     var idViewsToAdd = [];
-    var apiUrlViews = mx.settings.apiUrlViews;
 
     idViewsStory = isViewsArray
       ? idViewsStory
@@ -664,7 +660,7 @@ function checkMissingView(o) {
       ? [idViewsStory]
       : [];
 
-    if (!idViewsStory || idViewsStory.length == 0) {
+    if (!idViewsStory || idViewsStory.length === 0) {
       resolve([]);
     } else {
       /**
@@ -672,7 +668,7 @@ function checkMissingView(o) {
        * ( e.g. if they are from another project )
        */
       idViewsToAdd = idViewsStory.filter((id) => {
-        return idViews.indexOf(id) == -1;
+        return idViews.indexOf(id) === -1;
       });
       resolve(idViewsToAdd);
     }
@@ -683,7 +679,7 @@ function checkMissingView(o) {
        * Retrieved views as object
        */
       viewsToAdd.forEach((view) => {
-        if (views.indexOf(view) == -1) {
+        if (views.indexOf(view) === -1) {
           views.push(view);
         }
         h.addSourceFromView({
@@ -728,7 +724,7 @@ function setScrollData(o) {
  * @param {Function} o.callback Callback function. All options will be provided to this callback function
  */
 function storyOnScroll(o) {
-  var start, data, posNow, posLast;
+  var data, posNow, posLast;
   var nf = mx.helpers.onNextFrame;
 
   /*
@@ -766,7 +762,7 @@ function storyOnScroll(o) {
       // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
       posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
       posLast = data.distTop;
-      if (posLast == posNow) {
+      if (posLast === posNow) {
         nf(loop);
         return false;
       } else {
@@ -886,10 +882,10 @@ export function storyUpdateSlides(o) {
    */
   var data = o.onScrollData;
   var percent = 0;
-  var elsSlides, elSlide;
+  var elsSlides;
   var config;
   var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
-  var classActive = 'mx-story-step-active';
+  //var classActive = 'mx-story-step-active';
 
   for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
     /**
@@ -902,7 +898,7 @@ export function storyUpdateSlides(o) {
 
     isInRange = percent < 75 && percent >= 25;
     isInRangeAnim = percent < 100 && percent >= 0;
-    isActive = data.stepActive == s;
+    isActive = data.stepActive === s;
     toActivate = isInRange && !isActive;
     toRemove = !isInRange && isActive;
 
@@ -960,13 +956,13 @@ function storyHandleKeyDown(event) {
       break;
     case 'ArrowDown':
     case 'ArrowRight':
-      h.storyAutoPlay('stop').then(function(autoplay) {
+      h.storyAutoPlay('stop').then(function() {
         h.storyGoTo('next');
       });
       break;
     case 'ArrowUp':
     case 'ArrowLeft':
-      h.storyAutoPlay('stop').then(function(autoplay) {
+      h.storyAutoPlay('stop').then(function() {
         h.storyGoTo('previous');
       });
       break;
@@ -978,7 +974,9 @@ function storyHandleKeyDown(event) {
 export function storyGoTo(to, useTimeout, funStop) {
   var h = mx.helpers;
   var data = h.path(mx, 'data.story');
-  if (!data || !data.data || !data.data.stepsConfig) return;
+  if (!data || !data.data || !data.data.stepsConfig) {
+    return;
+  }
   var steps = h.path(data, 'view.data.story.steps');
   var stepsDim = h.path(data, 'data.stepsConfig');
   var elStory = data.data.elScroll;
@@ -1002,7 +1000,7 @@ export function storyGoTo(to, useTimeout, funStop) {
   } else if (to === 'next' || to === 'n') {
     nextStep = currentStep + 1;
     destStep = nextStep > maxStep ? 0 : nextStep;
-  } else if (to == 'previous' || to === 'p') {
+  } else if (to === 'previous' || to === 'p') {
     previousStep = currentStep - 1;
     destStep = previousStep < 0 ? maxStep : previousStep;
   } else {
@@ -1036,7 +1034,7 @@ export function storyGoTo(to, useTimeout, funStop) {
     .then(function() {
       return {
         step: destStep,
-        end: destStep == maxStep
+        end: destStep === maxStep
       };
     });
 }
@@ -1047,9 +1045,9 @@ export function storyAutoPlay(cmd) {
   var enabled = data.autoplay || false;
   var playStart = cmd === 'start' && !enabled;
   var playStop = (cmd === 'stop' && enabled) || (cmd === 'start' && enabled);
-  var playNext = cmd == 'next' && enabled;
+  var playNext = cmd === 'next' && enabled;
 
-  return new Promise(function(resolve, reject) {
+  return new Promise(function(resolve) {
     var stopControl = function() {
       return data.autoplay === false;
     };
@@ -1066,7 +1064,7 @@ export function storyAutoPlay(cmd) {
     }
 
     if (playNext) {
-      h.storyGoTo('next', true, stopControl).then(function(res) {
+      h.storyGoTo('next', true, stopControl).then(function() {
         if (data.autoplay) {
           storyAutoPlay('next');
         }
@@ -1225,7 +1223,7 @@ export function storyController(o) {
       enabled: true,
       map: mx.maps[o.id].map,
       views: oldViews,
-      setWrapperLayout: function(o) {},
+      setWrapperLayout: function() {},
       position: mx.helpers.getMapPos(o),
       currentStep: 0,
       hasAerial: mx.helpers.btnToggleLayer({
@@ -1246,7 +1244,9 @@ export function storyController(o) {
     });
 
     o.data.close = function() {
-      if (this && this.hasAttribute && this.hasAttribute('disabled')) return;
+      if (this && this.hasAttribute && this.hasAttribute('disabled')) {
+        return;
+      }
       o.enable = false;
       storyController(o);
     };
@@ -1419,7 +1419,9 @@ function listenerManager(o, config) {
  */
 export function storyBuild(o) {
   var story = mx.helpers.path(o, 'view.data.story');
-  if (!story || !story.steps || story.steps.length < 1) return;
+  if (!story || !story.steps || story.steps.length < 1) {
+    return;
+  }
 
   /**
    * Set default
@@ -1444,8 +1446,8 @@ export function storyBuild(o) {
    */
   var doc = window.document;
   //var divOldStory = doc.getElementById(o.idStory);
+  //var wrapper = doc.querySelector('.' + o.classWrapper);
 
-  var wrapper = doc.querySelector('.' + o.classWrapper);
   var divStory = doc.createElement('div');
   var divStoryContainer = doc.createElement('div');
   var divMap = o.data.map.getContainer();
@@ -1459,7 +1461,10 @@ export function storyBuild(o) {
    * For each steps, build content
    */
   story.steps.forEach(function(step, stepNum) {
-    if (!step.slides) return;
+    if (!step.slides) {
+      return;
+    }
+
     var slides = step.slides;
     var divStep = doc.createElement('div');
     divStep.dataset.step_name = step.name;
@@ -1510,7 +1515,7 @@ export function storyBuild(o) {
       );
       divSlideBack.style.backgroundColor = slide.color_bg || o.colors.bg;
       divSlideBack.style.opacity =
-        slide.opacity_bg == 0 ? 0 : slide.opacity_bg || o.colors.alpha;
+        slide.opacity_bg === 0 ? 0 : slide.opacity_bg || o.colors.alpha;
       divSlide.appendChild(divSlideBack);
 
       divSlide.appendChild(divSlideFront);
@@ -1554,7 +1559,7 @@ export function storyBuild(o) {
  */
 export function storySetTransform(o) {
   var tf = {
-    0: function(p) {
+    0: function() {
       return '';
     },
     1: function(p) {
@@ -1592,8 +1597,12 @@ export function storySetTransform(o) {
     var d = o.data[i];
 
     /* limit percentage to start->end range*/
-    if (p <= d.s) p = d.s;
-    if (p >= d.e) p = d.e;
+    if (p <= d.s) {
+      p = d.s;
+    }
+    if (p >= d.e) {
+      p = d.e;
+    }
 
     /* modify the offset. Default middle is expected to be at 50%*/
     p = p - 50 + d.o;
@@ -1619,11 +1628,10 @@ function getViewsEnabled(o) {
 export function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
-  var view = o.view;
   var steps = mx.helpers.path(o, 'view.data.story.steps');
   var data = mx.helpers.path(mx.data, 'story.data');
   var stepNum = o.stepNum;
-  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove, vBefore;
+  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
   var m = mx.maps[o.id];
 
   data.currentStep = stepNum;
@@ -1651,7 +1659,7 @@ export function storyPlayStep(o) {
   /**
    * Fly to position
    */
-  if (anim.method == 'fitBounds') {
+  if (anim.method === 'fitBounds') {
     if (pos.s && pos.n && pos.e && pos.w) {
       m.map.fitBounds([pos.w, pos.s, pos.e, pos.n]);
       m.map.once('moveend', function() {
