@@ -2,6 +2,7 @@ const modules = {
   'topojson': loadTopoJSON,
   'd3': loadD3,
   'd3-geo': loadD3Geo,
+  'shapefile':loadShapefile,
   'turf-bbox':loadTurfBbox,
   'highcharts': loadHighcharts,
   'json-editor': loadJsonEditor,
@@ -16,7 +17,9 @@ const modules = {
 
 export function moduleLoad(name) {
   const module = modules[name]();
-  if (!module) return Promise.resolve({});
+  if (!module){
+    return Promise.resolve({});
+  }
   return module;
 }
 
@@ -61,7 +64,7 @@ function loadDragDropWorker(){
   return import('./mx_helper_map_dragdrop.worker.js')
     .then((m) => {
       return m.default;
-    })
+    });
 }
 
 function loadWmsCapabilities() {
@@ -130,8 +133,13 @@ function loadHighcharts() {
   });
 }
 
+function loadShapefile(){
+  return import('shapefile');
+}
+
+
 function loadJsonEditor() {
-  return import('json-editor').then(m => {
+  return import('json-editor').then(() => {
     return Promise.all([
       import('../css/mx_jed.css'),
       import('./mx_extend_jed_position.js'),
