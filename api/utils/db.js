@@ -5,6 +5,46 @@ const utils = require('./utils.js');
 const key = settings.db.crypto.key;
 
 /**
+ * Test if a table exists and has rows
+ *
+ * @async
+ * @param {String} id of the table
+ * @return {Promise<Boolean>} Table exists
+ */
+exports.tableHasValues = function(idTable, schema) {
+  schema = schema || 'public';
+  var sqlExists = `
+  SELECT EXISTS (
+   SELECT 1
+   FROM   information_schema.tables 
+   WHERE  table_schema = '${schema}'
+   AND    table_name = '${idTable}'
+   )`;
+  var sqlEmpty = `
+   SELECT count(geom) as n from ${idTable}
+  `;
+  var isThere = false;
+  var hasValues = false;
+
+  return pgRead
+    .query(sqlExists)
+    .then((res) => {
+      isThere = res.rowCount > 0 && res.rows[0].exists !== null;
+      if (!isThere) {
+        return false;
+      } else {
+        return pgRead.query(sqlEmpty);
+      }
+    })
+    .then((res) => {
+      if (res) {
+        hasValues = res.rowCount > 0 && res.rows[0].n * 1 > 0;
+      }
+      return isThere && hasValues;
+    });
+};
+
+/**
  * Decrypt message using default key
  * @param {String} txt Message to decrypt
  * @return {String} decrypted message
@@ -245,15 +285,14 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
     })
     .then(() => {
       /**
-      * Get summary
-      */
+       * Get summary
+       */
       return pgRead.query(sqlValidityStatus);
     })
     .then((res) => {
-
       /**
-      * Default
-      */
+       * Default
+       */
       var out = {
         nValid: 0,
         nInvalid: 0

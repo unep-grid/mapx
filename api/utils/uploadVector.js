@@ -1,17 +1,17 @@
 var settings = require('./../settings');
 var multer = require('multer');
 var fs = require('fs');
-var path = require('path');
 var sendMail = require('./mail.js').sendMail;
 var authenticateHandler = require('./authentification.js').authenticateHandler;
 var spawn = require('child_process').spawn;
 var pgWrite = require.main.require('./db').pgWrite;
 var emailAdmin = settings.mail.config.emailAdmin;
-var template = require('../templates');
 var utils = require('./utils.js');
 var toRes = utils.toRes;
 var removeSource = require('./db.js').removeSource;
 var isLayerValid = require('./db.js').isLayerValid;
+var layerHasValues = require('./db.js').tableHasValues;
+var err = require('./errors.js').handleErrorText;
 
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -48,7 +48,7 @@ module.exports.fileToPostgres = fileToPostgres;
 function convertOgrHandler(req, res, next) {
   msg = '';
   var sourceSrs, fileName, idUser, userToken, idProject;
-  var hasBody = typeof req.body == 'object';
+  var hasBody = typeof req.body === 'object';
 
   if (hasBody) {
     idUser = req.body.idUser * 1;
@@ -84,6 +84,13 @@ function convertOgrHandler(req, res, next) {
       }
     },
     onError: function(data) {
+      res.write(
+        toRes({
+          type: 'error',
+          msg: data.msg
+        })
+      );
+
       sendMail({
         to: [userEmail, emailAdmin].join(','),
         text: data.msg,
@@ -98,7 +105,7 @@ function convertOgrHandler(req, res, next) {
 /**
  * Handler for adding reccord in source table
  */
-function addSourceHandler(req, res, next) {
+function addSourceHandler(req, res) {
   /**
    * TODO: use dedicated function registerOrRemoveSource in db.js
    */
@@ -115,7 +122,6 @@ function addSourceHandler(req, res, next) {
   msg.invalidGeom = `Some geometries were not valid and some MapX functions will therefore not work properly. Please correct those geometries.`;
   msg.titleMailSuccess = `MapX import success for source ${title}`;
   msg.titleMailError = `MapX import failed for source ${title}`;
-
 
   var sqlAddSource = `INSERT INTO mx_sources (
     id, editor, readers, editors, date_modified, type, project, data
@@ -170,12 +176,15 @@ function addSourceHandler(req, res, next) {
       if (email) {
         var mailConf = {
           to: [email],
-          text: isValid ? msg.addedNewEntry : msg.addedNewEntry + '\n' + msg.invalidGeom,
+          text: isValid
+            ? msg.addedNewEntry
+            : msg.addedNewEntry + '\n' + msg.invalidGeom,
           subject: msg.titleMailSuccess
         };
 
         sendMail(mailConf);
       }
+
       res.status(200).end();
     })
     .catch(function(err) {
@@ -265,7 +274,9 @@ function fileToPostgres(config) {
 
   var isZip = fileName.search(/.zip$|.gz$/) !== -1;
 
-  if (!fileName) throw new Error('No filename given');
+  if (!fileName) {
+    throw new Error('No filename given');
+  }
 
   if (isZip) {
     fileName = '/vsizip/' + fileName;
@@ -335,8 +346,8 @@ function fileToPostgres(config) {
   ogr.stderr.on('data', function(data) {
     data = data.toString('utf8');
     onMessage({
-      msg: data,
-      type: 'issue'
+      msg: err(data),
+      type: 'warning'
     });
   });
 
@@ -349,11 +360,30 @@ function fileToPostgres(config) {
       return;
     }
 
-    onMessage({
-      msg: `The import was successful`,
-      type: 'message'
-    });
+    layerHasValues(idSource)
+      .then((has) => {
+        if (has) {
+          onMessage({
+            msg: `The import was successful`,
+            type: 'message'
+          });
 
-    onSuccess(idSource);
+          onSuccess(idSource);
+        } else {
+          onError({
+            code: code,
+            msg: `The import function failed No layer has been created. Verify your logs.`
+          });
+          return;
+        }
+      })
+      .catch((e) => {
+        onError({
+          code: code,
+          msg: `An error occured in import function (${err(e)})`
+        });
+        return;
+      });
   });
 }
+
