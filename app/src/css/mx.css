@@ -172,7 +172,9 @@ blockquote {
 .mx-north-arrow:before {
   icon-font: url('../svg/arrow-north.svg');
 }
-
+.mx-edit-vector:before {
+  icon-font: url('../svg/edit-vector.svg');
+}
 /**
 * Tools
 */
