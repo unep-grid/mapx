@@ -2197,15 +2197,15 @@
   },
   {
     "id": "PSE",
-    "bn": "ফিলিস্তিন অঞ্চলসমূহ",
-    "de": "Palästinensische Autonomiegebiete",
-    "en": "Palestinian Territories",
-    "es": "Territorios Palestinos",
-    "fr": "Territoires palestiniens",
-    "ru": "Палестинские территории",
-    "zh": "巴勒斯坦领土",
-    "fa": "سرزمین‌های فلسطینی",
-    "ps": "الأراضي الفلسطينية"
+    "bn": "ফিলিস্তিন",
+    "de": "Staat Palästina",
+    "en": "State of Palestine",
+    "es": "Estado de Palestina",
+    "fr": "État de Palestine",
+    "ru": "Государство Палестина",
+    "zh": "巴勒斯坦",
+    "fa": "دولت فلسطین",
+    "ps": "د فلسطین دولت"
   },
   {
     "id": "PYF",
