@@ -1,9 +1,8 @@
 var nodemailer = require('nodemailer');
 var settings = require.main.require("./settings");
 var bodyParser = require('body-parser');
-var auth = require("./authentification.js");
+//var auth = require("./authentification.js");
 var mailAdmin = settings.mail.config.admin;
-var clientPgRead = require.main.require("./db").pgRead;
 var decrypt = require("./db.js").decrypt;
 
 module.exports.sendMailApi = [
@@ -38,12 +37,11 @@ function sendMailApi(req,res){
        * Test
        */
       Object.keys(conf).forEach(function(k){
-        if( idKeys.indexOf(k) == -1 ){
+        if( idKeys.indexOf(k) === -1 ){
           issues = issues + " key " + k + " not valid; ";
         }
       });
 
-      console.log( conf );
       if(!issues){
         var d = new Date();
         var dNow = new Date(d.getFullYear() + "-" + (d.getMonth()+1) + "-" + (d.getDate()));
@@ -93,7 +91,6 @@ function  sendMail(opt){
     var transporter = nodemailer.createTransport(settings.mail.config);
     var def = settings.mail.options;
     var options = {};
-    var msg = "";
     options.subject = opt.subject || def.subject ;
     options.text = opt.text || def.text;
     options.html = opt.html || null;
@@ -104,7 +101,6 @@ function  sendMail(opt){
     transporter.sendMail(options, function(error, info){
 
       if(error){
-        console.log(error);
         reject(error);
       }else{
         resolve(info);

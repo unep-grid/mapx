@@ -172,9 +172,9 @@ function getOverlapHandler(req, res) {
  */
 function getOverlapCreateSource(options) {
   var send = options.send;
-  send.message = send.message || console.log;
-  //send.area = send.area || console.log;
-  send.sourceMeta = send.sourceMeta || console.log;
+  send.message = send.message || function(){};
+  //send.area = send.area || function(){};
+  send.sourceMeta = send.sourceMeta || function(){};
 
   var layers = options.layers;
   var nLayers = layers.length;
@@ -311,8 +311,8 @@ function getOverlapArea(options) {
   var countries = options.countries || [];
   var layers = options.layers || [];
 
-  send.message = send.message || console.log;
-  send.area = send.area || console.log;
+  send.message = send.message || cons;
+  send.area = send.area || function(){};
 
   return new Promise((resolve) => {
     send.message(

@@ -79,7 +79,6 @@ function exportHandler(req, res) {
       res.end();
     }
   }).catch((e) => {
-    console.log(e);
     res.write(
       JSON.stringify({
         type: 'error',
@@ -315,11 +314,7 @@ function extractFromPostgres(config, cb) {
         // listen for all archive data to be written
         // 'close' event is fired only when a file descriptor is involved
         zipFile.on('close', function() {
-          console.log(archive.pointer() + ' total bytes');
-          console.log(
-            'archiver has been finalized and the output file descriptor has closed.'
-          );
-
+          
           msg = 'Export success. File available at ';
 
           if (email) {

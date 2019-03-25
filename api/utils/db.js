@@ -151,9 +151,7 @@ function removeSource(idSource) {
   var sqlDrop = {
     text: `DROP TABLE IF EXISTS ${idSource}`
   };
-  console.log('Remove source entry in mx_sources for ' + idSource);
   return pgWrite.query(sqlDrop).then(() => {
-    console.log('Remove table ' + idSource);
     return pgWrite.query(sqlDelete);
   });
 }
