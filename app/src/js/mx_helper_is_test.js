@@ -5,9 +5,15 @@
  * @param {Any} item item to test
  */
 export function isEmpty(item){
-  if( ! item ) return true;
-  if(isObject(item)) return isEqual(item,{});
-  if(isArray(item)) return isEqual(item,[]);
+  if( ! item ){
+    return true;
+  }
+  if(isObject(item)){
+    return isEqual(item,{});
+  }
+  if(isArray(item)){
+    return isEqual(item,[]);
+  }
 }
 
 /**
@@ -60,6 +66,14 @@ export function isArray(item) {
   return (!!item && typeof item === 'object' && Array.isArray(item));
 }
 
+/**
+ * Test if entry is an table (array of object)
+ * @param {Array} item array
+ */
+export function isTable(item) {
+  var h = mx.helpers;
+  return h.isArray(item) && h.all(item.map(i=>h.isObject(i)));
+}
 /**
  * Test if entry is JSON
  * @param {String} String to test
@@ -193,5 +207,6 @@ export function isUrl(url) {
  * @param {String|Number} date to validate
  */
 export function isDateString(date) {
-  return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date);
+  return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) ||
+    /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/.test(date);
 }
