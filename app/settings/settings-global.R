@@ -153,11 +153,6 @@ config[["dictionaries"]] <- list(
     file.path(
       config[[c("resources","data")]],"dict_languages.json"
       )
-    ),
-  schemaMetadata = fromJSON(
-    file.path(
-      config[[c("resources","data")]],"dict_schema_source.json"
-      )
     )
   )
 
@@ -308,7 +303,7 @@ config[["languages"]][["list"]] <- list(
   "فارسی (Dari/Persian)" = "fa",
   "پښتو (Pashto)"="ps"
   )
-
+config[["languages"]][["codes"]] <- unlist(config[["languages"]][["list"]])
 
 #
 # Dictionnary of badwords for the profanity checker

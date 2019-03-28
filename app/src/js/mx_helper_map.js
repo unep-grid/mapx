@@ -4109,7 +4109,7 @@ export function getViewTitle(id, lang) {
     view = mx.helpers.getView(id);
   }
   lang = lang || mx.settings.language;
-  var langs = mx.helpers.objectToArray(mx.settings.languages);
+  var langs = mx.settings.languages;
 
   return mx.helpers.getLabelFromObjectPath({
     obj: view,
