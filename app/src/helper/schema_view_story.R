@@ -300,6 +300,7 @@ mxSchemaViewStory <- function(view,views,language){
     )
 
   slideName = list(
+    propertyOrder = 0,
     type = "string",
     title = tt("schema_story_slide_name")
     )
@@ -321,15 +322,15 @@ mxSchemaViewStory <- function(view,views,language){
       title = tt("schema_story_slide"),
       headerTemplate = "{{ i1 }}. {{ self.name }} ",
       properties = list(
+        name = slideName,
+        html = slideText,
         color_fg = slideColorText,
         color_bg = slideColorBg,
         opacity_bg = slideOpacityBg,
         size_text = slideSizeText,
         effects = slideEffects,
         scroll_enable = slideScroll,
-        classes = slideClasses,
-        html = slideText,
-        name = slideName
+        classes = slideClasses
         )
       ),
     options = list(
@@ -458,12 +459,12 @@ mxSchemaViewStory <- function(view,views,language){
       collapsed = TRUE
       ),
     properties = list(
+      name = stepName,
       slides = stepSlide,
       views = stepMapViews,
       position = stepMapPosition,
       animation = stepMapAnimation,
-      autoplay = stepAutoplay,
-      name = stepName
+      autoplay = stepAutoplay
       )
     )
 
