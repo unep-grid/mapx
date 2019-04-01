@@ -16,10 +16,10 @@
 }
 
 
-.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo) {
+.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo),
+.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo) * {
   color: var(--mx_ui_link);
   text-decoration: none;
-  border-bottom:1px solid var(--mx_ui_link);
 }
 
 
