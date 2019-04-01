@@ -6,7 +6,8 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
   # 
   # PArtial use of codes from from  https://geo-ide.noaa.gov/wiki/index.php?title=ISO_19115_and_19115-2_CodeList_Dictionaries#MD_GeometricObjectTypeCode
 
-  dict =  .get(config,c("dictionaries","schemaMetadata"))
+  #dict =  .get(config,c("dictionaries","schemaMetadata"))
+  dict = config$dict
 
   #
   # Counter to keep property in the same order as described here 
