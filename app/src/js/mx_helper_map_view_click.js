@@ -222,6 +222,16 @@ export function handleViewClick(o) {
         }
       },
       {
+        comment: 'target is the view meta button',
+        test: el.dataset.view_action_key === 'btn_opt_meta',
+        action: function() {
+          console.log("meta button clicked");
+          var idView = el.dataset.view_action_target;
+          console.log("Meta requested for view ",idView);
+          h.viewToMetaModal(idView);
+        }
+      },
+      {
         idAction: 'click_meta_raster_open',
         comment: 'target is the raster metadata link',
         test: el.dataset.view_action_key === 'btn_opt_meta_external',

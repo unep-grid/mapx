@@ -1,4 +1,5 @@
-var path = require('path');
+const path = require('path');
+const zlib = require("zlib");
 
 /**
  * Conversion of array of column names to pg columns
@@ -39,9 +40,45 @@ exports.parseTemplate = parseTemplate;
  * Send string for result message
  * @param {Object} obj object to be converted in string for messages
  */
-exports.toRes = function(obj) {
+exports.toRes = toRes; 
+function toRes(obj) {
   return JSON.stringify(obj) + '\t\n';
+}
+/**
+* Simple json to zip to res
+* @param {Object} re Result object
+* @param {Object} data Data stringifiable to JSON
+*/
+exports.sendJSON = function(res,data,end){
+  end = end === true || false;
+  return dataToJsonZip(data)
+    .then((zip) => {
+      res.setHeader('Cache-Control', 'public, max-age=3600');
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Encoding', 'gzip');
+      if(end){
+        res.send(zip);
+      }else{
+        res.write(zip);    
+      }
+    });
 };
+
+/**
+* Simple send error wrapper
+* @param {Object} res Result object
+* @param {Error} error Error object
+* @return null
+*/
+exports.sendError = function(res,error){
+  res.send(
+    toRes({
+      type: 'error',
+      msg: error.message
+    })
+  );
+};
+
 
 /**
  * Simple boolean converter.
@@ -116,23 +153,8 @@ exports.readTxt = function(p) {
  */
 exports.ip = {
   get: function(req, res) {
-    var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    res.send(ip.split(',')[0].trim());
+    res.send(req.ip);
   }
-};
-
-/**
- * Get source metadata
- * @param {String} idLayer id of the layer
- */
-exports.getSourceMetadata = function(id) {
-  var pgRead = require.main.require('./db').pgRead;
-  var template = require('../templates');
-  var sql = parseTemplate(template.getSourceMetadata, {
-    idSource: id
-  });
-
-  return pgRead.query(sql);
 };
 
 /**
@@ -158,6 +180,26 @@ exports.attrToPgCol = function(attribute, attributes) {
   return toPgColumn(attr);
 };
 
+/**
+* Send json as zip in res with proper header
+* @param {Object} data to send
+* @return {Promise} Promise object with zip buffer
+*/
+exports.dataToJsonZip = dataToJsonZip;
+function dataToJsonZip(data){
+  const buffer = new Buffer(JSON.stringify(data), 'utf-8');
+  return new Promise((resolve, reject) => {
+    zlib.gzip(buffer, function (err, zOut ) {
+      if(err){
+        reject(err);
+      }else{
+        resolve(zOut);
+      }
+    });
+  });
+}
+
+
 /*
  * Export methods
  */
@@ -165,6 +207,7 @@ exports.view = require('./getView.js');
 exports.source = require('./getSource.js');
 exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');
+exports.viewMetadata =  require('./getViewMetadata.js');
 exports.sourceOverlap = require('./getOverlap.js');
 exports.sourceValidityGeom = require('./getSourceValidityGeom.js');
 exports.image = require('./uploadImage.js');

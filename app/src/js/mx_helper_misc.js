@@ -11,37 +11,32 @@ export function removeServiceWorker() {
   }
 }
 
-
-
 /**
-* Set click handler mode
-* @param {Object} opt options
-* @param {String} opt.type  Type of handler : dashboard, draw, ...
-* @param {Boolean} opt.enable Enable this handler
-*/
-export function setClickHandler(opt){
-
+ * Set click handler mode
+ * @param {Object} opt options
+ * @param {String} opt.type  Type of handler : dashboard, draw, ...
+ * @param {Boolean} opt.enable Enable this handler
+ */
+export function setClickHandler(opt) {
   var type = opt.type;
   var enable = opt.enable;
 
-  if(!type || typeof enable === 'undefined'){
+  if (!type || typeof enable === 'undefined') {
     return;
   }
 
   var posClickHandler = mx.settings.clickHandlers.indexOf(type);
   var hasClickHandler = posClickHandler > -1;
-  if( enable && !hasClickHandler ){
+  if (enable && !hasClickHandler) {
     mx.settings.clickHandlers.push(type);
   }
-  if(!enable && hasClickHandler){
-    mx.settings.clickHandlers.splice(posClickHandler,1);
+  if (!enable && hasClickHandler) {
+    mx.settings.clickHandlers.splice(posClickHandler, 1);
   }
-
 }
-export function getClickHandlers(){
+export function getClickHandlers() {
   return mx.settings.clickHandlers;
 }
-
 
 /**
  * Get url query parameter by name
@@ -53,9 +48,9 @@ export function getUrlParameter(name) {
   var regexS = '[\\?&]' + name + '=([^&#]*)';
   var regex = new RegExp(regexS);
   var results = regex.exec(window.location.href);
-  if (results === null){
+  if (results === null) {
     return '';
-  }else{ 
+  } else {
     return results[1];
   }
 }
@@ -215,7 +210,7 @@ export function parseTemplate(template, data) {
  * @param {String} icon fontawesome name
  */
 export function iconFlash(icon) {
-  if (typeof icon === 'object'){
+  if (typeof icon === 'object') {
     icon = icon.icon;
   }
 
@@ -296,7 +291,7 @@ export function cancelFrameRequest(id) {
 export function cssTransformFun() {
   return (function() {
     /* Create dummy div to explore style */
-    if (typeof document === 'undefined'){
+    if (typeof document === 'undefined') {
       return;
     }
 
@@ -382,7 +377,7 @@ export function uiFold(o) {
   var id = makeId();
   var type = o.type || 'caret';
 
-  if (!content){
+  if (!content) {
     return;
   }
   open = open || false;
@@ -401,7 +396,7 @@ export function uiFold(o) {
   elContent.classList.add(classScroll);
   elLabel.classList.add(classLabel);
 
-  if (o.labelClass){
+  if (o.labelClass) {
     elLabel.classList.add(o.labelClass);
   }
   elLabel.setAttribute('for', id);
@@ -454,7 +449,7 @@ export function mergeDeep(target, source) {
   if (mx.helpers.isObject(target) && mx.helpers.isObject(source)) {
     Object.keys(source).forEach((key) => {
       if (mx.helpers.isObject(source[key])) {
-        if (!(key in target)){
+        if (!(key in target)) {
           Object.assign(output, {[key]: source[key]});
         } else {
           output[key] = mergeDeep(target[key], source[key]);
@@ -483,8 +478,9 @@ export function objectToHTML(o) {
   var classGroup = 'list-group';
   var classGroupItem = 'list-group-item';
   var classGroupItemValue = ['list-group-item-member'];
+  var el = mx.helpers.el;
 
-  if (classValue){
+  if (classValue) {
     classGroupItemValue.concat(classValue);
   }
 
@@ -498,33 +494,41 @@ export function objectToHTML(o) {
 
   function makeUl(li) {
     var l,
+      elLi,
       k,
       keys = [];
-    var ul = document.createElement('ul');
-    ul.classList.add(classGroup);
+
+    var ul = el('ul', {
+      class: classGroup
+    });
+
     var isObject = mx.helpers.isObject(li);
     var isArray = mx.helpers.isArray(li);
 
-    if (isObject){
+    if (isObject) {
       keys = Object.keys(li);
     }
-    if (isArray){
+
+    if (isArray) {
       for (var i = 0, iL = li.length; i < iL; i++) {
         keys.push(i);
       }
     }
+
     for (var j = 0, jL = keys.length; j < jL; j++) {
       k = keys[j];
       l = isArray ? k + 1 : k;
-      ul.appendChild(makeLi(li[k], l));
+      elLi = makeLi(li);
+      ul.appendChild(elLi, l);
     }
     return ul;
   }
 
   function makeLi(it, ti) {
-    var li = document.createElement('li');
-    var content = document.createElement('div');
-    li.classList.add(classGroupItem);
+    var li = el('li', {
+      class: classGroupItem
+    });
+    var content = el('div');
 
     if (it.constructor === Object || it.constructor === Array) {
       content.appendChild(
@@ -583,7 +587,7 @@ export function round(n, d) {
 }
 
 export function formatZeros(num, n) {
-  if (typeof num !== 'number'){
+  if (typeof num !== 'number') {
     return num;
   }
   num = mx.helpers.round(num, n);
@@ -591,7 +595,7 @@ export function formatZeros(num, n) {
   n = n || 3;
   var a = num.split('.');
   var b = a[1];
-  if (!b){
+  if (!b) {
     b = '';
   }
   for (var i = 0; b.length < n; i++) {
@@ -643,14 +647,14 @@ export function debounce(func, wait, immediate) {
       args = arguments;
     var later = function() {
       timeout = null;
-      if (!immediate){
+      if (!immediate) {
         func.apply(context, args);
       }
     };
     var callNow = immediate && !timeout;
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
-    if (callNow){
+    if (callNow) {
       func.apply(context, args);
     }
   };
@@ -668,7 +672,7 @@ export function toString(i) {
  * Get uniques meta word from view.
  */
 export function getDistinctIndexWords(view) {
-  if (!view){
+  if (!view) {
     return;
   }
   /*
@@ -1006,7 +1010,7 @@ export function makeId(n) {
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   n = n * 1 > 0 ? n * 1 : 5;
 
-  for (var i = 0; i < n; i++){
+  for (var i = 0; i < n; i++) {
     text += possible.charAt(Math.floor(Math.random() * possible.length));
   }
 
@@ -1052,7 +1056,7 @@ export function doPar(o) {
     end: o.onEnd || console.log
   };
 
-  if (script){
+  if (script) {
     s = "importScripts('" + self.origin + '/' + script + "');";
   }
   var m =
@@ -1126,7 +1130,7 @@ StackButton.prototype.build = function() {
   this.elBtn = elBtn;
   this.elFront = elFront;
   this.elBack = elBack;
-  if (this.config.elContainer){
+  if (this.config.elContainer) {
     this.config.elContainer.appendChild(elBtn);
   }
   this.setClasses();
@@ -1233,7 +1237,7 @@ export function searchToObject() {
     value;
 
   for (i in pairs) {
-    if (pairs[i] === ''){
+    if (pairs[i] === '') {
       continue;
     }
 
@@ -1333,7 +1337,7 @@ export function getSizeOf(obj, humanReadable) {
             var objClass = Object.prototype.toString.call(obj).slice(8, -1);
             if (objClass === 'Object' || objClass === 'Array') {
               for (var key in obj) {
-                if (!obj.hasOwnProperty(key)){
+                if (!obj.hasOwnProperty(key)) {
                   continue;
                 }
                 sizeOf(obj[key]);
@@ -1361,17 +1365,14 @@ export function getSizeOf(obj, humanReadable) {
  * Format byte to human readable value
  */
 export function formatByteSize(bytes) {
-  if (bytes < 1024){
+  if (bytes < 1024) {
     return bytes + ' bytes';
-  }
-  else if (bytes < 1048576){
+  } else if (bytes < 1048576) {
     return (bytes / 1024).toFixed(3) + ' KiB';
-  }
-  else if (bytes < 1073741824){
+  } else if (bytes < 1073741824) {
     return (bytes / 1048576).toFixed(3) + ' MiB';
-  }
-  else {
-   return (bytes / 1073741824).toFixed(3) + ' GiB';
+  } else {
+    return (bytes / 1073741824).toFixed(3) + ' GiB';
   }
 }
 
@@ -1407,20 +1408,20 @@ export function scrollFromTo(o) {
   return new Promise(function(resolve) {
     setTimeout(function() {
       mx.helpers.onNextFrame(function() {
-        if (axis === 'y'){
+        if (axis === 'y') {
           bodyDim = document.body.clientHeight || 800;
         }
-        if (axis === 'x'){
+        if (axis === 'x') {
           bodyDim = document.body.clientWidth || 800;
         }
         if (!diff || diff === 0) {
           resolve(true);
         } else if (Math.abs(diff) > bodyDim * 1.5) {
           // instant scroll
-          if (axis === 'y'){
+          if (axis === 'y') {
             o.el.scrollTop = o.to;
           }
-          if (axis === 'x'){
+          if (axis === 'x') {
             o.el.scrollLeft = o.to;
           }
 
@@ -1430,17 +1431,17 @@ export function scrollFromTo(o) {
           duration = o.during || 1000;
           // scroll on next frame
           onNextFrame(function step(timestamp) {
-            if (!start){
+            if (!start) {
               start = timestamp;
             }
 
             time = timestamp - start;
             percent = easing(Math.min(time / duration, 1));
 
-            if (axis === 'y'){
+            if (axis === 'y') {
               o.el.scrollTop = o.from + diff * percent;
             }
-            if (axis === 'x'){
+            if (axis === 'x') {
               o.el.scrollLeft = o.from + diff * percent;
             }
 
@@ -1523,16 +1524,16 @@ export function jsDebugMsg(m) {
 export function hide(m) {
   var element, prefix;
 
-  if (!m || !(m.class || m.id)){
+  if (!m || !(m.class || m.id)) {
     return;
   }
-  if (!m.hideClass){
+  if (!m.hideClass) {
     m.hideClass = 'mx-hide';
   }
-  if (m.hide === undefined){
+  if (m.hide === undefined) {
     m.hide = true;
   }
-  if (m.hide === undefined){
+  if (m.hide === undefined) {
     m.disable = true;
   }
 
@@ -1572,7 +1573,7 @@ export function hide(m) {
  */
 export function panelSwitch(classGroup, classItem, classHide, callback) {
   var elsGroup = document.querySelectorAll('.' + classGroup);
-  if (!classHide){
+  if (!classHide) {
     classHide = 'mx-hide';
   }
   mx.helpers.forEachEl({
@@ -1583,14 +1584,14 @@ export function panelSwitch(classGroup, classItem, classHide, callback) {
 
       if (isItem && isHidden) {
         el.classList.remove(classHide);
-        if (callback){
+        if (callback) {
           callback('on');
         }
       }
 
       if (isItem && !isHidden) {
         el.classList.add(classHide);
-        if (callback){
+        if (callback) {
           callback('off');
         }
       }
@@ -1612,10 +1613,10 @@ export function panelSwitch(classGroup, classItem, classHide, callback) {
 export function classAction(o) {
   var el, hasClass;
 
-  if (!o.class){
+  if (!o.class) {
     o.class = 'mx-hide';
   }
-  if (!o.action){
+  if (!o.action) {
     o.action = 'toggle';
   }
 
@@ -1669,12 +1670,18 @@ export function forEachEl(o) {
 
 /**
  * Get an object content an push it in an array
- * @param {object} obj Object to convert
+ * @param {object} obj Object to convert,
+ * @param {Boolean} asTable Produce an array of key-value object like [{key:'id',value:'123'}]
  * @return {array}
  */
-export function objectToArray(obj) {
+export function objectToArray(obj, asTable) {
+  asTable = asTable === true || false;
   return Object.keys(obj).map(function(key) {
-    return obj[key];
+    if (asTable) {
+      return {key: key, value: obj[key]};
+    } else {
+      return obj[key];
+    }
   });
 }
 
@@ -1692,7 +1699,7 @@ export function parentFinder(o) {
     el = document.querySelector(o.selector);
   }
 
-  while ((el = el.parentElement) && !el.classList.contains(o.class)){
+  while ((el = el.parentElement) && !el.classList.contains(o.class)) {
     return el;
   }
 }
@@ -1748,16 +1755,16 @@ export function progressScreen(o) {
   lScreenContainer = document.querySelector('.loading-container');
 
   if (!enable) {
-    if (lScreen){
+    if (lScreen) {
       lScreen.remove();
     }
-    if (lScreenBack){
+    if (lScreenBack) {
       lScreenBack.remove();
     }
     return;
   }
 
-  if (!id || !percent || !text){
+  if (!id || !percent || !text) {
     return;
   }
 
@@ -1797,7 +1804,7 @@ export function progressScreen(o) {
 
   if (percent >= 100) {
     lItem = document.getElementById(id);
-    if (lItem){
+    if (lItem) {
       lItem.remove();
     }
   } else {
@@ -1807,7 +1814,7 @@ export function progressScreen(o) {
 
   lItems = lScreenContainer.getElementsByClassName('loading-item');
 
-  if (lItems.length === 0){
+  if (lItems.length === 0) {
     progressScreen({enable: false});
   }
 }
@@ -1818,7 +1825,7 @@ export function progressScreen(o) {
  */
 export function clone(obj) {
   var copy;
-  if (obj === undefined || obj === null){
+  if (obj === undefined || obj === null) {
     return {};
   }
   if (obj.constructor === Array) {
@@ -1830,7 +1837,7 @@ export function clone(obj) {
   } else if (obj.constructor === Object) {
     copy = {};
     for (var prop in obj) {
-      if (!obj.hasOwnProperty(prop)){
+      if (!obj.hasOwnProperty(prop)) {
         continue;
       }
       copy[prop] = clone(obj[prop]);
@@ -1857,11 +1864,11 @@ export function htmlToData(o) {
     } else {
       el = document.querySelector(o.selector);
     }
-    if (!el){
+    if (!el) {
       resolve(undefined);
     }
 
-    if (!o.scale){
+    if (!o.scale) {
       o.scale = 1;
     }
     /**
@@ -1992,7 +1999,7 @@ export function injectHead(items) {
   var s = items.scripts || [];
   var c = items.css || [];
 
-  if (!mx.data.headItems){
+  if (!mx.data.headItems) {
     mx.data.headItems = {};
   }
 
@@ -2040,7 +2047,7 @@ export function getBrowserData() {
  */
 export function copyText(id) {
   var elText = document.getElementById(id);
-  if (!elText){
+  if (!elText) {
     return;
   }
   elText.select();
@@ -2050,7 +2057,7 @@ export function copyText(id) {
 
 export function shareTwitter(id) {
   var elText = document.getElementById(id);
-  if (!elText){
+  if (!elText) {
     return;
   }
   var url = elText.value || elText.innerHTML || '';
@@ -2064,7 +2071,7 @@ export function shareTwitter(id) {
     hashtags: 'mapx'
   };
 
-  for (var prop in params){
+  for (var prop in params) {
     shareURL += '&' + prop + '=' + encodeURIComponent(params[prop]);
   }
 
@@ -2081,7 +2088,7 @@ export function updateLogScroll(selector) {
   selector = selector || '.mx-logs';
   var elLogs =
     selector instanceof Element ? selector : document.querySelector(selector);
-  if (!elLogs){
+  if (!elLogs) {
     return;
   }
   var h = elLogs.getBoundingClientRect();
@@ -2145,7 +2152,7 @@ export function handleRequestMessage(msg, msgs, on) {
           var msg = isObject ? m.msg : m;
           var type = m.type || 'default';
 
-          if (msgs[msg]){
+          if (msgs[msg]) {
             return;
           }
 

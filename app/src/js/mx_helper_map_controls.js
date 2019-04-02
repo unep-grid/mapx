@@ -280,7 +280,8 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnDrawMode: {
-      classes: 'fa fa-pencil',
+      //classes: 'fa fa-pencil',
+      classes: 'mx-edit-vector',
       key: 'btn_draw_mode',
       action: function(e) {
         mx.helpers.drawModeToggle(e);

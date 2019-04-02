@@ -11,8 +11,8 @@ r = function(path){
   jsonlite::fromJSON(path)
 }
 
-
 message("Read dictionaries")
+
 dicts <- rbind(
   r("src/data/dict_main.json"),
   r("src/data/dict_languages.json")
@@ -20,9 +20,14 @@ dicts <- rbind(
 
 langs <- names(dicts)
 langs <- langs[!langs  %in% "id"]
+langDefault <- "en"
 
 for(l in langs){
-  j = jsonlite::toJSON(dicts[,c('id','en',l)])
+  if( l == langDefault ){
+    j = jsonlite::toJSON(dicts[,c('id',langDefault)])
+  }else{
+    j = jsonlite::toJSON(dicts[,c('id',langDefault,l)])
+  }
   message(paste("Write dict for ",l))
   write(j,sprintf("%1$s/dict_%2$s.json",pathDest,l))
 }

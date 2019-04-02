@@ -1,18 +1,23 @@
 
-table tbody {
-  display: block;
-  max-height: 450px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+/*table tbody {*/
+  /*display: block;*/
+  /*max-height: 450px;*/
+  /*overflow-y: auto;*/
+  /*overflow-x: hidden;*/
+/*}*/
 
-table thead,
-table tbody tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
-}
+/*table thead,*/
+/*table tbody tr {*/
+  /*display: table;*/
+  /*width: 100%;*/
+  /*table-layout: fixed;*/
+/*}*/
 
-table .col-33 {
-  width: 33%;
-}
+/*table .col-33 {*/
+  /*width: 33%;*/
+/*}*/
+
+/*table th, table td {*/
+  /*padding: 15px;*/
+  /*text-align: left;*/
+/*}*/

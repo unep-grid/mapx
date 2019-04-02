@@ -2252,7 +2252,7 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, geomType=NULL,language
       #"source_meta"=summary$layerMeta
       ),
     lang=language,
-    dict=.get(config,c("dictionaries","schemaMetadata"))
+    dict=.get(config,c('dict'))
     )
 
   list(

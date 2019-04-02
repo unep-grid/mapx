@@ -265,9 +265,9 @@ function fileToPostgres(config) {
 
   var fileName = config.fileName;
   var sourceSrs = config.sourceSrs;
-  var onMessage = config.onMessage || function(m){};
-  var onError = config.onError || function(m){};
-  var onSuccess = config.onSuccess || function(m){};
+  var onMessage = config.onMessage || function(){};
+  var onError = config.onError || function(){};
+  var onSuccess = config.onSuccess || function(){};
   var idSource = utils.randomString('mx_vector', 4, 5).toLowerCase();
 
   process.chdir(settings.vector.path.temporary);

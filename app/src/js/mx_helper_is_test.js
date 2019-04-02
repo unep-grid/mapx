@@ -4,15 +4,15 @@
  * Test if entry is empty : empty array, empty string, etc.
  * @param {Any} item item to test
  */
-export function isEmpty(item){
-  if( ! item ){
+export function isEmpty(item) {
+  if (!item) {
     return true;
   }
-  if(isObject(item)){
-    return isEqual(item,{});
+  if (isObject(item)) {
+    return isEqual(item, {});
   }
-  if(isArray(item)){
-    return isEqual(item,[]);
+  if (isArray(item)) {
+    return isEqual(item, []);
   }
 }
 
@@ -21,24 +21,50 @@ export function isEmpty(item){
  * @param {Object} item
  */
 export function isObject(item) {
-  return (!!item && typeof item === 'object' && !Array.isArray(item));
+  return !!item && typeof item === 'object' && !Array.isArray(item);
 }
 
 /**
-* Test if it's a MapX view. 
-* @param {Object} item to test
-*/
-export function isView(item){
-  return mx.helpers.isObject(item) && 
-  mx.helpers.isString(item.type) &&
-  !!item.type.match(/^(vt|rt|cc||sm)$/);
+ * Test if it's a MapX view.
+ * @param {Object} item to test
+ */
+export function isView(item) {
+  return (
+    isObject(item) &&
+    mx.helpers.isString(item.type) &&
+    !!item.type.match(/^(vt|rt|cc||sm)$/)
+  );
 }
 
 /**
-* Test for promise
-* @param {Promise} item item to test
-*/
-export function isPromise(item){
+ * Test if item is an language object, e.g. as defined in json schema
+ * @param {Object} item to test
+ */
+export function isLanguageObject(item) {
+  const h = mx.helpers;
+  var languages = mx.settings.languages;
+  return (
+    isObject(item) &&
+    function() {
+      // loop optimisation parse the map before isObject, wich is bad
+      // inside a function it stays here
+      return h.all(Object.keys(item).map((l) => languages.indexOf(l) > -1));
+    }()
+  );
+}
+export function isLanguageObjectArray(arr) {
+  const h = mx.helpers;
+  return isArray(arr) && function(){
+      // loop optimisation parse the map before isObject, wich is bad
+      // inside a function it stays here
+      return h.all(arr.map(isLanguageObject));
+  }();
+}
+/**
+ * Test for promise
+ * @param {Promise} item item to test
+ */
+export function isPromise(item) {
   return item instanceof Promise;
 }
 
@@ -46,7 +72,7 @@ export function isPromise(item){
  * Test for canvas
  * @param {Element} item item to test
  */
-export function isCanvas(item){
+export function isCanvas(item) {
   return item instanceof HTMLCanvasElement;
 }
 
@@ -54,8 +80,8 @@ export function isCanvas(item){
  * Test for fontawesome icon class
  * @param {Element} item item to test
  */
-export function isIconFont(item){
-  return isElement(item) && item.classList.contains("fa");
+export function isIconFont(item) {
+  return isElement(item) && item.classList.contains('fa');
 }
 
 /**
@@ -63,7 +89,7 @@ export function isIconFont(item){
  * @param {Array} item array
  */
 export function isArray(item) {
-  return (!!item && typeof item === 'object' && Array.isArray(item));
+  return !!item && typeof item === 'object' && Array.isArray(item);
 }
 
 /**
@@ -71,8 +97,10 @@ export function isArray(item) {
  * @param {Array} item array
  */
 export function isTable(item) {
-  var h = mx.helpers;
-  return h.isArray(item) && h.all(item.map(i=>h.isObject(i)));
+  const h = mx.helpers;
+  return h.isArray(item) && function(){ 
+    return h.all(item.map((i) => h.isObject(i)));
+  }();
 }
 /**
  * Test if entry is JSON
@@ -91,8 +119,16 @@ export function isJson(str) {
  * Test if entry is numeric
  * @param {String|Number} n string or number to test
  */
-export function isNumeric(n){
+export function isNumeric(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
+}
+
+/**
+ * Test if entry is boolean
+ * @param {Boolean} b boolean to test
+ */
+export function isBoolean(b) {
+  return b === true || b === false;
 }
 
 /**
@@ -101,13 +137,15 @@ export function isNumeric(n){
  * @param {Number} min Minumum number of characters. Default 0.
  * @param {Number} max Maximum number of characters. Default Infinity.
  */
-export function isStringRange(str,min,max){
+export function isStringRange(str, min, max) {
   min = min || 0;
   max = max || Infinity;
-  var isValid = !! str && typeof str === 'string';
-  if( !isValid ) return false;
+  var isValid = !!str && typeof str === 'string';
+  if (!isValid) {
+    return false;
+  }
   str = str.trim();
-  return  str.length >= min && str.length <= max;
+  return str.length >= min && str.length <= max;
 }
 
 /**
@@ -115,31 +153,32 @@ export function isStringRange(str,min,max){
  * @param {String} n string to test
  * @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193
  */
-export function isHTML(str){
-  var test = RegExp.prototype.test.bind(/(<([^>]+)>)/i);
-  return test(str);
+export function isHTML(str) {
+  return isString(str) && /(<([^>]+)>)/i.test(str);
 }
 
 /**
  * Test if entry is an email
  * @param {String} email
  */
-export function isEmail(email){
-  return /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email);
+export function isEmail(email) {
+  return isString(email) && /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+    email
+  );
 }
 
 /**
  * Test if entry is string
  * @param {String} str string to test
  */
-export function isString(str){
-  return typeof str === "string";
+export function isString(str) {
+  return typeof str === 'string';
 }
 /**
  * Test if entry is function
  * @param {Function} fun Function to test
  */
-export function isFunction(fun){
+export function isFunction(fun) {
   return fun instanceof Function;
 }
 
@@ -151,7 +190,6 @@ export function isElement(obj) {
   return obj instanceof Element;
 }
 
-
 /**
  * Test for object equality
  *
@@ -161,34 +199,57 @@ export function isElement(obj) {
  * @param {Object} y Second object to compare
  * @return {Boolean} Are those object equal ?
  */
-export function isEqual(x,y){
+export function isEqual(x, y) {
   'use strict';
   /**
-   * 
+   *
    *
    */
-  if (x === null || x === undefined || y === null || y === undefined) { return x === y; }
+  if (x === null || x === undefined || y === null || y === undefined) {
+    return x === y;
+  }
   // after this just checking type of one would be enough
-  if (x.constructor !== y.constructor) { return false; }
+  if (x.constructor !== y.constructor) {
+    return false;
+  }
   // if they are functions, they should exactly refer to same one (because of closures)
-  if (x instanceof Function) { return x === y; }
+  if (x instanceof Function) {
+    return x === y;
+  }
   // if they are regexps, they should exactly refer to same one (it is hard to better equality check on current ES)
-  if (x instanceof RegExp) { return x === y; }
-  if (x === y || x.valueOf() === y.valueOf()) { return true; }
-  if (Array.isArray(x) && x.length !== y.length) { return false; }
+  if (x instanceof RegExp) {
+    return x === y;
+  }
+  if (x === y || x.valueOf() === y.valueOf()) {
+    return true;
+  }
+  if (Array.isArray(x) && x.length !== y.length) {
+    return false;
+  }
 
   // if they are dates, they must had equal valueOf
-  if (x instanceof Date) { return false; }
+  if (x instanceof Date) {
+    return false;
+  }
 
   // if they are strictly equal, they both need to be object at least
-  if (!(x instanceof Object)) { return false; }
-  if (!(y instanceof Object)) { return false; }
+  if (!(x instanceof Object)) {
+    return false;
+  }
+  if (!(y instanceof Object)) {
+    return false;
+  }
 
   // recursive object equality check
   var p = Object.keys(x);
-  return Object.keys(y).every(function (i) { return p.indexOf(i) !== -1; }) &&
-    p.every(function (i) { return isEqual(x[i], y[i]); });
-
+  return (
+    Object.keys(y).every(function(i) {
+      return p.indexOf(i) !== -1;
+    }) &&
+    p.every(function(i) {
+      return isEqual(x[i], y[i]);
+    })
+  );
 }
 
 /**
@@ -198,15 +259,24 @@ export function isEqual(x,y){
  * @note https://mathiasbynens.be/demo/url-regex
  */
 export function isUrl(url) {
-  return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(url);
+  return (
+    isString(url) &&
+    /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:[/?#]\S*)?$/i.test(
+      url
+    )
+  );
 }
-
 
 /**
  * Validate date
  * @param {String|Number} date to validate
  */
 export function isDateString(date) {
-  return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) ||
-    /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/.test(date);
+  return (
+    isString(date) &&
+    (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date) ||
+      /(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d)|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d)/.test(
+        date
+      ))
+  );
 }

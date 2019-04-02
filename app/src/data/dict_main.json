@@ -431,7 +431,7 @@
     "fa": "",
     "ps": ""
   },
-    {
+  {
     "id": "source_overlap_mode_area",
     "en": "Calculate area of intersection",
     "fr": "Calculer l'aire de chevauchement",
@@ -443,7 +443,7 @@
     "fa": "",
     "ps": ""
   },
-    {
+  {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
     "fr": "Créer une nouvelle couche basée sur l'intersection",
@@ -1428,7 +1428,7 @@
     "fa": "",
     "ps": ""
   },
-{
+  {
     "id": "title_config_highlight",
     "en": "Highlight tool configuration",
     "fr": "Configuration de l'outil de mise en évidence",
@@ -2172,7 +2172,7 @@
     "fa": "لغو",
     "ps": "لغوه کړی"
   },
-   {
+  {
     "id": "login_pwd_mail_sent",
     "en": "An email has been sent, please check your inbox and copy the received password in the field below",
     "fr": "Un email a été envoyé, merci de relever votre courrier et de copier le mot de passe reçu dans le champ ci-dessous",
@@ -2184,7 +2184,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "login_pwd_mail_sent_error",
     "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
     "fr": "Une erreur est survenue, nous ne sommes pas en mesure de vous envoyer le mot de passe à usage unique. Merci d'essayer ultérieurement.",
@@ -3420,7 +3420,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "source_validate_title",
     "en": "Geometry validation tool",
     "fr": "Outil de validation des géometries",
@@ -3444,7 +3444,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
     "fr": "Utiliser les résultat en cache – si existant – au lieu de recalculer",
@@ -3456,7 +3456,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "source_validate_geom_auto_correct",
     "en": "Try an automatic correction ( experimental )",
     "fr": "Tenter une correction automatique ( expérimental )",
@@ -3551,7 +3551,7 @@
     "bn": "",
     "fa": "تعداد  قیمت های از دست رفته یا خالی",
     "ps": "د لاسه وتلو او یا خالي قیمتونو تعداد"
-  },  
+  },
   {
     "id": "source_sum_n_row",
     "en": "Number of values",
@@ -5760,7 +5760,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "update_app_msg",
     "en": "MapX has been updated, click on the button to install new version",
     "fr": "MapX a été mis à jour, cliquez sur le bouton pour installer",
@@ -5772,7 +5772,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fr": "Supprimer les données en cache",
@@ -5784,7 +5784,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "title_utilities",
     "en": "Utilities",
     "fr": "Utilitaires",
@@ -5832,7 +5832,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
     "fr": "Validation avancée",
@@ -5843,8 +5843,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_title",
     "en": "Metadata validation",
     "fr": "Validation des métadonnées",
@@ -5855,8 +5855,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_no_issue",
     "en": "Metadata are valid.",
     "fr": "Les métadonnées sont valides.",
@@ -5867,8 +5867,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_attribute",
     "en": "Attributes",
     "fr": "Attributs",
@@ -5879,8 +5879,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_attribute",
     "en": "Invalid attribute description entry",
     "fr": "Description d'attribut invalide",
@@ -5891,8 +5891,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_abstract",
     "en": "Abstract",
     "fr": "",
@@ -5903,8 +5903,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_abstract",
     "en": "Invalid abstract",
     "fr": "Résumé invalide",
@@ -5915,8 +5915,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_title",
     "en": "Title",
     "fr": "Titre",
@@ -5927,8 +5927,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_title",
     "en": "Invalid title",
     "fr": "Titre invalide",
@@ -5939,8 +5939,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_keyword",
     "en": "Keywords",
     "fr": "Mot-clefs",
@@ -5951,8 +5951,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_no_keyword",
     "en": "Missing keywords",
     "fr": "Mots clefs manquants",
@@ -5963,8 +5963,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_keyword",
     "en": "Invalid keywords",
     "fr": "Mots clefs invalides",
@@ -5975,8 +5975,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_contact",
     "en": "Contacts",
     "fr": "Contacts",
@@ -5987,8 +5987,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_no_contact",
     "en": "Missing contact",
     "fr": "Contacts manquant",
@@ -5999,8 +5999,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_contact_email",
     "en": "Invalid contact email",
     "fr": "Email de contact invalide",
@@ -6011,8 +6011,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_issuance",
     "en": "Issuance",
     "fr": "Émission",
@@ -6023,8 +6023,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_issuance_periodicity",
     "en": "Invalid periodicity",
     "fr": "Périodicité invalide",
@@ -6035,8 +6035,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_issuance_released_at",
     "en": "Invalid date of release",
     "fr": "Date de sortie invalide",
@@ -6047,8 +6047,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_issuance_modified_at",
     "en": "Invalid date of modification",
     "fr": "Date de modification invalide",
@@ -6059,8 +6059,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_license",
     "en": "License",
     "fr": "Licence",
@@ -6071,8 +6071,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_no_license",
     "en": "Missing license",
     "fr": "Licence manquante",
@@ -6083,8 +6083,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_license",
     "en": "Invalid license",
     "fr": "Licence invalide",
@@ -6095,8 +6095,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_source",
     "en": "Source",
     "fr": "Source",
@@ -6107,8 +6107,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_no_source",
     "en": "Source missing",
     "fr": "Source manquante",
@@ -6119,8 +6119,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_source",
     "en": "Invalid source",
     "fr": "Source invalide",
@@ -6131,8 +6131,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "validate_meta_invalid_external_link",
     "en": "Invalid external link",
     "fr": "Lien externe invalide",
@@ -6143,8 +6143,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
     "fr": "Email du dernier éditeur",
@@ -6155,8 +6155,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
- {
+  },
+  {
     "id": "tooltip_diaf_score",
     "en": "Integrity \n Score: {{score}} Positive: {{yes}} Negative: {{no}} Partial: {{part}} Unknown: {{unknown}} ",
     "fr": "Integrity \n Score: {{score}} Positif: {{yes}} Negatif: {{no}} Partiel: {{part}} No renseigné: {{unknown}} ",
@@ -6167,7 +6167,1947 @@
     "bn": "",
     "fa": "",
     "ps": ""
- },
+  },
+  {
+    "id": "additional_doc_desc",
+    "en": "If any, list of additional documents",
+    "fr": "Si applicable, liste des documents additionnels",
+    "es": "Si aplica, lista de documentos adicionales",
+    "fa": "اگر هر گونه، لست اسناد اضافی",
+    "ps": "که د اضافي اسنادو کوم نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "additional_doc_items_desc",
+    "en": "Related documents such as technical information about a dataset",
+    "fr": "Documents liés, par example documentation technique, article scientifique ou autre",
+    "es": "Documentos relacionados, por ejemplo documentos técnicos, artículos científicos u otros",
+    "fa": "اسناد مرتبط مثل اطلاعات تخنیکی در باره مجموعه اطلاعات",
+    "ps": "ورته اسناد لکه د ډیټابیس په هکله تخنیکي معلومات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "additional_doc_items_title",
+    "en": "List of annexes",
+    "fr": "Liste des annexes",
+    "es": "Lista de anexos",
+    "fa": "لست ضمایم",
+    "ps": "د ضمیمو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "additional_doc_item_title",
+    "en": "Document",
+    "fr": "Document",
+    "es": "Documentos",
+    "fa": "سند",
+    "ps": "اسناد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "additional_doc_item_url",
+    "en": "URL to the document",
+    "fr": "URL pointant vers le document",
+    "es": "URL hacia el documento",
+    "fa": "برای سند URL ",
+    "ps": "د سند لپاره URL",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "additional_doc_title",
+    "en": "Annexes",
+    "fr": "Annexes",
+    "es": "Anexos",
+    "fa": "ضمایم ",
+    "ps": "ضمیمې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "annually",
+    "en": "Data is updated every year",
+    "fr": "La donnée est mise à jour chaque année",
+    "es": "Los datos son actualizados cada año",
+    "fa": "اطلاعات هر ساله تجدید می شوند",
+    "ps": "ډیټا هر کال نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "as_needed",
+    "en": "Data is updated as deemed necessary",
+    "fr": "La donnée est mise à  jour lorsque cela est nécessaire",
+    "es": "Los datos son actualizados cada vez que sea necesario",
+    "fa": "اطلاعات به صورت ضروری تجدید می شوند",
+    "ps": "دیټا د اړتیا په صورت کې نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+
+  {
+    "id": "attribute_item_title",
+    "en": "Attribute",
+    "fr": "Attribut",
+    "es": "Atributo",
+    "fa": "ویژه گی ",
+    "ps": "ځانګېړنه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attribute_name_title",
+    "en": "Attribute name",
+    "fr": "Nom de l'attribut",
+    "es": "Nombre del atributo",
+    "fa": "نام ویژه گی ",
+    "ps": "د ځانګېړنې نوم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_list_title",
+    "en": "Attributes list",
+    "fr": "Liste d'attributs",
+    "es": "Lista de atributos",
+    "fa": "لست ویژه گی ها",
+    "ps": "د ځانګېړنو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_desc_title",
+    "en": "Attributes description",
+    "fr": "Description des attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_desc_desc",
+    "en": "Description of the attributes contained in the data",
+    "fr": "Description des attributs de la donnée",
+    "es": "Descripción de los atributos de la base de datos",
+    "fa": "شرح ویژه گی های که در اطلاعات موجود می باشد",
+    "ps": "د ځانګېړنو په هکله تفصیلات په ډیتا کې شتون لري.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attribute_desc_item_title",
+    "en": "Description",
+    "fr": "Description",
+    "es": "Descripción",
+    "fa": "شرح",
+    "ps": "تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_alias_title",
+    "en": "Alias for attributes names",
+    "fr": "Alias des noms d'attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attributes_alias_desc",
+    "en": "Set attributes short names (alias)",
+    "fr": "Définir des noms courts (alias) pour les attributs",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "attribute_alias_item_title",
+    "en": "Alias",
+    "fr": "Alias",
+    "es": "",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "biannually",
+    "en": "Data is updated twice each year",
+    "fr": "La donnée est mise à  jour deux fois par an",
+    "es": "Los datos son actualizados dos veces por año",
+    "fa": "اطلاعات دو بار در سال تجدید می شوند",
+    "ps": "ډیټا په کال کې دوه ځله نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "confirm_source_remove",
+    "en": "Are you sure to delete the source with all related views and metadata ? This can't be undone",
+    "fr": "Êtes-vous certain de vouloir supprimer cette source ainsi que toutes les vues et métadonnées liées ? L'opération ne peut pas être annulée.",
+    "es": "¿Está seguro de eliminar el recurso con todas las vistas y metadatos relacionados? La operación no podrá ser anulada",
+    "fa": "آیا مطمئن هستید که منبع را با تمام مشاهدات و ابرداده های مرتبط حذف شود؟ این کار را نمیتوان لغو کرد",
+    "ps": "آیا تاسو ډاډه یاست چې سرچینه د ټولو مربوطه لیدنو او میټا ډیټا سره پاکه کړئ؟ دا بیا نه موندل کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_address",
+    "en": "Contact address",
+    "fr": "Addresse du contact",
+    "es": "Dirección del contacto",
+    "fa": "آدرس مخاطب",
+    "ps": "د مخاطب پته",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_desc",
+    "en": "Information about people or organisation related to this data",
+    "fr": "Information sur les personnes ou organisations liées à la donnée",
+    "es": " Información de contacto de la persona o organización relacionados con datos",
+    "fa": "معلومات مربوط به افراد یا سازمان مرتبط به این اطلاعات",
+    "ps": "د هغو افرادو او سازمانونو په هکله معلومات چې په دې ډیټا پورې اړه لري",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_email",
+    "en": "Contact email",
+    "fr": "Email du contact",
+    "es": "Correo electrónico del contacto",
+    "fa": "ایمل مخاطب",
+    "ps": "د مخاطب د بریښنالیک پته",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_function",
+    "en": "Function",
+    "fr": "Fonction",
+    "es": "Función",
+    "fa": "عملکرد",
+    "ps": "فعالیت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_function_desc",
+    "en": "Name of the contact function, e.g. Administrator, Publisher",
+    "fr": "Nom de la fonction du contact : par ex. Administrateur, Editeur",
+    "es": "Nombre de la función del contacto. Ej. Administrador",
+    "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر ",
+    "ps": "د فعایت کوونکو مخاطبینو نومونه، لکه: اداره کوونکی، خپروونکی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_item_title",
+    "en": "Contact",
+    "fr": "Contact",
+    "es": "Contacto",
+    "fa": "مخاطب",
+    "ps": "مخاطبین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_list_title",
+    "en": "List of contacts",
+    "fr": "Liste des contacts",
+    "es": "Lista de contactos",
+    "fa": "لست مخاطبین",
+    "ps": "د مخاطبینو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_name",
+    "en": "Contact name",
+    "fr": "Nom du contact",
+    "es": "Nombre del contacto",
+    "fa": "نام مخاطب  ",
+    "ps": "د مخاطبینو نومونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "contact_title",
+    "en": "Contacts",
+    "fr": "Contacts",
+    "es": "Contactos",
+    "fa": "مخاطبین",
+    "ps": "مخاطبین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "continual",
+    "en": "Data is repeatedly and frequently updated",
+    "fr": "La donnée est mise à  jour en continu",
+    "es": "Los datos son actualizados con frecuencia",
+    "fa": "اطلاعات مکرراَ و دوره ایی تجدید شده اند",
+    "ps": "ډیټا په دوامدار او دوراني ډول نوې کیږي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "daily",
+    "en": "Data is updated each day",
+    "fr": "La donnée est mise à  jour chaque jour",
+    "es": "Los datos son actualizados todos los días",
+    "fa": "اطلاعات هر روز تجدید شده اند",
+    "ps": "ډیټا هره ورځ نوې کیږي.",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "fortnightly",
+    "en": "Data is updated every two weeks",
+    "fr": "La donnée est mise à  jour 2 fois par mois",
+    "es": "Los datos son actualizados 2 veces por mes",
+    "fa": "اطلاعات هر دو هفته تجدید می شوند",
+    "ps": "ډيټا هرې دوه اوونۍ وروسته نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "irregular",
+    "en": "Data is updated in intervals that are uneven in duration",
+    "fr": "La donnée est mise à jour de manière irrégulière",
+    "es": "Los datos son actualizados de manera irregular",
+    "fa": "اطلاعات در فواصل زمانی که در طول زمان ناهموار هستند تحدید می شوند",
+    "ps": "ډیټا د نا معلومو دورو لپاره  تازه شوي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "lang_desc",
+    "en": "Language(s) used in content",
+    "fr": "Langue(s) utilisée(s) dans le contenu",
+    "es": "Lengua(s) utilizada(s) en el contenido",
+    "fa": "زبان (زبانهای) که در محتوا استفاده شده است",
+    "ps": "په متن کې کارول شوې ژبه یا ژبې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "lang_item_title",
+    "en": "Language",
+    "fr": "Langue",
+    "es": "Lengua",
+    "fa": "زبان",
+    "ps": "ژبه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "lang_list_desc",
+    "en": "Two letters code of languages",
+    "fr": "Code de deux lettres minuscules",
+    "es": "Código de dos letras en minúscula ",
+    "fa": "دو دستورالعمل نامه از زبان ها",
+    "ps": "د ژبې دوه توریز کوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "lang_list_title",
+    "en": "List of languages",
+    "fr": "Liste des langues",
+    "es": "Lista de lenguas",
+    "fa": "لست زبان ها",
+    "ps": "د ژبو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "lang_title",
+    "en": "Language",
+    "fr": "Langue",
+    "es": "Lengua",
+    "fa": "زبان",
+    "ps": "ژبه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_allow_download",
+    "en": "Allow download source",
+    "fr": "Autoriser le téléchargement",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_desc",
+    "en": "If any, description of the data licenses",
+    "fr": "Si applicable, description des licences de la donnée",
+    "es": "Si aplica, descripción de la licencias de los datos",
+    "fa": "اگر هر گونه، شرح مجوز اطلاعات",
+    "ps": "که د ډیټا د جواز هر ډول تشریح",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_item_title",
+    "en": "License",
+    "fr": "Licence",
+    "es": "Licencia",
+    "fa": "مجوز",
+    "ps": "جواز",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_list_desc",
+    "en": "Name and/or description of the licence",
+    "fr": "Nom et/ou description de la licence",
+    "es": "Nombre o descripción de la licencia",
+    "fa": "نام و/یا شرح مجوز",
+    "ps": "د جواز نوم او یا تشریح",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_list_title",
+    "en": "List of licences",
+    "fr": "Liste des licences",
+    "es": "Lista de licencias",
+    "fa": "لست مجوز ",
+    "ps": "د جوازونو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_name",
+    "en": "Name",
+    "fr": "Nom",
+    "es": "Nombre",
+    "fa": "نام",
+    "ps": "نوم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_text",
+    "en": "Text",
+    "fr": "Texte",
+    "es": "Texto",
+    "fa": "متن",
+    "ps": "متن",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "license_title",
+    "en": "Licensing",
+    "fr": "Licence",
+    "es": "Licencias",
+    "fa": "صدور مجوز",
+    "ps": "جواز ورکونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "maintainer",
+    "en": "Maintainer",
+    "fr": "Mainteneur",
+    "es": "Encargado de mantenimiento",
+    "fa": "نگهدارنده",
+    "ps": "ساتونکئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "monthly",
+    "en": "Data is updated each month",
+    "fr": "La donnée est mise à  jour tous les mois",
+    "es": "Los datos son actualizados todos los meses",
+    "fa": "اطلاعات هر ماه تجدید می شوند",
+    "ps": "ډیټا په میاشتني ډول نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_error_duplicate",
+    "en": "This source already exists and is available for you",
+    "fr": "Cette source existe déjà et est disponible pour vous",
+    "es": "Este recurso ya existe y está disponible para usted",
+    "fa": "این منبع از قبل موجود و در دسترس شما است",
+    "ps": "دا سرچینه له مخکې شتون لري او ستاسو لپاره د لاسرسي وړ ده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_error_import",
+    "en": "Data was not imported",
+    "fr": "La donnée n'a pas été importée",
+    "es": "Los datos no fueron importados",
+    "fa": "اطلاعات وارد نشد ",
+    "ps": "ډیټا داخله نه شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_process_wait",
+    "en": "Data is processed, please wait",
+    "fr": "La donnée est préparée, veuillez attendre",
+    "es": "Procesando datos, por favor, espere",
+    "fa": "اطلاعات پروسس شد، لطفا صبر نمایید",
+    "ps": "ډیټا پروسس شوه، مهرباني وکړئ په تمه اوسئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_success_delete",
+    "en": "Source successfully removed",
+    "fr": "Source supprimée avec succès",
+    "es": "Recurso eliminado exitosamente",
+    "fa": "ابرداده با موفقیت حذف شد",
+    "ps": "سرچینه په بریالیتوب سره پاکه شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_success_import",
+    "en": "Data imported successfully",
+    "fr": "Donnée importée avec succès",
+    "es": "Datos importados exitosamente",
+    "fa": "اطلاعات با موفقیت وارد شدند",
+    "ps": "ډیټا په بریالیتوب سره داخله شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "msg_success_update",
+    "en": "Meta data successfully updated",
+    "fr": "Métadonnées mises à jour",
+    "es": "Matadatos actualizados",
+    "fa": "ابرداده با موفقیت به روز شد ",
+    "ps": "میټا ډیټا په بریالیتوب سره نوې شوه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+
+  {
+    "id": "not_planned",
+    "en": "There are no plans to update the data",
+    "fr": "La donnée n'a pas de mise à jour prévue",
+    "es": "No hay planes para actualizar los datos",
+    "fa": "هیچ برنامه ای برای تجدید اطلاعات وجود ندارد",
+    "ps": "د ډیټا د نوي کولو کوم پلان شتون نلرې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "optional_view_show_attribute_preview",
+    "en": "Show a summary of the attributes names and values",
+    "fr": "Afficher un résumé des attributs",
+    "es": "Monstrar resumen de los nombres y valores de los atributos",
+    "fa": "خلاصه ای از نام های ویژه گی و مقادیر را نمایش دهید",
+    "ps": "د ځانګیړنو د نومونو او ارزښتونو لنډیز ښکاره کړئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "optional_view_text",
+    "en": "Select an attribute from the source to create a simple view or click on finish to end the importation",
+    "fr": "Sélectionnez un attribut de la source pour créer une vue simple ou cliquez sur finir pour terminer l'importation,",
+    "es": "Seleccione un atributo para crear una vista simple o haga clic en Finalizar para finalizar la importación",
+    "fa": "یک ویژگی از منبع برای ایجاد یک نمای ساده انتخاب کنید یا روی دکمه پایان کلیک کنید تا واردات را پایان دهید",
+    "ps": "د ساده لیدنې لپاره د سرچینې څخه ځانګیړنه وټاکئ او یا د داخلولو د پای لپاره پای کیکاږئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "optional_view_title",
+    "en": "Optional creation of a new view",
+    "fr": "Création facultative d'une nouvelle vue",
+    "es": "Creación opcional de una vista",
+    "fa": "ایجاد اختیاری یک نمای جدید",
+    "ps": "د نوې لیدنې اختیاري جوړونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_desc",
+    "en": "Origin of the data and how to retrieve it",
+    "fr": "Origine de la donnée et comment la récupérer",
+    "es": "Origen de los datos y cómo puedo obtenerlos",
+    "fa": "اصلیت اطلاعات و روش بازیابی آن",
+    "ps": "د ډیټا اصلیت او د بیا ترلاسه کولو څرنګوالئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_homepage_desc",
+    "en": "Homepage for the data",
+    "fr": "Page d'accueil de la donnée",
+    "es": "Página principal de los datos",
+    "fa": "صفحه اصلی برای اطلاعات",
+    "ps": "د اطلاعاتو لپاره اصلي صفحه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_homepage_item_title",
+    "en": "Homepage (URL)",
+    "fr": "Page d'accueil (URL)",
+    "es": "Página principal (URL)",
+    "fa": "صفحه اصلی (URL)",
+    "ps": "اصلي صفحه (URL)",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_homepage_title",
+    "en": "Homepage",
+    "fr": "Page d'accueil",
+    "es": "Página principal",
+    "fa": "صفحه اصلی",
+    "ps": "اصلي صفحه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_source_is_full_request_title",
+    "en": "The url contain a request to retrieve the data automatically",
+    "fr": "L'URL contient une requête pour récupérer automatiquement la donnée",
+    "es": "La URL contiene una consulta para recuperar automáticamente los datos",
+    "fa": " دارایی یک درخواست جهت بازیابی اطلاعات به شکل خودکار میباشد URL",
+    "ps": " کې په اتومات ډول سره د ډیټا د بیا ترلاسه کولو لپاره غوښتنلیک شتون لری  URLپه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_sources_desc",
+    "en": "Method to retrieve the data",
+    "fr": "Méthode de récupération de la donnée",
+    "es": "Método para obtener los datos",
+    "fa": "روش بازیابی اطلاعات",
+    "ps": "د ډیټا د بیا ترلاسه کولو میټوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_sources_list",
+    "en": "List of sources",
+    "fr": "Liste des sources",
+    "es": "Lista de recursos",
+    "fa": "لست منابع",
+    "ps": "د سرچینو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_sources_title",
+    "en": "Sources",
+    "fr": "Sources",
+    "es": "Recursos en línea",
+    "fa": "منابع",
+    "ps": "سرچینې",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_source_title",
+    "en": "Source",
+    "fr": "Source",
+    "es": "Recurso",
+    "fa": "منبع",
+    "ps": "سرچینه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_source_url_title",
+    "en": "URL",
+    "fr": "URL",
+    "es": "URL",
+    "fa": "URL",
+    "ps": "URL",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "origin_title",
+    "en": "Source",
+    "fr": "Origine",
+    "es": "Información de distribución",
+    "fa": "منبع",
+    "ps": "سرچینه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "other",
+    "en": "Other",
+    "fr": "Autre",
+    "es": "Otros",
+    "fa": "سایر",
+    "ps": "نور",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "quarterly",
+    "en": "Data is updated every three months",
+    "fr": "La donnée est mise à  jour tous les trois mois",
+    "es": "Los datos son actualizados cada tres meses",
+    "fa": "اطلاعات هر سه ماه تجدید می شوند",
+    "ps": "ډیټا هرې درې اوونۍ وروسته نوې کیږي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_desc",
+    "en": "Metadata editor for map-x sources.",
+    "fr": "Editeur de métadonnées pour les sources de map-x.",
+    "es": "Editor de los metadatos para los recursos de Map-x.",
+    "fa": "ویرایشگر ابرداده برای منابع MAP-X",
+    "ps": "د map-x سرچینو لپاره د میټا دیټا ایډیټ کوونکی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_title",
+    "en": "Map-x metadata",
+    "fr": "Métadonnées map-x",
+    "es": "Metadatos Map-x",
+    "fa": "ابرداده یی MAP-X",
+    "ps": "د map-x میټاډیټا",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "select_optional_view_attribute",
+    "en": "Select attribute",
+    "fr": "Selectionnez un attribut",
+    "es": "Seleccione un atributo",
+    "fa": "ویژه گی را انتخاب نمایید",
+    "ps": "ځانګیړنه وتاکئ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_desc",
+    "en": "Spatial bounding box of the data using latitude and longitude",
+    "fr": "Délimitation spatiale en latitude et longitude",
+    "es": "Delimitación espacial en longitud y latitud",
+    "fa": "جبعه محدود فضایی  اطلاعات که از عرض و طول جغرافیایی استفاده می کنند",
+    "ps": "د ډیټا فضایي محدوده بکسه د طول البلد او عرض البلد څخه په ګټه اخیسنتې سره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_lat_max",
+    "en": "Max. latitude",
+    "fr": "Latitude max.",
+    "es": "Latitud max.",
+    "fa": "بیشترین. عرض جغرافیای ",
+    "ps": "تر ټولو لوی عرض البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_lat_min",
+    "en": "Min. latitude",
+    "fr": "Latitude min.",
+    "es": "Latitud min.",
+    "fa": "کمترین. عرض جغرافیایی",
+    "ps": "تر ټولو کوچونی عرض البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_lng_max",
+    "en": "Max. longitude",
+    "fr": "Longitude max.",
+    "es": "Longitud max.",
+    "fa": "بیشترین. طول جغرافیای ",
+    "ps": "تر ټولو لوی طول البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_lng_min",
+    "en": "Min. longitude",
+    "fr": "Longitude min.",
+    "es": "Longitud min.",
+    "fa": "کمترین. طول جغرافیایی",
+    "ps": "تر ټولو کوچونی طول البلد",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_bbx_title",
+    "en": "Bounding box",
+    "fr": "Délimitation spatiale",
+    "es": "Delimitación espacial",
+    "fa": "جبعه محدود",
+    "ps": "محدوده بکسه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_desc",
+    "en": "Description of the data using spatial reference: bounding box, and spatial reference system (SRS)",
+    "fr": "Description spatiale de la donnée avec délimitation spatiale et système de coordonnées (SRS)",
+    "es": "Descripción espacial de los datos con la delimitación espacial y sistema de coordenadas (SRS)",
+    "fa": "شرح اطلاعات که منبع فضایی استفاده می کنند: جبعه محدود، و سیستم منبع فضایی (SRS)",
+    "ps": "د ډیټا په اړه تفصیلات د فضایي سرچینو څخه په ګټه اخیستنه: محدود بکس او د فضایي سرچینو سیسټم (SRS).",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_srs_code",
+    "en": "Code of the SRS",
+    "fr": "Code du système de coordonnées",
+    "es": "Código del sistema de coordenadas",
+    "fa": "دستورالعمل SRS",
+    "ps": "د SRS کوډ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_srs_desc",
+    "en": "Description of the spatial reference system",
+    "fr": "Description du système de coordonnées",
+    "es": "Descripción del sistema de coordenadas",
+    "fa": "شرح سیستم منبع فضایی",
+    "ps": "د فضایي سرچینو د سیسټم په اړه تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_srs_desc_url",
+    "en": "URL to the SRS code definition",
+    "fr": "URL vers la définition du code du système de coordonnées",
+    "es": "URL de la definición del código del sistema de coordenadas",
+    "fa": " SRS برای تعریف دستورالعمل URL",
+    "ps": "د SRS د URL د دستورالعمل در تعریف لپاره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_srs_title",
+    "en": "Spatial reference system",
+    "fr": "Système de coordonnées",
+    "es": "Sistema de coordenadas",
+    "fa": "سیستم منبع فضایی",
+    "ps": "د فضایي سرچینو سیسټم",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "spatial_title",
+    "en": "Spatial",
+    "fr": "Spatial",
+    "es": "Espacial",
+    "fa": "فضایی",
+    "ps": "فضایي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "summary_attribute",
+    "en": "Summary ",
+    "fr": "Résumé",
+    "es": "Resumen",
+    "fa": "خلاصه",
+    "ps": "لنډیز",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_desc",
+    "en": "Modality and restriction of access to the data",
+    "fr": "Modalité et restriction d'accès à la donnée",
+    "es": "Modalidad de restricción de acceso a los datos",
+    "fa": "چگونگی محدودیت دسترسی به اطلاعات",
+    "ps": "ډیټا ته د لاسرسي څرنګوالئ او محدودیت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_role_item_title",
+    "en": "Role",
+    "fr": "Rôle",
+    "es": "Rol",
+    "fa": "نقش",
+    "ps": "نقش",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_roles_read_title",
+    "en": "Roles allowed to read",
+    "fr": "Rôles autorisés à lire",
+    "es": "Roles autorizados para leer",
+    "fa": "نقش های مجاز برای خواندن",
+    "ps": " د لوستلو لپاره مجاز نقشونه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_roles_admin_title",
+    "en": "Roles allowed to manage",
+    "fr": "Rôles autorisés à administrer",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_roles_get_title",
+    "en": "Roles allowed to download",
+    "fr": "Rôles autorisés à télécharger",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_roles_list_title",
+    "en": "List of roles",
+    "fr": "Liste des rôles",
+    "es": "Lista de roles",
+    "fa": "لست نقش ها",
+    "ps": "د نقشونو نوملړ",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_roles_title",
+    "en": "Roles",
+    "fr": "Rôles",
+    "es": "Roles",
+    "fa": "نقش ها",
+    "ps": "قوانین",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "target_title",
+    "en": "Access",
+    "fr": "Accès",
+    "es": "Acceso",
+    "fa": "دسترسی",
+    "ps": "لاسرسی",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_desc",
+    "en": "Description of the dataset using temporal references: periodicity, initial release, update and range",
+    "fr": "Description de la donnée au moyen de références temporelles : périodicité, date de publication, etc",
+    "es": "Descripción de la base de datos utilizando referencias temporales: Periodicidad, creación, actualización y rango",
+    "fa": "شرح مجموعه اطلاعات با استفاده منابع موقتی: پخش اولیه، تجدید و محدوده",
+    "ps": "د ډیټابیس په اړه تفصیلات د موقتې سرچینې څخه په ګټه اخیستنه: دوره، لمړنی نشر، تازه او محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_issuance_desc",
+    "en": "Description if the data issuance",
+    "fr": "Information sur l'émission de la donnée",
+    "es": " Información sobre la emisión de los datos",
+    "fa": "شرح انتشار اطلاعات",
+    "ps": "ا اطلاعاتو د خپرولو تفصیلات",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_issuance_title",
+    "en": "Issuance",
+    "fr": "Emission",
+    "es": "Emisión",
+    "fa": "صدور  ",
+    "ps": "خپرول",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_periodicity",
+    "en": "Periodicity",
+    "fr": "Périodicité",
+    "es": "Periodicidad",
+    "fa": "دوره ایی",
+    "ps": "دوره اي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_periodicity_desc",
+    "en": "Frenquency with wich data is published or updated",
+    "fr": "Fréquence de publication ou de mise à jour de la donnée",
+    "es": "Frecuencia con la que los datos son publicados o actualizados",
+    "fa": "دوره ای که در آن اطلاعات پخش یا تجدید می شود",
+    "ps": "د ډیټا د خپرولو او یا نوي کولو تکراریت",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_range_desc",
+    "en": "The temporal range of the data",
+    "fr": "L'étendue temporelle de la donnée",
+    "es": "El rango temporal de los datos",
+    "fa": "محدوده موقتی اطلاعات",
+    "ps": "د ډیټا موقتي محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_range_end",
+    "en": "End",
+    "fr": "Fin",
+    "es": "Final",
+    "fa": "ختم",
+    "ps": "پای",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_range_start",
+    "en": "Start",
+    "fr": "Début",
+    "es": "Inicio",
+    "fa": "شروع",
+    "ps": "پیل",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_range_timeless",
+    "en": "There is no time range for this data",
+    "fr": "Il n'y a pas d'étendue temporelle pour la donnée",
+    "es": "No hay rango de tiempo para los datos",
+    "fa": "محدوده زمانی برای این اطلاعات موجود نمی باشد ",
+    "ps": "ددې ډیټا لپاره د وخت محدوده شتون نلري",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_range_title",
+    "en": "Range",
+    "fr": "Etendue",
+    "es": "Rango",
+    "fa": "محدوده",
+    "ps": "محدوده",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_release_desc",
+    "en": "Date of formal issuance",
+    "fr": "Date d'émission officielle",
+    "es": "Fecha de la emision oficial",
+    "fa": "تاریخ صدور رسمی ",
+    "ps": "د خپرولو رسمي نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_release_title",
+    "en": "Release date",
+    "fr": "Date d'émission",
+    "es": " Fecha de emisión",
+    "fa": "تاریخ پخش ",
+    "ps": "د خپرولو نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_title",
+    "en": "Temporal",
+    "fr": "Temporel",
+    "es": "Temporal",
+    "fa": "موقتی",
+    "ps": "موقتي",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_update_desc",
+    "en": "Date of the latest update",
+    "fr": "Date de dernière mise à jour de la donnée",
+    "es": "Fecha de la última actualización",
+    "fa": "تاریخ آخرین تجدید",
+    "ps": "د وروستني نوي کولو نیټه",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "temporal_update_title",
+    "en": "Last update",
+    "fr": "Dernière mise à jour",
+    "es": "Última actualización",
+    "fa": "اخرین تجدید",
+    "ps": "وروستی نوی کول",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_desc",
+    "en": "Textual description of the data using title, abstract and tags",
+    "fr": "Description de la donnée : titre, résumé et tags",
+    "es": "Descripción de los datos: Título, resumen y etiquetas",
+    "fa": "شرح متنی اطلاعات با استفاده عنوان، چکیده و علامت ها",
+    "ps": "د ډیټا متني تفصیلات له عنوان، لنډیز او نښانو څخه په ګتې اخیستنې سره",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_desc_notes",
+    "en": "Additional notes",
+    "fr": "Notes additionnelles",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_desc_abstract",
+    "en": "Abstract",
+    "fr": "Résumé",
+    "es": "Resumen",
+    "fa": "چکیده",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_desc_title",
+    "en": "Title",
+    "fr": "Titre",
+    "es": "Título",
+    "fa": "عنوان",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_keyword_desc",
+    "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
+    "fr": "Mots clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique.",
+    "es": "Las palabras claves (o etiquetas) permiten a los usuarios encontrar los datos. Inserte términos utilizados por personas con un perfil técnico y no técnico.",
+    "fa": "کلید واژه ها (یا علامت ها) کاربران را  برای کشف اطلاعات شان  کمک می کند. لطفاً اصطلاحات را که  توسط کاربران تخصصی و غیر تخصصی مورد استفاده قرار میگیرد٬ را اضافه نمایید.",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_keyword_item_title",
+    "en": "Keyword",
+    "fr": "Mot clé",
+    "es": "Palabra clave",
+    "fa": "کلید واژه",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_keywords_title",
+    "en": "Keywords list",
+    "fr": "Liste de mots clés",
+    "es": "Lista de palabras claves",
+    "fa": "لست کلید واژه ها",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keywords",
+    "fr": "Mots clés",
+    "es": "Palabras claves",
+    "fa": "کلید واژه ها",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_title",
+    "en": "Textual",
+    "fr": "Texte",
+    "es": "Texto",
+    "fa": "متنی",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "unknown",
+    "en": "Frequency of maintenance for the data is not known",
+    "fr": "La donnée n'a pas de fréquence de mise à jour connue",
+    "es": "La frecuencia de actualización de los datos no se conoce",
+    "fa": "فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "weekly",
+    "en": "Data is updated on a weekly basis",
+    "fr": "La donnée est mise à  jour chaque semaine",
+    "es": "Los datos son actualizados cada semana",
+    "fa": "اطلاعات به صورت هفته وار تجدید می شوند",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "fr": "Métadonnées complètes de la source",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "fr": "Résumé des métadonnées de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "fr": "Id de l'éditeur",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "fr": "Id de tous les éditeurs",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "fr": "Métadonnées de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary",
+    "fr": "Résumé",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "fr": "Aperçu des changements",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "fr": "N. de changements",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "fr": "Editeur",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "fr": "Dernière édition",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "fr": "Titre de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "fr": "Résumé",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of viewing",
+    "fr": "Nombre de visualisations",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_stat_n_distinct_user",
+    "en": "Number of distinct users",
+    "fr": "Nombre d'utilisateurs distincts",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "fr": "Titre",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "fr": "Abstract",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "fr": "Notes",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "fr": "Mots clefs",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "fr": "Langues de la donnée",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "fr": "Liste des personnes de contacts",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "fr": "Périodicité",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "fr": "Date de sortie",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "fr": "Date de modification",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "fr": "Date de début des valeurs de la donnée",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "fr": "Date de fin des valeurs de la donnée",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "fr": "Donnée sans valeur temporelle",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_projects_titles",
+    "en": "Also published in those projects",
+    "fr": "Aussi publié dans ces projets",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Project",
+    "fr": "Projet",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "fr": "Projets",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "fr": "Id de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_classes",
+    "en": "Themes",
+    "fr": "Thèmes",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "fr": "Collections",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "fr": "Date de modification",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "fr": "Date de création",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "fr": "Editeur",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "fr": "Groupes avec accès en édition",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "fr": "Groupes avec accès en lecture",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "fr": "Type",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "fr": "Résumé de la vue",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "fr": "Id de la source",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "fr": "Résumé de la source",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "fr": "Page d'accueil de la source",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "fr": "Score d'intégrité",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "fr": "Étendue temporelle",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "fr": "De",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "fr": "A",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
   {
     "id": "data_integrity_desc",
     "en": "Evaluation of the data integrity",
@@ -6655,7 +8595,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }, 
+  },
   {
     "id": "wms_select_layer",
     "en": "Select layer",
@@ -6667,7 +8607,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }, 
+  },
   {
     "id": "wms_input_service_url",
     "en": "Enter service URL",
@@ -6679,7 +8619,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }, 
+  },
   {
     "id": "wms_btn_generate_url",
     "en": "Update generated URL ( tiles server, legends )",
@@ -6691,7 +8631,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }, 
+  },
   {
     "id": "wms_btn_get_layers",
     "en": "Update layer list",

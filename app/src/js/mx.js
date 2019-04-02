@@ -69,6 +69,7 @@ export let settings = {
     tiles : '/get/tile/{x}/{y}/{z}.mvt',
     views : '/get/view/',
     sourceMetadata : '/get/source/metadata/',
+    viewMetadata : '/get/view/metadata/',
     sourceOverlap : '/get/source/overlap/',
     sourceValidateGeom : '/get/source/validate/geom',
     downloadSourceCreate : '/get/source/',

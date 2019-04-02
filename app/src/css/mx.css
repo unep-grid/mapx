@@ -1352,7 +1352,7 @@ blockquote {
 }
 
 .fold-container .fold-switch:checked ~ .fold-content {
-  border-top: 1px solid #ccc;
+  /*border-top: 1px solid #ccc;*/
   opacity: 1;
   max-height: 1000px;
   font-size: inherit;
