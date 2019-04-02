@@ -80,7 +80,7 @@ module.exports = {
                 }
               ]
             ],
-            plugins: ['loop-optimizer', '@babel/syntax-dynamic-import']
+            plugins: ['@babel/syntax-dynamic-import']
           }
         }
       },
