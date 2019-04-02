@@ -422,12 +422,12 @@ export function handleClickEvent(e, idMap) {
   var hasDraw = clickModes.indexOf('draw') > -1;
 
   if (hasLayer && type === 'click') {
-    if ( hasDashboard ) {
+    if (hasDashboard) {
       /**
        * Probably handled by dashboards
        */
       return;
-    }else if( hasDraw ){
+    } else if (hasDraw) {
       /**
        * Handle draw function ; edit selected feature.
        *
@@ -440,14 +440,13 @@ export function handleClickEvent(e, idMap) {
        *  }
        *  mx.data.geojson.getItem(id)
        *    .then( data => {
-       *      var featuresOrig = mx.helpers.path(data,'view.data.source.data.features'); 
-       *      var featureQuery = feature; 
+       *      var featuresOrig = mx.helpers.path(data,'view.data.source.data.features');
+       *      var featureQuery = feature;
        *  });
        *}
        */
       return;
-    }else{
-
+    } else {
       /**
        * Click event : make a popup with attributes
        */
@@ -718,6 +717,7 @@ export function loadGeojsonViews() {
  */
 export function getViewRemote(idView) {
   var apiUrlViews = mx.helpers.getApiUrl('views');
+
   if (!idView || !apiUrlViews) {
     return Promise.reject('Missing id or fetch URL');
   }
@@ -726,7 +726,12 @@ export function getViewRemote(idView) {
   var keyNet = apiUrlViews + idView;
 
   return fetch(keyNet)
-    .then((view) => view.json())
+    .then((view) => {
+      if (view.status === 404) {
+        return {};
+      }
+      return view.json();
+    })
     .then((view) => {
       view._edit = false;
       view._kiosk = true;
@@ -3398,7 +3403,7 @@ export function addView(o) {
 
 export function addViewGj(opt) {
   return new Promise((resolve) => {
-    var layer = mx.helpers.path(opt.view, 'data.layer'); 
+    var layer = mx.helpers.path(opt.view, 'data.layer');
     opt.map.addLayer(layer, opt.before);
     resolve(true);
   });
@@ -3605,7 +3610,7 @@ export function getLayersPropertiesAtPoint(opt) {
   var idViews = [];
   var excludeProp = ['mx_t0', 'mx_t1', 'gid'];
   var type = opt.type || 'vt' || 'rt' || 'gj';
-  type  = h.isArray(type) ? type : [type];
+  type = h.isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
    * to get array of view ID.
@@ -3630,7 +3635,7 @@ export function getLayersPropertiesAtPoint(opt) {
     .map((idView) => h.getView(idView))
     .filter((view) => type.indexOf(view.type) > -1)
     .forEach((view) => {
-      if ( view.type === 'rt') {
+      if (view.type === 'rt') {
         items[view.id] = fetchRasterProp(view);
       } else {
         items[view.id] = fetchVectorProp(view);

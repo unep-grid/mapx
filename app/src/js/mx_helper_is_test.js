@@ -35,6 +35,13 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm)$/)
   );
 }
+export function isViewsArray(arr){
+  const h = mx.helpers;
+   return isArray(arr) && (function() {
+      // Workaround for the loop optimisation thats convert foreach to for
+      return h.all(arr.map(v => isView(v)));
+   })();
+}
 
 /**
  * Test if item is an language object, e.g. as defined in json schema
@@ -45,20 +52,21 @@ export function isLanguageObject(item) {
   var languages = mx.settings.languages;
   return (
     isObject(item) &&
-    function() {
-      // loop optimisation parse the map before isObject, wich is bad
-      // inside a function it stays here
+    (function() {
+      // Workaround for the loop optimisation thats convert foreach to for
       return h.all(Object.keys(item).map((l) => languages.indexOf(l) > -1));
-    }()
+    })()
   );
 }
 export function isLanguageObjectArray(arr) {
   const h = mx.helpers;
-  return isArray(arr) && function(){
-      // loop optimisation parse the map before isObject, wich is bad
-      // inside a function it stays here
+  return (
+    isArray(arr) &&
+    (function() {
+      // Workaround for the loop optimisation thats convert foreach to for
       return h.all(arr.map(isLanguageObject));
-  }();
+    })()
+  );
 }
 /**
  * Test for promise
@@ -98,9 +106,15 @@ export function isArray(item) {
  */
 export function isTable(item) {
   const h = mx.helpers;
-  return h.isArray(item) && function(){ 
-    return h.all(item.map((i) => h.isObject(i)));
-  }();
+  return (
+    h.isArray(item) &&
+    (function() {
+      return h.all(item.map((i) => h.isObject(i)));
+    })()
+  );
+}
+export function isArrayOfObject(item) {
+  return isTable(item);
 }
 /**
  * Test if entry is JSON
@@ -162,8 +176,11 @@ export function isHTML(str) {
  * @param {String} email
  */
 export function isEmail(email) {
-  return isString(email) && /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
-    email
+  return (
+    isString(email) &&
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+      email
+    )
   );
 }
 

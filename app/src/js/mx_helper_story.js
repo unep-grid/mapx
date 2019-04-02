@@ -30,10 +30,9 @@ function setUi(o) {
     mx.helpers.storyBuild(o);
 
     /* Alter wrapper class */
-    o.data.classWrapper = mx.helpers.path(
-      o.view,
-      'data.story.settings.class_wrapper'
-    );
+    o.data.classWrapper =
+      mx.helpers.path(o.view, 'data.story.settings.class_wrapper') ||
+      'mx-story-screen-720p';
 
     /* Return options */
     resolve(o);
@@ -650,8 +649,20 @@ function checkMissingView(o) {
 
   return new Promise(function(resolve) {
     var idViewsStory = h.path(view, 'data.views');
+    /**
+     * Case when views are stored as object instead of id.
+     * This was done when asynchronous fetch was not an option.
+     */
+    var isViewsArrayOfObject = h.isViewsArray(idViewsStory);
+    if (isViewsArrayOfObject) {
+      idViewsStory = idViewsStory.map((v) => v.id);
+    }
+    /**
+     * We expect an array of id, but sometimes a string could be
+     * returned. This could happen with toJSON in R.
+     */
     var isViewsArray = h.isArray(idViewsStory);
-    var isViewsString = h.isStringRange(idViewsStory, 1);
+    var isViewsString = h.isString(idViewsStory);
     var idViewsToAdd = [];
 
     idViewsStory = isViewsArray
@@ -778,43 +789,41 @@ function storyOnScroll(o) {
  * Set step config : dimention, number, bullets
  */
 function setStepConfig(o) {
-  var data = o.onScrollData;
-  var bullet, bullets, config, rect, slides, step, steps, stepName;
-  var slideConfig;
+  const h = mx.helpers;
+  const el = h.el;
 
-  /*
-   * Set bullet
-   */
-  function bulletScrollTo() {
-    var dest = this.dataset.step;
-    mx.helpers.storyGoTo(dest);
-  }
+  var data = o.onScrollData;
+  var elBullet, elBullets, config, rect, elStep, elSteps, elSlides, stepName;
+  var slideConfig;
 
   /*
    * Steps configuration
    */
-
   data.stepsConfig = [];
-  steps = data.elScroll.querySelectorAll('.mx-story-step');
-  bullets = document.createElement('div');
-  bullets.classList.add('mx-story-step-bullets');
-  bullets.classList.add('noselect');
+  elSteps = data.elScroll.querySelectorAll('.mx-story-step');
+  elBullets = el('div', {class: ['mx-story-step-bullets', 'noselect']});
 
-  o.data.elBullets = bullets;
-  o.data.elMapControls.appendChild(bullets);
+  o.data.elBullets = elBullets;
+  o.data.elMapControls.appendChild(elBullets);
+  console.log('added bullets');
 
-  //data.elScroll.appendChild(bullets);
+  listenerManager(o, {
+    action: 'add',
+    target: elBullets,
+    event: 'click',
+    listener: bulletScrollTo
+  });
 
-  for (var s = 0; s < steps.length; s++) {
+  for (var s = 0, sL = elSteps.length; s < sL; s++) {
     /*
      * config init
      */
     config = {};
-    step = steps[s];
-    stepName = step.dataset.step_name;
-    rect = step.getBoundingClientRect();
-    slides = step.querySelectorAll('.mx-story-slide');
-    config.slides = slides;
+    elStep = elSteps[s];
+    stepName = elStep.dataset.step_name;
+    rect = elStep.getBoundingClientRect();
+    elSlides = elStep.querySelectorAll('.mx-story-slide');
+    config.elSlides = elSlides;
     config.slidesConfig = [];
 
     /*
@@ -829,28 +838,42 @@ function setStepConfig(o) {
     /*
      * Bullets init
      */
-    bullet = document.createElement('div');
-    bullet.classList.add('mx-story-step-bullet');
-    bullet.classList.add('mx-pointer');
-    bullet.classList.add('btn');
-    bullet.dataset.to = config.startUnscaled;
-    bullet.dataset.step = s;
-    bullet.innerHTML = s + 1;
-    bullet.classList.add('hint--top');
-    bullet.setAttribute('aria-label', stepName ? stepName : 'Step ' + (s + 1));
-    bullets.appendChild(bullet);
-    bullet.onclick = bulletScrollTo;
-    config.bullet = bullet;
+    elBullet = el(
+      'div',
+      {
+        class: ['mx-story-step-bullet', 'mx-pointer', 'btn', 'hint--top'],
+        'aria-label': stepName ? stepName : 'Step ' + (s + 1),
+        dataset: {
+          to: config.startUnscaled,
+          step: s
+        }
+      },
+      s + 1 + ''
+    );
+
+    elBullets.appendChild(elBullet);
+    config.elBullet = elBullet;
 
     if (s === 0) {
-      bullet.classList.add('mx-story-step-active');
+      elBullet.classList.add('mx-story-step-active');
     }
 
     /*
      * Evaluate slides and save in config
      */
-    for (var l = 0; l < slides.length; l++) {
-      slideConfig = JSON.parse(slides[l].dataset.slide_config || '[]');
+    for (var l = 0; l < elSlides.length; l++) {
+      slideConfig = [];
+      try {
+        slideConfig = elSlides[l].dataset.slide_config;
+        if (h.isJson(slideConfig)) {
+          slideConfig = JSON.parse(slideConfig || '[]');
+        }
+        if (!h.isArray(slideConfig)) {
+          slideConfig = [];
+        }
+      } catch (e) {
+        console.warn(e, slideConfig);
+      }
       config.slidesConfig.push(slideConfig);
     }
 
@@ -868,6 +891,17 @@ function setStepConfig(o) {
   if (o.onScrollData.distStart) {
     data.elScroll.scrollTop = o.onScrollData.distStart * 1;
   }
+
+  /*
+   * Set position
+   */
+  function bulletScrollTo(e) {
+    const step = e.target.dataset.step;
+    if (step) {
+      e.stopPropagation();
+      mx.helpers.storyGoTo(step);
+    }
+  }
 }
 
 /*
@@ -882,7 +916,8 @@ export function storyUpdateSlides(o) {
    */
   var data = o.onScrollData;
   var percent = 0;
-  var elsSlides;
+  var elSlides;
+  var elBullet;
   var config;
   var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
   //var classActive = 'mx-story-step-active';
@@ -906,13 +941,16 @@ export function storyUpdateSlides(o) {
      * Update slide animation
      */
     if (isInRangeAnim) {
-      elsSlides = config.slides;
-      for (var l = 0, lL = config.slides.length; l < lL; l++) {
+      elSlides = config.elSlides;
+      for (var l = 0, lL = elSlides.length; l < lL; l++) {
         var slideTransform = mx.helpers.storySetTransform({
           data: config.slidesConfig[l],
           percent: percent
         });
-        config.slides[l].style[data.scrollFun] = slideTransform;
+        /**
+         * Update style
+         */
+        elSlides[l].style[data.scrollFun] = slideTransform;
       }
     }
 
@@ -931,11 +969,11 @@ export function storyUpdateSlides(o) {
        * Update bullet values
        */
       for (var b = 0, bL = data.stepsConfig.length; b < bL; b++) {
-        var bullet = data.stepsConfig[b].bullet;
+        elBullet = data.stepsConfig[b].elBullet;
         if (b <= s) {
-          bullet.classList.add('mx-story-step-active');
+          elBullet.classList.add('mx-story-step-active');
         } else {
-          bullet.classList.remove('mx-story-step-active');
+          elBullet.classList.remove('mx-story-step-active');
         }
       }
     }
@@ -1418,7 +1456,12 @@ function listenerManager(o, config) {
  *
  */
 export function storyBuild(o) {
-  var story = mx.helpers.path(o, 'view.data.story');
+  const h = mx.helpers;
+  const path = h.path;
+  const el = h.el;
+  const glfo = h.getLabelFromObjectPath;
+  const story = path(o, 'view.data.story');
+
   if (!story || !story.steps || story.steps.length < 1) {
     return;
   }
@@ -1430,7 +1473,6 @@ export function storyBuild(o) {
   o.classStory = o.classStory || 'mx-story';
   o.classStep = o.classStep || 'mx-story-step';
   o.classSlide = o.classSlide || 'mx-story-slide';
-  //o.classWrapper = o.classWrapper || "mx-wrapper";
   o.classSlideBack = o.classSlideBack || 'mx-story-slide-back';
   o.classSlideFront = o.classSlideFront || 'mx-story-slide-front';
   o.classContainer = o.classContainer || 'mx-story-layout';
@@ -1441,114 +1483,102 @@ export function storyBuild(o) {
   o.colors.fg = o.colors.fg || '#000';
   o.colors.alpha = o.colors.alpha || 1;
 
+  var elMapContainer = o.data.map.getContainer();
+  var elStoryContainer = el(
+    'div',
+    {
+      class: o.classContainer,
+      id: o.idStory
+    },
+    el(
+      'div',
+      {
+        class: o.classStory
+      },
+      story.steps.map((step, stepNum) => {
+        /**
+         * For each step
+         */
+        return el(
+          'div',
+          {
+            class: o.classStep,
+            dataset: {
+              step_name: step.name
+            }
+          },
+          step.slides.map((slide, slideNum) => {
+            /**
+             * For each slide
+             */
+            return el(
+              'div',
+              {
+                dataset: {
+                  slide_config: slide.effects || []
+                },
+                class: [o.classSlide].concat(
+                  slide.classes.map((c) => o.classStory + '-' + c.name)
+                )
+              },
+              el(
+                'div',
+                {
+                  class: o.classSlideFront,
+                  style: {
+                    color: slide.color_fg || o.colors.fg,
+                    borderColor: slide.color_fg || o.colors.fg,
+                    fontSize: slide.size_text + 'px' || o.sizes.text + 'px',
+                    overflowY: slide.scroll_enable ? 'scroll' : 'hidden'
+                  },
+                  dataset: {
+                    editable: true,
+                    name: stepNum + ':' + slideNum
+                  }
+                },
+                glfo({
+                  obj: slide,
+                  path: 'html',
+                  default: '<p></p>'
+                })
+              ),
+              el('div', {
+                style: {
+                  backgroundColor: slide.color_bg || o.colors.bg,
+                  opacity:
+                    slide.opacity_bg === 0
+                      ? 0
+                      : slide.opacity_bg || o.colors.alpha
+                },
+                class: o.classSlideBack
+              })
+            );
+          }) // end slides
+        );
+      }) // end steps
+    )
+  );
+
   /**
-   * Story base div
+   * Add story map to map container
    */
-  var doc = window.document;
-  //var divOldStory = doc.getElementById(o.idStory);
-  //var wrapper = doc.querySelector('.' + o.classWrapper);
-
-  var divStory = doc.createElement('div');
-  var divStoryContainer = doc.createElement('div');
-  var divMap = o.data.map.getContainer();
-
-  /* Add container and story classes */
-  divStory.classList.add(o.classStory);
-  divStoryContainer.classList.add(o.classContainer);
-  divStoryContainer.id = o.idStory;
-
-  /**
-   * For each steps, build content
-   */
-  story.steps.forEach(function(step, stepNum) {
-    if (!step.slides) {
-      return;
-    }
-
-    var slides = step.slides;
-    var divStep = doc.createElement('div');
-    divStep.dataset.step_name = step.name;
-    divStep.classList.add(o.classStep);
-
-    slides.forEach(function(slide, slideNum) {
-      var divSlide = doc.createElement('div');
-      var divSlideFront = doc.createElement('div');
-      var divSlideBack = doc.createElement('div');
-      var lang = mx.helpers.checkLanguage({
-        obj: slide,
-        path: 'html'
-      });
-      divSlide.classList.add(o.classSlide);
-      divSlideBack.classList.add(o.classSlideBack);
-
-      /**
-       *  Check if content is html. If not, add it in a paragraph
-       */
-
-      var content = slide.html[lang] || slide.html.en || '';
-
-      if (!mx.helpers.isHTML(content)) {
-        content = '<p>' + content + '<p>';
-      }
-
-      divSlideFront.innerHTML = content;
-
-      divSlideFront.classList.add(o.classSlideFront);
-      /**
-       * Add ref for contentTools editor
-       */
-
-      divSlideFront.dataset.editable = true;
-      divSlideFront.dataset.name = stepNum + ':' + slideNum;
-
-      slide.classes.forEach(function(classe) {
-        divSlide.classList.add(o.classStory + '-' + classe.name);
-      });
-      divSlideFront.style.color = slide.color_fg || o.colors.fg;
-      divSlideFront.style.borderColor = slide.color_fg || o.colors.fg;
-      divSlideFront.style.fontSize =
-        slide.size_text + 'px' || o.sizes.text + 'px';
-      divSlideFront.style.overflowY = slide.scroll_enable ? 'scroll' : 'hidden';
-      divSlide.setAttribute(
-        'data-slide_config',
-        JSON.stringify(slide.effects || [])
-      );
-      divSlideBack.style.backgroundColor = slide.color_bg || o.colors.bg;
-      divSlideBack.style.opacity =
-        slide.opacity_bg === 0 ? 0 : slide.opacity_bg || o.colors.alpha;
-      divSlide.appendChild(divSlideBack);
-
-      divSlide.appendChild(divSlideFront);
-      divStep.appendChild(divSlide);
-    });
-    /* add step to steps */
-    divStory.appendChild(divStep);
-  });
+  elMapContainer.appendChild(elStoryContainer);
 
   /**
    * Handle broken images
    */
-
-  //var imgs = divStory.querySelectorAll("img");
-
-  //imgs.forEach(img => {
-  //img.onerror = function(e){
-  //var imgRect = img.getBoundingClientRect();
-  //var w = Math.ceil(imgRect.width);
-  //var h = Math.ceil(imgRect.height);
-  //img.src = "http://placekitten.com/"+w+"/"+h+"";
-  //};
-  /*});*/
-
-  /**
-   * Finish building by adding container  to wrapper.
-   */
-
-  divStoryContainer.appendChild(divStory);
-  divMap.appendChild(divStoryContainer);
-  /**
-   * Set scroll to previous state
-   */
+  var imgs = elStoryContainer.querySelectorAll('img');
+  imgs.forEach((img) => {
+    img.onerror = function() {
+      var imgRect = img.getBoundingClientRect();
+      var w = Math.ceil(imgRect.width);
+      var h = Math.ceil(imgRect.height);
+      var elCanvas = mx.helpers.createCanvas(w, h);
+      var elParent = img.parentElement;
+      elParent.appendChild(elCanvas);
+      img.remove();
+    };
+  });
 }
 
 /*
