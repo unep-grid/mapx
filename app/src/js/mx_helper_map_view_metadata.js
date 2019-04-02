@@ -8,6 +8,7 @@ export function getSourceMetadata(id, force) {
     urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
 
   return new Promise((resolve, reject) => {
+
     if (!id) {
       return reject('missing id');
     }
@@ -95,6 +96,7 @@ export function viewToMetaModal(view) {
     if (data.meta) {
       meta = data.meta;
     }
+    meta.id = id;
 
     var elViewMeta = metaViewToUi(meta);
 
@@ -249,25 +251,30 @@ function metaViewToUi(meta) {
   const h = mx.helpers;
   const el = h.el;
   const elAuto = h.elAuto;
+  const prefixKey = 'meta_view_';
 
   var tblSummary = h.objectToArray(meta, true);
   var keys = [
-    'stat_n_add',
-    'stat_n_distinct_user',
-    'classes',
-    'collections',
     'project_title',
     'projects_titles',
+    'classes',
+    'collections',
     'readers',
     'editors',
+    'stat_n_add',
+    'stat_n_distinct_user',
     'date_modified',
-    'date_created'
+    'date_created',
+    'id'
   ];
 
   tblSummary = tblSummary
     .filter((row) => keys.indexOf(row.key) > -1)
+    .sort((a,b) => {
+      return keys.indexOf(a.key) - keys.indexOf(b.key);
+    })
     .map((row) => {
-      row.key = 'meta_view_' + row.key; // to match dict labels
+      row.key = prefixKey + row.key; // to match dict labels
       return row;
     });
 
@@ -305,6 +312,9 @@ export function metaSourceToUi(meta) {
   const glfo = h.getLabelFromObjectPath;
   const oToA = h.objectToArray;
 
+  /**
+  * Local shortcut
+  */
   const p = function(p, d) {
     return h.path(meta, p, d);
   };
@@ -406,7 +416,11 @@ export function metaSourceToUi(meta) {
         stringAsLanguageKey: true
       }),
       start_at: elAuto('date', p('temporal.range.start_at', null)),
-      end_at: elAuto('date', p('temporal.range.end_at', null))
+      end_at: elAuto('date', p('temporal.range.end_at', null)),
+      /**
+      * Id 
+      */
+      id: el('span',p('_idSource'))
     },
     // make an array of object
     true

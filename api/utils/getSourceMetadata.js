@@ -52,6 +52,7 @@ function getSourceMetadata(opt) {
         meta = out.metadata;
         meta._emailEditor = out.email_editor;
         meta._dateModified = out.date_modified;
+        meta._idSource = id;
         return meta;
       } else {
         return def;
