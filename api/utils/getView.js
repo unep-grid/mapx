@@ -30,32 +30,32 @@ exports.get = function(req, res) {
   });
 
   if (!sql) {
-    //return res.sendStatus(500).json({error:'no valid query'});
-    return sendError(res, {error: 'no valid query'});
+    return utils.sendError(res, {message: 'no valid query'});
   }
 
   clientPgRead
     .query(sql)
     .then(function(result) {
-      if (result && result.rows) {
-        out = result.rows[0];
-        buffer = new Buffer(JSON.stringify(out), 'utf-8');
-        zlib.gzip(buffer, function(err, zOut) {
-          if (err) {
-            return res.sendStatus(500).json(err);
-          }
-          res.setHeader('Cache-Control', 'public, max-age=3600');
-          res.setHeader('Content-Type', 'application/json');
-          res.setHeader('Content-Encoding', 'gzip');
-
-          res.send(zOut);
-        });
-      } else {
-        return res.sendStatus(204);
+      if (result && result.rowCount == 0) {
+        return res.sendStatus(404);
       }
+
+      out = result.rows[0];
+      buffer = new Buffer(JSON.stringify(out), 'utf-8');
+      zlib.gzip(buffer, function(err, zOut) {
+        if (err) {
+          return utils.sendError(res, err);
+        }
+        res.setHeader('Cache-Control', 'public, max-age=3600');
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Encoding', 'gzip');
+
+        res.send(zOut);
+      });
+
     })
     .catch(function(err) {
-      return res.status(500).send(err);
+      return utils.sendError(res, err);
     });
 };
 
@@ -88,7 +88,7 @@ exports.getTile = function(req, res) {
       data.attributes = utils.attrToPgCol(data.attribute, data.attributes);
 
       if (!data.layer || data.layer === Object) {
-        sendEmpty(res);
+        sendTileEmpty(res);
         return;
       }
 
@@ -102,6 +102,8 @@ exports.getTile = function(req, res) {
       return getTile(res, hash, data);
     })
     .catch(function(err) {
+
+      return res.status(500).send({error:err.message});
       return res.status(500).send(err);
     });
 };
@@ -151,12 +153,11 @@ function getTilePg(res, hash, data) {
             sendTileZip(res, zBuffer);
           });
         } else {
-          sendEmpty(res);
+          sendTileEmpty(res);
         }
       })
       .catch(function(err) {
-        console.log(err);
-        sendError(res, err);
+        return sendTileError(res, err);
       });
   });
 }
@@ -181,13 +182,11 @@ function sendTileZip(res, zBuffer) {
   res.status(200).send(zBuffer);
 }
 
-function sendEmpty(res) {
-  res.setHeader('Content-Type', 'application/x-protobuf');
-  res.status(204).send('-');
+function sendTileEmpty(res) {
+  res.status(204).send('');
 }
 
-function sendError(res, err) {
-  res.setHeader('Content-Type', 'application/x-protobuf');
+function sendTileError(res, err) {
   res.status(500).send(JSON.stringify(err));
 }
 
