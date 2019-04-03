@@ -92,7 +92,7 @@ reactSourceVariables <- reactive({
     isLayerOk <- isTRUE(layerName %in% reactListReadSources())
 
     if(isLayerOk){
-      outLocal <- mxDbGetLayerColumnsNames(layerName,notIn=c("geom","gid"))
+      outLocal <- mxDbGetLayerColumnsNames(layerName,notIn=c("geom","gid","_mx_valid"))
 
       if(!noDataCheck(outLocal)) out <- outLocal
     }
