@@ -1159,9 +1159,29 @@ export function getViewVariable(o) {
 export function makeSimpleLayer(o) {
   var ran, colA, colB, layer;
 
+  var sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
+  var sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
+  var sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
+  var zoomMin = o.zoomMin || 0;
+  var zoomMax = o.zoomMax || 22;
   var size = o.size || 2;
   var sprite = o.sprite || '';
   var filter = o.filter || ['all'];
+  if (o.gemType === 'symbol') {
+    size = size / 10;
+  }
+
+  var funSizeByZoom = [
+    'interpolate',
+    ['exponential', sizeFactorZoomExponent ],
+    ['zoom'],
+    zoomMin,
+    sizeFactorZoomMin * size,
+    zoomMax,
+    sizeFactorZoomMax * size
+  ];
+
+  size = sizeFactorZoomMax > 0 || sizeFactorZoomMin > 0 ? funSizeByZoom : size;
 
   if (!o.hexColor) {
     ran = Math.random();
@@ -1177,7 +1197,7 @@ export function makeSimpleLayer(o) {
       type: 'symbol',
       layout: {
         'icon-image': sprite,
-        'icon-size': size / 10
+        'icon-size': size
       },
       paint: {
         'icon-opacity': 1,
@@ -1210,6 +1230,10 @@ export function makeSimpleLayer(o) {
       paint: {
         'line-color': colA,
         'line-width': size
+      },
+      layout  : {
+        'line-cap' : 'round',
+        'line-join' : 'round'
       }
     }
   };
@@ -1217,6 +1241,8 @@ export function makeSimpleLayer(o) {
   layer = layer[o.geomType];
   layer.id = o.id;
   layer.source = o.idSource;
+  layer.minzoom = o.zoomMin;
+  layer.maxzoom = o.zoomMax;
   layer['source-layer'] = o.idSourceLayer;
   layer.filter = filter;
   layer.metadata = {};
@@ -2811,6 +2837,7 @@ export function addViewVt(o) {
       idView = view.id,
       style = p(view, 'data.style'),
       rules = p(view, 'data.style.rules', []),
+      zoomConfig = p(view, 'data.style.zoomConfig', {}),
       nulls = p(view, 'data.style.nulls', [])[0],
       hideNulls = p(view, 'data.style.hideNulls', false),
       geomType = p(view, 'data.geometry.type'),
@@ -2824,6 +2851,18 @@ export function addViewVt(o) {
       resolve(false);
     }
 
+    /**
+     * Set default
+     */
+    zoomConfig.zoomMax = zoomConfig.zoomMax || 22;
+    zoomConfig.zoomMin = zoomConfig.zoomMin || 0;
+    zoomConfig.sizeFactorZoomMax = zoomConfig.sizeFactorZoomMax || 0;
+    zoomConfig.sizeFactorZoomMin = zoomConfig.sizeFactorZoomMin || 0;
+    zoomConfig.sizeFactorZoomExponent = zoomConfig.sizeFactorZoomExponent || 1;
+
+    /**
+     * Parse custom style
+     */
     styleCustom = JSON.parse(p(style, 'custom.json'));
 
     /**
@@ -2884,8 +2923,8 @@ export function addViewVt(o) {
         type: styleCustom.type || 'circle',
         paint: styleCustom.paint || {},
         layout: styleCustom.layout || {},
-        minzoom: styleCustom.minzoom || 0,
-        maxzoom: styleCustom.maxzoom || 22
+        minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
+        maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax
       };
 
       layers.push(layerCustom);
@@ -2914,6 +2953,11 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
+          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+          sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+          zoomMax: zoomConfig.zoomMax,
+          zoomMin: zoomConfig.zoomMin,
           sprite: rule.sprite
         });
 
@@ -2929,6 +2973,11 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
+          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+          sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+          zoomMax: zoomConfig.zoomMax,
+          zoomMin: zoomConfig.zoomMin,
           sprite: rule.sprite
         });
 
@@ -2946,6 +2995,11 @@ export function addViewVt(o) {
         hexColor: rule.color,
         opacity: rule.opacity,
         size: rule.size,
+        sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+        sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+        sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+        zoomMax: zoomConfig.zoomMax,
+        zoomMin: zoomConfig.zoomMin,
         sprite: rule.sprite
       });
 
@@ -2960,7 +3014,12 @@ export function addViewVt(o) {
         id: getIdLayer(),
         idSource: idSource,
         idSourceLayer: idView,
-        geomType: geomType
+        geomType: geomType,
+        sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+        sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+        sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+        zoomMax: zoomConfig.zoomMax,
+        zoomMin: zoomConfig.zoomMin
       });
 
       layers.push(layerDefault);
@@ -3061,6 +3120,11 @@ export function addViewVt(o) {
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
+            sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+            zoomMax: zoomConfig.zoomMax,
+            zoomMin: zoomConfig.zoomMin,
             sprite: rule.sprite,
             filter: filter
           });
@@ -3077,6 +3141,11 @@ export function addViewVt(o) {
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
+            sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+            zoomMax: zoomConfig.zoomMax,
+            zoomMin: zoomConfig.zoomMin,
             sprite: rule.sprite,
             filter: filter
           });
@@ -3095,6 +3164,11 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
+          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+          sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+          zoomMax: zoomConfig.zoomMax,
+          zoomMin: zoomConfig.zoomMin,
           sprite: rule.sprite,
           filter: filter
         });

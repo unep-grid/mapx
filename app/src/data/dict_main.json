@@ -841,7 +841,7 @@
     "ps": "ددې لیدنې شکل تنظیم کړئ"
   },
   {
-    "id": "style_title_legend",
+    "id": "schema_style_title_legend",
     "en": "Legend title",
     "fr": "Titre de la légende",
     "es": "Título de la leyenda",
@@ -853,7 +853,7 @@
     "ps": ""
   },
   {
-    "id": "style_reverse_order",
+    "id": "schema_style_reverse_order",
     "en": "Reverse displayed layers order",
     "fr": "Inverser l'ordre des couches sur la carte",
     "es": "",
@@ -865,7 +865,7 @@
     "ps": ""
   },
   {
-    "id": "style_reverse_order_desc",
+    "id": "schema_style_reverse_order_desc",
     "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
     "fr": "Si coché, la pile de couches sera inversée : la première règle défininira la couche à la base de la pile",
     "es": "",
@@ -877,7 +877,7 @@
     "ps": ""
   },
   {
-    "id": "style_hide_nulls",
+    "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
     "fr": "Ignorer les valeurs manquantes",
     "es": "Ignorar valores ausentes",
@@ -889,7 +889,7 @@
     "ps": ""
   },
   {
-    "id": "style_hide_nulls_desc",
+    "id": "schema_style_hide_nulls_desc",
     "en": "If checked, null or missing values will be ignored in the style",
     "fr": "Si coché, les valeurs manquantes ou nulles ne seront pas utilisées dans le style",
     "es": "",
@@ -2713,7 +2713,7 @@
     "ps": "صنف"
   },
   {
-    "id": "schema_nulls",
+    "id": "schema_style_nulls",
     "en": "Missing values",
     "fr": "Valeur manquante",
     "es": "Valores incompletos",
@@ -2725,7 +2725,7 @@
     "ps": ""
   },
   {
-    "id": "schema_color",
+    "id": "schema_style_color",
     "en": "Color",
     "fr": "Couleur",
     "es": "Color",
@@ -2737,7 +2737,7 @@
     "ps": "رنګ"
   },
   {
-    "id": "schema_description",
+    "id": "schema_style_description",
     "en": "Description",
     "fr": "Description",
     "es": "Descripción",
@@ -2773,7 +2773,7 @@
     "ps": "کلۍ"
   },
   {
-    "id": "schema_label",
+    "id": "schema_style_label",
     "en": "Label",
     "fr": "Etiquette",
     "es": "Etiqueta",
@@ -2785,7 +2785,7 @@
     "ps": "نښه"
   },
   {
-    "id": "schema_last_rule",
+    "id": "schema_style_last_rule",
     "en": "Last rule",
     "fr": "Dern. règle",
     "es": "Última regla",
@@ -2821,7 +2821,7 @@
     "ps": "میتود"
   },
   {
-    "id": "schema_opacity",
+    "id": "schema_style_opacity",
     "en": "Opacity",
     "fr": "Opacité",
     "es": "Opacidad",
@@ -2833,7 +2833,7 @@
     "ps": "مکدریت"
   },
   {
-    "id": "schema_rule",
+    "id": "schema_style_rule",
     "en": "Rule",
     "fr": "Règle",
     "es": "Regla",
@@ -2845,7 +2845,7 @@
     "ps": "قانون"
   },
   {
-    "id": "schema_rules",
+    "id": "schema_style_rules",
     "en": "Rules",
     "fr": "Règles",
     "es": "Reglas",
@@ -2857,7 +2857,7 @@
     "ps": "قوانین"
   },
   {
-    "id": "schema_size",
+    "id": "schema_style_size",
     "en": "Size",
     "fr": "Taille",
     "es": "Tamaño",
@@ -2869,7 +2869,151 @@
     "ps": "اندازه"
   },
   {
-    "id": "schema_sprite",
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "fr": "Configuration du zoom",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "fr": "Coeficient de taille au zoom max",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "fr": "Coeficient de taille au zoom min",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "fr": "Exposant de l'interpolation de la taille",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "fr": "Exposant de la fonction d'interpolation de la taille. Une valeur de 1 donne une interpolation linéaire.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "fr": "Zoom max",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "fr": "Zoom min",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "fr": "Symbole",
+    "es": "Símbolo",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "سمبول",
+    "ps": "سمبول"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "fr": "Si plus grand que 0, coefficient de la taille des lignes et points au zoom min.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "fr": "Si plus grand que 0, coefficient de la taille des lignes et points au zoom max.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "fr": "Zoom minium pour afficher la donnée",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "fr": "Zoom maximum pour afficher la donnée",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_sprite",
     "en": "Symbol",
     "fr": "Symbole",
     "es": "Símbolo",
@@ -2882,7 +3026,7 @@
   },
   {
     "id": "schema_story_tips_title",
-    "en": "Tips",
+    "en": "Tips:",
     "fr": "Conseils",
     "es": "",
     "ru": "",
@@ -2894,8 +3038,8 @@
   },
   {
     "id": "schema_story_tips",
-    "en": "<ol><li>Keep it simple.</li><li>If your story does not have spatial components, this tool will probably be useless.</li><li>Avoid images. The purpose of this tool is to focus on spatial data, not images. If you can, use aerial imagery instead.</li><li>Avoid creating more than 10 slides by story and 2 slides by step.</li><li>Avoid adding more than 2 layers on the map in the same step.</li><li>Avoid effects, transitions or 3d transformations : they could very quickly make the story unusable on slow devices.</li></ol>",
-    "fr": "<ol><li>Rester simple.</li><li>Si votre récit ne possède pas de composantes spatiales, cet outil sera probablement inutile.</li><li>Évitez les images. L'objectif de cet outil est de mettre en valeur des données cartographiques. Si besoin, utilisez des fonds de carte d'imagerie aérienne.</li><li>Évitez d'ajouter plus de 10 étapes par récit et 2 diapositives par étapes.</li><li>Évitez d'ajouter plus de deux couches simultanément.</li><li>Évitez les effets, transitions ou transformations 3d : ils peuvent très rapidement rendre le récit inutilisable sur les appareils peu rapides.</li></ol>",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for the readers:</p><ol><li>Keep it simple.</li><li>If your story does not have spatial components, this tool will probably be useless.</li><li>Avoid images. The purpose of this tool is to focus on spatial data, not images. If you can, use aerial imagery instead.</li><li>Avoid creating more than 10 slides by story and 2 slides by step.</li><li>Avoid adding more than 2 layers on the map in the same step.</li><li>Avoid effects, transitions or 3d transformations : they could very quickly make the story unusable on slow devices.</li></ol>",
+    "fr": "<p>Afin d'assurer une lecture agréable de votre récit, voici une liste de bonnes pratiques que nous vous recommandons :</p><ol><li>Rester simple.</li><li>Si votre récit ne possède pas de composantes spatiales, cet outil sera probablement inutile.</li><li>Éviter les images. L'objectif de cet outil est de mettre en valeur des données cartographiques. Si besoin, utilisez des fonds de carte d'imagerie aérienne.</li><li>Éviter d'ajouter plus de 10 étapes par récit et 2 diapositives par étapes.</li><li>Éviter d'afficher plus de deux couches simultanément.</li><li>Éviter les effets, transitions ou transformations 3d : ils peuvent très rapidement rendre le récit inutilisable sur les appareils peu rapides.</li></ol>",
     "es": "",
     "ru": "",
     "zh": "",
@@ -2903,7 +3047,7 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  }, 
+  },
   {
     "id": "schema_story_author",
     "en": "Author of the story",
@@ -3169,7 +3313,7 @@
     "ps": "تاریخچه"
   },
   {
-    "id": "schema_value",
+    "id": "schema_style_value",
     "en": "Value",
     "fr": "Valeur",
     "es": "Valor",

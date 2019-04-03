@@ -39,7 +39,7 @@ mxSchemaViewStyle <- function(
   #
 
   tt = function(id){
-   d(id,lang=l,web=F,asChar=T)
+    d(id,lang=l,web=F,asChar=T)
   }
 
   #
@@ -49,14 +49,14 @@ mxSchemaViewStyle <- function(
   variableName <- .get(data,c("attribute","name"))
   variableNames <- .get(data,c("attribute","names"))
   layerName <- .get(data,c("source","layerInfo","name"))
-  
+
   #
   # Get distinct available value in
   # This is already done during view creation :  view.data.attribute.table
   # NOTE: why do it here again ?
   #
   values <- mxDbGetQuery(sprintf(
-      "SELECT DISTINCT(\"%1$s\") from %2$s WHERE \"%1$s\" IS NOT NULL ORDER BY \"%1$s\" ASC "
+      "SELECT DISTINCT(\"%1$s\") from %2$s WHERE \"%1$s\" IS NOT NULL ORDER BY \"%1$s\" ASC LIMIT 100"
       ,variableName
       ,layerName
       )
@@ -90,7 +90,7 @@ mxSchemaViewStyle <- function(
   titleLegend = list(
     titleLegend = mxSchemaMultiLingualInput(
       language = l,
-      keyTitle="style_title_legend",
+      keyTitle="schema_style_title_legend",
       default = list(en="Legend"),
       type="string",
       propertyOrder = 5
@@ -109,7 +109,7 @@ mxSchemaViewStyle <- function(
   for(i in ll){
     r <- list(
       list(
-        title = tt("schema_label"),
+        title = tt("schema_style_label"),
         type = "string",
         options = list(
           hidden = i != l
@@ -125,7 +125,7 @@ mxSchemaViewStyle <- function(
 
     value <- list(
       value = list(
-        title = tt("schema_value"),
+        title = tt("schema_style_value"),
         type = "number",
         minLength = 0
         )
@@ -134,7 +134,7 @@ mxSchemaViewStyle <- function(
   }else{
     value <- list(
       value = list(
-        title = tt("schema_value"),
+        title = tt("schema_style_value"),
         type = "string",
         enum = as.list(values),
         minLength = 0
@@ -144,7 +144,7 @@ mxSchemaViewStyle <- function(
   # color
   color <- list(
     color = list(
-      title = tt("schema_color"),
+      title = tt("schema_style_color"),
       type = "string",
       format = "color-picker",
       default = "#f1f3d7"
@@ -154,7 +154,7 @@ mxSchemaViewStyle <- function(
   # opacity
   opacity <-  list(
     opacity = list(
-      title = tt("schema_opacity"),
+      title = tt("schema_style_opacity"),
       type = "number",
       enum = c(0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1),
       default = 0.3
@@ -164,7 +164,7 @@ mxSchemaViewStyle <- function(
   # size
   size <- list(
     size = list(
-      title = tt("schema_size"),
+      title = tt("schema_style_size"),
       type = "number",
       default = 1
       )
@@ -173,7 +173,7 @@ mxSchemaViewStyle <- function(
   # sprite
   sprite <-  list(
     sprite = list(
-      title = tt("schema_sprite"),
+      title = tt("schema_style_sprite"),
       type = "string",
       enum = c("none",sprites)
       )
@@ -187,10 +187,10 @@ mxSchemaViewStyle <- function(
       propertyOrder = 1,
       type = "array",
       format = "table",
-      title = tt("schema_rules"),
+      title = tt("schema_style_rules"),
       items = list(
         type = "object",
-        title = tt("schema_rule"),
+        title = tt("schema_style_rule"),
         properties = c(
           value,
           labels,
@@ -202,26 +202,95 @@ mxSchemaViewStyle <- function(
         )
       )
     )
+
   #
   # Reverse layer order
   #
 
   reverseLayer <- list(
     reverseLayer = list(
-       propertyOrder = 2,
-       title = tt("style_reverse_order"),
-       description = tt("style_reverse_order_desc"),
-       type = "boolean",
-       format = "checkbox"
+      propertyOrder = 2,
+      title = tt("schema_style_reverse_order"),
+      description = tt("schema_style_reverse_order_desc"),
+      type = "boolean",
+      format = "checkbox"
       )
     )
+  #
+  # Zoom based changes
+  #
+  sizeFactorZoomMax <- list(
+    sizeFactorZoomMax = list(
+      title = tt("schema_style_size_zoom_max"),
+      description = tt("schema_style_size_zoom_max_desc"),
+      type = "number",
+      default = 0
+      )
+    )
+
+  sizeFactorZoomMin <- list(
+    sizeFactorZoomMin = list(
+      title = tt("schema_style_size_zoom_min"),
+      description = tt("schema_style_size_zoom_min_desc"),
+      type = "number",
+      default = 0
+      )
+    )
+
+  sizeFactorZoomExponent <- list(
+    sizeFactorZoomExponent = list(
+      title = tt("schema_style_size_zoom_exponent"),
+      description = tt("schema_style_size_zoom_exponent_desc"),
+      type = "number",
+      default = 1
+      )
+    )
+
+  zoomMin <- list(
+    zoomMin = list(
+      title = tt("schema_style_zoom_min"),
+      description = tt("schema_style_zoom_min_desc"),
+      type = "number",
+      default = 1
+      )
+    )
+
+  zoomMax <- list(
+    zoomMax = list(
+      title = tt("schema_style_zoom_max"),
+      description = tt("schema_style_zoom_max_desc"),
+      type = "number",
+      default = 22
+      )
+    )
+
+
+  zoomConfig = list(
+    zoomConfig = list (
+      #type = "object",
+      propertyOrder = 3,
+      title = tt("schema_style_config_zoom"),
+      options = list(
+        collapsed = TRUE
+        ),
+      properties = c(
+        zoomMin,
+        zoomMax,
+        sizeFactorZoomMax,
+        sizeFactorZoomMin,
+        sizeFactorZoomExponent
+        )
+      )
+    )
+
+
   #
   #  set rules list
   # 
 
   nullsValue <- list(
     value = list(
-      title = tt("schema_value"),
+      title = tt("schema_style_value"),
       type = "string",
       minLength = 0
       )
@@ -229,10 +298,10 @@ mxSchemaViewStyle <- function(
 
   nulls <- list(
     nulls = list(
-      propertyOrder = 3,
+      propertyOrder = 4,
       type = "array",
       format = "table",
-      title = tt("schema_nulls"),
+      title = tt("schema_style_nulls"),
       options = list(
         disable_array_add = TRUE,
         disable_array_delete = TRUE,
@@ -240,7 +309,7 @@ mxSchemaViewStyle <- function(
         ),
       items = list(
         type = "object",
-        title = tt("schema_nulls"),
+        title = tt("schema_style_nulls"),
         properties = c(
           nullsValue,
           labels,
@@ -250,7 +319,7 @@ mxSchemaViewStyle <- function(
           sprite
           )
         ),
-        default = list(list(value=NULL,labels=list("en"="NO DATA"),color="#000",opacity=1,size=1,sprite=""))
+      default = list(list(value=NULL,labels=list("en"="NO DATA"),color="#000",opacity=1,size=1,sprite=""))
       )
     )
 
@@ -261,11 +330,11 @@ mxSchemaViewStyle <- function(
 
   hideNulls <- list(
     hideNulls = list(
-       propertyOrder = 4,
-       title = tt("style_hide_nulls"),
-       description = tt("style_hide_nulls_desc"),
-       type = "boolean",
-       format = "checkbox"
+      propertyOrder = 5,
+      title = tt("schema_style_hide_nulls"),
+      description = tt("schema_style_hide_nulls_desc"),
+      type = "boolean",
+      format = "checkbox"
       )
     )
 
@@ -320,6 +389,7 @@ mxSchemaViewStyle <- function(
   #
   properties <- c(
     rules,
+    zoomConfig,
     nulls,
     reverseLayer,
     hideNulls,
