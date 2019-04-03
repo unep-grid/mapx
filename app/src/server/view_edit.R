@@ -550,14 +550,21 @@ observe({
                   #`data-keep` = TRUE
                   #)
                 )
-
+ 
+              tips <- mxFold(
+                 content = HTML(d('schema_story_tips',language)),
+                 labelText = d('schema_story_tips_title',language),
+                 labelDictKey = 'schema_story_tips_title',
+                 open = FALSE
+                )
               mxModal(
                 id = "modalViewEdit",
                 title = sprintf("Edit story map %s",viewTitle),
                 addBackground = FALSE,
                 content = tagList(
                   uiOutput("txtValidSchema"),
-                  jedOutput(id="storyEdit")
+                  jedOutput(id="storyEdit"),
+                  tips
                   ),
                 buttons = btnList,
                 textCloseButton=d("btn_close",language)

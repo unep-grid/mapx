@@ -2881,6 +2881,30 @@
     "ps": "سمبول"
   },
   {
+    "id": "schema_story_tips_title",
+    "en": "Tips",
+    "fr": "Conseils",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<ol><li>Keep it simple.</li><li>If your story does not have spatial components, this tool will probably be useless.</li><li>Avoid images. The purpose of this tool is to focus on spatial data, not images. If you can, use aerial imagery instead.</li><li>Avoid creating more than 10 slides by story and 2 slides by step.</li><li>Avoid adding more than 2 layers on the map in the same step.</li><li>Avoid effects, transitions or 3d transformations : they could very quickly make the story unusable on slow devices.</li></ol>",
+    "fr": "<ol><li>Rester simple.</li><li>Si votre récit ne possède pas de composantes spatiales, cet outil sera probablement inutile.</li><li>Évitez les images. L'objectif de cet outil est de mettre en valeur des données cartographiques. Si besoin, utilisez des fonds de carte d'imagerie aérienne.</li><li>Évitez d'ajouter plus de 10 étapes par récit et 2 diapositives par étapes.</li><li>Évitez d'ajouter plus de deux couches simultanément.</li><li>Évitez les effets, transitions ou transformations 3d : ils peuvent très rapidement rendre le récit inutilisable sur les appareils peu rapides.</li></ol>",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  }, 
+  {
     "id": "schema_story_author",
     "en": "Author of the story",
     "fr": "Auteur de la carte narrative",

@@ -137,7 +137,7 @@ mxSchemaViewStory <- function(view,views,language){
       #selectorLiveEdit = ".mx-story"
       ),
     language =  l,
-    languagesRequired = c("en"),
+    languagesRequired = c(),
     languagesHidden = ll[!ll%in%l],
     languagesReadOnly = ll[!ll%in%l],
     #keyTitle = d("content",web=F),
@@ -347,8 +347,8 @@ mxSchemaViewStory <- function(view,views,language){
     title = tt("schema_story_map_anim_duration"),
      description = tt("schema_story_map_anim_duration_desc"),
     type = "number",
-    min = 0,
-    default = 1000
+    min = 1,
+    default = 1
     )
   
   animPathMethod <- list(
@@ -404,16 +404,16 @@ mxSchemaViewStory <- function(view,views,language){
     title = tt("schema_story_autoplay_timeout"),
     description = tt("schema_story_autoplay_timeout_desc"),
     type = "number",
-    min = 0,
-    default = 1000
+    min = 1000,
+    default = 3000
     )
 
   autoplayTransition <- list(
     title = tt("schema_story_autoplay_transition"),
     description = tt("schema_story_autoplay_transition_desc"),
     type = "number",
-    min = 0,
-    default = 1000
+    min = 1,
+    default = 1
     )
 
   autoplayAnimFunction = list(
