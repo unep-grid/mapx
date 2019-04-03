@@ -165,9 +165,9 @@ export function handleViewClick(o) {
            */
           var legendContainer = h.parentFinder({
               selector: el,
-              class: 'mx-view-item-legend-vt'
-            }),
-            legendInputs = legendContainer.querySelectorAll('input');
+              class: 'mx-legend-box'
+            });
+          var legendInputs = legendContainer.querySelectorAll('input');
           var idView = el.dataset.view_action_target;
           var view = h.getViews({id: mx.settings.idMapDefault, idView: idView});
           var filter = ['any'];
@@ -186,6 +186,7 @@ export function handleViewClick(o) {
               }
             }
           }
+
 
           view._setFilter({
             type: 'legend',

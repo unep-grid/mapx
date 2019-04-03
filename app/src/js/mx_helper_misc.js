@@ -1699,9 +1699,10 @@ export function parentFinder(o) {
     el = document.querySelector(o.selector);
   }
 
-  while ((el = el.parentElement) && !el.classList.contains(o.class)) {
-    return el;
+  while ( el.parentElement && !el.classList.contains(o.class)) {
+    el = el.parentElement;
   }
+  return el;
 }
 
 /**
