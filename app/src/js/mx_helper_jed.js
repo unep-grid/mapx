@@ -432,20 +432,9 @@ function  jedShowDraftRecovery(o){
 
 function formatDateTime(posix){
   var d = new Date(posix*1000);
-  var D = d.getDate();
-  var M = d.getMonth()+1;
-  var Y = d.getFullYear();
-  var h = d.getHours();
-  var m = d.getMinutes();
-  var s = d.getSeconds();
-  
-  if(h<10) h = "0"+h;
-  if(m<10) m = "0"+m;
-  if(s<10) s = "0"+s;
-  if(D<10) M = "0"+D;
-  if(M<10) M = "0"+M;
-
-  return D +"-"+ M +"-" + Y + " at " + h + ":" + m + ":"+ s; 
+  var date = d.toLocaleDateString();
+  var time = d.toLocaleTimeString();
+  return date + " at " + time;
 }
 
 
