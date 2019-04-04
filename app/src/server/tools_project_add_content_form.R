@@ -28,6 +28,11 @@ observeEvent(input$btnUploadSourceApi,{
           textInput("txtUploadSourceFileName",
             label = d("upload_source_title",language),
             ),
+          textInput(
+            "numEpsgCode",
+            label = d("epsg_set_projection_import",language),
+            value = "",
+            ),
           textInput("txtEmailSourceUpload",
             label = d("email",language),
             userData$email
@@ -57,6 +62,12 @@ observeEvent(input$btnUploadSourceApi,{
       textCloseButton = d("btn_close",language),
       buttons = btnList
       )
+
+    #
+    # Add epsg search box
+    #
+    mxEpsgBuildSearchBox('#numEpsgCode')
+    
 
   })
 

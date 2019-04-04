@@ -312,7 +312,11 @@ function fileToPostgres(config) {
   ];
 
   if (sourceSrs) {
-    args = argBase.concat(['-s_srs', sourceSrc]);
+    // test fir integer => epsg code;
+    if(Number.isInteger(sourceSrs*1)){
+      sourceSrs = "EPSG:" + sourceSrs;
+    }
+    args = args.concat(['-s_srs', sourceSrs]);
   }
 
   args = args.concat([settings.db.stringWrite, fileName]);

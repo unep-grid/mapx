@@ -48,7 +48,7 @@ observeEvent(reactData$sourceDownloadRequest,{
         ),
       numericInput(
         "numEpsgCode",
-        label = d("set_projection_epsg_code",language),
+        label = d("epsg_set_projection_export",language),
         value = 4326,
         ),
       textInput("txtDownloadFileName",
@@ -82,9 +82,7 @@ observeEvent(reactData$sourceDownloadRequest,{
   #
 
   if( isDownloadable ){
-    mxEpsgBuildSearchBox('#numEpsgCode', list(
-        txtButtonSearch = d('search',language)    
-        ))
+    mxEpsgBuildSearchBox('#numEpsgCode')
   }
 
 })

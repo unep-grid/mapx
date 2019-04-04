@@ -11,8 +11,13 @@ const utils = require('./utils.js');
 const authenticateHandler = require('./authentification.js')
   .authenticateHandler;
 const isLayerValid = require('./db.js').isLayerValid;
+const getSourceMetadata = require('./getSourceMetadata.js').getSourceMetadata;
 const apiPort = settings.api.port;
 let apiHostUrl = settings.api.host;
+if (apiPort !== 80 && apiPort !== 443) {
+  apiHostUrl = apiHostUrl + ':' + apiPort;
+}
+
 
 var fileFormat = {
   GPKG: {
@@ -40,15 +45,11 @@ var fileFormat = {
     ext: 'dxf'
   },
   SQLite: {
-    ext: '.sqlite'
+    ext: 'sqlite'
   }
 };
 
 var formatDefault = 'GPKG';
-if (apiPort !== 80 && apiPort !== 443) {
-  apiHostUrl = apiHostUrl + ':' + apiPort;
-}
-
 /**
  * Request handler / middleware
  */
@@ -118,6 +119,7 @@ function extractFromPostgres(config, cb) {
    */
   var folderUrl = settings.vector.path.download_url;
   var folderUrlZip = folderUrl + folderName + '.zip';
+  var dataUrl = 'https://' +  apiHostUrl + folderUrlZip; 
 
   if (!id) {
     return Promise.reject('No id');
@@ -127,7 +129,7 @@ function extractFromPostgres(config, cb) {
   }
 
   if (typeof iso3codes === 'string') {
-    iso3codes = [iso3codes];
+    iso3codes = iso3codes.split(',');
   }
   if (iso3codes && iso3codes instanceof Array) {
     iso3codes = iso3codes.filter((i) => {
@@ -146,17 +148,14 @@ function extractFromPostgres(config, cb) {
     format = formatDefault;
   }
 
-  return utils
-    .getSourceMetadata(id)
+  return getSourceMetadata({id:id})
     .then((m) => {
-      if (m.rows[0] && m.rows[0].metadata) {
-        metadata = m.rows[0].metadata;
-      }
-
+      metadata = m;
       onMessage('Extracted metadata');
       return getColumnsNames(id);
     })
     .then((attr) => {
+      
       var hasCountryClip =
         iso3codes && iso3codes.constructor === Array && iso3codes.length > 0;
 
@@ -182,14 +181,7 @@ function extractFromPostgres(config, cb) {
             /**
              * Test failed. at least one feature presented bad geometry
              */
-            var err =
-              'Layer ' +
-              test.id +
-              '( ' +
-              test.title +
-              ' )' +
-              " has invalid geometry and can't be clipped by country." +
-              ' Please correct it, then try again';
+            var err = `Layer ${test.id} (${test.title}) has invalid geometry and cannot be clipped by country. Please correct the layer then try again. `;
             onMessage(err, 'error');
 
             throw new Error('Invalid geometry found');
@@ -199,6 +191,7 @@ function extractFromPostgres(config, cb) {
       }
     })
     .then((test) => {
+
       if (!test || !test.valid) {
         throw new Error('Issue with geometry validation, unknown state');
       }
@@ -210,20 +203,9 @@ function extractFromPostgres(config, cb) {
         fs.mkdirSync(folderPath);
       }
 
-      onMessage(
-        'An email will be sent to ' +
-          email +
-          ' at the end of the process. The expected path will be http://' +
-          apiHostUrl +
-          folderUrlZip,
-        'message'
-      );
-      onMessage(
-        'Extration from the database and conversion to ' +
-          format +
-          '. This could take a while, please wait ...',
-        'message'
-      );
+      onMessage(`An email will be sent to ${email} at the end of the process. The expected path will be ${dataUrl}`);
+
+      onMessage(`Extration from the database and conversion to ${format}. This could take a while, plase wait`);
 
       /**
        *
@@ -283,12 +265,7 @@ function extractFromPostgres(config, cb) {
       ogr.on('exit', function(code, signal) {
         var msg = '';
         if (code !== 0) {
-          msg =
-            'The export function exited with code ' +
-            code +
-            ' ( ' +
-            signal +
-            ' ) Please try another format or dataset';
+          msg = `The export function exited with code ${code} : ${signal}. Please try another format`;
 
           if (email) {
             sendMail({
@@ -315,12 +292,12 @@ function extractFromPostgres(config, cb) {
         // 'close' event is fired only when a file descriptor is involved
         zipFile.on('close', function() {
           
-          msg = 'Export success. File available at ';
+          msg = 'Export success. File available here: ';
 
           if (email) {
             sendMail({
               to: email,
-              text: msg + 'http://' + apiHostUrl + folderUrlZip,
+              text: `${msg} ${dataUrl}`,
               subject: 'MapX export success'
             });
           }

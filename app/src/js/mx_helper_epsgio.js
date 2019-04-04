@@ -1,70 +1,93 @@
 /* jshint esversion:6 */
 
-export function epsgBuildSearchBox(opt){
+export function epsgBuildSearchBox(opt) {
+  const h = mx.helpers;
+  const el = h.el;
 
   var selector = opt.selector;
-  var el = mx.helpers.el;
   var elInput = document.querySelector(selector);
 
-  if(!elInput){
-    throw new Error("Element "+ selector +" not found");
+  if (!elInput) {
+    throw new Error('Element ' + selector + ' not found');
   }
- 
-  elInput.classList.add("mx-hide");
 
+  elInput.classList.add('mx-hide');
 
   var elInputParent = elInput.parentElement;
 
-
-  var elEpsgChange = 
-    el("div",{
-      class : ["input-group"]
+  var elEpsgChange = el(
+    'div',
+    {
+      class: ['input-group']
     },
-      el("input",{
-        class : ['form-control','disabled'],
-        disabled : true,
-        value: elInput.value*1,
-        type : 'text',
-        id : 'epsgTextInput'
-      }),
-      el("span",{
-        class : ['input-group-btn']
+    el('input', {
+      class: ['form-control'],
+      placeholder: 'Epsg code. e.g. 4326',
+      dataset: {
+        lang_key: 'epsg_placeholder_input',
+        lang_type: 'placeholder'
       },
-        el('button',{
-          class : ['btn','btn-default'],
-          innerText : opt.txtButtonChange || 'Change',
-          on : ['click',showSearch]
-        })
-      )
-    );
+      //disabled : true,
+      value: elInput.value ? elInput.value * 1 : '',
+      id: 'epsgTextInput'
+    }),
+    el(
+      'span',
+      {
+        class: ['input-group-btn']
+      },
+      el('button', {
+        class: ['btn', 'btn-default'],
+        dataset: {lang_key: 'epsg_btn_open_search'},
+        innerText: 'Search',
+        on: ['click', showSearch]
+      })
+    )
+  );
 
-  var elSearchGroup = el("div",{
-    class : ['epsgio-box'],
-    style : {
-      display : 'none'
-    }
-  },      
-    el("div",{
-      class : ["input-group"]
+  var elSearchGroup = el(
+    'div',
+    {
+      class: ['epsgio-box', 'well'],
+      style: {
+        display: 'none'
+      }
     },
-      el("input",{
-        class : ['form-control'],
-        placeholder : opt.txtSearchPlaceholder || 'Search projection',
-        type : 'text',
-        id : 'epsgSearchInput'
-      }),
-      el("span",{
-        class : ['input-group-btn']
+    el('label', {
+      dataset: {
+        lang_key: 'epsg_label_search'
+      }
+    }),
+    el(
+      'div',
+      {
+        class: ['input-group']
       },
-        el('button',{
-          class : ['btn','btn-default'],
-          innerText : opt.txtButtonSearch || 'Search',
-          on : ['click',searchEpsg]
+      el('input', {
+        class: ['form-control'],
+        placeholder: 'Enter country/region name',
+        dataset: {
+          lang_key: 'epsg_placeholder_search',
+          lang_type: 'placeholder'
+        },
+        type: 'text',
+        id: 'epsgSearchInput'
+      }),
+      el(
+        'span',
+        {
+          class: ['input-group-btn']
+        },
+        el('button', {
+          class: ['btn', 'btn-default'],
+          innerText: 'Search',
+          dataset: {lang_key: 'epsg_btn_search'},
+          on: ['click', searchEpsg]
         })
       )
     ),
-    el('div',{
-      id :'epsgListResults'
+    el('div', {
+      id: 'epsgListResults'
     })
   );
 
@@ -72,10 +95,21 @@ export function epsgBuildSearchBox(opt){
   elInputParent.appendChild(elSearchGroup);
 
   /**
+   * Update labels
+   */
+
+  h.updateLanguageElements({el: elInputParent});
+
+  /**
    * Show or hide search block
    */
-  function showSearch(e) {
-    elSearchGroup.style.display = 'block';
+  function showSearch() {
+    var isVisible = elSearchGroup.style.display === 'block';
+    if (isVisible) {
+      elSearchGroup.style.display = 'none';
+    } else {
+      elSearchGroup.style.display = 'block';
+    }
   }
 
   /**
@@ -86,78 +120,76 @@ export function epsgBuildSearchBox(opt){
     var elEpsg = getEl('epsgTextInput');
     elInput.value = code;
     elEpsg.value = code;
-    if( typeof Shiny == "object" && Shiny.onInputChange ){
-      Shiny.onInputChange(elInput.id,code);
+    if (mx.helpers.isObject(Shiny) && Shiny.onInputChange) {
+      Shiny.onInputChange(elInput.id, code);
     }
     elSearchGroup.style.display = 'none';
-    return "";
+    return '';
   }
   /**
    * Simple wrapper to get nested elements by id
    */
-  function getEl(id){
-    return elInputParent.querySelector('#'+id);
+  function getEl(id) {
+    return elInputParent.querySelector('#' + id);
   }
   /**
    * Search epsg.io database and build results list as buttons
    */
-  function searchEpsg(e) {
+  function searchEpsg() {
     var elInputSearch = getEl('epsgSearchInput');
     var elResults = getEl('epsgListResults');
     var txt = elInputSearch.value;
 
-    if (!txt) return;
+    if (!txt) {
+      return;
+    }
 
     /**
      * Reset list search
      */
-    elResults.innerHTML = "";
+    elResults.innerHTML = '';
 
-    epsgQuery(txt,function(res){
+    epsgQuery(txt, function(res) {
+      if (res.length === 0) {
+        var elEmpty = el('button', {
+          class: ['btn', 'btn-default', 'epsgio-btn-choose', 'disabled']
+        });
 
-
-      if(res.length == 0){
-      var elEmpty = el("span");
-
-        mx.helpers.getDictItem('noValue')
-        .then(r => {
-         elEmpty.innerText = r;
+        mx.helpers.getDictItem('noValue').then((r) => {
+          elEmpty.innerText = r;
         });
 
         elResults.appendChild(elEmpty);
-
-      }else{
-      res.forEach((r, i) => {
-
-        /**
-         * Build select button
-         */
-        var elRow = el("div",
-          el("button", {
-            on: ['click', choose],
-            innerText: r.name + " (" + r.code + ")",
-            class: ['btn', 'btn-default','epsgio-btn-choose'],
-            dataset: {
-              code: r.code
-            }
-          })
-        );
-        elResults.appendChild(elRow);
-      });
+      } else {
+        res.forEach((r) => {
+          /**
+           * Build select button
+           */
+          var elRow = el(
+            'div',
+            el('button', {
+              on: ['click', choose],
+              innerText: r.name + ' (' + r.code + ')',
+              class: ['btn', 'btn-default', 'epsgio-btn-choose'],
+              dataset: {
+                code: r.code
+              }
+            })
+          );
+          elResults.appendChild(elRow);
+        });
       }
-
     });
   }
 }
 
 /**
-  * Validate epsg
-  */
-export function epsgQuery(code,cb){
+ * Validate epsg
+ */
+export function epsgQuery(code, cb) {
+  var url = 'https://epsg.io/?q=' + code + '&format=json';
 
-  var url = "https://epsg.io/?q=" + code + "&format=json";
-
-  if (!code){
+  if (!code) {
     cb([]);
     return;
   }
@@ -167,15 +199,12 @@ export function epsgQuery(code,cb){
    */
 
   return fetch(url)
-    .then(res => res.json())
-    .then(res => {
+    .then((res) => res.json())
+    .then((res) => {
       cb(res.results || []);
     })
-    .catch(e => {
+    .catch((e) => {
       cb([]);
-      throw new Error("Can't retrieve epsg code: "+ e);
+      throw new Error("Can't retrieve epsg code: " + e);
     });
-
-
-} 
-
+}

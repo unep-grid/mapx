@@ -427,6 +427,13 @@ config[[c("data","format")]] <- list(
     multiple = FALSE
     ),
   list(
+    name = "GPX",
+    driver = "GPX",
+    type = "vector",
+    fileExt = c(".gpx"),
+    multiple = FALSE
+    ),
+  list(
     name = "GPKG",
     driver = "GPKG",
     type = "vector",

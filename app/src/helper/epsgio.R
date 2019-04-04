@@ -7,15 +7,8 @@
 #' @return null
 #'
 mxEpsgBuildSearchBox <- function( selector, options = list(), session=shiny::getDefaultReactiveDomain()) {
-
-  session$sendCustomMessage("mxEpsgBuildSearchBox",
-    list(
-      selector = selector,
-      txtLabelInput = options$txtLabelInput,
-      txtSearchPlaceholder = options$txtSearchPlaceholder,
-      txtButtonSearch = options$txtButtonSearch
-      )
-    )
+  options$selector <- selector 
+  session$sendCustomMessage("mxEpsgBuildSearchBox",options)
 }
 
 
