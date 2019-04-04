@@ -1,4 +1,30 @@
 ## Changelog
+
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.41">1.5.41</a>
+    
+    - Improvement
+      - APP
+        - Story map :
+          - Editor translation in french
+          - Full rebuilt UI renderer
+          - Added tips section in editor
+        - Style editor : support for style size by zoom ( point and lines )
+      - APP/API
+        - View metadata : faster, available using api, UI built client side.
+        - Added support for SRS assignation for data upload should add support for DXF/CSV. See #413; 
+        - Improved EPSG search module;
+        - Removed _mx_valid column from attributes fields and schema, as requested in #410
+    - Bug fixes
+      - APP
+        - Story map : fix for issue when old story map where played. Longtime overdue.
+        - #410 : 
+          - Removed _mx_valid column from list attributes fields and schema in forms
+          - Fix legend filter not cumulative
+    - Other :
+      - APP
+        - Removed loop optimisation. Loop optimizer have some issue when used in expression : the for loop was rebuilt outside scope;
+
+
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.2">1.5.40.2</a>
     - Improvement
       - APP/API
