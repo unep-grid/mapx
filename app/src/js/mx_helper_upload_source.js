@@ -178,7 +178,7 @@ function uploadSource(o) {
   var host = h.getApiUrl('uploadVector');
 
   if (o.geojson) {
-    o.geojson = typeof h.isString('string')
+    o.geojson = typeof h.isString(o.geojson)
       ? o.geojson
       : JSON.stringify(o.geojson);
     o.file = new File([o.geojson], mx.helpers.makeId(12) + '.geojson', {
