@@ -16,7 +16,7 @@
         - Removed _mx_valid column from attributes fields and schema, as requested in #410
     - Bug fixes
       - APP
-        - Story map : fix for issue when old story map where played. Longtime overdue.
+        - Story map : fix issue with external view as object instead of the expected view id string.
         - #410 : 
           - Removed _mx_valid column from list attributes fields and schema in forms
           - Fix legend filter not cumulative
