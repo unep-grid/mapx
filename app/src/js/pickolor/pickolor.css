@@ -20,21 +20,42 @@
   cursor:move;
 }
 
+.pickolor-tab {
+  border: 1px solid #ccc;
+  border-radius: 3px 3px 0px 0px;
+  border-bottom: none;
+  cursor : pointer;
+  font-size: 0.8em;
+  margin: 0px 5px 0px 0px;
+  padding: 5px 5px 5px 5px;
+  background-color:#d8d8d826;
+}
 
+.pickolor-tabs {
+  display: none;
+}
 .pickolor-tabs .pickolor-tab-radio {
   display: none;
 }
+
 .pickolor-tabs .pickolor-tab-radio:checked + label{
-  border-bottom : 1px solid #ccc;
+  background-color: #d8d8d8;
 }
-.pickolor-tabs .pickolor-tab-radio + label {
-  font-size: 0.8em;
-  margin: 5px;
+
+.pickolor-tabs-content {
+  border: 1px solid #ccc;
+  border-radius: 0px 3px 3px 3px;
+  background-color: #d8d8d8;
+  border-top: none;
+}
+
+.pickolor-check-panel-options-label {
   padding: 5px;
 }
-.pickolor-tabs-content {
-  padding-top: 10px;
-}
+
+.pickolor-options .pickolor-check-panel-options:checked ~ .pickolor-tabs {
+  display:block;
+} 
 
 .pickolor-tabs #pickolor-tab-sliders-radio:checked ~ .pickolor-tabs-content #pickolor-tab-sliders-content {
   display: block;
@@ -48,6 +69,7 @@
 
 .pickolor-tabs .pickolor-tab-content {
   display: none;
+  background-color:#d8d8d8;
 }
 
 .pickolor .tabs {
@@ -68,12 +90,17 @@
 .pickolor .top-group-input {
   display: flex;
 }
-.pickolor .top-group-input .button {
+.pickolor .top-group-input .button,
+.pickolor .pickolor-tab-content .button {
   margin: 2px;
   color: #fff;
   background-color: #474747;
   cursor: pointer;
   border-radius: 3px;
+}
+
+.pickolor .pickolor-tab-content .button {
+  width : 100%;
 }
 
 .pickolor .color-input {
@@ -90,17 +117,24 @@
   margin: 2px;
 }
 
-.pickolor .tab-sliders {
+.pickolor-tab-palettes,
+.pickolor-tab-json {
+  padding:10px;  
+}
+
+.pickolor-tab-sliders {
   border-radius: 3px;
-  padding: 15px;
   max-height: 300px;
   overflow-y: auto;
-  -webkit-box-shadow: inset 2px 2px 8px 1px rgba(173, 173, 173, 0.29);
-  -moz-box-shadow: inset 2px 2px 8px 1px rgba(173, 173, 173, 0.29);
-  box-shadow: inset 2px 2px 8px 1px rgba(173, 173, 173, 0.29);
 }
 
 .pickolor .slider-container {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
+}
+.pickolor .slider-container span {
+  opacity:0.8;
 }
 
 .pickolor .slider-min-max-container {
@@ -109,9 +143,7 @@
   justify-content: space-between;
   align-items: center;
 }
-.pickolor .slider-min-max-container span {
-  font-size: 0.7em;
-}
+
 
 .pickolor .slider {
   margin: 10px;
@@ -155,7 +187,8 @@
   border-radius: 3px;
   background: #474747;
   color: #fff;
-  width: calc(100% - 20px);
+  /*width: calc(100% - 20px);*/
+  width: 100%;
   resize: vertical;
   padding: 10px;
   min-height: 200px;

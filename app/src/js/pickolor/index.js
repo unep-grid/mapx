@@ -23,12 +23,6 @@ for( var i = 0 ; i< 5; i++){
 }
 
 
-
-
-
-var elDest =  document.getElementById("dest"); 
-var elDestOut =  document.getElementById("dest-out"); 
-
 window.pk = new Pickolor({
   container : document.body,
   //selector : '.btn-pickolor',
