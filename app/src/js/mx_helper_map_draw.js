@@ -83,7 +83,7 @@ function save() {
 
   return mx.helpers
     .saveSpatialDataAsView({
-      title : ' New layer ( ' + (new Date()).toLocaleString() + ' )' ,
+      title : 'New layer ' + (new Date()).toLocaleString() ,
       fileName: fileName,
       fileType: 'geojson',
       data: gj
