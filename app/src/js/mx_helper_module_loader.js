@@ -11,6 +11,7 @@ const modules = {
   'mapbox-gl-draw': loadMapboxGlDraw,
   'pickolor': loadPickolor,
   'nouislider': loadNoUiSlider,
+  'downloadjs': loadDownloadjs,
   'wms-capabilities' : loadWmsCapabilities,
   'mx-drag-drop-worker' : loadDragDropWorker
 };
@@ -35,6 +36,13 @@ export function modulesLoad(arr) {
 
 function loadTurfBbox(){
   return import('@turf/bbox')
+    .then(m => {
+      return m.default;
+    });
+}
+
+function loadDownloadjs(){
+  return import('downloadjs')
     .then(m => {
       return m.default;
     });

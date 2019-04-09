@@ -105,6 +105,27 @@ export function handleViewClick(o) {
         }
       },
       {
+        comment: 'target is the get geojson button',
+        test: el.dataset.view_action_key === 'btn_opt_get_geojson',
+        action: function() {
+          var viewTarget = el.dataset.view_action_target;
+          var download;
+          h.moduleLoad('downloadjs')
+            .then((d) => {
+              download = d;
+              return mx.data.geojson.getItem(viewTarget);
+            })
+            .then(function(item) {
+              var geojson = h.path(item, 'view.data.source.data');
+              var filename = h.path(item, 'view.data.title.en');
+              if(filename.search(/.geojson$/) === -1){
+                filename = "mx_geojson_" + mx.helpers.makeId() + ".geojson";
+              }
+              download(JSON.stringify(geojson),filename);
+            });
+        }
+      },
+      {
         comment: 'target is the upload geojson button',
         test: el.dataset.view_action_key === 'btn_upload_geojson',
         action: function() {
@@ -164,9 +185,9 @@ export function handleViewClick(o) {
            * for other values to filter using "OR" logical operator
            */
           var legendContainer = h.parentFinder({
-              selector: el,
-              class: 'mx-legend-box'
-            });
+            selector: el,
+            class: 'mx-legend-box'
+          });
           var legendInputs = legendContainer.querySelectorAll('input');
           var idView = el.dataset.view_action_target;
           var view = h.getViews({id: mx.settings.idMapDefault, idView: idView});
@@ -186,7 +207,6 @@ export function handleViewClick(o) {
               }
             }
           }
-
 
           view._setFilter({
             type: 'legend',
@@ -226,9 +246,7 @@ export function handleViewClick(o) {
         comment: 'target is the view meta button',
         test: el.dataset.view_action_key === 'btn_opt_meta',
         action: function() {
-          console.log("meta button clicked");
           var idView = el.dataset.view_action_target;
-          console.log("Meta requested for view ",idView);
           h.viewToMetaModal(idView);
         }
       },

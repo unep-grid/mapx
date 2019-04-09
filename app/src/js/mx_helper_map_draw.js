@@ -54,7 +54,7 @@ function disableDraw() {
   c.enabled = false;
   mx.helpers.setClickHandler({
     type: 'draw',
-    enable: c.enabled 
+    enable: c.enabled
   });
 }
 
@@ -62,20 +62,20 @@ function enableDraw() {
   var c = drawConfig;
   c.enabled = true;
   c.elBtn.classList.add('active');
-  if (c.draw){
+  if (c.draw) {
     disableDraw();
   }
   initDraw();
   mx.helpers.setClickHandler({
     type: 'draw',
-    enable: c.enabled 
+    enable: c.enabled
   });
 }
 
 function save() {
   var c = drawConfig;
   var gj = c.draw.getAll();
-  var fileName = 'MX-GJ-' + mx.helpers.makeId(10) + '.geojson';
+  var fileName = 'mx_draw_' + mx.helpers.makeId() + '.geojson';
 
   if (gj.features.length === 0) {
     return;
@@ -83,7 +83,7 @@ function save() {
 
   return mx.helpers
     .saveSpatialDataAsView({
-      title : 'New layer ' + (new Date()).toLocaleString() ,
+      title: fileName,
       fileName: fileName,
       fileType: 'geojson',
       data: gj

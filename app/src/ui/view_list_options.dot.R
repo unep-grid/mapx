@@ -308,21 +308,31 @@ liControlsGeoJson <- tagList(
   # Button to upload geojson
 
   tagList(
-  "{{?!h.path(mx,'settings.user.guest')}}",
+    "{{?!h.path(mx,'settings.user.guest')}}",
+    tags$li(
+      class="mx-pointer btn-circle btn-circle-small hint--left",
+      `data-lang_key`="btn_upload",
+      `data-lang_type`="tooltip",
+      `data-view_action_key`="btn_upload_geojson",
+      `data-view_action_target`="{{=view.id}}",
+      tags$div(
+        class="fa fa-cloud-upload"
+        )
+      ),
+    "{{?}}"
+    ),
   tags$li(
-    class="mx-pointer btn-circle btn-circle-small hint--right",
-    `data-lang_key`="btn_upload",
+    class="mx-pointer btn-circle btn-circle-small hint--left",
+    `data-lang_key`="btn_opt_download",
     `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_upload_geojson",
+    `data-view_action_key`="btn_opt_get_geojson",
     `data-view_action_target`="{{=view.id}}",
     tags$div(
-      class="fa fa-cloud-upload"
+      class="fa fa-cloud-download"
       )
     ),
-  "{{?}}"
-  ),
   tags$li(
-    class="mx-pointer btn-circle btn-circle-small hint--right",
+    class="mx-pointer btn-circle btn-circle-small hint--left",
     `data-lang_key`="btn_opt_delete_geojson",
     `data-lang_type`="tooltip",
     `data-view_action_key`="btn_opt_delete_geojson",
