@@ -109,8 +109,7 @@ export function jedInit(o) {
         if (pk) {
           pk.destroy();
         }
-        h
-          .getDict(mx.settings.language)
+        h.getDict(mx.settings.language)
           .then((d) => {
             dict = d;
             return h.moduleLoad('pickolor');
@@ -352,26 +351,32 @@ export function jedGetValidationById(o) {
  * @param {Number} o.timeDb Posix time stamp of the db version
  */
 function jedShowDraftRecovery(o) {
+  const h = mx.helpers;
+  const el = h.el;
+
   if (!o.draft || o.draft.type !== 'draft') {
     throw new Error({
       msg: 'Invalid draft',
       data: o.draft
     });
   }
-  var jed = mx.helpers.path(window, 'jed.editors.' + o.id);
+
+  var jed = h.path(window, 'jed.editors.' + o.id);
   var recoveredData = o.draft.data;
   var dbData = o.saved;
   var dateTimeDb = formatDateTime(o.timeDb);
   var dateTimeBrowser = formatDateTime(o.draft.timestamp);
-  var el = mx.helpers.el;
+
   var btnYes = el(
     'button',
     {
       type: 'button',
       class: ['btn', 'btn-default'],
-      on: ['click', restore]
-    },
-    'Use the most recent'
+      on: ['click', restore],
+      dataset: {
+        lang_key: 'draft_recover_use_most_recent'
+      }
+    }
   );
 
   var btnDiffData = el(
@@ -379,58 +384,78 @@ function jedShowDraftRecovery(o) {
     {
       type: 'button',
       class: ['btn', 'btn-default'],
-      on: ['click', previewDiff]
-    },
-    'Preview diff'
+      on: ['click', previewDiff],
+      dataset: {
+        lang_key: 'draft_recover_preview_diff'
+      }
+    }
   );
 
-  var elData = el('div');
-
-  var modal = mx.helpers.modal({
+  var elData;
+  var modal = h.modal({
     addBackground: true,
-    id: 'Data recovery',
-    title: 'Data recovery : more recent values found',
+    id: 'modalDataRecovery',
+    title: h.el('span', {dataset: {lang_key: 'draft_recover_modal_title'}}),
     buttons: [btnYes, btnDiffData],
-    textCloseButton: 'Cancel',
+    textCloseButton: el('span', {dataset: {lang_key: 'draft_recover_cancel'}}),
     content: el(
       'div',
-      el('h3', 'Summary'),
+      el('h3', {
+        dataset: {
+          lang_key: 'draft_recover_summary_title'
+        }
+      }),
       el(
         'p',
         el(
           'ul',
-          el('li', 'Last saved date : ' + dateTimeDb),
-          el('li', 'Recovered date : ' + dateTimeBrowser)
+          el(
+            'li',
+            el('span', {dataset: {lang_key: 'draft_recover_last_saved_date'}}),
+            el('span', ': ' + dateTimeDb)
+          ),
+          el(
+            'li',
+            el('span', {
+              dataset: {lang_key: 'draft_recover_recovered_date'}
+            }),
+            el('span', ': ' + dateTimeBrowser)
+          )
         ),
-        elData
+        elData = el('div')
       )
     )
+  });
+
+  h.updateLanguageElements({
+    el : modal
   });
 
   function previewDiff() {
     var elItem = el('div', {
       class: ['mx-diff-item']
     });
+    elData.innerHTML='';
     elData.classList.add('mx-diff-items');
-    elData.appendChild(el('h3', 'Diffs'));
+    elData.appendChild(
+      el('h3', el('span', {dataset: {lang_key: 'draft_recover_diffs'}}))
+    );
     elData.appendChild(elItem);
 
-    mx.helpers
-      .jsonDiff(dbData, recoveredData, {
-        toHTML: true,
-        propertyFilter: function(name) {
-          var firstChar = name.slice(0, 1);
-          /**
-           * Set of known key that should not be used in diff
-           */
-          return (
-            name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
-          );
-        }
-      })
-      .then((html) => {
-        elItem.innerHTML = html;
-      });
+    h.jsonDiff(dbData, recoveredData, {
+      toHTML: true,
+      propertyFilter: function(name) {
+        var firstChar = name.slice(0, 1);
+        /**
+         * Set of known key that should not be used in diff
+         */
+        return (
+          name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
+        );
+      }
+    }).then((html) => {
+      elItem.innerHTML = html;
+    });
   }
 
   function restore() {
