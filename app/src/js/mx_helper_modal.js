@@ -12,39 +12,70 @@
  */
 export function modal(o) {
   o = o || {};
-  var that = this;
   var h = mx.helpers;
+  var top,
+    title,
+    head,
+    body,
+    content,
+    footer,
+    buttons,
+    dialog,
+    validation,
+    buttonClose;
   var id = o.id || h.makeId();
   var idBackground = 'mx_background_for_' + id;
-  var modal = document.getElementById(o.id) || document.createElement('div');
-  var rectModal = modal.getBoundingClientRect();
-  var background = document.getElementById(idBackground) || document.createElement('div');
-  var hasJquery = typeof window.jQuery === 'function';
-  var hasShiny = typeof window.Shiny !== 'undefined';
-  var hasJed = false;
-  var elJedContainers;
-  var hasSelectize = hasJquery && typeof window.Selectize == 'function';
-  var startBodyScrollPos = 0;
-  var noShinyBinding = !hasShiny || typeof o.noShinyBinding !== 'undefined' ? o.noShinyBinding : false;
+  /**
+   * Get or create modal and background
+   */
+  var modal = document.getElementById(o.id);
+  var hasModal = h.isElement(modal);
+  if(!hasModal){
+    modal = buildModal(id);
+  }
 
-  if (o.close) {
+  var background = document.getElementById(idBackground);
+  var hasBackground = h.isElement(background);
+
+  if(!hasBackground){
+    background = buildBackground(idBackground);
+  }
+
+  var rectModal = modal.getBoundingClientRect();
+  var hasJquery = h.isFunction(window.jQuery);
+  var hasShiny = h.isObject(window.Shiny);
+  var elJedContainers;
+  var hasSelectize = hasJquery && h.isFunction(window.Selectize);
+  var startBodyScrollPos = 0;
+  var noShinyBinding =
+    !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
+
+  if (o.close === true) {
     close();
     return;
   }
-  if (modal.id && o.replace) {
-    if (hasShiny && !noShinyBinding) Shiny.unbindAll(modal);
-    if (hasSelectize) mx.helpers.removeSelectizeGroupById(id);
+
+  if ( hasModal && o.replace) {
     var oldBody = modal.querySelector('.mx-modal-body');
+
+    if (hasShiny && !noShinyBinding) {
+      Shiny.unbindAll(modal);
+    }
+    if (hasSelectize) {
+      mx.helpers.removeSelectizeGroupById(id);
+    }
     if (oldBody) {
       startBodyScrollPos = oldBody.scrollTop;
     }
 
     modal.remove();
-    modal = document.createElement('div');
-    modal.style.marginLeft = rectModal.left + 'px';
-    modal.style.top = rectModal.top + 'px';
+    modal = buildModal(id,{
+      marginLeft: rectModal.left + 'px',
+      top: rectModal.top + 'px'
+    });
   }
-  if (modal.id && !o.replace) {
+
+  if ( hasModal && !o.replace) {
     return;
   }
 
@@ -54,66 +85,37 @@ export function modal(o) {
   if (o.zIndex) {
     modal.style.zIndex = o.zIndex;
   }
-  
+
   if (o.minWidth) {
     modal.style.width = o.minWidth;
   }
 
-  var top = document.createElement('div');
-  var title = document.createElement('div');
-  var head = document.createElement('div');
-  var body = document.createElement('div');
-  var content = document.createElement('div');
-  var footer = document.createElement('div');
-  var buttons = document.createElement('div');
-  var dialog = document.createElement('div');
-  var validation = document.createElement('div');
-   
-  modal.appendChild(top);
-  modal.appendChild(head);
-  modal.appendChild(body);
-  modal.appendChild(footer);
-  modal.classList.add('mx-modal-container');
-  modal.classList.add('mx-draggable');
-  modal.appendChild(validation);
-  modal.id = id;
-
-
-  top.classList.add('mx-drag-handle');
-  top.classList.add('mx-modal-top');
-  top.appendChild(title);
-
-  title.classList.add('mx-modal-drag-enable');
-  title.classList.add('mx-modal-title');
-  head.classList.add('mx-modal-head');
-  validation.classList.add('mx-modal-validation');
-  body.classList.add('mx-modal-body');
-  body.classList.add('mx-scroll-styled');
-  content.classList.add('mx-modal-content');
-  footer.classList.add('mx-modal-foot');
-  buttons.classList.add('btn-group');
-  background.id = idBackground;
-  background.classList.add('mx-modal-background');
-  dialog.classList.add('shiny-text-output');
-  dialog.id = id + '_txt';
-  dialog.classList.add('mx-modal-foot-text');
-  validation.classList.add('shiny-html-output');
-  validation.id = id + '_validation';
-
   if (!o.removeCloseButton) {
-    var b = document.createElement('button');
-    b.className = 'btn btn-default';
-    b.innerHTML = o.textCloseButton || 'close';
-    b.addEventListener('click', close);
-    buttons.appendChild(b);
+    buttonClose = h.el(
+      'button',
+      {
+        class: ['btn', 'btn-default'],
+        on: {
+          click: close
+        }
+      },
+      o.textCloseButton
+    );
+    if (!o.textCloseButton) {
+      h.getDictItem('btn_close').then((d) => {
+        buttonClose.innerText = d;
+        buttonClose.dataset.lang_key = 'btn_close';
+      });
+    }
+    buttons.appendChild(buttonClose);
   }
 
-  if (o.buttons && o.buttons.constructor == Array) {
+  if (o.buttons && o.buttons.constructor === Array) {
     o.buttons.forEach(function(b) {
-      if (typeof b === 'string') {
+      if (h.isHTML(b)) {
         b = mx.helpers.textToDom(b);
       }
-      if (mx.helpers.isElement(b)) {
+      if (h.isElement(b)) {
         buttons.appendChild(b);
       }
     });
@@ -128,46 +130,115 @@ export function modal(o) {
   if (o.content && o.content instanceof Node) {
     content.appendChild(o.content);
   } else {
-    content.innerHTML = o.content;
+    if (h.isHTML(o.content)) {
+      content.innerHTML = o.content;
+    } else {
+      content.innerText = o.content;
+    }
   }
 
-  body.appendChild(content);
-  footer.appendChild(dialog);
-  footer.appendChild(buttons);
-  document.body.appendChild(modal);
-
-  
-
-  if (o.addBackground) document.body.appendChild(background);
-  if (hasShiny && !noShinyBinding) Shiny.bindAll(modal);
+ 
+  if (hasShiny && !noShinyBinding) {
+    Shiny.bindAll(modal);
+  }
   if (true) {
     mx.helpers.initSelectizeAll({
       id: id,
-      selector: modal,
+      selector: modal
     });
   }
   if (startBodyScrollPos) {
     body.scrollTop = startBodyScrollPos;
   }
+
+  /**
+  * Add to dom
+  */
+  document.body.appendChild(modal);
+
+  if (o.addBackground) {
+    document.body.appendChild(background);
+  }
+
   mx.helpers.draggable({
     selector: modal,
-    debounceTime: 10,
+    debounceTime: 10
   });
-
 
   modal.close = close;
 
   return modal;
 
-  function close(e) {
-    if( mx.helpers.isElement(content)  ) {
+  /**
+   * Helpers
+   */
+  function buildModal(idModal, style) {
+    return h.el(
+      'div',
+      {
+        id: idModal,
+        class: ['mx-modal-container', 'mx-draggable'],
+        style : style
+      },
+      (top = h.el(
+        'div',
+        {
+          class: ['mx-drag-handle', 'mx-modal-top']
+        },
+        (title = h.el('div', {
+          class: ['mx-modal-drag-enable', 'mx-modal-title']
+        }))
+      )),
+      (head = h.el('div', {
+        class: ['mx-modal-head']
+      })),
+      (body = h.el(
+        'div',
+        {
+          class: ['mx-modal-body', 'mx-scroll-styled']
+        },
+        (content = h.el('div', {
+          class: ['mx-modal-content']
+        }))
+      )),
+      (footer = h.el(
+        'div',
+        {
+          class: ['mx-modal-foot']
+        },
+        (buttons = h.el('div', {
+          class: 'btn-group'
+        })),
+        (dialog = h.el('div', {
+          id: idModal + '_txt',
+          class: ['shiny-text-output', 'mx-modal-foot-text']
+        }))
+      )),
+      (validation = h.el('div', {
+        id: idModal + '_validation',
+        class: ['shiny-html-output', 'mx-modal-validation']
+      }))
+    );
+  }
+
+  function buildBackground(idBackground) {
+    return h.el('div', {
+      id: idBackground,
+      class: ['mx-modal-background']
+    });
+  }
+  function close() {
+    if (mx.helpers.isElement(content)) {
       /**
-      * Remove jed editors
-      */
+       * Remove jed editors
+       */
       elJedContainers = content.querySelectorAll('[data-jed_id]');
-      elJedContainers.forEach(elJed => {
+      elJedContainers.forEach((elJed) => {
         var jedId = elJed.dataset.jed_id;
-        if(jed.editors[jedId] && mx.helpers.isFunction(jed.editors[jedId].destroy)){
+        if (
+          jed.editors[jedId] &&
+          mx.helpers.isFunction(jed.editors[jedId].destroy)
+        ) {
           jed.editors[jedId].destroy();
         }
       });
@@ -175,18 +246,18 @@ export function modal(o) {
     /**
      * Renove shiny binding
      */
-    if (hasShiny && !noShinyBinding){
+    if (hasShiny && !noShinyBinding) {
       Shiny.unbindAll(modal);
-    } 
+    }
     /**
-    * Remove selectize
-    */
-    if (hasSelectize){
+     * Remove selectize
+     */
+    if (hasSelectize) {
       mx.helpers.removeSelectizeGroupById(id);
     }
     /**
-    * Remove using jquery or DOM method.
-    */
+     * Remove using jquery or DOM method.
+     */
     if (hasJquery) {
       $(modal).remove();
       $(background).remove();
@@ -194,8 +265,5 @@ export function modal(o) {
       modal.remove();
       background.remove();
     }
-  
   }
-
-
 }
