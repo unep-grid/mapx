@@ -361,14 +361,14 @@ mxSchemaViewStyle <- function(
     custom = list (
       type = "object",
       propertyOrder = 6,
-      title = "Custom style",
+      title = tt("custom_style"),
       options = list(
         collapsed = TRUE
         ),
       properties = c(
         json = list(
           list(
-            title = "Custom style",
+            title = tt("custom_style_edit"),
             options = list(
               language = "javascript",
               editor = "ace",

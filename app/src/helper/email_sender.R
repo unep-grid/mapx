@@ -14,7 +14,7 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
   }
 
   if(noDataCheck(subject)){
-    subject = "map-x"
+    subject = "MapX"
   }
 
   if(noDataCheck(body)){

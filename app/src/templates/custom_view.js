@@ -1,6 +1,6 @@
 
 /**
-* Custom method for custom view in map-x
+* Custom method for custom view in MapX
 * Parameters for onInit and onClose function ;
 * @param {Object} o Options
 * @param {Object} o.view Map-x view object

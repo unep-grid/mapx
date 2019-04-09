@@ -51,7 +51,11 @@ export function modal(o) {
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
   if (o.close === true) {
-    close();
+    if(hasModal && h.isFunction(modal.close)){
+      modal.close();
+    }else{
+      close();
+    }
     return;
   }
 
@@ -121,7 +125,7 @@ export function modal(o) {
     });
   }
 
-  if (o.title && o.title instanceof Node) {
+  if (o.title && h.isElement(o.title)) {
     title.appendChild(o.title);
   } else {
     title.innerHTML = o.title || '';
@@ -166,6 +170,7 @@ export function modal(o) {
   });
 
   modal.close = close;
+  modal.setTitle = setTitle;
 
   return modal;
 
@@ -226,6 +231,13 @@ export function modal(o) {
       id: idBackground,
       class: ['mx-modal-background']
     });
+  }
+  function setTitle(newTitle){
+     if(h.isElement(newTitle)){
+       title.parentElement.replaceChild(title,newTitle)
+     }else{
+       title.innerText = newTitle;
+     }
   }
   function close() {
     if (mx.helpers.isElement(content)) {

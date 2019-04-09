@@ -18,7 +18,7 @@ tagList(
     ),
   tags$meta(
     name="description",
-    content="map-x"
+    content="MapX"
     ),
   tags$meta(
     name="author",

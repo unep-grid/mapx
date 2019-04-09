@@ -221,6 +221,7 @@ observeEvent(input$dashboardEdit_values,{
   dashboard <- values$data;
   idEvent <- values$idEvent;
   editor <- reactUser$data$id
+  language <- reactData$language
   project <- reactData$project
   view <- reactData$viewDataEdited
   view <- .set(view,c("data","dashboard"), dashboard)
@@ -266,7 +267,7 @@ observeEvent(input$dashboardEdit_values,{
 
       mxUpdateText(
         id = "modalViewEdit_txt",
-        text = sprintf("Saved at %s",format(time,'%H:%M'))
+        text = sprintf(d("saved_at",language),format(time,'%H:%M'))
         )
 
 

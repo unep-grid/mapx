@@ -2125,7 +2125,7 @@ mxDbGetLayerTimeVariables <- function(layer){
 
 }
 
-#' Get layer time extent using map-x time column
+#' Get layer time extent using MapX time column
 #' @param layer Layer name to analyze
 #' @export 
 mxDbGetLayerTimeExtent <- function(layer){
@@ -2164,7 +2164,7 @@ mxDbGetLayerTimeExtent <- function(layer){
   return(out)
 }
 
-#' Get object count over time using map-x time column
+#' Get object count over time using MapX time column
 #' @param layer Layer name to analyze
 #' @export 
 mxDbGetLayerTimeDensity <- function(layer){
@@ -2593,7 +2593,7 @@ mxDbGetSessionDurationHMS <- function(id=NULL){
 #'
 #' Check in a standard mapx database if an email/user exists
 #'
-#' @param email map-x user email
+#' @param email MapX user email
 #' @param userTable name of the table
 #' @return boolean exists
 #' @export

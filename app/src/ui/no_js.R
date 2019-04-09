@@ -8,7 +8,7 @@
 
 # Set no script if javascript is missong
 tags$noscript(
-  tags$p("Please enable JavaScript to use map-x"),
+  tags$p("Please enable JavaScript to use MapX"),
   tags$style(
     type="text/css",
     ".mx .left-column {display:none}"

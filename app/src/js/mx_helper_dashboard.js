@@ -427,7 +427,7 @@ Dashboard.prototype.Widget = function(config) {
         type: ['pie', 'bar', 'line'][Math.round(Math.random() * 2)]
       },
       credits: {
-        text: 'map-x',
+        text: 'MapX',
         href: 'http://www.mapx.org'
       },
       title: {

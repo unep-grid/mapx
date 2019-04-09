@@ -34,19 +34,19 @@ export function triggerUploadForm(opt) {
     elEmail.setAttribute('disabled', true);
     elTitle.setAttribute('disabled', true);
     elButton.setAttribute('disabled', true);
-    elEpsgCode.setAttribute('disabled',true);
+    elEpsgCode.setAttribute('disabled', true);
 
     /**
      * Get values
      */
     var title = elTitle.value;
     var file = elInput.files[0];
-    var epsg =  elEpsgCode.value + '' ;
+    var epsg = elEpsgCode.value + '';
 
     uploadSource({
       file: file,
       title: title,
-      sourceSrs : epsg,
+      sourceSrs: epsg,
       selectorProgressContainer: elForm
     });
   }
@@ -72,9 +72,12 @@ export function uploadGeojsonModal(idView) {
       return;
     }
 
-    var elBtnUpload = el('buton', 'Upload', {
+    var elBtnUpload = el('buton',{
       class: 'btn btn-default',
-      on: ['click', upload]
+      on: ['click', upload],
+       dataset : {
+         lang_key : 'btn_upload'
+       }
     });
 
     var elInput = el('input', {
@@ -89,7 +92,10 @@ export function uploadGeojsonModal(idView) {
     var elWarning = el('span');
     var elProgress = el('div');
 
-    var elLabel = el('label', 'Title of the source', {
+    var elLabel = el('label', {
+      dataset: {
+        lang_key: 'src_upload_add'
+      },
       for: 'txtInputSourceTitle'
     });
 
@@ -106,10 +112,18 @@ export function uploadGeojsonModal(idView) {
 
     var elFormUpload = el('div', elFormGroup);
 
-    h.modal({
-      title: 'Upload ' + title,
+    var elModal = h.modal({
+      title: h.el('div', {
+        dataset: {
+          lang_key: 'src_upload_add'
+        }
+      }),
       content: elFormUpload,
       buttons: [elBtnUpload]
+    });
+
+    h.updateLanguageElements({
+      el : elModal
     });
 
     function upload() {
@@ -165,6 +179,8 @@ export function uploadGeojsonModal(idView) {
  */
 function uploadSource(o) {
   const h = mx.helpers;
+  const el = h.el;
+ 
   /* Server will validate token,
    * but we can avoid much trouble here
    */
@@ -178,10 +194,16 @@ function uploadSource(o) {
   var host = h.getApiUrl('uploadVector');
 
   if (o.geojson) {
-    o.geojson = typeof h.isString(o.geojson)
+    o.geojson = h.isString(o.geojson)
       ? o.geojson
       : JSON.stringify(o.geojson);
-    o.file = new File([o.geojson], mx.helpers.makeId(12) + '.geojson', {
+    var filename = o.title;
+
+    if(o.title.search(/.geojson$/) === -1){
+      filename = h.makeId(10) + '.geojson';
+    }
+
+    o.file = new File([o.geojson], filename, {
       type: 'application/json'
     });
   }
@@ -201,42 +223,76 @@ function uploadSource(o) {
    * Create ui
    */
 
-  var elProgressTarget =
+  var elOutput =
     o.selectorProgressContainer instanceof Node
       ? o.selectorProgressContainer
       : document.querySelector(o.selectorProgressContainer);
-  var el = mx.helpers.el;
-  var elProgressLabel = el('label', 'Progress');
-  var elLogLabel = el('label', 'Logs');
 
-  /* progress bar */
-  var elProgressBar = el('div', {
-    class: 'mx-inline-progress-bar'
-  });
-  var elProgressBarContainer = el(
-    'div',
-    {
-      class: 'mx-inline-progress-container'
-    },
-    elProgressBar
-  );
-  var elProgressMessageContainer = el('div', {
-    class: ['form-control', 'mx-logs']
-  });
+ /* var elProgressLabel = el('label', 'Progress');*/
+  //var elLogLabel = el('label', 'Logs');
 
-  var elProgressMessage = el('ul');
+  //[> progress bar <]
+  //var elProgressBar = el('div', {
+    //class: 'mx-inline-progress-bar'
+  //});
+  //var elProgressBarContainer = el(
+    //'div',
+    //{
+      //class: 'mx-inline-progress-container'
+    //},
+    //elProgressBar
+  //);
+  //var elProgressMessageContainer = el('div', {
+    //class: ['form-control', 'mx-logs']
+  //});
 
-  elProgressMessageContainer.appendChild(elProgressMessage);
+  //var elProgressMessage = el('ul');
+
+  //elProgressMessageContainer.appendChild(elProgressMessage);
+
+  //var elProgressContainer = el(
+    //'div',
+    //elProgressLabel,
+    //elProgressBarContainer,
+    //elLogLabel,
+    //elProgressMessageContainer
+  //);
+
+
+  
+  /* log messages */
+  var elLogLabel, elProgressBar, elProgressBarContainer, elProgressLabel, elProgressMessage, elProgressMessageContainer;
 
   var elProgressContainer = el(
     'div',
-    elProgressLabel,
-    elProgressBarContainer,
-    elLogLabel,
-    elProgressMessageContainer
+    /**
+     * Progress bar
+     */
+    (elProgressLabel = el('label', {dataset: {lang_key: 'api_progress_title'}})),
+    (elProgressBarContainer = el(
+      'div',
+      {
+        class: 'mx-inline-progress-container'
+      },
+      (elProgressBar = el('div', {
+        class: 'mx-inline-progress-bar'
+      }))
+    )),
+    /**
+     * Message box
+     */
+    (elLogLabel = el('label', {dataset: {lang_key: 'api_log_title'}})),
+    (elProgressMessageContainer = el(
+      'div',
+      {
+        class: ['form-control', 'mx-logs']
+      },
+      (elProgressMessage = el('ul'))
+    ))
   );
 
-  elProgressTarget.appendChild(elProgressContainer);
+  elOutput.appendChild(elProgressContainer);
+  updateTranslation();
 
   mx.helpers.sendData({
     maxWait: 1e3 * 60 * 60,
@@ -258,6 +314,10 @@ function uploadSource(o) {
 
   var uploadDone = false;
 
+ function updateTranslation() {
+    h.updateLanguageElements({el: elProgressContainer});
+  }
+
   function updateLayerList() {
     Shiny.onInputChange('mglEvent_update_source_list', {
       date: new Date() * 1
@@ -272,12 +332,15 @@ function uploadSource(o) {
         var li = el(
           'li',
           {
+            dataset : {
+              lang_key : 'api_upload_ready'
+            },
             class: ['mx-log-item', 'mx-log-green']
-          },
-          'Process done,the data should be available in sources list'
+          }
         );
         elProgressMessage.appendChild(li);
         updateLayerList();
+        updateTranslation();
       },
       error: function(msg) {
         var li = el(
@@ -297,7 +360,6 @@ function uploadSource(o) {
           },
           msg
         );
-        elProgressLabel.innertText = 'Importation progress';
         elProgressMessage.appendChild(li);
       },
       warning: function(msg) {
@@ -311,20 +373,21 @@ function uploadSource(o) {
         elProgressMessage.appendChild(li);
       },
       progress: function(progress) {
-        elProgressLabel.innerText = 'Upload progress';
         elProgressBar.style.width = progress + '%';
         if (progress >= 99.9 && !uploadDone) {
           uploadDone = true;
-          var msg =
-            'Upload done. Importation in DB, please wait, this could take a while...';
           var li = el(
             'li',
             {
-              class: ['mx-log-item', 'mx-log-white']
+              class: ['mx-log-item', 'mx-log-white'],
+              dataset : {
+                lang_key : 'api_upload_done_wait_db'
+              }
             },
             msg
           );
           elProgressMessage.appendChild(li);
+          updateTranslation();
         }
       },
       default: function(msg) {

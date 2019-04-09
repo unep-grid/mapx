@@ -3313,7 +3313,7 @@ export function addOptions(o) {
 }
 
 /**
- * Add map-x view on the map
+ * Add MapX view on the map
  * @param {object} o Options
  * @param {string} o.id map id
  * @param {string} o.idView view id

@@ -64,13 +64,13 @@ observeEvent(input$btnShowRoleManager,{
 
     btnSave <- actionButton(
       "btnSaveProjectConfigRoles",
-      "Save"
+      d("btn_save",language)
       )
 
 
     mxModal(
       id = "roleInfo",
-      title = "Role administration",
+      title = d("project_roles_modal_title",language),
       content = ui,
       textCloseButton = d("btn_cancel",language,web=F),
       buttons = list(btnSave)
@@ -222,7 +222,7 @@ observeEvent(input$btnSaveProjectConfigRoles,{
 
     mxModal(
       id = "roleInfo",
-      title = "Role administration",
+      title = d("project_roles_modal_title",language),
       content = ui,
       textCloseButton = d(btnCloseText,language,web=F),
       buttons = btnConfirm
@@ -277,9 +277,8 @@ observeEvent(input$btnConfirmProjectConfigRoles,{
     
     mxModal(
       id = "roleInfo",
-      title = "Role administration",
-      content = ui,
-      textCloseButton = d("btn_close",language,web=F)
+      title = d("project_roles_modal_title",language),
+      content = ui
       )
 
   }

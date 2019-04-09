@@ -56,10 +56,9 @@ observeEvent(input$btnUploadSourceApi,{
     # create modal
     #
     mxModal(
-      id = "modalSourceDownload",
-      title = d("upload"),
+      id = "modalSourceUpload",
+      title = d("src_upload_add",language),
       content = uiOut,
-      textCloseButton = d("btn_close",language),
       buttons = btnList
       )
 

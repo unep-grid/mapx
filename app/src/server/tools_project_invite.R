@@ -57,7 +57,7 @@ observeEvent(reactData$showInviteMember,{
       )
 
     mxModal(
-      id = "roleInfo",
+      id = "modalSendProjectInvite",
       title = d("project_invite_modal_title",language),
       content = ui,
       textCloseButton = d("btn_cancel",language,web=F)
@@ -168,8 +168,8 @@ observeEvent(reactData$showInviteMemberCompose,{
       tags$input(type="text","class"="form-control",disabled="true",value=email),
       textAreaInput(
         inputId = "txtAreaInviteMessage",
-        label=modalTitle,
-        rows="10",
+        label = modalTitle,
+        rows = "10",
         value = msgInvite,
         placeholder = modalTitle 
         ),
@@ -183,8 +183,8 @@ observeEvent(reactData$showInviteMemberCompose,{
         ))
 
     mxModal(
-      title = modalTitle,
       id = "modalSendProjectInvite",
+      title = modalTitle,
       content = uiOutput,
       textCloseButton = d("btn_close",language),
       buttons = btn
@@ -253,7 +253,6 @@ observeEvent(input$btnSendInviteMessage,{
             )
           )
       }else{
-
         mxModal(
           close = T,
           id  =  "modalSendProjectInvite"

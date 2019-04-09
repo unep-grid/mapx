@@ -133,7 +133,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                title=tags$b(sprintf("Delete %s",viewTitle)),
+                title=tags$b(sprintf(d('view_delete_modal_title',language),viewTitle)),
                 content=uiOut,
                 textCloseButton=d("btn_close",language),
                 buttons=btnList
@@ -481,7 +481,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                title=sprintf("Edit custom code for %s",viewTitle),
+                title=sprintf(d('view_edit_custom_code_modal_title',language),viewTitle),
                 addBackground=FALSE,
                 content=tagList(
                   jedOutput(id="customCodeEdit")
@@ -509,7 +509,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                title=sprintf("Edit dashboard %s",viewTitle),
+                title=sprintf(d('view_edit_dashboard_modal_title',language),viewTitle),
                 addBackground=FALSE,
                 content=tagList(
                   uiOutput("txtValidSchema"),
@@ -559,7 +559,7 @@ observe({
                 )
               mxModal(
                 id = "modalViewEdit",
-                title = sprintf("Edit story map %s",viewTitle),
+                title = sprintf(d("view_edit_story_modal_title",language),viewTitle),
                 addBackground = FALSE,
                 content = tagList(
                   uiOutput("txtValidSchema"),
@@ -589,7 +589,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                title=sprintf("Edit style %s",viewTitle),
+                title = sprintf(d("view_edit_style_modal_title",language),viewTitle),
                 addBackground=FALSE,
                 content=tagList(
                   uiOutput("txtValidSchema"),

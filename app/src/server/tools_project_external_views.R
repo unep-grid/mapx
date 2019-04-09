@@ -15,7 +15,6 @@ observeEvent(input$btnShowProjectExternalViews,{
     viewsExternal <- mxDbGetViewsTitle(viewsExternal,asNamedList=TRUE,language=language)
 
     uiExternalViews <- tagList(   
-      tags$h3("External views shared in this project"),
       selectizeInput(
         "selectProjectExternalViews",
         label = d("views_external",language),
@@ -31,12 +30,12 @@ observeEvent(input$btnShowProjectExternalViews,{
 
     btnSave <- actionButton(
       "btnSaveProjectExternalViews",
-      "Save"
+      d("btn_save",language)
       )
 
     mxModal(
       id = "viewsExternal",
-      title = "External views",
+      title = d("views_external_modal_title",language),
       content = uiExternalViews,
       textCloseButton = d("btn_close",language,web=F),
       buttons = list(btnSave)
