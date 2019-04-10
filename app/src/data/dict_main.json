@@ -9811,7 +9811,7 @@
   {
     "id": "error_notset",
     "en": "Property must be set",
-    "fr": "",
+    "fr": "La propriété doit être remplie",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9823,7 +9823,7 @@
   {
     "id": "error_notempty",
     "en": "Value required",
-    "fr": "",
+    "fr": "Valeur requise",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9835,7 +9835,7 @@
   {
     "id": "error_enum",
     "en": "Value must be one of the enumerated values",
-    "fr": "",
+    "fr": "La valeur doit être l'une de celles énumérées",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9847,7 +9847,7 @@
   {
     "id": "error_anyOf",
     "en": "Value must validate against at least one of the provided schemas",
-    "fr": "",
+    "fr": "La valeur doit être validée par au moins un des schémas fournis",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9859,7 +9859,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "fr": "",
+    "fr": "La valeur doit être validée par exactement un des schémas fournis. Elle est actuellement validée par {{0}} des schémas.",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9871,7 +9871,7 @@
   {
     "id": "error_not",
     "en": "Value must not validate against the provided schema",
-    "fr": "",
+    "fr": "La valeur ne doit pas être validée par rapport au schéma fourni",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9883,7 +9883,7 @@
   {
     "id": "error_type_union",
     "en": "Value must be one of the provided types",
-    "fr": "",
+    "fr": "La valeur doit être l'un des types fournis",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9895,7 +9895,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être de type {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9907,7 +9907,7 @@
   {
     "id": "error_disallow_union",
     "en": "Value must not be one of the provided disallowed types",
-    "fr": "",
+    "fr": "La valeur ne doit pas être l'un des types non autorisés fournis",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9919,7 +9919,7 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "fr": "",
+    "fr": "La valeur ne doit pas être de type {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9931,7 +9931,7 @@
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être un multiple de {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9943,7 +9943,7 @@
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être inférieure à {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9955,7 +9955,7 @@
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être au maximum {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9967,7 +9967,7 @@
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être supérieure à {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9979,7 +9979,7 @@
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "fr": "",
+    "fr": "La valeur doit être au moins {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -9991,7 +9991,7 @@
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "fr": "",
+    "fr": "La valeur doit comporter au maximum {{0}} caractères",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10003,7 +10003,7 @@
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "fr": "La valeur doit être d'au moins {{0}} charactères",
+    "fr": "La valeur doit comporter au moins {{0}} caractères",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10015,7 +10015,7 @@
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "fr": "",
+    "fr": "La valeur doit correspondre au modèle {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10027,7 +10027,7 @@
   {
     "id": "error_additionalItems",
     "en": "No additional items allowed in this array",
-    "fr": "",
+    "fr": "Aucun élément supplémentaire autorisé dans ce tableau",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10039,7 +10039,7 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "fr": "",
+    "fr": "La valeur doit comporter au maximum {{0}} éléments",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10051,7 +10051,7 @@
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "fr": "",
+    "fr": "La valeur doit comporter au moins {{0}} éléments",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10063,7 +10063,7 @@
   {
     "id": "error_uniqueItems",
     "en": "Array must have unique items",
-    "fr": "",
+    "fr": "Le Tableau doit avoir des éléments uniques",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10075,7 +10075,7 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "fr": "",
+    "fr": "L'objet doit avoir au plus {{0}} propriétés",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10087,7 +10087,7 @@
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "fr": "",
+    "fr": "L'objet doit avoir au moins {{0}} propriétés",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10099,7 +10099,7 @@
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "fr": "",
+    "fr": "La propriété requise '{{0}}' est manquante dans l'objet",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10111,7 +10111,7 @@
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "fr": "",
+    "fr": "Aucune propriété supplémentaire n'est autorisée, mais la propriété {{0}} est définie",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10123,7 +10123,7 @@
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "fr": "",
+    "fr": "Doit avoir la propriété {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10135,7 +10135,7 @@
   {
     "id": "button_delete_all",
     "en": "All",
-    "fr": "",
+    "fr": "Tout",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10147,7 +10147,7 @@
   {
     "id": "button_delete_all_title",
     "en": "Delete All",
-    "fr": "",
+    "fr": "Supprimer tout",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10159,7 +10159,7 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "fr": "",
+    "fr": "Dernier {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10171,7 +10171,7 @@
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "fr": "",
+    "fr": "Supprimer le dernier {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10183,7 +10183,7 @@
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "fr": "",
+    "fr": "Ajouter {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10195,7 +10195,7 @@
   {
     "id": "button_move_down_title",
     "en": "Move down",
-    "fr": "",
+    "fr": "Déplacer vers le bas",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10207,7 +10207,7 @@
   {
     "id": "button_move_up_title",
     "en": "Move up",
-    "fr": "",
+    "fr": "Déplacer vers le haut",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10219,7 +10219,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "fr": "",
+    "fr": "Supprimer {{0}}",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10231,7 +10231,7 @@
   {
     "id": "button_delete_row_title_short",
     "en": "Delete",
-    "fr": "",
+    "fr": "Supprimer",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10243,7 +10243,7 @@
   {
     "id": "button_collapse",
     "en": "Collapse",
-    "fr": "",
+    "fr": "Réduire",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10255,7 +10255,7 @@
   {
     "id": "button_expand",
     "en": "Expand",
-    "fr": "",
+    "fr": "Développer",
     "de": "",
     "ru": "",
     "zh": "",
