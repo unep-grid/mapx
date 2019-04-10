@@ -1,7 +1,16 @@
 ## Changelog
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.41">1.5.41</a>
-    
+-<a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.42</a>
+    - Improvement
+      - APP
+        - Added support for languages in forms validation + french translation
+        - Allow GeoJSON view direct download
+        - Full rebuild of modals
+        - Added support for languages in color picker
+        - Added support for languages in recovery system
+        - Minor translation changes. See #327.
+
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.41">1.5.41</a>    
     - Improvement
       - APP
         - Story map :
