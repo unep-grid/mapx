@@ -9,12 +9,21 @@
  */
 export function jedInit(o) {
   var h = mx.helpers;
-  return h.moduleLoad('json-editor').then(() => {
+
+  return Promise.all([
+    getDictJsonEditorDict(),
+    h.moduleLoad('json-editor')
+  ]).then((m) => {
+    var dict = m[0];
     var id = o.id;
     var schema = o.schema;
     var startVal = o.startVal;
     var options = o.options;
     var JSONEditor = window.JSONEditor;
+    if (dict) {
+      JSONEditor.defaults.languages = dict;
+    }
+    JSONEditor.defaults.language = mx.settings.language;
     var el = document.getElementById(id);
     var idDraft;
     var draftLock = true;
@@ -367,29 +376,23 @@ function jedShowDraftRecovery(o) {
   var dateTimeDb = formatDateTime(o.timeDb);
   var dateTimeBrowser = formatDateTime(o.draft.timestamp);
 
-  var btnYes = el(
-    'button',
-    {
-      type: 'button',
-      class: ['btn', 'btn-default'],
-      on: ['click', restore],
-      dataset: {
-        lang_key: 'draft_recover_use_most_recent'
-      }
+  var btnYes = el('button', {
+    type: 'button',
+    class: ['btn', 'btn-default'],
+    on: ['click', restore],
+    dataset: {
+      lang_key: 'draft_recover_use_most_recent'
     }
-  );
+  });
 
-  var btnDiffData = el(
-    'button',
-    {
-      type: 'button',
-      class: ['btn', 'btn-default'],
-      on: ['click', previewDiff],
-      dataset: {
-        lang_key: 'draft_recover_preview_diff'
-      }
+  var btnDiffData = el('button', {
+    type: 'button',
+    class: ['btn', 'btn-default'],
+    on: ['click', previewDiff],
+    dataset: {
+      lang_key: 'draft_recover_preview_diff'
     }
-  );
+  });
 
   var elData;
   var modal = h.modal({
@@ -422,20 +425,20 @@ function jedShowDraftRecovery(o) {
             el('span', ': ' + dateTimeBrowser)
           )
         ),
-        elData = el('div')
+        (elData = el('div'))
       )
     )
   });
 
   h.updateLanguageElements({
-    el : modal
+    el: modal
   });
 
   function previewDiff() {
     var elItem = el('div', {
       class: ['mx-diff-item']
     });
-    elData.innerHTML='';
+    elData.innerHTML = '';
     elData.classList.add('mx-diff-items');
     elData.appendChild(
       el('h3', el('span', {dataset: {lang_key: 'draft_recover_diffs'}}))
@@ -470,4 +473,29 @@ function formatDateTime(posix) {
   var date = d.toLocaleDateString();
   var time = d.toLocaleTimeString();
   return date + ' at ' + time;
+}
+
+/**
+ * Translate MapX to JSONEditor dict
+ *
+ * @return {Promise} resolve to JSONEditor dict
+ */
+function getDictJsonEditorDict() {
+  const h = mx.helpers;
+  var out = {};
+  return h.getDict(mx.settings.language).then((dict) => {
+    dict.forEach((d) => {
+      var k = d.id;
+      Object.keys(d).forEach((l) => {
+        if (l === 'id') {
+          return;
+        }
+        if (!out[l]) {
+          out[l] = {};
+        }
+        out[l][k] = d[l];
+      });
+    });
+    return out;
+  });
 }

@@ -4356,7 +4356,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "view_edit_custom_code_modal_title",
     "en": "Edit custom code of %s",
     "fr": "Éditer le code personalisé de %s",
@@ -4368,7 +4368,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "view_edit_dasboard_modal_title",
     "en": "Edit dashboard of  %s",
     "fr": "Éditer le tableau de bord de %s",
@@ -4380,7 +4380,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "view_edit_story_modal_title",
     "en": "Edit story map of  %s",
     "fr": "Éditer le récit de %s",
@@ -4392,7 +4392,7 @@
     "fa": "",
     "ps": ""
   },
- {
+  {
     "id": "view_edit_style_modal_title",
     "en": "Edit style of  %s",
     "fr": "Éditer le style de %s",
@@ -9640,7 +9640,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
     "fr": "Récupération de données",
@@ -9652,7 +9652,7 @@
     "fa": "",
     "ps": ""
   },
-   {
+  {
     "id": "draft_recover_use_most_recent",
     "en": "Use the most recent",
     "fr": "Utiliser la version recente",
@@ -9663,7 +9663,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_cancel",
     "en": "Cancel",
     "fr": "Annuler",
@@ -9674,7 +9675,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_preview_diff",
     "en": "Preview differences",
     "fr": "Aperçu des changements",
@@ -9685,7 +9687,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_last_saved_date",
     "en": "Date of the last saved version",
     "fr": "Date de la dernière version sauvegardée",
@@ -9696,7 +9699,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_recovered_date",
     "en": "Date of the recovered version",
     "fr": "Date de la version récupérée",
@@ -9707,7 +9711,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_diffs",
     "en": "Differences",
     "fr": "Différences",
@@ -9718,7 +9723,8 @@
     "bn": "",
     "fa": "",
     "ps": ""
-  },   {
+  },
+  {
     "id": "draft_recover_summary_title",
     "en": "Summary",
     "fr": "Résumé",
@@ -9801,5 +9807,461 @@
     "bn": "",
     "fa": "",
     "ps": ""
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "fr": "La valeur doit être d'au moins {{0}} charactères",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "fr": "",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
   }
 ]

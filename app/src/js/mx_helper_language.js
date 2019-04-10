@@ -25,9 +25,9 @@ export function splitnwords(str) {
     .join('\n');
 }
 
+
 export function getDict(lang) {
   'use strict';
-  const h = mx.helpers; 
   lang = lang || mx.settings.language || 'en';
   var out;
 
@@ -63,7 +63,10 @@ export function getDict(lang) {
       out = import('../built/dict_en.json');
       break;
   }
-  return out.then(m => h.objectToArray(m));
+  return out.then(m =>
+    {
+      return m.default;
+    });
 }
 
 /** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
