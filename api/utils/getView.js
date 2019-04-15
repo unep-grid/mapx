@@ -36,7 +36,7 @@ exports.get = function(req, res) {
   clientPgRead
     .query(sql)
     .then(function(result) {
-      if (result && result.rowCount == 0) {
+      if (result && result.rowCount === 0) {
         return res.sendStatus(404);
       }
 
@@ -102,9 +102,7 @@ exports.getTile = function(req, res) {
       return getTile(res, hash, data);
     })
     .catch(function(err) {
-
       return res.status(500).send({error:err.message});
-      return res.status(500).send(err);
     });
 };
 

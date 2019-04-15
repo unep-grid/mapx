@@ -234,7 +234,7 @@ export function modal(o) {
   }
   function setTitle(newTitle){
      if(h.isElement(newTitle)){
-       title.parentElement.replaceChild(title,newTitle)
+       title.parentElement.replaceChild(title,newTitle);
      }else{
        title.innerText = newTitle;
      }
