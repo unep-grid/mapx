@@ -1,0 +1,182 @@
+.mc {
+  position: relative;
+  transform-origin: top left;
+}
+.mc.mc-mode-layout {
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #ccc;
+}
+.mc * {
+  transform-origin: top left;
+  touch-action: none;
+  user-select: none;
+}
+.mc .mc-page {
+  transform-origin: top left;
+  background: #fff;
+  position: relative;
+}
+
+.mc.mc-mode-normal .mc-page {
+  overflow: hidden;
+}
+.mc.mc-mode-layout .mc-page,
+.mc.mc-mode-layout {
+  background-image: -moz-linear-gradient(45deg, #ddd 25%, transparent 25%),
+    -moz-linear-gradient(-45deg, #ddd 25%, transparent 25%),
+    -moz-linear-gradient(45deg, transparent 75%, #ddd 75%),
+    -moz-linear-gradient(-45deg, transparent 75%, #ddd 75%);
+  background-image: -webkit-gradient(
+      linear,
+      0 100%,
+      100% 0,
+      color-stop(0.25, #ddd),
+      color-stop(0.25, transparent)
+    ),
+    -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0.25, #ddd), color-stop(0.25, transparent)),
+    -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.75, transparent), color-stop(0.75, #ddd)),
+    -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0.75, transparent), color-stop(0.75, #ddd));
+
+  -moz-background-size: 10px 10px;
+  -webkit-background-size: 10px 11px; /* override value for shitty webkit */
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 0, 5px -5px, 0px 5px;
+}
+
+.mc.mc-mode-layout {
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: #ccc;
+}
+.mc.mc-mode-layout .mc-page {
+  outline: 1px dashed #474747;
+  background-color: #fff;
+}
+
+.mc .mc-item {
+  position: absolute;
+}
+.mc .mc-item .mc-item-content {
+  overflow: hidden;
+  background-color:#fff;
+  height: 100%;
+  width: 100%;
+}
+.mc.mc-mode-layout .mc-item {
+  background: #fff;
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  outline-offset: -1px;
+  -webkit-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
+  -moz-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
+  box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
+}
+
+.mc .mc-item .mc-text {
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
+}
+
+.mc .mc-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #474747;
+  border-radius: 50%;
+  opacity: 0.7;
+  display: none;
+  z-index: 1;
+}
+.mc .mc-handle:after {
+  top: -10px;
+  left: -10px;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  background-color: #ccc;
+  content: '';
+  border-radius: 50%;
+  opacity: 0.2;
+}
+
+.mc.mc-mode-layout .mc-item:hover > .mc-handle,
+.mc.mc-mode-layout .mc-page:hover > .mc-handle {
+  display: block;
+}
+
+.mc .mc-handle.mc-handle-resize-top {
+  top: -5px;
+  left: calc(50% - 5px);
+  cursor: ns-resize;
+}
+.mc .mc-handle.mc-handle-resize-bottom {
+  bottom: -5px;
+  left: calc(50% - 5px);
+  cursor: ns-resize;
+}
+.mc .mc-handle.mc-handle-resize-left {
+  top: calc(50% - 5px);
+  left: -5px;
+  cursor: ew-resize;
+}
+.mc .mc-handle.mc-handle-resize-right {
+  top: calc(50% - 5px);
+  right: -5px;
+  cursor: ew-resize;
+}
+.mc .mc-handle.mc-handle-drag {
+  top: calc(50% - 5px);
+  left: calc(50% - 5px);
+  cursor: move;
+}
+.mc .mc-map {
+  height: 100%;
+  width: 100%;
+}
+.mc .mc-map .mapboxgl-ctrl-attrib,
+.mc .mc-map .mapboxgl-ctrl-logo {
+  display: none;
+}
+.mc .mc-map .mapboxgl-ctrl-scale {
+  max-height: 20px;
+  border-radius: 0;
+}
+/*.mc .mc-map .mapbox-ctrl-bottom-right {*/
+/*display: flex;*/
+/*flex-direction: row;*/
+/*}*/
+.mc .mc-flash {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+.mc .mc-flash.active {
+  z-index: 10;
+}
+
+.mc .mc-flash div {
+  color: white;
+  background-color: #474747;
+  font-size: 20px;
+  opacity: 0;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.mc .mc-flash.active div {
+  opacity: 1;
+  font-size: 30px;
+}
+
+/**
+* set default texts
+*/
+.mc h1,
+.mc h2,
+.mc h3,
+.mc h4,
+.mc h5 {
+  margin: unset;
+}

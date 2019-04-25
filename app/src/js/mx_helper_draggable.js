@@ -1,7 +1,6 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
 export function sortable(o) {
-
   o.listener = {};
   var sortableOpt = o;
 
@@ -11,34 +10,31 @@ export function sortable(o) {
     o.elRoot = document.querySelector(o.selector);
   }
 
-  o.classHandle = o.classHandle || "mx-drag-handle";
-  o.classDraggable = o.classDraggable || "mx-draggable";
-  o.classDropArea = o.classDropArea || "mx-drag-drop-area";
-  o.classDragged = o.classDragged || "mx-dragged";
-  var elsDraggable = o.elRoot.querySelectorAll("." + o.classDraggable);
+  o.classHandle = o.classHandle || 'mx-drag-handle';
+  o.classDraggable = o.classDraggable || 'mx-draggable';
+  o.classDropArea = o.classDropArea || 'mx-drag-drop-area';
+  o.classDragged = o.classDragged || 'mx-dragged';
+  var elsDraggable = o.elRoot.querySelectorAll('.' + o.classDraggable);
 
   /**
    * On init
    */
   o.listener.mousedown = function(event) {
-
     var elHandle = event.target;
     var isHandle = elHandle.classList.contains(o.classHandle);
 
     if (isHandle && !o.elDrag) {
-
       o.elDrag = findParentByClass({
         selector: elHandle,
         class: o.classDraggable
       });
 
       if (o.elDrag) {
-
         draggable({
           event: event,
           elRoot: o.elRoot,
           selector: o.elDrag,
-          selectorContainer : o.selector,
+          selectorContainer: o.selector,
           classHandle: o.classHandle,
           classDraggable: o.classDraggable,
           classDropArea: o.classDropArea,
@@ -53,20 +49,17 @@ export function sortable(o) {
 
   o.elRoot.addEventListener('pointerdown', o.listener.mousedown, false);
 
-
   /**
    * On drag start
    */
-  o.listener.onDragStart = function(o, e) {
+  o.listener.onDragStart = function(o) {
     setDropArea(o, o.el);
   };
-
 
   /**
    * On drag move
    */
-  o.listener.onDragMove = function(o, e) {
-
+  o.listener.onDragMove = function(o) {
     o.elOver = getOver(o);
 
     var isOver =
@@ -83,16 +76,20 @@ export function sortable(o) {
   /**
    * On drag end
    */
-  o.listener.onDragEnd = function(o, e) {
+  o.listener.onDragEnd = function(o) {
     o.elRoot.insertBefore(o.el, o.elDropArea.nextSibling);
-    if(o.styleOrig){
-      for(var s in o.styleOrig){
+    if (o.styleOrig) {
+      for (var s in o.styleOrig) {
         sortableOpt.elDrag.style[s] = o.styleOrig[s];
       }
     }
     sortableOpt.elDrag = null;
-    if (o.elDropArea instanceof Node) o.elDropArea.remove();
-    if (sortableOpt.onSorted instanceof Function) sortableOpt.onSorted(); 
+    if (o.elDropArea instanceof Node) {
+      o.elDropArea.remove();
+    }
+    if (sortableOpt.onSorted instanceof Function) {
+      sortableOpt.onSorted();
+    }
   };
 
   /**
@@ -101,40 +98,36 @@ export function sortable(o) {
   function getOver(o) {
     var el;
     var els = elsDraggable;
-    var rectOther, rectDragged = o.el.getBoundingClientRect();
+    var rectOther,
+      rectDragged = o.el.getBoundingClientRect();
     for (var e = 0, eL = els.length; e < eL; e++) {
       el = els[e];
-      if (el != o.el) {
-        rectOther = el.getBoundingClientRect(); 
+      if (el !== o.el) {
+        rectOther = el.getBoundingClientRect();
         if (rectTouchRect(rectDragged, rectOther)) {
-          return (el);
+          return el;
         }
       }
     }
   }
 
-
   /**
-   * Create drop area 
+   * Create drop area
    */
   function setDropArea(o, elAfter) {
-
     if (!o.elDropArea) {
-      o.elDropArea = document.createElement("div");
+      o.elDropArea = document.createElement('div');
       o.elDropArea.className = o.classDropArea;
-      o.elDropArea.style.width = o.rect.width + "px";
-      o.elDropArea.style.height = o.rect.height + "px";
+      o.elDropArea.style.width = o.rect.width + 'px';
+      o.elDropArea.style.height = o.rect.height + 'px';
     }
 
     o.elRoot.insertBefore(o.elDropArea, elAfter);
-
   }
 }
 
-
 export function draggable(o) {
-
-  var xMin,xMax,yMin,yMax,x,y;
+  var xMin, xMax, yMin, yMax;
 
   if (o.selector instanceof Node) {
     o.el = o.selector;
@@ -142,15 +135,18 @@ export function draggable(o) {
     o.el = document.querySelector(o.selector);
   }
 
-  o.classHandle = o.classHandle || "mx-drag-handle";
-  o.classDraggable = o.classDraggable || "mx-draggable";
-  o.classDragged = o.classDragged || "mx-dragged";
+  o.classHandle = o.classHandle || 'mx-drag-handle';
+  o.classDraggable = o.classDraggable || 'mx-draggable';
+  o.classDragged = o.classDragged || 'mx-dragged';
   o.debounceTime = o.debounceTime || 10;
   o.forceDim = o.forceDim || false;
-  o.elHandle = o.el.querySelector("." + o.classHandle);
+  o.elHandle = o.el.querySelector('.' + o.classHandle);
   o.listener = {};
-  o.selectorContainer = o.selectorContainer || "body";
-  o.elContainer = o.selectorContainer instanceof Node ? o.selectorContainer : document.querySelector(o.selectorContainer);
+  o.selectorContainer = o.selectorContainer || 'body';
+  o.elContainer =
+    o.selectorContainer instanceof Node
+      ? o.selectorContainer
+      : document.querySelector(o.selectorContainer);
   o.containerRect = o.elContainer.getBoundingClientRect();
 
   xMin = o.containerRect.left;
@@ -165,10 +161,18 @@ export function draggable(o) {
     var x = o.x + newX - o.x_to;
     var y = o.y + newY - o.y_to;
 
-    if( x + o.rectHandle.width >= xMax ) x = xMax - o.rectHandle.width ;
-    if( x <= xMin ) x = xMin;
-    if( y + o.rectHandle.height >= yMax  ) y = yMax - o.rectHandle.height;
-    if( y <= yMin ) y = yMin;
+    if (x + o.rectHandle.width >= xMax) {
+      x = xMax - o.rectHandle.width;
+    }
+    if (x <= xMin) {
+      x = xMin;
+    }
+    if (y + o.rectHandle.height >= yMax) {
+      y = yMax - o.rectHandle.height;
+    }
+    if (y <= yMin) {
+      y = yMin;
+    }
     return {
       left: x,
       top: y
@@ -181,8 +185,8 @@ export function draggable(o) {
   o.setPosElement = function(el, newX, newY) {
     //o.rect = el.getBoundingClientRect();
     o.pos = o.setPos(newX, newY);
-    o.el.style.left = o.pos.left + "px";
-    o.el.style.top = o.pos.top + "px";
+    o.el.style.left = o.pos.left + 'px';
+    o.el.style.top = o.pos.top + 'px';
     o.block = false;
   };
 
@@ -190,20 +194,21 @@ export function draggable(o) {
    * mouse down + move : change element coordinate
    */
   o.listener.mousemove = mx.helpers.debounce(function(event) {
-    if( o.block === false ){
+    if (o.block === false) {
       o.block = true;
-    event.preventDefault();
-    event.stopImmediatePropagation();
-        o.setPosElement(o.el, event.clientX, event.clientY);
-        if (o.onDragMove instanceof Function) o.onDragMove(o, event);
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      o.setPosElement(o.el, event.clientX, event.clientY);
+      if (o.onDragMove instanceof Function) {
+        o.onDragMove(o, event);
+      }
     }
-  },o.debouceTime);
+  }, o.debouceTime);
 
   /*
    * mouse up : remove "up" and "move" listener
    */
   o.listener.mouseup = function(event) {
-
     o.block = true;
 
     event.preventDefault();
@@ -214,15 +219,15 @@ export function draggable(o) {
 
     o.el.classList.remove(o.classDragged);
 
-    if (o.onDragEnd instanceof Function) o.onDragEnd(o, event);
-
+    if (o.onDragEnd instanceof Function) {
+      o.onDragEnd(o, event);
+    }
   };
 
   /**
    * mouse down : make it draggable
    */
   o.listener.mousedown = function(event) {
-
     var isHandle = event.target.classList.contains(o.classHandle);
     if (isHandle) {
       event.preventDefault();
@@ -234,12 +239,12 @@ export function draggable(o) {
         height: o.el.style.height,
         zIndex: o.el.style.zIndex,
         position: o.el.style.position,
-        margin : o.el.style.margin
+        margin: o.el.style.margin
       };
 
       o.block = false;
-      
-      o.sumScroll =  sumScrollY(o.el) ;
+
+      o.sumScroll = sumScrollY(o.el);
 
       o.rect = o.el.getBoundingClientRect();
       o.rectHandle = o.elHandle.getBoundingClientRect();
@@ -248,18 +253,18 @@ export function draggable(o) {
       o.x_to = event.clientX;
       o.y_to = event.clientY;
 
-      if( o.sumScroll ){
+      if (o.sumScroll) {
         o.y = o.y - o.sumScroll;
       }
 
-      if( o.forceDim ){
+      if (o.forceDim) {
         o.el.style.zIndex = 1000;
-        o.el.style.width = o.rect.width + "px";
-        o.el.style.height = o.rect.height + "px";
+        o.el.style.width = o.rect.width + 'px';
+        o.el.style.height = o.rect.height + 'px';
       }
 
-      o.el.style.position = "absolute";
-      o.el.style.margin = "initial";
+      o.el.style.position = 'absolute';
+      o.el.style.margin = 'initial';
       o.el.classList.add(o.classDragged);
 
       o.setPosElement(o.el, event.clientX, event.clientY);
@@ -267,8 +272,9 @@ export function draggable(o) {
       window.addEventListener('pointermove', o.listener.mousemove, false);
       window.addEventListener('pointerup', o.listener.mouseup, false);
 
-      if (o.onDragStart instanceof Function) o.onDragStart(o, event);
-
+      if (o.onDragStart instanceof Function) {
+        o.onDragStart(o, event);
+      }
     }
   };
 
@@ -277,21 +283,18 @@ export function draggable(o) {
   } else {
     o.listener.mousedown(event);
   }
-
 }
 
 /**
-* Cumulative sum of all el parents.
-*/
+ * Cumulative sum of all el parents.
+ */
 function sumScrollY(el) {
   var offsetY = 0;
-  while (
-    el instanceof Node &&
-      (el = el.parentElement)
-  ){offsetY+=el.scrollTop;}
+  while (el instanceof Node && (el = el.parentElement)) {
+    offsetY += el.scrollTop;
+  }
   return offsetY;
 }
-
 
 /**
  * Test if el touch the given rect
@@ -334,9 +337,9 @@ function findParentByClass(o) {
 
   while (
     el instanceof Node &&
-      (el = el.parentElement) &&
-      !el.classList.contains(o.class)
-  );
-  return el;
+    (el = el.parentElement) &&
+    !el.classList.contains(o.class)
+  ) {
+    return el;
+  }
 }
-

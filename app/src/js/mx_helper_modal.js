@@ -7,6 +7,7 @@
  * @param {Boolean} o.noShinyBinding  By default, the modal panel will try to bind automatically input elements. In some case, this is not wanted. Default : false
  * @param {String} o.styleString Style string to apply to modal window. Default : empty
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
+ * @param {Functoin} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
  *
  */
@@ -240,6 +241,8 @@ export function modal(o) {
      }
   }
   function close() {
+    
+
     if (mx.helpers.isElement(content)) {
       /**
        * Remove jed editors
@@ -276,6 +279,12 @@ export function modal(o) {
     } else {
       modal.remove();
       background.remove();
+    }
+    /**
+    * on close callback
+    */
+    if(mx.helpers.isFunction(o.onClose)){
+      o.onClose();
     }
   }
 }

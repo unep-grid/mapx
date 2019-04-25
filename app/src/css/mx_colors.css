@@ -172,8 +172,8 @@
 
 .mx .mx-modal-container,
 .mx .selectize-dropdown,
-.mx .mapboxgl-ctrl.mapboxgl-ctrl-scale,
-.mx .mapboxgl-ctrl.mx-north-arrow, 
+/*.mx .mapboxgl-ctrl.mapboxgl-ctrl-scale,*/
+/*.mx .mapboxgl-ctrl.mx-north-arrow, */
 .mx .mapboxgl-popup-content
 {
   border : 1px solid var(--mx_ui_border);

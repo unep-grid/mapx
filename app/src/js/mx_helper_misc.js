@@ -257,33 +257,6 @@ export function paddy(n, p, c) {
   return (pad + n).slice(-pad.length);
 }
 
-var nf =
-  window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  window.msRequestAnimationFrame ||
-  window.oRequestAnimationFrame ||
-  function(callback) {
-    window.setTimeout(callback, 1000 / 60);
-  };
-
-/**
- * Do something on next frame
- * @param {Function} cb Callback function to execute on next animation frame
- */
-export function onNextFrame(cb) {
-  nf(cb);
-}
-
-var cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-
-/**
- * Cancel a requested frame id
- * @param {Number} frame number
- */
-export function cancelFrameRequest(id) {
-  cf(id);
-}
 
 /**
  * Get the correct css transform function

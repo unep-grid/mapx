@@ -12,6 +12,14 @@
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
 }
+/**
+* Modifier for map composer mode
+*/
+.mc .mx-legend-box {
+  max-height: unset;
+  overflow-y: unset;
+  overflow-x: unset;
+}
 
 /**
 * Legend for raster

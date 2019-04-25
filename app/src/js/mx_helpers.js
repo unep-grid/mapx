@@ -46,4 +46,6 @@ export * from './mx_helper_epsgio.js';
 export * from './mx_helper_wms.js';
 export * from './mx_helper_filter_views.js';
 export * from './mx_helper_module_loader.js';
+export * from './mx_helper_animation_frame.js';
+export * from './map_composer/mx_helper_map_composer.js';
 

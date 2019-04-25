@@ -221,7 +221,8 @@ mapControlApp.prototype.onAdd = function(map) {
       classes: 'fa fa-print',
       key: 'btn_print',
       action: function() {
-        mx.helpers.downloadScreenshotPdfAll();
+        mx.helpers.mapComposerModalAuto();
+        //mx.helpers.downloadScreenshotPdfAll();
       }
     },
     btnFullScreen: {

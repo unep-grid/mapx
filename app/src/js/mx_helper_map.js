@@ -258,10 +258,14 @@ export function initMapxApp(o) {
    * Send loading confirmation to shiny
    */
   o.map.on('load', function() {
+
+        //mx.helpers.mapComposerModalAuto();
+    //return;
     /*
      * Init pixop
      */
     mx.helpers.initPixop();
+
 
     /*
      * secondary centering method
@@ -1173,7 +1177,7 @@ export function makeSimpleLayer(o) {
 
   var funSizeByZoom = [
     'interpolate',
-    ['exponential', sizeFactorZoomExponent ],
+    ['exponential', sizeFactorZoomExponent],
     ['zoom'],
     zoomMin,
     sizeFactorZoomMin * size,
@@ -1231,9 +1235,9 @@ export function makeSimpleLayer(o) {
         'line-color': colA,
         'line-width': size
       },
-      layout  : {
-        'line-cap' : 'round',
-        'line-join' : 'round'
+      layout: {
+        'line-cap': 'round',
+        'line-join': 'round'
       }
     }
   };
@@ -2953,7 +2957,7 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
-          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
           sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
           sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
           zoomMax: zoomConfig.zoomMax,
@@ -2973,7 +2977,7 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
-          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
           sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
           sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
           zoomMax: zoomConfig.zoomMax,
@@ -2995,7 +2999,7 @@ export function addViewVt(o) {
         hexColor: rule.color,
         opacity: rule.opacity,
         size: rule.size,
-        sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+        sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
         sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
         sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
         zoomMax: zoomConfig.zoomMax,
@@ -3015,7 +3019,7 @@ export function addViewVt(o) {
         idSource: idSource,
         idSourceLayer: idView,
         geomType: geomType,
-        sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+        sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
         sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
         sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
         zoomMax: zoomConfig.zoomMax,
@@ -3120,7 +3124,7 @@ export function addViewVt(o) {
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
-            sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
             sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
             sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
             zoomMax: zoomConfig.zoomMax,
@@ -3141,7 +3145,7 @@ export function addViewVt(o) {
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
-            sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
             sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
             sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
             zoomMax: zoomConfig.zoomMax,
@@ -3164,7 +3168,7 @@ export function addViewVt(o) {
           hexColor: rule.color,
           opacity: rule.opacity,
           size: rule.size,
-          sizeFactorZoomExponent : zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
           sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
           sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
           zoomMax: zoomConfig.zoomMax,
@@ -4197,6 +4201,40 @@ export function getViewTitle(id, lang) {
     langs: langs,
     defaultKey: 'noTitle'
   });
+}
+/**
+ * Get a view desc by id or view object
+ * @param {String|Object} id  View id or view
+ * @param {String} lang Optional. Language : e.g. fr, en, sp ..
+ * @return {String} desc
+ */
+export function getViewDescription(id, lang) {
+  var view = id;
+  if (typeof id === 'string') {
+    view = mx.helpers.getView(id);
+  }
+  lang = lang || mx.settings.language;
+  var langs = mx.settings.languages;
+
+  return mx.helpers.getLabelFromObjectPath({
+    obj: view,
+    path: 'data.abstract',
+    lang: lang,
+    langs: langs,
+    defaultKey: ''
+  });
+}
+
+export function getViewLegend(id,clone) {
+  var h = mx.helpers;
+  if (h.isView(id)) {
+    id = id.id;
+  }
+  var elLegend = document.getElementById('check_view_legend_' + id);
+  if(elLegend && clone){
+    elLegend = elLegend.cloneNode(true);
+  }
+  return elLegend || h.el('div');
 }
 
 /**

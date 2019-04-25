@@ -1,11 +1,11 @@
 /* jshint esversion:6 */
-import {buel} from 'buel';
+//import {el} from '@fxi/el';
+import {el} from '/Users/fxi/Documents/git/el.git';
 
-export function el(type, ...opt) {
-  return buel(type, ...opt);
-}
+export {el, elAuto};
 
-export function elAuto(render, data, opt) {
+function elAuto(render, data, opt) {
+  var h = mx.helpers;
   opt = opt || {};
 
   var def = {
@@ -15,9 +15,9 @@ export function elAuto(render, data, opt) {
     tableHeadersLabels: [],
     tableTitle: 'Table',
     tableTitleAsLanguageKey: false,
-    tableClass : ['table'],
-    tableContainerHeaderClass : ['panel-heading'],
-    tableContainerClass : ['panel', 'panel-default'],
+    tableClass: ['table'],
+    tableContainerHeaderClass: ['panel-heading'],
+    tableContainerClass: ['panel', 'panel-default'],
     booleanValues: [true, false],
     stringStyle: {paddingRight: '5px'},
     numberStyle: {float: 'right'},
@@ -35,7 +35,6 @@ export function elAuto(render, data, opt) {
    */
   Object.assign(opt, def);
 
-  const h = mx.helpers;
   const el = h.el;
   const r = {
     auto: renderAuto,
