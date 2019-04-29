@@ -961,7 +961,7 @@ observe({
 
     variables <- mxDbGetLayerColumnsNames(
       table = layerMain,
-      notIn = c("geom","gid",'mx_t0','mx_t1','_mx_valid')
+      notIn = c("geom","gid",'_mx_valid')
       )
 
     geomType <- .get(viewData,c("data","geometry","type"))

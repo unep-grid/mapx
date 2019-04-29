@@ -1,5 +1,10 @@
+
 ## Changelog
 
+-<a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.43</a>
+    - Bug fixes 
+      - APP
+        - Solved issue with secondary attributes that were unselected during view edit.
 -<a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.42</a>
     - Improvement
       - APP
