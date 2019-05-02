@@ -1,6 +1,13 @@
 export {mapComposerModalAuto};
 
 function mapComposerModalAuto() {
+  var idComposer = 'mapcomposer';
+  var oldComposer = document.getElementById(idComposer);
+
+  if (oldComposer) {
+    return;
+  }
+
   var map = mx.helpers.getMap();
 
   var vVisible = mx.helpers.getLayerNamesByPrefix({
@@ -13,35 +20,35 @@ function mapComposerModalAuto() {
 
   items.push({
     type: 'map',
-    width: 20,
-    height: 20,
+    width: 50,
+    height: 17,
     options: {}
   });
 
   vVisible.forEach((id) => {
     var title = mx.helpers.getViewTitle(id);
     var description = mx.helpers.getViewDescription(id);
-    var elLegend = mx.helpers.getViewLegend(id, true);
+    var elLegend = mx.helpers.getViewLegend(id, {clone: true, input: false});
 
     items.push({
       type: 'legend',
       element: elLegend,
-      width: 4,
-      height: 6
+      width: 20,
+      height: 20
     });
 
     items.push({
       type: 'title',
       text: title,
       width: 40,
-      height: 4
+      height: 5
     });
 
     items.push({
       type: 'text',
       text: description,
-      width: 20,
-      height: 8
+      width: 40,
+      height: 5
     });
   });
 
@@ -70,7 +77,7 @@ function mapComposerModalAuto() {
   /**
    * Run map composer
    */
-  return import('./index.js').then((m) => {
+  return import('./map_composer/index.js').then((m) => {
     config.items.forEach((i) => {
       if (i.type === 'map') {
         Object.assign(i.options, {
@@ -82,24 +89,23 @@ function mapComposerModalAuto() {
       }
     });
 
-    var elContainer = mx.helpers.el('div', {
-      style: {
-        width: '100%',
-        height: '100%',
-        minHeight: '400px'
-      }
-    });
-
+    var elContainer = mx.helpers.el('div');
 
     mx.helpers.modal({
-      id: 'mapcomposer',
+      title : 'Map Composer',
+      id: idComposer,
       content: elContainer,
-      onClose : removeMc
+      onClose: destroy,
+      style: {
+        position: 'absolute',
+        width: '80%',
+        height: '100%'
+      }
     });
 
     var mc = new m.MapComposer(elContainer, config);
 
-    function removeMc(){
+    function destroy() {
       mc.destroy();
     }
 

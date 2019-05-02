@@ -6,6 +6,7 @@
  * @param {Boolean} o.replace If a modal is displayed twice with the same id, delete the previous one. Default : true
  * @param {Boolean} o.noShinyBinding  By default, the modal panel will try to bind automatically input elements. In some case, this is not wanted. Default : false
  * @param {String} o.styleString Style string to apply to modal window. Default : empty
+ * @param {Object} o.style Style objectto apply to modal window. Default : empty
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Functoin} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
@@ -32,7 +33,7 @@ export function modal(o) {
   var modal = document.getElementById(o.id);
   var hasModal = h.isElement(modal);
   if(!hasModal){
-    modal = buildModal(id);
+    modal = buildModal(id,o.style);
   }
 
   var background = document.getElementById(idBackground);
@@ -42,7 +43,6 @@ export function modal(o) {
     background = buildBackground(idBackground);
   }
 
-  var rectModal = modal.getBoundingClientRect();
   var hasJquery = h.isFunction(window.jQuery);
   var hasShiny = h.isObject(window.Shiny);
   var elJedContainers;
@@ -62,7 +62,8 @@ export function modal(o) {
 
   if ( hasModal && o.replace) {
     var oldBody = modal.querySelector('.mx-modal-body');
-
+    var rectModal = modal.getBoundingClientRect();
+    
     if (hasShiny && !noShinyBinding) {
       Shiny.unbindAll(modal);
     }

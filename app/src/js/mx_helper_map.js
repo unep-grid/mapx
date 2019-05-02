@@ -259,7 +259,7 @@ export function initMapxApp(o) {
    */
   o.map.on('load', function() {
 
-        //mx.helpers.mapComposerModalAuto();
+    //mx.helpers.mapComposerModalAuto();
     //return;
     /*
      * Init pixop
@@ -4225,14 +4225,23 @@ export function getViewDescription(id, lang) {
   });
 }
 
-export function getViewLegend(id,clone) {
+export function getViewLegend(id,opt) {
+
+  opt = opt || {};
+
   var h = mx.helpers;
   if (h.isView(id)) {
     id = id.id;
   }
   var elLegend = document.getElementById('check_view_legend_' + id);
-  if(elLegend && clone){
+  
+  mx.helpers.convertAllImagesToBase64(elLegend);
+
+  if(elLegend && opt.clone === true){
     elLegend = elLegend.cloneNode(true);
+  }
+  if(elLegend && opt.clone === true && opt.input === false){
+    elLegend.querySelectorAll('input').forEach(e => e.remove());
   }
   return elLegend || h.el('div');
 }

@@ -7,8 +7,15 @@ let print = {
 let layout = {
   resolution: [10, 10],
   page: {
-    width: 40,
-    height: 40
+    width: 50,
+    height: 50
+  },
+  legends : {
+    columnWidth : 15
+  },
+  workspace: {
+    width: 100,
+    height: 100
   },
   item: {
     width: 5,

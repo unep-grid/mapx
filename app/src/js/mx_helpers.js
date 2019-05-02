@@ -28,6 +28,7 @@ export * from './mx_helper_progress_radial.js';
 export * from './mx_helper_map_controls.js';
 export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_print.js';
+export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_pixop_core.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
@@ -47,5 +48,4 @@ export * from './mx_helper_wms.js';
 export * from './mx_helper_filter_views.js';
 export * from './mx_helper_module_loader.js';
 export * from './mx_helper_animation_frame.js';
-export * from './map_composer/mx_helper_map_composer.js';
 

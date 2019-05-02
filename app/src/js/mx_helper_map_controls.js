@@ -218,8 +218,8 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnPrint: {
-      classes: 'fa fa-print',
-      key: 'btn_print',
+      classes: 'fa fa-map-o',
+      key: 'btn_map_composer',
       action: function() {
         mx.helpers.mapComposerModalAuto();
         //mx.helpers.downloadScreenshotPdfAll();

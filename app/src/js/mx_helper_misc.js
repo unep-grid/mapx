@@ -2138,3 +2138,24 @@ export function handleRequestMessage(msg, msgs, on) {
     });
   }
 }
+
+export function convertAllImagesToBase64(elOrig) {
+  var el = mx.helpers.el;
+  var elImgs = elOrig.querySelectorAll('img');
+
+  elImgs.forEach((elImg) => {
+    var rect = elImg.getBoundingClientRect();
+    var elCanvas = el('canvas', {
+      width: rect.width,
+      height: rect.height,
+      style: {
+        width: rect.width + 'px',
+        height: rect.height + 'px'
+      }
+    });
+    var ctx = elCanvas.getContext('2d');
+    ctx.drawImage(elImg, 0, 0);
+    elImg.src = elCanvas.toDataURL();
+  });
+}
+

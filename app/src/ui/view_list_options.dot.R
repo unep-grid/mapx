@@ -348,18 +348,18 @@ liControlsGeoJson <- tagList(
 # Controls for the screenshot / print
 #
 liControlsScreenShot <- tagList(
-  "{{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}",
-   tags$li(
-    class="mx-pointer btn-circle btn-circle-small hint--right",
-    `data-lang_key`="btn_opt_screenshot",
-    `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_opt_screenshot",
-    `data-view_action_target`="{{=view.id}}",
-    tags$div(
-      class="fa fa-camera"
-      )
-    ),
-   "{{?}}"
+#  "{{? h.any([ view.type == 'vt', view.type == 'rt' ]) }}",
+   #tags$li(
+    #class="mx-pointer btn-circle btn-circle-small hint--right",
+    #`data-lang_key`="btn_opt_screenshot",
+    #`data-lang_type`="tooltip",
+    #`data-view_action_key`="btn_opt_screenshot",
+    #`data-view_action_target`="{{=view.id}}",
+    #tags$div(
+      #class="fa fa-camera"
+      #)
+    #),
+   #"{{?}}"
   )
 
 # controls share
