@@ -1,11 +1,15 @@
 
 ## Changelog
 
--<a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.43</a>
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.43">1.5.44</a>
+    - New feature
+      - APP
+        - Map composer - early versioan. A module to compose a map based on currently visible views
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.43">1.5.43</a>
     - Bug fixes 
       - APP
         - Solved issue with secondary attributes that were unselected during view edit.
--<a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.42</a>
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.42</a>
     - Improvement
       - APP
         - Added support for languages in forms validation + french translation
