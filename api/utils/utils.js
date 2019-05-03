@@ -7,6 +7,7 @@ const zlib = require("zlib");
 function toPgColumn(arr) {
   return '"' + arr.join('","') + '"';
 }
+exports.toPgColumn = toPgColumn;
 
 /**
  * Get distinct value in array
@@ -207,6 +208,7 @@ exports.view = require('./getView.js');
 exports.source = require('./getSource.js');
 exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');
+exports.sourceTableAttribute = require('./getSourceTableAttribute.js');
 exports.viewMetadata =  require('./getViewMetadata.js');
 exports.sourceOverlap = require('./getOverlap.js');
 exports.sourceValidityGeom = require('./getSourceValidityGeom.js');

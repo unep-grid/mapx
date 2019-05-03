@@ -44,6 +44,7 @@ app.get('/get/query/', utils.query.get);
 app.get('/get/mirror/', utils.mirror.get);
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
+app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
 app.get('/get/source/overlap/', utils.sourceOverlap.get); //countries=[]&layers=[]&='area';
 app.get('/get/source/validate/geom', utils.sourceValidityGeom.get);
 app.get('/get/ip', utils.ip.get);
