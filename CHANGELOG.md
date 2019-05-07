@@ -1,7 +1,10 @@
 
 ## Changelog
-
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.43">1.5.44</a>
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.45">1.5.45</a>
+    - New feature
+      - APP
+        - Each view based on a vector source have now a button to display the full attribute table of the source. There is a filtering system by attribute that will also filter the displayed elements on the map. The table can be exported as CSV.
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.44">1.5.44</a>
     - New feature
       - APP
         - Map composer - early versioan. A module to compose a map based on currently visible views
