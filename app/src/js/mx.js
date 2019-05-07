@@ -72,6 +72,7 @@ export let settings = {
     viewMetadata : '/get/view/metadata/',
     sourceOverlap : '/get/source/overlap/',
     sourceValidateGeom : '/get/source/validate/geom',
+    getSourceTableAttribute : '/get/source/table/attribute',
     downloadSourceCreate : '/get/source/',
     downloadSourceGet : '',
     uploadImage : '/upload/image/',

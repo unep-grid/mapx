@@ -26,7 +26,7 @@ function getSourceAttributeTable(opt) {
   if (typeof attributes === 'string') {
     attributes = attributes.split(',');
   }
-  var attributesToIgnore = ['gid', 'geom'];
+  var attributesToIgnore = ['geom'];
   var attributesSelect = [];
   var query = '';
 
@@ -49,7 +49,7 @@ function getSourceAttributeTable(opt) {
       } else {
         attributesSelect = utils.getDistinct(attributesSelect);
         attributesSelect = utils.toPgColumn(attributesSelect);
-        query = `SELECT ${attributesSelect} FROM ${idSource} LIMIT 1000`;
+        query = `SELECT ${attributesSelect} FROM ${idSource} `;
         return pgRead.query(query);
       }
     })

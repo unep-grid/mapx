@@ -1916,27 +1916,6 @@ mxPanel<- function(
 
 
   #
-  # handle draggable
-  #
-  if(draggable){
-    scr <- tags$script(sprintf('
-        mx.util.draggable({
-          id:"%1$s",
-          disable:[]
-        })'
-        , idContent
-        )
-      )
-    
-    #dragButton = tags$span(class="mx-modal-drag-button btn btn-default",icon('arrows'),style="cursor:move")
-
-    dragButton = ""
-  }else{
-    scr = ""
-    dragButton = ""
-  }
-
-  #
   # Handle title 
   #
   title = div(

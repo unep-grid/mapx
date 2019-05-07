@@ -1,24 +1,26 @@
 const modules = {
-  'topojson': loadTopoJSON,
-  'd3': loadD3,
+  topojson: loadTopoJSON,
+  d3: loadD3,
   'd3-geo': loadD3Geo,
-  'shapefile':loadShapefile,
-  'turf-bbox':loadTurfBbox,
-  'highcharts': loadHighcharts,
+  shapefile: loadShapefile,
+  'turf-bbox': loadTurfBbox,
+  highcharts: loadHighcharts,
   'json-editor': loadJsonEditor,
-  'selectize': loadSelectize,
+  selectize: loadSelectize,
   'mapbox-gl-js': loadMapboxGlJs,
   'mapbox-gl-draw': loadMapboxGlDraw,
-  'pickolor': loadPickolor,
-  'nouislider': loadNoUiSlider,
-  'downloadjs': loadDownloadjs,
-  'wms-capabilities' : loadWmsCapabilities,
-  'mx-drag-drop-worker' : loadDragDropWorker
+  pickolor: loadPickolor,
+  nouislider: loadNoUiSlider,
+  downloadjs: loadDownloadjs,
+  'wms-capabilities': loadWmsCapabilities,
+  'mx-drag-drop-worker': loadDragDropWorker,
+  handsontable: loadHandsontable,
+  interactjs: loadInteract
 };
 
 export function moduleLoad(name) {
   const module = modules[name]();
-  if (!module){
+  if (!module) {
     return Promise.resolve({});
   }
   return module;
@@ -26,7 +28,7 @@ export function moduleLoad(name) {
 
 export function modulesLoad(arr) {
   arr = arr || [];
-  arr = arr.map(m => moduleLoad(m));
+  arr = arr.map((m) => moduleLoad(m));
   return Promise.all(arr);
 }
 
@@ -34,52 +36,47 @@ export function modulesLoad(arr) {
  * Loader definitions
  */
 
-function loadTurfBbox(){
-  return import('@turf/bbox')
-    .then(m => {
-      return m.default;
-    });
+function loadTurfBbox() {
+  return import('@turf/bbox').then((m) => {
+    return m.default;
+  });
 }
 
-function loadDownloadjs(){
-  return import('downloadjs')
-    .then(m => {
-      return m.default;
-    });
+function loadDownloadjs() {
+  return import('downloadjs').then((m) => {
+    return m.default;
+  });
 }
 
-function loadMapboxGlJs(){
+function loadMapboxGlJs() {
   return Promise.all([
     import('mapbox-gl/dist/mapbox-gl.css'),
     import('../css/mx_mapbox.css'),
-    import("mapbox-gl")])
-    .then(m => {
-      return m[2].default;
-    });
+    import('mapbox-gl')
+  ]).then((m) => {
+    return m[2].default;
+  });
 }
 
-function loadMapboxGlDraw(){
+function loadMapboxGlDraw() {
   return Promise.all([
-    import("@mapbox/mapbox-gl-draw"),
+    import('@mapbox/mapbox-gl-draw'),
     import('@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css')
-    ])
-    .then(m => {
-      return m[0].default;
-    });
+  ]).then((m) => {
+    return m[0].default;
+  });
 }
 
-function loadDragDropWorker(){
-  return import('./mx_helper_map_dragdrop.worker.js')
-    .then((m) => {
-      return m.default;
-    });
+function loadDragDropWorker() {
+  return import('./mx_helper_map_dragdrop.worker.js').then((m) => {
+    return m.default;
+  });
 }
 
 function loadWmsCapabilities() {
-  return import('wms-capabilities')
-    .then(m => {
-      return  m.default;
-    });
+  return import('wms-capabilities').then((m) => {
+    return m.default;
+  });
 }
 
 function loadTopoJSON() {
@@ -97,15 +94,15 @@ function loadD3Geo() {
 function loadNoUiSlider() {
   return Promise.all([
     import('nouislider'),
-    import('../../node_modules/nouislider/distribute/nouislider.css'),
+    import('../../node_modules/nouislider/distribute/nouislider.css')
   ]);
 }
 
 function loadPickolor() {
   return Promise.all([
     import('../js/pickolor/pickolor.js'),
-    import('../js/pickolor/pickolor.css'),
-  ]).then(m => {
+    import('../js/pickolor/pickolor.css')
+  ]).then((m) => {
     var Pickolor = m[0].default;
     return Pickolor;
   });
@@ -117,8 +114,8 @@ function loadSelectize() {
     import('webpack-jquery-ui/sortable'),
     import('selectize/dist/css/selectize.css'),
     import('selectize/dist/css/selectize.bootstrap3.css'),
-    import('../css/mx_selectize.css'),
-  ]).then(m => {
+    import('../css/mx_selectize.css')
+  ]).then((m) => {
     var Selectize = m[0].default;
     window.Selectize = Selectize;
     return Selectize;
@@ -126,13 +123,12 @@ function loadSelectize() {
 }
 
 function loadHighcharts() {
-  
   return Promise.all([
     import('highcharts'),
     import('highcharts/highcharts-more.js'),
     import('highcharts/modules/solid-gauge'),
-    import('highcharts/modules/stock'),
-  ]).then(m => {
+    import('highcharts/modules/stock')
+  ]).then((m) => {
     var Highcharts = m[0].default;
     m[1].default(Highcharts);
     m[2].default(Highcharts);
@@ -141,10 +137,9 @@ function loadHighcharts() {
   });
 }
 
-function loadShapefile(){
+function loadShapefile() {
   return import('shapefile');
 }
-
 
 function loadJsonEditor() {
   return import('json-editor').then(() => {
@@ -156,7 +151,27 @@ function loadJsonEditor() {
       /***
        * Global plugin for all editors.
        */
-      moduleLoad('selectize'),
+      moduleLoad('selectize')
     ]);
+  });
+}
+
+function loadHandsontable() {
+  return Promise.all([
+    import('handsontable'),
+    import('handsontable/dist/handsontable.css'),
+    import('handsontable/languages/de-DE.js'),
+    import('handsontable/languages/es-MX.js'),
+    import('handsontable/languages/fr-FR.js'),
+    import('handsontable/languages/ru-RU.js'),
+    import('handsontable/languages/zh-CN.js')
+  ]).then((m) => {
+    return m[0].default;
+  });
+}
+
+function loadInteract() {
+  return import('interactjs').then((m) => {
+    return m.default;
   });
 }

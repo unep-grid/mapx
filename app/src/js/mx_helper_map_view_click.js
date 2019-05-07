@@ -233,13 +233,12 @@ export function handleViewClick(o) {
         }
       },
       {
-        comment: 'target is the png screenshoot button',
-        test: el.dataset.view_action_key === 'btn_opt_screenshot',
+        comment: 'target is the attribute table button',
+        test: el.dataset.view_action_key === 'btn_opt_attribute_table',
         action: function() {
-          h.downloadScreenshotPdf({
-            id: o.id,
-            idView: el.dataset.view_action_target
-          });
+
+          var idView = el.dataset.view_action_target;
+          h.viewToTableAttributeModal(idView);  
         }
       },
       {

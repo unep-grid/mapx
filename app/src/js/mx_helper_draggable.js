@@ -311,15 +311,15 @@ function rectTouchRect(rectA, rectB) {
 /**
  * Test if rectA is fully in rectB
  */
-function elInRect(el, rectB) {
-  var rectA = el.getBoundingClientRect();
-  var inside =
-    rectA.bottom <= rectB.bottom &&
-    rectA.top >= rectB.top &&
-    rectA.right <= rectB.right &&
-    rectA.left >= rectB.left;
-  return inside;
-}
+//function elInRect(el, rectB) {
+  //var rectA = el.getBoundingClientRect();
+  //var inside =
+    //rectA.bottom <= rectB.bottom &&
+    //rectA.top >= rectB.top &&
+    //rectA.right <= rectB.right &&
+    //rectA.left >= rectB.left;
+  //return inside;
+/*}*/
 /**
  * Find closest parent using classname
  * @param {Object} o options;
@@ -343,3 +343,5 @@ function findParentByClass(o) {
     return el;
   }
 }
+
+

@@ -15,32 +15,35 @@
 export function modal(o) {
   o = o || {};
   var h = mx.helpers;
-  var top,
-    title,
-    head,
-    body,
-    content,
-    footer,
-    buttons,
-    dialog,
-    validation,
-    buttonClose;
+  var 
+  elModal,
+  elTop,
+    elTitle,
+    elHead,
+    elBody,
+    elContent,
+    elFooter,
+    elButtons,
+    elDialog,
+    elValidation,
+    elButtonClose,
+    elBackground;
   var id = o.id || h.makeId();
   var idBackground = 'mx_background_for_' + id;
   /**
    * Get or create modal and background
    */
-  var modal = document.getElementById(o.id);
-  var hasModal = h.isElement(modal);
+  elModal = document.getElementById(o.id);
+  var hasModal = h.isElement(elModal);
   if(!hasModal){
-    modal = buildModal(id,o.style);
+    elModal = buildModal(id,o.style);
   }
 
-  var background = document.getElementById(idBackground);
-  var hasBackground = h.isElement(background);
+  elBackground = document.getElementById(idBackground);
+  var hasBackground = h.isElement(elBackground);
 
   if(!hasBackground){
-    background = buildBackground(idBackground);
+    elBackground = buildBackground(idBackground);
   }
 
   var hasJquery = h.isFunction(window.jQuery);
@@ -52,8 +55,8 @@ export function modal(o) {
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
   if (o.close === true) {
-    if(hasModal && h.isFunction(modal.close)){
-      modal.close();
+    if(hasModal && h.isFunction(elModal.close)){
+      elModal.close();
     }else{
       close();
     }
@@ -61,11 +64,11 @@ export function modal(o) {
   }
 
   if ( hasModal && o.replace) {
-    var oldBody = modal.querySelector('.mx-modal-body');
-    var rectModal = modal.getBoundingClientRect();
+    var oldBody = elModal.querySelector('.mx-modal-body');
+    var rectModal = elModal.getBoundingClientRect();
     
     if (hasShiny && !noShinyBinding) {
-      Shiny.unbindAll(modal);
+      Shiny.unbindAll(elModal);
     }
     if (hasSelectize) {
       mx.helpers.removeSelectizeGroupById(id);
@@ -74,8 +77,8 @@ export function modal(o) {
       startBodyScrollPos = oldBody.scrollTop;
     }
 
-    modal.remove();
-    modal = buildModal(id,{
+    elModal.remove();
+    elModal = buildModal(id,{
       marginLeft: rectModal.left + 'px',
       top: rectModal.top + 'px'
     });
@@ -86,18 +89,18 @@ export function modal(o) {
   }
 
   if (o.styleString) {
-    modal.style = o.styleString;
+    elModal.style = o.styleString;
   }
   if (o.zIndex) {
-    modal.style.zIndex = o.zIndex;
+    elModal.style.zIndex = o.zIndex;
   }
 
   if (o.minWidth) {
-    modal.style.width = o.minWidth;
+    elModal.style.width = o.minWidth;
   }
 
   if (!o.removeCloseButton) {
-    buttonClose = h.el(
+    elButtonClose = h.el(
       'button',
       {
         class: ['btn', 'btn-default'],
@@ -109,11 +112,11 @@ export function modal(o) {
     );
     if (!o.textCloseButton) {
       h.getDictItem('btn_close').then((d) => {
-        buttonClose.innerText = d;
-        buttonClose.dataset.lang_key = 'btn_close';
+        elButtonClose.innerText = d;
+        elButtonClose.dataset.lang_key = 'btn_close';
       });
     }
-    buttons.appendChild(buttonClose);
+    elButtons.appendChild(elButtonClose);
   }
 
   if (o.buttons && o.buttons.constructor === Array) {
@@ -122,59 +125,56 @@ export function modal(o) {
         b = mx.helpers.textToDom(b);
       }
       if (h.isElement(b)) {
-        buttons.appendChild(b);
+        elButtons.appendChild(b);
       }
     });
   }
 
-  if (o.title && h.isElement(o.title)) {
-    title.appendChild(o.title);
-  } else {
-    title.innerHTML = o.title || '';
-  }
 
   if (o.content && o.content instanceof Node) {
-    content.appendChild(o.content);
+    elContent.appendChild(o.content);
   } else {
     if (h.isHTML(o.content)) {
-      content.innerHTML = o.content;
+      elContent.innerHTML = o.content;
     } else {
-      content.innerText = o.content;
+      elContent.innerText = o.content;
     }
   }
 
  
   if (hasShiny && !noShinyBinding) {
-    Shiny.bindAll(modal);
+    Shiny.bindAll(elModal);
   }
   if (true) {
     mx.helpers.initSelectizeAll({
       id: id,
-      selector: modal
+      selector: elModal
     });
   }
   if (startBodyScrollPos) {
-    body.scrollTop = startBodyScrollPos;
+    elBody.scrollTop = startBodyScrollPos;
   }
 
   /**
   * Add to dom
   */
-  document.body.appendChild(modal);
+  document.body.appendChild(elModal);
 
   if (o.addBackground) {
-    document.body.appendChild(background);
+    document.body.appendChild(elBackground);
   }
 
+  setTitle(o.title);
+
   mx.helpers.draggable({
-    selector: modal,
+    selector: elModal,
     debounceTime: 10
   });
 
-  modal.close = close;
-  modal.setTitle = setTitle;
+  elModal.close = close;
+  elModal.setTitle = setTitle;
 
-  return modal;
+  return elModal;
 
   /**
    * Helpers
@@ -187,41 +187,41 @@ export function modal(o) {
         class: ['mx-modal-container', 'mx-draggable'],
         style : style
       },
-      (top = h.el(
+      (elTop = h.el(
         'div',
         {
           class: ['mx-drag-handle', 'mx-modal-top']
         },
-        (title = h.el('div', {
+        (elTitle = h.el('div', {
           class: ['mx-modal-drag-enable', 'mx-modal-title']
         }))
       )),
-      (head = h.el('div', {
+      (elHead = h.el('div', {
         class: ['mx-modal-head']
       })),
-      (body = h.el(
+      (elBody = h.el(
         'div',
         {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
-        (content = h.el('div', {
+        (elContent = h.el('div', {
           class: ['mx-modal-content']
         }))
       )),
-      (footer = h.el(
+      (elFooter = h.el(
         'div',
         {
           class: ['mx-modal-foot']
         },
-        (buttons = h.el('div', {
+        (elButtons = h.el('div', {
           class: 'btn-group'
         })),
-        (dialog = h.el('div', {
+        (elDialog = h.el('div', {
           id: idModal + '_txt',
           class: ['shiny-text-output', 'mx-modal-foot-text']
         }))
       )),
-      (validation = h.el('div', {
+      (elValidation = h.el('div', {
         id: idModal + '_validation',
         class: ['shiny-html-output', 'mx-modal-validation']
       }))
@@ -236,19 +236,20 @@ export function modal(o) {
   }
   function setTitle(newTitle){
      if(h.isElement(newTitle)){
-       title.parentElement.replaceChild(title,newTitle);
+       elTitle.innerHTML = "";
+       elTitle.appendChild(newTitle);
      }else{
-       title.innerText = newTitle;
+       elTitle.innerText = newTitle;
      }
   }
   function close() {
     
 
-    if (mx.helpers.isElement(content)) {
+    if (mx.helpers.isElement(elContent)) {
       /**
        * Remove jed editors
        */
-      elJedContainers = content.querySelectorAll('[data-jed_id]');
+      elJedContainers = elContent.querySelectorAll('[data-jed_id]');
       elJedContainers.forEach((elJed) => {
         var jedId = elJed.dataset.jed_id;
         if (
@@ -263,7 +264,7 @@ export function modal(o) {
      * Renove shiny binding
      */
     if (hasShiny && !noShinyBinding) {
-      Shiny.unbindAll(modal);
+      Shiny.unbindAll(elModal);
     }
     /**
      * Remove selectize
@@ -274,13 +275,8 @@ export function modal(o) {
     /**
      * Remove using jquery or DOM method.
      */
-    if (hasJquery) {
-      $(modal).remove();
-      $(background).remove();
-    } else {
-      modal.remove();
-      background.remove();
-    }
+    elModal.remove();
+    elBackground.remove();
     /**
     * on close callback
     */

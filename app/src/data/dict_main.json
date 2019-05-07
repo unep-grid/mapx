@@ -793,6 +793,18 @@
     "ps": ""
   },
   {
+    "id": "btn_opt_attribute_table",
+    "en": "Attribute table",
+    "fr": "Table attributaire",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_opt_delete",
     "en": "Remove this view",
     "fr": "Supprimer cette vue",
@@ -10256,6 +10268,18 @@
     "id": "button_expand",
     "en": "Expand",
     "fr": "Développer",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "tbl_attr_modal_title",
+    "en": "Attribute table",
+    "fr": "Table attributaire",
     "de": "",
     "ru": "",
     "zh": "",
