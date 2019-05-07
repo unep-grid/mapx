@@ -119,7 +119,10 @@ mxParseQuery <- function(urlSearch){
   #
   if(!noDataCheck(query$style)){
     mxUpdateUrlParams(list(style=""))
-    query$style <- jsonlite::fromJSON(mxDecode(query$style+"="))
+    lStyle <- nchar(query$style)
+    lastTwo <- substr(query$style,lStyle-1,lStyle) == "=="
+    eqAdd <- ifelse(lastTwo,'','==')
+    query$style <- jsonlite::fromJSON(mxDecode(query$style+eqAdd))
   }else{
     query$style <- .get(config,c("ui","colors","default"))
   }
