@@ -6,7 +6,7 @@ import './node_modules/nouislider/distribute/nouislider.css';
 import noUiSlider from 'nouislider';
 import chroma from 'chroma-js';
 import localforage from 'localforage';
-import {buel} from 'buel';
+import {el} from '@fxi/el';
 import {draggable} from './draggable.js';
 import * as frameTool from './onNextFrame.js';
 import * as options from './options.js';
@@ -133,27 +133,27 @@ Pickolor.prototype.open = function(e) {
 Pickolor.prototype.buildTabs = function() {
   var pk = this;
 
-  var elTabSliders = buel('div', {
+  var elTabSliders = el('div', {
     class: ['pickolor-tab-sliders']
   });
-  var elTabJsonEdit = buel('div', {
+  var elTabJsonEdit = el('div', {
     class: ['pickolor-tab-json']
   });
-  var elTabSaveLoad = buel('div', {
+  var elTabSaveLoad = el('div', {
     class: ['pickolor-tab-palette']
   });
 
-  var elPanelOptions = buel(
+  var elPanelOptions = el(
     'div',
     {
       class: ['pickolor-options']
     },
-    buel('input', {
+    el('input', {
       type: 'checkbox',
       class: 'pickolor-check-panel-options',
       id: 'pickolorCheckPanelOptions'
     }),
-    buel(
+    el(
       'label',
       {
         class: 'pickolor-check-panel-options-label',
@@ -164,12 +164,12 @@ Pickolor.prototype.buildTabs = function() {
     )
   );
 
-  var elTabsRadio = buel(
+  var elTabsRadio = el(
     'div',
     {
       class: ['pickolor-tabs']
     },
-    buel('input', {
+    el('input', {
       type: 'radio',
       name: 'pickolor-tabs',
       class: 'pickolor-tab-radio',
@@ -177,7 +177,7 @@ Pickolor.prototype.buildTabs = function() {
       checked: true,
       id: 'pickolor-tab-sliders-radio'
     }),
-    buel(
+    el(
       'label',
       {
         class: 'pickolor-tab',
@@ -186,14 +186,14 @@ Pickolor.prototype.buildTabs = function() {
       },
       pk.d('pk_tab_settings')
     ),
-    buel('input', {
+    el('input', {
       type: 'radio',
       name: 'pickolor-tabs',
       class: 'pickolor-tab-radio',
       value: 'pickolor-tab-load-save',
       id: 'pickolor-tab-load-save-radio'
     }),
-    buel(
+    el(
       'label',
       {
         class: 'pickolor-tab',
@@ -202,14 +202,14 @@ Pickolor.prototype.buildTabs = function() {
       },
       pk.d('pk_tab_palettes')
     ),
-    buel('input', {
+    el('input', {
       type: 'radio',
       name: 'pickolor-tabs',
       class: 'pickolor-tab-radio',
       value: 'pickolor-tab-json-edit',
       id: 'pickolor-tab-json-edit-radio'
     }),
-    buel(
+    el(
       'label',
       {
         class: 'pickolor-tab',
@@ -218,12 +218,12 @@ Pickolor.prototype.buildTabs = function() {
       },
       pk.d('pk_tab_edit_json')
     ),
-    buel(
+    el(
       'div',
       {
         class: ['pickolor-tabs-content']
       },
-      buel(
+      el(
         'div',
         {
           id: 'pickolor-tab-sliders-content',
@@ -231,7 +231,7 @@ Pickolor.prototype.buildTabs = function() {
         },
         elTabSliders
       ),
-      buel(
+      el(
         'div',
         {
           id: 'pickolor-tab-load-save-content',
@@ -239,7 +239,7 @@ Pickolor.prototype.buildTabs = function() {
         },
         elTabSaveLoad
       ),
-      buel(
+      el(
         'div',
         {
           id: 'pickolor-tab-json-edit-content',
@@ -269,30 +269,30 @@ Pickolor.prototype.buildTabSliders = function() {
     /**
      * ui
      */
-    var elContainer = buel('div', {
+    var elContainer = el('div', {
       class: ['slider-container']
     });
-    var elSlider = buel('div', {
+    var elSlider = el('div', {
       class: ['slider']
     });
-    var elContainerMinMax = buel('div', {
+    var elContainerMinMax = el('div', {
       class: 'slider-min-max-container'
     });
-    var elMin = buel('input', {
+    var elMin = el('input', {
       type: 'text', // avoid browser things..
       dataset: {
         action: 'input-update-value-slider',
         idSlider: s.id
       }
     });
-    var elMax = buel('input', {
+    var elMax = el('input', {
       type: 'text', // avoid browser things
       dataset: {
         action: 'input-update-value-slider',
         idSlider: s.id
       }
     });
-    var elTitle = buel('span', s.title, {
+    var elTitle = el('span', s.title, {
       id: s.id
     });
 
@@ -334,14 +334,14 @@ Pickolor.prototype.buildTabSliders = function() {
 Pickolor.prototype.buildTabJsonEdit = function() {
   var pk = this;
 
-  var elInputJson = buel('textarea', {
+  var elInputJson = el('textarea', {
     class: ['text-area-input-json']
   });
 
-  var elContainer = buel(
+  var elContainer = el(
     'div',
     elInputJson,
-    buel('button', 'update', {
+    el('button', 'update', {
       class: 'button',
       dataset: {
         action: 'btn-update-json'
@@ -359,11 +359,11 @@ Pickolor.prototype.buildPanel = function() {
 
   var elContainer = pk.elContainer || pk.options.el;
 
-  var elDest = buel('div');
-  var elHandle = buel('div', {
+  var elDest = el('div');
+  var elHandle = el('div', {
     class: 'handle'
   });
-  var elInputColor = buel('input', {
+  var elInputColor = el('input', {
     class: ['color-input'],
     placeholder: '#fff',
     dataset: {
@@ -371,7 +371,7 @@ Pickolor.prototype.buildPanel = function() {
     }
   });
 
-  var elBtnAdd = buel('button', pk.d('pk_btn_add'), {
+  var elBtnAdd = el('button', pk.d('pk_btn_add'), {
     type: 'button',
     class: ['button'],
     dataset: {
@@ -380,7 +380,7 @@ Pickolor.prototype.buildPanel = function() {
     }
   });
 
-  var elBtnClose = buel('button', pk.d('pk_btn_close'), {
+  var elBtnClose = el('button', pk.d('pk_btn_close'), {
     type: 'button',
     class: ['button'],
     dataset: {
@@ -389,7 +389,7 @@ Pickolor.prototype.buildPanel = function() {
     }
   });
 
-  var elInputGroup = buel(
+  var elInputGroup = el(
     'div',
     {
       class: ['top-group-input']
@@ -399,7 +399,7 @@ Pickolor.prototype.buildPanel = function() {
     elBtnClose
   );
 
-  var elItems = buel('div', {
+  var elItems = el('div', {
     class: ['items']
   });
 
@@ -419,12 +419,12 @@ Pickolor.prototype.buildPanel = function() {
 
 Pickolor.prototype.buildTabSaveLoad = function() {
   var pk = this;
-  var elContent = buel(
+  var elContent = el(
     'div',
     {
       class: 'pickolor-tab-palettes'
     },
-    buel(
+    el(
       'button',
       {
         type: 'button',
@@ -436,14 +436,14 @@ Pickolor.prototype.buildTabSaveLoad = function() {
       },
       pk.d('pk_btn_set_default_palette')
     ),
-    buel(
+    el(
       'div',
       'Available soon:',
-      buel(
+      el(
         'ul',
-        buel('li', 'Browse standard palettes'),
-        buel('li', 'Save your own palettes'),
-        buel('li', 'Share palettes')
+        el('li', 'Browse standard palettes'),
+        el('li', 'Save your own palettes'),
+        el('li', 'Share palettes')
       )
     )
   );
@@ -727,7 +727,7 @@ Pickolor.prototype.update = function() {
 
     pk.elInputJson.value = JSON.stringify(backup, 0, 2);
 
-    var elContainer = buel('div', {class: 'items'});
+    var elContainer = el('div', {class: 'items'});
     colors.forEach((c) => {
       var elItem = createItem(c);
       elContainer.appendChild(elItem);
@@ -819,17 +819,17 @@ Pickolor.prototype.validateDataInput = function(data) {
 
 function createItem(color) {
   var idRadio = Math.random().toString(32);
-  var elItem = buel('div', {
+  var elItem = el('div', {
     class: ['item']
   });
-  var elLabel = buel('label', {
+  var elLabel = el('label', {
     for: idRadio,
     style: {
       backgroundColor: color
       //borderColor: color,
     }
   });
-  var elInput = buel('input', {
+  var elInput = el('input', {
     id: idRadio,
     type: 'radio',
     name: 'pickolor-item',

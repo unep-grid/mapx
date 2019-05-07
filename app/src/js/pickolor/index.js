@@ -1,13 +1,11 @@
 /* jshint esversion:6*/
 import './style.css';
 import Pickolor from "./pickolor";
-import {buel} from 'buel';
-
-
+import {el} from '@fxi/el';
 
 
 for( var i = 0 ; i< 5; i++){
-  var el = buel("button",{
+  var elBtn = el("button",{
     type : "button",
     dataset : {
       pickolor_trigger : true
@@ -19,7 +17,7 @@ for( var i = 0 ; i< 5; i++){
       padding : "10px"
     }
   });
-  document.body.appendChild(el);
+  document.body.appendChild(elBtn);
 }
 
 
