@@ -4,6 +4,7 @@ class MessageFlash {
   constructor(parent) {
     this.addTo(parent.el);
     this.timeout = 0;
+    this.flash = debounce(this._flash,200);
   }
 
   addTo(elContainer) {
@@ -23,7 +24,7 @@ class MessageFlash {
     mf.elMesssageContainer.remove();
   }
 
-  flash(str, duration) {
+  _flash(str, duration) {
     var mf = this;
     duration = duration || 2000;
     str = str || '';
@@ -58,3 +59,23 @@ class MessageFlash {
 }
 
 export {MessageFlash};
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function() {
+    var context = this,
+      args = arguments;
+    var later = function() {
+      timeout = null;
+      if (!immediate) {
+        func.apply(context, args);
+      }
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) {
+      func.apply(context, args);
+    }
+  };
+}

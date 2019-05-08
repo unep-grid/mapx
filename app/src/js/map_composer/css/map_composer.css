@@ -42,9 +42,9 @@
 }
 
 .mc.mc-mode-normal .mc-page {
-  -webkit-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
-  -moz-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
-  box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
+  -webkit-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
   overflow: hidden;
 }
 

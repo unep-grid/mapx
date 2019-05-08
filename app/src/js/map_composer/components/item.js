@@ -9,29 +9,25 @@ import './../css/map_composer_medium_editor.css';
 import {Box} from './box.js';
 
 class Item extends Box {
-  constructor(parent, config) {
-    super(parent);
-
+  constructor(boxParent, config) {
+    super(boxParent);
     var item = this;
-    item.page = parent;
-    item.workspace = item.page.workspace;
     item.resizeAction = [];
     item.orig = config;
     item.type = config.type;
     item.title = 'item-' + item.type;
-    var layout = this.page.options.layout.item;
 
     item.init({
       class: 'mc-' + item.type,
-      elContainer: item.page.elContent,
-      elContent: item.buildEl(),
-      boxRestrict: item.workspace,
+      content: item.buildEl(),
+      boxContainer: item.boxParent,
+      boxRestrict: item.boxParent.boxParent,
       draggable: true,
       resizable: true,
       onRemove: item.onRemove.bind(item),
       onResize: item.onResize.bind(item),
-      width: config.width || layout.width,
-      height: config.height || layout.height
+      width: config.width || item.state.item_width,
+      height: config.height || item.state.item_height
     });
   }
 
@@ -51,7 +47,8 @@ class Item extends Box {
   }
 
   onResize() {
-    this.resizeAction.forEach((a) => a());
+    var item = this;
+    item.resizeAction.forEach((a) => a());
     this.displayDim();
   }
 
@@ -76,7 +73,7 @@ class Item extends Box {
     );
 
     item.editor = new MediumEditor(elOut, {
-      elementsContainer: item.page.el
+      elementsContainer: item.boxParent.el
     });
     return elOut;
   }

@@ -1,31 +1,40 @@
-import {el} from '@fxi/el';
 import {MessageFlash} from './message_flash.js';
+import {el} from '@fxi/el';
 import interact from 'interactjs';
 
 class Box {
-  constructor(parent) {
-    this.parent = parent;
-    this.options = parent.options;
-    this.width = null;
-    this.height = null;
-    this.message = null;
-    this.title = 'box';
-    this.transform = {
+  constructor(boxParent) {
+    var box = this;
+    box.mc = boxParent.mc || boxParent;
+    box[boxParent.title] = boxParent;
+    box.boxParent = boxParent;
+    box.state = boxParent.state;
+    //box.busy = false;
+    box.width = 0;
+    box.height = 0;
+    box.y = 0;
+    box.y = 0;
+    box.message = null;
+    box.title = 'box';
+    box.transform = {
       content: {},
       box: {}
     };
-    this.cbResize = [];
-    this.cbDrag = [];
+    box.cbResize = [];
+    box.cbDrag = [];
   }
 
   init(opt) {
     opt = opt || {};
     var box = this;
     box.config = opt;
-    box.createEl(opt.class);
-    opt.elContainer.appendChild(box.el);
-    box.el.appendChild(opt.elContent);
-    box.elContent = opt.elContent;
+
+    box.elContent = opt.content || el('div');
+    box.el = box.createEl(opt.class);
+    box.elContainer = opt.boxContainer.elContent;
+    box.elContainer.appendChild(box.el);
+    box.el.appendChild(box.elContent);
+    box.addMessageSupport();
 
     if (opt.width) {
       box.setWidth(opt.width);
@@ -42,7 +51,7 @@ class Box {
           box.cbDrag.push(opt.onDrag);
         }
         makeDraggable(box, {
-          boxRestrict: opt.boxRestrict || box.parent
+          boxRestrict: opt.boxRestrict || box.boxParent
         });
       }
       if (opt.resizable) {
@@ -50,7 +59,7 @@ class Box {
           box.cbResize.push(opt.onResize);
         }
         makeResizable(box, {
-          boxRestrict: opt.boxRestrict || box.parent
+          boxRestrict: opt.boxRestrict || box.boxParent
         });
       }
     }
@@ -63,22 +72,22 @@ class Box {
 
   createEl(classes) {
     var box = this;
-    box.el = el('div', {class: ['mc-box'].concat(classes || [])});
-    box.el.box = box;
+    var elBox = el('div', {
+      class: ['mc-box'].concat(classes || [])
+    });
+    elBox.box = box;
+    return elBox;
   }
 
   onResize() {
     var box = this;
-    console.log('box on resize');
     box.cbResize.forEach((cb) => cb(box));
-    box.updateContent();
   }
 
   onDrag() {
     var box = this;
     console.log('box on drag');
     box.cbDrag.forEach((cb) => cb(box));
-    box.updateContent();
   }
 
   addEl(e) {
@@ -91,6 +100,7 @@ class Box {
     if (box.config.onRemove) {
       box.config.onRemove();
     }
+    console.log("Removed box " + box.title);
   }
 
   addHandle(type) {
@@ -98,7 +108,7 @@ class Box {
     var title = box.title;
     box.addEl(
       el('div', {
-        'title' : title,
+        title: title,
         class: ['mc-handle', 'mc-handle-' + type]
       })
     );
@@ -120,14 +130,7 @@ class Box {
     this.setHeight(h || this.height);
   }
 
-  setContentScale(scale) {
-    var box = this;
-    box._content_scale = scale;
-    box.updateContent();
-    box.onResize();
-  }
-
-  updateContent() {
+  _updateContentScale() {
     var box = this;
     if (!box.elContent) {
       return;
@@ -143,6 +146,16 @@ class Box {
       box.elContent.style.width = wP + '%';
       box.elContent.style.height = hP + '%';
       box.setTransform('content', 'scale', scale);
+    }
+  }
+
+  validateSize() {
+    var box = this;
+    var mc = box.mc;
+    var max = mc.state.canvas_max_area;
+    var area = (box.width / box.state.scale) * (box.height / box.state.scale);
+    if (area >= max) {
+      mc.displayWarning('Your browser will not handle this kind of size');
     }
   }
 
@@ -166,53 +179,110 @@ class Box {
     elTarget.style.transform = '';
   }
 
-  setWidth(w) {
-    var box = this;
-    var res = box.resolution;
-    box.width = w || 10;
-    box.el.style.width = box.width * res[1] + 'px';
-    box.updateContent();
-  }
-
-  setHeight(h) {
-    var box = this;
-    var res = box.resolution;
-    box.height = h || 10;
-
-    box.el.style.height = box.height * res[0] + 'px';
-    box.updateContent();
-  }
-
   calcRect() {
     return this.el.getBoundingClientRect();
   }
 
-  displayDim() {
-    var box = this;
-    if (!box.message) {
-      box.addMessageSupport();
-    }
-    var s = this.calcRect();
-    var w = Math.round(s.width);
-    var h = Math.round(s.height);
-    var r = window.devicePixelRatio;
-    this.message.flash(Math.round(w * r) + ' x ' + Math.round(h * r) + '');
+  get rect() {
+    return this.calcRect();
   }
 
-  get resOffset() {
-    var res = this.resolution;
-    var rect = this.calcRect();
+  boxIsInside(otherBox) {
+    var box = this;
+    var rA = box.rect;
+    var rB = otherBox.rect;
+    rectIsInsideRect(rA, rB);
+  }
+
+  get gridOffset() {
+    var box = this;
+    var res = box.state.grid_snap_size;
+    var rect = box.calcRect();
     return {
-      x: rect.x - Math.round(rect.x / res[0]) * res[0],
-      y: rect.y - Math.round(rect.y / res[1]) * res[1]
+      x: rect.x - Math.round(rect.x / res) * res,
+      y: rect.y - Math.round(rect.y / res) * res
     };
   }
-
-  get resolution() {
-    return this.options.layout.resolution;
+  setY(y, inPx) {
+    var box = this;
+    box.y = inPx ? y : box.toLengthPixel(y);
+    box.el.style.top = y + 'px';
   }
+  setX(x, inPx) {
+    var box = this;
+    box.x = inPx ? x : box.toLengthPixel(x);
+    box.el.style.left = x + 'px';
+  }
+  setWidth(w, inPx) {
+    var box = this;
+    box.width = inPx ? w : box.toLengthPixel(w);
+    box.el.style.width = box.width + 'px';
+    box.validateSize();
+    return w;
+  }
+
+  setHeight(h, inPx) {
+    var box = this;
+    box.height = inPx ? h : box.toLengthPixel(h);
+    box.el.style.height = box.height + 'px';
+    box.validateSize();
+    return h;
+  }
+
+  displayDim() {
+    var box = this;
+    if(box.isBusy){
+      return;
+    }
+    var unit = box.state.unit;
+    var w = box.toLengthUnit(box.width);
+    var h = box.toLengthUnit(box.height);
+    w = unit === 'in' ? Math.round(w * 100) / 100 : Math.round(w);
+    h = unit === 'in' ? Math.round(h * 100) / 100 : Math.round(h);
+    box.message.flash(w + ' [' + unit + '] x ' + h + ' [' + unit + '] ');
+  }
+
+  toLengthPixel(length) {
+    var state = this.state;
+    var r = window.devicePixelRatio;
+    length /= r;
+    if (state.unit === 'px') {
+      return length;
+    }
+    if (state.unit === 'mm') {
+      length /= 25.4;
+    }
+    return state.dpi * length;
+  }
+
+  toLengthUnit(px) {
+    var state = this.state;
+    var r = window.devicePixelRatio;
+    px *= r;
+    if (state.unit === 'px') {
+      return px;
+    }
+    var out = px / state.dpi;
+    if (state.unit === 'mm') {
+      out *= 25.4;
+    }
+    return out;
+  }
+
   get contentScale() {
     return this._content_scale;
+  }
+  setContentScale(scale) {
+    var box = this;
+    box._content_scale = scale;
+    box._updateContentScale();
+    box.onResize();
+    box.validateSize();
+  }
+  setScale(scale) {
+    var box = this;
+    box._scale = scale;
+    box.setTransform('box', 'scale', scale);
   }
 }
 
@@ -225,8 +295,9 @@ export function makeInteract(box) {
 
 function makeResizable(box, opt) {
   opt = opt || {};
-  var restrict = opt.boxRestrict;
-  box.addHandleResize(); 
+  var boxRestrict = opt.boxRestrict;
+  box.addHandleResize();
+  box.boxRestrict = boxRestrict;
   var out = box.interact
     .resizable({
       edges: {
@@ -237,11 +308,11 @@ function makeResizable(box, opt) {
       },
       modifiers: [
         interact.modifiers.restrict({
-          restriction: restrict.elContent,
+          restriction: boxRestrict.el,
           endOnly: true
         }),
         interact.modifiers.snap({
-          targets: [snapTo(restrict)],
+          targets: [snapToBox(boxRestrict)],
           relativePoints: [{x: 0, y: 0}]
         }),
         interact.modifiers.restrictSize({
@@ -256,10 +327,10 @@ function makeResizable(box, opt) {
   return out;
 }
 
-function snapTo(box) {
+function snapToBox(box) {
   return function(x, y) {
-    x = Math.round(x / 5) * 5 + box.resOffset.x;
-    y = Math.round(y / 5) * 5 + box.resOffset.y;
+    x = Math.round(x / 5) * 5 + box.gridOffset.x;
+    y = Math.round(y / 5) * 5 + box.gridOffset.y;
     return {
       x: x,
       y: y
@@ -269,18 +340,19 @@ function snapTo(box) {
 
 function makeDraggable(box, opt) {
   opt = opt || {};
-  var restrict = opt.boxRestrict;
-  box.addHandleDrag(); 
+  var boxRestrict = opt.boxRestrict;
+  box.addHandleDrag();
+  box.boxRestrict = boxRestrict;
   var out = box.interact
     .draggable({
       allowFrom: '.mc-handle-drag',
       modifiers: [
         interact.modifiers.snap({
-          targets: [snapTo(restrict)],
+          targets: [snapToBox(boxRestrict)],
           relativePoints: [{x: 0, y: 0}]
         }),
         interact.modifiers.restrict({
-          restriction: restrict.elContent,
+          restriction: boxRestrict.el,
           elementRect: {top: 0, left: 0, bottom: 1, right: 1}
         })
       ]
@@ -297,12 +369,15 @@ function onResizeBase(event) {
   if (!box) {
     return;
   }
+
   var x = box.x || 0;
   var y = box.y || 0;
 
-  // update the element's style
-  target.style.width = event.rect.width + 'px';
-  target.style.height = event.rect.height + 'px';
+  var w = event.rect.width;
+  var h = event.rect.height;
+
+  box.setWidth(w, true);
+  box.setHeight(h, true);
 
   // translate when resizing from top or left edges
   x += event.deltaRect.left;
@@ -328,4 +403,13 @@ function onDragBase(event) {
   // update the posiion attributes
   box.x = x;
   box.y = y;
+}
+
+function rectIsInsideRect(rectA, rectB) {
+  var inside =
+    rectB.bottom <= rectA.bottom &&
+    rectB.top >= rectA.top &&
+    rectB.right <= rectA.right &&
+    rectB.left >= rectA.left;
+  return inside;
 }

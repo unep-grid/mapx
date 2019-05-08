@@ -20,8 +20,8 @@ function mapComposerModalAuto() {
 
   items.push({
     type: 'map',
-    width: 50,
-    height: 17,
+    width:  100,
+    height: 50,
     options: {}
   });
 
@@ -33,26 +33,26 @@ function mapComposerModalAuto() {
     items.push({
       type: 'legend',
       element: elLegend,
-      width: 20,
-      height: 20
+      width: 50,
+      height: 50
     });
 
     items.push({
       type: 'title',
       text: title,
-      width: 40,
-      height: 5
+      width: 50,
+      height: 20
     });
 
     items.push({
       type: 'text',
       text: description,
-      width: 40,
-      height: 5
+      width: 50,
+      height: 20
     });
   });
 
-  var config = {items: items};
+  var state = {items: items};
 
   /**
    * Remove canvas source and layers
@@ -78,7 +78,7 @@ function mapComposerModalAuto() {
    * Run map composer
    */
   return import('./map_composer/index.js').then((m) => {
-    config.items.forEach((i) => {
+    state.items.forEach((i) => {
       if (i.type === 'map') {
         Object.assign(i.options, {
           attributionControl: false,
@@ -95,6 +95,7 @@ function mapComposerModalAuto() {
       title : 'Map Composer',
       id: idComposer,
       content: elContainer,
+      addSelectize : false, 
       onClose: destroy,
       style: {
         position: 'absolute',
@@ -103,7 +104,7 @@ function mapComposerModalAuto() {
       }
     });
 
-    var mc = new m.MapComposer(elContainer, config);
+    var mc = new m.MapComposer(elContainer, state);
 
     function destroy() {
       mc.destroy();

@@ -15,9 +15,8 @@
 export function modal(o) {
   o = o || {};
   var h = mx.helpers;
-  var 
-  elModal,
-  elTop,
+  var elModal,
+    elTop,
     elTitle,
     elHead,
     elBody,
@@ -35,14 +34,14 @@ export function modal(o) {
    */
   elModal = document.getElementById(o.id);
   var hasModal = h.isElement(elModal);
-  if(!hasModal){
-    elModal = buildModal(id,o.style);
+  if (!hasModal) {
+    elModal = buildModal(id, o.style);
   }
 
   elBackground = document.getElementById(idBackground);
   var hasBackground = h.isElement(elBackground);
 
-  if(!hasBackground){
+  if (!hasBackground) {
     elBackground = buildBackground(idBackground);
   }
 
@@ -54,19 +53,21 @@ export function modal(o) {
   var noShinyBinding =
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
+  o.addSelectize = o.addSelectize === false ? false : true;
+
   if (o.close === true) {
-    if(hasModal && h.isFunction(elModal.close)){
+    if (hasModal && h.isFunction(elModal.close)) {
       elModal.close();
-    }else{
+    } else {
       close();
     }
     return;
   }
 
-  if ( hasModal && o.replace) {
+  if (hasModal && o.replace) {
     var oldBody = elModal.querySelector('.mx-modal-body');
     var rectModal = elModal.getBoundingClientRect();
-    
+
     if (hasShiny && !noShinyBinding) {
       Shiny.unbindAll(elModal);
     }
@@ -78,13 +79,13 @@ export function modal(o) {
     }
 
     elModal.remove();
-    elModal = buildModal(id,{
+    elModal = buildModal(id, {
       marginLeft: rectModal.left + 'px',
       top: rectModal.top + 'px'
     });
   }
 
-  if ( hasModal && !o.replace) {
+  if (hasModal && !o.replace) {
     return;
   }
 
@@ -130,7 +131,6 @@ export function modal(o) {
     });
   }
 
-
   if (o.content && o.content instanceof Node) {
     elContent.appendChild(o.content);
   } else {
@@ -141,11 +141,10 @@ export function modal(o) {
     }
   }
 
- 
   if (hasShiny && !noShinyBinding) {
     Shiny.bindAll(elModal);
   }
-  if (true) {
+  if (o.addSelectize) {
     mx.helpers.initSelectizeAll({
       id: id,
       selector: elModal
@@ -156,8 +155,8 @@ export function modal(o) {
   }
 
   /**
-  * Add to dom
-  */
+   * Add to dom
+   */
   document.body.appendChild(elModal);
 
   if (o.addBackground) {
@@ -185,7 +184,7 @@ export function modal(o) {
       {
         id: idModal,
         class: ['mx-modal-container', 'mx-draggable'],
-        style : style
+        style: style
       },
       (elTop = h.el(
         'div',
@@ -234,17 +233,15 @@ export function modal(o) {
       class: ['mx-modal-background']
     });
   }
-  function setTitle(newTitle){
-     if(h.isElement(newTitle)){
-       elTitle.innerHTML = "";
-       elTitle.appendChild(newTitle);
-     }else{
-       elTitle.innerText = newTitle;
-     }
+  function setTitle(newTitle) {
+    if (h.isElement(newTitle)) {
+      elTitle.innerHTML = '';
+      elTitle.appendChild(newTitle);
+    } else {
+      elTitle.innerText = newTitle;
+    }
   }
   function close() {
-    
-
     if (mx.helpers.isElement(elContent)) {
       /**
        * Remove jed editors
@@ -278,9 +275,9 @@ export function modal(o) {
     elModal.remove();
     elBackground.remove();
     /**
-    * on close callback
-    */
-    if(mx.helpers.isFunction(o.onClose)){
+     * on close callback
+     */
+    if (mx.helpers.isFunction(o.onClose)) {
       o.onClose();
     }
   }

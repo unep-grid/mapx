@@ -3,20 +3,19 @@ import {Page} from './page.js';
 import {Box} from './box.js';
 
 class Workspace extends Box {
-  constructor(parent) {
-    super(parent);
+  constructor(boxParent) {
+    super(boxParent);
     var workspace = this;
     workspace.title = "workspace";  
     workspace.init({
       class : ['mc-workspace'],
-      elContainer: parent.elContent,
+      boxContainer: boxParent,
       elContent: workspace.buildEl(),
       draggable: false,
       resizable: false,
       onRemove : workspace.onRemove.bind(workspace)
     });
 
-    workspace.mc = parent;
     workspace.page = new Page(workspace);
   }
 
