@@ -30,7 +30,6 @@ function wmsBuildQueryUi(opt) {
       return;
     }
 
-	
     var elSelectServices = el('select', {
       class: 'form-control'
     });
