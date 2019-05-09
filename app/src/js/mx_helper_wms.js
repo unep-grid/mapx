@@ -30,6 +30,7 @@ function wmsBuildQueryUi(opt) {
       return;
     }
 
+	
     var elSelectServices = el('select', {
       class: 'form-control'
     });
@@ -322,7 +323,7 @@ function urlLegend(opt) {
   var query = mx.helpers.objToParams({
     service: 'WMS',
     version: '1.1.1',
-    styles: '',
+    style: '',
     request: 'getLegendGraphic',
     layer: opt.layer,
     format: 'image/png',
