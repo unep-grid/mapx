@@ -6,17 +6,18 @@ class Workspace extends Box {
   constructor(boxParent) {
     super(boxParent);
     var workspace = this;
-    workspace.title = "workspace";  
+    workspace.title = 'workspace';
     workspace.init({
-      class : ['mc-workspace'],
+      class: ['mc-workspace'],
       boxContainer: boxParent,
       elContent: workspace.buildEl(),
       draggable: false,
       resizable: false,
-      onRemove : workspace.onRemove.bind(workspace)
+      onRemove: workspace.onRemove.bind(workspace)
     });
 
     workspace.page = new Page(workspace);
+    workspace.page.setTopLeft({top: 20, left: 20, inPx: true});
   }
 
   onRemove() {

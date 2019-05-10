@@ -10,7 +10,7 @@ let state = {
   page_height: 100,
   content_scale: 1,
   legend_n_columns: 1,
-  grid_snap_size: 1,
+  grid_snap_size: 5,
   item_height: 10,
   item_width: 10,
   workspace_height: 200,

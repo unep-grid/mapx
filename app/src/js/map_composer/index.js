@@ -1,8 +1,6 @@
 import * as def from './default.js';
 import {Workspace} from './components/index.js';
 import {Toolbar} from './components/index.js';
-import html2canvas from 'html2canvas';
-import download from 'downloadjs';
 import {el} from '@fxi/el';
 import './css/map_composer.css';
 
@@ -23,10 +21,22 @@ class MapComposer {
 
   destroy() {
     var mc = this;
-    //mc.setDpi();
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
+  }
+    
+  setState(id, value) {
+    var mc = this;
+    return {
+      mode_preview: mc.toggleModePreview.bind(mc),
+      dpi: mc.setDpi.bind(mc),
+      unit: mc.setUnit.bind(mc),
+      page_width: mc.setPageWidth.bind(mc),
+      page_height: mc.setPageHeight.bind(mc),
+      content_scale: mc.setScale.bind(mc),
+      legends_n_columns: mc.setLegendColumnCount.bind(mc)
+    }[id](value);
   }
 
   setMode(mode) {
@@ -53,7 +63,7 @@ class MapComposer {
   }
   setPageHeight(h) {
     var page = this.workspace.page;
-    h = h || mc.state.page_height ;
+    h = h || mc.state.page_height;
     page.setHeight(h);
     console.log(h);
     mc.state.page_height = h;
@@ -83,30 +93,10 @@ class MapComposer {
     });
   }
 
-  updatePageSizes(){
+  updatePageSizes() {
     mc = this;
     mc.setPageHeight();
     mc.setPageWidth();
-  }
-
-  setState(id, value) {
-    var mc = this;
-    return {
-      mode_preview: mc.toggleModePreview.bind(mc),
-      dpi: mc.setDpi.bind(mc),
-      unit: mc.setUnit.bind(mc),
-      page_width: mc.setPageWidth.bind(mc),
-      page_height: mc.setPageHeight.bind(mc),
-      content_scale: mc.setScale.bind(mc),
-      legends_n_columns: mc.setLegendColumnCount.bind(mc)
-    }[id](value);
-  }
-
-  handleAction(idAction) {
-    var mc = this;
-    if (idAction === 'export_page') {
-      mc.exportPage();
-    }
   }
 
   toggleModePreview(enable) {
@@ -117,31 +107,7 @@ class MapComposer {
     }
   }
 
-  exportPage() {
-    var mc = this;
-    var workspace = mc.workspace;
-    var page = workspace.page;
-    var elPrint = page.el;
-    var curMode = mc.state.mode;
-
-    mc.setMode('print')
-      .then(() => {
-        return html2canvas(elPrint);
-      })
-      .then((canvas) => {
-        var data = canvas.toDataURL('image/png');
-        download(data, 'map-composer-export.png', 'image/png');
-        mc.setMode(curMode);
-      })
-      .catch((e) => {
-        mc.displayWarning(
-          'Oups, something went wrong during the rendering, please read the console log.'
-        );
-        console.warn(e);
-        mc.setMode(curMode);
-      });
-  }
-
+  
   displayWarning(txt) {
     alert(JSON.stringify(txt));
   }
@@ -183,22 +149,8 @@ class MapComposer {
     return Promise.all(promItems);
   }
 
-  //initPixelRatio() {
-  //var mc = this;
-  //mc.pixelRatioOrig = window.devicePixelRatio;
-  /*}*/
-
-  //Object.defineProperty(window, 'devicePixelRatio', {
-  //get: function() {
-  //if (dpi) {
-  //return dpi / 96;
-  //} else {
-  //return origPixelRatio;
-  //}
-  //}
-  //});
-  //return mc.resizeEachMap();
-  //}
 }
 
 export {MapComposer};
+
+

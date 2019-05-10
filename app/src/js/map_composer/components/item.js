@@ -21,9 +21,11 @@ class Item extends Box {
       class: 'mc-' + item.type,
       content: item.buildEl(),
       boxContainer: item.boxParent,
-      boxRestrict: item.boxParent.boxParent,
+      boxBound: item.boxParent.boxParent,
+      boundEdges: {top: true, left: true, bottom: false, right: false},
       draggable: true,
       resizable: true,
+      removable: true,
       onRemove: item.onRemove.bind(item),
       onResize: item.onResize.bind(item),
       width: config.width || item.state.item_width,
@@ -155,5 +157,3 @@ mapNorthArrow.prototype.onRemove = function() {
   this._container.parentNode.removeChild(this._container);
   this._map = undefined;
 };
-
-

@@ -5,6 +5,7 @@ class Toolbar extends Box {
   constructor(boxParent) {
     super(boxParent);
     var toolbar = this;
+    toolbar.title = 'toolbar';
     toolbar.init({
       class: ['mc-toolbar'],
       boxContainer: boxParent,
@@ -15,12 +16,21 @@ class Toolbar extends Box {
       onResize: toolbar.onResize.bind(toolbar)
     });
     toolbar.mc = boxParent;
-    toolbar.initListener();
+
+    toolbar.addListener({
+      type: 'change',
+      group: 'toolbar_form_change',
+      listener: changeListener.bind(toolbar)
+    });
+
+    toolbar.addListener({
+      type: 'click',
+      group: 'toolbar_click',
+      listener: clickListener.bind(toolbar)
+    });
   }
 
-  onRemove() {
-    this.removeListener();
-  }
+  onRemove() {}
 
   buildEl() {
     var toolbar = this;
@@ -191,46 +201,33 @@ class Toolbar extends Box {
       ]
     );
   }
-
-  listenerChange(e) {
-    var toolbox = this;
-    var d = e.target.dataset;
-    if (d.mc_event_type && d.mc_action) {
-      e.stopPropagation();
-      var eventType = d.mc_event_type;
-      var idAction = d.mc_action;
-      var value = validateValue(e.target);
-      if (eventType === 'change') {
-        if (idAction === 'update_state') {
-          var idState = d.mc_state_name;
-          toolbox.mc.setState(idState, value);
-        }
-      } else {
-        if (eventType === 'click') {
-          toolbox.mc.handleAction(idAction);
-        }
-      }
-    }
-  }
-
-  initListener() {
-    var toolbar = this;
-    var l = (toolbar.listeners = []);
-    l.push({type: 'change', listener: toolbar.listenerChange.bind(toolbar)});
-    l.push({type: 'click', listener: toolbar.listenerChange.bind(toolbar)});
-    l.forEach((ll) => {
-      toolbar.el.addEventListener(ll.type, ll.listener);
-    });
-  }
-  removeListener() {
-    var toolbar = this;
-    toolbar.listeners.forEach((ll) => {
-      toolbar.el.removeEventListener(ll.type, ll.listener);
-    });
-  }
 }
 
 export {Toolbar};
+
+function clickListener(e) {
+  var toolbar = this;
+  var mc = toolbar.mc;
+  var elTarget = e.target;
+  var d = elTarget.dataset;
+  var idAction = d.mc_action;
+  if (idAction === 'export_page') {
+    mc.workspace.page.exportPng();
+  }
+}
+
+function changeListener(e) {
+  var toolbar = this;
+  var mc = toolbar.mc;
+  var elTarget = e.target;
+  var d = elTarget.dataset;
+  var idAction = d.mc_action;
+  if (idAction === 'update_state') {
+    var value = validateValue(e.target);
+    var idState = d.mc_state_name;
+    mc.setState(idState, value);
+  }
+}
 
 function validateValueNumber(el) {
   var value = el.value * 1;
@@ -255,7 +252,7 @@ function validateValueSelect(el) {
   return validateValueString(el);
 }
 function validateValueCheckbox(el) {
-   return !!el.checked;
+  return !!el.checked;
 }
 
 function validateValue(el) {
@@ -271,5 +268,5 @@ function validateValue(el) {
   if (el.type === 'string') {
     return validateValueString(el);
   }
-  return "";
+  return '';
 }

@@ -16,15 +16,23 @@
   display: flex;
   flex-direction: row;
 }
+.mc .mc-content > .mc-toolbar,
+.mc .mc-content > .mc-workspace {
+  position: relative;
+}
+
 .mc .mc-toolbar {
-  width: 200px;
+  min-width: 200px;
   padding: 10px;
   margin-right: 20px;
 }
 .mc .mc-workspace {
-  width: calc(100% - 200px);
+  flex-grow:1;
 }
-
+.mc .mc-workspace > div {
+  min-width: 5000px;
+  min-height: 5000px;
+}
 .mc .mc-workspace,
 .mc .mc-workspace-content {
   padding: 0px;
@@ -41,13 +49,17 @@
   position: relative;
 }
 
-.mc.mc-mode-normal .mc-page {
-  -webkit-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
-  -moz-box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
-  box-shadow: 0px 0px 11px -1px rgba(0,0,0,0.75);
-  overflow: hidden;
-}
 
+.mc.mc-mode-print .mc-page,
+.mc.mc-mode-normal .mc-page{
+  overflow:hidden;
+  transform:none!important;
+}
+.mc.mc-mode-normal .mc-page {
+  -webkit-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+}
 .mc.mc-mode-normal .mc-workspace:after {
   height: 100%;
   top: 0;
@@ -90,16 +102,12 @@
   background: #fff;
   outline: 1px solid rgba(0, 0, 0, 0.2);
   outline-offset: -1px;
-  -webkit-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
-  -moz-box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
-  box-shadow: 3px 3px 4px 0px rgba(214, 214, 214, 1);
+  -webkit-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
+  box-shadow: 0px 0px 11px -1px rgba(0, 0, 0, 0.4);
 }
 
 .mc .mc-box {
-  position: relative;
-}
-
-.mc .mc-box .mc-interact {
   position: absolute;
 }
 
@@ -133,6 +141,19 @@
 
 .mc.mc-mode-layout .mc-box:hover > .mc-handle {
   display: block;
+}
+.mc .mc-handle.mc-handle-remove {
+  top: -5px;
+  right: -5px;
+  cursor: pointer;
+}
+.mc .mc-handle.mc-handle-remove:before {
+  top: -5px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  content: '×';
 }
 
 .mc .mc-handle.mc-handle-resize-top {
@@ -203,6 +224,7 @@
 .mc.mc-mode-normal .mc-flash {
   display: none;
 }
+
 
 /**
 * set default texts
