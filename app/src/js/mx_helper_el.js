@@ -1,6 +1,5 @@
 /* jshint esversion:6 */
-//import {el} from '@fxi/el';
-import {el} from '/Users/fxi/Documents/git/el.git';
+import {el} from '@fxi/el';
 
 export {el, elAuto};
 
