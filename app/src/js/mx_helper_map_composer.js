@@ -20,8 +20,8 @@ function mapComposerModalAuto() {
 
   items.push({
     type: 'map',
-    width:  100,
-    height: 50,
+    width:  40,
+    height: 40,
     options: {}
   });
 

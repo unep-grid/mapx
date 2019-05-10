@@ -14,8 +14,7 @@ const modules = {
   downloadjs: loadDownloadjs,
   'wms-capabilities': loadWmsCapabilities,
   'mx-drag-drop-worker': loadDragDropWorker,
-  handsontable: loadHandsontable,
-  interactjs: loadInteract
+  handsontable: loadHandsontable
 };
 
 export function moduleLoad(name) {
@@ -170,8 +169,3 @@ function loadHandsontable() {
   });
 }
 
-function loadInteract() {
-  return import('interactjs').then((m) => {
-    return m.default;
-  });
-}
