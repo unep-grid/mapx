@@ -1,7 +1,7 @@
 /* jshint esversion:6*/
 
 import './pickolor.css';
-import './node_modules/nouislider/distribute/nouislider.css';
+import 'nouislider/distribute/nouislider.css';
 
 import noUiSlider from 'nouislider';
 import chroma from 'chroma-js';
