@@ -96,6 +96,7 @@
 
 .mx-story-slide-back {
   pointer-events: none;
+  z-index:0;
 }
 
 
@@ -110,10 +111,10 @@
 .mx-story-slide-front {
   padding:5%;
   position:relative;
+  z-index:1;
 }
 
 .mx-story-slide-front * {
-  z-index:1;
   position: relative;
 }
 

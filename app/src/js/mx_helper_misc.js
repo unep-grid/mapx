@@ -1403,7 +1403,7 @@ export function scrollFromTo(o) {
           // var duration = (o.during || 1000) * (Math.abs(diff)/1000);
           duration = o.during || 1000;
           // scroll on next frame
-          onNextFrame(function step(timestamp) {
+          mx.helpers.onNextFrame(function step(timestamp) {
             if (!start) {
               start = timestamp;
             }
@@ -1419,7 +1419,7 @@ export function scrollFromTo(o) {
             }
 
             if (time < duration && !(stop && stop())) {
-              onNextFrame(step);
+              mx.helpers.onNextFrame(step);
             } else {
               resolve(true);
             }
