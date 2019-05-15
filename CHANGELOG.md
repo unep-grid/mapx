@@ -1,5 +1,9 @@
 
 ## Changelog
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.46">1.5.46</a>
+    - Improvement
+      - APP
+        - Map Composer : removed depedencies on medium-editor and interactjs use custom ones; Added new feature to set page size, units and other settings.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.45">1.5.45</a>
     - New feature
       - APP
