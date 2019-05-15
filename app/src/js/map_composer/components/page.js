@@ -23,13 +23,28 @@ class Page extends Box {
       width: state.page_width,
       height: state.page_height
     });
-
     page.addItems();
     page.placeItems();
   }
 
   onResize() {
-    this.displayDim();
+    var page = this;
+    var mc = page.mc;
+    page.displayDim();
+    var w = page.toLengthUnit(page.width);
+    var h = page.toLengthUnit(page.height);
+    w =
+      page.state.unit !== 'in'
+        ? Math.round(w * 10) / 10
+        : Math.round(w * 100) / 100;
+    h =
+      page.state.unit !== 'in'
+        ? Math.round(h * 10) / 10
+        : Math.round(h * 100) / 100;
+    page.mc.toolbar.elInputPageWidth.value = w;
+    page.mc.toolbar.elInputPageHeight.value = h;
+    mc.setState('page_width', w);
+    mc.setState('page_height', h);
   }
 
   onRemove() {
@@ -93,6 +108,7 @@ class Page extends Box {
       y += g;
     });
   }
+
 }
 
 export {Page};

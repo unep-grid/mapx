@@ -9,7 +9,6 @@ class Box {
     box[boxParent.title] = boxParent;
     box.boxParent = boxParent;
     box.state = boxParent.state;
-    //box.busy = false;
     box.width = 0;
     box.height = 0;
     box.left = 0;
@@ -23,6 +22,7 @@ class Box {
     box.listeners = [];
     box.draggers = [];
     box.resizers = [];
+    box.editabel = false;
     box.resizable = false;
     box.draggable = false;
     box.removable = false;
@@ -58,7 +58,6 @@ class Box {
       console.log('add removable');
     }
     if (opt.draggable || opt.resizable) {
-
       box.addListener({
         type: 'mousedown',
         group: 'drag_resize',
@@ -346,8 +345,10 @@ class Box {
 
   setWidth(w, inPx) {
     var box = this;
-    box.width = inPx ? w : box.toLengthPixel(w);
-    box.el.style.width = box.snapToGrid(box.width) + 'px';
+    w = inPx ? w : box.toLengthPixel(w);
+    w = box.snapToGrid(w);
+    box.el.style.width = w + 'px';
+    box.width = w;
     box.validateSize();
     box.onResize();
     return w;
@@ -355,8 +356,10 @@ class Box {
 
   setHeight(h, inPx) {
     var box = this;
-    box.height = inPx ? h : box.toLengthPixel(h);
-    box.el.style.height = box.snapToGrid(box.height) + 'px';
+    h = inPx ? h : box.toLengthPixel(h);
+    h = box.snapToGrid(h);
+    box.el.style.height = h + 'px';
+    box.height = h;
     box.validateSize();
     box.onResize();
     return h;
@@ -372,7 +375,7 @@ class Box {
     var h = box.toLengthUnit(box.height);
     w = unit === 'in' ? Math.round(w * 100) / 100 : Math.round(w);
     h = unit === 'in' ? Math.round(h * 100) / 100 : Math.round(h);
-    box.message.flash(w + ' [' + unit + '] x ' + h + ' [' + unit + '] ');
+    box.message.flash(w + ' x ' + h);
   }
 
   toLengthPixel(length) {
@@ -432,7 +435,6 @@ class Box {
 export {Box};
 
 function dragResizeListener(e) {
-  
   var box = this;
   var elTarget = e.target;
   var d = elTarget.dataset;
@@ -441,8 +443,6 @@ function dragResizeListener(e) {
   var idType = d.mc_event_type;
   var isMouseDown = idType === 'mousedown';
   var isDragResize = idAction === 'box_drag' || idAction === 'box_resize';
-
-  console.log(idType,idAction);
 
   if (isMouseDown && isDragResize) {
     e.stopPropagation();

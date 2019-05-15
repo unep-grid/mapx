@@ -20,8 +20,8 @@ function mapComposerModalAuto() {
 
   items.push({
     type: 'map',
-    width:  40,
-    height: 40,
+    width:  600,
+    height: 400,
     options: {}
   });
 
@@ -33,22 +33,22 @@ function mapComposerModalAuto() {
     items.push({
       type: 'legend',
       element: elLegend,
-      width: 50,
-      height: 50
+      width: 300,
+      height: 400
     });
 
     items.push({
       type: 'title',
       text: title,
-      width: 50,
-      height: 20
+      width: 300,
+      height: 50
     });
 
     items.push({
       type: 'text',
       text: description,
-      width: 50,
-      height: 20
+      width: 300,
+      height: 50
     });
   });
 
@@ -101,6 +101,9 @@ function mapComposerModalAuto() {
         position: 'absolute',
         width: '80%',
         height: '100%'
+      },
+      styleContent : {
+        padding : '0px'
       }
     });
 

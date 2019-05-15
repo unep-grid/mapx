@@ -40,7 +40,11 @@ class Toolbar extends Box {
         ? el('option', {selected: true}, u)
         : el('option', u);
     });
-
+   var elModesOptions = state.modes.map((u) => {
+      return state.mode === u
+        ? el('option', {selected: true}, u)
+        : el('option', u);
+    });
     return el(
       'form',
       {
@@ -50,39 +54,24 @@ class Toolbar extends Box {
         el(
           'div',
           {
-            class: 'checkbox'
-          },
-          el(
-            'label',
-            el('input', {
-              dataset: {
-                mc_action: 'update_state',
-                mc_event_type: 'change',
-                mc_state_name: 'mode_preview'
-              },
-              type: 'checkbox'
-            }),
-            el('span', 'Preview mode')
-          )
-        ),
-        el(
-          'div',
-          {
             class: 'form-group'
           },
-          el('label', 'Resolution (dpi)'),
-          el('input', {
-            type: 'number',
-            class: 'form-control',
-            dataset: {
-              mc_action: 'update_state',
-              mc_event_type: 'change',
-              mc_state_name: 'dpi'
-            },
-            value: state.dpi,
-            max: 600,
-            min: 72
-          })
+          [
+            el('label', 'Mode'),
+            el(
+              'select',
+              {
+                class: 'form-control',
+                dataset: {
+                  mc_action: 'update_state',
+                  mc_event_type: 'change',
+                  mc_state_name: 'mode'
+                }
+              },
+              elModesOptions
+            )
+          ],
+          el('span', {class: 'text-muted'}, 'Set map composer edition mode.')
         ),
         el(
           'div',
@@ -98,33 +87,58 @@ class Toolbar extends Box {
                 dataset: {
                   mc_action: 'update_state',
                   mc_event_type: 'change',
-
                   mc_state_name: 'unit'
                 }
               },
               elUnitOptions
             )
-          ]
+          ],
+          el('span', {class: 'text-muted'}, 'Unit for all sizes.')
         ),
         el(
           'div',
           {
             class: 'form-group'
           },
-          el('label', 'Width'),
-          el('input', {
+          el('label', 'Resolution (dpi)'),
+          (toolbar.elInputDpi = el('input', {
             type: 'number',
             class: 'form-control',
             dataset: {
               mc_action: 'update_state',
               mc_event_type: 'change',
+              mc_state_name: 'dpi'
+            },
+            value: state.dpi,
+            max: 600,
+            min: 72
+          })),
+          el(
+            'span',
+            {class: 'text-muted'},
+            'Resolution for converting from pixels to millimeters and inches.'
+          )
+        ),
 
+        el(
+          'div',
+          {
+            class: 'form-group'
+          },
+          el('label', 'Width'),
+          (toolbar.elInputPageWidth = el('input', {
+            type: 'number',
+            class: 'form-control',
+            dataset: {
+              mc_action: 'update_state',
+              mc_event_type: 'change',
               mc_state_name: 'page_width'
             },
-            value: 100,
-            max: 500,
-            min: 10
-          })
+            value: 500,
+            max: 10000,
+            min: 1
+          })),
+          el('span', {class: 'text-muted'}, 'Width of the page in current unit')
         ),
         el(
           'div',
@@ -132,21 +146,27 @@ class Toolbar extends Box {
             class: 'form-group'
           },
           el('label', 'Height'),
-          el('input', {
+          (toolbar.elInputPageHeight = el('input', {
             type: 'number',
             class: 'form-control',
             dataset: {
               mc_action: 'update_state',
               mc_event_type: 'change',
-
               mc_state_name: 'page_height'
             },
-
-            value: 100,
-            max: 500,
-            min: 10
-          })
+            value: 500,
+            max: 10000,
+            min: 1
+          })),
+          el(
+            'span',
+            {class: 'text-muted'},
+            'Height of the page in current unit'
+          )
         ),
+        /** Scaling does not work with html2canvas, as the
+        * css transform is not fully supported
+        *
         el(
           'div',
           {
@@ -166,6 +186,7 @@ class Toolbar extends Box {
             min: 0.5
           })
         ),
+        */
         el(
           'div',
           {
@@ -184,7 +205,12 @@ class Toolbar extends Box {
             value: 1,
             max: 10,
             min: 1
-          })
+          }),
+          el(
+            'span',
+            {class: 'text-muted'},
+            'Set the number of column for legend items'
+          )
         ),
         el(
           'button',
@@ -208,6 +234,9 @@ export {Toolbar};
 function clickListener(e) {
   var toolbar = this;
   var mc = toolbar.mc;
+  if (!mc.ready) {
+    return;
+  }
   var elTarget = e.target;
   var d = elTarget.dataset;
   var idAction = d.mc_action;
@@ -219,6 +248,9 @@ function clickListener(e) {
 function changeListener(e) {
   var toolbar = this;
   var mc = toolbar.mc;
+  if (!mc.ready) {
+    return;
+  }
   var elTarget = e.target;
   var d = elTarget.dataset;
   var idAction = d.mc_action;

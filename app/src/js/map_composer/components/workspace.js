@@ -10,14 +10,18 @@ class Workspace extends Box {
     workspace.init({
       class: ['mc-workspace'],
       boxContainer: boxParent,
-      elContent: workspace.buildEl(),
+      content: workspace.buildEl(),
       draggable: false,
       resizable: false,
       onRemove: workspace.onRemove.bind(workspace)
     });
 
     workspace.page = new Page(workspace);
-    workspace.page.setTopLeft({top: 20, left: 20, inPx: true});
+    workspace.page.setTopLeft({
+      top: 20, 
+      left: 20, 
+      inPx: true
+    });
   }
 
   onRemove() {
@@ -26,7 +30,9 @@ class Workspace extends Box {
   }
 
   buildEl() {
-    return el('div', {class: ['mc-workspace-content']});
+    return el('div', {
+      class: 'mc-workspace-content'
+    });
   }
 }
 

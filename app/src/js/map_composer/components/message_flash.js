@@ -5,7 +5,7 @@ class MessageFlash {
   constructor(parent) {
     this.addTo(parent.el);
     this.timeout = 0;
-    this.flash = debounce(this._flash,200);
+    this.flash = debounce(this._flash,50);
   }
 
   addTo(elContainer) {
@@ -52,6 +52,7 @@ class MessageFlash {
     var mf = this;
     mf.elMessageContainer.classList.add('active');
   }
+
   disable(){
     var mf = this;
     mf.elMessageContainer.classList.remove('active');

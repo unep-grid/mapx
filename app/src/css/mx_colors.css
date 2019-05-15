@@ -333,9 +333,9 @@ span.mx-badge-role {
 .mx .selectize-dropdown .active.create,
 .mx .selectize-dropdown .active.create *,
 .mx .btn-default:hover,
-.mx .btn-default:hover div,
-.mx .btn-default:hover span,
-.mx .btn-default:hover i,
+/*.mx .btn-default:hover div,*/
+/*.mx .btn-default:hover span,*/
+.mx .btn-default:hover > *,
 .mx [class*=hint--]:after
 {
   color: var(--mx_ui_background);

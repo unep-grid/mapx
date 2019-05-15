@@ -6,7 +6,8 @@
  * @param {Boolean} o.replace If a modal is displayed twice with the same id, delete the previous one. Default : true
  * @param {Boolean} o.noShinyBinding  By default, the modal panel will try to bind automatically input elements. In some case, this is not wanted. Default : false
  * @param {String} o.styleString Style string to apply to modal window. Default : empty
- * @param {Object} o.style Style objectto apply to modal window. Default : empty
+ * @param {Object} o.style Style object to apply to modal window. Default : empty
+ * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
  * @param {Functoin} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
@@ -35,7 +36,7 @@ export function modal(o) {
   elModal = document.getElementById(o.id);
   var hasModal = h.isElement(elModal);
   if (!hasModal) {
-    elModal = buildModal(id, o.style);
+    elModal = buildModal(id, o.style, o.styleContent);
   }
 
   elBackground = document.getElementById(idBackground);
@@ -178,7 +179,7 @@ export function modal(o) {
   /**
    * Helpers
    */
-  function buildModal(idModal, style) {
+  function buildModal(idModal, style, styleContent) {
     return h.el(
       'div',
       {
@@ -204,6 +205,7 @@ export function modal(o) {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
         (elContent = h.el('div', {
+          style : styleContent,
           class: ['mx-modal-content']
         }))
       )),

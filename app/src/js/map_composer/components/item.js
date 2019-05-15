@@ -2,10 +2,6 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import {el} from '@fxi/el';
 
-import MediumEditor from 'medium-editor';
-import 'medium-editor/dist/css/medium-editor.min.css';
-import './../css/map_composer_medium_editor.css';
-
 import {Box} from './box.js';
 
 class Item extends Box {
@@ -59,9 +55,6 @@ class Item extends Box {
     if (item.map) {
       item.map.remove();
     }
-    if (item.editor) {
-      item.editor.destroy();
-    }
   }
 
   buildElNode() {
@@ -71,30 +64,34 @@ class Item extends Box {
       {
         class: ['mc-item', 'mc-item-element']
       },
-      this.orig.element
+      item.orig.element
     );
-
-    item.editor = new MediumEditor(elOut, {
-      elementsContainer: item.boxParent.el
-    });
+    item.orig.element.dataset.mc_editable = true;
     return elOut;
   }
 
   buildElText() {
     var item = this;
-    var elOut = el('span', {
-      class: ['mc-item', 'mc-item-text']
-    });
-    elOut.innerText = item.orig.text;
-    item.editor = new MediumEditor(elOut, {
-      elementsContainer: item.page.el
-    });
+    var elOut = el(
+      'span',
+      {
+        class: ['mc-item', 'mc-item-text']
+      },
+      el(
+        'div',
+        {
+          dataset: {
+            mc_editable: true
+          }
+        },
+        el('p', item.orig.text)
+      )
+    );
     return elOut;
   }
 
   buildElMap() {
     var item = this;
-
     var elOut = el('div', {
       class: ['mc-item', 'mc-item-map']
     });
@@ -103,7 +100,9 @@ class Item extends Box {
       {
         preserveDrawingBuffer: true,
         container: elOut,
-        fadeDuration: 0
+        fadeDuration: 0,
+        trackResize: false, // handled in mapcomposer
+        renderWorldCopies: false
       },
       item.orig.options
     );
@@ -113,6 +112,7 @@ class Item extends Box {
     item.map.addControl(new mapNorthArrow(), 'top-right');
 
     item.resizeAction.push(function() {
+      console.log('resize map');
       item.map.resize();
     });
     return elOut;
