@@ -34,21 +34,24 @@ function mapComposerModalAuto() {
       type: 'legend',
       element: elLegend,
       width: 300,
-      height: 400
+      height: 400,
+      editable : true
     });
 
     items.push({
       type: 'title',
       text: title,
       width: 300,
-      height: 50
+      height: 100,
+      editable : true
     });
 
     items.push({
       type: 'text',
       text: description,
       width: 300,
-      height: 50
+      height: 100,
+      editable : true
     });
   });
 

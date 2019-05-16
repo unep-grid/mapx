@@ -649,6 +649,7 @@ function checkMissingView(o) {
 
   return new Promise(function(resolve) {
     var idViewsStory = h.path(view, 'data.views');
+    var story = h.path(view, 'data.story');
     /**
      * Case when views are stored as object instead of id.
      * This was done when asynchronous fetch was not an option.
@@ -657,6 +658,26 @@ function checkMissingView(o) {
     if (isViewsArrayOfObject) {
       idViewsStory = idViewsStory.map((v) => v.id);
     }
+   
+    /**
+    * Case when views are not stored in data.view but only in steps
+    */
+    if (h.isEmpty(idViewsStory) && !h.isEmpty(story)) {
+      idViewsStory = [];
+
+      story.steps.forEach((step) => {
+        if (step && h.isArray(step.views)) {
+          step.views.forEach((d) => {
+            if (h.isObject(d)) {
+              idViewsStory.push(d.view);
+            }
+          });
+        } else {
+          return;
+        }
+      });
+    }
+
     /**
      * We expect an array of id, but sometimes a string could be
      * returned. This could happen with toJSON in R.

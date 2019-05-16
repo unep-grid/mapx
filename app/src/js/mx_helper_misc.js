@@ -2141,6 +2141,9 @@ export function handleRequestMessage(msg, msgs, on) {
 
 export function convertAllImagesToBase64(elOrig) {
   var el = mx.helpers.el;
+  if(!mx.helpers.isElement(elOrig)){
+    return;
+  }
   var elImgs = elOrig.querySelectorAll('img');
 
   elImgs.forEach((elImg) => {

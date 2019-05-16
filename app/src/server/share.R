@@ -10,7 +10,10 @@ observeEvent(reactData$showShareManager,{
 
   data <- reactData$showShareManager 
 
-  hasViews <- typeof(data) == "list" && !noDataCheck(data$views)
+  hasDataList <- typeof(data) == "list"
+  hasViews <- hasDataList  && !noDataCheck(data$views)
+  isStory <- hasDataList && isTRUE(data$isStory)
+
   reactData$iframeString = "";
   project <- reactData$project
   language <- reactData$language
@@ -71,6 +74,10 @@ observeEvent(reactData$showShareManager,{
         )
       ),
     checkboxInput("checkShareIframe",label="Include link in an iframe"),
+    tagList(
+    if(isStory){
+      checkboxInput("checkShareStoryAutoStart",label="Auto start story")
+    }),
     tags$label("Link"),
     div(
       class="input-group",
@@ -262,7 +269,9 @@ observe({
   style <- ""
   collections <- ""
   views <- ""
+  storyAutoStart <- ""
   first <- TRUE
+
   s<-function(){
     if(first){
       first<<-FALSE
@@ -274,6 +283,7 @@ observe({
   tryCatch({
     addIframe = !noDataCheck(input$checkShareIframe) && isTRUE(input$checkShareIframe)
     addStyle = !noDataCheck(input$checkShareStyle) && isTRUE(input$checkShareStyle)
+    addStoryAutoStart = !noDataCheck(input$checkShareStoryAutoStart) && isTRUE(input$checkShareStoryAutoStart)
     addProject = !noDataCheck(input$checkShareProject) && isTRUE(input$checkShareProject)
     addCollections = !noDataCheck(input$checkShareCollections) && isTRUE(input$checkShareCollections)
     addViews = !noDataCheck(input$checkShareViews) && isTRUE(input$checkShareViews)
@@ -282,11 +292,12 @@ observe({
     if(addProject) project <- s() + "project=" + input$selectShareProject
     if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
     if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
+    if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true"
   },error=function(e){})
   out <- ""
 
 
-  url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views 
+  url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views  + storyAutoStart
 
 
   #

@@ -99,6 +99,7 @@ observe({
             "btn_opt_share"= {
               reactData$showShareManager <- list(
                 views = list(viewId),
+                isStory = .get(viewData,c('type')) == "sm",
                 project = project,
                 collections = collectionsCurrent,
                 trigger = runif(1)
