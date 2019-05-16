@@ -170,7 +170,7 @@ Dashboard.prototype.Widget = function(config) {
     dashboard.widgets.push(widget);
     mx.widgets.push(widget);
     widget.show();
-    widget.onAdd();
+    widget.onAdd(widget);
   };
 
   /*
@@ -227,7 +227,7 @@ Dashboard.prototype.Widget = function(config) {
    */
   widget.updateDataFromAttribute = function() {
     var d = mx.helpers.path(config, 'view.data.attribute.table');
-    widget.setData(d || []);
+    widget.setData(d);
   };
 
   /**
@@ -237,6 +237,7 @@ Dashboard.prototype.Widget = function(config) {
     getWidgetDataFromLinkedView({
       point: e.point
     }).then(function(data) {
+      
       widget.setData(data);
     });
   };
@@ -259,7 +260,7 @@ Dashboard.prototype.Widget = function(config) {
 
     switch (widget.config.source) {
       case 'none':
-        widget.setData([]);
+        widget.setData();
         break;
       case 'viewFreqTable':
         widget.updateDataFromAttribute();
@@ -310,7 +311,7 @@ Dashboard.prototype.Widget = function(config) {
     /*
      * Exec widget on remove
      */
-    widget.onRemove();
+    widget.onRemove(widget);
 
     /**
      * Remove timers if any
@@ -380,9 +381,15 @@ Dashboard.prototype.Widget = function(config) {
   };
 
   widget.setData = mx.helpers.debounce(function(d) {
-    if (widget.data !== d) {
-      widget.data = d;
-      widget.onData();
+    if(widget.data === d){
+      return;
+    }
+    var hasData = !mx.helpers.isEmpty(d);
+    var ignoreEmptyData = widget.config.sourceIgnoreEmpty;
+    var triggerOnData = hasData || (!hasData && !ignoreEmptyData);
+    if (triggerOnData) {
+      widget.data = hasData ?  d : [];
+      widget.onData(widget,widget.data);
     }
   }, 100);
 
@@ -476,7 +483,7 @@ Dashboard.prototype.Widget = function(config) {
       point: opt.point,
       idView: id
     });
-    return items[id];
+    return items[id] || [];
   }
 
   /*
@@ -555,6 +562,7 @@ Dashboard.init = function(o) {
           id: view.id,
           dashboard: dashboard,
           source: w.source,
+          sourceIgnoreEmpty : w.sourceIgnoreEmpty !== false,
           height: w.height,
           width: w.width,
           script: w.script,

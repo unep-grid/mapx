@@ -4381,7 +4381,7 @@
     "ps": ""
   },
   {
-    "id": "view_edit_dasboard_modal_title",
+    "id": "view_edit_dashboard_modal_title",
     "en": "Edit dashboard of  %s",
     "fr": "Éditer le tableau de bord de %s",
     "es": "",
@@ -4673,6 +4673,18 @@
     "en": "Which source to use for the data ?",
     "fr": "Quelle source utiliser pour les données?",
     "es": "Cuál source utilizar por los datos?",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_ignore_empty_data",
+    "en": "Ignore events that returns an empty array ?",
+    "fr": "Ignorer les événements rapportant une array vide ?",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

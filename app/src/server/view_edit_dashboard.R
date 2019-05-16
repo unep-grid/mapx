@@ -129,6 +129,12 @@ observeEvent(input$dashboardEdit_init,{
                     enum_titles = srcDataLabels
                     )
                   ),
+                `sourceIgnoreEmpty` = list(
+                  title = t("view_dashboard_txt_ignore_empty_data"),
+                  type = "boolean",
+                  format = "checkbox",
+                  default = TRUE
+                  ),
                 `width` = list(
                   title = t("view_dashboard_txt_width"),
                   type = "string",

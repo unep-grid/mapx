@@ -5,18 +5,12 @@
  * onData = Action to execute when data is updated. Data is available with this.data 
  */
 return {
-  onAdd : function() {
-    var widget = this;
-
+  onAdd : function(widget) {
   },
-  onRemove : function() {
-    var widget = this;
-
+  onRemove : function(widget) {
   },
-  onData : function() {
-    var data = this.data;
-    var widget = this;
-
+  onData : function(widget,data) {
+    console.log(data)
   }
 };
 
