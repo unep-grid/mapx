@@ -40,11 +40,12 @@ class Toolbar extends Box {
         ? el('option', {selected: true}, u)
         : el('option', u);
     });
-   var elModesOptions = state.modes.map((u) => {
+    var elModesOptions = state.modes.map((u) => {
       return state.mode === u
         ? el('option', {selected: true}, u)
         : el('option', u);
     });
+    var sizeStep = state.grid_snap_size * window.devicePixelRatio;
     return el(
       'form',
       {
@@ -95,7 +96,7 @@ class Toolbar extends Box {
           ],
           el('span', {class: 'text-muted'}, 'Unit for all sizes.')
         ),
-        el(
+        (toolbar.elFormDpi = el(
           'div',
           {
             class: 'form-group'
@@ -109,6 +110,7 @@ class Toolbar extends Box {
               mc_event_type: 'change',
               mc_state_name: 'dpi'
             },
+            step: 1,
             value: state.dpi,
             max: 600,
             min: 72
@@ -118,7 +120,7 @@ class Toolbar extends Box {
             {class: 'text-muted'},
             'Resolution for converting from pixels to millimeters and inches.'
           )
-        ),
+        )),
 
         el(
           'div',
@@ -134,9 +136,9 @@ class Toolbar extends Box {
               mc_event_type: 'change',
               mc_state_name: 'page_width'
             },
-            value: 500,
-            max: 10000,
-            min: 1
+            step: sizeStep,
+            max: sizeStep * 1000,
+            min: sizeStep
           })),
           el('span', {class: 'text-muted'}, 'Width of the page in current unit')
         ),
@@ -154,9 +156,9 @@ class Toolbar extends Box {
               mc_event_type: 'change',
               mc_state_name: 'page_height'
             },
-            value: 500,
-            max: 10000,
-            min: 1
+            step: sizeStep,
+            max: sizeStep * 1000,
+            min: sizeStep
           })),
           el(
             'span',

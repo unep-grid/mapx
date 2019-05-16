@@ -55,7 +55,7 @@ function cancelFrame(id) {
  */
 function unitConvert(opt) {
   var v = opt.value || 0;
-  var dpi = opt.dpi || 300;
+  var dpi = opt.dpi;
   var unitFrom = opt.unitFrom || 'px';
   var unitTo = opt.unitTo || 'px';
 

@@ -47,6 +47,17 @@ class Box {
       right: true
     };
 
+    box.addListener({
+      type: 'click',
+      group: 'box_focus',
+      listener: (e) => {
+        if(e.currentTarget === box.el){
+          e.stopPropagation();
+          mc.setBoxLastFocus(box);
+        }
+      }
+    });
+
     if (opt.width) {
       box.setWidth(opt.width);
     }
@@ -54,9 +65,6 @@ class Box {
       box.setHeight(opt.height);
     }
 
-    if (opt.removable) {
-      console.log('add removable');
-    }
     if (opt.draggable || opt.resizable) {
       box.addListener({
         type: 'mousedown',
@@ -80,6 +88,7 @@ class Box {
       }
     }
     box.setContentScale(1);
+    box.setTextSize(12);
   }
 
   isDragging() {
@@ -105,7 +114,7 @@ class Box {
   addListener(opt) {
     var box = this;
     opt.target = opt.target || box.el;
-    opt.listener = opt.listener || console.log;
+    opt.listener = opt.listener;
     box.listeners.push(opt);
     opt.target.addEventListener(opt.type, opt.listener);
     return opt;
@@ -163,7 +172,6 @@ class Box {
     if (box.config.onRemove) {
       box.config.onRemove();
     }
-    console.log('Removed box ' + box.title);
   }
 
   addHandle(type, opt) {
@@ -218,7 +226,7 @@ class Box {
     if (!box.elContent) {
       return;
     }
-    var scale = box._content_scale;
+    var scale = box.contentScale;
     if (scale === 1) {
       box.elContent.style.width = '100%';
       box.elContent.style.height = '100%';
@@ -340,15 +348,16 @@ class Box {
   snapToGrid(length) {
     var box = this;
     var res = box.state.grid_snap_size;
-    return Math.floor(length / res) * res;
+    //return Math.ceil(length / res) * res;
+    return Math.round(length / res) * res;
   }
 
   setWidth(w, inPx) {
     var box = this;
     w = inPx ? w : box.toLengthPixel(w);
     w = box.snapToGrid(w);
-    box.el.style.width = w + 'px';
     box.width = w;
+    box.el.style.width = w + 'px';
     box.validateSize();
     box.onResize();
     return w;
@@ -358,8 +367,8 @@ class Box {
     var box = this;
     h = inPx ? h : box.toLengthPixel(h);
     h = box.snapToGrid(h);
-    box.el.style.height = h + 'px';
     box.height = h;
+    box.el.style.height = h + 'px';
     box.validateSize();
     box.onResize();
     return h;
@@ -379,8 +388,9 @@ class Box {
   }
 
   toLengthPixel(length) {
-    var state = this.state;
-    var r = window.devicePixelRatio;
+    var box = this;
+    var state = box.state;
+    var r = state.device_pixel_ratio;
     length /= r;
     if (state.unit === 'px') {
       return length;
@@ -393,7 +403,7 @@ class Box {
 
   toLengthUnit(px) {
     var state = this.state;
-    var r = window.devicePixelRatio;
+    var r = state.device_pixel_ratio;
     px *= r;
     if (state.unit === 'px') {
       return px;
@@ -415,6 +425,29 @@ class Box {
     box.onResize();
     box.validateSize();
   }
+
+  get textSize(){
+    return this._text_size;
+  }
+
+  setTextSize(size){
+    var box = this;
+    size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
+    box._text_size = size;
+    box.elContent.style.fontSize = size + 'px';
+  }
+
+  sizeTextMore() {
+    var box = this;
+    var size = box.textSize + 1 ;
+    box.setTextSize(size);
+  }
+  sizeTextLess() {
+    var box = this;
+    var size = box.textSize - 1;
+    box.setTextSize(size);
+  }
+
   setScale(scale) {
     var box = this;
     box._scale = scale;
@@ -535,7 +568,6 @@ function startDragResize(opt) {
   }
 
   function cancel() {
-    console.log('stop');
     box.removeListenerByGroup('drag_resize_active');
     /* without this, the box keep dragging */
     onNextFrame(() => {

@@ -12,6 +12,7 @@ class Item extends Box {
     item.orig = config;
     item.type = config.type;
     item.title = 'item-' + item.type;
+    item.editable = config.editable === true;
 
     item.init({
       class: 'mc-' + item.type,
@@ -59,19 +60,23 @@ class Item extends Box {
 
   buildElNode() {
     var item = this;
+
     var elOut = el(
       'div',
       {
+        dataset: {
+          mc_editable: item.editable
+        },
         class: ['mc-item', 'mc-item-element']
       },
       item.orig.element
     );
-    item.orig.element.dataset.mc_editable = true;
     return elOut;
   }
 
   buildElText() {
     var item = this;
+    var text = el('span', item.orig.text).innerText; //quick html removal ?
     var elOut = el(
       'span',
       {
@@ -81,10 +86,10 @@ class Item extends Box {
         'div',
         {
           dataset: {
-            mc_editable: true
+            mc_editable: item.editable
           }
         },
-        el('p', item.orig.text)
+        el('p', text)
       )
     );
     return elOut;
@@ -93,6 +98,9 @@ class Item extends Box {
   buildElMap() {
     var item = this;
     var elOut = el('div', {
+      dataset: {
+        mc_editable: item.editable
+      },
       class: ['mc-item', 'mc-item-map']
     });
 
@@ -112,7 +120,6 @@ class Item extends Box {
     item.map.addControl(new mapNorthArrow(), 'top-right');
 
     item.resizeAction.push(function() {
-      console.log('resize map');
       item.map.resize();
     });
     return elOut;

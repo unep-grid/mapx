@@ -10,7 +10,7 @@ class MapComposer {
   constructor(elContainer, state) {
     var mc = this;
     window.mc = mc;
-    
+
     mc.el = elContainer;
     mc.el.classList.add('mc');
     mc.elContent = el('div', {class: ['mc-content']});
@@ -19,17 +19,26 @@ class MapComposer {
 
     mc.toolbar = new Toolbar(mc);
     mc.workspace = new Workspace(mc);
-    mc.editor = new EditorToolbar(mc,{
-        boxTarget : mc.workspace.page
+    mc.editor = new EditorToolbar(mc, {
+      boxTarget: mc.workspace.page
     });
     mc.page = mc.workspace.page;
-    mc.setMode(mc.state.mode);
     mc.errors = [];
     mc.ready = true;
+    mc.setMode(mc.state.mode);
+    mc.setDpi(mc.state.dpi);
+    mc.setUnit(mc.state.unit);
   }
 
+  setBoxLastFocus(box) {
+    this._box_last_focus = box;
+  }
+  get boxLastFocus() {
+    return this._box_last_focus;
+  }
   destroy() {
     var mc = this;
+    mc.setDpi();
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
@@ -50,7 +59,7 @@ class MapComposer {
 
   setMode(mode) {
     var mc = this;
-    let modes = mc.state.modes;
+    let modes = mc.state.modes_internal;
     mc.state.mode = mode;
     modes.forEach((m) => {
       if (mode !== m) {
@@ -98,7 +107,18 @@ class MapComposer {
     if (!mc.ready) {
       return;
     }
+    if (unit === 'px') {
+      mc.setDpi();
+    }else{
+      mc.setDpi(mc.state.dpi);
+    }
     var dpi = mc.state.dpi;
+    var sizeStep = unitConvert({
+      value: mc.state.grid_snap_size * mc.state.device_pixel_ratio,
+      unitFrom: 'px',
+      unitTo: unit,
+      dpi: dpi
+    });
     mc.state.page_width = unitConvert({
       value: mc.state.page_width,
       unitFrom: mc.state.unit,
@@ -111,11 +131,17 @@ class MapComposer {
       unitTo: unit,
       dpi: dpi
     });
+    mc.toolbar.elInputPageWidth.setAttribute('step', sizeStep);
+    mc.toolbar.elInputPageWidth.setAttribute('min', sizeStep);
+    mc.toolbar.elInputPageWidth.setAttribute('max', sizeStep * 1000);
+    mc.toolbar.elInputPageHeight.setAttribute('step', sizeStep);
+    mc.toolbar.elInputPageHeight.setAttribute('min', sizeStep);
+    mc.toolbar.elInputPageHeight.setAttribute('max', sizeStep * 1000);
     mc.state.unit = unit || mc.state.unit;
     if (unit === 'px') {
-      mc.toolbar.elInputDpi.setAttribute('disabled', true);
+      mc.toolbar.elFormDpi.style.display = 'none';
     } else {
-      mc.toolbar.elInputDpi.removeAttribute('disabled');
+      mc.toolbar.elFormDpi.style.display = 'block';
     }
     mc.updatePageSizes();
     //mc.updatePageContentScale();
@@ -125,11 +151,25 @@ class MapComposer {
     if (!mc.ready) {
       return;
     }
-    if (mc.state.unit === 'px') {
-      return;
-    }
-    mc.state.dpi = dpi || mc.state.dpi;
+
+    Object.defineProperty(window, 'devicePixelRatio', {
+      get: function() {
+        if (dpi) {
+          return dpi / 96;
+        } else {
+          return mc.state.device_pixel_ratio_orig;
+        }
+      }
+    });
+    
+  
+
+    mc.state.dpi = dpi || 96 * mc.state.device_pixel_ratio_orig;
+    mc.toolbar.elInputDpi.value = mc.state.dpi;
+    mc.state.device_pixel_ratio = window.devicePixelRatio;
     mc.updatePageSizes();
+    mc.resizeEachMap();
+
     //mc.updatePageContentScale();
   }
   setScale(scale) {
@@ -138,7 +178,7 @@ class MapComposer {
       return;
     }
     mc.state.scale = scale || mc.state.scale;
-    //mc.updatePageContentScale();
+    mc.updatePageContentScale();
   }
 
   updatePageContentScale() {

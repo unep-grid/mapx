@@ -29,7 +29,7 @@ class EditorToolbar {
       type: 'click',
       group: 'btn_format_text',
       target: ed.el,
-      listener: edit
+      listener: edit.bind(ed.boxTarget)
     });
     ed.boxTarget.addListener({
       type: 'paste',
@@ -90,6 +90,12 @@ function buildEl() {
     {
       class: ['mc-box-bar-edit']
     },
+    el(
+      'span',
+      {class: ['mc-box-bar-edit-btn-group', 'btn-group-vertical']},
+      btnEdit('sizeText:more', el('span', '+')),
+      btnEdit('sizeText:less', el('span', '-'))
+    ),
     el(
       'span',
       {class: ['mc-box-bar-edit-btn-group', 'btn-group-vertical']},
@@ -172,6 +178,7 @@ function edit(e) {
   e.preventDefault();
   e.stopPropagation();
   e.stopImmediatePropagation();
+  var boxTarget = this;
   var elTarget = e.target;
   var d = elTarget.dataset;
   // read the property of the handle;
@@ -182,12 +189,25 @@ function edit(e) {
 
   if (isClick && hasCmd) {
     cmd = cmd.split(':');
-    console.log(cmd);
-    document.execCommand(cmd[0], false, cmd[1]);
+    if (cmd[0] === 'sizeText') {
+      sizeText(boxTarget.mc.boxLastFocus, cmd[1]);
+    } else {
+      document.execCommand(cmd[0], false, cmd[1]);
+    }
   }
 }
-function paste(e){
+function paste(e) {
   e.preventDefault();
   const text = (e.originalEvent || e).clipboardData.getData('text/plain');
   document.execCommand('insertText', false, text);
+}
+
+function sizeText(boxActive, cmd) {
+  if (boxActive && boxActive.editable) {
+    if (cmd === 'more') {
+      boxActive.sizeTextMore();
+    } else {
+      boxActive.sizeTextLess();
+    }
+  }
 }

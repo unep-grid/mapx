@@ -93,14 +93,18 @@
 .mc .mc-item {
   position: absolute;
   z-index: 0;
-}
-
-.mc .mc-item {
   overflow: hidden;
   background-color: #fff;
   height: 100%;
   width: 100%;
 }
+
+.mc .mc-item-text,
+.mc .mc-item-title,
+.mc .mc-item-legend{
+  padding:10px;
+}
+
 .mc.mc-mode-layout .mc-item {
   background: #fff;
   outline: 1px solid rgba(0, 0, 0, 0.2);
@@ -231,6 +235,10 @@
 .mc.mc-mode-print .mc-flash,
 .mc.mc-mode-preview .mc-flash {
   display: none;
+  z-index : -1;
+  position:absolute;
+  top : -10000;
+  left : -1000;
 }
 
 /**
