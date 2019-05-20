@@ -22,6 +22,7 @@ process.argv.forEach(function(val) {
 app.set('trust proxy', true); // see https://expressjs.com/en/guide/behind-proxies.html
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Expose-Headers', 'Content-Length');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
