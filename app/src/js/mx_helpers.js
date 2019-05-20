@@ -49,3 +49,4 @@ export * from './mx_helper_filter_views.js';
 export * from './mx_helper_module_loader.js';
 export * from './mx_helper_animation_frame.js';
 export * from './mx_helper_source_attribute_table.js';
+export * from './mx_helper_fetch_progress.js';

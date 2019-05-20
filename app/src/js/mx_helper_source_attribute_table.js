@@ -10,9 +10,15 @@ export function getSourceTableAttribute(opt) {
       attributes: opt.attributes
     });
 
-  return fetch(url).then((data) => {
-    return data.json();
-  });
+  return h
+    .fetchProgress(url, {
+      onProgress: onProgressData,
+      onError: onProgressError,
+      onComplete: onProgressDataComplete
+    })
+    .then((data) => {
+      return data.json();
+    });
 }
 
 export function showSourceTableAttributeModal(opt) {
@@ -26,6 +32,8 @@ export function showSourceTableAttributeModal(opt) {
     attributes: opt.attributes,
     view: opt.view
   };
+
+  onProgressStart();
 
   return Promise.all([
     h.moduleLoad('handsontable'),
@@ -45,10 +53,25 @@ export function showSourceTableAttributeModal(opt) {
         backgroundColor: 'var(--mx_ui_shadow)'
       }
     });
-    var elDownloadButton = el(
+    var elButtonDownload = el(
       'button',
-      {class: 'btn btn-default'},
-      'export CSV'
+      {
+        class: 'btn btn-default',
+        on: {
+          click: handleDownload
+        }
+      },
+      'Export CSV'
+    );
+    var elButtonClearFilter = el(
+      'button',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: handleClearFilter
+        }
+      },
+      'Clear filter'
     );
     var elTitle = el('div');
 
@@ -60,7 +83,7 @@ export function showSourceTableAttributeModal(opt) {
       title: elTitle,
       content: elTable,
       onClose: destroy,
-      buttons: [elDownloadButton]
+      buttons: [elButtonDownload, elButtonClearFilter]
     });
 
     mutationObserver = listenMutationAttribute(elModal, tableRender);
@@ -99,29 +122,34 @@ export function showSourceTableAttributeModal(opt) {
     });
 
     addTitle();
-    addDownloadButton();
+    onProgressEnd();
 
     /**
      * Helpers
      */
 
-    function addDownloadButton() {
+    function handleDownload() {
       var exportPlugin = hot.getPlugin('exportFile');
 
-      elDownloadButton.addEventListener('click', function() {
-        exportPlugin.downloadFile('csv', {
-          bom: false,
-          columnDelimiter: ',',
-          columnHeaders: true,
-          exportHiddenColumns: false,
-          exportHiddenRows: false,
-          fileExtension: 'csv',
-          filename: 'mx_attribute_table',
-          mimeType: 'text/csv',
-          rowDelimiter: '\r\n',
-          rowHeaders: false
-        });
+      exportPlugin.downloadFile('csv', {
+        bom: false,
+        columnDelimiter: ',',
+        columnHeaders: true,
+        exportHiddenColumns: false,
+        exportHiddenRows: false,
+        fileExtension: 'csv',
+        filename: 'mx_attribute_table',
+        mimeType: 'text/csv',
+        rowDelimiter: '\r\n',
+        rowHeaders: false
       });
+    }
+
+    function handleClearFilter() {
+      var filterPlugin = hot.getPlugin('filters');
+      filterPlugin.clearConditions();
+      filterPlugin.filter();
+      hot.render();
     }
 
     function addTitle() {
@@ -241,4 +269,46 @@ function listenMutationAttribute(el, cb) {
     attributes: true
   });
   return observer;
+}
+function onProgressStart() {
+  var h = mx.helpers;
+  h.progressScreen({
+    percent: 1,
+    id: 'fetch_data',
+    text: 'Init, please wait',
+    enable: true
+  });
+}
+function onProgressData(data) {
+  var h = mx.helpers;
+  h.progressScreen({
+    percent: (data.loaded / data.total) * 100 - 1,
+    id: 'fetch_data',
+    text: 'Fetching Data',
+    enable: true
+  });
+}
+function onProgressDataComplete(data) {
+  var h = mx.helpers;
+  if (data.loaded !== data.total) {
+    console.log('FetchProgress : data seems incomplete', data);
+  }
+  h.progressScreen({
+    text: 'Data downloaded, build table',
+    enable: true,
+    percent: 99,
+    id: 'fetch_data'
+  });
+}
+function onProgressEnd() {
+  var h = mx.helpers;
+  h.progressScreen({
+    enable: false,
+    percent: 100,
+    id: 'fetch_data'
+  });
+}
+function onProgressError(data) {
+  onEnd();
+  alert(data.message);
 }
