@@ -1,6 +1,41 @@
 
 
 
+export function getDiafScoreFromIntegrity(integrity){
+  integrity = integrity || {};
+  var items = Object.keys(integrity);
+  var maxScore = items.length * 3;
+
+  var nUnknown = items.reduce( (r,k) => {
+    return integrity[k] * 1  === 0 ? r+1 : r  ;
+  },0);
+
+  var nNo = items.reduce( (r,k) => {
+    return integrity[k] * 1  === 1 ? r+1 : r  ;
+  },0); 
+
+  var nPart = items.reduce( (r,k) => {
+    return integrity[k] * 1  === 2 ? r+1 : r  ;
+  },0);
+
+  var nYes = items.reduce( (r,k) => {
+    return integrity[k] * 1  === 3 ? r+1 : r  ;
+  },0);
+
+  var score = nYes * 3 / maxScore;
+
+  return {
+    n : items.length,
+    score : score,
+    no : nNo,
+    part : nPart,
+    yes : nYes,
+    unknown : nUnknown
+  };
+
+}
+
+
 export function evaluateDiafView(opt){
   opt = opt || {};
   var view = opt.view || {};
@@ -8,47 +43,27 @@ export function evaluateDiafView(opt){
   var h = mx.helpers;
   var txtTooltip;
 
-  return mx.helpers.getDictItem("tooltip_diaf_score")
+  return h.getDictItem("tooltip_diaf_score")
     .then(txt => {
       txtTooltip = txt;
       /**
       * Make sure metadata are there. 
       * Force update if needed
       */
-      return mx.helpers.addSourceMetadataToView({
+      return h.addSourceMetadataToView({
          view : view,
          forceUpdateMeta : forceUpdateMeta
       });
     })
     .then(meta => {
-      var integrity = h.path(meta,"integrity",{});
       var threshold = 0.8;
-      var items = Object.keys(integrity);
-      var maxScore = items.length * 3;
-
-      var nUnknown = items.reduce( (r,k) => {
-        return integrity[k] * 1  === 0 ? r+1 : r  ;
-      },0);
-
-      var nNo = items.reduce( (r,k) => {
-        return integrity[k] * 1  === 1 ? r+1 : r  ;
-      },0); 
-
-      var nPart = items.reduce( (r,k) => {
-        return integrity[k] * 1  === 2 ? r+1 : r  ;
-      },0);
-
-      var nYes = items.reduce( (r,k) => {
-        return integrity[k] * 1  === 3 ? r+1 : r  ;
-      },0);
-
-      var score = nYes * 3 / maxScore;
-
-      var elStar = mx.helpers.elStrokeStar({
+      var integrity = h.path(meta,"integrity",{});
+      var diafScore = h.getDiafScoreFromIntegrity(integrity);
+      var elStar = h.elStrokeStar({
         diameter: 10,
         nBranch: 5,
         inlet: 0.5,
-        progress: score || 0,
+        progress: diafScore.score || 0,
         threshold: threshold,
         color1: "#ccc",
         color2: "#0096f5"
@@ -57,11 +72,11 @@ export function evaluateDiafView(opt){
       elStar.style.marginBottom="-1px";
 
       var tooltip = mx.helpers.parseTemplate(txtTooltip,{
-        score : Math.round(score*100)/100,
-        yes : nYes,
-        no : nNo,
-        part : nPart,
-        unknown : nUnknown
+        score : Math.round(diafScore.score*100)/100,
+        yes : diafScore.yes,
+        no : diafScore.no,
+        part : diafScore.part,
+        unknown : diafScore.unknown
       });
 
       var elSpan = mx.helpers.el("span",{

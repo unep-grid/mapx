@@ -1,4 +1,3 @@
-
 /**
  * Get view's source metadata
  * @param {String} id Name/Id of the source layer
@@ -8,7 +7,6 @@ export function getSourceMetadata(id, force) {
     urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
 
   return new Promise((resolve, reject) => {
-
     if (!id) {
       return reject('missing id');
     }
@@ -89,6 +87,7 @@ export function viewToMetaModal(view) {
   var id = h.isView(view) ? view.id : view;
   view = mx.helpers.getView(id);
   var meta = {};
+  var metaRasterLink = h.path(view, 'data.source.urlMetadata');
 
   getViewMetadata(id, true).then((data) => {
     var elContent = el('div');
@@ -104,11 +103,25 @@ export function viewToMetaModal(view) {
       elContent.appendChild(elViewMeta);
     }
 
+    if (metaRasterLink) {
+      var elRasterMetaLink = metaSourceRasterToUi({
+        url: metaRasterLink
+      });
+      if (elRasterMetaLink) {
+        elContent.appendChild(elRasterMetaLink);
+      }
+    }
+
     if (view._meta) {
       var sourceMeta = view._meta;
       var elSourceMeta = metaSourceToUi(sourceMeta);
       var elDiafTable = metaSourceToDiafUi(sourceMeta);
-      
+      var elDiafSummary = metaSourceToDiafSummary(sourceMeta);
+
+      if (elDiafSummary) {
+        elContent.appendChild(elDiafSummary);
+      }
+
       if (elSourceMeta) {
         elContent.appendChild(elSourceMeta);
       }
@@ -135,13 +148,75 @@ export function viewToMetaModal(view) {
   });
 }
 
+export function metaSourceRasterToUi(rasterMeta) {
+  var h = mx.helpers;
+  var el = h.el;
+  var elOut = el('div');
+
+  rasterMeta = rasterMeta || {};
+
+  if (!h.isUrl(rasterMeta.url)) {
+    return elOut;
+  }
+
+  rasterMeta = h.objectToArray(
+    {
+      'meta_view_raster_meta': rasterMeta.url
+    },
+    true
+  );
+
+  elOut = h.elAuto('array_table', rasterMeta, {
+    render: 'array_table',
+    tableHeadersSkip: true,
+    tableTitle: 'meta_view_raster_meta',
+    tableTitleAsLanguageKey: true,
+    stringAsLanguageKey: true,
+    urlDefaultLabel : 'Link'
+  });
+
+  return elOut;
+}
+
+export function metaSourceToDiafSummary(meta) {
+  var h = mx.helpers;
+  var el = h.el;
+  var elOut = el('div');
+
+  if (!h.isObject(meta) || !h.isObject(meta.integrity)) {
+    return elOut;
+  }
+
+  var score = h.getDiafScoreFromIntegrity(meta.integrity);
+
+  var summary = h.objectToArray(
+    {
+      score: Math.round(score.score * 10000) / 100,
+      yes: score.yes,
+      no: score.no,
+      partial: score.part,
+      dont_know: score.unknown
+    },
+    true
+  );
+
+  elOut = h.elAuto('array_table', summary, {
+    render: 'array_table',
+    tableHeadersSkip: true,
+    tableTitle: 'meta_view_diaf_summary_title',
+    tableTitleAsLanguageKey: true,
+    stringAsLanguageKey: true
+  });
+
+  return elOut;
+}
 
 export function metaSourceToDiafUi(meta) {
   var h = mx.helpers;
   var el = h.el;
   var elOut = el('div');
 
-  if (!h.isObject(meta) || !h.isObject(meta.integrity)){
+  if (!h.isObject(meta) || !h.isObject(meta.integrity)) {
     return elOut;
   }
 
@@ -241,11 +316,8 @@ export function metaSourceToDiafUi(meta) {
     elTableDiaf
   );
 
-
-
   return elOut;
 }
-
 
 function metaViewToUi(meta) {
   const h = mx.helpers;
@@ -270,7 +342,7 @@ function metaViewToUi(meta) {
 
   tblSummary = tblSummary
     .filter((row) => keys.indexOf(row.key) > -1)
-    .sort((a,b) => {
+    .sort((a, b) => {
       return keys.indexOf(a.key) - keys.indexOf(b.key);
     })
     .map((row) => {
@@ -301,10 +373,9 @@ function metaViewToUi(meta) {
   );
 }
 
-
 /**
-* Vector source meta data to UI
-*/
+ * Vector source meta data to UI
+ */
 export function metaSourceToUi(meta) {
   const h = mx.helpers;
   const el = h.el;
@@ -313,8 +384,8 @@ export function metaSourceToUi(meta) {
   const oToA = h.objectToArray;
 
   /**
-  * Local shortcut
-  */
+   * Local shortcut
+   */
   const p = function(p, d) {
     return h.path(meta, p, d);
   };
@@ -349,78 +420,107 @@ export function metaSourceToUi(meta) {
     tableTitle: 'attributes_desc_title'
   });
 
+  var urlHomepage = p('origin.homepage.url', '');
+  var urlSources = p('origin.source.urls', []).map((d) => d.url);
+  var hasHomepage = h.isUrl(urlHomepage);
+  var elHomepage = hasHomepage
+    ? el(
+        'a',
+        {
+          target: '_blank',
+          href: urlHomepage
+        },
+        'Link'
+      )
+    : el('span');
+
+  var elSourceUrl = el(
+    'ul',
+    urlSources.map((url, i) => {
+      if (!h.isUrl(url)) {
+        return;
+      }
+      return el(
+        'li',
+        el(
+          'a',
+          {
+            target: '_blank',
+            href: url
+          },
+          'Link ' + i + 1
+        )
+      );
+    })
+  );
+
+  var elTitle = el('span', l('text.title'));
+
+  var elAbstract = el('p', l('text.abstract', '-'));
+  var elNotes = el('p', l('text.notes', '-'));
+  var elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
+  var elLanguages = elAuto(
+    'array_string',
+    p('text.language.codes', []).map((l) => l.code),
+    {
+      stringAsLanguageKey: true
+    }
+  );
+  var elContacts = el(
+    'ul',
+    p('contact.contacts', []).map((c) => {
+      return el(
+        'li',
+        el(
+          'a',
+          {
+            href: 'mailto:' + c.email
+          },
+          el('div', el('span', c.name + ' (' + c.function + ') '))
+        ),
+        el(
+          'span',
+          {
+            class: 'text-muted'
+          },
+          c.address
+        )
+      );
+    })
+  );
+  var elPeriodicity = elAuto('string', p('temporal.issuance.periodicity'), {
+    stringAsLanguageKey: true
+  });
+  var elReleasedAt = elAuto('date', p('temporal.issuance.released_at', null));
+  var elModifiedAt = elAuto('date', p('temporal.issuance.modified_at', null));
+  var elIsTimeless = elAuto('boolean', p('temporal.range.is_timeless', null), {
+    booleanValues: ['yes', 'no'],
+    stringAsLanguageKey: true
+  });
+  var elStartAt = elAuto('date', p('temporal.range.start_at', null));
+
+  var elEndAt = elAuto('date', p('temporal.range.end_at', null));
+  var elId = el('span', p('_idSource'));
   /**
    * Summary table
    */
   var tblSummary = oToA(
     {
-      /**
-       * Title with link to the homepage
-       */
-      title: el(
-        'a',
-        {
-          href: p('origin.homepage.url', null),
-          target: '_blank'
-        },
-        l('text.title')
-      ),
-      /**
-       * Abstract, notes, keywords, languages of the data
-       */
-      abstract: el('p', l('text.abstract', '-')),
-      notes: el('p', l('text.notes', '-')),
-      keywords: elAuto('array_string', p('text.keywords.keys', ['-'])),
-      languages: elAuto(
-        'array_string',
-        p('text.language.codes', []).map((l) => l.code),
-        {
-          stringAsLanguageKey: true
-        }
-      ),
-      /**
-       * Contact list with mailto set email
-       */
-      contacts: el(
-        'ul',
-        p('contact.contacts', []).map((c) => {
-          return el(
-            'li',
-            el(
-              'a',
-              {
-                href: 'mailto:' + c.email
-              },
-              el('div', el('span', c.name + ' (' + c.function + ') '))
-            ),
-            el(
-              'span',
-              {
-                class: 'text-muted'
-              },
-              c.address
-            )
-          );
-        })
-      ),
-      /**
-       * Temporal meta data
-       */
-      periodicity: elAuto('string', p('temporal.issuance.periodicity'), {
-        stringAsLanguageKey: true
-      }),
-      released_at: elAuto('date', p('temporal.issuance.released_at', null)),
-      modified_at: elAuto('date', p('temporal.issuance.modified_at', null)),
-      is_timeless: elAuto('boolean', p('temporal.range.is_timeless', null), {
-        booleanValues: ['yes', 'no'],
-        stringAsLanguageKey: true
-      }),
-      start_at: elAuto('date', p('temporal.range.start_at', null)),
-      end_at: elAuto('date', p('temporal.range.end_at', null)),
-      /**
-      * Id 
-      */
-      id: el('span',p('_idSource'))
+      title: elTitle,
+      abstract: elAbstract,
+      notes: elNotes,
+      keywords: elKeywords,
+      languages: elLanguages,
+      contacts: elContacts,
+      homepage: elHomepage,
+      url_download: elSourceUrl,
+      periodicity: elPeriodicity,
+      released_at: elReleasedAt,
+      modified_at: elModifiedAt,
+      is_timeless: elIsTimeless,
+      start_at: elStartAt,
+      end_at: elEndAt,
+      id: elId
     },
     // make an array of object
     true
@@ -438,5 +538,3 @@ export function metaSourceToUi(meta) {
 
   return elMeta;
 }
-
-

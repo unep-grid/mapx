@@ -8461,6 +8461,28 @@
     "de": ""
   },
   {
+    "id": "meta_view_diaf_summary_title",
+    "en": "DIAF Summary",
+    "fr": "Résumé du diaf",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Raster metadata",
+    "fr": "Métadonnées du raster",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_view_table_editors_title",
     "en": "Changes overview",
     "fr": "Aperçu des changements",
@@ -8849,6 +8871,17 @@
     "id": "meta_source_homepage",
     "en": "Source homepage",
     "fr": "Page d'accueil de la source",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "fr": "Téléchargement de la source originale",
     "fa": "",
     "ps": "",
     "zh": "",

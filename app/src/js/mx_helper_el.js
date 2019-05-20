@@ -22,7 +22,8 @@ function elAuto(render, data, opt) {
     numberStyle: {float: 'right'},
     dateStyle: {float: 'right'},
     langKeyPrefix: '',
-    stringAsLanguageKey: false
+    stringAsLanguageKey: false,
+    urlDefaultLabel: 'Link'
   };
 
   /*
@@ -57,6 +58,9 @@ function elAuto(render, data, opt) {
     }
     if (h.isDateString(x)) {
       return renderDate(x);
+    }
+    if (h.isUrl(x)) {
+      return renderUrl(x);
     }
     if (h.isString(x)) {
       return renderString(x);
@@ -112,6 +116,18 @@ function elAuto(render, data, opt) {
     }
 
     return el('span', {style: opt.dateStyle}, new Date(date).toDateString());
+  }
+  function renderUrl(url, label) {
+    label = label || opt.urlDefaultLabel;
+
+    return el(
+      'a',
+      {
+        target: '_blank',
+        href: url
+      },
+      label
+    );
   }
   function renderString(str, asLanguageKey) {
     asLanguageKey = h.isBoolean(asLanguageKey)
