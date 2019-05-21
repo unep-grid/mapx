@@ -258,14 +258,12 @@ export function initMapxApp(o) {
    * Send loading confirmation to shiny
    */
   o.map.on('load', function() {
-
     //mx.helpers.mapComposerModalAuto();
     //return;
     /*
      * Init pixop
      */
     mx.helpers.initPixop();
-
 
     /*
      * secondary centering method
@@ -390,17 +388,17 @@ export function initMapxApp(o) {
       northArrow.style[mx.helpers.cssTransformFun()] =
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
-    map.on('moveend', function() {
-      var c = map.getCenter();
-      var z = map.getZoom();
-      mx.helpers.objToState({
-        data: {
-          lat: c.lat,
-          lng: c.lng,
-          zoom: z
-        }
-      });
-    });
+/*    map.on('moveend', function() {*/
+      //var c = map.getCenter();
+      //var z = map.getZoom();
+      //mx.helpers.objToState({
+        //data: {
+          //lat: c.lat,
+          //lng: c.lng,
+          //zoom: z
+        //}
+      //});
+    /*});*/
   });
 
   /**
@@ -4079,6 +4077,7 @@ export function resetViewStyle(o) {
  * Fly to location and zoom
  * @param {object} o options
  * @param {string} o.id map id
+ * @param {boolean} o.jump
  * @param {number} o.param Parameters to use
  */
 export function flyTo(o) {
@@ -4087,16 +4086,21 @@ export function flyTo(o) {
   if (map) {
     var p = o.param;
 
-    if (!o.fromQuery && p.fitToBounds === true) {
+    if (!o.fromQuery && p.fitToBounds === true && !p.jump) {
       map.fitBounds([p.w || 0, p.s || 0, p.e || 0, p.n || 0]);
     } else {
       var opt = {
         center: [p.lng || 0, p.lat || 0],
         zoom: p.zoom || 0,
+        jump: p.jump || false,
         duration: o.duration || 3000
       };
 
-      map.flyTo(opt);
+      if (opt.jump) {
+        map.jumpTo(opt);
+      } else {
+        map.flyTo(opt);
+      }
     }
   }
 }
@@ -4225,8 +4229,7 @@ export function getViewDescription(id, lang) {
   });
 }
 
-export function getViewLegend(id,opt) {
-
+export function getViewLegend(id, opt) {
   opt = opt || {};
 
   var h = mx.helpers;
@@ -4234,14 +4237,14 @@ export function getViewLegend(id,opt) {
     id = id.id;
   }
   var elLegend = document.getElementById('check_view_legend_' + id);
-  
+
   mx.helpers.convertAllImagesToBase64(elLegend);
 
-  if(elLegend && opt.clone === true){
+  if (elLegend && opt.clone === true) {
     elLegend = elLegend.cloneNode(true);
   }
-  if(elLegend && opt.clone === true && opt.input === false){
-    elLegend.querySelectorAll('input').forEach(e => e.remove());
+  if (elLegend && opt.clone === true && opt.input === false) {
+    elLegend.querySelectorAll('input').forEach((e) => e.remove());
   }
   return elLegend || h.el('div');
 }

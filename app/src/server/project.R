@@ -250,6 +250,8 @@ observe({
         query$zoom <<- NULL
       }
 
+      mapPos$jump = TRUE
+
       mglFlyTo(
         id = idMap,
         mapPos
