@@ -74,21 +74,23 @@ export function showSourceTableAttributeModal(opt) {
       'Clear filter'
     );
     var elTitle = el('div');
-
+    var buttons = [elButtonClearFilter,elButtonDownload];
     if (!hasData) {
       elTable = el('span', 'no data');
+      buttons = null;
     }
 
     var elModal = h.modal({
       title: elTitle,
       content: elTable,
       onClose: destroy,
-      buttons: [elButtonDownload, elButtonClearFilter]
+      buttons: buttons
     });
 
     mutationObserver = listenMutationAttribute(elModal, tableRender);
 
     if (!hasData) {
+      onProgressEnd();
       return;
     }
 
@@ -172,7 +174,9 @@ export function showSourceTableAttributeModal(opt) {
     }
 
     function destroy() {
-      hot.destroy();
+      if(hot){
+        hot.destroy();
+      }
       if (mutationObserver) {
         mutationObserver.disconnect();
       }
@@ -309,6 +313,6 @@ function onProgressEnd() {
   });
 }
 function onProgressError(data) {
-  onEnd();
+  onProgressEnd();
   alert(data.message);
 }
