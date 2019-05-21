@@ -224,4 +224,5 @@ observeEvent(reactData$showAbout,{
 #
 observeEvent(reactData$renderUserProjectsList,{
   session$sendCustomMessage("mxRenderUserProjectsList",reactData$renderUserProjectsList)
+  mxTimeDiff(reactData$timerProjectList)
 })

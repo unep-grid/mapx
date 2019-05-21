@@ -1,6 +1,6 @@
 /*jshint esversion: 6 , node: true */
 
-$(document).on('shiny:connected', function(event) {
+$(document).on('shiny:connected', function() {
 
   /*
   * Input

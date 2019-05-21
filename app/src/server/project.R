@@ -39,11 +39,6 @@ observe({
       if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
       if(TRUE) project_query <- mxDbGetProjectIdByAlias(project_query)
       project_query <- mxDbProjectCheck(project_query)
-
-      #roles <- mxDbGetProjectUserRoles(id_user,project_query)
-      #if(!roles$public){
-        #project_query <- NULL
-      #}
     }
 
     if(!noDataCheck(project_query)){
@@ -59,12 +54,6 @@ observe({
         # if the change comes from the ui, apply
       }else if(!noDataCheck(project_ui)){
         mxModal(id="uiSelectProject",close=T)
-      #  roles <- mxDbGetProjectUserRoles(id_user,project_ui)
-        #if(!roles$public){
-          #msg <- d("project_access_denied",language)
-          #mxModal(id="homeProjectDenied",content = tags$b(msg))
-          #project_ui <- NULL
-        #}
         project_out <- project_ui
       }else{
         # nothing to do
@@ -125,6 +114,8 @@ observeEvent(reactData$mapIsReady,{
 # Show project panel
 #
 observeEvent(reactData$showProjectsList,{
+  
+  reactData$timerProjectList = mxTimeDiff('Build project list') ## end timer in control.js
 
   event <- reactData$showProjectsList 
   userRole <- getUserRole()
@@ -201,8 +192,7 @@ observeEvent(reactData$showProjectsList,{
       btnJoinProject
       )
   }
-
-  
+ 
   mxModal(
     id = "uiSelectProject",
     buttons = btn,
