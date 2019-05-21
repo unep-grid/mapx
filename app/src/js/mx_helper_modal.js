@@ -142,26 +142,8 @@ export function modal(o) {
     }
   }
 
-  if (hasShiny && !noShinyBinding) {
-    Shiny.bindAll(elModal);
-  }
-  if (o.addSelectize) {
-    mx.helpers.initSelectizeAll({
-      id: id,
-      selector: elModal
-    });
-  }
   if (startBodyScrollPos) {
     elBody.scrollTop = startBodyScrollPos;
-  }
-
-  /**
-   * Add to dom
-   */
-  document.body.appendChild(elModal);
-
-  if (o.addBackground) {
-    document.body.appendChild(elBackground);
   }
 
   setTitle(o.title);
@@ -174,6 +156,32 @@ export function modal(o) {
   elModal.close = close;
   elModal.setTitle = setTitle;
 
+  /**
+   * Add to dom
+   */
+  document.body.appendChild(elModal);
+
+  if (o.addBackground) {
+    document.body.appendChild(elBackground);
+  }
+
+  /**
+   * Init shiny and selectize
+   */
+
+  if (hasShiny && !noShinyBinding) {
+    Shiny.bindAll(elModal);
+  }
+  if (o.addSelectize) {
+    mx.helpers.initSelectizeAll({
+      id: id,
+      selector: elModal
+    });
+  }
+
+  /**
+   * Return final element
+   */
   return elModal;
 
   /**
@@ -205,7 +213,7 @@ export function modal(o) {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
         (elContent = h.el('div', {
-          style : styleContent,
+          style: styleContent,
           class: ['mx-modal-content']
         }))
       )),
