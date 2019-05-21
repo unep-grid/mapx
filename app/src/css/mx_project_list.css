@@ -1,0 +1,69 @@
+/* project list by user */
+.mx-badge-role,
+.mx-badge-view-count {
+  opacity: 0.5;
+  font-size: 0.8em;
+  padding: 0px 4px 0px 4px;
+}
+
+.mx-list-projects {
+  max-height: 300px;
+  overflow: auto;
+}
+.mx-list-projects-title {
+  cursor: pointer;
+}
+.mx-list-projects-view-count {
+  opacity: 0.5;
+  font-size: 0.9em;
+  display: none;
+}
+.mx-list-projects-desc {
+  font-style: italic;
+  opacity: 0.5;
+  font-size: 0.9em;
+}
+.mx-list-projects-row {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mx-list-projects-top,
+.mx-list-projects-bottom {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mx-list-projects-opt {
+  padding-top: 9px;
+  margin-left: 30px;
+}
+
+.mx-list-projects-left,
+.mx-list-projects-right {
+  flex: 1;
+}
+
+.mx-list-projects-right {
+}
+.mx-list-projects-container {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.mx-list-projects-search {
+  padding: 10px 10px 10px 10px;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 5px;
+  outline: none;
+}
+.mx-list-projects-search:focus {
+  /*border-bottom: 2px solid #ccc;*/
+}
+
