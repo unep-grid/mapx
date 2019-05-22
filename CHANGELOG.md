@@ -1,9 +1,34 @@
 
 ## Changelog
+
+
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.48">1.5.48</a>
+    - Improvement
+      - API
+        - Added exposed header : content-length;
+        - Set zip encoding as an option in sendJSON
+      - APP
+        - Attribute table modal: remove buttons if no data.
+        - Jump to location at project change instead of fly to position;
+        - Better performance and refactoring of the project list renderer;
+        - Progress Radial : added animation frame support;
+        - Merge pull request #435 from antobenve/master : style instead of styles in WMS request
+        - Added diaf score / summary in metadata window in addition to the full diaf table; added link to raster metadata; Remove the homepage link to source title: use distinct homepage link and list of download/source link; should solve feature requests from #423
+        - Added progress bar support in attributes table
+    - Bug fixes
+      - App
+        - Solve issue where validation message did not work : login window, new view name, new project name, etc..
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.47">1.5.47</a>
+    - Improvement
+      - APP
+        - Map Composer : new feature : change font size of current item; better resolution handling; various fixes;
+        - Share manager : add auto start option for story map
+        - Dashboard : add an option to ignore or not events that return no data or an empty array. Added callback arguments in widgets; Solved issues with dashboard modal window title;
+        
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.46">1.5.46</a>
     - Improvement
       - APP
-        - Map Composer : removed depedencies on medium-editor and interactjs use custom ones; Added new feature to set page size, units and other settings.
+        - Map Composer : removed dependencies on medium-editor and interactjs use custom ones; Added new features to set page size, units and other settings.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.45">1.5.45</a>
     - New feature
       - APP
@@ -11,7 +36,7 @@
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.44">1.5.44</a>
     - New feature
       - APP
-        - Map composer - early versioan. A module to compose a map based on currently visible views
+        - Map composer - early version. A module to compose a map based on currently visible views
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.43">1.5.43</a>
     - Bug fixes 
       - APP
