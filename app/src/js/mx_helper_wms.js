@@ -338,6 +338,7 @@ function urlLegend(opt) {
  * @param {Boolean} opt.asObject Return an object of array `{a:[2,1]}` instead of an array of object `[{a:2},{a:1}]`.
  * @param {Object} opt.point Mapbox gl point object
  * @param {Array} opt.layers layer list
+ * @param {Array} opt.styles style list
  * @param {String} opt.url Service url
  */
 export function queryWms(opt) {
@@ -364,6 +365,7 @@ export function queryWms(opt) {
    * Build query string
    */
   var layers = opt.layers;
+  var styles = opt.styles;
   var paramsInfo = {
     service: 'WMS',
     request: 'GetFeatureInfo',
@@ -371,6 +373,7 @@ export function queryWms(opt) {
     transparent: true,
     query_layers: layers,
     layers: layers,
+    styles: styles,
     info_format: 'application/json',
     exceptions: 'application/json',
     feature_count: 10,

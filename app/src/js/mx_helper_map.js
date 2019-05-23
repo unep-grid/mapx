@@ -3741,6 +3741,7 @@ export function getLayersPropertiesAtPoint(opt) {
       return h.queryWms({
         point: opt.point,
         layers: params.layers,
+        styles: params.styles,
         url: endpoint,
         asObject: modeObject
       });
