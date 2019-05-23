@@ -1,53 +1,61 @@
 WITH
-v_latest as (
-  SELECT * 
-  FROM mx_views_latest where id = '{{idView}}'
+v_latest AS (
+  SELECT *
+  FROM mx_views_latest WHERE id = '{{idView}}'
 ),
-v_last_editor as (
-  SELECT editor 
+v_last_editor AS (
+  SELECT editor
   FROM v_latest
 ),
-v_date_created as (
-  SELECT date_modified 
-  FROM mx_views where id = '{{idView}}'
+v_date_created AS (
+  SELECT date_modified
+  FROM mx_views WHERE id = '{{idView}}'
   ORDER BY date_modified ASC LIMIT 1
 ),
-v_stat_add_count as (
-  SELECT count(pid)
-  FROM mx_logs 
-  WHERE id_log = 'view_add' 
+v_stat_add_count AS (
+  SELECT COUNT(pid)
+  FROM mx_logs
+  WHERE id_log = 'view_add'
   AND data #>> '{"id_view"}' = '{{idView}}'
 ),
-v_stat_add_distinct_user as (
-  SELECT count(distinct id_user) 
-  FROM mx_logs 
-  WHERE id_log = 'view_add' 
+v_stat_add_distinct_user AS (
+  SELECT COUNT(DISTINCT id_user)
+  FROM mx_logs
+  WHERE id_log = 'view_add'
   AND data #>> '{id_view}' = '{{idView}}'
 ),
-v_editor as (
-  SELECT editor, count(pid) from mx_views
+v_editor AS (
+  SELECT editor, COUNT(pid) FROM mx_views
   WHERE id = '{{idView}}'
   GROUP BY editor
 ),
-v_editor_email as (
-  SELECT u.email as editor_email, vt.count n_changes, vt.editor = vl.editor current_editor
-  FROM v_editor as vt, v_last_editor vl, mx_users u
+v_editor_email AS (
+  SELECT u.email AS editor_email, vt.count n_changes, vt.editor = vl.editor current_editor
+  FROM v_editor AS vt, v_last_editor vl, mx_users u
   WHERE u.id = vt.editor
 ),
-v_editor_json as (
-  SELECT json_agg(row_to_json(v_editor_email)) as tbl
+v_editor_json AS (
+  SELECT json_agg(row_to_json(v_editor_email)) AS tbl
   FROM v_editor_email
 ),
-v_project_title as (
-  SELECT p.title as title 
+v_project_title AS (
+  SELECT p.title AS title
   FROM mx_projects p, v_latest vl
   WHERE vl.project = p.id
 ),
-v_projects_titles_json as (
-  select json_agg(title) tbl
+v_projects_titles_json_arrays AS (
+  SELECT
+    CASE WHEN jsonb_typeof(data->'projects') = 'array'
+    THEN data->'projects'
+    ELSE jsonb_build_array(data->'projects')
+  END AS projects
+  FROM v_latest
+),
+v_projects_titles_json AS (
+  SELECT json_agg(title) tbl
   FROM mx_projects p, (
-    SELECT DISTINCT jsonb_array_elements_text(data #> '{"projects"}') id
-    FROM v_latest
+    SELECT DISTINCT jsonb_array_elements_text(projects) id
+    FROM v_projects_titles_json_arrays
   ) vps
   WHERE p.id = vps.id
 ),
@@ -56,7 +64,7 @@ v_projects_titles_json as (
   -- SELECT json_agg(title) as tbl
   -- FROM v_projects_titles
 -- ),
-v_meta as (
+v_meta AS (
   SELECT json_build_object(
     'id', to_json(vl.id),
     'stat_n_add', to_json(vs_add.count),
@@ -76,7 +84,7 @@ v_meta as (
     'projects_titles', vpts.tbl,
     'collections', (vl.data #> '{"collections"}')::json,
     'table_editors', ve.tbl
-  ) as meta
+  ) AS meta
   FROM v_latest vl,
   v_date_created vc,
   v_stat_add_count vs_add,
@@ -86,6 +94,6 @@ v_meta as (
   v_editor_json ve
 )
 
-SELECT * from v_meta;
+SELECT * FROM v_meta;
 
 
