@@ -1,7 +1,9 @@
-
+ 
 ## Changelog
 
-
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.50">1.5.50</a>
+      - Improvement 
+        - APP Added logic to remove service worker and cache if there is not enough storage space in the browser. See issue #441.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.48">1.5.48</a>
     - Improvement
       - API
