@@ -80,6 +80,14 @@ blockquote {
 }
 
 /**
+* Disabled things : link, button, etc
+*/
+.mx-not-allowed {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/**
 * set general dimention
 */
 

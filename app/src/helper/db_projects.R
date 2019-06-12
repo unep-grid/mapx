@@ -181,6 +181,7 @@ mxDbGetProjectListByUser <- function(id,whereUserRoleIs="any",whereTitleMatch=NU
   description->>'" + language +"' as description_lang, 
   description->>'en' as description_en,
   public, 
+  allow_join,
   members @> '[" + id +"]' as _member,
   publishers @> '[" + id +"]' as _publisher,
   admins @> '[" + id +"]' as _admin from mx_projects
@@ -204,6 +205,7 @@ project_cleaned as (
   description_lang
   END as description,
   public,
+  allow_join,
   _member OR _publisher OR _admin AS member,
   _publisher OR _admin AS publisher,
   _admin AS admin
@@ -401,7 +403,8 @@ mxDbSaveProjectData <- function(idProject,values = list(
     publishers = NULL,
     map_position = NULL,
     countries = NULL,
-    creator = NULL
+    creator = NULL,
+    allow_join = NULL
     )
   ){
 
@@ -428,7 +431,7 @@ mxDbSaveProjectData <- function(idProject,values = list(
     }
   }
 
-  for( n in c("public","active")){
+  for( n in c("public","active","allow_join")){
     v <- values[[n]]
     if(notNull(v)){ 
       mxDbUpdate(

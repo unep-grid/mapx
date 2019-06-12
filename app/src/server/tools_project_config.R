@@ -43,8 +43,13 @@ observeEvent(input$btnShowProjectConfig,{
         ),
       checkboxInput(
         "checkProjectPublic",
-        label = d("project_public",language),
+        label = d("project_enable_public",language),
         value =  projectData$public
+        ),
+      checkboxInput(
+        "checkProjectEnableJoin",
+        label = d("project_enable_join",language),
+        value =  projectData$allow_join
         ),
       uiOutput("uiValidateProject")
       )
@@ -78,6 +83,7 @@ observe({
   input$projectTitleSchema_values
   input$projectDescriptionSchema_values
   input$checkProjectPublic
+  input$checkProjectEnableJoin
   input$txtProjectNameAlias
   isolate({
     #
@@ -326,6 +332,7 @@ observeEvent(input$btnSaveProjectConfig,{
   isAdmin <- isTRUE(userRole$admin)
   isValid <- isTRUE(reactData$projectConfigValid)
   isPublic <- isTRUE(input$checkProjectPublic) || .get(config,c("project","default")) == project
+  allowJoin <- isTRUE(input$checkProjectEnableJoin)
   aliasProject <- input$txtProjectNameAlias
   aliasProject <- ifelse(isTRUE(mxDbValidateProjectAlias(aliasProject,project)),aliasProject,"")
 
@@ -342,7 +349,8 @@ observeEvent(input$btnSaveProjectConfig,{
         publishers = NULL,
         map_position = input$projectMapPosition_values$data,
         countries = input$selectProjectConfigCountries,
-        creator = NULL
+        creator = NULL,
+        allow_join = allowJoin
         )
       )
 

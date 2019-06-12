@@ -8,6 +8,7 @@ export function renderUserProjectsList(o) {
   var nRow = dat[idCol].length;
   var titles = Object.keys(dat);
   var nCol = titles.length;
+  var userIsGuest = h.path(mx,'settings.user.guest') === true;
 
   /* render */
 
@@ -92,7 +93,9 @@ export function renderUserProjectsList(o) {
     var ds = el.dataset;
     var actions = {
       request_membership: function() {
-        h.requestProjectMembership(ds.request_membership);
+        if(ds.allow_join === "true" && !userIsGuest){
+           h.requestProjectMembership(ds.request_membership);
+        }
       },
       load_project: function() {
         detach();
@@ -261,9 +264,14 @@ export function renderUserProjectsList(o) {
   function makeJoinButton(opt) {
     var dat = opt.dat;
     var elBtn = el('a');
-    if (!(dat.member || dat.admin || dat.publisher)) {
+    if (!(dat.member || dat.admin || dat.publisher) && !userIsGuest) {
       elBtn.href = '#';
       elBtn.dataset.request_membership = dat[idCol];
+      elBtn.dataset.allow_join = dat.allow_join;
+      if(!dat.allow_join){
+       elBtn.classList.add('mx-not-allowed');
+      }
+      
       h.getDictItem('btn_join_project', mx.settings.language).then(function(
         it
       ) {

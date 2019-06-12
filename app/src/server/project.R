@@ -33,11 +33,16 @@ observe({
       project_query = NULL
     }
 
-    # if query project, check right
+    # Project requested can be an iso3 code or mapx project id or custom alias.
     if(!noDataCheck(project_query)){
 
+      # case project requested is an iso3code. e.g. COD, USA, etc
       if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
-      if(TRUE) project_query <- mxDbGetProjectIdByAlias(project_query)
+      
+      # case project requested is an alias
+      project_query <- mxDbGetProjectIdByAlias(project_query)
+      
+      # General check
       project_query <- mxDbProjectCheck(project_query)
     }
 
@@ -61,21 +66,25 @@ observe({
       }
     }
 
-
+    # Set requested project to null
     query$project <<- NULL
+
+    #
+    # Check roles, change project, set roles, log action
+    #
     if(!noDataCheck(project_out)){
      
       project_out <- toupper(project_out)
+
       #
-      # Last check
+      # Roles checking
       #
       roles <- mxDbGetProjectUserRoles(id_user,project_out)
       if(noDataCheck(roles$groups)) project_out <- project_def;
-      mxUpdateUrlParams(list(project = project_out))
       reactData$project <- project_out
 
       #
-      # Log any project change or load
+      # Log project changes
       #
       mxDbLogger("USER_ACTION", list(
           side = "app",
@@ -87,8 +96,13 @@ observe({
             new_project = project_out,
             old_project = project_react
             )
-          ))
+          )
+        )
 
+      #
+      # Update browser query parameter
+      #
+      mxUpdateUrlParams(list(project = project_out))
     }
 
   })
@@ -125,13 +139,15 @@ observeEvent(reactData$showProjectsList,{
   idUser  <- .get(reactUser,c("data","id"))
   projectData <- mxDbGetProjectData(project)
   projectName <- .get(projectData,c("title",language))
-  isMember <- FALSE
-  
+  projectAllowsJoin <- isTRUE(.get(projectData,c('allow_join')))
+  userIsMember <- FALSE
+  userIsGuest <- isGuestUser()
+
   filterRoles <- NULL
   filterTitle <- NULL
   if( typeof(event) == "list" && event$msg == "start"){
 
-    if(isGuestUser()){
+    if(userIsGuest){
       reactData$showLogin <- list(
         msg = d("login_first_before_action",language),
         then = function(){
@@ -167,7 +183,7 @@ observeEvent(reactData$showProjectsList,{
 
   projects <- projects[with(projects, order(-admin,-publisher,-member,title)),]
   projectsMember <- projects[projects$member,]
-  isMember <- project %in% projectsMember$id
+  userIsMember <- project %in% projectsMember$id
 
   btnJoinProject <- actionButton(
     inputId = 'btnJoinProject',
@@ -186,7 +202,7 @@ observeEvent(reactData$showProjectsList,{
     tags$div(id="mxListProjects")
     )
 
-  if(!isMember){
+  if(!userIsGuest && !userIsMember && projectAllowsJoin){
     btn <- tagList(
       btn,
       btnJoinProject
@@ -201,6 +217,15 @@ observeEvent(reactData$showProjectsList,{
     textCloseButton = d("btn_close",language)
     )
 
+})
+
+
+#
+# Render project list
+#
+observeEvent(reactData$renderUserProjectsList,{
+  session$sendCustomMessage("mxRenderUserProjectsList",reactData$renderUserProjectsList)
+  mxTimeDiff(reactData$timerProjectList)
 })
 
 

@@ -5569,10 +5569,22 @@
     "ps": ""
   },
   {
-    "id": "project_public",
+    "id": "project_enable_public",
     "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
     "fr": "Ce projet est public. Il va être listé dans le catalogue des projets. Toutes les vues publiques publiées dans ce projet seront également visibles à tous.",
     "es": "Este proyecto es público. Esta publicado en catálogo de los proyectos. Todas las vista públicas en este proyecto estan visibles para todo el mundo.",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow nonmember to request a membership to this project.",
+    "fr": "Autoriser les personnes non membres à faire une demande d'adhésion.",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

@@ -34,11 +34,12 @@ observeEvent(reactData$showLogin,{
   project <- reactData$project
   projectData <- mxDbGetProjectData(project)
   projectName <- .get(projectData,c("title",language))
+  projectAllowsJoin <- isTRUE(.get(projectData,c("allow_join")))
   #titleModalLogin <- titleModalLogin + " (" + projectName + ")"
   event <- reactData$showLogin 
   msgLogin <- ""
   reactData$onLoggedIn <- function(){}
-
+  userIsGuest <- isGuestUser()
 
   if(typeof(event) == "list" && !noDataCheck(event$msg) ){
      msgLogin <- event$msg
@@ -49,7 +50,7 @@ observeEvent(reactData$showLogin,{
   # 
   # If not logged, build an input form
   #
-  if( isGuestUser() ){
+  if( userIsGuest ){
 
     txtSubTitle <- d("login_subtitle",language)
     titleModalLogin <- d("user_authentication",language)
@@ -122,7 +123,7 @@ observeEvent(reactData$showLogin,{
       tags$div(id='mxListProjects')
       )
 
-    if(!userRole$member){
+    if(!userRole$member && projectAllowsJoin){
       btn <- tagList(
         btn,
         btnJoinProject
@@ -218,11 +219,3 @@ observeEvent(reactData$showAbout,{
 
 })
 
-
-#
-# Trigger render user project list
-#
-observeEvent(reactData$renderUserProjectsList,{
-  session$sendCustomMessage("mxRenderUserProjectsList",reactData$renderUserProjectsList)
-  mxTimeDiff(reactData$timerProjectList)
-})

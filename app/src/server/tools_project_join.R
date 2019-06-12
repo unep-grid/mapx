@@ -27,8 +27,10 @@ observeEvent(reactData$requestProjectMembership,{
   language <- reactData$language
   msgRequestMembership <- d("project_request_membership_message",language)
   projectTitle <- mxDbGetProjectTitle(project,language)
+  projectData <- mxDbGetProjectData(project)
   modalTitle <- d('project_request_membership_message_compose',language)
   userRole <- mxDbGetProjectUserRoles(userData$id,project)
+  projectAllowsJoin <- isTRUE(.get(projectData,c('allow_join')))
   isNotMember <- !isTRUE(userRole$member)
   isGuest <- isGuestUser()
 
@@ -36,7 +38,7 @@ observeEvent(reactData$requestProjectMembership,{
     emailUser <- userData$email
   }
 
-  if( isNotMember ){
+  if( isNotMember && projectAllowsJoin ){
 
     btn <- list()
     msgRequestMembership <- mxUnescapeNewLine(msgRequestMembership)
