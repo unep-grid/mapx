@@ -54,7 +54,7 @@ observe({
       minZoom = .get(config,c("map","minZoom")),
       maxZoom = .get(config,c("map","maxZoom")),
       languages = .get(config,c("languages","codes")),
-      countries =  .get(config,c("countries","table","iso3")),
+      countries =  .get(config,c("countries","table","id")),
       #
       # Colorscheme
       #

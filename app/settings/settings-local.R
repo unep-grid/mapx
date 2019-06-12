@@ -1,6 +1,9 @@
 #
 # Set value from env
 # NOTE: if used with docker, this could be rewritten with start_mapx.sh.
+config[['mail']][['admin']] <- Sys.getenv('MAIL_ADMIN')
+config[['mail']][['bot']] <- Sys.getenv('MAIL_BOT')
+config[['mail']][['guest']] <- Sys.getenv('MAIL_GUEST')
 config[["db_log"]][["levels"]] <- jsonlite::fromJSON(Sys.getenv("MAPX_DB_LOG_LEVELS"))
 config[["api"]][["port"]] <- Sys.getenv("API_PORT")
 config[["api"]][["host"]] <- Sys.getenv("API_HOST")

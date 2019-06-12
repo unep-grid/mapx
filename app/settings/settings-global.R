@@ -3,13 +3,15 @@
 #
 config <- list()
 
-
 #
 # Shiny options
 #
 options(shiny.maxRequestSize=1000*1024^2) 
 options(shiny.reactlog=FALSE)
 
+#
+# DB log levels
+#
 config[["db_log"]] <-  list(
   levels = c("ERROR") # c("LOG","MESSAGE","WARNING","ERROR","USER_ACTION")
   )
@@ -24,23 +26,30 @@ config[["system"]] <- list(
   urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
   )
 
+#
+# MapX version
+#
 config$version = jsonlite::fromJSON('package.json')$version
 
+
+#
+# Set MapX mode
+#
 #config[["mode"]] <- c("MAINTENANCE")
 config[["mode"]] <- c()
 
 
+
+#
+# Brower config
+#
 config[["browser"]] <- list(
   #
-  # Expected params requested by getBrowserData js function 
-  # and stored in cookies
+  # Browser info used for fingerprinting. Used in getBrowserData.
   #
   params = c(
     "language",
     "userAgent",
-    #"screenHeight",
-    #"screenWidth",
-    #"screenColorDepth",
     "timeZone",
     "hasLocalStorage",
     "hasSessionStorage",
@@ -48,16 +57,14 @@ config[["browser"]] <- list(
     )  
   )
 
-
-## NOTE: see mx_helper_map_view_validation.js
-## View validation
-##
-#config[["validation"]] <- list(
-  #view = list(
-    #rules = list("meta_missing_abstract")
-    #)
-  #)
-
+#
+# api configuration
+#
+config[["api"]] <- list(
+  port = ":8888",
+  host = "localhost",
+  protocol = "http:"
+  )
 
 #
 # postgres configuration
@@ -107,13 +114,13 @@ config[["geoserver"]] = list(
     groupSep = "@"
     )
   )
+
 #
 # web resources : will be exposed to the client using shiny::addRessourcePath. 
 #
 # List name will be prefix 
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
-
 config[["resources"]]  =  list(
       "data"  = file.path("src","data"),
       "sprites" = file.path("src","sprites"),
@@ -146,6 +153,9 @@ config[["dictionaries"]] <- list(
     ),
   countries = fromJSON(
     file.path(
+      #
+      # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
+      #
       config[[c("resources","data")]],"dict_countries.json"
       )
     ),
@@ -160,18 +170,7 @@ config[["dictionaries"]] <- list(
 # Update main dictionary 
 #
 config[["dict"]] <- .get(config,c("dictionaries","main"))
-  #.get(config,c("dictionaries","languages"))
-  #)
 
-
-#
-# api configuration : updated live
-#
-config[["api"]] <- list(
-  port = ":8888",
-  host = "localhost",
-  protocol = "http:"
-  )
 
 # map default 
 #
@@ -186,10 +185,7 @@ config[["map"]] <- list(
   idViewsListContainer = "viewListContainer", # include filters and search field
   idViewsList = "viewListContent", # include views
   paths = list(
-    #style = "styles/base/mapx.json",
     sprite = "sprites/sprite"
-    #, themes="styles/themes/mapx.json"
-    #, style = "styles/base/simple.json"
     )
   )
 
@@ -220,9 +216,6 @@ config[["ui"]] <- list(
     )
   )
 
-
-# config map sources
-#config[["map"]][["sources"]] = list()
 
 #
 # wms sources
@@ -323,21 +316,15 @@ for(l in .get(config,c("languages","list"))){
   }
 }
 
-
-
-
-
 #
-# countries data
+# Project configuration
 #
-config[["countries"]] <- list()
 config[["project"]] <- list()
-
 
 #
 # Admin default
 #
-config[["project"]] =  list(
+config[["project"]] <- list(
   default = "MX-YHJ-6JJ-YLS-SCV-VL1",
   creation = list(
     usersAllowed = c(1)
@@ -345,18 +332,18 @@ config[["project"]] =  list(
   )
 
 
+#
+# countries configuration
+#
+config[["countries"]] <- list()
 
-# read countriea
-config[["countries"]]$table <- fromJSON(
-  file.path(
-    config[[c("resources","data")]],"countries.json"
-    )
-  )
-
-# all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
-config[["countries"]]$codes <- na.omit(
+#
+# Countries names and id without NA
+#
+config[[c("countries","table")]] <- na.omit(
   .get(config,c("dictionaries","countries"))
   )
+
 #
 # Set default no data keys
 #
@@ -375,7 +362,9 @@ config[["noData"]] <- list(
 #
 config[["views"]] = list()
 
+#
 # Set data classes. Value will be fetched in dict
+#
 config[[c("views","classes")]] <- list(
   "oth", # other (default)
   "sat", # satellite imagery
@@ -389,6 +378,9 @@ config[[c("views","classes")]] <- list(
   "str"
   )
 
+#
+# Views type
+#
 config[[c("views","type")]] <- list(
   "vt", # vector tiles
   "rt", # raster tiles
@@ -397,11 +389,13 @@ config[[c("views","type")]] <- list(
   )
 
 #
-# data format
+# Data configuration
 #
 config[["data"]] <- list()
 
-# structured list data format
+#
+# File format meta
+#
 # https://en.wikipedia.org/wiki/GIS_file_formats
 # http://www.w3schools.com/tags/att_input_accept.asp
 config[[c("data","format")]] <- list(
@@ -472,15 +466,15 @@ config[[c("data","format")]] <- list(
 
 
 #
-# email default
+# Email configuration
 #
 config[["mail"]] =  list(
-  "bot" = "bot@mapx.org",
-  "guest" = "guest@mapx.org",
-  "admin" = "frederic.moser@unepgrid.ch"
+  "bot" = "bot@localhost",
+  "guest" = "guest@localhost",
+  "admin" = "admin@localhost"
   )
 
-
+#
 # default user value
 #
 config[["users"]] <- list(
@@ -493,11 +487,14 @@ config[["users"]] <- list(
   apiExpireDays = 1
   )
 
-
+#
 # default data
+#
 config[[c("users","data")]] <- list() 
 
+#
 # default data for new users
+#
 config[[c("users","data","public")]] <- list(
   user = list(
     cache = list (
@@ -507,7 +504,9 @@ config[[c("users","data","public")]] <- list(
     )
   )
 
+#
 # default data for new  superuser if database is empty
+#
 config[["users"]][["data"]][["superUser"]]  <- list(
   user = list(
     cache = list (
@@ -516,96 +515,4 @@ config[["users"]][["data"]][["superUser"]]  <- list(
       )
     )
   )
-
-
-# note : could be searched with function
-#mxRecursiveSearch(config$$users$roles,"role","==","admin")
-# role definition : 
-# each user has a role stored in the database : public, user, editor, admin or superuser.
-# each roles is described in the following list.
-# access : which parts of the app the user can use.
-# read : The user can read content targeting those group.
-# publish : The user can write content targeting those group. If the user publish to group he don't have right to edit, he will loose its right.
-# edit : The user can edit content targeting those group.
-# profile : The user can edit profile of all users in this group.
-# admin : The user can edit account of all users in this group.
-config[["users"]][["roles"]]<- list(
-  list(
-    name="public",
-    level = 5,
-    access = c(),
-    read = c("public"),
-    publish = c(),
-    edit = c(),
-    profile = c(),
-    admin = c()
-    ),
-  list(
-    name = "user",
-    level = 4,
-    access = c("dbSelf"),
-    read = c("self","public","user"),
-    publish = c("self","publisher"),
-    edit = c("self"),
-    profile = c("self"),
-    admin = c()
-    ),
-  list(
-    name = "publisher",
-    level = 3,
-    access = c("dbSelf"),
-    read = c("self","public","user","publisher"),
-    publish = c("self","public","user","publisher"),
-    edit = c("self","public","user","publisher"),
-    profile = c("self"),
-    admin = c()
-    ),
-  list(
-    name = "developer",
-    level = 2,
-    access = c("dbSelf","editCustomView","editDashboard"),
-    read = c("self","public","user","publisher"),
-    publish = c("self","public","user","publisher"),
-    edit = c("self","public","user","publisher"),
-    profile = c("self"),
-    admin = c()
-    ),
-  list(
-    name = "admin",
-    level = 1,
-    access = c("dbSelf","editRoles"),
-    read = c("self","public","user","publisher","admin"),
-    publish = c("self","public","user","publisher","admin"),
-    edit = c("self","public","user","publisher","admin"),
-    profile = c("self","public","user","publisher","admin"),
-    admin = c("public","user","publisher")
-    ),
-  list(
-    name = "superuser",
-    level = 0,
-    access = c("dbSelf","db","editRoles","appConfig"),
-    read = c("self","public","user","publisher","admin","superuser"),
-    publish = c("self","public","user","publisher","admin","superuser"),
-    edit = c("self","public","user","publisher","admin","superuser"),
-    profile = c("self","public","user","publisher","admin","superuser"),
-    admin = c("public","user","publisher","admin","superuser")
-    )
-  )
-
-
-#
-# ssh config for remote command. Not that list names are used in cmd 
-# 
-#config[["ssh"]] <- list( 
-  #HostName="localhost",
-  #User="vagrant",
-  #Port=2222,
-  #UserKnownHostsFile="/dev/null",
-  #StrictHostKeyChecking="no",
-  #PasswordAuthentication="no",
-  #IdentityFile="",
-  #IdentitiesOnly="yes",
-  #LogLevel="FATAL"
-  #)
-
 

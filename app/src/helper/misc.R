@@ -394,9 +394,8 @@ mxSetResourcePath <- function(resources){
 #' @param language {Character} Two letter code for language
 #' @return list {List} Named list of countries
 mxGetCountryList <- function(language="en",includeWorld=TRUE){
-
   out <- list()
-  countryTable <- .get(config,c("countries","codes"))[,c("id",language)]
+  countryTable <- .get(config,c("countries","table"))[,c("id",language)]
   out <- .get(countryTable,c("id"))
   names(out) <- .get(countryTable,c(language))
   if(!includeWorld){
