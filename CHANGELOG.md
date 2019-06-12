@@ -1,9 +1,20 @@
- 
 ## Changelog
 
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.52">1.5.52</a>
+    - Improvement
+      - APP 
+        - Added options in projects to enable or not the join buttons to request membership see issue #251; 
+    - Bug fixes
+      - APP
+        -  Fixes a bug where a guest user could see the join buttons
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.51">1.5.51</a>
+    - Improvement
+      - APP 
+        -  Cleaned configuration files
+        -  Added email configuration for setting default emails : bot, admin, guest.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.50">1.5.50</a>
-      - Improvement 
-        - APP Added logic to remove service worker and cache if there is not enough storage space in the browser. See issue #441.
+    - Improvement 
+      - APP Added logic to remove service worker and cache if there is not enough storage space in the browser. See issue #441.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.48">1.5.48</a>
     - Improvement
       - API
