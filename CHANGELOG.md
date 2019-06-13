@@ -1,5 +1,11 @@
 ## Changelog
-
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.53">1.5.53</a>
+    - New feature
+      - APP 
+        - New 'root mode' that allows platform administrators to switch user in order to solve issues.
+    - Improvement
+      - APP
+        - Login messages for single use passwords or tokens are sent using an html template instead of raw text.
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.52">1.5.52</a>
     - Improvement
       - APP 
