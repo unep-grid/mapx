@@ -60,8 +60,10 @@ config[["browser"]] <- list(
 # api configuration
 #
 config[["api"]] <- list(
-  port = ":8888",
+  port = 3030,
+  port_public = 8888,
   host = "localhost",
+  host_public = "locahost",
   protocol = "http:"
   )
 

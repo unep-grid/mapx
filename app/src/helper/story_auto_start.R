@@ -38,8 +38,8 @@ mxStoryAutoStart = function(
     #
     # Api settings base url
     #
-    apiPort = .get(config,c("api","port")),
-    apiHost = .get(config,c("api","host")),
+    apiPort = .get(config,c("api","port_public")),
+    apiHost = .get(config,c("api","host_public")),
     #
     # Default from user
     #

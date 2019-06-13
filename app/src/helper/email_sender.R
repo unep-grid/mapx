@@ -46,8 +46,10 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
   data = toJSON(list(msg = msg ),auto_unbox=T)
 
   host <-  .get(config,c("api","host")) 
-  url <- "http://api:3333/send/mail"
+  port <- .get(config,c("api","port"))
+  url <- paste0("http://",host,":",port,"/send/mail")
   h <- new_handle(copypostfields = data)
+  
   handle_setheaders(h,
     "Content-Type" = "application/json",
     "Cache-Control" = "no-cache",

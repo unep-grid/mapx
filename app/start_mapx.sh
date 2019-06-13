@@ -20,6 +20,8 @@ CONF_MAPX="\
   config[['mode']] <- jsonlite::fromJSON('$MAPX_MODE') \n\
   config[['api']][['port']] <- '$API_PORT' \n\
   config[['api']][['host']] <- '$API_HOST' \n\
+  config[['api']][['port_public']] <- '$API_PORT_PUBLIC' \n\
+  config[['api']][['host_public']] <- '$API_HOST_PUBLIC' \n\
   config[['resources']][['userdata']] <- '$MAPX_PATH_USERDATA'\n\
   config[['resources']][['download']] <- '$MAPX_PATH_DOWNLOAD'\n\
   config[['pg']][['encryptKey']] <- '$POSTGRES_KEY_ENCRYPT'\n\
