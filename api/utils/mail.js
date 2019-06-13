@@ -24,7 +24,6 @@ function sendMailApi(req,res){
   /*
    * Decrypt the message
    */
-
   decrypt(dat.msg)
     .then( conf => {
       /**
@@ -32,13 +31,18 @@ function sendMailApi(req,res){
        */
       var issues = "";
       var idKeys = ["from","validUntil","subject","to","text","html"];
-
+      var str = "";
       /**
        * Test
        */
       Object.keys(conf).forEach(function(k){
         if( idKeys.indexOf(k) === -1 ){
           issues = issues + " key " + k + " not valid; ";
+        }else{
+          str = conf[k];
+          if(typeof str !== "string"){
+            conf[k] = null;
+          }
         }
       });
 
@@ -51,7 +55,7 @@ function sendMailApi(req,res){
           issues = issues + " invalide date";
         }
       }
-
+        
       if(issues){
         throw new Error(issues);
       }else{

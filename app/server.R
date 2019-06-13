@@ -85,6 +85,7 @@ server <- function(input,output,session){
                 "controls.R",
                 "map.R",
                 "input_register.R",
+                "root_mode.R", 
                 #
                 # Tools panel handler
                 #

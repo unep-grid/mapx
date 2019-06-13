@@ -2,18 +2,27 @@
 #
 # Hamdle logout process
 #
+
 observeEvent(input$btnLogout,{
-  mxCatch(title="Logout",{
-    reactUser <- reactiveValues()
-    reactData <- reactiveValues()
-   
-    mxUpdateUrlParams(clean=T)
-    mxUpdateValue(id="loginUserEmail",value="")
-    mxSetCookie(
-      deleteAll = TRUE,
-      reloadPage = TRUE
-      )
+  reactData$forceLogout <- runif(1)
 })
+
+
+observeEvent(reactData$forceLogout,{
+
+  isolate({
+    mxCatch(title="Logout",{
+      reactUser <- reactiveValues()
+      reactData <- reactiveValues()
+
+      mxUpdateUrlParams(clean=T)
+      mxUpdateValue(id="loginUserEmail",value="")
+      mxSetCookie(
+        deleteAll = TRUE,
+        reloadPage = TRUE
+        )
+})
+  })
 })
 
 #
@@ -33,7 +42,7 @@ observeEvent(input$loginUserEmail,{
       hide = FALSE
       )
 
-})
+  })
 })
 
 #
@@ -60,7 +69,7 @@ observeEvent(input$btnSendLoginKey,{
       #
       # Create the unique secret key
       #
-      reactData$loginSecret <- randomString(
+      reactData$loginToken <- randomString(
         splitSep="-",
         splitIn=5,
         addLetters=FALSE,
@@ -71,22 +80,22 @@ observeEvent(input$btnSendLoginKey,{
         id="txtLoginDialog",
         text="Generate strong password and send it, please wait..."
         )
-      
+
       #
       # Send email
       #
       res <- try({
 
-        template <- .get(config,c("templates","text","email_password"))
+        template <- d('login_single_use_password_email',language)
 
-        text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginSecret,template)
+        text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginToken,template)
 
         res <- mxSendMail(
           from = .get(config,c("mail","bot")),
           to = email,
-          body = text,
+          bodyHTML = text,
           type = "text",
-          subject = "MAP-X SECURE PASSWORD",
+          subject = "MAPX SECURE PASSWORD",
           wait = F
           )
 
@@ -134,7 +143,7 @@ observeEvent(input$btnSendLoginKey,{
       id="txtLoginDialog",
       text=msg
       )
-})
+  })
 })
 
 #
@@ -180,7 +189,7 @@ observe({
 
     }
 
-})
+  })
 })
 
 #
@@ -209,8 +218,8 @@ observeEvent(reactData$loginRequested,{
       reactData$onLoggedIn()
       reactData$onLoggedIn <- NULL
     }
-          
-})
+
+  })
 })
 
 

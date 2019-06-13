@@ -39,7 +39,6 @@ config$version = jsonlite::fromJSON('package.json')$version
 config[["mode"]] <- c()
 
 
-
 #
 # Brower config
 #
@@ -274,7 +273,7 @@ config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_
 
 # text template
 config[[c("templates","text")]] <-  list()
-config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
+#config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
 config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
 config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
 config[[c("templates","text","custom_view")]] <- paste(readLines("src/templates/custom_view.js"),collapse="\n")
@@ -331,6 +330,15 @@ config[["project"]] <- list(
     )
   )
 
+#
+# Root mode
+#
+config[["root_mode"]] <- list(
+  #
+  # Members of the root group
+  #
+  members = c(1) 
+  )
 
 #
 # countries configuration

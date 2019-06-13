@@ -5,7 +5,7 @@ keyStatus <- reactive({
   mxCatch(title="Key status reactive obj.",{
     key <- gsub("[[:blank:]]","",input$loginKey)
     timer <- reactData$loginTimerEndAt
-    secret <- reactData$loginSecret
+    secret <- reactData$loginToken
 
     isolate({
       isEmpty = isTRUE(is.null(key)) || isTRUE(nchar(key)==0)

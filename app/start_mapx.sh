@@ -30,6 +30,7 @@ CONF_MAPX="\
   config[['pg']][['host']] <- '$POSTGRES_HOST'\n\
   config[['project']][['default']] <- '$MAPX_PROJECT_DEFAULT'\n\
   config[['project']][['creation']][['usersAllowed']] <- jsonlite::fromJSON('$MAPX_PROJECT_CREATORS')\n\
+  config[['root_mode']][['members']] <- jsonlite::fromJSON('$MAPX_ROOT_MODE_MEMBERS')\n\
   config[['map']][['token']] <- '$MAPX_MAPBOX_TOKEN'\n\
   config[['geoserver']][['url']] <- '$GEOSERVER_URL'\n\
   config[['geoserver']][['urlPublic']] <- '$GEOSERVER_URL_PUBLIC'\n\

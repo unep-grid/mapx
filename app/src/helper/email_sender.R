@@ -17,7 +17,7 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
     subject = "MapX"
   }
 
-  if(noDataCheck(body)){
+  if(noDataCheck(body) && noDataCheck(bodyHTML)){
     stop("empty message")
   }else{
     body <- as.character(body)
@@ -45,20 +45,15 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
 
   data = toJSON(list(msg = msg ),auto_unbox=T)
 
-  if( F && Sys.getenv("API_PORT") != "80" ){
-    mxDebugMsg(msgClear)
-    return("ok")
-  }
-
   host <-  .get(config,c("api","host")) 
-  url <- "http://api:3030/send/mail"
+  url <- "http://api:3333/send/mail"
   h <- new_handle(copypostfields = data)
   handle_setheaders(h,
     "Content-Type" = "application/json",
     "Cache-Control" = "no-cache",
     "Host" = host 
     )
-  
+
   req <- curl_fetch_memory(url, handle = h)
   
   res <- fromJSON(rawToChar(req$content))
