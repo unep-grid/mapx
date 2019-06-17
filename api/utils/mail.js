@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 //var auth = require("./authentification.js");
 var mailAdmin = settings.mail.config.admin;
 var decrypt = require("./db.js").decrypt;
+var htmlToText = require("html-to-text");
 
 module.exports.sendMailApi = [
   bodyParser.urlencoded({ extended: false }),
@@ -45,6 +46,11 @@ function sendMailApi(req,res){
           }
         }
       });
+
+
+      if(!conf.text && conf.html){
+         conf.text =  htmlToText.fromString(conf.html);
+      }
 
       if(!issues){
         var d = new Date();

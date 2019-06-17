@@ -86,14 +86,14 @@ observeEvent(input$btnSendLoginKey,{
       #
       res <- try({
 
-        template <- d('login_single_use_password_email',language)
-
-        text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginToken,template)
+        templateHtml <- d('login_single_use_password_email',language)
+        emailHtml <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginToken,templateHtml)
 
         res <- mxSendMail(
           from = .get(config,c("mail","bot")),
           to = email,
-          bodyHTML = text,
+          bodyHTML = emailHtml,
+          body = "",
           type = "text",
           subject = "MAPX SECURE PASSWORD",
           wait = F
