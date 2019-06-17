@@ -143,13 +143,24 @@ observeEvent(input$btnSendRequestMembershipMessage,{
     language <- reactData$language
     projectRequestData <- reactData$requestProjectMembership
     project <- projectRequestData$id
+    
     projectData <- mxDbGetProjectData(project)
     projectTitle <- projectData$title[language]
     projectAdmin <- projectData$admins
-    nAdmins <- length(projectAdmin)
-    if( nAdmins>1 ) projectAdmin <- projectAdmin[ceiling(runif(1)*nAdmins)]
-    emailAdmin <- mxDbGetEmailListFromId(projectAdmin)
+    projectContact <- projectData$contacts
+
+    if( !noDataCheck(projectContact) ){
+      nContacts <- length(projectContact)
+      if( nContacts > 1 ) projectContact <- projectContact[ceiling(runif(1)*nContacts)]
+      emailContact <- mxDbGetEmailListFromId(projectContact)
+    }else{
+      nAdmins <- length(projectAdmin)
+      if( nAdmins>1 ) projectAdmin <- projectAdmin[ceiling(runif(1)*nAdmins)]
+      emailContact <- mxDbGetEmailListFromId(projectAdmin)
+    }
     
+
+
     #
     # TO REMOVE IN PROD
     #
@@ -159,7 +170,7 @@ observeEvent(input$btnSendRequestMembershipMessage,{
     emailUserIsRegistered <- mxDbEmailIsKnown()
     urlAction <- mxCreateEncryptedUrlAction("confirmregister",list(
         emailUser = emailUser,
-        emailAdmin = emailAdmin,
+        emailAdmin = emailContact,
         project = project,
         role = "member"
         ))
@@ -175,7 +186,7 @@ observeEvent(input$btnSendRequestMembershipMessage,{
 
     res <- mxSendMail(
       from = emailUser,
-      to = emailAdmin,
+      to = emailContact,
       body = msgRequest,
       subject = "[ membership request ]" + projectTitle    
       )

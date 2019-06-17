@@ -322,6 +322,7 @@ mxDbGetProjectUserRoles <- function(idUser,idProject){
     members @> '[" + idUser +"]' as member,
     publishers @> '[" + idUser +"]' as publisher,
     admins  @> '[" + idUser +"]'  as admin,
+    contacts  @> '[" + idUser +"]'  as contact,
     public
     FROM mx_projects
     WHERE id='" + idProject + "' OR id_old='"+ idProject +"'
@@ -384,7 +385,7 @@ mxDbGetProjectData <- function(idProject){
   for(i in 1:length(projectData)){
      p <- projectData[i]
      n <- names(p)
-     if( n %in% c("title","description","admins","members","publishers","map_position","countries")){
+     if( n %in% c("title","description","admins","members","publishers","contacts","map_position","countries")){
        projectData[[i]] <- fromJSON(p[[1]],simplifyDataFrame=FALSE)
      }
   }
@@ -493,12 +494,13 @@ mxDbGetProjectMembers <- function(idProject){
   members <- mxDbGetQuery("SELECT json_build_object(
     'members', members || publishers || admins,
     'publishers', publishers || admins,
-    'admins', admins
+    'admins', admins,
+    'contacts', contacts
     ) as members from mx_projects where id='" + idProject + "'")
 
   members <- fromJSON(members$members) 
 
-  sapply(c("members","publishers","admins"),function(m){
+  sapply(c("members","publishers","admins","contacts"),function(m){
     group <- unique(as.list(members[[m]]))
     if(!noDataCheck(group)){
       group[sapply(group,is.character)] <- NULL 

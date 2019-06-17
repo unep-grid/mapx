@@ -59,6 +59,13 @@ observeEvent(input$btnShowRoleManager,{
           plugins = list("remove_button")
           )
         ),
+      selectizeInput(
+        "selectProjectContacts",
+        label = d("list_contacts",language,web=F),
+        selected = unique(userList$contacts),
+        choices = userList$admins,
+        multiple = FALSE
+        ),
         tags$div(style="height:300px;")
       )
 
@@ -78,65 +85,6 @@ observeEvent(input$btnShowRoleManager,{
   }
 
 })
-
-##
-## Remove publishers and admins if there are removed from members
-##
-#observeEvent(input$selectProjectMembers,{
-  #members <- input$selectProjectMembers 
-  #admins <- input$selectProjectAdmins
-  #publishers <- input$selectProjectPublishers
-  
-  #newAdmins <- admins[admins %in% members]
-  #newPublishers <- publishers[publishers %in% members]
-
-  #if( !identical(admins,newAdmins) ){
-    #updateSelectizeInput(session,"selectProjectAdmins",selected=newAdmins)  
-  #}
-  #if( !identical(publishers,newPublishers) ){
-    #updateSelectizeInput(session,"selectProjectPublishers",selected=newPublishers)  
-  #}
-
-#})
-##
-## Remove  admins if there are removed from publishers
-## Add publishers to members if needed
-##
-#observeEvent(input$selectProjectPublishers,{
-  #members <- input$selectProjectMembers
-  #admins <- input$selectProjectAdmins
-  #publishers <- input$selectProjectPublishers
-  
-  #newAdmins <- admins[admins %in% publishers]
-  #newMembers <- unique(c(members,publishers))
-
-  #if( !identical(admins,newAdmins) ){
-    #updateSelectizeInput(session,"selectProjectAdmins",selected=newAdmins)  
-  #}
-  #if( !identical(members,newMembers) ){
-    #updateSelectizeInput(session,"selectProjectMembers",selected=newMembers)
-  #}
-#})
-
-##
-## Add admins to members and publishers if needed
-##
-#observeEvent(input$selectProjectAdmins,{
-  #members <- input$selectProjectMembers
-  #admins <- input$selectProjectAdmins
-  #publishers <- input$selectProjectPublishers
-  
-  #newMembers <- unique(c(admins,members))
-  #newPublishers <- unique(c(admins,publishers))
-
-  #if( !identical(publishers,newPublishers) ){
-    #updateSelectizeInput(session,"selectProjectPublishers",selected=newPublishers)  
-  #}
-  #if( !identical(members,newMembers) ){
-    #updateSelectizeInput(session,"selectProjectMembers",selected=newMembers)
-  #}
-#})
-
 
 #
 # Validation of roles
@@ -187,17 +135,21 @@ observeEvent(input$btnSaveProjectConfigRoles,{
     oldMembers <- as.numeric(userList$members)
     oldPublishers <- as.numeric(userList$publishers)
     oldAdmins <- as.numeric(userList$admins)
+    oldContacts <- as.numeric(userList$contacts)
     members <- as.numeric(input$selectProjectMembers)
     admins <- as.numeric(input$selectProjectAdmins)
     publishers <- as.numeric(input$selectProjectPublishers)
+    contacts <- as.numeric(input$selectProjectContacts)
 
     res <- list(
       new_members = members[ ! members %in% oldMembers ],
       new_publishers = publishers[ ! publishers %in% oldPublishers ],
       new_admins = admins[ ! admins %in% oldAdmins ],
+      new_contacts = contacts[ ! contacts %in% oldContacts ],
       rem_members = oldMembers[ ! oldMembers %in% members ],
       rem_publishers = oldPublishers[ ! oldPublishers %in% publishers ],
-      rem_admins = oldAdmins[ ! oldAdmins %in% admins ]
+      rem_admins = oldAdmins[ ! oldAdmins %in% admins ],
+      rem_contacts = oldContacts[ ! oldContacts %in% contacts ]
       )
 
     res <- sapply(res,mxDbGetEmailListFromId)
@@ -244,6 +196,7 @@ observeEvent(input$btnConfirmProjectConfigRoles,{
     members <- as.integer(input$selectProjectMembers)
     admins <- as.integer(input$selectProjectAdmins)
     publishers <- as.integer(input$selectProjectPublishers)
+    contacts <- as.integer(input$selectProjectContacts)
 
       mxDbUpdate(
         table = "mx_projects",
@@ -260,6 +213,23 @@ observeEvent(input$btnConfirmProjectConfigRoles,{
         column = 'publishers',
         value = as.list(unique(publishers))
         )
+
+      mxDbUpdate(
+        table = "mx_projects",
+        idCol = 'id',
+        id = project,
+        column = 'contacts',
+        value = as.list(unique(contacts))
+        )
+
+      mxDbUpdate(
+        table = "mx_projects",
+        idCol = 'id',
+        id = project,
+        column = 'publishers',
+        value = as.list(unique(publishers))
+        )
+
 
       if(!noDataCheck(admins)){
         mxDbUpdate(
