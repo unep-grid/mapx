@@ -1,4 +1,11 @@
+
 ## Changelog
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.54">1.5.54</a>
+    - Improvement 
+      - APP 
+        - Added new contact field in project's role settings 
+      - APP/API
+        - Added text version of html email messages
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.53">1.5.53</a>
     - New feature
       - APP 
