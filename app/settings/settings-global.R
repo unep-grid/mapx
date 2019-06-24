@@ -64,34 +64,48 @@ config[["api"]] <- list(
   port_public = 8888,
   host = "localhost",
   host_public = "locahost",
-  protocol = "http:"
+  protocol = "http:",
+  routes = list(
+    tiles =  '/get/tile/{x}/{y}/{z}.mvt',
+    views =  '/get/view/',
+    sourceMetadata =  '/get/source/metadata/',
+    viewMetadata =  '/get/view/metadata/',
+    sourceOverlap =  '/get/source/overlap/',
+    sourceValidateGeom =  '/get/source/validate/geom',
+    getSourceTableAttribute =  '/get/source/table/attribute',
+    getViews =  '/get/views/',
+    downloadSourceCreate =  '/get/source/',
+    downloadSourceGet =  '',
+    uploadImage =  '/upload/image/',
+    uploadVector =  '/upload/vector/'
+    )
   )
 
 #
 # postgres configuration
 #
 config[["pg"]] = list(
-    host ='127.0.0.1',
-    dbname = 'mapx',
-    port = '5432',
-    user = 'mapxw',
-    read = list(
-      user = "mapxr",
-      password=""
-      ),
-    encryptKey = "",
-    password= "",
-    conPool = 5,
-    geomCol = "geom",
-    tables = list(
-      "logs"="mx_logs",
-      "users"="mx_users",
-      "views"="mx_views",
-      "views_latest"="mx_views_latest",
-      "projects"="mx_projects",
-      "sources"="mx_sources",
-      "config"="mx_config"
-      )
+  host ='127.0.0.1',
+  dbname = 'mapx',
+  port = '5432',
+  user = 'mapxw',
+  read = list(
+    user = "mapxr",
+    password=""
+    ),
+  encryptKey = "",
+  password= "",
+  conPool = 5,
+  geomCol = "geom",
+  tables = list(
+    "logs"="mx_logs",
+    "users"="mx_users",
+    "views"="mx_views",
+    "views_latest"="mx_views_latest",
+    "projects"="mx_projects",
+    "sources"="mx_sources",
+    "config"="mx_config"
+    )
   )
 
 #
@@ -123,13 +137,13 @@ config[["geoserver"]] = list(
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
 config[["resources"]]  =  list(
-      "data"  = file.path("src","data"),
-      "sprites" = file.path("src","sprites"),
-      "src" = file.path("src"),
-      "dist" = file.path("www"),
-      "userdata" = file.path("./userdata"), ## expected shared folder from vagrant
-      "download" = file.path("/tmp/mapx/download")
-    )
+  "data"  = file.path("src","data"),
+  "sprites" = file.path("src","sprites"),
+  "src" = file.path("src"),
+  "dist" = file.path("www"),
+  "userdata" = file.path("./userdata"), ## expected shared folder from vagrant
+  "download" = file.path("/tmp/mapx/download")
+  )
 
 #
 # create temp dirs if not exists
@@ -182,12 +196,11 @@ config[["map"]] <- list(
   maxZoom = 22,
   minZoom = 0,
   token = "",
-  id = "map_main",
-  idViewsListContainer = "viewListContainer", # include filters and search field
-  idViewsList = "viewListContent", # include views
-  paths = list(
-    sprite = "sprites/sprite"
-    )
+  id = "map_main"
+  )
+
+config[['paths']] = list(
+  sprite = "sprites/sprite"
   )
 
 
@@ -195,6 +208,13 @@ config[["map"]] <- list(
 # Default ui and map colors
 #
 config[["ui"]] <- list(
+  ids = list(
+    idViewsListContainer = "viewListContainer", # include filters and search field
+    idViewsList = "viewListContent", # include views
+    idDashboards= "mxDashboards",
+    idDashboardsButton= "btnTabDashboard",
+    idDashboardsPanel= "mxDashboardsPanel"
+    ),
   colors = list(
     default = list(
       "mx_ui_text" = "rgba(53,53,53,1)",
@@ -299,6 +319,9 @@ config[["languages"]][["list"]] <- list(
   )
 config[["languages"]][["codes"]] <- unlist(config[["languages"]][["list"]])
 
+config[["language"]] <- list(
+  "default"="en"
+  )
 #
 # Dictionnary of badwords for the profanity checker
 #
@@ -307,7 +330,7 @@ config[["badwords"]] = list(
     config[[c("resources","data")]],
     "badwords"
     ),
-   "words" = list()
+  "words" = list()
   )
 
 for(l in .get(config,c("languages","list"))){

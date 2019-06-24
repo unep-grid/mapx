@@ -210,7 +210,7 @@ observeEvent(reactData$loginRequested,{
 
     reactUser$data <- userInfo$info;
     reactUser$token <- userInfo$token;
-
+ 
     #
     # Execute login callback
     #

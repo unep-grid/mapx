@@ -97,9 +97,7 @@ systemTools <- tagList(
 version <- tagList(
   tags$div(
     tags$hr(),
-    tags$small( class="text-muted","Version app server :",tags$span(class="text-muted",config$version)),
-    tags$br(),
-    tags$small( class="text-muted","Version app client :",tags$span(class="text-muted",id="mxVersion"))
+    tags$small( class="text-muted","Version",tags$span(class="text-muted",config$version))
     )
   )
 # View and source edit buttons. Generated in tools_manage.R

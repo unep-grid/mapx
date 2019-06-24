@@ -45,6 +45,10 @@ observe({
       }
     }
     mxUpdateUrlParams(list(language=lang_out)) 
+    mxUpdateSettings(list(
+          language = lang_out
+          ))
+
     reactData$language <- lang_out
   })
 })

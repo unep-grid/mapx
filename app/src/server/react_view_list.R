@@ -138,33 +138,11 @@ reactViewsCheckedList <- reactive({
   viewsStatus <- input[[eventMapViewsStatus]]
   viewsChecked <- .get(viewsStatus,c("vChecked"),default=list())
   if(noDataCheck(viewsChecked)){
-   viewsChecked = list()
+    viewsChecked = list()
   }
   return(viewsChecked)
 })
 
-
-
-reactViewsCountByProjects <- reactive({
-
-  out <- data.frame(count=integer(0),id=character(0))
-  timer <- mxTimeDiff("Fetching all view count")
-
-  #
-  # Ivalidated by :
-  #
-  update <- reactData$updateViewList
-  updateFetchOnly <- reactData$updateViewListFetchOnly
-  userData <- reactUser$data
-  project <- reactData$project
-  language <- reactData$language
-  idUser <- userData$id
-  out  <- mxDbGetProjectsViewsCount(idUser)
-
-  mxTimeDiff(timer)
-  return(out)
-
-})
 
 
 reactViewsExternal <- reactive({
@@ -185,6 +163,20 @@ reactViewsExternal <- reactive({
 
 })
 
+reactViewsCompactApi <- reactive({
+  userData <- reactUser$data
+  token <- reactUser$token
+  idProject <- reactData$project
+  idUser <- userData$id
+  language <- reactData$language
 
+  mxApiFetch('/get/views/',list(
+      token = token,
+      idProject = idProject,
+      idUser = idUser,
+      selectString = "id,pid,type,project,_edit,_title,_source"
+      ))
+
+})
 
 

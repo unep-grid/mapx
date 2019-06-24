@@ -91,7 +91,7 @@ observeEvent(input$storyEdit_values,{
     #
     # Add missing views refs
     #
-    view <- updateStoryViews(
+    view <- mxUpdateStoryViews(
       story = story,
       view = view,
       allViews = allViews

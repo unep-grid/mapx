@@ -17,6 +17,8 @@ observe({
     if(noDataCheck(project)) return()
     if(noDataCheck(language)) return()
 
+    #dd <- reactViewsProject()
+
     timer <- mxTimeDiff("Init map")
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
@@ -25,45 +27,10 @@ observe({
     # Set map options
     # 
     mapConfig <- list(
-      #
-      # Log level to report
-      #
-      dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
-      #
-      # Intial views
-      #
       viewsList = reactViewsCompact(),
       viewsCompact = TRUE,
-      #
-      # Api settings base url
-      #
-      apiPort = .get(config,c("api","port_public")),
-      apiHost = .get(config,c("api","host_public")),
-      #
-      # Default from user
-      #
-      project = project,
-      language = language,
-      mapPosition = mapPos,
-      #
-      # value from config
-      # 
-      id = .get(config,c("map","id")), 
-      paths = .get(config,c("map","paths")),
-      token = .get(config,c('map','token')),
-      minZoom = .get(config,c("map","minZoom")),
-      maxZoom = .get(config,c("map","maxZoom")),
-      languages = .get(config,c("languages","codes")),
-      countries =  .get(config,c("countries","table","id")),
-      #
-      # Colorscheme
-      #
-      colorScheme =  query$style,
-      #
-      # Elements : id of element for listener setting
-      #
-      idViewsList = .get(config,c("map","idViewsList")),
-      idViewsListContainer = .get(config,c("map","idViewsListContainer"))
+      mapPosition = mapPos, 
+      colorScheme =  query$style
       )
 
     # init map
@@ -73,11 +40,9 @@ observe({
 })
 
 
-
 observe({
-  eventMapName <-  sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
+  eventMapName <- sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
   map <- input[[eventMapName]]
-  isReady <- !noDataCheck(map)
-  reactData$mapIsReady <- isReady
+  reactData$mapIsReady <- !noDataCheck(map)
 })
 

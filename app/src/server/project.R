@@ -73,7 +73,7 @@ observe({
     # Check roles, change project, set roles, log action
     #
     if(!noDataCheck(project_out)){
-     
+
       project_out <- toupper(project_out)
 
       #
@@ -103,6 +103,13 @@ observe({
       # Update browser query parameter
       #
       mxUpdateUrlParams(list(project = project_out))
+      mxUpdateSettings(list(
+          project = project_out
+          ))
+      mxUpdateSettingsUser(list(
+        roles = roles
+        ));
+
     }
 
   })

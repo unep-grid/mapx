@@ -3,7 +3,22 @@
 #
 server <- function(input,output,session){
 
-
+  mxUpdateSettings(
+    #
+    # See all defaults in /src/js/mx_settings_default.js
+    #
+    list(
+      api = .get(config,c("api")),
+      dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
+      language = .get(config,c("language","default")),
+      languages = .get(config,c("languages","codes")),
+      project =  .get(config,c("project","default")),
+      countries =.get(config,c("countries","table","id")),
+      map = .get(config,c("map")),
+      paths = .get(config,c("paths")),
+      ui = .get(config,c("ui"))
+      )
+    )
 
   #
   # As soon as the document is ready, source every listeners
@@ -26,6 +41,7 @@ server <- function(input,output,session){
     # Launch init
     #
     mxCatch(title="MapX main process",{
+
 
       if("MAINTENANCE" %in% .get(config,c("mode"))){
 
@@ -68,6 +84,7 @@ server <- function(input,output,session){
             # in cookie, for fingerprinting
             #
             userInfo <- mxLogin(email,browserData, query);
+
             reactUser$data <- userInfo$info;
             reactUser$token <- userInfo$token;
 

@@ -5,6 +5,7 @@
 #' @return {List} user data
 mxLogin <- function(email,browserData,query){
 
+  isReactiveContext <- !noDataCheck(shiny:::getDefaultReactiveDomain())
   hasExpired <- FALSE
   hasInvalidMail <- FALSE
 
@@ -76,7 +77,7 @@ mxLogin <- function(email,browserData,query){
   userTable <-  .get(config,c("pg","tables","users"))
 
   # check if the account is "guest"
-  isGuest <- isGuest || isTRUE(email == .get(config,c("mail","guest")))
+  isGuest <- isTRUE(isGuest) || isTRUE(email == .get(config,c("mail","guest")))
 
   if( newAccount ){
 
@@ -147,10 +148,10 @@ mxLogin <- function(email,browserData,query){
   #
   if( !isGuest && (useAutoRegister || useConfirmMembership ) && !noDataCheck(forceProject) ){
     mxDbUpdate(
-      table=userTable,
-      idCol='id',
-      id=res$id,
-      column='data',
+      table = userTable,
+      idCol = 'id',
+      id = res$id,
+      column = 'data',
       path = c("user","cache","last_project"),
       value = forceProject
       )
@@ -185,24 +186,35 @@ mxLogin <- function(email,browserData,query){
   # Save user id in mx.settings.user.id
   #
   token <- mxDbEncrypt(list(
-    token = ifelse(isGuest,"",res$key),
-    valid_until = as.numeric(Sys.time()) + 2 * 86400
-    ))
-  
-  mglSetUserData(list(
-      id = res$id,
-      guest = isGuest,
-      email =  ifelse(isGuest,"",email),
-      token = token
-      ));
+      token = ifelse(isGuest,"",res$key),
+      valid_until = as.numeric(Sys.time()) + 2 * 86400
+      ))
+
+  userInfo <- mxDbGetUserInfoList(id=res$id)
+
+  if( isReactiveContext ){
+    mxUpdateSettingsUser(list(
+        id = res$id,
+        guest = isGuest,
+        email =  ifelse(isGuest,"",userInfo$email),
+        token = token
+        ));
+  }
+
   #
   # Get user info
   #
   mxDebugMsg(" User " + email +" loged in.")
+
+  #
+  # Return user info data
+  #
   return(list(
-      info = mxDbGetUserInfoList(id=res$id),
+      isGuest = isGuest,
+      info = userInfo,
       token = token
       ))
+
 
 }
 
@@ -218,7 +230,7 @@ mxInitBrowserData <- function(browserData,callback){
   maxSecondsValid <- .get(config,c("users","cookieExpireDays")) * 86400
   emailGuest <- .get(config,c("mail","guest"))
   emailUser <- NULL
-  
+
   #
   # Check that the account exists
   #
@@ -246,12 +258,12 @@ mxInitBrowserData <- function(browserData,callback){
     hasNoError <- !isTRUE("try-error" %in% class(dat))
     hasLength <- isTRUE(length(cookieData)>0)
     browserParams <- .get(config,c("browser","params"))
-    
+
     hasExpectedKeys <- isTRUE(all(c(
-        browserParams %in% names(cookieData),
-        browserParams %in% names(browserData)
-        )))
-        
+          browserParams %in% names(cookieData),
+          browserParams %in% names(browserData)
+          )))
+
     if( hasNoError && hasLength && hasExpectedKeys){
 
       #
@@ -297,7 +309,7 @@ mxParseCookies <- function(str){
 
   out <- list()
   if(!noDataCheck(str)){
-    
+
     pairs <- strsplit(str,"; ",fixed=T)[[1]]
 
     for(p in pairs){
@@ -306,7 +318,7 @@ mxParseCookies <- function(str){
       value <- dat[[2]]
       out[[key]] <- value
     } 
-    }
-    return(out)
+  }
+  return(out)
 }
 
