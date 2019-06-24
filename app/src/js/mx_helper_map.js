@@ -28,8 +28,8 @@ export function metersToDegrees(point) {
  */
 export function getApiUrl(id) {
   var s = mx.settings;
-  var urlBase = s.apiProtocol + '//' + s.apiHost + ':' + s.apiPort;
-  return urlBase + s.apiRoute[id];
+  var urlBase = s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
+  return urlBase + s.api.routes[id];
 }
 
 /**
@@ -42,26 +42,7 @@ export function getAppPathUrl(id) {
   return loc + '/' + s.paths[id];
 }
 
-/**
- * Update settings
- * @param {Options} o Option with key from settings. Overwrite settings values.
- */
-export function updateSettings(o) {
-  var s = mx.settings;
-  Object.keys(s).forEach((k) => {
-    mx.settings[k] = o[k] || s[k];
-  });
-}
 
-/**
- * Settings of the user
- * @param {Object} o Object that contains user data such as id, email, nickname, etc..
- */
-export function setUserData(o) {
-  for (var i in o) {
-    mx.settings.user[i] = o[i];
-  }
-}
 
 /**
  * Set the project manually
@@ -105,149 +86,95 @@ export function requestProjectMembership(idProject) {
  * @param {Object} o.apiUrl Base url for api
  */
 export function initMapx(o) {
-  return mx.helpers.moduleLoad('mapbox-gl-js').then((mapboxgl) => {
-    mx.mapboxgl = mapboxgl;
+  var mp, map;
 
-    var mp;
-    var style = mx.settings.style;
+  o = o || {}; 
+  o.id = o.id || mx.settings.map.id;
+  mp = o.mapPosition || {};
+ 
+  /**
+   * Init mgl data store
+   */
+  if (!mx.maps) {
+    mx.maps = {};
+  }
 
-    if (o.style) {
-      style = o.style;
-    }
-    /**
-     * Set db log levels
-     */
-    if (o.dbLogLevels) {
-      mx.settings.dbLogLevels = o.dbLogLevels;
-    }
+  /**
+   * Mgl data : keep reference on options, listener, views, etc...
+   */
+  mx.maps[o.id] = {
+    map: {},
+    listener: {},
+    views: o.viewsList || mx.maps[o.id].views
+  };
+  
+  /*
+   * workeround for centering based in bounds.
+   * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970
+   */
+  if (o.fitToViewsBounds === true || mp.bounds) {
+    mp.center = mp.bounds.getCenter();
+  }
 
-    /**
-     * Confirm user quit
-     */
+  /**
+   * Set mapbox gl token
+   */
+  mx.mapboxgl.accessToken = mx.settings.map.token;
 
-    if (false) {
-      window.onbeforeunload = function(e) {
-        var dialogText = 'Are you sure you want to quit?';
-        e.returnValue = dialogText;
-        return dialogText;
-      };
-    }
+  /**
+   * Update  sprites path
+   */
+  mx.style.sprite = getAppPathUrl('sprite');
 
-    /**
-     * Set mapbox gl token
-     */
-    if (!mx.mapboxgl.accessToken) {
-      mx.mapboxgl.accessToken = o.token || mx.settings.mapboxToken || '';
-    }
+  /**
+   * TEst if mapbox gl is supported
+   */
+  if (!mx.mapboxgl.supported()) {
+    alert(
+      'This website will not work with your browser. Please upgrade it or use a compatible one.'
+    );
+    return;
+  }
 
-    /**
-     * TEst if mapbox gl is supported
-     */
-    if (!mx.mapboxgl.supported()) {
-      alert(
-        'This website will not work with your browser. Please upgrade it or use a compatible one.'
-      );
-      return;
-    }
+ 
+  /* map options */
+  var mapOptions = {
+    container: o.id, // container id
+    style: mx.style,
+    maxZoom: mx.settings.map.maxZoom,
+    minZoom: mx.settings.map.minZoom,
+    preserveDrawingBuffer: false,
+    attributionControl: false,
+    zoom: mp.z || mp.zoom || 5,
+    bearing: mp.bearing || 0,
+    pitch: mp.pitch || 0,
+    center: mp.center || [mp.lng || 0, mp.lat || 0]
+  };
 
-    /**
-     * Set default
-     */
-    o.maxZoom = o.maxZoom || 20;
-    o.minZoom = o.minZoom || 0;
+  /*
+   * Create map object
+   */
+  o.map = new mx.mapboxgl.Map(mapOptions);
+  mx.maps[o.id].map = o.map;
 
-    updateSettings({
-      apiProtocol: o.apiProtocol || location.protocol,
-      apiPort: o.apiPort || location.port,
-      apiHost: o.apiHost,
-      project: o.project,
-      language: o.language,
-      languages: o.languages,
-      mapboxToken: o.token
-    });
+  /**
+   * Continue according to mode
+   */
+  if (!mx.settings.modeKiosk) {
+    mx.helpers.initMapxApp(o);
+    mx.helpers.initLog();
+  }
 
-    /*
-     * Update version
-     */
-    if (true) {
-      var elVersion = document.getElementById('mxVersion');
-      if (elVersion) {
-        elVersion.innerText = mx.helpers.getVersion().join('.');
-      }
-    }
-
-    /**
-     * Init mgl data store
-     */
-
-    if (!mx.maps) {
-      mx.maps = {};
-    }
-    /**
-     * Mgl data : keep reference on options, listener, views, etc...
-     */
-    mx.maps[o.id] = {
-      options: o,
-      map: {},
-      listener: {},
-      views: o.viewsList || mx.maps[o.id].views,
-      style: style
-    };
-
-    style.sprite = getAppPathUrl('sprites');
-    o.mapPosition = o.mapPosition || {};
-    mp = o.mapPosition;
-    //mx.maps[o.id].style = style;
-
-    /*
-     * workeround for centering based in bounds.
-     * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970
-     */
-    if (o.fitToViewsBounds === true || mp.bounds) {
-      mp.center = mp.bounds.getCenter();
-    }
-
-    /* map options */
-    var mapOptions = {
-      container: o.id, // container id
-      style: style,
-      maxZoom: o.maxZoom,
-      minZoom: o.minZoom,
-      preserveDrawingBuffer: false,
-      attributionControl: false,
-      zoom: mp.z || mp.zoom || 5,
-      bearing: mp.bearing || 0,
-      pitch: mp.pitch || 0,
-      center: mp.center || [mp.lng || 0, mp.lat || 0]
-    };
-
-    /*
-     * Create map object
-     */
-    var map = new mx.mapboxgl.Map(mapOptions);
-    mx.maps[o.id].map = map;
-    o.map = map;
-
-    /**
-     * Continue according to mode
-     */
-    if (!mx.settings.modeKiosk) {
-      mx.helpers.initMapxApp(o);
-      mx.helpers.initLog();
-    }
-
-    /**
-     * Resolve with the map object
-     */
-    return map;
-  });
+  /**
+   * Resolve with the map object
+   */
+  return map;
 }
 
 export function initMapxApp(o) {
   var map = o.map;
   var elMap = document.getElementById(o.id);
   var hasShiny = !!window.Shiny;
-  //var mp = o.mapPosition;
 
   if (!elMap) {
     alert('Map element with id ' + o.id + ' not found');
@@ -258,8 +185,6 @@ export function initMapxApp(o) {
    * Send loading confirmation to shiny
    */
   o.map.on('load', function() {
-    //mx.helpers.mapComposerModalAuto();
-    //return;
     /*
      * Init pixop
      */
@@ -281,7 +206,7 @@ export function initMapxApp(o) {
         id: o.id,
         viewsList: o.viewsList,
         viewsCompact: o.viewsCompact === true,
-        project: o.project,
+        project: o.project || mx.settings.project,
         resetViews: true
       })
       .then(function() {
@@ -309,14 +234,6 @@ export function initMapxApp(o) {
         colors: o.colorScheme
       });
     }
-
-    /*
-     *  First map language
-     */
-    mx.helpers.updateLanguage({
-      lang: o.language,
-      id: o.id
-    });
 
     /*
      * If shiny, trigger read event
@@ -357,15 +274,6 @@ export function initMapxApp(o) {
       throw new Error(msg);
     });
 
-    map.resize2 = function() {
-      var elContainer = this._container;
-      var rect = elContainer.getBoundingClientRect();
-      var w = rect.width;
-      var h = rect.height;
-      this.transform.resize(w, h);
-      this.painter.resize(w, h);
-    };
-
     /**
      * Mouse move handling
      */
@@ -388,17 +296,6 @@ export function initMapxApp(o) {
       northArrow.style[mx.helpers.cssTransformFun()] =
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
-/*    map.on('moveend', function() {*/
-      //var c = map.getCenter();
-      //var z = map.getZoom();
-      //mx.helpers.objToState({
-        //data: {
-          //lat: c.lat,
-          //lng: c.lng,
-          //zoom: z
-        //}
-      //});
-    /*});*/
   });
 
   /**
@@ -498,7 +395,7 @@ export function geolocateUser() {
   var lang = mx.settings.language;
   var hasGeolocator = !!navigator.geolocation;
 
-  var o = {idMap: mx.settings.idMapDefault};
+  var o = {idMap: mx.settings.map.id};
   var classesHtml = document.documentElement.classList;
   classesHtml.add('shiny-busy');
   var map = getMap(o.idMap);
@@ -605,7 +502,7 @@ export function cleanRemoveModules(view) {
   view =
     typeof view === 'string'
       ? mx.helpers.getViews({
-          id: mx.settings.idMapDefault,
+          id: mx.settings.map.id,
           idView: view
         })
       : view;
@@ -1023,7 +920,7 @@ export function viewControler(o) {
     vVisible = [],
     vChecked = [];
   var view, isChecked, id, viewDuration;
-  var idMap = o.id || mx.settings.idMapDefault;
+  var idMap = o.id || mx.settings.map.id;
   var idViewsList = o.idViewsList || 'mx-views-list';
   var els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
@@ -1410,7 +1307,7 @@ export function moveViewItem(o) {
     }
   }
   updateViewOrder({
-    id: mx.settings.idMapDefault
+    id: mx.settings.map.id
   });
 }
 
@@ -1510,7 +1407,7 @@ export function sortViewsListBy(o) {
   });
 
   mx.helpers.updateViewOrder({
-    id: o.id || o.idMap || mx.settings.idMapDefault
+    id: o.id || o.idMap || mx.settings.map.id
   });
 
   function getValue(el) {
@@ -2348,7 +2245,7 @@ export function viewSetFilter(o) {
   var filters = view._filters;
   var filterNew = ['all'];
   var type = o.type ? o.type : 'default';
-  var idMap = view._idMap ? view._idMap : mx.settings.idMapDefault;
+  var idMap = view._idMap ? view._idMap : mx.settings.map.id;
   var m = mx.helpers.getMap(idMap);
   var layers = mx.helpers.getLayerByPrefix({id: idMap, prefix: idView});
 
@@ -2388,7 +2285,7 @@ export function viewSetOpacity(o) {
   var view = this;
   var idView = view.id;
   var opacity = o.opacity;
-  var idMap = view._idMap ? view._idMap : mx.settings.idMapDefault;
+  var idMap = view._idMap ? view._idMap : mx.settings.map.id;
   var map = mx.helpers.getMap(idMap);
   var layers = mx.helpers.getLayerByPrefix({
     map: map,
@@ -2728,7 +2625,7 @@ function addViewCc(o) {
 
     mx.helpers.removeLayersByPrefix({
       prefix: opt.idView,
-      id: mx.settings.idMapDefault
+      id: mx.settings.map.id
     });
 
     view._onRemoveCustomView = function() {
@@ -4119,7 +4016,7 @@ export function flyTo(o) {
 export function btnToggleLayer(o) {
   var shades;
 
-  o.id = o.id || mx.settings.idMapDefault;
+  o.id = o.id || mx.settings.map.id;
   var map = mx.helpers.getMap(o.id);
   var btn = document.getElementById(o.idSwitch);
   var lay = map.getLayer(o.idLayer);
@@ -4256,7 +4153,7 @@ export function getViewLegend(id, opt) {
  * @return {Object} map
  */
 export function getMap(idMap) {
-  idMap = idMap || mx.settings.idMapDefault;
+  idMap = idMap || mx.settings.map.id;
   var map = {};
 
   var isId = typeof idMap === 'string';
@@ -4280,8 +4177,8 @@ export function getMap(idMap) {
  * @return {Object} data
  */
 export function getMapData(idMap) {
-  idMap = idMap || mx.settings.idMapDefault;
-  var data = mx.maps[idMap || mx.settings.idMapDefault];
+  idMap = idMap || mx.settings.map.id;
+  var data = mx.maps[idMap || mx.settings.map.id];
   data.id = idMap;
   return data;
 }
@@ -4328,7 +4225,7 @@ export function getMapPos(o) {
  * @return {Object | Array} array of views or object with views id as key
  */
 export function getViews(o) {
-  o = o || mx.settings.idMapDefault;
+  o = o || mx.settings.map.id;
 
   var asArray = o.asArray || false;
   var byMapId = typeof o === 'string';

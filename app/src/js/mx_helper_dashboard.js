@@ -189,7 +189,7 @@ Dashboard.prototype.Widget = function(config) {
         {
           class: ['btn-widget-group']
         },
-        widget.elButtonClose = el('button', {
+        (widget.elButtonClose = el('button', {
           class: [
             'btn-circle',
             'btn-widget',
@@ -198,7 +198,7 @@ Dashboard.prototype.Widget = function(config) {
             'fa-times'
           ],
           on: {click: widget.remove}
-        }),
+        })),
         el('button', {
           class: [
             'btn-circle',
@@ -216,7 +216,7 @@ Dashboard.prototype.Widget = function(config) {
     );
 
     widget._removeBtnCloseListener = function() {
-      widget.elButtonClose.removeEventListener('click',widget.remove);
+      widget.elButtonClose.removeEventListener('click', widget.remove);
     };
 
     dashboard.elGrid.appendChild(widget.el);
@@ -237,7 +237,6 @@ Dashboard.prototype.Widget = function(config) {
     getWidgetDataFromLinkedView({
       point: e.point
     }).then(function(data) {
-      
       widget.setData(data);
     });
   };
@@ -324,8 +323,8 @@ Dashboard.prototype.Widget = function(config) {
     if (mx.helpers.isFunction(widget._removeMapListener)) {
       widget._removeMapListener();
     }
-    if (mx.helpers.isFunction(widget._removeBtnCloseListener)){
-      widget._removeBtnCloseListener(); 
+    if (mx.helpers.isFunction(widget._removeBtnCloseListener)) {
+      widget._removeBtnCloseListener();
     }
     /**
      * Register a unique event
@@ -381,15 +380,15 @@ Dashboard.prototype.Widget = function(config) {
   };
 
   widget.setData = mx.helpers.debounce(function(d) {
-    if(widget.data === d){
+    if (widget.data === d) {
       return;
     }
     var hasData = !mx.helpers.isEmpty(d);
     var ignoreEmptyData = widget.config.sourceIgnoreEmpty;
     var triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
-      widget.data = hasData ?  d : [];
-      widget.onData(widget,widget.data);
+      widget.data = hasData ? d : [];
+      widget.onData(widget, widget.data);
     }
   }, 100);
 
@@ -531,7 +530,7 @@ Dashboard.prototype.Widget = function(config) {
 Dashboard.init = function(o) {
   var view = o.view;
   var idDashboard = o.idDashboard || 'mx-dashboard-' + mx.helpers.makeId();
-  var idContainer = o.idContainer || mx.settings.idDashboards;
+  var idContainer = o.idContainer || mx.settings.ui.ids.idDashboards;
   var dashboardData = o.data || mx.helpers.path(view, 'data.dashboard');
 
   if (!dashboardData || !dashboardData.widgets) {
@@ -562,7 +561,7 @@ Dashboard.init = function(o) {
           id: view.id,
           dashboard: dashboard,
           source: w.source,
-          sourceIgnoreEmpty : w.sourceIgnoreEmpty !== false,
+          sourceIgnoreEmpty: w.sourceIgnoreEmpty !== false,
           height: w.height,
           width: w.width,
           script: w.script,
@@ -638,8 +637,10 @@ Dashboard.showPanel = function(enable, id) {
   var classEnable = 'enabled';
   var classActive = 'active';
   var toggle = enable === 'toggle';
-  var elPanel = document.getElementById(id || mx.settings.idDashboardsPanel);
-  var elButton = document.getElementById(mx.settings.idDashboardsButton);
+  var elPanel = document.getElementById(
+    id || mx.settings.ui.ids.idDashboardsPanel
+  );
+  var elButton = document.getElementById(mx.settings.ui.ids.idDashboardsButton);
 
   if (!elPanel || !elButton) {
     return;

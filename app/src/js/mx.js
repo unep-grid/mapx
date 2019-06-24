@@ -1,98 +1,73 @@
 /*jshint esversion: 6, node: true  */
 
-import * as helpers from "./mx_helpers.js";
+import * as helpers from './mx_helpers.js';
+import * as info  from './../../package.json';
+import * as style from './../data/style_mapx.json';
+import localforage from 'localforage';
+import mapboxgl from 'mapbox-gl';
+import { settings } from './mx_settings_default.js';
 
-import localforage  from 'localforage';
-
-export { localforage, helpers };
-export let templates = {
-  viewList : require('../built/view_list.dot'),
-  viewListLegend : require('../built/view_list_legend.dot'),
-  viewListOptions : require('../built/view_list_options.dot')
+let templates = {
+  viewList: require('../built/view_list.dot'),
+  viewListLegend: require('../built/view_list_legend.dot'),
+  viewListOptions: require('../built/view_list_options.dot')
 };
-
-export let maps = {};
-
-export let data = {
-  geojson : localforage.createInstance({
-    name:  "geojson"
+let maps = {};
+let data = {
+  geojson: localforage.createInstance({
+    name: 'geojson'
   }),
-  images : localforage.createInstance({
-    name : "images"
+  images: localforage.createInstance({
+    name: 'images'
   }),
-  stories : localforage.createInstance({
-    name : "stories"
+  stories: localforage.createInstance({
+    name: 'stories'
   }),
-  views : localforage.createInstance({
-    name : "views"
+  views: localforage.createInstance({
+    name: 'views'
   }),
-  config : localforage.createInstance({
-    name : "config"
+  config: localforage.createInstance({
+    name: 'config'
   }),
-  draft : localforage.createInstance({
-    name : "draft"
+  draft: localforage.createInstance({
+    name: 'draft'
   }),
-draw : localforage.createInstance({
-    name : "draw"
+  draw: localforage.createInstance({
+    name: 'draw'
   })
 };
-
-export let listener = {};
-export let selectize = {};
-export let queue = [];
-export let widgets = [];
-export let events = {};
-export let controls = {};
-export let info = require('../../package.json');
-export let settings = {
-  dbLogLevels : ['ERROR'],
-  dbLogLevelsAll : ["ERROR","WARNING","MESSAGE","LOG","USER_ACTION"],
-  devicePixelRatio : 0, // updated by getPixelRatio()
-  language : 'en',
-  languages : ['en','fr'],
-  highlightedCountries : [],
-  project : '',
-  apiPort : '80',
-  apiHost : 'api.mapx.localhost',
-  apiProtocol : 'http:',
-  modeKiosk : false,
-  idMapDefault : 'map_main',
-  idDashboardsPanel : 'mxDashboardsPanel',
-  idDashboardsButton : 'btnTabDashboard',
-  idDashboards : 'mxDashboards',
-  mapboxToken : '',
-  paths : {
-    sprites : 'sprites/sprite',
-  },
-  style : require("../data/style_mapx.json"),
-  apiRoute : { 
-    tiles : '/get/tile/{x}/{y}/{z}.mvt',
-    views : '/get/view/',
-    sourceMetadata : '/get/source/metadata/',
-    viewMetadata : '/get/view/metadata/',
-    sourceOverlap : '/get/source/overlap/',
-    sourceValidateGeom : '/get/source/validate/geom',
-    getSourceTableAttribute : '/get/source/table/attribute',
-    downloadSourceCreate : '/get/source/',
-    downloadSourceGet : '',
-    uploadImage : '/upload/image/',
-    uploadVector : '/upload/vector/'
-  },
-  layerBefore : "mxlayers",
-  separators : {
-    sublayer : "_@_",
-  },
-  clickHandlers : [],
-  maxByteUpload : Math.pow(1024,2)*100, //100 MiB 
-  maxByteJed : 100000, // 100 Kb  
-  user : {}
-};
-//export let pixop = {};
-export let dashboards = [];
-export let editors = {};
-export let extend = {
-  position : {},
-  texteditor : {}
+let listener = {};
+let selectize = {};
+let queue = [];
+let widgets = [];
+let events = {};
+let controls = {};
+let dashboards = [];
+let editors = {};
+let extend = {
+  position: {},
+  texteditor: {}
 };
 
-console.log("INIT MX");
+export {
+  mapboxgl,
+  localforage,
+  helpers,
+  templates,
+  maps,
+  data,
+  listener,
+  selectize,
+  queue,
+  widgets,
+  events,
+  controls,
+  info,
+  settings,
+  style,
+  dashboards,
+  editors,
+  extend
+};
+
+console.log('INIT MX');

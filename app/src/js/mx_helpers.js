@@ -1,4 +1,5 @@
 /* jshint esversion :6 */
+export * from './mx_helper_settings.js';
 export * from './mx_helper_cookies.js';
 export * from './mx_helper_log.js';
 export * from './mx_helper_utils_xml.js';
@@ -32,6 +33,7 @@ export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_pixop_core.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
+export * from './mx_helper_map_view_fetch.js';
 export * from './mx_helper_map_view_click.js';
 export * from './mx_helper_map_view_diaf.js';
 export * from './mx_helper_metadata_validation.js';

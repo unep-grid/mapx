@@ -10,6 +10,7 @@ $(document).on('shiny:connected', function() {
   /**
   * General bindings
   */
+  
   Shiny.addCustomMessageHandler("mxUpdateLanguage", mx.helpers.updateLanguage);
   Shiny.addCustomMessageHandler("mxSetCookie",mx.helpers.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', mx.helpers.modal);
@@ -32,7 +33,8 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",mx.helpers.updateSelectizeItems);
   Shiny.addCustomMessageHandler("mxInitSelectizeAll",mx.helpers.initSelectizeAll);
   Shiny.addCustomMessageHandler('mxFlashIcon', mx.helpers.iconFlash);
-
+  Shiny.addCustomMessageHandler('mxUpdateSettingsUser', mx.helpers.updateSettingsUser );
+  Shiny.addCustomMessageHandler('mxUpdateSettings', mx.helpers.updateSettings );
 
   /**
   * Mapx map and view related binding
@@ -50,7 +52,6 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglAddView', mx.helpers.addView );
   Shiny.addCustomMessageHandler('mglReadStory', mx.helpers.storyRead );
   Shiny.addCustomMessageHandler('mglReset', mx.helpers.reset );
-  Shiny.addCustomMessageHandler('mglSetUserData', mx.helpers.setUserData );
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', mx.helpers.handlerDownloadVectorSource);
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', mx.helpers.getOverlapAnalysis);
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', mx.helpers.getValidateSourceGeom);

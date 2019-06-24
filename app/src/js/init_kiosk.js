@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
   var h = mx.helpers;
   var q = h.searchToObject().k;
   var hasLatLng = h.isNumeric(q.lng) && h.isNumeric(q.lat);
-  var idMap = mx.settings.idMapDefault;
+  var idMap = mx.settings.map.id;
   mx.maps[idMap] = {};
 
   h.updateSettings({

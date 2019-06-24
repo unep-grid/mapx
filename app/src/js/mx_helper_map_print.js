@@ -4,7 +4,7 @@
 
 //export function downloadScreenshotPdfAll(){
 
-  //var idMap = mx.settings.idMapDefault;
+  //var idMap = mx.settings.map.id;
   //var vVisible = mx.helpers.getLayerNamesByPrefix({
     //id:idMap,
     //prefix:"MX-",
@@ -300,7 +300,7 @@
     //var idView = o;
     //o = {
       //idView : idView,
-      //id : mx.settings.idMapDefault
+      //id : mx.settings.map.id
     //};
   //}
   /**
@@ -329,7 +329,7 @@
   //var promLegend,promScale,promNorth,promMap,promMeta;
   //var qf = [];
   //var map = mx.helpers.getMap(o.id);
-  //var elMap = document.getElementById(mx.settings.idMapDefault);
+  //var elMap = document.getElementById(mx.settings.map.id);
   //var mapDim =  elMap.getBoundingClientRect();
   //var paperWidth = 297;
   //var paperHeight = 210;

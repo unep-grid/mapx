@@ -214,7 +214,7 @@ export function showSourceTableAttributeModal(opt) {
 export function viewToTableAttributeModal(idView) {
   var h = mx.helpers;
   var view = h.getViews({
-    id: mx.settings.idMapDefault,
+    id: mx.settings.map.id,
     idView: idView
   });
   var opt = getTableAttributeConfigFromView(view);

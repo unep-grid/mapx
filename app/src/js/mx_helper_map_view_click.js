@@ -55,7 +55,7 @@ export function handleViewClick(o) {
         action: function() {
           var viewTarget = el.dataset.view_action_target;
           var view = h.getViews({
-            id: mx.settings.idMapDefault,
+            id: mx.settings.map.id,
             idView: viewTarget
           });
           h.setProject(view.project);
@@ -190,7 +190,7 @@ export function handleViewClick(o) {
           });
           var legendInputs = legendContainer.querySelectorAll('input');
           var idView = el.dataset.view_action_target;
-          var view = h.getViews({id: mx.settings.idMapDefault, idView: idView});
+          var view = h.getViews({id: mx.settings.map.id, idView: idView});
           var filter = ['any'];
           var rules = h.path(view, 'data.style.rulesCopy', []);
 
@@ -255,7 +255,7 @@ export function handleViewClick(o) {
         test: el.dataset.view_action_key === 'btn_opt_meta_external',
         action: function() {
           var idView = el.dataset.view_action_target;
-          var view = h.getViews({id: mx.settings.idMapDefault, idView: idView});
+          var view = h.getViews({id: mx.settings.map.id, idView: idView});
           var link = h.path(view, 'data.source.urlMetadata');
           var title =
             h.path(view, 'data.title.' + mx.settings.language) ||

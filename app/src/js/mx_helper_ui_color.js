@@ -12,7 +12,7 @@
 export function setUiColorScheme(o) {
   var mx_colors; // colors from stylesheet from the rule ".mx *";
   var init = false;
-  var map = mx.maps[o.id || mx.settings.idMapDefault].map;
+  var map = mx.maps[o.id || mx.settings.map.id].map;
   var c = o.colors;
   init = c !== undefined && mx.settings.colors === undefined;
   c = c || {};
