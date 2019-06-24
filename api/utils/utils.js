@@ -221,6 +221,7 @@ function dataToJsonZip(data) {
  * Export methods
  */
 exports.view = require('./getView.js');
+exports.views = require('./getViews.js');
 exports.source = require('./getSource.js');
 exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');

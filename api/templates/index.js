@@ -9,3 +9,4 @@ exports.layerIntersectsCountry = u.readTxt("./templates/sql/getIntersectsCountry
 exports.layerIntersectionCountry = u.readTxt("./templates/sql/getIntersectionCountry.sql");
 exports.getSourceMetadata = u.readTxt("./templates/sql/getSourceMetadata.sql");
 exports.getViewMetadata = u.readTxt("./templates/sql/getViewMetadata.sql");
+exports.getViews = u.readTxt("./templates/sql/getViewsByUserProject.sql");

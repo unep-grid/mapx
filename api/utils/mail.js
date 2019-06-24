@@ -1,7 +1,6 @@
 var nodemailer = require('nodemailer');
 var settings = require.main.require("./settings");
 var bodyParser = require('body-parser');
-//var auth = require("./authentification.js");
 var mailAdmin = settings.mail.config.admin;
 var decrypt = require("./db.js").decrypt;
 var htmlToText = require("html-to-text");

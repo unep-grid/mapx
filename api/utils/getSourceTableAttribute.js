@@ -1,10 +1,7 @@
-//const authenticateHandler = require('./authentification.js')
-//.authenticateHandler;
 const pgRead = require.main.require('./db').pgRead;
 const db = require('./db.js');
 const utils = require('./utils.js');
 
-//exports.get = [authenticateHandler, getSourceAttributeTableHandler];
 exports.get = [getSourceAttributeTableHandler];
 
 function getSourceAttributeTableHandler(req, res) {

@@ -1,15 +1,18 @@
 const utils = require('./utils.js');
 const toRes = utils.toRes;
 const isLayerValid = require('./db.js').isLayerValid;
-const authenticateHandler = require('./authentification.js')
-  .authenticateHandler;
+const auth = require('./authentication.js');
 
 /**
  * Upload's middleware
  */
-module.exports.get = [authenticateHandler, validateHandler];
+module.exports.get = [
+  auth.validateTokenHandler,
+  auth.validateRoleHandlerFor('member'),
+  validateLayerHandler
+];
 
-function validateHandler(req, res) {
+function validateLayerHandler(req, res) {
   var idSource = req.query.idSource;
   var useCache = req.query.useCache;
   var autoCorrect = req.query.autoCorrect;

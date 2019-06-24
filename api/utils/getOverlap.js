@@ -2,8 +2,7 @@ const wktToJson = require('wellknown').parse;
 const martinez = require('martinez-polygon-clipping');
 const turf = require('@turf/turf');
 const clientPgRead = require.main.require('./db').pgWrite;
-const authenticateHandler = require('./authentification.js')
-  .authenticateHandler;
+const auth = require('./authentication.js');
 const utils = require('./utils.js');
 const toRes = utils.toRes;
 const registerOrRemoveSource = require('./db.js').registerOrRemoveSource;
@@ -15,7 +14,11 @@ const sendMail = require('./mail.js').sendMail;
 /**
  * Upload's middleware
  */
-module.exports.get = [authenticateHandler, getOverlapHandler];
+module.exports.get = [
+  auth.validateTokenHandler, 
+  auth.validateRoleHandlerFor('member'),
+  getOverlapHandler
+];
 
 function getOverlapHandler(req, res) {
   var start = Date.now();

@@ -40,6 +40,7 @@ app.use('/download', express.static(settings.vector.path.download));
  */
 app.get('/get/view/:id', utils.view.get);
 app.get('/get/view/metadata/:id', utils.viewMetadata.get);
+app.get('/get/views/',utils.views.get);
 app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get);
 app.get('/get/mirror/', utils.mirror.get);

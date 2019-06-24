@@ -8,8 +8,7 @@ const settings = require.main.require('./settings');
 const emailAdmin = settings.mail.config.emailAdmin;
 const template = require('../templates');
 const utils = require('./utils.js');
-const authenticateHandler = require('./authentification.js')
-  .authenticateHandler;
+const auth = require('./authentication.js');
 const isLayerValid = require('./db.js').isLayerValid;
 const getSourceMetadata = require('./getSourceMetadata.js').getSourceMetadata;
 const apiPort = settings.api.port;
@@ -53,8 +52,10 @@ var formatDefault = 'GPKG';
 /**
  * Request handler / middleware
  */
-
-module.exports.get = [authenticateHandler, exportHandler];
+module.exports.get = [
+  auth.validateTokenHandler,
+  exportHandler
+];
 
 function exportHandler(req, res) {
   var config = req.query;

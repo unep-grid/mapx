@@ -2,7 +2,7 @@ var settings = require('./../settings');
 var multer = require('multer');
 var fs = require('fs');
 var sendMail = require('./mail.js').sendMail;
-var authenticateHandler = require('./authentification.js').authenticateHandler;
+var auth = require('./authentication.js');
 var spawn = require('child_process').spawn;
 var pgWrite = require.main.require('./db').pgWrite;
 var emailAdmin = settings.mail.config.emailAdmin;
@@ -30,7 +30,8 @@ var uploadHandler = multer({storage: storage}).single('vector');
  */
 module.exports.upload = [
   uploadHandler,
-  authenticateHandler,
+  auth.validateTokenHandler,
+  auth.validateRoleHandlerFor('publisher'),
   convertOgrHandler,
   addSourceHandler
 ];

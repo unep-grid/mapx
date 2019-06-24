@@ -1,11 +1,10 @@
 const request = require('request');
-const authenticateHandler = require('./authentification.js')
-  .authenticateHandler;
+const auth = require('./authentication.js');
 /**
  * Request handler / middleware
  */
 
-module.exports.get = [authenticateHandler, mirrorHandler];
+module.exports.get = [auth.validateTokenHandler, mirrorHandler];
 
 function mirrorHandler(req, res) {
   var query = req.query;
@@ -14,19 +13,21 @@ function mirrorHandler(req, res) {
     url: query.url,
     method: 'GET',
     headers: JSON.parse(query.headers || null),
-    qs: JSON.parse(query.query || null),
+    qs: JSON.parse(query.query || null)
   };
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     request(options, function(error, response, body) {
-      if(error) throw new Error(error);
+      if (error) {
+        throw new Error(error);
+      }
       resolve(body);
     });
   })
-    .then( body => {
+    .then((body) => {
       return res.send(body);
     })
-    .catch(e => {
+    .catch((e) => {
       return res.send({
         type: 'error',
         msg: e
