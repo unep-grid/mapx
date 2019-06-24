@@ -91,12 +91,6 @@ mglHandlerDownloadVectorSource <- function( config, session=shiny::getDefaultRea
 }
 
 
-#' Set user id
-#' @param userData {list} list of user data such as id, email, nickname
-#' @export
-mglSetUserData <- function( userData, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mglSetUserData",userData)
-}
 
 #' Get client localForage object 
 #' @param idStore localforage store id
