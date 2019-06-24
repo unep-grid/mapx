@@ -84,10 +84,10 @@ function validateRoleHandlerFor(role) {
 
     if (hasBody) {
       idUser = req.body.idUser;
-      idProject = req.body.idProject;
+      idProject = req.body.idProject || req.body.project;
     } else {
       idUser = req.query.idUser;
-      idProject = req.query.idProject;
+      idProject = req.query.idProject || req.query.project;
     }
     getUserRole(idUser, idProject)
       .then((r) => {
@@ -132,15 +132,20 @@ function getUserRole(idUser, idProject) {
 
   return pgWrite.query(sqlProject, [idProject]).then((res) => {
     if (res.rows.length === 0) {
-      throw new Error('Project not found');
+      return {
+        list : [],
+        admin : false,
+        publisher: false,
+        member : false,
+        guest : false
+      };
     }
     var pData = res.rows[0];
 
-    var hasAdminRole = pData.admins.indexOf(idUser);
-    var hasPublisherRole = pData.publishers.indexOf(idUser);
-    var hasMemberRole = pData.members.indexOf(idUser);
-    var hasGuestRole =
-      pData.public === true && !isMember && !isPublisher && !isAdmin;
+    var hasAdminRole = pData.admins.indexOf(idUser) > -1;
+    var hasPublisherRole = pData.publishers.indexOf(idUser) > -1;
+    var hasMemberRole = pData.members.indexOf(idUser) > -1;
+    var hasGuestRole = pData.public === true && !hasMemberRole && !hasPublisherRole && !hasAdminRole;
 
     var roles = [];
 
