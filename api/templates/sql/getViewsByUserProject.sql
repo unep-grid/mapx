@@ -59,6 +59,18 @@ ELSE
    */
   WHERE 
   (
+    CASE WHEN
+      coalesce({{idViews}},'') = ''
+      THEN
+      (
+        true
+      )
+    ELSE (
+      v.id in {{idViews}}
+    )
+  )
+  AND
+  (
     v.project = '{{idProject}}' OR 
     v.data #> '{"projects"}' @> '["{{idProject}}"]'::jsonb OR 
     v.data #> '{"projects"}' = '"{{idProject}}"'::jsonb OR

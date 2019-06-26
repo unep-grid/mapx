@@ -3,23 +3,18 @@ const utils = require('./utils.js');
 const template = require('../templates');
 const auth = require('./authentication.js');
 
-exports.get = [
-  auth.validateTokenHandler,
-  getViewsHandler
-];
+exports.get = [auth.validateTokenHandler, getViewsHandler];
 
 exports.getViews = getViews;
 
 function getViewsHandler(req, res) {
-  var start = process.hrtime();
   getViews({
     idUser: req.query.idUser * 1,
     idProject: req.query.idProject,
-    selectString: req.query.selectString
+    selectString: req.query.selectString,
+    idViews: req.query.idViews
   })
     .then((data) => {
-      var diff = process.hrtime(start);
-      console.log(diff[0] * 1e3 + diff[1] / 1e6 + 'ms');
       utils.sendJSON(res, data, true);
     })
     .catch((err) => {
@@ -44,13 +39,13 @@ function getViews(opt) {
     var sql = utils.parseTemplate(template.getViews, {
       idUser: opt.idUser * 1,
       idProject: opt.idProject,
-      selectString : opt.selectString || "*",
-      language : opt.language || 'en'       
+      selectString: opt.selectString || '*',
+      language: opt.language || 'en',
+      idViews: opt.idViews || ''
     });
 
     resolve(clientPgRead.query(sql));
-  })
-    .then(function(result) {
-      return result.rows;
-    });
+  }).then(function(result) {
+    return result.rows;
+  });
 }

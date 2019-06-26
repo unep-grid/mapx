@@ -46,7 +46,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglAddLayer',  mx.helpers.addLayer );
   Shiny.addCustomMessageHandler('mglFlyTo', mx.helpers.flyTo );
   Shiny.addCustomMessageHandler('mglSyncAllMaps', mx.helpers.syncAll );
-  Shiny.addCustomMessageHandler('mglSetSourcesFromViews',mx.helpers.setViewsList );
+  Shiny.addCustomMessageHandler('mglUpdateViewsList',mx.helpers.updateViewsList);
   Shiny.addCustomMessageHandler('mglRemoveView', mx.helpers.removeView );
   Shiny.addCustomMessageHandler('mglGetLocalForageData', mx.helpers.getLocalForageData );
   Shiny.addCustomMessageHandler('mglAddView', mx.helpers.addView );

@@ -317,7 +317,7 @@ config[["languages"]][["list"]] <- list(
   "فارسی (Dari/Persian)" = "fa",
   "پښتو (Pashto)"="ps"
   )
-config[["languages"]][["codes"]] <- unlist(config[["languages"]][["list"]])
+config[["languages"]][["codes"]] <- unname(unlist(config[["languages"]][["list"]]))
 
 config[["language"]] <- list(
   "default"="en"

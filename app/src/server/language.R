@@ -3,7 +3,8 @@
 # Define language.
 #
 observe({
-  lang_def <- .get(config,c("languages","list"))[[1]]
+  langs <- .get(config,c("languages","codes"))
+  lang_def <- langs[[1]]
   lang_ui <- input$selectLanguage
   lang_query <- query$language
   lang_db <- .get(reactUser$data,c("data","user","cache","last_language"))
@@ -44,11 +45,20 @@ observe({
         lang_out <- lang_def
       }
     }
-    mxUpdateUrlParams(list(language=lang_out)) 
-    mxUpdateSettings(list(
-          language = lang_out
-          ))
+    mxUpdateUrlParams(
+      list(
+        language = lang_out
+        )
+      )
 
+    mxUpdateSettings(
+      list(
+        language = lang_out,
+        languages = langs
+        )
+      )
+    
+    mxUpdateLanguage(lang_out)
     reactData$language <- lang_out
   })
 })
@@ -83,7 +93,7 @@ observeEvent(input$selectLanguage,{
   session$sendCustomMessage(
     "mxUpdateLanguage",
     list(
-      lang=language
+      lang = language
       )
     )
   mxUpdateText(

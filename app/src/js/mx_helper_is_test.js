@@ -15,6 +15,9 @@ export function isEmpty(item) {
     return isEqual(item, []);
   }
 }
+export function isNotEmpty(item){
+  return !isEmpty(item);
+}
 
 /**
  * Test if entry is an object
@@ -35,12 +38,15 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm)$/)
   );
 }
-export function isViewsArray(arr){
+export function isViewsArray(arr) {
   const h = mx.helpers;
-   return isArray(arr) && (function() {
+  return (
+    isArray(arr) &&
+    (function() {
       // Workaround for the loop optimisation thats convert foreach to for
-      return h.all(arr.map(v => isView(v)));
-   })();
+      return h.all(arr.map((v) => isView(v)));
+    })()
+  );
 }
 
 /**
@@ -145,6 +151,13 @@ export function isBoolean(b) {
   return b === true || b === false;
 }
 
+/**
+ * Test if is map
+ * @param {Object} map Map object
+ */
+export function isMap(map) {
+  return mx.helpers.isObject(map) && !!map._canvas;
+}
 /**
  * Test if entry is string and have the correct number of characters
  * @param {String} str, character to test

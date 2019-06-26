@@ -44,6 +44,7 @@ observe({
             editMode = TRUE
             )
 
+
           if(length(viewData)>0){
             viewData <- viewData[[1]]
           }
@@ -610,7 +611,7 @@ observe({
 observeEvent(input$viewTitleSchema_init,{
   view = reactData$viewDataEdited
   language = reactData$language
-  languages = .get(config,c("languages","list"))
+  languages = .get(config,c("languages","codes"))
   titles = .get(view,c("data","title"))
   schema =  mxSchemaMultiLingualInput(
     keyTitle = "view_title",
@@ -634,7 +635,7 @@ observeEvent(input$viewTitleSchema_init,{
 observeEvent(input$viewAbstractSchema_init,{
   view = reactData$viewDataEdited
   language = reactData$language
-  languages = .get(config,c("languages","list"))
+  languages = .get(config,c("languages","codes"))
   abstracts = .get(view,c("data","abstract"))
   schema =  mxSchemaMultiLingualInput(
     keyTitle = "view_abstract",

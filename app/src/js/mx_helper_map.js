@@ -1,4 +1,5 @@
 /* jshint evil:true, esversion:6, laxbreak:true */
+import Sortable from 'sortablejs';
 
 export function degreesToMeters(lngLat) {
   var x = (lngLat.lng * 20037508.34) / 180;
@@ -28,7 +29,8 @@ export function metersToDegrees(point) {
  */
 export function getApiUrl(id) {
   var s = mx.settings;
-  var urlBase = s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
+  var urlBase =
+    s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
   return urlBase + s.api.routes[id];
 }
 
@@ -41,8 +43,6 @@ export function getAppPathUrl(id) {
   var loc = window.location.origin;
   return loc + '/' + s.paths[id];
 }
-
-
 
 /**
  * Set the project manually
@@ -81,17 +81,15 @@ export function requestProjectMembership(idProject) {
  * @param {Object} o.fitToViewsBounds Discard map position, use views to fit
  * @param {number} [o.minZoom=4] Min zoom level
  * @param {number} [o.maxZoom=10] Max zoom level
- * @param {string} o.language Initial language code
- * @param {string} o.languages Languages code list
  * @param {Object} o.apiUrl Base url for api
  */
 export function initMapx(o) {
   var mp, map;
 
-  o = o || {}; 
+  o = o || {};
   o.id = o.id || mx.settings.map.id;
   mp = o.mapPosition || {};
- 
+
   /**
    * Init mgl data store
    */
@@ -105,9 +103,9 @@ export function initMapx(o) {
   mx.maps[o.id] = {
     map: {},
     listener: {},
-    views: o.viewsList || mx.maps[o.id].views
+    views: []
   };
-  
+
   /*
    * workeround for centering based in bounds.
    * NOTE: bounds will be available at init : https://github.com/mapbox/mapbox-gl-js/issues/1970
@@ -136,7 +134,6 @@ export function initMapx(o) {
     return;
   }
 
- 
   /* map options */
   var mapOptions = {
     container: o.id, // container id
@@ -202,10 +199,9 @@ export function initMapxApp(o) {
      * set views list
      */
     mx.helpers
-      .setViewsList({
+      .updateViewsList({
         id: o.id,
-        viewsList: o.viewsList,
-        viewsCompact: o.viewsCompact === true,
+        autoFetchAll: true,
         project: o.project || mx.settings.project,
         resetViews: true
       })
@@ -282,7 +278,6 @@ export function initMapxApp(o) {
         id: o.id,
         prefix: 'MX-'
       });
-
       var features = map.queryRenderedFeatures(e.point, {layers: layers});
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
@@ -290,6 +285,7 @@ export function initMapxApp(o) {
     map.on('click', function(e) {
       mx.helpers.handleClickEvent(e, o.id);
     });
+
     map.on('rotate', function() {
       var r = -map.getBearing();
       var northArrow = document.querySelector('.mx-north-arrow');
@@ -656,53 +652,51 @@ export function getViewsRemote(idViews) {
  * @param {string} o.project code
  * @param {Boolean} o.resetViews should this reset stored views list on map
  */
-export function setViewsList(o) {
+export function updateViewsList(o) {
+  var h = mx.helpers;
   return new Promise(function(resolve) {
-    var m = mx.helpers.getMapData(o.id);
-    var mode, map, singleView, views;
+    var mode = 'array_async_all';
+    var viewsToAdd = o.viewsToAdd;
     var nCache = 0,
       nNetwork = 0,
       nTot = 0,
       prog;
+    var apiUrlViews = h.getApiUrl('viewsToAdd');
     var elProgContainer;
-    var hasViews;
-    var apiUrlViews = mx.helpers.getApiUrl('views');
+    var isCompactList = o.viewsCompact === true;
+    var autoFetchAll = o.autoFetchAll === true;
+    var hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+    var hasSingleView = !hasViewsList && h.isView(viewsToAdd);
+    var resetViews = h.isBoolean(o.resetViews) ? o.resetViews : hasViewsList;
+    var updateProject = o.project && o.project !== mx.settings.project;
 
-    if (o.viewsList && o.viewsList.length > 0) {
-      nTot = o.viewsList.length;
-    }
-    if (!m || !o.viewsList || !m.map) {
-      return;
-    }
-
-    map = m.map;
-    views = o.viewsList;
-    singleView = views instanceof Object && views.id;
-    hasViews = m.views.length > 0;
-    if (singleView) {
-      mode = 'object_single';
-    }
-    if (!singleView && o.viewsCompact) {
-      mode = 'array_async';
-    }
-    if (!singleView && !o.viewsCompact) {
-      mode = 'array_sync';
-    }
-
-    if (typeof o.resetViews === 'undefined' && !singleView) {
-      o.resetViews = true;
-    }
-    /*
-     * Set project if needed
-     */
-    if (o.project) {
+    if (updateProject) {
       mx.settings.project = o.project;
     }
+
+    if (hasViewsList) {
+      nTot = viewsToAdd.length;
+    }
+
+    if (autoFetchAll) {
+      mode = 'array_async_all';
+    } else {
+      if (hasSingleView) {
+        mode = 'object_single';
+      }else
+        if (hasViewsList && isCompactList) {
+          mode = 'array_async';
+        } else
+        if (hasViewsList && !isCompactList) {
+          mode = 'array_sync';
+        }
+    }
+
     /*
-     * Reset old views and dashboards
+     * Reset old viewsToAdd and dashboards
      */
-    if (o.resetViews) {
-      mx.helpers.reset({
+    if (resetViews) {
+      h.reset({
         idMap: o.id
       });
     }
@@ -721,17 +715,18 @@ export function setViewsList(o) {
       return {
         object_single: addSingle,
         array_sync: addSync,
-        array_async: addAsync
-      }[mode](views);
+        array_async: addAsync,
+        array_async_all: addAsyncAll
+      }[mode](viewsToAdd);
     }
 
-    /* Sort views by title */
-    function sortViews(views) {
+    /* Sort viewsToAdd by title */
+    function sortViews(viewsToAdd) {
       var aTitle, bTitle;
-
-      views.sort(function(a, b) {
+      viewsToAdd = viewsToAdd || [];
+      viewsToAdd.sort(function(a, b) {
         aTitle = getViewTitle(a);
-        bTitle = getViewTitle(b);
+        bTitle = getViewTitleNormalized(b);
         if (aTitle < bTitle) {
           return -1;
         }
@@ -741,31 +736,40 @@ export function setViewsList(o) {
         return 0;
       });
 
-      return views;
+      return viewsToAdd;
     }
 
     /* update progress */
-    function updateProgress() {
-      elProgContainer = document.querySelector('#noViewItemText');
+    function updateProgress(d) {
+      d = d || {
+        loaded: nCache + nNetwork,
+        total: nTot
+      };
+
+      if (!elProgContainer) {
+        elProgContainer = document.querySelector('#noViewItemText');
+      }
+
       if (!prog && elProgContainer) {
-        prog = new mx.helpers.RadialProgress(elProgContainer, {
+        prog = new h.RadialProgress(elProgContainer, {
           radius: 20,
           stroke: 3
         });
       }
+
       if (prog && prog.update && elProgContainer) {
-        prog.update((nCache + nNetwork) / nTot);
+        prog.update(d.loaded / d.total);
       }
     }
 
     /* get view title  */
-    function getViewTitle(view) {
-      var title = mx.helpers.getLabelFromObjectPath({
+    function getViewTitleNormalized(view) {
+      var title = h.getLabelFromObjectPath({
         lang: mx.settings.language,
         obj: view,
         path: 'data.title'
       });
-      title = mx.helpers
+      title = h
         .cleanDiacritic(title)
         .toLowerCase()
         .trim();
@@ -777,7 +781,7 @@ export function setViewsList(o) {
       var keyStore = v.id + '@' + v.pid;
       var keyNet = apiUrlViews + v.id + '?' + v.pid;
       var editable = v._edit;
-      return mx.data.views.getItem(keyStore).then((view) => {
+      return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
         if (view) {
           nCache++;
           updateProgress();
@@ -792,51 +796,59 @@ export function setViewsList(o) {
               view._edit = editable;
               return view;
             })
-            .then((view) => mx.data.views.setItem(keyStore, view));
+            .then((view) => mx.data.viewsToAdd.setItem(keyStore, view));
         }
       });
     }
 
-    /* Add array of compact views object*/
-    function addAsync(views) {
-      var out = views.map(getViewObject);
+    /* Add array of compact viewsToAdd object*/
+    function addAsync(viewsToAdd) {
+      var out = viewsToAdd.map(getViewObject);
 
-      return Promise.all(out).then((viewsFetched) => {
-        viewsFetched = sortViews(viewsFetched);
+      return Promise.all(out).then((viewsToAddFetched) => {
+        viewsToAddFetched = sortViews(viewsToAddFetched);
 
-        m.views = viewsFetched;
-
-        mx.helpers.renderViewsList({
+        h.renderViewsList({
           id: o.id,
-          views: viewsFetched
+          views: viewsToAddFetched
         });
 
         loadGeojsonFromStorage(o);
 
-        return viewsFetched;
+        return viewsToAddFetched;
       });
     }
 
-    /* Add array of coomplete views object*/
-    function addSync() {
-      m.views = views;
+    function addAsyncAll() {
+      h.fetchViews({
+        onProgress: updateProgress
+      })
+        .then((viewsToAdd) => {
+          viewsToAdd = sortViews(viewsToAdd);
+          h.renderViewsList({
+            id: o.id,
+            views: viewsToAdd
+          });
+          loadGeojsonFromStorage(o);
+          return viewsToAdd;
+        });
+    }
 
-      mx.helpers.renderViewsList({
+    /* Add array of coomplete viewsToAdd object*/
+    function addSync() {
+
+      h.renderViewsList({
         id: o.id,
-        views: views
+        views: viewsToAdd
       });
 
       loadGeojsonFromStorage(o);
-      return views;
+      return viewsToAdd;
     }
 
     /* Add single view object */
     function addSingle(view) {
-      if (hasViews) {
-        m.views.unshift(view);
-      }
-
-      mx.helpers.renderViewsList({
+      h.renderViewsList({
         id: o.id,
         views: view,
         add: true,
@@ -1893,17 +1905,19 @@ export function renderViewsList(o) {
   var elViewsContainer = document.querySelector('.mx-views-container');
   var elViewsList = elViewsContainer.querySelector('.mx-views-list');
   var views = o.views;
+  var hasTemplate = h.isFunction(mx.templates.viewList);
+  var hasViews = h.isArray(views) && h.isNotEmpty(views);
   var add = o.add || false;
   var open = o.open || false;
-  var isEmpty = o.empty === true;
-  var hasList =
-    !isEmpty &&
-    views !== undefined &&
-    views.constructor === Array &&
-    views.length > 0 &&
-    mx.templates.viewList;
+  var hasSingleView = !hasViews && h.isObject(views) && h.isNotEmpty(views);
 
-  if (!hasList && views && views.constructor === Object) {
+
+  if( !hasTemplate ){
+   throw new Error('renderViewsList : no template found');
+  }
+
+
+  if (  hasSingleView ) {
     views = [views];
     add = true;
   }
@@ -1911,7 +1925,7 @@ export function renderViewsList(o) {
   /**
    * If empty, add empty view list message
    */
-  if (!hasList && !add) {
+  if (!hasViews && !hasSingleView) {
     setViewsListEmpty(true);
   } else {
     setViewsListEmpty(false);
@@ -1927,12 +1941,30 @@ export function renderViewsList(o) {
        * Render all view items
        */
       elViewsList.innerHTML = mx.templates.viewList(views);
+
+      if (!mx.listener.sortableViews) {
+        mx.listener.sortableViews = Sortable.create(elViewsList, {
+          handle: '.mx-view-tgl-title',
+          draggable: '.mx-view-item',
+          animation: 150,
+          fallbackOnBody: true,
+          swapThreshold: 0.65,
+          onChange: mx.helpers.viewControler
+        });
+      }
+      /**
+      * Update views list
+      */    
+      m.views = views;
+
     } else {
       /**
        * Render given view items only
        */
       views.forEach(function(v) {
-        // remove old views if present
+        /**
+        * Update views list
+        */
         var oldPos;
         m.views.forEach(function(f) {
           if (f.id === v.id) {
@@ -1942,7 +1974,6 @@ export function renderViewsList(o) {
         if (oldPos > -1) {
           m.views.splice(oldPos, 1);
         }
-        // add new/update view
         m.views.push(v);
       });
       elDiv = document.createElement('div');
@@ -2669,8 +2700,8 @@ function addViewRt(o) {
     /*
      * Add legend
      */
-
     var legend = mx.helpers.path(view, 'data.source.legend');
+    var elLegend = document.querySelector('#check_view_legend_' + view.id);
 
     if (legend) {
       var defaultImg = function() {
@@ -2678,7 +2709,6 @@ function addViewRt(o) {
         this.src = require('../../src/svg/no_legend.svg');
       };
 
-      var elLegend = document.querySelector('#check_view_legend_' + view.id);
       if (elLegend) {
         var oldImg = elLegend.querySelector('img');
         if (!oldImg) {
@@ -4157,18 +4187,22 @@ export function getMap(idMap) {
   var map = {};
 
   var isId = typeof idMap === 'string';
-  var isMap = !isId && (typeof idMap === 'object' && idMap._canvas);
+  var isMap = !isId && mx.helpers.isMap(idMap);
 
   if (isMap) {
     return idMap;
   }
 
-  if (isId) {
+  if (isId && mx.maps[idMap]) {
     map = mx.maps[idMap].map;
     map.id = idMap;
   }
 
-  return map;
+  if (mx.helpers.isMap(map)) {
+    return map;
+  } else {
+    return null;
+  }
 }
 
 /**

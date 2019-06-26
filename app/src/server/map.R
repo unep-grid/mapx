@@ -27,8 +27,6 @@ observe({
     # Set map options
     # 
     mapConfig <- list(
-      viewsList = reactViewsCompact(),
-      viewsCompact = TRUE,
       mapPosition = mapPos, 
       colorScheme =  query$style
       )

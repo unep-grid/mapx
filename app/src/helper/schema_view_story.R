@@ -8,7 +8,7 @@ mxSchemaViewStory <- function(view,views,language){
   l <- language
 
   # all languages
-  ll <- .get(config,c("languages","list"))
+  ll <- .get(config,c("languages","codes"))
 
   #
   # shortcut to translate function

@@ -260,7 +260,7 @@ observeEvent(input$projectTitleSchema_init,{
     project <- reactData$project
     projectData <- mxDbGetProjectData(project)
     language <- reactData$language 
-    languages <- .get(config,c("languages","list"))
+    languages <- .get(config,c("languages","codes"))
     titles <- .get(projectData,c("title"))
 
     schema =  mxSchemaMultiLingualInput(
@@ -294,7 +294,7 @@ observeEvent(input$projectDescriptionSchema_init,{
     project <- reactData$project
     projectData <- mxDbGetProjectData(project)
     language <- reactData$language 
-    languages <- .get(config,c("languages","list"))
+    languages <- .get(config,c("languages","codes"))
     descriptions <- .get(projectData,c("description"))
 
     schema =  mxSchemaMultiLingualInput(

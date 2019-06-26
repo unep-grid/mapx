@@ -19,12 +19,10 @@ observe({
 
     timer <- mxTimeDiff("Sending view")
 
-    mglSetSourcesFromViews(
+    mglUpdateViewsList(
       id = .get(config,c("map","id")),
-      viewsList = reactViewsCompact(),
-      viewsCompact = TRUE,
-      render = FALSE,
       project = project,
+      autoFetchAll = TRUE,
       resetView = TRUE
       )
 

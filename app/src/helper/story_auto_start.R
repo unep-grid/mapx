@@ -22,7 +22,7 @@ mxStoryAutoStart = function(
   project <- .get(view,c("project"))
   firstStep <- .get(view,c("data","story","steps"))[[1]]
   position <- .get(firstStep,c("position"))
-  if(noDataCheck(language)) language <- .get(config,c("languages","list"))[[1]]
+  if(noDataCheck(language)) language <- .get(config,c("languages","codes"))[[1]]
   if(noDataCheck(style)) style = .get(config,c("ui","colors","default"))
 
   mapConfig <- list(
@@ -56,7 +56,7 @@ mxStoryAutoStart = function(
     token = .get(config,c('map','token')),
     minZoom = .get(config,c("map","minZoom")),
     maxZoom = .get(config,c("map","maxZoom")),
-    languages = .get(config,c("languages","list")),
+    languages = .get(config,c("languages","codes")),
     countries =  .get(config,c("countries","table","id")),
     #
     # Colorscheme

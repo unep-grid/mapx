@@ -22,7 +22,7 @@ mxSchemaViewStyle <- function(
   l <- language
 
   # all languages
-  ll <- .get(conf,c("languages","list"))
+  ll <- .get(conf,c("languages","codes"))
 
   #
   # data

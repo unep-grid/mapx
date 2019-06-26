@@ -17,23 +17,26 @@ export function fetchViews(opt) {
 
   return h
     .fetchProgress(url, {
-      onProgress: onProgressData,
-      onError: onProgressError,
-      onComplete: onProgressDataComplete
+      onProgress: opt.onProgress || onProgress,
+      onError: opt.onError || onError,
+      onComplete: opt.onComplete || onComplete
     })
     .then((data) => {
       return data.json() || [];
     });
 }
 
-function onProgressData(d) {
+function onProgress(d) {
   console.log(Math.round((d.loaded / d.total) * 100));
 }
 
-function onProgressError(d) {
+function onError(d) {
   console.log(d);
 }
 
-function onProgressDataComplete(d) {
+function onComplete(d) {
   console.log(d);
 }
+
+
+

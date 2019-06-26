@@ -25,7 +25,6 @@ export function splitnwords(str) {
     .join('\n');
 }
 
-
 export function getDict(lang) {
   'use strict';
   lang = lang || mx.settings.language || 'en';
@@ -63,10 +62,9 @@ export function getDict(lang) {
       out = import('../built/dict_en.json');
       break;
   }
-  return out.then(m =>
-    {
-      return m.default;
-    });
+  return out.then((m) => {
+    return m.default;
+  });
 }
 
 /** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
@@ -81,7 +79,6 @@ export function updateLanguageElements(o) {
   var langDefault = 'en';
 
   getDict(o.lang).then(function(dict) {
- 
     var els, el, doc, label, found;
     var lang = o.lang;
 
@@ -126,12 +123,12 @@ export function updateLanguageElements(o) {
         /*
          * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
          */
-        if (!type){
+        if (!type) {
           type = el.getAttribute('data-lang_type');
         }
 
         // Default is text. Maybe not the most clever default.
-        if (!type){
+        if (!type) {
           type = 'text';
         }
 
@@ -180,7 +177,7 @@ export function getDictItem(key, lang) {
   lang = lang || mx.settings.language || defaultLang;
 
   return getDict(lang).then(function(dict) {
-    if (!(dict instanceof Array)){
+    if (!(dict instanceof Array)) {
       dict = mx.helpers.objectToArray(dict);
     }
 
@@ -292,7 +289,7 @@ export function checkLanguage(o) {
     for (var l in langs) {
       lang = langs[l];
       test();
-      if (found){
+      if (found) {
         return lang;
       }
     }
@@ -302,24 +299,23 @@ export function checkLanguage(o) {
 }
 
 /**
- * Get language item from object 
+ * Get language item from object
  * @param {object} o options
  * @param {object} o.obj object to check
  * @param {string} o.path path to the string to check
  * @param {string} o.language language code expected
  */
-export function getTranslationFromObject(o){
+export function getTranslationFromObject(o) {
   var h = mx.helpers;
   var lang = checkLanguage(o);
-  var out = h.path(o.obj,o.path + '.' + lang,'');
+  var out = h.path(o.obj, o.path + '.' + lang, '');
   return out;
 }
-
 
 export function updateLanguageViewsList(o) {
   var elsViews = document.getElementsByClassName('mx-view-item');
 
-  if (!mx.maps || !mx.maps[o.id]){
+  if (!mx.maps || !mx.maps[o.id]) {
     return;
   }
 
@@ -367,6 +363,9 @@ export function updateLanguageViewsList(o) {
  */
 export function updateLanguageMap(o) {
   var map = mx.helpers.getMap(o.id);
+  if (!mx.helpers.isMap(map)) {
+    return;
+  }
   var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
   var defaultLang = 'en';
   var layers = [

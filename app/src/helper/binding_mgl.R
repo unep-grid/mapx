@@ -125,17 +125,21 @@ mglRemoveView <- function( id=NULL, idView, session=shiny::getDefaultReactiveDom
     )
 }
 
-#' Send view list to js
-#' @param viewsList {list} List of view to save
+#' Update views list 
+#'
+#' Trigger an update or send new view list, possibly compact.
+#'
 #' @param id {character} Id of the map to associate views
+#' @param viewsList {list} List of view to save
 #' @param viewsCompact {boolean} For compact views list (ask remote server for full view)
+#' @param autoFetchAll {boolean} Auto fetch views client side based on user id and project
 #' @param project {character} Project code
 #' @param resetViews {boolean} remove old views and replace them by those one
 #' @param idViewsList {character} Id of the view list where to put views
 #' @param idViewsListContainer {character} Id of the view list container
 #' @note mgl init has already saved idViewsList and idViewsListContainer. Duplicate ? 
 #' @export
-mglSetSourcesFromViews <- function(viewsList, id=NULL, project=NULL, resetViews=FALSE, viewsCompact=FALSE, idViewsList=NULL, idViewsListContainer=NULL, render=TRUE, session=shiny::getDefaultReactiveDomain()) {
+mglUpdateViewsList <- function(viewsList=NULL, id=NULL, project=NULL, resetViews=FALSE, viewsCompact=FALSE,autoFetchAll=FALSE, idViewsList=NULL, idViewsListContainer=NULL, render=TRUE, session=shiny::getDefaultReactiveDomain()) {
 
   conf <- mxGetDefaultConfig()
 
@@ -151,8 +155,7 @@ mglSetSourcesFromViews <- function(viewsList, id=NULL, project=NULL, resetViews=
     idViewsListContainer <- conf[[c("map","idViewsListContainer")]]
   }
 
-
-  session$sendCustomMessage("mglSetSourcesFromViews",list(
+  session$sendCustomMessage("mglUpdateViewsList",list(
       id = id,
       viewsList = viewsList,
       idViewsList = idViewsList,

@@ -198,6 +198,25 @@ exports.attrToPgCol = function(attribute, attributes) {
   return toPgColumn(attr);
 };
 
+
+/**
+* Convert js array [1,2,3] to pg array ('1','2','5');
+* 
+* @param {Array} arr Array to convert
+* @param {Any} def Default value, in case of empty array.
+*/
+exports.arrayToPgArray = function(arr, def) {
+  if(typeof arr === "string"){
+   arr = [arr];
+  }
+  arr = arr || [];
+  if (arr.length === 0) {
+    return def || '';
+  } else {
+    return "('" + arr.join("','") + "')";
+  }
+};
+
 /**
  * Send json as zip in res with proper header
  * @param {Object} data to send

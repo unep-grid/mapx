@@ -529,7 +529,7 @@ mxDbProjectTitleExists <- function(title,ignore=NULL,languages=NULL){
   if(noDataCheck(title)) return(FALSE)
   if(noDataCheck(ignore)) ignore = ""
   projectsTable <- .get(config,c("pg","tables","projects"))
-  languages <- .get(config,c("languages","list"))
+  languages <- .get(config,c("languages","codes"))
   language <- paste(sprintf("title@>'{\"%1$s\":\"%2$s\"}' IS TRUE",languages,title),collapse=" OR ")
 
   sql <- sprintf("

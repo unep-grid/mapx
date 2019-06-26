@@ -95,7 +95,7 @@ mxParseQuery <- function(urlSearch){
 
   if(!noDataCheck(query$language)){
   
-    languages <- .get(config,c('languages','list'))
+    languages <- .get(config,c('languages','codes'))
     if( ! query$language %in% languages ){
        query$language <- NULL
     }
