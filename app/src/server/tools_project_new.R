@@ -126,6 +126,7 @@ observeEvent(input$btnAddProjectConfirm,{
   r$map_position <- list(lat=0,lng=0,zoom=2)
   r$views_external <- list()
   r$alias <- character(1)
+  r$contacts <- list(idCreator)
 
   mxDbAddRow(r,"mx_projects")
 
