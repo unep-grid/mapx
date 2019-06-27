@@ -35,13 +35,15 @@ function getViews(opt) {
     if (!opt.idProject || !opt.idUser) {
       return reject({message: 'Invalid id'});
     }
+    opt.idViews = opt.idViews instanceof Array ? opt.idViews : opt.idViews.split(',');
+    views = utils.arrayToPgArray(opt.idViews || '');
 
     var sql = utils.parseTemplate(template.getViews, {
       idUser: opt.idUser * 1,
       idProject: opt.idProject,
       selectString: opt.selectString || '*',
       language: opt.language || 'en',
-      idViews: opt.idViews || ''
+      idViews: utils.arrayToPgArray(opt.idViews || '')
     });
 
     resolve(clientPgRead.query(sql));

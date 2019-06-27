@@ -68,6 +68,7 @@ ELSE
     ELSE (
       v.id in {{idViews}}
     )
+    END
   )
   AND
   (
