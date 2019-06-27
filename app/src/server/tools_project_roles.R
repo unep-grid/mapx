@@ -27,6 +27,13 @@ observeEvent(input$btnShowRoleManager,{
     ui <- tagList(
       uiOutput("uiValidateProjectRoles"),
       selectizeInput(
+        "selectProjectContacts",
+        label = d("list_contacts",language,web=F),
+        selected = unique(userList$contacts),
+        choices = userList$admins,
+        multiple = FALSE
+        ),
+      selectizeInput(
         "selectProjectAdmins",
         label = d("list_admins",language,web=F),
         selected = userList$admins,
@@ -59,13 +66,6 @@ observeEvent(input$btnShowRoleManager,{
           plugins = list("remove_button")
           )
         ),
-      selectizeInput(
-        "selectProjectContacts",
-        label = d("list_contacts",language,web=F),
-        selected = unique(userList$contacts),
-        choices = userList$admins,
-        multiple = FALSE
-        ),
         tags$div(style="height:300px;")
       )
 
@@ -85,6 +85,26 @@ observeEvent(input$btnShowRoleManager,{
   }
 
 })
+
+
+observeEvent(input$selectProjectAdmins,{
+  contacts <- unique(as.numeric(input$selectProjectContacts))
+  admins <- unique(as.numeric(input$selectProjectAdmins))
+  emails <- vapply(admins,mxDbGetEmailFromId,character(1))
+  names(admins) <- emails
+
+  if( ! contacts %in% admins ){
+    contacts <- admins[1]
+  }
+
+  updateSelectizeInput(session,
+    inputId = 'selectProjectContacts',
+    selected = contacts, 
+    choices = admins
+    )
+})
+
+
 
 #
 # Validation of roles
