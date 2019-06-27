@@ -182,19 +182,7 @@ export function initMapxApp(o) {
    * Send loading confirmation to shiny
    */
   o.map.on('load', function() {
-    /*
-     * Init pixop
-     */
-    mx.helpers.initPixop();
-
-    /*
-     * secondary centering method
-     */
-
-    if (!o.storyAutoStart) {
-      showUi();
-    }
-
+ 
     /*
      * set views list
      */
@@ -216,8 +204,7 @@ export function initMapxApp(o) {
               view: o.viewsList[0],
               save: false,
               autoStart: true
-            })
-            .then(showUi);
+            });
         }
       });
 
@@ -294,14 +281,6 @@ export function initMapxApp(o) {
     });
   });
 
-  /**
-   * local helpers
-   */
-  function showUi() {
-    document.querySelectorAll('.mx-hide-start').forEach(function(el) {
-      el.classList.remove('mx-hide-start');
-    });
-  }
 }
 
 /**
@@ -723,7 +702,7 @@ export function updateViewsList(o) {
     /* Sort viewsToAdd by title */
     function sortViews(viewsToAdd) {
       var aTitle, bTitle;
-      viewsToAdd = viewsToAdd || [];
+      viewsToAdd = h.isArray(viewsToAdd) ? viewsToAdd : [];
       viewsToAdd.sort(function(a, b) {
         aTitle = getViewTitle(a);
         bTitle = getViewTitleNormalized(b);

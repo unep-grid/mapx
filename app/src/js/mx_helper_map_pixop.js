@@ -3,6 +3,7 @@
 */
 export function overlapsSpotlightUpdate(){
 
+  mx.helpers.initPixop();
   var state = overlapsSpotlightState();
 
   if( ! state.enabled ) return;
