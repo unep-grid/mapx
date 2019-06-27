@@ -31,18 +31,17 @@ export function filterViewsListText(o) {
     var lang = mx.settings.language;
     var search = this.value.toLowerCase();
     var displayAll = h.isEmpty(search);
-
+    var txt = "";
     views.forEach((v) => {
       var found = true;
       var el = document.getElementById(v.id);
-
       if (h.isElement(el)) {
         var hasSkip = el.classList.contains(classSkip);
         if (!hasSkip) {
           if (displayAll) {
             el.classList.remove(classHide);
           } else {
-            var txt =
+            txt =
               h.getLabelFromObjectPath({
                 obj: v,
                 path: 'data.title',
@@ -55,12 +54,15 @@ export function filterViewsListText(o) {
                   path: 'data.abstract',
                   lang: lang,
                   defaultKey: ''
-                })
-                .toLowerCase();
+                }).toLowerCase();
+
+             txt = txt.toLowerCase();
 
             if (h.isString(txt)) {
-              found = txt.includes(search);
+              found = txt.indexOf(search) > -1;
+              //console.log({found,txt,search});
             } else {
+              console.log(txt);
               found = false;
             }
 
@@ -80,6 +82,7 @@ export function filterViewsListText(o) {
 
   elInput.addEventListener('keyup', listener);
   return listener;
+
 }
 
 /**
