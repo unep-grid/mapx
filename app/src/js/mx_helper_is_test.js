@@ -7,11 +7,9 @@
 export function isEmpty(item) {
   if (!item) {
     return true;
-  }
-  if (isObject(item)) {
+  } else if (isObject(item)) {
     return isEqual(item, {});
-  }
-  if (isArray(item)) {
+  } else if (isArray(item)) {
     return isEqual(item, []);
   }
 }

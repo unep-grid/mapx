@@ -50,8 +50,8 @@ observeEvent(input$btnMakeQuery,{
   language <- reactData$language
   userRole <- getUserRole()
   isMember <- isTRUE("members" %in% userRole$groups)
-  apiPort <- config$api$port 
-  apiHost <- config$api$host 
+  apiPort <- config$api$port_public
+  apiHost <- config$api$host_public
   if( apiPort != 80 && apiPort != 443){
     apiHost = apiHost + ":" + apiPort 
   }
