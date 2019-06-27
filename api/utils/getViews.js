@@ -31,19 +31,29 @@ function getViewsHandler(req, res) {
  */
 function getViews(opt) {
   opt = opt || {};
+  var sql;
+  var viewsFilter = [];
+  var sqlViewsFilter = '';
+  var hasViews = false;
   return new Promise((resolve, reject) => {
     if (!opt.idProject || !opt.idUser) {
       return reject({message: 'Invalid id'});
     }
-    opt.idViews = opt.idViews instanceof Array ? opt.idViews : opt.idViews.split(',');
-    views = utils.arrayToPgArray(opt.idViews || '');
 
-    var sql = utils.parseTemplate(template.getViews, {
+    if(opt.idViews){
+      viewsFilter = opt.idViews instanceof Array ? opt.idViews : opt.idViews.split(',');
+    }
+   
+    hasViews = viewsFilter.length > 0;
+    sqlViewsFilter = utils.arrayToPgArray(viewsFilter);
+
+    sql = utils.parseTemplate(template.getViews, {
       idUser: opt.idUser * 1,
       idProject: opt.idProject,
       selectString: opt.selectString || '*',
       language: opt.language || 'en',
-      idViews: utils.arrayToPgArray(opt.idViews || '')
+      filterByViews : hasViews,
+      idViews: sqlViewsFilter
     });
 
     resolve(clientPgRead.query(sql));

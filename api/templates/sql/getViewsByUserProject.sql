@@ -34,41 +34,24 @@ v_all AS (
   /**
    * Title private
    */
-  (
-    CASE WHEN
-      coalesce(data #>> '{"title","{{language}}"}','') = ''
-      THEN 
-      ( 
-        CASE WHEN coalesce(data #>> '{"title","en"}','') = '' 
-          THEN id 
-        ELSE data #>> '{"title","en"}' 
-    END
-  )
-ELSE
-  data #>> '{"title","{{language}}"}' 
-    END
-  )
-  as _title
+  CASE WHEN coalesce(data #>> '{"title","{{language}}"}','') = ''
+    THEN 
+    CASE WHEN coalesce(data #>> '{"title","en"}','') = '' 
+      THEN id 
+    ELSE data #>> '{"title","en"}' END
+    ELSE data #>> '{"title","{{language}}"}'  
+   END as _title
   /**
-   * Data source
-   */
+  * Data source
+  */
   FROM mx_views_latest v, p_config p
-
   /**
-   * Filter by role
-   */
+  * Filter by role
+  */
   WHERE 
   (
-    CASE WHEN
-      coalesce({{idViews}},'') = ''
-      THEN
-      (
-        true
-      )
-    ELSE (
-      v.id in {{idViews}}
-    )
-    END
+    CASE WHEN {{filterByViews}} THEN v.id in {{idViews}}
+    ELSE true END
   )
   AND
   (

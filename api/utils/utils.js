@@ -211,7 +211,7 @@ exports.arrayToPgArray = function(arr, def) {
   }
   arr = arr || [];
   if (arr.length === 0) {
-    return def || '';
+    return def || '(\'\')';
   } else {
     return "('" + arr.join("','") + "')";
   }
