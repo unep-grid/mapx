@@ -7,11 +7,9 @@
 export function isEmpty(item) {
   if (!item) {
     return true;
-  }
-  if (isObject(item)) {
+  } else if (isObject(item)) {
     return isEqual(item, {});
-  }
-  if (isArray(item)) {
+  } else if (isArray(item)) {
     return isEqual(item, []);
   }
 }
@@ -35,12 +33,15 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm)$/)
   );
 }
-export function isViewsArray(arr){
+export function isViewsArray(arr) {
   const h = mx.helpers;
-   return isArray(arr) && (function() {
+  return (
+    isArray(arr) &&
+    (function() {
       // Workaround for the loop optimisation thats convert foreach to for
-      return h.all(arr.map(v => isView(v)));
-   })();
+      return h.all(arr.map((v) => isView(v)));
+    })()
+  );
 }
 
 /**
