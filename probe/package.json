@@ -1,0 +1,37 @@
+{
+  "name": "probe",
+  "version": "1.0.0",
+  "description": "Little script to test technologies used in MapX",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:dev": "webpack --config webpack.dev.config.js",
+    "build:prod": "webpack --config webpack.prod.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unep-grid/map-x-mgl.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/unep-grid/map-x-mgl/issues"
+  },
+  "homepage": "https://github.com/unep-grid/map-x-mgl",
+  "devDependencies": {
+    "autoprefixer": "^9.4.4",
+    "browser-sync": "^2.26.3",
+    "browser-sync-webpack-plugin": "^2.2.2",
+    "css-loader": "^2.1.0",
+    "events-polyfill": "^2.1.0",
+    "node-sass": "^4.11.0",
+    "postcss-calc": "^7.0.1",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2",
+    "webpack-merge": "^4.1.5"
+  }
+}
