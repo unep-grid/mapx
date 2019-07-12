@@ -73,7 +73,8 @@ services:
       - traefik.frontend.rule=Host:geoserver.mapx.localhost
   pg:
     env_file: mapx.dev.env
-    image: mdillon/postgis:10-alpine
+    build: ./pg/.
+    image: fredmoser/mx-postgis:11-alpine
     restart: always
     hostname: pg
     volumes :
