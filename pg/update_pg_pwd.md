@@ -2,35 +2,35 @@
 
 Procedure to follow if PostgreSQL passwords need to be updated for security reason (or any other reasons).
 
-Launch MapX stack with Docker Compose:
+1. Launch MapX stack with Docker Compose:
 
-```sh
-docker-compose up
-```
+    ```sh
+    docker-compose up
+    ```
 
-Once your stack is up, update PostgreSQL passwords in the environment file:
+2. Once your stack is up, update PostgreSQL passwords in the environment file:
 
-- `POSTGRES_PASSWORD`
-- `POSTGRES_USER_WRITE_PASSWORD`
-- `POSTGRES_USER_READ_PASSWORD`
+    - `POSTGRES_PASSWORD`
+    - `POSTGRES_USER_WRITE_PASSWORD`
+    - `POSTGRES_USER_READ_PASSWORD`
 
-Connect to PostgreSQL:
+3. Connect to PostgreSQL using psql:
 
-```sh
-docker-compose exec pg psql -U {POSTGRES_USER}
-```
+    ```sh
+    docker-compose exec pg psql -U {POSTGRES_USER}
+    ```
 
-Queries to run in PSQL to update the passwords. Be careful to respect the order in which the queries are run.
+4. Queries to run in psql to update the passwords. Be careful to respect the order in which the queries are run.
 
-```sql
-ALTER ROLE {POSTGRES_USER_READ} WITH PASSWORD '{POSTGRES_USER_READ_PASSWORD}';
-ALTER ROLE {POSTGRES_USER_WRITE} WITH PASSWORD '{POSTGRES_USER_WRITE_PASSWORD}';
-ALTER ROLE {POSTGRES_USER} WITH PASSWORD '{POSTGRES_PASSWORD}';
-\q
-```
+    ```sql
+    ALTER ROLE {POSTGRES_USER_READ} WITH PASSWORD '{POSTGRES_USER_READ_PASSWORD}';
+    ALTER ROLE {POSTGRES_USER_WRITE} WITH PASSWORD '{POSTGRES_USER_WRITE_PASSWORD}';
+    ALTER ROLE {POSTGRES_USER} WITH PASSWORD '{POSTGRES_PASSWORD}';
+    \q
+    ```
 
-Force Compose to stop and recreate all containers to avoid any problems related to passwords update:
+5. Force Compose to stop and recreate all containers to avoid any problems related to passwords update:
 
-```sh
-docker-compose up -d --force-recreate
-```
+    ```sh
+    docker-compose up -d --force-recreate
+    ```
