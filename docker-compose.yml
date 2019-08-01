@@ -90,5 +90,21 @@ services:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
       - 6379
-
+  probe:
+    build: ./probe/.
+    image: fredmoser/mx-probe:0.1-go
+    labels:
+      - traefik.frontend.rule=Host:probe.mapx.localhost
+      - traefik.port=3737
+    ports:
+      - 8080:8080
+    volumes:
+      - ./probe/dist/:/web
+  ws-echo:
+    image: jmalloc/echo-server
+    labels:
+      - traefik.frontend.rule=Host:ws-echo.mapx.localhost
+      - traefik.port=3636
+    ports:
+      - 8081:8080
 
