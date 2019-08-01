@@ -210,7 +210,7 @@ export function saveSpatialDataAsView(opt) {
     gj: {},
     fileType: opt.fileType,
     fileName: opt.fileName,
-    title : opt.title || opt.fileName.split('.')[0]
+    title: opt.title || opt.fileName.split('.')[0]
   };
 
   return mx.helpers
@@ -286,12 +286,12 @@ export function saveSpatialDataAsView(opt) {
             project: mx.settings.project,
             date_modified: new Date().toLocaleDateString(),
             data: {
-              title: { 
+              title: {
                 en: c.title
-              }, 
+              },
               attributes: m.attributes,
               abstract: {
-                en: c.title 
+                en: c.title
               },
               geometry: {
                 extent: {
@@ -313,11 +313,8 @@ export function saveSpatialDataAsView(opt) {
             view: view
           });
 
-          mx.helpers.renderViewsList({
-            views: view,
-            add: true,
-            open: true
-          });
+          mx.helpers.viewsListAddSingle(view, {open: true});
+          mx.helpers.renderView({viewData: view});
 
           c.worker.terminate();
         }
@@ -338,7 +335,7 @@ export function saveSpatialDataAsView(opt) {
 function saveInLocalDb(opt) {
   mx.data.geojson
     .setItem(opt.view.id, {
-      view: opt.view
+      view: JSON.parse(JSON.stringify(opt.view)) // clone
     })
     .then(() => {
       console.log(

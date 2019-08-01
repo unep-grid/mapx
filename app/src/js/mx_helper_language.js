@@ -73,8 +73,8 @@ export function getDict(lang) {
  * @param {String} o.lang Language code. e.g. "en" or "fr".
  */
 export function updateLanguageElements(o) {
-  'use strict';
   const h = mx.helpers;
+  o = o || {};
   o.lang = o.lang || mx.settings.language || 'en';
   var langDefault = 'en';
 

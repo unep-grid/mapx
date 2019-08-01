@@ -1213,6 +1213,18 @@
     "ps": ""
   },
   {
+    "id": "btn_show_project_views_states",
+    "en": "Save views list state",
+    "fr": "Sauvegarder l'ordre des vues",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "btn_show_project_delete",
     "en": "Delete this project",
     "fr": "Supprimer ce projet",
@@ -1265,6 +1277,18 @@
     "en": "Filter activated views",
     "fr": "Filtrer les vues activées",
     "es": "Filtrar las vistas activadas",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_filter_show_panel",
+    "en": "Advanced filter",
+    "fr": "Filtres avancés",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5620,6 +5644,30 @@
     "id": "project_enable_join",
     "en": "Allow nonmember to request a membership to this project.",
     "fr": "Autoriser les personnes non membres à faire une demande d'adhésion.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "fr": "Identifiant",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+    {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "fr": "Sauvegarder l'ordre des vues",
     "es": "",
     "ru": "",
     "zh": "",

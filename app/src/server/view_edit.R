@@ -20,6 +20,7 @@ observe({
         userRole <- getUserRole()
         language <- reactData$language
         project <- reactData$project
+        token <- reactUser$token
 
         if(viewAction[["action"]] == "btn_upload_geojson" ){
 
@@ -35,15 +36,13 @@ observe({
          
           viewId <- viewAction[["target"]]
 
-          viewData <-  mxDbGetViews(
-            views = viewId, 
-            project = project,
-            rolesInProject = userRole,
+          viewData <-  mxApiGetViews(
+            idViews = viewId, 
+            idProject = project,
             idUser = userData$id,
             language = language,
-            editMode = TRUE
+            token = token
             )
-
 
           if(length(viewData)>0){
             viewData <- viewData[[1]]
@@ -937,8 +936,11 @@ observe({
 })
 observe({
 
-  timer <- mxTimeDiff("Layer properties timing ")
   layerMain <- input$selectSourceLayerMain
+  if(noDataCheck(layerMain)){
+    return()
+  }
+  timer <- mxTimeDiff("Layer properties timing ")
   #
   # In case of of reopening same view, this oberver is not
   # invalidated. Meaning properties not updated
@@ -950,8 +952,6 @@ observe({
 
     viewData <- reactData$viewDataEdited
     mxDebugMsg("Layer properties update")
-
-    if(noDataCheck(layerMain)) return()
     if(noDataCheck(viewData)) return()
     if(viewData$type != "vt") return()
 

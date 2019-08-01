@@ -198,20 +198,19 @@ exports.attrToPgCol = function(attribute, attributes) {
   return toPgColumn(attr);
 };
 
-
 /**
-* Convert js array [1,2,3] to pg array ('1','2','5');
-* 
-* @param {Array} arr Array to convert
-* @param {Any} def Default value, in case of empty array.
-*/
+ * Convert js array [1,2,3] to pg array ('1','2','5');
+ *
+ * @param {Array} arr Array to convert
+ * @param {Any} def Default value, in case of empty array.
+ */
 exports.arrayToPgArray = function(arr, def) {
-  if(typeof arr === "string"){
-   arr = [arr];
+  if (typeof arr === 'string') {
+    arr = [arr];
   }
   arr = arr || [];
   if (arr.length === 0) {
-    return def || '(\'\')';
+    return def || "('')";
   } else {
     return "('" + arr.join("','") + "')";
   }
@@ -236,11 +235,68 @@ function dataToJsonZip(data) {
   });
 }
 
+/**
+ * Wrapper on throw new Error
+ * @param {String} reason Error message
+ */
+function stop(reason) {
+  throw new Error(reason);
+}
+exports.stop = stop;
+
+/**
+* Validator test an input against an array of rules
+* @param {Array} validateRules Array of rules with a structure like :
+* [{
+*  id : '<id>',
+*  test : function(value){if(!value)(stop("Test failed"))}
+* }]
+* @return {Function} a validation functio taking two argument : id and value.
+*/
+function validator(validateRules) {
+  return function validate(id, value) {
+    let out = value;
+    validateRules.forEach((r) => {
+      if (r.key === id) {
+        out = r.test(value);
+      }
+    });
+    return out;
+  };
+}
+exports.validator = validator;
+
+/**
+* Convert string input from query string (e.g. test=1,2,4 => [1,2,3]) as an array and clean
+* @param {String} v String value to convert 
+*/
+function asArray(v) {
+  v = v || [];
+  var r = [];
+  if (v instanceof Array) {
+    r = cleanArray(v);
+  } else {
+    r = cleanArray(v.split(','));
+  }
+  return r;
+}
+exports.asArray = asArray;
+
+/**
+* Clean array, remove empty item
+* @param {Array} arr Array to clean
+*/
+function cleanArray(arr) {
+  return arr.reduce((a, v) => (v ? a.concat(v) : a), []);
+}
+
+
 /*
  * Export methods
  */
 exports.view = require('./getView.js');
-exports.views = require('./getViews.js');
+exports.views = require('./getViewsByProject.js');
+exports.viewsPublic = require('./getViewsPublic.js');
 exports.source = require('./getSource.js');
 exports.mirror = require('./getMirrorRequest.js');
 exports.sourceMetadata = require('./getSourceMetadata.js');

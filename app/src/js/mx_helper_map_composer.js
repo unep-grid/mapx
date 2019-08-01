@@ -80,7 +80,7 @@ function mapComposerModalAuto() {
   /**
    * Run map composer
    */
-  return import('./map_composer/index.js').then((m) => {
+  return mx.helpers.moduleLoad('map_composer').then(MapComposer=>{
     state.items.forEach((i) => {
       if (i.type === 'map') {
         Object.assign(i.options, {
@@ -93,6 +93,7 @@ function mapComposerModalAuto() {
     });
 
     var elContainer = mx.helpers.el('div');
+    var mc = new MapComposer(elContainer, state);
 
     mx.helpers.modal({
       title : 'Map Composer',
@@ -110,7 +111,6 @@ function mapComposerModalAuto() {
       }
     });
 
-    var mc = new m.MapComposer(elContainer, state);
 
     function destroy() {
       mc.destroy();

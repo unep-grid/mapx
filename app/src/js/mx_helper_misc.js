@@ -12,6 +12,37 @@ export function removeServiceWorker() {
 }
 
 /**
+ * Retrieve nested item from object/array
+ * @param {Object|Array} obj
+ * @param {String} path dot separated
+ * @param {*} def default value ( if result undefined )
+ * @note http://jsfiddle.net/Jw8XB/1/
+ * @returns {*}
+ */
+export function path(obj, path, def) {
+  var i, len;
+  if (typeof def === 'undefined') {
+    def = null;
+  }
+  if (typeof path !== 'string') {
+    return def;
+  }
+  for (i = 0, path = path.split('.'), len = path.length; i < len; i++) {
+    if (!obj || typeof obj !== 'object') {
+      return def;
+    }
+    obj = obj[path[i]];
+  }
+
+  if (obj === undefined) {
+    return def;
+  }
+  return obj;
+}
+
+
+
+/**
  * Set click handler mode
  * @param {Object} opt options
  * @param {String} opt.type  Type of handler : dashboard, draw, ...
@@ -40,19 +71,30 @@ export function getClickHandlers() {
 
 /**
  * Get url query parameter by name
- * @param {String} name Name of the query request name
- * @note http://www.netlobo.com/url_query_string_javascript.html
+ *
+ * @param {String|Array} name Name of the query parameter name. If name is an array, values will be concatenated in the same array
+ * @return {Array} Array of values from the query parameter
  */
-export function getUrlParameter(name) {
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-  var regexS = '[\\?&]' + name + '=([^&#]*)';
-  var regex = new RegExp(regexS);
-  var results = regex.exec(window.location.href);
-  if (results === null) {
-    return '';
+export function getQueryParameter(name) {
+  var h = mx.helpers;
+  if (h.isArray(name)) {
+    return getQueryParameter_array(name);
   } else {
-    return results[1];
+    var url = new URL(window.location.href);
+    var p = url.searchParams.get(name);
+    if (h.isString(p)) {
+      p = p.split(',');
+    } else {
+      p = [];
+    }
+    return p;
   }
+}
+
+function getQueryParameter_array(names) {
+  return names
+    .map((n) => getQueryParameter(n))
+    .reduce((p, a) => a.concat(p), []);
 }
 
 /**
@@ -68,7 +110,7 @@ export function paramsToObject(params) {
     : window.location.search.substring(1).split('&');
   for (var i = 0, iL = params.length; i < iL; i++) {
     param = params[i].split('=');
-    out[param[0].toLowerCase()] = dec(param[1]);
+    out[param[0]] = dec(param[1]);
   }
   return out;
 }
@@ -256,7 +298,6 @@ export function paddy(n, p, c) {
   var pad = new Array(1 + p).join(pad_char);
   return (pad + n).slice(-pad.length);
 }
-
 
 /**
  * Get the correct css transform function
@@ -659,6 +700,7 @@ export function getDistinctIndexWords(view) {
     toString(view.data.abstract);
 
   str = str.replace(/[^0-9a-zA-Z]+/g, ';').split(';');
+
   str = mx.helpers.getArrayStat({arr: str, stat: 'distinct'});
   return str.join(' ');
 }
@@ -1658,6 +1700,7 @@ export function objectToArray(obj, asTable) {
   });
 }
 
+
 /**
  * Parent finder
  * @param {Object} o options;
@@ -1666,14 +1709,31 @@ export function objectToArray(obj, asTable) {
  */
 export function parentFinder(o) {
   var el;
-  if (o.selector instanceof Node) {
+  const h = mx.helpers;
+  if (h.isElement(o.selector)) {
+    el = o.selector;
+  } else {
+    el = document.querySelector(o.selector);
+  }
+  while (el.parentElement && !el.classList.contains(o.class)) {
+    el = el.parentElement;
+  }
+  return el;
+}
+
+export function childRemover(o) {
+  var el;
+  const h = mx.helpers;
+  if (h.isElement(o)) {
+    el = o;
+  } else if (h.isElement(o.selector)) {
     el = o.selector;
   } else {
     el = document.querySelector(o.selector);
   }
 
-  while ( el.parentElement && !el.classList.contains(o.class)) {
-    el = el.parentElement;
+  while (el.firstChild) {
+    el.removeChild(el.firstChild);
   }
   return el;
 }
@@ -2141,7 +2201,7 @@ export function handleRequestMessage(msg, msgs, on) {
 
 export function convertAllImagesToBase64(elOrig) {
   var el = mx.helpers.el;
-  if(!mx.helpers.isElement(elOrig)){
+  if (!mx.helpers.isElement(elOrig)) {
     return;
   }
   var elImgs = elOrig.querySelectorAll('img');
@@ -2161,4 +2221,3 @@ export function convertAllImagesToBase64(elOrig) {
     elImg.src = elCanvas.toDataURL();
   });
 }
-

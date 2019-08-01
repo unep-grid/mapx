@@ -33,7 +33,7 @@ export function isView(item) {
   return (
     isObject(item) &&
     mx.helpers.isString(item.type) &&
-    !!item.type.match(/^(vt|rt|cc||sm)$/)
+    !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
 export function isViewsArray(arr) {

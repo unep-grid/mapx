@@ -1,0 +1,37 @@
+.switch {
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.switch .switch-input {
+  display: none;
+}
+
+.switch-label {
+  width: 20px;
+  display: flex;
+  align-items: center;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.switch-handle {
+  flex-grow: 0;
+  min-height: 10px;
+  min-width: 10px;
+  border-radius: 50%;
+  background: black;
+}
+
+.switch-container {
+  pointer-events:none;
+  display: flex;
+  flex-grow: 1;
+  min-width: 20px;
+  border-radius: 10px;
+  border: 1px solid black;
+}
+.switch .switch-input:checked ~ .switch-label .switch-handle {
+  margin-left:auto;
+}

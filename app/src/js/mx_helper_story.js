@@ -1368,7 +1368,7 @@ export function storyController(o) {
        */
       o.data.views.forEach(function(idView) {
         console.log('add again  view ' + idView);
-        h.addView({
+        h.renderView({
           id: o.id,
           idView: idView,
           debug: true
@@ -1735,12 +1735,12 @@ export function storyPlayStep(o) {
    */
   mx.helpers.onNextFrame(function() {
     vVisible = getViewsEnabled(o);
-    vToRemove = mx.helpers.arrayDiff(vVisible, vStep);
-    vToAdd = mx.helpers.arrayDiff(vStep, vVisible);
+    vToRemove = mx.helpers.getArrayDiff(vVisible, vStep);
+    vToAdd = mx.helpers.getArrayDiff(vStep, vVisible);
 
     vToAdd.forEach(function(v, i) {
       var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-      mx.helpers.addView({
+      mx.helpers.renderView({
         id: o.id,
         idView: v,
         before: vPrevious,

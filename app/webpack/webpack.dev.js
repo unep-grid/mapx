@@ -11,22 +11,18 @@ module.exports = merge(common, {
   },
   plugins: [
     new watchUi({
-      watchFolder: "./src/ui",
-      script: 'Rscript ./src/script/build_html.R'
-    }),
-    new watchUi({
       watchFolder: "./src/data",
       script: 'Rscript ./src/script/build_dict_json.R'
     }),
     new HtmlWebpackPlugin({
-      template : './src/kiosk/index.html',
+      template: './src/html/kiosk.html',
       filename: './kiosk.html',
-      chunks : ['common','kiosk']
+      chunks: ['common', 'kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template : './src/built/index.html',
-      chunks : ['common','app']
-    })
+      template: './src/html/index.html',
+      chunks: ['common', 'app']
+    }),
   ]
 });

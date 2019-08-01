@@ -36,16 +36,17 @@ export function setViewBadges(opt){
   
   var h = mx.helpers;
   var view = opt.view || {};
-  var cl;
   var elBadges = document.createElement("div");
   var readers = view.readers || [];
   var hasEdit = view._edit === true;
-  var isValidable = view.type == "rt" || view.type == "vt";
-  var hasDiaf = view.type == "vt";
+  var isValidable = view.type === "rt" || view.type === "vt";
+  var hasDiaf = view.type === "vt";
   var hasPublic = readers.indexOf("public") > -1;
   var isShared = view.project !== mx.settings.project;
-  var elViewBadgesContainer = document.getElementById("view_badges_" + view.id);
-  if(!elViewBadgesContainer) return;
+  var elViewBadgesContainer =  document.getElementById("view_badges_" + view.id);
+  if(!elViewBadgesContainer){
+    return;
+  }
   elViewBadgesContainer.innerHTML = "";
   elViewBadgesContainer.appendChild(elBadges);
   elBadges.classList.add("mx-view-badges");

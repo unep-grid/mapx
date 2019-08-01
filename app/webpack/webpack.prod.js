@@ -20,7 +20,7 @@ module.exports = merge(common, {
   plugins: [
     new WebpackShellPlugin({
       onBuildStart: [
-        'Rscript ./src/script/build_html.R',
+        //'Rscript ./src/script/build_html.R',
         'Rscript ./src/script/build_dict_json.R'
       ],
       onBuildEnd: ['echo "Webpack End"']
@@ -31,13 +31,13 @@ module.exports = merge(common, {
       allowExternal: true
     }),
     new HtmlWebpackPlugin({
-      template: './src/kiosk/index.html',
+      template: './src/html/kiosk.html',
       filename: './kiosk.html',
       chunks: ['common', 'sw', 'kiosk']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
-      template: './src/built/index.html',
+      template: './src/html/index.html',
       chunks: ['common', 'sw', 'app']
     }),
 

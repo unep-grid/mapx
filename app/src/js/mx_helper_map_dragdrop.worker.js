@@ -3,7 +3,7 @@
 import * as geojsonhint from 'geojsonhint';
 import {featureEach, propEach} from '@turf/meta';
 import bbox from '@turf/bbox';
-import * as stat from './mx_helper_stat.js';
+import {getArrayDistinct} from './array_stat/index.js';
 import * as color from './mx_helper_colors.js';
 
 // geojson type to mapbox gl type
@@ -177,10 +177,7 @@ onmessage = function(e) {
     });
 
     for (p in attributes.tmp) {
-      attributes[p] = stat.getArrayStat({
-        arr: attributes.tmp[p],
-        stat: 'distinct'
-      });
+      attributes[p] = getArrayDistinct(attributes.tmp[p]);
     }
 
     delete attributes.tmp;
@@ -263,7 +260,7 @@ onmessage = function(e) {
      */
 
     // Set random id for source and layer
-        // Set random color
+    // Set random color
     var ran = Math.random();
     var colA = color.randomHsl(0.3, ran);
     var colB = color.randomHsl(0.9, ran);

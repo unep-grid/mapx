@@ -5,6 +5,8 @@ mxStoryAutoStart = function(
   style
   ){
 
+  stop('Function not yet available')
+
   views <- mxDbGetViews(
     views = idView,
     allReaders = TRUE,

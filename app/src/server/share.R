@@ -225,8 +225,8 @@ observeEvent(reactData$updateShareProject,{
   hasDataViews <- isSameProj && !noDataCheck(data) && !noDataCheck(data$views)
   language <- reactData$language
   userData <- reactUser$data
-  userRole <- mxDbGetProjectUserRoles(idUser=userData$id,idProject=project)
-
+  idUser <- userData$id
+  token <- reactUser$token
   collections <- mxDbGetDistinctCollectionsTags(project)
   if(noDataCheck(collections)) collections <- list()
   updateSelectInput(session,
@@ -234,14 +234,14 @@ observeEvent(reactData$updateShareProject,{
     choices=collections
     )
 
-  views <-  mxDbGetViews(
-    project = project,
-    rolesInProject=userRole,
-    idUser = userData$id,
+  views <-  mxApiGetViews(
+    idUser = idUser,
+    idProject = project,
+    token = token,
     language = language,
     keys = c("id","_title")
     )
-
+   
   if(noDataCheck(views)){
     viewsList=list()
   }else{

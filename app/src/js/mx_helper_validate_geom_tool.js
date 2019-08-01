@@ -1,12 +1,14 @@
 export function getValidateSourceGeom(opt) {
-  if (mx.settings.user.guest) return;
+  if (mx.settings.user.guest){
+    return;
+  }
 
   var h = mx.helpers;
   var elForm = document.getElementById(opt.idForm);
   var elButtonValidate = document.getElementById(opt.idButtonValidate);
   var elListMessage = elForm.querySelector('#' + opt.idListMessage);
 
-  var host = h.getApiUrl('sourceValidateGeom');
+  var host = h.getApiUrl('getSourceValidateGeom');
   var query = {
     idSource: opt.idSource,
     idUser: mx.settings.user.id,

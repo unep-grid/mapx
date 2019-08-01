@@ -1,0 +1,37 @@
+
+.tab-container {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.tab-label {
+  background: #eee; 
+  border: 1px solid #ddd; 
+  padding: .7em 1em;
+  cursor: pointer;
+  z-index: 1;
+  margin-left: -1px;
+}
+.tab-label:first-of-type {
+  margin-left: 0;
+}
+.tab-content {
+  width: 100%;
+  margin-top: -1px;
+  border: 1px solid #ddd;
+  -webkit-order: 1;
+  order: 1;
+}
+.tab-radio, .tab-content {
+  display: none;
+}
+.tab-radio:checked + .tab-label {
+  background: #fff;
+  border-bottom: 1px solid #fff;
+}
+
+.tab-radio:checked + .tab-label + .tab-content {
+  display: block;
+}

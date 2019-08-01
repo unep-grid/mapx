@@ -23,18 +23,11 @@ mxParseQuery <- function(urlSearch){
   # Parse role for project list modal
   #
   query$showProjectsListByRole <-  mxQueryRoleParser(query$showProjectsListByRole)
-  if(!noDataCheck(query$showProjectsListByRole)){
-    mxUpdateUrlParams(list(showProjectsListByRole=""))
-  }
 
   #
   # Parse project title for project list modal
   #
   query$showProjectsListByTitle <-  mxQueryTitleParser(query$showProjectsListByTitle)
-  if(!noDataCheck(query$showProjectsListByTitle)){
-    mxUpdateUrlParams(list(showProjectsListByTitle=""))
-  }
-
 
   #
   # Forced map position
@@ -50,15 +43,7 @@ mxParseQuery <- function(urlSearch){
   if(!noDataCheck(query$action)){
     query$action <- mxDbDecrypt(query$action)
     mxUpdateUrlParams(list(action=""))
-  }
-
-  #
-  # maxRole 
-  #
-  if(!noDataCheck(query$filterViewsByRoleMax)){
-    query$filterViewsByRoleMax <- mxQueryRoleParser(query$filterViewsByRoleMax)
-    mxUpdateUrlParams(list(filterViewsByRoleMax=""))
-  }
+  } 
 
   #
   # Lock project : user will not be able to change project is set to true
@@ -67,26 +52,11 @@ mxParseQuery <- function(urlSearch){
     query$lockProject <- isTRUE(tolower(query$lockProject) == "true")
   }
 
-  if(!noDataCheck(query$noViews)){
-     query$noViews <- isTRUE(tolower(query$noViews) == "true")
-  }else{
-    query$noViews <- FALSE
-  }
-
   #
   # Set the project
   #
   if(!noDataCheck(query$project)){
     query$project <- toupper(query$project)
-    mxUpdateUrlParams(list(project=""))
-  }
-
-  #
-  # Fetch only those views
-  #
-  if(!noDataCheck(query$views)){
-    query$views <- unlist(strsplit(query$views,","))
-    mxUpdateUrlParams(list(views=""))
   }
 
   #
@@ -94,24 +64,10 @@ mxParseQuery <- function(urlSearch){
   #
 
   if(!noDataCheck(query$language)){
-  
     languages <- .get(config,c('languages','codes'))
     if( ! query$language %in% languages ){
        query$language <- NULL
     }
-  
-  }
-
-  #
-  # Collections selection
-  #
-  if(!noDataCheck(query$collections)){
-    query$collections <- unlist(strsplit(query$collections,","))
-    mxUpdateUrlParams(list(collections=""))
-    #
-    # Select method : ANY or ALL
-    #
-    query$collectionsSelectOperator <- query$collectionsSelectOperator
   }
 
   #

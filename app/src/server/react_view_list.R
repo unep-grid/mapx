@@ -34,13 +34,12 @@ reactViewsCompact <- reactive({
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
   userData <- reactUser$data
-  project <- reactData$project
-  language <- reactData$language
-
-  #
-  # Get user role
-  #
+  language <- reactData$language 
+  idProject <- reactData$project
+  idUser <- userData$id
   userRole <- getUserRole()
+  hasRole <- !noDataCheck(userRole)
+  token <- reactUser$token
 
   #
   # Value from request
@@ -48,32 +47,27 @@ reactViewsCompact <- reactive({
   viewsId <- query$views
   collections <- query$collections
   collectionsSelectOperator <- query$collectionsSelectOperator 
-  empty <- query$noViews 
+  noViews <- isTRUE(query$noViews)
   filterViewsByRoleMax <- query$filterViewsByRoleMax 
-  #
-  # don't use requested views twice
-  #
-  query$views <<- NULL
 
   #
   # Set logic
   #
 
-  hasRole <- !noDataCheck(userRole)
-
   if( !hasRole ) return()
 
-  if(empty){
+  if(noViews){
     out <- list()
   }else{
-    out <-  mxDbGetViews(
-      views = viewsId, 
-      filterViewsByRoleMax=filterViewsByRoleMax,
+
+    out <-  mxApiGetViews(
+      idUser = idUser,
+      idProject = idProject,
+      idViews = viewsId, 
+      token = token,
+      filterViewsByRoleMax = filterViewsByRoleMax,
       collections = collections,
       collectionsSelectOperator = collectionsSelectOperator,
-      project = project,
-      rolesInProject = userRole,
-      idUser = userData$id,
       language = language,
       keys = c("id","pid","type","project","_edit","_title","_source")
       )
@@ -84,39 +78,52 @@ reactViewsCompact <- reactive({
 })
 
 
-reactViewsCompactAll <- reactive({
+reactViewsListIdAll <- reactive({
 
   timer <- mxTimeDiff("Fetching all view")
-
-  #
-  # Ivalidated by :
-  #
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
   userData <- reactUser$data
-  project <- reactData$project
-  language <- reactData$language
+  language <- reactData$language 
+  idProject <- reactData$project
+  idUser <- userData$id
+  token <- reactUser$token
 
-  viewsList <- reactViewsCompact()
-
-  idViews <- sapply(viewsList,`[[`,'id')
-  types <- sapply(viewsList,`[[`,'type')
-
-  idViews <- idViews[types %in% c('cc','vt','rt')]
-  idViewsPublic <- mxDbGetViewsAllPublicProject(project)
-
-  viewsPublic <- mxDbGetViewsTitle(idViewsPublic$id,asNamedList=TRUE,language)
-  views <- mxDbGetViewsTitle(idViews,asNamedList=TRUE,language)
-
-  out <- list(
-    views_project = views,
-    views_external = viewsPublic
+  viewsPublic <- mxApiGetViewsAllPublicProject(
+    idUser = idUser,
+    idProject = idProject, 
+    idProjectExclude = idProject,
+    token = token,
+    language = language,
+    types = c('vt','cc','rt'),
+    keys = c("id","_title","_title_project")
+    )
+ 
+  viewsProject <-  mxApiGetViews(
+    idUser = idUser,
+    idProject = idProject,
+    token = token,
+    types = c('vt','cc','rt'),
+    language = language,
+    keys = c("id","_title","_title_project")
     )
 
-  names(out) <- c(
-    d('views_project',language),
-    d('views_external',language)
-    )
+  viewsProjectList <- vapply(viewsProject,function(v){v$id},character(1))
+  viewsProjectTitle <- vapply(viewsProject,function(v){
+    ' [ ' + v$`_title_project` + ' ] ' + v$`_title`  
+    }, character(1))
+  viewsPublicList <- vapply(viewsPublic,function(v){v$id},character(1))
+  viewsPublicTitle <- vapply(viewsPublic,function(v){
+    ' [ ' + v$`_title_project` + ' ] ' + v$`_title`  
+    },character(1))
+
+  names(viewsPublicList) <- viewsPublicTitle
+  names(viewsProjectList) <- viewsProjectTitle
+
+  viewsProjectList <- viewsProjectList[order(names(viewsProjectList))]
+  viewsPublicList <- viewsPublicList[order(names(viewsPublicList))]
+
+  out <- c(viewsProjectList,viewsPublicList)
 
   mxTimeDiff(timer)
   return(out)
@@ -163,20 +170,5 @@ reactViewsExternal <- reactive({
 
 })
 
-reactViewsCompactApi <- reactive({
-  userData <- reactUser$data
-  token <- reactUser$token
-  idProject <- reactData$project
-  idUser <- userData$id
-  language <- reactData$language
-
-  mxApiFetch('/get/views/',list(
-      token = token,
-      idProject = idProject,
-      idUser = idUser,
-      selectString = "id,pid,type,project,_edit,_title,_source"
-      ))
-
-})
 
 

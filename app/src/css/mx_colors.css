@@ -22,26 +22,6 @@
   text-decoration: none;
 }
 
-
-.mx .mx-scroll-styled::-webkit-scrollbar {
-  background:var(--mx_ui_background);
-}
-
-.mx .mx-scroll-styled::-webkit-scrollbar:hover {
-  background:var(--mx_ui_border);
-}
-
-.mx .mx-scroll-styled::-webkit-scrollbar-track {
-  background:none;
-}
-
-.mx .mx-scroll-styled::-webkit-scrollbar-thumb {
-  background:var(--mx_ui_border);
-}
-.mx .mx-scroll-styled::-webkit-scrollbar-thumb:hover {
-  background:var(--mx_ui_text);
-}
-
 .mx select {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -488,7 +468,7 @@ color:var(--mx_ui_text);
  * View toggle button
  */
 
-.mx .mx-view-tgl-btn-in {
+.mx .mx-view-tgl-btn  .mx-view-tgl-btn-in {
   fill: var(--mx_ui_background);
 }
 

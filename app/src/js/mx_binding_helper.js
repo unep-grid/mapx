@@ -10,60 +10,62 @@ $(document).on('shiny:connected', function() {
   /**
   * General bindings
   */
+  const h = mx.helpers;
   
-  Shiny.addCustomMessageHandler("mxUpdateLanguage", mx.helpers.updateLanguage);
-  Shiny.addCustomMessageHandler("mxSetCookie",mx.helpers.writeCookie);
-  Shiny.addCustomMessageHandler('mxModal', mx.helpers.modal);
-  Shiny.addCustomMessageHandler('mxSetTemplates', mx.helpers.setTemplates);
-  Shiny.addCustomMessageHandler('mxSetElementAttribute', mx.helpers.setElementAttribute);
-  Shiny.addCustomMessageHandler("mxSetImageAttributes", mx.helpers.setImageAttributes);
-  Shiny.addCustomMessageHandler("mxUiHide", mx.helpers.hide);
-  Shiny.addCustomMessageHandler("mxValidateMetadataModal", mx.helpers.validateMetadataModal);
-  Shiny.addCustomMessageHandler("mxObjToState", mx.helpers.objToState);
-  Shiny.addCustomMessageHandler("mxUpdateText", mx.helpers.updateText);
-  Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", mx.helpers.epsgBuildSearchBox);
-  Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", mx.helpers.wmsBuildQueryUi);
-  Shiny.addCustomMessageHandler("mxJsDebugMsg", mx.helpers.jsDebugMsg);
-  Shiny.addCustomMessageHandler("mxButtonToggle", mx.helpers.buttonToggle);
-  Shiny.addCustomMessageHandler("mxJsonToObj", mx.helpers.jsonToObj);
-  Shiny.addCustomMessageHandler("mxJsonToHtml", mx.helpers.objectToHTML);
-  Shiny.addCustomMessageHandler("mxProgress",mx.helpers.progressScreen);
-  Shiny.addCustomMessageHandler("mxRenderUserProjectsList",mx.helpers.renderUserProjectsList);
-  Shiny.addCustomMessageHandler("mxInjectHead",mx.helpers.injectHead);
-  Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",mx.helpers.updateSelectizeItems);
-  Shiny.addCustomMessageHandler("mxInitSelectizeAll",mx.helpers.initSelectizeAll);
-  Shiny.addCustomMessageHandler('mxFlashIcon', mx.helpers.iconFlash);
-  Shiny.addCustomMessageHandler('mxUpdateSettingsUser', mx.helpers.updateSettingsUser );
-  Shiny.addCustomMessageHandler('mxUpdateSettings', mx.helpers.updateSettings );
+  Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
+  Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
+  Shiny.addCustomMessageHandler('mxModal', h.modal);
+  Shiny.addCustomMessageHandler('mxSetTemplates', h.setTemplates);
+  Shiny.addCustomMessageHandler('mxSetElementAttribute', h.setElementAttribute);
+  Shiny.addCustomMessageHandler("mxSetImageAttributes", h.setImageAttributes);
+  Shiny.addCustomMessageHandler("mxUiHide", h.hide);
+  Shiny.addCustomMessageHandler("mxValidateMetadataModal", h.validateMetadataModal);
+  Shiny.addCustomMessageHandler("mxObjToState", h.objToState);
+  Shiny.addCustomMessageHandler("mxUpdateText", h.updateText);
+  Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", h.epsgBuildSearchBox);
+  Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", h.wmsBuildQueryUi);
+  Shiny.addCustomMessageHandler("mxJsDebugMsg", h.jsDebugMsg);
+  Shiny.addCustomMessageHandler("mxButtonToggle", h.buttonToggle);
+  Shiny.addCustomMessageHandler("mxJsonToObj", h.jsonToObj);
+  Shiny.addCustomMessageHandler("mxJsonToHtml", h.objectToHTML);
+  Shiny.addCustomMessageHandler("mxProgress",h.progressScreen);
+  Shiny.addCustomMessageHandler("mxRenderUserProjectsList",h.renderUserProjectsList);
+  Shiny.addCustomMessageHandler("mxInjectHead",h.injectHead);
+  Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",h.updateSelectizeItems);
+  Shiny.addCustomMessageHandler("mxInitSelectizeAll",h.initSelectizeAll);
+  Shiny.addCustomMessageHandler('mxFlashIcon', h.iconFlash);
+  Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
+  Shiny.addCustomMessageHandler('mxUpdateSettings', h.updateSettings );
 
   /**
   * Mapx map and view related binding
   */
-  Shiny.addCustomMessageHandler("mglUpdateViewsBadges", mx.helpers.updateViewsBadges);
-  Shiny.addCustomMessageHandler('mglRenderViewsList', mx.helpers.renderViewsList ); 
-  Shiny.addCustomMessageHandler('mglSetFilter', mx.helpers.setFilter );
-  Shiny.addCustomMessageHandler('mglSetHighlightedCountries', mx.helpers.setHighlightedCountries);
-  Shiny.addCustomMessageHandler('mglAddLayer',  mx.helpers.addLayer );
-  Shiny.addCustomMessageHandler('mglFlyTo', mx.helpers.flyTo );
-  Shiny.addCustomMessageHandler('mglSyncAllMaps', mx.helpers.syncAll );
-  Shiny.addCustomMessageHandler('mglUpdateViewsList',mx.helpers.updateViewsList);
-  Shiny.addCustomMessageHandler('mglRemoveView', mx.helpers.removeView );
-  Shiny.addCustomMessageHandler('mglGetLocalForageData', mx.helpers.getLocalForageData );
-  Shiny.addCustomMessageHandler('mglAddView', mx.helpers.addView );
-  Shiny.addCustomMessageHandler('mglReadStory', mx.helpers.storyRead );
-  Shiny.addCustomMessageHandler('mglReset', mx.helpers.reset );
-  Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', mx.helpers.handlerDownloadVectorSource);
-  Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', mx.helpers.getOverlapAnalysis);
-  Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', mx.helpers.getValidateSourceGeom);
-  Shiny.addCustomMessageHandler('mglInit', mx.helpers.initMapx );
-  
+  Shiny.addCustomMessageHandler("mglUpdateViewsBadges", h.updateViewsBadges);
+  Shiny.addCustomMessageHandler('mglRenderViewsList', h.viewsListRenderNew );
+  Shiny.addCustomMessageHandler('mglSetFilter', h.setFilter );
+  Shiny.addCustomMessageHandler('mglSetHighlightedCountries', h.setHighlightedCountries);
+  Shiny.addCustomMessageHandler('mglAddLayer',  h.addLayer );
+  Shiny.addCustomMessageHandler('mglFlyTo', h.flyTo );
+  Shiny.addCustomMessageHandler('mglSyncAllMaps', h.syncAll );
+  Shiny.addCustomMessageHandler('mglUpdateViewsList',h.updateViewsList);
+  Shiny.addCustomMessageHandler('mglRemoveView', h.removeView );
+  Shiny.addCustomMessageHandler('mglGetLocalForageData', h.getLocalForageData );
+  Shiny.addCustomMessageHandler('mglAddView', h.renderView );
+  Shiny.addCustomMessageHandler('mglReadStory', h.storyRead );
+  Shiny.addCustomMessageHandler('mglReset', h.resetViews );
+  Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', h.handlerDownloadVectorSource);
+  Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
+  Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
+  Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
+  Shiny.addCustomMessageHandler('mglInit', h.initMapx );
+
   /**
   * Jed comands binding
   */
-  Shiny.addCustomMessageHandler('jedInit',mx.helpers.jedInit);
-  Shiny.addCustomMessageHandler('jedUpdate',mx.helpers.jedUpdate);
-  Shiny.addCustomMessageHandler('jedTriggerGetValidation',mx.helpers.jedGetValidationById);
-  Shiny.addCustomMessageHandler('jedTriggerGetValues',mx.helpers.jedGetValuesById);
+  Shiny.addCustomMessageHandler('jedInit',h.jedInit);
+  Shiny.addCustomMessageHandler('jedUpdate',h.jedUpdate);
+  Shiny.addCustomMessageHandler('jedTriggerGetValidation',h.jedGetValidationById);
+  Shiny.addCustomMessageHandler('jedTriggerGetValues',h.jedGetValuesById);
 
 });
 

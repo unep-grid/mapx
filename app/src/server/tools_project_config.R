@@ -336,6 +336,11 @@ observeEvent(input$btnSaveProjectConfig,{
   aliasProject <- input$txtProjectNameAlias
   aliasProject <- ifelse(isTRUE(mxDbValidateProjectAlias(aliasProject,project)),aliasProject,"")
 
+  countries <- input$selectProjectConfigCountries
+  if(noDataCheck(countries)){
+   countries = list()
+  }
+
   if(isAdmin && isValid){
 
     mxDbSaveProjectData(project,list(
@@ -348,7 +353,7 @@ observeEvent(input$btnSaveProjectConfig,{
         members = NULL,
         publishers = NULL,
         map_position = input$projectMapPosition_values$data,
-        countries = input$selectProjectConfigCountries,
+        countries = countries,
         creator = NULL,
         allow_join = allowJoin
         )

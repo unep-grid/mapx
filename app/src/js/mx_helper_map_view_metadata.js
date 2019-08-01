@@ -4,7 +4,7 @@
  */
 export function getSourceMetadata(id, force) {
   var url,
-    urlSourceMeta = mx.helpers.getApiUrl('sourceMetadata');
+    urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
 
   return new Promise((resolve, reject) => {
     if (!id) {
@@ -29,7 +29,7 @@ export function getSourceMetadata(id, force) {
  */
 export function getViewMetadata(id, force) {
   var url,
-    urlViewMeta = mx.helpers.getApiUrl('viewMetadata');
+    urlViewMeta = mx.helpers.getApiUrl('getViewMetadata');
 
   return new Promise((resolve, reject) => {
     if (!id) {

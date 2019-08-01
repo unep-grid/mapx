@@ -75,6 +75,12 @@ observe({
           `data-lang_key` = labelBtnDelete,
           inputId = "btnShowProjectDelete",
           class = "btn btn-sm btn-default hint " + ifelse(isProjectDefault,"disabled",""),
+          ),
+        actionButton(
+          label =  d('btn_show_project_views_states',language),
+          `data-lang_key` = 'btn_show_project_views_states',
+          inputId = "btnShowProjectViewsStates",
+          class = "btn btn-sm btn-default hint "
           )
         )
     }

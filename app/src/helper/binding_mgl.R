@@ -33,6 +33,16 @@ mglSetHighlightedCountries <- function( id, countries, idLayer="country-code",se
 
 
 
+#' Update all view badges, and linked metadata if needed
+#' @param opt {List} list of options
+#' @param idProject {Character} Id of the project
+#' @export
+mglGetProjectViewsState<- function(opt=list(),session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglGetProjectViewsState",
+    opt
+    )
+}
+
 
 #' Update all view badges, and linked metadata if needed
 #' @param opt {List} list of option : forceUpadateMeta : force update of the metadata
@@ -283,9 +293,8 @@ mglAddSources <- function( id = NULL, sources, session=shiny::getDefaultReactive
 #' Add view 
 #' @param id Map id
 #' @param viewData View list
-#' @param idViewsList id of the ui element for displaying list of view
 #' @export
-mglAddView <- function( id=NULL, viewData, idViewsList=NULL,  session=shiny::getDefaultReactiveDomain() ){
+mglAddView <- function( id=NULL, viewData, session=shiny::getDefaultReactiveDomain() ){
   
   conf <- mxGetDefaultConfig()
 
@@ -293,15 +302,12 @@ mglAddView <- function( id=NULL, viewData, idViewsList=NULL,  session=shiny::get
     id <- conf[["map"]][["id"]]
   }
 
-  if(noDataCheck(idViewsList)){
-    idViewsList <- conf[["map"]][["idViewsList"]]
-  }
 
   session$sendCustomMessage("mglAddView",
     list(
       id = id,
       viewData = viewData,
-      idViewsList = idViewsList
+      fromServer = TRUE
       )
     )
 }

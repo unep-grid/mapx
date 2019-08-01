@@ -23,7 +23,8 @@ divHeader <- tagList(
     `data-view_action_target`="{{=view.id}}",
     id = "check_view_enable_{{=view.id}}",
     class = "mx-view-tgl-input",
-    type = "checkbox"
+    type = "checkbox",
+    checked= "{{=view._open}}"
     ), 
   tags$label(
     class = "mx-view-tgl-content",
@@ -57,8 +58,8 @@ divHeader <- tagList(
       "{{=view.data.classes}},{{=view.type}}"
       ),
     tags$span(
-      class="mx-view-item-index",
-      "{{=mx.helpers.getDistinctIndexWords(view)}}"
+      class="mx-view-item-index"
+      #"{{=mx.helpers.getDistinctIndexWords(view)}}"
       )
     ),
   #
@@ -84,12 +85,12 @@ tagList(
   #
   "{{ var lang = h.checkLanguage({obj:view,path:'data.title'}) ; }}",
   "{{ var title = view.data.title ? view.data.title[lang] : 'undefined' ; }}",
-  tags$li(
-    id = "{{=view.id}}",
+  tags$div(
+    #id = "{{=view.id}}",
     `data-view_id`="{{=view.id}}",
     `data-view_date_modified`="{{=view.date_modified}}",
     `data-view_title`="{{=title}}",
-    class="mx-view-item mx-view-item-{{=view.type}} mx-sort-li-item noselect mx-draggable",
+    class="mx-view-item mx-view-item-{{=view.type}} mx-sort-li-item noselect transparent",
     divHeader
     ),
   "{{~}}"

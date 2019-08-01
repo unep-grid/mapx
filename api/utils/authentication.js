@@ -178,6 +178,7 @@ function validateToken(userToken) {
   }
   return utils.db.decrypt(userToken).then((tokenData) => {
     return {
+      isGuest: tokenData.is_guest,
       key: tokenData.token,
       isValid: tokenData.valid_until * 1 > new Date().getTime() / 1000
     };

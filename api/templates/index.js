@@ -9,4 +9,6 @@ exports.layerIntersectsCountry = u.readTxt("./templates/sql/getIntersectsCountry
 exports.layerIntersectionCountry = u.readTxt("./templates/sql/getIntersectionCountry.sql");
 exports.getSourceMetadata = u.readTxt("./templates/sql/getSourceMetadata.sql");
 exports.getViewMetadata = u.readTxt("./templates/sql/getViewMetadata.sql");
-exports.getViews = u.readTxt("./templates/sql/getViewsByUserProject.sql");
+exports.getViewsByProject = u.readTxt("./templates/sql/getViewsByProject.sql");
+exports.getViewsPublic = u.readTxt("./templates/sql/getViewsPublic.sql");
+exports.getProjectViewsStates = u.readTxt("./templates/sql/getProjectViewsStates.sql");

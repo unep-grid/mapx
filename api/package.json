@@ -10,7 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "@turf/turf": "^5.1.6",
-    "archiver": "^2.1.1",
+    "archiver": "^3.0.0",
     "express": "^4.16.3",
     "geojson-vt": "^3.1.4",
     "html-to-text": "^5.1.1",
@@ -23,6 +23,7 @@
     "request": "^2.88.0",
     "sphericalmercator": "^1.0.5",
     "tar": "^4.4.4",
+    "validator": "^11.0.0",
     "vt-pbf": "^3.1.1",
     "wellknown": "^0.5.0",
     "zlib": "^1.0.5"

@@ -14,16 +14,8 @@ mxSchemaViewStory <- function(view,views,language){
   # shortcut to translate function
   #
   tt = function(id){
-   d(id,lang=l,web=F,asChar=T)
+    d(id,lang=l,web=F,asChar=T)
   }
-
-  viewsProjNames <- paste(d('view_project_short',language),names(views[[1]]))
-  viewsExtNames <- paste(d('view_external_short',language),names(views[[2]]))
-  viewListTitles <- unlist(c(viewsProjNames,viewsExtNames))
-  viewListId <- as.list(c(views[[1]],views[[2]]))
-  names(viewListId) <- NULL
-  viewListId <- unlist(viewListId)
-
 
   mxCounter(reset=T)
 
@@ -47,10 +39,14 @@ mxSchemaViewStory <- function(view,views,language){
           title = tt("view"),
           type = "string",
           minLength = 1,
-          enum = viewListId,
+          enum = as.list(as.character(views)),
           options = list(
-            enum_titles = viewListTitles,
+            enum_titles = names(views),
             selectize_options = list(
+              #
+              # create = TRUE is HARDCODED in jsoneditor
+              #
+              create = FALSE
               )
             )
           )
@@ -203,7 +199,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "boolean",
     format = "checkbox",
     defaut = TRUE
-  )
+    )
   #
   # Slide background opacity
   #
@@ -225,7 +221,7 @@ mxSchemaViewStory <- function(view,views,language){
     default = "#000000"
     )
 
- #
+  #
   # Slide text size
   #
   slideSizeText <- list(
@@ -345,42 +341,42 @@ mxSchemaViewStory <- function(view,views,language){
   #
   animDuration <- list(
     title = tt("schema_story_map_anim_duration"),
-     description = tt("schema_story_map_anim_duration_desc"),
+    description = tt("schema_story_map_anim_duration_desc"),
     type = "number",
     min = 1,
     default = 1
     )
-  
+
   animPathMethod <- list(
     title = tt("schema_story_map_anim_traj_method"),
-     description = tt("schema_story_map_anim_traj_method_desc"),
+    description = tt("schema_story_map_anim_traj_method_desc"),
     type = "string",
     enum = list("flyTo","easeTo","jumpTo","fitBounds"),
     default = "jumpTo",
     options = list(
-        enum_titles = list(
-          "Fly to ( follow a flight path ) ",
-          "Ease to ( follow a linear path ) ",
-          "Jump to ( move directly to the position )",
-          "Fit bounds ( Fit exactly the saved extend )"
-          )
+      enum_titles = list(
+        "Fly to ( follow a flight path ) ",
+        "Ease to ( follow a linear path ) ",
+        "Jump to ( move directly to the position )",
+        "Fit bounds ( Fit exactly the saved extend )"
+        )
       )
     )
 
   animFunction = list(
     title = tt("schema_story_map_anim_fun"),
-     description = tt("schema_story_map_anim_fun_desc"),
+    description = tt("schema_story_map_anim_fun_desc"),
     type =  "string",
     enum =  list("easeIn","easeOut","easeInOut")
     )
 
   animFunctionPower = list(
-     title = tt("schema_story_map_anim_fun_exp"),
-     description = tt("schema_story_map_anim_fun_exp_desc"),
-     type =  "number",
-     min = 0,
-     max = 10,
-     default =1
+    title = tt("schema_story_map_anim_fun_exp"),
+    description = tt("schema_story_map_anim_fun_exp_desc"),
+    type =  "number",
+    min = 0,
+    max = 10,
+    default =1
     )
 
   stepMapAnimation <- list(

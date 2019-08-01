@@ -110,6 +110,7 @@ server <- function(input,output,session){
                 "tools_app_config.R",
                 "tools_project_main.R",
                 "tools_project_new.R",
+                "tools_project_views_state.R",
                 "tools_project_roles.R",
                 "tools_project_config.R",
                 "tools_project_external_views.R",

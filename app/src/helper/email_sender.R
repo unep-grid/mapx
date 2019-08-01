@@ -33,32 +33,20 @@ mxSendMail <- function( from=NULL, to=NULL, type="text", body=NULL,bodyHTML=NULL
   if( ! mxEmailIsValid(from) | ! mxEmailIsValid(to)) stop(paste("mxSendMail : email not valid. From: ", from, " To: ", to))
 
   msgClear <- list(
-      from = from,
-      to = to,
-      subject = subject,
-      text = body,
-      html = bodyHTML,
-      validUntil = as.character(Sys.Date() + 1)
-      )
-
-  msg <- mxDbEncrypt(msgClear)
-
-  data = toJSON(list(msg = msg ),auto_unbox=T)
-
-  host <-  .get(config,c("api","host")) 
-  port <- .get(config,c("api","port"))
-  url <- paste0("http://",host,":",port,"/send/mail")
-  h <- new_handle(copypostfields = data)
-  
-  handle_setheaders(h,
-    "Content-Type" = "application/json",
-    "Cache-Control" = "no-cache",
-    "Host" = host 
+    from = from,
+    to = to,
+    subject = subject,
+    text = body,
+    html = bodyHTML,
+    validUntil = as.character(Sys.Date() + 1)
     )
 
-  req <- curl_fetch_memory(url, handle = h)
-  
-  res <- fromJSON(rawToChar(req$content))
+  msg <- mxDbEncrypt(msgClear)
+  route <- .get(config,c('api','routes','postEmail'))
+
+  res <- mxApiPost(route,list(
+      msg = msg
+      ))
 
   if(to %in% res$accepted){
     return()

@@ -99,11 +99,11 @@
     "screenfull": "^4.0.0",
     "selectize": "^0.12.6",
     "shapefile": "^0.6.5",
-    "sortablejs": "^1.10.0-rc2",
     "svg-inline-loader": "^0.8.0",
     "togeojson": "^0.16.0",
     "tokml": "^0.4.0",
     "topojson-client": "^3.0.0",
+    "web-streams-polyfill": "^2.0.3",
     "webpack-jquery-ui": "^2.0.1",
     "wms-capabilities": "^0.4.0"
   },

@@ -1,5 +1,5 @@
 /* jshint evil:true, esversion:6, laxbreak:true */
-import Sortable from 'sortablejs';
+import {RadialProgress} from './radial_progress/index.js';
 
 export function degreesToMeters(lngLat) {
   var x = (lngLat.lng * 20037508.34) / 180;
@@ -61,6 +61,66 @@ export function requestProjectMembership(idProject) {
 }
 
 /**
+ * Init base listeners
+ */
+export function initListeners() {
+  /**
+   *  Other listener
+   */
+  mx.listenerStore.addListener({
+    target: document.getElementById('btnShowProject'),
+    type: 'click',
+    listener: mx.helpers.showSelectProject,
+    group: 'mapx-base'
+  });
+
+  mx.listenerStore.addListener({
+    target: document.getElementById('btnShowLanguage'),
+    type: 'click',
+    listener: mx.helpers.showSelectLanguage,
+    group: 'mapx-base'
+  });
+
+  mx.listenerStore.addListener({
+    target: document.getElementById('btnGetAreaVisible'),
+    type: 'click',
+    listener: () => {
+      mx.helpers.sendRenderedLayersAreaToUi({
+        id: 'map_main',
+        prefix: 'MX-',
+        idEl: 'txtAreaSum'
+      });
+    },
+    group: 'mapx-base'
+  });
+  mx.listenerStore.addListener({
+    target: document.getElementById('btnClearCache'),
+    type: 'click',
+    listener: mx.helpers.clearCache,
+    group: 'mapx-base'
+  });
+  mx.listenerStore.addListener({
+    target: document.getElementById('btnFilterShowPanel'),
+    type: 'click',
+    listener: (e) => {
+      let elBtn = e.target;
+      let clHide = 'mx-hide';
+      let clActive = 'active';
+      let elPanel = document.getElementById('viewsFilterPanel');
+      let isHidden = elPanel.classList.contains(clHide);
+      if (isHidden) {
+        elPanel.classList.remove(clHide);
+        elBtn.classList.add(clActive);
+      } else {
+        elPanel.classList.add(clHide);
+        elBtn.classList.remove(clActive);
+      }
+    },
+    group: 'mapx-base'
+  });
+}
+
+/**
  * Initial mgl and mapboxgl
  * @param {string} o options
  * @param {string} o.idMap id
@@ -102,7 +162,6 @@ export function initMapx(o) {
    */
   mx.maps[o.id] = {
     map: {},
-    listener: {},
     views: []
   };
 
@@ -160,6 +219,7 @@ export function initMapx(o) {
   if (!mx.settings.modeKiosk) {
     mx.helpers.initMapxApp(o);
     mx.helpers.initLog();
+    mx.helpers.initListeners();
   }
 
   /**
@@ -182,7 +242,6 @@ export function initMapxApp(o) {
    * Send loading confirmation to shiny
    */
   o.map.on('load', function() {
- 
     /*
      * set views list
      */
@@ -191,20 +250,18 @@ export function initMapxApp(o) {
         id: o.id,
         autoFetchAll: true,
         project: o.project || mx.settings.project,
-        resetViews: true
       })
       .then(function() {
         /*
          * Auto start story map
          */
         if (o.storyAutoStart) {
-          mx.helpers
-            .storyRead({
-              id: o.id,
-              view: o.viewsList[0],
-              save: false,
-              autoStart: true
-            });
+          mx.helpers.storyRead({
+            id: o.id,
+            view: o.viewsList[0],
+            save: false,
+            autoStart: true
+          });
         }
       });
 
@@ -229,8 +286,20 @@ export function initMapxApp(o) {
      * Handle drop geojson event
      */
     if (mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver) {
-      elMap.addEventListener('dragover', mx.helpers.handleDragOver, false);
-      elMap.addEventListener('drop', mx.helpers.handleUploadFileEvent, false);
+      mx.listenerStore.addListener({
+        target: elMap,
+        type: 'dragover',
+        listener: mx.helpers.handleDragOver,
+        group: 'map_drag_over',
+        bind: mx
+      });
+      mx.listenerStore.addListener({
+        target: elMap,
+        type: 'drop',
+        listener: mx.helpers.handleUploadFileEvent,
+        group: 'map_drag_over',
+        bind: mx
+      });
     }
 
     /**
@@ -280,7 +349,6 @@ export function initMapxApp(o) {
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
   });
-
 }
 
 /**
@@ -414,60 +482,28 @@ export function geolocateUser() {
  *
  * @param {String} idMap map id
  */
-export function reset(o) {
-  var views = mx.helpers.getViews({
+export function resetViews(o) {
+  const h = mx.helpers;
+  var views = h.getViews({
     id: o.idMap,
     asArray: true
   });
   /**
    * remove existing layers
    */
-  mx.helpers.removeLayersByPrefix({
+  h.removeLayersByPrefix({
     id: o.idMap,
     prefix: 'MX-'
   });
 
-  /**
-   *  Reset filters and selector
-   */
-  var elViewList = document.querySelector('.mx-views-list');
-  if (elViewList) {
-    elViewList.innerHTML = '';
-  }
-  var elTxtFilterInput = document.querySelector('#viewsFilterText');
-  if (elTxtFilterInput) {
-    elTxtFilterInput.value = '';
-  }
-  var elBtnFilterCheck = document.querySelector('#btn_filter_checked');
-  if (elBtnFilterCheck) {
-    elBtnFilterCheck.classList.remove('active');
-  }
-  var elBtnSort = document.querySelectorAll('.mx-btn-sort');
-  if (elBtnSort) {
-    for (var i = 0, iL = elBtnSort.length; i < iL; i++) {
-      elBtnSort[i].classList.remove('asc');
-    }
-  }
-  var elViewsFilter = document.querySelector('#viewsFilter');
-  if (elViewsFilter) {
-    var elFilterToggles = elViewsFilter.querySelectorAll('.check-toggle');
-    elFilterToggles.forEach((v) => v.remove());
-  }
-
   /*
    * apply remove method
    */
-
-  mx.helpers.cleanRemoveModules(views);
-  if (elViewList) {
-    setViewsListEmpty(true);
-  }
-
+  h.cleanRemoveModules(views);
   /*
-   * Force dashboard remove
-   */
-
-  //mx.helpers.Dashboard.removeAllDashboards();
+  * Set views list empty
+  */
+  h.setViewsListEmpty(true);
 }
 
 /**
@@ -557,7 +593,7 @@ export function addSourceFromView(o) {
     }
 
     if (o.view.type === 'vt') {
-      var baseUrl = mx.helpers.getApiUrl('tiles');
+      var baseUrl = mx.helpers.getApiUrl('getTile');
       var url =
         baseUrl + '?view=' + o.view.id + '&date=' + o.view.date_modified;
       o.view.data.source.tiles = [url, url];
@@ -567,22 +603,23 @@ export function addSourceFromView(o) {
   }
 }
 
-export function loadGeojsonViews() {
-  var project = mx.settings.project;
-  var viewsGj = [];
+//export function loadGeojsonViews() {
+//throw new Error("he");
+//var project = mx.settings.project;
+//var viewsGj = [];
 
-  var getProjectGj = function(gj) {
-    var v = gj.view;
-    if (v && v.project === project) {
-      viewsGj.push(v);
-    }
-    return viewsGj;
-  };
+//var getProjectGj = function(gj) {
+//var v = gj.view;
+//if (v && v.project === project) {
+//viewsGj.push(v);
+//}
+//return viewsGj;
+//};
 
-  mx.data.geojson.iterate(getProjectGj).then(function(gj) {
-    console.log(gj);
-  });
-}
+//mx.data.geojson.iterate(getProjectGj).then(function(gj) {
+//console.log(gj);
+//});
+/*}*/
 
 /**
  * Get remote view from latest views table
@@ -590,7 +627,7 @@ export function loadGeojsonViews() {
  * @return {Promise} Promise resolving to object
  */
 export function getViewRemote(idView) {
-  var apiUrlViews = mx.helpers.getApiUrl('views');
+  var apiUrlViews = mx.helpers.getApiUrl('getView');
 
   if (!idView || !apiUrlViews) {
     return Promise.reject('Missing id or fetch URL');
@@ -629,24 +666,21 @@ export function getViewsRemote(idViews) {
  * @param {Boolean} o.viewsCompact The view list is in compact form (id and row only)
  * @param {boolean} o.add Append to existing
  * @param {string} o.project code
- * @param {Boolean} o.resetViews should this reset stored views list on map
  */
 export function updateViewsList(o) {
   var h = mx.helpers;
   return new Promise(function(resolve) {
     var mode = 'array_async_all';
-    var viewsToAdd = o.viewsToAdd;
+    var viewsToAdd = o.viewsList;
     var nCache = 0,
       nNetwork = 0,
       nTot = 0,
       prog;
-    var apiUrlViews = h.getApiUrl('viewsToAdd');
     var elProgContainer;
     var isCompactList = o.viewsCompact === true;
     var autoFetchAll = o.autoFetchAll === true;
     var hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
     var hasSingleView = !hasViewsList && h.isView(viewsToAdd);
-    var resetViews = h.isBoolean(o.resetViews) ? o.resetViews : hasViewsList;
     var updateProject = o.project && o.project !== mx.settings.project;
 
     if (updateProject) {
@@ -662,29 +696,17 @@ export function updateViewsList(o) {
     } else {
       if (hasSingleView) {
         mode = 'object_single';
-      }else
-        if (hasViewsList && isCompactList) {
-          mode = 'array_async';
-        } else
-        if (hasViewsList && !isCompactList) {
-          mode = 'array_sync';
-        }
-    }
-
-    /*
-     * Reset old viewsToAdd and dashboards
-     */
-    if (resetViews) {
-      h.reset({
-        idMap: o.id
-      });
+      } else if (hasViewsList && isCompactList) {
+        mode = 'array_async';
+      } else if (hasViewsList && !isCompactList) {
+        mode = 'array_sync';
+      }
     }
 
     /**
      * Process view list
      */
     resolve(addViews());
-
     /**
      * Helpers
      */
@@ -720,24 +742,30 @@ export function updateViewsList(o) {
 
     /* update progress */
     function updateProgress(d) {
+      let percent = 0;
       d = d || {
         loaded: nCache + nNetwork,
         total: nTot
       };
 
       if (!elProgContainer) {
-        elProgContainer = document.querySelector('#noViewItemText');
+        elProgContainer = document.querySelector('.mx-views-list');
       }
 
       if (!prog && elProgContainer) {
-        prog = new h.RadialProgress(elProgContainer, {
-          radius: 20,
-          stroke: 3
+        h.childRemover(elProgContainer);
+        prog = new RadialProgress(elProgContainer, {
+          radius: 30,
+          stroke: 4
         });
       }
 
       if (prog && prog.update && elProgContainer) {
-        prog.update(d.loaded / d.total);
+        percent = (d.loaded / d.total) * 100;
+        prog.update(percent);
+        if (percent >= 100) {
+          prog.destroy();
+        }
       }
     }
 
@@ -757,6 +785,7 @@ export function updateViewsList(o) {
 
     /* get view object from storage or network */
     function getViewObject(v) {
+      var apiUrlViews = h.getApiUrl('getView');
       var keyStore = v.id + '@' + v.pid;
       var keyNet = apiUrlViews + v.id + '?' + v.pid;
       var editable = v._edit;
@@ -782,41 +811,57 @@ export function updateViewsList(o) {
 
     /* Add array of compact viewsToAdd object*/
     function addAsync(viewsToAdd) {
-      var out = viewsToAdd.map(getViewObject);
-
-      return Promise.all(out).then((viewsToAddFetched) => {
-        viewsToAddFetched = sortViews(viewsToAddFetched);
-
-        h.renderViewsList({
-          id: o.id,
-          views: viewsToAddFetched
+      var promViews = viewsToAdd.map(getViewObject);
+      var promGjViews = getGeojsonViewsFromStorage(o);
+      var views = [];
+      return Promise.all(promViews)
+        .then((viewsToAddFetched) => {
+          views = views.concat(viewsToAddFetched);
+          views = sortViews(views);
+          return promGjViews;
+        })
+        .then((viewsGeojson) => {
+          views = viewsGeojson.concat(views);
+          h.viewsListRenderNew({
+            id: o.id,
+            views: views
+          });
+          return views;
         });
-
-        loadGeojsonFromStorage(o);
-
-        return viewsToAddFetched;
-      });
     }
 
     function addAsyncAll() {
+      var promGjViews = getGeojsonViewsFromStorage(o);
+      var views = [];
+      var state = [];
       h.fetchViews({
         onProgress: updateProgress
       })
-        .then((viewsToAdd) => {
-          viewsToAdd = sortViews(viewsToAdd);
-          h.renderViewsList({
+        .then((data) => {
+          views = views.concat(data.views);
+          state = data.states['default'] || state;
+          return promGjViews;
+        })
+        .then((viewsGeojson) => {
+
+          views = viewsGeojson.concat(views);
+
+          h.viewsListRenderNew({
             id: o.id,
-            views: viewsToAdd
+            views: views,
+            state : state
           });
-          loadGeojsonFromStorage(o);
-          return viewsToAdd;
+          
+          return views;
         });
     }
 
     /* Add array of coomplete viewsToAdd object*/
     function addSync() {
-
-      h.renderViewsList({
+      if (true) {
+        throw new Error('addSync disabled');
+      }
+      h.viewsListRenderNew({
         id: o.id,
         views: viewsToAdd
       });
@@ -827,29 +872,26 @@ export function updateViewsList(o) {
 
     /* Add single view object */
     function addSingle(view) {
-      h.renderViewsList({
-        id: o.id,
-        views: view,
-        add: true,
-        open: true
+      h.viewsListAddSingle(view, {
+        open: true,
+        render: true
       });
-
       return view;
     }
   });
 }
 
 /**
- * Load geojson from localstorage,save it in views list and render item
+ * Load geojson from localstorage,
  * @param {Object} o options
  * @param {String} o.id Map id
  * @param {String} o.project Current project to filter geojson view. Default to settings.project
+ * @return {Array} array of views;
  */
-function loadGeojsonFromStorage(o) {
-  var m = mx.helpers.getMapData(o.id);
-
-  if (!mx.data || !mx.data.geojson || !m) {
-    return;
+function getGeojsonViewsFromStorage(o) {
+  let out = [];
+  if (!mx.data || !mx.data.geojson) {
+    return out;
   }
 
   var project = o.project || mx.settings.project;
@@ -859,45 +901,10 @@ function loadGeojsonFromStorage(o) {
   mx.data.geojson.iterate(function(value) {
     var view = value.view;
     if (view.project === project) {
-      m.views.unshift(view);
-
-      mx.helpers.renderViewsList({
-        id: o.id,
-        views: view,
-        add: true,
-        open: true
-      });
+      out.push(view);
     }
   });
-}
-
-/**
- * Retrieve nested item from object/array
- * @param {Object|Array} obj
- * @param {String} path dot separated
- * @param {*} def default value ( if result undefined )
- * @note http://jsfiddle.net/Jw8XB/1/
- * @returns {*}
- */
-export function path(obj, path, def) {
-  var i, len;
-  if (typeof def === 'undefined') {
-    def = null;
-  }
-  if (typeof path !== 'string') {
-    return def;
-  }
-  for (i = 0, path = path.split('.'), len = path.length; i < len; i++) {
-    if (!obj || typeof obj !== 'object') {
-      return def;
-    }
-    obj = obj[path[i]];
-  }
-
-  if (obj === undefined) {
-    return def;
-  }
-  return obj;
+  return out;
 }
 
 let vStore = [];
@@ -906,13 +913,14 @@ let vStore = [];
  *  View controler : evalutate view state and enable/disable it depending on ui state
  */
 export function viewControler(o) {
+  o = o || {};
   var vToAdd = [],
     vToRemove = [],
     vVisible = [],
     vChecked = [];
   var view, isChecked, id, viewDuration;
   var idMap = o.id || mx.settings.map.id;
-  var idViewsList = o.idViewsList || 'mx-views-list';
+  //var idViewsList = o.idViewsList || 'mx-views-list';
   var els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
   );
@@ -937,9 +945,8 @@ export function viewControler(o) {
       stat: 'distinct'
     });
 
-    vToRemove = mx.helpers.arrayDiff(vVisible, vChecked);
-
-    vToAdd = mx.helpers.arrayDiff(vChecked, vVisible);
+    vToRemove = mx.helpers.getArrayDiff(vVisible, vChecked);
+    vToAdd = mx.helpers.getArrayDiff(vChecked, vVisible);
 
     /**
      * View to add
@@ -949,10 +956,9 @@ export function viewControler(o) {
       view = mx.helpers.getView(v);
       view._addTime = Date.now();
 
-      mx.helpers.addView({
+      mx.helpers.renderView({
         id: idMap,
-        viewData: view,
-        idViewsList: idViewsList
+        viewData: view
       });
 
       mx.helpers.fire('view_add', {
@@ -1008,17 +1014,25 @@ export function viewControler(o) {
  * @param {string} o.action Action :  "check", "uncheck"
  */
 export function viewLiAction(o) {
-  if (!o.id || !o.idView || !o.action) {
+  if (!o.idView || !o.action) {
     return;
   }
 
-  var el = document.querySelector("input[data-view-toggle='" + o.idView + "']");
+  var el = document.getElementById(o.idView);
 
-  if (o.action === 'check' && el && !el.checked) {
+  if (!el) {
+    return;
+  }
+
+  var elInput = el.querySelector(
+    "input[data-view_action_key='btn_toggle_view']"
+  );
+
+  if (o.action === 'check' && elInput && !elInput.checked) {
     el.checked = true;
   }
 
-  if (o.action === 'uncheck' && el && el.checked) {
+  if (o.action === 'uncheck' && elInput && elInput.checked) {
     el.checked = false;
   }
 }
@@ -1753,34 +1767,27 @@ export function handleViewValueFilterText(o) {
  * @param {string} o.idView view id
  */
 export function removeView(o) {
-  var li = document.querySelector("[data-view_id='" + o.idView + "']");
-
-  var views = mx.helpers.getViews({asArray: true});
-  var view = mx.helpers.getView(o.idView);
-  var vIndex = views.indexOf(view);
-
+  const h = mx.helpers;
+  var mData = h.getMapData();
+  var views = mData.views;
+  var idView = o.idView;
+  var view = views.filter((v) => v.id === idView)[0];
   if (!view) {
     return;
   }
+  var vIndex = views.indexOf(view);
+  var geojsonData = mx.data.geojson;
 
-  mx.helpers.closeView(o);
+  h.closeView(o);
+  mData.viewsList.removeItemById(view.id);
 
   if (view.type === 'gj') {
-    var data = mx.data.geojson;
-    data.removeItem(o.idView);
-  }
-
-  if (li) {
-    li.remove();
-  }
-
-  if (views.length === 0) {
-    setViewsListEmpty(true);
+    geojsonData.removeItem(view.id);
   }
 
   views.splice(vIndex, 1);
-  mx.helpers.updateViewsFilter({from: 'removeView'});
-  mx.helpers.viewControler(o);
+  h.updateViewsFilter();
+  h.viewControler(o);
 }
 
 /**
@@ -1802,441 +1809,6 @@ export function closeView(o) {
     id: o.id,
     prefix: o.idView
   });
-}
-
-/**
- * Add components in view for an array of views
- * @param {Array} views Array of views to update
- */
-export function setViewsComponents(views) {
-  views.forEach((v) => {
-    var components,
-      isVt,
-      isSm,
-      isCc,
-      isRt,
-      widgets,
-      story,
-      overlap,
-      attributes,
-      customStyle;
-    var h = mx.helpers;
-    components = [];
-
-    isVt = v.type === 'vt';
-    isSm = v.type === 'sm';
-    isCc = v.type === 'cc';
-    isRt = v.type === 'rt';
-
-    widgets = h.path(v, 'data.dashboard.widgets', '');
-    story = h.path(v, 'data.story.steps', '');
-    overlap = h.path(v, 'data.source.layerInfo.maskName', '');
-    attributes = h.path(v, 'data.attribute.names', '');
-    customStyle = h.path(v, 'data.style.custom', '');
-
-    if (isVt) {
-      components.push('vt');
-    }
-    if (isRt) {
-      components.push('rt');
-    }
-    if (isSm && story && story.length) {
-      components.push('story_map');
-    }
-    if (isVt && widgets && widgets.length) {
-      components.push('dashboard');
-    }
-    if (!isSm) {
-      components.push('layer');
-    }
-    if (isVt && attributes && attributes.indexOf('mx_t0') > -1) {
-      components.push('time_slider');
-    }
-    if (isVt && typeof overlap === 'string' && overlap.length) {
-      components.push('overlap');
-    }
-    if (
-      isVt &&
-      customStyle &&
-      customStyle.json &&
-      JSON.parse(customStyle.json).enable
-    ) {
-      components.push('custom_style');
-    }
-    if (isCc) {
-      components.push('custom_code');
-    }
-    v._components = components;
-  });
-}
-
-/**
- * Render views HTML list in viewStore
- * @param {object} o options
- * @param {string} o.id map id
- * @param {Object} o.views views to render
- * @param {boolean} o.add Add views to an existing list
- */
-export function renderViewsList(o) {
-  var h = mx.helpers;
-  var elDiv, elNewItem, elNewInput;
-  var m = mx.helpers.getMapData(o.id);
-  var elViewsContainer = document.querySelector('.mx-views-container');
-  var elViewsList = elViewsContainer.querySelector('.mx-views-list');
-  var views = o.views;
-  var hasTemplate = h.isFunction(mx.templates.viewList);
-  var hasViews = h.isArray(views) && h.isNotEmpty(views);
-  var add = o.add || false;
-  var open = o.open || false;
-  var hasSingleView = !hasViews && h.isObject(views) && h.isNotEmpty(views);
-
-
-  if( !hasTemplate ){
-   throw new Error('renderViewsList : no template found');
-  }
-
-
-  if (  hasSingleView ) {
-    views = [views];
-    add = true;
-  }
-
-  /**
-   * If empty, add empty view list message
-   */
-  if (!hasViews && !hasSingleView) {
-    setViewsListEmpty(true);
-  } else {
-    setViewsListEmpty(false);
-
-    if (!m.listener) {
-      m.listener = {};
-    }
-    if (!m.tools) {
-      m.tools = {};
-    }
-    if (!add) {
-      /**
-       * Render all view items
-       */
-      elViewsList.innerHTML = mx.templates.viewList(views);
-
-      if (!mx.listener.sortableViews) {
-        mx.listener.sortableViews = Sortable.create(elViewsList, {
-          handle: '.mx-view-tgl-title',
-          draggable: '.mx-view-item',
-          animation: 150,
-          fallbackOnBody: true,
-          swapThreshold: 0.65,
-          onChange: mx.helpers.viewControler
-        });
-      }
-      /**
-      * Update views list
-      */    
-      m.views = views;
-
-    } else {
-      /**
-       * Render given view items only
-       */
-      views.forEach(function(v) {
-        /**
-        * Update views list
-        */
-        var oldPos;
-        m.views.forEach(function(f) {
-          if (f.id === v.id) {
-            oldPos = m.views.indexOf(f);
-          }
-        });
-        if (oldPos > -1) {
-          m.views.splice(oldPos, 1);
-        }
-        m.views.push(v);
-      });
-      elDiv = document.createElement('div');
-      elDiv.innerHTML = mx.templates.viewList(views);
-      elNewItem = elDiv.querySelector('li');
-      elNewInput = elNewItem.querySelector('.mx-view-tgl-input');
-      elNewInput.checked = open;
-      elViewsList.insertBefore(elNewItem, elViewsList.childNodes[0]);
-    }
-
-    /**
-     * Generate filter
-     */
-    h.updateViewsFilter({from: 'renderViewsList'});
-
-    /**
-     * Add views badges
-     */
-    h.updateViewsBadges();
-
-    /*
-     * translate based on dict key
-     */
-    h.updateLanguageElements({
-      el: elViewsContainer
-    });
-
-    /*
-     * filter view  by text input
-     */
-    if (!m.listener.viewsListFilterText) {
-      m.listener.viewsListFilterText = h.filterViewsListText({
-        selectorInput: '#viewsFilterText',
-        classHide: 'mx-filter-text',
-        classSkip: 'mx-filter-class',
-        idMap: o.id,
-        onFiltered: function() {}
-      });
-    } else {
-      m.listener.viewsListFilterText();
-    }
-    /*
-     * List filter by classes
-     */
-    if (!m.listener.viewsListFilterCheckbox) {
-      m.listener.viewsListFilterCheckbox = h.filterViewsListCheckbox({
-        selectorInput: '#viewsFilterContainer',
-        idMap: o.id,
-        classHide: 'mx-filter-class',
-        classSkip: 'mx-filter-text',
-        onFiltered: function() {}
-      });
-    } else {
-      m.listener.viewsListFilterCheckbox();
-    }
-
-    /*
-     * View values filter by text
-     */
-    if (!m.listener.viewsValueFilterText) {
-      m.listener.viewsValueFilterText = h.handleViewValueFilterText({
-        id: o.id
-      });
-      /* NOTE: keyup on the whole list */
-      elViewsList.addEventListener('keyup', m.listener.viewsValueFilterText);
-    }
-
-    /**
-     * Listen to click inside the list
-     */
-    if (!m.listener.viewsListClick) {
-      m.listener.viewsListClick = h.handleViewClick(o);
-      elViewsList.addEventListener('click', m.listener.viewsListClick, false);
-    }
-
-    /**
-     * Trigger view controler
-     */
-    h.viewControler(o);
-  }
-}
-
-/**
- * Check if there is an empty views list and add a message if needed
- */
-export function setViewsListEmpty(enable) {
-  enable = enable || false;
-  var noViewKey = 'noView';
-  var elViewsList = document.querySelector('.mx-views-list');
-
-  if (enable) {
-    elViewsList.innerHTML = '';
-    var elView = document.createElement('li');
-    var elTitle = document.createElement('span');
-    elTitle.dataset.lang_key = noViewKey;
-    elView.classList.add('mx-view-item-empty');
-    elTitle.id = 'noViewItemText';
-    elView.appendChild(elTitle);
-    elViewsList.appendChild(elView);
-    mx.helpers.getDictItem(noViewKey).then(function(item) {
-      elTitle.innerHTML = item;
-    });
-  } else {
-    var elToRemove = document.querySelector('.mx-view-item-empty');
-    if (elToRemove) {
-      elToRemove.remove();
-    }
-  }
-}
-
-/**
- * Extract tags from various path in given views list and produce frequency tables
- * @param {Array} v Views list
- * @note : expect type, data.classes and data.collections
- */
-export function getTagsGroupsFromView(views) {
-  var h = mx.helpers;
-
-  var tags = {
-    components: [],
-    classes: [],
-    collections: []
-  };
-
-  var stat = {};
-
-  views.map(function(v) {
-    tags.components = tags.components.concat(h.path(v, '_components'));
-    tags.classes = tags.classes.concat(h.path(v, 'data.classes'));
-    tags.collections = tags.collections.concat(h.path(v, 'data.collections'));
-  });
-
-  // grouprs
-  stat.view_components = mx.helpers.getArrayStat({
-    arr: tags.components,
-    stat: 'frequency'
-  });
-
-  stat.view_classes = mx.helpers.getArrayStat({
-    arr: tags.classes,
-    stat: 'frequency'
-  });
-
-  stat.view_collections = mx.helpers.getArrayStat({
-    arr: tags.collections,
-    stat: 'frequency'
-  });
-
-  return stat;
-}
-
-/**
- * Create filter tags label using freqency table from getTagsGroupFromView
- * @param {Object} o options
- * @param {Object} o.tagsTable Object containing the count for each key :
- * @param {Object} o.tagsTable.count Count of key.
- * @param {Element|Selector} o.selectorContainer Container to store the resulting label
- */
-export function updateViewsFilter(o) {
-  o = o || {};
-
-  var h = mx.helpers;
-  var views = h.getViews({asArray: true});
-  o.selectorContainer = o.selectorContainer || '#viewsFilterContainer';
-
-  /**
-   * Add components (story, dashboard, vector, raster, etc..) to each view ._components
-   */
-  mx.helpers.setViewsComponents(views);
-
-  /**
-   * Build tags table
-   */
-  o.tagsTable = o.tagsTable || h.getTagsGroupsFromView(views);
-
-  var elContainer =
-    o.selectorContainer instanceof Node
-      ? o.selectorContainer
-      : document.querySelector(o.selectorContainer);
-  var elFilters = document.createElement('div');
-  var elFoldFilters;
-  elContainer.innerHTML = '';
-
-  h.getDictItem('view_filter_by_tags')
-    .then(function(label) {
-      elFoldFilters = h.uiFold({
-        content: elFilters,
-        label: label,
-        labelKey: 'view_filter_by_tags',
-        open: false
-      });
-      elContainer.appendChild(elFoldFilters);
-    })
-    .then(function() {
-      /**
-       * Add filter by class, type, ...
-       */
-      var types = Object.keys(o.tagsTable);
-
-      types.forEach(function(type) {
-        var tags = [];
-        var tbl = o.tagsTable[type];
-        var keys = Object.keys(tbl);
-        var elTypeContent = document.createElement('div');
-        var elTypeContainer = document.createElement('div');
-        elTypeContent.classList.add('filter-tag-content');
-
-        h.getDictItem(type)
-          .then(function(label) {
-            elTypeContainer = h.uiFold({
-              content: elTypeContent,
-              label: label,
-              labelKey: type,
-              labelClass: 'filter-tag-label-light',
-              open: false
-            });
-            elFilters.appendChild(elTypeContainer);
-          })
-          .then(function() {
-            return Promise.all(
-              keys.map(function(key) {
-                return h.getDictItem(key).then(function(label) {
-                  tags.push({
-                    key: key,
-                    count: tbl[key],
-                    label: label,
-                    type: type
-                  });
-                });
-              })
-            );
-          })
-          .then(function() {
-            tags = tags.sort(function(a, b) {
-              if (a.label < b.label) {
-                return -1;
-              }
-              if (a.label > b.label) {
-                return 1;
-              }
-              return 0;
-            });
-
-            tags.forEach(function(t) {
-              var el = makeEl(t.key, t.label, t.count, t.type);
-              elTypeContent.appendChild(el);
-            });
-          });
-      });
-    });
-
-  function makeEl(id, label, number, type) {
-    var checkToggle = document.createElement('div');
-    var checkToggleLabel = document.createElement('label');
-    var checkToggleLabelText = document.createElement('span');
-    var checkToggleLabelCount = document.createElement('span');
-    var checkToggleInput = document.createElement('input');
-
-    checkToggleLabelText.innerText = label;
-    checkToggleLabelText.dataset.lang_key = id;
-    checkToggleLabelCount.innerText = '( ' + number + ' )';
-    /**
-     * For update
-     */
-    checkToggleLabelCount.className = 'mx-check-toggle-filter-count';
-    checkToggleLabelCount.dataset.type = type;
-    checkToggleLabelCount.dataset.id = id;
-
-    checkToggle.className = 'check-toggle';
-    checkToggleInput.className = 'filter check-toggle-input';
-    checkToggleInput.setAttribute('type', 'checkbox');
-    checkToggleLabel.className = 'check-toggle-label';
-    checkToggleInput.id = 'filter_' + id;
-    checkToggleInput.dataset.filter = id;
-    checkToggleInput.dataset.type = type;
-
-    checkToggleLabel.setAttribute('for', 'filter_' + id);
-    //checkToggleLabel.innerHTML =  label.toUp,perCase() + "<span class='check-toggle-badge'> (" + number + ") </span>";
-    checkToggleLabel.appendChild(checkToggleLabelText);
-    checkToggleLabel.appendChild(checkToggleLabelCount);
-    checkToggle.appendChild(checkToggleInput);
-    checkToggle.appendChild(checkToggleLabel);
-    return checkToggle;
-  }
 }
 
 /**
@@ -2596,7 +2168,7 @@ export function existsInList(li, it, val, inverse) {
  * @param {Object} o.map Map object
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function addViewCc(o) {
+function renderViewCc(o) {
   var view = o.view;
   var map = o.map;
   var methods = mx.helpers.path(view, 'data.methods');
@@ -2656,7 +2228,7 @@ function addViewCc(o) {
  * @param {Object} o.map Map object
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function addViewRt(o) {
+function renderViewRt(o) {
   var view = o.view;
   var map = o.map;
   return new Promise((resolve) => {
@@ -2733,7 +2305,7 @@ function addViewRt(o) {
  * @param {Object} o.map Map object
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-export function addViewVt(o) {
+export function renderViewVt(o) {
   var p = mx.helpers.path;
 
   return new Promise((resolve) => {
@@ -3191,19 +2763,8 @@ export function addOptions(o) {
     var elOptions = document.querySelector(
       "[data-view_options_for='" + view.id + "']"
     );
-
+ 
     if (elOptions) {
-      //var optMade = new Promise(function(resolve,reject){
-      //resolve(elOptions);
-      //});
-      //optMade.then(function(el){
-      /*  mx.helpers.uiReadMore('.make-readmore',{*/
-      //selectorParent : el,
-      //maxHeightClosed : 105,
-      //maxHeightOpened : 400
-      //});
-      //});
-
       elOptions.innerHTML = mx.templates.viewListOptions(view);
       mx.helpers.makeTimeSlider({view: view, idMap: o.id});
       mx.helpers.makeNumericSlider({view: view, idMap: o.id});
@@ -3221,6 +2782,18 @@ export function addOptions(o) {
 }
 
 /**
+* Force view checkbox
+* @param {Object} view View to open
+*/
+export function viewOpen(view){
+  var elView = document.querySelector("[data-view_id='" + view.id + "']");
+  if (elView && elView.vb) {
+    elView.vb.open();
+  }
+}
+
+
+/**
  * Add MapX view on the map
  * @param {object} o Options
  * @param {string} o.id map id
@@ -3231,14 +2804,12 @@ export function addOptions(o) {
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
  */
-export function addView(o) {
+export function renderView(o) {
   var m = mx.helpers.getMapData(o.id);
   var view = o.viewData;
   var idMap = o.id;
 
   if (!o.viewData && !o.idView) {
-    console.log('Add view called without idView or view Data. Options :');
-    console.log(o);
     return;
   }
 
@@ -3298,6 +2869,11 @@ export function addView(o) {
     return;
   }
 
+  /*
+  * Make sure that the view is open
+  */
+  mx.helpers.viewOpen(view);
+
   /**
    * Add options
    */
@@ -3339,21 +2915,21 @@ export function addView(o) {
     /* Switch on view type*/
     var handler = {
       rt: function() {
-        return addViewRt({
+        return renderViewRt({
           view: view,
           map: m.map,
           before: o.before
         });
       },
       cc: function() {
-        return addViewCc({
+        return renderViewCc({
           view: view,
           map: m.map,
           before: o.before
         });
       },
       vt: function() {
-        return addViewVt({
+        return renderViewVt({
           view: view,
           map: m.map,
           debug: o.debug,
@@ -3361,7 +2937,7 @@ export function addView(o) {
         });
       },
       gj: function() {
-        return addViewGj({
+        return renderViewGj({
           view: view,
           map: m.map,
           before: o.before
@@ -3383,7 +2959,7 @@ export function addView(o) {
   }
 }
 
-export function addViewGj(opt) {
+export function renderViewGj(opt) {
   return new Promise((resolve) => {
     var layer = mx.helpers.path(opt.view, 'data.layer');
     opt.map.addLayer(layer, opt.before);
@@ -3533,12 +3109,18 @@ export function getRenderedLayersArea(o) {
 
       var worker = new calcAreaWorker();
       worker.postMessage(data);
-      worker.addEventListener('message', function(e) {
-        if (e.data.message) {
-          o.onMessage(e.data.message);
-        }
-        if (e.data.end) {
-          o.onEnd(e.data.end);
+      mx.listenerStore.addListener({
+        group: 'compute_layer_area',
+        target: worker,
+        type: 'message',
+        listener: function(e) {
+          if (e.data.message) {
+            o.onMessage(e.data.message);
+          }
+          if (e.data.end) {
+            o.onEnd(e.data.end);
+            mx.lisntenerStore.removeListenerByGroup('compute_layer_area');
+          }
         }
       });
     }
@@ -3970,11 +3552,10 @@ export function zoomToViewIdVisible(o) {
 }
 
 export function resetViewStyle(o) {
-  if (!o.id || !o.idView) {
+  if (!o.idView) {
     return;
   }
-
-  mx.helpers.addView({
+  mx.helpers.renderView({
     id: o.id,
     idView: o.idView
   });

@@ -13,7 +13,9 @@ const modules = {
   downloadjs: loadDownloadjs,
   'wms-capabilities': loadWmsCapabilities,
   'mx-drag-drop-worker': loadDragDropWorker,
-  handsontable: loadHandsontable
+  handsontable: loadHandsontable,
+  map_composer: loadMapComposer,
+  nested_list: loadNestedList
 };
 
 export function moduleLoad(name) {
@@ -158,3 +160,9 @@ function loadHandsontable() {
   });
 }
 
+function loadMapComposer() {
+  return import('./map_composer/index.js').then((m) => m.MapComposer);
+}
+function loadNestedList() {
+  return import('./nested_list/index.js').then((m) => m.NestedList);
+}

@@ -115,7 +115,7 @@ mxDbCreateTempUser <- function(id,srcList){
 #' Update view data according to source value
 #' @param idSource Source/Layer id
 #' @return null
-mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progress=0,view=NUll){}){
+mxDbUpdateAllViewDataFromSource <- function(idSource,token,onProgress=function(progress=0,view=NUll){}){
 
   idSource <- tolower(idSource)
   viewsData <- mxDbGetViewsIdBySourceId(idSource)
@@ -137,11 +137,11 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
       #
       # Get view data
       #
-      viewData <- mxDbGetViews(
-        views = id, 
-        project = view$project,
+      viewData <- mxApiGetViews(
+        idViews = id, 
+        idProject = view$project,
         idUser = view$editor,
-        rolesInProject = userRole
+        token = token
         )
 
       if( noDataCheck(viewData) || length(viewData) != 1 ){

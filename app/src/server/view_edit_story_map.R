@@ -11,7 +11,7 @@ observeEvent(input$storyEdit_init,{
   language <- reactData$language  
   story <- .get(view,c("data","story"))
   hasStory <- !noDataCheck(story)
-  views <- reactViewsCompactAll()
+  views <- reactViewsListIdAll()
 
   schema <- mxSchemaViewStory(
     view=view,
@@ -78,7 +78,7 @@ observeEvent(input$storyEdit_values,{
   language <- reactData$language
   project <- reactData$project
   view <- reactData$viewDataEdited
-  allViews <- reactViewsCompactAll()
+  allViews <- reactViewsListIdAll()
   isEditable <- view[["_edit"]] && view[["type"]] == "sm"
   userData <- reactUser$data
   userRole <- getUserRole()

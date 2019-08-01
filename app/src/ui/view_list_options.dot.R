@@ -393,30 +393,6 @@ liControlsHomeProject <- tagList(
     ),
   "{{?}}"
 )
-# controls move
-liControlsMove <- tagList(
-  tags$li(
-    class="mx-pointer btn-circle btn-circle-small hint--right",
-    `data-lang_key`="btn_opt_move_top",
-    `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_opt_move_top",
-    `data-view_action_target`="{{=view.id}}",
-    tags$div(
-      class="fa fa-level-up"
-      )
-    ),
-  tags$li(
-    class="mx-pointer btn-circle btn-circle-small hint--right",
-    `data-lang_key`="btn_opt_move_bottom",
-    `data-lang_type`="tooltip",
-    `data-view_action_key`="btn_opt_move_bottom",
-    `data-view_action_target`="{{=view.id}}",
-    tags$div(
-      class="fa fa-level-down"
-      )
-    )
-)
-
 #
 # Controls if edit tag is set 
 #
@@ -499,7 +475,6 @@ ulControls <- tags$div(
     class="mx-controls-view",
     tags$ul(
       class="mx-controls-ul",
-      liControlsMove,
       liControlsStoryMaps,
       liControlsVectorTiles,
       liControlsRasterTiles,

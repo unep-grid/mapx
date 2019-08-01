@@ -186,9 +186,11 @@ mxLogin <- function(email,browserData,query){
   # Save user id in mx.settings.user.id
   #
   token <- mxDbEncrypt(list(
-      token = ifelse(isGuest,"",res$key),
+      token = res$key,
+      is_guest = isGuest,
       valid_until = as.numeric(Sys.time()) + 2 * 86400
-      ))
+      )
+    )
 
   userInfo <- mxDbGetUserInfoList(id=res$id)
 

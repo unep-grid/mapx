@@ -34,6 +34,47 @@ if(noDataCheck(out)) return(alias)
 }
 
 
+#' Get project views list states
+#' 
+#' @param idProject {Character} id of the project
+#' @return states {List} list of views list states
+mxDbGetProjectStateKeys <- function(idProject){
+
+  stateKeys <- mxDbGetQuery(sprintf("
+      SELECT jsonb_object_keys(states_views) as keys 
+      FROM  mx_projects
+      WHERE id = '%s'
+      ", idProject))$keys
+
+      if(noDataCheck(stateKeys)){
+        stateKeys = c('default')
+      }
+
+      return(stateKeys)
+}
+
+#' Get project views list states keys
+#' 
+#' @param idProject {Character} id of the project
+#' @return states {List} list of views list states keys
+mxDbGetProjectStates <- function(idProject){
+
+  states <- mxDbGetQuery(sprintf("
+      SELECT states_views as state 
+      FROM  mx_projects
+      WHERE id = '%s'
+      ", idProject))$state
+
+      states <- fromJSON(states,simplifyDataFrame=FALSE)
+
+      if(noDataCheck(states)){
+        states = list('default'=list())
+      }
+
+      return(states)
+}
+
+
 #' Get project title using id and language
 #' @param id {Character} project id
 #' @param language {Character} language default="en"
@@ -385,7 +426,7 @@ mxDbGetProjectData <- function(idProject){
   for(i in 1:length(projectData)){
      p <- projectData[i]
      n <- names(p)
-     if( n %in% c("title","description","admins","members","publishers","contacts","map_position","countries")){
+     if( n %in% c("title","description","admins","members","publishers","contacts","map_position","countries","states_views")){
        projectData[[i]] <- fromJSON(p[[1]],simplifyDataFrame=FALSE)
      }
   }
@@ -405,7 +446,8 @@ mxDbSaveProjectData <- function(idProject,values = list(
     map_position = NULL,
     countries = NULL,
     creator = NULL,
-    allow_join = NULL
+    allow_join = NULL,
+    states_views = NULL
     )
   ){
 
@@ -416,57 +458,56 @@ mxDbSaveProjectData <- function(idProject,values = list(
     return(out)
   }
 
-  for( n in c("title","description","admins","members","publishers","map_position","countries")){
-    v <- values[[n]]
-    isCountries <- n=="countries"
-    toUpdate <- notNull(v) || isCountries
+  for( key in c("title","description","admins","members","publishers","map_position","countries","states_views")){
+    value <- values[[key]]
+    toUpdate <- notNull(value)
 
     if(toUpdate){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
         id = idProject,
-        column = n,
-        value = as.list(v)
+        column = key,
+        value = as.list(value)
         )
     }
   }
 
-  for( n in c("public","active","allow_join")){
-    v <- values[[n]]
-    if(notNull(v)){ 
+  for( key in c("public","active","allow_join")){
+    value <- values[[key]]
+    if(notNull(value)){ 
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
         id = idProject,
-        column = n,
-        value = isTRUE(v)
+        column = key,
+        value = isTRUE(value)
         )
     }
   }
 
-  for( n in c("creator")){
-    v <- values[[n]]
-    if(notNull(v)){
+  for( key in c("creator")){
+    value <- values[[key]]
+    if(notNull(value)){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
         id = idProject,
-        column = n,
-        value = as.integer(v)
+        column = key,
+        value = as.integer(value)
         )
     }
   }
 
-  for( n in c("alias")){
-    v <- values[[n]]
-    if(notNull(v)){
+  for( key in c("alias")){
+    value <- values[[key]]
+    if(notNull(value)){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
         id = idProject,
-        column = n,
-        value = as.character(v)
+        column = key,
+        value = as.character(value)
         )
     }
   }

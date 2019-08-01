@@ -144,7 +144,7 @@ observeEvent(input$btnAddViewConfirm,{
   newView$`_edit` = TRUE 
 
   # add this as new (empty) source
-  mglSetSourcesFromViews(
+  mglUpdateViewsList(
     id = .get(config,c("map","id")),
     viewsList = newView,
     render = TRUE,
