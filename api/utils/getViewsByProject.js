@@ -15,13 +15,13 @@ function getViewsHandler(req, res) {
 
   getProjectViewsStates(req.query || {})
     .then((states) => {
-      projectStates = states;
+      projectStates = states || [];
       return getViews(req.query || {});
     })
-    .then((data) => {
+    .then((views) => {
       data = {
         states: projectStates,
-        views: data,
+        views: views,
         timing: new Date() - start
       };
       utils.sendJSON(res, data, true);

@@ -17,14 +17,14 @@ observeEvent(input$btnShowProjectViewsStates,{
         idInput = 'projectViewsState'
         ))
 
-    stateKeys <- mxDbGetProjectStateKeys(idProject)
+    stateKeys <- mxDbGetProjectStateKeys(idProject,language)
 
     ui = tagList(
       selectizeInput(
         "selectProjectStateKey",
         label = d("project_state_key",language,web=F),
         selected = stateKeys[0],
-        choices = as.list(stateKeys),
+        choices = stateKeys,
         multiple = FALSE,
         options=list(
           create = FALSE
@@ -77,14 +77,22 @@ observeEvent(input$btnSaveViewsState,{
   language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)
   userData <- reactUser$data
-  if( isAdmin && hasState && hasKey){
+  if( isAdmin && hasState && hasKey ){
 
-    states[[key]] <- state
+    states <- lapply(states, function(s){
+      if( s$id == key ){
+        s$state <- state
+      }else{
+        s$state <- s$state
+      }
+      return(s)
+    })
 
     mxDbSaveProjectData(idProject,list(
         states_views = states
         )
       )
+
     reactData$updateProject <- runif(1)
     mxFlashIcon("floppy-o")
   }

@@ -49,7 +49,7 @@ export function fetchViews(opt) {
     })
     .then((data) => {
       data.views = data.views || [];
-      data.states = data.states || {default:[]};
+      data.states = data.states || [];
       console.log(`Views DB: ${data.timing} [ms]`);
       console.log(`Views n: ${data.views.length}`);
       return data;

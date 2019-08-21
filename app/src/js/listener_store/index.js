@@ -22,9 +22,9 @@ class ListenerStore {
     let li = this;
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
-    if(opt.debounce){
+    if (opt.debounce) {
       opt.listener = li.debounce(opt.listener, opt.bind || li);
-    }else{
+    } else {
       opt.listener = opt.listener.bind(opt.bind || li);
     }
     opt.group = opt.group || 'default';
@@ -45,16 +45,22 @@ class ListenerStore {
       listener(d);
     }
   }
-  removeListener(opt) {
+  /**
+   * @param {Object|Integer} index Listener index/indexition or listener object
+   */
+  removeListener(index) {
     let li = this;
-    let pos = li.listeners.indexOf(opt);
-    if (pos > -1) {
-      li.listeners.splice(pos, 1);
-      opt.type = opt.type instanceof Array ? opt.type : [opt.type];
-      opt.type.forEach((t) => {
-        opt.target.removeEventListener(t, opt.listener);
-      });
+    let isPos = isFinite(index);
+    index = isPos ? index : li.listeners.indexOf(index);
+    let opt = li.listeners[index];
+    if(!opt){
+     throw new Error('Listener not found');
     }
+    li.listeners.splice(index, 1);
+    opt.type = opt.type instanceof Array ? opt.type : [opt.type];
+    opt.type.forEach((t) => {
+      opt.target.removeEventListener(t, opt.listener);
+    });
   }
   removeListenerByGroup(grp) {
     let li = this;
@@ -68,9 +74,11 @@ class ListenerStore {
   }
   removeAllListeners() {
     let li = this;
-    li.listeners.forEach((opt) => {
-      li.removeListener(opt);
-    });
+    let i = li.listeners.length - 1;
+    while (i >= 0) {
+      li.removeListener(i);
+      i -= 1;
+    }
   }
 }
 

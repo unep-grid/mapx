@@ -1,10 +1,3 @@
-.li-dragged {
-  opacity: 0.2;
-}
-
-.li-global-dragging * {
-  cursor: grabbing;
-}
 
 .li-item {
   width: 100%;
@@ -86,6 +79,13 @@
 .li-draggable {
   cursor: grab;
 }
+.li-dragged {
+  opacity: 0.2;
+}
+.li-global-dragging * {
+  cursor: grabbing !important;
+}
+
 .li-context-menu {
   z-index: 1000;
   padding: 5px;

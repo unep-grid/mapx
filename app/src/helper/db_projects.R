@@ -38,19 +38,50 @@ if(noDataCheck(out)) return(alias)
 #' 
 #' @param idProject {Character} id of the project
 #' @return states {List} list of views list states
-mxDbGetProjectStateKeys <- function(idProject){
+mxDbGetProjectStateKeys <- function(idProject, language='en'){
 
-  stateKeys <- mxDbGetQuery(sprintf("
-      SELECT jsonb_object_keys(states_views) as keys 
-      FROM  mx_projects
-      WHERE id = '%s'
-      ", idProject))$keys
+  tableKeys <- mxDbGetQuery(sprintf("
+      WITH 
+      state_list as (
+        SELECT jsonb_array_elements(states_views) as states
+        FROM mx_projects
+        WHERE id = '%2$s'
+        ),
+      keys as (
+        SELECT
+        states #>> '{\"id\"}' as id,
+        states #>> '{\"label\",\"en\"}' as label_en,
+        states #>> '{\"label\",\"%1$s\"}' as label_lang
+        FROM state_list
+        )
 
-      if(noDataCheck(stateKeys)){
-        stateKeys = c('default')
-      }
+      SELECT 
+      id, 
+      CASE WHEN label_lang IS NULL
+        THEN 
+          CASE WHEN label_en IS NULL 
+            THEN
+              id 
+            ELSE
+              label_en
+          END
+        ELSE 
+          label_lang
+      END as label
+      FROM keys"
+      , language
+      , idProject
+      )
+    )
 
-      return(stateKeys)
+  if(noDataCheck(tableKeys)){
+    tableKeys <- data.frame(id='default',label='Default')
+  }
+
+  keys <- as.list(tableKeys$id)
+  names(keys) <- tableKeys$label
+
+  return(keys)
 }
 
 #' Get project views list states keys
@@ -68,7 +99,16 @@ mxDbGetProjectStates <- function(idProject){
       states <- fromJSON(states,simplifyDataFrame=FALSE)
 
       if(noDataCheck(states)){
-        states = list('default'=list())
+        states = list(
+          list(
+            id = 'default',
+            label = list(
+              en = 'Default',
+              fr = 'Défaut'
+              ),
+            state = list()
+            )
+          )
       }
 
       return(states)

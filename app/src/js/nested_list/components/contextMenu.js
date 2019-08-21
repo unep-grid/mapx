@@ -107,12 +107,16 @@ class ContextMenu {
 
   buildContext() {
     let cm = this;
-    let isGroup = cm.li.isGroup(cm.elTarget);
+    let isRoot = cm.li.isRoot(cm.elTarget);
+    let isGroup = !isRoot && cm.li.isGroup(cm.elTarget);
     let elContainer = cm.elContainer;
-
-    let type = isGroup ? 'group' : 'item';
-    let it = cm.li.opt.contextMenuItems.filter(fItem);
-    let ui = it.map((i) => {
+    let type = isRoot ? 'root' : isGroup ? 'group' : 'item';
+    /**
+    * Filter context item and build UI according to 
+    * settings;
+    */
+    let contextItems = cm.li.opt.contextMenuItems.filter(filterContextItem);
+    let ui = contextItems.map((i) => {
       if (i.ui === 'button') {
         return cm.elButton(i.action);
       }
@@ -132,6 +136,9 @@ class ContextMenu {
       }
     });
 
+    /**
+    * Context content
+    */
     let elMenuGroup = cm.li.el(
       'div',
       {
@@ -140,6 +147,10 @@ class ContextMenu {
       ui
     );
 
+
+    /**
+    * Context
+    */
     let elContext = cm.li.el(
       'span',
       {
@@ -152,17 +163,19 @@ class ContextMenu {
       },
       elMenuGroup
     );
-
     elContainer.appendChild(elContext);
     return elContext;
 
-    function fItem(i) {
+    /**
+    * Context helpers
+    */
+    function filterContextItem(i) {
       if (cm.li.isFunction(i.condition)) {
         if (!i.condition.bind(cm.li)()) {
           return false;
         }
       }
-      return i.forType === type || i.forType === 'all';
+      return i.forType === 'all' || i.forType.indexOf(type) > -1;
     }
   }
 

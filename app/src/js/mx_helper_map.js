@@ -838,8 +838,16 @@ export function updateViewsList(o) {
         onProgress: updateProgress
       })
         .then((data) => {
+          
           views = views.concat(data.views);
-          state = data.states['default'] || state;
+          state = data.states.reduce((a,s)=>{
+            if(s.id === 'default'){
+              return s.state;
+            }else{
+              return a;
+            }
+          },state);
+          
           return promGjViews;
         })
         .then((viewsGeojson) => {

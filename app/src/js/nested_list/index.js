@@ -703,7 +703,6 @@ class NestedList {
    */
   setUiDraggingStart() {
     let li = this;
-    li._body_curlir = document.body.style.curlir;
     setTimeout(() => {
       document.body.classList.add(li.opt.class.globalDragging);
     }, 100);
@@ -832,10 +831,13 @@ class NestedList {
   isItem(el) {
     return this.isElement(el) && el.classList.contains(this.opt.class.item);
   }
+  isRoot(el) {
+    return el === this.elRoot;
+  }
   isGroup(el) {
     return (
       this.isElement(el) &&
-      (el.classList.contains(this.opt.class.group) || el === this.elRoot)
+      (el.classList.contains(this.opt.class.group) || this.isRoot(el))
     );
   }
   isTarget(el) {
@@ -976,9 +978,8 @@ function handleSortEnter(evt) {
 /**
  * Over event listener
  */
-function handleSortOver(event) {
+function handleSortOver(evt) {
   let li = this;
-  let evt = event;
   li.log('over');
   li.opt.onSortOver(evt);
   evt.preventDefault();
@@ -1089,7 +1090,7 @@ function handleSortEnd(evt) {
 function handleContextClick(evt) {
   evt.preventDefault();
   let li = this;
-  if (li.contextMenu) {
+  if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
   }
   li.contextMenu = new ContextMenu(evt, li);

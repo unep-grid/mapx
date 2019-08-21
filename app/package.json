@@ -62,7 +62,7 @@
     "@mapbox/mapbox-gl-draw": "^1.1.1",
     "@turf/turf": "^5.1.6",
     "ContentTools": "^1.6.10",
-    "bootstrap": "^3.4.0",
+    "bootstrap": "^3.4.1",
     "brace": "^0.11.1",
     "chroma-js": "^2.0.3",
     "codemirror": "^5.43.0",
