@@ -137,6 +137,15 @@ RUN \
   rm -rf /build && \
   rm -rf /var/cache/apk/*
 
+
+#
+# Install dependencies
+#
+RUN \  
+  echo "http://nl.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
+  apk add --no-cache postgresql-client \
+  rm -rf /var/cache/apk/*
+
 #
 # Install node packages, copy files
 #

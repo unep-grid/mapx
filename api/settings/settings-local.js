@@ -46,7 +46,7 @@ module.exports = {
   },
   vector : {
     path : {
-      temporary : "/tmp/",
+      temporary : "/tmp",
       download : env.MAPX_PATH_DOWNLOAD,
       download_url : env.MAPX_PATH_DOWNLOAD_URL
     }
