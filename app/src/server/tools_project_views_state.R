@@ -93,7 +93,12 @@ observeEvent(input$btnSaveViewsState,{
         )
       )
 
-    reactData$updateProject <- runif(1)
+    #
+    # NOTE: updateProject has an impact on map position only, no other 
+    # reactive dependency. We can skip it, as views list state does not
+    # impact any command triggered by updateProject
+    # reactData$updateProject <- runif(1)
+    #
     mxFlashIcon("floppy-o")
   }
   mxToggleButton(
