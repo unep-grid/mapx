@@ -131,6 +131,7 @@ export function viewsListRenderNew(o) {
   let elFilterText = document.getElementById('viewsFilterText');
   let elFilterTags = document.getElementById('viewsFilterContainer');
   let elFilterSwitch = document.getElementById('viewsFilterSwitch');
+  let elFilterCount = document.getElementById('viewsFilterCount');
   let elViewsList = elViewsContainer.querySelector('.mx-views-list');
   let views = o.views;
   let hasState = o.state && h.isArray(o.state) && o.state.length > 0;
@@ -177,10 +178,10 @@ export function viewsListRenderNew(o) {
     ],
     onSetDragImage: handleSetDragImage,
     onRenderItemContent: handleRenderItemContent,
-    onGetItemTextById : (id) => {
+    onGetItemTextById: (id) => {
       return mx.helpers.getViewTitleNormalized(id);
     },
-    onGetItemDateById : (id) => {
+    onGetItemDateById: (id) => {
       return mx.helpers.getView(id).date_modified;
     },
     onChange: () => {
@@ -197,9 +198,18 @@ export function viewsListRenderNew(o) {
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
+      /*
+       * Apply filter to nested list
+       */
       mData.viewsList.filterById(ids, {
         flatMode: false || rules.length < 0 // > 0 NOTE: remove this
       });
+    },
+    onUpdateCount: (count) => {
+      /**
+       * Update filter count
+       */
+      elFilterCount.innerText = `( ${count.nSubset} / ${count.nTot} )`;
     }
   });
 
@@ -207,8 +217,8 @@ export function viewsListRenderNew(o) {
    * Toggle between AND or OR operator for filter
    */
   mData.viewsSwitchToggle = new Switch(elFilterSwitch, {
-    labelLeft: '⋂',
-    labelRight: '⋃',
+    labelLeft: h.el('div',{dataset:{lang_key:'operator_and'}},'Intersection'),
+    labelRight: h.el('div',{dataset:{lang_key:'operator_or'}},'Union'),
     onChange: (s) => {
       let op = s ? 'or' : 'and';
       mData.viewsFilter.setOperator(op);

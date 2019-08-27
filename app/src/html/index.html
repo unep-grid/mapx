@@ -33,44 +33,39 @@
       <div class="mx-panel-left mx-panel-views transparent shadow">
         <div class="mx-views-container">
           <div class="mx-views-header">
-            <div>
-              <div class="mx-views-project-language-bar">
-                <span
-                  id="btnShowProject"
-                  >-</span
-                >
-                <span
-                  id="btnShowLanguage"
-                  >-</span
-                >
-                <input
-                  id="viewsFilterText"
-                  class="mx-views-filter-text-input"
-                  type="text"
-                  data-lang_key="view_filter_input"
-                  data-lang_type="placeholder"
-                />
-              </div>
-              <div></div>
-              <div class="mx-bar-sort">
-                <span
-                  class="mx-btn-toggle-filter"
-                  id="btnFilterChecked"
-                  data-lang_key="btn_filter_checked"
-                  >Activated views only</span
-                >
-                <span
-                  class="mx-btn-toggle-filter"
-                  id="btnFilterShowPanel"
-                  data-lang_key="btn_filter_show_panel"
+            <div class="mx-views-project-language-bar">
+              <span id="btnShowProject">-</span>
+              <span id="btnShowLanguage">-</span>
+              <input
+                id="viewsFilterText"
+                class="mx-views-filter-text-input"
+                type="text"
+                data-lang_key="view_filter_input"
+                data-lang_type="placeholder"
+              />
+            </div>
+            <div class="mx-bar-sort">
+              <span
+                class="mx-btn-toggle-filter"
+                id="btnFilterChecked"
+                data-lang_key="btn_filter_checked"
+                >Activated views only</span
+              >
+              <span class="mx-btn-toggle-filter" id="btnFilterShowPanel">
+                <span data-lang_key="btn_filter_show_panel"
                   >Advanced filter</span
                 >
-              </div>
+                <span class="mx-btn-toggle-filter-count" id="viewsFilterCount">
+                </span>
+              </span>
             </div>
           </div>
           <div class="mx-views-content"><div class="mx-views-list"></div></div>
           <div class="mx-views-footer"><div></div></div>
-          <div class="mx-views-side transparent shadow mx-hide" id="viewsFilterPanel">
+          <div
+            class="mx-views-side transparent shadow mx-hide"
+            id="viewsFilterPanel"
+          >
             <div id="viewsFilter" class="mx-bar-filter-container">
               <div id="viewsFilterSwitch" class="filter-switch-operator"></div>
               <div id="viewsFilterContainer"></div>

@@ -14,6 +14,9 @@ let settings = {
   onFilter: (ids) => {
     console.log(ids);
   },
+  onUpdateCount : (nTot,nFilter)=>{
+    console.table({nTot:nTot,nFilter:nFilter});
+  },
   operator: 'and',
   elFilterText: document.body,
   elFilterTags: document.body,
@@ -190,10 +193,11 @@ class ViewsFilter {
   updateCount() {
     let vf = this;
     let views = vf.getViews();
+    let viewsSubset = vf.getViewsSubset();
     let isIntersect = vf.opt.operator === 'and';
-    let viewsSub = isIntersect ? vf.getViewsSubset() : views;
+    let viewsDisplayed = isIntersect ? viewsSubset  : views;
     let tags = vf.getTags();
-    let tagsCount = getFreqTable(viewsSub);
+    let tagsCount = getFreqTable(viewsDisplayed);
     let count, byType, byId;
     tags.forEach((tag) => {
       count = 0;
@@ -205,6 +209,10 @@ class ViewsFilter {
         }
       }
       tag.setCount(count);
+    });
+    vf.opt.onUpdateCount({
+      nTot : views.length,
+      nSubset : viewsSubset.length
     });
   }
 
@@ -396,7 +404,7 @@ function updateTags() {
       }))
     )
   );
-
+  
   let groups = {
     view_components: elTypes,
     view_classes: elThemes,

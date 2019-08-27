@@ -64,14 +64,12 @@
   margin-left: 3px;
   margin-right: 3px;
   opacity: 0.7;
-  transform:scale(1.2);
-  transition: transform 500ms;
   width:2em;
+  position:relative;
+  transition: transform 500ms;
+  backface-visibility: hidden;
 }
 
-.vf-check-toggle .vf-check-toggle-filter-count.updated {
-  transform:scale(1);
-}
-.vf-check-toggle .vf-check-toggle-filter-count:hover {
-  transform:scale(1.2);
+.vf-check-toggle .vf-check-toggle-filter-count.updating {
+  transform: rotateY(90deg);
 }

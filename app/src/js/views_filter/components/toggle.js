@@ -1,4 +1,5 @@
 import {el} from '@fxi/el';
+import {onNextFrame, cancelFrame} from '../../animation_frame/index.js';
 
 let settings = {
   onDestroy: () => {},
@@ -31,20 +32,34 @@ class Toggle {
     tgl._destroyed = true;
   }
 
+  getDisplayedCount() {
+    return this.elLabelCount.innerText * 1;
+  }
+
   setCount(n) {
     let tgl = this;
-    let delay = n !== this.count ? 500 : 0;
-    tgl.elLabelCount.classList.remove('updated');
+    let nD = tgl.getDisplayedCount();
+    if (n === nD) {
+      return;
+    }
     tgl.count = n;
-    tgl.elLabelCount.innerText = tgl.count;
-    if (delay > 0) {
-      setTimeout(add, 500);
-    } else {
-      add();
+    tgl.animateCountUpdate(n);
+  }
+
+  animateCountUpdate(n) {
+    let tgl = this;
+    if ( tgl._updating ) {
+      return;
     }
-    function add() {
-      tgl.elLabelCount.classList.add('updated');
-    }
+    tgl._updating = true;
+    tgl.elLabelCount.classList.add('updating');
+    setTimeout(() => {
+      onNextFrame(()=>{
+        tgl.elLabelCount.innerText = n;
+        tgl.elLabelCount.classList.remove('updating');
+        tgl._updating = false;
+      });
+    }, 500);
   }
 
   setLabel(txt) {

@@ -4,6 +4,7 @@ import {Item} from './components/item.js';
 import {Group} from './components/group.js';
 import {ContextMenu} from './components/contextMenu.js';
 import {ListenerStore} from '../listener_store/index.js';
+import {onNextFrame} from '../animation_frame/index.js';
 
 import './style/nested_list.css';
 
@@ -119,17 +120,19 @@ class NestedList {
     let li = this;
     let elTargets = li.getChildrenTarget();
     let clHidden = li.opt.class.itemHidden;
-    let flatMode = opt.flatMode === true;
+    //let flatMode = opt.flatMode === true;
     ids = li.isArray(ids) ? ids : [ids];
-    li.setModeFlat(flatMode, false);
+    //li.setModeFlat(flatMode, false);
     elTargets.forEach((el) => {
       if (li.isItem(el)) {
         let id = el.id;
-        if (ids.indexOf(id) > -1) {
-          el.classList.remove(clHidden);
-        } else {
-          el.classList.add(clHidden);
-        }
+        onNextFrame(() => {
+          if (ids.indexOf(id) > -1) {
+            el.classList.remove(clHidden);
+          } else {
+            el.classList.add(clHidden);
+          }
+        });
       }
     });
   }

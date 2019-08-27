@@ -183,15 +183,21 @@ blockquote {
   font-size: 0.9em;
 }
 
-.mx-bar-sort > .mx-btn-toggle-filter {
+.mx-bar-sort .mx-btn-toggle-filter {
   padding: 5px;
   cursor: pointer;
 }
 
-.mx-bar-sort > .mx-btn-toggle-filter {
+.mx-bar-sort .mx-btn-toggle-filter * {
+  pointer-events:none;
+}
+.mx-bar-sort .mx-btn-toggle-filter-count {
+  opacity: 0.6;
+}
+.mx-bar-sort .mx-btn-toggle-filter {
   border-left: 1px solid #ccc;
 }
-.mx-bar-sort > .mx-btn-toggle-filter.active {
+.mx-bar-sort .mx-btn-toggle-filter.active {
   color: #fff;
   background: #333;
 }
