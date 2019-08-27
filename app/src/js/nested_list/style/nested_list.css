@@ -117,6 +117,15 @@
   border-bottom: 1px solid #ddd;
   padding-bottom: 2px;
 }
+.li-context-menu-header {
+  display: block;
+  padding-top: 5px;
+  background: #eee;
+  line-height: 1.6em;
+  opacity: 0.7;
+  font-size: 0.85em;
+  text-align: center;
+}
 .li-context-menu-button {
   display: block;
   padding: 2px;
@@ -132,6 +141,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
 }
 
 .li-context-menu-input {
@@ -141,6 +151,7 @@
   background: #fff;
   padding: 3px;
   margin-left: 5px;
+  max-width:50%;
 }
 
 .li-arrow-bottom {

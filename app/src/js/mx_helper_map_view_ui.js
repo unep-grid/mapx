@@ -4,12 +4,21 @@ import {handleViewClick} from './views_click/index.js';
 import {Switch} from './switch/index.js';
 import {ViewBase} from './views_builder/view_base.js';
 
+/**
+ * Get the current project views state.
+ *
+ * @param {Object} opt Options
+ * @param {String} opt.idProject ID of the project
+ * @param {String} opt.idInput Shiny input id. This will trigger an event in Shiny with the state as value
+ * @return {Array} State
+ */
 export function getProjectViewsState(opt) {
   const h = mx.helpers;
+  opt = opt || {};
   let idInput = opt.idInput || 'projectViewsState';
   let isCurrentProject = opt.idProject === mx.settings.project;
   let hasShiny = h.isObject(window.Shiny);
-  let state = {};
+  let state = [];
   if (isCurrentProject) {
     let mData = h.getMapData();
     if (mData.viewsList) {
@@ -25,8 +34,8 @@ export function getProjectViewsState(opt) {
 /**
  * View list to default nested list state
  * @param {Array} view list
+ * @param {Arras} Array of state item.
  */
-
 export function viewsToNestedListState(views) {
   return views.map((v) => {
     return {
@@ -163,11 +172,17 @@ export function viewsListRenderNew(o) {
     autoMergeState: true,
     customClassDragIgnore: ['mx-view-tgl-more-container'],
     customDictItems: [
-      {id: 'group_name', en: 'category', fr: 'catégorie'},
-      {id: 'item_name', en: 'view', fr: 'vue'}
+      {id: 'name_group', en: 'category', fr: 'catégorie'},
+      {id: 'name_item', en: 'view', fr: 'vue'}
     ],
-    setDragImage: handleSetDragImage,
+    onSetDragImage: handleSetDragImage,
     onRenderItemContent: handleRenderItemContent,
+    onGetItemTextById : (id) => {
+      return mx.helpers.getViewTitleNormalized(id);
+    },
+    onGetItemDateById : (id) => {
+      return mx.helpers.getView(id).date_modified;
+    },
     onChange: () => {
       mx.helpers.viewControler();
     },
@@ -182,7 +197,9 @@ export function viewsListRenderNew(o) {
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
-      mData.viewsList.filterById(ids, rules.length > 0);
+      mData.viewsList.filterById(ids, {
+        flatMode: false || rules.length < 0 // > 0 NOTE: remove this
+      });
     }
   });
 
@@ -267,7 +284,7 @@ export function viewsListRenderNew(o) {
     let open = data.open === true;
     if (elView) {
       el.appendChild(elView);
-      h.setViewBadges({view:view});
+      h.setViewBadges({view: view});
       if (open) {
         viewBase.open();
       }

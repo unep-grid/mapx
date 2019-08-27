@@ -769,19 +769,7 @@ export function updateViewsList(o) {
       }
     }
 
-    /* get view title  */
-    function getViewTitleNormalized(view) {
-      var title = h.getLabelFromObjectPath({
-        lang: mx.settings.language,
-        obj: view,
-        path: 'data.title'
-      });
-      title = h
-        .cleanDiacritic(title)
-        .toLowerCase()
-        .trim();
-      return title;
-    }
+
 
     /* get view object from storage or network */
     function getViewObject(v) {
@@ -3682,25 +3670,41 @@ export function getMercCoords(x, y, z) {
 
 /**
  * Get a view title by id or view object
- * @param {String|Object} id  View id or view
+ * @param {Object|String} iview View id or view
  * @param {String} lang Optional. Language : e.g. fr, en, sp ..
  * @return {String} title
  */
-export function getViewTitle(id, lang) {
-  var view = id;
-  if (typeof id === 'string') {
-    view = mx.helpers.getView(id);
+export function getViewTitle(view, lang) {
+  const h = mx.helpers;
+  if (!h.isView(view)) {
+    view = h.getView(view);
   }
   lang = lang || mx.settings.language;
   var langs = mx.settings.languages;
-
-  return mx.helpers.getLabelFromObjectPath({
+  return h.getLabelFromObjectPath({
     obj: view,
     path: 'data.title',
     lang: lang,
     langs: langs,
     defaultKey: 'noTitle'
   });
+}
+/* get view title  */
+export function getViewTitleNormalized(view,lang) {
+  const h = mx.helpers;
+  if (!h.isView(view)) {
+    view = h.getView(view);
+  }
+  var title = h.getLabelFromObjectPath({
+    lang: lang || mx.settings.language,
+    obj: view,
+    path: 'data.title'
+  });
+  title = h
+    .cleanDiacritic(title)
+    .toLowerCase()
+    .trim();
+  return title;
 }
 /**
  * Get a view desc by id or view object

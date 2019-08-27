@@ -20,7 +20,8 @@ class NestedList {
     li.contextMenu = null;
     li.init();
     li._is_busy = false;
-    li._is_groupless = false;
+    li._is_mode_flat = false;
+    li._is_mode_skip_save = false;
   }
   /**
    * Init/destroy
@@ -113,25 +114,92 @@ class NestedList {
   /**
    * Sorting and ordering
    */
-  filterById(ids, enable) {
+  filterById(ids, opt) {
+    opt = opt || {};
     let li = this;
     let elTargets = li.getChildrenTarget();
     let clHidden = li.opt.class.itemHidden;
-
-    enable = enable === true;
+    let flatMode = opt.flatMode === true;
     ids = li.isArray(ids) ? ids : [ids];
-    li.setModeGroupless(enable, false);
-
+    li.setModeFlat(flatMode, false);
     elTargets.forEach((el) => {
       if (li.isItem(el)) {
         let id = el.id;
-        if (!enable || ids.indexOf(id) > -1) {
+        if (ids.indexOf(id) > -1) {
           el.classList.remove(clHidden);
         } else {
           el.classList.add(clHidden);
         }
       }
     });
+  }
+
+  sortGroup(elTarget, opt) {
+    let def = {asc: true, mode: 'text'};
+    opt = Object.assign({}, def, opt);
+    let li = this;
+    let elGroup = li.isGroup(elTarget) ? elTarget : li.getGroup(elTarget);
+    let els = li.getChildrenTarget(elGroup, true);
+    let data = [];
+    /**
+     * Get values to sort on
+     */
+    els.forEach((el) => {
+      let item = {
+        id: el.id,
+        el: el,
+        value: 0,
+        isGroup: li.isGroup(el)
+      };
+      if (opt.mode === 'text') {
+        item.value = item.isGroup ? li.getGroupTitle(el) : li.getItemText(el);
+        item.value = item.value.toLowerCase().trim();
+      }
+      if (opt.mode === 'date') {
+        item.value = item.isGroup ? li.getGroupDate(el) : li.getItemDate(el);
+        if (Number.isFinite(item.value * 1)) {
+          item.value = item.value * 1;
+        }
+        item.value = new Date(item.value || 0);
+      }
+      data.push(item);
+    });
+
+    /**
+     * Sort
+     */
+    data = data.sort((a, b) => {
+      if (lt(a.value, b.value)) {
+        return -1;
+      }
+      if (gt(a.value, b.value)) {
+        return 1;
+      }
+      return 0;
+    });
+
+    /**
+     * Move targets
+     */
+    var elPrevious;
+    data.forEach((d, i) => {
+      if (i === 0) {
+        li.moveTargetTop(d.el);
+      } else {
+        li.moveTargetAfter(d.el, elPrevious);
+      }
+      elPrevious = d.el;
+    });
+
+    /**
+     * Helpers
+     */
+    function gt(a, b) {
+      return opt.asc ? a > b : a < b;
+    }
+    function lt(a, b) {
+      return opt.asc ? a < b : a > b;
+    }
   }
 
   /**
@@ -157,6 +225,7 @@ class NestedList {
     let els = el.querySelectorAll(
       `${pref}.${li.opt.class.draggable}, ${pref}.${li.opt.class.group}`
     );
+
     return els;
   }
   hasChildrenTarget(el, direct) {
@@ -182,6 +251,12 @@ class NestedList {
     if (li.isItem(el)) {
       return el.querySelector('.' + li.opt.class.itemContent);
     }
+  }
+  getItemText(el) {
+    return this.opt.onGetItemTextById(el.id);
+  }
+  getItemDate(el) {
+    return this.opt.onGetItemDateById(el.id);
   }
   getGroup(el) {
     let li = this;
@@ -218,6 +293,12 @@ class NestedList {
       return el.querySelector('.' + li.opt.class.groupTitle).innerText;
     }
   }
+  getGroupDate(el) {
+    let li = this;
+    if (li.isGroup(el)) {
+      return el.dataset.li_date;
+    }
+  }
   getGroupLabel(el) {
     let li = this;
     if (li.isGroup(el)) {
@@ -238,26 +319,36 @@ class NestedList {
       elGroup.insertBefore(el, elFirst);
     }
   }
+  moveTargetBefore(el, elBefore) {
+    let li = this;
+    elBefore = elBefore || li.getPreviousTarget(el);
+    if (li.isTarget(elBefore)) {
+      let elGroup = li.getGroup(el);
+      elGroup.insertBefore(el, elBefore);
+    }
+  }
   moveTargetUp(el) {
     let li = this;
     let elPrevious = li.getPreviousTarget(el);
-    if (li.isTarget(elPrevious)) {
+    li.moveTargetBefore(el, elPrevious);
+  }
+  moveTargetAfter(el, elAfter) {
+    let li = this;
+    elAfter = elAfter || li.getNextTarget(el);
+    if (li.isTarget(elAfter)) {
       let elGroup = li.getGroup(el);
-      elGroup.insertBefore(el, elPrevious);
+      let elAfterNext = li.getNextTarget(elAfter);
+      if (elAfterNext) {
+        elGroup.insertBefore(el, elAfterNext);
+      } else {
+        elGroup.appendChild(el);
+      }
     }
   }
   moveTargetDown(el) {
     let li = this;
     let elNext = li.getNextTarget(el);
-    if (li.isTarget(elNext)) {
-      let elGroup = li.getGroup(el);
-      let elNextAfter = li.getNextTarget(elNext);
-      if (elNextAfter) {
-        elGroup.insertBefore(el, elNextAfter);
-      } else {
-        elGroup.appendChild(el);
-      }
-    }
+    li.moveTargetAfter(el, elNext);
   }
   moveTargetBottom(el) {
     let li = this;
@@ -323,28 +414,29 @@ class NestedList {
       elGroupLabel.innerText = label || '';
     }
   }
-  setModeGroupless(groupless, save) {
+  setModeSkipSave(skip) {
+    this._is_mode_skip_save = skip === true;
+  }
+  isModeSkipSave() {
+    return this._is_mode_skip_save === true;
+  }
+  setModeFlat(enable, opt) {
+    opt = opt || {};
     let li = this;
-    groupless = groupless === true;
-    let skipSave = save === false;
+    enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
     li.addUndoStep();
     els.forEach((el) => {
       if (li.isGroup(el)) {
-        li.setGroupVisibility(el, !groupless);
+        li.setGroupVisibility(el, !enable);
       }
     });
-    /*  if (!groupless) {*/
-    //li.resetState();
-    /*}*/
-    if (!skipSave) {
-      li.saveStateStorage();
-    }
-    li._is_groupless = groupless;
+    li.saveStateStorage();
+    li._is_mode_flat = enable;
   }
-  isModeGroupless() {
-    return this._is_groupless;
+  isModeFlat() {
+    return this._is_mode_flat;
   }
   setGroupTitle(el, title) {
     let li = this;
@@ -431,9 +523,11 @@ class NestedList {
     let li = this;
     let state = li.getState();
     let history = li.getHistory();
-    if (li.isModeGroupless()) {
+
+    if (li.isModeFlat() || li.isModeSkipSave()) {
       return;
     }
+
     li.opt.onChange(state);
     li.setStateStored(state);
     li.setHistoryStored(history);
@@ -719,6 +813,7 @@ class NestedList {
   isBusy() {
     return this._is_busy === true;
   }
+
   cloneObject(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
@@ -750,10 +845,10 @@ class NestedList {
     let dict = li.getDict();
     let item = dict.find((t) => t.id === id) || {};
     let txt = item[lang] || item[langDef];
-    let cap = item.capitalize === true;
+    let skipCap = item.capitalize === false;
     if (txt) {
       txt = li.parseTemplate(txt, dict);
-      if (cap) {
+      if (!skipCap) {
         txt = li.capitalizeFirst(txt);
       }
       return txt;
@@ -936,14 +1031,14 @@ function handleSortStart(evt) {
   evt.dataTransfer.effectAllowed = 'move';
   // keep this version in history;
   li.addUndoStep();
-  if (li.opt.setDragImage) {
-    let elDragImage = li.opt.setDragImage(li.elDrag);
+  if (li.opt.onSetDragImage) {
+    let elDragImage = li.opt.onSetDragImage(li.elDrag);
     let rectImage = elDragImage.getBoundingClientRect();
     let dragOffsetTop = evt.clientY - rectImage.top;
     let dragOffsetLeft = evt.clientX - rectImage.left;
     evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
   }
-  evt.dataTransfer.setData('Text', li.opt.setTextData(li.elDrag));
+  evt.dataTransfer.setData('Text', li.opt.onSetTextData(li.elDrag));
   li.elNext = li.elDrag.nextSibling;
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -980,7 +1075,6 @@ function handleSortEnter(evt) {
  */
 function handleSortOver(evt) {
   let li = this;
-  li.log('over');
   li.opt.onSortOver(evt);
   evt.preventDefault();
   evt.dataTransfer.dropEffect = 'move';
@@ -1037,7 +1131,9 @@ function handleSortOver(evt) {
         !li.isSameElement(elInsert, elDrag) &&
         !li.isSameElement(elInsert, elGroup);
       if (isValid) {
-        //li.log('insert item ' + (insertAfter ? 'after' : 'before'));
+        /**
+         * Move
+         */
         elGroup.insertBefore(elDrag, elInsert);
       }
       return;
@@ -1050,7 +1146,9 @@ function handleSortOver(evt) {
       elGroup = elTarget;
       groupHasItems = li.hasChildrenTarget(elGroup);
       if (!groupHasItems || insertAfter) {
-        //li.log('insert group last');
+        /**
+         * Move
+         */
         elGroup.appendChild(elDrag);
       } else {
         elFirst = li.getFirstTarget(elGroup);
@@ -1058,7 +1156,9 @@ function handleSortOver(evt) {
           !li.isSameElement(elFirst, elDrag) &&
           !li.isSameElement(elFirst, elGroup);
         if (isValid) {
-          //li.log('insert group first');
+          /**
+           * Move
+           */
           elGroup.insertBefore(elDrag, elFirst);
         }
       }
