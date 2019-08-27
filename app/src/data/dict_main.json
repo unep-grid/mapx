@@ -637,7 +637,7 @@
   },
   {
     "id": "title_overlap_tools",
-    "en": "Aera intersection utilities",
+    "en": "Area intersection utilities",
     "fr": "Utilitaire d'analyse de chevauchement",
     "es": "",
     "ru": "",
@@ -773,6 +773,30 @@
     "en": "Reset bearing",
     "fr": "Réinitialiser l'orientation",
     "es": "Reajustar mapa",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_draw_mode",
+    "en": "Vector draw tools",
+    "fr": "Outils de \n dessin vectoriel",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "btn_map_composer",
+    "en": "Map composer",
+    "fr": "Compositeur de carte",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5642,7 +5666,7 @@
   },
   {
     "id": "project_enable_join",
-    "en": "Allow nonmember to request a membership to this project.",
+    "en": "Allow non-members to request a membership to this project.",
     "fr": "Autoriser les personnes non membres à faire une demande d'adhésion.",
     "es": "",
     "ru": "",
