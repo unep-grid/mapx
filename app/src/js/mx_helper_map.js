@@ -2766,7 +2766,6 @@ export function addOptions(o) {
       mx.helpers.makeNumericSlider({view: view, idMap: o.id});
       mx.helpers.makeTransparencySlider({view: view, idMap: o.id});
       mx.helpers.makeSearchBox({view: view, idMap: o.id});
-
       /*
        * translate based on dict key
        */

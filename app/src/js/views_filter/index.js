@@ -14,8 +14,8 @@ let settings = {
   onFilter: (ids) => {
     console.log(ids);
   },
-  onUpdateCount : (nTot,nFilter)=>{
-    console.table({nTot:nTot,nFilter:nFilter});
+  onUpdateCount: (nTot, nFilter) => {
+    console.table({nTot: nTot, nFilter: nFilter});
   },
   operator: 'and',
   elFilterText: document.body,
@@ -52,7 +52,7 @@ class ViewsFilter {
     let pState = vf._previousState;
     let state = vf.getViewsIdSubset();
     let rules = vf.getRules();
-    if(pState !== state){
+    if (pState !== state) {
       vf._previousState = state;
       vf.opt.onFilter(state, rules);
       vf.updateCount();
@@ -142,7 +142,7 @@ class ViewsFilter {
     let vf = this;
     vf.lStore.addListener({
       target: vf.opt.elFilterTags,
-      type : ['click'],
+      type: ['click'],
       listener: handleFilterViewIdByTag,
       group: 'view_filter',
       bind: vf
@@ -195,7 +195,7 @@ class ViewsFilter {
     let views = vf.getViews();
     let viewsSubset = vf.getViewsSubset();
     let isIntersect = vf.opt.operator === 'and';
-    let viewsDisplayed = isIntersect ? viewsSubset  : views;
+    let viewsDisplayed = isIntersect ? viewsSubset : views;
     let tags = vf.getTags();
     let tagsCount = getFreqTable(viewsDisplayed);
     let count, byType, byId;
@@ -211,8 +211,8 @@ class ViewsFilter {
       tag.setCount(count);
     });
     vf.opt.onUpdateCount({
-      nTot : views.length,
-      nSubset : viewsSubset.length
+      nTot: views.length,
+      nSubset: viewsSubset.length
     });
   }
 
@@ -371,40 +371,21 @@ function updateTags() {
   let elCollections;
   vf.cleanTags();
 
-  let elTags = el(
-    'div',
-    el(
-      'div',
-    {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_components'}}, 'Types'),
-      (elTypes = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    ),
-    el(
-      'div',
-      {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_classes'}}, 'Themes'),
-      (elThemes = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    ),
-    el(
-      'div',
-    {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_collections'}}, 'Collections'),
-      (elCollections = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    )
-  );
-  
+  let elTags = document.createDocumentFragment();
+
+  let parts = [
+    elTitle('view_components', 'Type of views'),
+    (elTypes = elGroup()),
+    elTitle('view_classes', 'Themes'),
+    (elThemes = elGroup()),
+    elTitle('view_collections', 'Collections'),
+    (elCollections = elGroup())
+  ];
+
+  parts.forEach((p) => {
+    elTags.appendChild(p);
+  });
+
   let groups = {
     view_components: elTypes,
     view_classes: elThemes,
@@ -433,7 +414,6 @@ function updateTags() {
           vf.addTag(tag);
           groups[tag.type].appendChild(tag.el);
         });
-        return updateLanguageElements({el: elTags});
       })
       .then(() => {})
       .catch((err) => {
@@ -441,21 +421,30 @@ function updateTags() {
       });
   });
 
-  return Promise.all(gProm).then(() => {
-    elContainer.appendChild(elTags);
-  });
+  return Promise.all(gProm)
+    .then(() => {
+      elContainer.appendChild(elTags);
+    })
+    .then(() => {
+      return updateLanguageElements({el: elContainer});
+    });
 
-  /*  function sortTags(tags) {*/
-  //tags = tags.sort(function(a, b) {
-  //if (a.label < b.label) {
-  //return -1;
-  //}
-  //if (a.label > b.label) {
-  //return 1;
-  //}
-  //return 0;
-  //});
-  /*}*/
+  function elTitle(key, txtDefault) {
+    return el(
+      'span',
+      {
+        class: 'vf-check-toggle-group-title',
+        dataset: {lang_key: key}
+      },
+      txtDefault
+    );
+  }
+
+  function elGroup() {
+    return el('div', {
+      class: ['vf-check-toggle-group']
+    });
+  }
 }
 
 /**
@@ -532,7 +521,7 @@ function handleFilterViewIdByTag(event) {
   }
 
   event.stopImmediatePropagation();
-  let isMouseOver = event.type ==='mouseover';
+  let isMouseOver = event.type === 'mouseover';
   let isMouseOut = event.type === 'mouseout';
   let isClick = event.type === 'click';
 

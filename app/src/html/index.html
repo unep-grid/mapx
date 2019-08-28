@@ -10,11 +10,7 @@
     <meta name="description" content="MapX" />
     <meta name="author" content="Unep sience division; Fred Moser" />
     <meta name="google" content="notranslate" />
-    <!--<meta http-equiv="Cache-control" content="NO-CACHE">-->
-    <meta
-      http-equiv="Cache-Control"
-      content="no-cache, no-store, must-revalidate"
-    />
+    <meta http-equiv="Cache-control" content="No-Cache">
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#15b0f8" />
@@ -31,6 +27,15 @@
     <noscript> <p>Please enable JavaScript to use MapX</p> </noscript>
     <div class="mx-panels-container">
       <div class="mx-panel-left mx-panel-views transparent shadow">
+        <!-- views side panel for filter views -->
+        <div
+          class="mx-panel-left-side mx-views-filter-panel transparent shadow mx-hide"
+          id="viewsFilterPanel"
+        >
+            <div id="viewsFilterContainer" class="mx-views-filter-container"></div>
+            <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
+        </div>
+        <!-- views container -->
         <div class="mx-views-container">
           <div class="mx-views-header">
             <div class="mx-views-project-language-bar">
@@ -62,15 +67,6 @@
           </div>
           <div class="mx-views-content"><div class="mx-views-list"></div></div>
           <div class="mx-views-footer"><div></div></div>
-          <div
-            class="mx-views-side transparent shadow mx-hide"
-            id="viewsFilterPanel"
-          >
-            <div id="viewsFilter" class="mx-bar-filter-container">
-              <div id="viewsFilterSwitch" class="filter-switch-operator"></div>
-              <div id="viewsFilterContainer"></div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="mx-panel-left mx-panel-tools transparent shadow mx-hide">

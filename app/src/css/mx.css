@@ -189,7 +189,7 @@ blockquote {
 }
 
 .mx-bar-sort .mx-btn-toggle-filter * {
-  pointer-events:none;
+  pointer-events: none;
 }
 .mx-bar-sort .mx-btn-toggle-filter-count {
   opacity: 0.6;
@@ -201,8 +201,6 @@ blockquote {
   color: #fff;
   background: #333;
 }
-
-
 
 /**
 * map 
@@ -232,10 +230,10 @@ blockquote {
 * Search box
 */
 .mx-views-filter-text-input {
-border-top-left-radius: 0px;
-    border-top-right-radius: 3px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 0px;
+  border-bottom-left-radius: 0px;
   outline: none;
   border: none;
   -webkit-box-shadow: none;
@@ -248,6 +246,18 @@ border-top-left-radius: 0px;
 }
 
 
+.mx-views-filter-panel {
+  display: flex;
+  flex-direction: column;
+}
+.mx-views-filter-container {
+  overflow: auto;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.mx-views-filter-switch {
+  padding-top: 10px;
+}
 
 /***
 * Project bar
@@ -281,24 +291,6 @@ border-top-left-radius: 0px;
   font-family: 'fontawesome';
   padding: 5px;
 }
-
-
-/**
-* Side bar panel
-*/
-.mx-views-side {
-  position: absolute;
-  left: 101%;
-  width: 300px;
-  max-height: 100%;
-  background: #fff;
-  border: 1px solid #ccc;
-  overflow: scroll;
-  padding: 5px;
-  border-radius: 3px;
-  resize : both;
-}
-
 
 /**
 * Shiny input
@@ -581,13 +573,6 @@ border-top-left-radius: 0px;
 * General layout
 */
 
-/*.mx-panel {*/
-/*border: 1px solid;*/
-/*border-radius: 5px;*/
-/*z-index: 100;*/
-/*padding:10px;*/
-/*position: absolute;*/
-/*}*/
 .mx-panels-container {
   position: absolute;
   top: 0px;
@@ -620,6 +605,19 @@ border-top-left-radius: 0px;
   z-index: 90;
 }
 
+.mx-panel-left-side {
+  position: absolute;
+  left: 101%;
+  width: 380px;
+  height : 50%;
+  max-height: 100%;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 3px;
+  resize: both;
+}
+
 @media (max-width: 800px) {
   .mx-panel {
     border-radius: 0px;
@@ -646,6 +644,20 @@ border-top-left-radius: 0px;
     padding: 3px;
     left: 0px;
     right: 0px;
+  }
+
+  .mx-panel-left-side {
+    position: absolute;
+    left: 0px;
+    top: -300px;
+    height: 300px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    overflow: scroll;
+    padding: 5px;
+    border-radius: 0px;
+    resize: none;
   }
 }
 
@@ -1141,16 +1153,13 @@ border-top-left-radius: 0px;
   height: 32px;
 }
 
-
 /**
 * Filter switch operator
 */
 .filter-switch-operator {
-  width:100%;
-  padding:2px;
+  width: 100%;
+  padding: 2px;
 }
-
-
 
 /**
 * Text switch
@@ -1164,8 +1173,8 @@ border-top-left-radius: 0px;
   flex-wrap: wrap;
   flex-direction: column;
   padding: 10px;
-  max-height:140px;
-};
+  max-height: 140px;
+}
 
 .check-toggle {
   display: inline-block;

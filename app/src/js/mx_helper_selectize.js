@@ -24,36 +24,39 @@ export function updateSelectizeItems(o) {
 
 export function initSelectizeAll(opt) {
   opt = opt || {};
-  mx.helpers.moduleLoad('selectize').then(() => {
-    var selector = mx.helpers.isElement(opt.selector)
+  const h = mx.helpers;
+  h.moduleLoad('selectize').then(() => {
+    var selector = h.isElement(opt.selector)
       ? opt.selector
       : document.querySelector(opt.selector);
     var out = [];
     opt.id = opt.id || 'global';
-    if (!mx.helpers.isEmpty(mx.selectize[opt.id])) {
+    if (!h.isEmpty(mx.selectize[opt.id])) {
       removeSelectizeGroupById(opt.id);
     }
     mx.selectize[opt.id] = out;
     var selects = $(selector).find('select');
     var $select;
     selects.each(function(i, s) {
+      var localOptions = {};
+      var options = {};
+      var script;
+      var data;
       if (s.id) {
-        var script = selector.querySelector('script[data-for=' + s.id + ']');
-        var data = script ? script.innerHTML : null;
-        var options = opt.options || {};
+        script = selector.querySelector('script[data-for=' + s.id + ']');
+        data = script ? script.innerHTML : null;
         if (data) {
-          options = JSON.parse(data);
-          if (options.renderFun) {
-            options.render = {
-              option: mx.helpers[options.renderFun]
+          localOptions = JSON.parse(data);
+          if (localOptions.renderFun) {
+            localOptions.render = {
+              option: h[localOptions.renderFun]
             };
           }
         }
-        options.inputClass = 'form-control selectize-input';
-        $select = $(s).selectize(options);
-      } else {
-        $select = $(s).selectize();
       }
+      options.inputClass = 'form-control selectize-input';
+      options = Object.assign(options, opt.options, localOptions);
+      $select = $(s).selectize(options);
       var selectize = $select[0].selectize;
       out.push(selectize);
     });

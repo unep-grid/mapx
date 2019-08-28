@@ -134,7 +134,7 @@ observe({
 
               mxModal(
                 id="modalViewEdit",
-                title=tags$b(sprintf(d('view_delete_modal_title',language),viewTitle)),
+                title=sprintf(d('view_delete_modal_title',language),viewTitle),
                 content=uiOut,
                 textCloseButton=d("btn_close",language),
                 buttons=btnList

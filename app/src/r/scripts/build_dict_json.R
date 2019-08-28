@@ -1,11 +1,14 @@
 #
 # Build dicts for the client
 #
-
 library("jsonlite")
 
-pathDest <- "src/built"
-dir.create(pathDest,showWarnings=F)
+args <- commandArgs(trailingOnly = TRUE)
+pathDest <- args[1]
+
+if(!dir.exists(pathDest)){
+  stop(sprintf("Built dictionary folder must exits. Path=%s",pathDest))
+}
 
 r = function(path){
   jsonlite::fromJSON(path)
@@ -14,8 +17,8 @@ r = function(path){
 message("Read dictionaries")
 
 dicts <- rbind(
-  r("src/data/dict_main.json"),
-  r("src/data/dict_languages.json")
+  r("src/data/dict/dict_main.json"),
+  r("src/data/dict/dict_languages.json")
   )
 
 langs <- names(dicts)

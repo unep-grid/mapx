@@ -4,7 +4,7 @@ export function fetchProgress(url, opt) {
   const onComplete = opt.onComplete || console.log;
   const onError = opt.onError || console.log;
 
-  return fetch(url)
+  return fetch(url,{cache: "no-cache"})
     .then((response) => {
       let err = '';
       if (!response.ok) {

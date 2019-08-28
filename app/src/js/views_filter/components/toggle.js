@@ -1,5 +1,5 @@
 import {el} from '@fxi/el';
-import {onNextFrame, cancelFrame} from '../../animation_frame/index.js';
+import {onNextFrame} from '../../animation_frame/index.js';
 
 let settings = {
   onDestroy: () => {},
@@ -127,6 +127,7 @@ function buildToggle() {
         for: 'toggle_' + tgl.id
       },
       (elLabelText = el('span', {
+        class: 'vf-check-toggle-filter-text',
         land_key: tgl.id
       })),
       (elLabelCount = el('span', {
