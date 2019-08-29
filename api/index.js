@@ -23,16 +23,13 @@ app.set('trust proxy', true); // see https://expressjs.com/en/guide/behind-proxi
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Expose-Headers', 'Content-Length');
+  res.header('Access-Control-Expose-Headers', 'Mapx-Content-Length');
   res.header(
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept'
   );
   next();
 });
-
-/*
- * Static files access
- */
 app.use('/download', express.static(settings.vector.path.download));
 
 /*
@@ -40,8 +37,8 @@ app.use('/download', express.static(settings.vector.path.download));
  */
 app.get('/get/view/item/:id', utils.view.get);
 app.get('/get/view/metadata/:id', utils.viewMetadata.get);
-app.get('/get/views/list/project/',utils.views.get);
-app.get('/get/views/list/global/public/',utils.viewsPublic.get);
+app.get('/get/views/list/project/', utils.views.get);
+app.get('/get/views/list/global/public/', utils.viewsPublic.get);
 app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get);
 app.get('/get/mirror/', utils.mirror.get);
@@ -56,7 +53,9 @@ app.post('/upload/vector/', utils.vector.upload);
 app.post('/send/mail/', utils.mail.sendMailApi);
 
 /**
-* Start
-*/
+ * Start
+ */
 console.log('listen to ' + port);
 app.listen(port);
+
+

@@ -39,18 +39,15 @@ export function fetchViews(opt) {
   start = performance.now();
 
   return h
-    .fetchProgress(url, {
+    .fetchJsonProgress(url, {
       onProgress: opt.onProgress || onProgress,
       onError: opt.onError || onError,
       onComplete: opt.onComplete || onComplete
     })
     .then((data) => {
-      return data.json() || {};
-    })
-    .then((data) => {
+      data = data || {};
       data.views = data.views || [];
       data.states = data.states || [];
-      console.log(`Views DB: ${data.timing} [ms]`);
       console.log(`Views n: ${data.views.length}`);
       return data;
     });

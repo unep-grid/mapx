@@ -3,20 +3,16 @@ version: '3.2'
 # ports : host:container
 services:
   traefik:
-    image: traefik
+    image: traefik:v1.7.4-alpine
     command: 
       - --api
-      #- --logLevel=DEBUG
       - --docker
       - --docker.domain=mapx.localhost
       - --defaultentrypoints=http
-      #- --defaultentrypoints=https
-      #- --entrypoints=Name:http Address::80 Redirect.EntryPoint:https
-      #- --entrypoints=Name:https Address::443 TLS.DefaultCertificate.Cert:/certs/wekan.crt TLS.DefaultCertificate.Key:/certs/wekan1.key
+      - "--entryPoints=Name:http Address::80 Compress:true"
     ports:
       - 8880:80
       - 8881:8080
-      #- 8888:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs

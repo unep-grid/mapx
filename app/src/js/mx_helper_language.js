@@ -77,9 +77,10 @@ export function updateLanguageElements(o) {
   o = o || {};
   o.lang = o.lang || mx.settings.language || 'en';
   var langDefault = 'en';
-
+  let changes = [];
   getDict(o.lang).then(function(dict) {
-    var els, el, doc, label, found;
+    var i, iL, j, jL;
+    var els, el, doc, label, found, type, id;
     var lang = o.lang;
 
     // custom buttons
@@ -88,10 +89,62 @@ export function updateLanguageElements(o) {
       elBtnLanguage.dataset.lang_key = o.lang;
     }
 
-    // set value selector
+    // if no el to look at, serach the whole document
+    doc = h.isElement(o.el) ? o.el : document;
 
-    var setValue = {
-      tooltip: function(el) {
+    // fetch all elements with data-lang_key attr
+    els = doc.querySelectorAll('[data-lang_key]');
+    for (i = 0, iL = els.length; i < iL; i++) {
+      el = els[i];
+      type = el.dataset.lang_type;
+      id = el.dataset.lang_key;
+      found = false;
+      label = '';
+
+      /*
+       * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
+       */
+      if (!type) {
+        type = el.getAttribute('data-lang_type');
+      }
+
+      /*
+       * Default is text : inner text will be updated 
+       */
+      if (!type) {
+        type = 'text';
+      }
+
+      for (j = 0, jL = dict.length; j < jL; j++) {
+        if (!found) {
+          if (dict[j].id === id) {
+            found = true;
+            label = dict[j][lang];
+            if (!label) {
+              label = dict[j][langDefault];
+            }
+          }
+        }
+      }
+
+      changes.push([type,el,label]);
+    }
+
+    /**
+    * Group all change to avoid many reflow;
+    */
+    changes.forEach(c=>{
+       setValue(c[0],c[1],c[2]);    
+    });
+
+    /**
+     * Helpers
+     */
+    function setValue(type, el, label) {
+      if(!label){
+        return;
+      }
+      if (type === 'tooltip') {
         if (el.dataset.lang_split) {
           label = splitnwords(label);
         }
@@ -99,66 +152,14 @@ export function updateLanguageElements(o) {
         if (el.className.indexOf('hint--') === -1) {
           el.className += ' hint--left';
         }
-      },
-      placeholder: function(el) {
+        return;
+      }
+
+      if (type === 'placeholder') {
         el.setAttribute('placeholder', label);
-      },
-      text: function(el) {
-        el.innerHTML = label;
+        return;
       }
-    };
-
-    // if no el to look at, serach the whole document
-    doc = h.isElement(o.el) ? o.el : document;
-
-    // fetch all elements with data-lang_key attr
-    els = doc.querySelectorAll('[data-lang_key]');
-    for (var i = 0; i < els.length; i++) {
-      el = els[i];
-
-      if (h.isElement(el)) {
-        var type = el.dataset.lang_type;
-        var id = el.dataset.lang_key;
-
-        /*
-         * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
-         */
-        if (!type) {
-          type = el.getAttribute('data-lang_type');
-        }
-
-        // Default is text. Maybe not the most clever default.
-        if (!type) {
-          type = 'text';
-        }
-
-        found = false;
-        label = '';
-
-        for (var j = 0; j < dict.length; j++) {
-          if (!found) {
-            if (dict[j].id === id) {
-              found = true;
-              label = dict[j][lang];
-              if (!label) {
-                // if label no in dict, take the default
-                label = dict[j][langDefault];
-              }
-            }
-          }
-        }
-        /*
-         * Fallback
-         */
-        if (!label) {
-          if (el.innerText) {
-            label = el.innerText;
-          } else {
-            label = id;
-          }
-        }
-        setValue[type](el);
-      }
+      el.innerText = label;
     }
   });
 }

@@ -11,14 +11,12 @@ export function getSourceTableAttribute(opt) {
     });
 
   return h
-    .fetchProgress(url, {
+    .fetchJsonProgress(url, {
       onProgress: onProgressData,
       onError: onProgressError,
       onComplete: onProgressDataComplete
-    })
-    .then((data) => {
-      return data.json();
     });
+
 }
 
 export function showSourceTableAttributeModal(opt) {
@@ -292,13 +290,10 @@ function onProgressData(data) {
     enable: true
   });
 }
-function onProgressDataComplete(data) {
+function onProgressDataComplete() {
   var h = mx.helpers;
-  if (data.loaded !== data.total) {
-    console.log('FetchProgress : data seems incomplete', data);
-  }
   h.progressScreen({
-    text: 'Data downloaded, build table',
+    text: 'Data downloaded. Build table',
     enable: true,
     percent: 99,
     id: 'fetch_data'

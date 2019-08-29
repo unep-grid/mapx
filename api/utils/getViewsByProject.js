@@ -10,7 +10,6 @@ exports.getViews = getViews;
 exports.getProjectViewsStates = getProjectViewsStates;
 
 function getViewsHandler(req, res) {
-  var start = new Date();
   var projectStates = {};
 
   getProjectViewsStates(req.query || {})
@@ -21,10 +20,9 @@ function getViewsHandler(req, res) {
     .then((views) => {
       data = {
         states: projectStates,
-        views: views,
-        timing: new Date() - start
+        views: views
       };
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end: true });
     })
     .catch((err) => {
       utils.sendError(res, err);

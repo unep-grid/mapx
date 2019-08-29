@@ -13,6 +13,7 @@
 .vf-check-toggle-group-title {
   opacity:0.5;
 }
+
 .vf-check-toggle {
   display: flex;
 }
@@ -24,6 +25,7 @@
   align-items:center;
   margin-left: 6px;
 }
+
 .vf-check-toggle .vf-check-toggle-filter-text {
   font-weight: normal;
   text-overflow: ellipsis;
@@ -31,7 +33,9 @@
   width: 100px;
   white-space: nowrap;
   overflow: hidden;
+  font-size: 0.85em;
 }
+
 .vf-check-toggle .vf-check-toggle-filter-count {
   font-size: 0.9em;
   margin-left: 1px;

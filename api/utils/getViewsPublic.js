@@ -17,7 +17,7 @@ function getViewsPublicHandler(req, res) {
         views: data,
         timing: new Date() - start
       };
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end:true});
     })
     .catch((err) => {
       utils.sendError(res, err);

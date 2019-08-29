@@ -798,11 +798,8 @@ observeEvent(input$btnViewSave,{
     #
     # Update project
     #
-    #projectUpdate = input$selViewProjectUpdate
     projectsUpdate = input$selViewProjectsUpdate
-    #if(noDataCheck(projectUpdate)) projectUpdate = project
     if(noDataCheck(projectsUpdate)) projectsUpdate = list()
-    #project = projectUpdate
     projects = as.list(projectsUpdate)
     editor = reactUser$data$id
 

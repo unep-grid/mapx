@@ -46,40 +46,27 @@ function toRes(obj) {
   return JSON.stringify(obj) + '\t\n';
 }
 /**
- * Simple json to zip to res
- * @param {Object} re Result object
+ * Simple custom json send
+ * @param {Object} res Result object
  * @param {Object} data Data stringifiable to JSON
+ * @param {Object} opt
+ * @param {Object} opt.end If true, send, else continue writing
+ * @param {Object} opt.etag If set, add custom etag
  */
-exports.sendJSON = function(res, data, end, asZip) {
-  end = end === true || false;
-
-  res.setHeader('Cache-Control', 'public, max-age=3600');
-
-  if (!asZip) {
-    if (end) {
-      res.json(data);
-    } else {
-      res.write(data);
-    }
+exports.sendJSON = function(res, data, opt) {
+  opt = Object.assign({}, {end: true}, opt);
+  opt.end = opt.end === true || false;
+  data = JSON.stringify(data);
+  res.setHeader('Mapx-Content-Length', data.length || 0);
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Cache-Control', 'max-age=43200, s-maxage=300');
+  if (opt.etag) {
+    res.setHeader('Etag', opt.etag);
+  }
+  if (opt.end) {
+    res.send(data);
   } else {
-    dataToJsonZip(data)
-      .then((zip) => {
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Content-Encoding', 'gzip');
-
-        //* Note : Content-length is not correct in the reader used in fetchProgress.
-        //res.setHeader('Content-Length', zip.length);
-
-        if (end) {
-          res.send(zip);
-        } else {
-          res.write(zip);
-        }
-      })
-      .catch((e) => {
-        res.status('500');
-        res.send(e);
-      });
+    res.write(data);
   }
 };
 
@@ -245,14 +232,14 @@ function stop(reason) {
 exports.stop = stop;
 
 /**
-* Validator test an input against an array of rules
-* @param {Array} validateRules Array of rules with a structure like :
-* [{
-*  id : '<id>',
-*  test : function(value){if(!value)(stop("Test failed"))}
-* }]
-* @return {Function} a validation functio taking two argument : id and value.
-*/
+ * Validator test an input against an array of rules
+ * @param {Array} validateRules Array of rules with a structure like :
+ * [{
+ *  id : '<id>',
+ *  test : function(value){if(!value)(stop("Test failed"))}
+ * }]
+ * @return {Function} a validation functio taking two argument : id and value.
+ */
 function validator(validateRules) {
   return function validate(id, value) {
     let out = value;
@@ -267,9 +254,9 @@ function validator(validateRules) {
 exports.validator = validator;
 
 /**
-* Convert string input from query string (e.g. test=1,2,4 => [1,2,3]) as an array and clean
-* @param {String} v String value to convert 
-*/
+ * Convert string input from query string (e.g. test=1,2,4 => [1,2,3]) as an array and clean
+ * @param {String} v String value to convert
+ */
 function asArray(v) {
   v = v || [];
   var r = [];
@@ -283,13 +270,12 @@ function asArray(v) {
 exports.asArray = asArray;
 
 /**
-* Clean array, remove empty item
-* @param {Array} arr Array to clean
-*/
+ * Clean array, remove empty item
+ * @param {Array} arr Array to clean
+ */
 function cleanArray(arr) {
   return arr.reduce((a, v) => (v ? a.concat(v) : a), []);
 }
-
 
 /*
  * Export methods

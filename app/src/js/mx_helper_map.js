@@ -249,7 +249,7 @@ export function initMapxApp(o) {
       .updateViewsList({
         id: o.id,
         autoFetchAll: true,
-        project: o.project || mx.settings.project,
+        project: o.project || mx.settings.project
       })
       .then(function() {
         /*
@@ -501,8 +501,8 @@ export function resetViews(o) {
    */
   h.cleanRemoveModules(views);
   /*
-  * Set views list empty
-  */
+   * Set views list empty
+   */
   h.setViewsListEmpty(true);
 }
 
@@ -743,6 +743,7 @@ export function updateViewsList(o) {
     /* update progress */
     function updateProgress(d) {
       let percent = 0;
+
       d = d || {
         loaded: nCache + nNetwork,
         total: nTot
@@ -764,12 +765,10 @@ export function updateViewsList(o) {
         percent = (d.loaded / d.total) * 100;
         prog.update(percent);
         if (percent >= 100) {
-          prog.destroy();
+            prog.destroy();
         }
       }
     }
-
-
 
     /* get view object from storage or network */
     function getViewObject(v) {
@@ -826,28 +825,26 @@ export function updateViewsList(o) {
         onProgress: updateProgress
       })
         .then((data) => {
-          
           views = views.concat(data.views);
-          state = data.states.reduce((a,s)=>{
-            if(s.id === 'default'){
+          state = data.states.reduce((a, s) => {
+            if (s.id === 'default') {
               return s.state;
-            }else{
+            } else {
               return a;
             }
-          },state);
-          
+          }, state);
+
           return promGjViews;
         })
         .then((viewsGeojson) => {
-
           views = viewsGeojson.concat(views);
 
           h.viewsListRenderNew({
             id: o.id,
             views: views,
-            state : state
+            state: state
           });
-          
+
           return views;
         });
     }
@@ -2759,7 +2756,7 @@ export function addOptions(o) {
     var elOptions = document.querySelector(
       "[data-view_options_for='" + view.id + "']"
     );
- 
+
     if (elOptions) {
       elOptions.innerHTML = mx.templates.viewListOptions(view);
       mx.helpers.makeTimeSlider({view: view, idMap: o.id});
@@ -2777,16 +2774,15 @@ export function addOptions(o) {
 }
 
 /**
-* Force view checkbox
-* @param {Object} view View to open
-*/
-export function viewOpen(view){
+ * Force view checkbox
+ * @param {Object} view View to open
+ */
+export function viewOpen(view) {
   var elView = document.querySelector("[data-view_id='" + view.id + "']");
   if (elView && elView.vb) {
     elView.vb.open();
   }
 }
-
 
 /**
  * Add MapX view on the map
@@ -2865,8 +2861,8 @@ export function renderView(o) {
   }
 
   /*
-  * Make sure that the view is open
-  */
+   * Make sure that the view is open
+   */
   mx.helpers.viewOpen(view);
 
   /**
@@ -3689,7 +3685,7 @@ export function getViewTitle(view, lang) {
   });
 }
 /* get view title  */
-export function getViewTitleNormalized(view,lang) {
+export function getViewTitleNormalized(view, lang) {
   const h = mx.helpers;
   if (!h.isView(view)) {
     view = h.getView(view);

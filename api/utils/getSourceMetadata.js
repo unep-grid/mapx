@@ -12,7 +12,7 @@ function getSourceMetadataHandler(req, res) {
     format: 'mapx-json'
   })
     .then((data) => {
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end:true});
     })
     .catch((err) => {
       utils.sendError(res, err);
