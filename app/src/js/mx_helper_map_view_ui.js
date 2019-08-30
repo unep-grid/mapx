@@ -136,6 +136,7 @@ export function viewsListRenderNew(o) {
   let views = o.views;
   let hasState = o.state && h.isArray(o.state) && o.state.length > 0;
   let state = hasState ? o.state : h.viewsToNestedListState(views);
+  let noViewsMode  = h.getQueryParameter('noViews')[0] === 'true';
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     mData.viewsFilter.destroy();
@@ -159,9 +160,8 @@ export function viewsListRenderNew(o) {
    */
   state = updateState(mData.views, state);
 
-  /**
-   *
-   */
+
+
 
   /**
    * Create views list ui
@@ -169,6 +169,7 @@ export function viewsListRenderNew(o) {
   mData.viewsList = new NestedList(elViewsList, {
     id: mx.settings.project,
     state: state,
+    locked : noViewsMode,
     useStateStored: true,
     autoMergeState: true,
     customClassDragIgnore: ['mx-view-tgl-more-container'],
@@ -189,6 +190,7 @@ export function viewsListRenderNew(o) {
     },
     emptyLabel: getEmptyLabel()
   });
+ 
 
   /**
    * Handle views list filtering
@@ -311,18 +313,19 @@ export function setViewsListEmpty(enable) {
   let mData = h.getMapData();
   let viewList = mData.viewsList;
   if (viewList instanceof NestedList) {
-    viewList.setEmptyMode(enable);
+    viewList.setModeEmpty(enable);
   }
 }
 
 function getEmptyLabel() {
   const h = mx.helpers;
-  let noViewKey = 'noView';
+  let noViewForced = h.getQueryParameter('noViews')[0] === 'true';
+  let noViewKey = noViewForced ? 'noView' : 'noViewOrig';
   let elTitle;
   let elItem = h.el(
     'div',
     {
-      class: ['mx-item-empty']
+      class: ['mx-view-item-empty']
     },
     (elTitle = h.el('span', {
       dataset: {

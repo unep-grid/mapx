@@ -187,7 +187,9 @@ observeEvent(reactData$showProjectsList,{
     whereTitleMatch = filterTitle,
     asDataFrame = T
     )
-
+  if(noDataCheck(projects)){
+    return()
+  }
   projects <- projects[with(projects, order(-admin,-publisher,-member,title)),]
   projectsMember <- projects[projects$member,]
   userIsMember <- project %in% projectsMember$id

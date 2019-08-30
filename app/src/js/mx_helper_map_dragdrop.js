@@ -352,6 +352,10 @@ export function handleUploadFileEvent(evt) {
   var helper = mx.helpers;
   var files = evt.dataTransfer.files;
 
+  if(helper.isModeLocked()){
+    return;
+  }
+
   var nFiles = files.length;
   var exts = {
     '.json': 'geojson',

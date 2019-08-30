@@ -11,14 +11,22 @@ export function fetchViews(opt) {
   var collectionsSelectOperator = h.getQueryParameter(
     'collectionsSelectOperator'
   );
-  var roleMax = h.getQueryParameter(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
+  var roleMax =
+    h.getQueryParameter(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
   var noViews = h.getQueryParameter('noViews')[0] || '';
+
+  var dataEmpty = {
+    views: [],
+    states: [],
+    timing: 0
+  };
 
   opt = opt || {};
   var host = h.getApiUrl('getViewsListByProject');
 
-  if(noViews === true || noViews.toLowerCase() === 'true'){
-    return Promise.resolve([]);
+  if (noViews === true || noViews.toLowerCase() === 'true') {
+    dataEmpty.noViews = true;
+    return Promise.resolve(dataEmpty);
   }
 
   var url =

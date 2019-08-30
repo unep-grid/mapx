@@ -7,6 +7,7 @@ let settings = {
   * General options
   */
   id: 'li-default',
+  idEmptyItem : 'liEmptyItem',
   prefix: 'li',
   dict: dict,
   state: state,

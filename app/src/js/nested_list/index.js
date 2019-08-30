@@ -11,18 +11,22 @@ import './style/nested_list.css';
 class NestedList {
   constructor(elRoot, opt) {
     const li = this;
+    li._is_busy = false;
+    li._is_mode_flat = false;
+    li._is_mode_skip_save = false;
+    li._is_mode_empty = false;
+    li._is_mode_lock = false;
+
     li.listenerStore = new ListenerStore();
     li.setOptions(opt);
     li.setStateOrig(opt.state);
+    li.setModeLock(opt.locked);
     li.setId();
     li.elRoot = elRoot;
     li.history = [];
     li.meta = [];
     li.contextMenu = null;
     li.init();
-    li._is_busy = false;
-    li._is_mode_flat = false;
-    li._is_mode_skip_save = false;
   }
   /**
    * Init/destroy
@@ -106,6 +110,10 @@ class NestedList {
   getLanguage() {
     return this.opt.language;
   }
+  getChildrenCount(el) {
+    el = el || this.elRoot;
+    return el.childElementCount;
+  }
   getLanguageDefault() {
     return this.opt.languageDefault;
   }
@@ -117,15 +125,24 @@ class NestedList {
    */
   filterById(ids, opt) {
     opt = opt || {};
+
     let li = this;
+    if (li.isModeEmpty()) {
+      return;
+    }
     let elTargets = li.getChildrenTarget();
     let clHidden = li.opt.class.itemHidden;
-    //let flatMode = opt.flatMode === true;
     ids = li.isArray(ids) ? ids : [ids];
-    //li.setModeFlat(flatMode, false);
+
+    /**
+     * Hide / show items
+     */
     elTargets.forEach((el) => {
       if (li.isItem(el)) {
         let id = el.id;
+        if (id === li.opt.idEmptyItem) {
+          return;
+        }
         onNextFrame(() => {
           if (ids.indexOf(id) > -1) {
             el.classList.remove(clHidden);
@@ -423,6 +440,14 @@ class NestedList {
   isModeSkipSave() {
     return this._is_mode_skip_save === true;
   }
+
+  setModeLock(enable) {
+    this._is_mode_lock = !!enable;
+  }
+  isModeLock() {
+    return !!this._is_mode_lock;
+  }
+
   setModeFlat(enable, opt) {
     opt = opt || {};
     let li = this;
@@ -527,7 +552,7 @@ class NestedList {
     let state = li.getState();
     let history = li.getHistory();
 
-    if (li.isModeFlat() || li.isModeSkipSave()) {
+    if (li.isModeFlat() || li.isModeSkipSave() || li.isModeLock()) {
       return;
     }
 
@@ -639,18 +664,36 @@ class NestedList {
   /**
    * Empty mode
    */
-  setEmptyMode(empty) {
+  setModeEmpty(enable) {
     let li = this;
-    let id = 'liEmptyLabel';
+    let idEmpty = li.opt.idEmptyItem;
+    let ignore = (enable && li.isModeEmpty()) || (!enable && !li.isModeEmpty());
+    let nItems = li.getChildrenCount();
     let elLabel = el('div', li.opt.emptyLabel);
-    li.clearAllItems();
-    if (empty) {
-      li.addItem({
-        id: id,
-        type: 'item',
-        el: elLabel
-      });
+
+    if (ignore) {
+      return;
     }
+
+    if (enable) {
+      if (nItems > 0) {
+        li.clearAllItems();
+      }
+
+      li.addItem({
+        id: idEmpty,
+        type: 'item',
+        el: elLabel,
+        empty: true
+      });
+    } else {
+      li.removeItemById(idEmpty);
+    }
+
+    li._is_mode_empty = !!enable;
+  }
+  isModeEmpty() {
+    return !!this._is_mode_empty;
   }
 
   /**
@@ -702,7 +745,7 @@ class NestedList {
       /*
        * Render empty label
        */
-      li.setEmptyMode(state.length > 1);
+      li.setModeEmpty(true);
     } else {
       /*
        * Render state item
@@ -734,13 +777,26 @@ class NestedList {
     let li = this;
     attr.render = attr.render || !attr.content || false;
     let isGroup = li.isGroup(attr.group);
-    var elGroupParent = isGroup
+    let isLocked = li.isModeLock();
+    let elGroupParent = isGroup
       ? attr.group
       : li.getGroupById(attr.group) || li.elRoot;
     let item = new Item(attr, li);
     let elItem = item.el;
     let elContent = item.elContent;
+    let isEmptyItem = !!attr.empty;
+    let isModeEmpty = li.isModeEmpty();
+
+    if (isLocked && !isEmptyItem) {
+      return;
+    }
+
+    if (!isEmptyItem && isModeEmpty) {
+      li.setModeEmpty(false);
+    }
+
     elGroupParent.appendChild(elItem);
+
     if (attr.render) {
       li.opt.onRenderItemContent(elContent, attr);
     }
@@ -748,6 +804,10 @@ class NestedList {
       li.moveTargetTop(elItem);
     }
     li.makeIgnoredClassesDraggable(elItem);
+
+    if(!isEmptyItem){
+      li.saveStateStorage();
+    }
     return elItem;
   }
 
@@ -829,10 +889,17 @@ class NestedList {
     }
   }
   removeElement(el) {
-    if (el.remove) {
-      el.remove();
-    } else if (el.parentElement) {
-      el.parentElement.removeChild(el);
+    let li = this;
+    if (el instanceof Element) {
+      if (el.remove) {
+        el.remove();
+      } else if (el) {
+        el.parentElement.removeChild(el);
+      }
+    }
+    let isEmpty = li.getChildrenCount() === 0;
+    if (isEmpty) {
+      li.setModeEmpty(true);
     }
   }
   removeContent(el) {
@@ -1036,6 +1103,9 @@ function handleSortStart(evt) {
   li.addUndoStep();
   if (li.opt.onSetDragImage) {
     let elDragImage = li.opt.onSetDragImage(li.elDrag);
+    if (!elDragImage) {
+      elDragImage = li.elDrag;
+    }
     let rectImage = elDragImage.getBoundingClientRect();
     let dragOffsetTop = evt.clientY - rectImage.top;
     let dragOffsetLeft = evt.clientX - rectImage.left;

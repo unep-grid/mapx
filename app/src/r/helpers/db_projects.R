@@ -229,7 +229,15 @@ mxDbProjectSetViewExternal <- function(idProject,idView,action="add"){
 #' id, 
 #' title,
 #' description
-mxDbGetProjectListByUser <- function(id,whereUserRoleIs="any",whereTitleMatch=NULL,language="en",asNamedList=FALSE,asDataFrame=FALSE,idsAdditionalProjects=NULL){
+mxDbGetProjectListByUser <- function(
+  id,
+  whereUserRoleIs = "any",
+  whereTitleMatch = NULL,
+  language = "en",
+  asNamedList = FALSE,
+  asDataFrame = FALSE,
+  idsAdditionalProjects = NULL
+  ){
 
   if(noDataCheck(language)) language <-"en"
 

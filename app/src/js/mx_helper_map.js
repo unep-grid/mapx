@@ -60,6 +60,21 @@ export function requestProjectMembership(idProject) {
   });
 }
 
+
+/**
+* Check if query paramater noViews or modeLocked is set to 'true'
+* In such mode, no view can be added
+*/
+export function isModeLocked(){
+  const h = mx.helpers;
+  let modeLocked = 
+    h.getQueryParameter('noViews')[0] === 'true' ||
+  h.getQueryParameter('nodeLocked')[0] === 'true' ;
+
+  return !! modeLocked;
+}
+
+
 /**
  * Init base listeners
  */
