@@ -20,8 +20,7 @@ module.exports = merge(common, {
   plugins: [
     new WebpackShellPlugin({
       onBuildStart: [
-        //'Rscript ./src/script/build_html.R',
-        'Rscript ./src/script/build_dict_json.R'
+        'Rscript ./src/r/scripts/build_dict_json.R ./src/data/dict_built'
       ],
       onBuildEnd: ['echo "Webpack End"']
     }),
