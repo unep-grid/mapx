@@ -10488,5 +10488,29 @@
     "fa": "",
     "ps": "",
     "es": ""
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded_title",
+    "en": "Maximum size reached",
+    "fr": "Taille maximale atteinte",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded",
+    "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
+    "fr": "La taille maximale de {{size}} pour le téléversement de fichier a été atteinte. Vous n'êtes pas autorisé à dépasser cette limite. Merci de prendre contact avec nous pour plus d'information.",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
   }
 ]

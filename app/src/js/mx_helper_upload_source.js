@@ -72,12 +72,12 @@ export function uploadGeojsonModal(idView) {
       return;
     }
 
-    var elBtnUpload = el('buton',{
+    var elBtnUpload = el('buton', {
       class: 'btn btn-default',
       on: ['click', upload],
-       dataset : {
-         lang_key : 'btn_upload'
-       }
+      dataset: {
+        lang_key: 'btn_upload'
+      }
     });
 
     var elInput = el('input', {
@@ -123,7 +123,7 @@ export function uploadGeojsonModal(idView) {
     });
 
     h.updateLanguageElements({
-      el : elModal
+      el: elModal
     });
 
     function upload() {
@@ -165,6 +165,47 @@ export function uploadGeojsonModal(idView) {
 }
 
 /**
+ * File size checker
+ * @param {File} file File to test
+ * @param {Object} opt Options
+ * @param {Boolean} opt.showModal Display a modal panel to warn the user
+ * @return {Boolean} Is the file below limit =
+ */
+export function isUploadFileSizeValid(file, opt) {
+  opt = Object.assign({}, {showModal: true}, opt);
+  const h = mx.helpers;
+  const isFileValid = file instanceof File;
+  const sizeMax = mx.settings.api.upload_size_max;
+  const size = file.size;
+  let out = true;
+
+  if (!isFileValid) {
+    throw new Error('maxSizeFileTest : input is not a file');
+  }
+
+  if (size >= sizeMax) {
+    out = false;
+    if (opt.showModal) {
+      const elMessage = h.el('span');
+      const sizeHuman = h.formatByteSize(sizeMax);
+      const modal = h.modal({
+        id: 'modal_max_size_exceeded',
+        content: elMessage
+      });
+      h.getDictItem([
+        'api_upload_file_max_size_exceeded',
+        'api_upload_file_max_size_exceeded_title'
+      ]).then((items) => {
+        elMessage.innerText = h.parseTemplate(items[0], {size: sizeHuman});
+        modal.setTitle(items[1]);
+      });
+    }
+  }
+
+  return out;
+}
+
+/**
  * Upload source wrapper
  *
  * @param {Object} o Options
@@ -180,11 +221,15 @@ export function uploadGeojsonModal(idView) {
 function uploadSource(o) {
   const h = mx.helpers;
   const el = h.el;
- 
+  const isSizeValid = isUploadFileSizeValid(o.file);
+
   /* Server will validate token,
    * but we can avoid much trouble here
    */
   if (mx.settings.user.guest) {
+    return;
+  }
+  if (!isSizeValid) {
     return;
   }
 
@@ -194,12 +239,10 @@ function uploadSource(o) {
   var host = h.getApiUrl('uploadVector');
 
   if (o.geojson) {
-    o.geojson = h.isString(o.geojson)
-      ? o.geojson
-      : JSON.stringify(o.geojson);
+    o.geojson = h.isString(o.geojson) ? o.geojson : JSON.stringify(o.geojson);
     var filename = o.title;
 
-    if(o.title.search(/.geojson$/) === -1){
+    if (o.title.search(/.geojson$/) === -1) {
       filename = h.makeId(10) + '.geojson';
     }
 
@@ -207,6 +250,7 @@ function uploadSource(o) {
       type: 'application/json'
     });
   }
+
   /*
    * create upload form
    */
@@ -228,47 +272,22 @@ function uploadSource(o) {
       ? o.selectorProgressContainer
       : document.querySelector(o.selectorProgressContainer);
 
- /* var elProgressLabel = el('label', 'Progress');*/
-  //var elLogLabel = el('label', 'Logs');
-
-  //[> progress bar <]
-  //var elProgressBar = el('div', {
-    //class: 'mx-inline-progress-bar'
-  //});
-  //var elProgressBarContainer = el(
-    //'div',
-    //{
-      //class: 'mx-inline-progress-container'
-    //},
-    //elProgressBar
-  //);
-  //var elProgressMessageContainer = el('div', {
-    //class: ['form-control', 'mx-logs']
-  //});
-
-  //var elProgressMessage = el('ul');
-
-  //elProgressMessageContainer.appendChild(elProgressMessage);
-
-  //var elProgressContainer = el(
-    //'div',
-    //elProgressLabel,
-    //elProgressBarContainer,
-    //elLogLabel,
-    //elProgressMessageContainer
-  //);
-
-
-  
   /* log messages */
-  var elLogLabel, elProgressBar, elProgressBarContainer, elProgressLabel, elProgressMessage, elProgressMessageContainer;
+  var elLogLabel,
+    elProgressBar,
+    elProgressBarContainer,
+    elProgressLabel,
+    elProgressMessage,
+    elProgressMessageContainer;
 
   var elProgressContainer = el(
     'div',
     /**
      * Progress bar
      */
-    (elProgressLabel = el('label', {dataset: {lang_key: 'api_progress_title'}})),
+    (elProgressLabel = el('label', {
+      dataset: {lang_key: 'api_progress_title'}
+    })),
     (elProgressBarContainer = el(
       'div',
       {
@@ -314,7 +333,7 @@ function uploadSource(o) {
 
   var uploadDone = false;
 
- function updateTranslation() {
+  function updateTranslation() {
     h.updateLanguageElements({el: elProgressContainer});
   }
 
@@ -329,15 +348,12 @@ function uploadSource(o) {
   function cleanMsg(msg) {
     return mx.helpers.handleRequestMessage(msg, messageStore, {
       end: function() {
-        var li = el(
-          'li',
-          {
-            dataset : {
-              lang_key : 'api_upload_ready'
-            },
-            class: ['mx-log-item', 'mx-log-green']
-          }
-        );
+        var li = el('li', {
+          dataset: {
+            lang_key: 'api_upload_ready'
+          },
+          class: ['mx-log-item', 'mx-log-green']
+        });
         elProgressMessage.appendChild(li);
         updateLayerList();
         updateTranslation();
@@ -380,8 +396,8 @@ function uploadSource(o) {
             'li',
             {
               class: ['mx-log-item', 'mx-log-white'],
-              dataset : {
-                lang_key : 'api_upload_done_wait_db'
+              dataset: {
+                lang_key: 'api_upload_done_wait_db'
               }
             },
             msg

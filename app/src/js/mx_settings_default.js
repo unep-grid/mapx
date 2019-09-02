@@ -12,6 +12,7 @@ let settings = {
     host: 'api',
     host_public: 'apidev.mapx.localhost',
     protocol: 'http:',
+    upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
       getSourceMetadata: '/get/source/metadata/',
@@ -48,7 +49,6 @@ let settings = {
     sublayer: '_@_'
   },
   clickHandlers: [],
-  maxByteUpload: Math.pow(1024, 2) * 100, //100 MiB
   maxByteJed: 100000, // 100 Kb
   user: {},
   ui: {

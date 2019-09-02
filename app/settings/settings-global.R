@@ -6,7 +6,7 @@ config <- list()
 #
 # Shiny options
 #
-options(shiny.maxRequestSize=1000*1024^2) 
+options(shiny.maxRequestSize=0) 
 options(shiny.reactlog=FALSE)
 
 #
@@ -65,19 +65,8 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
+  upload_size_max = 100 * 1024^2,#100MiB
   routes = list(
-    #    tiles =  '/get/tile/{x}/{y}/{z}.mvt',
-    #views =  '/get/view/',
-    #sourceMetadata =  '/get/source/metadata/',
-    #viewMetadata =  '/get/view/metadata/',
-    #sourceOverlap =  '/get/source/overlap/',
-    #sourceValidateGeom =  '/get/source/validate/geom',
-    #getSourceTableAttribute =  '/get/source/table/attribute',
-    #getViews =  '/get/views/',
-    #downloadSourceCreate =  '/get/source/',
-    #downloadSourceGet =  '',
-    #uploadImage =  '/upload/image/',
-    #uploadVector =  '/upload/vector/'
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",
     getViewMetadata = "/get/view/metadata/",
