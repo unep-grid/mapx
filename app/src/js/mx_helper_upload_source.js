@@ -166,7 +166,7 @@ export function uploadGeojsonModal(idView) {
 
 /**
  * File size checker
- * @param {File} file File to test
+ * @param {File||Object||String} file File or geojson to test
  * @param {Object} opt Options
  * @param {Boolean} opt.showModal Display a modal panel to warn the user
  * @return {Boolean} Is the file below limit =
@@ -174,14 +174,14 @@ export function uploadGeojsonModal(idView) {
 export function isUploadFileSizeValid(file, opt) {
   opt = Object.assign({}, {showModal: true}, opt);
   const h = mx.helpers;
-  const isFileValid = file instanceof File;
   const sizeMax = mx.settings.api.upload_size_max;
-  const size = file.size;
-  let out = true;
-
-  if (!isFileValid) {
-    throw new Error('maxSizeFileTest : input is not a file');
+  const isFile = file instanceof File;
+  const isData = file && !isFile;
+  if (!isFile && !isData) {
+    throw new Error('maxSizeFileTest : input is not a file or data');
   }
+  const size = isFile ? file.size : h.getSizeOf(file) ;
+  let out = true;
 
   if (size >= sizeMax) {
     out = false;
@@ -221,7 +221,7 @@ export function isUploadFileSizeValid(file, opt) {
 function uploadSource(o) {
   const h = mx.helpers;
   const el = h.el;
-  const isSizeValid = isUploadFileSizeValid(o.file);
+  const isSizeValid = isUploadFileSizeValid(o.file || o.geojson);
 
   /* Server will validate token,
    * but we can avoid much trouble here
