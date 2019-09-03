@@ -102,7 +102,10 @@ const contextMenuItems = [
     forType: ['root', 'group', 'item'],
     action: 'cm_global_reset_state',
     label: 'cm_global_reset_state',
-    ui: 'button'
+    ui: 'button',
+    condition: function() {
+      return !this.isModeEmpty() && this.hasHistory();
+    }
   },
   {
     forType: ['root', 'group', 'item'],
@@ -110,7 +113,7 @@ const contextMenuItems = [
     label: 'cm_global_undo_last',
     ui: 'button',
     condition: function() {
-      return this.hasHistory();
+      return !this.isModeEmpty() && this.hasHistory();
     }
   },
   {

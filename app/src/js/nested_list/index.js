@@ -707,6 +707,9 @@ class NestedList {
   resetState() {
     let li = this;
     let state = li.getStateOrig();
+    if (li.isModeEmpty()) {
+      return;
+    }
     li.addUndoStep();
     li.clearAllItems();
     li.setState({render: true, state: state, useStateStored: false});
@@ -755,6 +758,7 @@ class NestedList {
           li.addGroup(s);
         } else {
           s.render = opt.render;
+          s.initState = true;
           li.addItem(s);
         }
       });
@@ -786,6 +790,7 @@ class NestedList {
     let elContent = item.elContent;
     let isEmptyItem = !!attr.empty;
     let isModeEmpty = li.isModeEmpty();
+    let isInitState = !!attr.initState;
 
     if (isLocked && !isEmptyItem) {
       return;
@@ -805,7 +810,7 @@ class NestedList {
     }
     li.makeIgnoredClassesDraggable(elItem);
 
-    if(!isEmptyItem){
+    if(!isEmptyItem && !isInitState){
       li.saveStateStorage();
     }
     return elItem;
@@ -1247,14 +1252,18 @@ function handleSortOver(evt) {
 function handleSortEnd(evt) {
   evt.preventDefault();
   let li = this;
-  li.opt.onSortEnd(evt);
   li.elDrag.classList.remove(li.opt.class.dragged);
   li.listenerStore.removeListenerByGroup('dragevent');
+  li.setUiDraggingEnd();
+
+  if(li.isModeEmpty()){
+   return;
+  }
+  li.opt.onSortEnd(evt);
   if (li.elNext !== li.elDrag.nextSibling) {
     li.opt.onSortDone(li.elDrag);
   }
   li.elDrag = null;
-  li.setUiDraggingEnd();
   li.saveStateStorage();
 }
 /**
@@ -1265,6 +1274,9 @@ function handleContextClick(evt) {
   let li = this;
   if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
+  }
+  if(li.isModeEmpty()){
+   return;
   }
   li.contextMenu = new ContextMenu(evt, li);
 }

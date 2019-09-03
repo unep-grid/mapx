@@ -21,7 +21,7 @@ class ContextMenu {
     this.adjustPosition();
   }
 
-  destroy() {
+  destroy(save) {
     let cm = this;
     if (cm._destroyed) {
       return;
@@ -29,7 +29,9 @@ class ContextMenu {
     cm.setTargetFocus(false);
     cm.stopListen();
     cm.li.removeElement(cm.elContext);
-    cm.li.saveStateStorage();
+    if(save){
+      cm.li.saveStateStorage();
+    }
     cm._destroyed = true;
   }
 
@@ -113,11 +115,11 @@ class ContextMenu {
      */
     let contextItems = cm.li.opt.contextMenuItems.filter(filterContextItem);
     let ui = contextItems.map((i) => {
-      if(i.ui === 'header'){
+      if (i.ui === 'header') {
         return cm.elHeader(i.label);
       }
       if (i.ui === 'button') {
-        return cm.elButton(i.label,i.action);
+        return cm.elButton(i.label, i.action);
       }
       if (i.ui === 'input_text') {
         let value = '';
@@ -176,19 +178,19 @@ class ContextMenu {
       return i.forType === 'all' || i.forType.indexOf(type) > -1;
     }
   }
-elHeader(idLabel) {
+  elHeader(idLabel) {
     let cm = this;
     let title = cm.li.d(idLabel);
     let el = cm.li.el;
     return el(
       'div',
       {
-        class: cm.li.opt.class.contextMenuHeader,
+        class: cm.li.opt.class.contextMenuHeader
       },
       title
     );
   }
-  elButton(idLabel,idAction) {
+  elButton(idLabel, idAction) {
     let cm = this;
     let title = cm.li.d(idLabel);
     let el = cm.li.el;
@@ -266,15 +268,19 @@ function handleContextEvent(evt) {
   let elContext = cm.elContext;
   let idAction = elInput.dataset.li_id_action;
   let elGroup = cm.li.getGroup(elTarget);
+  let save = false;
 
   if (!isValidInput && !isValidClick) {
-    cm.destroy();
+    cm.destroy(save);
     return;
   }
 
   if (!elTarget || !elGroup || !idAction || !elContext) {
     return;
   }
+
+  save = true;
+
 
   let act = {
     cm_group_sort_text_asc: () => {
@@ -332,7 +338,9 @@ function handleContextEvent(evt) {
       cm.addUndoStepOnce();
       cm.li.setGroupColor(elTarget, elInput.value);
     },
-    cm_btn_close: () => {}
+    cm_btn_close: () => {
+      save = false;
+    }
   };
 
   if (idAction) {
@@ -340,6 +348,6 @@ function handleContextEvent(evt) {
   }
 
   if (isEventClick && isValidClick) {
-    cm.destroy();
+    cm.destroy(save);
   }
 }
