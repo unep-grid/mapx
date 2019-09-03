@@ -10,13 +10,11 @@ export function getSourceTableAttribute(opt) {
       attributes: opt.attributes
     });
 
-  return h
-    .fetchJsonProgress(url, {
-      onProgress: onProgressData,
-      onError: onProgressError,
-      onComplete: onProgressDataComplete
-    });
-
+  return h.fetchJsonProgress(url, {
+    onProgress: onProgressData,
+    onError: onProgressError,
+    onComplete: onProgressDataComplete
+  });
 }
 
 export function showSourceTableAttributeModal(opt) {
@@ -44,7 +42,7 @@ export function showSourceTableAttributeModal(opt) {
     var elTable = el('div', {
       style: {
         width: '100%',
-        height: '100%',
+        height: '350px',
         minHeight: '350px',
         minWidth: '100px',
         overflow: 'hidden',
@@ -72,7 +70,7 @@ export function showSourceTableAttributeModal(opt) {
       'Clear filter'
     );
     var elTitle = el('div');
-    var buttons = [elButtonClearFilter,elButtonDownload];
+    var buttons = [elButtonClearFilter, elButtonDownload];
     if (!hasData) {
       elTable = el('span', 'no data');
       buttons = null;
@@ -118,7 +116,12 @@ export function showSourceTableAttributeModal(opt) {
       ],
       filters: true,
       language: getHandsonLanguageCode(),
-      afterFilter: handleViewFilter
+      afterFilter: handleViewFilter,
+      renderAllRows: false,
+      height: function() {
+        let r = elTable.getBoundingClientRect();
+        return r.height - 30;
+      }
     });
 
     addTitle();
@@ -167,12 +170,19 @@ export function showSourceTableAttributeModal(opt) {
 
     function tableRender() {
       if (hot && hot.render) {
-        hot.render();
+        let elParent = elTable.parentElement;
+        let pStyle = getComputedStyle(elParent);
+        let pad = parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
+        let height = elParent.getBoundingClientRect().height;
+        if (height > 350) {
+          elTable.style.height = height - pad + 'px';
+          hot.render();
+        }
       }
     }
 
     function destroy() {
-      if(hot){
+      if (hot) {
         hot.destroy();
       }
       if (mutationObserver) {
