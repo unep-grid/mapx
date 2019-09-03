@@ -19,6 +19,7 @@ export function modal(o) {
   var elModal,
     elTop,
     elTitle,
+    elCollapse,
     elHead,
     elBody,
     elContent,
@@ -188,7 +189,7 @@ export function modal(o) {
    * Helpers
    */
   function buildModal(idModal, style, styleContent) {
-    return h.el(
+    const elModal = h.el(
       'div',
       {
         id: idModal,
@@ -202,6 +203,13 @@ export function modal(o) {
         },
         (elTitle = h.el('div', {
           class: ['mx-modal-drag-enable', 'mx-modal-title']
+        })),
+        (elCollapse = h.el('i', {
+          class: ['mx-modal-top-btn-collapse','fa', 'fa-square-o','fa-minus-square'],
+          on : ['click',()=>{
+            elCollapse.classList.toggle('fa-minus-square');
+            elModal.classList.toggle('mx-modal-collapsed');
+          }]
         }))
       )),
       (elHead = h.el('div', {
@@ -235,6 +243,7 @@ export function modal(o) {
         class: ['shiny-html-output', 'mx-modal-validation']
       }))
     );
+    return elModal;
   }
 
   function buildBackground(idBackground) {
