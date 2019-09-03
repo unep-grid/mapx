@@ -11,12 +11,16 @@ const utils = require('./utils.js');
 const auth = require('./authentication.js');
 const isLayerValid = require('./db.js').isLayerValid;
 const getSourceMetadata = require('./getSourceMetadata.js').getSourceMetadata;
-const apiPort = settings.api.port;
-let apiHostUrl = settings.api.host;
-if (apiPort !== 80 && apiPort !== 443) {
-  apiHostUrl = apiHostUrl + ':' + apiPort;
+const apiPort = settings.api.port_public;
+const apiHost = settings.api.host_public;
+let apiHostUrl = '';
+if (apiPort === 443) {
+  apiHostUrl = 'https://' + apiHost;
+} else if (apiPort === 80) {
+  apiHostUrl = 'http://' + apiHost;
+} else {
+  apiHostUrl = 'http://' + apiHost + ':' + apiPort;
 }
-
 
 var fileFormat = {
   GPKG: {
@@ -52,10 +56,7 @@ var formatDefault = 'GPKG';
 /**
  * Request handler / middleware
  */
-module.exports.get = [
-  auth.validateTokenHandler,
-  exportHandler
-];
+module.exports.get = [auth.validateTokenHandler, exportHandler];
 
 function exportHandler(req, res) {
   var config = req.query;
@@ -120,7 +121,7 @@ function extractFromPostgres(config, cb) {
    */
   var folderUrl = settings.vector.path.download_url;
   var folderUrlZip = folderUrl + folderName + '.zip';
-  var dataUrl = 'https://' +  apiHostUrl + folderUrlZip; 
+  var dataUrl = apiHostUrl + folderUrlZip;
 
   if (!id) {
     return Promise.reject('No id');
@@ -149,14 +150,13 @@ function extractFromPostgres(config, cb) {
     format = formatDefault;
   }
 
-  return getSourceMetadata({id:id})
+  return getSourceMetadata({id: id})
     .then((m) => {
       metadata = m;
       onMessage('Extracted metadata');
       return getColumnsNames(id);
     })
     .then((attr) => {
-      
       var hasCountryClip =
         iso3codes && iso3codes.constructor === Array && iso3codes.length > 0;
 
@@ -182,7 +182,9 @@ function extractFromPostgres(config, cb) {
             /**
              * Test failed. at least one feature presented bad geometry
              */
-            var err = `Layer ${test.id} (${test.title}) has invalid geometry and cannot be clipped by country. Please correct the layer then try again. `;
+            var err = `Layer ${test.id} (${
+              test.title
+            }) has invalid geometry and cannot be clipped by country. Please correct the layer then try again. `;
             onMessage(err, 'error');
 
             throw new Error('Invalid geometry found');
@@ -192,7 +194,6 @@ function extractFromPostgres(config, cb) {
       }
     })
     .then((test) => {
-
       if (!test || !test.valid) {
         throw new Error('Issue with geometry validation, unknown state');
       }
@@ -204,9 +205,13 @@ function extractFromPostgres(config, cb) {
         fs.mkdirSync(folderPath);
       }
 
-      onMessage(`An email will be sent to ${email} at the end of the process. The expected path will be ${dataUrl}`);
+      onMessage(
+        `An email will be sent to ${email} at the end of the process. The expected path will be ${dataUrl}`
+      );
 
-      onMessage(`Extration from the database and conversion to ${format}. This could take a while, plase wait`);
+      onMessage(
+        `Extration from the database and conversion to ${format}. This could take a while, plase wait`
+      );
 
       /**
        *
@@ -292,7 +297,6 @@ function extractFromPostgres(config, cb) {
         // listen for all archive data to be written
         // 'close' event is fired only when a file descriptor is involved
         zipFile.on('close', function() {
-          
           msg = 'Export success. File available here: ';
 
           if (email) {
