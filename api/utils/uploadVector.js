@@ -241,8 +241,8 @@ function cleanFile(fileToRemove, res) {
  * In case of faillure, clean the db : remove added entry and table
  */
 function cleanAll(fileToRemove, idSource, res) {
-  cleanFile(fileToRemove);
   return removeSource(idSource).then(() => {
+    cleanFile(fileToRemove,res);
     res.write(
       toRes({
         type: 'message',
