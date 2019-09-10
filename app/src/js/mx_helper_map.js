@@ -339,7 +339,8 @@ export function initMapxApp(o) {
           return;
         }
       }
-      throw new Error(msg);
+
+      console.warn(err);
     });
 
     /**
@@ -502,12 +503,20 @@ export function geolocateUser() {
  *
  * @param {String} idMap map id
  */
-export function resetViews(o) {
+export function viewsRemoveAll(o) {
   const h = mx.helpers;
-  var views = h.getViews({
+  const views = h.getViews({
     id: o.idMap,
     asArray: true
   });
+
+  const mData = h.getMapData(o.idMap);
+
+  /**
+   * Replace content without replacing views array
+   */
+  mData.views.length = 0;
+
   /**
    * remove existing layers
    */
@@ -3369,7 +3378,7 @@ export function zoomToViewIdVisible(o) {
       }
     })
     .catch((err) => {
-      throw new Error(err);
+      console.warn(err);
     });
 }
 

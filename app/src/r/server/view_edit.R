@@ -378,6 +378,8 @@ observe({
                 url <- .get(viewData,c("data","source","tiles"))
                 legend <- .get(viewData,c("data","source","legend"))
                 urlMetadata <- .get(viewData,c("data","source","urlMetadata"))
+                urlDownload <- .get(viewData,c("data","source","urlDownload"))
+
                 if(noDataCheck(url)) url = list()
                 url <-  unlist(url[1])
 
@@ -414,6 +416,11 @@ observe({
                     inputId = "textRasterTileUrlMetadata",
                     label = d("source_raster_tile_url_metadata",language),
                     value = urlMetadata
+                    ),
+                  textAreaInput(
+                    inputId = "textRasterTileUrlDownload",
+                    label = d("source_raster_tile_url_download",language),
+                    value = urlDownload
                     )
                   )
               }
@@ -872,6 +879,7 @@ observeEvent(input$btnViewSave,{
         tiles =  rep(input$textRasterTileUrl,2),
         legend = input$textRasterTileLegend,
         urlMetadata = input$textRasterTileUrlMetadata,
+        urlDownload = input$textRasterTileUrlDownload,
         tileSize = as.integer(input$selectRasterTileSize)
         )
 

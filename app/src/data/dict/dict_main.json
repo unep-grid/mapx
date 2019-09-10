@@ -3673,6 +3673,18 @@
     "ps": "د وروستیو پکسلونو پته"
   },
   {
+    "id": "source_raster_tile_url_download",
+    "en": "Download link",
+    "fr": "Lien de téléchargement",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "source_raster_tile_url_metadata",
     "en": "Link to the metadata",
     "fr": "Lien vers les métadonnées",

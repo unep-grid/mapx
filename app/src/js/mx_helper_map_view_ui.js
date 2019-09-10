@@ -149,9 +149,13 @@ export function viewsListRenderNew(o) {
   }
 
   /**
-   * Replace content without replacing views array
-   */
-  mData.views.length = 0;
+  * Clean old views, modules, array of views ...
+  */
+  h.viewsRemoveAll({idMap:o.id});
+
+  /**
+  * Add all new views
+  */
   mData.views.push(...views);
 
   /**
