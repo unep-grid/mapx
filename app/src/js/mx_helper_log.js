@@ -18,9 +18,15 @@ export function dbLog(level, opt) {
   var logActivated = logLevel.indexOf(level) > -1;
   var logDetailsAreValid = mx.helpers.isObject(opt) && opt.id_log;
 
-  if (!logValid) throw new Error('Missing log level');
-  if (!logActivated) console.log('Log ignored');
-  if (!logDetailsAreValid) throw new Error('missing log details');
+  if (!logValid) {
+    throw new Error('Missing log level');
+  }
+  if (!logActivated) {
+    console.warn('Log ignored');
+  }
+  if (!logDetailsAreValid) {
+    throw new Error('missing log details');
+  }
 
   var dataDef = {};
   var log = {};
@@ -31,48 +37,64 @@ export function dbLog(level, opt) {
     id_user: mx.settings.user.id,
     is_guest: mx.settings.user.guest,
     id_project: mx.settings.project,
-    data: dataDef,
+    data: dataDef
   };
 
-  Object.keys(def).forEach(k => {
+  Object.keys(def).forEach((k) => {
     log[k] = opt[k] || def[k];
   });
 
-  Shiny.onInputChange('dbLogger', log);
+  if (!hasShiny) {
+    Shiny.onInputChange('dbLogger', log);
+  }
 }
-
-var actions = [];
 
 export function initLog() {
   /**
    * Register listener
    */
-  mx.helpers.on('view_remove', function(d) {
+  mx.events.on({
+    type: 'view_add',
+    idGroup: 'mx_log',
+    callback: logViewAdd
+  });
+  mx.events.on({
+    type: 'view_remove',
+    idGroup: 'mx_log',
+    callback: logViewRemove
+  });
+  mx.events.on({
+    type: 'view_panel_click',
+    idGroup: 'mx_log',
+    callback: logPanelClick
+  });
+
+  function logViewAdd(d) {
+    mx.helpers.dbLog('USER_ACTION', {
+      id_log: 'view_add',
+      data: {
+        id_view: d.idView
+      }
+    });
+  }
+
+  function logViewRemove(d) {
     mx.helpers.dbLog('USER_ACTION', {
       id_log: 'view_remove',
       data: {
         id_view: d.idView,
-        view_duration_seconds: d.viewDuration / 1000 || 0,
-      },
+        view_duration_seconds: d.viewDuration / 1000 || 0
+      }
     });
-  });
+  }
 
-  mx.helpers.on('view_add', function(d) {
-    mx.helpers.dbLog('USER_ACTION', {
-      id_log: 'view_add',
-      data: {
-        id_view: d.idView,
-      },
-    });
-  });
-
-  mx.helpers.on('view_panel_click', function(d) {
+  function logPanelClick(d) {
     mx.helpers.dbLog('USER_ACTION', {
       id_log: 'view_panel_click',
       data: {
         id_view: d.idView,
-        id_action: d.idAction,
-      },
+        id_action: d.idAction
+      }
     });
-  });
+  }
 }

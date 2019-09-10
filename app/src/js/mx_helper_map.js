@@ -28,6 +28,9 @@ export function metersToDegrees(point) {
  * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
  */
 export function getApiUrl(id) {
+  if (location.protocol === 'https:') {
+    s.api.protocol = 'https:';
+  }
   var s = mx.settings;
   var urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
@@ -60,20 +63,18 @@ export function requestProjectMembership(idProject) {
   });
 }
 
-
 /**
-* Check if query paramater noViews or modeLocked is set to 'true'
-* In such mode, no view can be added
-*/
-export function isModeLocked(){
+ * Check if query paramater noViews or modeLocked is set to 'true'
+ * In such mode, no view can be added
+ */
+export function isModeLocked() {
   const h = mx.helpers;
-  let modeLocked = 
+  let modeLocked =
     h.getQueryParameter('noViews')[0] === 'true' ||
-  h.getQueryParameter('nodeLocked')[0] === 'true' ;
+    h.getQueryParameter('nodeLocked')[0] === 'true';
 
-  return !! modeLocked;
+  return !!modeLocked;
 }
-
 
 /**
  * Init base listeners
@@ -85,21 +86,21 @@ export function initListeners() {
   mx.listenerStore.addListener({
     target: document.getElementById('btnShowProject'),
     type: 'click',
-    listener: mx.helpers.showSelectProject,
+    callback: mx.helpers.showSelectProject,
     group: 'mapx-base'
   });
 
   mx.listenerStore.addListener({
     target: document.getElementById('btnShowLanguage'),
     type: 'click',
-    listener: mx.helpers.showSelectLanguage,
+    callback: mx.helpers.showSelectLanguage,
     group: 'mapx-base'
   });
 
   mx.listenerStore.addListener({
     target: document.getElementById('btnGetAreaVisible'),
     type: 'click',
-    listener: () => {
+    callback: () => {
       mx.helpers.sendRenderedLayersAreaToUi({
         id: 'map_main',
         prefix: 'MX-',
@@ -111,13 +112,13 @@ export function initListeners() {
   mx.listenerStore.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
-    listener: mx.helpers.clearCache,
+    callback: mx.helpers.clearCache,
     group: 'mapx-base'
   });
   mx.listenerStore.addListener({
     target: document.getElementById('btnFilterShowPanel'),
     type: 'click',
-    listener: (e) => {
+    callback: (e) => {
       let elBtn = e.target;
       let clHide = 'mx-hide';
       let clActive = 'active';
@@ -304,14 +305,14 @@ export function initMapxApp(o) {
       mx.listenerStore.addListener({
         target: elMap,
         type: 'dragover',
-        listener: mx.helpers.handleDragOver,
+        callback: mx.helpers.handleDragOver,
         group: 'map_drag_over',
         bind: mx
       });
       mx.listenerStore.addListener({
         target: elMap,
         type: 'drop',
-        listener: mx.helpers.handleUploadFileEvent,
+        callback: mx.helpers.handleUploadFileEvent,
         group: 'map_drag_over',
         bind: mx
       });
@@ -411,8 +412,12 @@ export function handleClickEvent(e, idMap) {
         .setLngLat(map.unproject(e.point))
         .addTo(map);
 
-      mx.helpers.once('view_remove', function() {
-        popup.remove();
+      mx.events.once({
+        type: ['view_remove', 'view_add'],
+        idGroup: 'click_popup',
+        callback: () => {
+          popup.remove();
+        }
       });
 
       /**
@@ -437,7 +442,7 @@ export function handleClickEvent(e, idMap) {
  */
 export function getLocalForageData(o) {
   var db = mx.data[o.idStore];
-  db.getItem(o.idKey).then(function(item) {
+  db.getItem(o.idKey).then((item) => {
     Shiny.onInputChange(o.idInput, {
       item: item,
       time: new Date()
@@ -780,7 +785,7 @@ export function updateViewsList(o) {
         percent = (d.loaded / d.total) * 100;
         prog.update(percent);
         if (percent >= 100) {
-            prog.destroy();
+          prog.destroy();
         }
       }
     }
@@ -926,7 +931,7 @@ export function viewControler(o) {
     vToRemove = [],
     vVisible = [],
     vChecked = [];
-  var view, isChecked, id, viewDuration;
+  var view, isChecked, id;
   var idMap = o.id || mx.settings.map.id;
   //var idViewsList = o.idViewsList || 'mx-views-list';
   var els = document.querySelectorAll(
@@ -968,31 +973,16 @@ export function viewControler(o) {
         id: idMap,
         viewData: view
       });
-
-      mx.helpers.fire('view_add', {
-        idView: v
-      });
     });
 
     /**
      * View to remove
      */
-    vToRemove.forEach(function(v) {
-      vStore.splice(vStore.indexOf(v, 1));
-
-      view = mx.helpers.getView(v);
-      viewDuration = Date.now() - view._addTime || 0;
-
-      mx.helpers.removeLayersByPrefix({
+    vToRemove.forEach(function(idView) {
+      vStore.splice(vStore.indexOf(idView, 1));
+      closeView({
         id: idMap,
-        prefix: v
-      });
-
-      mx.helpers.cleanRemoveModules(v);
-
-      mx.helpers.fire('view_remove', {
-        idView: v,
-        viewDuration: viewDuration
+        idView: idView
       });
     });
 
@@ -1008,9 +998,6 @@ export function viewControler(o) {
     }
 
     updateViewOrder(o);
-    /**
-     * updateViewParams(o);
-     **/
   });
 }
 
@@ -1224,228 +1211,6 @@ export function updateViewParams(o) {
       views: displayed
     }
   });
-}
-
-/**
- * Event mapx : fire event
- * @param {String} type
- */
-export function fire(type, data) {
-  data = data || {};
-  setTimeout(function() {
-    if (!mx.events[type]) {
-      mx.events[type] = [];
-    }
-    var evts = mx.events[type];
-    evts.forEach((cb) => {
-      mx.helpers.onNextFrame(() => {
-        cb(data);
-        if (cb.once === true) {
-          var id = evts.indexOf(cb);
-          evts.splice(id, 1);
-        }
-      });
-    });
-  }, 500);
-}
-/**
- * Event mapx : add event listener
- * @param {String} type
- * @param {Function} callback
- */
-export function on(type, cb) {
-  if (!mx.events[type]) {
-    mx.events[type] = [];
-  }
-  var id = mx.events[type].indexOf(cb);
-  if (id === -1) {
-    mx.events[type].push(cb);
-  }
-}
-
-/**
- * Event mapx : once event listener
- * @param {String} type
- * @param {Function} callback
- */
-export function once(type, cb) {
-  cb.once = true;
-  mx.helpers.on(type, cb);
-}
-/**
- * Event mapx : remove event listener
- * @param {String} type
- * @param {Function} callback
- */
-export function off(type, cb) {
-  if (!mx.events[type]) {
-    mx.events[type] = [];
-  }
-  var id = mx.events[type].indexOf(cb);
-  if (id > -1) {
-    mx.events[type].splice(id, 1);
-  }
-}
-
-export function moveViewItem(o) {
-  o.id = o.id || new Error('no id');
-  o.mode = o.mode || 'top' || 'next' || 'previous' || 'bottom';
-
-  var elViewsList = document.querySelector('.mx-views-list');
-  var elView = document.getElementById(o.id);
-  var elsViews = elViewsList.querySelectorAll('.mx-view-item');
-  var elViewFirst = elsViews[0];
-  var elViewLast = elsViews[elsViews.length - 1];
-  var elScroll = elViewsList.parentElement;
-  var scrollMax = elViewsList.getBoundingClientRect().height;
-
-  switch (o.mode) {
-    case 'top': {
-      elViewsList.insertBefore(elView, elViewFirst);
-      elScroll.scrollTop = 0;
-      break;
-    }
-    case 'bottom': {
-      elViewsList.insertBefore(elView, elViewLast.nextSibling);
-      elScroll.scrollTop = scrollMax;
-      break;
-    }
-    case 'next': {
-      elViewsList.insertBefore(elView, elView.nextSibling);
-      break;
-    }
-    case 'previous': {
-      elViewsList.insertBefore(elView, elView.previousSibling);
-      break;
-    }
-  }
-  updateViewOrder({
-    id: mx.settings.map.id
-  });
-}
-
-export function filterActiveViews(o) {
-  var elList = document.querySelector('.mx-views-list');
-  var elItems = elList.querySelectorAll('.mx-view-item');
-  var elItem, elCheck;
-  var elBtn = document.getElementById(o.idBtn);
-  var wasActive = elBtn.classList.contains('active');
-  if (wasActive) {
-    elBtn.classList.remove('active');
-  } else {
-    elBtn.classList.add('active');
-  }
-
-  for (var i = 0, iL = elItems.length; i < iL; i++) {
-    elItem = elItems[i];
-    elCheck = elItem.querySelector('.mx-view-tgl-input');
-    if (wasActive === true || (elCheck && elCheck.checked)) {
-      elItem.classList.remove('mx-hide-filter');
-    } else {
-      elItem.classList.add('mx-hide-filter');
-    }
-  }
-}
-
-export function sortViewsListBy(o) {
-  /**
-   * Get elements and element state
-   */
-  var elList = document.querySelector('.mx-views-list');
-  var elItems = elList.querySelectorAll('.mx-view-item');
-  var elItemFirst = elItems[0];
-  var idBtn = o.idBtn || '';
-  var elBtn;
-  var isAsc = false;
-  if (idBtn) {
-    elBtn = document.getElementById(idBtn);
-  }
-  if (elBtn) {
-    isAsc = elBtn.classList.contains('asc');
-  }
-
-  /*
-   * Set options based on arguments
-   */
-  var dir = o.dir || 'asc';
-  var toggle = dir === 'toggle';
-  var type = o.type || 'title';
-
-  /*
-   * Update ui
-   */
-  if (elBtn && toggle) {
-    if (isAsc) {
-      dir = 'asc';
-      elBtn.classList.remove('asc');
-    } else {
-      dir = 'desc';
-      elBtn.classList.add('asc');
-    }
-  }
-
-  /**
-   * Set direction
-   */
-
-  var gt = dir === 'desc' ? 1 : -1;
-  var lt = dir === 'desc' ? -1 : 1;
-  /*
-   * value in array
-   */
-  var values = [];
-  elItems.forEach(function(el) {
-    values.push({
-      el: el,
-      val: getValue(el)
-    });
-  });
-
-  values.sort(function(a, b) {
-    if (a.val > b.val) {
-      return gt;
-    }
-    if (a.val < b.val) {
-      return lt;
-    }
-    return 0;
-  });
-
-  values.forEach(function(v, i) {
-    if (i === 0) {
-      elList.insertBefore(v.el, elItemFirst);
-    } else {
-      elList.insertBefore(v.el, values[i - 1].el);
-    }
-  });
-
-  mx.helpers.updateViewOrder({
-    id: o.id || o.idMap || mx.settings.map.id
-  });
-
-  function getValue(el) {
-    switch (type) {
-      case 'date':
-        return prep(el.dataset.view_date_modified || '');
-      case 'checked':
-        return prep(el.querySelector('input').checked || false);
-      case 'title':
-        return prep(el.dataset.view_title.toLowerCase().trim() || '');
-      default:
-        return '';
-    }
-  }
-
-  function prep(val) {
-    switch (typeof val) {
-      case 'boolean':
-        return val;
-      case 'string':
-        return mx.helpers.cleanDiacritic(val).toLowerCase();
-      case 'number':
-        return val;
-    }
-  }
 }
 
 /**
@@ -1805,11 +1570,22 @@ export function removeView(o) {
  * @param {string} o.idView view id
  */
 export function closeView(o) {
-  var view = mx.helpers.getView(o.idView);
+  const h = mx.helpers;
+  let view = mx.helpers.getView(o.idView);
 
-  if (!view) {
+  if (!h.isView(view)) {
     return;
   }
+
+  let viewDuration = Date.now() - view._addTime || 0;
+
+  mx.events.fire({
+    type: 'view_remove',
+    data: {
+      idView: o.idView,
+      viewDuration: viewDuration
+    }
+  });
 
   mx.helpers.cleanRemoveModules(view);
 
@@ -1817,8 +1593,14 @@ export function closeView(o) {
     id: o.id,
     prefix: o.idView
   });
-}
 
+  mx.events.fire({
+    type: 'view_removed',
+    data: {
+      idView: o.idView
+    }
+  });
+}
 /**
  * Filter current view and store rules
  * @param {Object} o Options
@@ -1826,8 +1608,6 @@ export function closeView(o) {
  * @param {String} o.type Type of filter : style, legend, time_slider, search_box or numeric_slider
  */
 export function viewSetFilter(o) {
-  /*jshint validthis:true*/
-
   o = o || {};
   var view = this;
   var idView = view.id;
@@ -1844,6 +1624,14 @@ export function viewSetFilter(o) {
   } else {
     filters[type] = ['all'];
   }
+
+  mx.events.fire({
+    type: 'view_filter',
+    data: {
+      idView: idView,
+      filter: filters
+    }
+  });
 
   for (var t in filters) {
     var f = filters[t];
@@ -1862,7 +1650,13 @@ export function viewSetFilter(o) {
     m.setFilter(layer.id, filterFinal);
   }
 
-  mx.helpers.fire('view_filter');
+  mx.events.fire({
+    type: 'view_filtered',
+    data: {
+      idView: idView,
+      filter: filters
+    }
+  });
 }
 
 /**
@@ -2819,6 +2613,16 @@ export function renderView(o) {
     return;
   }
 
+  /**
+   * Fire view add event
+   */
+  mx.events.fire({
+    type: 'view_add',
+    data: {
+      idView: view.id
+    }
+  });
+
   if (o.before) {
     var l = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
@@ -2955,13 +2759,25 @@ export function renderView(o) {
     };
 
     /* Call function according to view type */
-    handler[viewType]().catch(function(e) {
-      mx.helpers.modal({
-        id: 'modalError',
-        title: 'Error',
-        content: '<p>Error during methods evaluation :' + e
+    handler[viewType]()
+      .then(() => {
+        /**
+         * Fire view add event
+         */
+        mx.events.fire({
+          type: 'view_added',
+          data: {
+            idView: view.id
+          }
+        });
+      })
+      .catch(function(e) {
+        mx.helpers.modal({
+          id: 'modalError',
+          title: 'Error',
+          content: '<p>Error during methods evaluation :' + e
+        });
       });
-    });
   }
 }
 
@@ -3119,7 +2935,7 @@ export function getRenderedLayersArea(o) {
         group: 'compute_layer_area',
         target: worker,
         type: 'message',
-        listener: function(e) {
+        callback: function(e) {
           if (e.data.message) {
             o.onMessage(e.data.message);
           }

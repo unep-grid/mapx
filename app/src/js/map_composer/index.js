@@ -4,19 +4,14 @@ import {Toolbar} from './components/index.js';
 import {EditorToolbar} from './components/text_editor.js';
 import {el} from '@fxi/el';
 import {unitConvert} from './components/helpers';
-import './css/map_composer.css';
+import './style/map_composer.less';
 
 class MapComposer {
   constructor(elContainer, state) {
     var mc = this;
-    window.mc = mc;
-
-    mc.el = elContainer;
-    mc.el.classList.add('mc');
-    mc.elContent = el('div', {class: ['mc-content']});
-    mc.el.appendChild(mc.elContent);
+    window.mc = mc; // for easy access in console. To remove in prod.
     mc.state = Object.assign({}, def.state, state);
-
+    mc.initRoot(elContainer);
     mc.toolbar = new Toolbar(mc);
     mc.workspace = new Workspace(mc);
     mc.editor = new EditorToolbar(mc, {
@@ -30,8 +25,36 @@ class MapComposer {
     mc.setUnit(mc.state.unit);
   }
 
+  initRoot(elContainer) {
+    var mc = this;
+    if (false && elContainer.attachShadow instanceof Function) {
+      /**
+       * NOTE; Render map composer in shadow dom : sounds good, doesnt work
+       * HTMLtoCanvas does not work well and 
+       * we need to import style for building legends, fontawesome for
+       * buttons, bootstrap and mapbox gl css.
+       */
+      elContainer.attachShadow({mode: 'open'});
+      var elRoot = elContainer.shadowRoot;
+      mc.el = el('div', {class: ['mc']});
+      elRoot.appendChild(mc.el);
+    } else {
+      mc.el = elContainer;
+      mc.el.classList.add('mc');
+    }
+
+    mc.elContent = el('div', {class: ['mc-content']});
+    mc.el.appendChild(mc.elContent);
+  }
+
   setBoxLastFocus(box) {
-    this._box_last_focus = box;
+    var mc = this;
+    var boxLast = mc._box_last_focus;
+    if (boxLast) {
+      boxLast.removeFocus();
+    }
+    box.addFocus();
+    mc._box_last_focus = box;
   }
   get boxLastFocus() {
     return this._box_last_focus;
@@ -109,7 +132,7 @@ class MapComposer {
     }
     if (unit === 'px') {
       mc.setDpi();
-    }else{
+    } else {
       mc.setDpi(mc.state.dpi);
     }
     var dpi = mc.state.dpi;
@@ -161,8 +184,6 @@ class MapComposer {
         }
       }
     });
-    
-  
 
     mc.state.dpi = dpi || 96 * mc.state.device_pixel_ratio_orig;
     mc.toolbar.elInputDpi.value = mc.state.dpi;

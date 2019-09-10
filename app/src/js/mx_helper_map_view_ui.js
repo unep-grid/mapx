@@ -240,7 +240,7 @@ export function viewsListRenderNew(o) {
     bind: mData.viewsList,
     type: 'click',
     group: 'view_list',
-    listener: handleViewClick
+    callback: handleViewClick
   });
 
   /**

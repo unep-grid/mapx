@@ -53,21 +53,21 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleSortStart,
+      callback: handleSortStart,
       group: 'base',
       type: 'dragstart'
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleContextClick,
+      callback: handleContextClick,
       group: 'base',
       type: ['dblclick', 'contextmenu']
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleClick,
+      callback: handleClick,
       group: 'base',
       type: 'click'
     });
@@ -1123,7 +1123,7 @@ function handleSortStart(evt) {
     bind: li,
     type: 'dragover',
     group: 'dragevent',
-    listener: handleSortOver,
+    callback: handleSortOver,
     debounce: true
   });
   li.listenerStore.addListener({
@@ -1131,14 +1131,14 @@ function handleSortStart(evt) {
     bind: li,
     type: 'dragenter',
     group: 'dragevent',
-    listener: handleSortEnter
+    callback: handleSortEnter
   });
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
     type: 'dragend',
     group: 'dragevent',
-    listener: handleSortEnd
+    callback: handleSortEnd
   });
 }
 /**

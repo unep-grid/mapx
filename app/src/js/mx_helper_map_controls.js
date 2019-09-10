@@ -276,8 +276,12 @@ mapControlApp.prototype.onAdd = function(map) {
     btnOverlapSpotlight: {
       classes: 'fa fa-bullseye',
       key: 'btn_overlap_spotlight',
-      action: function() {
-        mx.helpers.overlapsSpotlightToggle();
+      action: function(e) {
+        var el = e.target;
+        var cl = 'active';
+        el.classList.toggle(cl);
+        var enable = el.classList.contains(cl);
+        mx.helpers.activateSpotlight(enable);
       }
     },
     btnDrawMode: {

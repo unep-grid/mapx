@@ -143,14 +143,14 @@ class ViewsFilter {
     vf.lStore.addListener({
       target: vf.opt.elFilterTags,
       type: ['click'],
-      listener: handleFilterViewIdByTag,
+      callback: handleFilterViewIdByTag,
       group: 'view_filter',
       bind: vf
     });
     vf.lStore.addListener({
       target: vf.opt.elFilterText,
       type: 'keyup',
-      listener: handleFilterViewIdByText,
+      callback: handleFilterViewIdByText,
       group: 'view_filter',
       debounce: true,
       bind: vf

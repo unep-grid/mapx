@@ -80,21 +80,21 @@ class ContextMenu {
       type: 'click',
       group: 'context',
       target: window,
-      listener: handleContextEvent,
+      callback: handleContextEvent,
       bind: cm
     });
     cm.li.listenerStore.addListener({
       type: 'input',
       group: 'context',
       target: cm.elContainer,
-      listener: handleContextEvent,
+      callback: handleContextEvent,
       bind: cm
     });
     cm.li.listenerStore.addListener({
       type: 'keydown',
       group: 'context',
       target: window,
-      listener: handleContextEventKeyDown,
+      callback: handleContextEventKeyDown,
       bind: cm
     });
   }

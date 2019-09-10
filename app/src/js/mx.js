@@ -6,7 +6,7 @@ import * as styleDefault from './../data/style/style_mapx.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
-import {ListenerStore} from './listener_store/index.js';
+import {ListenerStore,EventStore} from './listener_store/index.js';
 
 let templates = {
   viewListLegend: require('../dot/view_list_legend.dot'),
@@ -38,10 +38,10 @@ let data = {
 };
 let style = styleDefault.default;
 let listenerStore = new ListenerStore();
+let events = new EventStore();
 let selectize = {};
 let queue = [];
 let widgets = [];
-let events = {};
 let controls = {};
 let dashboards = [];
 let editors = {};
@@ -58,6 +58,7 @@ export {
   helpers,
   // listener manager / store
   listenerStore,
+  events,
   // mapx storage
   templates,
   maps,
@@ -65,7 +66,6 @@ export {
   selectize,
   queue,
   widgets,
-  events,
   controls,
   info,
   settings,

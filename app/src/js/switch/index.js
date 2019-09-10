@@ -60,7 +60,7 @@ class Switch {
     sw.lStore.addListener({
       type : 'input',
       target: sw.elInput,
-      listener: sw.handleChange,
+      callback: sw.handleChange,
       bind: sw
     });
   }

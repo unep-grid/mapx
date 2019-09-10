@@ -1,4 +1,3 @@
-
 export {handleViewClick};
 
 function handleViewClick(event) {
@@ -262,9 +261,12 @@ function handleViewClick(event) {
       found = true;
       t[i].action();
 
-      mx.helpers.fire('view_panel_click', {
-        idView: el.dataset.view_action_target,
-        idAction: el.dataset.view_action_key
+      mx.events.fire({
+        type: 'view_panel_click',
+        data: {
+          idView: el.dataset.view_action_target,
+          idAction: el.dataset.view_action_key
+        }
       });
 
       if (!t[i].allowDefault) {
@@ -279,4 +281,3 @@ function handleViewClick(event) {
     }
   }
 }
-

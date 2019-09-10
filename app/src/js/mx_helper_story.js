@@ -83,12 +83,12 @@ function setListeners(o) {
 * Init listener for keydown event on window
 # @param {Object} o Story options
 */
-function initKeydownListener(o) {
-  listenerManager(o, {
-    action: 'add',
+function initKeydownListener() {
+  mx.listenerStore.addListener({
     target: window,
-    event: 'keydown',
-    listener: storyHandleKeyDown
+    type: 'keydown',
+    callback: storyHandleKeyDown,
+    group: 'story_map'
   });
 }
 
@@ -113,41 +113,25 @@ function initMouseMoveListener(o) {
       el.classList.add(classOpacitySmooth);
     });
 
-    listenerManager(o, {
-      action: 'add',
+    mx.listenerStore.addListener({
       target: window,
-      event: 'mousemove',
-      onDestroy: destroy,
-      listener: function() {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        show();
-        timer = setTimeout(function() {
-          if (!destroyed) {
-            hide();
-          }
-        }, 2000);
-      }
+      callback: mouseHider,
+      type: 'mousemove',
+      group: 'story_map',
+      onRemove: destroy
     });
 
-    /*    listenerManager(o,{*/
-    //action : 'add',
-    //target : window,
-    //event : "keydown",
-    //onDestroy : destroy,
-    //listener : function(event){
-    //if(timer){
-    //clearTimeout(timer);
-    //}
-    //show();
-    //timer = setTimeout(function(){
-    //if(!destroyed){
-    //hide();
-    //}
-    //},2000);
-    //}
-    /*});*/
+    function mouseHider() {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      show();
+      timer = setTimeout(function() {
+        if (!destroyed) {
+          hide();
+        }
+      }, 2000);
+    }
 
     function hide() {
       mx.helpers.onNextFrame(function() {
@@ -605,6 +589,11 @@ function contentToolsImageUploader(dialog) {
  * Clean + init
  */
 function cleanInit(o) {
+  /**
+   * Remove old listener
+   */
+  mx.listenerStore.removeListenerByGroup('story_map');
+
   return new Promise(function(resolve) {
     /* Fetch view if not given */
     if (!o.view && o.id && o.idView) {
@@ -658,10 +647,10 @@ function checkMissingView(o) {
     if (isViewsArrayOfObject) {
       idViewsStory = idViewsStory.map((v) => v.id);
     }
-   
+
     /**
-    * Case when views are not stored in data.view but only in steps
-    */
+     * Case when views are not stored in data.view but only in steps
+     */
     if (h.isEmpty(idViewsStory) && !h.isEmpty(story)) {
       idViewsStory = [];
 
@@ -772,11 +761,11 @@ function storyOnScroll(o) {
   /**
    * Trigger step config
    */
-  listenerManager(o, {
-    action: 'add',
+  mx.listenerStore.addListener({
     target: window,
-    event: 'resize',
-    listener: updateLayout
+    type: 'resize',
+    callback: updateLayout,
+    group: 'story_map'
   });
 
   function updateLayout() {
@@ -828,11 +817,11 @@ function setStepConfig(o) {
   o.data.elMapControls.appendChild(elBullets);
   console.log('added bullets');
 
-  listenerManager(o, {
-    action: 'add',
+  mx.listenerStore.addListener({
     target: elBullets,
-    event: 'click',
-    listener: bulletScrollTo
+    type: 'click',
+    callback: bulletScrollTo,
+    group: 'story_map'
   });
 
   for (var s = 0, sL = elSteps.length; s < sL; s++) {
@@ -1310,19 +1299,22 @@ export function storyController(o) {
       storyController(o);
     };
 
-    listenerManager(o, {
-      action: 'add',
+    mx.listenerStore.addListener({
       target: elBtnClose,
-      event: 'click',
-      listener: o.data.close
+      type: 'click',
+      callback: o.data.close,
+      group: 'story_map'
     });
+
   } else {
     /**
      * Remvove registered listener
      */
-    listenerManager(o, {
-      action: 'removeAll'
-    });
+
+    mx.listenerStore.removeListenerByGroup('story_map');
+    /*listenerManager(o, {*/
+    //action: 'removeAll'
+    /*});*/
 
     /**
      * Remove layers added by the story
@@ -1445,31 +1437,31 @@ export function storyController(o) {
  * @param {String} config.event name
  * @param {Function} config.listener Listener function
  */
-function listenerManager(o, config) {
-  var c = config;
-  var h = mx.helpers;
-  if (c.action === 'add') {
-    c.target.addEventListener(c.event, c.listener);
+//function listenerManager(o, config) {
+//var c = config;
+//var h = mx.helpers;
+//if (c.action === 'add') {
+//c.target.addEventListener(c.event, c.listener);
 
-    c.destroy = function() {
-      var e = c.event;
-      var l = c.listener;
-      var onDestroy = c.onDestroy || function() {};
-      c.target.removeEventListener(e, l);
-      onDestroy();
-    };
+//c.destroy = function() {
+//var e = c.event;
+//var l = c.listener;
+//var onDestroy = c.onDestroy || function() {};
+//c.target.removeEventListener(e, l);
+//onDestroy();
+//};
 
-    o.data.listeners.push(c);
-  } else {
-    var listeners =
-      h.path(o, 'data.listeners') || h.path(mx.data, 'story.data.listeners');
-    if (listeners) {
-      listeners.forEach(function(l) {
-        l.destroy();
-      });
-    }
-  }
-}
+//o.data.listeners.push(c);
+//} else {
+//var listeners =
+//h.path(o, 'data.listeners') || h.path(mx.data, 'story.data.listeners');
+//if (listeners) {
+//listeners.forEach(function(l) {
+//l.destroy();
+//});
+//}
+//}
+/*}*/
 
 /**
  * Build story ui
