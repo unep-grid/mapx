@@ -39,7 +39,9 @@ export function initSelectizeAll(opt) {
     var $select;
     selects.each(function(i, s) {
       var localOptions = {};
-      var options = {};
+      var options = {
+        dropdownParent : 'body'
+      };
       var script;
       var data;
       if (s.id) {
