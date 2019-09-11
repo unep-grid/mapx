@@ -42,7 +42,6 @@ class Page extends Box {
   onRemove() {
     var page = this;
     page.items.forEach((i) => {
-      console.log('destroy',i);
       i.destroy();
     });
   }

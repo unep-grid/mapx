@@ -917,9 +917,9 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
             tags$b("Something went wrong :/"),
             tags$p("An unexpected issue happened : our team has received a notification about it. If this keeps happening, you can also post something here:"),
             tags$a(href=.get(
-                config, c("system","urlRepositoryIssues")),
+                config, c("links","repositoryIssues")),
               target="_blank",
-              .get(config,c("system","urlRepositoryIssues")
+              .get(config,c("links","repositoryIssues")
                 )
               ),
             mxFold(labelText="More info",

@@ -16,7 +16,8 @@ server <- function(input,output,session){
       countries =.get(config,c("countries","table","id")),
       map = .get(config,c("map")),
       paths = .get(config,c("paths")),
-      ui = .get(config,c("ui"))
+      ui = .get(config,c("ui")),
+      links = .get(config,c("links"))
       )
     )
 

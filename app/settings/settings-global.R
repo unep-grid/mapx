@@ -22,8 +22,14 @@ config[["db_log"]] <-  list(
 config[["system"]] <- list(
   os = Sys.info()[["sysname"]],
   hostname = Sys.info()[["nodename"]],
-  hostnameRemote = "map-x-full",
-  urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
+  hostnameRemote = "map-x-full"
+  )
+
+
+config[["links"]] <- list(
+  repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
+  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
+  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer"
   )
 
 #

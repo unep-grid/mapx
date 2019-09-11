@@ -15,7 +15,9 @@
  */
 export function modal(o) {
   o = o || {};
-  var h = mx.helpers;
+  const h = mx.helpers;
+  const id = o.id || h.makeId();
+  const idBackground = 'mx_background_for_' + id;
   var elModal,
     elTop,
     elTitle,
@@ -29,13 +31,11 @@ export function modal(o) {
     elValidation,
     elButtonClose,
     elBackground;
-  var id = o.id || h.makeId();
-  var idBackground = 'mx_background_for_' + id;
   /**
    * Get or create modal and background
    */
   elModal = document.getElementById(o.id);
-  var hasModal = h.isElement(elModal);
+  const hasModal = h.isElement(elModal);
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
@@ -205,11 +205,19 @@ export function modal(o) {
           class: ['mx-modal-drag-enable', 'mx-modal-title']
         })),
         (elCollapse = h.el('i', {
-          class: ['mx-modal-top-btn-collapse','fa', 'fa-square-o','fa-minus-square'],
-          on : ['click',()=>{
-            elCollapse.classList.toggle('fa-minus-square');
-            elModal.classList.toggle('mx-modal-collapsed');
-          }]
+          class: [
+            'mx-modal-top-btn-collapse',
+            'fa',
+            'fa-square-o',
+            'fa-minus-square'
+          ],
+          on: [
+            'click',
+            () => {
+              elCollapse.classList.toggle('fa-minus-square');
+              elModal.classList.toggle('mx-modal-collapsed');
+            }
+          ]
         }))
       )),
       (elHead = h.el('div', {

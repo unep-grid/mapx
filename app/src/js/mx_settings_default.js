@@ -29,6 +29,7 @@ let settings = {
       uploadVector: '/upload/vector/'
     }
   },
+  links : [],
   modeKiosk: false,
   paths: {
     sprites: 'sprites/sprite'

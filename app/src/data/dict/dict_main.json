@@ -48,6 +48,18 @@
     "ps": ""
   },
   {
+    "id": "btn_help",
+    "en": "Help",
+    "fr": "Aide",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
     "fr": "Définir la projection d'exportation en utilisant un code du format EPSG",
