@@ -1,5 +1,5 @@
 const s = require('./../settings');
-const {Client, types} = require('pg');
+const {Pool, types} = require('pg');
 const redis = require('redis');
 
 /*
@@ -12,27 +12,37 @@ types.setTypeParser(
   }
 );
 
-var pgWrite = new Client({
+var pgWrite = new Pool({
   host: s.db.host,
   user: s.db.write.user,
   database: s.db.name,
   password: s.db.write.password,
-  port: s.db.port
+  port: s.db.port,
+  max: 1
 });
-pgWrite.connect();
 exports.pgWrite = pgWrite;
 
-var pgRead = new Client({
+pgWrite.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+  process.exit(-1);
+});
+
+
+var pgRead = new Pool({
   host: s.db.host,
   user: s.db.read.user,
   database: s.db.name,
   password: s.db.read.password,
   port: s.db.port,
-  statement_timeout: 30 * 1000
+  statement_timeout: 30 * 1000,
+  max: 1
 });
-
-pgRead.connect();
 exports.pgRead = pgRead;
+
+pgRead.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+  process.exit(-1);
+});
 
 exports.redis = redis.createClient({
   url: 'redis://' + s.redis.host + ':' + s.redis.port
