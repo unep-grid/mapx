@@ -13,6 +13,7 @@ class ContextMenu {
     cm.elContainer = document.body;
     cm.elContext = cm.buildContext();
     cm.init();
+    cm._save_on_quit = false;
   }
 
   init() {
@@ -21,7 +22,7 @@ class ContextMenu {
     this.adjustPosition();
   }
 
-  destroy(save) {
+  destroy() {
     let cm = this;
     if (cm._destroyed) {
       return;
@@ -29,10 +30,19 @@ class ContextMenu {
     cm.setTargetFocus(false);
     cm.stopListen();
     cm.li.removeElement(cm.elContext);
-    if(save){
+    if (cm.getModeSaveOnQuit()) {
       cm.li.saveStateStorage();
+      cm.setModeSaveOnQuit(false);
     }
     cm._destroyed = true;
+  }
+
+  setModeSaveOnQuit(enable) {
+    this._save_on_quit = enable;
+  }
+
+  getModeSaveOnQuit() {
+    return this._save_on_quit === true;
   }
 
   adjustPosition() {
@@ -268,7 +278,6 @@ function handleContextEvent(evt) {
   let elContext = cm.elContext;
   let idAction = elInput.dataset.li_id_action;
   let elGroup = cm.li.getGroup(elTarget);
-  let save = false;
 
   if (!isValidInput && !isValidClick) {
     cm.destroy(save);
@@ -278,9 +287,6 @@ function handleContextEvent(evt) {
   if (!elTarget || !elGroup || !idAction || !elContext) {
     return;
   }
-
-  save = true;
-
 
   let act = {
     cm_group_sort_text_asc: () => {
@@ -331,15 +337,16 @@ function handleContextEvent(evt) {
       cm.li.removeGroup(elTarget);
     },
     cm_group_rename: () => {
+      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupTitle(elTarget, elInput.value);
     },
     cm_group_color: () => {
+      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupColor(elTarget, elInput.value);
     },
     cm_btn_close: () => {
-      save = false;
     }
   };
 
@@ -348,6 +355,6 @@ function handleContextEvent(evt) {
   }
 
   if (isEventClick && isValidClick) {
-    cm.destroy(save);
+    cm.destroy();
   }
 }
