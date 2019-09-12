@@ -27,6 +27,7 @@ observe({
     # Set map options
     # 
     mapConfig <- list(
+      storyAutoStart = query$storyAutoStart,
       mapPosition = mapPos, 
       colorScheme =  query$style
       )

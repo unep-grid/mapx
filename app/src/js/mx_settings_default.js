@@ -1,3 +1,6 @@
+
+import * as styleDefault from './../data/style/style_mapx.json';
+
 let settings = {
   dbLogLevels: ['ERROR'],
   dbLogLevelsAll: ['ERROR', 'WARNING', 'MESSAGE', 'LOG', 'USER_ACTION'],
@@ -34,11 +37,7 @@ let settings = {
   paths: {
     sprites: 'sprites/sprite'
   },
-  style: {
-    version: 8,
-    name: 'mx_white',
-    layers: []
-  },
+  style : styleDefault.default,
   map: {
     id: 'map_main',
     token: '',

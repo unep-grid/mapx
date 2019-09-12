@@ -57,10 +57,6 @@ server <- function(input,output,session){
       }else{
 
         mxInitBrowserData(browserData,function(email){
-
-
-          if(!isTRUE(query$kioskMode)){
-
             #
             # Init reactive objects
             #
@@ -88,7 +84,7 @@ server <- function(input,output,session){
 
             reactUser$data <- userInfo$info;
             reactUser$token <- userInfo$token;
-
+         
             mxSource(
               base = config$srvPath,
               env = environment(),
@@ -149,7 +145,6 @@ server <- function(input,output,session){
                 "db_logger.R"
                 )
               )
-          }
           })
 
       }

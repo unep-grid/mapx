@@ -142,26 +142,22 @@ export function initListeners() {
 
 /**
  * Initial mgl and mapboxgl
- * @param {string} o options
- * @param {string} o.idMap id
- * @param {string} o.token Mapbox token
+ * @param {Object} o options
+ * @param {String} o.id Id of the map. Default to mx.settings.map.id
  * @param {Object} o.mapPosition Options (zoom, method, for center ing the map)
- * @param {Object} o.mapPosition Options (zoom, method, for center ing the map)
- * @param {Object} o.mapPosition.z Zoom
- * @param {Object} o.mapPosition.n North max
- * @param {Object} o.mapPosition.s South max
- * @param {Object} o.mapPosition.e East max
- * @param {Object} o.mapPosition.w West max
- * @param {Object} o.mapPosition.pitch Pitch
- * @param {Object} o.mapPosition.bearing Bearing
- * @param {Object} o.mapPosition.lng Longitude center
- * @param {Object} o.mapPosition.lat Latitude center
+ * @param {Number} o.mapPosition.z Zoom
+ * @param {Number} o.mapPosition.n North max
+ * @param {Number} o.mapPosition.s South max
+ * @param {Number} o.mapPosition.e East max
+ * @param {Number} o.mapPosition.w West max
+ * @param {Number} o.mapPosition.pitch Pitch
+ * @param {Number} o.mapPosition.bearing Bearing
+ * @param {Number} o.mapPosition.lng Longitude center
+ * @param {Number} o.mapPosition.lat Latitude center
  * @param {Object} o.mapPosition.bounds Mapbox bounds object
- * @param {Object} o.mapPosition.fitToBounds fit map to bounds
- * @param {Object} o.fitToViewsBounds Discard map position, use views to fit
- * @param {number} [o.minZoom=4] Min zoom level
- * @param {number} [o.maxZoom=10] Max zoom level
- * @param {Object} o.apiUrl Base url for api
+ * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
+ * @param {Object} o.colorSheme Color sheme object
+ * @param {Boolean} o.storyAutoStart Immediate start with story map
  */
 export function initMapx(o) {
   let mp, map;
@@ -201,7 +197,7 @@ export function initMapx(o) {
   /**
    * Update  sprites path
    */
-  mx.style.sprite = getAppPathUrl('sprite');
+  mx.settings.style.sprite = mx.helpers.getAppPathUrl('sprite');
 
   /**
    * TEst if mapbox gl is supported
@@ -216,7 +212,7 @@ export function initMapx(o) {
   /* map options */
   const mapOptions = {
     container: o.id, // container id
-    style: mx.style,
+    style: mx.settings.style, // mx default style
     maxZoom: mx.settings.map.maxZoom,
     minZoom: mx.settings.map.minZoom,
     preserveDrawingBuffer: false,
@@ -242,9 +238,6 @@ export function initMapx(o) {
     mx.helpers.initListeners();
   }
 
-  /**
-   * Resolve with the map object
-   */
   return map;
 }
 
@@ -271,14 +264,17 @@ export function initMapxApp(o) {
         autoFetchAll: true,
         project: o.project || mx.settings.project
       })
-      .then(function() {
+      .then((views)=>{
+        
         /*
          * Auto start story map
          */
-        if (o.storyAutoStart) {
+        if (o.storyAutoStart && views.length > 0) {
+          let idStory = mx.helpers.getQueryParameter('views')[0];
           mx.helpers.storyRead({
             id: o.id,
-            view: o.viewsList[0],
+            idView: idStory,
+            view : mx.helpers.getView(idStory),
             save: false,
             autoStart: true
           });
@@ -327,7 +323,6 @@ export function initMapxApp(o) {
      */
     //compact: true
     map.addControl(new mx.helpers.mapControlApp(), 'top-left');
-    //map.addControl(new mx.helpers.mapControlNav(),'top-right');
     map.addControl(new mx.helpers.mapControlLiveCoord(), 'bottom-right');
     map.addControl(new mx.helpers.mapControlScale(), 'bottom-right');
     map.addControl(new mx.helpers.mapxLogo(), 'bottom-left');
@@ -828,7 +823,7 @@ export function updateViewsList(o) {
       const promGjViews = getGeojsonViewsFromStorage(o);
       const views = [];
       const state = [];
-      h.fetchViews({
+      return h.fetchViews({
         onProgress: updateProgress
       })
         .then((data) => {

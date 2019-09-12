@@ -756,7 +756,7 @@ function setScrollData(o) {
 function storyOnScroll(o) {
   var data, posNow, posLast;
   var nf = mx.helpers.onNextFrame;
-
+  var map = o.data.map;
   /*
    * Store start values
    */
@@ -787,7 +787,9 @@ function storyOnScroll(o) {
    * Loop : run a function if scroll is done on an element
    */
   function loop() {
-    if (o.data.enabled) {
+    if(map.isMoving()){
+      nf(loop);
+    }else if (o.data.enabled) {
       data = o.onScrollData;
       // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
       posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
@@ -1551,7 +1553,8 @@ export function storyBuild(o) {
                   slide_config: config
                 },
                 class: [o.classSlide].concat(
-                  slide.classes.map((c) => o.classStory + '-' + c.name)
+                  slide.classes.map((c) => o.classStory + '-' + c.name),
+                  'mx-display-none'
                 )
               },
               el(

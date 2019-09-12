@@ -1,7 +1,6 @@
 /*jshint esversion: 6, node: true  */
 import * as helpers from './mx_helpers.js';
 import * as info from './../../package.json';
-import * as styleDefault from './../data/style/style_mapx.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
@@ -35,7 +34,6 @@ let data = {
     name: 'draw'
   })
 };
-let style = styleDefault.default;
 let listenerStore = new ListenerStore();
 let events = new EventStore();
 let selectize = {};
@@ -68,7 +66,6 @@ export {
   controls,
   info,
   settings,
-  style,
   dashboards,
   editors,
   extend

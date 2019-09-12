@@ -87,11 +87,7 @@ mxParseQuery <- function(urlSearch){
   # Story map auto start
   #
   if(!noDataCheck(query$views) && length(query$views) == 1 && isTRUE(tolower(query$storyAutoStart) == "true")){
-    query$kioskMode <- mxStoryAutoStart(
-      idView = query$views,
-      style = query$style,
-      language = query$language 
-      )
+    query$storyAutoStart = TRUE
   }
 
   return(query)
