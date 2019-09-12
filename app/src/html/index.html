@@ -32,8 +32,11 @@
           class="mx-panel-left-side mx-views-filter-panel transparent shadow mx-hide"
           id="viewsFilterPanel"
         >
-            <div id="viewsFilterContainer" class="mx-views-filter-container"></div>
-            <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
+          <div
+            id="viewsFilterContainer"
+            class="mx-views-filter-container"
+          ></div>
+          <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
         </div>
         <!-- views container -->
         <div class="mx-views-container">
@@ -50,16 +53,15 @@
               />
             </div>
             <div class="mx-bar-sort">
-              <span
-                class="mx-btn-toggle-filter"
-                id="btnFilterChecked"
-                data-lang_key="btn_filter_checked"
-                >Activated views only</span
-              >
+              <span class="mx-btn-toggle-filter" id="btnFilterChecked">
+                <span data-lang_key="btn_filter_checked">
+                  Activated views only
+                </span>
+              </span>
               <span class="mx-btn-toggle-filter" id="btnFilterShowPanel">
-                <span data-lang_key="btn_filter_show_panel"
-                  >Advanced filter</span
-                >
+                <span data-lang_key="btn_filter_show_panel">
+                  Advanced filter
+                </span>
                 <span class="mx-btn-toggle-filter-count" id="viewsFilterCount">
                 </span>
               </span>
@@ -72,20 +74,6 @@
       <div class="mx-panel-left mx-panel-tools transparent shadow mx-hide">
         <div class="mx-tools-container">
           <div class="mx-tools-content mx-scroll-styled">
-            <h2 data-lang_key="title_tools"></h2>
-            <h3 data-lang_key="title_tools_map"></h3>
-            <div class="input-group">
-              <div class="input-group-btn">
-                <button
-                  id="btnGetAreaVisible"
-                  class="btn btn-default"
-                  data-lang_key="btn_get_area_visible"
-                >
-                  Area of visible features
-                </button>
-              </div>
-              <div class="form-control" id="txtAreaSum"></div>
-            </div>
             <div>
               <h4 data-lang_key="title_config_highlight"></h4>
               <div class="well">

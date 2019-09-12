@@ -48,6 +48,7 @@ function build() {
   let vb = this;
   let view = vb.view;
   let lang = checkLanguage({obj: view, path: 'data.title'});
+
   let title = view.data.title
     ? view.data.title[lang]
     : 'Undefined'; /**

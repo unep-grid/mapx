@@ -8,8 +8,8 @@
   {{?}}
   {{?view.type!='sm'}}
   {{?view.type=='vt'}}
-  {{ var rules = h.path(view,'data.style.rules'); }}
-  {{?h.greaterThan(h.path(rules,'length'),0)}}
+  {{ var rules = h.path(view,'data.style.rules',[]);}}
+  {{?rules.length > 0}}
   <div class="mx-view-item-legend-vt" id="check_view_legend_{{=view.id}}"></div>
   {{?}}
   {{?}}

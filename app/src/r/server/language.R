@@ -57,9 +57,10 @@ observe({
         languages = langs
         )
       )
-    
-    mxUpdateLanguage(lang_out)
-    reactData$language <- lang_out
+    if(!identical(lang_out,lang_react)){  
+      mxUpdateLanguage(lang_out)
+      reactData$language <- lang_out
+    } 
   })
 })
 
@@ -79,26 +80,11 @@ observeEvent(reactData$language,{
       )
   }
 
-})
-
-
-#
-# Update language. Based on generated json files.
-#
-# See also : "src/js/mx_helper_language.js"
-#
-observeEvent(input$selectLanguage,{
-  language <- input$selectLanguage
-
-  session$sendCustomMessage(
-    "mxUpdateLanguage",
-    list(
-      lang = language
-      )
-    )
   mxUpdateText(
     "btnShowProject",
     mxDbGetProjectTitle(reactData$project,language)
     )
+
 })
+
 

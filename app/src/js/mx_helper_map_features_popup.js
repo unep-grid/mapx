@@ -13,7 +13,6 @@ export function featuresToHtml(o) {
   var filters = {};
   var layerVector = {};
   var layerRaster = {};
-  var views = h.getViews(o.id);
   var elNoData;
   var elContainer = el(
     'div',
@@ -266,7 +265,7 @@ export function featuresToHtml(o) {
 
   function resetFilter() {
     for (var idV in filters) {
-      var view = views[idV];
+      var view = h.getView(idV);
       view._setFilter({
         filter: ['all'],
         type: 'popup_filter'
@@ -286,7 +285,7 @@ export function featuresToHtml(o) {
 
     for (var idV in filters) {
       var filter = filters[idV];
-      var view = views[idV];
+      var view = h.getView(idV);
 
       view._setFilter({
         filter: filter,

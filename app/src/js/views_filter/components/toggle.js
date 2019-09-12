@@ -18,6 +18,7 @@ class Toggle {
     tgl.label = opt.label;
     tgl.label_key = opt.label_key;
     tgl.count = opt.count;
+    tgl.order = opt.order;
     tgl.type = opt.type;
     tgl.build();
   }
@@ -46,6 +47,11 @@ class Toggle {
     tgl.animateCountUpdate(n);
   }
 
+  setOrder(i){
+    this.order = i || 0;
+    this.el.style.order = this.order;
+  }
+
   animateCountUpdate(n) {
     let tgl = this;
     if ( tgl._updating ) {
@@ -64,8 +70,15 @@ class Toggle {
 
   setLabel(txt) {
     let tgl = this;
-    tgl.label = txt;
-    tgl.elLabelText.innerText = tgl.label;
+    if(txt instanceof Promise){
+      txt.then(t => {
+        tgl.label = t;
+        tgl.elLabelText.innerText = tgl.label; 
+      });
+    }else{
+      tgl.label = txt;
+      tgl.elLabelText.innerText = tgl.label; 
+    }
   }
   setLabelKey(key) {
     let tgl = this;
@@ -109,7 +122,10 @@ function buildToggle() {
   let elCheckToggle = el(
     'div',
     {
-      class: 'vf-check-toggle'
+      class: 'vf-check-toggle',
+      style : {
+        order : tgl.order
+      }
     },
     (elCheck = el('input', {
       id: 'toggle_' + tgl.id,
@@ -142,7 +158,7 @@ function buildToggle() {
   tgl.elLabelCount = elLabelCount;
   tgl.elCheck = elCheck;
 
-  tgl.setLabel(tgl.label || tgl.label_key);
+  tgl.setLabel(tgl.label);
   tgl.setLabelKey(tgl.label_key);
   tgl.setCount(tgl.count);
 }

@@ -20,24 +20,37 @@ export function removeServiceWorker() {
  * @returns {*}
  */
 export function path(obj, path, def) {
-  var i, len;
-  if (typeof def === 'undefined') {
+  const h = mx.helpers;
+  const hasDefault = !!def;
+  let i, iL;
+
+  if (!hasDefault) {
     def = null;
   }
-  if (typeof path !== 'string') {
-    return def;
+  if (!h.isString(path)) {
+    return out(def);
   }
-  for (i = 0, path = path.split('.'), len = path.length; i < len; i++) {
-    if (!obj || typeof obj !== 'object') {
-      return def;
+  for (i = 0, path = path.split('.'), iL = path.length; i < iL; i++) {
+    if (!obj || !h.isObject(obj)) {
+      return out(def);
     }
     obj = obj[path[i]];
   }
 
-  if (obj === undefined) {
-    return def;
+  if (!obj) {
+    return out(def);
   }
-  return obj;
+
+  return out(obj);
+
+  function out(obj){
+    if(hasDefault){
+      if(!obj || (obj.constructor !== def.constructor)){
+        obj = def.constructor(obj);
+      }
+    }
+    return obj;
+  }
 }
 
 

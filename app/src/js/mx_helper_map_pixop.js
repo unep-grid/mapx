@@ -1,8 +1,7 @@
 import {Spotlight} from './pixop/spotlight.js';
 
-export function activateSpotlight(enable) {
+export function activateSpotlight(enable,elToggle) {
   const map = mx.helpers.getMap();
-  const elToggle = document.getElementById('btnOverlapSpotlight');
   const elSelectNum = document.getElementById('selectNLayersOverlap');
   const elTextArea = document.getElementById('txtAreaOverlap');
   const elTextResol = document.getElementById('txtResolOverlap');

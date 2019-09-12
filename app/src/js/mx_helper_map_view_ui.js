@@ -15,14 +15,14 @@ import {ViewBase} from './views_builder/view_base.js';
 export function getProjectViewsState(opt) {
   const h = mx.helpers;
   opt = opt || {};
-  let idInput = opt.idInput || 'projectViewsState';
-  let isCurrentProject = opt.idProject === mx.settings.project;
-  let hasShiny = h.isObject(window.Shiny);
-  let state = [];
+  const idInput = opt.idInput || 'projectViewsState';
+  const isCurrentProject = opt.idProject === mx.settings.project;
+  const hasShiny = h.isObject(window.Shiny);
+  const state = [];
   if (isCurrentProject) {
-    let mData = h.getMapData();
+    const mData = h.getMapData();
     if (mData.viewsList) {
-      state = mData.viewsList.getState();
+      state.push(...mData.viewsList.getState());
     }
     if (hasShiny) {
       Shiny.onInputChange(idInput, JSON.stringify(state));
@@ -56,10 +56,10 @@ function updateState(views, state) {
   /**
    * Trim state
    */
-  let idsViews = views.map((v) => v.id);
+  const idsViews = views.map((v) => v.id);
   state.forEach((s, i) => {
     if (s.type === 'item') {
-      let missing = idsViews.indexOf(s.id) === -1;
+      const missing = idsViews.indexOf(s.id) === -1;
       if (missing) {
         state.splice(i, 1);
       }
@@ -68,11 +68,11 @@ function updateState(views, state) {
   /**
    * Expend state
    */
-  let idsState = state.map((s) => s.id);
+  const idsState = state.map((s) => s.id);
   idsViews.forEach((i) => {
-    let unrefer = idsState.indexOf(i) === -1;
+    const unrefer = idsState.indexOf(i) === -1;
     if (unrefer) {
-      let newItem = {id: i, type: 'item', render: true, moveTop: true};
+      const newItem = {id: i, type: 'item', render: true, moveTop: true};
       state.push(newItem);
     }
   });
@@ -91,7 +91,7 @@ export function viewsListAddSingle(view, opt) {
   if (!h.isView(view)) {
     return;
   }
-  let settings = {
+  const settings = {
     id: view.id,
     moveTop: true,
     render: true,
@@ -99,21 +99,21 @@ export function viewsListAddSingle(view, opt) {
     view: view
   };
   opt = Object.assign({}, settings, opt);
-  let mData = mx.helpers.getMapData();
-  let ids = mData.views.map((v) => v.id);
-  let idPosOld = ids.indexOf(view.id);
-  let idNew = idPosOld === -1;
+  const mData = mx.helpers.getMapData();
+  const ids = mData.views.map((v) => v.id);
+  const idPosOld = ids.indexOf(view.id);
+  const idNew = idPosOld === -1;
   if (!idNew) {
     mData.views.splice(idPosOld, 1);
   }
   mData.views.unshift(view);
   mData.viewsList.addItem(opt);
-  mData.viewsFilter.update();
+  mData.viewsFilter.updateTags();
 }
 
 export function updateViewsFilter() {
   const h = mx.helpers;
-  let mData = h.getMapData();
+  const mData = h.getMapData();
   mData.viewsFilter.update();
 }
 
@@ -126,17 +126,18 @@ export function updateViewsFilter() {
  */
 export function viewsListRenderNew(o) {
   const h = mx.helpers;
-  let mData = h.getMapData(o.id);
-  let elViewsContainer = document.querySelector('.mx-views-container');
-  let elFilterText = document.getElementById('viewsFilterText');
-  let elFilterTags = document.getElementById('viewsFilterContainer');
-  let elFilterSwitch = document.getElementById('viewsFilterSwitch');
-  let elFilterCount = document.getElementById('viewsFilterCount');
-  let elViewsList = elViewsContainer.querySelector('.mx-views-list');
-  let views = o.views;
-  let hasState = o.state && h.isArray(o.state) && o.state.length > 0;
-  let state = hasState ? o.state : h.viewsToNestedListState(views);
-  let noViewsMode  = h.getQueryParameter('noViews')[0] === 'true';
+  const mData = h.getMapData(o.id);
+  const elViewsContainer = document.querySelector('.mx-views-container');
+  const elFilterText = document.getElementById('viewsFilterText');
+  const elFilterTags = document.getElementById('viewsFilterContainer');
+  const elFilterActivated = document.getElementById('btnFilterChecked');
+  const elFilterSwitch = document.getElementById('viewsFilterSwitch');
+  const elFilterCount = document.getElementById('viewsFilterCount');
+  const elViewsList = elViewsContainer.querySelector('.mx-views-list');
+  const views = o.views;
+  const hasState = o.state && h.isArray(o.state) && o.state.length > 0;
+  const state = hasState ? o.state : h.viewsToNestedListState(views);
+  const noViewsMode  = h.getQueryParameter('noViews')[0] === 'true';
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     mData.viewsFilter.destroy();
@@ -147,6 +148,7 @@ export function viewsListRenderNew(o) {
   if (mData.viewsSwitchToggle instanceof Switch) {
     mData.viewsSwitchToggle.destroy();
   }
+  mx.events.lStore.removeListenerByGroup('view_filter_tag_lang');
 
   /**
   * Clean old views, modules, array of views ...
@@ -162,10 +164,7 @@ export function viewsListRenderNew(o) {
    * Sync views and state: trim and expend
    * according to actual views list
    */
-  state = updateState(mData.views, state);
-
-
-
+  updateState(mData.views, state);
 
   /**
    * Create views list ui
@@ -200,6 +199,7 @@ export function viewsListRenderNew(o) {
    * Handle views list filtering
    */
   mData.viewsFilter = new ViewsFilter(mData.views, {
+    elFilterActivated: elFilterActivated,
     elFilterTags: elFilterTags,
     elFilterText: elFilterText,
     operator: 'and',
@@ -226,15 +226,10 @@ export function viewsListRenderNew(o) {
     labelLeft: h.el('div',{dataset:{lang_key:'operator_and'}},'Intersection'),
     labelRight: h.el('div',{dataset:{lang_key:'operator_or'}},'Union'),
     onChange: (s) => {
-      let op = s ? 'or' : 'and';
+      const op = s ? 'or' : 'and';
       mData.viewsFilter.setOperator(op);
     }
   });
-
-  /*
-   * Global translation
-   */
-  h.updateLanguageElements();
 
   /**
    * Handle view click
@@ -243,17 +238,26 @@ export function viewsListRenderNew(o) {
     target: elViewsList,
     bind: mData.viewsList,
     type: 'click',
-    group: 'view_list',
+    idGroup: 'view_list',
     callback: handleViewClick
   });
+
+  mx.events.on({
+    type : 'lang_updated',
+    idGroup :'view_filter_tag_lang' ,
+    callback :function(){
+      mData.viewsFilter.updateTagsOrder();
+    }
+  });
+
 
   /**
    * Local helpers
    */
   function handleSetDragImage(el) {
-    let li = this;
-    let isGroup = li.isGroup(el);
-    let isItem = !isGroup && li.isItem(el);
+    const li = this;
+    const isGroup = li.isGroup(el);
+    const isItem = !isGroup && li.isItem(el);
     if (isGroup) {
       return el.querySelector('.li-group-header');
     }
@@ -267,7 +271,7 @@ export function viewsListRenderNew(o) {
    * Render view
    */
   function handleRenderItemContent(el, data) {
-    let li = this;
+    const li = this;
 
     /**
      * Add given element
@@ -281,8 +285,8 @@ export function viewsListRenderNew(o) {
      * No given element, assume it's a view
      */
 
-    let view = mData.views.find((v) => v.id === data.id);
-    let missing = !h.isView(view);
+    const view = mData.views.find((v) => v.id === data.id);
+    const missing = !h.isView(view);
 
     /**
      * View requested but not vailable)
@@ -295,9 +299,9 @@ export function viewsListRenderNew(o) {
     /**
      * Add new view list item
      */
-    let viewBase = new ViewBase(view);
-    let elView = viewBase.getEl();
-    let open = data.open === true;
+    const viewBase = new ViewBase(view);
+    const elView = viewBase.getEl();
+    const open = data.open === true;
     if (elView) {
       el.appendChild(elView);
       h.setViewBadges({view: view});
@@ -314,8 +318,8 @@ export function viewsListRenderNew(o) {
 export function setViewsListEmpty(enable) {
   enable = enable || false;
   const h = mx.helpers;
-  let mData = h.getMapData();
-  let viewList = mData.viewsList;
+  const mData = h.getMapData();
+  const viewList = mData.viewsList;
   if (viewList instanceof NestedList) {
     viewList.setModeEmpty(enable);
   }
@@ -323,10 +327,10 @@ export function setViewsListEmpty(enable) {
 
 function getEmptyLabel() {
   const h = mx.helpers;
-  let noViewForced = h.getQueryParameter('noViews')[0] === 'true';
-  let noViewKey = noViewForced ? 'noView' : 'noViewOrig';
-  let elTitle;
-  let elItem = h.el(
+  const noViewForced = h.getQueryParameter('noViews')[0] === 'true';
+  const noViewKey = noViewForced ? 'noView' : 'noViewOrig';
+  let  elTitle;
+  const elItem = h.el(
     'div',
     {
       class: ['mx-view-item-empty']

@@ -483,7 +483,6 @@ function startDragResize(opt) {
   var box = opt.box;
   var e = opt.e;
   var isDrag = opt.type === 'box_drag';
-  var isResize = opt.type === 'box_resize';
   var oX = box.left || 0;
   var oY = box.top || 0;
   var oW = box.width || 0;
@@ -558,20 +557,11 @@ function startDragResize(opt) {
     const box = this;
     box.lStore.removeListenerByGroup('drag_resize_active');
 
-    console.log({event:'cancel',isDragging:isDrag,isResize:isResize});
-
     if (box.isDragging()) {
       box.setDragingFlag(false);
     }
     if (box.isResizing()) {
       box.setResizingFlag(false);
     }
-    /* without this, the box keep dragging */
-    /*    onNextFrame(() => {*/
-    //if (isDrag) {
-    //}
-    //if (isResize) {
-    //}
-    /*});*/
   }
 }

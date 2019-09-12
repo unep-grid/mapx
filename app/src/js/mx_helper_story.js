@@ -1,4 +1,14 @@
 /**
+ * Story map prototype
+ * TODO:
+ * - Convert this as a class / module
+ * - Remove dependency on scrollTop and other things that trigger reflow/repaint
+ * - Use css transition for step animation instead of scrollFromTo
+ * - If scroll is still needed, use wheel event deltaY
+ * - Use transform translateY on the story element
+ */
+
+/**
  * Read and evaluate story map
  * @param {Object} o o.options
  * @param {String} o.id Map id
@@ -589,6 +599,7 @@ function contentToolsImageUploader(dialog) {
  * Clean + init
  */
 function cleanInit(o) {
+  const h = mx.helpers;
   /**
    * Remove old listener
    */
@@ -597,7 +608,7 @@ function cleanInit(o) {
   return new Promise(function(resolve) {
     /* Fetch view if not given */
     if (!o.view && o.id && o.idView) {
-      var view = mx.helpers.getViews(o);
+      var view = h.getView(o.idView);
       o.view = view;
     }
 
@@ -605,13 +616,13 @@ function cleanInit(o) {
     o.idView = o.idView || o.view.id;
 
     /* If no story, quit*/
-    if (!mx.helpers.path(o, 'view.data.story')) {
+    if (!h.path(o, 'view.data.story')) {
       console.log('No story to handle, abord');
       return;
     }
 
     /** Remove old stuff if any */
-    var oldData = mx.helpers.path(mx.data, 'story.data');
+    var oldData = h.path(mx.data, 'story.data');
 
     if (oldData) {
       o.startScroll = oldData.elScroll.scrollTop;
@@ -626,69 +637,67 @@ function cleanInit(o) {
   });
 }
 
+function getStoryViewsId(story) {
+  const h = mx.helpers;
+  const idViewsStory = [];
+
+  story.steps.forEach((step) => {
+    if (step && h.isArray(step.views)) {
+      step.views.forEach((d) => {
+        if (h.isObject(d)) {
+          idViewsStory.push(d.view);
+        }
+      });
+    } else {
+      return;
+    }
+  });
+  return idViewsStory;
+}
+
 /**
  * Evaluate missing view and fetch them if needed
  */
 function checkMissingView(o) {
-  var h = mx.helpers;
-  var view = o.view;
-  var views = h.getViews({id: o.id, asArray: true});
-  var idViews = views.map((v) => v.id);
-  var map = h.getMap(o.id);
+  const h = mx.helpers;
+  const view = o.view;
+  const views = h.getViews();
+  const idViews = views.map((v) => v.id);
+  const map = h.getMap(o.id);
+  const idViewsStory = [];
 
   return new Promise(function(resolve) {
-    var idViewsStory = h.path(view, 'data.views');
-    var story = h.path(view, 'data.story');
+    const story = h.path(view, 'data.story', {});
+
     /**
-     * Case when views are stored as object instead of id.
-     * This was done when asynchronous fetch was not an option.
+     * Case views are stored within data.views (deprecated)
      */
-    var isViewsArrayOfObject = h.isViewsArray(idViewsStory);
-    if (isViewsArrayOfObject) {
-      idViewsStory = idViewsStory.map((v) => v.id);
+    h.path(view, 'data.views', []).forEach((id) => {
+      idViewsStory.push(id);
+    });
+    /**
+     * Case when views are stored as object instead of id (deprecated).
+     */
+    if (h.isViewsArray(idViewsStory)) {
+      idViewsStory.length = 0;
+      idViewsStory.forEach((v) => idViewsStory.push(v.id));
     }
 
     /**
-     * Case when views are not stored in data.view but only in steps
+     * Case when views are not stored in data.view but only in steps (current behaviour).
      */
-    if (h.isEmpty(idViewsStory) && !h.isEmpty(story)) {
-      idViewsStory = [];
+    getStoryViewsId(story).forEach((id) => {
+      idViewsStory.push(id);
+    });
 
-      story.steps.forEach((step) => {
-        if (step && h.isArray(step.views)) {
-          step.views.forEach((d) => {
-            if (h.isObject(d)) {
-              idViewsStory.push(d.view);
-            }
-          });
-        } else {
-          return;
-        }
-      });
-    }
-
-    /**
-     * We expect an array of id, but sometimes a string could be
-     * returned. This could happen with toJSON in R.
-     */
-    var isViewsArray = h.isArray(idViewsStory);
-    var isViewsString = h.isString(idViewsStory);
-    var idViewsToAdd = [];
-
-    idViewsStory = isViewsArray
-      ? idViewsStory
-      : isViewsString
-      ? [idViewsStory]
-      : [];
-
-    if (!idViewsStory || idViewsStory.length === 0) {
+    if (idViewsStory.length === 0) {
       resolve([]);
     } else {
       /**
        * Create a list of views id to download
        * ( e.g. if they are from another project )
        */
-      idViewsToAdd = idViewsStory.filter((id) => {
+      const idViewsToAdd = idViewsStory.filter((id) => {
         return idViews.indexOf(id) === -1;
       });
       resolve(idViewsToAdd);
@@ -833,6 +842,7 @@ function setStepConfig(o) {
     stepName = elStep.dataset.step_name;
     rect = elStep.getBoundingClientRect();
     elSlides = elStep.querySelectorAll('.mx-story-slide');
+    config.elStep = elStep;
     config.elSlides = elSlides;
     config.slidesConfig = [];
 
@@ -927,12 +937,16 @@ export function storyUpdateSlides(o) {
   var data = o.onScrollData;
   var percent = 0;
   var elSlides;
+  var elStep;
   var elBullet;
-  var config;
   var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
+  var clHidden = 'mx-visibility-hidden';
+  var clRemove = 'mx-display-none';
+  var isHidden = false;
   //var classActive = 'mx-story-step-active';
 
-  for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
+  //for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
+  data.stepsConfig.forEach((config, s) => {
     /**
      *   1       2       s       e       5       6
      *   |.......|.......|.......|.......|.......|
@@ -946,21 +960,30 @@ export function storyUpdateSlides(o) {
     isActive = data.stepActive === s;
     toActivate = isInRange && !isActive;
     toRemove = !isInRange && isActive;
-
+    isHidden = config.elStep.classList.contains(clHidden);
+    elStep = config.elStep;
+    elSlides = config.elSlides;
     /**
      * Update slide animation
      */
     if (isInRangeAnim) {
-      elSlides = config.elSlides;
-      for (var l = 0, lL = elSlides.length; l < lL; l++) {
+      if (isHidden) {
+        elStep.classList.remove(clHidden);
+      }
+      elSlides.forEach((elSlide, i) => {
         var slideTransform = mx.helpers.storySetTransform({
-          data: config.slidesConfig[l],
+          data: config.slidesConfig[i],
           percent: percent
         });
-        /**
-         * Update style
-         */
-        elSlides[l].style[data.scrollFun] = slideTransform;
+        elSlide.classList.remove(clRemove);
+        elSlide.style[data.scrollFun] = slideTransform;
+      });
+    } else {
+      if (!isHidden) {
+        elStep.classList.add(clHidden);
+        elSlides.forEach((elSlide) => {
+          elSlide.classList.add(clRemove);
+        });
       }
     }
 
@@ -987,7 +1010,7 @@ export function storyUpdateSlides(o) {
         }
       }
     }
-  }
+  });
 }
 
 /*
@@ -1025,7 +1048,7 @@ export function storyGoTo(to, useTimeout, funStop) {
   if (!data || !data.data || !data.data.stepsConfig) {
     return;
   }
-  var steps = h.path(data, 'view.data.story.steps');
+  var steps = h.path(data, 'view.data.story.steps', []);
   var stepsDim = h.path(data, 'data.stepsConfig');
   var elStory = data.data.elScroll;
   var start = elStory.scrollTop;
@@ -1263,7 +1286,7 @@ export function storyController(o) {
      */
     var oldViews = h.path(mx.data, 'story.data.views');
     if (!mx.helpers.isArray(oldViews)) {
-      oldViews = getViewsEnabled(o);
+      oldViews = h.getViewsOnMap(o);
     }
 
     /* Save current values */
@@ -1305,21 +1328,17 @@ export function storyController(o) {
       callback: o.data.close,
       group: 'story_map'
     });
-
   } else {
     /**
      * Remvove registered listener
      */
 
     mx.listenerStore.removeListenerByGroup('story_map');
-    /*listenerManager(o, {*/
-    //action: 'removeAll'
-    /*});*/
 
     /**
      * Remove layers added by the story
      */
-    getViewsEnabled(o).forEach((id) => {
+    h.getViewsOnMap(o).forEach((id) => {
       h.closeView({
         id: o.id,
         idView: id
@@ -1521,6 +1540,7 @@ export function storyBuild(o) {
             }
           },
           step.slides.map((slide, slideNum) => {
+            var config = JSON.stringify(slide.effects || []);
             /**
              * For each slide
              */
@@ -1528,7 +1548,7 @@ export function storyBuild(o) {
               'div',
               {
                 dataset: {
-                  slide_config: slide.effects || []
+                  slide_config: config
                 },
                 class: [o.classSlide].concat(
                   slide.classes.map((c) => o.classStory + '-' + c.name)
@@ -1660,19 +1680,12 @@ export function storySetTransform(o) {
   return tt.join(' ');
 }
 
-function getViewsEnabled(o) {
-  return mx.helpers.getLayerNamesByPrefix({
-    id: o.id,
-    prefix: 'MX-',
-    base: true
-  });
-}
-
 export function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
-  var steps = mx.helpers.path(o, 'view.data.story.steps');
-  var data = mx.helpers.path(mx.data, 'story.data');
+  const h = mx.helpers;
+  var steps = h.path(o, 'view.data.story.steps');
+  var data = h.path(mx.data, 'story.data');
   var stepNum = o.stepNum;
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
   var m = mx.maps[o.id];
@@ -1697,7 +1710,7 @@ export function storyPlayStep(o) {
   vStep = step.views.map(function(v) {
     return v.view;
   });
-  easing = mx.helpers.easingFun({type: anim.easing, power: anim.easing_power});
+  easing = h.easingFun({type: anim.easing, power: anim.easing_power});
 
   /**
    * Fly to position
@@ -1725,14 +1738,14 @@ export function storyPlayStep(o) {
   /**
    * Add view if not alredy visible
    */
-  mx.helpers.onNextFrame(function() {
-    vVisible = getViewsEnabled(o);
-    vToRemove = mx.helpers.getArrayDiff(vVisible, vStep);
-    vToAdd = mx.helpers.getArrayDiff(vStep, vVisible);
+  h.onNextFrame(function() {
+    vVisible = h.getViewsOnMap(o);
+    vToRemove = h.getArrayDiff(vVisible, vStep);
+    vToAdd = h.getArrayDiff(vStep, vVisible);
 
     vToAdd.forEach(function(v, i) {
       var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-      mx.helpers.renderView({
+      h.renderView({
         id: o.id,
         idView: v,
         before: vPrevious,
@@ -1741,13 +1754,13 @@ export function storyPlayStep(o) {
     });
 
     vToRemove.forEach(function(v) {
-      mx.helpers.closeView({
+      h.closeView({
         id: o.id,
         idView: v
       });
     });
 
-    mx.helpers.updateViewOrder({
+    h.updateViewOrder({
       order: vStep,
       id: o.id
     });

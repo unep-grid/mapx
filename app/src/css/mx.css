@@ -148,6 +148,16 @@ blockquote {
   z-index: -1000;
 }
 
+.mx-display-none *,
+.mx-display-none {
+  display: none !important;
+}
+
+.mx-visibility-hidden *,
+.mx-visibility-hidden {
+  visibility: hidden !important;
+}
+
 .mx-hide,
 .mx-hide-bis,
 .mx-hide-filter {
@@ -244,7 +254,6 @@ blockquote {
   padding: 10px;
   flex-grow: 1;
 }
-
 
 .mx-views-filter-panel {
   display: flex;
@@ -609,7 +618,7 @@ blockquote {
   position: absolute;
   left: 101%;
   width: 380px;
-  height : 50%;
+  height: 50%;
   max-height: 100%;
   background: #fff;
   border: 1px solid #ccc;
@@ -760,7 +769,7 @@ blockquote {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .btn-circle-medium {

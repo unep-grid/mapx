@@ -1,5 +1,4 @@
 /*jshint esversion: 6, node: true  */
-
 import * as helpers from './mx_helpers.js';
 import * as info from './../../package.json';
 import * as styleDefault from './../data/style/style_mapx.json';

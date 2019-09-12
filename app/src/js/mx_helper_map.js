@@ -1,6 +1,11 @@
 /* jshint evil:true, esversion:6, laxbreak:true */
 import {RadialProgress} from './radial_progress/index.js';
 
+/**
+* TODO: convert this in a MapxMap Class
+*/
+
+
 export function degreesToMeters(lngLat) {
   var x = (lngLat.lng * 20037508.34) / 180;
   var y =
@@ -97,18 +102,18 @@ export function initListeners() {
     group: 'mapx-base'
   });
 
-  mx.listenerStore.addListener({
-    target: document.getElementById('btnGetAreaVisible'),
-    type: 'click',
-    callback: () => {
-      mx.helpers.sendRenderedLayersAreaToUi({
-        id: 'map_main',
-        prefix: 'MX-',
-        idEl: 'txtAreaSum'
-      });
-    },
-    group: 'mapx-base'
-  });
+  //mx.listenerStore.addListener({
+    //target: document.getElementById('btnGetAreaVisible'),
+    //type: 'click',
+    //callback: () => {
+      //mx.helpers.sendRenderedLayersAreaToUi({
+        //id: 'map_main',
+        //prefix: 'MX-',
+        //idEl: 'txtAreaSum'
+      //});
+    //},
+    //group: 'mapx-base'
+  /*});*/
   mx.listenerStore.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
@@ -340,7 +345,7 @@ export function initMapxApp(o) {
         }
       }
 
-      console.warn(err);
+      console.warn(e);
     });
 
     /**
@@ -506,8 +511,7 @@ export function geolocateUser() {
 export function viewsRemoveAll(o) {
   const h = mx.helpers;
   const views = h.getViews({
-    id: o.idMap,
-    asArray: true
+    id: o.idMap
   });
 
   const mData = h.getMapData(o.idMap);
@@ -538,22 +542,15 @@ export function viewsRemoveAll(o) {
 /**
  * Clean stored modules : dashboard, custom view, etc.
  */
-export function cleanRemoveModules(view) {
-  view =
-    typeof view === 'string'
-      ? mx.helpers.getViews({
-          id: mx.settings.map.id,
-          idView: view
-        })
-      : view;
-
-  view = view instanceof Array ? view : [view];
-
-  view.forEach(function(v) {
-    if (v._onRemoveCustomView instanceof Function) {
+export function cleanRemoveModules(views) {
+  const h = mx.helpers;
+  views = h.isString(views) ? h.getView(views) : views;
+  views = views instanceof Array ? views : [views];
+  views.forEach(function(v) {
+    if (h.isFunction(v._onRemoveCustomView)) {
       v._onRemoveCustomView();
     }
-    if (v._onRemoveDashboard instanceof Function) {
+    if (h.isFunction(v._onRemoveDashboard)) {
       v._onRemoveDashboard();
     }
   });
@@ -566,9 +563,10 @@ export function cleanRemoveModules(view) {
  * @param {Array} o.views Views array
  */
 export function addSourceFromViews(o) {
-  if (o.views instanceof Array) {
+  const h = mx.helpers;
+  if (h.isArray(o.views)) {
     o.views.forEach((v) => {
-      mx.helpers.addSourceFromView({
+      h.addSourceFromView({
         map: o.map,
         view: v
       });
@@ -1042,17 +1040,6 @@ export function viewLiAction(o) {
 }
 
 /**
- * Get main variable for a vt view
- * @param {object} o options
- * @param {string} o.id map id
- * @param {string} o.idView view id
- */
-export function getViewVariable(o) {
-  var view = mx.helpers.getViews(o);
-  return mx.helpers.path(view, 'data.attribute.name');
-}
-
-/**
  * Create a simple layer
  * @param {object} o Options
  * @param {string} o.id Id of the layer
@@ -1163,29 +1150,30 @@ export function makeSimpleLayer(o) {
  * Update layer order based on view list position
  * @param {object} o Options
  * @param {string} o.id Id of the map
- * @param {string} o.order Array of layer base name. If empty, use `getViewOrder`
+ * @param {string} o.order Array of layer base name. If empty, use `getViewsOrder`
  * @param
  */
 export function updateViewOrder(o) {
-  var map = mx.helpers.getMap(o.id);
-  var views = mx.helpers.getViews({id: o.id, asArray: true});
-  var orderUiList = mx.helpers.getViewOrder();
-  var orderViewList = views.map((v) => v.id);
-  var order = o.order || orderUiList || orderViewList || [];
-  var layerBefore = mx.settings.layerBefore;
+  const h = mx.helpers;
+  const map = h.getMap(o.id);
+  const views = h.getViews({id: o.id});
+  const orderUiList = h.getViewsOrder();
+  const orderViewList = views.map((v) => v.id);
+  const order = o.order || orderUiList || orderViewList || [];
+  let layerBefore = mx.settings.layerBefore;
 
   if (!order) {
     return;
   }
-  mx.helpers.onNextFrame(function() {
-    var displayed = mx.helpers.getLayerNamesByPrefix({
+  h.onNextFrame(function() {
+    var displayed = h.getLayerNamesByPrefix({
       id: o.id,
       prefix: 'MX-'
     });
 
     displayed.sort(function(a, b) {
-      var posA = order.indexOf(mx.helpers.getLayerBaseName(a));
-      var posB = order.indexOf(mx.helpers.getLayerBaseName(b));
+      var posA = order.indexOf(h.getLayerBaseName(a));
+      var posB = order.indexOf(h.getLayerBaseName(b));
       return posA - posB;
     });
 
@@ -1226,7 +1214,7 @@ export function updateViewParams(o) {
  * Get the current view order
  * @return {array} view id array
  */
-export function getViewOrder() {
+export function getViewsOrder() {
   var res = [];
   var viewContainer = document.querySelector('.mx-views-list');
   var els = viewContainer.querySelectorAll('.mx-view-item');
@@ -1609,6 +1597,8 @@ export function closeView(o) {
       idView: o.idView
     }
   });
+
+  view._open = false;
 }
 /**
  * Filter current view and store rules
@@ -2614,11 +2604,28 @@ export function viewOpen(view) {
  * @param
  */
 export function renderView(o) {
-  var m = mx.helpers.getMapData(o.id);
-  var view = o.viewData;
-  var idMap = o.id;
+  const h = mx.helpers;
+  const m = h.getMapData(o.id);
+  if (o.idView) {
+    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+  }
+  const view = o.viewData || h.getView(o.idView) || {};
+  const idView = view.id || o.idView;
+  const idMap = o.id;
+  /**
+   * Get previous layer name
+   */
+  const l = h.getLayerNamesByPrefix({
+    id: idMap,
+    prefix: o.before || mx.settings.layerBefore
+  });
+  const idLayerBefore = l[0];
 
-  if (!o.viewData && !o.idView) {
+  /*
+   * Validation
+   */
+  if (!idView || !h.isView(view)) {
+    console.warn('View ' + idView + ' not found');
     return;
   }
 
@@ -2628,87 +2635,56 @@ export function renderView(o) {
   mx.events.fire({
     type: 'view_add',
     data: {
-      idView: view.id
+      idView: idView
     }
   });
 
-  if (o.before) {
-    var l = mx.helpers.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: o.before
-    });
-    o.before = l[0];
-  } else {
-    o.before = mx.settings.layerBefore;
-  }
-
-  /* Remove previous layer if needed */
-  mx.helpers.removeLayersByPrefix({
-    id: o.id,
-    prefix: view ? view.id : o.idView
+  /*
+   * Remove previous layer if needed
+   */
+  h.removeLayersByPrefix({
+    id: idMap,
+    prefix: idView
   });
 
-  /* replace it to have current values */
-  if (view && view.id) {
-    var viewIndex;
+  /**
+   * Check for update
+   */
 
-    var oldView = mx.helpers.getViews({
-      id: o.id,
-      idView: view.id
+  const oldView = h.getView(idView);
+  const hasChanged = !h.isEqual(oldView, view);
+
+  if (hasChanged) {
+    /*
+     * This is an refresh or update
+     */
+    const viewIndex = m.views.indexOf(oldView);
+    h.cleanRemoveModules(oldView);
+    m.views[viewIndex] = view;
+    h.updateLanguageViewsList({id: idMap});
+    h.updateViewsFilter();
+  }
+
+  if (!o.noUi) {
+    /*
+     * Make sure that the view is open
+     */
+    h.viewOpen(view);
+
+    /**
+     * Add options
+     */
+    h.addOptions({
+      id: idMap,
+      view: view
     });
 
     /*
-     * NOTE: this should be passed as an option:
-     * update a view should not be evaluated by comparison..
+     * Check if dashboard data is there and build it if needed
      */
-    var hasChanged = !mx.helpers.isEqual(oldView, view);
-
-    if (hasChanged) {
-      /*
-       * This is an refresh or update
-       */
-      mx.helpers.cleanRemoveModules(oldView);
-      viewIndex = m.views.indexOf(oldView);
-      m.views[viewIndex] = view;
-      mx.helpers.updateLanguageViewsList({id: o.id});
-      mx.helpers.updateViewsFilter();
-    }
-  }
-
-  /*
-   * If id view, get view data
-   */
-  if (o.idView) {
-    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-    view = mx.helpers.getViews(o);
-  }
-
-  if (!view.id) {
-    console.log('View ' + o.idView + ' not found');
-    return;
-  }
-
-  /*
-   * Make sure that the view is open
-   */
-  mx.helpers.viewOpen(view);
-
-  /**
-   * Add options
-   */
-  mx.helpers.addOptions({
-    id: o.id,
-    view: view,
-    noUi: o.noUi
-  });
-
-  /*
-   * Check if dashboard data is there and build it if needed
-   */
-  if (!o.noUi) {
-    mx.helpers.Dashboard.init({
+    h.Dashboard.init({
       idContainer: 'mxDashboards',
-      idDasboard: 'mx-dashboard-' + view.id,
+      idDasboard: 'mx-dashboard-' + idView,
       idMap: idMap,
       view: view
     });
@@ -2717,7 +2693,7 @@ export function renderView(o) {
   /**
    * Add source from view
    */
-  mx.helpers.addSourceFromView({
+  h.addSourceFromView({
     map: m.map,
     view: view
   });
@@ -2737,14 +2713,14 @@ export function renderView(o) {
         return renderViewRt({
           view: view,
           map: m.map,
-          before: o.before
+          before: idLayerBefore
         });
       },
       cc: function() {
         return renderViewCc({
           view: view,
           map: m.map,
-          before: o.before
+          before: idLayerBefore
         });
       },
       vt: function() {
@@ -2752,14 +2728,14 @@ export function renderView(o) {
           view: view,
           map: m.map,
           debug: o.debug,
-          before: o.before
+          before: idLayerBefore
         });
       },
       gj: function() {
         return renderViewGj({
           view: view,
           map: m.map,
-          before: o.before
+          before: idLayerBefore
         });
       },
       sm: function() {
@@ -2779,9 +2755,10 @@ export function renderView(o) {
             idView: view.id
           }
         });
+        view._open = true;
       })
       .catch(function(e) {
-        mx.helpers.modal({
+        h.modal({
           id: 'modalError',
           title: 'Error',
           content: '<p>Error during methods evaluation :' + e
@@ -3196,7 +3173,7 @@ export function filterViewValues(o) {
 
   search = search.trim();
   isNumeric = mx.helpers.isNumeric(search);
-  view = mx.helpers.getViews({id: idMap, idView: idView});
+  view = mx.helpers.getView(idView);
 
   filter = ['all'];
 
@@ -3257,40 +3234,29 @@ export function addLayer(o) {
  * @param {string} o.idView view id
  */
 export function zoomToViewId(o) {
-  var view, isArray, extent, llb;
-  var map = mx.helpers.getMap(o.id);
-  if (map) {
-    isArray = o.idView.constructor === Array;
+  const h = mx.helpers;
+  const map = h.getMap(o.id);
+  const isArray = h.isArray(o.idView);
+  o.idView = isArray ? o.idView[0] : o.idView;
+  o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+  const view = mx.helpers.getView(o.idView);
 
-    o.idView = isArray ? o.idView[0] : o.idView;
-    /* in case of layer group */
-    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-    /* get map and view */
-    view = mx.helpers.getViews(o);
-
-    if (!view) {
-      return;
-    }
-
-    extent = mx.helpers.path(view, 'data.geometry.extent');
-
-    if (!extent) {
-      return;
-    }
-
-    llb = new mx.mapboxgl.LngLatBounds(
-      [extent.lng1, extent.lat1],
-      [extent.lng2, extent.lat2]
-    );
-
-    if (llb) {
-      try {
-        map.fitBounds(llb);
-      } catch (err) {
-        console.log(err);
-      }
-    }
+  if (!h.isView(view)) {
+    return;
   }
+
+  const extent = h.path(view, 'data.geometry.extent');
+
+  if (!extent) {
+    return;
+  }
+
+  const llb = new mx.mapboxgl.LngLatBounds(
+    [extent.lng1, extent.lat1],
+    [extent.lng2, extent.lat2]
+  );
+
+  map.fitBounds(llb);
 }
 
 /**
@@ -3511,11 +3477,11 @@ export function getMercCoords(x, y, z) {
  */
 export function getViewTitle(view, lang) {
   const h = mx.helpers;
+  const langs = mx.settings.languages;
   if (!h.isView(view)) {
     view = h.getView(view);
   }
   lang = lang || mx.settings.language;
-  var langs = mx.settings.languages;
   return h.getLabelFromObjectPath({
     obj: view,
     path: 'data.title',
@@ -3660,90 +3626,21 @@ export function getMapPos(o) {
  * Create views array or object with id as key, or single view if idView is provided in options
  * @param {Object | String} o options || id of the map
  * @param {String} o.id map id
- * @param {String} o.asArray Default is false, return an object
- * @param {String} o.idView Optional. Filter view to return. Default = all.
- * @param {String} o.type Optional. Filter by type
- * @return {Object | Array} array of views or object with views id as key
+ * @param {String|Array} o.idView Optional. Filter view(s) to return. Default = all.
+ * @return {Array} array of views
  */
 export function getViews(o) {
-  o = o || mx.settings.map.id;
+  o = o || {};
+  const h = mx.helpers;
+  const d = h.getMapData(o.id);
+  const views = d.views || [];
 
-  var asArray = o.asArray || false;
-  var byMapId = typeof o === 'string';
-  var out = asArray ? [] : {};
-  var id = byMapId ? o : o.id;
-  var dat = mx.helpers.getMapData(id);
-  var idView =
-    byMapId || !o.idView
-      ? []
-      : o.idView instanceof Array
-      ? o.idView
-      : [o.idView];
-  var type = o.type;
-
-  var hasNoViews = !dat || !dat.views || dat.views.length === 0;
-
-  var hasFilter = idView.length > 0 || typeof type !== 'undefined';
-
-  if (hasNoViews) {
-    return out;
-  }
-
-  /**
-   * Set default
-   */
-  var views = dat.views;
-
-  /**
-   * Full result
-   */
-  var retFullArray = asArray && !hasFilter;
-  var retFullObject = !asArray && !hasFilter;
-
-  /**
-   * Filtered result
-   */
-  var retFilteredArray = asArray && hasFilter;
-  var retFilteredObject = !asArray && hasFilter;
-
-  /**
-   * Return all views in array
-   */
-  if (retFullArray) {
+  if (o.idView) {
+    o.idView = h.isArray(o.idView) ? o.idView : [o.idView];
+    return views.filter((v) => o.idView.indexOf(v.id) > -1);
+  } else {
     return views;
   }
-
-  /**
-   * Return full object with id as key
-   */
-  if (retFullObject) {
-    views.forEach((v) => {
-      out[v.id] = v;
-    });
-    return out;
-  }
-
-  /**
-   * Return filtered view
-   */
-  if (retFilteredArray || retFilteredObject) {
-    out = views.filter((v) => {
-      return idView.indexOf(v.id) > -1 || (type ? v.type === type : false);
-    });
-
-    if (retFilteredArray) {
-      return out;
-    } else {
-      /*
-       * NOTE: This break the general logic. if result should returned as an object,
-       * {'mx-id-view':{<view>}} form should be used to match retFullObject output.
-       * Check where this is used and modify it
-       */
-      return out[0] || [];
-    }
-  }
-
-  return out;
 }
 
 /**
@@ -3752,19 +3649,20 @@ export function getViews(o) {
  * @param {String} idMap Id of the map
  */
 export function getView(id, idMap) {
-  if (typeof id === 'string') {
-    return mx.helpers.getViews({idView: id, id: idMap});
-  } else {
-    return id;
-  }
+  return mx.helpers.getViews({idView: id, id: idMap})[0];
+}
+export function getViewsOnMap(o) {
+  return mx.helpers.getLayerNamesByPrefix({
+    id: o.id,
+    prefix: 'MX-',
+    base: true
+  });
 }
 
 /**
  * Toy function to make layer move
  */
 export function makeLayerJiggle(mapId, prefix) {
-  /*jshint validthis:true*/
-
   var layersName = mx.helpers.getLayerNamesByPrefix({
     id: mapId,
     prefix: prefix

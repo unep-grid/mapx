@@ -42,10 +42,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_home_project',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        const view = h.getViews({
-          id: mx.settings.map.id,
-          idView: viewTarget
-        });
+        const view = h.getView(viewTarget);
         h.setProject(view.project);
       }
     },
@@ -169,7 +166,7 @@ function handleViewClick(event) {
         });
         const legendInputs = legendContainer.querySelectorAll('input');
         const idView = el.dataset.view_action_target;
-        const view = h.getViews({id: mx.settings.map.id, idView: idView});
+        const view = h.getView(idView);
         const filter = ['any'];
         const rules = h.path(view, 'data.style.rulesCopy', []);
 
@@ -232,7 +229,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_meta_external',
       action: function() {
         const idView = el.dataset.view_action_target;
-        const view = h.getViews({id: mx.settings.map.id, idView: idView});
+        const view = h.getView(idView);
         const link = h.path(view, 'data.source.urlMetadata');
         var title =
           h.path(view, 'data.title.' + mx.settings.language) ||
