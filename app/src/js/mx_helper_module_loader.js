@@ -107,6 +107,21 @@ function loadSelectize() {
     import('../css/mx_selectize.css')
   ]).then((m) => {
     var Selectize = m[0].default;
+
+    /*
+    * Patch for placing drop downrelative to a div
+    * https://github.com/selectize/selectize.js/pull/1447/commits
+    */
+    Selectize.prototype.positionDropdown = function() {
+      var $control = this.$control;
+      this.$dropdown.offset({
+        top:  $control.offset().top + $control[0].offsetHeight,
+        left: $control.offset().left,
+      }).css({
+        width : $control[0].getBoundingClientRect().width,
+      });
+    };
+
     window.Selectize = Selectize;
     return Selectize;
   });

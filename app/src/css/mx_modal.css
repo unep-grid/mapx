@@ -31,7 +31,6 @@
   position: absolute;
   width: 550px;
   height: auto;
-  overflow: hidden;
   max-height: calc(100% - 10px);
   max-width: 100%;
   min-width: 300px;

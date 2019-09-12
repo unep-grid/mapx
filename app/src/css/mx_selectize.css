@@ -5,15 +5,6 @@
  *
  */
 
-.mx .selectize-dropdown {
-  z-index:1000;
-}
-
-/* remove minus bar in input*/
-.mx .selectize-control.single .selectize-input:after {
-    /*display: none;*/
-}
-
 /* when multiple items are selected, adapt the height. Default : 34 px */
 .mx .form-control .selectize-input {
   height:auto;
@@ -43,16 +34,11 @@
   left: auto;
   bottom: auto;
 }
-.selectize-dropdown {
-  position: unset;
-}
+
 .selectize-control.multi .selectize-input.has-items {
   height:auto
 }
 
-.mx .selectize-dropdown [data-selectable] {
- padding: 5px;
-}
 
 .mx .selectize-control .item-label {
   font-size : 1em;

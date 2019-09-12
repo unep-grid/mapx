@@ -176,7 +176,10 @@ export function modal(o) {
   if (o.addSelectize) {
     mx.helpers.initSelectizeAll({
       id: id,
-      selector: elModal
+      selector: elModal,
+      options : {
+        dropdownParent : elModal
+      }
     });
   }
 
