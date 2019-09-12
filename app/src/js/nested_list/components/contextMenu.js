@@ -77,7 +77,7 @@ class ContextMenu {
   startListen() {
     let cm = this;
     cm.li.listenerStore.addListener({
-      type: 'click',
+      type: 'mousedown',
       group: 'context',
       target: window,
       callback: handleContextEvent,
@@ -200,7 +200,7 @@ class ContextMenu {
         class: cm.li.opt.class.contextMenuButton,
         dataset: {
           li_id_action: idAction,
-          li_event_type: 'click'
+          li_event_type: 'mousedown'
         }
       },
       title
@@ -261,9 +261,9 @@ function handleContextEvent(evt) {
   let elInput = evt.target;
   let idType = elInput.dataset.li_event_type;
   //let isEventInput = eventType === 'input';
-  let isEventClick = eventType === 'click';
+  let isEventClick = eventType === 'mousedown';
   let isValidInput = idType === 'input';
-  let isValidClick = idType === 'click';
+  let isValidClick = idType === 'mousedown';
   let elTarget = cm.elTarget;
   let elContext = cm.elContext;
   let idAction = elInput.dataset.li_id_action;

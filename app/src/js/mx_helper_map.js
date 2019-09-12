@@ -2,12 +2,11 @@
 import {RadialProgress} from './radial_progress/index.js';
 
 /**
-* TODO: convert this in a MapxMap Class
-*/
-
+ * TODO: convert this in a MapxMap Class
+ */
 
 export function degreesToMeters(lngLat) {
-  var x = (lngLat.lng * 20037508.34) / 180;
+  const x = (lngLat.lng * 20037508.34) / 180;
   var y =
     Math.log(Math.tan(((90 + lng.lat) * Math.PI) / 360)) / (Math.PI / 180);
   y = (y * 20037508.34) / 180;
@@ -18,8 +17,8 @@ export function degreesToMeters(lngLat) {
 }
 
 export function metersToDegrees(point) {
-  var lng = (point.x * 180) / 20037508.34;
-  var lat =
+  const lng = (point.x * 180) / 20037508.34;
+  const lat =
     (Math.atan(Math.exp((point.y * Math.PI) / 20037508.34)) * 360) / Math.PI -
     90;
   return {
@@ -33,11 +32,11 @@ export function metersToDegrees(point) {
  * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
  */
 export function getApiUrl(id) {
+  const s = mx.settings;
   if (location.protocol === 'https:') {
     s.api.protocol = 'https:';
   }
-  var s = mx.settings;
-  var urlBase =
+  const urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
   return urlBase + s.api.routes[id];
 }
@@ -47,8 +46,8 @@ export function getApiUrl(id) {
  * @param {String} id Id of the path : sprite, download, etc
  */
 export function getAppPathUrl(id) {
-  var s = mx.settings;
-  var loc = window.location.origin;
+  const s = mx.settings;
+  const loc = window.location.origin;
   return loc + '/' + s.paths[id];
 }
 
@@ -103,16 +102,16 @@ export function initListeners() {
   });
 
   //mx.listenerStore.addListener({
-    //target: document.getElementById('btnGetAreaVisible'),
-    //type: 'click',
-    //callback: () => {
-      //mx.helpers.sendRenderedLayersAreaToUi({
-        //id: 'map_main',
-        //prefix: 'MX-',
-        //idEl: 'txtAreaSum'
-      //});
-    //},
-    //group: 'mapx-base'
+  //target: document.getElementById('btnGetAreaVisible'),
+  //type: 'click',
+  //callback: () => {
+  //mx.helpers.sendRenderedLayersAreaToUi({
+  //id: 'map_main',
+  //prefix: 'MX-',
+  //idEl: 'txtAreaSum'
+  //});
+  //},
+  //group: 'mapx-base'
   /*});*/
   mx.listenerStore.addListener({
     target: document.getElementById('btnClearCache'),
@@ -165,7 +164,7 @@ export function initListeners() {
  * @param {Object} o.apiUrl Base url for api
  */
 export function initMapx(o) {
-  var mp, map;
+  let mp, map;
 
   o = o || {};
   o.id = o.id || mx.settings.map.id;
@@ -215,7 +214,7 @@ export function initMapx(o) {
   }
 
   /* map options */
-  var mapOptions = {
+  const mapOptions = {
     container: o.id, // container id
     style: mx.style,
     maxZoom: mx.settings.map.maxZoom,
@@ -250,9 +249,9 @@ export function initMapx(o) {
 }
 
 export function initMapxApp(o) {
-  var map = o.map;
-  var elMap = document.getElementById(o.id);
-  var hasShiny = !!window.Shiny;
+  const map = o.map;
+  const elMap = document.getElementById(o.id);
+  const hasShiny = !!window.Shiny;
 
   if (!elMap) {
     alert('Map element with id ' + o.id + ' not found');
@@ -337,7 +336,7 @@ export function initMapxApp(o) {
      * Error handling
      */
     map.on('error', function(e) {
-      var msg = mx.helpers.path(e, 'error.message');
+      const msg = mx.helpers.path(e, 'error.message');
 
       if (msg) {
         if (msg.indexOf('http status 200') > 0) {
@@ -352,11 +351,11 @@ export function initMapxApp(o) {
      * Mouse move handling
      */
     map.on('mousemove', function(e) {
-      var layers = mx.helpers.getLayerNamesByPrefix({
+      const layers = mx.helpers.getLayerNamesByPrefix({
         id: o.id,
         prefix: 'MX-'
       });
-      var features = map.queryRenderedFeatures(e.point, {layers: layers});
+      const features = map.queryRenderedFeatures(e.point, {layers: layers});
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
     });
 
@@ -365,8 +364,8 @@ export function initMapxApp(o) {
     });
 
     map.on('rotate', function() {
-      var r = -map.getBearing();
-      var northArrow = document.querySelector('.mx-north-arrow');
+      const r = -map.getBearing();
+      const northArrow = document.querySelector('.mx-north-arrow');
       northArrow.style[mx.helpers.cssTransformFun()] =
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
@@ -378,12 +377,12 @@ export function initMapxApp(o) {
  * @param {Object} e Mapboxgl event object
  */
 export function handleClickEvent(e, idMap) {
-  var type = e.type;
-  var hasLayer = mx.helpers.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
-  var map = mx.helpers.getMap(idMap);
-  var clickModes = mx.helpers.getClickHandlers();
-  var hasDashboard = clickModes.indexOf('dashboard') > -1;
-  var hasDraw = clickModes.indexOf('draw') > -1;
+  const type = e.type;
+  const hasLayer = mx.helpers.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
+  const map = mx.helpers.getMap(idMap);
+  const clickModes = mx.helpers.getClickHandlers();
+  const hasDashboard = clickModes.indexOf('dashboard') > -1;
+  const hasDraw = clickModes.indexOf('draw') > -1;
 
   if (hasLayer && type === 'click') {
     if (hasDashboard) {
@@ -395,17 +394,17 @@ export function handleClickEvent(e, idMap) {
       /**
        * Handle draw function ; edit selected feature.
        *
-       * var layerGJ = mx.helpers.getLayerNamesByPrefix({prefix:'MX-GJ'});
+       * const layerGJ = mx.helpers.getLayerNamesByPrefix({prefix:'MX-GJ'});
        *if(layerGJ.length>0){
-       *  var id = layerGJ[0];
-       *  var feature = map.queryRenderedFeatures(e.point,{layers:[id]})[0];
+       *  const id = layerGJ[0];
+       *  const feature = map.queryRenderedFeatures(e.point,{layers:[id]})[0];
        *  if(!feature){
        *    return;
        *  }
        *  mx.data.geojson.getItem(id)
        *    .then( data => {
-       *      var featuresOrig = mx.helpers.path(data,'view.data.source.data.features');
-       *      var featureQuery = feature;
+       *      const featuresOrig = mx.helpers.path(data,'view.data.source.data.features');
+       *      const featureQuery = feature;
        *  });
        *}
        */
@@ -414,7 +413,7 @@ export function handleClickEvent(e, idMap) {
       /**
        * Click event : make a popup with attributes
        */
-      var popup = new mx.mapboxgl.Popup()
+      const popup = new mx.mapboxgl.Popup()
         .setLngLat(map.unproject(e.point))
         .addTo(map);
 
@@ -447,7 +446,7 @@ export function handleClickEvent(e, idMap) {
  * @param {String} o.idInput Which id to trigger in Shiny
  */
 export function getLocalForageData(o) {
-  var db = mx.data[o.idStore];
+  const db = mx.data[o.idStore];
   db.getItem(o.idKey).then((item) => {
     Shiny.onInputChange(o.idInput, {
       item: item,
@@ -461,14 +460,14 @@ export function getLocalForageData(o) {
  * @return null
  */
 export function geolocateUser() {
-  var lang = mx.settings.language;
-  var hasGeolocator = !!navigator.geolocation;
+  const lang = mx.settings.language;
+  const hasGeolocator = !!navigator.geolocation;
 
-  var o = {idMap: mx.settings.map.id};
-  var classesHtml = document.documentElement.classList;
+  const o = {idMap: mx.settings.map.id};
+  const classesHtml = document.documentElement.classList;
   classesHtml.add('shiny-busy');
-  var map = getMap(o.idMap);
-  var options = {
+  const map = getMap(o.idMap);
+  const options = {
     enableHighAccuracy: true,
     timeout: 20000,
     maximumAge: 0
@@ -476,7 +475,7 @@ export function geolocateUser() {
 
   function success(pos) {
     classesHtml.remove('shiny-busy');
-    var crd = pos.coords;
+    const crd = pos.coords;
     map.flyTo({center: [crd.longitude, crd.latitude], zoom: 10});
     //console.log(`Latitude : ${crd.latitude}`);
     //console.log(`Longitude: ${crd.longitude}`);
@@ -582,14 +581,14 @@ export function addSourceFromViews(o) {
  * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
 export function addSourceFromView(o) {
-  var p = mx.helpers.path;
+  const p = mx.helpers.path;
 
   if (o.map && p(o.view, 'data.source')) {
-    var project = p(mx, 'settings.project');
-    var projectView = p(o.view, 'project');
-    var projectsView = p(o.view, 'data.projects') || [];
-    var isEditable = p(o.view._edit) === true;
-    var isLocationOk =
+    const project = p(mx, 'settings.project');
+    const projectView = p(o.view, 'project');
+    const projectsView = p(o.view, 'data.projects') || [];
+    const isEditable = p(o.view._edit) === true;
+    const isLocationOk =
       o.noLocationCheck ||
       projectView === project ||
       projectsView.indexOf(project) > -1;
@@ -601,8 +600,8 @@ export function addSourceFromView(o) {
       o.view._edit = false;
     }
 
-    var idSource = o.view.id + '-SRC';
-    var sourceExists = !!o.map.getSource(idSource);
+    const idSource = o.view.id + '-SRC';
+    const sourceExists = !!o.map.getSource(idSource);
 
     if (sourceExists) {
       /**
@@ -620,8 +619,8 @@ export function addSourceFromView(o) {
     }
 
     if (o.view.type === 'vt') {
-      var baseUrl = mx.helpers.getApiUrl('getTile');
-      var url =
+      const baseUrl = mx.helpers.getApiUrl('getTile');
+      const url =
         baseUrl + '?view=' + o.view.id + '&date=' + o.view.date_modified;
       o.view.data.source.tiles = [url, url];
     }
@@ -632,11 +631,11 @@ export function addSourceFromView(o) {
 
 //export function loadGeojsonViews() {
 //throw new Error("he");
-//var project = mx.settings.project;
-//var viewsGj = [];
+//const project = mx.settings.project;
+//const viewsGj = [];
 
-//var getProjectGj = function(gj) {
-//var v = gj.view;
+//const getProjectGj = function(gj) {
+//const v = gj.view;
 //if (v && v.project === project) {
 //viewsGj.push(v);
 //}
@@ -654,14 +653,14 @@ export function addSourceFromView(o) {
  * @return {Promise} Promise resolving to object
  */
 export function getViewRemote(idView) {
-  var apiUrlViews = mx.helpers.getApiUrl('getView');
+  const apiUrlViews = mx.helpers.getApiUrl('getView');
 
   if (!idView || !apiUrlViews) {
     return Promise.reject('Missing id or fetch URL');
   }
 
   /* get view object from storage or network */
-  var keyNet = apiUrlViews + idView;
+  const keyNet = apiUrlViews + idView;
 
   return fetch(keyNet)
     .then((view) => {
@@ -695,20 +694,21 @@ export function getViewsRemote(idViews) {
  * @param {string} o.project code
  */
 export function updateViewsList(o) {
-  var h = mx.helpers;
+  const h = mx.helpers;
   return new Promise(function(resolve) {
-    var mode = 'array_async_all';
-    var viewsToAdd = o.viewsList;
-    var nCache = 0,
+    const viewsToAdd = o.viewsList;
+    const isCompactList = o.viewsCompact === true;
+    const autoFetchAll = o.autoFetchAll === true;
+    const hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+    const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
+    const updateProject = o.project && o.project !== mx.settings.project;
+
+    let elProgContainer;
+    let mode = 'array_async_all';
+    let nCache = 0,
       nNetwork = 0,
       nTot = 0,
       prog;
-    var elProgContainer;
-    var isCompactList = o.viewsCompact === true;
-    var autoFetchAll = o.autoFetchAll === true;
-    var hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
-    var hasSingleView = !hasViewsList && h.isView(viewsToAdd);
-    var updateProject = o.project && o.project !== mx.settings.project;
 
     if (updateProject) {
       mx.settings.project = o.project;
@@ -748,25 +748,6 @@ export function updateViewsList(o) {
       }[mode](viewsToAdd);
     }
 
-    /* Sort viewsToAdd by title */
-    function sortViews(viewsToAdd) {
-      var aTitle, bTitle;
-      viewsToAdd = h.isArray(viewsToAdd) ? viewsToAdd : [];
-      viewsToAdd.sort(function(a, b) {
-        aTitle = getViewTitle(a);
-        bTitle = getViewTitleNormalized(b);
-        if (aTitle < bTitle) {
-          return -1;
-        }
-        if (aTitle > bTitle) {
-          return 1;
-        }
-        return 0;
-      });
-
-      return viewsToAdd;
-    }
-
     /* update progress */
     function updateProgress(d) {
       let percent = 0;
@@ -799,10 +780,10 @@ export function updateViewsList(o) {
 
     /* get view object from storage or network */
     function getViewObject(v) {
-      var apiUrlViews = h.getApiUrl('getView');
-      var keyStore = v.id + '@' + v.pid;
-      var keyNet = apiUrlViews + v.id + '?' + v.pid;
-      var editable = v._edit;
+      const apiUrlViews = h.getApiUrl('getView');
+      const keyStore = v.id + '@' + v.pid;
+      const keyNet = apiUrlViews + v.id + '?' + v.pid;
+      const editable = v._edit;
       return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
         if (view) {
           nCache++;
@@ -825,17 +806,16 @@ export function updateViewsList(o) {
 
     /* Add array of compact viewsToAdd object*/
     function addAsync(viewsToAdd) {
-      var promViews = viewsToAdd.map(getViewObject);
-      var promGjViews = getGeojsonViewsFromStorage(o);
-      var views = [];
+      const promViews = viewsToAdd.map(getViewObject);
+      const promGjViews = getGeojsonViewsFromStorage(o);
+      const views = [];
       return Promise.all(promViews)
         .then((viewsToAddFetched) => {
-          views = views.concat(viewsToAddFetched);
-          views = sortViews(views);
+          views.push(...viewsToAddFetched);
           return promGjViews;
         })
         .then((viewsGeojson) => {
-          views = viewsGeojson.concat(views);
+          views.push(...viewsGeojson);
           h.viewsListRenderNew({
             id: o.id,
             views: views
@@ -845,26 +825,28 @@ export function updateViewsList(o) {
     }
 
     function addAsyncAll() {
-      var promGjViews = getGeojsonViewsFromStorage(o);
-      var views = [];
-      var state = [];
+      const promGjViews = getGeojsonViewsFromStorage(o);
+      const views = [];
+      const state = [];
       h.fetchViews({
         onProgress: updateProgress
       })
         .then((data) => {
-          views = views.concat(data.views);
-          state = data.states.reduce((a, s) => {
-            if (s.id === 'default') {
-              return s.state;
-            } else {
-              return a;
-            }
-          }, state);
+          views.push(...data.views);
+          state.push(
+            ...data.states.reduce((a, s) => {
+              if (s.id === 'default') {
+                return s.state;
+              } else {
+                return a;
+              }
+            }, state)
+          );
 
           return promGjViews;
         })
         .then((viewsGeojson) => {
-          views = viewsGeojson.concat(views);
+          views.push(...viewsGeojson);
 
           h.viewsListRenderNew({
             id: o.id,
@@ -914,12 +896,12 @@ function getGeojsonViewsFromStorage(o) {
     return out;
   }
 
-  var project = o.project || mx.settings.project;
+  const project = o.project || mx.settings.project;
   /**
    * extract views from local storage
    */
   mx.data.geojson.iterate(function(value) {
-    var view = value.view;
+    const view = value.view;
     if (view.project === project) {
       out.push(view);
     }
@@ -934,14 +916,14 @@ let vStore = [];
  */
 export function viewControler(o) {
   o = o || {};
-  var vToAdd = [],
+  let vToAdd = [],
     vToRemove = [],
     vVisible = [],
     vChecked = [];
-  var view, isChecked, id;
-  var idMap = o.id || mx.settings.map.id;
-  //var idViewsList = o.idViewsList || 'mx-views-list';
-  var els = document.querySelectorAll(
+  let view, isChecked, id;
+  const idMap = o.id || mx.settings.map.id;
+  //const idViewsList = o.idViewsList || 'mx-views-list';
+  const els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
   );
 
@@ -994,7 +976,7 @@ export function viewControler(o) {
     });
 
     if (true) {
-      var summary = {
+      const summary = {
         vStore: vStore,
         vChecked: vChecked,
         vVisible: vVisible,
@@ -1020,13 +1002,13 @@ export function viewLiAction(o) {
     return;
   }
 
-  var el = document.getElementById(o.idView);
+  const el = document.getElementById(o.idView);
 
   if (!el) {
     return;
   }
 
-  var elInput = el.querySelector(
+  const elInput = el.querySelector(
     "input[data-view_action_key='btn_toggle_view']"
   );
 
@@ -1052,21 +1034,20 @@ export function viewLiAction(o) {
  * @param {string} o.sprite
  */
 export function makeSimpleLayer(o) {
-  var ran, colA, colB, layer;
-
-  var sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
-  var sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
-  var sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
-  var zoomMin = o.zoomMin || 0;
-  var zoomMax = o.zoomMax || 22;
-  var size = o.size || 2;
-  var sprite = o.sprite || '';
-  var filter = o.filter || ['all'];
+  let ran, colA, colB, layer;
+  let size = o.size || 2;
+  const sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
+  const sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
+  const sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
+  const zoomMin = o.zoomMin || 0;
+  const zoomMax = o.zoomMax || 22;
+  const sprite = o.sprite || '';
+  const filter = o.filter || ['all'];
   if (o.gemType === 'symbol') {
     size = size / 10;
   }
 
-  var funSizeByZoom = [
+  const funSizeByZoom = [
     'interpolate',
     ['exponential', sizeFactorZoomExponent],
     ['zoom'],
@@ -1166,20 +1147,20 @@ export function updateViewOrder(o) {
     return;
   }
   h.onNextFrame(function() {
-    var displayed = h.getLayerNamesByPrefix({
+    const displayed = h.getLayerNamesByPrefix({
       id: o.id,
       prefix: 'MX-'
     });
 
     displayed.sort(function(a, b) {
-      var posA = order.indexOf(h.getLayerBaseName(a));
-      var posB = order.indexOf(h.getLayerBaseName(b));
+      const posA = order.indexOf(h.getLayerBaseName(a));
+      const posB = order.indexOf(h.getLayerBaseName(b));
       return posA - posB;
     });
 
     displayed.forEach(function(x) {
       if (map.getLayer(x)) {
-        var posBefore = displayed.indexOf(x) - 1;
+        const posBefore = displayed.indexOf(x) - 1;
 
         if (posBefore > -1) {
           layerBefore = displayed[posBefore];
@@ -1197,7 +1178,7 @@ export function updateViewOrder(o) {
 export function updateViewParams(o) {
   o = o || {id: mx.helpers.getMap()};
 
-  var displayed = mx.helpers.getLayerNamesByPrefix({
+  const displayed = mx.helpers.getLayerNamesByPrefix({
     id: o.id,
     prefix: 'MX-',
     base: true
@@ -1215,9 +1196,9 @@ export function updateViewParams(o) {
  * @return {array} view id array
  */
 export function getViewsOrder() {
-  var res = [];
-  var viewContainer = document.querySelector('.mx-views-list');
-  var els = viewContainer.querySelectorAll('.mx-view-item');
+  const res = [];
+  const viewContainer = document.querySelector('.mx-views-list');
+  const els = viewContainer.querySelectorAll('.mx-view-item');
   els.forEach((el) => res.push(el.dataset.view_id));
   return res;
 }
@@ -1229,8 +1210,10 @@ export function getViewsOrder() {
 @param {String} o.idMap Map id
 */
 export function makeTransparencySlider(o) {
-  var view = o.view;
-  var el = document.querySelector("[data-transparency_for='" + view.id + "']");
+  const view = o.view;
+  const el = document.querySelector(
+    "[data-transparency_for='" + view.id + "']"
+  );
 
   if (!el) {
     return;
@@ -1240,9 +1223,9 @@ export function makeTransparencySlider(o) {
 
   function makeSlider() {
     mx.helpers.moduleLoad('nouislider').then(function(module) {
-      var noUiSlider = module[0].default;
+      const noUiSlider = module[0].default;
 
-      var slider = noUiSlider.create(el, {
+      const slider = noUiSlider.create(el, {
         range: {min: 0, max: 100},
         step: 1,
         start: 0,
@@ -1262,8 +1245,8 @@ export function makeTransparencySlider(o) {
       slider.on(
         'slide',
         mx.helpers.debounce(function(n, h) {
-          var view = this.targetView;
-          var opacity = 1 - n[h] * 0.01;
+          const view = this.targetView;
+          const opacity = 1 - n[h] * 0.01;
           view._setOpacity({opacity: opacity});
         }, 10)
       );
@@ -1278,8 +1261,10 @@ export function makeTransparencySlider(o) {
 @param {String} o.idMap Map id
 */
 export function makeNumericSlider(o) {
-  var view = o.view;
-  var el = document.querySelector("[data-range_numeric_for='" + view.id + "']");
+  const view = o.view;
+  const el = document.querySelector(
+    "[data-range_numeric_for='" + view.id + "']"
+  );
 
   if (!el) {
     return;
@@ -1288,8 +1273,8 @@ export function makeNumericSlider(o) {
   makeSlider();
 
   function makeSlider() {
-    var min = mx.helpers.path(view, 'data.attribute.min');
-    var max = mx.helpers.path(view, 'data.attribute.max');
+    let min = mx.helpers.path(view, 'data.attribute.min');
+    let max = mx.helpers.path(view, 'data.attribute.max');
 
     if (view && min !== null && max !== null) {
       if (min === max) {
@@ -1297,15 +1282,15 @@ export function makeNumericSlider(o) {
         max = max + 1;
       }
 
-      var range = {
+      const range = {
         min: min,
         max: max
       };
 
       mx.helpers.moduleLoad('nouislider').then((module) => {
-        var noUiSlider = module[0].default;
+        const noUiSlider = module[0].default;
 
-        var slider = noUiSlider.create(el, {
+        const slider = noUiSlider.create(el, {
           range: range,
           step: (min + max) / 1000,
           start: [min, max],
@@ -1327,13 +1312,11 @@ export function makeNumericSlider(o) {
         slider.on(
           'slide',
           mx.helpers.debounce(function(n) {
-            var view = this.targetView;
-            var filter;
-
-            var elContainer = this.target.parentElement;
-            var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-            var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-            var k = view.data.attribute.name;
+            const view = this.targetView;
+            const elContainer = this.target.parentElement;
+            const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+            const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+            const k = view.data.attribute.name;
 
             /* Update text values*/
             if (n[0]) {
@@ -1343,7 +1326,7 @@ export function makeNumericSlider(o) {
               elDMax.innerHTML = ' – ' + n[1];
             }
 
-            filter = [
+            const filter = [
               'any',
               ['all', ['<=', k, n[1] * 1], ['>=', k, n[0] * 1]],
               ['!has', k]
@@ -1364,13 +1347,13 @@ export function makeNumericSlider(o) {
  * Create and listen to time sliders
  */
 export function makeTimeSlider(o) {
-  var k = {};
+  const k = {};
   k.t0 = 'mx_t0';
   k.t1 = 'mx_t1';
 
-  var view = o.view;
+  const view = o.view;
 
-  var el = document.querySelector('[data-range_time_for="' + view.id + '"]');
+  const el = document.querySelector('[data-range_time_for="' + view.id + '"]');
   if (!el) {
     return;
   }
@@ -1379,16 +1362,16 @@ export function makeTimeSlider(o) {
    * Create a time slider for each time enabled view
    */
   /* from slider to num */
-  var fFrom = function(x) {
+  const fFrom = function(x) {
     return x;
   };
   /* num to slider */
-  var fTo = function(x) {
+  const fTo = function(x) {
     return Math.round(x);
   };
 
-  //var now = new Date().getTime() / 1000;
-  /*  var dateForm = {*/
+  //const now = new Date().getTime() / 1000;
+  /*  const dateForm = {*/
   //to: now,
   //from: true
   /*};*/
@@ -1397,22 +1380,22 @@ export function makeTimeSlider(o) {
 
   function makeSlider() {
     if (view.data.period) {
-      var time = mx.helpers.path(view, 'data.period');
-      var prop = mx.helpers.path(view, 'data.attribute.names');
-      var start = [];
+      const time = mx.helpers.path(view, 'data.period');
+      const prop = mx.helpers.path(view, 'data.attribute.names');
+      const start = [];
 
       if (time.extent.min && time.extent.max) {
-        var hasT0 = prop.indexOf(k.t0) > -1;
-        var hasT1 = prop.indexOf(k.t1) > -1;
-        var min = time.extent.min * 1000;
-        var max = time.extent.max * 1000;
+        const hasT0 = prop.indexOf(k.t0) > -1;
+        const hasT1 = prop.indexOf(k.t1) > -1;
+        let min = time.extent.min * 1000;
+        let max = time.extent.max * 1000;
 
         if (min === max) {
           min = min - 1;
           max = max + 1;
         }
 
-        var range = {
+        const range = {
           min: min,
           max: max
         };
@@ -1421,9 +1404,9 @@ export function makeTimeSlider(o) {
         start.push(max);
 
         mx.helpers.moduleLoad('nouislider').then(function(module) {
-          var noUiSlider = module[0].default;
+          const noUiSlider = module[0].default;
 
-          var slider = noUiSlider.create(el, {
+          const slider = noUiSlider.create(el, {
             range: range,
             step: 24 * 60 * 60 * 1000,
             start: start,
@@ -1453,12 +1436,10 @@ export function makeTimeSlider(o) {
           slider.on(
             'slide',
             mx.helpers.debounce(function(t) {
-              var filterAll = [];
-              var filter = [];
-              var view = this.targetView;
-              var elContainer = this.target.parentElement;
-              var elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-              var elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+              const view = this.targetView;
+              const elContainer = this.target.parentElement;
+              const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+              const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
 
               /* save current time value */
               //ime.extent.set = t;
@@ -1471,8 +1452,8 @@ export function makeTimeSlider(o) {
                 elDMax.innerHTML = ' – ' + mx.helpers.date(t[1]);
               }
 
-              filter = ['any'];
-              filterAll = ['all'];
+              const filter = ['any'];
+              const filterAll = ['all'];
               filter.push(['==', k.t0, -9e10]);
               filter.push(['==', k.t1, -9e10]);
 
@@ -1508,7 +1489,7 @@ export function handleViewValueFilterText(o) {
    * NOTE: keyup is set globaly, on the whole view list
    */
   return function(event) {
-    var action, el, idView, search, options;
+    let action, el, idView, search, options;
     el = event.target;
 
     idView = el.dataset.view_action_target;
@@ -1538,15 +1519,15 @@ export function handleViewValueFilterText(o) {
  */
 export function removeView(o) {
   const h = mx.helpers;
-  var mData = h.getMapData();
-  var views = mData.views;
-  var idView = o.idView;
-  var view = views.filter((v) => v.id === idView)[0];
+  const mData = h.getMapData();
+  const views = mData.views;
+  const idView = o.idView;
+  const view = views.filter((v) => v.id === idView)[0];
   if (!view) {
     return;
   }
-  var vIndex = views.indexOf(view);
-  var geojsonData = mx.data.geojson;
+  const vIndex = views.indexOf(view);
+  const geojsonData = mx.data.geojson;
 
   h.closeView(o);
   mData.viewsList.removeItemById(view.id);
@@ -1608,21 +1589,16 @@ export function closeView(o) {
  */
 export function viewSetFilter(o) {
   o = o || {};
-  var view = this;
-  var idView = view.id;
-  var filter = o.filter;
-  var filters = view._filters;
-  var filterNew = ['all'];
-  var type = o.type ? o.type : 'default';
-  var idMap = view._idMap ? view._idMap : mx.settings.map.id;
-  var m = mx.helpers.getMap(idMap);
-  var layers = mx.helpers.getLayerByPrefix({id: idMap, prefix: idView});
-
-  if (filter && filter.constructor === Array && filter.length > 1) {
-    filters[type] = filter;
-  } else {
-    filters[type] = ['all'];
-  }
+  const h = mx.helpers;
+  const view = this;
+  const idView = view.id;
+  const filter = o.filter;
+  const filters = view._filters;
+  const filterNew = ['all'];
+  const type = o.type ? o.type : 'default';
+  const idMap = view._idMap ? view._idMap : mx.settings.map.id;
+  const m = h.getMap(idMap);
+  const layers = h.getLayerByPrefix({id: idMap, prefix: idView});
 
   mx.events.fire({
     type: 'view_filter',
@@ -1631,6 +1607,12 @@ export function viewSetFilter(o) {
       filter: filters
     }
   });
+
+  if (filter && filter.constructor === Array && filter.length > 1) {
+    filters[type] = filter;
+  } else {
+    filters[type] = ['all'];
+  }
 
   for (var t in filters) {
     var f = filters[t];
@@ -1648,7 +1630,6 @@ export function viewSetFilter(o) {
     }
     m.setFilter(layer.id, filterFinal);
   }
-
   mx.events.fire({
     type: 'view_filtered',
     data: {
@@ -1665,18 +1646,18 @@ export function viewSetFilter(o) {
  */
 export function viewSetOpacity(o) {
   o = o || {};
-  var view = this;
-  var idView = view.id;
-  var opacity = o.opacity;
-  var idMap = view._idMap ? view._idMap : mx.settings.map.id;
-  var map = mx.helpers.getMap(idMap);
-  var layers = mx.helpers.getLayerByPrefix({
+  const view = this;
+  const idView = view.id;
+  const opacity = o.opacity;
+  const idMap = view._idMap ? view._idMap : mx.settings.map.id;
+  const map = mx.helpers.getMap(idMap);
+  const layers = mx.helpers.getLayerByPrefix({
     map: map,
     prefix: idView
   });
 
   layers.forEach((layer) => {
-    var property = layer.type + '-opacity';
+    const property = layer.type + '-opacity';
     map.setPaintProperty(layer.id, property, opacity);
   });
 }
@@ -1689,20 +1670,20 @@ export function viewSetOpacity(o) {
 # @param {string} o.type Type of plot. By default = density
 */
 export function plotTimeSliderData(o) {
-  var data = o.data;
-  var el = o.el;
+  const data = o.data;
+  const el = o.el;
   o.type = o.type ? o.type : 'density';
 
   if (!data || !data.year || !data.n) {
     return;
   }
 
-  var obj = {
+  const obj = {
     labels: data.year,
     series: [data.n]
   };
 
-  var options = {
+  const options = {
     seriesBarDistance: 100,
     height: '30px',
     showPoint: false,
@@ -1741,13 +1722,12 @@ export function getLayerByPrefix(o) {
   o = o || {};
   o.prefix = o.prefix || 'MX-';
   o.base = o.base || false;
-  var map = o.map || mx.helpers.getMap(o.id);
-  var layers, l;
-  var out = [];
+  const map = o.map || mx.helpers.getMap(o.id);
+  const out = [];
 
   if (map) {
-    layers = map.style._layers;
-    for (l in layers) {
+    const layers = map.style._layers;
+    for (var l in layers) {
       if (l.indexOf(o.prefix) > -1) {
         out.push(layers[l]);
       }
@@ -1766,12 +1746,11 @@ export function getLayerByPrefix(o) {
 export function getLayerById(o) {
   o = o || {};
   o.idLayer = o.idLayer || '';
-  var map = mx.helpers.getMap(o.id);
-  var result = [],
-    layer;
+  const map = mx.helpers.getMap(o.id);
+  const result = [];
 
   if (map && o.idLayer) {
-    layer = map.getLayer(o.idLayer);
+    const layer = map.getLayer(o.idLayer);
     if (layer) {
       result.push(layer);
     }
@@ -1800,12 +1779,11 @@ export function getLayerNamesByPrefix(o) {
   o = o || {};
   o.prefix = o.prefix || 'MX-';
   o.base = o.base || false;
-  var map = o.map || mx.helpers.getMap(o.id);
-  var layers, l;
-  var out = [];
+  const map = o.map || mx.helpers.getMap(o.id);
+  const out = [];
   if (map) {
-    layers = map.style._layers;
-    for (l in layers) {
+    const layers = map.style._layers;
+    for (var l in layers) {
       if (o.base) {
         l = getLayerBaseName(l);
       }
@@ -1827,15 +1805,14 @@ export function getLayerNamesByPrefix(o) {
  * @return {array} List of removed layer
  */
 export function removeLayersByPrefix(o) {
-  var result = [],
-    layers;
-  var map = o.map || mx.helpers.getMap(o.id);
+  const result = [];
+  const map = o.map || mx.helpers.getMap(o.id);
 
   if (!map) {
     return result;
   }
 
-  layers = mx.helpers.getLayerNamesByPrefix({
+  const layers = mx.helpers.getLayerNamesByPrefix({
     map: map,
     prefix: o.prefix
   });
@@ -1856,7 +1833,7 @@ export function removeLayersByPrefix(o) {
  * @param {boolean} [o.enabled=false]  Enable synchronisation
  */
 export function syncAll(o) {
-  var enabled, maps, ids;
+  let enabled, maps, ids;
 
   enabled = o.enabled;
 
@@ -1867,12 +1844,12 @@ export function syncAll(o) {
   maps = mx.maps;
   ids = [];
 
-  for (var m in maps) {
+  for (const m in maps) {
     ids.push(m);
   }
 
   ids.forEach(function(x) {
-    var others, m, locked, exists, pos, m2;
+    let others, m, locked, exists, pos, m2;
 
     others = [];
 
@@ -1928,7 +1905,7 @@ export function syncAll(o) {
  */
 export function existsInList(li, it, val, inverse) {
   if (!inverse) {
-    for (var i in li) {
+    for (const i in li) {
       if (
         i === it &&
         (li[i] === val ||
@@ -1944,7 +1921,7 @@ export function existsInList(li, it, val, inverse) {
     }
     return false;
   } else {
-    for (var j in li) {
+    for (const j in li) {
       if (
         j === it &&
         (li[j] !== val ||
@@ -1970,16 +1947,16 @@ export function existsInList(li, it, val, inverse) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function renderViewCc(o) {
-  var view = o.view;
-  var map = o.map;
-  var methods = mx.helpers.path(view, 'data.methods');
+  const view = o.view;
+  const map = o.map;
+  const methods = mx.helpers.path(view, 'data.methods');
 
   if (!methods) {
     return Promise.resolve(true);
   }
 
   return new Promise(function(resolve, reject) {
-    var r = new Function(methods)();
+    const r = new Function(methods)();
     if (r) {
       resolve(r);
     } else {
@@ -1990,7 +1967,7 @@ function renderViewCc(o) {
       return;
     }
 
-    var opt = {
+    const opt = {
       map: map,
       view: view,
       idView: view.id,
@@ -2030,8 +2007,8 @@ function renderViewCc(o) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function renderViewRt(o) {
-  var view = o.view;
-  var map = o.map;
+  const view = o.view;
+  const map = o.map;
   return new Promise((resolve) => {
     if (!mx.helpers.path(view, 'data.source.tiles')) {
       resolve(false);
@@ -2052,19 +2029,19 @@ function renderViewRt(o) {
     /*
      * Add legend
      */
-    var legend = mx.helpers.path(view, 'data.source.legend');
-    var elLegend = document.querySelector('#check_view_legend_' + view.id);
+    const legend = mx.helpers.path(view, 'data.source.legend');
+    const elLegend = document.querySelector('#check_view_legend_' + view.id);
 
     if (legend) {
-      var defaultImg = function() {
+      const defaultImg = function() {
         this.onerror = null;
         this.src = require('../../src/svg/no_legend.svg');
       };
 
       if (elLegend) {
-        var oldImg = elLegend.querySelector('img');
+        const oldImg = elLegend.querySelector('img');
         if (!oldImg) {
-          var img = new Image();
+          const img = new Image();
           img.src = legend;
           img.alt = 'Legend';
           img.setAttribute('crossorigin', 'anonymous');
@@ -2075,12 +2052,12 @@ function renderViewRt(o) {
             elLegend.classList.add('mx-legend-box');
           };
           elLegend.onclick = function() {
-            var title = mx.helpers.getLabelFromObjectPath({
+            const title = mx.helpers.getLabelFromObjectPath({
               obj: view,
               path: 'data.title',
               defaultKey: 'noTitle'
             });
-            var imgModal = new Image();
+            const imgModal = new Image();
             imgModal.src = legend;
             imgModal.setAttribute('crossorigin', 'anonymous');
             imgModal.onerror = defaultImg;
@@ -2107,7 +2084,7 @@ function renderViewRt(o) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function renderViewVt(o) {
-  var p = mx.helpers.path;
+  const p = mx.helpers.path;
 
   return new Promise((resolve) => {
     var view = o.view,
@@ -2127,7 +2104,7 @@ export function renderViewVt(o) {
       styleCustom,
       defaultOrder = true;
 
-    var idSourceLayer = mx.helpers.path(source, 'layerInfo.name');
+    const idSourceLayer = mx.helpers.path(source, 'layerInfo.name');
     if (!idSourceLayer) {
       resolve(false);
     }
@@ -2156,7 +2133,7 @@ export function renderViewVt(o) {
       view._meta = {};
     }
 
-    var sepLayer = p(mx, 'settings.separators.sublayer') || '@';
+    const sepLayer = p(mx, 'settings.separators.sublayer') || '@';
 
     /**
      * clean values
@@ -2177,27 +2154,27 @@ export function renderViewVt(o) {
       num = rules.length || 1;
     }
 
-    var ruleAll = rules.filter(function(r) {
+    const ruleAll = rules.filter(function(r) {
       return r.value === 'all';
     });
     var idLayer;
-    var getIdLayer = function() {
+    const getIdLayer = function() {
       idLayer = idView + sepLayer + (defaultOrder ? num++ : num--);
       return idLayer;
     };
 
-    var hasStyleCustom =
+    const hasStyleCustom =
       styleCustom &&
       styleCustom instanceof Object &&
       styleCustom.enable === true;
-    var hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
-    var hasRuleAll = ruleAll.length > 0;
+    const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
+    const hasRuleAll = ruleAll.length > 0;
 
     /**
      * Make custom layer
      */
     if (hasStyleCustom) {
-      var layerCustom = {
+      const layerCustom = {
         id: getIdLayer(),
         source: idSource,
         'source-layer': idView,
@@ -2220,13 +2197,13 @@ export function renderViewVt(o) {
      * Create layer for single rule covering all values
      */
     if (hasRuleAll && !hasStyleCustom) {
-      var rule = ruleAll.splice(0, 1, 1)[0];
+      const rule = ruleAll.splice(0, 1, 1)[0];
 
       /**
        * add a second layer for symbol if point + sprite
        */
       if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
-        var layerSprite = makeSimpleLayer({
+        const layerSprite = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
           idSourceLayer: idView,
@@ -2246,7 +2223,7 @@ export function renderViewVt(o) {
       }
 
       if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
-        var layerPattern = makeSimpleLayer({
+        const layerPattern = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
           idSourceLayer: idView,
@@ -2268,7 +2245,7 @@ export function renderViewVt(o) {
       /*
        * add the layer for all
        */
-      var layerAll = makeSimpleLayer({
+      const layerAll = makeSimpleLayer({
         id: getIdLayer(),
         idSourceLayer: idView,
         idSource: idSource,
@@ -2291,7 +2268,7 @@ export function renderViewVt(o) {
      * Apply default style is no style is defined
      */
     if (!hasStyleRules && !hasStyleCustom) {
-      var layerDefault = makeSimpleLayer({
+      const layerDefault = makeSimpleLayer({
         id: getIdLayer(),
         idSource: idSource,
         idSourceLayer: idView,
@@ -2320,24 +2297,24 @@ export function renderViewVt(o) {
        * evaluate rules
        */
       rules.forEach(function(rule, i) {
-        var value = rule.value;
-        var isNullRule = rule.isNullRule === true;
-        var max = p(view, 'data.attribute.max') + 1;
-        //var min = p(view, 'data.attribute.min') - 1;
-        var nextRule = rules[i + 1];
-        var nextRuleIsNullRule = nextRule && nextRule.isNullRule;
-        var nextValue =
+        const value = rule.value;
+        const isNullRule = rule.isNullRule === true;
+        const max = p(view, 'data.attribute.max') + 1;
+        //const min = p(view, 'data.attribute.min') - 1;
+        const nextRule = rules[i + 1];
+        const nextRuleIsNullRule = nextRule && nextRule.isNullRule;
+        const nextValue =
           nextRule && !nextRuleIsNullRule
             ? nextRule.value !== undefined
               ? nextRule.value
               : max
             : max;
-        var isNumeric = p(view, 'data.attribute.type') === 'number';
-        var idView = view.id;
-        var filter = ['all'];
-        var attr = def.attribute.name;
-        //var paint = {};
-        //var layerSprite = {};
+        const isNumeric = p(view, 'data.attribute.type') === 'number';
+        const idView = view.id;
+        const filter = ['all'];
+        const attr = def.attribute.name;
+        //const paint = {};
+        //const layerSprite = {};
 
         /**
          * Set filter
@@ -2393,7 +2370,7 @@ export function renderViewVt(o) {
          * Add layer for symbols
          */
         if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
-          var layerSymbol = makeSimpleLayer({
+          const layerSymbol = makeSimpleLayer({
             id: getIdLayer(),
             idSource: idSource,
             idSourceLayer: idView,
@@ -2414,7 +2391,7 @@ export function renderViewVt(o) {
         }
 
         if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
-          var layerPattern = makeSimpleLayer({
+          const layerPattern = makeSimpleLayer({
             id: getIdLayer(),
             idSource: idSource,
             idSourceLayer: idView,
@@ -2437,7 +2414,7 @@ export function renderViewVt(o) {
         /**
          * Add layer for curent rule
          */
-        var layerMain = makeSimpleLayer({
+        const layerMain = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
           idSourceLayer: idView,
@@ -2487,15 +2464,18 @@ export function renderViewVt(o) {
        * - Set sprite path
        */
       if (!o.noLegend && hasStyleRules) {
-        var elLegend = document.querySelector('#check_view_legend_' + view.id);
+        const elLegend = document.querySelector(
+          '#check_view_legend_' + view.id
+        );
 
         if (elLegend) {
           for (var i = 0; i < rules.length; i++) {
             if (rules[i]) {
-              var ruleHasSprite = rules[i].sprite && rules[i].sprite !== 'none';
-              var nextRuleIsSame =
+              const ruleHasSprite =
+                rules[i].sprite && rules[i].sprite !== 'none';
+              const nextRuleIsSame =
                 !!rules[i + 1] && rules[i + 1].value === rules[i].value;
-              var nextRuleHasSprite =
+              const nextRuleHasSprite =
                 !!rules[i + 1] &&
                 rules[i + 1].sprite &&
                 rules[i + 1].sprite !== 'none';
@@ -2545,9 +2525,11 @@ export function renderViewVt(o) {
  * @param {Boolean} o.noUi Don't add ui components
  */
 export function addOptions(o) {
-  var view = o.view;
-
-  view._idMap = o.id;
+  const h = mx.helpers;
+  const view = o.view;
+  const idView = view.id;
+  const idMap = o.id;
+  view._idMap = idMap;
   view._interactive = {};
   view._filters = {
     style: ['all'],
@@ -2561,7 +2543,7 @@ export function addOptions(o) {
   view._setOpacity = mx.helpers.viewSetOpacity;
 
   if (!o.noUi) {
-    var elOptions = document.querySelector(
+    const elOptions = document.querySelector(
       "[data-view_options_for='" + view.id + "']"
     );
 
@@ -2578,6 +2560,21 @@ export function addOptions(o) {
         el: elOptions
       });
     }
+
+    /*
+     * Make sure that the view is open
+     */
+    h.viewOpen(view);
+
+    /*
+     * Check if dashboard data is there and build it if needed
+     */
+    h.Dashboard.init({
+      idContainer: 'mxDashboards',
+      idDasboard: 'mx-dashboard-' + idView,
+      idMap: idMap,
+      view: view
+    });
   }
 }
 
@@ -2586,7 +2583,7 @@ export function addOptions(o) {
  * @param {Object} view View to open
  */
 export function viewOpen(view) {
-  var elView = document.querySelector("[data-view_id='" + view.id + "']");
+  const elView = document.querySelector("[data-view_id='" + view.id + "']");
   if (elView && elView.vb) {
     elView.vb.open();
   }
@@ -2664,31 +2661,14 @@ export function renderView(o) {
     h.updateLanguageViewsList({id: idMap});
     h.updateViewsFilter();
   }
-
-  if (!o.noUi) {
-    /*
-     * Make sure that the view is open
-     */
-    h.viewOpen(view);
-
-    /**
-     * Add options
-     */
-    h.addOptions({
-      id: idMap,
-      view: view
-    });
-
-    /*
-     * Check if dashboard data is there and build it if needed
-     */
-    h.Dashboard.init({
-      idContainer: 'mxDashboards',
-      idDasboard: 'mx-dashboard-' + idView,
-      idMap: idMap,
-      view: view
-    });
-  }
+  /**
+   * Add options
+   */
+  h.addOptions({
+    id: idMap,
+    view: view,
+    noUi: o.noUi
+  });
 
   /**
    * Add source from view
@@ -2708,7 +2688,7 @@ export function renderView(o) {
    */
   function handler(viewType) {
     /* Switch on view type*/
-    var handler = {
+    const handler = {
       rt: function() {
         return renderViewRt({
           view: view,
@@ -2769,7 +2749,7 @@ export function renderView(o) {
 
 export function renderViewGj(opt) {
   return new Promise((resolve) => {
-    var layer = mx.helpers.path(opt.view, 'data.layer');
+    const layer = mx.helpers.path(opt.view, 'data.layer');
     opt.map.addLayer(layer, opt.before);
     resolve(true);
   });
@@ -2783,10 +2763,10 @@ export function renderViewGj(opt) {
  * @param {Object} o.source Source values
  */
 export function addSource(o) {
-  var map = mx.helpers.getMap(o.id);
+  const map = mx.helpers.getMap(o.id);
 
   if (map) {
-    var sourceExists =
+    const sourceExists =
       Object.keys(map.style.sourceCaches).indexOf(o.idSource) > -1;
 
     if (sourceExists) {
@@ -2805,9 +2785,9 @@ export function addSource(o) {
  * @param {array} o.filter Filter array to apply
  */
 export function setFilter(o) {
-  var exists = !!document.getElementById(o.id);
+  const exists = !!document.getElementById(o.id);
   if (exists) {
-    var m = mx.helpers.getMap(o.id);
+    const m = mx.helpers.getMap(o.id);
     m.setFilter(o.idView, o.filter);
   }
 }
@@ -2819,12 +2799,12 @@ export function setFilter(o) {
  * @param {array} o.countries Array of countries code
  */
 export function setHighlightedCountries(o) {
-  var countries = o.countries || null;
-  var filter = [];
-  var m = mx.helpers.getMap(o.id);
-  var hasCountries = mx.helpers.isArray(countries) && countries.length > 0;
-  var hasWorld = hasCountries && countries.indexOf('WLD') > -1;
-  var rule = ['==', 'iso3code', ''];
+  const countries = o.countries || null;
+  const m = mx.helpers.getMap(o.id);
+  const hasCountries = mx.helpers.isArray(countries) && countries.length > 0;
+  const hasWorld = hasCountries && countries.indexOf('WLD') > -1;
+  let filter = [];
+  let rule = ['==', 'iso3code', ''];
   mx.settings.highlightedCountries = hasCountries ? countries : [];
 
   if (hasCountries && !hasWorld) {
@@ -2847,17 +2827,17 @@ export function intersect(poly1, poly2) {
     import('martinez-polygon-clipping'),
     import('@turf/helpers')
   ]).then((m) => {
-    var martinez = m[0];
-    var helpers = m[1];
+    const martinez = m[0];
+    const helpers = m[1];
 
-    var polygon = helpers.polygon;
-    var multiPolygon = helpers.multiPolygon;
+    const polygon = helpers.polygon;
+    const multiPolygon = helpers.multiPolygon;
 
-    var geom1 = poly1.geometry;
-    var geom2 = poly2.geometry;
-    var properties = poly1.properties || {};
+    const geom1 = poly1.geometry;
+    const geom2 = poly2.geometry;
+    const properties = poly1.properties || {};
 
-    var intersection = martinez.intersection(
+    const intersection = martinez.intersection(
       geom1.coordinates,
       geom2.coordinates
     );
@@ -2865,8 +2845,8 @@ export function intersect(poly1, poly2) {
       return null;
     }
     if (intersection.length === 1) {
-      var start = intersection[0][0][0];
-      var end = intersection[0][0][intersection[0][0].length - 1];
+      const start = intersection[0][0][0];
+      const end = intersection[0][0][intersection[0][0].length - 1];
       if (start[0] === end[0] && start[1] === end[1]) {
         return polygon(intersection[0], properties);
       }
@@ -2885,19 +2865,19 @@ export function intersect(poly1, poly2) {
  * @return {number} area in km2
  */
 export function getRenderedLayersArea(o) {
-  var map = mx.helpers.getMap(o.id);
+  const map = mx.helpers.getMap(o.id);
 
   if (map) {
-    var calcAreaWorker = require('./mx_helper_calc_area.worker.js');
-    var layers = mx.helpers.getLayerNamesByPrefix({
+    const calcAreaWorker = require('./mx_helper_calc_area.worker.js');
+    const layers = mx.helpers.getLayerNamesByPrefix({
       id: o.id,
       prefix: o.prefix
     });
 
     if (layers.length > 0) {
-      var features = map.queryRenderedFeatures({layers: layers});
+      const features = map.queryRenderedFeatures({layers: layers});
 
-      var geomTemp = {
+      const geomTemp = {
         type: 'FeatureCollection',
         features: []
       };
@@ -2910,12 +2890,12 @@ export function getRenderedLayersArea(o) {
         });
       });
 
-      var data = {
+      const data = {
         geojson: geomTemp,
         bbox: getBoundsArray(o)
       };
 
-      var worker = new calcAreaWorker();
+      const worker = new calcAreaWorker();
       worker.postMessage(data);
       mx.listenerStore.addListener({
         group: 'compute_layer_area',
@@ -2936,7 +2916,7 @@ export function getRenderedLayersArea(o) {
 }
 
 export function sendRenderedLayersAreaToUi(o) {
-  var el = document.getElementById(o.idEl);
+  const el = document.getElementById(o.idEl);
   if (el) {
     getRenderedLayersArea({
       id: o.id,
@@ -2958,8 +2938,8 @@ export function sendRenderedLayersAreaToUi(o) {
  * @param {Object} o.map Map (optional, overwrite id)
  */
 export function getBoundsArray(o) {
-  var map = o.map || mx.maps[o.id].map;
-  var a = map.getBounds();
+  const map = o.map || mx.maps[o.id].map;
+  const a = map.getBounds();
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
 }
 
@@ -2974,14 +2954,14 @@ export function getBoundsArray(o) {
  * @return {Object} Object with view id as keys
  */
 export function getLayersPropertiesAtPoint(opt) {
-  var h = mx.helpers;
-  var map = h.getMap(opt.map);
-  var hasViewId = h.isString(opt.idView);
-  var modeObject = opt.asObject === true || false;
-  var items = {};
-  var idViews = [];
-  var excludeProp = ['mx_t0', 'mx_t1', 'gid'];
-  var type = opt.type || 'vt' || 'rt' || 'gj';
+  const h = mx.helpers;
+  const map = h.getMap(opt.map);
+  const hasViewId = h.isString(opt.idView);
+  const modeObject = opt.asObject === true || false;
+  const items = {};
+  const excludeProp = ['mx_t0', 'mx_t1', 'gid'];
+  let idViews = [];
+  let type = opt.type || 'vt' || 'rt' || 'gj';
   type = h.isArray(type) ? type : [type];
   /**
    * Use id from idView as array OR get all mapx displayed base layer
@@ -3020,14 +3000,14 @@ export function getLayersPropertiesAtPoint(opt) {
    * Fetch properties on raster WMS layer
    */
   function fetchRasterProp(view) {
-    var url = h.path(view, 'data.source.tiles', [])[0].split('?');
-    var endpoint = url[0];
-    var params = h.paramsToObject(url[1]);
-    var out = modeObject ? {} : [];
+    const url = h.path(view, 'data.source.tiles', [])[0].split('?');
+    const endpoint = url[0];
+    const params = h.paramsToObject(url[1]);
+    const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
      */
-    var isWms =
+    const isWms =
       params &&
       params.layers &&
       params.service &&
@@ -3051,22 +3031,22 @@ export function getLayersPropertiesAtPoint(opt) {
    */
   function fetchVectorProp(view) {
     return new Promise((resolve) => {
-      var id = view.id;
+      const id = view.id;
 
-      var layers = h.getLayerNamesByPrefix({
+      const layers = h.getLayerNamesByPrefix({
         map: map,
         prefix: id
       });
 
-      var features = map.queryRenderedFeatures(opt.point, {
+      const features = map.queryRenderedFeatures(opt.point, {
         layers: layers
       });
 
-      var out = modeObject ? {} : [];
+      const out = modeObject ? {} : [];
 
       features.forEach((f) => {
         if (modeObject) {
-          for (var p in f.properties) {
+          for (const p in f.properties) {
             /**
              * Exclude prop (time, gid, etc)
              */
@@ -3074,8 +3054,8 @@ export function getLayersPropertiesAtPoint(opt) {
               /**
                * Aggregate value by attribute
                */
-              var value = f.properties[p];
-              var values = out[p] || [];
+              let value = f.properties[p];
+              let values = out[p] || [];
               values = values.concat(value);
               out[p] = h.getArrayStat({
                 stat: 'distinct',
@@ -3098,9 +3078,9 @@ export function getLayersPropertiesAtPoint(opt) {
 
 /*selectize version*/
 export function makeSearchBox(o) {
-  var view = o.view;
-  var el = document.querySelector("[data-search_box_for='" + view.id + "']");
-  //var hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
+  const view = o.view;
+  const el = document.querySelector("[data-search_box_for='" + view.id + "']");
+  //const hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   if (!el) {
     return;
   }
@@ -3108,8 +3088,8 @@ export function makeSearchBox(o) {
   makeSelectize();
 
   function tableToData(table) {
-    var r, rL, row, res;
-    var data = [];
+    let r, rL, row, res;
+    const data = [];
     for (r = 0, rL = table.length; r < rL; r++) {
       row = table[r];
       res = {};
@@ -3122,14 +3102,14 @@ export function makeSearchBox(o) {
 
   function makeSelectize() {
     return mx.helpers.moduleLoad('selectize').then(() => {
-      var table = mx.helpers.path(view, 'data.attribute.table');
-      var attr = mx.helpers.path(view, 'data.attribute.name');
-      var data = tableToData(table);
+      const table = mx.helpers.path(view, 'data.attribute.table');
+      const attr = mx.helpers.path(view, 'data.attribute.name');
+      const data = tableToData(table);
 
-      var selectOnChange = function() {
-        var view = this.view;
-        var listObj = this.getValue();
-        var filter = ['any'];
+      const selectOnChange = function() {
+        const view = this.view;
+        const listObj = this.getValue();
+        const filter = ['any'];
         listObj.forEach(function(x) {
           filter.push(['==', attr, x]);
         });
@@ -3139,7 +3119,7 @@ export function makeSearchBox(o) {
         });
       };
 
-      var searchBox = $(el)
+      const searchBox = $(el)
         .selectize({
           placeholder: 'Search',
           choices: data,
@@ -3160,9 +3140,9 @@ export function makeSearchBox(o) {
 }
 
 export function filterViewValues(o) {
-  var attr, idMap, idView, search;
-  var view, map, features, values, filter;
-  var isNumeric;
+  let attr, idMap, idView, search;
+  let view, map, features, values, filter;
+  let isNumeric;
 
   attr = o.attribute;
   idMap = o.id;
@@ -3188,8 +3168,8 @@ export function filterViewValues(o) {
       values = {};
 
       features.forEach(function(f) {
-        var value = f.properties[attr];
-        var splited = value.split(/\s*,\s*/);
+        const value = f.properties[attr];
+        const splited = value.split(/\s*,\s*/);
         if (splited.indexOf(search) > -1) {
           values[value] = true;
         }
@@ -3217,7 +3197,7 @@ export function filterViewValues(o) {
  * @param {string} o.before
  */
 export function addLayer(o) {
-  var map = mx.helpers.getMap(o.id);
+  const map = mx.helpers.getMap(o.id);
   if (map) {
     if (o.layer.id in map.style._layers) {
       console.log('Layer already exists');
@@ -3266,11 +3246,11 @@ export function zoomToViewId(o) {
  */
 export function getViewsBounds(views) {
   return new Promise(function(resolve) {
-    var bounds;
-    var h = mx.helpers;
+    const h = mx.helpers;
+    let bounds;
     views = views.constructor === Array ? views : [views];
 
-    var extent = {
+    let extent = {
       lat1: -80,
       lat2: 80,
       lng1: -180,
@@ -3278,7 +3258,7 @@ export function getViewsBounds(views) {
     };
 
     views.forEach((v, i) => {
-      var ext = h.path(v, 'data.geometry.extent');
+      const ext = h.path(v, 'data.geometry.extent');
       if (ext) {
         if (i === 0) {
           extent = ext;
@@ -3311,14 +3291,14 @@ export function zoomToViewIdVisible(o) {
   return mx.helpers
     .moduleLoad('turf-bbox')
     .then((bbox) => {
-      var geomTemp, idLayerAll, features;
+      let geomTemp, idLayerAll, features;
 
       geomTemp = {
         type: 'FeatureCollection',
         features: []
       };
 
-      var map = mx.helpers.getMap(o.id);
+      const map = mx.helpers.getMap(o.id);
 
       if (map) {
         idLayerAll = mx.helpers.getLayerNamesByPrefix({
@@ -3335,10 +3315,10 @@ export function zoomToViewIdVisible(o) {
         });
 
         if (geomTemp.features.length > 0) {
-          var bbx = bbox(geomTemp);
-          var sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
-          var ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
-          var llb = new mx.mapboxgl.LngLatBounds(sw, ne);
+          const bbx = bbox(geomTemp);
+          const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
+          const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
+          const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
           map.fitBounds(llb);
         }
       }
@@ -3366,15 +3346,15 @@ export function resetViewStyle(o) {
  * @param {number} o.param Parameters to use
  */
 export function flyTo(o) {
-  var map = mx.helpers.getMap(o.id);
+  const map = mx.helpers.getMap(o.id);
 
   if (map) {
-    var p = o.param;
+    const p = o.param;
 
     if (!o.fromQuery && p.fitToBounds === true && !p.jump) {
       map.fitBounds([p.w || 0, p.s || 0, p.e || 0, p.n || 0]);
     } else {
-      var opt = {
+      const opt = {
         center: [p.lng || 0, p.lat || 0],
         zoom: p.zoom || 0,
         jump: p.jump || false,
@@ -3401,12 +3381,12 @@ export function flyTo(o) {
  * @return {String} Toggled
  */
 export function btnToggleLayer(o) {
-  var shades;
+  let shades;
 
   o.id = o.id || mx.settings.map.id;
-  var map = mx.helpers.getMap(o.id);
-  var btn = document.getElementById(o.idSwitch);
-  var lay = map.getLayer(o.idLayer);
+  const map = mx.helpers.getMap(o.id);
+  const btn = document.getElementById(o.idSwitch);
+  const lay = map.getLayer(o.idLayer);
 
   if (!lay) {
     alert("Layer '" + o.idLayer + "' not found");
@@ -3414,11 +3394,11 @@ export function btnToggleLayer(o) {
   }
 
   o.action = o.action || 'toggle';
-  var isAerial = o.idLayer === 'here_aerial'; // hide also shades...
-  var toShow = o.action === 'show';
-  var toHide = o.action === 'hide';
-  var isVisible = lay.visibility === 'visible';
-  var toToggle =
+  const isAerial = o.idLayer === 'here_aerial'; // hide also shades...
+  const toShow = o.action === 'show';
+  const toHide = o.action === 'hide';
+  const isVisible = lay.visibility === 'visible';
+  const toToggle =
     o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
 
   if (isAerial) {
@@ -3462,7 +3442,7 @@ export function btnToggleLayer(o) {
  * @returns  {Array}   [x, y]
  */
 export function getMercCoords(x, y, z) {
-  var resolution = (2 * Math.PI * 6378137) / 256 / Math.pow(2, z),
+  const resolution = (2 * Math.PI * 6378137) / 256 / Math.pow(2, z),
     merc_x = x * resolution - (2 * Math.PI * 6378137) / 2.0,
     merc_y = y * resolution - (2 * Math.PI * 6378137) / 2.0;
 
@@ -3496,7 +3476,7 @@ export function getViewTitleNormalized(view, lang) {
   if (!h.isView(view)) {
     view = h.getView(view);
   }
-  var title = h.getLabelFromObjectPath({
+  let title = h.getLabelFromObjectPath({
     lang: lang || mx.settings.language,
     obj: view,
     path: 'data.title'
@@ -3514,12 +3494,12 @@ export function getViewTitleNormalized(view, lang) {
  * @return {String} desc
  */
 export function getViewDescription(id, lang) {
-  var view = id;
+  let view = id;
   if (typeof id === 'string') {
     view = mx.helpers.getView(id);
   }
   lang = lang || mx.settings.language;
-  var langs = mx.settings.languages;
+  const langs = mx.settings.languages;
 
   return mx.helpers.getLabelFromObjectPath({
     obj: view,
@@ -3533,11 +3513,11 @@ export function getViewDescription(id, lang) {
 export function getViewLegend(id, opt) {
   opt = opt || {};
 
-  var h = mx.helpers;
+  const h = mx.helpers;
   if (h.isView(id)) {
     id = id.id;
   }
-  var elLegend = document.getElementById('check_view_legend_' + id);
+  let elLegend = document.getElementById('check_view_legend_' + id);
 
   mx.helpers.convertAllImagesToBase64(elLegend);
 
@@ -3557,10 +3537,10 @@ export function getViewLegend(id, opt) {
  */
 export function getMap(idMap) {
   idMap = idMap || mx.settings.map.id;
-  var map = {};
 
-  var isId = typeof idMap === 'string';
-  var isMap = !isId && mx.helpers.isMap(idMap);
+  let map;
+  const isId = typeof idMap === 'string';
+  const isMap = !isId && mx.helpers.isMap(idMap);
 
   if (isMap) {
     return idMap;
@@ -3573,8 +3553,6 @@ export function getMap(idMap) {
 
   if (mx.helpers.isMap(map)) {
     return map;
-  } else {
-    return null;
   }
 }
 
@@ -3585,7 +3563,7 @@ export function getMap(idMap) {
  */
 export function getMapData(idMap) {
   idMap = idMap || mx.settings.map.id;
-  var data = mx.maps[idMap || mx.settings.map.id];
+  const data = mx.maps[idMap || mx.settings.map.id];
   data.id = idMap;
   return data;
 }
@@ -3597,8 +3575,8 @@ export function getMapData(idMap) {
  */
 export function getMapPos(o) {
   o = o || {};
-  var out, map, bounds, center, zoom, bearing, pitch;
-  var r = mx.helpers.round;
+  let out, map, bounds, center, zoom, bearing, pitch;
+  const r = mx.helpers.round;
   map = mx.helpers.getMap(o.id);
 
   bounds = map.getBounds();
@@ -3663,30 +3641,30 @@ export function getViewsOnMap(o) {
  * Toy function to make layer move
  */
 export function makeLayerJiggle(mapId, prefix) {
-  var layersName = mx.helpers.getLayerNamesByPrefix({
+  const layersName = mx.helpers.getLayerNamesByPrefix({
     id: mapId,
     prefix: prefix
   });
 
   if (layersName.length > 0) {
-    var varTranslate = {
+    const varTranslate = {
       line: 'line-translate',
       fill: 'fill-translate',
       circle: 'circle-translate',
       symbol: 'icon-translate'
     };
 
-    var m = mx.helpers.getMap(mapId);
+    const m = mx.helpers.getMap(mapId);
 
     layersName.forEach(function(x) {
-      var l = m.getLayer(x);
-      var t = l.type;
-      var o = varTranslate[t];
-      var n = 0;
-      var max = 20;
-      var time = 200;
-      var dist = [[-20, 0], [20, 0]];
-      var interval = setInterval(function() {
+      const l = m.getLayer(x);
+      const t = l.type;
+      const o = varTranslate[t];
+      const max = 20;
+      const time = 200;
+      const dist = [[-20, 0], [20, 0]];
+      let n = 0;
+      const interval = setInterval(function() {
         if (n < max) {
           n++;
           m.setPaintProperty(x, o, dist[n % 2]);
@@ -3705,15 +3683,15 @@ export function makeLayerJiggle(mapId, prefix) {
  */
 export function randomFillAll() {
   setInterval(function() {
-    var map = mx.helpers.getMap(idMap);
+    const map = mx.helpers.getMap(idMap);
 
-    var layers = map.style._layers;
+    const layers = map.style._layers;
 
     //map.setBearing(Math.random() * 360);
     //map.setPitch(Math.random() * 60);
 
-    for (var l in layers) {
-      var type = layers[l].type;
+    for (const l in layers) {
+      const type = layers[l].type;
       if (type) {
         switch (type) {
           case 'fill':

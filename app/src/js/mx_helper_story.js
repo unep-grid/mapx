@@ -1688,7 +1688,7 @@ export function storyPlayStep(o) {
   var data = h.path(mx.data, 'story.data');
   var stepNum = o.stepNum;
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
-  var m = mx.maps[o.id];
+  var m = h.getMapData();
 
   data.currentStep = stepNum;
 

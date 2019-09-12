@@ -46,7 +46,7 @@ export function featuresToHtml(o) {
   layerVector = h.getLayersPropertiesAtPoint({
     map: map,
     point: o.point,
-    type: ['vt','gj'],
+    type: ['vt','gj','cc'],
     asObject: true
   });
   render(layerVector);
