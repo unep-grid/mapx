@@ -10536,5 +10536,41 @@
     "fa": "",
     "ps": "",
     "es": ""
+  },
+  {
+    "id": "modal_check_confirm_project_change_txt",
+    "en": "Are you sure to change project now ? Unsaved changes could be lost.",
+    "fr": "Êtes-vous certain de vouloir changer de project maintenant ? Les changements non-sauvegardés pourraient être perdus.",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "modal_check_confirm_project_change_btn",
+    "en": "Change project now, discard changes.",
+    "fr": "Changer de projet maintenant, ignorer les changements",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "modal_check_confirm_project_change_title",
+    "en": "Change project confirmation",
+    "fr": "Confirmation de changement de projet",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
   }
 ]

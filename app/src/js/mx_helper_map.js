@@ -54,10 +54,50 @@ export function getAppPathUrl(id) {
 /**
  * Set the project manually
  * @param {String} idProject project to load
+ * @param {Object} opt Options
+ * @param {Function} opt.onSuccess : Optional callback if project is changed
  * @return null
  */
-export function setProject(idProject) {
-  Shiny.onInputChange('selectProject', idProject);
+export function setProject(idProject, opt) {
+  const h = mx.helpers;
+  opt = opt || {};
+  /**
+   * Check if some modal are still there
+   */
+  const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+
+  if (modals.length > 0) {
+    const elContinue = h.el(
+      'btn',
+      {
+        class: ['btn', 'btn-default'],
+        on: {click: change}
+      },
+      h.getDictItem('modal_check_confirm_project_change_btn')
+    );
+
+    h.modal({
+      id: 'confirm_change_project',
+      title: 'Confirm change project',
+      content: h.getDictItem('modal_check_confirm_project_change_txt'),
+      buttons: [elContinue],
+      addBackground: true
+    });
+  } else {
+    change();
+  }
+
+  function change() {
+    closeModals();
+    Shiny.onInputChange('selectProject', idProject);
+    if (h.isFunction(opt.onSuccess)) {
+      opt.onSuccess();
+    }
+  }
+
+  function closeModals() {
+    h.modalCloseAll();
+  }
 }
 
 export function requestProjectMembership(idProject) {
@@ -264,8 +304,7 @@ export function initMapxApp(o) {
         autoFetchAll: true,
         project: o.project || mx.settings.project
       })
-      .then((views)=>{
-        
+      .then((views) => {
         /*
          * Auto start story map
          */
@@ -274,7 +313,7 @@ export function initMapxApp(o) {
           mx.helpers.storyRead({
             id: o.id,
             idView: idStory,
-            view : mx.helpers.getView(idStory),
+            view: mx.helpers.getView(idStory),
             save: false,
             autoStart: true
           });
@@ -503,17 +542,13 @@ export function geolocateUser() {
  * @param {String} idMap map id
  */
 export function viewsRemoveAll(o) {
+  o = o || {};
   const h = mx.helpers;
   const views = h.getViews({
     id: o.idMap
   });
 
   const mData = h.getMapData(o.idMap);
-
-  /**
-   * Replace content without replacing views array
-   */
-  mData.views.length = 0;
 
   /**
    * remove existing layers
@@ -527,6 +562,12 @@ export function viewsRemoveAll(o) {
    * apply remove method
    */
   h.cleanRemoveModules(views);
+
+  /**
+   * Replace content without replacing views array
+   */
+  mData.views.length = 0;
+
   /*
    * Set views list empty
    */
@@ -823,9 +864,10 @@ export function updateViewsList(o) {
       const promGjViews = getGeojsonViewsFromStorage(o);
       const views = [];
       const state = [];
-      return h.fetchViews({
-        onProgress: updateProgress
-      })
+      return h
+        .fetchViews({
+          onProgress: updateProgress
+        })
         .then((data) => {
           views.push(...data.views);
           state.push(

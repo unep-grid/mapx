@@ -133,14 +133,8 @@ export function modal(o) {
     });
   }
 
-  if (o.content && o.content instanceof Node) {
-    elContent.appendChild(o.content);
-  } else {
-    if (h.isHTML(o.content)) {
-      elContent.innerHTML = o.content;
-    } else {
-      elContent.innerText = o.content;
-    }
+  if (o.content) {
+    addContent(o.content, elContent);
   }
 
   if (startBodyScrollPos) {
@@ -177,8 +171,8 @@ export function modal(o) {
     mx.helpers.initSelectizeAll({
       id: id,
       selector: elModal,
-      options : {
-        dropdownParent : elModal
+      options: {
+        dropdownParent: elModal
       }
     });
   }
@@ -264,13 +258,29 @@ export function modal(o) {
     });
   }
   function setTitle(newTitle) {
-    if (h.isElement(newTitle)) {
-      elTitle.innerHTML = '';
-      elTitle.appendChild(newTitle);
-    } else {
-      elTitle.innerText = newTitle;
+    addContent(newTitle, elTitle);
+  }
+
+  function addContent(content, elTarget) {
+    if (!h.isElement(elTarget) || !content) {
+      return;
+    }
+
+    if (h.isPromise(content)) {
+      return content.then((c) => {
+        addContent(c, elTarget);
+      });
+    }
+
+    if (content && h.isElement(content)) {
+      elTarget.appendChild(content);
+    } else if (h.isHTML(content)) {
+      elTarget.innerHTML = content;
+    } else if (h.isString(content)) {
+      elTarget.innerText = content;
     }
   }
+
   function close() {
     if (mx.helpers.isElement(elContent)) {
       /**
@@ -311,4 +321,35 @@ export function modal(o) {
       o.onClose();
     }
   }
+}
+
+/**
+ * Quickly close all modal windows
+ */
+export function modalCloseAll() {
+  const elsModal = modalGetAll();
+  elsModal.forEach((modal) => {
+    modal.close();
+  });
+}
+
+/**
+ * Get all current modals
+ * @param {Object} opt Options
+ * @paramr {Array} opt.ignoreSelectors Array of ids to ignore
+ * @return {NodeList}
+ */
+export function modalGetAll(opt) {
+  const h = mx.helpers;
+  opt = opt || {};
+  let selector = '.mx-modal-container';
+  const hasIgnores =
+    h.isArray(opt.ignoreSelectors) && opt.ignoreSelectors.length > 0;
+  if (hasIgnores) {
+    selector = opt.ignoreSelectors.reduce(
+      (a, c) => `${a}:not(${c})`,
+      selector
+    );
+  }
+  return document.querySelectorAll(selector);
 }
