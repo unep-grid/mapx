@@ -36,6 +36,7 @@ fi
 echo "Update package.json"
 REP_PACKAGE_VERSION='s/"version": "'"$OLD_VERSION"'"/"version": "'"$NEW_VERSION"'"/g'
 perl -pi -e "$REP_PACKAGE_VERSION" ./app/package.json
+perl -pi -e "$REP_PACKAGE_VERSION" ./app/src/html/index.html
 perl -pi -e "$REP_PACKAGE_VERSION" ./api/package.json
 echo "Update version.txt"
 REP_VERSION='s/'"$OLD_VERSION"'/'"$NEW_VERSION"'/g'
