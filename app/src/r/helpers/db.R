@@ -112,10 +112,28 @@ mxDbCreateTempUser <- function(id,srcList){
     return(out)
 }
 
+
+#' Get a view object as list
+#'
+#' @param idView {Character} id of the view
+#'
+mxDbGetView <- function(idView){
+  v = mxDbGetQuery("
+    WITH view as (
+    SELECT * FROM mx_views_latest
+    WHERE id = '" + idView+"'
+    )
+    SELECT json_agg(view) as json from view;
+    ")$json
+  jsonlite::fromJSON(v,simplifyDataFrame=F)
+}
+
+
+
 #' Update view data according to source value
 #' @param idSource Source/Layer id
 #' @return null
-mxDbUpdateAllViewDataFromSource <- function(idSource,token,onProgress=function(progress=0,view=NUll){}){
+mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progress=0,view=NUll){}){
 
   idSource <- tolower(idSource)
   viewsData <- mxDbGetViewsIdBySourceId(idSource)
@@ -137,12 +155,7 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,token,onProgress=function(p
       #
       # Get view data
       #
-      viewData <- mxApiGetViews(
-        idViews = id, 
-        idProject = view$project,
-        idUser = view$editor,
-        token = token
-        )
+      viewData <- mxDbGetView(view$id)
 
       if( noDataCheck(viewData) || length(viewData) != 1 ){
 

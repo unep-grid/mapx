@@ -117,7 +117,6 @@ observeEvent(input$btnDbSelfGenerate,{
   mxCatch("dbSelfGenerate",{
 
     idUser <- .get(reactUser,c("data","id"))
-    token <- reactUser$token
     project <- reactData$project
     language <- reactData$language
     sourcesList <- as.list(input$selectDbSelfSource)
@@ -136,7 +135,6 @@ observeEvent(input$btnDbSelfGenerate,{
         for( id in sourcesList ){
           mxDbUpdateAllViewDataFromSource(
             idSource = id,
-            token = token,
             onProgress = function( progress, view ){
 
               if(!isTRUE(session$isClosed())){
