@@ -29,7 +29,7 @@ exports.tableHasValues = function(idTable, schema) {
   return pgRead
     .query(sqlExists)
     .then((res) => {
-      isThere = res.rowCount > 0 && res.rows[0].exists !== null;
+      isThere = res.rowCount > 0 && res.rows[0].exists === true;
       if (!isThere) {
         return false;
       } else {
