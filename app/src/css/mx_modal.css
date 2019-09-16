@@ -42,6 +42,7 @@
   top: 5px;
   margin: auto;
   resize: both;
+  overflow:auto;
   display: flex;
   flex-direction: column;
 }
