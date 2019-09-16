@@ -36,11 +36,11 @@ fi
 echo "Update package.json"
 REP_PACKAGE_VERSION='s/"version": "'"$OLD_VERSION"'"/"version": "'"$NEW_VERSION"'"/g'
 perl -pi -e "$REP_PACKAGE_VERSION" ./app/package.json
-perl -pi -e "$REP_PACKAGE_VERSION" ./app/src/html/index.html
 perl -pi -e "$REP_PACKAGE_VERSION" ./api/package.json
 echo "Update version.txt"
 REP_VERSION='s/'"$OLD_VERSION"'/'"$NEW_VERSION"'/g'
-perl -pi -e "$REP_VERSION"  version.txt
+perl -pi -e "$REP_VERSION" version.txt
+perl -pi -e "$REP_VERSION" ./app/src/html/index.html
 echo "Update docker-compose.yml"
 REP_API_TAG='s/mx-api-node:'"$OLD_VERSION"'-alpine/mx-api-node:'"$NEW_VERSION"'-alpine/g'
 REP_APP_TAG='s/mx-app-shiny:'"$OLD_VERSION"'-debian/mx-app-shiny:'"$NEW_VERSION"'-debian/g'
