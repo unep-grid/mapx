@@ -280,7 +280,7 @@ function handleContextEvent(evt) {
   let elGroup = cm.li.getGroup(elTarget);
 
   if (!isValidInput && !isValidClick) {
-    cm.destroy(save);
+    cm.destroy();
     return;
   }
 
