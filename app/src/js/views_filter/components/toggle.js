@@ -47,37 +47,46 @@ class Toggle {
     tgl.animateCountUpdate(n);
   }
 
-  setOrder(i){
+  setOrder(i) {
     this.order = i || 0;
     this.el.style.order = this.order;
   }
 
   animateCountUpdate(n) {
     let tgl = this;
-    if ( tgl._updating ) {
+    let nOld = tgl._count_update;
+
+    if (nOld > -1) {
+      /*
+      * Not finished updating, 
+      * Avoid a new render, just update value
+      * and return;
+      */
+      tgl._count_update = n;
       return;
     }
-    tgl._updating = true;
+
+    tgl._count_update = n || 0;
     tgl.elLabelCount.classList.add('updating');
     setTimeout(() => {
-      onNextFrame(()=>{
-        tgl.elLabelCount.innerText = n;
+      onNextFrame(() => {
+        tgl.elLabelCount.innerText = tgl._count_update;
         tgl.elLabelCount.classList.remove('updating');
-        tgl._updating = false;
+        tgl._count_update = -1;
       });
     }, 500);
   }
 
   setLabel(txt) {
     let tgl = this;
-    if(txt instanceof Promise){
-      txt.then(t => {
+    if (txt instanceof Promise) {
+      txt.then((t) => {
         tgl.label = t;
-        tgl.elLabelText.innerText = tgl.label; 
+        tgl.elLabelText.innerText = tgl.label;
       });
-    }else{
+    } else {
       tgl.label = txt;
-      tgl.elLabelText.innerText = tgl.label; 
+      tgl.elLabelText.innerText = tgl.label;
     }
   }
   setLabelKey(key) {
@@ -123,8 +132,8 @@ function buildToggle() {
     'div',
     {
       class: 'vf-check-toggle',
-      style : {
-        order : tgl.order
+      style: {
+        order: tgl.order
       }
     },
     (elCheck = el('input', {
