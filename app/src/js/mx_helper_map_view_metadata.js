@@ -3,8 +3,7 @@
  * @param {String} id Name/Id of the source layer
  */
 export function getSourceMetadata(id, force) {
-  var url,
-    urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
+  const urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
 
   return new Promise((resolve, reject) => {
     if (!id) {
@@ -12,7 +11,7 @@ export function getSourceMetadata(id, force) {
     }
 
     force = force || false;
-    url = urlSourceMeta + id + '?date=' + performance.now();
+    const url = urlSourceMeta + id + '?date=' + performance.now();
 
     resolve(url);
   })
@@ -28,8 +27,7 @@ export function getSourceMetadata(id, force) {
  * @param {String} id Name/Id of the view
  */
 export function getViewMetadata(id, force) {
-  var url,
-    urlViewMeta = mx.helpers.getApiUrl('getViewMetadata');
+  const urlViewMeta = mx.helpers.getApiUrl('getViewMetadata');
 
   return new Promise((resolve, reject) => {
     if (!id) {
@@ -37,7 +35,7 @@ export function getViewMetadata(id, force) {
     }
 
     force = force || false;
-    url = urlViewMeta + id + '?date=' + performance.now();
+    const url = urlViewMeta + id + '?date=' + performance.now();
 
     resolve(url);
   })
@@ -55,10 +53,10 @@ export function getViewMetadata(id, force) {
  */
 export function addSourceMetadataToView(opt) {
   opt = opt || {};
-  var view = opt.view || {};
-  var force = opt.forceUpdateMeta || false;
-  var idSourceLayer = mx.helpers.path(view, 'data.source.layerInfo.name', '');
-  var empty = {};
+  const view = opt.view || {};
+  const force = opt.forceUpdateMeta || false;
+  const idSourceLayer = mx.helpers.path(view, 'data.source.layerInfo.name', '');
+  const empty = {};
 
   if (!idSourceLayer) {
     return Promise.resolve(empty);
@@ -84,27 +82,27 @@ export function addSourceMetadataToView(opt) {
 export function viewToMetaModal(view) {
   const h = mx.helpers;
   const el = h.el;
-  var id = h.isView(view) ? view.id : view;
+  const id = h.isView(view) ? view.id : view;
   view = mx.helpers.getView(id);
-  var meta = {};
-  var metaRasterLink = h.path(view, 'data.source.urlMetadata');
+  const meta = {};
+  const metaRasterLink = h.path(view, 'data.source.urlMetadata');
 
   getViewMetadata(id, true).then((data) => {
-    var elContent = el('div');
+    const elContent = el('div');
 
     if (data.meta) {
-      meta = data.meta;
+      Object.assign(meta,data.meta);
     }
     meta.id = id;
 
-    var elViewMeta = metaViewToUi(meta);
+    const elViewMeta = metaViewToUi(meta);
 
     if (elViewMeta) {
       elContent.appendChild(elViewMeta);
     }
 
     if (metaRasterLink) {
-      var elRasterMetaLink = metaSourceRasterToUi({
+      const elRasterMetaLink = metaSourceRasterToUi({
         url: metaRasterLink
       });
       if (elRasterMetaLink) {
@@ -112,11 +110,11 @@ export function viewToMetaModal(view) {
       }
     }
 
-    if (view._meta) {
-      var sourceMeta = view._meta;
-      var elSourceMeta = metaSourceToUi(sourceMeta);
-      var elDiafTable = metaSourceToDiafUi(sourceMeta);
-      var elDiafSummary = metaSourceToDiafSummary(sourceMeta);
+    if ( view.type === 'vt' && view._meta) {
+      const sourceMeta = view._meta;
+      const elSourceMeta = metaSourceToUi(sourceMeta);
+      const elDiafTable = metaSourceToDiafUi(sourceMeta);
+      const elDiafSummary = metaSourceToDiafSummary(sourceMeta);
 
       if (elDiafSummary) {
         elContent.appendChild(elDiafSummary);
@@ -131,13 +129,13 @@ export function viewToMetaModal(view) {
       }
     }
 
-    var elTitleModal = el('span', {
+    const elTitleModal = el('span', {
       dataset: {
         lang_key: 'meta_view_modal_title'
       }
     });
 
-    var elModal = h.modal({
+    const elModal = h.modal({
       title: elTitleModal,
       content: elContent
     });
@@ -149,47 +147,44 @@ export function viewToMetaModal(view) {
 }
 
 export function metaSourceRasterToUi(rasterMeta) {
-  var h = mx.helpers;
-  var el = h.el;
-  var elOut = el('div');
+  const h = mx.helpers;
+  const el = h.el;
 
   rasterMeta = rasterMeta || {};
 
   if (!h.isUrl(rasterMeta.url)) {
-    return elOut;
+    return el("div");
   }
 
   rasterMeta = h.objectToArray(
     {
-      'meta_view_raster_meta': rasterMeta.url
+      meta_view_raster_meta: rasterMeta.url
     },
     true
   );
 
-  elOut = h.elAuto('array_table', rasterMeta, {
+  return h.elAuto('array_table', rasterMeta, {
     render: 'array_table',
     tableHeadersSkip: true,
     tableTitle: 'meta_view_raster_meta',
     tableTitleAsLanguageKey: true,
     stringAsLanguageKey: true,
-    urlDefaultLabel : 'Link'
+    urlDefaultLabel: 'Link'
   });
 
-  return elOut;
 }
 
 export function metaSourceToDiafSummary(meta) {
-  var h = mx.helpers;
-  var el = h.el;
-  var elOut = el('div');
+  const h = mx.helpers;
+  const el = h.el;
 
   if (!h.isObject(meta) || !h.isObject(meta.integrity)) {
-    return elOut;
+    return el('div');
   }
 
-  var score = h.getDiafScoreFromIntegrity(meta.integrity);
+  const score = h.getDiafScoreFromIntegrity(meta.integrity);
 
-  var summary = h.objectToArray(
+  const summary = h.objectToArray(
     {
       score: Math.round(score.score * 10000) / 100,
       yes: score.yes,
@@ -200,7 +195,7 @@ export function metaSourceToDiafSummary(meta) {
     true
   );
 
-  elOut = h.elAuto('array_table', summary, {
+  const elOut = h.elAuto('array_table', summary, {
     render: 'array_table',
     tableHeadersSkip: true,
     tableTitle: 'meta_view_diaf_summary_title',
@@ -212,35 +207,34 @@ export function metaSourceToDiafSummary(meta) {
 }
 
 export function metaSourceToDiafUi(meta) {
-  var h = mx.helpers;
-  var el = h.el;
-  var elOut = el('div');
+  const h = mx.helpers;
+  const el = h.el;
 
   if (!h.isObject(meta) || !h.isObject(meta.integrity)) {
-    return elOut;
+    return el('div');
   }
 
-  var diaf = meta.integrity;
-  var idsDiaf = Object.keys(diaf);
-  var di;
+  const diaf = meta.integrity;
+  const idsDiaf = Object.keys(diaf);
+  let diItem;
 
-  var ans = {
+  const ans = {
     '0': 'dont_know',
     '1': 'no',
     '2': 'partial',
     '3': 'yes'
   };
-  var desc = function(id) {
+  const desc = function(id) {
     return id + '_desc';
   };
 
-  var elDescBlock = el('span', {
+  const elDescBlock = el('span', {
     dataset: {
       lang_key: 'data_integrity_desc'
     }
   });
 
-  var elTableDiaf = el(
+  const elTableDiaf = el(
     'table',
     {
       class: 'table'
@@ -270,7 +264,7 @@ export function metaSourceToDiafUi(meta) {
         class: 'table-striped'
       },
       idsDiaf.map((id) => {
-        di = diaf[id];
+        diItem = diaf[id];
         return el(
           'tr',
           el(
@@ -293,7 +287,7 @@ export function metaSourceToDiafUi(meta) {
           el('td', {
             class: 'col-33',
             dataset: {
-              lang_key: ans[di]
+              lang_key: ans[diItem]
             }
           })
         );
@@ -301,7 +295,7 @@ export function metaSourceToDiafUi(meta) {
     )
   );
 
-  elOut = el(
+  return el(
     'div',
     {
       class: ['panel', 'panel-default']
@@ -316,7 +310,6 @@ export function metaSourceToDiafUi(meta) {
     elTableDiaf
   );
 
-  return elOut;
 }
 
 function metaViewToUi(meta) {
@@ -324,9 +317,7 @@ function metaViewToUi(meta) {
   const el = h.el;
   const elAuto = h.elAuto;
   const prefixKey = 'meta_view_';
-
-  var tblSummary = h.objectToArray(meta, true);
-  var keys = [
+  const keys = [
     'project_title',
     'projects_titles',
     'classes',
@@ -339,6 +330,8 @@ function metaViewToUi(meta) {
     'date_created',
     'id'
   ];
+
+  let tblSummary = h.objectToArray(meta, true);
 
   tblSummary = tblSummary
     .filter((row) => keys.indexOf(row.key) > -1)
@@ -384,11 +377,14 @@ export function metaSourceToUi(meta) {
   const oToA = h.objectToArray;
 
   /**
-   * Local shortcut
-   */
+  * Path to meta object
+  */
   const p = function(p, d) {
     return h.path(meta, p, d);
   };
+  /**
+  * Label from object path
+  */
   const lfo = function(o, d, p) {
     return glfo({
       obj: o,
@@ -403,9 +399,9 @@ export function metaSourceToUi(meta) {
   /**
    * Attributes table
    */
-  var tblAttributesRaw = oToA(p('text.attributes', {}), true);
-  var attrAlias = p('text.attributes_alias', {});
-  var tblAttributes = tblAttributesRaw.map((r) => {
+  const tblAttributesRaw = oToA(p('text.attributes', {}), true);
+  const attrAlias = p('text.attributes_alias', {});
+  const tblAttributes = tblAttributesRaw.map((r) => {
     r.key = el(
       'div',
       el('h5', lfo(attrAlias[r.key], r.key)),
@@ -414,16 +410,16 @@ export function metaSourceToUi(meta) {
     r.value = lfo(r.value);
     return r;
   });
-  var elTblAttributes = elAuto('array_table', tblAttributes, {
+  const elTblAttributes = elAuto('array_table', tblAttributes, {
     tableHeadersSkip: true,
     tableTitleAsLanguageKey: true,
     tableTitle: 'attributes_desc_title'
   });
 
-  var urlHomepage = p('origin.homepage.url', '');
-  var urlSources = p('origin.source.urls', []).map((d) => d.url);
-  var hasHomepage = h.isUrl(urlHomepage);
-  var elHomepage = hasHomepage
+  const urlHomepage = p('origin.homepage.url', '');
+  const urlSources = p('origin.source.urls', []).map((d) => d.url);
+  const hasHomepage = h.isUrl(urlHomepage);
+  const elHomepage = hasHomepage
     ? el(
         'a',
         {
@@ -434,7 +430,7 @@ export function metaSourceToUi(meta) {
       )
     : el('span');
 
-  var elSourceUrl = el(
+  const elSourceUrl = el(
     'ul',
     urlSources.map((url, i) => {
       if (!h.isUrl(url)) {
@@ -454,19 +450,19 @@ export function metaSourceToUi(meta) {
     })
   );
 
-  var elTitle = el('span', l('text.title'));
+  const elTitle = el('span', l('text.title'));
 
-  var elAbstract = el('p', l('text.abstract', '-'));
-  var elNotes = el('p', l('text.notes', '-'));
-  var elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
-  var elLanguages = elAuto(
+  const elAbstract = el('p', l('text.abstract', '-'));
+  const elNotes = el('p', l('text.notes', '-'));
+  const elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
+  const elLanguages = elAuto(
     'array_string',
     p('text.language.codes', []).map((l) => l.code),
     {
       stringAsLanguageKey: true
     }
   );
-  var elContacts = el(
+  const elContacts = el(
     'ul',
     p('contact.contacts', []).map((c) => {
       return el(
@@ -488,23 +484,23 @@ export function metaSourceToUi(meta) {
       );
     })
   );
-  var elPeriodicity = elAuto('string', p('temporal.issuance.periodicity'), {
+  const elPeriodicity = elAuto('string', p('temporal.issuance.periodicity'), {
     stringAsLanguageKey: true
   });
-  var elReleasedAt = elAuto('date', p('temporal.issuance.released_at', null));
-  var elModifiedAt = elAuto('date', p('temporal.issuance.modified_at', null));
-  var elIsTimeless = elAuto('boolean', p('temporal.range.is_timeless', null), {
+  const elReleasedAt = elAuto('date', p('temporal.issuance.released_at', null));
+  const elModifiedAt = elAuto('date', p('temporal.issuance.modified_at', null));
+  const elIsTimeless = elAuto('boolean', p('temporal.range.is_timeless', null), {
     booleanValues: ['yes', 'no'],
     stringAsLanguageKey: true
   });
-  var elStartAt = elAuto('date', p('temporal.range.start_at', null));
+  const elStartAt = elAuto('date', p('temporal.range.start_at', null));
 
-  var elEndAt = elAuto('date', p('temporal.range.end_at', null));
-  var elId = el('span', p('_idSource'));
+  const elEndAt = elAuto('date', p('temporal.range.end_at', null));
+  const elId = el('span', p('_id_source'));
   /**
    * Summary table
    */
-  var tblSummary = oToA(
+  const tblSummary = oToA(
     {
       title: elTitle,
       abstract: elAbstract,
@@ -526,7 +522,7 @@ export function metaSourceToUi(meta) {
     true
   );
 
-  var elTblSummary = elAuto('array_table', tblSummary, {
+  const elTblSummary = elAuto('array_table', tblSummary, {
     tableHeadersSkip: true,
     tableTitleAsLanguageKey: true,
     tableTitle: 'table_summary_title', // will be prefixed
@@ -534,7 +530,7 @@ export function metaSourceToUi(meta) {
     stringAsLanguageKey: true
   });
 
-  var elMeta = el('div', elTblSummary, elTblAttributes);
+  const elMeta = el('div', elTblSummary, elTblAttributes);
 
   return elMeta;
 }
