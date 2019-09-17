@@ -54,12 +54,12 @@ export function initLog() {
    * Register listener
    */
   mx.events.on({
-    type: 'view_add',
+    type: 'view_added',
     idGroup: 'mx_log',
     callback: logViewAdd
   });
   mx.events.on({
-    type: 'view_remove',
+    type: 'view_removed',
     idGroup: 'mx_log',
     callback: logViewRemove
   });
