@@ -44,7 +44,10 @@ export function dbLog(level, opt) {
     log[k] = opt[k] || def[k];
   });
 
-  if (!hasShiny) {
+  if (hasShiny) {
+    /**
+    * Handled in /server/db_logger.R
+    */
     Shiny.onInputChange('dbLogger', log);
   }
 }
