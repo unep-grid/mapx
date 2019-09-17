@@ -12,7 +12,6 @@ fi
 
 PG_USE_COPY=YES \
   ogr2ogr \
-  -overwrite \
   -progress \
   -skipfailures \
   -t_srs EPSG:4326 \
@@ -27,6 +26,8 @@ PG_USE_COPY=YES \
   -lco FID=gid \
   -lco SCHEMA=public \
   -lco CREATE_SCHEMA=OFF \
+  -lco DROP_TABLE=OFF \
+  -lco PRECISION=NO \
   | \
   PGPASSWORD=$POSTGRES_USER_WRITE_PASSWORD \
   psql \
