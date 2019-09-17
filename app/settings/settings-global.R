@@ -104,7 +104,6 @@ config[["pg"]] = list(
     ),
   encryptKey = "",
   password= "",
-  conPool = 5,
   geomCol = "geom",
   tables = list(
     "logs"="mx_logs",

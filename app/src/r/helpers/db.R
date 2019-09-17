@@ -1,20 +1,6 @@
 
 
 
-#' Add pool of connection
-#' @return pool
-mxDbInitPool <- function(){
-  .get(config,c("db","pool"))
-}
-
-
-
-#' Experimental db conection pool
-#' 
-#' @export
-mxDbAutoCon <- function(){ 
-  mxDbInitPool()
-}
 
 
 mxDbCreateTempUser <- function(id,srcList){
@@ -53,8 +39,7 @@ mxDbCreateTempUser <- function(id,srcList){
     dropUser <- function(){
       if(roleExists()){
         tryCatch({
-          pool <- mxDbAutoCon()
-          con <- poolCheckout(pool)
+          con <- mxDbAutoCon()
           allSources <- getAllSources()
           dbSendQuery(con, "BEGIN TRANSACTION")
           if(!noDataCheck(allSources)){
@@ -71,7 +56,6 @@ mxDbCreateTempUser <- function(id,srcList){
         },
         finally = {
           dbCommit(con)
-          poolReturn(con)
         })
       }
     }
@@ -80,8 +64,7 @@ mxDbCreateTempUser <- function(id,srcList){
       dropUser()
     }
 
-    pool <- mxDbAutoCon()
-    con <- poolCheckout(pool)
+    con <- mxDbAutoCon()
     dbSendQuery(con,"BEGIN TRANSACTION")
     tryCatch({
 
@@ -104,7 +87,6 @@ mxDbCreateTempUser <- function(id,srcList){
       stop(e)
     },finally = {
       dbCommit(con)
-      poolReturn(con)
     })
 
     out$dropUser <- dropUser
@@ -271,7 +253,6 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
   #
   if(!hasCon){
     con <- mxDbAutoCon()
-    con <- poolCheckout(con)
   }
 
   tryCatch({
@@ -292,7 +273,7 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
 
   },
     finally={
-      mxDbClearResult(con,returnPool=!hasCon)
+      mxDbClearResult(con)
     })
   return(res)
 
@@ -387,8 +368,7 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   query <- NULL
 
   # get connection object
-  pool <- mxDbAutoCon()
-  con <- poolCheckout(pool)
+  con <- mxDbAutoCon()
 
   if(!is.null(path)){
     # if value has no json class, convert it (single value update)
@@ -510,9 +490,6 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
     }
 
       })
-  },
-  finally = {
-    poolReturn(con)
   })
   return(isAsExpected)
 }
@@ -538,8 +515,7 @@ mxDbGetSp <- function(query) {
     d$dbname,d$host,d$port,d$user,d$password
     )
 
-  pool <- mxDbAutoCon()
-  con <- poolCheckout(pool)
+  con <- mxDbAutoCon()
   tryCatch({
 
     sql <- sprintf("CREATE UNLOGGED TABLE %s AS %s",tmpTbl,query)
@@ -1382,7 +1358,8 @@ mxDbListTable<- function(){
 #' @export
 mxDbExistsTable<- function(table){
   if(is.null(table)) return(FALSE)
-  res <- dbExistsTable(mxDbAutoCon(),table)
+  con <- mxDbAutoCon();
+  res <- dbExistsTable(con,table)
   return(res)
 }
 
@@ -1563,51 +1540,17 @@ mxDbAddRowBatch <- function(df,table){
 }
 
 
-
-mxDbClearResult <- function(con,returnPool=TRUE){
+#' Clear db results
+#' 
+#' @param {Connection} con Postgres connection
+mxDbClearResult <- function(con){
   lRes = dbListResults(con)
   if(length(lRes)>0){
     for(r in lRes){
       dbClearResult(r)
     }
   }
-  if(returnPool && !noDataCheck(con) && any("PostgreSQLConnection"  %in% class(con)) ){
-    poolReturn(con)
-  }
 }
-
-
-
-
-#mxDbClearResult <- function(con=NULL,allCon=FALSE){
-
-  #conAll <- list()
-
-  #if(allCon){
-    #conAll <- dbListConnections(PostgreSQL())
-  #}
-
-  #if(!is.null(con)){
-    #conAll <- c( con, conAll ) 
-  #}
-
-
-  #if(noDataCheck(conAll)) return()
-
-
-  #suppressWarnings({
-
-    #results <- unlist(sapply(conAll,dbListResults,simplify=F))
-
-    #mxDebugMsg(sprintf("mxDbClearResult, number of result found= %s",length(results)))
-
-    #if(length(results)>0){
-      #closed <- sapply(results,dbClearResult)
-    #}
-
-  #})
-
-#}
 
 
 #' Write spatial data frame to postgis
@@ -2709,4 +2652,37 @@ mxDbGetDistinctTableFromSql <- function(sql){
 }
 
 
+#' Get db connection
+#' 
+#' @export
+mxDbAutoCon <- function(){ 
+  pg <- .get(config,c("pg"))
+  dbCon <- pg$dbCon
 
+  if(noDataCheck(dbCon) || !isPostgresqlIdCurrent(dbCon)){
+    mxDebugMsg("Create new connection")
+    drv <- dbDriver("PostgreSQL")
+    dbCon <- dbConnect(drv, 
+      dbname = pg$dbname,
+      host = pg$host,
+      port = pg$port,
+      user = pg$user,
+      password = pg$password
+      )
+    config <<- .set(config,c("pg","dbCon"),dbCon)
+  }
+
+  return(dbCon)
+
+}
+
+#' Close db connection
+#' 
+#' @export
+mxDbCloseCon <- function(){
+  dbCon <- mxDbAutoCon()
+  if(isPostgresqlIdCurrent(dbCon)){
+    mxDebugMsg("Remove connection")
+    dbDisconnect(dbCon)
+  }
+}

@@ -1,8 +1,13 @@
 #
+# on exit, disconnect pg connection 
+#
+onStop(mxDbCloseCon)
+
+
+#
 #  SERVER FUNCTION
 #
 server <- function(input,output,session){
-
   mxUpdateSettings(
     #
     # See all defaults in /src/js/mx_settings_default.js
