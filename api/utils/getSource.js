@@ -108,6 +108,7 @@ function extractFromPostgres(config, cb) {
   var sqlOGR = 'SELECT * from ' + id;
   var ext = fileFormat[format].ext;
   var layername = filename;
+  var isShapefile = false;
   /**
    * folder local path. eg. /shared/download/mx_dl_1234 and /shared/download/mx_dl_1234.zip
    */
@@ -137,6 +138,10 @@ function extractFromPostgres(config, cb) {
     iso3codes = iso3codes.filter((i) => {
       return i && i.length === 3;
     });
+  }
+
+  if (ext === 'shp') {
+    isShapefile = true;
   }
 
   if (!format || !fileFormat[format]) {
@@ -210,7 +215,7 @@ function extractFromPostgres(config, cb) {
       );
 
       onMessage(
-        `Extration from the database and conversion to ${format}. This could take a while, plase wait`
+        `Extration from the database and conversion to ${format}. This could take a while, please wait`
       );
 
       /**
@@ -237,6 +242,13 @@ function extractFromPostgres(config, cb) {
         filePath,
         settings.db.stringRead
       ]);
+
+      if (isShapefile) {
+        args = args.concat([
+          '-lco',
+          'ENCODING=UTF-8',
+        ]);
+      }
 
       var cmd = 'ogr2ogr';
       var ogr = spawn(cmd, args);
