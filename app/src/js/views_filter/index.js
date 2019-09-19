@@ -344,6 +344,7 @@ function setViewsComponents(views) {
  * @note : expect type, data.classes and data.collections
  */
 export function getFreqTable(views) {
+  const path = mx.helpers.path;
   const tags = {
     components: [],
     classes: [],
@@ -353,9 +354,9 @@ export function getFreqTable(views) {
   const stat = {};
 
   views.forEach(function(v) {
-    tags.components = tags.components.concat(path(v, '_components'));
-    tags.classes = tags.classes.concat(path(v, 'data.classes'));
-    tags.collections = tags.collections.concat(path(v, 'data.collections'));
+    tags.components = tags.components.concat(path(v, '_components',[]));
+    tags.classes = tags.classes.concat(path(v, 'data.classes',[]));
+    tags.collections = tags.collections.concat(path(v, 'data.collections',[]));
   });
 
   // grouprs
