@@ -2,10 +2,10 @@
   border: 1px solid #f50808;
   color: #f50808;
   background-color: #d2e0d9;
-  -webkit-animation: pendul 1s infinite; /* Safari 4+ */
-  -moz-animation: pendul 1s infinite; /* Fx 5+ */
-  -o-animation: pendul 1s infinite; /* Opera 12+ */
-  animation: pendul 1s infinite; /* IE 10+, Fx 29+ */
+  -webkit-animation: pendul 1s 5; /* Safari 4+ */
+  -moz-animation: pendul 1s 5; /* Fx 5+ */
+  -o-animation: pendul 1s 5; /* Opera 12+ */
+  animation: pendul 1s 5; /* IE 10+, Fx 29+ */
 }
 
 .mx .handsontable .changeType {
