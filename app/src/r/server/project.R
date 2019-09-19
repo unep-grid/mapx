@@ -102,7 +102,9 @@ observe({
       #
       # Update browser query parameter
       #
-      mxUpdateUrlParams(list(project = project_out))
+      mxUpdateQueryParameters(list(
+          project = project_out
+          ))
       mxUpdateSettings(list(
           project = project_out
           ))
@@ -122,7 +124,9 @@ observe({
 #
 observeEvent(reactData$mapIsReady,{
   if(reactData$mapIsReady){
-    if(!noDataCheck(query$showProjectsListByTitle) || !noDataCheck(query$showProjectsListByRole) ){
+    byTitle = !noDataCheck(query$showProjectsListByTitle)
+    byRole = !noDataCheck(query$showProjectsListByRole)
+    if(byRole || byTitle){
       reactData$showProjectsList <- list( 
         msg = "start",
         time = Sys.time()
@@ -152,6 +156,7 @@ observeEvent(reactData$showProjectsList,{
 
   filterRoles <- NULL
   filterTitle <- NULL
+ 
   if( typeof(event) == "list" && event$msg == "start"){
 
     if(userIsGuest){
@@ -187,6 +192,7 @@ observeEvent(reactData$showProjectsList,{
     whereTitleMatch = filterTitle,
     asDataFrame = T
     )
+
   if(noDataCheck(projects)){
     return()
   }

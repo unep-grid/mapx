@@ -69,6 +69,11 @@ function setListeners(o) {
       initEditing(o);
     }
 
+    /**
+    * Init bullet container and listener
+    */
+    initBulletsListener(o);
+
     /* Listen to scroll on the main container. */
     storyOnScroll({
       selector: '.mx-story',
@@ -116,7 +121,6 @@ function initMouseMoveListener(o) {
     );
 
     var classOpacitySmooth = 'mx-smooth-opacity';
-    //var classOpacityHide =  "hide";
     var classNoCursor = 'nocursor';
 
     elsCtrls.forEach(function(el) {
@@ -806,6 +810,33 @@ function storyOnScroll(o) {
   }
 }
 
+
+function initBulletsListener(o){
+  const h = mx.helpers; 
+  var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
+  o.data.elBullets = elBullets; 
+  o.data.elMapControls.appendChild(elBullets);
+  mx.listenerStore.addListener({
+    target: elBullets,
+    type: 'click',
+    callback: bulletScrollTo,
+    group: 'story_map'
+  });
+  console.log('added bullets');
+/*
+   * Set position
+   */
+  function bulletScrollTo(e) {
+    const step = e.target.dataset.step;
+    if (step) {
+      e.stopPropagation();
+      h.storyGoTo(step);
+    }
+  }
+
+}
+
+
 /**
  * Set step config : dimention, number, bullets
  */
@@ -814,26 +845,21 @@ function setStepConfig(o) {
   const el = h.el;
 
   var data = o.onScrollData;
-  var elBullet, elBullets, config, rect, elStep, elSteps, elSlides, stepName;
+  var elBullets,elBullet, config, rect, elStep, elSteps, elSlides, stepName;
   var slideConfig;
 
   /*
    * Steps configuration
    */
   data.stepsConfig = [];
+  elBullets = o.data.elBullets;
   elSteps = data.elScroll.querySelectorAll('.mx-story-step');
-  elBullets = el('div', {class: ['mx-story-step-bullets', 'noselect']});
 
-  o.data.elBullets = elBullets;
-  o.data.elMapControls.appendChild(elBullets);
-  console.log('added bullets');
 
-  mx.listenerStore.addListener({
-    target: elBullets,
-    type: 'click',
-    callback: bulletScrollTo,
-    group: 'story_map'
-  });
+  /**
+  * Clean bullets
+  */
+  elBullets.innerHTML = "";
 
   for (var s = 0, sL = elSteps.length; s < sL; s++) {
     /*
@@ -914,17 +940,7 @@ function setStepConfig(o) {
     data.elScroll.scrollTop = o.onScrollData.distStart * 1;
   }
 
-  /*
-   * Set position
-   */
-  function bulletScrollTo(e) {
-    const step = e.target.dataset.step;
-    if (step) {
-      e.stopPropagation();
-      mx.helpers.storyGoTo(step);
-    }
   }
-}
 
 /*
  * Update slides transform value;
@@ -1249,8 +1265,8 @@ export function storyController(o) {
     '#btnShowLogin',
     '#btnZoomIn',
     '#btnZoomOut',
-    '#btnFullscreen',
-    '.mx-panel-views'
+    '#btnDrawMode',
+    '.mx-panels-container'
   ];
   o.selectorEnable = o.selectorEnable || [
     '#btnStoryUnlockMap',
@@ -1268,13 +1284,13 @@ export function storyController(o) {
   var toDisable = {
     selector: o.enable === true ? o.selectorDisable : o.selectorEnable,
     action: 'add',
-    class: 'mx-hide'
+    class: 'mx-display-none'
   };
 
   var toEnable = {
     selector: o.enable === true ? o.selectorEnable : o.selectorDisable,
     action: 'remove',
-    class: 'mx-hide'
+    class: 'mx-display-none'
   };
 
   h.classAction(toEnable);

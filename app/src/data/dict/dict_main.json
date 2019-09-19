@@ -1574,8 +1574,8 @@
   },
   {
     "id": "btn_overlap_spotlight",
-    "en": "Highlight vector features \n – See options and overlap settings \n in the toolbox panel – ",
-    "fr": "Mise en évidence des objets vectoriels \n – Voir options et mode de chevauchement \n dans le panneau des outils –",
+    "en": "Highlight vector features",
+    "fr": "Mise en évidence des objets vectoriels",
     "es": "",
     "ru": "",
     "zh": "",

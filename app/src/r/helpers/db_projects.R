@@ -241,7 +241,9 @@ mxDbGetProjectListByUser <- function(
 
   if(noDataCheck(language)) language <-"en"
 
-  filterTitleOperator <- ifelse(isTRUE(grepl("\\*$",whereTitleMatch)),' ~ ',' = ')
+  wildCardEnd <- isTRUE(grepl("\\*$",whereTitleMatch))
+  wildCard <- isTRUE(grepl("\\*",whereTitleMatch))
+  filterTitleOperator <- ifelse(wildCard || wildCardEnd,' ~ ',' = ')
   cleanTitle <- tolower(subPunct(whereTitleMatch," "))
   filterTitle <- " lower(title_en) " + filterTitleOperator + "'" + cleanTitle + "'"
   filterRole <- whereUserRoleIs
@@ -500,16 +502,18 @@ mxDbSaveProjectData <- function(idProject,values = list(
   ){
 
   hasChanged <- FALSE
+
   notNull <- function(x){
-    out <- isTRUE(!is.null(x))
-    if(out) hasChanged <- TRUE
-    return(out)
+    isNotNull <- isTRUE(!is.null(x))
+    if(!isNotNull){
+      hasChanged <<- TRUE
+    }
+    return(isNotNull)
   }
 
   for( key in c("title","description","admins","members","publishers","map_position","countries","states_views")){
     value <- values[[key]]
     toUpdate <- notNull(value)
-
     if(toUpdate){
       mxDbUpdate(
         table = "mx_projects",
@@ -523,6 +527,7 @@ mxDbSaveProjectData <- function(idProject,values = list(
 
   for( key in c("public","active","allow_join")){
     value <- values[[key]]
+    toUpdate <- notNull(value)
     if(notNull(value)){ 
       mxDbUpdate(
         table = "mx_projects",
@@ -536,7 +541,8 @@ mxDbSaveProjectData <- function(idProject,values = list(
 
   for( key in c("creator")){
     value <- values[[key]]
-    if(notNull(value)){
+    toUpdate <- notNull(value) 
+    if(toUpdate){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
@@ -549,7 +555,8 @@ mxDbSaveProjectData <- function(idProject,values = list(
 
   for( key in c("alias")){
     value <- values[[key]]
-    if(notNull(value)){
+    toUpdate <- notNull(value)
+    if(toUpdate){
       mxDbUpdate(
         table = "mx_projects",
         idCol = 'id',
@@ -568,8 +575,6 @@ mxDbSaveProjectData <- function(idProject,values = list(
       column = "date_modified",
       value = Sys.time()
       )
-  }else{
-    mxDebugMsg("The project values have not been updated")
   }
 }
 
@@ -648,49 +653,6 @@ mxDbProjectCheck <- function(idProject,idDefault=config[[c("project","default")]
   return(idDefault)
 }
 
-
-
-#mxDbGetUserProjectsTableHtmlJoin <- function(idUser,role="any",language="en"){
-
-  #tbl <- mxDbGetProjectListByUser(idUser,role,asDataFrame=TRUE,language=language)
-
-  #badge = function(role){
-    #label <- substr(d(role,language),1,1)
-  #"<span class='mx-badge-role hint--bottom-right' aria-label='"+role+"'>"+label+"</span>"
-  #}
-
-  #joinLink <- function(id){
-    #return("<a href='#' onclick=mx.helpers.triggerJoinProject('" + id + "')>"+d("btn_join_project",language)+"</a>")
-  #}
-
-  #tbl$roles <- ""
-  #tbl[tbl$member,c("roles")] <- tbl[tbl$member,c("roles")] + badge("member")
-  #tbl[tbl$publisher,c("roles")] <- tbl[tbl$publisher,c("roles")] + badge("publisher")
-  #tbl[tbl$admin,c("roles")] <- tbl[tbl$admin,c("roles")] + badge("admin")
-
-  #noRoles <- !(tbl$member | tbl$admin | tbl$publisher)
- 
-  #tbl$join <- ""
-
-  #if(any(noRoles)){
-    #tbl[noRoles,'join'] <- sprintf("%s %s",tbl[noRoles,c("join")],vapply(tbl[noRoles,]$id,joinLink,""))
-  #}
-  
-  #tbl$title <- sprintf("<h5>
-    #<a href='#' onclick=mx.helpers.setProject('%1$s',true)>%2$s</a>
-    #</h5>
-    #<p class='mx-project-description'>%3$s</p>"
-    #,tbl$id
-    #,tbl$title
-    #,tbl$description
-    #)
-
-  #tbl <- tbl[,c("title","roles","join")]
-
-  #names(tbl) <- c(d("title",language),d("roles",language),d("join_project",language))
-
-  #mxTableToHtml(tbl,class="mx-table-roles",classContainer="mx-table-roles-container")
-#}
 
 
 

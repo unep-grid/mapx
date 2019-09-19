@@ -1,17 +1,18 @@
 /*jshint esversion: 6 , node: true */
 
 $(document).on('shiny:connected', function() {
-
+  const h = mx.helpers;
+  
   /*
   * Input
   */
-  Shiny.onInputChange('browserData',mx.helpers.getBrowserData());
+  Shiny.onInputChange('urlSearchQuery',h.getQueryParametersInit());
+  Shiny.onInputChange('browserData',h.getBrowserData());
 
   /**
   * General bindings
   */
-  const h = mx.helpers;
-  
+
   Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
   Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', h.modal);
@@ -20,7 +21,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxSetImageAttributes", h.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", h.hide);
   Shiny.addCustomMessageHandler("mxValidateMetadataModal", h.validateMetadataModal);
-  Shiny.addCustomMessageHandler("mxObjToState", h.objToState);
+  Shiny.addCustomMessageHandler("mxSetQueryParametersUpdate", h.setQueryParametersUpdate);
   Shiny.addCustomMessageHandler("mxUpdateText", h.updateText);
   Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", h.epsgBuildSearchBox);
   Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", h.wmsBuildQueryUi);

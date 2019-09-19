@@ -137,7 +137,7 @@ export function viewsListRenderNew(o) {
   const views = o.views;
   const hasState = o.state && h.isArray(o.state) && o.state.length > 0;
   const state = hasState ? o.state : h.viewsToNestedListState(views);
-  const noViewsMode  = h.getQueryParameter('noViews')[0] === 'true';
+  const noViewsMode  = h.getQueryParameterInit('noViews')[0] === 'true';
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     mData.viewsFilter.destroy();
@@ -327,7 +327,7 @@ export function setViewsListEmpty(enable) {
 
 function getEmptyLabel() {
   const h = mx.helpers;
-  const noViewForced = h.getQueryParameter('noViews')[0] === 'true';
+  const noViewForced = h.getQueryParameterInit('noViews')[0] === 'true';
   const noViewKey = noViewForced ? 'noView' : 'noViewOrig';
   let  elTitle;
   const elItem = h.el(

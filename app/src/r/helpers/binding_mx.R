@@ -349,16 +349,9 @@ mxModal = function(id=NULL,close=F,replace=T,zIndex=NULL,title=NULL,subtitle=NUL
 #' Update url using a list of key pair values in a list
 #'
 #' @param data {List} List of key par values. eg. list("x"=2)
-#' @param clean {Boolean} Remove everything, clean the state to /
 #' @param session {Session} Shiny session
-mxUpdateUrlParams = function(data=list(),clean=FALSE,session=shiny::getDefaultReactiveDomain()){
-
-  session$sendCustomMessage("mxObjToState",list(
-      data = data,
-      clean = clean
-      )
-    )
-
+mxUpdateQueryParameters = function(data=list(),session=shiny::getDefaultReactiveDomain()){
+  session$sendCustomMessage("mxSetQueryParametersUpdate",data)
 }
 
 #' Validate metadata

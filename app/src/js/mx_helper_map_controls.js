@@ -222,7 +222,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnStoryClose: {
       classes: ['fa', 'fa-arrow-left'],
-      liClasses: 'mx-hide',
+      liClasses: 'mx-display-none',
       key: 'btn_story_close'
     },
     btnFullScreen: {
@@ -234,7 +234,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnStoryUnlockMap: {
       classes: ['fa', 'fa-lock'],
-      liClasses: 'mx-hide',
+      liClasses: 'mx-display-none',
       liData: {map_unlock: 'off'},
       key: 'btn_story_unlock_map',
       action: h.storyControlMapPan

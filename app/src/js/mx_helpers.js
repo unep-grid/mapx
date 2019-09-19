@@ -51,6 +51,7 @@ export * from './mx_helper_module_loader.js';
 export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_fetch_progress.js';
 export * from './mx_helper_root_mode.js';
+export * from './mx_helper_url.js';
 
 /**
 * imported module available in mx.helpers 

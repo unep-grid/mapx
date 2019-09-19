@@ -13,8 +13,6 @@ import '../css/mx_project_list.css';
 import '../css/mx_table.css';
 import '../css/mx_dashboard.css';
 import '../css/mx_colors.css';
-import 'promise-polyfill/src/polyfill';
-import 'web-streams-polyfill/ponyfill';
 
 import $ from 'jquery';
 window.jQuery = $;
@@ -23,3 +21,9 @@ window.$ = $;
 import * as mx from './mx.js';
 window.mx = mx;
 
+
+/**
+* Init query parameters and clean temporary stuff
+*/
+mx.helpers.setQueryParametersInit();
+mx.helpers.cleanTemporaryQueryParameters();

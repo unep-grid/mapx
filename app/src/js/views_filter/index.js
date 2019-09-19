@@ -131,7 +131,6 @@ class ViewsFilter {
   }
 
   update() {
-    console.log('update');
     const vf = this;
     vf.removeRules();
     vf.filter();

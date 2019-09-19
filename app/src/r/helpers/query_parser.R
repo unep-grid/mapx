@@ -5,19 +5,14 @@
 #' @param query {Character} query string
 #' @return cleaned string
 cleanQueryString <- function(query){
-  out <- ""
-  tryCatch({
-    query <- httpuv:::decodeURIComponent(query)
-    out <- gsub('[^a-zA-Z0-9\\-_&*?,=+/\\. ]*',"",query,perl=T)
-  },error=function(cond){warning(cond)})
-  return(out)
+    lapply(query,unlist)
 }
 
 mxParseQuery <- function(urlSearch){
   #
   # Retrieve query value. Used in project and fetch view server files.
   #
-  query <- parseQueryString(cleanQueryString(urlSearch))
+  query <- cleanQueryString(urlSearch)
 
   #
   # Parse role for project list modal
@@ -42,7 +37,6 @@ mxParseQuery <- function(urlSearch){
   #
   if(!noDataCheck(query$action)){
     query$action <- mxDbDecrypt(query$action)
-    mxUpdateUrlParams(list(action=""))
   } 
 
   #
@@ -74,7 +68,6 @@ mxParseQuery <- function(urlSearch){
   # Use this style instead of the dafault style
   #
   if(!noDataCheck(query$style)){
-    mxUpdateUrlParams(list(style=""))
     lStyle <- nchar(query$style)
     lastTwo <- substr(query$style,lStyle-1,lStyle) == "=="
     eqAdd <- ifelse(lastTwo,'','==')
@@ -86,9 +79,7 @@ mxParseQuery <- function(urlSearch){
   #
   # Story map auto start
   #
-  if(!noDataCheck(query$views) && length(query$views) == 1 && isTRUE(tolower(query$storyAutoStart) == "true")){
-    query$storyAutoStart = TRUE
-  }
+  query$storyAutoStart = isTRUE(tolower(query$storyAutoStart) == "true")
 
   return(query)
 }

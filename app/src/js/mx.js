@@ -34,6 +34,7 @@ let data = {
     name: 'draw'
   })
 };
+let initQueryParams = {}; // set in init_common.js
 let listenerStore = new ListenerStore();
 let events = new EventStore();
 let selectize = {};
@@ -57,6 +58,7 @@ export {
   listenerStore,
   events,
   // mapx storage
+  initQueryParams,
   templates,
   maps,
   data,

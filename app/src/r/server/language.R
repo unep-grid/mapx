@@ -45,11 +45,9 @@ observe({
         lang_out <- lang_def
       }
     }
-    mxUpdateUrlParams(
-      list(
+    mxUpdateQueryParameters(list(
         language = lang_out
-        )
-      )
+        ))
 
     mxUpdateSettings(
       list(

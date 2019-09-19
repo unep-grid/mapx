@@ -15,7 +15,6 @@ observeEvent(reactData$forceLogout,{
       reactUser <- reactiveValues()
       reactData <- reactiveValues()
 
-      mxUpdateUrlParams(clean=T)
       mxUpdateValue(id="loginUserEmail",value="")
       mxSetCookie(
         deleteAll = TRUE,

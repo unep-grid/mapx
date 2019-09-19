@@ -35,7 +35,7 @@ server <- function(input,output,session){
     #
     # Get query parameters
     #
-    query <- mxParseQuery(session$clientData$url_search)
+    query <- mxParseQuery(input$urlSearchQuery)
 
 
     #
@@ -47,7 +47,6 @@ server <- function(input,output,session){
     # Launch init
     #
     mxCatch(title="MapX main process",{
-
 
       if("MAINTENANCE" %in% .get(config,c("mode"))){
 

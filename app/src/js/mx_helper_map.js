@@ -89,6 +89,7 @@ export function setProject(idProject, opt) {
 
   function change() {
     closeModals();
+    h.setQueryParametersInitReset();
     Shiny.onInputChange('selectProject', idProject);
     if (h.isFunction(opt.onSuccess)) {
       opt.onSuccess();
@@ -114,8 +115,8 @@ export function requestProjectMembership(idProject) {
 export function isModeLocked() {
   const h = mx.helpers;
   let modeLocked =
-    h.getQueryParameter('noViews')[0] === 'true' ||
-    h.getQueryParameter('nodeLocked')[0] === 'true';
+    h.getQueryParameterInit('noViews')[0] === 'true' ||
+    h.getQueryParameterInit('nodeLocked')[0] === 'true';
 
   return !!modeLocked;
 }
@@ -197,11 +198,10 @@ export function initListeners() {
  * @param {Object} o.mapPosition.bounds Mapbox bounds object
  * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorSheme Color sheme object
- * @param {Boolean} o.storyAutoStart Immediate start with story map
  */
 export function initMapx(o) {
+  const h = mx.helpers;
   let mp, map;
-
   o = o || {};
   o.id = o.id || mx.settings.map.id;
   mp = o.mapPosition || {};
@@ -249,6 +249,25 @@ export function initMapx(o) {
     return;
   }
 
+  /*
+   * Check url for lat, lng and zoom
+   */
+  let queryLat = h.getQueryParameterInit('lat');
+  let queryLng = h.getQueryParameterInit('lng');
+  let queryZoom = h.getQueryParameterInit('zoom');
+
+  if (queryLat) {
+    mp.center = null;
+    mp.lat = queryLat[0] * 1 || 0;
+  }
+  if (queryLng) {
+    mp.center = null;
+    mp.lng = queryLng[0] * 1 || 0;
+  }
+  if (queryZoom) {
+    mp.z = queryZoom[0] * 1 || 0;
+  }
+
   /* map options */
   const mapOptions = {
     container: o.id, // container id
@@ -282,9 +301,12 @@ export function initMapx(o) {
 }
 
 export function initMapxApp(o) {
+  const h = mx.helpers;
   const map = o.map;
   const elMap = document.getElementById(o.id);
   const hasShiny = !!window.Shiny;
+  const storyAutoStart = h.getQueryParameterInit('storyAutoStart')[0] === 'true';
+
 
   if (!elMap) {
     alert('Map element with id ' + o.id + ' not found');
@@ -308,8 +330,8 @@ export function initMapxApp(o) {
         /*
          * Auto start story map
          */
-        if (o.storyAutoStart && views.length > 0) {
-          let idStory = mx.helpers.getQueryParameter('views')[0];
+        if (storyAutoStart && views.length > 0) {
+          let idStory = mx.helpers.getQueryParameterInit('views')[0];
           mx.helpers.storyRead({
             id: o.id,
             idView: idStory,
@@ -1221,11 +1243,7 @@ export function updateViewParams(o) {
     base: true
   });
 
-  mx.helpers.objToState({
-    data: {
-      views: displayed
-    }
-  });
+  mx.helpers.setQueryParameters({views: displayed});
 }
 
 /**
@@ -3039,7 +3057,7 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchRasterProp(view) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
     const endpoint = url[0];
-    const params = h.paramsToObject(url[1]);
+    const params = h.getQueryParametersAsObject(url[1]);
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object

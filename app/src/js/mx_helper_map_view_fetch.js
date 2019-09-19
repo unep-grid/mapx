@@ -6,14 +6,14 @@ export function fetchViews(opt) {
   var idUser = mx.settings.user.id;
   var language = mx.settings.language || mx.settings.languages[0];
   var token = mx.settings.user.token;
-  var idViews = h.getQueryParameter(['idViews', 'views']);
-  var collections = h.getQueryParameter('collections');
-  var collectionsSelectOperator = h.getQueryParameter(
+  var idViews = h.getQueryParameterInit(['idViews', 'views']);
+  var collections = h.getQueryParameterInit('collections');
+  var collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
   );
   var roleMax =
-    h.getQueryParameter(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
-  var noViews = h.getQueryParameter('noViews')[0] || '';
+    h.getQueryParameterInit(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
+  var noViews = h.getQueryParameterInit('noViews')[0] || '';
 
   var dataEmpty = {
     views: [],

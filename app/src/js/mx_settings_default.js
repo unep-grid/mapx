@@ -1,4 +1,3 @@
-
 import * as styleDefault from './../data/style/style_mapx.json';
 
 let settings = {
@@ -25,19 +24,29 @@ let settings = {
       getSourceTableAttribute: '/get/source/table/attribute',
       getView: '/get/view/item/',
       getViewsListByProject: '/get/views/list/project/',
-      getViewsListGlobalPublic:'/get/views/list/global/public',
+      getViewsListGlobalPublic: '/get/views/list/global/public',
       downloadSourceCreate: '/get/source/',
       downloadSourceGet: '',
       uploadImage: '/upload/image/',
       uploadVector: '/upload/vector/'
     }
   },
-  links : [],
+  // see https://github.com/unep-grid/map-x-mgl/issues/472
+  paramKeysPermanent: [
+    'lat',
+    'lng',
+    'zoom',
+    'project',
+    'language',
+    'lockProject',
+    'style'
+  ],
+  links: [],
   modeKiosk: false,
   paths: {
     sprites: 'sprites/sprite'
   },
-  style : styleDefault.default,
+  style: styleDefault.default,
   map: {
     id: 'map_main',
     token: '',
@@ -62,4 +71,4 @@ let settings = {
   }
 };
 
-export {settings };
+export {settings};
