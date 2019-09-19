@@ -13,6 +13,7 @@ import '../css/mx_project_list.css';
 import '../css/mx_table.css';
 import '../css/mx_dashboard.css';
 import '../css/mx_colors.css';
+import '../css/mx_handsontable.css';
 /*
  * polyfill all
  * https://github.com/zloirock/core-js#usage
