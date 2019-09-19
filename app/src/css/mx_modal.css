@@ -41,8 +41,8 @@
   left: 0;
   top: 5px;
   margin: auto;
-  resize: both;
-  overflow:auto;
+  /*resize: both;*/
+  overflow:visible; /* resize need auto: selectize dropdown need visible...*/
   display: flex;
   flex-direction: column;
 }
