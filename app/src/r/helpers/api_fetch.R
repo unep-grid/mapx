@@ -5,13 +5,16 @@
 #' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
 #' @return Data {List}
 #'
-mxApiFetch <- function(route,listParam){
+mxApiFetch <- function(route,listParam,debug){
   data <- list()
 
   host <-  .get(config,c("api","host")) 
   port <- .get(config,c("api","port"))
   param <- mxListToQueryStringParam(listParam)
   url <- "http://" + host + ":" + port + route + '?' + param
+  if(debug){
+    mxDebugMsg(url)
+  }
   data <- fromJSON(url,simplifyDataFrame=FALSE)
   if(isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")){
     stop(data$msg)
@@ -30,10 +33,11 @@ mxApiFetch <- function(route,listParam){
 #'
 mxListToQueryStringParam <- function(data){
   str <- ""
+  enc = htmltools::urlEncodePath;
   for(i in 1:length(data)){
     n <- names(data[i])
     v <- data[[i]]
-    str <- str + n + '=' + paste(v,collapse=',') + '&'
+    str <- str + n + '=' + enc(paste(v,collapse=',')) + '&'
   }
 
   str
@@ -107,7 +111,8 @@ mxApiGetViews <-  function(
   allReaders = FALSE,
   rolesInProject = list( public = T, member = F,publisher = F, admin = F), 
   filterViewsByRoleMax = "admin",
-  language = "en"
+  language = "en",
+  debug = FALSE
   ){
   route <- .get(config,c('api','routes','getViewsListByProject'))
   res <- mxApiFetch(route,list(
@@ -118,7 +123,9 @@ mxApiGetViews <-  function(
       idViews = idViews,
       collections = collections,
       types = types
-      ))
+      ),
+      debug = debug
+    )
 
   return(res$views)
 }

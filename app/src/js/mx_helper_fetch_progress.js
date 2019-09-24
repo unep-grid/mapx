@@ -1,4 +1,90 @@
-export function fetchJsonProgress(url, opt) {
+
+
+export function fetchJsonProgress(url, opt){
+  return fetchProgress(url, opt)
+  .then(r=>{
+    return r.json();  
+  });
+}
+
+
+
+export function fetchProgress(url, opt) {
+  opt = opt || {};
+  const onProgress = opt.onProgress || console.log;
+  const onComplete = opt.onComplete || console.log;
+  const onError = opt.onError || console.log;
+  const modeProgress = window.Response && window.ReadableStream;
+  let err = '';
+  let loaded = 0;
+  let total = 0;
+
+  return fetch(url, {cache: 'no-cache'})
+    .then((response) => {
+      err = '';
+      if (!response.ok) {
+        err = response.status + ' ' + response.statusText;
+        throw Error(err);
+      }
+
+      const contentLength =
+        response.headers.get('Mapx-Content-Length') ||
+        response.headers.get('content-length');
+
+      if (!modeProgress || !contentLength) {
+        onProgress({
+          loaded: loaded,
+          total: total
+        });
+        return response;
+      }
+
+      total = parseInt(contentLength, 10);
+      loaded = 0;
+
+      return new Response(
+        new ReadableStream({
+          start(controller) {
+            const reader = response.body.getReader();
+            read(reader, controller);
+          }
+        })
+      );
+    })
+    .catch((error) => {
+      onError({
+        message: error
+      });
+    });
+
+  function read(reader, controller) {
+    reader
+      .read()
+      .then(({done, value}) => {
+        if (done) {
+          onComplete({
+            loaded: loaded,
+            total: total
+          });
+          controller.close();
+          return;
+        }
+        loaded += value.byteLength;
+        onProgress({
+          loaded: loaded,
+          total: total
+        });
+        controller.enqueue(value);
+        read(reader, controller);
+      })
+      .catch((error) => {
+        controller.error(error);
+        throw new Error(error);
+      });
+  }
+}
+
+export function fetchJsonProgress_xhr(url, opt) {
   opt = opt || {};
   const onProgress = opt.onProgress || console.log;
   const onComplete = opt.onComplete || opt.onProgress;
@@ -27,8 +113,8 @@ export function fetchJsonProgress(url, opt) {
         }
       }
 
-      if(hasMapxContentLength){
-         p.loaded = d.target.response.length;
+      if (hasMapxContentLength) {
+        p.loaded = d.target.response.length;
       }
 
       onProgress(p);
@@ -58,88 +144,4 @@ export function fetchJsonProgress(url, opt) {
       message: err
     });
   });
-}
-
-export function fetchProgress_fetch(url, opt) {
-  opt = opt || {};
-  const onProgress = opt.onProgress || console.log;
-  const onComplete = opt.onComplete || console.log;
-  const onError = opt.onError || console.log;
-
-  return fetch(url, {cache: 'no-cache'})
-    .then((response) => {
-      let err = '';
-      if (!response.ok) {
-        err = response.status + ' ' + response.statusText;
-        onError({
-          message: err
-        });
-        throw Error(err);
-      }
-
-      if (!response.body) {
-        err = 'ReadableStream not yet supported in this browser.';
-        onError({
-          message: err
-        });
-        throw Error(err);
-      }
-
-      const contentLength = response.headers.get('content-length');
-
-      if (!contentLength) {
-        err = 'Content-Length response header unavailable';
-        onError({
-          message: err
-        });
-        throw Error(err);
-      }
-
-      const total = parseInt(contentLength, 10);
-      console.log('Content Length', total);
-      let loaded = 0;
-
-      return new Response(
-        new ReadableStream({
-          start(controller) {
-            const reader = response.body.getReader();
-
-            read();
-
-            function read() {
-              reader
-                .read()
-                .then(({done, value}) => {
-                  if (done) {
-                    onComplete({
-                      loaded: loaded,
-                      total: total
-                    });
-                    controller.close();
-                    return;
-                  }
-                  loaded += value.byteLength;
-                  onProgress({
-                    loaded: loaded,
-                    total: total
-                  });
-                  controller.enqueue(value);
-                  read();
-                })
-                .catch((error) => {
-                  onError({
-                    message: error
-                  });
-                  controller.error(error);
-                });
-            }
-          }
-        })
-      );
-    })
-    .catch((error) => {
-      onError({
-        message: error
-      });
-    });
 }

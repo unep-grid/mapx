@@ -69,7 +69,8 @@ reactViewsCompact <- reactive({
       collections = collections,
       collectionsSelectOperator = collectionsSelectOperator,
       language = language,
-      keys = c("id","pid","type","project","_edit","_title","_source")
+      keys = c("id","pid","type","project","_edit","_title","_source"),
+      debug = TRUE
       )
   }
 

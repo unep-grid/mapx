@@ -69,12 +69,12 @@ module.exports = merge(common, {
           handler: 'cacheFirst'
         },
         {
-          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/view\//,
-          handler: 'cacheFirst'
+          urlPattern: /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/views\/list\//,
+          handler: 'networkFirst'
         },
         {
-          urlPattern: /^(https|http):\/\/api\.mapx\..*\/get\/tile\//,
-          handler: 'cacheFirst'
+          urlPattern: /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/source\/table\//,
+          handler: 'networkFirst'
         },
         {
           urlPattern: /^https:\/\/.*wms\?bbox=/,
