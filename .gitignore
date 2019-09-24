@@ -15,7 +15,6 @@ _*
 # build web files
 app/www/*
 app/src/built/*
-probe/dist/*
 
 # History files
 .Rhistory

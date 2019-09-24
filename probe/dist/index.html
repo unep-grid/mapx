@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>MapX tests</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <h1>Mapbox GL JS and Websocket</h1>
+    <h2>Tests for your browser functionalities</h2>
+    <button id="copy-to-clipboard" onclick="copyResults()">Copy to your clipboard</button>
+    <button id="end-websocket-test">End websocket test
+      <span class="throbber">
+        (running<span>.</span><span>.</span><span>.</span>)
+      </span>
+    </button>
+    <ul id="tests"></ul>
+    <script src="main.js"></script>
+    <script>
+      function copyResults(){
+        var elResults = document.getElementById("tests");
+        if(!elResults.innerText) return;
+        var elInput = document.createElement("textarea");
+        elInput.value=elResults.innerText
+        document.body.appendChild(elInput);
+        elInput.focus();
+        elInput.select();
+        document.execCommand("copy");
+        alert("Copied");
+        elInput.remove();
+      }
+   </script>
+  </body>
+</html>
