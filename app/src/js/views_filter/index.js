@@ -31,7 +31,17 @@ class ViewsFilter {
     vf.lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
-    vf.update();
+    vf.init();
+  }
+
+  init() {
+    const vf = this;
+    vf.removeRules();
+    vf.removeRules();
+    vf.filter();
+    vf.updateViewsComponents();
+    vf.updateTags();
+    vf.updateCount();
   }
 
   initStorage(views) {
@@ -42,6 +52,33 @@ class ViewsFilter {
     vf._previousState = [];
   }
 
+  initListeners() {
+    const vf = this;
+
+    vf.lStore.addListener({
+      target: vf.opt.elFilterActivated,
+      type: ['click'],
+      callback: handleFilterActivatedView,
+      group: 'view_filter',
+      bind: vf
+    });
+
+    vf.lStore.addListener({
+      target: vf.opt.elFilterTags,
+      type: ['click'],
+      callback: handleFilterViewIdByTag,
+      group: 'view_filter',
+      bind: vf
+    });
+    vf.lStore.addListener({
+      target: vf.opt.elFilterText,
+      type: 'keyup',
+      callback: handleFilterViewIdByText,
+      group: 'view_filter',
+      debounce: true,
+      bind: vf
+    });
+  }
   destroy() {
     const vf = this;
     vf.clear();
@@ -128,43 +165,6 @@ class ViewsFilter {
     const vf = this;
     vf.opt.operator = op;
     vf.filter();
-  }
-
-  update() {
-    const vf = this;
-    vf.removeRules();
-    vf.filter();
-    vf.updateViewsComponents();
-    vf.updateTags();
-    vf.updateCount();
-  }
-
-  initListeners() {
-    const vf = this;
-
-    vf.lStore.addListener({
-      target: vf.opt.elFilterActivated,
-      type: ['click'],
-      callback: handleFilterActivatedView,
-      group: 'view_filter',
-      bind: vf
-    });
-
-    vf.lStore.addListener({
-      target: vf.opt.elFilterTags,
-      type: ['click'],
-      callback: handleFilterViewIdByTag,
-      group: 'view_filter',
-      bind: vf
-    });
-    vf.lStore.addListener({
-      target: vf.opt.elFilterText,
-      type: 'keyup',
-      callback: handleFilterViewIdByText,
-      group: 'view_filter',
-      debounce: true,
-      bind: vf
-    });
   }
 
   setTags(tags) {
@@ -354,9 +354,9 @@ export function getFreqTable(views) {
   const stat = {};
 
   views.forEach(function(v) {
-    tags.components = tags.components.concat(path(v, '_components',[]));
-    tags.classes = tags.classes.concat(path(v, 'data.classes',[]));
-    tags.collections = tags.collections.concat(path(v, 'data.collections',[]));
+    tags.components = tags.components.concat(path(v, '_components', []));
+    tags.classes = tags.classes.concat(path(v, 'data.classes', []));
+    tags.collections = tags.collections.concat(path(v, 'data.collections', []));
   });
 
   // grouprs
@@ -416,6 +416,8 @@ function updateTags() {
   const table = getFreqTable(views);
   const types = Object.keys(table);
   const elTags = document.createDocumentFragment();
+  const labels = [];
+
   let elTypes;
   let elThemes;
   let elCollections;
@@ -444,20 +446,31 @@ function updateTags() {
     const tbl = table[type];
     const keys = Object.keys(tbl);
     keys.forEach((key, i) => {
+      const label = getDictItem(key);
       const tag = new Toggle({
         order: i,
         id: key,
         label_key: key,
-        label: getDictItem(key),
+        label: label,
         count: tbl[key],
         type: type
       });
       const elParent = groups[type];
       vf.addTag(tag, elParent);
+      labels.push(label);
     });
   });
 
-  vf.updateTagsOrder();
+  /**
+  * Update tags order when tags labels are updated
+  */
+  Promise.all(labels).then(() => {
+    return vf.updateTagsOrder();
+  });
+
+  /**
+  * Render fragment
+  */
   elContainer.appendChild(elTags);
   /**
    * Helpers
