@@ -38,10 +38,9 @@ class ViewsFilter {
     const vf = this;
     vf.removeRules();
     vf.removeRules();
-    vf.filter();
     vf.updateViewsComponents();
     vf.updateTags();
-    vf.updateCount();
+    vf.filter();
   }
 
   initStorage(views) {
@@ -219,9 +218,9 @@ class ViewsFilter {
     let count, byType, byId;
     tags.forEach((tag) => {
       count = 0;
-      byType = tagsCount[tag.type];
+      byType = tagsCount[tag.getType()];
       if (byType) {
-        byId = byType[tag.id];
+        byId = byType[tag.getId()];
         if (byId) {
           count = byId;
         }
@@ -384,14 +383,14 @@ function updateTagsOrder() {
   const types = ['view_components', 'view_classes', 'view_collections'];
 
   types.forEach((t) => {
-    const tt = tags.filter((tag) => tag.type === t);
+    const tt = tags.filter((tag) => tag.getType() === t);
     tt.sort((a, b) => {
-      a.label = a.elLabelText.innerText;
-      b.label = b.elLabelText.innerText;
-      if (n(a.label) > n(b.label)) {
+      let aLabel = n(a.getLabel());
+      let bLabel = n(b.getLabel());
+      if (aLabel > bLabel) {
         return 1;
       }
-      if (n(b.label) > n(a.label)) {
+      if (bLabel > aLabel) {
         return -1;
       }
       return 0;
@@ -462,15 +461,15 @@ function updateTags() {
   });
 
   /**
-  * Update tags order when tags labels are updated
-  */
+   * Update tags order when tags labels are updated
+   */
   Promise.all(labels).then(() => {
     return vf.updateTagsOrder();
   });
 
   /**
-  * Render fragment
-  */
+   * Render fragment
+   */
   elContainer.appendChild(elTags);
   /**
    * Helpers

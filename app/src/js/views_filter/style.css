@@ -51,7 +51,9 @@
 .vf-check-toggle .vf-check-toggle-filter-count.updating {
   transform: rotateX(90deg);
 }
-
+.vf-check-toggle .vf-check-toggle-filter-count:after {
+  content: attr( data-count );
+}
 
 /*.vf-partial-border-side {*/
   /*position: relative;*/

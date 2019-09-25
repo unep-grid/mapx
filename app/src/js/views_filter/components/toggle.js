@@ -7,7 +7,9 @@ let settings = {
   id: Math.random().toString(32),
   type: '',
   label: 'label',
-  count: 0
+  count: 0,
+  animate: true,
+  animateType: 'seq_counter' // or 'class'
 };
 
 class Toggle {
@@ -15,11 +17,14 @@ class Toggle {
     let tgl = this;
     tgl.opt = Object.assign({}, settings, opt);
     tgl.id = opt.id;
-    tgl.label = opt.label;
-    tgl.label_key = opt.label_key;
-    tgl.count = opt.count;
-    tgl.order = opt.order;
-    tgl.type = opt.type;
+    tgl._label = opt.label;
+    tgl._label_key = opt.label_key;
+    tgl._order = opt.order;
+    tgl._type = opt.type;
+    tgl._is_animating = false;
+    tgl._destroyed = false;
+    tgl._count = opt.count;
+    tgl._count_displayed = 0;
     tgl.build();
   }
 
@@ -33,76 +38,151 @@ class Toggle {
     tgl._destroyed = true;
   }
 
-  getDisplayedCount() {
-    return this.elLabelCount.innerText * 1;
+  getCountDisplayed() {
+    return this._count_displayed * 1 || 0;
+  }
+
+  getCount() {
+    return this._count * 1 || 0;
+  }
+
+  setOrder(i) {
+    this._order = i || 0;
+    this.el.style.order = this._order;
   }
 
   setCount(n) {
     let tgl = this;
-    let nD = tgl.getDisplayedCount();
+    let nD = tgl.getCountDisplayed();
+
+    tgl._count = n || 0;
     if (n === nD) {
       return;
     }
-    tgl.count = n;
-    tgl.animateCountUpdate(n);
-  }
+    let animate = tgl.opt.animate;
+    let animating = tgl._isAnimating();
 
-  setOrder(i) {
-    this.order = i || 0;
-    this.el.style.order = this.order;
-  }
-
-  animateCountUpdate(n) {
-    let tgl = this;
-    let nOld = tgl._count_update;
-
-    if (nOld > -1) {
-      /*
-      * Not finished updating, 
-      * Avoid a new render, just update value
-      * and return;
-      */
-      tgl._count_update = n;
-      return;
+    if (animating || !animate) {
+      tgl._setCountLabel(n);
+    } else {
+      tgl._animateCountUpdate(n);
     }
+  }
 
-    tgl._count_update = n || 0;
+  _setCountLabel(n) {
+    this._count_displayed = n;
+    this.elLabelCount.dataset.count = n;
+  }
+
+  _animateCountUpdate() {
+    let tgl = this;
+    let animSeqCounter = tgl.opt.animateType === 'seq_counter';
+    if (animSeqCounter) {
+      tgl._animateCountProg();
+    } else {
+      tgl._animateCountClass();
+    }
+  }
+  _isAnimating() {
+    return this._is_animating;
+  }
+  _setAnimating(enable) {
+    let tgl = this;
+    enable = enable || false;
+    tgl._is_animating = enable;
+  }
+
+  _animateCountClass() {
+    let tgl = this;
+    tgl._setAnimating(true);
     tgl.elLabelCount.classList.add('updating');
     setTimeout(() => {
       onNextFrame(() => {
-        tgl.elLabelCount.innerText = tgl._count_update;
+        let count = tgl.getCount();
+        tgl._setCountLabel(count);
+        tgl._setAnimating(false);
         tgl.elLabelCount.classList.remove('updating');
-        tgl._count_update = -1;
       });
     }, 500);
   }
 
+  _animateCountProg() {
+    let tgl = this;
+    let c = 0;
+    let inc = 1;
+    let delta = 0;
+    let count = 0;
+    init();
+    next();
+    function next() {
+      delta = d();
+      count = tgl.getCount();
+      if (delta !== 0) {
+        tgl._setAnimating(true);
+        inc = Math.ceil(Math.abs(delta) / 10);
+        if (up()) {
+          c += inc;
+          c = c > count ? count : c;
+        } else {
+          c -= inc;
+          c = c < 0 ? 0 : c;
+        }
+        tgl._setCountLabel(Math.ceil(c));
+        onNextFrame(next);
+      } else {
+        tgl._setAnimating(false);
+      }
+    }
+    function d() {
+      return tgl.getCount() - tgl.getCountDisplayed();
+    }
+    function up() {
+      return d() > 0;
+    }
+    function init() {
+      c = tgl.getCountDisplayed();
+    }
+  }
   setLabel(txt) {
     let tgl = this;
     if (txt instanceof Promise) {
       txt.then((t) => {
-        tgl.label = t;
-        tgl.elLabelText.innerText = tgl.label;
+        set(t);
       });
     } else {
-      tgl.label = txt;
-      tgl.elLabelText.innerText = tgl.label;
+      set(txt);
+    }
+    function set(txt) {
+      let curTxt = tgl.elLabelText.innerText;
+      if (txt !== curTxt) {
+        if (!txt) {
+          txt = curTxt;
+        }
+        tgl._label = txt;
+        tgl.elLabelText.innerText = txt;
+      }
     }
   }
   setLabelKey(key) {
     let tgl = this;
-    tgl.label_key = key;
-    tgl.elLabelText.dataset.lang_key = tgl.label_key;
+    tgl._label_key = key;
+    tgl.elLabelText.dataset.lang_key = tgl._label_key;
   }
-
+  getLabelKey() {
+    return this._label_key;
+  }
+  getLabel() {
+    this.setLabel();
+    return this._label;
+  }
   getType() {
-    return this.type;
+    return this._type;
   }
   getId() {
     return this.id;
   }
   setType(type) {
-    this.type = type;
+    this._type = type;
     this.elLabelText.innerText = txt;
   }
 
@@ -133,7 +213,7 @@ function buildToggle() {
     {
       class: 'vf-check-toggle',
       style: {
-        order: tgl.order
+        order: tgl._order
       }
     },
     (elCheck = el('input', {
@@ -141,7 +221,7 @@ function buildToggle() {
       class: ['filter', 'vf-check-toggle-input'],
       dataset: {
         filter: tgl.id,
-        type: tgl.type
+        type: tgl._type
       },
       type: 'checkbox'
     })),
@@ -167,7 +247,7 @@ function buildToggle() {
   tgl.elLabelCount = elLabelCount;
   tgl.elCheck = elCheck;
 
-  tgl.setLabel(tgl.label);
-  tgl.setLabelKey(tgl.label_key);
-  tgl.setCount(tgl.count);
+  tgl.setLabel(tgl._label);
+  tgl.setLabelKey(tgl._label_key);
+  tgl.setCount(tgl._count);
 }
