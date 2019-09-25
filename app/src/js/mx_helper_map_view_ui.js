@@ -14,8 +14,12 @@ import {ViewBase} from './views_builder/view_base.js';
  */
 export function getProjectViewsState(opt) {
   const h = mx.helpers;
-  opt = opt || {};
-  const idInput = opt.idInput || 'projectViewsState';
+  opt = Object.assign(
+    {},
+    {idProject: mx.settings.project, idInput: 'projectViewsStates'},
+    opt
+  );
+  const idInput = opt.idInput;
   const isCurrentProject = opt.idProject === mx.settings.project;
   const hasShiny = h.isObject(window.Shiny);
   const state = [];
@@ -29,6 +33,26 @@ export function getProjectViewsState(opt) {
     }
   }
   return state;
+}
+
+/**
+ * Get current collections available in rendered views
+ * @param {Object} opt  Options
+ * @param {String} opt.idInput Shiny input id,
+ */
+export function getProjectViewsCollections(opt) {
+  const h = mx.helpers;
+  opt = Object.assign({}, {idInput: 'projectViewsCollections'}, opt);
+  const hasShiny = h.isObject(window.Shiny);
+  const views = h.getViews();
+  const collections = h.getArrayDistinct(
+    views.flatMap((v) => h.path(v, 'data.collections', []))
+  );
+  
+  if (hasShiny && opt.idInput) {
+    Shiny.onInputChange(opt.idInput, collections);
+  }
+  return collections;
 }
 
 /**
@@ -137,7 +161,7 @@ export function viewsListRenderNew(o) {
   const views = o.views;
   const hasState = o.state && h.isArray(o.state) && o.state.length > 0;
   const state = hasState ? o.state : h.viewsToNestedListState(views);
-  const noViewsMode  = h.getQueryParameterInit('noViews')[0] === 'true';
+  const noViewsMode = h.getQueryParameterInit('noViews')[0] === 'true';
 
   if (mData.viewsFilter instanceof ViewsFilter) {
     mData.viewsFilter.destroy();
@@ -148,16 +172,15 @@ export function viewsListRenderNew(o) {
   if (mData.viewsSwitchToggle instanceof Switch) {
     mData.viewsSwitchToggle.destroy();
   }
-  mx.events.lStore.removeListenerByGroup('view_filter_tag_lang');
 
   /**
-  * Clean old views, modules, array of views ...
-  */
-  h.viewsRemoveAll({idMap:o.id});
+   * Clean old views, modules, array of views ...
+   */
+  h.viewsRemoveAll({idMap: o.id});
 
   /**
-  * Add all new views
-  */
+   * Add all new views
+   */
   mData.views.push(...views);
 
   /**
@@ -172,7 +195,7 @@ export function viewsListRenderNew(o) {
   mData.viewsList = new NestedList(elViewsList, {
     id: mx.settings.project,
     state: state,
-    locked : noViewsMode,
+    locked: noViewsMode,
     useStateStored: true,
     autoMergeState: true,
     customClassDragIgnore: ['mx-view-tgl-more-container'],
@@ -193,7 +216,6 @@ export function viewsListRenderNew(o) {
     },
     emptyLabel: getEmptyLabel()
   });
- 
 
   /**
    * Handle views list filtering
@@ -223,8 +245,12 @@ export function viewsListRenderNew(o) {
    * Toggle between AND or OR operator for filter
    */
   mData.viewsSwitchToggle = new Switch(elFilterSwitch, {
-    labelLeft: h.el('div',{dataset:{lang_key:'operator_and'}},'Intersection'),
-    labelRight: h.el('div',{dataset:{lang_key:'operator_or'}},'Union'),
+    labelLeft: h.el(
+      'div',
+      {dataset: {lang_key: 'operator_and'}},
+      'Intersection'
+    ),
+    labelRight: h.el('div', {dataset: {lang_key: 'operator_or'}}, 'Union'),
     onChange: (s) => {
       const op = s ? 'or' : 'and';
       mData.viewsFilter.setOperator(op);
@@ -240,14 +266,6 @@ export function viewsListRenderNew(o) {
     type: 'click',
     idGroup: 'view_list',
     callback: handleViewClick
-  });
-
-  mx.events.on({
-    type : 'lang_updated',
-    idGroup :'view_filter_tag_lang' ,
-    callback :function(){
-      mData.viewsFilter.updateTagsOrder();
-    }
   });
 
 
@@ -329,7 +347,7 @@ function getEmptyLabel() {
   const h = mx.helpers;
   const noViewForced = h.getQueryParameterInit('noViews')[0] === 'true';
   const noViewKey = noViewForced ? 'noView' : 'noViewOrig';
-  let  elTitle;
+  let elTitle;
   const elItem = h.el(
     'div',
     {

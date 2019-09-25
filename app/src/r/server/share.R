@@ -227,7 +227,7 @@ observeEvent(reactData$updateShareProject,{
   userData <- reactUser$data
   idUser <- userData$id
   token <- reactUser$token
-  collections <- mxDbGetDistinctCollectionsTags(project)
+  collections <- reactCollections()
   if(noDataCheck(collections)) collections <- list()
   updateSelectInput(session,
     inputId="selectShareCollections",

@@ -125,39 +125,49 @@ export function isModeLocked() {
  * Init base listeners
  */
 export function initListeners() {
+  const h = mx.helpers;
   /**
    *  Other listener
    */
   mx.listenerStore.addListener({
     target: document.getElementById('btnShowProject'),
     type: 'click',
-    callback: mx.helpers.showSelectProject,
+    callback: h.showSelectProject,
     group: 'mapx-base'
   });
 
   mx.listenerStore.addListener({
     target: document.getElementById('btnShowLanguage'),
     type: 'click',
-    callback: mx.helpers.showSelectLanguage,
+    callback: h.showSelectLanguage,
     group: 'mapx-base'
   });
 
-  //mx.listenerStore.addListener({
-  //target: document.getElementById('btnGetAreaVisible'),
-  //type: 'click',
-  //callback: () => {
-  //mx.helpers.sendRenderedLayersAreaToUi({
-  //id: 'map_main',
-  //prefix: 'MX-',
-  //idEl: 'txtAreaSum'
-  //});
-  //},
-  //group: 'mapx-base'
-  /*});*/
+  mx.events.on({
+    type: 'lang_updated',
+    idGroup: 'view_filter_tag_lang',
+    callback: function() {
+      const mData = h.getMapData();
+      if(mData.viewsFilter){
+        mData.viewsFilter.updateTagsOrder();
+      }
+    }
+  });
+
+  mx.events.on({
+    type: 'views_list_updated',
+    idGroup: 'view_list_updated',
+    callback: function() {
+      h.getProjectViewsCollections({
+        idInput: 'viewsListCollections'
+      });
+    }
+  });
+
   mx.listenerStore.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
-    callback: mx.helpers.clearCache,
+    callback: h.clearCache,
     group: 'mapx-base'
   });
   mx.listenerStore.addListener({
@@ -305,8 +315,8 @@ export function initMapxApp(o) {
   const map = o.map;
   const elMap = document.getElementById(o.id);
   const hasShiny = !!window.Shiny;
-  const storyAutoStart = h.getQueryParameterInit('storyAutoStart')[0] === 'true';
-
+  const storyAutoStart =
+    h.getQueryParameterInit('storyAutoStart')[0] === 'true';
 
   if (!elMap) {
     alert('Map element with id ' + o.id + ' not found');
@@ -878,6 +888,7 @@ export function updateViewsList(o) {
             id: o.id,
             views: views
           });
+          triggerUpdate();
           return views;
         });
     }
@@ -913,6 +924,7 @@ export function updateViewsList(o) {
             state: state
           });
 
+          triggerUpdate();
           return views;
         });
     }
@@ -928,6 +940,8 @@ export function updateViewsList(o) {
       });
 
       loadGeojsonFromStorage(o);
+
+      triggerUpdate();
       return viewsToAdd;
     }
 
@@ -937,9 +951,16 @@ export function updateViewsList(o) {
         open: true,
         render: true
       });
+      triggerUpdate();
       return view;
     }
   });
+
+  function triggerUpdate() {
+    mx.events.fire({
+      type: 'views_list_updated'
+    });
+  }
 }
 
 /**
@@ -2869,46 +2890,6 @@ export function setHighlightedCountries(o) {
   filter = ['any', rule, ['!has', 'iso3code']];
 
   m.setFilter(o.idLayer, filter);
-}
-
-/**
- * Return the intersect between two Polygons or multiPolygon
- * @param {Object} poly1
- * @param {Object} poly2
- * @return {Object} Intersect or null
- */
-export function intersect(poly1, poly2) {
-  return Promise.all([
-    import('martinez-polygon-clipping'),
-    import('@turf/helpers')
-  ]).then((m) => {
-    const martinez = m[0];
-    const helpers = m[1];
-
-    const polygon = helpers.polygon;
-    const multiPolygon = helpers.multiPolygon;
-
-    const geom1 = poly1.geometry;
-    const geom2 = poly2.geometry;
-    const properties = poly1.properties || {};
-
-    const intersection = martinez.intersection(
-      geom1.coordinates,
-      geom2.coordinates
-    );
-    if (intersection === null || intersection.length === 0) {
-      return null;
-    }
-    if (intersection.length === 1) {
-      const start = intersection[0][0][0];
-      const end = intersection[0][0][intersection[0][0].length - 1];
-      if (start[0] === end[0] && start[1] === end[1]) {
-        return polygon(intersection[0], properties);
-      }
-      return null;
-    }
-    return multiPolygon(intersection, properties);
-  });
 }
 
 /**

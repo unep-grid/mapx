@@ -83,7 +83,8 @@ observe({
           #
           # View collection
           #
-          collectionsTags <- mxDbGetDistinctCollectionsTags(project)
+          #collectionsTags <- mxDbGetDistinctCollectionsTags(project)
+          collectionsTags <- reactCollections()
           collectionsCurrent <- .get(viewData,c("data","collections"))
 
 

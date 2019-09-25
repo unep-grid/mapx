@@ -58,6 +58,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
   Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
+  Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollections);
   Shiny.addCustomMessageHandler('mglInit', h.initMapx );
 
   /**
