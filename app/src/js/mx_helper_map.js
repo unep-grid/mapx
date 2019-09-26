@@ -3038,7 +3038,8 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchRasterProp(view) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
     const endpoint = url[0];
-    const params = h.getQueryParametersAsObject(url[1]);
+    const urlFull = endpoint + '?' + url[1];
+    const params = h.getQueryParametersAsObject(urlFull);
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
@@ -3046,8 +3047,9 @@ export function getLayersPropertiesAtPoint(opt) {
     const isWms =
       params &&
       params.layers &&
-      params.service &&
-      params.service.toLowerCase() === 'wms';
+      params.service && (
+      params.service.indexOf("WMS") > -1 ||
+      params.service.indexOf("wms") > -1 );
 
     if (isWms) {
       return h.queryWms({

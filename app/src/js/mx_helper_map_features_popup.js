@@ -46,7 +46,7 @@ export function featuresToHtml(o) {
   layerVector = h.getLayersPropertiesAtPoint({
     map: map,
     point: o.point,
-    type: ['vt','gj','cc'],
+    type: ['vt', 'gj', 'cc'],
     asObject: true
   });
   render(layerVector);
@@ -134,133 +134,137 @@ export function featuresToHtml(o) {
     /**
      * Attributes to ui
      */
-    promAttributes.then((attributes) => {
-      elWait.remove();
+    promAttributes
+      .then((attributes) => {
+        elWait.remove();
 
-      var attrNames = Object.keys(attributes);
+        var attrNames = Object.keys(attributes);
 
-      if (attrNames.length === 0) {
-        var elNoDataAttr = elNoData.cloneNode(true);
-        elLayer.appendChild(elNoDataAttr);
-      }
-
-      /**
-       * For each attributes, add
-       */
-      attrNames.forEach(function(attribute) {
-        var elValue,
-          elPropContainer,
-          elPropContent,
-          elPropWrapper,
-          elPropTitle,
-          elPropToggles;
-
-        var values = h.getArrayStat({
-          stat: 'sortNatural',
-          arr: attributes[attribute]
-        });
-
-        var hasValues = values.length > 0;
-        values = hasValues ? values : ['-'];
-
-        var label = attribute;
-        if (labels && labels[attribute]) {
-          label =
-            labels[attribute][language] || labels[attribute].en || attribute;
+        if (attrNames.length === 0) {
+          var elNoDataAttr = elNoData.cloneNode(true);
+          elLayer.appendChild(elNoDataAttr);
         }
 
         /**
-         * Build property elements
+         * For each attributes, add
          */
-        elPropContainer = el(
-          'div',
-          {
-            class: 'mx-prop-container'
-          },
-          (elPropWrapper = el(
-            'div',
-            (elPropContent = el(
-              'div',
-              {
-                class: 'mx-prop-content'
-              },
-              (elPropTitle = el(
-                'span',
-                {
-                  class: 'mx-prop-title',
-                  title: attribute
-                },
-                label
-              )),
-              (elPropToggles = el('div', {
-                class: 'mx-prop-toggles'
-              }))
-            ))
-          ))
-        );
+        attrNames.forEach(function(attribute) {
+          var elValue,
+            elPropContainer,
+            elPropContent,
+            elPropWrapper,
+            elPropTitle,
+            elPropToggles;
 
-        elProps.appendChild(elPropContainer);
-        /*
-         * Add a toggle or span for each value
-         */
-        for (var i = 0, iL = values.length; i < iL; i++) {
-          var value = values[i];
+          var values = h.getArrayStat({
+            stat: 'sortNatural',
+            arr: attributes[attribute]
+          });
 
-          if (hasValues && isVector) {
-            /**
-             * Case vector, add button and listener
-             */
-            elValue = h.uiToggleBtn({
-              label: value,
-              onChange: filterValues,
-              data: {
-                l: idView,
-                p: attribute,
-                v: value
-              },
-              labelBoxed: true,
-              checked: false
-            });
-          } else {
-            /**
-             * In other cases, add values as span
-             */
-            elValue = el('div');
-            /* jshint ignore:start */
-            if (h.isArray(value)) {
-              value.forEach((v) => {
-                elValue.appendChild(
-                  el(
-                    'span',
-                    {
-                      class: 'mx-prop-static'
-                    },
-                    v
-                  )
-                );
-              });
-            } else {
-              elValue = el('span', {
-                class: 'mx-prop-static'
-              });
-              elValue.innerText = value;
-            }
+          var hasValues = values.length > 0;
+          values = hasValues ? values : ['-'];
 
-            /* jshint ignore:end*/
+          var label = attribute;
+          if (labels && labels[attribute]) {
+            label =
+              labels[attribute][language] || labels[attribute].en || attribute;
           }
 
           /**
-           * Add value(s) to container
+           * Build property elements
            */
-          elPropToggles.appendChild(elValue);
-        }
-      });
+          elPropContainer = el(
+            'div',
+            {
+              class: 'mx-prop-container'
+            },
+            (elPropWrapper = el(
+              'div',
+              (elPropContent = el(
+                'div',
+                {
+                  class: 'mx-prop-content'
+                },
+                (elPropTitle = el(
+                  'span',
+                  {
+                    class: 'mx-prop-title',
+                    title: attribute
+                  },
+                  label
+                )),
+                (elPropToggles = el('div', {
+                  class: 'mx-prop-toggles'
+                }))
+              ))
+            ))
+          );
 
-      /**
-       * Udate readmore
-       */
-      updateReadMore();
-    });
+          elProps.appendChild(elPropContainer);
+          /*
+           * Add a toggle or span for each value
+           */
+          for (var i = 0, iL = values.length; i < iL; i++) {
+            var value = values[i];
+
+            if (hasValues && isVector) {
+              /**
+               * Case vector, add button and listener
+               */
+              elValue = h.uiToggleBtn({
+                label: value,
+                onChange: filterValues,
+                data: {
+                  l: idView,
+                  p: attribute,
+                  v: value
+                },
+                labelBoxed: true,
+                checked: false
+              });
+            } else {
+              /**
+               * In other cases, add values as span
+               */
+              elValue = el('div');
+              /* jshint ignore:start */
+              if (h.isArray(value)) {
+                value.forEach((v) => {
+                  elValue.appendChild(
+                    el(
+                      'span',
+                      {
+                        class: 'mx-prop-static'
+                      },
+                      v
+                    )
+                  );
+                });
+              } else {
+                elValue = el('span', {
+                  class: 'mx-prop-static'
+                });
+                elValue.innerText = value;
+              }
+
+              /* jshint ignore:end*/
+            }
+
+            /**
+             * Add value(s) to container
+             */
+            elPropToggles.appendChild(elValue);
+          }
+        });
+
+        /**
+         * Udate readmore
+         */
+        updateReadMore();
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
   }
 
   function resetFilter() {
@@ -272,7 +276,6 @@ export function featuresToHtml(o) {
       });
     }
   }
-
 
   function filterValues() {
     var elChecks = popup._content.querySelectorAll('.check-toggle input');

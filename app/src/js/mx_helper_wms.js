@@ -127,8 +127,9 @@ function wmsBuildQueryUi(opt) {
     function initSelectLayer(data) {
       data = data || [];
       var def = data[0] && data[0].Name ? data[0].Name : data[0];
-      if (typeof selectLayer != 'undefined' && selectLayer.destroy)
+      if (typeof selectLayer !== 'undefined' && selectLayer.destroy) {
         selectLayer.destroy();
+      }
       var $elSelectLayer = $(elSelectLayer).selectize({
         options: data,
         onChange: checkDisableBtnUpdate,
@@ -180,11 +181,6 @@ function wmsBuildQueryUi(opt) {
       selectServices.refreshOptions();
     }
 
-    function setUrl() {
-      var service = $(elSelectServices).val();
-      elInputService.value = service;
-    }
-
     function updateInput() {
       elInputTiles.value = urlTile({
         layer: $(elSelectLayer).val(),
@@ -229,14 +225,22 @@ function wmsBuildQueryUi(opt) {
         elInputService.setAttribute('disabled', true);
         elButtonGetLayers.setAttribute('disabled', true);
         elButtonUpdate.setAttribute('disabled', true);
-        if (selectServices && selectServices.disable) selectServices.disable();
-        if (selectLayer && selectLayer.disable) selectLayer.disable();
+        if (selectServices && selectServices.disable) {
+          selectServices.disable();
+        }
+        if (selectLayer && selectLayer.disable) {
+          selectLayer.disable();
+        }
       } else {
         elInputService.removeAttribute('disabled');
         elButtonGetLayers.removeAttribute('disabled', true);
         elButtonUpdate.removeAttribute('disabled', true);
-        if (selectServices && selectServices.enable) selectServices.enable();
-        if (selectLayer && selectLayer.enable) selectLayer.enable();
+        if (selectServices && selectServices.enable) {
+          selectServices.enable();
+        }
+        if (selectLayer && selectLayer.enable) {
+          selectLayer.enable();
+        }
       }
     }
   });
@@ -246,7 +250,9 @@ function wmsGetCapabilities(baseUrl) {
   var data = {};
   var xmlString = '';
   var url = baseUrl + '?service=WMS&request=GetCapabilities';
-  if (!mx.helpers.isUrl(url)) return Promise.resolve(data);
+  if (!mx.helpers.isUrl(url)) {
+    return Promise.resolve(data);
+  }
 
   return fetch(url)
     .then((res) => res.text())
@@ -265,9 +271,9 @@ function wmsGetCapabilities(baseUrl) {
 function wmsGetLayers(baseUrl) {
   var layers = [];
   return wmsGetCapabilities(baseUrl).then((Capability) => {
-    if (!Capability || !Capability.Layer || !Capability.Layer.Layer)
+    if (!Capability || !Capability.Layer || !Capability.Layer.Layer) {
       return layers;
-    var layers = [];
+    }
     layerFinder(Capability.Layer, layers);
     return layers;
   });
@@ -346,7 +352,7 @@ export function queryWms(opt) {
   var map = opt.map || h.getMap();
   var point = opt.point;
   var url = opt.url;
-  var modeObject = opt.asObject == true || false;
+  var modeObject = opt.asObject === true || false;
   var ignoreBbox = true;
   /*
    * Build a bounding box
@@ -385,16 +391,27 @@ export function queryWms(opt) {
     bbox: minLng + ',' + minLat + ',' + maxLng + ',' + maxLat
   };
   var request = url + '?' + h.objToParams(paramsInfo);
+  var props = modeObject ? {} : [];
 
   /**
    * Return fetch promise
    */
-
-  return fetch(request)
+  return wmsGetCapabilities(url)
+    .then((cap) => {
+      let pathLayer = 'Layer.Layer';
+      let layersAll = h.path(cap, 'Layer.Layer', []);
+      let ok = layersAll.find((l) => {
+        return layers.indexOf(l.Name) > -1 && l.queryable === true;
+      });
+      
+      if (ok) {
+        return fetch(request);
+      } else {
+        throw new Error('Operation not permited by the requested server');
+      }
+    })
     .then((data) => data.json())
     .then((res) => {
-      var props = modeObject ? {} : [];
-
       if (res.exceptions) {
         console.warn(res.exceptions);
         return props;
@@ -406,7 +423,7 @@ export function queryWms(opt) {
             /*
              * Aggregate by attribute
              */
-            if (ignoreBbox && p != 'bbox') {
+            if (ignoreBbox && p !== 'bbox') {
               var value = f.properties[p];
               var values = props[p] || [];
               values = values.concat(value);
@@ -421,6 +438,10 @@ export function queryWms(opt) {
         }
       });
 
+      return props;
+    })
+    .catch((err) => {
+      console.warn(err);
       return props;
     });
 }

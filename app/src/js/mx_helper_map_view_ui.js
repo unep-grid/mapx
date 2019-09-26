@@ -138,7 +138,7 @@ export function viewsListAddSingle(view, opt) {
 export function updateViewsFilter() {
   const h = mx.helpers;
   const mData = h.getMapData();
-  mData.viewsFilter.update();
+  mData.viewsFilter.updateTags();
 }
 
 /**
