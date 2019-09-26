@@ -118,7 +118,7 @@ mxDbGetView <- function(idView){
 mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progress=0,view=NUll){}){
 
   idSource <- tolower(idSource)
-  viewsData <- mxDbGetViewsIdBySourceId(idSource)
+  viewsData <- mxDbGetViewsIdBySourceId(idSource,selectAlsoByMask=FALSE)
   viewsDataIds <- viewsData$id
 
   iL <- length(viewsDataIds)

@@ -157,7 +157,7 @@ reactTableViewsUsingSource <- reactive({
   #
   # Get views table
   #
-  mxDbGetViewsIdBySourceId(idSource,language)
+  mxDbGetViewsIdBySourceId(idSource,language=language)
 })
 
 

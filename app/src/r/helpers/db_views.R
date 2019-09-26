@@ -38,9 +38,14 @@ mxDbViewTitleExists <- function(title,project,languages=NULL){
 #'
 #' @param idSource Source (layer) id
 #'
-mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
+mxDbGetViewsIdBySourceId <- function(idSource,selectAlsoByMask=TRUE,language="en"){
 
   tableName <- "mx_views_latest"
+  strMask = ifelse(
+    isTRUE(selectAlsoByMask),
+    "OR data#>>'{\"source\",\"layerInfo\",\"maskName\"}' = '" + idSource + "'",
+    ""
+    )
 
   sql <- "
   WITH views_table AS (
@@ -58,9 +63,8 @@ mxDbGetViewsIdBySourceId <- function(idSource,language="en"){
     END AS title
     FROM mx_views_latest
     WHERE 
-    data#>>'{\"source\",\"layerInfo\",\"name\"}' = '" + idSource +"' OR
-    data#>>'{\"source\",\"layerInfo\",\"maskName\"}' = '" + idSource +"'
-    )
+    data #>> '{\"source\",\"layerInfo\",\"name\"}' = '" + idSource +"'
+    " + strMask + ")
 
   SELECT views_table.*, mx_users.email
   FROM views_table
