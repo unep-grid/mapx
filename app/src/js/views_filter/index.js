@@ -156,8 +156,14 @@ class ViewsFilter {
         return a.concat(ids);
       }
     }, viewsBase);
-
-    return getArrayDistinct(subset);
+    let distinct = getArrayDistinct(subset);
+    /**
+    * By defaut, if result is empty, show all;
+    */
+    if(distinct.length === 0){
+      distinct = vf.getViewsId();
+    }
+    return distinct;
   }
 
   setOperator(op) {

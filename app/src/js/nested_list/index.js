@@ -4,7 +4,6 @@ import {Item} from './components/item.js';
 import {Group} from './components/group.js';
 import {ContextMenu} from './components/contextMenu.js';
 import {ListenerStore} from '../listener_store/index.js';
-import {onNextFrame} from '../animation_frame/index.js';
 
 import './style/nested_list.css';
 
@@ -143,13 +142,11 @@ class NestedList {
         if (id === li.opt.idEmptyItem) {
           return;
         }
-        onNextFrame(() => {
-          if (ids.indexOf(id) > -1) {
-            el.classList.remove(clHidden);
-          } else {
-            el.classList.add(clHidden);
-          }
-        });
+        if (ids.indexOf(id) > -1 ) {
+          el.classList.remove(clHidden);
+        } else {
+          el.classList.add(clHidden);
+        }
       }
     });
   }
@@ -810,7 +807,7 @@ class NestedList {
     }
     li.makeIgnoredClassesDraggable(elItem);
 
-    if(!isEmptyItem && !isInitState){
+    if (!isEmptyItem && !isInitState) {
       li.saveStateStorage();
     }
     return elItem;
@@ -1256,8 +1253,8 @@ function handleSortEnd(evt) {
   li.listenerStore.removeListenerByGroup('dragevent');
   li.setUiDraggingEnd();
 
-  if(li.isModeEmpty()){
-   return;
+  if (li.isModeEmpty()) {
+    return;
   }
   li.opt.onSortEnd(evt);
   if (li.elNext !== li.elDrag.nextSibling) {
@@ -1275,8 +1272,8 @@ function handleContextClick(evt) {
   if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
   }
-  if(li.isModeEmpty()){
-   return;
+  if (li.isModeEmpty()) {
+    return;
   }
   li.contextMenu = new ContextMenu(evt, li);
 }
