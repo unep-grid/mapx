@@ -74,7 +74,7 @@ export function modal(o) {
       Shiny.unbindAll(elModal);
     }
     if (hasSelectize) {
-      mx.helpers.removeSelectizeGroupById(id);
+      h.removeSelectizeGroupById(id);
     }
     if (oldBody) {
       startBodyScrollPos = oldBody.scrollTop;
@@ -125,7 +125,7 @@ export function modal(o) {
   if (o.buttons && o.buttons.constructor === Array) {
     o.buttons.forEach(function(b) {
       if (h.isHTML(b)) {
-        b = mx.helpers.textToDom(b);
+        b = h.textToDom(b);
       }
       if (h.isElement(b)) {
         elButtons.appendChild(b);
@@ -142,11 +142,6 @@ export function modal(o) {
   }
 
   setTitle(o.title);
-
-  mx.helpers.draggable({
-    selector: elModal,
-    debounceTime: 10
-  });
 
   elModal.close = close;
   elModal.setTitle = setTitle;
@@ -168,14 +163,22 @@ export function modal(o) {
     Shiny.bindAll(elModal);
   }
   if (o.addSelectize) {
-    mx.helpers.initSelectizeAll({
+    h.initSelectizeAll({
       id: id,
       selector: elModal,
       options: {
-        dropdownParent: elModal
+        dropdownParent: document.body
       }
     });
   }
+
+  h.draggable({
+    selector: elModal,
+    debounceTime: 10,
+    onStart : ()=>{ 
+      h.closeSelectizeGroupById(id);
+    }
+  });
 
   /**
    * Return final element
@@ -203,7 +206,7 @@ export function modal(o) {
         })),
         (elCollapse = h.el('i', {
           class: [
-            'mx-modal-top-btn-collapse',
+            'mx-modal-top-btn-control',
             'fa',
             'fa-square-o',
             'fa-minus-square'
@@ -282,7 +285,7 @@ export function modal(o) {
   }
 
   function close() {
-    if (mx.helpers.isElement(elContent)) {
+    if (h.isElement(elContent)) {
       /**
        * Remove jed editors
        */
@@ -291,7 +294,7 @@ export function modal(o) {
         var jedId = elJed.dataset.jed_id;
         if (
           jed.editors[jedId] &&
-          mx.helpers.isFunction(jed.editors[jedId].destroy)
+          h.isFunction(jed.editors[jedId].destroy)
         ) {
           jed.editors[jedId].destroy();
         }
@@ -307,7 +310,7 @@ export function modal(o) {
      * Remove selectize
      */
     if (hasSelectize) {
-      mx.helpers.removeSelectizeGroupById(id);
+      h.removeSelectizeGroupById(id);
     }
     /**
      * Remove using jquery or DOM method.
@@ -317,7 +320,7 @@ export function modal(o) {
     /**
      * on close callback
      */
-    if (mx.helpers.isFunction(o.onClose)) {
+    if (h.isFunction(o.onClose)) {
       o.onClose();
     }
   }

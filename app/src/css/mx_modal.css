@@ -41,8 +41,8 @@
   left: 0;
   top: 5px;
   margin: auto;
-  /*resize: both;*/
-  overflow:visible; /* resize need auto: selectize dropdown need visible...*/
+  resize: both;
+  overflow:auto; /* resize need auto: selectize dropdown need visible...*/
   display: flex;
   flex-direction: column;
 }
@@ -55,7 +55,7 @@
 .mx-modal-container.mx-modal-collapsed {
   min-height: 45px!important;
   height:45px!important;
-  resize:none;
+  overflow:visible;
 }
 
 .mx-modal-top {
@@ -63,8 +63,9 @@
   display: flex;
   flex-direction: row;
 }
-.mx-modal-top-btn-collapse {
+.mx-modal-top-btn-control {
   cursor: pointer;
+  padding: 2px;
 }
 .mx-modal-top,
 .mx-modal-foot {

@@ -81,3 +81,15 @@ export function removeSelectizeGroupById(id) {
   }
   delete mx.selectize[id];
 }
+
+export function closeSelectizeGroupById(id) {
+  id = id || 'global';
+  var selectize = mx.selectize[id];
+  if (mx.helpers.isArray(selectize)) {
+    selectize.forEach((s) => {
+      if (mx.helpers.isFunction(s.close)) {
+        s.close();
+      }
+    });
+  }
+}
