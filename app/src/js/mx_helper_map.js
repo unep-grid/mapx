@@ -116,7 +116,7 @@ export function isModeLocked() {
   const h = mx.helpers;
   let modeLocked =
     h.getQueryParameterInit('noViews')[0] === 'true' ||
-    h.getQueryParameterInit('nodeLocked')[0] === 'true';
+    h.getQueryParameterInit('modeLocked')[0] === 'true';
 
   return !!modeLocked;
 }
@@ -262,9 +262,9 @@ export function initMapx(o) {
   /*
    * Check url for lat, lng and zoom
    */
-  let queryLat = h.getQueryParameterInit('lat');
-  let queryLng = h.getQueryParameterInit('lng');
-  let queryZoom = h.getQueryParameterInit('zoom');
+  let queryLat = h.getQueryParameterInit('lat')[0];
+  let queryLng = h.getQueryParameterInit('lng')[0];
+  let queryZoom = h.getQueryParameterInit('zoom')[0];
 
   if (queryLat) {
     mp.center = null;

@@ -245,7 +245,7 @@ mxDbGetProjectListByUser <- function(
   wildCard <- isTRUE(grepl("\\*",whereTitleMatch))
   filterTitleOperator <- ifelse(wildCard || wildCardEnd,' ~ ',' = ')
   cleanTitle <- tolower(subPunct(whereTitleMatch," "))
-  filterTitle <- " lower(title_en) " + filterTitleOperator + "'" + cleanTitle + "'"
+  filterTitle <- " lower(title) " + filterTitleOperator + "'" + cleanTitle + "'"
   filterRole <- whereUserRoleIs
 
   if( !isTRUE(filterRole %in% c("member","publisher","admin"))) filterRole = "public OR member OR publisher OR admin"

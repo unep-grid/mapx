@@ -84,7 +84,7 @@ function getViews(opt) {
     );
     opt.collectionsFilterOperator = validate(
       'collectionsFilterOperator',
-      opt.collectionsFilterOperator
+      opt.collectionsSelectOperator
     );
     opt.roleMax = validate('roleMax', opt.roleMax || opt.filterViewsByRoleMax);
     opt.idViews = validate('idViews', opt.idViews || opt.views);

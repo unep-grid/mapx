@@ -22,7 +22,7 @@ observe({
     timer <- mxTimeDiff("Init map")
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
-    
+
     #
     # Set map options
     # 

@@ -103,7 +103,11 @@ export function getQueryParametersAsObject(urlString) {
   const out = {};
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
-    out[k.toLowerCase()] = asArray(v);
+    /**
+    * Note: check why lowercase was set
+    */
+    //out[k.toLowerCase()] = asArray(v);
+    out[k] = asArray(v);
   });
   return out;
 }

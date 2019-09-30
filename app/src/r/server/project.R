@@ -156,7 +156,7 @@ observeEvent(reactData$showProjectsList,{
 
   filterRoles <- NULL
   filterTitle <- NULL
- 
+
   if( typeof(event) == "list" && event$msg == "start"){
 
     if(userIsGuest){
