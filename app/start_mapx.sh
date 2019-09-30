@@ -32,6 +32,9 @@ CONF_MAPX="\
   config[['pg']][['read']][['user']] <- '$POSTGRES_USER_READ'\n\
   config[['pg']][['read']][['password']] <- '$POSTGRES_USER_READ_PASSWORD'\n\
   config[['pg']][['host']] <- '$POSTGRES_HOST'\n\
+  config[['pg']][['port']] <- '$POSTGRES_PORT'\n\
+  config[['pg']][['hostMaster']] <- '$POSTGRES_HOST_MASTER'\n\
+  config[['pg']][['portMaster']] <- '$POSTGRES_PORT_MASTER'\n\
   config[['project']][['default']] <- '$MAPX_PROJECT_DEFAULT'\n\
   config[['project']][['creation']][['usersAllowed']] <- jsonlite::fromJSON('$MAPX_PROJECT_CREATORS')\n\
   config[['root_mode']][['members']] <- jsonlite::fromJSON('$MAPX_ROOT_MODE_MEMBERS')\n\

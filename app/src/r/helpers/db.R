@@ -1,97 +1,103 @@
 
-
-
-
-
+#' Create a temporary user in pg master node
+#' @param {Character} id Current user id. The id of the user asking for a temporary access
+#' @param {List} List of source id to edit
+#' @return {List} out List of parameters
+#'    out.password = temporary password,
+#'     out.username = temporary username,
+#'     out.dropUser = dropUser function to call when user should be removed
+#'     out.valid =  connection validity (not dynamic...)
+#'     out.validUntil = validity duration in days
 mxDbCreateTempUser <- function(id,srcList){
 
-    email <- mxDbGetEmailFromId(id)
-    token <- randomString("MX",splitIn=3,addLETTERS=T,addLetters=F)
-    tmpUser <- "mapx_temp_" + id
+  conMaster <- mxDbAutoCon(useMaster=TRUE)
+  email <- mxDbGetEmailFromId(id)
+  token <- randomString("MX",splitIn=3,addLETTERS=T,addLetters=F)
+  tmpUser <- "mapx_temp_" + id
 
-    out <- list(
-      password = token,
-      user = tmpUser,
-      dropUser = function(){},
-      valid = FALSE,
-      validUntil = (Sys.Date() + 2)
-      )
+  out <- list(
+    password = token,
+    user = tmpUser,
+    dropUser = function(){},
+    valid = FALSE,
+    validUntil = (Sys.Date() + 2)
+    )
 
-    if(noDataCheck(email) || noDataCheck(srcList) || noDataCheck(token)){return(out)}
+  if(noDataCheck(email) || noDataCheck(srcList) || noDataCheck(token)){return(out)}
 
-    out$valid <- TRUE
+  out$valid <- TRUE
 
-    roleExists <- function(){
-      isTRUE(mxDbGetQuery("SELECT count(*) = 1 as e FROM pg_roles WHERE rolname ='" + tmpUser + "'")$e)
-    }
+  roleExists <- function(){
+    qRoleExists <- "SELECT count(*) = 1 as e FROM pg_roles WHERE rolname ='" + tmpUser + "'"
+    isTRUE(mxDbGetQuery(qRoleExists,con=conMaster)$e)
+  }
 
-    getAllSources <- function(){
-      
-      q = "SELECT table_name as tbl" +
-        " FROM information_schema.role_table_grants "+
-        " WHERE grantee = '" + tmpUser + "'" + 
-        " AND table_schema  = 'public'"+ 
-        " GROUP BY 1 "
+  getAllSources <- function(){
 
-      mxDbGetQuery(q)$tbl
-    }
+    q <- "SELECT table_name as tbl" +
+      " FROM information_schema.role_table_grants "+
+      " WHERE grantee = '" + tmpUser + "'" + 
+      " AND table_schema  = 'public'"+ 
+      " GROUP BY 1 "
 
-    dropUser <- function(){
-      if(roleExists()){
-        tryCatch({
-          con <- mxDbAutoCon()
-          allSources <- getAllSources()
-          dbSendQuery(con, "BEGIN TRANSACTION")
-          if(!noDataCheck(allSources)){
-            for(t in allSources){
-              dbSendQuery(con,"REVOKE ALL PRIVILEGES ON " + t + " FROM " + tmpUser )
-            }
-          }
-          dbSendQuery(con, "REVOKE ALL PRIVILEGES ON DATABASE mapx FROM " + tmpUser)
-          dbSendQuery(con, "DROP USER " + tmpUser)
-        },
-        error = function(e){
-          dbRollback(con)
-          stop(e)
-        },
-        finally = {
-          dbCommit(con)
-        })
-      }
-    }
+    mxDbGetQuery(q,con=conMaster)$tbl
+  }
 
+  dropUser <- function(){
     if(roleExists()){
-      dropUser()
+      tryCatch({
+        allSources <- getAllSources()
+        dbSendQuery(conMaster, "BEGIN TRANSACTION")
+        if(!noDataCheck(allSources)){
+          for(t in allSources){
+            dbSendQuery(conMaster,"REVOKE ALL PRIVILEGES ON " + t + " FROM " + tmpUser )
+          }
+        }
+        dbSendQuery(conMaster, "REVOKE ALL PRIVILEGES ON DATABASE mapx FROM " + tmpUser)
+        dbSendQuery(conMaster, "DROP USER " + tmpUser)
+      },
+      error = function(e){
+        dbRollback(conMaster)
+        stop(e)
+      },
+      finally = {
+        dbCommit(conMaster)
+      })
+    }
+  }
+
+  if(roleExists()){
+    dropUser()
+  }
+
+  con <- mxDbAutoCon()
+  dbSendQuery(conMaster,"BEGIN TRANSACTION")
+  tryCatch({
+
+    dbSendQuery(conMaster,
+      "CREATE ROLE "+ tmpUser + 
+        " WITH ENCRYPTED PASSWORD \'" + token + "\'"+
+        " VALID UNTIL \'" + out$validUntil +"\'"+
+        " CONNECTION LIMIT 5" +
+        " LOGIN "
+      )
+    dbSendQuery(conMaster,"REVOKE ALL PRIVILEGES ON SCHEMA public FROM " + tmpUser +"")
+    dbSendQuery(conMaster,"GRANT CONNECT ON DATABASE mapx TO " + tmpUser)
+
+    for(t in srcList){
+      dbSendQuery(conMaster,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t + " TO " + tmpUser )
     }
 
-    con <- mxDbAutoCon()
-    dbSendQuery(con,"BEGIN TRANSACTION")
-    tryCatch({
+  }, error = function(e){
+    dbRollback(conMaster)
+    stop(e)
+  },finally = {
+    dbCommit(conMaster)
+  })
 
-      dbSendQuery(con,
-        "CREATE ROLE "+ tmpUser + 
-          " WITH ENCRYPTED PASSWORD \'" + token + "\'"+
-          " VALID UNTIL \'" + out$validUntil +"\'"+
-          " CONNECTION LIMIT 5" +
-          " LOGIN "
-        )
-      dbSendQuery(con,"REVOKE ALL PRIVILEGES ON SCHEMA public FROM " + tmpUser +"")
-      dbSendQuery(con,"GRANT CONNECT ON DATABASE mapx TO " + tmpUser)
+  out$dropUser <- dropUser
 
-      for(t in srcList){
-        dbSendQuery(con,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t + " TO " + tmpUser )
-      }
-
-    }, error = function(e){
-      dbRollback(con)
-      stop(e)
-    },finally = {
-      dbCommit(con)
-    })
-
-    out$dropUser <- dropUser
-
-    return(out)
+  return(out)
 }
 
 
@@ -2653,23 +2659,25 @@ mxDbGetDistinctTableFromSql <- function(sql){
 
 
 #' Get db connection
-#' 
+#' @param {Boolean} useMaster : force to use master node
 #' @export
-mxDbAutoCon <- function(){ 
+mxDbAutoCon <- function(useMaster=FALSE){ 
+  useMaster = isTRUE(useMaster)
   pg <- .get(config,c("pg"))
-  dbCon <- pg$dbCon
+  con <- ifelse(useMaster,'dbConMaster','dbCon')
+  dbCon <- pg[[con]]
 
   if(noDataCheck(dbCon) || !isPostgresqlIdCurrent(dbCon)){
     mxDebugMsg("Create new connection")
     drv <- dbDriver("PostgreSQL")
     dbCon <- dbConnect(drv, 
       dbname = pg$dbname,
-      host = pg$host,
-      port = pg$port,
+      host = ifelse(useMaster,pg$hostMaster,pg$host),
+      port = ifelse(useMaster,pg$portMaster,pg$port),
       user = pg$user,
       password = pg$password
       )
-    config <<- .set(config,c("pg","dbCon"),dbCon)
+    config <<- .set(config,c("pg",con),dbCon)
   }
 
   return(dbCon)
@@ -2684,5 +2692,10 @@ mxDbCloseCon <- function(){
   if(isPostgresqlIdCurrent(dbCon)){
     mxDebugMsg("Remove connection")
     dbDisconnect(dbCon)
+  }
+  dbConMaster <- mxDbAutoCon(TRUE)
+  if(isPostgresqlIdCurrent(dbConMaster)){
+    mxDebugMsg("Remove master connection")
+    dbDisconnect(dbConMaster)
   }
 }

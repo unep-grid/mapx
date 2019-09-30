@@ -187,12 +187,11 @@ observeEvent(input$btnDbSelfGenerate,{
     #
     dbInfo <- listToHtmlSimple(list(
         db_name =  .get(config,c("pg","dbname")),
-        db_host = .get(config,c("pg","host")),
-        db_port = .get(config,c("pg","port")),
+        db_host = .get(config,c("pg","hostMaster")),
+        db_port = .get(config,c("pg","portMaster")),
         db_username =  .get(dataTempUser,c("user")),
         db_password =  .get(dataTempUser,c("password"))
         ))
-
 
     ui <- tags$p(
       id = "txtDbSelfInfo",

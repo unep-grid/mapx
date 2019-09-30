@@ -102,6 +102,8 @@ config[["pg"]] = list(
     user = "mapxr",
     password=""
     ),
+  hostMaster = "127.0.0.1",
+  portMaster = "5432",
   encryptKey = "",
   password= "",
   geomCol = "geom",
