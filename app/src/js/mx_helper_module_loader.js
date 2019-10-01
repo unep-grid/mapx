@@ -15,7 +15,9 @@ const modules = {
   'mx-drag-drop-worker': loadDragDropWorker,
   handsontable: loadHandsontable,
   map_composer: loadMapComposer,
-  nested_list: loadNestedList
+  nested_list: loadNestedList,
+  packery : loadPackery,
+  draggabilly : loadDraggabilly
 };
 
 export function moduleLoad(name) {
@@ -35,6 +37,17 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+
+function loadPackery() {
+  return import('packery').then((m)=>{
+    return m.default;
+  });
+}
+function loadDraggabilly() {
+  return import('draggabilly').then((m)=>{
+    return m.default;
+  });
+}
 
 function loadTurfBbox() {
   return import('@turf/bbox').then((m) => {
