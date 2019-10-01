@@ -148,7 +148,7 @@ export function initListeners() {
     idGroup: 'view_filter_tag_lang',
     callback: function() {
       const mData = h.getMapData();
-      if(mData.viewsFilter){
+      if (mData.viewsFilter) {
         mData.viewsFilter.updateTagsOrder();
       }
     }
@@ -161,6 +161,20 @@ export function initListeners() {
       h.getProjectViewsCollections({
         idInput: 'viewsListCollections'
       });
+    }
+  });
+
+  mx.events.on({
+    type: ['view_created', 'view_deleted'],
+    idGroup: 'cleane_history_and_state',
+    callback: () => {
+      let dat = h.getMapData();
+      if (dat.viewsList) {
+        dat.viewsList.clearHistory();
+        dat.viewsList.setStateOrig();
+      }
+      h.updateViewsFilter();
+      h.viewsRender();
     }
   });
 
@@ -330,34 +344,32 @@ export function initMapxApp(o) {
     /*
      * set views list
      */
-    mx.helpers
-      .updateViewsList({
-        id: o.id,
-        autoFetchAll: true,
-        project: o.project || mx.settings.project
-      })
-      .then((views) => {
-        /*
-         * Auto start story map
-         */
-        if (storyAutoStart && views.length > 0) {
-          let idStory = mx.helpers.getQueryParameterInit('views')[0];
-          mx.helpers.storyRead({
-            id: o.id,
-            idView: idStory,
-            view: mx.helpers.getView(idStory),
-            save: false,
-            autoStart: true
-          });
-        }
-      });
+    h.updateViewsList({
+      id: o.id,
+      autoFetchAll: true,
+      project: o.project || mx.settings.project
+    }).then((views) => {
+      /*
+       * Auto start story map
+       */
+      if (storyAutoStart && views.length > 0) {
+        let idStory = h.getQueryParameterInit('views')[0];
+        h.storyRead({
+          id: o.id,
+          idView: idStory,
+          view: h.getView(idStory),
+          save: false,
+          autoStart: true
+        });
+      }
+    });
 
     /**
      * Apply colorscheme if any
      */
 
     if (o.colorScheme) {
-      mx.helpers.setUiColorScheme({
+      h.setUiColorScheme({
         colors: o.colorScheme
       });
     }
@@ -372,18 +384,18 @@ export function initMapxApp(o) {
     /**
      * Handle drop geojson event
      */
-    if (mx.helpers.handleUploadFileEvent && mx.helpers.handleDragOver) {
+    if (h.handleUploadFileEvent && h.handleDragOver) {
       mx.listenerStore.addListener({
         target: elMap,
         type: 'dragover',
-        callback: mx.helpers.handleDragOver,
+        callback: h.handleDragOver,
         group: 'map_drag_over',
         bind: mx
       });
       mx.listenerStore.addListener({
         target: elMap,
         type: 'drop',
-        callback: mx.helpers.handleUploadFileEvent,
+        callback: h.handleUploadFileEvent,
         group: 'map_drag_over',
         bind: mx
       });
@@ -393,16 +405,16 @@ export function initMapxApp(o) {
      * Add controls to the map
      */
     //compact: true
-    map.addControl(new mx.helpers.mapControlApp(), 'top-left');
-    map.addControl(new mx.helpers.mapControlLiveCoord(), 'bottom-right');
-    map.addControl(new mx.helpers.mapControlScale(), 'bottom-right');
-    map.addControl(new mx.helpers.mapxLogo(), 'bottom-left');
+    map.addControl(new h.mapControlApp(), 'top-left');
+    map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
+    map.addControl(new h.mapControlScale(), 'bottom-right');
+    map.addControl(new h.mapxLogo(), 'bottom-left');
 
     /**
      * Error handling
      */
     map.on('error', function(e) {
-      const msg = mx.helpers.path(e, 'error.message');
+      const msg = h.path(e, 'error.message');
 
       if (msg) {
         if (msg.indexOf('http status 200') > 0) {
@@ -417,7 +429,7 @@ export function initMapxApp(o) {
      * Mouse move handling
      */
     map.on('mousemove', function(e) {
-      const layers = mx.helpers.getLayerNamesByPrefix({
+      const layers = h.getLayerNamesByPrefix({
         id: o.id,
         prefix: 'MX-'
       });
@@ -426,13 +438,13 @@ export function initMapxApp(o) {
     });
 
     map.on('click', function(e) {
-      mx.helpers.handleClickEvent(e, o.id);
+      h.handleClickEvent(e, o.id);
     });
 
     map.on('rotate', function() {
       const r = -map.getBearing();
       const northArrow = document.querySelector('.mx-north-arrow');
-      northArrow.style[mx.helpers.cssTransformFun()] =
+      northArrow.style[h.cssTransformFun()] =
         'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
     });
   });
@@ -888,7 +900,9 @@ export function updateViewsList(o) {
             id: o.id,
             views: views
           });
-          triggerUpdate();
+          mx.events.fire({
+            type: 'views_list_updated'
+          });
           return views;
         });
     }
@@ -923,8 +937,10 @@ export function updateViewsList(o) {
             views: views,
             state: state
           });
+          mx.events.fire({
+            type: 'views_list_updated'
+          });
 
-          triggerUpdate();
           return views;
         });
     }
@@ -941,7 +957,10 @@ export function updateViewsList(o) {
 
       loadGeojsonFromStorage(o);
 
-      triggerUpdate();
+      mx.events.fire({
+        type: 'views_list_updated'
+      });
+
       return viewsToAdd;
     }
 
@@ -951,16 +970,15 @@ export function updateViewsList(o) {
         open: true,
         render: true
       });
-      triggerUpdate();
+      mx.events.fire({
+        type: 'views_list_updated'
+      });
+      mx.events.fire({
+        type: 'view_created'
+      });
       return view;
     }
   });
-
-  function triggerUpdate() {
-    mx.events.fire({
-      type: 'views_list_updated'
-    });
-  }
 }
 
 /**
@@ -992,9 +1010,9 @@ function getGeojsonViewsFromStorage(o) {
 let vStore = [];
 
 /**
- *  View controler : evalutate view state and enable/disable it depending on ui state
+ *  View render / update : evalutate view state and enable/disable it depending on ui state
  */
-export function viewControler(o) {
+export function viewsRender(o) {
   o = o || {};
   let vToAdd = [],
     vToRemove = [],
@@ -1613,8 +1631,9 @@ export function removeView(o) {
   }
 
   views.splice(vIndex, 1);
-  h.updateViewsFilter();
-  h.viewControler(o);
+  mx.events.fire({
+    type: 'view_deleted'
+  });
 }
 
 /**
@@ -3047,9 +3066,9 @@ export function getLayersPropertiesAtPoint(opt) {
     const isWms =
       params &&
       params.layers &&
-      params.service && (
-      params.service.indexOf("WMS") > -1 ||
-      params.service.indexOf("wms") > -1 );
+      params.service &&
+      (params.service.indexOf('WMS') > -1 ||
+        params.service.indexOf('wms') > -1);
 
     if (isWms) {
       return h.queryWms({

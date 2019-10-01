@@ -195,7 +195,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_toggle_view',
       allowDefault: true,
       action: function() {
-        h.viewControler();
+        h.viewsRender();
       }
     },
     {

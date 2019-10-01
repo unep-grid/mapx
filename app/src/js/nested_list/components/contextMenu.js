@@ -30,10 +30,10 @@ class ContextMenu {
     cm.setTargetFocus(false);
     cm.stopListen();
     cm.li.removeElement(cm.elContext);
-    if (cm.getModeSaveOnQuit()) {
+    //if (cm.getModeSaveOnQuit()) {
       cm.li.saveStateStorage();
-      cm.setModeSaveOnQuit(false);
-    }
+      //cm.setModeSaveOnQuit(false);
+    //}
     cm._destroyed = true;
   }
 

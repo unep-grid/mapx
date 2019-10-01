@@ -561,7 +561,6 @@ class NestedList {
     let li = this;
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
-      li.log('save state');
       window.localStorage.setItem(key, JSON.stringify(state));
     }
   }
@@ -581,7 +580,6 @@ class NestedList {
     let key = li.getStorageKey('history');
     let isValid = li.isArray(history) && history.length > 0;
     if (isValid && window.localStorage) {
-      li.log('save history');
       let historyClone = li.cloneObject(history);
       historyClone.forEach((state) => {
         state.forEach((s) => {
@@ -765,7 +763,7 @@ class NestedList {
     return this._state_orig || [];
   }
   setStateOrig(state) {
-    this._state_orig = this.cloneObject(state || []);
+    this._state_orig = this.cloneObject(state || this.getState() || []);
   }
   clearAllItems() {
     let li = this;

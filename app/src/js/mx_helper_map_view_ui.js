@@ -206,13 +206,13 @@ export function viewsListRenderNew(o) {
     onSetDragImage: handleSetDragImage,
     onRenderItemContent: handleRenderItemContent,
     onGetItemTextById: (id) => {
-      return mx.helpers.getViewTitleNormalized(id);
+      return h.getViewTitleNormalized(id);
     },
     onGetItemDateById: (id) => {
-      return mx.helpers.getView(id).date_modified;
+      return h.getView(id).date_modified;
     },
     onChange: () => {
-      mx.helpers.viewControler();
+      h.viewsRender();
     },
     emptyLabel: getEmptyLabel()
   });
@@ -270,7 +270,7 @@ export function viewsListRenderNew(o) {
 
 
   /**
-   * Local helpers
+   * Set image for the drag item
    */
   function handleSetDragImage(el) {
     const li = this;
