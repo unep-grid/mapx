@@ -268,14 +268,14 @@ export function initMapx(o) {
 
   if (queryLat) {
     mp.center = null;
-    mp.lat = queryLat[0] * 1 || 0;
+    mp.lat = queryLat * 1 || 0;
   }
   if (queryLng) {
     mp.center = null;
-    mp.lng = queryLng[0] * 1 || 0;
+    mp.lng = queryLng * 1 || 0;
   }
   if (queryZoom) {
-    mp.z = queryZoom[0] * 1 || 0;
+    mp.z = queryZoom * 1 || 0;
   }
 
   /* map options */
