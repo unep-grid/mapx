@@ -530,12 +530,13 @@ Dashboard.prototype.Widget = function(config) {
  * @param {Object} o.data Dashboard data. Default is view.data.dashboard
  */
 Dashboard.init = function(o) {
+  const h = mx.helpers;
   var view = o.view;
-  var idDashboard = o.idDashboard || 'mx-dashboard-' + mx.helpers.makeId();
+  var idDashboard = o.idDashboard || 'mx-dashboard-' + h.makeId();
   var idContainer = o.idContainer || mx.settings.ui.ids.idDashboards;
-  var dashboardData = o.data || mx.helpers.path(view, 'data.dashboard');
+  var dashboardData = o.data || h.path(view, 'data.dashboard');
 
-  if (!dashboardData || !dashboardData.widgets) {
+  if (!dashboardData || !h.isArray(dashboardData.widgets) || dashboardData.widgets.length === 0) {
     return;
   }
   if (view._dashboard) {
@@ -567,7 +568,7 @@ Dashboard.init = function(o) {
           height: w.height,
           width: w.width,
           script: w.script,
-          map: mx.helpers.getMap(o.idMap),
+          map: h.getMap(o.idMap),
           packery: dashboard.packery,
           view: view,
           type: view.type
@@ -597,12 +598,12 @@ Dashboard.hasWidgets = function() {
 Dashboard.hasWidgetsVisibles = function() {
   return (
     Dashboard.getStore()
-      .map((d) => {
-        d.widgets.filter((w) => w.visible === true);
-      })
-      .reduce((all, widget) => {
-        all.concat(widget);
-      }).length > 0
+    .map((d) => {
+      d.widgets.filter((w) => w.visible === true);
+    })
+    .reduce((all, widget) => {
+      all.concat(widget);
+    }).length > 0
   );
 };
 
