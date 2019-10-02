@@ -1,10 +1,8 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
-
-
 /**
-* Clean / remove service worker
-*/
+ * Clean / remove service worker
+ */
 export function removeServiceWorker() {
   if (navigator.serviceWorker) {
     caches.keys().then((k) => k.forEach((i) => caches.delete(i)));
@@ -84,7 +82,6 @@ export function setClickHandler(opt) {
 export function getClickHandlers() {
   return mx.settings.clickHandlers;
 }
-
 
 /**
  * All member should be true, return boolean
@@ -1249,50 +1246,23 @@ timer.prototype.stop = function() {
  * @param {Boolean} humanReadable Output the result in formated text with units bytes; KiB; MiB, etc.. instead of bytes
  */
 export function getSizeOf(obj, humanReadable) {
+  const h = mx.helpers;
   var bytes = 0;
   var seenObjects = [];
   humanReadable = humanReadable === undefined ? true : humanReadable;
 
-  function sizeOf(obj) {
-    if (obj !== null && obj !== undefined) {
-      if (seenObjects.indexOf(obj) === -1) {
-        seenObjects.push(obj);
-        switch (typeof obj) {
-          case 'number':
-            bytes += 8;
-            break;
-          case 'string':
-            bytes += obj.length * 2;
-            break;
-          case 'boolean':
-            bytes += 4;
-            break;
-          case 'object':
-            var objClass = Object.prototype.toString.call(obj).slice(8, -1);
-            if (objClass === 'Object' || objClass === 'Array') {
-              for (var key in obj) {
-                if (!obj.hasOwnProperty(key)) {
-                  continue;
-                }
-                sizeOf(obj[key]);
-              }
-            } else {
-              bytes += obj.toString().length * 2;
-            }
-            break;
-        }
-        return bytes;
+  return h
+    .moduleLoad('size-of')
+    .then((s) => {
+       return obj instanceof File ? obj.size : s(obj); 
+    })
+    .then((res) => {
+      if (!humanReadable) {
+        return res;
+      } else {
+        return formatByteSize(res);
       }
-    }
-  }
-
-  var res = sizeOf(obj);
-
-  if (!humanReadable) {
-    return res;
-  } else {
-    return formatByteSize(res);
-  }
+    });
 }
 
 /**

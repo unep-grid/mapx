@@ -16,8 +16,9 @@ const modules = {
   handsontable: loadHandsontable,
   map_composer: loadMapComposer,
   nested_list: loadNestedList,
-  packery : loadPackery,
-  draggabilly : loadDraggabilly
+  packery: loadPackery,
+  draggabilly: loadDraggabilly,
+  'size-of':loadSizeOf
 };
 
 export function moduleLoad(name) {
@@ -37,14 +38,19 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+function loadSizeOf() {
+  return import('object-sizeof').then((m) => {
+    return m.default;
+  });
+}
 
 function loadPackery() {
-  return import('packery').then((m)=>{
+  return import('packery').then((m) => {
     return m.default;
   });
 }
 function loadDraggabilly() {
-  return import('draggabilly').then((m)=>{
+  return import('draggabilly').then((m) => {
     return m.default;
   });
 }
@@ -122,17 +128,19 @@ function loadSelectize() {
     var Selectize = m[0].default;
 
     /*
-    * Patch for placing drop downrelative to a div
-    * https://github.com/selectize/selectize.js/pull/1447/commits
-    */
+     * Patch for placing drop downrelative to a div
+     * https://github.com/selectize/selectize.js/pull/1447/commits
+     */
     Selectize.prototype.positionDropdown = function() {
       var $control = this.$control;
-      this.$dropdown.offset({
-        top:  $control.offset().top + $control[0].offsetHeight,
-        left: $control.offset().left,
-      }).css({
-        width : $control[0].getBoundingClientRect().width,
-      });
+      this.$dropdown
+        .offset({
+          top: $control.offset().top + $control[0].offsetHeight,
+          left: $control.offset().left
+        })
+        .css({
+          width: $control[0].getBoundingClientRect().width
+        });
     };
 
     window.Selectize = Selectize;
