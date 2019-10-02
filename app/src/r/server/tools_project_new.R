@@ -94,7 +94,6 @@ observeEvent(input$btnAddProjectConfirm,{
 
   userRole <- getUserRole()
 
-  project <- reactData$project 
   language <- reactData$language
   userData <- reactUser$data
   title <- reactData$projectAddTitle
@@ -108,25 +107,25 @@ observeEvent(input$btnAddProjectConfirm,{
   idProject <- reactData$projectAddId
   idCreator <- userData$id
 
-  r <- mxDbGetProjectData(project)
-  r$pid <- NULL
-  r$id <- idProject 
-  r$id_old <- NULL
-  r$title <- titles
-  r$description <- descriptions
-  r$countries <- list()
-  r$active <- TRUE
-  r$creator <- idCreator
-  r$admins <- list(idCreator)
-  r$publishers <- list()
-  r$members <- list()
-  r$date_modified <- Sys.time()
-  r$date_created <- Sys.time()
-  r$public <- FALSE
-  r$map_position <- list(lat=0,lng=0,zoom=2)
-  r$views_external <- list()
-  r$alias <- character(1)
-  r$contacts <- list(idCreator)
+  r = list(
+    id =  idProject,
+    title = titles,
+    description = descriptions,
+    countries = list(),
+    active = TRUE,
+    creator = idCreator,
+    admins = list(idCreator),
+    members = list(),
+    publishers = list(),
+    contacts = list(idCreator),
+    date_modified = Sys.time(),
+    date_created = Sys.time(),
+    public = FALSE,
+    map_position = list(lat=0,lng=0,zoom=1),
+    views_external = list(),
+    alias = character(1),
+    states_views = list()
+    )
 
   mxDbAddRow(r,"mx_projects")
 

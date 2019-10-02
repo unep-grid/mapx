@@ -47,7 +47,6 @@ function getProjectViewsStates(opt) {
      * SQL
      */
     sql = utils.parseTemplate(template.getProjectViewsStates, opt);
-
     resolve(clientPgRead.query(sql));
   }).then(function(result) {
     if (result.rowCount > 0) {
