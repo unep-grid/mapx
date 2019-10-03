@@ -8,7 +8,7 @@ onStop(mxDbCloseCon)
 #  SERVER FUNCTION
 #
 server <- function(input,output,session){
-  
+
   mxUpdateSettings(
     #
     # See all defaults in /src/js/mx_settings_default.js
@@ -28,38 +28,34 @@ server <- function(input,output,session){
     )
 
   #
-  # Initial client ip data
+  # Init reactive objects
   #
-  obsIpData <- observeEvent(input$clientIpData, {
-    obsIpData$destroy();
-
-    #
-    # Init reactive objects
-    #
-    mxSource(
-      base = config$srvPath,
-      env = environment(),
-      files = c(
-        "react_login_key_status.R",
-        "react_objects.R",
-        "react_ip_data.R",
-        "react_source_list.R",
-        "react_source_summary.R",
-        "react_view_list.R",
-        "react_map.R",
-        "react_roles.R",
-        "react_project_members.R"
-        )
+  mxSource(
+    base = config$srvPath,
+    env = environment(),
+    files = c(
+      "react_login_key_status.R",
+      "react_objects.R",
+      "react_ip_data.R",
+      "react_source_list.R",
+      "react_source_summary.R",
+      "react_view_list.R",
+      "react_map.R",
+      "react_roles.R",
+      "react_project_members.R"
       )
+    )
+  #
+  # Read browser data, cookies, etc..
+  #
+  obsBrowserData <- observeEvent(input$browserData,{
+    obsBrowserData$destroy()
     #
-    # Get query parameters
-    #
-    query <- mxParseQuery(input$urlSearchQuery)
-
-    #
-    # Read browser data, cookies, etc..
+    # Get query and browser/navigator data
     #
     browserData <- input$browserData
+    query <- mxParseQuery(input$urlSearchQuery)
+
 
     #
     # Launch init

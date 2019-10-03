@@ -10,14 +10,14 @@ obsIpData <- observe({
   idUser <- reactUser$data$id
   ipUser <- data$ip
 
-  isNotValid <- noDataCheck(idUser) || 
+  isNotComplete <- noDataCheck(idUser) || 
     noDataCheck(idProject) || 
     noDataCheck(data) || 
     noDataCheck(ipUser) ||
     noDataCheck(isGuest)
 
 
-  if(isNotValid){
+  if(isNotComplete){
     return()
   }
 

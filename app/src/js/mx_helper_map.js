@@ -344,6 +344,7 @@ export function initMapxApp(o) {
     return;
   }
 
+
   /**
    * Send loading confirmation to shiny
    */
@@ -386,6 +387,10 @@ export function initMapxApp(o) {
      */
     if (hasShiny) {
       Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
+      /**
+       * Async IP lookup
+       */
+      h.sendIpInfo({idInput: 'clientIpData'});
     }
 
     /**

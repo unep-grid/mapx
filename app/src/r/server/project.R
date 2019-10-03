@@ -82,23 +82,7 @@ observe({
       roles <- mxDbGetProjectUserRoles(id_user,project_out)
       if(noDataCheck(roles$groups)) project_out <- project_def;
       reactData$project <- project_out
-
-      #
-      # Log project changes
-      #
-      mxDbLogger("USER_ACTION", list(
-          side = "app",
-          id_log = "project_load",
-          id_project = project_out,
-          id_user = id_user,
-          is_guest = isGuest,
-          ip_user = reactIp(),
-          data = list(
-            new_project = project_out,
-            old_project = project_react
-            )
-          )
-        )
+      reactData$projectPrevious <- project_react
 
       #
       # Update browser query parameter
@@ -116,6 +100,43 @@ observe({
     }
 
   })
+})
+
+observe({
+  ipUser <- reactIp()
+  idProject <- reactData$project
+
+  isolate({
+    idUser <- reactUser$data$id
+    isGuest <- isGuestUser()
+    idProjectPrevious <- reactData$projectPrevious
+
+    isNotComplete <- noDataCheck(idUser) ||
+      noDataCheck(idProject) ||
+      noDataCheck(ipUser) ||
+      noDataCheck(idProject) 
+
+    if(isNotComplete){
+      return()
+    }
+    #
+    # Log project changes
+    #
+    mxDbLogger("USER_ACTION", list(
+        side = "app",
+        id_log = "project_load",
+        id_project = idProject,
+        id_user = idUser,
+        is_guest = isGuest,
+        ip_user = ipUser,
+        data = list(
+          new_project = idProject,
+          old_project = idProjectPrevious
+          )
+        )
+      )
+  })
+
 })
 
 

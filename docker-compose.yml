@@ -10,9 +10,6 @@ services:
       - --docker.domain=mapx.localhost
       - --defaultentrypoints=http
       - "--entryPoints=Name:http Address::80 Compress:true"
-    #ports:
-      #- 8880:80
-      #- 8881:8080
     ports:
       - target: 80
         published: 8880
