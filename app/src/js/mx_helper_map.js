@@ -443,7 +443,7 @@ export function initMapxApp(o) {
     map.on('mousemove', function(e) {
       const layers = h.getLayerNamesByPrefix({
         id: o.id,
-        prefix: 'MX-'
+        prefix: 'MX' // custom code could be MXCC ...
       });
       const features = map.queryRenderedFeatures(e.point, {layers: layers});
       map.getCanvas().style.cursor = features.length ? 'pointer' : '';
