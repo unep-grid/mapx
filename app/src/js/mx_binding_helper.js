@@ -6,6 +6,7 @@ $(document).on('shiny:connected', function() {
   /*
   * Input
   */
+  mx.helpers.sendIpInfo({idInput: 'clientIpData'});
   Shiny.onInputChange('urlSearchQuery',h.getQueryParametersInit());
   Shiny.onInputChange('browserData',h.getBrowserData());
 

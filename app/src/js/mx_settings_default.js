@@ -16,6 +16,7 @@ let settings = {
     protocol: 'http:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
+      getIpInfo : '/get/ip',
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
       getSourceMetadata: '/get/source/metadata/',
       getViewMetadata: '/get/view/metadata/',

@@ -126,6 +126,14 @@ export function isModeLocked() {
  */
 export function initListeners() {
   const h = mx.helpers;
+
+  /**
+   * Init log system
+   */
+  if (true) {
+    mx.helpers.initLog();
+  }
+
   /**
    *  Other listener
    */
@@ -317,7 +325,6 @@ export function initMapx(o) {
    */
   if (!mx.settings.modeKiosk) {
     mx.helpers.initMapxApp(o);
-    mx.helpers.initLog();
     mx.helpers.initListeners();
   }
 
@@ -449,6 +456,7 @@ export function initMapxApp(o) {
     });
   });
 }
+
 
 /**
  * Handle click event
@@ -1054,8 +1062,6 @@ export function viewsRender(o) {
     vToAdd.forEach(function(v) {
       vStore.push(v);
       view = mx.helpers.getView(v);
-      view._addTime = Date.now();
-
       mx.helpers.renderView({
         id: idMap,
         viewData: view
@@ -1656,7 +1662,7 @@ export function closeView(o) {
     type: 'view_remove',
     data: {
       idView: o.idView,
-      viewDuration: viewDuration
+      view: view
     }
   });
 
@@ -1670,7 +1676,8 @@ export function closeView(o) {
   mx.events.fire({
     type: 'view_removed',
     data: {
-      idView: o.idView
+      idView: o.idView,
+      view: view
     }
   });
 
@@ -2727,7 +2734,8 @@ export function renderView(o) {
   mx.events.fire({
     type: 'view_add',
     data: {
-      idView: idView
+      idView: idView,
+      view: view
     }
   });
 
@@ -2827,7 +2835,8 @@ export function renderView(o) {
         mx.events.fire({
           type: 'view_added',
           data: {
-            idView: view.id
+            idView: view.id,
+            view: view
           }
         });
         view._open = true;

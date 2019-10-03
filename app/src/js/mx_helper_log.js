@@ -59,12 +59,12 @@ export function initLog() {
   mx.events.on({
     type: 'view_added',
     idGroup: 'mx_log',
-    callback: logViewAdd
+    callback: logViewAdded
   });
   mx.events.on({
     type: 'view_removed',
     idGroup: 'mx_log',
-    callback: logViewRemove
+    callback: logViewRemoved
   });
   mx.events.on({
     type: 'view_panel_click',
@@ -72,7 +72,9 @@ export function initLog() {
     callback: logPanelClick
   });
 
-  function logViewAdd(d) {
+  function logViewAdded(d) {
+    d.view._added_at = Date.now();
+
     mx.helpers.dbLog('USER_ACTION', {
       id_log: 'view_add',
       data: {
@@ -81,12 +83,15 @@ export function initLog() {
     });
   }
 
-  function logViewRemove(d) {
+  function logViewRemoved(d) {
+
+    let viewDuration = (Date.now() - d.view._added_at) / 1000;
+
     mx.helpers.dbLog('USER_ACTION', {
       id_log: 'view_remove',
       data: {
         id_view: d.idView,
-        view_duration_seconds: d.viewDuration / 1000 || 0
+        view_duration_seconds: viewDuration
       }
     });
   }

@@ -47,7 +47,7 @@ app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
 app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
 app.get('/get/source/overlap/', utils.sourceOverlap.get); //countries=[]&layers=[]&='area';
 app.get('/get/source/validate/geom', utils.sourceValidityGeom.get);
-app.get('/get/ip', utils.ip.get);
+app.get('/get/ip', utils.ip.info);
 app.post('/upload/image/', utils.image.upload);
 app.post('/upload/vector/', utils.vector.upload);
 app.post('/send/mail/', utils.mail.sendMailApi);

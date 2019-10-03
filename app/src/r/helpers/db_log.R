@@ -32,6 +32,7 @@ mxDbLogger <- function(level, opt) {
     id_log = NULL,
     id_user = 96,
     is_guest = TRUE,
+    ip_user = NULL,
     id_project = config$project$default,
     data = list() # set as {} in db. Which is ok.
     )

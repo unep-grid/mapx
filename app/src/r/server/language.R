@@ -29,7 +29,7 @@ observe({
               side = "app",
               id_log = "language_change",
               id_project = reactData$project,
-              id_user = reactUser$data$id,
+              ip_user = reactIp(),
               is_guest = isGuestUser(),
               data = list(
                 language = lang_out

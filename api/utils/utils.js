@@ -280,6 +280,7 @@ function cleanArray(arr) {
 /*
  * Export methods
  */
+exports.ip = require('./getIpInfo.js');
 exports.view = require('./getView.js');
 exports.views = require('./getViewsByProject.js');
 exports.viewsPublic = require('./getViewsPublic.js');

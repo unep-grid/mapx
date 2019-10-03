@@ -92,6 +92,7 @@ observe({
           id_project = project_out,
           id_user = id_user,
           is_guest = isGuest,
+          ip_user = reactIp(),
           data = list(
             new_project = project_out,
             old_project = project_react
