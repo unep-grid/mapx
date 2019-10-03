@@ -50,10 +50,10 @@ function getSourceMetadata(opt) {
       if (result && result.rows) {
         out = result.rows[0];
         meta = out.metadata;
-        meta._emailEditor = out.email_editor;
-        meta._dateModified = out.date_modified;
+        meta._email_editor = out.email_editor;
+        meta._date_modified = out.date_modified;
         meta._services = out.services;
-        meta._idSource = id;
+        meta._id_source = id;
         return meta;
       } else {
         return def;

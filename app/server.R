@@ -9,6 +9,12 @@ onStop(mxDbCloseCon)
 #
 server <- function(input,output,session){
 
+  #
+  # Session query search string
+  #
+  query <- list()
+
+
   mxUpdateSettings(
     #
     # See all defaults in /src/js/mx_settings_default.js
@@ -54,7 +60,7 @@ server <- function(input,output,session){
     # Get query and browser/navigator data
     #
     browserData <- input$browserData
-    query <- mxParseQuery(input$urlSearchQuery)
+    query <<- mxParseQuery(input$urlSearchQuery)
 
 
     #

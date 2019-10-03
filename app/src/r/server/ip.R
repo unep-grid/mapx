@@ -8,8 +8,8 @@ obsIpData <- observe({
   idProject <- reactData$project
   isGuest <- isGuestUser()
   idUser <- reactUser$data$id
-  ipUser <- data$ip
-
+  ipUser <- reactIp()
+  
   isNotComplete <- noDataCheck(idUser) || 
     noDataCheck(idProject) || 
     noDataCheck(data) || 
