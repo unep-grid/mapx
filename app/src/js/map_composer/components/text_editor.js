@@ -25,17 +25,18 @@ class EditorToolbar {
       ed.boxParent.elContent.appendChild(ed.el);
     }
     ed.setTargetEditable(true);
-    ed.boxTarget.addListener({
+    ed.boxTarget.lStore.addListener({
       type: 'click',
-      group: 'btn_format_text',
+      idGroup: 'editor_target_click',
       target: ed.el,
-      listener: edit.bind(ed.boxTarget)
+      callback: edit,
+      bind : ed.boxTarget
     });
-    ed.boxTarget.addListener({
+    ed.boxTarget.lStore.addListener({
       type: 'paste',
-      group: 'btn_format_text',
+      idGroup: 'editor_target_paste',
       target: ed.boxTarget.el,
-      listener: paste
+      callback: paste
     });
     ed.enabled = true;
   }
@@ -57,7 +58,7 @@ class EditorToolbar {
     if (ed.enabled === true) {
       ed.el.remove();
       ed.setTargetEditable(false);
-      ed.boxTarget.removeListenerByGroup('btn_format_text');
+      ed.boxTarget.lStore.removeListenerByGroup('btn_format_text');
       ed.enabled = false;
     }
   }

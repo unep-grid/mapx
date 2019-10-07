@@ -1,6 +1,7 @@
 var settings = require('./../settings');
 var multer = require('multer');
 var fs = require('fs');
+var path = require('path');
 var sendMail = require('./mail.js').sendMail;
 var auth = require('./authentication.js');
 var spawn = require('child_process').spawn;
@@ -12,7 +13,6 @@ var removeSource = require('./db.js').removeSource;
 var isLayerValid = require('./db.js').isLayerValid;
 var layerHasValues = require('./db.js').tableHasValues;
 var err = require('./errors.js').handleErrorText;
-
 var storage = multer.diskStorage({
   destination: function(req, file, cb) {
     var pathTemp = settings.vector.path.temporary;
@@ -241,8 +241,8 @@ function cleanFile(fileToRemove, res) {
  * In case of faillure, clean the db : remove added entry and table
  */
 function cleanAll(fileToRemove, idSource, res) {
-  cleanFile(fileToRemove);
   return removeSource(idSource).then(() => {
+    cleanFile(fileToRemove,res);
     res.write(
       toRes({
         type: 'message',
@@ -263,68 +263,58 @@ function cleanAll(fileToRemove, idSource, res) {
  */
 function fileToPostgres(config) {
   config = config || {};
-
   var fileName = config.fileName;
   var sourceSrs = config.sourceSrs;
-  var onMessage = config.onMessage || function(){};
-  var onError = config.onError || function(){};
-  var onSuccess = config.onSuccess || function(){};
+  var onMessage = config.onMessage || function() {};
+  var onError = config.onError || function() {};
+  var onSuccess = config.onSuccess || function() {};
   var idSource = utils.randomString('mx_vector', 4, 5).toLowerCase();
-
-  process.chdir(settings.vector.path.temporary);
-
-  var isZip = fileName.search(/.zip$|.gz$/) !== -1;
 
   if (!fileName) {
     throw new Error('No filename given');
   }
 
+  var filePath = path.format({
+    dir: settings.vector.path.temporary,
+    base: fileName
+  });
+
+  var isZip = fileName.search(/.zip$|.gz$/) !== -1;
+
   if (isZip) {
-    fileName = '/vsizip/' + fileName;
+    filePath = '/vsizip/' + filePath;
   }
 
   onMessage({
-    msg: 'Conversion using ogr2ogr : please wait ...',
+    msg: 'Conversion : please wait ...',
     type: 'message'
   });
 
-  var args = [
-    '-f',
-    'PostgreSQL',
-    '-nln',
-    idSource,
-    '-nlt',
-    'PROMOTE_TO_MULTI',
-    '-geomfield',
-    'geom',
-    '-lco',
-    'GEOMETRY_NAME=geom',
-    '-lco',
-    'SCHEMA=public',
-    '-lco',
-    'OVERWRITE=YES',
-    '-lco',
-    'FID=gid',
-    '-skipfailures',
-    '-progress',
-    '-overwrite',
-    '-t_srs',
-    'EPSG:4326'
-  ];
+  /**
+  * NOTE: PGDump OGR driver was needed because OGR PG was not compatible with
+  * PG_POOL : connection were never closed.
+  *
+  * pg-copy-stream
+  * --------------
+  * pg-copy-stream needed a stream from a file containing a simple table. 
+  * Streaming from a spawn stdout did not work. OGR make a dump and not 
+  * only a table : which means a lot of command to prepare the copy query. 
+  * Streaming through node-pg-copy-stream is _maybe_ not even possible 
+  * because of this. *Streaming directly to og using node-pg seems to
+  * be the cleanest way of doing this*
+  *
+  * ogr and psql as spawn
+  * ---------------------
+  * Piping a ogr2ogr spawn to a spawn of psql did not work
+  *
+  * ogr and psal as script
+  * ----------------------
+  * Given the limited time to work on this, a warkaround has been found, 
+  * using a script. This should be a temporary fix.
+  */
+  var args = ['./sh/import_vector.sh', filePath, idSource, sourceSrs];
 
-  if (sourceSrs) {
-    // test fir integer => epsg code;
-    if(Number.isInteger(sourceSrs*1)){
-      sourceSrs = "EPSG:" + sourceSrs;
-    }
-    args = args.concat(['-s_srs', sourceSrs]);
-  }
-
-  args = args.concat([settings.db.stringWrite, fileName]);
-
-  var cmd = 'ogr2ogr';
-
-  var ogr = spawn(cmd, args);
+  var ogr = spawn('sh', args);
 
   ogr.stdout.on('data', function(data) {
     data = data.toString('utf8');
@@ -391,4 +381,3 @@ function fileToPostgres(config) {
       });
   });
 }
-

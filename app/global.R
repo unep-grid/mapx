@@ -9,31 +9,30 @@ library(magrittr)
 library(parallel)
 library(curl)
 library(xml2)
-library(pool)
 library(geosapi)
 
 #
 # Load helpers
 #
-source("src/helper/misc.R",local=.GlobalEnv)
-mxSource("src/helper/binding_mgl.R")
-mxSource("src/helper/binding_mx.R")
-mxSource("src/helper/binding_epsgio.R")
-mxSource("src/helper/binding_jed.R")
-mxSource("src/helper/binding_wms_client.R")
-mxSource("src/helper/login_utils.R")
-mxSource("src/helper/query_parser.R")
-mxSource("src/helper/email_sender.R")
-mxSource("src/helper/api_fetch.R")
-mxSource("src/helper/geoserver.R")
-mxSource("src/helper/story_auto_start.R")
-mxSource("src/helper/db.R")
-mxSource("src/helper/db_projects.R")
-mxSource("src/helper/db_log.R")
-mxSource("src/helper/db_views.R")
-mxSource("src/helper/schema_source_meta.R")
-mxSource("src/helper/schema_view_story.R")
-mxSource("src/helper/schema_view_style.R")
+source("src/r/helpers/misc.R",local=.GlobalEnv)
+mxSource("src/r/helpers/binding_mgl.R")
+mxSource("src/r/helpers/binding_mx.R")
+mxSource("src/r/helpers/binding_epsgio.R")
+mxSource("src/r/helpers/binding_jed.R")
+mxSource("src/r/helpers/binding_wms_client.R")
+mxSource("src/r/helpers/login_utils.R")
+mxSource("src/r/helpers/query_parser.R")
+mxSource("src/r/helpers/email_sender.R")
+mxSource("src/r/helpers/api_fetch.R")
+mxSource("src/r/helpers/geoserver.R")
+mxSource("src/r/helpers/story_auto_start.R")
+mxSource("src/r/helpers/db.R")
+mxSource("src/r/helpers/db_projects.R")
+mxSource("src/r/helpers/db_log.R")
+mxSource("src/r/helpers/db_views.R")
+mxSource("src/r/helpers/schema_source_meta.R")
+mxSource("src/r/helpers/schema_view_story.R")
+mxSource("src/r/helpers/schema_view_style.R")
 
 #
 # Global configuration
@@ -50,28 +49,4 @@ mxSource("settings/settings-local.R")
 #
 mxSetResourcePath(.get(config,c("resources")))
 
-#
-# Creating db pool
-#
-if( ! ("MAINTENANCE" %in% .get(config,c("mode")) )){
-  mxDebugMsg("pool create")
-  pg <- .get(config,c("pg"))
-  config <- .set(config,c("db","pool"),
-    dbPool(
-      drv = dbDriver("PostgreSQL"),
-      dbname = pg$dbname,
-      host = pg$host,
-      user = pg$user,
-      password = pg$password,
-      port = pg$port
-      )
-    )
-}
-onStop(function() {
-  pool <- .get(config,c("db","pool"))
-  if(!noDataCheck(pool)){
-  
-  mxDebugMsg("pool close")
-  poolClose(pool)
-  }
-})
+

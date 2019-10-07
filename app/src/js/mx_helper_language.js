@@ -9,13 +9,26 @@ export function updateLanguage(o) {
   o.lang = o.lang || mx.settings.language || 'en';
   mx.settings.language = o.lang;
 
-  // Set language for the document
+  /*
+   * Set language for the document
+   */
   document.querySelector('html').setAttribute('lang', o.lang);
 
-  //updateButtons(o);
-  updateLanguageElements(o);
-  updateLanguageViewsList(o);
-  updateLanguageMap(o);
+  updateLanguageElements(o)
+    .then(() => {
+      return updateLanguageMap(o);
+    })
+    .then(() => {
+      return updateLanguageViewsList(o);
+    })
+    .then(() => {
+      /**
+       * Fire lang_updated event
+       */
+      mx.events.fire({
+        type: 'lang_updated'
+      });
+    });
 }
 
 export function splitnwords(str) {
@@ -32,34 +45,34 @@ export function getDict(lang) {
 
   switch (lang) {
     case 'en':
-      out = import('../built/dict_en.json');
+      out = import('../data/dict_built/dict_en.json');
       break;
     case 'fr':
-      out = import('../built/dict_fr.json');
+      out = import('../data/dict_built/dict_fr.json');
       break;
     case 'es':
-      out = import('../built/dict_es.json');
+      out = import('../data/dict_built/dict_es.json');
       break;
     case 'de':
-      out = import('../built/dict_de.json');
+      out = import('../data/dict_built/dict_de.json');
       break;
     case 'ru':
-      out = import('../built/dict_ru.json');
+      out = import('../data/dict_built/dict_ru.json');
       break;
     case 'fa':
-      out = import('../built/dict_fa.json');
+      out = import('../data/dict_built/dict_fa.json');
       break;
     case 'ps':
-      out = import('../built/dict_ps.json');
+      out = import('../data/dict_built/dict_ps.json');
       break;
     case 'bn':
-      out = import('../built/dict_bn.json');
+      out = import('../data/dict_built/dict_bn.json');
       break;
     case 'zh':
-      out = import('../built/dict_zh.json');
+      out = import('../data/dict_built/dict_zh.json');
       break;
     default:
-      out = import('../built/dict_en.json');
+      out = import('../data/dict_built/dict_en.json');
       break;
   }
   return out.then((m) => {
@@ -77,9 +90,10 @@ export function updateLanguageElements(o) {
   o = o || {};
   o.lang = o.lang || mx.settings.language || 'en';
   var langDefault = 'en';
-
-  getDict(o.lang).then(function(dict) {
-    var els, el, doc, label, found;
+  let changes = [];
+  return getDict(o.lang).then((dict) => {
+    var i, iL, j, jL;
+    var els, el, doc, label, found, type, id;
     var lang = o.lang;
 
     // custom buttons
@@ -88,10 +102,62 @@ export function updateLanguageElements(o) {
       elBtnLanguage.dataset.lang_key = o.lang;
     }
 
-    // set value selector
+    // if no el to look at, serach the whole document
+    doc = h.isElement(o.el) ? o.el : document;
 
-    var setValue = {
-      tooltip: function(el) {
+    // fetch all elements with data-lang_key attr
+    els = doc.querySelectorAll('[data-lang_key]');
+    for (i = 0, iL = els.length; i < iL; i++) {
+      el = els[i];
+      type = el.dataset.lang_type;
+      id = el.dataset.lang_key;
+      found = false;
+      label = '';
+
+      /*
+       * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
+       */
+      if (!type) {
+        type = el.getAttribute('data-lang_type');
+      }
+
+      /*
+       * Default is text : inner text will be updated
+       */
+      if (!type) {
+        type = 'text';
+      }
+
+      for (j = 0, jL = dict.length; j < jL; j++) {
+        if (!found) {
+          if (dict[j].id === id) {
+            found = true;
+            label = dict[j][lang];
+            if (!label) {
+              label = dict[j][langDefault];
+            }
+          }
+        }
+      }
+
+      changes.push([type, el, label]);
+    }
+
+    /**
+     * Group all change to avoid many reflow;
+     */
+    changes.forEach((c) => {
+      setValue(c[0], c[1], c[2]);
+    });
+
+    /**
+     * Helpers
+     */
+    function setValue(type, el, label) {
+      if (!label) {
+        return;
+      }
+      if (type === 'tooltip') {
         if (el.dataset.lang_split) {
           label = splitnwords(label);
         }
@@ -99,66 +165,14 @@ export function updateLanguageElements(o) {
         if (el.className.indexOf('hint--') === -1) {
           el.className += ' hint--left';
         }
-      },
-      placeholder: function(el) {
+        return;
+      }
+
+      if (type === 'placeholder') {
         el.setAttribute('placeholder', label);
-      },
-      text: function(el) {
-        el.innerHTML = label;
+        return;
       }
-    };
-
-    // if no el to look at, serach the whole document
-    doc = h.isElement(o.el) ? o.el : document;
-
-    // fetch all elements with data-lang_key attr
-    els = doc.querySelectorAll('[data-lang_key]');
-    for (var i = 0; i < els.length; i++) {
-      el = els[i];
-
-      if (h.isElement(el)) {
-        var type = el.dataset.lang_type;
-        var id = el.dataset.lang_key;
-
-        /*
-         * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
-         */
-        if (!type) {
-          type = el.getAttribute('data-lang_type');
-        }
-
-        // Default is text. Maybe not the most clever default.
-        if (!type) {
-          type = 'text';
-        }
-
-        found = false;
-        label = '';
-
-        for (var j = 0; j < dict.length; j++) {
-          if (!found) {
-            if (dict[j].id === id) {
-              found = true;
-              label = dict[j][lang];
-              if (!label) {
-                // if label no in dict, take the default
-                label = dict[j][langDefault];
-              }
-            }
-          }
-        }
-        /*
-         * Fallback
-         */
-        if (!label) {
-          if (el.innerText) {
-            label = el.innerText;
-          } else {
-            label = id;
-          }
-        }
-        setValue[type](el);
-      }
+      el.innerText = label;
     }
   });
 }
@@ -313,45 +327,43 @@ export function getTranslationFromObject(o) {
 }
 
 export function updateLanguageViewsList(o) {
-  var elsViews = document.getElementsByClassName('mx-view-item');
+  return new Promise((resolve) => {
+    var elsViews = document.getElementsByClassName('mx-view-item');
+    var views = mx.maps[o.id].views;
+    var lang = o.lang || mx.settings.language;
 
-  if (!mx.maps || !mx.maps[o.id]) {
-    return;
-  }
-
-  var views = mx.maps[o.id].views;
-  var lang = o.lang || mx.settings.language;
-
-  mx.helpers.forEachEl({
-    els: elsViews,
-    callback: function(el) {
-      var id = el.dataset.view_id;
-      var v = views.find(function(v) {
-        return v.id === id;
-      });
-      var elTitle = el.querySelector('.mx-view-tgl-title');
-      var elText = el.querySelector('.mx-view-item-desc');
-      var elLegend = el.querySelector('.mx-view-item-legend-vt');
-
-      if (elLegend) {
-        elLegend.innerHTML = mx.templates.viewListLegend(v);
-      }
-
-      if (elTitle) {
-        elTitle.innerHTML = mx.helpers.getLabelFromObjectPath({
-          lang: lang,
-          obj: v,
-          path: 'data.title'
+    mx.helpers.forEachEl({
+      els: elsViews,
+      callback: function(el) {
+        var id = el.dataset.view_id;
+        var v = views.find(function(v) {
+          return v.id === id;
         });
+        var elTitle = el.querySelector('.mx-view-tgl-title');
+        var elText = el.querySelector('.mx-view-item-desc');
+        var elLegend = el.querySelector('.mx-view-item-legend-vt');
+
+        if (elLegend) {
+          elLegend.innerHTML = mx.templates.viewListLegend(v);
+        }
+
+        if (elTitle) {
+          elTitle.innerHTML = mx.helpers.getLabelFromObjectPath({
+            lang: lang,
+            obj: v,
+            path: 'data.title'
+          });
+        }
+        if (elText) {
+          elText.innerHTML = mx.helpers.getLabelFromObjectPath({
+            lang: lang,
+            obj: v,
+            path: 'data.abstract'
+          });
+        }
       }
-      if (elText) {
-        elText.innerHTML = mx.helpers.getLabelFromObjectPath({
-          lang: lang,
-          obj: v,
-          path: 'data.abstract'
-        });
-      }
-    }
+    });
+    resolve(true);
   });
 }
 
@@ -362,50 +374,57 @@ export function updateLanguageViewsList(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export function updateLanguageMap(o) {
-  var map = mx.helpers.getMap(o.id);
-  if (!mx.helpers.isMap(map)) {
-    return;
-  }
-  var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
-  var defaultLang = 'en';
-  var layers = [
-    'place-label-city',
-    'place-label-capital',
-    'country-label',
-    'water-label',
-    'poi-label'
-  ];
-
-  if (map) {
-    if (!o.language || mapLang.indexOf(o.language) === -1) {
-      o.language = mx.settings.language;
+  return new Promise((resolve) => {
+    var map = mx.helpers.getMap(o.id);
+    if (!mx.helpers.isMap(map)) {
+      return;
     }
+    var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
+    var defaultLang = 'en';
+    var layers = [
+      'place-label-city',
+      'place-label-capital',
+      'country-label',
+      'water-label',
+      'poi-label'
+    ];
 
-    if (!o.language) {
-      o.language = defaultLang;
-    }
-
-    /*
-     * set default to english for the map layers if not in language set
-     */
-    if (mapLang.indexOf(o.language) === -1) {
-      o.language = defaultLang;
-    }
-
-    /**
-     * Set language in layers
-     */
-    for (var i = 0; i < layers.length; i++) {
-      var layer = layers[i];
-      var layerExists =
-        mx.helpers.getLayerNamesByPrefix({
-          id: o.id,
-          prefix: layer
-        }).length > 0;
-
-      if (layerExists) {
-        map.setLayoutProperty(layer, 'text-field', '{name_' + o.language + '}');
+    if (map) {
+      if (!o.language || mapLang.indexOf(o.language) === -1) {
+        o.language = mx.settings.language;
       }
+
+      if (!o.language) {
+        o.language = defaultLang;
+      }
+
+      /*
+       * set default to english for the map layers if not in language set
+       */
+      if (mapLang.indexOf(o.language) === -1) {
+        o.language = defaultLang;
+      }
+
+      /**
+       * Set language in layers
+       */
+      for (var i = 0; i < layers.length; i++) {
+        var layer = layers[i];
+        var layerExists =
+          mx.helpers.getLayerNamesByPrefix({
+            id: o.id,
+            prefix: layer
+          }).length > 0;
+
+        if (layerExists) {
+          map.setLayoutProperty(
+            layer,
+            'text-field',
+            '{name_' + o.language + '}'
+          );
+        }
+      }
+      resolve(true);
     }
-  }
+  });
 }

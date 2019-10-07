@@ -268,11 +268,11 @@ span.mx-badge-role {
   border-left: 1px solid var(--mx_ui_border);
 }
 
-.mx-bar-sort > .mx-btn-toggle-filter:hover {
+.mx-bar-sort > .mx-btn-toggle-filter:hover * {
   color: var(--mx_ui_text);
 }
 
-.mx-bar-sort > .mx-btn-toggle-filter.active {
+.mx-bar-sort > .mx-btn-toggle-filter.active * {
   color:var(--mx_ui_background);
   background:var(--mx_ui_text);
 }
@@ -295,7 +295,6 @@ span.mx-badge-role {
 
 .mx .selectize-control.single .selectize-input:after,
 .mx .selectize-control.single .selectize-input.dropdown-active:after,
-
 .mx .selectize-dropdown.form-control{
   background-color: var(--mx_ui_background);
   border-color: var(--mx_ui_border);

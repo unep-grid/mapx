@@ -225,30 +225,29 @@ function jedValidateSize(editor) {
   /**
    * Test size
    */
+  const h = mx.helpers;
   var values = editor.getValue();
-  var el = mx.helpers.el;
-  new Promise(function(resolve) {
-    var res = mx.helpers.getSizeOf(values, false);
-    resolve(res);
-  }).then(function(size) {
-    if (size > mx.settings.maxByteJed) {
-      var sizeReadable = mx.helpers.formatByteSize(size);
-      mx.helpers.modal({
-        addBackground: true,
-        id: 'warningSize',
-        title:
+
+  return h.getSizeOf(values, false)
+    .then(function(size) {
+      if (size > mx.settings.maxByteJed) {
+        var sizeReadable = h.formatByteSize(size);
+        h.modal({
+          addBackground: true,
+          id: 'warningSize',
+          title:
           'Warning : size greater than ' +
           mx.settings.maxByteJed +
           ' ( ' +
           sizeReadable +
           ')',
-        content: el(
-          'b',
-          'Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.'
-        )
-      });
-    }
-  });
+          content: h.el(
+            'b',
+            'Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.'
+          )
+        });
+      }
+    });
 }
 
 /**

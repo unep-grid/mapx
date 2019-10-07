@@ -17,16 +17,20 @@ class Toolbar extends Box {
     });
     toolbar.mc = boxParent;
 
-    toolbar.addListener({
+    toolbar.lStore.addListener({
+      target : toolbar.el, 
       type: 'change',
-      group: 'toolbar_form_change',
-      listener: changeListener.bind(toolbar)
+      idGroup: 'toolbar_change',
+      callback: changeCallback,
+      bind : toolbar
     });
 
-    toolbar.addListener({
+    toolbar.lStore.addListener({
+      target : toolbar.el, 
       type: 'click',
-      group: 'toolbar_click',
-      listener: clickListener.bind(toolbar)
+      idGroup: 'toolbar_click',
+      callback: clickCallback,
+      bind : toolbar
     });
   }
 
@@ -233,7 +237,7 @@ class Toolbar extends Box {
 
 export {Toolbar};
 
-function clickListener(e) {
+function clickCallback(e) {
   var toolbar = this;
   var mc = toolbar.mc;
   if (!mc.ready) {
@@ -247,7 +251,7 @@ function clickListener(e) {
   }
 }
 
-function changeListener(e) {
+function changeCallback(e) {
   var toolbar = this;
   var mc = toolbar.mc;
   if (!mc.ready) {

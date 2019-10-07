@@ -7,49 +7,89 @@ import {Toggle} from './components/toggle.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
 import {el} from '@fxi/el';
-import {updateLanguageElements} from './../mx_helper_language.js';
+import {getDictItem} from './../mx_helper_language.js';
 import './style.css';
 
-let settings = {
+const settings = {
   onFilter: (ids) => {
     console.log(ids);
+  },
+  onUpdateCount: (nTot, nFilter) => {
+    console.table({nTot: nTot, nFilter: nFilter});
   },
   operator: 'and',
   elFilterText: document.body,
   elFilterTags: document.body,
+  elFilterActivated: document.body,
   views: []
 };
 
 class ViewsFilter {
   constructor(views, opt) {
-    let vf = this;
+    const vf = this;
     vf.opt = Object.assign({}, settings, opt);
     vf.lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
-    vf.update();
+    vf.init();
+  }
+
+  init() {
+    const vf = this;
+    vf.removeRules();
+    vf.removeRules();
+    vf.updateViewsComponents();
+    vf.updateTags();
+    vf.filter();
   }
 
   initStorage(views) {
-    let vf = this;
+    const vf = this;
     vf._views = views || opt.views;
     vf._tags = [];
     vf._rules = [];
     vf._previousState = [];
   }
 
+  initListeners() {
+    const vf = this;
+
+    vf.lStore.addListener({
+      target: vf.opt.elFilterActivated,
+      type: ['click'],
+      callback: handleFilterActivatedView,
+      group: 'view_filter',
+      bind: vf
+    });
+
+    vf.lStore.addListener({
+      target: vf.opt.elFilterTags,
+      type: ['click'],
+      callback: handleFilterViewIdByTag,
+      group: 'view_filter',
+      bind: vf
+    });
+    vf.lStore.addListener({
+      target: vf.opt.elFilterText,
+      type: 'keyup',
+      callback: handleFilterViewIdByText,
+      group: 'view_filter',
+      debounce: true,
+      bind: vf
+    });
+  }
   destroy() {
-    let vf = this;
-    vf.cleanTags();
+    const vf = this;
+    vf.clear();
     vf.lStore.destroy();
   }
 
   filter() {
-    let vf = this;
-    let pState = vf._previousState;
-    let state = vf.getViewsIdSubset();
-    let rules = vf.getRules();
-    if(pState !== state){
+    const vf = this;
+    const pState = vf._previousState;
+    const state = vf.getViewsIdSubset();
+    const rules = vf.getRules();
+    if (pState !== state) {
       vf._previousState = state;
       vf.opt.onFilter(state, rules);
       vf.updateCount();
@@ -73,10 +113,10 @@ class ViewsFilter {
     this._rules.length = 0;
   }
   updateRule(idRule, ids, enable) {
-    let vf = this;
-    let rules = vf.getRules();
+    const vf = this;
+    const rules = vf.getRules();
     let rule = rules.filter((r) => r.idRule === idRule)[0];
-    let ruleExists = typeof rule !== 'undefined';
+    const ruleExists = typeof rule !== 'undefined';
 
     if (ruleExists && enable) {
       rule.ids = ids;
@@ -90,126 +130,117 @@ class ViewsFilter {
     }
 
     if (ruleExists && !enable) {
-      let pos = rules.indexOf(rule);
+      const pos = rules.indexOf(rule);
       rules.splice(pos, 1);
     }
     vf.filter();
   }
 
   getViewsSubset() {
-    let vf = this;
-    let ids = vf.getViewsIdSubset();
-    let views = vf.getViews();
+    const vf = this;
+    const ids = vf.getViewsIdSubset();
+    const views = vf.getViews();
     return views.filter((v) => ids.indexOf(v.id) > -1);
   }
 
   getViewsIdSubset() {
-    let vf = this;
-    let rules = vf.getRules();
-    let isIntersect = vf.opt.operator.toLowerCase() === 'and';
-    let viewsBase = isIntersect ? vf.getViewsId() : [];
-    let subset = rules.reduce((a, r) => {
-      let ids = r.ids;
+    const vf = this;
+    const rules = vf.getRules();
+    const isIntersect = vf.opt.operator.toLowerCase() === 'and';
+    const viewsBase = isIntersect ? vf.getViewsId() : [];
+    const subset = rules.reduce((a, r) => {
+      const ids = r.ids;
       if (isIntersect) {
         return getArrayIntersect(a, ids);
       } else {
         return a.concat(ids);
       }
     }, viewsBase);
-
-    return getArrayDistinct(subset);
+    let distinct = getArrayDistinct(subset);
+    /**
+    * By defaut, if result is empty, show all;
+    */
+    if(distinct.length === 0){
+      distinct = vf.getViewsId();
+    }
+    return distinct;
   }
 
   setOperator(op) {
-    let vf = this;
+    const vf = this;
     vf.opt.operator = op;
     vf.filter();
-  }
-
-  update() {
-    let vf = this;
-    vf.removeRules();
-    vf.filter();
-    vf.updateViewsComponents();
-    vf.updateTags();
-    vf.updateCount();
-  }
-
-  initListeners() {
-    let vf = this;
-    vf.lStore.addListener({
-      target: vf.opt.elFilterTags,
-      type : ['click'],
-      listener: handleFilterViewIdByTag,
-      group: 'view_filter',
-      bind: vf
-    });
-    vf.lStore.addListener({
-      target: vf.opt.elFilterText,
-      type: 'keyup',
-      listener: handleFilterViewIdByText,
-      group: 'view_filter',
-      debounce: true,
-      bind: vf
-    });
   }
 
   setTags(tags) {
     this._tags = tags;
   }
-  addTag(tag) {
+  addTag(tag, elParent) {
     this._tags.push(tag);
+    if (elParent) {
+      elParent.appendChild(tag.el);
+    }
   }
   getTags() {
     return this._tags;
   }
   removeTag(tag) {
-    let tags = this._tags;
-    let pos = tags.indexOf(tag);
+    const tags = this._tags;
+    const pos = tags.indexOf(tag);
     if (pos > -1) {
       tags.splice(pos, 1);
     }
   }
 
   updateTags() {
-    updateTags.bind(this)();
+    return updateTags.bind(this)();
+  }
+  updateTagsOrder() {
+    return updateTagsOrder.bind(this)();
   }
 
-  cleanTags() {
-    let vf = this;
+  clear() {
+    const vf = this;
     vf._tags.forEach((t) => {
       t.destroy();
       vf.removeTag(t);
     });
-    let elTags = vf.opt.elFilterTags;
+    const elTags = vf.opt.elFilterTags;
+    const elFilter = vf.opt.elFilterActivated;
     while (elTags.firstElementChild) {
       elTags.removeChild(elTags.firstElementChild);
     }
+    elFilter.classList.remove('active');
   }
 
   updateCount() {
-    let vf = this;
-    let views = vf.getViews();
-    let isIntersect = vf.opt.operator === 'and';
-    let viewsSub = isIntersect ? vf.getViewsSubset() : views;
-    let tags = vf.getTags();
-    let tagsCount = getFreqTable(viewsSub);
+    const vf = this;
+    const views = vf.getViews();
+    const viewsSubset = vf.getViewsSubset();
+    const isIntersect = vf.opt.operator === 'and';
+    const viewsDisplayed = isIntersect ? viewsSubset : views;
+    const tags = vf.getTags();
+    const tagsCount = getFreqTable(viewsDisplayed);
     let count, byType, byId;
     tags.forEach((tag) => {
       count = 0;
-      byType = tagsCount[tag.type];
+      byType = tagsCount[tag.getType()];
       if (byType) {
-        byId = byType[tag.id];
+        byId = byType[tag.getId()];
         if (byId) {
           count = byId;
         }
       }
       tag.setCount(count);
     });
+    vf.opt.onUpdateCount({
+      nTot: views.length,
+      nSubset: viewsSubset.length
+    });
   }
 
   updateViewsComponents() {
-    let views = this.getViews();
+    const views = this.getViews();
     setViewsComponents(views);
   }
 }
@@ -250,7 +281,7 @@ function isFound(view, type, filter) {
  */
 function setViewsComponents(views) {
   views.forEach((v) => {
-    let components,
+    let components = [],
       isVt,
       isGj,
       isSm,
@@ -261,7 +292,6 @@ function setViewsComponents(views) {
       overlap,
       attributes,
       customStyle;
-    components = [];
 
     isVt = v.type === 'vt';
     isSm = v.type === 'sm';
@@ -319,18 +349,19 @@ function setViewsComponents(views) {
  * @note : expect type, data.classes and data.collections
  */
 export function getFreqTable(views) {
-  let tags = {
+  const path = mx.helpers.path;
+  const tags = {
     components: [],
     classes: [],
     collections: []
   };
 
-  let stat = {};
+  const stat = {};
 
   views.forEach(function(v) {
-    tags.components = tags.components.concat(path(v, '_components'));
-    tags.classes = tags.classes.concat(path(v, 'data.classes'));
-    tags.collections = tags.collections.concat(path(v, 'data.collections'));
+    tags.components = tags.components.concat(path(v, '_components', []));
+    tags.classes = tags.classes.concat(path(v, 'data.classes', []));
+    tags.collections = tags.collections.concat(path(v, 'data.collections', []));
   });
 
   // grouprs
@@ -352,118 +383,135 @@ export function getFreqTable(views) {
   return stat;
 }
 
+function updateTagsOrder() {
+  const vf = this;
+  const tags = vf.getTags();
+  const types = ['view_components', 'view_classes', 'view_collections'];
+
+  types.forEach((t) => {
+    const tt = tags.filter((tag) => tag.getType() === t);
+    tt.sort((a, b) => {
+      let aLabel = n(a.getLabel());
+      let bLabel = n(b.getLabel());
+      if (aLabel > bLabel) {
+        return 1;
+      }
+      if (bLabel > aLabel) {
+        return -1;
+      }
+      return 0;
+    });
+    tt.forEach((t, i) => {
+      t.setOrder(i);
+    });
+  });
+
+  /**
+   * Normalise
+   */
+  function n(txt) {
+    return txt.toLowerCase().trim();
+  }
+}
+
 function updateTags() {
-  let vf = this;
-  let views = vf.getViews();
-  let elContainer = vf.opt.elFilterTags;
-  let table = getFreqTable(views);
-  let types = Object.keys(table);
+  const vf = this;
+  const views = vf.getViews();
+  const elContainer = vf.opt.elFilterTags;
+  const table = getFreqTable(views);
+  const types = Object.keys(table);
+  const elTags = document.createDocumentFragment();
+  const labels = [];
+
   let elTypes;
   let elThemes;
   let elCollections;
-  vf.cleanTags();
+  vf.clear();
 
-  let elTags = el(
-    'div',
-    el(
-      'div',
-    {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_components'}}, 'Types'),
-      (elTypes = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    ),
-    el(
-      'div',
-      {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_classes'}}, 'Themes'),
-      (elThemes = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    ),
-    el(
-      'div',
-    {
-        class : ['vf-partial-border-side']
-      },
-      el('b', {dataset: {lang_key: 'view_collections'}}, 'Collections'),
-      (elCollections = el('div', {
-        class: ['vf-check-toggle-group']
-      }))
-    )
-  );
+  const parts = [
+    elTitleKey('view_components'),
+    (elTypes = elGroup()),
+    elTitleKey('view_classes'),
+    (elThemes = elGroup()),
+    elTitleKey('view_collections'),
+    (elCollections = elGroup())
+  ];
 
-  let groups = {
+  parts.forEach((p) => {
+    elTags.appendChild(p);
+  });
+
+  const groups = {
     view_components: elTypes,
     view_classes: elThemes,
     view_collections: elCollections
   };
 
-  let gProm = types.map(function(type) {
-    return new Promise((resolve) => {
-      let tbl = table[type];
-      let keys = Object.keys(tbl);
-      let tags = [];
-
-      keys.forEach((key) => {
-        let tag = new Toggle({
-          id: key,
-          label_key: key,
-          count: tbl[key],
-          type: type
-        });
-        tags.push(tag);
+  types.forEach((type) => {
+    const tbl = table[type];
+    const keys = Object.keys(tbl);
+    keys.forEach((key, i) => {
+      const label = getDictItem(key);
+      const tag = new Toggle({
+        order: i,
+        id: key,
+        label_key: key,
+        label: label,
+        count: tbl[key],
+        type: type
       });
-      resolve(tags);
-    })
-      .then((tags) => {
-        tags.forEach((tag) => {
-          vf.addTag(tag);
-          groups[tag.type].appendChild(tag.el);
-        });
-        return updateLanguageElements({el: elTags});
-      })
-      .then(() => {})
-      .catch((err) => {
-        console.warn(err);
-      });
+      const elParent = groups[type];
+      vf.addTag(tag, elParent);
+      labels.push(label);
+    });
   });
 
-  return Promise.all(gProm).then(() => {
-    elContainer.appendChild(elTags);
+  /**
+   * Update tags order when tags labels are updated
+   */
+  Promise.all(labels).then(() => {
+    return vf.updateTagsOrder();
   });
 
-  /*  function sortTags(tags) {*/
-  //tags = tags.sort(function(a, b) {
-  //if (a.label < b.label) {
-  //return -1;
-  //}
-  //if (a.label > b.label) {
-  //return 1;
-  //}
-  //return 0;
-  //});
-  /*}*/
+  /**
+   * Render fragment
+   */
+  elContainer.appendChild(elTags);
+  /**
+   * Helpers
+   */
+
+  function elTitleKey(key) {
+    return el(
+      'span',
+      {
+        class: 'vf-check-toggle-group-title',
+        dataset: {lang_key: key}
+      },
+      getDictItem(key)
+    );
+  }
+
+  function elGroup() {
+    return el('div', {
+      class: ['vf-check-toggle-group']
+    });
+  }
 }
 
 /**
  * Filter view by text
  */
 function handleFilterViewIdByText(event) {
-  let vf = this;
-  let txt = event.target.value;
-  let views = vf.getViews();
-  txt = txt.toLowerCase();
-  let expr = txtToRegex(txt);
+  const vf = this;
+  const txt = event.target.value.toLowerCase();
+  const views = vf.getViews();
+  const expr = txtToRegex(txt);
   let found = false;
   let text = '';
 
-  let ids = views.reduce((a, v) => {
-    text = Object.values(v.data.title)
+  const ids = views.reduce((a, v) => {
+    text = Object.values(path(v, 'data.title', {}))
       .join(' ')
       .toLowerCase();
     found = text.search(expr) > -1;
@@ -475,7 +523,7 @@ function handleFilterViewIdByText(event) {
     }
   }, []);
 
-  let enable = txt.length > 0;
+  const enable = txt.length > 0;
   vf.updateRule('text', ids, enable);
 }
 
@@ -516,35 +564,59 @@ function findToggle(el) {
  * Filter view by tag
  */
 function handleFilterViewIdByTag(event) {
-  let vf = this;
-  let elToggle = findToggle(event.target);
+  const vf = this;
+  const elToggle = findToggle(event.target);
 
   if (!elToggle || !isToggle(elToggle)) {
     return;
   }
 
   event.stopImmediatePropagation();
-  let isMouseOver = event.type ==='mouseover';
-  let isMouseOut = event.type === 'mouseout';
-  let isClick = event.type === 'click';
+  const isMouseOver = event.type === 'mouseover';
+  const isMouseOut = event.type === 'mouseout';
+  const isClick = event.type === 'click';
 
-  let tgl = elToggle.toggle;
-  let views = vf.getViews();
-  let type = tgl.getType();
-  let id = tgl.getId();
-  let state = isClick ? tgl.getState() : isMouseOver && !isMouseOut;
-  let ids = [];
+  const tgl = elToggle.toggle;
+  const views = vf.getViews();
+  const type = tgl.getType();
+  const id = tgl.getId();
+  const state = isClick ? tgl.getState() : isMouseOver && !isMouseOut;
+  const ids = [];
   let found = false;
+
   if (state) {
-    ids = views.reduce((a, v) => {
-      found = isFound(v, type, id);
-      if (found) {
-        a.push(v.id);
-      }
-      return a;
-    }, []);
+    ids.push(
+      ...views.reduce((a, v) => {
+        found = isFound(v, type, id);
+        if (found) {
+          a.push(v.id);
+        }
+        return a;
+      }, [])
+    );
   }
-  let mouseEvent = isMouseOver || isMouseOut ? 'mouse' : '';
-  let idRule = ['tag', type, id, mouseEvent].join(':');
+  const mouseEvent = isMouseOver || isMouseOut ? 'mouse' : '';
+  const idRule = ['tag', type, id, mouseEvent].join(':');
   vf.updateRule(idRule, ids, state);
+}
+
+function handleFilterActivatedView(event) {
+  const vf = this;
+  const clActive = 'active';
+  const elBtn = event.target;
+  const toDisable = elBtn.classList.contains(clActive);
+  if (toDisable) {
+    elBtn.classList.remove(clActive);
+  } else {
+    elBtn.classList.add(clActive);
+  }
+  const views = vf.getViews();
+  const ids = views.reduce((a, v) => {
+    if (!toDisable && v._open) {
+      a.push(v.id);
+    }
+    return a;
+  }, []);
+
+  vf.updateRule('activated', ids, !toDisable);
 }

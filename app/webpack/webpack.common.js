@@ -33,7 +33,7 @@ module.exports = {
       background_color: '#15b0f8',
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
       filename: 'manifest.json',
-      inject: true /* added manually in header.R */,
+      inject: true,
       start_url: '/',
       'theme-color': '#15b0f8',
       theme_color: '#15b0f8',
@@ -54,7 +54,14 @@ module.exports = {
   ],
   module: {
     rules: [
-      {test: /.css$/, use: ['style-loader', 'css-loader', 'icon-font-loader']},
+      {
+        test: /\.less$/,
+        use: ['style-loader','css-loader','less-loader']
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'icon-font-loader']
+      },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         use: ['url-loader?limit=10000', 'img-loader']

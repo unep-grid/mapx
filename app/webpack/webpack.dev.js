@@ -11,8 +11,8 @@ module.exports = merge(common, {
   },
   plugins: [
     new watchUi({
-      watchFolder: "./src/data",
-      script: 'Rscript ./src/script/build_dict_json.R'
+      watchFolder: "./src/data/dict",
+      script: 'Rscript ./src/r/scripts/build_dict_json.R ./src/data/dict_built'
     }),
     new HtmlWebpackPlugin({
       template: './src/html/kiosk.html',

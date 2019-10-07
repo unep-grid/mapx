@@ -11,5 +11,3 @@ import "./shiny.js";
 
 console.log("INIT SHINY");
 
-
-

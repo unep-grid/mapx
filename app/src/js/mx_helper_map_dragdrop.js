@@ -165,23 +165,15 @@ export function parseDataToGeojson(data, fileType) {
 
 // handle worker
 function handleFileParser(f) {
-  var helper = mx.helpers;
+  const helper = mx.helpers;
 
   return function handler(e) {
     /**
      * Test for size
      */
-    if (f && f.size && f.size > mx.settings.maxByteUpload) {
-      var msg = '<p>The file size reached the current limit.</p>';
-      msg = msg + '<p>The file size is ' + f.size + ' byte </p>';
-      msg = msg + '<p>The limit is ' + mx.settings.maxByteUpload + ' byte </p>';
-      msg =
-        msg +
-        '<p> Registered users can upload big dataset in the toolbox section </p>';
-      helper.modal({
-        content: msg,
-        title: 'Max size reached'
-      });
+
+    let isSizeValid = helper.isUploadFileSizeValid(f,{showModal:true});
+    if (!isSizeValid) {
       helper.progressScreen({
         enable: false,
         id: f.name
@@ -351,6 +343,10 @@ export function handleUploadFileEvent(evt) {
   evt.preventDefault();
   var helper = mx.helpers;
   var files = evt.dataTransfer.files;
+
+  if (helper.isModeLocked()) {
+    return;
+  }
 
   var nFiles = files.length;
   var exts = {

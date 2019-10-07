@@ -3,7 +3,9 @@ const v = require('validator');
 
 var arrayOperator = {
   ALL: '?&',
-  ANY: '?|'
+  ANY: '?|',
+  OR : '?|',
+  AND : '?&'
 };
 let keysChoices = [
   '*',

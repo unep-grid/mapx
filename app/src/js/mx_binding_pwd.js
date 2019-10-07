@@ -1,7 +1,6 @@
 /*jshint esversion: 6 */
 
-$(document).on('shiny:connected', function(event) {
-
+$(document).on('shiny:connected', function() {
   jQuery(function($) {
     // Password Input
     var passwordInputBinding = new Shiny.InputBinding();
@@ -19,10 +18,13 @@ $(document).on('shiny:connected', function(event) {
         el.value = value;
       },
       subscribe: function(el, callback) {
-        $(el).on('keyup.passwordInputBinding input.passwordInputBinding', function(event) {
-          callback(true);
-        });
-        $(el).on('change.passwordInputBinding', function(event) {
+        $(el).on(
+          'keyup.passwordInputBinding input.passwordInputBinding',
+          function() {
+            callback(true);
+          }
+        );
+        $(el).on('change.passwordInputBinding', function() {
           callback(false);
         });
       },
@@ -39,14 +41,12 @@ $(document).on('shiny:connected', function(event) {
     Shiny.inputBindings.register(passwordInputBinding, 'shiny.passwordInput');
   });
 
-
   jQuery(function($) {
     // User name input
     var usernameInputBinding = new Shiny.InputBinding();
     $.extend(usernameInputBinding, {
       find: function(scope) {
         return $(scope).find('.mx-login-input');
-
       },
       getId: function(el) {
         return Shiny.InputBinding.prototype.getId.call(this, el) || el.name;
@@ -58,10 +58,13 @@ $(document).on('shiny:connected', function(event) {
         el.value = value;
       },
       subscribe: function(el, callback) {
-        $(el).on('keyup.usernameInputBinding input.usernameInputBinding', function(event) {
-          callback(true);
-        });
-        $(el).on('change.usernameInputBinding', function(event) {
+        $(el).on(
+          'keyup.usernameInputBinding input.usernameInputBinding',
+          function() {
+            callback(true);
+          }
+        );
+        $(el).on('change.usernameInputBinding', function() {
           callback(false);
         });
       },
@@ -77,5 +80,4 @@ $(document).on('shiny:connected', function(event) {
     });
     Shiny.inputBindings.register(usernameInputBinding, 'shiny.usernameInput');
   });
-
 });

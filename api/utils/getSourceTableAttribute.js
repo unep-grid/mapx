@@ -10,7 +10,7 @@ function getSourceAttributeTableHandler(req, res) {
     attributes: req.query.attributes
   })
     .then((data) => {
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end: true});
     })
     .catch((err) => {
       utils.sendError(res, err);

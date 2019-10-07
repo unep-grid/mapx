@@ -149,7 +149,8 @@ v_all AS (
 v_meta AS (
   SELECT
   v.id as id,
-  coalesce( s.data #> '{"meta"}', '{}' ) AS _meta
+  coalesce( s.data #> '{"meta"}', '{}' ) AS _meta,
+  v.data #> '{"source","layerInfo","name"}' AS _id_source
   FROM v_all v LEFT OUTER JOIN mx_sources s
   ON v.data #>> '{"source","layerInfo","name"}' = s.id
 ),
@@ -160,7 +161,7 @@ v_list AS (
    */
   SELECT 
   v.*,
-  m._meta,
+  jsonb_insert(m._meta,'{"_id_source"}',m._id_source) as _meta,
   p.title _title_project
   FROM v_all v, v_meta m, p_base p 
   WHERE v.id = m.id

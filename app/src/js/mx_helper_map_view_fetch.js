@@ -6,19 +6,27 @@ export function fetchViews(opt) {
   var idUser = mx.settings.user.id;
   var language = mx.settings.language || mx.settings.languages[0];
   var token = mx.settings.user.token;
-  var idViews = h.getQueryParameter(['idViews', 'views']);
-  var collections = h.getQueryParameter('collections');
-  var collectionsSelectOperator = h.getQueryParameter(
+  var idViews = h.getQueryParameterInit(['idViews', 'views']);
+  var collections = h.getQueryParameterInit('collections');
+  var collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
   );
-  var roleMax = h.getQueryParameter(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
-  var noViews = h.getQueryParameter('noViews')[0] || '';
+  var roleMax =
+    h.getQueryParameterInit(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
+  var noViews = h.getQueryParameterInit('noViews')[0] || '';
+
+  var dataEmpty = {
+    views: [],
+    states: [],
+    timing: 0
+  };
 
   opt = opt || {};
   var host = h.getApiUrl('getViewsListByProject');
 
-  if(noViews === true || noViews.toLowerCase() === 'true'){
-    return Promise.resolve([]);
+  if (noViews === true || noViews.toLowerCase() === 'true') {
+    dataEmpty.noViews = true;
+    return Promise.resolve(dataEmpty);
   }
 
   var url =
@@ -39,18 +47,15 @@ export function fetchViews(opt) {
   start = performance.now();
 
   return h
-    .fetchProgress(url, {
+    .fetchJsonProgress(url, {
       onProgress: opt.onProgress || onProgress,
       onError: opt.onError || onError,
       onComplete: opt.onComplete || onComplete
     })
     .then((data) => {
-      return data.json() || {};
-    })
-    .then((data) => {
+      data = data || {};
       data.views = data.views || [];
-      data.states = data.states || {default:[]};
-      console.log(`Views DB: ${data.timing} [ms]`);
+      data.states = data.states || [];
       console.log(`Views n: ${data.views.length}`);
       return data;
     });

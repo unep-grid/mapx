@@ -73,6 +73,7 @@ export function renderUserProjectsList(o) {
    * Clean remove listener
    */
   function detach() {
+    console.log('Project list detach listeners');
     elContainer.removeEventListener('keyup', filterList);
     elContainer.removeEventListener('click', handleClick);
   }
@@ -98,8 +99,9 @@ export function renderUserProjectsList(o) {
         }
       },
       load_project: function() {
-        detach();
-        h.setProject(ds.load_project);
+        h.setProject(ds.load_project,{
+          onSuccess : detach
+        });
       }
     };
     Object.keys(actions).forEach((a) => {

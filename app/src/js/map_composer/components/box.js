@@ -1,14 +1,16 @@
 import {MessageFlash} from './message_flash.js';
 import {el} from '@fxi/el';
 import {onNextFrame} from './helpers.js';
+import {ListenerStore} from './../../listener_store/index.js';
 
 class Box {
   constructor(boxParent) {
-    var box = this;
+    let box = this;
     box.mc = boxParent.mc || boxParent;
     box[boxParent.title] = boxParent;
     box.boxParent = boxParent;
     box.state = boxParent.state;
+    box.lStore = new ListenerStore();
     box.width = 0;
     box.height = 0;
     box.left = 0;
@@ -32,6 +34,7 @@ class Box {
     opt = opt || {};
     var box = this;
     box.config = opt;
+    box.id = Math.random().toString(32);
     box.elContent = opt.content || el('div');
     box.el = box.createEl(opt.class);
     box.elContainer = opt.boxContainer.elContent;
@@ -47,11 +50,12 @@ class Box {
       right: true
     };
 
-    box.addListener({
+    box.lStore.addListener({
+      target: box.el,
       type: 'click',
-      group: 'box_focus',
-      listener: (e) => {
-        if(e.currentTarget === box.el){
+      idGroup: 'set_last_focus',
+      callback: (e) => {
+        if (e.currentTarget === box.el) {
           e.stopPropagation();
           mc.setBoxLastFocus(box);
         }
@@ -66,10 +70,14 @@ class Box {
     }
 
     if (opt.draggable || opt.resizable) {
-      box.addListener({
+      
+      
+      box.lStore.addListener({
+        target: box.el,
         type: 'mousedown',
-        group: 'drag_resize',
-        listener: dragResizeListener.bind(box)
+        idGroup: 'drag_resize',
+        callback: dragResizeListener,
+        bind: box
       });
 
       if (opt.draggable) {
@@ -111,43 +119,6 @@ class Box {
     return this.resizers.forEach((d) => d(this));
   }
 
-  addListener(opt) {
-    var box = this;
-    opt.target = opt.target || box.el;
-    opt.listener = opt.listener;
-    box.listeners.push(opt);
-    opt.target.addEventListener(opt.type, opt.listener);
-    return opt;
-  }
-
-  removeListener(opt) {
-    var box = this;
-    var pos = box.listeners.indexOf(opt);
-    if (pos > -1) {
-      box.listeners.splice(pos, 1);
-      opt.target.removeEventListener(opt.type, opt.listener);
-    }
-  }
-
-  removeListenerByGroup(grp) {
-    var box = this;
-    box.getListenerByGroup(grp).forEach((l) => {
-      box.removeListener(l);
-    });
-  }
-
-  getListenerByGroup(grp) {
-    var box = this;
-    return box.listeners.filter((l) => l.group === grp);
-  }
-
-  removeAllListeners() {
-    var box = this;
-    box.listeners.forEach((opt) => {
-      box.removeListener(opt);
-    });
-  }
-
   addMessageSupport() {
     this.message = new MessageFlash(this);
   }
@@ -168,7 +139,7 @@ class Box {
   destroy() {
     var box = this;
     box.el.remove();
-    box.removeAllListeners();
+    box.lStore.removeListenerByGroup(box.id);
     if (box.config.onRemove) {
       box.config.onRemove();
     }
@@ -214,6 +185,13 @@ class Box {
         mc_event_type: 'click'
       }
     });
+  }
+
+  addFocus() {
+    this.el.classList.add('mc-focus');
+  }
+  removeFocus() {
+    this.el.classList.remove('mc-focus');
   }
 
   setSize(w, h) {
@@ -426,11 +404,11 @@ class Box {
     box.validateSize();
   }
 
-  get textSize(){
+  get textSize() {
     return this._text_size;
   }
 
-  setTextSize(size){
+  setTextSize(size) {
     var box = this;
     size = size < 5 ? 5 : size > 30 ? 30 : size ? size : 12;
     box._text_size = size;
@@ -439,7 +417,7 @@ class Box {
 
   sizeTextMore() {
     var box = this;
-    var size = box.textSize + 1 ;
+    var size = box.textSize + 1;
     box.setTextSize(size);
   }
   sizeTextLess() {
@@ -474,11 +452,25 @@ function dragResizeListener(e) {
   // read the property of the handle;
   var idAction = d.mc_action;
   var idType = d.mc_event_type;
+  var isDrag = idAction === 'box_drag';
+  var isResize = idAction === 'box_resize';
   var isMouseDown = idType === 'mousedown';
-  var isDragResize = idAction === 'box_drag' || idAction === 'box_resize';
+  var isDragResize = isDrag || isResize;
 
   if (isMouseDown && isDragResize) {
-    e.stopPropagation();
+    if (box.isDragging() || box.isResizing()) {
+      return;
+    }
+
+    e.stopImmediatePropagation();
+
+    if (isDrag) {
+      box.setDragingFlag(true);
+    }
+    if (isResize) {
+      box.setResizingFlag(true);
+    }
+
     startDragResize({
       e: e,
       type: idAction,
@@ -491,18 +483,6 @@ function startDragResize(opt) {
   var box = opt.box;
   var e = opt.e;
   var isDrag = opt.type === 'box_drag';
-  var isResize = opt.type === 'box_resize';
-
-  if (box.isDragging() || box.isResizing()) {
-    return;
-  }
-  if (isDrag) {
-    box.setDragingFlag(true);
-  }
-  if (isResize) {
-    box.setResizingFlag(true);
-  }
-
   var oX = box.left || 0;
   var oY = box.top || 0;
   var oW = box.width || 0;
@@ -511,21 +491,25 @@ function startDragResize(opt) {
   var cY = e.clientY;
   var rDir = e.target.dataset.mc_resize_dir;
 
-  box.addListener({
-    type: 'mouseup',
-    group: 'drag_resize_active',
+  box.lStore.addListener({
     target: window,
-    listener: cancel
+    type: 'mouseup',
+    idGroup: 'drag_resize_active',
+    callback: cancel,
+    bind: box
   });
 
-  box.addListener({
-    type: 'mousemove',
-    group: 'drag_resize_active',
+  box.lStore.addListener({
     target: window,
-    listener: isDrag ? drag : resize
+    type: 'mousemove',
+    idGroup: 'drag_resize_active',
+    callback: isDrag ? drag : resize,
+    bind: box
   });
 
   function drag(e) {
+    e.stopPropagation();
+    const box = this;
     var dX = e.clientX - cX;
     var dY = e.clientY - cY;
     box.setTopLeft({
@@ -536,6 +520,8 @@ function startDragResize(opt) {
   }
 
   function resize(e) {
+    e.stopPropagation();
+    const box = this;
     var dX = e.clientX - cX;
     var dY = e.clientY - cY;
     var drag = {};
@@ -568,15 +554,14 @@ function startDragResize(opt) {
   }
 
   function cancel() {
-    box.removeListenerByGroup('drag_resize_active');
-    /* without this, the box keep dragging */
-    onNextFrame(() => {
-      if (isDrag) {
-        box.setDragingFlag(false);
-      }
-      if (isResize) {
-        box.setResizingFlag(false);
-      }
-    });
+    const box = this;
+    box.lStore.removeListenerByGroup('drag_resize_active');
+
+    if (box.isDragging()) {
+      box.setDragingFlag(false);
+    }
+    if (box.isResizing()) {
+      box.setResizingFlag(false);
+    }
   }
 }

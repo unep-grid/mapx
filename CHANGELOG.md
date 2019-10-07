@@ -1,5 +1,29 @@
 
 ## Changelog
+- <a href="https://github.com/fxi/map-x-mgl/tree/1.6.4-beta">1.6.4-beta</a>
+
+    - New feature
+       - New view integrated filter system : search using text with basic regex parsing, tags, activated views. Tags order reacts to language change. Two mode are available: union and intersection. Views count is more accurate and match all kinds of filters.
+       - Views list : views can be repositioned with a wide range of options : date, title, drag and drop, relative position. A history of changes is kept. The order can be saved. Nessted groups can be created. Groups can be created, deleted, edited. All options are available with a right click in the list that produce a contextual menu. Content change according to click location. 
+    - Improvement
+      - APP
+       - Internal unified event and listener management
+       - Code refactoring : code rewrite using more strict structure, transfer method in dedicated modules (work in progress)
+       - Remove direct access to an attribute table from a view if "allow download" in the source settings is not set 
+       - Minimize button in modal window
+       - Set file size limit for upload   
+    - Bug fixes
+      - APP 
+        - In select box, drop-down menu always visible.
+        - Story autostart has been reimplemented
+        - Story map slides effect
+        - The project spatial parameters are not reset on the map after a save
+        - Various fixes
+    - Breaking changes
+      - API
+        - We do not use connection pool : pooling should be done by a sensible pooling system, like pg_pool.
+        - Instead of using OGR to transfer spatial data to the DB, a first step with "PGDump" is made, then the result is piped through psql.
+
 - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.54">1.5.54</a>
     - Improvement 
       - APP 

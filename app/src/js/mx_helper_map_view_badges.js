@@ -8,11 +8,9 @@
 */
 export function updateViewsBadges(o){
   o = o || {};
-  var forceUpdateMeta = o.forceUpdateMeta || false;
-
-
-  var h = mx.helpers;
-  var views = h.getViews({asArray:true});
+  const forceUpdateMeta = o.forceUpdateMeta || false;
+  const h = mx.helpers;
+  const views = h.getViews();
   views.forEach(v => {
     //mx.helpers.onNextFrame(()=>{
     setTimeout(()=>{
@@ -34,16 +32,16 @@ export function setViewBadges(opt){
 
   opt = opt || {};
   
-  var h = mx.helpers;
-  var view = opt.view || {};
-  var elBadges = document.createElement("div");
-  var readers = view.readers || [];
-  var hasEdit = view._edit === true;
-  var isValidable = view.type === "rt" || view.type === "vt";
-  var hasDiaf = view.type === "vt";
-  var hasPublic = readers.indexOf("public") > -1;
-  var isShared = view.project !== mx.settings.project;
-  var elViewBadgesContainer =  document.getElementById("view_badges_" + view.id);
+  const h = mx.helpers;
+  const view = opt.view || {};
+  const elBadges = document.createElement("div");
+  const readers = view.readers || [];
+  const hasEdit = view._edit === true;
+  const isValidable = view.type === "rt" || view.type === "vt";
+  const hasDiaf = view.type === "vt";
+  const hasPublic = readers.indexOf("public") > -1;
+  const isShared = view.project !== mx.settings.project;
+  const elViewBadgesContainer =  document.getElementById("view_badges_" + view.id);
   if(!elViewBadgesContainer){
     return;
   }
@@ -148,9 +146,9 @@ export function setViewBadges(opt){
  * Add public badge
  */
 function addBadgePublic(opt){
-  var elBadges = opt.elBadges;
+  const elBadges = opt.elBadges;
 
-  var elBadge  = createViewBadge({
+  const elBadge  = createViewBadge({
     iconClasses : ["mx-view-public-valid","fa","fa-check-circle"],
     tooltipClasses : ["hint--left"],
     tooltipKey : "view_public_valid"
@@ -163,9 +161,9 @@ function addBadgePublic(opt){
  * Add editor / lock badge
  */
 function addBadgeEdit(opt){
-  var hasEdit = opt.viewEditable;
-  var elBadges = opt.elBadges;
-  var elBadge  = createViewBadge({
+  const hasEdit = opt.viewEditable;
+  const elBadges = opt.elBadges;
+  const elBadge  = createViewBadge({
     iconClasses : ["fa", hasEdit ? "fa-unlock" : "fa-lock" ],
     tooltipClasses : ["hint--left"],
     tooltipKey : hasEdit ? "view_editable" : "view_locked"
@@ -178,8 +176,8 @@ function addBadgeEdit(opt){
  */
 function addBadgeShared(opt){
 
-  var elBadges = opt.elBadges;
-  var elBadge = createViewBadge({
+  const elBadges = opt.elBadges;
+  const elBadge = createViewBadge({
     iconClasses : ["fa","fa-share-alt-square"],
     tooltipClasses : ["hint--left"],
     tooltipKey : "view_shared"
@@ -190,15 +188,15 @@ function addBadgeShared(opt){
  * Evaluate diaf and add badge
  */
 function addBadgeDiaf(opt){
-  var h = mx.helpers;
-  var view = opt.view;
-  var elBadges = opt.elBadges;
+  const h = mx.helpers;
+  const view = opt.view;
+  const elBadges = opt.elBadges;
 
   h.evaluateDiafView({
     view : view
   })
     .then( result => {
-      var elStar = result.elStar;
+      const elStar = result.elStar;
       elBadges.appendChild(elStar);
       elStar.dataset.view_action_key = "btn_opt_diaf_modal";
       elStar.dataset.view_action_target = result.idView;
@@ -210,11 +208,11 @@ function addBadgeDiaf(opt){
  */
 function addBadgePublicNotValid(opt){
 
-  var h = mx.helpers;
-  var validation = opt.validation;
-  var elBadges = opt.elBadges;
-  var results = h.path(validation,'results');
-  var elBadge = createViewBadge({
+  const h = mx.helpers;
+  const validation = opt.validation;
+  const elBadges = opt.elBadges;
+  const results = h.path(validation,'results');
+  const elBadge = createViewBadge({
     iconClasses : ["mx-view-public-not-valid","fa","fa-exclamation-triangle"],
     style : {
       color : "red"
@@ -252,7 +250,7 @@ export function displayMetadataIssuesModal(results){
  * create a view badge
  */
 function createViewBadge(opt){
-  var el = mx.helpers.el;
+  const el = mx.helpers.el;
   return el("span",
     {
       class : opt.tooltipClasses || "hint--left",

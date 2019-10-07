@@ -19,59 +19,170 @@ class ListenerStore {
     };
   }
   addListener(opt) {
-    let li = this;
+    const li = this;
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
-    if(opt.debounce){
-      opt.listener = li.debounce(opt.listener, opt.bind || li);
-    }else{
-      opt.listener = opt.listener.bind(opt.bind || li);
+    if (opt.debounce) {
+      opt.callback = li.debounce(opt.callback, opt.bind || li);
+    } else {
+      opt.callback = opt.callback.bind(opt.bind || li);
     }
-    opt.group = opt.group || 'default';
-    li.listeners.push(opt);
+    opt.idGroup = opt.group || opt.idGroup ||  'default';
     opt.type = opt.type instanceof Array ? opt.type : [opt.type];
-    opt.type.forEach((t) => {
-      opt.target.addEventListener(t, opt.listener);
-    });
+
+    li.listeners.push(opt);
+
+    if (opt.target instanceof Element || opt.target instanceof Window) {
+      opt.type.forEach((t) => {
+        opt.target.addEventListener(t, opt.callback);
+      });
+    }
     return opt;
   }
   addListenerOnce(opt) {
-    let li = this;
-    let listener = opt.listener.bind(li);
-    opt.listener = cb;
+    const li = this;
+    const callback = opt.callback.bind(li);
+    opt.callback = cb;
     li.addListener(opt);
     function cb(d) {
       li.removeListener(opt);
-      listener(d);
+      callback(d);
     }
   }
-  removeListener(opt) {
-    let li = this;
-    let pos = li.listeners.indexOf(opt);
-    if (pos > -1) {
-      li.listeners.splice(pos, 1);
-      opt.type = opt.type instanceof Array ? opt.type : [opt.type];
-      opt.type.forEach((t) => {
-        opt.target.removeEventListener(t, opt.listener);
-      });
+  /**
+   * @param {Object|Integer} index Listener index/indexition or callbackobject
+   */
+  removeListener(index) {
+    const li = this;
+    const isPos = isFinite(index);
+    index = isPos ? index : li.listeners.indexOf(index);
+    const opt = li.listeners[index];
+    if (!opt) {
+      throw new Error('Listener not found');
     }
+    li.listeners.splice(index, 1);
+    opt.type = opt.type instanceof Array ? opt.type : [opt.type];
+    opt.type.forEach((t) => {
+      if (opt.onRemove instanceof Function) {
+        opt.onRemove();
+      }
+      if (opt.target instanceof Element || opt.target instanceof Window) {
+        opt.target.removeEventListener(t, opt.callback);
+      }
+    });
   }
-  removeListenerByGroup(grp) {
-    let li = this;
-    li.getListenerByGroup(grp).forEach((l) => {
+  getListenerByGroup(idGroup) {
+    const li = this;
+    return li.listeners.filter((l) => l.idGroup === idGroup);
+  }
+  removeListenerByGroup(idGroup) {
+    const li = this;
+    li.getListenerByGroup(idGroup).forEach((l) => {
       li.removeListener(l);
     });
   }
-  getListenerByGroup(grp) {
-    let li = this;
-    return li.listeners.filter((l) => l.group === grp);
-  }
-  removeAllListeners() {
-    let li = this;
-    li.listeners.forEach((opt) => {
-      li.removeListener(opt);
+  getListenerByTypeGroup(type,idGroup) {
+    const li = this;
+    type = !type ? [] : type instanceof Array ? type : [type];
+    return li.listeners.filter((l) => {
+      if(idGroup && l.idGroup !== idGroup){
+        return false;
+      }
+      return l.type.reduce((a, tS) => {
+        return a || type.length === 0 || type.indexOf(tS) > -1;
+      }, false);
     });
+  }
+  removeListenerByTypeGroup(type,idGroup) {
+    const li = this;
+    li.getListenerByTypeGroup(type,idGroup).forEach((l) => {
+      li.removeListener(l);
+    });
+  }
+
+  removeAllListeners() {
+    const li = this;
+    let i = li.listeners.length;
+    while (i--) {
+      li.removeListener(i);
+    }
   }
 }
 
-export {ListenerStore};
+class EventStore {
+  constructor() {
+    this.lStore = new ListenerStore();
+  }
+  destroy() {
+    this.lStore.destroy();
+  }
+  /**
+  * Fire event type, trigger linked callback
+  * @param {Object} opt options
+  * @param {String||Array} opt.type Type of event
+  * @param {String} opt.idGroup id of group.
+  * @param {data} opt.data Data to pass to callback
+  */
+  fire(opt){
+    opt = Object.assign({},opt);
+    if (!opt.type) {
+      throw new Error('Missing argument');
+    }
+    let li = this.lStore;
+    let ls = li.getListenerByTypeGroup(opt.type,opt.idGroup);
+    ls.forEach((l) => {
+      l.callback(opt.data);
+    });
+  }
+ /**
+  * Register new listener for eventy type
+  * @param {Object} opt options
+  * @param {String||Array} opt.type Type of event
+  * @param {String} opt.idGroup Id of group
+  * @param {Function} opt.callback Callback to trigger
+  */
+  on(opt) {
+    opt = Object.assign({},opt);
+    if (!opt.type || !opt.idGroup || !opt.callback) {
+      throw new Error('Missing argument');
+    }
+    let li = this.lStore;
+    li.addListener({
+      type: opt.type,
+      idGroup: opt.idGroup,
+      callback: opt.callback
+    });
+  }
+ /**
+  * Register new listener to use once
+  * @param {Object} opt options
+  * @param {String||Array} opt.type Type of event
+  * @param {String} opt.idGroup Id of group
+  * @param {Function} opt.callback Callback to trigger
+  */
+  once(opt) {
+    opt = Object.assign({},opt);
+    if (!opt.type || !opt.idGroup || !opt.callback) {
+      throw new Error('Missing argument');
+    }
+    let li = this.lStore;
+    li.addListenerOnce({
+      type: opt.type,
+      idGroup: opt.idGroup,
+      callback: opt.callback
+    });
+  }
+ /**
+  * Remove listener
+  * @param {Object} opt options
+  * @param {String||Array} opt.type Type of event
+  * @param {String} opt.idGroup Id of group
+  */
+  off(opt) {
+    opt = Object.assign({},opt);
+    let li = this.lStore;
+    li.removeListenerByTypeGroup(opt.type, opt.idGroup);
+  }
+}
+
+export {ListenerStore, EventStore};

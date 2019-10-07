@@ -1,17 +1,18 @@
 /*jshint esversion: 6 , node: true */
 
 $(document).on('shiny:connected', function() {
-
+  const h = mx.helpers;
+  
   /*
   * Input
   */
-  Shiny.onInputChange('browserData',mx.helpers.getBrowserData());
+  Shiny.onInputChange('urlSearchQuery',h.getQueryParametersInit());
+  Shiny.onInputChange('browserData',h.getBrowserData());
 
   /**
   * General bindings
   */
-  const h = mx.helpers;
-  
+
   Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
   Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', h.modal);
@@ -20,7 +21,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxSetImageAttributes", h.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", h.hide);
   Shiny.addCustomMessageHandler("mxValidateMetadataModal", h.validateMetadataModal);
-  Shiny.addCustomMessageHandler("mxObjToState", h.objToState);
+  Shiny.addCustomMessageHandler("mxSetQueryParametersUpdate", h.setQueryParametersUpdate);
   Shiny.addCustomMessageHandler("mxUpdateText", h.updateText);
   Shiny.addCustomMessageHandler("mxEpsgBuildSearchBox", h.epsgBuildSearchBox);
   Shiny.addCustomMessageHandler("mxWmsBuildQueryUi", h.wmsBuildQueryUi);
@@ -52,11 +53,12 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglGetLocalForageData', h.getLocalForageData );
   Shiny.addCustomMessageHandler('mglAddView', h.renderView );
   Shiny.addCustomMessageHandler('mglReadStory', h.storyRead );
-  Shiny.addCustomMessageHandler('mglReset', h.resetViews );
+  Shiny.addCustomMessageHandler('mglReset', h.viewsRemoveAll );
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', h.handlerDownloadVectorSource);
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
   Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
+  Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollections);
   Shiny.addCustomMessageHandler('mglInit', h.initMapx );
 
   /**

@@ -1,8 +1,8 @@
 export function getSourceTableAttribute(opt) {
-  var h = mx.helpers;
-  var host = h.getApiUrl('getSourceTableAttribute');
+  let h = mx.helpers;
+  let host = h.getApiUrl('getSourceTableAttribute');
 
-  var url =
+  let url =
     host +
     '?' +
     h.objToParams({
@@ -10,24 +10,20 @@ export function getSourceTableAttribute(opt) {
       attributes: opt.attributes
     });
 
-  return h
-    .fetchProgress(url, {
-      onProgress: onProgressData,
-      onError: onProgressError,
-      onComplete: onProgressDataComplete
-    })
-    .then((data) => {
-      return data.json();
-    });
+  return h.fetchJsonProgress(url, {
+    onProgress: onProgressData,
+    onError: onProgressError,
+    onComplete: onProgressDataComplete
+  });
 }
 
 export function showSourceTableAttributeModal(opt) {
-  var h = mx.helpers;
-  var el = h.el;
-  var hot;
-  var mutationObserver;
-  var labels = opt.labels || null;
-  var settings = {
+  let h = mx.helpers;
+  let el = h.el;
+  let hot;
+  let mutationObserver;
+  let labels = opt.labels || null;
+  let settings = {
     idSource: opt.idSource,
     attributes: opt.attributes,
     view: opt.view
@@ -37,50 +33,59 @@ export function showSourceTableAttributeModal(opt) {
 
   return Promise.all([
     h.moduleLoad('handsontable'),
-    getSourceTableAttribute(settings)
+    h.getSourceMetadata(settings.idSource),
+    h.getSourceTableAttribute(settings),
   ]).then((m) => {
-    var handsontable = m[0];
-    var data = m[1];
-    var hasData = h.isArray(data) && data.length > 0;
-    var license = 'non-commercial-and-evaluation';
-    var elTable = el('div', {
+    let handsontable = m[0];
+    let meta = m[1] || {};
+    let data = m[2] || {};
+    let services = meta._services || [];
+    let hasData = h.isArray(data) && data.length > 0;
+    let license = 'non-commercial-and-evaluation';
+    let elTable = el('div', {
       style: {
         width: '100%',
-        height: '100%',
+        height: '350px',
         minHeight: '350px',
         minWidth: '100px',
         overflow: 'hidden',
         backgroundColor: 'var(--mx_ui_shadow)'
       }
     });
-    var elButtonDownload = el(
+    let allowDownload = services.indexOf('mx_download') > -1;
+    let elButtonDownload = el(
       'button',
       {
         class: 'btn btn-default',
         on: {
           click: handleDownload
-        }
+        },
+        title : allowDownload ? 'Download' : "Download disabled"
       },
       'Export CSV'
     );
-    var elButtonClearFilter = el(
+    if(!allowDownload){
+      elButtonDownload.setAttribute('disabled',true);
+    }
+    let elButtonClearFilter = el(
       'button',
       {
         class: 'btn btn-default',
+        disabled : true,
         on: {
           click: handleClearFilter
         }
       },
       'Clear filter'
     );
-    var elTitle = el('div');
-    var buttons = [elButtonClearFilter,elButtonDownload];
+    let elTitle = el('div');
+    let buttons = [elButtonClearFilter, elButtonDownload];
     if (!hasData) {
       elTable = el('span', 'no data');
       buttons = null;
     }
 
-    var elModal = h.modal({
+    let elModal = h.modal({
       title: elTitle,
       content: elTable,
       onClose: destroy,
@@ -97,7 +102,7 @@ export function showSourceTableAttributeModal(opt) {
     /*
      * NOTE: get this from postgres
      */
-    var columns = opt.attributes.map((a) => {
+    let columns = opt.attributes.map((a) => {
       return {
         type: typeof data[0][a] === 'number' ? 'numeric' : 'text',
         data: a,
@@ -120,7 +125,13 @@ export function showSourceTableAttributeModal(opt) {
       ],
       filters: true,
       language: getHandsonLanguageCode(),
-      afterFilter: handleViewFilter
+      afterFilter: handleViewFilter,
+      renderAllRows: false,
+      height: function() {
+        let r = elTable.getBoundingClientRect();
+        return r.height - 30;
+      },
+      disableVisualSelection: !allowDownload
     });
 
     addTitle();
@@ -131,7 +142,10 @@ export function showSourceTableAttributeModal(opt) {
      */
 
     function handleDownload() {
-      var exportPlugin = hot.getPlugin('exportFile');
+      if(!allowDownload){
+        return;
+      }
+      let exportPlugin = hot.getPlugin('exportFile');
 
       exportPlugin.downloadFile('csv', {
         bom: false,
@@ -148,18 +162,19 @@ export function showSourceTableAttributeModal(opt) {
     }
 
     function handleClearFilter() {
-      var filterPlugin = hot.getPlugin('filters');
+      let filterPlugin = hot.getPlugin('filters');
       filterPlugin.clearConditions();
       filterPlugin.filter();
       hot.render();
+      elButtonClearFilter.setAttribute('disabled',true);
     }
 
     function addTitle() {
-      var view = settings.view;
+      let view = settings.view;
       if (!h.isView(view)) {
         return;
       }
-      var title = h.getViewTitle(view);
+      let title = h.getViewTitle(view);
       h.getDictItem('tbl_attr_modal_title')
         .then((t) => {
           elTitle.innerText = t + ' – ' + title;
@@ -169,18 +184,25 @@ export function showSourceTableAttributeModal(opt) {
 
     function tableRender() {
       if (hot && hot.render) {
-        hot.render();
+        let elParent = elTable.parentElement;
+        let pStyle = getComputedStyle(elParent);
+        let pad = parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
+        let height = elParent.getBoundingClientRect().height;
+        if (height > 350) {
+          elTable.style.height = height - pad + 'px';
+          hot.render();
+        }
       }
     }
 
     function destroy() {
-      if(hot){
+      if (hot) {
         hot.destroy();
       }
       if (mutationObserver) {
         mutationObserver.disconnect();
       }
-      var view = settings.view;
+      let view = settings.view;
       if (!h.isView(view)) {
         return;
       }
@@ -191,17 +213,17 @@ export function showSourceTableAttributeModal(opt) {
     }
 
     function handleViewFilter() {
-      var idCol = 'gid';
-      var view = settings.view;
+      let idCol = 'gid';
+      let view = settings.view;
       if (!h.isView(view)) {
         return;
       }
-      var data = hot.getData();
-      var attr = settings.attributes;
-      var posGid = attr.indexOf(idCol);
+      let data = hot.getData();
+      let attr = settings.attributes;
+      let posGid = attr.indexOf(idCol);
       if (posGid > -1) {
-        var ids = data.map((d) => d[posGid]);
-
+        let ids = data.map((d) => d[posGid]);
+        elButtonClearFilter.removeAttribute('disabled');
         view._setFilter({
           type: 'attribute_table',
           filter: ['in', 'gid'].concat(ids)
@@ -212,32 +234,29 @@ export function showSourceTableAttributeModal(opt) {
 }
 
 export function viewToTableAttributeModal(idView) {
-  var h = mx.helpers;
-  var view = h.getViews({
-    id: mx.settings.map.id,
-    idView: idView
-  });
-  var opt = getTableAttributeConfigFromView(view);
+  let h = mx.helpers;
+  let view = h.getView(idView);
+  let opt = getTableAttributeConfigFromView(view);
   return showSourceTableAttributeModal(opt);
 }
 
 function getTableAttributeConfigFromView(view) {
-  var h = mx.helpers;
-  var language = mx.settings.language;
+  let h = mx.helpers;
+  let language = mx.settings.language;
 
   if (view.type !== 'vt' || !view._meta) {
     console.warn('Only vt view with ._meta are supported');
     return null;
   }
-  var idSource = h.path(view, 'data.source.layerInfo.name');
-  var attributes = h.path(view, 'data.attribute.names') || [];
-  var attribute = h.path(view, 'data.attribute.name');
+  let idSource = h.path(view, 'data.source.layerInfo.name');
+  let attributes = h.path(view, 'data.attribute.names') || [];
+  let attribute = h.path(view, 'data.attribute.name');
   attributes = h.isArray(attributes) ? attributes : [attributes];
   attributes = attributes.concat(attribute);
   attributes = attributes.concat(['gid']);
   attributes = h.getArrayStat({arr: attributes, stat: 'distinct'});
-  var labelsDict = h.path(view, '_meta.text.attributes_alias') || {};
-  var labels = attributes.map((a) => {
+  let labelsDict = h.path(view, '_meta.text.attributes_alias') || {};
+  let labels = attributes.map((a) => {
     return labelsDict[a] ? labelsDict[a][language] || labelsDict[a].en || a : a;
   });
 
@@ -250,8 +269,8 @@ function getTableAttributeConfigFromView(view) {
 }
 
 function getHandsonLanguageCode() {
-  var lang = mx.settings.language;
-  var languages = {
+  let lang = mx.settings.language;
+  let languages = {
     de: 'de-DE',
     es: 'es-MX',
     fr: 'fr-FR',
@@ -262,7 +281,7 @@ function getHandsonLanguageCode() {
 }
 
 function listenMutationAttribute(el, cb) {
-  var h = mx.helpers;
+  let h = mx.helpers;
   cb = h.isFunction(cb) ? h.debounce(cb, 100) : console.log;
 
   let observer = new MutationObserver((m) => {
@@ -275,7 +294,7 @@ function listenMutationAttribute(el, cb) {
   return observer;
 }
 function onProgressStart() {
-  var h = mx.helpers;
+  let h = mx.helpers;
   h.progressScreen({
     percent: 1,
     id: 'fetch_data',
@@ -284,7 +303,7 @@ function onProgressStart() {
   });
 }
 function onProgressData(data) {
-  var h = mx.helpers;
+  let h = mx.helpers;
   h.progressScreen({
     percent: (data.loaded / data.total) * 100 - 1,
     id: 'fetch_data',
@@ -292,20 +311,17 @@ function onProgressData(data) {
     enable: true
   });
 }
-function onProgressDataComplete(data) {
-  var h = mx.helpers;
-  if (data.loaded !== data.total) {
-    console.log('FetchProgress : data seems incomplete', data);
-  }
+function onProgressDataComplete() {
+  let h = mx.helpers;
   h.progressScreen({
-    text: 'Data downloaded, build table',
+    text: 'Data downloaded. Build table',
     enable: true,
     percent: 99,
     id: 'fetch_data'
   });
 }
 function onProgressEnd() {
-  var h = mx.helpers;
+  let h = mx.helpers;
   h.progressScreen({
     enable: false,
     percent: 100,

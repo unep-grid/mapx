@@ -12,7 +12,7 @@ function getSourceMetadataHandler(req, res) {
     format: 'mapx-json'
   })
     .then((data) => {
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end:true});
     })
     .catch((err) => {
       utils.sendError(res, err);
@@ -50,9 +50,10 @@ function getSourceMetadata(opt) {
       if (result && result.rows) {
         out = result.rows[0];
         meta = out.metadata;
-        meta._emailEditor = out.email_editor;
-        meta._dateModified = out.date_modified;
-        meta._idSource = id;
+        meta._email_editor = out.email_editor;
+        meta._date_modified = out.date_modified;
+        meta._services = out.services;
+        meta._id_source = id;
         return meta;
       } else {
         return def;

@@ -13,6 +13,7 @@ export * from './mx_helper_selectize.js';
 export * from './mx_helper_language.js';
 export * from './mx_helper_app_utils.js';
 export * from './mx_helper_list_projects.js';
+export * from './mx_helper_intersect.js';
 export * from './mx_helper_upload_source.js';
 export * from './mx_helper_download_source.js';
 export * from './mx_helper_overlap_tool.js';
@@ -28,7 +29,6 @@ export * from './mx_helper_map_controls.js';
 export * from './mx_helper_map_pixop.js';
 export * from './mx_helper_map_print.js';
 export * from './mx_helper_map_composer.js';
-export * from './mx_helper_map_pixop_core.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
 export * from './mx_helper_map_view_build.js';
@@ -52,6 +52,8 @@ export * from './mx_helper_module_loader.js';
 export * from './mx_helper_source_attribute_table.js';
 export * from './mx_helper_fetch_progress.js';
 export * from './mx_helper_root_mode.js';
+export * from './mx_helper_url.js';
+export * from './mx_helper_ip.js';
 
 /**
 * imported module available in mx.helpers 

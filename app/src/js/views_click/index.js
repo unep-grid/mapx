@@ -1,4 +1,3 @@
-
 export {handleViewClick};
 
 function handleViewClick(event) {
@@ -6,10 +5,11 @@ function handleViewClick(event) {
     return;
   }
 
-  var t;
-  var h = mx.helpers;
-  var idMap = h.path(mx, 'settings.map.id');
+  const h = mx.helpers;
+  const idMap = h.path(mx, 'settings.map.id');
   var el = event.target;
+  var t;
+
   el = h.isIconFont(el) || h.isCanvas(el) ? el.parentElement : el;
   if (!el) {
     return;
@@ -33,7 +33,7 @@ function handleViewClick(event) {
       comment: 'target is the show invalid/result metadata modal',
       test: el.dataset.view_action_key === 'btn_badge_warning_invalid_meta',
       action: function() {
-        var results = JSON.parse(el.dataset.view_action_data);
+        const results = JSON.parse(el.dataset.view_action_data);
         h.displayMetadataIssuesModal(results);
       }
     },
@@ -41,11 +41,8 @@ function handleViewClick(event) {
       comment: 'target is the home project button',
       test: el.dataset.view_action_key === 'btn_opt_home_project',
       action: function() {
-        var viewTarget = el.dataset.view_action_target;
-        var view = h.getViews({
-          id: mx.settings.map.id,
-          idView: viewTarget
-        });
+        const viewTarget = el.dataset.view_action_target;
+        const view = h.getView(viewTarget);
         h.setProject(view.project);
       }
     },
@@ -53,8 +50,8 @@ function handleViewClick(event) {
       comment: 'target is the view meta diaf badge',
       test: el.dataset.view_action_key === 'btn_opt_diaf_modal',
       action: function() {
-        var viewTarget = el.dataset.view_action_target;
-        var view = h.getView(viewTarget);
+        const viewTarget = el.dataset.view_action_target;
+        const view = h.getView(viewTarget);
         h.displayDiafModal(view);
       }
     },
@@ -62,7 +59,7 @@ function handleViewClick(event) {
       comment: 'target is the delete geojson button',
       test: el.dataset.view_action_key === 'btn_opt_delete_geojson',
       action: function() {
-        var arg = el.dataset;
+        const arg = el.dataset;
 
         h.removeView({
           id: idMap,
@@ -71,10 +68,23 @@ function handleViewClick(event) {
       }
     },
     {
+      comment: 'target is the get raster button',
+      test: el.dataset.view_action_key === 'btn_opt_get_raster',
+      action: function() {
+        const viewTarget = el.dataset.view_action_target;
+        const view = h.getView(viewTarget);
+        const url = h.path(view, 'data.source.urlDownload');
+        if(h.isUrl(url)){
+          const win = window.open(url, '_blank');
+          win.focus();
+        }
+      }
+    },
+    {
       comment: 'target is the get geojson button',
       test: el.dataset.view_action_key === 'btn_opt_get_geojson',
       action: function() {
-        var viewTarget = el.dataset.view_action_target;
+        const viewTarget = el.dataset.view_action_target;
         var download;
         h.moduleLoad('downloadjs')
           .then((d) => {
@@ -82,7 +92,7 @@ function handleViewClick(event) {
             return mx.data.geojson.getItem(viewTarget);
           })
           .then(function(item) {
-            var geojson = h.path(item, 'view.data.source.data');
+            const geojson = h.path(item, 'view.data.source.data');
             var filename = h.path(item, 'view.data.title.en');
             if (filename.search(/.geojson$/) === -1) {
               filename = 'mx_geojson_' + mx.helpers.makeId() + '.geojson';
@@ -95,7 +105,7 @@ function handleViewClick(event) {
       comment: 'target is the upload geojson button',
       test: el.dataset.view_action_key === 'btn_upload_geojson',
       action: function() {
-        var idView = el.dataset.view_action_target;
+        const idView = el.dataset.view_action_target;
         h.uploadGeojsonModal(idView);
       }
     },
@@ -134,7 +144,7 @@ function handleViewClick(event) {
       comment: 'target is tool search',
       test: el.dataset.view_action_key === 'btn_opt_search',
       action: function() {
-        var elSearch = document.getElementById(el.dataset.view_action_target);
+        const elSearch = document.getElementById(el.dataset.view_action_target);
         h.classAction({
           selector: elSearch,
           action: 'toggle'
@@ -150,21 +160,21 @@ function handleViewClick(event) {
          * After click on legend, select all sibling to check
          * for other values to filter using "OR" logical operator
          */
-        var legendContainer = h.parentFinder({
+        const legendContainer = h.parentFinder({
           selector: el,
           class: 'mx-legend-box'
         });
-        var legendInputs = legendContainer.querySelectorAll('input');
-        var idView = el.dataset.view_action_target;
-        var view = h.getViews({id: mx.settings.map.id, idView: idView});
-        var filter = ['any'];
-        var rules = h.path(view, 'data.style.rulesCopy', []);
+        const legendInputs = legendContainer.querySelectorAll('input');
+        const idView = el.dataset.view_action_target;
+        const view = h.getView(idView);
+        const filter = ['any'];
+        const rules = h.path(view, 'data.style.rulesCopy', []);
 
         for (var i = 0, iL = legendInputs.length; i < iL; i++) {
-          var li = legendInputs[i];
+          const li = legendInputs[i];
           if (li.checked) {
-            var index = li.dataset.view_action_index * 1;
-            var ruleIndex = rules[index];
+            const index = li.dataset.view_action_index * 1;
+            const ruleIndex = rules[index];
             if (
               typeof ruleIndex !== 'undefined' &&
               typeof ruleIndex.filter !== 'undefined'
@@ -185,7 +195,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_toggle_view',
       allowDefault: true,
       action: function() {
-        h.viewControler();
+        h.viewsRender();
       }
     },
     {
@@ -201,7 +211,7 @@ function handleViewClick(event) {
       comment: 'target is the attribute table button',
       test: el.dataset.view_action_key === 'btn_opt_attribute_table',
       action: function() {
-        var idView = el.dataset.view_action_target;
+        const idView = el.dataset.view_action_target;
         h.viewToTableAttributeModal(idView);
       }
     },
@@ -209,7 +219,7 @@ function handleViewClick(event) {
       comment: 'target is the view meta button',
       test: el.dataset.view_action_key === 'btn_opt_meta',
       action: function() {
-        var idView = el.dataset.view_action_target;
+        const idView = el.dataset.view_action_target;
         h.viewToMetaModal(idView);
       }
     },
@@ -218,9 +228,9 @@ function handleViewClick(event) {
       comment: 'target is the raster metadata link',
       test: el.dataset.view_action_key === 'btn_opt_meta_external',
       action: function() {
-        var idView = el.dataset.view_action_target;
-        var view = h.getViews({id: mx.settings.map.id, idView: idView});
-        var link = h.path(view, 'data.source.urlMetadata');
+        const idView = el.dataset.view_action_target;
+        const view = h.getView(idView);
+        const link = h.path(view, 'data.source.urlMetadata');
         var title =
           h.path(view, 'data.title.' + mx.settings.language) ||
           h.path(view, 'data.title.en');
@@ -262,9 +272,12 @@ function handleViewClick(event) {
       found = true;
       t[i].action();
 
-      mx.helpers.fire('view_panel_click', {
-        idView: el.dataset.view_action_target,
-        idAction: el.dataset.view_action_key
+      mx.events.fire({
+        type: 'view_panel_click',
+        data: {
+          idView: el.dataset.view_action_target,
+          idAction: el.dataset.view_action_key
+        }
       });
 
       if (!t[i].allowDefault) {
@@ -279,4 +292,3 @@ function handleViewClick(event) {
     }
   }
 }
-

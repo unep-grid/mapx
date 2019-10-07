@@ -1,3 +1,15 @@
+import {initEditing} from './mx_helper_story_editor.js';
+
+/**
+ * Story map prototype
+ * TODO:
+ * - Convert this as a class / module
+ * - Remove dependency on scrollTop and other things that trigger reflow/repaint
+ * - Use css transition for step animation instead of scrollFromTo
+ * - If scroll is still needed, use wheel event deltaY
+ * - Use transform translateY on the story element
+ */
+
 /**
  * Read and evaluate story map
  * @param {Object} o o.options
@@ -12,7 +24,10 @@ export function storyRead(o) {
   return cleanInit(o)
     .then(checkMissingView)
     .then(setUi)
-    .then(setListeners);
+    .then(setListeners)
+    .catch(e => {
+      console.warn(e);
+    });
 }
 
 /**
@@ -59,6 +74,11 @@ function setListeners(o) {
       initEditing(o);
     }
 
+    /**
+    * Init bullet container and listener
+    */
+    initBulletsListener(o);
+
     /* Listen to scroll on the main container. */
     storyOnScroll({
       selector: '.mx-story',
@@ -83,12 +103,12 @@ function setListeners(o) {
 * Init listener for keydown event on window
 # @param {Object} o Story options
 */
-function initKeydownListener(o) {
-  listenerManager(o, {
-    action: 'add',
+function initKeydownListener() {
+  mx.listenerStore.addListener({
     target: window,
-    event: 'keydown',
-    listener: storyHandleKeyDown
+    type: 'keydown',
+    callback: storyHandleKeyDown,
+    group: 'story_map'
   });
 }
 
@@ -106,48 +126,31 @@ function initMouseMoveListener(o) {
     );
 
     var classOpacitySmooth = 'mx-smooth-opacity';
-    //var classOpacityHide =  "hide";
     var classNoCursor = 'nocursor';
 
     elsCtrls.forEach(function(el) {
       el.classList.add(classOpacitySmooth);
     });
 
-    listenerManager(o, {
-      action: 'add',
+    mx.listenerStore.addListener({
       target: window,
-      event: 'mousemove',
-      onDestroy: destroy,
-      listener: function() {
-        if (timer) {
-          clearTimeout(timer);
-        }
-        show();
-        timer = setTimeout(function() {
-          if (!destroyed) {
-            hide();
-          }
-        }, 2000);
-      }
+      callback: mouseHider,
+      type: 'mousemove',
+      group: 'story_map',
+      onRemove: destroy
     });
 
-    /*    listenerManager(o,{*/
-    //action : 'add',
-    //target : window,
-    //event : "keydown",
-    //onDestroy : destroy,
-    //listener : function(event){
-    //if(timer){
-    //clearTimeout(timer);
-    //}
-    //show();
-    //timer = setTimeout(function(){
-    //if(!destroyed){
-    //hide();
-    //}
-    //},2000);
-    //}
-    /*});*/
+    function mouseHider() {
+      if (timer) {
+        clearTimeout(timer);
+      }
+      show();
+      timer = setTimeout(function() {
+        if (!destroyed) {
+          hide();
+        }
+      }, 2000);
+    }
 
     function hide() {
       mx.helpers.onNextFrame(function() {
@@ -187,428 +190,51 @@ function initMouseMoveListener(o) {
  * @param {Object} o story options
  */
 function initAdaptiveScreen(o) {
-  //var classBase = "mx-story-screen";
-  //var classWrapper = "mx-wrapper";
-  o.data.elStory = document.querySelector('.' + o.classContainer);
-  o.data.elMap = o.data.map.getContainer();
-  o.data.elMapControls = o.data.elMap.querySelector(
+  var data = o.data || {};
+  data.elStory = document.querySelector('.' + o.classContainer);
+  data.elMap = data.map.getContainer();
+  data.elMapControls = data.elMap.querySelector(
     '.mapboxgl-control-container'
   );
-  o.data.elStory.classList.add(o.data.classWrapper);
-  o.data.rectStory = o.data.elStory.getBoundingClientRect();
-  o.data.classMap = o.data.elMap.className;
-  o.data.styleMap = o.data.elMap.style;
+  data.elStory.classList.add(data.classWrapper);
+  data.rectStory = data.elStory.getBoundingClientRect();
+  data.classMap = data.elMap.className;
+  data.styleMap = data.elMap.style;
 
-  o.data.elMap.classList.add(o.classContainer);
-  o.data.elMap.classList.add(o.data.classWrapper);
+  data.elMap.classList.add(o.classContainer);
+  data.elMap.classList.add(data.classWrapper);
 
-  o.data.setWrapperLayout = function(o) {
+  data.setWrapperLayout = function() {
     var scaleWrapper = Math.min(
-      window.innerWidth / o.data.rectStory.width,
-      window.innerHeight / o.data.rectStory.height
+      window.innerWidth / data.rectStory.width,
+      window.innerHeight / data.rectStory.height
     );
-    o.data.scaleWrapper = scaleWrapper;
-    o.data.elStory.style[mx.helpers.cssTransform] =
+    data.scaleWrapper = scaleWrapper;
+    data.elStory.style[mx.helpers.cssTransform] =
       'translate(-50%,-50%) scale(' + scaleWrapper + ')';
-    o.data.elStory.style[mx.helpers.cssTransform] =
+    data.elStory.style[mx.helpers.cssTransform] =
       'translate(-50%,-50%) scale(' + scaleWrapper + ')';
-    o.data.elMap.style.height = o.data.rectStory.height * scaleWrapper + 'px';
-    o.data.elMap.style.width = o.data.rectStory.width * scaleWrapper + 'px';
-    o.data.elMap.style[mx.helpers.cssTransform] = 'translate(-50%,-50%)';
-    o.data.map.resize();
+    data.elMap.style.height = data.rectStory.height * scaleWrapper + 'px';
+    data.elMap.style.width = data.rectStory.width * scaleWrapper + 'px';
+    data.elMap.style[mx.helpers.cssTransform] = 'translate(-50%,-50%)';
+    data.map.resize();
   };
-}
-
-var customStyle = [
-  /* Table classes from bootstrap */
-  {t: 'Table base', c: 'table', f: ['table']},
-  {t: 'Table bordered', c: 'table-bordered', f: ['table']},
-  {t: 'Table striped', c: 'table-striped', f: ['table']},
-  {t: 'Table hover', c: 'table-hover', f: ['table']},
-  /* custom mapx classes */
-  {t: 'Image cover', c: 'mx-image-cover', f: ['img']},
-  {t: 'Margin top 5%', c: 'margin-top-5p'},
-  {t: 'Width 100%', c: 'width-100p'},
-  {t: 'Margin right 5%', c: 'margin-right-5p'},
-  {t: 'Margin left 5%', c: 'margin-left-5p'},
-  {t: 'Margin bottom 5%', c: 'margin-bottom-5p'},
-  {t: 'Margin top 10%', c: 'margin-top-10p'},
-  {t: 'Margin right 10%', c: 'margin-right-10p'},
-  {t: 'Margin left 10%', c: 'margin-left-10p'},
-  {t: 'Margin bottom 10%', c: 'margin-bottom-10p'},
-  {t: 'Align right', c: 'align-right'},
-  {t: 'Align left', c: 'align-left'},
-  {t: 'Center', c: 'block-center'},
-  {t: 'Absolute top', c: 'absolute-top'},
-  {t: 'Absolute left', c: 'absolute-left'},
-  {t: 'Absolute right', c: 'absolute-right'},
-  {t: 'Absolute bottom', c: 'absolute-bottom'},
-  {t: 'Absolute 50% top', c: 'absolute-50-top'},
-  {t: 'Absolute 50% left', c: 'absolute-50-left'},
-  {t: 'Absolute 50% right', c: 'absolute-50-right'},
-  {t: 'Absolute 50% bottom', c: 'absolute-50-bottom'}
-];
-
-/**
- * Init editing function
- * @param {Options} o story options
- */
-function initEditing(o) {
-  var ContentTools;
-
-  return Promise.all([
-    import('ContentTools'),
-    import('ContentTools/build/content-tools.min.css')
-  ])
-    .then(function(m) {
-      ContentTools = m[0].default;
-      return import('./../coffee/mx_extend_content_tools.coffee');
-    })
-    .then(function() {
-      /*
-       * Get ContentTools and set upload logic
-       */
-
-      if (!ContentTools._init) {
-        ContentTools.DEFAULT_TOOLS = [
-          [
-            'h1',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'paragraph',
-            'blockquote',
-            'preformatted'
-          ],
-          ['italic', 'bold'],
-          ['align-left', 'align-center', 'align-right'],
-          [
-            'unordered-list',
-            'ordered-list',
-            'table',
-            'indent',
-            'unindent',
-            'line-break'
-          ],
-          ['link', 'image', 'video'],
-          ['undo', 'redo', 'remove']
-        ];
-
-        var style = customStyle.map(function(s) {
-          return new ContentTools.Style(s.t, s.c, s.f);
-        });
-        ContentTools.StylePalette.add(style);
-        ContentTools.IMAGE_UPLOADER = contentToolsImageUploader;
-        ContentTools._init = true;
-      }
-      /**
-       * If not already set, create a new editor instance
-       */
-      if (!o.data.ct_editor) {
-        o.data.ct_editor = ContentTools.EditorApp.get();
-
-        /**
-         * Add custom button logic
-         */
-        var elBtnModalPreview = document.getElementById('btnViewPreviewStory');
-        var elBtnModalSave = document.getElementById('btnViewSaveStory');
-        //var elBtnStoryClose = document.getElementById("btnViewStoryCancel");
-        var elModalEditView = document.getElementById('modalViewEdit');
-        /**
-         * Set a remove function for custom buttons
-         */
-
-        o.data.ct_editor.remove = function() {
-          o.data.ct_editor.destroy();
-        };
-
-        /**
-         * Init editor
-         */
-        o.data.ct_editor.init(
-          '*[data-editable]', // class of region editable
-          'data-name', // name of regions
-          null, // fixture test
-          true
-        );
-
-        /**
-         * On start
-         */
-        o.data.ct_editor.addEventListener('start', function() {
-          elBtnModalSave.setAttribute('disabled', true);
-          elBtnModalPreview.setAttribute('disabled', true);
-          //elBtnStoryClose.setAttribute("disabled",true);
-          elModalEditView.classList.add('mx-hide');
-          /* If jed has an story editor, disable it during edition */
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.disable();
-          }
-        });
-
-        /**
-         * On cancel
-         */
-        o.data.ct_editor.addEventListener('revert', function() {
-          elBtnModalSave.removeAttribute('disabled');
-          elBtnModalPreview.removeAttribute('disabled');
-          elModalEditView.classList.remove('mx-hide');
-          //elBtnStoryClose.removeAttribute("disabled");
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.enable();
-          }
-        });
-
-        /**
-         * On save
-         */
-        o.data.ct_editor.addEventListener('saved', function(ev) {
-          var regions;
-
-          elBtnModalSave.removeAttribute('disabled');
-          elBtnModalPreview.removeAttribute('disabled');
-          //elBtnStoryClose.removeAttribute("disabled");
-          elModalEditView.classList.remove('mx-hide');
-          // Check that something changed
-          regions = ev.detail().regions;
-          if (jed.editors.storyEdit) {
-            jed.editors.storyEdit.enable();
-          }
-          if (Object.keys(regions).length === 0) {
-            return;
-          }
-
-          if (jed.editors.storyEdit) {
-            var j = jed.editors.storyEdit;
-            this.busy(true);
-
-            for (var k in regions) {
-              var t = regions[k];
-              var s = k.split(':');
-              var step = +s[0];
-              var slide = +s[1];
-              var lang = mx.settings.language;
-              var e = j.getEditor(
-                'root.steps.' + step + '.slides.' + slide + '.html.' + lang
-              );
-              if (e && e.setValue) {
-                e.setValue(t);
-              }
-            }
-            this.busy(false);
-          }
-        });
-      }
-    });
-}
-
-function contentToolsImageUploader(dialog) {
-  var file, image, url, xhr, height, width, type;
-
-  /**
-   * Cancel upload
-   */
-  dialog.addEventListener('imageuploader.cancelupload', function() {
-    if (xhr) {
-      xhr.upload.removeEventListener('progress', xhrProgress);
-      xhr.removeEventListener('readystatechange', xhrComplete);
-      xhr.abort();
-    }
-
-    dialog.state('empty');
-  });
-
-  /**
-   * Clear image
-   */
-  dialog.addEventListener('imageuploader.clear', function() {
-    // Clear the current image
-    dialog.clear();
-    image = null;
-  });
-
-  /**
-   * File is loaded
-   */
-  dialog.addEventListener('imageuploader.fileready', function(ev) {
-    var fileReader = new FileReader();
-    file = ev.detail().file;
-    type = file.type;
-    image = new Image();
-    fileReader.readAsDataURL(file);
-    fileReader.addEventListener('load', function(e) {
-      url = e.target.result;
-      image.src = url;
-      image.onload = function() {
-        width = this.width;
-        height = this.height;
-        setMaxWidth(1200, function(url, width, height) {
-          dialog.populate(url, [width, height]);
-        });
-      };
-    });
-  });
-
-  /**
-   * Insert image
-   */
-  dialog.addEventListener('imageuploader.save', function() {
-    var canvas, ctx;
-    var h = mx.helpers;
-    if (h.path(mx, 'settings.user.guest')) {
-      return;
-    }
-    canvas = document.createElement('canvas');
-    canvas.height = height;
-    canvas.width = width;
-    ctx = canvas.getContext('2d');
-    ctx.drawImage(image, 0, 0);
-    ctx.save();
-    canvas.toBlob(
-      function(blob) {
-        var form = new FormData();
-        form.append('image', blob);
-        form.append('width', width);
-        form.append('height', height);
-        form.append('token', h.path(mx, 'settings.user.token'));
-        form.append('idUser', h.path(mx, 'settings.user.id'));
-        form.append('project', h.path(mx, 'settings.project'));
-
-        mx.helpers.sendData({
-          url: mx.helpers.getApiUrl('uploadImage'),
-          data: form,
-          onProgress: function(progress) {
-            dialog.progress(progress * 100);
-          },
-          onSuccess: function(data) {
-            data = data.split('\t\n');
-            data.forEach((d) => {
-              try {
-                d = JSON.parse(d);
-              } catch (err) {}
-              if (d.msg && d.msg.url && d.msg.size) {
-                dialog.save(d.msg.url, d.msg.size, {
-                  alt: 'img',
-                  'data-ce-max-width': d.msg.size[0]
-                });
-              } else {
-                console.log(d);
-              }
-            });
-          },
-          onError: function(er) {
-            mx.helpers.modal({
-              title: 'Error during the upload',
-              content: 'An error occured during the upload : ' + er,
-              styleString: 'z-index:11000'
-            });
-          }
-        });
-
-        // Set the dialog state to uploading and reset the progress bar to 0
-        dialog.state('uploading');
-        dialog.progress(0);
-      },
-      type || 'image/jpeg',
-      0.95
-    );
-  });
-
-  dialog.addEventListener('imageuploader.rotateccw', function() {
-    dialog.busy(true);
-    rotateImage(-90);
-    dialog.busy(false);
-  });
-
-  dialog.addEventListener('imageuploader.rotatecw', function() {
-    dialog.busy(true);
-    rotateImage(90);
-    dialog.busy(false);
-  });
-
-  function setMaxWidth(maxWidth, onLoad) {
-    var ratio, scale, canvas, ctx, newWidth, newHeight;
-
-    ratio = height / width;
-    scale = maxWidth / width;
-
-    if (width <= maxWidth) {
-      onLoad(url, width, height);
-    } else {
-      newWidth = maxWidth;
-      newHeight = newWidth * ratio;
-      canvas = document.createElement('canvas');
-      canvas.height = newHeight;
-      canvas.width = newWidth;
-      ctx = canvas.getContext('2d');
-      ctx.save();
-      ctx.drawImage(image, 0, 0, width, height, 0, 0, newWidth, newHeight);
-      ctx.restore();
-      url = canvas.toDataURL();
-      image.src = url;
-      image.onload = function() {
-        width = this.width;
-        height = this.height;
-        onLoad(url, width, height);
-      };
-    }
-  }
-
-  function rotateImage(degrees) {
-    var angle, canvas, ctx, to_radians, x, y, origWidth, origHeight;
-    angle = degrees % 360;
-    to_radians = Math.PI / 180;
-    canvas = document.createElement('canvas');
-
-    origWidth = width;
-    origHeight = height;
-    if (angle === 90 || angle === -270 || angle === 270 || angle === -90) {
-      width = origHeight;
-      height = origWidth;
-      x = width / 2;
-      y = height / 2;
-    } else if (angle === 180) {
-      width = origWidth;
-      height = origHeight;
-      x = width / 2;
-      y = height / 2;
-    } else {
-      width = Math.sqrt(Math.pow(origWidth, 2) + Math.pow(origHeight, 2));
-      height = width;
-      x = origHeight / 2;
-      y = origWidth / 2;
-    }
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx = canvas.getContext('2d');
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate(angle * to_radians);
-    ctx.drawImage(image, -origWidth / 2, -origHeight / 2);
-    ctx.restore();
-
-    url = canvas.toDataURL();
-    image.src = url;
-
-    image.onload = function() {
-      width = this.width;
-      height = this.height;
-      dialog.populate(url, [width, height]);
-    };
-  }
 }
 
 /**
  * Clean + init
  */
 function cleanInit(o) {
+  const h = mx.helpers;
+  /**
+   * Remove old listener
+   */
+  mx.listenerStore.removeListenerByGroup('story_map');
+
   return new Promise(function(resolve) {
     /* Fetch view if not given */
     if (!o.view && o.id && o.idView) {
-      var view = mx.helpers.getViews(o);
+      var view = h.getView(o.idView);
       o.view = view;
     }
 
@@ -616,13 +242,13 @@ function cleanInit(o) {
     o.idView = o.idView || o.view.id;
 
     /* If no story, quit*/
-    if (!mx.helpers.path(o, 'view.data.story')) {
+    if (!h.path(o, 'view.data.story')) {
       console.log('No story to handle, abord');
       return;
     }
 
     /** Remove old stuff if any */
-    var oldData = mx.helpers.path(mx.data, 'story.data');
+    var oldData = h.path(mx.data, 'story.data');
 
     if (oldData) {
       o.startScroll = oldData.elScroll.scrollTop;
@@ -637,69 +263,67 @@ function cleanInit(o) {
   });
 }
 
+function getStoryViewsId(story) {
+  const h = mx.helpers;
+  const idViewsStory = [];
+
+  story.steps.forEach((step) => {
+    if (step && h.isArray(step.views)) {
+      step.views.forEach((d) => {
+        if (h.isObject(d)) {
+          idViewsStory.push(d.view);
+        }
+      });
+    } else {
+      return;
+    }
+  });
+  return idViewsStory;
+}
+
 /**
  * Evaluate missing view and fetch them if needed
  */
 function checkMissingView(o) {
-  var h = mx.helpers;
-  var view = o.view;
-  var views = h.getViews({id: o.id, asArray: true});
-  var idViews = views.map((v) => v.id);
-  var map = h.getMap(o.id);
+  const h = mx.helpers;
+  const view = o.view;
+  const views = h.getViews();
+  const idViews = views.map((v) => v.id);
+  const map = h.getMap(o.id);
+  const idViewsStory = [];
 
   return new Promise(function(resolve) {
-    var idViewsStory = h.path(view, 'data.views');
-    var story = h.path(view, 'data.story');
-    /**
-     * Case when views are stored as object instead of id.
-     * This was done when asynchronous fetch was not an option.
-     */
-    var isViewsArrayOfObject = h.isViewsArray(idViewsStory);
-    if (isViewsArrayOfObject) {
-      idViewsStory = idViewsStory.map((v) => v.id);
-    }
-   
-    /**
-    * Case when views are not stored in data.view but only in steps
-    */
-    if (h.isEmpty(idViewsStory) && !h.isEmpty(story)) {
-      idViewsStory = [];
+    const story = h.path(view, 'data.story', {});
 
-      story.steps.forEach((step) => {
-        if (step && h.isArray(step.views)) {
-          step.views.forEach((d) => {
-            if (h.isObject(d)) {
-              idViewsStory.push(d.view);
-            }
-          });
-        } else {
-          return;
-        }
-      });
+    /**
+     * Case views are stored within data.views (deprecated)
+     */
+    h.path(view, 'data.views', []).forEach((id) => {
+      idViewsStory.push(id);
+    });
+    /**
+     * Case when views are stored as object instead of id (deprecated).
+     */
+    if (h.isViewsArray(idViewsStory)) {
+      idViewsStory.length = 0;
+      idViewsStory.forEach((v) => idViewsStory.push(v.id));
     }
 
     /**
-     * We expect an array of id, but sometimes a string could be
-     * returned. This could happen with toJSON in R.
+     * Case when views are not stored in data.view but only in steps (current behaviour).
      */
-    var isViewsArray = h.isArray(idViewsStory);
-    var isViewsString = h.isString(idViewsStory);
-    var idViewsToAdd = [];
+    getStoryViewsId(story).forEach((id) => {
+      idViewsStory.push(id);
+    });
 
-    idViewsStory = isViewsArray
-      ? idViewsStory
-      : isViewsString
-      ? [idViewsStory]
-      : [];
-
-    if (!idViewsStory || idViewsStory.length === 0) {
+    if (idViewsStory.length === 0) {
       resolve([]);
     } else {
       /**
        * Create a list of views id to download
        * ( e.g. if they are from another project )
        */
-      idViewsToAdd = idViewsStory.filter((id) => {
+      const idViewsToAdd = idViewsStory.filter((id) => {
         return idViews.indexOf(id) === -1;
       });
       resolve(idViewsToAdd);
@@ -758,7 +382,6 @@ function setScrollData(o) {
 function storyOnScroll(o) {
   var data, posNow, posLast;
   var nf = mx.helpers.onNextFrame;
-
   /*
    * Store start values
    */
@@ -772,11 +395,11 @@ function storyOnScroll(o) {
   /**
    * Trigger step config
    */
-  listenerManager(o, {
-    action: 'add',
+  mx.listenerStore.addListener({
     target: window,
-    event: 'resize',
-    listener: updateLayout
+    type: 'resize',
+    callback: updateLayout,
+    group: 'story_map'
   });
 
   function updateLayout() {
@@ -789,22 +412,47 @@ function storyOnScroll(o) {
    * Loop : run a function if scroll is done on an element
    */
   function loop() {
-    if (o.data.enabled) {
-      data = o.onScrollData;
-      // NOTE: this is weird.  scrollTop does not reflect actual dimension but non scaled ones.
-      posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
-      posLast = data.distTop;
-      if (posLast === posNow) {
-        nf(loop);
-        return false;
-      } else {
-        o.onScrollData.distTop = posNow;
-      }
-      o.callback(o);
+    data = o.onScrollData;
+    // NOTE: scrollTop does not reflect actual dimension but non scaled ones.
+    posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
+    posLast = data.distTop;
+    if (posLast === posNow) {
       nf(loop);
+      return false;
+    } else {
+      o.onScrollData.distTop = posNow;
     }
+    o.callback(o);
+    nf(loop);
   }
 }
+
+
+function initBulletsListener(o){
+  const h = mx.helpers; 
+  var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
+  o.data.elBullets = elBullets; 
+  o.data.elMapControls.appendChild(elBullets);
+  mx.listenerStore.addListener({
+    target: elBullets,
+    type: 'click',
+    callback: bulletScrollTo,
+    group: 'story_map'
+  });
+  console.log('added bullets');
+/*
+   * Set position
+   */
+  function bulletScrollTo(e) {
+    const step = e.target.dataset.step;
+    if (step) {
+      e.stopPropagation();
+      h.storyGoTo(step);
+    }
+  }
+
+}
+
 
 /**
  * Set step config : dimention, number, bullets
@@ -814,26 +462,21 @@ function setStepConfig(o) {
   const el = h.el;
 
   var data = o.onScrollData;
-  var elBullet, elBullets, config, rect, elStep, elSteps, elSlides, stepName;
+  var elBullets,elBullet, config, rect, elStep, elSteps, elSlides, stepName;
   var slideConfig;
 
   /*
    * Steps configuration
    */
   data.stepsConfig = [];
+  elBullets = o.data.elBullets;
   elSteps = data.elScroll.querySelectorAll('.mx-story-step');
-  elBullets = el('div', {class: ['mx-story-step-bullets', 'noselect']});
 
-  o.data.elBullets = elBullets;
-  o.data.elMapControls.appendChild(elBullets);
-  console.log('added bullets');
 
-  listenerManager(o, {
-    action: 'add',
-    target: elBullets,
-    event: 'click',
-    listener: bulletScrollTo
-  });
+  /**
+  * Clean bullets
+  */
+  elBullets.innerHTML = "";
 
   for (var s = 0, sL = elSteps.length; s < sL; s++) {
     /*
@@ -844,6 +487,7 @@ function setStepConfig(o) {
     stepName = elStep.dataset.step_name;
     rect = elStep.getBoundingClientRect();
     elSlides = elStep.querySelectorAll('.mx-story-slide');
+    config.elStep = elStep;
     config.elSlides = elSlides;
     config.slidesConfig = [];
 
@@ -913,17 +557,7 @@ function setStepConfig(o) {
     data.elScroll.scrollTop = o.onScrollData.distStart * 1;
   }
 
-  /*
-   * Set position
-   */
-  function bulletScrollTo(e) {
-    const step = e.target.dataset.step;
-    if (step) {
-      e.stopPropagation();
-      mx.helpers.storyGoTo(step);
-    }
   }
-}
 
 /*
  * Update slides transform value;
@@ -938,12 +572,16 @@ export function storyUpdateSlides(o) {
   var data = o.onScrollData;
   var percent = 0;
   var elSlides;
+  var elStep;
   var elBullet;
-  var config;
   var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
+  var clHidden = 'mx-visibility-hidden';
+  var clRemove = 'mx-display-none';
+  var isHidden = false;
   //var classActive = 'mx-story-step-active';
 
-  for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
+  //for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
+  data.stepsConfig.forEach((config, s) => {
     /**
      *   1       2       s       e       5       6
      *   |.......|.......|.......|.......|.......|
@@ -957,21 +595,30 @@ export function storyUpdateSlides(o) {
     isActive = data.stepActive === s;
     toActivate = isInRange && !isActive;
     toRemove = !isInRange && isActive;
-
+    isHidden = config.elStep.classList.contains(clHidden);
+    elStep = config.elStep;
+    elSlides = config.elSlides;
     /**
      * Update slide animation
      */
     if (isInRangeAnim) {
-      elSlides = config.elSlides;
-      for (var l = 0, lL = elSlides.length; l < lL; l++) {
+      if (isHidden) {
+        elStep.classList.remove(clHidden);
+      }
+      elSlides.forEach((elSlide, i) => {
         var slideTransform = mx.helpers.storySetTransform({
-          data: config.slidesConfig[l],
+          data: config.slidesConfig[i],
           percent: percent
         });
-        /**
-         * Update style
-         */
-        elSlides[l].style[data.scrollFun] = slideTransform;
+        elSlide.classList.remove(clRemove);
+        elSlide.style[data.scrollFun] = slideTransform;
+      });
+    } else {
+      if (!isHidden) {
+        elStep.classList.add(clHidden);
+        elSlides.forEach((elSlide) => {
+          elSlide.classList.add(clRemove);
+        });
       }
     }
 
@@ -998,7 +645,7 @@ export function storyUpdateSlides(o) {
         }
       }
     }
-  }
+  });
 }
 
 /*
@@ -1036,7 +683,7 @@ export function storyGoTo(to, useTimeout, funStop) {
   if (!data || !data.data || !data.data.stepsConfig) {
     return;
   }
-  var steps = h.path(data, 'view.data.story.steps');
+  var steps = h.path(data, 'view.data.story.steps', []);
   var stepsDim = h.path(data, 'data.stepsConfig');
   var elStory = data.data.elScroll;
   var start = elStory.scrollTop;
@@ -1133,49 +780,6 @@ export function storyAutoPlay(cmd) {
   });
 }
 
-//function storyAutoplayStop(stop){
-//var h = mx.helpers;
-//var data = h.path(mx.data,"story.data");
-//if( data ){
-//if( typeof(stop) === "boolean" ){
-//data.autoplayStop = stop;
-//}
-//return data.autoplayStop === true;
-//}
-//}
-
-//export function storyAutoplay(cmd){
-//var h = mx.helpers;
-//var data = h.path(mx.data,"story.data");
-
-//if(data){
-
-//var stop = storyAutoplayStop();
-
-//if( cmd === "start"){
-//stop = !stop;
-//if( !stop ){
-//h.iconFlash("play");
-//storyAutoplayStop(false);
-//}
-//}
-
-//if( stop ){
-
-//storyAutoplayStop(true);
-//h.iconFlash("stop");
-//return;
-
-//}else{
-
-//h.storyGoTo("next",true,storyAutoplayStop)
-//.then(function(res){
-//storyAutoplay("continue");
-//});
-//}
-//}
-//}
-
 /**
  * Control map pan during story map
  * @param {Object} o options
@@ -1235,8 +839,8 @@ export function storyController(o) {
     '#btnShowLogin',
     '#btnZoomIn',
     '#btnZoomOut',
-    '#btnFullscreen',
-    '.mx-panel-views'
+    '#btnDrawMode',
+    '.mx-panels-container'
   ];
   o.selectorEnable = o.selectorEnable || [
     '#btnStoryUnlockMap',
@@ -1254,13 +858,13 @@ export function storyController(o) {
   var toDisable = {
     selector: o.enable === true ? o.selectorDisable : o.selectorEnable,
     action: 'add',
-    class: 'mx-hide'
+    class: 'mx-display-none'
   };
 
   var toEnable = {
     selector: o.enable === true ? o.selectorEnable : o.selectorDisable,
     action: 'remove',
-    class: 'mx-hide'
+    class: 'mx-display-none'
   };
 
   h.classAction(toEnable);
@@ -1274,7 +878,7 @@ export function storyController(o) {
      */
     var oldViews = h.path(mx.data, 'story.data.views');
     if (!mx.helpers.isArray(oldViews)) {
-      oldViews = getViewsEnabled(o);
+      oldViews = h.getViewsOnMap(o);
     }
 
     /* Save current values */
@@ -1310,24 +914,23 @@ export function storyController(o) {
       storyController(o);
     };
 
-    listenerManager(o, {
-      action: 'add',
+    mx.listenerStore.addListener({
       target: elBtnClose,
-      event: 'click',
-      listener: o.data.close
+      type: 'click',
+      callback: o.data.close,
+      group: 'story_map'
     });
   } else {
     /**
      * Remvove registered listener
      */
-    listenerManager(o, {
-      action: 'removeAll'
-    });
+
+    mx.listenerStore.removeListenerByGroup('story_map');
 
     /**
      * Remove layers added by the story
      */
-    getViewsEnabled(o).forEach((id) => {
+    h.getViewsOnMap(o).forEach((id) => {
       h.closeView({
         id: o.id,
         idView: id
@@ -1436,42 +1039,6 @@ export function storyController(o) {
 }
 
 /**
- * Listener manager
- * @param {Object} o Story options
- * @param {Object} config Config
- * @param {Element} config.target Target element
- * @param {Function} config.onDestroy Function to run on destroy
- * @param {Element} config.action `add`,`remove`,`removeAll`
- * @param {String} config.event name
- * @param {Function} config.listener Listener function
- */
-function listenerManager(o, config) {
-  var c = config;
-  var h = mx.helpers;
-  if (c.action === 'add') {
-    c.target.addEventListener(c.event, c.listener);
-
-    c.destroy = function() {
-      var e = c.event;
-      var l = c.listener;
-      var onDestroy = c.onDestroy || function() {};
-      c.target.removeEventListener(e, l);
-      onDestroy();
-    };
-
-    o.data.listeners.push(c);
-  } else {
-    var listeners =
-      h.path(o, 'data.listeners') || h.path(mx.data, 'story.data.listeners');
-    if (listeners) {
-      listeners.forEach(function(l) {
-        l.destroy();
-      });
-    }
-  }
-}
-
-/**
  * Build story ui
  *
  *
@@ -1529,6 +1096,7 @@ export function storyBuild(o) {
             }
           },
           step.slides.map((slide, slideNum) => {
+            var config = JSON.stringify(slide.effects || []);
             /**
              * For each slide
              */
@@ -1536,10 +1104,11 @@ export function storyBuild(o) {
               'div',
               {
                 dataset: {
-                  slide_config: slide.effects || []
+                  slide_config: config
                 },
                 class: [o.classSlide].concat(
-                  slide.classes.map((c) => o.classStory + '-' + c.name)
+                  slide.classes.map((c) => o.classStory + '-' + c.name),
+                  'mx-display-none'
                 )
               },
               el(
@@ -1668,29 +1237,20 @@ export function storySetTransform(o) {
   return tt.join(' ');
 }
 
-function getViewsEnabled(o) {
-  return mx.helpers.getLayerNamesByPrefix({
-    id: o.id,
-    prefix: 'MX-',
-    base: true
-  });
-}
-
 export function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
-  var steps = mx.helpers.path(o, 'view.data.story.steps');
-  var data = mx.helpers.path(mx.data, 'story.data');
+  const h = mx.helpers;
+  var steps = h.path(o, 'view.data.story.steps',[]);
+  var data = h.path(mx.data, 'story.data',{});
   var stepNum = o.stepNum;
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
-  var m = mx.maps[o.id];
+  var m = h.getMapData();
 
-  data.currentStep = stepNum;
-
-  if (!steps) {
-    console.log('No steps found');
+  if (steps.length ===0) {
     return;
   }
+  data.currentStep = stepNum;
   /**
    * retrieve step information
    */
@@ -1705,7 +1265,7 @@ export function storyPlayStep(o) {
   vStep = step.views.map(function(v) {
     return v.view;
   });
-  easing = mx.helpers.easingFun({type: anim.easing, power: anim.easing_power});
+  easing = h.easingFun({type: anim.easing, power: anim.easing_power});
 
   /**
    * Fly to position
@@ -1733,14 +1293,14 @@ export function storyPlayStep(o) {
   /**
    * Add view if not alredy visible
    */
-  mx.helpers.onNextFrame(function() {
-    vVisible = getViewsEnabled(o);
-    vToRemove = mx.helpers.getArrayDiff(vVisible, vStep);
-    vToAdd = mx.helpers.getArrayDiff(vStep, vVisible);
+  h.onNextFrame(function() {
+    vVisible = h.getViewsOnMap(o);
+    vToRemove = h.getArrayDiff(vVisible, vStep);
+    vToAdd = h.getArrayDiff(vStep, vVisible);
 
     vToAdd.forEach(function(v, i) {
       var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-      mx.helpers.renderView({
+      h.renderView({
         id: o.id,
         idView: v,
         before: vPrevious,
@@ -1749,13 +1309,13 @@ export function storyPlayStep(o) {
     });
 
     vToRemove.forEach(function(v) {
-      mx.helpers.closeView({
+      h.closeView({
         id: o.id,
         idView: v
       });
     });
 
-    mx.helpers.updateViewOrder({
+    h.updateViewOrder({
       order: vStep,
       id: o.id
     });

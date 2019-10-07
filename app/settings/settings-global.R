@@ -6,7 +6,7 @@ config <- list()
 #
 # Shiny options
 #
-options(shiny.maxRequestSize=1000*1024^2) 
+options(shiny.maxRequestSize=0) 
 options(shiny.reactlog=FALSE)
 
 #
@@ -22,8 +22,14 @@ config[["db_log"]] <-  list(
 config[["system"]] <- list(
   os = Sys.info()[["sysname"]],
   hostname = Sys.info()[["nodename"]],
-  hostnameRemote = "map-x-full",
-  urlRepositoryIssues = "https://github.com/fxi/map-x-mgl/issues"
+  hostnameRemote = "map-x-full"
+  )
+
+
+config[["links"]] <- list(
+  repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
+  repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
+  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer"
   )
 
 #
@@ -65,19 +71,9 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
+  upload_size_max = 100 * 1024^2,#100MiB
   routes = list(
-    #    tiles =  '/get/tile/{x}/{y}/{z}.mvt',
-    #views =  '/get/view/',
-    #sourceMetadata =  '/get/source/metadata/',
-    #viewMetadata =  '/get/view/metadata/',
-    #sourceOverlap =  '/get/source/overlap/',
-    #sourceValidateGeom =  '/get/source/validate/geom',
-    #getSourceTableAttribute =  '/get/source/table/attribute',
-    #getViews =  '/get/views/',
-    #downloadSourceCreate =  '/get/source/',
-    #downloadSourceGet =  '',
-    #uploadImage =  '/upload/image/',
-    #uploadVector =  '/upload/vector/'
+    getIpInfo = "/get/ip",
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",
     getViewMetadata = "/get/view/metadata/",
@@ -107,9 +103,10 @@ config[["pg"]] = list(
     user = "mapxr",
     password=""
     ),
+  hostMaster = "127.0.0.1",
+  portMaster = "5432",
   encryptKey = "",
   password= "",
-  conPool = 5,
   geomCol = "geom",
   tables = list(
     "logs"="mx_logs",
@@ -167,8 +164,8 @@ dir.create(.get(config,c("resources","download")),showWarnings=F,recursive=TRUE)
 #
 # Server and UI folder path
 #
-config[["srvPath"]] = file.path("src","server")
-config[["uiPath"]] = file.path("src","ui")
+config[["srvPath"]] = file.path("src","r","server")
+#config[["uiPath"]] = file.path("src","ui")
 config[["uploadDirPath"]] = tempdir()
 
 #
@@ -177,7 +174,7 @@ config[["uploadDirPath"]] = tempdir()
 config[["dictionaries"]] <- list(
   main = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_main.json"
+      config[[c("resources","data")]],"dict","dict_main.json"
       )
     ),
   countries = fromJSON(
@@ -185,12 +182,12 @@ config[["dictionaries"]] <- list(
       #
       # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
       #
-      config[[c("resources","data")]],"dict_countries.json"
+      config[[c("resources","data")]],"dict","dict_countries.json"
       )
     ),
   languages = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict_languages.json"
+      config[[c("resources","data")]],"dict","dict_languages.json"
       )
     )
   )
@@ -297,19 +294,12 @@ config[[c("variables","time")]] <- list(
 #
 config[["templates"]] <- list()
 
-# js dot renderer
-config[[c("templates","dot")]] <-  list()
-config[[c("templates","dot","viewListLegend")]] <- as.character(mxSource("src/ui/view_list_legend.dot.R"))
-config[[c("templates","dot","viewListOptions")]] <- as.character(mxSource("src/ui/view_list_options.dot.R"))
-config[[c("templates","dot","viewList")]] <- as.character(mxSource("src/ui/view_list.dot.R"))
-
 # html template
 config[[c("templates","html")]] <-  list()
 config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_simple.html"),collapse="\n")
 
 # text template
 config[[c("templates","text")]] <-  list()
-#config[[c("templates","text","email_password")]] <- paste(readLines("src/templates/email_password.txt"),collapse="\n")
 config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
 config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
 config[[c("templates","text","custom_view")]] <- paste(readLines("src/templates/custom_view.js"),collapse="\n")

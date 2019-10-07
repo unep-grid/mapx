@@ -1,8 +1,9 @@
 /* jshint esversion:6, evil: true */
 
 export function Dashboard(idContainer, idDashboard, view) {
+  const h = mx.helpers;
   var dashboard = this;
-  var modules = mx.helpers.path(view, 'data.dashboard.modules');
+  var modules = h.path(view, 'data.dashboard.modules');
   if (typeof modules === 'string') {
     modules = [modules];
   }
@@ -20,16 +21,16 @@ export function Dashboard(idContainer, idDashboard, view) {
    * Fetch module
    */
   return Promise.all([
-    import('packery'),
-    import('draggabilly'),
-    mx.helpers.modulesLoad(modules)
+    h.moduleLoad('packery'),
+    h.moduleLoad('draggabilly'),
+    h.modulesLoad(modules)
   ]).then(function(m) {
     /**
      * Add modules in dashboard instance for quick ref
      * from the editor
      */
-    dashboard.modules.packery = m[0].default;
-    dashboard.modules.draggabilly = m[1].default;
+    dashboard.modules.packery = m[0];
+    dashboard.modules.draggabilly = m[1];
 
     modules.forEach((mod, i) => {
       dashboard.modules[mod] = m[2][i];
@@ -111,7 +112,7 @@ export function Dashboard(idContainer, idDashboard, view) {
         mx.dashboards.splice(pos, 1);
       }
       if (mx.dashboards.length === 0) {
-        mx.helpers.Dashboard.showPanel(false);
+        h.Dashboard.showPanel(false);
       }
     };
 
@@ -474,6 +475,7 @@ Dashboard.prototype.Widget = function(config) {
    * @param {Object} opt.point Point data
    */
   function getWidgetDataFromLinkedView(opt) {
+    opt = opt || {};
     var h = mx.helpers;
     var id = widget.config.id;
     var items = h.getLayersPropertiesAtPoint({
@@ -528,12 +530,13 @@ Dashboard.prototype.Widget = function(config) {
  * @param {Object} o.data Dashboard data. Default is view.data.dashboard
  */
 Dashboard.init = function(o) {
+  const h = mx.helpers;
   var view = o.view;
-  var idDashboard = o.idDashboard || 'mx-dashboard-' + mx.helpers.makeId();
+  var idDashboard = o.idDashboard || 'mx-dashboard-' + h.makeId();
   var idContainer = o.idContainer || mx.settings.ui.ids.idDashboards;
-  var dashboardData = o.data || mx.helpers.path(view, 'data.dashboard');
+  var dashboardData = o.data || h.path(view, 'data.dashboard');
 
-  if (!dashboardData || !dashboardData.widgets) {
+  if (!dashboardData || !h.isArray(dashboardData.widgets) || dashboardData.widgets.length === 0) {
     return;
   }
   if (view._dashboard) {
@@ -565,7 +568,7 @@ Dashboard.init = function(o) {
           height: w.height,
           width: w.width,
           script: w.script,
-          map: mx.helpers.getMap(o.idMap),
+          map: h.getMap(o.idMap),
           packery: dashboard.packery,
           view: view,
           type: view.type
@@ -595,12 +598,12 @@ Dashboard.hasWidgets = function() {
 Dashboard.hasWidgetsVisibles = function() {
   return (
     Dashboard.getStore()
-      .map((d) => {
-        d.widgets.filter((w) => w.visible === true);
-      })
-      .reduce((all, widget) => {
-        all.concat(widget);
-      }).length > 0
+    .map((d) => {
+      d.widgets.filter((w) => w.visible === true);
+    })
+    .reduce((all, widget) => {
+      all.concat(widget);
+    }).length > 0
   );
 };
 

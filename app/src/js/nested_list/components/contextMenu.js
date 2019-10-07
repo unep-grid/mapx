@@ -13,6 +13,7 @@ class ContextMenu {
     cm.elContainer = document.body;
     cm.elContext = cm.buildContext();
     cm.init();
+    cm._save_on_quit = false;
   }
 
   init() {
@@ -29,29 +30,36 @@ class ContextMenu {
     cm.setTargetFocus(false);
     cm.stopListen();
     cm.li.removeElement(cm.elContext);
-    cm.li.saveStateStorage();
+    //if (cm.getModeSaveOnQuit()) {
+      cm.li.saveStateStorage();
+      //cm.setModeSaveOnQuit(false);
+    //}
     cm._destroyed = true;
   }
 
-  adjustPosition(){
+  setModeSaveOnQuit(enable) {
+    this._save_on_quit = enable;
+  }
+
+  getModeSaveOnQuit() {
+    return this._save_on_quit === true;
+  }
+
+  adjustPosition() {
     let cm = this;
     let rCtx = cm.elContext.getBoundingClientRect();
     let rCon = cm.elContainer.getBoundingClientRect();
 
-    if(rCtx.right > rCon.right){
-      cm.elContext.style.left = (rCon.right - rCtx.width - 20) + "px";
+    if (rCtx.right > rCon.right) {
+      cm.elContext.style.left = rCon.right - rCtx.width - 20 + 'px';
     }
-    if(rCtx.left < rCon.left){
-      cm.elContext.style.left = (rCon.left + 20) + "px";
+    if (rCtx.left < rCon.left) {
+      cm.elContext.style.left = rCon.left + 20 + 'px';
     }
-    if(rCtx.bottom > rCon.bottom){
-      cm.elContext.style.top = (rCon.bottom - rCtx.height - 20) + "px";
+    if (rCtx.bottom > rCon.bottom) {
+      cm.elContext.style.top = rCon.bottom - rCtx.height - 20 + 'px';
     }
-
   }
-
-
-
 
   setTargetFocus(enable) {
     let cm = this;
@@ -59,9 +67,9 @@ class ContextMenu {
     if (enable) {
       cm.elTarget.classList.add(cm.li.opt.class.contextMenuTargetFocus);
     } else {
-      setTimeout(()=>{
-      cm.elTarget.classList.remove(cm.li.opt.class.contextMenuTargetFocus);
-      },500);
+      setTimeout(() => {
+        cm.elTarget.classList.remove(cm.li.opt.class.contextMenuTargetFocus);
+      }, 500);
     }
   }
 
@@ -79,24 +87,24 @@ class ContextMenu {
   startListen() {
     let cm = this;
     cm.li.listenerStore.addListener({
-      type: 'click',
+      type: 'mousedown',
       group: 'context',
       target: window,
-      listener: handleContextEvent,
+      callback: handleContextEvent,
       bind: cm
     });
     cm.li.listenerStore.addListener({
       type: 'input',
       group: 'context',
       target: cm.elContainer,
-      listener: handleContextEvent,
+      callback: handleContextEvent,
       bind: cm
     });
     cm.li.listenerStore.addListener({
       type: 'keydown',
       group: 'context',
       target: window,
-      listener: handleContextEventKeyDown,
+      callback: handleContextEventKeyDown,
       bind: cm
     });
   }
@@ -107,14 +115,21 @@ class ContextMenu {
 
   buildContext() {
     let cm = this;
-    let isGroup = cm.li.isGroup(cm.elTarget);
+    let isRoot = cm.li.isRoot(cm.elTarget);
+    let isGroup = !isRoot && cm.li.isGroup(cm.elTarget);
     let elContainer = cm.elContainer;
-
-    let type = isGroup ? 'group' : 'item';
-    let it = cm.li.opt.contextMenuItems.filter(fItem);
-    let ui = it.map((i) => {
+    let type = isRoot ? 'root' : isGroup ? 'group' : 'item';
+    /**
+     * Filter context item and build UI according to
+     * settings;
+     */
+    let contextItems = cm.li.opt.contextMenuItems.filter(filterContextItem);
+    let ui = contextItems.map((i) => {
+      if (i.ui === 'header') {
+        return cm.elHeader(i.label);
+      }
       if (i.ui === 'button') {
-        return cm.elButton(i.action);
+        return cm.elButton(i.label, i.action);
       }
       if (i.ui === 'input_text') {
         let value = '';
@@ -132,6 +147,9 @@ class ContextMenu {
       }
     });
 
+    /**
+     * Context content
+     */
     let elMenuGroup = cm.li.el(
       'div',
       {
@@ -140,6 +158,9 @@ class ContextMenu {
       ui
     );
 
+    /**
+     * Context
+     */
     let elContext = cm.li.el(
       'span',
       {
@@ -152,23 +173,36 @@ class ContextMenu {
       },
       elMenuGroup
     );
-
     elContainer.appendChild(elContext);
     return elContext;
 
-    function fItem(i) {
+    /**
+     * Context helpers
+     */
+    function filterContextItem(i) {
       if (cm.li.isFunction(i.condition)) {
         if (!i.condition.bind(cm.li)()) {
           return false;
         }
       }
-      return i.forType === type || i.forType === 'all';
+      return i.forType === 'all' || i.forType.indexOf(type) > -1;
     }
   }
-
-  elButton(idAction) {
+  elHeader(idLabel) {
     let cm = this;
-    let title = cm.li.d(idAction);
+    let title = cm.li.d(idLabel);
+    let el = cm.li.el;
+    return el(
+      'div',
+      {
+        class: cm.li.opt.class.contextMenuHeader
+      },
+      title
+    );
+  }
+  elButton(idLabel, idAction) {
+    let cm = this;
+    let title = cm.li.d(idLabel);
     let el = cm.li.el;
     return el(
       'div',
@@ -176,7 +210,7 @@ class ContextMenu {
         class: cm.li.opt.class.contextMenuButton,
         dataset: {
           li_id_action: idAction,
-          li_event_type: 'click'
+          li_event_type: 'mousedown'
         }
       },
       title
@@ -237,9 +271,9 @@ function handleContextEvent(evt) {
   let elInput = evt.target;
   let idType = elInput.dataset.li_event_type;
   //let isEventInput = eventType === 'input';
-  let isEventClick = eventType === 'click';
+  let isEventClick = eventType === 'mousedown';
   let isValidInput = idType === 'input';
-  let isValidClick = idType === 'click';
+  let isValidClick = idType === 'mousedown';
   let elTarget = cm.elTarget;
   let elContext = cm.elContext;
   let idAction = elInput.dataset.li_id_action;
@@ -255,6 +289,18 @@ function handleContextEvent(evt) {
   }
 
   let act = {
+    cm_group_sort_text_asc: () => {
+      cm.li.sortGroup(elTarget, {mode: 'text', asc: true});
+    },
+    cm_group_sort_text_desc: () => {
+      cm.li.sortGroup(elTarget, {mode: 'text', asc: false});
+    },
+    cm_group_sort_date_asc: () => {
+      cm.li.sortGroup(elTarget, {mode: 'date', asc: false});
+    },
+    cm_group_sort_date_desc: () => {
+      cm.li.sortGroup(elTarget, {mode: 'date', asc: true});
+    },
     cm_target_move_top: () => {
       cm.li.moveTargetTop(elTarget);
     },
@@ -291,14 +337,17 @@ function handleContextEvent(evt) {
       cm.li.removeGroup(elTarget);
     },
     cm_group_rename: () => {
+      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupTitle(elTarget, elInput.value);
     },
     cm_group_color: () => {
+      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupColor(elTarget, elInput.value);
     },
-    cm_btn_close: () => {}
+    cm_btn_close: () => {
+    }
   };
 
   if (idAction) {

@@ -10,17 +10,22 @@ import './style/nested_list.css';
 class NestedList {
   constructor(elRoot, opt) {
     const li = this;
+    li._is_busy = false;
+    li._is_mode_flat = false;
+    li._is_mode_skip_save = false;
+    li._is_mode_empty = false;
+    li._is_mode_lock = false;
+
     li.listenerStore = new ListenerStore();
     li.setOptions(opt);
     li.setStateOrig(opt.state);
+    li.setModeLock(opt.locked);
     li.setId();
     li.elRoot = elRoot;
     li.history = [];
     li.meta = [];
     li.contextMenu = null;
     li.init();
-    li._is_busy = false;
-    li._is_groupless = false;
   }
   /**
    * Init/destroy
@@ -47,21 +52,21 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleSortStart,
+      callback: handleSortStart,
       group: 'base',
       type: 'dragstart'
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleContextClick,
+      callback: handleContextClick,
       group: 'base',
       type: ['dblclick', 'contextmenu']
     });
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      listener: handleClick,
+      callback: handleClick,
       group: 'base',
       type: 'click'
     });
@@ -104,6 +109,10 @@ class NestedList {
   getLanguage() {
     return this.opt.language;
   }
+  getChildrenCount(el) {
+    el = el || this.elRoot;
+    return el.childElementCount;
+  }
   getLanguageDefault() {
     return this.opt.languageDefault;
   }
@@ -113,25 +122,101 @@ class NestedList {
   /**
    * Sorting and ordering
    */
-  filterById(ids, enable) {
+  filterById(ids, opt) {
+    opt = opt || {};
+
     let li = this;
+    if (li.isModeEmpty()) {
+      return;
+    }
     let elTargets = li.getChildrenTarget();
     let clHidden = li.opt.class.itemHidden;
-
-    enable = enable === true;
     ids = li.isArray(ids) ? ids : [ids];
-    li.setModeGroupless(enable, false);
 
+    /**
+     * Hide / show items
+     */
     elTargets.forEach((el) => {
       if (li.isItem(el)) {
         let id = el.id;
-        if (!enable || ids.indexOf(id) > -1) {
+        if (id === li.opt.idEmptyItem) {
+          return;
+        }
+        if (ids.indexOf(id) > -1 ) {
           el.classList.remove(clHidden);
         } else {
           el.classList.add(clHidden);
         }
       }
     });
+  }
+
+  sortGroup(elTarget, opt) {
+    let def = {asc: true, mode: 'text'};
+    opt = Object.assign({}, def, opt);
+    let li = this;
+    let elGroup = li.isGroup(elTarget) ? elTarget : li.getGroup(elTarget);
+    let els = li.getChildrenTarget(elGroup, true);
+    let data = [];
+    /**
+     * Get values to sort on
+     */
+    els.forEach((el) => {
+      let item = {
+        id: el.id,
+        el: el,
+        value: 0,
+        isGroup: li.isGroup(el)
+      };
+      if (opt.mode === 'text') {
+        item.value = item.isGroup ? li.getGroupTitle(el) : li.getItemText(el);
+        item.value = item.value.toLowerCase().trim();
+      }
+      if (opt.mode === 'date') {
+        item.value = item.isGroup ? li.getGroupDate(el) : li.getItemDate(el);
+        if (Number.isFinite(item.value * 1)) {
+          item.value = item.value * 1;
+        }
+        item.value = new Date(item.value || 0);
+      }
+      data.push(item);
+    });
+
+    /**
+     * Sort
+     */
+    data = data.sort((a, b) => {
+      if (lt(a.value, b.value)) {
+        return -1;
+      }
+      if (gt(a.value, b.value)) {
+        return 1;
+      }
+      return 0;
+    });
+
+    /**
+     * Move targets
+     */
+    var elPrevious;
+    data.forEach((d, i) => {
+      if (i === 0) {
+        li.moveTargetTop(d.el);
+      } else {
+        li.moveTargetAfter(d.el, elPrevious);
+      }
+      elPrevious = d.el;
+    });
+
+    /**
+     * Helpers
+     */
+    function gt(a, b) {
+      return opt.asc ? a > b : a < b;
+    }
+    function lt(a, b) {
+      return opt.asc ? a < b : a > b;
+    }
   }
 
   /**
@@ -157,6 +242,7 @@ class NestedList {
     let els = el.querySelectorAll(
       `${pref}.${li.opt.class.draggable}, ${pref}.${li.opt.class.group}`
     );
+
     return els;
   }
   hasChildrenTarget(el, direct) {
@@ -182,6 +268,12 @@ class NestedList {
     if (li.isItem(el)) {
       return el.querySelector('.' + li.opt.class.itemContent);
     }
+  }
+  getItemText(el) {
+    return this.opt.onGetItemTextById(el.id);
+  }
+  getItemDate(el) {
+    return this.opt.onGetItemDateById(el.id);
   }
   getGroup(el) {
     let li = this;
@@ -218,6 +310,12 @@ class NestedList {
       return el.querySelector('.' + li.opt.class.groupTitle).innerText;
     }
   }
+  getGroupDate(el) {
+    let li = this;
+    if (li.isGroup(el)) {
+      return el.dataset.li_date;
+    }
+  }
   getGroupLabel(el) {
     let li = this;
     if (li.isGroup(el)) {
@@ -238,26 +336,36 @@ class NestedList {
       elGroup.insertBefore(el, elFirst);
     }
   }
+  moveTargetBefore(el, elBefore) {
+    let li = this;
+    elBefore = elBefore || li.getPreviousTarget(el);
+    if (li.isTarget(elBefore)) {
+      let elGroup = li.getGroup(el);
+      elGroup.insertBefore(el, elBefore);
+    }
+  }
   moveTargetUp(el) {
     let li = this;
     let elPrevious = li.getPreviousTarget(el);
-    if (li.isTarget(elPrevious)) {
+    li.moveTargetBefore(el, elPrevious);
+  }
+  moveTargetAfter(el, elAfter) {
+    let li = this;
+    elAfter = elAfter || li.getNextTarget(el);
+    if (li.isTarget(elAfter)) {
       let elGroup = li.getGroup(el);
-      elGroup.insertBefore(el, elPrevious);
+      let elAfterNext = li.getNextTarget(elAfter);
+      if (elAfterNext) {
+        elGroup.insertBefore(el, elAfterNext);
+      } else {
+        elGroup.appendChild(el);
+      }
     }
   }
   moveTargetDown(el) {
     let li = this;
     let elNext = li.getNextTarget(el);
-    if (li.isTarget(elNext)) {
-      let elGroup = li.getGroup(el);
-      let elNextAfter = li.getNextTarget(elNext);
-      if (elNextAfter) {
-        elGroup.insertBefore(el, elNextAfter);
-      } else {
-        elGroup.appendChild(el);
-      }
-    }
+    li.moveTargetAfter(el, elNext);
   }
   moveTargetBottom(el) {
     let li = this;
@@ -323,28 +431,37 @@ class NestedList {
       elGroupLabel.innerText = label || '';
     }
   }
-  setModeGroupless(groupless, save) {
+  setModeSkipSave(skip) {
+    this._is_mode_skip_save = skip === true;
+  }
+  isModeSkipSave() {
+    return this._is_mode_skip_save === true;
+  }
+
+  setModeLock(enable) {
+    this._is_mode_lock = !!enable;
+  }
+  isModeLock() {
+    return !!this._is_mode_lock;
+  }
+
+  setModeFlat(enable, opt) {
+    opt = opt || {};
     let li = this;
-    groupless = groupless === true;
-    let skipSave = save === false;
+    enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
     li.addUndoStep();
     els.forEach((el) => {
       if (li.isGroup(el)) {
-        li.setGroupVisibility(el, !groupless);
+        li.setGroupVisibility(el, !enable);
       }
     });
-    /*  if (!groupless) {*/
-    //li.resetState();
-    /*}*/
-    if (!skipSave) {
-      li.saveStateStorage();
-    }
-    li._is_groupless = groupless;
+    li.saveStateStorage();
+    li._is_mode_flat = enable;
   }
-  isModeGroupless() {
-    return this._is_groupless;
+  isModeFlat() {
+    return this._is_mode_flat;
   }
   setGroupTitle(el, title) {
     let li = this;
@@ -431,9 +548,11 @@ class NestedList {
     let li = this;
     let state = li.getState();
     let history = li.getHistory();
-    if (li.isModeGroupless()) {
+
+    if (li.isModeFlat() || li.isModeSkipSave() || li.isModeLock()) {
       return;
     }
+
     li.opt.onChange(state);
     li.setStateStored(state);
     li.setHistoryStored(history);
@@ -442,7 +561,6 @@ class NestedList {
     let li = this;
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
-      li.log('save state');
       window.localStorage.setItem(key, JSON.stringify(state));
     }
   }
@@ -462,7 +580,6 @@ class NestedList {
     let key = li.getStorageKey('history');
     let isValid = li.isArray(history) && history.length > 0;
     if (isValid && window.localStorage) {
-      li.log('save history');
       let historyClone = li.cloneObject(history);
       historyClone.forEach((state) => {
         state.forEach((s) => {
@@ -542,18 +659,36 @@ class NestedList {
   /**
    * Empty mode
    */
-  setEmptyMode(empty) {
+  setModeEmpty(enable) {
     let li = this;
-    let id = 'liEmptyLabel';
+    let idEmpty = li.opt.idEmptyItem;
+    let ignore = (enable && li.isModeEmpty()) || (!enable && !li.isModeEmpty());
+    let nItems = li.getChildrenCount();
     let elLabel = el('div', li.opt.emptyLabel);
-    li.clearAllItems();
-    if (empty) {
-      li.addItem({
-        id: id,
-        type: 'item',
-        el: elLabel
-      });
+
+    if (ignore) {
+      return;
     }
+
+    if (enable) {
+      if (nItems > 0) {
+        li.clearAllItems();
+      }
+
+      li.addItem({
+        id: idEmpty,
+        type: 'item',
+        el: elLabel,
+        empty: true
+      });
+    } else {
+      li.removeItemById(idEmpty);
+    }
+
+    li._is_mode_empty = !!enable;
+  }
+  isModeEmpty() {
+    return !!this._is_mode_empty;
   }
 
   /**
@@ -567,6 +702,9 @@ class NestedList {
   resetState() {
     let li = this;
     let state = li.getStateOrig();
+    if (li.isModeEmpty()) {
+      return;
+    }
     li.addUndoStep();
     li.clearAllItems();
     li.setState({render: true, state: state, useStateStored: false});
@@ -605,7 +743,7 @@ class NestedList {
       /*
        * Render empty label
        */
-      li.setEmptyMode(state.length > 1);
+      li.setModeEmpty(true);
     } else {
       /*
        * Render state item
@@ -615,6 +753,7 @@ class NestedList {
           li.addGroup(s);
         } else {
           s.render = opt.render;
+          s.initState = true;
           li.addItem(s);
         }
       });
@@ -624,7 +763,7 @@ class NestedList {
     return this._state_orig || [];
   }
   setStateOrig(state) {
-    this._state_orig = this.cloneObject(state || []);
+    this._state_orig = this.cloneObject(state || this.getState() || []);
   }
   clearAllItems() {
     let li = this;
@@ -637,13 +776,27 @@ class NestedList {
     let li = this;
     attr.render = attr.render || !attr.content || false;
     let isGroup = li.isGroup(attr.group);
-    var elGroupParent = isGroup
+    let isLocked = li.isModeLock();
+    let elGroupParent = isGroup
       ? attr.group
       : li.getGroupById(attr.group) || li.elRoot;
     let item = new Item(attr, li);
     let elItem = item.el;
     let elContent = item.elContent;
+    let isEmptyItem = !!attr.empty;
+    let isModeEmpty = li.isModeEmpty();
+    let isInitState = !!attr.initState;
+
+    if (isLocked && !isEmptyItem) {
+      return;
+    }
+
+    if (!isEmptyItem && isModeEmpty) {
+      li.setModeEmpty(false);
+    }
+
     elGroupParent.appendChild(elItem);
+
     if (attr.render) {
       li.opt.onRenderItemContent(elContent, attr);
     }
@@ -651,6 +804,10 @@ class NestedList {
       li.moveTargetTop(elItem);
     }
     li.makeIgnoredClassesDraggable(elItem);
+
+    if (!isEmptyItem && !isInitState) {
+      li.saveStateStorage();
+    }
     return elItem;
   }
 
@@ -703,7 +860,6 @@ class NestedList {
    */
   setUiDraggingStart() {
     let li = this;
-    li._body_curlir = document.body.style.curlir;
     setTimeout(() => {
       document.body.classList.add(li.opt.class.globalDragging);
     }, 100);
@@ -720,6 +876,7 @@ class NestedList {
   isBusy() {
     return this._is_busy === true;
   }
+
   cloneObject(obj) {
     return JSON.parse(JSON.stringify(obj));
   }
@@ -732,10 +889,17 @@ class NestedList {
     }
   }
   removeElement(el) {
-    if (el.remove) {
-      el.remove();
-    } else if (el.parentElement) {
-      el.parentElement.removeChild(el);
+    let li = this;
+    if (el instanceof Element) {
+      if (el.remove) {
+        el.remove();
+      } else if (el) {
+        el.parentElement.removeChild(el);
+      }
+    }
+    let isEmpty = li.getChildrenCount() === 0;
+    if (isEmpty) {
+      li.setModeEmpty(true);
     }
   }
   removeContent(el) {
@@ -751,10 +915,10 @@ class NestedList {
     let dict = li.getDict();
     let item = dict.find((t) => t.id === id) || {};
     let txt = item[lang] || item[langDef];
-    let cap = item.capitalize === true;
+    let skipCap = item.capitalize === false;
     if (txt) {
       txt = li.parseTemplate(txt, dict);
-      if (cap) {
+      if (!skipCap) {
         txt = li.capitalizeFirst(txt);
       }
       return txt;
@@ -832,10 +996,13 @@ class NestedList {
   isItem(el) {
     return this.isElement(el) && el.classList.contains(this.opt.class.item);
   }
+  isRoot(el) {
+    return el === this.elRoot;
+  }
   isGroup(el) {
     return (
       this.isElement(el) &&
-      (el.classList.contains(this.opt.class.group) || el === this.elRoot)
+      (el.classList.contains(this.opt.class.group) || this.isRoot(el))
     );
   }
   isTarget(el) {
@@ -934,21 +1101,24 @@ function handleSortStart(evt) {
   evt.dataTransfer.effectAllowed = 'move';
   // keep this version in history;
   li.addUndoStep();
-  if (li.opt.setDragImage) {
-    let elDragImage = li.opt.setDragImage(li.elDrag);
+  if (li.opt.onSetDragImage) {
+    let elDragImage = li.opt.onSetDragImage(li.elDrag);
+    if (!elDragImage) {
+      elDragImage = li.elDrag;
+    }
     let rectImage = elDragImage.getBoundingClientRect();
     let dragOffsetTop = evt.clientY - rectImage.top;
     let dragOffsetLeft = evt.clientX - rectImage.left;
     evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
   }
-  evt.dataTransfer.setData('Text', li.opt.setTextData(li.elDrag));
+  evt.dataTransfer.setData('Text', li.opt.onSetTextData(li.elDrag));
   li.elNext = li.elDrag.nextSibling;
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
     type: 'dragover',
     group: 'dragevent',
-    listener: handleSortOver,
+    callback: handleSortOver,
     debounce: true
   });
   li.listenerStore.addListener({
@@ -956,14 +1126,14 @@ function handleSortStart(evt) {
     bind: li,
     type: 'dragenter',
     group: 'dragevent',
-    listener: handleSortEnter
+    callback: handleSortEnter
   });
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
     type: 'dragend',
     group: 'dragevent',
-    listener: handleSortEnd
+    callback: handleSortEnd
   });
 }
 /**
@@ -976,10 +1146,8 @@ function handleSortEnter(evt) {
 /**
  * Over event listener
  */
-function handleSortOver(event) {
+function handleSortOver(evt) {
   let li = this;
-  let evt = event;
-  li.log('over');
   li.opt.onSortOver(evt);
   evt.preventDefault();
   evt.dataTransfer.dropEffect = 'move';
@@ -1036,7 +1204,9 @@ function handleSortOver(event) {
         !li.isSameElement(elInsert, elDrag) &&
         !li.isSameElement(elInsert, elGroup);
       if (isValid) {
-        //li.log('insert item ' + (insertAfter ? 'after' : 'before'));
+        /**
+         * Move
+         */
         elGroup.insertBefore(elDrag, elInsert);
       }
       return;
@@ -1049,7 +1219,9 @@ function handleSortOver(event) {
       elGroup = elTarget;
       groupHasItems = li.hasChildrenTarget(elGroup);
       if (!groupHasItems || insertAfter) {
-        //li.log('insert group last');
+        /**
+         * Move
+         */
         elGroup.appendChild(elDrag);
       } else {
         elFirst = li.getFirstTarget(elGroup);
@@ -1057,7 +1229,9 @@ function handleSortOver(event) {
           !li.isSameElement(elFirst, elDrag) &&
           !li.isSameElement(elFirst, elGroup);
         if (isValid) {
-          //li.log('insert group first');
+          /**
+           * Move
+           */
           elGroup.insertBefore(elDrag, elFirst);
         }
       }
@@ -1073,14 +1247,18 @@ function handleSortOver(event) {
 function handleSortEnd(evt) {
   evt.preventDefault();
   let li = this;
-  li.opt.onSortEnd(evt);
   li.elDrag.classList.remove(li.opt.class.dragged);
   li.listenerStore.removeListenerByGroup('dragevent');
+  li.setUiDraggingEnd();
+
+  if (li.isModeEmpty()) {
+    return;
+  }
+  li.opt.onSortEnd(evt);
   if (li.elNext !== li.elDrag.nextSibling) {
     li.opt.onSortDone(li.elDrag);
   }
   li.elDrag = null;
-  li.setUiDraggingEnd();
   li.saveStateStorage();
 }
 /**
@@ -1089,8 +1267,11 @@ function handleSortEnd(evt) {
 function handleContextClick(evt) {
   evt.preventDefault();
   let li = this;
-  if (li.contextMenu) {
+  if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
+  }
+  if (li.isModeEmpty()) {
+    return;
   }
   li.contextMenu = new ContextMenu(evt, li);
 }

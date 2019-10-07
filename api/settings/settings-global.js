@@ -2,7 +2,9 @@
 module.exports = {
  api : {
    host : "api",
-   port : "8080"
+   port : "8080",
+   host_public : 'app.mapx.localhost',
+   port_public : '8880'
  },
  redis : {
     user : "redis",

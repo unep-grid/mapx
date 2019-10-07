@@ -1,17 +1,14 @@
 /*jshint esversion: 6, node: true  */
-
 import * as helpers from './mx_helpers.js';
 import * as info from './../../package.json';
-import * as styleDefault from './../data/style_mapx.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
-import {ListenerStore} from './listener_store/index.js';
+import {ListenerStore,EventStore} from './listener_store/index.js';
 
 let templates = {
-  //viewList: require('../built/view_list.dot'), NOTE: replaced by view_builder
-  viewListLegend: require('../built/view_list_legend.dot'),
-  viewListOptions: require('../built/view_list_options.dot')
+  viewListLegend: require('../dot/view_list_legend.dot'),
+  viewListOptions: require('../dot/view_list_options.dot')
 };
 let maps = {};
 let data = {
@@ -37,12 +34,12 @@ let data = {
     name: 'draw'
   })
 };
-let style = styleDefault.default;
+let initQueryParams = {}; // set in init_common.js
 let listenerStore = new ListenerStore();
+let events = new EventStore();
 let selectize = {};
 let queue = [];
 let widgets = [];
-let events = {};
 let controls = {};
 let dashboards = [];
 let editors = {};
@@ -59,18 +56,18 @@ export {
   helpers,
   // listener manager / store
   listenerStore,
+  events,
   // mapx storage
+  initQueryParams,
   templates,
   maps,
   data,
   selectize,
   queue,
   widgets,
-  events,
   controls,
   info,
   settings,
-  style,
   dashboards,
   editors,
   extend

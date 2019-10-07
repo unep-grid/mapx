@@ -4,7 +4,9 @@ var env = process.env;
 module.exports = {
   api : {
      host : env.API_HOST,
-     port : env.API_PORT
+     port : env.API_PORT,
+     host_public : env.API_HOST_PUBLIC,
+     port_public : env.API_PORT_PUBLIC
   },
   redis : {
     user : env.REDIS_USER,
@@ -46,7 +48,7 @@ module.exports = {
   },
   vector : {
     path : {
-      temporary : "/tmp/",
+      temporary : "/tmp",
       download : env.MAPX_PATH_DOWNLOAD,
       download_url : env.MAPX_PATH_DOWNLOAD_URL
     }

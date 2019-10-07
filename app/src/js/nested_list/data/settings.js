@@ -1,8 +1,13 @@
 import {state} from './state.js';
 import {dict} from './dictionary.js';
+import {contextMenuItems} from './settings_menu_items.js';
 
 let settings = {
+  /**
+  * General options
+  */
   id: 'li-default',
+  idEmptyItem : 'liEmptyItem',
   prefix: 'li',
   dict: dict,
   state: state,
@@ -19,8 +24,11 @@ let settings = {
   },
   colorDefault: '#474747',
   maxHistoryLength: 100,
+  /*
+  * Hooks
+  */
   onRenderItemContent: function() {},
-  onChange : function() {},
+  onChange: function() {},
   onSortInit: function() {},
   onSortStart: function() {},
   onSortDone: function() {},
@@ -28,15 +36,31 @@ let settings = {
   onSortEnter: function() {},
   onSortEnd: function() {},
   onGetStateEl: function() {},
+  onGetItemTextById: function(id) {
+    return id;
+  },
+  onGetItemDateById: function(id) {
+    id = id;
+    return new Date().getTime();
+  },
   onFilterText: function() {
     return [];
   },
-  setTextData: function(el) {
+  onSetTextData: function(el) {
     return el.textContent;
   },
-  setDragImage: null,
-  customClassDragIgnore : [],
-  customDictItem : [],
+  onSetDragImage: null,
+  /**
+  * Dictionnary
+  */
+  customDictItem: [],
+  /**
+  * Drag classes
+  */
+  customClassDragIgnore: [],
+  /**
+  * Global classes names
+  */
   class: {
     base: 'li',
     item: 'li-item',
@@ -57,88 +81,15 @@ let settings = {
     contextMenuTargetFocus: 'li-context-menu-target-focus',
     contextMenuGroup: 'li-context-menu-group',
     contextMenuButton: 'li-context-menu-button',
+    contextMenuHeader: 'li-context-menu-header',
     contextMenuInput: 'li-context-menu-input',
     contextMenuInputLabel: 'li-context-menu-input-label',
     contextMenuInputGroup: 'li-context-menu-input-group'
   },
-  contextMenuItems: [
-    {
-      forType: 'group',
-      action: 'cm_group_rename',
-      label: 'cm_group_name',
-      ui: 'input_text'
-    },
-    {
-      forType: 'group',
-      action: 'cm_group_color',
-      label: 'cm_group_color',
-      ui: 'input_color'
-    },
-    {
-      forType: 'group',
-      action: 'cm_group_add',
-      label: 'cm_group_add',
-      ui: 'button',
-      shortCut: ''
-    },
-    {
-      forType: 'group',
-      action: 'cm_group_remove',
-      label: 'cm_group_remove',
-      ui: 'button'
-    },
-    {
-      forType: 'item',
-      action: 'cm_item_add_group',
-      label: 'cm_item_add_group',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_target_move_top',
-      label: 'cm_target_move_top',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_target_move_up',
-      label: 'cm_target_move_up',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_target_move_down',
-      label: 'cm_target_move_dow',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_target_move_bottom',
-      label: 'cm_target_move_bottom',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_global_reset_state',
-      label: 'cm_global_reset_state',
-      ui: 'button'
-    },
-    {
-      forType: 'all',
-      action: 'cm_global_undo_last',
-      label: 'cm_global_undo_last',
-      ui: 'button',
-      condition: function() {
-        return this.hasHistory();
-      }
-    },
-    {
-      forType: 'all',
-      action: 'cm_btn_close',
-      label: 'cm_btn_close',
-      ui: 'button'
-    }
-  ]
+  /**
+  * Context menu items
+  */
+  contextMenuItems: contextMenuItems
 };
 
 export {settings};

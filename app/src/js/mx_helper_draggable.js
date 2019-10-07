@@ -1,130 +1,5 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
-export function sortable(o) {
-  o.listener = {};
-  var sortableOpt = o;
-
-  if (o.selector instanceof Node) {
-    o.elRoot = o.selector;
-  } else {
-    o.elRoot = document.querySelector(o.selector);
-  }
-
-  o.classHandle = o.classHandle || 'mx-drag-handle';
-  o.classDraggable = o.classDraggable || 'mx-draggable';
-  o.classDropArea = o.classDropArea || 'mx-drag-drop-area';
-  o.classDragged = o.classDragged || 'mx-dragged';
-  var elsDraggable = o.elRoot.querySelectorAll('.' + o.classDraggable);
-
-  /**
-   * On init
-   */
-  o.listener.mousedown = function(event) {
-    var elHandle = event.target;
-    var isHandle = elHandle.classList.contains(o.classHandle);
-
-    if (isHandle && !o.elDrag) {
-      o.elDrag = findParentByClass({
-        selector: elHandle,
-        class: o.classDraggable
-      });
-
-      if (o.elDrag) {
-        draggable({
-          event: event,
-          elRoot: o.elRoot,
-          selector: o.elDrag,
-          selectorContainer: o.selector,
-          classHandle: o.classHandle,
-          classDraggable: o.classDraggable,
-          classDropArea: o.classDropArea,
-          onDragStart: o.listener.onDragStart,
-          onDragMove: o.listener.onDragMove,
-          onDragEnd: o.listener.onDragEnd,
-          forceDim: true
-        });
-      }
-    }
-  };
-
-  o.elRoot.addEventListener('pointerdown', o.listener.mousedown, false);
-
-  /**
-   * On drag start
-   */
-  o.listener.onDragStart = function(o) {
-    setDropArea(o, o.el);
-  };
-
-  /**
-   * On drag move
-   */
-  o.listener.onDragMove = function(o) {
-    o.elOver = getOver(o);
-
-    var isOver =
-      o.elOver instanceof Node &&
-      o.elOver !== o.el &&
-      o.elOver !== o.elOverPrevious;
-
-    if (isOver) {
-      setDropArea(o, o.elOver);
-      o.elOverPrevious = o.elOver;
-    }
-  };
-
-  /**
-   * On drag end
-   */
-  o.listener.onDragEnd = function(o) {
-    o.elRoot.insertBefore(o.el, o.elDropArea.nextSibling);
-    if (o.styleOrig) {
-      for (var s in o.styleOrig) {
-        sortableOpt.elDrag.style[s] = o.styleOrig[s];
-      }
-    }
-    sortableOpt.elDrag = null;
-    if (o.elDropArea instanceof Node) {
-      o.elDropArea.remove();
-    }
-    if (sortableOpt.onSorted instanceof Function) {
-      sortableOpt.onSorted();
-    }
-  };
-
-  /**
-   * Fetch element under dragged item
-   */
-  function getOver(o) {
-    var el;
-    var els = elsDraggable;
-    var rectOther,
-      rectDragged = o.el.getBoundingClientRect();
-    for (var e = 0, eL = els.length; e < eL; e++) {
-      el = els[e];
-      if (el !== o.el) {
-        rectOther = el.getBoundingClientRect();
-        if (rectTouchRect(rectDragged, rectOther)) {
-          return el;
-        }
-      }
-    }
-  }
-
-  /**
-   * Create drop area
-   */
-  function setDropArea(o, elAfter) {
-    if (!o.elDropArea) {
-      o.elDropArea = document.createElement('div');
-      o.elDropArea.className = o.classDropArea;
-      o.elDropArea.style.width = o.rect.width + 'px';
-      o.elDropArea.style.height = o.rect.height + 'px';
-    }
-
-    o.elRoot.insertBefore(o.elDropArea, elAfter);
-  }
-}
 
 export function draggable(o) {
   var xMin, xMax, yMin, yMax;
@@ -148,6 +23,7 @@ export function draggable(o) {
       ? o.selectorContainer
       : document.querySelector(o.selectorContainer);
   o.containerRect = o.elContainer.getBoundingClientRect();
+  o.onStart = o.onStart || console.log;
 
   xMin = o.containerRect.left;
   xMax = o.containerRect.right;
@@ -232,6 +108,7 @@ export function draggable(o) {
     if (isHandle) {
       event.preventDefault();
       event.stopImmediatePropagation();
+      o.onStart();
       o.styleOrig = {
         left: o.el.style.left,
         top: o.el.style.top,
@@ -295,53 +172,4 @@ function sumScrollY(el) {
   }
   return offsetY;
 }
-
-/**
- * Test if el touch the given rect
- */
-function rectTouchRect(rectA, rectB) {
-  var overlaps =
-    rectA.top < rectB.bottom &&
-    rectA.bottom > rectB.top &&
-    rectA.right > rectB.left &&
-    rectA.left < rectB.right;
-  return overlaps;
-}
-
-/**
- * Test if rectA is fully in rectB
- */
-//function elInRect(el, rectB) {
-  //var rectA = el.getBoundingClientRect();
-  //var inside =
-    //rectA.bottom <= rectB.bottom &&
-    //rectA.top >= rectB.top &&
-    //rectA.right <= rectB.right &&
-    //rectA.left >= rectB.left;
-  //return inside;
-/*}*/
-/**
- * Find closest parent using classname
- * @param {Object} o options;
- * @param {Element|String} o.selector Element or selector string
- * @param {String} o.class Class of the parent to find
- */
-function findParentByClass(o) {
-  var el;
-
-  if (o.selector instanceof Node) {
-    el = o.selector;
-  } else {
-    el = document.querySelector(o.selector);
-  }
-
-  while (
-    el instanceof Node &&
-    (el = el.parentElement) &&
-    !el.classList.contains(o.class)
-  ) {
-    return el;
-  }
-}
-
 

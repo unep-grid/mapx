@@ -1,5 +1,8 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
+/**
+ * Clean / remove service worker
+ */
 export function removeServiceWorker() {
   if (navigator.serviceWorker) {
     caches.keys().then((k) => k.forEach((i) => caches.delete(i)));
@@ -20,27 +23,38 @@ export function removeServiceWorker() {
  * @returns {*}
  */
 export function path(obj, path, def) {
-  var i, len;
-  if (typeof def === 'undefined') {
+  const h = mx.helpers;
+  const hasDefault = !!def;
+  let i, iL;
+
+  if (!hasDefault) {
     def = null;
   }
-  if (typeof path !== 'string') {
-    return def;
+  if (!h.isString(path)) {
+    return out(def);
   }
-  for (i = 0, path = path.split('.'), len = path.length; i < len; i++) {
-    if (!obj || typeof obj !== 'object') {
-      return def;
+  for (i = 0, path = path.split('.'), iL = path.length; i < iL; i++) {
+    if (!obj || !h.isObject(obj)) {
+      return out(def);
     }
     obj = obj[path[i]];
   }
 
-  if (obj === undefined) {
-    return def;
+  if (!obj) {
+    return out(def);
   }
-  return obj;
+
+  return out(obj);
+
+  function out(obj) {
+    if (hasDefault) {
+      if (!obj || obj.constructor !== def.constructor) {
+        obj = def.constructor(obj);
+      }
+    }
+    return obj;
+  }
 }
-
-
 
 /**
  * Set click handler mode
@@ -67,104 +81,6 @@ export function setClickHandler(opt) {
 }
 export function getClickHandlers() {
   return mx.settings.clickHandlers;
-}
-
-/**
- * Get url query parameter by name
- *
- * @param {String|Array} name Name of the query parameter name. If name is an array, values will be concatenated in the same array
- * @return {Array} Array of values from the query parameter
- */
-export function getQueryParameter(name) {
-  var h = mx.helpers;
-  if (h.isArray(name)) {
-    return getQueryParameter_array(name);
-  } else {
-    var url = new URL(window.location.href);
-    var p = url.searchParams.get(name);
-    if (h.isString(p)) {
-      p = p.split(',');
-    } else {
-      p = [];
-    }
-    return p;
-  }
-}
-
-function getQueryParameter_array(names) {
-  return names
-    .map((n) => getQueryParameter(n))
-    .reduce((p, a) => a.concat(p), []);
-}
-
-/**
- * Returns an Array of all url parameters
- * @return {[Array]} [Key Value pairs form URL]
- */
-export function paramsToObject(params) {
-  var param;
-  var out = {};
-  var dec = decodeURIComponent;
-  params = params
-    ? params.split('&')
-    : window.location.search.substring(1).split('&');
-  for (var i = 0, iL = params.length; i < iL; i++) {
-    param = params[i].split('=');
-    out[param[0]] = dec(param[1]);
-  }
-  return out;
-}
-
-/**
- * Replace current url state using object values
- *
- * @param {Object} opt Options
- * @param {Object} opt.data params to replace state with
- * @param {Boolean} opt.clean remove everything
- * @return null
- */
-export function objToState(opt) {
-  mx.helpers.onNextFrame(function() {
-    var out = '/';
-    var params = paramsToObject();
-    var keysNew = Object.keys(opt.data);
-    var val;
-    if (!opt.clean) {
-      keysNew.forEach((kn) => {
-        val = opt.data[kn];
-        if (val) {
-          params[kn] = val;
-        } else {
-          delete params[kn];
-        }
-      });
-
-      if (params) {
-        out = out + '?' + objToParams(params);
-      }
-    }
-    history.replaceState(null, null, out);
-  });
-}
-
-/**
- * Convert object to params string
- *
- * @param {Object} opt Options
- * @param {Object} object to convert
- * @return {String} params string
- */
-export function objToParams(data) {
-  var esc = encodeURIComponent;
-  var params = [];
-
-  Object.keys(data).forEach((k) => {
-    if (k) {
-      params.push(esc(k) + '=' + esc(data[k]));
-    }
-  });
-
-  return params.join('&');
 }
 
 /**
@@ -1330,50 +1246,23 @@ timer.prototype.stop = function() {
  * @param {Boolean} humanReadable Output the result in formated text with units bytes; KiB; MiB, etc.. instead of bytes
  */
 export function getSizeOf(obj, humanReadable) {
+  const h = mx.helpers;
   var bytes = 0;
   var seenObjects = [];
   humanReadable = humanReadable === undefined ? true : humanReadable;
 
-  function sizeOf(obj) {
-    if (obj !== null && obj !== undefined) {
-      if (seenObjects.indexOf(obj) === -1) {
-        seenObjects.push(obj);
-        switch (typeof obj) {
-          case 'number':
-            bytes += 8;
-            break;
-          case 'string':
-            bytes += obj.length * 2;
-            break;
-          case 'boolean':
-            bytes += 4;
-            break;
-          case 'object':
-            var objClass = Object.prototype.toString.call(obj).slice(8, -1);
-            if (objClass === 'Object' || objClass === 'Array') {
-              for (var key in obj) {
-                if (!obj.hasOwnProperty(key)) {
-                  continue;
-                }
-                sizeOf(obj[key]);
-              }
-            } else {
-              bytes += obj.toString().length * 2;
-            }
-            break;
-        }
-        return bytes;
+  return h
+    .moduleLoad('size-of')
+    .then((s) => {
+       return obj instanceof File ? obj.size : s(obj); 
+    })
+    .then((res) => {
+      if (!humanReadable) {
+        return res;
+      } else {
+        return formatByteSize(res);
       }
-    }
-  }
-
-  var res = sizeOf(obj);
-
-  if (!humanReadable) {
-    return res;
-  } else {
-    return formatByteSize(res);
-  }
+    });
 }
 
 /**
@@ -1699,7 +1588,6 @@ export function objectToArray(obj, asTable) {
     }
   });
 }
-
 
 /**
  * Parent finder
@@ -2064,9 +1952,6 @@ export function getBrowserData() {
     language: navigator.language.substr(0, 2),
     cookies: mx.helpers.readCookie(),
     userAgent: navigator.userAgent,
-    //screenHeight : screen.height,
-    //screenWidth : screen.width,
-    //screenColorDepth : screen.colorDepth,
     timeZone: new Date().toString().replace(/.*[(](.*)[)].*/, '$1'),
     hasLocalStorage: !!window.sessionStorage,
     hasSessionStorage: !!window.sessionStorage,

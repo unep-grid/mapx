@@ -1,41 +1,42 @@
 export {mapComposerModalAuto};
 
 function mapComposerModalAuto() {
-  var idComposer = 'mapcomposer';
-  var oldComposer = document.getElementById(idComposer);
+  const h = mx.helpers;
+  const idComposer = 'mapcomposer';
+  const oldComposer = document.getElementById(idComposer);
 
   if (oldComposer) {
     return;
   }
 
-  var map = mx.helpers.getMap();
+  const map = h.getMap();
 
-  var vVisible = mx.helpers.getLayerNamesByPrefix({
+  const vVisible = h.getLayerNamesByPrefix({
     id: map.id,
     prefix: 'MX-',
     base: true
   });
 
-  var items = [];
+  const items = [];
 
   items.push({
     type: 'map',
-    width:  600,
+    width: 600,
     height: 400,
     options: {}
   });
 
   vVisible.forEach((id) => {
-    var title = mx.helpers.getViewTitle(id);
-    var description = mx.helpers.getViewDescription(id);
-    var elLegend = mx.helpers.getViewLegend(id, {clone: true, input: false});
+    const title = h.getViewTitle(id);
+    const description = h.getViewDescription(id);
+    const elLegend = h.getViewLegend(id, {clone: true, input: false});
 
     items.push({
       type: 'legend',
       element: elLegend,
       width: 300,
       height: 400,
-      editable : true
+      editable: true
     });
 
     items.push({
@@ -43,7 +44,7 @@ function mapComposerModalAuto() {
       text: title,
       width: 300,
       height: 100,
-      editable : true
+      editable: true
     });
 
     items.push({
@@ -51,18 +52,18 @@ function mapComposerModalAuto() {
       text: description,
       width: 300,
       height: 100,
-      editable : true
+      editable: true
     });
   });
 
-  var state = {items: items};
+  const state = {items: items};
 
   /**
    * Remove canvas source and layers
    */
-  var style = map.getStyle();
+  const style = map.getStyle();
 
-  var canvasSrc = mx.helpers
+  const canvasSrc = h
     .objectToArray(style.sources, true)
     .map((r) => (r.value.type === 'canvas' ? r.key : null));
 
@@ -80,7 +81,9 @@ function mapComposerModalAuto() {
   /**
    * Run map composer
    */
-  return mx.helpers.moduleLoad('map_composer').then(MapComposer=>{
+  return h.moduleLoad('map_composer').then((MapComposer) => {
+    const elContainer = h.el('div');
+
     state.items.forEach((i) => {
       if (i.type === 'map') {
         Object.assign(i.options, {
@@ -92,25 +95,37 @@ function mapComposerModalAuto() {
       }
     });
 
-    var elContainer = mx.helpers.el('div');
-    var mc = new MapComposer(elContainer, state);
+    const elBtnHelp = h.el(
+      'div',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: () => {
+            var link = mx.settings.links.repositoryWikiMapComposer;
+            window.open(link, '_blank');
+          }
+        }
+      },
+      h.getDictItem('btn_help')
+    );
+    const mc = new MapComposer(elContainer, state);
 
-    mx.helpers.modal({
-      title : 'Map Composer',
+    h.modal({
+      title: 'Map Composer',
       id: idComposer,
+      buttons: [elBtnHelp],
       content: elContainer,
-      addSelectize : false, 
+      addSelectize: false,
       onClose: destroy,
       style: {
         position: 'absolute',
         width: '80%',
         height: '100%'
       },
-      styleContent : {
-        padding : '0px'
+      styleContent: {
+        padding: '0px'
       }
     });
-
 
     function destroy() {
       mc.destroy();

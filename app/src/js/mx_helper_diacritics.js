@@ -1,6 +1,6 @@
 /*jshint esversion: 6 , node: true */
 
-const diacTable =  require("../data/table_diacritics.json");
+const diacTable =  require("../data/string_processing/table_diacritics.json");
 
 /**
  * Remove diacritics

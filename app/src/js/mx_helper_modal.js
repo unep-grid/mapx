@@ -15,10 +15,13 @@
  */
 export function modal(o) {
   o = o || {};
-  var h = mx.helpers;
+  const h = mx.helpers;
+  const id = o.id || h.makeId();
+  const idBackground = 'mx_background_for_' + id;
   var elModal,
     elTop,
     elTitle,
+    elCollapse,
     elHead,
     elBody,
     elContent,
@@ -28,13 +31,11 @@ export function modal(o) {
     elValidation,
     elButtonClose,
     elBackground;
-  var id = o.id || h.makeId();
-  var idBackground = 'mx_background_for_' + id;
   /**
    * Get or create modal and background
    */
   elModal = document.getElementById(o.id);
-  var hasModal = h.isElement(elModal);
+  const hasModal = h.isElement(elModal);
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
@@ -73,7 +74,7 @@ export function modal(o) {
       Shiny.unbindAll(elModal);
     }
     if (hasSelectize) {
-      mx.helpers.removeSelectizeGroupById(id);
+      h.removeSelectizeGroupById(id);
     }
     if (oldBody) {
       startBodyScrollPos = oldBody.scrollTop;
@@ -124,7 +125,7 @@ export function modal(o) {
   if (o.buttons && o.buttons.constructor === Array) {
     o.buttons.forEach(function(b) {
       if (h.isHTML(b)) {
-        b = mx.helpers.textToDom(b);
+        b = h.textToDom(b);
       }
       if (h.isElement(b)) {
         elButtons.appendChild(b);
@@ -132,14 +133,8 @@ export function modal(o) {
     });
   }
 
-  if (o.content && o.content instanceof Node) {
-    elContent.appendChild(o.content);
-  } else {
-    if (h.isHTML(o.content)) {
-      elContent.innerHTML = o.content;
-    } else {
-      elContent.innerText = o.content;
-    }
+  if (o.content) {
+    addContent(o.content, elContent);
   }
 
   if (startBodyScrollPos) {
@@ -147,11 +142,6 @@ export function modal(o) {
   }
 
   setTitle(o.title);
-
-  mx.helpers.draggable({
-    selector: elModal,
-    debounceTime: 10
-  });
 
   elModal.close = close;
   elModal.setTitle = setTitle;
@@ -173,11 +163,22 @@ export function modal(o) {
     Shiny.bindAll(elModal);
   }
   if (o.addSelectize) {
-    mx.helpers.initSelectizeAll({
+    h.initSelectizeAll({
       id: id,
-      selector: elModal
+      selector: elModal,
+      options: {
+        dropdownParent: document.body
+      }
     });
   }
+
+  h.draggable({
+    selector: elModal,
+    debounceTime: 10,
+    onStart : ()=>{ 
+      h.closeSelectizeGroupById(id);
+    }
+  });
 
   /**
    * Return final element
@@ -188,7 +189,7 @@ export function modal(o) {
    * Helpers
    */
   function buildModal(idModal, style, styleContent) {
-    return h.el(
+    const elModal = h.el(
       'div',
       {
         id: idModal,
@@ -202,6 +203,21 @@ export function modal(o) {
         },
         (elTitle = h.el('div', {
           class: ['mx-modal-drag-enable', 'mx-modal-title']
+        })),
+        (elCollapse = h.el('i', {
+          class: [
+            'mx-modal-top-btn-control',
+            'fa',
+            'fa-square-o',
+            'fa-minus-square'
+          ],
+          on: [
+            'click',
+            () => {
+              elCollapse.classList.toggle('fa-minus-square');
+              elModal.classList.toggle('mx-modal-collapsed');
+            }
+          ]
         }))
       )),
       (elHead = h.el('div', {
@@ -235,6 +251,7 @@ export function modal(o) {
         class: ['shiny-html-output', 'mx-modal-validation']
       }))
     );
+    return elModal;
   }
 
   function buildBackground(idBackground) {
@@ -244,15 +261,31 @@ export function modal(o) {
     });
   }
   function setTitle(newTitle) {
-    if (h.isElement(newTitle)) {
-      elTitle.innerHTML = '';
-      elTitle.appendChild(newTitle);
-    } else {
-      elTitle.innerText = newTitle;
+    addContent(newTitle, elTitle);
+  }
+
+  function addContent(content, elTarget) {
+    if (!h.isElement(elTarget) || !content) {
+      return;
+    }
+
+    if (h.isPromise(content)) {
+      return content.then((c) => {
+        addContent(c, elTarget);
+      });
+    }
+
+    if (content && h.isElement(content)) {
+      elTarget.appendChild(content);
+    } else if (h.isHTML(content)) {
+      elTarget.innerHTML = content;
+    } else if (h.isString(content)) {
+      elTarget.innerText = content;
     }
   }
+
   function close() {
-    if (mx.helpers.isElement(elContent)) {
+    if (h.isElement(elContent)) {
       /**
        * Remove jed editors
        */
@@ -261,7 +294,7 @@ export function modal(o) {
         var jedId = elJed.dataset.jed_id;
         if (
           jed.editors[jedId] &&
-          mx.helpers.isFunction(jed.editors[jedId].destroy)
+          h.isFunction(jed.editors[jedId].destroy)
         ) {
           jed.editors[jedId].destroy();
         }
@@ -277,7 +310,7 @@ export function modal(o) {
      * Remove selectize
      */
     if (hasSelectize) {
-      mx.helpers.removeSelectizeGroupById(id);
+      h.removeSelectizeGroupById(id);
     }
     /**
      * Remove using jquery or DOM method.
@@ -287,8 +320,39 @@ export function modal(o) {
     /**
      * on close callback
      */
-    if (mx.helpers.isFunction(o.onClose)) {
+    if (h.isFunction(o.onClose)) {
       o.onClose();
     }
   }
+}
+
+/**
+ * Quickly close all modal windows
+ */
+export function modalCloseAll() {
+  const elsModal = modalGetAll();
+  elsModal.forEach((modal) => {
+    modal.close();
+  });
+}
+
+/**
+ * Get all current modals
+ * @param {Object} opt Options
+ * @paramr {Array} opt.ignoreSelectors Array of ids to ignore
+ * @return {NodeList}
+ */
+export function modalGetAll(opt) {
+  const h = mx.helpers;
+  opt = opt || {};
+  let selector = '.mx-modal-container';
+  const hasIgnores =
+    h.isArray(opt.ignoreSelectors) && opt.ignoreSelectors.length > 0;
+  if (hasIgnores) {
+    selector = opt.ignoreSelectors.reduce(
+      (a, c) => `${a}:not(${c})`,
+      selector
+    );
+  }
+  return document.querySelectorAll(selector);
 }

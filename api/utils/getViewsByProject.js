@@ -10,21 +10,19 @@ exports.getViews = getViews;
 exports.getProjectViewsStates = getProjectViewsStates;
 
 function getViewsHandler(req, res) {
-  var start = new Date();
   var projectStates = {};
 
   getProjectViewsStates(req.query || {})
     .then((states) => {
-      projectStates = states;
+      projectStates = states || [];
       return getViews(req.query || {});
     })
-    .then((data) => {
+    .then((views) => {
       data = {
         states: projectStates,
-        views: data,
-        timing: new Date() - start
+        views: views
       };
-      utils.sendJSON(res, data, true);
+      utils.sendJSON(res, data, {end: true });
     })
     .catch((err) => {
       utils.sendError(res, err);
@@ -49,7 +47,6 @@ function getProjectViewsStates(opt) {
      * SQL
      */
     sql = utils.parseTemplate(template.getProjectViewsStates, opt);
-
     resolve(clientPgRead.query(sql));
   }).then(function(result) {
     if (result.rowCount > 0) {
@@ -86,7 +83,7 @@ function getViews(opt) {
     );
     opt.collectionsFilterOperator = validate(
       'collectionsFilterOperator',
-      opt.collectionsFilterOperator
+      opt.collectionsSelectOperator
     );
     opt.roleMax = validate('roleMax', opt.roleMax || opt.filterViewsByRoleMax);
     opt.idViews = validate('idViews', opt.idViews || opt.views);

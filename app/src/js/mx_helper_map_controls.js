@@ -4,7 +4,7 @@
 
 export function mapControlLiveCoord() {}
 mapControlLiveCoord.prototype.onAdd = function(map) {
-  var helper = mx.helpers;
+  const helper = mx.helpers;
   var coord = document.createElement('div');
   map.on('mousemove', function(e) {
     var pos = e.lngLat;
@@ -61,48 +61,41 @@ export function showSelectLanguage() {
 }
 
 export function createControlBtns(btns) {
-  var ulAll, id, btn, el, elBtn;
-  ulAll = document.createElement('ul');
-  ulAll.className = 'mx-controls-ul';
-  for (id in btns) {
-    btn = btns[id];
+  const h = mx.helpers;
 
-    el = document.createElement('li');
-    elBtn = document.createElement('div');
-    btn.elBtn = elBtn;
+  let keys = Object.keys(btns);
+  let items = Object.values(btns);
 
-    if (btn.liClasses) {
-      el.className = btn.liClasses;
-    }
-    if (btn.classes) {
-      elBtn.className = btn.classes;
-    }
-    if (btn.liData) {
-      for (var k in btn.liData) {
-        el.dataset[k] = btn.liData[k];
-      }
-    }
-    if (btn.img) {
-      var test = 'url(' + btn.img + ')';
-      elBtn.style.backgroundImage = test;
-      elBtn.style.backgroundRepeat = 'no-repeat';
-      elBtn.style.width = '17px';
-      elBtn.style.height = '17px';
-      elBtn.id = id + '_img';
-    }
-    el.id = id;
-    el.appendChild(elBtn);
-    el.dataset.lang_key = btn.key;
-    el.dataset.lang_type = 'tooltip';
-    el.classList.add('btn');
-    el.classList.add('btn-circle');
-    el.classList.add('btn-circle-medium');
-    el.classList.add('hint--bottom-right');
-    el.classList.add('shadow');
-    el.onclick = btn.action;
-    ulAll.appendChild(el);
-  }
-  return ulAll;
+  const elControls = h.el(
+    'ul',
+    {
+      class: ['mx-controls-ul']
+    },
+    items.map((btn,i) => {
+      btn.elBtn = h.el(
+        'li',
+        {
+          id: keys[i],
+          on: {click: btn.action},
+          class: [
+            'btn',
+            'btn-circle',
+            'btn-circle-medium',
+            'hint--bottom-right',
+            'shadow'
+          ].concat(btn.liClasses),
+          dataset: Object.assign({}, {lang_key: btn.key,lang_type:'tooltip'}, btn.liData)
+        },
+        h.el('div', {
+          class: btn.classes
+        })
+      );
+      return btn.elBtn;
+    })
+  );
+
+  mx.helpers.updateLanguageElements({selector:elControls});
+  return elControls;
 }
 
 /**
@@ -112,12 +105,12 @@ export function createControlBtns(btns) {
 export function mapControlApp() {}
 mapControlApp.prototype.onAdd = function(map) {
   //var idMap = map._container.id;
-  var helper = mx.helpers;
+  const h = mx.helpers;
 
   /**
    * Toggle controls (btnToggleBtns)
    */
-  helper.toggleControls = function(o) {
+  h.toggleControls = function(o) {
     o = o || {};
     var hide = o.hide || !btns.btnToggleBtns.hidden; // state saved in buttons list
     var action = hide ? 'add' : 'remove';
@@ -138,9 +131,12 @@ mapControlApp.prototype.onAdd = function(map) {
     var btnToggle = btns.btnToggleBtns;
 
     btnToggle.hidden = hide;
-    btnToggle.elBtn.className = hide
-      ? btnToggle.classesHidden
-      : btnToggle.classes;
+
+    if(hide){
+      btnToggle.elBtn.classList.add(btnToggle.classActive);
+    }else{
+      btnToggle.elBtn.classList.remove(btnToggle.classActive);
+    }
 
     if (this instanceof Node) {
       if (hide) {
@@ -156,7 +152,7 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     }
 
-    helper.classAction({
+    h.classAction({
       selector: selectorToggle,
       action: action,
       class: 'mx-hide-bis'
@@ -168,15 +164,15 @@ mapControlApp.prototype.onAdd = function(map) {
    */
   var btns = {
     btnToggleBtns: {
-      classes: 'fa fa-desktop',
-      classesHidden: 'fa fa-desktop active',
+      classes: ['fa', 'fa-desktop'],
+      classeActive: 'active',
       key: 'btn_toggle_all',
       hidden: false,
       position: 'top-left',
-      action: helper.toggleControls
+      action: h.toggleControls
     },
     btnShowLogin: {
-      classes: 'fa fa-user',
+      classes: ['fa', 'fa-user'],
       key: 'btn_login',
       action: function() {
         var val = {
@@ -187,10 +183,10 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnTabView: {
-      classes: 'fa fa-list-ul',
+      classes: ['fa', 'fa-list-ul'],
       key: 'btn_tab_views',
       action: function() {
-        helper.panelSwitch(
+        h.panelSwitch(
           'mx-panel-left',
           'mx-panel-views',
           'mx-hide',
@@ -204,48 +200,47 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnTabTools: {
-      classes: 'fa fa-cogs',
+      classes: ['fa', 'fa-cogs'],
       key: 'btn_tab_tools',
       action: function() {
-        helper.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
+        h.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
       }
     },
     btnTabDashboard: {
-      classes: 'fa fa-pie-chart',
+      classes: ['fa', 'fa-pie-chart'],
       key: 'btn_tab_dashboard',
       action: function() {
-        mx.helpers.Dashboard.showPanel('toggle');
+        h.Dashboard.showPanel('toggle');
       }
     },
     btnPrint: {
-      classes: 'fa fa-map-o',
+      classes: ['fa', 'fa-map-o'],
       key: 'btn_map_composer',
       action: function() {
-        mx.helpers.mapComposerModalAuto();
-        //mx.helpers.downloadScreenshotPdfAll();
-      }
-    },
-    btnFullScreen: {
-      classes: 'fa fa-expand',
-      key: 'btn_fullscreen',
-      action: function() {
-        helper.toggleFullScreen('btnFullScreen');
+        h.mapComposerModalAuto();
       }
     },
     btnStoryClose: {
-      classes: 'fa fa-arrow-left',
-      liClasses: 'mx-hide',
+      classes: ['fa', 'fa-arrow-left'],
+      liClasses: 'mx-display-none',
       key: 'btn_story_close'
     },
+    btnFullScreen: {
+      classes: ['fa', 'fa-expand'],
+      key: 'btn_fullscreen',
+      action: function() {
+        h.toggleFullScreen('btnFullScreen');
+      }
+    },
     btnStoryUnlockMap: {
-      classes: 'fa fa-lock',
-      liClasses: 'mx-hide',
+      classes: ['fa', 'fa-lock'],
+      liClasses: 'mx-display-none',
       liData: {map_unlock: 'off'},
       key: 'btn_story_unlock_map',
-      action: helper.storyControlMapPan
+      action: h.storyControlMapPan
     },
     btnShowAbout: {
-      classes: 'fa fa-info',
+      classes: ['fa', 'fa-info'],
       key: 'btn_about',
       action: function() {
         var val = {
@@ -256,16 +251,16 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnGeolocateUser: {
-      classes: 'fa fa-map-marker',
+      classes: ['fa', 'fa-map-marker'],
       key: 'btn_geolocate_user',
       hidden: false,
-      action: mx.helpers.geolocateUser
+      action: h.geolocateUser
     },
     btnThemeAerial: {
-      classes: 'fa fa-plane',
+      classes: ['fa', 'fa-plane'],
       key: 'btn_theme_sat',
       action: function() {
-        helper.btnToggleLayer({
+        h.btnToggleLayer({
           id: 'map_main',
           idLayer: 'here_aerial',
           idSwitch: 'btnThemeAerial',
@@ -274,39 +269,42 @@ mapControlApp.prototype.onAdd = function(map) {
       }
     },
     btnOverlapSpotlight: {
-      classes: 'fa fa-bullseye',
+      classes: ['fa', 'fa-bullseye'],
       key: 'btn_overlap_spotlight',
-      action: function() {
-        mx.helpers.overlapsSpotlightToggle();
+      action: function(e) {
+        var el = e.target;
+        var cl = 'active';
+        el.classList.toggle(cl);
+        var enable = el.classList.contains(cl);
+        h.activateSpotlight(enable,el);
       }
     },
     btnDrawMode: {
-      //classes: 'fa fa-pencil',
       classes: 'mx-edit-vector',
       key: 'btn_draw_mode',
       action: function(e) {
-        mx.helpers.drawModeToggle(e);
+        h.drawModeToggle(e);
       }
     },
     btnZoomIn: {
-      classes: 'fa fa-plus',
+      classes: ['fa', 'fa-plus'],
       key: 'btn_zoom_in',
       action: function() {
         map.zoomIn();
       }
     },
     btnZoomOut: {
-      classes: 'fa fa-minus',
+      classes: ['fa', 'fa-minus'],
       key: 'btn_zoom_out',
       action: function() {
         map.zoomOut();
       }
     },
     btnSetNorth: {
-      classes: 'mx-north-arrow',
+      classes: ['mx-north-arrow'],
       key: 'btn_north_arrow',
       action: function() {
-        var map = mx.helpers.getMap();
+        var map = h.getMap();
         if (map) {
           map.easeTo({bearing: 0, pitch: 0});
         }
@@ -335,23 +333,23 @@ mapControlApp.prototype.onRemove = function() {
 export function mapControlNav() {}
 mapControlNav.prototype.onAdd = function(map) {
   //var idMap = map._container.id;
-  var helper = mx.helpers;
+  const h = mx.helpers;
 
   /**
    * Build buttons list
    */
   var btns = {
     btnGeolocateUser: {
-      classes: 'fa fa-map-marker',
+      classes: ['fa', 'fa-map-marker'],
       key: 'btn_geolocate_user',
       hidden: false,
-      action: mx.helpers.geolocateUser
+      action: h.geolocateUser
     },
     btnThemeAerial: {
-      classes: 'fa fa-plane',
+      classes: ['fa', 'fa-plane'],
       key: 'btn_theme_sat',
       action: function() {
-        helper.btnToggleLayer({
+        h.btnToggleLayer({
           id: 'map_main',
           idLayer: 'here_aerial',
           idSwitch: 'btnThemeAerial',
@@ -360,24 +358,24 @@ mapControlNav.prototype.onAdd = function(map) {
       }
     },
     btnZoomIn: {
-      classes: 'fa fa-plus',
+      classes: ['fa', 'fa-plus'],
       key: 'btn_zoom_in',
       action: function() {
         map.zoomIn();
       }
     },
     btnZoomOut: {
-      classes: 'fa fa-minus',
+      classes: ['fa', 'fa-minus'],
       key: 'btn_zoom_out',
       action: function() {
         map.zoomOut();
       }
     },
     btnSetNorth: {
-      classes: 'mx-north-arrow',
+      classes: ['mx-north-arrow'],
       key: 'btn_north_arrow',
       action: function() {
-        var map = mx.helpers.path(mx, 'maps.map_main.map');
+        var map = h.path(mx, 'maps.map_main.map');
         if (map) {
           map.easeTo({bearing: 0, pitch: 0});
         }
