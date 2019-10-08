@@ -92,7 +92,7 @@ services:
       - 6379
   probe:
     build: ./probe/.
-    image: fredmoser/mx-probe:0.1-go
+    image: fredmoser/mx-probe:0.2-go
     labels:
       - traefik.frontend.rule=Host:probe.mapx.localhost
       - traefik.port=8080
