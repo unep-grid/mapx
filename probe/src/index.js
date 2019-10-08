@@ -9,6 +9,9 @@ var elBtnCopy = document.getElementById('btn_get_result');
 
 elBtnCopy.addEventListener('click', copyResults);
 
+/**
+ * Store web socket test instances
+ */
 var websockets = [
   {
     url: WS_WEBSOCKET_ORG_URI,
@@ -20,6 +23,9 @@ var websockets = [
   }
 ];
 
+/**
+ * Store tests results
+ */
 var tests = {
   browser: t.isBrowser(),
   array: t.isArraySupported(),
@@ -33,15 +39,29 @@ var tests = {
   websocket: t.isWebsocketSupported()
 };
 
+/**
+ * Convert tests as table
+ */
 var out = '';
 for (var key in tests) {
   out = out + `<tr><td>${key}</td><td>${ok(tests[key])}</td></tr>`;
 }
 elTableBrowser.innerHTML = out;
 
+/**
+ * Websocket tests
+ */
 if (tests.websocket === true) {
+  /**
+   * For each specified ws endpoint, create
+   * a new WsTest instance
+   */
   websockets.forEach((ws) => {
     var start = Date.now();
+
+    /*
+     * Build UI
+     */
     var elTimer, elStop, elBtnStop, elStatus, elError;
     var elRow = el(
       'tr',
@@ -55,9 +75,11 @@ if (tests.websocket === true) {
         (elStop = el('span', {class: 'ws-warning'}, ''))
       )
     );
-
     elTableWebsocket.appendChild(elRow);
 
+    /*
+     * Create WsTest instance
+     */
     ws.instance = new WsTest(ws.url, {
       log_levels: ['open', 'close', 'error', 'timeover', 'stop'],
       onHeartbeat: () => {
@@ -83,20 +105,29 @@ if (tests.websocket === true) {
       time_response_max: 30 * 1e3
     });
 
+    /*
+     * Helpers
+     */
+
+    /*
+     * Pause or resume test instance
+     */
     function toggle() {
       var isPaused = ws.instance.paused;
-
       if (isPaused) {
         elBtnStop.innerText = 'pause';
       } else {
         elBtnStop.innerText = 'resume';
       }
-
       ws.instance.toggle();
     }
   });
 }
 
+
+/*
+ * Copy result in pastboard
+ */
 function copyResults() {
   var res_ws = websockets.map((w) => {
     return {
@@ -121,6 +152,9 @@ function copyResults() {
   alert('Copied');
 }
 
+/**
+ * Formating time in ms to HH:MM:SS
+ */
 function formatTime(ms) {
   var s = ms / 1000;
   var time = parseFloat(s).toFixed(3);
@@ -134,6 +168,10 @@ function pad(num, size) {
   return ('000' + num).slice(size * -1);
 }
 
+/**
+ * Return UI for test cases string 
+ * @param {Boolean} test Successed or failed test
+ */
 function ok(test) {
   if (!test) {
     return `<span class=error>failed</span>`;
