@@ -1,3 +1,8 @@
+$red: red;
+$blue: blue;
+$green: green;
+$orange: orange;
+
 body,
 html {
   font-family: sans, helvetica;
@@ -10,3 +15,25 @@ button {
 .hidden {
   display: none;
 }
+
+.passed {
+  color : $green;
+}
+.error,
+.ws-error {
+  color : $red;
+}
+
+.ws-status {
+  color : $blue;
+}
+.normal,
+.ws-timer {
+  color : $blue;
+}
+
+.warning,
+.ws-warning {
+  color : $orange
+}
+

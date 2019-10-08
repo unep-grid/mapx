@@ -1,23 +1,21 @@
-# Websocket and Mapbox GL JS
+# MapX diagnostic tool
 
 https://probe.mapx.org/
 
-## Checklist for support
-
-This is a simple page to test if your browser support WebGL and other features used by Mapbox GL JS. It's based on `mapbox-gl-supported` package, but use a step by step approach instead of a global pass/not pass result.
-
-It also test for a secure connection via websocket.
+This is a tool to check if your browser and network settings match MapX requirements.
 
 Sources :
 
 - https://github.com/mapbox/mapbox-gl-supported
-- https://gist.github.com/miebach/3293565
+
+
+## Configuration
+
+Websocket endpoints URL are specified in `webpack.dev.config.js` and `webpack.prod.config.js`.
 
 ## Build
 
-Use the following instructions to build:
-
 ```
-$ npm run build:prod # build prod output
-$ npm run build:dev [-- --watch] # build dev output and optionally use browserSync
+$ npm run prod # build prod output
+$ npm run dev [-- --watch] # build dev output and optionally use browserSync
 ```

@@ -95,16 +95,16 @@ services:
     image: fredmoser/mx-probe:0.1-go
     labels:
       - traefik.frontend.rule=Host:probe.mapx.localhost
-      - traefik.port=3737
+      - traefik.port=8080
     ports:
-      - 8080:8080
-    volumes:
-      - ./probe/dist/:/web
-  ws-echo:
+      - 8080
+    #volumes:
+      #- ./probe/dist/:/web
+  wsecho:
     image: jmalloc/echo-server
     labels:
-      - traefik.frontend.rule=Host:ws-echo.mapx.localhost
-      - traefik.port=3636
+      - traefik.frontend.rule=Host:wsecho.mapx.localhost
+      - traefik.port=8080
     ports:
-      - 8081:8080
+      - 8080
 
