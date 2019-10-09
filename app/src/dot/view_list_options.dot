@@ -111,7 +111,7 @@
         <div class="fa fa-trash-o"></div>
       </li>
       {{?}}
-      {{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt' ]) }}
+      {{? h.any([ view.type == 'sm', view.type == 'vt', view.type == 'rt', view.type == 'cc' ]) }}
       <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_share" data-lang_type="tooltip" data-view_action_key="btn_opt_share" data-view_action_target="{{=view.id}}" data-view_action_handler="shiny">
         <div class="fa fa-share-alt"></div>
       </li>
