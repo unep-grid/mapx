@@ -1453,28 +1453,6 @@
       }
     },
     {
-      "id": "country-label",
-      "type": "symbol",
-      "source": "mapbox_base",
-      "source-layer": "country_label",
-      "layout": {
-        "visibility": "visible",
-        "text-field": "{name_en}",
-        "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"],
-        "text-size": {
-          "base": 1,
-          "stops": [[1, 9], [18, 25]]
-        },
-        "text-letter-spacing": 0.2,
-        "text-transform": "uppercase"
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 0%)",
-        "text-halo-width": 1,
-        "text-halo-color": "#FFF"
-      }
-    },
-    {
       "id": "maritime",
       "type": "line",
       "source": "mapbox_base",
@@ -1523,9 +1501,31 @@
       },
       "paint": {
         "text-halo-color": "#FFF",
-        "text-halo-blur": 0,
-        "text-halo-width": 0.5,
+        "text-halo-blur": 0.5,
+        "text-halo-width": 2,
         "icon-translate": [0, 0]
+      }
+    },
+    {
+      "id": "country-label",
+      "type": "symbol",
+      "source": "mapbox_base",
+      "source-layer": "country_label",
+      "layout": {
+        "visibility": "visible",
+        "text-field": "{name_en}",
+        "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"],
+        "text-size": {
+          "base": 1,
+          "stops": [[1, 9], [18, 25]]
+        },
+        "text-letter-spacing": 0.2,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-color": "hsl(0, 0%, 0%)",
+        "text-halo-width": 2,
+        "text-halo-color": "#FFF"
       }
     },
     {
