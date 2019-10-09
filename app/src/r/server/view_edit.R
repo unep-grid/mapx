@@ -68,10 +68,10 @@ observe({
           #
           # Who can view this
           #
-          viewReadTarget <- c("public","members","publishers","admins") 
-          viewEditTarget <- c("publishers","admins")
-          viewReaders <- .get(viewData,c("readers")) 
-          viewEditors <- .get(viewData,c("editors")) 
+          viewReadTarget <- c("self","public","members","publishers","admins") 
+          viewEditTarget <- c("self","publishers","admins")
+          viewReaders <- c("self",.get(viewData,c("readers")))
+          viewEditors <- c("self",.get(viewData,c("editors")))
           viewEditors <- unique(c(viewEditors,.get(viewData,c("editor"))))
             
           #
