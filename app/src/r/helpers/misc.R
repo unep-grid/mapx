@@ -183,6 +183,9 @@ mxCounter =  function(id,reset=F){
 #' @param languagesHidden {Character} Vector of languages code where editor is hidden
 #' @param languagesReadOnly {Character} Vector of languages code where editor is visible, but not editable
 #' @param dict {Data.frame} Dictionarry to use
+#' @param minLength {Integer} minimum length of the string
+#' @param maxLength {Interger} maximum length of the string
+#' @param strict {Boolean} If not strict (default) minLength is ignored for non-required language
 #' @param options {List} List of option given to the json editor client side
 mxSchemaMultiLingualInput = function(
   format = NULL,
@@ -199,6 +202,9 @@ mxSchemaMultiLingualInput = function(
   languagesHidden = c(),
   languagesReadOnly = c(),
   dict = NULL,
+  minLength = 0,
+  maxLength = 300,
+  strict = FALSE,
   options = list()
   ){
 
@@ -223,16 +229,20 @@ mxSchemaMultiLingualInput = function(
   }
 
   prop = lapply(languages,function(x){
-
+    required <- x %in% languagesRequired
     opt = options
     #
     # Required ?
     #
-    minLength = 0 
-    if( x %in% languagesRequired ){
-      minLength = 3
+    if( required ){
+      minLength = 1
     }
-
+    #
+    # Strict
+    #
+    if( !required && !strict){
+      minLength =0 
+    }
     #
     # Hidden ?
     #
@@ -252,6 +262,7 @@ mxSchemaMultiLingualInput = function(
       format = format,
       options = opt,
       minLength = minLength,
+      maxLength = maxLength,
       default = .get(default,c(x),default="")
       )
 
@@ -289,6 +300,8 @@ mxSchemaAttributeInput = function(
   type="string",
   collapsed=TRUE,
   attributes=c(),
+  minLength = 1,
+  maxLength = 30,
   dict
   ){
 
@@ -301,7 +314,9 @@ mxSchemaAttributeInput = function(
       type = type,
       format = format,
       default = list('en'=x),
-      dict = dict
+      dict = dict,
+      minLength = minLength,
+      maxLength = maxLength
       )
   })
 

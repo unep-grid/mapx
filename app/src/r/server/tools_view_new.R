@@ -56,15 +56,16 @@ observeEvent(input$btnAddView,{
 
 observeEvent(input$txtViewTitle,{
 
-  title <- subPunct(input$txtViewTitle," ")
+  title <- trimws(subPunct(input$txtViewTitle," "))
   project <- reactData$project
   language <- reactData$language
   idView <- reactData$viewAddId
-
+  v <- .get(config,c('validation','input','nchar'))
   errors <- logical(0)
   warning <- logical(0)
 
-  errors['error_title_short'] <- noDataCheck(title) || nchar(title) < 3
+  errors['error_title_short'] <- noDataCheck(title) || nchar(title) < v$viewTitle$min
+  errors['error_title_long'] <-  nchar(title) > v$viewTitle$max
   errors['error_title_bad'] <- mxProfanityChecker(title)
   errors['error_title_exists'] <-  mxDbViewTitleExists(
     title = title,

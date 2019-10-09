@@ -8,7 +8,7 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
 
   #dict =  .get(config,c("dictionaries","schemaMetadata"))
   dict = config$dict
-
+  v = .get(config,c('validation','input','nchar'))
   #
   # Counter to keep property in the same order as described here 
   #  
@@ -37,7 +37,9 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
             language =  language,
             keyTitle = "textual_desc_title",
             default = list(en=title),
-            dict = dict
+            dict = dict,
+            maxLength = v$sourceTitle$max,
+            minLength = v$sourceTitle$min
             ),
           abstract = mxSchemaMultiLingualInput(
             language =  language,
@@ -45,7 +47,9 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
             default = list(en=abstract),
             type="string",
             format="textarea",
-            dict = dict
+            dict = dict,
+            maxLength = v$sourceAbstract$max,
+            minLength = v$sourceAbstract$min
             ),
           keywords = list(
             propertyOrder = mxCounter("b"),
@@ -61,7 +65,7 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
                 items = list(
                   type = "string",
                   title = t("textual_keyword_item_title"),
-                  minLength = 3
+                  minLength = v$sourceKeywords$min
                   )
                 )
               )
@@ -80,8 +84,10 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
               type = "string",
               collapsed = TRUE,
               attributes = attributesNames,
-              dict = dict
-              )  
+              dict = dict,
+              maxLength = v$sourceAttributeDesc$max,
+              minLength = v$sourceAttributeDesc$min
+              )
             ),
           attributes_alias = list(
             propertyOrder = mxCounter("b"),
@@ -97,7 +103,9 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
               type = "string",
               collapsed = TRUE,
               attributes = attributesNames,
-              dict = dict
+              dict = dict,
+              maxLength = v$sourceAttributeAlias$max,
+              minLength = v$sourceAttributeAlias$min
               )
             ),
           notes = mxSchemaMultiLingualInput(
@@ -137,30 +145,7 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
               )
             )
           )
-        ),
-      #access = list(
-        #propertyOrder = mxCounter("a"),
-        #title = t("target_title"),
-        #description = t("target_desc"),
-        #type = "object",
-        #options = list(collapsed = TRUE),
-        #properties = list(
-          #rolesRead = list(
-            #title = t("target_roles_admin_title"),
-            #type =  "array",
-            #format = "checkbox",
-            #uniqueItems = TRUE,
-            #items = list(
-              #type = "string",
-              #enum = as.list(rolesTarget),
-              #default = "self",
-              #options = list(
-                #enum_titles = names(t(rolesTarget))
-                #)
-              #)
-            #)
-          #)
-        #),
+        ), 
       temporal = list(
         propertyOrder = mxCounter("a"),
         type = "object",
@@ -421,12 +406,6 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
           collapsed = TRUE
           ),
         properties = list(
-          #allowDownload = list(
-            #type = "boolean",
-            #format = "checkbox",
-            #title = t("license_allow_download"),
-            #default = FALSE
-            #),
           licenses = list(
             type = "array",
             title = t("license_list_title"),

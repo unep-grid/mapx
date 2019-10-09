@@ -21,6 +21,7 @@ server <- function(input,output,session){
     #
     list(
       api = .get(config,c("api")),
+      validation = .get(config,c('validation')),
       dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
       language = .get(config,c("language","default")),
       languages = .get(config,c("languages","codes")),
@@ -121,20 +122,23 @@ server <- function(input,output,session){
               "tools_project_config.R",
               "tools_project_external_views.R",
               "tools_project_sources_views.R",
-              "tools_project_add_content_form.R",
               "tools_project_delete.R",
               "tools_project_join.R",
               "tools_project_invite.R",
               "tools_query_maker.R",
+              "tools_source_new.R",
               "tools_source_edit_metadata.R",
               "tools_source_manage.R",
               "tools_source_overlap.R",
               "tools_source_validate_geom.R",
               #
-              # Views handler
+              # Views creation
+              #
+              "tools_view_new.R",
+              #
+              # View edit
               #
               "view_update_client.R",
-              "view_create.R",
               "view_edit.R",
               "view_edit_style.R",
               "view_edit_dashboard.R",

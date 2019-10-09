@@ -11,7 +11,7 @@ export function triggerUploadForm(opt) {
   var elEmail = elForm.querySelector('#txtEmailSourceUpload');
   var elButton = document.getElementById('btnSourceUpload');
   var elEpsgCode = elForm.querySelector('#epsgTextInput');
-
+ 
   /*
    * Create fake input
    */
@@ -141,14 +141,13 @@ export function uploadGeojsonModal(idView) {
 
     function validateTitle() {
       var title = elInput.value.trim();
-
+      var v = mx.settings.validation.input.nchar;
       hasIssue = false;
-
-      if (title.length < 5) {
+      if (title.length < v.sourceTitle.min) {
         hasIssue = true;
         elWarning.innerText = 'Title too short';
       }
-      if (title.length > 50) {
+      if (title.length > v.sourceTitle.max) {
         hasIssue = true;
         elWarning.innerText = 'Title too long';
       }

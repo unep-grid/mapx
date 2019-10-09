@@ -553,11 +553,6 @@ observe({
                   label=d("btn_preview",language),
                   `data-keep` = TRUE
                   )
-                 #actionButton(
-                  #inputId="btnViewStoryCancel",
-                  #label=d("btn_close",language),
-                  #`data-keep` = TRUE
-                  #)
                 )
  
               tips <- mxFold(
@@ -616,17 +611,20 @@ observe({
 })
 
 observeEvent(input$viewTitleSchema_init,{
-  view = reactData$viewDataEdited
-  language = reactData$language
-  languages = .get(config,c("languages","codes"))
-  titles = .get(view,c("data","title"))
-  schema =  mxSchemaMultiLingualInput(
+  view <- reactData$viewDataEdited
+  v <- .get(config,c('validation','input','nchar'))
+  language <- reactData$language
+  languages <- .get(config,c("languages","codes"))
+  titles <- .get(view,c("data","title"))
+  schema <-  mxSchemaMultiLingualInput(
     keyTitle = "view_title",
     format = "text",
     default = titles,
     language = language,
     languagesRequired = c("en"),
-    languagesHidden = languages[!languages %in% language]
+    languagesHidden = languages[!languages %in% language],
+    maxLength = v$viewTitle$max,
+    minLength = v$viewTitle$min
     )
   jedSchema(
     id = "viewTitleSchema",
@@ -640,17 +638,20 @@ observeEvent(input$viewTitleSchema_init,{
 })
 
 observeEvent(input$viewAbstractSchema_init,{
-  view = reactData$viewDataEdited
-  language = reactData$language
-  languages = .get(config,c("languages","codes"))
-  abstracts = .get(view,c("data","abstract"))
-  schema =  mxSchemaMultiLingualInput(
+  view <- reactData$viewDataEdited
+  v <- .get(config,c('validation','input','nchar'))
+  language <- reactData$language
+  languages <- .get(config,c("languages","codes"))
+  abstracts <- .get(view,c("data","abstract"))
+  schema <-  mxSchemaMultiLingualInput(
     keyTitle = "view_abstract",
     format = "textarea",
     default = abstracts,
     language = language,
     languagesRequired = c("en"),
-    languagesHidden = languages[!languages %in% language]
+    languagesHidden = languages[!languages %in% language],
+    maxLength = v$viewAbstract$max,
+    minLength = v$viewAbstract$min
     )
   jedSchema(
     id = "viewAbstractSchema",

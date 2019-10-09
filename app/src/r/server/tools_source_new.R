@@ -75,17 +75,19 @@ observeEvent(input$btnUploadSourceApi,{
 
 observe({
 
-  filename <- input$txtUploadSourceFileName
-  email <- input$txtEmailSourceUpload
+  filename <- trimws(input$txtUploadSourceFileName)
+  email <- trimws(input$txtEmailSourceUpload)
 
   isolate({
+    v <- .get(config,c('validation','input','nchar'))
     language <- reactData$language
     err <- logical(0)
     btnEnable <- FALSE
     hasFileName <- !noDataCheck(filename)
     hasEmail <- mxEmailIsValid(email)
 
-    err[['txt_too_short_min_3']] <- !hasFileName || nchar(filename) < 3
+    err[['error_title_short']] <- !hasFileName || nchar(filename) < v$sourceTitle$min
+    err[['error_title_long']] <- hasFileName && nchar(filename) > v$sourceTitle$max
     err[['error_title_bad']] <- mxProfanityChecker(filename)
     err[['txt_email_not_valid']] <- !hasEmail 
 

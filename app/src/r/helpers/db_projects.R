@@ -19,7 +19,7 @@ mxDbValidateProjectAlias <- function(alias,id){
   if(noDataCheck(alias)) return(TRUE)
   if(noDataCheck(id)) return(FALSE)
   isProjectAliasValid <- isTRUE(grepl("^[a-z0-9\\_\\-]*$",alias,perl=T))
-  isLengthOk <- isTRUE(nchar(alias) >= 5 && nchar(alias) <= 30)
+  isLengthOk <- isTRUE(nchar(alias) > 0 && nchar(alias) <= 30)
   out <-  isLengthOk && isProjectAliasValid && mxDbGetQuery("SELECT count(*) FROM mx_projects WHERE id !='" + id + "' AND alias ='"+ alias +"'" )$count == 0
   return(isTRUE(out))
 }

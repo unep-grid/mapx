@@ -52,13 +52,14 @@ observeEvent(input$txtProjectTitle,{
 
   if(!isTRUE(reactData$projectAllowedToCreate)) return()
 
-  projectTitle <- input$txtProjectTitle
+  v <- .get(config,c('validation','input','nchar'))
+  projectTitle <- trimws(input$txtProjectTitle)
   language <- reactData$language 
   errors <- logical(0)
   warning <- logical(0)
 
-  errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < 3
-  errors['error_title_long'] <- nchar(projectTitle) > 100
+  errors['error_title_short'] <- noDataCheck(projectTitle) || nchar(projectTitle) < v$projectTitle$min
+  errors['error_title_long'] <- nchar(projectTitle) > v$projectTitle$max
   errors['error_title_bad'] <- mxProfanityChecker(projectTitle)
   errors['error_title_exists'] <-  mxDbProjectTitleExists(projectTitle)
 

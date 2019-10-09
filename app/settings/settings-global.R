@@ -63,6 +63,27 @@ config[["browser"]] <- list(
   )
 
 #
+# Input control
+#
+config[['validation']] <- list(
+  input = list(
+    nchar = list(
+      sourceAbstract = list(min=1,max=5000),
+      sourceAttributesAlias = list(min=1,max=30),
+      sourceAttributesDesc = list(min=1,max=5000),
+      sourceLicense = list(min=1,max=5000),
+      sourceKeywords = list(min=1,max=30),
+      sourceTitle = list(min=1,max=300),
+      projectAbstract = list(min=1,max=5000),
+      projectTitle = list(min=1,max=150),
+      projectAlias = list(min=1,max=30),
+      viewAbstract = list(min=1,max=5000),
+      viewTitle = list(min=1,max=300)
+      )
+    )
+  )
+
+#
 # api configuration
 #
 config[["api"]] <- list(
@@ -88,8 +109,8 @@ config[["api"]] <- list(
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
     postEmail = "/send/mail"
-    )
   )
+)
 
 #
 # postgres configuration

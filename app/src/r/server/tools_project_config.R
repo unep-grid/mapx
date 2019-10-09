@@ -103,6 +103,8 @@ observe({
 
     isProjectAliasValid <- mxDbValidateProjectAlias(projectAlias,project)
 
+    v <- .get(config,c('validation','input','nchar'))
+
     if(language != "en"){
       languagesTest <- c("en",language)
     }else{
@@ -119,14 +121,12 @@ observe({
       }
     }
     
-
-
     for(l in languagesTest){
-      errTest(l,"error_description_short", noDataCheck(projectDesc[[l]]) || nchar(projectDesc[[l]]) < 5)
-      errTest(l,"error_description_long", nchar(projectDesc[[l]]) > 100)
+      errTest(l,"error_description_short", noDataCheck(projectDesc[[l]]) || nchar(projectDesc[[l]]) < v$projectAbstract$min)
+      errTest(l,"error_description_long", nchar(projectDesc[[l]]) > v$projecAbstract$max)
       errTest(l,"error_description_bad", mxProfanityChecker(projectDesc[[l]]))
-      errTest(l,'error_title_short', noDataCheck(projectTitle[[l]]) || nchar(projectTitle[[l]]) < 5)
-      errTest(l,'error_title_long', nchar(projectTitle[[l]]) > 50)
+      errTest(l,'error_title_short', noDataCheck(projectTitle[[l]]) || nchar(projectTitle[[l]]) < v$projectTitle$min)
+      errTest(l,'error_title_long', nchar(projectTitle[[l]]) > v$projectTitle$max)
       errTest(l,'error_title_bad', mxProfanityChecker(projectTitle[[l]]))
       errTest(l,'error_title_exists', mxDbProjectTitleExists(projectTitle[[l]],ignore=project))
     }
@@ -262,6 +262,7 @@ observeEvent(input$projectTitleSchema_init,{
     language <- reactData$language 
     languages <- .get(config,c("languages","codes"))
     titles <- .get(projectData,c("title"))
+    v <- .get(config,c('validation','input','nchar'))
 
     schema =  mxSchemaMultiLingualInput(
       keyTitle = "project_title",
@@ -269,7 +270,9 @@ observeEvent(input$projectTitleSchema_init,{
       default = titles,
       language = language,
       languagesRequired = c(),
-      languagesHidden = languages[!languages %in% c(language,'en')]
+      languagesHidden = languages[!languages %in% c(language,'en')],
+      minLength = v$projectTitle$min,
+      maxLength = v$projectTitle$max
       )
 
     jedSchema(
@@ -288,6 +291,7 @@ observeEvent(input$projectDescriptionSchema_init,{
 
   userRole <- getUserRole()
   isAdmin <- isTRUE(userRole$admin)
+  v <- .get(config,c('validation','input','nchar'))
 
   if( isAdmin ){
 
@@ -303,7 +307,9 @@ observeEvent(input$projectDescriptionSchema_init,{
       default = descriptions,
       language = language,
       languagesRequired = c(),
-      languagesHidden = languages[!languages %in% c(language,'en')]
+      languagesHidden = languages[!languages %in% c(language,'en')],
+      minLength = v$projectAbstract$min,
+      maxLength = v$projectAbstract$max
       )
 
     jedSchema(

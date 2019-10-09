@@ -1900,18 +1900,6 @@
     "id": "error_title_bad",
     "en": "The title is not valid",
     "fr": "Ce titre n'est pas valide",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "",
-    "ps": ""
-  },
-  {
-    "id": "error_title_bad",
-    "en": "The title is not valid",
-    "fr": "Ce titre n'est pas valide",
     "es": "El título no es valido",
     "ru": "",
     "zh": "",

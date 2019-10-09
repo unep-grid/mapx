@@ -75,15 +75,21 @@ export function validateMetadataView(opt) {
  * @return {Array} array of tests
  */
 export function validateMetadataTests(meta, attr) {
+  var v = mx.settings.validation.input.nchar;
   var tests = [
-    validateAttribute(meta, attr, 3),
-    validateAbstract(meta, 3),
-    validateTitle(meta, 3),
-    validateKeywords(meta),
+    validateAttribute(
+      meta,
+      attr,
+      v.sourceAttributesDesc.min,
+      v.sourceAttributesDesc.max
+    ),
+    validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
+    validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
+    validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
     validateContact(meta),
     validateIssuance(meta),
     validateSource(meta),
-    validateLicense(meta, 3)
+    validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max)
   ];
 
   return {
@@ -95,18 +101,20 @@ export function validateMetadataTests(meta, attr) {
  * Validate attributes
  * - At least n letter in english description
  * @param {Object} MapX metadata object
- * @param {Integer} n Number of character default 3
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
  * @return {Object} Validation result : type, valid, reason
  */
-function validateAttribute(meta, attr, n) {
-  n = n || 3;
+function validateAttribute(meta, attr, min, max) {
+  min = min || 3;
+  max = max || 10;
   var h = mx.helpers;
   var reasons = [];
   var attributes = h.path(meta, 'text.attributes', {});
   // if no attr given, get the first one.
   attr = attr || Object.keys(attributes)[0];
   var str = h.path(attributes, attr + '.en', '');
-  var hasAttr = h.isStringRange(attr) && h.isStringRange(str, n);
+  var hasAttr = h.isStringRange(attr) && h.isStringRange(str, min, max);
 
   if (!hasAttr) {
     reasons.push('validate_meta_invalid_attribute');
@@ -125,15 +133,17 @@ function validateAttribute(meta, attr, n) {
  * Validate abstract
  * - At least n letter in english abstract
  * @param {Object} MapX metadata object
- * @param {Number} n Number of character
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
  * @return {Object} Validation result : type, valid, reason
  */
-function validateAbstract(meta, n) {
-  n = n || 3;
+function validateAbstract(meta, min, max) {
+  min = min || 3;
+  max = max || 10;
   var reasons = [];
   var h = mx.helpers;
   var str = h.path(meta, 'text.abstract.en', '');
-  var hasAbstract = h.isStringRange(str, n);
+  var hasAbstract = h.isStringRange(str, min, max);
 
   if (!hasAbstract) {
     reasons.push('validate_meta_invalid_abstract');
@@ -150,15 +160,17 @@ function validateAbstract(meta, n) {
  * Validate title
  * - At least n letter in english title
  * @param {Object} MapX metadata object
- * @param {Integer} n Number of character
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
  * @return {Object} Validation result : type, valid, reason
  */
-function validateTitle(meta, n) {
-  n = n || 3;
+function validateTitle(meta, min, max) {
+  min = min || 3;
+  max = max || 10;
   var reasons = [];
   var h = mx.helpers;
   var str = h.path(meta, 'text.title.en', '');
-  var hasTitle = h.isStringRange(str, n);
+  var hasTitle = h.isStringRange(str, min, max);
 
   if (!hasTitle) {
     reasons.push('validate_meta_invalid_title');
@@ -175,16 +187,20 @@ function validateTitle(meta, n) {
  * Validate keywords
  * - At least one keyword
  * @param {Object} MapX metadata object
- * @param {Number} n Number of character
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
  * @return {Object} Validation result : type, valid, reason
  */
-function validateKeywords(meta, n) {
-  n = n || 3;
+function validateKeywords(meta, min, max) {
+  min = min || 3;
+  max = max || 10;
   var reasons = [];
   var h = mx.helpers;
   var keywords = h.path(meta, 'text.keywords.keys', []);
   var hasKeywords = !h.isEmpty(keywords);
-  var hasValidKeywords = h.all(keywords.map((k) => h.isStringRange(k, n)));
+  var hasValidKeywords = h.all(
+    keywords.map((k) => h.isStringRange(k, min, max))
+  );
 
   if (!hasKeywords) {
     reasons.push('validate_meta_no_keyword');
@@ -276,18 +292,21 @@ function validateIssuance(meta) {
  * - At least one license item
  * - All license should have at least n character
  * @param {Object} MapX metadata object
- * @param {Integer} n Number of character
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
  * @return {Object} Validation result : type, valid, reason
  */
-function validateLicense(meta, n) {
+function validateLicense(meta, min, max) {
   var reasons = [];
-  n = n || 3;
+  min = min || 3;
+  max = max || 10;
+
   var h = mx.helpers;
   var licenses = h.path(meta, 'license.licenses', []);
   var hasLicense = !h.isEmpty(licenses);
   var hasValidLicenses = h.all(
     licenses.map((l) => {
-      return h.isStringRange(l.text, n) && h.isStringRange(l.name, n);
+      return h.isStringRange(l.text, min, max) && h.isStringRange(l.name, min, max);
     })
   );
 
