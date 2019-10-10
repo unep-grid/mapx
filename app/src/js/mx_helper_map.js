@@ -757,7 +757,7 @@ export function getViewRemote(idView) {
 
   return fetch(keyNet)
     .then((view) => {
-      if (view.status === 404) {
+      if (view.status === 404 || view.status === 204) {
         return {};
       }
       return view.json();

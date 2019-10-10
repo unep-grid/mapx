@@ -25,7 +25,7 @@ export function storyRead(o) {
     .then(checkMissingView)
     .then(setUi)
     .then(setListeners)
-    .catch(e => {
+    .catch((e) => {
       console.warn(e);
     });
 }
@@ -75,8 +75,8 @@ function setListeners(o) {
     }
 
     /**
-    * Init bullet container and listener
-    */
+     * Init bullet container and listener
+     */
     initBulletsListener(o);
 
     /* Listen to scroll on the main container. */
@@ -85,7 +85,9 @@ function setListeners(o) {
       callback: mx.helpers.storyUpdateSlides,
       view: o.view,
       data: o.data,
-      enable: o.enable,
+      enableCheck: function() {
+        return o.enable;
+      },
       startPos: o.startScroll
     });
 
@@ -193,9 +195,7 @@ function initAdaptiveScreen(o) {
   var data = o.data || {};
   data.elStory = document.querySelector('.' + o.classContainer);
   data.elMap = data.map.getContainer();
-  data.elMapControls = data.elMap.querySelector(
-    '.mapboxgl-control-container'
-  );
+  data.elMapControls = data.elMap.querySelector('.mapboxgl-control-container');
   data.elStory.classList.add(data.classWrapper);
   data.rectStory = data.elStory.getBoundingClientRect();
   data.classMap = data.elMap.className;
@@ -427,11 +427,10 @@ function storyOnScroll(o) {
   }
 }
 
-
-function initBulletsListener(o){
-  const h = mx.helpers; 
+function initBulletsListener(o) {
+  const h = mx.helpers;
   var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
-  o.data.elBullets = elBullets; 
+  o.data.elBullets = elBullets;
   o.data.elMapControls.appendChild(elBullets);
   mx.listenerStore.addListener({
     target: elBullets,
@@ -440,7 +439,7 @@ function initBulletsListener(o){
     group: 'story_map'
   });
   console.log('added bullets');
-/*
+  /*
    * Set position
    */
   function bulletScrollTo(e) {
@@ -450,9 +449,7 @@ function initBulletsListener(o){
       h.storyGoTo(step);
     }
   }
-
 }
-
 
 /**
  * Set step config : dimention, number, bullets
@@ -462,7 +459,7 @@ function setStepConfig(o) {
   const el = h.el;
 
   var data = o.onScrollData;
-  var elBullets,elBullet, config, rect, elStep, elSteps, elSlides, stepName;
+  var elBullets, elBullet, config, rect, elStep, elSteps, elSlides, stepName;
   var slideConfig;
 
   /*
@@ -472,11 +469,10 @@ function setStepConfig(o) {
   elBullets = o.data.elBullets;
   elSteps = data.elScroll.querySelectorAll('.mx-story-step');
 
-
   /**
-  * Clean bullets
-  */
-  elBullets.innerHTML = "";
+   * Clean bullets
+   */
+  elBullets.innerHTML = '';
 
   for (var s = 0, sL = elSteps.length; s < sL; s++) {
     /*
@@ -556,8 +552,7 @@ function setStepConfig(o) {
   if (o.onScrollData.distStart) {
     data.elScroll.scrollTop = o.onScrollData.distStart * 1;
   }
-
-  }
+}
 
 /*
  * Update slides transform value;
@@ -578,7 +573,9 @@ export function storyUpdateSlides(o) {
   var clHidden = 'mx-visibility-hidden';
   var clRemove = 'mx-display-none';
   var isHidden = false;
-  //var classActive = 'mx-story-step-active';
+  if(!o.enableCheck()){
+    return;
+  }
 
   //for (var s = 0, sL = data.stepsConfig.length; s < sL; s++) {
   data.stepsConfig.forEach((config, s) => {
@@ -1241,13 +1238,13 @@ export function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
   const h = mx.helpers;
-  var steps = h.path(o, 'view.data.story.steps',[]);
-  var data = h.path(mx.data, 'story.data',{});
+  var steps = h.path(o, 'view.data.story.steps', []);
+  var data = h.path(mx.data, 'story.data', {});
   var stepNum = o.stepNum;
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
   var m = h.getMapData();
 
-  if (steps.length ===0) {
+  if (steps.length === 0) {
     return;
   }
   data.currentStep = stepNum;

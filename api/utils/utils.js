@@ -56,7 +56,7 @@ function toRes(obj) {
 exports.sendJSON = function(res, data, opt) {
   opt = Object.assign({}, {end: true}, opt);
   opt.end = opt.end === true || false;
-  data = JSON.stringify(data);
+  data = JSON.stringify(data||'');
   res.setHeader('Mapx-Content-Length', data.length || 0);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'max-age=43200, s-maxage=300');

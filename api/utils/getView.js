@@ -16,7 +16,6 @@ const vtpbf = require('vt-pbf');
  * Get full view data
  */
 exports.get = function(req, res) {
-  var buffer;
   var out = {};
   var id = req.params.id;
   var sql = '';
@@ -33,26 +32,15 @@ exports.get = function(req, res) {
     return utils.sendError(res, {message: 'no valid query'});
   }
 
-  clientPgRead
+  return clientPgRead
     .query(sql)
     .then(function(result) {
       if (result && result.rowCount === 0) {
-        return res.sendStatus(404);
+        return res.sendStatus(204);
+      } else {
+        out = result.rows[0];
+        return utils.sendJSON(res, out || {});
       }
-
-      out = result.rows[0];
-      buffer = new Buffer(JSON.stringify(out), 'utf-8');
-      zlib.gzip(buffer, function(err, zOut) {
-        if (err) {
-          return utils.sendError(res, err);
-        }
-        res.setHeader('Cache-Control', 'public, max-age=3600');
-        res.setHeader('Content-Type', 'application/json');
-        res.setHeader('Content-Encoding', 'gzip');
-
-        res.send(zOut);
-      });
-
     })
     .catch(function(err) {
       return utils.sendError(res, err);
@@ -102,7 +90,7 @@ exports.getTile = function(req, res) {
       return getTile(res, hash, data);
     })
     .catch(function(err) {
-      return res.status(500).send({error:err.message});
+      return res.status(500).send({error: err.message});
     });
 };
 
