@@ -8605,8 +8605,8 @@
   },
   {
     "id": "meta_view_raster_meta",
-    "en": "Raster metadata",
-    "fr": "Métadonnées du raster",
+    "en": "Metadata Entry",
+    "fr": "Entrée de métadonnées",
     "fa": "",
     "ps": "",
     "zh": "",
@@ -9014,6 +9014,17 @@
     "id": "meta_source_url_download",
     "en": "Download original source",
     "fr": "Téléchargement de la source originale",
+    "fa": "",
+    "ps": "",
+    "zh": "",
+    "ru": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "fr": "Téléchargement des annexes",
     "fa": "",
     "ps": "",
     "zh": "",

@@ -418,7 +418,9 @@ export function metaSourceToUi(meta) {
 
   const urlHomepage = p('origin.homepage.url', '');
   const urlSources = p('origin.source.urls', []).map((d) => d.url);
+  const urlAnnexes = p('annex.references', []).map((d) => d.url);
   const hasHomepage = h.isUrl(urlHomepage);
+
   const elHomepage = hasHomepage
     ? el(
         'a',
@@ -432,10 +434,11 @@ export function metaSourceToUi(meta) {
 
   const elSourceUrl = el(
     'ul',
-    urlSources.map((url, i) => {
+    urlSources.map((url) => {
       if (!h.isUrl(url)) {
         return;
       }
+      let hostname = (new URL(url)).hostname;
       return el(
         'li',
         el(
@@ -444,7 +447,27 @@ export function metaSourceToUi(meta) {
             target: '_blank',
             href: url
           },
-          'Link ' + i + 1
+          hostname
+        )
+      );
+    })
+  );
+const elAnnexesUrl = el(
+    'ul',
+    urlAnnexes.map((url) => {
+      if (!h.isUrl(url)) {
+        return;
+      }
+      let hostname = (new URL(url)).hostname;
+      return el(
+        'li',
+        el(
+          'a',
+          {
+            target: '_blank',
+            href: url
+          },
+          hostname
         )
       );
     })
@@ -472,7 +495,7 @@ export function metaSourceToUi(meta) {
           {
             href: 'mailto:' + c.email
           },
-          el('div', el('span', c.name + ' (' + c.function + ') '))
+          el('div', el('span', c.name + (c.function?(' ( ' + c.function + ' ) '):'')))
         ),
         el(
           'span',
@@ -510,6 +533,7 @@ export function metaSourceToUi(meta) {
       contacts: elContacts,
       homepage: elHomepage,
       url_download: elSourceUrl,
+      url_annexes: elAnnexesUrl,
       periodicity: elPeriodicity,
       released_at: elReleasedAt,
       modified_at: elModifiedAt,
