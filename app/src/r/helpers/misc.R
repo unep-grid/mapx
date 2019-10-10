@@ -203,7 +203,7 @@ mxSchemaMultiLingualInput = function(
   languagesReadOnly = c(),
   dict = NULL,
   minLength = 0,
-  maxLength = 300,
+  maxLength = 1e6,
   strict = FALSE,
   options = list()
   ){
