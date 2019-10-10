@@ -76,7 +76,7 @@ observeEvent(reactData$showShareManager,{
     checkboxInput("checkShareIframe",label="Include link in an iframe"),
     tagList(
     if(isStory){
-      checkboxInput("checkShareStoryAutoStart",label="Auto start story")
+      checkboxInput("checkShareStoryAutoStart",label="Play the story immediately after MapX is loaded")
     }),
     tags$label("Link"),
     div(
