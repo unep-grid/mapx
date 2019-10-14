@@ -71,7 +71,7 @@ export function createControlBtns(btns) {
     {
       class: ['mx-controls-ul']
     },
-    items.map((btn,i) => {
+    items.map((btn, i) => {
       btn.elBtn = h.el(
         'li',
         {
@@ -84,7 +84,11 @@ export function createControlBtns(btns) {
             'hint--bottom-right',
             'shadow'
           ].concat(btn.liClasses),
-          dataset: Object.assign({}, {lang_key: btn.key,lang_type:'tooltip'}, btn.liData)
+          dataset: Object.assign(
+            {},
+            {lang_key: btn.key, lang_type: 'tooltip'},
+            btn.liData
+          )
         },
         h.el('div', {
           class: btn.classes
@@ -94,7 +98,7 @@ export function createControlBtns(btns) {
     })
   );
 
-  mx.helpers.updateLanguageElements({selector:elControls});
+  mx.helpers.updateLanguageElements({selector: elControls});
   return elControls;
 }
 
@@ -126,15 +130,16 @@ mapControlApp.prototype.onAdd = function(map) {
     var idSkip = o.skip || [
       'btnStoryUnlockMap',
       'btnStoryClose',
+      'btnStoryLegends',
       'btnToggleBtns'
     ];
     var btnToggle = btns.btnToggleBtns;
 
     btnToggle.hidden = hide;
 
-    if(hide){
+    if (hide) {
       btnToggle.elBtn.classList.add(btnToggle.classActive);
-    }else{
+    } else {
       btnToggle.elBtn.classList.remove(btnToggle.classActive);
     }
 
@@ -274,9 +279,9 @@ mapControlApp.prototype.onAdd = function(map) {
       action: function(e) {
         var el = e.target;
         var cl = 'active';
-        el.classList.toggle(cl);
         var enable = el.classList.contains(cl);
-        h.activateSpotlight(enable,el);
+        el.classList.toggle(cl);
+        h.activateSpotlight(enable, el);
       }
     },
     btnDrawMode: {

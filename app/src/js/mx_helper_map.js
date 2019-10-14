@@ -2570,7 +2570,7 @@ export function renderViewVt(o) {
        * - If next rules is identical, remove it from legend
        * - Set sprite path
        */
-      if (!o.noLegend && hasStyleRules) {
+      if (hasStyleRules) {
         const elLegend = document.querySelector(
           '#check_view_legend_' + view.id
         );
@@ -3581,8 +3581,18 @@ export function getViewDescription(id, lang) {
   });
 }
 
+/**
+* Get a view's legends or clone. Images are converted in base64
+* (Used in MapComposer)
+* @param {String||Object} id of the legend or view object
+* @param {Object} opt Options
+* @param {Boolean} opt.clone Clone the legend. Default true
+* @param {Boolean} opt.input Keep working inputs. Default false
+* @param {Boolean} opt.base64 Convert all images in base64. Default true
+*/
 export function getViewLegend(id, opt) {
-  opt = opt || {};
+
+  opt = Object.assign({},{clone:true,input:false,base64:true},opt);
 
   const h = mx.helpers;
   if (h.isView(id)) {
@@ -3590,13 +3600,14 @@ export function getViewLegend(id, opt) {
   }
   let elLegend = document.getElementById('check_view_legend_' + id);
 
-  mx.helpers.convertAllImagesToBase64(elLegend);
-
   if (elLegend && opt.clone === true) {
     elLegend = elLegend.cloneNode(true);
   }
   if (elLegend && opt.clone === true && opt.input === false) {
     elLegend.querySelectorAll('input').forEach((e) => e.remove());
+  }
+  if( elLegend && opt.clone === true && opt.base64 === true) {
+    mx.helpers.convertAllImagesToBase64(elLegend);
   }
   return elLegend || h.el('div');
 }

@@ -77,7 +77,7 @@ function setListeners(o) {
     /**
      * Init bullet container and listener
      */
-    initBulletsListener(o);
+    initButtonsListener(o);
 
     /* Listen to scroll on the main container. */
     storyOnScroll({
@@ -427,8 +427,11 @@ function storyOnScroll(o) {
   }
 }
 
-function initBulletsListener(o) {
+function initButtonsListener(o) {
   const h = mx.helpers;
+  /**
+   * Bullets
+   */
   var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
   o.data.elBullets = elBullets;
   o.data.elMapControls.appendChild(elBullets);
@@ -438,7 +441,17 @@ function initBulletsListener(o) {
     callback: bulletScrollTo,
     group: 'story_map'
   });
-  console.log('added bullets');
+
+  /**
+   * Legend
+   */
+  mx.listenerStore.addListener({
+    target: o.data.elBtnLegend,
+    type: 'click',
+    callback: toggleLegend,
+    group: 'story_map'
+  });
+
   /*
    * Set position
    */
@@ -447,6 +460,19 @@ function initBulletsListener(o) {
     if (step) {
       e.stopPropagation();
       h.storyGoTo(step);
+    }
+  }
+  /**
+   * Legend callback
+   */
+  function toggleLegend() {
+    let active = o.data.elBtnLegend.classList.contains('active');
+    if (active) {
+      o.data.elBtnLegend.classList.remove('active');
+      o.data.elLegend.classList.remove('active');
+    } else {
+      o.data.elBtnLegend.classList.add('active');
+      o.data.elLegend.classList.add('active');
     }
   }
 }
@@ -502,7 +528,7 @@ function setStepConfig(o) {
     elBullet = el(
       'div',
       {
-        class: ['mx-story-step-bullet', 'mx-pointer', 'btn', 'hint--top'],
+        class: ['mx-story-step-bullet', 'shadow', 'mx-pointer', 'hint--top'],
         'aria-label': stepName ? stepName : 'Step ' + (s + 1),
         dataset: {
           to: config.startUnscaled,
@@ -573,7 +599,7 @@ export function storyUpdateSlides(o) {
   var clHidden = 'mx-visibility-hidden';
   var clRemove = 'mx-display-none';
   var isHidden = false;
-  if(!o.enableCheck()){
+  if (!o.enableCheck()) {
     return;
   }
 
@@ -670,6 +696,11 @@ function storyHandleKeyDown(event) {
       });
       break;
     default:
+      if (h.isNumeric(event.key)) {
+        h.storyAutoPlay('stop').then(function() {
+          h.storyGoTo(event.key * 1 - 1);
+        });
+      }
       return;
   }
 }
@@ -698,7 +729,7 @@ export function storyGoTo(to, useTimeout, funStop) {
 
   maxStep = steps.length - 1;
 
-  if (isFinite(to)) {
+  if (h.isNumeric(to)) {
     destStep = to >= maxStep ? maxStep : to < 0 ? 0 : to;
   } else if (to === 'next' || to === 'n') {
     nextStep = currentStep + 1;
@@ -1002,7 +1033,9 @@ export function storyController(o) {
       if (o.data.elStory) {
         o.data.elStory.remove();
       }
-
+      if (o.data.elLegendContainer) {
+        o.data.elLegendContainer.remove();
+      }
       if (o.data.styleMap) {
         o.data.elMap.style = o.data.styleMap;
       }
@@ -1069,7 +1102,22 @@ export function storyBuild(o) {
   o.colors.alpha = o.colors.alpha || 1;
 
   var elMapContainer = o.data.map.getContainer();
-  var elStoryContainer = el(
+
+  o.data.elLegendContainer = el(
+    'div',
+    {class: 'mx-story-legend-container'},
+    (o.data.elBtnLegend = el('div', {
+      class: ['mx-story-btn-legend', 'fa', 'fa-list-ul', 'shadow'],
+      dataset: {
+        lang_key: 'btn_story_legend'
+      }
+    })),
+    (o.data.elLegend = el('div', {
+      class: ['mx-story-legend']
+    }))
+  );
+
+  o.data.elStoryContainer = el(
     'div',
     {
       class: o.classContainer,
@@ -1149,12 +1197,13 @@ export function storyBuild(o) {
   /**
    * Add story map to map container
    */
-  elMapContainer.appendChild(elStoryContainer);
+  elMapContainer.appendChild(o.data.elStoryContainer);
+  elMapContainer.appendChild(o.data.elLegendContainer);
 
   /**
    * Handle broken images
    */
-  var imgs = elStoryContainer.querySelectorAll('img');
+  var imgs = o.data.elStoryContainer.querySelectorAll('img');
   imgs.forEach((img) => {
     img.onerror = function() {
       var imgRect = img.getBoundingClientRect();

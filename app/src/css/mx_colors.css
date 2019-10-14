@@ -434,15 +434,21 @@ span.mx-badge-role {
     color: var(--mx_ui_text);
 }
 
-.mx-story-step-bullet{
+.mx-story-step-bullet,
+.mx-story-btn-legend {
   background: var(--mx_ui_background);
   color: var(--mx_ui_text);
 }
 
 .mx .mx-story-step-bullet.mx-story-step-active ,
-.mx .mx-story-step-bullet:hover {
+.mx .mx-story-step-bullet:hover,
+.mx .mx-story-btn-legend.active {
   background: var(--mx_ui_text);
   color:var(--mx_ui_background);
+}
+
+.mx .mx-story-legend {
+  background: var(--mx_ui_background);
 }
 
 /**
