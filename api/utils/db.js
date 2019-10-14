@@ -14,6 +14,7 @@ const key = settings.db.crypto.key;
 exports.tableHasValues = function(idTable, schema) {
   schema = schema || 'public';
   var sqlExists = `
+  /*NO LOAD BALANCE*/
   SELECT EXISTS (
    SELECT 1
    FROM   information_schema.tables 
@@ -21,6 +22,7 @@ exports.tableHasValues = function(idTable, schema) {
    AND    table_name = '${idTable}'
    )`;
   var sqlEmpty = `
+   /*NO LOAD BALANCE*/
    SELECT count(geom) as n from ${idTable}
   `;
   var isThere = false;
@@ -249,6 +251,7 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
    * Count valid query
    */
   var sqlValidityStatus = `
+  /*NO LOAD BALANCE*/
   SELECT count(${idValidColumn}) as n, ${idValidColumn} as valid
   FROM  ${idLayer}
   GROUP BY ${idValidColumn}`;
