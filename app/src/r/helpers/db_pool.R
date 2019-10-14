@@ -78,6 +78,10 @@ mxDbPoolInit <- function(){
   init <- quote({
 
     pg <- .get(config,c("pg"))
+    pMax <- as.integer(pg$poolMax)
+    pMin <- as.integer(pg$poolMin)
+    pMax <- ifelse(noDataCheck(pMax),1,pMax)
+    pMin <- ifelse(noDataCheck(pMin),1,pMin)
 
     db <- list(
       pg = pg
@@ -100,8 +104,8 @@ mxDbPoolInit <- function(){
         port = pg$port,
         user = pg$user,
         password = pg$password,
-        minSize = pg$poolMin,
-        maxSize = pg$poolMax
+        minSize = pMin,
+        maxSize = pMax
         )
       )
     #
@@ -114,8 +118,8 @@ mxDbPoolInit <- function(){
         port = pg$portMaster,
         user = pg$user,
         password = pg$password,
-        minSize = pg$poolMin,
-        maxSize = pg$poolMax
+        minSize = pMin,
+        maxSize = pMax
         )
       )
   })
