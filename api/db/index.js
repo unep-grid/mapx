@@ -18,7 +18,7 @@ var pgWrite = new Pool({
   database: s.db.name,
   password: s.db.write.password,
   port: s.db.port,
-  max: 1
+  max: s.db.poolMax
 });
 exports.pgWrite = pgWrite;
 
@@ -34,7 +34,7 @@ var pgRead = new Pool({
   password: s.db.read.password,
   port: s.db.port,
   statement_timeout: 30 * 1000,
-  max: 1
+  max: s.db.poolMax
 });
 exports.pgRead = pgRead;
 

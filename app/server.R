@@ -1,8 +1,3 @@
-#
-# on exit, disconnect pg connection 
-#
-onStop(mxDbCloseCon)
-
 
 #
 #  SERVER FUNCTION

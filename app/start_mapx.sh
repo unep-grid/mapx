@@ -35,6 +35,8 @@ CONF_MAPX="\
   config[['pg']][['port']] <- '$POSTGRES_PORT'\n\
   config[['pg']][['hostMaster']] <- '$POSTGRES_HOST_MASTER'\n\
   config[['pg']][['portMaster']] <- '$POSTGRES_PORT_MASTER'\n\
+  config[['pg']][['poolMin']] <- '$POSTGRES_POOL_MIN'\n\
+  config[['pg']][['poolMax']] <- '$POSTGRES_POOL_MAX'\n\
   config[['project']][['default']] <- '$MAPX_PROJECT_DEFAULT'\n\
   config[['project']][['creation']][['usersAllowed']] <- jsonlite::fromJSON('$MAPX_PROJECT_CREATORS')\n\
   config[['root_mode']][['members']] <- jsonlite::fromJSON('$MAPX_ROOT_MODE_MEMBERS')\n\

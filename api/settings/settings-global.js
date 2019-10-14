@@ -15,6 +15,8 @@ module.exports = {
     name : 'postgres',
     port : 5432,
     host : 'localhost',
+    poolMin : 1,
+    poolMax : 1,
     write : {
       user : "postgres",
       password : "1234"

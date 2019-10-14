@@ -10,6 +10,7 @@ library(parallel)
 library(curl)
 library(xml2)
 library(geosapi)
+library(pool)
 
 #
 # Load helpers
@@ -27,6 +28,7 @@ mxSource("src/r/helpers/api_fetch.R")
 mxSource("src/r/helpers/geoserver.R")
 mxSource("src/r/helpers/story_auto_start.R")
 mxSource("src/r/helpers/db.R")
+mxSource("src/r/helpers/db_pool.R")
 mxSource("src/r/helpers/db_projects.R")
 mxSource("src/r/helpers/db_log.R")
 mxSource("src/r/helpers/db_views.R")
@@ -49,4 +51,8 @@ mxSource("settings/settings-local.R")
 #
 mxSetResourcePath(.get(config,c("resources")))
 
-
+#
+# Init pool and master direct connection
+# Cleaning is done usig the .Last method from within this init process
+#
+mxDbPoolInit()

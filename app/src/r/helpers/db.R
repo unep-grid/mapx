@@ -10,7 +10,9 @@
 #'     out.validUntil = validity duration in days
 mxDbCreateTempUser <- function(id,srcList){
 
-  conMaster <- mxDbAutoCon(useMaster=TRUE)
+  conMaster <- mxDbGetCon(useMaster=TRUE)
+  mxDbAutoReturnCon(conMaster)
+
   email <- mxDbGetEmailFromId(id)
   token <- randomString("MX",splitIn=3,addLETTERS=T,addLetters=F)
   tmpUser <- "mapx_temp_" + id
@@ -70,7 +72,7 @@ mxDbCreateTempUser <- function(id,srcList){
     dropUser()
   }
 
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
   dbSendQuery(conMaster,"BEGIN TRANSACTION")
   tryCatch({
 
@@ -258,7 +260,7 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
   # Get a connection 
   #
   if(!hasCon){
-    con <- mxDbAutoCon()
+    con <- mxDbGetCon()
   }
 
   tryCatch({
@@ -374,7 +376,7 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   query <- NULL
 
   # get connection object
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
 
   if(!is.null(path)){
     # if value has no json class, convert it (single value update)
@@ -498,233 +500,6 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
       })
   })
   return(isAsExpected)
-}
-
-
-
-
-
-
-#' Transfert postgis feature by sql query to sp object
-#' @param query PostGIS spatial sql querry.
-#' @return spatial object.
-#' @export
-mxDbGetSp <- function(query) {
-
-  conf <- mxGetDefaultConfig()
-
-  d<- config[["pg"]]
-
-  tmpTbl <- sprintf('tmp_table_%s',round(runif(1)*1e5))
-
-  dsn <- sprintf("PG:dbname='%s' host='%s' port='%s' user='%s' password='%s'",
-    d$dbname,d$host,d$port,d$user,d$password
-    )
-
-  con <- mxDbAutoCon()
-  tryCatch({
-
-    sql <- sprintf("CREATE UNLOGGED TABLE %s AS %s",tmpTbl,query)
-
-    res <- dbSendQuery(con,sql)
-
-    nr <- dbGetInfo(res)$rowsAffected
-
-    if(nr<1){
-
-      warning('There is no feature returned.'); 
-
-      return()
-
-    }
-
-    sql <- sprintf("SELECT f_geometry_column from geometry_columns WHERE f_table_name='%s'",tmpTbl) 
-
-    geo <- dbGetQuery(con,sql)
-
-    if(length(geo)>1){
-      tname <- sprintf("%s(%s)",tmpTbl,geo$f_geometry_column[1])
-    }else{
-      tname <- tmpTbl;
-    }
-    out <- readOGR(dsn,tname)
-
-    on.exit({
-      if(exists("con")){
-        sql <- sprintf("DROP TABLE %s",tmpTbl)
-        dbSendQuery(con,sql)
-        mxDbClearResult(con)
-      }
-    })
-
-    return(out)
-  },
-  finally = {
-     mxDbClearResult(con,FALSE)
-  }
-  )
-
-}
-
-
-#' Geojson from postGIS base
-#' @param query PostGIS spatial sql querry.
-#' @return geojson list
-#' @export
-mxDbGetGeoJSON<-function(query,fromSrid="4326",toSrid="4326",asList=FALSE){
-
-  # NOTE: check package geojsonio for topojson and geojson handling.
-  # https://github.com/ropensci/geojsonio/issues/61
-  conf <- mxGetDefaultConfig()
-  d <- config[['pg']]
-  dsn <-gsub("\n|\\s+"," ",sprintf(
-      "dbname='%1$s'
-      host='%2$s'
-      port='%3$s'
-      user='%4$s'
-      password='%5$s'",
-      d$dbname,
-      d$host,
-      d$port,
-      d$user,
-      d$password
-      ))
-
-  tmp <- paste0(tempfile(),".geojson")
-
-  cmd <-gsub("\n|\\s+"," ",sprintf(
-      "ogr2ogr -f GeoJSON
-      %2$s
-      PG:\"%1$s\"
-      -sql '%3$s'
-      -s_srs 'EPSG:%4$s'
-      -t_srs 'EPSG:%5$s'",
-      dsn,
-      tmp,
-      query,
-      fromSrid,
-      toSrid
-      )
-    )
-
-  system(cmd)
-
-  if(asList){
-    return(jsonlite::fromJSON(tmp))
-  }else{
-    return(tmp)
-  }
-}
-
-mxDbExport <- function(
-  idTable = NULL,
-  fileName = NULL,
-  fileNameZip = NULL,
-  fromSrid = "4326",
-  toSrid = "4326",
-  formatOut = "GeoJSON",
-  onStart = function(){},
-  onEnd = function(){},
-  onErrorClient = function(){},
-  onErrorAdmin = function(){}
-  ){
-
-  #
-  # Init variables
-  #
-  fileNameNoExt <- removeExtension(fileName) 
-  pathDirDownload <- .get(config,c("resources","downloads"))
-  nameDirDownloadFile <- fileNameNoExt 
-  pathDirDownloadFile <- file.path(pathDirDownload,nameDirDownloadFile)
-  pathFileZip <- file.path(pathDirDownload,fileNameZip)
-  isShapeFile <- formatOut == "ESRI Shapefile"
-  pathFile <- ifelse(isShapeFile,pathDirDownloadFile,file.path(pathDirDownloadFile,fileName))
-  fileNameError <- "error_" + fileNameNoExt + ".txt"
-  pathFileError <- file.path(pathDirDownload,fileNameError)
-  fileCommand <- tempfile()
-
-  #
-  # cleaning
-  #
-  if(file.exists(pathDirDownloadFile)){
-    unlink(pathDirDownloadFile,recursive=T)
-  }
-
-  if(file.exists(pathFileZip)){
-    unlink(pathFile,recursive=T)
-  }
-
-  files <- list.files(pathDirDownload)
-
-  for(f in files){
-    old <- isTRUE(difftime(Sys.time(),file.info(f)$mtime,units="secs") > 84400)
-    if(old){
-      file.remove(f)
-    }
-  }
-
-  dir.create(pathDirDownloadFile,showWarnings=F,recursive=TRUE)
-
-  #
-  # Postgres config
-  #
-  d <- .get(config,c('pg'))
-
-  clean <- function(p){
-    gsub("\\$","\\\\$",p)
-  }
-
-  postgresData <- 
-    "PG:\"dbname='"+ d$dbname +"'" +
-    " host='" + d$host + "'" +
-    " port='" + d$port + "'" +
-    " user='" + d$user + "'" +
-    " password='"+ clean(d$password) + "'\"" +
-    " \""+ idTable + "\""
-  #
-  # Init
-  #
-  cmdInit <- "cd " + pathDirDownload  
-
-  #
-  # Command to ogr
-  #
-  cmdOgr <- "ogr2ogr" + 
-    " -f '" + formatOut + "'"+
-    " " + pathFile +
-    " " + postgresData +
-    " -t_srs 'EPSG:" + toSrid + "'" +
-    " -s_srs 'EPSG:" + fromSrid + "'" +
-    " -nln " + fileNameNoExt + 
-    " 2> " + fileNameError
-
-  cmdZip <- "zip -r " +
-    " " + fileNameZip +
-    " " + fileNameNoExt +
-    " 2> " + fileNameError
-
-  cmdClean <-
-    " rm -rf  " + pathDirDownloadFile + " && " +
-    " rm -rf  " + file.path(pathDirDownload,"*.txt") 
-
-  #
-  # Try catch 
-  # 
-  cmd = "sleep 10;  ({ " + 
-    cmdInit + " && " + 
-    cmdOgr +" && " + 
-    cmdZip + " && " + 
-    onEnd() + " ; } || { " + 
-    onErrorClient() + " && " + 
-    onErrorAdmin(pathFileError) + " ; } ; " + cmdClean + ") "
-
-  #
-  #
-  #
-  write(cmd,fileCommand)
-  system("sh " + fileCommand, wait=FALSE)
-  onStart()
-
 }
 
 #' Get layer extent
@@ -914,78 +689,6 @@ mxJsonToList <- function(res){
 }
 
 mxJsonToList <- memoise(mxJsonToList)
-
-
-#' Build encrypted query for a vt view
-#' @param sourceData {list} Source settings
-#' @param sourceDataMask {list} Source settings
-#' @param idView View id (view$id)
-#' @export
-#mxViewMakeQuery <- function( def = NULL, defMask = NULL, idView = NULL){
-
-  #out <-  list()
-
-  #if(!noDataCheck(def)){
-
-    #variableName = def[["variableName"]]
-    #variablesNamesAdd = def[["variableNameAdd"]]
-    #layerName = def[["layerName"]]
-    #layerNameMask = defMask[["layerMaskName"]]
-
-    ##templateOverLap = config[[c("templates","pgViewOverlap")]]
-    ##templateSimple = config[[c("templates","pgViewSimple")]]
-
-    #geomCol = config[[c("pg","geomCol")]]
-
-    #hasVariable = !noDataCheck(variableName)
-    #hasLayer = !noDataCheck(layerName)
-    #hasLayerMask = !noDataCheck(layerNameMask)
-
-    #if( hasLayer && hasVariable){
-
-      ##
-      ## Check if time is available
-      ##
-      #timeVars <- def[["timeVariables"]]
-
-      #if(!noDataCheck(timeVars)){
-        #variablesNamesAdd <- c(
-          #timeVars,
-          #variablesNamesAdd
-          #)
-      #}
-
-      #if( hasLayerMask ){
-        ## 
-        ## Use overlap template
-        ##
-        #query <- infuse(
-          #file_or_string = templateOverLap,
-          #geom = geomCol,
-          #variableName = c( variableName, variablesNamesAdd ),
-          #layerName = layerName,
-          #layerMaskName = layerNameMask
-          #)
-       
-      #}else{
-        ##
-        ## Use simple template
-        ##
-        #query <- infuse(
-          #file_or_string = templateSimple,
-          #geom = geomCol,
-          #variableName = c(variableName, variablesNamesAdd),
-          #layerName = layerName
-          #) 
-      #}
-
-      #out = mxDbEncrypt(query)
-    #}
-  #}
-  #return(out)
-
-#}
-
 
 
 
@@ -1205,145 +908,6 @@ mxDbGetFilterCenter<-function(table=NULL,column=NULL,value=NULL,geomColumn='geom
 
 }
 
-
-
-#' Add geojson list or file to db postgis
-#' @param geojsonList list containing the geojson data
-#' @param geojsonPath path to the geojson
-#' @param tableName Name of the postgis layer / table 
-mxDbAddGeoJSON  <-  function(
-  geojsonList=NULL,
-  geojsonPath=NULL,
-  tableName=NULL,
-  archiveIfExists=T,
-  archivePrefix="mx_archives",
-  onProgress=function(x){}
-  ){
-
-  conf <- mxGetDefaultConfig()
-  d <-config[['pg']]
-
-
-  # NOTE : no standard method worked.
-  # rgdal::writeOGR (require loading in r AND did not provide options AND did not allow mixed geometry) or gdalUtils::ogr2ogr failed (did not set -f option!).
-
-  gL <- geojsonList
-  gP <- geojsonPath
-  tN <- tableName
-  timestamp <- format(Sys.time(),"%Y_%m_%d_%H_%M_%S")
-  aN <- paste0(archivePrefix,"_",tN,"_",timestamp)
-  tE <- mxDbExistsTable(tN)
-  aE <- mxDbExistsTable(aN)
-
-
-  if(!is.null(gL) && typeof(gL) == "list"){
-    gP <- tempfile(fileext=".GeoJSON")
-    gJ <- jsonlite::toJSON(gL,auto_unbox=T)
-    write(gJ,gP)
-  }
-
-  #
-  # Stop if file does not exists
-  #
-  stopifnot(file.exists(gP))
-  #
-  # overwrite handling
-  #
-  if(tE && isTRUE(archiveIfExists) && aE){
-
-    aNameTable <- aN
-    aNameSeq <- paste0(aN,"_seq")
-    aNameIdx <- paste0(aN,"_idx")
-    aNamePkey <- paste0(aN,"_pkey")
-
-    qdb <- sprintf("
-      ALTER TABLE IF EXISTS %1$s 
-      RENAME TO %2$s;
-      ALTER SEQUENCE IF EXISTS %1$s_gid_seq 
-      RENAME TO %3$ ;
-      ALTER INDEX IF EXISTS %1$s_geom_geom_idx
-      RENAME TO %4$ ;
-      ALTER INDEX IF EXISTS %1$s_pkey
-      RENAME TO %5$s ;
-      ",
-      tN,
-      aNameTable,
-      aNameIdx,
-      aNameSeq,
-      aNamePkey
-      )
-
-    mxDbGetQuery(qdb) 
-  }
-  if(aE){
-    stop("Archive requested but already existing ! ArchiveName =  %a",aN)
-  }else{
-
-    #
-    # Import into db
-    #
-
-
-    nFeatures <- mxDbGeojsonCountFeatures(gP) 
-
-    if(nFeatures==0){
-      stop("Can't get the number of features :( ")
-    }
-
-    tD <- sprintf("PG:dbname=%s host=%s port=%s user=%s password=%s",
-      d$dbname,d$host,d$port,d$user,d$password
-      )
-
-    cmd = sprintf(
-      "ogr2ogr \\
-      -gt 1001 \\
-      -t_srs \"EPSG:4326\" \\
-      -s_srs \"EPSG:4326\" \\
-      -geomfield \"geom\" \\
-      -lco FID=\"gid\" \\
-      -lco GEOMETRY_NAME=\"geom\" \\
-      -lco SCHEMA=\"public\" \\
-      -f \"PostgreSQL\" \\
-      -overwrite \\
-      -nln \"%1$s\" \\
-      -nlt \"PROMOTE_TO_MULTI\" \\
-      \'%2$s\' \\
-      \'%3$s\'"
-      #\"OGRGeoJSON\""
-      , tN
-      , tD
-      , gP
-      )
-
-    system(cmd,wait=F)
-
-  }
-
-}
-
-
-mxDbGeojsonCountFeatures <- function(path){
-  nFeatures <- 0
-
-  try(silent=T,{
-    if(file.exists(path)){
-      #
-      # NOTE:
-      # Fragile method, but on large file, very fast. More than node,or jq. 
-      # But very fragile
-      #
-      cmdCount <- sprintf("grep -o '\"geometry\": *{'  '%1$s' | wc -l",path)
-      nFeatures <- system(cmdCount, intern=T)
-      if(!noDataCheck(nFeatures)){
-        nFeatures = as.numeric(nFeatures) 
-    }}
-  })
-
-  nFeatures
-}
-
-
-
 #' List existing table from postgresql
 #'
 #' Shortcut to create a connection, get the list of table and close the connection, using a dbInfo list. 
@@ -1351,7 +915,7 @@ mxDbGeojsonCountFeatures <- function(path){
 #' @param dbInfo Named list with dbName,host,port,user and password
 #' @export
 mxDbListTable<- function(){
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
   res <- dbListTables(con)
   return(res)
 }
@@ -1364,7 +928,7 @@ mxDbListTable<- function(){
 #' @export
 mxDbExistsTable<- function(table){
   if(is.null(table)) return(FALSE)
-  con <- mxDbAutoCon();
+  con <- mxDbGetCon();
   res <- dbExistsTable(con,table)
   return(res)
 }
@@ -1436,7 +1000,7 @@ mxDbAddData <- function(data,table){
   stopifnot(class(data)=="data.frame")
   stopifnot(class(table)=="character")
 
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
 
   tAppend <- FALSE
   tExists <- FALSE
@@ -1528,7 +1092,7 @@ mxDbAddRow <- function(data,table){
     paste(dataProc,collapse=",")
     )
 
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
   res <- list()
   dbExecute(con, q )
 }
@@ -1575,7 +1139,7 @@ mxDbWriteSpatial <- function(spatial.df=NULL, schemaname="public", tablename, ov
 
   mxDbDropLayer(tablename)
 
-  con <- mxDbAutoCon()
+  con <- mxDbGetCon()
   # Create well known text and add to spatial DF
   spatialwkt <- writeWKT(spatial.df, byid=TRUE)
   spatial.df$wkt <- spatialwkt
@@ -2658,44 +2222,3 @@ mxDbGetDistinctTableFromSql <- function(sql){
 }
 
 
-#' Get db connection
-#' @param {Boolean} useMaster : force to use master node
-#' @export
-mxDbAutoCon <- function(useMaster=FALSE){ 
-  useMaster = isTRUE(useMaster)
-  pg <- .get(config,c("pg"))
-  con <- ifelse(useMaster,'dbConMaster','dbCon')
-  dbCon <- pg[[con]]
-
-  if(noDataCheck(dbCon) || !isPostgresqlIdCurrent(dbCon)){
-    mxDebugMsg("Create new connection")
-    drv <- dbDriver("PostgreSQL")
-    dbCon <- dbConnect(drv, 
-      dbname = pg$dbname,
-      host = ifelse(useMaster,pg$hostMaster,pg$host),
-      port = ifelse(useMaster,pg$portMaster,pg$port),
-      user = pg$user,
-      password = pg$password
-      )
-    config <<- .set(config,c("pg",con),dbCon)
-  }
-
-  return(dbCon)
-
-}
-
-#' Close db connection
-#' 
-#' @export
-mxDbCloseCon <- function(){
-  dbCon <- mxDbAutoCon()
-  if(isPostgresqlIdCurrent(dbCon)){
-    mxDebugMsg("Remove connection")
-    dbDisconnect(dbCon)
-  }
-  dbConMaster <- mxDbAutoCon(TRUE)
-  if(isPostgresqlIdCurrent(dbConMaster)){
-    mxDebugMsg("Remove master connection")
-    dbDisconnect(dbConMaster)
-  }
-}

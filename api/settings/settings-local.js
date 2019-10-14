@@ -17,6 +17,8 @@ module.exports = {
     name : env.POSTGRES_DB,
     port : env.POSTGRES_PORT,
     host : env.POSTGRES_HOST,
+    poolMin : env.POSTGRES_POOL_MIN,
+    poolMax : env.POSTGRES_POOL_MAX,
     write : {
       user : env.POSTGRES_USER_WRITE,
       password : env.POSTGRES_USER_WRITE_PASSWORD

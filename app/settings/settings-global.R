@@ -137,7 +137,9 @@ config[["pg"]] = list(
     "projects"="mx_projects",
     "sources"="mx_sources",
     "config"="mx_config"
-    )
+    ),
+  poolMin = 1,
+  poolMax = 1
   )
 
 #
