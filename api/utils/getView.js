@@ -3,7 +3,7 @@
  */
 //const clientPgWrite = require.main.require("./db").pgWrite;
 const clientPgRead = require.main.require('./db').pgRead;
-const clientRedis = require.main.require('./db').redis;
+const clientRedis = require.main.require('./db').clientRedis;
 const utils = require('./utils.js');
 const template = require('../templates');
 const crypto = require('crypto');

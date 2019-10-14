@@ -23,10 +23,9 @@ var pgWrite = new Pool({
 exports.pgWrite = pgWrite;
 
 pgWrite.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  console.error('Unexpected error on postgres client write', err);
   process.exit(-1);
 });
-
 
 var pgRead = new Pool({
   host: s.db.host,
@@ -40,10 +39,17 @@ var pgRead = new Pool({
 exports.pgRead = pgRead;
 
 pgRead.on('error', (err) => {
-  console.error('Unexpected error on idle client', err);
+  console.error('Unexpected error on postgres client read', err);
   process.exit(-1);
 });
 
-exports.redis = redis.createClient({
+var clientRedis = redis.createClient({
   url: 'redis://' + s.redis.host + ':' + s.redis.port
 });
+
+clientRedis.on('error', (err) => {
+  console.error('Unexpected error on redis client', err);
+  process.exit(-1);
+});
+
+exports.clientRedis = clientRedis;
