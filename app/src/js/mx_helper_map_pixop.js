@@ -1,6 +1,6 @@
 import {Spotlight} from './pixop/spotlight.js';
 
-export function activateSpotlight(enable,elToggle) {
+export function activateSpotlight(enable, elToggle) {
   const map = mx.helpers.getMap();
   const elSelectNum = document.getElementById('selectNLayersOverlap');
   const elTextArea = document.getElementById('txtAreaOverlap');
@@ -89,7 +89,9 @@ export function activateSpotlight(enable,elToggle) {
   }
 
   function destroy() {
-    mx.spotlight.destroy();
+    if (mx.spotlight instanceof Spotlight) {
+      mx.spotlight.destroy();
+    }
     elToggle.classList.remove('active');
   }
 }

@@ -279,8 +279,8 @@ mapControlApp.prototype.onAdd = function(map) {
       action: function(e) {
         var el = e.target;
         var cl = 'active';
-        var enable = el.classList.contains(cl);
         el.classList.toggle(cl);
+        var enable = el.classList.contains(cl);
         h.activateSpotlight(enable, el);
       }
     },
