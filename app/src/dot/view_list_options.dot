@@ -4,21 +4,8 @@
 {{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
 {{ var isCurrentProject =  mx.settings.project === view.project ; }}
 <div>
-  {{?view.type=='sm'}}
-  {{?}}
   {{?view.type!='sm'}}
-  {{?view.type=='vt'}}
-  {{ var rules = h.path(view,'data.style.rules',[]);}}
-  {{?rules.length > 0}}
-  <div class="mx-view-item-legend-vt" id="check_view_legend_{{=view.id}}"></div>
-  {{?}}
-  {{?}}
-  {{?view.type=='rt'}}
-  <div class="mx-view-item-legend-rt" id="check_view_legend_{{=view.id}}"></div>
-  {{?}}
-  {{?view.type=='cc'}}
-  <div class="make-readmore mx-view-item-legend-cc" id="check_view_legend_{{=view.id}}"></div>
-  {{?}}
+  <div class="mx-view-legend-container" id="view_legend_container_{{=view.id}}"></div>
   {{?}}
   <div>
     {{?h.path(view,'data.abstract.' + langAbstract)}}

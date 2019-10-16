@@ -1,23 +1,24 @@
 .mx-view-item-legend-vt,
 .mx-view-item-legend-rt,
-.mx-view-item-legend-cc{
+.mx-view-item-legend-cc {
 }
 
-
 .mx-legend-box {
-  max-height: 150px;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding:5px;
+  padding: 5px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+}
+.mx-view-tgl-more-container .mx-legend-box {
+  max-height: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /**
 * Legend for raster
 */
-.mx-view-item-legend-rt{
-  cursor:zoom-in;
+.mx-view-item-legend-rt {
+  cursor: zoom-in;
 }
 
 .mx-view-item-legend-rt img {
@@ -44,12 +45,14 @@
   padding: 10px;
 }
 
-.mx-legend-vt-rule>.mx-legend-vt-rule-input {
+.mx-legend-vt-rule > .mx-legend-vt-rule-input {
   display: none;
 }
 
-.mx-legend-vt-rule>.mx-legend-vt-rule-input:checked~.mx-legend-vt-rule-content:before {
-  content: "=";
+.mx-legend-vt-rule
+  > .mx-legend-vt-rule-input:checked
+  ~ .mx-legend-vt-rule-content:before {
+  content: '=';
   margin: 0 3px 0 3px;
   font-size: 0.9em;
   font-weight: normal;
@@ -80,4 +83,3 @@
   font-size: 0.9em;
   font-weight: normal;
 }
-

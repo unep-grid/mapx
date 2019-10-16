@@ -3,7 +3,6 @@ const path = require('path');
 const IconFontPlugin = require('icon-font-loader').Plugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
-
 /**
  * To remove in dev
  */
@@ -56,7 +55,7 @@ module.exports = {
     rules: [
       {
         test: /\.less$/,
-        use: ['style-loader','css-loader','less-loader']
+        use: ['style-loader', 'css-loader', 'less-loader']
       },
       {
         test: /\.css$/,

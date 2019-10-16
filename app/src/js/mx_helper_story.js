@@ -652,7 +652,8 @@ export function storyUpdateSlides(o) {
       mx.helpers.storyPlayStep({
         id: 'map_main',
         view: o.view,
-        stepNum: s
+        stepNum: s,
+        elLegendContainer : o.data.elLegendContent
       });
       data.stepActive = s;
 
@@ -1103,20 +1104,42 @@ export function storyBuild(o) {
 
   var elMapContainer = o.data.map.getContainer();
 
+  /**
+  * Legends container
+  */
   o.data.elLegendContainer = el(
     'div',
-    {class: 'mx-story-legend-container'},
+    {class: ['mx-story-legend-container']},
     (o.data.elBtnLegend = el('div', {
       class: ['mx-story-btn-legend', 'fa', 'fa-list-ul', 'shadow'],
       dataset: {
         lang_key: 'btn_story_legend'
       }
     })),
-    (o.data.elLegend = el('div', {
-      class: ['mx-story-legend']
-    }))
+    (o.data.elLegend = el(
+      'div',
+      {
+        class: ['mx-story-legend']
+      },
+      el(
+        'span',
+        {
+          class: 'mx-story-legend-title'
+        },
+        h.getDictItem('story_legends')
+      ),
+      /**
+      * Where the legend will appear
+      */
+      (o.data.elLegendContent = el('div', {
+        class: 'mx-story-legend-content'
+      }))
+    ))
   );
 
+  /**
+  * Story map container
+  */
   o.data.elStoryContainer = el(
     'div',
     {
@@ -1287,11 +1310,12 @@ export function storyPlayStep(o) {
   o = o || {};
   o.id = o.id || 'map_main';
   const h = mx.helpers;
-  var steps = h.path(o, 'view.data.story.steps', []);
-  var data = h.path(mx.data, 'story.data', {});
-  var stepNum = o.stepNum;
+  const steps = h.path(o, 'view.data.story.steps', []);
+  const data = h.path(mx.data, 'story.data', {});
+  const elLegendContainer = o.elLegendContainer;
+  const stepNum = o.stepNum;
+  const m = h.getMapData();
   var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
-  var m = h.getMapData();
 
   if (steps.length === 0) {
     return;
@@ -1312,6 +1336,40 @@ export function storyPlayStep(o) {
     return v.view;
   });
   easing = h.easingFun({type: anim.easing, power: anim.easing_power});
+
+
+  /**
+   * Add view if not alredy visible
+   */
+  h.onNextFrame(function() {
+    vVisible = h.getViewsOnMap(o);
+    vToRemove = h.getArrayDiff(vVisible, vStep);
+    vToAdd = h.getArrayDiff(vStep, vVisible);
+
+    vToAdd.forEach(function(v, i) {
+      var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
+
+      h.renderView({
+        id: o.id,
+        idView: v,
+        before: vPrevious,
+        noTools: true,
+        elLegendContainer : elLegendContainer
+      });
+    });
+
+    vToRemove.forEach(function(v) {
+      h.closeView({
+        id: o.id,
+        idView: v
+      });
+    });
+
+    h.updateViewOrder({
+      order: vStep,
+      id: o.id
+    });
+  });
 
   /**
    * Fly to position
@@ -1335,35 +1393,4 @@ export function storyPlayStep(o) {
       center: [pos.lng, pos.lat]
     });
   }
-
-  /**
-   * Add view if not alredy visible
-   */
-  h.onNextFrame(function() {
-    vVisible = h.getViewsOnMap(o);
-    vToRemove = h.getArrayDiff(vVisible, vStep);
-    vToAdd = h.getArrayDiff(vStep, vVisible);
-
-    vToAdd.forEach(function(v, i) {
-      var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-      h.renderView({
-        id: o.id,
-        idView: v,
-        before: vPrevious,
-        noUi: true
-      });
-    });
-
-    vToRemove.forEach(function(v) {
-      h.closeView({
-        id: o.id,
-        idView: v
-      });
-    });
-
-    h.updateViewOrder({
-      order: vStep,
-      id: o.id
-    });
-  });
 }

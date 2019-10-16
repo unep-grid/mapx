@@ -261,7 +261,8 @@ export function viewsListRenderNew(o) {
    * Handle view click
    */
   mx.listenerStore.addListener({
-    target: elViewsList,
+    //target: elViewsList,
+    target: document.body,
     bind: mData.viewsList,
     type: 'click',
     idGroup: 'view_list',
@@ -286,7 +287,7 @@ export function viewsListRenderNew(o) {
   }
 
   /*
-   * Render view
+   * Render view item
    */
   function handleRenderItemContent(el, data) {
     const li = this;
@@ -302,7 +303,6 @@ export function viewsListRenderNew(o) {
     /**
      * No given element, assume it's a view
      */
-
     const view = mData.views.find((v) => v.id === data.id);
     const missing = !h.isView(view);
 
@@ -319,6 +319,7 @@ export function viewsListRenderNew(o) {
      */
     const viewBase = new ViewBase(view);
     const elView = viewBase.getEl();
+    view._el = elView;
     const open = data.open === true;
     if (elView) {
       el.appendChild(elView);

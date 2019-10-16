@@ -7958,6 +7958,18 @@
     "ps": ""
   },
   {
+    "id": "story_legends",
+    "en": "Legends",
+    "fr": "Légendes",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "select_optional_view_attribute",
     "en": "Select attribute",
     "fr": "Selectionnez un attribut",

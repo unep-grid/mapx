@@ -344,7 +344,6 @@ export function initMapxApp(o) {
     return;
   }
 
-
   /**
    * Send loading confirmation to shiny
    */
@@ -461,7 +460,6 @@ export function initMapxApp(o) {
     });
   });
 }
-
 
 /**
  * Handle click event
@@ -644,6 +642,9 @@ export function cleanRemoveModules(views) {
     }
     if (h.isFunction(v._onRemoveDashboard)) {
       v._onRemoveDashboard();
+    }
+    if (h.isElement(v._elLegend)) {
+      v._elLegend.remove();
     }
   });
 }
@@ -2051,16 +2052,35 @@ export function existsInList(li, it, val, inverse) {
  * @param {Object} o Options
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
+ * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function renderViewCc(o) {
+  const h = mx.helpers;
   const view = o.view;
   const map = o.map;
   const methods = mx.helpers.path(view, 'data.methods');
 
-  if (!methods) {
+  const elOldLegend = view._elLegend;
+  const idView = view.id;
+  const elView = h.getViewEl(view);
+  const idSource = idView + '-SRC';
+  const idLegend = 'view_legend_' + idView;
+  const idLegendContainer = 'view_legend_container_' + idView;
+  const elLegendContainer =
+    o.elLegendContainer || elView.querySelector('#' + idLegendContainer);
+
+  if(!methods || !elLegendContainer){
     return Promise.resolve(true);
   }
+
+  if(elOldLegend){
+   elOldLegend.remove();
+  }
+
+  const elLegend = h.el('div', {class: 'mx-view-legend-cc', id: idLegend});
+  elLegendContainer.appendChild(elLegend);
+  view._elLegend = elLegend;
 
   return new Promise(function(resolve, reject) {
     const r = new Function(methods)();
@@ -2077,14 +2097,13 @@ function renderViewCc(o) {
     const opt = {
       map: map,
       view: view,
-      idView: view.id,
-      idSource: view.id + '-SRC',
-      idLegend: 'check_view_legend_' + view.id,
+      idView: idView,
+      idSource: idSource,
+      idLegend: idLegend,
+      elLegend : elLegend,
       onClose: cc.onClose,
       onInit: cc.onInit
     };
-
-    opt.elLegend = document.getElementById(opt.idLegend);
 
     if (opt.map.getSource(opt.idSource)) {
       opt.map.removeSource(opt.idSource);
@@ -2111,24 +2130,34 @@ function renderViewCc(o) {
  * @param {Object} o Options
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
+ * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function renderViewRt(o) {
   const view = o.view;
   const map = o.map;
+  const h = mx.helpers;
+
   return new Promise((resolve) => {
-    if (!mx.helpers.path(view, 'data.source.tiles')) {
+    if (!h.path(view, 'data.source.tiles')) {
       resolve(false);
     }
-
+    const elOldLegend = view._elLegend;
+    const idView = view.id;
+    const elView = h.getViewEl(view);
+    const idSource = idView + '-SRC';
+    const idLegend = 'view_legend_' + idView;
+    const idLegendContainer = 'view_legend_container_' + idView;
+    const legend = h.path(view, 'data.source.legend');
+    const extContainer = h.isElement(o.elLegendContainer) ;
     /**
      * source as already be added. Add layer
      */
     map.addLayer(
       {
-        id: view.id,
+        id: idView,
         type: 'raster',
-        source: view.id + '-SRC'
+        source: idSource
       },
       o.before
     );
@@ -2136,48 +2165,64 @@ function renderViewRt(o) {
     /*
      * Add legend
      */
-    const legend = mx.helpers.path(view, 'data.source.legend');
-    const elLegend = document.querySelector('#check_view_legend_' + view.id);
+    const elLegendContainer = extContainer ?
+      o.elLegendContainer : elView.querySelector('#' + idLegendContainer);
+
+    if (!elLegendContainer) {
+      return;
+    }
+
+    if (elOldLegend) {
+      elOldLegend.remove();
+    }
 
     if (legend) {
+      const elLegend = h.el('div', {class: 'mx-view-legend-rt', id: idLegend});
       const defaultImg = function() {
         this.onerror = null;
         this.src = require('../../src/svg/no_legend.svg');
       };
+      /**
+       * Save ref for removal
+       */
+      view._elLegend = elLegend;
 
-      if (elLegend) {
-        const oldImg = elLegend.querySelector('img');
-        if (!oldImg) {
-          const img = new Image();
-          img.src = legend;
-          img.alt = 'Legend';
-          img.setAttribute('crossorigin', 'anonymous');
-          img.onerror = defaultImg;
-          img.style = 'cursor:zoom.in';
-          elLegend.appendChild(img);
-          img.onload = function() {
-            elLegend.classList.add('mx-legend-box');
-          };
-          elLegend.onclick = function() {
-            const title = mx.helpers.getLabelFromObjectPath({
-              obj: view,
-              path: 'data.title',
-              defaultKey: 'noTitle'
-            });
-            const imgModal = new Image();
-            imgModal.src = legend;
-            imgModal.setAttribute('crossorigin', 'anonymous');
-            imgModal.onerror = defaultImg;
-            imgModal.alt = 'Legend';
-            mx.helpers.modal({
-              title: title,
-              id: 'legend-raster-' + view.id,
-              content: imgModal,
-              addBackground: false
-            });
-          };
-        }
-      }
+      /**
+       * Create an image with given source
+       */
+      const img = new Image();
+      img.src = legend;
+      img.alt = 'Legend';
+      img.setAttribute('crossorigin', 'anonymous');
+      img.onerror = defaultImg;
+      img.style.cursor = 'zoom-in';
+      img.onload = function() {
+        elLegend.classList.add('mx-legend-box');
+      };
+      elLegend.appendChild(img);
+
+      elLegend.onclick = function() {
+        /**
+         * Show a bigger image if clicked
+         */
+        const title = h.getLabelFromObjectPath({
+          obj: view,
+          path: 'data.title',
+          defaultKey: 'noTitle'
+        });
+        const imgModal = new Image();
+        imgModal.src = legend;
+        imgModal.setAttribute('crossorigin', 'anonymous');
+        imgModal.onerror = defaultImg;
+        imgModal.alt = 'Legend';
+        h.modal({
+          title: title,
+          id: 'legend-raster-' + view.id,
+          content: imgModal,
+          addBackground: false
+        });
+      };
+      elLegendContainer.appendChild(elLegend);
     }
     resolve(true);
   });
@@ -2188,30 +2233,36 @@ function renderViewRt(o) {
  * @param {Object} o Options
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
+ * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function renderViewVt(o) {
-  const p = mx.helpers.path;
+  const h = mx.helpers;
+  const p = h.path;
 
   return new Promise((resolve) => {
-    var view = o.view,
-      map = o.map,
-      layers = [],
-      def = p(view, 'data'),
-      idSource = view.id + '-SRC',
-      idView = view.id,
-      style = p(view, 'data.style'),
-      rules = p(view, 'data.style.rules', []),
-      zoomConfig = p(view, 'data.style.zoomConfig', {}),
-      nulls = p(view, 'data.style.nulls', [])[0],
-      hideNulls = p(view, 'data.style.hideNulls', false),
-      geomType = p(view, 'data.geometry.type'),
-      source = p(view, 'data.source'),
-      num = 0,
-      styleCustom,
-      defaultOrder = true;
+    const view = o.view;
+    const map = o.map;
+    const def = p(view, 'data');
+    const idSource = view.id + '-SRC';
+    const idView = view.id;
+    const style = p(view, 'data.style');
+    const zoomConfig = p(view, 'data.style.zoomConfig', {});
+    const nulls = p(view, 'data.style.nulls', [])[0];
+    const hideNulls = p(view, 'data.style.hideNulls', false);
+    const geomType = p(view, 'data.geometry.type','point');
+    const source = p(view, 'data.source',{});
+    const elView = h.getViewEl(view);
+    const elOldLegend = view._elLegend;
+    const idLegend = 'view_legend_' + idView;
+    const idLegendContainer = 'view_legend_container_' + idView;
+    const idSourceLayer = p(source, 'layerInfo.name');
+    var layers = [];
+    var num = 0;
+    var defaultOrder = true;
+    var rules = p(view, 'data.style.rules', []);
+    var styleCustom;
 
-    const idSourceLayer = mx.helpers.path(source, 'layerInfo.name');
     if (!idSourceLayer) {
       resolve(false);
     }
@@ -2235,7 +2286,7 @@ export function renderViewVt(o) {
      */
     if (!view._meta) {
       /**
-       * ! metadata are added erlier, using mx.helpers.addSourceMetadataToView()
+       * ! metadata are added erlier, using h.addSourceMetadataToView()
        */
       view._meta = {};
     }
@@ -2250,7 +2301,7 @@ export function renderViewVt(o) {
       return r && r.value !== undefined;
     });
     rules = rules instanceof Array ? rules : [rules];
-    rules = mx.helpers.clone(rules);
+    rules = h.clone(rules);
     if (nulls && !hideNulls) {
       nulls.isNullRule = true;
       rules.push(nulls);
@@ -2396,8 +2447,8 @@ export function renderViewVt(o) {
     if (hasStyleRules && !hasRuleAll && !hasStyleCustom) {
       /* convert opacity to rgba */
       rules.forEach(function(rule) {
-        rule.rgba = mx.helpers.hex2rgba(rule.color, rule.opacity);
-        rule.rgb = mx.helpers.hex2rgba(rule.color);
+        rule.rgba = h.hex2rgba(rule.color, rule.opacity);
+        rule.rgb = h.hex2rgba(rule.color);
       });
 
       /**
@@ -2416,7 +2467,7 @@ export function renderViewVt(o) {
               ? nextRule.value
               : max
             : max;
-        const isNumeric = p(view, 'data.attribute.type') === 'number';
+        const isNumeric = p(view, 'data.attribute.type', 'string') === 'number';
         const idView = view.id;
         const filter = ['all'];
         const attr = def.attribute.name;
@@ -2571,11 +2622,22 @@ export function renderViewVt(o) {
        * - Set sprite path
        */
       if (hasStyleRules) {
-        const elLegend = document.querySelector(
-          '#check_view_legend_' + view.id
-        );
+        const elLegend = h.el('div', {
+          class: 'mx-view-item-legend-vt'
+        });
+        /**
+         * Save ref for removal
+         */
+        view._elLegend = elLegend;
+        
 
-        if (elLegend) {
+        /*
+         * Add legend
+         */
+        const elLegendContainer =
+          o.elLegendContainer || elView.querySelector('#' + idLegendContainer);
+
+        if (elLegendContainer) {
           for (var i = 0; i < rules.length; i++) {
             if (rules[i]) {
               const ruleHasSprite =
@@ -2616,6 +2678,7 @@ export function renderViewVt(o) {
            * Add legend using template
            */
           elLegend.innerHTML = mx.templates.viewListLegend(view);
+          elLegendContainer.appendChild(elLegend);
         }
       }
     }
@@ -2629,7 +2692,7 @@ export function renderViewVt(o) {
  * @param {Object} o Options
  * @param {String} o.id map id
  * @param {Object} o.view View item
- * @param {Boolean} o.noUi Don't add ui components
+ * @param {Boolean} o.noTools Don't add tools
  */
 export function addOptions(o) {
   const h = mx.helpers;
@@ -2649,7 +2712,7 @@ export function addOptions(o) {
   view._setFilter = mx.helpers.viewSetFilter;
   view._setOpacity = mx.helpers.viewSetOpacity;
 
-  if (!o.noUi) {
+  if (!o.noTools) {
     const elOptions = document.querySelector(
       "[data-view_options_for='" + view.id + "']"
     );
@@ -2669,7 +2732,7 @@ export function addOptions(o) {
     }
 
     /*
-     * Make sure that the view is open
+     * Open the view
      */
     h.viewOpen(view);
 
@@ -2685,12 +2748,21 @@ export function addOptions(o) {
   }
 }
 
+
+/**
+ * Get view el 
+ * @param {Object} view View 
+ */
+export function getViewEl(view) {
+  return view._el || document.querySelector("[data-view_id='" + view.id + "']");
+}
+
 /**
  * Force view checkbox
  * @param {Object} view View to open
  */
 export function viewOpen(view) {
-  const elView = document.querySelector("[data-view_id='" + view.id + "']");
+  const elView = getViewEl(view);
   if (elView && elView.vb) {
     elView.vb.open();
   }
@@ -2702,7 +2774,8 @@ export function viewOpen(view) {
  * @param {string} o.id map id
  * @param {string} o.idView view id
  * @param {objsect} o.viewData view
- * @param {Boolean} o.noUi Don't add ui components
+ * @param {Boolean} o.noTools Don't add view tools
+ * @param {Element} o.elLegendContainer Legend container
  * @param {string} o.idViewsList id of ui views list element
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
@@ -2769,13 +2842,14 @@ export function renderView(o) {
     h.updateLanguageViewsList({id: idMap});
     h.updateViewsFilter();
   }
+
   /**
    * Add options
    */
   h.addOptions({
     id: idMap,
     view: view,
-    noUi: o.noUi
+    noTools: o.noTools
   });
 
   /**
@@ -2801,14 +2875,16 @@ export function renderView(o) {
         return renderViewRt({
           view: view,
           map: m.map,
-          before: idLayerBefore
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
         });
       },
       cc: function() {
         return renderViewCc({
           view: view,
           map: m.map,
-          before: idLayerBefore
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
         });
       },
       vt: function() {
@@ -2816,14 +2892,16 @@ export function renderView(o) {
           view: view,
           map: m.map,
           debug: o.debug,
-          before: idLayerBefore
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
         });
       },
       gj: function() {
         return renderViewGj({
           view: view,
           map: m.map,
-          before: idLayerBefore
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
         });
       },
       sm: function() {
@@ -2856,6 +2934,14 @@ export function renderView(o) {
   }
 }
 
+/**
+ * Parse view of type gejson (gj) and add it to the map
+ * @param {Object} o Options
+ * @param {Object} o.view View data
+ * @param {Object} o.map Map object
+ * @param {Element} o.elLegendContainer Legend container
+ * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
+ */
 export function renderViewGj(opt) {
   return new Promise((resolve) => {
     const layer = mx.helpers.path(opt.view, 'data.layer');
@@ -3582,23 +3668,22 @@ export function getViewDescription(id, lang) {
 }
 
 /**
-* Get a view's legends or clone. Images are converted in base64
-* (Used in MapComposer)
-* @param {String||Object} id of the legend or view object
-* @param {Object} opt Options
-* @param {Boolean} opt.clone Clone the legend. Default true
-* @param {Boolean} opt.input Keep working inputs. Default false
-* @param {Boolean} opt.base64 Convert all images in base64. Default true
-*/
+ * Get a view's legends or clone. Images are converted in base64
+ * (Used in MapComposer)
+ * @param {String||Object} id of the legend or view object
+ * @param {Object} opt Options
+ * @param {Boolean} opt.clone Clone the legend. Default true
+ * @param {Boolean} opt.input Keep working inputs. Default false
+ * @param {Boolean} opt.base64 Convert all images in base64. Default true
+ */
 export function getViewLegend(id, opt) {
-
-  opt = Object.assign({},{clone:true,input:false,base64:true},opt);
+  opt = Object.assign({}, {clone: true, input: false, base64: true}, opt);
 
   const h = mx.helpers;
   if (h.isView(id)) {
     id = id.id;
   }
-  let elLegend = document.getElementById('check_view_legend_' + id);
+  let elLegend = v._elLegend;
 
   if (elLegend && opt.clone === true) {
     elLegend = elLegend.cloneNode(true);
@@ -3606,7 +3691,7 @@ export function getViewLegend(id, opt) {
   if (elLegend && opt.clone === true && opt.input === false) {
     elLegend.querySelectorAll('input').forEach((e) => e.remove());
   }
-  if( elLegend && opt.clone === true && opt.base64 === true) {
+  if (elLegend && opt.clone === true && opt.base64 === true) {
     mx.helpers.convertAllImagesToBase64(elLegend);
   }
   return elLegend || h.el('div');

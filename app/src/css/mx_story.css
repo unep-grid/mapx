@@ -135,7 +135,7 @@
   min-height: 100% !important;
   min-width: 100% !important;
   object-fit: cover !important;
-  z-index: 0;
+  z-index: -1;
   width: 100% !important;
   height: 100% !important;
   background-size: cover;
@@ -232,16 +232,6 @@
   padding: 10px;
 }
 
-/*.mx-story-step-bullet{*/
-/*cursor: pointer; */
-/*position: relative;*/
-/*display: inline-block;*/
-/*float: left;*/
-/*border: none;*/
-/*border-radius: 50%;*/
-/*margin: 2px;*/
-/*width:30px;*/
-/*}*/
 .mx-story-step-bullet,
 .mx-story-btn-legend {
   cursor: pointer;
@@ -272,12 +262,24 @@
 }
 .mx-story-legend {
   z-index: 0;
-  border-radius: 3px;
-  height: 500px;
-  width: 300px;
-  overflow: auto;
-  clip-path: circle(20px at 290px 10px);
+  padding: 10px;
+  border-radius: 10px;
+  height: auto;
+  max-height: 100%;
+  min-width: 300px;
+  max-width: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  clip-path: circle(20px at 100% 0px);
   transition: clip-path 1s;
+}
+.mx-story-legend-title {
+  margin: 7px;
+  font-size: 1.5em;
+}
+
+.mx-story-legend-content {
+  padding: 10px;
 }
 
 .mx-story-btn-legend:hover ~ .mx-story-legend,
@@ -292,7 +294,9 @@
   position: absolute;
   top: 0px;
   right: 0px;
+  height: 100%;
   padding: 10px;
+  filter: drop-shadow(2px 4px 6px var(--mx_ui_shadow));
 }
 
 /**
