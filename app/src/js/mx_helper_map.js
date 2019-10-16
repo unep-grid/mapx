@@ -174,7 +174,7 @@ export function initListeners() {
 
   mx.events.on({
     type: ['view_created', 'view_deleted'],
-    idGroup: 'cleane_history_and_state',
+    idGroup: 'clean_history_and_state',
     callback: () => {
       let dat = h.getMapData();
       if (dat.viewsList) {
@@ -186,12 +186,21 @@ export function initListeners() {
     }
   });
 
+  mx.events.on({
+    type: ['views_list_updated', 'view_added', 'view_removed'],
+    idGroup: 'update_btn_filter_view_activated',
+    callback: () => {
+      updateBtnFilterActivated();
+    }
+  });
+
   mx.listenerStore.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
     callback: h.clearCache,
     group: 'mapx-base'
   });
+
   mx.listenerStore.addListener({
     target: document.getElementById('btnFilterShowPanel'),
     type: 'click',
@@ -211,6 +220,24 @@ export function initListeners() {
     },
     group: 'mapx-base'
   });
+}
+/**
+ * Set activated view button state
+ */
+function updateBtnFilterActivated() {
+  const h = mx.helpers;
+  const views = h.getViews();
+  const elFilterActivated = document.getElementById('btnFilterChecked');
+  const activate = views.reduce((a, v) => {
+    return  a || (v._open === true && window.getComputedStyle(v._el).display !== "none");
+  }, false);
+  
+
+  if (activate) {
+    elFilterActivated.classList.remove('disabled');
+  } else {
+    elFilterActivated.classList.add('disabled');
+  }
 }
 
 /**
@@ -1679,6 +1706,7 @@ export function closeView(o) {
     prefix: o.idView
   });
 
+  view._open = false;
   mx.events.fire({
     type: 'view_removed',
     data: {
@@ -1687,7 +1715,6 @@ export function closeView(o) {
     }
   });
 
-  view._open = false;
 }
 /**
  * Filter current view and store rules
@@ -2070,12 +2097,12 @@ function renderViewCc(o) {
   const elLegendContainer =
     o.elLegendContainer || elView.querySelector('#' + idLegendContainer);
 
-  if(!methods || !elLegendContainer){
+  if (!methods || !elLegendContainer) {
     return Promise.resolve(true);
   }
 
-  if(elOldLegend){
-   elOldLegend.remove();
+  if (elOldLegend) {
+    elOldLegend.remove();
   }
 
   const elLegend = h.el('div', {class: 'mx-view-legend-cc', id: idLegend});
@@ -2100,7 +2127,7 @@ function renderViewCc(o) {
       idView: idView,
       idSource: idSource,
       idLegend: idLegend,
-      elLegend : elLegend,
+      elLegend: elLegend,
       onClose: cc.onClose,
       onInit: cc.onInit
     };
@@ -2149,7 +2176,7 @@ function renderViewRt(o) {
     const idLegend = 'view_legend_' + idView;
     const idLegendContainer = 'view_legend_container_' + idView;
     const legend = h.path(view, 'data.source.legend');
-    const extContainer = h.isElement(o.elLegendContainer) ;
+    const extContainer = h.isElement(o.elLegendContainer);
     /**
      * source as already be added. Add layer
      */
@@ -2165,8 +2192,9 @@ function renderViewRt(o) {
     /*
      * Add legend
      */
-    const elLegendContainer = extContainer ?
-      o.elLegendContainer : elView.querySelector('#' + idLegendContainer);
+    const elLegendContainer = extContainer
+      ? o.elLegendContainer
+      : elView.querySelector('#' + idLegendContainer);
 
     if (!elLegendContainer) {
       return;
@@ -2250,8 +2278,8 @@ export function renderViewVt(o) {
     const zoomConfig = p(view, 'data.style.zoomConfig', {});
     const nulls = p(view, 'data.style.nulls', [])[0];
     const hideNulls = p(view, 'data.style.hideNulls', false);
-    const geomType = p(view, 'data.geometry.type','point');
-    const source = p(view, 'data.source',{});
+    const geomType = p(view, 'data.geometry.type', 'point');
+    const source = p(view, 'data.source', {});
     const elView = h.getViewEl(view);
     const elOldLegend = view._elLegend;
     const idLegend = 'view_legend_' + idView;
@@ -2629,7 +2657,6 @@ export function renderViewVt(o) {
          * Save ref for removal
          */
         view._elLegend = elLegend;
-        
 
         /*
          * Add legend
@@ -2748,10 +2775,9 @@ export function addOptions(o) {
   }
 }
 
-
 /**
- * Get view el 
- * @param {Object} view View 
+ * Get view el
+ * @param {Object} view View
  */
 export function getViewEl(view) {
   return view._el || document.querySelector("[data-view_id='" + view.id + "']");
@@ -2915,6 +2941,7 @@ export function renderView(o) {
         /**
          * Fire view add event
          */
+        view._open = true;
         mx.events.fire({
           type: 'view_added',
           data: {
@@ -2922,7 +2949,6 @@ export function renderView(o) {
             view: view
           }
         });
-        view._open = true;
       })
       .catch(function(e) {
         h.modal({

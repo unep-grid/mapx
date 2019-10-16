@@ -230,7 +230,7 @@ export function viewsListRenderNew(o) {
        * Apply filter to nested list
        */
       mData.viewsList.filterById(ids, {
-        flatMode: false || rules.length < 0 // > 0 NOTE: remove this
+        flatMode: (rules.length > 0)
       });
     },
     onUpdateCount: (count) => {
@@ -329,6 +329,7 @@ export function viewsListRenderNew(o) {
       }
     }
   }
+
 }
 
 /**

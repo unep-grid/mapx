@@ -1,4 +1,3 @@
-
 .vf-check-toggle-group {
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +10,7 @@
 }
 
 .vf-check-toggle-group-title {
-  opacity:0.5;
+  opacity: 0.5;
 }
 
 .vf-check-toggle {
@@ -22,14 +21,14 @@
   font-weight: normal;
   cursor: pointer;
   display: flex;
-  align-items:center;
+  align-items: center;
   margin-left: 6px;
 }
 
 .vf-check-toggle .vf-check-toggle-filter-text {
   font-weight: normal;
   text-overflow: ellipsis;
-  max-width:100px;
+  max-width: 100px;
   width: 100px;
   white-space: nowrap;
   overflow: hidden;
@@ -41,8 +40,8 @@
   margin-left: 1px;
   margin-right: 10px;
   opacity: 0.7;
-  width:2em;
-  position:relative;
+  width: 2em;
+  position: relative;
   transition: transform 500ms;
   backface-visibility: hidden;
   text-align: right;
@@ -52,40 +51,43 @@
   transform: rotateX(90deg);
 }
 .vf-check-toggle .vf-check-toggle-filter-count:after {
-  content: attr( data-count );
+  content: attr(data-count);
+}
+.vf-check-toggle-input.disabled ~ .vf-check-toggle-label {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /*.vf-partial-border-side {*/
-  /*position: relative;*/
-  /*padding:5px;*/
-  /*margin-left:5px;*/
-  /*margin-top:10px;*/
-  /*margin-bottom:10px;*/
-  /*font-size:0.8em;*/
-  /*text-align: center;*/
+/*position: relative;*/
+/*padding:5px;*/
+/*margin-left:5px;*/
+/*margin-top:10px;*/
+/*margin-bottom:10px;*/
+/*font-size:0.8em;*/
+/*text-align: center;*/
 /*}*/
 
 /*.vf-partial-border-side::after,*/
 /*.vf-partial-border-side::before {*/
-  /*content: '';*/
-  /*position: absolute;*/
-  /*border: 1px solid #ccc;*/
+/*content: '';*/
+/*position: absolute;*/
+/*border: 1px solid #ccc;*/
 /*}*/
 
 /*.vf-partial-border-side::before {*/
-  /*height: 100%;*/
-  /*width: 10px;*/
-  /*right: 0px;*/
-  /*border-left: none;*/
-  /*top: 0px;*/
+/*height: 100%;*/
+/*width: 10px;*/
+/*right: 0px;*/
+/*border-left: none;*/
+/*top: 0px;*/
 /*}*/
 
 /*.vf-partial-border-side::after {*/
-  /*height: 100%;*/
-  /*width: 10px;*/
-  /*left: 0px;*/
-  /*border-right: none;*/
-  /*top: 0px;*/
+/*height: 100%;*/
+/*width: 10px;*/
+/*left: 0px;*/
+/*border-right: none;*/
+/*top: 0px;*/
 /*}*/
-
-

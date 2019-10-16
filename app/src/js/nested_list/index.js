@@ -15,7 +15,7 @@ class NestedList {
     li._is_mode_skip_save = false;
     li._is_mode_empty = false;
     li._is_mode_lock = false;
-
+    li._is_mode_frozen = false;
     li.listenerStore = new ListenerStore();
     li.setOptions(opt);
     li.setStateOrig(opt.state);
@@ -123,7 +123,7 @@ class NestedList {
    * Sorting and ordering
    */
   filterById(ids, opt) {
-    opt = opt || {};
+    opt = Object.assign({}, {flatMode: false}, opt);
 
     let li = this;
     if (li.isModeEmpty()) {
@@ -134,6 +134,11 @@ class NestedList {
     ids = li.isArray(ids) ? ids : [ids];
 
     /**
+     * Handle options
+     */
+    li.setModeFlat(opt.flatMode);
+
+    /**
      * Hide / show items
      */
     elTargets.forEach((el) => {
@@ -142,7 +147,7 @@ class NestedList {
         if (id === li.opt.idEmptyItem) {
           return;
         }
-        if (ids.indexOf(id) > -1 ) {
+        if (ids.indexOf(id) > -1) {
           el.classList.remove(clHidden);
         } else {
           el.classList.add(clHidden);
@@ -445,6 +450,20 @@ class NestedList {
     return !!this._is_mode_lock;
   }
 
+  setModeFrozenForce(frozen) {
+    this._is_mode_frozen = frozen === true;
+  }
+
+  isModeFrozen() {
+    const li = this;
+    return (
+      li.isModeFlat() ||
+      li.isModeSkipSave() ||
+      li.isModeLock() ||
+      this._is_mode_frozen === true
+    );
+  }
+
   setModeFlat(enable, opt) {
     opt = opt || {};
     let li = this;
@@ -549,7 +568,7 @@ class NestedList {
     let state = li.getState();
     let history = li.getHistory();
 
-    if (li.isModeFlat() || li.isModeSkipSave() || li.isModeLock()) {
+    if (li.isModeFrozen()) {
       return;
     }
 
@@ -559,6 +578,9 @@ class NestedList {
   }
   setStateStored(state) {
     let li = this;
+    if (li.isModeFrozen()) {
+      return;
+    }
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
@@ -1084,6 +1106,9 @@ export {NestedList};
  */
 function handleSortStart(evt) {
   let li = this;
+  if(li.isModeFrozen()){
+    return;
+  }
   li.elDrag = evt.target;
   /**
    * prevent if event comes from ignored see comment

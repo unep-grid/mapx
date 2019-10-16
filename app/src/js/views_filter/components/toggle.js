@@ -14,7 +14,7 @@ let settings = {
 
 class Toggle {
   constructor(opt) {
-    let tgl = this;
+    const tgl = this;
     tgl.opt = Object.assign({}, settings, opt);
     tgl.id = opt.id;
     tgl._label = opt.label;
@@ -24,12 +24,13 @@ class Toggle {
     tgl._is_animating = false;
     tgl._destroyed = false;
     tgl._count = opt.count;
+    tgl._is_enabled = true;
     tgl._count_displayed = 0;
     tgl.build();
   }
 
   destroy() {
-    let tgl = this;
+    const tgl = this;
     if (tgl._destroyed || !tgl.el.parentElement) {
       return;
     }
@@ -52,15 +53,16 @@ class Toggle {
   }
 
   setCount(n) {
-    let tgl = this;
-    let nD = tgl.getCountDisplayed();
+    const tgl = this;
+    const nD = tgl.getCountDisplayed();
 
     tgl._count = n || 0;
+    tgl.enable(n > 0);
     if (n === nD) {
       return;
     }
-    let animate = tgl.opt.animate;
-    let animating = tgl._isAnimating();
+    const animate = tgl.opt.animate;
+    const animating = tgl._isAnimating();
 
     if (animating || !animate) {
       tgl._setCountLabel(n);
@@ -69,14 +71,35 @@ class Toggle {
     }
   }
 
+  isEnabled() {
+    return this._is_enabled === true;
+  }
+
+  enable(enable) {
+    const tgl = this;
+    const enabled = tgl.isEnabled();
+    enable = enable !== false;
+    //const skipEnable = enable && enabled;
+    //const skipDisable = !enable && !enabled;
+    if (enable) {
+      this.elCheck.classList.remove('disabled');
+      this.elCheck.removeAttribute('disabled');
+    } else {
+      this.elCheck.classList.add('disabled');
+      this.elCheck.setAttribute('disabled', true);
+    }
+    tgl._is_enabled = enabled;
+  }
+
   _setCountLabel(n) {
-    this._count_displayed = n;
-    this.elLabelCount.dataset.count = n;
+    const tgl = this;
+    tgl._count_displayed = n;
+    tgl.elLabelCount.dataset.count = n;
   }
 
   _animateCountUpdate() {
-    let tgl = this;
-    let animSeqCounter = tgl.opt.animateType === 'seq_counter';
+    const tgl = this;
+    const animSeqCounter = tgl.opt.animateType === 'seq_counter';
     if (animSeqCounter) {
       tgl._animateCountProg();
     } else {
@@ -87,18 +110,18 @@ class Toggle {
     return this._is_animating;
   }
   _setAnimating(enable) {
-    let tgl = this;
+    const tgl = this;
     enable = enable || false;
     tgl._is_animating = enable;
   }
 
   _animateCountClass() {
-    let tgl = this;
+    const tgl = this;
     tgl._setAnimating(true);
     tgl.elLabelCount.classList.add('updating');
     setTimeout(() => {
       onNextFrame(() => {
-        let count = tgl.getCount();
+        const count = tgl.getCount();
         tgl._setCountLabel(count);
         tgl._setAnimating(false);
         tgl.elLabelCount.classList.remove('updating');
@@ -107,7 +130,7 @@ class Toggle {
   }
 
   _animateCountProg() {
-    let tgl = this;
+    const tgl = this;
     let c = 0;
     let inc = 1;
     let delta = 0;
@@ -144,7 +167,7 @@ class Toggle {
     }
   }
   setLabel(txt) {
-    let tgl = this;
+    const tgl = this;
     if (txt instanceof Promise) {
       txt.then((t) => {
         set(t);
@@ -153,7 +176,7 @@ class Toggle {
       set(txt);
     }
     function set(txt) {
-      let curTxt = tgl.elLabelText.innerText;
+      const curTxt = tgl.elLabelText.innerText;
       if (txt !== curTxt) {
         if (!txt) {
           txt = curTxt;
@@ -164,7 +187,7 @@ class Toggle {
     }
   }
   setLabelKey(key) {
-    let tgl = this;
+    const tgl = this;
     tgl._label_key = key;
     tgl.elLabelText.dataset.lang_key = tgl._label_key;
   }
@@ -203,12 +226,12 @@ class Toggle {
 export {Toggle};
 
 function buildToggle() {
-  let tgl = this;
+  const tgl = this;
   let elLabelText;
   let elLabelCount;
   let elCheck;
 
-  let elCheckToggle = el(
+  const elCheckToggle = el(
     'div',
     {
       class: 'vf-check-toggle',

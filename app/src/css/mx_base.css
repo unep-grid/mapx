@@ -198,6 +198,12 @@ blockquote {
   cursor: pointer;
 }
 
+.mx-bar-sort .mx-btn-toggle-filter.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .mx-bar-sort .mx-btn-toggle-filter * {
   pointer-events: none;
 }
