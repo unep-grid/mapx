@@ -96,7 +96,28 @@ const contextMenuItems = [
    {
     forType: ['group', 'item', 'root'],
     label: 'cm_global_header',
-    ui: 'header'
+    ui: 'header',
+     condition: function() {
+       return !this.isModeFrozen();
+     }
+  },
+  {
+    forType: ['root', 'group', 'item'],
+    action: 'cm_global_save_state_self',
+    label: 'cm_global_save_state_self',
+    ui: 'button',
+    condition: function() {
+      return !this.isModeFrozen() && !this.isModeEmpty() && this.hasHistory();
+    }
+  },
+  {
+    forType: ['root', 'group', 'item'],
+    action: 'cm_global_clear_history',
+    label: 'cm_global_clear_history',
+    ui: 'button',
+    condition: function() {
+      return !this.isModeFrozen() && this.hasHistory();
+    }
   },
   {
     forType: ['root', 'group', 'item'],
@@ -104,7 +125,7 @@ const contextMenuItems = [
     label: 'cm_global_reset_state',
     ui: 'button',
     condition: function() {
-      return !this.isModeEmpty() && this.hasHistory();
+      return !this.isModeFrozen() && !this.isModeEmpty();
     }
   },
   {
@@ -113,8 +134,13 @@ const contextMenuItems = [
     label: 'cm_global_undo_last',
     ui: 'button',
     condition: function() {
-      return !this.isModeEmpty() && this.hasHistory();
+      return !this.isModeFrozen() && !this.isModeEmpty() && this.hasHistory();
     }
+  },
+   {
+    forType: ['group', 'item', 'root'],
+    label: 'cm_global_other',
+    ui: 'header'
   },
   {
     forType: ['root', 'group', 'item'],

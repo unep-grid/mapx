@@ -30,10 +30,6 @@ class ContextMenu {
     cm.setTargetFocus(false);
     cm.stopListen();
     cm.li.removeElement(cm.elContext);
-    //if (cm.getModeSaveOnQuit()) {
-      cm.li.saveStateStorage();
-      //cm.setModeSaveOnQuit(false);
-    //}
     cm._destroyed = true;
   }
 
@@ -290,27 +286,35 @@ function handleContextEvent(evt) {
 
   let act = {
     cm_group_sort_text_asc: () => {
+      cm.addUndoStepOnce();
       cm.li.sortGroup(elTarget, {mode: 'text', asc: true});
     },
     cm_group_sort_text_desc: () => {
+      cm.addUndoStepOnce();
       cm.li.sortGroup(elTarget, {mode: 'text', asc: false});
     },
     cm_group_sort_date_asc: () => {
+      cm.addUndoStepOnce();
       cm.li.sortGroup(elTarget, {mode: 'date', asc: false});
     },
     cm_group_sort_date_desc: () => {
+      cm.addUndoStepOnce();
       cm.li.sortGroup(elTarget, {mode: 'date', asc: true});
     },
     cm_target_move_top: () => {
+      cm.addUndoStepOnce();
       cm.li.moveTargetTop(elTarget);
     },
     cm_target_move_up: () => {
+      cm.addUndoStepOnce();
       cm.li.moveTargetUp(elTarget);
     },
     cm_target_move_down: () => {
+      cm.addUndoStepOnce();
       cm.li.moveTargetDown(elTarget);
     },
     cm_target_move_bottom: () => {
+      cm.addUndoStepOnce();
       cm.li.moveTargetBottom(elTarget);
     },
     cm_global_undo_last: () => {
@@ -318,6 +322,12 @@ function handleContextEvent(evt) {
     },
     cm_global_reset_state: () => {
       cm.li.resetState();
+    },
+    cm_global_clear_history: () => {
+      cm.li.clearHistory();
+    },
+    cm_global_save_state_self: () => {
+      cm.li.saveStateStorage();
     },
     cm_item_add_group: () => {
       cm.addUndoStepOnce();
@@ -337,17 +347,14 @@ function handleContextEvent(evt) {
       cm.li.removeGroup(elTarget);
     },
     cm_group_rename: () => {
-      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupTitle(elTarget, elInput.value);
     },
     cm_group_color: () => {
-      cm.setModeSaveOnQuit(true);
       cm.addUndoStepOnce();
       cm.li.setGroupColor(elTarget, elInput.value);
     },
-    cm_btn_close: () => {
-    }
+    cm_btn_close: () => {}
   };
 
   if (idAction) {

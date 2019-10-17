@@ -36,7 +36,6 @@ class NestedList {
     li.initState();
     li.initHistory();
     li.startListening();
-    li.opt.onChange();
   }
   initState() {
     this.setState({render: true});
@@ -154,6 +153,9 @@ class NestedList {
         }
       }
     });
+    if (li.opt.onFilterEnd) {
+      li.opt.onFilterEnd();
+    }
   }
 
   sortGroup(elTarget, opt) {
@@ -275,10 +277,14 @@ class NestedList {
     }
   }
   getItemText(el) {
-    return this.opt.onGetItemTextById(el.id);
+    return this.opt.onGetItemTextById
+      ? this.opt.onGetItemTextById(el.id)
+      : el.innerText;
   }
   getItemDate(el) {
-    return this.opt.onGetItemDateById(el.id);
+    return this.opt.onGetItemTextById
+      ? this.opt.onGetItemDateById(el.id)
+      : Date.now();
   }
   getGroup(el) {
     let li = this;
@@ -379,27 +385,22 @@ class NestedList {
       elGroup.appendChild(el);
     }
   }
-  groupCollapse(el, collapse, save) {
+  groupCollapse(el, collapse) {
     let li = this;
     collapse = collapse === true;
-    save = save === true;
     if (li.isGroup(el)) {
       if (collapse) {
         el.classList.add(li.opt.class.groupCollapsed);
       } else {
         el.classList.remove(li.opt.class.groupCollapsed);
       }
-      if (save) {
-        li.saveStateStorage();
-      }
     }
   }
-  groupToggle(el, save) {
+  groupToggle(el) {
     let li = this;
-    save = save === true;
     if (li.isGroup(el)) {
       let isCollapsed = li.isGroupCollapsed(el);
-      li.groupCollapse(el, !isCollapsed, save);
+      li.groupCollapse(el, !isCollapsed);
     }
   }
   isGroupCollapsed(el) {
@@ -470,13 +471,11 @@ class NestedList {
     enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
-    li.addUndoStep();
     els.forEach((el) => {
       if (li.isGroup(el)) {
         li.setGroupVisibility(el, !enable);
       }
     });
-    li.saveStateStorage();
     li._is_mode_flat = enable;
   }
   isModeFlat() {
@@ -571,8 +570,9 @@ class NestedList {
     if (li.isModeFrozen()) {
       return;
     }
-
-    li.opt.onChange(state);
+    if (li.opt.onChange) {
+      li.opt.onChange();
+    }
     li.setStateStored(state);
     li.setHistoryStored(history);
   }
@@ -584,6 +584,11 @@ class NestedList {
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
+      if(li.opt.onSaveLocal){
+        li.opt.onSaveLocal();
+      }else{
+        alert("Saved");
+      }
     }
   }
 
@@ -600,7 +605,7 @@ class NestedList {
   setHistoryStored(history) {
     let li = this;
     let key = li.getStorageKey('history');
-    let isValid = li.isArray(history) && history.length > 0;
+    let isValid = li.isArray(history);
     if (isValid && window.localStorage) {
       let historyClone = li.cloneObject(history);
       historyClone.forEach((state) => {
@@ -659,6 +664,7 @@ class NestedList {
   }
   clearHistory() {
     this.history.length = 0;
+    this.setHistoryStored([]);
   }
   clearMeta() {
     this.meta.length = 0;
@@ -730,7 +736,9 @@ class NestedList {
     li.addUndoStep();
     li.clearAllItems();
     li.setState({render: true, state: state, useStateStored: false});
-    li.saveStateStorage();
+    if (li.opt.onResetState) {
+      li.opt.onResetState();
+    }
   }
   setState(opt) {
     let li = this;
@@ -780,6 +788,9 @@ class NestedList {
         }
       });
     }
+    if (li.opt.onChange) {
+      li.opt.onChange();
+    }
   }
   getStateOrig() {
     return this._state_orig || [];
@@ -807,7 +818,6 @@ class NestedList {
     let elContent = item.elContent;
     let isEmptyItem = !!attr.empty;
     let isModeEmpty = li.isModeEmpty();
-    let isInitState = !!attr.initState;
 
     if (isLocked && !isEmptyItem) {
       return;
@@ -819,7 +829,7 @@ class NestedList {
 
     elGroupParent.appendChild(elItem);
 
-    if (attr.render) {
+    if (attr.render && li.opt.onRenderItemContent) {
       li.opt.onRenderItemContent(elContent, attr);
     }
     if (attr.moveTop) {
@@ -827,9 +837,6 @@ class NestedList {
     }
     li.makeIgnoredClassesDraggable(elItem);
 
-    if (!isEmptyItem && !isInitState) {
-      li.saveStateStorage();
-    }
     return elItem;
   }
 
@@ -1106,9 +1113,7 @@ export {NestedList};
  */
 function handleSortStart(evt) {
   let li = this;
-  if(li.isModeFrozen()){
-    return;
-  }
+
   li.elDrag = evt.target;
   /**
    * prevent if event comes from ignored see comment
@@ -1119,7 +1124,9 @@ function handleSortStart(evt) {
     return;
   }
 
-  li.opt.onSortStart(evt);
+  if (li.opt.onSortStart) {
+    li.opt.onSortStart(evt);
+  }
   li.setUiDraggingStart();
 
   li.elDrag.classList.add(li.opt.class.dragged);
@@ -1136,7 +1143,9 @@ function handleSortStart(evt) {
     let dragOffsetLeft = evt.clientX - rectImage.left;
     evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
   }
-  evt.dataTransfer.setData('Text', li.opt.onSetTextData(li.elDrag));
+  if (li.opt.onSetTextData) {
+    evt.dataTransfer.setData('Text', li.opt.onSetTextData(li.elDrag));
+  }
   li.elNext = li.elDrag.nextSibling;
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -1144,14 +1153,8 @@ function handleSortStart(evt) {
     type: 'dragover',
     group: 'dragevent',
     callback: handleSortOver,
-    debounce: true
-  });
-  li.listenerStore.addListener({
-    target: li.elRoot,
-    bind: li,
-    type: 'dragenter',
-    group: 'dragevent',
-    callback: handleSortEnter
+    throttle : true,
+    throttleTime : 500
   });
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -1164,16 +1167,15 @@ function handleSortStart(evt) {
 /**
  * Enter event listener
  */
-function handleSortEnter(evt) {
-  let li = this;
-  li.opt.onSortEnter(evt);
-}
+
 /**
  * Over event listener
  */
 function handleSortOver(evt) {
   let li = this;
-  li.opt.onSortOver(evt);
+  if (li.opt.onSortOver) {
+    li.opt.onSortOver(evt);
+  }
   evt.preventDefault();
   evt.dataTransfer.dropEffect = 'move';
   let elTarget = li.getTarget(evt.target);
@@ -1265,6 +1267,7 @@ function handleSortOver(evt) {
   } catch (e) {
     console.warn(e);
   }
+
 }
 /**
  * Sort end event listener
@@ -1279,12 +1282,13 @@ function handleSortEnd(evt) {
   if (li.isModeEmpty()) {
     return;
   }
-  li.opt.onSortEnd(evt);
-  if (li.elNext !== li.elDrag.nextSibling) {
+  if (li.opt.onSortEnd) {
+    li.opt.onSortEnd(evt);
+  }
+  if (li.elNext !== li.elDrag.nextSibling && li.opt.onSortDone) {
     li.opt.onSortDone(li.elDrag);
   }
   li.elDrag = null;
-  li.saveStateStorage();
 }
 /**
  * Click in context menu event listener

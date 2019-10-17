@@ -26,6 +26,10 @@ export function getProjectViewsState(opt) {
   if (isCurrentProject) {
     const mData = h.getMapData();
     if (mData.viewsList) {
+      if (mData.viewsList.isModeFrozen()) {
+        alert('Operation not allowed : remove activated filters');
+        return;
+      }
       state.push(...mData.viewsList.getState());
     }
     if (hasShiny) {
@@ -48,7 +52,7 @@ export function getProjectViewsCollections(opt) {
   const collections = h.getArrayDistinct(
     views.flatMap((v) => h.path(v, 'data.collections', []))
   );
-  
+
   if (hasShiny && opt.idInput) {
     Shiny.onInputChange(opt.idInput, collections);
   }
@@ -214,6 +218,15 @@ export function viewsListRenderNew(o) {
     onChange: () => {
       h.viewsRender();
     },
+    onFilterEnd: () => {
+      h.viewsRender();
+    },
+    onResetState: () => {
+      h.viewsRender();
+    },
+    onSaveLocal: () => {
+      mx.helpers.iconFlash('floppy-o');
+    },
     emptyLabel: getEmptyLabel()
   });
 
@@ -230,7 +243,7 @@ export function viewsListRenderNew(o) {
        * Apply filter to nested list
        */
       mData.viewsList.filterById(ids, {
-        flatMode: (rules.length > 0)
+        flatMode: rules.length > 0
       });
     },
     onUpdateCount: (count) => {
@@ -268,7 +281,6 @@ export function viewsListRenderNew(o) {
     idGroup: 'view_list',
     callback: handleViewClick
   });
-
 
   /**
    * Set image for the drag item
@@ -329,7 +341,6 @@ export function viewsListRenderNew(o) {
       }
     }
   }
-
 }
 
 /**

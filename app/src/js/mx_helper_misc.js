@@ -177,29 +177,28 @@ export function iconFlash(icon) {
   var elContainer;
   var elIcon;
 
-  new Promise(function(resolve) {
+  add();
+
+  function add(){
     elContainer = document.createElement('div');
     elIcon = document.createElement('i');
     elContainer.classList.add('mx-flash');
     elIcon.className = 'fa fa-' + icon;
     elContainer.appendChild(elIcon);
     document.body.appendChild(elContainer);
+    setTimeout(activate,10);
+  }
 
-    resolve(true);
-  })
-    .then(function() {
-      return new Promise(function(resolve) {
-        setTimeout(function() {
-          elIcon.classList.add('active');
-          resolve(true);
-        }, 0);
-      });
-    })
-    .then(function() {
-      setTimeout(function() {
-        elContainer.remove();
-      }, 1000);
-    });
+  function activate(){
+    elIcon.classList.add('active');
+    setTimeout(remove,1000);
+  }
+
+  function remove(){
+    elContainer.remove();
+  }
+
+
 }
 
 /**

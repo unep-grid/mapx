@@ -229,10 +229,10 @@ function updateBtnFilterActivated() {
   const views = h.getViews();
   const elFilterActivated = document.getElementById('btnFilterChecked');
   const activate = views.reduce((a, v) => {
-    return  a || (v._open === true && window.getComputedStyle(v._el).display !== "none");
+    let hasEl = h.isElement(v._el);
+    return  a || (v._open === true && (hasEl && window.getComputedStyle(v._el).display !== "none"));
   }, false);
   
-
   if (activate) {
     elFilterActivated.classList.remove('disabled');
   } else {
@@ -2293,6 +2293,7 @@ export function renderViewVt(o) {
 
     if (!idSourceLayer) {
       resolve(false);
+      return;
     }
 
     /**

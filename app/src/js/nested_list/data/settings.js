@@ -4,10 +4,10 @@ import {contextMenuItems} from './settings_menu_items.js';
 
 let settings = {
   /**
-  * General options
-  */
+   * General options
+   */
   id: 'li-default',
-  idEmptyItem : 'liEmptyItem',
+  idEmptyItem: 'liEmptyItem',
   prefix: 'li',
   dict: dict,
   state: state,
@@ -25,42 +25,32 @@ let settings = {
   colorDefault: '#474747',
   maxHistoryLength: 100,
   /*
-  * Hooks
-  */
-  onRenderItemContent: function() {},
-  onChange: function() {},
-  onSortInit: function() {},
-  onSortStart: function() {},
-  onSortDone: function() {},
-  onSortOver: function() {},
-  onSortEnter: function() {},
-  onSortEnd: function() {},
-  onGetStateEl: function() {},
-  onGetItemTextById: function(id) {
-    return id;
-  },
-  onGetItemDateById: function(id) {
-    id = id;
-    return new Date().getTime();
-  },
-  onFilterText: function() {
-    return [];
-  },
-  onSetTextData: function(el) {
-    return el.textContent;
-  },
+   * Hooks
+   */
+  onRenderItemContent: null,
+  onChange: null,
+  onSortStart: null,
+  onSortDone: null,
+  onSortOver: null,
+  onSortEnd: null,
+  onSaveLocal: null,
+  onGetItemTextById: null,
+  onGetItemDateById: null,
+  onSetTextData: null,
   onSetDragImage: null,
+  onFilterEnd : null,
+  onResetState : null,
   /**
-  * Dictionnary
-  */
+   * Dictionnary
+   */
   customDictItem: [],
   /**
-  * Drag classes
-  */
+   * Drag classes
+   */
   customClassDragIgnore: [],
   /**
-  * Global classes names
-  */
+   * Global classes names
+   */
   class: {
     base: 'li',
     item: 'li-item',
@@ -87,8 +77,8 @@ let settings = {
     contextMenuInputGroup: 'li-context-menu-input-group'
   },
   /**
-  * Context menu items
-  */
+   * Context menu items
+   */
   contextMenuItems: contextMenuItems
 };
 

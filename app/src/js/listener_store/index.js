@@ -1,5 +1,5 @@
 import {onNextFrame, cancelFrame} from '../animation_frame/index.js';
-let idFrame = 0;
+//let idFrame = 0;
 /**
  * Event management
  */
@@ -10,24 +10,61 @@ class ListenerStore {
   destroy() {
     this.removeAllListeners();
   }
-  debounce(fun, bind) {
-    return function(e) {
-      cancelFrame(idFrame);
-      idFrame = onNextFrame(() => {
-        fun.bind(bind)(e);
-      });
+  debounce(fun, opt) {
+    opt = opt || {};
+    var bind = opt.bind || this;
+    var idTimeout = 0;
+    if (opt.time) {
+      return function() {
+        clearTimeout(idTimeout);
+        const funCall = () => {
+          fun.apply(bind, arguments);
+          idTimeout = 0;
+        };
+        idTimeout = setTimeout(funCall, opt.time);
+      };
+    } else {
+      return function() {
+        cancelFrame(idTimeout);
+        const funCall = () => {
+          fun.apply(bind, arguments);
+          idTimeout = 0;
+        };
+        idTimeout = onNextFrame(funCall);
+      };
+    }
+  }
+  throttle(fun, opt) {
+    opt = Object.assign({},{time:100},opt);
+    var bind = opt.bind || this;
+    var start = Date.now();
+    var delta = 0;
+    return function() {
+      delta = Date.now() - start;
+      if(delta > opt.time){
+        fun.apply(bind,arguments);
+        start = Date.now();
+      }
     };
   }
   addListener(opt) {
     const li = this;
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
-    if (opt.debounce) {
-      opt.callback = li.debounce(opt.callback, opt.bind || li);
+    if (opt.throttle){
+    opt.callback = li.throttle(opt.callback, {
+        bind: opt.bind || li,
+        time: opt.throttleTime
+      });
+    }else if (opt.debounce) {
+      opt.callback = li.debounce(opt.callback, {
+        bind: opt.bind || li,
+        time: opt.debounceTime
+      });
     } else {
       opt.callback = opt.callback.bind(opt.bind || li);
     }
-    opt.idGroup = opt.group || opt.idGroup ||  'default';
+    opt.idGroup = opt.group || opt.idGroup || 'default';
     opt.type = opt.type instanceof Array ? opt.type : [opt.type];
 
     li.listeners.push(opt);
@@ -81,11 +118,11 @@ class ListenerStore {
       li.removeListener(l);
     });
   }
-  getListenerByTypeGroup(type,idGroup) {
+  getListenerByTypeGroup(type, idGroup) {
     const li = this;
     type = !type ? [] : type instanceof Array ? type : [type];
     return li.listeners.filter((l) => {
-      if(idGroup && l.idGroup !== idGroup){
+      if (idGroup && l.idGroup !== idGroup) {
         return false;
       }
       return l.type.reduce((a, tS) => {
@@ -93,9 +130,9 @@ class ListenerStore {
       }, false);
     });
   }
-  removeListenerByTypeGroup(type,idGroup) {
+  removeListenerByTypeGroup(type, idGroup) {
     const li = this;
-    li.getListenerByTypeGroup(type,idGroup).forEach((l) => {
+    li.getListenerByTypeGroup(type, idGroup).forEach((l) => {
       li.removeListener(l);
     });
   }
@@ -117,32 +154,32 @@ class EventStore {
     this.lStore.destroy();
   }
   /**
-  * Fire event type, trigger linked callback
-  * @param {Object} opt options
-  * @param {String||Array} opt.type Type of event
-  * @param {String} opt.idGroup id of group.
-  * @param {data} opt.data Data to pass to callback
-  */
-  fire(opt){
-    opt = Object.assign({},opt);
+   * Fire event type, trigger linked callback
+   * @param {Object} opt options
+   * @param {String||Array} opt.type Type of event
+   * @param {String} opt.idGroup id of group.
+   * @param {data} opt.data Data to pass to callback
+   */
+  fire(opt) {
+    opt = Object.assign({}, opt);
     if (!opt.type) {
       throw new Error('Missing argument');
     }
     let li = this.lStore;
-    let ls = li.getListenerByTypeGroup(opt.type,opt.idGroup);
+    let ls = li.getListenerByTypeGroup(opt.type, opt.idGroup);
     ls.forEach((l) => {
       l.callback(opt.data);
     });
   }
- /**
-  * Register new listener for eventy type
-  * @param {Object} opt options
-  * @param {String||Array} opt.type Type of event
-  * @param {String} opt.idGroup Id of group
-  * @param {Function} opt.callback Callback to trigger
-  */
+  /**
+   * Register new listener for eventy type
+   * @param {Object} opt options
+   * @param {String||Array} opt.type Type of event
+   * @param {String} opt.idGroup Id of group
+   * @param {Function} opt.callback Callback to trigger
+   */
   on(opt) {
-    opt = Object.assign({},opt);
+    opt = Object.assign({}, opt);
     if (!opt.type || !opt.idGroup || !opt.callback) {
       throw new Error('Missing argument');
     }
@@ -153,15 +190,15 @@ class EventStore {
       callback: opt.callback
     });
   }
- /**
-  * Register new listener to use once
-  * @param {Object} opt options
-  * @param {String||Array} opt.type Type of event
-  * @param {String} opt.idGroup Id of group
-  * @param {Function} opt.callback Callback to trigger
-  */
+  /**
+   * Register new listener to use once
+   * @param {Object} opt options
+   * @param {String||Array} opt.type Type of event
+   * @param {String} opt.idGroup Id of group
+   * @param {Function} opt.callback Callback to trigger
+   */
   once(opt) {
-    opt = Object.assign({},opt);
+    opt = Object.assign({}, opt);
     if (!opt.type || !opt.idGroup || !opt.callback) {
       throw new Error('Missing argument');
     }
@@ -172,14 +209,14 @@ class EventStore {
       callback: opt.callback
     });
   }
- /**
-  * Remove listener
-  * @param {Object} opt options
-  * @param {String||Array} opt.type Type of event
-  * @param {String} opt.idGroup Id of group
-  */
+  /**
+   * Remove listener
+   * @param {Object} opt options
+   * @param {String||Array} opt.type Type of event
+   * @param {String} opt.idGroup Id of group
+   */
   off(opt) {
-    opt = Object.assign({},opt);
+    opt = Object.assign({}, opt);
     let li = this.lStore;
     li.removeListenerByTypeGroup(opt.type, opt.idGroup);
   }

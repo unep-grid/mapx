@@ -5,48 +5,63 @@
 observeEvent(input$btnShowProjectViewsStates,{
 
   userRole <- getUserRole()
-  idProject <- reactData$project
-  language <- reactData$language
   isAdmin <- isTRUE(userRole$admin)
-  userData <- reactUser$data
-  
+  idProject <- reactData$project
+
   if( isAdmin ){
 
     mglGetProjectViewsState(list(
         idProject = idProject,
         idInput = 'projectViewsState'
         ))
+  }
+})
 
-    stateKeys <- mxDbGetProjectStateKeys(idProject,language)
+observeEvent(input$projectViewsState,{
 
-    ui = tagList(
-      selectizeInput(
-        "selectProjectStateKey",
-        label = d("project_state_key",language,web=F),
-        selected = stateKeys[0],
-        choices = stateKeys,
-        multiple = FALSE,
-        options=list(
-          create = FALSE
-          )
+  userRole <- getUserRole()
+  idProject <- reactData$project
+  language <- reactData$language
+  isAdmin <- isTRUE(userRole$admin)
+  userData <- reactUser$data
+  
+  if(noDataCheck(input$projectViewsState)){
+    return()
+  }
+
+  if(!isAdmin){
+    return()
+  }
+
+  stateKeys <- mxDbGetProjectStateKeys(idProject,language)
+
+  ui = tagList(
+    selectizeInput(
+      "selectProjectStateKey",
+      label = d("project_state_key",language,web=F),
+      selected = stateKeys[0],
+      choices = stateKeys,
+      multiple = FALSE,
+      options=list(
+        create = FALSE
         )
       )
+    )
 
-    btnSave <- actionButton(
-      "btnSaveViewsState",
-      d("btn_save",language)
-      )
+  btnSave <- actionButton(
+    "btnSaveViewsState",
+    d("btn_save",language)
+    )
 
-    mxModal(
-      id = "projectSaveViewsState",
-      title = d("project_save_views_state",language,web=F),
-      content = ui,
-      textCloseButton = d("btn_close",language,web=F),
-      buttons = list(btnSave),
-      addBackground = TRUE
-      )
+  mxModal(
+    id = "projectSaveViewsState",
+    title = d("project_save_views_state",language,web=F),
+    content = ui,
+    textCloseButton = d("btn_close",language,web=F),
+    buttons = list(btnSave),
+    addBackground = TRUE
+    )
 
-  }
 
 })
 
@@ -70,6 +85,7 @@ observeEvent(input$btnSaveViewsState,{
   idProject <- reactData$project
   key <- input$selectProjectStateKey 
   state <- fromJSON(input$projectViewsState,simplifyDataFrame = FALSE)
+
   hasState <- !noDataCheck(state)
   states <- mxDbGetProjectStates(idProject)
   hasKey <- !noDataCheck(key)
@@ -86,7 +102,7 @@ observeEvent(input$btnSaveViewsState,{
         s$state <- s$state
       }
       return(s)
-    })
+      })
 
     mxDbSaveProjectData(idProject,list(
         states_views = states

@@ -37,10 +37,8 @@ class ViewsFilter {
   init() {
     const vf = this;
     vf.removeRules();
-    vf.removeRules();
     vf.updateViewsComponents();
     vf.updateTags();
-    vf.filter();
   }
 
   initStorage(views) {
@@ -160,7 +158,7 @@ class ViewsFilter {
     /**
     * By defaut, if result is empty, show all;
     */
-    if(distinct.length === 0){
+    if(!isIntersect && distinct.length === 0){
       distinct = vf.getViewsId();
     }
     return distinct;
@@ -201,6 +199,8 @@ class ViewsFilter {
 
   clear() {
     const vf = this;
+    vf.removeRules();
+    vf.filter();
     vf._tags.forEach((t) => {
       t.destroy();
       vf.removeTag(t);
