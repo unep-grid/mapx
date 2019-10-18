@@ -136,13 +136,13 @@ export function viewsListAddSingle(view, opt) {
   }
   mData.views.unshift(view);
   mData.viewsList.addItem(opt);
-  mData.viewsFilter.updateTags();
+  mData.viewsFilter.update();
 }
 
 export function updateViewsFilter() {
   const h = mx.helpers;
   const mData = h.getMapData();
-  mData.viewsFilter.updateTags();
+  mData.viewsFilter.update();
 }
 
 /**

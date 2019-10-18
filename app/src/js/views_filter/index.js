@@ -31,10 +31,10 @@ class ViewsFilter {
     vf.lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
-    vf.init();
+    vf.update();
   }
 
-  init() {
+  update() {
     const vf = this;
     vf.removeRules();
     vf.updateViewsComponents();
@@ -138,7 +138,8 @@ class ViewsFilter {
     const vf = this;
     const ids = vf.getViewsIdSubset();
     const views = vf.getViews();
-    return views.filter((v) => ids.indexOf(v.id) > -1);
+    const res =  views.filter((v) => ids.indexOf(v.id) > -1);
+    return res;
   }
 
   getViewsIdSubset() {
@@ -156,7 +157,8 @@ class ViewsFilter {
     }, viewsBase);
     let distinct = getArrayDistinct(subset);
     /**
-    * By defaut, if result is empty, show all;
+    * By defaut, empty set in union mode,
+    * everything is displayed;
     */
     if(!isIntersect && distinct.length === 0){
       distinct = vf.getViewsId();
@@ -240,7 +242,8 @@ class ViewsFilter {
   }
 
   updateViewsComponents() {
-    const views = this.getViews();
+    const vf = this;
+    const views = vf.getViews();
     setViewsComponents(views);
   }
 }
