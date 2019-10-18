@@ -2168,6 +2168,7 @@ function renderViewRt(o) {
   return new Promise((resolve) => {
     if (!h.path(view, 'data.source.tiles')) {
       resolve(false);
+      return;
     }
     const elOldLegend = view._elLegend;
     const idView = view.id;
