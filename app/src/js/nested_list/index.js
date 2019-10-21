@@ -1107,7 +1107,7 @@ class NestedList {
     });
   }
   isIgnoredElement(el) {
-    let li =  this;
+    let li = this;
     return li.opt.customClassDragIgnore.reduce((a, c) => {
       return a || (li.isElement(el) && el.classList.contains(c));
     }, false);
@@ -1162,7 +1162,7 @@ function handleSortStart(evt) {
     group: 'dragevent',
     callback: handleSortOver,
     throttle: true,
-    throttleTime: 500
+    throttleTime: 100
   });
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -1181,6 +1181,10 @@ function handleSortStart(evt) {
  */
 function handleSortOver(evt) {
   let li = this;
+  if (li.isBusy()) {
+    console.log('sort over : is busy');
+    return;
+  }
   if (li.opt.onSortOver) {
     li.opt.onSortOver(evt);
   }
@@ -1242,7 +1246,11 @@ function handleSortOver(evt) {
         /**
          * Move
          */
-        elGroup.insertBefore(elDrag, elInsert);
+        li.setBusy(true);
+        animateMove(elDrag, elInsert).then(() => {
+          elGroup.insertBefore(elDrag, elInsert);
+          li.setBusy(false);
+        });
       }
       return;
     }
@@ -1267,7 +1275,11 @@ function handleSortOver(evt) {
           /**
            * Move
            */
-          elGroup.insertBefore(elDrag, elFirst);
+          li.setBusy(true);
+          animateMove(elDrag, elFirst).then(() => {
+            elGroup.insertBefore(elDrag, elFirst);
+            li.setBusy(false);
+          });
         }
       }
       return;
@@ -1275,6 +1287,36 @@ function handleSortOver(evt) {
   } catch (e) {
     console.warn(e);
   }
+}
+
+
+/**
+* Simple animation to move smoothly list item
+*/
+function animateMove(elDrag, elDest, duration) {
+  duration = duration || 200;
+  return new Promise((resolve) => {
+    if(!elDrag || !elDest){
+      resolve(false);
+    }
+    var rDrag = elDrag.getBoundingClientRect();
+    var rDest = elDest.getBoundingClientRect();
+    var dY = rDrag.top - rDest.top;
+
+    elDrag.classList.add('li-animate-move');
+    elDest.classList.add('li-animate-move');
+
+    elDrag.style.transform = 'translateY(' + (-dY) + 'px)';
+    elDest.style.transform = 'translateY(' + (dY) + 'px)';
+
+    setTimeout(() => {
+      elDrag.classList.remove('li-animate-move');
+      elDest.classList.remove('li-animate-move');
+      elDrag.style.transform = '';
+      elDest.style.transform = '';
+      resolve(true);
+    }, duration);
+  });
 }
 /**
  * Sort end event listener

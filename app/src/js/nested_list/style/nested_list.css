@@ -7,6 +7,9 @@
   max-height:1000px;
   opacity:1;
 }
+.li-item.li-animate-move {
+  transition : transform 200ms ease-in-out;
+}
 
 .li-item.li-item-hidden,
 .li-group.li-group-collapsed .li-item,
