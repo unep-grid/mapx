@@ -3711,7 +3711,8 @@ export function getViewLegend(id, opt) {
   if (h.isView(id)) {
     id = id.id;
   }
-  let elLegend = v._elLegend;
+  let view = h.getView(id);
+  let elLegend = view._elLegend;
 
   if (elLegend && opt.clone === true) {
     elLegend = elLegend.cloneNode(true);
