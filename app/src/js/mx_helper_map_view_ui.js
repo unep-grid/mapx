@@ -239,6 +239,12 @@ export function viewsListRenderNew(o) {
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
+
+      /*
+      * Update filter activated button
+      */
+      h.updateBtnFilterActivated();
+      
       /*
        * Apply filter to nested list
        */

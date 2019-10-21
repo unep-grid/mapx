@@ -224,18 +224,23 @@ export function initListeners() {
 /**
  * Set activated view button state
  */
-function updateBtnFilterActivated() {
+export function updateBtnFilterActivated() {
   const h = mx.helpers;
   const views = h.getViews();
   const elFilterActivated = document.getElementById('btnFilterChecked');
-  const activate = views.reduce((a, v) => {
+  const hasViewsActivated = views.reduce((a, v) => {
     let hasEl = h.isElement(v._el);
-    return  a || (v._open === true && (hasEl && window.getComputedStyle(v._el).display !== "none"));
+    return (
+      a ||
+      (v._open === true &&
+        (hasEl && window.getComputedStyle(v._el).display !== 'none'))
+    );
   }, false);
-  
-  if (activate) {
+  const isActivated = elFilterActivated.classList.contains('active');
+
+  if (isActivated || hasViewsActivated) {
     elFilterActivated.classList.remove('disabled');
-  } else {
+  }else{
     elFilterActivated.classList.add('disabled');
   }
 }
@@ -1714,7 +1719,6 @@ export function closeView(o) {
       view: view
     }
   });
-
 }
 /**
  * Filter current view and store rules

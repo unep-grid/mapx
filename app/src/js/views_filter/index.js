@@ -621,5 +621,5 @@ function handleFilterActivatedView(event) {
     return a;
   }, []);
 
-  vf.updateRule('activated', ids, !toDisable);
+  vf.updateRule('views_activated', ids, !toDisable);
 }
