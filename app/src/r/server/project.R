@@ -81,19 +81,12 @@ observe({
       #
       roles <- mxDbGetProjectUserRoles(id_user,project_out)
       if(noDataCheck(roles$groups)) project_out <- project_def;
+      
       reactData$project <- project_out
       reactData$projectPrevious <- project_react
 
-      #
-      # Update browser query parameter
-      #
-      mxUpdateQueryParameters(list(
-          project = project_out
-          ))
-      mxUpdateSettings(list(
-          project = project_out
-          ))
-      mxUpdateSettingsUser(list(
+
+       mxUpdateSettingsUser(list(
         roles = roles
         ));
 
@@ -102,23 +95,47 @@ observe({
   })
 })
 
+
+observeEvent(reactData$project,{
+  #
+  # Update browser query parameter
+  #
+  idProject <- reactData$project
+  mxUpdateQueryParameters(list(
+      project = idProject
+      ))
+  mxUpdateSettings(list(
+      project = idProject
+      ))
+
+})
+
+
+
+#
+# In case project change log project change AND IP
+# IP can take a while to be updated
+#
 observe({
   ipUser <- reactIp()
   idProject <- reactData$project
 
   isolate({
+    #
+    # Check current user values
+    #
     idUser <- reactUser$data$id
     isGuest <- isGuestUser()
     idProjectPrevious <- reactData$projectPrevious
 
     isNotComplete <- noDataCheck(idUser) ||
-      noDataCheck(idProject) ||
       noDataCheck(ipUser) ||
       noDataCheck(idProject) 
 
     if(isNotComplete){
       return()
     }
+   
     #
     # Log project changes
     #
