@@ -177,10 +177,10 @@ export function initListeners() {
     idGroup: 'clean_history_and_state',
     callback: () => {
       let dat = h.getMapData();
-      if (dat.viewsList) {
-        dat.viewsList.clearHistory();
-        dat.viewsList.setStateOrig();
-      }
+      //if (dat.viewsList) {
+        //dat.viewsList.clearHistory();
+        //dat.viewsList.setStateOrig();
+      //}
       h.updateViewsFilter();
       h.viewsRender();
     }

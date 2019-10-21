@@ -584,10 +584,10 @@ class NestedList {
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
-      if(li.opt.onSaveLocal){
+      if (li.opt.onSaveLocal) {
         li.opt.onSaveLocal();
-      }else{
-        alert("Saved");
+      } else {
+        alert('Saved');
       }
     }
   }
@@ -764,6 +764,13 @@ class NestedList {
       }
     }
     state = state || li.getStateOrig();
+    /**
+     * Sanitize
+     */
+    if (li.opt.onSanitizeState) {
+      state = li.opt.onSanitizeState(state);
+    }
+
     /*
      * If the state is empty,
      * add empty label
@@ -1100,8 +1107,9 @@ class NestedList {
     });
   }
   isIgnoredElement(el) {
-    return this.opt.customClassDragIgnore.reduce((a, c) => {
-      return a || el.classList.contains(c);
+    let li =  this;
+    return li.opt.customClassDragIgnore.reduce((a, c) => {
+      return a || (li.isElement(el) && el.classList.contains(c));
     }, false);
   }
 }
@@ -1153,8 +1161,8 @@ function handleSortStart(evt) {
     type: 'dragover',
     group: 'dragevent',
     callback: handleSortOver,
-    throttle : true,
-    throttleTime : 500
+    throttle: true,
+    throttleTime: 500
   });
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -1267,7 +1275,6 @@ function handleSortOver(evt) {
   } catch (e) {
     console.warn(e);
   }
-
 }
 /**
  * Sort end event listener

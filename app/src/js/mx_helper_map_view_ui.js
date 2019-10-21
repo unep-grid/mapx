@@ -76,14 +76,16 @@ export function viewsToNestedListState(views) {
 
 /**
  * Trim and expend state according to views list
- * @param {Array} views Views list
  * @param {Array} state State list
  * @return {Array} modified state
  */
-function updateState(views, state) {
+function sanitizeState(state) {
+  const h = mx.helpers;
+  state = state || [];
   /**
    * Trim state
    */
+  const views = h.getViews();
   const idsViews = views.map((v) => v.id);
   state.forEach((s, i) => {
     if (s.type === 'item') {
@@ -188,12 +190,6 @@ export function viewsListRenderNew(o) {
   mData.views.push(...views);
 
   /**
-   * Sync views and state: trim and expend
-   * according to actual views list
-   */
-  updateState(mData.views, state);
-
-  /**
    * Create views list ui
    */
   mData.viewsList = new NestedList(elViewsList, {
@@ -227,6 +223,9 @@ export function viewsListRenderNew(o) {
     onSaveLocal: () => {
       mx.helpers.iconFlash('floppy-o');
     },
+    onSanitizeState: (state) => {
+      return sanitizeState(state);
+    },
     emptyLabel: getEmptyLabel()
   });
 
@@ -239,12 +238,11 @@ export function viewsListRenderNew(o) {
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
-
       /*
-      * Update filter activated button
-      */
+       * Update filter activated button
+       */
       h.updateBtnFilterActivated();
-      
+
       /*
        * Apply filter to nested list
        */
@@ -279,8 +277,8 @@ export function viewsListRenderNew(o) {
   /**
    * Handle view click
    */
+  mx.listenerStore.removeListenerByGroup('view_list');
   mx.listenerStore.addListener({
-    //target: elViewsList,
     target: document.body,
     bind: mData.viewsList,
     type: 'click',

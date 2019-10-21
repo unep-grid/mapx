@@ -40,6 +40,7 @@ let settings = {
   onSetDragImage: null,
   onFilterEnd : null,
   onResetState : null,
+  onSanitizeState : null,
   /**
    * Dictionnary
    */
