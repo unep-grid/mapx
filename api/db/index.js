@@ -43,6 +43,22 @@ pgRead.on('error', (err) => {
   process.exit(-1);
 });
 
+var pgCustom = new Pool({
+  host: s.db.host,
+  user: s.db.custom.user,
+  database: s.db.name,
+  password: s.db.custom.password,
+  port: s.db.port,
+  statement_timeout: 30 * 1000,
+  max: s.db.poolMax
+});
+exports.pgCustom = pgCustom;
+
+pgCustom.on('error', (err) => {
+  console.error('Unexpected error on postgres client custom', err);
+  process.exit(-1);
+});
+
 var clientRedis = redis.createClient({
   url: 'redis://' + s.redis.host + ':' + s.redis.port
 });

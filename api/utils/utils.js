@@ -277,6 +277,35 @@ function cleanArray(arr) {
   return arr.reduce((a, v) => (v ? a.concat(v) : a), []);
 }
 
+/**
+ * Find values for a given key
+ * Source (2019/10/22): https://gist.github.com/shakhal/3cf5402fc61484d58c8d
+ * @param {Object} obj Object to parse
+ * @param {String} key Key for which values must be retrieved
+ */
+function findValues(obj, key) {
+  var list = [];
+  if (!obj) return list;
+  if (obj instanceof Array) {
+    for (var i in obj) {
+        list = list.concat(findValues(obj[i], key));
+    }
+    return list;
+  }
+  if (obj[key]) list.push(obj[key]);
+
+  if ((typeof obj == "object") && (obj !== null) ){
+	  var children = Object.keys(obj);
+	  if (children.length > 0){
+	  	for (i = 0; i < children.length; i++ ){
+	        list = list.concat(findValues(obj[children[i]], key));
+	  	}
+	  }
+  }
+  return list;
+}
+exports.findValues = findValues;
+
 /*
  * Export methods
  */
