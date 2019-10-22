@@ -6,9 +6,7 @@
 .li-item {
   max-height:1000px;
   opacity:1;
-}
-.li-item.li-animate-move {
-  transition : transform 200ms ease-in-out;
+  will-change: transform;
 }
 
 .li-item.li-item-hidden,
@@ -84,6 +82,7 @@
 }
 .li-dragged {
   opacity: 0.2;
+   z-index:-1;
 }
 .li-global-dragging * {
   cursor: grabbing !important;

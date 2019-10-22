@@ -16,6 +16,7 @@ class NestedList {
     li._is_mode_empty = false;
     li._is_mode_lock = false;
     li._is_mode_frozen = false;
+    li._is_mode_animate = false;
     li.listenerStore = new ListenerStore();
     li.setOptions(opt);
     li.setStateOrig(opt.state);
@@ -31,7 +32,7 @@ class NestedList {
    * Init/destroy
    */
   init() {
-    let li = this;
+    const li = this;
     li.initCustomDictItem();
     li.initState();
     li.initHistory();
@@ -44,7 +45,7 @@ class NestedList {
     this.setHistory();
   }
   startListening() {
-    let li = this;
+    const li = this;
     /**
      * Add base listeners
      */
@@ -74,7 +75,7 @@ class NestedList {
     this.listenerStore.removeListenerByGroup('base');
   }
   destroy() {
-    let li = this;
+    const li = this;
     li.listenerStore.destroy();
     li.clearHistory();
     li.clearAllItems();
@@ -86,7 +87,7 @@ class NestedList {
     return this.opt;
   }
   setOptions(opt) {
-    let li = this;
+    const li = this;
     li.opt = Object.assign({}, settings, opt);
     for (let k in li.opt) {
       let item = li.opt[k];
@@ -94,6 +95,9 @@ class NestedList {
         li.opt[k] = item.bind(li);
       }
     }
+  }
+  getOption(id) {
+    return this.opt[id];
   }
   setId(id) {
     if (id) {
@@ -124,7 +128,7 @@ class NestedList {
   filterById(ids, opt) {
     opt = Object.assign({}, {flatMode: false}, opt);
 
-    let li = this;
+    const li = this;
     if (li.isModeEmpty()) {
       return;
     }
@@ -161,7 +165,8 @@ class NestedList {
   sortGroup(elTarget, opt) {
     let def = {asc: true, mode: 'text'};
     opt = Object.assign({}, def, opt);
-    let li = this;
+    const li = this;
+    li.setModeAnimate(false);
     let elGroup = li.isGroup(elTarget) ? elTarget : li.getGroup(elTarget);
     let els = li.getChildrenTarget(elGroup, true);
     let data = [];
@@ -215,6 +220,7 @@ class NestedList {
       elPrevious = d.el;
     });
 
+    li.setModeAnimate(true);
     /**
      * Helpers
      */
@@ -230,7 +236,7 @@ class NestedList {
    * Target management
    */
   getTarget(el) {
-    let li = this;
+    const li = this;
     if (li.isTarget(el)) {
       return el;
     }
@@ -240,7 +246,7 @@ class NestedList {
     return el || li.elRoot;
   }
   getChildrenTarget(el, direct) {
-    let li = this;
+    const li = this;
     el = el || li.elRoot;
     if (!li.isGroup(el)) {
       el = li.getGroup(el);
@@ -271,7 +277,7 @@ class NestedList {
     return el.previousElementSibling;
   }
   getItemContent(el) {
-    let li = this;
+    const li = this;
     if (li.isItem(el)) {
       return el.querySelector('.' + li.opt.class.itemContent);
     }
@@ -287,18 +293,18 @@ class NestedList {
       : Date.now();
   }
   getGroup(el) {
-    let li = this;
+    const li = this;
     while (el && (el = el.parentNode) && !li.isGroup(el)) {
       el = el.parentNode;
     }
     return el || li.elRoot;
   }
   getGroupById(id) {
-    let li = this;
+    const li = this;
     return li.elRoot.querySelector(`#${id}`);
   }
   getGroupId(el) {
-    let li = this;
+    const li = this;
     let elGrp = li.getGroup(el);
     if (elGrp === li.elRoot) {
       return 'root';
@@ -307,7 +313,7 @@ class NestedList {
     }
   }
   getGroupTitleObject(el) {
-    let li = this;
+    const li = this;
     let titleObject = {};
     if (li.isGroup(el)) {
       titleObject = JSON.parse(el.dataset.li_title || '{}');
@@ -316,77 +322,85 @@ class NestedList {
     return titleObject;
   }
   getGroupTitle(el) {
-    let li = this;
+    const li = this;
     if (li.isGroup(el)) {
       return el.querySelector('.' + li.opt.class.groupTitle).innerText;
     }
   }
   getGroupDate(el) {
-    let li = this;
+    const li = this;
     if (li.isGroup(el)) {
       return el.dataset.li_date;
     }
   }
   getGroupLabel(el) {
-    let li = this;
+    const li = this;
     if (li.isGroup(el)) {
       return el.querySelector('.' + li.opt.class.groupLabel);
     }
   }
   getGroupColor(el) {
-    let li = this;
+    const li = this;
     if (li.isGroup(el)) {
       return el.dataset.li_color || this.opt.colorDefault;
     }
   }
   moveTargetTop(el) {
-    let li = this;
+    const li = this;
     let elGroup = li.getGroup(el);
     let elFirst = li.getFirstTarget(elGroup, true);
     if (li.isTarget(elFirst)) {
-      elGroup.insertBefore(el, elFirst);
+      li.animateMove([el, elFirst], () => {
+        elGroup.insertBefore(el, elFirst);
+      });
     }
   }
   moveTargetBefore(el, elBefore) {
-    let li = this;
+    const li = this;
     elBefore = elBefore || li.getPreviousTarget(el);
     if (li.isTarget(elBefore)) {
       let elGroup = li.getGroup(el);
-      elGroup.insertBefore(el, elBefore);
+      li.animateMove([el, elBefore], () => {
+        elGroup.insertBefore(el, elBefore);
+      });
     }
   }
   moveTargetUp(el) {
-    let li = this;
+    const li = this;
     let elPrevious = li.getPreviousTarget(el);
     li.moveTargetBefore(el, elPrevious);
   }
   moveTargetAfter(el, elAfter) {
-    let li = this;
+    const li = this;
     elAfter = elAfter || li.getNextTarget(el);
     if (li.isTarget(elAfter)) {
       let elGroup = li.getGroup(el);
       let elAfterNext = li.getNextTarget(elAfter);
       if (elAfterNext) {
-        elGroup.insertBefore(el, elAfterNext);
+        li.animateMove([el, elAfterNext], () => {
+          elGroup.insertBefore(el, elAfterNext);
+        });
       } else {
-        elGroup.appendChild(el);
+        li.animateMove([el], () => {
+          elGroup.appendChild(el);
+        });
       }
     }
   }
   moveTargetDown(el) {
-    let li = this;
+    const li = this;
     let elNext = li.getNextTarget(el);
     li.moveTargetAfter(el, elNext);
   }
   moveTargetBottom(el) {
-    let li = this;
+    const li = this;
     let elGroup = li.getGroup(el);
     if (li.isGroup(elGroup)) {
       elGroup.appendChild(el);
     }
   }
   groupCollapse(el, collapse) {
-    let li = this;
+    const li = this;
     collapse = collapse === true;
     if (li.isGroup(el)) {
       if (collapse) {
@@ -397,7 +411,7 @@ class NestedList {
     }
   }
   groupToggle(el) {
-    let li = this;
+    const li = this;
     if (li.isGroup(el)) {
       let isCollapsed = li.isGroupCollapsed(el);
       li.groupCollapse(el, !isCollapsed);
@@ -407,12 +421,12 @@ class NestedList {
     return el.classList.contains(this.opt.class.groupCollapsed);
   }
   isGroupVisible(el) {
-    let li = this;
+    const li = this;
     let isVisible = !el.classList.contains(li.opt.class.groupInvisible);
     return isVisible;
   }
   setGroupVisibility(el, visible) {
-    let li = this;
+    const li = this;
     visible = visible === true;
     if (li.isGroup(el)) {
       if (visible) {
@@ -424,7 +438,7 @@ class NestedList {
   }
 
   setGroupLabel(el, label) {
-    let li = this;
+    const li = this;
     let elGroup = li.isGroup(el) ? el : li.getGroup(el);
     if (!elGroup) {
       return;
@@ -439,6 +453,12 @@ class NestedList {
   }
   setModeSkipSave(skip) {
     this._is_mode_skip_save = skip === true;
+  }
+  setModeAnimate(enable) {
+    this._is_mode_animate = enable === true;
+  }
+  isModeAnimate() {
+    return this._is_mode_animate === true;
   }
   isModeSkipSave() {
     return this._is_mode_skip_save === true;
@@ -467,7 +487,7 @@ class NestedList {
 
   setModeFlat(enable, opt) {
     opt = opt || {};
-    let li = this;
+    const li = this;
     enable = enable === true;
     let el = li.elRoot;
     let els = li.getChildrenTarget(el);
@@ -482,7 +502,7 @@ class NestedList {
     return this._is_mode_flat;
   }
   setGroupTitle(el, title) {
-    let li = this;
+    const li = this;
     let lang = li.getLanguage();
     let isGroup = li.isGroup(el);
     if (!isGroup) {
@@ -497,7 +517,7 @@ class NestedList {
     el.dataset.li_title = JSON.stringify(titleObject);
   }
   setGroupColor(el, color) {
-    let li = this;
+    const li = this;
     let isGroup = li.isGroup(el);
     if (!isGroup) {
       return;
@@ -557,13 +577,13 @@ class NestedList {
     return this.getStateHash(a) !== this.getStateHash(b);
   }
   getPreviousState() {
-    let li = this;
+    const li = this;
     if (li.hasHistory()) {
       return li.history[li.history.length - 1];
     }
   }
   saveStateStorage() {
-    let li = this;
+    const li = this;
     let state = li.getState();
     let history = li.getHistory();
 
@@ -577,7 +597,7 @@ class NestedList {
     li.setHistoryStored(history);
   }
   setStateStored(state) {
-    let li = this;
+    const li = this;
     if (li.isModeFrozen()) {
       return;
     }
@@ -603,7 +623,7 @@ class NestedList {
    * History management
    */
   setHistoryStored(history) {
-    let li = this;
+    const li = this;
     let key = li.getStorageKey('history');
     let isValid = li.isArray(history);
     if (isValid && window.localStorage) {
@@ -627,7 +647,7 @@ class NestedList {
     this.history = this.isArray(history) ? history : this.getHistoryStored();
   }
   getHistoryStored() {
-    let li = this;
+    const li = this;
     let key = li.getStorageKey('history');
     let history = [];
     if (window.localStorage) {
@@ -639,7 +659,7 @@ class NestedList {
     return history;
   }
   getStateStored() {
-    let li = this;
+    const li = this;
     let key = li.getStorageKey('state');
     if (window.localStorage) {
       return JSON.parse(window.localStorage.getItem(key));
@@ -647,7 +667,7 @@ class NestedList {
     return [];
   }
   addUndoStep() {
-    let li = this;
+    const li = this;
     let hasDiff = true;
     let state = li.getState({keepItemContent: true});
     let lastState;
@@ -673,7 +693,7 @@ class NestedList {
     return this.history.length > 0;
   }
   undo() {
-    let li = this;
+    const li = this;
     li.clearAllItems();
     let last = li.history.pop();
     li.setState({
@@ -688,7 +708,7 @@ class NestedList {
    * Empty mode
    */
   setModeEmpty(enable) {
-    let li = this;
+    const li = this;
     let idEmpty = li.opt.idEmptyItem;
     let ignore = (enable && li.isModeEmpty()) || (!enable && !li.isModeEmpty());
     let nItems = li.getChildrenCount();
@@ -723,12 +743,12 @@ class NestedList {
    * State management
    */
   refreshState() {
-    let li = this;
+    const li = this;
     let state = li.getState({keepItemContent: true});
     li.setState({render: false, state: state, useStateStored: false});
   }
   resetState() {
-    let li = this;
+    const li = this;
     let state = li.getStateOrig();
     if (li.isModeEmpty()) {
       return;
@@ -741,7 +761,8 @@ class NestedList {
     }
   }
   setState(opt) {
-    let li = this;
+    const li = this;
+    li.setModeAnimate(false);
     li.clearAllItems();
     opt = opt || {};
     opt = Object.assign({}, li.opt, opt);
@@ -798,6 +819,7 @@ class NestedList {
     if (li.opt.onChange) {
       li.opt.onChange();
     }
+    li.setModeAnimate(true);
   }
   getStateOrig() {
     return this._state_orig || [];
@@ -806,14 +828,14 @@ class NestedList {
     this._state_orig = this.cloneObject(state || this.getState() || []);
   }
   clearAllItems() {
-    let li = this;
+    const li = this;
     let els = li.getChildrenTarget(li.elRoot);
     els.forEach((el) => {
       li.removeElement(el);
     });
   }
   addItem(attr) {
-    let li = this;
+    const li = this;
     attr.render = attr.render || !attr.content || false;
     let isGroup = li.isGroup(attr.group);
     let isLocked = li.isModeLock();
@@ -848,7 +870,7 @@ class NestedList {
   }
 
   addGroup(attr) {
-    let li = this;
+    const li = this;
     let isGroup = li.isGroup(attr.group);
     let hasContent = li.isTarget(attr.content);
     let targetAfter = null;
@@ -861,26 +883,30 @@ class NestedList {
     let group = new Group(attr, li);
     let elGroup = group.el;
     if (targetAfter) {
-      targetAfter.parentElement.insertBefore(elGroup, targetAfter);
+      li.animateMove([elGroup, targetAfter], () => {
+        targetAfter.parentElement.insertBefore(elGroup, targetAfter);
+      });
     } else {
-      elGroupParent.appendChild(elGroup);
+      li.animateMove([elGroup], () => {
+        elGroupParent.appendChild(elGroup);
+      });
     }
     return elGroup;
   }
 
   removeItemById(id) {
-    let li = this;
+    const li = this;
     let elItem = li.elRoot.querySelector('#' + id);
     li.removeElement(elItem);
   }
 
   removeGroupById(id) {
-    let li = this;
+    const li = this;
     let elGroup = li.elRoot.querySelector('#' + id);
     li.removeGroup(elGroup);
   }
   removeGroup(elGroup) {
-    let li = this;
+    const li = this;
     let isValid = li.isGroup(elGroup) && elGroup !== li.elRoot;
     if (isValid) {
       let elParent = li.getGroup(elGroup);
@@ -895,13 +921,13 @@ class NestedList {
    * Helpers
    */
   setUiDraggingStart() {
-    let li = this;
+    const li = this;
     setTimeout(() => {
       document.body.classList.add(li.opt.class.globalDragging);
     }, 100);
   }
   setUiDraggingEnd() {
-    let li = this;
+    const li = this;
     setTimeout(() => {
       document.body.classList.remove(li.opt.class.globalDragging);
     }, 10);
@@ -925,7 +951,7 @@ class NestedList {
     }
   }
   removeElement(el) {
-    let li = this;
+    const li = this;
     if (el instanceof Element) {
       if (el.remove) {
         el.remove();
@@ -945,7 +971,7 @@ class NestedList {
   }
   d(id) {
     // translate based on id
-    let li = this;
+    const li = this;
     let lang = li.getLanguage();
     let langDef = li.getLanguageDefault();
     let dict = li.getDict();
@@ -963,7 +989,7 @@ class NestedList {
     return id;
   }
   updateDictItems(items) {
-    let li = this;
+    const li = this;
     let dict = li.getDict();
     items = li.isArray(items) ? items : [items];
     let keys = items.map((i) => i.id);
@@ -982,7 +1008,7 @@ class NestedList {
   }
 
   parseTemplate(template, dict) {
-    let li = this;
+    const li = this;
     let lang = li.getLanguage();
     return template.replace(/{{([^{}]+)}}/g, (m, k) => {
       let item = dict.filter((d) => d.id === k)[0];
@@ -1009,7 +1035,7 @@ class NestedList {
     return item && item instanceof Function;
   }
   randomId() {
-    let li = this;
+    const li = this;
     return (
       li.opt.prefix +
       '_' +
@@ -1057,7 +1083,7 @@ class NestedList {
     );
   }
   getDistanceFromTo(elTest, elOther) {
-    let li = this;
+    const li = this;
     if (!li.isElement(elTest) || !li.isElement(elOther)) {
       return {
         dY: Infinity,
@@ -1078,7 +1104,7 @@ class NestedList {
     return /^#[0-9A-F]{6}$/i.test(color) ? color : this.opt.colorDefault;
   }
   validateGroupTitleObject(title) {
-    let li = this;
+    const li = this;
     title = li.isObject(title) ? title : {};
     let lang = li.getLanguage();
     let langDefault = li.getLanguageDefault();
@@ -1100,17 +1126,90 @@ class NestedList {
    * see https://jsfiddle.net/fxi/tyw0zn7h/;
    */
   makeIgnoredClassesDraggable(el) {
-    let li = this;
+    const li = this;
     let cl = '.' + li.opt.customClassDragIgnore.join(',.');
     el.querySelectorAll(cl).forEach((el) => {
       el.setAttribute('draggable', true);
     });
   }
   isIgnoredElement(el) {
-    let li = this;
+    const li = this;
     return li.opt.customClassDragIgnore.reduce((a, c) => {
       return a || (li.isElement(el) && el.classList.contains(c));
     }, false);
+  }
+
+  /**
+   * Simple animation to move smoothly list item
+   * @param {Element|Array} elements to move
+   * @param {Function} Callback that move elements
+   * @return {Promise|Boolean} moved
+   */
+  animateMove(elsMove, cbMove) {
+    const li = this;
+    const enable = li.isModeAnimate();
+    const duration = li.getOption('animeDuration');
+    const relaxDuration = li.getOption('animeDragRelaxDuration');
+    const els = elsMove instanceof Array ? elsMove : [elsMove];
+    if (els.length === 0) {
+      return;
+    }
+    const done = [];
+    if (enable) {
+      li.setBusy(true);
+      savePos();
+    }
+    move();
+    if (enable) {
+      start();
+    }
+
+    function savePos() {
+      els.forEach((e, i) => {
+        if (li.isElement(e)) {
+          e.dataset.from = e.getBoundingClientRect().top;
+        } else {
+          els.splice(i, 1);
+        }
+      });
+    }
+    function move() {
+      cbMove();
+    }
+    function start() {
+      els.forEach((elItem) => {
+        elItem.style.transition = 'transform 0ms';
+        set(elItem);
+      });
+    }
+    function set(elItem) {
+      elItem.dataset.to = elItem.getBoundingClientRect().top;
+      elItem.dataset.dist = elItem.dataset.to - elItem.dataset.from;
+      elItem.style.transform = 'translateY(' + -elItem.dataset.dist + 'px)';
+      setTimeout(() => {
+        anim(elItem);
+      }, 0);
+    }
+    function anim(elItem) {
+      elItem.style.transition = 'transform ' + duration + 'ms ease-in-out';
+      elItem.style.transform = 'translateY(0px)';
+      setTimeout(() => {
+        clean(elItem);
+      }, duration);
+    }
+    function clean(elItem) {
+      elItem.style.transition = '';
+      elItem.style.transform = '';
+      done.push(elItem);
+      end();
+    }
+    function end() {
+      if (done.length === els.length) {
+        setTimeout(() => {
+          li.setBusy(false);
+        }, relaxDuration);
+      }
+    }
   }
 }
 
@@ -1120,7 +1219,7 @@ export {NestedList};
  * Start sort event listener
  */
 function handleSortStart(evt) {
-  let li = this;
+  const li = this;
 
   li.elDrag = evt.target;
   /**
@@ -1162,7 +1261,7 @@ function handleSortStart(evt) {
     group: 'dragevent',
     callback: handleSortOver,
     throttle: true,
-    throttleTime: 100
+    throttleTime: 200
   });
   li.listenerStore.addListener({
     target: li.elRoot,
@@ -1180,9 +1279,8 @@ function handleSortStart(evt) {
  * Over event listener
  */
 function handleSortOver(evt) {
-  let li = this;
+  const li = this;
   if (li.isBusy()) {
-    console.log('sort over : is busy');
     return;
   }
   if (li.opt.onSortOver) {
@@ -1246,10 +1344,8 @@ function handleSortOver(evt) {
         /**
          * Move
          */
-        li.setBusy(true);
-        animateMove(elDrag, elInsert).then(() => {
+        li.animateMove([elDrag, elTarget], () => {
           elGroup.insertBefore(elDrag, elInsert);
-          li.setBusy(false);
         });
       }
       return;
@@ -1265,7 +1361,9 @@ function handleSortOver(evt) {
         /**
          * Move
          */
-        elGroup.appendChild(elDrag);
+        li.animateMove([elDrag], () => {
+          elGroup.appendChild(elDrag);
+        });
       } else {
         elFirst = li.getFirstTarget(elGroup);
         isValid =
@@ -1275,10 +1373,8 @@ function handleSortOver(evt) {
           /**
            * Move
            */
-          li.setBusy(true);
-          animateMove(elDrag, elFirst).then(() => {
+          li.animateMove([elFirst, elDrag], () => {
             elGroup.insertBefore(elDrag, elFirst);
-            li.setBusy(false);
           });
         }
       }
@@ -1289,41 +1385,12 @@ function handleSortOver(evt) {
   }
 }
 
-
-/**
-* Simple animation to move smoothly list item
-*/
-function animateMove(elDrag, elDest, duration) {
-  duration = duration || 200;
-  return new Promise((resolve) => {
-    if(!elDrag || !elDest){
-      resolve(false);
-    }
-    var rDrag = elDrag.getBoundingClientRect();
-    var rDest = elDest.getBoundingClientRect();
-    var dY = rDrag.top - rDest.top;
-
-    elDrag.classList.add('li-animate-move');
-    elDest.classList.add('li-animate-move');
-
-    elDrag.style.transform = 'translateY(' + (-dY) + 'px)';
-    elDest.style.transform = 'translateY(' + (dY) + 'px)';
-
-    setTimeout(() => {
-      elDrag.classList.remove('li-animate-move');
-      elDest.classList.remove('li-animate-move');
-      elDrag.style.transform = '';
-      elDest.style.transform = '';
-      resolve(true);
-    }, duration);
-  });
-}
 /**
  * Sort end event listener
  */
 function handleSortEnd(evt) {
   evt.preventDefault();
-  let li = this;
+  const li = this;
   li.elDrag.classList.remove(li.opt.class.dragged);
   li.listenerStore.removeListenerByGroup('dragevent');
   li.setUiDraggingEnd();
@@ -1344,7 +1411,7 @@ function handleSortEnd(evt) {
  */
 function handleContextClick(evt) {
   evt.preventDefault();
-  let li = this;
+  const li = this;
   if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
   }
@@ -1357,7 +1424,7 @@ function handleContextClick(evt) {
  * Click general listener
  */
 function handleClick(evt) {
-  let li = this;
+  const li = this;
   let elTarget = li.getTarget(evt.target);
   let idAction = elTarget.dataset.li_id_action;
   let idType = elTarget.dataset.li_event_type;
