@@ -27,19 +27,28 @@ module.exports = {
       user : env.POSTGRES_USER_READ,
       password : env.POSTGRES_USER_READ_PASSWORD
     },
+    custom : {
+      user : env.POSTGRES_USER_CUSTOM,
+      password : env.POSTGRES_USER_CUSTOM_PASSWORD
+    },
     crypto : {
       key: env.POSTGRES_KEY_ENCRYPT
     },
+    stringWrite : 'PG:host=' + env.POSTGRES_HOST + 
+    ' port=' + env.POSTGRES_PORT + 
+    ' user=' + env.POSTGRES_USER_WRITE + 
+    ' dbname=' + env.POSTGRES_DB +
+    ' password=' + env.POSTGRES_USER_WRITE_PASSWORD,
     stringRead : 'PG:host=' + env.POSTGRES_HOST + 
     ' port=' + env.POSTGRES_PORT + 
     ' user=' + env.POSTGRES_USER_READ + 
     ' dbname=' + env.POSTGRES_DB +
     ' password=' + env.POSTGRES_USER_READ_PASSWORD,
-    stringWrite : 'PG:host=' + env.POSTGRES_HOST + 
+    stringCustom : 'PG:host=' + env.POSTGRES_HOST + 
     ' port=' + env.POSTGRES_PORT + 
-    ' user=' + env.POSTGRES_USER_WRITE + 
+    ' user=' + env.POSTGRES_USER_CUSTOM + 
     ' dbname=' + env.POSTGRES_DB +
-    ' password=' + env.POSTGRES_USER_WRITE_PASSWORD
+    ' password=' + env.POSTGRES_USER_CUSTOM_PASSWORD
   },
   image : {
     path : {
