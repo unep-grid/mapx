@@ -1698,6 +1698,7 @@ export function viewOpen(view) {
     if (elView && elView.vb) {
       h.viewModulesInit(view);
       elView.vb.open();
+      h.updateLanguageElements({el:elView});
     }
     resolve(true);
   });
