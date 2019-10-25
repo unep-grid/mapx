@@ -9,6 +9,12 @@
   will-change: transform;
 }
 
+.li-item:hover {
+  position: relative;
+  z-index: 100;
+}
+
+
 .li-item.li-item-hidden,
 .li-group.li-group-collapsed .li-item,
 .li-group.li-group-collapsed .li-group {

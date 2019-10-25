@@ -11,7 +11,6 @@
 mxDbCreateTempUser <- function(id,srcList){
 
   conMaster <- mxDbGetCon(useMaster=TRUE)
-  mxDbAutoReturnCon(conMaster)
 
   email <- mxDbGetEmailFromId(id)
   token <- randomString("MX",splitIn=3,addLETTERS=T,addLetters=F)
@@ -72,7 +71,6 @@ mxDbCreateTempUser <- function(id,srcList){
     dropUser()
   }
 
-  con <- mxDbGetCon()
   dbSendQuery(conMaster,"BEGIN TRANSACTION")
   tryCatch({
 

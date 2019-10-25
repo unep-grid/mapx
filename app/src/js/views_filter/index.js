@@ -73,6 +73,7 @@ class ViewsFilter {
       callback: handleFilterViewIdByText,
       group: 'view_filter',
       debounce: true,
+      debounceTime : 100,
       bind: vf
     });
   }
@@ -604,6 +605,7 @@ function handleFilterViewIdByTag(event) {
 }
 
 function handleFilterActivatedView(event) {
+  console.log("Click on handle filter activated view");
   const vf = this;
   const clActive = 'active';
   const elBtn = event.target;
@@ -615,7 +617,8 @@ function handleFilterActivatedView(event) {
   }
   const views = vf.getViews();
   const ids = views.reduce((a, v) => {
-    if (!toDisable && v._open) {
+    let isOpen = v.vb.isOpen();
+    if (!toDisable && isOpen) {
       a.push(v.id);
     }
     return a;

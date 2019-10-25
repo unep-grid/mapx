@@ -161,6 +161,9 @@ class EventStore {
    * @param {data} opt.data Data to pass to callback
    */
   fire(opt) {
+    if(typeof opt === 'string'){
+      opt = {type:opt};
+    }
     opt = Object.assign({}, opt);
     if (!opt.type) {
       throw new Error('Missing argument');

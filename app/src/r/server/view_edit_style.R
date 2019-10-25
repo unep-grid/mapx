@@ -124,9 +124,7 @@ observeEvent(input$styleEdit_values,{
 
     switch(idEvent,
       "preview"= {
-        mglAddView(
-          viewData = view
-          )
+        mglUpdateView(view)
       },
       "save" = {
         view[["_edit"]] = NULL
@@ -145,9 +143,7 @@ observeEvent(input$styleEdit_values,{
         # edit flag
         view$`_edit` = TRUE 
 
-        mglAddView(
-          viewData = view
-          )
+        mglUpdateView(view)
 
         mxUpdateText(
           id = "modalViewEdit_txt",

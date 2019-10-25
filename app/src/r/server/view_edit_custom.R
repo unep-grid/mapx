@@ -94,9 +94,7 @@ observeEvent(input$customCodeEdit_values,{
 
     switch(idEvent,
       "preview"= {
-        mglAddView(
-          viewData = view
-          )
+        mglUpdateView(view)
       },
       "save" = {
         view[["_edit"]] = NULL
@@ -115,9 +113,7 @@ observeEvent(input$customCodeEdit_values,{
         # edit flag
         view$`_edit` = TRUE 
 
-        mglAddView(
-          viewData = view
-          )
+        mglUpdateView(view)
 
         reactData$updateViewListFetchOnly <- runif(1)
 

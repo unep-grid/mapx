@@ -146,9 +146,7 @@ observeEvent(input$btnDbSelfGenerate,{
 
                   view$`_edit` = TRUE 
 
-                  mglAddView(
-                    viewData = view
-                    )
+                  mglUpdateView(view)
                 }
               }
             })

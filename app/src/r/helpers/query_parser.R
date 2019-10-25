@@ -31,7 +31,6 @@ mxParseQuery <- function(urlSearch){
   query$lng = as.numeric(query$lng)
   query$zoom = as.numeric(query$zoom)
 
-
   #
   # Query action
   #

@@ -10583,5 +10583,29 @@
     "fa": "",
     "ps": "",
     "es": ""
+  },
+   {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "fr": "Définir la position de la carte",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+ {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "fr": "Obtenir la position actuelle",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
   }
 ]

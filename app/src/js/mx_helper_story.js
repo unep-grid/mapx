@@ -16,17 +16,151 @@ import {initEditing} from './mx_helper_story_editor.js';
  * @param {String} o.id Map id
  * @param {String} o.idView View id. If no view is given, fetch one by id
  * @param {Object} o.view A view object containing a story in data
+ * @param {Boolean} o.edit Enable editing
+ * @param {Boolean} o.update Update : partial cleaning
  * @param {Boolean} o.storyAutoStart Bypass everything, start story, don't display back button
  * @param
  */
 
 export function storyRead(o) {
+  if (o.close) {
+    return storyClose();
+  }
   return cleanInit(o)
     .then(checkMissingView)
     .then(setUi)
     .then(setListeners)
     .catch((e) => {
       console.warn(e);
+    });
+}
+
+/**
+ * Close current story if any.
+ */
+export function storyClose() {
+  const h = mx.helpers;
+  const oldData = h.path(mx.data, 'story.data');
+  if (oldData && oldData.close instanceof Function) {
+    return oldData.close({enable:false,update:false});
+  }
+}
+
+/**
+ * Clean + init
+ */
+function cleanInit(o) {
+  const h = mx.helpers;
+  /**
+   * Remove old listener
+   */
+  mx.listenerStore.removeListenerByGroup('story_map');
+
+  return new Promise(function(resolve) {
+    /* Fetch view if not given */
+    if (!o.view && o.id && o.idView) {
+      var view = h.getView(o.idView);
+      o.view = view;
+    }
+
+    /* set id view  */
+    o.idView = o.idView || o.view.id;
+
+    /* If no story, quit*/
+    if (!h.path(o, 'view.data.story')) {
+      console.log('No story to handle, abord');
+      return;
+    }
+
+    /** Remove old stuff if any */
+
+    var oldData = h.path(mx.data, 'story.data');
+    if (oldData) {
+      o.startScroll = oldData.elScroll.scrollTop;
+    }
+    if (oldData && oldData.close instanceof Function) {
+      oldData.close();
+    }
+
+    o.enable = true;
+
+    resolve(o);
+  });
+}
+
+/**
+ * Evaluate missing view and fetch them if needed
+ */
+function checkMissingView(o) {
+  const h = mx.helpers;
+  const view = o.view;
+  const views = h.getViews();
+  const idViews = views.map((v) => v.id);
+  const map = h.getMap(o.id);
+  const idViewsStory = [];
+  o.idViewsAdded = [];
+
+  return new Promise(function(resolve) {
+    const story = h.path(view, 'data.story', {});
+
+    /**
+     * Case views are stored within data.views (deprecated)
+     */
+    h.path(view, 'data.views', []).forEach((id) => {
+      idViewsStory.push(id);
+    });
+    /**
+     * Case when views are stored as object instead of id (deprecated).
+     */
+    if (h.isViewsArray(idViewsStory)) {
+      idViewsStory.length = 0;
+      idViewsStory.forEach((v) => idViewsStory.push(v.id));
+    }
+
+    /**
+     * Case when views are not stored in data.view but only in steps (current behaviour).
+     */
+    getStoryViewsId(story).forEach((id) => {
+      idViewsStory.push(id);
+    });
+
+    if (idViewsStory.length === 0) {
+      resolve([]);
+    } else {
+      /**
+       * Create a list of views id to download
+       * ( e.g. if they are from another project )
+       */
+      let idViewsToAdd = idViewsStory.filter((id) => {
+        return idViews.indexOf(id) === -1;
+      });
+      /**
+       * Return views to be fetched remotely
+       */
+      idViewsToAdd = mx.helpers.getArrayDistinct(idViewsToAdd);
+      resolve(idViewsToAdd);
+    }
+  })
+    .then((idViewsToAdd) => h.getViewsRemote(idViewsToAdd))
+    .then((viewsToAdd) => {
+      /**
+       * Retrieved views as object
+       */
+      viewsToAdd.forEach((view) => {
+        let isViewAbsent = views.indexOf(view) === -1;
+        let isView = h.isView(view);
+        if (isView && isViewAbsent) {
+          views.push(view);
+          o.idViewsAdded.push(view.id);
+          h.addSourceFromView({
+            map: map,
+            view: view,
+            noLocationCheck: true
+          });
+        }
+      });
+
+      return o;
     });
 }
 
@@ -49,6 +183,10 @@ function setUi(o) {
       mx.helpers.path(o.view, 'data.story.settings.class_wrapper') ||
       'mx-story-screen-720p';
 
+    if (o.data.classWrapper) {
+      initAdaptiveScreen(o);
+    }
+
     /* Return options */
     resolve(o);
   });
@@ -60,10 +198,6 @@ function setUi(o) {
 
 function setListeners(o) {
   return new Promise(function(resolve) {
-    if (o.data.classWrapper) {
-      initAdaptiveScreen(o);
-    }
-
     /**
      * Handle key events
      */
@@ -221,48 +355,6 @@ function initAdaptiveScreen(o) {
   };
 }
 
-/**
- * Clean + init
- */
-function cleanInit(o) {
-  const h = mx.helpers;
-  /**
-   * Remove old listener
-   */
-  mx.listenerStore.removeListenerByGroup('story_map');
-
-  return new Promise(function(resolve) {
-    /* Fetch view if not given */
-    if (!o.view && o.id && o.idView) {
-      var view = h.getView(o.idView);
-      o.view = view;
-    }
-
-    /* set id view  */
-    o.idView = o.idView || o.view.id;
-
-    /* If no story, quit*/
-    if (!h.path(o, 'view.data.story')) {
-      console.log('No story to handle, abord');
-      return;
-    }
-
-    /** Remove old stuff if any */
-    var oldData = h.path(mx.data, 'story.data');
-
-    if (oldData) {
-      o.startScroll = oldData.elScroll.scrollTop;
-    }
-    if (oldData && oldData.close instanceof Function) {
-      oldData.close();
-    }
-
-    o.enable = true;
-
-    resolve(o);
-  });
-}
-
 function getStoryViewsId(story) {
   const h = mx.helpers;
   const idViewsStory = [];
@@ -279,73 +371,6 @@ function getStoryViewsId(story) {
     }
   });
   return idViewsStory;
-}
-
-/**
- * Evaluate missing view and fetch them if needed
- */
-function checkMissingView(o) {
-  const h = mx.helpers;
-  const view = o.view;
-  const views = h.getViews();
-  const idViews = views.map((v) => v.id);
-  const map = h.getMap(o.id);
-  const idViewsStory = [];
-
-  return new Promise(function(resolve) {
-    const story = h.path(view, 'data.story', {});
-
-    /**
-     * Case views are stored within data.views (deprecated)
-     */
-    h.path(view, 'data.views', []).forEach((id) => {
-      idViewsStory.push(id);
-    });
-    /**
-     * Case when views are stored as object instead of id (deprecated).
-     */
-    if (h.isViewsArray(idViewsStory)) {
-      idViewsStory.length = 0;
-      idViewsStory.forEach((v) => idViewsStory.push(v.id));
-    }
-
-    /**
-     * Case when views are not stored in data.view but only in steps (current behaviour).
-     */
-    getStoryViewsId(story).forEach((id) => {
-      idViewsStory.push(id);
-    });
-
-    if (idViewsStory.length === 0) {
-      resolve([]);
-    } else {
-      /**
-       * Create a list of views id to download
-       * ( e.g. if they are from another project )
-       */
-      const idViewsToAdd = idViewsStory.filter((id) => {
-        return idViews.indexOf(id) === -1;
-      });
-      resolve(idViewsToAdd);
-    }
-  })
-    .then((idViewsToAdd) => h.getViewsRemote(idViewsToAdd))
-    .then((viewsToAdd) => {
-      /**
-       * Retrieved views as object
-       */
-      viewsToAdd.forEach((view) => {
-        if (views.indexOf(view) === -1) {
-          views.push(view);
-        }
-        h.addSourceFromView({
-          map: map,
-          view: view,
-          noLocationCheck: true
-        });
-      });
-      return o;
-    });
 }
 
 /**
@@ -412,18 +437,20 @@ function storyOnScroll(o) {
    * Loop : run a function if scroll is done on an element
    */
   function loop() {
-    data = o.onScrollData;
-    // NOTE: scrollTop does not reflect actual dimension but non scaled ones.
-    posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
-    posLast = data.distTop;
-    if (posLast === posNow) {
+    if (o.enableCheck()) {
+      data = o.onScrollData;
+      // NOTE: scrollTop does not reflect actual dimension but non scaled ones.
+      posNow = data.elScroll.scrollTop * data.scaleWrapper || 1;
+      posLast = data.distTop;
+      if (posLast === posNow) {
+        nf(loop);
+        return false;
+      } else {
+        o.onScrollData.distTop = posNow;
+      }
+      o.callback(o);
       nf(loop);
-      return false;
-    } else {
-      o.onScrollData.distTop = posNow;
     }
-    o.callback(o);
-    nf(loop);
   }
 }
 
@@ -653,7 +680,7 @@ export function storyUpdateSlides(o) {
         id: 'map_main',
         view: o.view,
         stepNum: s,
-        elLegendContainer : o.data.elLegendContent
+        elLegendContainer: o.data.elLegendContent
       });
       data.stepActive = s;
 
@@ -854,6 +881,9 @@ export function storyControlMapPan(o) {
 export function storyController(o) {
   var h = mx.helpers;
 
+  var enableMode = o.enable === true || o.update === true;
+  var updateMode = o.update === true;
+
   o.selectorDisable = o.selectorDisable || [
     '#mxDashboards',
     '#btnTabDashboard',
@@ -877,28 +907,26 @@ export function storyController(o) {
     '#story'
   ];
 
-  if (o.autoStart) {
+  if (o.autoStart || updateMode) {
     o.selectorEnable = ['#btnStoryUnlockMap', '#story'];
   }
 
   var elBtnClose = document.querySelector('#btnStoryClose');
   var elBtnPreview = document.querySelector('#btnViewPreviewStory');
-
   var toDisable = {
-    selector: o.enable === true ? o.selectorDisable : o.selectorEnable,
+    selector: enableMode ? o.selectorDisable : o.selectorEnable,
     action: 'add',
     class: 'mx-display-none'
   };
 
   var toEnable = {
-    selector: o.enable === true ? o.selectorEnable : o.selectorDisable,
+    selector: enableMode ? o.selectorEnable : o.selectorDisable,
     action: 'remove',
     class: 'mx-display-none'
   };
 
   h.classAction(toEnable);
   h.classAction(toDisable);
-
   o.id = o.id || 'map_main';
 
   if (o.enable === true) {
@@ -913,7 +941,7 @@ export function storyController(o) {
     /* Save current values */
     o.data = {
       enabled: true,
-      map: mx.maps[o.id].map,
+      map: h.getMap(),
       views: oldViews,
       setWrapperLayout: function() {},
       position: mx.helpers.getMapPos(o),
@@ -929,17 +957,15 @@ export function storyController(o) {
     };
 
     oldViews.forEach((id) => {
-      h.closeView({
-        id: o.id,
-        idView: id
-      });
+      h.viewCloseAuto(id);
     });
 
-    o.data.close = function() {
+    o.data.close = function(cmd) {
       if (this && this.hasAttribute && this.hasAttribute('disabled')) {
         return;
       }
       o.enable = false;
+      o = Object.assign(o,cmd);
       storyController(o);
     };
 
@@ -960,9 +986,10 @@ export function storyController(o) {
      * Remove layers added by the story
      */
     h.getViewsOnMap(o).forEach((id) => {
-      h.closeView({
+      h.viewLayersRemove({
         id: o.id,
-        idView: id
+        idView: id,
+        elLegendContainer: o.elLegendContainer
       });
     });
 
@@ -986,32 +1013,38 @@ export function storyController(o) {
       /**
        *
        */
-      if (o.data.hasAerial) {
-        h.btnToggleLayer({
-          id: 'map_main',
-          idLayer: 'here_aerial',
-          idSwitch: 'btnThemeAerial',
-          action: 'show'
+      if (!updateMode) {
+        if (o.data.hasAerial) {
+          h.btnToggleLayer({
+            id: 'map_main',
+            idLayer: 'here_aerial',
+            idSwitch: 'btnThemeAerial',
+            action: 'show'
+          });
+        }
+
+        /**
+         * Enable previously enabled layers
+         */
+        o.data.views.forEach((idView) => {
+          h.viewOpenAuto(idView);
         });
       }
 
       /**
-       * Enable previously enabled layers
+       * Remove addtional views
        */
-      o.data.views.forEach(function(idView) {
-        console.log('add again  view ' + idView);
-        h.renderView({
-          id: o.id,
-          idView: idView,
-          debug: true
-        });
+      let views = h.getViews();
+      o.idViewsAdded.forEach((idView) => {
+        let idPos = h.getViewIndex(idView);
+        views.splice(idPos, 1);
       });
 
       /**
        * Rest previous position
        */
 
-      if (o.data.position) {
+      if (!updateMode && o.data.position) {
         var pos = o.data.position;
         o.data.map.jumpTo({
           zoom: pos.z,
@@ -1048,12 +1081,12 @@ export function storyController(o) {
        * Resize map
        */
 
-      o.data.map.resize();
-
+      if (!updateMode) {
+        o.data.map.resize();
+      }
       /**
        * clean data storage
        */
-
       if (mx.data.story) {
         mx.data.story = {};
       }
@@ -1105,8 +1138,8 @@ export function storyBuild(o) {
   var elMapContainer = o.data.map.getContainer();
 
   /**
-  * Legends container
-  */
+   * Legends container
+   */
   o.data.elLegendContainer = el(
     'div',
     {class: ['mx-story-legend-container']},
@@ -1129,8 +1162,8 @@ export function storyBuild(o) {
         h.getDictItem('story_legends')
       ),
       /**
-      * Where the legend will appear
-      */
+       * Where the legend will appear
+       */
       (o.data.elLegendContent = el('div', {
         class: 'mx-story-legend-content'
       }))
@@ -1138,8 +1171,8 @@ export function storyBuild(o) {
   );
 
   /**
-  * Story map container
-  */
+   * Story map container
+   */
   o.data.elStoryContainer = el(
     'div',
     {
@@ -1320,6 +1353,7 @@ export function storyPlayStep(o) {
   if (steps.length === 0) {
     return;
   }
+  mx.events.fire('story_step');
   data.currentStep = stepNum;
   /**
    * retrieve step information
@@ -1337,7 +1371,6 @@ export function storyPlayStep(o) {
   });
   easing = h.easingFun({type: anim.easing, power: anim.easing_power});
 
-
   /**
    * Add view if not alredy visible
    */
@@ -1348,24 +1381,24 @@ export function storyPlayStep(o) {
 
     vToAdd.forEach(function(v, i) {
       var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-
-      h.renderView({
+      h.viewLayersAdd({
         id: o.id,
         idView: v,
         before: vPrevious,
-        noTools: true,
-        elLegendContainer : elLegendContainer
+        openView: false,
+        elLegendContainer: elLegendContainer
       });
     });
 
     vToRemove.forEach(function(v) {
-      h.closeView({
+      h.viewLayersRemove({
         id: o.id,
-        idView: v
+        idView: v,
+        elLegendContainer: elLegendContainer
       });
     });
 
-    h.updateViewOrder({
+    h.viewsLayersOrderUpdate({
       order: vStep,
       id: o.id
     });

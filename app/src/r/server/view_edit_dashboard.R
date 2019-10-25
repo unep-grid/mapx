@@ -235,9 +235,7 @@ observeEvent(input$dashboardEdit_values,{
 
   switch(idEvent,
     "preview"= {
-      mglAddView(
-        viewData = view
-        )
+      mglUpdateView(view)
     },
     "save"={
 
@@ -260,9 +258,7 @@ observeEvent(input$dashboardEdit_values,{
         # edit flag
         view$`_edit` = TRUE 
 
-        mglAddView(
-          viewData = view
-          )
+        mglUpdateView(view)
 
         jedRemoveDraft("dashboardEdit",view$id);
 

@@ -8,7 +8,7 @@ export function renderUserProjectsList(o) {
   var nRow = dat[idCol].length;
   var titles = Object.keys(dat);
   var nCol = titles.length;
-  var userIsGuest = h.path(mx,'settings.user.guest') === true;
+  var userIsGuest = h.path(mx, 'settings.user.guest') === true;
 
   /* render */
 
@@ -73,17 +73,34 @@ export function renderUserProjectsList(o) {
    * Clean remove listener
    */
   function detach() {
-    console.log('Project list detach listeners');
-    elContainer.removeEventListener('keyup', filterList);
-    elContainer.removeEventListener('click', handleClick);
+    mx.listenerStore.removeListenerByGroup('project_list');
   }
 
   /**
    * Enable listener
    */
   function listen() {
-    elContainer.addEventListener('keyup', filterList);
-    elContainer.addEventListener('click', handleClick);
+    detach();
+    mx.listenerStore.addListener({
+      target: elContainer,
+      bind: elContainer,
+      type: 'keyup',
+      idGroup: 'project_list',
+      callback: filterList,
+      debounce: true,
+      debounceTime: 100
+    });
+    mx.listenerStore.addListener({
+      target: elContainer,
+      bind: elContainer,
+      type: 'click',
+      idGroup: 'project_list',
+      callback: handleClick,
+      debounce: true,
+      debounceTime: 100
+    });
+    //elContainer.addEventListener('keyup', filterList);
+    //elContainer.addEventListener('click', handleClick);
   }
 
   /**
@@ -94,13 +111,13 @@ export function renderUserProjectsList(o) {
     var ds = el.dataset;
     var actions = {
       request_membership: function() {
-        if(ds.allow_join === "true" && !userIsGuest){
-           h.requestProjectMembership(ds.request_membership);
+        if (ds.allow_join === 'true' && !userIsGuest) {
+          h.requestProjectMembership(ds.request_membership);
         }
       },
       load_project: function() {
-        h.setProject(ds.load_project,{
-          onSuccess : detach
+        h.setProject(ds.load_project, {
+          onSuccess: detach
         });
       }
     };
@@ -117,16 +134,20 @@ export function renderUserProjectsList(o) {
   function filterList(e) {
     var elTarget = e.target;
     var elRow, textSearch, textRow;
+    var toAdd = [];
+    var toRemove = [];
     var i, iL;
     if (elTarget && elTarget.dataset.project_search) {
       textSearch = cleanString(elTarget.value);
       for (i = 0, iL = elsRows.length; i < iL; i++) {
         elRow = elsRows[i];
-        textRow = cleanString(elRow.innerText);
-        if (textRow.match(textSearch)) {
-          elRow.classList.remove('mx-hide');
-        } else {
-          elRow.classList.add('mx-hide');
+        if (elRow.dataset && elRow.dataset.text) {
+          textRow = elRow.dataset.text;
+          if (textRow.match(textSearch)) {
+            elRow.style.display = 'block';
+          } else {
+            elRow.style.display = 'none';
+          }
         }
       }
     }
@@ -179,7 +200,10 @@ export function renderUserProjectsList(o) {
     var elRow = el(
       'div',
       {
-        class: 'mx-list-projects-row'
+        class: 'mx-list-projects-row',
+        dataset: {
+          text: cleanString(row.description + ' ' + row.title)
+        }
       },
       (elTop = el(
         'div',
@@ -270,10 +294,10 @@ export function renderUserProjectsList(o) {
       elBtn.href = '#';
       elBtn.dataset.request_membership = dat[idCol];
       elBtn.dataset.allow_join = dat.allow_join;
-      if(!dat.allow_join){
-       elBtn.classList.add('mx-not-allowed');
+      if (!dat.allow_join) {
+        elBtn.classList.add('mx-not-allowed');
       }
-      
+
       h.getDictItem('btn_join_project', mx.settings.language).then(function(
         it
       ) {

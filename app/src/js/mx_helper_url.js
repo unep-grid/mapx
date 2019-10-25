@@ -114,7 +114,7 @@ export function getQueryParametersAsObject(urlString) {
 
 function asArray(str) {
   const h = mx.helpers;
-  return h.isArray(str) ? str : h.isString(str) ? str.split(',') : [str];
+  return !str ? [] : h.isArray(str) ? str : h.isString(str) ? str.split(',') : [str];
 }
 function asString(array) {
   const h = mx.helpers;

@@ -306,7 +306,7 @@ export function saveSpatialDataAsView(opt) {
           });
 
           mx.helpers.viewsListAddSingle(view, {open: true});
-          mx.helpers.renderView({viewData: view});
+          mx.helpers.viewLayersAdd({viewData: view});
 
           c.worker.terminate();
         }

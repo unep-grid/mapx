@@ -122,6 +122,23 @@ class NestedList {
   getDict() {
     return this.opt.dict;
   }
+
+  /**
+   * Events callback
+   */
+  fire(type, data) {
+    const li = this;
+    let cb = function(data) {
+      return data;
+    };
+    li.opt.eventsCallback.forEach((e) => {
+      if (e.id === type) {
+        cb = e.action;
+      }
+    });
+    return cb.bind(li)(data);
+  }
+
   /**
    * Sorting and ordering
    */
@@ -157,9 +174,7 @@ class NestedList {
         }
       }
     });
-    if (li.opt.onFilterEnd) {
-      li.opt.onFilterEnd();
-    }
+    li.fire('filter_end', ids);
   }
 
   sortGroup(elTarget, opt) {
@@ -221,6 +236,7 @@ class NestedList {
     });
 
     li.setModeAnimate(true);
+    li.fire('state_order');
     /**
      * Helpers
      */
@@ -270,10 +286,23 @@ class NestedList {
     let els = this.getChildrenTarget(el, direct);
     return els[els.length - 1];
   }
+  isHidden(el) {
+    let li = this;
+    let clHidden = li.opt.class.itemHidden;
+    return li.isElement(el) && el.classList.contains(clHidden);
+  }
   getNextTarget(el) {
+    let li = this;
+    while (li.isHidden(el.nextElementSibling)) {
+      el = el.nextElementSibling;
+    }
     return el.nextElementSibling;
   }
   getPreviousTarget(el) {
+    let li = this;
+    while (li.isHidden(el.previousElementSibling)) {
+      el = el.previousElementSibling;
+    }
     return el.previousElementSibling;
   }
   getItemContent(el) {
@@ -283,14 +312,12 @@ class NestedList {
     }
   }
   getItemText(el) {
-    return this.opt.onGetItemTextById
-      ? this.opt.onGetItemTextById(el.id)
-      : el.innerText;
+    const li = this;
+    return li.fire('get_item_text_by_id', el.id) || el.innerText;
   }
   getItemDate(el) {
-    return this.opt.onGetItemTextById
-      ? this.opt.onGetItemDateById(el.id)
-      : Date.now();
+    const li = this;
+    return li.fire('get_item_date_by_id', el.id) || Date.now();
   }
   getGroup(el) {
     const li = this;
@@ -300,6 +327,10 @@ class NestedList {
     return el || li.elRoot;
   }
   getGroupById(id) {
+    const li = this;
+    return li.getItemById(id);
+  }
+  getItemById(id) {
     const li = this;
     return li.elRoot.querySelector(`#${id}`);
   }
@@ -395,8 +426,9 @@ class NestedList {
   moveTargetBottom(el) {
     const li = this;
     let elGroup = li.getGroup(el);
+    let elLast = li.getLastTarget(elGroup);
     if (li.isGroup(elGroup)) {
-      elGroup.appendChild(el);
+      li.moveTargetAfter(el, elLast);
     }
   }
   groupCollapse(el, collapse) {
@@ -582,16 +614,13 @@ class NestedList {
       return li.history[li.history.length - 1];
     }
   }
+
   saveStateStorage() {
     const li = this;
     let state = li.getState();
     let history = li.getHistory();
-
     if (li.isModeFrozen()) {
       return;
-    }
-    if (li.opt.onChange) {
-      li.opt.onChange();
     }
     li.setStateStored(state);
     li.setHistoryStored(history);
@@ -604,11 +633,7 @@ class NestedList {
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
-      if (li.opt.onSaveLocal) {
-        li.opt.onSaveLocal();
-      } else {
-        alert('Saved');
-      }
+      li.fire('state_save_local', state);
     }
   }
 
@@ -756,9 +781,7 @@ class NestedList {
     li.addUndoStep();
     li.clearAllItems();
     li.setState({render: true, state: state, useStateStored: false});
-    if (li.opt.onResetState) {
-      li.opt.onResetState();
-    }
+    li.fire('state_reset', state);
   }
   setState(opt) {
     const li = this;
@@ -788,9 +811,7 @@ class NestedList {
     /**
      * Sanitize
      */
-    if (li.opt.onSanitizeState) {
-      state = li.opt.onSanitizeState(state);
-    }
+    state = li.fire('state_sanitize', state);
 
     /*
      * If the state is empty,
@@ -816,9 +837,7 @@ class NestedList {
         }
       });
     }
-    if (li.opt.onChange) {
-      li.opt.onChange();
-    }
+    li.fire('state_change', state);
     li.setModeAnimate(true);
   }
   getStateOrig() {
@@ -834,6 +853,12 @@ class NestedList {
       li.removeElement(el);
     });
   }
+
+  updateItem(attr) {
+    const li = this;
+    var elContent = li.getItemById(attr.id);
+    li.fire('render_item_content', {el: elContent, data: attr});
+  }
   addItem(attr) {
     const li = this;
     attr.render = attr.render || !attr.content || false;
@@ -847,7 +872,6 @@ class NestedList {
     let elContent = item.elContent;
     let isEmptyItem = !!attr.empty;
     let isModeEmpty = li.isModeEmpty();
-
     if (isLocked && !isEmptyItem) {
       return;
     }
@@ -858,8 +882,8 @@ class NestedList {
 
     elGroupParent.appendChild(elItem);
 
-    if (attr.render && li.opt.onRenderItemContent) {
-      li.opt.onRenderItemContent(elContent, attr);
+    if (attr.render) {
+      li.fire('render_item_content', {el: elContent, data: attr});
     }
     if (attr.moveTop) {
       li.moveTargetTop(elItem);
@@ -883,13 +907,9 @@ class NestedList {
     let group = new Group(attr, li);
     let elGroup = group.el;
     if (targetAfter) {
-      li.animateMove([elGroup, targetAfter], () => {
-        targetAfter.parentElement.insertBefore(elGroup, targetAfter);
-      });
+      targetAfter.parentElement.insertBefore(elGroup, targetAfter);
     } else {
-      li.animateMove([elGroup], () => {
-        elGroupParent.appendChild(elGroup);
-      });
+      elGroupParent.appendChild(elGroup);
     }
     return elGroup;
   }
@@ -912,7 +932,9 @@ class NestedList {
       let elParent = li.getGroup(elGroup);
       let els = li.getChildrenTarget(elGroup, true);
       els.forEach((el) => {
-        elParent.appendChild(el);
+        li.animateMove([el, elGroup], () => {
+          elParent.insertBefore(el, elGroup);
+        });
       });
       li.removeElement(elGroup);
     }
@@ -1149,6 +1171,7 @@ class NestedList {
     const li = this;
     const enable = li.isModeAnimate();
     const duration = li.getOption('animeDuration');
+    const maxDist = li.getOption('animeMaxDist');
     const relaxDuration = li.getOption('animeDragRelaxDuration');
     const els = elsMove instanceof Array ? elsMove : [elsMove];
     if (els.length === 0) {
@@ -1163,7 +1186,6 @@ class NestedList {
     if (enable) {
       start();
     }
-
     function savePos() {
       els.forEach((e, i) => {
         if (li.isElement(e)) {
@@ -1191,7 +1213,8 @@ class NestedList {
       }, 0);
     }
     function anim(elItem) {
-      elItem.style.transition = 'transform ' + duration + 'ms ease-in-out';
+      var durationFinal = elItem.dataset.dist > maxDist ? 0 : duration;
+      elItem.style.transition = 'transform ' + durationFinal + 'ms ease-in-out';
       elItem.style.transform = 'translateY(0px)';
       setTimeout(() => {
         clean(elItem);
@@ -1206,6 +1229,7 @@ class NestedList {
     function end() {
       if (done.length === els.length) {
         setTimeout(() => {
+          li.fire('state_order');
           li.setBusy(false);
         }, relaxDuration);
       }
@@ -1230,30 +1254,25 @@ function handleSortStart(evt) {
     evt.preventDefault();
     return;
   }
+  li.fire('sort_start', evt);
 
-  if (li.opt.onSortStart) {
-    li.opt.onSortStart(evt);
-  }
   li.setUiDraggingStart();
 
   li.elDrag.classList.add(li.opt.class.dragged);
   evt.dataTransfer.effectAllowed = 'move';
   // keep this version in history;
   li.addUndoStep();
-  if (li.opt.onSetDragImage) {
-    let elDragImage = li.opt.onSetDragImage(li.elDrag);
-    if (!elDragImage) {
-      elDragImage = li.elDrag;
-    }
-    let rectImage = elDragImage.getBoundingClientRect();
-    let dragOffsetTop = evt.clientY - rectImage.top;
-    let dragOffsetLeft = evt.clientX - rectImage.left;
-    evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
-  }
-  if (li.opt.onSetTextData) {
-    evt.dataTransfer.setData('Text', li.opt.onSetTextData(li.elDrag));
-  }
+
+  const elDragImage = li.fire('set_drag_image', li.elDrag);
+
+  const rectImage = elDragImage.getBoundingClientRect();
+  const dragOffsetTop = evt.clientY - rectImage.top;
+  const dragOffsetLeft = evt.clientX - rectImage.left;
+  evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
+  evt.dataTransfer.setData('text/plain', elDragImage.innerText);
+
   li.elNext = li.elDrag.nextSibling;
+
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
@@ -1263,6 +1282,7 @@ function handleSortStart(evt) {
     throttle: true,
     throttleTime: 200
   });
+
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
@@ -1282,9 +1302,6 @@ function handleSortOver(evt) {
   const li = this;
   if (li.isBusy()) {
     return;
-  }
-  if (li.opt.onSortOver) {
-    li.opt.onSortOver(evt);
   }
   evt.preventDefault();
   evt.dataTransfer.dropEffect = 'move';
@@ -1392,17 +1409,19 @@ function handleSortEnd(evt) {
   evt.preventDefault();
   const li = this;
   li.elDrag.classList.remove(li.opt.class.dragged);
+
+  window.removeEventListener('dragend', handleSortEnd);
   li.listenerStore.removeListenerByGroup('dragevent');
   li.setUiDraggingEnd();
 
   if (li.isModeEmpty()) {
     return;
   }
-  if (li.opt.onSortEnd) {
-    li.opt.onSortEnd(evt);
-  }
-  if (li.elNext !== li.elDrag.nextSibling && li.opt.onSortDone) {
-    li.opt.onSortDone(li.elDrag);
+
+  li.fire('sort_end', evt);
+
+  if (li.elNext !== li.elDrag.nextSibling) {
+    li.fire('sort_done', evt);
   }
   li.elDrag = null;
 }

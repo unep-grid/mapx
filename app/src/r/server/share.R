@@ -35,6 +35,11 @@ observeEvent(reactData$showShareManager,{
         value=colorScheme
         )
       ),
+    checkboxInput("checkShareMapPosition",label="Set map position"),
+    conditionalPanel(
+      condition="input.checkShareMapPosition",
+      jedOutput("shareMapPosition")
+      ),
     checkboxInput("checkShareProject",label="Set project (default = current) ",value=TRUE),
     conditionalPanel(condition="input.checkShareProject",
       selectInput("selectShareProject",
@@ -58,7 +63,7 @@ observeEvent(reactData$showShareManager,{
           )
         )
       ),
-    checkboxInput("checkShareViews",label="Set views",value=hasViews),
+    checkboxInput("checkShareViews",label="Filter views",value=FALSE),
     conditionalPanel(
       condition="input.checkShareViews",
       selectizeInput(
@@ -67,6 +72,21 @@ observeEvent(reactData$showShareManager,{
         choices = list(),
         multiple = TRUE,
         selected = query,
+        options = list(
+          sortField = "label",
+          plugins = list("remove_button")
+          )
+        )
+      ),
+    checkboxInput("checkShareViewsOpen",label="Set views to open",value=hasViews),
+    conditionalPanel(
+      condition="input.checkShareViewsOpen",
+      selectizeInput(
+        "selectShareViewsOpen",
+        label = NULL,
+        choices = list(),
+        multiple = TRUE,
+        selected = NULL,
         options = list(
           sortField = "label",
           plugins = list("remove_button")
@@ -155,7 +175,8 @@ observeEvent(reactData$showShareManager,{
   mxModal(
     id = "modalShare",
     title ="Sharing manager",
-    content = ui
+    content = ui,
+    addBackground = FALSE
     )
 
   reactData$updateShareProject<-runif(1)
@@ -250,11 +271,16 @@ observeEvent(reactData$updateShareProject,{
   }
 
   updateSelectInput(session,
-    inputId="selectShareViews",
-    choices=viewsList,
-    selected=ifelse(hasDataViews,data$views,"")
+    inputId = "selectShareViews",
+    choices = viewsList,
+    selected = '',
     )
 
+  updateSelectInput(session,
+    inputId = "selectShareViewsOpen",
+    choices = viewsList,
+    selected = ifelse(hasDataViews,data$views,"")
+    )
 })
 
 
@@ -269,8 +295,10 @@ observe({
   style <- ""
   collections <- ""
   views <- ""
+  viewsOpen <- ""
   storyAutoStart <- ""
   first <- TRUE
+  mapPosition = list()
 
   s<-function(){
     if(first){
@@ -280,24 +308,42 @@ observe({
       return("&")
     }
   }
-  tryCatch({
-    addIframe = !noDataCheck(input$checkShareIframe) && isTRUE(input$checkShareIframe)
-    addStyle = !noDataCheck(input$checkShareStyle) && isTRUE(input$checkShareStyle)
-    addStoryAutoStart = !noDataCheck(input$checkShareStoryAutoStart) && isTRUE(input$checkShareStoryAutoStart)
-    addProject = !noDataCheck(input$checkShareProject) && isTRUE(input$checkShareProject)
-    addCollections = !noDataCheck(input$checkShareCollections) && isTRUE(input$checkShareCollections)
-    addViews = !noDataCheck(input$checkShareViews) && isTRUE(input$checkShareViews)
+
+  #
+  # Build request
+  #
+  #tryCatch({
+    
+    addIframe = isTRUE(input$checkShareIframe)
+    addStyle = isTRUE(input$checkShareStyle)
+    addStoryAutoStart = isTRUE(input$checkShareStoryAutoStart)
+    addProject = isTRUE(input$checkShareProject)
+    addCollections = isTRUE(input$checkShareCollections)
+    addViews = isTRUE(input$checkShareViews)
+    addViewsOpen = isTRUE(input$checkShareViewsOpen)
+
+    addMapPosition = isTRUE(input$checkShareMapPosition)
+
+    if(addMapPosition){
+      mapPositionIssue <- .get(input$shareMapPosition_issues,c('data'),list())
+      if(length(mapPositionIssue) == 0){
+        mapPosition$lat <- .get(input$shareMapPosition_values,c('data','lat'),0)
+        mapPosition$lng <- .get(input$shareMapPosition_values,c('data','lng'),0) 
+        mapPosition$zoom <- .get(input$shareMapPosition_values,c('data','z'),0) 
+      }
+    }
 
     if(addStyle) style <- s() + "style=" + mxEncode(jsonlite::toJSON(jsonlite::fromJSON(input$txtShareStyle),auto_unbox=T))
     if(addProject) project <- s() + "project=" + input$selectShareProject
     if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
     if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
+    if(addViewsOpen) viewsOpen <-  s() + "viewsOpen=" + paste(input$selectShareViewsOpen,collapse=",")
     if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true"
-  },error=function(e){})
+    if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
+  #},error=function(e){})
   out <- ""
 
-
-  url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views  + storyAutoStart
+  url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views + viewsOpen + storyAutoStart + mapPosition
 
 
   #
@@ -325,3 +371,56 @@ observe({
     value=out
     )
 })
+
+observeEvent(input$shareMapPosition_init,{
+
+  language <- reactData$language 
+  tt <- function(id){d(id,language,web=F)}
+
+  project <- reactData$project
+  projectData <- mxDbGetProjectData(project)
+  mapPosition <- .get(projectData,c("map_position"))
+
+  schema <- list(
+    type = "object",
+    format = "position",
+    title = tt("share_map_pos_set"),
+    options = list(
+      addButtonPos = TRUE,
+      idMap = "map_main",
+      textButton = tt("share_map_pos_get"),
+      collapsed = TRUE
+      ),
+    properties = list(
+      z = list(
+        title = tt("map_zoom"),
+        type = "number",
+        minimum = 0,
+        maximum = 22
+        ),
+      lat = list(
+        title = tt("map_latitude_center"),
+        type="number",
+        minimum=-90,
+        maximum=90
+        ),
+      lng = list(
+        title = tt("map_longitude_center"),
+        type="number",
+        minimum=-180,
+        maximum=180
+        )
+      )
+    )
+  jedSchema(
+    id = "shareMapPosition",
+    schema = schema,
+    startVal = mapPosition,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+      )
+    )
+})
+
+

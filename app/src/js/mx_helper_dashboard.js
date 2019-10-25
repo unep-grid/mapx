@@ -16,6 +16,7 @@ export function Dashboard(idContainer, idDashboard, view) {
   dashboard.elContainer = document.getElementById(idContainer);
   dashboard.store = Dashboard.getStore() || [];
   dashboard.modules = {};
+  dashboard.view = view;
 
   /**
    * Fetch module
@@ -103,10 +104,6 @@ export function Dashboard(idContainer, idDashboard, view) {
         widgets.forEach((w) => w.remove());
       }
 
-      /*
-       * Removing other references
-       */
-      delete view._dashboard;
       var pos = dashboard.store.indexOf(dashboard);
       if (pos > -1) {
         mx.dashboards.splice(pos, 1);
@@ -158,6 +155,10 @@ Dashboard.prototype.Widget = function(config) {
          * Set init flag to true
          */
         widget._init = true;
+      })
+      .catch((e) => {
+        console.warn(e);
+        widget.remove();
       });
   };
 
@@ -307,12 +308,16 @@ Dashboard.prototype.Widget = function(config) {
     widget.visible = true;
   };
 
-  widget.remove = function() {
+  widget.remove = function(skipOnRemove) {
     /*
      * Exec widget on remove
      */
-    widget.onRemove(widget);
-
+    if (!skipOnRemove) {
+      /*
+       * Case normal remove
+       */
+      widget.onRemove(widget);
+    }
     /**
      * Remove timers if any
      */
@@ -394,17 +399,33 @@ Dashboard.prototype.Widget = function(config) {
   }, 100);
 
   widget.strToObj = function(str) {
+    var w = widget;
     return new Promise(function(resolve, reject) {
-      var r = function() {};
+      var r = {};
       if (str) {
         r = new Function(str)();
       }
       if (r) {
+        for (var f in r) {
+          var rBinded = r[f].bind(w);
+          r[f] = w.tryCatched(rBinded, f === 'onRemove');
+        }
         resolve(r);
       } else {
         reject(Error('strToObj failed. Script = ' + str));
       }
     });
+  };
+
+  widget.tryCatched = function(fun, skipOnRemove) {
+    return function(...args) {
+      try {
+        return fun(...args);
+      } catch (e) {
+        console.warn(e);
+        widget.remove(skipOnRemove);
+      }
+    };
   };
 
   widget.randomValue = function(from, to) {
@@ -536,7 +557,11 @@ Dashboard.init = function(o) {
   var idContainer = o.idContainer || mx.settings.ui.ids.idDashboards;
   var dashboardData = o.data || h.path(view, 'data.dashboard');
 
-  if (!dashboardData || !h.isArray(dashboardData.widgets) || dashboardData.widgets.length === 0) {
+  if (
+    !dashboardData ||
+    !h.isArray(dashboardData.widgets) ||
+    dashboardData.widgets.length === 0
+  ) {
     return;
   }
   if (view._dashboard) {
@@ -598,12 +623,12 @@ Dashboard.hasWidgets = function() {
 Dashboard.hasWidgetsVisibles = function() {
   return (
     Dashboard.getStore()
-    .map((d) => {
-      d.widgets.filter((w) => w.visible === true);
-    })
-    .reduce((all, widget) => {
-      all.concat(widget);
-    }).length > 0
+      .map((d) => {
+        d.widgets.filter((w) => w.visible === true);
+      })
+      .reduce((all, widget) => {
+        all.concat(widget);
+      }).length > 0
   );
 };
 

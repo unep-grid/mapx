@@ -60,8 +60,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_delete_geojson',
       action: function() {
         const arg = el.dataset;
-
-        h.removeView({
+        h.viewDelete({
           id: idMap,
           idView: arg.view_action_target
         });
@@ -195,7 +194,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_toggle_view',
       allowDefault: true,
       action: function() {
-        h.viewsRender();
+        h.viewsCheckedUpdate();
       }
     },
     {

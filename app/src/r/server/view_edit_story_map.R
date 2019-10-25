@@ -50,6 +50,33 @@ observeEvent(input$btnViewPreviewStory,{
     )
   jedTriggerGetValues("storyEdit","preview")
 })
+
+observeEvent(input$btnViewCloseStory,{
+  mxDebugMsg("Close story map");
+
+  view <- reactData$viewDataEdited
+
+  if(isTRUE(reactData$storyPreviewed)){ 
+    mglReadStory(
+      view = view,
+      edit = FALSE,
+      update = FALSE,
+      close = TRUE
+      )
+    reactData$storyPreviewed <- FALSE
+  }
+  if(isTRUE(reactData$storySaved)){
+    mglUpdateView(view)
+    reactData$storySaved <- FALSE
+  }
+
+  mxModal(
+    id = "modalViewEdit",
+    close = TRUE
+    )
+
+})
+
 #
 # View story save
 #
@@ -101,8 +128,10 @@ observeEvent(input$storyEdit_values,{
       "preview"= {
         mglReadStory(
           view = view,
-          edit = TRUE
+          edit = TRUE,
+          update = TRUE
           )
+        reactData$storyPreviewed <- TRUE;
       },
       "save" = {
         view[["_edit"]] = NULL
@@ -119,6 +148,7 @@ observeEvent(input$storyEdit_values,{
         view <- .set(view, c("editor"), editor)
 
 
+
         mxDbAddRow(
           data=view,
           table=.get(config,c("pg","tables","views"))
@@ -126,10 +156,8 @@ observeEvent(input$storyEdit_values,{
 
         # edit flag
         view$`_edit` = TRUE 
-
-        mglAddView(
-          viewData = view
-          )
+        reactData$storySaved <- TRUE
+        reactData$viewDataEdited <- view
 
         mxUpdateText(
           id = "modalViewEdit_txt",

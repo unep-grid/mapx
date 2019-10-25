@@ -177,12 +177,8 @@ export function initListeners() {
     idGroup: 'clean_history_and_state',
     callback: () => {
       let dat = h.getMapData();
-      //if (dat.viewsList) {
-        //dat.viewsList.clearHistory();
-        //dat.viewsList.setStateOrig();
-      //}
       h.updateViewsFilter();
-      h.viewsRender();
+      h.viewsCheckedUpdate();
     }
   });
 
@@ -229,20 +225,32 @@ export function updateBtnFilterActivated() {
   const views = h.getViews();
   const elFilterActivated = document.getElementById('btnFilterChecked');
   const hasViewsActivated = views.reduce((a, v) => {
-    let hasEl = h.isElement(v._el);
-    return (
-      a ||
-      (v._open === true &&
-        (hasEl && window.getComputedStyle(v._el).display !== 'none'))
-    );
+    if (!v.vb) {
+      return a || false;
+    }
+    let hasEl = h.isElement(v.vb.el);
+    let isOpen = v.vb.isOpen();
+    let isVisible =
+      hasEl && window.getComputedStyle(v.vb.el).display !== 'none';
+    return a || (isOpen && isVisible);
   }, false);
   const isActivated = elFilterActivated.classList.contains('active');
-
   if (isActivated || hasViewsActivated) {
     elFilterActivated.classList.remove('disabled');
-  }else{
+  } else {
     elFilterActivated.classList.add('disabled');
   }
+}
+export function setBtnFilterActivated(enable) {
+  const h = mx.helpers;
+  const elFilterActivated = document.getElementById('btnFilterChecked');
+  const isActivated = elFilterActivated.classList.contains('active');
+  const skip = (enable && isActivated) || (!enable && !isActivated);
+  if (skip) {
+    return;
+  }
+  const ev = new MouseEvent('click');
+  elFilterActivated.dispatchEvent(ev);
 }
 
 /**
@@ -340,7 +348,7 @@ export function initMapx(o) {
     minZoom: mx.settings.map.minZoom,
     preserveDrawingBuffer: false,
     attributionControl: false,
-    zoom: mp.z || mp.zoom || 5,
+    zoom: mp.z || mp.zoom || 0,
     bearing: mp.bearing || 0,
     pitch: mp.pitch || 0,
     center: mp.center || [mp.lng || 0, mp.lat || 0]
@@ -539,7 +547,7 @@ export function handleClickEvent(e, idMap) {
         .addTo(map);
 
       mx.events.once({
-        type: ['view_remove', 'view_add'],
+        type: ['view_remove', 'view_add', 'story_step'],
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
@@ -598,9 +606,6 @@ export function geolocateUser() {
     classesHtml.remove('shiny-busy');
     const crd = pos.coords;
     map.flyTo({center: [crd.longitude, crd.latitude], zoom: 10});
-    //console.log(`Latitude : ${crd.latitude}`);
-    //console.log(`Longitude: ${crd.longitude}`);
-    //console.log(`More or less ${crd.accuracy} meters.`);
   }
 
   function error(err) {
@@ -645,11 +650,6 @@ export function viewsRemoveAll(o) {
     prefix: 'MX-'
   });
 
-  /*
-   * apply remove method
-   */
-  h.cleanRemoveModules(views);
-
   /**
    * Replace content without replacing views array
    */
@@ -659,26 +659,6 @@ export function viewsRemoveAll(o) {
    * Set views list empty
    */
   h.setViewsListEmpty(true);
-}
-
-/**
- * Clean stored modules : dashboard, custom view, etc.
- */
-export function cleanRemoveModules(views) {
-  const h = mx.helpers;
-  views = h.isString(views) ? h.getView(views) : views;
-  views = views instanceof Array ? views : [views];
-  views.forEach(function(v) {
-    if (h.isFunction(v._onRemoveCustomView)) {
-      v._onRemoveCustomView();
-    }
-    if (h.isFunction(v._onRemoveDashboard)) {
-      v._onRemoveDashboard();
-    }
-    if (h.isElement(v._elLegend)) {
-      v._elLegend.remove();
-    }
-  });
 }
 
 /**
@@ -754,31 +734,13 @@ export function addSourceFromView(o) {
     o.map.addSource(idSource, o.view.data.source);
   }
 }
-
-//export function loadGeojsonViews() {
-//throw new Error("he");
-//const project = mx.settings.project;
-//const viewsGj = [];
-
-//const getProjectGj = function(gj) {
-//const v = gj.view;
-//if (v && v.project === project) {
-//viewsGj.push(v);
-//}
-//return viewsGj;
-//};
-
-//mx.data.geojson.iterate(getProjectGj).then(function(gj) {
-//console.log(gj);
-//});
-/*}*/
-
 /**
  * Get remote view from latest views table
  * @param {String} idView id of the view
  * @return {Promise} Promise resolving to object
  */
 export function getViewRemote(idView) {
+  const h = mx.helpers;
   const apiUrlViews = mx.helpers.getApiUrl('getView');
 
   if (!idView || !apiUrlViews) {
@@ -796,8 +758,10 @@ export function getViewRemote(idView) {
       return view.json();
     })
     .then((view) => {
-      view._edit = false;
-      view._kiosk = true;
+      if (h.isView(view)) {
+        view._edit = false;
+        view._kiosk = true;
+      }
       return view;
     });
 }
@@ -1058,7 +1022,8 @@ let vStore = [];
 /**
  *  View render / update : evalutate view state and enable/disable it depending on ui state
  */
-export function viewsRender(o) {
+export function viewsCheckedUpdate(o) {
+  const h = mx.helpers;
   o = o || {};
   let vToAdd = [],
     vToRemove = [],
@@ -1066,7 +1031,6 @@ export function viewsRender(o) {
     vChecked = [];
   let view, isChecked, id;
   const idMap = o.id || mx.settings.map.id;
-  //const idViewsList = o.idViewsList || 'mx-views-list';
   const els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
   );
@@ -1079,31 +1043,27 @@ export function viewsRender(o) {
     }
   }
 
-  mx.helpers.onNextFrame(function() {
-    vVisible = mx.helpers.getLayerNamesByPrefix({
+  h.onNextFrame(function() {
+    vVisible = h.getLayerNamesByPrefix({
       id: idMap,
       prefix: 'MX-',
       base: true
     });
 
-    vVisible = mx.helpers.getArrayStat({
+    vVisible = h.getArrayStat({
       arr: vStore.concat(vVisible),
       stat: 'distinct'
     });
 
-    vToRemove = mx.helpers.getArrayDiff(vVisible, vChecked);
-    vToAdd = mx.helpers.getArrayDiff(vChecked, vVisible);
+    vToRemove = h.getArrayDiff(vVisible, vChecked);
+    vToAdd = h.getArrayDiff(vChecked, vVisible);
 
     /**
      * View to add
      */
     vToAdd.forEach(function(v) {
       vStore.push(v);
-      view = mx.helpers.getView(v);
-      mx.helpers.renderView({
-        id: idMap,
-        viewData: view
-      });
+      h.viewOpenAuto(v);
     });
 
     /**
@@ -1111,10 +1071,7 @@ export function viewsRender(o) {
      */
     vToRemove.forEach(function(idView) {
       vStore.splice(vStore.indexOf(idView, 1));
-      closeView({
-        id: idMap,
-        idView: idView
-      });
+      h.viewCloseAuto(idView);
     });
 
     if (true) {
@@ -1128,7 +1085,7 @@ export function viewsRender(o) {
       Shiny.onInputChange('mglEvent_' + idMap + '_views_status', summary);
     }
 
-    updateViewOrder(o);
+    h.viewsLayersOrderUpdate(o);
   });
 }
 
@@ -1276,7 +1233,8 @@ export function makeSimpleLayer(o) {
  * @param {string} o.order Array of layer base name. If empty, use `getViewsOrder`
  * @param
  */
-export function updateViewOrder(o) {
+export function viewsLayersOrderUpdate(o) {
+  o = o || {};
   const h = mx.helpers;
   const map = h.getMap(o.id);
   const views = h.getViews({id: o.id});
@@ -1655,7 +1613,7 @@ export function handleViewValueFilterText(o) {
  * @param {string} o.id map id
  * @param {string} o.idView view id
  */
-export function removeView(o) {
+export function viewDelete(o) {
   const h = mx.helpers;
   const mData = h.getMapData();
   const views = mData.views;
@@ -1667,7 +1625,7 @@ export function removeView(o) {
   const vIndex = views.indexOf(view);
   const geojsonData = mx.data.geojson;
 
-  h.closeView(o);
+  h.viewLayersRemove(o);
   mData.viewsList.removeItemById(view.id);
 
   if (view.type === 'gj') {
@@ -1686,40 +1644,117 @@ export function removeView(o) {
  * @param {string} o.id map id
  * @param {string} o.idView view id
  */
-export function closeView(o) {
+export function viewLayersRemove(o) {
   const h = mx.helpers;
   let view = mx.helpers.getView(o.idView);
-
-  if (!h.isView(view)) {
-    return;
-  }
-
-  let viewDuration = Date.now() - view._addTime || 0;
-
-  mx.events.fire({
-    type: 'view_remove',
-    data: {
-      idView: o.idView,
-      view: view
+  o.id = o.id || mx.settings.map.id;
+  return new Promise((resolve) => {
+    if (!h.isView(view)) {
+      resolve(false);
     }
-  });
 
-  mx.helpers.cleanRemoveModules(view);
+    let viewDuration = Date.now() - view._addTime || 0;
 
-  mx.helpers.removeLayersByPrefix({
-    id: o.id,
-    prefix: o.idView
-  });
+    mx.events.fire({
+      type: 'view_remove',
+      data: {
+        idView: o.idView,
+        view: view
+      }
+    });
 
-  view._open = false;
-  mx.events.fire({
-    type: 'view_removed',
-    data: {
-      idView: o.idView,
-      view: view
+    mx.helpers.removeLayersByPrefix({
+      id: o.id,
+      prefix: o.idView
+    });
+
+    mx.events.fire({
+      type: 'view_removed',
+      data: {
+        idView: o.idView,
+        view: view
+      }
+    });
+    if (view._elLegend) {
+      view._elLegend.remove();
     }
+
+    resolve(true);
+  }).catch(console.warn);
+}
+
+/**
+ * Force view checkbox
+ * @param {Object} view View to open
+ */
+export function viewOpen(view) {
+  const h = mx.helpers;
+  return new Promise((resolve, reject) => {
+    view = h.getView(view);
+    if (!h.isView(view)) {
+      reject('viewOpen : no view given');
+    }
+    const elView = getViewEl(view);
+    if (elView && elView.vb) {
+      h.viewModulesInit(view);
+      elView.vb.open();
+    }
+    resolve(true);
   });
 }
+export function viewOpenAuto(view) {
+  const h = mx.helpers;
+  view = h.getView(view);
+  if (!view) {
+    return;
+  }
+  h.viewOpen(view).then(() => {
+    h.viewLayersAdd({
+      viewData: view
+    });
+  });
+}
+
+/**
+ * Close / uncheck view – if exists – in view list
+ * @param {String|View} idView id of the view or view object
+ */
+export function viewClose(view) {
+  const h = mx.helpers;
+  return new Promise((resolve, reject) => {
+    view = h.getView(view);
+
+    if (!h.isView(view)) {
+      reject('viewClose : no view given');
+    }
+    if (view && view.vb) {
+      view.vb.close();
+      h.viewModulesRemove(view);
+    }
+    resolve(true);
+  });
+}
+export function viewCloseAuto(view) {
+  const h = mx.helpers;
+  view = h.getView(view);
+  if (!view) {
+    return;
+  }
+  h.viewClose(view).then(() => {
+    h.viewLayersRemove({
+      idView: view.id
+    });
+  });
+}
+
+/**
+ * Get view el
+ * @param {Object} view View
+ */
+export function getViewEl(view) {
+  return view._el || document.querySelector("[data-view_id='" + view.id + "']");
+}
+
 /**
  * Filter current view and store rules
  * @param {Object} o Options
@@ -2079,6 +2114,182 @@ export function existsInList(li, it, val, inverse) {
 }
 
 /**
+ * Add MapX view on the map
+ * @param {object} o Options
+ * @param {string} o.id map id
+ * @param {string} o.idView view id
+ * @param {objsect} o.viewData view
+ * @param {Element} o.elLegendContainer Legend container
+ * @param {string} o.idViewsList id of ui views list element
+ * @param {string} o.before Layer before which insert this view layer(s)
+ * @param
+ */
+export function viewLayersAdd(o) {
+  const h = mx.helpers;
+  const m = h.getMapData(o.id);
+  if (o.idView) {
+    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+  }
+  const view = o.viewData || h.getView(o.idView) || {};
+  const idView = view.id || o.idView;
+  const idMap = o.id || mx.settings.map.id;
+  const idType = view.type;
+  /**
+   * Get previous layer name
+   */
+  const l = h.getLayerNamesByPrefix({
+    id: idMap,
+    prefix: o.before || mx.settings.layerBefore
+  });
+  const idLayerBefore = l[0];
+
+  /*
+   * Validation
+   */
+  if (!idView || !h.isView(view)) {
+    console.warn('View ' + idView + ' not found');
+    return;
+  }
+
+  /**
+   * Fire view add event
+   */
+  mx.events.fire({
+    type: 'view_add',
+    data: {
+      idView: idView,
+      view: view
+    }
+  });
+
+  /*
+   * Remove previous layer if needed
+   */
+  h.removeLayersByPrefix({
+    id: idMap,
+    prefix: idView
+  });
+
+  /**
+   * Add source from view
+   */
+  h.addSourceFromView({
+    map: m.map,
+    view: view
+  });
+
+  /**
+   * Set/Reset filter
+   */
+  h.viewFiltersInit(view);
+
+  /*
+   * Add views layers
+   *
+   */
+  return handler(idType)
+    .then(() => {
+      mx.events.fire({
+        type: 'view_added',
+        data: {
+          idView: view.id,
+          view: view
+        }
+      });
+    })
+    .catch(function(e) {
+      console.warn(e);
+    });
+
+  /**
+   * handler based on view type
+   */
+  function handler(viewType) {
+    /* Switch on view type*/
+    const types = {
+      rt: function() {
+        return viewLayersAddRt({
+          view: view,
+          map: m.map,
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
+        });
+      },
+      cc: function() {
+        return viewLayersAddCc({
+          view: view,
+          map: m.map,
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
+        });
+      },
+      vt: function() {
+        return viewLayersAddVt({
+          view: view,
+          map: m.map,
+          debug: o.debug,
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
+        });
+      },
+      gj: function() {
+        return viewLayersAddGj({
+          view: view,
+          map: m.map,
+          before: idLayerBefore,
+          elLegendContainer: o.elLegendContainer
+        });
+      },
+      sm: function() {
+        return Promise.resolve(true);
+      }
+    };
+
+    return types[viewType]();
+  }
+}
+
+export function elLegend(idView, settings) {
+  const h = mx.helpers;
+  const view = h.getView(idView);
+  if (!h.isView(view)) {
+    throw new Error('elLegend invalid view');
+  }
+  const elView = h.getViewEl(view);
+  const idLegend = 'view_legend_' + idView;
+  const idLegendContainer = 'view_legend_container_' + idView;
+  settings = Object.assign(settings, {removeOld: true, type: 'vt'});
+  const hasView = h.isElement(elView);
+  const hasContainer = h.isElement(settings.elLegendContainer);
+
+  if (hasView && !hasContainer) {
+    settings.elLegendContainer = elView.querySelector('#' + idLegendContainer);
+  }
+  if (!settings.elLegendContainer) {
+    throw new Error("elLegend can't find legend container");
+  }
+  const elLegendContainer = settings.elLegendContainer;
+
+  if (settings.removeOld) {
+    if (view._elLegend) {
+      view._elLegend.remove();
+    }
+    const elOldLegend = elLegendContainer.querySelector('#' + idLegend);
+    if (elOldLegend) {
+      elOldLegend.remove();
+    }
+  }
+
+  const elLegend = h.el('div', {
+    class: 'mx-view-legend-' + settings.type,
+    id: idLegend
+  });
+  elLegendContainer.appendChild(elLegend);
+  view._elLegend = elLegend;
+  return elLegend;
+}
+
+/**
  * Parse view of type cc and add it to the map
  * @param {Object} o Options
  * @param {Object} o.view View data
@@ -2086,32 +2297,19 @@ export function existsInList(li, it, val, inverse) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function renderViewCc(o) {
+function viewLayersAddCc(o) {
   const h = mx.helpers;
   const view = o.view;
   const map = o.map;
   const methods = mx.helpers.path(view, 'data.methods');
 
-  const elOldLegend = view._elLegend;
   const idView = view.id;
-  const elView = h.getViewEl(view);
   const idSource = idView + '-SRC';
-  const idLegend = 'view_legend_' + idView;
-  const idLegendContainer = 'view_legend_container_' + idView;
-  const elLegendContainer =
-    o.elLegendContainer || elView.querySelector('#' + idLegendContainer);
-
-  if (!methods || !elLegendContainer) {
-    return Promise.resolve(true);
-  }
-
-  if (elOldLegend) {
-    elOldLegend.remove();
-  }
-
-  const elLegend = h.el('div', {class: 'mx-view-legend-cc', id: idLegend});
-  elLegendContainer.appendChild(elLegend);
-  view._elLegend = elLegend;
+  const elLegend = h.elLegend(idView, {
+    type: 'cc',
+    elLegendContainer: o.elLegendContainer,
+    removeOld: true
+  });
 
   return new Promise(function(resolve, reject) {
     const r = new Function(methods)();
@@ -2120,40 +2318,71 @@ function renderViewCc(o) {
     } else {
       reject(methods);
     }
-  }).then(function(cc) {
-    if (!(cc.onInit instanceof Function) || !(cc.onClose instanceof Function)) {
-      return;
-    }
+  })
+    .then(function(cc) {
+      if (
+        !(cc.onInit instanceof Function) ||
+        !(cc.onClose instanceof Function)
+      ) {
+        return;
+      }
 
-    const opt = {
-      map: map,
-      view: view,
-      idView: idView,
-      idSource: idSource,
-      idLegend: idLegend,
-      elLegend: elLegend,
-      onClose: cc.onClose,
-      onInit: cc.onInit
-    };
+      const opt = {
+        _init: false,
+        _closed: false,
+        map: map,
+        view: view,
+        idView: idView,
+        idSource: idSource,
+        idLegend: elLegend.id,
+        elLegend: elLegend
+      };
+      opt.onInit = tryCatched(cc.onInit.bind());
+      opt.onClose = cc.onClose.bind(opt);
 
-    if (opt.map.getSource(opt.idSource)) {
-      opt.map.removeSource(opt.idSource);
-    }
+      if (opt.map.getSource(opt.idSource)) {
+        opt.map.removeSource(opt.idSource);
+      }
 
-    mx.helpers.removeLayersByPrefix({
-      prefix: opt.idView,
-      id: mx.settings.map.id
-    });
+      mx.helpers.removeLayersByPrefix({
+        prefix: opt.idView,
+        id: mx.settings.map.id
+      });
 
-    view._onRemoveCustomView = function() {
-      opt.onClose(opt);
-    };
+      view._onRemoveCustomView = function() {
+        if (!opt._init || opt._closed) {
+          return;
+        }
+        try {
+          opt.onClose(opt);
+        } catch (e) {
+          console.warn(e);
+        }
+        opt._closed = true;
+      };
 
-    /**
-     * Init custom map
-     */
-    opt.onInit(opt);
-  });
+      /**
+       * Init custom map
+       */
+
+      opt.onInit(opt);
+      opt._init = true;
+      /**
+       * Helpers
+       */
+
+      function tryCatched(fun) {
+        return function(...args) {
+          try {
+            return fun(...args);
+          } catch (e) {
+            console.warn(e);
+            opt.onClose(opt);
+          }
+        };
+      }
+    })
+    .catch(console.warn);
 }
 
 /**
@@ -2164,7 +2393,7 @@ function renderViewCc(o) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function renderViewRt(o) {
+function viewLayersAddRt(o) {
   const view = o.view;
   const map = o.map;
   const h = mx.helpers;
@@ -2174,16 +2403,18 @@ function renderViewRt(o) {
       resolve(false);
       return;
     }
-    const elOldLegend = view._elLegend;
     const idView = view.id;
-    const elView = h.getViewEl(view);
     const idSource = idView + '-SRC';
-    const idLegend = 'view_legend_' + idView;
-    const idLegendContainer = 'view_legend_container_' + idView;
     const legend = h.path(view, 'data.source.legend');
-    const extContainer = h.isElement(o.elLegendContainer);
+
+    const elLegend = h.elLegend(idView, {
+      type: 'rt',
+      elLegendContainer: o.elLegendContainer,
+      removeOld: true
+    });
+
     /**
-     * source as already be added. Add layer
+     * source has already be added. Add layer
      */
     map.addLayer(
       {
@@ -2197,28 +2428,12 @@ function renderViewRt(o) {
     /*
      * Add legend
      */
-    const elLegendContainer = extContainer
-      ? o.elLegendContainer
-      : elView.querySelector('#' + idLegendContainer);
-
-    if (!elLegendContainer) {
-      return;
-    }
-
-    if (elOldLegend) {
-      elOldLegend.remove();
-    }
 
     if (legend) {
-      const elLegend = h.el('div', {class: 'mx-view-legend-rt', id: idLegend});
       const defaultImg = function() {
         this.onerror = null;
         this.src = require('../../src/svg/no_legend.svg');
       };
-      /**
-       * Save ref for removal
-       */
-      view._elLegend = elLegend;
 
       /**
        * Create an image with given source
@@ -2255,7 +2470,6 @@ function renderViewRt(o) {
           addBackground: false
         });
       };
-      elLegendContainer.appendChild(elLegend);
     }
     resolve(true);
   });
@@ -2269,7 +2483,7 @@ function renderViewRt(o) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-export function renderViewVt(o) {
+export function viewLayersAddVt(o) {
   const h = mx.helpers;
   const p = h.path;
 
@@ -2285,10 +2499,6 @@ export function renderViewVt(o) {
     const hideNulls = p(view, 'data.style.hideNulls', false);
     const geomType = p(view, 'data.geometry.type', 'point');
     const source = p(view, 'data.source', {});
-    const elView = h.getViewEl(view);
-    const elOldLegend = view._elLegend;
-    const idLegend = 'view_legend_' + idView;
-    const idLegendContainer = 'view_legend_container_' + idView;
     const idSourceLayer = p(source, 'layerInfo.name');
     var layers = [];
     var num = 0;
@@ -2300,6 +2510,12 @@ export function renderViewVt(o) {
       resolve(false);
       return;
     }
+
+    const elLegend = h.elLegend(idView, {
+      type: 'vt',
+      elLegendContainer: o.elLegendContainer,
+      removeOld: true
+    });
 
     /**
      * Set default
@@ -2505,20 +2721,6 @@ export function renderViewVt(o) {
         const idView = view.id;
         const filter = ['all'];
         const attr = def.attribute.name;
-        //const paint = {};
-        //const layerSprite = {};
-
-        /**
-         * Set filter
-         */
-
-        //if( isNullRule && isNumeric && value !== null ){
-        //if( value || value === 0 ){
-        //value = value * 1;
-        //}else{
-        //value = null;
-        //}
-        /*}*/
 
         if (!isNullRule) {
           if (isNumeric) {
@@ -2648,71 +2850,49 @@ export function renderViewVt(o) {
       /*
        * Update layer order based in displayed list
        */
-      updateViewOrder(o);
+      viewsLayersOrderUpdate(o);
 
-      /**
-       * Evaluate rules;
-       * - If next rules is identical, remove it from legend
-       * - Set sprite path
-       */
-      if (hasStyleRules) {
-        const elLegend = h.el('div', {
-          class: 'mx-view-item-legend-vt'
-        });
+      if (hasStyleRules && elLegend) {
         /**
-         * Save ref for removal
+         * Clean rules;
+         * - If next rules is identical, remove it from legend
+         * - Set sprite path
          */
-        view._elLegend = elLegend;
+        for (var i = 0; i < rules.length; i++) {
+          if (rules[i]) {
+            const ruleHasSprite = rules[i].sprite && rules[i].sprite !== 'none';
+            const nextRuleIsSame =
+              !!rules[i + 1] && rules[i + 1].value === rules[i].value;
+            const nextRuleHasSprite =
+              !!rules[i + 1] &&
+              rules[i + 1].sprite &&
+              rules[i + 1].sprite !== 'none';
 
-        /*
-         * Add legend
-         */
-        const elLegendContainer =
-          o.elLegendContainer || elView.querySelector('#' + idLegendContainer);
+            if (ruleHasSprite) {
+              rules[i].sprite = 'url(sprites/svg/' + rules[i].sprite + '.svg)';
+            } else {
+              rules[i].sprite = null;
+            }
 
-        if (elLegendContainer) {
-          for (var i = 0; i < rules.length; i++) {
-            if (rules[i]) {
-              const ruleHasSprite =
-                rules[i].sprite && rules[i].sprite !== 'none';
-              const nextRuleIsSame =
-                !!rules[i + 1] && rules[i + 1].value === rules[i].value;
-              const nextRuleHasSprite =
-                !!rules[i + 1] &&
-                rules[i + 1].sprite &&
-                rules[i + 1].sprite !== 'none';
-
-              if (ruleHasSprite) {
+            if (nextRuleIsSame) {
+              if (nextRuleHasSprite) {
                 rules[i].sprite =
-                  'url(sprites/svg/' + rules[i].sprite + '.svg)';
-              } else {
-                rules[i].sprite = null;
+                  rules[i].sprite +
+                  ',' +
+                  'url(sprites/svg/' +
+                  rules[i + 1].sprite +
+                  '.svg)';
               }
-
-              if (nextRuleIsSame) {
-                if (nextRuleHasSprite) {
-                  rules[i].sprite =
-                    rules[i].sprite +
-                    ',' +
-                    'url(sprites/svg/' +
-                    rules[i + 1].sprite +
-                    '.svg)';
-                }
-                rules[i + 1] = null;
-              }
+              rules[i + 1] = null;
             }
           }
-          /**
-           * Update rules
-           */
-          view.data.style.rulesCopy = rules;
-
-          /*
-           * Add legend using template
-           */
-          elLegend.innerHTML = mx.templates.viewListLegend(view);
-          elLegendContainer.appendChild(elLegend);
         }
+
+        /*
+         * Add legend using template
+         */
+        view.data.style.rulesCopy = rules;
+        elLegend.innerHTML = mx.templates.viewListLegend(view);
       }
     }
 
@@ -2721,19 +2901,18 @@ export function renderViewVt(o) {
 }
 
 /**
- * Add option and legend box for the given view
- * @param {Object} o Options
- * @param {String} o.id map id
- * @param {Object} o.view View item
- * @param {Boolean} o.noTools Don't add tools
+ * Add filtering system to views
+ * @param {String|Object} idView id or View to update
  */
-export function addOptions(o) {
+export function viewFiltersInit(idView) {
   const h = mx.helpers;
-  const view = o.view;
-  const idView = view.id;
-  const idMap = o.id;
-  view._idMap = idMap;
-  view._interactive = {};
+  const view = h.getView(idView);
+  if (!h.isView(view)) {
+    return;
+  }
+  /**
+   * Add methods
+   */
   view._filters = {
     style: ['all'],
     legend: ['all'],
@@ -2742,228 +2921,95 @@ export function addOptions(o) {
     numeric_slider: ['all'],
     custom_style: ['all']
   };
-  view._setFilter = mx.helpers.viewSetFilter;
-  view._setOpacity = mx.helpers.viewSetOpacity;
-
-  if (!o.noTools) {
-    const elOptions = document.querySelector(
-      "[data-view_options_for='" + view.id + "']"
-    );
-
-    if (elOptions) {
-      elOptions.innerHTML = mx.templates.viewListOptions(view);
-      mx.helpers.makeTimeSlider({view: view, idMap: o.id});
-      mx.helpers.makeNumericSlider({view: view, idMap: o.id});
-      mx.helpers.makeTransparencySlider({view: view, idMap: o.id});
-      mx.helpers.makeSearchBox({view: view, idMap: o.id});
-      /*
-       * translate based on dict key
-       */
-      mx.helpers.updateLanguageElements({
-        el: elOptions
-      });
-    }
-
-    /*
-     * Open the view
-     */
-    h.viewOpen(view);
-
-    /*
-     * Check if dashboard data is there and build it if needed
-     */
-    h.Dashboard.init({
-      idContainer: 'mxDashboards',
-      idDasboard: 'mx-dashboard-' + idView,
-      idMap: idMap,
-      view: view
-    });
-  }
+  view._setFilter = h.viewSetFilter;
+  view._setOpacity = h.viewSetOpacity;
 }
 
 /**
- * Get view el
- * @param {Object} view View
+ * Add sliders and searchbox
+ * @param {String|Object} id id or View to update
  */
-export function getViewEl(view) {
-  return view._el || document.querySelector("[data-view_id='" + view.id + "']");
-}
-
-/**
- * Force view checkbox
- * @param {Object} view View to open
- */
-export function viewOpen(view) {
-  const elView = getViewEl(view);
-  if (elView && elView.vb) {
-    elView.vb.open();
-  }
-}
-
-/**
- * Add MapX view on the map
- * @param {object} o Options
- * @param {string} o.id map id
- * @param {string} o.idView view id
- * @param {objsect} o.viewData view
- * @param {Boolean} o.noTools Don't add view tools
- * @param {Element} o.elLegendContainer Legend container
- * @param {string} o.idViewsList id of ui views list element
- * @param {string} o.before Layer before which insert this view layer(s)
- * @param
- */
-export function renderView(o) {
+export function viewModulesInit(id) {
   const h = mx.helpers;
-  const m = h.getMapData(o.id);
-  if (o.idView) {
-    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-  }
-  const view = o.viewData || h.getView(o.idView) || {};
-  const idView = view.id || o.idView;
-  const idMap = o.id;
-  /**
-   * Get previous layer name
-   */
-  const l = h.getLayerNamesByPrefix({
-    id: idMap,
-    prefix: o.before || mx.settings.layerBefore
-  });
-  const idLayerBefore = l[0];
-
-  /*
-   * Validation
-   */
-  if (!idView || !h.isView(view)) {
-    console.warn('View ' + idView + ' not found');
+  const view = h.getView(id);
+  if (!h.isView(view)) {
     return;
   }
+  const elView = h.getViewEl(view);
+  if (!h.isElement(elView)) {
+    return;
+  }
+  const idView = view.id;
+  const idMap = mx.settings.map.id;
+  const elOptions = elView.querySelector(
+    "[data-view_options_for='" + idView + "']"
+  );
+  const d = h.getMapData();
+  /**
+   * Clean old modules
+   */
+  h.viewModulesRemove(view);
 
   /**
-   * Fire view add event
+   * Add sliders and search box
    */
-  mx.events.fire({
-    type: 'view_add',
-    data: {
-      idView: idView,
-      view: view
-    }
-  });
+  view._interactive = {};
+  elOptions.innerHTML = mx.templates.viewListOptions(view);
+  h.makeTimeSlider({view: view, idMap: idMap});
+  h.makeNumericSlider({view: view, idMap: idMap});
+  h.makeTransparencySlider({view: view, idMap: idMap});
+  h.makeSearchBox({view: view, idMap: idMap});
 
   /*
-   * Remove previous layer if needed
+   * Check if dashboard data is there and build it if needed
    */
-  h.removeLayersByPrefix({
-    id: idMap,
-    prefix: idView
-  });
-
-  /**
-   * Check for update
-   */
-
-  const oldView = h.getView(idView);
-  const hasChanged = !h.isEqual(oldView, view);
-
-  if (hasChanged) {
-    /*
-     * This is an refresh or update
-     */
-    const viewIndex = m.views.indexOf(oldView);
-    h.cleanRemoveModules(oldView);
-    m.views[viewIndex] = view;
-    h.updateLanguageViewsList({id: idMap});
-    h.updateViewsFilter();
-  }
-
-  /**
-   * Add options
-   */
-  h.addOptions({
-    id: idMap,
-    view: view,
-    noTools: o.noTools
-  });
-
-  /**
-   * Add source from view
-   */
-  h.addSourceFromView({
-    map: m.map,
+  h.Dashboard.init({
+    idContainer: 'mxDashboards',
+    idDasboard: 'mx-dashboard-' + idView,
+    idMap: idMap,
     view: view
   });
+}
 
-  /**
-   * Add view
-   */
-  handler(view.type);
-
-  /**
-   * handler based on view type
-   */
-  function handler(viewType) {
-    /* Switch on view type*/
-    const handler = {
-      rt: function() {
-        return renderViewRt({
-          view: view,
-          map: m.map,
-          before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
-        });
-      },
-      cc: function() {
-        return renderViewCc({
-          view: view,
-          map: m.map,
-          before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
-        });
-      },
-      vt: function() {
-        return renderViewVt({
-          view: view,
-          map: m.map,
-          debug: o.debug,
-          before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
-        });
-      },
-      gj: function() {
-        return renderViewGj({
-          view: view,
-          map: m.map,
-          before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
-        });
-      },
-      sm: function() {
-        return Promise.resolve(true);
-      }
-    };
-
-    /* Call function according to view type */
-    handler[viewType]()
-      .then(() => {
-        /**
-         * Fire view add event
-         */
-        view._open = true;
-        mx.events.fire({
-          type: 'view_added',
-          data: {
-            idView: view.id,
-            view: view
-          }
-        });
-      })
-      .catch(function(e) {
-        h.modal({
-          id: 'modalError',
-          title: 'Error',
-          content: '<p>Error during methods evaluation :' + e
-        });
-      });
+/**
+ * Clean stored modules : dashboard, custom view, etc.
+ */
+export function viewModulesRemove(view) {
+  const h = mx.helpers;
+  view = h.isString(view) ? h.getView(view) : view;
+  if (!h.isView(view)) {
+    return;
   }
+  const it = view._interactive;
+
+  if (h.isFunction(view._onRemoveCustomView)) {
+    view._onRemoveCustomView();
+  }
+  if (h.isFunction(view._onRemoveDashboard)) {
+    view._onRemoveDashboard();
+  }
+  if (h.isElement(view._elLegend)) {
+    view._elLegend.remove();
+  }
+  if (it) {
+    if (it.searchBox) {
+      it.searchBox.destroy();
+    }
+    if (it.transparencySlider) {
+      it.transparencySlider.destroy();
+    }
+    if (it.numericSlider) {
+      it.numericSlider.destroy();
+    }
+    if (it.timeSlider) {
+      it.timeSlider.destroy();
+    }
+  }
+}
+export function viewsModulesRemove(views) {
+  const h = mx.helpers;
+  views = views instanceof Array ? views : [views];
+  views.forEach((v) => h.viewModulesRemove(v));
 }
 
 /**
@@ -2974,7 +3020,7 @@ export function renderView(o) {
  * @param {Element} o.elLegendContainer Legend container
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-export function renderViewGj(opt) {
+export function viewLayersAddGj(opt) {
   return new Promise((resolve) => {
     const layer = mx.helpers.path(opt.view, 'data.layer');
     opt.map.addLayer(layer, opt.before);
@@ -3267,12 +3313,14 @@ export function getLayersPropertiesAtPoint(opt) {
 
 /*selectize version*/
 export function makeSearchBox(o) {
+  const h = mx.helpers;
   const view = o.view;
   const el = document.querySelector("[data-search_box_for='" + view.id + "']");
   //const hasSelectize = typeof window.jQuery === "function" && window.jQuery().selectize;
   if (!el) {
     return;
   }
+  const elViewParent = h.getViewEl(view).parentElement;
 
   makeSelectize();
 
@@ -3290,9 +3338,9 @@ export function makeSearchBox(o) {
   }
 
   function makeSelectize() {
-    return mx.helpers.moduleLoad('selectize').then(() => {
-      const table = mx.helpers.path(view, 'data.attribute.table');
-      const attr = mx.helpers.path(view, 'data.attribute.name');
+    return h.moduleLoad('selectize').then(() => {
+      const table = h.path(view, 'data.attribute.table');
+      const attr = h.path(view, 'data.attribute.name');
       const data = tableToData(table);
 
       const selectOnChange = function() {
@@ -3310,6 +3358,7 @@ export function makeSearchBox(o) {
 
       const searchBox = $(el)
         .selectize({
+          dropdownParent: elViewParent,
           placeholder: 'Search',
           choices: data,
           valueField: 'value',
@@ -3388,11 +3437,10 @@ export function filterViewValues(o) {
 export function addLayer(o) {
   const map = mx.helpers.getMap(o.id);
   if (map) {
-    if (o.layer.id in map.style._layers) {
-      console.log('Layer already exists');
-    } else {
-      map.addLayer(o.layer, o.before);
+    if (map.getLayer(o.layer.id)) {
+      map.removeLayer(o.layer.id);
     }
+    map.addLayer(o.layer, o.before);
   }
 }
 
@@ -3408,7 +3456,7 @@ export function zoomToViewId(o) {
   const isArray = h.isArray(o.idView);
   o.idView = isArray ? o.idView[0] : o.idView;
   o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-  const view = mx.helpers.getView(o.idView);
+  const view = h.getView(o.idView);
 
   if (!h.isView(view)) {
     return;
@@ -3521,7 +3569,7 @@ export function resetViewStyle(o) {
   if (!o.idView) {
     return;
   }
-  mx.helpers.renderView({
+  mx.helpers.viewLayersAdd({
     id: o.id,
     idView: o.idView
   });
@@ -3676,6 +3724,14 @@ export function getViewTitleNormalized(view, lang) {
     .trim();
   return title;
 }
+
+export function getViewDateModified(view) {
+  const h = mx.helpers;
+  if (!h.isView(view)) {
+    view = h.getView(view);
+  }
+  return view.date_modified;
+}
 /**
  * Get a view desc by id or view object
  * @param {String|Object} id  View id or view
@@ -3827,8 +3883,20 @@ export function getViews(o) {
  * @param {String} idMap Id of the map
  */
 export function getView(id, idMap) {
+  const h = mx.helpers;
+  if (h.isView(id)) {
+    return id;
+  }
   return mx.helpers.getViews({idView: id, id: idMap})[0];
 }
+export function getViewIndex(id) {
+  const h = mx.helpers;
+  const view = h.getView(id);
+  const d = mx.helpers.getMapData();
+  const views = d.views || [];
+  return views.indexOf(view);
+}
+
 export function getViewsOnMap(o) {
   return mx.helpers.getLayerNamesByPrefix({
     id: o.id,

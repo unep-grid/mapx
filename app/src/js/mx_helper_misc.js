@@ -197,8 +197,10 @@ export function iconFlash(icon) {
   function remove(){
     elContainer.remove();
   }
+}
 
-
+export function iconFlashSave(){
+  mx.helpers.iconFlash('floppy-o');
 }
 
 /**

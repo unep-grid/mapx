@@ -34,9 +34,6 @@ let settings = {
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
   paramKeysPermanent: [
-    'lat',
-    'lng',
-    'zoom',
     'project',
     'language',
     'lockProject',

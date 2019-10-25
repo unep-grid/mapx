@@ -18,8 +18,9 @@ let settings = {
   languageDefault: 'en',
   languages: ['en', 'fr', 'es'],
   mode: ['debug'],
-  animeDuration : 100,
-  animeDragRelaxDuration : 1,
+  animeDuration: 100,
+  animeMaxDist : 200,
+  animeDragRelaxDuration: 1,
   localStorageKeys: {
     state: 'li-state',
     history: 'li-history'
@@ -27,27 +28,24 @@ let settings = {
   colorDefault: '#474747',
   maxHistoryLength: 100,
   /*
-   * Hooks
+   * Events
    */
-  onRenderItemContent: null,
-  onChange: null,
-  onSortStart: null,
-  onSortDone: null,
-  onSortOver: null,
-  onSortEnd: null,
-  onSaveLocal: null,
-  onGetItemTextById: null,
-  onGetItemDateById: null,
-  onSetTextData: null,
-  onSetDragImage: null,
-  onFilterEnd : null,
-  onResetState : null,
-  onSanitizeState : null,
-  /**
-   * Dictionnary
-   */
-  customDictItem: [],
-  /**
+  eventsCallback: [],
+  eventsKeys: [
+    'set_drag_image',
+    'sort_end',
+    'sort_done',
+    'render_item_content',
+    'get_item_text_by_id',
+    'get_item_date_by_id',
+    'filter_end',
+    'state_reset',
+    'state_change',
+    'state_save_local',
+    'state_sanitize',
+    'state_order'
+  ],
+  /*
    * Drag classes
    */
   customClassDragIgnore: [],

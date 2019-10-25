@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
          * Add views
          */
         mx.maps[idMap].views.forEach( v => {
-          h.renderView({viewData:v});
+          h.viewLayersAdd({viewData:v});
         });
         /*
          * secondary centering method this should be done at init, but see https://github.com/mapbox/mapbox-gl-js/issues/1970

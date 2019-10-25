@@ -533,16 +533,12 @@ observe({
               if(!viewIsEditable) return()
               if(viewType != "sm") return()
 
-              ##
-              ## First, get latest stored version of the story, if any.
-              ##
-              #mglGetLocalForageData(
-                #idStore = "stories",
-                #idInput = "localStory",
-                #idKey = viewId
-                #)
-
               btnList <- list(
+                actionButton(
+                  inputId="btnViewCloseStory",
+                  label=d("btn_close",language),
+                  `data-keep` = TRUE
+                  ),
                 actionButton(
                   inputId="btnViewSaveStory",
                   label=d("btn_save",language),
@@ -571,8 +567,8 @@ observe({
                   tips
                   ),
                 buttons = btnList,
-                textCloseButton=d("btn_close",language)
-                #removeCloseButton = T
+                textCloseButton=d("btn_close",language),
+                removeCloseButton = T
                 )
             },
             "btn_opt_edit_style"={
@@ -902,9 +898,7 @@ observeEvent(input$btnViewSave,{
       # edit flag
       view$`_edit` = TRUE 
 
-      mglAddView(
-        viewData = view
-        )
+      mglUpdateView(view)
     }
     #
     # Trigger next reactViews call

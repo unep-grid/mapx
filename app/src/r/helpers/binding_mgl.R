@@ -290,28 +290,13 @@ mglAddSources <- function( id = NULL, sources, session=shiny::getDefaultReactive
 }
 
 
-#' Add view 
+#' Update view 
 #' @param id Map id
 #' @param viewData View list
 #' @export
-mglAddView <- function( id=NULL, viewData, session=shiny::getDefaultReactiveDomain() ){
-  
-  conf <- mxGetDefaultConfig()
-
-  if(noDataCheck(id)){
-    id <- conf[["map"]][["id"]]
-  }
-
-
-  session$sendCustomMessage("mglAddView",
-    list(
-      id = id,
-      viewData = viewData,
-      fromServer = TRUE
-      )
-    )
+mglUpdateView <- function( viewData, session=shiny::getDefaultReactiveDomain() ){
+  session$sendCustomMessage("mglUpdateView",viewData);
 }
-
 
 #' Add a new layer
 #' @param id Map id
@@ -358,7 +343,7 @@ mglAddAutoLayer <- function(id=NULL, style=NULL, before=NULL, session=shiny::get
 #' @param edit Enable view edition 
 #' @param close Close the current story
 #' @param session Shiny session object
-mglReadStory <- function(id=NULL,view=list(),save=TRUE,edit=TRUE,close=FALSE, session=shiny::getDefaultReactiveDomain()){
+mglReadStory <- function(id=NULL,view=list(),save=TRUE,update=TRUE,edit=TRUE,close=FALSE, session=shiny::getDefaultReactiveDomain()){
 
   if(noDataCheck(id)){
     id <- .get(config,c("map","id"))
@@ -370,7 +355,8 @@ mglReadStory <- function(id=NULL,view=list(),save=TRUE,edit=TRUE,close=FALSE, se
       view = view,
       save = save,
       edit = edit,
-      close = close
+      close = close,
+      update = update
       )
     )
 }

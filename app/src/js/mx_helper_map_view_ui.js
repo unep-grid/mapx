@@ -111,24 +111,25 @@ function sanitizeState(state) {
 }
 
 /**
- * Add signle view to the views list
+ * Add single view to the views list
  * @param {Object} view View object to add
- * @param {Object} opt Options View list options (id,moveTop,render,open)
+ * @param {Object} settings Settings (id,moveTop,render,open)
  */
-export function viewsListAddSingle(view, opt) {
-  opt = opt || {};
+export function viewsListAddSingle(view, settings) {
+  settings = settings || {};
   const h = mx.helpers;
   if (!h.isView(view)) {
     return;
   }
-  const settings = {
+  const settings_default = {
     id: view.id,
     moveTop: true,
     render: true,
     open: true,
     view: view
   };
-  opt = Object.assign({}, settings, opt);
+  settings = Object.assign({}, settings_default, settings);
+
   const mData = mx.helpers.getMapData();
   const ids = mData.views.map((v) => v.id);
   const idPosOld = ids.indexOf(view.id);
@@ -137,8 +138,31 @@ export function viewsListAddSingle(view, opt) {
     mData.views.splice(idPosOld, 1);
   }
   mData.views.unshift(view);
-  mData.viewsList.addItem(opt);
+  mData.viewsList.addItem(settings);
   mData.viewsFilter.update();
+}
+
+/**
+ * Update single view alread in the view list
+ * @param {Object} view View object to add
+ */
+export function viewsListUpdateSingle(view) {
+  const h = mx.helpers;
+  const mData = mx.helpers.getMapData();
+  const oldView = h.getView(view.id);
+  if (!h.isView(oldView)) {
+    console.warn('No old view to update');
+  }
+  h.viewModulesRemove(oldView);
+  Object.assign(oldView, view);
+  const settings = {
+    id: view.id,
+    view: oldView,
+    update: true
+  };
+  mData.viewsList.updateItem(settings);
+  mData.viewsFilter.updateViewsComponents();
+  mData.viewsFilter.updateCount();
 }
 
 export function updateViewsFilter() {
@@ -156,7 +180,8 @@ export function updateViewsFilter() {
  */
 export function viewsListRenderNew(o) {
   const h = mx.helpers;
-  const mData = h.getMapData(o.id);
+  const idMap = o.id;
+  const mData = h.getMapData(idMap);
   const elViewsContainer = document.querySelector('.mx-views-container');
   const elFilterText = document.getElementById('viewsFilterText');
   const elFilterTags = document.getElementById('viewsFilterContainer');
@@ -182,7 +207,7 @@ export function viewsListRenderNew(o) {
   /**
    * Clean old views, modules, array of views ...
    */
-  h.viewsRemoveAll({idMap: o.id});
+  h.viewsRemoveAll({idMap: idMap});
 
   /**
    * Add all new views
@@ -198,35 +223,24 @@ export function viewsListRenderNew(o) {
     locked: noViewsMode,
     useStateStored: true,
     autoMergeState: true,
+    emptyLabel: getEmptyLabel(),
     customClassDragIgnore: ['mx-view-tgl-more-container'],
     customDictItems: [
       {id: 'name_group', en: 'category', fr: 'catégorie'},
       {id: 'name_item', en: 'view', fr: 'vue'}
     ],
-    onSetDragImage: handleSetDragImage,
-    onRenderItemContent: handleRenderItemContent,
-    onGetItemTextById: (id) => {
-      return h.getViewTitleNormalized(id);
-    },
-    onGetItemDateById: (id) => {
-      return h.getView(id).date_modified;
-    },
-    onChange: () => {
-      h.viewsRender();
-    },
-    onFilterEnd: () => {
-      h.viewsRender();
-    },
-    onResetState: () => {
-      h.viewsRender();
-    },
-    onSaveLocal: () => {
-      mx.helpers.iconFlash('floppy-o');
-    },
-    onSanitizeState: (state) => {
-      return sanitizeState(state);
-    },
-    emptyLabel: getEmptyLabel()
+    eventsCallback: [
+      {id: 'set_drag_image', action: handleSetDragImage},
+      {id: 'render_item_content', action: handleRenderItemContent},
+      {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
+      {id: 'get_item_date_by_id', action: h.getViewDateModified},
+      {id: 'filter_end', action: h.viewsCheckedUpdate},
+      {id: 'state_reset', action: h.viewsCheckedUpdate},
+      {id: 'state_change', action: h.viewsCheckedUpdate},
+      {id: 'state_order', action: h.viewsLayersOrderUpdate},
+      {id: 'state_save_local', action: h.iconFlashSave},
+      {id: 'state_sanitize', action: sanitizeState}
+    ]
   });
 
   /**
@@ -275,6 +289,11 @@ export function viewsListRenderNew(o) {
   });
 
   /**
+   *  Auto open
+   */
+  filterIfOpen();
+
+  /**
    * Handle view click
    */
   mx.listenerStore.removeListenerByGroup('view_list');
@@ -302,12 +321,31 @@ export function viewsListRenderNew(o) {
     return el;
   }
 
+  /**
+   * Trigger a filter activated if any view opened
+   */
+  function filterIfOpen() {
+    const views = h.getViews();
+    let found = false;
+    views.forEach((v) => {
+      if (!found && v.vb.isOpen()) {
+        found = true;
+      }
+    });
+    if (found) {
+      h.setBtnFilterActivated(true);
+    }
+  }
+
   /*
    * Render view item
    */
-  function handleRenderItemContent(el, data) {
+  function handleRenderItemContent(config) {
     const li = this;
-
+    const el = config.el;
+    const data = config.data;
+    const viewsOpen = h.getQueryParameterInit('viewsOpen');
+    const update = data.update;
     /**
      * Add given element
      */
@@ -319,7 +357,7 @@ export function viewsListRenderNew(o) {
     /**
      * No given element, assume it's a view
      */
-    const view = mData.views.find((v) => v.id === data.id);
+    const view = data.view || mData.views.find((v) => v.id === data.id);
     const missing = !h.isView(view);
 
     /**
@@ -330,18 +368,41 @@ export function viewsListRenderNew(o) {
       li.removeItemById(data.id);
       return;
     }
+
+    if(update && view._el){
+      view._el.remove();
+    }
+
     /**
-     * Add new view list item
+     * Create new view
      */
-    const viewBase = new ViewBase(view);
+    const viewBase = new ViewBase(view,update);
+
+    /**
+     * Test if registered to auto-open
+     */
+    const idOpen = viewsOpen.indexOf(view.id);
+    if (idOpen > -1) {
+      data.open = true;
+      viewsOpen.splice(idOpen, 1);
+      h.setBtnFilterActivated(true);
+    }
+
+    /**
+     * Handle view element
+     */
     const elView = viewBase.getEl();
-    view._el = elView;
     const open = data.open === true;
     if (elView) {
       el.appendChild(elView);
       h.setViewBadges({view: view});
-      if (open) {
-        viewBase.open();
+      if(update){
+        h.viewModulesInit(view);
+        h.viewLayersAdd({
+          viewData: view
+        });
+      }else if(open){
+        h.viewOpenAuto(view);
       }
     }
   }

@@ -1,14 +1,16 @@
 import {checkLanguage} from '../mx_helper_language.js';
+
 import {el} from '@fxi/el';
 
 class ViewBase {
-  constructor(view) {
+  constructor(view,enable) {
     let vb = this;
     vb.view = view;
-    vb.build();
+    view.vb = vb;
+    vb.build(enable);
   }
-  build() {
-    build.bind(this)();
+  build(enable) {
+    build.bind(this)(enable);
   }
   getEl() {
     return this.el;
@@ -16,22 +18,14 @@ class ViewBase {
   isOpen() {
     return this.elInput.checked === true;
   }
-  click() {
-    var evt = new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-      view: window
-    });
-    this.elInput.dispatchEvent(evt);
-  }
   open() {
     if (!this.isOpen()) {
-      this.click();
+      this.elInput.checked = true;
     }
   }
   close() {
     if (this.isOpen()) {
-      this.click();
+      this.elInput.checked = false;
     }
   }
   destroy() {
@@ -44,7 +38,8 @@ class ViewBase {
 
 export {ViewBase};
 
-function build() {
+function build(enable) {
+  enable = !!enable;
   let vb = this;
   let view = vb.view;
   let lang = checkLanguage({obj: view, path: 'data.title'});
@@ -101,6 +96,10 @@ function build() {
     }
   });
 
+  if(enable){
+    elInput.checked = true;
+  }
+
   let elLabel = el(
     'label',
     {
@@ -137,4 +136,5 @@ function build() {
   vb.elInput = elInput;
   vb.elToggleMore = elToggleMore;
   vb.el.vb = this;
+  view._el = elView;
 }

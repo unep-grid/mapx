@@ -18,10 +18,14 @@ export function getSourceTableAttribute(opt) {
 }
 
 export function showSourceTableAttributeModal(opt) {
+    if(!opt || !opt.idSource ){
+    return Promise.resolve(false);
+  }
   let h = mx.helpers;
   let el = h.el;
   let hot;
   let mutationObserver;
+
   let labels = opt.labels || null;
   let settings = {
     idSource: opt.idSource,
