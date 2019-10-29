@@ -339,8 +339,8 @@ function saveInLocalDb(opt) {
 
 // handle drop event
 export function handleUploadFileEvent(evt) {
-  evt.stopPropagation();
   evt.preventDefault();
+
   var helper = mx.helpers;
   var files = evt.dataTransfer.files;
 
@@ -394,7 +394,7 @@ export function handleUploadFileEvent(evt) {
 export function handleDragOver(evt) {
   evt.stopPropagation();
   evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+  evt.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
 }
 
 /** Worker function to handler

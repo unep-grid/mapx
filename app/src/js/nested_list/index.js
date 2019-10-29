@@ -56,6 +56,7 @@ class NestedList {
       group: 'base',
       type: 'dragstart'
     });
+
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
@@ -1264,12 +1265,13 @@ function handleSortStart(evt) {
   li.addUndoStep();
 
   const elDragImage = li.fire('set_drag_image', li.elDrag);
-
+  const dragText = li.fire('set_drag_text', li.elDrag);
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
   evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
   evt.dataTransfer.setData('text/plain', elDragImage.innerText);
+  evt.dataTransfer.setData('text/plain', dragText);
 
   li.elNext = li.elDrag.nextSibling;
 
