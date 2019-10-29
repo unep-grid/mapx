@@ -75,15 +75,8 @@ observe({
           viewEditors <- unique(c(viewEditors,.get(viewData,c("editor"))))
             
           #
-          # View classes
-          #
-          classesTags <- .get(config,c("views","classes"))
-          classesCurrent <- .get(viewData,c("data","classes"))
-
-          #
           # View collection
           #
-          #collectionsTags <- mxDbGetDistinctCollectionsTags(project)
           collectionsTags <- reactCollections()
           collectionsCurrent <- .get(viewData,c("data","collections"))
 
@@ -239,20 +232,6 @@ observe({
                   label=d("view_target_editors",language),
                   choices=viewEditTarget,
                   selected=viewEditors,
-                  multiple=TRUE,
-                  options=list(
-                    sortField = "label",
-                    plugins = list("remove_button")
-                    )
-                  ),
-                #
-                # Classes
-                #
-                selectizeInput(
-                  inputId="selViewClassesUpdate",
-                  label=d("view_classes",language),
-                  choices=d(classesTags,language,namedVector=T),
-                  selected=classesCurrent,
                   multiple=TRUE,
                   options=list(
                     sortField = "label",
@@ -814,13 +793,6 @@ observeEvent(input$btnViewSave,{
 
     if(noDataCheck(editors)) editors <- c(as.character(editor))
     if(!isTRUE( as.character(editor) %in% editors )) editors <- c(editors,as.character(editor))
-
-    #
-    # Update classes
-    #
-    classes <- input$selViewClassesUpdate
-    if(noDataCheck(classes)) classes <- config[[c("views","classes")]][[1]]
-    view[[c("data","classes")]] <- as.list(classes)
 
     #
     # Update collections

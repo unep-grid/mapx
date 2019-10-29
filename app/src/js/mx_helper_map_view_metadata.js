@@ -320,7 +320,6 @@ function metaViewToUi(meta) {
   const keys = [
     'project_title',
     'projects_titles',
-    'classes',
     'collections',
     'readers',
     'editors',

@@ -2125,18 +2125,6 @@
     "ps": "وسایل"
   },
   {
-    "id": "fold_views_class",
-    "en": "Filter views by theme",
-    "fr": "Filtrer les vues par thème",
-    "es": "Filtrar vistas por tema",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "فلتر نمایه ها به اساس صنف ها",
-    "ps": "د صنفونو په اساس لیدنې فلټر کړئ"
-  },
-  {
     "id": "fold_views_filter",
     "en": "Filter options",
     "fr": "Filtres",
@@ -4523,18 +4511,6 @@
     "bn": "",
     "fa": "افزودن نقاب",
     "ps": "د ماسک زیاتول"
-  },
-  {
-    "id": "view_classes",
-    "en": "Themes",
-    "fr": "Thèmes",
-    "es": "Temas",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "طبقه ها",
-    "ps": "صنفونه"
   },
   {
     "id": "view_component",
@@ -8883,17 +8859,6 @@
     "id": "meta_view_id",
     "en": "View id",
     "fr": "Id de la vue",
-    "fa": "",
-    "ps": "",
-    "zh": "",
-    "ru": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "meta_view_classes",
-    "en": "Themes",
-    "fr": "Thèmes",
     "fa": "",
     "ps": "",
     "zh": "",

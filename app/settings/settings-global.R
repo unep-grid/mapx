@@ -423,22 +423,6 @@ config[["noData"]] <- list(
 config[["views"]] = list()
 
 #
-# Set data classes. Value will be fetched in dict
-#
-config[[c("views","classes")]] <- list(
-  "oth", # other (default)
-  "sat", # satellite imagery
-  "ext", # extractive
-  "dev", # development
-  "soc", # social
-  "pol", # political
-  "env", # environment
-  "nrg", # energy
-  "inf", # infrastructure
-  "str"
-  )
-
-#
 # Views type
 #
 config[[c("views","type")]] <- list(

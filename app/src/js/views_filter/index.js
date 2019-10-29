@@ -258,11 +258,6 @@ export {ViewsFilter};
 function isFound(view, type, filter) {
   let found = false;
   switch (type) {
-    case 'view_classes':
-      if (view.data && view.data.classes) {
-        found = view.data.classes.indexOf(filter) > -1;
-      }
-      break;
     case 'view_collections':
       if (view.data && view.data.collections) {
         found = view.data.collections.indexOf(filter) > -1;
@@ -350,13 +345,12 @@ function setViewsComponents(views) {
 /**
  * Extract tags from various path in given views list and produce frequency tables
  * @param {Array} v Views list
- * @note : expect type, data.classes and data.collections
+ * @note : expect type, data.collections
  */
 export function getFreqTable(views) {
   const path = mx.helpers.path;
   const tags = {
     components: [],
-    classes: [],
     collections: []
   };
 
@@ -364,18 +358,12 @@ export function getFreqTable(views) {
 
   views.forEach(function(v) {
     tags.components = tags.components.concat(path(v, '_components', []));
-    tags.classes = tags.classes.concat(path(v, 'data.classes', []));
     tags.collections = tags.collections.concat(path(v, 'data.collections', []));
   });
 
   // grouprs
   stat.view_components = getArrayStat({
     arr: tags.components,
-    stat: 'frequency'
-  });
-
-  stat.view_classes = getArrayStat({
-    arr: tags.classes,
     stat: 'frequency'
   });
 
@@ -390,7 +378,7 @@ export function getFreqTable(views) {
 function updateTagsOrder() {
   const vf = this;
   const tags = vf.getTags();
-  const types = ['view_components', 'view_classes', 'view_collections'];
+  const types = ['view_components', 'view_collections'];
 
   types.forEach((t) => {
     const tt = tags.filter((tag) => tag.getType() === t);
@@ -428,15 +416,12 @@ function updateTags() {
   const labels = [];
 
   let elTypes;
-  let elThemes;
   let elCollections;
   vf.clear();
 
   const parts = [
     elTitleKey('view_components'),
     (elTypes = elGroup()),
-    elTitleKey('view_classes'),
-    (elThemes = elGroup()),
     elTitleKey('view_collections'),
     (elCollections = elGroup())
   ];
@@ -447,7 +432,6 @@ function updateTags() {
 
   const groups = {
     view_components: elTypes,
-    view_classes: elThemes,
     view_collections: elCollections
   };
 
