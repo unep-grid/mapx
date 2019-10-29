@@ -93,6 +93,10 @@
 .li-global-dragging * {
   cursor: grabbing !important;
 }
+.li-global-dragging .li-item-content *,
+.li-global-dragging .li-item-content {
+  pointer-events:none;
+}
 
 .li-context-menu {
   z-index: 1000;
