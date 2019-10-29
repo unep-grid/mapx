@@ -15,6 +15,10 @@
   min-width:50%;
 }
 
+.mx .selectize-dropdown {
+   z-index:10000!important;
+}
+
 .mx .form-control .selectize-input.items > .item {
   width:95%;
   display:inline-block;
