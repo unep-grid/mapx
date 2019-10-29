@@ -179,27 +179,27 @@ export function iconFlash(icon) {
 
   add();
 
-  function add(){
+  function add() {
     elContainer = document.createElement('div');
     elIcon = document.createElement('i');
     elContainer.classList.add('mx-flash');
     elIcon.className = 'fa fa-' + icon;
     elContainer.appendChild(elIcon);
     document.body.appendChild(elContainer);
-    setTimeout(activate,10);
+    setTimeout(activate, 10);
   }
 
-  function activate(){
+  function activate() {
     elIcon.classList.add('active');
-    setTimeout(remove,1000);
+    setTimeout(remove, 1000);
   }
 
-  function remove(){
+  function remove() {
     elContainer.remove();
   }
 }
 
-export function iconFlashSave(){
+export function iconFlashSave() {
   mx.helpers.iconFlash('floppy-o');
 }
 
@@ -1142,6 +1142,34 @@ export function updateText(o) {
 }
 
 /**
+ * Update checkbox input values
+ * @param {object} o Object
+ * @param {string} o.id Id of the element
+ * @param {string} o.enabled Enabled
+ * @param {string} o.checked Enabled
+ */
+export function updateCheckboxInput(o) {
+  const h = mx.helpers;
+  var el = document.getElementById(o.id);
+  var altered =  false;
+  if (h.isElement(el)) {
+    if (h.isBoolean(o.disabled)) {
+      if (o.disabled) {
+        el.setAttribute('disabled', true);
+      } else {
+        el.removeAttribute('disabled');
+      }
+    }
+    if (h.isBoolean(o.checked)) {
+      el.checked = o.checked;
+      if(window.Shiny){
+        Shiny.onInputChange(o.id, el.checked);
+      }
+    }
+  }
+}
+
+/**
  * convert b64 to utf8
  * @param {string} str String to convert
  * @note  taken from http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
@@ -1255,7 +1283,7 @@ export function getSizeOf(obj, humanReadable) {
   return h
     .moduleLoad('size-of')
     .then((s) => {
-       return obj instanceof File ? obj.size : s(obj); 
+      return obj instanceof File ? obj.size : s(obj);
     })
     .then((res) => {
       if (!humanReadable) {

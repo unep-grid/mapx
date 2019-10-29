@@ -1,12 +1,14 @@
 var start;
 
 export function fetchViews(opt) {
+  opt = opt || {};
   var h = mx.helpers;
   var idProject = mx.settings.project;
   var idUser = mx.settings.user.id;
   var language = mx.settings.language || mx.settings.languages[0];
   var token = mx.settings.user.token;
   var idViews = h.getQueryParameterInit(['idViews', 'views']);
+  var idViewsOpen = h.getQueryParameterInit(['idViewsOpen','viewsOpen']);
   var collections = h.getQueryParameterInit('collections');
   var collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
@@ -20,13 +22,16 @@ export function fetchViews(opt) {
     states: [],
     timing: 0
   };
-
-  opt = opt || {};
   var host = h.getApiUrl('getViewsListByProject');
 
   if (noViews === true || noViews.toLowerCase() === 'true') {
     dataEmpty.noViews = true;
     return Promise.resolve(dataEmpty);
+  }
+
+  if(idViews.length > 0 && idViewsOpen.length > 0){
+    idViews = idViews.concat(idViewsOpen);
+    idViews = h.getArrayDistinct(idViews);
   }
 
   var url =

@@ -63,9 +63,10 @@ observeEvent(reactData$showShareManager,{
           )
         )
       ),
-    checkboxInput("checkShareViews",label="Filter views",value=FALSE),
+    checkboxInput("checkShareViews",label="Subset views to share",value=FALSE),
     conditionalPanel(
       condition="input.checkShareViews",
+      p(class="text-muted","Views to display in the list when the project is loaded. If empty, all project's views will be visible."),
       selectizeInput(
         "selectShareViews",
         label = NULL,
@@ -81,6 +82,7 @@ observeEvent(reactData$showShareManager,{
     checkboxInput("checkShareViewsOpen",label="Set views to open",value=hasViews),
     conditionalPanel(
       condition="input.checkShareViewsOpen",
+      p(class="text-muted","Views that will be opened as soon as the project is loaded. The layers – if any – will be visible on the map. The button 'Filter activated views' will be enabled."),
       selectizeInput(
         "selectShareViewsOpen",
         label = NULL,
@@ -181,6 +183,9 @@ observeEvent(reactData$showShareManager,{
 
   reactData$updateShareProject<-runif(1)
 })
+
+
+
 
 #
 # block button share view if no project, or not allowed
@@ -283,9 +288,23 @@ observeEvent(reactData$updateShareProject,{
     )
 })
 
+observeEvent(input$checkShareStoryAutoStart, {
+  autoStart = isTRUE(input$checkShareStoryAutoStart)
+
+  toDisable = c('checkShareStyle','checkShareProject', 'checkShareMapPosition','checkShareViewsOpen','checkShareViews','checkShareCollections','checkShare')
+
+  if(autoStart){
+    sapply(toDisable,function(id){
+    mxUpdateCheckboxInput(id=id, disabled=TRUE, checked=FALSE);
+    })
+  }else{
+    sapply(toDisable,function(id){
+    mxUpdateCheckboxInput(id=id, disabled=FALSE);
+    })
+  }
+})
 
 observe({
-
   urlHost <- session$clientData[["url_hostname"]]  
   urlPort <- session$clientData[["url_port"]] 
   urlProtocol <- session$clientData[["url_protocol"]]
@@ -312,36 +331,36 @@ observe({
   #
   # Build request
   #
-  #tryCatch({
-    
-    addIframe = isTRUE(input$checkShareIframe)
-    addStyle = isTRUE(input$checkShareStyle)
-    addStoryAutoStart = isTRUE(input$checkShareStoryAutoStart)
-    addProject = isTRUE(input$checkShareProject)
-    addCollections = isTRUE(input$checkShareCollections)
-    addViews = isTRUE(input$checkShareViews)
-    addViewsOpen = isTRUE(input$checkShareViewsOpen)
+  data <- reactData$showShareManager
+  addIframe <- isTRUE(input$checkShareIframe)
+  addStyle <- isTRUE(input$checkShareStyle)
+  addStoryAutoStart <- isTRUE(input$checkShareStoryAutoStart)
+  addProject <- isTRUE(input$checkShareProject)
+  addCollections <- isTRUE(input$checkShareCollections)
+  addViews <- isTRUE(input$checkShareViews)
+  addViewsOpen <- isTRUE(input$checkShareViewsOpen)
+  addMapPosition <- isTRUE(input$checkShareMapPosition)
 
-    addMapPosition = isTRUE(input$checkShareMapPosition)
-
-    if(addMapPosition){
-      mapPositionIssue <- .get(input$shareMapPosition_issues,c('data'),list())
-      if(length(mapPositionIssue) == 0){
-        mapPosition$lat <- .get(input$shareMapPosition_values,c('data','lat'),0)
-        mapPosition$lng <- .get(input$shareMapPosition_values,c('data','lng'),0) 
-        mapPosition$zoom <- .get(input$shareMapPosition_values,c('data','z'),0) 
-      }
+  if(addMapPosition){
+    mapPositionIssue <- .get(input$shareMapPosition_issues,c('data'),list())
+    if(length(mapPositionIssue) == 0){
+      mapPosition$lat <- .get(input$shareMapPosition_values,c('data','lat'),0)
+      mapPosition$lng <- .get(input$shareMapPosition_values,c('data','lng'),0) 
+      mapPosition$zoom <- .get(input$shareMapPosition_values,c('data','z'),0) 
     }
+  }
 
-    if(addStyle) style <- s() + "style=" + mxEncode(jsonlite::toJSON(jsonlite::fromJSON(input$txtShareStyle),auto_unbox=T))
-    if(addProject) project <- s() + "project=" + input$selectShareProject
-    if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
-    if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
-    if(addViewsOpen) viewsOpen <-  s() + "viewsOpen=" + paste(input$selectShareViewsOpen,collapse=",")
-    if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true"
-    if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
-  #},error=function(e){})
+  if(addStyle) style <- s() + "style=" + mxEncode(jsonlite::toJSON(jsonlite::fromJSON(input$txtShareStyle),auto_unbox=T))
+  if(addProject) project <- s() + "project=" + input$selectShareProject
+  if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
+  if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
+  if(addViewsOpen) viewsOpen <-  s() + "viewsOpen=" + paste(input$selectShareViewsOpen,collapse=",")
+  if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true&views=" + data$views
+  if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
+  
   out <- ""
+
+
 
   url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views + viewsOpen + storyAutoStart + mapPosition
 

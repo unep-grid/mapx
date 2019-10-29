@@ -9,13 +9,13 @@
  * @param {Object} opt Options
  * @param {Boolean} opt.reset Reset current init params ?
  */
-export function setQueryParametersInit(param,opt) {
-  opt = Object.assign({},{reset:false},opt);
-  param =  param || getQueryParametersAsObject();
+export function setQueryParametersInit(param, opt) {
+  opt = Object.assign({}, {reset: false}, opt);
+  param = param || getQueryParametersAsObject();
   const init = mx.initQueryParams;
 
-  if(opt.reset){
-    Object.keys(init).forEach(k=>{
+  if (opt.reset) {
+    Object.keys(init).forEach((k) => {
       delete init[k];
     });
   }
@@ -23,36 +23,47 @@ export function setQueryParametersInit(param,opt) {
   Object.keys(param).forEach((k) => {
     init[k] = asArray(param[k]);
   });
-  if(window.Shiny){
-    Shiny.onInputChange('urlSearchParam',init);
+  if (window.Shiny) {
+    Shiny.onInputChange('urlSearchParam', init);
   }
 }
 /**
-* Reset init parameters
-*/
+ * Reset init parameters
+ */
 export function setQueryParametersInitReset() {
-  setQueryParametersInit(null,{reset:true});
+  setQueryParametersInit(null, {reset: true});
 }
 
-export function getQueryParametersInit(){
+export function getQueryParametersInit() {
   return mx.initQueryParams;
 }
 
 /**
  * Get stored query parameters
  * @param {String||Array} name/key to retrieve
- * @return {Array}
+ * @return {Array||Any}
  */
 
-export function getQueryParameterInit(name) {
+export function getQueryParameterInit(idParam) {
   const h = mx.helpers;
   let out = [];
-  if (h.isArray(name)) {
-    out = name.map((n) => mx.initQueryParams[n]);
+  if (h.isArray(idParam)) {
+    idParam.forEach(add, true);
   } else {
-    out = mx.initQueryParams[name];
+    add(idParam);
   }
   return asArray(out);
+
+  function add(id) {
+    const value = mx.initQueryParams[id];
+    if(value){
+      if (h.isArray(value)) {
+        out = out.concat(value);
+      }else{
+        out.push(value);
+      }
+    }
+  }
 }
 
 /**
@@ -104,8 +115,8 @@ export function getQueryParametersAsObject(urlString) {
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
     /**
-    * Note: check why lowercase was set
-    */
+     * Note: check why lowercase was set
+     */
     //out[k.toLowerCase()] = asArray(v);
     out[k] = asArray(v);
   });
@@ -114,7 +125,13 @@ export function getQueryParametersAsObject(urlString) {
 
 function asArray(str) {
   const h = mx.helpers;
-  return !str ? [] : h.isArray(str) ? str : h.isString(str) ? str.split(',') : [str];
+  return !str
+    ? []
+    : h.isArray(str)
+    ? str
+    : h.isString(str)
+    ? str.split(',')
+    : [str];
 }
 function asString(array) {
   const h = mx.helpers;

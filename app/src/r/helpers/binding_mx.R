@@ -43,6 +43,25 @@ mxToggleButton <- function(id,disable=TRUE,warning=FALSE,session=shiny:::getDefa
     )
 }
 
+#' Alter checkbox input
+#'
+#'
+#' @param id Id of the input. 
+#' @param disable Disabled
+#' @param checked Checked
+#' @param session Shiny session object.
+#' @export
+mxUpdateCheckboxInput <- function(id,disabled=NULL,checked=NULL,session=shiny:::getDefaultReactiveDomain()) {
+  res <- list(
+    id = id,
+    disabled = disabled,
+    checked = checked
+    )
+  session$sendCustomMessage(
+    type="mxUpdateCheckboxInput",
+    res
+    )
+}
 #' Send and compile templates.
 #'
 #' @param listTemplates {list} named list containing html. list("id"="HTML")

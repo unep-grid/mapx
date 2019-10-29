@@ -37,7 +37,8 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mxFlashIcon', h.iconFlash);
   Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
   Shiny.addCustomMessageHandler('mxUpdateSettings', h.updateSettings );
-
+  Shiny.addCustomMessageHandler('mxUpdateCheckboxInput', h.updateCheckboxInput );
+  
   /**
   * Mapx map and view related binding
   */
