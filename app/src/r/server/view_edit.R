@@ -671,7 +671,7 @@ observeEvent(input$btnViewDeleteConfirm,{
     idView = idView
     )
 
-
+  reactData$updateViewList <- runif(1)
   #
   # Close modal window
   #

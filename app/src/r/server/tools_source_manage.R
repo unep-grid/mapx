@@ -170,16 +170,26 @@ observeEvent(input$btnEditSourceManage,{
         uiOutput("uiValidateSourceEdit")
         )
 
-      btnList <- list(
+
+      btnDelete <- actionButton(
+        inputId = "btnDeleteSource",
+        label = d("btn_delete",language)
+        )
+
+      btnList <- tagList(
         actionButton(
-          inputId="btnDeleteSource",
-          label=d("btn_delete",language)
-          ),
-        actionButton(
-          inputId="btnUpdateSource",
-          label=d("btn_update",language)
+          inputId = "btnUpdateSource",
+          label = d("btn_update",language)
           )
         )
+
+      #
+      # Todo : check why btnDelete 'disabled' attribute
+      # could not be set using actionButton(.... disabled=FALSE);
+      #
+      if(!hasRow){
+        btnList <- tagList(btnList,btnDelete)
+      }
 
       mxModal(
         id="editSourceManage",
@@ -207,9 +217,9 @@ observe({
   warning <- logical(0)
   userData <- reactUser$data
   idUser <-  .get(userData,c("id"))
+  data <- reactTableViewsUsingSource()
   isolate({
 
-    data <- reactTableViewsUsingSource()
     hasData <- !noDataCheck(data)
     hasNoLayer <- noDataCheck(layer)
     hasNoReaders <- !isTRUE("publishers" %in% readers)

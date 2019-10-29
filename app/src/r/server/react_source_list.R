@@ -130,7 +130,6 @@ reactTableEditSources <- reactive({
 reactListEditSources <- reactive({
 
     layers <- reactTableEditSources()
-
     if(noDataCheck(layers)){
       layers <- list("noLayer")
     }else{
@@ -151,9 +150,12 @@ reactTableViewsUsingSource <- reactive({
   # Trigger
   #
   idSource <- input$selectSourceLayerEdit 
-  language <- reactData$language
+  language <- reactData$language  
   idViewSource <-input$selectSourceLayerMain
   idViewSourceMask <- input$selectSourceLayerMask
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+
   #
   # Get views table
   #
