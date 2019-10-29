@@ -857,7 +857,8 @@ class NestedList {
 
   updateItem(attr) {
     const li = this;
-    var elContent = li.getItemById(attr.id);
+    var el = li.getItemById(attr.id);
+    var elContent = li.getItemContent(el,li.opt.class.itemContent);
     li.fire('render_item_content', {el: elContent, data: attr});
   }
   addItem(attr) {
@@ -1219,7 +1220,7 @@ class NestedList {
       elItem.style.transform = 'translateY(0px)';
       setTimeout(() => {
         clean(elItem);
-      }, duration);
+      }, durationFinal);
     }
     function clean(elItem) {
       elItem.style.transition = '';

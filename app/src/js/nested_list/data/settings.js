@@ -18,9 +18,9 @@ let settings = {
   languageDefault: 'en',
   languages: ['en', 'fr', 'es'],
   mode: ['debug'],
-  animeDuration: 100,
+  animeDuration: 200,
   animeMaxDist : 200,
-  animeDragRelaxDuration: 1,
+  animeDragRelaxDuration: 200,
   localStorageKeys: {
     state: 'li-state',
     history: 'li-history'
