@@ -1300,6 +1300,36 @@ export function getViewsOrder() {
 }
 
 /**
+* Get JSON representation of a view ( same as the one dowloaded );
+* @param {String} idView Id of the view;
+* @return {String} JSON string with view data;
+*/
+export function getViewJson(idView) {
+  const h = mx.helpers;
+  const view = h.getView(idView);
+  const keys = [
+    'id',
+    'editor',
+    'target',
+    'date_modified',
+    'data',
+    'type',
+    'pid',
+    'project',
+    'readers',
+    'editors'
+  ];
+  const out = {};
+  keys.forEach((k) => {
+    let value = view[k];
+    if (value) {
+      out[k] = value;
+    }
+  });
+ return JSON.stringify(out);
+}
+
+/**
  * Create and listen to transparency sliders
 @param {Object} o Options
 @param {Object} o.view View data
@@ -1698,7 +1728,7 @@ export function viewOpen(view) {
     if (elView && elView.vb) {
       h.viewModulesInit(view);
       elView.vb.open();
-      h.updateLanguageElements({el:elView});
+      h.updateLanguageElements({el: elView});
     }
     resolve(true);
   });

@@ -231,6 +231,7 @@ export function viewsListRenderNew(o) {
     ],
     eventsCallback: [
       {id: 'set_drag_image', action: handleSetDragImage},
+      {id: 'set_drag_text', action: handleSetDragText},
       {id: 'render_item_content', action: handleRenderItemContent},
       {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
       {id: 'get_item_date_by_id', action: h.getViewDateModified},
@@ -320,7 +321,25 @@ export function viewsListRenderNew(o) {
     }
     return el;
   }
-
+  function handleSetDragText(el) {
+    const li = this;
+    const isGroup = li.isGroup(el);
+    const isItem = !isGroup && li.isItem(el);
+    if (isGroup) {
+      return el.dataset;
+    }
+    if (isItem) {
+      const elView = el.querySelector('.mx-view-item');
+      let out = "";
+      if (elView && elView.vb) {
+        let out = mx.helpers.getViewJson(elView.vb.view);
+        return out;
+      } else {
+        return el.dataset;
+      }
+    }
+    return el;
+  }
   /**
    * Trigger a filter activated if any view opened
    */
@@ -369,14 +388,14 @@ export function viewsListRenderNew(o) {
       return;
     }
 
-    if(update && view._el){
+    if (update && view._el) {
       view._el.remove();
     }
 
     /**
      * Create new view
      */
-    const viewBase = new ViewBase(view,update);
+    const viewBase = new ViewBase(view, update);
 
     /**
      * Test if registered to auto-open
@@ -396,12 +415,12 @@ export function viewsListRenderNew(o) {
     if (elView) {
       el.appendChild(elView);
       h.setViewBadges({view: view});
-      if(update){
+      if (update) {
         h.viewModulesInit(view);
         h.viewLayersAdd({
           viewData: view
         });
-      }else if(open){
+      } else if (open) {
         h.viewOpenAuto(view);
       }
     }
