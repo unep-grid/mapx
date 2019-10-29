@@ -75,12 +75,7 @@ export function jedInit(o) {
       getValuesOnChange: false
     };
 
-    for (var v1 in opt) {
-      opt_final[v1] = opt[v1];
-    }
-    for (var v2 in options) {
-      opt_final[v2] = options[v2];
-    }
+    opt_final = Object.assign({},opt, options);
 
     if (opt_final.draftAutoSaveId && opt_final.draftAutoSaveDbTimestamp) {
       idDraft = id + '@' + opt_final.draftAutoSaveId;
