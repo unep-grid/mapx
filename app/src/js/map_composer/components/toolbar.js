@@ -116,7 +116,7 @@ class Toolbar extends Box {
             },
             step: 1,
             value: state.dpi,
-            max: 600,
+            max: 300,
             min: 72
           })),
           el(
