@@ -73,7 +73,7 @@ class ViewsFilter {
       callback: handleFilterViewIdByText,
       group: 'view_filter',
       debounce: true,
-      debounceTime : 100,
+      debounceTime: 100,
       bind: vf
     });
   }
@@ -139,7 +139,7 @@ class ViewsFilter {
     const vf = this;
     const ids = vf.getViewsIdSubset();
     const views = vf.getViews();
-    const res =  views.filter((v) => ids.indexOf(v.id) > -1);
+    const res = views.filter((v) => ids.indexOf(v.id) > -1);
     return res;
   }
 
@@ -158,10 +158,10 @@ class ViewsFilter {
     }, viewsBase);
     let distinct = getArrayDistinct(subset);
     /**
-    * By defaut, empty set in union mode,
-    * everything is displayed;
-    */
-    if(!isIntersect && distinct.length === 0){
+     * By defaut, empty set in union mode,
+     * everything is displayed;
+     */
+    if (!isIntersect && distinct.length === 0) {
       distinct = vf.getViewsId();
     }
     return distinct;
@@ -438,6 +438,10 @@ function updateTags() {
   types.forEach((type) => {
     const tbl = table[type];
     const keys = Object.keys(tbl);
+    const elParent = groups[type];
+    if (keys.length === 0) {
+      elParent.appendChild(elEmpty());
+    }
     keys.forEach((key, i) => {
       const label = getDictItem(key);
       const tag = new Toggle({
@@ -448,7 +452,6 @@ function updateTags() {
         count: tbl[key],
         type: type
       });
-      const elParent = groups[type];
       vf.addTag(tag, elParent);
       labels.push(label);
     });
@@ -484,6 +487,17 @@ function updateTags() {
     return el('div', {
       class: ['vf-check-toggle-group']
     });
+  }
+  function elEmpty() {
+    var promText = getDictItem('view_filter_no_items');
+    return el(
+      'div',
+      {
+        class: ['vf-check-toggle-empty'],
+        dataset: {lang_key: 'view_filter_no_items'}
+      },
+      promText
+    );
   }
 }
 
@@ -589,7 +603,7 @@ function handleFilterViewIdByTag(event) {
 }
 
 function handleFilterActivatedView(event) {
-  console.log("Click on handle filter activated view");
+  console.log('Click on handle filter activated view');
   const vf = this;
   const clActive = 'active';
   const elBtn = event.target;

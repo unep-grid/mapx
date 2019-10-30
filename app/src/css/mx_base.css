@@ -624,8 +624,9 @@ blockquote {
   position: absolute;
   left: 101%;
   width: 380px;
-  height: 50%;
+  min-height: 50px;
   max-height: 100%;
+  overflow-y: auto;
   background: #fff;
   border: 1px solid #ccc;
   padding: 10px;
