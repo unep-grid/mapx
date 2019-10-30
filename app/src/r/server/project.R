@@ -303,15 +303,17 @@ observe({
       countryClip <- projectData$countries
       mapPos <- projectData$map_position 
       language <- reactData$language
-
       hasNoClip <- noDataCheck(countryClip) || "WLD" %in% countryClip
-
+      
       mglSetHighlightedCountries(
         id = idMap,
         idLayer = 'country-code',
         countries = as.list(countryClip)
         )
 
+      if(noDataCheck(mapPos)){
+        mapPos = list()
+      }
       if(noDataCheck(mapPos$zoom)){
         mapPos$zoom <- mapPos$z
         mapPos$z <- NULL

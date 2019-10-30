@@ -477,7 +477,10 @@ mxDbGetProjectData <- function(idProject){
      p <- projectData[i]
      n <- names(p)
      if( n %in% c("title","description","admins","members","publishers","contacts","map_position","countries","states_views")){
-       projectData[[i]] <- fromJSON(p[[1]],simplifyDataFrame=FALSE)
+       val = p[[1]]
+       if(!noDataCheck(val)){
+         projectData[[i]] <- fromJSON(val,simplifyDataFrame=FALSE)
+       }
      }
   }
   
