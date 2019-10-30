@@ -24,8 +24,9 @@ class RadialProgress {
   }
 
   destroy() {
-    if(this.elTarget && this.el){
-      this.elTarget.removeChild(this.el);
+    let rp = this;
+    if(rp.elTarget && rp.el){
+      rp.el.remove();
     }
   }
 
