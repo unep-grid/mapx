@@ -15,6 +15,9 @@ class ListenerStore {
     var bind = opt.bind || this;
     var idTimeout = 0;
     if (opt.time) {
+      /**
+       * Cancel previous non-executed command and call again in x miliseconds
+       */
       return function() {
         clearTimeout(idTimeout);
         const funCall = () => {
@@ -35,15 +38,18 @@ class ListenerStore {
     }
   }
   throttle(fun, opt) {
-    opt = Object.assign({},{time:100},opt);
+    /**
+     * If less than x milliseconds ellapsed : ignore.
+     */
+    opt = Object.assign({}, {time: 100}, opt);
     var bind = opt.bind || this;
-    var start = Date.now();
+    var start = performance.now();
     var delta = 0;
     return function() {
-      delta = Date.now() - start;
-      if(delta > opt.time){
-        fun.apply(bind,arguments);
-        start = Date.now();
+      delta = performance.now() - start;
+      if (delta > opt.time) {
+        fun.apply(bind, arguments);
+        start = performance.now();
       }
     };
   }
@@ -51,12 +57,12 @@ class ListenerStore {
     const li = this;
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
-    if (opt.throttle){
-    opt.callback = li.throttle(opt.callback, {
+    if (opt.throttle) {
+      opt.callback = li.throttle(opt.callback, {
         bind: opt.bind || li,
         time: opt.throttleTime
       });
-    }else if (opt.debounce) {
+    } else if (opt.debounce) {
       opt.callback = li.debounce(opt.callback, {
         bind: opt.bind || li,
         time: opt.debounceTime
@@ -161,8 +167,8 @@ class EventStore {
    * @param {data} opt.data Data to pass to callback
    */
   fire(opt) {
-    if(typeof opt === 'string'){
-      opt = {type:opt};
+    if (typeof opt === 'string') {
+      opt = {type: opt};
     }
     opt = Object.assign({}, opt);
     if (!opt.type) {

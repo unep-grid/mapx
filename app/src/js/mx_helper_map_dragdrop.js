@@ -172,7 +172,7 @@ function handleFileParser(f) {
      * Test for size
      */
 
-    let isSizeValid = helper.isUploadFileSizeValid(f,{showModal:true});
+    let isSizeValid = helper.isUploadFileSizeValid(f, {showModal: true});
     if (!isSizeValid) {
       helper.progressScreen({
         enable: false,
@@ -337,12 +337,64 @@ function saveInLocalDb(opt) {
     .catch((e) => console.warn(e));
 }
 
-// handle drop event
-export function handleUploadFileEvent(evt) {
+export function handleMapDragOver(evt) {
   evt.preventDefault();
+  evt.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
+}
 
+/**
+ * Drop event occured on map : view or files ?
+ *
+ */
+export function handleMapDrop(evt) {
+  const h = mx.helpers;
+  let dt = evt.dataTransfer;
+
+  if (!dt) {
+    return;
+  }
+  let files = evt.dataTransfer.files;
+  let data = evt.dataTransfer.getData('text');
+  let hasData = h.isJson(data);
+  let hasFiles = files.length > 0;
+
+  if(hasData || hasFiles){
+    evt.preventDefault();
+  }else{
+    return;
+  }
+
+  if (hasFiles) {
+    handleFiles(files);
+  }
+  if(hasData){
+    const view = JSON.parse(data);
+    if (h.isView(view)) {
+      handleView(view);
+    }
+  }
+}
+
+/**
+ * Drop event contains view data
+ */
+function handleView(view) {
+  const h = mx.helpers;
+  const idViews = h.getViews().map((v) => v.id);
+  if (idViews.indexOf(view.id) > -1) {
+    const viewOld = h.getView(view.id);
+    h.viewOpenAuto(viewOld);
+  } else {
+    view._drop_shared = true;
+    h.viewsListAddSingle(view);
+  }
+}
+
+/**
+ * Drop event as files
+ */
+export function handleFiles(files) {
   var helper = mx.helpers;
-  var files = evt.dataTransfer.files;
 
   if (helper.isModeLocked()) {
     return;
@@ -390,15 +442,3 @@ export function handleUploadFileEvent(evt) {
     }
   }
 }
-
-export function handleDragOver(evt) {
-  evt.stopPropagation();
-  evt.preventDefault();
-  evt.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
-}
-
-/** Worker function to handler
- *
- *
- */
-export function handleReadGeojson() {}

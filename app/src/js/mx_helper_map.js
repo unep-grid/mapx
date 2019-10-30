@@ -433,20 +433,20 @@ export function initMapxApp(o) {
     }
 
     /**
-     * Handle drop geojson event
+     * Handle drop view or spatial dataset
      */
-    if (h.handleUploadFileEvent && h.handleDragOver) {
+    if (h.handleMapDragOver && h.handleMapDrop) {
       mx.listenerStore.addListener({
         target: elMap,
         type: 'dragover',
-        callback: h.handleDragOver,
+        callback: h.handleMapDragOver,
         group: 'map_drag_over',
         bind: mx
       });
       mx.listenerStore.addListener({
         target: elMap,
         type: 'drop',
-        callback: h.handleUploadFileEvent,
+        callback: h.handleMapDrop,
         group: 'map_drag_over',
         bind: mx
       });
@@ -1300,10 +1300,10 @@ export function getViewsOrder() {
 }
 
 /**
-* Get JSON representation of a view ( same as the one dowloaded );
-* @param {String} idView Id of the view;
-* @return {String} JSON string with view data;
-*/
+ * Get JSON representation of a view ( same as the one dowloaded );
+ * @param {String} idView Id of the view;
+ * @return {String} JSON string with view data;
+ */
 export function getViewJson(idView) {
   const h = mx.helpers;
   const view = h.getView(idView);
@@ -1326,7 +1326,7 @@ export function getViewJson(idView) {
       out[k] = value;
     }
   });
- return JSON.stringify(out);
+  return JSON.stringify(out);
 }
 
 /**

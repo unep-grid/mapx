@@ -1241,12 +1241,15 @@ class NestedList {
 
 export {NestedList};
 
+
+
 /**
  * Start sort event listener
  */
 function handleSortStart(evt) {
   const li = this;
-
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
   li.elDrag = evt.target;
   /**
    * prevent if event comes from ignored see comment
@@ -1280,17 +1283,17 @@ function handleSortStart(evt) {
     target: li.elRoot,
     bind: li,
     type: 'dragover',
-    group: 'dragevent',
+    group: 'sort_start',
     callback: handleSortOver,
     throttle: true,
     throttleTime: 200
   });
 
   li.listenerStore.addListener({
-    target: li.elRoot,
+    target: window,
     bind: li,
     type: 'dragend',
-    group: 'dragevent',
+    group: 'sort_start',
     callback: handleSortEnd
   });
 }
@@ -1306,7 +1309,10 @@ function handleSortOver(evt) {
   if (li.isBusy()) {
     return;
   }
+  console.log('sort over root');
   evt.preventDefault();
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
   evt.dataTransfer.dropEffect = 'move';
   let elTarget = li.getTarget(evt.target);
   /**
@@ -1412,9 +1418,11 @@ function handleSortEnd(evt) {
   evt.preventDefault();
   const li = this;
   li.elDrag.classList.remove(li.opt.class.dragged);
-
-  window.removeEventListener('dragend', handleSortEnd);
-  li.listenerStore.removeListenerByGroup('dragevent');
+  
+  li.listenerStore.removeListenerByGroup('sort_start');
+ 
+  console.log('sort end');
+  
   li.setUiDraggingEnd();
 
   if (li.isModeEmpty()) {

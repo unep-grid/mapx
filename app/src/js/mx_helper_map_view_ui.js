@@ -305,13 +305,7 @@ export function viewsListRenderNew(o) {
     idGroup: 'view_list',
     callback: handleViewClick
   });
-  mx.listenerStore.addListener({
-    target: document.body,
-    bind: mData.viewsList,
-    type: 'drop',
-    idGroup: 'view_list',
-    callback: handleViewDrop
-  });
+
   /**
    * Set image for the drag item
    */
@@ -346,21 +340,7 @@ export function viewsListRenderNew(o) {
     }
     return el;
   }
-  function handleViewDrop(evt){
-    const h = mx.helpers;
-    evt.preventDefault();
-    const view = JSON.parse(evt.dataTransfer.getData('text'));
-    if(h.isView(view)){
-      const idViews = h.getViews().map(v=>v.id);
-      if(idViews.indexOf(view.id) > -1){
-        const viewOld =  h.getView(view.id);
-        h.viewOpenAuto(viewOld);
-      }else{
-        view._drop_shared = true;
-        h.viewsListAddSingle(view);
-      }
-    }
-  }
+
   /**
    * Trigger a filter activated if any view opened
    */
