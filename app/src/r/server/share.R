@@ -16,6 +16,7 @@ observeEvent(reactData$showShareManager,{
 
   reactData$iframeString = "";
   project <- reactData$project
+  
   language <- reactData$language
   colorScheme <- input$uiColorScheme;
   userData <- reactUser$data
@@ -319,6 +320,10 @@ observe({
   first <- TRUE
   mapPosition = list()
 
+  isolate({
+    projectCurrent = reactData$project
+  })
+
   s<-function(){
     if(first){
       first<<-FALSE
@@ -350,17 +355,18 @@ observe({
     }
   }
 
-  if(addStyle) style <- s() + "style=" + mxEncode(jsonlite::toJSON(jsonlite::fromJSON(input$txtShareStyle),auto_unbox=T))
-  if(addProject) project <- s() + "project=" + input$selectShareProject
-  if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
-  if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
-  if(addViewsOpen) viewsOpen <-  s() + "viewsOpen=" + paste(input$selectShareViewsOpen,collapse=",")
-  if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true&views=" + data$views
-  if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
+  if(!addStoryAutoStart){
+    if(addStyle) style <- s() + "style=" + mxEncode(jsonlite::toJSON(jsonlite::fromJSON(input$txtShareStyle),auto_unbox=T))
+    if(addProject) project <- s() + "project=" + input$selectShareProject
+    if(addCollections) collections <-  s() + "collections=" + paste(input$selectShareCollections,collapse=",")
+    if(addViews) views <-  s() + "views=" + paste(input$selectShareViews,collapse=",")
+    if(addViewsOpen) viewsOpen <-  s() + "viewsOpen=" + paste(input$selectShareViewsOpen,collapse=",")
+    if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
+  }
+  
+  if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true&views=" + data$views + "&project=" + projectCurrent
   
   out <- ""
-
-
 
   url <- urlProtocol + "//" + urlHost + urlPort + style + project + collections +  views + viewsOpen + storyAutoStart + mapPosition
 
