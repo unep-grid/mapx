@@ -947,14 +947,17 @@ class NestedList {
   setUiDraggingStart() {
     const li = this;
     setTimeout(() => {
+      li.elDrag.classList.add(li.opt.class.dragged);
       document.body.classList.add(li.opt.class.globalDragging);
-    }, 100);
+      //debugger;
+    }, 10);
   }
   setUiDraggingEnd() {
     const li = this;
     setTimeout(() => {
+      li.elDrag.classList.remove(li.opt.class.dragged);
       document.body.classList.remove(li.opt.class.globalDragging);
-    }, 10);
+    }, 0);
   }
   setBusy(busy) {
     this._is_busy = busy === true;
@@ -1150,11 +1153,11 @@ class NestedList {
    * see https://jsfiddle.net/fxi/tyw0zn7h/;
    */
   makeIgnoredClassesDraggable(el) {
-    const li = this;
-    let cl = '.' + li.opt.customClassDragIgnore.join(',.');
-    el.querySelectorAll(cl).forEach((el) => {
-      el.setAttribute('draggable', true);
-    });
+   /* const li = this;*/
+    //let cl = '.' + li.opt.customClassDragIgnore.join(',.');
+    //el.querySelectorAll(cl).forEach((el) => {
+      //el.setAttribute('draggable', true);
+    /*});*/
   }
   isIgnoredElement(el) {
     const li = this;
@@ -1248,8 +1251,6 @@ export {NestedList};
  */
 function handleSortStart(evt) {
   const li = this;
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
   li.elDrag = evt.target;
   /**
    * prevent if event comes from ignored see comment
@@ -1260,12 +1261,13 @@ function handleSortStart(evt) {
     return;
   }
   li.fire('sort_start', evt);
-
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
   li.setUiDraggingStart();
-
-  li.elDrag.classList.add(li.opt.class.dragged);
   evt.dataTransfer.effectAllowed = 'move';
-  // keep this version in history;
+  /*
+  * keep this version in history;
+  */
   li.addUndoStep();
 
   const elDragImage = li.fire('set_drag_image', li.elDrag);
@@ -1283,7 +1285,7 @@ function handleSortStart(evt) {
     target: li.elRoot,
     bind: li,
     type: 'dragover',
-    group: 'sort_start',
+    group: 'sort_dragging',
     callback: handleSortOver,
     throttle: true,
     throttleTime: 200
@@ -1293,7 +1295,7 @@ function handleSortStart(evt) {
     target: window,
     bind: li,
     type: 'dragend',
-    group: 'sort_start',
+    group: 'sort_dragging',
     callback: handleSortEnd
   });
 }
@@ -1309,11 +1311,7 @@ function handleSortOver(evt) {
   if (li.isBusy()) {
     return;
   }
-  console.log('sort over root');
-  evt.preventDefault();
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
-  evt.dataTransfer.dropEffect = 'move';
+    
   let elTarget = li.getTarget(evt.target);
   /**
    * Target evaluation
@@ -1328,8 +1326,11 @@ function handleSortOver(evt) {
   if (isNotTarget || isItself || isChildren) {
     return;
   }
+  evt.preventDefault();
   evt.stopPropagation();
   evt.stopImmediatePropagation();
+  evt.dataTransfer.dropEffect = 'move';
+
   let isGroup = li.isGroup(elTarget);
   let isGroupCollapsed = isGroup && li.isGroupCollapsed(elTarget);
   let elDrag = li.elDrag;
@@ -1417,24 +1418,15 @@ function handleSortOver(evt) {
 function handleSortEnd(evt) {
   evt.preventDefault();
   const li = this;
-  li.elDrag.classList.remove(li.opt.class.dragged);
-  
-  li.listenerStore.removeListenerByGroup('sort_start');
- 
-  console.log('sort end');
-  
+  li.listenerStore.removeListenerByGroup('sort_dragging');  
   li.setUiDraggingEnd();
-
   if (li.isModeEmpty()) {
     return;
   }
-
   li.fire('sort_end', evt);
-
   if (li.elNext !== li.elDrag.nextSibling) {
     li.fire('sort_done', evt);
   }
-  li.elDrag = null;
 }
 /**
  * Click in context menu event listener
