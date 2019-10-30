@@ -87,7 +87,12 @@ export function setProject(idProject, opt) {
     change();
   }
 
+  /**
+   * Change confirmed : remove all views, close modals, send
+   * selected project to shiny
+   */
   function change() {
+    h.viewsRemoveAll();
     closeModals();
     h.setQueryParametersInitReset();
     Shiny.onInputChange('selectProject', idProject);
@@ -631,34 +636,32 @@ export function geolocateUser() {
 /**
  * Reset project : remove view, dashboards, etc
  *
- * @param {String} idMap map id
  */
 export function viewsRemoveAll(o) {
   o = o || {};
   const h = mx.helpers;
-  const views = h.getViews({
-    id: o.idMap
-  });
-
-  const mData = h.getMapData(o.idMap);
-
-  /**
-   * remove existing layers
-   */
-  h.removeLayersByPrefix({
-    id: o.idMap,
-    prefix: 'MX-'
-  });
-
-  /**
-   * Replace content without replacing views array
-   */
-  mData.views.length = 0;
+  const views = h.getViews();
+  const mData = h.getMapData();
 
   /*
-   * Set views list empty
+   * Close and remove layers
    */
-  h.setViewsListEmpty(true);
+  const removed = views.map((view) => {
+    h.viewCloseAuto(view.id);
+  });
+
+  return Promise.all(removed)
+  .then(() => {
+    /**
+     * Replace content without replacing views array
+     */
+    mData.views.length = 0;
+
+    /*
+     * Set views list empty
+     */
+    h.setViewsListEmpty(true);
+  });
 }
 
 /**
@@ -1769,10 +1772,10 @@ export function viewCloseAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
   if (!view) {
-    return;
+    return Promise.resolve(false);
   }
-  h.viewClose(view).then(() => {
-    h.viewLayersRemove({
+  return h.viewClose(view).then(() => {
+    return h.viewLayersRemove({
       idView: view.id
     });
   });
@@ -3985,9 +3988,6 @@ export function randomFillAll() {
     const map = mx.helpers.getMap(idMap);
 
     const layers = map.style._layers;
-
-    //map.setBearing(Math.random() * 360);
-    //map.setPitch(Math.random() * 60);
 
     for (const l in layers) {
       const type = layers[l].type;

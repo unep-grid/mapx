@@ -205,9 +205,11 @@ export function viewsListRenderNew(o) {
   }
 
   /**
-   * Clean old views, modules, array of views ...
+  * Should be always empty
    */
-  h.viewsRemoveAll({idMap: idMap});
+  if(mData.views.length > 0){
+    mData.views.length = 0;
+  }
 
   /**
    * Add all new views
