@@ -3230,8 +3230,8 @@
   },
   {
     "id": "schema_story_tips",
-    "en": "<p>Here is a list of good practices to provide a seamless experience for the readers:</p><ol><li>Keep it simple.</li><li>If your story does not have spatial components, this tool will probably be useless.</li><li>Avoid images. The purpose of this tool is to focus on spatial data, not images. If you can, use aerial imagery instead.</li><li>Avoid creating more than 10 slides by story and 2 slides by step.</li><li>Avoid adding more than 2 layers on the map in the same step.</li><li>Avoid effects, transitions or 3d transformations : they could very quickly make the story unusable on slow devices.</li></ol>",
-    "fr": "<p>Afin d'assurer une lecture agréable de votre récit, voici une liste de bonnes pratiques que nous vous recommandons :</p><ol><li>Rester simple.</li><li>Si votre récit ne possède pas de composantes spatiales, cet outil sera probablement inutile.</li><li>Éviter les images. L'objectif de cet outil est de mettre en valeur des données cartographiques. Si besoin, utilisez des fonds de carte d'imagerie aérienne.</li><li>Éviter d'ajouter plus de 10 étapes par récit et 2 diapositives par étapes.</li><li>Éviter d'afficher plus de deux couches simultanément.</li><li>Éviter les effets, transitions ou transformations 3d : ils peuvent très rapidement rendre le récit inutilisable sur les appareils peu rapides.</li></ol>",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "fr": "<p>Afin d'assurer une lecture agréable de votre récit, voici une liste de bonnes pratiques que nous vous recommandons:</p><ol><li>Rester simple.</li><li>Il est préférable de créer des récits courts afin de conserver l’intérêt de votre public.</li><li>Pour une bonne lisibilité, il est recommandé de ne pas dépasser deux diapositives par étapes et de ne pas afficher plus de deux couches sur la carte durant une étape.</li><li>Les images, vidéos et infographies peuvent être des supports utiles et percutants pour contextualiser votre récit. Cependant, ils ne doivent pas occulter la composante spatiale de votre récit. Les cartes doivent être en son centre.</li><li>Les effets, transitions ou transformations 3D peuvent affecter la lisibilité de votre récit sur des appareils peu performants, utilisez-les avec parcimonie.</li></ol>",
     "es": "",
     "ru": "",
     "zh": "",
@@ -10549,7 +10549,7 @@
     "ps": "",
     "es": ""
   },
-   {
+  {
     "id": "share_map_pos_set",
     "en": "Set map position",
     "fr": "Définir la position de la carte",
@@ -10561,7 +10561,7 @@
     "ps": "",
     "es": ""
   },
- {
+  {
     "id": "share_map_pos_get",
     "en": "Get current position",
     "fr": "Obtenir la position actuelle",
@@ -10573,7 +10573,7 @@
     "ps": "",
     "es": ""
   },
- {
+  {
     "id": "view_filter_no_items",
     "en": "Empty",
     "fr": "Vide",
