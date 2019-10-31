@@ -177,7 +177,7 @@ class Toggle {
     }
     function set(txt) {
       const curTxt = tgl.elLabelText.innerText;
-      if (txt !== curTxt) {
+      if (txt && txt !== curTxt) {
         if (!txt) {
           txt = curTxt;
         }
