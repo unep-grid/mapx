@@ -16,7 +16,7 @@
 
 
 .li-item.li-item-hidden,
-.li-group.li-group-collapsed .li-item,
+.li-group.li-group-collapsed:not(.li-group-invisible) .li-item,
 .li-group.li-group-collapsed .li-group {
   display: none;
 }
