@@ -75,9 +75,6 @@ exports.getCustom = function (req, res) {
     })
     .catch(function (err) {
       console.log(err);
-      res.send({
-        type: 'error',
-        msg: 'Error parsing request'
-      })
+      res.status(400).send('400 Bad request');
     });
 };
