@@ -1153,11 +1153,11 @@ class NestedList {
    * see https://jsfiddle.net/fxi/tyw0zn7h/;
    */
   makeIgnoredClassesDraggable(el) {
-   /* const li = this;*/
-    //let cl = '.' + li.opt.customClassDragIgnore.join(',.');
-    //el.querySelectorAll(cl).forEach((el) => {
-      //el.setAttribute('draggable', true);
-    /*});*/
+    const li = this;
+    let cl = '.' + li.opt.customClassDragIgnore.join(',.');
+    el.querySelectorAll(cl).forEach((el) => {
+      el.setAttribute('draggable', true);
+    });
   }
   isIgnoredElement(el) {
     const li = this;
