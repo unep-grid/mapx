@@ -56,7 +56,7 @@ function toRes(obj) {
 exports.sendJSON = function(res, data, opt) {
   opt = Object.assign({}, {end: true}, opt);
   opt.end = opt.end === true || false;
-  data = JSON.stringify(data||'');
+  data = JSON.stringify(data || '');
   res.setHeader('Mapx-Content-Length', data.length || 0);
   res.setHeader('Content-Type', 'application/json');
   res.setHeader('Cache-Control', 'max-age=43200, s-maxage=300');
@@ -285,22 +285,27 @@ function cleanArray(arr) {
  */
 function findValues(obj, key) {
   var list = [];
-  if (!obj) return list;
+  var i;
+  if (!obj) {
+    return list;
+  }
   if (obj instanceof Array) {
-    for (var i in obj) {
-        list = list.concat(findValues(obj[i], key));
+    for (i in obj) {
+      list = list.concat(findValues(obj[i], key));
     }
     return list;
   }
-  if (obj[key]) list.push(obj[key]);
+  if (obj[key]) {
+    list.push(obj[key]);
+  }
 
-  if ((typeof obj == "object") && (obj !== null) ){
-	  var children = Object.keys(obj);
-	  if (children.length > 0){
-	  	for (i = 0; i < children.length; i++ ){
-	        list = list.concat(findValues(obj[children[i]], key));
-	  	}
-	  }
+  if (typeof obj === 'object' && obj !== null) {
+    var children = Object.keys(obj);
+    if (children.length > 0) {
+      for (i = 0; i < children.length; i++) {
+        list = list.concat(findValues(obj[children[i]], key));
+      }
+    }
   }
   return list;
 }
