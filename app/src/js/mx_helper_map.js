@@ -394,27 +394,26 @@ export function initMapxApp(o) {
    */
   o.map.on('load', function() {
     /*
-     * set views list
+     * Auto start story map
      */
-    h.updateViewsList({
-      id: o.id,
-      autoFetchAll: true,
-      project: o.project || mx.settings.project
-    }).then((views) => {
+    if (storyAutoStart) {
+      let idStory = h.getQueryParameterInit('views')[0];
+      h.storyRead({
+        id: o.id,
+        idView: idStory,
+        save: false,
+        autoStart: true
+      });
+    } else {
       /*
-       * Auto start story map
+       * set views list
        */
-      if (storyAutoStart && views.length > 0) {
-        let idStory = h.getQueryParameterInit('views')[0];
-        h.storyRead({
-          id: o.id,
-          idView: idStory,
-          view: h.getView(idStory),
-          save: false,
-          autoStart: true
-        });
-      }
-    });
+      h.updateViewsList({
+        id: o.id,
+        autoFetchAll: true,
+        project: o.project || mx.settings.project
+      });
+    }
 
     /**
      * Apply colorscheme if any
@@ -429,7 +428,7 @@ export function initMapxApp(o) {
     /*
      * If shiny, trigger read event
      */
-    if (hasShiny) {
+    if (!storyAutoStart && hasShiny) {
       Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
       /**
        * Async IP lookup
@@ -440,7 +439,7 @@ export function initMapxApp(o) {
     /**
      * Handle drop view or spatial dataset
      */
-    if (h.handleMapDragOver && h.handleMapDrop) {
+    if (!storyAutoStart && h.handleMapDragOver && h.handleMapDrop) {
       mx.listenerStore.addListener({
         target: elMap,
         type: 'dragover',
@@ -650,8 +649,7 @@ export function viewsRemoveAll(o) {
     h.viewCloseAuto(view.id);
   });
 
-  return Promise.all(removed)
-  .then(() => {
+  return Promise.all(removed).then(() => {
     /**
      * Replace content without replacing views array
      */

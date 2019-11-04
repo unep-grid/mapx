@@ -36,6 +36,14 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
+export function isStory(item) {
+  const h = mx.helpers;
+  return (
+    h.isView(item) &&
+    h.path(item, 'data.story')
+  );
+}
+
 export function isViewsArray(arr) {
   const h = mx.helpers;
   return (

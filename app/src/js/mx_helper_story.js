@@ -26,7 +26,8 @@ export function storyRead(o) {
   if (o.close) {
     return storyClose();
   }
-  return cleanInit(o)
+  return getStory(o)
+    .then(cleanInit)
     .then(checkMissingView)
     .then(setUi)
     .then(setListeners)
@@ -47,6 +48,30 @@ export function storyClose() {
 }
 
 /**
+* Get story view or fetch it remotely
+*/
+function getStory(o){
+  const h = mx.helpers;
+  let view  = h.getView(o.view || o.idView);
+  if(!h.isView(view)){
+    view = h.getViewRemote(o.idView);
+  }
+  return new Promise((resolve)=>{
+    resolve(view);
+  }).then(view => {
+
+    if(h.isStory(view)){
+      o.view = view;
+      o.idView = view.id;
+    }else{
+      throw new Error('No story to read');
+    }
+    return o;
+  });
+}
+
+
+/**
  * Clean + init
  */
 function cleanInit(o) {
@@ -56,24 +81,10 @@ function cleanInit(o) {
    */
   mx.listenerStore.removeListenerByGroup('story_map');
 
+
   return new Promise(function(resolve) {
-    /* Fetch view if not given */
-    if (!o.view && o.id && o.idView) {
-      var view = h.getView(o.idView);
-      o.view = view;
-    }
-
-    /* set id view  */
-    o.idView = o.idView || o.view.id;
-
-    /* If no story, quit*/
-    if (!h.path(o, 'view.data.story')) {
-      console.log('No story to handle, abord');
-      return;
-    }
 
     /** Remove old stuff if any */
-
     var oldData = h.path(mx.data, 'story.data');
     if (oldData) {
       o.startScroll = oldData.elScroll.scrollTop;

@@ -364,7 +364,7 @@ observe({
     if(addMapPosition) mapPosition <- s() + "lat=" + mapPosition$lat +'&lng='+ mapPosition$lng + '&zoom=' + mapPosition$zoom 
   }
   
-  if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true&views=" + data$views + "&project=" + projectCurrent
+  if(addStoryAutoStart) storyAutoStart <- s() + "storyAutoStart=true&views=" + data$views 
   
   out <- ""
 
