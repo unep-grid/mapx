@@ -193,7 +193,6 @@ class MapComposer {
     }
     const nDpi = dpi || 96 * window.devicePixelRatio;
     const changed = mc.state.dpi !== nDpi;
-    console.log(changed,mc.state.dpi);
     if (changed) {
       mc.state.dpi = nDpi;
       mc.toolbar.elInputDpi.value = mc.state.dpi;
