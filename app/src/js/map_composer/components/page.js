@@ -31,8 +31,8 @@ class Page extends Box {
     var page = this;
     var mc = page.mc;
     page.displayDim();
-    var w = page.toLengthUnit(page.width);
-    var h = page.toLengthUnit(page.height);
+    var w = Math.floor(page.toLengthUnit(page.width));
+    var h = Math.floor(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
     mc.setState('page_width', w);
@@ -51,6 +51,7 @@ class Page extends Box {
     var mc = page.mc;
     var elPrint = page.el;
     var curMode = mc.state.mode;
+    var curDpi = mc.state.dpi;
 
     mc.setMode('print')
       .then(() => {
@@ -60,8 +61,14 @@ class Page extends Box {
       })
       .then((canvas) => {
         var data = canvas.toDataURL('image/png');
-        download(data, 'map-composer-export.png', 'image/png');
+        mc.setDpi();
+        return download(data, 'map-composer-export.png', 'image/png');
+      })
+      .then(() => {
         mc.setMode(curMode);
+        setTimeout(() => {
+          mc.setDpi(curDpi);
+        }, 100);
       })
       .catch((e) => {
         mc.displayWarning(
@@ -100,7 +107,6 @@ class Page extends Box {
       y += g;
     });
   }
-
 }
 
 export {Page};

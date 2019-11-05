@@ -5,11 +5,16 @@ import {EditorToolbar} from './components/text_editor.js';
 import {el} from '@fxi/el';
 import {unitConvert} from './components/helpers';
 import './style/map_composer.less';
+const getDevicePixelRatio = Object.getOwnPropertyDescriptor(
+  window,
+  'devicePixelRatio'
+).get;
 
 class MapComposer {
-  constructor(elContainer, state) {
-    var mc = this;
+  constructor(elContainer, state, options) {
+    const mc = this;
     window.mc = mc; // for easy access in console. To remove in prod.
+    mc.options =  Object.assign({}, def.options, options);
     mc.state = Object.assign({}, def.state, state);
     mc.initRoot(elContainer);
     mc.toolbar = new Toolbar(mc);
@@ -20,22 +25,22 @@ class MapComposer {
     mc.page = mc.workspace.page;
     mc.errors = [];
     mc.ready = true;
-    mc.setMode(mc.state.mode);
     mc.setDpi(mc.state.dpi);
     mc.setUnit(mc.state.unit);
+    mc.setMode(mc.state.mode);
   }
 
   initRoot(elContainer) {
-    var mc = this;
+    const mc = this;
     if (false && elContainer.attachShadow instanceof Function) {
       /**
        * NOTE; Render map composer in shadow dom : sounds good, doesnt work
-       * HTMLtoCanvas does not work well and 
+       * HTMLtoCanvas does not work well and
        * we need to import style for building legends, fontawesome for
        * buttons, bootstrap and mapbox gl css.
        */
       elContainer.attachShadow({mode: 'open'});
-      var elRoot = elContainer.shadowRoot;
+      const elRoot = elContainer.shadowRoot;
       mc.el = el('div', {class: ['mc']});
       elRoot.appendChild(mc.el);
     } else {
@@ -48,8 +53,8 @@ class MapComposer {
   }
 
   setBoxLastFocus(box) {
-    var mc = this;
-    var boxLast = mc._box_last_focus;
+    const mc = this;
+    const boxLast = mc._box_last_focus;
     if (boxLast) {
       boxLast.removeFocus();
     }
@@ -60,15 +65,16 @@ class MapComposer {
     return this._box_last_focus;
   }
   destroy() {
-    var mc = this;
+    const mc = this;
     mc.setDpi();
     mc.workspace.destroy();
     mc.toolbar.destroy();
     mc.el.remove();
+    mc.options.onDestroy();
   }
 
   setState(id, value) {
-    var mc = this;
+    const mc = this;
     return {
       mode: mc.setMode.bind(mc),
       dpi: mc.setDpi.bind(mc),
@@ -81,7 +87,7 @@ class MapComposer {
   }
 
   setMode(mode) {
-    var mc = this;
+    const mc = this;
     let modes = mc.state.modes_internal;
     mc.state.mode = mode;
     modes.forEach((m) => {
@@ -108,7 +114,7 @@ class MapComposer {
   }
 
   setPageWidth(w) {
-    var mc = this;
+    const mc = this;
     if (!mc.ready || mc.state.page_width === w) {
       return;
     }
@@ -117,7 +123,7 @@ class MapComposer {
   }
 
   setPageHeight(h) {
-    var mc = this;
+    const mc = this;
     if (!mc.ready || mc.state.page_height === h) {
       return;
     }
@@ -126,7 +132,7 @@ class MapComposer {
   }
 
   setUnit(unit) {
-    var mc = this;
+    const mc = this;
     if (!mc.ready) {
       return;
     }
@@ -135,25 +141,25 @@ class MapComposer {
     } else {
       mc.setDpi(mc.state.dpi);
     }
-    var dpi = mc.state.dpi;
-    var sizeStep = unitConvert({
-      value: mc.state.grid_snap_size * mc.state.device_pixel_ratio,
+    const dpi = mc.state.dpi;
+    const sizeStep = Math.ceil(unitConvert({
+      value: mc.state.grid_snap_size * window.devicePixelRatio,
       unitFrom: 'px',
       unitTo: unit,
       dpi: dpi
-    });
-    mc.state.page_width = unitConvert({
+    }));
+    mc.state.page_width = Math.floor(unitConvert({
       value: mc.state.page_width,
       unitFrom: mc.state.unit,
       unitTo: unit,
       dpi: dpi
-    });
-    mc.state.page_height = unitConvert({
+    }));
+    mc.state.page_height = Math.floor(unitConvert({
       value: mc.state.page_height,
       unitFrom: mc.state.unit,
       unitTo: unit,
       dpi: dpi
-    });
+    }));
     mc.toolbar.elInputPageWidth.setAttribute('step', sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute('min', sizeStep);
     mc.toolbar.elInputPageWidth.setAttribute('max', sizeStep * 1000);
@@ -170,31 +176,34 @@ class MapComposer {
     //mc.updatePageContentScale();
   }
   setDpi(dpi) {
-    var mc = this;
+    const mc = this;
     if (!mc.ready) {
       return;
     }
-
-    Object.defineProperty(window, 'devicePixelRatio', {
-      get: function() {
-        if (dpi) {
+    if (dpi && dpi >= 72 && dpi <= 300) {
+      Object.defineProperty(window, 'devicePixelRatio', {
+        get: function() {
           return dpi / 96;
-        } else {
-          return mc.state.device_pixel_ratio_orig;
         }
-      }
-    });
-
-    mc.state.dpi = dpi || 96 * mc.state.device_pixel_ratio_orig;
-    mc.toolbar.elInputDpi.value = mc.state.dpi;
-    mc.state.device_pixel_ratio = window.devicePixelRatio;
-    mc.updatePageSizes();
-    mc.resizeEachMap();
-
+      });
+    } else {
+      Object.defineProperty(window, 'devicePixelRatio', {
+        get: getDevicePixelRatio
+      });
+    }
+    const nDpi = dpi || 96 * window.devicePixelRatio;
+    const changed = mc.state.dpi !== nDpi;
+    console.log(changed,mc.state.dpi);
+    if (changed) {
+      mc.state.dpi = nDpi;
+      mc.toolbar.elInputDpi.value = mc.state.dpi;
+      mc.updatePageSizes();
+      mc.resizeEachMap();
+    }
     //mc.updatePageContentScale();
   }
   setScale(scale) {
-    var mc = this;
+    const mc = this;
     if (!mc.ready) {
       return;
     }
@@ -217,17 +226,17 @@ class MapComposer {
   }
 
   setContentScale(scale) {
-    var mc = this;
+    const mc = this;
     mc._page_scale = scale;
     mc.page.setScale(scale);
   }
 
   setLegendColumnCount(n) {
-    var mc = this;
+    const mc = this;
     n = n || 1;
     mc.page.items.forEach((i) => {
       if (i.type === 'legend') {
-        var elLegendBox = i.el.querySelector('.mx-legend-box');
+        const elLegendBox = i.el.querySelector('.mx-legend-box');
         if (elLegendBox) {
           elLegendBox.style.columnCount = n;
         }
@@ -236,15 +245,22 @@ class MapComposer {
   }
 
   resizeEachMap() {
-    var mc = this;
-    var promItems = mc.page.items.map((i) => {
+    const mc = this;
+    const promItems = mc.page.items.map((i) => {
       return new Promise((resolve) => {
         if (i.map) {
-          i.map.resize();
-          i.map.once('render', () => {
-            resolve(true);
-          });
-          i.map.setBearing(i.map.getBearing());
+          setTimeout(() => {
+            /**
+            * Add a timeout : the UI is not always fully rendered : the resize 
+            * operate on old dimension. 
+            * alternative, set an MultationObserver ...
+            */
+            i.map.resize();
+            i.map.once('render', () => {
+              resolve(true);
+            });
+            i.map.setBearing(i.map.getBearing());
+          }, 10);
         } else {
           resolve(true);
         }

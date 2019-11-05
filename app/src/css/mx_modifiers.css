@@ -157,7 +157,6 @@
 /* Note : see also loading screen background*/
 .mx .mx-modal-background {
   background-color: var(--mx_ui_shadow);
-  opacity: 0.3;
 }
 
 .mx .mx-modal-body {

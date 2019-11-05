@@ -108,7 +108,12 @@ function mapComposerModalAuto() {
       },
       h.getDictItem('btn_help')
     );
-    const mc = new MapComposer(elContainer, state);
+    
+    const mc = new MapComposer(elContainer, state, {
+      onDestroy : ()=>{
+         map.resize();
+      } 
+    });
 
     h.modal({
       title: 'Map Composer',
@@ -117,6 +122,7 @@ function mapComposerModalAuto() {
       content: elContainer,
       addSelectize: false,
       onClose: destroy,
+      addBackground : true,
       style: {
         position: 'absolute',
         width: '80%',

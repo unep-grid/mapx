@@ -70,8 +70,6 @@ class Box {
     }
 
     if (opt.draggable || opt.resizable) {
-      
-      
       box.lStore.addListener({
         target: box.el,
         type: 'mousedown',
@@ -368,7 +366,7 @@ class Box {
   toLengthPixel(length) {
     var box = this;
     var state = box.state;
-    var r = state.device_pixel_ratio;
+    var r = window.devicePixelRatio;
     length /= r;
     if (state.unit === 'px') {
       return length;
@@ -381,7 +379,7 @@ class Box {
 
   toLengthUnit(px) {
     var state = this.state;
-    var r = state.device_pixel_ratio;
+    var r = window.devicePixelRatio;
     px *= r;
     if (state.unit === 'px') {
       return px;
