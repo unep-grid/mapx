@@ -22,6 +22,7 @@ let settings = {
     protocol: 'http:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
+      getApiSql : '/get/sql',
       getConfigMap: '/get/config/map',
       getIpInfo: '/get/ip',
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
