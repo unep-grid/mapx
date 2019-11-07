@@ -1,6 +1,5 @@
 import {NestedList} from './nested_list/index.js';
 import {ViewsFilter} from './views_filter/index.js';
-import {handleViewClick} from './views_click/index.js';
 import {Switch} from './switch/index.js';
 import {ViewBase} from './views_builder/view_base.js';
 
@@ -295,18 +294,6 @@ export function viewsListRenderNew(o) {
    *  Auto open
    */
   filterIfOpen();
-
-  /**
-   * Handle view click
-   */
-  mx.listenerStore.removeListenerByGroup('view_list');
-  mx.listenerStore.addListener({
-    target: document.body,
-    bind: mData.viewsList,
-    type: 'click',
-    idGroup: 'view_list',
-    callback: handleViewClick
-  });
 
   /**
    * Set image for the drag item

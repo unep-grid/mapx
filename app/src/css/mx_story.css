@@ -231,9 +231,7 @@
   z-index: 100;
   padding: 10px;
 }
-
-.mx-story-step-bullet,
-.mx-story-btn-legend {
+.mx-story-step-bullet{
   cursor: pointer;
   display: inline-block;
   border-radius: 50%;
@@ -247,60 +245,7 @@
   margin: 2px;
 }
 
-.mx-story-btn-legend {
-  font-family: 'fontawesome';
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  font-size: 20px;
-  margin: 5px;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  z-index: 1;
-  pointer-events: auto;
-}
-.mx-story-legend {
-  z-index: 0;
-  padding: 10px;
-  border-radius: 10px;
-  height: auto;
-  max-height: 100%;
-  min-width: 300px;
-  max-width: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  clip-path: circle(20px at 100% 0px);
-  transition: clip-path 1s;
-}
-.mx-story-legend-title {
-  margin: 7px;
-  font-size: 1.5em;
-}
 
-.mx-story-legend-content {
-  padding: 10px;
-}
-
-.mx-story-btn-legend:hover ~ .mx-story-legend,
-.mx-story-legend.active {
-  clip-path: circle(75%);
-  pointer-events: auto;
-}
-
-.mx-story-legend-container {
-  pointer-events: none;
-  z-index: 1000;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  height: 100%;
-  padding: 10px;
-  filter: drop-shadow(2px 4px 6px var(--mx_ui_shadow));
-}
-.mx-story-legend-content > div {
-  margin-bottom:15px;
-}
 /**
  * simple reactive table
  * source : https://gist.github.com/AllThingsSmitty/cb32e5a377716bc8f147

@@ -8,6 +8,12 @@ let settings = {
   languages: ['en', 'fr'],
   highlightedCountries: [],
   project: '',
+  map: {
+    id: 'map_main',
+    token: '',
+    maxZoom: 20,
+    minZoom: 0
+  },
   api: {
     port: '3333',
     port_public: '8880',
@@ -16,7 +22,8 @@ let settings = {
     protocol: 'http:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
-      getIpInfo : '/get/ip',
+      getConfigMap: '/get/config/map',
+      getIpInfo: '/get/ip',
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
       getSourceMetadata: '/get/source/metadata/',
       getViewMetadata: '/get/view/metadata/',
@@ -33,24 +40,13 @@ let settings = {
     }
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
-  paramKeysPermanent: [
-    'project',
-    'language',
-    'lockProject',
-    'style'
-  ],
+  paramKeysPermanent: ['project', 'language', 'lockProject', 'style'],
   links: [],
   modeKiosk: false,
   paths: {
     sprites: 'sprites/sprite'
   },
   style: styleDefault.default,
-  map: {
-    id: 'map_main',
-    token: '',
-    maxZoom: 20,
-    minZoom: 0
-  },
   layerBefore: 'mxlayers',
   separators: {
     sublayer: '_@_'

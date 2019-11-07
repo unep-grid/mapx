@@ -7934,7 +7934,19 @@
     "ps": ""
   },
   {
-    "id": "story_legends",
+    "id": "button_legend_title",
+    "en": "Legends",
+    "fr": "Légendes",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "button_legend_btn",
     "en": "Legends",
     "fr": "Légendes",
     "es": "",

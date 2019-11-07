@@ -1,0 +1,69 @@
+
+.mx-button-legend-btn {
+  font-family: 'fontawesome';
+  width: 40px;
+  height: 40px;
+   font-size: 20px;
+  line-height: 30px;
+  margin: 2px;
+  position: absolute; height: 40px;
+  display: inline-block;
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 2px 2px 5px #ccc;
+}
+
+.mx-button-legend-btn-top-right {
+  top: 0px;
+  right: 0px;
+  z-index: 1;
+}
+
+.mx-button-legend {
+  z-index: 0;
+  padding: 10px;
+  border-radius: 10px;
+  height: auto;
+  max-height: 100%;
+  min-width: 300px;
+  max-width: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  clip-path: circle(20px at 100% 0px);
+  transition: clip-path 1s;
+}
+
+.mx-button-legend-title {
+  margin: 7px;
+  font-size: 1.5em;
+}
+
+.mx-button-legend-content {
+  padding: 10px;
+}
+
+.mx-button-legend-btn:hover ~ .mx-button-legend,
+.mx-button-legend.active {
+  clip-path: circle(75%);
+  pointer-events: auto;
+}
+
+.mx-button-legend-container {
+  pointer-events: none;
+  z-index: 1000;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  padding: 10px;
+  filter: drop-shadow(2px 4px 6px var(--mx_ui_shadow));
+}
+
+/**
+* Add a margin for first div (legends item)
+*/
+.mx-button-legend-content > div {
+  margin-bottom:15px;
+}

@@ -1,5 +1,5 @@
 import {initEditing} from './mx_helper_story_editor.js';
-
+import {ButtonLegend} from './button_legend/index.js';
 /**
  * Story map prototype
  * TODO:
@@ -467,6 +467,12 @@ function storyOnScroll(o) {
 
 function initButtonsListener(o) {
   const h = mx.helpers;
+  
+  /**
+  * Button Legend
+  */
+  o.data.buttonLegend = new ButtonLegend();
+
   /**
    * Bullets
    */
@@ -480,15 +486,6 @@ function initButtonsListener(o) {
     group: 'story_map'
   });
 
-  /**
-   * Legend
-   */
-  mx.listenerStore.addListener({
-    target: o.data.elBtnLegend,
-    type: 'click',
-    callback: toggleLegend,
-    group: 'story_map'
-  });
 
   /*
    * Set position
@@ -500,19 +497,7 @@ function initButtonsListener(o) {
       h.storyGoTo(step);
     }
   }
-  /**
-   * Legend callback
-   */
-  function toggleLegend() {
-    let active = o.data.elBtnLegend.classList.contains('active');
-    if (active) {
-      o.data.elBtnLegend.classList.remove('active');
-      o.data.elLegend.classList.remove('active');
-    } else {
-      o.data.elBtnLegend.classList.add('active');
-      o.data.elLegend.classList.add('active');
-    }
-  }
+
 }
 
 /**
@@ -691,7 +676,7 @@ export function storyUpdateSlides(o) {
         id: 'map_main',
         view: o.view,
         stepNum: s,
-        elLegendContainer: o.data.elLegendContent
+        elLegendContainer: o.data.buttonLegend.elLegendContent
       });
       data.stepActive = s;
 
@@ -1078,8 +1063,8 @@ export function storyController(o) {
       if (o.data.elStory) {
         o.data.elStory.remove();
       }
-      if (o.data.elLegendContainer) {
-        o.data.elLegendContainer.remove();
+      if (o.data.buttonLegend) {
+        o.data.buttonLegend.destroy();
       }
       if (o.data.styleMap) {
         o.data.elMap.style = o.data.styleMap;
@@ -1147,39 +1132,6 @@ export function storyBuild(o) {
   o.colors.alpha = o.colors.alpha || 1;
 
   var elMapContainer = o.data.map.getContainer();
-
-  /**
-   * Legends container
-   */
-  o.data.elLegendContainer = el(
-    'div',
-    {class: ['mx-story-legend-container']},
-    (o.data.elBtnLegend = el('div', {
-      class: ['mx-story-btn-legend', 'fa', 'fa-list-ul', 'shadow'],
-      dataset: {
-        lang_key: 'btn_story_legend'
-      }
-    })),
-    (o.data.elLegend = el(
-      'div',
-      {
-        class: ['mx-story-legend']
-      },
-      el(
-        'span',
-        {
-          class: 'mx-story-legend-title'
-        },
-        h.getDictItem('story_legends')
-      ),
-      /**
-       * Where the legend will appear
-       */
-      (o.data.elLegendContent = el('div', {
-        class: 'mx-story-legend-content'
-      }))
-    ))
-  );
 
   /**
    * Story map container
@@ -1265,7 +1217,6 @@ export function storyBuild(o) {
    * Add story map to map container
    */
   elMapContainer.appendChild(o.data.elStoryContainer);
-  elMapContainer.appendChild(o.data.elLegendContainer);
 
   /**
    * Handle broken images
