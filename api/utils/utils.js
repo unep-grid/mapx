@@ -1,6 +1,6 @@
 const path = require('path');
 const zlib = require('zlib');
-
+const settings = require.main.require('./settings');
 /**
  * Conversion of array of column names to pg columns
  */
@@ -53,7 +53,7 @@ function toRes(obj) {
  * @param {Object} opt.end If true, send, else continue writing
  * @param {Object} opt.etag If set, add custom etag
  */
-exports.sendJSON = function(res, data, opt) {
+function sendJSON(res, data, opt) {
   opt = Object.assign({}, {end: true}, opt);
   opt.end = opt.end === true || false;
   data = JSON.stringify(data || '');
@@ -68,7 +68,8 @@ exports.sendJSON = function(res, data, opt) {
   } else {
     res.write(data);
   }
-};
+}
+exports.sendJSON = sendJSON;
 
 /**
  * Simple send error wrapper
@@ -311,9 +312,21 @@ function findValues(obj, key) {
 }
 exports.findValues = findValues;
 
+/**
+ * Get config from client
+ */
+exports.config = {
+  map: {
+    get: (req, res) => {
+      return sendJSON(res, settings.map);
+    }
+  }
+};
+
 /*
  * Export methods
  */
+
 exports.ip = require('./getIpInfo.js');
 exports.view = require('./getView.js');
 exports.views = require('./getViewsByProject.js');

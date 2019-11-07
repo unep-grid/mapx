@@ -76,6 +76,7 @@
     "d3-geo-projection": "2.5.1",
     "dom-to-image": "^2.6.0",
     "dot": "^1.1.2",
+    "dotenv": "^8.2.0",
     "downloadjs": "^1.4.7",
     "draggabilly": "^2.2.0",
     "font-awesome": "^4.7.0",

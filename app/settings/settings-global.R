@@ -95,6 +95,7 @@ config[["api"]] <- list(
   upload_size_max = 100 * 1024^2,#100MiB
   routes = list(
     getIpInfo = "/get/ip",
+    getConfigMap = '/get/config/map',
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",
     getViewMetadata = "/get/view/metadata/",
@@ -234,7 +235,7 @@ config[["map"]] <- list(
   )
 
 config[['paths']] = list(
-  sprite = "sprites/sprite"
+  sprites = "sprites/sprite"
   )
 
 

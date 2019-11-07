@@ -42,6 +42,7 @@ app.get('/get/views/list/global/public/', utils.viewsPublic.get);
 app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get);
 app.get('/get/mirror/', utils.mirror.get);
+app.get('/get/config/map',utils.config.map.get);
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
 app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
