@@ -132,7 +132,9 @@
 .mx-login-info p,
 .mx .mx-view-tgl-more label,
 .mx .list-group .list-group-title-small,
-.text-muted {
+.text-muted, 
+.text-muted > div {
+  transition: color 500ms ease-in-out;
   color: var(--mx_ui_text_faded);
 }
 
@@ -140,7 +142,8 @@
 .mx-login-info p:hover,
 .mx .mx-view-tgl-more label:hover,
 .mx .list-group .list-group-title-small:hover,
-.text-muted:hover {
+.text-muted:hover,
+.text-muted:hover > div {
   color: var(--mx_ui_text);
 }
 

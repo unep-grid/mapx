@@ -71,10 +71,6 @@ export function setUiColorScheme(o) {
     });
   }
 
-  if (typeof Shiny !== 'undefined') {
-    Shiny.onInputChange('uiColorScheme', JSON.stringify(c, 0, 2));
-  }
-
   if (init) {
     inputs.innerHTML = '';
     var inputType = ['color', 'range'];

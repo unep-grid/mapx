@@ -332,10 +332,26 @@ mxInitSelectizeAll <- function(id,session=shiny:::getDefaultReactiveDomain()){
 #' @param minHeight {String} Optional min height of the modal window. String. Eg. "500px"
 #' @param minWidth {String} Optional min width of the modal window. String. Eg. "500px"
 #' @param addBackground {logical} Add a background
+#' @param addSelectize {logical} Add selectize
 #' @param removeCloseButton {logical} Remove close button
 #' @param textCloseButton {character|shiny.tag} Text of the default close button
 #' @param session {shiny.session} Default session object
-mxModal = function(id=NULL,close=F,replace=T,zIndex=NULL,title=NULL,subtitle=NULL,content=NULL,buttons=NULL,minHeight=NULL,minWidth=NULL,addBackground=T,removeCloseButton=F,textCloseButton="ok",session=shiny::getDefaultReactiveDomain()){
+mxModal = function(
+  id = NULL,
+  close = F,
+  replace = T,
+  zIndex = NULL,
+  title = NULL,
+  subtitle = NULL,
+  content = NULL,
+  buttons = NULL,
+  minHeight = NULL,
+  minWidth = NULL,
+  addSelectize = NULL,
+  addBackground = T,
+  removeCloseButton = F,
+  textCloseButton = "ok",
+  session=shiny::getDefaultReactiveDomain()){
 
   stopifnot(!noDataCheck(id))
 
@@ -346,19 +362,20 @@ mxModal = function(id=NULL,close=F,replace=T,zIndex=NULL,title=NULL,subtitle=NUL
   session$sendCustomMessage(
     type="mxModal",
     list(
-      id=id,
-      replace=as.logical(replace),
-      zIndex=zIndex,
-      title=as.character(title),
-      subtitle=as.character(subtitle),
-      textCloseButton=as.character(textCloseButton),
-      buttons=buttons,
-      minHeight=minHeight,
-      minWidth=minWidth,
-      content=as.character(content),
-      addBackground=as.logical(addBackground),
-      removeCloseButton=as.logical(removeCloseButton),
-      close=as.logical(close)
+      id = id,
+      replace = as.logical(replace),
+      zIndex = zIndex,
+      title = as.character(title),
+      subtitle = as.character(subtitle),
+      textCloseButton = as.character(textCloseButton),
+      buttons = buttons,
+      minHeight = minHeight,
+      minWidth = minWidth,
+      content = as.character(content),
+      addBackground = as.logical(addBackground),
+      addSelectize = addSelectize,
+      removeCloseButton = as.logical(removeCloseButton),
+      close = as.logical(close)
       )
     )
 }

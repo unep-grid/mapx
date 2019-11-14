@@ -2,10 +2,12 @@
 
 $(document).on('shiny:connected', function() {
   const h = mx.helpers;
-  
-  /*
-  * Input
-  */
+
+  /**
+   * Set init query parameters
+   */
+  h.setQueryParametersInit();
+  h.cleanTemporaryQueryParameters();
   Shiny.onInputChange('urlSearchQuery',h.getQueryParametersInit());
   Shiny.onInputChange('browserData',h.getBrowserData());
 

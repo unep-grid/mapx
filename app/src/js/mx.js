@@ -4,14 +4,14 @@ import * as info from './../../package.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
-import {ListenerStore,EventStore} from './listener_store/index.js';
+import {ListenerStore, EventStore} from './listener_store/index.js';
 
-let templates = {
+const templates = {
   viewListLegend: require('../dot/view_list_legend.dot'),
   viewListOptions: require('../dot/view_list_options.dot')
 };
-let maps = {};
-let data = {
+const maps = {};
+const data = {
   geojson: localforage.createInstance({
     name: 'geojson'
   }),
@@ -34,16 +34,16 @@ let data = {
     name: 'draw'
   })
 };
-let initQueryParams = {}; // set in init_common.js
-let listenerStore = new ListenerStore();
-let events = new EventStore();
-let selectize = {};
-let queue = [];
-let widgets = [];
-let controls = {};
-let dashboards = [];
-let editors = {};
-let extend = {
+const initQueryParams = {}; // set in init_common.js
+const listenerStore = new ListenerStore();
+const events = new EventStore();
+const selectize = {};
+const queue = [];
+const widgets = [];
+const controls = {};
+const dashboards = [];
+const editors = {};
+const extend = {
   position: {},
   texteditor: {}
 };

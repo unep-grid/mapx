@@ -57,6 +57,7 @@ export function modal(o) {
 
   o.addSelectize = o.addSelectize === false ? false : true;
 
+
   if (o.close === true) {
     if (hasModal && h.isFunction(elModal.close)) {
       elModal.close();

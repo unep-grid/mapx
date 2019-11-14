@@ -16,6 +16,15 @@ body,
   -webkit-text-size-adjust: 100%;
 }
 
+/*
+* If shiny is busy, do not use pointer event
+*/
+html.shiny-busy body {
+  pointer-events:none!important;
+  cursor: wait!important;
+}
+
+
 /**
 * RESET font size
 */
@@ -314,6 +323,7 @@ blockquote {
   width: 100%;
   max-width: 100%;
 }
+
 
 /**
 * Shiny server

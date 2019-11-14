@@ -18,13 +18,17 @@ class ButtonLegend {
       'div',
       {class: ['mx-button-legend-container']},
       (this.elBtnLegend = el('div', {
-        class: ['mx-button-legend-btn', 'fa', 'fa-list-ul', 'shadow'],
+        class: ['mx-button-legend-btn','shadow'],
         dataset: {
           lang_key: 'button_legend_btn',
           lang_type: 'tooltip',
           button_legend_action: 'toggle'
         }
-      })),
+      },
+        el('span',{
+          class : ['mx-button-legend-btn-icon','fa','fa-list-ul']
+        })
+      )),
       (this.elLegend = el(
         'div',
         {

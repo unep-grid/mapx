@@ -176,5 +176,36 @@ reactViewsExternal <- reactive({
 
 })
 
+reactViewsListProject <- reactive({
 
+  timer <- mxTimeDiff("Fetching list of view")
+
+  #
+  # Ivalidated by :
+  #
+  update <- reactData$updateViewList
+  updateFetchOnly <- reactData$updateViewListFetchOnly
+  userData <- reactUser$data
+  language <- reactData$language
+  idProject <- reactData$project
+  idUser <- userData$id
+  token <- reactUser$token
+
+  views <-  mxApiGetViews(
+    idUser = idUser,
+    idProject = idProject,
+    token = token,
+    language = language,
+    keys = c("id","_title")
+    )
+
+  if(noDataCheck(views)){
+    viewsList = list()
+  }else{
+    viewsList <- lapply(views,`[[`,'id')
+    names(viewsList) <- lapply(views,`[[`,'_title')
+  }
+  mxTimeDiff(timer)
+  return(viewsList)
+})
 

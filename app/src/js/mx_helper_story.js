@@ -43,33 +43,31 @@ export function storyClose() {
   const h = mx.helpers;
   const oldData = h.path(mx.data, 'story.data');
   if (oldData && oldData.close instanceof Function) {
-    return oldData.close({enable:false,update:false});
+    return oldData.close({enable: false, update: false});
   }
 }
 
 /**
-* Get story view or fetch it remotely
-*/
-function getStory(o){
+ * Get story view or fetch it remotely
+ */
+function getStory(o) {
   const h = mx.helpers;
-  let view  = h.getView(o.view || o.idView);
-  if(!h.isView(view)){
+  let view = h.getView(o.view || o.idView);
+  if (!h.isView(view)) {
     view = h.getViewRemote(o.idView);
   }
-  return new Promise((resolve)=>{
+  return new Promise((resolve) => {
     resolve(view);
-  }).then(view => {
-
-    if(h.isStory(view)){
+  }).then((view) => {
+    if (h.isStory(view)) {
       o.view = view;
       o.idView = view.id;
-    }else{
+    } else {
       throw new Error('No story to read');
     }
     return o;
   });
 }
-
 
 /**
  * Clean + init
@@ -81,9 +79,7 @@ function cleanInit(o) {
    */
   mx.listenerStore.removeListenerByGroup('story_map');
 
-
   return new Promise(function(resolve) {
-
     /** Remove old stuff if any */
     var oldData = h.path(mx.data, 'story.data');
     if (oldData) {
@@ -467,11 +463,13 @@ function storyOnScroll(o) {
 
 function initButtonsListener(o) {
   const h = mx.helpers;
-  
+
   /**
-  * Button Legend
-  */
-  o.data.buttonLegend = new ButtonLegend();
+   * Button Legend
+   */
+  o.data.buttonLegend = new ButtonLegend({
+    elContainer: o.data.elMapContainer
+  });
 
   /**
    * Bullets
@@ -486,7 +484,6 @@ function initButtonsListener(o) {
     group: 'story_map'
   });
 
-
   /*
    * Set position
    */
@@ -497,7 +494,6 @@ function initButtonsListener(o) {
       h.storyGoTo(step);
     }
   }
-
 }
 
 /**
@@ -961,7 +957,7 @@ export function storyController(o) {
         return;
       }
       o.enable = false;
-      o = Object.assign(o,cmd);
+      o = Object.assign(o, cmd);
       storyController(o);
     };
 
@@ -1131,7 +1127,7 @@ export function storyBuild(o) {
   o.colors.fg = o.colors.fg || '#000';
   o.colors.alpha = o.colors.alpha || 1;
 
-  var elMapContainer = o.data.map.getContainer();
+  o.data.elMapContainer = o.data.map.getContainer();
 
   /**
    * Story map container
@@ -1216,7 +1212,7 @@ export function storyBuild(o) {
   /**
    * Add story map to map container
    */
-  elMapContainer.appendChild(o.data.elStoryContainer);
+  o.data.elMapContainer.appendChild(o.data.elStoryContainer);
 
   /**
    * Handle broken images
@@ -1336,35 +1332,38 @@ export function storyPlayStep(o) {
   /**
    * Add view if not alredy visible
    */
-  h.onNextFrame(function() {
-    vVisible = h.getViewsOnMap(o);
-    vToRemove = h.getArrayDiff(vVisible, vStep);
-    vToAdd = h.getArrayDiff(vStep, vVisible);
+  vVisible = h.getViewsOnMap(o);
+  vToRemove = h.getArrayDiff(vVisible, vStep);
+  vToAdd = h.getArrayDiff(vStep, vVisible);
 
-    vToAdd.forEach(function(v, i) {
-      var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-      h.viewLayersAdd({
-        id: o.id,
-        idView: v,
-        before: vPrevious,
-        openView: false,
-        elLegendContainer: elLegendContainer
-      });
+  vToAdd.forEach(function(v, i) {
+    var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
+    h.viewLayersAdd({
+      id: o.id,
+      idView: v,
+      before: vPrevious,
+      openView: false,
+      elLegendContainer: elLegendContainer
     });
+  });
 
-    vToRemove.forEach(function(v) {
-      h.viewLayersRemove({
-        id: o.id,
-        idView: v,
-        elLegendContainer: elLegendContainer
-      });
+  vToRemove.forEach(function(v) {
+    h.viewLayersRemove({
+      id: o.id,
+      idView: v,
+      elLegendContainer: elLegendContainer
     });
+  });
 
+  setTimeout(()=>{
+    /**
+    * Set order after rendering
+    */
     h.viewsLayersOrderUpdate({
       order: vStep,
       id: o.id
     });
-  });
+  },0);
 
   /**
    * Fly to position

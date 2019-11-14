@@ -1417,181 +1417,6 @@ mxButton <- function (inputId, labelId = NULL, class = NULL )
 }
 
 
-
-#' Create a modal panel
-#'
-#' Create a modal panel with some options as custom button, close button, html content. 
-#'
-#' @param id Panel id
-#' @param title Panel title
-#' @param subtitle Panel subtitle
-#' @param html HTML content of the panel, main text
-#' @param zIndex base zIndex for the panel and background
-#' @param listActionButton If FALSE, hide buttons. If NULL, display default close panel button, with text given in defaultButtonText. If list of buttons, list of button.
-#' @param defaultButtonText Text of the default button if listActionButton is NULL and not FALSE
-#' @param style Additional CSS style for the panel 
-#' @param class Additional class for the panel
-#' @param hideCloseButton Boolean. Hide the close panel button
-#' @param draggable Boolean. Set the panel as draggable
-#' @export
-mxPanel<- function(
-  id="default",
-  title=NULL,
-  headIcon=NULL,
-  subtitle=NULL,
-  html=NULL,
-  zIndex=500,
-  listActionButton=NULL,
-  background=TRUE,
-  addCloseButton=FALSE,
-  addOnClickClose=TRUE,
-  closeButtonText="OK",
-  style=NULL,
-  class=NULL,
-  hideHeadButtonClose=TRUE,
-  draggable=TRUE,
-  fixed=TRUE,
-  defaultTextHeight=150
-  ){ 
-
-  rand <- randomString(splitIn=1,addLetters=T)
-
-  idBack <- paste("mx_modal_background",id,rand,sep="_")
-  idContent <- paste("mx_modal_content",id,rand,sep="_")
-  jsHide <- sprintf("mx.util.hide({id:'%1$s'}); mx.util.hide({id:'%2$s'})"
-    , idContent
-    , idBack
-    )
-
-  #
-  # Handle on click close for all buttons
-  #
-  if(!is.null(listActionButton) && isTRUE(addOnClickClose)){
-    listActionButton <- lapply(
-      listActionButton,
-      function(x){
-        x$attribs$onclick<-jsHide
-        return(x)
-      }
-      )
-  }  
-
-  #
-  # Handle default close button
-  #
-  if(addCloseButton || is.null(listActionButton)){
-    listActionButton <- tagList(
-      listActionButton,
-      tags$button(onclick=jsHide,closeButtonText,class="btn btn-modal")
-      )
-  }
-
-  #
-  # Remove buttons if logical false
-  #
-  if(isTRUE(is.logical(listActionButton) && !isTRUE(listActionButton))) listActionButton=NULL
-
-  #
-  # handling close button in top
-  #
-  if(hideHeadButtonClose){
-    closeButton=NULL
-  }else{
-    closeButton=tags$button(href="#",class="btn btn-default", onclick=jsHide,icon('times'))
-  }
-
-  #
-  # Handle background removal
-  #
-  if(background){
-    backg <- div(id=idBack,class=paste("mx-modal-background"),style=sprintf("z-index:%s",zIndex))
-  }else{
-    backg <- character(0)
-  }
-
-
-  #
-  # Handle title 
-  #
-  title = div(
-    class="",
-    tags$span(
-      icon( headIcon ),
-      style = "font-size:30px"
-      ),
-    div(
-      class="",
-      title
-      ),
-    div(
-      class="",
-      subtitle
-      )
-    )
-
-
-  #
-  # Info text
-  #
-  infoText = tags$div(
-    class="mx-modal-info-text",
-    p(
-      id=sprintf("%s_infoText",id)
-      )
-    )
-
-  #
-  # Final object
-  #
-  out <- tagList(
-    backg,
-    div(
-      id=idContent,
-      style=sprintf("z-index:%s",zIndex+1),
-      class="mx-modal-container",
-      div(
-        class="mx-modal-top mx-modal-drag-enable",
-        closeButton,
-        dragButton
-        ),
-      div(
-        class="mx-modal-head",
-        title
-        ),
-      div(
-        class="mx-modal-body",
-        html
-        ),
-      div(
-        class="mx-modal-foot",
-        infoText,
-        listActionButton
-        )
-      ),
-    scr
-    )
-
-
-  return(out)
-}
-#' Alert panel
-#'
-#' Create an alert panel. This panel could be send to an output object from a reactive context. 
-#'
-#' @param title Title of the alert. Should be "error", "warning" or "message"
-#' @param subtitle Subtitle of the alert
-#' @param message html or text message for the alert
-#' @param listActionButtons List of action button for the panel
-#' @export
-mxPanelAlert <- function(title=c("error","warning","message"),subtitle=NULL,message=NULL,listActionButton=NULL,...){ 
-  title = match.arg(title)
-  switch(title,
-    'error'={title=h2(icon("frown-o"))},
-    'warning'={title=h2(icon("frown-o"))},
-    'message'={title=h2(icon("info-circle"))} 
-    )
-  mxPanel(class="panel-overall panel-fixed",title=title,subtitle=subtitle,html=message,listActionButton=listActionButton,style="position:fixed;top:100px",...)
-}
 #' Password input
 #'
 #' Create a password input.
@@ -1738,7 +1563,14 @@ mxFileInput<-function (inputId, label, fileAccept=NULL, multiple=FALSE){
 #' @param inputId Element id
 #' @param labelId Id of label
 
-mxSelect <- function(inputId,class="",values=NULL,valuesLabels=NULL,optionAttr=NULL,optionAttrValues=NULL){
+mxSelect <- function(
+  inputId,
+  class = "",
+  values = NULL,
+  valuesLabels = NULL,
+  optionAttr = NULL,
+  optionAttrValues = NULL
+  ){
 
 
   attr <- character(1)
@@ -1760,15 +1592,10 @@ mxSelect <- function(inputId,class="",values=NULL,valuesLabels=NULL,optionAttr=N
     opt <- sprintf("<option %1$s %2$s >%3$s</option>\n",attr,val,valuesLabels)
   }
 
-  #tags$div(
-  #class = sprintf("form-group shiny-input-container %s",paste(class,collapse=" ")),
-  #class = sprintf(" %s",paste(class,collapse=" ")),
   tags$select(
     id=inputId,
-    #class="selectpicker",
     HTML(opt)
     )
-  #)
 }
 
 

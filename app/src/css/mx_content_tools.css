@@ -106,7 +106,7 @@
   top: 5px;
   right: 5px;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   left: auto;
 }
 

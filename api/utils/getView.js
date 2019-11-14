@@ -109,9 +109,9 @@ function getTile(res, hash, data) {
       console.log(err);
     }
     if (!err && zTile64) {
-      sendTileZip(res, Buffer(zTile64, 'base64'));
+      return sendTileZip(res, Buffer(zTile64, 'base64'));
     } else {
-      getTilePg(res, hash, data);
+      return getTilePg(res, hash, data);
     }
   });
 }
@@ -128,24 +128,26 @@ function getTilePg(res, hash, data) {
 
   query = utils.parseTemplate(str, data);
 
-  clientPgRead.query(query).then(function(out) {
-    rowsToGeoJSON(out.rows, out.types)
-      .then(function(geojson) {
-        return geojsonToPbf(geojson, data);
-      })
-      .then(function(buffer) {
-        if (buffer && buffer.length) {
-          setRedis(hash, buffer, function(zBuffer) {
-            sendTileZip(res, zBuffer);
-          });
-        } else {
-          sendTileEmpty(res);
-        }
-      })
-      .catch(function(err) {
-        return sendTileError(res, err);
-      });
-  });
+  return clientPgRead
+    .query(query)
+    .then(function(out) {
+      return rowsToGeoJSON(out.rows, out.types);
+    })
+    .then(function(geojson) {
+      return geojsonToPbf(geojson, data);
+    })
+    .then(function(buffer) {
+      if (buffer && buffer.length) {
+        setRedis(hash, buffer, function(zBuffer) {
+          sendTileZip(res, zBuffer);
+        });
+      } else {
+        sendTileEmpty(res);
+      }
+    })
+    .catch(function(err) {
+      return sendTileError(res, err);
+    });
 }
 
 function setRedis(hash, buffer, cb) {
@@ -173,7 +175,7 @@ function sendTileEmpty(res) {
 }
 
 function sendTileError(res, err) {
-  res.status(500).send(JSON.stringify(err));
+  res.status(500).send(err.message);
 }
 
 function rowsToGeoJSON(rows) {

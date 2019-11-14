@@ -23,9 +23,6 @@ export function setQueryParametersInit(param, opt) {
   Object.keys(param).forEach((k) => {
     init[k] = asArray(param[k]);
   });
-  if (window.Shiny) {
-    Shiny.onInputChange('urlSearchParam', init);
-  }
 }
 /**
  * Reset init parameters

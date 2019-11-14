@@ -43,7 +43,10 @@ let settings = {
   // see https://github.com/unep-grid/map-x-mgl/issues/472
   paramKeysPermanent: ['project', 'language', 'lockProject', 'style'],
   links: [],
-  modeKiosk: false,
+  mode : {
+    readonly : false,
+    app : false
+  },
   paths: {
     sprites: 'sprites/sprite'
   },

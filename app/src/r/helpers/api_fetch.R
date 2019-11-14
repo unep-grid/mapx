@@ -1,4 +1,3 @@
-
 #' Fetch json data from API
 #'
 #' @param route {Character} route. E.g. '/get/views'
@@ -117,6 +116,7 @@ mxApiGetViews <-  function(
       idUser = idUser,
       selectKeys = keys,
       idViews = idViews,
+      language = language,
       collections = collections,
       types = types
       )

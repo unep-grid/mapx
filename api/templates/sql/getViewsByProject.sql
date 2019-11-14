@@ -2,12 +2,12 @@ WITH
 role_filter as (
   SELECT
   CASE 
-    WHEN '{{roleMax}}' = 'admin' THEN 4
-    WHEN '{{roleMax}}' = 'publisher' THEN 3 
-    WHEN '{{roleMax}}' = 'member' THEN 2
-    WHEN '{{roleMax}}' = 'public' THEN 1
-    ELSE 5
-  END as max
+WHEN '{{roleMax}}' = 'admin' THEN 4
+WHEN '{{roleMax}}' = 'publisher' THEN 3 
+WHEN '{{roleMax}}' = 'member' THEN 2
+WHEN '{{roleMax}}' = 'public' THEN 1
+ELSE 5
+END as max
 ),
 /**
  * Project config by user
@@ -23,17 +23,17 @@ p_base AS (
     CASE WHEN coalesce(title #>> '{"en"}','') = '' 
       THEN id 
     ELSE title #>> '{"en"}' 
-      END
-    ELSE title #>> '{"{{language}}"}'  
-   END as title,
-  views_external as v_ext
-  FROM mx_projects 
-  WHERE id = '{{idProject}}'
+END
+ELSE title #>> '{"{{language}}"}'  
+END as title,
+views_external as v_ext
+FROM mx_projects 
+WHERE id = '{{idProject}}'
 ),
 p_config AS (
   /*
-  * Role inheritance
-  */
+   * Role inheritance
+   */
   SELECT
   ( u_is_admin ) AND r.max >=  4 as u_is_admin,
   ( u_is_admin OR u_is_publisher ) AND r.max >= 3  as u_is_publisher,
@@ -72,45 +72,47 @@ v_all AS (
       THEN id 
     ELSE data #>> '{"title","en"}' END
     ELSE data #>> '{"title","{{language}}"}'  
-   END as _title
-  /**
-  * Data source
-  */
-  FROM mx_views_latest v, p_config p
-  WHERE
-   /**
-  * Filter by selected type
-  */
-  (
-    CASE WHEN {{hasFilterTypes}} THEN v.type IN (
-     SELECT (unnest(array[{{sqlTypesFilter}}]::text[]))
-    )
-    ELSE true END
+END as _title
+/**
+ * Data source
+ */
+FROM mx_views_latest v, p_config p
+WHERE
+/**
+ * Filter by selected type
+ */
+(
+  CASE WHEN {{hasFilterTypes}} THEN v.type IN (
+    SELECT (unnest(array[{{sqlTypesFilter}}]::text[]))
   )
-  AND
+ELSE true END
+)
+AND
+(
   /**
-  * Filter by selected views
-  */
+   * Filter by selected views
+   */
   (
-   
+
     CASE WHEN {{hasFilterViews}} THEN v.id IN (
-     SELECT (unnest(array[{{sqlViewsFilter}}]::text[]))
+      SELECT (unnest(array[{{sqlViewsFilter}}]::text[]))
     )
-    ELSE true END
+  ELSE true END
   )
-  AND
+  OR
   /**
-  * Filter by selected collections
-  */
+   * Filter by selected collections
+   */
   (
     CASE WHEN {{hasFilterCollections}} THEN 
       v.data #> '{"collections"}' {{sqlCollectionsFilterOperator}} array[{{sqlCollectionsFilter}}]::text[]
-    ELSE true END
+    ELSE false END
+    )
   )
   AND
- /**
-  * Filter by role
-  */
+  /**
+   * Filter by role
+   */
   (
     p.is_public OR 
     p.u_is_member OR
@@ -120,8 +122,8 @@ v_all AS (
 
   AND
   /**
-  * Filter by selected project
-  */
+   * Filter by selected project
+   */
   (
     v.project = '{{idProject}}' OR 
     v.data #> '{"projects"}' @> '["{{idProject}}"]'::jsonb OR 
@@ -130,8 +132,8 @@ v_all AS (
   )
   AND
   /**
-  * Filter by role in project
-  */
+   * Filter by role in project
+   */
   ( 
     ( v.editor = {{idUser}} ) OR
     ( v.editors @> '["{{idUser}}"]'::jsonb ) OR

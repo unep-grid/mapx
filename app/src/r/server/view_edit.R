@@ -11,9 +11,9 @@ observe({
     #
     viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
 
-    if(!noDataCheck(viewAction)){
+    isolate({
+      if(!noDataCheck(viewAction)){
 
-      isolate({
 
         isGuest <- isGuestUser()
         userData <- reactUser$data
@@ -33,9 +33,10 @@ observe({
           #
           # Get view data and check if user can edit
           #
-         
+
           viewId <- viewAction[["target"]]
 
+          timer <- mxTimeDiff('get view to edit')
           viewData <-  mxApiGetViews(
             idViews = viewId, 
             idProject = project,
@@ -43,8 +44,11 @@ observe({
             language = language,
             token = token
             )
+          mxTimeDiff(timer)
 
-          if(length(viewData)>0){
+          if(length(viewData) > 1){
+            stop("View edit can't edit more than one view")
+          }else{
             viewData <- viewData[[1]]
           }
 
@@ -53,12 +57,12 @@ observe({
           # Keep a version of the view edited
           #
           reactData$viewDataEdited <- viewData
-         
+
           #
           # Check if the request gave edit flag to the user
           #
           viewIsEditable <- isTRUE(.get(viewData,c("_edit")))
-          
+
           #
           # Get type and title
           #
@@ -73,7 +77,7 @@ observe({
           viewReaders <- c("self",.get(viewData,c("readers")))
           viewEditors <- c("self",.get(viewData,c("editors")))
           viewEditors <- unique(c(viewEditors,.get(viewData,c("editor"))))
-            
+
           #
           # View collection
           #
@@ -90,6 +94,9 @@ observe({
           # Switch through actions
           #
           switch(viewAction$action,
+            "btn_opt_share_to_project"= {
+              reactData$showShareManagerProject <- runif(1) 
+            },
             "btn_opt_share"= {
               reactData$showShareManager <- list(
                 views = list(viewId),
@@ -154,13 +161,6 @@ observe({
               # Get additional editors from members
               #
               members <- reactTableUsers()$members
-              #projectData <- mxDbGetProjectData(project)
-              #members <- unique(projectData$members)
-              #members <- members[is.numeric(members)]
-              #members <- mxDbGetEmailListFromId(members
-              #, asNamedList=TRUE
-              #, munged=TRUE
-              #)
 
               #
               # Create named lists for editors and members
@@ -186,25 +186,13 @@ observe({
                 #
                 jedOutput("viewTitleSchema"),
                 jedOutput("viewAbstractSchema"),
-                #
-                # Country of the view ?
-                # 
-                #                selectizeInput(
-                #inputId="selViewProjectUpdate",
-                #label=d("view_project",language),
-                #choices=projectsList,
-                #selected=.get(viewData,c("project")),
-                #multiple=FALSE,
-                #options=list(
-                #sortField="label"
-                #)
-                #),
+
                 #
                 # Projects of the view ?
                 #
                 selectizeInput(
-                  inputId="selViewProjectsUpdate",
-                  label=d("view_projects",language),
+                  inputId = "selViewProjectsUpdate",
+                  label = d("view_projects",language),
                   choices = projectsList,
                   selected = .get(viewData,c("data","projects")),
                   multiple = TRUE,
@@ -217,23 +205,23 @@ observe({
                 # Who can see this ?
                 #
                 selectizeInput(
-                  inputId="selViewReadersUpdate",
-                  label=d("view_target_readers",language),
-                  choices=viewReadTarget,
-                  selected=viewReaders,
-                  multiple=TRUE,
-                  options=list(
+                  inputId = "selViewReadersUpdate",
+                  label = d("view_target_readers",language),
+                  choices = viewReadTarget,
+                  selected = viewReaders,
+                  multiple = TRUE,
+                  options = list(
                     sortField = "label",
                     plugins = list("remove_button")
                     )
                   ),
                 selectizeInput(
-                  inputId="selViewEditorsUpdate",
-                  label=d("view_target_editors",language),
-                  choices=viewEditTarget,
-                  selected=viewEditors,
-                  multiple=TRUE,
-                  options=list(
+                  inputId = "selViewEditorsUpdate",
+                  label = d("view_target_editors",language),
+                  choices = viewEditTarget,
+                  selected = viewEditors,
+                  multiple = TRUE,
+                  options = list(
                     sortField = "label",
                     plugins = list("remove_button")
                     )
@@ -452,7 +440,7 @@ observe({
 
             },
             "btn_opt_edit_custom_code" = {
- 
+
               if(!viewIsEditable) return()
               if(viewType != "cc") return()
 
@@ -480,7 +468,7 @@ observe({
 
             },
             "btn_opt_edit_dashboard"={
- 
+
               if(!viewIsEditable) return()
               if(viewType == "sm" || viewType == "gj" ) return()
 
@@ -508,7 +496,7 @@ observe({
                 )
             },
             "btn_opt_edit_story"={
- 
+
               if(!viewIsEditable) return()
               if(viewType != "sm") return()
 
@@ -523,18 +511,18 @@ observe({
                   label=d("btn_save",language),
                   `data-keep` = TRUE
                   ),
-                 actionButton(
+                actionButton(
                   inputId="btnViewPreviewStory",
                   label=d("btn_preview",language),
                   `data-keep` = TRUE
                   )
                 )
- 
+
               tips <- mxFold(
-                 content = HTML(d('schema_story_tips',language)),
-                 labelText = d('schema_story_tips_title',language),
-                 labelDictKey = 'schema_story_tips_title',
-                 open = FALSE
+                content = HTML(d('schema_story_tips',language)),
+                labelText = d('schema_story_tips_title',language),
+                labelDictKey = 'schema_story_tips_title',
+                open = FALSE
                 )
               mxModal(
                 id = "modalViewEdit",
@@ -580,8 +568,8 @@ observe({
 
             })
         }
-      })
-    }
+      }
+    })
 })
 })
 

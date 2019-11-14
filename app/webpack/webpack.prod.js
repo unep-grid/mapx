@@ -30,9 +30,9 @@ module.exports = merge(common, {
       allowExternal: true
     }),
     new HtmlWebpackPlugin({
-      template: './src/html/kiosk.html',
-      filename: './kiosk.html',
-      chunks: ['common', 'sw', 'kiosk']
+      template: './src/html/readonly.html',
+      filename: './readonly.html',
+      chunks: ['common', 'sw', 'readonly']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',

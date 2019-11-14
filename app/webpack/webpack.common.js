@@ -15,7 +15,7 @@ module.exports = {
     sw: './src/js/init_sw.js',
     common: './src/js/init_common.js',
     app: './src/js/init_shiny.js',
-    kiosk: './src/js/init_kiosk.js'
+    readonly: './src/js/init_readonly.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -55,11 +55,16 @@ module.exports = {
     rules: [
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader']
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'icon-font-loader']
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'icon-font-loader'
+        ]
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
@@ -79,10 +84,8 @@ module.exports = {
               [
                 '@babel/preset-env',
                 {
-                  targets: {
-                    browsers: ['defaults'] // https://github.com/ai/browserslist#queries
-                  },
-                  modules: false
+                  useBuiltIns: 'usage',
+                  corejs: 3
                 }
               ]
             ],

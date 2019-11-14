@@ -267,11 +267,11 @@ mxDbGetProjectListByUser <- function(
   quer <- "WITH project_roles as (
   SELECT 
   id,
-  title->>'" + language +"' as title_lang, 
-  title->>'en' as title_en,
-  description->>'" + language +"' as description_lang, 
-  description->>'en' as description_en,
-  public, 
+  title ->> '" + language +"' as title_lang, 
+  title ->> 'en' as title_en,
+  description ->> '" + language +"' as description_lang, 
+  description ->> 'en' as description_en,
+  public,
   allow_join,
   members @> '[" + id +"]' as _member,
   publishers @> '[" + id +"]' as _publisher,
@@ -655,17 +655,3 @@ mxDbProjectCheck <- function(idProject,idDefault=config[[c("project","default")]
 
   return(idDefault)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

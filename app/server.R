@@ -143,6 +143,7 @@ server <- function(input,output,session){
               # Tools
               #
               "share.R",
+              "share_to_project.R",
               #
               # source download handler
               #

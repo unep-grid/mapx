@@ -1,6 +1,7 @@
 /* jshint evil:true, esversion:6, laxbreak:true */
-import {RadialProgress} from './radial_progress/index.js';
-import {handleViewClick} from './views_click/index.js';
+import {RadialProgress} from './radial_progress';
+import {handleViewClick} from './views_click';
+import {ButtonLegend} from './button_legend';
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -38,6 +39,29 @@ export function getApiUrl(id) {
   const urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
   return urlBase + s.api.routes[id];
+}
+
+/**
+ * Set mapx API host info when started without server app
+ */
+export function setApiUrlAuto() {
+  const loc = new URL(window.location.href);
+  /**
+   * Webpack variables
+   */
+  const webpackApiHost = API_HOST_PUBLIC;
+  const webpackApiPort = API_PORT;
+  /**
+   * Set API url based on current location
+   */
+  const apiPublic =
+    webpackApiHost || loc.hostname.replace(/^app|^dev\./, 'api.');
+  const apiPort = webpackApiPort || loc.port;
+  Object.assign(mx.settings.api, {
+    host_public: apiPublic,
+    protocol: loc.protocol,
+    port: apiPort
+  });
 }
 
 /**
@@ -277,6 +301,7 @@ export function setBtnFilterActivated(enable) {
  * Initial mgl and mapboxgl
  * @param {Object} o options
  * @param {String} o.id Id of the map. Default to mx.settings.map.id
+ * @param {Array} o.idViews Initial id views list
  * @param {Object} o.mapPosition Options (zoom, method, for center ing the map)
  * @param {Number} o.mapPosition.z Zoom
  * @param {Number} o.mapPosition.n North max
@@ -297,19 +322,29 @@ export function initMapx(o) {
   o = o || {};
   o.id = o.id || mx.settings.map.id;
   mp = o.mapPosition || {};
-
-  /**
-   * MapX map data : views, config, etc.. 
-   */ 
-  mx.maps[o.id] = Object.assign({
-    map: {},
-    views:[]
-  },mx.maps[o.id]);
-
   /**
    * Set mapbox gl token
    */
-  mx.mapboxgl.accessToken = mx.settings.map.token;
+  mx.mapboxgl.accessToken = o.token || mx.settings.map.token;
+
+  /**
+   * MapX map data : views, config, etc..
+   */
+  mx.maps[o.id] = Object.assign(
+    {
+      map: {},
+      views: []
+    },
+    mx.maps[o.id]
+  );
+
+  /**
+   * Set mode
+   */
+  mx.settings.mode.storyAutoStart =
+    h.getQueryParameter('storyAutoStart')[0] === 'true';
+  mx.settings.mode.readonly = o.modeReadOnly || mx.settings.mode.storyAutoStart;
+  mx.settings.mode.app = !mx.settings.mode.readonly;
 
   /**
    * Update  sprites path
@@ -329,9 +364,9 @@ export function initMapx(o) {
   /*
    * Check url for lat, lng and zoom
    */
-  let queryLat = h.getQueryParameterInit('lat')[0];
-  let queryLng = h.getQueryParameterInit('lng')[0];
-  let queryZoom = h.getQueryParameterInit('zoom')[0];
+  const queryLat = h.getQueryParameter('lat')[0];
+  const queryLng = h.getQueryParameter('lng')[0];
+  const queryZoom = h.getQueryParameter(['z', 'zoom'])[0];
 
   if (queryLat) {
     mp.center = null;
@@ -374,15 +409,22 @@ export function initMapx(o) {
    */
 
   o.map.on('load', () => {
+  
+    o.map.addControl(new h.mapControlApp(), 'top-left');
+    o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
+    o.map.addControl(new h.mapControlScale(), 'bottom-right');
+    o.map.addControl(new h.mapxLogo(), 'bottom-left');
+
     /**
-    * Init global listeners
-    */
+     * Init global listeners
+     */
     initListenerGlobal();
+    initMapListener(o.map);
     /**
-    * Load mapx app or kiosk
-    */
-    if (mx.settings.modeKiosk) {
-      h.initMapxKiosk(o);
+     * Load mapx app or readonly
+     */
+    if (mx.settings.mode.readonly) {
+      h.initMapxReadonly(o);
     } else {
       h.initMapxApp(o);
     }
@@ -391,117 +433,8 @@ export function initMapx(o) {
   return o;
 }
 
-export function initMapxKiosk(o) {
+function initMapListener(map){
   const h = mx.helpers;
-  const map = o.map;
-  const elMap = document.getElementById(o.id);
-  const hasShiny = !!window.Shiny;
-  const d = h.getMapData();
-  /**
-   * Add views
-   */
-  d.views.forEach((v) => {
-    console.log(v);
-    h.viewLayersAdd({viewData: v});
-  });
-  /*
-   * secondary centering method this should be done at init, but see https://github.com/mapbox/mapbox-gl-js/issues/1970
-   */
-  if (mx.settings.map.bounds) {
-    o.map.fitBounds(mx.settings.map.bounds);
-  }
-}
-
-export function initMapxApp(o) {
-  const h = mx.helpers;
-  const map = o.map;
-  const elMap = document.getElementById(o.id);
-  const hasShiny = !!window.Shiny;
-  const storyAutoStart =
-    h.getQueryParameterInit('storyAutoStart')[0] === 'true';
-
-  if (!elMap) {
-    alert('Map element with id ' + o.id + ' not found');
-    return;
-  }
-
-  /**
-   * init app listeners: view add, language, project change, etc.
-   */
-  mx.helpers.initListenersApp();
-
-  /*
-   * Auto start story map
-   */
-  if (storyAutoStart) {
-    let idStory = h.getQueryParameterInit('views')[0];
-    h.storyRead({
-      id: o.id,
-      idView: idStory,
-      save: false,
-      autoStart: true
-    });
-  } else {
-    /*
-     * set views list
-     */
-    h.updateViewsList({
-      id: o.id,
-      autoFetchAll: true,
-      project: o.project || mx.settings.project
-    });
-  }
-
-  /**
-   * Apply colorscheme if any
-   */
-
-  if (o.colorScheme) {
-    h.setUiColorScheme({
-      colors: o.colorScheme
-    });
-  }
-
-  /*
-   * If shiny, trigger read event
-   */
-  if (!storyAutoStart && hasShiny) {
-    Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
-    /**
-     * Async IP lookup
-     */
-    h.sendIpInfo({idInput: 'clientIpData'});
-  }
-
-  /**
-   * Handle drop view or spatial dataset
-   */
-  if (!storyAutoStart && h.handleMapDragOver && h.handleMapDrop) {
-    mx.listenerStore.addListener({
-      target: elMap,
-      type: 'dragover',
-      callback: h.handleMapDragOver,
-      group: 'map_drag_over',
-      bind: mx
-    });
-    mx.listenerStore.addListener({
-      target: elMap,
-      type: 'drop',
-      callback: h.handleMapDrop,
-      group: 'map_drag_over',
-      bind: mx
-    });
-  }
-
-  /**
-   * Add controls to the map
-   */
-  //compact: true
-  map.addControl(new h.mapControlApp(), 'top-left');
-  map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
-  map.addControl(new h.mapControlScale(), 'bottom-right');
-  map.addControl(new h.mapxLogo(), 'bottom-left');
-
   /**
    * Error handling
    */
@@ -522,7 +455,7 @@ export function initMapxApp(o) {
    */
   map.on('mousemove', function(e) {
     const layers = h.getLayerNamesByPrefix({
-      id: o.id,
+      id: map.id,
       prefix: 'MX' // custom code could be MXCC ...
     });
     const features = map.queryRenderedFeatures(e.point, {layers: layers});
@@ -530,7 +463,7 @@ export function initMapxApp(o) {
   });
 
   map.on('click', function(e) {
-    h.handleClickEvent(e, o.id);
+    h.handleClickEvent(e, map.id);
   });
 
   map.on('rotate', function() {
@@ -539,6 +472,154 @@ export function initMapxApp(o) {
     northArrow.style[h.cssTransformFun()] =
       'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
   });
+
+}
+
+
+export function initMapxReadonly(o) {
+  const h = mx.helpers;
+  const map = h.getMap();
+  const settings = mx.settings;
+  const mapData = h.getMapData();
+  const elMap = map.getContainer();
+  const btnLegend = new ButtonLegend({elContainer: elMap});
+  const idViewsOpen = h.getQueryParameter('viewsOpen');
+  const idViews = h.getArrayDistinct(
+    h.getQueryParameter('views').concat(idViewsOpen)
+  );
+
+  return h
+    .getViewsRemote(idViews)
+    .then((views) => {
+      mapData.views = views;
+    })
+    .then(() => {
+      /**
+       * Add views
+       */
+      var story = mapData.views.find((v) => v.type === 'sm');
+      if (story) {
+        h.storyRead({
+          id: o.id,
+          idView: story.id,
+          save: false,
+          autoStart: true
+        });
+        return false;
+      } else {
+        return true;
+      }
+    })
+    .then((addBounds) => {
+      if (addBounds) {
+        return h.getViewsBounds(mapData.views);
+      } else {
+        return false;
+      }
+    })
+    .then((bounds) => {
+      if (bounds) {
+        mapData.views.forEach((view) => {
+          h.viewLayersAdd({
+            viewData: view,
+            elLegendContainer: btnLegend.elLegendContent
+          });
+           
+          /**
+          * add Dashboard
+          */
+          const hasDashboard = h.path(view, 'data.dashboard', null);
+          if(hasDashboard){
+            h.Dashboard.init({
+              idContainer: 'mxDashboards',
+              idDashboard: 'mx-dashboard-' + view.id,
+              idMap: map.id,
+              view: view
+            });         
+          }
+        });
+        map.fitBounds(bounds);
+      }
+    })
+    .catch((e) => {
+      console.warn(e);
+    });
+}
+
+/**
+* Init full app mode
+*/
+export function initMapxApp(o) {
+  const h = mx.helpers;
+  const map = o.map;
+  const elMap = map.getContainer();
+  const settings = mx.settings;
+  const hasShiny = !!window.Shiny;
+  const idViewsOpen = h.getQueryParameter('viewsOpen');
+  const idViews = h.getArrayDistinct(
+    h.getQueryParameter('views').concat(idViewsOpen)
+  );
+
+  /**
+   * init app listeners: view add, language, project change, etc.
+   */
+  h.initListenersApp();
+
+  /*
+   * set views list
+   */
+  h.updateViewsList({
+    id: o.id,
+    autoFetchAll: true,
+    project: o.project || mx.settings.project
+  });
+
+  /**
+   * Apply colorscheme if any
+   */
+
+  if (o.colorScheme) {
+    h.setUiColorScheme({
+      colors: o.colorScheme
+    });
+  }
+
+  /*
+   * If shiny, trigger read event
+   */
+  if ( hasShiny ) {
+    Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
+    /**
+     * Async IP lookup
+     */
+    h.sendIpInfo({idInput: 'clientIpData'});
+  }
+
+  /**
+   * Handle drop view or spatial dataset
+   */
+  if (h.handleMapDragOver && h.handleMapDrop) {
+    mx.listenerStore.addListener({
+      target: elMap,
+      type: 'dragover',
+      callback: h.handleMapDragOver,
+      group: 'map_drag_over',
+      bind: mx
+    });
+    mx.listenerStore.addListener({
+      target: elMap,
+      type: 'drop',
+      callback: h.handleMapDrop,
+      group: 'map_drag_over',
+      bind: mx
+    });
+  }
+
+  /**
+   * Add controls to the map
+   */
+  //compact: true
+
 }
 
 /**
@@ -797,7 +878,7 @@ export function getViewRemote(idView) {
     .then((view) => {
       if (h.isView(view)) {
         view._edit = false;
-        view._kiosk = true;
+        view._readonly = true;
       }
       return view;
     });
@@ -1275,15 +1356,13 @@ export function viewsLayersOrderUpdate(o) {
   const h = mx.helpers;
   const map = h.getMap(o.id);
   const views = h.getViews({id: o.id});
-  const orderUiList = h.getViewsOrder();
-  const orderViewList = views.map((v) => v.id);
-  const order = o.order || orderUiList || orderViewList || [];
+  const order = o.order || h.getViewsOrder() || views.map((v) => v.id) || [];
   let layerBefore = mx.settings.layerBefore;
 
   if (!order) {
     return;
   }
-  h.onNextFrame(function() {
+  setTimeout(() => {
     const displayed = h.getLayerNamesByPrefix({
       id: o.id,
       prefix: 'MX-'
@@ -1306,7 +1385,7 @@ export function viewsLayersOrderUpdate(o) {
         map.moveLayer(x, layerBefore);
       }
     });
-  });
+  }, 0);
 }
 
 /**
@@ -1751,7 +1830,7 @@ export function viewLayersRemove(o) {
 }
 
 /**
- * Force view checkbox
+ * Enable/open view from the list
  * @param {Object} view View to open
  */
 export function viewOpen(view) {
@@ -1770,6 +1849,10 @@ export function viewOpen(view) {
     resolve(true);
   });
 }
+/**
+* Get view, open it and add layers if any
+* @param {Object} view View to open
+*/
 export function viewOpenAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
@@ -2198,8 +2281,9 @@ export function viewLayersAdd(o) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
   var view = o.viewData || h.getView(o.idView) || {};
-  var idLayerBefore = o.before || mx.settings.layerBefore;
-
+  const idLayerBefore = o.before
+    ? h.getLayerNamesByPrefix({prefix: o.before})[0]
+    : mx.settings.layerBefore;
   return new Promise((resolve, reject) => {
     if (h.isView(view)) {
       resolve(view);
@@ -2925,7 +3009,6 @@ export function viewLayersAddVt(o) {
       /*
        * Update layer order based in displayed list
        */
-      viewsLayersOrderUpdate(o);
 
       if (hasStyleRules && elLegend) {
         /**
@@ -3040,7 +3123,7 @@ export function viewModulesInit(id) {
    */
   h.Dashboard.init({
     idContainer: 'mxDashboards',
-    idDasboard: 'mx-dashboard-' + idView,
+    idDashboard: 'mx-dashboard-' + idView,
     idMap: idMap,
     view: view
   });
@@ -3560,29 +3643,38 @@ export function getViewsBounds(views) {
     const h = mx.helpers;
     let bounds;
     views = views.constructor === Array ? views : [views];
-
-    let extent = {
-      lat1: -80,
-      lat2: 80,
-      lng1: -180,
-      lng2: 180
+    let set = false;
+    const def = {
+      lat1: 80,
+      lat2: -80,
+      lng1: 180,
+      lng2: -180
     };
 
-    views.forEach((v, i) => {
-      const ext = h.path(v, 'data.geometry.extent');
-      if (ext) {
-        if (i === 0) {
-          extent = ext;
-        }
-        extent = {
-          lat1: ext.lat1 > extent.lat1 ? ext.lat1 : extent.lat1,
-          lat2: ext.lat2 < extent.lat2 ? ext.lat2 : extent.lat2,
-          lng1: ext.lng1 > extent.lng1 ? ext.lng1 : extent.lng1,
-          lng2: ext.lng2 < extent.lng2 ? ext.lng2 : extent.lng2
-        };
-      }
-    });
+    let extent = views.reduce(
+      (a, v) => {
+        const ext = h.path(v, 'data.geometry.extent');
 
+        if (ext) {
+          set = true;
+          a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
+          a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
+          a.lng1 = ext.lng1 < a.lng1 ? ext.lng1 : a.lng1;
+          a.lng2 = ext.lng2 > a.lng2 ? ext.lng2 : a.lng2;
+        }
+        return a;
+      },
+      {
+        lat1: 80,
+        lat2: -80,
+        lng1: 180,
+        lng2: -180
+      }
+    );
+
+    if (!set) {
+      extent = def;
+    }
     bounds = new mx.mapboxgl.LngLatBounds(
       [extent.lng1, extent.lat1],
       [extent.lng2, extent.lat2]

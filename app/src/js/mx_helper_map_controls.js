@@ -72,29 +72,31 @@ export function createControlBtns(btns) {
       class: ['mx-controls-ul']
     },
     items.map((btn, i) => {
-      btn.elBtn = h.el(
-        'li',
-        {
-          id: keys[i],
-          on: {click: btn.action},
-          class: [
-            'btn',
-            'btn-circle',
-            'btn-circle-medium',
-            'hint--bottom-right',
-            'shadow'
-          ].concat(btn.liClasses),
-          dataset: Object.assign(
-            {},
-            {lang_key: btn.key, lang_type: 'tooltip'},
-            btn.liData
-          )
-        },
-        h.el('div', {
-          class: btn.classes
-        })
-      );
-      return btn.elBtn;
+      if (!btn.remove) {
+        btn.elBtn = h.el(
+          'li',
+          {
+            id: keys[i],
+            on: {click: btn.action},
+            class: [
+              'btn',
+              'btn-circle',
+              'btn-circle-medium',
+              'hint--bottom-right',
+              'shadow'
+            ].concat(btn.liClasses),
+            dataset: Object.assign(
+              {},
+              {lang_key: btn.key, lang_type: 'tooltip'},
+              btn.liData
+            )
+          },
+          h.el('div', {
+            class: btn.classes
+          })
+        );
+        return btn.elBtn;
+      }
     })
   );
 
@@ -110,7 +112,7 @@ export function mapControlApp() {}
 mapControlApp.prototype.onAdd = function(map) {
   //var idMap = map._container.id;
   const h = mx.helpers;
-
+  const modeReadOnly = mx.settings.mode.readonly === true;
   /**
    * Toggle controls (btnToggleBtns)
    */
@@ -178,6 +180,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnShowLogin: {
       classes: ['fa', 'fa-user'],
+      remove: modeReadOnly,
       key: 'btn_login',
       action: function() {
         var val = {
@@ -190,6 +193,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnTabView: {
       classes: ['fa', 'fa-list-ul'],
       key: 'btn_tab_views',
+      remove: modeReadOnly,
       action: function() {
         h.panelSwitch(
           'mx-panel-left',
@@ -206,6 +210,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnTabTools: {
       classes: ['fa', 'fa-cogs'],
+      remove: modeReadOnly,
       key: 'btn_tab_tools',
       action: function() {
         h.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
@@ -247,6 +252,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnShowAbout: {
       classes: ['fa', 'fa-info'],
       key: 'btn_about',
+      remove: modeReadOnly,
       action: function() {
         var val = {
           time: new Date(),
@@ -276,6 +282,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnOverlapSpotlight: {
       classes: ['fa', 'fa-bullseye'],
       key: 'btn_overlap_spotlight',
+      remove: modeReadOnly,
       action: function(e) {
         var el = e.target;
         var cl = 'active';
@@ -286,6 +293,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnDrawMode: {
       classes: 'mx-edit-vector',
+      remove: modeReadOnly,
       key: 'btn_draw_mode',
       action: function(e) {
         h.drawModeToggle(e);
