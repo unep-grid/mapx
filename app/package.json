@@ -87,6 +87,7 @@
     "handsontable": "^7.2.2",
     "highcharts": "^7.2.1",
     "hint.css": "^2.6.0",
+    "html-minifier": "^4.0.0",
     "html2canvas": "^1.0.0-rc.5",
     "jquery": "^3.4.1",
     "js-beautify": "^1.10.2",
