@@ -15,7 +15,7 @@ module.exports = {
     sw: './src/js/init_sw.js',
     common: './src/js/init_common.js',
     app: './src/js/init_shiny.js',
-    readonly: './src/js/init_readonly.js'
+    static: './src/js/init_static.js'
   },
   output: {
     filename: '[name].bundle.js',

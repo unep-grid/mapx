@@ -17,9 +17,9 @@ module.exports = merge(common, {
       script: 'Rscript ./src/r/scripts/build_dict_json.R ./src/data/dict_built'
     }),
     new HtmlWebpackPlugin({
-      template: './src/html/readonly.html',
-      filename: './readonly.html',
-      chunks: ['common', 'readonly']
+      template: './src/html/static.html',
+      filename: './static.html',
+      chunks: ['common', 'static']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',

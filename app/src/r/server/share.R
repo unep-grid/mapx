@@ -85,14 +85,14 @@ observeEvent(reactData$showShareManager,{
             style="max-height:300px;overflow:auto",
             tagList(
               #
-              # Read only
+              # Static mode
               #
-              checkboxInput("checkShareReadOnly",
-                label = tt("share_mode_read_only_label"),
+              checkboxInput("checkShareStatic",
+                label = tt("share_mode_static_label"),
                 value = TRUE
                 ),
               span(class = "text-muted",
-                tt('share_mode_read_only_desc')
+                tt('share_mode_static_desc')
                 ),
               #
               # Views to share
@@ -122,7 +122,7 @@ observeEvent(reactData$showShareManager,{
               # App options
               #
               conditionalPanel(
-                condition = "!input.checkShareReadOnly",
+                condition = "!input.checkShareStatic",
                 tagList(
                   #
                   # Views to open
@@ -270,7 +270,7 @@ observe({
     #
     data <- reactData$showShareManager
     addIframe <- isTRUE(input$checkShareIframe)
-    addReadOnlyMode <- isTRUE(input$checkShareReadOnly)
+    addStaticMode <- isTRUE(input$checkShareStatic)
     addCollections <- isTRUE(input$checkShareCollections)
     addCollectionsAll <- isTRUE(input$checkShareCollectionOperator == 'ALL')
     addViews <- isTRUE(input$checkShareViews)
@@ -280,10 +280,11 @@ observe({
     isolate({
       project <- sprintf("project=%s&", reactData$project)
 
-      if(addReadOnlyMode){
-        mode <- '/readonly.html?'
+
+      if(addStaticMode){
+        mode = "/static.html?"
       }else{
-        mode <- '?'
+        mode = "?"
       }
 
       if(addMapPosition){
@@ -312,7 +313,7 @@ observe({
       #
       # App mode
       #
-      if(!addReadOnlyMode){
+      if(!addStaticMode){
 
         #
         # Views to open

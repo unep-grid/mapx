@@ -49,16 +49,18 @@ export function setApiUrlAuto() {
   /**
    * Webpack variables
    */
-  const webpackApiHost = API_HOST_PUBLIC;
-  const webpackApiPort = API_PORT;
+  const apiHost = typeof API_HOST_PUBLIC === "undefined" ? 
+    loc.hostname.replace(/^app\.|^dev\./, 'api.') :
+    API_HOST_PUBLIC;
+
+  const apiPort = typeof API_PORT === "undefined" ? 
+    loc.port :
+    API_PORT;
   /**
    * Set API url based on current location
    */
-  const apiPublic =
-    webpackApiHost || loc.hostname.replace(/^app|^dev\./, 'api.');
-  const apiPort = webpackApiPort || loc.port;
   Object.assign(mx.settings.api, {
-    host_public: apiPublic,
+    host_public: apiHost,
     protocol: loc.protocol,
     port: apiPort
   });
@@ -343,8 +345,8 @@ export function initMapx(o) {
    */
   mx.settings.mode.storyAutoStart =
     h.getQueryParameter('storyAutoStart')[0] === 'true';
-  mx.settings.mode.readonly = o.modeReadOnly || mx.settings.mode.storyAutoStart;
-  mx.settings.mode.app = !mx.settings.mode.readonly;
+  mx.settings.mode.static = o.modeStatic || mx.settings.mode.storyAutoStart;
+  mx.settings.mode.app = !mx.settings.mode.static;
 
   /**
    * Update  sprites path
@@ -421,10 +423,10 @@ export function initMapx(o) {
     initListenerGlobal();
     initMapListener(o.map);
     /**
-     * Load mapx app or readonly
+     * Load mapx app or static
      */
-    if (mx.settings.mode.readonly) {
-      h.initMapxReadonly(o);
+    if (mx.settings.mode.static) {
+      h.initMapxStatic(o);
     } else {
       h.initMapxApp(o);
     }
@@ -476,7 +478,7 @@ function initMapListener(map){
 }
 
 
-export function initMapxReadonly(o) {
+export function initMapxStatic(o) {
   const h = mx.helpers;
   const map = h.getMap();
   const settings = mx.settings;
@@ -878,7 +880,7 @@ export function getViewRemote(idView) {
     .then((view) => {
       if (h.isView(view)) {
         view._edit = false;
-        view._readonly = true;
+        view._static = true;
       }
       return view;
     });

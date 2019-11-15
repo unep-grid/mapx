@@ -10670,9 +10670,9 @@
     "es": ""
   },
   {
-    "id": "share_mode_read_only_label",
-    "en": "Use the mode read-only ( recommended )",
-    "fr": "Partager en lecture seule ( recommandé )",
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "fr": "Partager en mode 'statique' ( recommandé )",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10682,9 +10682,9 @@
     "es": ""
   },
   {
-    "id": "share_mode_read_only_desc",
-    "en": "Use the 'read-only' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "fr": "Utilisez le mode 'lecture seule' si vous voulez partager une vue en utilisant une version légère de MapX, avec des fonctionnalités limitées. En utilisant cette méthode, quiconque possédant le lien de partage sera autorisé à visualiser les vues sélectionnées, même sans être enregistré dans MapX. Si vous partagez un récit cartographique ( story map ), celle-ci démarrera directement sans prendre en compte les autres options.",
+    "id": "share_mode_static_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
+    "fr": "Utilisez le mode 'statique' si vous voulez partager une vue en utilisant une version légère de MapX, avec des fonctionnalités limitées. En utilisant cette méthode, quiconque possédant le lien de partage sera autorisé à visualiser les vues sélectionnées, même sans être enregistré dans MapX. Si vous partagez un récit cartographique ( story map ), celle-ci démarrera directement sans prendre en compte les autres options.",
     "de": "",
     "ru": "",
     "zh": "",
@@ -10707,8 +10707,8 @@
   },
   {
     "id": "share_views_check_desc",
-    "en": "Views to display. In mode 'read-only', those views will be rendered automatically. Story maps will start directly. Otherwise, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "fr": "Les vues à afficher. En mode 'lecture seule' les données de la vue seront automatiquement chargées sur la carte. Autrement, les vues seront disponibles dans la liste et si aucune vue n'est sélectionnée, toutes les vues du projet seront listées.",
+    "en": "Views to display. In mode 'static', those views will be rendered automatically. Story maps will start directly. Otherwise, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "fr": "Les vues à afficher. En mode 'statique' les données de la vue seront automatiquement chargées sur la carte. Autrement, les vues seront disponibles dans la liste et si aucune vue n'est sélectionnée, toutes les vues du projet seront listées.",
     "de": "",
     "ru": "",
     "zh": "",

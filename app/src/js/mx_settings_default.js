@@ -44,7 +44,7 @@ let settings = {
   paramKeysPermanent: ['project', 'language', 'lockProject', 'style'],
   links: [],
   mode : {
-    readonly : false,
+    static : false,
     app : false
   },
   paths: {

@@ -112,7 +112,7 @@ export function mapControlApp() {}
 mapControlApp.prototype.onAdd = function(map) {
   //var idMap = map._container.id;
   const h = mx.helpers;
-  const modeReadOnly = mx.settings.mode.readonly === true;
+  const modeStatic = mx.settings.mode.static === true;
   /**
    * Toggle controls (btnToggleBtns)
    */
@@ -180,7 +180,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnShowLogin: {
       classes: ['fa', 'fa-user'],
-      remove: modeReadOnly,
+      remove: modeStatic,
       key: 'btn_login',
       action: function() {
         var val = {
@@ -193,7 +193,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnTabView: {
       classes: ['fa', 'fa-list-ul'],
       key: 'btn_tab_views',
-      remove: modeReadOnly,
+      remove: modeStatic,
       action: function() {
         h.panelSwitch(
           'mx-panel-left',
@@ -210,7 +210,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnTabTools: {
       classes: ['fa', 'fa-cogs'],
-      remove: modeReadOnly,
+      remove: modeStatic,
       key: 'btn_tab_tools',
       action: function() {
         h.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
@@ -252,7 +252,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnShowAbout: {
       classes: ['fa', 'fa-info'],
       key: 'btn_about',
-      remove: modeReadOnly,
+      remove: modeStatic,
       action: function() {
         var val = {
           time: new Date(),
@@ -282,7 +282,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnOverlapSpotlight: {
       classes: ['fa', 'fa-bullseye'],
       key: 'btn_overlap_spotlight',
-      remove: modeReadOnly,
+      remove: modeStatic,
       action: function(e) {
         var el = e.target;
         var cl = 'active';
@@ -293,7 +293,7 @@ mapControlApp.prototype.onAdd = function(map) {
     },
     btnDrawMode: {
       classes: 'mx-edit-vector',
-      remove: modeReadOnly,
+      remove: modeStatic,
       key: 'btn_draw_mode',
       action: function(e) {
         h.drawModeToggle(e);

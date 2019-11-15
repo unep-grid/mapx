@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('READONLY MODE');
+  console.log('STATIC MODE');
   const h = mx.helpers;
   h.setApiUrlAuto();
   /**
-   * Init readonly mode
+   * Init static mode
    */
   fetch(h.getApiUrl('getConfigMap'))
     .then((d) => (d ? d.json() : {}))
@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
       mx.settings.map.token = c.token;
       h.initMapx({
         token: c.token,
-        modeReadOnly: true
+        modeStatic: true
       });
     });
 });
