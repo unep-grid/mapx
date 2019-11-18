@@ -858,7 +858,7 @@ class NestedList {
   updateItem(attr) {
     const li = this;
     var el = li.getItemById(attr.id);
-    var elContent = li.getItemContent(el,li.opt.class.itemContent);
+    var elContent = li.getItemContent(el, li.opt.class.itemContent);
     li.fire('render_item_content', {el: elContent, data: attr});
   }
   addItem(attr) {
@@ -1240,11 +1240,12 @@ class NestedList {
       }
     }
   }
+  isDevMode() {
+    return window.innerWidth < window.outerWidth;
+  }
 }
 
 export {NestedList};
-
-
 
 /**
  * Start sort event listener
@@ -1266,8 +1267,8 @@ function handleSortStart(evt) {
   li.setUiDraggingStart();
   evt.dataTransfer.effectAllowed = 'move';
   /*
-  * keep this version in history;
-  */
+   * keep this version in history;
+   */
   li.addUndoStep();
 
   const elDragImage = li.fire('set_drag_image', li.elDrag);
@@ -1311,7 +1312,7 @@ function handleSortOver(evt) {
   if (li.isBusy()) {
     return;
   }
-    
+
   let elTarget = li.getTarget(evt.target);
   /**
    * Target evaluation
@@ -1418,7 +1419,7 @@ function handleSortOver(evt) {
 function handleSortEnd(evt) {
   evt.preventDefault();
   const li = this;
-  li.listenerStore.removeListenerByGroup('sort_dragging');  
+  li.listenerStore.removeListenerByGroup('sort_dragging');
   li.setUiDraggingEnd();
   if (li.isModeEmpty()) {
     return;
@@ -1457,3 +1458,4 @@ function handleClick(evt) {
     }
   }
 }
+

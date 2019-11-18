@@ -1,5 +1,5 @@
 const contextMenuItems = [
-   {
+  {
     forType: ['group'],
     label: 'cm_group_settings_header',
     ui: 'header'
@@ -16,7 +16,7 @@ const contextMenuItems = [
     label: 'cm_group_color',
     ui: 'input_color'
   },
- {
+  {
     forType: ['group', 'root'],
     action: 'cm_group_add',
     label: 'cm_group_add',
@@ -29,8 +29,8 @@ const contextMenuItems = [
     label: 'cm_group_remove',
     ui: 'button'
   },
- {
-    forType: ['group','item'],
+  {
+    forType: ['group', 'item'],
     label: 'cm_target_sorting_header',
     ui: 'header'
   },
@@ -64,7 +64,7 @@ const contextMenuItems = [
     label: 'cm_target_move_bottom',
     ui: 'button'
   },
-   {
+  {
     forType: ['group', 'item', 'root'],
     label: 'cm_group_sort_header',
     ui: 'header'
@@ -93,13 +93,13 @@ const contextMenuItems = [
     label: 'cm_group_sort_date_desc',
     ui: 'button'
   },
-   {
+  {
     forType: ['group', 'item', 'root'],
     label: 'cm_global_header',
     ui: 'header',
-     condition: function() {
-       return !this.isModeFrozen();
-     }
+    condition: function() {
+      return !this.isModeFrozen();
+    }
   },
   {
     forType: ['root', 'group', 'item'],
@@ -137,7 +137,7 @@ const contextMenuItems = [
       return !this.isModeFrozen() && !this.isModeEmpty() && this.hasHistory();
     }
   },
-   {
+  {
     forType: ['group', 'item', 'root'],
     label: 'cm_global_other',
     ui: 'header'
@@ -147,6 +147,15 @@ const contextMenuItems = [
     action: 'cm_btn_close',
     label: 'cm_btn_close',
     ui: 'button'
+  },
+  {
+    forType: ['root', 'group', 'item'],
+    action: 'cm_btn_inspect',
+    label: 'cm_btn_inspect',
+    ui: 'button',
+    condition: function() {
+      return this.isDevMode();
+    }
   }
 ];
 

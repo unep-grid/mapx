@@ -354,7 +354,10 @@ function handleContextEvent(evt) {
       cm.addUndoStepOnce();
       cm.li.setGroupColor(elTarget, elInput.value);
     },
-    cm_btn_close: () => {}
+    cm_btn_close: () => {},
+    cm_btn_inspect: () => {
+      console.log(elTarget); 
+    }
   };
 
   if (idAction) {

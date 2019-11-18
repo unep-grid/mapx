@@ -5,6 +5,7 @@ let dict = [
   },
   {id: 'cm_group_add', en: 'Add new {{name_group}}'},
   {id: 'cm_btn_close', en: 'Close', fr: 'Fermer'},
+  {id: 'cm_btn_inspect', en: 'Inspect', fr: 'Inspecter'},
   {id: 'cm_group_settings_header', en: '{{name_group}} settings'},
   {
     id: 'cm_group_remove',
