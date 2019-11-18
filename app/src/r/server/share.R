@@ -106,15 +106,32 @@ observeEvent(reactData$showShareManager,{
                 ),
               conditionalPanel(
                 condition = "input.checkShareViews",
-                selectizeInput(
-                  "selectShareViews",
-                  label = NULL,
-                  choices = viewsList,
-                  multiple = TRUE,
-                  selected = viewsToShare,
-                  options = list(
-                    sortField = "label",
-                    plugins = list("remove_button")
+                tagList(
+                  selectizeInput(
+                    "selectShareViews",
+                    label = NULL,
+                    choices = viewsList,
+                    multiple = TRUE,
+                    selected = viewsToShare,
+                    options = list(
+                      sortField = "label",
+                      plugins = list("remove_button")
+                      )
+                    )
+                  )
+                ),
+              #
+              # Zoom to views in static mode
+              #
+              conditionalPanel(
+                condition = 'input.checkShareStatic',
+                tagList(
+                  checkboxInput("checkShareZoomToViews",
+                    label = tt("share_views_zoom_label"),
+                    value = TRUE
+                    ),
+                  span(class="text-muted",
+                    tt("share_views_zoom_desc")
                     )
                   )
                 ),
@@ -259,6 +276,7 @@ observe({
     views <- ""
     viewsOpen <- ""
     mapPosition <- ""
+    zoomToViews <- ""
     inMapPosition <- .get(input$shareMapPosition_values,c('data'),list())
 
     inCollections <- paste(input$selectShareCollections,collapse=",")
@@ -274,6 +292,7 @@ observe({
     addCollections <- isTRUE(input$checkShareCollections)
     addCollectionsAll <- isTRUE(input$checkShareCollectionOperator == 'ALL')
     addViews <- isTRUE(input$checkShareViews)
+    addZoomToExtent <- isTRUE(input$checkShareZoomToViews)
     addViewsOpen <- isTRUE(input$checkShareViewsOpen)
     addMapPosition <- isTRUE(input$checkShareMapPosition)
 
@@ -303,6 +322,13 @@ observe({
         inMapPosition$z
         )
 
+      #
+      # Zoom to views extent
+      #
+      if(addStaticMode && addZoomToExtent){
+        zoomToViews = "zoomToViews=true&"
+      }
+      
       #
       # Views
       # 
@@ -340,7 +366,8 @@ observe({
         collections + 
         views + 
         viewsOpen + 
-        mapPosition
+        zoomToViews +
+        mapPosition 
 
       #
       # Build iframe

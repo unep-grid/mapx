@@ -4,7 +4,7 @@
 {{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
 {{ var isCurrentProject =  mx.settings.project === view.project ; }}
 {{ var isDropedView = !!view._drop_shared ; }}
-{{ var isMember  = h.path(mx,'settings.user.roles.public',false) ;}}
+{{ var isMember  = h.path(mx,'settings.user.roles.member',false) ;}}
 <div>
   {{?view.type!='sm'}}
   <div class="mx-view-legend-container" id="view_legend_container_{{=view.id}}"></div>

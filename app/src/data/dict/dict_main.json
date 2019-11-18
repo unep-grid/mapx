@@ -10718,6 +10718,30 @@
     "es": ""
   },
   {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "fr": "Zoom sur l'étendue des vues",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
+    "id": "share_views_zoom_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "fr": "Avec le mode 'statique', cette option permet de centrer la carte sur l'étendue des couches contenues dans cette vue, si cela est possible.",
+    "de": "",
+    "ru": "",
+    "zh": "",
+    "bn": "",
+    "fa": "",
+    "ps": "",
+    "es": ""
+  },
+  {
     "id": "share_views_open_check_label",
     "en": "Set views to activate",
     "fr": "Ajouter des vues à activer",

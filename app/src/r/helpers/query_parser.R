@@ -29,7 +29,7 @@ mxParseQuery <- function(urlSearch){
   #
   query$lat  = as.numeric(query$lat)
   query$lng = as.numeric(query$lng)
-  query$zoom = as.numeric(query$zoom)
+  query$zoom = max(as.numeric(query$zoom),as.numeric(query$z))
 
   #
   # Query action

@@ -1,7 +1,8 @@
 import {Spotlight} from './pixop/spotlight.js';
 
 export function activateSpotlight(enable, elToggle) {
-  const map = mx.helpers.getMap();
+  const h = mx.helpers;
+  const map = h.getMap();
   const elSelectNum = document.getElementById('selectNLayersOverlap');
   const elTextArea = document.getElementById('txtAreaOverlap');
   const elTextResol = document.getElementById('txtResolOverlap');
@@ -13,16 +14,26 @@ export function activateSpotlight(enable, elToggle) {
       return enable;
     },
     nLayersOverlap: function() {
-      return elSelectNum.value === 'all' ? 0 : elSelectNum.value * 1;
+      let n = 1;
+      if (h.isElement(elSelectNum)) {
+        n = elSelectNum.value === 'all' ? 0 : elSelectNum.value * 1;
+      }
+      return n;
     },
     calcArea: () => {
-      return !!elEnableCalcArea.checked;
+      let calc = false;
+      if (h.isElement(elEnableCalcArea)) {
+        calc = !!elEnableCalcArea.checked;
+      }
+      return calc;
     },
     onCalcArea: (area) => {
       let resol = mx.spotlight.getResolution();
-      elTextArea.innerText = '~ ' + Math.round(area * 1e-6) + ' km2';
-      elTextResol.innerText =
-        ' ~ ' + formatDist(resol.lat) + ' x ' + formatDist(resol.lng);
+      if (h.isElement(elTextArea) && h.isElement(elTestResol)) {
+        elTextArea.innerText = '~ ' + Math.round(area * 1e-6) + ' km2';
+        elTextResol.innerText =
+          ' ~ ' + formatDist(resol.lat) + ' x ' + formatDist(resol.lng);
+      }
     },
     onRendered: () => {
       console.log('Spotlight rendered');

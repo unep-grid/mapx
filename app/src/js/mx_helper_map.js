@@ -486,6 +486,7 @@ export function initMapxStatic(o) {
   const elMap = map.getContainer();
   const btnLegend = new ButtonLegend({elContainer: elMap});
   const idViewsOpen = h.getQueryParameter('viewsOpen');
+  const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
   const idViews = h.getArrayDistinct(
     h.getQueryParameter('views').concat(idViewsOpen)
   );
@@ -521,6 +522,11 @@ export function initMapxStatic(o) {
     })
     .then((bounds) => {
       if (bounds) {
+        if(zoomToViews){
+          console.log(bounds);
+          map.fitBounds(bounds);
+        }
+
         mapData.views.forEach((view) => {
           h.viewLayersAdd({
             viewData: view,
@@ -540,7 +546,6 @@ export function initMapxStatic(o) {
             });         
           }
         });
-        map.fitBounds(bounds);
       }
     })
     .catch((e) => {
@@ -561,6 +566,7 @@ export function initMapxApp(o) {
   const idViews = h.getArrayDistinct(
     h.getQueryParameter('views').concat(idViewsOpen)
   );
+
 
   /**
    * init app listeners: view add, language, project change, etc.
@@ -618,9 +624,10 @@ export function initMapxApp(o) {
   }
 
   /**
-   * Add controls to the map
-   */
-  //compact: true
+  * From now, query parameter should be requested using
+  * getQueryParameterInit
+  */  
+  h.cleanTemporaryQueryParameters();
 
 }
 

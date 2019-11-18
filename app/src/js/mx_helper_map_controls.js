@@ -282,7 +282,7 @@ mapControlApp.prototype.onAdd = function(map) {
     btnOverlapSpotlight: {
       classes: ['fa', 'fa-bullseye'],
       key: 'btn_overlap_spotlight',
-      remove: modeStatic,
+      //remove: modeStatic,
       action: function(e) {
         var el = e.target;
         var cl = 'active';
