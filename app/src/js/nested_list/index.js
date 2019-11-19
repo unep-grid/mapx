@@ -1331,7 +1331,6 @@ function handleDragStart(evt) {
  * Drag end event listener
  */
 function handleDragEnd(evt) {
-  console.log('drag end');
   const li = this;
   li.listenerStore.removeListenerByGroup('item_dragging');
   if (li.isDraggable(li.elDrag)) {
@@ -1358,7 +1357,6 @@ function handleDragEnd(evt) {
  */
 function handleDragOver(evt) {
   evt.preventDefault();
-  console.log('drag over event');
   const li = this;
   if (li.isBusy()) {
     return;
