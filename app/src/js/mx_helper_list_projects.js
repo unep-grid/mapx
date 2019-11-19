@@ -167,9 +167,11 @@ export function renderUserProjectsList(o) {
       for (j = 0, jL = nCol; j < jL; j++) {
         row[titles[j]] = dat[titles[j]][i];
       }
-      var elRow = buildRow(row);
-      elsRows.push(elRow);
-      elProjects.appendChild(elRow);
+      if (row.id !== mx.settings.project) {
+        var elRow = buildRow(row);
+        elsRows.push(elRow);
+        elProjects.appendChild(elRow);
+      }
     }
 
     //elsRows = elProjects.querySelectorAll('.mx-list-projects-row');
