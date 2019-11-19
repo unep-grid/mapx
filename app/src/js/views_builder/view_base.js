@@ -103,7 +103,7 @@ function build(enable) {
   let elLabel = el(
     'label',
     {
-      class: 'mx-view-tgl-content',
+      class: ['mx-view-tgl-content','li-drag-handle'],
       for: 'check_view_enable_' + view.id
     },
     elButton,

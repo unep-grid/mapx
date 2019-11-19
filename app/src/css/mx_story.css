@@ -9,9 +9,7 @@
   position: relative;
   left: 50%;
   top: 50%;
-  -webkit-transform: translate(-50%, -50%);
   transform: translate(-50%, -50%);
-  -webkit-transform-origin: center center;
   tranform-origin: center center;
 }
 
@@ -54,26 +52,19 @@
   line-height: 1.4;
   font-size: 20px;
   overflow-y: scroll; /* has to be scroll, not auto */
-  -webkit-overflow-scrolling: touch;
 }
 
 .mx-story-step {
   position: relative;
   height: 100%;
   perspective: 1000px;
-  /*overflow: hidden;*/
 }
 
 .mx-story-slide {
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  -ms-backface-visibility: hidden;
   backface-visibility: hidden;
   font-family: sans-serif;
   position: absolute;
-  /*border: 1px solid red;*/
   border-radius: 5px;
-  /*padding: 10px;*/
   max-height: 100%;
   height: 100%;
   width: 100%;
@@ -152,8 +143,6 @@
 }
 
 .mx-story-shadow {
-  -webkit-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
   box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.2);
 }
 
@@ -318,16 +307,3 @@
 }
 
 
-
-/*.mapboxgl-control-container {*/
-/*opacity :1 ;*/
-/*transition: opacity ease-in-out 1s;*/
-/*}*/
-
-/*.mapboxgl-control-container.mx-story-hide-control {*/
-/*opacity : 0 ;*/
-/*}*/
-
-/*.mx-story-layout.mx-story-hide-control {*/
-/*cursor:none;*/
-/*}*/

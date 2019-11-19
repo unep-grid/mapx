@@ -84,7 +84,7 @@ class ListenerStore {
   }
   addListenerOnce(opt) {
     const li = this;
-    const callback = opt.callback.bind(li);
+    const callback = opt.callback.bind(opt.bind || li);
     opt.callback = cb;
     li.addListener(opt);
     function cb(d) {

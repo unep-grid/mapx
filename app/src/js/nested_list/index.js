@@ -52,14 +52,6 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      callback: handleSortStart,
-      group: 'base',
-      type: 'dragstart'
-    });
-
-    li.listenerStore.addListener({
-      target: li.elRoot,
-      bind: li,
       callback: handleContextClick,
       group: 'base',
       type: ['dblclick', 'contextmenu']
@@ -67,7 +59,14 @@ class NestedList {
     li.listenerStore.addListener({
       target: li.elRoot,
       bind: li,
-      callback: handleClick,
+      callback: handleMouseDown,
+      group: 'base',
+      type: 'mousedown'
+    });
+    li.listenerStore.addListener({
+      target: li.elRoot,
+      bind: li,
+      callback: handleMouseClick,
       group: 'base',
       type: 'click'
     });
@@ -890,7 +889,7 @@ class NestedList {
     if (attr.moveTop) {
       li.moveTargetTop(elItem);
     }
-    li.makeIgnoredClassesDraggable(elItem);
+    //li.makeIgnoredClassesDraggable(elItem);
 
     return elItem;
   }
@@ -944,18 +943,24 @@ class NestedList {
   /**
    * Helpers
    */
+  setUiDraggingInit(elTarget) {
+    const li = this;
+    li.elDrag = elTarget;
+    li.elDrag.setAttribute('draggable', true);
+  }
   setUiDraggingStart() {
     const li = this;
     setTimeout(() => {
       li.elDrag.classList.add(li.opt.class.dragged);
       document.body.classList.add(li.opt.class.globalDragging);
-      //debugger;
-    }, 10);
+    }, 0);
   }
   setUiDraggingEnd() {
     const li = this;
     setTimeout(() => {
       li.elDrag.classList.remove(li.opt.class.dragged);
+      li.elDrag.setAttribute('draggable', false);
+      li.elDrag = null;
       document.body.classList.remove(li.opt.class.globalDragging);
     }, 0);
   }
@@ -1082,6 +1087,14 @@ class NestedList {
       this.isElement(el) && el.classList.contains(this.opt.class.draggable)
     );
   }
+  isDragHandle(el) {
+    const li = this;
+    const isValidHandle =
+      li.isElement(el) &&
+      (el.classList.contains(li.opt.class.dragHandle) ||
+        el.classList.contains(li.opt.classDragHandle));
+    return isValidHandle;
+  }
   isItem(el) {
     return this.isElement(el) && el.classList.contains(this.opt.class.item);
   }
@@ -1146,26 +1159,6 @@ class NestedList {
     }
     return title;
   }
-  /**
-   * The only way found to avoid non-draggable children
-   * to be dragged is to set the draggable attribute to true
-   * and when the dragstart begin, prevent default and return
-   * see https://jsfiddle.net/fxi/tyw0zn7h/;
-   */
-  makeIgnoredClassesDraggable(el) {
-    const li = this;
-    let cl = '.' + li.opt.customClassDragIgnore.join(',.');
-    el.querySelectorAll(cl).forEach((el) => {
-      el.setAttribute('draggable', true);
-    });
-  }
-  isIgnoredElement(el) {
-    const li = this;
-    return li.opt.customClassDragIgnore.reduce((a, c) => {
-      return a || (li.isElement(el) && el.classList.contains(c));
-    }, false);
-  }
-
   /**
    * Simple animation to move smoothly list item
    * @param {Element|Array} elements to move
@@ -1248,71 +1241,128 @@ class NestedList {
 export {NestedList};
 
 /**
- * Start sort event listener
+ * Click in context menu event listener
  */
-function handleSortStart(evt) {
+function handleContextClick(evt) {
+  evt.preventDefault();
   const li = this;
-  li.elDrag = evt.target;
-  /**
-   * prevent if event comes from ignored see comment
-   * for makeIgnoredClassesDraggable
-   **/
-  if (li.isIgnoredElement(li.elDrag)) {
-    evt.preventDefault();
+  if (li.contextMenu instanceof ContextMenu) {
+    li.contextMenu.destroy();
+  }
+  if (li.isModeEmpty()) {
     return;
   }
-  li.fire('sort_start', evt);
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
-  li.setUiDraggingStart();
-  evt.dataTransfer.effectAllowed = 'move';
-  /*
-   * keep this version in history;
-   */
-  li.addUndoStep();
+  li.contextMenu = new ContextMenu(evt, li);
+}
 
+/**
+* Mouse click
+*/
+function handleMouseClick(evt){
+  const li = this;
+  const elTarget = li.getTarget(evt.target);
+  const idAction = elTarget.dataset.li_id_action;
+  const idType = elTarget.dataset.li_event_type;
+  const isValidEvent = idType === 'click' && idAction && li.isTarget(elTarget);
+  if (isValidEvent && idAction === 'li_group_toggle') {
+    evt.preventDefault();
+    evt.stopPropagation();
+    evt.stopImmediatePropagation();
+    li.groupToggle(elTarget, true);
+  }
+}
+/**
+ * Mouse down
+ */
+function handleMouseDown(evt) {
+  const li = this;
+  const elTarget = li.getTarget(evt.target);
+  const isHandle = li.isDragHandle(evt.target);
+  if (isHandle) {
+    li.setUiDraggingInit(elTarget);
+    li.listenerStore.addListener({
+      target: elTarget,
+      bind: li,
+      callback: handleDragStart,
+      group: 'item_dragging',
+      type: ['dragstart']
+    });
+    li.listenerStore.addListener({
+      target: window,
+      bind: li,
+      callback: handleDragEnd,
+      group: 'item_dragging',
+      type: ['dragend','mouseup']
+    });
+  }
+}
+
+/**
+ * Start sort event listener
+ */
+function handleDragStart(evt) {
+  const li = this;
   const elDragImage = li.fire('set_drag_image', li.elDrag);
   const dragText = li.fire('set_drag_text', li.elDrag);
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
+  li.fire('sort_start', evt);
+  li.setUiDraggingStart();
+  li.addUndoStep();
+  evt.dataTransfer.effectAllowed = 'move';
   evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
   evt.dataTransfer.setData('text/plain', elDragImage.innerText);
   evt.dataTransfer.setData('text/plain', dragText);
-
   li.elNext = li.elDrag.nextSibling;
 
   li.listenerStore.addListener({
     target: li.elRoot,
     bind: li,
     type: 'dragover',
-    group: 'sort_dragging',
-    callback: handleSortOver,
+    group: 'item_dragging',
+    callback: handleDragOver,
     throttle: true,
-    throttleTime: 200
-  });
-
-  li.listenerStore.addListener({
-    target: window,
-    bind: li,
-    type: 'dragend',
-    group: 'sort_dragging',
-    callback: handleSortEnd
+    throttleTime: 100
   });
 }
+
 /**
- * Enter event listener
+ * Drag end event listener
  */
+function handleDragEnd(evt) {
+  console.log('drag end');
+  const li = this;
+  li.listenerStore.removeListenerByGroup('item_dragging');
+  if (li.isDraggable(li.elDrag)) {
+    /**
+     * Remove draggable attribute,
+     *  reset ui dragging,
+     *  remove li.elDrag
+     */
+    li.setUiDraggingEnd();
+    /**
+     * Not empty mode, activate callbacks triggered by 'fire'
+     */
+    if (!li.isModeEmpty()) {
+      li.fire('sort_end', evt);
+      if (li.elNext !== li.elDrag.nextSibling) {
+        li.fire('sort_done', evt);
+      }
+    }
+  }
+}
 
 /**
  * Over event listener
  */
-function handleSortOver(evt) {
+function handleDragOver(evt) {
+  evt.preventDefault();
+  console.log('drag over event');
   const li = this;
   if (li.isBusy()) {
     return;
   }
-
   let elTarget = li.getTarget(evt.target);
   /**
    * Target evaluation
@@ -1327,7 +1377,6 @@ function handleSortOver(evt) {
   if (isNotTarget || isItself || isChildren) {
     return;
   }
-  evt.preventDefault();
   evt.stopPropagation();
   evt.stopImmediatePropagation();
   evt.dataTransfer.dropEffect = 'move';
@@ -1410,52 +1459,6 @@ function handleSortOver(evt) {
     }
   } catch (e) {
     console.warn(e);
-  }
-}
-
-/**
- * Sort end event listener
- */
-function handleSortEnd(evt) {
-  evt.preventDefault();
-  const li = this;
-  li.listenerStore.removeListenerByGroup('sort_dragging');
-  li.setUiDraggingEnd();
-  if (li.isModeEmpty()) {
-    return;
-  }
-  li.fire('sort_end', evt);
-  if (li.elNext !== li.elDrag.nextSibling) {
-    li.fire('sort_done', evt);
-  }
-}
-/**
- * Click in context menu event listener
- */
-function handleContextClick(evt) {
-  evt.preventDefault();
-  const li = this;
-  if (li.contextMenu instanceof ContextMenu) {
-    li.contextMenu.destroy();
-  }
-  if (li.isModeEmpty()) {
-    return;
-  }
-  li.contextMenu = new ContextMenu(evt, li);
-}
-/**
- * Click general listener
- */
-function handleClick(evt) {
-  const li = this;
-  let elTarget = li.getTarget(evt.target);
-  let idAction = elTarget.dataset.li_id_action;
-  let idType = elTarget.dataset.li_event_type;
-  let isValidEvent = idType === 'click' && idAction && li.isTarget(elTarget);
-  if (isValidEvent) {
-    if (isValidEvent && idAction === 'li_group_toggle') {
-      li.groupToggle(elTarget, true);
-    }
   }
 }
 

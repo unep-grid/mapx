@@ -225,8 +225,8 @@ export function viewsListRenderNew(o) {
     useStateStored: true,
     autoMergeState: true,
     emptyLabel: getEmptyLabel(),
-    customClassDragIgnore: ['mx-view-tgl-more-container'],
-    customDictItems: [
+    classDragHandle : 'li-drag-handle',
+    addDictItems: [
       {id: 'name_group', en: 'category', fr: 'catégorie'},
       {id: 'name_item', en: 'view', fr: 'vue'}
     ],

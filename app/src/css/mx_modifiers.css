@@ -1,12 +1,7 @@
 
 .mx select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   padding: 5px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
 }
 
 .mx .theme_colors label {
@@ -20,8 +15,6 @@
 }
 
 .mx .shadow {
-  -webkit-box-box-shadow: 1px 1px 4px 0px var(--mx_ui_shadow);
-  -moz-box-shadow: 1px 1px 4px 0px var(--mx_ui_shadow);
   box-shadow: 1px 1px 4px 0px var(--mx_ui_shadow);
 }
 
@@ -123,8 +116,6 @@
 .mx .mapboxgl-popup-content {
   border: 1px solid var(--mx_ui_border);
   background-color: var(--mx_ui_background);
-  -webkit-box-shadow: 2px 2px 5px 0 var(--mx_ui_shadow);
-  -moz-box-shadow: 2px 2px 5px 0 var(--mx_ui_shadow);
   box-shadow: 2px 2px 5px 0 var(--mx_ui_shadow);
 }
 

@@ -128,13 +128,7 @@ blockquote {
 }
 
 .noselect * {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-  supported by Chrome and Opera */
+  user-select: none; 
 }
 
 .nocursor {
@@ -182,9 +176,6 @@ blockquote {
 .mx-smooth-opacity {
   opacity: 1;
   will-change: opacity;
-  -webkit-transition: opacity ease-in-out 1s;
-  -moz-transition: opacity ease-in-out 1s;
-  -o-transition: opacity ease-in-out 1s;
   transition: opacity ease-in-out 1s;
 }
 
@@ -261,10 +252,7 @@ blockquote {
   border-bottom-left-radius: 0px;
   outline: none;
   border: none;
-  -webkit-box-shadow: none;
   box-shadow: none;
-  -webkit-transition: none;
-  -o-transition: none;
   transition: none;
   padding: 10px;
   flex-grow: 1;
@@ -508,7 +496,6 @@ blockquote {
 }
 
 .mx-slider-container .noUi-horizontal .noUi-tooltip {
-  -webkit-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
   left: 50%;
   bottom: -35px;
@@ -951,31 +938,6 @@ blockquote {
   color: #a2a1a1;
 }
 
-.mx-dragged {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-}
-
-.mx-drag-handle {
-  cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-
-.mx-drag-no-handle {
-  cursor: pointer;
-}
-
-.mx-drag-drop-area {
-  border-radius: 3px;
-  width: 100%;
-  height: 10px;
-  background: rgba(212, 212, 212, 0.34);
-  margin-top: 5px;
-}
-
 /** 
 * login panel
 */
@@ -1133,8 +1095,6 @@ blockquote {
 .readmore .readmore-label::before {
   content: '';
   height: 7px;
-  -webkit-box-shadow: -1px -4px 5px -2px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: -1px -4px 5px -2px rgba(0, 0, 0, 0.2);
   box-shadow: -1px -4px 5px -2px rgba(0, 0, 0, 0.2);
   position: absolute;
   left: 15px;
@@ -1354,7 +1314,6 @@ blockquote {
   background: hsla(0, 0%, 0%, 0.1);
   margin-top: 5px;
   border-radius: 3px;
-  -webkit-transition: -webkit-transform 0.2s;
   transition: transform 0.2s;
 }
 
@@ -1389,8 +1348,6 @@ blockquote {
 */
 [class*='hint--']:hover:after,
 [class*='hint--']:hover:before {
-  -webkit-transition-delay: 1000ms;
-  -moz-transition-delay: 1000ms;
   transition-delay: 1000ms;
 }
 /**

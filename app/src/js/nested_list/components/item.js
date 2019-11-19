@@ -27,7 +27,6 @@ class Item {
 
     item.el = li.el('div', {
       id: item.id,
-      draggable: true,
       class: cl
     });
  

@@ -35,7 +35,6 @@ class Group {
 
     group.el = li.el('div', {
       id: group.id,
-      draggable: true,
       class: cl,
       style: {
         borderColor: opt.color
@@ -52,7 +51,7 @@ class Group {
     group.elHeader = li.el(
       'div',
       {
-        class: li.opt.class.groupHeader
+        class: [li.opt.class.groupHeader, li.opt.class.dragHandle]
       },
       li.el('span', {
         class: [li.opt.class.arrowBottom, li.opt.class.groupCaret]

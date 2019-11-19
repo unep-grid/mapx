@@ -226,22 +226,8 @@
   transform-origin: 50% 50%;
 }
 
-@keyframes btn_anim {
-  from {
-    transform: scale(0.9);
-  }
-  to {
-    transform: scale(0.8);
-  }
-}
-
-
 .mx-view-tgl-input:not(:checked) ~ label:hover .mx-view-tgl-btn:not(:hover) .mx-view-tgl-btn-in {
-   transform : scale(0.9);
-  -moz-animation: 0.5s 0.3s btn_anim infinite alternate;
-  -ms-animation: 0.5s 0.3s  btn_anim infinite alternate;
-  -webkit-animation: 0.5s 0.3s btn_anim infinite alternate;
-  animation: 0.5s 0.3s btn_anim infinite alternate ;
+  transform : scale(0.9);
 }
 
 .mx-view-tgl-input ~ label:hover .mx-view-tgl-btn:hover .mx-view-tgl-btn-in {

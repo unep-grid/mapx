@@ -10,6 +10,7 @@ let settings = {
   idEmptyItem: 'liEmptyItem',
   prefix: 'li',
   dict: dict,
+  addDictItems : [],
   state: state,
   useStateStored: false,
   autoMergeState: false,
@@ -45,10 +46,10 @@ let settings = {
     'state_sanitize',
     'state_order'
   ],
-  /*
-   * Drag classes
-   */
-  customClassDragIgnore: [],
+  /**
+  * Custom classes
+  */
+  classDragHandle : '',
   /**
    * Global classes names
    */
@@ -66,6 +67,7 @@ let settings = {
     groupInvisible: 'li-group-invisible',
     dragged: 'li-dragged',
     draggable: 'li-draggable',
+    dragHandle : 'li-drag-handle',
     arrowBottom: 'li-arrow-bottom',
     globalDragging: 'li-global-dragging',
     contextMenu: 'li-context-menu',

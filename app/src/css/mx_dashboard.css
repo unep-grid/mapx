@@ -9,7 +9,6 @@
   left:0px;
   height: 0;
   opacity:0;
-  -webkit-transition: height 0s 1.3s;
   transition: height 0s 1.3s, opacity 1s;
   background-color: rgba(255, 255, 255, 0.24);
 }
@@ -17,25 +16,8 @@
 .mx-panel-dashboards.enabled {
   opacity:1;
   height:50%;
-  /*border-radius: 3px;*/
-  -webkit-transition: height 0s;
   transition: height 0s, opacity 1s; 
 }
-
-/*.mx-panel-dashboards:after {*/
-  /*content:'';*/
-  /*position: absolute;*/
-  /*bottom: 0px;*/
-  /*right: 0px;*/
-  /*left:0px;*/
-  /*top:0px;*/
-  /*z-index:10;*/
-  /*[>border-radius: 3px;<]*/
-  /*opacity:0;*/
-  /*border: 10px solid var(--mx_ui_background);*/
-  /*-webkit-transition: opacity 2s;*/
-  /*transition: opacity 2s;*/
-/*}*/
 
 .mx-panel-dashboards.enabled::after {
   opacity:1;
@@ -56,15 +38,8 @@
   overflow: visible;
   padding:10px;
   margin:10px;
-  /*background-color : var(--mx_ui_background);*/
-  /*background: hsla(0, 0%, 98%, 0.25);*/
 }
 
-.mx-panel-dashboards.enabled .mx-dashboard {
-  /*opacity: 1;*/
-  /*-webkit-transition: opacity 1s 1s;*/
-  /*transition: opacity 1s 1s;*/
-}
 
 
 
