@@ -103,7 +103,7 @@ mxDbGetViewMainSource <- function(idView){
 #'
 #' @param idsViews Source (layer) id
 #'
-mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
+mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en", prefix=""){
 
   tableName <- "mx_views_latest"
 
@@ -122,6 +122,9 @@ mxDbGetViewsTitle <- function(idsViews,asNamedList=TRUE,language="en"){
   ORDER BY title asc"
 
   out <- mxDbGetQuery(sql)
+  if(!noDataCheck(prefix)){
+     out$title = paste(prefix, out$title)
+  }
 
   if(asNamedList){
     titles <- out$title

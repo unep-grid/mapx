@@ -12,10 +12,12 @@ observeEvent(input$storyEdit_init,{
   story <- .get(view,c("data","story"))
   hasStory <- !noDataCheck(story)
   views <- reactViewsListIdAll()
+  idViewsStory <- unique(unlist(lapply(story$steps,`[[`,'views')))
+  viewsStory <- mxDbGetViewsTitle(idViewsStory, prefix = '[ story ]' )
 
   schema <- mxSchemaViewStory(
     view=view,
-    views=views,
+    views=c(viewsStory,views),
     language=language
     )
 
