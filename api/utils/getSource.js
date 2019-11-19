@@ -14,7 +14,7 @@ const getSourceMetadata = require('./getSourceMetadata.js').getSourceMetadata;
 const apiPort = settings.api.port_public;
 const apiHost = settings.api.host_public;
 let apiHostUrl = '';
-if (apiPort === 443) {
+if (apiPort === 443 || apiPort === '443') {
   apiHostUrl = 'https://' + apiHost;
 } else if (apiPort === 80) {
   apiHostUrl = 'http://' + apiHost;
