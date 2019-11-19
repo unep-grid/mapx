@@ -212,7 +212,7 @@
   height: 30px;
   min-width: 30px;
   min-height: 30px;
-  cursor: pointer;
+  cursor: pointer!important;
 }
 
 .mx-view-tgl-btn .mx-view-tgl-btn-out {
