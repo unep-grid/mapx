@@ -8,14 +8,6 @@ config <- list()
 #
 options(shiny.maxRequestSize=0) 
 options(shiny.reactlog=FALSE)
-
-#
-# DB log levels
-#
-config[["db_log"]] <-  list(
-  levels = c("ERROR") # c("LOG","MESSAGE","WARNING","ERROR","USER_ACTION")
-  )
-
 #
 # get info about the host
 #
@@ -109,7 +101,8 @@ config[["api"]] <- list(
     downloadSourceGet = "",
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
-    postEmail = "/send/mail"
+    postEmail = "/send/mail",
+    collectLogs = "/collect/logs/"
   )
 )
 
@@ -131,7 +124,6 @@ config[["pg"]] = list(
   password= "",
   geomCol = "geom",
   tables = list(
-    "logs"="mx_logs",
     "users"="mx_users",
     "views"="mx_views",
     "views_latest"="mx_views_latest",

@@ -20,23 +20,6 @@ observe({
         lang_out <- lang_db
       }else if(!noDataCheck(lang_ui)){
         lang_out <- lang_ui
-
-        #
-        # Logger language change from UI
-        #
-        if( lang_ui != lang_react ){
-          mxDbLogger("USER_ACTION", list(
-              side = "app",
-              id_log = "language_change",
-              id_project = reactData$project,
-              ip_user = reactIp(),
-              is_guest = isGuestUser(),
-              data = list(
-                language = lang_out
-                )
-              ))
-        }
-
       }else{
         lang_out <- lang_def
       }
@@ -45,20 +28,13 @@ observe({
         lang_out <- lang_def
       }
     }
-    mxUpdateQueryParameters(list(
-        language = lang_out
-        ))
-
-    mxUpdateSettings(
-      list(
-        language = lang_out,
-        languages = langs
-        )
-      )
     if(!identical(lang_out,lang_react)){  
       mxUpdateLanguage(lang_out)
       reactData$language <- lang_out
     } 
+    mxUpdateQueryParameters(list(
+        language = lang_out
+        ))
   })
 })
 

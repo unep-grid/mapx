@@ -24,7 +24,7 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/html/index.html',
-      chunks: ['common', 'app']
+      chunks: ['common','jquery', 'shiny']
     }),
     new webpack.DefinePlugin({
       API_PORT: JSON.stringify(process.env.API_PORT),

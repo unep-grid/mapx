@@ -4,7 +4,6 @@
 config[['mail']][['admin']] <- Sys.getenv('MAIL_ADMIN')
 config[['mail']][['bot']] <- Sys.getenv('MAIL_BOT')
 config[['mail']][['guest']] <- Sys.getenv('MAIL_GUEST')
-config[["db_log"]][["levels"]] <- jsonlite::fromJSON(Sys.getenv("MAPX_DB_LOG_LEVELS"))
 config[["api"]][["port"]] <- Sys.getenv("API_PORT")
 config[["api"]][["port_public"]] <- Sys.getenv("API_PORT_PUBLIC")
 config[["api"]][["host"]] <- Sys.getenv("API_HOST")

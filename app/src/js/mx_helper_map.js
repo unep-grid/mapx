@@ -49,13 +49,12 @@ export function setApiUrlAuto() {
   /**
    * Webpack variables
    */
-  const apiHost = typeof API_HOST_PUBLIC === "undefined" ? 
-    loc.hostname.replace(/^app\.|^dev\./, 'api.') :
-    API_HOST_PUBLIC;
+  const apiHost =
+    typeof API_HOST_PUBLIC === 'undefined'
+      ? loc.hostname.replace(/^app\.|^dev\./, 'api.')
+      : API_HOST_PUBLIC;
 
-  const apiPort = typeof API_PORT === "undefined" ? 
-    loc.port :
-    API_PORT;
+  const apiPort = typeof API_PORT === 'undefined' ? loc.port : API_PORT;
   /**
    * Set API url based on current location
    */
@@ -86,6 +85,9 @@ export function getAppPathUrl(id) {
 export function setProject(idProject, opt) {
   const h = mx.helpers;
   opt = opt || {};
+  if (idProject === mx.settings.project) {
+    return;
+  }
   /**
    * Check if some modal are still there
    */
@@ -120,10 +122,20 @@ export function setProject(idProject, opt) {
     h.viewsRemoveAll();
     closeModals();
     h.setQueryParametersInitReset();
-    Shiny.onInputChange('selectProject', idProject);
+    const hasShiny = window.Shiny;
+    if (hasShiny) {
+      Shiny.onInputChange('selectProject', idProject);
+    }
     if (h.isFunction(opt.onSuccess)) {
       opt.onSuccess();
     }
+    mx.events.fire({
+      type: 'project_change',
+      data: {
+        new_project: idProject,
+        old_project: mx.settings.project
+      }
+    });
   }
 
   function closeModals() {
@@ -159,11 +171,33 @@ export function initListenerGlobal() {
   /**
    * Handle view click
    */
+
   mx.listenerStore.addListener({
     target: document.body,
     type: 'click',
     idGroup: 'view_list',
     callback: handleViewClick
+  });
+
+  /*
+   * Fire session start
+   */
+  mx.events.fire({
+    type: 'session_start'
+  });
+
+  /*
+   * Fire session end
+   */
+  mx.listenerStore.addListener({
+    target: window,
+    type: 'beforeunload',
+    idGroup: 'base',
+    callback: () => {
+      mx.events.fire({
+        type: 'session_end'
+      });
+    }
   });
 }
 
@@ -172,13 +206,6 @@ export function initListenerGlobal() {
  */
 export function initListenersApp() {
   const h = mx.helpers;
-
-  /**
-   * Init log system
-   */
-  if (true) {
-    mx.helpers.initLog();
-  }
 
   /**
    *  Other listener
@@ -198,7 +225,7 @@ export function initListenersApp() {
   });
 
   mx.events.on({
-    type: 'lang_updated',
+    type: 'language_change',
     idGroup: 'view_filter_tag_lang',
     callback: function() {
       const mData = h.getMapData();
@@ -411,7 +438,6 @@ export function initMapx(o) {
    */
 
   o.map.on('load', () => {
-  
     o.map.addControl(new h.mapControlApp(), 'top-left');
     o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
     o.map.addControl(new h.mapControlScale(), 'bottom-right');
@@ -420,8 +446,10 @@ export function initMapx(o) {
     /**
      * Init global listeners
      */
-    initListenerGlobal();
-    initMapListener(o.map);
+    h.initLog();
+    h.initListenerGlobal();
+    h.initMapListener(o.map);
+
     /**
      * Load mapx app or static
      */
@@ -435,7 +463,7 @@ export function initMapx(o) {
   return o;
 }
 
-function initMapListener(map){
+export function initMapListener(map) {
   const h = mx.helpers;
   /**
    * Error handling
@@ -464,19 +492,23 @@ function initMapListener(map){
     map.getCanvas().style.cursor = features.length ? 'pointer' : '';
   });
 
+  /**
+   * Click event : build popup, ignore or redirect
+   */
   map.on('click', function(e) {
     h.handleClickEvent(e, map.id);
   });
 
+  /**
+   * Move north arrow
+   */
   map.on('rotate', function() {
     const r = -map.getBearing();
     const northArrow = document.querySelector('.mx-north-arrow');
     northArrow.style[h.cssTransformFun()] =
       'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
   });
-
 }
-
 
 export function initMapxStatic(o) {
   const h = mx.helpers;
@@ -522,7 +554,7 @@ export function initMapxStatic(o) {
     })
     .then((bounds) => {
       if (bounds) {
-        if(zoomToViews){
+        if (zoomToViews) {
           console.log(bounds);
           map.fitBounds(bounds);
         }
@@ -532,18 +564,18 @@ export function initMapxStatic(o) {
             viewData: view,
             elLegendContainer: btnLegend.elLegendContent
           });
-           
+
           /**
-          * add Dashboard
-          */
+           * add Dashboard
+           */
           const hasDashboard = h.path(view, 'data.dashboard', null);
-          if(hasDashboard){
+          if (hasDashboard) {
             h.Dashboard.init({
               idContainer: 'mxDashboards',
               idDashboard: 'mx-dashboard-' + view.id,
               idMap: map.id,
               view: view
-            });         
+            });
           }
         });
       }
@@ -554,8 +586,8 @@ export function initMapxStatic(o) {
 }
 
 /**
-* Init full app mode
-*/
+ * Init full app mode
+ */
 export function initMapxApp(o) {
   const h = mx.helpers;
   const map = o.map;
@@ -566,7 +598,6 @@ export function initMapxApp(o) {
   const idViews = h.getArrayDistinct(
     h.getQueryParameter('views').concat(idViewsOpen)
   );
-
 
   /**
    * init app listeners: view add, language, project change, etc.
@@ -595,12 +626,8 @@ export function initMapxApp(o) {
   /*
    * If shiny, trigger read event
    */
-  if ( hasShiny ) {
+  if (hasShiny) {
     Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
-    /**
-     * Async IP lookup
-     */
-    h.sendIpInfo({idInput: 'clientIpData'});
   }
 
   /**
@@ -624,11 +651,11 @@ export function initMapxApp(o) {
   }
 
   /**
-  * From now, query parameter should be requested using
-  * getQueryParameterInit
-  */  
-  h.cleanTemporaryQueryParameters();
+   * From now, query parameter should be requested using
+   * getQueryParameterInit
+   */
 
+  h.cleanTemporaryQueryParameters();
 }
 
 /**
@@ -1859,9 +1886,9 @@ export function viewOpen(view) {
   });
 }
 /**
-* Get view, open it and add layers if any
-* @param {Object} view View to open
-*/
+ * Get view, open it and add layers if any
+ * @param {Object} view View to open
+ */
 export function viewOpenAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
@@ -2417,6 +2444,7 @@ export function viewLayersAdd(o) {
 }
 
 export function elLegend(view, settings) {
+  settings = Object.assign(settings, {removeOld: true, type: 'vt'});
   const h = mx.helpers;
   if (!h.isView(view)) {
     throw new Error('elLegend invalid view');
@@ -2425,7 +2453,6 @@ export function elLegend(view, settings) {
   const elView = h.getViewEl(view);
   const idLegend = 'view_legend_' + idView;
   const idLegendContainer = 'view_legend_container_' + idView;
-  settings = Object.assign(settings, {removeOld: true, type: 'vt'});
   const hasView = h.isElement(elView);
   const hasContainer = h.isElement(settings.elLegendContainer);
 
@@ -2606,17 +2633,19 @@ function viewLayersAddRt(o) {
       /**
        * Create an image with given source
        */
-      const img = new Image();
-      img.src = legend;
+      const img = h.urlToImageBase64(legend);
       img.alt = 'Legend';
-      img.setAttribute('crossorigin', 'anonymous');
       img.onerror = defaultImg;
-      img.style.cursor = 'zoom-in';
-      img.onload = function() {
-        elLegend.classList.add('mx-legend-box');
-      };
-      elLegend.appendChild(img);
+      img.addEventListener(
+        'load',
+        () => {
+          elLegend.classList.add('mx-legend-box');
+        },
+        {once: true}
+      );
 
+      elLegend.appendChild(img);
+      elLegend.style.cursor = 'zoom-in';
       elLegend.onclick = function() {
         /**
          * Show a bigger image if clicked
@@ -2626,9 +2655,7 @@ function viewLayersAddRt(o) {
           path: 'data.title',
           defaultKey: 'noTitle'
         });
-        const imgModal = new Image();
-        imgModal.src = legend;
-        imgModal.setAttribute('crossorigin', 'anonymous');
+        const imgModal = h.urlToImageBase64(legend);
         imgModal.onerror = defaultImg;
         imgModal.alt = 'Legend';
         h.modal({
@@ -3937,10 +3964,11 @@ export function getViewDescription(id, lang) {
  * @param {Object} opt Options
  * @param {Boolean} opt.clone Clone the legend. Default true
  * @param {Boolean} opt.input Keep working inputs. Default false
- * @param {Boolean} opt.base64 Convert all images in base64. Default true
+ * @param {Boolean} opt.class Keep classes. Default true
+ * @param {Boolean} opt.style Keep style. Default false
  */
 export function getViewLegend(id, opt) {
-  opt = Object.assign({}, {clone: true, input: false, base64: true}, opt);
+  opt = Object.assign({}, {clone: true, input: false, class: true, style: false}, opt);
 
   const h = mx.helpers;
   if (h.isView(id)) {
@@ -3948,17 +3976,22 @@ export function getViewLegend(id, opt) {
   }
   let view = h.getView(id);
   let elLegend = view._elLegend;
+  let elLegendClone;
+  let hasLegend = h.isElement(elLegend);
 
-  if (elLegend && opt.clone === true) {
-    elLegend = elLegend.cloneNode(true);
+  if (hasLegend && opt.clone === true) {
+    elLegendClone = elLegend.cloneNode(true);
   }
-  if (elLegend && opt.clone === true && opt.input === false) {
-    elLegend.querySelectorAll('input').forEach((e) => e.remove());
+  if (hasLegend && opt.clone === true && opt.input === false) {
+    elLegendClone.querySelectorAll('input').forEach((e) => e.remove());
   }
-  if (elLegend && opt.clone === true && opt.base64 === true) {
-    mx.helpers.convertAllImagesToBase64(elLegend);
+  if(opt.clone === true && opt.style === false){
+    elLegendClone.style = "";
   }
-  return elLegend || h.el('div');
+  if(opt.clone === true && opt.class === false){
+    elLegendClone.className = "";
+  }
+  return elLegendClone || elLegend || h.el('div');
 }
 
 /**

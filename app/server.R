@@ -147,11 +147,7 @@ server <- function(input,output,session){
               #
               # source download handler
               #
-              "source_download.R",
-              #
-              # misc
-              #
-              "db_logger.R"
+              "source_download.R"
               )
             )
           })

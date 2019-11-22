@@ -1,6 +1,6 @@
 /*jshint esversion: 6, node: true  */
 import * as helpers from './mx_helpers.js';
-import * as info from './../../package.json';
+import {version} from './../../package.json';
 import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
@@ -66,7 +66,7 @@ export {
   queue,
   widgets,
   controls,
-  info,
+  version,
   settings,
   dashboards,
   editors,

@@ -18,9 +18,5 @@ import '../css/mx_handsontable.css';
 import '../css/mx_flash.css';
 import '../css/mx_legends.css';
 
-import $ from 'jquery';
-window.jQuery = $;
-window.$ = $;
-
 import * as mx from './mx.js';
 window.mx = mx;

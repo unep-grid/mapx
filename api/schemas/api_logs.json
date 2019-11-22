@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "required": [
+    "date_modified",
+    "side",
+    "level",
+    "id_log",
+    "id_user",
+    "id_project",
+    "is_guest",
+    "data"
+  ],
+  "properties": {
+    "date_modified": {
+      "type": "integer",
+      "title": "Log date"
+    },
+    "side": {
+      "type": "string",
+      "title": "Log origin side",
+      "default": "",
+      "examples": ["browser"],
+      "enum": ["browser", "app", "api"]
+    },
+    "level": {
+      "type": "string",
+      "title": "Log level",
+      "default": "",
+      "examples": ["USER_ACTION"],
+      "enum": ["ERROR", "WARNING", "MESSAGE", "LOG", "USER_ACTION"]
+    },
+    "id_log": {
+      "type": "string",
+      "title": "Log id",
+      "default": "",
+      "examples": ["view_panel_click"],
+      "enum": [
+        "session_end",
+        "session_start",
+        "view_remove",
+        "view_add",
+        "view_panel_click",
+        "project_change",
+        "language_change"
+      ]
+    },
+    "id_user": {
+      "type": "number",
+      "title": "User id",
+      "default": 96,
+      "examples": [1]
+    },
+    "id_project": {
+      "type": "string",
+      "title": "Project id",
+      "default": "",
+      "examples": ["MX-T6R-PJF-2DF-3OI-LBF"],
+      "min": 22,
+      "max": 22
+    },
+    "is_guest": {
+      "type": "boolean",
+      "title": "Is guest",
+      "default": false,
+      "examples": [false]
+    },
+    "data": {
+      "type": "object",
+      "title": "Log additional data"
+    }
+  }
+}

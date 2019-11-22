@@ -62,17 +62,7 @@ mxUpdateCheckboxInput <- function(id,disabled=NULL,checked=NULL,session=shiny:::
     res
     )
 }
-#' Send and compile templates.
-#'
-#' @param listTemplates {list} named list containing html. list("id"="HTML")
-#' @param session Shiny session object.
-#' @export
-mxSetTemplates <- function(listTemplates,session=shiny:::getDefaultReactiveDomain()) {
-  session$sendCustomMessage(
-    type="mxSetTemplates",
-    listTemplates
-    )
-}
+
 
 #' Send a message to js console
 #' @param {character} text Text to send

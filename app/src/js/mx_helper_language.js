@@ -5,29 +5,46 @@
  * @param {String} o.lang Language code
  */
 export function updateLanguage(o) {
+  let previousLang = mx.settings.language;
   o.id = 'map_main';
-  o.lang = o.lang || mx.settings.language || 'en';
-  mx.settings.language = o.lang;
+  o.lang = o.lang || previousLang || 'en';
+
+  /**
+   * Fire language_change
+   */
+  mx.events.fire({
+    type: 'language_change',
+    data: {
+      old_language: previousLang,
+      new_language: o.lang
+    }
+  });
 
   /*
    * Set language for the document
    */
   document.querySelector('html').setAttribute('lang', o.lang);
 
+  /**
+   * Update language settings
+   */
+  mx.settings.language = o.lang;
+
+  /**
+   * Update lang of interface
+   */
   updateLanguageElements(o)
     .then(() => {
+      /**
+       * Update map language
+       */
       return updateLanguageMap(o);
     })
     .then(() => {
-      return updateLanguageViewsList(o);
-    })
-    .then(() => {
       /**
-       * Fire lang_updated event
+       * Update views language : labels, desc, title
        */
-      mx.events.fire({
-        type: 'lang_updated'
-      });
+      return updateLanguageViewsList(o);
     });
 }
 

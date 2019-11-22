@@ -17,7 +17,6 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
   Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', h.modal);
-  Shiny.addCustomMessageHandler('mxSetTemplates', h.setTemplates);
   Shiny.addCustomMessageHandler('mxSetElementAttribute', h.setElementAttribute);
   Shiny.addCustomMessageHandler("mxSetImageAttributes", h.setImageAttributes);
   Shiny.addCustomMessageHandler("mxUiHide", h.hide);

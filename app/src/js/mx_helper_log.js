@@ -1,108 +1,184 @@
+import {Logger} from './logger';
+
 /**
- * MapX log
- * @param {String} level Log level : ERROR, WARNING, MESSAGE, LOG, USER_ACTION
- * @param {Object} opt Options
- * @param {String} opt.kind Log kind : log, error, warning, info, etc.
- * @param {String} opt.from From which part of the app the log comes ? "browser", "app", "api"
- * @param {String} opt.what What happenning ? Code of the action : "views_panel_click", ..
- * @param {Integer} opt.time What time ? Time in posix
- * @param {Integer} opt.user Which user id ? 1
- * @param {String} opt.guest Is guest user ?
- * @param {Object} opt.data Additional data related.
+ * Logger object
  */
-export function dbLog(level, opt) {
-  var logLevelsAll = mx.settings.dbLogLevelsAll;
-  var logLevel = mx.settings.dbLogLevels;
-  var hasShiny = !!window.Shiny;
-  var logValid = logLevelsAll.indexOf(level) > -1;
-  var logActivated = logLevel.indexOf(level) > -1;
-  var logDetailsAreValid = mx.helpers.isObject(opt) && opt.id_log;
+window.logger = null;
 
-  if (!logValid) {
-    throw new Error('Missing log level');
-  }
-  if (!logActivated) {
-    console.warn('Log ignored');
-  }
-  if (!logDetailsAreValid) {
-    throw new Error('missing log details');
+/**
+ * Init log
+ */
+export function initLog() {
+  const h = mx.helpers;
+
+  if (!window.logger) {
+    window.logger = new Logger({
+      url: h.getApiUrl('collectLogs'),
+      timeCollect: 15000,
+      baseForm: {},
+      validate: formatValidateLog
+    });
   }
 
-  var dataDef = {};
-  var log = {};
-  var def = {
-    level: level,
-    side: 'browser',
-    id_log: null,
-    id_user: mx.settings.user.id,
-    is_guest: mx.settings.user.guest,
-    id_project: mx.settings.project,
-    data: dataDef
-  };
-
-  Object.keys(def).forEach((k) => {
-    log[k] = opt[k] || def[k];
+  /**
+   * On session start
+   */
+  mx.events.on({
+    type: 'session_start',
+    idGroup: 'mx_log',
+    callback: () => {
+      logger.add({
+        id_log: 'session_start',
+        data: {}
+      });
+      console.log('session_start');
+      /*
+       * Force collect
+       */
+      logger.collect();
+    }
   });
 
-  if (hasShiny) {
-    /**
-    * Handled in /server/db_logger.R
-    */
-    Shiny.onInputChange('dbLogger', log);
-  }
-}
-
-export function initLog() {
   /**
-   * Register listener
+   * On session end
+   */
+  mx.events.on({
+    type: 'session_end',
+    idGroup: 'mx_log',
+    callback: () => {
+      logger.add({
+        id_log: 'session_end',
+        data: {}
+      });
+      /*
+       * Force collect
+       */
+      logger.collect();
+    }
+  });
+
+  /**
+   * On lang change
+   */
+  mx.events.on({
+    type: 'language_change',
+    idGroup: 'mx_log',
+    callback: (d) => {
+      logger.add({
+        id_log: 'language_change',
+        data: d
+      });
+    }
+  });
+
+  /**
+   * On project change
+   */
+  mx.events.on({
+    type: 'project_change',
+    idGroup: 'mx_log',
+    callback: (d) => {
+      logger.add({
+        id_log: 'project_change',
+        data: d
+      });
+    }
+  });
+
+  /**
+   * On session end
    */
   mx.events.on({
     type: 'view_added',
     idGroup: 'mx_log',
-    callback: logViewAdded
+    callback: (d) => {
+      d.view._added_at = Date.now();
+      logger.add({
+        id_log: 'view_add',
+        data: {
+          id_view: d.idView
+        }
+      });
+    }
   });
+
+  /**
+   * On view removed
+   */
   mx.events.on({
     type: 'view_removed',
     idGroup: 'mx_log',
-    callback: logViewRemoved
+    callback: (d) => {
+      let viewDuration = (Date.now() - d.view._added_at) / 1000;
+      logger.add({
+        id_log: 'view_remove',
+        data: {
+          id_view: d.idView,
+          view_duration_seconds: viewDuration
+        }
+      });
+    }
   });
+
+  /**
+   * On view panel click
+   */
   mx.events.on({
     type: 'view_panel_click',
     idGroup: 'mx_log',
-    callback: logPanelClick
+    callback: (d) => {
+      logger.add({
+        id_log: 'view_panel_click',
+        data: {
+          id_view: d.idView,
+          id_action: d.idAction
+        }
+      });
+    }
   });
+}
 
-  function logViewAdded(d) {
-    d.view._added_at = Date.now();
-
-    mx.helpers.dbLog('USER_ACTION', {
-      id_log: 'view_add',
-      data: {
-        id_view: d.idView
-      }
-    });
+/**
+ * Update and validate log
+ * @param {Object} log Log object.
+ * @param {Object} log.data data
+ * @param {String} log.level log level (in mx.settings.logs.levels)
+ * @param {String} log.side log side (in mx.settings.logs.sides)
+ * @param {String} log.id_log log id (in mx.settings.logs.ids)
+ */
+function formatValidateLog(log) {
+  const s = mx.settings.logs;
+  if (s.disabled) {
+    /**
+     * User should be able to disable logs (e.g. in a cookie);
+     */
+    return false;
   }
+  /**
+   * Set default
+   */
+  let def = {
+    id_user: mx.settings.user.id,
+    id_project: mx.settings.project,
+    is_guest: mx.settings.user.guest === true,
+    side: 'browser',
+    level: 'USER_ACTION'
+  };
 
-  function logViewRemoved(d) {
+  /**
+   * Update log input with default
+   */
+  def = Object.assign({}, def, log);
+  Object.assign(log, def);
 
-    let viewDuration = (Date.now() - d.view._added_at) / 1000;
-
-    mx.helpers.dbLog('USER_ACTION', {
-      id_log: 'view_remove',
-      data: {
-        id_view: d.idView,
-        view_duration_seconds: viewDuration
-      }
-    });
-  }
-
-  function logPanelClick(d) {
-    mx.helpers.dbLog('USER_ACTION', {
-      id_log: 'view_panel_click',
-      data: {
-        id_view: d.idView,
-        id_action: d.idAction
-      }
-    });
-  }
+  /**
+   * Validate
+   */
+  var isValid =
+    log instanceof Object &&
+    log.data instanceof Object &&
+    s.levels.indexOf(log.level) > -1 &&
+    s.sides.indexOf(log.side) > -1 &&
+    s.ids.indexOf(log.id_log) > -1;
+  return isValid;
 }

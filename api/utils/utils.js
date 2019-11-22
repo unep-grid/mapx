@@ -341,5 +341,6 @@ exports.sourceValidityGeom = require('./getSourceValidityGeom.js');
 exports.image = require('./uploadImage.js');
 exports.vector = require('./uploadVector.js');
 exports.mail = require('./mail.js');
+exports.logs = require('./logs.js');
 exports.query = require('./query.js');
 exports.db = require('./db.js');

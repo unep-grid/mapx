@@ -41,5 +41,5 @@ export function reload(){
 * Get version as array [major,minor,maintenance]
 */
 export function getVersion(){
-  return mx.info.version.split('.').map(r => r*1);
+  return mx.version;
 }

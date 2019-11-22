@@ -118,34 +118,52 @@ function loadPickolor() {
 }
 
 function loadSelectize() {
-  return Promise.all([
-    import('selectize'),
-    import('webpack-jquery-ui/sortable'),
-    import('selectize/dist/css/selectize.css'),
-    import('selectize/dist/css/selectize.bootstrap3.css'),
-    import('../css/mx_selectize.css')
-  ]).then((m) => {
-    var Selectize = m[0].default;
+  /**
+  * jquery and selectize are already imported in init_jquery. 
+  * Here is the version for static pages
+  */
+  const hasSelectize = window.jQuery && jQuery.fn.selectize;
+  if (hasSelectize) {
+    /**
+    * Use default
+    */
+    return Promise.resolve(jQuery.fn.selectize);
+  }else{
+    /**
+    * Load everything
+    */
+    return Promise.all([
+      import('jquery'),
+      import('selectize'),
+      import('webpack-jquery-ui/sortable'),
+      import('selectize/dist/css/selectize.css'),
+      import('selectize/dist/css/selectize.bootstrap3.css'),
+      import('../css/mx_selectize.css')
+    ]).then((m) => {
+      window.jQuery = m[0].default;
+      window.$ = window.jQuery;
+      var Selectize = m[1].default;
 
-    /*
-     * Patch for placing drop downrelative to a div
-     * https://github.com/selectize/selectize.js/pull/1447/commits
-     */
-    Selectize.prototype.positionDropdown = function() {
-      var $control = this.$control;
-      this.$dropdown
-        .offset({
-          top: $control.offset().top + $control[0].offsetHeight,
-          left: $control.offset().left
-        })
-        .css({
-          width: $control[0].getBoundingClientRect().width
-        });
-    };
+      /*
+       * Patch for placing drop downrelative to a div
+       * https://github.com/selectize/selectize.js/pull/1447/commits
+       */
+      Selectize.prototype.positionDropdown = function() {
+        var $control = this.$control;
+        this.$dropdown
+          .offset({
+            top: $control.offset().top + $control[0].offsetHeight,
+            left: $control.offset().left
+          })
+          .css({
+            width: $control[0].getBoundingClientRect().width
+          });
+      };
 
-    window.Selectize = Selectize;
-    return Selectize;
-  });
+      window.Selectize = Selectize;
+      return Selectize;
+    });
+  }
 }
 
 function loadHighcharts() {

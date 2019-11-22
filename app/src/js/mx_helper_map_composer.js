@@ -29,7 +29,12 @@ function mapComposerModalAuto() {
   vVisible.forEach((id) => {
     const title = h.getViewTitle(id);
     const description = h.getViewDescription(id);
-    const elLegend = h.getViewLegend(id, {clone: true, input: false});
+    const elLegend = h.getViewLegend(id, {
+      clone: true,
+      input: false,
+      class: true,
+      style: false
+    });
 
     items.push({
       type: 'legend',
@@ -108,11 +113,11 @@ function mapComposerModalAuto() {
       },
       h.getDictItem('btn_help')
     );
-    
+
     const mc = new MapComposer(elContainer, state, {
-      onDestroy : ()=>{
-         map.resize();
-      } 
+      onDestroy: () => {
+        map.resize();
+      }
     });
 
     h.modal({
@@ -122,7 +127,7 @@ function mapComposerModalAuto() {
       content: elContainer,
       addSelectize: false,
       onClose: destroy,
-      addBackground : true,
+      addBackground: true,
       style: {
         position: 'absolute',
         width: '80%',

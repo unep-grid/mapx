@@ -37,16 +37,8 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/html/index.html',
-      chunks: ['common', 'sw', 'app']
+      chunks: ['common', 'sw', 'jquery', 'shiny']
     }),
-
-    //new BundleAnalyzerPlugin(),
-    //new FaviconsWebpackPlugin('./src/png/map-x-logo.png'),
-    /**
-     * last step, generate service worker
-     * Configuration : https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin#configuration
-     * more info here : https://developers.google.com/web/tools/workbox/guides/codelabs/webpack
-     */
     new CopyWebpackPlugin([
       {
         from: './webpack/sw_listen_skip_waiting_install.js',

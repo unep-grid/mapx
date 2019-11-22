@@ -547,21 +547,6 @@ export function unicodeToChar(text) {
 }
 
 /**
- * Set template : compile and store result
- *  @param {object} o Options
- * @param {string} o.id Name of the function
- * @param {string} o.template html string for legend
- */
-export function setTemplates(o) {
-  return import('dot').then(function(doT) {
-    for (var id in o) {
-      var template = mx.helpers.unicodeToChar(o[id]);
-      mx.templates[id] = doT.template(template);
-    }
-  });
-}
-
-/**
  *  * Returns a function, that, as long as it continues to be invoked, will not
  * be triggered. The function will be called after it stops being called for
  * N milliseconds. If
@@ -1151,7 +1136,7 @@ export function updateText(o) {
 export function updateCheckboxInput(o) {
   const h = mx.helpers;
   var el = document.getElementById(o.id);
-  var altered =  false;
+  var altered = false;
   if (h.isElement(el)) {
     if (h.isBoolean(o.disabled)) {
       if (o.disabled) {
@@ -1162,7 +1147,7 @@ export function updateCheckboxInput(o) {
     }
     if (h.isBoolean(o.checked)) {
       el.checked = o.checked;
-      if(window.Shiny){
+      if (window.Shiny) {
         Shiny.onInputChange(o.id, el.checked);
       }
     }
@@ -2114,8 +2099,10 @@ export function handleRequestMessage(msg, msgs, on) {
 }
 
 export function convertAllImagesToBase64(elOrig) {
-  var el = mx.helpers.el;
-  if (!mx.helpers.isElement(elOrig)) {
+  const h = mx.helpers;
+  const el = h.el;
+  const isEl = h.isElement(elOrig);
+  if (!isEl) {
     return;
   }
   var elImgs = elOrig.querySelectorAll('img');
@@ -2134,4 +2121,40 @@ export function convertAllImagesToBase64(elOrig) {
     ctx.drawImage(elImg, 0, 0);
     elImg.src = elCanvas.toDataURL();
   });
+}
+
+export function urlToImageBase64(url) {
+  const h = mx.helpers;
+  let img = h.el('img', {
+    crossorigin: 'anonymous'
+  });
+
+  fetch(url)
+    .then(function(response) {
+      return response.blob();
+    })
+    .then(function(blob) {
+      img.src = URL.createObjectURL(blob);
+      img.addEventListener('load',convertToBase64, {once:true});
+    })
+    .catch((e) => {
+      console.warn('urlToImageBase64 failed: ', e.message);
+    });
+
+  return img;
+
+  function convertToBase64() {
+    var rect = img.getBoundingClientRect();
+    var elCanvas = h.el('canvas', {
+      width: rect.width,
+      height: rect.height,
+      style: {
+        width: rect.width + 'px',
+        height: rect.height + 'px'
+      }
+    });
+    var ctx = elCanvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    img.src = elCanvas.toDataURL();
+  }
 }

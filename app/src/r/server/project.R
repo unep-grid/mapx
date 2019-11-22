@@ -136,22 +136,6 @@ observe({
       return()
     }
    
-    #
-    # Log project changes
-    #
-    mxDbLogger("USER_ACTION", list(
-        side = "app",
-        id_log = "project_load",
-        id_project = idProject,
-        id_user = idUser,
-        is_guest = isGuest,
-        ip_user = ipUser,
-        data = list(
-          new_project = idProject,
-          old_project = idProjectPrevious
-          )
-        )
-      )
   })
 
 })
