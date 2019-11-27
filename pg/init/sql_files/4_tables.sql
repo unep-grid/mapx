@@ -55,6 +55,7 @@ CREATE TABLE public.mx_logs (
     side character varying(10),
     id_log character varying(40),
     id_user integer,
+    ip_user character varying(45),
     is_guest boolean,
     id_project character varying(22),
     date_modified timestamp with time zone,
