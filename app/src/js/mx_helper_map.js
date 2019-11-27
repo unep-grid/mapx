@@ -568,7 +568,6 @@ export function initMapxStatic(o) {
     .then((bounds) => {
       if (bounds) {
         if (zoomToViews) {
-          console.log(bounds);
           map.fitBounds(bounds);
         }
 
@@ -592,6 +591,9 @@ export function initMapxStatic(o) {
           }
         });
       }
+      mx.events.fire({
+        type: 'mapx_ready'
+      });
     })
     .catch((e) => {
       console.warn(e);
@@ -624,6 +626,10 @@ export function initMapxApp(o) {
     id: o.id,
     autoFetchAll: true,
     project: o.project || mx.settings.project
+  }).then(() => {
+    mx.events.fire({
+      type: 'mapx_ready'
+    });
   });
 
   /**
@@ -4106,6 +4112,30 @@ export function getViews(o) {
   } else {
     return views;
   }
+}
+export function getViewsForJSON() {
+  const h = mx.helpers;
+  const views = h.getViews();
+  const f = [
+    'id',
+    'editor',
+    'target',
+    'date_modifed',
+    'data',
+    'type',
+    'pid',
+    'project',
+    'readers',
+    'editors'
+  ];
+
+  const viewsClean = views.map((v) => {
+    return f.reduce((a, k) => {
+      a[k] = v[k];
+      return a;
+    }, {});
+  });
+  return viewsClean;
 }
 
 /**
