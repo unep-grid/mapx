@@ -109,7 +109,8 @@ CREATE TABLE public.mx_projects (
     views_external jsonb DEFAULT '[]'::jsonb,
     alias character varying(40),
     allow_join boolean DEFAULT false,
-    contacts jsonb DEFAULT '[]'::jsonb
+    contacts jsonb DEFAULT '[]'::jsonb,
+    states_views jsonb DEFAULT '[]'::jsonb
 );
 
 
@@ -579,6 +580,7 @@ CREATE INDEX mx_views_target_idx ON public.mx_views USING btree (target);
 -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pguser
 --
 
+GRANT USAGE ON SCHEMA public TO mapxc;
 GRANT USAGE ON SCHEMA public TO readonly;
 GRANT USAGE ON SCHEMA public TO readwrite;
 
@@ -631,3 +633,10 @@ GRANT SELECT ON TABLE public.mx_views TO readonly;
 --
 
 ALTER DEFAULT PRIVILEGES FOR ROLE mapxw GRANT SELECT ON TABLES  TO readonly;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: mapxw
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE mapxw IN SCHEMA public GRANT SELECT ON TABLES TO mapxc;

@@ -14,8 +14,8 @@ COPY public.mx_config (pid, key, data, date_modified) FROM stdin;
 -- Data for Name: mx_projects; Type: TABLE DATA; Schema: public; Owner: mapxw
 --
 
-COPY public.mx_projects (pid, id, id_old, title, description, active, public, admins, members, publishers, map_position, countries, creator, date_created, date_modified, views_external, alias, allow_join, contacts) FROM stdin;
-1	MX-3ZK-82N-DY8-WU2-IGF	WLD	{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}	{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}	t	t	[1]	[1]	[1]	{"z": 2, "lat": 0, "lng": 0}	["WLD"]	1	now()	now()	[]	\N	f	[] 
+COPY public.mx_projects (pid, id, id_old, title, description, active, public, admins, members, publishers, map_position, countries, creator, date_created, date_modified, views_external, alias, allow_join, contacts, states_views) FROM stdin;
+1	MX-3ZK-82N-DY8-WU2-IGF	WLD	{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}	{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}	t	t	[1]	[1]	[1]	{"z": 2, "lat": 0, "lng": 0}	["WLD"]	1	now()	now()	[]	\N	f	[]	[] 
 \.
 
 --
