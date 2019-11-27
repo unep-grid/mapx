@@ -25,6 +25,7 @@ function getViewsHandler(req, res) {
       utils.sendJSON(res, data, {end: true });
     })
     .catch((err) => {
+      console.error(err);
       utils.sendError(res, err);
     });
 }

@@ -61,7 +61,7 @@ let validateRules = [
       d = u.asArray(d);
       return d.reduce((a, x) => a && x.length === 20, true)
         ? d
-        : stop('View id not valid');
+        : u.stop('Views id not valid : ' + JSON.stringify(d));
     }
   },
   {
