@@ -21,7 +21,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
   app:
-    env_file: mapx.dev.env
+    env_file: env.development
+    environment:
+      - MAPX_MAPBOX_TOKEN=${MAPX_MAPBOX_TOKEN}
+      - API_PORT=${API_PORT:-3030}
+      - API_HOST_PUBLIC=${API_HOST_PUBLIC:-api.mapx.localhost}
     build: ./app/.
     image: fredmoser/mx-app-shiny:1.6.33-debian
     restart: always
@@ -41,8 +45,13 @@ services:
     volumes:
       - ./app:/srv/shiny-server/dev
       - ./_shared:/shared
+      - ./app/userdata:/shared/userdata
   api:
-    env_file: mapx.dev.env
+    env_file: env.development
+    environment:
+      - MAPX_MAPBOX_TOKEN=${MAPX_MAPBOX_TOKEN}
+      - API_PORT=${API_PORT:-3030}
+      - API_HOST_PUBLIC=${API_HOST_PUBLIC:-api.mapx.localhost}
     build: ./api/.
     image: fredmoser/mx-api-node:1.6.33-alpine
     restart: always
@@ -62,24 +71,25 @@ services:
       - ./api:/apidev
       - ./_shared:/shared
   geoserver :
-    env_file: mapx.dev.env
+    env_file: env.development
     build: ./geoserver/.
     image: fredmoser/mx-api-geoserver:2.14.1-alpine
     ports: 
       - 8882:8080
     volumes:
-      - ./_shared:/shared
+      - ./_shared/geoserver:/shared/geoserver
     labels:
       - traefik.frontend.rule=Host:geoserver.mapx.localhost
   pg:
-    env_file: mapx.dev.env
-    build: ./pg/.
-    image: fredmoser/mx-postgis:11-alpine
+    env_file: env.development
+    image: mdillon/postgis:10-alpine
     restart: always
     hostname: pg
-    volumes :
+    volumes:
       - ./_shared:/shared
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
+      - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
     ports :
       - 5432:5432
   redis:
@@ -106,4 +116,10 @@ services:
       - traefik.port=8080
     ports:
       - 8080
-
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: none
+    labels:
+      - traefik.s1.frontend.rule=Host:mail.mapx.localhost
+      - traefik.s1.port=8025

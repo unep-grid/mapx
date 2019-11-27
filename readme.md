@@ -4,3 +4,52 @@
 
 ![mapx preview](app/src/png/mapx-preview.png "MapX")
 
+# Development environment
+
+The included `docker-compose.yml` allows to setup a development environment.
+
+A mapbox token is needed which can be set in a `.env` file as follow:
+```
+MAPX_MAPBOX_TOKEN=<your token>
+```
+
+Trigger the following script which init some required directories:
+```
+$ ./docker-compose.init.sh
+```
+
+Finally launch the mapx stack:
+```
+$ docker-compose up
+```
+
+The application should be available at http://app.mapx.localhost:8880/ (curl -H Host:app.mapx.localhost http://127.0.0.1/).
+
+An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at http://mail.mapx.localhost:8880/.
+
+## Development session for `app` service
+
+```
+$ docker-compose up -d
+$ docker-compose exec app sh
+$ cd /srv/shiny-server/dev/
+$ R
+$ source("run.R")
+```
+
+Then an instance of mapx should be available at http://dev.mapx.localhost:8880/ for which the source code from `./app/` is mounted as `/srv/shiny-server/dev/` in the container.
+
+## Development session for `api` service
+
+```
+$ API_PORT=3333 API_HOST_PUBLIC=apidev.mapx.localhost docker-compose up
+$ docker-compose exec api sh
+$ cd /apidev
+$ node inspect index.js port=3333
+...
+debug> c
+< listen to 3333
+...
+```
+
+The instance now should use the api at http://apidev.mapx.localhost/ for which the source from `./api/` is mounted as `/apidev/` in the container.
