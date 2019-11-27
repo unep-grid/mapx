@@ -1,21 +1,5 @@
 import {Events} from './events.js';
-
-const settings = {
-  url: 'http://localhost:80',
-  container: document.body,
-  height: 400,
-  width: 800,
-  params: {},
-  style: {
-    width: '810px',
-    height: '410px',
-    backgroundColor: '#474747',
-    resize: 'both',
-    border: 'none',
-    maxHeight: '100%',
-    maxWidth: '100%'
-  }
-};
+import * as settings from './settings.json'; 
 
 class FrameManager extends Events {
   constructor(opt) {
@@ -45,6 +29,9 @@ class FrameManager extends Events {
     this.iframe = document.createElement('iframe');
     for (let s in this.opt.style) {
       this.iframe.style[s] = this.opt.style[s];
+    }
+    if(!(this.opt.container instanceof Element)){
+      this.opt.container = document.querySelector(this.opt.container);
     }
     this.opt.container.appendChild(this.iframe);
   }
@@ -82,6 +69,7 @@ class FrameManager extends Events {
       const request = JSON.parse(msg.data);
       if (request === 'ready') {
         this.fire('ready');
+        console.log('ready received');
       } else if (request.idRequest > -1) {
         const req = this._req.find((r) => r.id === request.idRequest);
         if (req) {
@@ -121,8 +109,14 @@ class FrameWorker {
     this.init();
   }
   init() {
-    this.initListener();
-    this.post('ready');
+    if (this.isNested()) {
+      this.initListener();
+      this.post('ready');
+      console.log('ready posted');
+    }
+  }
+  isNested() {
+    return window.parent !== window;
   }
   destroy() {
     this.removeListener();
@@ -139,6 +133,7 @@ class FrameWorker {
     window.removeEventListener('message', this._msg_handler);
   }
   handleManagerMessage(msg) {
+    console.log(msg);
     try {
       const fw = this;
       const request = JSON.parse(msg.data);

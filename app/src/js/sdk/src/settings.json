@@ -1,0 +1,14 @@
+{
+  "url": "http://localhost:80",
+  "container": "body",
+  "params": {},
+  "style": {
+    "width": "810px",
+    "height": "410px",
+    "backgroundColor": "#474747",
+    "resize": "both",
+    "border": "none",
+    "maxHeight": "100%",
+    "maxWidth": "100%"
+  }
+}

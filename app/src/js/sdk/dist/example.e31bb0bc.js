@@ -208,6 +208,21 @@ function () {
 }();
 
 exports.Events = Events;
+},{}],"../src/settings.json":[function(require,module,exports) {
+module.exports = {
+  "url": "http://localhost:80",
+  "container": "body",
+  "params": {},
+  "style": {
+    "width": "810px",
+    "height": "410px",
+    "backgroundColor": "#474747",
+    "resize": "both",
+    "border": "none",
+    "maxHeight": "100%",
+    "maxWidth": "100%"
+  }
+};
 },{}],"../src/framecom.js":[function(require,module,exports) {
 "use strict";
 
@@ -217,6 +232,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.FrameWorker = exports.FrameManager = void 0;
 
 var _events = require("./events.js");
+
+var settings = _interopRequireWildcard(require("./settings.json"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -235,23 +256,6 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-var settings = {
-  url: 'http://localhost:80',
-  container: document.body,
-  height: 400,
-  width: 800,
-  params: {},
-  style: {
-    width: '810px',
-    height: '410px',
-    backgroundColor: '#474747',
-    resize: 'both',
-    border: 'none',
-    maxHeight: '100%',
-    maxWidth: '100%'
-  }
-};
 
 var FrameManager =
 /*#__PURE__*/
@@ -297,6 +301,10 @@ function (_Events) {
 
       for (var s in this.opt.style) {
         this.iframe.style[s] = this.opt.style[s];
+      }
+
+      if (!(this.opt.container instanceof Element)) {
+        this.opt.container = document.querySelector(this.opt.container);
       }
 
       this.opt.container.appendChild(this.iframe);
@@ -349,6 +357,7 @@ function (_Events) {
 
         if (request === 'ready') {
           this.fire('ready');
+          console.log('ready received');
         } else if (request.idRequest > -1) {
           var req = this._req.find(function (r) {
             return r.id === request.idRequest;
@@ -413,8 +422,16 @@ function () {
   _createClass(FrameWorker, [{
     key: "init",
     value: function init() {
-      this.initListener();
-      this.post('ready');
+      if (this.isNested()) {
+        this.initListener();
+        this.post('ready');
+        console.log('ready posted');
+      }
+    }
+  }, {
+    key: "isNested",
+    value: function isNested() {
+      return window.parent !== window;
     }
   }, {
     key: "destroy",
@@ -440,6 +457,8 @@ function () {
   }, {
     key: "handleManagerMessage",
     value: function handleManagerMessage(msg) {
+      console.log(msg);
+
       try {
         var fw = this;
         var request = JSON.parse(msg.data);
@@ -471,7 +490,7 @@ function () {
 }();
 
 exports.FrameWorker = FrameWorker;
-},{"./events.js":"../src/events.js"}],"../src/index.js":[function(require,module,exports) {
+},{"./events.js":"../src/events.js","./settings.json":"../src/settings.json"}],"../src/index.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -480,6 +499,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.MxSdkWorker = exports.MxSdk = void 0;
 
 var _framecom = require("./framecom.js");
+
+var settings = _interopRequireWildcard(require("./settings.json"));
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -501,9 +526,13 @@ function (_FrameManager) {
   _inherits(MxSdk, _FrameManager);
 
   function MxSdk(opt) {
+    var _this;
+
     _classCallCheck(this, MxSdk);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(MxSdk).call(this, opt));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(MxSdk).call(this, opt));
+    _this.opt = Object.assign({}, settings, opt);
+    return _this;
   }
 
   return MxSdk;
@@ -526,7 +555,7 @@ function (_FrameWorker) {
 }(_framecom.FrameWorker);
 
 exports.MxSdkWorker = MxSdkWorker;
-},{"./framecom.js":"../src/framecom.js"}],"index.js":[function(require,module,exports) {
+},{"./framecom.js":"../src/framecom.js","./settings.json":"../src/settings.json"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 var _index = require("../src/index.js");
@@ -574,7 +603,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56714" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57712" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

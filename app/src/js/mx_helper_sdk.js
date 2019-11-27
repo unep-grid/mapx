@@ -12,8 +12,6 @@ window.addEventListener('load', () => {
   });
 });
 
-
-
 function  getResolver (){
   const h = mx.helpers;
   return {
