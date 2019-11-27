@@ -15,7 +15,7 @@ _*
 # compiled js by webpack or parcel
 app/www/*
 app/src/built/*
-app/src/sdk/lib/*
+app/src/sdk/dist/*
 
 # Parcel
 .cache
