@@ -31,7 +31,6 @@ export function initLog() {
         id_log: 'session_start',
         data: {}
       });
-      console.log('session_start');
       /*
        * Force collect
        */
