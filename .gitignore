@@ -1,6 +1,6 @@
 
 
-# local folder, do not add to git
+# local folder: do not add to git
 _trash
 _archives
 _mail.txt
@@ -9,21 +9,29 @@ _shared
 _data
 _*
 
-# Passwords
+# Env variable
 *.env
 
-# build web files
+# compiled js by webpack or parcel
 app/www/*
 app/src/built/*
+app/src/sdk/lib/*
 
-# History files
+# Parcel
+.cache
+
+# History files – could be written during build
 .Rhistory
 .Rprofile
 .Rapp.history
+
 # Example code in package build process
 *-Ex.R
+
 # RStudio files
 .Rproj.user/
+
+
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
@@ -31,6 +39,7 @@ vignettes/*.pdf
 .DS_Store
 .Rproj.user
 packrat-scenario*/
+
 # libre office temp file
 .~lock*
 
@@ -46,9 +55,9 @@ Session.vim
 # Temporary
 .netrwhist
 *~
+
 # Auto-generated tag files
 tags
-
 
 #
 # node
@@ -110,6 +119,4 @@ typings/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variables file
-.env
 
