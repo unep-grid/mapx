@@ -1,0 +1,28 @@
+{
+  "name": "mxsdk",
+  "version": "0.0.1",
+  "description": "sdk for mapx app",
+  "main": "src/index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "parcel ./example/index.html",
+    "prod" : "parcel build src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unep-grid/map-x-mgl.git"
+  },
+  "keywords": [
+    "mapx",
+    "sdk"
+  ],
+  "author": "Fred Moser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unep-grid/map-x-mgl/issues"
+  },
+  "homepage": "https://github.com/unep-grid/map-x-mgl#readme"
+}

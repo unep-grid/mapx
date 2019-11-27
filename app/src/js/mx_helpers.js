@@ -27,7 +27,6 @@ export * from './mx_helper_draggable.js';
 export * from './mx_helper_dashboard.js';
 export * from './mx_helper_map_controls.js';
 export * from './mx_helper_map_pixop.js';
-export * from './mx_helper_map_print.js';
 export * from './mx_helper_map_composer.js';
 export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
@@ -54,6 +53,7 @@ export * from './mx_helper_fetch_progress.js';
 export * from './mx_helper_root_mode.js';
 export * from './mx_helper_url.js';
 export * from './mx_helper_ip.js';
+export * from './mx_helper_sdk.js';
 
 /**
 * imported module available in mx.helpers 
