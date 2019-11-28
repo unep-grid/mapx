@@ -78,8 +78,7 @@ observeEvent(reactData$showShareManager,{
         # Conditional option panel
         #
         checkboxInput('checkShareOptions',
-          label = tt('share_options'),
-          value = !hasViews
+          label = tt('share_options')
           ),
         conditionalPanel('input.checkShareOptions',
           wellPanel(

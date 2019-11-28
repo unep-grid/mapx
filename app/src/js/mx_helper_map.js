@@ -143,19 +143,6 @@ export function setProject(idProject, opt) {
   }
 }
 
-/**
- * Wrapper around set project for use with shiny binding
- * @param {Object} opt Options
- * @param {String} opt.idProject id of the project
- */
-export function updateProject(opt) {
-  mx.helpers.setProject(opt.idProject, opt);
-}
-
-/**
- * Trigger an membership request event in mapx Shiny app
- * @param {String} idProject id of the project
- */
 export function requestProjectMembership(idProject) {
   Shiny.onInputChange('requestProjectMembership', {
     id: idProject,
@@ -647,22 +634,12 @@ export function initMapxApp(o) {
    * Handle drop view or spatial dataset
    */
   if (h.handleMapDragOver && h.handleMapDrop) {
-    /**
-     * Allow view to be dropped when glopbal drag mode is enabled
-     */
-    elMap.classList.add('li-keep-enable-drop');
-
-    /**
-    * Listen to drag/drop
-    */
     mx.listenerStore.addListener({
       target: elMap,
       type: 'dragover',
       callback: h.handleMapDragOver,
       group: 'map_drag_over',
-      bind: mx,
-      throttle: true,
-      throttleTime: 200
+      bind: mx
     });
     mx.listenerStore.addListener({
       target: elMap,
@@ -1931,9 +1908,13 @@ export function viewOpenAuto(view) {
  */
 export function viewClose(view) {
   const h = mx.helpers;
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     view = h.getView(view);
-    if (h.isView(view) && view.vb) {
+
+    if (!h.isView(view)) {
+      reject('viewClose : no view given');
+    }
+    if (view && view.vb) {
       view.vb.close();
       h.viewModulesRemove(view);
     }
@@ -1943,7 +1924,7 @@ export function viewClose(view) {
 export function viewCloseAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
-  if (!h.isView(view)) {
+  if (!view) {
     return Promise.resolve(false);
   }
   return h.viewClose(view).then(() => {
@@ -3987,11 +3968,7 @@ export function getViewDescription(id, lang) {
  * @param {Boolean} opt.style Keep style. Default false
  */
 export function getViewLegend(id, opt) {
-  opt = Object.assign(
-    {},
-    {clone: true, input: false, class: true, style: false},
-    opt
-  );
+  opt = Object.assign({}, {clone: true, input: false, class: true, style: false}, opt);
 
   const h = mx.helpers;
   if (h.isView(id)) {
@@ -4008,11 +3985,11 @@ export function getViewLegend(id, opt) {
   if (hasLegend && opt.clone === true && opt.input === false) {
     elLegendClone.querySelectorAll('input').forEach((e) => e.remove());
   }
-  if (opt.clone === true && opt.style === false) {
-    elLegendClone.style = '';
+  if(opt.clone === true && opt.style === false){
+    elLegendClone.style = "";
   }
-  if (opt.clone === true && opt.class === false) {
-    elLegendClone.className = '';
+  if(opt.clone === true && opt.class === false){
+    elLegendClone.className = "";
   }
   return elLegendClone || elLegend || h.el('div');
 }

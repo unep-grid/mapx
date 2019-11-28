@@ -92,15 +92,13 @@ export function initLog() {
     type: 'view_added',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isView(d.view)) {
-        d.view._added_at = Date.now();
-        logger.add({
-          id_log: 'view_add',
-          data: {
-            id_view: d.idView
-          }
-        });
-      }
+      d.view._added_at = Date.now();
+      logger.add({
+        id_log: 'view_add',
+        data: {
+          id_view: d.idView
+        }
+      });
     }
   });
 
@@ -111,16 +109,14 @@ export function initLog() {
     type: 'view_removed',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isView(d.view) && d.view._added_at > 0) {
-        let viewDuration = (Date.now() - d.view._added_at) / 1000;
-        logger.add({
-          id_log: 'view_remove',
-          data: {
-            id_view: d.idView,
-            view_duration_seconds: viewDuration
-          }
-        });
-      }
+      let viewDuration = (Date.now() - d.view._added_at) / 1000;
+      logger.add({
+        id_log: 'view_remove',
+        data: {
+          id_view: d.idView,
+          view_duration_seconds: viewDuration
+        }
+      });
     }
   });
 

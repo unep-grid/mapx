@@ -14,23 +14,9 @@
 }
 
 .li-item.li-item-hidden,
-.li-group.li-group-collapsed:not(.li-group-invisible) .li-item {
-  display: none;
-}
-/*
-* If we display:none nested li-group in li-group-invisible, 
-* li-item will also be display:none. Solution: 
-* - remove border, padding and margin,
-* - hide header.
-*/
+.li-group.li-group-collapsed:not(.li-group-invisible) .li-item,
 .li-group.li-group-collapsed .li-group {
-  border:none;
-  padding:0;
-  margin:0;
-  min-height:0;
-}
-.li-group.li-group-collapsed .li-group .li-group-header {
-  display:none;
+  display: none;
 }
 
 .li-item-content {
@@ -97,7 +83,10 @@
 
 .li-drag-handle {
   cursor: grab;
-  position:relative
+}
+.li-drag-handle * {
+  cursor: grab;
+  pointer-events: none;
 }
 .li-dragged {
   opacity: 1;
@@ -110,7 +99,7 @@
 .li-global-dragging {
   cursor: grabbing !important;
 }
-.li-global-dragging *:not(.li-keep-enable-drop) {
+.li-global-dragging * {
   pointer-events: none !important;
 }
 .li-global-dragging .li-draggable {
