@@ -233,28 +233,6 @@ function stop(reason) {
 exports.stop = stop;
 
 /**
- * Validator test an input against an array of rules
- * @param {Array} validateRules Array of rules with a structure like :
- * [{
- *  id : '<id>',
- *  test : function(value){if(!value)(stop("Test failed"))}
- * }]
- * @return {Function} a validation functio taking two argument : id and value.
- */
-function validator(validateRules) {
-  return function validate(id, value) {
-    let out = value;
-    validateRules.forEach((r) => {
-      if (r.key === id) {
-        out = r.test(value);
-      }
-    });
-    return out;
-  };
-}
-exports.validator = validator;
-
-/**
  * Convert string input from query string (e.g. test=1,2,4 => [1,2,3]) as an array and clean
  * @param {String} v String value to convert
  */

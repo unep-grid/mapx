@@ -53,7 +53,6 @@ function validateSql(req, res, next) {
     try {
       ast = parser.astify(sql, opt);
     } catch (e) {
-      console.error(e.message);
       messages.push('The SQL query could not be parsed.');
     }
   }
@@ -78,7 +77,6 @@ function validateSql(req, res, next) {
     try {
       sqlParsed = parser.sqlify(ast, opt);
     } catch (e) {
-      console.error(e.message);
       messages.push('The AST object could not be parsed.');
     }
   }

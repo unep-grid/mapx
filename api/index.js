@@ -43,7 +43,7 @@ app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
 app.get('/get/query/', utils.query.get);
 app.get('/get/sql/', utils.query.get);
 app.get('/get/mirror/', utils.mirror.get);
-app.get('/get/config/map',utils.config.map.get);
+app.get('/get/config/map', utils.config.map.get);
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
 app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
@@ -53,12 +53,10 @@ app.get('/get/ip', utils.ip.get);
 app.post('/upload/image/', utils.image.upload);
 app.post('/upload/vector/', utils.vector.upload);
 app.post('/send/mail/', utils.mail.sendMailApi);
-app.post('/collect/logs/',utils.logs.collect);
+app.post('/collect/logs/', utils.logs.collect);
 
 /**
  * Start
  */
 console.log('listen to ' + port);
 app.listen(port);
-
-

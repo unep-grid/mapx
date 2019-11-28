@@ -51,10 +51,14 @@ function validateTokenHandler(req, res, next) {
         }
         next();
       } else {
-        throw new Error('Not valid');
+        throw new Error('Token not valid');
       }
     })
     .catch((err) => {
+      /**
+      * Log error
+      */
+      console.log(err);
       /**
        * Failed, stop here
        */
@@ -64,9 +68,8 @@ function validateTokenHandler(req, res, next) {
           msg: {
             reason: 'authentication failed',
             status: {
-              token: tokenData.isValid,
-              user: userData.isValid,
-              err: err
+              token_is_valid: tokenData.isValid,
+              user_is_valid: userData.isValid
             }
           }
         })

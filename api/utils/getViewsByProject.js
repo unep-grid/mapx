@@ -2,10 +2,26 @@ const clientPgRead = require.main.require('./db').pgRead;
 const utils = require('./utils.js');
 const template = require('../templates');
 const auth = require('./authentication.js');
-const validate = require('./getViews_validation.js').validate;
 
-exports.get = [auth.validateTokenHandler, getViewsHandler];
+const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator({
+  required: ['idUser', 'idProject'],
+  expected: [
+    'idProjectOption',
+    'idViews',
+    'idCollections',
+    'collectionsSelectOperator',
+    'selectKeys',
+    'selectKeysPublic',
+    'idTypes',
+    'roleMax',
+    'language',
+    'publicOnly',
+    'token',
+    'email' // requested / added by validateTokenHandler
+  ]
+});
 
+exports.get = [validateParamsHandler, auth.validateTokenHandler, getViewsHandler];
 exports.getViews = getViews;
 exports.getProjectViewsStates = getProjectViewsStates;
 
@@ -22,10 +38,10 @@ function getViewsHandler(req, res) {
         states: projectStates,
         views: views
       };
-      utils.sendJSON(res, data, {end: true });
+      utils.sendJSON(res, data, {end: true});
     })
     .catch((err) => {
-      console.error(err);
+      console.log(err);
       utils.sendError(res, err);
     });
 }
@@ -40,10 +56,6 @@ function getProjectViewsStates(opt) {
   opt = opt || {};
   let states = [];
   return new Promise((resolve) => {
-    /**
-     * Validate options
-     */
-    opt.idProject = validate('idProject', opt.idProject);
     /**
      * SQL
      */
@@ -71,30 +83,15 @@ function getViews(opt) {
     /**
      * Validate options
      */
-    opt.idUser = validate('idUser', opt.idUser || opt.user);
-    opt.idProject = validate('idProject', opt.idProject || opt.project);
-    opt.language = validate('language', opt.language);
-    opt.idTypes = validate('idTypes', opt.idTypes || opt.types);
     opt.hasFilterTypes = opt.idTypes.length > 0;
     opt.sqlTypesFilter = opt.idTypes.map((c) => "'" + c + "'").join(',');
-    opt.selectKeys = validate('selectKeys', opt.selectKeys || opt.selectString);
-    opt.idCollections = validate(
-      'idCollections',
-      opt.idCollections || opt.collections
-    );
-    opt.collectionsFilterOperator = validate(
-      'collectionsFilterOperator',
-      opt.collectionsSelectOperator
-    );
-    opt.roleMax = validate('roleMax', opt.roleMax || opt.filterViewsByRoleMax);
-    opt.idViews = validate('idViews', opt.idViews || opt.views);
     opt.hasFilterViews = opt.idViews.length > 0;
     opt.sqlViewsFilter = opt.idViews.map((c) => "'" + c + "'").join(',');
     opt.hasFilterCollections = opt.idCollections.length > 0;
     opt.sqlCollectionsFilter = opt.idCollections
       .map((c) => "'" + c + "'")
       .join(',');
-    opt.sqlCollectionsFilterOperator = opt.collectionsFilterOperator;
+    opt.sqlCollectionsSelectOperator = opt.collectionsSelectOperator;
 
     /**
      * SQL

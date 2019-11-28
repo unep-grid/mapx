@@ -105,7 +105,7 @@ AND
    */
   (
     CASE WHEN {{hasFilterCollections}} THEN 
-      v.data #> '{"collections"}' {{sqlCollectionsSelectOperator}} array[{{sqlCollectionsFilter}}]::text[]
+      v.data #> '{"collections"}' {{sqlCollectionsFilterOperator}} array[{{sqlCollectionsFilter}}]::text[]
     ELSE false END
     )
   )

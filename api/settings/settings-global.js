@@ -66,5 +66,55 @@ module.exports = {
       text: 'yoply',
       html: '<b>yopla</b>'
     }
+  },
+  validation_defaults: {
+    db : {
+      array_operators : {
+        ALL: '?&',
+        ANY: '?|',
+        OR: '?|',
+        AND: '?&'
+      }
+    },
+    users: {
+      roles: ['admin', 'publisher', 'member', 'public'],
+      id_public: 96,
+      id_admin: 1
+    },
+    views: {
+      types: ['vt', 'rt', 'sm', 'cc'],
+      keys_out: [
+        '*',
+        'id',
+        'editor',
+        'date_modified',
+        'data',
+        'type',
+        'pid',
+        'project',
+        'readers',
+        'editors',
+        '_edit',
+        '_title',
+        '_title_project',
+        '_source',
+        '_meta'
+      ],
+      keys_out_public: [
+        '*',
+        'id',
+        'editor',
+        'date_modified',
+        'data',
+        'type',
+        'pid',
+        'project',
+        'readers',
+        'editors',
+        '_title',
+        '_title_project',
+        '_meta'
+      ]
+    }
   }
 };
