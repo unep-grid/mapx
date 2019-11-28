@@ -1292,7 +1292,7 @@ function handleMouseDown(evt) {
       bind: li,
       callback: handleDragEnd,
       group: 'item_dragging',
-      type: ['dragend','mouseup']
+      type: ['dragend']
     });
   }
 }
@@ -1333,6 +1333,7 @@ function handleDragStart(evt) {
 function handleDragEnd(evt) {
   const li = this;
   li.listenerStore.removeListenerByGroup('item_dragging');
+  console.log('drag end');
   if (li.isDraggable(li.elDrag)) {
     /**
      * Remove draggable attribute,
@@ -1375,8 +1376,6 @@ function handleDragOver(evt) {
   if (isNotTarget || isItself || isChildren) {
     return;
   }
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
   evt.dataTransfer.dropEffect = 'move';
 
   let isGroup = li.isGroup(elTarget);

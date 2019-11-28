@@ -3,7 +3,7 @@ import {checkLanguage} from '../mx_helper_language.js';
 import {el} from '@fxi/el';
 
 class ViewBase {
-  constructor(view,enable) {
+  constructor(view, enable) {
     let vb = this;
     vb.view = view;
     view.vb = vb;
@@ -56,7 +56,11 @@ function build(enable) {
        <circle class='mx-view-tgl-btn-in' r=13 cx=15 cy=15></circle>
       </svg>`;
 
-  let elTitle = el('span', {class: 'mx-view-tgl-title'}, title);
+  let elTitle = el(
+    'span',
+    {class: ['mx-view-tgl-title', 'li-drag-handle']},
+    title
+  );
 
   let elBadges = el('div', {
     id: 'view_badges_' + view.id
@@ -96,14 +100,14 @@ function build(enable) {
     }
   });
 
-  if(enable){
+  if (enable) {
     elInput.checked = true;
   }
 
   let elLabel = el(
     'label',
     {
-      class: ['mx-view-tgl-content','li-drag-handle'],
+      class: ['mx-view-tgl-content'],
       for: 'check_view_enable_' + view.id
     },
     elButton,

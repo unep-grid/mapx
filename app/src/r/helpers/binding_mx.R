@@ -23,6 +23,7 @@ mxUpdateLanguage <- function( language = "en", session=shiny::getDefaultReactive
     )
 }
 
+
 #' Toggle disabling of given button, based on its id.
 #'
 #' Action or other button can be disabled using the attribute "disabled". This function can update a button state using this method.

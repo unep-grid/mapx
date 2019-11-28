@@ -339,6 +339,7 @@ function saveInLocalDb(opt) {
 
 export function handleMapDragOver(evt) {
   evt.preventDefault();
+  console.log('over map');
   evt.dataTransfer.dropEffect = 'move'; // Explicitly show this is a copy.
 }
 

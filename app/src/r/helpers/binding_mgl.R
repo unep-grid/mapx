@@ -43,6 +43,15 @@ mglGetProjectViewsState<- function(opt=list(),session=shiny::getDefaultReactiveD
     )
 }
 
+#' Set project
+#' @param idProject {Character} Id of the project
+#' @export
+mglUpdateProject <- function( idProject = config$project$default, session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglUpdateProject",list(
+      idProject = idProject
+      )
+    )
+}
 
 #' Update all view badges, and linked metadata if needed
 #' @param opt {List} list of option : forceUpadateMeta : force update of the metadata

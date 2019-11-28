@@ -148,10 +148,10 @@ observeEvent(input$btnAddProjectConfirm,{
 
 
 observeEvent(input$btnLoadNewProject,{
-  reactData$project <- reactData$projectAddId
   mxModal(
     id = "createNewProject",
     close = TRUE
     )
+  mglUpdateProject(reactData$projectAddId)
 })
 
