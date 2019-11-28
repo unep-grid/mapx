@@ -8,12 +8,7 @@
 
 The included `docker-compose.yml` allows to setup a development environment.
 
-A mapbox token is needed which can be set in a `.env` file as follow:
-```
-MAPX_MAPBOX_TOKEN=<your token>
-```
-
-Trigger the following script which init some required directories:
+Trigger the following script which init some required directories and copy the default environment variable to './mapx.dev.env' (if missing):
 ```
 $ ./docker-compose.init.sh
 ```
@@ -23,7 +18,7 @@ Finally launch the mapx stack:
 $ docker-compose up
 ```
 
-The application should be available at http://app.mapx.localhost:8880/ (curl -H Host:app.mapx.localhost http://127.0.0.1/).
+The application should be available at http://app.mapx.localhost:8880/ (curl -H Host:app.mapx.localhost http://127.0.0.1:8880/).
 
 An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at http://mail.mapx.localhost:8880/.
 
@@ -41,8 +36,19 @@ Then an instance of mapx should be available at http://dev.mapx.localhost:8880/ 
 
 ## Development session for `api` service
 
+Update your `mapx.dev.env` file as follow:
 ```
-$ API_PORT=3333 API_HOST_PUBLIC=apidev.mapx.localhost docker-compose up
+...
+# API_PORT=3030
+# API_HOST_PUBLIC=api.mapx.localhost
+API_PORT=3333
+API_HOST_PUBLIC=apidev.mapx.localhost
+...
+```
+
+The start the expressjs development server:
+```
+$ docker-compose up -d
 $ docker-compose exec api sh
 $ cd /apidev
 $ node inspect index.js port=3333
@@ -52,4 +58,6 @@ debug> c
 ...
 ```
 
-The instance now should use the api at http://apidev.mapx.localhost/ for which the source from `./api/` is mounted as `/apidev/` in the container.
+The instance now should use the api service at http://apidev.mapx.localhost/ for which the source from `./api/` is mounted as `/apidev/` in the container.
+
+Note that you might need to add the different hosts `*.mapx.localhost` to your system hosts file.

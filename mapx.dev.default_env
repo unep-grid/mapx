@@ -38,8 +38,8 @@ LC_ALL=en_US.UTF-8
 LANG=en_US.UTF-8
 
 API_HOST=api
-API_PORT=3030 # This variable is overrided in the docker-compose file
-API_HOST_PUBLIC=api.mapx.localhost # This variable is overrided in the docker-compose file
+API_PORT=3030
+API_HOST_PUBLIC=api.mapx.localhost
 API_PORT_PUBLIC=8880
 
 HOST_PG=pg
@@ -62,7 +62,7 @@ GEOSERVER_ADMIN_USERNAME=admin
 GEOSERVER_DATA_DIR=/shared/geoserver
 GEOSERVER_HOME=/geoserver
 
-MAPX_MAPBOX_TOKEN=... # This variable is overrided in the docker-compose file
+MAPX_MAPBOX_TOKEN=pk.eyJ1IjoiaGVsc2lua2kiLCJhIjoiY2szaWlvdDd1MDd6ZDNqcWw3bHVzajNwOSJ9._XKZVH3Q633f0SAU-lqiyA
 MAPX_DB_LOG_LEVELS=["ERROR","WARNING","MESSAGE","LOG","USER_ACTION"]
 MAPX_MODE=[]
 MAPX_PROJECT_CREATORS=[1]
