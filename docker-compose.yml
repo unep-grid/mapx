@@ -41,6 +41,7 @@ services:
     volumes:
       - ./app:/srv/shiny-server/dev
       - ./_shared:/shared
+      - ./app/userdata:/shared/userdata
   api:
     env_file: mapx.dev.env
     build: ./api/.
@@ -68,7 +69,7 @@ services:
     ports: 
       - 8882:8080
     volumes:
-      - ./_shared:/shared
+      - ./_shared/geoserver:/shared/geoserver
     labels:
       - traefik.frontend.rule=Host:geoserver.mapx.localhost
   pg:
@@ -76,9 +77,11 @@ services:
     image: mdillon/postgis:10-alpine
     restart: always
     hostname: pg
-    volumes :
+    volumes:
       - ./_shared:/shared
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
+      - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
     ports :
       - 5432:5432
   redis:
@@ -105,4 +108,10 @@ services:
       - traefik.port=8080
     ports:
       - 8080
-
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: none
+    labels:
+      - traefik.s1.frontend.rule=Host:mail.mapx.localhost
+      - traefik.s1.port=8025
