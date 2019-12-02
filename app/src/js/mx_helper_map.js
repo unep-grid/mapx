@@ -660,9 +660,7 @@ export function initMapxApp(o) {
       type: 'dragover',
       callback: h.handleMapDragOver,
       group: 'map_drag_over',
-      bind: mx,
-      throttle: true,
-      throttleTime: 200
+      bind: mx
     });
     mx.listenerStore.addListener({
       target: elMap,
