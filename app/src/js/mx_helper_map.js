@@ -568,7 +568,6 @@ export function initMapxStatic(o) {
     .then((bounds) => {
       if (bounds) {
         if (zoomToViews) {
-          console.log(bounds);
           map.fitBounds(bounds);
         }
 
@@ -1010,8 +1009,18 @@ export function updateViewsList(o) {
         array_sync: addSync,
         array_async: addAsync,
         array_async_all: addAsyncAll
-      }[mode](viewsToAdd);
+      }[mode](viewsToAdd)
+        .finally(cleanProgress);
     }
+
+
+    /* Clean progress radial */
+    function cleanProgress(){
+      if(prog instanceof RadialProgress){
+        prog.destroy();
+      }
+    }
+
 
     /* update progress */
     function updateProgress(d) {
@@ -1034,12 +1043,9 @@ export function updateViewsList(o) {
         });
       }
 
-      if (prog && prog.update && elProgContainer) {
+      if (prog instanceof RadialProgress && prog.update && elProgContainer) {
         percent = (d.loaded / d.total) * 100;
         prog.update(percent);
-        if (percent >= 100) {
-          prog.destroy();
-        }
       }
     }
 
