@@ -1,29 +1,30 @@
-var settings = require('./../settings');
-var multer = require('multer');
-var fs = require('fs');
-var path = require('path');
-var sendMail = require('./mail.js').sendMail;
-var auth = require('./authentication.js');
-var spawn = require('child_process').spawn;
-var pgWrite = require.main.require('./db').pgWrite;
-var emailAdmin = settings.mail.config.emailAdmin;
-var utils = require('./utils.js');
-var toRes = utils.toRes;
-var removeSource = require('./db.js').removeSource;
-var isLayerValid = require('./db.js').isLayerValid;
-var layerHasValues = require('./db.js').tableHasValues;
-var err = require('./errors.js').handleErrorText;
-var storage = multer.diskStorage({
+const settings = require('./../settings');
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
+const sendMail = require('./mail.js').sendMail;
+const auth = require('./authentication.js');
+const spawn = require('child_process').spawn;
+const pgWrite = require.main.require('./db').pgWrite;
+const emailAdmin = settings.mail.config.emailAdmin;
+const utils = require('./utils.js');
+const toRes = utils.toRes;
+const removeSource = require('./db.js').removeSource;
+const isLayerValid = require('./db.js').isLayerValid;
+const layerHasValues = require('./db.js').tableHasValues;
+const err = require('./errors.js').handleErrorText;
+const storage = multer.diskStorage({
   destination: function(req, file, cb) {
-    var pathTemp = settings.vector.path.temporary;
+    const pathTemp = settings.vector.path.temporary;
     cb(null, pathTemp);
   },
   filename: function(req, file, cb) {
-    cb(null, Date.now() + '_' + file.originalname);
+    let filename = file.originalname.replace(new RegExp(/\s+/,'g'),'_');
+    cb(null, Date.now() + '_' + filename);
   }
 });
 
-var uploadHandler = multer({storage: storage}).single('vector');
+const uploadHandler = multer({storage: storage}).single('vector');
 
 /**
  * Upload's middleware
@@ -47,27 +48,19 @@ module.exports.fileToPostgres = fileToPostgres;
  * Convert data
  */
 function convertOgrHandler(req, res, next) {
-  msg = '';
-  var sourceSrs, fileName, idUser, userToken, idProject;
-  var hasBody = typeof req.body === 'object';
+  const hasBody = typeof req.body === 'object' && req.file;
 
-  if (hasBody) {
-    idUser = req.body.idUser * 1;
-    idProject = req.body.idProject || req.body.project;
-    userToken = req.body.token;
-    userEmail = req.body.email;
-    sourceSrs = req.body.sourceSrs;
-    fileName = req.body.fileName || req.file ? req.file.filename : '';
-  } else {
-    idUser = req.query.idUser;
-    idProject = req.query.idProject || req.query.project;
-    userToken = req.query.token;
-    userEmail = req.query.email;
-    sourceSrs = req.query.sourceSrs;
-    fileName = req.query.fileName;
+  if(!hasBody){
+    throw new Error('Empty body');
   }
+  
+  const userEmail = req.body.email;
+  const sourceSrs = req.body.sourceSrs;
+  const fileName = req.file.filename;
+  const isZipped = req.file.mimetype === 'application/zip';
 
   fileToPostgres({
+    isZipped : isZipped,
     fileName: fileName,
     sourceSrs: sourceSrs,
     onSuccess: function(idSource) {
@@ -110,13 +103,13 @@ function addSourceHandler(req, res) {
   /**
    * TODO: use dedicated function registerOrRemoveSource in db.js
    */
-  var title = req.body.title;
-  var email = req.body.email;
-  var idProject = req.body.project;
-  var idUser = req.body.idUser * 1;
-  var idSource = req.body.idSource;
-  var fileToRemove = req.file.path;
-  var msg = {};
+  const title = req.body.title;
+  const email = req.body.email;
+  const idProject = req.body.project;
+  const idUser = req.body.idUser * 1;
+  const idSource = req.body.idSource;
+  const fileToRemove = req.file.path;
+  const msg = {};
 
   msg.waitValidation = `Geometry validation – This could take a while, please wait. If an error occurs, a message will be displayed `;
   msg.addedNewEntry = `Added new entry ${title} ( id = ${idSource} ) in project ${idProject}.`;
@@ -124,7 +117,7 @@ function addSourceHandler(req, res) {
   msg.titleMailSuccess = `MapX import success for source ${title}`;
   msg.titleMailError = `MapX import failed for source ${title}`;
 
-  var sqlAddSource = `INSERT INTO mx_sources (
+  const sqlAddSource = `INSERT INTO mx_sources (
     id, editor, readers, editors, date_modified, type, project, data
   ) VALUES ( 
     $1::text,
@@ -263,25 +256,24 @@ function cleanAll(fileToRemove, idSource, res) {
  */
 function fileToPostgres(config) {
   config = config || {};
-  var fileName = config.fileName;
-  var sourceSrs = config.sourceSrs;
-  var onMessage = config.onMessage || function() {};
-  var onError = config.onError || function() {};
-  var onSuccess = config.onSuccess || function() {};
-  var idSource = utils.randomString('mx_vector', 4, 5).toLowerCase();
+  const fileName = config.fileName;
+  const sourceSrs = config.sourceSrs;
+  const onMessage = config.onMessage || function() {};
+  const onError = config.onError || function() {};
+  const onSuccess = config.onSuccess || function() {};
+  const idSource = utils.randomString('mx_vector', 4, 5).toLowerCase();
+  const isZipped = config.isZipped === true;
 
   if (!fileName) {
     throw new Error('No filename given');
   }
 
-  var filePath = path.format({
+  let filePath = path.format({
     dir: settings.vector.path.temporary,
     base: fileName
   });
 
-  var isZip = fileName.search(/.zip$|.gz$/) !== -1;
-
-  if (isZip) {
+  if (isZipped) {
     filePath = '/vsizip/' + filePath;
   }
 
@@ -312,14 +304,14 @@ function fileToPostgres(config) {
   * Given the limited time to work on this, a warkaround has been found, 
   * using a script. This should be a temporary fix.
   */
-  var args = ['./sh/import_vector.sh', filePath, idSource, sourceSrs];
+  const args = ['./sh/import_vector.sh', filePath, idSource, sourceSrs];
 
-  var ogr = spawn('sh', args);
+  const ogr = spawn('sh', args);
 
   ogr.stdout.on('data', function(data) {
     data = data.toString('utf8');
-    var progressNums = data.split('.');
-    var hasProg = false;
+    let progressNums = data.split('.');
+    let hasProg = false;
     progressNums.forEach(function(prog) {
       prog = parseFloat(prog);
       if (!isNaN(prog) && isFinite(prog)) {
