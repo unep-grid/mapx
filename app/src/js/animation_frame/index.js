@@ -1,8 +1,8 @@
 let idDefault = 0;
 
-const cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+let cf = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
-const nf =
+let nf =
   window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
   window.mozRequestAnimationFrame ||
@@ -11,6 +11,12 @@ const nf =
   function(callback) {
     window.setTimeout(callback, 1000 / 60);
   };
+
+/**
+* Bug in Edge / ie 11;
+*/
+nf = nf.bind(window);
+cf = cf.bind(window);
 
 /**
  * Do something on next frame
