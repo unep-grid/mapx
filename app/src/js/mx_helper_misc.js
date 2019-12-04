@@ -2126,7 +2126,9 @@ export function convertAllImagesToBase64(elOrig) {
 export function urlToImageBase64(url) {
   const h = mx.helpers;
   let img = h.el('img', {
-    crossorigin: 'anonymous'
+    crossorigin: 'anonymous',
+    src:
+      `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`
   });
 
   fetch(url)
@@ -2135,7 +2137,7 @@ export function urlToImageBase64(url) {
     })
     .then(function(blob) {
       img.src = URL.createObjectURL(blob);
-      img.addEventListener('load',convertToBase64, {once:true});
+      img.addEventListener('load', convertToBase64, {once: true});
     })
     .catch((e) => {
       console.warn('urlToImageBase64 failed: ', e.message);

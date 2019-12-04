@@ -1,13 +1,16 @@
-
-
-export function fetchJsonProgress(url, opt){
-  return fetchProgress(url, opt)
-  .then(r=>{
-    return r.json();  
+export function fetchJsonProgress(url, opt) {
+  return fetchProgress(url, opt).then((r) => {
+    if (!r || !r.json) {
+      /**
+      * Prbably because Response not implemented. 
+      * try with xhr
+      */
+      return fetchJsonProgress_xhr(url, opt);
+    } else {
+      return r.json();
+    }
   });
 }
-
-
 
 export function fetchProgress(url, opt) {
   opt = opt || {};
