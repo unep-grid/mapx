@@ -40,7 +40,7 @@ export function path(obj, path, def) {
     obj = obj[path[i]];
   }
 
-  if (!obj) {
+  if (typeof obj === 'undefined' || obj === null ) {
     return out(def);
   }
 
