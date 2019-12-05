@@ -11,6 +11,11 @@ import {ButtonLegend} from './button_legend/index.js';
  */
 
 /**
+ * Store activated views
+ */
+const viewsActive = [];
+
+/**
  * Read and evaluate story map
  * @param {Object} o o.options
  * @param {String} o.id Map id
@@ -21,7 +26,6 @@ import {ButtonLegend} from './button_legend/index.js';
  * @param {Boolean} o.storyAutoStart Bypass everything, start story, don't display back button
  * @param
  */
-
 export function storyRead(o) {
   if (o.close) {
     return storyClose();
@@ -32,7 +36,7 @@ export function storyRead(o) {
     .then(setUi)
     .then(setListeners)
     .catch((e) => {
-      console.warn(e);
+      console.error(e);
     });
 }
 
@@ -70,6 +74,18 @@ function getStory(o) {
 }
 
 /**
+ * Get views id currently visible on map – included
+ * custom stuff,
+ */
+function getViewsOnMap(o) {
+  return mx.helpers.getLayerNamesByPrefix({
+    id: o.id,
+    prefix: 'MX',
+    base: true
+  });
+}
+
+/**
  * Clean + init
  */
 function cleanInit(o) {
@@ -88,11 +104,23 @@ function cleanInit(o) {
     if (oldData && oldData.close instanceof Function) {
       oldData.close();
     }
-
     o.enable = true;
 
     resolve(o);
   });
+}
+
+function cleanRemoveViews() {
+  const h = mx.helpers;
+  while (viewsActive.length > 0) {
+    let pos = viewsActive.length - 1;
+    let v = viewsActive[pos];
+    h.viewLayersRemove({
+      idView: v
+    });
+    h.viewModulesRemove(v);
+    viewsActive.splice(pos, 1);
+  }
 }
 
 /**
@@ -927,7 +955,7 @@ export function storyController(o) {
      */
     var oldViews = h.path(mx.data, 'story.data.views');
     if (!mx.helpers.isArray(oldViews)) {
-      oldViews = h.getViewsOnMap(o);
+      oldViews = getViewsOnMap(o);
     }
 
     /* Save current values */
@@ -977,13 +1005,7 @@ export function storyController(o) {
     /**
      * Remove layers added by the story
      */
-    h.getViewsOnMap(o).forEach((id) => {
-      h.viewLayersRemove({
-        id: o.id,
-        idView: id,
-        elLegendContainer: o.elLegendContainer
-      });
-    });
+    cleanRemoveViews();
 
     /**
      * Get previous stored data
@@ -1329,10 +1351,10 @@ export function storyPlayStep(o) {
   });
   easing = h.easingFun({type: anim.easing, power: anim.easing_power});
 
+  vVisible = viewsActive || [];
   /**
    * Add view if not alredy visible
    */
-  vVisible = h.getViewsOnMap(o);
   vToRemove = h.getArrayDiff(vVisible, vStep);
   vToAdd = h.getArrayDiff(vStep, vVisible);
 
@@ -1345,6 +1367,7 @@ export function storyPlayStep(o) {
       openView: false,
       elLegendContainer: elLegendContainer
     });
+    vVisible.push(v);
   });
 
   vToRemove.forEach(function(v) {
@@ -1353,17 +1376,19 @@ export function storyPlayStep(o) {
       idView: v,
       elLegendContainer: elLegendContainer
     });
+    vVisible.splice(vVisible.indexOf(v), 1);
+    h.viewModulesRemove(v);
   });
 
-  setTimeout(()=>{
+  setTimeout(() => {
     /**
-    * Set order after rendering
-    */
+     * Set order after rendering
+     */
     h.viewsLayersOrderUpdate({
       order: vStep,
       id: o.id
     });
-  },0);
+  }, 0);
 
   /**
    * Fly to position

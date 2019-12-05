@@ -1957,8 +1957,8 @@ export function viewClose(view) {
     view = h.getView(view);
     if (h.isView(view) && view.vb) {
       view.vb.close();
-      h.viewModulesRemove(view);
     }
+    h.viewModulesRemove(view);
     resolve(true);
   });
 }
@@ -2576,14 +2576,16 @@ function viewLayersAddCc(o) {
       opt.onInit = tryCatched(cc.onInit.bind());
       opt.onClose = cc.onClose.bind(opt);
 
-      if (opt.map.getSource(opt.idSource)) {
-        opt.map.removeSource(opt.idSource);
-      }
+      h.viewModulesRemove(view);
 
       mx.helpers.removeLayersByPrefix({
         prefix: opt.idView,
         id: mx.settings.map.id
       });
+
+      if (opt.map.getSource(opt.idSource)) {
+        opt.map.removeSource(opt.idSource);
+      }
 
       view._onRemoveCustomView = function() {
         if (!opt._init || opt._closed) {
@@ -4174,13 +4176,6 @@ export function getViewIndex(id) {
   return views.indexOf(view);
 }
 
-export function getViewsOnMap(o) {
-  return mx.helpers.getLayerNamesByPrefix({
-    id: o.id,
-    prefix: 'MX-',
-    base: true
-  });
-}
 
 /**
  * Toy function to make layer move
