@@ -383,8 +383,19 @@ export function initMapx(o) {
   /**
    * Set mode
    */
-  mx.settings.mode.storyAutoStart =
-    h.getQueryParameter('storyAutoStart')[0] === 'true';
+  if(!o.modeStatic && h.getQueryParameter('storyAutoStart')[0] === 'true'){
+    /**
+     * Temporary hack : force redirect here. URL rewrite in Traefik does
+     * not allow lookaround : it's not possible to have non trivial redirect.
+     */
+    const params = h.getQueryParametersAsObject(window.location.href);
+    const url = new URL(window.location);
+    url.searchParams.set('storyAutoStart', false);
+    url.pathname = '/static.html';
+    window.location = url.href;
+    return;
+  }
+  
   mx.settings.mode.static = o.modeStatic || mx.settings.mode.storyAutoStart;
   mx.settings.mode.app = !mx.settings.mode.static;
 
