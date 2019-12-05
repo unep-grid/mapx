@@ -659,8 +659,8 @@ export function initMapxApp(o) {
     elMap.classList.add('li-keep-enable-drop');
 
     /**
-    * Listen to drag/drop
-    */
+     * Listen to drag/drop
+     */
     mx.listenerStore.addListener({
       target: elMap,
       type: 'dragover',
@@ -1011,23 +1011,23 @@ export function updateViewsList(o) {
 
     /* Switch according to mode */
     function addViews() {
-      return {
+      let add = {
         object_single: addSingle,
         array_sync: addSync,
         array_async: addAsync,
         array_async_all: addAsyncAll
-      }[mode](viewsToAdd)
-        .finally(cleanProgress);
+      }[mode];
+      return new Promise((resolve) => {
+        resolve(add(viewsToAdd));
+      }).finally(cleanProgress);
     }
 
-
     /* Clean progress radial */
-    function cleanProgress(){
-      if(prog instanceof RadialProgress){
+    function cleanProgress() {
+      if (prog instanceof RadialProgress) {
         prog.destroy();
       }
     }
-
 
     /* update progress */
     function updateProgress(d) {

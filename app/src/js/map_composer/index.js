@@ -148,13 +148,14 @@ class MapComposer {
       unitTo: unit,
       dpi: dpi
     }));
-    mc.state.page_width = Math.floor(unitConvert({
+    //console.log(`unit change. SizeStep = $ {sizeStep} Min ${sizeStep} Max ${sizeStep*1000} unit ${unit}`);
+    mc.state.page_width = Math.round(unitConvert({
       value: mc.state.page_width,
       unitFrom: mc.state.unit,
       unitTo: unit,
       dpi: dpi
     }));
-    mc.state.page_height = Math.floor(unitConvert({
+    mc.state.page_height = Math.round(unitConvert({
       value: mc.state.page_height,
       unitFrom: mc.state.unit,
       unitTo: unit,

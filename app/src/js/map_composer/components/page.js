@@ -31,8 +31,8 @@ class Page extends Box {
     var page = this;
     var mc = page.mc;
     page.displayDim();
-    var w = Math.floor(page.toLengthUnit(page.width));
-    var h = Math.floor(page.toLengthUnit(page.height));
+    var w = Math.round(page.toLengthUnit(page.width));
+    var h = Math.round(page.toLengthUnit(page.height));
     page.mc.toolbar.elInputPageWidth.value = w;
     page.mc.toolbar.elInputPageHeight.value = h;
     mc.setState('page_width', w);

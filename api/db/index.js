@@ -5,12 +5,12 @@ const redis = require('redis');
 /*
  * custom type parsing
  */
-types.setTypeParser(
-  1700, // numeric
-  function(val) {
-    return parseFloat(val);
-  }
-);
+types.setTypeParser(1700, function(val) {
+  return parseFloat(val);
+});
+types.setTypeParser(20, function(value) {
+  return parseInt(value);
+});
 
 var pgWrite = new Pool({
   host: s.db.host,
