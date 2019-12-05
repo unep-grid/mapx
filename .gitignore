@@ -16,6 +16,7 @@ _*
 app/www/*
 app/src/built/*
 app/src/js/sdk/dist/*
+app/src/js/sdk/example/dist/*
 
 # Parcel
 .cache
