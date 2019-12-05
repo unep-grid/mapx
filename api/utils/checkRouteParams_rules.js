@@ -26,16 +26,7 @@ const rules = [
     }
   },
   {
-    key: ['idProject', 'project', 'idProjectExclude'],
-    test: (d) => {
-      return {
-        valid: validator.isLength(d, {min: 22, max: 22}),
-        value: d
-      };
-    }
-  },
-  {
-    key: 'idProjectOption',
+    key: ['idProject', 'project', 'idProjectExclude','idProjectOption'],
     test: (d) => {
       return {
         valid: validator.isLength(d, {min: 22, max: 22}),
