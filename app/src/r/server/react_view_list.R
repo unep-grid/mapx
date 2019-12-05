@@ -99,9 +99,9 @@ reactViewsListIdAll <- reactive({
     idUser = idUser,
     idProject = idProject, 
     idProjectExclude = idProject,
+    types = c('vt','cc','rt'),
     token = token,
     language = language,
-    types = c('vt','cc','rt'),
     keys = c("id","_title","_title_project")
     )
  

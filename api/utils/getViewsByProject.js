@@ -3,25 +3,30 @@ const utils = require('./utils.js');
 const template = require('../templates');
 const auth = require('./authentication.js');
 
-const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator({
-  required: ['idUser', 'idProject'],
-  expected: [
-    'idProjectOption',
-    'idViews',
-    'idCollections',
-    'collectionsSelectOperator',
-    'selectKeys',
-    'selectKeysPublic',
-    'idTypes',
-    'roleMax',
-    'language',
-    'publicOnly',
-    'token',
-    'email' // requested / added by validateTokenHandler
-  ]
-});
+const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
+  {
+    required: ['idUser', 'idProject','token'],
+    expected: [
+      'idProjectOption',
+      'idViews',
+      'collections',
+      'collectionsSelectOperator',
+      'selectKeys',
+      'selectKeysPublic',
+      'types',
+      'roleMax',
+      'language',
+      'publicOnly',
+      'email' 
+    ]
+  }
+);
 
-exports.get = [validateParamsHandler, auth.validateTokenHandler, getViewsHandler];
+exports.get = [
+  validateParamsHandler,
+  auth.validateTokenHandler,
+  getViewsHandler
+];
 exports.getViews = getViews;
 exports.getProjectViewsStates = getProjectViewsStates;
 
@@ -78,28 +83,45 @@ function getProjectViewsStates(opt) {
  */
 function getViews(opt) {
   opt = opt || {};
-  var sql;
   return new Promise((resolve) => {
     /**
-     * Validate options
+     * Set variable to alter the template :
+     * Instead of concatenating conditionally bits of
+     * sql, use a conditional block in sql template and
+     * set boolean beforehand, here.
      */
-    opt.hasFilterTypes = opt.idTypes.length > 0;
-    opt.sqlTypesFilter = opt.idTypes.map((c) => "'" + c + "'").join(',');
+    opt.hasFilterTypes = opt.types.length > 0;
     opt.hasFilterViews = opt.idViews.length > 0;
+    opt.hasFilterCollections = opt.collections.length > 0;
+    /**
+     * Convert array to sql code for the template
+     */
+    opt.sqlTypesFilter = opt.types.map((c) => "'" + c + "'").join(',');
     opt.sqlViewsFilter = opt.idViews.map((c) => "'" + c + "'").join(',');
-    opt.hasFilterCollections = opt.idCollections.length > 0;
-    opt.sqlCollectionsFilter = opt.idCollections
+    opt.sqlCollectionsFilter = opt.collections
       .map((c) => "'" + c + "'")
       .join(',');
     opt.sqlCollectionsSelectOperator = opt.collectionsSelectOperator;
 
     /**
-     * SQL
+     * Parse sql template
      */
-    sql = utils.parseTemplate(template.getViewsByProject, opt);
+    const sql = utils.parseTemplate(template.getViewsByProject, opt);
 
-    resolve(clientPgRead.query(sql));
+    /**
+     * Query
+     */
+    const result = clientPgRead.query(sql);
+
+    /**
+     * Resolve result
+     */
+    resolve(result);
   }).then(function(result) {
+
+    /**
+     * Finally return only rows
+     */
     return result.rows;
   });
 }

@@ -26,7 +26,7 @@ const rules = [
     }
   },
   {
-    key: ['idProject', 'project'],
+    key: ['idProject', 'project', 'idProjectExclude'],
     test: (d) => {
       return {
         valid: validator.isLength(d, {min: 22, max: 22}),
@@ -58,7 +58,7 @@ const rules = [
     }
   },
   {
-    key: 'idCollections',
+    key: 'collections',
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce(

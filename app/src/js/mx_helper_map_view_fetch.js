@@ -9,7 +9,7 @@ export function fetchViews(opt) {
   var token = mx.settings.user.token;
   var idViews = h.getQueryParameterInit(['idViews', 'views']);
   var idViewsOpen = h.getQueryParameterInit(['idViewsOpen','viewsOpen']);
-  var collections = h.getQueryParameterInit('collections');
+  var collections = h.getQueryParameterInit(['idCollections','collections' ]);
   var collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
   );
@@ -43,7 +43,7 @@ export function fetchViews(opt) {
       language: language,
       token: opt.token || token,
       idViews: idViews,
-      idCollections: opt.collections || collections,
+      collections: opt.collections || collections,
       collectionsSelectOperator:
         opt.collectionsSelectOperator || collectionsSelectOperator,
       roleMax: roleMax

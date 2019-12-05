@@ -99,14 +99,14 @@ AND
     )
   ELSE true END
   )
-  OR
+  AND
   /**
    * Filter by selected collections
    */
   (
     CASE WHEN {{hasFilterCollections}} THEN 
       v.data #> '{"collections"}' {{sqlCollectionsSelectOperator}} array[{{sqlCollectionsFilter}}]::text[]
-    ELSE false END
+    ELSE true END
     )
   )
   AND
