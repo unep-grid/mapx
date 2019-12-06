@@ -51,7 +51,7 @@ class Group {
     group.elHeader = li.el(
       'div',
       {
-        class: [li.opt.class.groupHeader, li.opt.class.dragHandle]
+        class: [li.opt.class.groupHeader]
       },
       li.el('span', {
         class: [li.opt.class.arrowBottom, li.opt.class.groupCaret]
@@ -59,7 +59,7 @@ class Group {
       li.el(
         'span',
         {
-          class: li.opt.class.groupTitle
+          class: [li.opt.class.groupTitle, li.opt.class.dragHandle]
         },
         opt.title[language] || opt.title[languageDefault]
       ),

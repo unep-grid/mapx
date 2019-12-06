@@ -78,21 +78,21 @@ export function viewsToNestedListState(views) {
  * @param {Array} state State list
  * @return {Array} modified state
  */
-function sanitizeState(state) {
+function sanitizeState(states) {
   const h = mx.helpers;
-  state = state || [];
+  const hasStateStored = h.isArray(states.stored) && 
+    states.stored.length > 0;
+  let state = hasStateStored ? states.stored : states.orig || [];
+  if (hasStateStored) {
+    console.warn('Using view list state stored');
+  }
   /**
    * Trim state
    */
   const views = h.getViews();
   const idsViews = views.map((v) => v.id);
-  state.forEach((s, i) => {
-    if (s.type === 'item') {
-      const missing = idsViews.indexOf(s.id) === -1;
-      if (missing) {
-        state.splice(i, 1);
-      }
-    }
+  state = state.filter((s) => {
+    return s.type !== 'item' || idsViews.indexOf(s.id) > -1;
   });
   /**
    * Expend state
@@ -204,9 +204,9 @@ export function viewsListRenderNew(o) {
   }
 
   /**
-  * Should be always empty
+   * Should be always empty
    */
-  if(mData.views.length > 0){
+  if (mData.views.length > 0) {
     mData.views.length = 0;
   }
 
@@ -225,7 +225,7 @@ export function viewsListRenderNew(o) {
     useStateStored: true,
     autoMergeState: true,
     emptyLabel: getEmptyLabel(),
-    classDragHandle : 'li-drag-handle',
+    classDragHandle: 'li-drag-handle',
     addDictItems: [
       {id: 'name_group', en: 'category', fr: 'catégorie'},
       {id: 'name_item', en: 'view', fr: 'vue'}
@@ -319,7 +319,7 @@ export function viewsListRenderNew(o) {
     }
     if (isItem) {
       const elView = el.querySelector('.mx-view-item');
-      let out = "";
+      let out = '';
       if (elView && elView.vb) {
         let out = mx.helpers.getViewJson(elView.vb.view);
         return out;

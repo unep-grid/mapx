@@ -780,6 +780,7 @@ class NestedList {
     }
     li.addUndoStep();
     li.clearAllItems();
+    li.setStateStored([]);
     li.setState({render: true, state: state, useStateStored: false});
     li.fire('state_reset', state);
   }
@@ -787,31 +788,19 @@ class NestedList {
     const li = this;
     li.setModeAnimate(false);
     li.clearAllItems();
-    opt = opt || {};
     opt = Object.assign({}, li.opt, opt);
-    let state = opt.state || li.getStateOrig();
-    if (opt.useStateStored) {
-      state = li.getStateStored();
-      let isValid = li.isArray(state) && state.length > 0;
-      if (isValid && opt.autoMergeState) {
-        let stateOrig = li.getStateOrig();
-        let allStoredIds = state.map((i) => i.id);
-        let allOrigIds = stateOrig.map((i) => i.id);
-        stateOrig.forEach((s) => {
-          if (allStoredIds.indexOf(s.id) === -1) {
-            state.push(s);
-          }
-        });
-        state = state.filter((s) => {
-          return s.type === 'group' || allOrigIds.indexOf(s.id) > -1;
-        });
-      }
+    let stateOrig = opt.state || li.getStateOrig();
+    let stateStored;
+    if(opt.useStateStored){
+      stateStored = li.getStateStored();
     }
-    state = state || li.getStateOrig();
     /**
      * Sanitize
      */
-    state = li.fire('state_sanitize', state);
+    let state = li.fire('state_sanitize', {
+      orig: stateOrig,
+      stored: stateStored
+    });
 
     /*
      * If the state is empty,
@@ -1256,9 +1245,9 @@ function handleContextClick(evt) {
 }
 
 /**
-* Mouse click
-*/
-function handleMouseClick(evt){
+ * Mouse click
+ */
+function handleMouseClick(evt) {
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const idAction = elTarget.dataset.li_id_action;
@@ -1301,6 +1290,7 @@ function handleMouseDown(evt) {
  * Start sort event listener
  */
 function handleDragStart(evt) {
+  console.log('dragStart');
   const li = this;
   const elDragImage = li.fire('set_drag_image', li.elDrag);
   const dragText = li.fire('set_drag_text', li.elDrag);
@@ -1333,7 +1323,6 @@ function handleDragStart(evt) {
 function handleDragEnd(evt) {
   const li = this;
   li.listenerStore.removeListenerByGroup('item_dragging');
-  console.log('drag end');
   if (li.isDraggable(li.elDrag)) {
     /**
      * Remove draggable attribute,
@@ -1458,4 +1447,3 @@ function handleDragOver(evt) {
     console.warn(e);
   }
 }
-
