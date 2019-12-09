@@ -83,9 +83,6 @@ function sanitizeState(states) {
   const hasStateStored = h.isArray(states.stored) && 
     states.stored.length > 0;
   let state = hasStateStored ? states.stored : states.orig || [];
-  if (hasStateStored) {
-    console.warn('Using view list state stored');
-  }
   /**
    * Trim state
    */
