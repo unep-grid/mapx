@@ -1322,6 +1322,7 @@ function handleDragStart(evt) {
  */
 function handleDragEnd(evt) {
   const li = this;
+  evt.preventDefault();
   li.listenerStore.removeListenerByGroup('item_dragging');
   if (li.isDraggable(li.elDrag)) {
     /**

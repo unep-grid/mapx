@@ -349,6 +349,7 @@ export function handleMapDragOver(evt) {
 export function handleMapDrop(evt) {
   const h = mx.helpers;
   let dt = evt.dataTransfer;
+  evt.preventDefault();
 
   if (!dt) {
     return;
@@ -360,7 +361,7 @@ export function handleMapDrop(evt) {
   let hasFiles = files.length > 0;
 
   if(hasData || hasFiles){
-    evt.preventDefault();
+    evt.stopPropagation();
   }else{
     return;
   }
