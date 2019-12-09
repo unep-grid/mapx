@@ -17,6 +17,7 @@ app/www/*
 app/src/built/*
 app/src/js/sdk/dist/*
 app/src/js/sdk/example/dist/*
+app/src/sprites/dist/*
 
 # Parcel
 .cache
