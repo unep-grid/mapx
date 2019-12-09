@@ -30,6 +30,7 @@ export function getProjectViewsState(opt) {
         return;
       }
       state.push(...mData.viewsList.getState());
+      mData.viewsList.setStateOrig(state);
     }
     if (hasShiny) {
       Shiny.onInputChange(idInput, JSON.stringify(state));
