@@ -81,8 +81,7 @@ export function viewsToNestedListState(views) {
  */
 function sanitizeState(states) {
   const h = mx.helpers;
-  const hasStateStored = h.isArray(states.stored) && 
-    states.stored.length > 0;
+  const hasStateStored = h.isArray(states.stored) && states.stored.length > 0;
   let state = hasStateStored ? states.stored : states.orig || [];
   /**
    * Trim state
@@ -224,7 +223,7 @@ export function viewsListRenderNew(o) {
     autoMergeState: true,
     emptyLabel: getEmptyLabel(),
     classDragHandle: 'li-drag-handle',
-    addDictItems: [
+    customDictItems: [
       {id: 'name_group', en: 'category', fr: 'catégorie'},
       {id: 'name_item', en: 'view', fr: 'vue'}
     ],

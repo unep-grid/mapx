@@ -347,9 +347,9 @@ export function handleMapDragOver(evt) {
  *
  */
 export function handleMapDrop(evt) {
+  evt.preventDefault();
   const h = mx.helpers;
   let dt = evt.dataTransfer;
-  evt.preventDefault();
 
   if (!dt) {
     return;
