@@ -791,7 +791,7 @@ class NestedList {
     opt = Object.assign({}, li.opt, opt);
     let stateOrig = opt.state || li.getStateOrig();
     let stateStored;
-    if(opt.useStateStored){
+    if (opt.useStateStored) {
       stateStored = li.getStateStored();
     }
     /**
@@ -1055,10 +1055,10 @@ class NestedList {
   isFunction(item) {
     return item && item instanceof Function;
   }
-  randomId() {
+  randomId(prefix) {
     const li = this;
     return (
-      li.opt.prefix +
+      (prefix || li.opt.prefix) +
       '_' +
       Math.random()
         .toString(32)
@@ -1269,14 +1269,14 @@ function handleMouseDown(evt) {
   const isHandle = li.isDragHandle(evt.target);
   if (isHandle) {
     li.setUiDraggingInit(elTarget);
-    li.listenerStore.addListener({
+    li.listenerStore.addListenerOnce({
       target: elTarget,
       bind: li,
       callback: handleDragStart,
       group: 'item_dragging',
       type: ['dragstart']
     });
-    li.listenerStore.addListener({
+    li.listenerStore.addListenerOnce({
       target: window,
       bind: li,
       callback: handleDragEnd,
@@ -1292,28 +1292,42 @@ function handleMouseDown(evt) {
 function handleDragStart(evt) {
   console.log('dragStart');
   const li = this;
+  li.fire('sort_start', evt);
+
+  /**
+   * Build drag image, set ui dragging mode and set
+   * datatransfer data
+   */
   const elDragImage = li.fire('set_drag_image', li.elDrag);
   const dragText = li.fire('set_drag_text', li.elDrag);
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
-  li.fire('sort_start', evt);
+
   li.setUiDraggingStart();
   li.addUndoStep();
   evt.dataTransfer.effectAllowed = 'move';
   evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
-  evt.dataTransfer.setData('text/plain', elDragImage.innerText);
   evt.dataTransfer.setData('text/plain', dragText);
   li.elNext = li.elDrag.nextSibling;
 
-  li.listenerStore.addListener({
-    target: li.elRoot,
-    bind: li,
-    type: 'dragover',
-    group: 'item_dragging',
-    callback: handleDragOver,
-    throttle: true,
-    throttleTime: 100
+  /**
+   * On drag start, listen to drag enter events
+   */
+  const elsTarget = li.getChildrenTarget();
+
+  elsTarget.forEach((elTarget) => {
+    if (li.isSameElement(elTarget, li.elDrag)) {
+      return;
+    }
+    li.listenerStore.addListener({
+      target: elTarget,
+      bind: li,
+      type: 'dragover',
+      group: 'item_dragging',
+      callback: handleDragOver,
+      debounce: true
+    });
   });
 }
 
@@ -1347,27 +1361,14 @@ function handleDragEnd(evt) {
  * Over event listener
  */
 function handleDragOver(evt) {
-  evt.preventDefault();
   const li = this;
-  if (li.isBusy()) {
-    return;
-  }
-  let elTarget = li.getTarget(evt.target);
-  /**
-   * Target evaluation
-   */
-  let areElements = li.isElement(elTarget) && li.isElement(li.elDrag);
-  if (!areElements) {
-    return;
-  }
-  let isNotTarget = !li.isTarget(elTarget);
-  let isChildren = li.isChildOf(elTarget, li.elDrag);
-  let isItself = li.isSameElement(elTarget, li.elDrag);
-  if (isNotTarget || isItself || isChildren) {
-    return;
-  }
-  evt.dataTransfer.dropEffect = 'move';
 
+  evt.dataTransfer.dropEffect = 'move';
+  evt.preventDefault();
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
+
+  let elTarget = evt.target;
   let isGroup = li.isGroup(elTarget);
   let isGroupCollapsed = isGroup && li.isGroupCollapsed(elTarget);
   let elDrag = li.elDrag;
