@@ -47,7 +47,7 @@ const extend = {
   position: {},
   texteditor: {}
 };
-
+const info = {};
 export {
   /// globally available library
   mapboxgl,
@@ -62,6 +62,7 @@ export {
   templates,
   maps,
   data,
+  info,
   selectize,
   queue,
   widgets,

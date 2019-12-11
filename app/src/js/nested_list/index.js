@@ -64,13 +64,6 @@ class NestedList {
       group: 'base',
       type: 'mousedown'
     });
-/*    li.listenerStore.addListener({*/
-      //target: li.elRoot,
-      //bind: li,
-      //callback: handleMouseClick,
-      //group: 'base',
-      //type: 'click'
-    /*});*/
   }
   stopListening() {
     this.listenerStore.removeListenerByGroup('base');
@@ -941,15 +934,39 @@ class NestedList {
   setDragStart() {
     const li = this;
     const hasDrag = li.isElement(li.drag.el);
-    if(hasDrag){
-      li.drag.el.classList.add(li.opt.class.dragged);
-      document.body.classList.add(li.opt.class.globalDragging);
+    if (hasDrag) {
+      /**
+      * Set timeout to avoid 'dragend' being fired
+      * immediatly after the upper view stack being collapsed.
+      *  
+      * -------------------------------
+      *  /---
+      *  |    not collapsed
+      *  \--- 
+      *  /---
+      *  |
+      *  \--- * <-
+      * --------------------------------
+      *  /--- collapsed
+      *  \---
+      *  /---
+      *  |
+      *  \---
+      *     
+      *      * <- pointer is immediatly out = draggend fired 
+      *  
+      */
+      setTimeout(() => {
+        li.drag.el.classList.add(li.opt.class.dragged);
+        document.body.classList.add(li.opt.class.globalDragging);
+      }, 200);
     }
   }
   setDragClean() {
     const li = this;
     const hasDrag = li.isElement(li.drag.el);
-    if(hasDrag){
+
+    if (hasDrag) {
       li.drag.el.classList.remove(li.opt.class.dragged);
       li.drag.el.setAttribute('draggable', false);
       li.drag = {};
@@ -1204,7 +1221,8 @@ class NestedList {
       elItem.dataset.to_x = rect.left;
       elItem.dataset.dist_y = elItem.dataset.to_y - elItem.dataset.from_y;
       elItem.dataset.dist_x = elItem.dataset.to_x - elItem.dataset.from_x;
-      elItem.style.transform = `translateY( ${-elItem.dataset.dist_y}px ) translateX( ${-elItem.dataset.dist_x}px )`;
+      elItem.style.transform = `translateY( ${-elItem.dataset
+        .dist_y}px ) translateX( ${-elItem.dataset.dist_x}px )`;
       setTimeout(() => {
         anim(elItem);
       }, 0);
@@ -1263,8 +1281,13 @@ function handleMouseClick(evt) {
   const elTarget = li.getTarget(evt.target);
   const idAction = elTarget.dataset.li_id_action;
   const idType = elTarget.dataset.li_event_type;
-  const isValidEvent = idType === 'click' && idAction && li.isTarget(elTarget);
-  if (isValidEvent && idAction === 'li_group_toggle') {
+  const isValid =
+    !li.drag.el &&
+    idType === 'click' &&
+    idAction &&
+    idAction === 'li_group_toggle' &&
+    li.isTarget(elTarget);
+  if (isValid) {
     evt.stopPropagation();
     evt.stopImmediatePropagation();
     li.groupToggle(elTarget, true);
@@ -1277,10 +1300,9 @@ function handleMouseDown(evt) {
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
-  evt.stopPropagation();
-  evt.stopImmediatePropagation();
 
-  if(!isHandle){
+  if (!isHandle) {
+
     li.listenerStore.addListenerOnce({
       target: evt.target,
       bind: li,
@@ -1288,9 +1310,8 @@ function handleMouseDown(evt) {
       group: 'base',
       type: 'mouseup'
     });
-  }else{
-
-     li.setDragInit(elTarget);
+  } else {
+    li.setDragInit(elTarget);
 
     /**
      * Draggable
@@ -1304,7 +1325,7 @@ function handleMouseDown(evt) {
     });
 
     li.listenerStore.addListenerOnce({
-      target: elTarget,
+      target: window,
       bind: li,
       callback: handleDragEnd,
       group: 'item_dragging',
@@ -1349,7 +1370,6 @@ function handleDragStart(evt) {
   const li = this;
 
   li.fire('sort_start', evt);
-
   /**
    * Build drag image, set ui dragging mode and set
    * datatransfer data
@@ -1503,4 +1523,3 @@ function handleDragOver(evt) {
     console.warn(e);
   }
 }
-
