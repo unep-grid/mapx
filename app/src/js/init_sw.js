@@ -165,7 +165,7 @@ function showRefreshUI(registration) {
   }
 
   function buildAlert() {
-    h.getDictItem(['update_app_msg']).then((w) => {
+    mx.helpers.getDictItem(['update_app_msg']).then((w) => {
       alert(w[0]);
       update();
     });
