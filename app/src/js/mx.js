@@ -10,6 +10,7 @@ const templates = {
   viewListLegend: require('../dot/view_list_legend.dot'),
   viewListOptions: require('../dot/view_list_options.dot')
 };
+
 const maps = {};
 const data = {
   geojson: localforage.createInstance({

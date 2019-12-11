@@ -12,15 +12,15 @@ module.exports = {
     fs: 'empty'
   },
   entry: {
-    sw: './src/js/init_sw.js',
-    common: './src/js/init_common.js',
+    mx: './src/js/init_mx.js',
     jquery: './src/js/init_jquery.js',
     shiny: './src/js/init_shiny.js',
-    static: './src/js/init_static.js'
+    static: './src/js/init_static.js',
+    sw: './src/js/init_sw.js'
   },
   output: {
-    filename: '[name].bundle.js',
-    chunkFilename: '[name].chunk.js',
+    filename: '[name].[chunkhash].bundle.js',
+    chunkFilename: '[name].[chunkhash].chunk.js',
     path: path.resolve(__dirname, '../www'),
     publicPath: '/'
   },

@@ -32,12 +32,12 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       template: './src/html/static.html',
       filename: './static.html',
-      chunks: ['common', 'sw', 'static']
+      chunks: ['sw', 'mx', 'static']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/html/index.html',
-      chunks: ['common', 'sw', 'jquery', 'shiny']
+      chunks: ['sw','mx', 'jquery', 'shiny']
     }),
     new CopyWebpackPlugin([
       {
