@@ -6326,8 +6326,8 @@
   },
   {
     "id": "update_app_msg",
-    "en": "MapX has been updated, click on the button to install new version",
-    "fr": "MapX a été mis à jour, cliquez sur le bouton pour installer",
+    "en": "MapX has been updated, this page will be reloaded now.",
+    "fr": "MapX a été mis à jour, cette page va être rechargée maintenant.",
     "es": "",
     "ru": "",
     "zh": "",

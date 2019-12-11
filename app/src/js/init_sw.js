@@ -3,8 +3,8 @@
  * Adapted from https://developers.google.com/web/tools/workbox/guides/advanced-recipes
  * SEE also sw_listen_skip_waiting_install.js in ./webpack folder
  */
-var minQuota = 100000000; // 100 MB or 95.4 MiB
-var isCompatible =
+const minQuota = 100000000; // 100 MB or 95.4 MiB
+const isCompatible =
   'serviceWorker' in navigator &&
   'storage' in navigator &&
   'estimate' in navigator.storage &&
@@ -22,7 +22,7 @@ if (isCompatible) {
       log(`SW - Storage seems ok, register service worker.`);
       addListener();
     } else {
-      log(`SW - There is not enough storage.`);
+      log(`SW - There is not enough storage, MapX will try to remove cache.`);
       cleanSw()
         .then(clearCache)
         .then(hasEnoughStorage)
@@ -34,7 +34,7 @@ if (isCompatible) {
             restart();
           }
           log(
-            `SW - Lack of storage space, don't try to register service worker restart.`
+            `SW - Lack of storage space, MapX will not try to register service worker restart.`
           );
         });
     }
@@ -145,22 +145,13 @@ function handleNewServiceWorker(registration, informUser) {
  * Display a modal window to inform the user to update
  */
 function showRefreshUI(registration) {
-  var skipWaiting = !!(
-    !mx ||
-    !mx.info ||
-    !mx.helpers ||
-    !mx.helpers.el ||
-    !mx.helpers.modal ||
-    !mx.helpers.getDictItem
-  );
+  var skipWaiting = !window.mx || !window.mx.helpers.getDictItem;
 
   if (skipWaiting) {
-    log('Skip waiting');
     return update();
   }
 
-  log('Ask the user to install');
-  buildModal();
+  buildAlert();
 
   function update(e) {
     if (!registration.waiting) {
@@ -173,36 +164,17 @@ function showRefreshUI(registration) {
     registration.waiting.postMessage('mx_install');
   }
 
-  function buildModal() {
-    var h = mx.helpers;
-    h.getDictItem([
-      'btn_install_update',
-      'update_app_title',
-      'update_app_msg'
-    ]).then((w) => {
-      var txtButton = w[0];
-      var titleModal = w[1];
-      var txtMsg = w[2];
-
-      var btn = h.el('button', txtButton, {
-        class: 'btn btn-default'
-      });
-
-      var txt = h.el('p', txtMsg);
-      var msg = h.el('div', txt, btn);
-
-      btn.addEventListener('click', update);
-
-      h.modal({
-        zIndex: 100000,
-        title: titleModal,
-        id: 'a',
-        content: msg
-      });
+  function buildAlert() {
+    h.getDictItem(['update_app_msg']).then((w) => {
+      alert(w[0]);
+      update();
     });
   }
 }
 
+/**
+ * Display messages if debug mode
+ */
 function log(msg) {
   if (debug) {
     console.log(msg);
