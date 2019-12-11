@@ -312,7 +312,7 @@ export function viewsListRenderNew(o) {
     const isGroup = li.isGroup(el);
     const isItem = !isGroup && li.isItem(el);
     if (isGroup) {
-      return el.dataset;
+      return el.id;
     }
     if (isItem) {
       const elView = el.querySelector('.mx-view-item');

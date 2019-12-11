@@ -356,12 +356,13 @@ export function handleMapDrop(evt) {
   }
 
   let files = evt.dataTransfer.files;
-  let data = evt.dataTransfer.getData('text');
+  let data = evt.dataTransfer.getData('application/json');
   let hasData = h.isJson(data);
   let hasFiles = files.length > 0;
 
   if(hasData || hasFiles){
     evt.stopPropagation();
+    evt.stopImmediatePropagation();
   }else{
     return;
   }

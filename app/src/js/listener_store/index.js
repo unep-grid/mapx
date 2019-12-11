@@ -1,5 +1,6 @@
 import {onNextFrame, cancelFrame} from '../animation_frame/index.js';
 //let idFrame = 0;
+
 /**
  * Event management
  */
@@ -55,6 +56,10 @@ class ListenerStore {
   }
   addListener(opt) {
     const li = this;
+    if(opt.options && opt.options.once===true){
+      opt.options.once = false;
+     return addListenerOnce(opt);
+    }
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
     if (opt.throttle) {
@@ -77,7 +82,7 @@ class ListenerStore {
 
     if (opt.target instanceof Element || opt.target instanceof Window) {
       opt.type.forEach((t) => {
-        opt.target.addEventListener(t, opt.callback);
+        opt.target.addEventListener(t, opt.callback, opt.options || false);
       });
     }
     return opt;
@@ -86,7 +91,7 @@ class ListenerStore {
     const li = this;
     const callback = opt.callback.bind(opt.bind || li);
     opt.callback = cb;
-    li.addListener(opt);
+    return li.addListener(opt);
     function cb(d) {
       li.removeListener(opt);
       callback(d);

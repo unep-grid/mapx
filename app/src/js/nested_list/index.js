@@ -27,6 +27,7 @@ class NestedList {
     li.meta = [];
     li.contextMenu = null;
     li.init();
+    li.drag = {};
   }
   /**
    * Init/destroy
@@ -63,13 +64,13 @@ class NestedList {
       group: 'base',
       type: 'mousedown'
     });
-    li.listenerStore.addListener({
-      target: li.elRoot,
-      bind: li,
-      callback: handleMouseClick,
-      group: 'base',
-      type: 'click'
-    });
+/*    li.listenerStore.addListener({*/
+      //target: li.elRoot,
+      //bind: li,
+      //callback: handleMouseClick,
+      //group: 'base',
+      //type: 'click'
+    /*});*/
   }
   stopListening() {
     this.listenerStore.removeListenerByGroup('base');
@@ -932,27 +933,31 @@ class NestedList {
   /**
    * Helpers
    */
-  setUiDraggingInit(elTarget) {
+  setDragInit(elTarget) {
     const li = this;
-    li.elDrag = elTarget;
-    li.elDrag.setAttribute('draggable', true);
+    li.drag.el = elTarget;
+    li.drag.el.setAttribute('draggable', true);
   }
-  setUiDraggingStart() {
+  setDragStart() {
     const li = this;
-    setTimeout(() => {
-      li.elDrag.classList.add(li.opt.class.dragged);
+    const hasDrag = li.isElement(li.drag.el);
+    if(hasDrag){
+      li.drag.el.classList.add(li.opt.class.dragged);
       document.body.classList.add(li.opt.class.globalDragging);
-    }, 0);
+    }
   }
-  setUiDraggingEnd() {
+  setDragClean() {
     const li = this;
-    setTimeout(() => {
-      li.elDrag.classList.remove(li.opt.class.dragged);
-      li.elDrag.setAttribute('draggable', false);
-      li.elDrag = null;
-      document.body.classList.remove(li.opt.class.globalDragging);
-    }, 0);
+    const hasDrag = li.isElement(li.drag.el);
+    if(hasDrag){
+      li.drag.el.classList.remove(li.opt.class.dragged);
+      li.drag.el.setAttribute('draggable', false);
+      li.drag = {};
+    }
+    document.body.classList.remove(li.opt.class.globalDragging);
+    li.listenerStore.removeListenerByGroup('item_dragging');
   }
+
   setBusy(busy) {
     this._is_busy = busy === true;
   }
@@ -1176,7 +1181,9 @@ class NestedList {
     function savePos() {
       els.forEach((e, i) => {
         if (li.isElement(e)) {
-          e.dataset.from = e.getBoundingClientRect().top;
+          let rect = e.getBoundingClientRect();
+          e.dataset.from_y = rect.top;
+          e.dataset.from_x = rect.left;
         } else {
           els.splice(i, 1);
         }
@@ -1192,9 +1199,12 @@ class NestedList {
       });
     }
     function set(elItem) {
-      elItem.dataset.to = elItem.getBoundingClientRect().top;
-      elItem.dataset.dist = elItem.dataset.to - elItem.dataset.from;
-      elItem.style.transform = 'translateY(' + -elItem.dataset.dist + 'px)';
+      let rect = elItem.getBoundingClientRect();
+      elItem.dataset.to_y = rect.top;
+      elItem.dataset.to_x = rect.left;
+      elItem.dataset.dist_y = elItem.dataset.to_y - elItem.dataset.from_y;
+      elItem.dataset.dist_x = elItem.dataset.to_x - elItem.dataset.from_x;
+      elItem.style.transform = `translateY( ${-elItem.dataset.dist_y}px ) translateX( ${-elItem.dataset.dist_x}px )`;
       setTimeout(() => {
         anim(elItem);
       }, 0);
@@ -1222,6 +1232,7 @@ class NestedList {
       }
     }
   }
+
   isDevMode() {
     return window.innerWidth < window.outerWidth;
   }
@@ -1233,8 +1244,8 @@ export {NestedList};
  * Click in context menu event listener
  */
 function handleContextClick(evt) {
-  evt.preventDefault();
   const li = this;
+  evt.preventDefault();
   if (li.contextMenu instanceof ContextMenu) {
     li.contextMenu.destroy();
   }
@@ -1254,7 +1265,6 @@ function handleMouseClick(evt) {
   const idType = elTarget.dataset.li_event_type;
   const isValidEvent = idType === 'click' && idAction && li.isTarget(elTarget);
   if (isValidEvent && idAction === 'li_group_toggle') {
-    evt.preventDefault();
     evt.stopPropagation();
     evt.stopImmediatePropagation();
     li.groupToggle(elTarget, true);
@@ -1267,8 +1277,24 @@ function handleMouseDown(evt) {
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
-  if (isHandle) {
-    li.setUiDraggingInit(elTarget);
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
+
+  if(!isHandle){
+    li.listenerStore.addListenerOnce({
+      target: evt.target,
+      bind: li,
+      callback: handleMouseClick,
+      group: 'base',
+      type: 'mouseup'
+    });
+  }else{
+
+     li.setDragInit(elTarget);
+
+    /**
+     * Draggable
+     */
     li.listenerStore.addListenerOnce({
       target: elTarget,
       bind: li,
@@ -1276,12 +1302,42 @@ function handleMouseDown(evt) {
       group: 'item_dragging',
       type: ['dragstart']
     });
+
     li.listenerStore.addListenerOnce({
-      target: window,
+      target: elTarget,
       bind: li,
       callback: handleDragEnd,
       group: 'item_dragging',
       type: ['dragend']
+    });
+
+    /*
+     * Drop zones
+     */
+    li.listenerStore.addListener({
+      target: li.elRoot,
+      bind: li,
+      callback: handleDragEnter,
+      group: 'item_dragging',
+      type: 'dragenter'
+    });
+
+    li.listenerStore.addListener({
+      target: li.elRoot,
+      bind: li,
+      group: 'item_dragging',
+      callback: handleDragOver,
+      throttle: true,
+      throttleTime: 200,
+      type: 'dragover'
+    });
+
+    li.listenerStore.addListener({
+      target: window,
+      bind: li,
+      callback: handleDrop,
+      group: 'item_dragging',
+      type: 'drop'
     });
   }
 }
@@ -1290,45 +1346,46 @@ function handleMouseDown(evt) {
  * Start sort event listener
  */
 function handleDragStart(evt) {
-  console.log('dragStart');
   const li = this;
+
   li.fire('sort_start', evt);
 
   /**
    * Build drag image, set ui dragging mode and set
    * datatransfer data
    */
-  const elDragImage = li.fire('set_drag_image', li.elDrag);
-  const dragText = li.fire('set_drag_text', li.elDrag);
+  const elDragImage = li.fire('set_drag_image', li.drag.el);
+  const dragText = li.fire('set_drag_text', li.drag.el);
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
 
-  li.setUiDraggingStart();
+  li.setDragStart();
   li.addUndoStep();
-  evt.dataTransfer.effectAllowed = 'move';
+  evt.dataTransfer.clearData();
   evt.dataTransfer.setDragImage(elDragImage, dragOffsetLeft, dragOffsetTop);
-  evt.dataTransfer.setData('text/plain', dragText);
-  li.elNext = li.elDrag.nextSibling;
-
   /**
-   * On drag start, listen to drag enter events
+   * NOTE: text/plain make chrome very, very slow.
    */
-  const elsTarget = li.getChildrenTarget();
+  evt.dataTransfer.setData('application/json', dragText || li.drag.el.id);
+  evt.dataTransfer.effectAllowed = 'all';
+  li.elNext = li.drag.el.nextSibling;
+}
+/**
+ * Handle drag enter
+ */
+function handleDragEnter(evt) {
+  evt.dataTransfer.dropEffect = 'move';
+  evt.preventDefault();
+}
 
-  elsTarget.forEach((elTarget) => {
-    if (li.isSameElement(elTarget, li.elDrag)) {
-      return;
-    }
-    li.listenerStore.addListener({
-      target: elTarget,
-      bind: li,
-      type: 'dragover',
-      group: 'item_dragging',
-      callback: handleDragOver,
-      debounce: true
-    });
-  });
+/**
+ * Handle drop
+ */
+function handleDrop(evt) {
+  const li = this;
+  li.setDragClean();
+  evt.preventDefault();
 }
 
 /**
@@ -1336,24 +1393,12 @@ function handleDragStart(evt) {
  */
 function handleDragEnd(evt) {
   const li = this;
-  evt.preventDefault();
-  li.listenerStore.removeListenerByGroup('item_dragging');
-  if (li.isDraggable(li.elDrag)) {
-    /**
-     * Remove draggable attribute,
-     *  reset ui dragging,
-     *  remove li.elDrag
-     */
-    li.setUiDraggingEnd();
-    /**
-     * Not empty mode, activate callbacks triggered by 'fire'
-     */
-    if (!li.isModeEmpty()) {
-      li.fire('sort_end', evt);
-      if (li.elNext !== li.elDrag.nextSibling) {
-        li.fire('sort_done', evt);
-      }
+  if (!li.isModeEmpty()) {
+    li.fire('sort_end', evt);
+    if (li.elNext !== li.drag.el.nextSibling) {
+      li.fire('sort_done', evt);
     }
+    li.setDragClean();
   }
 }
 
@@ -1361,24 +1406,29 @@ function handleDragEnd(evt) {
  * Over event listener
  */
 function handleDragOver(evt) {
-  const li = this;
-
-  evt.dataTransfer.dropEffect = 'move';
   evt.preventDefault();
+  const li = this;
+  const elTarget = evt.target;
+  const isGroup = li.isGroup(elTarget);
+  const isGroupCollapsed = isGroup && li.isGroupCollapsed(elTarget);
+  const elDrag = li.drag.el;
+  const hasTarget = li.isTarget(elTarget);
+  const hasDrag = li.isDraggable(elDrag);
+  const isItself = hasDrag && hasTarget && li.isSameElement(elDrag, elTarget);
+  const isParent = hasDrag && hasTarget && li.isParentOf(elDrag, elTarget);
+  if (!hasTarget || isItself || isParent) {
+    return;
+  }
   evt.stopPropagation();
   evt.stopImmediatePropagation();
 
-  let elTarget = evt.target;
-  let isGroup = li.isGroup(elTarget);
-  let isGroupCollapsed = isGroup && li.isGroupCollapsed(elTarget);
-  let elDrag = li.elDrag;
   let elGroup = null;
   let elInsert = null;
   let elFirst = null;
   let isValid = false;
   let groupHasItems = false;
   /**
-   *   Curlir position above target
+   *    Position above target
    *
    *   /---------\
    *   |         | <- insert before
@@ -1391,6 +1441,7 @@ function handleDragOver(evt) {
   let atGroupEdgeBottom =
     isGroup && evt.clientY > rDest.bottom - rDest.height / 10;
   let atGroupEdgeTop = isGroup && evt.clientY < rDest.top + rDest.height / 10;
+
   try {
     /**
      * Insert in list : if empty or if insert after, appendChild,
@@ -1403,8 +1454,10 @@ function handleDragOver(evt) {
           ? li.getNextTarget(elTarget)
           : elTarget;
       isValid =
+        li.isElement(elInsert) &&
         !li.isSameElement(elInsert, elDrag) &&
         !li.isSameElement(elInsert, elGroup);
+
       if (isValid) {
         /**
          * Move
@@ -1441,6 +1494,7 @@ function handleDragOver(evt) {
           li.animateMove([elFirst, elDrag], () => {
             elGroup.insertBefore(elDrag, elFirst);
           });
+          li.drag.elTargetPrevious = elTarget;
         }
       }
       return;
@@ -1449,3 +1503,4 @@ function handleDragOver(evt) {
     console.warn(e);
   }
 }
+
