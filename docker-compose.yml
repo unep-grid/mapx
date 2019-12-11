@@ -23,7 +23,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.6.43-debian
+    image: fredmoser/mx-app-shiny:1.6.44-debian
     restart: always
     ports:
       - 3838
@@ -45,7 +45,7 @@ services:
   api:
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node:1.6.43-alpine
+    image: fredmoser/mx-api-node:1.6.44-alpine
     restart: always
     ports: 
       - 3030
