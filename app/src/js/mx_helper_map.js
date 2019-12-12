@@ -54,14 +54,14 @@ export function setApiUrlAuto() {
       ? loc.hostname.replace(/^app\.|^dev\./, 'api.')
       : API_HOST_PUBLIC;
 
-  const apiPort = typeof API_PORT === 'undefined' ? loc.port : API_PORT;
+  const apiPortPublic = typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
   /**
    * Set API url based on current location
    */
   Object.assign(mx.settings.api, {
     host_public: apiHost,
     protocol: loc.protocol,
-    port: apiPort
+    port_public : apiPortPublic
   });
 }
 

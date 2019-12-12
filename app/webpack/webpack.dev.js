@@ -27,7 +27,7 @@ module.exports = merge(common, {
       chunks: ['mx','jquery', 'shiny']
     }),
     new webpack.DefinePlugin({
-      API_PORT: JSON.stringify(process.env.API_PORT),
+      API_PORT_PUBLIC: JSON.stringify(process.env.API_PORT_PUBLIC),
       API_HOST_PUBLIC: JSON.stringify(process.env.API_HOST_PUBLIC)
     })
   ]
