@@ -4,7 +4,7 @@ const common = require('./webpack.common.js');
 const watchUi = require('./webpack.watch_ui.js');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-require('dotenv').config({ path: '../mapx.dev.env' });
+require('dotenv').config({path: '../mapx.dev.env'});
 
 module.exports = merge(common, {
   mode: 'development',
@@ -19,12 +19,12 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       template: './src/html/static.html',
       filename: './static.html',
-      chunks: ['mx', 'static']
+      chunks: ['mx', 'static', 'jquery']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/html/index.html',
-      chunks: ['mx','jquery', 'shiny']
+      chunks: ['mx', 'jquery', 'shiny']
     }),
     new webpack.DefinePlugin({
       API_PORT_PUBLIC: JSON.stringify(process.env.API_PORT_PUBLIC),
