@@ -957,8 +957,14 @@ class NestedList {
       *  
       */
       setTimeout(() => {
-        li.drag.el.classList.add(li.opt.class.dragged);
-        document.body.classList.add(li.opt.class.globalDragging);
+        if(li.drag.el){
+          /**
+          * The drag element could already be removed if 
+          * dragend fired before the timeout
+          */
+          li.drag.el.classList.add(li.opt.class.dragged);
+          document.body.classList.add(li.opt.class.globalDragging);
+        }
       }, 200);
     }
   }
@@ -1439,6 +1445,9 @@ function handleDragOver(evt) {
   if (!hasTarget || isItself || isParent) {
     return;
   }
+  /**
+  * Stop propagation, we have to resolve this
+  */
   evt.stopPropagation();
   evt.stopImmediatePropagation();
 
