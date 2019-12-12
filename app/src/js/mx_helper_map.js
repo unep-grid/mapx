@@ -2541,6 +2541,10 @@ function viewLayersAddCc(o) {
 
   const idView = view.id;
   const idSource = idView + '-SRC';
+  const idListener = 'listener_cc_' + view.id;
+
+  h.viewModulesRemove(view);
+
   const elLegend = h.elLegend(view, {
     type: 'cc',
     elLegendContainer: o.elLegendContainer,
@@ -2576,11 +2580,19 @@ function viewLayersAddCc(o) {
       opt.onInit = tryCatched(cc.onInit.bind());
       opt.onClose = cc.onClose.bind(opt);
 
-      h.viewModulesRemove(view);
-
       mx.helpers.removeLayersByPrefix({
         prefix: opt.idView,
         id: mx.settings.map.id
+      });
+
+      /**
+      * Avoid event to propagate
+      */
+      mx.listenerStore.addListener({
+        group: idListener,
+        target: elLegend,
+        type: ['click','mousedown','change','input'],
+        callback: catchEvent
       });
 
       if (opt.map.getSource(opt.idSource)) {
@@ -2588,6 +2600,9 @@ function viewLayersAddCc(o) {
       }
 
       view._onRemoveCustomView = function() {
+
+        mx.listenerStore.removeListenerByGroup(idListener);
+
         if (!opt._init || opt._closed) {
           return;
         }
@@ -2608,7 +2623,9 @@ function viewLayersAddCc(o) {
       /**
        * Helpers
        */
-
+      function catchEvent(e){
+        e.stopPropagation();
+      }
       function tryCatched(fun) {
         return function(...args) {
           try {
@@ -3377,7 +3394,7 @@ export function getRenderedLayersArea(o) {
           }
           if (e.data.end) {
             o.onEnd(e.data.end);
-            mx.lisntenerStore.removeListenerByGroup('compute_layer_area');
+            mx.listenerStore.removeListenerByGroup('compute_layer_area');
           }
         }
       });
