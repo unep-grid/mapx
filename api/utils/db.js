@@ -243,9 +243,10 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
   /*
    * Set cache to true
    */
-  var sqlInvalidate = `
-  UPDATE ${idLayer} 
-  SET ${idValidColumn} = null`;
+  var sqlDeleteColumn = `
+  ALTER TABLE ${idLayer}
+  DROP COLUMN IF EXISTS ${idValidColumn}
+  `;
 
   /**
    * Count valid query
@@ -268,7 +269,9 @@ function isLayerValid(idLayer, useCache, autoCorrect) {
         /**
          * Invalidate if not use cache
          */
-        return pgWrite.query(sqlInvalidate);
+        return pgWrite.query(sqlDeleteColumn).then(() => {
+          return pgWrite.query(sqlNewColumn);
+        });
       }
     })
     .then(() => {

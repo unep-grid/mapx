@@ -19,8 +19,9 @@ const storage = multer.diskStorage({
     cb(null, pathTemp);
   },
   filename: function(req, file, cb) {
-    let filename = file.originalname.replace(new RegExp(/\s+/,'g'),'_');
-    cb(null, Date.now() + '_' + filename);
+    var filename =
+      Date.now() + '_' + file.originalname.replace(new RegExp(/\s+/, 'g'), '_');
+    cb(null, filename);
   }
 });
 
@@ -50,17 +51,19 @@ module.exports.fileToPostgres = fileToPostgres;
 function convertOgrHandler(req, res, next) {
   const hasBody = typeof req.body === 'object' && req.file;
 
-  if(!hasBody){
+  if (!hasBody) {
     throw new Error('Empty body');
   }
-  
+
   const userEmail = req.body.email;
   const sourceSrs = req.body.sourceSrs;
   const fileName = req.file.filename;
-  const isZipped = req.file.mimetype === 'application/zip';
+  const isZipped =
+    req.file.mimetype === 'application/zip' ||
+    req.file.mimetype === 'application/x-zip-compressed';
 
   fileToPostgres({
-    isZipped : isZipped,
+    isZipped: isZipped,
     fileName: fileName,
     sourceSrs: sourceSrs,
     onSuccess: function(idSource) {
@@ -142,7 +145,7 @@ function addSourceHandler(req, res) {
           msg: msg.waitValidation
         })
       );
-      return isLayerValid(idSource);
+      return isLayerValid(idSource,false);
     })
     .then((layerTest) => {
       isValid = layerTest.valid;
@@ -235,7 +238,7 @@ function cleanFile(fileToRemove, res) {
  */
 function cleanAll(fileToRemove, idSource, res) {
   return removeSource(idSource).then(() => {
-    cleanFile(fileToRemove,res);
+    cleanFile(fileToRemove, res);
     res.write(
       toRes({
         type: 'message',
@@ -283,27 +286,27 @@ function fileToPostgres(config) {
   });
 
   /**
-  * NOTE: PGDump OGR driver was needed because OGR PG was not compatible with
-  * PG_POOL : connection were never closed.
-  *
-  * pg-copy-stream
-  * --------------
-  * pg-copy-stream needed a stream from a file containing a simple table. 
-  * Streaming from a spawn stdout did not work. OGR make a dump and not 
-  * only a table : which means a lot of command to prepare the copy query. 
-  * Streaming through node-pg-copy-stream is _maybe_ not even possible 
-  * because of this. *Streaming directly to og using node-pg seems to
-  * be the cleanest way of doing this*
-  *
-  * ogr and psql as spawn
-  * ---------------------
-  * Piping a ogr2ogr spawn to a spawn of psql did not work
-  *
-  * ogr and psal as script
-  * ----------------------
-  * Given the limited time to work on this, a warkaround has been found, 
-  * using a script. This should be a temporary fix.
-  */
+   * NOTE: PGDump OGR driver was needed because OGR PG was not compatible with
+   * PG_POOL : connection were never closed.
+   *
+   * pg-copy-stream
+   * --------------
+   * pg-copy-stream needed a stream from a file containing a simple table.
+   * Streaming from a spawn stdout did not work. OGR make a dump and not
+   * only a table : which means a lot of command to prepare the copy query.
+   * Streaming through node-pg-copy-stream is _maybe_ not even possible
+   * because of this. *Streaming directly to og using node-pg seems to
+   * be the cleanest way of doing this*
+   *
+   * ogr and psql as spawn
+   * ---------------------
+   * Piping a ogr2ogr spawn to a spawn of psql did not work
+   *
+   * ogr and psal as script
+   * ----------------------
+   * Given the limited time to work on this, a warkaround has been found,
+   * using a script. This should be a temporary fix.
+   */
   const args = ['./sh/import_vector.sh', filePath, idSource, sourceSrs];
 
   const ogr = spawn('sh', args);
