@@ -1306,9 +1306,16 @@ function handleMouseDown(evt) {
   const li = this;
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
+  /**
+  * Case when drag was not properly finished 
+  */
+  li.setDragClean();
 
   if (!isHandle) {
-
+    /**
+    * It's not a valid handle, add listener
+    * mouseup to continue to a full 'click' 
+    */
     li.listenerStore.addListenerOnce({
       target: evt.target,
       bind: li,
@@ -1317,6 +1324,10 @@ function handleMouseDown(evt) {
       type: 'mouseup'
     });
   } else {
+    /**
+    * Prepare the UI for global change : style, cursore,
+    * temporary register of drag item...
+    */ 
     li.setDragInit(elTarget);
 
     /**
