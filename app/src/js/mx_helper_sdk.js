@@ -1,11 +1,11 @@
-import {MxSdkWorker} from './sdk/src/index.js';
+import {Worker} from './sdk/src/index.js';
 
 window.addEventListener('load', () => {
   mx.events.once({
     type: ['mapx_ready'],
     idGroup: 'sdk_binding',
     callback: () => {
-      window.mxsdkworker = new MxSdkWorker({
+      window.mxsdkworker = new Worker({
         resolvers: getResolver()
       });
     }

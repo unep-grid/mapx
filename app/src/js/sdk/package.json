@@ -1,15 +1,19 @@
 {
-  "name": "mxsdk",
-  "version": "0.0.1",
+  "name": "@fxi/mxsdk",
+  "version": "0.0.10",
   "description": "sdk for mapx app",
-  "main": "src/index.js",
+  "source": "src/index.js",
+  "main": "dist/mxsdk.js",
+  "module": "dist/mxsdk.mjs",
+  "unpkg": "dist/mxsdk.umd.js",
+  "browser": "dist/mxsdk.umd.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev" : "parcel ./example/index.html",
-    "prod" : "parcel build src/index.js"
+    "dev": "parcel example/index.html",
+    "prod": "microbundle -o dist"
   },
   "repository": {
     "type": "git",
@@ -24,5 +28,8 @@
   "bugs": {
     "url": "https://github.com/unep-grid/map-x-mgl/issues"
   },
-  "homepage": "https://github.com/unep-grid/map-x-mgl#readme"
+  "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/sdk/#readme",
+  "devDependencies": {
+    "microbundle": "^0.11.0"
+  }
 }
