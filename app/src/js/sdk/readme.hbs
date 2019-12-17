@@ -1,0 +1,52 @@
+
+## MapX SDK
+
+The package `MxSdk` ease the integration of MapX. It features a simple way to interact with MapX within a static web page or from a full featured application.
+
+## Example
+
+```js
+import {MxSdk} from  'mxsdk';
+
+/**
+* new mxsdk instance
+*/
+const mxsdk = new MxSdk.manager({
+  host : 'http://dev.mapx.localhost/'
+  port : '8880',
+  project : 'MX-HPP-OWB-3SI-3FF-Q3R'
+  language : 'en'
+});
+
+/**
+* When ready, begin requests
+*/
+mxsdk.on('ready', () => {
+   /**
+   * Get list of views, print them in console
+   */
+   mxsdk.ask('get_views').then(console.log);
+  /**
+   * Get geo ip info,  print it in console
+   */
+   mxsdk.ask('get_ip').then(console.log);
+   setTimeout(()=>{
+     /**
+     * Change project after 3000 ms, print new list 
+     * of views
+     */
+     mxsdk.ask('set_project','MX-JZL-FJV-RLN-7OH-QLU');
+     .then(mxsdk.ask('get_views'))
+     .then(console.log)
+
+   }, 3000);
+});
+
+```
+
+
+{{>main}}
+
+* * *
+
+&copy; 2019-2020 Fred Moser

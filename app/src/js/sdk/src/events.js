@@ -7,9 +7,16 @@
 *      
 */
 class Events {
+  /**
+  * new Event handler
+  */
   constructor() {
     this._on_cb = [];
   }
+  /**
+  * Fire callback based on type
+  * @param {String} type Type of callback to fire
+  */
   fire(type) {
     var cbs = this._on_cb;
     var ncb = cbs.length;
@@ -24,6 +31,11 @@ class Events {
       ncb--;
     }
   }
+  /**
+  * Register new callback by type
+  * @param {String} type Type of callback to be evaluated when fired
+  * @param {Function} cb Callback
+  */
   on(type, cb) {
     this._on_cb.push({
       type: type,
@@ -31,6 +43,11 @@ class Events {
       once: false
     });
   }
+  /**
+  * Unregister callback by type
+  * @param {String} type Type of callback
+  * @param {Function} cb Callback
+  */
   off(type, cb) {
     var cbs = this._on_cb;
     var ncb = cbs.length;
@@ -42,6 +59,11 @@ class Events {
       ncb--;
     }
   }
+ /**
+  * Register a callback only and remove it after the first evaluation
+  * @param {String} type Type of callback to be evaluated when fired
+  * @param {Function} cb Callback
+  */
   once(type, cb) {
     this._on_cb.push({
       type: type,
