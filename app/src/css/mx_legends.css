@@ -31,11 +31,13 @@
 .mx-legend-vt-container {
 }
 
-.mx-legend-vt-title {
+.mx-legend-vt-title,
+.mx-legend-rt-title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
+  display: block;
 }
 
 .mx-legend-view-title {

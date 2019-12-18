@@ -2537,7 +2537,7 @@ export function elLegend(view, settings) {
     path: 'data.title',
     defaultValue: '[ missing title ]'
   });
-  
+
   const elLegendTitle = h.el(
     'span',
     {
@@ -2703,6 +2703,11 @@ function viewLayersAddRt(o) {
     const idView = view.id;
     const idSource = idView + '-SRC';
     const legend = h.path(view, 'data.source.legend');
+    const legendTitle = h.getLabelFromObjectPath({
+      obj: view,
+      path: 'data.source.legendTitles',
+      defaultValue: '[ missing title ]'
+    });
 
     const elLegend = h.elLegend(view, {
       type: 'rt',
@@ -2724,7 +2729,20 @@ function viewLayersAddRt(o) {
     );
 
     /*
-     * Add legend
+     * Add legend label
+     */
+    if (legendTitle) {
+      const elLabel = h.el(
+        'label',
+        {
+          class: ['mx-legend-rt-title', 'text-muted']
+        },
+        legendTitle
+      );
+      elLegend.appendChild(elLabel);
+    }
+    /*
+     * Add legend image
      */
 
     if (legend) {
@@ -4026,7 +4044,7 @@ export function getViewTitleNormalized(view, lang) {
     lang: lang || mx.settings.language,
     obj: view,
     path: 'data.title',
-    defaultValue  : ''
+    defaultValue: ''
   });
   title = h
     .cleanDiacritic(title)

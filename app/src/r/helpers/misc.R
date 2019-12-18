@@ -241,7 +241,7 @@ mxSchemaMultiLingualInput = function(
     # Strict
     #
     if( !required && !strict){
-      minLength =0 
+      minLength = 0 
     }
     #
     # Hidden ?
