@@ -32,15 +32,25 @@
 }
 
 .mx-legend-vt-title {
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  margin-left: 20px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin-left: 10px;
-  font-size: 0.9em;
+  max-width: 100%;
 }
+
+.mx-legend-view-title {
+  margin-top: 20px;
+  font-weight: 500;
+  font-size: 1.1em;
+  display: inline-block;
+  text-transform: uppercase;
+  width: 100%;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .mx-legend-vt-rules {
   padding: 10px;
 }

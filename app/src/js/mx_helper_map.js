@@ -54,14 +54,15 @@ export function setApiUrlAuto() {
       ? loc.hostname.replace(/^app\.|^dev\./, 'api.')
       : API_HOST_PUBLIC;
 
-  const apiPortPublic = typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
+  const apiPortPublic =
+    typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
   /**
    * Set API url based on current location
    */
   Object.assign(mx.settings.api, {
     host_public: apiHost,
     protocol: loc.protocol,
-    port_public : apiPortPublic
+    port_public: apiPortPublic
   });
 }
 
@@ -383,7 +384,7 @@ export function initMapx(o) {
   /**
    * Set mode
    */
-  if(!o.modeStatic && h.getQueryParameter('storyAutoStart')[0] === 'true'){
+  if (!o.modeStatic && h.getQueryParameter('storyAutoStart')[0] === 'true') {
     /**
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
@@ -395,7 +396,7 @@ export function initMapx(o) {
     window.location = url.href;
     return;
   }
-  
+
   mx.settings.mode.static = o.modeStatic || mx.settings.mode.storyAutoStart;
   mx.settings.mode.app = !mx.settings.mode.static;
 
@@ -585,7 +586,8 @@ export function initMapxStatic(o) {
         mapData.views.forEach((view) => {
           h.viewLayersAdd({
             viewData: view,
-            elLegendContainer: btnLegend.elLegendContent
+            elLegendContainer: btnLegend.elLegendContent,
+            addTitle: false
           });
 
           /**
@@ -1902,8 +1904,8 @@ export function viewLayersRemove(o) {
         view: view
       }
     });
-    if (view._elLegend) {
-      view._elLegend.remove();
+    if (view._elLegendGroup) {
+      view._elLegendGroup.remove();
     }
 
     resolve(true);
@@ -2346,8 +2348,9 @@ export function existsInList(li, it, val, inverse) {
  * @param {object} o Options
  * @param {string} o.id map id
  * @param {string} o.idView view id
- * @param {objsect} o.viewData view
+ * @param {object} o.viewData view
  * @param {Element} o.elLegendContainer Legend container
+ * @param {boolean} o.addTitle Add view title in legend
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
  */
@@ -2447,7 +2450,8 @@ export function viewLayersAdd(o) {
           view: view,
           map: m.map,
           before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
+          elLegendContainer: o.elLegendContainer,
+          addTitle: o.addTitle
         });
       },
       cc: function() {
@@ -2455,7 +2459,8 @@ export function viewLayersAdd(o) {
           view: view,
           map: m.map,
           before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
+          elLegendContainer: o.elLegendContainer,
+          addTitle: o.addTitle
         });
       },
       vt: function() {
@@ -2464,7 +2469,8 @@ export function viewLayersAdd(o) {
           map: m.map,
           debug: o.debug,
           before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
+          elLegendContainer: o.elLegendContainer,
+          addTitle: o.addTitle
         });
       },
       gj: function() {
@@ -2472,7 +2478,8 @@ export function viewLayersAdd(o) {
           view: view,
           map: m.map,
           before: idLayerBefore,
-          elLegendContainer: o.elLegendContainer
+          elLegendContainer: o.elLegendContainer,
+          addTitle: o.addTitle
         });
       },
       sm: function() {
@@ -2485,7 +2492,16 @@ export function viewLayersAdd(o) {
 }
 
 export function elLegend(view, settings) {
-  settings = Object.assign(settings, {removeOld: true, type: 'vt'});
+  settings = Object.assign(
+    {},
+    {
+      removeOld: true,
+      type: 'vt',
+      addTitle: false
+    },
+    settings
+  );
+
   const h = mx.helpers;
   if (!h.isView(view)) {
     throw new Error('elLegend invalid view');
@@ -2507,8 +2523,8 @@ export function elLegend(view, settings) {
   const elLegendContainer = settings.elLegendContainer;
 
   if (settings.removeOld) {
-    if (view._elLegend) {
-      view._elLegend.remove();
+    if (view._elLegendGroup) {
+      view._elLegendGroup.remove();
     }
     const elOldLegend = elLegendContainer.querySelector('#' + idLegend);
     if (elOldLegend) {
@@ -2516,12 +2532,36 @@ export function elLegend(view, settings) {
     }
   }
 
+  const title = h.getLabelFromObjectPath({
+    obj: view,
+    path: 'data.title',
+    defaultKey: 'noTitle'
+  });
+  
+  const elLegendTitle = h.el(
+    'span',
+    {
+      class: ['mx-legend-view-title', 'text-muted']
+    },
+    settings.addTitle ? title : ''
+  );
+
   const elLegend = h.el('div', {
     class: 'mx-view-legend-' + settings.type,
     id: idLegend
   });
-  elLegendContainer.appendChild(elLegend);
+  const elLegendGroup = h.el(
+    'div',
+    {
+      class: 'mx-view-legend-group'
+    },
+    settings.addTitle ? elLegendTitle : null,
+    elLegend
+  );
+
+  elLegendContainer.appendChild(elLegendGroup);
   view._elLegend = elLegend;
+  view._elLegendGroup = elLegendGroup;
   return elLegend;
 }
 
@@ -2531,6 +2571,7 @@ export function elLegend(view, settings) {
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
  * @param {Element} o.elLegendContainer Legend container
+ * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function viewLayersAddCc(o) {
@@ -2548,6 +2589,7 @@ function viewLayersAddCc(o) {
   const elLegend = h.elLegend(view, {
     type: 'cc',
     elLegendContainer: o.elLegendContainer,
+    addTitle: o.addTitle,
     removeOld: true
   });
 
@@ -2586,12 +2628,12 @@ function viewLayersAddCc(o) {
       });
 
       /**
-      * Avoid event to propagate
-      */
+       * Avoid event to propagate
+       */
       mx.listenerStore.addListener({
         group: idListener,
         target: elLegend,
-        type: ['click','mousedown','change','input'],
+        type: ['click', 'mousedown', 'change', 'input'],
         callback: catchEvent
       });
 
@@ -2600,7 +2642,6 @@ function viewLayersAddCc(o) {
       }
 
       view._onRemoveCustomView = function() {
-
         mx.listenerStore.removeListenerByGroup(idListener);
 
         if (!opt._init || opt._closed) {
@@ -2623,7 +2664,7 @@ function viewLayersAddCc(o) {
       /**
        * Helpers
        */
-      function catchEvent(e){
+      function catchEvent(e) {
         e.stopPropagation();
       }
       function tryCatched(fun) {
@@ -2646,6 +2687,7 @@ function viewLayersAddCc(o) {
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
  * @param {Element} o.elLegendContainer Legend container
+ * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 function viewLayersAddRt(o) {
@@ -2665,6 +2707,7 @@ function viewLayersAddRt(o) {
     const elLegend = h.elLegend(view, {
       type: 'rt',
       elLegendContainer: o.elLegendContainer,
+      addTitle: o.addTitle,
       removeOld: true
     });
 
@@ -2736,6 +2779,7 @@ function viewLayersAddRt(o) {
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
  * @param {Element} o.elLegendContainer Legend container
+ * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function viewLayersAddVt(o) {
@@ -2768,8 +2812,9 @@ export function viewLayersAddVt(o) {
 
     const elLegend = h.elLegend(view, {
       type: 'vt',
+      removeOld: true,
       elLegendContainer: o.elLegendContainer,
-      removeOld: true
+      addTitle: o.addTitle
     });
 
     /**
@@ -3272,6 +3317,7 @@ export function viewsModulesRemove(views) {
  * @param {Object} o.view View data
  * @param {Object} o.map Map object
  * @param {Element} o.elLegendContainer Legend container
+ * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function viewLayersAddGj(opt) {
@@ -4192,7 +4238,6 @@ export function getViewIndex(id) {
   const views = d.views || [];
   return views.indexOf(view);
 }
-
 
 /**
  * Toy function to make layer move

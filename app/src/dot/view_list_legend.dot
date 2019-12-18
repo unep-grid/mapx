@@ -9,7 +9,7 @@
 {{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
 {{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}
 <div class="mx-legend-vt-container">
-  <label class="mx-legend-vt-title">{{=titleLegend}}</label>
+  <label class="mx-legend-vt-title text-muted">{{=titleLegend}}</label>
   <div class="mx-legend-vt-rules mx-legend-box">
     {{~rules :item:index}}
     {{?item}}
