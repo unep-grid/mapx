@@ -587,7 +587,7 @@ export function initMapxStatic(o) {
           h.viewLayersAdd({
             viewData: view,
             elLegendContainer: btnLegend.elLegendContent,
-            addTitle: false
+            addTitle: true
           });
 
           /**
@@ -2535,7 +2535,7 @@ export function elLegend(view, settings) {
   const title = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.title',
-    defaultKey: 'noTitle'
+    defaultValue: '[ missing title ]'
   });
   
   const elLegendTitle = h.el(
@@ -2756,8 +2756,9 @@ function viewLayersAddRt(o) {
         const title = h.getLabelFromObjectPath({
           obj: view,
           path: 'data.title',
-          defaultKey: 'noTitle'
+          defaultValue: '[ missing title ]'
         });
+
         const imgModal = h.urlToImageBase64(legend);
         imgModal.onerror = defaultImg;
         imgModal.alt = 'Legend';
@@ -4012,7 +4013,7 @@ export function getViewTitle(view, lang) {
     path: 'data.title',
     lang: lang,
     langs: langs,
-    defaultKey: 'noTitle'
+    defaultValue: '[ missing title ]'
   });
 }
 /* get view title  */
@@ -4024,7 +4025,8 @@ export function getViewTitleNormalized(view, lang) {
   let title = h.getLabelFromObjectPath({
     lang: lang || mx.settings.language,
     obj: view,
-    path: 'data.title'
+    path: 'data.title',
+    defaultValue  : ''
   });
   title = h
     .cleanDiacritic(title)
@@ -4059,7 +4061,7 @@ export function getViewDescription(id, lang) {
     path: 'data.abstract',
     lang: lang,
     langs: langs,
-    defaultKey: ''
+    defaultValue: ''
   });
 }
 
