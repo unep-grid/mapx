@@ -23,6 +23,10 @@ The application should be available at http://app.mapx.localhost:8880/ (curl -H 
 
 An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at http://mail.mapx.localhost:8880/.
 
+## Known issues
+
+Postgis : `OperationalError: could not access file "$libdir/postgis-X.X` : solution, run `docker-compose exec pg update-postgis.sh`
+ 
 ## Development session for `app` service
 
 ```
