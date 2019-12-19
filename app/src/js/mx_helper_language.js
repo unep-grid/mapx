@@ -254,19 +254,20 @@ export function getTranslationTag(key, lang) {
  * Get label value from an object path.
  * @param {Object} o Options
  * @param {string} o.lang Selected language two letter code. Default = mx.settings.language
- * @param {Any} o.default Default value
+ * @param {Any} o.defaultValue Default value
  * @param {Object} o.obj Object containing the value
  * @param {String} o.path Path to the value container. Eg. "data.title"
  */
 export function getLabelFromObjectPath(o) {
   'use strict';
-  o.lang = o.lang ? o.lang : mx.settings.language;
+  var defaultLang = 'en';
+  o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
   o.path = o.path ? o.path + '.' : '';
-  var defaultValue = o.default || '[ NA ]';
-  var out = mx.helpers.path(o.obj, o.path + o.lang);
+  var defaultValue = o.defaultValue || '[ NA ]';
+  var out = mx.helpers.path(o.obj, o.path + o.lang, null);
 
   if (!out) {
-    out = mx.helpers.path(o.obj, o.path + 'en');
+    out = mx.helpers.path(o.obj, o.path + defaultLang);
   }
 
   if (!out) {

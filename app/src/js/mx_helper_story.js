@@ -1363,8 +1363,9 @@ export function storyPlayStep(o) {
     h.viewLayersAdd({
       id: o.id,
       idView: v,
-      before: vPrevious,
       openView: false,
+      addTitle : true,
+      before: vPrevious,
       elLegendContainer: elLegendContainer
     });
     vVisible.push(v);

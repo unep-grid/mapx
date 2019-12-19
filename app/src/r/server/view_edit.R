@@ -380,6 +380,7 @@ observe({
                     label = d("source_raster_tile_legend",language),
                     value = legend 
                     ),
+                  jedOutput("viewRasterLegendTitles"),
                   textAreaInput(
                     inputId = "textRasterTileUrlMetadata",
                     label = d("source_raster_tile_url_metadata",language),
@@ -627,7 +628,33 @@ observeEvent(input$viewAbstractSchema_init,{
     )
 })
 
+observeEvent(input$viewRasterLegendTitles_init,{
+  view <- reactData$viewDataEdited
+  language <- reactData$language
+  languages <- .get(config,c("languages","codes"))
+  legendTitles <- .get(view,c("data","source","legendTitles"))
 
+  #
+  # Same as in schema_view_style.R
+  #
+  schemaTitleLegend <- mxSchemaMultiLingualInput(
+    languagesRequired = c(),
+    language = language,
+    keyTitle = "schema_style_title_legend",
+    default = list(),
+    type = "string"
+  )
+
+  jedSchema(
+    id = "viewRasterLegendTitles",
+    schema = schemaTitleLegend,
+    startVal = legendTitles,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+    )
+  )
+})
 #
 # View removal
 #
@@ -708,18 +735,26 @@ observe({
     titleIssues <- input$viewTitleSchema_issues
     abstractValues <- input$viewAbstractSchema_values
     abstractIssues <- input$viewAbstractSchema_issues
-
+ 
     hasNoSchemaTitle <- noDataCheck( .get(titleValues, c("data","en")) )
     hasNoSchemaAbstract <- noDataCheck( .get(abstractValues, c("data","en")) )
     hasTitleIssues <- !noDataCheck( .get(titleIssues, c("data")) )
     hasAbstractIssues <- !noDataCheck( .get(abstractIssues, c("data")) )
+
+    if( view[["type"]] == "rt" ){
+      legendTitlesIssues <- input$viewRasterLegendTitles_issues
+      hasLegendTitlesIssues <- !noDataCheck( .get(legendTitlesIssues, c("data")) )
+    }else{
+      hasLegendTitlesIssues <- FALSE 
+    }
 
     errors <- c(
       errors,
       hasTitleIssues,
       hasAbstractIssues,
       hasNoSchemaTitle,
-      hasNoSchemaAbstract
+      hasNoSchemaAbstract,
+      hasLegendTitlesIssues
       )
 
     disabled =  any(sapply(errors,isTRUE))
@@ -841,6 +876,7 @@ observeEvent(input$btnViewSave,{
         tileSize = as.integer(input$selectRasterTileSize)
         )
 
+       view[[c("data","source","legendTitles")]] <- input$viewRasterLegendTitles_values$data
     }
 
     #
