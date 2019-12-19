@@ -15,6 +15,7 @@ $ ./docker-compose.init.sh
 
 Finally launch the mapx stack:
 ```
+$ docker-compose pull
 $ docker-compose up
 ```
 
