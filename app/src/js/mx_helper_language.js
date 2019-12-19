@@ -263,14 +263,34 @@ export function getLabelFromObjectPath(o) {
   var defaultLang = 'en';
   o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
   o.path = o.path ? o.path + '.' : '';
-  var defaultValue = o.defaultValue || '[ NA ]';
+  var defaultValue = o.defaultValue || '';
   var out = mx.helpers.path(o.obj, o.path + o.lang, null);
+  var langs = mx.settings.languages;
 
   if (!out) {
-    out = mx.helpers.path(o.obj, o.path + defaultLang);
+    /**
+     * Try default language
+     */
+    out = mx.helpers.path(o.obj, o.path + defaultLang, null);
   }
 
   if (!out) {
+    /**
+     * Try alternative language
+     */
+    out = langs.reduce((a, l) => {
+      if (!a) {
+        return mx.helpers.path(o.obj, o.path + l, null);
+      } else {
+        return a;
+      }
+    }, null);
+  }
+
+  if (!out) {
+    /**
+    * Use the default value
+    */
     out = defaultValue;
   }
 

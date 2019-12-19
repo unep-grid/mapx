@@ -2706,7 +2706,7 @@ function viewLayersAddRt(o) {
     const legendTitle = h.getLabelFromObjectPath({
       obj: view,
       path: 'data.source.legendTitles',
-      defaultValue: '[ missing title ]'
+      defaultValue: null
     });
 
     const elLegend = h.elLegend(view, {
@@ -2771,7 +2771,7 @@ function viewLayersAddRt(o) {
         /**
          * Show a bigger image if clicked
          */
-        const title = h.getLabelFromObjectPath({
+        const title = legendTitle || h.getLabelFromObjectPath({
           obj: view,
           path: 'data.title',
           defaultValue: '[ missing title ]'
