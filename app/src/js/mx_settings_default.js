@@ -61,7 +61,7 @@ let settings = {
     sublayer: '_@_'
   },
   clickHandlers: [],
-  maxByteJed: 100000, // 100 Kb
+  maxByteJed: 300000, // 300 Kb
   user: {},
   ui: {
     ids: {
