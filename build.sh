@@ -11,7 +11,8 @@ echo $NEW_VERSION
 FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
-
+DIR_APP=app
+DIR_CUR=$(pwd)
 CUR_HASH=$(git rev-parse HEAD)
 
 USAGE="Usage : bash build.sh $OLD_VERSION"
@@ -49,58 +50,33 @@ perl -pi -e $REP_APP_TAG ./docker-compose.yml
 
 git --no-pager diff --minimal 
 
-echo "Verify git diff of versioning changes. Continue ? [YES/NO]"
+echo "Verify git diff of versioning changes. Continue (npm prod, build + push) ? [YES/NO]"
 read confirm_diff
 
 if [ "$confirm_diff" != "YES"  ]
-then 
+then
   echo "Stop here, stash changes. rollback to $CUR_HASH " 
   git stash
   exit 1
 fi
 
-#
-# Options
-#
-echo "Options"
-echo -e "Updating from version $FG_GREEN$OLD_VERSION$FG_NORMAL to $FG_GREEN$NEW_VERSION$FG_NORMAL."
-echo "Options: "
-echo "1) Quit"
-echo "2) Update version files, Build Webpack, APP and API"
-echo "3) All 2 + push images + git stage, commit, tag + push"
-read option
 
-if [ "$option" -eq 1  ]
-then 
-  echo "Stop here"
-  exit 1
-fi
+echo "Build webpack prod"
+cd $DIR_APP
+npm run prod
+cd $DIR_CUR
+echo "Build app"
+docker-compose build app 
+echo "Build api"
+docker-compose build api 
 
-
-
-
-if [ "$option" -eq 2  ] || [ "$option" -eq 3  ]
-then 
-  echo "Build webpack prod"
-  cd ./app
-  npm run prod
-  cd ../
-  echo "Build app"
-  docker-compose build app 
-  echo "Build api"
-  docker-compose build api 
-fi
-
-if [ "$option" -eq 3  ]
-then 
-  echo "Push images, git stage, commit, tag"
-  docker-compose push api
-  docker-compose push app
-  git add .
-  git commit -m "auto build version $NEW_VERSION"
-  git tag $NEW_VERSION
-  git push $REMOTE $BRANCH --tags
-fi
+echo "Push images, git stage, commit, tag"
+docker-compose push api
+docker-compose push app
+git add .
+git commit -m "auto build version $NEW_VERSION"
+git tag $NEW_VERSION
+git push $REMOTE $BRANCH --tags
 
 echo "Done"
 
