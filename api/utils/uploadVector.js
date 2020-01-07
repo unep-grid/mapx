@@ -60,7 +60,9 @@ function convertOgrHandler(req, res, next) {
   const fileName = req.file.filename;
   const isZipped =
     req.file.mimetype === 'application/zip' ||
-    req.file.mimetype === 'application/x-zip-compressed';
+    req.file.mimetype === 'application/x-zip-compressed' ||
+    req.file.mimetype === 'application/octet-stream' ||
+    req.file.mimetype === 'multipart/x-zip';
 
   fileToPostgres({
     isZipped: isZipped,
