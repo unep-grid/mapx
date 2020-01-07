@@ -137,6 +137,8 @@ AND
   ( 
     ( v.editor = {{idUser}} ) OR
     ( v.editors @> '["{{idUser}}"]'::jsonb ) OR
+    ( p.u_is_publisher AND v.editors ?| array['publishers'] ) OR
+    ( p.u_is_admin AND v.editors ?| array['admins'] ) OR
     ( v.readers @> '["{{idUser}}"]' ) OR
     ( v.readers @> '["public"]' ) OR
     ( p.u_is_member AND v.readers ?| array['members'] ) OR
