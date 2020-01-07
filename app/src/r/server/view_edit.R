@@ -638,10 +638,10 @@ observeEvent(input$viewRasterLegendTitles_init,{
   # Same as in schema_view_style.R
   #
   schemaTitleLegend <- mxSchemaMultiLingualInput(
-    languagesRequired = c(),
+    languagesRequired = c('en'),
     language = language,
     keyTitle = "schema_style_title_legend",
-    default = list(),
+    default = list(en='Legend'),
     type = "string"
   )
 
