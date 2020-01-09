@@ -74,7 +74,7 @@ class Page extends Box {
         mc.displayWarning(
           'Oups, something went wrong during the rendering, please read the console log.'
         );
-        console.warn(e);
+        console.error(e);
         mc.setMode(curMode);
       });
   }

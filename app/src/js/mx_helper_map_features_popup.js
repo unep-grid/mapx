@@ -263,7 +263,7 @@ export function featuresToHtml(o) {
         updateReadMore();
       })
       .catch((err) => {
-        console.warn(err);
+        console.error(err);
       });
   }
 

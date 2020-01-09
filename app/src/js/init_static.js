@@ -1,6 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
   console.log('STATIC MODE');
   const h = mx.helpers;
+  /*
+  * Update api URL according to current path, local value or
+  * weback env. variable.
+  */
   h.setApiUrlAuto();
   /**
    * Init static mode

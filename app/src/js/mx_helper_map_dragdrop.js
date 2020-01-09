@@ -334,7 +334,7 @@ function saveInLocalDb(opt) {
         'Data saved and registered as geojson source. Id = ' + opt.view.id
       );
     })
-    .catch((e) => console.warn(e));
+    .catch((e) => console.error(e));
 }
 
 export function handleMapDragOver(evt) {
@@ -360,17 +360,17 @@ export function handleMapDrop(evt) {
   let hasData = h.isJson(data);
   let hasFiles = files.length > 0;
 
-  if(hasData || hasFiles){
+  if (hasData || hasFiles) {
     evt.stopPropagation();
     evt.stopImmediatePropagation();
-  }else{
+  } else {
     return;
   }
 
   if (hasFiles) {
     handleFiles(files);
   }
-  if(hasData){
+  if (hasData) {
     const view = JSON.parse(data);
     if (h.isView(view)) {
       handleView(view);

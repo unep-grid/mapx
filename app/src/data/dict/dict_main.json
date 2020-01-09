@@ -2533,6 +2533,18 @@
     "ps": "لنډیز شتون نلري"
   },
   {
+    "id": "noLegend",
+    "en": "[ Missing legend ]",
+    "fr": "[ Légende manquante ]",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "noData",
     "en": "[ Missing value ]",
     "fr": "[ Donnée manquante ]",

@@ -86,6 +86,16 @@ observeEvent(reactData$showShareManager,{
             style="max-height:300px;overflow:auto",
             tagList(
               #
+              # Language
+              #
+              selectizeInput(
+                "selectShareLanguage",
+                label = tt('btn_language'),
+                choices = config$languages$list,
+                multiple = FALSE,
+                selected = language,
+              ),
+              #
               # Static mode
               #
               checkboxInput("checkShareStatic",
@@ -283,7 +293,7 @@ observe({
     inCollections <- paste(input$selectShareCollections,collapse=",")
     inViews <- paste(input$selectShareViews,collapse=",")
     inViewsOpen <- paste(input$selectShareViewsOpen,collapse=",")
-
+    inLanguage <- input$selectShareLanguage
     #
     # Build request
     #
@@ -358,6 +368,10 @@ observe({
             )
         }
       }
+      #
+      # Language
+      #
+      strLanguage = sprintf("language=%s&", inLanguage)
 
       #
       # Compose URL
@@ -368,7 +382,8 @@ observe({
         views + 
         viewsOpen + 
         zoomToViews +
-        mapPosition 
+        mapPosition +
+        strLanguage
 
       #
       # Build iframe

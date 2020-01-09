@@ -1,5 +1,4 @@
 /* jshint esversion:6 */
-
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -441,7 +440,7 @@ export function queryWms(opt) {
       return props;
     })
     .catch((err) => {
-      console.warn(err);
+      console.error(err);
       return props;
     });
 }

@@ -2,6 +2,7 @@
 import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonLegend} from './button_legend';
+import {RasterMiniMap} from './rasterMiniMap';
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -44,26 +45,35 @@ export function getApiUrl(id) {
 /**
  * Set mapx API host info when started without server app
  */
+const regexDefaultSubDomain = new RegExp(/^(app|dev)\..*\.[a-z]{1,}$/);
 export function setApiUrlAuto() {
   const loc = new URL(window.location.href);
+  const hasDefaultSubDomain = regexDefaultSubDomain.test(loc.hostname);
   /**
-   * Webpack variables
-   */
-  const apiHost =
-    typeof API_HOST_PUBLIC === 'undefined'
-      ? loc.hostname.replace(/^app\.|^dev\./, 'api.')
-      : API_HOST_PUBLIC;
+  * Use mx.settings default or,
+  * if has default subdomain, webpack variables OR
+  * modified url based on standard 
+  */
+  if (hasDefaultSubDomain) {
+    /**
+     * If no webpack variables found, replace by defaults
+     */
+    const apiHost =
+      typeof API_HOST_PUBLIC === 'undefined'
+        ? loc.hostname.replace(/^(app|dev)\./, 'api.')
+        : API_HOST_PUBLIC;
+    const apiPortPublic =
+      typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
 
-  const apiPortPublic =
-    typeof API_PORT_PUBLIC === 'undefined' ? loc.port : API_PORT_PUBLIC;
-  /**
-   * Set API url based on current location
-   */
-  Object.assign(mx.settings.api, {
-    host_public: apiHost,
-    protocol: loc.protocol,
-    port_public: apiPortPublic
-  });
+    /**
+     * Set API url based on current location
+     */
+    Object.assign(mx.settings.api, {
+      host_public: apiHost,
+      protocol: loc.protocol,
+      port_public: apiPortPublic
+    });
+  }
 }
 
 /**
@@ -502,7 +512,7 @@ export function initMapListener(map) {
       }
     }
 
-    console.warn(e);
+    console.error(e);
   });
 
   /**
@@ -544,6 +554,9 @@ export function initMapxStatic(o) {
   const btnLegend = new ButtonLegend({elContainer: elMap});
   const idViewsOpen = h.getQueryParameter('viewsOpen');
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
+  const language = h.getQueryParameter('language')[0] || settings.languages[0];
+  h.updateLanguage({lang:language});
+
   const idViews = h.getArrayDistinct(
     h.getQueryParameter('views').concat(idViewsOpen)
   );
@@ -551,7 +564,7 @@ export function initMapxStatic(o) {
   return h
     .getViewsRemote(idViews)
     .then((views) => {
-      mapData.views = views;
+      mapData.views = views.reverse();
     })
     .then(() => {
       /**
@@ -609,7 +622,7 @@ export function initMapxStatic(o) {
       });
     })
     .catch((e) => {
-      console.warn(e);
+      console.error(e);
     });
 }
 
@@ -1909,7 +1922,9 @@ export function viewLayersRemove(o) {
     }
 
     resolve(true);
-  }).catch(console.warn);
+  }).catch((e) => {
+    console.error(e);
+  });
 }
 
 /**
@@ -2435,8 +2450,8 @@ export function viewLayersAdd(o) {
         }
       });
     })
-    .catch(function(e) {
-      console.warn(e);
+    .catch((e) => {
+      console.error(e);
     });
 
   /**
@@ -2517,7 +2532,7 @@ export function elLegend(view, settings) {
     settings.elLegendContainer = elView.querySelector('#' + idLegendContainer);
   }
   if (!settings.elLegendContainer) {
-    console.warn("elLegend cant't find a legeend contaienr");
+    console.warn("elLegend cant't find a legend container");
     return;
   }
   const elLegendContainer = settings.elLegendContainer;
@@ -2541,7 +2556,8 @@ export function elLegend(view, settings) {
   const elLegendTitle = h.el(
     'span',
     {
-      class: ['mx-legend-view-title', 'text-muted']
+      class: ['mx-legend-view-title', 'text-muted', 'hint--bottom'],
+      title: title
     },
     settings.addTitle ? title : ''
   );
@@ -2650,7 +2666,7 @@ function viewLayersAddCc(o) {
         try {
           opt.onClose(opt);
         } catch (e) {
-          console.warn(e);
+          console.error(e);
         }
         opt._closed = true;
       };
@@ -2672,13 +2688,15 @@ function viewLayersAddCc(o) {
           try {
             return fun(...args);
           } catch (e) {
-            console.warn(e);
             opt.onClose(opt);
+            console.error(e);
           }
         };
       }
     })
-    .catch(console.warn);
+    .catch((e) => {
+      console.error(e);
+    });
 }
 
 /**
@@ -2694,39 +2712,33 @@ function viewLayersAddRt(o) {
   const view = o.view;
   const map = o.map;
   const h = mx.helpers;
+  const idView = view.id;
+  const idSource = idView + '-SRC';
+  const legendB64Default = require('../../src/svg/no_legend.svg');
+  const legendUrl = h.path(view, 'data.source.legend', null);
+  const tiles = h.path(view, 'data.source.tiles', null);
+  const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
+  const legendTitle = h.getLabelFromObjectPath({
+    obj: view,
+    path: 'data.source.legendTitles',
+    defaultValue: null
+  });
+  let isLegendDefault = false;
+  /**
+   * Add legend in container
+   */
+  const elLegend = h.elLegend(view, {
+    type: 'rt',
+    elLegendContainer: o.elLegendContainer,
+    addTitle: o.addTitle,
+    removeOld: true
+  });
 
   return new Promise((resolve) => {
-    if (!h.path(view, 'data.source.tiles')) {
+    if (!tiles) {
       resolve(false);
       return;
     }
-    const idView = view.id;
-    const idSource = idView + '-SRC';
-    const legend = h.path(view, 'data.source.legend');
-    const legendTitle = h.getLabelFromObjectPath({
-      obj: view,
-      path: 'data.source.legendTitles',
-      defaultValue: null
-    });
-
-    const elLegend = h.elLegend(view, {
-      type: 'rt',
-      elLegendContainer: o.elLegendContainer,
-      addTitle: o.addTitle,
-      removeOld: true
-    });
-
-    /**
-     * source has already be added. Add layer
-     */
-    map.addLayer(
-      {
-        id: idView,
-        type: 'raster',
-        source: idSource
-      },
-      o.before
-    );
 
     /*
      * Add legend label
@@ -2741,55 +2753,134 @@ function viewLayersAddRt(o) {
       );
       elLegend.appendChild(elLabel);
     }
-    /*
-     * Add legend image
+    /**
+     * Add legend box
      */
+    elLegend.appendChild(elLegendImageBox);
 
-    if (legend) {
-      const defaultImg = function() {
-        this.onerror = null;
-        this.src = require('../../src/svg/no_legend.svg');
-      };
+    /**
+     * source has already be added. Add layer
+     */
+    map.addLayer(
+      {
+        id: idView,
+        type: 'raster',
+        source: idSource
+      },
+      o.before
+    );
 
+    /**
+     * If no legend url is provided, use a minimap
+     */
+    if (!h.isUrl(legendUrl)) {
+      view._legend_minimap = new RasterMiniMap({
+        elContainer: elLegendImageBox,
+        width: 40,
+        height: 40,
+        mapSync: map,
+        tiles: tiles
+      });
+      /**
+       * Resolve now
+       */
+      resolve(false);
+    } else {
+      /*
+       * Add legend image
+       */
+      const promLegendBase64 = h.urlToImageBase64(legendUrl);
+      resolve(promLegendBase64);
+    }
+  })
+    .then((legendB64) => {
+      /**
+       * If empty, use default
+       */
+      if (legendB64 === false) {
+        return true;
+      }
+      /**
+       * If empty data or length < 'data:image/png;base64,' length
+       */
+      if (!h.isBase64img(legendB64)) {
+        legendB64 = legendB64Default;
+        isLegendDefault = true;
+      }
+
+      if (isLegendDefault) {
+        /**
+         * Add tooltip 'missing legend'
+         */
+        elLegend.classList.add('hint--right');
+        elLegend.dataset.lang_key = 'noLegend';
+        elLegend.dataset.lang_type = 'tooltip';
+        h.updateLanguageElements({
+          el: o.elLegendContainer
+        });
+      } else {
+        /**
+         * Indicate that image can be zoomed
+         */
+        elLegend.style.cursor = 'zoom-in';
+      }
       /**
        * Create an image with given source
        */
-      const img = h.urlToImageBase64(legend);
+      const img = h.el('img', {alt: 'Legend'});
       img.alt = 'Legend';
-      img.onerror = defaultImg;
-      img.addEventListener(
-        'load',
-        () => {
-          elLegend.classList.add('mx-legend-box');
-        },
-        {once: true}
-      );
+      img.addEventListener('error', handleImgError);
+      img.addEventListener('load', handleLoad, {once: true});
+      if (!isLegendDefault) {
+        img.addEventListener('click', handleClick);
+      }
+      img.src = legendB64;
 
-      elLegend.appendChild(img);
-      elLegend.style.cursor = 'zoom-in';
-      elLegend.onclick = function() {
+      return true;
+
+      /**
+       * Helpers
+       */
+      function handleClick() {
         /**
          * Show a bigger image if clicked
          */
-        const title = legendTitle || h.getLabelFromObjectPath({
-          obj: view,
-          path: 'data.title',
-          defaultValue: '[ missing title ]'
+        const title =
+          legendTitle ||
+          h.getLabelFromObjectPath({
+            obj: view,
+            path: 'data.title',
+            defaultValue: '[ missing title ]'
+          });
+
+        const imgModal = h.el('img', {
+          src: img.src,
+          alt: 'Legend',
+          onerror: handleImgError
         });
 
-        const imgModal = h.urlToImageBase64(legend);
-        imgModal.onerror = defaultImg;
-        imgModal.alt = 'Legend';
+        /**
+         * Add in modal
+         */
         h.modal({
           title: title,
           id: 'legend-raster-' + view.id,
           content: imgModal,
           addBackground: false
         });
-      };
-    }
-    resolve(true);
-  });
+      }
+      function handleLoad() {
+        /**
+         * Add image to
+         */
+        elLegendImageBox.appendChild(img);
+      }
+      function handleImgError() {
+        this.onerror = null;
+        this.src = legendB64Default;
+      }
+    })
+    .catch((e) => console.error(e));
 }
 
 /**
@@ -3322,6 +3413,9 @@ export function viewModulesRemove(view) {
     if (it.timeSlider) {
       it.timeSlider.destroy();
     }
+  }
+  if (view._legend_minimap instanceof RasterMiniMap) {
+    view._legend_minimap.destroy();
   }
 }
 export function viewsModulesRemove(views) {
@@ -3888,7 +3982,7 @@ export function zoomToViewIdVisible(o) {
       }
     })
     .catch((err) => {
-      console.warn(err);
+      console.error(err);
     });
 }
 
@@ -4084,7 +4178,7 @@ export function getViewDescription(id, lang) {
 }
 
 /**
- * Get a view's legends or clone. Images are converted in base64
+ * Get a view's legends or clone.
  * (Used in MapComposer)
  * @param {String||Object} id of the legend or view object
  * @param {Object} opt Options
@@ -4108,17 +4202,24 @@ export function getViewLegend(id, opt) {
   let elLegend = view._elLegend;
   let elLegendClone;
   let hasLegend = h.isElement(elLegend);
+  let useClone = opt.clone === true;
+  let hasMiniMap = view._legend_minimap instanceof RasterMiniMap;
 
-  if (hasLegend && opt.clone === true) {
+  if (hasLegend && useClone) {
     elLegendClone = elLegend.cloneNode(true);
   }
-  if (hasLegend && opt.clone === true && opt.input === false) {
+  if (hasLegend && useClone && hasMiniMap) {
+    var img = view._legend_minimap.getImage();
+    var elImg = h.el('img', {src: img});
+    elLegendClone.appendChild(elImg);
+  }
+  if (hasLegend && useClone && opt.input === false) {
     elLegendClone.querySelectorAll('input').forEach((e) => e.remove());
   }
-  if (opt.clone === true && opt.style === false) {
+  if (useClone && opt.style === false) {
     elLegendClone.style = '';
   }
-  if (opt.clone === true && opt.class === false) {
+  if (useClone && opt.class === false) {
     elLegendClone.className = '';
   }
   return elLegendClone || elLegend || h.el('div');

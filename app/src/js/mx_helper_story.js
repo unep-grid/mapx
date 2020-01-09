@@ -606,7 +606,7 @@ function setStepConfig(o) {
           slideConfig = [];
         }
       } catch (e) {
-        console.warn(e, slideConfig);
+        console.error(e, slideConfig);
       }
       config.slidesConfig.push(slideConfig);
     }

@@ -19,11 +19,11 @@ let settings = {
     minZoom: 0
   },
   api: {
-    port: '3333',
-    port_public: '8880',
     host: 'api',
-    host_public: 'apidev.mapx.localhost',
-    protocol: 'http:',
+    port: '3333',
+    host_public: 'api.mapx.org',
+    port_public: '443',
+    protocol: 'https:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
       getApiSql : '/get/sql',

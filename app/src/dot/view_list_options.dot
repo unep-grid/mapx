@@ -4,7 +4,7 @@
 {{ var langAbstract = h.checkLanguage({obj:view,path:'data.abstract'}) ; }}
 {{ var isCurrentProject =  mx.settings.project === view.project ; }}
 {{ var isDropedView = !!view._drop_shared ; }}
-{{ var isMember  = h.path(mx,'settings.user.roles.member',false) ;}}
+{{ var isRegistered  = !h.path(mx,'settings.user.guest',true) ;}}
 <div>
   {{?view.type!='sm'}}
   <div class="mx-view-legend-container" id="view_legend_container_{{=view.id}}"></div>
@@ -104,7 +104,7 @@
       <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_share" data-lang_type="tooltip" data-view_action_key="btn_opt_share" data-view_action_target="{{=view.id}}" data-view_action_handler="shiny">
         <div class="fa fa-share-alt"></div>
       </li>
-      {{? isMember }}
+      {{? isRegistered }}
        <li class="mx-pointer btn-circle btn-circle-small hint--left" data-lang_key="btn_opt_share_to_project" data-lang_type="tooltip" data-view_action_key="btn_opt_share_to_project" data-view_action_target="{{=view.id}}" data-view_action_handler="shiny">
         <div class="fa fa-share"></div>
       </li>

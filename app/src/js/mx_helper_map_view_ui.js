@@ -407,6 +407,9 @@ export function viewsListRenderNew(o) {
         h.viewLayersAdd({
           viewData: view
         });
+        h.updateLanguageElements({
+          el: elView
+        });
       } else if (open) {
         h.viewOpenAuto(view);
       }

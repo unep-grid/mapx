@@ -40,7 +40,7 @@ export function path(obj, path, def) {
     obj = obj[path[i]];
   }
 
-  if (typeof obj === 'undefined' || obj === null ) {
+  if (typeof obj === 'undefined' || obj === null) {
     return out(def);
   }
 
@@ -2098,65 +2098,50 @@ export function handleRequestMessage(msg, msgs, on) {
   }
 }
 
-export function convertAllImagesToBase64(elOrig) {
-  const h = mx.helpers;
-  const el = h.el;
-  const isEl = h.isElement(elOrig);
-  if (!isEl) {
-    return;
-  }
-  var elImgs = elOrig.querySelectorAll('img');
-
-  elImgs.forEach((elImg) => {
-    var rect = elImg.getBoundingClientRect();
-    var elCanvas = el('canvas', {
-      width: rect.width,
-      height: rect.height,
-      style: {
-        width: rect.width + 'px',
-        height: rect.height + 'px'
-      }
-    });
-    var ctx = elCanvas.getContext('2d');
-    ctx.drawImage(elImg, 0, 0);
-    elImg.src = elCanvas.toDataURL();
-  });
-}
-
+/**
+ * Fetch image and convert to base64
+ *
+ *
+ */
 export function urlToImageBase64(url) {
   const h = mx.helpers;
-  let img = h.el('img', {
-    crossorigin: 'anonymous',
-    src:
-      `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=`
-  });
+  const def = '';
 
-  fetch(url)
+  if (url.indexOf('base64,') > -1) {
+    return Promise.resolve(url);
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'Anonymous';
+
+  return fetch(url)
     .then(function(response) {
       return response.blob();
     })
     .then(function(blob) {
       img.src = URL.createObjectURL(blob);
-      img.addEventListener('load', convertToBase64, {once: true});
+      return new Promise((resolve) => {
+        img.onload = () => {
+          const b64 = convertToBase64(img);
+          resolve(b64);
+        };
+      });
     })
     .catch((e) => {
-      console.warn('urlToImageBase64 failed: ', e.message);
+      console.error('urlToImageBase64 failed: ', e.message);
+      return def
     });
 
-  return img;
-
-  function convertToBase64() {
-    var rect = img.getBoundingClientRect();
-    var elCanvas = h.el('canvas', {
-      width: rect.width,
-      height: rect.height,
-      style: {
-        width: rect.width + 'px',
-        height: rect.height + 'px'
-      }
+  /**
+  * Helpers
+  */
+  function convertToBase64(img) {
+    const elCanvas = h.el('canvas', {
+      width: img.naturalWidth,
+      height: img.naturalHeight
     });
-    var ctx = elCanvas.getContext('2d');
+    const ctx = elCanvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
-    img.src = elCanvas.toDataURL();
+    return elCanvas.toDataURL('image/png');
   }
 }

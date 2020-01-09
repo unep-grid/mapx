@@ -13,7 +13,7 @@ export function isEmpty(item) {
     return isEqual(item, []);
   }
 }
-export function isNotEmpty(item){
+export function isNotEmpty(item) {
   return !isEmpty(item);
 }
 
@@ -38,10 +38,7 @@ export function isView(item) {
 }
 export function isStory(item) {
   const h = mx.helpers;
-  return (
-    h.isView(item) &&
-    h.path(item, 'data.story')
-  );
+  return h.isView(item) && h.path(item, 'data.story');
 }
 
 export function isViewsArray(arr) {
@@ -179,6 +176,25 @@ export function isStringRange(str, min, max) {
   }
   str = str.trim();
   return str.length >= min && str.length <= max;
+}
+
+/**
+ * Test if valide base64
+ */
+let regexDataImg = new RegExp(
+  /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+=$/
+);
+export function isBase64img(str) {
+  try {
+    let isValid = isStringRange(str, 22) && regexDataImg.test(str);
+    if (!isValid) {
+      return false;
+    }
+    let strb64 = str.split(',')[1];
+    return isStringRange(strb64, 10);
+  } catch (err) {
+    return false;
+  }
 }
 
 /**

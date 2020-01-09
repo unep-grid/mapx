@@ -289,8 +289,8 @@ export function getLabelFromObjectPath(o) {
 
   if (!out) {
     /**
-    * Use the default value
-    */
+     * Use the default value
+     */
     out = defaultValue;
   }
 
@@ -365,43 +365,66 @@ export function getTranslationFromObject(o) {
 }
 
 export function updateLanguageViewsList(o) {
+  const h = mx.helpers;
+  const lang = o.lang || mx.settings.language;
+  const views = h.getViews();
+
   return new Promise((resolve) => {
-    var elsViews = document.getElementsByClassName('mx-view-item');
-    var views = mx.maps[o.id].views;
-    var lang = o.lang || mx.settings.language;
+    views.forEach((view) => {
+      const elTitle = view._el.querySelector('.mx-view-tgl-title');
+      const elText = view._el.querySelector('.mx-view-item-desc');
+      const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
+      const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
 
-    mx.helpers.forEachEl({
-      els: elsViews,
-      callback: function(el) {
-        var id = el.dataset.view_id;
-        var v = views.find(function(v) {
-          return v.id === id;
+      /**
+       * Regenerate vt legend
+       */
+      if (elLegendVt) {
+        elLegendVt.innerHTML = mx.templates.viewListLegend(view);
+      }
+
+      /**
+       * Update rt legend text only
+       */
+      if (elLegendRtTitle) {
+        const legendTitle = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.source.legendTitles',
+          defaultValue: null
         });
-        var elTitle = el.querySelector('.mx-view-tgl-title');
-        var elText = el.querySelector('.mx-view-item-desc');
-        var elLegend = el.querySelector('.mx-view-item-legend-vt');
+        if (legendTitle) {
+          elLegendRtTitle.innerText = legendTitle;
+          elLegendRtTitle.setAttribute('title', legendTitle);
+        }
+      }
 
-        if (elLegend) {
-          elLegend.innerHTML = mx.templates.viewListLegend(v);
-        }
+      /**
+       * Update view title
+       */
+      if (elTitle) {
+        elTitle.innerHTML = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.title'
+        });
+      }
 
-        if (elTitle) {
-          elTitle.innerHTML = mx.helpers.getLabelFromObjectPath({
-            lang: lang,
-            obj: v,
-            path: 'data.title'
-          });
-        }
-        if (elText) {
-          elText.innerHTML = mx.helpers.getLabelFromObjectPath({
-            lang: lang,
-            obj: v,
-            path: 'data.abstract'
-          });
-        }
+      /**
+       * Update view description
+       */
+      if (elText) {
+        elText.innerHTML = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.abstract'
+        });
       }
     });
     resolve(true);
+  }).catch((e) => {
+    console.error(e);
+    return false;
   });
 }
 

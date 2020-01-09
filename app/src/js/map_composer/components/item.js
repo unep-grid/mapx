@@ -42,7 +42,7 @@ class Item extends Box {
     if (type === 'legend' || type === 'element') {
       return this.buildElNode();
     }
-    console.warn('type ' + type + 'not known');
+    console.error('type ' + type + 'not known');
   }
 
   onResize() {

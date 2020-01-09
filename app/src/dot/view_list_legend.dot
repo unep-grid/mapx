@@ -1,8 +1,7 @@
 {{ var h = mx.helpers ; }}
 {{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}
 {{?rules}}
-{{ var langTitle = h.checkLanguage({obj:it, path:'data.style.titleLegend', concat:true}) ; }}
-{{ var titleLegend = h.path(it,'data.style.titleLegend.'+langTitle) || 'Legend' ; }}
+{{ var titleLegend = h.getLabelFromObjectPath({obj: it,path: 'data.style.titleLegend'}); }}
 {{?h.greaterThan(rules.length,0)}}
 {{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}
 {{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}

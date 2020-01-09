@@ -157,7 +157,7 @@ Dashboard.prototype.Widget = function(config) {
         widget._init = true;
       })
       .catch((e) => {
-        console.warn(e);
+        console.error(e);
         widget.remove();
       });
   };
@@ -422,7 +422,7 @@ Dashboard.prototype.Widget = function(config) {
       try {
         return fun(...args);
       } catch (e) {
-        console.warn(e);
+        console.error(e);
         widget.remove(skipOnRemove);
       }
     };
