@@ -41,7 +41,6 @@ services:
     volumes:
       - ./app:/srv/shiny-server/dev
       - ./_shared:/shared
-      - ./app/userdata:/shared/userdata
   api:
     env_file: mapx.dev.env
     build: ./api/.
