@@ -1,2 +1,2 @@
-pg/init/sql_files linguist-detectable=false
-app/src/data/dict_built linguist-generated=true
+./pg/init/sql_files/**/*.sql linguist-detectable=false
+app/src/data/dict_built/* linguist-generated=true
