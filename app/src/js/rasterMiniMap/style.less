@@ -1,0 +1,36 @@
+@color_1: white;
+@background_color_1: #ccc;
+@background_color_2: #fff;
+@background_color_3: #474747;
+
+.rmm {
+  padding: 0px;
+  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAANJwAADScBQwZj3AAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAmSURBVBiVY2TAAp49e/YfXYwJm0JsYAAVMmJzuJSUFCPtraa+QgDLYwfEbRLGHgAAAABJRU5ErkJggg==');
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 0, 5px -5px, 0px 5px;
+  background-color: @background_color_1;
+  background-attachment: local;
+  border-radius: 3px;
+  overflow: hidden;
+  pointer-events: none;
+
+  .mapboxgl-map {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  * {
+    transform-origin: top left;
+    touch-action: none;
+    user-select: none;
+  }
+  .mapboxgl-ctrl-attrib {
+    display: none;
+  }
+  .mapboxgl-ctrl-logo {
+    display: none;
+  }
+  .mapboxgl-ctrl-scale {
+    display: none;
+  }
+}
