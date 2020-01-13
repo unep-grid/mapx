@@ -50,10 +50,10 @@ export function setApiUrlAuto() {
   const loc = new URL(window.location.href);
   const hasDefaultSubDomain = regexDefaultSubDomain.test(loc.hostname);
   /**
-  * Use mx.settings default or,
-  * if has default subdomain, webpack variables OR
-  * modified url based on standard 
-  */
+   * Use mx.settings default or,
+   * if has default subdomain, webpack variables OR
+   * modified url based on standard
+   */
   if (hasDefaultSubDomain) {
     /**
      * If no webpack variables found, replace by defaults
@@ -555,7 +555,7 @@ export function initMapxStatic(o) {
   const idViewsOpen = h.getQueryParameter('viewsOpen');
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
   const language = h.getQueryParameter('language')[0] || settings.languages[0];
-  h.updateLanguage({lang:language});
+  h.updateLanguage({lang: language});
 
   const idViews = h.getArrayDistinct(
     h.getQueryParameter('views').concat(idViewsOpen)
@@ -1339,6 +1339,7 @@ export function viewLiAction(o) {
  * @param {object} o Options
  * @param {string} o.id Id of the layer
  * @param {string} o.idSourceLayer Id of the source layer / id of the view
+ * @param {string} o.idAfter Id of the layer after
  * @param {string} o.idSource Id of the source
  * @param {string} o.geomType Geometry type (point, line, polygon)
  * @param {string} o.hexColor Hex color. If not provided, random color will be generated
@@ -1386,7 +1387,8 @@ export function makeSimpleLayer(o) {
       type: 'symbol',
       layout: {
         'icon-image': sprite,
-        'icon-size': size
+        'icon-size': size / 4,
+        'icon-allow-overlap': true
       },
       paint: {
         'icon-opacity': 1,
@@ -1411,7 +1413,8 @@ export function makeSimpleLayer(o) {
     pattern: {
       type: 'fill',
       paint: {
-        'fill-pattern': sprite
+        'fill-pattern': sprite,
+        'fill-antialias': false
       }
     },
     line: {
@@ -1430,6 +1433,7 @@ export function makeSimpleLayer(o) {
   layer = layer[o.geomType];
   layer.id = o.id;
   layer.source = o.idSource;
+  layer.idAfter = o.idAfter;
   layer.minzoom = o.zoomMin;
   layer.maxzoom = o.zoomMax;
   layer['source-layer'] = o.idSourceLayer;
@@ -2910,6 +2914,7 @@ export function viewLayersAddVt(o) {
     const source = p(view, 'data.source', {});
     const idSourceLayer = p(source, 'layerInfo.name');
     var layers = [];
+    var layersAfter = [];
     var num = 0;
     var defaultOrder = true;
     var rules = p(view, 'data.style.rules', []);
@@ -3131,6 +3136,8 @@ export function viewLayersAddVt(o) {
         const idView = view.id;
         const filter = ['all'];
         const attr = def.attribute.name;
+        const idLayerRule = getIdLayer();
+        const idLayerRuleSymbol = idLayerRule + '_symbol';
 
         if (!isNullRule) {
           if (isNumeric) {
@@ -3171,55 +3178,10 @@ export function viewLayersAddVt(o) {
         rule.filter = filter;
 
         /**
-         * Add layer for symbols
-         */
-        if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
-          const layerSymbol = makeSimpleLayer({
-            id: getIdLayer(),
-            idSource: idSource,
-            idSourceLayer: idView,
-            geomType: 'symbol',
-            hexColor: rule.color,
-            opacity: rule.opacity,
-            size: rule.size,
-            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
-            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
-            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
-            zoomMax: zoomConfig.zoomMax,
-            zoomMin: zoomConfig.zoomMin,
-            sprite: rule.sprite,
-            filter: filter
-          });
-
-          layers.push(layerSymbol);
-        }
-
-        if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
-          const layerPattern = makeSimpleLayer({
-            id: getIdLayer(),
-            idSource: idSource,
-            idSourceLayer: idView,
-            geomType: 'pattern',
-            hexColor: rule.color,
-            opacity: rule.opacity,
-            size: rule.size,
-            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
-            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
-            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
-            zoomMax: zoomConfig.zoomMax,
-            zoomMin: zoomConfig.zoomMin,
-            sprite: rule.sprite,
-            filter: filter
-          });
-
-          layers.push(layerPattern);
-        }
-
-        /**
          * Add layer for curent rule
          */
         const layerMain = makeSimpleLayer({
-          id: getIdLayer(),
+          id: idLayerRule,
           idSource: idSource,
           idSourceLayer: idView,
           geomType: geomType,
@@ -3236,6 +3198,56 @@ export function viewLayersAddVt(o) {
         });
 
         layers.push(layerMain);
+
+        /**
+         * Add layer for symbols
+         */
+        if (rule.sprite && rule.sprite !== 'none' && (
+          geomType === 'point' || 
+          geomType === 'polygon' )
+        ) {
+
+          const layerSprite = makeSimpleLayer({
+            id: idLayerRuleSymbol,
+            idAfter: idLayerRule,
+            idSource: idSource,
+            idSourceLayer: idView,
+            geomType: geomType === 'polygon' ? 'pattern' : 'symbol',
+            hexColor: rule.color,
+            opacity: 1,
+            size: rule.size,
+            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+            zoomMax: zoomConfig.zoomMax,
+            zoomMin: zoomConfig.zoomMin,
+            sprite: rule.sprite,
+            filter: filter
+          });
+
+          layersAfter.push(layerSprite);
+        }
+
+        if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
+          const layerPattern = makeSimpleLayer({
+            id: idLayerRuleSymbol,
+            idSource: idSource,
+            idAfter: idLayerRule,
+            idSourceLayer: idView,
+            geomType: 'pattern',
+            hexColor: rule.color,
+            opacity: 1,
+            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+            zoomMax: zoomConfig.zoomMax,
+            zoomMin: zoomConfig.zoomMin,
+            sprite: rule.sprite,
+            filter: filter
+          });
+
+          layersAfter.push(layerPattern);
+        }
       });
     }
 
@@ -3253,10 +3265,17 @@ export function viewLayersAddVt(o) {
       /*
        * Add layers to map
        */
-      layers.forEach(function(layer) {
+      layers.forEach((layer) => {
         map.addLayer(layer, o.before);
       });
-
+      setTimeout(() => {
+        layersAfter.forEach((layer) => {
+          h.addLayer({
+            layer: layer,
+            after: layer.idAfter
+          });
+        });
+      }, 10);
       /*
        * Update layer order based in displayed list
        */
@@ -3845,14 +3864,35 @@ export function filterViewValues(o) {
  * @param {string} o.id Map id
  * @param {object} o.layer Layer object
  * @param {string} o.before
+ * @param {string} o.after
  */
 export function addLayer(o) {
-  const map = mx.helpers.getMap(o.id);
+  const h = mx.helpers;
+  const map = h.getMap(o.id);
+
   if (map) {
     if (map.getLayer(o.layer.id)) {
       map.removeLayer(o.layer.id);
     }
-    map.addLayer(o.layer, o.before);
+    if (o.after) {
+      /**
+       * Assume stable, rendered style
+       */
+      var layers = map.getStyle().layers;
+      var found = false;
+      layers.forEach((l, i) => {
+        if (!found && l.id === o.after) {
+          found = true;
+          var idBefore = layers[i + 1].id || null;
+          map.addLayer(o.layer, idBefore);
+        }
+      });
+      if (!found) {
+        console.warn(`addLayer after ${o.after} : layer not found`);
+      }
+    } else {
+      map.addLayer(o.layer, o.before);
+    }
   }
 }
 
