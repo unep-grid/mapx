@@ -182,7 +182,7 @@ export function isStringRange(str, min, max) {
  * Test if valide base64
  */
 let regexDataImg = new RegExp(
-  /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+=$/
+  /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+$/
 );
 export function isBase64img(str) {
   try {
