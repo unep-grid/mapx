@@ -3,10 +3,8 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const WebpackShellPlugin = require('webpack-shell-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-//const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
 const {GenerateSW} = require('workbox-webpack-plugin');
 
 module.exports = merge(common, {
@@ -18,12 +16,6 @@ module.exports = merge(common, {
     }
   },
   plugins: [
-    new WebpackShellPlugin({
-      onBuildStart: [
-        'Rscript ./src/r/scripts/build_dict_json.R ./src/data/dict_built'
-      ],
-      onBuildEnd: ['echo "Webpack End"']
-    }),
     new CleanWebpackPlugin(['../www/*'], {
       exclude: [],
       dry: false,

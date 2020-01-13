@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.6.55",
+  "version": "1.6.56",
   "description": "",
   "main": "main.js",
   "devDependencies": {
@@ -115,7 +115,7 @@
   },
   "scripts": {
     "test": "-",
-    "prod": "webpack --config ./webpack/webpack.prod.js",
+    "prod": "npm run build_dict && webpack --config ./webpack/webpack.prod.js",
     "dev": "webpack --watch --config ./webpack/webpack.dev.js",
     "build_dict": "node ./src/node/build_dict.js config_dict.json",
     "lint": "eslint"
