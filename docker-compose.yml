@@ -24,7 +24,6 @@ services:
     env_file: mapx.dev.env
     build: ./app/.
     image: fredmoser/mx-app-shiny:1.6.55-debian
-    restart: always
     ports:
       - 3838
     hostname: mx_app
@@ -45,7 +44,6 @@ services:
     env_file: mapx.dev.env
     build: ./api/.
     image: fredmoser/mx-api-node:1.6.55-alpine
-    restart: always
     ports: 
       - 3030
     hostname: mx_api
@@ -74,7 +72,6 @@ services:
   pg:
     env_file: mapx.dev.env
     image: mdillon/postgis:10-alpine
-    restart: always
     hostname: pg
     volumes:
       - ./_shared:/shared
@@ -85,7 +82,6 @@ services:
       - 5432:5432
   redis:
     image: redis:alpine
-    restart: always
     hostname: redis
     command: redis-server /usr/local/etc/redis/redis.conf 
     volumes:
