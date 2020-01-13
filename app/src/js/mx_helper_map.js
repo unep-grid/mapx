@@ -2816,7 +2816,7 @@ function viewLayersAddRt(o) {
         /**
          * Add tooltip 'missing legend'
          */
-        elLegend.classList.add('hint--right');
+        elLegend.classList.add('hint--bottom');
         elLegend.dataset.lang_key = 'noLegend';
         elLegend.dataset.lang_type = 'tooltip';
         h.updateLanguageElements({

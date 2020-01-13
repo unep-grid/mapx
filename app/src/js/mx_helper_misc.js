@@ -2129,12 +2129,12 @@ export function urlToImageBase64(url) {
     })
     .catch((e) => {
       console.error('urlToImageBase64 failed: ', e.message);
-      return def
+      return def;
     });
 
   /**
-  * Helpers
-  */
+   * Helpers
+   */
   function convertToBase64(img) {
     const elCanvas = h.el('canvas', {
       width: img.naturalWidth,
