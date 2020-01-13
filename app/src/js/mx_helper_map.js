@@ -954,8 +954,8 @@ export function getViewRemote(idView) {
     return Promise.reject('Missing id or fetch URL');
   }
 
-  /* get view object from storage or network */
-  const keyNet = apiUrlViews + idView;
+  /* get view, force update */
+  const keyNet = apiUrlViews + idView + '?date=' + performance.now();
 
   return fetch(keyNet)
     .then((view) => {
