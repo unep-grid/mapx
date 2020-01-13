@@ -322,3 +322,4 @@ exports.mail = require('./mail.js');
 exports.logs = require('./logs.js');
 exports.query = require('./query.js');
 exports.db = require('./db.js');
+exports.projects = require('./getProjects.js');

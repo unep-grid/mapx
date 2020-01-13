@@ -2,7 +2,7 @@ const settings = require.main.require('./settings');
 const express = require('express');
 const app = express();
 const utils = require('./utils');
-let port = 3030;
+let port = process.env.API_PORT || 3030;
 
 /**
  * If port argument is set, use this instead
@@ -54,9 +54,12 @@ app.post('/upload/image/', utils.image.upload);
 app.post('/upload/vector/', utils.vector.upload);
 app.post('/send/mail/', utils.mail.sendMailApi);
 app.post('/collect/logs/', utils.logs.collect);
+app.get('/get/projects/list/user/:id', utils.projects.getByUser);
 
 /**
  * Start
  */
 console.log('listen to ' + port);
 app.listen(port);
+
+module.exports = app;
