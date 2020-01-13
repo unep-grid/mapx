@@ -1,0 +1,7 @@
+{
+  "dict_dir": "./src/data/dict",
+  "dict_dir_built": "./src/data/dict_built",
+  "dict_files": ["dict_main.json", "dict_languages.json"],
+  "languages": ["en", "fr", "es", "ru", "zh", "de", "bn", "fa", "ps"],
+  "language_default": "en"
+}

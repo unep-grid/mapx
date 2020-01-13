@@ -117,6 +117,7 @@
     "test": "-",
     "prod": "webpack --config ./webpack/webpack.prod.js",
     "dev": "webpack --watch --config ./webpack/webpack.dev.js",
+    "build_dict": "node ./src/node/build_dict.js config_dict.json",
     "lint": "eslint"
   },
   "author": "",
