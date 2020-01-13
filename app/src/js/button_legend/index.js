@@ -55,7 +55,7 @@ class ButtonLegend {
     this.build();
     this.opt.elContainer.appendChild(this.el);
     this.ls.addListener({
-      target: this.el,
+      target: this.elBtnLegend,
       bind: this,
       callback: this.toggle,
       group: 'base',
