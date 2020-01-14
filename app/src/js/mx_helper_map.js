@@ -564,6 +564,9 @@ export function initMapxStatic(o) {
   return h
     .getViewsRemote(idViews)
     .then((views) => {
+      /**
+       * Match order set in form
+       */
       mapData.views = views.reverse();
     })
     .then(() => {
@@ -572,6 +575,9 @@ export function initMapxStatic(o) {
        */
       var story = mapData.views.find((v) => v.type === 'sm');
       if (story) {
+        /*
+         * If a story is found, ignore other options
+         */
         h.storyRead({
           id: o.id,
           idView: story.id,
@@ -584,7 +590,10 @@ export function initMapxStatic(o) {
       }
     })
     .then((addBounds) => {
-      if (addBounds) {
+      if (addBounds && zoomToViews) {
+        /**
+         * Extract wider views extent
+         */
         return h.getViewsBounds(mapData.views);
       } else {
         return false;
@@ -592,31 +601,33 @@ export function initMapxStatic(o) {
     })
     .then((bounds) => {
       if (bounds) {
-        if (zoomToViews) {
-          map.fitBounds(bounds);
-        }
-
-        mapData.views.forEach((view) => {
-          h.viewLayersAdd({
-            viewData: view,
-            elLegendContainer: btnLegend.elLegendContent,
-            addTitle: true
-          });
-
-          /**
-           * add Dashboard
-           */
-          const hasDashboard = h.path(view, 'data.dashboard', null);
-          if (hasDashboard) {
-            h.Dashboard.init({
-              idContainer: 'mxDashboards',
-              idDashboard: 'mx-dashboard-' + view.id,
-              idMap: map.id,
-              view: view
-            });
-          }
-        });
+        map.fitBounds(bounds);
       }
+
+      mapData.views.forEach((view) => {
+        /**
+         * Add views layer
+         */
+        h.viewLayersAdd({
+          viewData: view,
+          elLegendContainer: btnLegend.elLegendContent,
+          addTitle: true
+        });
+
+        /**
+         * add Dashboard
+         */
+        const hasDashboard = h.path(view, 'data.dashboard', null);
+        if (hasDashboard) {
+          h.Dashboard.init({
+            idContainer: 'mxDashboards',
+            idDashboard: 'mx-dashboard-' + view.id,
+            idMap: map.id,
+            view: view
+          });
+        }
+      });
+
       mx.events.fire({
         type: 'mapx_ready'
       });
@@ -2383,6 +2394,7 @@ export function viewLayersAdd(o) {
   const idLayerBefore = o.before
     ? h.getLayerNamesByPrefix({prefix: o.before})[0]
     : mx.settings.layerBefore;
+
   return new Promise((resolve, reject) => {
     if (h.isView(view)) {
       resolve(view);
@@ -2540,6 +2552,7 @@ export function elLegend(view, settings) {
     return;
   }
   const elLegendContainer = settings.elLegendContainer;
+  const hasLegend = elLegendContainer.childElementCount > 0;
 
   if (settings.removeOld) {
     if (view._elLegendGroup) {
@@ -2578,8 +2591,13 @@ export function elLegend(view, settings) {
     settings.addTitle ? elLegendTitle : null,
     elLegend
   );
+  if (hasLegend) {
+    const elPreviousLegend = elLegendContainer.firstChild;
+    elLegendContainer.insertBefore(elLegendGroup, elPreviousLegend);
+  } else {
+    elLegendContainer.appendChild(elLegendGroup);
+  }
 
-  elLegendContainer.appendChild(elLegendGroup);
   view._elLegend = elLegend;
   view._elLegendGroup = elLegendGroup;
   return elLegend;
@@ -3202,11 +3220,11 @@ export function viewLayersAddVt(o) {
         /**
          * Add layer for symbols
          */
-        if (rule.sprite && rule.sprite !== 'none' && (
-          geomType === 'point' || 
-          geomType === 'polygon' )
+        if (
+          rule.sprite &&
+          rule.sprite !== 'none' &&
+          (geomType === 'point' || geomType === 'polygon')
         ) {
-
           const layerSprite = makeSimpleLayer({
             id: idLayerRuleSymbol,
             idAfter: idLayerRule,

@@ -192,7 +192,7 @@ class Toggle {
     tgl.elLabelText.dataset.lang_key = tgl._label_key;
   }
   getLabelKey() {
-    return this._label_key;
+    return this._label_key || '';
   }
   getLabel() {
     this.setLabel();

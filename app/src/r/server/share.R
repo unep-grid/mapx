@@ -126,10 +126,13 @@ observeEvent(reactData$showShareManager,{
                     selected = viewsToShare,
                     options = list(
                       sortField = "label",
-                      plugins = list("remove_button")
+                      plugins = list(
+                        "remove_button",
+                        "drag_drop"
                       )
                     )
                   )
+                )
                 ),
               #
               # Zoom to views in static mode
@@ -327,7 +330,7 @@ observe({
       #
       # Initial map position
       #
-      if(addMapPosition) mapPosition <- sprintf("lat=%1$s&lng=%2$s&z=%3$s",
+      if(addMapPosition) mapPosition <- sprintf("lat=%1$s&lng=%2$s&z=%3$s&",
         inMapPosition$lat,
         inMapPosition$lng,
         inMapPosition$z

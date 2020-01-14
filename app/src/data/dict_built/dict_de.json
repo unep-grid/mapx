@@ -4491,7 +4491,7 @@
   },
   {
     "id": "share_views_check_desc",
-    "en": "Views to display. In mode 'static', those views will be rendered automatically. Story maps will start directly. Otherwise, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
     "de": ""
   },
   {
