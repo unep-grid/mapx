@@ -2401,7 +2401,7 @@
   },
   {
     "id": "project_alias_name_desc",
-    "en": "Minimum 5, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
     "fa": ""
   },
   {

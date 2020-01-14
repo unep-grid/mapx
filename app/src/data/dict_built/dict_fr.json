@@ -2401,8 +2401,8 @@
   },
   {
     "id": "project_alias_name_desc",
-    "en": "Minimum 5, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "fr": "Minimum 5, maximum 30 charactères parmis les lettre minuscules ASCII  [a-z], les chiffres [0-9], le tiret court [-] ainsi que le charactère de soulignement [_]"
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "fr": "Minimum 1, maximum 30 charactères parmis les lettre minuscules ASCII  [a-z], les chiffres [0-9], le tiret court [-] ainsi que le charactère de soulignement [_]"
   },
   {
     "id": "error_project_alias_not_valid",
