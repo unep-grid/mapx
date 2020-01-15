@@ -2107,7 +2107,7 @@ export function urlToImageBase64(url) {
   const h = mx.helpers;
   const def = '';
 
-  if (url.indexOf('base64,') > -1) {
+  if (h.isBase64img(url)) {
     return Promise.resolve(url);
   }
 
@@ -2116,7 +2116,11 @@ export function urlToImageBase64(url) {
 
   return fetch(url)
     .then(function(response) {
-      return response.blob();
+      if (response.ok) {
+        return response.blob();
+      } else {
+        throw new Error(`No valid response for url ${url}`);
+      }
     })
     .then(function(blob) {
       img.src = URL.createObjectURL(blob);
@@ -2128,7 +2132,7 @@ export function urlToImageBase64(url) {
       });
     })
     .catch((e) => {
-      console.error('urlToImageBase64 failed: ', e.message);
+      console.error(`urlToImageBase64 failed: , ${e.message}`);
       return def;
     });
 
