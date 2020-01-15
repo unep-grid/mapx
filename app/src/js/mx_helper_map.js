@@ -1,7 +1,7 @@
 /* jshint evil:true, esversion:6, laxbreak:true */
 import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
-import {ButtonLegend} from './button_legend';
+import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './rasterMiniMap';
 /**
  * TODO: convert this in a MapxMap Class
@@ -551,7 +551,20 @@ export function initMapxStatic(o) {
   const settings = mx.settings;
   const mapData = h.getMapData();
   const elMap = map.getContainer();
-  const btnLegend = new ButtonLegend({elContainer: elMap});
+  const btnLegend = new ButtonPanel({
+    elContainer: elMap,
+    position : 'top-right',
+    title_text: h.getDictItem('button_legend_title'),
+    title_lang_key : 'button_legend_title',
+    button_text : h.getDictItem('button_legend_button'),
+    button_lang_key : 'button_legend_button',
+    button_classes : ['fa','fa-list-ul'],    
+    container_style : {
+        maxHeight : '50%',
+        maxWidth : '50%'
+    }
+  });
+
   const idViewsOpen = h.getQueryParameter('viewsOpen');
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
   const language = h.getQueryParameter('language')[0] || settings.languages[0];
@@ -610,7 +623,7 @@ export function initMapxStatic(o) {
          */
         h.viewLayersAdd({
           viewData: view,
-          elLegendContainer: btnLegend.elLegendContent,
+          elLegendContainer: btnLegend.elPanelContent,
           addTitle: true
         });
 

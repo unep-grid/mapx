@@ -1,5 +1,5 @@
 import {initEditing} from './mx_helper_story_editor.js';
-import {ButtonLegend} from './button_legend/index.js';
+import {ButtonPanel} from './button_panel/index.js';
 /**
  * Story map prototype
  * TODO:
@@ -495,8 +495,18 @@ function initButtonsListener(o) {
   /**
    * Button Legend
    */
-  o.data.buttonLegend = new ButtonLegend({
-    elContainer: o.data.elMapContainer
+  o.data.buttonLegend = new ButtonPanel({
+    elContainer: o.data.elMapContainer,
+    position : 'top-right',
+    title_text: h.getDictItem('button_legend_title'),
+    title_lang_key : 'button_legend_title',
+    button_text : h.getDictItem('button_legend_button'),
+    button_lang_key : 'button_legend_button',
+    button_classes : ['fa','fa-list-ul'],    
+    container_style : {
+        maxHeight : '50%',
+        maxWidth : '50%'
+    }
   });
 
   /**
@@ -700,7 +710,7 @@ export function storyUpdateSlides(o) {
         id: 'map_main',
         view: o.view,
         stepNum: s,
-        elLegendContainer: o.data.buttonLegend.elLegendContent
+        elLegendContainer: o.data.buttonLegend.elPanelContent
       });
       data.stepActive = s;
 
