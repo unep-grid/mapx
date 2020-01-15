@@ -2,9 +2,18 @@ const pgRead = require.main.require('./db').pgRead;
 const project = require('../db/models').project;
 const utils = require('./utils.js');
 const auth = require('./authentication.js');
+const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
+  {
+    expected: [
+      'language',
+      'role',
+    ],
+  }
+);
 
 module.exports.getByUser = [
-  // auth.validateTokenHandler,
+  validateParamsHandler,
+  auth.validateTokenHandler,
   getProjectsByUserRouteHandler,
 ];
 
@@ -19,9 +28,6 @@ function getProjectsByUserHelper(userId, lc='en', role='any') {
     .select(`members @> '[${userId}]' OR publishers @> '[${userId}]' OR admins @> '[${userId}]' AS member`)
     .select(`publishers @> '[${userId}]' OR admins @> '[${userId}]' AS publisher`)
     .select(`admins @> '[${userId}]' AS admin`)
-    .where(`members @> '[${userId}]'`)
-    .or(`publishers @> '[${userId}]'`)
-    .or(`admins @> '[${userId}]'`)
     ;
 
     sqlStr = `

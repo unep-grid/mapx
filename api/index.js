@@ -2,7 +2,7 @@ const settings = require.main.require('./settings');
 const express = require('express');
 const app = express();
 const utils = require('./utils');
-let port = process.env.API_PORT || 3030;
+let port = settings.api.port || 3030;
 
 /**
  * If port argument is set, use this instead

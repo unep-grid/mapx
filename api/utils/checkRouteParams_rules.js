@@ -105,7 +105,7 @@ const rules = [
     }
   },
   {
-    key: ['roleMax', 'filterViewsByRoleMax'],
+    key: ['roleMax', 'filterViewsByRoleMax', 'role'],
     test: (d) => {
       return {
         valid: roles.indexOf(d) > -1,
