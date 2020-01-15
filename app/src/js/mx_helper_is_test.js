@@ -198,6 +198,27 @@ export function isBase64img(str) {
 }
 
 /**
+* Quick type checker by group eg. image
+* @param {String} type Type to test
+* @param {String} group Group : image, ... NOTE: to be completed
+*/
+export function isValidType(type, group) {
+  const types = {
+    image: [
+      'image/apng',
+      'image/bmp',
+      'image/gif',
+      'image/jpeg',
+      'image/png',
+      'image/svg+xml',
+      'image/tiff',
+      'image/webp'
+    ]
+  };
+  return types[group].indexOf(type) > -1;
+}
+
+/**
  * Test if string contain HTML
  * @param {String} n string to test
  * @note https://stackoverflow.com/questions/15458876/check-if-a-string-is-html-or-not#answer-36773193

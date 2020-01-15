@@ -2106,14 +2106,11 @@ export function handleRequestMessage(msg, msgs, on) {
 export function urlToImageBase64(url) {
   const h = mx.helpers;
   const def = '';
-
   if (h.isBase64img(url)) {
     return Promise.resolve(url);
   }
-
   const img = new Image();
   img.crossOrigin = 'Anonymous';
-
   return fetch(url)
     .then(function(response) {
       if (response.ok) {
@@ -2123,6 +2120,10 @@ export function urlToImageBase64(url) {
       }
     })
     .then(function(blob) {
+      const validType = h.isValidType(blob.type, 'image');
+      if (!validType) {
+        throw new Error(`No valid image type ${blob.type}`);
+      }
       img.src = URL.createObjectURL(blob);
       return new Promise((resolve) => {
         img.onload = () => {
