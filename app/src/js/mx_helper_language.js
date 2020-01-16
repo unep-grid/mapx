@@ -8,7 +8,6 @@ export function updateLanguage(o) {
   let previousLang = mx.settings.language;
   o.id = 'map_main';
   o.lang = o.lang || previousLang || 'en';
-
   /**
    * Fire language_change
    */
@@ -368,6 +367,11 @@ export function updateLanguageViewsList(o) {
   const h = mx.helpers;
   const lang = o.lang || mx.settings.language;
   const views = h.getViews();
+  const isModeStatic = h.path(mx, 'settings.mode.static') === true;
+
+  if (isModeStatic) {
+    return Promise.resolve(false);
+  }
 
   return new Promise((resolve) => {
     views.forEach((view) => {
