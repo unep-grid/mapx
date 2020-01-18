@@ -46,7 +46,7 @@ export function activateSpotlight(enable, elToggle) {
      */
     map.off('move', destroy);
     destroy();
-    mx.listenerStore.removeListenerByGroup('spotlight_pixop');
+    mx.listeners.removeListenerByGroup('spotlight_pixop');
   } else {
     /**
      * Create if needed
@@ -59,13 +59,13 @@ export function activateSpotlight(enable, elToggle) {
      * Render if non spatial change
      */
     render();
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elEnableCalcArea,
       type: 'change',
       idGroup: 'spotlight_pixop',
       callback: render
     });
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elSelectNum,
       type: 'change',
       idGroup: 'spotlight_pixop',

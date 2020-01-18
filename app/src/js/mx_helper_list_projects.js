@@ -73,7 +73,7 @@ export function renderUserProjectsList(o) {
    * Clean remove listener
    */
   function detach() {
-    mx.listenerStore.removeListenerByGroup('project_list');
+    mx.listeners.removeListenerByGroup('project_list');
   }
 
   /**
@@ -81,7 +81,7 @@ export function renderUserProjectsList(o) {
    */
   function listen() {
     detach();
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elContainer,
       bind: elContainer,
       type: 'keyup',
@@ -90,7 +90,7 @@ export function renderUserProjectsList(o) {
       debounce: true,
       debounceTime: 100
     });
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elContainer,
       bind: elContainer,
       type: 'click',

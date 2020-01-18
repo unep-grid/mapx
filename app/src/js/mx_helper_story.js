@@ -93,7 +93,7 @@ function cleanInit(o) {
   /**
    * Remove old listener
    */
-  mx.listenerStore.removeListenerByGroup('story_map');
+  mx.listeners.removeListenerByGroup('story_map');
 
   return new Promise(function(resolve) {
     /** Remove old stuff if any */
@@ -275,7 +275,7 @@ function setListeners(o) {
 # @param {Object} o Story options
 */
 function initKeydownListener() {
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: window,
     type: 'keydown',
     callback: storyHandleKeyDown,
@@ -303,7 +303,7 @@ function initMouseMoveListener(o) {
       el.classList.add(classOpacitySmooth);
     });
 
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: window,
       callback: mouseHider,
       type: 'mousemove',
@@ -455,7 +455,7 @@ function storyOnScroll(o) {
   /**
    * Trigger step config
    */
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: window,
     type: 'resize',
     callback: updateLayout,
@@ -515,7 +515,7 @@ function initButtonsListener(o) {
   var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
   o.data.elBullets = elBullets;
   o.data.elMapControls.appendChild(elBullets);
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: elBullets,
     type: 'click',
     callback: bulletScrollTo,
@@ -999,7 +999,7 @@ export function storyController(o) {
       storyController(o);
     };
 
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elBtnClose,
       type: 'click',
       callback: o.data.close,
@@ -1010,7 +1010,7 @@ export function storyController(o) {
      * Remvove registered listener
      */
 
-    mx.listenerStore.removeListenerByGroup('story_map');
+    mx.listeners.removeListenerByGroup('story_map');
 
     /**
      * Remove layers added by the story

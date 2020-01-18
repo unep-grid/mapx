@@ -36,12 +36,10 @@ const data = {
   })
 };
 const initQueryParams = {}; // set in init_common.js
-const listenerStore = new ListenerStore();
+const listeners = new ListenerStore();
 const events = new EventStore();
 const selectize = {};
-const queue = [];
 const widgets = [];
-const controls = {};
 const dashboards = [];
 const editors = {};
 const extend = {
@@ -56,7 +54,7 @@ export {
   // mapx helpers
   helpers,
   // listener manager / store
-  listenerStore,
+  listeners,
   events,
   // mapx storage
   initQueryParams,
@@ -65,9 +63,7 @@ export {
   data,
   info,
   selectize,
-  queue,
   widgets,
-  controls,
   version,
   settings,
   dashboards,

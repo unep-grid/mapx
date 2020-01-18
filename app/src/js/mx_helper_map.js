@@ -196,7 +196,7 @@ export function initListenerGlobal() {
    * Handle view click
    */
 
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: document.body,
     type: 'click',
     idGroup: 'view_list',
@@ -213,7 +213,7 @@ export function initListenerGlobal() {
   /*
    * Fire session end
    */
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: window,
     type: 'beforeunload',
     idGroup: 'base',
@@ -234,14 +234,14 @@ export function initListenersApp() {
   /**
    *  Other listener
    */
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: document.getElementById('btnShowProject'),
     type: 'click',
     callback: h.showSelectProject,
     group: 'mapx-base'
   });
 
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: document.getElementById('btnShowLanguage'),
     type: 'click',
     callback: h.showSelectLanguage,
@@ -287,14 +287,14 @@ export function initListenersApp() {
     }
   });
 
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
     callback: h.clearCache,
     group: 'mapx-base'
   });
 
-  mx.listenerStore.addListener({
+  mx.listeners.addListener({
     target: document.getElementById('btnFilterShowPanel'),
     type: 'click',
     callback: (e) => {
@@ -711,14 +711,14 @@ export function initMapxApp(o) {
     /**
      * Listen to drag/drop
      */
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elMap,
       type: 'dragover',
       callback: h.handleMapDragOver,
       group: 'map_drag_over',
       bind: mx
     });
-    mx.listenerStore.addListener({
+    mx.listeners.addListener({
       target: elMap,
       type: 'drop',
       callback: h.handleMapDrop,
@@ -2681,7 +2681,7 @@ function viewLayersAddCc(o) {
       /**
        * Avoid event to propagate
        */
-      mx.listenerStore.addListener({
+      mx.listeners.addListener({
         group: idListener,
         target: elLegend,
         type: ['click', 'mousedown', 'change', 'input'],
@@ -2693,7 +2693,7 @@ function viewLayersAddCc(o) {
       }
 
       view._onRemoveCustomView = function() {
-        mx.listenerStore.removeListenerByGroup(idListener);
+        mx.listeners.removeListenerByGroup(idListener);
 
         if (!opt._init || opt._closed) {
           return;
@@ -3593,7 +3593,7 @@ export function getRenderedLayersArea(o) {
 
       const worker = new calcAreaWorker();
       worker.postMessage(data);
-      mx.listenerStore.addListener({
+      mx.listeners.addListener({
         group: 'compute_layer_area',
         target: worker,
         type: 'message',
@@ -3603,7 +3603,7 @@ export function getRenderedLayersArea(o) {
           }
           if (e.data.end) {
             o.onEnd(e.data.end);
-            mx.listenerStore.removeListenerByGroup('compute_layer_area');
+            mx.listeners.removeListenerByGroup('compute_layer_area');
           }
         }
       });
