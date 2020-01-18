@@ -119,6 +119,9 @@ class ButtonPanel {
       this.open();
     }
   }
+  isEmpty(){
+    return this.elPanelContent.childElementCount === 0;
+  }
 }
 
 function txtResolve(txt) {
