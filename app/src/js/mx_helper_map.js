@@ -2,7 +2,7 @@
 import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
-import {RasterMiniMap} from './rasterMiniMap';
+import {RasterMiniMap} from './raster_mini_map';
 /**
  * TODO: convert this in a MapxMap Class
  */
