@@ -4,7 +4,7 @@
   "description": "MapX express api",
   "main": "api.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "API_PORT=3636; POSTGRES_DB=mapx_test; node test.js"
   },
   "author": "Fred Moser",
   "license": "MIT",

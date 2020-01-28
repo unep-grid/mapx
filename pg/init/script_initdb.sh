@@ -42,6 +42,7 @@ Aborting."
 # Initializes MapX database in the already-started PostgreSQL.
 init_db_mapx() {
   cat /docker-entrypoint-initdb.d/sql_files/*.sql | psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" -f -
+  createdb -T "$POSTGRES_DB" "mapx_test"
 }
 
 # Executes the main routine.
