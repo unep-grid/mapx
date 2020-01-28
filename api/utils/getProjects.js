@@ -7,6 +7,8 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
     expected: [
       'language',
       'role',
+      'token',
+      'idUser',
     ],
   }
 );

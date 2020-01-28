@@ -10,8 +10,19 @@ const user = require('../db/models').user;
 const project = require('../db/models').project;
 const getProjects = require('../utils/getProjects');
 const testStartId = 1000000;
+const encrypt = require.main.require('./utils/db').encrypt;
 
 describe('Get projects', function() {
+
+  var adminUser = {
+    userId: 1,
+    userToken: {
+      "token": "3oqf43x3mbr1j78",
+      "is_guest": false,
+      "valid_until": new Date().getTime() / 1000 + 2 * 86400,
+    }
+  };
+
   before(function(done) {
     var sqls = [];
 
@@ -75,63 +86,103 @@ describe('Get projects', function() {
     });
   });
 
-  it('/Get empty', function(done) {
-    request(app).get(`/get/projects/list/user/0`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.be.empty;
-        done();
-      });
+  it('User test insertions', function(done) {
+    var sql = user.select(user.pid.count()).where(user.pid.gt(testStartId)).toQuery();
+    pgRead.query(sql).then(function(result) {
+      expect(result.rows[0].pid_count).to.equal(2);
+      done();
+    });
   });
 
-  it(`/Get by user id (${testStartId + 1})`, function(done) {
-    request(app).get(`/get/projects/list/user/${testStartId + 1}`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(2);
-        done();
-      });
+  it('Project test insertions', function(done) {
+    var sql = project.select(project.pid.count()).where(project.pid.gt(testStartId)).toQuery();
+    pgRead.query(sql).then(function(result) {
+      expect(result.rows[0].pid_count).to.equal(3);
+      done();
+    });
   });
 
-  it(`/Get by user id (${testStartId + 2})`, function(done) {
-    request(app).get(`/get/projects/list/user/${testStartId + 2}`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(2);
-        done();
-      });
+  it('GET /get/projects/list/user/0 empty', function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/0`)
+        .query({
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.be.empty;
+          done();
+        });
+    });
   });
 
-  it(`/Get by user id (${testStartId + 1}) with member role`, function(done) {
-    request(app).get(`/get/projects/list/user/${testStartId + 1}?role=member`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(2);
-        done();
-      });
+  it(`GET /get/projects/list/user/${testStartId + 1} as member`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/${testStartId + 1}`)
+        .query({
+          role: 'member',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(2);
+          done();
+        });
+    });
   });
 
-  it(`/Get by user id (${testStartId + 1}) with publisher role`, function(done) {
-    request(app).get(`/get/projects/list/user/${testStartId + 1}?role=publisher`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(1);
-        done();
-      });
+  it(`GET /get/projects/list/user/${testStartId + 2} as publisher`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/${testStartId + 2}`)
+        .query({
+          role: 'publisher',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(2);
+          done();
+        });
+    });
   });
 
-  it(`/Get by user id (${testStartId + 2}) with admin role`, function(done) {
-    request(app).get(`/get/projects/list/user/${testStartId + 2}?role=admin`)
-      .end(function(err, res) {
-        expect(res.statusCode).to.equal(200);
-        expect(res.body).to.be.an('array');
-        expect(res.body).to.have.lengthOf(1);
-        done();
-      });
+  it(`GET /get/projects/list/user/${testStartId + 2} as admin`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/${testStartId + 2}`)
+        .query({
+          role: 'admin',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(1);
+          done();
+        });
+    });
+  });
+
+  it(`GET /get/projects/list/user/${testStartId + 1} as admin`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/${testStartId + 1}`)
+        .query({
+          role: 'admin',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(0);
+          done();
+        });
+    });
   });
 });
