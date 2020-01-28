@@ -9,6 +9,8 @@ var toRes = utils.toRes;
  */
 exports.validateTokenHandler = validateTokenHandler;
 exports.validateRoleHandlerFor = validateRoleHandlerFor;
+exports.validateToken = validateToken;
+exports.validateUser = validateUser;
 
 /**
  * Validate / authenticate user
