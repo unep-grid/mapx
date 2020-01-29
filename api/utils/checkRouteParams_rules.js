@@ -142,7 +142,7 @@ const rules = [
     }
   },
   {
-    key: 'token',
+    key: ['token', 'title'],
     test: (d) => {
       return {
         valid: validator.isLength(d, {min: 1}),

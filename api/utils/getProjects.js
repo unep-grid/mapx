@@ -7,6 +7,7 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
     expected: [
       'language',
       'role',
+      'title',
       'token',
       'idUser',
     ],
@@ -19,7 +20,7 @@ module.exports.getByUser = [
   getProjectsByUserRouteHandler,
 ];
 
-function getProjectsByUserHelper(userId, lc='en', role='any') {
+function getProjectsByUserHelper(userId, lc='en', role='any', title=null) {
   var roleCondition = ['member', 'publisher', 'admin'].includes(role) ? role : `public OR member OR publisher OR admin`;
   var sql = project
     .select(`id`)
@@ -31,6 +32,19 @@ function getProjectsByUserHelper(userId, lc='en', role='any') {
     .select(`publishers @> '[${userId}]' OR admins @> '[${userId}]' AS publisher`)
     .select(`admins @> '[${userId}]' AS admin`)
     ;
+
+    if (title) {
+      let titleOp = 'equals';
+      if (title.indexOf('*') > -1) {
+        titleOp = 'ilike';
+        title = title.replace(/\*/g, '%');
+      }
+      sql.where(
+        project.title.keyText('en')[titleOp](title).or(
+          project.title.keyText(lc)[titleOp](title)
+        )
+      );
+    }
 
     sqlStr = `
     WITH project_role AS (${sql.toString()})
@@ -44,13 +58,14 @@ async function getProjectsByUserRouteHandler(req, res) {
   var rq = Object.assign({}, {
     language: 'en',
     role: 'any',
+    title: null,
   }, req.query);
 
   // Validate parameters (userId and rp.*)
   // Todo!
 
   try {
-    const result = await getProjectsByUserHelper(userId, rq.language, rq.role);
+    const result = await getProjectsByUserHelper(userId, rq.language, rq.role, rq.title);
     res.json(result.rows);
   } catch(e) {
     console.log(e);

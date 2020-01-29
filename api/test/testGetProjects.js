@@ -46,14 +46,14 @@ describe('Get projects', function() {
         pid: testStartId + 1,
         id: 'AA-AAA-AAA-AAA-AAA-AAA',
         id_old: 'AAA',
-        title: '{"en": "AAA (en)", "fr": "AAA (fr)"}',
+        title: '{"en": "AAA (en) risk", "fr": "AAA (fr)"}',
         members: `[${testStartId + 1}]`
       })).toQuery(),
       project.insert(Object.assign({}, project.default, {
         pid: testStartId + 2,
         id: 'BB-BBB-BBB-BBB-BBB-BBB',
         id_old: 'BBB',
-        title: '{"en": "BBB (en)", "fr": "BBB (fr)"}',
+        title: '{"en": "BBB (en)", "fr": "BBB risk (fr)"}',
         members: `[${testStartId + 1}]`,
         publishers: `[${testStartId + 1},${testStartId + 2}]`,
       })).toQuery(),
@@ -181,6 +181,43 @@ describe('Get projects', function() {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('array');
           expect(res.body).to.have.lengthOf(0);
+          done();
+        });
+    });
+  });
+
+  it(`GET /get/projects/list/user/1} specifying title search exact match`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/1`)
+        .query({
+          role: 'any',
+          title: 'CCC (en)',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(1);
+          done();
+        });
+    });
+  });
+
+  it(`GET /get/projects/list/user/1} specifying title search wildcard match`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/1`)
+        .query({
+          role: 'any',
+          title: '*risk*',
+          language: 'fr',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(2);
           done();
         });
     });
