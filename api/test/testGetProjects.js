@@ -46,7 +46,7 @@ describe('Get projects', function() {
         pid: testStartId + 1,
         id: 'AA-AAA-AAA-AAA-AAA-AAA',
         id_old: 'AAA',
-        title: '{"en": "AAA (en) risk", "fr": "AAA (fr)"}',
+        title: '{"en": "AAA (en) risk treatment", "fr": "AAA (fr)"}',
         members: `[${testStartId + 1}]`
       })).toQuery(),
       project.insert(Object.assign({}, project.default, {
@@ -61,7 +61,7 @@ describe('Get projects', function() {
         pid: testStartId + 3,
         id: 'CC-CCC-CCC-CCC-CCC-CCC',
         id_old: 'CCC',
-        title: '{"en": "CCC (en)", "fr": "CCC (fr)"}',
+        title: '{"en": "CCC (en)", "fr": "threats CCC (fr)"}',
         admins: `[${testStartId + 2}]`,
       })).toQuery(),
     ].forEach(function(item) {
@@ -210,6 +210,25 @@ describe('Get projects', function() {
         .query({
           role: 'any',
           title: '*risk*',
+          language: 'fr',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(2);
+          done();
+        });
+    });
+  });
+
+  it(`GET /get/projects/list/user/1} specifying title search fuzzy match`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/1`)
+        .query({
+          role: 'any',
+          titleFuzzy: 'threat',
           language: 'fr',
           idUser: adminUser.userId,
           token: userTokenEncrypted,
