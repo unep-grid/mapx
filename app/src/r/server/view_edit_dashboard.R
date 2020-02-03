@@ -59,11 +59,12 @@ observeEvent(input$dashboardEdit_init,{
     # Data source according to type
     #
     if(viewType == "vt"){
-      srcDataOption = list("viewFreqTable","layerChange","layerClick","none")
+      srcDataOption = list("viewFreqTable","layerChange","layerClick",'layerOver',"none")
       srcDataLabels = list(
         t("view_dashboard_src_view"),
         t("view_dashboard_src_layerChange"),
         t("view_dashboard_src_layerClick"),
+        t("view_dashboard_src_mousemove"),
         t("view_dashboard_src_none")
         ) 
     }
@@ -150,6 +151,18 @@ observeEvent(input$dashboardEdit_init,{
                   options = list(
                     enum_titles = widgetSizesLabels
                     )
+                  ),
+                `addColorBackground` = list(
+                  title = t("view_dashboard_txt_add_background_color"),
+                  type = "boolean",
+                  format = "checkbox",
+                  default = FALSE
+                  ),
+                `colorBackground` = list(
+                  title = t("view_dashboard_txt_color_background"),
+                  type = "string",
+                  format = "color",
+                  default = "#fff"
                   ),
                 `script` = list(
                   title = t("view_dashboard_script"),

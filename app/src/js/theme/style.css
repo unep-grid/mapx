@@ -1,0 +1,34 @@
+
+.mx-theme-colors {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: white !important;
+  padding: 20px;
+}
+
+.mx-theme-color-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 2;
+  align-items: center;
+  justify-content: center;
+  height: 3em;
+}
+.mx-theme-color-label {
+  width: 500px;
+  max-width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mx-theme-colors-input {
+  display: flex;
+  width: 100%;
+}
+.mx-theme-colors-input * {
+  margin-left: 10px;
+}
+.mx-theme-colors * {
+  color: black !important;
+}

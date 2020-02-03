@@ -146,10 +146,11 @@ export function viewsListUpdateSingle(view) {
   const h = mx.helpers;
   const mData = mx.helpers.getMapData();
   const oldView = h.getView(view.id);
-  if (!h.isView(oldView)) {
+  if (h.isView(oldView)) {
+    h.viewModulesRemove(oldView);
+  } else {
     console.warn('No old view to update');
   }
-  h.viewModulesRemove(oldView);
   Object.assign(oldView, view);
   const settings = {
     id: view.id,
@@ -403,7 +404,6 @@ export function viewsListRenderNew(o) {
       el.appendChild(elView);
       h.setViewBadges({view: view});
       if (update) {
-        h.viewModulesInit(view);
         h.viewLayersAdd({
           viewData: view
         });

@@ -9,6 +9,7 @@ class ContextMenu {
     cm.li = li;
     cm.top = evt.clientY;
     cm.left = evt.clientX;
+    cm.elTargetOriginal = evt.target;
     cm.elTarget = cm.li.getTarget(evt.target);
     cm.elContainer = document.body;
     cm.elContext = cm.buildContext();
@@ -271,6 +272,7 @@ function handleContextEvent(evt) {
   let isValidInput = idType === 'input';
   let isValidClick = idType === 'mousedown';
   let elTarget = cm.elTarget;
+  let elTargetOriginal = cm.elTargetOriginal;
   let elContext = cm.elContext;
   let idAction = elInput.dataset.li_id_action;
   let elGroup = cm.li.getGroup(elTarget);
@@ -356,7 +358,7 @@ function handleContextEvent(evt) {
     },
     cm_btn_close: () => {},
     cm_btn_inspect: () => {
-      console.log(elTarget); 
+      console.log(elTargetOriginal); 
     }
   };
 

@@ -1,45 +1,55 @@
-
 /**
 * Mapbox gl modifiers
 */
 .mx .mapboxgl-popup-content {
-  padding-top : 25px;
+  padding-top: 25px;
 }
 
 .mx .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
-    margin: 5px 0 0 5px;
-    float: left;
+  margin: 5px 0 0 5px;
+  float: left;
 }
 
-.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo),
-.mx  a:not(.mapboxgl-ctrl-logo):not(.mx-logo) * {
+.mx a:not(.mapboxgl-ctrl-logo):not(.mx-logo),
+.mx a:not(.mapboxgl-ctrl-logo):not(.mx-logo) * {
   color: var(--mx_ui_link);
   text-decoration: none;
 }
 
+.mx .mapboxgl-popup-tip {
+  border-color: transparent;
+}
 .mx .mapboxgl-popup-anchor-top .mapboxgl-popup-tip {
-  border-top-color: var(--mx_ui_hidden);
   border-bottom-color: var(--mx_ui_text);
-  border-left-color: var(--mx_ui_hidden);
-  border-right-color: var(--mx_ui_hidden);
 }
 .mx .mapboxgl-popup-anchor-bottom .mapboxgl-popup-tip {
   border-top-color: var(--mx_ui_text);
-  border-bottom-color: var(--mx_ui_hidden);
-  border-left-color: var(--mx_ui_hidden);
-  border-right-color: var(--mx_ui_hidden);
 }
 .mx .mapboxgl-popup-anchor-left .mapboxgl-popup-tip {
-  border-top-color: var(--mx_ui_hidden);
-  border-bottom-color: var(--mx_ui_hidden);
   border-left-color: var(--mx_ui_text);
-  border-right-color: var(--mx_ui_hidden);
 }
 .mx .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
-  border-top-color: var(--mx_ui_hidden);
-  border-bottom-color: var(--mx_ui_hidden);
   border-left-color: var(--mx_ui_text);
-  border-right-color: var(--mx_ui_hidden);
 }
 
-
+.mx .mapbox-gl-draw_ctrl-draw-btn {
+  background-image: none;
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_uncombine:before {
+  icon-font: url('../svg/uncombine.svg');
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_combine:before {
+  icon-font: url('../svg/combine.svg');
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_point:before {
+  icon-font: url('../svg/point.svg');
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_line:before {
+  icon-font: url('../svg/line.svg');
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_polygon:before {
+  icon-font: url('../svg/polygon.svg');
+}
+.mx .mapbox-gl-draw_ctrl-draw-btn.mapbox-gl-draw_trash:before {
+  icon-font: url('../svg/trash.svg');
+}

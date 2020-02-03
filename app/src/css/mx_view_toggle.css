@@ -18,10 +18,13 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  opacity: 1;
+  opacity: 0.5;
   transition: opacity ease-in-out 0.3s 0.3s;
 }
 
+.mx-view-badges:hover {
+  opacity:1;
+}
 .mx-view-badges i {
   font-size: 10px;
   color: #ccc;

@@ -1513,28 +1513,16 @@
     "ps": "لیدنې"
   },
   {
-    "id": "btn_theme_black",
-    "en": "Switch theme : dark",
-    "fr": "Changer le thème : sombre",
-    "es": "Cambiar capa base : oscuro",
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
+    "fr": "Changer le thème",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
     "bn": "",
-    "fa": "تاریک",
-    "ps": "تیاره"
-  },
-  {
-    "id": "btn_theme_orig",
-    "en": "Switch theme : clear",
-    "fr": "Changer le thème : clair",
-    "es": "Cambiar capa base : claro",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "صاف",
-    "ps": "روښانه"
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "btn_theme_sat",
@@ -4717,6 +4705,18 @@
     "ps": ""
   },
   {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "fr": "Tous les attributs et valeur à la position de la souris",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "view_dashboard_title",
     "en": "Dashboard title",
     "fr": "Titre du tableau de bord",
@@ -4745,6 +4745,30 @@
     "en": "Your script",
     "fr": "Votre script",
     "es": "Vuestro script",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "fr": "Ajouter une couleur en arrière plan",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
+    "fr": "Couleur de l'arrière plan",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5269,6 +5293,18 @@
     "ps": ""
   },
   {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "fr": "Liens",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "mx_ui_text_faded",
     "en": "Secondary text color",
     "fr": "Couleur secondaire pour le texte",
@@ -5417,6 +5453,18 @@
     "en": "Map: disputed boundaries",
     "fr": "Carte : frontières disputées",
     "es": "Mapa: fronteras disputadas",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_admin_secondary",
+    "en": "Map: secondary boundaries",
+    "fr": "Carte : frontières secondaires",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

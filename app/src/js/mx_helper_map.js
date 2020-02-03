@@ -3,6 +3,9 @@ import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
+import {Theme} from './theme';
+const vStore = [];
+
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -367,7 +370,8 @@ export function setBtnFilterActivated(enable) {
  * @param {Number} o.mapPosition.lat Latitude center
  * @param {Object} o.mapPosition.bounds Mapbox bounds object
  * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
- * @param {Object} o.colorSheme Color sheme object
+ * @param {Object} o.colorScheme Color sheme object
+ * @param {String} o.idTheme  Id of the theme to use
  */
 export function initMapx(o) {
   const h = mx.helpers;
@@ -465,14 +469,29 @@ export function initMapx(o) {
   mx.maps[o.id].map = o.map;
 
   /**
-   *
-   */
-
-  /**
    * Continue according to mode
    */
 
   o.map.on('load', () => {
+    /**
+     * Set theme
+     */
+    const queryIdTheme = h.getQueryParameter('theme')[0];
+    const queryColors = h.getQueryParameter(['colors', 'style'])[0];
+    mx.theme = new Theme({
+      idTheme: queryIdTheme,
+      colors: queryIdTheme
+        ? null
+        : queryColors || o.colors || o.colorScheme || mx.settings.ui.colors,
+      elInputsContainer: document.getElementById(
+        mx.settings.ui.ids.idInputThemeColors
+      ),
+      map: o.map
+    });
+
+    /**
+     * Add controls
+     */
     o.map.addControl(new h.mapControlApp(), 'top-left');
     o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
     o.map.addControl(new h.mapControlScale(), 'bottom-right');
@@ -484,7 +503,6 @@ export function initMapx(o) {
     h.initLog();
     h.initListenerGlobal();
     h.initMapListener(o.map);
-
     /**
      * Load mapx app or static
      */
@@ -541,7 +559,7 @@ export function initMapListener(map) {
     const r = -map.getBearing();
     const northArrow = document.querySelector('.mx-north-arrow');
     northArrow.style[h.cssTransformFun()] =
-      'translate(-50%, -50%) rotateZ(' + r + 'deg) ';
+      'rotateZ(' + r + 'deg) ';
   });
 }
 
@@ -551,17 +569,18 @@ export function initMapxStatic(o) {
   const settings = mx.settings;
   const mapData = h.getMapData();
   const elMap = map.getContainer();
+
   const btnLegend = new ButtonPanel({
     elContainer: elMap,
-    position : 'top-right',
+    position: 'top-right',
     title_text: h.getDictItem('button_legend_title'),
-    title_lang_key : 'button_legend_title',
-    button_text : h.getDictItem('button_legend_button'),
-    button_lang_key : 'button_legend_button',
-    button_classes : ['fa','fa-list-ul'],    
-    container_style : {
-        maxHeight : '50%',
-        maxWidth : '50%'
+    title_lang_key: 'button_legend_title',
+    button_text: h.getDictItem('button_legend_button'),
+    button_lang_key: 'button_legend_button',
+    button_classes: ['fa', 'fa-list-ul'],
+    container_style: {
+      maxHeight: '50%',
+      maxWidth: '50%'
     }
   });
 
@@ -626,19 +645,6 @@ export function initMapxStatic(o) {
           elLegendContainer: btnLegend.elPanelContent,
           addTitle: true
         });
-
-        /**
-         * add Dashboard
-         */
-        const hasDashboard = h.path(view, 'data.dashboard', null);
-        if (hasDashboard) {
-          h.Dashboard.init({
-            idContainer: 'mxDashboards',
-            idDashboard: 'mx-dashboard-' + view.id,
-            idMap: map.id,
-            view: view
-          });
-        }
       });
 
       mx.events.fire({
@@ -681,16 +687,6 @@ export function initMapxApp(o) {
       type: 'mapx_ready'
     });
   });
-
-  /**
-   * Apply colorscheme if any
-   */
-
-  if (o.colorScheme) {
-    h.setUiColorScheme({
-      colors: o.colorScheme
-    });
-  }
 
   /*
    * If shiny, trigger read event
@@ -1255,8 +1251,6 @@ function getGeojsonViewsFromStorage(o) {
   return out;
 }
 
-let vStore = [];
-
 /**
  *  View render / update : evalutate view state and enable/disable it depending on ui state
  */
@@ -1710,6 +1704,96 @@ export function makeNumericSlider(o) {
 }
 
 /**
+ * Init view dashboard
+ * @param {Object} o Options
+ * @param {Object} o.view View to configure dashboard
+ */
+export function makeDashboard(o) {
+  const h = mx.helpers;
+  const view = o.view;
+  const config = h.isView(view) && h.path(view, 'data.dashboard', false);
+  const map = h.getMap();
+  const elMap = map.getContainer();
+
+  if (!config) {
+    return;
+  }
+
+  /*
+   * Modules should array of string. In older version, single string was an option
+   */
+  config.modules = h.isArray(config.modules)
+    ? config.modules
+    : h.isString(config.modules)
+    ? [config.modules]
+    : [];
+
+  /**
+   * Single dashboard for all view;
+   * individual widgets stored in view (_interactive.widgets)
+   */
+  h.moduleLoad('dashboard')
+    .then((Dashboard) => {
+      const hasDashboard =
+        mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
+      if (!hasDashboard) {
+        mx.dashboard = new Dashboard({
+          grid: {
+            dragEnabled: true,
+            layout: {
+              horizontal: false,
+              fillGaps: true,
+              alignRight: false,
+              alignBottom: false,
+              rounding: true
+            }
+          },
+          panel: {
+            elContainer: elMap,
+            title_text: h.getDictItem('Dashboard','fr'),
+            title_lang_key: 'dashboard',
+            button_text: 'dashboard',
+            button_lang_key: 'button_dashboard_panel',
+            button_classes: ['fa', 'fa-pie-chart'],
+            position: 'bottom-right'
+          }
+        });
+
+        mx.dashboard.panel.on('open', () => {
+          const hasStory = h.isStoryPlaying();
+          if (hasStory) {
+            h.storyControlMapPan('unlock');
+          }
+        });
+        mx.dashboard.panel.on('close', () => {
+          const hasStory = h.isStoryPlaying();
+          if (hasStory) {
+            h.storyControlMapPan('lock');
+          }
+        });
+      }
+
+      return mx.dashboard;
+    })
+    .then((d) => {
+      d.addWidgetsAsync({
+        widgets: config.widgets,
+        modules: config.modules,
+        view: view,
+        map: map
+      }).then((widgets) => {
+        view._interactive.widgets = widgets;
+        const hasStory = h.isStoryPlaying();
+        if (hasStory) {
+          d.hide();
+        } else {
+          d.show();
+        }
+      });
+    });
+}
+
+/**
  * Create and listen to time sliders
  */
 export function makeTimeSlider(o) {
@@ -1968,7 +2052,6 @@ export function viewOpen(view) {
     }
     const elView = getViewEl(view);
     if (elView && elView.vb) {
-      h.viewModulesInit(view);
       elView.vb.open();
       h.updateLanguageElements({el: elView});
     }
@@ -2460,6 +2543,11 @@ export function viewLayersAdd(o) {
       });
 
       /**
+       * Init modules
+       */
+      h.viewModulesInit(view);
+
+      /**
        * Set/Reset filter
        */
       h.viewFiltersInit(view);
@@ -2809,7 +2897,7 @@ function viewLayersAddRt(o) {
      * If no legend url is provided, use a minimap
      */
     if (!h.isUrl(legendUrl)) {
-      view._legend_minimap = new RasterMiniMap({
+      view._interactive.miniMap = new RasterMiniMap({
         elContainer: elLegendImageBox,
         width: 40,
         height: 40,
@@ -3394,40 +3482,41 @@ export function viewModulesInit(id) {
   if (!h.isView(view)) {
     return;
   }
-  const elView = h.getViewEl(view);
-  if (!h.isElement(elView)) {
-    return;
-  }
   const idView = view.id;
   const idMap = mx.settings.map.id;
-  const elOptions = elView.querySelector(
-    "[data-view_options_for='" + idView + "']"
-  );
-  const d = h.getMapData();
+  if (!view._interactive) {
+    view._interactive = {};
+  }
+
   /**
    * Clean old modules
    */
   h.viewModulesRemove(view);
 
   /**
-   * Add sliders and search box
+   * View list options related modules
    */
-  view._interactive = {};
-  elOptions.innerHTML = mx.templates.viewListOptions(view);
-  h.makeTimeSlider({view: view, idMap: idMap});
-  h.makeNumericSlider({view: view, idMap: idMap});
-  h.makeTransparencySlider({view: view, idMap: idMap});
-  h.makeSearchBox({view: view, idMap: idMap});
-
-  /*
-   * Check if dashboard data is there and build it if needed
+  const elView = h.getViewEl(view);
+  const hasViewEl = h.isElement(elView);
+  if (hasViewEl) {
+    const elOptions = elView.querySelector(
+      "[data-view_options_for='" + idView + "']"
+    );
+    if (elOptions) {
+      elOptions.innerHTML = mx.templates.viewListOptions(view);
+      /**
+       * Add interactive module
+       */
+      h.makeTimeSlider({view: view, idMap: idMap});
+      h.makeNumericSlider({view: view, idMap: idMap});
+      h.makeTransparencySlider({view: view, idMap: idMap});
+      h.makeSearchBox({view: view, idMap: idMap});
+    }
+  }
+  /**
+   * Non view list related modules
    */
-  h.Dashboard.init({
-    idContainer: 'mxDashboards',
-    idDashboard: 'mx-dashboard-' + idView,
-    idMap: idMap,
-    view: view
-  });
+  h.makeDashboard({view: view});
 }
 
 /**
@@ -3444,13 +3533,16 @@ export function viewModulesRemove(view) {
   if (h.isFunction(view._onRemoveCustomView)) {
     view._onRemoveCustomView();
   }
-  if (h.isFunction(view._onRemoveDashboard)) {
-    view._onRemoveDashboard();
-  }
   if (h.isElement(view._elLegend)) {
     view._elLegend.remove();
   }
   if (it) {
+    if (it.widgets) {
+      it.widgets.forEach((w) => {
+        w.destroy();
+      });
+      it.widgets.length = 0;
+    }
     if (it.searchBox) {
       it.searchBox.destroy();
     }
@@ -3463,9 +3555,9 @@ export function viewModulesRemove(view) {
     if (it.timeSlider) {
       it.timeSlider.destroy();
     }
-  }
-  if (view._legend_minimap instanceof RasterMiniMap) {
-    view._legend_minimap.destroy();
+    if (it.miniMap) {
+      it.miniMap.destroy();
+    }
   }
 }
 export function viewsModulesRemove(views) {
@@ -4058,12 +4150,19 @@ export function zoomToViewIdVisible(o) {
 }
 
 export function resetViewStyle(o) {
+  const h = mx.helpers;
   if (!o.idView) {
     return;
   }
-  mx.helpers.viewLayersAdd({
+  const view = h.getView(o.idView);
+
+  h.viewLayersAdd({
     id: o.id,
     idView: o.idView
+  });
+
+  h.updateLanguageElements({
+    el: view._el
   });
 }
 
@@ -4475,53 +4574,34 @@ export function makeLayerJiggle(mapId, prefix) {
  * Take every layer and randomly change the color
  * @param {string} mapId Map identifier
  */
-export function randomFillAll() {
-  setInterval(function() {
-    const map = mx.helpers.getMap(idMap);
-
-    const layers = map.style._layers;
-
-    for (const l in layers) {
-      const type = layers[l].type;
-      if (type) {
-        switch (type) {
-          case 'fill':
-            map.setPaintProperty(l, 'fill-color', mx.helpers.randomHsl(1));
-            break;
-          case 'background':
-            map.setPaintProperty(
-              l,
-              'background-color',
-              mx.helpers.randomHsl(1)
-            );
-            break;
-          case 'line':
-            map.setPaintProperty(l, 'line-color', mx.helpers.randomHsl(1));
-            break;
-        }
-      }
+export function randomUiColorAuto() {
+  const max = 200;
+  const id = setInterval(random, 200);
+  let i = 0;
+  function random() {
+    if (i++ > max) {
+      clearInterval(id, random);
     }
-  }, 100);
+    randomUicolor();
+  }
 }
 
 export function randomUicolor() {
-  mx.helpers.setUiColorScheme({
-    colors: {
-      mx_ui_text: mx.helpers.randomHsl(1),
-      mx_ui_text_faded: mx.helpers.randomHsl(1),
-      mx_ui_hidden: mx.helpers.randomHsl(1),
-      mx_ui_border: mx.helpers.randomHsl(1),
-      mx_ui_background: mx.helpers.randomHsl(1),
-      mx_ui_shadow: mx.helpers.randomHsl(1),
-      mx_map_text: mx.helpers.randomHsl(1),
-      mx_map_background: mx.helpers.randomHsl(1),
-      mx_map_mask: mx.helpers.randomHsl(1),
-      mx_map_water: mx.helpers.randomHsl(1),
-      mx_map_road: mx.helpers.randomHsl(1),
-      mx_map_road_border: mx.helpers.randomHsl(1),
-      mx_map_building: mx.helpers.randomHsl(1),
-      mx_map_admin: mx.helpers.randomHsl(1),
-      mx_map_admin_disputed: mx.helpers.randomHsl(1)
-    }
+  return mx.theme.setColors({
+    mx_ui_text: mx.helpers.randomHsl(1),
+    mx_ui_text_faded: mx.helpers.randomHsl(1),
+    mx_ui_hidden: mx.helpers.randomHsl(1),
+    mx_ui_border: mx.helpers.randomHsl(1),
+    mx_ui_background: mx.helpers.randomHsl(1),
+    mx_ui_shadow: mx.helpers.randomHsl(1),
+    mx_map_text: mx.helpers.randomHsl(1),
+    mx_map_background: mx.helpers.randomHsl(1),
+    mx_map_mask: mx.helpers.randomHsl(1),
+    mx_map_water: mx.helpers.randomHsl(1),
+    mx_map_road: mx.helpers.randomHsl(1),
+    mx_map_road_border: mx.helpers.randomHsl(1),
+    mx_map_building: mx.helpers.randomHsl(1),
+    mx_map_admin: mx.helpers.randomHsl(1),
+    mx_map_admin_disputed: mx.helpers.randomHsl(1)
   });
 }

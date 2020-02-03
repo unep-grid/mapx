@@ -66,52 +66,32 @@
     afterInputReady: function() {
       var that = this;
       var mode = this.options.language;
-
-      function getMode(mode){
-        var out;
-        switch(mode){
-          case "html" :
-            out = import("brace/mode/html");
-            break;
-          case "javascript":
-            out = import("brace/mode/javascript");
-            break;
-          default:
-            out = import("brace/mode/text");
-            break;
-        }
-        return(out);
-      }
-      
+ 
       if( that.options.hidden ){
         that.theme.afterInputReady(that.input);
       }else{
 
-        return import("brace")
-          .then(function(ace){
-            window.ace = ace;
-            return  Promise.all([
-              getMode(mode),
-              import('brace/theme/github'),
-              import('brace/ext/searchbox'),
-              import('js-beautify')
-            ]);
-          })
-          .then(function(m){
+        return mx.helpers.modulesLoad(['ace','js-beautify'])
 
+          .then(function(m){
             that.ace_container = document.createElement('div');
             that.ace_container.style.width = '100%';
             that.ace_container.style.position = 'relative';
             that.input.parentNode.insertBefore(that.ace_container,that.input);
             that.input.style.display = 'none';
-            that.ace_editor = window.ace.edit(that.ace_container);
+            that.ace_editor = window.ace.edit(that.ace_container, {
+                  mode : `ace/mode/${mode}`,
+                  theme : 'ace/theme/github'
+            });
             that.ace_editor.setValue(that.getValue()||"");
-            that.ace_editor.getSession().setMode('ace/mode/'+mode);
             that.ace_editor.getSession().selection.clearSelection();
-            that.ace_editor.setTheme('ace/theme/github');
+            
+            window.ace_editor = that.ace_editor;
+
             that.ace_editor.setOptions({
               minLines : 1, 
               maxLines : Infinity,
+              autoScrollEditorIntoView: true,
               wrap: true,
               indentedSoftWrap: false
             });
@@ -144,15 +124,15 @@
             /**
              * Add beautify button
              */
-            if( (mode == "javascript" || mode == "json" ) && that.options.readOnly !== true ){
+            if( (mode === "javascript" || mode === "json" ) && that.options.readOnly !== true ){
 
 
 
               var elBeautifyBtn = document.createElement("button");
               elBeautifyBtn.className = "btn btn-info";
               elBeautifyBtn.innerHTML= "tidy";
-              elBeautifyBtn.addEventListener("click",function(){ 
-                var b = m[3].js;
+              elBeautifyBtn.addEventListener("click",()=>{ 
+                var b = m[1].js;
                 var s =  that.ace_editor.getSession();
                 new Promise(function(resolve,reject){
                   resolve(s.getValue()||"");

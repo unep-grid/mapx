@@ -240,28 +240,10 @@ config[["ui"]] <- list(
     idViewsList = "viewListContent", # include views
     idDashboards= "mxDashboards",
     idDashboardsButton= "btnTabDashboard",
-    idDashboardsPanel= "mxDashboardsPanel"
+    idDashboardsPanel= "mxDashboardsPanel",
+    idInputThemeColors = "mxInputThemeColors"
     ),
-  colors = list(
-    default = list(
-      "mx_ui_text" = "rgba(53,53,53,1)",
-      "mx_ui_text_faded" = "rgba(53,53,53,0.5)",
-      "mx_ui_hidden" = "rgba(2,186,253,0)",
-      "mx_ui_border" = "rgba(156,156,156,0.4)",
-      "mx_ui_background" = "rgba(255,255,255,1)",
-      "mx_ui_shadow" = "rgba(153,153,153,0.4)",
-      "mx_map_background" = "rgba(255,255,255,1)",
-      "mx_map_mask" = "rgba(153,153,153,0.4)",
-      "mx_map_text" = "rgba(53,53,53,0.9)",
-      "mx_map_text_outline" = "rgba(255,255,255,0.8)",
-      "mx_map_water" = "rgba(102,102,102,1)",
-      "mx_map_road" = "rgba(255,255,255,1)",
-      "mx_map_road_border" = "rgba(220,220,220,0.5)",
-      "mx_map_building" = "rgba(220,220,220,0.5)",
-      "mx_map_admin" = "rgba(127,127,127,1)",
-      "mx_map_admin_disputed" = "rgba(127,127,127,1)"
-      )
-    )
+  ui = list()
   )
 
 

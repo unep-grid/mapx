@@ -1,5 +1,5 @@
 import {onNextFrame, cancelFrame} from '../animation_frame/index.js';
-//let idFrame = 0;
+import {Map} from 'mapbox-gl';
 
 /**
  * Event management
@@ -56,9 +56,9 @@ class ListenerStore {
   }
   addListener(opt) {
     const li = this;
-    if(opt.options && opt.options.once===true){
+    if (opt.options && opt.options.once === true) {
       opt.options.once = false;
-     return addListenerOnce(opt);
+      return addListenerOnce(opt);
     }
     opt.target = opt.target || document.window;
     opt.debounce = opt.debounce === true;
@@ -83,6 +83,11 @@ class ListenerStore {
     if (opt.target instanceof Element || opt.target instanceof Window) {
       opt.type.forEach((t) => {
         opt.target.addEventListener(t, opt.callback, opt.options || false);
+      });
+    }
+    if (opt.target instanceof Map) {
+      opt.type.forEach((t) => {
+        opt.target.on(t, opt.callback);
       });
     }
     return opt;
@@ -116,6 +121,11 @@ class ListenerStore {
       }
       if (opt.target instanceof Element || opt.target instanceof Window) {
         opt.target.removeEventListener(t, opt.callback);
+      }
+      if (opt.target instanceof Map) {
+        opt.type.forEach((t) => {
+          opt.target.off(t, opt.callback);
+        });
       }
     });
   }

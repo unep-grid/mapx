@@ -53,3 +53,56 @@
     transform: rotate(5deg);
   }
 }
+
+.mx .ht_master tr td,
+.mx .handsontable th,
+.mx .ht_clone_left th,
+.mx .ht_clone_top th,
+.mx .ht_master table td.htCustomMenuRenderer ,
+.mx .ht_master table td.htCustomMenuRenderer .htUISelectCaption  {
+  background-color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background);
+  color : var(--mx_ui_text);
+}
+.mx .ht_master *,
+.mx .wtBorder {
+  border-color: var(--mx_ui_border)!important;
+}
+
+/* Every odd row */
+.mx .ht_master tr:nth-of-type(odd) > td {
+  background-color: var(--mx_ui_background);
+}
+
+/* Every even row */
+.mx .ht_master tr:nth-of-type(even) > td {
+  background-color: var(--mx_ui_background);
+}
+
+/* Selected row  */
+/* Add a custom class name in the configuration: currentRowClassName: "foo"; */
+.mx .ht_master tr.foo > td,
+.mx .ht_master tr > td.foo,
+.mx .ht_master th.ht_highlight {
+  background-color: var(--mx_ui_text);
+  color : var(--mx_ui_background);
+}
+
+/*Cell*/
+/*Background*/
+
+/* Selected cell */
+.mx .ht_master tr > td.current {
+  background-color: var(--mx_ui_text);
+  color : var(--mx_ui_background);
+}
+
+/* Edit mode */
+.mx .handsontableInput {
+  background-color: #F00!important;
+}
+/*Selection*/
+/*Background*/
+.mx .handsontable td.area {
+  background-color: #F00;
+}

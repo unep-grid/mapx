@@ -1,3 +1,18 @@
+.button-panel-container {
+  pointer-events: none;
+  z-index: 500;
+  position: absolute;
+  margin: 30px;
+  min-width: 200px;
+  min-height: 200px;
+  max-width: calc(100% - 60px);
+  max-height: calc(100% - 60px);
+}
+
+.button-panel-container.animate {
+  transition: width 500ms ease-in-out, height 500ms ease-in-out;
+}
+
 .button-panel-btn {
   width: 40px;
   height: 40px;
@@ -9,13 +24,60 @@
   cursor: pointer;
   pointer-events: auto;
   border-radius: 50%;
-  color : var(--mx_ui_text);
-  background: var(--mx_ui_background);
 }
 
-.button-panel-btn:hover {
-  color : var(--mx_ui_background);
-  background: var(--mx_ui_text);
+.button-panel {
+  display: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  min-height: 100px;
+  min-width: 100px;
+  max-width: calc(100vw - 60px);
+  max-height: calc(100vh - 60px);
+  overflow: auto;
+  z-index: 0;
+  padding: 0px;
+  border-radius: 10px;
+  filter: drop-shadow(2px 4px 6px var(--mx_ui_shadow));
+}
+
+.button-panel--hidden {
+  visibility: hidden;
+  position: absolute;
+  top: -10000px;
+  left: -10000px;
+  z-index: -1;
+}
+
+.button-panel.button-panel-full {
+  width: 100%;
+  height: 100%;
+}
+
+.button-panel-container.active > .button-panel {
+  display: block;
+  pointer-events: auto;
+}
+
+.button-panel-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  border-top: 1px solid var(--mx_ui_border);
+  overflow: auto;
+}
+
+.button-panel-title {
+  margin: 7px;
+  font-size: 1.5em;
+  display: block;
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .button-panel-btn-icon {
@@ -25,57 +87,7 @@
   font-size: 20px;
   text-align: center;
   line-height: 40px;
-  color:inherit;
-}
-
-.button-panel {
-  position:absolute;
-  z-index: 0;
-  padding: 10px;
-  border-radius: 20px;
-  height: auto;
-  max-height: 100%;
-  min-width: 300px;
-  max-width: 500px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  clip-path: circle(20px at 100% 0px);
-  transition: clip-path 1s, border-radius 1s;
-  background: var(--mx_ui_background);
-}
-
-.button-panel-content {
-  padding: 10px;
-}
-.button-panel-title {
-  margin: 7px;
-  font-size: 1.5em;
-  display:block;
-}
-.button-panel .button-panel--top-left > .button-panel-title {
-}
-
-.button-panel-container.active > .button-panel {
-  clip-path: circle(75%);
-  pointer-events: auto;
-  border-radius: 3px;
-}
-
-.button-panel-container {
-  pointer-events: none;
-  z-index: 1000;
-  position: absolute;
-  height: 100%;
-  padding: 10px;
-  margin: 10px;
-  filter: drop-shadow(2px 4px 6px var(--mx_ui_shadow));
-}
-
-/**
-* Add a margin for first div (panels item)
-*/
-.button-panel-content > div {
-  margin-bottom: 15px;
+  color: inherit;
 }
 
 /**
@@ -83,15 +95,14 @@
 */
 .button-panel-container.button-panel--top-right,
 .button-panel-container.button-panel--top-right > .button-panel,
+.button-panel-container.button-panel--top-right > .button-panel-content,
 .button-panel-container.button-panel--top-right > .button-panel-btn {
   top: 0px;
   right: 0px;
 }
-.button-panel-container.button-panel--top-right:not(.active) .button-panel {
-  clip-path: circle(20px at 100% 0);
-}
 .button-panel-container.button-panel--top-left,
 .button-panel-container.button-panel--top-left > .button-panel,
+.button-panel-container.button-panel--top-left > .button-panel-content,
 .button-panel-container.button-panel--top-left > .button-panel-btn {
   top: 0px;
   left: 0px;
@@ -99,27 +110,136 @@
 
 .button-panel-container.button-panel--top-left .button-panel-title,
 .button-panel-container.button-panel--bottom-left .button-panel-title {
- text-align : right;
+  text-align: right;
 }
 
-.button-panel-container.button-panel--top-left:not(.active) .button-panel {
-  clip-path: circle(20px at 0 0);
-}
 .button-panel-container.button-panel--bottom-left,
 .button-panel-container.button-panel--bottom-left > .button-panel,
+.button-panel-container.button-panel--bottom-left > .button-panel-content,
 .button-panel-container.button-panel--bottom-left > .button-panel-btn {
   bottom: 0px;
   left: 0px;
 }
-.button-panel-container.button-panel--bottom-left:not(.active) .button-panel {
-  clip-path: circle(20px at 0 100%);
-}
 .button-panel-container.button-panel--bottom-right,
 .button-panel-container.button-panel--bottom-right > .button-panel,
+.button-panel-container.button-panel--bottom-rigth > .button-panel-content,
 .button-panel-container.button-panel--bottom-right > .button-panel-btn {
   bottom: 0px;
   right: 0px;
 }
-.button-panel-container.button-panel--bottom-right:not(.active) .button-panel {
-  clip-path: circle(20px at 100% 100%);
+
+/**
+* Resizer
+*/
+.button-panel--handles {
+  z-index: 10;
+  position: absolute;
+  pointer-events: none;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  display:none;
 }
+.button-panel-container.active .button-panel--handles {
+  display:block;
+}
+
+.button-panel--handles .button-panel--handle-group-top-right,
+.button-panel--handles .button-panel--handle-group-top-left {
+  display: flex;
+  position: absolute;
+}
+
+.button-panel--handles > div {
+  position: absolute;
+  pointer-events: auto;
+  min-height:30px;
+  min-width:30px;
+  max-width: 150px;
+}
+
+.button-panel--handle-group-top-right {
+  top: 0px;
+  right: 0px;
+  margin-right: -15px;
+  margin-top: -15px;
+}
+.button-panel--handle-group-top-left {
+  left: 0px;
+  right: 0px;
+  margin-top: -15px;
+  margin-left: -15px;
+}
+.button-panel--handle-group-bottom-left {
+  left: 0px;
+  bottom: 0px;
+  margin-bottom: -15px;
+  margin-left: -15px;
+}
+.button-panel--handle-group-bottom-right {
+  right: 0px;
+  bottom: 0px;
+  margin-right: -15px;
+  margin-bottom: -15px;
+}
+
+.button-panel--handles .button-panel--handle {
+  margin:4px;
+  pointer-events: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--mx_ui_border);
+  display:none;
+  color: var(--mx_ui_text);
+  background: var(--mx_ui_background);
+  text-align: center;
+  line-height: 30px;
+}
+.button-panel--handle:before {
+  display: block;
+}
+.button-panel--handle-button {
+  font-size: 1em;
+}
+.button-panel--handle-button:hover {
+  cursor: pointer;
+}
+.button-panel--handle-button[data-id='half-width']:before {
+  icon-font : url(./svg/resize_auto_half_width.svg);
+}
+.button-panel--handle-button[data-id='half-height']:before {
+  icon-font : url(./svg/resize_auto_half_height.svg);
+}
+.button-panel--handle-button[data-id='full']:before {
+  icon-font : url(./svg/resize_auto_full.svg);
+}
+.button-panel--handle[data-corner='top-right']:hover {
+  cursor : ne-resize;
+}
+.button-panel--handle[data-corner='top-left']:hover {
+  cursor : nw-resize;
+}
+.button-panel--handle[data-corner='bottom-right']:hover {
+  cursor : se-resize;
+}
+.button-panel--handle[data-corner='bottom-left']:hover {
+  cursor : sw-resize;
+}
+.button-panel--handle-group-top-left:hover .button-panel--handle,
+.button-panel--handle-group-top-right:hover .button-panel--handle,
+.button-panel--handle-group-bottom-right:hover .button-panel--handle,
+.button-panel--handle-group-bottom-left:hover .button-panel--handle {
+  display:block;
+}
+
+.button-panel-container.button-panel--top-right .button-panel--handle-group-top-right,
+.button-panel-container.button-panel--top-left .button-panel--handle-group-top-left,
+.button-panel-container.button-panel--bottom-right .button-panel--handle-group-bottom-right,
+.button-panel-container.button-panel--bottom-left .button-panel--handle-group-bottom-left {
+  display :none;
+}
+
+
+

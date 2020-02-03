@@ -64,18 +64,6 @@ mxParseQuery <- function(urlSearch){
   }
 
   #
-  # Use this style instead of the dafault style
-  #
-  if(!noDataCheck(query$style)){
-    lStyle <- nchar(query$style)
-    lastTwo <- substr(query$style,lStyle-1,lStyle) == "=="
-    eqAdd <- ifelse(lastTwo,'','==')
-    query$style <- jsonlite::fromJSON(mxDecode(query$style+eqAdd))
-  }else{
-    query$style <- .get(config,c("ui","colors","default"))
-  }
-
-  #
   # Story map auto start
   #
   query$storyAutoStart = isTRUE(tolower(query$storyAutoStart) == "true")

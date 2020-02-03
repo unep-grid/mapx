@@ -18,7 +18,10 @@ const modules = {
   nested_list: loadNestedList,
   packery: loadPackery,
   draggabilly: loadDraggabilly,
-  'size-of':loadSizeOf
+  'size-of': loadSizeOf,
+  dashboard: loadDashboard,
+  ace: loadAceEditor,
+  'js-beautify': loadJsBeautify
 };
 
 export function moduleLoad(name) {
@@ -30,7 +33,8 @@ export function moduleLoad(name) {
 }
 
 export function modulesLoad(arr) {
-  arr = arr || [];
+  const h = mx.helpers;
+  arr = h.isArray(arr) ? arr : h.isString(arr) ? [arr] : [];
   arr = arr.map((m) => moduleLoad(m));
   return Promise.all(arr);
 }
@@ -38,12 +42,23 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+
+function loadJsBeautify() {
+  return import('js-beautify').then((m) => {
+    return m.default;
+  });
+}
+
 function loadSizeOf() {
   return import('object-sizeof').then((m) => {
     return m.default;
   });
 }
-
+function loadDashboard() {
+  return import('./dashboards').then((m) => {
+    return m.Dashboard;
+  });
+}
 function loadPackery() {
   return import('packery').then((m) => {
     return m.default;
@@ -54,19 +69,16 @@ function loadDraggabilly() {
     return m.default;
   });
 }
-
 function loadTurfBbox() {
   return import('@turf/bbox').then((m) => {
     return m.default;
   });
 }
-
 function loadDownloadjs() {
   return import('downloadjs').then((m) => {
     return m.default;
   });
 }
-
 function loadMapboxGlDraw() {
   return Promise.all([
     import('@mapbox/mapbox-gl-draw'),
@@ -74,6 +86,13 @@ function loadMapboxGlDraw() {
   ]).then((m) => {
     return m[0].default;
   });
+}
+
+function loadAceEditor() {
+  return import('ace-builds')
+    .then((m) => {
+      return import('ace-builds/webpack-resolver.js');
+    })
 }
 
 function loadDragDropWorker() {
@@ -119,19 +138,19 @@ function loadPickolor() {
 
 function loadSelectize() {
   /**
-  * jquery and selectize are already imported in init_jquery. 
-  * Here is the version for static pages
-  */
+   * jquery and selectize are already imported in init_jquery.
+   * Here is the version for static pages
+   */
   const hasSelectize = window.jQuery && jQuery.fn.selectize;
   if (hasSelectize) {
     /**
-    * Use default
-    */
+     * Use default
+     */
     return Promise.resolve(jQuery.fn.selectize);
-  }else{
+  } else {
     /**
-    * Load everything
-    */
+     * Load everything
+     */
     return Promise.all([
       import('jquery'),
       import('selectize'),

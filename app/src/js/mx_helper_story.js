@@ -41,6 +41,15 @@ export function storyRead(o) {
 }
 
 /**
+ * Check if a story is playing
+ */
+export function isStoryPlaying() {
+  const h = mx.helpers;
+  const s = h.path(mx, 'data.story', {});
+  return s.enable === true;
+}
+
+/**
  * Close current story if any.
  */
 export function storyClose() {
@@ -261,9 +270,7 @@ function setListeners(o) {
     });
 
     /* Set lock map pan to current value */
-    mx.helpers.storyControlMapPan({
-      recalc: true
-    });
+    mx.helpers.storyControlMapPan('recalc');
 
     /* Return options */
     resolve(o);
@@ -497,15 +504,15 @@ function initButtonsListener(o) {
    */
   o.data.buttonLegend = new ButtonPanel({
     elContainer: o.data.elMapContainer,
-    position : 'top-right',
+    position: 'top-right',
     title_text: h.getDictItem('button_legend_title'),
-    title_lang_key : 'button_legend_title',
-    button_text : h.getDictItem('button_legend_button'),
-    button_lang_key : 'button_legend_button',
-    button_classes : ['fa','fa-list-ul'],    
-    container_style : {
-        maxHeight : '50%',
-        maxWidth : '50%'
+    title_lang_key: 'button_legend_title',
+    button_text: h.getDictItem('button_legend_button'),
+    button_lang_key: 'button_legend_button',
+    button_classes: ['fa', 'fa-list-ul'],
+    container_style: {
+      maxHeight: '50%',
+      maxWidth: '50%'
     }
   });
 
@@ -868,37 +875,54 @@ export function storyAutoPlay(cmd) {
 
 /**
  * Control map pan during story map
- * @param {Object} o options
- * @param {Boolean} o.recalc Revaluate the state stored in dataset
- * @param {Boolean} o.unlock Unlock map pan
- * @param {Boolean} o.toggle Inverse the current state
+ * @param {String} cmd Action : recalc, unlock, toggle;
  */
-export function storyControlMapPan(o) {
-  o = o || {};
-  var toUnlock = true;
-  var liBtn = document.getElementById('btnStoryUnlockMap');
-  var btn = liBtn.querySelector('div');
-  var story = document.getElementById('story');
-  var isUnlock = liBtn.dataset.map_unlock === 'on';
+export function storyControlMapPan(cmd) {
+  const valid = ['recalc','lock','unlock','toggle'].indexOf(cmd) > -1;
 
-  if (o.recalc) {
-    toUnlock = isUnlock;
-  } else if (o.unlock || (o.toggle && !isUnlock)) {
-    toUnlock = o.unlock;
-  } else {
-    toUnlock = liBtn.dataset.map_unlock === 'off';
+  if(!valid){ 
+    cmd = 'toggle';
   }
+  
+  const liBtn = document.getElementById('btnStoryUnlockMap');
+  const elStory = document.getElementById('story');
+  const btn = liBtn.querySelector('div');
+  const classLock = 'fa-lock';
+  const classUnlock = 'fa-unlock';
+  const classNoEvent = 'mx-events-off';
+  const isLocked = btn.classList.contains(classLock);
+  const isUnlocked = !isLocked;
+  const isRecalc = cmd === 'recalc';
 
-  liBtn.dataset.map_unlock = toUnlock ? 'on' : 'off';
+  const cases = {
+    unlock: true,
+    lock : false,
+    recalc : !isLocked,
+    toggle : isLocked,
+  };
+
+  const toUnlock = cases[cmd];
+  const hasChanged = toUnlock !== isUnlocked;
 
   if (toUnlock) {
-    btn.classList.remove('fa-lock');
-    btn.classList.add('fa-unlock');
-    story.classList.add('mx-events-off');
+    btn.classList.remove(classLock);
+    btn.classList.add(classUnlock);
+    elStory.classList.add(classNoEvent);
+    if(!isRecalc && hasChanged){
+      mx.helpers.iconFlash('unlock');
+    }
   } else {
-    btn.classList.add('fa-lock');
-    btn.classList.remove('fa-unlock');
-    story.classList.remove('mx-events-off');
+    btn.classList.add(classLock);
+    btn.classList.remove(classUnlock);
+    story.classList.remove(classNoEvent);
+    if(!isRecalc && hasChanged){
+      mx.helpers.iconFlash('lock');
+    }
+  
+    if(mx.dashboard && mx.dashboard.panel){
+       mx.dashboard.panel.close(true);
+    }
+
   }
 }
 
@@ -1374,7 +1398,7 @@ export function storyPlayStep(o) {
       id: o.id,
       idView: v,
       openView: false,
-      addTitle : true,
+      addTitle: true,
       before: vPrevious,
       elLegendContainer: elLegendContainer
     });

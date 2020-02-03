@@ -6,16 +6,12 @@
  */
 return {
   onAdd : function(widget) {
+    console.log(widget);
   },
   onRemove : function(widget) {
+    console.log(widget);
   },
   onData : function(widget,data) {
-    console.log(data)
+    console.log(data);
   }
 };
-
-/**
-* Available method on widget 
-* 
-* 
-*/

@@ -216,13 +216,6 @@ mapControlApp.prototype.onAdd = function(map) {
         h.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
       }
     },
-    btnTabDashboard: {
-      classes: ['fa', 'fa-pie-chart'],
-      key: 'btn_tab_dashboard',
-      action: function() {
-        h.Dashboard.showPanel('toggle');
-      }
-    },
     btnPrint: {
       classes: ['fa', 'fa-map-o'],
       key: 'btn_map_composer',
@@ -245,7 +238,6 @@ mapControlApp.prototype.onAdd = function(map) {
     btnStoryUnlockMap: {
       classes: ['fa', 'fa-lock'],
       liClasses: 'mx-display-none',
-      liData: {map_unlock: 'off'},
       key: 'btn_story_unlock_map',
       action: h.storyControlMapPan
     },
@@ -277,6 +269,15 @@ mapControlApp.prototype.onAdd = function(map) {
           idSwitch: 'btnThemeAerial',
           action: 'toggle'
         });
+      }
+    },
+    btnThemeSwitch: {
+      classes: ['fa', 'fa-adjust', 'fa-transition-generic'],
+      key: 'btn_theme_switch',
+      action: function() {
+        const elIcon = this.querySelector('.fa');
+        elIcon.classList.toggle('fa-rotate-180');
+        mx.theme.setColorsByThemeNext();
       }
     },
     btnOverlapSpotlight: {

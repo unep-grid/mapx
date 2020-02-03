@@ -1,5 +1,6 @@
 /** 
 * Set colors of mapx
+* See also themes/index.js
 */
 .mx * {
   --mx_ui_text: hsl(0, 0%, 21%);

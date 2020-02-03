@@ -504,12 +504,8 @@
     "en": "Views"
   },
   {
-    "id": "btn_theme_black",
-    "en": "Switch theme : dark"
-  },
-  {
-    "id": "btn_theme_orig",
-    "en": "Switch theme : clear"
+    "id": "btn_theme_switch",
+    "en": "Switch theme"
   },
   {
     "id": "btn_theme_sat",
@@ -1572,6 +1568,10 @@
     "en": "The frequency table of the selected attribute"
   },
   {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position"
+  },
+  {
     "id": "view_dashboard_title",
     "en": "Dashboard title"
   },
@@ -1582,6 +1582,14 @@
   {
     "id": "view_dashboard_txt_script",
     "en": "Your script"
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color"
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color"
   },
   {
     "id": "view_dashboard_txt_which_data",
@@ -1756,6 +1764,10 @@
     "en": "Text of the interface"
   },
   {
+    "id": "mx_ui_link",
+    "en": "Links"
+  },
+  {
     "id": "mx_ui_text_faded",
     "en": "Secondary text color"
   },
@@ -1806,6 +1818,10 @@
   {
     "id": "mx_map_admin_disputed",
     "en": "Map: disputed boundaries"
+  },
+  {
+    "id": "mx_map_admin_secondary",
+    "en": "Map: secondary boundaries"
   },
   {
     "id": "mx_map_text",

@@ -630,14 +630,9 @@
     "ps": "لیدنې"
   },
   {
-    "id": "btn_theme_black",
-    "en": "Switch theme : dark",
-    "ps": "تیاره"
-  },
-  {
-    "id": "btn_theme_orig",
-    "en": "Switch theme : clear",
-    "ps": "روښانه"
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
+    "ps": ""
   },
   {
     "id": "btn_theme_sat",
@@ -1965,6 +1960,11 @@
     "ps": ""
   },
   {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "ps": ""
+  },
+  {
     "id": "view_dashboard_title",
     "en": "Dashboard title",
     "ps": ""
@@ -1977,6 +1977,16 @@
   {
     "id": "view_dashboard_txt_script",
     "en": "Your script",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
     "ps": ""
   },
   {
@@ -2195,6 +2205,11 @@
     "ps": ""
   },
   {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "ps": ""
+  },
+  {
     "id": "mx_ui_text_faded",
     "en": "Secondary text color",
     "ps": ""
@@ -2257,6 +2272,11 @@
   {
     "id": "mx_map_admin_disputed",
     "en": "Map: disputed boundaries",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_admin_secondary",
+    "en": "Map: secondary boundaries",
     "ps": ""
   },
   {

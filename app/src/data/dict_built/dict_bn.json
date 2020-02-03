@@ -630,13 +630,8 @@
     "bn": ""
   },
   {
-    "id": "btn_theme_black",
-    "en": "Switch theme : dark",
-    "bn": ""
-  },
-  {
-    "id": "btn_theme_orig",
-    "en": "Switch theme : clear",
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
     "bn": ""
   },
   {
@@ -1965,6 +1960,11 @@
     "bn": ""
   },
   {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "bn": ""
+  },
+  {
     "id": "view_dashboard_title",
     "en": "Dashboard title",
     "bn": ""
@@ -1977,6 +1977,16 @@
   {
     "id": "view_dashboard_txt_script",
     "en": "Your script",
+    "bn": ""
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "bn": ""
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
     "bn": ""
   },
   {
@@ -2195,6 +2205,11 @@
     "bn": ""
   },
   {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "bn": ""
+  },
+  {
     "id": "mx_ui_text_faded",
     "en": "Secondary text color",
     "bn": ""
@@ -2257,6 +2272,11 @@
   {
     "id": "mx_map_admin_disputed",
     "en": "Map: disputed boundaries",
+    "bn": ""
+  },
+  {
+    "id": "mx_map_admin_secondary",
+    "en": "Map: secondary boundaries",
     "bn": ""
   },
   {

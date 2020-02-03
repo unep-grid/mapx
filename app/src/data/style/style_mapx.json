@@ -1543,7 +1543,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 14%, 0.3)",
+        "line-color": "rgba(38,38,38, 0.3)",
         "line-width": {
           "base": 1,
           "stops": [[0, 0.5], [22, 2]]
@@ -1566,7 +1566,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 14%, 0.3)",
+        "line-color": "rgba(38,38,38, 0.3)",
         "line-dasharray": [1, 2, 6, 2],
         "line-width": {
           "base": 1,
@@ -1590,7 +1590,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 14%, 0.3)",
+        "line-color": "rgba(38,38,38, 0.3)",
         "line-dasharray": [3, 2],
         "line-width": {
           "base": 1,
@@ -1614,7 +1614,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 34%, 0.7)",
+        "line-color": "rgba(112, 112, 112, 0.3)",
         "line-dasharray": [0.5, 1.5],
         "line-width": {
           "base": 1,
@@ -1638,7 +1638,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 44%, 0.3)",
+        "line-color": "rgba(112, 112, 112, 0.3)",
         "line-dasharray": [3, 2],
         "line-width": {
           "base": 1,
@@ -1662,7 +1662,7 @@
         "line-join": "bevel"
       },
       "paint": {
-        "line-color": "hsla(0, 0%, 44%, 0.3)",
+        "line-color": "rgba(112, 112, 112, 0.3)",
         "line-width": {
           "base": 1,
           "stops": [[0, 0.5], [22, 2]]
@@ -1674,7 +1674,7 @@
       }
     },
     {
-      "id": "boundaries_mb_3-4",
+      "id": "boundaries_mb_3_4",
       "type": "line",
       "source": "mapbox_base",
       "source-layer": "admin",

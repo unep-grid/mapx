@@ -102,3 +102,11 @@
   font-size: 0.9em;
   font-weight: normal;
 }
+
+/**
+* Add a margin for first div (panels item)
+*/
+.button-panel-content > .mx-view-legend-group {
+  padding: 20px;
+  padding-top:0px;
+}

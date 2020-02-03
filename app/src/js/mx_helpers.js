@@ -40,7 +40,6 @@ export * from './mx_helper_map_view_metadata.js';
 export * from './mx_helper_map_features_popup.js';
 export * from './mx_helper_diacritics.js';
 export * from './mx_helper_fullscreen.js';
-export * from './mx_helper_colors.js';
 export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
@@ -60,3 +59,4 @@ export * from './mx_helper_sdk.js';
 */
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';
+export * from './color_utils/index.js';

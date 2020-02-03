@@ -79,13 +79,19 @@
 }
 .li-group-caret {
   margin: 4px;
+  transition: transform 0.2s ease-in-out;
 }
 .li-group-caret:hover {
   cursor: pointer;
+  transform: scale(1.5);
 }
 .li-group-collapsed .li-group-caret {
   transform: rotate(-90deg);
 }
+.li-group-collapsed .li-group-caret:hover {
+  transform: rotate(-90deg) scale(1.5);
+}
+
 
 .li-group-button span {
 }
@@ -181,10 +187,7 @@
   max-width: 50%;
 }
 
-.li-arrow-bottom {
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 5px solid #474747;
+.li-arrow-bottom:before {
+  icon-font : url(./svg/arrow_bottom.svg);
+  font-size: 0.6em;
 }

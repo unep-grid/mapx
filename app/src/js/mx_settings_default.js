@@ -6,11 +6,19 @@ let settings = {
   languages: ['en', 'fr'],
   highlightedCountries: [],
   project: '',
-  logs : {
-    disabled : false, // set in cookies as preferences ?
+  logs: {
+    disabled: false, // set in cookies as preferences ?
     levels: ['ERROR', 'WARNING', 'MESSAGE', 'LOG', 'USER_ACTION'],
-    ids : ['session_end','session_start','view_remove','view_add','view_panel_click','project_change','language_change'],
-    sides : ['browser','app','api'],
+    ids: [
+      'session_end',
+      'session_start',
+      'view_remove',
+      'view_add',
+      'view_panel_click',
+      'project_change',
+      'language_change'
+    ],
+    sides: ['browser', 'app', 'api']
   },
   map: {
     id: 'map_main',
@@ -26,7 +34,7 @@ let settings = {
     protocol: 'https:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
-      getApiSql : '/get/sql',
+      getApiSql: '/get/sql',
       getConfigMap: '/get/config/map',
       getIpInfo: '/get/ip',
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
@@ -46,11 +54,11 @@ let settings = {
     }
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
-  paramKeysPermanent: ['project', 'language', 'lockProject', 'style'],
+  paramKeysPermanent: ['project', 'language', 'lockProject', 'style', 'theme', 'colors'],
   links: [],
-  mode : {
-    static : false,
-    app : false
+  mode: {
+    static: false,
+    app: false
   },
   paths: {
     sprites: 'sprites/sprite'
@@ -69,8 +77,10 @@ let settings = {
       idViewsList: 'viewListContent',
       idDashboardsPanel: 'mxDashboardsPanel',
       idDashboardsButton: 'btnTabDashboard',
-      idDashboards: 'mxDashboards'
-    }
+      idDashboards: 'mxDashboards',
+      idInputThemeColors: 'mxInputThemeColors'
+    },
+   theme : 'light'
   }
 };
 

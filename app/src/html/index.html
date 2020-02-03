@@ -4,13 +4,13 @@
     <title>MapX</title>
     <meta
       name="viewport"
-      content="width=device-width, initial-scale=1, maximum-scale=1"
+      content="width=device-width, initial-scale=1, maximum-scale=5"
     />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="description" content="MapX" />
     <meta name="author" content="Unep sience division; Fred Moser" />
     <meta name="google" content="notranslate" />
-    <meta http-equiv="Cache-Control" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#15b0f8" />
     <link rel="manifest" href="/manifest.json" />
@@ -27,17 +27,6 @@
     <noscript> <p>Please enable JavaScript to use MapX</p> </noscript>
     <div class="mx-panels-container">
       <div class="mx-panel-left mx-panel-views transparent shadow">
-        <!-- views side panel for filter views -->
-        <div
-          class="mx-panel-left-side mx-views-filter-panel transparent shadow mx-hide"
-          id="viewsFilterPanel"
-        >
-          <div
-            id="viewsFilterContainer"
-            class="mx-views-filter-container"
-          ></div>
-          <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
-        </div>
         <!-- views container -->
         <div class="mx-views-container">
           <div class="mx-views-header">
@@ -51,6 +40,9 @@
                 data-lang_key="view_filter_input"
                 data-lang_type="placeholder"
               />
+              <label class="mx-hide" for="viewsFilterText"
+                >Filter views by text</label
+              >
             </div>
             <div class="mx-bar-sort">
               <span class="mx-btn-toggle-filter" id="btnFilterChecked">
@@ -58,13 +50,24 @@
                   Activated views only
                 </span>
               </span>
-              <span class="mx-btn-toggle-filter" id="btnFilterShowPanel">
+              <span class="mx-btn-toggle-filter bottom_tick" id="btnFilterShowPanel">
                 <span data-lang_key="btn_filter_show_panel">
                   Advanced filter
                 </span>
                 <span class="mx-btn-toggle-filter-count" id="viewsFilterCount">
                 </span>
               </span>
+            </div>
+            <!-- views side panel for filter views -->
+            <div
+              class="mx-views-filter-panel transparent mx-hide"
+              id="viewsFilterPanel"
+            >
+              <div
+                id="viewsFilterContainer"
+                class="mx-views-filter-container"
+              ></div>
+              <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
             </div>
           </div>
           <div class="mx-views-content"><div class="mx-views-list"></div></div>
@@ -162,7 +165,7 @@
             <div id="uiBtnProjectConfig" class="shiny-html-output"></div>
             <h3 data-lang_key="title_settings_colors"></h3>
             <div class="mx-settings-colors">
-              <div id="inputThemeColors"></div>
+              <div id="mxInputThemeColors"></div>
             </div>
             <h3 data-lang_key="title_utilities"></h3>
             <button
@@ -184,14 +187,6 @@
       </div>
       <div class="mx-panel-left mx-panel-settings transparent shadow mx-hide">
         <h3 data-lang_key="title_settings"></h3>
-      </div>
-      <div class="mx-panel-right mx-events-off">
-        <div class="mx-panel-dashboards" id="mxDashboardsPanel">
-          <div
-            class="mx-panel-dashboards-scroll mx-events-on"
-            id="mxDashboards"
-          ></div>
-        </div>
       </div>
     </div>
     <div id="map_main"></div>

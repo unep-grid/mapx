@@ -3,8 +3,9 @@
 import * as geojsonhint from 'geojsonhint';
 import {featureEach, propEach} from '@turf/meta';
 import bbox from '@turf/bbox';
-import {getArrayDistinct} from './array_stat/index.js';
-import * as color from './mx_helper_colors.js';
+import {getArrayDistinct} from './array_stat';
+import * as color from './color_utils/';
+
 
 // geojson type to mapbox gl type
 var typeSwitcher = {

@@ -39,8 +39,6 @@ const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventStore();
 const selectize = {};
-const widgets = [];
-const dashboards = [];
 const editors = {};
 const extend = {
   position: {},
@@ -63,10 +61,8 @@ export {
   data,
   info,
   selectize,
-  widgets,
   version,
   settings,
-  dashboards,
   editors,
   extend
 };
