@@ -73,7 +73,7 @@
   background: var(--mx_ui_background);
 }
 .mx-views-filter-container {
-  border : 1px solid  var(--mx_ui_border);
+  border: 1px solid var(--mx_ui_border);
 }
 .mx-views-filters-container .mx-check-toggle-filter-count {
   color: var(--mx_ui_text_faded);
@@ -548,4 +548,29 @@ span.mx-badge-role {
 }
 ::-webkit-scrollbar-thumb:active {
   background: var(--mx_ui_text);
+}
+
+/**
+* Boostrap colors changes
+*/
+.mx .table > tbody > tr > td,
+.mx .table > tbody > tr > th,
+.mx .table > tfoot > tr > td,
+.mx .table > tfoot > tr > th,
+.mx .table > thead > tr > td,
+.mx .table > thead > tr > th {
+  border-color: var(--mx_ui_border);
+}
+
+.mx .panel-default > .panel-heading {
+  color: var(--mx_ui_background);
+  background-color: var(--mx_ui_text);
+  border-color: var(--mx_ui_border);
+}
+
+.mx .panel-default > .panel-heading span {
+  color: var(--mx_ui_background);
+}
+.mx .panel {
+  background-color: var(--mx_ui_background);
 }
