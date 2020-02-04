@@ -347,31 +347,33 @@ function urlLegend(opt) {
  * @param {String} opt.url Service url
  */
 export function queryWms(opt) {
-  var h = mx.helpers;
-  var map = opt.map || h.getMap();
-  var point = opt.point;
-  var url = opt.url;
-  var modeObject = opt.asObject === true || false;
-  var ignoreBbox = true;
+  const h = mx.helpers;
+  const map = opt.map || h.getMap();
+  const point = opt.point;
+  const url = opt.url;
+  const modeObject = opt.asObject === true || false;
+  const ignoreBbox = true;
   /*
    * Build a bounding box
    */
-  var xMax = point.x + 1;
-  var xMin = point.x - 1;
-  var yMax = point.y + 1;
-  var yMin = point.y - 1;
-  var sw = map.unproject([xMax, yMin]);
-  var ne = map.unproject([xMin, yMax]);
-  var minLat = Math.min(sw.lat, ne.lat);
-  var minLng = Math.min(sw.lng, ne.lng);
-  var maxLat = Math.max(sw.lat, ne.lat);
-  var maxLng = Math.max(sw.lng, ne.lng);
+  const xMax = point.x + 1;
+  const xMin = point.x - 1;
+  const yMax = point.y + 1;
+  const yMin = point.y - 1;
+  const sw = map.unproject([xMax, yMin]);
+  const ne = map.unproject([xMin, yMax]);
+  const minLat = Math.min(sw.lat, ne.lat);
+  const minLng = Math.min(sw.lng, ne.lng);
+  const maxLat = Math.max(sw.lat, ne.lat);
+  const maxLng = Math.max(sw.lng, ne.lng);
   /*
    * Build query string
    */
-  var layers = opt.layers;
-  var styles = opt.styles;
-  var paramsInfo = {
+  const layers = opt.layers;
+  const styles = opt.styles;
+  const props = modeObject ? {} : [];
+  const paramsInfo = {
+    version: '1.3.0',
     service: 'WMS',
     request: 'GetFeatureInfo',
     format: 'image/png',
@@ -380,33 +382,48 @@ export function queryWms(opt) {
     layers: layers,
     styles: styles,
     info_format: 'application/json',
-    exceptions: 'application/json',
+    exceptions: 'application/vnd.ogc.se_xml',
     feature_count: 10,
     x: 5,
     y: 5,
     width: 9,
     height: 9,
-    src: 'EPSG:4326',
+    srs: 'EPSG:4326',
     bbox: minLng + ',' + minLat + ',' + maxLng + ',' + maxLat
   };
-  var request = url + '?' + h.objToParams(paramsInfo);
-  var props = modeObject ? {} : [];
-
   /**
    * Return fetch promise
    */
   return wmsGetCapabilities(url)
     .then((cap) => {
-      let pathLayer = 'Layer.Layer';
-      let layersAll = h.path(cap, 'Layer.Layer', []);
-      let ok = layersAll.find((l) => {
-        return layers.indexOf(l.Name) > -1 && l.queryable === true;
-      });
-      
-      if (ok) {
+      const allowedFormatsInfo = ['application/json', 'application/geojson'];
+      const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
+      const layersAll = h.path(cap, 'Layer.Layer', []);
+
+      paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
+        return !a ? (allowedFormatsInfo.indexOf(f) > -1 ? f : a) : a;
+      }, null);
+      paramsInfo.exception = h.path(cap, 'Exception', [])[1];
+
+      const validLayer =
+        layersAll.reduce((a, l) => {
+          return layers.indexOf(l.Name) > -1 && l.queryable === true
+            ? a.push(l)
+            : a;
+        }, []).length > 0;
+      const validInfo = h.isString(paramsInfo.info_format);
+      const validException = h.isString(paramsInfo.exception);
+
+      if (validException && validLayer && validInfo) {
+        const request = `${url}?${h.objToParams(paramsInfo)}`;
         return fetch(request);
       } else {
-        throw new Error('Operation not permited by the requested server');
+        throw new Error(
+          `Operation not permited by the requested server. ` +
+            `Valid exception format ${validException}. ` +
+            `Valid (queryable) layer ${validLayer}. ` +
+            `Valid info format ${validInfo}.`
+        );
       }
     })
     .then((data) => data.json())
@@ -418,13 +435,13 @@ export function queryWms(opt) {
 
       res.features.forEach((f) => {
         if (modeObject) {
-          for (var p in f.properties) {
+          for (let p in f.properties) {
             /*
              * Aggregate by attribute
              */
             if (ignoreBbox && p !== 'bbox') {
-              var value = f.properties[p];
-              var values = props[p] || [];
+              let value = f.properties[p];
+              let values = props[p] || [];
               values = values.concat(value);
               props[p] = values;
             }
