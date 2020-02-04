@@ -456,32 +456,7 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
               ),
             uniqueItems = TRUE)
           )
-        ),
-      integrity = list(
-        propertyOrder = mxCounter("a"),
-        title = t("data_integrity_title"),
-        description = t("data_integrity_desc"),
-        type = "object",
-        options = list(collapsed = TRUE),
-        properties = list(
-          "di_1_1" = mxSchemaDataIntegrityQuestion("di_1_1"),
-          "di_1_2" = mxSchemaDataIntegrityQuestion("di_1_2"), 
-          "di_1_3" = mxSchemaDataIntegrityQuestion("di_1_3"),
-          "di_1_4" = mxSchemaDataIntegrityQuestion("di_1_4"),
-          "di_2_1" = mxSchemaDataIntegrityQuestion("di_2_1"),
-          "di_2_2" = mxSchemaDataIntegrityQuestion("di_2_2"),
-          "di_2_3" = mxSchemaDataIntegrityQuestion("di_2_3"),
-          "di_2_4" = mxSchemaDataIntegrityQuestion("di_2_4"),
-          "di_3_1" = mxSchemaDataIntegrityQuestion("di_3_1"),
-          "di_3_2" = mxSchemaDataIntegrityQuestion("di_3_2"),
-          "di_3_3" = mxSchemaDataIntegrityQuestion("di_3_3"),
-          "di_3_4" = mxSchemaDataIntegrityQuestion("di_3_4"),
-          "di_4_1" = mxSchemaDataIntegrityQuestion("di_4_1"),
-          "di_4_2" = mxSchemaDataIntegrityQuestion("di_4_2"),
-          "di_4_3" = mxSchemaDataIntegrityQuestion("di_4_3"),
-          "di_4_4" = mxSchemaDataIntegrityQuestion("di_4_4")
-          )
-        )
+        ) 
       )
     )
 

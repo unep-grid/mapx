@@ -216,6 +216,7 @@ observe({
 # Validate metadata
 #
 observeEvent(input$btnValidateMetadata,{
+  # will be validate by mxValidateMetadataModal (r) through client function (js) mx.helpers.validateMetadataModal
   jedTriggerGetValues("jedSourceMetadata","validate")
 })
 
@@ -238,6 +239,7 @@ observeEvent(input$jedSourceMetadata_values,{
 
   switch(idEvent,
     "validate"= {
+      
       mxValidateMetadataModal(meta)
     },
     "save" = {

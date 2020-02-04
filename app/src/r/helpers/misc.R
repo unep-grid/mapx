@@ -1937,42 +1937,6 @@ mxCreateEncryptedUrlAction = function(id,value,session=shiny::getDefaultReactive
   return(url)
 }
 
-
-#' Create object for data integrity framework
-#' @param keyTitle {Character} Translation key of the title
-#' @param language {Character} Language code to use
-mxSchemaDataIntegrityQuestion = function(keyTitle,language=NULL,dict=NULL){ 
-
-  if(noDataCheck(language)){
-    language = get("language",envir=parent.frame())
-  }
-  if(noDataCheck(dict)){
-    dict = .get(config,c('dict'))
-  }
-
-  list(
-    title = d(keyTitle,lang=language,dict=dict,web=F),
-    description = d(paste0(keyTitle,"_desc"),lang=language,dict=dict,web=F),
-    type = "string",
-    propertyOrder = mxCounter("dataIntegrity"),
-    minlength = 1,
-    default = "0",
-    enum = c("0",
-      "1",
-      "2",
-      "3"),
-    options = list(
-      enum_titles = 
-        list(
-          dd('dont_know',dict,language),
-          dd('no',dict,language),
-          dd('partial',dict,language),
-          dd('yes',dict,language)
-          )
-      )
-    )
-}
-
 #' update vt view definition
 #' @param {list} view View list
 #' @param {list} sourceData List from reactLayerSummary reactive object
@@ -2085,10 +2049,6 @@ mxGetViewMeta <- function(viewData,language){
   # from meta, get data temporal range
   dateSourceRangeStart <- .get(layerMeta,c("temporal","range","start_at"))
   dateSourceRangeEnd <- .get(layerMeta,c("temporal","range","end_at"))
-  # integrity score
-  integrityData <- .get(layerMeta,c("integrity"))
-  integrityScore <- round(((sum(as.numeric(unlist(integrityData)))/(3*16))*100),1)
-
 
   #
   # View meta
@@ -2151,7 +2111,6 @@ mxGetViewMeta <- function(viewData,language){
         meta_source_title = mxDbGetLayerTitle(idSource,language = language,asNamedList = F),
         meta_source_id = idSource,
         meta_source_homepage = homepage,
-        meta_source_integrity_score = integrityScore + "%",
         meta_source_time_range  =  list(
           meta_source_time_range_min  =  dateSourceRangeStart,
           meta_source_time_range_max  = dateSourceRangeEnd

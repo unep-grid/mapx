@@ -47,15 +47,6 @@ function handleViewClick(event) {
       }
     },
     {
-      comment: 'target is the view meta diaf badge',
-      test: el.dataset.view_action_key === 'btn_opt_diaf_modal',
-      action: function() {
-        const viewTarget = el.dataset.view_action_target;
-        const view = h.getView(viewTarget);
-        h.displayDiafModal(view);
-      }
-    },
-    {
       comment: 'target is the delete geojson button',
       test: el.dataset.view_action_key === 'btn_opt_delete_geojson',
       action: function() {

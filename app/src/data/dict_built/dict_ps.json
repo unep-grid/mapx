@@ -2825,11 +2825,6 @@
     "ps": ""
   },
   {
-    "id": "tooltip_diaf_score",
-    "en": "Integrity \n Score: {{score}} Positive: {{yes}} Negative: {{no}} Partial: {{part}} Unknown: {{unknown}} ",
-    "ps": ""
-  },
-  {
     "id": "additional_doc_desc",
     "en": "If any, list of additional documents",
     "ps": "که د اضافي اسنادو کوم نوملړ"
@@ -3624,11 +3619,6 @@
     "ps": ""
   },
   {
-    "id": "meta_view_diaf_summary_title",
-    "en": "DIAF Summary",
-    "ps": ""
-  },
-  {
     "id": "meta_view_raster_meta",
     "en": "Metadata Entry",
     "ps": ""
@@ -3837,185 +3827,6 @@
     "id": "meta_source_time_range_max",
     "en": "To",
     "ps": ""
-  },
-  {
-    "id": "data_integrity_desc",
-    "en": "Evaluation of the data integrity",
-    "ps": "د ډیټا د بشپړتیا ارزیابي"
-  },
-  {
-    "id": "data_integrity_title",
-    "en": "Integrity",
-    "ps": "بشپړتیا"
-  },
-  {
-    "id": "data_integrity_table_key",
-    "en": "Question",
-    "ps": ""
-  },
-  {
-    "id": "data_integrity_table_value",
-    "en": "Answer",
-    "ps": ""
-  },
-  {
-    "id": "di_1_1",
-    "en": "Is the data documented?",
-    "ps": "آیا ډیتا مستنده شوېده؟"
-  },
-  {
-    "id": "di_1_1_desc",
-    "en": "Does the data provider have the capacity to document the data and provide basic metadata (e.g. name, coordinate system, year, update frequency, description, and methodology)? ",
-    "ps": "آيا د ډیټا تولیدوونکئ ددې وړتیا لري چي ډیټا مستنده کړي او ابتدائي میټا ډیټا (لکه: نوم، د کوردیناتو سیستم، کال، د نوي کولو نیټه، تفصیل، او میتود) وړاندې کړي؟"
-  },
-  {
-    "id": "di_1_2",
-    "en": "Does the data provider have the relevant mandate?",
-    "ps": "آیا د ډیټا وړاندې کوونکئ مربوطه حکم لري؟"
-  },
-  {
-    "id": "di_1_2_desc",
-    "en": "Does the data provider have a mandate or legal requirement to collect the data?",
-    "ps": "آیا د ډیټا وړاندې کوونکئ د ډیټا راټولولو قانوني جواز لري؟"
-  },
-  {
-    "id": "di_1_3",
-    "en": "Is the data subject to internal quality control?",
-    "ps": "آیا ډیټا د داخلي کیفیت کنټرول تابع ده؟"
-  },
-  {
-    "id": "di_1_3_desc",
-    "en": "Has the data been subject to data quality assurance and control processes? ",
-    "ps": "آیآ د ډیټا د کیفیت څخه اطمینان حاصل شوی دی؟"
-  },
-  {
-    "id": "di_1_4",
-    "en": "Is the data subject to external quality control?",
-    "ps": "آیا د ډیټآ د خارجی کیفیت کنټرول شوی دی؟"
-  },
-  {
-    "id": "di_1_4_desc",
-    "en": "Are the data sets subject to external auditing or peer review processes?  ",
-    "ps": "آیا ډیټا د بهرنیو همکارانو د پلټنو او بیا کتنې پروسې طۍ کړې دي؟"
-  },
-  {
-    "id": "di_2_1",
-    "en": "Is the data machine-readable?",
-    "ps": "آیا ډیټا د ماشین په واسطه د لوستلو وړتیا لري؟"
-  },
-  {
-    "id": "di_2_1_desc",
-    "en": "Data is machine-readable if it is in a format that can be easily structured and exploited by a computer. Good examples of machine-readable files are SQL, JSON, XML, DBF and to a lesser extent Excel",
-    "ps": "که چیرې ډیټا په داسې یو چوکاټ کې وي چې په آسانه تنظیم او د کمپیوټر په واسطه د کارولو وړتیا ولري د ماشین په واسطه د لوستلو وړتیا لري. د ماشین په وسیله د لوستلو وړ فایلونو ښې بیلګې SQL، JSON، XML، DB او کم حجم لرونکې ایکسل فایلونه دي."
-  },
-  {
-    "id": "di_2_2",
-    "en": "Is the data available online?",
-    "ps": "آیا ډیټا په آنلاین بڼه شتون لري؟"
-  },
-  {
-    "id": "di_2_2_desc",
-    "en": "This question addresses whether the data is available online from an official source. This does not mean that the data is necessarily updated or maintained",
-    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډیټا په یوه رسمي سرچینه کې په آنلاین بڼه شتون لري او که نه. دا په دې معنا نه ده چې ډیټا په ضروري شکل شامله شوې او یا نوې شوې ده."
-  },
-  {
-    "id": "di_2_3",
-    "en": "Is the data available in a non-fragmented state?",
-    "ps": "آیا ډیټا په یو غیر تفکیک شوې بڼه د لاسرسي وړ ده؟"
-  },
-  {
-    "id": "di_2_3_desc",
-    "en": "Data is available in bulk if the whole dataset can be downloaded or accessed easily. Conversely it is considered non-bulk if the citizens are limited to just parts of the dataset (e.g., if restricted to querying a web form and retrieving a few results at a time)",
-    "ps": "که چیرې ټول ډیټاسیټ په آسانۍ سره د لاسرسي او ډانلوډ وړ وي ډیټا په پراخه کچه د لاسرسي وړ ګڼل کېږي، برعکس؛ که چېرې د ګټه اخیستونکي لاسرسئ  صرف د ډیټاسیټ یوې برخې ته محدود وي ډیټا په پراخه کچه د لاسرسي وړ نه ګڼل کېږي ( د مثال په توګه که چېرې د یوه انټرنیټي فورم د پوښتنو او پلټنو په اړه محدودیت شتون ولري او لږ معلومات په یوه وخت کې لاس ته راشي)"
-  },
-  {
-    "id": "di_2_4",
-    "en": "Does the data comply with OGC standards? "
-  },
-  {
-    "id": "di_2_4_desc",
-    "en": "Is the data compliant with applicable Open Geospatial Consortium standards, e.g. Web Map Service (WMS)?",
-    "ps": "آیا ډیټا د خلاص جیوفضائي کانسرسیوم د سټنډرډونو لکه د بريښنایې نقشو د خدمتونو (WMS) مطابق ده؟"
-  },
-  {
-    "id": "di_3_1",
-    "en": "Is the data publicly available?",
-    "ps": "آیا ډیټا په عام ډول د لاسرسي وړ ده؟"
-  },
-  {
-    "id": "di_3_1_desc",
-    "en": "‘Publicly available’ means that the data can be accessed by the public in some form either from websites or physical documents (even if the data is available for purchase)",
-    "ps": "په عام ډول د لاسرسی وړ په دی معنا ده چې ډیټاګانې د عامو خلکو لپاره په هارډ شکل او هم د ویب سایټ له لارې د لاسرسي وړ دی( حتا که چیرې ډیټا د پلورلو لپاره آماده وي."
-  },
-  {
-    "id": "di_3_2",
-    "en": "Is the data accessible to the public without discrimination of users?",
-    "ps": "آیا ډیټا د عامو خلکو لپاره بدون له کوم تبعیض څخه د لاسرسي وړ ده؟"
-  },
-  {
-    "id": "di_3_2_desc",
-    "en": "Can any user anonymously download the data or is registration required?",
-    "ps": "آیا هر نا معلوم ګټه اخیستونکئ کولای شي چې ډیټا ډانلوډ کړي او یا د نوم ثبتول اړین دي."
-  },
-  {
-    "id": "di_3_3",
-    "en": "Is the data available free of charge?",
-    "ps": "آیا ډیټا په وړیا ډول د لاسرسي وړ ده او که مصرف لري؟"
-  },
-  {
-    "id": "di_3_3_desc",
-    "en": "Compliance with GEOSS data sharing principle #2: \"where international instruments, national policies or legislation preclude the sharing of data as Open Data, data should be made available with minimal restrictions on use and at no more than the cost of reproduction and distribution;\"",
-    "ps": "د GEOSS سره د ډیټا شریکولو دوهم اصل: \" په کوم ځای کې چې نړیوال وسایل، ملي پالیسۍ یا قوانین د ډیټاګانو د آزاد شریکولو مانع وي معلومات باید په ترټولو کم محدودیت او بدون د تولید له مصرف څخه د لاسرسي وړ وي."
-  },
-  {
-    "id": "di_3_4",
-    "en": "Is there an open license for the data?",
-    "ps": "آیا د ډیټا لپاره کوم آزاد جواز وجود لري"
-  },
-  {
-    "id": "di_3_4_desc",
-    "en": "This question addresses whether the dataset is openly licensed. It needs to state the terms of use or license that allow anyone to freely use, reuse or redistribute the data (subject to attribution and share alike requirements)",
-    "ps": "دا پوښتنه دا په ډاګه کوي چې آیا ډيټاسیت آزاد جواز لري. لازمه ګڼل کېږي چې د ګتې اخیستنې او یا جواز هغه شرطونه ذکر کړئ چې هر چاته اجازه ورکوي چې په وړیا ډول ترې ګټه واخلي، د ډیټا څخه بیا ګټه واخلي او یا بیا خپره کړي (د ګډو الزاماتو په نظر کې نیولو سره)"
-  },
-  {
-    "id": "di_4_1",
-    "en": "Does the data provider have the technical capacity to manage and update the layer?",
-    "ps": "آیا د ډیټا چمتو کوونکئ د لایو د تنظیم او نوي کولو تخنیکي ظرفیت لري؟"
-  },
-  {
-    "id": "di_4_1_desc",
-    "en": "The data provider is able to maintain, update and publish it on a regular basis ",
-    "ps": "د ډیټا چمتو کوونکئ ددې وړتیا لري چې ډیټا په نومال ډول شامله، نوې او خپره کړي."
-  },
-  {
-    "id": "di_4_2",
-    "en": "Does the data provider have a long-term mandate and financial means?",
-    "ps": "آیا د ډيټا چمتو کوونکئ یوه اوږدمهاله دنده او مالي وسایل لري؟"
-  },
-  {
-    "id": "di_4_2_desc",
-    "en": "Does the data provider have a long-term mandate and related resources to ensure continuity in data collection and publication? ",
-    "ps": "آیا د ډیټا چمتو کوونکئ یوه اوږدمهاله دنده او مربوطې سرچینې لري چې د ډیټا راټولولو او خپرولو د دوام څخه اطمینان ورکړي؟"
-  },
-  {
-    "id": "di_4_3",
-    "en": "Can the data layer be dynamically streamed and shared using an API",
-    "ps": "آیا د ډیټا لایه په ډینامیک ډول خپریدلای او د API څخه په ګټه اخیستنه شریکیدلای شي؟"
-  },
-  {
-    "id": "di_4_3_desc",
-    "en": "Is the data interoperable with MapX to enable dynamic streaming/automatic updates? ",
-    "ps": "آیا ډیټا له MapX سره مطابقت لري چې په ډینامیک خپرولو او یا اتومات ډول نوي کیدلو کې مرسته وکړي؟"
-  },
-  {
-    "id": "di_4_4",
-    "en": "Does the data support measuring of SDGs?",
-    "ps": "آیا ډيټا د SDGs په اندازه ګیرۍ کې مرسته کوي؟"
-  },
-  {
-    "id": "di_4_4_desc",
-    "en": "Can the dataset be aligned with measuring progress towards achievement of Sustainable Development Goals?",
-    "ps": "آیا د معلوماتو مجموعه د دوامدارې پراختیا د موخو له پرمختګ سره سمون لري؟"
   },
   {
     "id": "dont_know",

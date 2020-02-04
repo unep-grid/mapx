@@ -38,7 +38,6 @@ export function setViewBadges(opt){
   const readers = view.readers || [];
   const hasEdit = view._edit === true;
   const isValidable = view.type === "rt" || view.type === "vt";
-  const hasDiaf = view.type === "vt";
   const hasPublic = readers.indexOf("public") > -1;
   const isShared = view.project !== mx.settings.project;
   const elViewBadgesContainer =  document.getElementById("view_badges_" + view.id);
@@ -84,17 +83,6 @@ export function setViewBadges(opt){
               validation : validation
             });
 
-          }else if(hasDiaf){
-
-            if( hasPublic ){
-              /**
-               * Validation passed. Test DIAF
-               */
-              addBadgeDiaf({
-                elBadges : elBadges,
-                view : view
-              });
-            }
           }
         }
       })
@@ -183,24 +171,6 @@ function addBadgeShared(opt){
     tooltipKey : "view_shared"
   });
   elBadges.appendChild(elBadge);
-}
-/**
- * Evaluate diaf and add badge
- */
-function addBadgeDiaf(opt){
-  const h = mx.helpers;
-  const view = opt.view;
-  const elBadges = opt.elBadges;
-
-  h.evaluateDiafView({
-    view : view
-  })
-    .then( result => {
-      const elStar = result.elStar;
-      elBadges.appendChild(elStar);
-      elStar.dataset.view_action_key = "btn_opt_diaf_modal";
-      elStar.dataset.view_action_target = result.idView;
-    });
 }
 
 /**
