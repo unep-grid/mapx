@@ -204,20 +204,38 @@ describe('Get projects', function() {
     });
   });
 
-  it(`GET /get/projects/list/user/1} specifying title search wildcard match`, function(done) {
+  it(`GET /get/projects/list/user/1} specifying title search prefix match`, function(done) {
     encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
       request(app).get(`/get/projects/list/user/1`)
         .query({
           role: 'any',
-          title: '*risk*',
           language: 'fr',
+          titlePrefix: 'BBB',
           idUser: adminUser.userId,
           token: userTokenEncrypted,
         })
         .end(function(err, res) {
           expect(res.statusCode).to.equal(200);
           expect(res.body).to.be.an('array');
-          expect(res.body).to.have.lengthOf(2);
+          expect(res.body).to.have.lengthOf(1);
+          done();
+        });
+    });
+  });
+
+  it(`GET /get/projects/list/user/1} specifying title search prefix no match`, function(done) {
+    encrypt(JSON.stringify(adminUser.userToken)).then(function(userTokenEncrypted) {
+      request(app).get(`/get/projects/list/user/1`)
+        .query({
+          role: 'any',
+          titlePrefix: 'ZZZ (en)',
+          idUser: adminUser.userId,
+          token: userTokenEncrypted,
+        })
+        .end(function(err, res) {
+          expect(res.statusCode).to.equal(200);
+          expect(res.body).to.be.an('array');
+          expect(res.body).to.have.lengthOf(0);
           done();
         });
     });

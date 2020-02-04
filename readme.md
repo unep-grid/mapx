@@ -63,7 +63,7 @@ debug> c
 ...
 ```
 
-The instance now should use the api service at http://apidev.mapx.localhos:8880/ for which the source from `./api/` is mounted as `/apidev/` in the container.
+The instance now should use the api service at http://apidev.mapx.localhost:8880/ for which the source from `./api/` is mounted as `/apidev/` in the container.
 
 Note that you might need to add the different hosts `*.mapx.localhost` to your system hosts file.
 

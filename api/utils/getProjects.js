@@ -9,6 +9,7 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
       'language',
       'role',
       'title',
+      'titlePrefix',
       'titleFuzzy',
       'token',
       'idUser',
@@ -22,7 +23,7 @@ module.exports.getByUser = [
   getProjectsByUserRouteHandler,
 ];
 
-function getProjectsByUserHelper(userId, lc='en', role='any', title=null, titleFuzzy=null) {
+function getProjectsByUserHelper(userId, lc='en', role='any', title=null, titlePrefix=null, titleFuzzy=null) {
   var roleCondition = ['member', 'publisher', 'admin'].includes(role) ? role : `public OR member OR publisher OR admin`;
   var pSql = project
     .select(`id`)
@@ -36,14 +37,17 @@ function getProjectsByUserHelper(userId, lc='en', role='any', title=null, titleF
     ;
 
     if (title) {
-      let titleOp = 'equals';
-      if (title.indexOf('*') > -1) {
-        titleOp = 'ilike';
-        title = title.replace(/\*/g, '%');
-      }
       pSql.where(
-        project.title.keyText('en')[titleOp](title).or(
-          project.title.keyText(lc)[titleOp](title)
+        project.title.keyText('en')['equals'](title).or(
+          project.title.keyText(lc)['equals'](title)
+        )
+      );
+    }
+
+    if (titlePrefix) {
+      pSql.where(
+        project.title.keyText('en')['ilike'](`${titlePrefix}%`).or(
+          project.title.keyText(lc)['ilike'](`${titlePrefix}%`)
         )
       );
     }
@@ -68,14 +72,12 @@ async function getProjectsByUserRouteHandler(req, res) {
     language: 'en',
     role: 'any',
     title: null,
+    titlePrefix: null,
     titleFuzzy: null,
   }, req.query);
 
-  // Validate parameters (userId and rp.*)
-  // Todo!
-
   try {
-    const result = await getProjectsByUserHelper(userId, rq.language, rq.role, rq.title, rq.titleFuzzy);
+    const result = await getProjectsByUserHelper(userId, rq.language, rq.role, rq.title, rq.titlePrefix, rq.titleFuzzy);
     res.json(result.rows);
   } catch(e) {
     console.log(e);
