@@ -74,7 +74,8 @@ class Dashboard {
     const d = this;
     d.panel.open();
     d.grid.show();
-    console.log(d.fitPanelToWidgetsWidth());
+    d.fitPanelToWidgetsWidth();
+    d.fitPanelToWidgetsHeight();
     d.grid.refreshItems().layout();
   }
 
@@ -92,6 +93,17 @@ class Dashboard {
     },0);
     if(wmax > 0 && wmax > d.panel.width){  
      d.panel.width = wmax + 10 ;
+    }
+  }
+
+  fitPanelToWidgetsHeight(){
+    const d = this;
+    const hmax = d.widgets.reduce((a,w)=>{
+       const hw = w.height;
+       return hw > a ? hw : a;
+    },0);
+    if(hmax > 0 && hmax > d.panel.height){  
+     d.panel.height = hmax + 10 ;
     }
   }
   isDestroyed() {

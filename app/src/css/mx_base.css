@@ -708,6 +708,10 @@ blockquote {
     resize: none;
   }
 }
+.mx-panel-left label {
+  font-weight: normal;
+}
+
 
 /**
 * Custom scrollbar

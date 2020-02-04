@@ -159,11 +159,11 @@
 
 .mx .mx-modal-top,
 .mx .mx-modal-top * {
-  color: var(--mx_ui_text);
+  color: var(--mx_ui_background);
 }
 
 .mx .mx-modal-top {
-  background-color: var(--mx_ui_background);
+  background-color: var(--mx_ui_text);
 }
 
 /* Note : see also loading screen background*/

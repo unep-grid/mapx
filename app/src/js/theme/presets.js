@@ -1,6 +1,6 @@
 const mapx = {
   mx_ui_text: 'rgba(53,53,53,1)',
-  mx_ui_link: 'rgba(53,53,53,1)',
+  mx_ui_link: 'rgba(21,177,248,1)',
   mx_ui_text_faded: 'rgba(53,53,53,0.5)',
   mx_ui_hidden: 'rgba(2,186,253,0)',
   mx_ui_border: 'rgba(156,156,156,0.3)',

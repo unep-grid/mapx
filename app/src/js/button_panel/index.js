@@ -305,19 +305,32 @@ class ButtonPanel {
     const btn = this;
     btn.el.classList.add('animate');
 
+    /**
+     * Remove animate class according to
+     * animate rules in css
+     */
     setTimeout(() => {
       btn.el.classList.remove('animate');
     }, 500);
 
+    /**
+     * Solve bug where the first animation did not work
+     */
+    btn.width = btn.width - 1;
+    btn.height = btn.height - 1;
+
+    /**
+     * Animate
+     */
     if (type === 'half-width') {
       btn.width = btn.rectParent.width / 2;
       btn.height = btn.rectParent.height;
     } else if (type === 'half-height') {
+      btn.width = btn.rectParent.width;
       btn.height = btn.rectParent.height / 2;
-      btn.width = btn.rectParent.width;
     } else if (type === 'full') {
-      btn.height = btn.rectParent.height;
       btn.width = btn.rectParent.width;
+      btn.height = btn.rectParent.height;
     }
   }
 

@@ -200,13 +200,13 @@ class Widget {
     widget.el = el(
       'div',
       {
-        class: ['noselect', 'widget'],
-        title: title
+        class: ['noselect', 'widget']
       },
       el(
         'div',
         {
-          class: ['btn-widget-group']
+          class: ['btn-widget-group'],
+          title: title
         },
         (widget.elButtonClose = el('button', {
           class: ['btn-circle', 'btn-widget', 'fa', 'fa-times']

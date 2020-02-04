@@ -263,6 +263,22 @@ export function initListenersApp() {
   });
 
   mx.events.on({
+    type: 'project_change',
+    idGroup: 'project_change',
+    callback: function() {
+      const clActive = 'active';
+      const clHide = 'mx-hide';
+      const elBtn = document.getElementById('btnFilterShowPanel');
+      const isActive = elBtn.classList.contains(clActive);
+      const elPanel = document.getElementById('viewsFilterPanel');
+      if(isActive){
+        elPanel.classList.add(clHide);
+        elBtn.classList.remove(clActive);
+      }
+    }
+  });
+
+  mx.events.on({
     type: 'views_list_updated',
     idGroup: 'view_list_updated',
     callback: function() {
@@ -1019,13 +1035,14 @@ export function updateViewsList(o) {
     const hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
     const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
     const updateProject = o.project && o.project !== mx.settings.project;
-
     let elProgContainer;
     let mode = 'array_async_all';
     let nCache = 0,
       nNetwork = 0,
       nTot = 0,
       prog;
+
+    h.viewsRemoveAll();
 
     if (updateProject) {
       mx.settings.project = o.project;
@@ -1046,6 +1063,8 @@ export function updateViewsList(o) {
         mode = 'array_sync';
       }
     }
+
+    console.log('updateViewsList');
 
     /**
      * Process view list
@@ -1980,6 +1999,8 @@ export function viewDelete(o) {
   const geojsonData = mx.data.geojson;
 
   h.viewLayersRemove(o);
+  h.viewModulesRemove(view);
+
   mData.viewsList.removeItemById(view.id);
 
   if (view.type === 'gj') {

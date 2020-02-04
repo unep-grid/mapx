@@ -12,6 +12,7 @@
 .vf-check-toggle-group-title {
   opacity: 0.5;
   font-size: 0.8em;
+  padding-left: 5px;
 }
 
 .vf-check-toggle {

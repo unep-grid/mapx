@@ -315,9 +315,10 @@ observe({
 
 
       if(addStaticMode){
-        mode = "/static.html?"
+        mode <- "/static.html?"
+        project <- ""
       }else{
-        mode = "?"
+        mode <- "?"
       }
 
       if(addMapPosition){
