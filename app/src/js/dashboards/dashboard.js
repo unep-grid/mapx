@@ -1,6 +1,7 @@
 import {Widget} from './widget.js';
 import {ButtonPanel} from './../button_panel';
 import {modulesLoad} from './../mx_helper_module_loader.js';
+import {el} from '@fxi/el';
 import Muuri from 'muuri';
 import './style.css';
 
@@ -57,8 +58,9 @@ class Dashboard {
     d.modules = {};
     d.widgets = [];
     d.panel = new ButtonPanel(d.opt.panel);
-    d.grid = new Muuri(d.panel.elPanelContent, d.opt.grid);
-    d.panel.elPanelContent.classList.add('dashboard');
+    d.elDashboard = el('div',{class:'dashboard'});
+    d.panel.elPanelContent.appendChild(d.elDashboard);
+    d.grid = new Muuri(d.elDashboard, d.opt.grid);
     d.panel.on('resize', () => {
       d.grid.refreshItems().layout();
     });
