@@ -1075,6 +1075,11 @@
     "fr": "[ Pas de valeur ]"
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "fr": "[ Echec de l'affichage des attributes  ]"
+  },
+  {
     "id": "none",
     "en": "None",
     "fr": "Aucun"

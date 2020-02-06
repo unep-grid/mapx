@@ -2581,6 +2581,18 @@
     "ps": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "fr": "[ Echec de l'affichage des attributes  ]",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "fr": "Aucun",

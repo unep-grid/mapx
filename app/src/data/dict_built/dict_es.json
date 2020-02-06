@@ -1075,6 +1075,11 @@
     "es": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "es": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "es": "Ninguno"

@@ -105,17 +105,24 @@ function getQueryParameter_array(names) {
 /**
  * Get all query parameters as an object
  * @param {String} urlString Url to decode. If empty window.location.href is used
+ * @param {Object} opt Options
+ * @param {Boolean} opt.lowerCase convert parameters to lower case
  * @return {Object}
  */
-export function getQueryParametersAsObject(urlString) {
+export function getQueryParametersAsObject(urlString, opt) {
   const out = {};
+  opt = Object.assign({},{lowerCase:false},opt);
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
     /**
      * Note: check why lowercase was set
+     * Answer : to lower case is more predictable, e.g. in checking for presence/absence of a parameter
      */
-    //out[k.toLowerCase()] = asArray(v);
-    out[k] = asArray(v);
+    if(opt.lowerCase){
+      out[k.toLowerCase()] = asArray(v);
+    }else{
+      out[k] = asArray(v);
+    }
   });
   return out;
 }

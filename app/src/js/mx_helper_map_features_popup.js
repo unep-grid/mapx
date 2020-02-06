@@ -13,22 +13,25 @@ export function featuresToHtml(o) {
   var filters = {};
   var layerVector = {};
   var layerRaster = {};
-  var elNoData;
   var elContainer = el(
     'div',
     {
       class: ['mx-popup-container', 'mx-scroll-styled']
-    },
-    (elNoData = el('div', 'no values'))
+    }
   );
 
-  /**
-   * Translate label
-   */
-  h.getDictItem('noValue').then((txt) => {
-    elNoData.innerText = txt;
-    elNoData.dataset.lang_key = 'noValue';
-  });
+  function elIssueMessage(idMsg) {
+    var elIssue = el('div','no values');
+    idMsg = idMsg || 'noValue';
+    /**
+     * Translate label
+     */
+    h.getDictItem(idMsg).then((txt) => {
+      elIssue.innerText = txt;
+      elIssue.dataset.lang_key = idMsg;
+    });
+    return elIssue;
+  }
 
   /**
    * Reset filters
@@ -94,11 +97,6 @@ export function featuresToHtml(o) {
     var title = h.getViewTitle(idView);
     var elLayer, elProps, elWait, elSpinner, elTitle;
 
-    /*
-     * Remove no data label
-     */
-    elNoData.remove();
-
     /**
      * Build content elements
      */
@@ -141,8 +139,9 @@ export function featuresToHtml(o) {
         var attrNames = Object.keys(attributes);
 
         if (attrNames.length === 0) {
-          var elNoDataAttr = elNoData.cloneNode(true);
-          elLayer.appendChild(elNoDataAttr);
+          var elIssue = elIssueMessage('noValue');
+          elLayer.appendChild(elIssue);
+          return
         }
 
         /**
@@ -263,8 +262,16 @@ export function featuresToHtml(o) {
         updateReadMore();
       })
       .catch((err) => {
+        var elIssue = elIssueMessage('property_list_failed');
+        if(h.isElement(elLayer)){
+          elLayer.appendChild(elIssue);
+        }
+        if(h.isElement(elWait)){
+            elWait.remove();
+        }
         console.error(err);
       });
+
   }
 
   function resetFilter() {

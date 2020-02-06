@@ -1075,6 +1075,11 @@
     "ps": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "ps": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "ps": "هیڅ یو"

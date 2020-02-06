@@ -246,15 +246,15 @@ function wmsBuildQueryUi(opt) {
 }
 
 function wmsGetCapabilities(baseUrl) {
-  var data = {};
-  var xmlString = '';
-  var url = baseUrl + '?service=WMS&request=GetCapabilities';
+  const h = mx.helpers;
+  const data = {};
+  let xmlString = '';
+  let url = baseUrl + '?service=WMS&request=GetCapabilities';
   if (!mx.helpers.isUrl(url)) {
     return Promise.resolve(data);
   }
-
-  return fetch(url)
-    .then((res) => res.text())
+  return h
+    .fetchProgress_xhr(url, {maxSize: mx.settings.maxByteFetch})
     .then((str) => {
       xmlString = str;
       return mx.helpers.moduleLoad('wms-capabilities');
@@ -373,7 +373,7 @@ export function queryWms(opt) {
   const styles = opt.styles;
   const props = modeObject ? {} : [];
   const paramsInfo = {
-    version: '1.3.0',
+    version: '1.1.1',
     service: 'WMS',
     request: 'GetFeatureInfo',
     format: 'image/png',
@@ -399,30 +399,35 @@ export function queryWms(opt) {
       const allowedFormatsInfo = ['application/json', 'application/geojson'];
       const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
       const layersAll = h.path(cap, 'Layer.Layer', []);
-
       paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
         return !a ? (allowedFormatsInfo.indexOf(f) > -1 ? f : a) : a;
       }, null);
       paramsInfo.exception = h.path(cap, 'Exception', [])[1];
 
-      const validLayer =
-        layersAll.reduce((a, l) => {
-          return layers.indexOf(l.Name) > -1 && l.queryable === true
-            ? a.push(l)
-            : a;
-        }, []).length > 0;
+      const layersQueryable = layersAll.reduce((a, l) => {
+        const isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
+        if (isQueryable) {
+          a.push(l);
+        }
+        return a;
+      }, []);
+
+      const validLayer = layersQueryable.length > 0;
       const validInfo = h.isString(paramsInfo.info_format);
       const validException = h.isString(paramsInfo.exception);
+      const request = `${url}?${h.objToParams(paramsInfo)}`;
 
       if (validException && validLayer && validInfo) {
-        const request = `${url}?${h.objToParams(paramsInfo)}`;
         return fetch(request);
       } else {
+        console.warn({
+          'Request not fetched': request,
+          'Valid exception format': validException,
+          'Valid (queryable) layer': validLayer,
+          'Valid info format': validInfo
+        });
         throw new Error(
-          `Operation not permited by the requested server. ` +
-            `Valid exception format ${validException}. ` +
-            `Valid (queryable) layer ${validLayer}. ` +
-            `Valid info format ${validInfo}.`
+          `Operation not permited by the requested server or layer`
         );
       }
     })
@@ -453,11 +458,6 @@ export function queryWms(opt) {
           props.push(f.properties);
         }
       });
-
-      return props;
-    })
-    .catch((err) => {
-      console.error(err);
       return props;
     });
 }

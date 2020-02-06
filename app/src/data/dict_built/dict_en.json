@@ -860,6 +860,10 @@
     "en": "[ No value ]"
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]"
+  },
+  {
     "id": "none",
     "en": "None"
   },

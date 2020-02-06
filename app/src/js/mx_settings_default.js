@@ -70,6 +70,7 @@ let settings = {
   },
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb
+  maxByteFetch : 5e6, // 5MB
   user: {},
   ui: {
     ids: {

@@ -1075,6 +1075,11 @@
     "zh": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "zh": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "zh": ""

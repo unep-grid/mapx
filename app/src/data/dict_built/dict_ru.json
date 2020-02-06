@@ -1075,6 +1075,11 @@
     "ru": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "ru": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "ru": ""

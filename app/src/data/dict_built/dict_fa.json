@@ -1075,6 +1075,11 @@
     "fa": ""
   },
   {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "fa": ""
+  },
+  {
     "id": "none",
     "en": "None",
     "fa": "هیچکدام"

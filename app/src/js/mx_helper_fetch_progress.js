@@ -2,9 +2,9 @@ export function fetchJsonProgress(url, opt) {
   return fetchProgress(url, opt).then((r) => {
     if (!r || !r.json) {
       /**
-      * Prbably because Response not implemented. 
-      * try with xhr
-      */
+       * Prbably because Response not implemented.
+       * try with xhr
+       */
       return fetchJsonProgress_xhr(url, opt);
     } else {
       return r.json();
@@ -12,60 +12,62 @@ export function fetchJsonProgress(url, opt) {
   });
 }
 
+const defProgress = {
+  onProgress: () => {},
+  onComplete: () => {},
+  onError: (e) => {
+    throw new Error(e);
+  },
+  maxSize: Infinity,
+  headerContentLength: 'content-length'
+};
+
 export function fetchProgress(url, opt) {
-  opt = opt || {};
-  const onProgress = opt.onProgress || console.log;
-  const onComplete = opt.onComplete || console.log;
-  const onError = opt.onError || console.log;
+  opt = Object.assign({}, defProgress, opt);
+
   const modeProgress = window.Response && window.ReadableStream;
   let err = '';
   let loaded = 0;
   let total = 0;
 
-  return fetch(url, {cache: 'no-cache'})
-    .then((response) => {
-      err = '';
-      if (!response.ok) {
-        err = response.status + ' ' + response.statusText;
-        throw Error(err);
-      }
+  return fetch(url, {cache: 'no-cache'}).then((response) => {
+    err = '';
+    if (!response.ok) {
+      err = response.status + ' ' + response.statusText;
+      throw Error(err);
+    }
 
-      const contentLength =
-        response.headers.get('Mapx-Content-Length') ||
-        response.headers.get('content-length');
+    const contentLength =
+      response.headers.get('Mapx-Content-Length') ||
+      response.headers.get('content-length');
 
-      if (!modeProgress || !contentLength) {
-        onProgress({
-          loaded: loaded,
-          total: total
-        });
-        return response;
-      }
-
-      total = parseInt(contentLength, 10);
-      loaded = 0;
-
-      return new Response(
-        new ReadableStream({
-          start(controller) {
-            const reader = response.body.getReader();
-            read(reader, controller);
-          }
-        })
-      );
-    })
-    .catch((error) => {
-      onError({
-        message: error
+    if (!modeProgress || !contentLength) {
+      opt.onProgress({
+        loaded: loaded,
+        total: total
       });
-    });
+      return response;
+    }
+
+    total = parseInt(contentLength, 10);
+    loaded = 0;
+
+    return new Response(
+      new ReadableStream({
+        start(controller) {
+          const reader = response.body.getReader();
+          read(reader, controller);
+        }
+      })
+    );
+  });
 
   function read(reader, controller) {
     reader
       .read()
       .then(({done, value}) => {
         if (done) {
-          onComplete({
+          opt.onComplete({
             loaded: loaded,
             total: total
           });
@@ -73,7 +75,7 @@ export function fetchProgress(url, opt) {
           return;
         }
         loaded += value.byteLength;
-        onProgress({
+        opt.onProgress({
           loaded: loaded,
           total: total
         });
@@ -88,15 +90,7 @@ export function fetchProgress(url, opt) {
 }
 
 export function fetchJsonProgress_xhr(url, opt) {
-  opt = opt || {};
-  const onProgress = opt.onProgress || console.log;
-  const onComplete = opt.onComplete || opt.onProgress;
-  const onError =
-    opt.onError ||
-    function(e) {
-      throw new Error(e);
-    };
-
+  opt = Object.assign({}, defProgress, opt);
   let hasMapxContentLength = false;
 
   return new Promise((resolve, reject) => {
@@ -109,7 +103,9 @@ export function fetchJsonProgress_xhr(url, opt) {
         loaded: d.loaded
       };
       if (p.total === 0 || !d.lengthComputable) {
-        let cLength = d.target.getResponseHeader('mapx-content-length') * 1;
+        let cLength =
+          (d.target.getResponseHeader('mapx-content-length') ||
+            d.target.getResponseHeader('content-length')) * 1;
         if (cLength > 0) {
           p.total = cLength;
           hasMapxContentLength = true;
@@ -119,8 +115,7 @@ export function fetchJsonProgress_xhr(url, opt) {
       if (hasMapxContentLength) {
         p.loaded = d.target.response.length;
       }
-
-      onProgress(p);
+      opt.onProgress(p);
     };
     xmlhttp.onerror = (err) => {
       reject(err);
@@ -140,11 +135,61 @@ export function fetchJsonProgress_xhr(url, opt) {
         let data = JSON.parse(that.responseText);
         resolve(data);
       }
-      onComplete();
+      opt.onComplete();
     }
-  }).catch((err) => {
-    onError({
-      message: err
-    });
+  });
+}
+
+export function fetchProgress_xhr(url, opt) {
+  opt = Object.assign({}, defProgress, opt);
+
+  return new Promise((resolve, reject) => {
+    let xmlhttp = new XMLHttpRequest();
+    let hasContentLength = false;
+
+    xmlhttp.open('GET', url, true);
+    xmlhttp.onprogress = (d) => {
+      let p = {
+        total: d.total,
+        loaded: d.loaded
+      };
+      if (p.total === 0 || !d.lengthComputable) {
+        let cLength = d.target.getResponseHeader(opt.headerContentLength) * 1;
+        if (cLength > 0) {
+          p.total = cLength;
+          hasContentLength = true;
+        }
+      }
+
+      if (hasContentLength) {
+        p.loaded = d.target.response.length;
+      }
+      if (opt.maxSize < Infinity) {
+        if (p.loaded >= opt.maxSize) {
+          xmlhttp.abort();
+          reject(`fetchProgress_xhr : Size limit exceeded ( ${opt.maxSize} B )`);
+        }
+      }
+      opt.onProgress(p);
+    };
+    xmlhttp.onerror = (err) => {
+      reject(err);
+    };
+    xmlhttp.onload = onLoad;
+
+    xmlhttp.send();
+
+    /**
+     * Helpers
+     */
+    function onLoad() {
+      var that = this;
+      if (that.status !== 200) {
+        reject(`Unable to fetch ${url} ${that.responseText}`);
+      } else {
+        resolve(that.responseText);
+      }
+      opt.onComplete();
+    }
   });
 }

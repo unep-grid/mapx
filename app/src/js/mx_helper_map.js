@@ -3812,15 +3812,15 @@ export function getLayersPropertiesAtPoint(opt) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
     const endpoint = url[0];
     const urlFull = endpoint + '?' + url[1];
-    const params = h.getQueryParametersAsObject(urlFull);
+    const params = h.getQueryParametersAsObject(urlFull,{lowerCase:true});
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
      */
     const isWms =
-      params &&
-      params.layers &&
-      params.service &&
+      h.isObject(params) &&
+      h.isArray(params.layers) &&
+      h.isArray(params.service) &&
       (params.service.indexOf('WMS') > -1 ||
         params.service.indexOf('wms') > -1);
 
