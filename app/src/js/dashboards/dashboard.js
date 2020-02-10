@@ -94,7 +94,7 @@ class Dashboard {
        return ww > a ? ww : a;
     },0);
     if(wmax > 0 && wmax > d.panel.width){  
-     d.panel.width = wmax + 10 ;
+     d.panel.width = wmax + 50 ;
     }
   }
 
@@ -105,7 +105,7 @@ class Dashboard {
        return hw > a ? hw : a;
     },0);
     if(hmax > 0 && hmax > d.panel.height){  
-     d.panel.height = hmax + 10 ;
+     d.panel.height = hmax + 50 ;
     }
   }
   isDestroyed() {

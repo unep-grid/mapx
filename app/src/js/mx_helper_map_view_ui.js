@@ -239,7 +239,8 @@ export function viewsListRenderNew(o) {
       {id: 'state_change', action: h.viewsCheckedUpdate},
       {id: 'state_order', action: h.viewsLayersOrderUpdate},
       {id: 'state_save_local', action: h.iconFlashSave},
-      {id: 'state_sanitize', action: sanitizeState}
+      {id: 'state_sanitize', action: sanitizeState},
+      {id: 'destroy', action: h.viewsCloseAll}
     ]
   });
 

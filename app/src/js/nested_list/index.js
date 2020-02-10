@@ -73,6 +73,7 @@ class NestedList {
     li.listenerStore.destroy();
     li.clearHistory();
     li.clearAllItems();
+    li.fire('destroy');
   }
   /**
    * Get/set options

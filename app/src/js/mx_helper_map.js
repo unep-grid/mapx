@@ -133,7 +133,7 @@ export function setProject(idProject, opt) {
    * selected project to shiny
    */
   function change() {
-    h.viewsRemoveAll();
+    h.viewsCloseAll();
     closeModals();
     h.setQueryParametersInitReset();
     const hasShiny = window.Shiny;
@@ -878,29 +878,16 @@ export function geolocateUser() {
  * Reset project : remove view, dashboards, etc
  *
  */
-export function viewsRemoveAll(o) {
+export function viewsCloseAll(o) {
   o = o || {};
   const h = mx.helpers;
   const views = h.getViews();
   const mData = h.getMapData();
-
   /*
    * Close and remove layers
    */
   const removed = views.map((view) => {
     h.viewCloseAuto(view.id);
-  });
-
-  return Promise.all(removed).then(() => {
-    /**
-     * Replace content without replacing views array
-     */
-    mData.views.length = 0;
-
-    /*
-     * Set views list empty
-     */
-    h.setViewsListEmpty(true);
   });
 }
 
@@ -1042,8 +1029,6 @@ export function updateViewsList(o) {
       nTot = 0,
       prog;
 
-    h.viewsRemoveAll();
-
     if (updateProject) {
       mx.settings.project = o.project;
     }
@@ -1063,8 +1048,6 @@ export function updateViewsList(o) {
         mode = 'array_sync';
       }
     }
-
-    console.log('updateViewsList');
 
     /**
      * Process view list
