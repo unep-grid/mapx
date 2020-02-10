@@ -2270,19 +2270,39 @@
     "fr": "Carte : bâtiments"
   },
   {
-    "id": "mx_map_admin",
-    "en": "Map: boundaries",
-    "fr": "Carte : frontières"
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "fr": "Carte : Frontières internationales"
   },
   {
-    "id": "mx_map_admin_disputed",
-    "en": "Map: disputed boundaries",
-    "fr": "Carte : frontières disputées"
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "fr": "Carte : Frontière ligne spéciale"
   },
   {
-    "id": "mx_map_admin_secondary",
-    "en": "Map: secondary boundaries",
-    "fr": "Carte : frontières secondaires"
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "fr": "Carte : Armistice ou ligne boundary_unistrative internationale"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "fr": "Carte : Autres lignes de séparation"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "fr": "Carte : Frontière de régions autonomes"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "fr": "Carte : Limite de base souveraine"
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational_3_4",
+    "en": "Map: Subnational boundaries",
+    "fr": "Carte : Frontières sous-nationales"
   },
   {
     "id": "mx_map_text",

@@ -2270,18 +2270,38 @@
     "ru": ""
   },
   {
-    "id": "mx_map_admin",
-    "en": "Map: boundaries",
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
     "ru": ""
   },
   {
-    "id": "mx_map_admin_disputed",
-    "en": "Map: disputed boundaries",
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
     "ru": ""
   },
   {
-    "id": "mx_map_admin_secondary",
-    "en": "Map: secondary boundaries",
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "ru": ""
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "ru": ""
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "ru": ""
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "ru": ""
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational_3_4",
+    "en": "Map: Subnational boundaries",
     "ru": ""
   },
   {

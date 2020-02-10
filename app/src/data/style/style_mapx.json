@@ -1532,7 +1532,7 @@
       }
     },
     {
-      "id": "boundaries_un_1",
+      "id": "boundary_un_1",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1555,7 +1555,7 @@
       }
     },
     {
-      "id": "boundaries_un_2",
+      "id": "boundary_un_2",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1579,7 +1579,7 @@
       }
     },
     {
-      "id": "boundaries_un_3",
+      "id": "boundary_un_3",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1603,7 +1603,7 @@
       }
     },
     {
-      "id": "boundaries_un_4",
+      "id": "boundary_un_4",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1627,7 +1627,7 @@
       }
     },
     {
-      "id": "boundaries_un_8",
+      "id": "boundary_un_8",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1651,7 +1651,7 @@
       }
     },
     {
-      "id": "boundaries_un_9",
+      "id": "boundary_un_9",
       "type": "line",
       "source": "mapbox_unepgrid_countries_lines",
       "source-layer": "mx_countries_un_line_2018geojson",
@@ -1674,7 +1674,7 @@
       }
     },
     {
-      "id": "boundaries_mb_3_4",
+      "id": "boundary_osm_subnational_3_4",
       "type": "line",
       "source": "mapbox_base",
       "source-layer": "admin",

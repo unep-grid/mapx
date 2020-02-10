@@ -36,8 +36,8 @@ class Theme {
       });
       document.head.appendChild(global.elStyle);
     }
-    if(t.opt.idTheme){
-       t._id_theme = t.opt.idTheme;
+    if (t.opt.idTheme) {
+      t._id_theme = t.opt.idTheme;
     }
     if (!t.opt.colors) {
       t.opt.colors = t.getColorsByThemeId();
@@ -223,6 +223,7 @@ class Theme {
           class: ['mx-theme-color-label', 'hint--right'],
           dataset: {lang_key: cid},
           'aria-label': cid,
+          title : cid,
           for: `${cid}_inputs`
         },
         getDictItem(cid)
@@ -409,23 +410,47 @@ function template_layers(c) {
       }
     },
     {
-      id: ['boundaries_un_1', 'boundaries_un_2', 'boundaries_un_3'],
+      id: ['boundary_un_1'],
       paint: {
-        'line-color': c.mx_map_admin
+        'line-color': c.mx_map_boundary_un_1
       }
     },
     {
-      id: [
-        'boundaries_un_4',
-        'boundaries_un_8',
-        'boundaries_un_9',
-        'boundaries_mb_3_4'
-      ],
+      id: ['boundary_un_2'],
       paint: {
-        'line-color': c.mx_map_admin_secondary
+        'line-color': c.mx_map_boundary_un_2
       }
     },
-
+    {
+      id: ['boundary_un_3'],
+      paint: {
+        'line-color': c.mx_map_boundary_un_3
+      }
+    },
+    {
+      id: ['boundary_un_4'],
+      paint: {
+        'line-color': c.mx_map_boundary_un_4
+      }
+    },
+    {
+      id: ['boundary_un_8'],
+      paint: {
+        'line-color': c.mx_map_boundary_un_8
+      }
+    },
+    {
+      id: ['boundary_un_9'],
+      paint: {
+        'line-color': c.mx_map_boundary_un_9
+      }
+    },
+    {
+      id: ['boundary_osm_subnational_3_4'],
+      paint: {
+        'line-color': c.mx_map_boundary_osm_subnational_3_4
+      }
+    },
     {
       id: [
         'place-label-capital',

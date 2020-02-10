@@ -5449,10 +5449,10 @@
     "ps": ""
   },
   {
-    "id": "mx_map_admin",
-    "en": "Map: boundaries",
-    "fr": "Carte : frontières",
-    "es": "Mapa: fronteras",
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "fr": "Carte : Frontières internationales",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5461,10 +5461,10 @@
     "ps": ""
   },
   {
-    "id": "mx_map_admin_disputed",
-    "en": "Map: disputed boundaries",
-    "fr": "Carte : frontières disputées",
-    "es": "Mapa: fronteras disputadas",
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "fr": "Carte : Frontière ligne spéciale",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5473,9 +5473,57 @@
     "ps": ""
   },
   {
-    "id": "mx_map_admin_secondary",
-    "en": "Map: secondary boundaries",
-    "fr": "Carte : frontières secondaires",
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "fr": "Carte : Armistice ou ligne boundary_unistrative internationale",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "fr": "Carte : Autres lignes de séparation",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "fr": "Carte : Frontière de régions autonomes",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "fr": "Carte : Limite de base souveraine",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational_3_4",
+    "en": "Map: Subnational boundaries",
+    "fr": "Carte : Frontières sous-nationales",
     "es": "",
     "ru": "",
     "zh": "",
@@ -10410,7 +10458,7 @@
     "ps": "",
     "es": ""
   },
-   {
+  {
     "id": "share_collections_check_operator_all",
     "en": "Intersection",
     "fr": "Intersection",
@@ -10422,7 +10470,7 @@
     "ps": "",
     "es": ""
   },
-   {
+  {
     "id": "share_collections_check_operator_any",
     "en": "Union",
     "fr": "Union",
