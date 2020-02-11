@@ -1738,6 +1738,10 @@ export function makeDashboard(o) {
       const hasDashboard =
         mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
       if (!hasDashboard) {
+
+        /**
+         * Create a new dashboard, save it in mx object
+         */
         mx.dashboard = new Dashboard({
           grid: {
             dragEnabled: true,
@@ -1760,18 +1764,38 @@ export function makeDashboard(o) {
           }
         });
 
-        mx.dashboard.panel.on('open', () => {
+        /**
+         * If a story is playing and the dashboard
+         * is shown, unlock the story
+         */
+        mx.dashboard.on('show', () => {
           const hasStory = h.isStoryPlaying();
           if (hasStory) {
             h.storyControlMapPan('unlock');
           }
         });
-        mx.dashboard.panel.on('close', () => {
+
+        /**
+         * If a story is playing and the dashboard
+         * is closed or destroy, lock the story
+         */
+        mx.dashboard.on('hide', () => {
           const hasStory = h.isStoryPlaying();
           if (hasStory) {
             h.storyControlMapPan('lock');
           }
         });
+
+        mx.dashboard.on('destroy', () => {
+          const hasStory = h.isStoryPlaying();
+          if (hasStory) {
+            h.storyControlMapPan('lock');
+          }
+        });
+        /**
+         * If the dashboard panel is automatically resizing,
+         * fit to widgets
+         */
         mx.dashboard.panel.on('resize-auto', (panel, type) => {
           const d = mx.dashboard;
           if (type === 'half-width') {

@@ -59,6 +59,7 @@ class Dashboard {
     }
     d.modules = {};
     d.widgets = [];
+    d.cb = [];
     d.panel = new ButtonPanel(d.opt.panel);
     d.elDashboard = el('div',{class:'dashboard'});
     d.panel.elPanelContent.appendChild(d.elDashboard);
@@ -72,6 +73,39 @@ class Dashboard {
     d.panel.on('close', () => {
       d.hide();
     });
+    d.fire('init');
+  }
+
+  fire(type,data) {
+    const d = this;
+    d.cb.forEach((c) => {
+      if (c.type === type) {
+        c.cb(d, data);
+      }
+    });
+  }
+
+  on(type, cb) {
+    const d = this;
+    const item = d.cb.reduce((a, c) => {
+      return a || (c.type === type && c.cb === cb ? c : a);
+    }, false);
+    if (!item) {
+      d.cb.push({
+        type: type,
+        cb: cb
+      });
+    }
+  }
+  off(type, cb) {
+    const d = this;
+    const item = d.cb.reduce((a, c) => {
+      return a || (c.type === type && c.cb === cb ? c : a);
+    }, false);
+    if (item) {
+      const pos = d.cb.indexOf(item);
+      d.cb.splice(pos, 1);
+    }
   }
 
   show() {
@@ -81,12 +115,14 @@ class Dashboard {
     d.fitPanelToWidgetsWidth();
     d.fitPanelToWidgetsHeight();
     d.grid.refreshItems().layout();
+    d.fire('show');
   }
 
   hide() {
     const d = this;
     d.panel.close();
     d.grid.hide();
+    d.fire('hide');
   }
 
   fitPanelToWidgetsWidth(){
@@ -125,6 +161,7 @@ class Dashboard {
     d.removeWidgets();
     d.panel.destroy();
     d.grid.destroy();
+    d.fire('destroy');
   }
 
   removeWidgets() {

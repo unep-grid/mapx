@@ -939,8 +939,6 @@ export function storyController(o) {
   var updateMode = o.update === true;
 
   o.selectorDisable = o.selectorDisable || [
-    '#mxDashboards',
-    '#btnTabDashboard',
     '#btnToggleBtns',
     '#btnPrint',
     '#btnTabTools',
@@ -1030,6 +1028,12 @@ export function storyController(o) {
       group: 'story_map'
     });
   } else {
+
+    /**
+    * Lock story
+    */
+    h.storyControlMapPan('lock');
+    
     /**
      * Remvove registered listener
      */
