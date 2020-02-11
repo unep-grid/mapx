@@ -63,6 +63,22 @@ exports.decrypt = function(txt) {
 };
 
 /**
+ * Encrypt message using default key
+ * @param {String} txt Message to encrypt
+ * @return {String} encrypted message
+ */
+exports.encrypt = function(txt) {
+  var sql = "SELECT mx_encrypt('" + txt + "','" + key + "') as msg";
+  return pgRead.query(sql).then(function(result) {
+    if (result.rowCount > 0) {
+      return result.rows[0].msg;
+    } else {
+      return false;
+    }
+  });
+};
+
+/**
  * Register a source in mx_sources
  * @param {String} idSource Id of the source
  * @param {Integer} idUser Id of the user
