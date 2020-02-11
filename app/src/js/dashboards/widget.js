@@ -17,7 +17,7 @@ const defaults = {
     script:
       'return { onAdd:console.log, onRemove:console.log, onData:console.log}'
   },
-  language : 'en',
+  language: 'en',
   map: null,
   view: null,
   dashboard: null
@@ -37,12 +37,16 @@ class Widget {
     }
     widget.ls = new ListenerStore();
     widget.id = Math.random().toString(32);
-
     /**
      * Build and set size
      */
     widget.build();
     widget.setSize(widget.opt.conf.height, widget.opt.conf.width);
+
+    /**
+     * Retro-compatibility
+     */
+    widget.config = Object.assign({}, widget, widget.opt.conf, widget.opt);
 
     /**
      * Eval the script, dump error in console
@@ -194,9 +198,17 @@ class Widget {
   build() {
     const widget = this;
     const conf = widget.opt.conf;
-    const lang = h.path(widget, 'dashboard.opt.dashboard.language',h.path(widget,'opt.language'));
-    const title = h.path(widget, `view.data.dashboard.title.${lang}`,h.path(widget,'view._title', ''));
-    
+    const lang = h.path(
+      widget,
+      'dashboard.opt.dashboard.language',
+      h.path(widget, 'opt.language')
+    );
+    const title = h.path(
+      widget,
+      `view.data.dashboard.title.${lang}`,
+      h.path(widget, 'view._title', '')
+    );
+
     widget.el = el(
       'div',
       {
@@ -270,8 +282,11 @@ class Widget {
     widget.ls.destroy();
 
     /**
-     * Remove element
+     * Remove elements
      */
+    while (widget.el.firstElementChild) {
+      widget.el.firstElementChild.remove();
+    }
     widget.el.remove();
 
     /*
@@ -283,6 +298,7 @@ class Widget {
        */
       widget.onRemove(widget);
     }
+
     /**
      * Remove timers if any
      */
