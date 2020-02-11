@@ -251,7 +251,7 @@ mxSchemaViewStyle <- function(
       title = tt("schema_style_zoom_min"),
       description = tt("schema_style_zoom_min_desc"),
       type = "number",
-      default = 1
+      default = 0
       )
     )
 
