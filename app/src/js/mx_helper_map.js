@@ -271,7 +271,7 @@ export function initListenersApp() {
       const elBtn = document.getElementById('btnFilterShowPanel');
       const isActive = elBtn.classList.contains(clActive);
       const elPanel = document.getElementById('viewsFilterPanel');
-      if(isActive){
+      if (isActive) {
         elPanel.classList.add(clHide);
         elBtn.classList.remove(clActive);
       }
@@ -574,8 +574,7 @@ export function initMapListener(map) {
   map.on('rotate', function() {
     const r = -map.getBearing();
     const northArrow = document.querySelector('.mx-north-arrow');
-    northArrow.style[h.cssTransformFun()] =
-      'rotateZ(' + r + 'deg) ';
+    northArrow.style[h.cssTransformFun()] = 'rotateZ(' + r + 'deg) ';
   });
 }
 
@@ -1752,7 +1751,7 @@ export function makeDashboard(o) {
           },
           panel: {
             elContainer: elMap,
-            title_text: h.getDictItem('Dashboard','fr'),
+            title_text: h.getDictItem('Dashboard', 'fr'),
             title_lang_key: 'dashboard',
             button_text: 'dashboard',
             button_lang_key: 'button_dashboard_panel',
@@ -1771,6 +1770,15 @@ export function makeDashboard(o) {
           const hasStory = h.isStoryPlaying();
           if (hasStory) {
             h.storyControlMapPan('lock');
+          }
+        });
+        mx.dashboard.panel.on('resize-auto', (panel, type) => {
+          const d = mx.dashboard;
+          if (type === 'half-width') {
+            d.fitPanelToWidgetsWidth();
+          }
+          if (type === 'half-height') {
+            d.fitPanelToWidgetsHeight();
           }
         });
       }
@@ -3795,7 +3803,7 @@ export function getLayersPropertiesAtPoint(opt) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
     const endpoint = url[0];
     const urlFull = endpoint + '?' + url[1];
-    const params = h.getQueryParametersAsObject(urlFull,{lowerCase:true});
+    const params = h.getQueryParametersAsObject(urlFull, {lowerCase: true});
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object

@@ -9,7 +9,9 @@ const defaults = {
   dashboard: {
     widgets: [],
     modules: ['highcharts'],
-    language : 'en'
+    language : 'en',
+    marginFitWidth : 20,
+    marginFitHeight : 50
   },
   grid: {
     dragEnabled: true,
@@ -89,23 +91,25 @@ class Dashboard {
 
   fitPanelToWidgetsWidth(){
     const d = this;
+    const m = d.opt.dashboard.marginFitWidth;
     const wmax = d.widgets.reduce((a,w)=>{
        const ww = w.width;
        return ww > a ? ww : a;
     },0);
-    if(wmax > 0 && wmax > d.panel.width){  
-     d.panel.width = wmax + 50 ;
+    if(wmax > 0 && wmax !== (d.panel.width + m)){  
+     d.panel.width = wmax + m ;
     }
   }
 
   fitPanelToWidgetsHeight(){
     const d = this;
+    const m = d.opt.dashboard.marginFitHeight;
     const hmax = d.widgets.reduce((a,w)=>{
        const hw = w.height;
        return hw > a ? hw : a;
     },0);
-    if(hmax > 0 && hmax > d.panel.height){  
-     d.panel.height = hmax + 50 ;
+    if(hmax > 0 && hmax !== (d.panel.height + m)){  
+     d.panel.height = hmax + m ;
     }
   }
   isDestroyed() {
