@@ -105,7 +105,7 @@ const rules = [
     }
   },
   {
-    key: ['roleMax', 'filterViewsByRoleMax'],
+    key: ['roleMax', 'filterViewsByRoleMax', 'role'],
     test: (d) => {
       return {
         valid: roles.indexOf(d) > -1,
@@ -142,7 +142,7 @@ const rules = [
     }
   },
   {
-    key: 'token',
+    key: ['token', 'title', 'titlePrefix', 'titleFuzzy'],
     test: (d) => {
       return {
         valid: validator.isLength(d, {min: 1}),
