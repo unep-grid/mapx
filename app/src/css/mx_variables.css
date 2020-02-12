@@ -1,8 +1,11 @@
 /** 
 * Set colors of mapx
-* See also themes/index.js
+* This could be overwritten by css generated in themes/index.js
 */
-.mx * {
+* {
+  /**
+  * Colors
+  */
   --mx_ui_text: hsl(0, 0%, 21%);
   --mx_ui_text_faded: hsla(0, 0%, 21%, 0.5);
   --mx_ui_hidden: hsla(196, 98%, 50%, 0);
@@ -12,5 +15,8 @@
   --mx_ui_link: #12b0f8;
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
+  /**
+  * font size
+  */
+  --mx_font_size_base: 14px;
 }
-

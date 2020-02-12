@@ -312,7 +312,7 @@ function b64ToJson(txt) {
 
 function template_css(c) {
   return `
-.mx * {
+  * {
   --mx_ui_text: ${c.mx_ui_text};
   --mx_ui_text_faded: ${c.mx_ui_text_faded};
   --mx_ui_hidden: ${c.mx_ui_hidden};

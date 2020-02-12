@@ -1,3 +1,16 @@
+
+/**
+* Fonts
+*/
+html,
+body.mx {
+  font-size: var(--mx_font_size_base);
+}
+
+/**
+* Input
+*/
+
 .mx select {
   appearance: none;
   padding: 5px;
@@ -574,3 +587,13 @@ span.mx-badge-role {
 .mx .panel {
   background-color: var(--mx_ui_background);
 }
+
+
+/**
+* Dashboard rules
+*/
+.mx .dashboard {
+  line-height:1.6em;
+  font-size : var(--mx_font_size_base)
+}
+

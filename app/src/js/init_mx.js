@@ -5,7 +5,7 @@ import 'font-awesome/css/font-awesome.min.css';
 import 'hint.css';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-import '../css/mx_colors.css';
+import '../css/mx_variables.css';
 import '../css/mx_base.css';
 import '../css/mx_ace_editor.css';
 import '../css/mx_modifiers.css';
