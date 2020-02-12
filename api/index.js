@@ -54,7 +54,7 @@ app.post('/upload/image/', utils.image.upload);
 app.post('/upload/vector/', utils.vector.upload);
 app.post('/send/mail/', utils.mail.sendMailApi);
 app.post('/collect/logs/', utils.logs.collect);
-app.get('/get/projects/list/user/:id', utils.projects.getByUser);
+app.get('/get/projects/list/user/', utils.projects.getByUser);
 
 /**
  * Start

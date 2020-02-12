@@ -1,7 +1,6 @@
 const sql = require('sql');
 const pgRead = require.main.require('./db').pgRead;
 const project = require('../db/models').project;
-const utils = require('./utils.js');
 const auth = require('./authentication.js');
 const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
   {
@@ -12,54 +11,74 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
       'titlePrefix',
       'titleFuzzy',
       'token',
-      'idUser',
-    ],
+      'idUser'
+    ]
   }
 );
 
 module.exports.getByUser = [
   validateParamsHandler,
   auth.validateTokenHandler,
-  getProjectsByUserRouteHandler,
+  getProjectsByUserRouteHandler
 ];
 
-function getProjectsByUserHelper(userId, lc='en', role='any', title=null, titlePrefix=null, titleFuzzy=null) {
-  var roleCondition = ['member', 'publisher', 'admin'].includes(role) ? role : `public OR member OR publisher OR admin`;
+function getProjectsByUserHelper(
+  idUser,
+  lc = 'en',
+  role = 'any',
+  title = null,
+  titlePrefix = null,
+  titleFuzzy = null
+) {
+  var roleCondition = ['member', 'publisher', 'admin'].includes(role)
+    ? role
+    : `public OR member OR publisher OR admin`;
   var pSql = project
     .select(`id`)
-    .select(`title ->> '${lc}' as title_${lc}`)
-    .select(`description ->> '${lc}' as description_${lc}`)
+    .select(`title ->> '${lc}' as title`)
+    .select(`description ->> '${lc}' as description`)
+    .select(`title ->> 'en' as title_en`)
+    .select(`description ->> 'en' as description_en`)
     .select(`public`)
     .select(`allow_join`)
-    .select(`members @> '[${userId}]' OR publishers @> '[${userId}]' OR admins @> '[${userId}]' AS member`)
-    .select(`publishers @> '[${userId}]' OR admins @> '[${userId}]' AS publisher`)
-    .select(`admins @> '[${userId}]' AS admin`)
-    ;
+    .select(
+      `members @> '[${idUser}]' OR publishers @> '[${idUser}]' OR admins @> '[${idUser}]' AS member`
+    )
+    .select(
+      `publishers @> '[${idUser}]' OR admins @> '[${idUser}]' AS publisher`
+    )
+    .select(`admins @> '[${idUser}]' AS admin`);
+  if (title) {
+    pSql.where(
+      project.title
+        .keyText('en')
+        .equals(title)
+        .or(project.title.keyText(lc).equals(title))
+    );
+  }
 
-    if (title) {
-      pSql.where(
-        project.title.keyText('en')['equals'](title).or(
-          project.title.keyText(lc)['equals'](title)
-        )
-      );
-    }
+  if (titlePrefix) {
+    pSql.where(
+      project.title
+        .keyText('en')
+        .ilike(`${titlePrefix}%`)
+        .or(project.title.keyText(lc).ilike(`${titlePrefix}%`))
+    );
+  }
 
-    if (titlePrefix) {
-      pSql.where(
-        project.title.keyText('en')['ilike'](`${titlePrefix}%`).or(
-          project.title.keyText(lc)['ilike'](`${titlePrefix}%`)
+  if (titleFuzzy) {
+    pSql.where(
+      sql
+        .function('SIMILARITY')(project.title.keyText('en'), titleFuzzy)
+        .gt(0)
+        .or(
+          sql
+            .function('SIMILARITY')(project.title.keyText(lc), titleFuzzy)
+            .gt(0)
         )
-      );
-    }
-
-    if (titleFuzzy) {
-      pSql.where(
-        sql.function('SIMILARITY')(project.title.keyText('en'), titleFuzzy).gt(0).or(
-          sql.function('SIMILARITY')(project.title.keyText(lc), titleFuzzy).gt(0)
-        )
-      );
-    }
-    sqlStr = `
+    );
+  }
+  sqlStr = `
     WITH project_role AS (${pSql.toString()})
     SELECT * FROM project_role WHERE ${roleCondition}
     `;
@@ -67,19 +86,40 @@ function getProjectsByUserHelper(userId, lc='en', role='any', title=null, titleP
 }
 
 async function getProjectsByUserRouteHandler(req, res) {
-  var userId = req.params['id'];
-  var rq = Object.assign({}, {
-    language: 'en',
-    role: 'any',
-    title: null,
-    titlePrefix: null,
-    titleFuzzy: null,
-  }, req.query);
+  var idUser = req.query.idUser;
+  var rq = Object.assign(
+    {},
+    {
+      language: 'en',
+      role: 'any',
+      title: null,
+      titlePrefix: null,
+      titleFuzzy: null
+    },
+    req.query
+  );
 
   try {
-    const result = await getProjectsByUserHelper(userId, rq.language, rq.role, rq.title, rq.titlePrefix, rq.titleFuzzy);
+    const result = await getProjectsByUserHelper(
+      idUser,
+      rq.language,
+      rq.role,
+      rq.title,
+      rq.titlePrefix,
+      rq.titleFuzzy
+    );
+
+    /**
+    * As it's not done in sql, set title default if empty
+    */
+    result.rows.forEach((r) => {
+      if (!r.title) {
+        r.title = r.title_en;
+      }
+    });
+
     res.json(result.rows);
-  } catch(e) {
+  } catch (e) {
     console.log(e);
     res.status(500);
     res.send('Data query error!');

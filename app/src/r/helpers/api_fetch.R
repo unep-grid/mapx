@@ -2,22 +2,20 @@
 #'
 #' @param route {Character} route. E.g. '/get/views'
 #' @param listParam {List} Query param. E.g. list(idUser=1,idProject="MX-TEST")
+#' @param asDataFrame {Logical} Return a data.frame 
 #' @return Data {List}
 #'
-mxApiFetch <- function(route,listParam){
+mxApiFetch <- function(route,listParam, asDataFrame = FALSE){
   data <- list()
-
   host <-  .get(config,c("api","host")) 
   port <- .get(config,c("api","port"))
   param <- mxListToQueryStringParam(listParam)
   url <- "http://" + host + ":" + port + route + '?' + param
-  data <- fromJSON(url,simplifyDataFrame=FALSE)
+  data <- fromJSON(url, simplifyDataFrame = asDataFrame)
   if(isTRUE(!noDataCheck(data)) && isTRUE(data$type == "error")){
     stop(data$msg)
   }
-
   return(data)
-
 }
 
 

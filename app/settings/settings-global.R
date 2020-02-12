@@ -97,6 +97,7 @@ config[["api"]] <- list(
     getView = "/get/view/item/",
     getViewsListByProject = "/get/views/list/project/",
     getViewsListGlobalPublic ="/get/views/list/global/public",
+    getProjectsListByUser = "/get/projects/list/user",
     downloadSourceCreate = "/get/source/",
     downloadSourceGet = "",
     uploadImage = "/upload/image/",

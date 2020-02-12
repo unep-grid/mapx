@@ -213,12 +213,14 @@ observeEvent(reactData$showProjectsList,{
     language = language,
     whereUserRoleIs = filterRoles, 
     whereTitleMatch = filterTitle,
-    asDataFrame = T
+    asDataFrame = T,
+    token = reactUser$token
     )
 
   if(noDataCheck(projects)){
     return()
   }
+
   projects <- projects[with(projects, order(-admin,-publisher,-member,title)),]
   projectsMember <- projects[projects$member,]
   userIsMember <- project %in% projectsMember$id

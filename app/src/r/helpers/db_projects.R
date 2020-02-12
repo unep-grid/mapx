@@ -236,161 +236,33 @@ mxDbGetProjectListByUser <- function(
   language = "en",
   asNamedList = FALSE,
   asDataFrame = FALSE,
-  idsAdditionalProjects = NULL
+  idsAdditionalProjects = NULL,
+  token = NULL
   ){
 
-  if(noDataCheck(language)) language <-"en"
+  route <- .get(config,c('api','routes','getProjectsListByUser'))
 
-  wildCardEnd <- isTRUE(grepl("\\*$",whereTitleMatch))
-  wildCard <- isTRUE(grepl("\\*",whereTitleMatch))
-  filterTitleOperator <- ifelse(wildCard || wildCardEnd,' ~ ',' = ')
-  cleanTitle <- tolower(subPunct(whereTitleMatch," "))
-  filterTitle <- " lower(title) " + filterTitleOperator + "'" + cleanTitle + "'"
-  filterRole <- whereUserRoleIs
-
-  if( !isTRUE(filterRole %in% c("member","publisher","admin"))) filterRole = "public OR member OR publisher OR admin"
-
-  #
-  # NOTE: "filter" for filter role will be boolean in the request. So 'WHERE publisher AND (title_en = "to remove")' is expected
-  #
-  filter <- filterRole
-
-  if(!noDataCheck(whereTitleMatch)){
-    filter <- "(" + filterTitle + ") AND " +  "(" + filterRole + ")"
-  }
-
-
-  if(!noDataCheck(idsAdditionalProjects)){
-    filter <- sprintf(" %1$s OR  id in ('%2$s')",filter, paste(idsAdditionalProjects,collapse="','"))
-  }
-
-  quer <- "WITH project_roles as (
-  SELECT 
-  id,
-  title ->> '" + language +"' as title_lang, 
-  title ->> 'en' as title_en,
-  description ->> '" + language +"' as description_lang, 
-  description ->> 'en' as description_en,
-  public,
-  allow_join,
-  members @> '[" + id +"]' as _member,
-  publishers @> '[" + id +"]' as _publisher,
-  admins @> '[" + id +"]' as _admin from mx_projects
-  ),
-project_cleaned as (
-  SELECT 
-  id,
-  CASE 
-  WHEN coalesce(TRIM(title_lang), '') = ''
-  THEN
-  title_en
-  ELSE
-  title_lang
-  END as title,
-  title_en,
-  CASE 
-  WHEN coalesce(TRIM(description_lang), '') = ''
-  THEN
-  description_en
-  ELSE
-  description_lang
-  END as description,
-  public,
-  allow_join,
-  _member OR _publisher OR _admin AS member,
-  _publisher OR _admin AS publisher,
-  _admin AS admin
-  FROM project_roles
-  ORDER BY admin DESC,publisher DESC,member DESC, title ASC
+  res <- mxApiFetch(route,
+    list(
+      idUser = id,
+      token = token,
+      language = language
+      ),
+    asDataFrame = asDataFrame
   )
 
-SELECT * from project_cleaned WHERE " + filter
 
-res <- mxDbGetQuery(quer)
 
-if(isTRUE(asDataFrame)){
-  out <- res
-}else if(isTRUE(asNamedList)){
-  out <- as.list(res$id)
-  names(out) <- res$title
-}else{
-  out <- as.list(res)
-}
+  if(isTRUE(asNamedList)){
+    out <- as.list(res$id)
+    names(out) <- res$title
+    res <- out
+  }
 
-return(out)
+  return(res)
 
 }
 
-
-mxDbGetProjectsViewsCount <- function(idUser){
-  sql <- "WITH user_projects as(
-  SELECT
-  id,
-  id_old,
-  to_jsonb(id::text) as _id,
-  public as _public,
-  members @> '[" + idUser +"]' as _member,
-  publishers @> '[" + idUser +"]' as _publisher,
-  admins @> '[" + idUser +"]' as _admin,
-  coalesce(views_external,'[]'::jsonb) as _views_external
-  FROM mx_projects
-  WHERE
-  public OR
-  members @> '[" + idUser +"]' OR
-  publishers @> '[" + idUser +"]' OR
-  admins @> '[" + idUser +"]'
-),
-views_prep AS (
-  SELECT
-  id,
-  project,
-  coalesce(data -> 'projects','[]')::jsonb as _projects,
-  to_jsonb(id::text) as _id,
-  editor,
-  readers,
-  editors
-  FROM
-  mx_views_latest v
-),
-view_by_project AS (
-  SELECT v.id id_view, p.id id_project
-  FROM views_prep v, user_projects p
-  WHERE
-  ( v.project = p.id )
-  AND (
-    ( v.editor = " + idUser + ") OR
-    (  v.editors @> '[" + idUser +"]' ) OR
-    (  p._public AND v.readers @> '\"public\"') OR
-    (  p._member AND v.readers @> '\"members\"') OR
-    (  p._publisher AND v.readers @> '\"publishers\"') OR
-    (  p._admin AND v.readers @> '\"admins\"') OR
-    (  p._publisher AND v.editors @> '\"publishers\"') OR
-    (  p._admin AND v.editors @> '\"admins\"')
-  )
-),
-view_by_projects AS (
-  SELECT v.id id_view, p.id id_project
-  FROM views_prep v, user_projects p
-  WHERE v._projects @> p._id
-),
-view_by_external AS (
-  SELECT jsonb_array_elements(_views_external)::text id_view, p.id id_project
-  FROM  user_projects p
-),
-combined as (
-  SELECT * FROM view_by_project UNION
-  SELECT * FROM view_by_projects UNION
-  SELECT * FROM view_by_external
-),
-counted as (
- SELECT count(id_project), id_project id
- FROM combined
- GROUP BY id_project
-)
-
-SELECT * from counted"
-mxDbGetQuery(sql)
-}
 
 
 
