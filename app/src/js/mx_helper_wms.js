@@ -356,10 +356,10 @@ export function queryWms(opt) {
   /*
    * Build a bounding box
    */
-  const xMax = point.x + 1;
-  const xMin = point.x - 1;
-  const yMax = point.y + 1;
-  const yMin = point.y - 1;
+  const xMax = point.x + 5;
+  const xMin = point.x - 5;
+  const yMax = point.y + 5;
+  const yMin = point.y - 5;
   const sw = map.unproject([xMax, yMin]);
   const ne = map.unproject([xMin, yMax]);
   const minLat = Math.min(sw.lat, ne.lat);
@@ -376,8 +376,6 @@ export function queryWms(opt) {
     version: '1.1.1',
     service: 'WMS',
     request: 'GetFeatureInfo',
-    format: 'image/png',
-    transparent: true,
     query_layers: layers,
     layers: layers,
     styles: styles,
@@ -396,14 +394,20 @@ export function queryWms(opt) {
    */
   return wmsGetCapabilities(url)
     .then((cap) => {
+      /**
+      * Update formats using capabilities
+      */
       const allowedFormatsInfo = ['application/json', 'application/geojson'];
       const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
       const layersAll = h.path(cap, 'Layer.Layer', []);
       paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
-        return !a ? (allowedFormatsInfo.indexOf(f) > -1 ? f : a) : a;
+        return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
       }, null);
       paramsInfo.exception = h.path(cap, 'Exception', [])[1];
 
+      /**
+      * Test if layer is queryable
+      */
       const layersQueryable = layersAll.reduce((a, l) => {
         const isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
         if (isQueryable) {
@@ -412,12 +416,18 @@ export function queryWms(opt) {
         return a;
       }, []);
 
+      /**
+      * Validate
+      */
       const validLayer = layersQueryable.length > 0;
       const validInfo = h.isString(paramsInfo.info_format);
       const validException = h.isString(paramsInfo.exception);
-      const request = `${url}?${h.objToParams(paramsInfo)}`;
 
+      /**
+      * Fetch or stop here
+      */
       if (validException && validLayer && validInfo) {
+        const request = `${url}?${h.objToParams(paramsInfo)}`;
         return fetch(request);
       } else {
         console.warn({
