@@ -402,8 +402,7 @@ function updateTagsOrder() {
    * Normalise
    */
   function n(txt) {
-    if(!txt){
-      console.warn('updateTagsOrder failed to normalize some tags.', tags);
+    if(!txt || !txt.toLowerCase){
       return txt;
     }
     return txt.toLowerCase().trim();

@@ -13,7 +13,7 @@ const defaults = {
     height: 'y50',
     addColorBackground: false,
     colorBackground: '#fff',
-    sourceIgnoreEmpty: false,
+    sourceIgnoreEmpty: true,
     script:
       'return { onAdd:console.log, onRemove:console.log, onData:console.log}'
   },
@@ -24,9 +24,10 @@ const defaults = {
 };
 
 class Widget {
-  constructor(config) {
+  constructor(opt) {
     const widget = this;
-    widget.opt = Object.assign({}, defaults, config);
+    widget.opt = Object.assign({}, defaults, opt);
+    widget.opt.conf = Object.assign({}, defaults.conf, opt.conf);
     widget.init();
   }
 
@@ -349,7 +350,7 @@ class Widget {
   setData(d) {
     const widget = this;
     const hasData = !h.isEmpty(d);
-    const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty;
+    const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty ;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
       widget.data = hasData ? d : [];
