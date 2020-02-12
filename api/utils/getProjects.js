@@ -48,6 +48,7 @@ function getProjectsByUserHelper(
       `publishers @> '[${idUser}]' OR admins @> '[${idUser}]' AS publisher`
     )
     .select(`admins @> '[${idUser}]' AS admin`);
+
   if (title) {
     pSql.where(
       project.title
@@ -80,7 +81,7 @@ function getProjectsByUserHelper(
   }
   sqlStr = `
     WITH project_role AS (${pSql.toString()})
-    SELECT * FROM project_role WHERE ${roleCondition}
+    SELECT * FROM project_role WHERE ${roleCondition} or public = true
     `;
   return pgRead.query(sqlStr);
 }
