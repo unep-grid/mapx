@@ -1,0 +1,28 @@
+kind: pipeline
+type: docker
+name: api test
+
+steps:
+- name: api
+  image: fredmoser/mx-api-node:1.6.66-alpine
+  commands:
+  - set -o allexport; source mapx.dev.default_env; set +o allexport
+  - sleep 10
+  - cd api/
+  - npm run test
+
+services:
+- name: pg
+  image: mdillon/postgis:10-alpine
+  commands:
+  - set -o allexport; source mapx.dev.default_env; set +o allexport
+  - cp -a /drone/src/pg/init/* /docker-entrypoint-initdb.d/
+  - docker-entrypoint.sh postgres
+- name: redis
+  image: redis:alpine
+  ports:
+  - 6379
+  commands:
+  - set -o allexport; source mapx.dev.default_env; set +o allexport
+  - mkdir -p /usr/local/etc/redis/; cp -a redis.conf /usr/local/etc/redis/redis.conf
+  - redis-server /usr/local/etc/redis/redis.conf
