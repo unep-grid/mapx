@@ -7,7 +7,8 @@ steps:
   image: fredmoser/mx-api-node:1.6.66-alpine
   commands:
   - set -o allexport; source mapx.dev.default_env; set +o allexport
-  - sleep 10
+  - while [ "`PGPASSWORD=$POSTGRES_PASSWORD psql -h pg -U postgres -l 2>/dev/null | grep mapx_test | wc -l`" = "0" ]; do echo "Waiting service 'pg'..."; sleep 5; done
+  - echo "Service 'pg' ready!..."
   - cd api/
   - npm run test
 
