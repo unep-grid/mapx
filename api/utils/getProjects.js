@@ -81,7 +81,7 @@ function getProjectsByUserHelper(
   }
   sqlStr = `
     WITH project_role AS (${pSql.toString()})
-    SELECT * FROM project_role WHERE ${roleCondition} or public = true
+    SELECT * FROM project_role WHERE ${roleCondition} OR public = true
     `;
   return pgRead.query(sqlStr);
 }

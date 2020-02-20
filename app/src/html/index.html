@@ -25,8 +25,12 @@
   <body class="full-page mx">
     <div class="mx-shiny-busy-panel"></div>
     <noscript> <p>Please enable JavaScript to use MapX</p> </noscript>
+
     <div class="mx-panels-container">
-      <div class="mx-panel-left mx-panel-views transparent shadow">
+      <div
+        id="mxPanelViews"
+        class="mx-panel-left mx-panel-views base_background shadow"
+      >
         <!-- views container -->
         <div class="mx-views-container">
           <div class="mx-views-header">
@@ -50,7 +54,10 @@
                   Activated views only
                 </span>
               </span>
-              <span class="mx-btn-toggle-filter bottom_tick" id="btnFilterShowPanel">
+              <span
+                class="mx-btn-toggle-filter bottom_tick"
+                id="btnFilterShowPanel"
+              >
                 <span data-lang_key="btn_filter_show_panel">
                   Advanced filter
                 </span>
@@ -60,7 +67,7 @@
             </div>
             <!-- views side panel for filter views -->
             <div
-              class="mx-views-filter-panel transparent mx-hide"
+              class="mx-views-filter-panel base_background mx-hide"
               id="viewsFilterPanel"
             >
               <div
@@ -74,7 +81,10 @@
           <div class="mx-views-footer"><div></div></div>
         </div>
       </div>
-      <div class="mx-panel-left mx-panel-tools transparent shadow mx-hide">
+      <div
+        id="mxPanelTools"
+        class="mx-panel-left mx-panel-tools base_background shadow mx-hide"
+      >
         <div class="mx-tools-container">
           <div class="mx-tools-content mx-scroll-styled">
             <div>
@@ -184,9 +194,6 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="mx-panel-left mx-panel-settings transparent shadow mx-hide">
-        <h3 data-lang_key="title_settings"></h3>
       </div>
     </div>
     <div id="map_main"></div>

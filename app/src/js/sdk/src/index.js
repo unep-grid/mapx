@@ -12,7 +12,7 @@ class Manager extends FrameManager {
   constructor(opt) {
     super(opt);
     this.opt = Object.assign({}, settings, opt);
-  } 
+  }
 }
 
 /**

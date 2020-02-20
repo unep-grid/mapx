@@ -40,23 +40,32 @@ export function getProjectViewsState(opt) {
 }
 
 /**
- * Get current collections available in rendered views
+ * Get current collections available in rendered views and update Shiny input
  * @param {Object} opt  Options
  * @param {String} opt.idInput Shiny input id,
  */
-export function getProjectViewsCollections(opt) {
+export function getProjectViewsCollectionsShiny(opt) {
   const h = mx.helpers;
   opt = Object.assign({}, {idInput: 'projectViewsCollections'}, opt);
+
   const hasShiny = h.isObject(window.Shiny);
-  const views = h.getViews();
-  const collections = h.getArrayDistinct(
-    views.flatMap((v) => h.path(v, 'data.collections', []))
-  );
+  const collections = h.getProjectViewsCollections();
 
   if (hasShiny && opt.idInput) {
     Shiny.onInputChange(opt.idInput, collections);
   }
   return collections;
+}
+
+/**
+ * Get current collections available in views list
+*/
+export function getProjectViewsCollections(){
+  const h = mx.helpers;
+  const collections = h.getViews().reduce((a,v)=>{
+    return a.concat(h.path(v,'data.collections',[]));
+  },[]);
+  return h.getArrayDistinct(collections);
 }
 
 /**

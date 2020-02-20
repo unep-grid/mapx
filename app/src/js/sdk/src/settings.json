@@ -3,12 +3,13 @@
   "container": "body",
   "params": {},
   "style": {
-    "width": "810px",
-    "height": "410px",
+    "width": "100%",
+    "height": "80%",
     "backgroundColor": "#474747",
     "resize": "both",
     "border": "none",
-    "maxHeight": "100%",
+    "maxHeight": "80%",
     "maxWidth": "100%"
-  }
+  },
+  "maxSimultaneousRequest" : 10
 }

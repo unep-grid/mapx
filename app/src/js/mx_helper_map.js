@@ -282,7 +282,7 @@ export function initListenersApp() {
     type: 'views_list_updated',
     idGroup: 'view_list_updated',
     callback: function() {
-      h.getProjectViewsCollections({
+      h.getProjectViewsCollectionsShiny({
         idInput: 'viewsListCollections'
       });
     }
@@ -1604,10 +1604,11 @@ export function makeTransparencySlider(o) {
        *
        */
       slider.on(
-        'slide',
+        'update',
         mx.helpers.debounce(function(n, h) {
           const view = this.targetView;
           const opacity = 1 - n[h] * 0.01;
+          console.log(opacity);
           view._setOpacity({opacity: opacity});
         }, 10)
       );
@@ -1671,7 +1672,7 @@ export function makeNumericSlider(o) {
          *
          */
         slider.on(
-          'slide',
+          'update',
           mx.helpers.debounce(function(n) {
             const view = this.targetView;
             const elContainer = this.target.parentElement;
@@ -1731,14 +1732,13 @@ export function makeDashboard(o) {
 
   /**
    * Single dashboard for all view;
-   * individual widgets stored in view (_interactive.widgets)
+   * individual widgets stored in view (._widgets)
    */
   h.moduleLoad('dashboard')
     .then((Dashboard) => {
       const hasDashboard =
         mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
       if (!hasDashboard) {
-
         /**
          * Create a new dashboard, save it in mx object
          */
@@ -1816,7 +1816,7 @@ export function makeDashboard(o) {
         view: view,
         map: map
       }).then((widgets) => {
-        view._interactive.widgets = widgets;
+        view._widgets = widgets;
         const hasStory = h.isStoryPlaying();
         if (hasStory) {
           d.hide();
@@ -1918,7 +1918,7 @@ export function makeTimeSlider(o) {
              * 
              */
           slider.on(
-            'slide',
+            'update',
             mx.helpers.debounce(function(t) {
               const view = this.targetView;
               const elContainer = this.target.parentElement;
@@ -3572,13 +3572,13 @@ export function viewModulesRemove(view) {
   if (h.isElement(view._elLegend)) {
     view._elLegend.remove();
   }
+
+  if (h.isArray(view._widgets)) {
+    view._widgets.forEach(w=>{
+      w.destroy();
+    });
+  }
   if (it) {
-    if (it.widgets) {
-      it.widgets.forEach((w) => {
-        w.destroy();
-      });
-      it.widgets.length = 0;
-    }
     if (it.searchBox) {
       it.searchBox.destroy();
     }

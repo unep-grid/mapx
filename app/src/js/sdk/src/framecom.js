@@ -1,171 +1,237 @@
 import {Events} from './events.js';
-import * as settings from './settings.json'; 
-
+import * as settings from './settings.json';
 
 /**
-* Class to create a manager to build an iframe and post message to a worker inside
-* @extends Events
-*/
+ * Class to create a manager to build an iframe and post message to a worker inside
+ * @extends Events
+ */
 class FrameManager extends Events {
   /**
-  * Create a manager
-  * @param {object} opt options
-  */
+   * Create a manager
+   * @param {object} opt options
+   */
   constructor(opt) {
     super();
-    this.opt = Object.assign({}, settings, opt);
-    this._url = null;
-    this._req = [];
-    this.init();
-    this.reqCounter = 0;
+    const fm = this;
+    fm.init(opt);
   }
 
   /**
-  * Init manager
-  * @private
-  */
-  init() {
-    this.setUrl();
-    this.build();
-    this.setUrl();
-    this.setParams();
-    this.render();
-    this.initListener();
+   * Init manager
+   * @private
+   */
+  init(opt) {
+    const fm = this;
+    if (fm._init) {
+      fm.message('warning', `Already initialized, ignoring`);
+      return;
+    }
+    fm._emitter = 'manager';
+    fm._init = true;
+    fm.opt = Object.assign({}, settings, fm.opt, opt);
+    fm._url = null;
+    fm._req = [];
+    fm.reqId = 0;
+    fm.reqCounter = 0;
+
+    fm.setUrl();
+    fm.build();
+    fm.setUrl();
+    fm.setParams();
+    fm.render();
+    fm.initListener();
   }
 
   /**
-  * Destroy manager
-  */
+   * Destroy manager
+   */
   destroy() {
-    this.removeListener();
-    this.iframe.remove();
+    const fm = this;
+    fm.removeListener();
+    fm.iframe.remove();
+    fm._init = false;
   }
 
   /**
-  * Build iframe and set its properties
-  * @private
-  */
+   * Build iframe and set its properties
+   * @private
+   */
   build() {
-    this.iframe = document.createElement('iframe');
-    for (let s in this.opt.style) {
-      this.iframe.style[s] = this.opt.style[s];
+    const fm = this;
+    fm.iframe = document.createElement('iframe');
+    fm.iframe.classList.add('framecom');
+    for (let s in fm.opt.style) {
+      fm.iframe.style[s] = fm.opt.style[s];
     }
-    if(!(this.opt.container instanceof Element)){
-      this.opt.container = document.querySelector(this.opt.container);
+    if (!(fm.opt.container instanceof Element)) {
+      fm.opt.container = document.querySelector(fm.opt.container);
     }
-    this.opt.container.appendChild(this.iframe);
+    fm.opt.container.appendChild(fm.iframe);
   }
 
   /**
-  * Set url
-  * @param {string|url} Url to use when rendering
-  */
+   * Get bounding client rect of the iframe
+   */
+  get rect() {
+    const fm = this;
+    return fm.iframe.getBoundingClientRect();
+  }
+  /**
+   * Set iframe width
+   * @param {number|string} w Width in px
+   */
+  set width(w) {
+    const fm = this;
+    w = isFinite(w) ? w + 'px' : w || fm.rect.width + 'px';
+    fm.iframe.style.width = w;
+  }
+  get width() {
+    const fm = this;
+    return fm.rect.width;
+  }
+  /**
+   * Set iframe height
+   * @param {number|string} h height in px
+   */
+  set height(h) {
+    const fm = this;
+    h = isFinite(h) ? h + 'px' : h || fm.rect.height + 'px';
+    fm.iframe.style.height = h;
+  }
+  get height() {
+    const fm = this;
+    return fm.rect.height;
+  }
+
+  /**
+   * Set url
+   * @param {string|url} Url to use when rendering
+   */
   setUrl(url) {
-    this._url = new URL(url || this.opt.url);
+    const fm = this;
+    fm._url = new URL(url || fm.opt.url);
   }
   /**
-  * get url
-  * @return url object
-  */
+   * get url
+   * @return url object
+   */
   get url() {
-    return this._url;
+    const fm = this;
+    return fm._url;
   }
   /**
-  * Render the iframe : set the selected url
-  * @private
-  */
+   * Render the iframe : set the selected url
+   * @private
+   */
   render() {
-    this.iframe.src = this._url;
+    const fm = this;
+    fm.iframe.src = fm._url;
   }
   /**
-  * Set url search params using an object
-  * @param {Object} Object representing the worker url params
-  * @private
-  */
+   * Set url search params using an object
+   * @param {Object} Object representing the worker url params
+   * @private
+   */
   setParams(params) {
-    var p = (this.opt.params = params || this.opt.params);
+    const fm = this;
+    var p = (fm.opt.params = params || fm.opt.params);
     for (let i in p) {
-      this.setParam(i, p[i]);
+      fm.setParam(i, p[i]);
     }
   }
   /**
-  * Set single url param by key value
-  * @param {String} key Key of the param
-  * @param {Any} value to set
-  * @private
-  */
+   * Set single url param by key value
+   * @param {String} key Key of the param
+   * @param {Any} value to set
+   * @private
+   */
   setParam(key, value) {
-    this.url.searchParams.set(key, value);
+    const fm = this;
+    fm.url.searchParams.set(key, value);
   }
   /**
-  * Post data to the worker
-  * @param {Object} request
-  * @private
-  */
+   * Post data to the worker
+   * @param {Object} request
+   * @private
+   */
   post(request) {
-    this.iframe.contentWindow.postMessage(JSON.stringify(request), '*');
+    const fm = this;
+    fm.iframe.contentWindow.postMessage(JSON.stringify(request), '*');
   }
 
   /**
-  * Init message listener
-  * @private
-  */
+   * Init message listener
+   * @private
+   */
   initListener() {
-    this._msg_handler = this.handleWorkerMessage.bind(this);
-    window.addEventListener('message', this._msg_handler);
+    const fm = this;
+    fm._msg_handler = fm.handleWorkerMessage.bind(fm);
+    window.addEventListener('message', fm._msg_handler);
   }
 
   /**
-  * Remove message listener
-  * @private
-  */
+   * Remove message listener
+   * @private
+   */
   removeListener() {
-    window.removeEventListener('message', this._msg_handler);
+    const fm = this;
+    window.removeEventListener('message', fm._msg_handler);
   }
 
   /**
-  * Handle worker message, trigger callbacks
-  * @param {Message} worker message 
-  * @private
-  */
+   * Handle worker message, trigger callbacks
+   * @param {Message} worker message
+   * @private
+   */
   handleWorkerMessage(msg) {
+    const fm = this;
     try {
       const request = JSON.parse(msg.data);
       if (request === 'ready') {
-        this.fire('ready');
-        console.log('ready received');
+        fm.fire('ready');
+        fm.message('log', `Sent ready state`);
       } else if (request.idRequest > -1) {
-        const req = this._req.find((r) => r.id === request.idRequest);
+        const req = fm._req.find((r) => r.id === request.idRequest);
         if (req) {
-          const reqPos = this._req.indexOf(req);
-          this._req.splice(reqPos, 1);
+          const reqPos = fm._req.indexOf(req);
+          fm._req.splice(reqPos, 1);
           req.onResponse(request.result);
         }
       }
     } catch (e) {
-      console.error('Failed to parse message:', e);
+      fm.message('error', `Failed to parse message ${msg}`, e);
     }
   }
-  
+
   /**
-  * Ask / request method to the worker
-  * @param {String} Id of the request/resolver
-  * @param {String} data Optional data to send to the resolver
-  * @return {Promise} Promise that resolve to the resolver result
-  */ 
+   * Ask / request method to the worker
+   * @param {String} Id of the request/resolver
+   * @param {String} data Optional data to send to the resolver
+   * @return {Promise} Promise that resolve to the resolver result
+   */
   ask(idResolver, data) {
-    const fw = this;
+    const fm = this;
+    const nR = fm.reqCounter;
+    const mR = fm.opt.maxSimultaneousRequest;
+    if (nR > mR) {
+      fm.message('error', `Too much request (${nR}/${mR})`);
+      return;
+    }
     return new Promise((resolve) => {
+      fm.reqCounter++;
       var request = {
-        id: fw.reqCounter++,
+        id: fm.reqId++,
         idResolver: idResolver,
         data: data
       };
-      fw.post(request);
+      fm.post(request);
       request.onResponse = (res) => {
         resolve(res);
       };
-      fw._req.push(request);
+      fm._req.push(request);
+    }).finally(() => {
+      fm.reqCounter--;
+      fm.message('log', `${fm.reqCounter} request in queue`);
     });
   }
 }
@@ -175,99 +241,113 @@ const settingsWorker = {
 };
 
 /**
-* Class to create a worker / listener inside an application
-* @extends Events
-*/
-class FrameWorker {
+ * Class to create a worker / listener inside an application
+ * @extends Events
+ */
+class FrameWorker extends Events {
   /**
-  * Create a worke
-  * @param {object} opt options
-  */
+   * Create a worke
+   * @param {object} opt options
+   */
   constructor(opt) {
-    this.opt = Object.assign({}, settingsWorker, opt);
-    this.init();
+    super();
+    const fw = this;
+    fw.opt = Object.assign({}, settingsWorker, opt);
+    fw.init();
   }
 
   /**
-  * Init worker
-  * @private
-  */
+   * Init worker
+   * @private
+   */
   init() {
-    if (this.isNested()) {
-      this.initListener();
-      this.post('ready');
-      console.log('ready posted');
+    const fw = this;
+    fw._emitter = 'worker';
+    if (fw._init) {
+      fw.message('warning', `Already initialized`);
+      return;
+    }
+    fw._init = true;
+    if (fw.isNested()) {
+      fw.initListener();
+      fw.post('ready');
+      fw.message('message', `Ready`);
     }
   }
 
   /**
-  * Check if the worker has a parent (is nested)
-  * @return {boolean} True if the worker has a parent (is inside an iframe)
-  */
+   * Check if the worker has a parent (is nested)
+   * @return {boolean} True if the worker has a parent (is inside an iframe)
+   */
   isNested() {
     return window.parent !== window;
   }
   /**
-  * Destroy the worker
-  */
+   * Destroy the worker
+   */
   destroy() {
-    this.removeListener();
+    const fw = this;
+    fw.removeListener();
   }
 
   /**
-  * Post message to the parent
-  * @param {Object} data Object to send to the parent
-  * @private 
-  */
+   * Post message to the parent
+   * @param {Object} data Object to send to the parent
+   * @private
+   */
   post(data) {
     window.parent.postMessage(JSON.stringify(data), '*');
   }
   /**
-  * Init message listener
-  * @param {data}
-  * @private
-  */
+   * Init message listener
+   * @param {data}
+   * @private
+   */
   initListener() {
-    this._msg_handler = this.handleManagerMessage.bind(this);
-    window.addEventListener('message', this._msg_handler, false);
+    const fw = this;
+    fw._msg_handler = fw.handleManagerMessage.bind(fw);
+    window.addEventListener('message', fw._msg_handler, false);
   }
   /**
-  * Remove message listener
-  */
+   * Remove message listener
+   */
   removeListener() {
-    window.removeEventListener('message', this._msg_handler);
+    const fw = this;
+    window.removeEventListener('message', fw._msg_handler);
   }
   /**
-  * Handle message : activate resolvers
-  * @param {msg} Message object with data attribute.
-  * @private
-  */
+   * Handle message : activate resolvers
+   * @param {msg} Message object with data attribute.
+   * @private
+   */
   handleManagerMessage(msg) {
-    console.log(msg);
-    try {
-      const fw = this;
-      const request = JSON.parse(msg.data);
-      const idRequest = request.id;
-      const idResolver = request.idResolver;
-      const resolver = this.opt.resolvers[idResolver];
-      return new Promise((resolve) => {
-        if (resolver instanceof Function) {
-          const result = resolver(request.data);
-          resolve(result);
-        } else {
-          resolve(null);
-        }
-      })
-        .then((res) => {
-          fw.post({
-            idRequest: idRequest,
-            result: res
-          });
-        })
-        .catch((e) => console.error(e));
-    } catch (e) {
-      console.error('Failed to parse message:', e);
+    let idRequest = '';
+    const fw = this;
+    const request = JSON.parse(msg.data);
+    idRequest = request.id;
+    const idResolver = request.idResolver;
+    const resolver = fw.opt.resolvers[idResolver];
+    if (!resolver) {
+      fw.message('error', `Unknown resolver '${idResolver}'`);
+      return;
     }
+    return new Promise((resolve) => {
+      if (resolver instanceof Function) {
+        const result = resolver(request.data);
+        resolve(result);
+      } else {
+        resolve(null);
+      }
+    })
+      .then((res) => {
+        fw.post({
+          idRequest: idRequest,
+          result: res
+        });
+      })
+      .catch((e) => {
+        fw.message('error', `Failed to handle message ${idRequest}`, e);
+      });
   }
 }
 

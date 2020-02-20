@@ -31,6 +31,7 @@ export * from './mx_helper_map_dragdrop.js';
 export * from './mx_helper_map_view_badges.js';
 export * from './mx_helper_map_view_build.js';
 export * from './mx_helper_map_view_fetch.js';
+export * from './mx_helper_map_project_fetch.js';
 export * from './mx_helper_map_view_click.js';
 export * from './mx_helper_map_view_ui.js';
 export * from './mx_helper_metadata_validation.js';

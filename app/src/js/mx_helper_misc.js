@@ -1477,46 +1477,53 @@ export function hide(m) {
       $el.attr('disabled', false);
     }
   }
-  /* else{*/
-  //return;
-  //console.log("hide: element " + element + " not found.");
-  /*}*/
 }
 
-/** Toggle panel visibility in panels group.
- * @param {String} classGroup Class of tab group
- * @param {String} classItem Class of tab item to show
- * @param {String} classHide Class to add for hiding
- * @param {Function} callback Callback function with one argument : state of item hide/show;
+/**
+ * Set state of left panel
+ * @param {Object} opt Options
+ * @param {String} opt.panel Name of the panel (views, tools)
+ * @param {Boolean} opt.toggle Toogle visibility
+ * @param {Boolean} opt.show Set visibility
+ * @param {Function} opt.callback Callback function with one argument : state of the panel : off/on
  */
-export function panelSwitch(classGroup, classItem, classHide, callback) {
-  var elsGroup = document.querySelectorAll('.' + classGroup);
-  if (!classHide) {
-    classHide = 'mx-hide';
+export function panelLeftSwitch(opt) {
+  const defaults = {
+    panel: 'views',
+    toggle: null,
+    show: false,
+    callback: null
+  };
+  const interns = {
+    clPanels: 'mx-panel-left',
+    clHide: 'mx-hide',
+    valueHide: 'off',
+    valueShow: 'on',
+    panelToId: {
+      views: 'mxPanelViews',
+      tools: 'mxPanelTools'
+    }
+  };
+  opt = Object.assign({}, defaults, interns, opt);
+  const elsPanel = document.querySelectorAll(`.${opt.clPanels}`);
+  const panels = Object.keys(opt.panelToId);
+  if (panels.indexOf(opt.panel) === -1) {
+    console.warn(`Panel '${opt.panel}' not valid`);
+    opt.panel = panels[0];
   }
-  mx.helpers.forEachEl({
-    els: elsGroup,
-    callback: function(el) {
-      var isItem = el.classList.contains(classItem);
-      var isHidden = el.classList.contains(classHide);
+  elsPanel.forEach((elPanel) => {
+    const isTarget = elPanel.id === opt.panelToId[opt.panel];
+    const isHidden = elPanel.classList.contains(opt.clHide);
+    const show = (isHidden && opt.toggle === true) || opt.show === true;
+    const hide = !isTarget || !show;
 
-      if (isItem && isHidden) {
-        el.classList.remove(classHide);
-        if (callback) {
-          callback('on');
-        }
-      }
-
-      if (isItem && !isHidden) {
-        el.classList.add(classHide);
-        if (callback) {
-          callback('off');
-        }
-      }
-
-      if (!isItem) {
-        el.classList.add(classHide);
-      }
+    if (hide) {
+      elPanel.classList.add(opt.clHide);
+    } else {
+      elPanel.classList.remove(opt.clHide);
+    }
+    if (isTarget && opt.callback) {
+      opt.callback(hide ? opt.valueHide : opt.valueShow);
     }
   });
 }

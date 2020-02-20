@@ -184,7 +184,10 @@ export function objToParams(data) {
 
   Object.keys(data).forEach((k) => {
     if (k) {
-      params.push(esc(k) + '=' + esc(data[k]));
+      const value = data[k];
+      if(value){
+        params.push(esc(k) + '=' + esc(value));
+      }
     }
   });
 

@@ -60,7 +60,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
   Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
   Shiny.addCustomMessageHandler("mglUpdateProject", h.updateProject);
-  Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollections);
+  Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollectionsShiny);
   Shiny.addCustomMessageHandler('mglInit', h.initMapx );
 
   /**

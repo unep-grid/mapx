@@ -302,7 +302,10 @@ mxDbGetProjectUserRoles <- function(idUser,idProject){
   #
   # If no records, return default
   #
-  if(nrow(res) == 0) return(out)
+  
+  if(noDataCheck(res)){
+    return(out)
+  }
 
   #
   # Build groups names

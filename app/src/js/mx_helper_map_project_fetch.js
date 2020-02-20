@@ -1,10 +1,14 @@
-var start;
+let start;
 
 export function fetchProjects(opt) {
-  var h = mx.helpers;
-  var defaults = {
+  const h = mx.helpers;
+  const defaults = {
     idUser: mx.settings.user.id,
     language: mx.settings.language,
+    role: 'any',
+    title: null,
+    titlePrefix: null,
+    titleFuzzy: null,
     token: mx.settings.user.token,
     onProgress: onProgress,
     onError: onError,
@@ -13,16 +17,16 @@ export function fetchProjects(opt) {
 
   opt = Object.assign({}, defaults, opt);
 
-  var host = h.getApiUrl('getProjectsListByUser');
-
-  var url =
-    host +
-    '?' +
-    h.objToParams({
-      idUser: opt.idUser,
-      language: opt.language,
-      token: opt.token
-    });
+  const host = h.getApiUrl('getProjectsListByUser');
+  const query = h.objToParams({
+    idUser: opt.idUser,
+    language: opt.language,
+    token: opt.token,
+    role : opt.role,
+    titlePrefix: opt.titlePrefix,
+    titleFuzzy: opt.titleFuzzy
+  });
+  const url = `${host}?${query}`;
 
   start = performance.now();
 
@@ -48,7 +52,6 @@ function onError(d) {
 }
 
 function onComplete() {
-  console.log(
-    `Project fetch + DB: ${Math.round(performance.now() - start)} [ms]`
-  );
+  const duration = Math.round(performance.now() - start);
+  console.log(`Project fetch + DB: ${duration} [ms]`);
 }

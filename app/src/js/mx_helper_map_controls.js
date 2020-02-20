@@ -194,26 +194,22 @@ mapControlApp.prototype.onAdd = function(map) {
       classes: ['fa', 'fa-list-ul'],
       key: 'btn_tab_views',
       remove: modeStatic,
-      action: function() {
-        h.panelSwitch(
-          'mx-panel-left',
-          'mx-panel-views',
-          'mx-hide',
-          // Set a callback : if present, reset views layout
-          function(state) {
-            if (state === 'on') {
-              return;
-            }
-          }
-        );
+      action: () => {
+        h.panelLeftSwitch({
+          id: 'panel-views',
+          toggle: true
+        });
       }
     },
     btnTabTools: {
       classes: ['fa', 'fa-cogs'],
       remove: modeStatic,
       key: 'btn_tab_tools',
-      action: function() {
-        h.panelSwitch('mx-panel-left', 'mx-panel-tools', 'mx-hide');
+      action: () => {
+        h.panelLeftSwitch({
+          id: 'panel-tools',
+          toggle: true
+        });
       }
     },
     btnPrint: {

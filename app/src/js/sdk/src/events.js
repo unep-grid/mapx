@@ -1,41 +1,42 @@
 /**
-* Simple event management
-* @example 
-*     var e = new Events(); 
-*     e.on('test',()=>{console.log('ok')});
-*     e.fire('test') -> 'ok'
-*      
-*/
+ * Simple event management
+ * @example
+ *     var e = new Events();
+ *     e.on('test',()=>{console.log('ok')});
+ *     e.fire('test') -> 'ok'
+ *
+ */
 class Events {
   /**
-  * new Event handler
-  */
+   * new Event handler
+   */
   constructor() {
+    this._emitter = 'generic';
     this._on_cb = [];
   }
   /**
-  * Fire callback based on type
-  * @param {String} type Type of callback to fire
-  */
-  fire(type) {
+   * Fire callback based on type
+   * @param {String} type Type of callback to fire
+   */
+  fire(type, data) {
     var cbs = this._on_cb;
     var ncb = cbs.length;
     while (ncb) {
-      var c = cbs[ncb-1];
+      var c = cbs[ncb - 1];
       if (c.type === type) {
-        c.cb();
         if (c.once) {
           cbs.splice(ncb, 1);
         }
+        c.cb(data);
       }
       ncb--;
     }
   }
   /**
-  * Register new callback by type
-  * @param {String} type Type of callback to be evaluated when fired
-  * @param {Function} cb Callback
-  */
+   * Register new callback by type
+   * @param {String} type Type of callback to be evaluated when fired
+   * @param {Function} cb Callback
+   */
   on(type, cb) {
     this._on_cb.push({
       type: type,
@@ -44,10 +45,10 @@ class Events {
     });
   }
   /**
-  * Unregister callback by type
-  * @param {String} type Type of callback
-  * @param {Function} cb Callback
-  */
+   * Unregister callback by type
+   * @param {String} type Type of callback
+   * @param {Function} cb Callback
+   */
   off(type, cb) {
     var cbs = this._on_cb;
     var ncb = cbs.length;
@@ -59,16 +60,31 @@ class Events {
       ncb--;
     }
   }
- /**
-  * Register a callback only and remove it after the first evaluation
-  * @param {String} type Type of callback to be evaluated when fired
-  * @param {Function} cb Callback
-  */
+  /**
+   * Register a callback only and remove it after the first evaluation
+   * @param {String} type Type of callback to be evaluated when fired
+   * @param {Function} cb Callback
+   */
   once(type, cb) {
     this._on_cb.push({
       type: type,
       cb: cb,
       once: true
+    });
+  }
+
+  /**
+   * Fire event of type 'message'
+   * @param {String} type Type of message. error, log, message, warnin, data ..
+   * @param {String} text Text of the message
+   * @param {Any} details Anything
+   */
+  message(type, text, details) {
+    this.fire('message', {
+      type: type || 'message',
+      emitter: this._emitter,
+      text: text,
+      details: details || null
     });
   }
 }
