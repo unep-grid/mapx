@@ -15,4 +15,3 @@ VOLUME /shared
 EXPOSE 3030
 
 CMD ["node","index.js"]
-

@@ -18,4 +18,3 @@ COPY . /srv/shiny-server/mapx
 COPY ./start_mapx.sh /usr/bin/start_mapx.sh
 
 CMD ["sh","/usr/bin/start_mapx.sh"]
-

@@ -116,8 +116,8 @@
   },
   "scripts": {
     "test": "-",
-    "prod": "npm run build_dict && webpack --config ./webpack/webpack.prod.js",
-    "dev": "webpack --watch --config ./webpack/webpack.dev.js",
+    "prod": "npm run build_dict && npx webpack --config ./webpack/webpack.prod.js",
+    "dev": "npx webpack --watch --config ./webpack/webpack.dev.js",
     "build_dict": "node ./src/node/build_dict.js config_dict.json",
     "lint": "eslint"
   },

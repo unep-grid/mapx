@@ -1,3 +1,53 @@
+---
+kind: pipeline
+type: docker
+name: build
+
+steps:
+- name: api docker build
+  image: plugins/docker
+  settings:
+    debug: true
+    dockerfile: api/Dockerfile
+    context: api
+    repo: docker-hub.unepgrid.ch/mapx/mx-api-node
+    registry: docker-hub.unepgrid.ch
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    tags:
+    - latest
+    - 1.6.66-alpine
+    when:
+      ref:
+      - refs/tags/*
+
+- name: app npm run prod
+  image: node:8-alpine
+  commands:
+  - apk add git python build-base
+  - cd app/
+  - npm ci
+  - npm run prod
+
+- name: app docker build
+  image: plugins/docker
+  settings:
+    debug: true
+    dockerfile: app/Dockerfile
+    context: app
+    repo: docker-hub.unepgrid.ch/mapx/mx-app-shiny
+    registry: docker-hub.unepgrid.ch
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    tags:
+    - latest
+    - 1.6.66-debian
+
+---
 kind: pipeline
 type: docker
 name: api test
