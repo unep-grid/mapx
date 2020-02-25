@@ -50,6 +50,9 @@ perl -pi -e $REP_APP_TAG ./docker-compose.yml
 echo "Update .drone.yml"
 REP_DRONE_TAG='s/'"$OLD_VERSION"'-/'"$NEW_VERSION"'-/g'
 perl -pi -e $REP_DRONE_TAG ./.drone.yml
+echo "Update readme.md"
+REP_README_TAG='s/Version '"$OLD_VERSION"'-/Version '"$NEW_VERSION"'-/g'
+perl -pi -e $REP_README_TAG ./readme.md
 
 git --no-pager diff --minimal 
 

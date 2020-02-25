@@ -72,5 +72,8 @@ Run tests within the development container:
 ```
 $ docker-compose exec api sh
 $ cd /apidev
-$ npm run
+$ npm run test
 ```
+
+# Build
+Version 1.6.66 [![Build Status](https://cloud.drone.io/api/badges/trepmag/map-x-mgl/status.svg?pipeline=api%20test&ref=refs/tags/1.6.66)](https://cloud.drone.io/trepmag/map-x-mgl)
