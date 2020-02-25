@@ -66,6 +66,7 @@ steps:
   - while [ "`PGPASSWORD=$POSTGRES_PASSWORD psql -h pg -U postgres -l 2>/dev/null | grep mapx_test | wc -l`" = "0" ]; do echo "Waiting service 'pg'..."; sleep 5; done
   - echo "Service 'pg' ready!..."
   - cd api/
+  - npm ci
   - npm run test
 
 services:
