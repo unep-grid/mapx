@@ -2368,7 +2368,7 @@
     "id": "login_pwd_mail_sent_error",
     "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
     "fr": "Une erreur est survenue, nous ne sommes pas en mesure de vous envoyer le mot de passe à usage unique. Merci d'essayer ultérieurement.",
-    "en": "Se ha producido un error, no se ha podido enviarle la contraseña. Por favor, inténtelo de nuevo más tarde.",
+    "es": "Se ha producido un error, no se ha podido enviarle la contraseña. Por favor, inténtelo de nuevo más tarde.",
     "es": "",
     "ru": "",
     "zh": "",
@@ -5453,7 +5453,7 @@
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
     "fr": "Carte : Frontières internationales",
-    "es": "Mapa: frontera internacional,
+    "es": "Mapa: frontera internacional",
     "ru": "",
     "zh": "",
     "de": "",
@@ -6773,7 +6773,7 @@
     "id": "validate_meta_invalid_license",
     "en": "Invalid license",
     "fr": "Licence invalide",
-    "es": "",
+    "es": "Licencia inválida",
     "ru": "",
     "zh": "",
     "de": "",
@@ -10015,7 +10015,7 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": ""
+    "es": "La tabla debe incluir elementos únicos"
   },
   {
     "id": "error_maxProperties",
@@ -10231,7 +10231,7 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": "<div style =\"max-width:400px;padding:20px\"> Hola,<br><br> Aquí está la contraseña solicitada:<hr><span style =\"font-family: monospace;\"> {{CONTRASEÑA}} </span> <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos. Saludos cordiales,<br><br>Su equipo de MapX.<br><br> <span style =\"opacity: 0.5; font-size: 0.8em\"> Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error. </span> </ div>"
+    "es": "<div style=\"max-width:400px;padding:20px\">Hola, <br><br> Aquí está la contraseña solicitada:  <hr>  <span style=\"font-family:monospace;\">{{CONTRASEÑA}}</span>  <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos.<br>Saludos cordiales,<br><br>Su equipo de MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error.</span></div>"
   },
   {
     "id": "operator_and",
