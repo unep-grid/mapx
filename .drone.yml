@@ -19,9 +19,9 @@ steps:
     tags:
     - latest
     - 1.6.66-alpine
-    when:
-      ref:
-      - refs/tags/*
+  when:
+    ref:
+    - refs/tags/*
 
 - name: app npm run prod
   image: node:8-alpine
@@ -30,6 +30,9 @@ steps:
   - cd app/
   - npm ci
   - npm run prod
+  when:
+    ref:
+    - refs/tags/*
 
 - name: app docker build
   image: plugins/docker
@@ -46,6 +49,9 @@ steps:
     tags:
     - latest
     - 1.6.66-debian
+  when:
+    ref:
+    - refs/tags/*
 
 ---
 kind: pipeline
