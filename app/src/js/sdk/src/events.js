@@ -72,21 +72,7 @@ class Events {
       once: true
     });
   }
-
-  /**
-   * Fire event of type 'message'
-   * @param {String} type Type of message. error, log, message, warnin, data ..
-   * @param {String} text Text of the message
-   * @param {Any} details Anything
-   */
-  message(type, text, details) {
-    this.fire('message', {
-      type: type || 'message',
-      emitter: this._emitter,
-      text: text,
-      details: details || null
-    });
-  }
+ 
 }
 
 export {Events};

@@ -7,12 +7,12 @@ window.addEventListener('load', () => {
     idGroup: 'sdk_binding',
     callback: () => {
       const resolvers = new MapxResolvers({
-          helpers:mx.helpers
-        });
+        helpers: mx.helpers
+      });
       window.mxsdkworker = new Worker({
-        resolvers: resolvers
+        resolvers: resolvers,
+        eventStore: mx.events 
       });
     }
   });
 });
-

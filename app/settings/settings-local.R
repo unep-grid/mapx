@@ -4,10 +4,20 @@
 config[['mail']][['admin']] <- Sys.getenv('MAIL_ADMIN')
 config[['mail']][['bot']] <- Sys.getenv('MAIL_BOT')
 config[['mail']][['guest']] <- Sys.getenv('MAIL_GUEST')
-config[["api"]][["port"]] <- Sys.getenv("API_PORT")
+config[["api"]][["port"]] <- Sys.getenv("API_PORT_DEV")
+
+if(noDataCheck(config[["api"]][["port"]])){
+  config[["api"]][["port"]] <- Sys.getenv("API_PORT")
+}
+
 config[["api"]][["port_public"]] <- Sys.getenv("API_PORT_PUBLIC")
 config[["api"]][["host"]] <- Sys.getenv("API_HOST")
-config[["api"]][["host_public"]] <- Sys.getenv("API_HOST_PUBLIC")
+config[["api"]][["host_public"]] <- Sys.getenv("API_HOST_PUBLIC_DEV")
+
+if(noDataCheck(config[["api"]][["host_public"]])){
+  config[["api"]][["port"]] <- Sys.getenv("API_HOST_PUBLIC")
+}
+
 config[["resources"]][["userdata"]] <- Sys.getenv("MAPX_PATH_USERDATA")
 config[["resources"]][["download"]] <- Sys.getenv("MAPX_PATH_DOWNLOAD")
 config[["pg"]][["encryptKey"]] <- Sys.getenv("POSTGRES_KEY_ENCRYPT")

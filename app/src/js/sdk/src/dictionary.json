@@ -1,0 +1,52 @@
+[
+  {
+    "key": "err_resolver_not_found",
+    "en": "No resolver for '${idResolver}'. Use 'list_methods'to list available methods'",
+    "fr": "Pas de resolver pour '${idResolver}'. Utiliser 'list_methods' pour lister les méthodes disponibles"
+  },
+  {
+    "key": "err_resolver_failed",
+    "en": "Resolver failed ( idResolver =  ${idResolver}, id = ${id} ) ",
+    "fr": ""
+  },
+  {
+    "key": "warn_already_init",
+    "en": "Already initialized,ignoring",
+    "fr": ""
+  },
+  {
+    "key": "log_state",
+    "en": "Sent state ${state}",
+    "fr": "Envoi état ${state}"
+  },
+  {
+    "key": "log_worker_ready",
+    "en": "Worker ready",
+    "fr": "Worker prêt"
+  },
+  {
+    "key": "warn_worker_already_init",
+    "en": "Worker already initialized",
+    "fr": "Worker déjà initialisé"
+  },
+  {
+    "key": "warn_to_much_request",
+    "en": "Too much request (${nR}/${mR})",
+    "fr": "Trop de requêtes (${nR}/${mR})"
+  },
+  {
+    "key": "log_req_queue_counter",
+    "en": "Number of request in queue : ${counter}",
+    "fr": "Nombre de requêtes en cours :  ${counter}"
+  },
+  {
+    "key": "err_handle_message_worker",
+    "en": "Failed to handle worker message : ${msg}",
+    "fr": "Echec de la prise en charge du message : ${msg}"
+  },
+  {
+    "key": "warn_destroyed",
+    "en": "Instance destroyed, ignore init",
+    "fr": "Instance détruite, ignore initialisation"
+  }
+]

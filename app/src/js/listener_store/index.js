@@ -1,11 +1,11 @@
 import {onNextFrame, cancelFrame} from '../animation_frame/index.js';
 import {Map} from 'mapbox-gl';
-
 /**
  * Event management
  */
 class ListenerStore {
   constructor() {
+    this.className = 'ListenerStore';
     this.listeners = [];
   }
   destroy() {
@@ -169,11 +169,27 @@ class ListenerStore {
 
 class EventStore {
   constructor() {
+    this.className = "EventStore";
     this.lStore = new ListenerStore();
+    this.passthroughs = [];
   }
   destroy() {
     this.lStore.destroy();
   }
+
+  /**
+  * Delegate fire event to another function
+  * @param {Object} opt Options
+  * @param {Function} opt.cb Callback
+  */
+  addPassthrough(opt) {
+    opt = Object.assign({}, opt);
+    var eStore = this;
+    if (opt.cb) {
+      eStore.passthroughs.push(opt);
+    }
+  }
+
   /**
    * Fire event type, trigger linked callback
    * @param {Object} opt options
@@ -187,12 +203,18 @@ class EventStore {
     }
     opt = Object.assign({}, opt);
     if (!opt.type) {
-      throw new Error('Missing argument');
+      throw new Error('Missing type argument');
     }
-    let li = this.lStore;
+    let eStore = this;
+    let li = eStore.lStore;
     let ls = li.getListenerByTypeGroup(opt.type, opt.idGroup);
+
     ls.forEach((l) => {
       l.callback(opt.data);
+    });
+
+    eStore.passthroughs.forEach((p) => {
+      p.cb(opt);
     });
   }
   /**

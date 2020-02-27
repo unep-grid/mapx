@@ -129,7 +129,7 @@ function build(enable) {
         'mx-view-item',
         'mx-view-item-' + view.type,
         'noselect',
-        'transparent'
+        'base_background'
       ]
     },
     elInput,

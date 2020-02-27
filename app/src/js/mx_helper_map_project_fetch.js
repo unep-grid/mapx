@@ -43,12 +43,10 @@ export function fetchProjects(opt) {
     });
 }
 
-function onProgress(d) {
-  console.log(Math.round((d.loaded / d.total) * 100));
-}
+function onProgress() {}
 
 function onError(d) {
-  console.log(d);
+  console.error(d);
 }
 
 function onComplete() {

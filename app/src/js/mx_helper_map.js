@@ -332,6 +332,18 @@ export function initListenersApp() {
     },
     group: 'mapx-base'
   });
+
+  /**
+   * Redirect Shiny events
+   */
+  if (window.Shiny) {
+    $(document).on('shiny:connected', () => {
+      mx.events.fire('mapx_connected');
+    });
+    $(document).on('shiny:disconnected', () => {
+      mx.events.fire('mapx_disconnected');
+    });
+  }
 }
 /**
  * Set activated view button state
@@ -1608,7 +1620,6 @@ export function makeTransparencySlider(o) {
         mx.helpers.debounce(function(n, h) {
           const view = this.targetView;
           const opacity = 1 - n[h] * 0.01;
-          console.log(opacity);
           view._setOpacity({opacity: opacity});
         }, 10)
       );
@@ -3574,7 +3585,7 @@ export function viewModulesRemove(view) {
   }
 
   if (h.isArray(view._widgets)) {
-    view._widgets.forEach(w=>{
+    view._widgets.forEach((w) => {
       w.destroy();
     });
   }

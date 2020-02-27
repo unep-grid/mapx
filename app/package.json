@@ -82,6 +82,7 @@
     "dotenv": "^8.2.0",
     "downloadjs": "^1.4.7",
     "draggabilly": "^2.2.0",
+    "flatted": "^2.0.1",
     "font-awesome": "^4.7.0",
     "geojsonhint": "^2.0.0",
     "handsontable": "^7.2.2",

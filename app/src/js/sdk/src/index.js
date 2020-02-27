@@ -1,4 +1,6 @@
-import {FrameManager, FrameWorker} from './framecom.js';
+import {FrameManager} from './frameManager.js';
+import {FrameWorker} from './frameWorker.js';
+
 import * as settings from './settings.json'; 
 
 /**

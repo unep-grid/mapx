@@ -9,9 +9,9 @@ The package `MxSdk` ease the integration of MapX. It features a simple way to in
 import {MxSdk} from  'mxsdk';
 
 /**
-* new mxsdk instance
+* new instance
 */
-const mxsdk = new MxSdk.manager({
+const mapx = new MxSdk.manager({
   host : 'http://dev.mapx.localhost/'
   port : '8880',
   project : 'MX-HPP-OWB-3SI-3FF-Q3R'
@@ -21,22 +21,22 @@ const mxsdk = new MxSdk.manager({
 /**
 * When ready, begin requests
 */
-mxsdk.on('ready', () => {
+mapx.on('ready', () => {
    /**
    * Get list of views, print them in console
    */
-   mxsdk.ask('get_views').then(console.log);
+   mapx.ask('get_views').then(console.log);
   /**
    * Get geo ip info,  print it in console
    */
-   mxsdk.ask('get_ip').then(console.log);
+   mapx.ask('get_ip').then(console.log);
    setTimeout(()=>{
      /**
      * Change project after 3000 ms, print new list 
      * of views
      */
-     mxsdk.ask('set_project','MX-JZL-FJV-RLN-7OH-QLU');
-     .then(mxsdk.ask('get_views'))
+     mapx.ask('set_project','MX-JZL-FJV-RLN-7OH-QLU');
+     .then(mapx.ask('get_views'))
      .then(console.log)
 
    }, 3000);
