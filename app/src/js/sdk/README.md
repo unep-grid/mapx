@@ -71,7 +71,7 @@ mapx.on('ready', () => {
 ## Functions
 
 <dl>
-<dt><a href="#_apply_layer_slider">_apply_layer_slider()</a></dt>
+<dt><a href="#_apply_filter_layer_slider">_apply_filter_layer_slider()</a></dt>
 <dd><p>Helpers</p>
 </dd>
 </dl>
@@ -180,7 +180,10 @@ Create a manager
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>object</code> | options |
+| opt | <code>Object</code> | options SEE settings.json |
+| opt.url | <code>String</code> | Url of the worker |
+| opt.style | <code>Object</code> | Style css object |
+| opt.container | <code>Element</code> | Element that will hold the worker iframe |
 
 <a name="FrameManager+rect"></a>
 
@@ -461,7 +464,7 @@ Class to handle MapX specific method
 **Kind**: global class  
 
 * [MapxResolvers](#MapxResolvers)
-    * [.list_methods()](#MapxResolvers+list_methods) ⇒ <code>Array</code>
+    * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
     * [.get_views()](#MapxResolvers+get_views) ⇒ <code>Array</code>
     * [.get_views_id()](#MapxResolvers+get_views_id) ⇒ <code>Array</code>
@@ -490,9 +493,9 @@ Class to handle MapX specific method
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
     * [.close_modal_all()](#MapxResolvers+close_modal_all) ⇒ <code>Boolean</code>
 
-<a name="MapxResolvers+list_methods"></a>
+<a name="MapxResolvers+get_sdk_methods"></a>
 
-### mapxResolvers.list\_methods() ⇒ <code>Array</code>
+### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>
 List resolvers methods
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -766,9 +769,9 @@ close all modals
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
-<a name="_apply_layer_slider"></a>
+<a name="_apply_filter_layer_slider"></a>
 
-## \_apply\_layer\_slider()
+## \_apply\_filter\_layer\_slider()
 Helpers
 
 **Kind**: global function  
