@@ -11,6 +11,7 @@ class MapxResolvers {
     }
     h = mr.opt.helpers;
   }
+
   /**
    * List resolvers methods
    * @return {Array} array of supported methods
@@ -51,6 +52,7 @@ class MapxResolvers {
   get_views_id() {
     return h.getViewsForJSON().map((v) => v.id);
   }
+
   /**
    * Get vector view (vt) metadata of the attribute
    * @param {Object} opt Options
@@ -99,6 +101,7 @@ class MapxResolvers {
   get_user_roles() {
     return mx.settings.user.roles;
   }
+
   /**
    * Get user email
    * @return {String} Current user email
@@ -106,12 +109,13 @@ class MapxResolvers {
   get_user_email() {
     return mx.settings.user.guest ? '' : mx.settings.user.email;
   }
-  /*
-   * Set project
-   * @param {Object} opt project option
-   * @param {String} opt.idProject Id of the project to load
-   * @return {Boolean} done
-   */
+
+  /**
+  * Set project
+  * @param {Object} opt options
+  * @param {String} opt.idProject Id of the project to switch to
+  * @return {Boolean} Done
+  */
   set_project(opt) {
     opt = Object.assign({}, {idProject: null}, opt);
     h.setProject(opt.idProject);
@@ -142,6 +146,7 @@ class MapxResolvers {
   get_projects(opt) {
     return h.fetchProjects(opt);
   }
+
   /**
    * Get current project id
    * @return {String} Current project id
@@ -195,6 +200,7 @@ class MapxResolvers {
   set_view_layer_filter_time(opt) {
     return _apply_filter_layer_slider('timeSlider', 'set', opt);
   }
+
   /**
    * Set layer transarency (0 : visible, 100 : 100% transparent)
    * @param {Options} opt Options
@@ -205,6 +211,7 @@ class MapxResolvers {
   set_view_layer_transparency(opt) {
     return _apply_filter_layer_slider('transparencySlider', 'set', opt);
   }
+
   /**
    * Get current numeric slider value
    * @param {Options} opt Options
@@ -214,6 +221,7 @@ class MapxResolvers {
   get_view_layer_filter_numeric() {
     return _apply_filter_layer_slider('numericSlider', 'get');
   }
+
   /**
    * Get current time slider value
    * @param {Options} opt Options
@@ -223,6 +231,7 @@ class MapxResolvers {
   get_view_layer_filter_time() {
     return _apply_filter_layer_slider('timeSlider', 'get');
   }
+
   /**
    * Get current transparency value for layers of a view
    * @param {Options} opt Options

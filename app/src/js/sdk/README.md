@@ -6,40 +6,50 @@ The package `MxSdk` ease the integration of MapX. It features a simple way to in
 ## Example
 
 ```js
-import {MxSdk} from  'mxsdk';
+import {MxSdk} from 'mxsdk';
 
 /**
-* new instance
-*/
+ * new instance
+ */
 const mapx = new MxSdk.manager({
-  host : 'http://dev.mapx.localhost/'
-  port : '8880',
-  project : 'MX-HPP-OWB-3SI-3FF-Q3R'
-  language : 'en'
+  host: 'http://dev.mapx.localhost/',
+  port: '8880',
+  project: 'MX-HPP-OWB-3SI-3FF-Q3R',
+  language: 'en'
 });
 
 /**
-* When ready, begin requests
-*/
+ * When ready, begin requests
+ */
 mapx.on('ready', () => {
-   /**
+  /**
    * Get list of views, print them in console
    */
-   mapx.ask('get_views').then(console.log);
+  mapx.ask('get_views').then(console.log);
   /**
    * Get geo ip info,  print it in console
    */
-   mapx.ask('get_ip').then(console.log);
-   setTimeout(()=>{
-     /**
-     * Change project after 3000 ms, print new list 
-     * of views
+  mapx.ask('get_user_ip').then(console.log);
+  setTimeout(() => {
+    /**
+     * Change project after 3000 ms
      */
-     mapx.ask('set_project','MX-JZL-FJV-RLN-7OH-QLU');
-     .then(mapx.ask('get_views'))
-     .then(console.log)
-
-   }, 3000);
+    maps
+      .ask('get_projects')
+      .then((projects) => {
+        const newProject = projects[projects.length - 1];
+        if (newProject) {
+          return mapx.ask('set_project', {idProject: newProject.id});
+        }
+      })
+      .then(() => {
+        /**
+         * Get list of views
+         */
+        return mapx.ask('get_views');
+      })
+      .then(console.log);
+  }, 3000);
 });
 
 ```
@@ -474,6 +484,7 @@ Class to handle MapX specific method
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
     * [.get_user_email()](#MapxResolvers+get_user_email) ⇒ <code>String</code>
+    * [.set_project(opt)](#MapxResolvers+set_project) ⇒ <code>Boolean</code>
     * [.get_language()](#MapxResolvers+get_language) ⇒ <code>String</code>
     * [.get_languages()](#MapxResolvers+get_languages) ⇒ <code>Array</code>
     * [.get_projects(opt)](#MapxResolvers+get_projects) ⇒ <code>Array</code>
@@ -583,6 +594,19 @@ Get user email
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>String</code> - Current user email  
+<a name="MapxResolvers+set_project"></a>
+
+### mapxResolvers.set\_project(opt) ⇒ <code>Boolean</code>
+Set project
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idProject | <code>String</code> | Id of the project to switch to |
+
 <a name="MapxResolvers+get_language"></a>
 
 ### mapxResolvers.get\_language() ⇒ <code>String</code>
