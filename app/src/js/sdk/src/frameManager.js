@@ -1,7 +1,7 @@
 import {Events} from './events.js';
 import * as settings from './settings.json';
 import {MessageFrameCom, RequestFrameCom} from './messages.js';
-import {parse, stringify} from 'flatted/esm';
+import {parse, stringify} from './helpers.js';
 
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
@@ -10,7 +10,10 @@ import {parse, stringify} from 'flatted/esm';
 class FrameManager extends Events {
   /**
    * Create a manager
-   * @param {object} opt options
+   * @param {Object} opt options SEE settings.json
+   * @param {String} opt.url Url of the worker
+   * @param {Object} opt.style Style css object
+   * @param {Element} opt.container Element that will hold the worker iframe
    */
   constructor(opt) {
     super();
@@ -231,16 +234,24 @@ class FrameManager extends Events {
     try {
       const message = Object.assign({}, parse(msg.data));
 
-
-     if(message.type === 'event'){
-         const type = message.value.type;
-         const data = message.value.data;
-         if(type){
-         fm.fire(type, data);
-         }
-     }
-
-
+      /**
+       * Handle event
+       */
+      if (message.type === 'event') {
+        const type = message.value.type;
+        const data = message.value.data;
+        if (type) {
+          fm.fire(type, data);
+        }
+        fm._message({
+          level: 'log',
+          key: 'log_event',
+          vars: {
+            event: type
+          },
+          emitter: 'worker'
+        });
+      }
 
       /**
        * Redirect message to manager
@@ -262,22 +273,7 @@ class FrameManager extends Events {
         if (message.success) {
           req.onResponse(message.value);
         }
-      }
-
-      /**
-       * Handle event
-       */
-      if (message.type === 'event') {
-        fm.fire(message.state);
-        fm._message({
-          level: 'log',
-          key: 'log_state',
-          vars: {
-            state: message.state
-          },
-          emitter: 'worker'
-        });
-        return;
+        
       }
 
       /**

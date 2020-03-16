@@ -143,6 +143,7 @@ export function setProject(idProject, opt) {
     if (h.isFunction(opt.onSuccess)) {
       opt.onSuccess();
     }
+    console.log('project change');
     mx.events.fire({
       type: 'project_change',
       data: {
@@ -1549,10 +1550,13 @@ export function getViewsOrder() {
 /**
  * Get JSON representation of a view ( same as the one dowloaded );
  * @param {String} idView Id of the view;
- * @return {String} JSON string with view data;
+ * @param {Object} opt Options
+ * @param {Boolean} opt.asString As string
+ * @return {String} JSON string with view data (or cleaned view object);
  */
-export function getViewJson(idView) {
+export function getViewJson(idView, opt) {
   const h = mx.helpers;
+  opt = Object.assign({}, {asString: true});
   const view = h.getView(idView);
   const keys = [
     'id',
@@ -1573,7 +1577,11 @@ export function getViewJson(idView) {
       out[k] = value;
     }
   });
-  return JSON.stringify(out);
+  if (opt.asString) {
+    return JSON.stringify(out);
+  } else {
+    return out;
+  }
 }
 
 /**
@@ -2060,7 +2068,7 @@ export function viewLayersRemove(o) {
       type: 'view_remove',
       data: {
         idView: o.idView,
-        view: view
+        view: h.getViewJson(view, {asString: false})
       }
     });
 
@@ -2073,7 +2081,7 @@ export function viewLayersRemove(o) {
       type: 'view_removed',
       data: {
         idView: o.idView,
-        view: view
+        view: h.getViewJson(view, {asString: false})
       }
     });
     if (view._elLegendGroup) {
@@ -2569,7 +2577,7 @@ export function viewLayersAdd(o) {
         type: 'view_add',
         data: {
           idView: idView,
-          view: view
+          view: h.getViewJson(view, {asString: false})
         }
       });
 
@@ -2610,7 +2618,7 @@ export function viewLayersAdd(o) {
         type: 'view_added',
         data: {
           idView: view.id,
-          view: view
+          view: h.getViewJson(view, {asString: false})
         }
       });
     })
@@ -3917,7 +3925,7 @@ export function getLayersPropertiesAtPoint(opt) {
 export function makeSearchBox(o) {
   const h = mx.helpers;
   const view = o.view;
-  const el = document.querySelector("[data-search_box_for='" + view.id + "']");
+  const el = document.querySelector(`[data-search_box_for='${view.id}']`);
   if (!el) {
     return;
   }

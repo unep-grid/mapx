@@ -15,12 +15,13 @@ class MapxResolvers {
    * List resolvers methods
    * @return {Array} array of supported methods
    */
-  list_methods() {
+  get_sdk_methods() {
     const mr = this;
     const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(mr));
     methods.splice(0, 1);
     return methods;
   }
+
   /**
    * Set panel visibility
    * @param {Object} opt Options
@@ -170,7 +171,9 @@ class MapxResolvers {
    * @param {Options} opt Options
    * @return {Boolean} done
    */
-  set_view_layer_filter_text() {}
+  set_view_layer_filter_text(opt) {
+    return _apply_filter_layer_select('select', 'set', opt);
+  }
 
   /**
    * Filter view layer by numeric (if attribute is numeric)
@@ -179,7 +182,7 @@ class MapxResolvers {
    * @param {Numeric} opt.value Value
    */
   set_view_layer_filter_numeric(opt) {
-    return _apply_layer_slider('numericSlider', 'set', opt);
+    return _apply_filter_layer_slider('numericSlider', 'set', opt);
   }
 
   /**
@@ -190,7 +193,7 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_filter_time(opt) {
-    return _apply_layer_slider('timeSlider', 'set', opt);
+    return _apply_filter_layer_slider('timeSlider', 'set', opt);
   }
   /**
    * Set layer transarency (0 : visible, 100 : 100% transparent)
@@ -200,7 +203,7 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_transparency(opt) {
-    return _apply_layer_slider('transparencySlider', 'set', opt);
+    return _apply_filter_layer_slider('transparencySlider', 'set', opt);
   }
   /**
    * Get current numeric slider value
@@ -209,7 +212,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_numeric() {
-    return _apply_layer_slider('numericSlider', 'get');
+    return _apply_filter_layer_slider('numericSlider', 'get');
   }
   /**
    * Get current time slider value
@@ -218,7 +221,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_time() {
-    return _apply_layer_slider('timeSlider', 'get');
+    return _apply_filter_layer_slider('timeSlider', 'get');
   }
   /**
    * Get current transparency value for layers of a view
@@ -227,7 +230,7 @@ class MapxResolvers {
    * @return {Number} value
    */
   get_view_layer_transparency() {
-    return _apply_layer_slider('transparencySlider', 'get');
+    return _apply_filter_layer_slider('transparencySlider', 'get');
   }
 
   /**
@@ -306,7 +309,20 @@ export {MapxResolvers};
 /**
  * Helpers
  */
-function _apply_layer_slider(type, method, opt) {
+function _apply_filter_layer_slider(type, method, opt) {
+  opt = Object.assign({}, {idView: null, value: null}, opt);
+  const view = h.getView(opt.idView);
+  const valid =
+    h.isView(view) &&
+    h.isObject(view._interactive) &&
+    h.isObject(view._interactive[type]) &&
+    h.isFunction(view._interactive[type][method]);
+
+  if (valid) {
+    return view._interactive[type][method](opt.value);
+  }
+}
+function _apply_filter_layer_select(type, method, opt) {
   opt = Object.assign({}, {idView: null, value: null}, opt);
   const view = h.getView(opt.idView);
   const valid =

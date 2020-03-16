@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        width: 100%;
+        font-family: helvetica;
+      }
+      .container {
+        width:100%;
+        height:100%;
+        display: flex;
+        
+      }
+      .container > .item {
+        flex-grow:1;
+      }
+      #results {
+        background:#eee;
+        font-size : 0.8em;
+      }
+      #results ul {
+        margin: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>TESTS</h1>
+    <div class="container">
+      <div id="results" class="item"></div>
+      <div id="mapx" class="item"></div>
+    </div>
+    <script src="dist/mxsdk.umd.js"></script>
+    <script src="tests.js"></script>
+  </body>
+</html>

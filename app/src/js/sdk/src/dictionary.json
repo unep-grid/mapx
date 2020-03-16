@@ -16,8 +16,13 @@
   },
   {
     "key": "log_state",
-    "en": "Sent state ${state}",
-    "fr": "Envoi état ${state}"
+    "en": "Log state: ${state}",
+    "fr": "Log état: ${state}"
+  },
+  {
+    "key": "log_event",
+    "en": "Log event: ${event}",
+    "fr": "Log event: ${event}"
   },
   {
     "key": "log_worker_ready",

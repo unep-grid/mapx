@@ -25,7 +25,7 @@ class Events {
       var c = cbs[ncb - 1];
       if (c.type === type) {
         if (c.once) {
-          cbs.splice(ncb, 1);
+          cbs.splice(ncb-1, 1);
         }
         c.cb(data);
       }

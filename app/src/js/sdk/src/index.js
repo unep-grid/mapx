@@ -1,6 +1,6 @@
 import {FrameManager} from './frameManager.js';
 import {FrameWorker} from './frameWorker.js';
-
+import {Testing} from  './testing.js';
 import * as settings from './settings.json'; 
 
 /**
@@ -30,4 +30,4 @@ class Worker extends FrameWorker {
    }
 }
 
-export {Manager, Worker};
+export {Manager, Worker, Testing};

@@ -1,5 +1,6 @@
 import {Events} from './events.js';
-import {parse, stringify} from 'flatted/esm';
+import {parse, stringify} from './helpers.js';
+import {isObject} from  '../../is_test/index.js';
 
 import {
   MessageFrameCom,
@@ -28,6 +29,9 @@ class FrameWorker extends Events {
     super();
     const fw = this;
     fw.opt = Object.assign({}, settingsWorker, opt);
+    if (!fw.isNested()) {
+      return;
+    }
     fw.init();
   }
 
@@ -48,29 +52,27 @@ class FrameWorker extends Events {
       return;
     }
     fw._init = true;
-    if (fw.isNested()) {
-      fw.initListener();
-      fw.post(
-        new StateFrameCom({
-          state: 'ready'
-        })
-      );
-      fw.post(
-        new MessageFrameCom({
-          level: 'log',
-          key: 'log_worker_ready'
-        })
-      );
-    }
+    fw.initListener();
+    fw.post(
+      new StateFrameCom({
+        state: 'ready'
+      })
+    );
+    fw.post(
+      new MessageFrameCom({
+        level: 'log',
+        key: 'log_worker_ready'
+      })
+    );
 
     if (
-      fw.opt.eventStore instanceof Object &&
+      isObject(fw.opt.eventStore) &&
       fw.opt.eventStore.className === 'EventStore'
     ) {
       fw._eventStore = fw.opt.eventStore;
       fw._eventStore.addPassthrough({
         cb: (d) => {
-          fw.post(new EventFrameCom({value:d}));
+          fw.post(new EventFrameCom({value: d}));
         }
       });
     }
@@ -158,7 +160,8 @@ class FrameWorker extends Events {
         fw.post(
           new ResponseFrameCom({
             idRequest: idRequest,
-            value: res
+            value: res,
+            success : true
           })
         );
       })
@@ -170,7 +173,7 @@ class FrameWorker extends Events {
           })
         );
 
-        if (e instanceof Message) {
+        if (e instanceof MessageFrameCom) {
           fw.post(e);
         } else {
           fw.post(
