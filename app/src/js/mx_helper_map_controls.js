@@ -197,6 +197,7 @@ mapControlApp.prototype.onAdd = function(map) {
       action: () => {
         h.panelLeftSwitch({
           id: 'panel-views',
+          panel: 'views',
           toggle: true
         });
       }
@@ -208,6 +209,7 @@ mapControlApp.prototype.onAdd = function(map) {
       action: () => {
         h.panelLeftSwitch({
           id: 'panel-tools',
+          panel: 'tools',
           toggle: true
         });
       }
