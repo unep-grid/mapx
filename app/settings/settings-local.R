@@ -15,7 +15,7 @@ config[["api"]][["host"]] <- Sys.getenv("API_HOST")
 config[["api"]][["host_public"]] <- Sys.getenv("API_HOST_PUBLIC_DEV")
 
 if(noDataCheck(config[["api"]][["host_public"]])){
-  config[["api"]][["port"]] <- Sys.getenv("API_HOST_PUBLIC")
+  config[["api"]][["host_public"]] <- Sys.getenv("API_HOST_PUBLIC")
 }
 
 config[["resources"]][["userdata"]] <- Sys.getenv("MAPX_PATH_USERDATA")
