@@ -82,7 +82,7 @@ services:
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
       - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
     ports :
-      - 5432:5432
+      - 5429:5432
   redis:
     image: redis:alpine
     restart: always
