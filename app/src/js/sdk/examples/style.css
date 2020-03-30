@@ -1,0 +1,21 @@
+html,
+body {
+  font-family: helvetica;
+}
+
+.container {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+}
+
+.pane-left {
+  background: #eee;
+  font-size: 0.8em;
+  padding: 0 1em;
+  max-width: 200px
+}
+
+.pane-right {
+  flex-grow: 1;
+}
