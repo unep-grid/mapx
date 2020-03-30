@@ -4,73 +4,102 @@
 
 ![mapx preview](app/src/png/mapx-preview.png "MapX")
 
-# Development environment
+## Development environment
 
 The included `docker-compose.yml` allows to setup a development environment.
 
-Trigger the following script which init some required directories and copy the default environment variable to './mapx.dev.env' (if missing):
-```
-$ ./docker-compose.init.sh
-```
+Trigger the following script which init some required directories and copy the default environment variable to `./mapx.dev.env` (if missing):
 
-Finally launch the mapx stack:
-```
-$ docker-compose pull
-$ docker-compose up
+```sh
+./docker-compose.init.sh
 ```
 
-The application should be available at http://app.mapx.localhost:8880/ (curl -H Host:app.mapx.localhost http://127.0.0.1:8880/).
+Finally, launch the mapx stack:
 
-An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at http://mail.mapx.localhost:8880/.
-
-## Known issues
-
-Postgis : `OperationalError: could not access file "$libdir/postgis-X.X` : solution, run `docker-compose exec pg update-postgis.sh`
- 
-## Development session for `app` service
-
+```sh
+docker-compose pull
+docker-compose up
 ```
+
+The application should be available at <http://app.mapx.localhost:8880/> (curl -H Host:app.mapx.localhost <http://127.0.0.1:8880/).>
+
+An admin user is available as `admin@localhost` which can be used to login; get the password by browsing the web mail at <http://mail.mapx.localhost:8880/.>
+
+### Known issues
+
+Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solution:_ run `docker-compose exec pg update-postgis.sh`
+
+## Development session for the `app` service
+
+Install all modules listed as dependencies in `package.json` for the `app` service and the `sdk`:
+
+```sh
+cd ./app
+npm install
+cd ./app/src/js/sdk/
+npm install
+```
+
+Start a development session for the `app` service:
+
+```sh
+$ cd ./app
+$ npm run dev
+$ cd ../
 $ docker-compose up -d
 $ docker-compose exec app sh
 $ cd /srv/shiny-server/dev/
 $ R
-$ source("run.R")
+> source("run.R")
 ```
 
-Then an instance of mapx should be available at http://dev.mapx.localhost:8880/ for which the source code from `./app/` is mounted as `/srv/shiny-server/dev/` in the container.
+Then an instance of mapx should be available at <http://dev.mapx.localhost:8880/> for which the source code from `./app/` is mounted as `/srv/shiny-server/dev/` in the container.
 
-## Development session for `api` service
+## Development session for the `api` service
 
-Update your `mapx.dev.env` file as follow:
-```
-...
-# API_PORT=3030
-# API_HOST_PUBLIC=api.mapx.localhost
-API_PORT=3333
-API_HOST_PUBLIC=apidev.mapx.localhost
-...
+Setup the environmental variables for the `api` service in `mapx.dev.env` as follows:
+
+```sh
+API_HOST=api
+API_PORT=3030
+API_PORT_DEV=3333
+API_PORT_PUBLIC=8880
+API_HOST_PUBLIC=api.mapx.localhost
+API_HOST_PUBLIC_DEV=apidev.mapx.localhost
 ```
 
-The start the expressjs development server:
-```
+Start the `Express.js` development server:
+
+```sh
 $ docker-compose up -d
 $ docker-compose exec api sh
 $ cd /apidev
 $ node inspect index.js port=3333
-...
 debug> c
 < listen to 3333
-...
 ```
 
-The instance now should use the api service at http://apidev.mapx.localhost:8880/ for which the source from `./api/` is mounted as `/apidev/` in the container.
+The instance now should use the api service at <http://apidev.mapx.localhost:8880/> for which the source from `./api/` is mounted as `/apidev/` in the container.
 
-Note that you might need to add the different hosts `*.mapx.localhost` to your system hosts file.
+If you want to use the prod version of the `api` service, setup the environmental variables in `mapx.dev.env`as follows:
+
+```sh
+API_HOST=api
+API_PORT=3030
+API_PORT_DEV=3030
+API_PORT_PUBLIC=8880
+API_HOST_PUBLIC=api.mapx.localhost
+API_HOST_PUBLIC_DEV=api.mapx.localhost
+```
+
+**Note:** You might need to add the different hosts `*.mapx.localhost` to your system `hosts` file.
 
 ### `api` tests
+
 Run tests within the development container:
-```
-$ docker-compose exec api sh
-$ cd /apidev
-$ npm run
+
+```sh
+docker-compose exec api sh
+cd /apidev
+npm run
 ```

@@ -6927,7 +6927,7 @@
   {
     "id": "as_needed",
     "en": "Data is updated as deemed necessary",
-    "fr": "La donnée est mise à  jour lorsque cela est nécessaire",
+    "fr": "La donnée est mise à jour lorsque cela est nécessaire",
     "es": "Los datos son actualizados cada vez que sea necesario",
     "fa": "اطلاعات به صورت ضروری تجدید می شوند",
     "ps": "دیټا د اړتیا په صورت کې نوې کیږي",
@@ -7048,7 +7048,7 @@
   {
     "id": "biannually",
     "en": "Data is updated twice each year",
-    "fr": "La donnée est mise à  jour deux fois par an",
+    "fr": "La donnée est mise à jour deux fois par an",
     "es": "Los datos son actualizados dos veces al año",
     "fa": "اطلاعات دو بار در سال تجدید می شوند",
     "ps": "ډیټا په کال کې دوه ځله نوې کیږي",
@@ -7180,7 +7180,7 @@
   {
     "id": "continual",
     "en": "Data is repeatedly and frequently updated",
-    "fr": "La donnée est mise à  jour en continu",
+    "fr": "La donnée est mise à jour en continu",
     "es": "Los datos son actualizados con frecuencia",
     "fa": "اطلاعات مکرراَ و دوره ایی تجدید شده اند",
     "ps": "ډیټا په دوامدار او دوراني ډول نوې کیږي.",
@@ -7192,7 +7192,7 @@
   {
     "id": "daily",
     "en": "Data is updated each day",
-    "fr": "La donnée est mise à  jour chaque jour",
+    "fr": "La donnée est mise à jour chaque jour",
     "es": "Los datos son actualizados todos los días",
     "fa": "اطلاعات هر روز تجدید شده اند",
     "ps": "ډیټا هره ورځ نوې کیږي.",
@@ -7204,7 +7204,7 @@
   {
     "id": "fortnightly",
     "en": "Data is updated every two weeks",
-    "fr": "La donnée est mise à  jour 2 fois par mois",
+    "fr": "La donnée est mise à jour 2 fois par mois",
     "es": "Los datos son actualizados 2 veces al mes",
     "fa": "اطلاعات هر دو هفته تجدید می شوند",
     "ps": "ډيټا هرې دوه اوونۍ وروسته نوې کیږي",
@@ -7395,7 +7395,7 @@
   {
     "id": "monthly",
     "en": "Data is updated each month",
-    "fr": "La donnée est mise à  jour tous les mois",
+    "fr": "La donnée est mise à jour tous les mois",
     "es": "Los datos son actualizados todos los meses",
     "fa": "اطلاعات هر ماه تجدید می شوند",
     "ps": "ډیټا په میاشتني ډول نوې کیږي",
@@ -7672,7 +7672,7 @@
   {
     "id": "quarterly",
     "en": "Data is updated every three months",
-    "fr": "La donnée est mise à  jour tous les trois mois",
+    "fr": "La donnée est mise à jour tous les trois mois",
     "es": "Los datos son actualizados cada tres meses",
     "fa": "اطلاعات هر سه ماه تجدید می شوند",
     "ps": "ډیټا هرې درې اوونۍ وروسته نوې کیږي",
@@ -8652,7 +8652,7 @@
   {
     "id": "unknown",
     "en": "Frequency of maintenance for the data is not known",
-    "fr": "La donnée n'a pas de fréquence de mise à jour connue",
+    "fr": "La donnée n'a pas de fréquence de mise à jour connue",
     "es": "La frecuencia de actualización desconocida",
     "fa": "فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست",
     "ps": "",
@@ -8664,7 +8664,7 @@
   {
     "id": "weekly",
     "en": "Data is updated on a weekly basis",
-    "fr": "La donnée est mise à  jour chaque semaine",
+    "fr": "La donnée est mise à jour chaque semaine",
     "es": "Los datos son actualizados cada semana",
     "fa": "اطلاعات به صورت هفته وار تجدید می شوند",
     "ps": "",
@@ -8796,7 +8796,7 @@
     "id": "meta_view_table_editors_current",
     "en": "Latest edit",
     "fr": "Dernière édition",
-    "en": "Últimos cambios",
+    "es": "Últimos cambios",
     "fa": "",
     "ps": "",
     "zh": "",
@@ -8832,7 +8832,7 @@
     "id": "meta_view_stat_n_add",
     "en": "Number of viewing",
     "fr": "Nombre de visualisations",
-    "en": "Número de visualizaciones",
+    "es": "Número de visualizaciones",
     "fa": "",
     "ps": "",
     "zh": "",
