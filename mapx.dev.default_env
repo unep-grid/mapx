@@ -45,7 +45,7 @@ API_HOST_PUBLIC=api.mapx.localhost
 API_HOST_PUBLIC_DEV=apidev.mapx.localhost
 
 HOST_PG=pg
-HOST_PG_PORT=5429
+HOST_PG_PORT=5432
 
 MAIL_ADMIN=admin@localhost
 MAIL_GUEST=guest@mapx.org
