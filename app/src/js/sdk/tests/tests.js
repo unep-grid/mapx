@@ -2,7 +2,7 @@ const elContainer = document.getElementById('mapx');
 const elResults = document.getElementById('results');
 const mapx = new mxsdk.Manager({
   container: elContainer,
-  url: 'http://dev.mapx.localhost:8880/?project=MX-HPP-OWB-3SI-3FF-Q3R'
+  url: 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF'
 });
 const t = new mxsdk.Testing({
   container: elResults,
