@@ -11,9 +11,9 @@
     "example": "example"
   },
   "scripts": {
-    "test": "live-server tests --mount=/dist:dist",
+    "test": "microbundle -o dist --no-compress && live-server tests --mount=/dist:dist",
     "dev": "microbundle watch -o dist --no-compress",
-    "serve": "live-server example --mount=/dist:dist",
+    "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
     "prod": "microbundle -o dist && npm run jsdoc && npm publish",
     "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"
   },
@@ -33,6 +33,7 @@
   "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/sdk/#readme",
   "devDependencies": {
     "jsdoc-to-markdown": "^5.0.3",
+    "live-server": "^1.2.1",
     "microbundle": "^0.11.0"
   },
   "dependencies": {
