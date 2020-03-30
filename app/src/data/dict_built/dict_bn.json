@@ -701,7 +701,7 @@
   },
   {
     "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel. ",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
     "bn": ""
   },
   {
@@ -1702,7 +1702,7 @@
   {
     "id": "title_app",
     "en": "MapX",
-    "bn": ""
+    "bn": "MapX"
   },
   {
     "id": "user_profile",
@@ -3666,7 +3666,7 @@
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
+    "en": "Últimos cambios",
     "bn": ""
   },
   {
@@ -3681,7 +3681,7 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
+    "en": "Número de visualizaciones",
     "bn": ""
   },
   {

@@ -213,7 +213,7 @@ observeEvent(reactData$showProjectsList,{
     language = language,
     whereUserRoleIs = filterRoles, 
     whereTitleMatch = filterTitle,
-    asDataFrame = T,
+    asDataFrame = TRUE,
     token = reactUser$token
     )
 

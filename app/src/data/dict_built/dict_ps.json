@@ -701,7 +701,7 @@
   },
   {
     "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel. ",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
     "ps": ""
   },
   {
@@ -3665,7 +3665,7 @@
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
+    "en": "Últimos cambios",
     "ps": ""
   },
   {
@@ -3680,7 +3680,7 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
+    "en": "Número de visualizaciones",
     "ps": ""
   },
   {

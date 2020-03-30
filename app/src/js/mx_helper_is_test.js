@@ -17,7 +17,7 @@ export function isLanguageObject(item) {
   const h = mx.helpers;
   var languages = mx.settings.languages;
   return (
-    isObject(item) &&
+    h.isObject(item) &&
     (function() {
       return Object.keys(item).reduce((a, l) => (!a ? a : languages.indexOf(l) > -1 ), true);
     })()
@@ -27,9 +27,9 @@ export function isLanguageObject(item) {
 export function isLanguageObjectArray(arr) {
   const h = mx.helpers;
   return (
-    isArray(arr) &&
+    h.isArray(arr) &&
     (function() {
-      return arr.reduce((a, i) => (!a ? a : isLanguageObject(i)), true);
+      return arr.reduce((a, i) => (!a ? a : h.isLanguageObject(i)), true);
     })()
   );
 }

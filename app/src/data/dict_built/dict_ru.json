@@ -701,7 +701,7 @@
   },
   {
     "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel. ",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
     "ru": ""
   },
   {
@@ -1332,7 +1332,7 @@
   {
     "id": "schema_style_sprite",
     "en": "Symbol",
-    "ru": ""
+    "ru": "Símbolo"
   },
   {
     "id": "schema_style_size_zoom_min_desc",
@@ -1372,7 +1372,7 @@
   {
     "id": "schema_story_author",
     "en": "Author of the story",
-    "ru": ""
+    "ru": "Autor del mapa narrativo"
   },
   {
     "id": "schema_story_map_pos",
@@ -1702,7 +1702,7 @@
   {
     "id": "title_app",
     "en": "MapX",
-    "ru": ""
+    "ru": "MapX"
   },
   {
     "id": "user_profile",
@@ -3666,7 +3666,7 @@
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Latest edit",
+    "en": "Últimos cambios",
     "ru": ""
   },
   {
@@ -3681,7 +3681,7 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
+    "en": "Número de visualizaciones",
     "ru": ""
   },
   {

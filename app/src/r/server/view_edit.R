@@ -153,9 +153,10 @@ observe({
                 id = userData$id,
                 whereUserRoleIs = "publisher",
                 language = language,
+                token = reactUser$token,
                 asNamedList = TRUE,
                 idsAdditionalProjects = .get(viewData,c("data","projects"))  
-                )
+              )
 
               #
               # Get additional editors from members
