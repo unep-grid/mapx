@@ -12,7 +12,7 @@
   {
     "id": "bottom",
     "en": "Bottom",
-    "es": "Al fondo"
+    "es": "Ir abajo"
   },
   {
     "id": "btn_browse",
@@ -22,57 +22,57 @@
   {
     "id": "btn_help",
     "en": "Help",
-    "es": ""
+    "es": "Ayuda"
   },
   {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
-    "es": ""
+    "es": "Definit la proyeccióne de exportación, utilizando un código del formato EPSG "
   },
   {
     "id": "epsg_set_projection_import",
     "en": "Assign a projection system to the data ( code EPSG, optional )",
-    "es": ""
+    "es": "Asignar un sistema de proyección a la base de datos (código EPSG, opcional)"
   },
   {
     "id": "epsg_btn_search",
     "en": "Search",
-    "es": ""
+    "es": "Buscar"
   },
   {
     "id": "epsg_placeholder_search",
     "en": "Country or projection name ...",
-    "es": ""
+    "es": "Nombre del país o proyección..."
   },
   {
     "id": "epsg_label_search",
     "en": "Enter a country or projection name",
-    "es": ""
+    "es": "Escribe el nombre de un país (en inglés) o de una proyección"
   },
   {
     "id": "epsg_placeholder_input",
     "en": "EPSG code. e.g. '4326'",
-    "es": ""
+    "es": "Código EPSG, por ejemplo: 4326"
   },
   {
     "id": "epsg_btn_open_search",
     "en": "Find epsg code ...",
-    "es": ""
+    "es": "Encontrar un código EPSG..."
   },
   {
     "id": "btn_add_source",
     "en": "Add a source layer",
-    "es": "Añadir una capa source"
+    "es": "Añadir una capa base"
   },
   {
     "id": "btn_about",
     "en": "About",
-    "es": "Acerca"
+    "es": "Acerca de"
   },
   {
     "id": "title_about",
     "en": "About",
-    "es": "Acerca"
+    "es": "Acerca de"
   },
   {
     "id": "btn_load_new_project",
@@ -147,7 +147,7 @@
   {
     "id": "btn_join_project_long",
     "en": "Membership request for this project",
-    "es": ""
+    "es": "Solicitar membresía para este proyecto"
   },
   {
     "id": "btn_join_project",
@@ -182,102 +182,102 @@
   {
     "id": "btn_edit_selected",
     "en": "Edit selected",
-    "es": ""
+    "es": "Editar la selección"
   },
   {
     "id": "btn_edit_source",
     "en": "Manage sources",
-    "es": "Gestionar sources"
+    "es": "Gestionar fuentes de datos"
   },
   {
     "id": "btn_source_overlap_utilities",
     "en": "Area intersection tools",
-    "es": ""
+    "es": "Herramientas de intersección de área"
   },
   {
     "id": "btn_source_validate_geom",
     "en": "Geometry validation",
-    "es": ""
+    "es": "Validación de geometrías"
   },
   {
     "id": "btn_analyse",
     "en": "Run analysis",
-    "es": ""
+    "es": "Analizar"
   },
   {
     "id": "logs",
     "en": "Logs",
-    "es": ""
+    "es": "Registros"
   },
   {
     "id": "calc_area_result",
     "en": "Area of intersection (km2)",
-    "es": ""
+    "es": "Área de intersección"
   },
   {
     "id": "radio_source_overlap_mode",
     "en": "Select analysis",
-    "es": ""
+    "es": "Seleccionar análisis"
   },
   {
     "id": "source_overlap_mode_area",
     "en": "Calculate area of intersection",
-    "es": ""
+    "es": "Calcular el área de análisis"
   },
   {
     "id": "source_overlap_mode_create_source",
     "en": "Create new layer based on the intersection",
-    "es": ""
+    "es": "Crear una nueva capa basada en la intersección"
   },
   {
     "id": "check_add_source_from_view",
     "en": "Add sources by views",
-    "es": ""
+    "es": "Adjuntar fuente de datos para vistas"
   },
   {
     "id": "select_overlap_source_from_view",
     "en": "Select views",
-    "es": ""
+    "es": "Seleccionar las vistas"
   },
   {
     "id": "btn_add_source_from_view",
     "en": "Add sources from those views",
-    "es": ""
+    "es": "Adjuntar las fuentes de datos de esas vistas"
   },
   {
     "id": "select_overlap_layers",
     "en": "Layers : minimum 1, maximum 3, reorder if needed ",
-    "es": ""
+    "es": "Capas: mínimo 1, máximo 3, ordenar si es necesario"
   },
   {
     "id": "select_overlap_countries",
     "en": "Country",
-    "es": ""
+    "es": "País"
   },
   {
     "id": "n_layers_more_3",
     "en": "More than three layers selected",
-    "es": ""
+    "es": "Más de tres capas seleccionadas"
   },
   {
     "id": "n_layers_less_1",
     "en": "Less that one layer selected",
-    "es": ""
+    "es": "Menos de tres capas seleccionadas"
   },
   {
     "id": "n_country_not_1",
     "en": "Only one country should be selected",
-    "es": ""
+    "es": "Únicamente un país puede ser seleccionado"
   },
   {
     "id": "title_overlap_tools",
     "en": "Area intersection utilities",
-    "es": ""
+    "es": "Herramientas de análisis de intersección"
   },
   {
     "id": "source_overlap_new_source_email_info",
     "en": "An email will be send to '%s' at the end of the process",
-    "es": ""
+    "es": "Se enviará un e-mail a '%s' al final del proceso de análisis"
   },
   {
     "id": "btn_edit_source_metadata",
@@ -287,7 +287,7 @@
   {
     "id": "btn_finish",
     "en": "Finish",
-    "es": "Terminar"
+    "es": "Finalizar"
   },
   {
     "id": "btn_fullscreen",
@@ -307,7 +307,7 @@
   {
     "id": "btn_get_layer_summary",
     "en": "Get layer summary",
-    "es": "Visualizar el resumen de la source"
+    "es": "Visualizar el resumen de la fuente de datos"
   },
   {
     "id": "btn_iframe_builder",
@@ -332,12 +332,12 @@
   {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
-    "es": ""
+    "es": "Herramientas de diseño vectorial"
   },
   {
     "id": "btn_map_composer",
     "en": "Map composer",
-    "es": ""
+    "es": "Compositor de mapas"
   },
   {
     "id": "btn_opt_date",
@@ -347,7 +347,7 @@
   {
     "id": "btn_opt_attribute_table",
     "en": "Attribute table",
-    "es": ""
+    "es": "Tabla de atributos"
   },
   {
     "id": "btn_opt_delete",
@@ -357,7 +357,7 @@
   {
     "id": "btn_opt_home_project",
     "en": "Open original project",
-    "es": ""
+    "es": "Abrir el proyecto original"
   },
   {
     "id": "btn_opt_move_top",
@@ -392,7 +392,7 @@
   {
     "id": "btn_opt_edit_dashboard",
     "en": "Edit dashboard",
-    "es": "Editar el dashboard"
+    "es": "Editar el tablero de instrumentos"
   },
   {
     "id": "btn_opt_edit_story",
@@ -412,22 +412,22 @@
   {
     "id": "schema_style_reverse_order",
     "en": "Reverse displayed layers order",
-    "es": ""
+    "es": "Invertir el orden de las capas mostradas"
   },
   {
     "id": "schema_style_reverse_order_desc",
     "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "es": ""
+    "es": "Si marcado, la pila de capas se invertirá: la regla superior dibujará una capa en la parte inferior de la pila"
   },
   {
     "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
-    "es": "Ignorar valores ausentes"
+    "es": "Ignorar valores no disponibles"
   },
   {
     "id": "schema_style_hide_nulls_desc",
     "en": "If checked, null or missing values will be ignored in the style",
-    "es": ""
+    "es": "Si marcado, los valores nulos o faltantes serán ignorados en el estilo"
   },
   {
     "id": "btn_opt_meta",
@@ -457,27 +457,27 @@
   {
     "id": "btn_opt_share",
     "en": "Share a link to this view",
-    "es": ""
+    "es": "Compartir un enlace a esta vista"
   },
   {
     "id": "btn_opt_share_to_project",
     "en": "Share this view in another project",
-    "es": ""
+    "es": "Compartir la visa a otro proyecto"
   },
   {
     "id": "share_in_project_no_publisher_project",
     "en": "You have no project yet where to publish this view",
-    "es": ""
+    "es": "No hay ningún proyecto donde publicar esta vista"
   },
   {
     "id": "share_in_project_no_view",
     "en": "No view to share",
-    "es": ""
+    "es": "No hay ninguna vista a compartir"
   },
   {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
-    "es": "Leer esta story"
+    "es": "Leer esta historia"
   },
   {
     "id": "btn_opt_transparency",
@@ -537,7 +537,7 @@
   {
     "id": "btn_show_project_views_states",
     "en": "Save views list state",
-    "es": ""
+    "es": "Guardar el estado de la lista de vistas"
   },
   {
     "id": "btn_show_project_delete",
@@ -567,7 +567,7 @@
   {
     "id": "btn_filter_show_panel",
     "en": "Advanced filter",
-    "es": ""
+    "es": "Filtros avanzados"
   },
   {
     "id": "btn_sort_title",
@@ -587,7 +587,7 @@
   {
     "id": "btn_story_close",
     "en": "Back to the map explorer",
-    "es": ""
+    "es": "Volver al explorador del mapa"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -597,7 +597,7 @@
   {
     "id": "btn_story_edit_save",
     "en": "Save edition",
-    "es": ""
+    "es": "Guardar"
   },
   {
     "id": "btn_story_edit",
@@ -622,7 +622,7 @@
   {
     "id": "btn_tab_tools",
     "en": "Toolbox",
-    "es": "Caja de utilidades"
+    "es": "Caja de herramientas"
   },
   {
     "id": "btn_tab_views",
@@ -632,17 +632,17 @@
   {
     "id": "btn_theme_switch",
     "en": "Switch theme",
-    "es": ""
+    "es": "Cambiar el tema"
   },
   {
     "id": "btn_theme_sat",
     "en": "Switch theme : aerial",
-    "es": "Cambiar capa base : imagen satélite"
+    "es": "Cambiar capa base: imagen satélite"
   },
   {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
-    "es": "Cerrar panel de instrumentos"
+    "es": "Cerrar panel de herramientas"
   },
   {
     "id": "btn_update",
@@ -662,47 +662,47 @@
   {
     "id": "btn_zoom_out",
     "en": "Zoom out",
-    "es": "Hacer zoom out"
+    "es": "Disminuir el zoom"
   },
   {
     "id": "btn_overlap_spotlight",
     "en": "Highlight vector features",
-    "es": ""
+    "es": "Destacar objetos vectoriales"
   },
   {
     "id": "title_config_highlight",
     "en": "Highlight tool configuration",
-    "es": ""
+    "es": "Destacar la configuración de herramientas"
   },
   {
     "id": "select_highlight_mode",
     "en": "Select highlight mode",
-    "es": ""
+    "es": "Seleccionar modo resaltado"
   },
   {
     "id": "label_check_instant_overlap",
     "en": "Enable overlap area estimation",
-    "es": ""
+    "es": "Habilitar estimación de área superpuesta"
   },
   {
     "id": "label_area_instant_overlap",
     "en": "Instant area estimation",
-    "es": ""
+    "es": "Estimación de área superpuesta"
   },
   {
     "id": "label_help_area_instant_overlap",
     "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
-    "es": ""
+    "es": "La superposición de la superficie se estima utilizando una representación esférica de la Tierra. El resultado variará según la calidad de los datos, los filtros actuales y la resolución actual."
   },
   {
     "id": "label_resol_instant_overlap",
     "en": "Current resolution",
-    "es": ""
+    "es": "Resolución actual"
   },
   {
     "id": "label_help_resol_instant_overlap",
-    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel. ",
-    "es": ""
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "es": "La resolución actual depende del nivel de zoom y la latitud. Representa el área promedio cubierta por un píxel."
   },
   {
     "id": "categorical",
@@ -757,7 +757,7 @@
   {
     "id": "error_no_layer",
     "en": "No source layer set",
-    "es": "No hay colección de capa source"
+    "es": "No hay colección de capa de fuente de datos"
   },
   {
     "id": "error_form_issues",
@@ -772,7 +772,7 @@
   {
     "id": "error_no_source",
     "en": "No source layer found",
-    "es": "No hay capa source"
+    "es": "No hay capa de fuente de datos"
   },
   {
     "id": "error_title_exists",
@@ -792,7 +792,7 @@
   {
     "id": "error_title_not_valid",
     "en": "The title is not valid",
-    "es": ""
+    "es": "El título no es válido"
   },
   {
     "id": "error_description_short",
@@ -817,17 +817,17 @@
   {
     "id": "error_email_is_member",
     "en": "This email is already registered in this project",
-    "es": ""
+    "es": "Este e-mail ya está registrado en este proyecto"
   },
   {
     "id": "error_email_bad",
     "en": "This email is not accepted",
-    "es": "Este email no es aceptado"
+    "es": "Este e-mail no es aceptado"
   },
   {
     "id": "error_email_confirm_too_old",
     "en": "This confirmation email is too old",
-    "es": ""
+    "es": "El mensaje de confirmación es demasiado antiguo"
   },
   {
     "id": "error_msg_too_long",
@@ -842,7 +842,7 @@
   {
     "id": "error_email_not_registered",
     "en": "This email does not belongs to a current MapX user. Once open, the activation link will also create automatically a new account on MapX.",
-    "es": "Este email no pertenece aun usurio actual de MapX. Cuando abierto, el enlace de activación también creará automáticamente una nueva cuenta en MapX."
+    "es": "Este email no pertenece a un usurio actual de MapX. Cuando abierto, el enlace de activación también creará automáticamente una nueva cuenta en MapX."
   },
   {
     "id": "error_email_already_member",
@@ -942,7 +942,7 @@
   {
     "id": "custom_style_edit",
     "en": "Edit custom style",
-    "es": ""
+    "es": "Editar estilo personalizado"
   },
   {
     "id": "story_map",
@@ -952,12 +952,12 @@
   {
     "id": "dashboard",
     "en": "Dashboard",
-    "es": "Dashboard"
+    "es": "Tablero de instrumentos"
   },
   {
     "id": "overlap",
     "en": "Overlap",
-    "es": ""
+    "es": "Superponer"
   },
   {
     "id": "left",
@@ -972,7 +972,7 @@
   {
     "id": "loading_img",
     "en": "Image loading, please wait ...",
-    "es": "Cargando imagen, por favor espera ..."
+    "es": "Cargando imagen, por favor espere..."
   },
   {
     "id": "login_cancel",
@@ -982,12 +982,12 @@
   {
     "id": "login_pwd_mail_sent",
     "en": "An email has been sent, please check your inbox and copy the received password in the field below",
-    "es": ""
+    "es": "Hemos enviado un e-mail. Por fvor, revise su correo y copie la contraseña a continuación "
   },
   {
     "id": "login_pwd_mail_sent_error",
     "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
-    "es": ""
+    "es": "Se ha producido un error, no se ha podido enviarle la contraseña. Por favor, inténtelo de nuevo más tarde."
   },
   {
     "id": "login_project",
@@ -997,7 +997,7 @@
   {
     "id": "login_email",
     "en": "Email",
-    "es": "Email"
+    "es": "E-mail"
   },
   {
     "id": "login_insert_pwd",
@@ -1007,12 +1007,12 @@
   {
     "id": "login_info_box",
     "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
-    "es": ""
+    "es": "Si no está registrado todavía, una autenticación exitosa creará una nueva cuenta y desbloqueará nuevas funciones. Si ya está registrado, la autenticación exitosa le dará acceso a todos los proyectos en los que ya es miembro. El registro de usuario con MapX implica el consentimiento para recopilar y publicar datos de rendimiento de información de identificación no personal a nivel agregado."
   },
   {
     "id": "login_out",
     "en": "Log out",
-    "es": "Desloguearse"
+    "es": "Cerrar sesión"
   },
   {
     "id": "login_groups",
@@ -1027,7 +1027,7 @@
   {
     "id": "login_subtitle",
     "en": "Please enter your email to receive a single usage secure password",
-    "es": "Ingrese su email para recibir una contraseña segura de uso único"
+    "es": "Ingrese su e-mail para recibir una contraseña segura de uso único"
   },
   {
     "id": "login_title",
@@ -1052,7 +1052,7 @@
   {
     "id": "noLegend",
     "en": "[ Missing legend ]",
-    "es": ""
+    "es": "[ Falta la leyenda ]"
   },
   {
     "id": "noData",
@@ -1067,17 +1067,17 @@
   {
     "id": "noLayer",
     "en": "[ No source layer ]",
-    "es": "[ No hay capa source ]"
+    "es": "[ No hay capa de fuente de datos ]"
   },
   {
     "id": "noValue",
     "en": "[ No value ]",
-    "es": ""
+    "es": "[ No hay valores ]"
   },
   {
     "id": "property_list_failed",
     "en": "[ Failed to display attributes ]",
-    "es": ""
+    "es": "[ Error al mostrar los atributos ]"
   },
   {
     "id": "none",
@@ -1107,12 +1107,12 @@
   {
     "id": "noView",
     "en": "[ Select a different project, category or country to display available data ]",
-    "es": "[ Selecciona otro proyecto, categoría o país para ver datos disponibles"
+    "es": "[ Selecciona otro proyecto, categoría o país para ver datos disponibles ]"
   },
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "es": ""
+    "es": "[ {{vOk}}/{{vTot}} ]"
   },
   {
     "id": "nrg",
@@ -1182,7 +1182,7 @@
   {
     "id": "rt",
     "en": "Raster tiles",
-    "es": "Tesela raster"
+    "es": "Imágenes raster"
   },
   {
     "id": "sat",
@@ -1197,22 +1197,22 @@
   {
     "id": "saved_at",
     "en": "Saved at %s",
-    "es": ""
+    "es": "Guardado como"
   },
   {
     "id": "email",
     "en": "Email",
-    "es": "Email"
+    "es": "E-mail"
   },
   {
     "id": "from",
     "en": "From",
-    "es": ""
+    "es": "De"
   },
   {
     "id": "to",
     "en": "To",
-    "es": ""
+    "es": "A"
   },
   {
     "id": "invite_member_email",
@@ -1252,7 +1252,7 @@
   {
     "id": "schema_key",
     "en": "Key",
-    "es": "Clave"
+    "es": "Llave"
   },
   {
     "id": "schema_style_label",
@@ -1297,37 +1297,37 @@
   {
     "id": "schema_style_config_zoom",
     "en": "Zoom settings",
-    "es": ""
+    "es": "Configuración de zoom"
   },
   {
     "id": "schema_style_size_zoom_max",
     "en": "Coeficient of size at zoom max",
-    "es": ""
+    "es": "Coeficiente del tamaño del zoom máximo"
   },
   {
     "id": "schema_style_size_zoom_min",
     "en": "Coeficient of size at zoom min",
-    "es": ""
+    "es": "Coeficiente del tamaño del zoom mínimo"
   },
   {
     "id": "schema_style_size_zoom_exponent",
     "en": "Size interpolation exponent",
-    "es": ""
+    "es": "Exponente de interpolación de tamaño"
   },
   {
     "id": "schema_style_size_zoom_exponent_desc",
     "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
-    "es": ""
+    "es": "Función de exponente de interpolación de tamaño. Un valor de 1 da una interpolación lineal."
   },
   {
     "id": "schema_style_zoom_max",
     "en": "Zoom max",
-    "es": ""
+    "es": "Zoom máximo"
   },
   {
     "id": "schema_style_zoom_min",
     "en": "Zoom min",
-    "es": ""
+    "es": "Zoom mínimo"
   },
   {
     "id": "schema_style_sprite",
@@ -1337,22 +1337,22 @@
   {
     "id": "schema_style_size_zoom_min_desc",
     "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
-    "es": ""
+    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom mínimo"
   },
   {
     "id": "schema_style_size_zoom_max_desc",
     "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
-    "es": ""
+    "es": "Si mayor que 0, el coeficiente del tamaño de las líneas y puntos en zoom máximo"
   },
   {
     "id": "schema_style_zoom_min_desc",
     "en": "Minimum zoom to show the data",
-    "es": ""
+    "es": "Zoom mínimo para mostrar los datos"
   },
   {
     "id": "schema_style_zoom_max_desc",
     "en": "Maximum zoom to display the data",
-    "es": ""
+    "es": "Zoom máximo para mostrar los datos"
   },
   {
     "id": "schema_style_sprite",
@@ -1362,12 +1362,12 @@
   {
     "id": "schema_story_tips_title",
     "en": "Tips:",
-    "es": ""
+    "es": "Consejos:"
   },
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "es": ""
+    "es": "<p> Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores: </p> <ol> <li> Mantenlo simple. </li> <li> Es mejor crear mapas de historias cortas para mantener el interés de su audiencia. </li> <li> Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso. </li> <li> Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su historia. Sin embargo, no deberían eclipsar el componente espacial de su historia. Los mapas deben estar en el centro. </li> <li> Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación. </li> </ol>"
   },
   {
     "id": "schema_story_author",
@@ -1397,12 +1397,12 @@
   {
     "id": "schema_story_slide",
     "en": "Slide",
-    "es": "Slide"
+    "es": "Diapositiva"
   },
   {
     "id": "schema_story_slide_color",
     "en": "Color theme",
-    "es": "Tema de color"
+    "es": "Color del tema"
   },
   {
     "id": "schema_story_slide_color_bg",
@@ -1437,7 +1437,7 @@
   {
     "id": "schema_story_slide_speed",
     "en": "Speed ratio",
-    "es": "Ratio velocidad"
+    "es": "Ratio de velocidad"
   },
   {
     "id": "schema_story_slides",
@@ -1477,7 +1477,7 @@
   {
     "id": "schema_story_title",
     "en": "Story",
-    "es": "Story"
+    "es": "Historia"
   },
   {
     "id": "schema_style_value",
@@ -1502,32 +1502,32 @@
   {
     "id": "source_meta_data",
     "en": "Metadata for the source",
-    "es": "Metadatos de la source"
+    "es": "Metadatos de la fuente de datos"
   },
   {
     "id": "source_confirm_remove",
     "en": "Confirm source deletion",
-    "es": "Confirmar la eliminación de la source"
+    "es": "Confirmar la eliminación de la fuente de datos"
   },
   {
     "id": "source_allow_download",
     "en": "Allow download",
-    "es": ""
+    "es": "Autorizar la descarga"
   },
   {
     "id": "source_allow_WMS",
     "en": "Activate WMS",
-    "es": ""
+    "es": "Activar WMS"
   },
   {
     "id": "source_allow_WFS",
     "en": "Activate WFS",
-    "es": ""
+    "es": "Activar WFS"
   },
   {
     "id": "source_removed",
     "en": "Source deleted",
-    "es": "Source eliminada"
+    "es": "Fuente de datos eliminada"
   },
   {
     "id": "source_raster_tile_legend",
@@ -1537,17 +1537,17 @@
   {
     "id": "source_raster_tile_size",
     "en": "Size of the tiles (pixels)",
-    "es": "Tamaño de las teselas (píxels)"
+    "es": "Tamaño de las celdas (píxels)"
   },
   {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
-    "es": ""
+    "es": "URL del servidor de celdas raster"
   },
   {
     "id": "source_raster_tile_url_download",
     "en": "Download link",
-    "es": ""
+    "es": "Enlace de descarga"
   },
   {
     "id": "source_raster_tile_url_metadata",
@@ -1562,12 +1562,12 @@
   {
     "id": "source_select_layer",
     "en": "Source layer",
-    "es": "Capa source"
+    "es": "Capa de fuente de datos"
   },
   {
     "id": "source_select_layer_mask",
     "en": "Source layer mask",
-    "es": "Máscara de la capa source"
+    "es": "Máscara de la capa de fuente de datos"
   },
   {
     "id": "source_select_variable",
@@ -1577,12 +1577,12 @@
   {
     "id": "source_select_variable_alt",
     "en": "Secondary attributes",
-    "es": "Atributos secondarios"
+    "es": "Atributos secundarios"
   },
   {
     "id": "source_select_variable_alt",
     "en": "Secondary attributes",
-    "es": "Atributos secondarios"
+    "es": "Atributos secundarios"
   },
   {
     "id": "source_target_readers",
@@ -1597,42 +1597,42 @@
   {
     "id": "source_services",
     "en": "Services",
-    "es": ""
+    "es": "Servicios"
   },
   {
     "id": "source_validate_title",
     "en": "Geometry validation tool",
-    "es": ""
+    "es": "Herramienta de validación de geometrías"
   },
   {
     "id": "source_validate_geom_show_expert_options",
     "en": "Show expert options",
-    "es": ""
+    "es": "Mostrar opciones avanzadas"
   },
   {
     "id": "source_validate_geom_use_cache",
     "en": "Use cached results – if any – instead of recalculate",
-    "es": ""
+    "es": "Utilizar resultados en caché, si hay, en lugar recalcular"
   },
   {
     "id": "source_validate_geom_auto_correct",
     "en": "Try an automatic correction ( experimental )",
-    "es": ""
+    "es": "Intentar una corrección automática (experimental)"
   },
   {
     "id": "source_validate_geom_auto_correct_info",
     "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "es": ""
+    "es": "Advertencia: esto podría alterar la geometría. Para los polígonos (múltiples), la corrección automática utiliza un búfer de 0 alrededor de cada entidad. Para otros tipos, se utiliza ST_MakeValid."
   },
   {
     "id": "download_select_format_vector",
     "en": "Output format",
-    "es": "Format de salida"
+    "es": "Formato de salida"
   },
   {
     "id": "download_select_by_countries",
     "en": "Country used to spatially extract the data (clip)",
-    "es": ""
+    "es": "País utilizado para extraer los datos de forma espacial (clip)"
   },
   {
     "id": "download_file_name",
@@ -1687,12 +1687,12 @@
   {
     "id": "source_title",
     "en": "Source title",
-    "es": "Título de la source"
+    "es": "Título de la fuente de datos"
   },
   {
     "id": "str",
     "en": "Stress",
-    "es": "Stress"
+    "es": "Estrés"
   },
   {
     "id": "superuser",
@@ -1712,7 +1712,7 @@
   {
     "id": "user_authentication",
     "en": "Authentication",
-    "es": ""
+    "es": "Autenticación"
   },
   {
     "id": "title_settings",
@@ -1757,7 +1757,7 @@
   {
     "id": "title_tools_sources",
     "en": "Sources",
-    "es": "Sources"
+    "es": "Fuentes de datos"
   },
   {
     "id": "title_tools_views",
@@ -1772,7 +1772,7 @@
   {
     "id": "title_tools_dbself_select",
     "en": "Select source(s) to edit",
-    "es": "Seleccionar las sources para editar"
+    "es": "Seleccionar las fuentes de datos para editar"
   },
   {
     "id": "title_views",
@@ -1837,47 +1837,47 @@
   {
     "id": "views_external_modal_title",
     "en": "Manage external views",
-    "es": ""
+    "es": "Administrat las vistas externas"
   },
   {
     "id": "view_project_short",
     "en": "( p )",
-    "es": ""
+    "es": "( p )"
   },
   {
     "id": "view_external_short",
     "en": "( e )",
-    "es": ""
+    "es": "( e )"
   },
   {
     "id": "view_shared",
     "en": "View shared",
-    "es": ""
+    "es": "Vista compartida"
   },
   {
     "id": "view_delete_modal_title",
     "en": "View to delete %s",
-    "es": ""
+    "es": "Vista para eliminar %s"
   },
   {
     "id": "view_edit_custom_code_modal_title",
     "en": "Edit custom code of %s",
-    "es": ""
+    "es": "Editar el código personalizado de %s"
   },
   {
     "id": "view_edit_dashboard_modal_title",
     "en": "Edit dashboard of  %s",
-    "es": ""
+    "es": "Editar el tablero de instrumentos de %s"
   },
   {
     "id": "view_edit_story_modal_title",
     "en": "Edit story map of  %s",
-    "es": ""
+    "es": "Editar el mapa narrativo de %s"
   },
   {
     "id": "view_edit_style_modal_title",
     "en": "Edit style of  %s",
-    "es": ""
+    "es": "Editar el estilo de %s"
   },
   {
     "id": "view_abstract",
@@ -1887,12 +1887,12 @@
   {
     "id": "view_add_dashboard",
     "en": "Add a dashboard",
-    "es": "Añadir un dashboard"
+    "es": "Añadir un tablero de instrumentos"
   },
   {
     "id": "view_add_download_btn",
     "en": "Allow download of the source",
-    "es": "Permitir la descarga de la source"
+    "es": "Permitir la descarga de la fuente de datos"
   },
   {
     "id": "view_add_overlap_layer",
@@ -1932,7 +1932,7 @@
   {
     "id": "view_dashboard",
     "en": "Dashboard",
-    "es": "Dashboard"
+    "es": "Tablero de instrumentos"
   },
   {
     "id": "view_dashboard_config",
@@ -1952,7 +1952,7 @@
   {
     "id": "view_dashboard_src_layerClick",
     "en": "All attributes and values from the clicked feature",
-    "es": "Todos los atributos y valores de los características cliqueadas"
+    "es": "Todos los atributos y valores de los características clicadas"
   },
   {
     "id": "view_dashboard_src_none",
@@ -1967,12 +1967,12 @@
   {
     "id": "view_dashboard_src_mousemove",
     "en": "All attributes and values at mouse position",
-    "es": ""
+    "es": "Todos los atributos y valores en la posición del ratón"
   },
   {
     "id": "view_dashboard_title",
     "en": "Dashboard title",
-    "es": "Título del dashboard"
+    "es": "Título del tablero de instrumentos"
   },
   {
     "id": "view_dashboard_txt_height",
@@ -1987,27 +1987,27 @@
   {
     "id": "view_dashboard_txt_add_background_color",
     "en": "Add background color",
-    "es": ""
+    "es": "Adjuntar el color de fondo"
   },
   {
     "id": "view_dashboard_txt_color_background",
     "en": "Background color",
-    "es": ""
+    "es": "Color de fondo"
   },
   {
     "id": "view_dashboard_txt_which_data",
     "en": "Which source to use for the data ?",
-    "es": "Cuál source utilizar por los datos?"
+    "es": "Quê fuente de datos utilizar?"
   },
   {
     "id": "view_dashboard_txt_ignore_empty_data",
     "en": "Ignore events that returns an empty array ?",
-    "es": ""
+    "es": "Ignorar los eventos que devuelven una orden vacía"
   },
   {
     "id": "view_dashboard_txt_which_module",
     "en": "Which modules to load?",
-    "es": "Cuál módulo cargar?"
+    "es": "Qué módulo cargar?"
   },
   {
     "id": "view_dashboard_txt_desc_module",
@@ -2027,7 +2027,7 @@
   {
     "id": "view_dashboard_widgets",
     "en": "Widgets",
-    "es": "Widget"
+    "es": "Widgets"
   },
   {
     "id": "view_delete_confirm",
@@ -2037,7 +2037,7 @@
   {
     "id": "view_download_layer",
     "en": "Download the source layer",
-    "es": "Descargar la capa source"
+    "es": "Descargar la capa de fuente de datos"
   },
   {
     "id": "view_edit_current",
@@ -2047,12 +2047,12 @@
   {
     "id": "source_edit_metadata",
     "en": "Edit source metadata",
-    "es": ""
+    "es": "Editar la fuente de metadatos"
   },
   {
     "id": "source_edit",
     "en": "Edit source",
-    "es": ""
+    "es": "Editar la fuente de datos"
   },
   {
     "id": "view_id",
@@ -2097,7 +2097,7 @@
   {
     "id": "view_filter_by_values",
     "en": "Filter by values",
-    "es": ""
+    "es": "Filtrar por valores"
   },
   {
     "id": "view_show_abstract_languages",
@@ -2117,12 +2117,12 @@
   {
     "id": "view_target_readers",
     "en": "Read access groups",
-    "es": "Grupos con acceso de leer"
+    "es": "Grupos con acceso de lectura"
   },
   {
     "id": "view_target_editors",
     "en": "Edit access groups",
-    "es": "Grupos con acceso de editar"
+    "es": "Grupos con acceso de edición"
   },
   {
     "id": "view_text",
@@ -2137,12 +2137,12 @@
   {
     "id": "view_type_select",
     "en": "Type of the view",
-    "es": "Tipo de la vista"
+    "es": "Tipo de vista"
   },
   {
     "id": "vt",
     "en": "Vector tiles",
-    "es": "Teselas de vector"
+    "es": "Celdas de vector"
   },
   {
     "id": "wms",
@@ -2152,17 +2152,17 @@
   {
     "id": "mx_download",
     "en": "Allow this source to be downloaded",
-    "es": ""
+    "es": "Autorizar esta fuente de datos para ser descargada"
   },
   {
     "id": "gs_ws_a",
     "en": "Publish all related views via WMS",
-    "es": ""
+    "es": "Publicar todas las vistas relacionadas por WMS"
   },
   {
     "id": "gs_ws_b",
     "en": "Publish all related views via WMS/WFS/WCS",
-    "es": ""
+    "es": "Publicar todas las vistas relacionadas por WMS/WFS/WCS"
   },
   {
     "id": "src_download_issues",
@@ -2172,7 +2172,7 @@
   {
     "id": "src_upload_add",
     "en": "Upload a new source layer",
-    "es": ""
+    "es": "Subir una nueva capa base"
   },
   {
     "id": "src_upload_issues",
@@ -2182,27 +2182,27 @@
   {
     "id": "source_upload_vector",
     "en": "Upload new vector source",
-    "es": "Subir nueva source de vector"
+    "es": "Subir nueva fuente de datos vectoriales"
   },
   {
     "id": "upload_source_title",
     "en": "Title of the new source",
-    "es": "Título de la nueva source"
+    "es": "Título de la nueva fuente de datos"
   },
   {
     "id": "you_not_logged_in",
     "en": "You are not logged in.",
-    "es": "No esta contectado."
+    "es": "No está contectado."
   },
   {
     "id": "you_not_allowed",
     "en": "You are not allowed to do this.",
-    "es": "No esta autorizado hacer esta acción."
+    "es": "No está autorizado hacer esta acción."
   },
   {
     "id": "src_download_disabled",
     "en": "The download is not allowed.",
-    "es": "La descarga no es permitido"
+    "es": "La descarga no está permitida"
   },
   {
     "id": "mx_ui_text",
@@ -2212,7 +2212,7 @@
   {
     "id": "mx_ui_link",
     "en": "Links",
-    "es": ""
+    "es": "Enlaces"
   },
   {
     "id": "mx_ui_text_faded",
@@ -2262,7 +2262,7 @@
   {
     "id": "mx_map_road_border",
     "en": "Map: road border",
-    "es": "Mapa: borde de las rutas"
+    "es": "Mapa: borde de carreteras y caminos"
   },
   {
     "id": "mx_map_building",
@@ -2272,37 +2272,37 @@
   {
     "id": "mx_map_boundary_un_1",
     "en": "Map: International boundary",
-    "es": ""
+    "es": "Mapa: frontera internacional"
   },
   {
     "id": "mx_map_boundary_un_2",
     "en": "Map: Special boundary line",
-    "es": ""
+    "es": "Mapa: línea de fronteras especiales"
   },
   {
     "id": "mx_map_boundary_un_3",
     "en": "Map: Armistice or international boundary_unistrative line",
-    "es": ""
+    "es": "Mapa: armisticio o línea internacional"
   },
   {
     "id": "mx_map_boundary_un_4",
     "en": "Map: Other line of separation",
-    "es": ""
+    "es": "Mapa: otras líneas de separación"
   },
   {
     "id": "mx_map_boundary_un_8",
     "en": "Map: Autonomous region boundary",
-    "es": ""
+    "es": "Mapa: fronteras de regiones autónomas"
   },
   {
     "id": "mx_map_boundary_un_9",
     "en": "Map: Sovereign base limit",
-    "es": ""
+    "es": "Mapa: límite de base soberana"
   },
   {
     "id": "mx_map_boundary_osm_subnational_3_4",
     "en": "Map: Subnational boundaries",
-    "es": ""
+    "es": "Mapa: Fronteras subnacionales"
   },
   {
     "id": "mx_map_text",
@@ -2317,17 +2317,17 @@
   {
     "id": "list_publishers",
     "en": "List of publishers",
-    "es": "Lista de los editores"
+    "es": "Lista de editores"
   },
   {
     "id": "list_members",
     "en": "List of members",
-    "es": "Lista de los miembros"
+    "es": "Lista de miembros"
   },
   {
     "id": "list_admins",
     "en": "List of administrators",
-    "es": "Lista de los administradores"
+    "es": "Lista de administradores"
   },
   {
     "id": "list_contacts",
@@ -2372,7 +2372,7 @@
   {
     "id": "rem_contacts",
     "en": "Contacts removed",
-    "es": "Contacts eliminados"
+    "es": "Contactos eliminados"
   },
   {
     "id": "no_changes",
@@ -2397,22 +2397,22 @@
   {
     "id": "error_roles_no_admins",
     "en": "Require at least one admin",
-    "es": "Al menos un administrador necesario"
+    "es": "Al menos un administrador es necesario"
   },
   {
     "id": "error_views_need_data",
     "en": "Deletion of a source disabled because at least one view depends on it",
-    "es": "Eliminación de la source desactivado porque hay una vista que depende de la source"
+    "es": "Eliminación desactivada porque hay una vista que depende de la fuente de datos"
   },
   {
     "id": "error_views_need_publishers",
     "en": "At least one view needs this source to be available for publishers. Update disabled.",
-    "es": "Por lo menos una vista necesita esta source disponible para los editores. No se puede actualizar."
+    "es": "Al menos una vista necesita esta fuente de datos disponible para los editores. No se puede actualizar."
   },
   {
     "id": "error_roles_removed_self",
     "en": "You can't remove yourself from admin group",
-    "es": "No se puede reitrar del grupo de los administradores"
+    "es": "No se puede retirar del grupo de los administradores"
   },
   {
     "id": "project_enable_public",
@@ -2422,52 +2422,52 @@
   {
     "id": "project_enable_join",
     "en": "Allow non-members to request a membership to this project.",
-    "es": ""
+    "es": "Permitir a los no miembros solicitar una membresía para este proyecto."
   },
   {
     "id": "project_state_key",
     "en": "Identifier",
-    "es": ""
+    "es": "Identificar"
   },
   {
     "id": "project_save_views_state",
     "en": "Save views state",
-    "es": ""
+    "es": "Guardar el orden de las vistas"
   },
   {
     "id": "project_roles_modal_title",
     "en": "Roles administration",
-    "es": ""
+    "es": "Administracion de roles"
   },
   {
     "id": "project_alias_name",
     "en": "Alias of the project",
-    "es": ""
+    "es": "Alias del proyecto"
   },
   {
     "id": "project_alias_name_desc",
     "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "es": ""
+    "es": "Mínimo 1, máximo 30 minúsculas con caracteres ASCII [a-z], números [0-9], guiones [-] y guiones bajos permitidos [_]"
   },
   {
     "id": "error_project_alias_not_valid",
     "en": "Project alias not valid or already taken",
-    "es": ""
+    "es": "Alias del proyecto no válido o ya en uso"
   },
   {
     "id": "project_access_denied",
     "en": "Access denied. You cannot access the requested project",
-    "es": ""
+    "es": "Aceso denegado. No puede acceder al proyecto seleccionado."
   },
   {
     "id": "project_delete_confirm_title",
     "en": "Write the project name you want to delete",
-    "es": "Escribe el título del proyecto que desea eliminar"
+    "es": "Escriba el título del proyecto que desea eliminar"
   },
   {
     "id": "project_invite_modal_title",
     "en": "Invite a new member",
-    "es": "Invitar a nuevo miembro"
+    "es": "Invitar a nuevo miembro al proyecto"
   },
   {
     "id": "btn_show_invite_member",
@@ -2482,7 +2482,7 @@
   {
     "id": "project_invite_message_sent",
     "en": "Email sent.",
-    "es": "Email enviado."
+    "es": "E-mail enviado."
   },
   {
     "id": "project_invite_message_tips",
@@ -2502,7 +2502,7 @@
   {
     "id": "project_countries_highlight",
     "en": "Countries to be highlighted on the map",
-    "es": "Países resaltados en el mapa"
+    "es": "Países destacados en el mapa"
   },
   {
     "id": "project_search_values",
@@ -2517,7 +2517,7 @@
   {
     "id": "project_created",
     "en": "Project %1$s created",
-    "es": "Proyecto %1$s creído"
+    "es": "Proyecto %1$s creado"
   },
   {
     "id": "project_deleted",
@@ -2527,12 +2527,12 @@
   {
     "id": "project_delete_analyze",
     "en": "Analysing, please wait...",
-    "es": "Analizando, por favor espera..."
+    "es": "Analizando, por favor espere..."
   },
   {
     "id": "project_delete_number_of_sources",
     "en": "Number of sources to delete",
-    "es": "Nombre de la source para eliminar"
+    "es": "Nombre de la fuente de datos para eliminar"
   },
   {
     "id": "project_delete_number_of_views",
@@ -2542,7 +2542,7 @@
   {
     "id": "project_delete_title",
     "en": "Project deletion",
-    "es": "Eliminación del proyecto"
+    "es": "Eliminare el proyecto"
   },
   {
     "id": "project_new_title",
@@ -2557,7 +2557,7 @@
   {
     "id": "project_list_select_desc",
     "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
-    "es": "Haga clic en el nombre de un proyecto para accederlo. Si usted no es miebro de un proyecto, puede solicitar unirse al mismo haciendo clic en el botón unirse."
+    "es": "Haga clic en el nombre de un proyecto para acceder. Si usted no es miebro de un proyecto, puede solicitar unirse al mismo haciendo clic en el botón unirse."
   },
   {
     "id": "project_title",
@@ -2617,22 +2617,22 @@
   {
     "id": "map_north_max",
     "en": "Max north latitude",
-    "es": "Max. latitud norte"
+    "es": "Máxima latitud norte"
   },
   {
     "id": "map_south_max",
     "en": "Max south latitude",
-    "es": "Max. latitud sur"
+    "es": "Máxima latitud sur"
   },
   {
     "id": "map_east_max",
     "en": "Max east longitude",
-    "es": "Max. longitud este"
+    "es": "Máxima longitud este"
   },
   {
     "id": "map_west_max",
     "en": "Max west longitude",
-    "es": "Max. longitud oeste"
+    "es": "Máxima longitud oeste"
   },
   {
     "id": "view_public_valid",
@@ -2642,12 +2642,12 @@
   {
     "id": "view_public_not_valid",
     "en": "This view is publicly available \n with incomplete metadata",
-    "es": ""
+    "es": "Esta vista está disponible para todos los usuarios \n con metadatos incompletos"
   },
   {
     "id": "view_editable",
     "en": "You have editor rights for this view",
-    "es": "Tiene derechos de editor para esta vista"
+    "es": "Tiene derechos de editor en esta vista"
   },
   {
     "id": "view_locked",
@@ -2662,7 +2662,7 @@
   {
     "id": "txt_email_not_valid",
     "en": "Email not valid",
-    "es": "Email no válido"
+    "es": "E-mail no válido"
   },
   {
     "id": "project_request_membership_message",
@@ -2677,7 +2677,7 @@
   {
     "id": "project_request_membership_message_recap",
     "en": "A membership request from <from> has been received. \\nMessage : \\n-\\n<msg>\\n-\\nConfirmation : <link>\\nData : <data>\\n",
-    "es": "Una solicitud de afiliación de <from> esta recibido. \\nMensaje: \\n-\\n<msg>\\n-\\nConfirmación : <link>\\nData : <data>\\n"
+    "es": "Ha recibido una solicitud de afiliacion de <from>. \\nMensaje: \\n-\\n<msg>\\n-\\nConfirmación : <link>\\nData : <data>\\n"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -2687,167 +2687,167 @@
   {
     "id": "update_app_msg",
     "en": "MapX has been updated, this page will be reloaded now.",
-    "es": ""
+    "es": "MapX ha sido actualizado, esta página va a ser refrescada ahora."
   },
   {
     "id": "btn_clear_cache",
     "en": "Clear cached data",
-    "es": ""
+    "es": "Suprimir los datos en caché"
   },
   {
     "id": "title_utilities",
     "en": "Utilities",
-    "es": ""
+    "es": "Utilidades"
   },
   {
     "id": "update_app_title",
     "en": "Update",
-    "es": ""
+    "es": "Actualizar"
   },
   {
     "id": "btn_install_update",
     "en": "Install and reload",
-    "es": ""
+    "es": "Instalar y recargar"
   },
   {
     "id": "tbl_views_depending_source",
     "en": "Table of views depending on the source",
-    "es": ""
+    "es": "Tabla de vistas que depende de la fuente de datos"
   },
   {
     "id": "btn_validate_metadata",
     "en": "In depth validation",
-    "es": ""
+    "es": "Validación avanzada"
   },
   {
     "id": "validate_meta_title",
     "en": "Metadata validation",
-    "es": ""
+    "es": "Validación de los metadatos"
   },
   {
     "id": "validate_meta_no_issue",
     "en": "Metadata are valid.",
-    "es": ""
+    "es": "Los metadatos son válidos"
   },
   {
     "id": "validate_meta_attribute",
     "en": "Attributes",
-    "es": ""
+    "es": "Atributos"
   },
   {
     "id": "validate_meta_invalid_attribute",
     "en": "Invalid attribute description entry",
-    "es": ""
+    "es": "Descripción de atributo inválido"
   },
   {
     "id": "validate_meta_abstract",
     "en": "Abstract",
-    "es": ""
+    "es": "Resumen"
   },
   {
     "id": "validate_meta_invalid_abstract",
     "en": "Invalid abstract",
-    "es": ""
+    "es": "Resumen"
   },
   {
     "id": "validate_meta_title",
     "en": "Title",
-    "es": ""
+    "es": "Título"
   },
   {
     "id": "validate_meta_invalid_title",
     "en": "Invalid title",
-    "es": ""
+    "es": "Título inválido"
   },
   {
     "id": "validate_meta_keyword",
     "en": "Keywords",
-    "es": ""
+    "es": "Palabras clave"
   },
   {
     "id": "validate_meta_no_keyword",
     "en": "Missing keywords",
-    "es": ""
+    "es": "Palabras clave faltantes"
   },
   {
     "id": "validate_meta_invalid_keyword",
     "en": "Invalid keywords",
-    "es": ""
+    "es": "Palabras clave inválidas"
   },
   {
     "id": "validate_meta_contact",
     "en": "Contacts",
-    "es": ""
+    "es": "Contactos"
   },
   {
     "id": "validate_meta_no_contact",
     "en": "Missing contact",
-    "es": ""
+    "es": "Contact faltante"
   },
   {
     "id": "validate_meta_invalid_contact_email",
     "en": "Invalid contact email",
-    "es": ""
+    "es": "E-mail de contacto inválido"
   },
   {
     "id": "validate_meta_issuance",
     "en": "Issuance",
-    "es": ""
+    "es": "Emision"
   },
   {
     "id": "validate_meta_invalid_issuance_periodicity",
     "en": "Invalid periodicity",
-    "es": ""
+    "es": "Periodicidad inválida"
   },
   {
     "id": "validate_meta_invalid_issuance_released_at",
     "en": "Invalid date of release",
-    "es": ""
+    "es": "Datos de publicación inválidos"
   },
   {
     "id": "validate_meta_invalid_issuance_modified_at",
     "en": "Invalid date of modification",
-    "es": ""
+    "es": "Datos de modificación inválidos"
   },
   {
     "id": "validate_meta_license",
     "en": "License",
-    "es": ""
+    "es": "Licencia"
   },
   {
     "id": "validate_meta_no_license",
     "en": "Missing license",
-    "es": ""
+    "es": "Licencia faltante"
   },
   {
     "id": "validate_meta_invalid_license",
     "en": "Invalid license",
-    "es": ""
+    "es": "Licencia inválida"
   },
   {
     "id": "validate_meta_source",
     "en": "Source",
-    "es": ""
+    "es": "Fuente de datos"
   },
   {
     "id": "validate_meta_no_source",
     "en": "Source missing",
-    "es": ""
+    "es": "Fuente de datos faltante"
   },
   {
     "id": "validate_meta_invalid_source",
     "en": "Invalid source",
-    "es": ""
+    "es": "Fuente de datos inválida"
   },
   {
     "id": "validate_meta_invalid_external_link",
     "en": "Invalid external link",
-    "es": ""
+    "es": "Enlace externo inválido"
   },
   {
     "id": "source_last_editor_email",
     "en": "Email of the last editor",
-    "es": ""
+    "es": "E-mail del último editor"
   },
   {
     "id": "additional_doc_desc",
@@ -2907,7 +2907,7 @@
   {
     "id": "attributes_desc_title",
     "en": "Attributes description",
-    "es": ""
+    "es": "Descripción del atributo"
   },
   {
     "id": "attributes_desc_desc",
@@ -2922,22 +2922,22 @@
   {
     "id": "attributes_alias_title",
     "en": "Alias for attributes names",
-    "es": ""
+    "es": "Alias de los nombres de los atributos"
   },
   {
     "id": "attributes_alias_desc",
     "en": "Set attributes short names (alias)",
-    "es": ""
+    "es": "Definir los nombres cortos de los atributos (alias)"
   },
   {
     "id": "attribute_alias_item_title",
     "en": "Alias",
-    "es": ""
+    "es": "Alias"
   },
   {
     "id": "biannually",
     "en": "Data is updated twice each year",
-    "es": "Los datos son actualizados dos veces por año"
+    "es": "Los datos son actualizados dos veces al año"
   },
   {
     "id": "confirm_source_remove",
@@ -2947,17 +2947,17 @@
   {
     "id": "contact_address",
     "en": "Contact address",
-    "es": "Dirección del contacto"
+    "es": "Dirección de contacto"
   },
   {
     "id": "contact_desc",
     "en": "Information about people or organisation related to this data",
-    "es": " Información de contacto de la persona o organización relacionados con datos"
+    "es": "Información de contacto de la persona u organización relacionados con los datos"
   },
   {
     "id": "contact_email",
     "en": "Contact email",
-    "es": "Correo electrónico del contacto"
+    "es": "Correo electrónico de contacto"
   },
   {
     "id": "contact_function",
@@ -2967,7 +2967,7 @@
   {
     "id": "contact_function_desc",
     "en": "Name of the contact function, e.g. Administrator, Publisher",
-    "es": "Nombre de la función del contacto. Ej. Administrador"
+    "es": "Nombre de la función de contacto. Ej. Administrador"
   },
   {
     "id": "contact_item_title",
@@ -2977,7 +2977,7 @@
   {
     "id": "contact_list_title",
     "en": "List of contacts",
-    "es": "Lista de contactos"
+    "es": "Listado de contactos"
   },
   {
     "id": "contact_name",
@@ -3002,7 +3002,7 @@
   {
     "id": "fortnightly",
     "en": "Data is updated every two weeks",
-    "es": "Los datos son actualizados 2 veces por mes"
+    "es": "Los datos son actualizados 2 veces al mes"
   },
   {
     "id": "irregular",
@@ -3012,7 +3012,7 @@
   {
     "id": "lang_desc",
     "en": "Language(s) used in content",
-    "es": "Lengua(s) utilizada(s) en el contenido"
+    "es": "Idioma(s) utilizadao(s) en el contenido"
   },
   {
     "id": "lang_item_title",
@@ -3126,7 +3126,7 @@
   {
     "id": "optional_view_text",
     "en": "Select an attribute from the source to create a simple view or click on finish to end the importation",
-    "es": "Seleccione un atributo para crear una vista simple o haga clic en Finalizar para finalizar la importación"
+    "es": "Seleccione un atributo para crear una vista simple o haga clic en 'Finalizar' para terminar la importación"
   },
   {
     "id": "optional_view_title",
@@ -3136,7 +3136,7 @@
   {
     "id": "origin_desc",
     "en": "Origin of the data and how to retrieve it",
-    "es": "Origen de los datos y cómo puedo obtenerlos"
+    "es": "Origen de los datos y cómo obtenerlos"
   },
   {
     "id": "origin_homepage_desc",
@@ -3211,167 +3211,167 @@
   {
     "id": "schema_story_views_activate",
     "en": "Views to activate",
-    "es": ""
+    "es": "Vistas a activar"
   },
   {
     "id": "schema_story_slide_classes",
     "en": "Slide classes",
-    "es": ""
+    "es": "Clases de diapositivas"
   },
   {
     "id": "schema_story_slide_classes_name",
     "en": "Class names",
-    "es": ""
+    "es": "Nombres de las clases"
   },
   {
     "id": "schema_story_slide_allow_scroll",
     "en": "Allow scrolling",
-    "es": ""
+    "es": "Autorizar desplazamiento vertical"
   },
   {
     "id": "schema_story_slide_allow_scroll_desc",
     "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
-    "es": ""
+    "es": "Si el contenido de la diapositiva sale del contenedor, se mostrará una barra de desplazamiento."
   },
   {
     "id": "schema_story_slide_base_txt_size_px",
     "en": "Base text size in pixels",
-    "es": ""
+    "es": "Tamaño del texto base en píxeles"
   },
   {
     "id": "schema_story_slide_effects",
     "en": "Effects",
-    "es": ""
+    "es": "Efectos"
   },
   {
     "id": "schema_story_slide_effect_start",
     "en": "Start",
-    "es": ""
+    "es": "Comenzar"
   },
   {
     "id": "schema_story_slide_effect_end",
     "en": "End",
-    "es": ""
+    "es": "Fin"
   },
   {
     "id": "schema_story_slide_effect_offset",
     "en": "Offset",
-    "es": ""
+    "es": "Compensar"
   },
   {
     "id": "schema_story_slide_effect_factor",
     "en": "Factor",
-    "es": ""
+    "es": "Factor"
   },
   {
     "id": "schema_story_slide_effect_type",
     "en": "Type",
-    "es": ""
+    "es": "Tipo"
   },
   {
     "id": "schema_story_slide_name",
     "en": "Slide name",
-    "es": ""
+    "es": "Nombre de la diapositiva"
   },
   {
     "id": "schema_story_map_anim_duration",
     "en": "Animation duration [ms]",
-    "es": ""
+    "es": "Duración de la animación (en ms)"
   },
   {
     "id": "schema_story_map_anim_duration_desc",
     "en": "Change the total animation duration",
-    "es": ""
+    "es": "Modificar la durada total de la animación"
   },
   {
     "id": "schema_story_map_anim_traj_method",
     "en": "Trajectory method",
-    "es": ""
+    "es": "Método de trayectoria"
   },
   {
     "id": "schema_story_map_anim_traj_method_desc",
     "en": "Set the traveling method of the camera during the animation",
-    "es": ""
+    "es": "Establecer el método de desplazamiento de la cámara durante la animacion"
   },
   {
     "id": "schema_story_map_anim_fun",
     "en": "Animation function",
-    "es": ""
+    "es": "Función de la animación"
   },
   {
     "id": "schema_story_map_anim_fun_desc",
     "en": "Change the default animation function. Ease the start and/or end of the animation.",
-    "es": ""
+    "es": "Cambiar la función de animación predeterminada. Facilita el inicio y, o el final de la animación."
   },
   {
     "id": "schema_story_map_anim_fun_exp",
     "en": "Animation function exponent",
-    "es": ""
+    "es": "Exponente de la función de animación"
   },
   {
     "id": "schema_story_map_anim_fun_exp_desc",
     "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "es": ""
+    "es": "Cambiar el exponente de la función por defecto. Esto amplificará o reducirá la tasa de relajación."
   },
   {
     "id": "schema_story_map_anim",
     "en": "Map animation",
-    "es": ""
+    "es": "Animación del mapa"
   },
   {
     "id": "schema_story_autoplay_timeout",
     "en": "Timeout [ms]",
-    "es": ""
+    "es": "Tiempo de espera (ms)"
   },
   {
     "id": "schema_story_autoplay_timeout_desc",
     "en": "Waiting time before going to the next step.",
-    "es": ""
+    "es": "Tiempo de espera antes de pasar a la siguiente etapa"
   },
   {
     "id": "schema_story_autoplay_transition",
     "en": "Transition [ms]",
-    "es": ""
+    "es": "Transicion (ms)"
   },
   {
     "id": "schema_story_autoplay_transition_desc",
     "en": "Duration of the transition between steps.",
-    "es": ""
+    "es": "Duración de la transición entre etapas"
   },
   {
     "id": "schema_story_autoplay",
     "en": "Autoplay settings",
-    "es": ""
+    "es": "Parámetros de lectura automática"
   },
   {
     "id": "schema_story_step_name",
     "en": "Step name",
-    "es": ""
+    "es": "Nombre de la etapa"
   },
   {
     "id": "schema_story_screen_res",
     "en": "Screen resolution",
-    "es": ""
+    "es": "Resolución de la pantalla"
   },
   {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "es": ""
+    "es": "Resolución base de la página durante un mapa de historia. Se escalará automáticamente para adaptarse a la pantalla y preservar el formato del contenido."
   },
   {
     "id": "schema_story_settings",
     "en": "Settings",
-    "es": ""
+    "es": "Parámetros"
   },
   {
     "id": "button_legend_title",
     "en": "Legends",
-    "es": ""
+    "es": "Leyendas"
   },
   {
     "id": "button_legend_btn",
     "en": "Legends",
-    "es": ""
+    "es": "Leyendas"
   },
   {
     "id": "select_optional_view_attribute",
@@ -3460,11 +3460,13 @@
   },
   {
     "id": "target_roles_admin_title",
-    "en": "Roles allowed to manage"
+    "en": "Roles allowed to manage",
+    "es": "Roles autorizados a administrar"
   },
   {
     "id": "target_roles_get_title",
-    "en": "Roles allowed to download"
+    "en": "Roles allowed to download",
+    "es": "Roles autorizados a descargar"
   },
   {
     "id": "target_roles_list_title",
@@ -3539,7 +3541,7 @@
   {
     "id": "temporal_release_title",
     "en": "Release date",
-    "es": " Fecha de emisión"
+    "es": "Fecha de emisión"
   },
   {
     "id": "temporal_title",
@@ -3559,11 +3561,12 @@
   {
     "id": "textual_desc",
     "en": "Textual description of the data using title, abstract and tags",
-    "es": "Descripción de los datos: Título, resumen y etiquetas"
+    "es": "Descripción de los datos: título, resumen y etiquetas"
   },
   {
     "id": "textual_desc_notes",
-    "en": "Additional notes"
+    "en": "Additional notes",
+    "es": "Notas adicionales"
   },
   {
     "id": "textual_desc_abstract",
@@ -3588,12 +3591,12 @@
   {
     "id": "textual_keywords_title",
     "en": "Keywords list",
-    "es": "Lista de palabras claves"
+    "es": "Lista de palabras clave"
   },
   {
     "id": "textual_keyword_title",
     "en": "Keywords",
-    "es": "Palabras claves"
+    "es": "Palabras clave"
   },
   {
     "id": "textual_title",
@@ -3603,7 +3606,7 @@
   {
     "id": "unknown",
     "en": "Frequency of maintenance for the data is not known",
-    "es": "La frecuencia de actualización de los datos no se conoce"
+    "es": "La frecuencia de actualización desconocida"
   },
   {
     "id": "weekly",
@@ -3612,23 +3615,28 @@
   },
   {
     "id": "meta_display_source_title",
-    "en": "Metadata of the source"
+    "en": "Metadata of the source",
+    "es": "Metadatos de la fuente de datos"
   },
   {
     "id": "meta_display_view_title",
-    "en": "Summary of the view metadata"
+    "en": "Summary of the view metadata",
+    "es": "Resumen de los metadatos de la vista"
   },
   {
     "id": "meta_last_editor_id",
-    "en": "Editor id"
+    "en": "Editor id",
+    "es": "Id del editor"
   },
   {
     "id": "meta_all_editor_id",
-    "en": "Id of all editors"
+    "en": "Id of all editors",
+    "es": "Id de todos los editores"
   },
   {
     "id": "meta_view_modal_title",
-    "en": "Metadata of the view"
+    "en": "Metadata of the view",
+    "es": "Metadatos de la vista"
   },
   {
     "id": "meta_view_table_summary_title",
@@ -3636,171 +3644,211 @@
   },
   {
     "id": "meta_view_raster_meta",
-    "en": "Metadata Entry"
+    "en": "Metadata Entry",
+    "es": "Entrada de metadatos"
   },
   {
     "id": "meta_view_table_editors_title",
-    "en": "Changes overview"
+    "en": "Changes overview",
+    "es": "Visión general de los cambios"
   },
   {
     "id": "meta_view_table_editors_changes",
-    "en": "N. of changes"
+    "en": "N. of changes",
+    "es": "Número de cambios"
   },
   {
     "id": "meta_view_table_editors_email",
-    "en": "Editor"
+    "en": "Editor",
+    "es": "Editor"
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Latest edit"
+    "en": "Últimos cambios"
   },
   {
     "id": "meta_view_title",
-    "en": "View title"
+    "en": "View title",
+    "es": "Ver título"
   },
   {
     "id": "meta_view_abstract",
-    "en": "Abstract"
+    "en": "Abstract",
+    "es": "Resumen"
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing"
+    "en": "Número de visualizaciones"
   },
   {
     "id": "meta_view_stat_n_distinct_user",
-    "en": "Number of distinct users"
+    "en": "Number of distinct users",
+    "es": "Número de usuaros distintos"
   },
   {
     "id": "meta_source_title",
-    "en": "Title"
+    "en": "Title",
+    "es": "Título"
   },
   {
     "id": "meta_source_abstract",
-    "en": "Abstract"
+    "en": "Abstract",
+    "es": "Resumen"
   },
   {
     "id": "meta_source_notes",
-    "en": "Notes"
+    "en": "Notes",
+    "es": "Notas"
   },
   {
     "id": "meta_source_keywords",
-    "en": "Keywords"
+    "en": "Keywords",
+    "es": "Palabras clave"
   },
   {
     "id": "meta_source_languages",
-    "en": "Languages used in the data"
+    "en": "Languages used in the data",
+    "es": "Idiomas usados en los datos"
   },
   {
     "id": "meta_source_contacts",
-    "en": "Contacts list"
+    "en": "Contacts list",
+    "es": "Lista de personas de contacto"
   },
   {
     "id": "meta_source_periodicity",
-    "en": "Periodicity"
+    "en": "Periodicity",
+    "es": "Periodicidad"
   },
   {
     "id": "meta_source_released_at",
-    "en": "Date of release"
+    "en": "Date of release",
+    "es": "Fecha de publicación"
   },
   {
     "id": "meta_source_modified_at",
-    "en": "Date of modification"
+    "en": "Date of modification",
+    "es": "Datos de moficación"
   },
   {
     "id": "meta_source_start_at",
-    "en": "Data values starting date"
+    "en": "Data values starting date",
+    "es": "Fecha de inicio de los datos"
   },
   {
     "id": "meta_source_end_at",
-    "en": "Data values ending date"
+    "en": "Data values ending date",
+    "es": "Fecha final de los datos"
   },
   {
     "id": "meta_source_is_timeless",
-    "en": "Data without temporal values"
+    "en": "Data without temporal values",
+    "es": "Datos sin valores temporales"
   },
   {
     "id": "meta_view_projects_titles",
-    "en": "Also published in those projects"
+    "en": "Also published in those projects",
+    "es": "También publicado en estos proyectos"
   },
   {
     "id": "meta_view_project_title",
-    "en": "Original project"
+    "en": "Original project",
+    "es": "Proyecto original"
   },
   {
     "id": "meta_view_projects",
-    "en": "Projects"
+    "en": "Projects",
+    "es": "Proyectos"
   },
   {
     "id": "meta_view_id",
-    "en": "View id"
+    "en": "View id",
+    "es": "Id de la vista"
   },
   {
     "id": "meta_view_collections",
-    "en": "Collections"
+    "en": "Collections",
+    "es": "Colecciones"
   },
   {
     "id": "meta_view_date_modified",
-    "en": "Modification date"
+    "en": "Modification date",
+    "es": "Fecha de modificación"
   },
   {
     "id": "meta_view_date_created",
-    "en": "Creation date"
+    "en": "Creation date",
+    "es": "Fecha de creación"
   },
   {
     "id": "meta_view_editor",
-    "en": "Editor"
+    "en": "Editor",
+    "es": "Editor"
   },
   {
     "id": "meta_view_editors",
-    "en": "Groups with editing access"
+    "en": "Groups with editing access",
+    "es": "Grupos con acceso a editar"
   },
   {
     "id": "meta_view_readers",
-    "en": "Groups with reading access"
+    "en": "Groups with reading access",
+    "es": "Grupos con acceso de lectura"
   },
   {
     "id": "meta_view_type",
-    "en": "Type"
+    "en": "Type",
+    "es": "Tipo"
   },
   {
     "id": "meta_view_table_summary_title",
-    "en": "Summary of the view"
+    "en": "Summary of the view",
+    "es": "Resumen de la vista"
   },
   {
     "id": "meta_source_id",
-    "en": "Source id"
+    "en": "Source id",
+    "es": "Id de la fuente de datos"
   },
   {
     "id": "meta_source_table_summary_title",
-    "en": "Summary of the source"
+    "en": "Summary of the source",
+    "es": "Resumen de la fuente de datos"
   },
   {
     "id": "meta_source_homepage",
-    "en": "Source homepage"
+    "en": "Source homepage",
+    "es": "Página de la fuente de datos"
   },
   {
     "id": "meta_source_url_download",
-    "en": "Download original source"
+    "en": "Download original source",
+    "es": "Descarga de la fuente de datos original"
   },
   {
     "id": "meta_source_url_annexes",
-    "en": "Download annexes"
+    "en": "Download annexes",
+    "es": "Descarga de los anexos"
   },
   {
     "id": "meta_source_integrity_score",
-    "en": "Integrity score"
+    "en": "Integrity score",
+    "es": "Puntuación de integridad"
   },
   {
     "id": "meta_source_time_range",
-    "en": "Temporal range"
+    "en": "Temporal range",
+    "es": "Rango temporal"
   },
   {
     "id": "meta_source_time_range_min",
-    "en": "From"
+    "en": "From",
+    "es": "De"
   },
   {
     "id": "meta_source_time_range_max",
-    "en": "To"
+    "en": "To",
+    "es": "A"
   },
   {
     "id": "dont_know",
@@ -3825,557 +3873,557 @@
   {
     "id": "wms_select_reviewed_service",
     "en": "Select stored service",
-    "es": ""
+    "es": "Selectionar un servicio registrado"
   },
   {
     "id": "wms_select_layer",
     "en": "Select layer",
-    "es": ""
+    "es": "Selectionar capa"
   },
   {
     "id": "wms_input_service_url",
     "en": "Enter service URL",
-    "es": ""
+    "es": "Entrar URL de servicio"
   },
   {
     "id": "wms_btn_generate_url",
     "en": "Update generated URL ( tiles server, legends )",
-    "es": ""
+    "es": "Actualizar la URL generada (servidor de celdas raster, leyendas)"
   },
   {
     "id": "wms_btn_get_layers",
     "en": "Update layer list",
-    "es": ""
+    "es": "Actualizar la lista de capas"
   },
   {
     "id": "app_maintenance_title",
     "en": "Maintenance",
-    "es": ""
+    "es": "Mantenimiento"
   },
   {
     "id": "app_maintenance_text",
     "en": "MapX is currently unavailable due to server maintenance. </br> Come back later in the day !  </br> </br> Sincerely, your MapX team",
-    "es": ""
+    "es": "MapX no está disponible actualmente debido al mantenimiento del servidor. </br> ¡Vuelve más tarde en el día! </br> </br> Atentamente, su equipo de MapX "
   },
   {
     "id": "pk_panel_options",
     "en": "Display options",
-    "es": ""
+    "es": "Opciones de muestra"
   },
   {
     "id": "pk_tab_settings",
     "en": "Palette tool",
-    "es": ""
+    "es": "Herramienta de paleta"
   },
   {
     "id": "pk_tab_palettes",
     "en": "Palettes",
-    "es": ""
+    "es": "Paletas"
   },
   {
     "id": "pk_tab_edit_json",
     "en": "Edit JSON",
-    "es": ""
+    "es": "Editar en JSON"
   },
   {
     "id": "pk_btn_add",
     "en": "Add",
-    "es": ""
+    "es": "Añadir"
   },
   {
     "id": "pk_btn_close",
     "en": "Close",
-    "es": ""
+    "es": "Cerrar"
   },
   {
     "id": "pk_slider_n_hue_rotation",
     "en": "Number of hue rotation",
-    "es": ""
+    "es": "Número de rotación del tinte"
   },
   {
     "id": "pk_slider_n_colors",
     "en": "Number of colors",
-    "es": ""
+    "es": "Número de colores"
   },
   {
     "id": "pk_slider_hue_shift",
     "en": "Hue shift",
-    "es": ""
+    "es": "Decálogo de tintes"
   },
   {
     "id": "pk_slider_colors",
     "en": "Colors space",
-    "es": ""
+    "es": "Espacio de colores"
   },
   {
     "id": "pk_slider_saturation",
     "en": "Saturation",
-    "es": ""
+    "es": "Saturacion"
   },
   {
     "id": "pk_slider_luminosity",
     "en": "Luminosity",
-    "es": ""
+    "es": "Luminosidad"
   },
   {
     "id": "pk_slider_randomize",
     "en": "Shuffle",
-    "es": ""
+    "es": "Aleatorio"
   },
   {
     "id": "pk_slider_reverse",
     "en": "Reverse",
-    "es": ""
+    "es": "Invertir el orden"
   },
   {
     "id": "pk_slider_diverge",
     "en": "Diverge",
-    "es": ""
+    "es": "Divergir"
   },
   {
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
-    "es": ""
+    "es": "Utilizar la paleta por defecto"
   },
   {
     "id": "btn_opt_meta",
     "en": "Enable draw mode",
-    "es": ""
+    "es": "Activar el modo de diseño"
   },
   {
     "id": "draft_recover_modal_title",
     "en": "Data recovery",
-    "es": ""
+    "es": "Recuperar datos"
   },
   {
     "id": "draft_recover_use_most_recent",
     "en": "Use the most recent",
-    "es": ""
+    "es": "Utilizar la versión más reciente"
   },
   {
     "id": "draft_recover_cancel",
     "en": "Cancel",
-    "es": ""
+    "es": "Anular"
   },
   {
     "id": "draft_recover_preview_diff",
     "en": "Preview differences",
-    "es": ""
+    "es": "Vista anticipada de las diferencias"
   },
   {
     "id": "draft_recover_last_saved_date",
     "en": "Date of the last saved version",
-    "es": ""
+    "es": "Fecha de la última version guardada"
   },
   {
     "id": "draft_recover_recovered_date",
     "en": "Date of the recovered version",
-    "es": ""
+    "es": "Fecha de la version recuperada"
   },
   {
     "id": "draft_recover_diffs",
     "en": "Differences",
-    "es": ""
+    "es": "Diferencias"
   },
   {
     "id": "draft_recover_summary_title",
     "en": "Summary",
-    "es": ""
+    "es": "Resumen"
   },
   {
     "id": "api_download_ready",
     "en": "Process done, the data is available for download : ",
-    "es": ""
+    "es": "Proceso terminado, los datos están disponibles para descargar:"
   },
   {
     "id": "api_upload_ready",
     "en": "Process done, the data will be available in source list.",
-    "es": ""
+    "es": "Proceso terminado, los datos van a estar disponibles en la lista de fuentes de datos pronto"
   },
   {
     "id": "api_upload_done_wait_db",
     "en": "Upload done. Importation in DB, please wait, this could take multiple minutes for complex layers. Please be patient.",
-    "es": ""
+    "es": "Subida completa. Importación en la base de datos, espere, esto podría tomar varios minutos si son capas complejas. Por favor, sea paciente."
   },
   {
     "id": "api_download_btn",
     "en": "click here",
-    "es": ""
+    "es": "clicar aquí"
   },
   {
     "id": "api_progress_title",
     "en": "Progress",
-    "es": ""
+    "es": "Progreso"
   },
   {
     "id": "api_log_title",
     "en": "Log",
-    "es": ""
+    "es": "Registro"
   },
   {
     "id": "error_notset",
     "en": "Property must be set",
-    "es": ""
+    "es": "La propriedad debe ser establecida"
   },
   {
     "id": "error_notempty",
     "en": "Value required",
-    "es": ""
+    "es": "Valor requerido"
   },
   {
     "id": "error_enum",
     "en": "Value must be one of the enumerated values",
-    "es": ""
+    "es": "El valor debe ser uno de los valores enumerados"
   },
   {
     "id": "error_anyOf",
     "en": "Value must validate against at least one of the provided schemas",
-    "es": ""
+    "es": "El valor debe ser validado con al menos uno de los esquemas previstos"
   },
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "es": ""
+    "es": "El valor debe ser calidado exactamente con uno de los esquemas previstos. Actualmente se valida con {{0}} de los esquemas."
   },
   {
     "id": "error_not",
     "en": "Value must not validate against the provided schema",
-    "es": ""
+    "es": "Los valores no deben ser validados con los esquemas previstos"
   },
   {
     "id": "error_type_union",
     "en": "Value must be one of the provided types",
-    "es": ""
+    "es": "El valor debe ser uno de los tipos previstos"
   },
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "es": ""
+    "es": "El valor debe ser del tipo {{0}}"
   },
   {
     "id": "error_disallow_union",
     "en": "Value must not be one of the provided disallowed types",
-    "es": ""
+    "es": "El valor no debe ser uno de los tipos no permitidos proporcionados"
   },
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "es": ""
+    "es": "El valor no debe ser del tipo {{0}}"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "es": ""
+    "es": "El valor debe ser múltiple de {{0}}"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "es": ""
+    "es": "El valor debe ser inferior a {{0}}"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "es": ""
+    "es": "El valor debe ser {{0}} como máximo"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "es": ""
+    "es": "El valor dado debe ser mayor que {{0}}"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "es": ""
+    "es": "El valor dado debe ser menor que {{0}}"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "es": ""
+    "es": "El valor debe ser al menos de {{0}} carácteres"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "es": ""
+    "es": "El valor debe componer al menos {{0}} carácteres"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "es": ""
+    "es": "El calor debe corresponderse al modelo {{0}}"
   },
   {
     "id": "error_additionalItems",
     "en": "No additional items allowed in this array",
-    "es": ""
+    "es": "Ningún elemento extra está permitido en esta tabla"
   },
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "es": ""
+    "es": "El valor debe tener un máximo de {{0}} carácteres"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "es": ""
+    "es": "El calor debe componer al menos {{0}} elementos"
   },
   {
     "id": "error_uniqueItems",
     "en": "Array must have unique items",
-    "es": ""
+    "es": "La tabla debe incluir elementos únicos"
   },
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "es": ""
+    "es": "El objeto debe tener un máximo de {{0}} propiedades"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "es": ""
+    "es": "El objeto debe tener al menos {{0}} propiedades"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "es": ""
+    "es": "El objeto necesita la propiedad {{0}}"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "es": ""
+    "es": "Ninguna propieda adicional está permitida, pero la propiedad {{0}} está establecida"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "es": ""
+    "es": "Debe incluir la propiedad {{0}}"
   },
   {
     "id": "button_delete_all",
     "en": "All",
-    "es": ""
+    "es": "Todo"
   },
   {
     "id": "button_delete_all_title",
     "en": "Delete All",
-    "es": ""
+    "es": "Suprimir todo"
   },
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "es": ""
+    "es": "Último {{0}}"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "es": ""
+    "es": "Eliminar el último {{0}}"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "es": ""
+    "es": "Adjuntar"
   },
   {
     "id": "button_move_down_title",
     "en": "Move down",
-    "es": ""
+    "es": "Desplazarse hacia abajo"
   },
   {
     "id": "button_move_up_title",
     "en": "Move up",
-    "es": ""
+    "es": "Desplazar hacia arriba"
   },
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "es": ""
+    "es": "Suprimir {{0}}"
   },
   {
     "id": "button_delete_row_title_short",
     "en": "Delete",
-    "es": ""
+    "es": "Suprimir"
   },
   {
     "id": "button_collapse",
     "en": "Collapse",
-    "es": ""
+    "es": "Reducir"
   },
   {
     "id": "button_expand",
     "en": "Expand",
-    "es": ""
+    "es": "Desarrollar"
   },
   {
     "id": "tbl_attr_modal_title",
     "en": "Attribute table",
-    "es": ""
+    "es": "Tabla de atributos"
   },
   {
     "id": "login_single_use_password_email",
     "en": "<div style=\"max-width:400px;padding:20px\">Hello,  <br><br> Here is the requested password:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "es": ""
+    "es": "<div style=\"max-width:400px;padding:20px\">Hola, <br><br> Aquí está la contraseña solicitada:  <hr>  <span style=\"font-family:monospace;\">{{CONTRASEÑA}}</span>  <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos.<br>Saludos cordiales,<br><br>Su equipo de MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error.</span></div>"
   },
   {
     "id": "operator_and",
     "en": "Intersection",
-    "es": ""
+    "es": "Intersección"
   },
   {
     "id": "operator_or",
     "en": "Union",
-    "es": ""
+    "es": "Union"
   },
   {
     "id": "api_upload_file_max_size_exceeded_title",
     "en": "Maximum size reached",
-    "es": ""
+    "es": "Tamaño máximo alcanzado"
   },
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "es": ""
+    "es": "Se ha alcanzado el tamaño máximo de archivo de {{size}}. No tiene permiso para cargar un archivo mayor que eso. Por favor contáctenos para más información."
   },
   {
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
-    "es": ""
+    "es": "¿Estás seguro de querer cambiar de proyecto? Los cambios no guardados podrían perderse."
   },
   {
     "id": "modal_check_confirm_project_change_btn",
     "en": "Change project now, discard changes.",
-    "es": ""
+    "es": "Cambiar de proyecto ahora, descartar cambios"
   },
   {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
-    "es": ""
+    "es": "Confirmación de cambio de proyecto"
   },
   {
     "id": "share_map_pos_set",
     "en": "Set map position",
-    "es": ""
+    "es": "Definir la posición del mapa"
   },
   {
     "id": "share_map_pos_get",
     "en": "Get current position",
-    "es": ""
+    "es": "Obtener la posición actual"
   },
   {
     "id": "view_filter_no_items",
     "en": "Empty",
-    "es": ""
+    "es": "Vacío"
   },
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "es": ""
+    "es": "Administrador de cambios"
   },
   {
     "id": "share_link_title",
     "en": "Share link",
-    "es": ""
+    "es": "Compartir enlace"
   },
   {
     "id": "share_options",
     "en": "Share options",
-    "es": ""
+    "es": "Opciones para compartir"
   },
   {
     "id": "share_mode_static_label",
     "en": "Use the mode 'static' ( recommended )",
-    "es": ""
+    "es": "Usar el modo 'estático' (recomendado)"
   },
   {
     "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "es": ""
+    "es": "Use el modo 'estático' si desea compartir una vista usando una versión ligera y más rápida de MapX, con funcionalidades limitadas. Con este método, cualquier persona con el enlace compartido podrá leer la vista seleccionada, sin necesidad de estar registrado en MapX. Si agrega un mapa de historia, se iniciará automáticamente, descartando cualquier otra vista."
   },
   {
     "id": "share_views_check_label",
     "en": "Add views to share",
-    "es": ""
+    "es": "Adjunar vistas para compartir"
   },
   {
     "id": "share_views_check_desc",
     "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "es": ""
+    "es": "Vistas para mostrar. La lista se puede reordenar: las vistas superiores mostrarán capas en la parte superior. En el modo 'estático', esas vistas se procesarán automáticamente. Los mapas de historias comenzarán directamente. En el modo 'normal', las vistas se mostrarán en la lista y si la selección está vacía, se mostrarán todas las vistas del proyecto."
   },
   {
     "id": "share_views_zoom_label",
     "en": "Zoom to views extent",
-    "es": ""
+    "es": "Zoom al total de extensión de las vistas"
   },
   {
     "id": "share_views_zoom_desc",
     "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
-    "es": ""
+    "es": "En el modo 'estático', esto establecerá la extensión del mapa para que se ajuste a la extensión de las capas de vistas, si está disponible."
   },
   {
     "id": "share_views_open_check_label",
     "en": "Set views to activate",
-    "es": ""
+    "es": "Establecer las vistas a activar"
   },
   {
     "id": "share_views_open_check_desc",
     "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "es": ""
+    "es": "Agregue vistas para que se activen automáticamente cuando se inicia la aplicación. Esto habilitará el botón 'filtrar vista activada' y ocultará la vista no activada."
   },
   {
     "id": "share_collections_check_label",
     "en": "Set collections",
-    "es": ""
+    "es": "Establecer las colecciones"
   },
   {
     "id": "share_collections_check_operator_label",
     "en": "Selection mode (if more that one collection)",
-    "es": ""
+    "es": "Selección del modo (si hay más de una colección)"
   },
   {
     "id": "share_collections_check_operator_all",
     "en": "Intersection",
-    "es": ""
+    "es": "Intersección"
   },
   {
     "id": "share_collections_check_operator_any",
     "en": "Union",
-    "es": ""
+    "es": "Unión"
   },
   {
     "id": "share_collections_check_desc",
     "en": "Add groups of views by using collections",
-    "es": ""
+    "es": "Adjunar grupos de vistas usando colecciones"
   },
   {
     "id": "share_map_pos_check_label",
     "en": "Set map position",
-    "es": ""
+    "es": "Establecer los parámetros de posición del mapa"
   },
   {
     "id": "share_map_pos_check_desc",
     "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
-    "es": ""
+    "es": "Establecer la posición del mapa mostrará una extensión espacial definida en lugar de exponer una representación del mundo entero."
   },
   {
     "id": "share_iframe_check_label",
     "en": "Embed in HTML tags",
-    "es": ""
+    "es": "Adjuntar tags HTML"
   },
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "es": ""
+    "es": "Adjuntar el enlace en una etiqueta HTML <iframe> para agregar fácilmente MapX a su sitio web."
   },
   {
     "id": "share_in_project_title",
     "en": "Share in another project",
-    "es": ""
+    "es": "Compartir en otro proyecto"
   },
   {
     "id": "share_in_project_desc",
     "en": "Share a view in a project where you have publisher rights",
-    "es": ""
+    "es": "Compartir una vista en un proyecto en el que tiene derecho de publicación"
   },
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
-    "es": ""
+    "es": "Adjuntar en el proyecto seleccionado"
   },
   {
     "id": "en",

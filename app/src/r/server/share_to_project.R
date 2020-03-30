@@ -17,11 +17,16 @@ observeEvent(reactData$showShareManagerProject,{
       #
       tt <- function(id){d(id,lang=language,web=F)}
 
-      projectsPublisher <- mxDbGetProjectListByUser(
-        idUser,
-        asNamedList = T,
-        whereUserRoleIs = "publisher"
-        )
+      projectsPublisher<- mxDbGetProjectListByUser(
+        id = idUser,
+        whereUserRoleIs = "publisher",
+        language = language,
+        token = reactUser$token,
+        asNamedList = TRUE
+      )
+
+
+
       #
       # Do not list current project
       #
