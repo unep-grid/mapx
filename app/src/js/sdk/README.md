@@ -492,6 +492,7 @@ Class to handle MapX specific method
     * [.get_project_collections()](#MapxResolvers+get_project_collections) ⇒ <code>Array</code>
     * [.is_guest()](#MapxResolvers+is_guest) ⇒ <code>Boolean</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolvers+set_view_layer_filter_text) ⇒ <code>Boolean</code>
+    * [.get_view_layer_filter_text(opt)](#MapxResolvers+get_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.set_view_layer_filter_numeric(opt)](#MapxResolvers+set_view_layer_filter_numeric)
     * [.set_view_layer_filter_time(opt)](#MapxResolvers+set_view_layer_filter_time) ⇒
     * [.set_view_layer_transparency(opt)](#MapxResolvers+set_view_layer_transparency) ⇒
@@ -658,6 +659,18 @@ Test if the current user is guest
 
 ### mapxResolvers.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
 Filter view layer by text (if attribute is text)
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Options</code> | Options |
+
+<a name="MapxResolvers+get_view_layer_filter_text"></a>
+
+### mapxResolvers.get\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
+Get current search box item
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
