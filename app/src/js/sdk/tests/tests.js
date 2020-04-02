@@ -30,6 +30,7 @@ const expectedMethods = [
   'get_project_collections',
   'is_guest',
   'set_view_layer_filter_text',
+  'get_view_layer_filter_text',
   'set_view_layer_filter_numeric',
   'set_view_layer_filter_time',
   'set_view_layer_transparency',
@@ -55,9 +56,12 @@ mapx.once('ready', () => {
       {
         name: 'test if all expected methods are listed',
         test: (r) => {
-          return r.reduce((a, m) => {
-            return a === false ? a : expectedMethods.indexOf(m) > -1;
-          }, true);
+          return (
+            r.length === expectedMethods.length &&
+            r.reduce((a, m) => {
+              return a === false ? a : expectedMethods.indexOf(m) > -1;
+            }, true)
+          );
         }
       }
     ]
@@ -119,7 +123,7 @@ mapx.once('ready', () => {
 
   t.check('Get view meta', {
     ignore: ignoreGlobal,
-    timeout : 1000,
+    timeout: 3000,
     init: () => {
       return mapx.ask('get_views_id').then((ids) => {
         const pos = Math.floor(Math.random() * ids.length - 1);
@@ -197,6 +201,55 @@ mapx.once('ready', () => {
     ]
   });
 
+  t.check('Filter view by text', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('get_views').then((views) => {
+        views = views.reduce((a, v) => {
+          if (v.type === 'vt' && v.data.attribute.type === 'string') {
+            a.push(v);
+          }
+          return a;
+        }, []);
+        const pos = Math.floor(Math.random() * views.length - 1);
+        const view = views[pos];
+        return mapx.ask('open_view', {idView: view.id}).then(() => {
+          return view;
+        });
+      });
+    },
+    tests: [
+      {
+        name: 'Set/get filter layers by text values',
+        test: (view) => {
+          let pass = false;
+          if (!t.h.isView(view)) {
+            return pass;
+          }
+          const values = view.data.attribute.table
+            .map((v) => v.value)
+            .filter((v) => t.h.isString(v));
+          return mapx
+            .ask('set_view_layer_filter_text', {idView: view.id, value: values})
+            .then(() => {
+              return mapx.ask('get_view_layer_filter_text', {idView: view.id});
+            })
+            .then((res) => {
+              pass = values.reduce(
+                (a, v) => (!a ? a : res.indexOf(v) > -1),
+                true
+              );
+            })
+            .then(() => {
+              return mapx.ask('close_view', {idView: view.id});
+            })
+            .then(() => {
+              return pass;
+            });
+        }
+      }
+    ]
+  });
   t.check('Load projects', {
     ignore: ignoreGlobal,
     init: () => {
@@ -211,7 +264,7 @@ mapx.once('ready', () => {
       },
       {
         name: 'Change project',
-        timeout: 1000,
+        timeout: 2000,
         test: (r) => {
           const pos = Math.floor(Math.random() * r.length - 1);
           const newProject = r[pos].id;

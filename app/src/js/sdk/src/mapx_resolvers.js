@@ -32,7 +32,7 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_panel_left_visibility(opt) {
-    opt = Object.assign({}, {panel: 'views', show: true, toggle:false}, opt);
+    opt = Object.assign({}, {panel: 'views', show: true, toggle: false}, opt);
     h.panelLeftSwitch(opt);
     return true;
   }
@@ -111,11 +111,11 @@ class MapxResolvers {
   }
 
   /**
-  * Set project
-  * @param {Object} opt options
-  * @param {String} opt.idProject Id of the project to switch to
-  * @return {Boolean} Done
-  */
+   * Set project
+   * @param {Object} opt options
+   * @param {String} opt.idProject Id of the project to switch to
+   * @return {Boolean} Done
+   */
   set_project(opt) {
     opt = Object.assign({}, {idProject: null}, opt);
     h.setProject(opt.idProject);
@@ -177,7 +177,15 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_view_layer_filter_text(opt) {
-    return _apply_filter_layer_select('select', 'set', opt);
+    return _apply_filter_layer_select('searchBox', 'setValue', opt);
+  }
+  /**
+   * Get current search box item
+   * @param {Options} opt Options
+   * @return {Boolean} done
+   */
+  get_view_layer_filter_text(opt) {
+    return _apply_filter_layer_select('searchBox', 'getValue', opt);
   }
 
   /**
@@ -306,11 +314,10 @@ class MapxResolvers {
    * close all modals
    * @return {Boolean} done
    */
-  close_modal_all(){
+  close_modal_all() {
     h.modalCloseAll();
     return true;
   }
-
 }
 
 export {MapxResolvers};
@@ -332,6 +339,7 @@ function _apply_filter_layer_slider(type, method, opt) {
   }
 }
 function _apply_filter_layer_select(type, method, opt) {
+  type = type || 'searchBox'; // selectize;
   opt = Object.assign({}, {idView: null, value: null}, opt);
   const view = h.getView(opt.idView);
   const valid =
@@ -339,7 +347,7 @@ function _apply_filter_layer_select(type, method, opt) {
     h.isObject(view._interactive) &&
     h.isObject(view._interactive[type]) &&
     h.isFunction(view._interactive[type][method]);
-
+ 
   if (valid) {
     return view._interactive[type][method](opt.value);
   }
