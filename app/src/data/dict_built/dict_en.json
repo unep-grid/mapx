@@ -2933,7 +2933,7 @@
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Últimos cambios"
+    "en": "Latest edit"
   },
   {
     "id": "meta_view_title",
@@ -2945,7 +2945,7 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Número de visualizaciones"
+    "en": "Number of viewing"
   },
   {
     "id": "meta_view_stat_n_distinct_user",

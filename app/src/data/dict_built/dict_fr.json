@@ -2887,7 +2887,7 @@
   {
     "id": "as_needed",
     "en": "Data is updated as deemed necessary",
-    "fr": "La donnée est mise à  jour lorsque cela est nécessaire"
+    "fr": "La donnée est mise à jour lorsque cela est nécessaire"
   },
   {
     "id": "attribute_item_title",
@@ -2937,7 +2937,7 @@
   {
     "id": "biannually",
     "en": "Data is updated twice each year",
-    "fr": "La donnée est mise à  jour deux fois par an"
+    "fr": "La donnée est mise à jour deux fois par an"
   },
   {
     "id": "confirm_source_remove",
@@ -2992,17 +2992,17 @@
   {
     "id": "continual",
     "en": "Data is repeatedly and frequently updated",
-    "fr": "La donnée est mise à  jour en continu"
+    "fr": "La donnée est mise à jour en continu"
   },
   {
     "id": "daily",
     "en": "Data is updated each day",
-    "fr": "La donnée est mise à  jour chaque jour"
+    "fr": "La donnée est mise à jour chaque jour"
   },
   {
     "id": "fortnightly",
     "en": "Data is updated every two weeks",
-    "fr": "La donnée est mise à  jour 2 fois par mois"
+    "fr": "La donnée est mise à jour 2 fois par mois"
   },
   {
     "id": "irregular",
@@ -3082,7 +3082,7 @@
   {
     "id": "monthly",
     "en": "Data is updated each month",
-    "fr": "La donnée est mise à  jour tous les mois"
+    "fr": "La donnée est mise à jour tous les mois"
   },
   {
     "id": "msg_error_duplicate",
@@ -3197,7 +3197,7 @@
   {
     "id": "quarterly",
     "en": "Data is updated every three months",
-    "fr": "La donnée est mise à  jour tous les trois mois"
+    "fr": "La donnée est mise à jour tous les trois mois"
   },
   {
     "id": "schema_desc",
@@ -3607,12 +3607,12 @@
   {
     "id": "unknown",
     "en": "Frequency of maintenance for the data is not known",
-    "fr": "La donnée n'a pas de fréquence de mise à jour connue"
+    "fr": "La donnée n'a pas de fréquence de mise à jour connue"
   },
   {
     "id": "weekly",
     "en": "Data is updated on a weekly basis",
-    "fr": "La donnée est mise à  jour chaque semaine"
+    "fr": "La donnée est mise à jour chaque semaine"
   },
   {
     "id": "meta_display_source_title",
@@ -3666,7 +3666,7 @@
   },
   {
     "id": "meta_view_table_editors_current",
-    "en": "Últimos cambios",
+    "en": "Latest edit",
     "fr": "Dernière édition"
   },
   {
@@ -3681,7 +3681,7 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Número de visualizaciones",
+    "en": "Number of viewing",
     "fr": "Nombre de visualisations"
   },
   {
