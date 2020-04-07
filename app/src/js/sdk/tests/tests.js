@@ -14,6 +14,7 @@ const ignoreGlobal = false;
 const expectedMethods = [
   'get_sdk_methods',
   'set_panel_left_visibility',
+  'get_source_meta',
   'get_views',
   'get_views_id',
   'get_view_meta_vt_attribute',
@@ -24,6 +25,7 @@ const expectedMethods = [
   'get_user_email',
   'set_project',
   'get_language',
+  'set_language',
   'get_languages',
   'get_projects',
   'get_project',
@@ -47,6 +49,24 @@ const expectedMethods = [
  * MapX respond
  */
 mapx.once('ready', () => {
+  t.check('Get / Set language', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('set_language', {lang: 'ru'});
+    },
+    tests: [
+      {
+        name: 'test if the language is set',
+        test: () => {
+          return mapx.ask('get_language').then((r) => {
+            mapx.ask('set_language', {lang: 'en'});
+            return r === 'ru';
+          });
+        }
+      }
+    ]
+  });
+
   t.check('Get list methods', {
     ignore: ignoreGlobal,
     init: () => {
@@ -109,6 +129,33 @@ mapx.once('ready', () => {
         const pos = Math.floor(Math.random() * views.length - 1);
         const view = views[pos];
         return mapx.ask('get_view_meta_vt_attribute', {idView: view.id});
+      });
+    },
+    tests: [
+      {
+        name: 'is object',
+        test: (r) => {
+          return t.h.isObject(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get view vt source meta', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('get_views').then((views) => {
+        views = views.reduce((a, v) => {
+          if (v.type === 'vt') {
+            a.push(v);
+          }
+          return a;
+        }, []);
+        const pos = Math.floor(Math.random() * views.length - 1);
+        const view = views[pos];
+        return mapx.ask('get_source_meta', {
+          idSource: view.data.source.layerInfo.name
+        });
       });
     },
     tests: [
@@ -250,6 +297,7 @@ mapx.once('ready', () => {
       }
     ]
   });
+
   t.check('Load projects', {
     ignore: ignoreGlobal,
     init: () => {
@@ -297,4 +345,9 @@ mapx.once('ready', () => {
       }
     ]
   });
+
+  /**
+   * Run tests
+   */
+  t.run();
 });

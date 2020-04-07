@@ -273,7 +273,6 @@ class FrameManager extends Events {
         if (message.success) {
           req.onResponse(message.value);
         }
-        
       }
 
       /**
@@ -315,28 +314,32 @@ class FrameManager extends Events {
     const nR = fm._req.length;
     const mR = fm.opt.maxSimultaneousRequest;
 
-    if (nR > mR) {
-      fm._message({
-        level: 'warning',
-        key: 'warn_to_much_request',
-        vars: {
-          nR: nR,
-          mR: mR
-        }
+    return new Promise((resolve, reject) => {
+      const req = new RequestFrameCom({
+        idRequest: fm._reqId++,
+        idResolver: idResolver,
+        value: data
       });
-      return;
-    }
 
-    const req = new RequestFrameCom({
-      idRequest: fm._reqId++,
-      idResolver: idResolver,
-      value: data
-    });
+      /**
+      * Reject if to many request
+      */
+      if (nR > mR) {
+        fm._message({
+          level: 'warning',
+          key: 'warn_to_much_request',
+          vars: {
+            nR: nR,
+            mR: mR
+          }
+        });
+        reject(`too_many_request ${nR}. Max= ${mR}`);
+      }
 
-    return new Promise((resolve) => {
       req.onResponse = (res) => {
         resolve(res);
       };
+
       fm._post(req);
       fm._req.push(req);
     }).finally(() => {

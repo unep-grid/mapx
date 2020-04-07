@@ -19,6 +19,7 @@ const defaultsTest = {
   ignore: false,
   timeout: 1000
 };
+const queue = [];
 
 /**
  * Testing process
@@ -53,63 +54,99 @@ export class Testing {
     t._destroyed = true;
     t.opt.tests = [];
   }
+
+  run() {
+    const c = queue.shift();
+    const t = this;
+    if (c) {
+      c().then(() => {
+        t.run();
+      });
+    }
+  }
+
   check(title, opt) {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
     if (opt.ignore) {
       return;
     }
-    const uiSection = t._ui_section(title);
-    const initSuccess = t._promise(opt.init);
-    const initTimeout = t._promise_timeout(opt.timeout);
-    /**
-     * Race between timeout and success
-     */
-    return Promise.race([initSuccess, initTimeout]).then((data) => {
-      if (data === 'timeout') {
-        /**
-         * Timeout returned before success
-         */
-        uiSection.icon.innerText = '⏱';
-        uiSection.text.innerText = `: timeout ( ${opt.timeout} ms) `;
-      } else {
-        /**
-         * Launch each tests
-         */
-        let pass = true;
-        opt.tests.forEach((it) => {
-          it = Object.assign({}, defaultsTest, it);
-          const uiResult = t._ui_result(it.name, uiSection);
-          let res = null;
-          if (it.ignore) {
-            return;
-          }
-          const resSuccess = t._promise(it.test, data);
-          const resTimeout = t._promise_timeout(it.timeout);
-          /**
-           * Race between timeout and success
-           */
-          const start = performance.now();
-          return Promise.race([resSuccess, resTimeout]).then((res) => {
-            const success = res === true;
-            const timing = Math.round((performance.now()-start)*1e4)/1e4;
-            if (res === 'timeout') {
-              uiResult.icon.innerText = '⏱';
-              uiResult.text.innerText = `: timeout ( ${it.timeout} ms) `;
-              pass = false;
-            } else {
-              uiResult.icon.innerText = success ? '✅' : '❌';
-              uiResult.text.innerText = success
-                ? ''
-                : `( ${JSON.stringify(res)} )`;
-            }
-            uiResult.timing.innerText = ` (timing :${timing} ms) `;
 
-            if (!pass || !success) {
-              uiSection.text.innerText = ': failed ';
-              uiSection.icon = '🐞';
+    queue.push(() => {
+      let pass = true;
+      const uiSection = t._ui_section(title);
+      try {
+        const initSuccess = t._promise(opt.init);
+        const initTimeout = t._promise_timeout(opt.timeout);
+        /**
+         * Race between timeout and success
+         */
+        return Promise.race([initSuccess, initTimeout])
+          .then((data) => {
+            if (data === 'timeout') {
+              /**
+               * Timeout returned before success
+               */
+              uiSection.icon.innerText = '⏱';
+              uiSection.text.innerText = `: timeout ( ${opt.timeout} ms) `;
+              return;
+            } else {
+              /**
+               * Launch each tests
+               */
+              return nextTest(data);
             }
-          });
+          })
+          .catch(handleErrorSection);
+      } catch (e) {
+        handleErrorSection(e);
+      }
+
+      function handleErrorSection(e) {
+        uiSection.text.innerText = `: failed ( ${e} )`;
+        uiSection.icon.innerText = '🐞';
+      }
+      function nextTest(data) {
+        let res = null;
+        const test = opt.tests.shift();
+        if (!pass || !test) {
+          return;
+        }
+        const it = Object.assign({}, defaultsTest, test);
+
+        const uiResult = t._ui_result(it.name, uiSection);
+        if (it.ignore) {
+          return;
+        }
+        const resSuccess = t._promise(it.test, data);
+        const resTimeout = t._promise_timeout(it.timeout);
+        /**
+         * Race between timeout and success
+         */ const start = performance.now();
+        return Promise.race([resSuccess, resTimeout]).then((res) => {
+          const success = res === true;
+          const timing = Math.round((performance.now() - start) * 1e4) / 1e4;
+          /**
+           * Timeout resolve first
+           */ if (res === 'timeout') {
+            uiResult.icon.innerText = '⏱';
+            uiResult.text.innerText = `: timeout ( ${it.timeout} ms) `;
+            pass = false;
+          } else {
+            /**
+             * Test resolve first
+             */ uiResult.icon.innerText = success ? '✅' : '❌';
+            uiResult.text.innerText = success
+              ? ''
+              : `( ${JSON.stringify(res)} )`;
+          }
+          uiResult.timing.innerText = ` (timing :${timing} ms) `;
+
+          if (!pass || !success) {
+            handleErrorSection();
+          } else {
+            nextTest(data);
+          }
         });
       }
     });
@@ -122,14 +159,22 @@ export class Testing {
     });
   }
   _promise(cb, data) {
-    return new Promise((resolve) => {
-      res = cb(data);
-      if (res instanceof Promise) {
-        res.then((r) => {
-          resolve(r);
-        });
-      } else {
-        resolve(res);
+    return new Promise((resolve, reject) => {
+      try {
+        res = cb(data);
+        if (res instanceof Promise) {
+          return res
+            .then((r) => {
+              resolve(r);
+            })
+            .catch((e) => {
+              reject(e);
+            });
+        } else {
+          resolve(res);
+        }
+      } catch (e) {
+        reject(e);
       }
     });
   }

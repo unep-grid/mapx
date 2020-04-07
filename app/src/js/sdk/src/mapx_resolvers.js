@@ -37,6 +37,16 @@ class MapxResolvers {
     return true;
   }
 
+
+  /**
+  * Get source metadata 
+  * @param {Object} opt Options
+  * @param {String} opt.idSource Id of the source
+  */
+  get_source_meta(opt){
+    return h.getSourceMetadata(opt.idSource, opt.force);
+  }
+
   /**
    * Get list of available views as static objects
    * @return  {Array} Array of views
@@ -128,6 +138,15 @@ class MapxResolvers {
    */
   get_language() {
     return mx.settings.language;
+  }
+
+  /**
+   * Setlanguage
+   * @param {Object} opt Options
+   * @param {String} opt.lang Two letters language code
+   */
+  set_language(opt) {
+    return h.updateLanguage(opt);
   }
 
   /**
