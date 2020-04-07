@@ -11,6 +11,10 @@ module.exports = merge(common, {
   devServer: {
     contentBase: './www'
   },
+  watchOptions: {
+    poll: 1000,
+    ignored: ['node_modules']
+  },
   plugins: [
     new watchUi({
       watchFolder: './src/data/dict',
