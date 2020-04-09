@@ -62,12 +62,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_raster',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        const view = h.getView(viewTarget);
-        const url = h.path(view, 'data.source.urlDownload');
-        if(h.isUrl(url)){
-          const win = window.open(url, '_blank');
-          win.focus();
-        }
+        downloadViewRaster(viewTarget, true);
       }
     },
     {
@@ -75,20 +70,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_geojson',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        var download;
-        h.moduleLoad('downloadjs')
-          .then((d) => {
-            download = d;
-            return mx.data.geojson.getItem(viewTarget);
-          })
-          .then(function(item) {
-            const geojson = h.path(item, 'view.data.source.data');
-            var filename = h.path(item, 'view.data.title.en');
-            if (filename.search(/.geojson$/) === -1) {
-              filename = 'mx_geojson_' + mx.helpers.makeId() + '.geojson';
-            }
-            download(JSON.stringify(geojson), filename);
-          });
+        h.downloadViewGeojson(viewTarget);
       }
     },
     {

@@ -476,21 +476,28 @@ Class to handle MapX specific method
 * [MapxResolvers](#MapxResolvers)
     * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
-    * [.get_views()](#MapxResolvers+get_views) ⇒ <code>Array</code>
-    * [.get_views_id()](#MapxResolvers+get_views_id) ⇒ <code>Array</code>
-    * [.get_view_meta_vt_attribute(opt)](#MapxResolvers+get_view_meta_vt_attribute) ⇒ <code>Object</code>
-    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta)
+    * [.has_dashboard()](#MapxResolvers+has_dashboard) ⇒ <code>Boolean</code>
+    * [.set_dashboard_visibility(opt)](#MapxResolvers+set_dashboard_visibility) ⇒ <code>Boolean</code>
+    * [.get_source_meta(opt)](#MapxResolvers+get_source_meta)
     * [.get_user_id()](#MapxResolvers+get_user_id) ⇒ <code>Number</code>
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
     * [.get_user_email()](#MapxResolvers+get_user_email) ⇒ <code>String</code>
     * [.set_project(opt)](#MapxResolvers+set_project) ⇒ <code>Boolean</code>
     * [.get_language()](#MapxResolvers+get_language) ⇒ <code>String</code>
+    * [.set_language(opt)](#MapxResolvers+set_language)
     * [.get_languages()](#MapxResolvers+get_languages) ⇒ <code>Array</code>
     * [.get_projects(opt)](#MapxResolvers+get_projects) ⇒ <code>Array</code>
     * [.get_project()](#MapxResolvers+get_project) ⇒ <code>String</code>
-    * [.get_project_collections()](#MapxResolvers+get_project_collections) ⇒ <code>Array</code>
-    * [.is_guest()](#MapxResolvers+is_guest) ⇒ <code>Boolean</code>
+    * [.get_project_collections(opt)](#MapxResolvers+get_project_collections) ⇒ <code>Array</code>
+    * [.is_user_guest()](#MapxResolvers+is_user_guest) ⇒ <code>Boolean</code>
+    * [.get_views()](#MapxResolvers+get_views) ⇒ <code>Array</code>
+    * [.get_views_with_visible_layer()](#MapxResolvers+get_views_with_visible_layer) ⇒ <code>Array</code>
+    * [.get_views_id()](#MapxResolvers+get_views_id) ⇒ <code>Array</code>
+    * [.get_views_id_open()](#MapxResolvers+get_views_id_open) ⇒ <code>Array</code>
+    * [.get_view_meta_vt_attribute(opt)](#MapxResolvers+get_view_meta_vt_attribute) ⇒ <code>Object</code>
+    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta)
+    * [.get_view_legend_image(opt)](#MapxResolvers+get_view_legend_image)
     * [.set_view_layer_filter_text(opt)](#MapxResolvers+set_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolvers+get_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.set_view_layer_filter_numeric(opt)](#MapxResolvers+set_view_layer_filter_numeric)
@@ -501,9 +508,21 @@ Class to handle MapX specific method
     * [.get_view_layer_transparency(opt)](#MapxResolvers+get_view_layer_transparency) ⇒ <code>Number</code>
     * [.open_view(opt)](#MapxResolvers+open_view) ⇒ <code>Boolean</code>
     * [.close_view(opt)](#MapxResolvers+close_view) ⇒ <code>Boolean</code>
+    * [.download_view_source_auto(opt)](#MapxResolvers+download_view_source_auto) ⇒ <code>Object</code>
     * [.show_modal_login()](#MapxResolvers+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
+    * [.show_modal_map_composer()](#MapxResolvers+show_modal_map_composer) ⇒ <code>Boolean</code>
     * [.close_modal_all()](#MapxResolvers+close_modal_all) ⇒ <code>Boolean</code>
+    * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
+    * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
+    * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state)
+    * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort)
+    * [.move_view_top(opt)](#MapxResolvers+move_view_top)
+    * [.move_view_bottom(opt)](#MapxResolvers+move_view_bottom)
+    * [.move_view_after(opt)](#MapxResolvers+move_view_after)
+    * [.move_view_before(opt)](#MapxResolvers+move_view_before)
+    * [.move_view_up(opt)](#MapxResolvers+move_view_up)
+    * [.move_view_down(opt)](#MapxResolvers+move_view_down)
 
 <a name="MapxResolvers+get_sdk_methods"></a>
 
@@ -527,45 +546,38 @@ Set panel visibility
 | opt.show | <code>Boolean</code> | If true, show the panel (and hide other) |
 | opt.toggle | <code>Boolean</code> | Toggle the panel |
 
-<a name="MapxResolvers+get_views"></a>
+<a name="MapxResolvers+has_dashboard"></a>
 
-### mapxResolvers.get\_views() ⇒ <code>Array</code>
-Get list of available views as static objects
-
-**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Array</code> - Array of views  
-<a name="MapxResolvers+get_views_id"></a>
-
-### mapxResolvers.get\_views\_id() ⇒ <code>Array</code>
-Get list of available views id
+### mapxResolvers.has\_dashboard() ⇒ <code>Boolean</code>
+Check if mapx has a dashboard
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Array</code> - Array of id  
-<a name="MapxResolvers+get_view_meta_vt_attribute"></a>
+**Returns**: <code>Boolean</code> - Has dashboard  
+<a name="MapxResolvers+set_dashboard_visibility"></a>
 
-### mapxResolvers.get\_view\_meta\_vt\_attribute(opt) ⇒ <code>Object</code>
-Get vector view (vt) metadata of the attribute
+### mapxResolvers.set\_dashboard\_visibility(opt) ⇒ <code>Boolean</code>
+Set dashboard visibility
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Object</code> - attribut metadata  
+**Returns**: <code>Boolean</code> - done  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | Id of the view |
+| opt.show | <code>Boolean</code> | If true, show the dashboard |
+| opt.toggle | <code>Boolean</code> | Toggle the dashoard |
 
-<a name="MapxResolvers+get_view_meta"></a>
+<a name="MapxResolvers+get_source_meta"></a>
 
-### mapxResolvers.get\_view\_meta(opt, view)
-Get view metadata
+### mapxResolvers.get\_source\_meta(opt)
+Get source metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opt | <code>Object</code> | options |
-| opt.idView | <code>String</code> | Id of the view |
-| view | <code>Object</code> | meta data object |
+| opt | <code>Object</code> | Options |
+| opt.idSource | <code>String</code> | Id of the source |
 
 <a name="MapxResolvers+get_user_id"></a>
 
@@ -615,6 +627,18 @@ Get current language
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>String</code> - Two letters language code  
+<a name="MapxResolvers+set_language"></a>
+
+### mapxResolvers.set\_language(opt)
+Setlanguage
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.lang | <code>String</code> | Two letters language code |
+
 <a name="MapxResolvers+get_languages"></a>
 
 ### mapxResolvers.get\_languages() ⇒ <code>Array</code>
@@ -643,18 +667,91 @@ Get current project id
 **Returns**: <code>String</code> - Current project id  
 <a name="MapxResolvers+get_project_collections"></a>
 
-### mapxResolvers.get\_project\_collections() ⇒ <code>Array</code>
+### mapxResolvers.get\_project\_collections(opt) ⇒ <code>Array</code>
 Get list of collection for the current project
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of collections names  
-<a name="MapxResolvers+is_guest"></a>
 
-### mapxResolvers.is\_guest() ⇒ <code>Boolean</code>
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.open | <code>Boolean</code> | Return only collections from open views |
+
+<a name="MapxResolvers+is_user_guest"></a>
+
+### mapxResolvers.is\_user\_guest() ⇒ <code>Boolean</code>
 Test if the current user is guest
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - User is guest  
+<a name="MapxResolvers+get_views"></a>
+
+### mapxResolvers.get\_views() ⇒ <code>Array</code>
+Get list of available views as static objects
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolvers+get_views_with_visible_layer"></a>
+
+### mapxResolvers.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
+Get list views with visible layers
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of views  
+<a name="MapxResolvers+get_views_id"></a>
+
+### mapxResolvers.get\_views\_id() ⇒ <code>Array</code>
+Get list of available views id
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of id  
+<a name="MapxResolvers+get_views_id_open"></a>
+
+### mapxResolvers.get\_views\_id\_open() ⇒ <code>Array</code>
+Get list of available views id
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of id  
+<a name="MapxResolvers+get_view_meta_vt_attribute"></a>
+
+### mapxResolvers.get\_view\_meta\_vt\_attribute(opt) ⇒ <code>Object</code>
+Get vector view (vt) metadata of the attribute
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - attribut metadata  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Id of the view |
+
+<a name="MapxResolvers+get_view_meta"></a>
+
+### mapxResolvers.get\_view\_meta(opt, view)
+Get view metadata
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+| view | <code>Object</code> | meta data object |
+
+<a name="MapxResolvers+get_view_legend_image"></a>
+
+### mapxResolvers.get\_view\_legend\_image(opt)
+Get view legend
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+| opt.format | <code>String</code> |  |
+
 <a name="MapxResolvers+set_view_layer_filter_text"></a>
 
 ### mapxResolvers.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
@@ -785,6 +882,33 @@ Close a view
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
+<a name="MapxResolvers+download_view_source_auto"></a>
+
+### mapxResolvers.download\_view\_source\_auto(opt) ⇒ <code>Object</code>
+Download process for raster (rt), geojson (gj) and vector (vt) view
+
+<pre>
+=> file : a file downloaded by the browser
+=> url : an url to fetch the data, if available
+=> data : the data. E.g. geojson = object
+=> modal : a modal window inside MapX
+vt : return {type: "vt", methods: ['modal']}
+rt : return {type: "rt", methods: ['url'], url:'http://example.com/data'}
+gj : return {type: "vt", methods: ['file','data'], data:{"type":"FeatureCollection","features":[{"id":"1","type":"Feature","properties":{},"geometry":{"coordinates":[[-11,43],[12,20]],"type":"Point"}}]}}
+</pre>
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - Object with the method to retrieve the source.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | View of the source to download |
+
+**Example**  
+```js
+mapx.ask('download_view_source_auto',{idView:'MX-GJ-0RB4FBOS8E'})
+```
 <a name="MapxResolvers+show_modal_login"></a>
 
 ### mapxResolvers.show\_modal\_login() ⇒ <code>Boolean</code>
@@ -799,6 +923,13 @@ Show view meta modal
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolvers+show_modal_map_composer"></a>
+
+### mapxResolvers.show\_modal\_map\_composer() ⇒ <code>Boolean</code>
+Show map composer
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+close_modal_all"></a>
 
 ### mapxResolvers.close\_modal\_all() ⇒ <code>Boolean</code>
@@ -806,6 +937,117 @@ close all modals
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolvers+get_views_order"></a>
+
+### mapxResolvers.get\_views\_order() ⇒ <code>Array</code>
+Get views current absolute order (without groups)
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+<a name="MapxResolvers+get_views_list_state"></a>
+
+### mapxResolvers.get\_views\_list\_state() ⇒ <code>Array</code>
+Get views list state
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+<a name="MapxResolvers+set_views_list_state"></a>
+
+### mapxResolvers.set\_views\_list\_state(opt)
+Set state / views list order, groups, etc. Opened view will be closed
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.state | <code>Array</code> | Mapx views list state |
+
+<a name="MapxResolvers+set_views_list_sort"></a>
+
+### mapxResolvers.set\_views\_list\_sort(opt)
+Set views list order
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.asc | <code>Boolean</code> | Asc |
+| opt.mode | <code>String</code> | Mode : 'string' or 'date'; |
+
+<a name="MapxResolvers+move_view_top"></a>
+
+### mapxResolvers.move\_view\_top(opt)
+Move view on top of its group
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+
+<a name="MapxResolvers+move_view_bottom"></a>
+
+### mapxResolvers.move\_view\_bottom(opt)
+Move view on the bottom of its group
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+
+<a name="MapxResolvers+move_view_after"></a>
+
+### mapxResolvers.move\_view\_after(opt)
+Move view after anoter view
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+| opt.idViewAfter | <code>Sring</code> |  |
+
+<a name="MapxResolvers+move_view_before"></a>
+
+### mapxResolvers.move\_view\_before(opt)
+Move view before another view
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+| opt.idViewBefore | <code>Sring</code> |  |
+
+<a name="MapxResolvers+move_view_up"></a>
+
+### mapxResolvers.move\_view\_up(opt)
+Move view up
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+
+<a name="MapxResolvers+move_view_down"></a>
+
+### mapxResolvers.move\_view\_down(opt)
+Move view down
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>Sring</code> |  |
+
 <a name="_apply_filter_layer_slider"></a>
 
 ## \_apply\_filter\_layer\_slider()

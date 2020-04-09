@@ -9,9 +9,9 @@ const defaults = {
   dashboard: {
     widgets: [],
     modules: ['highcharts'],
-    language : 'en',
-    marginFitWidth : 20,
-    marginFitHeight : 50
+    language: 'en',
+    marginFitWidth: 20,
+    marginFitHeight: 50
   },
   grid: {
     dragEnabled: true,
@@ -61,7 +61,7 @@ class Dashboard {
     d.widgets = [];
     d.cb = [];
     d.panel = new ButtonPanel(d.opt.panel);
-    d.elDashboard = el('div',{class:'dashboard'});
+    d.elDashboard = el('div', {class: 'dashboard'});
     d.panel.elPanelContent.appendChild(d.elDashboard);
     d.grid = new Muuri(d.elDashboard, d.opt.grid);
     d.panel.on('resize', () => {
@@ -76,7 +76,7 @@ class Dashboard {
     d.fire('init');
   }
 
-  fire(type,data) {
+  fire(type, data) {
     const d = this;
     d.cb.forEach((c) => {
       if (c.type === type) {
@@ -115,6 +115,7 @@ class Dashboard {
     d.fitPanelToWidgetsWidth();
     d.fitPanelToWidgetsHeight();
     d.grid.refreshItems().layout();
+    d._visible =  true;
     d.fire('show');
   }
 
@@ -122,30 +123,42 @@ class Dashboard {
     const d = this;
     d.panel.close();
     d.grid.hide();
+    d._visible =  false;
     d.fire('hide');
   }
 
-  fitPanelToWidgetsWidth(){
+  toggle() {
+    const d = this;
+    const show = !d._visible;
+    if (show) {
+      d.show();
+    } else {
+      d.hide();
+    }
+    d.fire('toggle');
+  }
+
+  fitPanelToWidgetsWidth() {
     const d = this;
     const m = d.opt.dashboard.marginFitWidth;
-    const wmax = d.widgets.reduce((a,w)=>{
-       const ww = w.width;
-       return ww > a ? ww : a;
-    },0);
-    if(wmax > 0 && wmax !== (d.panel.width + m)){  
-     d.panel.width = wmax + m ;
+    const wmax = d.widgets.reduce((a, w) => {
+      const ww = w.width;
+      return ww > a ? ww : a;
+    }, 0);
+    if (wmax > 0 && wmax !== d.panel.width + m) {
+      d.panel.width = wmax + m;
     }
   }
 
-  fitPanelToWidgetsHeight(){
+  fitPanelToWidgetsHeight() {
     const d = this;
     const m = d.opt.dashboard.marginFitHeight;
-    const hmax = d.widgets.reduce((a,w)=>{
-       const hw = w.height;
-       return hw > a ? hw : a;
-    },0);
-    if(hmax > 0 && hmax !== (d.panel.height + m)){  
-     d.panel.height = hmax + m ;
+    const hmax = d.widgets.reduce((a, w) => {
+      const hw = w.height;
+      return hw > a ? hw : a;
+    }, 0);
+    if (hmax > 0 && hmax !== d.panel.height + m) {
+      d.panel.height = hmax + m;
     }
   }
   isDestroyed() {

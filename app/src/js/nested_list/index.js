@@ -248,6 +248,12 @@ class NestedList {
    */
   getTarget(el) {
     const li = this;
+    if(!el){
+       return;
+    }
+    if (typeof el === 'string') {
+      el = li.elRoot.querySelector(`#${el}`);
+    }
     if (li.isTarget(el)) {
       return el;
     }
@@ -373,6 +379,7 @@ class NestedList {
   }
   moveTargetTop(el) {
     const li = this;
+    el = li.getTarget(el);
     let elGroup = li.getGroup(el);
     let elFirst = li.getFirstTarget(elGroup, true);
     if (li.isTarget(elFirst)) {
@@ -383,7 +390,8 @@ class NestedList {
   }
   moveTargetBefore(el, elBefore) {
     const li = this;
-    elBefore = elBefore || li.getPreviousTarget(el);
+    el = li.getTarget(el);
+    elBefore = li.getTarget(elBefore) || li.getPreviousTarget(el);
     if (li.isTarget(elBefore)) {
       let elGroup = li.getGroup(el);
       li.animateMove([el, elBefore], () => {
@@ -393,12 +401,14 @@ class NestedList {
   }
   moveTargetUp(el) {
     const li = this;
+    el = li.getTarget(el);
     let elPrevious = li.getPreviousTarget(el);
     li.moveTargetBefore(el, elPrevious);
   }
   moveTargetAfter(el, elAfter) {
     const li = this;
-    elAfter = elAfter || li.getNextTarget(el);
+    el = li.getTarget(el);
+    elAfter = li.getTarget(elAfter) || li.getNextTarget(el);
     if (li.isTarget(elAfter)) {
       let elGroup = li.getGroup(el);
       let elAfterNext = li.getNextTarget(elAfter);
@@ -415,17 +425,20 @@ class NestedList {
   }
   moveTargetDown(el) {
     const li = this;
+    el = li.getTarget(el);
     let elNext = li.getNextTarget(el);
     li.moveTargetAfter(el, elNext);
   }
   moveTargetBottom(el) {
     const li = this;
+    el = li.getTarget(el);
     let elGroup = li.getGroup(el);
     let elLast = li.getLastTarget(elGroup);
     if (li.isGroup(elGroup)) {
       li.moveTargetAfter(el, elLast);
     }
   }
+
   groupCollapse(el, collapse) {
     const li = this;
     collapse = collapse === true;
@@ -937,32 +950,32 @@ class NestedList {
     const hasDrag = li.isElement(li.drag.el);
     if (hasDrag) {
       /**
-      * Set timeout to avoid 'dragend' being fired
-      * immediatly after the upper view stack being collapsed.
-      *  
-      * -------------------------------
-      *  /---
-      *  |    not collapsed
-      *  \--- 
-      *  /---
-      *  |
-      *  \--- * <-
-      * --------------------------------
-      *  /--- collapsed
-      *  \---
-      *  /---
-      *  |
-      *  \---
-      *     
-      *      * <- pointer is immediatly out = draggend fired 
-      *  
-      */
+       * Set timeout to avoid 'dragend' being fired
+       * immediatly after the upper view stack being collapsed.
+       *
+       * -------------------------------
+       *  /---
+       *  |    not collapsed
+       *  \---
+       *  /---
+       *  |
+       *  \--- * <-
+       * --------------------------------
+       *  /--- collapsed
+       *  \---
+       *  /---
+       *  |
+       *  \---
+       *
+       *      * <- pointer is immediatly out = draggend fired
+       *
+       */
       setTimeout(() => {
-        if(li.drag.el){
+        if (li.drag.el) {
           /**
-          * The drag element could already be removed if 
-          * dragend fired before the timeout
-          */
+           * The drag element could already be removed if
+           * dragend fired before the timeout
+           */
           li.drag.el.classList.add(li.opt.class.dragged);
           document.body.classList.add(li.opt.class.globalDragging);
         }
@@ -1308,15 +1321,15 @@ function handleMouseDown(evt) {
   const elTarget = li.getTarget(evt.target);
   const isHandle = li.isDragHandle(evt.target);
   /**
-  * Case when drag was not properly finished 
-  */
+   * Case when drag was not properly finished
+   */
   li.setDragClean();
 
   if (!isHandle) {
     /**
-    * It's not a valid handle, add listener
-    * mouseup to continue to a full 'click' 
-    */
+     * It's not a valid handle, add listener
+     * mouseup to continue to a full 'click'
+     */
     li.listenerStore.addListenerOnce({
       target: evt.target,
       bind: li,
@@ -1326,9 +1339,10 @@ function handleMouseDown(evt) {
     });
   } else {
     /**
-    * Prepare the UI for global change : style, cursore,
-    * temporary register of drag item...
-    */ 
+     * Prepare the UI for global change : style, cursore,
+     * temporary register of drag item...
+     */
+
     li.setDragInit(elTarget);
 
     /**
@@ -1458,8 +1472,8 @@ function handleDragOver(evt) {
     return;
   }
   /**
-  * Stop propagation, we have to resolve this
-  */
+   * Stop propagation, we have to resolve this
+   */
   evt.stopPropagation();
   evt.stopImmediatePropagation();
 

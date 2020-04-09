@@ -32,6 +32,90 @@ export function metersToDegrees(point) {
 }
 
 /**
+ * Download view geojson
+ * @param {String} idView Id of the gj view
+ */
+export async function downloadViewGeojson(idView) {
+  const h = mx.helpers;
+  const download = await h.moduleLoad('downloadjs');
+  const item = await mx.data.geojson.getItem(idView);
+  const geojson = h.path(item, 'view.data.source.data');
+  let filename = h.path(item, 'view.data.title.en');
+  if (filename.search(/.geojson$/) === -1) {
+    filename = 'mx_geojson_' + h.makeId() + '.geojson';
+  }
+  const data = JSON.stringify(geojson);
+  await download(data, filename);
+  return geojson;
+}
+
+/**
+ * Download view geojson
+ * @param {String} idView Id of the rt view
+ * @param {Boolean} open Open the link in a new window
+ */
+export async function downloadViewRaster(idView, open) {
+  const h = mx.helpers;
+  const view = h.getView(viewTarget);
+  const url = h.path(view, 'data.source.urlDownload');
+  if (h.isUrl(url) && open) {
+    const win = window.open(url, '_blank');
+    win.focus();
+  }
+  return url;
+}
+
+/**
+* Download source of the view of type raster, vector and geojson.
+* @param {String} idView Id of the view
+* @return {Object} Object with the method to retrieve the source : raster = url, vector = modal, geojson = data, file. 
+*/
+export async function downloadViewAuto(idView) {
+  const h = mx.helpers;
+  const view = h.getView(idView);
+
+  if (!h.isView(view)) {
+    return Promise.reject('no view or view not valid');
+  }
+
+  const s = await {
+    vt: () => {
+      Shiny.onInputChange(`mglEvent_${mx.settings.map.id}_view_action`, {
+        target: view.id,
+        action: 'btn_opt_download',
+        time: new Date()
+      });
+      return Promise.resolve({
+        type: 'vt',
+        methods : ['modal']
+      });
+    },
+    rt: () => {
+      const urlDownload = h.path(view, 'data.source.urlDownload');
+      return Promise.resolve({
+        type: 'rt',
+        methods : ['url'],
+        url: urlDownload
+      });
+    },
+    gj: () => {
+      return h.downloadViewGeojson(view.id).then((data) => {
+        return {
+          type: 'gt',
+          data: data,
+          methods : ['file','data']
+        };
+      });
+    }
+  }[view.type]();
+  if (!s) {
+    return Promise.reject('invalid view');
+  } else {
+    return s;
+  }
+}
+
+/**
  * Get url for api
  * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
  */
@@ -1290,11 +1374,7 @@ export function viewsCheckedUpdate(o) {
   }
 
   h.onNextFrame(function() {
-    vVisible = h.getLayerNamesByPrefix({
-      id: idMap,
-      prefix: 'MX-',
-      base: true
-    });
+    vVisible = h.getViewsLayersVisibles();
 
     vVisible = h.getArrayStat({
       arr: vStore.concat(vVisible),
@@ -1332,6 +1412,18 @@ export function viewsCheckedUpdate(o) {
     }
 
     h.viewsLayersOrderUpdate(o);
+  });
+}
+
+/**
+ * Get id of views with visible layers on map
+ * @return {Array}
+ */
+export function getViewsLayersVisibles() {
+  const h = mx.helpers;
+  return h.getLayerNamesByPrefix({
+    prefix: 'MX-',
+    base: true
   });
 }
 
@@ -2110,6 +2202,7 @@ export function viewOpen(view) {
       elView.vb.open();
       h.updateLanguageElements({el: elView});
     }
+    view._open = true;
     resolve(true);
   });
 }
@@ -2123,7 +2216,7 @@ export function viewOpenAuto(view) {
   if (!view) {
     return;
   }
-  h.viewOpen(view).then(() => {
+  return h.viewOpen(view).then(() => {
     h.viewLayersAdd({
       viewData: view
     });
@@ -2142,9 +2235,11 @@ export function viewClose(view) {
       view.vb.close();
     }
     h.viewModulesRemove(view);
+    view._open = false;
     resolve(true);
   });
 }
+
 export function viewCloseAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
@@ -2156,6 +2251,20 @@ export function viewCloseAuto(view) {
       idView: view.id
     });
   });
+}
+
+/**
+ * Get id of all view opened
+ * @return {Array}
+ */
+export function getViewsOpen() {
+  const h = mx.helpers;
+  return h.getViews().reduce((a, v) => {
+    if (v._open === true) {
+      a.push(v.id);
+    }
+    return a;
+  }, []);
 }
 
 /**
@@ -2757,6 +2866,82 @@ export function elLegend(view, settings) {
   view._elLegend = elLegend;
   view._elLegendGroup = elLegendGroup;
   return elLegend;
+}
+
+/**
+ * Get view legend as an image
+ * @param {Options} opt Options
+ * @param {String|View} opt.view View or view id
+ * @param {String} opt.format image/jpeg, image/png Default = image/png
+ * @return {String} Base64 Image
+ */
+export async function getViewLegendImage(opt) {
+  const h = mx.helpers;
+  opt = Object.assign({format: 'image/png'}, opt);
+  const view = h.getView(opt.view);
+  const isVt = h.isViewVt(view);
+  const isRt = !isVt && h.isViewRt(view);
+  const isValid = isVt || isRt;
+  const isOpen = isValid && h.isViewOpen(view);
+
+  let out = '';
+  if (!isValid) {
+    return Promise.reject('not valid');
+  }
+
+  if (isRt) {
+    const legendUrl = h.path(view, 'data.source.legend', null);
+    if (!h.isUrl(legendUrl)) {
+      return Promise.reject('no legend');
+    }
+    return h.urlToImageBase64(legendUrl);
+  }
+
+  if (isVt) {
+    try {
+      await h.viewOpenAuto(view);
+
+      const hasLegend = h.isElement(view._elLegend);
+
+      if (!hasLegend) {
+        close();
+        return Promise.reject('no legend');
+      }
+
+      const elRules = view._elLegend.querySelector('.mx-legend-vt-rules');
+      const hasRules = h.isElement(elRules);
+
+      if (!hasRules) {
+        close();
+        return Promise.reject('no legend content');
+      }
+      const elRulesClone = elRules.cloneNode(true);
+      document.body.appendChild(elRulesClone);
+      elRulesClone.style.position = 'absolute';
+      elRulesClone.style.border = 'none';
+      elRulesClone.style.overflow = 'visible';
+
+      const html2canvas = await h.moduleLoad('html2canvas');
+      const canvas = await html2canvas(elRulesClone, {
+        logging: false
+      });
+      close();
+      elRulesClone.remove();
+      out = canvas.toDataURL('image/png');
+
+      return out;
+    } catch (e) {
+      close();
+    }
+  }
+  /**
+   * Helpers
+   */
+  function close() {
+    if (!isOpen) {
+      h.viewCloseAuto(view);
+    }
+  }
 }
 
 /**

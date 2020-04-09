@@ -21,7 +21,8 @@ const modules = {
   'size-of': loadSizeOf,
   dashboard: loadDashboard,
   ace: loadAceEditor,
-  'js-beautify': loadJsBeautify
+  'js-beautify': loadJsBeautify,
+  'html2canvas': loadHtmlToCanvas
 };
 
 export function moduleLoad(name) {
@@ -42,6 +43,11 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+function loadHtmlToCanvas() {
+  return import('html2canvas').then((m) => {
+    return m.default;
+  });
+}
 
 function loadJsBeautify() {
   return import('js-beautify').then((m) => {

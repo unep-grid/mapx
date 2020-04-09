@@ -176,13 +176,15 @@ class FrameWorker extends Events {
         if (e instanceof MessageFrameCom) {
           fw.post(e);
         } else {
+          const m = isObject(e) ? e.message : e; 
           fw.post(
             new MessageFrameCom({
               level: 'error',
               key: 'err_resolver_failed',
               vars: {
                 idRequest: idRequest,
-                idResolver: idResolver
+                idResolver: idResolver,
+                msg : m
               },
               data: e
             })

@@ -1,6 +1,6 @@
 {
   "name": "@fxi/mxsdk",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "description": "sdk for mapx app",
   "source": "src/index.js",
   "main": "dist/mxsdk.js",
@@ -13,6 +13,7 @@
   "scripts": {
     "test": "microbundle -o dist --no-compress && live-server tests --mount=/dist:dist",
     "dev": "microbundle watch -o dist --no-compress",
+    "dev-live": "live-server dev --mount=/dist:dist",
     "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
     "prod": "microbundle -o dist && npm run jsdoc && npm publish",
     "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"

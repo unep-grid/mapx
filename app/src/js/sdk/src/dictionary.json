@@ -1,12 +1,12 @@
 [
   {
     "key": "err_resolver_not_found",
-    "en": "No resolver for '${idResolver}'. Use 'list_methods'to list available methods'",
-    "fr": "Pas de resolver pour '${idResolver}'. Utiliser 'list_methods' pour lister les méthodes disponibles"
+    "en": "No resolver for '${idResolver}'. Use 'get_sdk_methods' to list available methods'",
+    "fr": "Pas de resolver pour '${idResolver}'. Utiliser 'get_sdk_methods' pour lister les méthodes disponibles"
   },
   {
     "key": "err_resolver_failed",
-    "en": "Resolver failed ( idResolver =  ${idResolver}, id = ${id} ) ",
+    "en": "Resolver failed ( idResolver =  ${idResolver}, idRequest = ${idRequest}, msg = ${msg}) ",
     "fr": ""
   },
   {

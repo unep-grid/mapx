@@ -34,6 +34,12 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
+export function isViewVt(item) {
+  return isView(item) && item.type === 'vt';
+}
+export function isViewRt(item) {
+  return isView(item) && item.type === 'rt';
+}
 export function isViewsArray(arr) {
   return (
     isArray(arr) &&

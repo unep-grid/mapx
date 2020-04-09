@@ -59,10 +59,18 @@ export function getProjectViewsCollectionsShiny(opt) {
 
 /**
  * Get current collections available in views list
+ * @param {Object} opt Options
+ * @param {Boolean} opt.open Return only collection from open views
+ * @return {Array} Array of names of collections
 */
-export function getProjectViewsCollections(){
+export function getProjectViewsCollections(opt){
   const h = mx.helpers;
+  opt = Object.assign({open:null},opt);
+  var useOpen = open === true;
   const collections = h.getViews().reduce((a,v)=>{
+    if(useOpen && !h.isViewOpen(v)){
+      return a; 
+    }
     return a.concat(h.path(v,'data.collections',[]));
   },[]);
   return h.getArrayDistinct(collections);

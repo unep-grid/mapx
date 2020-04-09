@@ -34,3 +34,12 @@ export function isLanguageObjectArray(arr) {
   );
 }
 
+/**
+ * Check if a view is open
+ * @return {Boolean}
+ */
+export function isViewOpen(view) {
+  const h = mx.helpers;
+  view = h.getView(view);
+  return h.isView(view) && view._open === true;
+}

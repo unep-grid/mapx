@@ -14,11 +14,9 @@ const ignoreGlobal = false;
 const expectedMethods = [
   'get_sdk_methods',
   'set_panel_left_visibility',
+  'has_dashboard',
+  'set_dashboard_visibility',
   'get_source_meta',
-  'get_views',
-  'get_views_id',
-  'get_view_meta_vt_attribute',
-  'get_view_meta',
   'get_user_id',
   'get_user_ip',
   'get_user_roles',
@@ -30,7 +28,14 @@ const expectedMethods = [
   'get_projects',
   'get_project',
   'get_project_collections',
-  'is_guest',
+  'is_user_guest',
+  'get_views',
+  'get_views_with_visible_layer',
+  'get_views_id',
+  'get_views_id_open',
+  'get_view_meta_vt_attribute',
+  'get_view_meta',
+  'get_view_legend_image',
   'set_view_layer_filter_text',
   'get_view_layer_filter_text',
   'set_view_layer_filter_numeric',
@@ -41,32 +46,26 @@ const expectedMethods = [
   'get_view_layer_transparency',
   'open_view',
   'close_view',
+  'download_view_source_auto',
   'show_modal_login',
   'show_modal_view_meta',
-  'close_modal_all'
+  'show_modal_map_composer',
+  'close_modal_all',
+  'get_views_order',
+  'get_views_list_state',
+  'set_views_list_state',
+  'set_views_list_sort',
+  'move_view_top',
+  'move_view_bottom',
+  'move_view_after',
+  'move_view_before',
+  'move_view_up',
+  'move_view_down'
 ];
 /**
  * MapX respond
  */
 mapx.once('ready', () => {
-  t.check('Get / Set language', {
-    ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('set_language', {lang: 'ru'});
-    },
-    tests: [
-      {
-        name: 'test if the language is set',
-        test: () => {
-          return mapx.ask('get_language').then((r) => {
-            mapx.ask('set_language', {lang: 'en'});
-            return r === 'ru';
-          });
-        }
-      }
-    ]
-  });
-
   t.check('Get list methods', {
     ignore: ignoreGlobal,
     init: () => {
@@ -86,6 +85,7 @@ mapx.once('ready', () => {
       }
     ]
   });
+
   t.check('Get views list', {
     ignore: ignoreGlobal,
     init: () => {
@@ -96,6 +96,24 @@ mapx.once('ready', () => {
         name: 'is array of views',
         test: (r) => {
           return t.h.isViewsArray(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get / Set language', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('set_language', {lang: 'ru'});
+    },
+    tests: [
+      {
+        name: 'test if the language is set',
+        test: () => {
+          return mapx.ask('get_language').then((r) => {
+            mapx.ask('set_language', {lang: 'en'});
+            return r === 'ru';
+          });
         }
       }
     ]
