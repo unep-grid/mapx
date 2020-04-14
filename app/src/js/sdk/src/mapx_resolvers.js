@@ -382,21 +382,15 @@ class MapxResolvers {
   }
 
   /**
-   * Show modal login
+   * Show the login modal window
    * @return {Boolean} done
    */
   show_modal_login() {
-    if (mx.settings.mode.app) {
-      Shiny.onInputChange('btn_control', {
-        time: new Date(),
-        value: 'showLogin'
-      });
-      return true;
-    }
+    return _shiny_input('btn_control', {value: 'showLogin'});
   }
 
   /**
-   * Show view meta modal
+   * Show view meta modal window
    * @return {Boolean} done
    */
   show_modal_view_meta(opt) {
@@ -417,8 +411,28 @@ class MapxResolvers {
     h.mapComposerModalAuto();
     return true;
   }
+
   /**
-   * close all modals
+   * Show sharing modal window
+   * @param {Object} opt Options
+   * @param {String} opt.idView Id view to share
+   */
+  show_modal_share(opt) {
+    opt = Object.assign({}, opt);
+    const view = h.getView(opt.idView);
+    const isView = opt.idView && h.isView(view);
+    if(isView){
+      return _shiny_input('mx_client_view_action', {
+        action: 'btn_opt_share',
+        target: opt.idView
+      });
+    }else{
+      return _shiny_input('btnIframeBuilder');
+    }
+  }
+
+  /**
+   * close all modal windows
    * @return {Boolean} done
    */
   close_modal_all() {
@@ -529,7 +543,8 @@ class MapxResolvers {
 export {MapxResolvers};
 
 /**
- * Helpers
+ * Helper to work with sliders
+ * @ignore
  */
 function _apply_filter_layer_slider(type, method, opt) {
   opt = Object.assign({}, {idView: null, value: null}, opt);
@@ -544,6 +559,11 @@ function _apply_filter_layer_slider(type, method, opt) {
     return view._interactive[type][method](opt.value);
   }
 }
+
+/**
+ * Helper to work with selectize
+ * @ignore
+ */
 function _apply_filter_layer_select(type, method, opt) {
   type = type || 'searchBox'; // selectize;
   opt = Object.assign({}, {idView: null, value: null}, opt);
@@ -557,4 +577,17 @@ function _apply_filter_layer_select(type, method, opt) {
   if (valid) {
     return view._interactive[type][method](opt.value);
   }
+}
+/**
+ * Helper to work with shiny
+ * @ignore
+ */
+function _shiny_input(id, opt) {
+  if (mx.settings.mode.app) {
+    opt = Object.assign({time: new Date()}, opt);
+    Shiny.onInputChange(id, opt);
+  } else {
+    throw new Error('only available in app mode');
+  }
+  return true;
 }

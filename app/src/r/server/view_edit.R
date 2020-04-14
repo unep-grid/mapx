@@ -35,6 +35,9 @@ observe({
           #
 
           viewId <- viewAction[["target"]]
+          if(noDataCheck(viewId)){
+            return()
+          }
 
           timer <- mxTimeDiff('get view to edit')
           viewData <-  mxApiGetViews(
