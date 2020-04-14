@@ -21,3 +21,11 @@ body {
 .pane-right {
   flex-grow: 1;
 }
+
+#actions ul {
+  padding-left: 1em;
+}
+
+#actions .active {
+  font-weight: bold;
+}
