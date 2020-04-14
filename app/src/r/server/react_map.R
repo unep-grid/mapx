@@ -1,5 +1,5 @@
 isMapReady <- reactive({
-  return(reactData$mapIsReady)
+  return(isTRUE(reactData$mapIsReady))
 })
 
 

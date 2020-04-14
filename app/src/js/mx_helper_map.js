@@ -80,7 +80,7 @@ export async function downloadViewAuto(idView) {
 
   const s = await {
     vt: () => {
-      Shiny.onInputChange(`mglEvent_${mx.settings.map.id}_view_action`, {
+      Shiny.onInputChange(`mx_client_view_action`, {
         target: view.id,
         action: 'btn_opt_download',
         time: new Date()
@@ -804,7 +804,7 @@ export function initMapxApp(o) {
    * If shiny, trigger read event
    */
   if (hasShiny) {
-    Shiny.onInputChange('mglEvent_' + o.id + '_ready', new Date());
+    Shiny.onInputChange('mx_client_ready', new Date());
   }
 
   /**
@@ -1408,7 +1408,7 @@ export function viewsCheckedUpdate(o) {
         vToRemove: vToRemove,
         vToAdd: vToAdd
       };
-      Shiny.onInputChange('mglEvent_' + idMap + '_views_status', summary);
+      Shiny.onInputChange('mx_client_views_status', summary);
     }
 
     h.viewsLayersOrderUpdate(o);

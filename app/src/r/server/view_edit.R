@@ -9,7 +9,7 @@ observe({
     #
     # Extract action type
     #
-    viewAction <- input[[sprintf("mglEvent_%1$s_view_action",.get(config,c("map","id")))]]
+    viewAction <- input$mx_client_view_action
 
     isolate({
       if(!noDataCheck(viewAction)){

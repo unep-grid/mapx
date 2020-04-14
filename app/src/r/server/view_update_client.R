@@ -9,7 +9,6 @@ observe({
   userData <- reactUser$data
 
   isolate({
-
     mapIsReady <- isMapReady()
     role <- getUserRole()
 

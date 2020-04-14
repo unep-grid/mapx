@@ -10,9 +10,9 @@ observe({
     userRole <- getUserRole()
     project <- reactData$project
     language <- reactData$language
-    isMapReady <- reactData$mapIsReady
+    isMapReady <- isTRUE(reactData$mapIsReady)
 
-    if(!noDataCheck(isMapReady)) return()
+    if(isMapReady) return()
     if(noDataCheck(userRole)) return()
     if(noDataCheck(project)) return()
     if(noDataCheck(language)) return()
@@ -38,9 +38,7 @@ observe({
 })
 
 
-observe({
-  eventMapName <- sprintf("mglEvent_%s_ready",.get(config,c("map","id"))) 
-  map <- input[[eventMapName]]
-  reactData$mapIsReady <- !noDataCheck(map)
+observeEvent(input$mx_client_ready,{
+  reactData$mapIsReady <- !noDataCheck(input$mx_client_ready)
 })
 

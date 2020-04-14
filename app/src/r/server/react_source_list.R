@@ -3,7 +3,7 @@
 
 observe({
   updateSourceLayer <- reactData$updateEditSourceLayerList
-  updateMgl <- input$mglEvent_update_source_list
+  updateMgl <- input$mx_client_update_source_list
   reactData$updateSourceLayerList <- runif(1)
 })
 

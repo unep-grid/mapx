@@ -22,7 +22,7 @@ function handleViewClick(event) {
       comment: 'target is a shiny action button',
       test: el.dataset.view_action_handler === 'shiny',
       action: function() {
-        Shiny.onInputChange('mglEvent_' + idMap + '_view_action', {
+        Shiny.onInputChange('mx_client_view_action', {
           target: el.dataset.view_action_target,
           action: el.dataset.view_action_key,
           time: new Date()

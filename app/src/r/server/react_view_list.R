@@ -147,8 +147,7 @@ reactViewsCompactListVector <- reactive({
 
 
 reactViewsCheckedList <- reactive({
-  eventMapViewsStatus <-  sprintf("mglEvent_%s_views_status",.get(config,c("map","id"))) 
-  viewsStatus <- input[[eventMapViewsStatus]]
+  viewsStatus <- input$mx_client_views_status
   viewsChecked <- .get(viewsStatus,c("vChecked"),default=list())
   if(noDataCheck(viewsChecked)){
     viewsChecked = list()

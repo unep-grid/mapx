@@ -278,10 +278,10 @@ observe({
   idMap <- .get(config,c("map","id"))
   project <- reactData$project
   hasProject <- !noDataCheck(project)
-  hasMap <- !noDataCheck(input[[ sprintf("mglEvent_%s_ready",config[[c("map","id")]]) ]])
+  hasMap <- isTRUE(reactData$mapIsReady)
   isGuest <- isGuestUser()
   update <- reactData$updateProject
-
+ 
   isolate({
     if( hasMap && hasProject ){
 
