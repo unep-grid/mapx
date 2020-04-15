@@ -78,14 +78,6 @@ mapx.on('ready', () => {
 </dd>
 </dl>
 
-## Functions
-
-<dl>
-<dt><a href="#_apply_filter_layer_slider">_apply_filter_layer_slider()</a></dt>
-<dd><p>Helpers</p>
-</dd>
-</dl>
-
 <a name="Events"></a>
 
 ## Events
@@ -474,7 +466,6 @@ Class to handle MapX specific method
 **Kind**: global class  
 
 * [MapxResolvers](#MapxResolvers)
-    * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
     * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
     * [.has_dashboard()](#MapxResolvers+has_dashboard) ⇒ <code>Boolean</code>
     * [.set_dashboard_visibility(opt)](#MapxResolvers+set_dashboard_visibility) ⇒ <code>Boolean</code>
@@ -512,6 +503,8 @@ Class to handle MapX specific method
     * [.show_modal_login()](#MapxResolvers+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
     * [.show_modal_map_composer()](#MapxResolvers+show_modal_map_composer) ⇒ <code>Boolean</code>
+    * [.show_modal_share(opt)](#MapxResolvers+show_modal_share)
+    * [.show_modal_tool(opt)](#MapxResolvers+show_modal_tool) ⇒ <code>Boolean</code> \| <code>Array</code>
     * [.close_modal_all()](#MapxResolvers+close_modal_all) ⇒ <code>Boolean</code>
     * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
     * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
@@ -523,14 +516,8 @@ Class to handle MapX specific method
     * [.move_view_before(opt)](#MapxResolvers+move_view_before)
     * [.move_view_up(opt)](#MapxResolvers+move_view_up)
     * [.move_view_down(opt)](#MapxResolvers+move_view_down)
+    * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
 
-<a name="MapxResolvers+get_sdk_methods"></a>
-
-### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>
-List resolvers methods
-
-**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Array</code> - array of supported methods  
 <a name="MapxResolvers+set_panel_left_visibility"></a>
 
 ### mapxResolvers.set\_panel\_left\_visibility(opt) ⇒ <code>Boolean</code>
@@ -912,14 +899,14 @@ mapx.ask('download_view_source_auto',{idView:'MX-GJ-0RB4FBOS8E'})
 <a name="MapxResolvers+show_modal_login"></a>
 
 ### mapxResolvers.show\_modal\_login() ⇒ <code>Boolean</code>
-Show modal login
+Show the login modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_view_meta"></a>
 
 ### mapxResolvers.show\_modal\_view\_meta() ⇒ <code>Boolean</code>
-Show view meta modal
+Show view meta modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
@@ -930,10 +917,36 @@ Show map composer
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolvers+show_modal_share"></a>
+
+### mapxResolvers.show\_modal\_share(opt)
+Show sharing modal window
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Id view to share |
+
+<a name="MapxResolvers+show_modal_tool"></a>
+
+### mapxResolvers.show\_modal\_tool(opt) ⇒ <code>Boolean</code> \| <code>Array</code>
+Show modal for tools
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> \| <code>Array</code> - Done or the list of tools  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.tool | <code>String</code> | Id of the tools |
+| opt.list | <code>Boolean</code> | Return a list of tools |
+
 <a name="MapxResolvers+close_modal_all"></a>
 
 ### mapxResolvers.close\_modal\_all() ⇒ <code>Boolean</code>
-close all modals
+close all modal windows
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
@@ -1048,12 +1061,13 @@ Move view down
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>Sring</code> |  |
 
-<a name="_apply_filter_layer_slider"></a>
+<a name="MapxResolvers+get_sdk_methods"></a>
 
-## \_apply\_filter\_layer\_slider()
-Helpers
+### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>
+List resolvers methods
 
-**Kind**: global function  
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - array of supported methods  
 
 * * *
 

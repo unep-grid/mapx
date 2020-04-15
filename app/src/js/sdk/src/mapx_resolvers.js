@@ -433,7 +433,7 @@ class MapxResolvers {
    * @param {Object} opt Options
    * @param {String} opt.tool Id of the tools
    * @param {Boolean} opt.list Return a list of tools
-   * @return {Boolean || Array} Done or the list of tools
+   * @return {Boolean | Array} Done or the list of tools
    */
   show_modal_tool(opt) {
     const mr = this;
