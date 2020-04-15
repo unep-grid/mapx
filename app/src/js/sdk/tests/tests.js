@@ -12,7 +12,6 @@ const t = new mxsdk.Testing({
 const ignoreGlobal = false;
 
 const expectedMethods = [
-  'get_sdk_methods',
   'set_panel_left_visibility',
   'has_dashboard',
   'set_dashboard_visibility',
@@ -50,6 +49,8 @@ const expectedMethods = [
   'show_modal_login',
   'show_modal_view_meta',
   'show_modal_map_composer',
+  'show_modal_share',
+  'show_modal_tool',
   'close_modal_all',
   'get_views_order',
   'get_views_list_state',
@@ -60,7 +61,8 @@ const expectedMethods = [
   'move_view_after',
   'move_view_before',
   'move_view_up',
-  'move_view_down'
+  'move_view_down',
+  'get_sdk_methods'
 ];
 /**
  * MapX respond

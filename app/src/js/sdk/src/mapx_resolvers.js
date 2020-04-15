@@ -1,4 +1,9 @@
+/**
+ * Shortcut for helpers
+ * @ignore
+ */
 let h;
+
 /**
  * Class to handle MapX specific method
  */
@@ -10,17 +15,6 @@ class MapxResolvers {
       throw new Error('mx.helpers not found');
     }
     h = mr.opt.helpers;
-  }
-
-  /**
-   * List resolvers methods
-   * @return {Array} array of supported methods
-   */
-  get_sdk_methods() {
-    const mr = this;
-    const methods = Object.getOwnPropertyNames(Object.getPrototypeOf(mr));
-    methods.splice(0, 1);
-    return methods;
   }
 
   /**
@@ -36,6 +30,7 @@ class MapxResolvers {
     h.panelLeftSwitch(opt);
     return true;
   }
+
   /**
    * Check if mapx has a dashboard
    * @return {Boolean} Has dashboard
@@ -253,7 +248,7 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_view_layer_filter_text(opt) {
-    return _apply_filter_layer_select('searchBox', 'setValue', opt);
+    return this._apply_filter_layer_select('searchBox', 'setValue', opt);
   }
   /**
    * Get current search box item
@@ -261,7 +256,7 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   get_view_layer_filter_text(opt) {
-    return _apply_filter_layer_select('searchBox', 'getValue', opt);
+    return this._apply_filter_layer_select('searchBox', 'getValue', opt);
   }
 
   /**
@@ -271,7 +266,7 @@ class MapxResolvers {
    * @param {Numeric} opt.value Value
    */
   set_view_layer_filter_numeric(opt) {
-    return _apply_filter_layer_slider('numericSlider', 'set', opt);
+    return this._apply_filter_layer_slider('numericSlider', 'set', opt);
   }
 
   /**
@@ -282,7 +277,7 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_filter_time(opt) {
-    return _apply_filter_layer_slider('timeSlider', 'set', opt);
+    return this._apply_filter_layer_slider('timeSlider', 'set', opt);
   }
 
   /**
@@ -293,7 +288,7 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_transparency(opt) {
-    return _apply_filter_layer_slider('transparencySlider', 'set', opt);
+    return this._apply_filter_layer_slider('transparencySlider', 'set', opt);
   }
 
   /**
@@ -303,7 +298,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_numeric() {
-    return _apply_filter_layer_slider('numericSlider', 'get');
+    return this._apply_filter_layer_slider('numericSlider', 'get');
   }
 
   /**
@@ -313,7 +308,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_time() {
-    return _apply_filter_layer_slider('timeSlider', 'get');
+    return this._apply_filter_layer_slider('timeSlider', 'get');
   }
 
   /**
@@ -323,7 +318,7 @@ class MapxResolvers {
    * @return {Number} value
    */
   get_view_layer_transparency() {
-    return _apply_filter_layer_slider('transparencySlider', 'get');
+    return this._apply_filter_layer_slider('transparencySlider', 'get');
   }
 
   /**
@@ -386,7 +381,8 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   show_modal_login() {
-    return _shiny_input('btn_control', {value: 'showLogin'});
+    const mr = this;
+    return mr._shiny_input('btn_control', {value: 'showLogin'});
   }
 
   /**
@@ -419,16 +415,95 @@ class MapxResolvers {
    */
   show_modal_share(opt) {
     opt = Object.assign({}, opt);
+    const mr = this;
     const view = h.getView(opt.idView);
     const isView = opt.idView && h.isView(view);
-    if(isView){
-      return _shiny_input('mx_client_view_action', {
+    if (isView) {
+      return mr._shiny_input('mx_client_view_action', {
         action: 'btn_opt_share',
         target: opt.idView
       });
-    }else{
-      return _shiny_input('btnIframeBuilder');
+    } else {
+      return mr._shiny_input('btnIframeBuilder');
     }
+  }
+
+  /**
+   * Show modal for tools
+   * @param {Object} opt Options
+   * @param {String} opt.tool Id of the tools
+   * @param {Boolean} opt.list Return a list of tools
+   * @return {Boolean || Array} Done or the list of tools
+   */
+  show_modal_tool(opt) {
+    const mr = this;
+    opt = Object.assign({}, opt);
+    const roles = h.path(mx, 'settings.user.roles.groups', []);
+    const tools = {
+      sharing_manager: {
+        roles: ['public'],
+        id: 'btnIframeBuilder'
+      },
+      view_add: {
+        roles: ['publishers', 'admins'],
+        id: 'btnAddView'
+      },
+      source_validate_geom: {
+        roles: ['publishers', 'admins'],
+        id: 'btnValidateSourceGeom'
+      },
+      source_overlap_utilities: {
+        roles: ['publishers', 'admins'],
+        id: 'btnAnalysisOverlap'
+      },
+      source_edit: {
+        roles: ['publishers', 'admins'],
+        id: 'btnEditSources'
+      },
+      source_metadata_edit: {
+        roles: ['publishers', 'admins'],
+        id: 'btnEditSourcesMetadata'
+      },
+      source_upload: {
+        roles: ['publishers', 'admins'],
+        id: 'btnUploadSourceApi'
+      },
+      db_temporary_connect: {
+        roles: ['publishers', 'admins'],
+        id: 'btnShowDbInfoSelf'
+      }
+    };
+    if (opt.list) {
+      return Object.keys(tools);
+    }
+    if (opt.tool) {
+      const conf = tools[opt.tool];
+      if (!conf) {
+        mr._fw.postMessage({
+          level: 'error',
+          key: 'err_resolver_tool_not_found',
+          vars: {idTool: opt.tool}
+        });
+        return false;
+      }
+      const allow = conf.roles.reduce((a, r) => {
+        return a || roles.indexOf(r) > -1;
+      }, false);
+      if (!allow) {
+       mr._fw.postMessage({
+          level: 'error',
+          key: 'err_roles_not_match',
+          vars: {
+            idTool: opt.tool,
+            roles: JSON.stringify(conf.roles)
+          }
+        });
+        return false;
+      }
+      mr._shiny_input(conf.id, {randomNumber: true});
+      return true;
+    }
+    return false;
   }
 
   /**
@@ -538,56 +613,86 @@ class MapxResolvers {
     const v = h.getMapData().viewsList;
     return v.moveTargetDown(opt.idView);
   }
+
+  /**
+   * List resolvers methods
+   * @return {Array} array of supported methods
+   */
+  get_sdk_methods() {
+    const mr = this;
+    const reg = new RegExp('^_');
+    const protos = Object.getPrototypeOf(mr);
+    const methods = Object.getOwnPropertyNames(protos).reduce((a, m) => {
+      if (!m.match(reg)) {
+        a.push(m);
+      }
+      return a;
+    }, []);
+    methods.splice(0, 1);
+    return methods;
+  }
+
+  /**
+   * Bind worker
+   * @ignore
+   * @param {FrameWorker} fw FrameWorker
+   */
+  _bind(fw) {
+    this._fw = fw;
+  }
+
+  /**
+   * Helper to work with sliders
+   * @ignore
+   */
+  _apply_filter_layer_slider(type, method, opt) {
+    opt = Object.assign({}, {idView: null, value: null}, opt);
+    const view = h.getView(opt.idView);
+    const valid =
+      h.isView(view) &&
+      h.isObject(view._interactive) &&
+      h.isObject(view._interactive[type]) &&
+      h.isFunction(view._interactive[type][method]);
+
+    if (valid) {
+      return view._interactive[type][method](opt.value);
+    }
+  }
+
+  /**
+   * Helper to work with selectize
+   * @ignore
+   */
+  _apply_filter_layer_select(type, method, opt) {
+    type = type || 'searchBox'; // selectize;
+    opt = Object.assign({}, {idView: null, value: null}, opt);
+    const view = h.getView(opt.idView);
+    const valid =
+      h.isView(view) &&
+      h.isObject(view._interactive) &&
+      h.isObject(view._interactive[type]) &&
+      h.isFunction(view._interactive[type][method]);
+
+    if (valid) {
+      return view._interactive[type][method](opt.value);
+    }
+  }
+  /**
+   * Helper to work with shiny
+   * @ignore
+   */
+  _shiny_input(id, opt) {
+    if (mx.settings.mode.app) {
+      opt = Object.assign({time: new Date()}, opt);
+      if (opt.randomNumber) {
+        opt = Math.ceil(Math.random() * 1000);
+      }
+      Shiny.onInputChange(id, opt);
+    } else {
+      throw new Error('only available in app mode');
+    }
+    return true;
+  }
 }
 
 export {MapxResolvers};
-
-/**
- * Helper to work with sliders
- * @ignore
- */
-function _apply_filter_layer_slider(type, method, opt) {
-  opt = Object.assign({}, {idView: null, value: null}, opt);
-  const view = h.getView(opt.idView);
-  const valid =
-    h.isView(view) &&
-    h.isObject(view._interactive) &&
-    h.isObject(view._interactive[type]) &&
-    h.isFunction(view._interactive[type][method]);
-
-  if (valid) {
-    return view._interactive[type][method](opt.value);
-  }
-}
-
-/**
- * Helper to work with selectize
- * @ignore
- */
-function _apply_filter_layer_select(type, method, opt) {
-  type = type || 'searchBox'; // selectize;
-  opt = Object.assign({}, {idView: null, value: null}, opt);
-  const view = h.getView(opt.idView);
-  const valid =
-    h.isView(view) &&
-    h.isObject(view._interactive) &&
-    h.isObject(view._interactive[type]) &&
-    h.isFunction(view._interactive[type][method]);
-
-  if (valid) {
-    return view._interactive[type][method](opt.value);
-  }
-}
-/**
- * Helper to work with shiny
- * @ignore
- */
-function _shiny_input(id, opt) {
-  if (mx.settings.mode.app) {
-    opt = Object.assign({time: new Date()}, opt);
-    Shiny.onInputChange(id, opt);
-  } else {
-    throw new Error('only available in app mode');
-  }
-  return true;
-}

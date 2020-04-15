@@ -5,6 +5,21 @@
     "fr": "Pas de resolver pour '${idResolver}'. Utiliser 'get_sdk_methods' pour lister les méthodes disponibles"
   },
   {
+    "key": "err_resolver_tool_not_found",
+    "en": "No tool for '${idTool}'. Use '{list:true}' to list available tools'",
+    "en": "L'outil '${idTool}' n'existe pas. Lister les outils avec cette option '{list:true}' '"
+  },
+  {
+    "key": "err_roles_not_match",
+    "en": "Tool ${idTool} need specific role: ${roles}",
+    "en": "L'outil ${idTool} a besoin d'un role spécifique: ${roles}"
+  },
+  {
+    "key": "err_not_available_mode",
+    "en": "Method not available in this mode: ${mode}",
+    "en": "Méthode non disponible dans ce mode: ${mode}"
+  },
+  {
     "key": "err_resolver_failed",
     "en": "Resolver failed ( idResolver =  ${idResolver}, idRequest = ${idRequest}, msg = ${msg}) ",
     "fr": ""

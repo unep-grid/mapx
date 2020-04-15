@@ -1,6 +1,6 @@
 import {Events} from './events.js';
 import {parse, stringify} from './helpers.js';
-import {isObject} from  '../../is_test/index.js';
+import {isObject} from '../../is_test/index.js';
 
 import {
   MessageFrameCom,
@@ -43,27 +43,25 @@ class FrameWorker extends Events {
     const fw = this;
     fw._emitter = 'worker';
     if (fw._init) {
-      fw.post(
-        new MessageFrameCom({
-          level: 'warning',
-          key: 'warn_worker_already_init'
-        })
-      );
+      fw.postMessage({
+        level: 'warning',
+        key: 'warn_worker_already_init'
+      });
       return;
     }
     fw._init = true;
     fw.initListener();
-    fw.post(
-      new StateFrameCom({
-        state: 'ready'
-      })
-    );
-    fw.post(
-      new MessageFrameCom({
-        level: 'log',
-        key: 'log_worker_ready'
-      })
-    );
+
+    fw.opt.resolvers._bind(fw);
+
+    fw.postState({
+      state: 'ready'
+    });
+
+    fw.postMessage({
+      level: 'log',
+      key: 'log_worker_ready'
+    });
 
     if (
       isObject(fw.opt.eventStore) &&
@@ -72,7 +70,7 @@ class FrameWorker extends Events {
       fw._eventStore = fw.opt.eventStore;
       fw._eventStore.addPassthrough({
         cb: (d) => {
-          fw.post(new EventFrameCom({value: d}));
+          fw.postEvent({value: d});
         }
       });
     }
@@ -98,9 +96,27 @@ class FrameWorker extends Events {
    * @param {Object} data Object to send to the parent
    * @private
    */
-  post(data) {
+  _post(data) {
     window.parent.postMessage(stringify(data), '*');
   }
+
+  postMessage(opt) {
+    const msg = new MessageFrameCom(opt);
+    this._post(msg);
+  }
+  postEvent(opt) {
+    const evt = new EventFrameCom(opt);
+    this._post(evt);
+  }
+  postResponse(opt) {
+    const state = new ResponseFrameCom(opt);
+    this._post(state);
+  }
+  postState(opt) {
+    const state = new StateFrameCom(opt);
+    this._post(state);
+  }
+
   /**
    * Init message listener
    * @param {data}
@@ -132,7 +148,6 @@ class FrameWorker extends Events {
     const idRequest = request.idRequest;
     const idResolver = request.idResolver;
     const resolver = fw.opt.resolvers[idResolver];
-
     return new Promise((resolve, reject) => {
       if (idRequest === 'destroy') {
         fw.destroy();
@@ -157,38 +172,32 @@ class FrameWorker extends Events {
       }
     })
       .then((res) => {
-        fw.post(
-          new ResponseFrameCom({
-            idRequest: idRequest,
-            value: res,
-            success : true
-          })
-        );
+        fw.postResponse({
+          idRequest: idRequest,
+          value: res,
+          success: true
+        });
       })
       .catch((e) => {
-        fw.post(
-          new ResponseFrameCom({
-            idRequest: idRequest,
-            success: false
-          })
-        );
+        fw.postResponse({
+          idRequest: idRequest,
+          success: false
+        });
 
         if (e instanceof MessageFrameCom) {
-          fw.post(e);
+          fw._post(e);
         } else {
-          const m = isObject(e) ? e.message : e; 
-          fw.post(
-            new MessageFrameCom({
-              level: 'error',
-              key: 'err_resolver_failed',
-              vars: {
-                idRequest: idRequest,
-                idResolver: idResolver,
-                msg : m
-              },
-              data: e
-            })
-          );
+          const m = isObject(e) ? e.message : e;
+          fw.postMessage({
+            level: 'error',
+            key: 'err_resolver_failed',
+            vars: {
+              idRequest: idRequest,
+              idResolver: idResolver,
+              msg: m
+            },
+            data: e
+          });
         }
       });
   }
