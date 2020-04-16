@@ -2157,7 +2157,9 @@ export function viewLayersRemove(o) {
       resolve(false);
     }
 
-    let viewDuration = Date.now() - view._addTime || 0;
+    const now = Date.now();
+    const viewDuration = now - view._added_at || 0;
+    delete view._added_at;
 
     mx.events.fire({
       type: 'view_remove',
@@ -2176,9 +2178,11 @@ export function viewLayersRemove(o) {
       type: 'view_removed',
       data: {
         idView: o.idView,
-        view: h.getViewJson(view, {asString: false})
+        time : now,
+        duration : viewDuration, 
       }
     });
+
     if (view._elLegendGroup) {
       view._elLegendGroup.remove();
     }
@@ -2726,11 +2730,14 @@ export function viewLayersAdd(o) {
       return handler(idType);
     })
     .then(() => {
+      
+      view._added_at = Date.now();
+
       mx.events.fire({
         type: 'view_added',
         data: {
           idView: view.id,
-          view: h.getViewJson(view, {asString: false})
+          time : view._added_at
         }
       });
     })

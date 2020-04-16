@@ -91,8 +91,7 @@ export function initLog() {
     type: 'view_added',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isView(d.view)) {
-        d.view._log_added_at = Date.now();
+      if (h.isViewId(d.idView)) {
         logger.add({
           id_log: 'view_add',
           data: {
@@ -110,14 +109,12 @@ export function initLog() {
     type: 'view_removed',
     idGroup: 'mx_log',
     callback: (d) => {
-      if (h.isView(d.view) && d.view._log_added_at > 0) {
-        let viewDuration = (Date.now() - d.view._log_added_at) / 1000;
-        delete d.view._log_added_at;
+      if (h.isViewId(d.idView) && d.duration > 0) {
         logger.add({
           id_log: 'view_remove',
           data: {
             id_view: d.idView,
-            view_duration_seconds: viewDuration
+            view_duration_seconds: d.duration / 1000
           }
         });
       }
