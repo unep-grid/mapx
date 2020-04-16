@@ -244,6 +244,8 @@ mxDbGetProjectListByUser <- function(
 
   res <- mxApiFetch(route,
     list(
+      role = whereUserRoleIs,
+      title = whereTitleMatch,
       idUser = id,
       token = token,
       language = language
@@ -251,11 +253,9 @@ mxDbGetProjectListByUser <- function(
     asDataFrame = asDataFrame
   )
 
-
-
   if(isTRUE(asNamedList)){
-    out <- as.list(res$id)
-    names(out) <- res$title
+    out <- unlist(lapply(res,`[[`, 'id'))
+    names(out) <- unlist(lapply(res,`[[`, 'title'))
     res <- out
   }
 

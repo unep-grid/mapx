@@ -25,8 +25,6 @@ observeEvent(reactData$showShareManagerProject,{
         asNamedList = TRUE
       )
 
-
-
       #
       # Do not list current project
       #

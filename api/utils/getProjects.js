@@ -30,9 +30,15 @@ function getProjectsByUserHelper(
   titlePrefix = null,
   titleFuzzy = null
 ) {
-  var roleCondition = ['member', 'publisher', 'admin'].includes(role)
-    ? role
-    : `public OR member OR publisher OR admin`;
+  if (title && title.indexOf('*') > -1) {
+    const starPos = title.indexOf('*');
+    titlePrefix = title.substring(0,starPos);
+    title = null;
+  }
+
+  var hasRole = ['member', 'publisher', 'admin'].includes(role);
+  var roleCondition = hasRole ? role : `public OR member OR publisher OR admin`;
+
   var pSql = project
     .select(`id`)
     .select(`title ->> '${lc}' as title`)
@@ -58,7 +64,7 @@ function getProjectsByUserHelper(
     );
   }
 
-  if (titlePrefix) {
+  if (titlePrefix) { 
     pSql.where(
       project.title
         .keyText('en')
@@ -81,7 +87,7 @@ function getProjectsByUserHelper(
   }
   sqlStr = `
     WITH project_role AS (${pSql.toString()})
-    SELECT * FROM project_role WHERE ${roleCondition} OR public = true
+    SELECT * FROM project_role WHERE ${roleCondition}
     `;
   return pgRead.query(sqlStr);
 }
@@ -111,8 +117,8 @@ async function getProjectsByUserRouteHandler(req, res) {
     );
 
     /**
-    * As it's not done in sql, set title default if empty
-    */
+     * As it's not done in sql, set title default if empty
+     */
     result.rows.forEach((r) => {
       if (!r.title) {
         r.title = r.title_en;
