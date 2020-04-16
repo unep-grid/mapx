@@ -62,7 +62,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_raster',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        downloadViewRaster(viewTarget, true);
+        h.downloadViewRaster(viewTarget, true);
       }
     },
     {

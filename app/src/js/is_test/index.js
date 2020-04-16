@@ -51,12 +51,22 @@ export function isViewsArray(arr) {
 
 /**
  * Test for valid project id
- * @param {String} id proect to test
+ * @param {String} id Project id to test
  * @return {Boolean}
  */
-export function isIdProject(idProject) {
+export function isProjectId(idProject) {
   const reg = new RegExp('MX-.{3}-.{3}-.{3}-.{3}-.{3}');
-  return !!idProject.match(reg);
+  return !!idProject && !!idProject.match(reg);
+}
+
+/**
+ * Test for valid view id
+ * @param {String} id View id to test
+ * @return {Boolean}
+ */
+export function isViewId(idView) {
+  const reg = new RegExp('MX-.{5}-.{5}-.{5}');
+  return !!idView && !!idView.match(reg);
 }
 /**
  * Test for valid project
@@ -64,7 +74,7 @@ export function isIdProject(idProject) {
  * @return {Boolean}
  */
 export function isProject(p) {
-  return isObject(p) && isIdProject(p.id);
+  return isObject(p) && isProjectId(p.id);
 }
 /**
  * Test for valid project array

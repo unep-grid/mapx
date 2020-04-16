@@ -56,7 +56,10 @@ export async function downloadViewGeojson(idView) {
  */
 export async function downloadViewRaster(idView, open) {
   const h = mx.helpers;
-  const view = h.getView(viewTarget);
+  const view = h.getView(idView);
+  if (!h.isView(view)) {
+    throw new Error(`No view with id ${idView}`);
+  }
   const url = h.path(view, 'data.source.urlDownload');
   if (h.isUrl(url) && open) {
     const win = window.open(url, '_blank');
@@ -66,10 +69,10 @@ export async function downloadViewRaster(idView, open) {
 }
 
 /**
-* Download source of the view of type raster, vector and geojson.
-* @param {String} idView Id of the view
-* @return {Object} Object with the method to retrieve the source : raster = url, vector = modal, geojson = data, file. 
-*/
+ * Download source of the view of type raster, vector and geojson.
+ * @param {String} idView Id of the view
+ * @return {Object} Object with the method to retrieve the source : raster = url, vector = modal, geojson = data, file.
+ */
 export async function downloadViewAuto(idView) {
   const h = mx.helpers;
   const view = h.getView(idView);
@@ -87,14 +90,14 @@ export async function downloadViewAuto(idView) {
       });
       return Promise.resolve({
         type: 'vt',
-        methods : ['modal']
+        methods: ['modal']
       });
     },
     rt: () => {
       const urlDownload = h.path(view, 'data.source.urlDownload');
       return Promise.resolve({
         type: 'rt',
-        methods : ['url'],
+        methods: ['url'],
         url: urlDownload
       });
     },
@@ -103,7 +106,7 @@ export async function downloadViewAuto(idView) {
         return {
           type: 'gt',
           data: data,
-          methods : ['file','data']
+          methods: ['file', 'data']
         };
       });
     }
@@ -4760,8 +4763,17 @@ export function getView(id, idMap) {
   if (h.isView(id)) {
     return id;
   }
+  if (!h.isViewId(id)) {
+    throw new Error('No valid view id given');
+  }
   return mx.helpers.getViews({idView: id, id: idMap})[0];
 }
+
+/**
+ * Get view position in views array
+ * @param {String} id of the view
+ * @param {String} idMap Id of the map
+ */
 export function getViewIndex(id) {
   const h = mx.helpers;
   const view = h.getView(id);
