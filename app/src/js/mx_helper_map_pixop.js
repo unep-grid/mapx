@@ -29,7 +29,7 @@ export function activateSpotlight(enable, elToggle) {
     },
     onCalcArea: (area) => {
       let resol = mx.spotlight.getResolution();
-      if (h.isElement(elTextArea) && h.isElement(elTestResol)) {
+      if (h.isElement(elTextArea) && h.isElement(elTextResol)) {
         elTextArea.innerText = '~ ' + Math.round(area * 1e-6) + ' km2';
         elTextResol.innerText =
           ' ~ ' + formatDist(resol.lat) + ' x ' + formatDist(resol.lng);
