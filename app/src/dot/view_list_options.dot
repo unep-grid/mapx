@@ -22,7 +22,7 @@
       <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_start_story" data-lang_type="tooltip" data-view_action_key="btn_opt_start_story" data-view_action_target="{{=view.id}}">
         <div class="fa fa-play"></div>
       </li>
-      {{?view._edit && isCurrentProject}}
+      {{?h.isViewEditable(view) && isCurrentProject}}
       <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_edit_story" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_story" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-file-text"></div>
       </li>
@@ -77,7 +77,7 @@
         <div class="fa fa-table"></div>
       </li>
       {{?}}
-      {{?view._edit && isCurrentProject}}
+      {{?h.isViewEditable(view) && isCurrentProject}}
       <li class="mx-pointer btn-circle btn-circle-small hint--right" data-lang_key="btn_opt_edit_config" data-lang_type="tooltip" data-view_action_key="btn_opt_edit_config" data-view_action_handler="shiny" data-view_action_target="{{=view.id}}">
         <div class="fa fa-pencil"></div>
       </li>

@@ -32,7 +32,7 @@ export function updateLanguage(o) {
   /**
    * Update lang of interface
    */
-  updateLanguageElements(o)
+ return updateLanguageElements(o)
     .then(() => {
       /**
        * Update map language

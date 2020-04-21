@@ -40,6 +40,9 @@ export function isViewVt(item) {
 export function isViewRt(item) {
   return isView(item) && item.type === 'rt';
 }
+export function isViewEditable(item) {
+  return isView(item) && item._edit === true;
+}
 export function isViewsArray(arr) {
   return (
     isArray(arr) &&
@@ -120,6 +123,14 @@ export function isIconFont(item) {
  */
 export function isArray(item) {
   return !!item && typeof item === 'object' && Array.isArray(item);
+}
+export function isArrayOfString(arr) {
+  return (
+    isArray(arr) &&
+    arr.reduce((a, p) => {
+      return a === false ? a : isString(p);
+    }, true)
+  );
 }
 
 /**

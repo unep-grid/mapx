@@ -11,59 +11,6 @@ const t = new mxsdk.Testing({
 
 const ignoreGlobal = false;
 
-const expectedMethods = [
-  'set_panel_left_visibility',
-  'has_dashboard',
-  'set_dashboard_visibility',
-  'get_source_meta',
-  'get_user_id',
-  'get_user_ip',
-  'get_user_roles',
-  'get_user_email',
-  'set_project',
-  'get_language',
-  'set_language',
-  'get_languages',
-  'get_projects',
-  'get_project',
-  'get_project_collections',
-  'is_user_guest',
-  'get_views',
-  'get_views_with_visible_layer',
-  'get_views_id',
-  'get_views_id_open',
-  'get_view_meta_vt_attribute',
-  'get_view_meta',
-  'get_view_legend_image',
-  'set_view_layer_filter_text',
-  'get_view_layer_filter_text',
-  'set_view_layer_filter_numeric',
-  'set_view_layer_filter_time',
-  'set_view_layer_transparency',
-  'get_view_layer_filter_numeric',
-  'get_view_layer_filter_time',
-  'get_view_layer_transparency',
-  'open_view',
-  'close_view',
-  'download_view_source_auto',
-  'show_modal_login',
-  'show_modal_view_meta',
-  'show_modal_map_composer',
-  'show_modal_share',
-  'show_modal_tool',
-  'close_modal_all',
-  'get_views_order',
-  'get_views_list_state',
-  'set_views_list_state',
-  'set_views_list_sort',
-  'move_view_top',
-  'move_view_bottom',
-  'move_view_after',
-  'move_view_before',
-  'move_view_up',
-  'move_view_down',
-  'get_sdk_methods'
-];
 /**
  * MapX respond
  */
@@ -75,14 +22,9 @@ mapx.once('ready', () => {
     },
     tests: [
       {
-        name: 'test if all expected methods are listed',
+        name: 'test if array of string',
         test: (r) => {
-          return (
-            r.length === expectedMethods.length &&
-            r.reduce((a, m) => {
-              return a === false ? a : expectedMethods.indexOf(m) > -1;
-            }, true)
-          );
+          return t.h.isArrayOfString(r);
         }
       }
     ]
@@ -366,8 +308,56 @@ mapx.once('ready', () => {
     ]
   });
 
+  t.check('Show edit view modal', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('get_views').then((views) => {
+        views = views.reduce((a, v) => {
+          if (v._edit === true) {
+            a.push(v);
+          }
+          return a;
+        }, []);
+        const pos = Math.floor(Math.random() * views.length - 1);
+        return views[pos];
+      });
+    },
+    tests: [
+      {
+        name: 'has editable view ',
+        test: (v) => {
+          return t.h.isViewEditable(v);
+        }
+      },
+      {
+        name: 'Display view edit modal',
+        timeout: 2000,
+        test: async (v) => {
+          const editable = t.h.isViewEditable(v);
+          if (!editable) {
+            return false;
+          }
+          const show = await mapx.ask('show_modal_view_edit', {
+            idView: v.id
+          });
+          const pass = await mapx.ask('has_el_id', {
+            id: 'modalViewEdit',
+            timeout: 1500
+          });
+          return show && pass;
+        }
+      }
+    ]
+  });
+
   /**
    * Run tests
    */
-  t.run();
+  t.run({
+    finally: () => {
+      setTimeout(() => {
+        mapx.ask('close_modal_all');
+      }, 3000);
+    }
+  });
 });

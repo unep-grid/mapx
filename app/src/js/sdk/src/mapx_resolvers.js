@@ -9,12 +9,12 @@ let h;
  */
 class MapxResolvers {
   constructor(opt) {
-    const mr = this;
-    mr.opt = Object.assign({}, opt);
-    if (!mr.opt.helpers) {
+    const res = this;
+    res.opt = Object.assign({}, opt);
+    if (!res.opt.helpers) {
       throw new Error('mx.helpers not found');
     }
-    h = mr.opt.helpers;
+    h = res.opt.helpers;
   }
 
   /**
@@ -31,12 +31,23 @@ class MapxResolvers {
     return true;
   }
 
-  /**
-   * Check if mapx has a dashboard
-   * @return {Boolean} Has dashboard
-   */
   has_dashboard() {
     return !!mx.dashboard && !mx.dashboard._destroyed;
+  }
+
+  /**
+   * Check if element is visible, by id
+   * @param {Object} opt Options
+   * @param {String} opt.id Id of the element to check
+   * @param {Number} opt.timeout Timeout
+   */
+  has_el_id(opt) {
+    return new Promise((resolve) => {
+      setTimeout(()=>{
+        const has = !!document.getElementById(opt.id);
+        resolve(has);
+      }, opt.timeout || 0);
+    });
   }
 
   /**
@@ -47,9 +58,9 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_dashboard_visibility(opt) {
-    const mr = this;
+    const res = this;
     opt = Object.assign({show: true, toggle: false}, opt);
-    if (mr.has_dashboard()) {
+    if (res.has_dashboard()) {
       if (opt.toggle === true) {
         mx.dashboard.toggle();
       } else if (opt.show === true) {
@@ -66,6 +77,7 @@ class MapxResolvers {
    * Get source metadata
    * @param {Object} opt Options
    * @param {String} opt.idSource Id of the source
+   * @return {Object} Source MapX metadata
    */
   get_source_meta(opt) {
     return h.getSourceMetadata(opt.idSource, opt.force);
@@ -97,7 +109,7 @@ class MapxResolvers {
 
   /**
    * Get user email
-   * @return {String} Current user email
+   * @return {String} Current user email ( if logged, null if not)
    */
   get_user_email() {
     return mx.settings.user.guest ? '' : mx.settings.user.email;
@@ -127,6 +139,7 @@ class MapxResolvers {
    * Setlanguage
    * @param {Object} opt Options
    * @param {String} opt.lang Two letters language code
+   * @return {Boolean} Laguage change process finished
    */
   set_language(opt) {
     return h.updateLanguage(opt);
@@ -226,6 +239,7 @@ class MapxResolvers {
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
    * @param {Object} view meta data object
+   * @return {Object} view metadata
    */
   get_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);
@@ -237,6 +251,7 @@ class MapxResolvers {
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
    * @param {String} opt.format
+   * @return {String} PNG in base64 format
    */
   get_view_legend_image(opt) {
     return h.getViewLegendImage({view: opt.idView, format: opt.format});
@@ -329,11 +344,14 @@ class MapxResolvers {
    */
   open_view(opt) {
     opt = Object.assign({}, {idView: null}, opt);
+    const res = this;
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
       h.viewOpenAuto(view);
       return true;
+    } else {
+      return res._err('err_view_invalid');
     }
   }
 
@@ -345,11 +363,14 @@ class MapxResolvers {
    */
   close_view(opt) {
     opt = Object.assign({}, {idView: null}, opt);
+    const res = this;
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
       h.viewCloseAuto(view);
       return true;
+    } else {
+      return res._err('err_view_invalid');
     }
   }
 
@@ -381,8 +402,8 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   show_modal_login() {
-    const mr = this;
-    return mr._shiny_input('btn_control', {value: 'showLogin'});
+    const res = this;
+    return res._shiny_input('btn_control', {value: 'showLogin'});
   }
 
   /**
@@ -392,10 +413,38 @@ class MapxResolvers {
   show_modal_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     const view = h.getView(opt.idView);
+    const res = this;
     const valid = h.isView(view);
     if (valid) {
       h.viewToMetaModal(view);
       return true;
+    } else {
+      return res._err('err_view_invalid');
+    }
+  }
+
+  /**
+   * Show view edit modal window
+   * @return {Boolean} done
+   */
+  show_modal_view_edit(opt) {
+    opt = Object.assign({}, {idView: null}, opt);
+    const res = this;
+    const view = h.getView(opt.idView);
+    const valid = h.isView(view);
+    const editable = valid && view._edit === true;
+    if (valid && editable) {
+      res._shiny_input('mx_client_view_action', {
+        action: 'btn_opt_edit_config',
+        target: opt.idView
+      });
+      return true;
+    } else {
+      if (!editable && valid) {
+        return res._err('err_view_not_editable');
+      } else {
+        return res._err('err_view_invalid');
+      }
     }
   }
 
@@ -412,19 +461,20 @@ class MapxResolvers {
    * Show sharing modal window
    * @param {Object} opt Options
    * @param {String} opt.idView Id view to share
+   * @return {Boolean} Done
    */
   show_modal_share(opt) {
     opt = Object.assign({}, opt);
-    const mr = this;
+    const res = this;
     const view = h.getView(opt.idView);
     const isView = opt.idView && h.isView(view);
     if (isView) {
-      return mr._shiny_input('mx_client_view_action', {
+      return res._shiny_input('mx_client_view_action', {
         action: 'btn_opt_share',
         target: opt.idView
       });
     } else {
-      return mr._shiny_input('btnIframeBuilder');
+      return res._shiny_input('btnIframeBuilder');
     }
   }
 
@@ -436,7 +486,7 @@ class MapxResolvers {
    * @return {Boolean | Array} Done or the list of tools
    */
   show_modal_tool(opt) {
-    const mr = this;
+    const res = this;
     opt = Object.assign({}, opt);
     const roles = h.path(mx, 'settings.user.roles.groups', []);
     const tools = {
@@ -479,7 +529,7 @@ class MapxResolvers {
     if (opt.tool) {
       const conf = tools[opt.tool];
       if (!conf) {
-        mr._fw.postMessage({
+        res._fw.postMessage({
           level: 'error',
           key: 'err_resolver_tool_not_found',
           vars: {idTool: opt.tool}
@@ -490,9 +540,9 @@ class MapxResolvers {
         return a || roles.indexOf(r) > -1;
       }, false);
       if (!allow) {
-       mr._fw.postMessage({
+        res._fw.postMessage({
           level: 'error',
-          key: 'err_roles_not_match',
+          key: 'err_tool_roles_not_match',
           vars: {
             idTool: opt.tool,
             roles: JSON.stringify(conf.roles)
@@ -500,7 +550,7 @@ class MapxResolvers {
         });
         return false;
       }
-      mr._shiny_input(conf.id, {randomNumber: true});
+      res._shiny_input(conf.id, {randomNumber: true});
       return true;
     }
     return false;
@@ -536,14 +586,16 @@ class MapxResolvers {
    * Set state / views list order, groups, etc. Opened view will be closed
    * @param {Object} opt Options
    * @param {Array} opt.state Mapx views list state
+   * @return {Boolean} Done
    */
   set_views_list_state(opt) {
     const v = h.getMapData().viewsList;
-    return v.setState({
+    v.setState({
       render: false,
       state: opt.state,
       useStateStored: false
     });
+    return true;
   }
 
   /**
@@ -551,67 +603,81 @@ class MapxResolvers {
    * @param {Object} opt Options
    * @param {Boolean} opt.asc Asc
    * @param {String} opt.mode Mode : 'string' or 'date';
+   * @return {Boolean} Done
    */
   set_views_list_sort(opt) {
     const v = h.getMapData().viewsList;
-    return v.sortGroup(null, opt);
+    v.sortGroup(null, opt);
+    return true;
   }
 
   /**
    * Move view on top of its group
    * @param {Object} opt Options
    * @param {Sring} opt.idView
+   * @return {Boolean} Done
    */
   move_view_top(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetTop(opt.idView);
+    v.moveTargetTop(opt.idView);
+    return true;
   }
   /**
    * Move view on the bottom of its group
    * @param {Object} opt Options
    * @param {Sring} opt.idView
+   * @return {Boolean} Done
    */
   move_view_bottom(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetBottom(opt.idView);
+    v.moveTargetBottom(opt.idView);
+    return true;
   }
   /**
    * Move view after anoter view
    * @param {Object} opt Options
    * @param {Sring} opt.idView
    * @param {Sring} opt.idViewAfter
+   * @return {Boolean} Done
    */
   move_view_after(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetAfter(opt.idView, opt.idViewAfter);
+    v.moveTargetAfter(opt.idView, opt.idViewAfter);
+    return true;
   }
   /**
    * Move view before another view
    * @param {Object} opt Options
    * @param {Sring} opt.idView
    * @param {Sring} opt.idViewBefore
+   * @return {Boolean} Done
    */
   move_view_before(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetBefore(opt.idView, opt.idViewBefore);
+    v.moveTargetBefore(opt.idView, opt.idViewBefore);
+    return true;
   }
   /**
    * Move view up
    * @param {Object} opt Options
    * @param {Sring} opt.idView
+   * @return {Boolean} Done
    */
   move_view_up(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetUp(opt.idView);
+    v.moveTargetUp(opt.idView);
+    return true;
   }
   /**
    * Move view down
    * @param {Object} opt Options
    * @param {Sring} opt.idView
+   * @return {Boolean} Done
    */
   move_view_down(opt) {
     const v = h.getMapData().viewsList;
-    return v.moveTargetDown(opt.idView);
+    v.moveTargetDown(opt.idView);
+    return true;
   }
 
   /**
@@ -619,9 +685,9 @@ class MapxResolvers {
    * @return {Array} array of supported methods
    */
   get_sdk_methods() {
-    const mr = this;
+    const res = this;
     const reg = new RegExp('^_');
-    const protos = Object.getPrototypeOf(mr);
+    const protos = Object.getPrototypeOf(res);
     const methods = Object.getOwnPropertyNames(protos).reduce((a, m) => {
       if (!m.match(reg)) {
         a.push(m);
@@ -656,6 +722,8 @@ class MapxResolvers {
 
     if (valid) {
       return view._interactive[type][method](opt.value);
+    } else {
+      return res._err('err_view_invalid');
     }
   }
 
@@ -675,6 +743,8 @@ class MapxResolvers {
 
     if (valid) {
       return view._interactive[type][method](opt.value);
+    } else {
+      return res._err('err_view_invalid');
     }
   }
   /**
@@ -689,9 +759,23 @@ class MapxResolvers {
       }
       Shiny.onInputChange(id, opt);
     } else {
-      throw new Error('only available in app mode');
+      return res._err('err_not_available_mode', {
+        mode: JSON.stringify(mx.settings.mode)
+      });
     }
     return true;
+  }
+  /**
+   * Error handling
+   * @ignore
+   */
+  _err(key, vars) {
+    const res = this;
+    res._fw.postMessage({
+      level: 'error',
+      key: key,
+      vars: vars
+    });
   }
 }
 

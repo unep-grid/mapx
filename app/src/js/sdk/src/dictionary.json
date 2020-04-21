@@ -5,14 +5,24 @@
     "fr": "Pas de resolver pour '${idResolver}'. Utiliser 'get_sdk_methods' pour lister les méthodes disponibles"
   },
   {
-    "key": "err_resolver_tool_not_found",
+    "key": "err_tool_not_found",
     "en": "No tool for '${idTool}'. Use '{list:true}' to list available tools'",
     "en": "L'outil '${idTool}' n'existe pas. Lister les outils avec cette option '{list:true}' '"
   },
   {
-    "key": "err_roles_not_match",
+    "key": "err_tool_roles_not_match",
     "en": "Tool ${idTool} need specific role: ${roles}",
     "en": "L'outil ${idTool} a besoin d'un role spécifique: ${roles}"
+  },
+  {
+    "key": "err_view_not_editable",
+    "en": "The user can't edit this view",
+    "en": "L'utilisateur n'a pas les droits d'édition sur cette vue"
+  },
+  {
+    "key": "err_view_invalid",
+    "en": "This view is not valid",
+    "en": "Cette vue n'est pas valide"
   },
   {
     "key": "err_not_available_mode",

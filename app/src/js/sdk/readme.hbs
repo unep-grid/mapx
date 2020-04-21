@@ -24,6 +24,8 @@ const mapx = new MxSdk.manager({
 mapx.on('ready', () => {
   /**
    * Get list of views, print them in console
+   * ( All requests to MapX resolvers return
+   * Promises or Promisified value)
    */
   mapx.ask('get_views').then(console.log);
   /**
@@ -59,4 +61,5 @@ mapx.on('ready', () => {
 
 * * *
 
-&copy; 2019-2020 Fred Moser
+
+&copy; 2019-2020 unepgrid.ch

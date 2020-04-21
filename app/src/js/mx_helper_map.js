@@ -1016,13 +1016,14 @@ export function addSourceFromViews(o) {
  * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
 export function addSourceFromView(o) {
-  const p = mx.helpers.path;
+  const h = mx.helpers;
+  const p = h.path;
 
   if (o.map && p(o.view, 'data.source')) {
     const project = p(mx, 'settings.project');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
-    const isEditable = p(o.view._edit) === true;
+    const isEditable = h.isViewEditable(o.view);
     const isLocationOk =
       o.noLocationCheck ||
       projectView === project ||
@@ -1208,7 +1209,7 @@ export function updateViewsList(o) {
       const apiUrlViews = h.getApiUrl('getView');
       const keyStore = v.id + '@' + v.pid;
       const keyNet = apiUrlViews + v.id + '?' + v.pid;
-      const editable = v._edit;
+      const editable = h.isViewEditable(v);
       return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
         if (view) {
           nCache++;
@@ -4748,7 +4749,8 @@ export function getViewsForJSON() {
     'pid',
     'project',
     'readers',
-    'editors'
+    'editors',
+    '_edit'
   ];
 
   const viewsClean = views.map((v) => {

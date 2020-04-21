@@ -55,13 +55,26 @@ export class Testing {
     t.opt.tests = [];
   }
 
-  run() {
-    const c = queue.shift();
+  run(opt) {
     const t = this;
+    opt = Object.assign({}, opt);
+    if (opt.finally instanceof Function) {
+      t._finally = opt.finally;
+    }
+    t._next();
+  }
+
+  _next() {
+    const t = this;
+    const c = queue.shift();
     if (c) {
       c().then(() => {
-        t.run();
+        t._next();
       });
+    } else {
+      if (t._finally) {
+        t._finally();
+      }
     }
   }
 
@@ -113,7 +126,6 @@ export class Testing {
           return;
         }
         const it = Object.assign({}, defaultsTest, test);
-
         const uiResult = t._ui_result(it.name, uiSection);
         if (it.ignore) {
           return;
