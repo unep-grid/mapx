@@ -65,8 +65,9 @@ export function isProjectId(idProject) {
  * @return {Boolean}
  */
 export function isViewId(idView) {
-  const reg = new RegExp('MX-.{5}-.{5}-.{5}');
-  return !!idView && !!idView.match(reg);
+  const regStandard = new RegExp('MX-.{5}-.{5}-.{5}');
+  const regGeojson = new RegExp('MX-GJ-.{10}');
+  return !!idView && (!!idView.match(regStandard) || idView.match(regGeojson));
 }
 /**
  * Test for valid project
