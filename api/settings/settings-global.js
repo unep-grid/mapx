@@ -77,7 +77,7 @@ module.exports = {
       }
     },
     users: {
-      roles: ['admin', 'publisher', 'member', 'public'],
+      roles: ['public','member','publisher','admin'],
       id_public: 96,
       id_admin: 1
     },
