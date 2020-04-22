@@ -49,6 +49,9 @@ observe({
             )
           mxTimeDiff(timer)
 
+          if(noDataCheck(viewData)){
+               return()
+          }
           if(length(viewData) > 1){
             stop("View edit can't edit more than one view")
           }else{

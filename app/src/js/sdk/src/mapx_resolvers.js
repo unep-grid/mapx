@@ -95,8 +95,9 @@ class MapxResolvers {
    * Get user ip info
    * @return {Object} Current user ip object (ip, country, region, etc)
    */
-  get_user_ip() {
-    return fetch('https://api.mapx.org/get/ip').then((r) => r.json());
+  async get_user_ip() {
+    const res = await fetch('https://api.mapx.org/get/ip');
+    return res.json();
   }
 
   /**

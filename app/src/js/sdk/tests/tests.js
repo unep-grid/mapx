@@ -47,17 +47,17 @@ mapx.once('ready', () => {
 
   t.check('Get / Set language', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('set_language', {lang: 'ru'});
-    },
     tests: [
       {
         name: 'test if the language is set',
-        test: () => {
-          return mapx.ask('get_language').then((r) => {
-            mapx.ask('set_language', {lang: 'en'});
-            return r === 'ru';
-          });
+        test: async () => {
+          const lang = await mapx.ask('get_language');
+          const langAlt = lang === 'en' ? 'ru' : 'en';
+          await mapx.ask('set_language', {lang: langAlt});
+          const langSet = await mapx.ask('get_language');
+          const pass = langSet === langAlt;
+          await mapx.ask('set_language', {lang: lang});
+          return pass;
         }
       }
     ]
@@ -80,18 +80,20 @@ mapx.once('ready', () => {
 
   t.check('Get view vt attribute meta', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('get_views').then((views) => {
-        views = views.reduce((a, v) => {
-          if (v.type === 'vt') {
-            a.push(v);
-          }
-          return a;
-        }, []);
-        const pos = Math.floor(Math.random() * views.length - 1);
-        const view = views[pos];
-        return mapx.ask('get_view_meta_vt_attribute', {idView: view.id});
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const viewsVt = views.reduce((a, v) => {
+        if (v.type === 'vt') {
+          a.push(v);
+        }
+        return a;
+      }, []);
+      const pos = Math.floor(Math.random() * viewsVt.length - 1);
+      const view = viewsVt[pos];
+      const meta = await mapx.ask('get_view_meta_vt_attribute', {
+        idView: view.id
       });
+      return meta;
     },
     tests: [
       {
@@ -105,19 +107,18 @@ mapx.once('ready', () => {
 
   t.check('Get view vt source meta', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('get_views').then((views) => {
-        views = views.reduce((a, v) => {
-          if (v.type === 'vt') {
-            a.push(v);
-          }
-          return a;
-        }, []);
-        const pos = Math.floor(Math.random() * views.length - 1);
-        const view = views[pos];
-        return mapx.ask('get_source_meta', {
-          idSource: view.data.source.layerInfo.name
-        });
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const viewsVt = views.reduce((a, v) => {
+        if (v.type === 'vt') {
+          a.push(v);
+        }
+        return a;
+      }, []);
+      const pos = Math.floor(Math.random() * viewsVt.length - 1);
+      const view = viewsVt[pos];
+      return mapx.ask('get_source_meta', {
+        idSource: view.data.source.layerInfo.name
       });
     },
     tests: [
@@ -132,13 +133,12 @@ mapx.once('ready', () => {
 
   t.check('Get view meta', {
     ignore: ignoreGlobal,
-    timeout: 3000,
-    init: () => {
-      return mapx.ask('get_views_id').then((ids) => {
-        const pos = Math.floor(Math.random() * ids.length - 1);
-        const id = ids[pos];
-        return mapx.ask('get_view_meta', {idView: id});
-      });
+    timeout: 10000,
+    init: async () => {
+      const ids = await mapx.ask('get_views_id');
+      const pos = Math.floor(Math.random() * ids.length - 1);
+      const id = ids[pos];
+      return mapx.ask('get_view_meta', {idView: id});
     },
     tests: [
       {
@@ -212,49 +212,46 @@ mapx.once('ready', () => {
 
   t.check('Filter view by text', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('get_views').then((views) => {
-        views = views.reduce((a, v) => {
-          if (v.type === 'vt' && v.data.attribute.type === 'string') {
-            a.push(v);
-          }
-          return a;
-        }, []);
-        const pos = Math.floor(Math.random() * views.length - 1);
-        const view = views[pos];
-        return mapx.ask('open_view', {idView: view.id}).then(() => {
-          return view;
-        });
-      });
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const viewsVt = views.reduce((a, v) => {
+        const isVtWithType =
+          v.type === 'vt' && v.data.attribute && v.data.attribute.type;
+        if (isVtWithType) {
+          a.push(v);
+        }
+        return a;
+      }, []);
+      const pos = Math.floor(Math.random() * viewsVt.length - 1);
+      const view = viewsVt[pos];
+      await mapx.ask('open_view', {idView: view.id});
+      return view;
     },
     tests: [
       {
         name: 'Set/get filter layers by text values',
-        test: (view) => {
-          let pass = false;
+        timeout: 10000,
+        test: async (view) => {
           if (!t.h.isView(view)) {
-            return pass;
+            return false;
           }
           const values = view.data.attribute.table
             .map((v) => v.value)
             .filter((v) => t.h.isString(v));
-          return mapx
-            .ask('set_view_layer_filter_text', {idView: view.id, value: values})
-            .then(() => {
-              return mapx.ask('get_view_layer_filter_text', {idView: view.id});
-            })
-            .then((res) => {
-              pass = values.reduce(
-                (a, v) => (!a ? a : res.indexOf(v) > -1),
-                true
-              );
-            })
-            .then(() => {
-              return mapx.ask('close_view', {idView: view.id});
-            })
-            .then(() => {
-              return pass;
-            });
+          console.log(values);
+          await mapx.ask('set_view_layer_filter_text', {
+            idView: view.id,
+            value: values
+          });
+          const res = await mapx.ask('get_view_layer_filter_text', {
+            idView: view.id
+          });
+          const pass = values.reduce(
+            (a, v) => (!a ? a : res.indexOf(v) > -1),
+            true
+          );
+          await mapx.ask('close_view', {idView: view.id});
+          return pass;
         }
       }
     ]
@@ -274,34 +271,36 @@ mapx.once('ready', () => {
       },
       {
         name: 'Change project',
-        timeout: 2000,
-        test: (r) => {
+        timeout: 10000,
+        test: async (r) => {
           const pos = Math.floor(Math.random() * r.length - 1);
           const newProject = r[pos].id;
-          return mapx.ask('get_project').then((currProject) => {
-            return new Promise((resolve) => {
-              /**
-               * Reset current project after change
-               * resolve true if the process succeeded.
-               */
-              mapx.once('settings_change', (s) => {
-                if (s.new_settings.project !== newProject) {
-                  resolve(false);
-                } else {
-                  mapx.once('views_list_updated', () => {
-                    mapx
-                      .ask('set_project', {idProject: currProject})
-                      .then(() => {
-                        resolve(true);
-                      });
-                  });
-                }
-              });
-              /**
-               * Request project change
-               */
-              mapx.ask('set_project', {idProject: newProject});
+          const currProject = await mapx.ask('get_project');
+          return new Promise((resolve) => {
+            /**
+             * Reset current project after change
+             * resolve true if the process succeeded.
+             */
+            mapx.once('settings_change', (s) => {
+              if (s.new_settings.project !== newProject) {
+                /**
+                 * Failed
+                 */
+                resolve(false);
+              } else {
+                /**
+                 * Success, reset project after views_list_updated
+                 */
+                mapx.once('views_list_updated', async () => {
+                  await mapx.ask('set_project', {idProject: currProject});
+                  resolve(true);
+                });
+              }
             });
+            /**
+             * Request project change
+             */
+            return mapx.ask('set_project', {idProject: newProject});
           });
         }
       }
@@ -310,17 +309,17 @@ mapx.once('ready', () => {
 
   t.check('Show edit view modal', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('get_views').then((views) => {
-        views = views.reduce((a, v) => {
-          if (v._edit === true) {
-            a.push(v);
-          }
-          return a;
-        }, []);
-        const pos = Math.floor(Math.random() * views.length - 1);
-        return views[pos];
-      });
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const project = await mapx.ask('get_project');
+      const viewsEdit = views.reduce((a, v) => {
+        if (v._edit === true && v.project === project) {
+          a.push(v);
+        }
+        return a;
+      }, []);
+      const pos = Math.floor(Math.random() * viewsEdit.length - 1);
+      return viewsEdit[pos];
     },
     tests: [
       {
@@ -331,7 +330,7 @@ mapx.once('ready', () => {
       },
       {
         name: 'Display view edit modal',
-        timeout: 2000,
+        timeout: 10000,
         test: async (v) => {
           const editable = t.h.isViewEditable(v);
           if (!editable) {

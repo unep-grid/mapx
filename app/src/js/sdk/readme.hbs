@@ -21,36 +21,32 @@ const mapx = new MxSdk.manager({
 /**
  * When ready, begin requests
  */
-mapx.on('ready', () => {
+mapx.on('ready', async () => {
   /**
    * Get list of views, print them in console
    * ( All requests to MapX resolvers return
    * Promises or Promisified value)
    */
-  mapx.ask('get_views').then(console.log);
+  const views = await mapx.ask('get_views')
+  console.log(views);
+
   /**
    * Get geo ip info,  print it in console
    */
-  mapx.ask('get_user_ip').then(console.log);
-  setTimeout(() => {
-    /**
-     * Change project after 3000 ms
-     */
-    maps
-      .ask('get_projects')
-      .then((projects) => {
-        const newProject = projects[projects.length - 1];
-        if (newProject) {
-          return mapx.ask('set_project', {idProject: newProject.id});
-        }
-      })
-      .then(() => {
-        /**
-         * Get list of views
-         */
-        return mapx.ask('get_views');
-      })
-      .then(console.log);
+  const ipInfo = mapx.ask('get_user_ip');
+  console.log(ipInfo);
+
+  /**
+   * Change project after 3000 ms
+   */
+  setTimeout( async () => {
+     const projects = await = mapx.ask('get_projects');
+     const newProject = projects[projects.length - 1];
+     if (newProject) {
+       await mapx.ask('set_project', {idProject: newProject.id});
+       const views = await mapx.ask('get_views');
+       console.log(views);
+     }
   }, 3000);
 });
 

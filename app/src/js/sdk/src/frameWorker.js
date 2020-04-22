@@ -142,64 +142,83 @@ class FrameWorker extends Events {
    * @param {msg} Message object with data attribute.
    * @private
    */
-  handleMessageManager(msg) {
+  async handleMessageManager(msg) {
     const fw = this;
     const request = Object.assign({}, parse(msg.data));
     const idRequest = request.idRequest;
     const idResolver = request.idResolver;
     const resolver = fw.opt.resolvers[idResolver];
-    return new Promise((resolve, reject) => {
-      if (idRequest === 'destroy') {
-        fw.destroy();
-        resolve(null);
-      } else if (!resolver) {
-        reject(
-          new MessageFrameCom({
-            level: 'error',
-            key: 'err_resolver_not_found',
-            vars: {
-              idRequest: idRequest,
-              idResolver: idResolver
-            }
-          })
-        );
-      }
-      if (resolver instanceof Function) {
-        const result = resolver.bind(fw.opt.resolvers)(request.value);
-        resolve(result);
-      } else {
-        resolve(null);
-      }
-    })
-      .then((res) => {
-        fw.postResponse({
-          idRequest: idRequest,
-          value: res,
-          success: true
-        });
-      })
-      .catch((e) => {
-        fw.postResponse({
-          idRequest: idRequest,
-          success: false
-        });
 
-        if (e instanceof MessageFrameCom) {
-          fw._post(e);
+
+    try {
+      /**
+       * Execute the resolver and get result
+       */
+      const res = await new Promise((resolve, reject) => {
+        if (idRequest === 'destroy') {
+          fw.destroy();
+          resolve(null);
+        } else if (!resolver) {
+          reject(
+            new MessageFrameCom({
+              level: 'error',
+              key: 'err_resolver_not_found',
+              vars: {
+                idRequest: idRequest,
+                idResolver: idResolver
+              }
+            })
+          );
+        }
+        if (resolver instanceof Function) {
+          const result = resolver.bind(fw.opt.resolvers)(request.value);
+          resolve(result);
         } else {
-          const m = isObject(e) ? e.message : e;
-          fw.postMessage({
-            level: 'error',
-            key: 'err_resolver_failed',
-            vars: {
-              idRequest: idRequest,
-              idResolver: idResolver,
-              msg: m
-            },
-            data: e
-          });
+          resolve(null);
         }
       });
+
+      /**
+       * Post result back to manager
+       */
+
+      fw.postResponse({
+        idRequest: idRequest,
+        value: res,
+        success: true
+      });
+    } catch (e) {
+      /**
+       * In case of error, return success false
+       */
+      fw.postResponse({
+        idRequest: idRequest,
+        success: false
+      });
+
+      /**
+       * If the error was handled, it's probably a
+       * object from MessageFrameCom
+       */
+      if (e instanceof MessageFrameCom) {
+        fw._post(e);
+      } else {
+        /**
+         * If it's not handled, we build one here
+         */
+        const m = isObject(e) ? e.message : e;
+        fw.postMessage({
+          level: 'error',
+          key: 'err_resolver_failed',
+          vars: {
+            idRequest: idRequest,
+            idResolver: idResolver,
+            msg: m
+          },
+          data: e
+        });
+      }
+    }
   }
 }
 
