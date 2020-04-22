@@ -177,7 +177,7 @@ observeEvent(reactData$showProjectsList,{
   userIsMember <- FALSE
   userIsGuest <- isGuestUser()
 
-  filterRoles <- NULL
+  filterRoles <- 'any'
   filterTitle <- NULL
 
   if( typeof(event) == "list" && event$msg == "start"){
