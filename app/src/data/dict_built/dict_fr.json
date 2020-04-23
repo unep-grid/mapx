@@ -121,7 +121,7 @@
   },
   {
     "id": "btn_show_db_info_self",
-    "en": "Get a temporary access to edit a dataset",
+    "en": "Get temporary access to edit a dataset",
     "fr": "Obtenir un accès provisoire pour éditer une source"
   },
   {
@@ -477,7 +477,7 @@
   {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
-    "fr": "Lire la carte narrative "
+    "fr": "Lire la carte narrative"
   },
   {
     "id": "btn_opt_transparency",

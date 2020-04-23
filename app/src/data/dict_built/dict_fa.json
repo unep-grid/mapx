@@ -121,7 +121,7 @@
   },
   {
     "id": "btn_show_db_info_self",
-    "en": "Get a temporary access to edit a dataset",
+    "en": "Get temporary access to edit a dataset",
     "fa": ""
   },
   {
@@ -3037,7 +3037,7 @@
   {
     "id": "license_allow_download",
     "en": "Allow download source",
-    "fa": "Autorizar descarga"
+    "fa": ""
   },
   {
     "id": "license_desc",
@@ -3461,11 +3461,13 @@
   },
   {
     "id": "target_roles_admin_title",
-    "en": "Roles allowed to manage"
+    "en": "Roles allowed to manage",
+    "fa": ""
   },
   {
     "id": "target_roles_get_title",
-    "en": "Roles allowed to download"
+    "en": "Roles allowed to download",
+    "fa": ""
   },
   {
     "id": "target_roles_list_title",
@@ -3564,7 +3566,8 @@
   },
   {
     "id": "textual_desc_notes",
-    "en": "Additional notes"
+    "en": "Additional notes",
+    "fa": ""
   },
   {
     "id": "textual_desc_abstract",
@@ -3613,7 +3616,8 @@
   },
   {
     "id": "meta_display_source_title",
-    "en": "Metadata of the source"
+    "en": "Metadata of the source",
+    "fa": ""
   },
   {
     "id": "meta_display_view_title",

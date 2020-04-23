@@ -27,7 +27,7 @@
   {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
-    "es": "Definit la proyeccióne de exportación, utilizando un código del formato EPSG "
+    "es": "Definir la proyección de exportación, utilizando un código del formato EPSG"
   },
   {
     "id": "epsg_set_projection_import",
@@ -62,7 +62,7 @@
   {
     "id": "btn_add_source",
     "en": "Add a source layer",
-    "es": "Añadir una capa base"
+    "es": "Añadir una capa fuente"
   },
   {
     "id": "btn_about",
@@ -92,7 +92,7 @@
   {
     "id": "btn_show_project_external_views",
     "en": "Manage external views",
-    "es": "Gestionar las vistas exteriores"
+    "es": "Gestionar las vistas externas"
   },
   {
     "id": "btn_show_db_query_maker",
@@ -117,12 +117,12 @@
   {
     "id": "btn_show_add_project_disabled",
     "en": "Add a new project ( disabled )",
-    "es": "Nuevo proyecto ( discapacitado )"
+    "es": "Nuevo proyecto (desactivado)"
   },
   {
     "id": "btn_show_db_info_self",
-    "en": "Get a temporary access to edit a dataset",
-    "es": "Obtener un acceso provisional para editar la source"
+    "en": "Get temporary access to edit a dataset",
+    "es": "Obtener acceso provisional para editar un conjunto de datos"
   },
   {
     "id": "btn_cancel",
@@ -282,7 +282,7 @@
   {
     "id": "btn_edit_source_metadata",
     "en": "Edit sources metadata",
-    "es": "Editar los metadatos de las sources"
+    "es": "Editar los metadatos de la fuente de datos"
   },
   {
     "id": "btn_finish",
@@ -302,7 +302,7 @@
   {
     "id": "btn_get_overlap_visible",
     "en": "Overlaps to geojson",
-    "es": "Solapamiento para geojson"
+    "es": "Superposiciones para geojson"
   },
   {
     "id": "btn_get_layer_summary",
@@ -462,7 +462,7 @@
   {
     "id": "btn_opt_share_to_project",
     "en": "Share this view in another project",
-    "es": "Compartir la visa a otro proyecto"
+    "es": "Compartir la vista a otro proyecto"
   },
   {
     "id": "share_in_project_no_publisher_project",
@@ -477,7 +477,7 @@
   {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
-    "es": "Leer esta historia"
+    "es": "Leer este mapa narrativo"
   },
   {
     "id": "btn_opt_transparency",
@@ -607,12 +607,12 @@
   {
     "id": "btn_switchui",
     "en": "Toggle the color of the interface",
-    "es": "Cambiar los colores del interface"
+    "es": "Cambiar los colores de la interfaz"
   },
   {
     "id": "btn_tab_dashboard",
     "en": "Toggle dashboards",
-    "es": "Dashboards"
+    "es": "Tablero de instrumentos"
   },
   {
     "id": "btn_tab_settings",
@@ -637,7 +637,7 @@
   {
     "id": "btn_theme_sat",
     "en": "Switch theme : aerial",
-    "es": "Cambiar capa base: imagen satélite"
+    "es": "Cambiar capa fuente: imagen aérea"
   },
   {
     "id": "btn_toggle_all",
@@ -807,7 +807,7 @@
   {
     "id": "error_project_default_not_public",
     "en": "The default project must be public",
-    "es": "El proyecto defecto tiene que estar público"
+    "es": "El proyecto predeterminado tiene que estar público"
   },
   {
     "id": "error_email_not_valid",
@@ -927,7 +927,7 @@
   {
     "id": "time_slider",
     "en": "Time slider",
-    "es": "Slider temporal"
+    "es": "Control deslizante de tiempo"
   },
   {
     "id": "custom_code",
@@ -1367,7 +1367,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "es": "<p> Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores: </p> <ol> <li> Mantenlo simple. </li> <li> Es mejor crear mapas de historias cortas para mantener el interés de su audiencia. </li> <li> Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso. </li> <li> Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su historia. Sin embargo, no deberían eclipsar el componente espacial de su historia. Los mapas deben estar en el centro. </li> <li> Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación. </li> </ol>"
+    "es": "<p> Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores: </p> <ol> <li> Mantenlo simple. </li> <li> Es mejor crear mapas narrativos cortas para mantener el interés de su audiencia. </li> <li> Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso. </li> <li> Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su narración. Sin embargo, no deberían eclipsar el componente espacial de su narración. Los mapas deben estar en el centro. </li> <li> Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación. </li> </ol>"
   },
   {
     "id": "schema_story_author",
@@ -1477,7 +1477,7 @@
   {
     "id": "schema_story_title",
     "en": "Story",
-    "es": "Historia"
+    "es": "Narración"
   },
   {
     "id": "schema_style_value",
@@ -1832,12 +1832,12 @@
   {
     "id": "views_external",
     "en": "External views",
-    "es": "Vistas exteriores"
+    "es": "Vistas externas"
   },
   {
     "id": "views_external_modal_title",
     "en": "Manage external views",
-    "es": "Administrat las vistas externas"
+    "es": "Gestionar las vistas externas"
   },
   {
     "id": "view_project_short",
@@ -1937,7 +1937,7 @@
   {
     "id": "view_dashboard_config",
     "en": "Configure a dashboard",
-    "es": "Configurar un dashboard"
+    "es": "Configurar un tablero de instrumentos"
   },
   {
     "id": "view_dashboard_script",
@@ -1997,7 +1997,7 @@
   {
     "id": "view_dashboard_txt_which_data",
     "en": "Which source to use for the data ?",
-    "es": "Quê fuente de datos utilizar?"
+    "es": "¿Qué fuente de datos utilizar?"
   },
   {
     "id": "view_dashboard_txt_ignore_empty_data",
@@ -2032,7 +2032,7 @@
   {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "es": "Haz clic en el botón de confirmación para eliminar esta vista, su historia y todas las traducciones."
+    "es": "Haz clic en el botón de confirmación para eliminar esta vista, su narración y todas las traducciones."
   },
   {
     "id": "view_download_layer",
@@ -2072,12 +2072,12 @@
   {
     "id": "view_no_layer_found",
     "en": "No source layer found",
-    "es": "No hay capa base"
+    "es": "No hay capa fuente"
   },
   {
     "id": "view_num_overlap",
     "en": "Number of overlaps",
-    "es": "Número de solapamiento"
+    "es": "Número de superposiciones"
   },
   {
     "id": "view_filter_input",
@@ -2167,12 +2167,12 @@
   {
     "id": "src_download_issues",
     "en": "The source can't be downloaded",
-    "es": "No se puede descargar la source"
+    "es": "No se puede descargar la fuente de datos"
   },
   {
     "id": "src_upload_add",
     "en": "Upload a new source layer",
-    "es": "Subir una nueva capa base"
+    "es": "Subir una nueva capa fuente"
   },
   {
     "id": "src_upload_issues",
@@ -2857,7 +2857,7 @@
   {
     "id": "additional_doc_items_desc",
     "en": "Related documents such as technical information about a dataset",
-    "es": "Documentos relacionados, por ejemplo documentos técnicos, artículos científicos u otros"
+    "es": "Documentos relacionados, por ejemplo documentos técnicos sobre un conjunto de datos"
   },
   {
     "id": "additional_doc_items_title",
@@ -3036,7 +3036,8 @@
   },
   {
     "id": "license_allow_download",
-    "en": "Allow download source"
+    "en": "Allow download source",
+    "es": "Autorizar descarga"
   },
   {
     "id": "license_desc",
@@ -3101,7 +3102,7 @@
   {
     "id": "msg_success_delete",
     "en": "Source successfully removed",
-    "es": "Recurso eliminado exitosamente"
+    "es": "Fuente de datos eliminada exitosamente"
   },
   {
     "id": "msg_success_import",
@@ -3166,17 +3167,17 @@
   {
     "id": "origin_sources_list",
     "en": "List of sources",
-    "es": "Lista de recursos"
+    "es": "Lista de fuente de datos"
   },
   {
     "id": "origin_sources_title",
     "en": "Sources",
-    "es": "Recursos en línea"
+    "es": "Fuente de datos"
   },
   {
     "id": "origin_source_title",
     "en": "Source",
-    "es": "Recurso"
+    "es": "Fuente de datos"
   },
   {
     "id": "origin_source_url_title",
@@ -3201,7 +3202,7 @@
   {
     "id": "schema_desc",
     "en": "Metadata editor for MapX sources.",
-    "es": "Editor de los metadatos para los recursos de MapX."
+    "es": "Editor de los metadatos para las fuentes de datos de MapX."
   },
   {
     "id": "schema_title",
@@ -3311,7 +3312,7 @@
   {
     "id": "schema_story_map_anim_fun_exp_desc",
     "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "es": "Cambiar el exponente de la función por defecto. Esto amplificará o reducirá la tasa de relajación."
+    "es": "Cambiar el exponente de la función predeterminada. Esto amplificará o reducirá la tasa de relajación."
   },
   {
     "id": "schema_story_map_anim",
@@ -3356,7 +3357,7 @@
   {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
-    "es": "Resolución base de la página durante un mapa de historia. Se escalará automáticamente para adaptarse a la pantalla y preservar el formato del contenido."
+    "es": "Resolución base de la página durante un mapa narrativo. Se escalará automáticamente para adaptarse a la pantalla y preservar el formato del contenido."
   },
   {
     "id": "schema_story_settings",
@@ -3486,12 +3487,12 @@
   {
     "id": "temporal_desc",
     "en": "Description of the dataset using temporal references: periodicity, initial release, update and range",
-    "es": "Descripción de la base de datos utilizando referencias temporales: Periodicidad, creación, actualización y rango"
+    "es": "Descripción del conjunto de datos utilizando referencias temporales: Periodicidad, creación, actualización y rango"
   },
   {
     "id": "temporal_issuance_desc",
     "en": "Description if the data issuance",
-    "es": " Información sobre la emisión de los datos"
+    "es": "Información sobre la emisión de los datos"
   },
   {
     "id": "temporal_issuance_title",
@@ -3581,7 +3582,7 @@
   {
     "id": "textual_keyword_desc",
     "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
-    "es": "Las palabras claves (o etiquetas) permiten a los usuarios encontrar los datos. Inserte términos utilizados por personas con un perfil técnico y no técnico."
+    "es": "Las palabras claves (o etiquetas) permiten a los usuarios encontrar el conjunto de datos. Inserte términos utilizados por personas con un perfil técnico y no técnico."
   },
   {
     "id": "textual_keyword_item_title",
@@ -3640,7 +3641,8 @@
   },
   {
     "id": "meta_view_table_summary_title",
-    "en": "Summary"
+    "en": "Summary",
+    "es": "Resumen"
   },
   {
     "id": "meta_view_raster_meta",
@@ -3985,7 +3987,7 @@
   {
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
-    "es": "Utilizar la paleta por defecto"
+    "es": "Utilizar la paleta predeterminada"
   },
   {
     "id": "btn_opt_meta",
@@ -4335,7 +4337,7 @@
   {
     "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "es": "Use el modo 'estático' si desea compartir una vista usando una versión ligera y más rápida de MapX, con funcionalidades limitadas. Con este método, cualquier persona con el enlace compartido podrá leer la vista seleccionada, sin necesidad de estar registrado en MapX. Si agrega un mapa de historia, se iniciará automáticamente, descartando cualquier otra vista."
+    "es": "Use el modo 'estático' si desea compartir una vista usando una versión ligera y más rápida de MapX, con funcionalidades limitadas. Con este método, cualquier persona con el enlace compartido podrá leer la vista seleccionada, sin necesidad de estar registrado en MapX. Si agrega un mapa narrativo, se iniciará automáticamente, descartando cualquier otra vista."
   },
   {
     "id": "share_views_check_label",
@@ -4345,7 +4347,7 @@
   {
     "id": "share_views_check_desc",
     "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "es": "Vistas para mostrar. La lista se puede reordenar: las vistas superiores mostrarán capas en la parte superior. En el modo 'estático', esas vistas se procesarán automáticamente. Los mapas de historias comenzarán directamente. En el modo 'normal', las vistas se mostrarán en la lista y si la selección está vacía, se mostrarán todas las vistas del proyecto."
+    "es": "Vistas para mostrar. La lista se puede reordenar: las vistas superiores mostrarán capas en la parte superior. En el modo 'estático', esas vistas se procesarán automáticamente. Los mapas narrativos comenzarán directamente. En el modo 'normal', las vistas se mostrarán en la lista y si la selección está vacía, se mostrarán todas las vistas del proyecto."
   },
   {
     "id": "share_views_zoom_label",

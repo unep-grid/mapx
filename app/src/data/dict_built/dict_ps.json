@@ -121,7 +121,7 @@
   },
   {
     "id": "btn_show_db_info_self",
-    "en": "Get a temporary access to edit a dataset",
+    "en": "Get temporary access to edit a dataset",
     "ps": ""
   },
   {
@@ -3466,7 +3466,8 @@
   },
   {
     "id": "target_roles_get_title",
-    "en": "Roles allowed to download"
+    "en": "Roles allowed to download",
+    "ps": ""
   },
   {
     "id": "target_roles_list_title",
