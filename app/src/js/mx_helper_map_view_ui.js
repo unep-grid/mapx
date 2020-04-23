@@ -66,7 +66,7 @@ export function getProjectViewsCollectionsShiny(opt) {
 export function getProjectViewsCollections(opt){
   const h = mx.helpers;
   opt = Object.assign({open:null},opt);
-  var useOpen = open === true;
+  var useOpen = opt.open === true;
   const collections = h.getViews().reduce((a,v)=>{
     if(useOpen && !h.isViewOpen(v)){
       return a; 

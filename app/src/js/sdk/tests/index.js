@@ -45,6 +45,26 @@ mapx.once('ready', () => {
     ]
   });
 
+  t.check('Trigger login window', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('show_modal_login');
+    },
+    tests: [
+      {
+        name: 'has login modal',
+        test: async () => {
+          const pass = await mapx.ask('has_el_id', {
+            id: 'loginCode',
+            timeout: 1000
+          });
+          await mapx.ask('close_modal_all');
+          return pass;
+        }
+      }
+    ]
+  });
+
   t.check('Get / Set language', {
     ignore: ignoreGlobal,
     tests: [
@@ -211,7 +231,7 @@ mapx.once('ready', () => {
   });
 
   t.check('Filter view by text', {
-    ignore: ignoreGlobal,
+    ignore: false,
     init: async () => {
       const views = await mapx.ask('get_views');
       const viewsVt = views.reduce((a, v) => {
@@ -238,7 +258,6 @@ mapx.once('ready', () => {
           const values = view.data.attribute.table
             .map((v) => v.value)
             .filter((v) => t.h.isString(v));
-          console.log(values);
           await mapx.ask('set_view_layer_filter_text', {
             idView: view.id,
             value: values
@@ -252,6 +271,87 @@ mapx.once('ready', () => {
           );
           await mapx.ask('close_view', {idView: view.id});
           return pass;
+        }
+      }
+    ]
+  });
+
+  t.check('Get collection by project', {
+    ignore: ignoreGlobal,
+    init: () => {
+      return mapx.ask('get_project_collections');
+    },
+    tests: [
+      {
+        name: 'is array',
+        test: (r) => {
+          return t.h.isArray(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Set dashboard visibility', {
+    ignore: true,
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const view = views.find((v) => {
+        return !!v.data.dashboard;
+      });
+      await mapx.ask('open_view', {idView: view.id});
+      return view;
+    },
+    tests: [
+      {
+        name: 'Dashboard is visible',
+        test: async (view) => {
+          let pass = false;
+          const hasDashboard = await mapx.ask('has_dashboard');
+          if (hasDashboard) {
+            await mapx.ask('set_dashboard_visibility', {
+              show: true
+            });
+            pass = await mapx.ask('is_dashboard_visible');
+            await mapx.ask('set_dashboard_visibility', {
+              show: false
+            });
+            pass = pass && !(await mapx.ask('is_dashboard_visible'));
+          }
+
+          await mapx.ask('close_view', {idView: view.id});
+          return hasDashboard && pass;
+        }
+      }
+    ]
+  });
+
+  t.check('Get collection of open views', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const views = await mapx.ask('get_views');
+      const view = views.find((v) => {
+        return t.h.isArray(v.data.collections) && v.data.collections.length > 0;
+      });
+      await mapx.ask('open_view', {idView: view.id});
+      return view;
+    },
+    tests: [
+      {
+        name: 'View collections match',
+        test: async (view) => {
+          const collectionAfter = await mapx.ask('get_project_collections', {
+            open: true
+          });
+          await mapx.ask('close_view', {idView: view.id});
+          const diff = d(collectionAfter, view.data.collections);
+          const pass = diff.length === 0;
+          return pass;
+          function d(a, b) {
+            var bSet = new Set(b);
+            return a.filter(function(x) {
+              return !bSet.has(x);
+            });
+          }
         }
       }
     ]
@@ -276,32 +376,14 @@ mapx.once('ready', () => {
           const pos = Math.floor(Math.random() * r.length - 1);
           const newProject = r[pos].id;
           const currProject = await mapx.ask('get_project');
-          return new Promise((resolve) => {
-            /**
-             * Reset current project after change
-             * resolve true if the process succeeded.
-             */
-            mapx.once('settings_change', (s) => {
-              if (s.new_settings.project !== newProject) {
-                /**
-                 * Failed
-                 */
-                resolve(false);
-              } else {
-                /**
-                 * Success, reset project after views_list_updated
-                 */
-                mapx.once('views_list_updated', async () => {
-                  await mapx.ask('set_project', {idProject: currProject});
-                  resolve(true);
-                });
-              }
-            });
-            /**
-             * Request project change
-             */
-            return mapx.ask('set_project', {idProject: newProject});
+          const success = await mapx.ask('set_project', {
+            idProject: newProject
           });
+          if (success) {
+            return await mapx.ask('set_project', {idProject: currProject});
+          } else {
+            return false;
+          }
         }
       }
     ]
@@ -343,6 +425,7 @@ mapx.once('ready', () => {
             id: 'modalViewEdit',
             timeout: 1500
           });
+          await mapx.ask('close_modal_all');
           return show && pass;
         }
       }
@@ -354,9 +437,7 @@ mapx.once('ready', () => {
    */
   t.run({
     finally: () => {
-      setTimeout(() => {
-        mapx.ask('close_modal_all');
-      }, 3000);
+      console.log('done');
     }
   });
 });

@@ -74,6 +74,15 @@ class MapxResolvers {
   }
 
   /**
+  * Check if the dashboard is visible
+  * @return {Boolean} The dashboard is visible
+  */
+  is_dashboard_visible() {
+    const res = this;
+    return res.has_dashboard() && mx.dashboard.isVisible();
+  }
+
+  /**
    * Get source metadata
    * @param {Object} opt Options
    * @param {String} opt.idSource Id of the source
@@ -122,10 +131,9 @@ class MapxResolvers {
    * @param {String} opt.idProject Id of the project to switch to
    * @return {Boolean} Done
    */
-  set_project(opt) {
+  async set_project(opt) {
     opt = Object.assign({}, {idProject: null}, opt);
-    h.setProject(opt.idProject);
-    return true;
+    return h.setProject(opt.idProject);
   }
 
   /**
@@ -349,8 +357,7 @@ class MapxResolvers {
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
-      h.viewOpenAuto(view);
-      return true;
+      return h.viewOpenAuto(view);
     } else {
       return res._err('err_view_invalid');
     }

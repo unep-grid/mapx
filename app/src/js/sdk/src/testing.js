@@ -68,11 +68,11 @@ export class Testing {
     const t = this;
     const c = queue.shift();
     if (c) {
-      await c();
-      t._next();
+      const x = await c();
+      return t._next();
     } else {
       if (t._finally) {
-        t._finally();
+        return t._finally();
       }
     }
   }
@@ -106,7 +106,12 @@ export class Testing {
           /**
            * Launch each tests
            */
-          return nextTest(data);
+          const success = await nextTest(data);
+
+          if (success === false) {
+            throw new Error(`Failed`);
+          }
+          return true;
         }
       } catch (e) {
         handleErrorSection(e);
@@ -119,13 +124,16 @@ export class Testing {
       async function nextTest(data) {
         let res = null;
         const test = opt.tests.shift();
-        if (!pass || !test) {
-          return;
+        if (!pass) {
+          return false;
+        }
+        if (!test) {
+          return null;
         }
         const it = Object.assign({}, defaultsTest, test);
         const uiResult = t._ui_result(it.name, uiSection);
         if (it.ignore) {
-          return;
+          return null;
         }
         const resSuccess = t._promise(it.test, data);
         const resTimeout = t._promise_timeout(it.timeout);
@@ -155,8 +163,9 @@ export class Testing {
 
         if (!pass || !success) {
           handleErrorSection();
+          return false;
         } else {
-          nextTest(data);
+          return nextTest(data);
         }
       }
     });
@@ -169,7 +178,7 @@ export class Testing {
     });
   }
   _promise(cb, data) {
-    cb = is.isFunction(cb) ? cb : ()=>{};
+    cb = is.isFunction(cb) ? cb : () => {};
     return new Promise(async (resolve, reject) => {
       try {
         const res = await cb(data);

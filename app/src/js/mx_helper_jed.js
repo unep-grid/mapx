@@ -32,7 +32,8 @@ export function jedInit(o) {
     var jed = window.jed;
 
     if (!el) {
-      throw 'jed element ' + id + 'not found';
+      console.warn(`jed element ${id} not found`);
+      return;
     }
 
     if (!jed) {

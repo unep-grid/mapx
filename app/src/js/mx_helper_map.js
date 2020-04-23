@@ -1,4 +1,4 @@
-/* jshint evil:true, esversion:6, laxbreak:true */
+/* jshint evil:true, laxbreak:true */
 import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
@@ -185,64 +185,85 @@ export function getAppPathUrl(id) {
  */
 export function setProject(idProject, opt) {
   const h = mx.helpers;
-  opt = opt || {};
-  if (idProject === mx.settings.project) {
-    return;
-  }
-  /**
-   * Check if some modal are still there
-   */
-  const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
-
-  if (modals.length > 0) {
-    const elContinue = h.el(
-      'btn',
-      {
-        class: ['btn', 'btn-default'],
-        on: {click: change}
-      },
-      h.getDictItem('modal_check_confirm_project_change_btn')
-    );
-
-    h.modal({
-      id: 'confirm_change_project',
-      title: 'Confirm change project',
-      content: h.getDictItem('modal_check_confirm_project_change_txt'),
-      buttons: [elContinue],
-      addBackground: true
-    });
-  } else {
-    change();
-  }
-
-  /**
-   * Change confirmed : remove all views, close modals, send
-   * selected project to shiny
-   */
-  function change() {
-    h.viewsCloseAll();
-    closeModals();
-    h.setQueryParametersInitReset();
-    const hasShiny = window.Shiny;
-    if (hasShiny) {
-      Shiny.onInputChange('selectProject', idProject);
+  opt = Object.assign({}, opt);
+  const idCurrentProject = mx.settings.project;
+  return new Promise((resolve) => {
+    if (idProject === idCurrentProject) {
+      resolve(true);
     }
-    if (h.isFunction(opt.onSuccess)) {
-      opt.onSuccess();
+    /**
+     * Check if some modal are still there
+     */
+    const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+
+    if (modals.length > 0) {
+      const elContinue = h.el(
+        'btn',
+        {
+          class: ['btn', 'btn-default'],
+          on: {click: change}
+        },
+        h.getDictItem('modal_check_confirm_project_change_btn')
+      );
+
+      h.modal({
+        id: 'confirm_change_project',
+        title: 'Confirm change project',
+        content: h.getDictItem('modal_check_confirm_project_change_txt'),
+        buttons: [elContinue],
+        addBackground: true
+      });
+    } else {
+      change();
     }
-    console.log('project change');
-    mx.events.fire({
-      type: 'project_change',
-      data: {
-        new_project: idProject,
-        old_project: mx.settings.project
+
+    /**
+     * Change confirmed : remove all views, close modals, send
+     * selected project to shiny
+     */
+    function change() {
+      h.viewsCloseAll();
+      closeModals();
+      h.setQueryParametersInitReset();
+      const hasShiny = window.Shiny;
+
+      mx.events.once({
+        type: 'settings_change',
+        idGroup: 'project_change',
+        callback: (s) => {
+          if (s.new_settings.project !== idProject) {
+            resolve(false);
+          } else {
+            mx.events.once({
+              type: 'views_list_updated',
+              idGroup: 'project_change',
+              callback: () => {
+                if (h.isFunction(opt.onSuccess)) {
+                  opt.onSuccess();
+                }
+                resolve(true);
+              }
+            });
+          }
+        }
+      });
+
+      if (hasShiny) {
+        Shiny.onInputChange('selectProject', idProject);
       }
-    });
-  }
+      mx.events.fire({
+        type: 'project_change',
+        data: {
+          new_project: idProject,
+          old_project: idCurrentProject
+        }
+      });
+    }
 
-  function closeModals() {
-    h.modalCloseAll();
-  }
+    function closeModals() {
+      h.modalCloseAll();
+    }
+  });
 }
 
 /**
@@ -251,7 +272,7 @@ export function setProject(idProject, opt) {
  * @param {String} opt.idProject id of the project
  */
 export function updateProject(opt) {
-  mx.helpers.setProject(opt.idProject, opt);
+  return mx.helpers.setProject(opt.idProject, opt);
 }
 
 /**
@@ -1686,7 +1707,7 @@ export function getViewJson(idView, opt) {
 @param {Object} o.view View data
 @param {String} o.idMap Map id
 */
-export function makeTransparencySlider(o) {
+export async function makeTransparencySlider(o) {
   const view = o.view;
   const el = document.querySelector(
     "[data-transparency_for='" + view.id + "']"
@@ -1696,39 +1717,34 @@ export function makeTransparencySlider(o) {
     return;
   }
 
-  makeSlider();
+  const module = await mx.helpers.moduleLoad('nouislider');
+  const noUiSlider = module[0].default;
 
-  function makeSlider() {
-    mx.helpers.moduleLoad('nouislider').then(function(module) {
-      const noUiSlider = module[0].default;
+  const slider = noUiSlider.create(el, {
+    range: {min: 0, max: 100},
+    step: 1,
+    start: 0,
+    tooltips: false
+  });
 
-      const slider = noUiSlider.create(el, {
-        range: {min: 0, max: 100},
-        step: 1,
-        start: 0,
-        tooltips: false
-      });
+  slider.targetView = view;
 
-      slider.targetView = view;
+  /*
+   * Save the slider in the view
+   */
+  view._interactive.transparencySlider = slider;
 
-      /*
-       * Save the slider in the view
-       */
-      view._interactive.transparencySlider = slider;
-
-      /*
-       *
-       */
-      slider.on(
-        'update',
-        mx.helpers.debounce(function(n, h) {
-          const view = this.targetView;
-          const opacity = 1 - n[h] * 0.01;
-          view._setOpacity({opacity: opacity});
-        }, 10)
-      );
-    });
-  }
+  /*
+   *
+   */
+  slider.on(
+    'update',
+    mx.helpers.debounce(function(n, h) {
+      const view = this.targetView;
+      const opacity = 1 - n[h] * 0.01;
+      view._setOpacity({opacity: opacity});
+    }, 10)
+  );
 }
 
 /**
@@ -1737,7 +1753,7 @@ export function makeTransparencySlider(o) {
 @param {Object} o.view View data
 @param {String} o.idMap Map id
 */
-export function makeNumericSlider(o) {
+export async function makeNumericSlider(o) {
   const view = o.view;
   const el = document.querySelector(
     "[data-range_numeric_for='" + view.id + "']"
@@ -1747,76 +1763,70 @@ export function makeNumericSlider(o) {
     return;
   }
 
-  makeSlider();
+  let min = mx.helpers.path(view, 'data.attribute.min');
+  let max = mx.helpers.path(view, 'data.attribute.max');
 
-  function makeSlider() {
-    let min = mx.helpers.path(view, 'data.attribute.min');
-    let max = mx.helpers.path(view, 'data.attribute.max');
-
-    if (view && min !== null && max !== null) {
-      if (min === max) {
-        min = min - 1;
-        max = max + 1;
-      }
-
-      const range = {
-        min: min,
-        max: max
-      };
-
-      mx.helpers.moduleLoad('nouislider').then((module) => {
-        const noUiSlider = module[0].default;
-
-        const slider = noUiSlider.create(el, {
-          range: range,
-          step: (min + max) / 1000,
-          start: [min, max],
-          connect: true,
-          behaviour: 'drag',
-          tooltips: false
-        });
-
-        slider.targetView = view;
-
-        /*
-         * Save the slider in the view
-         */
-        view._interactive.numericSlider = slider;
-
-        /*
-         *
-         */
-        slider.on(
-          'update',
-          mx.helpers.debounce(function(n) {
-            const view = this.targetView;
-            const elContainer = this.target.parentElement;
-            const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-            const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-            const k = view.data.attribute.name;
-
-            /* Update text values*/
-            if (n[0]) {
-              elDMin.innerHTML = n[0];
-            }
-            if (n[1]) {
-              elDMax.innerHTML = ' – ' + n[1];
-            }
-
-            const filter = [
-              'any',
-              ['all', ['<=', k, n[1] * 1], ['>=', k, n[0] * 1]],
-              ['!has', k]
-            ];
-
-            view._setFilter({
-              filter: filter,
-              type: 'numeric_slider'
-            });
-          }, 100)
-        );
-      });
+  if (view && min !== null && max !== null) {
+    if (min === max) {
+      min = min - 1;
+      max = max + 1;
     }
+
+    const range = {
+      min: min,
+      max: max
+    };
+    module = await mx.helpers.moduleLoad('nouislider');
+    const noUiSlider = module[0].default;
+
+    const slider = noUiSlider.create(el, {
+      range: range,
+      step: (min + max) / 1000,
+      start: [min, max],
+      connect: true,
+      behaviour: 'drag',
+      tooltips: false
+    });
+
+    slider.targetView = view;
+
+    /*
+     * Save the slider in the view
+     */
+    view._interactive.numericSlider = slider;
+
+    /*
+     *
+     */
+    slider.on(
+      'update',
+      mx.helpers.debounce(function(n) {
+        const view = this.targetView;
+        const elContainer = this.target.parentElement;
+        const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+        const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+        const k = view.data.attribute.name;
+
+        /* Update text values*/
+        if (n[0]) {
+          elDMin.innerHTML = n[0];
+        }
+        if (n[1]) {
+          elDMax.innerHTML = ' – ' + n[1];
+        }
+
+        const filter = [
+          'any',
+          ['all', ['<=', k, n[1] * 1], ['>=', k, n[0] * 1]],
+          ['!has', k]
+        ];
+
+        view._setFilter({
+          filter: filter,
+          type: 'numeric_slider'
+        });
+      }, 100)
+    );
   }
 }
 
@@ -1825,7 +1835,7 @@ export function makeNumericSlider(o) {
  * @param {Object} o Options
  * @param {Object} o.view View to configure dashboard
  */
-export function makeDashboard(o) {
+export async function makeDashboard(o) {
   const h = mx.helpers;
   const view = o.view;
   const config = h.isView(view) && h.path(view, 'data.dashboard', false);
@@ -1849,103 +1859,99 @@ export function makeDashboard(o) {
    * Single dashboard for all view;
    * individual widgets stored in view (._widgets)
    */
-  h.moduleLoad('dashboard')
-    .then((Dashboard) => {
-      const hasDashboard =
-        mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
-      if (!hasDashboard) {
-        /**
-         * Create a new dashboard, save it in mx object
-         */
-        mx.dashboard = new Dashboard({
-          grid: {
-            dragEnabled: true,
-            layout: {
-              horizontal: false,
-              fillGaps: true,
-              alignRight: false,
-              alignBottom: false,
-              rounding: true
-            }
-          },
-          panel: {
-            elContainer: elMap,
-            title_text: h.getDictItem('Dashboard', 'fr'),
-            title_lang_key: 'dashboard',
-            button_text: 'dashboard',
-            button_lang_key: 'button_dashboard_panel',
-            button_classes: ['fa', 'fa-pie-chart'],
-            position: 'bottom-right'
-          }
-        });
+  const Dashboard = await h.moduleLoad('dashboard');
+  const hasDashboard =
+    mx.dashboard instanceof Dashboard && !mx.dashboard.isDestroyed();
 
-        /**
-         * If a story is playing and the dashboard
-         * is shown, unlock the story
-         */
-        mx.dashboard.on('show', () => {
-          const hasStory = h.isStoryPlaying();
-          if (hasStory) {
-            h.storyControlMapPan('unlock');
-          }
-        });
-
-        /**
-         * If a story is playing and the dashboard
-         * is closed or destroy, lock the story
-         */
-        mx.dashboard.on('hide', () => {
-          const hasStory = h.isStoryPlaying();
-          if (hasStory) {
-            h.storyControlMapPan('lock');
-          }
-        });
-
-        mx.dashboard.on('destroy', () => {
-          const hasStory = h.isStoryPlaying();
-          if (hasStory) {
-            h.storyControlMapPan('lock');
-          }
-        });
-        /**
-         * If the dashboard panel is automatically resizing,
-         * fit to widgets
-         */
-        mx.dashboard.panel.on('resize-auto', (panel, type) => {
-          const d = mx.dashboard;
-          if (type === 'half-width') {
-            d.fitPanelToWidgetsWidth();
-          }
-          if (type === 'half-height') {
-            d.fitPanelToWidgetsHeight();
-          }
-        });
-      }
-
-      return mx.dashboard;
-    })
-    .then((d) => {
-      d.addWidgetsAsync({
-        widgets: config.widgets,
-        modules: config.modules,
-        view: view,
-        map: map
-      }).then((widgets) => {
-        view._widgets = widgets;
-        const hasStory = h.isStoryPlaying();
-        if (hasStory) {
-          d.hide();
-        } else {
-          d.show();
+  if (!hasDashboard) {
+    /**
+     * Create a new dashboard, save it in mx object
+     */
+    mx.dashboard = new Dashboard({
+      grid: {
+        dragEnabled: true,
+        layout: {
+          horizontal: false,
+          fillGaps: true,
+          alignRight: false,
+          alignBottom: false,
+          rounding: true
         }
-      });
+      },
+      panel: {
+        elContainer: elMap,
+        title_text: h.getDictItem('Dashboard', 'fr'),
+        title_lang_key: 'dashboard',
+        button_text: 'dashboard',
+        button_lang_key: 'button_dashboard_panel',
+        button_classes: ['fa', 'fa-pie-chart'],
+        position: 'bottom-right'
+      }
     });
+
+    /**
+     * If a story is playing and the dashboard
+     * is shown, unlock the story
+     */
+    mx.dashboard.on('show', () => {
+      const hasStory = h.isStoryPlaying();
+      if (hasStory) {
+        h.storyControlMapPan('unlock');
+      }
+    });
+
+    /**
+     * If a story is playing and the dashboard
+     * is closed or destroy, lock the story
+     */
+    mx.dashboard.on('hide', () => {
+      const hasStory = h.isStoryPlaying();
+      if (hasStory) {
+        h.storyControlMapPan('lock');
+      }
+    });
+
+    mx.dashboard.on('destroy', () => {
+      const hasStory = h.isStoryPlaying();
+      if (hasStory) {
+        h.storyControlMapPan('lock');
+      }
+    });
+    /**
+     * If the dashboard panel is automatically resizing,
+     * fit to widgets
+     */
+    mx.dashboard.panel.on('resize-auto', (panel, type) => {
+      const d = mx.dashboard;
+      if (type === 'half-width') {
+        d.fitPanelToWidgetsWidth();
+      }
+      if (type === 'half-height') {
+        d.fitPanelToWidgetsHeight();
+      }
+    });
+  }
+
+  const widgets = await mx.dashboard.addWidgetsAsync({
+    widgets: config.widgets,
+    modules: config.modules,
+    view: view,
+    map: map
+  });
+
+  view._widgets = widgets;
+  const hasStory = h.isStoryPlaying();
+  if (hasStory) {
+    mx.dashboard.hide();
+  } else {
+    mx.dashboard.show();
+  }
 }
 
 /**
  * Create and listen to time sliders
  */
-export function makeTimeSlider(o) {
+export async function makeTimeSlider(o) {
   const k = {};
   k.t0 = 'mx_t0';
   k.t1 = 'mx_t1';
@@ -1969,110 +1975,99 @@ export function makeTimeSlider(o) {
     return Math.round(x);
   };
 
-  //const now = new Date().getTime() / 1000;
-  /*  const dateForm = {*/
-  //to: now,
-  //from: true
-  /*};*/
+  if (view.data.period) {
+    const time = mx.helpers.path(view, 'data.period');
+    const prop = mx.helpers.path(view, 'data.attribute.names');
+    const start = [];
 
-  makeSlider();
+    if (time.extent.min && time.extent.max) {
+      const hasT0 = prop.indexOf(k.t0) > -1;
+      const hasT1 = prop.indexOf(k.t1) > -1;
+      let min = time.extent.min * 1000;
+      let max = time.extent.max * 1000;
 
-  function makeSlider() {
-    if (view.data.period) {
-      const time = mx.helpers.path(view, 'data.period');
-      const prop = mx.helpers.path(view, 'data.attribute.names');
-      const start = [];
-
-      if (time.extent.min && time.extent.max) {
-        const hasT0 = prop.indexOf(k.t0) > -1;
-        const hasT1 = prop.indexOf(k.t1) > -1;
-        let min = time.extent.min * 1000;
-        let max = time.extent.max * 1000;
-
-        if (min === max) {
-          min = min - 1;
-          max = max + 1;
-        }
-
-        const range = {
-          min: min,
-          max: max
-        };
-
-        start.push(min);
-        start.push(max);
-
-        mx.helpers.moduleLoad('nouislider').then(function(module) {
-          const noUiSlider = module[0].default;
-
-          const slider = noUiSlider.create(el, {
-            range: range,
-            step: 24 * 60 * 60 * 1000,
-            start: start,
-            connect: true,
-            behaviour: 'drag',
-            tooltips: false,
-            format: {
-              to: fTo,
-              from: fFrom
-            }
-          });
-
-          /**
-           * Save slider in the view and view ref in target
-           */
-          slider.targetView = view;
-          view._interactive.timeSlider = slider;
-
-          /*
-           * create distribution plot in time slider
-           */
-          /* NOTE: removed chart. Removed dependencies to chartist
-
-            /*
-             * 
-             */
-          slider.on(
-            'update',
-            mx.helpers.debounce(function(t) {
-              const view = this.targetView;
-              const elContainer = this.target.parentElement;
-              const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-              const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-
-              /* save current time value */
-              //ime.extent.set = t;
-
-              /* Update text values*/
-              if (t[0]) {
-                elDMin.innerHTML = mx.helpers.date(t[0]);
-              }
-              if (t[1]) {
-                elDMax.innerHTML = ' – ' + mx.helpers.date(t[1]);
-              }
-
-              const filter = ['any'];
-              const filterAll = ['all'];
-              filter.push(['==', k.t0, -9e10]);
-              filter.push(['==', k.t1, -9e10]);
-
-              if (hasT0 && hasT1) {
-                filterAll.push(['<=', k.t0, t[1] / 1000]);
-                filterAll.push(['>=', k.t1, t[0] / 1000]);
-              } else if (hasT0) {
-                filterAll.push(['>=', k.t0, t[0] / 1000]);
-                filterAll.push(['<=', k.t0, t[1] / 1000]);
-              }
-              filter.push(filterAll);
-
-              view._setFilter({
-                filter: filter,
-                type: 'time_slider'
-              });
-            }, 10)
-          );
-        });
+      if (min === max) {
+        min = min - 1;
+        max = max + 1;
       }
+
+      const range = {
+        min: min,
+        max: max
+      };
+
+      start.push(min);
+      start.push(max);
+
+      const module = await mx.helpers.moduleLoad('nouislider');
+      const noUiSlider = module[0].default;
+
+      const slider = noUiSlider.create(el, {
+        range: range,
+        step: 24 * 60 * 60 * 1000,
+        start: start,
+        connect: true,
+        behaviour: 'drag',
+        tooltips: false,
+        format: {
+          to: fTo,
+          from: fFrom
+        }
+      });
+
+      /**
+       * Save slider in the view and view ref in target
+       */
+      slider.targetView = view;
+      view._interactive.timeSlider = slider;
+
+      /*
+       * create distribution plot in time slider
+       */
+      /* NOTE: removed chart. Removed dependencies to chartist
+
+        /*
+         * 
+         */
+      slider.on(
+        'update',
+        mx.helpers.debounce(function(t) {
+          const view = this.targetView;
+          const elContainer = this.target.parentElement;
+          const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
+          const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
+
+          /* save current time value */
+          //ime.extent.set = t;
+
+          /* Update text values*/
+          if (t[0]) {
+            elDMin.innerHTML = mx.helpers.date(t[0]);
+          }
+          if (t[1]) {
+            elDMax.innerHTML = ' – ' + mx.helpers.date(t[1]);
+          }
+
+          const filter = ['any'];
+          const filterAll = ['all'];
+          filter.push(['==', k.t0, -9e10]);
+          filter.push(['==', k.t1, -9e10]);
+
+          if (hasT0 && hasT1) {
+            filterAll.push(['<=', k.t0, t[1] / 1000]);
+            filterAll.push(['>=', k.t1, t[0] / 1000]);
+          } else if (hasT0) {
+            filterAll.push(['>=', k.t0, t[0] / 1000]);
+            filterAll.push(['<=', k.t0, t[1] / 1000]);
+          }
+          filter.push(filterAll);
+
+          view._setFilter({
+            filter: filter,
+            type: 'time_slider'
+          });
+        }, 10)
+      );
     }
   }
 }
@@ -2179,8 +2174,8 @@ export function viewLayersRemove(o) {
       type: 'view_removed',
       data: {
         idView: o.idView,
-        time : now,
-        duration : viewDuration, 
+        time: now,
+        duration: viewDuration
       }
     });
 
@@ -2218,17 +2213,30 @@ export function viewOpen(view) {
  * Get view, open it and add layers if any
  * @param {Object} view View to open
  */
-export function viewOpenAuto(view) {
+export async function viewOpenAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
   if (!view) {
     return;
   }
-  return h.viewOpen(view).then(() => {
-    h.viewLayersAdd({
-      viewData: view
+  const confirmation = new Promise((resolve) => {
+    mx.events.once({
+      type: 'view_added',
+      idGroup: 'viewOpenAuto',
+      callback: (d) => {
+        if (d.idView === view.id) {
+          resolve(true);
+        }
+      }
     });
   });
+
+  await h.viewOpen(view);
+  await h.viewLayersAdd({
+    viewData: view
+  });
+
+  return confirmation;
 }
 
 /**
@@ -2248,17 +2256,29 @@ export function viewClose(view) {
   });
 }
 
-export function viewCloseAuto(view) {
+export async function viewCloseAuto(view) {
   const h = mx.helpers;
   view = h.getView(view);
   if (!h.isView(view)) {
     return Promise.resolve(false);
   }
-  return h.viewClose(view).then(() => {
-    return h.viewLayersRemove({
-      idView: view.id
+
+  const confirmation = new Promise((resolve) => {
+    mx.events.once({
+      type: 'view_removed',
+      idGroup: 'viewCloseAuto',
+      callback: (d) => {
+        if (d.idView === view.id) {
+          resolve(true);
+        }
+      }
     });
   });
+  await h.viewClose(view);
+  await h.viewLayersRemove({
+    idView: view.id
+  });
+  return confirmation;
 }
 
 /**
@@ -2652,18 +2672,18 @@ export function existsInList(li, it, val, inverse) {
  * @param {string} o.before Layer before which insert this view layer(s)
  * @param
  */
-export function viewLayersAdd(o) {
+export async function viewLayersAdd(o) {
   const h = mx.helpers;
   const m = h.getMapData(o.id);
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
-  var view = o.viewData || h.getView(o.idView) || {};
+  let view = o.viewData || h.getView(o.idView) || {};
   const idLayerBefore = o.before
     ? h.getLayerNamesByPrefix({prefix: o.before})[0]
     : mx.settings.layerBefore;
 
-  return new Promise((resolve, reject) => {
+  const v = await new Promise((resolve, reject) => {
     if (h.isView(view)) {
       resolve(view);
     } else if (!h.isEmpty(o.idView)) {
@@ -2671,80 +2691,74 @@ export function viewLayersAdd(o) {
     } else {
       reject(`No view or id view given, stop viewLayersAdd`);
     }
-  })
-    .then((v) => {
-      /*
-       * Validation
-       */
+  });
 
-      if (!h.isView(v)) {
-        throw new Error(`View ${o.idView} not found, stop viewLayersAdd`);
-      } else {
-        view = v;
-      }
+  /*
+   * Validation
+   */
 
-      const idView = view.id;
-      const idMap = o.id || mx.settings.map.id;
-      const idType = view.type;
+  if (!h.isView(v)) {
+    throw new Error(`View ${o.idView} not found, stop viewLayersAdd`);
+  } else {
+    view = v;
+  }
 
-      /**
-       * Fire view add event
-       */
-      mx.events.fire({
-        type: 'view_add',
-        data: {
-          idView: idView,
-          view: h.getViewJson(view, {asString: false})
-        }
-      });
+  const idView = view.id;
+  const idMap = o.id || mx.settings.map.id;
+  const idType = view.type;
 
-      /*
-       * Remove previous layer if needed
-       */
-      h.removeLayersByPrefix({
-        id: idMap,
-        prefix: idView
-      });
+  /**
+   * Fire view add event
+   */
+  mx.events.fire({
+    type: 'view_add',
+    data: {
+      idView: idView,
+      view: h.getViewJson(view, {asString: false})
+    }
+  });
 
-      /**
-       * Add source from view
-       */
-      h.addSourceFromView({
-        map: m.map,
-        view: view
-      });
+  /*
+   * Remove previous layer if needed
+   */
+  h.removeLayersByPrefix({
+    id: idMap,
+    prefix: idView
+  });
 
-      /**
-       * Init modules
-       */
-      h.viewModulesInit(view);
+  /**
+   * Add source from view
+   */
+  h.addSourceFromView({
+    map: m.map,
+    view: view
+  });
 
-      /**
-       * Set/Reset filter
-       */
-      h.viewFiltersInit(view);
+  /**
+   * Set/Reset filter
+   */
+  await h.viewFiltersInit(view);
 
-      /*
-       * Add views layers
-       *
-       */
-      return handler(idType);
-    })
-    .then(() => {
-      
-      view._added_at = Date.now();
+  /**
+   * Init modules
+   */
+  await h.viewModulesInit(view);
 
-      mx.events.fire({
-        type: 'view_added',
-        data: {
-          idView: view.id,
-          time : view._added_at
-        }
-      });
-    })
-    .catch((e) => {
-      console.error(e);
-    });
+  /*
+   * Add views layers
+   *
+   */
+  handler(idType);
+
+  view._added_at = Date.now();
+
+  mx.events.fire({
+    type: 'view_added',
+    data: {
+      idView: view.id,
+      time: view._added_at
+    }
+  });
 
   /**
    * handler based on view type
@@ -3727,7 +3741,7 @@ export function viewFiltersInit(idView) {
  * Add sliders and searchbox
  * @param {String|Object} id id or View to update
  */
-export function viewModulesInit(id) {
+export async function viewModulesInit(id) {
   const h = mx.helpers;
   const view = h.getView(id);
   if (!h.isView(view)) {
@@ -3758,16 +3772,16 @@ export function viewModulesInit(id) {
       /**
        * Add interactive module
        */
-      h.makeTimeSlider({view: view, idMap: idMap});
-      h.makeNumericSlider({view: view, idMap: idMap});
-      h.makeTransparencySlider({view: view, idMap: idMap});
-      h.makeSearchBox({view: view, idMap: idMap});
+      await h.makeTimeSlider({view: view, idMap: idMap});
+      await h.makeNumericSlider({view: view, idMap: idMap});
+      await h.makeTransparencySlider({view: view, idMap: idMap});
+      await h.makeSearchBox({view: view, idMap: idMap});
     }
   }
   /**
    * Non view list related modules
    */
-  h.makeDashboard({view: view});
+  await h.makeDashboard({view: view});
 }
 
 /**
@@ -4118,7 +4132,7 @@ export function getLayersPropertiesAtPoint(opt) {
 }
 
 /*selectize version*/
-export function makeSearchBox(o) {
+export async function makeSearchBox(o) {
   const h = mx.helpers;
   const view = o.view;
   const el = document.querySelector(`[data-search_box_for='${view.id}']`);
@@ -4126,8 +4140,6 @@ export function makeSearchBox(o) {
     return;
   }
   const elViewParent = h.getViewEl(view).parentElement;
-
-  makeSelectize();
 
   function tableToData(table) {
     let r, rL, row, res;
@@ -4142,44 +4154,42 @@ export function makeSearchBox(o) {
     return data;
   }
 
-  function makeSelectize() {
-    return h.moduleLoad('selectize').then(() => {
-      const table = h.path(view, 'data.attribute.table');
-      const attr = h.path(view, 'data.attribute.name');
-      const data = tableToData(table);
+  const s = await  h.moduleLoad('selectize');
+  const table = h.path(view, 'data.attribute.table');
+  const attr = h.path(view, 'data.attribute.name');
+  const data = tableToData(table);
 
-      const selectOnChange = function() {
-        const view = this.view;
-        const listObj = this.getValue();
-        const filter = ['any'];
-        listObj.forEach(function(x) {
-          filter.push(['==', attr, x]);
-        });
-        view._setFilter({
-          filter: filter,
-          type: 'search_box'
-        });
-      };
-
-      const searchBox = $(el)
-        .selectize({
-          dropdownParent: elViewParent,
-          placeholder: 'Search',
-          choices: data,
-          valueField: 'value',
-          labelField: 'label',
-          searchField: ['value'],
-          options: data,
-          onChange: selectOnChange
-        })
-        .data().selectize;
-      /**
-       * Save selectr object in the view
-       */
-      searchBox.view = view;
-      view._interactive.searchBox = searchBox;
+  const selectOnChange = function() {
+    const view = this.view;
+    const listObj = this.getValue();
+    const filter = ['any'];
+    listObj.forEach(function(x) {
+      filter.push(['==', attr, x]);
     });
-  }
+    view._setFilter({
+      filter: filter,
+      type: 'search_box'
+    });
+  };
+
+  const searchBox = $(el)
+    .selectize({
+      dropdownParent: elViewParent,
+      placeholder: 'Search',
+      choices: data,
+      valueField: 'value',
+      labelField: 'label',
+      searchField: ['value'],
+      options: data,
+      onChange: selectOnChange
+    })
+    .data().selectize;
+  /**
+   * Save selectr object in the view
+   */
+  searchBox.view = view;
+  view._interactive.searchBox = searchBox;
+  return searchBox;
 }
 
 export function filterViewValues(o) {

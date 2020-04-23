@@ -118,6 +118,11 @@ class Dashboard {
     d._visible =  true;
     d.fire('show');
   }
+  
+  isVisible(){
+    const d = this;
+    return d._visible === true;
+  }
 
   hide() {
     const d = this;
