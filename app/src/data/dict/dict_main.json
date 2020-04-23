@@ -731,7 +731,6 @@
     "fa": "",
     "ps": ""
   },
-
   {
     "id": "btn_get_layer_summary",
     "en": "Get layer summary",
@@ -6936,7 +6935,6 @@
     "bn": "",
     "de": ""
   },
-
   {
     "id": "attribute_item_title",
     "en": "Attribute",
@@ -7294,7 +7292,8 @@
     "zh": "",
     "ru": "",
     "bn": "",
-    "de": ""
+    "de": "",
+    "fa": ""
   },
   {
     "id": "license_desc",
@@ -7476,7 +7475,6 @@
     "bn": "",
     "de": ""
   },
-
   {
     "id": "not_planned",
     "en": "There are no plans to update the data",
@@ -8314,7 +8312,8 @@
     "zh": "",
     "ru": "",
     "bn": "",
-    "de": ""
+    "de": "",
+    "fa": ""
   },
   {
     "id": "target_roles_get_title",
@@ -8324,7 +8323,9 @@
     "zh": "",
     "ru": "",
     "bn": "",
-    "de": ""
+    "de": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "target_roles_list_title",
@@ -8563,7 +8564,8 @@
     "zh": "",
     "ru": "",
     "bn": "",
-    "de": ""
+    "de": "",
+    "fa": ""
   },
   {
     "id": "textual_desc_abstract",
@@ -8682,7 +8684,8 @@
     "zh": "",
     "ru": "",
     "bn": "",
-    "de": ""
+    "de": "",
+    "fa": ""
   },
   {
     "id": "meta_display_view_title",
