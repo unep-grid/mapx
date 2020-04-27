@@ -2067,7 +2067,7 @@
   {
     "id": "view_new_text",
     "en": "Create a new View",
-    "fr": "Créer une vue"
+    "fr": "Créer une nouevelle Vue"
   },
   {
     "id": "view_no_layer_found",
@@ -4262,7 +4262,7 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style=\"max-width:400px;padding:20px\">Hello,  <br><br> Here is the requested password:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "fr": "<div style=\"max-width:400px;padding:20px\">Bonjour,  <br><br>Voici le mot de passe demandé:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr>Ce mot de passe sécurisé ne sera vablable qu'une fois, pour la session MapX en cours et sera invalidé dans tous les cas après 20 minutes.<br>Meilleures salutations,<br><br>Votre équipe MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si vous n'avez pas fait de demande, il s'agit probablement d'un utilisateur ayant entré votre adresse email par erreur</span></div>"
+    "fr": "<div style=\"max-width:400px;padding:20px\">Bonjour,  <br><br>Voici le mot de passe demandé:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> Ce mot de passe sécurisé ne sera vablable qu'une fois, pour la session MapX en cours et sera invalidé dans tous les cas après 20 minutes.<br>Meilleures salutations,<br><br>Votre équipe MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si vous n'avez pas fait de demande, il s'agit probablement d'un utilisateur ayant entré votre adresse email par erreur</span></div>"
   },
   {
     "id": "operator_and",

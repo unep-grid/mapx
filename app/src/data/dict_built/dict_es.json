@@ -327,7 +327,7 @@
   {
     "id": "btn_north_arrow",
     "en": "Reset bearing",
-    "es": "Reajustar mapa"
+    "es": "Restablecer orientacion"
   },
   {
     "id": "btn_draw_mode",
@@ -422,12 +422,12 @@
   {
     "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
-    "es": "Ignorar valores no disponibles"
+    "es": "Ignorar valores faltantes"
   },
   {
     "id": "schema_style_hide_nulls_desc",
     "en": "If checked, null or missing values will be ignored in the style",
-    "es": "Si marcado, los valores nulos o faltantes serán ignorados en el estilo"
+    "es": "Si está marcado, los valores nulos o perdidos se omitirán en el estilo"
   },
   {
     "id": "btn_opt_meta",
@@ -442,7 +442,7 @@
   {
     "id": "btn_opt_reset",
     "en": "Reset the view",
-    "es": "Reiniciar la vista"
+    "es": "Restablecer la vista"
   },
   {
     "id": "btn_opt_screenshot",
@@ -487,12 +487,12 @@
   {
     "id": "btn_opt_zoom_all",
     "en": "Zoom to all features",
-    "es": "Zoom a todos elementos"
+    "es": "Enfocar a todos los objetos"
   },
   {
     "id": "btn_opt_zoom_visible",
     "en": "Zoom on displayed features",
-    "es": "Zoom a los elementos mostrados"
+    "es": "Enfocar a los objetos mostrados"
   },
   {
     "id": "btn_preview",
@@ -982,7 +982,7 @@
   {
     "id": "login_pwd_mail_sent",
     "en": "An email has been sent, please check your inbox and copy the received password in the field below",
-    "es": "Hemos enviado un e-mail. Por fvor, revise su correo y copie la contraseña a continuación "
+    "es": "Hemos enviado un e-mail. Por favor, revise su correo y copie la contraseña a continuación "
   },
   {
     "id": "login_pwd_mail_sent_error",
@@ -1047,17 +1047,17 @@
   {
     "id": "noAbstract",
     "en": "[ Abstract missing ]",
-    "es": "[ Resumen incompleto ]"
+    "es": "[ Resumen faltante ]"
   },
   {
     "id": "noLegend",
     "en": "[ Missing legend ]",
-    "es": "[ Falta la leyenda ]"
+    "es": "[ Leyenda faltante ]"
   },
   {
     "id": "noData",
     "en": "[ Missing value ]",
-    "es": "[ Valor incompleto ]"
+    "es": "[ Valor faltante ]"
   },
   {
     "id": "noFilter",
@@ -1092,12 +1092,12 @@
   {
     "id": "noTitle",
     "en": "[ Title missing ]",
-    "es": "[ Título incompleto ]"
+    "es": "[ Título faltante ]"
   },
   {
     "id": "noVariable",
     "en": "[ Missing value ]",
-    "es": "[ Valor incompleto ]"
+    "es": "[ Valor faltante ]"
   },
   {
     "id": "noViewOrig",
@@ -1182,7 +1182,7 @@
   {
     "id": "rt",
     "en": "Raster tiles",
-    "es": "Imágenes raster"
+    "es": "Teselas raster"
   },
   {
     "id": "sat",
@@ -1232,7 +1232,7 @@
   {
     "id": "schema_style_nulls",
     "en": "Missing values",
-    "es": "Valores incompletos"
+    "es": "Valores faltantes"
   },
   {
     "id": "schema_style_color",
@@ -1367,7 +1367,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "es": "<p> Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores: </p> <ol> <li> Mantenlo simple. </li> <li> Es mejor crear mapas narrativos cortas para mantener el interés de su audiencia. </li> <li> Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso. </li> <li> Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su narración. Sin embargo, no deberían eclipsar el componente espacial de su narración. Los mapas deben estar en el centro. </li> <li> Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación. </li> </ol>"
+    "es": "<p>Aquí hay una lista de buenas prácticas para proporcionar una experiencia perfecta para los lectores:</p><ol><li> Mantenlo simple.</li><li>Es mejor crear mapas narrativos cortas para mantener el interés de su audiencia.</li><li>Para una buena legibilidad, se recomienda no exceder dos diapositivas por pasos y más de dos capas en el mapa en el mismo paso.</li><li>Imágenes, videos e infografías pueden ser medios útiles e impactantes para contextualizar su narración. Sin embargo, no deberían eclipsar el componente espacial de su narración. Los mapas deben estar en el centro.</li><li>Los efectos, las transiciones o las transformaciones en 3D pueden afectar la legibilidad de su story map en dispositivos lentos, úselos con moderación.</li></ol>"
   },
   {
     "id": "schema_story_author",
@@ -1537,12 +1537,12 @@
   {
     "id": "source_raster_tile_size",
     "en": "Size of the tiles (pixels)",
-    "es": "Tamaño de las celdas (píxels)"
+    "es": "Tamaño de las teselas (píxels)"
   },
   {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
-    "es": "URL del servidor de celdas raster"
+    "es": "URL del servidor de teselas"
   },
   {
     "id": "source_raster_tile_url_download",
@@ -1622,7 +1622,7 @@
   {
     "id": "source_validate_geom_auto_correct_info",
     "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
-    "es": "Advertencia: esto podría alterar la geometría. Para los polígonos (múltiples), la corrección automática utiliza un búfer de 0 alrededor de cada entidad. Para otros tipos, se utiliza ST_MakeValid."
+    "es": "Advertencia, esto podría alterar la geometría. Para (multi) polígonos, la corrección automática utiliza un búfer de 0 alrededor de cada objeto. Para otros tipos, se utiliza ST_MakeValid"
   },
   {
     "id": "download_select_format_vector",
@@ -1652,7 +1652,7 @@
   {
     "id": "source_sum_n_null",
     "en": "Number of missing or null values",
-    "es": "Nombre de valores incompletos o nulos"
+    "es": "Nombre de valores faltantes o nulos"
   },
   {
     "id": "source_sum_n_row",
@@ -1947,12 +1947,12 @@
   {
     "id": "view_dashboard_src_layerChange",
     "en": "All attributes and values from the displayed features",
-    "es": "Todos los atributos y valores de los características mostradas"
+    "es": "Todos los atributos y valores de los objetos mostrados"
   },
   {
     "id": "view_dashboard_src_layerClick",
     "en": "All attributes and values from the clicked feature",
-    "es": "Todos los atributos y valores de los características clicadas"
+    "es": "Todos los atributos y valores de los objetos en los que hagan clic"
   },
   {
     "id": "view_dashboard_src_none",
@@ -2047,7 +2047,7 @@
   {
     "id": "source_edit_metadata",
     "en": "Edit source metadata",
-    "es": "Editar la fuente de metadatos"
+    "es": "Editar los metadatos de la fuente"
   },
   {
     "id": "source_edit",
@@ -2067,7 +2067,7 @@
   {
     "id": "view_new_text",
     "en": "Create a new View",
-    "es": "Crear una vista"
+    "es": "Crear una nueva Vista"
   },
   {
     "id": "view_no_layer_found",
@@ -2142,7 +2142,7 @@
   {
     "id": "vt",
     "en": "Vector tiles",
-    "es": "Celdas de vector"
+    "es": "Teselas vectoriales"
   },
   {
     "id": "wms",
@@ -2167,7 +2167,7 @@
   {
     "id": "src_download_issues",
     "en": "The source can't be downloaded",
-    "es": "No se puede descargar la fuente de datos"
+    "es": "La fuente de datos no puede ser descargada"
   },
   {
     "id": "src_upload_add",
@@ -2417,7 +2417,7 @@
   {
     "id": "project_enable_public",
     "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "es": "Este proyecto es público. Esta publicado en catálogo de los proyectos. Todas las vista públicas en este proyecto estan visibles para todo el mundo."
+    "es": "Este proyecto es público. Está publicado en catálogo de los proyectos. Todas las vista públicas en este proyecto están visibles para todo el mundo."
   },
   {
     "id": "project_enable_join",
@@ -2437,7 +2437,7 @@
   {
     "id": "project_roles_modal_title",
     "en": "Roles administration",
-    "es": "Administracion de roles"
+    "es": "Administración de roles"
   },
   {
     "id": "project_alias_name",
@@ -2782,7 +2782,7 @@
   {
     "id": "validate_meta_no_contact",
     "en": "Missing contact",
-    "es": "Contact faltante"
+    "es": "Contacto faltante"
   },
   {
     "id": "validate_meta_invalid_contact_email",
@@ -2857,7 +2857,7 @@
   {
     "id": "additional_doc_items_desc",
     "en": "Related documents such as technical information about a dataset",
-    "es": "Documentos relacionados, por ejemplo documentos técnicos sobre un conjunto de datos"
+    "es": "Documentos relacionados, como información técnica sobre un conjunto de datos"
   },
   {
     "id": "additional_doc_items_title",
@@ -2942,7 +2942,7 @@
   {
     "id": "confirm_source_remove",
     "en": "Are you sure to delete the source with all related views and metadata ? This can't be undone",
-    "es": "¿Está seguro de eliminar el recurso con todas las vistas y metadatos relacionados? La operación no podrá ser anulada"
+    "es": "¿Está seguro de eliminar la fuente de datos con todas las vistas y metadatos relacionados? La operación no podrá ser anulada"
   },
   {
     "id": "contact_address",
@@ -3087,7 +3087,7 @@
   {
     "id": "msg_error_duplicate",
     "en": "This source already exists and is available for you",
-    "es": "Este recurso ya existe y está disponible para usted"
+    "es": "Esta fuente de datos ya existe y está disponible para usted"
   },
   {
     "id": "msg_error_import",
@@ -3102,7 +3102,7 @@
   {
     "id": "msg_success_delete",
     "en": "Source successfully removed",
-    "es": "Fuente de datos eliminada exitosamente"
+    "es": "Fuente de datos eliminada correctamente"
   },
   {
     "id": "msg_success_import",
@@ -3172,7 +3172,7 @@
   {
     "id": "origin_sources_title",
     "en": "Sources",
-    "es": "Fuente de datos"
+    "es": "Fuentes de datos"
   },
   {
     "id": "origin_source_title",
@@ -3877,12 +3877,12 @@
   {
     "id": "wms_select_reviewed_service",
     "en": "Select stored service",
-    "es": "Selectionar un servicio registrado"
+    "es": "Seleccionar un servicio registrado"
   },
   {
     "id": "wms_select_layer",
     "en": "Select layer",
-    "es": "Selectionar capa"
+    "es": "Seleccionar capa"
   },
   {
     "id": "wms_input_service_url",
@@ -3892,7 +3892,7 @@
   {
     "id": "wms_btn_generate_url",
     "en": "Update generated URL ( tiles server, legends )",
-    "es": "Actualizar la URL generada (servidor de celdas raster, leyendas)"
+    "es": "Actualizar la URL generada (servidor de teselas, leyendas)"
   },
   {
     "id": "wms_btn_get_layers",
@@ -4187,7 +4187,7 @@
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "es": "El objeto necesita la propiedad {{0}}"
+    "es": "El objeto necesita la propiedad '{{0}}'"
   },
   {
     "id": "error_additional_properties",
@@ -4222,7 +4222,7 @@
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "es": "Adjuntar"
+    "es": "Adjuntar {{0}}"
   },
   {
     "id": "button_move_down_title",
@@ -4262,7 +4262,7 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style=\"max-width:400px;padding:20px\">Hello,  <br><br> Here is the requested password:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "es": "<div style=\"max-width:400px;padding:20px\">Hola, <br><br> Aquí está la contraseña solicitada:  <hr>  <span style=\"font-family:monospace;\">{{CONTRASEÑA}}</span>  <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos.<br>Saludos cordiales,<br><br>Su equipo de MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error.</span></div>"
+    "es": "<div style=\"max-width:400px;padding:20px\">Hola, <br><br> Aquí está la contraseña solicitada:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos.<br>Saludos cordiales,<br><br>Su equipo de MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error.</span></div>"
   },
   {
     "id": "operator_and",
