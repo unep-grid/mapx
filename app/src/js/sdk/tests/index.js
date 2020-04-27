@@ -56,7 +56,7 @@ mapx.once('ready', () => {
         test: async () => {
           const pass = await mapx.ask('has_el_id', {
             id: 'loginCode',
-            timeout: 1000
+            timeout: 500
           });
           await mapx.ask('close_modal_all');
           return pass;
@@ -146,6 +146,35 @@ mapx.once('ready', () => {
         name: 'is object',
         test: (r) => {
           return t.h.isObject(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get view rt or vt legend', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const h = t.h;
+      const views = await mapx.ask('get_views');
+      const viewsLegend = views.reduce((a, v) => {
+        const hasVtStyle =
+          h.isViewVt(v) && v.data.style && v.data.style.rules && v.data.style.rules.length > 0;
+        const hasRtStyle =
+          h.isViewRt(v) && v.data.source && h.isUrl(v.data.source.legend);
+        if (hasVtStyle || hasRtStyle) {
+          a.push(v);
+        }
+        return a;
+      }, []);
+      const pos = Math.floor(Math.random() * viewsLegend.length - 1);
+      const view = viewsLegend[pos];
+      return mapx.ask('get_view_legend_image', {idView: view.id});
+    },
+    tests: [
+      {
+        name: 'is base 64 image',
+        test: (png) => {
+          return t.h.isBase64img(png);
         }
       }
     ]
