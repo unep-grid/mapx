@@ -22,7 +22,9 @@ class RasterMiniMap {
   destroy() {
     const mm = this;
     mm.syncEnd();
-    mm.map.remove();
+    if(!mm.map._removed){
+      mm.map.remove();
+    }
     mm.el.remove();
   }
 
