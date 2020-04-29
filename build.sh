@@ -12,6 +12,7 @@ FG_GREEN="\033[32m"
 FG_NORMAL="\033[0m"
 CHANGES_CHECK=$(git status --porcelain | wc -l)
 DIR_APP=app
+DIR_SDK=app/src/js/sdk
 DIR_CUR=$(pwd)
 CUR_HASH=$(git rev-parse HEAD)
 
@@ -38,6 +39,7 @@ echo "Update package.json"
 REP_PACKAGE_VERSION='s/"version": "'"$OLD_VERSION"'"/"version": "'"$NEW_VERSION"'"/g'
 perl -pi -e "$REP_PACKAGE_VERSION" ./app/package.json
 perl -pi -e "$REP_PACKAGE_VERSION" ./api/package.json
+perl -pi -e "$REP_PACKAGE_VERSION" ./app/src/js/sdk/package.json
 echo "Update version.txt"
 REP_VERSION='s/'"$OLD_VERSION"'/'"$NEW_VERSION"'/g'
 perl -pi -e "$REP_VERSION" version.txt
@@ -60,13 +62,20 @@ then
   exit 1
 fi
 
+echo "Build sdk prod"
+cd $DIR_CUR
+cd $DIR_SDK
+npm run prod
 
 echo "Build webpack prod"
+cd $DIR_CUR
 cd $DIR_APP
 npm run prod
-cd $DIR_CUR
+
 echo "Build app"
+cd $DIR_CUR
 docker-compose build app 
+
 echo "Build api"
 docker-compose build api 
 
