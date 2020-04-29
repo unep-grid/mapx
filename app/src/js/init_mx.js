@@ -21,3 +21,7 @@ import '../css/mx_legends.css';
 
 import * as mx from './mx.js';
 window.mx = mx;
+/**
+* Mapbox gl preload workers as soon as possible
+*/
+mx.mapboxgl.prewarm();

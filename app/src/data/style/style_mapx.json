@@ -6,7 +6,11 @@
   "sources": {
     "mapbox_base": {
       "type": "vector",
-      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v7"
+      "url": "mapbox://mapbox.mapbox-streets-v8"
+    },
+    "mapbox_dem": {
+      "type": "raster-dem",
+      "url": "mapbox://mapbox.terrain-rgb"
     },
     "mapbox_unepgrid_countries": {
       "url": "mapbox://helsinki.mx_countries_un_poly_2018",
@@ -74,100 +78,6 @@
         "fill-opacity": 1,
         "fill-outline-color": "hsla(0, 0%, 45%, 0.55)",
         "fill-antialias": true
-      }
-    },
-    {
-      "id": "shade-56",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": ["all", ["==", "class", "shadow"], ["==", "level", 56]],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 0%, 0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
-      }
-    },
-    {
-      "id": "shade-67",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": ["all", ["==", "class", "shadow"], ["==", "level", 67]],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 0%, 0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
-      }
-    },
-    {
-      "id": "shade-78",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": ["all", ["==", "class", "shadow"], ["==", "level", 78]],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 0%,  0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
-      }
-    },
-    {
-      "id": "shade-89",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": ["all", ["==", "class", "shadow"], ["==", "level", 89]],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 0%, 0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
-      }
-    },
-    {
-      "id": "high-90",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": [
-        "all",
-        ["==", "$type", "Polygon"],
-        ["all", ["==", "class", "highlight"], ["==", "level", 90]]
-      ],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 100%, 0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
-      }
-    },
-    {
-      "id": "high-94",
-      "type": "fill",
-      "source": "mapbox_base",
-      "source-layer": "hillshade",
-      "interactive": true,
-      "filter": ["all", ["==", "class", "highlight"], ["==", "level", 94]],
-      "layout": {
-        "visibility": "visible"
-      },
-      "paint": {
-        "fill-color": "hsla(0, 0%, 100%, 0.05)",
-        "fill-outline-color": "hsla(0,0,0,0)"
       }
     },
     {
@@ -1004,7 +914,7 @@
       "id": "road-label-small",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "road_label",
+      "source-layer": "road",
       "minzoom": 15,
       "filter": [
         "all",
@@ -1040,7 +950,7 @@
         "text-padding": 1,
         "text-rotation-alignment": "map",
         "text-pitch-alignment": "viewport",
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": 0.01
       },
       "paint": {
@@ -1055,7 +965,7 @@
       "id": "road-label-medium",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "road_label",
+      "source-layer": "road",
       "minzoom": 11,
       "filter": [
         "all",
@@ -1077,7 +987,7 @@
         "text-padding": 1,
         "text-rotation-alignment": "map",
         "text-pitch-alignment": "viewport",
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": 0.01
       },
       "paint": {
@@ -1091,7 +1001,7 @@
       "id": "road-label-large",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "road_label",
+      "source-layer": "road",
       "filter": [
         "in",
         "class",
@@ -1116,7 +1026,7 @@
         "text-padding": 1,
         "text-rotation-alignment": "map",
         "text-pitch-alignment": "viewport",
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": 0.01
       },
       "paint": {
@@ -1124,45 +1034,6 @@
         "text-halo-color": "hsla(0, 0%, 100%, 0.75)",
         "text-halo-width": 1,
         "text-halo-blur": 1
-      },
-      "interactive": true
-    },
-    {
-      "id": "road-shields",
-      "type": "symbol",
-      "source": "mapbox_base",
-      "source-layer": "road_label",
-      "minzoom": 7,
-      "filter": ["all", ["<=", "reflen", 6], ["has", "shield"]],
-      "layout": {
-        "text-size": 8.5,
-        "icon-image": "{shield}-{reflen}",
-        "icon-rotation-alignment": "viewport",
-        "text-max-angle": 38,
-        "symbol-spacing": {
-          "base": 1,
-          "stops": [[11, 150], [14, 200]]
-        },
-        "text-font": ["Heebo Medium", "Arial Unicode MS Bold"],
-        "symbol-placement": {
-          "base": 1,
-          "stops": [[10, "point"], [11, "line"]]
-        },
-        "text-padding": 2,
-        "text-rotation-alignment": "viewport",
-        "text-field": "{ref}",
-        "text-letter-spacing": 0.05,
-        "icon-padding": 2
-      },
-      "paint": {
-        "text-color": "hsl(0, 0%, 40%)",
-        "icon-halo-color": "rgba(0, 0, 0, 1)",
-        "icon-halo-width": 1,
-        "text-opacity": 1,
-        "icon-color": "white",
-        "text-halo-color": "hsl(0, 0%, 100%)",
-        "text-halo-width": 0,
-        "text-translate": [0, 0]
       },
       "interactive": true
     },
@@ -1178,44 +1049,10 @@
       }
     },
     {
-      "id": "poi-label",
-      "type": "symbol",
-      "source": "mapbox_base",
-      "source-layer": "poi_label",
-      "interactive": true,
-      "filter": [
-        "in",
-        "type",
-        "Alpine Hut",
-        "Attraction",
-        "Bed And Breakfast",
-        "Biergarten",
-        "Golf Course",
-        "Hotel",
-        "Yes"
-      ],
-      "layout": {
-        "visibility": "visible",
-        "text-field": "{name_en}",
-        "text-size": {
-          "base": 1,
-          "stops": [[15, 10], [18, 12]]
-        },
-        "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"]
-      },
-      "paint": {
-        "text-opacity": 0.75,
-        "text-color": "rgba(15,15,15,1)",
-        "text-halo-color": "rgba(255,255,255,1)",
-        "text-halo-blur": 1,
-        "text-halo-width": 1.5
-      }
-    },
-    {
       "id": "path-label",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "road_label",
+      "source-layer": "road",
       "interactive": true,
       "filter": ["==", "class", "path"],
       "layout": {
@@ -1231,7 +1068,7 @@
         "text-offset": [0, -0.1],
         "text-rotation-alignment": "map",
         "text-anchor": "center",
-        "text-field": "{name_en}"
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]]
       },
       "paint": {
         "text-color": "rgba(48,47,47,1)",
@@ -1244,7 +1081,8 @@
       "id": "water-label",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "water_label",
+      "source-layer": "natural_label",
+      "filter": ["==", "class", "water"],
       "interactive": true,
       "layout": {
         "text-size": {
@@ -1260,7 +1098,7 @@
           "base": 1,
           "stops": [[0, true], [22, true]]
         },
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-rotate": -45,
         "text-letter-spacing": {
           "base": 1,
@@ -1281,9 +1119,9 @@
       "id": "water-label-lg",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "water_label",
+      "source-layer": "natural_label",
       "interactive": true,
-      "filter": [">=", "area", "258500"],
+      "filter": ["all",["==","class","water"],[">=", "area", "258500"]],
       "layout": {
         "text-size": {
           "base": 1,
@@ -1298,7 +1136,7 @@
           "base": 1,
           "stops": [[0, true], [22, true]]
         },
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-rotate": -45,
         "text-letter-spacing": {
           "base": 1,
@@ -1319,7 +1157,8 @@
       "id": "waterway-label",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "waterway_label",
+      "source-layer": "natural_label",
+      "filter": ["in", "class", "river", "canal","stream"],
       "interactive": true,
       "layout": {
         "text-size": {
@@ -1335,7 +1174,7 @@
           "base": 1,
           "stops": [[0, true], [22, true]]
         },
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-rotate": -45,
         "text-letter-spacing": {
           "base": 1,
@@ -1356,7 +1195,8 @@
       "id": "road-label",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "road_label",
+      "type": "symbol",
+      "source-layer": "road",
       "interactive": true,
       "filter": ["!in", "class", "aerialway", "path"],
       "layout": {
@@ -1372,11 +1212,21 @@
         "text-offset": [0, -0.1],
         "text-rotation-alignment": "map",
         "text-anchor": "center",
-        "text-field": "{name_en}"
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]]
       },
       "paint": {
         "text-color": "rgba(122,118,118,1)",
         "text-halo-color": "rgba(252,252,252,1)"
+      }
+    },
+    {
+      "id": "hillshading",
+      "source": "mapbox_dem",
+      "type": "hillshade",
+      "paint": {
+        "hillshade-accent-color": "hsla(0, 0%, 45%, 0.55)",
+        "hillshade-shadow-color": "hsla(0, 0%, 45%, 0.55)",
+        "hillshade-exaggeration": 0.5
       }
     },
     {
@@ -1385,6 +1235,9 @@
       "source": "here_aerial",
       "layout": {
         "visibility": "none"
+      },
+      "paint": {
+        "raster-opacity": 0.8
       }
     },
     {
@@ -1443,7 +1296,7 @@
       "interactive": true,
       "filter": [
         "all",
-        ["<", "localrank", 14],
+        ["<=", "filterrank", 1],
         [
           "in",
           "type",
@@ -1458,7 +1311,7 @@
       ],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"],
         "text-size": {
           "base": 1,
@@ -1500,7 +1353,7 @@
         },
         "icon-offset": [0, 0],
         "icon-rotation-alignment": "viewport",
-        "text-allow-overlap": true
+        "text-allow-overlap": false
       },
       "paint": {
         "text-halo-color": "#FFF",
@@ -1513,14 +1366,15 @@
       "id": "country-label",
       "type": "symbol",
       "source": "mapbox_base",
-      "source-layer": "country_label",
+      "source-layer": "place_label",
+      "filter": ["==", "class", "country"],
       "layout": {
         "visibility": "visible",
-        "text-field": "{name_en}",
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-font": ["Open Sans Semibold", "Arial Unicode MS Regular"],
         "text-size": {
           "base": 1,
-          "stops": [[1, 9], [18, 25]]
+          "stops": [[1, 8], [18, 25]]
         },
         "text-letter-spacing": 0.3,
         "text-transform": "uppercase"

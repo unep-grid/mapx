@@ -2245,6 +2245,21 @@
     "ps": ""
   },
   {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "ps": ""
+  },
+  {
     "id": "mx_map_mask",
     "en": "Map: country shadow",
     "ps": ""

@@ -1796,6 +1796,18 @@
     "en": "Map: background"
   },
   {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent"
+  },
+  {
     "id": "mx_map_mask",
     "en": "Map: country shadow"
   },

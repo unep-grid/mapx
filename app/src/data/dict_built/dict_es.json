@@ -2245,6 +2245,21 @@
     "es": "Mapa: fondo"
   },
   {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "es": "Mapa: hillshade shadow"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "es": "Mapa: hillshade luz"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "es": "Mapa: hillshade énfasis"
+  },
+  {
     "id": "mx_map_mask",
     "en": "Map: country shadow",
     "es": "Mapa: sombre de los países"

@@ -4,7 +4,12 @@
 .mx .mapboxgl-popup-content {
   padding-top: 25px;
 }
-
+.mx .mapboxgl-popup {
+  max-width:440px!important; 
+  /**
+  * see .mx-popup-container
+  */
+}
 .mx .mapboxgl-ctrl-top-left .mapboxgl-ctrl {
   margin: 5px 0 0 5px;
   float: left;

@@ -666,7 +666,6 @@ export function initMapListener(map) {
         return;
       }
     }
-
     console.error(e);
   });
 
@@ -4491,7 +4490,7 @@ export function btnToggleLayer(o) {
     o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
 
   if (isAerial) {
-    shades = mx.helpers.getLayerNamesByPrefix({id: o.id, prefix: 'shade'});
+    shades = mx.helpers.getLayerNamesByPrefix({id: o.id, prefix: 'hillshading'});
   }
 
   if (toToggle) {

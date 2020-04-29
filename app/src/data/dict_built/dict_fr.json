@@ -2245,6 +2245,21 @@
     "fr": "Carte : Arrière plan"
   },
   {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "fr": "Carte : ombrage du relief"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "fr": "Carte : lumière du relief"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "fr": "Carte : accentuation du relief"
+  },
+  {
     "id": "mx_map_mask",
     "en": "Map: country shadow",
     "fr": "Carte : Ombrage des pays"

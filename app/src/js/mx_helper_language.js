@@ -485,7 +485,7 @@ export function updateLanguageMap(o) {
           map.setLayoutProperty(
             layer,
             'text-field',
-            '{name_' + o.language + '}'
+            ["coalesce", ["get", `name_${o.language}`], ["get", "name"]]
           );
         }
       }

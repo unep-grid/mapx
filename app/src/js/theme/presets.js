@@ -7,6 +7,9 @@ const mapx = {
   mx_ui_background: 'rgba(255,255,255,1)',
   mx_ui_shadow: 'rgba(153,153,153,0.4)',
   mx_map_background: 'rgba(255,255,255,1)',
+  mx_map_hillshade_shadow: 'rgba(145,145,145,1)',
+  mx_map_hillshade_highlight: 'rgba(255,255,255,1)',
+  mx_map_hillshade_accent: 'rgba(255,255,255,1)',
   mx_map_mask: 'rgba(153,153,153,0.4)',
   mx_map_text: 'rgba(53,53,53,0.9)',
   mx_map_text_outline: 'rgba(255,255,255,0.8)',
@@ -14,15 +17,14 @@ const mapx = {
   mx_map_road: 'rgba(255,255,255,1)',
   mx_map_road_border: 'rgba(220,220,220,0.5)',
   mx_map_building: 'rgba(220,220,220,0.5)',
-  mx_map_boundary_un_1: 'rgba(38,38,38, 0.3)',
-  mx_map_boundary_un_2: 'rgba(38,38,38, 0.3)',
-  mx_map_boundary_un_3: 'rgba(38,38,38, 0.3)',
-  mx_map_boundary_un_4: 'rgba(38,38,38, 0.3)',
-  mx_map_boundary_un_8: 'rgba(38,38,38, 0.3)',
-  mx_map_boundary_un_9: 'rgba(38,38,38, 0.3)',
+  mx_map_boundary_un_1: 'rgba(38,38,38,0.3)',
+  mx_map_boundary_un_2: 'rgba(38,38,38,0.3)',
+  mx_map_boundary_un_3: 'rgba(38,38,38,0.3)',
+  mx_map_boundary_un_4: 'rgba(38,38,38,0.3)',
+  mx_map_boundary_un_8: 'rgba(38,38,38,0.3)',
+  mx_map_boundary_un_9: 'rgba(38,38,38,0.3)',
   mx_map_boundary_osm_subnational_3_4: 'rgba(121,121,121,0.6)'
 };
-
 const smartgray = {
   mx_ui_text: 'rgba(235,235,235,1)',
   mx_ui_link: 'rgba(235,235,235,1)',
@@ -32,6 +34,9 @@ const smartgray = {
   mx_ui_background: 'rgba(66,66,66,1)',
   mx_ui_shadow: 'rgba(16,16,16,0.9)',
   mx_map_background: 'rgba(66,66,66,1)',
+  mx_map_hillshade_shadow: 'rgba(0,0,0,1)',
+  mx_map_hillshade_highlight: 'rgba(66,66,66,1)',
+  mx_map_hillshade_accent: 'rgba(255,255,255,1)',
   mx_map_mask: 'rgba(0,0,0,0.2)',
   mx_map_text: 'rgba(121,121,121,1)',
   mx_map_text_outline: 'rgba(33,33,33,0.1)',
@@ -47,7 +52,5 @@ const smartgray = {
   mx_map_boundary_un_9: 'rgba(121,121,121,0.6)',
   mx_map_boundary_osm_subnational_3_4: 'rgba(121,121,121,0.6)'
 };
-export {
-  mapx,
-  smartgray
-};
+
+export {mapx, smartgray};
