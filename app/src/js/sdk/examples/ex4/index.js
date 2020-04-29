@@ -1,10 +1,61 @@
 'use strict';
 
-const mapx = new mxsdk.Manager({
-  container: document.getElementById('mapx'),
-  url: 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en',
-  // url: 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en',
-});
+const mapxUrl = 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
+// const mapxUrl = 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en';
+
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      projectId: 'Loading...',
+      views: [],
+      maxp: null,
+    };
+  }
+
+  componentDidMount() {
+    const mapx = new mxsdk.Manager({
+      container: this.mxContainer,
+      url: mapxUrl,
+    });
+
+    mapx.on('ready', () => {
+      /**
+       * Hide views panel
+       */
+      mapx.ask('set_panel_left_visibility', {
+        panel: 'views',
+        show: false,
+      });
+
+      Promise.all([
+        mapx.ask('get_project'),
+        mapx.ask('get_views'),
+      ]).then((values) => {
+        this.setState({
+          projectId: values[0],
+          views: values[1],
+          mapx: mapx,
+        })
+      });
+    });
+  }
+
+  getMapx = () => {
+    return this.state.mapx;
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="pane-left item">
+          <MxViewsCollections getMapx={this.getMapx} projectId={this.state.projectId} views={this.state.views} />
+        </div>
+        <div className="pane-right item" ref={el => this.mxContainer = el} />
+      </div>
+    )
+  }
+}
 
 class MxViewsCollections extends React.Component {
   render() {
@@ -34,7 +85,7 @@ class MxViewsCollections extends React.Component {
         <p>Collection(s) for project: {this.props.projectId}</p>
         {Object.keys(collections).map((collection, i) => {
           return (
-            <MxViewsCollection collection={collection} views={collections[collection]} key={i} />
+            <MxViewsCollection getMapx={this.props.getMapx}collection={collection} views={collections[collection]} key={i} />
           )
         })}
       </div>
@@ -44,13 +95,13 @@ class MxViewsCollections extends React.Component {
 
 class MxViewsCollection extends React.Component {
   render() {
-    var out = '<span>No views</span>';
+    var out = (<span>: No views</span>);
     if (this.props.views.length) {
       out = (
         <ul>
           {this.props.views.map((view, i) => {
             return (
-              <li key={i}><MxViews view={view} key={i} /></li>
+              <li key={i}><MxViews getMapx={this.props.getMapx} view={view} key={i} /></li>
             );
           })}
         </ul>
@@ -76,6 +127,7 @@ class MxViews extends React.Component {
   }
   render() {
     var view = this.props.view;
+    const mapx = this.props.getMapx();
     return (
         <a
           href="#"
@@ -94,22 +146,7 @@ class MxViews extends React.Component {
   }
 }
 
-mapx.on('ready', () => {
-  /**
-   * Hide views panel
-   */
-  mapx.ask('set_panel_left_visibility', {
-    panel: 'views',
-    show: false,
-  });
-
-  Promise.all([
-    mapx.ask('get_project'),
-    mapx.ask('get_views'),
-  ]).then(function(values) {
-    ReactDOM.render(
-      <MxViewsCollections projectId={values[0]} views={values[1]} />,
-      document.getElementById('views-collections-container')
-    );
-  });
-});
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
