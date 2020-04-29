@@ -21,34 +21,32 @@ const mapx = new MxSdk.manager({
 /**
  * When ready, begin requests
  */
-mapx.on('ready', () => {
+mapx.on('ready', async () => {
   /**
    * Get list of views, print them in console
+   * ( All requests to MapX resolvers return
+   * Promises or Promisified value)
    */
-  mapx.ask('get_views').then(console.log);
+  const views = await mapx.ask('get_views')
+  console.log(views);
+
   /**
    * Get geo ip info,  print it in console
    */
-  mapx.ask('get_user_ip').then(console.log);
-  setTimeout(() => {
-    /**
-     * Change project after 3000 ms
-     */
-    maps
-      .ask('get_projects')
-      .then((projects) => {
-        const newProject = projects[projects.length - 1];
-        if (newProject) {
-          return mapx.ask('set_project', {idProject: newProject.id});
-        }
-      })
-      .then(() => {
-        /**
-         * Get list of views
-         */
-        return mapx.ask('get_views');
-      })
-      .then(console.log);
+  const ipInfo = mapx.ask('get_user_ip');
+  console.log(ipInfo);
+
+  /**
+   * Change project after 3000 ms
+   */
+  setTimeout( async () => {
+     const projects = await = mapx.ask('get_projects');
+     const newProject = projects[projects.length - 1];
+     if (newProject) {
+       await mapx.ask('set_project', {idProject: newProject.id});
+       const views = await mapx.ask('get_views');
+       console.log(views);
+     }
   }, 3000);
 });
 
@@ -467,16 +465,17 @@ Class to handle MapX specific method
 
 * [MapxResolvers](#MapxResolvers)
     * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
-    * [.has_dashboard()](#MapxResolvers+has_dashboard) ⇒ <code>Boolean</code>
+    * [.has_el_id(opt)](#MapxResolvers+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolvers+set_dashboard_visibility) ⇒ <code>Boolean</code>
-    * [.get_source_meta(opt)](#MapxResolvers+get_source_meta)
+    * [.is_dashboard_visible()](#MapxResolvers+is_dashboard_visible) ⇒ <code>Boolean</code>
+    * [.get_source_meta(opt)](#MapxResolvers+get_source_meta) ⇒ <code>Object</code>
     * [.get_user_id()](#MapxResolvers+get_user_id) ⇒ <code>Number</code>
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
     * [.get_user_email()](#MapxResolvers+get_user_email) ⇒ <code>String</code>
     * [.set_project(opt)](#MapxResolvers+set_project) ⇒ <code>Boolean</code>
     * [.get_language()](#MapxResolvers+get_language) ⇒ <code>String</code>
-    * [.set_language(opt)](#MapxResolvers+set_language)
+    * [.set_language(opt)](#MapxResolvers+set_language) ⇒ <code>Boolean</code>
     * [.get_languages()](#MapxResolvers+get_languages) ⇒ <code>Array</code>
     * [.get_projects(opt)](#MapxResolvers+get_projects) ⇒ <code>Array</code>
     * [.get_project()](#MapxResolvers+get_project) ⇒ <code>String</code>
@@ -487,8 +486,8 @@ Class to handle MapX specific method
     * [.get_views_id()](#MapxResolvers+get_views_id) ⇒ <code>Array</code>
     * [.get_views_id_open()](#MapxResolvers+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolvers+get_view_meta_vt_attribute) ⇒ <code>Object</code>
-    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta)
-    * [.get_view_legend_image(opt)](#MapxResolvers+get_view_legend_image)
+    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta) ⇒ <code>Object</code>
+    * [.get_view_legend_image(opt)](#MapxResolvers+get_view_legend_image) ⇒ <code>String</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolvers+set_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolvers+get_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.set_view_layer_filter_numeric(opt)](#MapxResolvers+set_view_layer_filter_numeric)
@@ -502,20 +501,21 @@ Class to handle MapX specific method
     * [.download_view_source_auto(opt)](#MapxResolvers+download_view_source_auto) ⇒ <code>Object</code>
     * [.show_modal_login()](#MapxResolvers+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
+    * [.show_modal_view_edit()](#MapxResolvers+show_modal_view_edit) ⇒ <code>Boolean</code>
     * [.show_modal_map_composer()](#MapxResolvers+show_modal_map_composer) ⇒ <code>Boolean</code>
-    * [.show_modal_share(opt)](#MapxResolvers+show_modal_share)
+    * [.show_modal_share(opt)](#MapxResolvers+show_modal_share) ⇒ <code>Boolean</code>
     * [.show_modal_tool(opt)](#MapxResolvers+show_modal_tool) ⇒ <code>Boolean</code> \| <code>Array</code>
     * [.close_modal_all()](#MapxResolvers+close_modal_all) ⇒ <code>Boolean</code>
     * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
     * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
-    * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state)
-    * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort)
-    * [.move_view_top(opt)](#MapxResolvers+move_view_top)
-    * [.move_view_bottom(opt)](#MapxResolvers+move_view_bottom)
-    * [.move_view_after(opt)](#MapxResolvers+move_view_after)
-    * [.move_view_before(opt)](#MapxResolvers+move_view_before)
-    * [.move_view_up(opt)](#MapxResolvers+move_view_up)
-    * [.move_view_down(opt)](#MapxResolvers+move_view_down)
+    * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state) ⇒ <code>Boolean</code>
+    * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort) ⇒ <code>Boolean</code>
+    * [.move_view_top(opt)](#MapxResolvers+move_view_top) ⇒ <code>Boolean</code>
+    * [.move_view_bottom(opt)](#MapxResolvers+move_view_bottom) ⇒ <code>Boolean</code>
+    * [.move_view_after(opt)](#MapxResolvers+move_view_after) ⇒ <code>Boolean</code>
+    * [.move_view_before(opt)](#MapxResolvers+move_view_before) ⇒ <code>Boolean</code>
+    * [.move_view_up(opt)](#MapxResolvers+move_view_up) ⇒ <code>Boolean</code>
+    * [.move_view_down(opt)](#MapxResolvers+move_view_down) ⇒ <code>Boolean</code>
     * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
@@ -533,13 +533,19 @@ Set panel visibility
 | opt.show | <code>Boolean</code> | If true, show the panel (and hide other) |
 | opt.toggle | <code>Boolean</code> | Toggle the panel |
 
-<a name="MapxResolvers+has_dashboard"></a>
+<a name="MapxResolvers+has_el_id"></a>
 
-### mapxResolvers.has\_dashboard() ⇒ <code>Boolean</code>
-Check if mapx has a dashboard
+### mapxResolvers.has\_el\_id(opt)
+Check if element is visible, by id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Boolean</code> - Has dashboard  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.id | <code>String</code> | Id of the element to check |
+| opt.timeout | <code>Number</code> | Timeout |
+
 <a name="MapxResolvers+set_dashboard_visibility"></a>
 
 ### mapxResolvers.set\_dashboard\_visibility(opt) ⇒ <code>Boolean</code>
@@ -554,12 +560,20 @@ Set dashboard visibility
 | opt.show | <code>Boolean</code> | If true, show the dashboard |
 | opt.toggle | <code>Boolean</code> | Toggle the dashoard |
 
+<a name="MapxResolvers+is_dashboard_visible"></a>
+
+### mapxResolvers.is\_dashboard\_visible() ⇒ <code>Boolean</code>
+Check if the dashboard is visible
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - The dashboard is visible  
 <a name="MapxResolvers+get_source_meta"></a>
 
-### mapxResolvers.get\_source\_meta(opt)
+### mapxResolvers.get\_source\_meta(opt) ⇒ <code>Object</code>
 Get source metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - Source MapX metadata  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -593,7 +607,7 @@ Get user roles
 Get user email
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>String</code> - Current user email  
+**Returns**: <code>String</code> - Current user email ( if logged, null if not)  
 <a name="MapxResolvers+set_project"></a>
 
 ### mapxResolvers.set\_project(opt) ⇒ <code>Boolean</code>
@@ -616,10 +630,11 @@ Get current language
 **Returns**: <code>String</code> - Two letters language code  
 <a name="MapxResolvers+set_language"></a>
 
-### mapxResolvers.set\_language(opt)
+### mapxResolvers.set\_language(opt) ⇒ <code>Boolean</code>
 Setlanguage
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Laguage change process finished  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -715,10 +730,11 @@ Get vector view (vt) metadata of the attribute
 
 <a name="MapxResolvers+get_view_meta"></a>
 
-### mapxResolvers.get\_view\_meta(opt, view)
+### mapxResolvers.get\_view\_meta(opt, view) ⇒ <code>Object</code>
 Get view metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - view metadata  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -728,10 +744,11 @@ Get view metadata
 
 <a name="MapxResolvers+get_view_legend_image"></a>
 
-### mapxResolvers.get\_view\_legend\_image(opt)
+### mapxResolvers.get\_view\_legend\_image(opt) ⇒ <code>String</code>
 Get view legend
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>String</code> - PNG in base64 format  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -910,6 +927,13 @@ Show view meta modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolvers+show_modal_view_edit"></a>
+
+### mapxResolvers.show\_modal\_view\_edit() ⇒ <code>Boolean</code>
+Show view edit modal window
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_map_composer"></a>
 
 ### mapxResolvers.show\_modal\_map\_composer() ⇒ <code>Boolean</code>
@@ -919,10 +943,11 @@ Show map composer
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_share"></a>
 
-### mapxResolvers.show\_modal\_share(opt)
+### mapxResolvers.show\_modal\_share(opt) ⇒ <code>Boolean</code>
 Show sharing modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -964,10 +989,11 @@ Get views list state
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 <a name="MapxResolvers+set_views_list_state"></a>
 
-### mapxResolvers.set\_views\_list\_state(opt)
+### mapxResolvers.set\_views\_list\_state(opt) ⇒ <code>Boolean</code>
 Set state / views list order, groups, etc. Opened view will be closed
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -976,10 +1002,11 @@ Set state / views list order, groups, etc. Opened view will be closed
 
 <a name="MapxResolvers+set_views_list_sort"></a>
 
-### mapxResolvers.set\_views\_list\_sort(opt)
+### mapxResolvers.set\_views\_list\_sort(opt) ⇒ <code>Boolean</code>
 Set views list order
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -989,10 +1016,11 @@ Set views list order
 
 <a name="MapxResolvers+move_view_top"></a>
 
-### mapxResolvers.move\_view\_top(opt)
+### mapxResolvers.move\_view\_top(opt) ⇒ <code>Boolean</code>
 Move view on top of its group
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1001,10 +1029,11 @@ Move view on top of its group
 
 <a name="MapxResolvers+move_view_bottom"></a>
 
-### mapxResolvers.move\_view\_bottom(opt)
+### mapxResolvers.move\_view\_bottom(opt) ⇒ <code>Boolean</code>
 Move view on the bottom of its group
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1013,10 +1042,11 @@ Move view on the bottom of its group
 
 <a name="MapxResolvers+move_view_after"></a>
 
-### mapxResolvers.move\_view\_after(opt)
+### mapxResolvers.move\_view\_after(opt) ⇒ <code>Boolean</code>
 Move view after anoter view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1026,10 +1056,11 @@ Move view after anoter view
 
 <a name="MapxResolvers+move_view_before"></a>
 
-### mapxResolvers.move\_view\_before(opt)
+### mapxResolvers.move\_view\_before(opt) ⇒ <code>Boolean</code>
 Move view before another view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1039,10 +1070,11 @@ Move view before another view
 
 <a name="MapxResolvers+move_view_up"></a>
 
-### mapxResolvers.move\_view\_up(opt)
+### mapxResolvers.move\_view\_up(opt) ⇒ <code>Boolean</code>
 Move view up
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1051,10 +1083,11 @@ Move view up
 
 <a name="MapxResolvers+move_view_down"></a>
 
-### mapxResolvers.move\_view\_down(opt)
+### mapxResolvers.move\_view\_down(opt) ⇒ <code>Boolean</code>
 Move view down
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1071,4 +1104,5 @@ List resolvers methods
 
 * * *
 
-&copy; 2019-2020 Fred Moser
+
+&copy; 2019-2020 unepgrid.ch
