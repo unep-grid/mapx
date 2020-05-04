@@ -1513,7 +1513,7 @@
         "text-letter-spacing": 0.2,
         "icon-image": "star-11",
         "icon-size": ["interpolate", ["linear"], ["zoom"], 1, 0, 18, 3],
-        "icon-offset": [0, 0],
+        "icon-offset": [2, 2],
         "icon-rotation-alignment": "viewport",
         "text-allow-overlap": false
       },
