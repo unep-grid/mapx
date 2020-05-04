@@ -1,0 +1,16 @@
+{
+  "name": "svg_to_sprite",
+  "version": "0.0.1",
+  "description": "Automate sprite creation from svg",
+  "scripts": {
+    "build": "node index.js"
+  },
+  "keywords": [
+    "sprite"
+  ],
+  "author": "Fred Moser",
+  "license": "MIT",
+  "dependencies": {
+    "@mapbox/spritezero": "^7.0.0"
+  }
+}

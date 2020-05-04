@@ -1539,7 +1539,7 @@ export function makeSimpleLayer(o) {
         'icon-allow-overlap': true
       },
       paint: {
-        'icon-opacity': 1,
+        'icon-opacity': o.opacity || 1,
         'icon-halo-width': 2,
         'icon-halo-color': colB
       }
@@ -1561,6 +1561,7 @@ export function makeSimpleLayer(o) {
     pattern: {
       type: 'fill',
       paint: {
+        'fill-opacity': o.opacity,
         'fill-pattern': sprite,
         'fill-antialias': false
       }
@@ -4153,7 +4154,7 @@ export async function makeSearchBox(o) {
     return data;
   }
 
-  const s = await  h.moduleLoad('selectize');
+  const s = await h.moduleLoad('selectize');
   const table = h.path(view, 'data.attribute.table');
   const attr = h.path(view, 'data.attribute.name');
   const data = tableToData(table);
@@ -4469,10 +4470,10 @@ export function flyTo(o) {
  * @return {String} Toggled
  */
 export function btnToggleLayer(o) {
-  let shades;
-
+  let shades, bathy;
+  const h = mx.helpers;
   o.id = o.id || mx.settings.map.id;
-  const map = mx.helpers.getMap(o.id);
+  const map = h.getMap(o.id);
   const btn = document.getElementById(o.idSwitch);
   const lay = map.getLayer(o.idLayer);
 
@@ -4490,7 +4491,8 @@ export function btnToggleLayer(o) {
     o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
 
   if (isAerial) {
-    shades = mx.helpers.getLayerNamesByPrefix({id: o.id, prefix: 'hillshading'});
+    shades = h.getLayerNamesByPrefix({id: o.id, prefix: 'hillshading'});
+    bathy = h.getLayerNamesByPrefix({id: o.id, prefix: 'bathymetry'});
   }
 
   if (toToggle) {
@@ -4498,6 +4500,9 @@ export function btnToggleLayer(o) {
       map.setLayoutProperty(o.idLayer, 'visibility', 'none');
       if (isAerial) {
         shades.forEach(function(s) {
+          map.setLayoutProperty(s, 'visibility', 'visible');
+        });
+        bathy.forEach(function(s) {
           map.setLayoutProperty(s, 'visibility', 'visible');
         });
       }
@@ -4508,6 +4513,9 @@ export function btnToggleLayer(o) {
       map.setLayoutProperty(o.idLayer, 'visibility', 'visible');
       if (isAerial) {
         shades.forEach(function(s) {
+          map.setLayoutProperty(s, 'visibility', 'none');
+        });
+        bathy.forEach(function(s) {
           map.setLayoutProperty(s, 'visibility', 'none');
         });
       }

@@ -2315,19 +2315,29 @@
     "es": "Mapa: límite de base soberana"
   },
   {
-    "id": "mx_map_boundary_osm_subnational_3_4",
+    "id": "mx_map_boundary_osm_subnational",
     "en": "Map: Subnational boundaries",
     "es": "Mapa: Fronteras subnacionales"
   },
   {
-    "id": "mx_map_text",
-    "en": "Map: text",
-    "es": "Mapa: texto"
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "es": "Mapa: texto lugar"
   },
   {
-    "id": "mx_map_text_outline",
-    "en": "Map: text outline",
-    "es": "Mapa: borde del texto"
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "es": "Mapa: borde del texto lugar"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "es": "Mapa: camino texto"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "es": "Mapa: borde del texto camino"
   },
   {
     "id": "list_publishers",

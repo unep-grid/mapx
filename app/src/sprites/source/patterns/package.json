@@ -1,0 +1,21 @@
+{
+  "name": "textures_to_svg",
+  "version": "0.0.1",
+  "description": "Automate conversion of textures / d3 object to svg and sprites",
+  "scripts": {
+    "build": "node index.js"
+  },
+  "keywords": [
+    "textures",
+    "svg",
+    "d3",
+    "automate"
+  ],
+  "author": "Fred Moser",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^5.16.0",
+    "jsdom": "^16.2.2",
+    "textures": "^1.2.2"
+  }
+}

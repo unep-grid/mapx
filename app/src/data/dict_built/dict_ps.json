@@ -2315,18 +2315,28 @@
     "ps": ""
   },
   {
-    "id": "mx_map_boundary_osm_subnational_3_4",
+    "id": "mx_map_boundary_osm_subnational",
     "en": "Map: Subnational boundaries",
     "ps": ""
   },
   {
-    "id": "mx_map_text",
-    "en": "Map: text",
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
     "ps": ""
   },
   {
-    "id": "mx_map_text_outline",
-    "en": "Map: text outline",
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
     "ps": ""
   },
   {

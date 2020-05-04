@@ -24,9 +24,9 @@ export function layer_resolver(c) {
     {
       id: ['hillshading'],
       paint: {
-        "hillshade-accent-color": c.mx_map_hillshade_accent,
-        "hillshade-highlight-color": c.mx_map_hillshade_highlight,
-        "hillshade-shadow-color": c.mx_map_hillshade_shadow
+        'hillshade-accent-color': c.mx_map_hillshade_accent,
+        'hillshade-highlight-color': c.mx_map_hillshade_highlight,
+        'hillshade-shadow-color': c.mx_map_hillshade_shadow
       }
     },
     {
@@ -38,8 +38,30 @@ export function layer_resolver(c) {
     {
       id: ['water'],
       paint: {
-        'fill-color': c.mx_map_water,
-        'fill-outline-color': c.mx_map_water
+        'fill-color': c.mx_map_water
+      }
+    },
+    {
+      id: ['bathymetry'],
+      paint: {
+        'fill-color': [
+          'interpolate',
+          ['cubic-bezier', 0, 0.5, 1, 0.5],
+          ['get', 'DEPTH'],
+          100,
+          c.mx_map_water,
+          9000,
+          'rgb(47,47,47)'
+        ],
+        'fill-outline-color': [
+          'interpolate',
+          ['cubic-bezier', 0, 0.5, 1, 0.5],
+          ['get', 'DEPTH'],
+          100,
+          c.mx_map_water,
+          9000,
+          'rgb(47,47,47)'
+        ]
       }
     },
     {
@@ -142,9 +164,9 @@ export function layer_resolver(c) {
       }
     },
     {
-      id: ['boundary_osm_subnational_3_4'],
+      id: ['boundary_osm_subnational'],
       paint: {
-        'line-color': c.mx_map_boundary_osm_subnational_3_4
+        'line-color': c.mx_map_boundary_osm_subnational
       }
     },
     {
@@ -152,29 +174,18 @@ export function layer_resolver(c) {
         'place-label-capital',
         'place-label-city',
         'country-label',
-        'road-label',
-        'road-label-small',
-        'road-label-medium',
-        'road-label-large'
+        'water-label'
       ],
       paint: {
-        'text-color': c.mx_map_text,
-        'text-halo-color': c.mx_map_text_outline
+        'text-color': c.mx_map_text_place,
+        'text-halo-color': c.mx_map_text_place_outline
       }
     },
     {
-      id: [
-        'place-label-capital',
-        'place-label-city',
-        'country-label',
-        'road-label',
-        'road-label-small',
-        'road-label-medium',
-        'road-label-large'
-      ],
+      id: ['road-label'],
       paint: {
-        'text-color': c.mx_map_text,
-        'text-halo-color': c.mx_map_text_outline
+        'text-color': c.mx_map_text_road,
+        'text-halo-color': c.mx_map_text_road_outline
       }
     }
   ];

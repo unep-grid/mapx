@@ -5556,7 +5556,7 @@
     "ps": ""
   },
   {
-    "id": "mx_map_boundary_osm_subnational_3_4",
+    "id": "mx_map_boundary_osm_subnational",
     "en": "Map: Subnational boundaries",
     "fr": "Carte : Frontières sous-nationales",
     "es": "Mapa: Fronteras subnacionales",
@@ -5568,10 +5568,10 @@
     "ps": ""
   },
   {
-    "id": "mx_map_text",
-    "en": "Map: text",
-    "fr": "Carte : texte",
-    "es": "Mapa: texto",
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "fr": "Carte : texte lieu",
+    "es": "Mapa: texto lugar",
     "ru": "",
     "zh": "",
     "de": "",
@@ -5580,10 +5580,34 @@
     "ps": ""
   },
   {
-    "id": "mx_map_text_outline",
-    "en": "Map: text outline",
-    "fr": "Carte : texte bordure",
-    "es": "Mapa: borde del texto",
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "fr": "Carte : texte lieu bordure",
+    "es": "Mapa: borde del texto lugar",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "fr": "Carte : texte routes",
+    "es": "Mapa: camino texto",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "fr": "Carte : texte routes bordure",
+    "es": "Mapa: borde del texto camino",
     "ru": "",
     "zh": "",
     "de": "",

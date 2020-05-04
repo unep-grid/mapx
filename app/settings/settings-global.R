@@ -166,7 +166,7 @@ config[["geoserver"]] = list(
 # http://{location}:{port}/{prefix}/{resource.xxx}
 config[["resources"]]  =  list(
   "data"  = file.path("src","data"),
-  "sprites" = file.path("src","sprites"),
+  "sprites" = file.path("src","sprites","dist"),
   "src" = file.path("src"),
   "dist" = file.path("www"),
   "userdata" = file.path("./userdata"), ## expected shared folder from vagrant

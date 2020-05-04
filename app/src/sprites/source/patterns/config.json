@@ -1,0 +1,24 @@
+{
+  "out": "./svg",
+  "colors": {
+    "b": "#000",
+    "w": "#FFF",
+    "o": "#ff8c00"
+  },
+  "baseSize": 4,
+  "linesAngles": [0, 1, 2, 3, 4, 5, 6, 7],
+  "linesStrokeWidth": [0.2, 0.5, 1, 2, 3],
+  "linesSize": {
+    "0": 1,
+    "1": 2.1,
+    "2": 1.2,
+    "3": 2.2,
+    "4": 1,
+    "5": 2.1,
+    "6": 1.2,
+    "7": 2.1
+  },
+  "circlesRadius": [1, 2, 3],
+  "pathsStrokeWidth": [1, 2, 3],
+  "pathsType": ["crosses", "caps", "woven", "waves", "squares"]
+}
