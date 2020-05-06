@@ -166,7 +166,7 @@ config[["geoserver"]] = list(
 # http://{location}:{port}/{prefix}/{resource.xxx}
 config[["resources"]]  =  list(
   "data"  = file.path("src","data"),
-  "sprites" = file.path("src","sprites","dist"),
+  "sprites" = file.path("src","glyphs","dist","sprites"),
   "src" = file.path("src"),
   "dist" = file.path("www"),
   "userdata" = file.path("./userdata"), ## expected shared folder from vagrant
@@ -228,9 +228,9 @@ config[["map"]] <- list(
   )
 
 config[['paths']] = list(
-  sprites = "sprites/sprite"
+  sprites = "sprites/sprite",
+  fontstack = "fontstack/{fontstack}/{range}.pbf"
   )
-
 
 #
 # Default ui and map colors

@@ -1,5 +1,0 @@
-{
-  "source" :  "./source/**/svg/*.svg",
-  "ratios": [1, 2, 4],
-  "out":"./dist"
-}

@@ -555,6 +555,7 @@ export function initMapx(o) {
    * Update  sprites path
    */
   mx.settings.style.sprite = h.getAppPathUrl('sprites');
+  mx.settings.style.glyphs = h.getAppPathUrl('fontstack');
 
   /**
    * TEst if mapbox gl is supported

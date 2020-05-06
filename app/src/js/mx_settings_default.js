@@ -61,7 +61,8 @@ let settings = {
     app: false
   },
   paths: {
-    sprites: 'sprites/sprite'
+    sprites: 'sprites/sprite',
+    fontstack: 'fontstack/{fontstack}/{range}.pbf'
   },
   style: styleDefault.default,
   layerBefore: 'mxlayers',

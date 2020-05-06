@@ -1,0 +1,7 @@
+{
+  "svgs" :  "./source/svg/**/svg/*.svg",
+  "ttfs": "./source/ttf/*.ttf",
+  "ratios": [1, 2, 4],
+  "out":"./dist",
+  "fontNameSvg":"mx"
+}

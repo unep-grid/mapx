@@ -4,7 +4,7 @@ import {ListenerStore} from './../listener_store/index.js';
 import {getDictItem} from './../mx_helper_language.js';
 import './style.css';
 import * as themes from './presets.js';
-import { layer_resolver, css_resolver } from './mapx_style_resolver.js';
+import {layer_resolver, css_resolver} from './mapx_style_resolver.js';
 
 const global = {
   elStyle: null,
@@ -123,7 +123,8 @@ class Theme {
       const valid =
         colors instanceof Object &&
         Object.keys(colors).reduce(
-          (a, cid) => a && !!color_utils.rgba2hex(colors[cid]),
+          (a, cid) =>
+            a && !!color_utils.rgba2hex(colors[cid].color || colors[cid]),
           true
         ) &&
         layer_resolver(colors) &&
@@ -195,8 +196,16 @@ class Theme {
           return console.warn(`Layer ${id} not found`);
         }
         const paint = grp.paint;
-        for (var p in paint) {
-          map.setPaintProperty(id, p, paint[p]);
+        if (paint) {
+          for (var p in paint) {
+            map.setPaintProperty(id, p, paint[p]);
+          }
+        }
+        const layout = grp.layout;
+        if (layout) {
+          for (var l in layout) {
+            map.setLayoutProperty(id, l, layout[l]);
+          }
         }
       });
     });
@@ -209,9 +218,11 @@ class Theme {
   _buildInputGroup(cid) {
     const t = this;
     const colors = t.opt.colors;
-    const inputType = ['color', 'range'];
+    const inputType = ['checkbox', 'color', 'range'];
     let elInputGrp, elLabel;
-    const color = color_utils.color2obj(colors[cid]);
+    const color = color_utils.color2obj(colors[cid].color);
+    const visible = colors[cid].visibility === 'visible';
+
     return el(
       'div',
       {
@@ -224,7 +235,7 @@ class Theme {
           class: ['mx-theme-color-label', 'hint--right'],
           dataset: {lang_key: cid},
           'aria-label': cid,
-          title : cid,
+          title: cid,
           for: `${cid}_inputs`
         },
         getDictItem(cid)
@@ -236,12 +247,13 @@ class Theme {
         },
         inputType.map((type) => {
           const isRange = type === 'range';
+          const isCheck = type === 'checkbox';
           const config = {
             id: `${cid}_inputs`,
             type: type,
             dataset: {
               action: 'update',
-              param: isRange ? 'alpha' : 'hex',
+              param: isRange ? 'alpha' : isCheck ? 'visibility' : 'hex',
               id: cid
             }
           };
@@ -252,8 +264,11 @@ class Theme {
           } else {
             config.style = {maxWidth: '60px'};
           }
+          if (isCheck) {
+            config.checked = visible;
+          }
           const elInput = el('input', config);
-          elInput.value = isRange ? color.alpha : color.color;
+          elInput.value = isRange ? color.alpha : isCheck ? true : color.color;
           t.inputs.push(elInput);
           return elInput;
         })
@@ -277,17 +292,26 @@ class Theme {
     const out = {};
     t.inputs.forEach((input) => {
       const cid = input.dataset.id;
-      const value = input.value;
+      const isCheck = input.type === 'checkbox';
+      const value = isCheck ? input.checked : input.value;
       const param = input.dataset.param;
       if (!out[cid]) {
         out[cid] = {};
       }
       out[cid][param] = value;
     });
+
     for (var cid in out) {
-      out[cid] = color_utils.hex2rgba(out[cid].hex, out[cid].alpha);
+      out[cid] = {
+        visibility: out[cid].visibility === true ? 'visible' : 'none',
+        color: color_utils.hex2rgba(out[cid].hex, out[cid].alpha)
+      };
     }
     return out;
+  }
+  get(){
+    const t = this;
+    return t.getColorsFromInputs();
   }
 }
 
@@ -310,6 +334,3 @@ function isBase64Json(txt) {
 function b64ToJson(txt) {
   return JSON.parse(atob(txt));
 }
-
-
-

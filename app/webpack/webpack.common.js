@@ -48,7 +48,8 @@ module.exports = {
       fontName: 'mx-icons-font'
     }),
     new CopyWebpackPlugin([
-      {from: './src/sprites/dist', to: 'sprites/'},
+      {from: './src/glyphs/dist/sprites/', to: 'sprites/'},
+      {from: './src/glyphs/dist/fontstack', to: 'fontstack/'},
       {from: './src/favicons', to: '.'}
     ])
   ],
