@@ -73,10 +73,10 @@ export function layer_resolver(c) {
     {
       id: ['bathymetry'],
       layout: {
-        visibility: c.mx_map_water.visibility
+        visibility: c.mx_map_bathymetry.visibility
       },
       paint: {
-        'fill-color': c.mx_map_water.color,
+        'fill-color': c.mx_map_bathymetry.color,
         'fill-opacity': 0.2
       }
     },

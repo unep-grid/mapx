@@ -5448,6 +5448,18 @@
     "ps": ""
   },
   {
+    "id": "mx_map_bathymetry",
+    "en": "Map: bathymetry",
+    "fr": "Carte : bathymétrie",
+    "es": "Mapa: batimetría",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "fr": "Carte : routes",

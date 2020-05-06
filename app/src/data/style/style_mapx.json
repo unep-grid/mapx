@@ -1404,10 +1404,6 @@
     {
       "id": "water-label",
       "type": "symbol",
-      "metadata": {
-        "mapbox:featureComponent": "natural-features",
-        "mapbox:group": "Natural features, natural-labels"
-      },
       "source": "mapbox_base",
       "source-layer": "natural_label",
       "filter": [
@@ -1432,7 +1428,8 @@
           10,
           ["step", ["get", "sizerank"], 18, 9, 12]
         ],
-        "text-font": ["Arial"],
+        "text-font": ["Baskerville Italic"],
+        "text-transform": "uppercase",
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": [
           "match",

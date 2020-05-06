@@ -2270,6 +2270,11 @@
     "fr": "Carte : cours d'eau"
   },
   {
+    "id": "mx_map_bathymetry",
+    "en": "Map: bathymetry",
+    "fr": "Carte : bathymétrie"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "fr": "Carte : routes"

@@ -1816,6 +1816,10 @@
     "en": "Map: water"
   },
   {
+    "id": "mx_map_bathymetry",
+    "en": "Map: bathymetry"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road"
   },

@@ -55,6 +55,7 @@ glob.sync(config.ttfs).forEach((f) => {
       if (err) {
         throw err;
       }
+      console.log(fontData);
       font.stack.forEach((stack) => {
         const outFontDir = path.join(dirOutFonts, fontData.id);
         mkdirSync(outFontDir);

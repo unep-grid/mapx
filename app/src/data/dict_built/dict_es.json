@@ -2270,6 +2270,11 @@
     "es": "Mapa: agua"
   },
   {
+    "id": "mx_map_bathymetry",
+    "en": "Map: bathymetry",
+    "es": "Mapa: batimetría"
+  },
+  {
     "id": "mx_map_road",
     "en": "Map: road",
     "es": "Mapa: rutas"
@@ -4342,7 +4347,7 @@
   {
     "id": "share_manager_title",
     "en": "Sharing manager",
-    "es": "Administrador de cambios"
+    "es": "Gestor de compartir"
   },
   {
     "id": "share_link_title",
@@ -4367,7 +4372,7 @@
   {
     "id": "share_views_check_label",
     "en": "Add views to share",
-    "es": "Adjunar vistas para compartir"
+    "es": "Adjuntar vistas para compartir"
   },
   {
     "id": "share_views_check_desc",
@@ -4417,7 +4422,7 @@
   {
     "id": "share_collections_check_desc",
     "en": "Add groups of views by using collections",
-    "es": "Adjunar grupos de vistas usando colecciones"
+    "es": "Adjuntar grupos de vistas usando colecciones"
   },
   {
     "id": "share_map_pos_check_label",
@@ -4452,7 +4457,7 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
-    "es": "Adjuntar en el proyecto seleccionado"
+    "es": "Adjuntar al proyecto seleccionado"
   },
   {
     "id": "en",
