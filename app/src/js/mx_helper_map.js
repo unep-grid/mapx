@@ -1719,6 +1719,11 @@ export async function makeTransparencySlider(o) {
 
   const module = await mx.helpers.moduleLoad('nouislider');
   const noUiSlider = module[0].default;
+  const oldSlider = view._interactive.transparencySlider;
+  if(oldSlider){
+    oldSlider.destroy();
+  }
+
 
   const slider = noUiSlider.create(el, {
     range: {min: 0, max: 100},
@@ -1762,6 +1767,12 @@ export async function makeNumericSlider(o) {
   if (!el) {
     return;
   }
+
+  const oldSlider = view._interactive.numericSlider;
+  if(oldSlider){
+    oldSlider.destroy();
+  }
+
 
   let min = mx.helpers.path(view, 'data.attribute.min');
   let max = mx.helpers.path(view, 'data.attribute.max');
@@ -1961,6 +1972,11 @@ export async function makeTimeSlider(o) {
   const el = document.querySelector('[data-range_time_for="' + view.id + '"]');
   if (!el) {
     return;
+  }
+
+  const oldSlider = view._interactive.timeSlider;
+  if(oldSlider){
+    oldSlider.destroy();
   }
 
   /*
@@ -2748,7 +2764,7 @@ export async function viewLayersAdd(o) {
    * Add views layers
    *
    */
-  handler(idType);
+  await handler(idType);
 
   view._added_at = Date.now();
 
