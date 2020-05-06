@@ -44,24 +44,8 @@ export function layer_resolver(c) {
     {
       id: ['bathymetry'],
       paint: {
-        'fill-color': [
-          'interpolate',
-          ['cubic-bezier', 0, 0.5, 1, 0.5],
-          ['get', 'DEPTH'],
-          100,
-          c.mx_map_water,
-          9000,
-          'rgb(47,47,47)'
-        ],
-        'fill-outline-color': [
-          'interpolate',
-          ['cubic-bezier', 0, 0.5, 1, 0.5],
-          ['get', 'DEPTH'],
-          100,
-          c.mx_map_water,
-          9000,
-          'rgb(47,47,47)'
-        ]
+        "fill-color": c.mx_map_water,
+        "fill-opacity":0.2
       }
     },
     {
@@ -178,7 +162,8 @@ export function layer_resolver(c) {
       ],
       paint: {
         'text-color': c.mx_map_text_place,
-        'text-halo-color': c.mx_map_text_place_outline
+        'text-halo-color': c.mx_map_text_place_outline,
+        'icon-color':c.mx_map_text_place
       }
     },
     {

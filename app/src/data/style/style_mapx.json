@@ -7,9 +7,9 @@
       "url": "mapbox://mapbox.mapbox-streets-v8"
     },
     "mapbox_dem": {"type": "raster-dem", "url": "mapbox://mapbox.terrain-rgb"},
-    "mapbox_bathymetry": {
+    "naturalearth_bathymetry": {
       "type": "vector",
-      "url": "mapbox://mapbox.9tm8dx88"
+      "url" : "mapbox://helsinki.3jzaatr0"
     },
     "mapbox_unepgrid_countries": {
       "url": "mapbox://helsinki.mx_countries_un_poly_2018",
@@ -75,20 +75,17 @@
     {
       "id": "bathymetry",
       "type": "fill",
-      "source": "mapbox_bathymetry",
-      "source-layer": "10m-bathymetry-81bsvj",
-      "layout": {},
+      "source": "naturalearth_bathymetry",
+      "source-layer": "bathymetry_planet",
+      "filter": [
+        "==",
+        "$type",
+        "Polygon"
+      ],
       "paint": {
-        "fill-outline-color": "hsla(0, 0%, 45%, 0.55)",
-        "fill-color": [
-          "interpolate",
-          ["cubic-bezier", 0, 0.5, 1, 0.5],
-          ["get", "DEPTH"],
-          200,
-          "hsl(0, 0%, 45%)",
-          9000,
-          "hsl(0, 0%, 0%)"
-        ]
+        "fill-color": "rgba(47,47,47,0.3)",
+        "fill-antialias": true,
+        "fill-outline-color": "rgba(47,47,47,0)"
       }
     },
     {
@@ -1491,6 +1488,7 @@
         "icon-size": ["interpolate", ["linear"], ["zoom"], 1, 0, 18, 1]
       },
       "paint": {
+        "icon-color":"#F00",
         "text-color": "#333",
         "text-halo-color": "#FFF",
         "text-halo-blur": 0,

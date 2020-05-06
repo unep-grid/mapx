@@ -15,7 +15,7 @@ const mapx = {
   mx_map_text_place_outline: 'rgba(255,255,255,0.8)',
   mx_map_text_road: 'rgba(220,220,220,0.5)',
   mx_map_text_road_outline: 'rgba(220,220,220,0.2)',
-  mx_map_water: 'rgba(102,102,102,1)',
+  mx_map_water: 'rgba(66,66,66,0.4)',
   mx_map_road: 'rgba(255,255,255,1)',
   mx_map_road_border: 'rgba(220,220,220,0.5)',
   mx_map_building: 'rgba(220,220,220,0.5)',
@@ -27,7 +27,6 @@ const mapx = {
   mx_map_boundary_un_9: 'rgba(38,38,38,0.3)',
   mx_map_boundary_osm_subnational: 'rgba(121,121,121,0.6)'
 };
-
 const smartgray = {
   mx_ui_text: 'rgba(235,235,235,1)',
   mx_ui_link: 'rgba(235,235,235,1)',
@@ -41,11 +40,11 @@ const smartgray = {
   mx_map_hillshade_highlight: 'rgba(66,66,66,1)',
   mx_map_hillshade_accent: 'rgba(255,255,255,1)',
   mx_map_mask: 'rgba(0,0,0,0.2)',
-  mx_map_text_place: 'rgba(121,121,121,1)',
+  mx_map_text_place: 'rgba(94,94,94,1)',
   mx_map_text_place_outline: 'rgba(33,33,33,0.5)',
   mx_map_text_road: 'rgba(192,192,192,1)',
   mx_map_text_road_outline: 'rgba(192,192,192,0.4)',
-  mx_map_water: 'rgba(102,102,102,1)',
+  mx_map_water: 'rgba(192,192,192,0.3)',
   mx_map_road: 'rgba(94,94,94,1)',
   mx_map_road_border: 'rgba(33,33,33,0.7)',
   mx_map_building: 'rgba(33,33,33,0.4)',
