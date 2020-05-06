@@ -10425,7 +10425,7 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": "Administrador de cambios"
+    "es": "Gestor de compartir"
   },
   {
     "id": "share_link_title",
@@ -10485,7 +10485,7 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": "Adjunar vistas para compartir"
+    "es": "Adjuntar vistas para compartir"
   },
   {
     "id": "share_views_check_desc",
@@ -10605,7 +10605,7 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": "Adjunar grupos de vistas usando colecciones"
+    "es": "Adjuntar grupos de vistas usando colecciones"
   },
   {
     "id": "share_map_pos_check_label",
@@ -10689,6 +10689,6 @@
     "bn": "",
     "fa": "",
     "ps": "",
-    "es": "Adjuntar en el proyecto seleccionado"
+    "es": "Adjuntar al proyecto seleccionado"
   }
 ]
