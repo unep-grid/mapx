@@ -55,7 +55,6 @@ glob.sync(config.ttfs).forEach((f) => {
       if (err) {
         throw err;
       }
-      console.log(fontData);
       font.stack.forEach((stack) => {
         const outFontDir = path.join(dirOutFonts, fontData.id);
         mkdirSync(outFontDir);
@@ -131,7 +130,7 @@ config.ratios.forEach((pxRatio) => {
   );
 
   spritezero.generateLayout(
-    {imgs: svgs, pixelRatio: pxRatio, format: true},
+    {imgs: svgs, pixelRatio: pxRatio*2, format: true},
     (err, dataLayout) => {
       if (err) {
         return;
@@ -144,7 +143,7 @@ config.ratios.forEach((pxRatio) => {
   );
 
   spritezero.generateLayout(
-    {imgs: svgs, pixelRatio: pxRatio, format: false},
+    {imgs: svgs, pixelRatio: pxRatio*2, format: false},
     (err, imageLayout) => {
       spritezero.generateImage(imageLayout, (err, image) => {
         if (err) {
