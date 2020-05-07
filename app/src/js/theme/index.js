@@ -178,8 +178,10 @@ class Theme {
   _updateMap() {
     const t = this;
     const map = t.opt.map;
-    if (!map.isStyleLoaded() && !t._map_wait_load) {
-      t._map_wait_load = true;
+    const isMapStyleLoaded = map.isStyleLoaded();
+    const skipWaitMapLoad = t._map_skip_wait_load;
+
+    if (!isMapStyleLoaded && !skipWaitMapLoad) {
       t.ls.addListenerOnce({
         target: map,
         type: 'load',
@@ -188,7 +190,10 @@ class Theme {
       });
       return;
     }
+    t._map_skip_wait_load = true;
+
     const layers = layer_resolver(t.opt.colors);
+    
     layers.forEach((grp) => {
       grp.id.forEach((id) => {
         const layer = map.getLayer(id);
