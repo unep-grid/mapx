@@ -1,7 +1,7 @@
 'use strict';
 
-const mapxUrl = 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
-// const mapxUrl = 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en';
+// const mapxUrl = 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
+const mapxUrl = 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en';
 
 class App extends React.Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class App extends React.Component {
       views: [],
       maxp: null,
     };
+    this.getMapx = () => this.state.mapx;
   }
 
   componentDidMount() {
@@ -32,17 +33,26 @@ class App extends React.Component {
         mapx.ask('get_project'),
         mapx.ask('get_views'),
       ]).then((values) => {
+        var views = values[1].reduce((out, view) => {
+          out[view.id] = view;
+          out[view.id]._active = false;
+          return out;
+        }, new Map());
         this.setState({
           projectId: values[0],
-          views: values[1],
+          views: views,
           mapx: mapx,
-        })
+        });
+        mapx.on('view_added',view => {
+          views[view.idView]._active = true;
+          this.setState({views: views});
+        });
+        mapx.on('view_closed',view => {
+          views[view.idView]._active = false;
+          this.setState({views: views});
+        });
       });
     });
-  }
-
-  getMapx = () => {
-    return this.state.mapx;
   }
 
   render() {
@@ -60,8 +70,9 @@ class App extends React.Component {
 class MxViewsCollections extends React.Component {
   render() {
     var no_collection_name = 'Views in no collection';
-    var collections = {}; collections[no_collection_name] = [];
-    this.props.views.forEach((view) => {
+    var collections = {}; collections[no_collection_name] = new Map();
+    for (var id in this.props.views) {
+      var view = this.props.views[id];
       var view_collections = [];
       if ('collections' in view.data && Array.isArray(view.data.collections)) {
         view_collections = view.data.collections;
@@ -69,15 +80,15 @@ class MxViewsCollections extends React.Component {
       if (view_collections.length) {
         view_collections.forEach((view_collection) => {
           if (collections[view_collection] === undefined) {
-            collections[view_collection] = [];
+            collections[view_collection] = new Map();
           }
-          collections[view_collection].push(view);
+          collections[view_collection][id] = view;
         });
       }
       else {
-        collections[no_collection_name].push(view);
+        collections[no_collection_name][id] = view;
       }
-    });
+    }
 
     return (
       <div className="views-collections" id="actions">
@@ -96,12 +107,12 @@ class MxViewsCollections extends React.Component {
 class MxViewsCollection extends React.Component {
   render() {
     var out = (<span>: No views</span>);
-    if (this.props.views.length) {
-      out = (
+    if (Object.keys(this.props.views).length) {
+      var out = (
         <ul>
-          {this.props.views.map((view, i) => {
+          {Object.entries(this.props.views).map(([id, view]) => {
             return (
-              <li key={i}><MxViews getMapx={this.props.getMapx} view={view} key={i} /></li>
+              <li key={id}><MxView getMapx={this.props.getMapx} view={view} key={id} /></li>
             );
           })}
         </ul>
@@ -118,26 +129,23 @@ class MxViewsCollection extends React.Component {
   }
 }
 
-class MxViews extends React.Component {
+class MxView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      active: false,
-    }
   }
+
   render() {
     var view = this.props.view;
     const mapx = this.props.getMapx();
     return (
         <a
           href="#"
-          className={this.state.active ? 'active': null}
+          className={view._active ? 'active': null}
           onClick={() => {
-            var op = !this.state.active ? 'open_view' : 'close_view';
+            var op = !view._active ? 'open_view' : 'close_view';
             mapx.ask(op, {
               idView: view.id
             });
-            this.setState({active: !this.state.active});
           }}
         >
           {view.data.title.en}
