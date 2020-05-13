@@ -2270,9 +2270,14 @@
     "es": "Mapa: agua"
   },
   {
-    "id": "mx_map_bathymetry",
-    "en": "Map: bathymetry",
-    "es": "Mapa: batimetría"
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "es": "Mapa: batimetría (baja)"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "es": "Mapa: batimetría (alta)"
   },
   {
     "id": "mx_map_road",

@@ -2270,9 +2270,14 @@
     "fr": "Carte : cours d'eau"
   },
   {
-    "id": "mx_map_bathymetry",
-    "en": "Map: bathymetry",
-    "fr": "Carte : bathymétrie"
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "fr": "Carte : bathymétrie (bas)"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "fr": "Carte : bathymétrie (haut)"
   },
   {
     "id": "mx_map_road",

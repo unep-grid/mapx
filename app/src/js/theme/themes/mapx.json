@@ -67,7 +67,11 @@
     "visibility": "visible",
     "color": "rgba(169,169,169,1)"
   },
-  "mx_map_bathymetry": {
+  "mx_map_bathymetry_high": {
+    "visibility": "visible",
+    "color": "rgba(169,169,169,0.4)"
+  },
+  "mx_map_bathymetry_low": {
     "visibility": "visible",
     "color": "rgba(66,66,66,0.4)"
   },

@@ -23,7 +23,6 @@ function v(col) {
   }
   const rgba = color_utils.hex2rgba(obj.color, obj.alpha);
   return rgba;
-
 }
 
 export function layer_resolver(c) {
@@ -73,11 +72,21 @@ export function layer_resolver(c) {
     {
       id: ['bathymetry'],
       layout: {
-        visibility: c.mx_map_bathymetry.visibility
+        visibility: allVisible([
+        c.mx_map_bathymetry_low.visibility,
+        c.mx_map_bathymetry_high.visibility
+        ])
       },
       paint: {
-        'fill-color': c.mx_map_bathymetry.color,
-        'fill-opacity': 0.2
+        'fill-color':[
+          "interpolate",
+          ["cubic-bezier", 0, 0.5, 1, 0.5],
+          ["get", "depth"],
+          200,
+          c.mx_map_bathymetry_high.color,
+          9000,
+          c.mx_map_bathymetry_low.color
+        ]
       }
     },
     {

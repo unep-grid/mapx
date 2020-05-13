@@ -2270,8 +2270,13 @@
     "ru": ""
   },
   {
-    "id": "mx_map_bathymetry",
-    "en": "Map: bathymetry",
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "ru": ""
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
     "ru": ""
   },
   {

@@ -5448,10 +5448,22 @@
     "ps": ""
   },
   {
-    "id": "mx_map_bathymetry",
-    "en": "Map: bathymetry",
-    "fr": "Carte : bathymétrie",
-    "es": "Mapa: batimetría",
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "fr": "Carte : bathymétrie (bas)",
+    "es": "Mapa: batimetría (baja)",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "fr": "Carte : bathymétrie (haut)",
+    "es": "Mapa: batimetría (alta)",
     "ru": "",
     "zh": "",
     "de": "",

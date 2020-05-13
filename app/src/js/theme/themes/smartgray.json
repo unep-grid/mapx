@@ -67,9 +67,13 @@
     "visibility": "visible",
     "color": "rgba(121,121,121,1)"
   },
-  "mx_map_bathymetry": {
+  "mx_map_bathymetry_high": {
     "visibility": "visible",
-    "color": "rgba(33,33,33,0.5)"
+    "color": "rgba(121,121,121,0.5)"
+  },
+  "mx_map_bathymetry_low": {
+    "visibility": "visible",
+    "color": "rgba(66,66,66,0.5)"
   },
   "mx_map_road": {
     "visibility": "visible",
