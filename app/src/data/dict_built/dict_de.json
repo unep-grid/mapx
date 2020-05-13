@@ -2350,6 +2350,16 @@
     "de": ""
   },
   {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "de": ""
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "de": ""
+  },
+  {
     "id": "list_publishers",
     "en": "List of publishers",
     "de": ""

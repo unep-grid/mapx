@@ -1460,7 +1460,9 @@
         ]
       },
       "paint": {
-        "text-color": "rgba(53,53,53,0.9)"
+        "text-color": "rgba(53,53,53,0.9)",
+        "text-halo-color": "rgba(252,252,252,1)",
+        "text-halo-width": ["interpolate", ["linear"], ["zoom"], 14, 1, 22, 2]
       }
     },
     {

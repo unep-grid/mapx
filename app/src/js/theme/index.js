@@ -269,11 +269,12 @@ class Theme {
           } else {
             config.style = {maxWidth: '60px'};
           }
-          if (isCheck) {
-            config.checked = visible;
-          }
           const elInput = el('input', config);
+
           elInput.value = isRange ? color.alpha : isCheck ? true : color.color;
+          if(isCheck){
+            elInput.checked = visible;
+          }
           t.inputs.push(elInput);
           return elInput;
         })

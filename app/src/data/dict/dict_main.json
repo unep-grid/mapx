@@ -5630,8 +5630,32 @@
   {
     "id": "mx_map_text_road_outline",
     "en": "Map: road text outline",
-    "fr": "Carte : texte routes bordure",
+    "fr": "Carte : bordure texte routes",
     "es": "Mapa: borde del texto camino",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "fr": "Carte : texte plan d'eau",
+    "es": "Mapa: texto cuerpo de agua",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "fr": "Carte : bordure texte plan d'eau",
+    "es": "Mapa: borde del texto cuerop de agua",
     "ru": "",
     "zh": "",
     "de": "",

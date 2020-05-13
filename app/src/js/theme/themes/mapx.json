@@ -57,10 +57,18 @@
   },
   "mx_map_text_road": {
     "visibility": "visible",
-    "color": "rgba(220,220,220,0.5)"
+    "color": "rgba(121,121,121,0.5)"
   },
   "mx_map_text_road_outline": {
     "visibility": "visible",
+    "color": "rgba(220,220,220,0.2)"
+  },
+  "mx_map_text_water": {
+    "visibility": "none",
+    "color": "rgba(220,220,220,0.5)"
+  },
+  "mx_map_text_water_outline": {
+    "visibility": "none",
     "color": "rgba(220,220,220,0.2)"
   },
   "mx_map_water": {

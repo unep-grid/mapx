@@ -2347,7 +2347,17 @@
   {
     "id": "mx_map_text_road_outline",
     "en": "Map: road text outline",
-    "fr": "Carte : texte routes bordure"
+    "fr": "Carte : bordure texte routes"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "fr": "Carte : texte plan d'eau"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "fr": "Carte : bordure texte plan d'eau"
   },
   {
     "id": "list_publishers",

@@ -237,8 +237,7 @@ export function layer_resolver(c) {
       id: [
         'place-label-capital',
         'place-label-city',
-        'country-label',
-        'water-label'
+        'country-label'
       ],
       layout: {
         visibility: allVisible([
@@ -250,6 +249,22 @@ export function layer_resolver(c) {
         'text-color': c.mx_map_text_place.color,
         'text-halo-color': c.mx_map_text_place_outline.color,
         'icon-color': c.mx_map_text_place.color
+      }
+    },
+    {
+      id: [
+        'water-label'
+      ],
+      layout: {
+        visibility: allVisible([
+          c.mx_map_text_water.visibility,
+          c.mx_map_text_water_outline.visibility,
+        ])
+      },
+      paint: {
+        'text-color': c.mx_map_text_water.color,
+        'text-halo-color': c.mx_map_text_water_outline.color,
+        'icon-color': c.mx_map_text_water.color
       }
     },
     {

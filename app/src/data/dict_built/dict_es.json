@@ -2350,6 +2350,16 @@
     "es": "Mapa: borde del texto camino"
   },
   {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "es": "Mapa: texto cuerpo de agua"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "es": "Mapa: borde del texto cuerop de agua"
+  },
+  {
     "id": "list_publishers",
     "en": "List of publishers",
     "es": "Lista de editores"

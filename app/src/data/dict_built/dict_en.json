@@ -1880,6 +1880,14 @@
     "en": "Map: road text outline"
   },
   {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline"
+  },
+  {
     "id": "list_publishers",
     "en": "List of publishers"
   },
