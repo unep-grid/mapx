@@ -1542,7 +1542,8 @@ export function makeSimpleLayer(o) {
       paint: {
         'icon-opacity': o.opacity || 1,
         'icon-halo-width': 2,
-        'icon-halo-color': colB
+        'icon-halo-color': colB,
+        'icon-color': colA
       }
     },
     point: {
@@ -1721,10 +1722,9 @@ export async function makeTransparencySlider(o) {
   const module = await mx.helpers.moduleLoad('nouislider');
   const noUiSlider = module[0].default;
   const oldSlider = view._interactive.transparencySlider;
-  if(oldSlider){
+  if (oldSlider) {
     oldSlider.destroy();
   }
-
 
   const slider = noUiSlider.create(el, {
     range: {min: 0, max: 100},
@@ -1770,10 +1770,9 @@ export async function makeNumericSlider(o) {
   }
 
   const oldSlider = view._interactive.numericSlider;
-  if(oldSlider){
+  if (oldSlider) {
     oldSlider.destroy();
   }
-
 
   let min = mx.helpers.path(view, 'data.attribute.min');
   let max = mx.helpers.path(view, 'data.attribute.max');
@@ -1976,7 +1975,7 @@ export async function makeTimeSlider(o) {
   }
 
   const oldSlider = view._interactive.timeSlider;
-  if(oldSlider){
+  if (oldSlider) {
     oldSlider.destroy();
   }
 
@@ -2396,8 +2395,13 @@ export function viewSetOpacity(o) {
   });
 
   layers.forEach((layer) => {
-    const property = layer.type + '-opacity';
-    map.setPaintProperty(layer.id, property, opacity);
+    const type = layer.type === 'symbol' ? 'icon' : layer.type;
+    const property = type + '-opacity';
+    try {
+      map.setPaintProperty(layer.id, property, opacity);
+    } catch (e) {
+      console.error(e);
+    }
   });
 }
 
@@ -3422,11 +3426,16 @@ export function viewLayersAddVt(o) {
      */
     if (hasRuleAll && !hasStyleCustom) {
       const rule = ruleAll.splice(0, 1, 1)[0];
+      const isSymbol =
+        rule.sprite && rule.sprite !== 'none' && geomType === 'point';
+      const isPattern =
+        rule.sprite && rule.sprite !== 'none' && geomType === 'polygon';
+      const skipLayer = isSymbol;
 
       /**
-       * add a second layer for symbol if point + sprite
+       * add a layer for symbol if point + sprite
        */
-      if (rule.sprite && rule.sprite !== 'none' && geomType === 'point') {
+      if (isSymbol) {
         const layerSprite = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
@@ -3446,7 +3455,7 @@ export function viewLayersAddVt(o) {
         layers.push(layerSprite);
       }
 
-      if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
+      if (isPattern) {
         const layerPattern = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
@@ -3463,29 +3472,31 @@ export function viewLayersAddVt(o) {
           sprite: rule.sprite
         });
 
-        layers.push(layerPattern);
+        layersAfter.push(layerPattern);
       }
 
       /*
        * add the layer for all
        */
-      const layerAll = makeSimpleLayer({
-        id: getIdLayer(),
-        idSourceLayer: idView,
-        idSource: idSource,
-        geomType: geomType,
-        hexColor: rule.color,
-        opacity: rule.opacity,
-        size: rule.size,
-        sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
-        sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
-        sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
-        zoomMax: zoomConfig.zoomMax,
-        zoomMin: zoomConfig.zoomMin,
-        sprite: rule.sprite
-      });
+      if (!skipLayer) {
+        const layerAll = makeSimpleLayer({
+          id: getIdLayer(),
+          idSourceLayer: idView,
+          idSource: idSource,
+          geomType: geomType,
+          hexColor: rule.color,
+          opacity: rule.opacity,
+          size: rule.size,
+          sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
+          sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+          sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+          zoomMax: zoomConfig.zoomMax,
+          zoomMin: zoomConfig.zoomMin,
+          sprite: rule.sprite
+        });
 
-      layers.push(layerAll);
+        layers.push(layerAll);
+      }
     }
 
     /*
@@ -3539,6 +3550,11 @@ export function viewLayersAddVt(o) {
         const attr = def.attribute.name;
         const idLayerRule = getIdLayer();
         const idLayerRuleSymbol = idLayerRule + '_symbol';
+        const isSymbol =
+          rule.sprite && rule.sprite !== 'none' && geomType === 'point';
+        const isPattern =
+          rule.sprite && rule.sprite !== 'none' && geomType === 'polygon';
+        const skipLayer = isSymbol;
 
         if (!isNullRule) {
           if (isNumeric) {
@@ -3581,41 +3597,14 @@ export function viewLayersAddVt(o) {
         /**
          * Add layer for curent rule
          */
-        const layerMain = makeSimpleLayer({
-          id: idLayerRule,
-          idSource: idSource,
-          idSourceLayer: idView,
-          geomType: geomType,
-          hexColor: rule.color,
-          opacity: rule.opacity,
-          size: rule.size,
-          sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
-          sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
-          sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
-          zoomMax: zoomConfig.zoomMax,
-          zoomMin: zoomConfig.zoomMin,
-          sprite: rule.sprite,
-          filter: filter
-        });
-
-        layers.push(layerMain);
-
-        /**
-         * Add layer for symbols
-         */
-        if (
-          rule.sprite &&
-          rule.sprite !== 'none' &&
-          (geomType === 'point' || geomType === 'polygon')
-        ) {
-          const layerSprite = makeSimpleLayer({
-            id: idLayerRuleSymbol,
-            idAfter: idLayerRule,
+        if (!skipLayer) {
+          const layerMain = makeSimpleLayer({
+            id: idLayerRule,
             idSource: idSource,
             idSourceLayer: idView,
-            geomType: geomType === 'polygon' ? 'pattern' : 'symbol',
+            geomType: geomType,
             hexColor: rule.color,
-            opacity: 1,
+            opacity: rule.opacity,
             size: rule.size,
             sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
             sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
@@ -3626,10 +3615,35 @@ export function viewLayersAddVt(o) {
             filter: filter
           });
 
-          layersAfter.push(layerSprite);
+          layers.push(layerMain);
         }
 
-        if (rule.sprite && rule.sprite !== 'none' && geomType === 'polygon') {
+        /**
+         * Add layer for symbols
+         */
+        if (isSymbol) {
+          const layerSprite = makeSimpleLayer({
+            id: idLayerRuleSymbol,
+            idAfter: idLayerRule,
+            idSource: idSource,
+            idSourceLayer: idView,
+            geomType: 'symbol',
+            hexColor: rule.color,
+            opacity: rule.opacity,
+            size: rule.size,
+            sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
+            sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
+            sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,
+            zoomMax: zoomConfig.zoomMax,
+            zoomMin: zoomConfig.zoomMin,
+            sprite: rule.sprite,
+            filter: filter
+          });
+
+          layers.push(layerSprite);
+        }
+
+        if (isPattern) {
           const layerPattern = makeSimpleLayer({
             id: idLayerRuleSymbol,
             idSource: idSource,
@@ -3637,7 +3651,7 @@ export function viewLayersAddVt(o) {
             idSourceLayer: idView,
             geomType: 'pattern',
             hexColor: rule.color,
-            opacity: 1,
+            opacity: rule.opacity,
             sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
             sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
             sizeFactorZoomMin: zoomConfig.sizeFactorZoomMin,

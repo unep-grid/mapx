@@ -49,6 +49,7 @@ module.exports = {
     }),
     new CopyWebpackPlugin([
       {from: './src/glyphs/dist/sprites/', to: 'sprites/'},
+      {from: './src/glyphs/dist/svg/', to: 'sprites/svg/'},
       {from: './src/glyphs/dist/fontstack', to: 'fontstack/'},
       {from: './src/favicons', to: '.'}
     ])

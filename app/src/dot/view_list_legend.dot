@@ -14,10 +14,34 @@
     {{?item}}
     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
+    {{ var dpr = window.devicePixelRatio; }}
+    {{ var hasSprite  = !!item.sprite; }}
     <div class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}">
       <input class="mx-legend-vt-rule-input" type="checkbox" data-view_action_key="btn_legend_filter" data-view_action_target="{{=it.id}}" data-view_action_index="{{=index}}" name="{{=it.id}}_{{=item.value}}" id="{{=it.id}}_{{=item.value}}"/>
       <label for="{{=it.id}}_{{=item.value}}" class="mx-legend-vt-rule-content">
-        <div class="mx-legend-vt-rule-color" style="opacity:{{=item.opacity}};{{?isLine }}height:{{=item.size*2}}px;{{?}}{{?isPoint }}width:{{=Math.log(0+item.size*10)*2}}px;height:{{=Math.log(0+item.size*10)*2}}px;border-radius:100%;{{?}}background-color:{{=item.color}};{{? item.sprite }}background-image:{{=item.sprite}};background-size:contain;{{?}}"></div>
+        <div class="mx-legend-vt-rule-color" style="
+        opacity:{{=item.opacity}};
+        {{?isLine }}
+           height:{{=item.size * dpr}}px;
+        {{?}}
+        {{?isPoint }}
+        width:{{=item.size * dpr}}px;
+        height:{{=item.size * dpr}}px;
+          {{?!hasSprite}}
+            border-radius:100%;
+          {{?}}
+          {{?hasSprite }}
+            -webkit-mask-image: {{=item.sprite}};
+            mask-image: {{=item.sprite}};
+            -webkit-mask-size: cover;
+            mask-size: cover;
+          {{?}}
+        {{?}}
+        background-color:{{=item.color}};
+        {{?isPolygon && hasSprite }}
+         background-image:{{=item.sprite}};
+         background-size:contain;
+        {{?}}"></div>
         <div class="mx-legend-vt-rule-label" title="{{=label}}">{{=label}}</div>
       </label>
     </div>
