@@ -160,7 +160,7 @@ config[["geoserver"]] = list(
 
 #
 # web resources : will be exposed to the client using shiny::addRessourcePath. 
-#
+# TODO: maybe duplicate with webpack copy plugin ! Check how things work in static mode
 # List name will be prefix 
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
@@ -172,6 +172,19 @@ config[["resources"]]  =  list(
   "userdata" = file.path("./userdata"), ## expected shared folder from vagrant
   "download" = file.path("/tmp/mapx/download")
   )
+#
+# Client side path
+#
+config[['paths']] = list(
+  sprites = "sprites/sprite",
+  fontstack = "fontstack/{fontstack}/{range}.pbf"
+  )
+
+config[['sprites_prefix']] <- list(
+  point = '^maki-',
+  polygon = '^t_|^geol_',
+  line = ''
+)
 
 #
 # create temp dirs if not exists
@@ -225,11 +238,6 @@ config[["map"]] <- list(
   minZoom = 0,
   token = "",
   id = "map_main"
-  )
-
-config[['paths']] = list(
-  sprites = "sprites/sprite",
-  fontstack = "fontstack/{fontstack}/{range}.pbf"
   )
 
 #
