@@ -405,70 +405,74 @@ span.mx-badge-role {
   ~ .mx-view-tgl-content
   .mx-view-tgl-btn
   .mx-view-tgl-btn-out {
-  fill: hsla(97, 100%, 64%, 1);
-}
-.mx-view-item-gj
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 64%, 1);
-}
-.mx-view-item-sm
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(216, 100%, 64%, 1);
-}
-.mx-view-item-rt
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(307, 100%, 64%, 1);
-}
-.mx-view-item-cu
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 64%, 1);
+  fill: hsla(118, 100%, 64%, 1);
 }
 .mx-view-item-vt
   .mx-view-tgl-input:not(checked)
   ~ .mx-view-tgl-content
   .mx-view-tgl-btn
   .mx-view-tgl-btn-out {
-  fill: hsla(97, 100%, 28%, 1);
+  fill: hsla(118, 100%, 45%, 1);
 }
-.mx-view-item-sm
-  .mx-view-tgl-input:not(checked)
+
+.mx-view-item-gj
+  .mx-view-tgl-input:checked
   ~ .mx-view-tgl-content
   .mx-view-tgl-btn
   .mx-view-tgl-btn-out {
-  fill: hsla(216, 100%, 28%, 1);
-}
-.mx-view-item-rt
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(307, 100%, 28%, 1);
-}
-.mx-view-item-cu
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 28%, 1);
+  fill: hsla(30, 100%, 64%, 1);
 }
 .mx-view-item-gj
   .mx-view-tgl-input:not(checked)
   ~ .mx-view-tgl-content
   .mx-view-tgl-btn
   .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 28%, 1);
+  fill: hsla(30, 100%, 50%, 1);
+}
+
+.mx-view-item-sm
+  .mx-view-tgl-input:checked
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(216, 42%, 50%, 1);
+}
+.mx-view-item-sm
+  .mx-view-tgl-input:not(checked)
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(216, 100%, 50%, 1);
+}
+
+.mx-view-item-rt
+  .mx-view-tgl-input:checked
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(307, 84%, 41%, 1);
+}
+.mx-view-item-rt
+  .mx-view-tgl-input:not(checked)
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(307, 100%, 50%, 1);
+}
+
+.mx-view-item-cc
+  .mx-view-tgl-input:checked
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(348, 100%, 61%, 1);
+}
+.mx-view-item-cc
+  .mx-view-tgl-input:not(checked)
+  ~ .mx-view-tgl-content
+  .mx-view-tgl-btn
+  .mx-view-tgl-btn-out {
+  fill: hsla(348, 100%, 50%, 1);
 }
 
 .mx-view-item {

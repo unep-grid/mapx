@@ -2,51 +2,85 @@
 {{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}
 {{?rules}}
 {{ var titleLegend = h.getLabelFromObjectPath({obj: it,path: 'data.style.titleLegend'}); }}
-{{?h.greaterThan(rules.length,0)}}
+{{ var nRules = rules.length; }}
+{{?h.greaterThan(nRules,0)}}
 {{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}
 {{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}
 {{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
 {{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}
 <div class="mx-legend-vt-container">
   <label class="mx-legend-vt-title text-muted">{{=titleLegend}}</label>
-  <div class="mx-legend-vt-rules mx-legend-box">
-    {{~rules :item:index}}
-    {{?item}}
-    {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
-    {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
-    {{ var dpr = window.devicePixelRatio; }}
-    {{ var hasSprite  = !!item.sprite; }}
-    <div class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}">
-      <input class="mx-legend-vt-rule-input" type="checkbox" data-view_action_key="btn_legend_filter" data-view_action_target="{{=it.id}}" data-view_action_index="{{=index}}" name="{{=it.id}}_{{=item.value}}" id="{{=it.id}}_{{=item.value}}"/>
-      <label for="{{=it.id}}_{{=item.value}}" class="mx-legend-vt-rule-content">
-        <div class="mx-legend-vt-rule-color" style="
-        opacity:{{=item.opacity}};
-        {{?isLine }}
-           height:{{=item.size * dpr}}px;
-        {{?}}
-        {{?isPoint }}
-        width:{{=item.size * dpr}}px;
-        height:{{=item.size * dpr}}px;
-          {{?!hasSprite}}
-            border-radius:100%;
-          {{?}}
-          {{?hasSprite }}
-            -webkit-mask-image: {{=item.sprite}};
-            mask-image: {{=item.sprite}};
-            -webkit-mask-size: cover;
-            mask-size: cover;
-          {{?}}
-        {{?}}
-        background-color:{{=item.color}};
-        {{?isPolygon && hasSprite }}
-         background-image:{{=item.sprite}};
-         background-size:contain;
-        {{?}}"></div>
-        <div class="mx-legend-vt-rule-label" title="{{=label}}">{{=label}}</div>
-      </label>
-    </div>
-    {{?}}
-    {{~}}
+  <div class="mx-legend-box">
+  <table class="mx-legend-vt-rules">
+  <tbody>
+     {{~rules :item:index}}
+     {{?item}}
+     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
+     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
+     {{ var dpr = window.devicePixelRatio; }}
+     {{ var hasSprite  = !!item.sprite; }}
+     <tr 
+       class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}"
+       style="z-index: {{=nRules-index}}"
+       >
+       <td class="mx-legend-vt-td">
+         <div class="mx-legend-vt-rule-color-wrapper">
+           <div
+             class="mx-legend-vt-rule-color" style="
+             opacity:{{=item.opacity}};
+             {{?isLine }}
+                height:{{=item.size * dpr}}px;
+             {{?}}
+             {{?isPoint }}
+             width:{{=item.size * dpr}}px;
+             height:{{=item.size * dpr}}px;
+               {{?!hasSprite}}
+                 border-radius:100%;
+               {{?}}
+               {{?hasSprite }}
+                 -webkit-mask-image: {{=item.sprite}};
+                 mask-image: {{=item.sprite}};
+                 -webkit-mask-size: contain;
+                 mask-size: contain;
+                 -webkit-mask-repeat: no-repeat;
+                 mask-repeat: no-repeat;
+               {{?}}
+             {{?}}
+             background-color:{{=item.color}};
+             {{?isPolygon && hasSprite }}
+                background-image:{{=item.sprite}};
+                background-size:inherit;
+             {{?}}">
+             </div>
+           </div>
+         </td>
+
+         <td>
+           <input 
+           class = "mx-legend-vt-rule-input" 
+           type = "checkbox" 
+           data-view_action_key = "btn_legend_filter" 
+           data-view_action_target = "{{=it.id}}" 
+           data-view_action_index = "{{=index}}" 
+           name = "{{=it.id}}_{{=item.value}}" 
+           id = "{{=it.id}}_{{=item.value}}"/>
+   
+           <label 
+           for = "{{=it.id}}_{{=item.value}}" 
+           class = "mx-legend-vt-rule-label"
+           >
+             <div 
+               class="mx-legend-vt-rule-label-text" 
+               title="{{=label}}">
+               {{=label}}
+               </div>
+           </label>
+         </td>
+     </tr>
+     {{?}}
+     {{~}}
+  </tbody>
+  </table>
   </div>
 </div>
 {{?}}

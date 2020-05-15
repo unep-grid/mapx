@@ -1374,6 +1374,16 @@ export function scrollFromTo(o) {
     }, o.timeout || 0);
   });
 }
+/**
+* x,y to degree
+*/
+export function xyToDegree(x,y) {
+    let result = Math.atan2(y, x);
+    if (result < 0) {
+        result += (2 * Math.PI);
+    }
+    return result * ( 180 / Math.PI);
+}
 
 /**
  * Create easing function

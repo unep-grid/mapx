@@ -8,6 +8,7 @@ mxSchemaViewStyle <- function(
   view <- viewData
   jsonPaint <- .get(conf,c("templates","text","custom_paint"))
   jsonPaintExample <- .get(conf,c("templates","text","custom_paint_example"))
+  geomType <- .get(viewData,c("data","geometry","type"))
 
   if(noDataCheck(view)) return()
 
@@ -83,6 +84,13 @@ mxSchemaViewStyle <- function(
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
+ 
+  #
+  # Points : maki-
+  # Polygon : t_ & geol_
+  #
+  spritesPrefix <-  .get(config, c('sprites_prefix'))
+  sprites <- sprites[grepl(spritesPrefix[[geomType]],sprites)]
 
   #
   # Legend title

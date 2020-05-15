@@ -7,17 +7,20 @@
   padding: 5px;
   border-top: 1px solid #ccc;
   border-bottom: 1px solid #ccc;
+  width: 100%;
 }
 .mx-view-tgl-more-container .mx-legend-box {
-  max-height: 150px;
+  max-height: 100px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .mx-view-legend-container {
-    padding: 10px;
+  padding: 10px;
 }
 
-
+.mx-legend-vt-rule > .mx-legend-vt-td {
+  width: 1px;
+}
 
 /**
 * Legend for raster
@@ -36,6 +39,7 @@
 * Legend for vector
 */
 .mx-legend-vt-container {
+  overflow: hidden;
 }
 
 .mx-legend-vt-title,
@@ -62,42 +66,56 @@
 
 .mx-legend-vt-rules {
   padding: 10px;
+  width:100%;
 }
 
-.mx-legend-vt-rule > .mx-legend-vt-rule-input {
+.mx-legend-vt-rule .mx-legend-vt-rule-input {
   display: none;
 }
 
-.mx-legend-vt-rule
-  > .mx-legend-vt-rule-input:checked
-  ~ .mx-legend-vt-rule-content:before {
-  content: '=';
-  margin: 0 3px 0 3px;
-  font-size: 0.9em;
-  font-weight: normal;
+.mx-legend-vt-rule-color-wrapper {
+  max-height: 25px;
+  overflow: visible;
+  display: flex;
+  align-items: center;
 }
 
 .mx-legend-vt-rule-color {
   height: 1.5em;
   width: 1.5em;
   background-color: #333;
-  flex-grow: 0;
-  flex-shrink: 0;
+  cursor: 'e-resize';
 }
 
 .mx-legend-vt-rule-content {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   padding: 0px;
   margin: 0px;
 }
 
+.mx-legend-vt-rule:hover {
+  background: var(--mx_ui_shadow);
+  z-index:1000;
+}
+.mx-legend-vt-rule:hover .mx-legend-vt-rule-color-wrapper {
+  max-height:100%;
+}
+
+.mx-legend-vt-rule
+  .mx-legend-vt-rule-input:checked
+  ~ .mx-legend-vt-rule-label
+  .mx-legend-vt-rule-label-text {
+  text-decoration: underline;
+  font-weight: bold;
+}
+
 .mx-legend-vt-rule-label {
+  cursor: pointer;
+  width: 100%;
+}
+.mx-legend-vt-rule-label-text {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  cursor: pointer;
   margin-left: 10px;
   font-size: 0.9em;
   font-weight: normal;
@@ -108,5 +126,5 @@
 */
 .button-panel-content > .mx-view-legend-group {
   padding: 20px;
-  padding-top:0px;
+  padding-top: 0px;
 }

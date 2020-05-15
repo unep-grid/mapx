@@ -673,7 +673,25 @@ export function initMapListener(map) {
   /**
    * Mouse move handling
    */
-  map.on('mousemove', function(e) {
+
+   map.on('mousemove', (e) => {
+
+     if(false){
+       /**
+       * Change illuminaion direction accoding to mouse position
+       * Quite intensive on GPU.
+       */
+       const elCanvas = map.getCanvas();
+       const dpx = window.devicePixelRatio || 1;
+       const wMap = elCanvas.width;
+       const hMap = elCanvas.height;
+       const x = e.point.x - wMap / (2 * dpx);
+       const y = hMap / (2 * dpx) - e.point.y;
+       const deg = h.xyToDegree(x,y);
+
+       map.setPaintProperty('hillshading','hillshade-illumination-direction',deg) ;
+     }
+
     const layers = h.getLayerNamesByPrefix({
       id: map.id,
       prefix: 'MX' // custom code could be MXCC ...
