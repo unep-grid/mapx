@@ -42,9 +42,10 @@ class Theme {
     }
     if (!t.opt.colors) {
       t.opt.colors = t.getColorsByThemeId();
-    } else {
-      t.opt.colors = t.sanitizeColors(t.opt.colors);
     }
+
+    t.opt.colors = t.sanitizeColors(t.opt.colors);
+
     if (hasContainer) {
       t.ls.addListener({
         bind: t,
@@ -76,7 +77,8 @@ class Theme {
 
   getColorsByThemeId(id) {
     const t = this;
-    return t.opt.themes[id || t.opt.idTheme || t.opt.idThemeDefault];
+    const theme = t.opt.themes[id || t.opt.idTheme || t.opt.idThemeDefault];
+    return theme.colors;
   }
   setColorsByThemeId(id) {
     const t = this;
@@ -122,11 +124,9 @@ class Theme {
     try {
       const valid =
         colors instanceof Object &&
-        Object.keys(colors).reduce(
-          (a, cid) =>
-            a && !!color_utils.rgba2hex(colors[cid].color || colors[cid]),
-          true
-        ) &&
+        Object.keys(colors).reduce((a, cid) => {
+          return a && !!color_utils.rgba2hex(colors[cid].color || colors[cid]);
+        }, true) &&
         layer_resolver(colors) &&
         css_resolver(colors) &&
         true;
@@ -193,7 +193,7 @@ class Theme {
     t._map_skip_wait_load = true;
 
     const layers = layer_resolver(t.opt.colors);
-    
+
     layers.forEach((grp) => {
       grp.id.forEach((id) => {
         const layer = map.getLayer(id);
@@ -272,7 +272,7 @@ class Theme {
           const elInput = el('input', config);
 
           elInput.value = isRange ? color.alpha : isCheck ? true : color.color;
-          if(isCheck){
+          if (isCheck) {
             elInput.checked = visible;
           }
           t.inputs.push(elInput);
@@ -315,7 +315,7 @@ class Theme {
     }
     return out;
   }
-  get(){
+  get() {
     const t = this;
     return t.getColorsFromInputs();
   }
