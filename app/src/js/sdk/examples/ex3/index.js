@@ -55,7 +55,7 @@ mapx.on('ready', () => {
                 var op = $this.hasClass('active') ? 'open_view' : 'close_view';
                 mapx.ask(op, {
                   idView: view.id
-                })
+                });
               });
             $ul.find(`li[data-collection="${view_collection}"] ul`).append($('<li>').append($a));
           });

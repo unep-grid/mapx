@@ -108,7 +108,7 @@ class MxViewsCollection extends React.Component {
   render() {
     var out = (<span>: No views</span>);
     if (Object.keys(this.props.views).length) {
-      var out = (
+      out = (
         <ul>
           {Object.entries(this.props.views).map(([id, view]) => {
             return (

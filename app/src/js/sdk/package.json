@@ -15,6 +15,7 @@
     "dev": "microbundle watch -o dist --no-compress",
     "dev-live": "live-server dev --mount=/dist:dist",
     "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
+    "examples-lint": "eslint examples/",
     "prod": "microbundle -o dist && npm run jsdoc && npm publish",
     "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"
   },
@@ -33,6 +34,8 @@
   },
   "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/sdk/#readme",
   "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-plugin-react": "^7.20.0",
     "jsdoc-to-markdown": "^5.0.3",
     "live-server": "^1.2.1",
     "microbundle": "^0.12.0"
