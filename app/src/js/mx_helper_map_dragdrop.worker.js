@@ -5,7 +5,7 @@ import {featureEach, propEach} from '@turf/meta';
 import bbox from '@turf/bbox';
 import {getArrayDistinct} from './array_stat';
 import * as color from './color_utils/';
-
+const debug = false;
 
 // geojson type to mapbox gl type
 var typeSwitcher = {
@@ -82,7 +82,7 @@ onmessage = function(e) {
     });
 
     // validation : warnings
-    if (warnings.length > 0) {
+    if (debug && warnings.length > 0) {
       warningMsg =
         warnings.length +
         ' warning message(s) found. Check the console for more info';
@@ -91,7 +91,6 @@ onmessage = function(e) {
         progress: 75,
         message: warnings.length + ' warnings found. Please check the console.'
       });
-
       warnings.forEach(function(x) {
         console.log({file: fileName, warnings: JSON.stringify(x)});
       });

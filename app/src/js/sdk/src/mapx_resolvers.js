@@ -357,7 +357,7 @@ class MapxResolvers {
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
-      return h.viewOpenAuto(view);
+      return h.viewOpen(view);
     } else {
       return res._err('err_view_invalid');
     }
@@ -375,7 +375,7 @@ class MapxResolvers {
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
-      h.viewCloseAuto(view);
+      h.viewClose(view);
       return true;
     } else {
       return res._err('err_view_invalid');

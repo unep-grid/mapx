@@ -674,23 +674,26 @@ export function initMapListener(map) {
    * Mouse move handling
    */
 
-   map.on('mousemove', (e) => {
-
-     if(false){
-       /**
+  map.on('mousemove', (e) => {
+    if (false) {
+      /**
        * Change illuminaion direction accoding to mouse position
        * Quite intensive on GPU.
        */
-       const elCanvas = map.getCanvas();
-       const dpx = window.devicePixelRatio || 1;
-       const wMap = elCanvas.width;
-       const hMap = elCanvas.height;
-       const x = e.point.x - wMap / (2 * dpx);
-       const y = hMap / (2 * dpx) - e.point.y;
-       const deg = h.xyToDegree(x,y);
+      const elCanvas = map.getCanvas();
+      const dpx = window.devicePixelRatio || 1;
+      const wMap = elCanvas.width;
+      const hMap = elCanvas.height;
+      const x = e.point.x - wMap / (2 * dpx);
+      const y = hMap / (2 * dpx) - e.point.y;
+      const deg = h.xyToDegree(x, y);
 
-       map.setPaintProperty('hillshading','hillshade-illumination-direction',deg) ;
-     }
+      map.setPaintProperty(
+        'hillshading',
+        'hillshade-illumination-direction',
+        deg
+      );
+    }
 
     const layers = h.getLayerNamesByPrefix({
       id: map.id,
@@ -1025,7 +1028,7 @@ export function viewsCloseAll(o) {
    * Close and remove layers
    */
   const removed = views.map((view) => {
-    h.viewCloseAuto(view.id);
+    h.viewClose(view.id);
   });
 }
 
@@ -1398,12 +1401,13 @@ function getGeojsonViewsFromStorage(o) {
 export function viewsCheckedUpdate(o) {
   const h = mx.helpers;
   o = o || {};
+
   let vToAdd = [],
     vToRemove = [],
     vVisible = [],
     vChecked = [];
   let view, isChecked, id;
-  const idMap = o.id || mx.settings.map.id;
+
   const els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
   );
@@ -1416,7 +1420,7 @@ export function viewsCheckedUpdate(o) {
     }
   }
 
-  h.onNextFrame(function() {
+  h.onNextFrame(() => {
     vVisible = h.getViewsLayersVisibles();
 
     vVisible = h.getArrayStat({
@@ -1430,19 +1434,22 @@ export function viewsCheckedUpdate(o) {
     /**
      * View to add
      */
-    vToAdd.forEach(function(v) {
+    vToAdd.forEach((v) => {
       vStore.push(v);
-      h.viewOpenAuto(v);
+      h.viewOpen(v);
     });
 
     /**
      * View to remove
      */
-    vToRemove.forEach(function(idView) {
+    vToRemove.forEach((idView) => {
       vStore.splice(vStore.indexOf(idView, 1));
-      h.viewCloseAuto(idView);
+      h.viewClose(idView);
     });
 
+    /**
+     * Inform Shiny about the state
+     */
     if (true) {
       const summary = {
         vStore: vStore,
@@ -1454,6 +1461,17 @@ export function viewsCheckedUpdate(o) {
       Shiny.onInputChange('mx_client_views_status', summary);
     }
 
+    /**
+     * Debug check
+     */
+    if (false) {
+      console.log({
+        vToAdd: vToAdd.length,
+        vVisible: vVisible.length,
+        vChecked: vChecked.length,
+        vToRemove: vToRemove.length
+      });
+    }
     h.viewsLayersOrderUpdate(o);
   });
 }
@@ -2227,7 +2245,7 @@ export function viewLayersRemove(o) {
  * Enable/open view from the list
  * @param {Object} view View to open
  */
-export function viewOpen(view) {
+function _viewUiOpen(view) {
   const h = mx.helpers;
   return new Promise((resolve, reject) => {
     view = h.getView(view);
@@ -2235,49 +2253,21 @@ export function viewOpen(view) {
       reject('viewOpen : no view given');
     }
     const elView = getViewEl(view);
+
     if (elView && elView.vb) {
       elView.vb.open();
-      h.updateLanguageElements({el: elView});
     }
+
     view._open = true;
     resolve(true);
   });
-}
-/**
- * Get view, open it and add layers if any
- * @param {Object} view View to open
- */
-export async function viewOpenAuto(view) {
-  const h = mx.helpers;
-  view = h.getView(view);
-  if (!view) {
-    return;
-  }
-  const confirmation = new Promise((resolve) => {
-    mx.events.once({
-      type: 'view_added',
-      idGroup: 'viewOpenAuto',
-      callback: (d) => {
-        if (d.idView === view.id) {
-          resolve(true);
-        }
-      }
-    });
-  });
-
-  await h.viewOpen(view);
-  await h.viewLayersAdd({
-    viewData: view
-  });
-
-  return confirmation;
 }
 
 /**
  * Close / uncheck view – if exists – in view list
  * @param {String|View} idView id of the view or view object
  */
-export function viewClose(view) {
+function _viewUiClose(view) {
   const h = mx.helpers;
   return new Promise((resolve) => {
     view = h.getView(view);
@@ -2290,17 +2280,20 @@ export function viewClose(view) {
   });
 }
 
-export async function viewCloseAuto(view) {
+/**
+ * Get view, open it and add layers if any
+ * @param {Object} view View to open
+ */
+export async function viewOpen(view) {
   const h = mx.helpers;
   view = h.getView(view);
-  if (!h.isView(view)) {
-    return Promise.resolve(false);
+  if (!view) {
+    return;
   }
-
   const confirmation = new Promise((resolve) => {
     mx.events.once({
-      type: 'view_removed',
-      idGroup: 'viewCloseAuto',
+      type: 'view_added',
+      idGroup: 'viewOpen',
       callback: (d) => {
         if (d.idView === view.id) {
           resolve(true);
@@ -2308,7 +2301,38 @@ export async function viewCloseAuto(view) {
       }
     });
   });
-  await h.viewClose(view);
+
+  await h.viewLayersAdd({
+    viewData: view
+  });
+  await _viewUiOpen(view);
+  await h.updateLanguageElements({
+    el: view.el
+  });
+
+  return confirmation;
+}
+
+export async function viewClose(view) {
+  const h = mx.helpers;
+  view = h.getView(view);
+
+  if (!h.isView(view)) {
+    return Promise.resolve(false);
+  }
+
+  const confirmation = new Promise((resolve) => {
+    mx.events.once({
+      type: 'view_removed',
+      idGroup: 'viewClose',
+      callback: (d) => {
+        if (d.idView === view.id) {
+          resolve(true);
+        }
+      }
+    });
+  });
+  await _viewUiClose(view);
   await h.viewLayersRemove({
     idView: view.id
   });
@@ -2963,7 +2987,7 @@ export async function getViewLegendImage(opt) {
 
   if (isVt) {
     try {
-      await h.viewOpenAuto(view);
+      await h.viewOpen(view);
 
       const hasLegend = h.isElement(view._elLegend);
 
@@ -3003,7 +3027,7 @@ export async function getViewLegendImage(opt) {
    */
   function close() {
     if (!isOpen) {
-      h.viewCloseAuto(view);
+      h.viewClose(view);
     }
   }
 }

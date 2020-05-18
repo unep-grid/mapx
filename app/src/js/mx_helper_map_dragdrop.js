@@ -1,5 +1,3 @@
-/*jshint esversion: 6 */
-
 function handleProgressUpdate(f) {
   var helper = mx.helpers;
   return function(e) {
@@ -165,163 +163,167 @@ export function parseDataToGeojson(data, fileType) {
 
 // handle worker
 function handleFileParser(f) {
-  const helper = mx.helpers;
+  const h = mx.helpers;
 
-  return function handler(e) {
+  return async function handler(e) {
     /**
      * Test for size
      */
 
-    let isSizeValid = helper.isUploadFileSizeValid(f, {showModal: true});
+    let isSizeValid = h.isUploadFileSizeValid(f, {showModal: true});
     if (!isSizeValid) {
-      helper.progressScreen({
+      h.progressScreen({
         enable: false,
         id: f.name
       });
       return;
     }
 
-    saveSpatialDataAsView({
+    const view = await spatialDataToView({
       fileName: f.name,
       fileType: f.fileType,
       data: e.target.result
     });
+    await h.viewsListAddSingle(view, {
+      open: false
+    });
+    await h.viewOpen(view);
+    return view;
   };
 }
 
-export function saveSpatialDataAsView(opt) {
-  var helper = mx.helpers;
+export async function spatialDataToView(opt) {
+  const h = mx.helpers;
 
   /**
    * Init
    */
-  var c = {
+  const c = {
     worker: null,
     data: opt.data,
-    map: helper.getMap(),
+    map: h.getMap(),
     gj: {},
     fileType: opt.fileType,
     fileName: opt.fileName,
-    title: opt.title || opt.fileName.split('.')[0]
+    title: opt.title || opt.fileName.split('.')[0],
+    view: {}
   };
 
-  return mx.helpers
-    .moduleLoad('mx-drag-drop-worker')
-    .then((geojsonWorker) => {
-      c.worker = new geojsonWorker();
-      /**
-       * Parse data according to filetype
-       */
-      return helper.parseDataToGeojson(c.data, c.fileType);
-    })
-    .then(function(gJson) {
+  const geojsonWorker = await h.moduleLoad('mx-drag-drop-worker');
+  c.worker = new geojsonWorker();
+  /**
+   * Parse data according to filetype
+   */
+  const gJson = await h.parseDataToGeojson(c.data, c.fileType);
+
+  const promView = new Promise((resolve) => {
+    /*
+     * handle message received
+     */
+    c.worker.onmessage = function(e) {
+      var m = e.data;
+
+      if (m.progress) {
+        h.progressScreen({
+          enable: true,
+          id: c.fileName,
+          percent: m.progress,
+          text: c.fileName + ': ' + m.message
+        });
+      }
+
       /*
-       * handle message received
+       * Errors
        */
-      c.worker.onmessage = function(e) {
-        var m = e.data;
+      if (m.errorMessage) {
+        alert(m.errorMessage);
+      }
 
-        if (m.progress) {
-          helper.progressScreen({
-            enable: true,
-            id: c.fileName,
-            percent: m.progress,
-            text: c.fileName + ': ' + m.message
-          });
+      /*
+       * Extent
+       */
+      if (m.extent) {
+        // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
+        if (m.extent[0] < -179) {
+          m.extent[0] = -179;
+        }
+        if (m.extent[1] < -85) {
+          m.extent[1] = -85;
+        }
+        if (m.extent[2] > 179) {
+          m.extent[2] = 179;
+        }
+        if (m.extent[3] > 85) {
+          m.extent[3] = 85;
         }
 
-        /*
-         * Errors
-         */
-        if (m.errorMessage) {
-          alert(m.errorMessage);
-        }
+        var a = new mx.mapboxgl.LngLatBounds(
+          new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
+          new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
+        );
+        c.map.fitBounds(a);
+      }
 
-        /*
-         * Extent
-         */
-        if (m.extent) {
-          // bug with extent +/- 90. See https://github.com/mapbox/mapbox-gl-js/issues/3474
-          if (m.extent[0] < -179) {
-            m.extent[0] = -179;
-          }
-          if (m.extent[1] < -85) {
-            m.extent[1] = -85;
-          }
-          if (m.extent[2] > 179) {
-            m.extent[2] = 179;
-          }
-          if (m.extent[3] > 85) {
-            m.extent[3] = 85;
-          }
+      // If layer is valid and returned
+      if (m.layer) {
+        h.progressScreen({
+          enable: true,
+          id: c.fileName,
+          percent: 100,
+          text: c.fileName + ' done'
+        });
 
-          var a = new mx.mapboxgl.LngLatBounds(
-            new mx.mapboxgl.LngLat(m.extent[0], m.extent[1]),
-            new mx.mapboxgl.LngLat(m.extent[2], m.extent[3])
-          );
-          c.map.fitBounds(a);
-        }
-
-        // If layer is valid and returned
-        if (m.layer) {
-          helper.progressScreen({
-            enable: true,
-            id: c.fileName,
-            percent: 100,
-            text: c.fileName + ' done'
-          });
-
-          // mx default view
-          var view = {
-            id: m.id,
-            type: 'gj',
-            project: mx.settings.project,
-            date_modified: new Date().toLocaleDateString(),
-            data: {
-              title: {
-                en: c.title
-              },
-              attributes: m.attributes,
-              abstract: {
-                en: c.title
-              },
-              geometry: {
-                extent: {
-                  lng1: m.extent[0],
-                  lat1: m.extent[1],
-                  lng2: m.extent[2],
-                  lat2: m.extent[3]
-                }
-              },
-              layer: m.layer,
-              source: {
-                type: 'geojson',
-                data: m.geojson
+        // mx default view
+        c.view = {
+          id: m.id,
+          type: 'gj',
+          project: mx.settings.project,
+          date_modified: new Date().toLocaleDateString(),
+          data: {
+            title: {
+              en: c.title
+            },
+            attributes: m.attributes,
+            abstract: {
+              en: c.title
+            },
+            geometry: {
+              extent: {
+                lng1: m.extent[0],
+                lat1: m.extent[1],
+                lng2: m.extent[2],
+                lat2: m.extent[3]
               }
+            },
+            layer: m.layer,
+            source: {
+              type: 'geojson',
+              data: m.geojson
             }
-          };
+          }
+        };
 
-          saveInLocalDb({
-            view: view
-          });
+        saveInLocalDb({
+          view: c.view
+        });
 
-          mx.helpers.viewsListAddSingle(view, {open: true});
-          mx.helpers.viewLayersAdd({viewData: view});
+        resolve(c.view);
+        c.worker.terminate();
+      }
+    };
+  });
 
-          c.worker.terminate();
-        }
-      };
+  /*
+   * Message to pass to the worker
+   */
+  c.worker.postMessage({
+    data: gJson,
+    fileName: c.fileName,
+    fileType: c.fileType,
+    id: 'MX-GJ-' + h.makeId(10)
+  });
 
-      /*
-       * Message to pass to the worker
-       */
-      c.worker.postMessage({
-        data: gJson,
-        fileName: c.fileName,
-        fileType: c.fileType,
-        id: 'MX-GJ-' + mx.helpers.makeId(10)
-      });
-    });
+  return promView;
 }
 
 function saveInLocalDb(opt) {
@@ -386,7 +388,7 @@ function handleView(view) {
   const idViews = h.getViews().map((v) => v.id);
   if (idViews.indexOf(view.id) > -1) {
     const viewOld = h.getView(view.id);
-    h.viewOpenAuto(viewOld);
+    h.viewOpen(viewOld);
   } else {
     view._drop_shared = true;
     h.viewsListAddSingle(view);

@@ -36,10 +36,6 @@ function initDraw() {
 
     c.map.addControl(drawBar, c.position);
 
-    c.map.on('draw.delete', function() {
-      console.log('deleted');
-    });
-
     window.MapboxDraw = MapboxDraw;
     window.draw = c.draw;
     return c.draw;
@@ -73,23 +69,27 @@ function enableDraw() {
 }
 
 function save() {
+  const h = mx.helpers;
   var c = drawConfig;
   var gj = c.draw.getAll();
-  var fileName = 'mx_draw_' + mx.helpers.makeId() + '.geojson';
+  var fileName = 'mx_draw_' + h.makeId() + '.geojson';
 
   if (gj.features.length === 0) {
     return;
   }
 
-  return mx.helpers
-    .saveSpatialDataAsView({
+  return h
+    .spatialDataToView({
       title: fileName,
       fileName: fileName,
       fileType: 'geojson',
       data: gj
     })
-    .then(() => {
+    .then((view) => {
       c.draw.deleteAll();
+      h.viewsListAddSingle(view, {
+        open: true
+      });
     });
 }
 

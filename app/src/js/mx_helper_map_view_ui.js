@@ -134,6 +134,7 @@ export function viewsListAddSingle(view, settings) {
   if (!h.isView(view)) {
     return;
   }
+  
   const settings_default = {
     id: view.id,
     moveTop: true,
@@ -141,6 +142,7 @@ export function viewsListAddSingle(view, settings) {
     open: true,
     view: view
   };
+
   settings = Object.assign({}, settings_default, settings);
 
   const mData = mx.helpers.getMapData();
@@ -151,8 +153,8 @@ export function viewsListAddSingle(view, settings) {
     mData.views.splice(idPosOld, 1);
   }
   mData.views.unshift(view);
-  mData.viewsList.addItem(settings);
   mData.viewsFilter.update();
+  mData.viewsList.addItem(settings);
 }
 
 /**
@@ -251,9 +253,9 @@ export function viewsListRenderNew(o) {
       {id: 'render_item_content', action: handleRenderItemContent},
       {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
       {id: 'get_item_date_by_id', action: h.getViewDateModified},
-      {id: 'filter_end', action: h.viewsCheckedUpdate},
       {id: 'state_reset', action: h.viewsCheckedUpdate},
-      {id: 'state_change', action: h.viewsCheckedUpdate},
+      //{id: 'filter_end', action: h.viewsCheckedUpdate}, // could rigger view close if the view is not yet rendered
+      //{id: 'state_change', action: h.viewsCheckedUpdate}, // could rigger view close if the view is not yet rendered
       {id: 'state_order', action: h.viewsLayersOrderUpdate},
       {id: 'state_save_local', action: h.iconFlashSave},
       {id: 'state_sanitize', action: sanitizeState},
@@ -425,11 +427,8 @@ export function viewsListRenderNew(o) {
         h.viewLayersAdd({
           viewData: view
         });
-        h.updateLanguageElements({
-          el: elView
-        });
       } else if (open) {
-        h.viewOpenAuto(view);
+        h.viewOpen(view);
       }
     }
   }

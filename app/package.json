@@ -98,7 +98,7 @@
     "jsondiffpatch": "^0.3.11",
     "jspdf": "^1.5.3",
     "jszip": "^3.4.0",
-    "mapbox-gl": "^1.10.1",
+    "mapbox-gl": "^1.10.0",
     "martinez-polygon-clipping": "^0.5.0",
     "muuri": "^0.8.0",
     "nouislider": "^12.1.0",
