@@ -221,7 +221,7 @@ export class Testing {
   }
   _ui_result(name, section) {
     const t = this;
-    let elIcon, elTitle, elText;
+    let elIcon, elTitle, elText, elTiming;
     const elLi = el(
       'li',
       (elIcon = el('span')),

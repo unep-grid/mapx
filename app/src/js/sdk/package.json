@@ -35,7 +35,7 @@
   "devDependencies": {
     "jsdoc-to-markdown": "^5.0.3",
     "live-server": "^1.2.1",
-    "microbundle": "^0.11.0"
+    "microbundle": "^0.12.0"
   },
   "dependencies": {
     "@fxi/el": "0.0.12"
