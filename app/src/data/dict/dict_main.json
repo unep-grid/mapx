@@ -2870,8 +2870,8 @@
   {
     "id": "saved_at",
     "en": "Saved at %s",
-    "fr": "Sauvegardé à",
-    "es": "Guardado como",
+    "fr": "Sauvegardé à %s",
+    "es": "Guardado como %s",
     "ru": "",
     "zh": "",
     "de": "",
@@ -4882,6 +4882,30 @@
     "bn": "",
     "fa": "بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد.",
     "ps": "ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ "
+  },
+  {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "fr": "Cliquer sur le button de confirmation pour supprimer ce tableau de bord",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "fr": "Confirmation",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   },
   {
     "id": "view_download_layer",

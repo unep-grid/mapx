@@ -2035,6 +2035,16 @@
     "fa": "بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد."
   },
   {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "fa": ""
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "fa": ""
+  },
+  {
     "id": "view_download_layer",
     "en": "Download the source layer",
     "fa": "دانلود لایه منبع "

@@ -203,6 +203,56 @@ observeEvent(input$dashboardEdit_init,{
 
 
 #
+# Dashboard remove
+#
+observeEvent(input$btnViewRemoveDashboard,{
+  
+  language <- reactData$language
+
+
+  uiOut<-tagList(
+    tags$p(
+      tags$span(d("view_remove_dashboard_confirm",language))
+    )
+  )
+
+  btnList <- list(
+    actionButton(
+      inputId="btnViewRemoveDashboardConfirm",
+      label=d("btn_confirm",language)
+    )
+  )
+
+  mxModal(
+    id = "modalViewEdit",
+    title = d('view_remove_dashboard_confirm_title',language),
+    content = uiOut,
+    textCloseButton = d("btn_close",language),
+    buttons = btnList
+  )
+
+})
+#
+# View dashboard remove
+#
+observeEvent(input$btnViewRemoveDashboardConfirm,{
+
+  idView <- .get(reactData$viewDataEdited, c("id")) 
+
+  if(noDataCheck(idView)) mxDebugMsg("View to delete not found")
+
+  jedTriggerGetValues("dashboardEdit","remove")
+
+  #
+  # Close modal window
+  #
+  mxModal(
+    id="modalViewEdit",
+    close=TRUE
+    )
+})
+
+#
 # Vew dashboard change
 #
 observeEvent(input$btnViewPreviewDashboard,{
@@ -284,7 +334,36 @@ observeEvent(input$dashboardEdit_values,{
         id = "modalViewEdit_txt",
         text = sprintf(d("saved_at",language),format(time,'%H:%M'))
         )
+    },
+    "remove"={
+      if( view[["_edit"]] && view[["type"]] %in% c('vt','rt','cc') ){
+    
+        view[["_edit"]] = NULL
 
+        view <- .set(view, c("date_modified"), time )
+        view <- .set(view, c("target"), as.list(.get(view,c("target"))))
+        view <- .set(view, c("readers"), as.list(.get(view,c("readers"))))
+        view <- .set(view, c("editors"), as.list(.get(view,c("editors"))))
+        view <- .set(view, c("data", "dashboard"), NULL)
+        view <- .set(view, c("data"), as.list(.get(view,"data")))
+        view <- .set(view, c("editor"),editor)
+
+        mxDbAddRow(
+          data=view,
+          table=.get(config,c("pg","tables","views"))
+        )
+
+        # edit flag
+        view$`_edit` = TRUE 
+
+        mglUpdateView(view)
+
+        jedRemoveDraft("dashboardEdit",view$id);
+
+        reactData$updateViewListFetchOnly <- runif(1)
+      }
+
+      mxFlashIcon("floppy-o")
 
     })
 

@@ -2035,6 +2035,16 @@
     "zh": ""
   },
   {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "zh": ""
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "zh": ""
+  },
+  {
     "id": "view_download_layer",
     "en": "Download the source layer",
     "zh": ""

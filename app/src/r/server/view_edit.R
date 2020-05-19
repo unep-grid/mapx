@@ -488,6 +488,10 @@ observe({
                 actionButton(
                   inputId="btnViewPreviewDashboard",
                   label=d("btn_preview",language)
+                  ),
+                actionButton(
+                  inputId="btnViewRemoveDashboard",
+                  label=d("btn_delete",language)
                   )
                 )
 

@@ -1197,7 +1197,7 @@
   {
     "id": "saved_at",
     "en": "Saved at %s",
-    "fr": "Sauvegardé à"
+    "fr": "Sauvegardé à %s"
   },
   {
     "id": "email",
@@ -2033,6 +2033,16 @@
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
     "fr": "Cliquer sur le button de confirmation pour supprimer cette vue, ainsi que son historique et toutes les traductions."
+  },
+  {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "fr": "Cliquer sur le button de confirmation pour supprimer ce tableau de bord"
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "fr": "Confirmation"
   },
   {
     "id": "view_download_layer",

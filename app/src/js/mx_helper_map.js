@@ -3879,6 +3879,9 @@ export function viewModulesRemove(view) {
     view._widgets.forEach((w) => {
       w.destroy();
     });
+    if(mx.dashboard && mx.dashboard.widgets.length === 0){
+        mx.dashboard.destroy();
+    }
   }
   if (it) {
     if (it.searchBox) {

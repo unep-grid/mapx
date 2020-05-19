@@ -2035,6 +2035,16 @@
     "ps": "ددې لیدنې، د هغې د تاریخچې او ټولو ژباړو د پاکولو لپاره د تائید تڼۍ کیکاږئ "
   },
   {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "ps": ""
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "ps": ""
+  },
+  {
     "id": "view_download_layer",
     "en": "Download the source layer",
     "ps": "د لایې سرچینه ډانلوډ کړئ"
