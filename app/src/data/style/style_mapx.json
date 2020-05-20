@@ -4,20 +4,11 @@
   "sources": {
     "mapbox_base": {
       "type": "vector",
-      "url": "mapbox://mapbox.mapbox-streets-v8"
+      "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8"
     },
-    "mapbox_dem": {"type": "raster-dem", "url": "mapbox://mapbox.terrain-rgb"},
-    "bathymetry": {
+    "mapx_base":{
       "type": "vector",
-      "url": "mapbox://helsinki.58vx3k2v"
-    },
-    "mapbox_unepgrid_countries": {
-      "url": "mapbox://helsinki.mx_countries_un_poly_2018",
-      "type": "vector"
-    },
-    "mapbox_unepgrid_countries_lines": {
-      "url": "mapbox://helsinki.mx_countries_un_line_2018",
-      "type": "vector"
+      "url":"mapbox://helsinki.drcnsbpx"
     },
     "here_aerial": {
       "type": "raster",
@@ -44,8 +35,8 @@
     {
       "id": "boundary_un_1",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 1],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -58,8 +49,8 @@
     {
       "id": "boundary_un_2",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 2],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -73,8 +64,8 @@
     {
       "id": "boundary_un_3",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 3],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -88,8 +79,8 @@
     {
       "id": "boundary_un_4",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 4],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -103,8 +94,8 @@
     {
       "id": "boundary_un_8",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 8],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -118,8 +109,8 @@
     {
       "id": "boundary_un_9",
       "type": "line",
-      "source": "mapbox_unepgrid_countries_lines",
-      "source-layer": "mx_countries_un_line_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_line_2018",
       "filter": ["==", ["get", "bdytyp"], 9],
       "layout": {"visibility": "visible", "line-join": "bevel"},
       "paint": {
@@ -190,11 +181,11 @@
     {
       "id": "bathymetry",
       "type": "fill",
-      "source": "bathymetry",
+      "source": "mapx_base",
       "source-layer": "bathymetry",
       "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
       "layout": {
-        "visibility": "visible"
+        "visibility": "none"
       },
       "paint": {
         "fill-outline-color": "hsla(0, 0%, 0%, 0)",
@@ -1425,6 +1416,7 @@
         ["==", ["geometry-type"], "Point"]
       ],
       "layout": {
+        "visibility": "none",
         "text-line-height": 1.3,
         "text-size": [
           "interpolate",
@@ -1517,12 +1509,27 @@
     },
     {
       "id": "hillshading",
-      "type": "hillshade",
-      "source": "mapbox_dem",
+      "type": "fill",
+      "source": "mapbox_base",
+      "source-layer": "hillshade",
+      "filter": [
+        "match",
+        ["get", "class"], 
+        ["shadow", "highlight"],
+          true,
+          false
+      ],
       "paint": {
-        "hillshade-accent-color": "hsla(0, 0%, 45%, 0.55)",
-        "hillshade-shadow-color": "hsla(0, 0%, 45%, 0.55)",
-        "hillshade-exaggeration": 0.5
+        "fill-color": [
+          "match",
+          ["get", "class"],
+          "highlight",
+          "hsla(0, 0%, 100%, 0.05)",
+          "shadow",
+          "hsla(0, 0%, 0%, 0.05)",
+          "hsla(0, 0%, 0%, 0)"
+        ],
+        "fill-outline-color": "hsla(0,0,0,0)"
       }
     },
     {
@@ -1542,8 +1549,8 @@
     {
       "id": "country-code",
       "type": "fill",
-      "source": "mapbox_unepgrid_countries",
-      "source-layer": "mx_countries_un_poly_2018geojson",
+      "source": "mapx_base",
+      "source-layer": "countries_poly_2018",
       "filter": [
         "all",
         ["!", ["has", "iso3code"]],

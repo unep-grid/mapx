@@ -39,15 +39,11 @@
     },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
-      "color": "rgba(0,0,0,1)"
+      "color": "rgba(0,0,0,0.1)"
     },
     "mx_map_hillshade_highlight": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,1)"
-    },
-    "mx_map_hillshade_accent": {
-      "visibility": "visible",
-      "color": "rgba(255,255,255,1)"
+      "color": "rgba(121,121,121,0.2)"
     },
     "mx_map_mask": {
       "visibility": "visible",

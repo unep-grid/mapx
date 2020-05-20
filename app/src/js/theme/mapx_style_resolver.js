@@ -40,15 +40,20 @@ export function layer_resolver(c) {
       id: ['hillshading'],
       layout: {
         visibility: allVisible([
-          c.mx_map_hillshade_accent.visibility,
-          c.mx_map_hillshade_highlight.visibility,
-          c.mx_map_hillshade_shadow.visibility
+          c.mx_map_hillshade_shadow.visibility,
+          c.mx_map_hillshade_highlight.visibility
         ])
       },
       paint: {
-        'hillshade-accent-color': c.mx_map_hillshade_accent.color,
-        'hillshade-highlight-color': c.mx_map_hillshade_highlight.color,
-        'hillshade-shadow-color': c.mx_map_hillshade_shadow.color
+ "fill-color":[
+          "match",
+          ["get", "class"],
+          "highlight",
+           c.mx_map_hillshade_highlight.color,
+          "shadow",
+           c.mx_map_hillshade_shadow.color,
+          "hsla(0, 0%, 0%, 0)"
+        ]
       }
     },
     {
