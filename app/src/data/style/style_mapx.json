@@ -184,11 +184,11 @@
         "visibility": "none"
       },
       "paint": {
-        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 2, 0, 10, 1],
+        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 2, 0.001, 7, 1],
         "fill-outline-color": "hsla(0, 0%, 0%, 0)",
         "fill-color": [
           "interpolate",
-          ["cubic-bezier", 0, 0.5, 1, 0.5],
+          ["linear"],
           ["get", "depth"],
           200,
           "hsla(0, 0%, 0%, 0)",
