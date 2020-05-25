@@ -167,7 +167,7 @@
       "source-layer": "water",
       "layout": {"visibility": "visible"},
       "paint": {
-        "fill-color": "hsl(0, 0%, 45%)",
+        "fill-color": "rgba(169,169,169,1)",
         "fill-opacity": 1,
         "fill-outline-color": "hsla(0, 0%, 45%, 0.55)",
         "fill-antialias": false
@@ -184,6 +184,7 @@
         "visibility": "none"
       },
       "paint": {
+        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 2, 0, 10, 1],
         "fill-outline-color": "hsla(0, 0%, 0%, 0)",
         "fill-color": [
           "interpolate",
@@ -1510,10 +1511,10 @@
       "source-layer": "hillshade",
       "filter": [
         "match",
-        ["get", "class"], 
+        ["get", "class"],
         ["shadow", "highlight"],
-          true,
-          false
+        true,
+        false
       ],
       "paint": {
         "fill-color": [
