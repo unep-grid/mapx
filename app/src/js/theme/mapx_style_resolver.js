@@ -258,7 +258,8 @@ export function layer_resolver(c) {
     },
     {
       id: [
-        'water-label'
+        'water-label-point',
+        'water-label-line'
       ],
       layout: {
         visibility: allVisible([

@@ -450,7 +450,8 @@ export function updateLanguageMap(o) {
       'place-label-city',
       'place-label-capital',
       'country-label',
-      'water-label',
+      'water-label-line',
+      'water-label-point',
       'poi-label'
     ];
 

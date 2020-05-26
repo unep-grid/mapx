@@ -67,7 +67,7 @@
     },
     "mx_map_text_water": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,0.5)"
+      "color": "rgba(66,66,66,0.9)"
     },
     "mx_map_text_water_outline": {
       "visibility": "visible",
