@@ -1538,12 +1538,14 @@ export function makeSimpleLayer(o) {
   const sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
   const sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
   const sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
-  const zoomMin = o.zoomMin || 0;
+  const zoomMin = o.zoomMin || 1;
   const zoomMax = o.zoomMax || 22;
   const sprite = o.sprite || '';
   const filter = o.filter || ['all'];
-  if (o.gemType === 'symbol') {
-    size = size / 10;
+  const dpx = window.devicePixelRatio || 1;
+
+  if (o.geomType === 'symbol') {
+    size = size / dpx / 2;
   }
 
   const funSizeByZoom = [
@@ -1572,12 +1574,12 @@ export function makeSimpleLayer(o) {
       type: 'symbol',
       layout: {
         'icon-image': sprite,
-        'icon-size': size / 4,
+        'icon-size': size,
         'icon-allow-overlap': true
       },
       paint: {
         'icon-opacity': o.opacity || 1,
-        'icon-halo-width': 2,
+        'icon-halo-width': 0,
         'icon-halo-color': colB,
         'icon-color': colA
       }
@@ -3354,7 +3356,7 @@ export function viewLayersAddVt(o) {
     const idSource = view.id + '-SRC';
     const idView = view.id;
     const style = p(view, 'data.style');
-    const zoomConfig = p(view, 'data.style.zoomConfig', {});
+    const zConfig = p(view, 'data.style.zoomConfig', {});
     const nulls = p(view, 'data.style.nulls', [])[0];
     const hideNulls = p(view, 'data.style.hideNulls', false);
     const geomType = p(view, 'data.geometry.type', 'point');
@@ -3380,13 +3382,16 @@ export function viewLayersAddVt(o) {
     });
 
     /**
-     * Set default
+     * Set zoom default
      */
-    zoomConfig.zoomMax = zoomConfig.zoomMax || 22;
-    zoomConfig.zoomMin = zoomConfig.zoomMin || 0;
-    zoomConfig.sizeFactorZoomMax = zoomConfig.sizeFactorZoomMax || 0;
-    zoomConfig.sizeFactorZoomMin = zoomConfig.sizeFactorZoomMin || 0;
-    zoomConfig.sizeFactorZoomExponent = zoomConfig.sizeFactorZoomExponent || 1;
+    const zDef = {
+      zoomMax: 22,
+      zoomMin: 0,
+      sizeFactorZoomMax: 0,
+      sizeFactorZoomMin: 0,
+      sizeFactorZoomExponent: 1
+    };
+    const zoomConfig = Object.assign(zDef, zConfig);
 
     /**
      * Parse custom style
@@ -3879,8 +3884,8 @@ export function viewModulesRemove(view) {
     view._widgets.forEach((w) => {
       w.destroy();
     });
-    if(mx.dashboard && mx.dashboard.widgets.length === 0){
-        mx.dashboard.destroy();
+    if (mx.dashboard && mx.dashboard.widgets.length === 0) {
+      mx.dashboard.destroy();
     }
   }
   if (it) {
