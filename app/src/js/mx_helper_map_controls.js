@@ -283,11 +283,8 @@ mapControlApp.prototype.onAdd = function(map) {
       key: 'btn_overlap_spotlight',
       //remove: modeStatic,
       action: function(e) {
-        var el = e.target;
-        var cl = 'active';
-        el.classList.toggle(cl);
-        var enable = el.classList.contains(cl);
-        h.activateSpotlight(enable, el);
+        //var el = e.target;
+        h.toggleSpotlight(e.target);
       }
     },
     btnDrawMode: {

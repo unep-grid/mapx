@@ -9,6 +9,9 @@ const opt_default = {
   onRendered: function(d) {
     console.log(d);
   },
+  onRender: function(d){
+    console.log(d);
+  },
   onCalcArea: function(d) {
     console.log(d);
   },
@@ -30,7 +33,8 @@ class Spotlight {
     sl.pixop = new PixOp({
       map: sl.state.map,
       onCalcArea: sl.state.onCalcArea,
-      onRendered: sl.state.onRendered
+      onRendered: sl.state.onRendered,
+      onRender: sl.state.onRender
     });
   }
 
@@ -59,12 +63,13 @@ class Spotlight {
     sl.pixop.refresh();
   }
 
+  
   render() {
     const sl = this;
     cancelFrame(sl.state.idFrame);
     sl.state.idFrame = onNextFrame(() => {
       sl.pixop.render({
-        type: 'overlap-spotlight',
+        mode: 'spotlight',
         debug: false,
         overlap: {
           nLayersOverlap: sl.state.nLayersOverlap() || 0,

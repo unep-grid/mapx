@@ -1,5 +1,5 @@
-/* jshint esversion :6 */
 import {getLayerNamesByPrefix} from './../mx_helpers.js';
+import {el} from '@fxi/el';
 
 function PixOp(config) {
   'use strict';
@@ -8,7 +8,6 @@ function PixOp(config) {
     const px = this;
     window.px = this;
     px.config = config || {};
-    px.debug = !!config.debug || false;
     px.timing = {};
     px.data = px.getDefault('data');
     px.canvas = null;
@@ -19,7 +18,8 @@ function PixOp(config) {
     px.init();
     px._cache = {
       map_zoom: 0,
-      circles: {}
+      circles: {},
+      canvas: {}
     };
     px._destroyed = false;
   } else {
@@ -30,17 +30,18 @@ function PixOp(config) {
 PixOp.prototype.init = function() {
   const px = this;
   px.initConfig();
-  px.initCanvasSource();
+  px.initCanvas();
+  px.initWorker();
 };
 
 PixOp.prototype.destroy = function() {
   const px = this;
-  if(px.isDestroyed()){
+  if (px.isDestroyed()) {
     return;
   }
   px.clear();
-  px.canvas.remove();
-  px.map.removeLayer(px.config.id_layer);
+  px.elCanvas.remove();
+  px._worker.terminate();
   px._destroyed = true;
 };
 
@@ -48,27 +49,32 @@ PixOp.prototype.isDestroyed = function() {
   return this._destroyed;
 };
 
+PixOp.prototype.setOpacity = function(opacity) {
+  this.elCanvas.style.opacity = typeof opacity === 'undefined' ? 0.5 : opacity;
+};
+
 PixOp.prototype.render = function(opt) {
   const px = this;
   opt = opt || {};
+
+  if (px.isDestroyed()) {
+    throw new Error('PixOp is destroyed');
+  }
 
   render();
 
   function render() {
     px._timing('render', 'start', true);
 
+    px.config.onRender(px);
     px.reset()
       .updateRenderOptions(opt)
       .updateMapParams()
       .updateFeatures()
       .layersToPixelsStore()
-      .renderMethod();
+      .renderWorker();
 
-    if (opt.canvas.add) {
-      px.refresh();
-    }
-
-    px.config.onRendered();
+    px.config.onRendered(px);
     px._timing('render', 'stop');
   }
 };
@@ -91,7 +97,7 @@ PixOp.prototype.getDefault = function(type) {
         threshold: 127 // antialiasing produce varying alpha band. Which impact overlap analysis.
       },
       type: 'overlap',
-      debug: false,
+      debug: true,
       canvas: {
         scale: 2,
         add: false,
@@ -146,43 +152,210 @@ PixOp.prototype.initConfig = function() {
   px._timing('init_config', 'stop');
 };
 
-PixOp.prototype.initCanvasSource = function() {
+PixOp.prototype.initCanvas = function() {
   const px = this;
   px._timing('init_canvas', 'start');
   const idMapCanvas = px.config.id_layer;
-  const map = px.map;
-  const canvas = px.makeCanvas({
+  const elCanvas = px.makeCanvas({
     id: idMapCanvas,
     width: 10,
     height: 10,
     style: {
-      display: 'none'
+      transition: 'opacity 0.2s ease-in-out',
+      position: 'absolute',
+      top: 0,
+      opacity: 0.5,
+      pointerEvents: 'none'
     }
   });
 
-  document.body.appendChild(canvas);
+  document.body.appendChild(elCanvas);
 
-  const l = {
-    id: idMapCanvas,
-    source: {
-      type: 'canvas',
-      canvas: idMapCanvas,
-      coordinates: [[0, 0], [1, 0], [1, -1], [0, -1]],
-      animate: false
-    },
-    type: 'raster',
-    paint: {
-      'raster-fade-duration': 0.5,
-      'raster-opacity': 0.6
-    }
-  };
+  if (elCanvas.transferControlToOffscreen) {
+    px.canvas = elCanvas.transferControlToOffscreen();
+  } else {
+    px.canvas = elCanvas;
+  }
 
-  map.addLayer(l);
-
-  px.canvas = canvas;
-  px.sources.canvas = map.getSource(idMapCanvas);
+  px.elCanvas = elCanvas;
 
   px._timing('init_canvas', 'stop');
+};
+
+PixOp.prototype.initWorker = function() {
+  const px = this;
+  let worker = px._worker;
+
+  if (!worker) {
+    worker = px.createWorker(() => {
+      const w = self;
+
+      w.onmessage = async (m) => {
+        const d = m.data;
+        let width, height, ctx;
+        /**
+         * If init, clone canvas
+         */
+        if (d.type === 'init') {
+          w.canvas = d.canvas;
+          return;
+        }
+
+        if (d.type === 'set_size') {
+          w.canvas.width = d.width;
+          w.canvas.height = d.height;
+          return;
+        }
+
+        if (d.type === 'clear' || d.type === 'render') {
+          width = d.width || w.canvas.width;
+          height = d.height || w.canvas.height;
+          ctx = canvas.getContext('2d');
+        }
+
+        /**
+         * Clear
+         */
+        if (d.type === 'clear') {
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.clearRect(0, 0, width, height);
+          ctx.restore();
+          return;
+        }
+
+        /**
+         * Render spotlight
+         */
+        if (d.type === 'render') {
+          const start = performance.now();
+          /**
+           * init local vars
+           */
+          let x, y, k, j;
+          let hasOverlap = false;
+          let count = 0;
+          let countAll = 0;
+          const nLayers = d.store.length;
+          const nPix = height * width;
+          const points = [];
+
+          if (d.mode === 'spotlight') {
+            /**
+             * local
+             */
+            const imgBuffer = await createImageBitmap(d.buffer);
+
+            /**
+             * clear
+             */
+            ctx.fillRect(0, 0, width, height);
+            ctx.globalCompositeOperation = 'destination-out';
+
+            /**
+             * Find overlap and draw buffer
+             */
+            for (x = 0; x < width; x++) {
+              for (y = 0; y < height; y++) {
+                k = (y * width + x) * 4;
+                count = 0;
+                hasOverlap = false;
+                for (j = 0; j < nLayers; j++) {
+                  if (!hasOverlap) {
+                    if (d.store[j][k + 3] > d.thresh) {
+                      count++;
+                    }
+                    if (count >= d.nLayersOverlap) {
+                      hasOverlap = true;
+                      countAll += count;
+                      if (d.calcArea) {
+                        points.push([x, y]);
+                      }
+                      ctx.drawImage(imgBuffer, x - d.radius, y - d.radius);
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          if (d.mode === 'plain') {
+            /**
+             * Context data
+             */
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const data = imageData.data;
+
+            for (y = 0; y < height; y++) {
+              for (x = 0; x < width; x++) {
+                k = (y * width + x) * 4;
+                count = 0;
+
+                for (j = 0; j < nLayers; j++) {
+                  if (d.store[j][k + 3] > d.thresh) {
+                    count++;
+                  }
+                }
+                if (count >= d.nLayersOverlap) {
+                  data[k] = 255;
+                  data[k + 1] = 0;
+                  data[k + 2] = 0;
+                  data[k + 3] = 255;
+                  countAll += count;
+                  if (d.calcArea) {
+                    points.push([x, y]);
+                  }
+                }
+              }
+            }
+            ctx.putImageData(imageData, 0, 0, 0, 0, width, height);
+          }
+
+
+          /**
+          * Results
+          */
+          w.postMessage({
+            type: 'result',
+            mode: d.mode,
+            calcArea: d.calcArea,
+            points: points,
+            nPixelTotal: nPix,
+            nPixelFound: countAll,
+            timing: performance.now() - start
+          });
+        }
+      };
+    });
+
+    worker.postMessage(
+      {
+        type: 'init',
+        canvas: px.canvas
+      },
+      [px.canvas]
+    );
+
+    worker.addEventListener('message', (e) => {
+      const data = e.data;
+
+      if (data.type === 'result') {
+        if (data.calcArea) {
+          const area = data.points.reduce(
+            (a, coord) => a + px.getPixelAreaAtPoint(coord),
+            0
+          );
+          px.result.area = area;
+          px.config.onCalcArea(area);
+        }
+        px.result.nPixelTotal = data.nPixelTotal;
+        px.result.nPixelFound = data.nPixelFound;
+        console.log(data.timing + '(ms)');
+      }
+    });
+
+    px._worker = worker;
+  }
 };
 
 PixOp.prototype.start = function() {
@@ -192,27 +365,26 @@ PixOp.prototype.start = function() {
 
 PixOp.prototype.updateMapParams = function() {
   const px = this;
-  const opt = px.opt;
+  //const opt = px.opt;
   const map = px.map;
   const canvas = px.canvas;
-  const src = px.sources.canvas;
-  const bounds = px.getMapBounds();
-  const topLeft = map.project([bounds.minLng, bounds.maxLat]);
-  const bottomRight = map.project([bounds.maxLng, bounds.minLat]);
+  const rect = map.getCanvas().getBoundingClientRect();
 
   px._timing('update_bounds', 'start');
-  canvas.width = opt.canvas.scale * (bottomRight.x - topLeft.x) || 1;
-  canvas.height = opt.canvas.scale * (bottomRight.y - topLeft.y) || 1;
 
-  src.setCoordinates([
-    [bounds.minLng, bounds.maxLat],
-    [bounds.maxLng, bounds.maxLat],
-    [bounds.maxLng, bounds.minLat],
-    [bounds.minLng, bounds.minLat]
-  ]);
+  px._worker.postMessage({
+    type: 'set_size',
+    width: rect.width,
+    height: rect.height
+  });
+
+  /*
+   * It does not seems to be updated in worker...
+   */
+  canvas.width = rect.width;
+  canvas.height = rect.height;
 
   px._cache.map_bounds = map.getBounds();
-  px._cache.map_style = map.getStyle();
   px._cache.map_zoom = map.getZoom();
   px._timing('update_bounds', 'stop');
   return px;
@@ -248,18 +420,30 @@ PixOp.prototype.layersToPixelsStore = function() {
   return px;
 };
 
-PixOp.prototype.renderMethod = function() {
+PixOp.prototype.renderWorker = async function() {
   const px = this;
   const opt = px.opt;
 
-  switch (opt.type) {
-    case 'overlap':
-      px._findOverlap();
-      break;
-    case 'overlap-spotlight':
-      px._findOverlapSpotlight();
-      break;
-  }
+  const radius = opt.canvas.spotlightRadius || 10;
+  const buffer = px.getCircle(radius);
+
+  const nLayers = px.data.pixels.length;
+  const nLayersOverlap = opt.overlap.nLayersOverlap * 1 || nLayers; // 0 means all
+  const calcArea = opt.overlap.calcArea === true;
+  const thresh = opt.overlap.threshold;
+
+  const imgCircleBuffer = await buffer.convertToBlob();
+
+  px._worker.postMessage({
+    type: 'render',
+    mode: opt.mode,
+    buffer: imgCircleBuffer,
+    radius: radius,
+    store: px.data.pixels,
+    calcArea: calcArea,
+    nLayersOverlap: nLayersOverlap,
+    thresh: thresh
+  });
 
   return px;
 };
@@ -274,15 +458,9 @@ PixOp.prototype.reset = function() {
 
 PixOp.prototype.clearCanvas = function() {
   const px = this;
-  const canvas = px.canvas;
-  const width = canvas.width;
-  const height = canvas.height;
-  const ctx = canvas.getContext('2d');
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, width, height);
-  ctx.restore();
-  px.refresh();
+  px._worker.postMessage({
+    type: 'clear'
+  });
   return px;
 };
 
@@ -290,127 +468,6 @@ PixOp.prototype.clear = function() {
   const px = this;
   px.clearCanvas();
   return px;
-};
-
-PixOp.prototype._findOverlap = function() {
-  const px = this;
-  const opt = px.opt;
-  const canvas = px.canvas;
-  const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
-  const imageData = ctx.getImageData(0, 0, width, height);
-  const data = imageData.data;
-  const nPix = height * width;
-  const store = px.data.pixels;
-  const nLayer = store.length;
-  const nLayersOverlap = opt.overlap.nLayersOverlap * 1 || nLayer; // 0 means all
-  const calcArea = opt.overlap.calcArea === true;
-  const thresh = opt.overlap.threshold;
-  var j, k, x, y;
-  var area = 0;
-  var count = 0;
-  var countAll = 0;
-
-  for (y = 0; y < height; y++) {
-    for (x = 0; x < width; x++) {
-      k = (y * width + x) * 4;
-      count = 0;
-
-      for (j = 0; j < nLayer; j++) {
-        if (store[j][k + 3] > thresh) {
-          count++;
-        }
-      }
-      if (count >= nLayersOverlap) {
-        data[k] = 255;
-        data[k + 1] = 0;
-        data[k + 2] = 0;
-        data[k + 3] = 255;
-        countAll += count;
-        if (calcArea) {
-          area += px.getPixelAreaAtPoint(x, y);
-        }
-      }
-    }
-  }
-
-  px.result.nPixelTotal = nPix;
-  px.result.nPixelFound = countAll;
-
-  if (calcArea) {
-    px.result.area = area;
-    px.config.onCalcArea(area);
-  }
-
-  ctx.putImageData(imageData, 0, 0, 0, 0, width, height);
-};
-
-PixOp.prototype._findOverlapSpotlight = function() {
-  const px = this;
-  const opt = px.opt;
-  const canvas = px.canvas;
-  const ctx = canvas.getContext('2d');
-  const width = canvas.width;
-  const height = canvas.height;
-
-  const store = px.data.pixels;
-  const nLayer = store.length;
-  const radius = opt.canvas.spotlightRadius || 10;
-  const nPix = height * width;
-  const off = px.makeCanvas({width: width, height: height});
-  const ctxOff = off.getContext('2d', {alpha: false});
-  const nLayersOverlap = opt.overlap.nLayersOverlap * 1 || nLayer; // 0 means all
-  const calcArea = opt.overlap.calcArea === true;
-  const thresh = opt.overlap.threshold;
-  const buffer = px.getCircle(radius);
-  var hasOverlap = false;
-  var x, y, k, j;
-  var count = 0;
-  var countAll = 0;
-  var area = 0;
-
-  /**
-   * Black rect as starting point.
-   * everything else will be dest-out : like an eraser, new shapes
-   * will replace old pixels.
-   */
-  ctxOff.fillRect(0, 0, width, height);
-  ctxOff.globalCompositeOperation = 'destination-out';
-
-  /**
-   * Find overlap and draw buffer
-   */
-  for (x = 0; x < width; x++) {
-    for (y = 0; y < height; y++) {
-      k = (y * width + x) * 4;
-      count = 0;
-      hasOverlap = false;
-      for (j = 0; j < nLayer; j++) {
-        if (!hasOverlap) {
-          if (store[j][k + 3] > thresh) {
-            count++;
-          }
-          if (count >= nLayersOverlap) {
-            hasOverlap = true;
-            countAll += count;
-            if (calcArea) {
-              area += px.getPixelAreaAtPoint(x, y);
-            }
-            ctxOff.drawImage(buffer, x - radius, y - radius);
-          }
-        }
-      }
-    }
-  }
-  if (calcArea) {
-    px.result.area = area;
-    px.config.onCalcArea(area);
-  }
-  px.result.nPixelTotal = nPix;
-  px.result.nPixelFound = countAll;
-
-  ctx.drawImage(off, 0, 0, width, height);
 };
 
 PixOp.prototype.getResolution = function() {
@@ -453,7 +510,12 @@ PixOp.prototype.getCircle = function(radius) {
   var circle = circles[radius];
 
   if (!circle) {
-    circle = px.makeCanvas({width: radius * 2, height: radius * 2});
+    circle = px.makeCanvas({
+      id: 'circle',
+      width: radius * 2,
+      height: radius * 2,
+      offscreen: true
+    });
     ctxCircle = circle.getContext('2d');
     ctxCircle.beginPath();
     ctxCircle.arc(radius, radius, radius, 0, 2 * Math.PI);
@@ -490,14 +552,14 @@ PixOp.prototype.updateRenderOptions = function(opt) {
 };
 
 PixOp.prototype.refresh = function() {
-  const px = this;
-  return new Promise((resolve) => {
-    px.sources.canvas.play();
-    setTimeout(function() {
-      px.sources.canvas.pause();
-    }, 100);
-    resolve(px);
-  });
+  /*  const px = this;*/
+  //return new Promise((resolve) => {
+  //px.sources.canvas.play();
+  //setTimeout(function() {
+  //px.sources.canvas.pause();
+  //}, 100);
+  //resolve(px);
+  /*});*/
 };
 
 /*
@@ -572,9 +634,12 @@ PixOp.prototype.layerToCanvas = function(layer) {
   var point;
   var circle;
   const canvas = px.makeCanvas({
+    id: 'layers',
     width: px.canvas.width,
-    height: px.canvas.height
+    height: px.canvas.height,
+    offscreen: true
   });
+
   const ctx = canvas.getContext('2d');
 
   /**
@@ -684,7 +749,7 @@ PixOp.prototype.getPixelSizeMeterAtLat = function(lat) {
   );
 };
 
-PixOp.prototype.getPixelAreaAtPoint = function(x, y) {
+PixOp.prototype.getPixelAreaAtPoint = function(p) {
   /**
    *      dx
    *    *––––––*
@@ -693,6 +758,8 @@ PixOp.prototype.getPixelAreaAtPoint = function(x, y) {
    *    |
    *    *
    */
+  const x = p[0];
+  const y = p[1];
   const px = this;
   const map = px.map;
   const sc = px.opt.canvas.scale;
@@ -722,19 +789,13 @@ PixOp.prototype.getLatLngDistance = function(latlng1, latlng2) {
 };
 
 PixOp.prototype.makeCanvas = function(opt) {
-  const px = this;
-  const canvas = px.makeEl('canvas', opt);
-  const ctx = canvas.getContext('2d');
-  ctx.imageSmoothingEnabled = false;
+  let canvas = el('canvas', opt);
+  if (canvas.transferControlToOffscreen && opt.offscreen === true) {
+    canvas = canvas.transferControlToOffscreen();
+  }
+  /*const ctx = canvas.getContext('2d');*/
+  /*ctx.imageSmoothingEnabled = false;*/
   return canvas;
-};
-
-PixOp.prototype.makeEl = function(type, opt) {
-  const el = document.createElement(type);
-  Object.keys(opt).forEach((o) => {
-    el[o] = opt[o];
-  });
-  return el;
 };
 
 PixOp.prototype.onEachFeatureCoords = function(geojson, options) {
@@ -865,6 +926,26 @@ PixOp.prototype.getScaledContext = function() {
   // don't have to worry about the difference.
   ctx.scale(dpr, dpr);
   return ctx;
+};
+
+PixOp.prototype.createWorker = function(fun) {
+  /**
+   * As string
+   */
+  fun = fun.toString();
+  fun = fun.substring(fun.indexOf('{') + 1, fun.lastIndexOf('}'));
+  /**
+   * As blob
+   */
+  var blob = new Blob([fun], {
+    type: 'application/javascript'
+  });
+  /**
+   * As URL
+   */
+  var blobUrl = URL.createObjectURL(blob);
+
+  return new Worker(blobUrl);
 };
 
 export {PixOp};
