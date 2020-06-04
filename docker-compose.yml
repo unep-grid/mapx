@@ -64,7 +64,7 @@ services:
   geoserver :
     env_file: mapx.dev.env
     build: ./geoserver/.
-    image: fredmoser/mx-api-geoserver:2.14.1-alpine
+    image: fredmoser/mx-api-geoserver:2.17.0-alpine
     ports: 
       - 8882:8080
     volumes:
