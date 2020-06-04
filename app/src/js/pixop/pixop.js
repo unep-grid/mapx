@@ -97,7 +97,7 @@ PixOp.prototype.getDefault = function(type) {
         threshold: 127 // antialiasing produce varying alpha band. Which impact overlap analysis.
       },
       type: 'overlap',
-      debug: true,
+      debug: false,
       canvas: {
         scale: 2,
         add: false,
@@ -191,6 +191,7 @@ PixOp.prototype.initWorker = function() {
       const w = self;
 
       w.onmessage = async (m) => {
+
         const d = m.data;
         let width, height, ctx;
         /**
@@ -311,10 +312,9 @@ PixOp.prototype.initWorker = function() {
             ctx.putImageData(imageData, 0, 0, 0, 0, width, height);
           }
 
-
           /**
-          * Results
-          */
+           * Results
+           */
           w.postMessage({
             type: 'result',
             mode: d.mode,
@@ -350,7 +350,7 @@ PixOp.prototype.initWorker = function() {
         }
         px.result.nPixelTotal = data.nPixelTotal;
         px.result.nPixelFound = data.nPixelFound;
-        console.log(data.timing + '(ms)');
+
       }
     });
 

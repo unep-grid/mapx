@@ -108,7 +108,6 @@ export function toggleSpotlight(opt) {
      * Destroy if other changes
      */
 
-    console.log('add map move listener');
     map.on('movestart', hide);
     map.on('moveend', render);
     window.rr = render;
@@ -137,13 +136,12 @@ function hide() {
   mx.spotlight.pixop.setOpacity(0);
 }
 
-function render(e) {
-  if (e) {
-    console.log(e.type);
-  }
-  setTimeout(() => {
-    mx.spotlight.render();
-  }, 1);
+function render() {
+  mx.helpers.onNextFrame(() => {
+    setTimeout(()=>{
+      mx.spotlight.render();
+    },1);
+  });
 }
 
 function destroy() {
@@ -160,5 +158,4 @@ function destroy() {
   });
 
   mx.listeners.removeListenerByGroup('spotlight_pixop_ui');
-
 }
