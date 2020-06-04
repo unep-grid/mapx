@@ -1,61 +1,71 @@
 import {Spotlight} from './pixop/spotlight.js';
+import {RadialProgress} from './radial_progress/index.js';
+
+let prog;
 
 export function toggleSpotlight(opt) {
+  const h = mx.helpers;
+  const map = h.getMap();
   const elSelectNum = document.getElementById('selectNLayersOverlap');
   const elTextArea = document.getElementById('txtAreaOverlap');
   const elTextResol = document.getElementById('txtResolOverlap');
   const elEnableCalcArea = document.getElementById('checkEnableOverlapArea');
-  const clActive = 'active';
   const elToggleMain = document.getElementById('btnOverlapSpotlight');
+  const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
+  const clActive = 'active';
 
   opt = Object.assign(
-    {},
     {
-      enable: undefined,
-      elToggle: undefined,
-      calcArea: undefined,
-      nLayers: undefined
+      enable: !elToggle.classList.contains(clActive),
+      calcArea: !!elEnableCalcArea.checked,
+      nLayers: elSelectNum.value
     },
     opt
   );
-  const h = mx.helpers;
-  const map = h.getMap();
-  const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
 
-  const enable =
-    typeof opt.enable !== 'undefined'
-      ? opt.enable
-      : !elToggle.classList.contains(clActive);
+  /*
+   * Update UI
+   */
+  elEnableCalcArea.checked = opt.calc;
+  elToggle.checked = opt.enable;
+  elSelectNum.value = opt.nLayers;
 
+  if (!(prog instanceof RadialProgress)) {
+    prog = new RadialProgress(elToggle, {
+      radius: 20,
+      stroke: 2,
+      strokeColor: 'red'
+    });
+  }
+
+  /**
+   * Spotlight config
+   */
   const config = {
     map: map,
     enabled: () => {
-      return enable;
+      return !!elToggle.checked;
     },
-    nLayersOverlap: function() {
-      let n = 1;
-
-      if (opt.nLayers === 'all' || (opt.nLayers > 0 && opt.nLayers < 5)) {
-        elSelectNum.value = opt.nLayers;
-      }
-
-      n = elSelectNum.value === 'all' ? 0 : elSelectNum.value * 1;
-      return n;
+    nLayersOverlap: () => {
+      return elSelectNum.value * 1;
     },
     calcArea: () => {
-      let calc = false;
-      if (opt.calcArea) {
-        elEnableCalcArea.checked = true;
-      }
-      calc = !!elEnableCalcArea.checked;
-      return calc;
+      return !!elEnableCalcArea.checked;
     },
     onCalcArea: (area) => {
       let resol = mx.spotlight.getResolution();
       if (h.isElement(elTextArea) && h.isElement(elTextResol)) {
-        elTextArea.innerText = '~ ' + Math.round(area * 1e-6) + ' km2';
-        elTextResol.innerText =
-          ' ~ ' + formatDist(resol.lat) + ' x ' + formatDist(resol.lng);
+        const areaKm = Math.round(area * 1e-6);
+        const resolLat = formatDist(resol.lat);
+        const resolLng = formatDist(resol.lng);
+        elTextArea.innerText = `~ ${areaKm} km2`;
+        elTextResol.innerText = `~ ${resolLat} x ${resolLng}`;
+      }
+    },
+    onProgress: (p) => {
+      prog.update(p * 100);
+      if (p * 100 === 100) {
+        prog.update(0);
       }
     },
     onRendered: (px) => {
@@ -68,7 +78,7 @@ export function toggleSpotlight(opt) {
     }
   };
 
-  if (!enable) {
+  if (!opt.enable) {
     /**
      * Remove active class
      */
@@ -83,39 +93,39 @@ export function toggleSpotlight(opt) {
     /**
      * Create if needed
      */
-    if (!mx.spotlight || mx.spotlight.isDestroyed()) {
+    if (!(mx.spotlight instanceof Spotlight) || mx.spotlight.isDestroyed()) {
       mx.spotlight = new Spotlight(config);
+
+      mx.listeners.addListener({
+        target: elEnableCalcArea,
+        type: 'change',
+        idGroup: 'spotlight_pixop_ui',
+        callback: render
+      });
+      mx.listeners.addListener({
+        target: elSelectNum,
+        type: 'change',
+        idGroup: 'spotlight_pixop_ui',
+        callback: render
+      });
+
+      /**
+       * Destroy if other changes
+       */
+      map.on('movestart', clear);
+      map.on('moveend', render);
+      map.on('styledata', render);
+      /* mx.events.on({*/
+      //type: ['view_added', 'view_removed', 'view_filtered'],
+      //idGroup: 'spotlight_pixop_view_events',
+      //callback: render
+      /*});*/
     }
 
     /**
      * Render if non spatial change
      */
     render();
-    mx.listeners.addListener({
-      target: elEnableCalcArea,
-      type: 'change',
-      idGroup: 'spotlight_pixop_ui',
-      callback: render
-    });
-    mx.listeners.addListener({
-      target: elSelectNum,
-      type: 'change',
-      idGroup: 'spotlight_pixop_ui',
-      callback: render
-    });
-
-    /**
-     * Destroy if other changes
-     */
-
-    map.on('movestart', hide);
-    map.on('moveend', render);
-    window.rr = render;
-    mx.events.on({
-      type: ['view_added', 'view_removed', 'view_filtered'],
-      idGroup: 'spotlight_pixop_view_events',
-      callback: render
-    });
   }
 }
 
@@ -132,30 +142,26 @@ function formatDist(v, squared) {
   }
 }
 
-function hide() {
-  mx.spotlight.pixop.setOpacity(0);
+function clear() {
+  mx.spotlight.clear();
 }
 
+let idTimeout = 0;
+
 function render() {
-  mx.helpers.onNextFrame(() => {
-    setTimeout(()=>{
-      mx.spotlight.render();
-    },1);
-  });
+  clearTimeout(idTimeout);
+  idTimeout = setTimeout(() => {
+    mx.spotlight.render();
+  }, 100);
 }
 
 function destroy() {
   if (mx.spotlight instanceof Spotlight) {
     mx.spotlight.destroy();
+    const map = mx.spotlight.pixop.map;
+    map.off('moveend', render);
+    map.off('movestart', clear);
+    map.off('styledata', render);
+    mx.listeners.removeListenerByGroup('spotlight_pixop_ui');
   }
-  const map = mx.spotlight.pixop.map;
-  map.off('moveend', render);
-  map.off('movestart', hide);
-
-  mx.events.off({
-    type: ['view_added', 'view_removed', 'view_filtered'],
-    idGroup: 'spotlight_pixop_view_events'
-  });
-
-  mx.listeners.removeListenerByGroup('spotlight_pixop_ui');
 }

@@ -51,11 +51,11 @@ class RadialProgress {
 
   updateContext() {
     let rp = this;
-    var dpr = window.devicePixelRatio || 1;
-    var rect = rp.elCanvas.getBoundingClientRect();
+    let dpr = window.devicePixelRatio || 1;
+    let rect = rp.elCanvas.getBoundingClientRect();
     rp.elCanvas.width = rect.width * dpr;
     rp.elCanvas.height = rect.height * dpr;
-    var ctx = rp.elCanvas.getContext('2d');
+    let ctx = rp.elCanvas.getContext('2d');
     ctx.scale(dpr, dpr);
     rp.ctx = ctx;
     rp.ctx.lineWidth = rp.opt.stroke;

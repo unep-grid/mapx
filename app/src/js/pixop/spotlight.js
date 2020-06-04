@@ -15,6 +15,9 @@ const opt_default = {
   onCalcArea: function(d) {
     console.log(d);
   },
+  onProgress: function() {
+    console.log(d);
+  },
   idFrame: 0
 };
 
@@ -23,7 +26,6 @@ class Spotlight {
     const sl = this;
     sl.init(opt);
     sl.render = sl.render.bind(sl);
-    sl.refresh = sl.refresh.bind(sl);
     sl._destroyed = false;
   }
 
@@ -34,7 +36,8 @@ class Spotlight {
       map: sl.state.map,
       onCalcArea: sl.state.onCalcArea,
       onRendered: sl.state.onRendered,
-      onRender: sl.state.onRender
+      onRender: sl.state.onRender,
+      onProgress : sl.state.onProgress
     });
   }
 
@@ -57,12 +60,6 @@ class Spotlight {
   getResolution() {
     return this.pixop.getResolution();
   }
-
-  refresh() {
-    const sl = this;
-    sl.pixop.refresh();
-  }
-
   
   render() {
     const sl = this;
@@ -86,6 +83,7 @@ class Spotlight {
     });
     this.state.rendered = true;
   }
+  
   clear() {
     this.pixop.clear();
     this.state.rendered = false;

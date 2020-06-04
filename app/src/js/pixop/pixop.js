@@ -21,6 +21,7 @@ function PixOp(config) {
       circles: {},
       canvas: {}
     };
+    px._rendering = false;
     px._destroyed = false;
   } else {
     return new PixOp(config);
@@ -61,12 +62,19 @@ PixOp.prototype.render = function(opt) {
     throw new Error('PixOp is destroyed');
   }
 
+  if(px._rendering){
+    console.log('already rendering');
+    px.config.onProgress(0);
+    px.resetWorker();
+  }
+
   render();
 
   function render() {
     px._timing('render', 'start', true);
-
+    px._rendering = true;
     px.config.onRender(px);
+
     px.reset()
       .updateRenderOptions(opt)
       .updateMapParams()
@@ -74,7 +82,6 @@ PixOp.prototype.render = function(opt) {
       .layersToPixelsStore()
       .renderWorker();
 
-    px.config.onRendered(px);
     px._timing('render', 'stop');
   }
 };
@@ -155,6 +162,9 @@ PixOp.prototype.initConfig = function() {
 PixOp.prototype.initCanvas = function() {
   const px = this;
   px._timing('init_canvas', 'start');
+  if(px.elCanvas){
+    px.elCanvas.remove();
+  }
   const idMapCanvas = px.config.id_layer;
   const elCanvas = px.makeCanvas({
     id: idMapCanvas,
@@ -182,6 +192,15 @@ PixOp.prototype.initCanvas = function() {
   px._timing('init_canvas', 'stop');
 };
 
+PixOp.prototype.resetWorker = function() {
+  if (px._worker instanceof Worker) {
+    px._worker.terminate();
+    delete px._worker;
+  }
+  px.initCanvas();
+  px.initWorker();
+};
+
 PixOp.prototype.initWorker = function() {
   const px = this;
   let worker = px._worker;
@@ -191,7 +210,6 @@ PixOp.prototype.initWorker = function() {
       const w = self;
 
       w.onmessage = async (m) => {
-
         const d = m.data;
         let width, height, ctx;
         /**
@@ -218,10 +236,8 @@ PixOp.prototype.initWorker = function() {
          * Clear
          */
         if (d.type === 'clear') {
-          ctx.save();
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.clearRect(0, 0, width, height);
-          ctx.restore();
+          ctx.globalCompositeOperation = 'source-over';
+          ctx.fillRect(0, 0, width, height);
           return;
         }
 
@@ -242,6 +258,7 @@ PixOp.prototype.initWorker = function() {
           const points = [];
 
           if (d.mode === 'spotlight') {
+
             /**
              * local
              */
@@ -263,7 +280,7 @@ PixOp.prototype.initWorker = function() {
                 hasOverlap = false;
                 for (j = 0; j < nLayers; j++) {
                   if (!hasOverlap) {
-                    if (d.store[j][k + 3] > d.thresh) {
+                    if (d.store[j][k + 3] > d.threshold) {
                       count++;
                     }
                     if (count >= d.nLayersOverlap) {
@@ -277,6 +294,18 @@ PixOp.prototype.initWorker = function() {
                   }
                 }
               }
+
+              if (x % 50 === 0) {
+                w.postMessage({
+                  type: 'progress',
+                  progress: x / width
+                });
+              } else if (x === width - 1) {
+                w.postMessage({
+                  type: 'progress',
+                  progress: 1
+                });
+              }
             }
           }
 
@@ -289,11 +318,11 @@ PixOp.prototype.initWorker = function() {
 
             for (y = 0; y < height; y++) {
               for (x = 0; x < width; x++) {
-                k = (y * width + x) * 4;
+                p = k = (y * width + x) * 4;
                 count = 0;
 
                 for (j = 0; j < nLayers; j++) {
-                  if (d.store[j][k + 3] > d.thresh) {
+                  if (d.store[j][k + 3] > d.threshold) {
                     count++;
                   }
                 }
@@ -339,6 +368,10 @@ PixOp.prototype.initWorker = function() {
     worker.addEventListener('message', (e) => {
       const data = e.data;
 
+      if (data.type === 'progress') {
+        px.config.onProgress(data.progress);
+      }
+
       if (data.type === 'result') {
         if (data.calcArea) {
           const area = data.points.reduce(
@@ -350,7 +383,8 @@ PixOp.prototype.initWorker = function() {
         }
         px.result.nPixelTotal = data.nPixelTotal;
         px.result.nPixelFound = data.nPixelFound;
-
+        px.config.onRendered(px);
+        px._rendering = false;
       }
     });
 
@@ -430,7 +464,7 @@ PixOp.prototype.renderWorker = async function() {
   const nLayers = px.data.pixels.length;
   const nLayersOverlap = opt.overlap.nLayersOverlap * 1 || nLayers; // 0 means all
   const calcArea = opt.overlap.calcArea === true;
-  const thresh = opt.overlap.threshold;
+  const threshold = opt.overlap.threshold;
 
   const imgCircleBuffer = await buffer.convertToBlob();
 
@@ -442,7 +476,7 @@ PixOp.prototype.renderWorker = async function() {
     store: px.data.pixels,
     calcArea: calcArea,
     nLayersOverlap: nLayersOverlap,
-    thresh: thresh
+    threshold: threshold
   });
 
   return px;
@@ -549,17 +583,6 @@ PixOp.prototype.updateRenderOptions = function(opt) {
   });
   px.opt = opt;
   return px;
-};
-
-PixOp.prototype.refresh = function() {
-  /*  const px = this;*/
-  //return new Promise((resolve) => {
-  //px.sources.canvas.play();
-  //setTimeout(function() {
-  //px.sources.canvas.pause();
-  //}, 100);
-  //resolve(px);
-  /*});*/
 };
 
 /*
