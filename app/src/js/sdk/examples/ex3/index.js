@@ -52,10 +52,10 @@ mapx.on('ready', () => {
                 var $this = $(this);
                 var view = e.data;
                 $this.toggleClass('active');
-                var op = $this.hasClass('active') ? 'open_view' : 'close_view';
+                var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
                 mapx.ask(op, {
                   idView: view.id
-                })
+                });
               });
             $ul.find(`li[data-collection="${view_collection}"] ul`).append($('<li>').append($a));
           });

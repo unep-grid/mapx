@@ -346,12 +346,12 @@ class MapxResolvers {
   }
 
   /**
-   * Open a view
+   * Add a view
    * @param {Object} opt Options
    * @param {String} opt.idView Target view id
    * @return {Boolean} done
    */
-  open_view(opt) {
+  view_add(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     const res = this;
     const view = h.getView(opt.idView);
@@ -364,12 +364,12 @@ class MapxResolvers {
   }
 
   /**
-   * Close a view
+   * remove a view
    * @param {Object} opt Options
    * @param {String} opt.idView Target view id
    * @return {Boolean} done
    */
-  close_view(opt) {
+  view_remove(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     const res = this;
     const view = h.getView(opt.idView);

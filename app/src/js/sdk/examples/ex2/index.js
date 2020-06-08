@@ -1,17 +1,17 @@
 const mapx = new mxsdk.Manager({
   container: document.getElementById('mapx'),
-  url: 'http://app.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en',
+  url:
+    'http://app.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en'
   // url: 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en',
 });
 
 mapx.on('ready', () => {
-
   /**
    * Hide views panel
    */
   mapx.ask('set_panel_left_visibility', {
     panel: 'views',
-    show: false,
+    show: false
   });
 
   /**
@@ -35,10 +35,10 @@ mapx.on('ready', () => {
           var $this = $(this);
           var view = e.data;
           $this.toggleClass('active');
-          var op = $this.hasClass('active') ? 'open_view' : 'close_view';
+          var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
           mapx.ask(op, {
             idView: view.id
-          })
+          });
         });
       $ul.append($('<li>').append($a));
     });

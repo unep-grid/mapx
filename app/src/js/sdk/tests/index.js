@@ -273,7 +273,7 @@ mapx.once('ready', () => {
       }, []);
       const pos = Math.floor(Math.random() * viewsVt.length - 1);
       const view = viewsVt[pos];
-      await mapx.ask('open_view', {idView: view.id});
+      await mapx.ask('view_add', {idView: view.id});
       return view;
     },
     tests: [
@@ -298,7 +298,7 @@ mapx.once('ready', () => {
             (a, v) => (!a ? a : res.indexOf(v) > -1),
             true
           );
-          await mapx.ask('close_view', {idView: view.id});
+          await mapx.ask('view_remove', {idView: view.id});
           return pass;
         }
       }
@@ -327,7 +327,7 @@ mapx.once('ready', () => {
       const view = views.find((v) => {
         return !!v.data.dashboard;
       });
-      await mapx.ask('open_view', {idView: view.id});
+      await mapx.ask('view_add', {idView: view.id});
       return view;
     },
     tests: [
@@ -347,7 +347,7 @@ mapx.once('ready', () => {
             pass = pass && !(await mapx.ask('is_dashboard_visible'));
           }
 
-          await mapx.ask('close_view', {idView: view.id});
+          await mapx.ask('view_remove', {idView: view.id});
           return hasDashboard && pass;
         }
       }
@@ -361,7 +361,7 @@ mapx.once('ready', () => {
       const view = views.find((v) => {
         return t.h.isArray(v.data.collections) && v.data.collections.length > 0;
       });
-      await mapx.ask('open_view', {idView: view.id});
+      await mapx.ask('view_add', {idView: view.id});
       return view;
     },
     tests: [
@@ -371,7 +371,7 @@ mapx.once('ready', () => {
           const collectionAfter = await mapx.ask('get_project_collections', {
             open: true
           });
-          await mapx.ask('close_view', {idView: view.id});
+          await mapx.ask('view_remove', {idView: view.id});
           const diff = d(collectionAfter, view.data.collections);
           const pass = diff.length === 0;
           return pass;

@@ -496,8 +496,8 @@ Class to handle MapX specific method
     * [.get_view_layer_filter_numeric(opt)](#MapxResolvers+get_view_layer_filter_numeric) ⇒ <code>Number</code> \| <code>Array</code>
     * [.get_view_layer_filter_time(opt)](#MapxResolvers+get_view_layer_filter_time) ⇒ <code>Number</code> \| <code>Array</code>
     * [.get_view_layer_transparency(opt)](#MapxResolvers+get_view_layer_transparency) ⇒ <code>Number</code>
-    * [.open_view(opt)](#MapxResolvers+open_view) ⇒ <code>Boolean</code>
-    * [.close_view(opt)](#MapxResolvers+close_view) ⇒ <code>Boolean</code>
+    * [.view_add(opt)](#MapxResolvers+view_add) ⇒ <code>Boolean</code>
+    * [.view_remove(opt)](#MapxResolvers+view_remove) ⇒ <code>Boolean</code>
     * [.download_view_source_auto(opt)](#MapxResolvers+download_view_source_auto) ⇒ <code>Object</code>
     * [.show_modal_login()](#MapxResolvers+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
@@ -506,6 +506,7 @@ Class to handle MapX specific method
     * [.show_modal_share(opt)](#MapxResolvers+show_modal_share) ⇒ <code>Boolean</code>
     * [.show_modal_tool(opt)](#MapxResolvers+show_modal_tool) ⇒ <code>Boolean</code> \| <code>Array</code>
     * [.close_modal_all()](#MapxResolvers+close_modal_all) ⇒ <code>Boolean</code>
+    * [.toggle_draw_mode()](#MapxResolvers+toggle_draw_mode)
     * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
     * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state) ⇒ <code>Boolean</code>
@@ -516,6 +517,7 @@ Class to handle MapX specific method
     * [.move_view_before(opt)](#MapxResolvers+move_view_before) ⇒ <code>Boolean</code>
     * [.move_view_up(opt)](#MapxResolvers+move_view_up) ⇒ <code>Boolean</code>
     * [.move_view_down(opt)](#MapxResolvers+move_view_down) ⇒ <code>Boolean</code>
+    * [.set_vector_highlight(opt)](#MapxResolvers+set_vector_highlight) ⇒ <code>Object</code>
     * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
@@ -860,10 +862,10 @@ Get current transparency value for layers of a view
 | opt | <code>Options</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
-<a name="MapxResolvers+open_view"></a>
+<a name="MapxResolvers+view_add"></a>
 
-### mapxResolvers.open\_view(opt) ⇒ <code>Boolean</code>
-Open a view
+### mapxResolvers.view\_add(opt) ⇒ <code>Boolean</code>
+Add a view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
@@ -873,10 +875,10 @@ Open a view
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
-<a name="MapxResolvers+close_view"></a>
+<a name="MapxResolvers+view_remove"></a>
 
-### mapxResolvers.close\_view(opt) ⇒ <code>Boolean</code>
-Close a view
+### mapxResolvers.view\_remove(opt) ⇒ <code>Boolean</code>
+remove a view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
@@ -975,6 +977,12 @@ close all modal windows
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolvers+toggle_draw_mode"></a>
+
+### mapxResolvers.toggle\_draw\_mode()
+Toggle draw mode
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 <a name="MapxResolvers+get_views_order"></a>
 
 ### mapxResolvers.get\_views\_order() ⇒ <code>Array</code>
@@ -1093,6 +1101,21 @@ Move view down
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>Sring</code> |  |
+
+<a name="MapxResolvers+set_vector_highlight"></a>
+
+### mapxResolvers.set\_vector\_highlight(opt) ⇒ <code>Object</code>
+Highlight vector feature : Enable, disable, toggle
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle highglight |
+| opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed |
+| opt.calcArea | <code>Boolean</code> | Estimate area covered by visible features and display result in MapX interface |
 
 <a name="MapxResolvers+get_sdk_methods"></a>
 

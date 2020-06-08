@@ -90,7 +90,7 @@ class MxViews extends React.Component {
           href="#"
           className={this.state.active ? 'active': null}
           onClick={() => {
-            var op = !this.state.active ? 'open_view' : 'close_view';
+            var op = !this.state.active ? 'view_add' : 'view_remove';
             mapx.ask(op, {
               idView: view.id
             });
