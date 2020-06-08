@@ -574,6 +574,13 @@ class MapxResolvers {
   }
 
   /**
+  * Toggle draw mode
+  */
+  toggle_draw_mode(){
+    return h.drawModeToggle();
+  }
+
+  /**
    * Get views current absolute order (without groups)
    * @return {Array}
    */
@@ -699,6 +706,8 @@ class MapxResolvers {
   set_vector_highlight(opt) {
     return h.toggleSpotlight(opt);
   }
+
+
 
   /**
    * List resolvers methods

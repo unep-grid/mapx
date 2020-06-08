@@ -1,5 +1,6 @@
 var drawConfig = {
   enabled: false,
+  idButton : 'btnDrawMode',
   position: 'top-right',
   elBtn: null,
   draw: null
@@ -7,8 +8,8 @@ var drawConfig = {
 
 export function drawModeToggle(e) {
   const h = mx.helpers;
-  var c = drawConfig;
-  c.elBtn = e.currentTarget;
+  const c = drawConfig;
+  c.elBtn = e instanceof Event ? e.currentTarget : document.getElementById(c.idButton);
   c.map = h.getMap();
 
   if (drawConfig.enabled) {
@@ -16,6 +17,7 @@ export function drawModeToggle(e) {
   } else {
     enableDraw();
   }
+  return c.enabled;
 }
 
 function initDraw() {
