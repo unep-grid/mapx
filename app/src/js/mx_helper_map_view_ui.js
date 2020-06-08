@@ -428,7 +428,7 @@ export function viewsListRenderNew(o) {
           viewData: view
         });
       } else if (open) {
-        h.viewOpen(view);
+        h.viewAdd(view);
       }
     }
   }

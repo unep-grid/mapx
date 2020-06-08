@@ -1028,7 +1028,7 @@ export function viewsCloseAll(o) {
    * Close and remove layers
    */
   const removed = views.map((view) => {
-    h.viewClose(view.id);
+    h.viewRemove(view.id);
   });
 }
 
@@ -1436,7 +1436,7 @@ export function viewsCheckedUpdate(o) {
      */
     vToAdd.forEach((v) => {
       vStore.push(v);
-      h.viewOpen(v);
+      h.viewAdd(v);
     });
 
     /**
@@ -1444,7 +1444,7 @@ export function viewsCheckedUpdate(o) {
      */
     vToRemove.forEach((idView) => {
       vStore.splice(vStore.indexOf(idView, 1));
-      h.viewClose(idView);
+      h.viewRemove(idView);
     });
 
     /**
@@ -2252,7 +2252,7 @@ function _viewUiOpen(view) {
   return new Promise((resolve, reject) => {
     view = h.getView(view);
     if (!h.isView(view)) {
-      reject('viewOpen : no view given');
+      reject('viewAdd : no view given');
     }
     const elView = getViewEl(view);
 
@@ -2286,7 +2286,7 @@ function _viewUiClose(view) {
  * Get view, open it and add layers if any
  * @param {Object} view View to open
  */
-export async function viewOpen(view) {
+export async function viewAdd(view) {
   const h = mx.helpers;
   view = h.getView(view);
   if (!view) {
@@ -2295,7 +2295,7 @@ export async function viewOpen(view) {
   const confirmation = new Promise((resolve) => {
     mx.events.once({
       type: 'view_added',
-      idGroup: 'viewOpen',
+      idGroup: 'viewAdd',
       callback: (d) => {
         if (d.idView === view.id) {
           resolve(true);
@@ -2315,7 +2315,7 @@ export async function viewOpen(view) {
   return confirmation;
 }
 
-export async function viewClose(view) {
+export async function viewRemove(view) {
   const h = mx.helpers;
   view = h.getView(view);
 
@@ -2326,7 +2326,7 @@ export async function viewClose(view) {
   const confirmation = new Promise((resolve) => {
     mx.events.once({
       type: 'view_removed',
-      idGroup: 'viewClose',
+      idGroup: 'viewRemove',
       callback: (d) => {
         if (d.idView === view.id) {
           resolve(true);
@@ -2989,7 +2989,7 @@ export async function getViewLegendImage(opt) {
 
   if (isVt) {
     try {
-      await h.viewOpen(view);
+      await h.viewAdd(view);
 
       const hasLegend = h.isElement(view._elLegend);
 
@@ -3029,7 +3029,7 @@ export async function getViewLegendImage(opt) {
    */
   function close() {
     if (!isOpen) {
-      h.viewClose(view);
+      h.viewRemove(view);
     }
   }
 }

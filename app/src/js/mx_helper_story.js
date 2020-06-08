@@ -1009,7 +1009,7 @@ export function storyController(o) {
     };
 
     oldViews.forEach((id) => {
-      h.viewClose(id);
+      h.viewRemove(id);
     });
 
     o.data.close = function(cmd) {
@@ -1079,7 +1079,7 @@ export function storyController(o) {
          * Enable previously enabled layers
          */
         o.data.views.forEach((idView) => {
-          h.viewOpen(idView);
+          h.viewAdd(idView);
         });
       }
 

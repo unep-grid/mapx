@@ -187,7 +187,7 @@ function handleFileParser(f) {
     await h.viewsListAddSingle(view, {
       open: false
     });
-    await h.viewOpen(view);
+    await h.viewAdd(view);
     return view;
   };
 }
@@ -388,7 +388,7 @@ function handleView(view) {
   const idViews = h.getViews().map((v) => v.id);
   if (idViews.indexOf(view.id) > -1) {
     const viewOld = h.getView(view.id);
-    h.viewOpen(viewOld);
+    h.viewAdd(viewOld);
   } else {
     view._drop_shared = true;
     h.viewsListAddSingle(view);
