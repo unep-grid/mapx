@@ -529,6 +529,22 @@ class MapxResolvers {
       db_temporary_connect: {
         roles: ['publishers', 'admins'],
         id: 'btnShowDbInfoSelf'
+      },
+      project_external_views: {
+        roles: ['publishers', 'admins'],
+        id: 'btnShowProjectExternalViews'
+      },
+      project_config: {
+        roles: ['admins'],
+        id: 'btnShowProjectConfig'
+      },
+      project_invite_new_member: {
+        roles: ['admins'],
+        id: 'btnShowInviteMember'
+      },
+      project_define_roles: {
+        roles: ['admins'],
+        id: 'btnShowRoleManager'
       }
     };
     if (opt.list) {
@@ -574,9 +590,9 @@ class MapxResolvers {
   }
 
   /**
-  * Toggle draw mode
-  */
-  toggle_draw_mode(){
+   * Toggle draw mode
+   */
+  toggle_draw_mode() {
     return h.drawModeToggle();
   }
 
@@ -707,7 +723,55 @@ class MapxResolvers {
     return h.toggleSpotlight(opt);
   }
 
+  /**
+   * Map flyTo position with flying animation
+   * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto
+   * @example mapx.ask('set_map_fly_to',{center:[46,23], zoom:5});
+   * @return {Boolean} Move ended
+   */
+  set_map_fly_to(opt) {
+    const map = h.getMap();
+    return new Promise((resolve) => {
+      map.once('moveend', () => {
+        resolve(true);
+      });
+      map.flyTo(opt);
+    });
+  }
 
+  /**
+   * Map jumpTo position, without animation
+   * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto
+   * @example mapx.ask('set_map_fly_to',{lat:46,lng:23, zoom:5});
+   * @return {Boolean} Move ended
+   */
+  set_map_jump_to(opt) {
+    const map = h.getMap();
+    return new Promise((resolve) => {
+      map.once('moveend', () => {
+        resolve(true);
+      });
+      map.jumpTo(opt);
+    });
+  }
+
+  /**
+   * Get current map zoom
+   * @return {Float} zoom
+   */
+  get_map_zoom() {
+    const map = h.getMap();
+    return map.getZoom();
+  }
+
+  /**
+   * Get current map center
+   * @return {Array} center
+   */
+  get_map_center() {
+    const map = h.getMap();
+    map.getCenter();
+  }
 
   /**
    * List resolvers methods
