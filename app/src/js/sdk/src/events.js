@@ -25,7 +25,7 @@ class Events {
       var c = cbs[ncb - 1];
       if (c.type === type) {
         if (c.once) {
-          cbs.splice(ncb-1, 1);
+          cbs.splice(ncb - 1, 1);
         }
         c.cb(data);
       }
@@ -44,6 +44,7 @@ class Events {
       once: false
     });
   }
+
   /**
    * Unregister callback by type
    * @param {String} type Type of callback
@@ -51,7 +52,7 @@ class Events {
    */
   off(type, cb) {
     var cbs = this._on_cb;
-    var ncb = cbs.length;
+    var ncb = cbs.length - 1;
     while (ncb) {
       var c = cbs[ncb];
       if (c.type === type && c.cb === cb) {
@@ -72,7 +73,6 @@ class Events {
       once: true
     });
   }
- 
 }
 
 export {Events};

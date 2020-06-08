@@ -106,7 +106,8 @@ PixOp.prototype.getDefault = function(type) {
       type: 'overlap',
       debug: false,
       canvas: {
-        scale: 2,
+        dpr: 1,
+        useScale : false,
         add: false,
         lineWidth: 0,
         lineCap: 'round',
@@ -221,14 +222,15 @@ PixOp.prototype.initWorker = function() {
         }
 
         if (d.type === 'set_size') {
-          w.canvas.width = d.width;
-          w.canvas.height = d.height;
+          w.dpr = d.dpr || 1;
+          w.canvas.width = d.width * w.dpr;
+          w.canvas.height = d.height * w.dpr;
           return;
         }
 
         if (d.type === 'clear' || d.type === 'render') {
-          width = d.width || w.canvas.width;
-          height = d.height || w.canvas.height;
+          width =  w.canvas.width;
+          height = w.canvas.height;
           ctx = canvas.getContext('2d');
         }
 
@@ -289,7 +291,8 @@ PixOp.prototype.initWorker = function() {
                       if (d.calcArea) {
                         points.push([x, y]);
                       }
-                      ctx.drawImage(imgBuffer, x - d.radius, y - d.radius);
+                  
+                      ctx.drawImage(imgBuffer, x/w.dpr - d.radius, y/w.dpr - d.radius);
                     }
                   }
                 }
@@ -403,20 +406,22 @@ PixOp.prototype.updateMapParams = function() {
   const map = px.map;
   const canvas = px.canvas;
   const rect = map.getCanvas().getBoundingClientRect();
-
   px._timing('update_bounds', 'start');
+  px.opt.canvas.dpr = px.opt.canvas.useScale ? window.devicePixelRatio : 1;
 
   px._worker.postMessage({
     type: 'set_size',
-    width: rect.width,
-    height: rect.height
+    width: rect.width ,
+    height: rect.height,
+    dpr : px.opt.canvas.dpr
   });
-
   /*
    * It does not seems to be updated in worker...
    */
-  canvas.width = rect.width;
-  canvas.height = rect.height;
+  canvas.width = rect.width * px.opt.canvas.dpr;
+  canvas.height = rect.height * px.opt.canvas.dpr;
+  px.elCanvas.style.width= rect.width;
+  px.elCanvas.style.height = rect.height;
 
   px._cache.map_bounds = map.getBounds();
   px._cache.map_zoom = map.getZoom();
@@ -690,7 +695,6 @@ PixOp.prototype.layerToCanvas = function(layer) {
     },
     onCoord: function(coord, type, first, last) {
       point = px.coordToPoint(coord[0], coord[1]);
-
       if (point) {
         if (isPoint) {
           radius =
@@ -730,9 +734,9 @@ PixOp.prototype.coordToPoint = function(lng, lat) {
   var point;
   if (valid) {
     point = map.project([lng, lat]);
-    if (opt.canvas.scale !== 1) {
-      point.x = point.x * opt.canvas.scale;
-      point.y = point.y * opt.canvas.scale;
+    if (opt.canvas.dpr !== 1) {
+      point.x = point.x * opt.canvas.dpr;
+      point.y = point.y * opt.canvas.dpr;
     }
   }
   return point;
@@ -785,7 +789,7 @@ PixOp.prototype.getPixelAreaAtPoint = function(p) {
   const y = p[1];
   const px = this;
   const map = px.map;
-  const sc = px.opt.canvas.scale;
+  const sc = px.opt.canvas.dpr;
   const topLeft = map.unproject([(x - 0.5) / sc, (y - 0.5) / sc]);
   const topRight = map.unproject([(x + 0.5) / sc, (y - 0.5) / sc]);
   const bottomLeft = map.unproject([(x - 0.5) / sc, (y + 0.5) / sc]);
@@ -931,25 +935,6 @@ PixOp.prototype._timing = function(id, start, reset) {
   }
 };
 
-PixOp.prototype.getScaledContext = function() {
-  const canvas = this.canvas;
-  /**
-   * https://www.html5rocks.com/en/tutorials/canvas/hidpi/
-   */
-  // Get the device pixel ratio, falling back to 1.
-  const dpr = window.devicePixelRatio || 1;
-  // Get the size of the canvas in CSS pixels.
-  const rect = canvas.getBoundingClientRect();
-  // Give the canvas pixel dimensions of their CSS
-  // size * the device pixel ratio.
-  canvas.width = rect.width * dpr;
-  canvas.height = rect.height * dpr;
-  const ctx = canvas.getContext('2d');
-  // Scale all drawing operations by the dpr, so you
-  // don't have to worry about the difference.
-  ctx.scale(dpr, dpr);
-  return ctx;
-};
 
 PixOp.prototype.createWorker = function(fun) {
   /**

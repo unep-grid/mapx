@@ -43,7 +43,7 @@ class MapxResolvers {
    */
   has_el_id(opt) {
     return new Promise((resolve) => {
-      setTimeout(()=>{
+      setTimeout(() => {
         const has = !!document.getElementById(opt.id);
         resolve(has);
       }, opt.timeout || 0);
@@ -74,9 +74,9 @@ class MapxResolvers {
   }
 
   /**
-  * Check if the dashboard is visible
-  * @return {Boolean} The dashboard is visible
-  */
+   * Check if the dashboard is visible
+   * @return {Boolean} The dashboard is visible
+   */
   is_dashboard_visible() {
     const res = this;
     return res.has_dashboard() && mx.dashboard.isVisible();
@@ -686,6 +686,18 @@ class MapxResolvers {
     const v = h.getMapData().viewsList;
     v.moveTargetDown(opt.idView);
     return true;
+  }
+
+  /**
+   * Highlight vector feature : Enable, disable, toggle
+   * @param {Object} opt Options
+   * @param {Boolean} opt.enable Enable or disable. If not set, toggle highglight
+   * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed
+   * @param {Boolean} opt.calcArea Estimate area covered by visible features and display result in MapX interface
+   * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
+   */
+  set_vector_highlight(opt) {
+    return h.toggleSpotlight(opt);
   }
 
   /**

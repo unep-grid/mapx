@@ -67,6 +67,12 @@ export function toggleSpotlight(opt) {
       if (p * 100 === 100) {
         prog.update(0);
       }
+      mx.events.fire({
+        type: 'highlight_progress',
+        data: {
+          progress : p
+        }
+      });
     },
     onRendered: (px) => {
       document.body.classList.remove('mx-busy');
@@ -115,11 +121,6 @@ export function toggleSpotlight(opt) {
       map.on('movestart', clear);
       map.on('moveend', render);
       map.on('styledata', render);
-      /* mx.events.on({*/
-      //type: ['view_added', 'view_removed', 'view_filtered'],
-      //idGroup: 'spotlight_pixop_view_events',
-      //callback: render
-      /*});*/
     }
 
     /**
@@ -127,6 +128,13 @@ export function toggleSpotlight(opt) {
      */
     render();
   }
+  
+  mx.events.fire({
+    type: 'highlight_update',
+    data: opt
+  });
+
+  return opt;
 }
 
 function formatDist(v, squared) {
