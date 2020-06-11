@@ -61,24 +61,33 @@ export function path(obj, path, def) {
  * @param {Object} opt options
  * @param {String} opt.type  Type of handler : dashboard, draw, ...
  * @param {Boolean} opt.enable Enable this handler
+ * @return {Array} handlers id
  */
 export function setClickHandler(opt) {
   var type = opt.type;
   var enable = opt.enable;
+  var toggle = opt.toggle;
+  var handlers = getClickHandlers();
+  var posClickHandler = handlers.indexOf(type);
+  var hasClickHandler = posClickHandler > -1;
+
+  if (toggle) {
+    enable = !hasClickHandler;
+  }
 
   if (!type || typeof enable === 'undefined') {
     return;
   }
 
-  var posClickHandler = mx.settings.clickHandlers.indexOf(type);
-  var hasClickHandler = posClickHandler > -1;
   if (enable && !hasClickHandler) {
     mx.settings.clickHandlers.push(type);
   }
   if (!enable && hasClickHandler) {
     mx.settings.clickHandlers.splice(posClickHandler, 1);
   }
+  return mx.settings.clickHandlers;
 }
+
 export function getClickHandlers() {
   return mx.settings.clickHandlers;
 }
@@ -1375,14 +1384,14 @@ export function scrollFromTo(o) {
   });
 }
 /**
-* x,y to degree
-*/
-export function xyToDegree(x,y) {
-    let result = Math.atan2(y, x);
-    if (result < 0) {
-        result += (2 * Math.PI);
-    }
-    return result * ( 180 / Math.PI);
+ * x,y to degree
+ */
+export function xyToDegree(x, y) {
+  let result = Math.atan2(y, x);
+  if (result < 0) {
+    result += 2 * Math.PI;
+  }
+  return result * (180 / Math.PI);
 }
 
 /**

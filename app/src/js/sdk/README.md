@@ -518,6 +518,15 @@ Class to handle MapX specific method
     * [.move_view_up(opt)](#MapxResolvers+move_view_up) ⇒ <code>Boolean</code>
     * [.move_view_down(opt)](#MapxResolvers+move_view_down) ⇒ <code>Boolean</code>
     * [.set_vector_highlight(opt)](#MapxResolvers+set_vector_highlight) ⇒ <code>Object</code>
+    * [.view_geojson_create(opt)](#MapxResolvers+view_geojson_create) ⇒ <code>Object</code>
+    * [.view_geojson_set_style(opt)](#MapxResolvers+view_geojson_set_style) ⇒ <code>Boolean</code>
+    * [.view_geojson_delete(opt)](#MapxResolvers+view_geojson_delete) ⇒ <code>Boolean</code>
+    * [.set_features_click_sdk_only(opt)](#MapxResolvers+set_features_click_sdk_only) ⇒ <code>Array</code>
+    * [.get_features_click_handlers()](#MapxResolvers+get_features_click_handlers) ⇒ <code>Array</code>
+    * [.map_fly_to(opt)](#MapxResolvers+map_fly_to) ⇒ <code>Boolean</code>
+    * [.map_jump_to(opt)](#MapxResolvers+map_jump_to) ⇒ <code>Boolean</code>
+    * [.map_get_zoom()](#MapxResolvers+map_get_zoom) ⇒ <code>Float</code>
+    * [.map_get_center()](#MapxResolvers+map_get_center) ⇒ <code>Array</code>
     * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
@@ -1117,6 +1126,123 @@ Highlight vector feature : Enable, disable, toggle
 | opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed |
 | opt.calcArea | <code>Boolean</code> | Estimate area covered by visible features and display result in MapX interface |
 
+<a name="MapxResolvers+view_geojson_create"></a>
+
+### mapxResolvers.view\_geojson\_create(opt) ⇒ <code>Object</code>
+Add geojson.
+( Other supported file type may be supported )
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - view  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.data | <code>String</code> \| <code>Object</code> \| <code>Buffer</code> | Data : String, |
+| opt.save | <code>Boolean</code> | Save locally, so next session the date will be loaded |
+| opt.fileType | <code>String</code> | File type. e.g. geojson. default = geojson |
+| opt.fileName | <code>String</code> | File name, if any |
+| opt.title | <code>Sring</code> | Title |
+| opt.abstract | <code>String</code> | Abstract |
+
+<a name="MapxResolvers+view_geojson_set_style"></a>
+
+### mapxResolvers.view\_geojson\_set\_style(opt) ⇒ <code>Boolean</code>
+Set geojson view layers style : layout and paint
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Id of the geojson view |
+| opt.layout | <code>Object</code> | Mapbox-gl layout object e.g. {'visibility','none'}; |
+| opt.paint | <code>Object</code> | Mapbox-gl paint object. e.g. {'fill-color':'red'}; |
+
+<a name="MapxResolvers+view_geojson_delete"></a>
+
+### mapxResolvers.view\_geojson\_delete(opt) ⇒ <code>Boolean</code>
+Delete view geojson
+Works with all view, but not permanently.
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Id of the geojson view to delete. |
+
+<a name="MapxResolvers+set_features_click_sdk_only"></a>
+
+### mapxResolvers.set\_features\_click\_sdk\_only(opt) ⇒ <code>Array</code>
+Set map feature click handler to sdk only
+A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
+if this option is enabled, only the SDK will receive the attribute table.
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Enabled modes  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.enable | <code>Boolean</code> | Enable sdk only |
+| opt.toggle | <code>Boolean</code> | Toggle this mode |
+
+<a name="MapxResolvers+get_features_click_handlers"></a>
+
+### mapxResolvers.get\_features\_click\_handlers() ⇒ <code>Array</code>
+Get map feature click handlers id
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Enabled modes  
+<a name="MapxResolvers+map_fly_to"></a>
+
+### mapxResolvers.map\_fly\_to(opt) ⇒ <code>Boolean</code>
+Map flyTo position with flying animation
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Move ended  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto |
+
+**Example**  
+```js
+mapx.ask('map_fly_to',{center:[46,23], zoom:5});
+```
+<a name="MapxResolvers+map_jump_to"></a>
+
+### mapxResolvers.map\_jump\_to(opt) ⇒ <code>Boolean</code>
+Map jumpTo position, without animation
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Move ended  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto |
+
+**Example**  
+```js
+mapx.ask('set_map_jump_to',{lat:46,lng:23, zoom:5});
+```
+<a name="MapxResolvers+map_get_zoom"></a>
+
+### mapxResolvers.map\_get\_zoom() ⇒ <code>Float</code>
+Get current map zoom
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Float</code> - zoom  
+<a name="MapxResolvers+map_get_center"></a>
+
+### mapxResolvers.map\_get\_center() ⇒ <code>Array</code>
+Get current map center
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - center  
 <a name="MapxResolvers+get_sdk_methods"></a>
 
 ### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>

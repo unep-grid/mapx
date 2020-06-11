@@ -25,6 +25,11 @@
     "en": "Cette vue n'est pas valide"
   },
   {
+    "key": "err_layer_not_found",
+    "en": "Layer or view not found ${idView}",
+    "en": "Couche ou vue introuvable ${idView}"
+  },
+  {
     "key": "err_not_available_mode",
     "en": "Method not available in this mode: ${mode}",
     "en": "Méthode non disponible dans ce mode: ${mode}"
@@ -71,8 +76,8 @@
   },
   {
     "key": "err_handle_message_worker",
-    "en": "Failed to handle worker message : ${msg}",
-    "fr": "Echec de la prise en charge du message : ${msg}"
+    "en": "Failed to handle frameWorker message : ${msg}",
+    "fr": "Echec de la prise en charge du message du frameWorker : ${msg}"
   },
   {
     "key": "warn_destroyed",

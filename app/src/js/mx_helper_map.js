@@ -892,40 +892,36 @@ export function initMapxApp(o) {
  * Handle click event
  * @param {Object} e Mapboxgl event object
  */
-export function handleClickEvent(e, idMap) {
+export async function handleClickEvent(e, idMap) {
   const type = e.type;
-  const hasLayer = mx.helpers.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
-  const map = mx.helpers.getMap(idMap);
-  const clickModes = mx.helpers.getClickHandlers();
+  const h = mx.helpers;
+  const hasLayer = h.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
+  const map = h.getMap(idMap);
+  const clickModes = h.getClickHandlers();
   const hasDashboard = clickModes.indexOf('dashboard') > -1;
   const hasDraw = clickModes.indexOf('draw') > -1;
+  const hasSdk = clickModes.indexOf('sdk') > -1;
 
   if (hasLayer && type === 'click') {
-    if (hasDashboard) {
+    if (hasDashboard || hasDraw) {
       /**
-       * Probably handled by dashboards
+       * Handled by Dashboard/Widget
        */
       return;
-    } else if (hasDraw) {
-      /**
-       * Handle draw function ; edit selected feature.
-       *
-       * const layerGJ = mx.helpers.getLayerNamesByPrefix({prefix:'MX-GJ'});
-       *if(layerGJ.length>0){
-       *  const id = layerGJ[0];
-       *  const feature = map.queryRenderedFeatures(e.point,{layers:[id]})[0];
-       *  if(!feature){
-       *    return;
-       *  }
-       *  mx.data.geojson.getItem(id)
-       *    .then( data => {
-       *      const featuresOrig = mx.helpers.path(data,'view.data.source.data.features');
-       *      const featureQuery = feature;
-       *  });
-       *}
-       */
-      return;
-    } else {
+    }
+
+    /*
+     * Extract attributes, return an object with idView
+     * as key and prmises as value
+     */
+    const layersAttributes = h.getLayersPropertiesAtPoint({
+      map: map,
+      point: e.point,
+      type: ['vt', 'gj', 'cc', 'rt'],
+      asObject: true
+    });
+
+    if (!hasSdk) {
       /**
        * Click event : make a popup with attributes
        */
@@ -944,11 +940,31 @@ export function handleClickEvent(e, idMap) {
       /**
        * NOTE: see mx_helper_map_features_popoup.js
        */
-      mx.helpers.featuresToHtml({
-        id: idMap,
-        point: e.point,
-        lngLat: e.lngLat,
+      h.featuresToHtml({
+        layersAttributes: layersAttributes,
         popup: popup
+      });
+    }
+
+    /**
+     * Fire events with attributes data
+     */
+    const idViews = Object.keys(layersAttributes);
+    const nViews = idViews.length;
+    let processed = 0;
+    for (let idView in layersAttributes) {
+      const attributes = await layersAttributes[idView];
+      processed++;
+      mx.events.fire({
+        type: 'click_attributes',
+        data: {
+          part: processed,
+          nPart: nViews,
+          idView: idView,
+          attributes: attributes,
+          point: e.point,
+          lngLat: e.lngLat
+        }
       });
     }
   }
@@ -1713,7 +1729,7 @@ export function getViewsOrder() {
  */
 export function getViewJson(idView, opt) {
   const h = mx.helpers;
-  opt = Object.assign({}, {asString: true});
+  opt = Object.assign({}, {asString: true}, opt);
   const view = h.getView(idView);
   const keys = [
     'id',
@@ -2190,6 +2206,7 @@ export function viewDelete(o) {
   mx.events.fire({
     type: 'view_deleted'
   });
+  return true;
 }
 
 /**

@@ -26,5 +26,10 @@ mapx.on('mapx_disconnected', () => {
   alert('mapx_disconnected');
 });
 mapx.on('project_change', (d) => {
-  console.log("Project changed", d);
+  console.log('Project changed', d);
 });
+mapx.on('click_attributes', (d) => {
+  console.log(`Attributes clicked part ${d.part}/${d.nPart}`);
+});
+
+

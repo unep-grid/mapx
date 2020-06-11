@@ -426,8 +426,9 @@ export function queryWms(opt) {
       /**
       * Fetch or stop here
       */
+      
+      const request = `${url}?${h.objToParams(paramsInfo)}`;
       if (validException && validLayer && validInfo) {
-        const request = `${url}?${h.objToParams(paramsInfo)}`;
         return fetch(request);
       } else {
         console.warn({

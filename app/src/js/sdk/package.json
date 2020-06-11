@@ -11,9 +11,9 @@
     "example": "example"
   },
   "scripts": {
-    "test": "microbundle -o dist --no-compress && live-server tests --mount=/dist:dist",
+    "test": "microbundle -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
     "dev": "microbundle watch -o dist --no-compress",
-    "dev-live": "live-server dev --mount=/dist:dist",
+    "dev-live": "live-server dev --mount=/dist:dist --mount=/data:data",
     "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
     "prod": "microbundle -o dist && npm run jsdoc && npm publish",
     "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"

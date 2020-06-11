@@ -194,23 +194,30 @@ function handleFileParser(f) {
 
 export async function spatialDataToView(opt) {
   const h = mx.helpers;
+  const idRandom = h.makeId();
+
+  const c = Object.assign(
+    {},
+    {
+      worker: null,
+      map: h.getMap(),
+      gj: null, // maybe not used
+      data: null,
+      view: null,
+      title: idRandom,
+      fileName: idRandom,
+      abstract: idRandom,
+      fileType: 'geojson'
+    },
+    opt
+  );
 
   /**
    * Init
    */
-  const c = {
-    worker: null,
-    data: opt.data,
-    map: h.getMap(),
-    gj: {},
-    fileType: opt.fileType,
-    fileName: opt.fileName,
-    title: opt.title || opt.fileName.split('.')[0],
-    view: {}
-  };
-
   const geojsonWorker = await h.moduleLoad('mx-drag-drop-worker');
   c.worker = new geojsonWorker();
+
   /**
    * Parse data according to filetype
    */
@@ -285,7 +292,7 @@ export async function spatialDataToView(opt) {
             },
             attributes: m.attributes,
             abstract: {
-              en: c.title
+              en: c.abstract || c.title
             },
             geometry: {
               extent: {
@@ -303,9 +310,11 @@ export async function spatialDataToView(opt) {
           }
         };
 
-        saveInLocalDb({
-          view: c.view
-        });
+        if (c.save !== false) {
+          saveInLocalDb({
+            view: c.view
+          });
+        }
 
         resolve(c.view);
         c.worker.terminate();
@@ -320,7 +329,7 @@ export async function spatialDataToView(opt) {
     data: gJson,
     fileName: c.fileName,
     fileType: c.fileType,
-    id: 'MX-GJ-' + h.makeId(10)
+    id: `MX-GJ-${h.makeId(10)}`
   });
 
   return promView;
@@ -422,9 +431,9 @@ export function handleFiles(files) {
     // Only process geojson files. Validate later.
     if (!f.fileType) {
       alert(
-        f.name +
-          ' : filename not valid. Supported files – based on file extension – are ' +
-          JSON.stringify(Object.keys(exts))
+        `${f.name}: filename not valid. 
+      Supported files – based on file extension – are :
+      ${JSON.stringify(Object.keys(exts))}`
       );
       continue;
     }

@@ -375,8 +375,7 @@ class MapxResolvers {
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
-      h.viewRemove(view);
-      return true;
+      return h.viewRemove(view);
     } else {
       return res._err('err_view_invalid');
     }
@@ -724,17 +723,120 @@ class MapxResolvers {
   }
 
   /**
+   * Add geojson.
+   * ( Other supported file type may be supported )
+   * @param {Object} opt Options
+   * @param {String | Object | Buffer} opt.data Data : String,
+   * @param {Boolean} opt.save Save locally, so next session the date will be loaded
+   * @param {String} opt.fileType File type. e.g. geojson. default = geojson
+   * @param {String} opt.fileName File name, if any
+   * @param {Sring} opt.title Title
+   * @param {String} opt.abstract Abstract
+   * @return {Object} view
+   */
+  async view_geojson_create(opt) {
+    const id = h.makeId(12);
+    opt = Object.assign(
+      {},
+      {
+        data: null,
+        save: false,
+        fileType: 'geojson',
+        fileName: id,
+        title: id,
+        abstract: id
+      },
+      opt
+    );
+    const view = await h.spatialDataToView(opt);
+    await h.viewsListAddSingle(view, {open: true});
+    const out = h.getViewJson(view, {asString:false});
+    return out;
+  }
+
+  /**
+   * Set geojson view layers style : layout and paint
+   * @param {Object} opt Options
+   * @param {String} opt.idView Id of the geojson view
+   * @param {Object} opt.layout Mapbox-gl layout object e.g. {'visibility','none'};
+   * @param {Object} opt.paint Mapbox-gl paint object. e.g. {'fill-color':'red'};
+   * @return {Boolean} done
+   */
+  view_geojson_set_style(opt) {
+    opt = Object.assign({}, {idView: null, layout: {}, paint: {}}, opt);
+    const res = this;
+    const map = h.getMap();
+    const layer = map.getLayer(opt.idView);
+    const paintProp = Object.keys(opt.paint);
+    const layoutProp = Object.keys(opt.layout);
+    if (!layer) {
+      return res._err('err_layer_not_found', {idView: opt.idView});
+    }
+
+    if (paintProp.length > 0) {
+      paintProp.forEach((p) => {
+        map.setPaintProperty(opt.idView, p, opt.paint[p]);
+      });
+    }
+    if (layoutProp.length > 0) {
+      layoutProp.forEach((p) => {
+        map.setLayoutProperty(opt.idView, p, opt.layout[p]);
+      });
+    }
+  }
+
+  /**
+   * Delete view geojson
+   * Works with all view, but not permanently.
+   * @param {Object} opt Options
+   * @param {String} opt.idView Id of the geojson view to delete.
+   * @return {Boolean} done
+   */
+  view_geojson_delete(opt) {
+    return h.viewDelete({
+      idView: opt.idView
+    });
+  }
+
+  /**
+   * Set map feature click handler to sdk only
+   * A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
+   * if this option is enabled, only the SDK will receive the attribute table.
+   * @param {Object} opt Options
+   * @param {Boolean} opt.enable Enable sdk only
+   * @param {Boolean} opt.toggle Toggle this mode
+   * @return {Array} Enabled modes
+   */
+  set_features_click_sdk_only(opt) {
+    return h.setClickHandler({
+      type: 'sdk',
+      enable: opt.enable,
+      toggle: opt.toggle
+    });
+  }
+
+  /**
+   * Get map feature click handlers id
+   * @return {Array} Enabled modes
+   */
+  get_features_click_handlers() {
+    return h.getClickHandler();
+  }
+
+  /**
+   * MAPBOX direct binding
+   */
+
+  /**
    * Map flyTo position with flying animation
    * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto
-   * @example mapx.ask('set_map_fly_to',{center:[46,23], zoom:5});
+   * @example mapx.ask('map_fly_to',{center:[46,23], zoom:5});
    * @return {Boolean} Move ended
    */
-  set_map_fly_to(opt) {
+  map_fly_to(opt) {
+    const res = this;
     const map = h.getMap();
-    return new Promise((resolve) => {
-      map.once('moveend', () => {
-        resolve(true);
-      });
+    return res._map_resolve_when('moveend', () => {
       map.flyTo(opt);
     });
   }
@@ -742,15 +844,13 @@ class MapxResolvers {
   /**
    * Map jumpTo position, without animation
    * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto
-   * @example mapx.ask('set_map_fly_to',{lat:46,lng:23, zoom:5});
+   * @example mapx.ask('set_map_jump_to',{lat:46,lng:23, zoom:5});
    * @return {Boolean} Move ended
    */
-  set_map_jump_to(opt) {
+  map_jump_to(opt) {
+    const res = this;
     const map = h.getMap();
-    return new Promise((resolve) => {
-      map.once('moveend', () => {
-        resolve(true);
-      });
+    return res._map_resolve_when('moveend', () => {
       map.jumpTo(opt);
     });
   }
@@ -759,7 +859,7 @@ class MapxResolvers {
    * Get current map zoom
    * @return {Float} zoom
    */
-  get_map_zoom() {
+  map_get_zoom() {
     const map = h.getMap();
     return map.getZoom();
   }
@@ -768,10 +868,36 @@ class MapxResolvers {
    * Get current map center
    * @return {Array} center
    */
-  get_map_center() {
+  map_get_center() {
     const map = h.getMap();
     map.getCenter();
   }
+
+  /**
+   * NOTE: let users add any layer and source ?
+   * Add geojson to the map
+   * @param {String} id Source id
+   * @param {Object} source Source config
+   * @ignore
+   *
+   * map_add_source(id, source) {
+   * const res = this;
+   * const map = h.getMap();
+   * res._map_resolve_when('sourcedata', () => {
+   *   map.addSource(id, source);
+   * });
+   *  }
+   * Add layer to the map
+   * @param {Object} layer Layer config
+   *
+   * map_add_layer(layer, before) {
+   * const res = this;
+   * const map = h.getMap();
+   * res._map_resolve_when('styledata', () => {
+   *   map.addLayer(layer, before || 'mxlayers');
+   * });
+   * }
+   */
 
   /**
    * List resolvers methods
@@ -868,6 +994,23 @@ class MapxResolvers {
       level: 'error',
       key: key,
       vars: vars
+    });
+  }
+
+  /**
+   * Promisify mapbox method
+   * @param {String} type of event to listen to resolve the promise
+   * @param {Function} cb Function to wrap
+   * @ignore
+   */
+  _map_resolve_when(type, cb) {
+    const map = h.getMap();
+    return new Promise((resolve) => {
+      map.stop();
+      map.once(type, () => {
+        resolve(true);
+      });
+      cb();
     });
   }
 }

@@ -127,6 +127,7 @@ function sanitizeState(states) {
  * Add single view to the views list
  * @param {Object} view View object to add
  * @param {Object} settings Settings (id,moveTop,render,open)
+ * @return {Object} settings realised
  */
 export function viewsListAddSingle(view, settings) {
   settings = settings || {};
@@ -155,6 +156,7 @@ export function viewsListAddSingle(view, settings) {
   mData.views.unshift(view);
   mData.viewsFilter.update();
   mData.viewsList.addItem(settings);
+  return settings;
 }
 
 /**
