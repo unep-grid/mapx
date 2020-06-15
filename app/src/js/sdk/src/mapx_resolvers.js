@@ -36,6 +36,66 @@ class MapxResolvers {
   }
 
   /**
+   * Toogle immersive mode
+   * @aram {Object} opt Options
+   * @param {Boolean} opt.enable Force enable
+   * @param {Boolean} opt.toggle Toggle
+   * @return {Boolean} enabled
+   */
+  set_immersive_mode(opt) {
+    h.setImmersiveMode(opt);
+  }
+
+  /**
+   * Get immersive mode state
+   * @return {Boolean} Enabled
+   */
+  get_immersive_mode() {
+    return h.getImmersiveMode();
+  }
+
+  /**
+  * Set MapX theme by id or set custom colors. 
+  * Both ways are exclusive.
+  * @param {Object} opt Options
+  * @param {String} opt.idTheme Valid theme id. Use 'get_themes_id' to get a list
+  * @param {Object} opt.colors Valid colors scheme. Use 'get_themes' to see default themes structure.
+  * @return {Boolean} done
+  */
+  set_theme(opt) {
+    opt = Object.assign({}, opt);
+    if (opt.idTheme) {
+      return mx.theme.setColorsByThemeId(opt.idTheme);
+    } else if (opt.colors) {
+      return mx.theme.setColors(opt.colors);
+    }
+  }
+
+  /**
+  * Get themes id
+  * @return {Array} array of themes id
+  */
+  get_themes_id() {
+    return mx.themes.getThemesIdList();
+  }
+
+
+  /**
+  * Get all themes
+  * @return {Object} Themes object with themes id as key
+  */
+  get_themes() {
+    return mx.themes.getThemes();
+  }
+
+  /**
+  * Get current theme id
+  * @return {string} Theme id
+  */
+  get_theme_id() {
+    return mx.themes.id_theme;
+  }
+  /**
    * Check if element is visible, by id
    * @param {Object} opt Options
    * @param {String} opt.id Id of the element to check
@@ -750,7 +810,7 @@ class MapxResolvers {
     );
     const view = await h.spatialDataToView(opt);
     await h.viewsListAddSingle(view, {open: true});
-    const out = h.getViewJson(view, {asString:false});
+    const out = h.getViewJson(view, {asString: false});
     return out;
   }
 

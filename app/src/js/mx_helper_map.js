@@ -616,14 +616,12 @@ export function initMapx(o) {
      */
     const queryIdTheme = h.getQueryParameter('theme')[0];
     const queryColors = h.getQueryParameter(['colors', 'style'])[0];
+    const colors = queryIdTheme ? null: queryColors;
+
     mx.theme = new Theme({
       idTheme: queryIdTheme,
-      colors: queryIdTheme
-        ? null
-        : queryColors || o.colors || o.colorScheme || mx.settings.ui.colors,
-      elInputsContainer: document.getElementById(
-        mx.settings.ui.ids.idInputThemeColors
-      ),
+      colors: colors || o.colors || o.colorScheme || mx.settings.ui.colors,
+      elInputsContainer: document.getElementById('mxInputThemeColors'),
       map: o.map
     });
 
@@ -4944,6 +4942,75 @@ export function makeLayerJiggle(mapId, prefix) {
       }, time);
     });
   }
+}
+
+/**
+ * Toogle immersive mode
+ * @aram {Object} opt Options
+ * @param {Boolean} opt.enable Force enable
+ * @param {Boolean} opt.toggle Toggle
+ * @return {Boolean} enabled
+ */
+export function setImmersiveMode(opt) {
+  opt = Object.assign({}, {enable: false, toggle: true});
+  const h = mx.helpers;
+  const elBtn = document.getElementById('btnToggleBtns');
+  const enabled = elBtn.classList.contains('active');
+  const enable = opt.enable === true || (opt.toggle === true && !enabled);
+  const classHide = 'mx-hide-immersive';
+
+  const selectors = [
+    /**
+     * Mapbox controls, except top-left
+     */
+    '.mapboxgl-ctrl-bottom-left',
+    '.mapboxgl-ctrl-bottom-right',
+    '.mapboxgl-ctrl-top-right',
+    /**
+     * MapX views and settings panel
+     */
+    '#mxPanelViews',
+    '#mxPanelTools',
+    /**
+     * Non essential buttons
+     */
+    '#btnShowLogin',
+    '#btnTabView',
+    '#btnTabTools',
+    '#btnPrint',
+    '#btnShowAbout',
+    '#btnGeolocateUser',
+    '#btnThemeAerial',
+    '#btnDrawMode'
+  ];
+
+  if (enable) {
+    elBtn.classList.add('active');
+  } else {
+    elBtn.classList.remove('active');
+  }
+
+  selectors.forEach((s) => {
+    const elItem = document.querySelector(s);
+    if (h.isElement(elItem)) {
+      if (enable) {
+        elItem.classList.add(classHide);
+      } else {
+        elItem.classList.remove(classHide);
+      }
+    }
+  });
+
+  return enable;
+}
+
+/**
+ * Get immersive mode state
+ * @return {Boolean} Enabled
+ */
+export function getImmersiveMode() {
+  const elBtn = document.getElementById('btnToggleBtns');
+  return elBtn.classList.contains('active');
 }
 
 /**

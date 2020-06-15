@@ -170,7 +170,7 @@ blockquote {
 }
 
 .mx-hide,
-.mx-hide-bis,
+.mx-hide-immersive,
 .mx-hide-filter {
   opacity: 0 !important;
   z-index: -1000 !important;

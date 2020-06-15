@@ -54,7 +54,14 @@ let settings = {
     }
   },
   // see https://github.com/unep-grid/map-x-mgl/issues/472
-  paramKeysPermanent: ['project', 'language', 'lockProject', 'style', 'theme', 'colors'],
+  paramKeysPermanent: [
+    'project',
+    'language',
+    'lockProject',
+    'style',
+    'theme',
+    'colors'
+  ],
   links: [],
   mode: {
     static: false,
@@ -71,18 +78,10 @@ let settings = {
   },
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb
-  maxByteFetch : 5e6, // 5MB
+  maxByteFetch: 5e6, // 5MB
   user: {},
   ui: {
-    ids: {
-      idViewsListContainer: 'viewListContainer',
-      idViewsList: 'viewListContent',
-      idDashboardsPanel: 'mxDashboardsPanel',
-      idDashboardsButton: 'btnTabDashboard',
-      idDashboards: 'mxDashboards',
-      idInputThemeColors: 'mxInputThemeColors'
-    },
-   theme : 'light'
+    colors: null
   }
 };
 

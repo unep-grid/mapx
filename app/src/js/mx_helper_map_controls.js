@@ -113,58 +113,6 @@ mapControlApp.prototype.onAdd = function(map) {
   //var idMap = map._container.id;
   const h = mx.helpers;
   const modeStatic = mx.settings.mode.static === true;
-  /**
-   * Toggle controls (btnToggleBtns)
-   */
-  h.toggleControls = function(o) {
-    o = o || {};
-    var hide = o.hide || !btns.btnToggleBtns.hidden; // state saved in buttons list
-    var action = hide ? 'add' : 'remove';
-    var selectorToggle = [
-      '.mx-panel-right',
-      '.mx-panel-views',
-      '.mapboxgl-ctrl-bottom-left',
-      '.mapboxgl-ctrl-bottom-right',
-      '.mapboxgl-ctrl-top-right',
-      '.mx-panel-tools',
-      '.mx-panel-settings'
-    ];
-    var idSkip = o.skip || [
-      'btnStoryUnlockMap',
-      'btnStoryClose',
-      'btnStoryLegends',
-      'btnToggleBtns'
-    ];
-    var btnToggle = btns.btnToggleBtns;
-
-    btnToggle.hidden = hide;
-
-    if (hide) {
-      btnToggle.elBtn.classList.add(btnToggle.classActive);
-    } else {
-      btnToggle.elBtn.classList.remove(btnToggle.classActive);
-    }
-
-    if (this instanceof Node) {
-      if (hide) {
-        this.classList.add('active');
-      } else {
-        this.classList.remove('active');
-      }
-    }
-
-    for (var key in btns) {
-      if (idSkip.indexOf(key) === -1) {
-        selectorToggle.push('#' + key);
-      }
-    }
-
-    h.classAction({
-      selector: selectorToggle,
-      action: action,
-      class: 'mx-hide-bis'
-    });
-  };
 
   /**
    * Build buttons list
@@ -176,7 +124,7 @@ mapControlApp.prototype.onAdd = function(map) {
       key: 'btn_toggle_all',
       hidden: false,
       position: 'top-left',
-      action: h.toggleControls
+      action: h.setImmersiveMode,
     },
     btnShowLogin: {
       classes: ['fa', 'fa-user'],

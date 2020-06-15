@@ -12,7 +12,7 @@ const global = {
   map: null,
   themes: themes,
   idThemeDefault: 'mapx',
-  idTheme: null,
+  idTheme: 'mapx',
   colors: null,
   debug: false
 };
@@ -32,19 +32,9 @@ class Theme {
     t.ls = new ListenerStore();
 
     if (!global.elStyle) {
-      global.elStyle = el('style', {
-        type: 'text/css'
-      });
+      global.elStyle = el('style');
       document.head.appendChild(global.elStyle);
     }
-    if (t.opt.idTheme) {
-      t._id_theme = t.opt.idTheme;
-    }
-    if (!t.opt.colors) {
-      t.opt.colors = t.getColorsByThemeId();
-    }
-
-    t.opt.colors = t.sanitizeColors(t.opt.colors);
 
     if (hasContainer) {
       t.ls.addListener({
@@ -58,8 +48,9 @@ class Theme {
       });
       t.buildInputs();
     }
-    t.setColors();
+    t.setColorsByThemeId();
   }
+
   get id_theme() {
     return this._id_theme;
   }
@@ -75,20 +66,34 @@ class Theme {
     }
   }
 
-  getColorsByThemeId(id) {
+  getTheme(id) {
     const t = this;
-    const theme = t.opt.themes[id || t.opt.idTheme || t.opt.idThemeDefault];
-    return theme.colors;
+    const idTheme = id || t.opt.idTheme;
+    const valid = t.validateThemeId(idTheme);
+    return t.opt.themes[valid ? idTheme : t.opt.idThemeDefault];
   }
+
+  getThemesIdList() {
+    const t = this;
+    return Object.keys(t.opt.themes);
+  }
+
+  getThemes() {
+    const t = this;
+    return t.opt.themes;
+  }
+
   setColorsByThemeId(id) {
     const t = this;
     id = id || t.opt.idThemeDefault;
-    const colors = t.getColorsByThemeId(id);
-    if (colors) {
-      t._id_theme = id;
-      t.setColors(colors);
+    const theme = t.getTheme(id);
+    if (theme.colors) {
+      t._id_theme = theme.id;
+      t.setColors(theme.colors);
       t.buildInputs();
+      return true;
     }
+    return false;
   }
 
   sanitizeColors(colors) {
@@ -140,6 +145,16 @@ class Theme {
     }
   }
 
+  validateThemeId(idTheme) {
+    const t = this;
+    const theme = t.opt.themes[idTheme];
+    if (theme && theme.colors) {
+      return t.validateColors(theme.colors);
+    } else {
+      return false;
+    }
+  }
+
   setColorsByThemeNext() {
     const t = this;
     const idCurrent = t.id_theme;
@@ -158,10 +173,10 @@ class Theme {
 
   setColors(colors) {
     const t = this;
-    const default_colors = t.getColorsByThemeId();
+    const default_theme = t.getTheme();
     const new_colors = Object.assign(
       {},
-      default_colors,
+      default_theme.colors,
       colors || t.opt.colors
     );
     const validColors = t.validateColors(new_colors);
@@ -169,7 +184,9 @@ class Theme {
       t.opt.colors = new_colors;
       t._updateCss();
       t._updateMap();
+      return true;
     }
+    return false;
   }
   _updateCss() {
     const t = this;
