@@ -1,7 +1,6 @@
 'use strict';
 
-const mapxUrl =
-  'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
+const mapxUrl = 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
 // const mapxUrl = 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en';
 
 class App extends React.Component {
@@ -12,6 +11,7 @@ class App extends React.Component {
       views: [],
       maxp: null
     };
+    this.getMapx = () => this.state.mapx;
   }
 
   componentDidMount() {
@@ -40,10 +40,6 @@ class App extends React.Component {
       );
     });
   }
-
-  getMapx = () => {
-    return this.state.mapx;
-  };
 
   render() {
     return (
@@ -114,7 +110,7 @@ class MxViewsCollection extends React.Component {
           {this.props.views.map((view, i) => {
             return (
               <li key={i}>
-                <MxViews getMapx={this.props.getMapx} view={view} key={i} />
+                <MxView getMapx={this.props.getMapx} view={view} key={i} />
               </li>
             );
           })}
@@ -132,7 +128,7 @@ class MxViewsCollection extends React.Component {
   }
 }
 
-class MxViews extends React.Component {
+class MxView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
