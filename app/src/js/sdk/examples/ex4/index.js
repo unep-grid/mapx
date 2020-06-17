@@ -146,8 +146,9 @@ class MxView extends React.Component {
           var op = !this.state.active ? 'view_add' : 'view_remove';
           mapx.ask(op, {
             idView: view.id
+          }).then(() => {
+            this.setState({active: !this.state.active});
           });
-          this.setState({active: !this.state.active});
         }}
       >
         {view.data.title.en}
