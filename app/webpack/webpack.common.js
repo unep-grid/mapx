@@ -22,7 +22,7 @@ module.exports = {
     filename: '[name].[chunkhash].bundle.js',
     chunkFilename: '[name].[chunkhash].chunk.js',
     path: path.resolve(__dirname, '../www'),
-    publicPath: '/'
+    publicPath: ''
   },
   plugins: [
     new WebpackPwaManifest({

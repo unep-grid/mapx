@@ -1,7 +1,7 @@
 /*jshint esversion: 6 */
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -16,11 +16,7 @@ module.exports = merge(common, {
     }
   },
   plugins: [
-    new CleanWebpackPlugin(['../www/*'], {
-      exclude: [],
-      dry: false,
-      allowExternal: true
-    }),
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: './src/html/static.html',
       filename: './static.html',
@@ -39,34 +35,38 @@ module.exports = merge(common, {
     ]),
     new GenerateSW({
       swDest: './service-worker.js',
-      importWorkboxFrom: 'local',
+      mode : 'production',
       skipWaiting: false,
       clientsClaim: true,
+      exclude : [
+        /^fontstack\//, 
+        /^sprites\//
+      ],
       importScripts: ['sw_listen_skip_waiting_install.js'],
       runtimeCaching: [
         {
           urlPattern: /^https:\/\/api\.mapbox\.com\//,
-          handler: 'cacheFirst'
+          handler: 'CacheFirst'
         },
         {
           urlPattern: /^https:\/\/tiles\.mapbox\.com\//,
-          handler: 'cacheFirst'
+          handler: 'CacheFirst'
         },
         {
           urlPattern: /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/views\/list\//,
-          handler: 'networkFirst'
+          handler: 'NetworkFirst'
         },
         {
           urlPattern: /^(https|http):\/\/(api|apidev)\.mapx\..*\/get\/source\/table\//,
-          handler: 'networkFirst'
+          handler: 'NetworkFirst'
         },
         {
           urlPattern: /^https:\/\/.*wms\?bbox=/,
-          handler: 'cacheFirst'
+          handler: 'CacheFirst'
         },
         {
           urlPattern: /^https:\/\/.*api\.here\.com\/maptile/,
-          handler: 'cacheFirst'
+          handler: 'CacheFirst'
         }
       ]
     })

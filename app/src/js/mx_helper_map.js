@@ -124,7 +124,7 @@ export async function downloadViewVector(opt) {
 export function getGeoJSONRandomPoints(opt) {
   opt = Object.assign(
     {},
-    {n: 100, latRange: [-85, 85], lngRange: [-180, 180]},
+    {n: 101, latRange: [-85, 85], lngRange: [-180, 180]},
     opt
   );
 
