@@ -156,7 +156,7 @@ function checkMissingView(o) {
     /**
      * Case when views are stored as object instead of id (deprecated).
      */
-    if (h.isViewsArray(idViewsStory)) {
+    if (h.isArrayOfViews(idViewsStory)) {
       idViewsStory.length = 0;
       idViewsStory.forEach((v) => idViewsStory.push(v.id));
     }

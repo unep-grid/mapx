@@ -62,17 +62,17 @@ export function getProjectViewsCollectionsShiny(opt) {
  * @param {Object} opt Options
  * @param {Boolean} opt.open Return only collection from open views
  * @return {Array} Array of names of collections
-*/
-export function getProjectViewsCollections(opt){
+ */
+export function getProjectViewsCollections(opt) {
   const h = mx.helpers;
-  opt = Object.assign({open:null},opt);
+  opt = Object.assign({open: null}, opt);
   var useOpen = opt.open === true;
-  const collections = h.getViews().reduce((a,v)=>{
-    if(useOpen && !h.isViewOpen(v)){
-      return a; 
+  const collections = h.getViews().reduce((a, v) => {
+    if (useOpen && !h.isViewOpen(v)) {
+      return a;
     }
-    return a.concat(h.path(v,'data.collections',[]));
-  },[]);
+    return a.concat(h.path(v, 'data.collections', []));
+  }, []);
   return h.getArrayDistinct(collections);
 }
 
@@ -129,13 +129,13 @@ function sanitizeState(states) {
  * @param {Object} settings Settings (id,moveTop,render,open)
  * @return {Object} settings realised
  */
-export function viewsListAddSingle(view, settings) {
+export async function viewsListAddSingle(view, settings) {
   settings = settings || {};
   const h = mx.helpers;
   if (!h.isView(view)) {
     return;
   }
-  
+
   const settings_default = {
     id: view.id,
     moveTop: true,
@@ -155,7 +155,11 @@ export function viewsListAddSingle(view, settings) {
   }
   mData.views.unshift(view);
   mData.viewsFilter.update();
-  mData.viewsList.addItem(settings);
+
+  const test = await new Promise((resolve) => {
+    mData.viewsList.once('render_item_content',resolve);
+    mData.viewsList.addItem(settings);
+  });
   return settings;
 }
 
@@ -256,8 +260,6 @@ export function viewsListRenderNew(o) {
       {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
       {id: 'get_item_date_by_id', action: h.getViewDateModified},
       {id: 'state_reset', action: h.viewsCheckedUpdate},
-      //{id: 'filter_end', action: h.viewsCheckedUpdate}, // could rigger view close if the view is not yet rendered
-      //{id: 'state_change', action: h.viewsCheckedUpdate}, // could rigger view close if the view is not yet rendered
       {id: 'state_order', action: h.viewsLayersOrderUpdate},
       {id: 'state_save_local', action: h.iconFlashSave},
       {id: 'state_sanitize', action: sanitizeState},
@@ -375,9 +377,11 @@ export function viewsListRenderNew(o) {
     const data = config.data;
     const viewsOpen = h.getQueryParameterInit('viewsOpen');
     const update = data.update;
-    /**
+    const open = data.open === true;
+   
+        /**
      * Add given element
-     */
+     */ 
     if (data.el) {
       el.appendChild(data.el);
       return;
@@ -389,6 +393,7 @@ export function viewsListRenderNew(o) {
     const view = data.view || mData.views.find((v) => v.id === data.id);
     const missing = !h.isView(view);
 
+    
     /**
      * View requested but not vailable)
      */
@@ -403,8 +408,8 @@ export function viewsListRenderNew(o) {
     }
 
     /**
-     * Create new view
-     */
+    * UI view base
+    */
     const viewBase = new ViewBase(view, update);
 
     /**
@@ -421,7 +426,8 @@ export function viewsListRenderNew(o) {
      * Handle view element
      */
     const elView = viewBase.getEl();
-    const open = data.open === true;
+  
+   
     if (elView) {
       el.appendChild(elView);
       h.setViewBadges({view: view});

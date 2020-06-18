@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .then((d) => (d ? d.json() : {}))
     .then((c) => {
       mx.settings.map.token = c.token;
-      h.initMapx({
+     return h.initMapx({
         token: c.token,
         modeStatic: true
       });

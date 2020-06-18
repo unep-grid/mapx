@@ -517,7 +517,7 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
     #
     ext <- mxDbGetQuery("
       SELECT 
-      ST_AsGeojson(
+      ST_AsGeoJSON(
         ST_Extent(
           ST_buffer(
             ST_Envelope(" + geomColumn + ")::geography
@@ -537,7 +537,7 @@ mxDbGetLayerExtent<-function(table=NULL,geomColumn='geom'){
       )[[1]]
 
     #
-    # Geojson coordinate order is : longitude, latitude
+    # GeoJSON coordinate order is : longitude, latitude
     #
 
     if(is.null(res)){

@@ -62,7 +62,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_raster',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        h.downloadViewRaster(viewTarget, true);
+        h.downloadViewRaster({idView:viewTarget});
       }
     },
     {
@@ -70,7 +70,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_geojson',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        h.downloadViewGeojson(viewTarget);
+        h.downloadViewGeoJSON({idView:viewTarget, mode:'file'});
       }
     },
     {
@@ -78,7 +78,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_upload_geojson',
       action: function() {
         const idView = el.dataset.view_action_target;
-        h.uploadGeojsonModal(idView);
+        h.uploadGeoJSONModal(idView);
       }
     },
     {

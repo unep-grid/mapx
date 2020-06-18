@@ -34,21 +34,56 @@ export function isView(item) {
     !!item.type.match(/^(vt|rt|cc||sm||gj)$/)
   );
 }
+
+export function isViewType(item, type, validator) {
+  type = isArray(type) ? type : [type];
+  const valid = isFunction(validator) ? validator(item) : true;
+  const typeOk = type.reduce((a, t) => {
+    return a ? a : item.type === t;
+  }, false);
+  return isView(item) && typeOk && valid;
+}
+
 export function isViewVt(item) {
-  return isView(item) && item.type === 'vt';
+  return isViewType(item, 'vt');
 }
 export function isViewRt(item) {
-  return isView(item) && item.type === 'rt';
+  return isViewType(item, 'rt');
 }
 export function isViewEditable(item) {
   return isView(item) && item._edit === true;
 }
-export function isViewsArray(arr) {
+export function isArrayOfViews(arr) {
   return (
     isArray(arr) &&
     arr.reduce((a, i) => {
       return !a ? a : isView(i);
     }, true)
+  );
+}
+/**
+ * Test if array of views id
+ * @param {Array} arr Array of views id
+ * @return {Boolean}
+ */
+export function isArrayOfViewsId(arr) {
+  return (
+    isArray(arr) &&
+    arr.reduce((a, i) => {
+      return !a ? a : isViewId(i);
+    }, true)
+  );
+}
+
+/**
+ * Check if array is sorted
+ * @param {Array} arr Array to test
+ * @param {Boolean} desc Descendent ?
+ */
+export function isSorted(arr, desc) {
+  return (
+    isArray(arr) &&
+    arr.every((val, i, arr) => (!i || desc ? val < arr[i + 1] : val >= arr[i - 1]))
   );
 }
 
@@ -69,8 +104,8 @@ export function isProjectId(idProject) {
  */
 export function isViewId(idView) {
   const regStandard = new RegExp('MX-.{5}-.{5}-.{5}');
-  const regGeojson = new RegExp('MX-GJ-.{10}');
-  return !!idView && (!!idView.match(regStandard) || idView.match(regGeojson));
+  const regGeoJSON = new RegExp('MX-GJ-.{10}');
+  return !!idView && (!!idView.match(regStandard) || idView.match(regGeoJSON));
 }
 /**
  * Test for valid project

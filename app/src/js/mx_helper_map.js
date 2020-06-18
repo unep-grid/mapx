@@ -33,88 +33,128 @@ export function metersToDegrees(point) {
 
 /**
  * Download view geojson
- * @param {String} idView Id of the gj view
+ * @param {Object} opt Options
+ * @param {String} opt.idView Id of the gj view
+ * @param {String} opt.mode Mode : 'file' or 'data'
+ * @return {Object} input options. If data, new key "data"
  */
-export async function downloadViewGeojson(idView) {
+export async function downloadViewGeoJSON(opt) {
+  opt = Object.assign({}, {idView: null, mode: 'data'}, opt);
   const h = mx.helpers;
-  const download = await h.moduleLoad('downloadjs');
-  const item = await mx.data.geojson.getItem(idView);
-  const geojson = h.path(item, 'view.data.source.data');
-  let filename = h.path(item, 'view.data.title.en');
-  if (filename.search(/.geojson$/) === -1) {
-    filename = 'mx_geojson_' + h.makeId() + '.geojson';
+  const map = h.getMap();
+  const view = h.getView(opt.idView);
+
+  if (!h.isView(view)) {
+    throw new Error(`No view with id ${opt.idView}`);
   }
-  const data = JSON.stringify(geojson);
-  await download(data, filename);
-  return geojson;
+  const geojson = h.path(view, 'data.source.data');
+  let filename = h.path(view, 'data.title.en');
+  if (filename.search(/.geojson$/) === -1) {
+    filename = `${view.id}.geojson`;
+  }
+  if (opt.mode === 'file') {
+    const download = await h.moduleLoad('downloadjs');
+    const data = JSON.stringify(geojson);
+    await download(data, filename);
+  }
+
+  if (opt.mode === 'data') {
+    opt.data = geojson;
+  }
+  return opt;
 }
 
 /**
- * Download view geojson
- * @param {String} idView Id of the rt view
- * @param {Boolean} open Open the link in a new window
+ * Download view raster
+ * @param {Object} opt Options
+ * @param {String} opt.idView Id of the rt view
+ * @param {String} opt.mode Mode : 'file' or NULL
+ * @return {Object} input options, with new key "url".
  */
-export async function downloadViewRaster(idView, open) {
+export async function downloadViewRaster(opt) {
+  opt = Object.assign({}, {idView: null, mode: null}, opt);
   const h = mx.helpers;
-  const view = h.getView(idView);
+  const view = h.getView(opt.idView);
+
   if (!h.isView(view)) {
     throw new Error(`No view with id ${idView}`);
   }
+
   const url = h.path(view, 'data.source.urlDownload');
-  if (h.isUrl(url) && open) {
-    const win = window.open(url, '_blank');
-    win.focus();
+  opt.url = url;
+
+  if (opt.mode === 'file') {
+    const download = await h.moduleLoad('downloadjs');
+    download(opt.url);
   }
-  return url;
+
+  return opt;
 }
 
 /**
- * Download source of the view of type raster, vector and geojson.
- * @param {String} idView Id of the view
- * @return {Object} Object with the method to retrieve the source : raster = url, vector = modal, geojson = data, file.
+ * Download source for vector view : show modal panel
+ * @param {Object} opt Options
+ * @param {String} opt.idView Id of the vector view
+ * @return {Object} input options
  */
-export async function downloadViewAuto(idView) {
+export async function downloadViewVector(opt) {
+  opt = Object.assign({}, {idView: null}, opt);
   const h = mx.helpers;
-  const view = h.getView(idView);
+  const view = h.getView(opt.idView);
 
   if (!h.isView(view)) {
-    return Promise.reject('no view or view not valid');
+    throw new Error(`No view with id ${idView}`);
   }
 
-  const s = await {
-    vt: () => {
-      Shiny.onInputChange(`mx_client_view_action`, {
-        target: view.id,
-        action: 'btn_opt_download',
-        time: new Date()
-      });
-      return Promise.resolve({
-        type: 'vt',
-        methods: ['modal']
-      });
-    },
-    rt: () => {
-      const urlDownload = h.path(view, 'data.source.urlDownload');
-      return Promise.resolve({
-        type: 'rt',
-        methods: ['url'],
-        url: urlDownload
-      });
-    },
-    gj: () => {
-      return h.downloadViewGeojson(view.id).then((data) => {
-        return {
-          type: 'gt',
-          data: data,
-          methods: ['file', 'data']
-        };
-      });
-    }
-  }[view.type]();
-  if (!s) {
-    return Promise.reject('invalid view');
-  } else {
-    return s;
+  Shiny.onInputChange(`mx_client_view_action`, {
+    target: view.id,
+    action: 'btn_opt_download',
+    time: new Date()
+  });
+  return opt;
+}
+
+/**
+ * Get random geojson point
+ * @param {Object} opt Options
+ * @param {Number} opt.n points
+ * @param {Array} opt.latRange Range in lat
+ * @param {Array} opt.lngRange Range in lng
+ */
+export function getGeoJSONRandomPoints(opt) {
+  opt = Object.assign(
+    {},
+    {n: 100, latRange: [-85, 85], lngRange: [-180, 180]},
+    opt
+  );
+
+  const features = [];
+
+  for (var i = 0; i < opt.n; i++) {
+    features.push(feature());
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };
+
+  function feature() {
+    return {
+      type: 'Feature',
+      properties: {},
+      geometry: {
+        type: 'Point',
+        coordinates: [randomInRange(opt.lngRange), randomInRange(opt.latRange)]
+      }
+    };
+  }
+  function randomInRange(to) {
+    const from = [0, 1];
+    const scale = (to[1] - to[0]) / (from[1] - from[0]);
+    const capped =
+      Math.min(from[1], Math.max(from[0], Math.random())) - from[0];
+    return Math.floor(capped * scale + to[0]);
   }
 }
 
@@ -510,7 +550,7 @@ export function setBtnFilterActivated(enable) {
  * @param {Object} o.colorScheme Color sheme object
  * @param {String} o.idTheme  Id of the theme to use
  */
-export function initMapx(o) {
+export async function initMapx(o) {
   const h = mx.helpers;
   let mp, map;
   o = o || {};
@@ -610,44 +650,45 @@ export function initMapx(o) {
    * Continue according to mode
    */
 
-  o.map.on('load', () => {
-    /**
-     * Set theme
-     */
-    const queryIdTheme = h.getQueryParameter('theme')[0];
-    const queryColors = h.getQueryParameter(['colors', 'style'])[0];
-    const colors = queryIdTheme ? null: queryColors;
-
-    mx.theme = new Theme({
-      idTheme: queryIdTheme,
-      colors: colors || o.colors || o.colorScheme || mx.settings.ui.colors,
-      elInputsContainer: document.getElementById('mxInputThemeColors'),
-      map: o.map
-    });
-
-    /**
-     * Add controls
-     */
-    o.map.addControl(new h.mapControlApp(), 'top-left');
-    o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
-    o.map.addControl(new h.mapControlScale(), 'bottom-right');
-    o.map.addControl(new h.mapxLogo(), 'bottom-left');
-
-    /**
-     * Init global listeners
-     */
-    h.initLog();
-    h.initListenerGlobal();
-    h.initMapListener(o.map);
-    /**
-     * Load mapx app or static
-     */
-    if (mx.settings.mode.static) {
-      h.initMapxStatic(o);
-    } else {
-      h.initMapxApp(o);
-    }
+  await new Promise((resolve) => {
+    o.map.on('load', resolve);
   });
+  /**
+   * Set theme
+   */
+  const queryIdTheme = h.getQueryParameter('theme')[0];
+  const queryColors = h.getQueryParameter(['colors', 'style'])[0];
+  const colors = queryIdTheme ? null : queryColors;
+
+  mx.theme = new Theme({
+    idTheme: queryIdTheme,
+    colors: colors || o.colors || o.colorScheme || mx.settings.ui.colors,
+    elInputsContainer: document.getElementById('mxInputThemeColors'),
+    map: o.map
+  });
+
+  /**
+   * Add controls
+   */
+  o.map.addControl(new h.mapControlApp(), 'top-left');
+  o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
+  o.map.addControl(new h.mapControlScale(), 'bottom-right');
+  o.map.addControl(new h.mapxLogo(), 'bottom-left');
+
+  /**
+   * Init global listeners
+   */
+  h.initLog();
+  h.initListenerGlobal();
+  h.initMapListener(o.map);
+  /**
+   * Load mapx app or static
+   */
+  if (mx.settings.mode.static) {
+    await h.initMapxStatic(o);
+  } else {
+    await h.initMapxApp(o);
+  }
 
   return o;
 }
@@ -718,7 +759,7 @@ export function initMapListener(map) {
   });
 }
 
-export function initMapxStatic(o) {
+export async function initMapxStatic(o) {
   const h = mx.helpers;
   const map = h.getMap();
   const settings = mx.settings;
@@ -814,7 +855,7 @@ export function initMapxStatic(o) {
 /**
  * Init full app mode
  */
-export function initMapxApp(o) {
+export async function initMapxApp(o) {
   const h = mx.helpers;
   const map = o.map;
   const elMap = map.getContainer();
@@ -833,15 +874,17 @@ export function initMapxApp(o) {
   /*
    * set views list
    */
-  h.updateViewsList({
-    id: o.id,
-    autoFetchAll: true,
-    project: o.project || mx.settings.project
-  }).then(() => {
-    mx.events.fire({
-      type: 'mapx_ready'
+  await h
+    .updateViewsList({
+      id: o.id,
+      autoFetchAll: true,
+      project: o.project || mx.settings.project
+    })
+    .then(() => {
+      mx.events.fire({
+        type: 'mapx_ready'
+      });
     });
-  });
 
   /*
    * If shiny, trigger read event
@@ -1169,218 +1212,206 @@ export function getViewsRemote(idViews) {
  * @param {boolean} o.add Append to existing
  * @param {string} o.project code
  */
-export function updateViewsList(o) {
+export async function updateViewsList(o) {
   const h = mx.helpers;
-  return new Promise(function(resolve) {
-    const viewsToAdd = o.viewsList;
-    const isCompactList = o.viewsCompact === true;
-    const autoFetchAll = o.autoFetchAll === true;
-    const hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
-    const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
-    const updateProject = o.project && o.project !== mx.settings.project;
-    let elProgContainer;
-    let mode = 'array_async_all';
-    let nCache = 0,
-      nNetwork = 0,
-      nTot = 0,
-      prog;
+  const viewsToAdd = o.viewsList;
+  const isCompactList = o.viewsCompact === true;
+  const autoFetchAll = o.autoFetchAll === true;
+  const hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+  const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
+  const updateProject = o.project && o.project !== mx.settings.project;
+  let elProgContainer;
+  let mode = 'array_async_all';
+  let nCache = 0,
+    nNetwork = 0,
+    nTot = 0,
+    prog;
 
-    if (updateProject) {
-      mx.settings.project = o.project;
+  if (updateProject) {
+    mx.settings.project = o.project;
+  }
+
+  if (hasViewsList) {
+    nTot = viewsToAdd.length;
+  }
+
+  if (autoFetchAll) {
+    mode = 'array_async_all';
+  } else {
+    if (hasSingleView) {
+      mode = 'object_single';
+    } else if (hasViewsList && isCompactList) {
+      mode = 'array_async';
+    } else if (hasViewsList && !isCompactList) {
+      mode = 'array_sync';
+    }
+  }
+  /**
+   * Helpers
+   */
+
+  /* Switch according to mode */
+  async function addViews() {
+    let add = {
+      object_single: addSingle,
+      array_sync: addSync,
+      array_async: addAsync,
+      array_async_all: addAsyncAll
+    }[mode];
+    await add(viewsToAdd);
+    cleanProgress();
+  }
+
+  /* Clean progress radial */
+  function cleanProgress() {
+    if (prog instanceof RadialProgress) {
+      prog.destroy();
+    }
+  }
+
+  /* update progress */
+  function updateProgress(d) {
+    let percent = 0;
+
+    d = d || {
+      loaded: nCache + nNetwork,
+      total: nTot
+    };
+
+    if (!elProgContainer) {
+      elProgContainer = document.querySelector('.mx-views-list');
     }
 
-    if (hasViewsList) {
-      nTot = viewsToAdd.length;
+    if (!prog && elProgContainer) {
+      h.childRemover(elProgContainer);
+      prog = new RadialProgress(elProgContainer, {
+        radius: 30,
+        stroke: 4
+      });
     }
 
-    if (autoFetchAll) {
-      mode = 'array_async_all';
-    } else {
-      if (hasSingleView) {
-        mode = 'object_single';
-      } else if (hasViewsList && isCompactList) {
-        mode = 'array_async';
-      } else if (hasViewsList && !isCompactList) {
-        mode = 'array_sync';
+    if (prog instanceof RadialProgress && prog.update && elProgContainer) {
+      percent = (d.loaded / d.total) * 100;
+      prog.update(percent);
+    }
+  }
+
+  /* get view object from storage or network */
+  function getViewObject(v) {
+    const apiUrlViews = h.getApiUrl('getView');
+    const keyStore = v.id + '@' + v.pid;
+    const keyNet = apiUrlViews + v.id + '?' + v.pid;
+    const editable = h.isViewEditable(v);
+    return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
+      if (view) {
+        nCache++;
+        updateProgress();
+        view._edit = editable;
+        return Promise.resolve(view);
+      } else {
+        return fetch(keyNet)
+          .then((r) => r.json())
+          .then((view) => {
+            nNetwork++;
+            updateProgress();
+            view._edit = editable;
+            return view;
+          })
+          .then((view) => mx.data.viewsToAdd.setItem(keyStore, view));
       }
-    }
+    });
+  }
 
-    /**
-     * Process view list
-     */
-    resolve(addViews());
-    /**
-     * Helpers
-     */
+  /* Add array of compact viewsToAdd object*/
+  async function addAsync(viewsToAdd) {
+    const viewsToAddFetched = await Promise.all(viewsToAdd.map(getViewObject));
+    const viewsGeoJSON = await getGeoJSONViewsFromStorage(o);
+    const views = [];
+    views.push(...viewsToAddFetched);
+    views.push(...viewsGeoJSON);
 
-    /* Switch according to mode */
-    function addViews() {
-      let add = {
-        object_single: addSingle,
-        array_sync: addSync,
-        array_async: addAsync,
-        array_async_all: addAsyncAll
-      }[mode];
-      return new Promise((resolve) => {
-        resolve(add(viewsToAdd));
-      }).finally(cleanProgress);
-    }
+    h.viewsListRenderNew({
+      id: o.id,
+      views: views
+    });
+    mx.events.fire({
+      type: 'views_list_updated'
+    });
+    return views;
+  }
 
-    /* Clean progress radial */
-    function cleanProgress() {
-      if (prog instanceof RadialProgress) {
-        prog.destroy();
-      }
-    }
-
-    /* update progress */
-    function updateProgress(d) {
-      let percent = 0;
-
-      d = d || {
-        loaded: nCache + nNetwork,
-        total: nTot
-      };
-
-      if (!elProgContainer) {
-        elProgContainer = document.querySelector('.mx-views-list');
-      }
-
-      if (!prog && elProgContainer) {
-        h.childRemover(elProgContainer);
-        prog = new RadialProgress(elProgContainer, {
-          radius: 30,
-          stroke: 4
-        });
-      }
-
-      if (prog instanceof RadialProgress && prog.update && elProgContainer) {
-        percent = (d.loaded / d.total) * 100;
-        prog.update(percent);
-      }
-    }
-
-    /* get view object from storage or network */
-    function getViewObject(v) {
-      const apiUrlViews = h.getApiUrl('getView');
-      const keyStore = v.id + '@' + v.pid;
-      const keyNet = apiUrlViews + v.id + '?' + v.pid;
-      const editable = h.isViewEditable(v);
-      return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
-        if (view) {
-          nCache++;
-          updateProgress();
-          view._edit = editable;
-          return Promise.resolve(view);
+  async function addAsyncAll() {
+    const views = [];
+    const state = [];
+    const data = await h.fetchViews({
+      onProgress: updateProgress
+    });
+    views.push(...data.views);
+    state.push(
+      ...data.states.reduce((a, s) => {
+        if (s.id === 'default') {
+          return s.state;
         } else {
-          return fetch(keyNet)
-            .then((r) => r.json())
-            .then((view) => {
-              nNetwork++;
-              updateProgress();
-              view._edit = editable;
-              return view;
-            })
-            .then((view) => mx.data.viewsToAdd.setItem(keyStore, view));
+          return a;
         }
-      });
+      }, state)
+    );
+
+    const viewsGeoJSON = await getGeoJSONViewsFromStorage(o);
+
+    views.push(...viewsGeoJSON);
+
+    h.viewsListRenderNew({
+      id: o.id,
+      views: views,
+      state: state
+    });
+
+    mx.events.fire({
+      type: 'views_list_updated'
+    });
+
+    return views;
+  }
+
+  /* Add array of coomplete viewsToAdd object*/
+  async function addSync() {
+    if (true) {
+      throw new Error('addSync disabled');
     }
+    h.viewsListRenderNew({
+      id: o.id,
+      views: viewsToAdd
+    });
 
-    /* Add array of compact viewsToAdd object*/
-    function addAsync(viewsToAdd) {
-      const promViews = viewsToAdd.map(getViewObject);
-      const promGjViews = getGeojsonViewsFromStorage(o);
-      const views = [];
-      return Promise.all(promViews)
-        .then((viewsToAddFetched) => {
-          views.push(...viewsToAddFetched);
-          return promGjViews;
-        })
-        .then((viewsGeojson) => {
-          views.push(...viewsGeojson);
-          h.viewsListRenderNew({
-            id: o.id,
-            views: views
-          });
-          mx.events.fire({
-            type: 'views_list_updated'
-          });
-          return views;
-        });
-    }
+    loadGeoJSONFromStorage(o);
 
-    function addAsyncAll() {
-      const promGjViews = getGeojsonViewsFromStorage(o);
-      const views = [];
-      const state = [];
-      return h
-        .fetchViews({
-          onProgress: updateProgress
-        })
-        .then((data) => {
-          views.push(...data.views);
-          state.push(
-            ...data.states.reduce((a, s) => {
-              if (s.id === 'default') {
-                return s.state;
-              } else {
-                return a;
-              }
-            }, state)
-          );
+    mx.events.fire({
+      type: 'views_list_updated'
+    });
 
-          return promGjViews;
-        })
-        .then((viewsGeojson) => {
-          views.push(...viewsGeojson);
+    return viewsToAdd;
+  }
 
-          h.viewsListRenderNew({
-            id: o.id,
-            views: views,
-            state: state
-          });
-          mx.events.fire({
-            type: 'views_list_updated'
-          });
+  /* Add single view object */
+  async function addSingle(view) {
+    await h.viewsListAddSingle(view, {
+      open: true,
+      render: true
+    });
+    mx.events.fire({
+      type: 'views_list_updated'
+    });
+    mx.events.fire({
+      type: 'view_created'
+    });
+    return view;
+  }
 
-          return views;
-        });
-    }
-
-    /* Add array of coomplete viewsToAdd object*/
-    function addSync() {
-      if (true) {
-        throw new Error('addSync disabled');
-      }
-      h.viewsListRenderNew({
-        id: o.id,
-        views: viewsToAdd
-      });
-
-      loadGeojsonFromStorage(o);
-
-      mx.events.fire({
-        type: 'views_list_updated'
-      });
-
-      return viewsToAdd;
-    }
-
-    /* Add single view object */
-    function addSingle(view) {
-      h.viewsListAddSingle(view, {
-        open: true,
-        render: true
-      });
-      mx.events.fire({
-        type: 'views_list_updated'
-      });
-      mx.events.fire({
-        type: 'view_created'
-      });
-      return view;
-    }
-  });
+  /**
+   * Process view list
+   */
+  return await addViews();
 }
 
 /**
@@ -1390,7 +1421,7 @@ export function updateViewsList(o) {
  * @param {String} o.project Current project to filter geojson view. Default to settings.project
  * @return {Array} array of views;
  */
-function getGeojsonViewsFromStorage(o) {
+function getGeoJSONViewsFromStorage(o) {
   let out = [];
   if (!mx.data || !mx.data.geojson) {
     return out;
@@ -1665,6 +1696,7 @@ export function viewsLayersOrderUpdate(o) {
   if (!order) {
     return;
   }
+
   setTimeout(() => {
     const displayed = h.getLayerNamesByPrefix({
       id: o.id,
@@ -1686,6 +1718,13 @@ export function viewsLayersOrderUpdate(o) {
         }
 
         map.moveLayer(x, layerBefore);
+      }
+    });
+
+    mx.events.fire({
+      type: 'layers_ordered',
+      data: {
+        layers: displayed
       }
     });
   }, 0);
@@ -1739,7 +1778,8 @@ export function getViewJson(idView, opt) {
     'pid',
     'project',
     'readers',
-    'editors'
+    'editors',
+    '_edit'
   ];
   const out = {};
   keys.forEach((k) => {
@@ -2179,7 +2219,7 @@ export function handleViewValueFilterText(o) {
  * @param {string} o.id map id
  * @param {string} o.idView view id
  */
-export function viewDelete(o) {
+export async function viewDelete(o) {
   const h = mx.helpers;
   const mData = h.getMapData();
   const views = mData.views;
@@ -2191,8 +2231,8 @@ export function viewDelete(o) {
   const vIndex = views.indexOf(view);
   const geojsonData = mx.data.geojson;
 
-  h.viewLayersRemove(o);
-  h.viewModulesRemove(view);
+  await h.viewLayersRemove(o);
+  await h.viewModulesRemove(view);
 
   mData.viewsList.removeItemById(view.id);
 
@@ -2201,6 +2241,7 @@ export function viewDelete(o) {
   }
 
   views.splice(vIndex, 1);
+
   mx.events.fire({
     type: 'view_deleted'
   });
@@ -2284,17 +2325,15 @@ function _viewUiOpen(view) {
  * Close / uncheck view – if exists – in view list
  * @param {String|View} idView id of the view or view object
  */
-function _viewUiClose(view) {
+async function _viewUiClose(view) {
   const h = mx.helpers;
-  return new Promise((resolve) => {
-    view = h.getView(view);
-    if (h.isView(view) && view.vb) {
-      view.vb.close();
-    }
-    h.viewModulesRemove(view);
-    view._open = false;
-    resolve(true);
-  });
+  view = h.getView(view);
+  if (h.isView(view) && view.vb) {
+    view.vb.close();
+  }
+  await h.viewModulesRemove(view);
+  view._open = false;
+  return true;
 }
 
 /**
@@ -2614,19 +2653,27 @@ export function removeLayersByPrefix(o) {
     return result;
   }
 
-  const layers = mx.helpers.getLayerNamesByPrefix({
-    map: map,
-    prefix: o.prefix
-  });
-
-  layers.forEach(function(l) {
-    if (map.getLayer(l)) {
-      map.removeLayer(l);
-      result.push(l);
-    }
-  });
+  if (map.isStyleLoaded()) {
+    remove();
+  } else {
+    map.once('styledata', remove);
+  }
 
   return result;
+
+  function remove() {
+    const layers = mx.helpers.getLayerNamesByPrefix({
+      map: map,
+      prefix: o.prefix
+    });
+
+    layers.forEach(function(l) {
+      if (map.getLayer(l)) {
+        map.removeLayer(l);
+        result.push(l);
+      }
+    });
+  }
 }
 
 /**
@@ -3058,7 +3105,7 @@ export async function getViewLegendImage(opt) {
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function viewLayersAddCc(o) {
+async function viewLayersAddCc(o) {
   const h = mx.helpers;
   const view = o.view;
   const map = o.map;
@@ -3068,7 +3115,7 @@ function viewLayersAddCc(o) {
   const idSource = idView + '-SRC';
   const idListener = 'listener_cc_' + view.id;
 
-  h.viewModulesRemove(view);
+  await h.viewModulesRemove(view);
 
   const elLegend = h.elLegend(view, {
     type: 'cc',
@@ -3077,94 +3124,83 @@ function viewLayersAddCc(o) {
     removeOld: true
   });
 
-  return new Promise(function(resolve, reject) {
-    const r = new Function(methods)();
-    if (r) {
-      resolve(r);
-    } else {
-      reject(methods);
+  const cc = new Function(methods)();
+  if (!cc) {
+    throw new Error('Failed to parse cc view', method);
+  }
+
+  if (!(cc.onInit instanceof Function) || !(cc.onClose instanceof Function)) {
+    return;
+  }
+
+  const opt = {
+    _init: false,
+    _closed: false,
+    map: map,
+    view: view,
+    idView: idView,
+    idSource: idSource,
+    idLegend: elLegend.id,
+    elLegend: elLegend
+  };
+  opt.onInit = tryCatched(cc.onInit.bind());
+  opt.onClose = cc.onClose.bind(opt);
+
+  mx.helpers.removeLayersByPrefix({
+    prefix: opt.idView,
+    id: mx.settings.map.id
+  });
+
+  /**
+   * Avoid event to propagate
+   */
+  mx.listeners.addListener({
+    group: idListener,
+    target: elLegend,
+    type: ['click', 'mousedown', 'change', 'input'],
+    callback: catchEvent
+  });
+
+  if (opt.map.getSource(opt.idSource)) {
+    opt.map.removeSource(opt.idSource);
+  }
+
+  view._onRemoveCustomView = function() {
+    mx.listeners.removeListenerByGroup(idListener);
+
+    if (!opt._init || opt._closed) {
+      return;
     }
-  })
-    .then(function(cc) {
-      if (
-        !(cc.onInit instanceof Function) ||
-        !(cc.onClose instanceof Function)
-      ) {
-        return;
-      }
-
-      const opt = {
-        _init: false,
-        _closed: false,
-        map: map,
-        view: view,
-        idView: idView,
-        idSource: idSource,
-        idLegend: elLegend.id,
-        elLegend: elLegend
-      };
-      opt.onInit = tryCatched(cc.onInit.bind());
-      opt.onClose = cc.onClose.bind(opt);
-
-      mx.helpers.removeLayersByPrefix({
-        prefix: opt.idView,
-        id: mx.settings.map.id
-      });
-
-      /**
-       * Avoid event to propagate
-       */
-      mx.listeners.addListener({
-        group: idListener,
-        target: elLegend,
-        type: ['click', 'mousedown', 'change', 'input'],
-        callback: catchEvent
-      });
-
-      if (opt.map.getSource(opt.idSource)) {
-        opt.map.removeSource(opt.idSource);
-      }
-
-      view._onRemoveCustomView = function() {
-        mx.listeners.removeListenerByGroup(idListener);
-
-        if (!opt._init || opt._closed) {
-          return;
-        }
-        try {
-          opt.onClose(opt);
-        } catch (e) {
-          console.error(e);
-        }
-        opt._closed = true;
-      };
-
-      /**
-       * Init custom map
-       */
-
-      opt.onInit(opt);
-      opt._init = true;
-      /**
-       * Helpers
-       */
-      function catchEvent(e) {
-        e.stopPropagation();
-      }
-      function tryCatched(fun) {
-        return function(...args) {
-          try {
-            return fun(...args);
-          } catch (e) {
-            opt.onClose(opt);
-            console.error(e);
-          }
-        };
-      }
-    })
-    .catch((e) => {
+    try {
+      opt.onClose(opt);
+    } catch (e) {
       console.error(e);
-    });
+    }
+    opt._closed = true;
+  };
+
+  /**
+   * Init custom map
+   */
+
+  opt.onInit(opt);
+  opt._init = true;
+  /**
+   * Helpers
+   */
+  function catchEvent(e) {
+    e.stopPropagation();
+  }
+  function tryCatched(fun) {
+    return function(...args) {
+      try {
+        return fun(...args);
+      } catch (e) {
+        opt.onClose(opt);
+        console.error(e);
+      }
+    };
+  }
 }
 
 /**
@@ -3849,7 +3885,7 @@ export async function viewModulesInit(id) {
   /**
    * Clean old modules
    */
-  h.viewModulesRemove(view);
+  await h.viewModulesRemove(view);
 
   /**
    * View list options related modules
@@ -3880,7 +3916,7 @@ export async function viewModulesInit(id) {
 /**
  * Clean stored modules : dashboard, custom view, etc.
  */
-export function viewModulesRemove(view) {
+export async function viewModulesRemove(view) {
   const h = mx.helpers;
   view = h.isString(view) ? h.getView(view) : view;
   if (!h.isView(view)) {
@@ -3924,7 +3960,7 @@ export function viewModulesRemove(view) {
 export function viewsModulesRemove(views) {
   const h = mx.helpers;
   views = views instanceof Array ? views : [views];
-  views.forEach((v) => h.viewModulesRemove(v));
+  return Promise.all(views.map((v) => h.viewModulesRemove(v)));
 }
 
 /**
@@ -4465,45 +4501,41 @@ export function getViewsBounds(views) {
  * @param {string} o.id map id
  * @param {string} o.idView view id
  */
-export function zoomToViewIdVisible(o) {
-  return mx.helpers
-    .moduleLoad('turf-bbox')
-    .then((bbox) => {
-      let geomTemp, idLayerAll, features;
+export async function zoomToViewIdVisible(o) {
+  const h = mx.helpers;
+  const bbox = await h.moduleLoad('turf-bbox');
 
-      geomTemp = {
-        type: 'FeatureCollection',
-        features: []
-      };
+  let geomTemp, idLayerAll, features;
 
-      const map = mx.helpers.getMap(o.id);
+  geomTemp = {
+    type: 'FeatureCollection',
+    features: []
+  };
 
-      if (map) {
-        idLayerAll = mx.helpers.getLayerNamesByPrefix({
-          id: o.id,
-          prefix: o.idView
-        });
+  const map = h.getMap(o.id);
 
-        features = map.queryRenderedFeatures({
-          layers: idLayerAll
-        });
+  idLayerAll = h.getLayerNamesByPrefix({
+    id: o.id,
+    prefix: o.idView
+  });
 
-        features.forEach(function(x) {
-          geomTemp.features.push(x);
-        });
+  features = map.queryRenderedFeatures({
+    layers: idLayerAll
+  });
 
-        if (geomTemp.features.length > 0) {
-          const bbx = bbox(geomTemp);
-          const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
-          const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
-          const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
-          map.fitBounds(llb);
-        }
-      }
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  features.forEach(function(x) {
+    geomTemp.features.push(x);
+  });
+
+  if (geomTemp.features.length > 0) {
+    const bbx = bbox(geomTemp);
+    const sw = new mx.mapboxgl.LngLat(bbx[0], bbx[1]);
+    const ne = new mx.mapboxgl.LngLat(bbx[2], bbx[3]);
+    const llb = new mx.mapboxgl.LngLatBounds(sw, ne);
+    map.fitBounds(llb);
+  } else {
+    h.zoomToViewId(o);
+  }
 }
 
 export function resetViewStyle(o) {
@@ -4681,6 +4713,24 @@ export function getViewTitleNormalized(view, lang) {
   return title;
 }
 
+/**
+ * Get group of views title, normalized
+ * @param {Array} views Array of views or views id
+ * @param {String} lang Optional. Language : e.g. fr, en, sp ..
+ * @return {Array} Array of titles
+ */
+export function getViewsTitleNormalized(views, lang) {
+  const h = mx.helpers;
+  views =
+    h.isArrayOfViews(views) || h.isArrayOfViewsId(views) ? views : h.getViews();
+  return views.map((v) => h.getViewTitleNormalized(v, lang));
+}
+
+/**
+ * Get view date modified
+ * @param {Object} view View or view id
+ * @return {String} date of the last modification
+ */
 export function getViewDateModified(view) {
   const h = mx.helpers;
   if (!h.isView(view)) {

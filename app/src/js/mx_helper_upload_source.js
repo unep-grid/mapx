@@ -52,7 +52,7 @@ export function triggerUploadForm(opt) {
   }
 }
 
-export function uploadGeojsonModal(idView) {
+export function uploadGeoJSONModal(idView) {
   var h = mx.helpers;
   var el = mx.helpers.el;
   //var email = mx.settings.user.email;
@@ -214,7 +214,7 @@ export function isUploadFileSizeValid(file, opt) {
  * @param {String} o.email user email
  * @param {String} o.title title of the source
  * @param {File} o.file Single file object
- * @param {Object|String} o.geojson Geojson data
+ * @param {Object|String} o.geojson GeoJSON data
  * @param {Node|String} o.selectorProgressContainer Selector or element where to put the progress bar container
  */
 export function uploadSource(o) {

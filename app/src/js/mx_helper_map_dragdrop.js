@@ -38,7 +38,7 @@ function handleProgressError(f) {
 }
 
 // handle zip to geojson
-export function zipToGeojson(data) {
+export function zipToGeoJSON(data) {
   var shp,
     dbf,
     prj,
@@ -126,7 +126,7 @@ export function zipToGeojson(data) {
  * @param {String} Data type. Eg. kml, gpx, geojson
  */
 
-export function parseDataToGeojson(data, fileType) {
+export function parseDataToGeoJSON(data, fileType) {
   var out;
   switch (fileType) {
     case 'kml':
@@ -140,7 +140,7 @@ export function parseDataToGeojson(data, fileType) {
       });
       break;
     case 'zip':
-      out = mx.helpers.zipToGeojson(data);
+      out = mx.helpers.zipToGeoJSON(data);
       break;
     case 'geojson':
       out = new Promise(function(resolve) {
@@ -221,7 +221,7 @@ export async function spatialDataToView(opt) {
   /**
    * Parse data according to filetype
    */
-  const gJson = await h.parseDataToGeojson(c.data, c.fileType);
+  const gJson = await h.parseDataToGeoJSON(c.data, c.fileType);
 
   const promView = new Promise((resolve) => {
     /*

@@ -55,13 +55,13 @@ class MapxResolvers {
   }
 
   /**
-  * Set MapX theme by id or set custom colors. 
-  * Both ways are exclusive.
-  * @param {Object} opt Options
-  * @param {String} opt.idTheme Valid theme id. Use 'get_themes_id' to get a list
-  * @param {Object} opt.colors Valid colors scheme. Use 'get_themes' to see default themes structure.
-  * @return {Boolean} done
-  */
+   * Set MapX theme by id or set custom colors.
+   * Both ways are exclusive.
+   * @param {Object} opt Options
+   * @param {String} opt.idTheme Valid theme id. Use 'get_themes_id' to get a list
+   * @param {Object} opt.colors Valid colors scheme. Use 'get_themes' to see default themes structure.
+   * @return {Boolean} done
+   */
   set_theme(opt) {
     opt = Object.assign({}, opt);
     if (opt.idTheme) {
@@ -72,26 +72,25 @@ class MapxResolvers {
   }
 
   /**
-  * Get themes id
-  * @return {Array} array of themes id
-  */
+   * Get themes id
+   * @return {Array} array of themes id
+   */
   get_themes_id() {
     return mx.themes.getThemesIdList();
   }
 
-
   /**
-  * Get all themes
-  * @return {Object} Themes object with themes id as key
-  */
+   * Get all themes
+   * @return {Object} Themes object with themes id as key
+   */
   get_themes() {
     return mx.themes.getThemes();
   }
 
   /**
-  * Get current theme id
-  * @return {string} Theme id
-  */
+   * Get current theme id
+   * @return {string} Theme id
+   */
   get_theme_id() {
     return mx.themes.id_theme;
   }
@@ -270,7 +269,7 @@ class MapxResolvers {
    * @return  {Array} Array of views
    */
   get_views_with_visible_layer() {
-    return getViewsLayersVisible();
+    return h.getViewsLayersVisibles();
   }
 
   /**
@@ -442,27 +441,36 @@ class MapxResolvers {
   }
 
   /**
-   * Download process for raster (rt), geojson (gj) and vector (vt) view
-   *
-   * <pre>
-   * => file : a file downloaded by the browser
-   * => url : an url to fetch the data, if available
-   * => data : the data. E.g. geojson = object
-   * => modal : a modal window inside MapX
-   * vt : return {type: "vt", methods: ['modal']}
-   * rt : return {type: "rt", methods: ['url'], url:'http://example.com/data'}
-   * gj : return {type: "vt", methods: ['file','data'], data:{"type":"FeatureCollection","features":[{"id":"1","type":"Feature","properties":{},"geometry":{"coordinates":[[-11,43],[12,20]],"type":"Point"}}]}}
-   *</pre>
-   *
-   * @param {Object} opt Options
-   * @param {String} opt.idView View of the source to download
-   * @example
-   * mapx.ask('download_view_source_auto',{idView:'MX-GJ-0RB4FBOS8E'})
-   * @return {Object} Object with the method to retrieve the source.
-   */
-  download_view_source_auto(opt) {
-    return h.downloadViewAuto(opt.idView);
+  * Get the download link of the raster source
+  * @param {Object} opt Options
+  * @param {String} opt.idView Raster view id
+  * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<url>}
+  */
+  download_view_source_raster(opt) {
+    return h.downloadViewRaster(opt);
   }
+
+  /**
+  * Open the download modal for vector views
+  * @param {Object} opt Options
+  * @param {String} opt.idView Vector view id
+  * @return {Object} input options E.g. {idView:<abc>}
+  */
+  download_view_source_vector(opt) {
+    return h.downloadViewVector(opt);
+  }
+  
+  /**
+  * Get the data from geojson view or download geojsn as a file
+  * @param {Object} opt Options
+  * @param {String} opt.idView GeoJSON view id
+  * @param {String} opt.mode "file" or "data"
+  * @return {Object} input options E.g. {idView:<abc>, data:<data (if mode = data)>}
+  */
+  download_view_source_geojson(opt) {
+    return h.downloadViewGeoJSON(opt);
+  }
+
 
   /**
    * Show the login modal window
@@ -520,8 +528,7 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   show_modal_map_composer() {
-    h.mapComposerModalAuto();
-    return true;
+    return h.mapComposerModalAuto();
   }
 
   /**
@@ -672,6 +679,18 @@ class MapxResolvers {
     return v.getState();
   }
 
+
+  /**
+  * Get list of views title
+  * @param {Object} opt options
+  * @param {Array} opt.views List of views or views id
+  * @return {Array} Array of titles (string)
+  */
+  get_views_title(opt){
+    opt = Object.assign({},{views:[], lang:'en'}, opt);
+    return h.getViewsTitleNormalized(opt.views);
+  }
+
   /**
    * Set state / views list order, groups, etc. Opened view will be closed
    * @param {Object} opt Options
@@ -697,8 +716,18 @@ class MapxResolvers {
    */
   set_views_list_sort(opt) {
     const v = h.getMapData().viewsList;
+    /**
+     * Sort group -> trigger viewsLayersOrderUpdate -> fire 'layers_ordered'
+     */
+    const prom = new Promise((resolve) => {
+      mx.events.on({
+        type: 'layers_ordered',
+        idGroup: 'sdk_resolver',
+        callback: resolve
+      });
+    });
     v.sortGroup(null, opt);
-    return true;
+    return prom;
   }
 
   /**
@@ -792,10 +821,14 @@ class MapxResolvers {
    * @param {String} opt.fileName File name, if any
    * @param {Sring} opt.title Title
    * @param {String} opt.abstract Abstract
+   * @param {Object} opt.random Generate random geojson
+   * @param {Number} opt.random.n number of points
+   * @param {Array} opt.random.latRange [minLat, maxLat]
+   * @param {Array} opt.random.lngRange [minLng, maxLng]
    * @return {Object} view
    */
   async view_geojson_create(opt) {
-    const id = h.makeId(12);
+    const id = `MX-GJ-${h.makeId(10)}`;
     opt = Object.assign(
       {},
       {
@@ -808,6 +841,9 @@ class MapxResolvers {
       },
       opt
     );
+    if(opt.random && !opt.data){
+      opt.data = h.getGeoJSONRandomPoints(opt.random);
+    }
     const view = await h.spatialDataToView(opt);
     await h.viewsListAddSingle(view, {open: true});
     const out = h.getViewJson(view, {asString: false});
@@ -1072,6 +1108,27 @@ class MapxResolvers {
       });
       cb();
     });
+  }
+
+  /**
+   * Get random view
+   * @param {String} type of view
+   * @param {Function} filter Filter view by using further validation
+   * @return view
+   * @ignore
+   */
+  async _get_random_view(type, filter) {
+    let views = h.getViews();
+    if (type) {
+      views = views.reduce((a, v) => {
+        if (h.isViewType(v, type, filter)) {
+          a.push(v);
+        }
+        return a;
+      }, []);
+    }
+    const pos = Math.floor(Math.random() * (views.length - 1));
+    return h.getViewJson(views[pos], {asString: false});
   }
 }
 

@@ -5,7 +5,7 @@ export function stringify(data) {
   try{
     return JSON.stringify(sanitizeJson(data));
   }catch(e){
-    console.log(data);
+    console.error('Error in stringify helper',e,data);
   }
 }
 

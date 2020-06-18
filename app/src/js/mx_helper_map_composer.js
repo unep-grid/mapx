@@ -6,7 +6,7 @@ function mapComposerModalAuto() {
   const oldComposer = document.getElementById(idComposer);
 
   if (oldComposer) {
-    return;
+    return false;
   }
 
   const map = h.getMap();
@@ -143,5 +143,6 @@ function mapComposerModalAuto() {
     }
 
     window.mc = mc;
+    return true;
   });
 }

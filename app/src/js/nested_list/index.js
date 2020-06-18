@@ -123,15 +123,42 @@ class NestedList {
    */
   fire(type, data) {
     const li = this;
-    let cb = function(data) {
-      return data;
-    };
-    li.opt.eventsCallback.forEach((e) => {
+    const onces = [];
+    const cb = [];
+    const res = [];
+    li.opt.eventsCallback.forEach((e, i) => {
       if (e.id === type) {
-        cb = e.action;
+        if (e.action instanceof Function) {
+          cb.push(e.action);
+        }
+        if (e.once) {
+          onces.push(i);
+        }
       }
     });
-    return cb.bind(li)(data);
+    while (onces.length) {
+      li.opt.eventsCallback.splice(onces.length - 1, 1);
+      onces.pop();
+    }
+    while (cb.length) {
+      res.push(cb[cb.length-1].bind(li)(data));
+      cb.pop();
+    }
+    return res;
+  }
+
+  on(id, action, once) {
+    const li = this;
+    li.opt.eventsCallback.push({
+      id: id,
+      action: action instanceof Function ? action : () => {},
+      once: !!once
+    });
+  }
+
+  once(id, action) {
+    const li = this;
+    li.on(id, action, true);
   }
 
   /**
@@ -248,8 +275,8 @@ class NestedList {
    */
   getTarget(el) {
     const li = this;
-    if(!el){
-       return;
+    if (!el) {
+      return;
     }
     if (typeof el === 'string') {
       el = li.elRoot.querySelector(`#${el}`);
@@ -314,11 +341,11 @@ class NestedList {
   }
   getItemText(el) {
     const li = this;
-    return li.fire('get_item_text_by_id', el.id) || el.innerText;
+    return li.fire('get_item_text_by_id', el.id)[0] || el.innerText;
   }
   getItemDate(el) {
     const li = this;
-    return li.fire('get_item_date_by_id', el.id) || Date.now();
+    return li.fire('get_item_date_by_id', el.id)[0] || Date.now();
   }
   getGroup(el) {
     const li = this;
@@ -808,7 +835,7 @@ class NestedList {
     let state = li.fire('state_sanitize', {
       orig: stateOrig,
       stored: stateStored
-    });
+    })[0];
 
     /*
      * If the state is empty,
@@ -857,14 +884,16 @@ class NestedList {
     var elContent = li.getItemContent(el, li.opt.class.itemContent);
     li.fire('render_item_content', {el: elContent, data: attr});
   }
-  addItem(attr) {
+  async addItem(attr) {
     const li = this;
+
     attr.render = attr.render || !attr.content || false;
     let isGroup = li.isGroup(attr.group);
     let isLocked = li.isModeLock();
     let elGroupParent = isGroup
       ? attr.group
       : li.getGroupById(attr.group) || li.elRoot;
+
     let item = new Item(attr, li);
     let elItem = item.el;
     let elContent = item.elContent;
@@ -886,7 +915,6 @@ class NestedList {
     if (attr.moveTop) {
       li.moveTargetTop(elItem);
     }
-    //li.makeIgnoredClassesDraggable(elItem);
 
     return elItem;
   }
