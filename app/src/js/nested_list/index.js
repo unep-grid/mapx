@@ -1434,8 +1434,8 @@ function handleDragStart(evt) {
    * Build drag image, set ui dragging mode and set
    * datatransfer data
    */
-  const elDragImage = li.fire('set_drag_image', li.drag.el);
-  const dragText = li.fire('set_drag_text', li.drag.el);
+  const elDragImage = li.fire('set_drag_image', li.drag.el)[0];
+  const dragText = li.fire('set_drag_text', li.drag.el)[0];
   const rectImage = elDragImage.getBoundingClientRect();
   const dragOffsetTop = evt.clientY - rectImage.top;
   const dragOffsetLeft = evt.clientX - rectImage.left;
