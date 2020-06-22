@@ -169,9 +169,12 @@ mapx.once('ready', () => {
   t.check('Get view vt source meta', {
     ignore: ignoreGlobal,
     init: async () => {
+      // jshint ignore:start
       const view = await mapx.ask('_get_random_view', 'vt');
+      const idSource = view?.data?.source?.layerInfo?.name;
+      // jshint ignore:end
       return mapx.ask('get_source_meta', {
-        idSource: view.data.source.layerInfo.name
+        idSource: idSource
       });
     },
     tests: [
@@ -189,12 +192,13 @@ mapx.once('ready', () => {
     init: async () => {
       const h = t.h;
       const view = await mapx.ask('_get_random_view', ['vt', 'rt'], (v) => {
+        // jshint ignore:start
+        const rules = v.data?.style?.rules ?? [];
+        const legend = v.data?.source?.legend ?? '';
+        // jshint ignore:end
         return (
-          (h.isViewVt(v) &&
-            v.data.style &&
-            v.data.style.rules &&
-            v.data.style.rules.length > 0) ||
-          (h.isViewRt(v) && v.data.source && h.isUrl(v.data.source.legend))
+          (h.isViewVt(v) && rules.length > 0) ||
+          (h.isViewRt(v) && legend && h.isUrl(legend))
         );
       });
       return mapx.ask('get_view_legend_image', {idView: view.id});
