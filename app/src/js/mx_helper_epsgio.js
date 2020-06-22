@@ -8,7 +8,8 @@ export function epsgBuildSearchBox(opt) {
   var elInput = document.querySelector(selector);
 
   if (!elInput) {
-    throw new Error('Element ' + selector + ' not found');
+    console.warn(`epsgBuildSearchBox : element ${selector} not found`);
+    return;
   }
 
   elInput.classList.add('mx-hide');
