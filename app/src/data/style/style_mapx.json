@@ -9,8 +9,8 @@
     "here_aerial": {
       "type": "raster",
       "tiles": [
-        "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=fGLfEdFmYwbEVQaO7DhX&app_code=bcOOdf_UD3-A18j_HXxmbw&ppi=72",
-        "https://1.aerial.maps.cit.api.here.com/maptile/2.1/basetile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=fGLfEdFmYwbEVQaO7DhX&app_code=bcOOdf_UD3-A18j_HXxmbw&ppi=72"
+        "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=Rca96Nx8cxu1mIfAPdAu&app_code=HoBvBCod6QoWURwtDhyUDg&ppi=72",
+        "https://2.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/512/jpg?app_id=Rca96Nx8cxu1mIfAPdAu&app_code=HoBvBCod6QoWURwtDhyUDg&ppi=72"
       ]
     }
   },
