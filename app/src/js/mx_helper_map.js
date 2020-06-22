@@ -3112,7 +3112,8 @@ async function viewLayersAddCc(o) {
   const idSource = idView + '-SRC';
   const idListener = 'listener_cc_' + view.id;
 
-  await h.viewModulesRemove(view);
+  let cc;
+
 
   const elLegend = h.elLegend(view, {
     type: 'cc',
@@ -3121,13 +3122,18 @@ async function viewLayersAddCc(o) {
     removeOld: true
   });
 
-  const cc = new Function(methods)();
-  if (!cc) {
-    throw new Error('Failed to parse cc view', method);
+  try {
+    cc = new Function(methods)();
+  } catch (e) {
+    throw new Error('Failed to parse cc view', e.message);
   }
 
-  if (!(cc.onInit instanceof Function) || !(cc.onClose instanceof Function)) {
-    return;
+  if (
+    !cc ||
+    !(cc.onInit instanceof Function) ||
+    !(cc.onClose instanceof Function)
+  ) {
+    return console.warn('Invalid custom code  view');
   }
 
   const opt = {
