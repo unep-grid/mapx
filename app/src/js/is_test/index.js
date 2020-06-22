@@ -70,7 +70,7 @@ export function isArrayOfViewsId(arr) {
   return (
     isArray(arr) &&
     arr.reduce((a, i) => {
-      return !a ? a : isViewId(i);
+      return a === false ? a : isViewId(i);
     }, true)
   );
 }
@@ -103,9 +103,8 @@ export function isProjectId(idProject) {
  * @return {Boolean}
  */
 export function isViewId(idView) {
-  const regStandard = new RegExp('MX-.{5}-.{5}-.{5}');
-  const regGeoJSON = new RegExp('MX-GJ-.{10}');
-  return !!idView && (!!idView.match(regStandard) || idView.match(regGeoJSON));
+  const expIdView = new RegExp('^MX-GJ-.{10}$|^MX-.{5}-.{5}-.{5}$');
+  return !!idView && !!idView.match(expIdView);
 }
 /**
  * Test for valid project

@@ -181,13 +181,15 @@ function handleFileParser(f) {
 
     const view = await spatialDataToView({
       fileName: f.name,
+      title: f.name,
+      abstract: f.name,
       fileType: f.fileType,
-      data: e.target.result
+      data: e.target.result,
+      save: true
     });
     await h.viewsListAddSingle(view, {
-      open: false
+      open: true
     });
-    await h.viewAdd(view);
     return view;
   };
 }
@@ -335,17 +337,14 @@ export async function spatialDataToView(opt) {
   return promView;
 }
 
-function saveInLocalDb(opt) {
-  mx.data.geojson
-    .setItem(opt.view.id, {
-      view: JSON.parse(JSON.stringify(opt.view)) // clone
-    })
-    .then(() => {
-      console.log(
-        'Data saved and registered as geojson source. Id = ' + opt.view.id
-      );
-    })
-    .catch((e) => console.error(e));
+async function saveInLocalDb(opt) {
+  const h = mx.helpers;
+  await mx.data.geojson.setItem(opt.view.id, {
+    view: h.getViewJson(opt.view, {asString: false})
+  });
+  console.log(
+    `Data saved and registered as geojson source. Id = ${opt.view.id} `
+  );
 }
 
 export function handleMapDragOver(evt) {

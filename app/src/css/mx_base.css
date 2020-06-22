@@ -715,7 +715,6 @@ blockquote {
   font-weight: normal;
 }
 
-
 /**
 * Custom scrollbar
 */
@@ -1176,36 +1175,19 @@ blockquote {
 }
 
 .check-toggle {
-  display: inline-block;
+  display: flex;
 }
 
-.check-toggle .check-toggle-label {
+.check-toggle > * {
   cursor: pointer;
-  display: inline-block;
-  font-weight: normal;
+}
+.check-toggle .check-toggle-label {
   overflow: hidden;
   text-overflow: ellipsis;
   width: auto;
-  padding: 2px;
-}
-
-.check-toggle .check-toggle-label span {
-  font-weight: normal;
-  text-transform: capitalize;
-}
-
-.check-toggle .check-toggle-label:before {
-  font-family: fontawesome;
-  content: '\f096';
-  padding-right: 3px;
-}
-
-.check-toggle .check-toggle-input {
-  display: none;
-}
-
-.check-toggle .check-toggle-input:checked ~ .check-toggle-label:before {
-  content: '\f14a';
+  padding-left: 5px;
+  font-weight: inherit;
+  margin: 0px;
 }
 
 /**
@@ -1370,4 +1352,3 @@ blockquote {
   white-space: pre;
   line-height: 20px;
 }
-

@@ -255,39 +255,44 @@ export function cssTransformFun() {
 export var cssTransform = cssTransformFun();
 
 export function uiToggleBtn(o) {
+  const h = mx.helpers;
   var label = o.label || '';
   var onChange = o.onChange || function() {};
   var data = o.data || {};
   var checked = o.checked || false;
-  var classToggle = 'check-toggle';
-  var classLabel =
-    'check-toggle-label ' + (o.labelBoxed ? 'check-toggle-label-boxed' : '');
-  var classInput = 'check-toggle-input';
   var id = makeId();
-  var elContainer = document.createElement('div');
-  var elInput = document.createElement('input');
-  var elLabel = document.createElement('label');
-  elInput.type = 'checkbox';
-  elInput.id = id;
+  var elInput, elLabel;
+
+  const elContainer = h.el(
+    'div',
+    {class: 'check-toggle'},
+    (elInput = h.el('input', {
+      class: 'check-toggle-input',
+      id: id,
+      type: 'checkbox'
+    })),
+    (elLabel = h.el('label', {
+      class: `check-toggle-label ${
+        o.labelBoxed ? 'check-toggle-label-boxed' : ''
+      }`,
+      for: id
+    }))
+  );
+
   elInput.checked = checked;
-  elLabel.setAttribute('for', id);
-  elLabel.className = classLabel;
-  elInput.className = classInput;
-  elContainer.className = classToggle;
-  elLabel.innerText = label;
 
   for (var d in data) {
     elInput.dataset[d] = data[d];
   }
 
   elInput.onchange = function(e) {
-    /*jshint validthis:true */
-    var el = this;
-    onChange(e, el);
+    onChange(e, e.target);
   };
 
-  elContainer.appendChild(elInput);
-  elContainer.appendChild(elLabel);
+  h.getDictItem('noValue')
+  .then(na => {
+    elLabel.innerText = label || na;
+  });
 
   return elContainer;
 }

@@ -70,7 +70,7 @@ function enableDraw() {
   });
 }
 
-function save() {
+async function save() {
   const h = mx.helpers;
   var c = drawConfig;
   var gj = c.draw.getAll();
@@ -80,19 +80,19 @@ function save() {
     return;
   }
 
-  return h
-    .spatialDataToView({
-      title: fileName,
-      fileName: fileName,
-      fileType: 'geojson',
-      data: gj
-    })
-    .then((view) => {
-      c.draw.deleteAll();
-      h.viewsListAddSingle(view, {
-        open: true
-      });
-    });
+  const view = await h.spatialDataToView({
+    title: fileName,
+    fileName: fileName,
+    fileType: 'geojson',
+    data: gj,
+    save : true
+  });
+
+  await h.viewsListAddSingle(view, {
+    open: true
+  });
+
+  c.draw.deleteAll();
 }
 
 /**

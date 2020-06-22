@@ -981,7 +981,7 @@ export async function handleClickEvent(e, idMap) {
       /**
        * NOTE: see mx_helper_map_features_popoup.js
        */
-      h.featuresToHtml({
+      h.featuresToPopup({
         layersAttributes: layersAttributes,
         popup: popup
       });
@@ -1421,17 +1421,14 @@ export async function updateViewsList(o) {
  * @param {String} o.project Current project to filter geojson view. Default to settings.project
  * @return {Array} array of views;
  */
-function getGeoJSONViewsFromStorage(o) {
-  let out = [];
-  if (!mx.data || !mx.data.geojson) {
-    return out;
-  }
+async function getGeoJSONViewsFromStorage(o) {
+  const out = [];
 
   const project = o.project || mx.settings.project;
   /**
    * extract views from local storage
    */
-  mx.data.geojson.iterate(function(value) {
+  await mx.data.geojson.iterate(function(value) {
     const view = value.view;
     if (view.project === project) {
       out.push(view);

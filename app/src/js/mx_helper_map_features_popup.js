@@ -4,7 +4,7 @@
  * @param {Object} o.popup Mapbox-gl popup object
  * @param {Object} o.layersAttributes Attributes by layer {<abc>:{<attr>:[<values>,...]}}
  */
-export function featuresToHtml(o) {
+export function featuresToPopup(o) {
   const h = mx.helpers;
   const popup = o.popup;
   const attributes = o.layersAttributes;
@@ -251,15 +251,24 @@ export function featuresToHtml(o) {
     }
   }
 
-  function filterValues() {
-    const elChecks = popup._content.querySelectorAll('.check-toggle input');
+  function filterValues(e) {
+    const elBtn = e.target;
+    const elChecks = h
+      .parentFinder({
+        selector: elBtn, 
+        class: 'mx-prop-group'
+      })
+      .querySelectorAll('.check-toggle input');
+    const layer = elBtn.dataset.layer;
+
+    filters[layer] = ['any'];
 
     h.forEachEl({
       els: elChecks,
       callback: updateFilters
     });
 
-    applyFilters();
+    applyFilters(layer);
   }
 
   function updateFilters(el) {
@@ -269,10 +278,6 @@ export function featuresToHtml(o) {
     const add = el.checked;
     const isNum = h.isNumeric(value);
     let rule = [];
-
-    if (!filters[layer]) {
-      filters[layer] = ['any'];
-    }
 
     if (add) {
       if (isNum) {
@@ -287,8 +292,7 @@ export function featuresToHtml(o) {
     }
   }
 
-  function applyFilters() {
-    for (var idV in filters) {
+  function applyFilters(idV) {
       var filter = filters[idV];
       var view = h.getView(idV);
 
@@ -296,6 +300,7 @@ export function featuresToHtml(o) {
         filter: filter,
         type: 'popup_filter'
       });
-    }
+
+      filters[idV] = [];
   }
 }
