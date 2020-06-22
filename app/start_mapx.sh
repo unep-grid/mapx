@@ -61,5 +61,5 @@ CONF_SHINY_SERVER="\
 echo $CONF_MAPX > $MAPX_CONFIG
 echo $CONF_SHINY_SERVER > "/etc/shiny-server/shiny-server.conf"
 
-exec shiny-server 2>&1
-
+exec shiny-server 2>&1 &
+exec xtail $MAPX_PATH_LOG

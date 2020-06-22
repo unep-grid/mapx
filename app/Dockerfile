@@ -1,5 +1,7 @@
 FROM fredmoser/debian_r3.5.1_shinyserver1.5.7.890
 
+
+
 # Overwrite SockJSAdapter.R by a custom version:
 # Remove _ga refs
 # Add a mode where if the string 'mx-no-shiny' is found,

@@ -55,4 +55,12 @@ RUN apt-get update \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/* 
 
-
+#
+# xtail for logs (see start_mapx.sh)
+#
+RUN apt-get update \
+    && apt install -y -t unstable xtail \
+    && apt-get clean \
+    && apt-get autoclean \
+    && apt-get autoremove \
+    && rm -rf /var/lib/apt/lists/*
