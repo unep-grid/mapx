@@ -465,6 +465,12 @@ Class to handle MapX specific method
 
 * [MapxResolvers](#MapxResolvers)
     * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
+    * [.set_immersive_mode()](#MapxResolvers+set_immersive_mode) ⇒ <code>Boolean</code>
+    * [.get_immersive_mode()](#MapxResolvers+get_immersive_mode) ⇒ <code>Boolean</code>
+    * [.set_theme(opt)](#MapxResolvers+set_theme) ⇒ <code>Boolean</code>
+    * [.get_themes_id()](#MapxResolvers+get_themes_id) ⇒ <code>Array</code>
+    * [.get_themes()](#MapxResolvers+get_themes) ⇒ <code>Object</code>
+    * [.get_theme_id()](#MapxResolvers+get_theme_id) ⇒ <code>string</code>
     * [.has_el_id(opt)](#MapxResolvers+has_el_id)
     * [.set_dashboard_visibility(opt)](#MapxResolvers+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolvers+is_dashboard_visible) ⇒ <code>Boolean</code>
@@ -498,7 +504,9 @@ Class to handle MapX specific method
     * [.get_view_layer_transparency(opt)](#MapxResolvers+get_view_layer_transparency) ⇒ <code>Number</code>
     * [.view_add(opt)](#MapxResolvers+view_add) ⇒ <code>Boolean</code>
     * [.view_remove(opt)](#MapxResolvers+view_remove) ⇒ <code>Boolean</code>
-    * [.download_view_source_auto(opt)](#MapxResolvers+download_view_source_auto) ⇒ <code>Object</code>
+    * [.download_view_source_raster(opt)](#MapxResolvers+download_view_source_raster) ⇒ <code>Object</code>
+    * [.download_view_source_vector(opt)](#MapxResolvers+download_view_source_vector) ⇒ <code>Object</code>
+    * [.download_view_source_geojson(opt)](#MapxResolvers+download_view_source_geojson) ⇒ <code>Object</code>
     * [.show_modal_login()](#MapxResolvers+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolvers+show_modal_view_meta) ⇒ <code>Boolean</code>
     * [.show_modal_view_edit()](#MapxResolvers+show_modal_view_edit) ⇒ <code>Boolean</code>
@@ -509,6 +517,7 @@ Class to handle MapX specific method
     * [.toggle_draw_mode()](#MapxResolvers+toggle_draw_mode)
     * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
     * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
+    * [.get_views_title(opt)](#MapxResolvers+get_views_title) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state) ⇒ <code>Boolean</code>
     * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort) ⇒ <code>Boolean</code>
     * [.move_view_top(opt)](#MapxResolvers+move_view_top) ⇒ <code>Boolean</code>
@@ -544,6 +553,63 @@ Set panel visibility
 | opt.show | <code>Boolean</code> | If true, show the panel (and hide other) |
 | opt.toggle | <code>Boolean</code> | Toggle the panel |
 
+<a name="MapxResolvers+set_immersive_mode"></a>
+
+### mapxResolvers.set\_immersive\_mode() ⇒ <code>Boolean</code>
+Toogle immersive mode
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - enabled  
+**Aram**: <code>Object</code> opt Options  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt.enable | <code>Boolean</code> | Force enable |
+| opt.toggle | <code>Boolean</code> | Toggle |
+
+<a name="MapxResolvers+get_immersive_mode"></a>
+
+### mapxResolvers.get\_immersive\_mode() ⇒ <code>Boolean</code>
+Get immersive mode state
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Enabled  
+<a name="MapxResolvers+set_theme"></a>
+
+### mapxResolvers.set\_theme(opt) ⇒ <code>Boolean</code>
+Set MapX theme by id or set custom colors.
+Both ways are exclusive.
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idTheme | <code>String</code> | Valid theme id. Use 'get_themes_id' to get a list |
+| opt.colors | <code>Object</code> | Valid colors scheme. Use 'get_themes' to see default themes structure. |
+
+<a name="MapxResolvers+get_themes_id"></a>
+
+### mapxResolvers.get\_themes\_id() ⇒ <code>Array</code>
+Get themes id
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - array of themes id  
+<a name="MapxResolvers+get_themes"></a>
+
+### mapxResolvers.get\_themes() ⇒ <code>Object</code>
+Get all themes
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - Themes object with themes id as key  
+<a name="MapxResolvers+get_theme_id"></a>
+
+### mapxResolvers.get\_theme\_id() ⇒ <code>string</code>
+Get current theme id
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>string</code> - Theme id  
 <a name="MapxResolvers+has_el_id"></a>
 
 ### mapxResolvers.has\_el\_id(opt)
@@ -897,33 +963,46 @@ remove a view
 | opt | <code>Object</code> | Options |
 | opt.idView | <code>String</code> | Target view id |
 
-<a name="MapxResolvers+download_view_source_auto"></a>
+<a name="MapxResolvers+download_view_source_raster"></a>
 
-### mapxResolvers.download\_view\_source\_auto(opt) ⇒ <code>Object</code>
-Download process for raster (rt), geojson (gj) and vector (vt) view
-
-<pre>
-=> file : a file downloaded by the browser
-=> url : an url to fetch the data, if available
-=> data : the data. E.g. geojson = object
-=> modal : a modal window inside MapX
-vt : return {type: "vt", methods: ['modal']}
-rt : return {type: "rt", methods: ['url'], url:'http://example.com/data'}
-gj : return {type: "vt", methods: ['file','data'], data:{"type":"FeatureCollection","features":[{"id":"1","type":"Feature","properties":{},"geometry":{"coordinates":[[-11,43],[12,20]],"type":"Point"}}]}}
-</pre>
+### mapxResolvers.download\_view\_source\_raster(opt) ⇒ <code>Object</code>
+Get the download link of the raster source
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Object</code> - Object with the method to retrieve the source.  
+**Returns**: <code>Object</code> - input options, with new key : url. E.g. {idView:<abc>,url:<url>}  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.idView | <code>String</code> | View of the source to download |
+| opt.idView | <code>String</code> | Raster view id |
 
-**Example**  
-```js
-mapx.ask('download_view_source_auto',{idView:'MX-GJ-0RB4FBOS8E'})
-```
+<a name="MapxResolvers+download_view_source_vector"></a>
+
+### mapxResolvers.download\_view\_source\_vector(opt) ⇒ <code>Object</code>
+Open the download modal for vector views
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - input options E.g. {idView:<abc>}  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Vector view id |
+
+<a name="MapxResolvers+download_view_source_geojson"></a>
+
+### mapxResolvers.download\_view\_source\_geojson(opt) ⇒ <code>Object</code>
+Get the data from geojson view or download geojsn as a file
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - input options E.g. {idView:<abc>, data:<data (if mode = data)>}  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | GeoJSON view id |
+| opt.mode | <code>String</code> | "file" or "data" |
+
 <a name="MapxResolvers+show_modal_login"></a>
 
 ### mapxResolvers.show\_modal\_login() ⇒ <code>Boolean</code>
@@ -1004,6 +1083,19 @@ Get views current absolute order (without groups)
 Get views list state
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+<a name="MapxResolvers+get_views_title"></a>
+
+### mapxResolvers.get\_views\_title(opt) ⇒ <code>Array</code>
+Get list of views title
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of titles (string)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.views | <code>Array</code> | List of views or views id |
+
 <a name="MapxResolvers+set_views_list_state"></a>
 
 ### mapxResolvers.set\_views\_list\_state(opt) ⇒ <code>Boolean</code>
@@ -1144,6 +1236,10 @@ Add geojson.
 | opt.fileName | <code>String</code> | File name, if any |
 | opt.title | <code>Sring</code> | Title |
 | opt.abstract | <code>String</code> | Abstract |
+| opt.random | <code>Object</code> | Generate random geojson |
+| opt.random.n | <code>Number</code> | number of points |
+| opt.random.latRange | <code>Array</code> | [minLat, maxLat] |
+| opt.random.lngRange | <code>Array</code> | [minLng, maxLng] |
 
 <a name="MapxResolvers+view_geojson_set_style"></a>
 
