@@ -17,7 +17,6 @@
      {{?item}}
      {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
      {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
-     {{ var dpr = window.devicePixelRatio; }}
      {{ var hasSprite  = !!item.sprite; }}
      <tr 
        class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}"
@@ -29,11 +28,11 @@
              class="mx-legend-vt-rule-color" style="
              opacity:{{=item.opacity}};
              {{?isLine }}
-                height:{{=item.size * dpr}}px;
+                height:{{=item.size}}px;
              {{?}}
              {{?isPoint }}
-             width:{{=item.size * dpr}}px;
-             height:{{=item.size * dpr}}px;
+             width:{{=item.size}}px;
+             height:{{=item.size}}px;
                {{?!hasSprite}}
                  border-radius:100%;
                {{?}}

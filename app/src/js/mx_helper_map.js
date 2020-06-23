@@ -344,6 +344,7 @@ export function isModeLocked() {
  */
 
 export function initListenerGlobal() {
+  const h = mx.helpers;
   /**
    * Handle view click
    */
@@ -375,6 +376,14 @@ export function initListenerGlobal() {
       });
     }
   });
+
+  mx.listeners.addListener({
+     target : window,
+     type : ['error','unhandledrejection'],
+    idGroup : 'base',
+     callback: h.handleIssues
+  });
+
 }
 
 /**
@@ -501,16 +510,25 @@ export function updateBtnFilterActivated() {
   const h = mx.helpers;
   const views = h.getViews();
   const elFilterActivated = document.getElementById('btnFilterChecked');
+  /**
+   * Check displayed views element
+   */
   const hasViewsActivated = views.reduce((a, v) => {
-    if (!v.vb) {
+    if (!v._vb) {
       return a || false;
     }
-    let hasEl = h.isElement(v.vb.el);
-    let isOpen = v.vb.isOpen();
-    let isVisible =
-      hasEl && window.getComputedStyle(v.vb.el).display !== 'none';
+    let elView = v._vb.getEl();
+    let isOpen = v._vb.isOpen();
+    let style = window.getComputedStyle(elView);
+    let isVisible = style.display !== 'none';
+
     return a || (isOpen && isVisible);
   }, false);
+
+  /**
+   * Set elFilter disabled class
+   */
+
   const isActivated = elFilterActivated.classList.contains('active');
   if (isActivated || hasViewsActivated) {
     elFilterActivated.classList.remove('disabled');
@@ -518,6 +536,7 @@ export function updateBtnFilterActivated() {
     elFilterActivated.classList.add('disabled');
   }
 }
+
 export function setBtnFilterActivated(enable) {
   const h = mx.helpers;
   const elFilterActivated = document.getElementById('btnFilterChecked');
@@ -706,7 +725,7 @@ export function initMapListener(map) {
         return;
       }
     }
-    console.error(e);
+    h.handleIssues(e);
   });
 
   /**
@@ -1580,6 +1599,7 @@ export function makeSimpleLayer(o) {
   const sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
   const sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
   const sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
+  const text = o.text;
   const zoomMin = o.zoomMin || 1;
   const zoomMax = o.zoomMax || 22;
   const sprite = o.sprite || '';
@@ -1587,7 +1607,7 @@ export function makeSimpleLayer(o) {
   const dpx = window.devicePixelRatio || 1;
 
   if (o.geomType === 'symbol') {
-    size = size / dpx / 2;
+    size = size / 10;
   }
 
   const funSizeByZoom = [
@@ -1617,13 +1637,30 @@ export function makeSimpleLayer(o) {
       layout: {
         'icon-image': sprite,
         'icon-size': size,
-        'icon-allow-overlap': true
+        'icon-allow-overlap': true,
+        'icon-ignore-placement': false,
+        'icon-optional': true,
+        'text-field': text || null,
+        'text-variable-anchor': [
+          'bottom-left',
+          'bottom-right',
+          'top-right',
+          'top-left'
+        ],
+        'text-font': ['Arial'],
+        'text-radial-offset': 1.2,
+        'text-justify': 'auto'
       },
       paint: {
         'icon-opacity': o.opacity || 1,
         'icon-halo-width': 0,
         'icon-halo-color': colB,
-        'icon-color': colA
+        'icon-color': colA,
+        'text-color': colA,
+        'text-halo-color': '#FFF',
+        'text-halo-blur': 0,
+        'text-halo-width': 1.2,
+        'text-translate': [0, 0]
       }
     },
     point: {
@@ -1662,6 +1699,7 @@ export function makeSimpleLayer(o) {
   };
 
   layer = layer[o.geomType];
+
   layer.id = o.id;
   layer.source = o.idSource;
   layer.idAfter = o.idAfter;
@@ -2309,8 +2347,8 @@ function _viewUiOpen(view) {
     }
     const elView = getViewEl(view);
 
-    if (elView && elView.vb) {
-      elView.vb.open();
+    if (elView && elView._vb) {
+      elView._vb.open();
     }
 
     view._open = true;
@@ -2325,8 +2363,8 @@ function _viewUiOpen(view) {
 async function _viewUiClose(view) {
   const h = mx.helpers;
   view = h.getView(view);
-  if (h.isView(view) && view.vb) {
-    view.vb.close();
+  if (h.isView(view) && view._vb) {
+    view._vb.close();
   }
   await h.viewModulesRemove(view);
   view._open = false;
@@ -2358,7 +2396,9 @@ export async function viewAdd(view) {
   await h.viewLayersAdd({
     viewData: view
   });
+  
   await _viewUiOpen(view);
+
   await h.updateLanguageElements({
     el: view.el
   });
@@ -3114,7 +3154,6 @@ async function viewLayersAddCc(o) {
 
   let cc;
 
-
   const elLegend = h.elLegend(view, {
     type: 'cc',
     elLegendContainer: o.elLegendContainer,
@@ -3268,14 +3307,16 @@ function viewLayersAddRt(o) {
     /**
      * source has already be added. Add layer
      */
-    map.addLayer(
-      {
-        id: idView,
-        type: 'raster',
-        source: idSource
-      },
-      o.before
-    );
+    setTimeout(()=>{
+      map.addLayer(
+        {
+          id: idView,
+          type: 'raster',
+          source: idSource
+        },
+        o.before
+      );
+    },1);
 
     /**
      * If no legend url is provided, use a minimap
@@ -3537,12 +3578,19 @@ export function viewLayersAddVt(o) {
        * add a layer for symbol if point + sprite
        */
       if (isSymbol) {
+        const text = h.getLabelFromObjectPath({
+          obj: rule,
+          sep: '_',
+          path: 'label',
+          defaultValue: rule.value
+        });
         const layerSprite = makeSimpleLayer({
           id: getIdLayer(),
           idSource: idSource,
           idSourceLayer: idView,
           geomType: 'symbol',
           hexColor: rule.color,
+          text: text,
           opacity: rule.opacity,
           size: rule.size,
           sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
@@ -3723,12 +3771,19 @@ export function viewLayersAddVt(o) {
          * Add layer for symbols
          */
         if (isSymbol) {
+          const text = h.getLabelFromObjectPath({
+            obj: rule,
+            sep: '_',
+            path: 'label',
+            defaultValue: rule.value
+          });
           const layerSprite = makeSimpleLayer({
             id: idLayerRuleSymbol,
             idAfter: idLayerRule,
             idSource: idSource,
             idSourceLayer: idView,
             geomType: 'symbol',
+            text: text,
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
@@ -3771,27 +3826,8 @@ export function viewLayersAddVt(o) {
      * Add layer and legends
      */
     if (layers.length > 0) {
-      /**
-       * handle order
-       */
-      if (defaultOrder) {
-        layers = layers.reverse();
-      }
+  
 
-      /*
-       * Add layers to map
-       */
-      layers.forEach((layer) => {
-        map.addLayer(layer, o.before);
-      });
-      setTimeout(() => {
-        layersAfter.forEach((layer) => {
-          h.addLayer({
-            layer: layer,
-            after: layer.idAfter
-          });
-        });
-      }, 10);
       /*
        * Update layer order based in displayed list
        */
@@ -3838,10 +3874,49 @@ export function viewLayersAddVt(o) {
         view.data.style.rulesCopy = rules;
         elLegend.innerHTML = mx.templates.viewListLegend(view);
       }
+
+      /**
+       * handle order
+       */
+      if (defaultOrder) {
+        layers = layers.reverse();
+      }
+
+      /*
+       * Add layers to map 
+       */
+      h.onNextFrame(()=>{
+        addLayers(layers, layersAfter, o.before);
+        resolve(true);
+      },0);
+
+    }else{
+      resolve(false);
     }
 
-    resolve(true);
   });
+}
+
+/**
+ * Add mutiple layers at once
+ * NOTE: should be converted to data driven methods
+ * @param {Array} layers Array of layers
+ * @param {Array} layersAfter Array of additional layers to add on top of layers
+ */
+function addLayers(layers, layersAfter, before) {
+  const h = mx.helpers;
+  const map = h.getMap();
+  layers.forEach((layer) => {
+    map.addLayer(layer, before);
+  });
+  setTimeout(() => {
+    layersAfter.forEach((layer) => {
+      h.addLayer({
+        layer: layer,
+        after: layer.idAfter
+      });
+    });
+  }, 10);
 }
 
 /**

@@ -618,7 +618,7 @@ function handleFilterActivatedView(event) {
   }
   const views = vf.getViews();
   const ids = views.reduce((a, v) => {
-    let isOpen = v.vb.isOpen();
+    let isOpen = v._vb.isOpen();
     if (!toDisable && isOpen) {
       a.push(v.id);
     }

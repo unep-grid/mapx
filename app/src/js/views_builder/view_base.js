@@ -6,7 +6,7 @@ class ViewBase {
   constructor(view, enable) {
     let vb = this;
     vb.view = view;
-    view.vb = vb;
+    view._vb = vb;
     vb.build(enable);
   }
   build(enable) {
@@ -51,10 +51,16 @@ function build(enable) {
   /*
    * Chrome does not render at all svg produced with 'el';
    */
-  let elButton = `<svg class='mx-view-tgl-btn' viewBox='0 0 30 30' width='30px' height='30px' preserveAspectRatio='xMinYMin meet'>
+  let elButton = `
+  <svg 
+    class='mx-view-tgl-btn' 
+    viewBox='0 0 30 30' 
+    width='30px' 
+    height='30px' 
+    preserveAspectRatio='xMinYMin meet'>
        <circle class='mx-view-tgl-btn-out' r=15 cx=15 cy=15></circle>
        <circle class='mx-view-tgl-btn-in' r=13 cx=15 cy=15></circle>
-      </svg>`;
+  </svg>`;
 
   let elTitle = el(
     'span',
@@ -139,6 +145,6 @@ function build(enable) {
   vb.el = elView;
   vb.elInput = elInput;
   vb.elToggleMore = elToggleMore;
-  vb.el.vb = this;
+  vb.el._vb = this;
   view._el = elView;
 }

@@ -1452,104 +1452,43 @@
         "all",
         [
           "match",
-          [
-            "get",
-            "class"
-          ],
-          [
-            "bay",
-            "ocean",
-            "reservoir",
-            "sea",
-            "water"
-          ],
+          ["get", "class"],
+          ["bay", "ocean", "reservoir", "sea", "water"],
           true,
           false
         ],
-        [
-          "==",
-          [
-            "geometry-type"
-          ],
-          "Point"
-        ]
+        ["==", ["geometry-type"], "Point"]
       ],
       "layout": {
         "text-line-height": 1.3,
         "text-size": [
           "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
+          ["linear"],
+          ["zoom"],
           7,
-          [
-            "step",
-            [
-              "get",
-              "sizerank"
-            ],
-            24,
-            6,
-            18,
-            12,
-            12
-          ],
+          ["step", ["get", "sizerank"], 24, 6, 18, 12, 12],
           10,
-          [
-            "step",
-            [
-              "get",
-              "sizerank"
-            ],
-            18,
-            9,
-            12
-          ]
+          ["step", ["get", "sizerank"], 18, 9, 12]
         ],
         "text-font": ["Baskerville Italic"],
-        "text-field": [
-          "coalesce",
-          [
-            "get",
-            "name_en"
-          ],
-          [
-            "get",
-            "name"
-          ]
-        ],
+        "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-letter-spacing": [
           "match",
-          [
-            "get",
-            "class"
-          ],
+          ["get", "class"],
           "ocean",
           0.25,
-          [
-            "bay",
-            "sea"
-          ],
+          ["bay", "sea"],
           0.15,
           0.01
         ],
         "text-max-width": [
           "match",
-          [
-            "get",
-            "class"
-          ],
+          ["get", "class"],
           "ocean",
           4,
           "sea",
           5,
-          [
-            "bay",
-            "water"
-          ],
+          ["bay", "water"],
           7,
           10
         ]
@@ -1625,7 +1564,7 @@
       "paint": {"raster-opacity": 0.8}
     },
     {
-      "id": "mxlayers",
+      "id": "mx-layers-main",
       "type": "background",
       "source": "",
       "layout": {"visibility": "none"},
@@ -1695,7 +1634,13 @@
         "text-size": ["interpolate", ["linear"], ["zoom"], 1, 3, 18, 25],
         "text-letter-spacing": 0.2,
         "text-offset": [0, 0],
-        "text-anchor": "bottom",
+        "text-variable-anchor": [
+          "top-left",
+          "bottom-left",
+          "bottom-right",
+          "top-right"
+        ],
+        "text-radial-offset": 0.5,
         "icon-image": "maki-circle-11",
         "icon-size": ["interpolate", ["linear"], ["zoom"], 1, 0, 18, 1]
       },
@@ -1717,7 +1662,6 @@
       "filter": ["==", ["get", "capital"], 2],
       "layout": {
         "text-font": ["Arial"],
-        "text-anchor": "bottom-right",
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-size": ["interpolate", ["linear"], ["zoom"], 1, 4, 18, 30],
         "visibility": "visible",
@@ -1726,7 +1670,14 @@
         "icon-size": ["interpolate", ["linear"], ["zoom"], 1, 0, 18, 2],
         "icon-offset": [2, 2],
         "icon-rotation-alignment": "viewport",
-        "text-allow-overlap": false
+        "text-allow-overlap": false,
+        "text-variable-anchor": [
+          "top-right",
+          "bottom-right",
+          "bottom-left",
+          "top-left"
+        ],
+        "text-radial-offset": 0.5
       },
       "paint": {
         "text-halo-color": "#FFF",
@@ -1754,9 +1705,16 @@
       "paint": {
         "text-color": "hsl(0, 0%, 0%)",
         "text-halo-width": 1.4,
-        "text-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 8, 0.1], 
+        "text-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 8, 0.1],
         "text-halo-color": "#FFF"
       }
+    },
+    {
+      "id": "mx-layers-top",
+      "type": "background",
+      "source": "",
+      "layout": {"visibility": "none"},
+      "paint": {"background-color": "rgb(255,0,0)", "background-opacity": 0}
     }
   ]
 }

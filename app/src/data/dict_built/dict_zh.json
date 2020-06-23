@@ -3425,8 +3425,13 @@
     "zh": ""
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends",
+    "zh": ""
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
     "zh": ""
   },
   {

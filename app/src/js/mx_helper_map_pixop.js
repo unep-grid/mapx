@@ -2,17 +2,24 @@ import {Spotlight} from './pixop/spotlight.js';
 import {RadialProgress} from './radial_progress/index.js';
 
 let prog;
-
 export function toggleSpotlight(opt) {
   const h = mx.helpers;
   const map = h.getMap();
+  const clActive = 'active';
+
+  /**
+   * Mendatory expected ui
+   */
+  const elToggleMain = document.getElementById('btnOverlapSpotlight');
+  const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
+
+  /*
+   * Optional ui
+   */
   const elSelectNum = document.getElementById('selectNLayersOverlap');
   const elTextArea = document.getElementById('txtAreaOverlap');
   const elTextResol = document.getElementById('txtResolOverlap');
   const elEnableCalcArea = document.getElementById('checkEnableOverlapArea');
-  const elToggleMain = document.getElementById('btnOverlapSpotlight');
-  const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
-  const clActive = 'active';
 
   opt = Object.assign(
     {
@@ -26,9 +33,14 @@ export function toggleSpotlight(opt) {
   /*
    * Update UI
    */
-  elEnableCalcArea.checked = opt.calc;
+  if (elEnableCalcArea) {
+    elEnableCalcArea.checked = opt.calc;
+  }
   elToggle.checked = opt.enable;
-  elSelectNum.value = opt.nLayers;
+
+  if (elSelectNum) {
+    elSelectNum.value = opt.nLayers;
+  }
 
   if (!(prog instanceof RadialProgress)) {
     prog = new RadialProgress(elToggle, {
@@ -47,12 +59,15 @@ export function toggleSpotlight(opt) {
       return !!elToggle.checked;
     },
     nLayersOverlap: () => {
-      return elSelectNum.value * 1;
+      return elSelectNum ? elSelectNum.value * 1 : 1;
     },
     calcArea: () => {
-      return !!elEnableCalcArea.checked;
+      return elEnableCalcArea ? !!elEnableCalcArea.checked : false;
     },
     onCalcArea: (area) => {
+      if (!elEnableCalcArea) {
+        return;
+      }
       let resol = mx.spotlight.getResolution();
       if (h.isElement(elTextArea) && h.isElement(elTextResol)) {
         const areaKm = Math.round(area * 1e-6);
@@ -70,7 +85,7 @@ export function toggleSpotlight(opt) {
       mx.events.fire({
         type: 'highlight_progress',
         data: {
-          progress : p
+          progress: p
         }
       });
     },
@@ -102,19 +117,22 @@ export function toggleSpotlight(opt) {
     if (!(mx.spotlight instanceof Spotlight) || mx.spotlight.isDestroyed()) {
       mx.spotlight = new Spotlight(config);
 
-      mx.listeners.addListener({
-        target: elEnableCalcArea,
-        type: 'change',
-        idGroup: 'spotlight_pixop_ui',
-        callback: render
-      });
-      mx.listeners.addListener({
-        target: elSelectNum,
-        type: 'change',
-        idGroup: 'spotlight_pixop_ui',
-        callback: render
-      });
-
+      if (elEnableCalcArea) {
+        mx.listeners.addListener({
+          target: elEnableCalcArea,
+          type: 'change',
+          idGroup: 'spotlight_pixop_ui',
+          callback: render
+        });
+      }
+      if (elSelectNum) {
+        mx.listeners.addListener({
+          target: elSelectNum,
+          type: 'change',
+          idGroup: 'spotlight_pixop_ui',
+          callback: render
+        });
+      }
       /**
        * Destroy if other changes
        */
@@ -128,7 +146,7 @@ export function toggleSpotlight(opt) {
      */
     render();
   }
-  
+
   mx.events.fire({
     type: 'highlight_update',
     data: opt

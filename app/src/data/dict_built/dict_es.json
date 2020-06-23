@@ -3425,9 +3425,14 @@
     "es": "Leyendas"
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends",
     "es": "Leyendas"
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
+    "es": ""
   },
   {
     "id": "select_optional_view_attribute",

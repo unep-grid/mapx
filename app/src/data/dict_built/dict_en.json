@@ -2740,8 +2740,12 @@
     "en": "Legends"
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends"
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues"
   },
   {
     "id": "select_optional_view_attribute",

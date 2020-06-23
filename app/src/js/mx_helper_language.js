@@ -259,11 +259,13 @@ export function getTranslationTag(key, lang) {
  */
 export function getLabelFromObjectPath(o) {
   'use strict';
+  const h = mx.helpers;
   var defaultLang = 'en';
   o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
-  o.path = o.path ? o.path + '.' : '';
+  o.sep = o.sep ? o.sep : '.';
+  o.path = o.path ? o.path + o.sep : '';
   var defaultValue = o.defaultValue || '';
-  var out = mx.helpers.path(o.obj, o.path + o.lang, null);
+  var out = h.path(o.obj, o.path + o.lang, null);
   var langs = mx.settings.languages;
 
   if (!out) {

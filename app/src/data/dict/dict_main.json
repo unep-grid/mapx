@@ -8220,10 +8220,22 @@
     "ps": ""
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends",
     "fr": "Légendes",
     "es": "Leyendas",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
+    "fr": "Problèmes",
+    "es": "",
     "ru": "",
     "zh": "",
     "de": "",

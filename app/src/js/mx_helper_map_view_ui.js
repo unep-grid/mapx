@@ -180,7 +180,8 @@ export function viewsListUpdateSingle(view) {
   const settings = {
     id: view.id,
     view: oldView,
-    update: true
+    update: true,
+    open : true
   };
   mData.viewsList.updateItem(settings);
   mData.viewsFilter.updateViewsComponents();
@@ -342,8 +343,8 @@ export function viewsListRenderNew(o) {
     if (isItem) {
       const elView = el.querySelector('.mx-view-item');
       let out = '';
-      if (elView && elView.vb) {
-        let out = mx.helpers.getViewJson(elView.vb.view);
+      if (elView && elView._vb) {
+        let out = mx.helpers.getViewJson(elView._vb.view);
         return out;
       } else {
         return el.dataset;
@@ -359,7 +360,7 @@ export function viewsListRenderNew(o) {
     const views = h.getViews();
     let found = false;
     views.forEach((v) => {
-      if (!found && v.vb.isOpen()) {
+      if (!found && v._vb.isOpen()) {
         found = true;
       }
     });
@@ -371,7 +372,7 @@ export function viewsListRenderNew(o) {
   /*
    * Render view item
    */
-  function handleRenderItemContent(config) {
+  async function handleRenderItemContent(config) {
     const li = this;
     const el = config.el;
     const data = config.data;
@@ -412,6 +413,7 @@ export function viewsListRenderNew(o) {
     */
     const viewBase = new ViewBase(view, update);
 
+
     /**
      * Test if registered to auto-open
      */
@@ -435,6 +437,9 @@ export function viewsListRenderNew(o) {
         h.viewLayersAdd({
           viewData: view
         });
+        h.updateLanguageElements({
+           el: view._el
+          });
       } else if (open) {
         h.viewAdd(view);
       }

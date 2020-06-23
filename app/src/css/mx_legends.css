@@ -78,6 +78,7 @@
   overflow: visible;
   display: flex;
   align-items: center;
+  max-height:100%;
 }
 
 .mx-legend-vt-rule-color {
@@ -95,9 +96,6 @@
 .mx-legend-vt-rule:hover {
   background: var(--mx_ui_shadow);
   z-index:1000;
-}
-.mx-legend-vt-rule:hover .mx-legend-vt-rule-color-wrapper {
-  max-height:100%;
 }
 
 .mx-legend-vt-rule

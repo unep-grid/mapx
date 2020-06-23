@@ -990,7 +990,7 @@ class MapxResolvers {
    * const res = this;
    * const map = h.getMap();
    * res._map_resolve_when('styledata', () => {
-   *   map.addLayer(layer, before || 'mxlayers');
+   *   map.addLayer(layer, before || 'mx-layers-main' || 'mx-layers-top');
    * });
    * }
    */

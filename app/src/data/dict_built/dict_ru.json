@@ -3425,8 +3425,13 @@
     "ru": ""
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends",
+    "ru": ""
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
     "ru": ""
   },
   {

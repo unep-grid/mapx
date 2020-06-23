@@ -3425,8 +3425,13 @@
     "ps": ""
   },
   {
-    "id": "button_legend_btn",
+    "id": "button_legend_button",
     "en": "Legends",
+    "ps": ""
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
     "ps": ""
   },
   {
