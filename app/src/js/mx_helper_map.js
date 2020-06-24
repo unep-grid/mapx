@@ -68,7 +68,6 @@ export async function downloadViewGeoJSON(opt) {
  * Download view raster
  * @param {Object} opt Options
  * @param {String} opt.idView Id of the rt view
- * @param {String} opt.mode Mode : 'file' or NULL
  * @return {Object} input options, with new key "url".
  */
 export async function downloadViewRaster(opt) {
@@ -83,11 +82,12 @@ export async function downloadViewRaster(opt) {
   const url = h.path(view, 'data.source.urlDownload');
   opt.url = url;
 
-  if (opt.mode === 'file') {
+  if(h.isUrl(url)){
     const download = await h.moduleLoad('downloadjs');
     download(opt.url);
+  }else{
+    throw new Error(`Not a valid URL: ${url}`);
   }
-
   return opt;
 }
 
@@ -4239,8 +4239,9 @@ export function getLayersPropertiesAtPoint(opt) {
     .map((idView) => h.getView(idView))
     .filter((view) => type.indexOf(view.type) > -1)
     .forEach((view) => {
-      if(h.isView(view)){
-        console.warn('Not a view', view);
+      if (!h.isView(view)) {
+        console.warn('Not a view:', view);
+        return
       }
       if (view.type === 'rt') {
         items[view.id] = fetchRasterProp(view);
