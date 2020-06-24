@@ -4239,6 +4239,9 @@ export function getLayersPropertiesAtPoint(opt) {
     .map((idView) => h.getView(idView))
     .filter((view) => type.indexOf(view.type) > -1)
     .forEach((view) => {
+      if(h.isView(view)){
+        console.warn('Not a view', view);
+      }
       if (view.type === 'rt') {
         items[view.id] = fetchRasterProp(view);
       } else {
