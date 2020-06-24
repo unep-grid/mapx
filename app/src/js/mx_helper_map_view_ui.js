@@ -156,8 +156,10 @@ export async function viewsListAddSingle(view, settings) {
   mData.views.unshift(view);
   mData.viewsFilter.update();
 
-  const test = await new Promise((resolve) => {
-    mData.viewsList.once('render_item_content',resolve);
+  await new Promise((resolve) => {
+    mData.viewsList.once('render_item_content',(d)=>{
+      resolve(d);
+    });
     mData.viewsList.addItem(settings);
   });
   return settings;

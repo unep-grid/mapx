@@ -124,27 +124,38 @@ class NestedList {
   fire(type, data) {
     const li = this;
     const onces = [];
+    const results = [];
     const cb = [];
-    const res = [];
-    li.opt.eventsCallback.forEach((e, i) => {
+
+    li.opt.eventsCallback.forEach((e) => {
       if (e.id === type) {
         if (e.action instanceof Function) {
           cb.push(e.action);
         }
         if (e.once) {
-          onces.push(i);
+          onces.push(e);
         }
       }
     });
+
+    /**
+     * Remove registered events that should be used once
+     */
     while (onces.length) {
-      li.opt.eventsCallback.splice(onces.length - 1, 1);
-      onces.pop();
+      const e = onces.pop();
+      const pos = li.opt.eventsCallback.indexOf(e);
+      li.opt.eventsCallback.splice(pos, 1);
     }
+
+    /**
+     * Apply callbacks
+     */
     while (cb.length) {
-      res.push(cb[cb.length-1].bind(li)(data));
+      const res = cb[cb.length - 1].bind(li)(data);
+      results.push(res);
       cb.pop();
     }
-    return res;
+    return results;
   }
 
   on(id, action, once) {
