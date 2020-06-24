@@ -117,6 +117,7 @@ observeEvent(input$styleEdit_values,{
     view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
     view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
     view <- .set(view, c("data", "style", "zoomConfig"), .get(style,c("zoomConfig")))
+    view <- .set(view, c("data", "style", "showSymbolLabel"), .get(style,c("showSymbolLabel")))
     view <- .set(view, c("data","style", "nulls"), .get(style,c("nulls")))
     view <- .set(view, c("data","style", "hideNulls"), .get(style,c("hideNulls")))
     view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))

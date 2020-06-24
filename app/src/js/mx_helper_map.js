@@ -1588,6 +1588,8 @@ export function viewLiAction(o) {
  * @param {string} o.idAfter Id of the layer after
  * @param {string} o.idSource Id of the source
  * @param {string} o.geomType Geometry type (point, line, polygon)
+ * @param {Boolean} o.showSymbolLabel Show symbol with label
+ * @param {String} o.label Label text or expression
  * @param {string} o.hexColor Hex color. If not provided, random color will be generated
  * @param {array} o.filter
  * @param {Number} o.size
@@ -1599,7 +1601,7 @@ export function makeSimpleLayer(o) {
   const sizeFactorZoomMax = o.sizeFactorZoomMax || 0;
   const sizeFactorZoomMin = o.sizeFactorZoomMin || 0;
   const sizeFactorZoomExponent = o.sizeFactorZoomExponent || 1;
-  const text = o.text;
+  const label = o.label;
   const zoomMin = o.zoomMin || 1;
   const zoomMax = o.zoomMax || 22;
   const sprite = o.sprite || '';
@@ -1640,14 +1642,15 @@ export function makeSimpleLayer(o) {
         'icon-allow-overlap': true,
         'icon-ignore-placement': false,
         'icon-optional': true,
-        'text-field': text || null,
-        'text-variable-anchor': [
+        'text-field': o.showSymbolLabel ? label || '' : '',
+        'text-variable-anchor': o.showSymbolLabel ? [
           'bottom-left',
           'bottom-right',
           'top-right',
           'top-left'
-        ],
+        ]: [],
         'text-font': ['Arial'],
+        "text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
         'text-radial-offset': 1.2,
         'text-justify': 'auto'
       },
@@ -3452,6 +3455,7 @@ export function viewLayersAddVt(o) {
     const idView = view.id;
     const style = p(view, 'data.style');
     const zConfig = p(view, 'data.style.zoomConfig', {});
+    const showSymbolLabel = p(view, 'data.style.showSymbolLabel',false);
     const nulls = p(view, 'data.style.nulls', [])[0];
     const hideNulls = p(view, 'data.style.hideNulls', false);
     const geomType = p(view, 'data.geometry.type', 'point');
@@ -3578,7 +3582,7 @@ export function viewLayersAddVt(o) {
        * add a layer for symbol if point + sprite
        */
       if (isSymbol) {
-        const text = h.getLabelFromObjectPath({
+        const label = h.getLabelFromObjectPath({
           obj: rule,
           sep: '_',
           path: 'label',
@@ -3590,7 +3594,8 @@ export function viewLayersAddVt(o) {
           idSourceLayer: idView,
           geomType: 'symbol',
           hexColor: rule.color,
-          text: text,
+          showSymbolLabel : showSymbolLabel,
+          label: label,
           opacity: rule.opacity,
           size: rule.size,
           sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
@@ -3771,7 +3776,7 @@ export function viewLayersAddVt(o) {
          * Add layer for symbols
          */
         if (isSymbol) {
-          const text = h.getLabelFromObjectPath({
+          const label = h.getLabelFromObjectPath({
             obj: rule,
             sep: '_',
             path: 'label',
@@ -3783,7 +3788,8 @@ export function viewLayersAddVt(o) {
             idSource: idSource,
             idSourceLayer: idView,
             geomType: 'symbol',
-            text: text,
+            label: label,
+            showSymbolLabel : showSymbolLabel,
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,

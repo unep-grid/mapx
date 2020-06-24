@@ -1008,6 +1008,30 @@
     "ps": ""
   },
   {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "fr": "Montrer les label des symbols",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "fr": "Est-ce que MapX doit ajouter des labels sous les données points avec symboles?",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
     "fr": "Ignorer les valeurs manquantes",

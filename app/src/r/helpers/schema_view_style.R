@@ -9,6 +9,7 @@ mxSchemaViewStyle <- function(
   jsonPaint <- .get(conf,c("templates","text","custom_paint"))
   jsonPaintExample <- .get(conf,c("templates","text","custom_paint_example"))
   geomType <- .get(viewData,c("data","geometry","type"))
+  isPoint <- geomType == "point"
 
   if(noDataCheck(view)) return()
 
@@ -101,7 +102,7 @@ mxSchemaViewStyle <- function(
       keyTitle="schema_style_title_legend",
       default = list(en="Legend"),
       type="string",
-      propertyOrder = 5
+      propertyOrder = 8
       )
     )
 
@@ -214,7 +215,6 @@ mxSchemaViewStyle <- function(
   #
   # Reverse layer order
   #
-
   reverseLayer <- list(
     reverseLayer = list(
       propertyOrder = 2,
@@ -224,6 +224,22 @@ mxSchemaViewStyle <- function(
       format = "checkbox"
       )
     )
+  
+  showSymbolLabel <- NULL
+
+  if(isPoint){
+    showSymbolLabel <- list(
+      showSymbolLabel = list(
+        propertyOrder = 3,
+        title = tt("schema_style_show_symbol_label"),
+        description = tt("schema_style_show_symbol_label_desc"),
+        type = "boolean",
+        format = "checkbox"
+      )
+    )
+  }
+
+
   #
   # Zoom based changes
   #
@@ -276,7 +292,7 @@ mxSchemaViewStyle <- function(
   zoomConfig = list(
     zoomConfig = list (
       #type = "object",
-      propertyOrder = 3,
+      propertyOrder = 4,
       title = tt("schema_style_config_zoom"),
       options = list(
         collapsed = TRUE
@@ -306,7 +322,7 @@ mxSchemaViewStyle <- function(
 
   nulls <- list(
     nulls = list(
-      propertyOrder = 4,
+      propertyOrder = 5,
       type = "array",
       format = "table",
       title = tt("schema_style_nulls"),
@@ -338,7 +354,7 @@ mxSchemaViewStyle <- function(
 
   hideNulls <- list(
     hideNulls = list(
-      propertyOrder = 5,
+      propertyOrder = 6,
       title = tt("schema_style_hide_nulls"),
       description = tt("schema_style_hide_nulls_desc"),
       type = "boolean",
@@ -368,7 +384,7 @@ mxSchemaViewStyle <- function(
   custom = list(
     custom = list (
       type = "object",
-      propertyOrder = 6,
+      propertyOrder = 7,
       title = tt("custom_style"),
       options = list(
         collapsed = TRUE
@@ -400,6 +416,7 @@ mxSchemaViewStyle <- function(
     zoomConfig,
     nulls,
     reverseLayer,
+    showSymbolLabel,
     hideNulls,
     titleLegend,
     custom

@@ -420,6 +420,16 @@
     "zh": ""
   },
   {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "zh": ""
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "zh": ""
+  },
+  {
     "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
     "zh": ""

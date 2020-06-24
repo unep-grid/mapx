@@ -420,6 +420,16 @@
     "es": "Si marcado, la pila de capas se invertirá: la regla superior dibujará una capa en la parte inferior de la pila"
   },
   {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "es": ""
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "es": ""
+  },
+  {
     "id": "schema_style_hide_nulls",
     "en": "Ignore missing values",
     "es": "Ignorar valores faltantes"
