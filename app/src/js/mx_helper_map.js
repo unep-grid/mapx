@@ -378,12 +378,11 @@ export function initListenerGlobal() {
   });
 
   mx.listeners.addListener({
-     target : window,
-     type : ['error','unhandledrejection'],
-    idGroup : 'base',
-     callback: h.handleIssues
+    target: window,
+    type: ['error', 'unhandledrejection'],
+    idGroup: 'base',
+    callback: h.handleIssues
   });
-
 }
 
 /**
@@ -1643,14 +1642,11 @@ export function makeSimpleLayer(o) {
         'icon-ignore-placement': false,
         'icon-optional': true,
         'text-field': o.showSymbolLabel ? label || '' : '',
-        'text-variable-anchor': o.showSymbolLabel ? [
-          'bottom-left',
-          'bottom-right',
-          'top-right',
-          'top-left'
-        ]: [],
+        'text-variable-anchor': o.showSymbolLabel
+          ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
+          : [],
         'text-font': ['Arial'],
-        "text-size": ["interpolate", ["linear"], ["zoom"], 1, 10, 18, 20],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 1, 10, 18, 20],
         'text-radial-offset': 1.2,
         'text-justify': 'auto'
       },
@@ -2298,6 +2294,7 @@ export function viewLayersRemove(o) {
   o.id = o.id || mx.settings.map.id;
   return new Promise((resolve) => {
     if (!h.isView(view)) {
+      console.warn('Try to remove a non-view:', view);
       resolve(false);
     }
 
@@ -2399,7 +2396,7 @@ export async function viewAdd(view) {
   await h.viewLayersAdd({
     viewData: view
   });
-  
+
   await _viewUiOpen(view);
 
   await h.updateLanguageElements({
@@ -2693,27 +2690,17 @@ export function removeLayersByPrefix(o) {
     return result;
   }
 
-  if (map.isStyleLoaded()) {
-    remove();
-  } else {
-    map.once('styledata', remove);
-  }
+  const layers = mx.helpers.getLayerNamesByPrefix({
+    map: map,
+    prefix: o.prefix
+  });
 
-  return result;
-
-  function remove() {
-    const layers = mx.helpers.getLayerNamesByPrefix({
-      map: map,
-      prefix: o.prefix
-    });
-
-    layers.forEach(function(l) {
-      if (map.getLayer(l)) {
-        map.removeLayer(l);
-        result.push(l);
-      }
-    });
-  }
+  layers.forEach(function(l) {
+    if (map.getLayer(l)) {
+      map.removeLayer(l);
+      result.push(l);
+    }
+  });
 }
 
 /**
@@ -3310,7 +3297,7 @@ function viewLayersAddRt(o) {
     /**
      * source has already be added. Add layer
      */
-    setTimeout(()=>{
+    setTimeout(() => {
       map.addLayer(
         {
           id: idView,
@@ -3319,7 +3306,7 @@ function viewLayersAddRt(o) {
         },
         o.before
       );
-    },1);
+    }, 1);
 
     /**
      * If no legend url is provided, use a minimap
@@ -3455,7 +3442,7 @@ export function viewLayersAddVt(o) {
     const idView = view.id;
     const style = p(view, 'data.style');
     const zConfig = p(view, 'data.style.zoomConfig', {});
-    const showSymbolLabel = p(view, 'data.style.showSymbolLabel',false);
+    const showSymbolLabel = p(view, 'data.style.showSymbolLabel', false);
     const nulls = p(view, 'data.style.nulls', [])[0];
     const hideNulls = p(view, 'data.style.hideNulls', false);
     const geomType = p(view, 'data.geometry.type', 'point');
@@ -3594,7 +3581,7 @@ export function viewLayersAddVt(o) {
           idSourceLayer: idView,
           geomType: 'symbol',
           hexColor: rule.color,
-          showSymbolLabel : showSymbolLabel,
+          showSymbolLabel: showSymbolLabel,
           label: label,
           opacity: rule.opacity,
           size: rule.size,
@@ -3789,7 +3776,7 @@ export function viewLayersAddVt(o) {
             idSourceLayer: idView,
             geomType: 'symbol',
             label: label,
-            showSymbolLabel : showSymbolLabel,
+            showSymbolLabel: showSymbolLabel,
             hexColor: rule.color,
             opacity: rule.opacity,
             size: rule.size,
@@ -3832,8 +3819,6 @@ export function viewLayersAddVt(o) {
      * Add layer and legends
      */
     if (layers.length > 0) {
-  
-
       /*
        * Update layer order based in displayed list
        */
@@ -3889,17 +3874,15 @@ export function viewLayersAddVt(o) {
       }
 
       /*
-       * Add layers to map 
+       * Add layers to map
        */
-      h.onNextFrame(()=>{
+      h.onNextFrame(() => {
         addLayers(layers, layersAfter, o.before);
         resolve(true);
-      },0);
-
-    }else{
+      }, 0);
+    } else {
       resolve(false);
     }
-
   });
 }
 

@@ -119,16 +119,20 @@ function cleanInit(o) {
   });
 }
 
-function cleanRemoveViews() {
+async function cleanRemoveViews() {
   const h = mx.helpers;
+  const map = h.getMap();
+  console.log('beforeClean',viewsActive);
+  map.stop();
   while (viewsActive.length > 0) {
     let pos = viewsActive.length - 1;
     let v = viewsActive[pos];
-    h.viewLayersRemove({
+    await h.viewLayersRemove({
       idView: v
     });
-    h.viewModulesRemove(v);
+    await h.viewModulesRemove(v);
     viewsActive.splice(pos, 1);
+    console.log('Removed view id ',v);
   }
 }
 
@@ -187,6 +191,7 @@ function checkMissingView(o) {
   })
     .then((idViewsToAdd) => h.getViewsRemote(idViewsToAdd))
     .then((viewsToAdd) => {
+      console.log('Views to add', viewsToAdd);
       /**
        * Retrieved views as object
        */
@@ -878,12 +883,12 @@ export function storyAutoPlay(cmd) {
  * @param {String} cmd Action : recalc, unlock, toggle;
  */
 export function storyControlMapPan(cmd) {
-  const valid = ['recalc','lock','unlock','toggle'].indexOf(cmd) > -1;
+  const valid = ['recalc', 'lock', 'unlock', 'toggle'].indexOf(cmd) > -1;
 
-  if(!valid){ 
+  if (!valid) {
     cmd = 'toggle';
   }
-  
+
   const liBtn = document.getElementById('btnStoryUnlockMap');
   const elStory = document.getElementById('story');
   const btn = liBtn.querySelector('div');
@@ -896,9 +901,9 @@ export function storyControlMapPan(cmd) {
 
   const cases = {
     unlock: true,
-    lock : false,
-    recalc : !isLocked,
-    toggle : isLocked,
+    lock: false,
+    recalc: !isLocked,
+    toggle: isLocked
   };
 
   const toUnlock = cases[cmd];
@@ -908,21 +913,20 @@ export function storyControlMapPan(cmd) {
     btn.classList.remove(classLock);
     btn.classList.add(classUnlock);
     elStory.classList.add(classNoEvent);
-    if(!isRecalc && hasChanged){
+    if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('unlock');
     }
   } else {
     btn.classList.add(classLock);
     btn.classList.remove(classUnlock);
     story.classList.remove(classNoEvent);
-    if(!isRecalc && hasChanged){
+    if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('lock');
     }
-  
-    if(mx.dashboard && mx.dashboard.panel){
-       mx.dashboard.panel.close(true);
-    }
 
+    if (mx.dashboard && mx.dashboard.panel) {
+      mx.dashboard.panel.close(true);
+    }
   }
 }
 
@@ -1028,12 +1032,11 @@ export function storyController(o) {
       group: 'story_map'
     });
   } else {
-
     /**
-    * Lock story
-    */
+     * Lock story
+     */
     h.storyControlMapPan('lock');
-    
+
     /**
      * Remvove registered listener
      */
