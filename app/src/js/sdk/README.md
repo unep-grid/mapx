@@ -493,6 +493,7 @@ Class to handle MapX specific method
     * [.get_views_id_open()](#MapxResolvers+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolvers+get_view_meta_vt_attribute) ⇒ <code>Object</code>
     * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta) ⇒ <code>Object</code>
+    * [.get_view_table_attribute_config(opt)](#MapxResolvers+get_view_table_attribute_config) ⇒ <code>Object</code>
     * [.get_view_legend_image(opt)](#MapxResolvers+get_view_legend_image) ⇒ <code>String</code>
     * [.set_view_layer_filter_text(opt)](#MapxResolvers+set_view_layer_filter_text) ⇒ <code>Boolean</code>
     * [.get_view_layer_filter_text(opt)](#MapxResolvers+get_view_layer_filter_text) ⇒ <code>Boolean</code>
@@ -812,6 +813,20 @@ Get view metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Object</code> - view metadata  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.idView | <code>String</code> | Id of the view |
+| view | <code>Object</code> | meta data object |
+
+<a name="MapxResolvers+get_view_table_attribute_config"></a>
+
+### mapxResolvers.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
+Get view table attribute config
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)
+**Returns**: <code>Object</code> - view table attribute config
 
 | Param | Type | Description |
 | --- | --- | --- |

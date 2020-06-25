@@ -1,3 +1,4 @@
+import {getTableAttributeConfigFromView} from '../../mx_helper_source_attribute_table.js';
 /**
  * Shortcut for helpers
  * @ignore
@@ -312,6 +313,26 @@ class MapxResolvers {
   get_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     return h.getViewMetadata(opt.idView, true);
+  }
+
+  /**
+   * Get view table attribute config
+   * @param {Object} opt options
+   * @param {String} opt.idView Id of the view
+   * @return {Object}
+   */
+  get_view_table_attribute_config(opt) {
+    opt = Object.assign({}, {idView: null}, opt);
+    let out = null;
+    if (opt.idView) {
+      let view = h.getView(opt.idView);
+      const config = getTableAttributeConfigFromView(view);
+      out = {};
+      ['attributes', 'idSource', 'labels'].forEach((key) => {
+        out[key] = config[key];
+      });
+    }
+    return out;
   }
 
   /**
