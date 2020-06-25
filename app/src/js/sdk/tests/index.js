@@ -17,8 +17,11 @@ const ignoreGlobal = false;
 mapx.once('ready', () => {
   t.check('Get list methods', {
     ignore: ignoreGlobal,
-    init: () => {
-      return mapx.ask('get_sdk_methods');
+    init: async () => {
+      console.log()
+      let o = await mapx.ask('get_sdk_methods')
+      console.log(o);
+      return o;
     },
     tests: [
       {
@@ -155,6 +158,26 @@ mapx.once('ready', () => {
         idView: view.id
       });
       return meta;
+    },
+    tests: [
+      {
+        name: 'is object',
+        test: (r) => {
+          return t.h.isObject(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get view table attribute config', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const view = await mapx.ask('_get_random_view', 'vt');
+      const config = await mapx.ask('get_view_table_attribute_config', {
+        idView: view.id
+      });
+      console.log(config);
+      return config;
     },
     tests: [
       {

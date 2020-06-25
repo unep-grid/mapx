@@ -244,7 +244,7 @@ export function viewToTableAttributeModal(idView) {
   return showSourceTableAttributeModal(opt);
 }
 
-function getTableAttributeConfigFromView(view) {
+export function getTableAttributeConfigFromView(view) {
   let h = mx.helpers;
   let language = mx.settings.language;
 
