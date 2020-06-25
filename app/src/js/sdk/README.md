@@ -825,14 +825,12 @@ Get view metadata
 ### mapxResolvers.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
 Get view table attribute config
 
-**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)
-**Returns**: <code>Object</code> - view table attribute config
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | options |
 | opt.idView | <code>String</code> | Id of the view |
-| view | <code>Object</code> | meta data object |
 
 <a name="MapxResolvers+get_view_legend_image"></a>
 
