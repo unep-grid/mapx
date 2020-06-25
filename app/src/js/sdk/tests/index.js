@@ -17,11 +17,8 @@ const ignoreGlobal = false;
 mapx.once('ready', () => {
   t.check('Get list methods', {
     ignore: ignoreGlobal,
-    init: async () => {
-      console.log()
-      let o = await mapx.ask('get_sdk_methods')
-      console.log(o);
-      return o;
+    init: () => {
+      return mapx.ask('get_sdk_methods');
     },
     tests: [
       {
