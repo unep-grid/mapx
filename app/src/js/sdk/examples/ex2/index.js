@@ -1,7 +1,7 @@
 const mapx = new mxsdk.Manager({
   container: document.getElementById('mapx'),
   url:
-    'http://app.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en'
+    'http://app.mapx.localhost:8880/?project=MX-6ZH-Y46-C7I-AD5-IO1&language=en'
   // url: 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en',
 });
 
