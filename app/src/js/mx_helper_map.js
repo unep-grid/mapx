@@ -82,10 +82,10 @@ export async function downloadViewRaster(opt) {
   const url = h.path(view, 'data.source.urlDownload');
   opt.url = url;
 
-  if(h.isUrl(url)){
+  if (h.isUrl(url)) {
     const download = await h.moduleLoad('downloadjs');
     download(opt.url);
-  }else{
+  } else {
     throw new Error(`Not a valid URL: ${url}`);
   }
   return opt;
@@ -855,7 +855,7 @@ export async function initMapxStatic(o) {
          * Add views layer
          */
         h.viewLayersAdd({
-          viewData: view,
+          view: view,
           elLegendContainer: btnLegend.elPanelContent,
           addTitle: true
         });
@@ -1186,39 +1186,43 @@ export function addSourceFromView(o) {
  * @param {String} idView id of the view
  * @return {Promise} Promise resolving to object
  */
-export function getViewRemote(idView) {
+export async function getViewRemote(idView) {
   const h = mx.helpers;
   const apiUrlViews = mx.helpers.getApiUrl('getView');
 
   if (!idView || !apiUrlViews) {
-    return Promise.reject('Missing id or fetch URL');
+    throw new Error('Missing id or fetch URL');
   }
 
   /* get view, force update */
-  const keyNet = apiUrlViews + idView + '?date=' + performance.now();
+  const keyNet = `${apiUrlViews}${idView}?date=${Date.now()}`;
 
-  return fetch(keyNet)
-    .then((view) => {
-      if (view.status === 404 || view.status === 204) {
-        return {};
-      }
-      return view.json();
-    })
-    .then((view) => {
-      if (h.isView(view)) {
-        view._edit = false;
-        view._static = true;
-      }
-      return view;
-    });
+  const res = await fetch(keyNet);
+  if (res.status !== 200) {
+    return null;
+  }
+  const view = await res.json();
+
+  if (h.isView(view)) {
+    view._edit = false;
+    view._static = true;
+  }
+  return view;
 }
 /**
  * Get multipler remote views from latest views table
  * @param {Array} idViews array of views id
  * @return {Promise} Promise resolving to abject
  */
-export function getViewsRemote(idViews) {
-  return Promise.all(idViews.map((id) => getViewRemote(id)));
+export async function getViewsRemote(idViews) {
+  const h = mx.helpers;
+  const views = await Promise.all(idViews.map((id) => getViewRemote(id)));
+  return views.reduce((a, v) => {
+    if (h.isView(v)) {
+      a.push(v);
+    }
+    return a;
+  }, []);
 }
 
 /**
@@ -2284,54 +2288,52 @@ export async function viewDelete(o) {
 
 /**
  * Close view and clean its modules
- * @param {object} o options;
- * @param {string} o.id map id
- * @param {string} o.idView view id
+ * @param {Object} o options;
+ * @param {String} o.id map id
+ * @param {String} o.idView view id
+ * @param {Object} o.view view
  */
-export function viewLayersRemove(o) {
+export async function viewLayersRemove(o) {
   const h = mx.helpers;
-  let view = mx.helpers.getView(o.idView);
+  const view = o.view || h.getView(o.idView);
   o.id = o.id || mx.settings.map.id;
-  return new Promise((resolve) => {
-    if (!h.isView(view)) {
-      console.warn('Try to remove a non-view:', view);
-      resolve(false);
+
+  if (!h.isView(view)) {
+    console.warn('Try to remove a non existing view. Options:', o);
+    return false;
+  }
+
+  const now = Date.now();
+  const viewDuration = now - view._added_at || 0;
+  delete view._added_at;
+
+  mx.events.fire({
+    type: 'view_remove',
+    data: {
+      idView: o.idView,
+      view: h.getViewJson(view, {asString: false})
     }
-
-    const now = Date.now();
-    const viewDuration = now - view._added_at || 0;
-    delete view._added_at;
-
-    mx.events.fire({
-      type: 'view_remove',
-      data: {
-        idView: o.idView,
-        view: h.getViewJson(view, {asString: false})
-      }
-    });
-
-    mx.helpers.removeLayersByPrefix({
-      id: o.id,
-      prefix: o.idView
-    });
-
-    mx.events.fire({
-      type: 'view_removed',
-      data: {
-        idView: o.idView,
-        time: now,
-        duration: viewDuration
-      }
-    });
-
-    if (view._elLegendGroup) {
-      view._elLegendGroup.remove();
-    }
-
-    resolve(true);
-  }).catch((e) => {
-    console.error(e);
   });
+
+  mx.helpers.removeLayersByPrefix({
+    id: o.id,
+    prefix: o.idView
+  });
+
+  mx.events.fire({
+    type: 'view_removed',
+    data: {
+      idView: o.idView,
+      time: now,
+      duration: viewDuration
+    }
+  });
+
+  if (view._elLegendGroup) {
+    view._elLegendGroup.remove();
+  }
+
+  return true;
 }
 
 /**
@@ -2394,7 +2396,7 @@ export async function viewAdd(view) {
   });
 
   await h.viewLayersAdd({
-    viewData: view
+    view: view
   });
 
   await _viewUiOpen(view);
@@ -2820,7 +2822,7 @@ export function existsInList(li, it, val, inverse) {
  * @param {object} o Options
  * @param {string} o.id map id
  * @param {string} o.idView view id
- * @param {object} o.viewData view
+ * @param {object} o.view view
  * @param {Element} o.elLegendContainer Legend container
  * @param {boolean} o.addTitle Add view title in legend
  * @param {string} o.before Layer before which insert this view layer(s)
@@ -2832,29 +2834,24 @@ export async function viewLayersAdd(o) {
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
-  let view = o.viewData || h.getView(o.idView) || {};
   const idLayerBefore = o.before
     ? h.getLayerNamesByPrefix({prefix: o.before})[0]
     : mx.settings.layerBefore;
+  let view = o.view || h.getView(o.idView) || {};
 
-  const v = await new Promise((resolve, reject) => {
-    if (h.isView(view)) {
-      resolve(view);
-    } else if (!h.isEmpty(o.idView)) {
-      resolve(h.getViewRemote(o.idView));
-    } else {
-      reject(`No view or id view given, stop viewLayersAdd`);
-    }
-  });
+  /**
+   * Solve case where view is not set : try to fetch remote
+   */
+  if (!h.isView(view) && h.isViewId(o.idView)) {
+    view = await getViewRemote(o.idView);
+  }
 
   /*
    * Validation
    */
-
-  if (!h.isView(v)) {
-    throw new Error(`View ${o.idView} not found, stop viewLayersAdd`);
-  } else {
-    view = v;
+  if (!h.isView(view)) {
+    console.warn('viewLayerAdd : view not found, locally or remotely. Options:',o);
+    return;
   }
 
   const idView = view.id;
@@ -3985,7 +3982,7 @@ export async function viewModulesInit(id) {
  */
 export async function viewModulesRemove(view) {
   const h = mx.helpers;
-  view = h.isString(view) ? h.getView(view) : view;
+  view = h.isViewId(view) ? h.getView(view) : view;
   if (!h.isView(view)) {
     return;
   }
@@ -4240,8 +4237,8 @@ export function getLayersPropertiesAtPoint(opt) {
     .filter((view) => type.indexOf(view.type) > -1)
     .forEach((view) => {
       if (!h.isView(view)) {
-        console.warn('Not a view:', view);
-        return
+        console.warn('Not a view:', view, ' opt:', opt);
+        return;
       }
       if (view.type === 'rt') {
         items[view.id] = fetchRasterProp(view);

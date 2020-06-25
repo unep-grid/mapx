@@ -11,9 +11,9 @@ import {ButtonPanel} from './button_panel/index.js';
  */
 
 /**
- * Store activated views
+ * Store local and views
  */
-const viewsActive = [];
+const viewsAdditional = [];
 
 /**
  * Read and evaluate story map
@@ -32,7 +32,7 @@ export function storyRead(o) {
   }
   return getStory(o)
     .then(cleanInit)
-    .then(checkMissingView)
+    .then(setLocalViews)
     .then(setUi)
     .then(setListeners)
     .catch((e) => {
@@ -83,134 +83,120 @@ function getStory(o) {
 }
 
 /**
- * Get views id currently visible on map – included
- * custom stuff,
- */
-function getViewsOnMap(o) {
-  return mx.helpers.getLayerNamesByPrefix({
-    id: o.id,
-    prefix: 'MX',
-    base: true
-  });
-}
-
-/**
  * Clean + init
  */
-function cleanInit(o) {
+async function cleanInit(o) {
   const h = mx.helpers;
   /**
    * Remove old listener
    */
   mx.listeners.removeListenerByGroup('story_map');
 
-  return new Promise(function(resolve) {
-    /** Remove old stuff if any */
-    var oldData = h.path(mx.data, 'story.data');
-    if (oldData) {
-      o.startScroll = oldData.elScroll.scrollTop;
-    }
-    if (oldData && oldData.close instanceof Function) {
-      oldData.close();
-    }
-    o.enable = true;
+  /** Remove old stuff if any */
+  var oldData = h.path(mx.data, 'story.data');
+  if (oldData) {
+    o.startScroll = oldData.elScroll.scrollTop;
+  }
+  if (oldData && oldData.close instanceof Function) {
+    oldData.close();
+  }
+  o.enable = true;
 
-    resolve(o);
-  });
+  return o;
 }
 
 async function cleanRemoveViews() {
   const h = mx.helpers;
   const map = h.getMap();
-  console.log('beforeClean',viewsActive);
+  const views = h.getViews();
+  const vVisible = h.getViewsLayersVisibles();
+
   map.stop();
-  while (viewsActive.length > 0) {
-    let pos = viewsActive.length - 1;
-    let v = viewsActive[pos];
-    await h.viewLayersRemove({
-      idView: v
-    });
-    await h.viewModulesRemove(v);
-    viewsActive.splice(pos, 1);
-    console.log('Removed view id ',v);
+
+  const aProm = vVisible.map(async (idView) => {
+    if (h.isViewId(idView)) {
+      await h.viewLayersRemove({
+        idView: idView
+      });
+      await h.viewModulesRemove(idView);
+    }
+  });
+  await Promise.all(aProm);
+
+  while(viewsAdditional.length){
+    const view = viewsAdditional.pop();
+    const pos = views.indexOf(view);
+    if(pos > -1){
+       views.splice(pos,1);
+    }
   }
+  return true;
 }
 
 /**
  * Evaluate missing view and fetch them if needed
  */
-function checkMissingView(o) {
+async function setLocalViews(o) {
   const h = mx.helpers;
   const view = o.view;
-  const views = h.getViews();
-  const idViews = views.map((v) => v.id);
-  const map = h.getMap(o.id);
+  const story = h.path(view, 'data.story', {});
   const idViewsStory = [];
-  o.idViewsAdded = [];
+  const idViewsToAdd = [];
+  const viewsBase = h.getViews();
+  const idViewsBase = viewsBase.map((v) => v.id);
 
-  return new Promise(function(resolve) {
-    const story = h.path(view, 'data.story', {});
+  /**
+   * Case views are stored within data.views (deprecated)
+   */
+  h.path(view, 'data.views', []).forEach((id) => {
+    idViewsStory.push(id);
+  });
 
-    /**
-     * Case views are stored within data.views (deprecated)
-     */
-    h.path(view, 'data.views', []).forEach((id) => {
-      idViewsStory.push(id);
-    });
-    /**
-     * Case when views are stored as object instead of id (deprecated).
-     */
-    if (h.isArrayOfViews(idViewsStory)) {
-      idViewsStory.length = 0;
-      idViewsStory.forEach((v) => idViewsStory.push(v.id));
-    }
+  /**
+   * Case when views are stored as object instead of id (deprecated).
+   */
+  if (h.isArrayOfViews(idViewsStory)) {
+    idViewsStory.forEach((v, i) => idViewsStory.splice(i, 1, v.id));
+  }
 
-    /**
-     * Case when views are not stored in data.view but only in steps (current behaviour).
-     */
-    getStoryViewsId(story).forEach((id) => {
-      idViewsStory.push(id);
-    });
+  /**
+   * Case when views are not stored in data.view but only in steps (current behaviour).
+   */
+  idViewsStory.push(...getStoryViewsId(story));
 
-    if (idViewsStory.length === 0) {
-      resolve([]);
-    } else {
-      /**
-       * Create a list of views id to download
-       * ( e.g. if they are from another project )
-       */
-      let idViewsToAdd = idViewsStory.filter((id) => {
-        return idViews.indexOf(id) === -1;
-      });
-      /**
-       * Return views to be fetched remotely
-       */
-      idViewsToAdd = mx.helpers.getArrayDistinct(idViewsToAdd);
-      resolve(idViewsToAdd);
-    }
-  })
-    .then((idViewsToAdd) => h.getViewsRemote(idViewsToAdd))
-    .then((viewsToAdd) => {
-      console.log('Views to add', viewsToAdd);
-      /**
-       * Retrieved views as object
-       */
-      viewsToAdd.forEach((view) => {
-        let isViewAbsent = views.indexOf(view) === -1;
-        let isView = h.isView(view);
-        if (isView && isViewAbsent) {
-          views.push(view);
-          o.idViewsAdded.push(view.id);
-          h.addSourceFromView({
-            map: map,
-            view: view,
-            noLocationCheck: true
-          });
-        }
-      });
+  /**
+   * Test for views id
+   */
+  if (idViewsStory.length && !h.isArrayOfViewsId(idViewsStory)) {
+    throw new Error('Invalid story views list : not views id');
+  }
 
-      return o;
-    });
+  /**
+   * Create a list of views id to download
+   * ( e.g. if they are from another project )
+   */
+  idViewsToAdd.push(
+    ...idViewsStory.filter((id) => {
+      return idViewsBase.indexOf(id) === -1;
+    })
+  );
+
+  /**
+   * Return views to be fetched remotely
+   */
+  const idViewsToAddDistinct = h.getArrayDistinct(idViewsToAdd);
+
+  /**
+   * Fetch additional views
+   */
+  viewsAdditional.push(...(await h.getViewsRemote(idViewsToAddDistinct)));
+
+  /**
+   * addExternal views to views base
+   */
+  viewsBase.push(...viewsAdditional);
+
+  return o;
 }
 
 /**
@@ -748,7 +734,7 @@ function storyHandleKeyDown(event) {
   event.preventDefault();
   event.stopPropagation();
   var h = mx.helpers;
-
+ 
   switch (event.key) {
     case ' ':
       h.storyAutoPlay('start');
@@ -844,7 +830,8 @@ export function storyGoTo(to, useTimeout, funStop) {
 }
 
 export function storyAutoPlay(cmd) {
-  var h = mx.helpers;
+  const h = mx.helpers;
+  
   var data = h.path(mx.data, 'story.data', {});
   var enabled = data.autoplay || false;
   var playStart = cmd === 'start' && !enabled;
@@ -937,10 +924,11 @@ export function storyControlMapPan(cmd) {
  * @param {Boolean} o.enable Enable / start story
  */
 export function storyController(o) {
-  var h = mx.helpers;
-
-  var enableMode = o.enable === true || o.update === true;
-  var updateMode = o.update === true;
+  const h = mx.helpers;
+  const map = h.getMap();
+  const enableMode = o.enable === true || o.update === true;
+  const quitMode = o.enable === false;
+  const updateMode = o.update === true;
 
   o.selectorDisable = o.selectorDisable || [
     '#btnToggleBtns',
@@ -967,15 +955,15 @@ export function storyController(o) {
     o.selectorEnable = ['#btnStoryUnlockMap', '#story'];
   }
 
-  var elBtnClose = document.querySelector('#btnStoryClose');
-  var elBtnPreview = document.querySelector('#btnViewPreviewStory');
-  var toDisable = {
+  const elBtnClose = document.querySelector('#btnStoryClose');
+  const elBtnPreview = document.querySelector('#btnViewPreviewStory');
+  const toDisable = {
     selector: enableMode ? o.selectorDisable : o.selectorEnable,
     action: 'add',
     class: 'mx-display-none'
   };
 
-  var toEnable = {
+  const toEnable = {
     selector: enableMode ? o.selectorEnable : o.selectorDisable,
     action: 'remove',
     class: 'mx-display-none'
@@ -985,13 +973,16 @@ export function storyController(o) {
   h.classAction(toDisable);
   o.id = o.id || 'map_main';
 
-  if (o.enable === true) {
+  /**
+   * Enable story
+   */
+  if (enableMode) {
     /**
      *Check for previews views list ( in case of update );
      */
     var oldViews = h.path(mx.data, 'story.data.views');
-    if (!mx.helpers.isArray(oldViews)) {
-      oldViews = getViewsOnMap(o);
+    if (!h.isArrayOfViewsId(oldViews)) {
+      oldViews = h.getViewsLayersVisibles();
     }
 
     /* Save current values */
@@ -1000,9 +991,9 @@ export function storyController(o) {
       map: h.getMap(),
       views: oldViews,
       setWrapperLayout: function() {},
-      position: mx.helpers.getMapPos(o),
+      position: h.getMapPos(o),
       currentStep: 0,
-      hasAerial: mx.helpers.btnToggleLayer({
+      hasAerial: h.btnToggleLayer({
         id: 'map_main',
         idLayer: 'here_aerial',
         idSwitch: 'btnThemeAerial',
@@ -1012,10 +1003,16 @@ export function storyController(o) {
       autoplayStop: true
     };
 
+    /**
+     * Remove non stop map views
+     */
     oldViews.forEach((id) => {
       h.viewRemove(id);
     });
 
+    /**
+     * Create a callback for when the story is closed
+     */
     o.data.close = function(cmd) {
       if (this && this.hasAttribute && this.hasAttribute('disabled')) {
         return;
@@ -1031,7 +1028,12 @@ export function storyController(o) {
       callback: o.data.close,
       group: 'story_map'
     });
-  } else {
+  }
+
+  /**
+   * Stop story and clean up
+   */
+  if (quitMode) {
     /**
      * Lock story
      */
@@ -1040,7 +1042,6 @@ export function storyController(o) {
     /**
      * Remvove registered listener
      */
-
     mx.listeners.removeListenerByGroup('story_map');
 
     /**
@@ -1079,21 +1080,12 @@ export function storyController(o) {
         }
 
         /**
-         * Enable previously enabled layers
+         * Re-add previously enabled views
          */
         o.data.views.forEach((idView) => {
           h.viewAdd(idView);
         });
       }
-
-      /**
-       * Remove addtional views
-       */
-      let views = h.getViews();
-      o.idViewsAdded.forEach((idView) => {
-        let idPos = h.getViewIndex(idView);
-        views.splice(idPos, 1);
-      });
 
       /**
        * Rest previous position
@@ -1369,8 +1361,6 @@ export function storyPlayStep(o) {
   const elLegendContainer = o.elLegendContainer;
   const stepNum = o.stepNum;
   const m = h.getMapData();
-  var step, pos, anim, easing, vStep, vToAdd, vVisible, vToRemove;
-
   if (steps.length === 0) {
     return;
   }
@@ -1379,28 +1369,29 @@ export function storyPlayStep(o) {
   /**
    * retrieve step information
    */
-  step = steps[stepNum];
-  pos = step.position;
-  anim = step.animation || {
+  const step = steps[stepNum];
+  const pos = step.position;
+  const anim = step.animation || {
     duration: 1000,
     easing: 'easeIn',
     easing_power: 1,
     method: 'easeTo'
   };
-  vStep = step.views.map(function(v) {
-    return v.view;
-  });
-  easing = h.easingFun({type: anim.easing, power: anim.easing_power});
+  const easing = h.easingFun({type: anim.easing, power: anim.easing_power});
 
-  vVisible = viewsActive || [];
+  /**
+   * Views set
+   */
+  const vStep = step.views.map((v) => v.view);
+  const vVisible = h.getViewsLayersVisibles();
+  const vToRemove = h.getArrayDiff(vVisible, vStep);
+  const vToAdd = h.getArrayDiff(vStep, vVisible);
+ 
   /**
    * Add view if not alredy visible
    */
-  vToRemove = h.getArrayDiff(vVisible, vStep);
-  vToAdd = h.getArrayDiff(vStep, vVisible);
-
-  vToAdd.forEach(function(v, i) {
-    var vPrevious = vStep[i - 1] || mx.settings.layerBefore;
+  vToAdd.forEach((v, i) => {
+    const vPrevious = vStep[i - 1] || mx.settings.layerBefore;
     h.viewLayersAdd({
       id: o.id,
       idView: v,
@@ -1409,16 +1400,14 @@ export function storyPlayStep(o) {
       before: vPrevious,
       elLegendContainer: elLegendContainer
     });
-    vVisible.push(v);
   });
 
-  vToRemove.forEach(function(v) {
+  vToRemove.forEach((v) => {
     h.viewLayersRemove({
       id: o.id,
       idView: v,
       elLegendContainer: elLegendContainer
     });
-    vVisible.splice(vVisible.indexOf(v), 1);
     h.viewModulesRemove(v);
   });
 
@@ -1455,3 +1444,4 @@ export function storyPlayStep(o) {
     });
   }
 }
+

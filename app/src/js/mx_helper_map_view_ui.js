@@ -126,8 +126,13 @@ function sanitizeState(states) {
 /**
  * Add single view to the views list
  * @param {Object} view View object to add
- * @param {Object} settings Settings (id,moveTop,render,open)
- * @return {Object} settings realised
+ * @param {Object} settings
+ * @param {String} settings.id
+ * @param {Boolean} settings.moveTop Move view item to top
+ * @param {Boolean} settings.render Trigger item rendering
+ * @param {Boolean} settings.open Open and add view to the map
+ * @param {Oject} settings.view View object to render
+ * @return {Promise} Object settings realised
  */
 export async function viewsListAddSingle(view, settings) {
   settings = settings || {};
@@ -157,9 +162,7 @@ export async function viewsListAddSingle(view, settings) {
   mData.viewsFilter.update();
 
   await new Promise((resolve) => {
-    mData.viewsList.once('render_item_content',(d)=>{
-      resolve(d);
-    });
+    mData.viewsList.once('render_item_content', resolve);
     mData.viewsList.addItem(settings);
   });
   return settings;
@@ -183,7 +186,7 @@ export function viewsListUpdateSingle(view) {
     id: view.id,
     view: oldView,
     update: true,
-    open : true
+    open: true
   };
   mData.viewsList.updateItem(settings);
   mData.viewsFilter.updateViewsComponents();
@@ -335,6 +338,10 @@ export function viewsListRenderNew(o) {
     }
     return el;
   }
+
+  /**
+  * Handle drag text
+  */
   function handleSetDragText(el) {
     const li = this;
     const isGroup = li.isGroup(el);
@@ -372,21 +379,22 @@ export function viewsListRenderNew(o) {
   }
 
   /*
-   * Render view item
+   * Internal view rendering handler
    */
-  async function handleRenderItemContent(config) {
+  function handleRenderItemContent(config) {
     const li = this;
-    const el = config.el;
+    const elItem = config.el;
     const data = config.data;
     const viewsOpen = h.getQueryParameterInit('viewsOpen');
     const update = data.update;
     const open = data.open === true;
-   
-        /**
+
+    /**
      * Add given element
-     */ 
+     */
+
     if (data.el) {
-      el.appendChild(data.el);
+      elItem.appendChild(data.el);
       return;
     }
 
@@ -396,7 +404,6 @@ export function viewsListRenderNew(o) {
     const view = data.view || mData.views.find((v) => v.id === data.id);
     const missing = !h.isView(view);
 
-    
     /**
      * View requested but not vailable)
      */
@@ -406,15 +413,17 @@ export function viewsListRenderNew(o) {
       return;
     }
 
+    /**
+     * Remove view element
+     */
     if (update && view._el) {
       view._el.remove();
     }
 
     /**
-    * UI view base
-    */
+     * Create / update view element.
+     */
     const viewBase = new ViewBase(view, update);
-
 
     /**
      * Test if registered to auto-open
@@ -427,22 +436,22 @@ export function viewsListRenderNew(o) {
     }
 
     /**
-     * Handle view element
+     * Get view element
      */
     const elView = viewBase.getEl();
-  
-   
+
     if (elView) {
-      el.appendChild(elView);
+      elItem.appendChild(elView);
       h.setViewBadges({view: view});
       if (update) {
         h.viewLayersAdd({
-          viewData: view
+          view: view
         });
         h.updateLanguageElements({
-           el: view._el
-          });
-      } else if (open) {
+          el: view._el
+        });
+      }
+      if (!update && open) {
         h.viewAdd(view);
       }
     }

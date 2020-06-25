@@ -1564,7 +1564,7 @@
       "paint": {"raster-opacity": 0.8}
     },
     {
-      "id": "mx-layers-main",
+      "id": "mxlayers",
       "type": "background",
       "source": "",
       "layout": {"visibility": "none"},
@@ -1708,13 +1708,6 @@
         "text-opacity": ["interpolate", ["linear"], ["zoom"], 1, 1, 8, 0.1],
         "text-halo-color": "#FFF"
       }
-    },
-    {
-      "id": "mx-layers-top",
-      "type": "background",
-      "source": "",
-      "layout": {"visibility": "none"},
-      "paint": {"background-color": "rgb(255,0,0)", "background-opacity": 0}
     }
   ]
 }

@@ -104,7 +104,7 @@ export function isProjectId(idProject) {
  */
 export function isViewId(idView) {
   const expIdView = new RegExp('^MX-GJ-.{10}$|^MX-.{5}-.{5}-.{5}$');
-  return !!idView && !!idView.match(expIdView);
+  return !!idView && isString(idView) && !!idView.match(expIdView);
 }
 /**
  * Test for valid project

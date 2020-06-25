@@ -72,8 +72,7 @@ let settings = {
     fontstack: 'fontstack/{fontstack}/{range}.pbf'
   },
   style: styleDefault.default,
-  layerBefore: 'mx-layers-main',
-  layerBeforeTop : 'mx-layers-top',
+  layerBefore: 'mxlayers',
   separators: {
     sublayer: '_@_'
   },

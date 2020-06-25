@@ -24,38 +24,65 @@ export function handleIssues(err) {
         maxWidth: '100%'
       }
     });
-    const elErrorsCopy = h.el(
-      'a',
+    const elBtnGroup = h.el(
+      'div',
       {
-        class: ['btn', 'btn-primary'],
         style: {margin: '10px'},
-        on: {
-          click: () => {
-            const elText = h.el('textarea', {
-              style: {
-                postion:'fixed',
-                width: '2em',
-                height: '2em',
-                fontSize: '0px',
-                zIndex: -1
-              }
-            });
-            elText.innerHTML = JSON.stringify(errors);
-            document.body.appendChild(elText);
-            elText.focus();
-            elText.select();
-            document.execCommand('copy');
-            elText.remove();
-            h.iconFlash('clipboard');
-          }
-        }
+        role: 'group',
+        class: ['btn-group']
       },
-      h.el('i', {class: ['fa', 'fa-clipboard']}),
-      h.el('span', 'Copy to clipboard')
+      h.el(
+        'button',
+        {
+          class: ['btn', 'btn-sm', 'btn-primary'],
+          type: 'button',
+          on: {
+            click: () => {
+              errors.forEach((e) => {
+                e.el.remove();
+              });
+              errors.length = 0;
+              btnError.destroy();
+              btnError = null;
+            }
+          }
+        },
+        h.el('i', {class: ['fa', 'fa-trash-o']}),
+        h.el('span', {style: {margin: '4px'}}, 'Ignore all')
+      ),
+      h.el(
+        'button',
+        {
+          class: ['btn', 'btn-sm', 'btn-primary'],
+          on: {
+            click: () => {
+              const elText = h.el('textarea', {
+                style: {
+                  postion: 'fixed',
+                  width: '2em',
+                  height: '2em',
+                  fontSize: '0px',
+                  zIndex: -1
+                }
+              });
+              elText.innerHTML = JSON.stringify(errors.map(e=>e.msg));
+              document.body.appendChild(elText);
+              elText.focus();
+              elText.select();
+              document.execCommand('copy');
+              elText.remove();
+              h.iconFlash('clipboard');
+            }
+          }
+        },
+        h.el('i', {class: ['fa', 'fa-clipboard']}),
+        h.el('span', {style: {margin: '4px'}}, 'Copy to clipboard')
+      )
     );
 
     elErrorsContainer = h.el('div', {style: {padding: '10px'}});
-    btnError.elPanelContent.appendChild(elErrorsCopy);
+
+    btnError.elPanelContent.appendChild(elBtnGroup);
     btnError.elPanelContent.appendChild(elErrorsContainer);
   }
 
@@ -72,8 +99,6 @@ export function handleIssues(err) {
     msg = `${msg} (source:${src})`;
   }
 
-  errors.push(msg);
-
   // jshint ignore:end
   const elError = h.el(
     'div',
@@ -87,8 +112,13 @@ export function handleIssues(err) {
           style: {margin: '3px'},
           on: {
             click: () => {
-              errors.pop();
-              elError.remove();
+              const error = errors.reduce(
+                (a, e) => (a ? a : e.el === elError ? e : a),
+                null
+              );
+              const pos = errors.indexOf(error);
+              errors.splice(pos, 1);
+              error.el.remove();
               if (errors.length === 0) {
                 btnError.destroy();
                 btnError = null;
@@ -103,6 +133,5 @@ export function handleIssues(err) {
   );
 
   elErrorsContainer.appendChild(elError);
+  errors.push({msg: msg, el: elError});
 }
-
-
