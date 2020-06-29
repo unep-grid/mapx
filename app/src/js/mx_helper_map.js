@@ -2301,7 +2301,6 @@ export async function viewLayersRemove(o) {
   o.id = o.id || mx.settings.map.id;
 
   if (!h.isView(view)) {
-    console.warn('Try to remove a non existing view. Options:', o);
     return false;
   }
 
