@@ -173,7 +173,6 @@ mapx.once('ready', () => {
       const config = await mapx.ask('get_view_table_attribute_config', {
         idView: view.id
       });
-      console.log(config);
       return config;
     },
     tests: [
@@ -181,6 +180,44 @@ mapx.once('ready', () => {
         name: 'is object',
         test: (r) => {
           return t.h.isObject(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get view table attribute url', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const view = await mapx.ask('_get_random_view', 'vt');
+      const url = await mapx.ask('get_view_table_attribute_url', {
+        idView: view.id
+      });
+      return url;
+    },
+    tests: [
+      {
+        name: 'is url',
+        test: (r) => {
+          return t.h.isUrl(r);
+        }
+      }
+    ]
+  });
+
+  t.check('Get view table attribute', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const view = await mapx.ask('_get_random_view', 'vt');
+      const data = await mapx.ask('get_view_table_attribute', {
+        idView: view.id
+      });
+      return data;
+    },
+    tests: [
+      {
+        name: 'is array of object',
+        test: (r) => {
+          return t.h.isArrayOfObject(r);
         }
       }
     ]

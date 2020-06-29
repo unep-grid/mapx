@@ -1,4 +1,3 @@
-import {getTableAttributeConfigFromView} from '../../mx_helper_source_attribute_table.js';
 /**
  * Shortcut for helpers
  * @ignore
@@ -325,14 +324,51 @@ class MapxResolvers {
     opt = Object.assign({}, {idView: null}, opt);
     let out = null;
     if (opt.idView) {
-      let view = h.getView(opt.idView);
-      const config = getTableAttributeConfigFromView(view);
+      const view = h.getView(opt.idView);
+      const config = h.getTableAttributeConfigFromView(view);
       out = {};
       ['attributes', 'idSource', 'labels'].forEach((key) => {
         out[key] = config[key];
       });
     }
     return out;
+  }
+
+  /**
+   * Get view table attribute url
+   * @param {Object} opt options
+   * @param {String} opt.idView Id of the view
+   * @return {String}
+   */
+  get_view_table_attribute_url(opt) {
+    opt = Object.assign({}, {idView: null}, opt);
+    let out = null;
+    const res = this;
+    const config = res.get_view_table_attribute_config(opt);
+    if (config) {
+      let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(',')}`;
+      out = h.getApiUrl('getSourceTableAttribute') + url_qs;
+    }
+    return out;
+  }
+
+  /**
+   * Get view table attribute
+   * @param {Object} opt options
+   * @param {String} opt.idView Id of the view
+   * @return {Object}
+   */
+  async get_view_table_attribute(opt) {
+    opt = Object.assign({}, {idView: null}, opt);
+    const res = this;
+    const url = res.get_view_table_attribute_url(opt);
+    if (url) {
+      const response = await fetch(url);
+      if (response.ok) {
+        return response.json()
+      }
+    }
+    return null;
   }
 
   /**
