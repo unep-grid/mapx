@@ -196,9 +196,9 @@ mapx.once('ready', () => {
     },
     tests: [
       {
-        name: 'is string',
+        name: 'is url',
         test: (r) => {
-          return t.h.isString(r);
+          return t.h.isUrl(r);
         }
       }
     ]
@@ -215,9 +215,9 @@ mapx.once('ready', () => {
     },
     tests: [
       {
-        name: 'is array',
+        name: 'is array of object',
         test: (r) => {
-          return t.h.isArray(r);
+          return t.h.isArrayOfObject(r);
         }
       }
     ]

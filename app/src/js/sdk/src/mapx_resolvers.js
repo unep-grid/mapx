@@ -1,4 +1,3 @@
-import {getTableAttributeConfigFromView} from '../../mx_helper_source_attribute_table.js';
 /**
  * Shortcut for helpers
  * @ignore
@@ -326,7 +325,7 @@ class MapxResolvers {
     let out = null;
     if (opt.idView) {
       const view = h.getView(opt.idView);
-      const config = getTableAttributeConfigFromView(view);
+      const config = h.getTableAttributeConfigFromView(view);
       out = {};
       ['attributes', 'idSource', 'labels'].forEach((key) => {
         out[key] = config[key];
@@ -344,9 +343,10 @@ class MapxResolvers {
   get_view_table_attribute_url(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     let out = null;
-    const config = this.get_view_table_attribute_config(opt);
+    const res = this;
+    const config = res.get_view_table_attribute_config(opt);
     if (config) {
-      let url_qs = '?id=' + config.idSource + '&attributes=' + config.attributes.join(',');
+      let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(',')}`;
       out = h.getApiUrl('getSourceTableAttribute') + url_qs;
     }
     return out;
@@ -358,20 +358,17 @@ class MapxResolvers {
    * @param {String} opt.idView Id of the view
    * @return {Object}
    */
-  get_view_table_attribute(opt) {
+  async get_view_table_attribute(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    let out = null;
-    const url = this.get_view_table_attribute_url(opt);
+    const res = this;
+    const url = res.get_view_table_attribute_url(opt);
     if (url) {
-      out = fetch(url).then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-      }).then(json => {
-        return json;
-      });
+      const response = await fetch(url);
+      if (response.ok) {
+        return response.json()
+      }
     }
-    return out;
+    return null;
   }
 
   /**
