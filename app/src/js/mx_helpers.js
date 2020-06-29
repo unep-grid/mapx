@@ -61,4 +61,3 @@ export * from './mx_helper_issues.js';
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';
 export * from './color_utils/index.js';
-export {getTableAttributeConfigFromView} from './mx_helper_source_attribute_table.js';
