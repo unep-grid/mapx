@@ -7,9 +7,11 @@ export function fetchViews(opt) {
   var idUser = mx.settings.user.id;
   var language = mx.settings.language || mx.settings.languages[0];
   var token = mx.settings.user.token;
+  
   var idViews = h.getQueryParameterInit(['idViews', 'views']);
   var idViewsOpen = h.getQueryParameterInit(['idViewsOpen','viewsOpen']);
   var collections = h.getQueryParameterInit(['idCollections','collections' ]);
+  
   var collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
   );

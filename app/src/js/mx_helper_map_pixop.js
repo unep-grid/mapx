@@ -14,13 +14,29 @@ export function toggleSpotlight(opt) {
   const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
 
   /*
-   * Optional ui
+   * Select number of layer
    */
-  const elSelectNum = document.getElementById('selectNLayersOverlap');
-  const elTextArea = document.getElementById('txtAreaOverlap');
-  const elTextResol = document.getElementById('txtResolOverlap');
-  const elEnableCalcArea = document.getElementById('checkEnableOverlapArea');
+  const elSelectNum =
+    document.getElementById('selectNLayersOverlap') || h.el('select');
+  /*
+   * Text area
+   */
+  const elTextArea = document.getElementById('txtAreaOverlap') || h.el('span');
+  /**
+   * Text resol
+   */
+  const elTextResol =
+    document.getElementById('txtResolOverlap') || h.el('span');
+  /**
+   * input checkbox to enable area estimation
+   */
+  const elEnableCalcArea =
+    document.getElementById('checkEnableOverlapArea') ||
+    h.el('input', {type: 'checkbox'});
 
+  /**
+   * Default
+   */
   opt = Object.assign(
     {
       enable: !elToggle.classList.contains(clActive),

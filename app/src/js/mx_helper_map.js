@@ -4,7 +4,6 @@ import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
-const vStore = [];
 
 /**
  * TODO: convert this in a MapxMap Class
@@ -456,11 +455,9 @@ export function initListenersApp() {
   });
 
   mx.events.on({
-    type: ['views_list_updated', 'view_added', 'view_removed'],
+    type: ['views_list_updated', 'view_added', 'view_removed', 'mapx_ready'],
     idGroup: 'update_btn_filter_view_activated',
-    callback: () => {
-      updateBtnFilterActivated();
-    }
+    callback: updateBtnFilterActivated
   });
 
   mx.listeners.addListener({
@@ -783,6 +780,19 @@ export async function initMapxStatic(o) {
   const settings = mx.settings;
   const mapData = h.getMapData();
   const elMap = map.getContainer();
+  const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
+  const language = h.getQueryParameter('language')[0] || settings.languages[0];
+  /**
+   * NOTE: all views are
+   */
+  const idViewsQuery = h.getQueryParameter([
+    'views',
+    'viewsOpen',
+    'idViews',
+    'idViewsOpen'
+  ]);
+
+  const idViews = h.getArrayDistinct(idViewsQuery).reverse();
 
   const btnLegend = new ButtonPanel({
     elContainer: elMap,
@@ -798,76 +808,59 @@ export async function initMapxStatic(o) {
     }
   });
 
-  const idViewsOpen = h.getQueryParameter('viewsOpen');
-  const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
-  const language = h.getQueryParameter('language')[0] || settings.languages[0];
+  /**
+   *
+   */
   h.updateLanguage({lang: language});
 
-  const idViews = h.getArrayDistinct(
-    h.getQueryParameter('views').concat(idViewsOpen)
+  /**
+   * Get view and set order
+   */
+  mapData.views = await h.getViewsRemote(idViews);
+
+  /*
+   * If a story is found, ignore other options
+   */
+  const story = mapData.views.find((v) => v.type === 'sm');
+  if (story) {
+    h.storyRead({
+      id: o.id,
+      idView: story.id,
+      save: false,
+      autoStart: true
+    });
+
+    return;
+  }
+
+  /**
+   * Extract all views bounds
+   */
+  if (zoomToViews) {
+    const bounds = await h.getViewsBounds(mapData.views);
+    map.fitBounds(bounds);
+  }
+
+  /**
+   * Display views
+   */
+  const tt = await Promise.all(
+    idViews.map((idView) => {
+      return h.viewLayersAdd({
+        view: h.getView(idView),
+        elLegendContainer: btnLegend.elPanelContent,
+        addTitle: true
+      });
+    })
   );
 
-  return h
-    .getViewsRemote(idViews)
-    .then((views) => {
-      /**
-       * Match order set in form
-       */
-      mapData.views = views.reverse();
-    })
-    .then(() => {
-      /**
-       * Add views
-       */
-      var story = mapData.views.find((v) => v.type === 'sm');
-      if (story) {
-        /*
-         * If a story is found, ignore other options
-         */
-        h.storyRead({
-          id: o.id,
-          idView: story.id,
-          save: false,
-          autoStart: true
-        });
-        return false;
-      } else {
-        return true;
-      }
-    })
-    .then((addBounds) => {
-      if (addBounds && zoomToViews) {
-        /**
-         * Extract wider views extent
-         */
-        return h.getViewsBounds(mapData.views);
-      } else {
-        return false;
-      }
-    })
-    .then((bounds) => {
-      if (bounds) {
-        map.fitBounds(bounds);
-      }
+  h.viewsLayersOrderUpdate({
+    order: idViews.reverse()
+  });
 
-      mapData.views.forEach((view) => {
-        /**
-         * Add views layer
-         */
-        h.viewLayersAdd({
-          view: view,
-          elLegendContainer: btnLegend.elPanelContent,
-          addTitle: true
-        });
-      });
-
-      mx.events.fire({
-        type: 'mapx_ready'
-      });
-    })
-    .catch((e) => {
-      console.error(e);
-    });
+  mx.events.fire({
+    type: 'mapx_ready'
+  });
 }
 
 /**
@@ -879,10 +872,10 @@ export async function initMapxApp(o) {
   const elMap = map.getContainer();
   const settings = mx.settings;
   const hasShiny = !!window.Shiny;
-  const idViewsOpen = h.getQueryParameter('viewsOpen');
-  const idViews = h.getArrayDistinct(
-    h.getQueryParameter('views').concat(idViewsOpen)
-  );
+  const idViewsQueryOpen = h.getQueryParameter('viewsOpen');
+  const idViewsQuery = h.getQueryParameter('views');
+  idViewsQuery.push(...idViewsQueryOpen);
+  const idViews = h.getArrayDistinct(idViewsQuery);
 
   /**
    * init app listeners: view add, language, project change, etc.
@@ -892,17 +885,34 @@ export async function initMapxApp(o) {
   /*
    * set views list
    */
-  await h
-    .updateViewsList({
-      id: o.id,
-      autoFetchAll: true,
-      project: o.project || mx.settings.project
-    })
-    .then(() => {
-      mx.events.fire({
-        type: 'mapx_ready'
-      });
+  await h.updateViewsList({
+    id: o.id,
+    autoFetchAll: true,
+    project: o.project
+  });
+
+  /**
+   * Add/open view
+   */
+  await Promise.all(idViewsQueryOpen.map(h.viewAdd));
+
+  /**
+   * set order
+   */
+  if (idViews.length) {
+    const viewsList = h.getViewsList();
+    viewsList.sortGroup(null, {
+      mode: 'ids',
+      asc: true,
+      ids: idViewsQuery
     });
+  }
+  /**
+   * Fire ready event
+   */
+  mx.events.fire({
+    type: 'mapx_ready'
+  });
 
   /*
    * If shiny, trigger read event
@@ -1227,19 +1237,26 @@ export async function getViewsRemote(idViews) {
 
 /**
  * Save view list to views
- * @param {object} o options
- * @param {string} o.id ID of the map
- * @param {object} o.viewList views list
+ * @param {Object} o options
+ * @param {String} o.id ID of the map
+ * @param {Object} o.viewList views list
  * @param {Boolean} o.viewsCompact The view list is in compact form (id and row only)
- * @param {boolean} o.add Append to existing
- * @param {string} o.project code
+ * @param {String} o.project code
  */
 export async function updateViewsList(o) {
   const h = mx.helpers;
+  const def = {
+    id: 'map_main',
+    viewList: [],
+    viewsCompact: false,
+    project: mx.settings.project
+  };
+  o = Object.assign({}, def, o);
   const viewsToAdd = o.viewsList;
   const isCompactList = o.viewsCompact === true;
   const autoFetchAll = o.autoFetchAll === true;
-  const hasViewsList = h.isArray(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+  const hasViewsList =
+    h.isArrayOfViewsId(viewsToAdd) && h.isNotEmpty(viewsToAdd);
   const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
   const updateProject = o.project && o.project !== mx.settings.project;
   let elProgContainer;
@@ -1280,8 +1297,9 @@ export async function updateViewsList(o) {
       array_async: addAsync,
       array_async_all: addAsyncAll
     }[mode];
-    await add(viewsToAdd);
+    const views = await add(viewsToAdd);
     cleanProgress();
+    return views;
   }
 
   /* Clean progress radial */
@@ -1466,12 +1484,16 @@ export function viewsCheckedUpdate(o) {
   const h = mx.helpers;
   o = o || {};
 
-  let vToAdd = [],
-    vToRemove = [],
-    vVisible = [],
-    vChecked = [];
+  const vToAdd = [];
+  const vToRemove = [];
+  const vVisible = [];
+  const vChecked = [];
+
   let view, isChecked, id;
 
+  /**
+   * Get views checked
+   */
   const els = document.querySelectorAll(
     "[data-view_action_key='btn_toggle_view']"
   );
@@ -1484,60 +1506,40 @@ export function viewsCheckedUpdate(o) {
     }
   }
 
-  h.onNextFrame(() => {
-    vVisible = h.getViewsLayersVisibles();
+  /**
+   * Update views groups
+   */
+  vVisible.push(...h.getViewsLayersVisibles());
+  vToRemove.push(...h.getArrayDiff(vVisible, vChecked));
+  vToAdd.push(...h.getArrayDiff(vChecked, vVisible));
 
-    vVisible = h.getArrayStat({
-      arr: vStore.concat(vVisible),
-      stat: 'distinct'
-    });
+  /**
+   * View to add
+   */
+  vToAdd.forEach(h.viewAdd);
 
-    vToRemove = h.getArrayDiff(vVisible, vChecked);
-    vToAdd = h.getArrayDiff(vChecked, vVisible);
+  /**
+   * View to remove
+   */
+  vToRemove.forEach(h.viewRemove);
 
-    /**
-     * View to add
-     */
-    vToAdd.forEach((v) => {
-      vStore.push(v);
-      h.viewAdd(v);
-    });
+  /**
+   * Inform Shiny about the state
+   */
+  if (true) {
+    const summary = {
+      vVisible: h.getViewsLayersVisibles(),
+      vChecked: vChecked,
+      vToRemove: vToRemove,
+      vToAdd: vToAdd
+    };
+    Shiny.onInputChange('mx_client_views_status', summary);
+  }
 
-    /**
-     * View to remove
-     */
-    vToRemove.forEach((idView) => {
-      vStore.splice(vStore.indexOf(idView, 1));
-      h.viewRemove(idView);
-    });
-
-    /**
-     * Inform Shiny about the state
-     */
-    if (true) {
-      const summary = {
-        vStore: vStore,
-        vChecked: vChecked,
-        vVisible: vVisible,
-        vToRemove: vToRemove,
-        vToAdd: vToAdd
-      };
-      Shiny.onInputChange('mx_client_views_status', summary);
-    }
-
-    /**
-     * Debug check
-     */
-    if (false) {
-      console.log({
-        vToAdd: vToAdd.length,
-        vVisible: vVisible.length,
-        vChecked: vChecked.length,
-        vToRemove: vToRemove.length
-      });
-    }
-    h.viewsLayersOrderUpdate(o);
-  });
+  /**
+   * Set order
+   */
+  h.viewsLayersOrderUpdate(o);
 }
 
 /**
@@ -2383,16 +2385,24 @@ export async function viewAdd(view) {
   if (!view) {
     return;
   }
+  const idEvent = `'viewAdd_${view.id}_${h.makeId()}`;
   const confirmation = new Promise((resolve) => {
-    mx.events.once({
+    mx.events.on({
       type: 'view_added',
-      idGroup: 'viewAdd',
+      idGroup: idEvent,
       callback: (d) => {
         if (d.idView === view.id) {
+          cleanEvent();
           resolve(true);
         }
       }
     });
+  });
+  const timeout = new Promise((resolve) => {
+    setTimeout(() => {
+      cleanEvent();
+      resolve(false);
+    }, 5000);
   });
 
   await h.viewLayersAdd({
@@ -2405,7 +2415,14 @@ export async function viewAdd(view) {
     el: view.el
   });
 
-  return confirmation;
+  return Promise.race([timeout, confirmation]);
+
+  function cleanEvent() {
+    mx.events.off({
+      idGroup: idEvent,
+      type: 'view_added'
+    });
+  }
 }
 
 export async function viewRemove(view) {
@@ -2850,7 +2867,10 @@ export async function viewLayersAdd(o) {
    * Validation
    */
   if (!h.isView(view)) {
-    console.warn('viewLayerAdd : view not found, locally or remotely. Options:',o);
+    console.warn(
+      'viewLayerAdd : view not found, locally or remotely. Options:',
+      o
+    );
     return;
   }
 
@@ -2899,7 +2919,7 @@ export async function viewLayersAdd(o) {
    * Add views layers
    *
    */
-  await handler(idType);
+  const out = await handler(idType);
 
   view._added_at = Date.now();
 
@@ -3294,16 +3314,14 @@ function viewLayersAddRt(o) {
     /**
      * source has already be added. Add layer
      */
-    setTimeout(() => {
-      map.addLayer(
-        {
-          id: idView,
-          type: 'raster',
-          source: idSource
-        },
-        o.before
-      );
-    }, 1);
+    map.addLayer(
+      {
+        id: idView,
+        type: 'raster',
+        source: idSource
+      },
+      o.before
+    );
 
     /**
      * If no legend url is provided, use a minimap
@@ -3327,95 +3345,93 @@ function viewLayersAddRt(o) {
       const promLegendBase64 = h.urlToImageBase64(legendUrl);
       resolve(promLegendBase64);
     }
-  })
-    .then((legendB64) => {
-      /**
-       * If empty, use default
-       */
-      if (legendB64 === false) {
-        return true;
-      }
-      /**
-       * If empty data or length < 'data:image/png;base64,' length
-       */
-      if (!h.isBase64img(legendB64)) {
-        legendB64 = legendB64Default;
-        isLegendDefault = true;
-      }
-
-      if (isLegendDefault) {
-        /**
-         * Add tooltip 'missing legend'
-         */
-        elLegend.classList.add('hint--bottom');
-        elLegend.dataset.lang_key = 'noLegend';
-        elLegend.dataset.lang_type = 'tooltip';
-        h.updateLanguageElements({
-          el: o.elLegendContainer
-        });
-      } else {
-        /**
-         * Indicate that image can be zoomed
-         */
-        elLegend.style.cursor = 'zoom-in';
-      }
-      /**
-       * Create an image with given source
-       */
-      const img = h.el('img', {alt: 'Legend'});
-      img.alt = 'Legend';
-      img.addEventListener('error', handleImgError);
-      img.addEventListener('load', handleLoad, {once: true});
-      if (!isLegendDefault) {
-        img.addEventListener('click', handleClick);
-      }
-      img.src = legendB64;
-
+  }).then((legendB64) => {
+    /**
+     * If empty, use default
+     */
+    if (legendB64 === false) {
       return true;
+    }
+    /**
+     * If empty data or length < 'data:image/png;base64,' length
+     */
+    if (!h.isBase64img(legendB64)) {
+      legendB64 = legendB64Default;
+      isLegendDefault = true;
+    }
+
+    if (isLegendDefault) {
+      /**
+       * Add tooltip 'missing legend'
+       */
+      elLegend.classList.add('hint--bottom');
+      elLegend.dataset.lang_key = 'noLegend';
+      elLegend.dataset.lang_type = 'tooltip';
+      h.updateLanguageElements({
+        el: o.elLegendContainer
+      });
+    } else {
+      /**
+       * Indicate that image can be zoomed
+       */
+      elLegend.style.cursor = 'zoom-in';
+    }
+    /**
+     * Create an image with given source
+     */
+    const img = h.el('img', {alt: 'Legend'});
+    img.alt = 'Legend';
+    img.addEventListener('error', handleImgError);
+    img.addEventListener('load', handleLoad, {once: true});
+    if (!isLegendDefault) {
+      img.addEventListener('click', handleClick);
+    }
+    img.src = legendB64;
+
+    return true;
+
+    /**
+     * Helpers
+     */
+    function handleClick() {
+      /**
+       * Show a bigger image if clicked
+       */
+      const title =
+        legendTitle ||
+        h.getLabelFromObjectPath({
+          obj: view,
+          path: 'data.title',
+          defaultValue: '[ missing title ]'
+        });
+
+      const imgModal = h.el('img', {
+        src: img.src,
+        alt: 'Legend',
+        onerror: handleImgError
+      });
 
       /**
-       * Helpers
+       * Add in modal
        */
-      function handleClick() {
-        /**
-         * Show a bigger image if clicked
-         */
-        const title =
-          legendTitle ||
-          h.getLabelFromObjectPath({
-            obj: view,
-            path: 'data.title',
-            defaultValue: '[ missing title ]'
-          });
-
-        const imgModal = h.el('img', {
-          src: img.src,
-          alt: 'Legend',
-          onerror: handleImgError
-        });
-
-        /**
-         * Add in modal
-         */
-        h.modal({
-          title: title,
-          id: 'legend-raster-' + view.id,
-          content: imgModal,
-          addBackground: false
-        });
-      }
-      function handleLoad() {
-        /**
-         * Add image to
-         */
-        elLegendImageBox.appendChild(img);
-      }
-      function handleImgError() {
-        this.onerror = null;
-        this.src = legendB64Default;
-      }
-    })
-    .catch((e) => console.error(e));
+      h.modal({
+        title: title,
+        id: 'legend-raster-' + view.id,
+        content: imgModal,
+        addBackground: false
+      });
+    }
+    function handleLoad() {
+      /**
+       * Add image to
+       */
+      elLegendImageBox.appendChild(img);
+    }
+    function handleImgError() {
+      this.onerror = null;
+      this.src = legendB64Default;
+    }
+  });
 }
 
 /**
@@ -4915,6 +4931,15 @@ export function getMapData(idMap) {
   return data;
 }
 
+/**
+ * Get view list object
+ * @return {Object} ViewList
+ */
+export function getViewsList(o) {
+  const h = mx.helpers;
+  const data = h.getMapData(o);
+  return data.viewsList;
+}
 /**
  * Get map position summary
  * @param {object} o options

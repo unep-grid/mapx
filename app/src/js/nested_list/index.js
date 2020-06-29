@@ -210,8 +210,16 @@ class NestedList {
     li.fire('filter_end', ids);
   }
 
+  /**
+   *  Sort items
+   *  @param {Element} elTarget Target group element
+   * @param {Object} opt Options
+   * @param {Boolean} opt.asc Ascendent
+   * @param {String} opt.mode : text, date, ids
+   * @param {Array} opt.ids : Array of ids
+   */
   sortGroup(elTarget, opt) {
-    let def = {asc: true, mode: 'text'};
+    const def = {asc: true, mode: 'text', ids: []};
     opt = Object.assign({}, def, opt);
     const li = this;
     li.setModeAnimate(false);
@@ -238,6 +246,9 @@ class NestedList {
           item.value = item.value * 1;
         }
         item.value = new Date(item.value || 0);
+      }
+      if(opt.mode === "ids"){
+         item.value = opt.ids.indexOf(item.id);
       }
       data.push(item);
     });
