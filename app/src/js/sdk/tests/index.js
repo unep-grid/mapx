@@ -4,13 +4,20 @@ const mapx = new mxsdk.Manager({
   container: elContainer,
   url: 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF'
 });
-const t = new mxsdk.Testing({
-  container: elResults,
-  title: 'mapx sdk test'
+
+mapx.on('message', (message) => {
+  if (message.level === 'log') {
+    console.info(`%c 🤓 ${message.text}`, 'color: #76bbf7');
+  } else if (message.level === 'message') {
+    console.info(`%c 😎 ${message.text}`, 'color: #70e497');
+  } else if (message.level === 'warning') {
+    console.info(`%c 🥴 ${message.text}`, 'color: #d09c23');
+  } else if (message.level === 'error') {
+    console.info(`%c 🤬 ${message.text}`, 'color: #F00');
+  }
 });
-
-const ignoreGlobal = false;
-
+const t = new mxsdk.Testing({container: elResults, title: 'mapx sdk test'});
+const ignoreGlobal = true;
 /**
  * MapX respond
  */
@@ -29,7 +36,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get views list', {
     ignore: ignoreGlobal,
     init: () => {
@@ -44,7 +50,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger login window', {
     ignore: ignoreGlobal,
     init: () => {
@@ -64,7 +69,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get / Set language', {
     ignore: ignoreGlobal,
     tests: [
@@ -82,7 +86,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get views id list', {
     ignore: ignoreGlobal,
     init: () => {
@@ -97,7 +100,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get views with active layers on map', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -125,7 +127,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Set view order', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -146,7 +147,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view vt attribute meta', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -165,7 +165,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute config', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -184,7 +183,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute url', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -203,7 +201,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -222,7 +219,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view vt source meta', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -243,7 +239,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view rt or vt legend', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -269,7 +264,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view meta', {
     ignore: ignoreGlobal,
     timeout: 10000,
@@ -286,7 +280,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user id', {
     ignore: ignoreGlobal,
     init: () => {
@@ -301,7 +294,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user ip', {
     ignore: ignoreGlobal,
     init: () => {
@@ -316,7 +308,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user roles', {
     ignore: ignoreGlobal,
     init: () => {
@@ -331,7 +322,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user email', {
     ignore: ignoreGlobal,
     init: () => {
@@ -346,7 +336,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Filter view by text', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -384,7 +373,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get collection by project', {
     ignore: ignoreGlobal,
     init: () => {
@@ -399,7 +387,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Set dashboard visibility', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -426,14 +413,12 @@ mapx.once('ready', () => {
             });
             pass = pass && !(await mapx.ask('is_dashboard_visible'));
           }
-
           await mapx.ask('view_remove', {idView: view.id});
           return hasDashboard && pass;
         }
       }
     ]
   });
-
   t.check('Get collection of open views', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -465,7 +450,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Load projects', {
     ignore: ignoreGlobal,
     init: () => {
@@ -497,7 +481,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Show edit view modal', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -535,7 +518,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger map composer', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -555,7 +537,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger download view source : vt', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -579,7 +560,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('GeoJSON: create view, download geojson data', {
     ignore: ignoreGlobal,
     init: async () => {
@@ -590,7 +570,6 @@ mapx.once('ready', () => {
       const res = await mapx.ask('download_view_source_geojson', {
         idView: view.id
       });
-
       return {
         data: res.data,
         id: view.id
@@ -613,11 +592,55 @@ mapx.once('ready', () => {
       }
     ]
   });
+  t.check('Trigger share module for a view', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const view = await mapx.ask('_get_random_view', ['vt', 'rt', 'sm', 'cc']);
+      await mapx.ask('show_modal_share', {
+        idView: view.id
+      });
+      return null;
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async () => {
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'modalShare',
+            timeout: 3000
+          });
+          await mapx.ask('close_modal_all');
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+  t.check('Tools - trigger sharing manager', {
+    init: async () => {
+      return mapx.ask('show_modal_tool', {tool: 'sharing_manager'});
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async (r) => {
+          if (!r) {
+            return false;
+          }
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'modalShare',
+            timeout: 3000
+          });
+          await mapx.ask('close_modal_all');
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+
 
   /**
    * Run tests
-   */
-  t.run({
+   */ t.run({
     finally: () => {
       console.log('Tests finished');
     }

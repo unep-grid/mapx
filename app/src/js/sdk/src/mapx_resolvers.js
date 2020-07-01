@@ -346,7 +346,9 @@ class MapxResolvers {
     const res = this;
     const config = res.get_view_table_attribute_config(opt);
     if (config) {
-      let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(',')}`;
+      let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(
+        ','
+      )}`;
       out = h.getApiUrl('getSourceTableAttribute') + url_qs;
     }
     return out;
@@ -365,7 +367,7 @@ class MapxResolvers {
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
-        return response.json()
+        return response.json();
       }
     }
     return null;
@@ -498,36 +500,35 @@ class MapxResolvers {
   }
 
   /**
-  * Get the download link of the raster source
-  * @param {Object} opt Options
-  * @param {String} opt.idView Raster view id
-  * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<url>}
-  */
+   * Get the download link of the raster source
+   * @param {Object} opt Options
+   * @param {String} opt.idView Raster view id
+   * @return {Object} input options, with new key : url. E.g. {idView:<abc>,url:<url>}
+   */
   download_view_source_raster(opt) {
     return h.downloadViewRaster(opt);
   }
 
   /**
-  * Open the download modal for vector views
-  * @param {Object} opt Options
-  * @param {String} opt.idView Vector view id
-  * @return {Object} input options E.g. {idView:<abc>}
-  */
+   * Open the download modal for vector views
+   * @param {Object} opt Options
+   * @param {String} opt.idView Vector view id
+   * @return {Object} input options E.g. {idView:<abc>}
+   */
   download_view_source_vector(opt) {
     return h.downloadViewVector(opt);
   }
-  
+
   /**
-  * Get the data from geojson view or download geojsn as a file
-  * @param {Object} opt Options
-  * @param {String} opt.idView GeoJSON view id
-  * @param {String} opt.mode "file" or "data"
-  * @return {Object} input options E.g. {idView:<abc>, data:<data (if mode = data)>}
-  */
+   * Get the data from geojson view or download geojsn as a file
+   * @param {Object} opt Options
+   * @param {String} opt.idView GeoJSON view id
+   * @param {String} opt.mode "file" or "data"
+   * @return {Object} input options E.g. {idView:<abc>, data:<data (if mode = data)>}
+   */
   download_view_source_geojson(opt) {
     return h.downloadViewGeoJSON(opt);
   }
-
 
   /**
    * Show the login modal window
@@ -617,6 +618,7 @@ class MapxResolvers {
    * @return {Boolean | Array} Done or the list of tools
    */
   show_modal_tool(opt) {
+
     const res = this;
     opt = Object.assign({}, opt);
     const roles = h.path(mx, 'settings.user.roles.groups', []);
@@ -670,37 +672,37 @@ class MapxResolvers {
         id: 'btnShowRoleManager'
       }
     };
+
     if (opt.list) {
       return Object.keys(tools);
     }
-    if (opt.tool) {
-      const conf = tools[opt.tool];
-      if (!conf) {
-        res._fw.postMessage({
-          level: 'error',
-          key: 'err_resolver_tool_not_found',
-          vars: {idTool: opt.tool}
-        });
-        return false;
-      }
-      const allow = conf.roles.reduce((a, r) => {
-        return a || roles.indexOf(r) > -1;
-      }, false);
-      if (!allow) {
-        res._fw.postMessage({
-          level: 'error',
-          key: 'err_tool_roles_not_match',
-          vars: {
-            idTool: opt.tool,
-            roles: JSON.stringify(conf.roles)
-          }
-        });
-        return false;
-      }
-      res._shiny_input(conf.id, {randomNumber: true});
-      return true;
+    const conf = tools[opt.tool];
+
+    if (!conf) {
+      res._fw.postMessage({
+        level: 'error',
+        key: 'err_tool_not_found',
+        vars: {idTool: opt.tool || 'null'}
+      });
+      return false;
     }
-    return false;
+    
+    const allow = conf.roles.reduce((a, r) => {
+      return a || roles.indexOf(r) > -1;
+    }, false);
+    if (!allow) {
+      res._fw.postMessage({
+        level: 'error',
+        key: 'err_tool_roles_not_match',
+        vars: {
+          idTool: opt.tool,
+          roles: JSON.stringify(conf.roles)
+        }
+      });
+      return false;
+    }
+    res._shiny_input(conf.id, {randomNumber: true});
+    return true;
   }
 
   /**
@@ -736,15 +738,14 @@ class MapxResolvers {
     return v.getState();
   }
 
-
   /**
-  * Get list of views title
-  * @param {Object} opt options
-  * @param {Array} opt.views List of views or views id
-  * @return {Array} Array of titles (string)
-  */
-  get_views_title(opt){
-    opt = Object.assign({},{views:[], lang:'en'}, opt);
+   * Get list of views title
+   * @param {Object} opt options
+   * @param {Array} opt.views List of views or views id
+   * @return {Array} Array of titles (string)
+   */
+  get_views_title(opt) {
+    opt = Object.assign({}, {views: [], lang: 'en'}, opt);
     return h.getViewsTitleNormalized(opt.views);
   }
 
@@ -898,7 +899,7 @@ class MapxResolvers {
       },
       opt
     );
-    if(opt.random && !opt.data){
+    if (opt.random && !opt.data) {
       opt.data = h.getGeoJSONRandomPoints(opt.random);
     }
     const view = await h.spatialDataToView(opt);
