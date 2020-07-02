@@ -9,12 +9,12 @@ let h;
  */
 class MapxResolvers {
   constructor(opt) {
-    const res = this;
-    res.opt = Object.assign({}, opt);
-    if (!res.opt.helpers) {
+    const rslv = this;
+    rslv.opt = Object.assign({}, opt);
+    if (!rslv.opt.helpers) {
       throw new Error('mx.helpers not found');
     }
-    h = res.opt.helpers;
+    h = rslv.opt.helpers;
   }
 
   /**
@@ -117,9 +117,9 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_dashboard_visibility(opt) {
-    const res = this;
+    const rslv = this;
     opt = Object.assign({show: true, toggle: false}, opt);
-    if (res.has_dashboard()) {
+    if (rslv.has_dashboard()) {
       if (opt.toggle === true) {
         mx.dashboard.toggle();
       } else if (opt.show === true) {
@@ -137,8 +137,8 @@ class MapxResolvers {
    * @return {Boolean} The dashboard is visible
    */
   is_dashboard_visible() {
-    const res = this;
-    return res.has_dashboard() && mx.dashboard.isVisible();
+    const rslv = this;
+    return rslv.has_dashboard() && mx.dashboard.isVisible();
   }
 
   /**
@@ -164,8 +164,8 @@ class MapxResolvers {
    * @return {Object} Current user ip object (ip, country, region, etc)
    */
   async get_user_ip() {
-    const res = await fetch('https://api.mapx.org/get/ip');
-    return res.json();
+    const rs = await fetch('https://api.mapx.org/get/ip');
+    return rs.json();
   }
 
   /**
@@ -174,6 +174,30 @@ class MapxResolvers {
    */
   get_user_roles() {
     return mx.settings.user.roles;
+  }
+  /**
+   * Check if user as given role
+   * @param {Object} opt Options
+   * @param {String|Array} opt.role Role(s) to check
+   * @param {Boolean} opt.all all roles must match, else at least one
+   * @return {Boolean} has role(s)
+   */
+  check_user_role(opt) {
+    const rslv = this;
+    opt = Object.assign({}, {role: ['public'], all: true}, opt);
+    if (h.isString(opt.role)) {
+      opt.role = [opt.role];
+    }
+    const all = opt.all === true;
+    const roles = rslv.get_user_roles();
+    return opt.role.reduce((a, c) => {
+      const ok = roles.groups.indexOf(c) > -1;
+      if (all) {
+        return ok && a;
+      } else {
+        return a ? a : ok;
+      }
+    }, false);
   }
 
   /**
@@ -343,8 +367,8 @@ class MapxResolvers {
   get_view_table_attribute_url(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     let out = null;
-    const res = this;
-    const config = res.get_view_table_attribute_config(opt);
+    const rslv = this;
+    const config = rslv.get_view_table_attribute_config(opt);
     if (config) {
       let url_qs = `?id=${config.idSource}&attributes=${config.attributes.join(
         ','
@@ -362,8 +386,8 @@ class MapxResolvers {
    */
   async get_view_table_attribute(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    const res = this;
-    const url = res.get_view_table_attribute_url(opt);
+    const rslv = this;
+    const url = rslv.get_view_table_attribute_url(opt);
     if (url) {
       const response = await fetch(url);
       if (response.ok) {
@@ -471,13 +495,13 @@ class MapxResolvers {
    */
   view_add(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    const res = this;
+    const rslv = this;
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
       return h.viewAdd(view);
     } else {
-      return res._err('err_view_invalid');
+      return rslv._err('err_view_invalid');
     }
   }
 
@@ -489,13 +513,13 @@ class MapxResolvers {
    */
   view_remove(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    const res = this;
+    const rslv = this;
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     if (valid) {
       return h.viewRemove(view);
     } else {
-      return res._err('err_view_invalid');
+      return rslv._err('err_view_invalid');
     }
   }
 
@@ -535,8 +559,8 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   show_modal_login() {
-    const res = this;
-    return res._shiny_input('btn_control', {value: 'showLogin'});
+    const rslv = this;
+    return rslv._shiny_input('btn_control', {value: 'showLogin'});
   }
 
   /**
@@ -546,13 +570,13 @@ class MapxResolvers {
   show_modal_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);
     const view = h.getView(opt.idView);
-    const res = this;
+    const rslv = this;
     const valid = h.isView(view);
     if (valid) {
       h.viewToMetaModal(view);
       return true;
     } else {
-      return res._err('err_view_invalid');
+      return rslv._err('err_view_invalid');
     }
   }
 
@@ -562,21 +586,21 @@ class MapxResolvers {
    */
   show_modal_view_edit(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    const res = this;
+    const rslv = this;
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     const editable = valid && view._edit === true;
     if (valid && editable) {
-      res._shiny_input('mx_client_view_action', {
+      rslv._shiny_input('mx_client_view_action', {
         action: 'btn_opt_edit_config',
         target: opt.idView
       });
       return true;
     } else {
       if (!editable && valid) {
-        return res._err('err_view_not_editable');
+        return rslv._err('err_view_not_editable');
       } else {
-        return res._err('err_view_invalid');
+        return rslv._err('err_view_invalid');
       }
     }
   }
@@ -597,16 +621,16 @@ class MapxResolvers {
    */
   show_modal_share(opt) {
     opt = Object.assign({}, opt);
-    const res = this;
+    const rslv = this;
     const view = h.getView(opt.idView);
     const isView = opt.idView && h.isView(view);
     if (isView) {
-      return res._shiny_input('mx_client_view_action', {
+      return rslv._shiny_input('mx_client_view_action', {
         action: 'btn_opt_share',
         target: opt.idView
       });
     } else {
-      return res._shiny_input('btnIframeBuilder');
+      return rslv._shiny_input('btnIframeBuilder');
     }
   }
 
@@ -618,8 +642,7 @@ class MapxResolvers {
    * @return {Boolean | Array} Done or the list of tools
    */
   show_modal_tool(opt) {
-
-    const res = this;
+    const rslv = this;
     opt = Object.assign({}, opt);
     const roles = h.path(mx, 'settings.user.roles.groups', []);
     const tools = {
@@ -627,7 +650,7 @@ class MapxResolvers {
         roles: ['public'],
         id: 'btnIframeBuilder'
       },
-      view_add: {
+      view_new: {
         roles: ['publishers', 'admins'],
         id: 'btnAddView'
       },
@@ -679,29 +702,24 @@ class MapxResolvers {
     const conf = tools[opt.tool];
 
     if (!conf) {
-      res._fw.postMessage({
-        level: 'error',
-        key: 'err_tool_not_found',
-        vars: {idTool: opt.tool || 'null'}
+      rslv._err('err_tool_not_found',{
+        idTool: opt.tool || 'null'
       });
       return false;
     }
-    
+
     const allow = conf.roles.reduce((a, r) => {
-      return a || roles.indexOf(r) > -1;
+      return a ? a : roles.indexOf(r) > -1;
     }, false);
+
     if (!allow) {
-      res._fw.postMessage({
-        level: 'error',
-        key: 'err_tool_roles_not_match',
-        vars: {
-          idTool: opt.tool,
-          roles: JSON.stringify(conf.roles)
-        }
+      rslv._err('err_tool_roles_not_match',{
+        idTool: opt.tool,
+        roles: JSON.stringify(conf.roles)
       });
-      return false;
     }
-    res._shiny_input(conf.id, {randomNumber: true});
+
+    rslv._shiny_input(conf.id, {randomNumber: true});
     return true;
   }
 
@@ -862,7 +880,7 @@ class MapxResolvers {
    * @param {Object} opt Options
    * @param {Boolean} opt.enable Enable or disable. If not set, toggle highglight
    * @param {Number} opt.nLayers Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed
-   * @param {Boolean} opt.calcArea Estimate area covered by visible features and display result in MapX interface
+   * @param {Boolean} opt.calcArea Estimate area covered by visible feature and display result in MapX interface
    * @return {Object} options realised {enable:<false/true>,calcArea:<true/false>,nLayers:<n>}
    */
   set_vector_highlight(opt) {
@@ -918,13 +936,13 @@ class MapxResolvers {
    */
   view_geojson_set_style(opt) {
     opt = Object.assign({}, {idView: null, layout: {}, paint: {}}, opt);
-    const res = this;
+    const rslv = this;
     const map = h.getMap();
     const layer = map.getLayer(opt.idView);
     const paintProp = Object.keys(opt.paint);
     const layoutProp = Object.keys(opt.layout);
     if (!layer) {
-      return res._err('err_layer_not_found', {idView: opt.idView});
+      return rslv._err('err_layer_not_found', {idView: opt.idView});
     }
 
     if (paintProp.length > 0) {
@@ -988,9 +1006,9 @@ class MapxResolvers {
    * @return {Boolean} Move ended
    */
   map_fly_to(opt) {
-    const res = this;
+    const rslv = this;
     const map = h.getMap();
-    return res._map_resolve_when('moveend', () => {
+    return rslv._map_resolve_when('moveend', () => {
       map.flyTo(opt);
     });
   }
@@ -1002,9 +1020,9 @@ class MapxResolvers {
    * @return {Boolean} Move ended
    */
   map_jump_to(opt) {
-    const res = this;
+    const rslv = this;
     const map = h.getMap();
-    return res._map_resolve_when('moveend', () => {
+    return rslv._map_resolve_when('moveend', () => {
       map.jumpTo(opt);
     });
   }
@@ -1035,9 +1053,9 @@ class MapxResolvers {
    * @ignore
    *
    * map_add_source(id, source) {
-   * const res = this;
+   * const rslv = this;
    * const map = h.getMap();
-   * res._map_resolve_when('sourcedata', () => {
+   * rslv._map_resolve_when('sourcedata', () => {
    *   map.addSource(id, source);
    * });
    *  }
@@ -1045,9 +1063,9 @@ class MapxResolvers {
    * @param {Object} layer Layer config
    *
    * map_add_layer(layer, before) {
-   * const res = this;
+   * const rslv = this;
    * const map = h.getMap();
-   * res._map_resolve_when('styledata', () => {
+   * rslv._map_resolve_when('styledata', () => {
    *   map.addLayer(layer, before || 'mxlayers');
    * });
    * }
@@ -1058,9 +1076,9 @@ class MapxResolvers {
    * @return {Array} array of supported methods
    */
   get_sdk_methods() {
-    const res = this;
+    const rslv = this;
     const reg = new RegExp('^_');
-    const protos = Object.getPrototypeOf(res);
+    const protos = Object.getPrototypeOf(rslv);
     const methods = Object.getOwnPropertyNames(protos).reduce((a, m) => {
       if (!m.match(reg)) {
         a.push(m);
@@ -1096,7 +1114,7 @@ class MapxResolvers {
     if (valid) {
       return view._interactive[type][method](opt.value);
     } else {
-      return res._err('err_view_invalid');
+      return rslv._err('err_view_invalid');
     }
   }
 
@@ -1117,7 +1135,7 @@ class MapxResolvers {
     if (valid) {
       return view._interactive[type][method](opt.value);
     } else {
-      return res._err('err_view_invalid');
+      return rslv._err('err_view_invalid');
     }
   }
   /**
@@ -1132,7 +1150,7 @@ class MapxResolvers {
       }
       Shiny.onInputChange(id, opt);
     } else {
-      return res._err('err_not_available_mode', {
+      return rslv._err('err_not_available_mode', {
         mode: JSON.stringify(mx.settings.mode)
       });
     }
@@ -1143,8 +1161,8 @@ class MapxResolvers {
    * @ignore
    */
   _err(key, vars) {
-    const res = this;
-    res._fw.postMessage({
+    const rslv = this;
+    rslv._fw.postMessage({
       level: 'error',
       key: key,
       vars: vars
