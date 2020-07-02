@@ -1,6 +1,13 @@
 
 
 observeEvent(input$btnAddView,{
+  isGuest <- isGuestUser()
+  userRole <- getUserRole()
+  isPublisher <- !isGuest && "publishers" %in% userRole$groups
+
+  if(!isPublisher){
+    return()
+  }
 
   language <- reactData$language
 
@@ -11,7 +18,7 @@ observeEvent(input$btnAddView,{
     addLetters=F,
     splitSep="-",
     sep = "-"
-    )
+  )
 
 
   typeChoices <- config[[c("views","type")]]
@@ -25,8 +32,8 @@ observeEvent(input$btnAddView,{
       inputId = "btnAddViewConfirm",
       label = d("create",language),
       disable=TRUE
-      )
     )
+  )
 
   mxModal(
     id = "createNewView",
@@ -39,7 +46,7 @@ observeEvent(input$btnAddView,{
         label = d("view_type_select",language),
         choices = typeChoices,
         options = list(
-          )
+        )
         ),
       textInput(
         inputId = "txtViewTitle",
@@ -47,8 +54,8 @@ observeEvent(input$btnAddView,{
         value = idView
         ),
       uiOutput("uiViewTitleValidation")
-      )
     )
+  )
 
 
 })
@@ -107,6 +114,19 @@ observeEvent(input$btnAddViewConfirm,{
   hasErrors  <- reactData$viewAddHasError
 
   if(hasErrors) return();
+
+  #
+  # Role check
+  #
+  isGuest <- isGuestUser()
+  userRole <- getUserRole()
+  isPublisher <- !isGuest && "publishers" %in% userRole$groups
+
+  if(!isPublisher){
+    return()
+  }
+
+
 
   #
   # view data skeleton

@@ -233,7 +233,6 @@ class FrameManager extends Events {
     const fm = this;
     try {
       const message = Object.assign({}, parse(msg.data));
-
       /**
        * Handle event
        */
@@ -257,13 +256,8 @@ class FrameManager extends Events {
        * Redirect message to manager
        */
       if (message.type === 'message') {
-        return fm._message({
-          level: message.level,
-          key: message.key,
-          vars: message.vars,
-          data: message.data,
-          emitter: 'worker'
-        });
+        Object.assign(message,{emitter:'worker'});  
+        return fm._message(message);
       }
       /**
        * Remove request from pool

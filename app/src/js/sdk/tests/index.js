@@ -4,17 +4,26 @@ const mapx = new mxsdk.Manager({
   container: elContainer,
   url: 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF'
 });
-const t = new mxsdk.Testing({
-  container: elResults,
-  title: 'mapx sdk test'
+
+mapx.on('message', (message) => {
+  if (message.level === 'log') {
+    console.info(`%c 🤓 ${message.text}`, 'color: #76bbf7');
+  } else if (message.level === 'message') {
+    console.info(`%c 😎 ${message.text}`, 'color: #70e497');
+  } else if (message.level === 'warning') {
+    console.info(`%c 🥴 ${message.text}`, 'color: #d09c23');
+  } else if (message.level === 'error') {
+    console.info(`%c 🤬 ${message.text}`, 'color: #F00');
+  }
 });
-
+const t = new mxsdk.Testing({container: elResults, title: 'mapx sdk test'});
 const ignoreGlobal = false;
-
+const ignoreNot = false;
 /**
  * MapX respond
  */
 mapx.once('ready', () => {
+
   t.check('Get list methods', {
     ignore: ignoreGlobal,
     init: () => {
@@ -29,7 +38,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get views list', {
     ignore: ignoreGlobal,
     init: () => {
@@ -334,7 +342,11 @@ mapx.once('ready', () => {
 
   t.check('Get user email', {
     ignore: ignoreGlobal,
-    init: () => {
+    init: async () => {
+      const isGuest = await mapx.ask('is_user_guest');
+      if (isGuest) {
+        return t.stop('Need logged user');
+      }
       return mapx.ask('get_user_email');
     },
     tests: [
@@ -426,7 +438,6 @@ mapx.once('ready', () => {
             });
             pass = pass && !(await mapx.ask('is_dashboard_visible'));
           }
-
           await mapx.ask('view_remove', {idView: view.id});
           return hasDashboard && pass;
         }
@@ -590,7 +601,6 @@ mapx.once('ready', () => {
       const res = await mapx.ask('download_view_source_geojson', {
         idView: view.id
       });
-
       return {
         data: res.data,
         id: view.id
@@ -614,10 +624,104 @@ mapx.once('ready', () => {
     ]
   });
 
+  t.check('Trigger share module for a view', {
+    ignore: ignoreGlobal,
+    init: async () => {
+      const view = await mapx.ask('_get_random_view', ['vt', 'rt', 'sm', 'cc']);
+      await mapx.ask('show_modal_share', {
+        idView: view.id
+      });
+      return null;
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async () => {
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'modalShare',
+            timeout: 3000
+          });
+          await mapx.ask('close_modal_all');
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+
+  t.check('Tools - trigger sharing manager', {
+    ignore :ignoreGlobal,
+    init: async () => {
+      return mapx.ask('show_modal_tool', {tool: 'sharing_manager'});
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async (r) => {
+          if (!r) {
+            return false;
+          }
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'modalShare',
+            timeout: 2000
+          });
+          await mapx.ask('close_modal_all');
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+
+  t.check('Tools - add new view', {
+    ignore : ignoreGlobal,
+    init: async () => { 
+      return await mapx.ask('show_modal_tool', {tool: 'view_new'});
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async (ok) => {
+          if (!ok) {
+            return false;
+          }
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'modalShare',
+            timeout: 2000
+          });
+          await mapx.ask('close_modal_all');
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+
+  t.check('Tools - validate source geom', {
+    ignore : ignoreGlobal,
+    init: async () => {
+      return await mapx.ask('show_modal_tool', {tool: 'source_validate_geom'});
+    },
+    tests: [
+      {
+        name: 'has modal',
+        test: async (ok) => {
+          if (!ok) {
+            return false;
+          }
+          const hasModalEl = await mapx.ask('has_el_id', {
+            id: 'validateSourceGeom',
+            timeout: 2000
+          });
+
+          await mapx.ask('close_modal_all');
+
+          return hasModalEl;
+        }
+      }
+    ]
+  });
+
   /**
    * Run tests
-   */
-  t.run({
+   */ t.run({
     finally: () => {
       console.log('Tests finished');
     }

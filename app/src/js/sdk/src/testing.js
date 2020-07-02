@@ -77,6 +77,9 @@ export class Testing {
     }
   }
 
+  stop(msg){
+     throw new Error(msg);
+  }
   check(title, opt) {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
@@ -109,13 +112,17 @@ export class Testing {
           const success = await nextTest(data);
 
           if (success === false) {
-            throw new Error(`Failed`);
+            t.stop(`Failed`);
           }
           return true;
         }
       } catch (e) {
         handleErrorSection(e);
       }
+
+
+
+
 
       function handleErrorSection(e) {
         uiSection.text.innerText = `: failed ( ${e} )`;
