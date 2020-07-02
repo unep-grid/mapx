@@ -478,6 +478,7 @@ Class to handle MapX specific method
     * [.get_user_id()](#MapxResolvers+get_user_id) ⇒ <code>Number</code>
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
+    * [.check_user_role(opt)](#MapxResolvers+check_user_role) ⇒ <code>Boolean</code>
     * [.get_user_email()](#MapxResolvers+get_user_email) ⇒ <code>String</code>
     * [.set_project(opt)](#MapxResolvers+set_project) ⇒ <code>Boolean</code>
     * [.get_language()](#MapxResolvers+get_language) ⇒ <code>String</code>
@@ -681,6 +682,20 @@ Get user roles
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Object</code> - Current user roles  
+<a name="MapxResolvers+check_user_role"></a>
+
+### mapxResolvers.check\_user\_role(opt) ⇒ <code>Boolean</code>
+Check if user as given role
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - has role(s)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.role | <code>String</code> \| <code>Array</code> | Role(s) to check |
+| opt.all | <code>Boolean</code> | all roles must match, else at least one |
+
 <a name="MapxResolvers+get_user_email"></a>
 
 ### mapxResolvers.get\_user\_email() ⇒ <code>String</code>
@@ -1255,7 +1270,7 @@ Highlight vector feature : Enable, disable, toggle
 | opt | <code>Object</code> | Options |
 | opt.enable | <code>Boolean</code> | Enable or disable. If not set, toggle highglight |
 | opt.nLayers | <code>Number</code> | Numbers of layer that are used in the overlap tool. If not set, the default is 1 : any visible feature is highlighted. If 0 = only part where all displayed layers are overlapping are highligthed |
-| opt.calcArea | <code>Boolean</code> | Estimate area covered by visible features and display result in MapX interface |
+| opt.calcArea | <code>Boolean</code> | Estimate area covered by visible feature and display result in MapX interface |
 
 <a name="MapxResolvers+view_geojson_create"></a>
 
