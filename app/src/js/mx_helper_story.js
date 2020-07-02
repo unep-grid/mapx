@@ -906,7 +906,7 @@ export function storyControlMapPan(cmd) {
   } else {
     btn.classList.add(classLock);
     btn.classList.remove(classUnlock);
-    story.classList.remove(classNoEvent);
+    elStory.classList.remove(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('lock');
     }
