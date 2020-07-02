@@ -289,8 +289,7 @@ export function uiToggleBtn(o) {
     onChange(e, e.target);
   };
 
-  h.getDictItem('noValue')
-  .then(na => {
+  h.getDictItem('noValue').then((na) => {
     elLabel.innerText = label || na;
   });
 
@@ -518,6 +517,20 @@ export function date(val) {
   }
 
   return out;
+}
+
+/**
+ * Get week number
+ * @param {Date} date Optional date
+ * @return {Number} week number
+ */
+export function getWeek(date) {
+  date = date instanceof Date ? date : new Date();
+  const dateFirstDay = new Date(date.getFullYear(), 0, 1);
+  const msByDay = 86400000;
+  const deltaDay = (date - dateFirstDay) / msByDay;
+  const shiftWeek = dateFirstDay.getDay() + 1;
+  return Math.ceil((deltaDay + shiftWeek) / 7);
 }
 
 /**
