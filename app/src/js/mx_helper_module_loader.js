@@ -196,12 +196,14 @@ function loadHighcharts() {
     import('highcharts'),
     import('highcharts/highcharts-more.js'),
     import('highcharts/modules/solid-gauge'),
-    import('highcharts/modules/stock')
+    import('highcharts/modules/stock'),
+    import('highcharts/modules/heatmap')
   ]).then((m) => {
     var Highcharts = m[0].default;
     m[1].default(Highcharts);
     m[2].default(Highcharts);
     m[3].default(Highcharts);
+    m[4].default(Highcharts);
     return Promise.resolve(Highcharts);
   });
 }
