@@ -1985,6 +1985,41 @@
     "es": "Título del tablero de instrumentos"
   },
   {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "es": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "es": ""
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class",
     "es": "Clase por la altura"

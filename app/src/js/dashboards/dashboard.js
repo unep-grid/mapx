@@ -11,7 +11,8 @@ const defaults = {
     modules: ['highcharts'],
     language: 'en',
     marginFitWidth: 20,
-    marginFitHeight: 50
+    marginFitHeight: 50,
+    layout: 'fit'
   },
   grid: {
     dragEnabled: true,
@@ -112,14 +113,13 @@ class Dashboard {
     const d = this;
     d.panel.open();
     d.grid.show();
-    d.fitPanelToWidgetsWidth();
-    d.fitPanelToWidgetsHeight();
+    d.setPanelInitSize();
     d.grid.refreshItems().layout();
-    d._visible =  true;
+    d._visible = true;
     d.fire('show');
   }
-  
-  isVisible(){
+
+  isVisible() {
     const d = this;
     return d._visible === true;
   }
@@ -128,7 +128,7 @@ class Dashboard {
     const d = this;
     d.panel.close();
     d.grid.hide();
-    d._visible =  false;
+    d._visible = false;
     d.fire('hide');
   }
 
@@ -141,6 +141,33 @@ class Dashboard {
       d.hide();
     }
     d.fire('toggle');
+  }
+
+  setPanelInitSize() {
+    const d = this;
+    const layout = d.opt.dashboard.layout;
+    switch (layout) {
+      case 'fit':
+        d.fitPanelToWidgets();
+        break;
+      case 'vertical':
+        d.panel.resizeAuto('half-width');
+        break;
+      case 'horizontal':
+        d.panel.resizeAuto('half-height');
+        break;
+      case 'full':
+        d.panel.resizeAuto('full');
+        break;
+      default:
+        d.fitPanelToWidgets();
+    }
+  }
+
+  fitPanelToWidgets() {
+    const d = this;
+    d.fitPanelToWidgetsWidth();
+    d.fitPanelToWidgetsHeight();
   }
 
   fitPanelToWidgetsWidth() {

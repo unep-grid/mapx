@@ -2011,6 +2011,9 @@ export async function makeDashboard(o) {
      * Create a new dashboard, save it in mx object
      */
     mx.dashboard = new Dashboard({
+      dashboard : {
+         layout : config.layout
+      },
       grid: {
         dragEnabled: true,
         layout: {

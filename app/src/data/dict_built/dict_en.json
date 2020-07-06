@@ -1588,6 +1588,34 @@
     "en": "Dashboard title"
   },
   {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout"
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal"
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size"
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget"
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal"
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class"
   },

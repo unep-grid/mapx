@@ -45,7 +45,7 @@ class ButtonPanel {
     });
   }
 
-  fire(type,data) {
+  fire(type, data) {
     const panel = this;
     panel.cb.forEach((c) => {
       if (c.type === type) {
@@ -322,17 +322,23 @@ class ButtonPanel {
     /**
      * Animate
      */
-    if (type === 'half-width') {
-      panel.width = panel.rectParent.width / 2;
-      panel.height = panel.rectParent.height;
-    } else if (type === 'half-height') {
-      panel.width = panel.rectParent.width;
-      panel.height = panel.rectParent.height / 2;
-    } else if (type === 'full') {
-      panel.width = panel.rectParent.width;
-      panel.height = panel.rectParent.height;
+    switch (type) {
+      case 'half-width':
+        panel.width = panel.rectParent.width / 2;
+        panel.height = panel.rectParent.height;
+        break;
+      case 'half-height':
+        panel.width = panel.rectParent.width;
+        panel.height = panel.rectParent.height / 2;
+        break;
+      case 'full':
+        panel.width = panel.rectParent.width;
+        panel.height = panel.rectParent.height;
+        break;
+      default:
+        console.log(`Resize auto '${type}' not handled`);
     }
-    
+
     panel.fire('resize-auto', type);
   }
 

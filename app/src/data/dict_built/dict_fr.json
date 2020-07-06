@@ -1985,6 +1985,41 @@
     "fr": "Titre du tableau de bord"
   },
   {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "fr": "Agencement du tableau de bord"
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "fr": "Ajuste l'agencement initiale du tableau de bord"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "fr": "Horizontal"
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "fr": "Tout l'espace"
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "fr": "Ajuster au widget le plus grand"
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "fr": "Vertical"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "fr": "Horizontal"
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class",
     "fr": "Classe pour la hauteur"

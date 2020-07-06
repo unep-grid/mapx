@@ -1985,6 +1985,41 @@
     "ps": ""
   },
   {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "ps": ""
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "ps": ""
+  },
+  {
     "id": "view_dashboard_txt_height",
     "en": "Height class",
     "ps": ""
