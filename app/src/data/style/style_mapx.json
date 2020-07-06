@@ -1743,8 +1743,7 @@
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-font": ["Arial Italic"],
         "text-size": ["interpolate", ["linear"], ["zoom"], 1, 6, 20, 40],
-        "text-letter-spacing": 0.3,
-        "text-transform": "uppercase"
+        "text-letter-spacing": 0.3
       },
       "paint": {
         "text-color": "hsl(0, 0%, 0%)",
