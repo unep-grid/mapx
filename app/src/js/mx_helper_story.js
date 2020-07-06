@@ -97,8 +97,8 @@ async function cleanInit(o) {
   if (oldData) {
     o.startScroll = oldData.elScroll.scrollTop;
   }
-  if (oldData && oldData.close instanceof Function) {
-    oldData.close();
+  if (oldData && h.isFunction(oldData.close)) {
+    oldData.close({enable: false, update: false});
   }
   o.enable = true;
 
