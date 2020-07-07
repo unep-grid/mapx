@@ -140,7 +140,7 @@ function handleViewClick(event) {
         const idView = el.dataset.view_action_target;
         const view = h.getView(idView);
         const filter = ['any'];
-        const rules = h.path(view, 'data.style.rulesCopy', []);
+        const rules = h.path(view, 'data.style._rulesCopy', []);
 
         for (var i = 0, iL = legendInputs.length; i < iL; i++) {
           const li = legendInputs[i];

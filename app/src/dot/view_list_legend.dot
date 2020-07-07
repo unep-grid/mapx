@@ -1,5 +1,5 @@
 {{ var h = mx.helpers ; }}
-{{ var rules = h.path(it,'data.style.rulesCopy') || h.path(it,'data.style.rules');  }}
+{{ var rules = h.path(it,'data.style._rulesCopy') || h.path(it,'data.style.rules');  }}
 {{?rules}}
 {{ var titleLegend = h.getLabelFromObjectPath({obj: it,path: 'data.style.titleLegend'}); }}
 {{ var nRules = rules.length; }}
