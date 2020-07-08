@@ -179,18 +179,71 @@ exports.removeSource = removeSource;
  * Get layer columns names
  * @param {String} id of the layer
  */
-exports.getColumnsNames = function(idLayer) {
+exports.getColumnsNames = async function(idLayer) {
   var queryAttributes = {
     text: `SELECT column_name AS names 
     FROM information_schema.columns 
     WHERE table_name=$1`,
     values: [idLayer]
   };
-  return pgRead.query(queryAttributes).then((r) => {
-    return r.rows.map((a) => a.names);
-  });
+  const data = await pgRead.query(queryAttributes);
+  return data.rows.map((a) => a.names);
 };
 
+/**
+ * Get simple (json) column type
+ * @param {String} idLayer Id of the table
+ * @param {String} idAttr Id of the attribute
+ * @return {String} type
+ */
+exports.getColumnTypeSimple = async function(idLayer, idAttr) {
+  if (!idLayer || !idAttr) {
+    return null;
+  }
+
+  const q = {
+    values: [idLayer, idAttr],
+    text: `SELECT
+            CASE 
+              WHEN data_type='character varying' THEN 'string'
+              WHEN data_type='numeric' THEN 'number'
+              WHEN data_type='integer' THEN 'number'
+              WHEN data_type='double precision' THEN 'number'
+              ELSE data_type
+            END as attr_type
+            FROM information_schema.columns
+            WHERE table_name=$1 AND column_name = $2`
+  };
+  const data = await pgRead.query(q);
+  const row = data.rows[0];
+
+  if (row) {
+    return row.attr_type;
+  }
+};
+
+/**
+* Get the latest timestamp from a source / layer / table
+* @param {String} idSource Id of the source
+* @return {numeric} timetamp
+*/
+exports.getSourceLastTimestamp = async function(idSource) {
+  if (!idSource) {
+    return null;
+  }
+  const q = {
+    values: [idSource],
+    text: `SELECT
+             pg_xact_commit_timestamp(xmin) as timestamp
+             FROM pg_class where relname= $1`
+  };
+  const data = await pgRead.query(q);
+  const row = data.rows[0];
+
+  if (row) {
+    return row.timestamp;
+  }
+};
 /**
  * Get layer title
  * @param {String} id of the layer

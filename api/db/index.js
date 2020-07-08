@@ -1,7 +1,7 @@
 const s = require('./../settings');
 const {Pool, types} = require('pg');
 const redis = require('redis');
-
+const { promisify } = require("util");
 /*
  * custom type parsing
  */
@@ -69,3 +69,6 @@ clientRedis.on('error', (err) => {
 });
 
 exports.clientRedis = clientRedis;
+exports.redisGet = promisify(clientRedis.get).bind(clientRedis); 
+exports.redisSet = promisify(clientRedis.set).bind(clientRedis); 
+
