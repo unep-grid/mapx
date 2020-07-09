@@ -1,0 +1,33 @@
+{
+  "name": "@fxi/mx_valid",
+  "version": "0.0.2",
+  "description": "validator for MapX",
+  "source": "index.js",
+  "main": "dist/mx_valid.js",
+  "module": "dist/mx_valid.mjs",
+  "unpkg": "dist/mx_valid.umd.js",
+  "browser": "dist/mx_valid.umd.js",
+  "scripts": {
+    "build": "microbundle -o dist && npm run jsdoc",
+    "prod": "npm run build && npm publish",
+    "jsdoc": "jsdoc2md --template readme.hbs --files index.js > readme.md"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unep-grid/map-x-mgl.git"
+  },
+  "keywords": ["mapx", "validation"],
+  "author": "Fred Moser",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/unep-grid/map-x-mgl/issues"
+  },
+  "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/is_test/#readme",
+  "devDependencies": {
+    "jsdoc-to-markdown": "^5.0.3",
+    "microbundle": "^0.12.0"
+  }
+}

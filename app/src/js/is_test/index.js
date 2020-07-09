@@ -35,6 +35,12 @@ export function isView(item) {
   );
 }
 
+/**
+ * Test if it's a view of given type
+ * @param {Object} item to test
+ * @param {String|Array} type or array of types
+ * @param {Function} validator Additionnal validator that must return boolean
+ */
 export function isViewType(item, type, validator) {
   type = isArray(type) ? type : [type];
   const valid = isFunction(validator) ? validator(item) : true;
@@ -44,15 +50,34 @@ export function isViewType(item, type, validator) {
   return isView(item) && typeOk && valid;
 }
 
+/**
+ * Test if it's a MapX view of type vt
+ * @param {Object} item to test
+ */
 export function isViewVt(item) {
   return isViewType(item, 'vt');
 }
+
+/**
+ * Test if it's a MapX view of type rt
+ * @param {Object} item to test
+ */
 export function isViewRt(item) {
   return isViewType(item, 'rt');
 }
+
+/**
+ * Test if it's a MapX view is editable
+ * @param {Object} item to test
+ */
 export function isViewEditable(item) {
   return isView(item) && item._edit === true;
 }
+
+/**
+ * Test if is array of views object
+ * @param {Array} arr Array to test
+ */
 export function isArrayOfViews(arr) {
   return (
     isArray(arr) &&
@@ -61,6 +86,7 @@ export function isArrayOfViews(arr) {
     }, true)
   );
 }
+
 /**
  * Test if array of views id
  * @param {Array} arr Array of views id
@@ -83,7 +109,9 @@ export function isArrayOfViewsId(arr) {
 export function isSorted(arr, desc) {
   return (
     isArray(arr) &&
-    arr.every((val, i, arr) => (!i || desc ? val < arr[i + 1] : val >= arr[i - 1]))
+    arr.every((val, i, arr) =>
+      !i || desc ? val < arr[i + 1] : val >= arr[i - 1]
+    )
   );
 }
 
@@ -95,6 +123,25 @@ export function isSorted(arr, desc) {
 export function isProjectId(idProject) {
   const reg = new RegExp('MX-.{3}-.{3}-.{3}-.{3}-.{3}');
   return !!idProject && !!idProject.match(reg);
+}
+
+/**
+ * Test if it's a MapX view of type vt
+ * @param {Object} item to test
+ */
+export function isSourceId(id) {
+  const reg = new RegExp(
+    'mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+)?'
+  );
+  return !!id.match(id);
+}
+
+/**
+ * Test if it's an array of MapX source id
+ * @param {Array} arr Array of item to test
+ */
+export function isArrayOfSourceId(arr) {
+  return isArray(arr) && arr.every(isSourceId);
 }
 
 /**
