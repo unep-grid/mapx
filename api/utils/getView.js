@@ -1,167 +1,138 @@
 /**
  * Helpers
  */
-//const clientPgWrite = require.main.require("./db").pgWrite;
-const clientPgRead = require.main.require('./db').pgRead;
-const clientRedis = require.main.require('./db').clientRedis;
+const {redisGet, redisSet, pgRead} = require.main.require('./db');
 const utils = require('./utils.js');
+const util = require('util');
 const template = require('../templates');
 const crypto = require('crypto');
 const zlib = require('zlib');
-//const expire = 3600 * 24 * 30 * 2;
 const geojsonvt = require('geojson-vt');
 const vtpbf = require('vt-pbf');
-//const GeoJSONWrapper = vtpbf.GeoJSONWrapper;
+const db = require('./db.js');
+const gzip = util.promisify(zlib.gzip);
+
 /**
  * Get full view data
  */
-exports.get = function(req, res) {
-  var out = {};
-  var id = req.params.id;
-  var sql = '';
+exports.get = async function(req, res) {
+  try {
+    const id = req.params.id;
 
-  if (!id) {
-    throw new Error('No id');
-  }
+    if (!id) {
+      throw new Error('No id');
+    }
 
-  sql = utils.parseTemplate(template.viewFull, {
-    idView: id
-  });
-
-  if (!sql) {
-    return utils.sendError(res, {message: 'no valid query'});
-  }
-
-  return clientPgRead
-    .query(sql)
-    .then(function(result) {
-      if (result && result.rowCount === 0) {
-        return res.sendStatus(204);
-      } else {
-        out = result.rows[0];
-        return utils.sendJSON(res, out || {});
-      }
-    })
-    .catch(function(err) {
-      return utils.sendError(res, err);
+    const sql = utils.parseTemplate(template.viewFull, {
+      idView: id
     });
+
+    if (!sql) {
+      throw new Error('Invalid query');
+    }
+
+    const result = await pgRead.query(sql);
+
+    if (result && result.rowCount === 0) {
+      return res.sendStatus(204);
+    } else {
+      const out = result.rows[0];
+      return utils.sendJSON(res, out || {});
+    }
+  } catch (e) {
+    return utils.sendError(res, e);
+  }
 };
 
 /**
  * Get confit tiles query
  */
-exports.getTile = function(req, res) {
-  var hash;
-  var data = {idView: req.query.view};
-  var sqlViewInfo = utils.parseTemplate(template.viewData, data);
+exports.getTile = async function(req, res) {
+  try {
+    const data = {idView: req.query.view};
+    const sqlViewInfo = utils.parseTemplate(
+      template.getViewSourceAndAttributes,
+      data
+    );
+    const resultView = await pgRead.query(sqlViewInfo);
 
-  return clientPgRead
-    .query(sqlViewInfo)
-    .then(function(result) {
-      /*
-       * Get view data. Keys ;
-       * layer
-       * attribute
-       * attributes
-       * mask (optional)
-       */
-      data = result.rows[0];
-      data.geom = 'geom';
-      data.zoom = req.params.z * 1;
-      data.zoomColumn = parseZoom(req.params.z * 1);
-      data.x = req.params.x * 1;
-      data.y = req.params.y * 1;
-      data.date = req.query.date;
-      data.view = req.query.view;
-      data.attributes = utils.attrToPgCol(data.attribute, data.attributes);
+    if (resultView.rowCount !== 1) {
+      throw new Error('Error fetching view source and attribute');
+    }
 
-      if (!data.layer || data.layer === Object) {
-        sendTileEmpty(res);
-        return;
-      }
+    const viewSrcAttr = resultView.rows[0];
+    /*
+     * viewSrcAttr attributes:
+     * layer
+     * attribute
+     * attributes
+     * mask (optional)
+     */
+    Object.assign(data, viewSrcAttr);
+    data.geom = 'geom';
+    data.zoom = req.params.z * 1;
+    data.x = req.params.x * 1;
+    data.y = req.params.y * 1;
+    data.view = req.query.view;
+    data.attributes = utils.attrToPgCol(data.attribute, data.attributes);
 
-      hash = crypto
-        .createHash('md5')
-        .update(JSON.stringify(data))
-        .digest('hex');
+    if (!data.layer || data.layer === Object) {
+      sendTileEmpty(res);
+      return;
+    }
 
-      //sql = utils.parseTemplate(sql,data);
+    const timestamp = await db.getSourceLastTimestamp(data.layer);
 
-      return getTile(res, hash, data);
-    })
-    .catch(function(err) {
-      return res.status(500).send({error: err.message});
-    });
+    const hash = crypto
+      .createHash('md5')
+      .update(timestamp + data.layer + data.view + data.x + data.y + data.zoom)
+      .digest('hex');
+
+    return getTile(res, hash, data);
+  } catch (e) {
+    return sendTileError(res, e);
+  }
 };
 
-/**
- * Set the zoom. Match zoom 0,5,10,15 or 20 to get the right geom column
- * @param {String|Number} Zoom level
- */
-function parseZoom(z) {
-  z = z * 1;
-  return z < 0 ? (z = 0) : z > 20 ? (z = 20) : (z = Math.floor(z / 5) * 5);
-}
+async function getTile(res, hash, data) {
+  try {
+    const zTileB64 = await redisGet(hash);
 
-function getTile(res, hash, data) {
-  clientRedis.get(hash, function(err, zTile64) {
-    if (err) {
-      console.log(err);
+    if (zTileB64) {
+      return sendTileZip(res, Buffer(zTileB64, 'base64'));
     }
-    if (!err && zTile64) {
-      return sendTileZip(res, Buffer(zTile64, 'base64'));
-    } else {
-      return getTilePg(res, hash, data);
-    }
-  });
-}
 
-function getTilePg(res, hash, data) {
-  let query = {};
-  let str = '';
-
-  if (data.mask && typeof data.mask === 'string') {
-    str = template.geojsonTileOverlap;
-  } else {
-    str = template.geojsonTile;
+    return getTilePg(res, hash, data);
+  } catch (e) {
+    return sendTileError(res, e);
   }
-
-  query = utils.parseTemplate(str, data);
-
-  return clientPgRead
-    .query(query)
-    .then(function(out) {
-      return rowsToGeoJSON(out.rows, out.types);
-    })
-    .then(function(geojson) {
-      return geojsonToPbf(geojson, data);
-    })
-    .then(function(buffer) {
-      if (buffer && buffer.length) {
-        setRedis(hash, buffer, function(zBuffer) {
-          sendTileZip(res, zBuffer);
-        });
-      } else {
-        sendTileEmpty(res);
-      }
-    })
-    .catch(function(err) {
-      return sendTileError(res, err);
-    });
 }
 
-function setRedis(hash, buffer, cb) {
-  zlib.gzip(buffer, function(err, zTile) {
-    if (err) {
-      throw new Error(err);
+async function getTilePg(res, hash, data) {
+  try {
+    let str = '';
+
+    if (data.mask && typeof data.mask === 'string') {
+      str = template.geojsonTileOverlap;
+    } else {
+      str = template.geojsonTile;
     }
-    clientRedis.set(hash, zTile.toString('base64'), function(err) {
-      if (err) {
-        throw new Error(err);
-      }
-    });
-    cb(zTile);
-  });
+
+    const qs = utils.parseTemplate(str, data);
+    const out = await pgRead.query(qs);
+
+    if (out.rowCount > 0) {
+      const geojson = await rowsToGeoJSON(out.rows, out.types);
+      const buffer = await geojsonToPbf(geojson, data);
+      const zBuffer = await gzip(buffer);
+      sendTileZip(res, zBuffer);
+      redisSet(hash, zBuffer.toString('base64'));
+    } else {
+      sendTileEmpty(res);
+    }
+  } catch (e) {
+    return sendTileError(res, e);
+  }
 }
 
 function sendTileZip(res, zBuffer) {
@@ -178,49 +149,44 @@ function sendTileError(res, err) {
   res.status(500).send(err.message);
 }
 
-function rowsToGeoJSON(rows) {
-  return new Promise(function(resolve) {
-    var features = rows.map(function(r) {
-      var properties = {};
-      for (var attribute in r) {
-        if (attribute !== 'geom') {
-          if (r[attribute] instanceof Date) {
-            r[attribute] = r[attribute] * 1;
-          }
-          if (r[attribute] === null) {
-            r[attribute] = '';
-          }
-          properties[attribute] = r[attribute];
+async function rowsToGeoJSON(rows) {
+  const features = rows.map((r) => {
+    var properties = {};
+    for (var attribute in r) {
+      if (attribute !== 'geom') {
+        if (r[attribute] instanceof Date) {
+          r[attribute] = r[attribute] * 1;
         }
+        if (r[attribute] === null) {
+          r[attribute] = '';
+        }
+        properties[attribute] = r[attribute];
       }
-      return {
-        type: 'Feature',
-        geometry: JSON.parse(r.geom),
-        properties: properties
-      };
-    });
-    var geojson = {
-      type: 'FeatureCollection',
-      features: features
+    }
+    return {
+      type: 'Feature',
+      geometry: JSON.parse(r.geom),
+      properties: properties
     };
-    resolve(geojson);
   });
+
+  return {
+    type: 'FeatureCollection',
+    features: features
+  };
 }
 
-function geojsonToPbf(geojson, data) {
-  return new Promise(function(resolve) {
-    var pbfOptions = {};
-    var tileIndex = geojsonvt(geojson, {
-      maxZoom: data.zoom + 1,
-      indexMaxZoom: data.zoom - 1,
-      tolerence: 2000 / (512 * Math.pow(data.zoom, 2))
-    });
-    var tile = tileIndex.getTile(data.zoom, data.x, data.y);
-    if (!tile) {
-      resolve(null);
-    }
-    pbfOptions[data.view] = tile;
-    var buff = vtpbf.fromGeojsonVt(pbfOptions, {version: 2});
-    resolve(buff);
+async function geojsonToPbf(geojson, data) {
+  const pbfOptions = {};
+  const tileIndex = geojsonvt(geojson, {
+    maxZoom: data.zoom + 1,
+    indexMaxZoom: data.zoom - 1,
+    tolerence: 2000 / (512 * Math.pow(data.zoom, 2))
   });
+  const tile = tileIndex.getTile(data.zoom, data.x, data.y);
+  if (!tile) {
+    return null;
+  }
+  pbfOptions[data.view] = tile;
+  return vtpbf.fromGeojsonVt(pbfOptions, {version: 2});
 }

@@ -39,6 +39,7 @@ let settings = {
       getIpInfo: '/get/ip',
       getTile: '/get/tile/{x}/{y}/{z}.mvt',
       getSourceMetadata: '/get/source/metadata/',
+      getSourceStat: '/get/source/stat/',
       getViewMetadata: '/get/view/metadata/',
       getSourceOverlap: '/get/source/overlap/',
       getSourceValidateGeom: '/get/source/validate/geom',

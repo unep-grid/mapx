@@ -90,6 +90,7 @@ config[["api"]] <- list(
     getConfigMap = '/get/config/map',
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
     getSourceMetadata = "/get/source/metadata/",
+    getSourceStat = "/get/source/stat/",
     getViewMetadata = "/get/view/metadata/",
     getSourceOverlap = "/get/source/overlap/",
     getSourceValidateGeom = "/get/source/validate/geom",

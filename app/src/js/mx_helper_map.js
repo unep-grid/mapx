@@ -1183,8 +1183,7 @@ export function addSourceFromView(o) {
 
     if (o.view.type === 'vt') {
       const baseUrl = mx.helpers.getApiUrl('getTile');
-      const url =
-        baseUrl + '?view=' + o.view.id + '&date=' + o.view.date_modified;
+      const url = `${baseUrl}?view=${o.view.id}&date=${o.view.date_modified}`;
       o.view.data.source.tiles = [url, url];
     }
 
@@ -2011,8 +2010,8 @@ export async function makeDashboard(o) {
      * Create a new dashboard, save it in mx object
      */
     mx.dashboard = new Dashboard({
-      dashboard : {
-         layout : config.layout
+      dashboard: {
+        layout: config.layout
       },
       grid: {
         dragEnabled: true,

@@ -26,7 +26,12 @@ as values
 FROM "{{idSource}}"
 ),
 attr_distinct_json as (
-  SELECT json_agg(values) as values from attr_distinct
+  SELECT 
+  CASE WHEN {{attrIsStr}} 
+    THEN json_agg(values) 
+  ELSE null
+  END as values
+  FROM attr_distinct
 ),
 layer_sp_extent_gj as (
   SELECT 
@@ -71,12 +76,17 @@ FROM "{{idSource}}"
 )
 
 SELECT json_build_object(
-  'extent_time', json_build_object('min', to_json(lte.min), 'max', to_json(lte.max)),
+  'extent_time', json_build_object(
+    'min', to_json(lte.min), 
+    'max', to_json(lte.max)
+  ),
   'extent_sp', lse.extent::json,
-  'attr_min', to_json(amin.min),
-  'attr_max', to_json(amax.max),
-  'attr_distinct', to_json(adist.values)
-) as stat
+  'attribute_stat', json_build_object(
+    'min', to_json(amin.min),
+    'max', to_json(amax.max),
+    'distinct', to_json(adist.values)
+  )
+ ) as stat
 FROM 
 layer_sp_extent_gj as lse, 
 layer_time_extent as lte, 

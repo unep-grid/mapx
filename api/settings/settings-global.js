@@ -81,6 +81,21 @@ module.exports = {
       id_public: 96,
       id_admin: 1
     },
+    tables : {
+     attr_not_queryable : [
+      "geom",
+       "gid",
+       "pid"
+     ],
+     name_not_queryable : [
+       'mx_users',
+       'mx_sources',
+       'mx_views',
+       'mx_views_latest',
+       'mx_config',
+       'mx_logs'
+     ]
+    },
     views: {
       types: ['vt', 'rt', 'sm', 'cc'],
       keys_out: [

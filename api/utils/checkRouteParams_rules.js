@@ -1,5 +1,5 @@
 const asArray = require('./utils.js').asArray;
-const validator = require('validator');
+const mx_valid = require('@fxi/mx_valid');
 const defaults = require.main.require('./settings').validation_defaults;
 
 let isValid = false;
@@ -13,12 +13,27 @@ const viewKeysPublic = defaults.views.keys_out_public;
 const arrayOperators = defaults.db.array_operators;
 const types = defaults.views.types;
 const roles = defaults.users.roles;
+const tableNotQueryable = defaults.tables.name_not_queryable;
+const tableAttrNotQueryable = defaults.tables.attr_not_queryable;
 
 const rules = [
   {
+    key: ['noCache'],
+    test: (d) => {
+      if ((mx_valid.isString(d) && d === 'true') || d === 'false') {
+        d = d === 'true';
+      }
+      isValid = mx_valid.isBoolean(d);
+      return {
+        valid: isValid,
+        value: isValid ? d : null
+      };
+    }
+  },
+  {
     key: ['idUser', 'user'],
     test: (d) => {
-      isValid = validator.isNumeric(d);
+      isValid = mx_valid.isNumeric(d);
       return {
         valid: isValid,
         value: isValid ? d * 1 : idUserPublic
@@ -26,10 +41,19 @@ const rules = [
     }
   },
   {
-    key: ['idProject', 'project', 'idProjectExclude','idProjectOption'],
+    key: ['idProject', 'project', 'idProjectExclude', 'idProjectOption'],
     test: (d) => {
       return {
-        valid: validator.isLength(d, {min: 22, max: 22}),
+        valid: mx_valid.isProjectId(d),
+        value: d
+      };
+    }
+  },
+  {
+    key: ['idSource'],
+    test: (d) => {
+      return {
+        valid: mx_valid.isSourceId(d) && tableNotQueryable.indexOf(d) === -1,
         value: d
       };
     }
@@ -38,13 +62,20 @@ const rules = [
     key: ['idViews', 'views'],
     test: (d) => {
       d = asArray(d);
-      isValid = d.reduce(
-        (a, x) => a && validator.isLength(x, {min: 20, max: 20}),
-        true
-      );
+      isValid = d.reduce((a, x) => a && mx_valid.isViewId(x), true);
       return {
         valid: isValid,
         value: isValid ? d : []
+      };
+    }
+  },
+  {
+    key: ['idView'],
+    test: (d) => {
+      isValid = mx_valid.isViewId(d);
+      return {
+        valid: isValid,
+        value: isValid ? d : null
       };
     }
   },
@@ -53,7 +84,7 @@ const rules = [
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce(
-        (a, x) => a && validator.isLength(x, {min: 1, max: 200}),
+        (a, x) => a && mx_valid.isStringRange(x, 1, 200),
         true
       );
       return {
@@ -72,7 +103,17 @@ const rules = [
     }
   },
   {
-    key: 'selectKeys',
+    key: ['idAttr', 'attribute', 'column'],
+    test: (d) => {
+      isValid = tableAttrNotQueryable.indexOf(d) === -1;
+      return {
+        valid: isValid,
+        value: isValid ? d : null
+      };
+    }
+  },
+  {
+    key: ['selectKeys', 'viewKeys'],
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && viewKeys.indexOf(x) > -1, true);
@@ -117,7 +158,7 @@ const rules = [
     key: ['email'],
     test: (d) => {
       return {
-        valid: validator.isEmail(d),
+        valid: mx_valid.isEmail(d),
         value: d
       };
     }
@@ -127,7 +168,7 @@ const rules = [
     test: (d) => {
       d = d.toLowerCase();
       return {
-        valid: validator.isLength(d, {min: 2, max: 2}),
+        valid: mx_valid.isStringRange(d, 2, 2),
         value: d || 'en'
       };
     }
@@ -136,7 +177,7 @@ const rules = [
     key: 'publicOnly',
     test: (d) => {
       return {
-        valid: validator.isBoolean(d),
+        valid: mx_valid.isBoolean(d),
         value: d === 'true' || d === true ? true : ''
       };
     }
@@ -145,7 +186,7 @@ const rules = [
     key: ['token', 'title', 'titlePrefix', 'titleFuzzy'],
     test: (d) => {
       return {
-        valid: validator.isLength(d, {min: 1}),
+        valid: mx_valid.isStringRange(d, 1),
         value: d
       };
     }
