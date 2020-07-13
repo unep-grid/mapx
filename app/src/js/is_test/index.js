@@ -131,7 +131,7 @@ export function isProjectId(idProject) {
  */
 export function isSourceId(id) {
   const reg = new RegExp(
-    'mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+)?'
+    '^mx_(vector|[a-z]{3})(_vector)?_([0-9a-z]{5,6})_([0-9a-z]{5,6})_[0-9a-z]{5,6}_[0-9a-z]{5,6}(_u_[0-9]+)?$'
   );
   return isString(id) && !!id.match(id);
 }
