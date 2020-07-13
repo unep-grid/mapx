@@ -1,4 +1,4 @@
-export async function getSourceStat(opt) {
+export async function getSourceSummary(opt) {
   const h = mx.helpers;
   opt = Object.assign(
     {},
@@ -10,17 +10,17 @@ export async function getSourceStat(opt) {
      throw new Error('Missing id of a view or a source');
   }
   
-  const urlSourceStat = h.getApiUrl('getSourceStat');
+  const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
-  const url = `${urlSourceStat}?${query}`;
+  const url = `${urlSourceSummary}?${query}`;
 
   const resp = await fetch(url);
-  const stat = await resp.json();
+  const summary = await resp.json();
 
-  if(h.isObject(stat) && stat.type === "error"){
-    throw new Error(stat.msg);
+  if(h.isObject(summary) && summary.type === "error"){
+    throw new Error(summary.msg);
   }
 
-  return stat;
+  return summary;
 
 }
