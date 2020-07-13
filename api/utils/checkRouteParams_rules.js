@@ -20,13 +20,24 @@ const rules = [
   {
     key: ['noCache'],
     test: (d) => {
-      if ((mx_valid.isString(d) && d === 'true') || d === 'false') {
-        d = d === 'true';
+      if (mx_valid.isString(d)) {
+        switch (d) {
+          case 'true':
+            d = true;
+            break;
+          case 'false':
+            d = false;
+            break;
+          default:
+            d = !!d;
+        }
       }
+
       isValid = mx_valid.isBoolean(d);
+
       return {
         valid: isValid,
-        value: isValid ? d : null
+        value: d
       };
     }
   },

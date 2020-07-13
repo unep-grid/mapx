@@ -64,7 +64,7 @@ exports.get = function(req, res) {
   var sql = 'SELECT * from ' + id;
 
   if (clipCountryIso3 && clipCountryIso3.length === 3) {
-    sql = utils.parseTemplate(template.layerIntersectsCountry, {
+    sql = utils.parseTemplate(template.getLayerIntersectsCountry, {
       idLayer: id,
       idLayerCountry: 'mx_countries',
       idIso3: clipCountryIso3

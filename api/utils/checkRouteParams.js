@@ -51,6 +51,13 @@ module.exports.getParamsValidator = function(opt) {
           if (!result.valid && isRequired) {
             return u.stop(`Invalid required input ${k} : ${body[k]}`);
           }
+          if(!result.valid){
+            /*
+            * Replace whatever wrong value by null, as it's not required,
+            * the logic should be applied later. Maybe. 
+            */
+           result.value = null;
+          }
           /**
            * Invalid and not required are handled by the default
            * values set in checkRouteParams_rules

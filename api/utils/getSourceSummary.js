@@ -3,6 +3,7 @@ const utils = require('./utils.js');
 const template = require('../templates');
 const db = require('./db.js');
 const crypto = require('crypto');
+const mx_valid = require('@fxi/mx_valid');
 
 const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
   {
@@ -10,12 +11,12 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
   }
 );
 
-exports.get = [validateParamsHandler, getSourceStatHandler];
-exports.getSourceStat = getSourceStat;
+exports.get = [validateParamsHandler, getSourceSummaryHandler];
+exports.getSourceSummary = getSourceSummary;
 
-async function getSourceStatHandler(req, res) {
+async function getSourceSummaryHandler(req, res) {
   try {
-    const data = await getSourceStat({
+    const data = await getSourceSummary({
       idSource: req.query.idSource,
       idView: req.query.idView,
       idAttr: req.query.idAttr,
@@ -41,8 +42,8 @@ async function getSourceStatHandler(req, res) {
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
  * @return {Object} metadata object
  */
-async function getSourceStat(opt) {
-  if (!opt.idSource && !opt.idView) {
+async function getSourceSummary(opt) {
+  if (!mx_valid.isSourceId(opt.idSource) && !mx_valid.isViewId(opt.idView)) {
     throw new Error('Missing id of the source or the view');
   }
   if (!opt.idAttr || opt.idAttr === 'undefined') {
@@ -63,6 +64,10 @@ async function getSourceStat(opt) {
         opt.idAttr = srcAttr.attribute;
       }
     }
+  }
+
+  if(!mx_valid.isSourceId(opt.idSource)){
+    throw new Error('Source not valid');
   }
 
   const start = Date.now();
@@ -88,25 +93,67 @@ async function getSourceStat(opt) {
 
   opt.hasT0 = columns.indexOf('mx_t0') > -1;
   opt.hasT1 = columns.indexOf('mx_t1') > -1;
-  opt.hasGeom = columns.indexOf('geom') > -1;
-  opt.hasAttr = columns.indexOf(opt.idAttr) > -1;
   opt.idAttrT0 = opt.hasT0 ? 'mx_t0' : 0;
   opt.idAttrT1 = opt.hasT1 ? 'mx_t1' : 0;
-  opt.attrIsStr = attrType === 'string';
+  opt.timestamp = timestamp;
 
-  const sql = utils.parseTemplate(template.getSourceStat, opt);
-  const data = await pgRead.query(sql);
-  const stat = data.rows[0].stat;
+  const hasGeom = columns.indexOf('geom') > -1;
+  const hasAttr = columns.indexOf(opt.idAttr) > -1;
+  const isCategorical = attrType === 'string';
 
   const out = {
-    id : opt.idSource,
-    attribute : opt.idAttr,
-    attributes: columns,
-    timing: Date.now() - start
+    id: opt.idSource,
+    timestamp: opt.timestamp,
+    attributes: columns
   };
 
-  Object.assign(out,stat);
+  Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
 
-  redisSet(hash, JSON.stringify(out));
+  if (hasGeom) {
+    Object.assign(out, await getOrCalc('getSourceSummary_ext_sp', opt));
+  }
+
+  if (opt.hasT0 || opt.hasT1) {
+    Object.assign(out, await getOrCalc('getSourceSummary_ext_time', opt));
+  }
+
+  if (hasAttr) {
+    if (isCategorical) {
+      Object.assign(
+        out,
+        await getOrCalc('getSourceSummary_attr_categorical', opt)
+      );
+    } else {
+      Object.assign(
+        out,
+        await getOrCalc('getSourceSummary_attr_continuous', opt)
+      );
+    }
+  }
+
+  out.timing = Date.now() - start;
+
   return out;
+}
+
+async function getOrCalc(idTemplate, opt) {
+  const sql = utils.parseTemplate(template[idTemplate], opt);
+  const hash = crypto
+    .createHash('md5')
+    .update(sql + opt.timestamp)
+    .digest('hex');
+
+  const cached = opt.noCache ? false : await redisGet(hash);
+
+  if (!cached) {
+    const data = await pgRead.query(sql);
+    const newstat = data.rows[0].res;
+    setTimeout(() => {
+      // Save after return
+      redisSet(hash, JSON.stringify(newstat));
+    }, 0);
+    return newstat;
+  } else {
+    return JSON.parse(cached);
+  }
 }

@@ -46,7 +46,7 @@ app.get('/get/mirror/', utils.mirror.get);
 app.get('/get/config/map', utils.config.map.get);
 app.get('/get/source/', utils.source.get);
 app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
-app.get('/get/source/stat/', utils.sourceStat.get);
+app.get('/get/source/summary/', utils.sourceSummary.get);
 app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
 app.get('/get/source/overlap/', utils.sourceOverlap.get); //countries=[]&layers=[]&='area';
 app.get('/get/source/validate/geom', utils.sourceValidityGeom.get);

@@ -23,7 +23,7 @@ exports.get = async function(req, res) {
       throw new Error('No id');
     }
 
-    const sql = utils.parseTemplate(template.viewFull, {
+    const sql = utils.parseTemplate(template.getViewFull, {
       idView: id
     });
 
@@ -113,9 +113,9 @@ async function getTilePg(res, hash, data) {
     let str = '';
 
     if (data.mask && typeof data.mask === 'string') {
-      str = template.geojsonTileOverlap;
+      str = template.getGeojsonTileOverlap;
     } else {
-      str = template.geojsonTile;
+      str = template.getGeojsonTile;
     }
 
     const qs = utils.parseTemplate(str, data);

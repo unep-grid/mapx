@@ -375,7 +375,7 @@ function getSqlClip(idSource, iso3codes, attributes) {
 
   iso3codes = "'" + iso3codes.join("','") + "'";
 
-  var sql = utils.parseTemplate(template.layerIntersectionCountry, {
+  var sql = utils.parseTemplate(template.getLayerIntersectionCountry, {
     idLayer: idSource,
     attributes: attributesPg,
     idLayerCountry: 'mx_countries',

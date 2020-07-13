@@ -9,7 +9,7 @@
   "author": "Fred Moser",
   "license": "MIT",
   "dependencies": {
-    "@fxi/mx_valid": "0.0.2",
+    "@fxi/mx_valid": "0.0.3",
     "@turf/turf": "^5.1.6",
     "ajv": "^6.10.2",
     "archiver": "^3.0.0",
