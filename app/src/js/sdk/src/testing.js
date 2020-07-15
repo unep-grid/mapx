@@ -3,7 +3,8 @@ import * as is from '../../is_test/index.js';
 
 const defaults = {
   title: 'test',
-  container: document.body
+  container: document.body,
+  groups: []
 };
 const defaultsTests = {
   tests: [],
@@ -84,6 +85,9 @@ export class Testing {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
     if (opt.ignore) {
+      return;
+    }
+    if (!t._is_in_groups(opt.group)) {
       return;
     }
 
@@ -243,5 +247,15 @@ export class Testing {
       text: elText,
       timing: elTiming
     };
+  }
+
+  _is_in_groups(group) {
+    let out = false;
+    if (this.opt.groups.length === 0) {
+      out = true;
+    } else if (group !== undefined) {
+      out = this.opt.groups.includes(group);
+    }
+    return out;
   }
 }

@@ -16,7 +16,14 @@ mapx.on('message', (message) => {
     console.info(`%c 🤬 ${message.text}`, 'color: #F00');
   }
 });
-const t = new mxsdk.Testing({container: elResults, title: 'mapx sdk test'});
+
+const groups = (new window.URL(window.location.href)).searchParams.get('groups')
+const t = new mxsdk.Testing({
+  container: elResults,
+  title: 'mapx sdk test',
+  groups: groups ? groups.split(',') : [],
+});
+
 const ignoreGlobal = false;
 const ignoreNot = false;
 /**
