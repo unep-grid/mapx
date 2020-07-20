@@ -4358,25 +4358,38 @@ export async function makeSearchBox(o) {
   }
   const elViewParent = h.getViewEl(view).parentElement;
 
-  function tableToData(table) {
-    let r, rL, row, res;
-    const data = [];
-    for (r = 0, rL = table.length; r < rL; r++) {
-      row = table[r];
-      res = {};
-      res.value = row.value;
-      res.label = row.value;
-      data.push(res);
-    }
-    return data;
-  }
-
   const s = await h.moduleLoad('selectize');
   const table = h.path(view, 'data.attribute.table');
   const attr = h.path(view, 'data.attribute.name');
-  const data = tableToData(table);
+  const choices = [];
 
-  const selectOnChange = function() {
+  const searchBox = $(el)
+    .selectize({
+      dropdownParent: elViewParent,
+      placeholder: 'Search',
+      choices: choices,
+      valueField: 'value',
+      labelField: 'label',
+      searchField: ['label'],
+      options: choices,
+      onChange: selectOnChange
+    })
+    .data().selectize;
+  
+  /**
+  * Async choices
+  */
+  updateChoices();
+
+  /**
+   * Save selectr object in the view
+   */
+  searchBox.view = view;
+  view._interactive.searchBox = searchBox;
+
+  return searchBox;
+
+  function selectOnChange() {
     const view = this.view;
     const listObj = this.getValue();
     const filter = ['any'];
@@ -4387,26 +4400,24 @@ export async function makeSearchBox(o) {
       filter: filter,
       type: 'search_box'
     });
-  };
+  }
 
-  const searchBox = $(el)
-    .selectize({
-      dropdownParent: elViewParent,
-      placeholder: 'Search',
-      choices: data,
-      valueField: 'value',
-      labelField: 'label',
-      searchField: ['value'],
-      options: data,
-      onChange: selectOnChange
-    })
-    .data().selectize;
-  /**
-   * Save selectr object in the view
-   */
-  searchBox.view = view;
-  view._interactive.searchBox = searchBox;
-  return searchBox;
+  function updateChoices() {
+    h.getSourceSummary({
+      idView: view.id
+    }).then((s) => {
+      const table = h.path(s, 'attribute_stat.table', []);
+      const data = table.map((r) => {
+        return {
+          value: r.value,
+          label: `${r.value} (${r.count})`
+        };
+      });
+      console.log(data);
+      searchBox.addOption(data);
+      searchBox.refreshOptions();
+    });
+  }
 }
 
 export function filterViewValues(o) {
