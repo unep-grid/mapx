@@ -1,27 +1,27 @@
 WITH
 attr_max as (
   SELECT
-  max({{idAttr}})
+  max("{{idAttr}}")
 FROM "{{idSource}}"
 ),
 attr_min as (
   SELECT
-  min({{idAttr}})
+  min("{{idAttr}}")
   FROM "{{idSource}}"
 ),
 attr_buckets as (
   SELECT 
-  {{idAttr}},
+  "{{idAttr}}",
   ntile(100) 
   OVER (
-    ORDER by {{idAttr}}
+    ORDER by "{{idAttr}}"
   ) 
   FROM  {{idSource}}
 ),
 attr_percentile as (
   SELECT 
   ntile as percentile, 
-  max({{idAttr}}) as value
+  max("{{idAttr}}") as value
   FROM attr_buckets
   group by 1 order by 1
 ),

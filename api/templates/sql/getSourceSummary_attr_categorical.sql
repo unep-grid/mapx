@@ -1,11 +1,11 @@
 WITH
 attr_table as (
   SELECT
-  {{idAttr}} as value,
+  "{{idAttr}}" as value,
   count(*) FROM
   {{idSource}}
   GROUP BY
-  {{idAttr}}
+  "{{idAttr}}"
   order by count desc
 )
 
