@@ -145,7 +145,7 @@ function handleNewServiceWorker(registration, informUser) {
  * Display a modal window to inform the user to update
  */
 function showRefreshUI(registration) {
-  var skipWaiting = !window.mx || !window.mx.helpers.getDictItem;
+  var skipWaiting = !window.mx || !window.mx.helpers.getDictItem || window.parent !== window;
 
   if (skipWaiting) {
     return update();
