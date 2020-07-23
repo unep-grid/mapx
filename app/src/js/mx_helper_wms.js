@@ -1,4 +1,3 @@
-/* jshint esversion:6 */
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -14,269 +13,267 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
  *
  *TODO: event delegation, destroy method
  */
-function wmsBuildQueryUi(opt) {
-  return mx.helpers.moduleLoad('selectize').then(() => {
-    var el = mx.helpers.el;
-    var elInputTiles = document.querySelector(opt.selectorTileInput);
-    var elInputLegend = document.querySelector(opt.selectorLegendInput);
-    var elInputMeta = document.querySelector(opt.selectorMetaInput);
-    var elParent =
-      document.querySelector(opt.selectorParent) || elInputTile.parentElement;
-    var services = opt.services;
-    var tt = mx.helpers.getTranslationTag;
-
-    if (!elInputTiles || !elInputLegend || !elInputMeta) {
-      return;
-    }
-
-    var elSelectServices = el('select', {
-      class: 'form-control'
-    });
-    var elSelectLayer = el('select', {
-      class: 'form-control'
-    });
-
-    var elSelectServicesGroup = el(
-      'div',
-      {class: ['form-group']},
-      el('label', tt('wms_select_reviewed_service')),
-      el('div', elSelectServices)
-    );
-
-    var elInputService = el('input', {
-      type: 'text',
-      class: ['form-control'],
-      on: {
-        change: initSelectLayer,
-        input: checkDisableBtnUpdateLayerList
-      }
-    });
-
-    var elButtonGetLayers = el('button', tt('wms_btn_get_layers'), {
-      class: ['btn', 'btn-default'],
-      on: {
-        click: getLayers
-      }
-    });
-
-    var elInputServiceGroup = el(
-      'div',
-      {class: ['form-group']},
-      el('label', tt('wms_input_service_url')),
-      el(
-        'div',
-        {
-          class: 'input-group'
-        },
-        elInputService,
-        el(
-          'span',
-          {
-            class: 'input-group-btn'
-          },
-          elButtonGetLayers
-        )
-      )
-    );
-
-    var elButtonUpdate = el('button', tt('wms_btn_generate_url'), {
-      class: ['btn', 'btn-default'],
-      on: {
-        click: updateInput
-      }
-    });
-
-    var elInputLayerGroup = el(
-      'div',
-      {class: ['form-group']},
-      el('label', tt('wms_select_layer')),
-      elSelectLayer,
-      elButtonUpdate
-    );
-
-    elParent.appendChild(elSelectServicesGroup);
-    elParent.appendChild(elInputServiceGroup);
-    elParent.appendChild(elInputLayerGroup);
-
-    /*
-     * Add selectize
-     */
-    var selectLayer;
-    var selectServices;
-
-    initSelectServices();
-    initSelectLayer();
-
-    /**
-     * Local helpers
-     */
-    function getLayers() {
-      setBusy(true);
-      wmsGetLayers(elInputService.value)
-        .then((layers) => {
-          initSelectLayer(layers);
-          setBusy(false);
-        })
-        .catch((e) => {
-          setBusy(false);
-          throw new Error(e);
-        });
-    }
-
-    function initSelectLayer(data) {
-      data = data || [];
-      var def = data[0] && data[0].Name ? data[0].Name : data[0];
-      if (typeof selectLayer !== 'undefined' && selectLayer.destroy) {
-        selectLayer.destroy();
-      }
-      var $elSelectLayer = $(elSelectLayer).selectize({
-        options: data,
-        onChange: checkDisableBtnUpdate,
-        valueField: 'Name',
-        labelField: 'Title',
-        searchField: ['Name', 'Title'],
-        render: {
-          item: function(item, escape) {
-            return (
-              '<div class="item">' +
-              (item.Title
-                ? '<span class="item-label">' + escape(item.Title) + '</span>'
-                : '') +
-              (item.Name
-                ? '<span class="item-desc">' + escape(item.Name) + '</span>'
-                : '') +
-              '</div>'
-            );
-          },
-          option: function(item, escape) {
-            return (
-              '<div class="item">' +
-              (item.Title
-                ? '<span class="item-label">' + escape(item.Title) + '</span>'
-                : '') +
-              (item.Name
-                ? '<span class="item-desc">' + escape(item.Name) + '</span>'
-                : '') +
-              '</div>'
-            );
-          }
-        }
-      });
-      selectLayer = $elSelectLayer[0].selectize;
-      selectLayer.setValue(def);
-      checkDisableBtnUpdateLayerList();
-      checkDisableBtnUpdate();
-    }
-
-    function initSelectServices() {
-      var $elSelectServices = $(elSelectServices).selectize({
-        options: services,
-        labelField: 'label',
-        valueField: 'value',
-        onChange: updateServiceValue
-      });
-      selectServices = $elSelectServices[0].selectize;
-      selectServices.setValue(services[0].value);
-      selectServices.refreshOptions();
-    }
-
-    function updateInput() {
-      elInputTiles.value = urlTile({
-        layer: $(elSelectLayer).val(),
-        url: elInputService.value,
-        width: 512,
-        height: 512
-      });
-      elInputLegend.value = urlLegend({
-        url: elInputService.value,
-        layer: $(elSelectLayer).val()
-      });
-      elInputTiles.dispatchEvent(new Event('change'));
-      elInputLegend.dispatchEvent(new Event('change'));
-    }
-
-    function updateServiceValue(value) {
-      elInputService.value = value;
-      checkDisableBtnUpdateLayerList();
-      initSelectLayer();
-    }
-
-    function checkDisableBtnUpdateLayerList() {
-      var url = elInputService.value;
-      var valid = mx.helpers.isUrl(url);
-      if (valid) {
-        elButtonGetLayers.removeAttribute('disabled');
-      } else {
-        elButtonGetLayers.setAttribute('disabled', true);
-      }
-    }
-    function checkDisableBtnUpdate() {
-      var layer = $(elSelectLayer).val();
-      if (layer) {
-        elButtonUpdate.removeAttribute('disabled', false);
-      } else {
-        elButtonUpdate.setAttribute('disabled', true);
-      }
-    }
-
-    function setBusy(busy) {
-      if (busy) {
-        elInputService.setAttribute('disabled', true);
-        elButtonGetLayers.setAttribute('disabled', true);
-        elButtonUpdate.setAttribute('disabled', true);
-        if (selectServices && selectServices.disable) {
-          selectServices.disable();
-        }
-        if (selectLayer && selectLayer.disable) {
-          selectLayer.disable();
-        }
-      } else {
-        elInputService.removeAttribute('disabled');
-        elButtonGetLayers.removeAttribute('disabled', true);
-        elButtonUpdate.removeAttribute('disabled', true);
-        if (selectServices && selectServices.enable) {
-          selectServices.enable();
-        }
-        if (selectLayer && selectLayer.enable) {
-          selectLayer.enable();
-        }
-      }
-    }
-  });
-}
-
-function wmsGetCapabilities(baseUrl) {
+async function wmsBuildQueryUi(opt) {
+  var selectLayer, selectServices;
   const h = mx.helpers;
-  const data = {};
-  let xmlString = '';
-  let url = baseUrl + '?service=WMS&request=GetCapabilities';
-  if (!mx.helpers.isUrl(url)) {
-    return Promise.resolve(data);
+  await h.moduleLoad('selectize');
+  const el = h.el;
+  const elInputTiles = document.querySelector(opt.selectorTileInput);
+  const elInputLegend = document.querySelector(opt.selectorLegendInput);
+  const elInputMeta = document.querySelector(opt.selectorMetaInput);
+  const elParent =
+    document.querySelector(opt.selectorParent) || elInputTile.parentElement;
+  const services = opt.services;
+  const tt = h.getTranslationTag;
+
+  if (!elInputTiles || !elInputLegend || !elInputMeta) {
+    return;
   }
-  return h
-    .fetchProgress_xhr(url, {maxSize: mx.settings.maxByteFetch})
-    .then((str) => {
-      xmlString = str;
-      return mx.helpers.moduleLoad('wms-capabilities');
-    })
-    .then((WMSCapabilities) => {
-      return new WMSCapabilities(xmlString).toJSON();
-    })
-    .then((data) => {
-      return data.Capability;
+
+  const elSelectServices = el('select', {
+    class: 'form-control'
+  });
+  const elSelectLayer = el('select', {
+    class: 'form-control'
+  });
+
+  const elSelectServicesGroup = el(
+    'div',
+    {class: ['form-group']},
+    el('label', tt('wms_select_reviewed_service')),
+    el('div', elSelectServices)
+  );
+
+  const elInputService = el('input', {
+    type: 'text',
+    class: ['form-control'],
+    on: {
+      change: initSelectLayer,
+      input: checkDisableBtnUpdateLayerList
+    }
+  });
+
+  const elButtonGetLayers = el('button', tt('wms_btn_get_layers'), {
+    class: ['btn', 'btn-default'],
+    on: {
+      click: getLayers
+    }
+  });
+
+  const elInputServiceGroup = el(
+    'div',
+    {class: ['form-group']},
+    el('label', tt('wms_input_service_url')),
+    el(
+      'div',
+      {
+        class: 'input-group'
+      },
+      elInputService,
+      el(
+        'span',
+        {
+          class: 'input-group-btn'
+        },
+        elButtonGetLayers
+      )
+    )
+  );
+
+  const elButtonUpdate = el('button', tt('wms_btn_generate_url'), {
+    class: ['btn', 'btn-default'],
+    on: {
+      click: updateInput
+    }
+  });
+
+  const elInputLayerGroup = el(
+    'div',
+    {class: ['form-group']},
+    el('label', tt('wms_select_layer')),
+    elSelectLayer,
+    elButtonUpdate
+  );
+
+  elParent.appendChild(elSelectServicesGroup);
+  elParent.appendChild(elInputServiceGroup);
+  elParent.appendChild(elInputLayerGroup);
+
+  initSelectServices();
+  initSelectLayer();
+
+  /**
+   * Local helpers
+   */
+  async function getLayers() {
+    setBusy(true);
+    try {
+      const layers = await wmsGetLayers(elInputService.value);
+      initSelectLayer(layers);
+      setBusy(false);
+    } catch (e) {
+      setBusy(false);
+      throw new Error(e);
+    }
+  }
+
+  function initSelectLayer(data) {
+    data = data || [];
+    const def = data[0] && data[0].Name ? data[0].Name : data[0];
+    if (typeof selectLayer !== 'undefined' && selectLayer.destroy) {
+      selectLayer.destroy();
+    }
+    const $elSelectLayer = $(elSelectLayer).selectize({
+      options: data,
+      onChange: checkDisableBtnUpdate,
+      valueField: 'Name',
+      labelField: 'Title',
+      searchField: ['Name', 'Title','Abstract'],
+      render: {
+        item: function(item, escape) {
+          return (
+            '<div class="item">' +
+            (item.Title
+              ? '<span class="item-label">' + escape(item.Title) + '</span>'
+              : '') +
+            (item.Name
+              ? '<span class="item-desc">' + escape(item.Name) + '</span>'
+              : '') +
+           (item.Abstract
+              ? '<span class="item-desc">' + escape(item.Abstract) + '</span>'
+              : '') +
+            '</div>'
+          );
+        },
+        option: function(item, escape) {
+          return (
+            '<div class="item">' +
+            (item.Title
+              ? '<span class="item-label">' + escape(item.Title) + '</span>'
+              : '') +
+            (item.Name
+              ? '<span class="item-desc">' + escape(item.Name) + '</span>'
+              : '') +
+            (item.Abstract
+              ? '<span class="item-desc">' + escape(item.Abstract) + '</span>'
+              : '') +
+            '</div>'
+          );
+        }
+      }
     });
+    selectLayer = $elSelectLayer[0].selectize;
+    selectLayer.setValue(def);
+    checkDisableBtnUpdateLayerList();
+    checkDisableBtnUpdate();
+  }
+
+  function initSelectServices() {
+    const $elSelectServices = $(elSelectServices).selectize({
+      options: services,
+      labelField: 'label',
+      valueField: 'value',
+      onChange: updateServiceValue
+    });
+    selectServices = $elSelectServices[0].selectize;
+    selectServices.setValue(services[0].value);
+    selectServices.refreshOptions();
+  }
+
+  function updateInput() {
+    elInputTiles.value = urlTile({
+      layer: $(elSelectLayer).val(),
+      url: elInputService.value,
+      width: 512,
+      height: 512
+    });
+    elInputLegend.value = urlLegend({
+      url: elInputService.value,
+      layer: $(elSelectLayer).val()
+    });
+    elInputTiles.dispatchEvent(new Event('change'));
+    elInputLegend.dispatchEvent(new Event('change'));
+  }
+
+  function updateServiceValue(value) {
+    elInputService.value = value;
+    checkDisableBtnUpdateLayerList();
+    initSelectLayer();
+  }
+
+  function checkDisableBtnUpdateLayerList() {
+    const url = elInputService.value;
+    const valid = h.isUrl(url);
+    if (valid) {
+      elButtonGetLayers.removeAttribute('disabled');
+    } else {
+      elButtonGetLayers.setAttribute('disabled', true);
+    }
+  }
+  function checkDisableBtnUpdate() {
+    const layer = $(elSelectLayer).val();
+    if (layer) {
+      elButtonUpdate.removeAttribute('disabled', false);
+    } else {
+      elButtonUpdate.setAttribute('disabled', true);
+    }
+  }
+
+  function setBusy(busy) {
+    if (busy) {
+      elInputService.setAttribute('disabled', true);
+      elButtonGetLayers.setAttribute('disabled', true);
+      elButtonUpdate.setAttribute('disabled', true);
+      if (selectServices && selectServices.disable) {
+        selectServices.disable();
+      }
+      if (selectLayer && selectLayer.disable) {
+        selectLayer.disable();
+      }
+    } else {
+      elInputService.removeAttribute('disabled');
+      elButtonGetLayers.removeAttribute('disabled', true);
+      elButtonUpdate.removeAttribute('disabled', true);
+      if (selectServices && selectServices.enable) {
+        selectServices.enable();
+      }
+      if (selectLayer && selectLayer.enable) {
+        selectLayer.enable();
+      }
+    }
+  }
 }
 
-function wmsGetLayers(baseUrl) {
-  var layers = [];
-  return wmsGetCapabilities(baseUrl).then((Capability) => {
-    if (!Capability || !Capability.Layer || !Capability.Layer.Layer) {
-      return layers;
-    }
-    layerFinder(Capability.Layer, layers);
-    return layers;
+async function wmsGetCapabilities(baseUrl) {
+  const h = mx.helpers;
+  const def = {};
+  const url = baseUrl + '?service=WMS&request=GetCapabilities';
+
+  if (!h.isUrlValidWms(url)) {
+    return def;
+  }
+
+  const WMSCapabilities = await h.moduleLoad('wms-capabilities');
+  const xmlString = await h.fetchProgress_xhr(url, {
+    maxSize: mx.settings.maxByteFetch
   });
+  const data = new WMSCapabilities(xmlString).toJSON();
+
+  return h.path(data, 'Capability', {});
 }
+
+async function wmsGetLayers(baseUrl) {
+  const layers = [];
+  const capability = await wmsGetCapabilities(baseUrl);
+
+  if (!capability || !capability.Layer || !capability.Layer.Layer) {
+    return layers;
+  }
+
+  layerFinder(capability.Layer, layers);
+  return layers;
+}
+
 
 function layerFinder(layer, arr) {
   if (isWmsLayer(layer)) {
@@ -288,11 +285,12 @@ function layerFinder(layer, arr) {
 }
 
 function isWmsLayer(layer) {
+  const h = mx.helpers;
   return (
-    mx.helpers.isObject(layer) &&
-    mx.helpers.isStringRange(layer.Name, 1) &&
-    mx.helpers.isStringRange(layer.Title, 1) &&
-    mx.helpers.isArray(layer.BoundingBox) &&
+    h.isObject(layer) &&
+    h.isStringRange(layer.Name, 1) &&
+    h.isStringRange(layer.Title, 1) &&
+    h.isArray(layer.BoundingBox) &&
     layer.BoundingBox.length > 0
   );
 }
@@ -302,7 +300,7 @@ function isArray(layer) {
 }
 
 function urlTile(opt) {
-  var query = mx.helpers.objToParams({
+  let query = mx.helpers.objToParams({
     bbox: 'bbx_mapbox',
     service: 'WMS',
     version: '1.1.1',
@@ -324,7 +322,7 @@ function urlTile(opt) {
 }
 
 function urlLegend(opt) {
-  var query = mx.helpers.objToParams({
+  const query = mx.helpers.objToParams({
     service: 'WMS',
     version: '1.1.1',
     style: '',
@@ -346,7 +344,7 @@ function urlLegend(opt) {
  * @param {Array} opt.styles style list
  * @param {String} opt.url Service url
  */
-export function queryWms(opt) {
+export async function queryWms(opt) {
   const h = mx.helpers;
   const map = opt.map || h.getMap();
   const point = opt.point;
@@ -392,83 +390,89 @@ export function queryWms(opt) {
   /**
    * Return fetch promise
    */
-  return wmsGetCapabilities(url)
-    .then((cap) => {
-      /**
-      * Update formats using capabilities
-      */
-      const allowedFormatsInfo = ['application/json', 'application/geojson'];
-      const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
-      const layersAll = h.path(cap, 'Layer.Layer', []);
-      paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
-        return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
-      }, null);
-      paramsInfo.exception = h.path(cap, 'Exception', [])[1];
+  const cap = await wmsGetCapabilities(url);
 
-      /**
-      * Test if layer is queryable
-      */
-      const layersQueryable = layersAll.reduce((a, l) => {
-        const isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
-        if (isQueryable) {
-          a.push(l);
-        }
-        return a;
-      }, []);
+  /**
+   * Update formats using capabilities
+   */
+  const allowedFormatsInfo = ['application/json', 'application/geojson'];
+  const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
+  const layersAll = h.path(cap, 'Layer.Layer', []);
+  paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
+    return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
+  }, null);
+  paramsInfo.exception = h.path(cap, 'Exception', [])[1];
 
-      /**
-      * Validate
-      */
-      const validLayer = layersQueryable.length > 0;
-      const validInfo = h.isString(paramsInfo.info_format);
-      const validException = h.isString(paramsInfo.exception);
+  /**
+   * Test if layer is queryable
+   */
+  const layersQueryable = layersAll.reduce((a, l) => {
+    const isQueryable =
+      (layers.indexOf(l.Name) > -1 && l.queryable === true) ||
+      h.isArray(l.Layer)
+        ? l.Layer.reduce((a, ll) => {
+            return a ? a : ll.queryable;
+          }, false)
+        : false;
 
-      /**
-      * Fetch or stop here
-      */
-      
-      const request = `${url}?${h.objToParams(paramsInfo)}`;
-      if (validException && validLayer && validInfo) {
-        return fetch(request);
-      } else {
-        console.warn({
-          'Request not fetched': request,
-          'Valid exception format': validException,
-          'Valid (queryable) layer': validLayer,
-          'Valid info format': validInfo
-        });
-        throw new Error(
-          `Operation not permited by the requested server or layer`
-        );
-      }
-    })
-    .then((data) => data.json())
-    .then((res) => {
-      if (res.exceptions) {
-        console.warn(res.exceptions);
-        return props;
-      }
+    if (isQueryable) {
+      a.push(l);
+    }
+    return a;
+  }, []);
 
-      res.features.forEach((f) => {
-        if (modeObject) {
-          for (let p in f.properties) {
-            /*
-             * Aggregate by attribute
-             */
-            if (ignoreBbox && p !== 'bbox') {
-              let value = f.properties[p];
-              let values = props[p] || [];
-              values = values.concat(value);
-              props[p] = values;
-            }
-          }
-        } else {
-          /*
-           * Raw result
-           */
-          props.push(f.properties);
-        }
-      });
-      return props;
+  /**
+   * Validate
+   */
+  const validLayer = layersQueryable.length > 0;
+  const validInfo = h.isString(paramsInfo.info_format);
+  const validException = h.isString(paramsInfo.exception);
+
+  /**
+   * Fetch or stop here
+   */
+  const request = `${url}?${h.objToParams(paramsInfo)}`;
+
+  if (!validException || !validLayer || !validInfo) {
+    console.warn({
+      'Request not fetched': request,
+      'Valid exception format': validException,
+      'Valid (queryable) layer': validLayer,
+      'Valid info format': validInfo
     });
+    throw new Error(
+      `Operation not permited by the requested server or layer, check console for details`
+    );
+  }
+
+  const response = await fetch(request);
+
+  if (response.exceptions) {
+    console.warn(res.exceptions);
+    return props;
+  }
+
+  const data = await response.json();
+
+  data.features.forEach((f) => {
+    if (modeObject) {
+      for (let p in f.properties) {
+        /*
+         * Aggregate by attribute
+         */
+        if (ignoreBbox && p !== 'bbox') {
+          let value = f.properties[p];
+          let values = props[p] || [];
+          values = values.concat(value);
+          props[p] = values;
+        }
+      }
+    } else {
+      /*
+       * Raw result
+       */
+      props.push(f.properties);
+    }
+  });
+  return props;
 }

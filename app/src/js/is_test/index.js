@@ -88,6 +88,15 @@ export function isArrayOfViews(arr) {
 }
 
 /**
+ * Test if a raster view has wms url
+ * @param {Object} view
+ * @return {Boolean} valid
+ */
+export function isViewWms(view) {
+  return isViewRt(view) && isUrlValidWms(view.data.source.tiles[0]);
+}
+
+/**
  * Test if array of views id
  * @param {Array} arr Array of views id
  * @return {Boolean}
@@ -468,6 +477,19 @@ export function isUrl(url) {
       url
     )
   );
+}
+
+/**
+ * Check if it's expected url for wms end point.
+ * @param {String} url to test
+ * @return {Boolean} valid
+ */
+export function isUrlValidWms(url) {
+  url = url.toLowerCase();
+  const okUrl = isUrl(url);
+  const okHttps = /^https:\/\//i.test(url);
+  const okHasWmsString = /(wmsserver|wms)/i.test(url);
+  return okUrl && okHttps && okHasWmsString;
 }
 
 /**

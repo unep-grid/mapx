@@ -256,7 +256,7 @@ function buildToggle() {
       },
       (elLabelText = el('span', {
         class: 'vf-check-toggle-filter-text',
-        land_key: tgl.id
+        lang_key: tgl.id
       })),
       (elLabelCount = el('span', {
         class: 'vf-check-toggle-filter-count'

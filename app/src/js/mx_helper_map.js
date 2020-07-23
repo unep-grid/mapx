@@ -1190,6 +1190,7 @@ export function addSourceFromView(o) {
     o.map.addSource(idSource, o.view.data.source);
   }
 }
+
 /**
  * Get remote view from latest views table
  * @param {String} idView id of the view
@@ -1864,7 +1865,7 @@ export async function makeTransparencySlider(o) {
     tooltips: false
   });
 
-  slider.targetView = view;
+  slider._view = view;
 
   /*
    * Save the slider in the view
@@ -1877,7 +1878,7 @@ export async function makeTransparencySlider(o) {
   slider.on(
     'update',
     mx.helpers.debounce(function(n, h) {
-      const view = this.targetView;
+      const view = slider._view;
       const opacity = 1 - n[h] * 0.01;
       view._setOpacity({opacity: opacity});
     }, 10)
@@ -1892,6 +1893,7 @@ export async function makeTransparencySlider(o) {
 */
 export async function makeNumericSlider(o) {
   const view = o.view;
+  const h = mx.helpers;
   const el = document.querySelector(
     "[data-range_numeric_for='" + view.id + "']"
   );
@@ -1930,7 +1932,9 @@ export async function makeNumericSlider(o) {
       tooltips: false
     });
 
-    slider.targetView = view;
+    slider._view = view;
+    slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
+    slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
 
     /*
      * Save the slider in the view
@@ -1942,12 +1946,11 @@ export async function makeNumericSlider(o) {
      */
     slider.on(
       'update',
-      mx.helpers.debounce(function(n) {
-        const view = this.targetView;
-        const elContainer = this.target.parentElement;
-        const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-        const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-        const k = view.data.attribute.name;
+      h.debounce((n) => {
+        const view = slider._view;
+        const elDMin = slider._elDMin;
+        const elDMax = slider._elDMax;
+        const k = h.path(view, 'data.attribute.name', '');
 
         /* Update text values*/
         if (n[0]) {
@@ -2097,6 +2100,7 @@ export async function makeDashboard(o) {
  * Create and listen to time sliders
  */
 export async function makeTimeSlider(o) {
+  const h = mx.helpers;
   const k = {};
   k.t0 = 'mx_t0';
   k.t1 = 'mx_t1';
@@ -2113,6 +2117,10 @@ export async function makeTimeSlider(o) {
     oldSlider.destroy();
   }
 
+  const summary = await h.getViewSourceSummary(view);
+  const extent = h.path(summary, 'extent_time', {});
+  const attributes = h.path(summary, 'attributes', []);
+
   /*
    * Create a time slider for each time enabled view
    */
@@ -2125,16 +2133,14 @@ export async function makeTimeSlider(o) {
     return Math.round(x);
   };
 
-  if (view.data.period) {
-    const time = mx.helpers.path(view, 'data.period');
-    const prop = mx.helpers.path(view, 'data.attribute.names');
+  if (extent.min || extent.max) {
     const start = [];
 
-    if (time.extent.min && time.extent.max) {
-      const hasT0 = prop.indexOf(k.t0) > -1;
-      const hasT1 = prop.indexOf(k.t1) > -1;
-      let min = time.extent.min * 1000;
-      let max = time.extent.max * 1000;
+    if (extent.min && extent.max) {
+      const hasT0 = attributes.indexOf(k.t0) > -1;
+      const hasT1 = attributes.indexOf(k.t1) > -1;
+      let min = extent.min * 1000;
+      let max = extent.max * 1000;
 
       if (min === max) {
         min = min - 1;
@@ -2149,7 +2155,7 @@ export async function makeTimeSlider(o) {
       start.push(min);
       start.push(max);
 
-      const module = await mx.helpers.moduleLoad('nouislider');
+      const module = await h.moduleLoad('nouislider');
       const noUiSlider = module[0].default;
 
       const slider = noUiSlider.create(el, {
@@ -2168,34 +2174,23 @@ export async function makeTimeSlider(o) {
       /**
        * Save slider in the view and view ref in target
        */
-      slider.targetView = view;
+      slider._view = view;
+      slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
+      slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
       view._interactive.timeSlider = slider;
 
-      /*
-       * create distribution plot in time slider
-       */
-      /* NOTE: removed chart. Removed dependencies to chartist
-
-        /*
-         * 
-         */
       slider.on(
         'update',
-        mx.helpers.debounce(function(t) {
-          const view = this.targetView;
-          const elContainer = this.target.parentElement;
-          const elDMax = elContainer.querySelector('.mx-slider-dyn-max');
-          const elDMin = elContainer.querySelector('.mx-slider-dyn-min');
-
-          /* save current time value */
-          //ime.extent.set = t;
-
+        h.debounce((t) => {
+          const view = slider._view;
+          const elDMax = slider._elDMax;
+          const elDMin = slider._elDMin;
           /* Update text values*/
           if (t[0]) {
-            elDMin.innerHTML = mx.helpers.date(t[0]);
+            elDMin.innerHTML = h.date(t[0]);
           }
           if (t[1]) {
-            elDMax.innerHTML = ' – ' + mx.helpers.date(t[1]);
+            elDMax.innerHTML = ' – ' + h.date(t[1]);
           }
 
           const filter = ['any'];
@@ -2216,7 +2211,7 @@ export async function makeTimeSlider(o) {
             filter: filter,
             type: 'time_slider'
           });
-        }, 10)
+        }, 100)
       );
     }
   }
@@ -4361,7 +4356,8 @@ export async function makeSearchBox(o) {
   const s = await h.moduleLoad('selectize');
   const table = h.path(view, 'data.attribute.table');
   const attr = h.path(view, 'data.attribute.name');
-  const choices = [];
+  const summary = await h.getViewSourceSummary(view);
+  const choices = summaryToChoices(summary);
 
   const searchBox = $(el)
     .selectize({
@@ -4375,11 +4371,6 @@ export async function makeSearchBox(o) {
       onChange: selectOnChange
     })
     .data().selectize;
-  
-  /**
-  * Async choices
-  */
-  updateChoices();
 
   /**
    * Save selectr object in the view
@@ -4402,20 +4393,13 @@ export async function makeSearchBox(o) {
     });
   }
 
-  function updateChoices() {
-    h.getSourceSummary({
-      idView: view.id
-    }).then((s) => {
-      const table = h.path(s, 'attribute_stat.table', []);
-      const data = table.map((r) => {
-        return {
-          value: r.value,
-          label: `${r.value} (${r.count})`
-        };
-      });
-      console.log(data);
-      searchBox.addOption(data);
-      searchBox.refreshOptions();
+  function summaryToChoices(summary) {
+    const table = h.path(summary, 'attribute_stat.table', []);
+    return table.map((r) => {
+      return {
+        value: r.value,
+        label: `${r.value} (${r.count})`
+      };
     });
   }
 }
@@ -4510,13 +4494,19 @@ export function addLayer(o) {
 
 /**
  * Fly to view id using geometry extent
- * @param {object} o options
- * @param {string} o.id map id
- * @param {string} o.idView view id
+ * @param {Object|String} o options or idView
+ * @param {String} o.idView view id
  */
-export function zoomToViewId(o) {
+export async function zoomToViewId(o) {
   const h = mx.helpers;
-  const map = h.getMap(o.id);
+  const map = h.getMap();
+
+  if (h.isViewId(o)) {
+    o = {
+      idView: o
+    };
+  }
+
   const isArray = h.isArray(o.idView);
   o.idView = isArray ? o.idView[0] : o.idView;
   o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
@@ -4526,7 +4516,8 @@ export function zoomToViewId(o) {
     return;
   }
 
-  const extent = h.path(view, 'data.geometry.extent');
+  const sum = await h.getViewSourceSummary(view);
+  const extent = h.path(sum, 'extent_sp', null);
 
   if (!extent) {
     return;
@@ -4545,50 +4536,47 @@ export function zoomToViewId(o) {
  * @param {Array} views Array of views
  * @return {Object} MapBox gl bounds object
  */
-export function getViewsBounds(views) {
-  return new Promise(function(resolve) {
-    const h = mx.helpers;
-    let bounds;
-    views = views.constructor === Array ? views : [views];
-    let set = false;
-    const def = {
+export async function getViewsBounds(views) {
+  const h = mx.helpers;
+  let bounds;
+  views = views.constructor === Array ? views : [views];
+  let set = false;
+  const def = {
+    lat1: 80,
+    lat2: -80,
+    lng1: 180,
+    lng2: -180
+  };
+
+  let extents = await Promise.all(views.map(h.getViewSourceSummary));
+
+  let extent = extents.reduce(
+    (a, ext) => {
+      if (ext) {
+        set = true;
+        a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
+        a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
+        a.lng1 = ext.lng1 < a.lng1 ? ext.lng1 : a.lng1;
+        a.lng2 = ext.lng2 > a.lng2 ? ext.lng2 : a.lng2;
+      }
+      return a;
+    },
+    {
       lat1: 80,
       lat2: -80,
       lng1: 180,
       lng2: -180
-    };
-
-    let extent = views.reduce(
-      (a, v) => {
-        const ext = h.path(v, 'data.geometry.extent');
-
-        if (ext) {
-          set = true;
-          a.lat1 = ext.lat1 < a.lat1 ? ext.lat1 : a.lat1;
-          a.lat2 = ext.lat2 > a.lat2 ? ext.lat2 : a.lat2;
-          a.lng1 = ext.lng1 < a.lng1 ? ext.lng1 : a.lng1;
-          a.lng2 = ext.lng2 > a.lng2 ? ext.lng2 : a.lng2;
-        }
-        return a;
-      },
-      {
-        lat1: 80,
-        lat2: -80,
-        lng1: 180,
-        lng2: -180
-      }
-    );
-
-    if (!set) {
-      extent = def;
     }
-    bounds = new mx.mapboxgl.LngLatBounds(
-      [extent.lng1, extent.lat1],
-      [extent.lng2, extent.lat2]
-    );
+  );
 
-    resolve(bounds);
-  });
+  if (!set) {
+    extent = def;
+  }
+
+  return new mx.mapboxgl.LngLatBounds(
+    [extent.lng1, extent.lat1],
+    [extent.lng2, extent.lat2]
+  );
 }
 
 /**
