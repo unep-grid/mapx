@@ -168,7 +168,7 @@ export function getApiUrl(id) {
   }
   const urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
-  return urlBase + s.api.routes[id];
+  return urlBase + ( s.api.routes[id] || id );
 }
 
 /**
