@@ -84,9 +84,6 @@ export class Testing {
   check(title, opt) {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
-    if (opt.ignore) {
-      return;
-    }
     if (!t._is_in_opt_set('titles', title)) {
       return;
     }
