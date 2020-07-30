@@ -1,5 +1,5 @@
 {{ var h = mx.helpers ; }}
-{{ var rules = h.path(it,'data.style._rulesCopy') || h.path(it,'data.style.rules');  }}
+{{ var rules = h.path(it,'_rulesCopy') || h.path(it,'data.style.rules');  }}
 {{?rules}}
 {{ var titleLegend = h.getLabelFromObjectPath({obj: it,path: 'data.style.titleLegend'}); }}
 {{ var nRules = rules.length; }}
@@ -34,7 +34,7 @@
              width:{{=item.size}}px;
              height:{{=item.size}}px;
                {{?!hasSprite}}
-                 border-radius:100%;
+                 border-radius:50%;
                {{?}}
                {{?hasSprite }}
                  -webkit-mask-image: {{=item.sprite}};

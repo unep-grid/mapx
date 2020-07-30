@@ -3885,7 +3885,7 @@ export function viewLayersAddVt(o) {
         /*
          * Add legend using template
          */
-        view.data.style._rulesCopy = rules;
+        view._rulesCopy = rules;
         elLegend.innerHTML = mx.templates.viewListLegend(view);
       }
 

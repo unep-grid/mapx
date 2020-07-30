@@ -5,15 +5,14 @@
 reactLayerMaskSummary <- reactive({
 
   out <- list()
-  out$list <- list()
 
   useMask <- input$checkAddMaskLayer
   layerMaskName <- input$selectSourceLayerMask
   isLayerOk <- isTRUE(layerMaskName %in% reactListReadSources())
 
   if(useMask && isLayerOk){
-    out$list$layerMaskName <- layerMaskName
-    out$list$useMask <- useMask
+    out$layerMaskName <- layerMaskName
+    out$useMask <- useMask
   }
 
   return(out)
@@ -29,7 +28,6 @@ reactLayerSummary <- reactive({
   layerName <- input$selectSourceLayerMain
   geomType <- input$selectSourceLayerMainGeom
   variableName <- input$selectSourceLayerMainVariable
-  language <- reactData$language
 
   hasVariable <- !noDataCheck(variableName)
   hasLayer <- !noDataCheck(layerName)
@@ -52,10 +50,8 @@ reactLayerSummary <- reactive({
       #
       out <- mxDbGetLayerSummary(
         layer = layerName,
-        variable = variableName,
-        geomType = geomType,
-        language = language
-        )
+        variable = variableName
+      )
     }
   }
 

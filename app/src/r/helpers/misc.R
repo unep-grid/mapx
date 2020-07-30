@@ -1949,56 +1949,56 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
   # update meta data
   #
   update <- function(){
-    viewData <- .get(view,c("data"))
+    
     layerName <- .get(sourceData,c("layerName"))
+    viewData <- .get(view,c("data"))
     meta <- mxDbGetLayerMeta(layerName)
 
-    viewData <- .set(viewData,c("geometry"),list(
-        type = .get(sourceData,c("geomType")),
-        centroid = .get(sourceData,c("centroid")),
-        extent = .get(sourceData,c("extent"))
-        ))
-
-    viewTable <- .get(sourceData,c("table"))
-
-    attributes <- list(
+    #
+    # Source info
+    #
+    sourceInfo <- list(
+      type = "vector",
+      attribution = as.character(
+        tags$a(
+          href = .get(meta,c("origin","homepage","url")),
+          .get(meta,c("text","title","en"))
+        )
+        ),
+      layerInfo = list(
+        name =  .get(sourceData,c("layerName")),
+        maskName = .get(sourceDataMask,c("layerMaskName"))
+      )
+    ) 
+    #
+    # Attributes info
+    #
+    attributesInfo <- list(
       name = .get(sourceData,c("variableName")),
-      names = unique(c(
-          .get(sourceData,c("timeVariables")),
+      type = .get(sourceData,c("variableType")),
+      names = unique(
+        c(
           .get(sourceData,c("variableName")),
           additionalAttributes
-          )),
-      type = .get(sourceData,c("type")),
-      table = .get(sourceData,c("table")),
-      sample = sourceData[[c("sampleData")]],
-      min = min(viewTable[,"value"],na.rm=T),
-      max = max(viewTable[,"value"],na.rm=T),
-      rows = .get(sourceData,c("numberOfRow")),
-      nulls =  .get(sourceData,c("numberOfNull")),
-      distincts = .get(sourceData,c("numberOfDistinct"))
+        )
       )
-
-    viewData <- .set(viewData, c("attribute"), attributes )
-
-    viewData <- .set(viewData,c("period"),list(
-        extent = .get(sourceData,c("timeExtent")),
-        density = .get(sourceData,c("timeDensity")) 
-        ))
-
-    viewData <- .set(viewData,c("source"),list(
-        type = "vector",
-        attribution = as.character(tags$a(
-            href = .get(meta,c("origin","homepage","url")),
-            .get(meta,c("text","title","en"))
-            )),
-        layerInfo = list(
-          name =  .get(sourceData,c("layerName")),
-          maskName = .get(sourceDataMask,c("layerMaskName"))
-          )
-        ))
+    )
+    #
+    # Geom info
+    #
+    geomInfo <- list(
+      type = .get(sourceData,c("geomType"))
+    )
 
     #
-    #set style default
+    # Update view data
+    #
+    viewData <- .set(viewData, c("attribute"), attributesInfo )
+    viewData <- .set(viewData,c("source"),sourceInfo)
+    viewData <- .set(viewData,c("geometry"),geomInfo )
+
+    #
+    # set style default
     #
     geomType <- .get(sourceData,c("geomType"))
     style <- .get(viewData,c("style"))
@@ -2007,7 +2007,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
       viewData <- .set(viewData,c("style"), list())
     }
 
-    if( geomType == "lines" ){
+    if( geomInfo$type == "lines" ){
       viewData <- .set(viewData,c("style","spriteEnable"), FALSE)
     }
 

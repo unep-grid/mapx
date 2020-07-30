@@ -163,14 +163,12 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
         #
         sourceData <- mxDbGetLayerSummary(
           layer = idSource, 
-          variable = view$variable,
-          language="en" 
-        )$list
+          variable = view$variable
+        )
 
         #
         # Update view object
         #
-
         viewUpdated <- mxUpdateDefViewVt(
           view = viewData,
           sourceData = sourceData
@@ -1547,243 +1545,44 @@ mxDbGetLayerGeomTypes <- function(table=NULL,geomColumn="geom"){
 
 }
 
-#' Get column summary
+#' Get layer attribute type
 #' @param table {character} Layer name
-#' @param column {character} Variable name
-mxDbGetColumnSummary <- function( table, column, geomColumn="geom", geomType=NULL ){
+#' @param attribute {character} Attribute name
+#' @export
+mxDbGetLayerAttributeJsonType <- function(table=NULL,attribute=NULL){
 
-  out <- list()
-
-  if(!tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table))){
-    errMsg <- "Error in mxDbGetColumnSummary : column " + column + " does not exist in source " + table +"."
-    tableViews <- mxDbGetViewsIdBySourceId(table)
-
-    tableViews <- tableViews[tableViews$variable == column,]
-
-    if(nrow(tableViews)>0){
-      errMsg <- errMsg + " View ids with faulty column = " + paste(tableViews$id,collapse="; ")
-    }
-    stop(errMsg)
-    return(out)
-  }
-
-  filter <- ""
-
-  if(!noDataCheck(geomType)){
-  filter = sprintf("WHERE ST_GeometryType(\"%1$s\") ~* '.*%2$s.*'",geomColumn,geomType)
-  }
-
-
-
-  qTable <- sprintf(
-    "SELECT count(\"%1$s\") AS count,\"%1$s\" AS value
-    FROM \"%2$s\"
-    %3$s
-    GROUP BY \"%1$s\"
+  q <- sprintf("
+    SELECT 
+    JSON_typeof(to_json(%1$s)) as type 
+    FROM %2$s limit 1
     "
-    , column
+    , attribute
     , table
-    , filter
-    )
+  )
 
+  res <- mxDbGetQuery(q)
 
-  # number of row
-  qCountRows <- sprintf(
-        "SELECT count(*) AS count
-        FROM %1$s 
-        %3$s"
-        , table
-        , column
-        , filter
-        )
-      
-    # number of distinct
-   qCountDistinct <- sprintf(
-        "SELECT COUNT(DISTINCT(\"%2$s\")) as count
-        FROM %1$s 
-        %3$s"
-        , table
-        , column
-        , filter
-        )
-
-    # number of null
-    qCountNull <-sprintf(
-        "SELECT count(*) as count 
-        FROM (SELECT * FROM %1$s WHERE \"%2$s\" IS NULL ) t2
-        %3$s"
-        , table
-        , column
-        , filter
-        )
- 
-  out <- list()
-
-  out$table <- mxDbGetQuery(qTable,stringAsFactors=T) 
-  out$numberOfRow <- mxDbGetQuery(qCountRows)$count
-  out$numberOfNull <- mxDbGetQuery(qCountNull)$count 
-  out$numberOfDistinct <- mxDbGetQuery(qCountDistinct)$count
-  out$type <- ifelse(is.numeric(out$table$value),"number","string")
-
- return(out)
+  return(res[[1]])
 
 }
-
-
-#' Get layer time column
-#' @param layer Layer name to analyze
-#' @export 
-mxDbGetLayerTimeVariables <- function(layer){
-
-  out = list()
-
-  varLayer = mxDbGetLayerColumnsNames(
-    table=layer
-    )
-
-  varTime <- config[[c("variables","time")]]
-
-  varTime <- varTime[ varTime %in% varLayer ]
-
-  return(varTime)
-
-}
-
-#' Get layer time extent using MapX time column
-#' @param layer Layer name to analyze
-#' @export 
-mxDbGetLayerTimeExtent <- function(layer){
-
-  out = list()
-
-  varTime <- mxDbGetLayerTimeVariables(layer)
-
-  if(length(varTime) > 0 ){
- 
-    if(length(varTime)==2){
-      t0 <- varTime[[1]]
-      t1 <- varTime[[2]]
-    }else{
-      t0 <-varTime[[1]]
-      t1 <-varTime[[1]]
-    }
-
-    q <- sprintf("
-      SELECT 
-      MIN(%1$s) as min,
-      MAX(%2$s) as max
-      FROM %3$s
-      WHERE %1$s > -9e10 AND %2$s > -9e10
-      "
-      , t0
-      , t1
-      , layer
-      )
-
-    res <- mxDbGetQuery(q)
-    out <- as.list(mxDbGetQuery(q))
-
-  }
-
-  return(out)
-}
-
-#' Get object count over time using MapX time column
-#' @param layer Layer name to analyze
-#' @export 
-mxDbGetLayerTimeDensity <- function(layer){
-
-  out = list()
-
-  varTime <- mxDbGetLayerTimeVariables(layer)
-
-  if(length(varTime) > 0 ){
-
-    q <- sprintf("
-      SELECT 
-      extract(year from to_timestamp(%2$s)) as year, count(*) as n 
-      FROM %1$s 
-      WHERE extract(year from to_timestamp(mx_t0)) IS NOT NULL AND mx_t0 > -9e10
-      GROUP by extract(year from to_timestamp(mx_t0)) 
-      ORDER BY extract(year from to_timestamp(mx_t0)) DESC
-      "
-      , layer
-      , varTime[[1]]
-      )
-
-    res <- mxDbGetQuery(q)
-    out <- as.list(mxDbGetQuery(q))
-
-  }
-
-  return(out)
-
-}
-
-
 
 #' Get source summary data
-#' @param layer {string} Table to query
-#' @param variable {string} Column of interest
-#' @param variables {string} Other columns names
-#' @param geomType {string} Geometry type
+#'
+#' ⚠️  NOTE: Layer summary is done on demand, from the api. This 
+#' method exist for historical reason and return only partial summary
+#' 
+#' @param layer {Character} Table to query
+#' @param variable {Character} Column
 #' @export
-mxDbGetLayerSummary <- function(layer=NULL,variable=NULL, geomType=NULL,language="en"){
+mxDbGetLayerSummary <- function(layer=NULL,variable=NULL){
 
-  if(is.null(geomType)){
+  summary = list(
+    layerName  = layer,
+    variableName = variable,
+    variableType = mxDbGetLayerAttributeJsonType(layer,variable),
     geomType = mxDbGetLayerGeomTypes(layer)[1,"geom_type"]
-  }
-
-  summary  <- mxDbGetColumnSummary(
-    table = layer,
-    column = variable,
-    geomColumn = "geom",
-    geomType = geomType
-    )
-
-  if(noDataCheck(summary)){
-    stop("No summary")
-  }
-
-  summary$timeVariables <- mxDbGetLayerTimeVariables(layer)
-  summary$timeExtent <- mxDbGetLayerTimeExtent(layer)
-  summary$timeDensity <- mxDbGetLayerTimeDensity(layer)
-  summary$extent <- mxDbGetLayerExtent(layer)
-  summary$centroid <- mxDbGetLayerCentroid(layer)
-  #summary$layerMeta <- mxDbGetLayerMeta(layer)
-  summary$layerName <- layer 
-  summary$variableName <- variable
-  #summary$variableNames <- variables
-  summary$geomType <- geomType
-  summary$sampleData <- head(summary$table$value,10)
-
-  class(summary) <- c(class(summary),"mxSourceSummary")
-
-  #
-  # ui
-  #
-  ui = list()
-
-  summaryHtml <- listToHtmlSimple(
-    list(
-      "source_sum_sample"=paste(summary$sampleData,collapse="; "),
-      "source_sum_n_distinct"=summary$numberOfDistinct,
-      "source_sum_n_row"=summary$numberOfRow,
-      "source_sum_n_null"=summary$numberOfNull,
-      "source_sum_variable_type"=summary$type,
-      "source_sum_geom_type"=d(summary$geomType,language,web=F),
-      "source_time_range"=summary$timeExtent
-      #"source_meta"=summary$layerMeta
-      ),
-    lang=language,
-    dict=.get(config,c('dict'))
-    )
-
-  list(
-    `list` = summary,
-    `html` = summaryHtml
-    )
-
+  )
+  return(summary)
 }
 
 

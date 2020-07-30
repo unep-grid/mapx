@@ -790,6 +790,13 @@ observeEvent(input$btnViewSave,{
       id="btnViewSave",
       disable = TRUE
       )
+
+    on.exit({
+      mxToggleButton(
+        id="btnViewSave",
+        disable = FALSE
+      )
+    })
     #
     # Retrieve view value
     #
@@ -855,8 +862,8 @@ observeEvent(input$btnViewSave,{
       #
       # Get reactive data source summary
       #
-      sourceData <- reactLayerSummary()$list
-      sourceDataMask <- reactLayerMaskSummary()$list
+      sourceData <- reactLayerSummary()
+      sourceDataMask <- reactLayerMaskSummary()
       additionalAttributes <- input$selectSourceLayerOtherVariables
       isPublishable <- "public" %in% readers
 
@@ -921,10 +928,7 @@ observeEvent(input$btnViewSave,{
       id = "modalViewEdit_txt",
       text = sprintf("Saved at %s",format(time,'%H:%M'))
       )
-    mxToggleButton(
-      id="btnViewSave",
-      disable = FALSE
-      )
+ 
       })
 })
 
