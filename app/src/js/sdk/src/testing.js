@@ -87,7 +87,10 @@ export class Testing {
     if (opt.ignore) {
       return;
     }
-    if (!t._is_in_groups(opt.group)) {
+    if (!t._is_in_opt_set('titles', title)) {
+      return;
+    }
+    if (!t._is_in_opt_set('groups', opt.group)) {
       return;
     }
 
@@ -249,12 +252,12 @@ export class Testing {
     };
   }
 
-  _is_in_groups(group) {
+  _is_in_opt_set(set, value) {
     let out = false;
-    if (this.opt.groups.length === 0) {
+    if (this.opt[set] !== undefined && this.opt[set].length === 0) {
       out = true;
-    } else if (group !== undefined) {
-      out = this.opt.groups.includes(group);
+    } else if (value !== undefined) {
+      out = this.opt[set].includes(value);
     }
     return out;
   }

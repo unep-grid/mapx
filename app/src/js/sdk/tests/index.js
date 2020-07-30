@@ -17,11 +17,13 @@ mapx.on('message', (message) => {
   }
 });
 
-const groups = (new window.URL(window.location.href)).searchParams.get('groups')
+const groups = (new window.URL(window.location.href)).searchParams.get('groups');
+const titles = (new window.URL(window.location.href)).searchParams.get('titles');
 const t = new mxsdk.Testing({
   container: elResults,
   title: 'mapx sdk test',
   groups: groups ? groups.split(',') : [],
+  titles:  titles ? titles.split(',') : [],
 });
 
 const ignoreGlobal = false;
