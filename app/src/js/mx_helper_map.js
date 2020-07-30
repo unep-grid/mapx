@@ -168,7 +168,7 @@ export function getApiUrl(id) {
   }
   const urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
-  return urlBase + ( s.api.routes[id] || id );
+  return urlBase + (s.api.routes[id] || id);
 }
 
 /**
@@ -1061,42 +1061,56 @@ export function getLocalForageData(o) {
  * @return null
  */
 export function geolocateUser() {
+  const h = mx.helpers;
   const lang = mx.settings.language;
   const hasGeolocator = !!navigator.geolocation;
 
   const o = {idMap: mx.settings.map.id};
-  const classesHtml = document.documentElement.classList;
-  classesHtml.add('shiny-busy');
   const map = getMap(o.idMap);
   const options = {
-    enableHighAccuracy: true,
-    timeout: 20000,
+    enableHighAccuracy: false,
+    timeout: 5000,
     maximumAge: 0
   };
 
+  if (hasGeolocator) {
+    h.setBusy(true);
+    navigator.geolocation.getCurrentPosition(success, error, options);
+  } else {
+    error({message: 'Browser not compatible'});
+  }
+
   function success(pos) {
-    classesHtml.remove('shiny-busy');
+    h.setBusy(false);
     const crd = pos.coords;
     map.flyTo({center: [crd.longitude, crd.latitude], zoom: 10});
   }
 
   function error(err) {
-    mx.helpers
-      .getDictItem(['error_cant_geolocate_msg', 'error_geolocate_issue'], lang)
-      .then((it) => {
-        classesHtml.remove('shiny-busy');
-        mx.helpers.modal({
-          id: 'geolocate_error',
-          title: it[1],
-          content: '<p> ' + it[0] + '</p> <p> ( ' + err.message + ' ) </p>'
-        });
+    h.getDictItem(
+      ['error_cant_geolocate_msg', 'error_geolocate_issue'],
+      lang
+    ).then((it) => {
+      h.setBusy(false);
+      h.modal({
+        id: 'geolocate_error',
+        title: it[1],
+        content: '<p> ' + it[0] + '</p> <p> ( ' + err.message + ' ) </p>'
       });
+    });
   }
+}
 
-  if (hasGeolocator) {
-    navigator.geolocation.getCurrentPosition(success, error, options);
+/**
+ * Set app busy mode
+ * @param {Boolean} enable
+ */
+export function setBusy(enable) {
+  const classesHtml = document.documentElement.classList;
+  if (enable === true) {
+    classesHtml.add('shiny-busy');
   } else {
-    error({message: 'Browser not compatible'});
+    classesHtml.remove('shiny-busy');
   }
 }
 
@@ -4267,18 +4281,13 @@ export function getLayersPropertiesAtPoint(opt) {
   function fetchRasterProp(view) {
     const url = h.path(view, 'data.source.tiles', [])[0].split('?');
     const endpoint = url[0];
-    const urlFull = endpoint + '?' + url[1];
+    const urlFull = `${endpoint}?${url[1]}`;
     const params = h.getQueryParametersAsObject(urlFull, {lowerCase: true});
     const out = modeObject ? {} : [];
     /**
      * Check if this is a WMS valid param object
      */
-    const isWms =
-      h.isObject(params) &&
-      h.isArray(params.layers) &&
-      h.isArray(params.service) &&
-      (params.service.indexOf('WMS') > -1 ||
-        params.service.indexOf('wms') > -1);
+    const isWms = h.isUrlValidWms(urlFull, {layers: true, styles: true});
 
     if (isWms) {
       return h.queryWms({
@@ -4516,19 +4525,24 @@ export async function zoomToViewId(o) {
     return;
   }
 
-  const sum = await h.getViewSourceSummary(view);
-  const extent = h.path(sum, 'extent_sp', null);
-
-  if (!extent) {
-    return;
+  try {
+    h.setBusy(true);
+    const sum = await h.getViewSourceSummary(view);
+    const extent = h.path(sum, 'extent_sp', null);
+    if (!extent) {
+      return;
+    }
+    const llb = new mx.mapboxgl.LngLatBounds(
+      [extent.lng1, extent.lat1],
+      [extent.lng2, extent.lat2]
+    );
+    map.fitBounds(llb);
+  } catch (e) {
+    h.setBusy(false);
+    throw new Error(e);
   }
 
-  const llb = new mx.mapboxgl.LngLatBounds(
-    [extent.lng1, extent.lat1],
-    [extent.lng2, extent.lat2]
-  );
-
-  map.fitBounds(llb);
+  h.setBusy(false);
 }
 
 /**

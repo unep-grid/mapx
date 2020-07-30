@@ -1,20 +1,6 @@
 /*jshint esversion: 6 , node: true */ //'use strict';
 
 /**
- * Clean / remove service worker
- */
-export function removeServiceWorker() {
-  if (navigator.serviceWorker) {
-    caches.keys().then((k) => k.forEach((i) => caches.delete(i)));
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-      }
-    });
-  }
-}
-
-/**
  * Retrieve nested item from object/array
  * @param {Object|Array} obj
  * @param {String} path dot separated

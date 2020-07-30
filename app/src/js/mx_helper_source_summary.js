@@ -57,23 +57,39 @@ export async function getSourceRtSummary(view) {
   }
 
   const url = h.path(view, 'data.source.tiles', []);
-  const urlQuery = url[0].toLowerCase();
+  const urlQuery = url[0];
   const q = h.getQueryParametersAsObject(urlQuery);
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
 
   const layers = await h.wmsGetLayers(endpoint);
 
-  const layer = layers.find(
-    (l) =>
-      l.Name === layerName ||
-      ( l.Name.split(':')[1] ? l.Name.split(':')[1].toLowerCase() === layerName.toLowerCase() : false )||
-      l.Title === layerName
-  );
+  const layer = layers.find((l) => {
+    const nameMatch = h.isString(l.Name) && l.Name === layerName;
+    if (nameMatch) {
+      return true;
+    }
+    /**
+     * Match layer name to.. title ?
+     */
+    const titleMatch = l.Title === layerName;
+    if (titleMatch) {
+      return true;
+    }
+    /**
+     * Match layer name to.. composite name ?
+     */
+    const nameComposite = l.Name.split(':');
+    if (nameComposite[1]) {
+      return nameComposite[1] === layerName;
+    }
+  });
 
   if (layer && layer.BoundingBox) {
-    const bbx = layer.BoundingBox.find((b) => b.crs === 'EPSG:4326');
-    if (bbx && bbx.extent) {
+    const bbx = layer.BoundingBox.find(
+      (b) => b.crs === 'EPSG:4326' || b.crs === 'CRS:84'
+    );
+    if (bbx && bbx.extent && bbx.crs === 'EPSG:4326') {
       out.extent_sp = {
         lat1: bbx.extent[2],
         lng1: bbx.extent[1],
@@ -81,6 +97,17 @@ export async function getSourceRtSummary(view) {
         lng2: bbx.extent[3]
       };
     }
+
+    if (bbx && bbx.extent && bbx.crs === 'CRS:84') {
+      out.extent_sp = {
+        lat1: bbx.extent[1],
+        lng1: bbx.extent[2],
+        lat2: bbx.extent[3],
+        lng2: bbx.extent[0]
+      };
+    }
+  } else {
+    console.warn('Layer do not have valid bounding box', layer);
   }
 
   return out;

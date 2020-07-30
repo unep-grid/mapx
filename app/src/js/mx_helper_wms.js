@@ -1,3 +1,4 @@
+import {cacheSet, cacheGet} from './minicache';
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -128,7 +129,7 @@ async function wmsBuildQueryUi(opt) {
       onChange: checkDisableBtnUpdate,
       valueField: 'Name',
       labelField: 'Title',
-      searchField: ['Name', 'Title','Abstract'],
+      searchField: ['Name', 'Title', 'Abstract'],
       render: {
         item: function(item, escape) {
           return (
@@ -139,7 +140,7 @@ async function wmsBuildQueryUi(opt) {
             (item.Name
               ? '<span class="item-desc">' + escape(item.Name) + '</span>'
               : '') +
-           (item.Abstract
+            (item.Abstract
               ? '<span class="item-desc">' + escape(item.Abstract) + '</span>'
               : '') +
             '</div>'
@@ -248,22 +249,34 @@ async function wmsGetCapabilities(baseUrl) {
   const h = mx.helpers;
   const def = {};
   const url = baseUrl + '?service=WMS&request=GetCapabilities';
-
+  let data = {};
   if (!h.isUrlValidWms(url)) {
     return def;
   }
 
   const WMSCapabilities = await h.moduleLoad('wms-capabilities');
-  const xmlString = await h.fetchProgress_xhr(url, {
-    maxSize: mx.settings.maxByteFetch
-  });
-  const data = new WMSCapabilities(xmlString).toJSON();
+
+  data = await cacheGet(url);
+
+  if(!data){
+    const xmlString = await h.fetchProgress_xhr(url, {
+      maxSize: mx.settings.maxByteFetch,
+      timeout: 2e4
+    });
+
+    data = new WMSCapabilities(xmlString).toJSON();
+    cacheSet(url,data, {ttl:1000 * 60 * 60 * 24 * 2});
+  }else{
+    console.log('Get from cache');
+  }
+
 
   return h.path(data, 'Capability', {});
 }
 
 async function wmsGetLayers(baseUrl) {
   const layers = [];
+
   const capability = await wmsGetCapabilities(baseUrl);
 
   if (!capability || !capability.Layer || !capability.Layer.Layer) {
@@ -273,7 +286,6 @@ async function wmsGetLayers(baseUrl) {
   layerFinder(capability.Layer, layers);
   return layers;
 }
-
 
 function layerFinder(layer, arr) {
   if (isWmsLayer(layer)) {
@@ -407,13 +419,14 @@ export async function queryWms(opt) {
    * Test if layer is queryable
    */
   const layersQueryable = layersAll.reduce((a, l) => {
-    const isQueryable =
-      (layers.indexOf(l.Name) > -1 && l.queryable === true) ||
-      h.isArray(l.Layer)
-        ? l.Layer.reduce((a, ll) => {
-            return a ? a : ll.queryable;
-          }, false)
-        : false;
+    let isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
+
+    if (!isQueryable && h.isArray(l.Layer)) {
+      isLayerQueryable = l.Layer.reduce(
+        (a, ll) => (a ? a : ll.queryable),
+        false
+      );
+    }
 
     if (isQueryable) {
       a.push(l);

@@ -482,14 +482,28 @@ export function isUrl(url) {
 /**
  * Check if it's expected url for wms end point.
  * @param {String} url to test
+ * @param {Object} opt options
+ * @param {Boolean} opt.layers Should the url contains layers param ?
  * @return {Boolean} valid
  */
-export function isUrlValidWms(url) {
-  url = url.toLowerCase();
+export function isUrlValidWms(url, opt) {
+  opt = Object.assign({}, {layers: false}, opt);
   const okUrl = isUrl(url);
-  const okHttps = /^https:\/\//i.test(url);
-  const okHasWmsString = /(wmsserver|wms)/i.test(url);
-  return okUrl && okHttps && okHasWmsString;
+  if (!okUrl) {
+    return false;
+  }
+  url = url.toLowerCase();
+
+  const u = new URL(url);
+  const okHttps = u.protocol === 'https:';
+  const service = u.searchParams.get('service');
+  const okWms =
+    isString(service) &&
+    !!service.match(/(wmsserver|wms)/i) &&
+    (opt.layers ? u.searchParams.has('layers') : true) &&
+    (opt.styles ? u.searchParams.has('styles') : true);
+
+  return okHttps && okWms;
 }
 
 /**

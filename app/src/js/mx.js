@@ -33,6 +33,9 @@ const data = {
   }),
   draw: localforage.createInstance({
     name: 'draw'
+  }),
+  cache: localforage.createInstance({
+    name: 'cache'
   })
 };
 const initQueryParams = {}; // set in init_common.js

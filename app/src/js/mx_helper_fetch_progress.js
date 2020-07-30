@@ -19,9 +19,15 @@ const defProgress = {
     throw new Error(e);
   },
   maxSize: Infinity,
+  timeout: 5e3,
   headerContentLength: 'content-length'
 };
 
+/**
+*  Fetch : wrapper around fetch + progress
+*  @param {String} url url to fetch
+*  @param {Object} opt options
+*/
 export function fetchProgress(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
@@ -30,7 +36,13 @@ export function fetchProgress(url, opt) {
   let loaded = 0;
   let total = 0;
 
-  return fetch(url, {cache: 'no-cache'}).then((response) => {
+  const promTimeout = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
+    }, opt.timeout);
+  });
+
+  const promFetch = fetch(url, {cache: 'no-cache'}).then((response) => {
     err = '';
     if (!response.ok) {
       err = response.status + ' ' + response.statusText;
@@ -62,6 +74,8 @@ export function fetchProgress(url, opt) {
     );
   });
 
+  return Promise.race([promFetch, promTimeout]);
+
   function read(reader, controller) {
     reader
       .read()
@@ -89,11 +103,22 @@ export function fetchProgress(url, opt) {
   }
 }
 
+/**
+*  Fetch : wrapper around XMLHttp request + progress + json
+*  @param {String} url url to fetch
+*  @param {Object} opt options
+*/
 export function fetchJsonProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
   let hasMapxContentLength = false;
 
-  return new Promise((resolve, reject) => {
+  const promTimeout = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
+    }, opt.timeout);
+  });
+  
+  const promFetch =  new Promise((resolve, reject) => {
     let xmlhttp = new XMLHttpRequest();
 
     xmlhttp.open('GET', url, true);
@@ -138,12 +163,26 @@ export function fetchJsonProgress_xhr(url, opt) {
       opt.onComplete();
     }
   });
+
+  return Promise.race([promFetch, promTimeout]);
 }
 
-export function fetchProgress_xhr(url, opt) {
+
+/**
+*  Fetch : wrapper around XMLHttp request + progress
+*  @param {String} url url to fetch
+*  @param {Object} opt options
+*/
+export async function fetchProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
-  return new Promise((resolve, reject) => {
+  const promTimeout = new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
+    }, opt.timeout);
+  });
+
+  const promFetch = new Promise((resolve, reject) => {
     let xmlhttp = new XMLHttpRequest();
     let hasContentLength = false;
 
@@ -167,7 +206,9 @@ export function fetchProgress_xhr(url, opt) {
       if (opt.maxSize < Infinity) {
         if (p.loaded >= opt.maxSize) {
           xmlhttp.abort();
-          reject(`fetchProgress_xhr : Size limit exceeded ( ${opt.maxSize} B )`);
+          reject(
+            `fetchProgress_xhr : Size limit exceeded ( ${opt.maxSize} B )`
+          );
         }
       }
       opt.onProgress(p);
@@ -192,4 +233,6 @@ export function fetchProgress_xhr(url, opt) {
       opt.onComplete();
     }
   });
+
+  return Promise.race([promFetch, promTimeout]);
 }

@@ -87,10 +87,12 @@ export function handleIssues(err) {
   }
 
   // jshint ignore:start
-  // map error, standard error, promise errors
+  // mapx error, standard error, map error, promise errors
   var msg =
-    err?.error?.message ||
+    err?.msg ||
     err?.message ||
+    err?.error?.message ||
+    err?.reason ||
     err?.reason?.message ||
     'Error undefined, check the console';
   var src = err?.sourceId;
