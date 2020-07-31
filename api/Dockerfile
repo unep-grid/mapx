@@ -1,4 +1,5 @@
-FROM fredmoser/alpine_node8.15.1_gdal2.4.0
+#FROM fredmoser/alpine_node8.15.1_gdal2.4.0
+FROM fredmoser/alpine_node12.18.3_gdal2.4.0
 #
 # Install node packages, copy files
 #
