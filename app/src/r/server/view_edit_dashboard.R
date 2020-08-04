@@ -114,13 +114,14 @@ observeEvent(input$dashboardEdit_init,{
             title = t("view_dashboard_txt_layout"),
             description = t("view_dashboard_txt_desc_layout"),
             type = "string",
-            enum = c('full','vertical','horizontal', 'fit'),
+            enum = c('fit','vertical','horizontal', 'full'),
+            default = 'fit' ,
             options = list(
               enum_titles = list(
-                t('view_dashboard_txt_layout_full'),
+                t('view_dashboard_txt_layout_fit'),
                 t('view_dashboard_txt_layout_vertical'),
                 t('view_dashboard_txt_layout_horizontal'),
-                t('view_dashboard_txt_layout_fit')
+                t('view_dashboard_txt_layout_full')
               )
             )
             ),
