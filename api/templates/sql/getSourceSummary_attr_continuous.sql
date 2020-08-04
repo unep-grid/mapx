@@ -2,33 +2,31 @@ WITH
 attr_max as (
   SELECT
   max("{{idAttr}}")
-FROM "{{idSource}}"
+  FROM "{{idSource}}"
 ),
 attr_min as (
   SELECT
   min("{{idAttr}}")
   FROM "{{idSource}}"
 ),
-attr_buckets as (
-  SELECT 
-  "{{idAttr}}",
-  ntile(100) 
-  OVER (
-    ORDER by "{{idAttr}}"
-  ) 
-  FROM  {{idSource}}
+serie as (
+  SELECT array_agg(gs) as v FROM  generate_series(0, 1, 0.01) as gs
 ),
 attr_percentile as (
-  SELECT 
-  ntile as percentile, 
-  max("{{idAttr}}") as value
-  FROM attr_buckets
-  group by 1 order by 1
+  SELECT
+  percentile_cont((select v from serie)) 
+  WITHIN GROUP (ORDER BY "{{idAttr}}") as p
+  FROM {{idSource}}
 ),
-attr_percentile_json as (
+attr_percentile_table as (
   SELECT 
-  json_agg(aperc) as table
-  FROM attr_percentile aperc
+  unnest(serie.v)*100 as percentile, 
+  unnest(ptable.p) as value
+  FROM attr_percentile ptable, serie
+),
+attr_percentile_table_json as (
+  SELECT json_agg(ptable) as table
+  FROM attr_percentile_table ptable
 )
 
 SELECT json_build_object(
@@ -43,5 +41,5 @@ SELECT json_build_object(
 FROM
 attr_max as amax, 
 attr_min as amin, 
-attr_percentile_json as aperc
+attr_percentile_table_json as aperc
 
