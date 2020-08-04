@@ -2858,6 +2858,7 @@ export function existsInList(li, it, val, inverse) {
 export async function viewLayersAdd(o) {
   const h = mx.helpers;
   const m = h.getMapData(o.id);
+  const proms = [];
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
@@ -2918,18 +2919,25 @@ export async function viewLayersAdd(o) {
   /**
    * Set/Reset filter
    */
-  await h.viewFiltersInit(view);
+  proms.push(h.viewFiltersInit(view));
+
+  /**
+   * Build options
+   */
+  proms.push(h.viewBuildOptions(view));
 
   /**
    * Init modules
    */
-  await h.viewModulesInit(view);
+  proms.push(h.viewModulesInit(view));
 
   /*
    * Add views layers
    *
    */
-  const out = await handler(idType);
+  proms.push(handler(idType));
+
+  const done = await Promise.all(proms);
 
   view._added_at = Date.now();
 
@@ -3956,6 +3964,25 @@ export function viewFiltersInit(idView) {
   view._setOpacity = h.viewSetOpacity;
 }
 
+export async function viewBuildOptions(id) {
+  const h = mx.helpers;
+  const view = h.getView(id);
+  if (!h.isView(view)) {
+    return;
+  }
+  const elView = h.getViewEl(view);
+  const hasViewEl = h.isElement(elView);
+  if (hasViewEl) {
+    const elOptions = elView.querySelector(
+      `[data-view_options_for='${view.id}']`
+    );
+    if (elOptions) {
+      elOptions.innerHTML = mx.templates.viewListOptions(view);
+      return true;
+    }
+  }
+}
+
 /**
  * Add sliders and searchbox
  * @param {String|Object} id id or View to update
@@ -3971,36 +3998,25 @@ export async function viewModulesInit(id) {
   if (!view._interactive) {
     view._interactive = {};
   }
-
+  const proms = [];
   /**
    * Clean old modules
    */
   await h.viewModulesRemove(view);
 
   /**
-   * View list options related modules
+   * Add interactive module
    */
-  const elView = h.getViewEl(view);
-  const hasViewEl = h.isElement(elView);
-  if (hasViewEl) {
-    const elOptions = elView.querySelector(
-      "[data-view_options_for='" + idView + "']"
-    );
-    if (elOptions) {
-      elOptions.innerHTML = mx.templates.viewListOptions(view);
-      /**
-       * Add interactive module
-       */
-      await h.makeTimeSlider({view: view, idMap: idMap});
-      await h.makeNumericSlider({view: view, idMap: idMap});
-      await h.makeTransparencySlider({view: view, idMap: idMap});
-      await h.makeSearchBox({view: view, idMap: idMap});
-    }
-  }
+  proms.push(h.makeTimeSlider({view: view, idMap: idMap}));
+  proms.push(h.makeNumericSlider({view: view, idMap: idMap}));
+  proms.push(h.makeTransparencySlider({view: view, idMap: idMap}));
+  proms.push(h.makeSearchBox({view: view, idMap: idMap}));
   /**
    * Non view list related modules
    */
-  await h.makeDashboard({view: view});
+  proms.push(h.makeDashboard({view: view}));
+
+  return Promise.all(proms);
 }
 
 /**
