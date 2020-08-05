@@ -149,12 +149,14 @@ function addSourceHandler(req, res) {
       return isLayerValid(idSource,false);
     })
     .then((layerTest) => {
+       
       isValid = layerTest.valid;
 
       /**
        * Final step : send a message
        */
       cleanFile(fileToRemove, res);
+
       if (!isValid) {
         res.write(
           toRes({
@@ -223,8 +225,8 @@ function addSourceHandler(req, res) {
  * If importeed file exists, remove it
  */
 function cleanFile(fileToRemove, res) {
-  if (fs.exists(fileToRemove)) {
-    fs.unlink(fileToRemove);
+  if (fs.existsSync(fileToRemove)) {
+    fs.unlinkSync(fileToRemove);
   }
   res.write(
     toRes({
