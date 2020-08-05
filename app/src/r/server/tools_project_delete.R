@@ -9,7 +9,7 @@ observeEvent(input$btnShowProjectDelete,{
   isProjectDefault <- isTRUE(idProject == config[[c("project","default")]])
 
   if( isAdmin && !isProjectDefault ){
-    
+
     projectData <- mxDbGetProjectData(idProject)
     projectTitle <- .get(projectData,c("title",language))
     if(noDataCheck(projectTitle)){
@@ -27,12 +27,12 @@ observeEvent(input$btnShowProjectDelete,{
         label = d("project_delete_confirm_title",language,web=F),
         ),
       uiOutput("uiProjectDeleteValidation")
-      )
+    )
 
     btnDelete <- actionButton(
       "btnDeleteProject",
       d("btn_delete",language,web=F)
-      )
+    )
 
     mxModal(
       id = "deleteProject",
@@ -40,7 +40,7 @@ observeEvent(input$btnShowProjectDelete,{
       content = ui,
       textCloseButton = d("btn_cancel",language,web=F),
       buttons = list(btnDelete)
-      )
+    )
   }
 
 })
@@ -68,16 +68,16 @@ observeEvent(input$txtProjectConfirmName,{
     id = "btnDeleteProject",
     hide = FALSE,
     disable = hasError
-    )
+  )
 
   output$uiProjectDeleteValidation <- renderUI(
     mxErrorsToUi(
       errors = errors,
       warning = warning,
       language = language
-      )
     )
- 
+  )
+
   reactData$projectDeleteHasError <- hasError
 
 })
@@ -99,11 +99,19 @@ observeEvent(input$btnDeleteProject,{
       content = d("project_delete_analyze",language),
       buttons = list(),
       removeCloseButton = TRUE
-      )
+    )
 
-    sourcesToRemove <- mxDbGetQuery("Select id from mx_sources where project = '" + project + "'")$id
-    viewsProject <- mxDbGetQuery("Select distinct id from mx_views where project = '" + project + "'")$id
-    
+    sourcesToRemove <- mxDbGetQuery("
+      SELECT id 
+      FROM mx_sources
+      WHERE project = '" + project + "'"
+      )$id
+    viewsProject <- mxDbGetQuery("
+      SELECT distinct id
+      FROM mx_views_latest 
+      WHERE project = '" + project + "'"
+      )$id
+
     viewsToRemove <- c()
     #
     # Remove remaining views
@@ -119,18 +127,24 @@ observeEvent(input$btnDeleteProject,{
     reactData$projectDeleteViews <- viewsToRemove
     reactData$projectDeleteSources <- sourcesToRemove
 
-    })
+  })
 
 
   ui <- tags$ul(
-     tags$li(tags$b(d("project_delete_number_of_sources",language)),':',tags$span(length(sourcesToRemove))),
-     tags$li(tags$b(d("project_delete_number_of_views",language)),':',tags$span(length(viewsToRemove)))
-    )
+    tags$li(
+      tags$b(d("project_delete_number_of_sources",language))
+      ,':',
+      tags$span(length(sourcesToRemove))),
+    tags$li(
+      tags$b(d("project_delete_number_of_views",language))
+      ,':',
+      tags$span(length(viewsToRemove)))
+  )
 
   btnDelete <- actionButton(
     "btnDeleteProjectConfirm",
     d("btn_confirm",language,web=F)
-    )
+  )
 
   mxModal(
     id = "deleteProject",
@@ -138,13 +152,13 @@ observeEvent(input$btnDeleteProject,{
     content = ui,
     textCloseButton = d("btn_cancel",language,web=F),
     buttons = list(btnDelete)
-    )
+  )
 
 })
 
 
 observeEvent(input$btnDeleteProjectConfirm,{
-  
+
   if(reactData$projectDeleteHasError) return()
 
   views <-  unique(reactData$projectDeleteViews)
@@ -188,7 +202,7 @@ observeEvent(input$btnDeleteProjectConfirm,{
   mxSetCookie(
     #deleteAll = TRUE,
     reloadPage = TRUE
-    )
+  )
 
 
 })
