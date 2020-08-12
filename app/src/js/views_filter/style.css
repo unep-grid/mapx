@@ -1,4 +1,4 @@
-.vf-check-toggle-group {
+.vf-checkbox-group {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -9,17 +9,17 @@
   margin-bottom: 10px;
 }
 
-.vf-check-toggle-group-title {
+.vf-checkbox-group-title {
   opacity: 0.5;
   font-size: 0.8em;
   padding-left: 5px;
 }
 
-.vf-check-toggle {
+.vf-checkbox {
   display: flex;
 }
 
-.vf-check-toggle .vf-check-toggle-label {
+.vf-checkbox .vf-checkbox-label {
   font-weight: normal;
   cursor: pointer;
   display: flex;
@@ -27,7 +27,7 @@
   margin-left: 6px;
 }
 
-.vf-check-toggle .vf-check-toggle-filter-text {
+.vf-checkbox .vf-checkbox-filter-text {
   font-weight: normal;
   text-overflow: ellipsis;
   max-width: 100px;
@@ -37,7 +37,7 @@
   font-size: 0.85em;
 }
 
-.vf-check-toggle .vf-check-toggle-filter-count {
+.vf-checkbox .vf-checkbox-filter-count {
   font-size: 0.9em;
   margin-left: 1px;
   margin-right: 10px;
@@ -49,19 +49,19 @@
   text-align: right;
 }
 
-.vf-check-toggle .vf-check-toggle-filter-count.updating {
+.vf-checkbox .vf-checkbox-filter-count.updating {
   transform: rotateX(90deg);
 }
-.vf-check-toggle .vf-check-toggle-filter-count:after {
+.vf-checkbox .vf-checkbox-filter-count:after {
   content: attr(data-count);
 }
-.vf-check-toggle-input.disabled ~ .vf-check-toggle-label {
+.vf-checkbox-input.disabled ~ .vf-checkbox-label {
   opacity: 0.5;
   pointer-events: none;
   cursor: not-allowed;
 }
 
-.vf-check-toggle-empty {
+.vf-checkbox-empty {
   opacity: 0.5;
   font-size: 0.9em;
   cursor: not-allowed;

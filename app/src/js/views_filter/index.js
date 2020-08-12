@@ -3,7 +3,7 @@ import {
   getArrayStat,
   getArrayIntersect
 } from '../array_stat/index.js';
-import {Toggle} from './components/toggle.js';
+import {Checkbox} from './components/checkbox.js';
 import {Switch} from './../switch/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
@@ -40,13 +40,13 @@ class ViewsFilter {
     const vf = this;
     vf.removeRules();
     vf.updateViewsComponents();
-    vf.updateToggles();
+    vf.updateCheckboxes();
   }
 
   initStorage(views) {
     const vf = this;
     vf._views = views || opt.views;
-    vf._toggles = [];
+    vf._checkboxes = [];
     vf._rules = [];
     vf._previousState = [];
   }
@@ -65,7 +65,7 @@ class ViewsFilter {
     vf._lStore.addListener({
       target: vf.opt.elFilterTags,
       type: ['click'],
-      callback: handleFilterViewIdByToggle,
+      callback: handleFilterViewIdByCheckbox,
       group: 'view_filter',
       bind: vf
     });
@@ -225,19 +225,19 @@ class ViewsFilter {
     }
   }
 
-  addToggle(toggle, elParent) {
-    this._toggles.push(toggle);
+  addCheckbox(checkbox, elParent) {
+    this._checkboxes.push(checkbox);
     if (elParent) {
-      elParent.appendChild(toggle.el);
+      elParent.appendChild(checkbox.el);
     }
   }
 
-  getToggles() {
-    return this._toggles;
+  getCheckboxes() {
+    return this._checkboxes;
   }
 
-  getToggle(id, type) {
-    return this.getToggles().reduce(
+  getCheckbox(id, type) {
+    return this.getCheckboxes().reduce(
       (a, t) => (!a && t._id === id && t_type === type ? t : a),
       null
     );
@@ -261,22 +261,22 @@ class ViewsFilter {
 
     opt.rules.forEach((r) => {
       if (r.type === 'view_collections' || r.type === 'view_components') {
-        vf.updateToggleState(r);
+        vf.updateCheckboxState(r);
       }
       if (r.type === 'text') {
         vf.updateRuleByText(r, true);
       }
     });
 
-    vf.getToggles().forEach((t) => {
-      vf.updateRuleByToggle(t);
+    vf.getCheckboxes().forEach((t) => {
+      vf.updateRuleByCheckbox(t);
     });
 
     vf.setMode(opt.mode);
     vf.filter('filter_combined');
   }
 
-  updateToggleState(opt) {
+  updateCheckboxState(opt) {
     const vf = this;
     opt = Object.assign(
       {},
@@ -294,7 +294,7 @@ class ViewsFilter {
     /*
      * Enable or disable taggles
      */
-    vf.getToggles().forEach((t) => {
+    vf.getCheckboxes().forEach((t) => {
       const hasType = t._type === opt.type;
       if (!hasType) {
         return;
@@ -351,17 +351,17 @@ class ViewsFilter {
     });
   }
 
-  updateRuleByToggle(tgl) {
+  updateRuleByCheckbox(cbx) {
     const vf = this;
 
-    if (!(tgl instanceof Toggle)) {
+    if (!(cbx instanceof Checkbox)) {
       return;
     }
 
     const views = vf.getViews();
-    const type = tgl.getType();
-    const id = tgl.getId();
-    const state = tgl.getState();
+    const type = cbx.getType();
+    const id = cbx.getId();
+    const state = cbx.getState();
     const idViews = [];
     let found = false;
 
@@ -378,7 +378,7 @@ class ViewsFilter {
     }
 
     vf.updateRule({
-      group: 'toggle',
+      group: 'checkbox',
       type: type,
       id: id,
       idViews: idViews,
@@ -386,25 +386,25 @@ class ViewsFilter {
     });
   }
 
-  removeToggle(toggle) {
-    const toggles = this._toggles;
-    const pos = toggles.indexOf(toggle);
+  removeCheckbox(checkbox) {
+    const checkboxes = this._checkboxes;
+    const pos = checkboxes.indexOf(checkbox);
     if (pos > -1) {
-      toggles.splice(pos, 1);
+      checkboxes.splice(pos, 1);
     }
   }
 
-  updateToggles() {
-    return updateToggles.bind(this)();
+  updateCheckboxes() {
+    return updateCheckboxes.bind(this)();
   }
 
-  updateTogglesOrder() {
-    return updateTogglesOrder.bind(this)();
+  updateCheckboxesOrder() {
+    return updateCheckboxesOrder.bind(this)();
   }
 
   reset() {
     const vf = this;
-    vf.getToggles()
+    vf.getCheckboxes()
       .forEach((t) => {
       t.setState(false);
     });
@@ -422,16 +422,16 @@ class ViewsFilter {
     const vf = this;
     vf.reset();
     /**
-    * Remove toggles
+    * Remove checkboxes
     */
-    vf.getToggles()
+    vf.getCheckboxes()
       .forEach((t) => {
       t.destroy();
-      vf.removeToggle(t);
+      vf.removeCheckbox(t);
     });
-    const elToggles = vf.opt.elFilterTags;
-    while (elToggles.firstElementChild) {
-      elToggles.removeChild(elToggles.firstElementChild);
+    const elCheckboxes = vf.opt.elFilterTags;
+    while (elCheckboxes.firstElementChild) {
+      elCheckboxes.removeChild(elCheckboxes.firstElementChild);
     }
   }
 
@@ -441,19 +441,19 @@ class ViewsFilter {
     const viewsSubset = vf.getViewsSubset();
     const isIntersect = vf.opt.mode === 'intersection';
     const viewsDisplayed = isIntersect ? viewsSubset : views;
-    const toggles = vf.getToggles();
-    const togglesCount = getFreqTable(viewsDisplayed);
+    const checkboxes = vf.getCheckboxes();
+    const checkboxesCount = getFreqTable(viewsDisplayed);
     let count, byType, byId;
-    toggles.forEach((toggle) => {
+    checkboxes.forEach((checkbox) => {
       count = 0;
-      byType = togglesCount[toggle.getType()];
+      byType = checkboxesCount[checkbox.getType()];
       if (byType) {
-        byId = byType[toggle.getId()];
+        byId = byType[checkbox.getId()];
         if (byId) {
           count = byId;
         }
       }
-      toggle.setCount(count);
+      checkbox.setCount(count);
     });
     vf.opt.onUpdateCount({
       nTot: views.length,
@@ -563,13 +563,13 @@ function setViewsComponents(views) {
   });
 }
 /**
- * Extract toggles from various path in given views list and produce frequency tables
+ * Extract checkboxes from various path in given views list and produce frequency tables
  * @param {Array} v Views list
  * @note : expect type, data.collections
  */
 export function getFreqTable(views) {
   const path = mx.helpers.path;
-  const toggles = {
+  const checkboxes = {
     components: [],
     collections: []
   };
@@ -577,33 +577,33 @@ export function getFreqTable(views) {
   const stat = {};
 
   views.forEach(function(v) {
-    toggles.components = toggles.components.concat(path(v, '_components', []));
-    toggles.collections = toggles.collections.concat(
+    checkboxes.components = checkboxes.components.concat(path(v, '_components', []));
+    checkboxes.collections = checkboxes.collections.concat(
       path(v, 'data.collections', [])
     );
   });
 
   // grouprs
   stat.view_components = getArrayStat({
-    arr: toggles.components,
+    arr: checkboxes.components,
     stat: 'frequency'
   });
 
   stat.view_collections = getArrayStat({
-    arr: toggles.collections,
+    arr: checkboxes.collections,
     stat: 'frequency'
   });
 
   return stat;
 }
 
-function updateTogglesOrder() {
+function updateCheckboxesOrder() {
   const vf = this;
-  const toggles = vf.getToggles();
+  const checkboxes = vf.getCheckboxes();
   const types = ['view_components', 'view_collections'];
 
   types.forEach((t) => {
-    const tt = toggles.filter((toggle) => toggle.getType() === t);
+    const tt = checkboxes.filter((checkbox) => checkbox.getType() === t);
     tt.sort((a, b) => {
       let aLabel = n(a.getLabel());
       let bLabel = n(b.getLabel());
@@ -631,13 +631,13 @@ function updateTogglesOrder() {
   }
 }
 
-function updateToggles() {
+function updateCheckboxes() {
   const vf = this;
   const views = vf.getViews();
   const elContainer = vf.opt.elFilterTags;
   const table = getFreqTable(views);
   const types = Object.keys(table);
-  const elToggles = document.createDocumentFragment();
+  const elCheckboxes = document.createDocumentFragment();
   const labels = [];
 
   let elTypes;
@@ -652,7 +652,7 @@ function updateToggles() {
   ];
 
   parts.forEach((p) => {
-    elToggles.appendChild(p);
+    elCheckboxes.appendChild(p);
   });
 
   const groups = {
@@ -669,7 +669,7 @@ function updateToggles() {
     }
     keys.forEach((key, i) => {
       const label = getDictItem(key);
-      const toggle = new Toggle({
+      const checkbox = new Checkbox({
         order: i,
         id: key,
         label_key: key,
@@ -677,22 +677,22 @@ function updateToggles() {
         count: tbl[key],
         type: type
       });
-      vf.addToggle(toggle, elParent);
+      vf.addCheckbox(checkbox, elParent);
       labels.push(label);
     });
   });
 
   /**
-   * Update toggles order when toggles labels are updated
+   * Update checkboxes order when checkboxes labels are updated
    */
   Promise.all(labels).then(() => {
-    return vf.updateTogglesOrder();
+    return vf.updateCheckboxesOrder();
   });
 
   /**
    * Render fragment
    */
-  elContainer.appendChild(elToggles);
+  elContainer.appendChild(elCheckboxes);
   /**
    * Helpers
    */
@@ -701,7 +701,7 @@ function updateToggles() {
     return el(
       'span',
       {
-        class: 'vf-check-toggle-group-title',
+        class: 'vf-checkbox-group-title',
         dataset: {lang_key: key}
       },
       getDictItem(key)
@@ -710,7 +710,7 @@ function updateToggles() {
 
   function elGroup() {
     return el('div', {
-      class: ['vf-check-toggle-group']
+      class: ['vf-checkbox-group']
     });
   }
   function elEmpty() {
@@ -718,7 +718,7 @@ function updateToggles() {
     return el(
       'div',
       {
-        class: ['vf-check-toggle-empty'],
+        class: ['vf-checkbox-empty'],
         dataset: {lang_key: 'view_filter_no_items'}
       },
       promText
@@ -736,24 +736,24 @@ function handleFilterViewIdByText(event) {
   vf.filter('handler_text');
 }
 
-function handleFilterViewIdByToggle(event) {
+function handleFilterViewIdByCheckbox(event) {
   const vf = this;
   if (!(event instanceof Event)) {
     return;
   }
 
-  const elToggle = findToggle(event.target);
+  const elCheckbox = findCheckbox(event.target);
 
-  if (!elToggle || !isToggle(elToggle)) {
+  if (!elCheckbox || !isCheckbox(elCheckbox)) {
     return;
   }
 
   event.stopPropagation();
   event.stopImmediatePropagation();
 
-  const tgl = elToggle.toggle;
-  vf.updateRuleByToggle(tgl);
-  vf.filter('handler_toggle');
+  const cbx = elCheckbox.checkbox;
+  vf.updateRuleByCheckbox(cbx);
+  vf.filter('handler_checkbox');
 }
 
 function handleFilterActivatedView(event) {
@@ -790,14 +790,14 @@ function handleFilterActivatedView(event) {
  * Misc
  */
 
-function isToggle(el) {
-  return el instanceof Element && el.toggle instanceof Toggle;
+function isCheckbox(el) {
+  return el instanceof Element && el.checkbox instanceof Checkbox;
 }
 
-function findToggle(el) {
+function findCheckbox(el) {
   let found = false;
   while (el && el.parentElement && !found) {
-    if (isToggle(el)) {
+    if (isCheckbox(el)) {
       found = true;
       return el;
     } else {
