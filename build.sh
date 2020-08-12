@@ -15,6 +15,8 @@ DIR_APP=app
 DIR_SDK=app/src/js/sdk
 DIR_CUR=$(pwd)
 CUR_HASH=$(git rev-parse HEAD)
+CHANGELOG_TMP=/tmp/tmp_mgl_changes.md
+CHANGELOG=CHANGELOG.md
 
 REPO="https://github.com/unep-grid/map-x-mgl"
 
@@ -52,11 +54,12 @@ REP_APP_TAG='s/mx-app-shiny:'"$OLD_VERSION"'-debian/mx-app-shiny:'"$NEW_VERSION"
 perl -pi -e $REP_API_TAG ./docker-compose.yml
 perl -pi -e $REP_APP_TAG ./docker-compose.yml
 
-echo
-
 echo "Write changes"
-echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>" > CHANGELOG.md
-vim CHANGELOG.md
+echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>"\
+  > $CHANGELOG_TMP
+cat $CHANGELOG >> $CHANGELOG_TMP
+cp $CHANGELOG_TMP $CHANGELOG 
+vim $CHANGELOG
 
 echo "Get diff"
 git --no-pager diff --minimal
