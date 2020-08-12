@@ -413,7 +413,7 @@ export function initListenersApp() {
     callback: function() {
       const mData = h.getMapData();
       if (mData.viewsFilter) {
-        mData.viewsFilter.updateTagsOrder();
+        mData.viewsFilter.updateCheckboxesOrder();
       }
     }
   });
