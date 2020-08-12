@@ -1,5 +1,15 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.104-beta' target='_blank'>1.6.104-beta</a>
+
+    - Improvement
+       - APP, SDK : Added a test to control that the worker code match the manager version. An error is reported within the  messaging system if there is a mismatch. e.g. `mapx.on('message', (m)=>m.level=='error'?console.error(m.text):console.log('not an error'))`
+    - Bug fixes
+       - API : tile cache was not invalidated properly after the view's attributes list modification
+    - Internal 
+       - APP, ViewsFilter : all toggles are now called checkboxes.
+       - APP, SDK : ( PR #564 ) tests can be launched by group, via a parameter in the URL.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.103-beta' target='_blank'>1.6.103-beta</a>
     - New feature
        - SDK : Set/Get views filter. The view list can be managed from new method in the SDK. See issue #576 for details.

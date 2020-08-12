@@ -162,6 +162,7 @@ Class to create a manager to build an iframe and post message to a worker inside
     * [.width](#FrameManager+width)
     * [.height](#FrameManager+height)
     * [.url](#FrameManager+url) ⇒
+    * [.version](#FrameManager+version)
     * [.destroy()](#FrameManager+destroy)
     * [.setUrl(Url)](#FrameManager+setUrl)
     * [.setLang(Two)](#FrameManager+setLang)
@@ -220,6 +221,12 @@ get url
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
 **Returns**: url object  
+<a name="FrameManager+version"></a>
+
+### frameManager.version
+Get version
+
+**Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
 <a name="FrameManager+destroy"></a>
 
 ### frameManager.destroy()
@@ -334,6 +341,7 @@ Class to create a worker / listener inside an application
 
 * [FrameWorker](#FrameWorker) ⇐ [<code>Events</code>](#Events)
     * [new FrameWorker(opt)](#new_FrameWorker_new)
+    * [.version](#FrameWorker+version)
     * [.isNested()](#FrameWorker+isNested) ⇒ <code>Boolean</code>
     * [.destroy()](#FrameWorker+destroy)
     * [.removeListener()](#FrameWorker+removeListener)
@@ -354,6 +362,12 @@ create a worke
 | opt.resolvers | <code>Resolver</code> | Resolver |
 | opt.eventStore | <code>EventStore</code> | EventStore |
 
+<a name="FrameWorker+version"></a>
+
+### frameWorker.version
+Get version
+
+**Kind**: instance property of [<code>FrameWorker</code>](#FrameWorker)  
 <a name="FrameWorker+isNested"></a>
 
 ### frameWorker.isNested() ⇒ <code>Boolean</code>
