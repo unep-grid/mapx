@@ -56,7 +56,7 @@ echo
 
 echo "Write changes"
 echo "- <a href='${REPO}/tree/${NEW_VERSION}' target='_blank'>${NEW_VERSION}</a>" > CHANGELOG.md
-vim changes.md
+vim CHANGELOG.md
 
 echo "Get diff"
 git --no-pager diff --minimal
