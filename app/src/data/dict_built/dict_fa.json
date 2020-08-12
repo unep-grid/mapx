@@ -930,11 +930,6 @@
     "fa": "فاصله"
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "fa": "لایه"
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "fa": ""
@@ -4370,12 +4365,12 @@
     "fa": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "fa": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "fa": ""
   },

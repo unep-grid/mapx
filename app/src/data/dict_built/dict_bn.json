@@ -930,11 +930,6 @@
     "bn": ""
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "bn": ""
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "bn": ""
@@ -4370,12 +4365,12 @@
     "bn": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "bn": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "bn": ""
   },

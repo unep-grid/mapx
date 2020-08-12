@@ -4,33 +4,35 @@ import {
   getArrayIntersect
 } from '../array_stat/index.js';
 import {Toggle} from './components/toggle.js';
+import {Switch} from './../switch/index.js';
 import {ListenerStore} from './../listener_store/index.js';
 import {path} from './../mx_helper_misc.js';
 import {el} from '@fxi/el';
 import {getDictItem} from './../mx_helper_language.js';
 import './style.css';
-
 const settings = {
-  onFilter: (ids) => {
-    console.log(ids);
+  onFilter: (idViews) => {
+    console.log(idViews);
   },
   onUpdateCount: (nTot, nFilter) => {
     console.table({nTot: nTot, nFilter: nFilter});
   },
-  operator: 'and',
+  mode: 'intersection',
   elFilterText: document.body,
   elFilterTags: document.body,
   elFilterActivated: document.body,
-  views: []
+  views: [],
+  debug: true
 };
 
 class ViewsFilter {
   constructor(views, opt) {
     const vf = this;
     vf.opt = Object.assign({}, settings, opt);
-    vf.lStore = new ListenerStore();
+    vf._lStore = new ListenerStore();
     vf.initStorage(views);
     vf.initListeners();
+    vf.initSwitchMode();
     vf.update();
   }
 
@@ -38,13 +40,13 @@ class ViewsFilter {
     const vf = this;
     vf.removeRules();
     vf.updateViewsComponents();
-    vf.updateTags();
+    vf.updateToggles();
   }
 
   initStorage(views) {
     const vf = this;
     vf._views = views || opt.views;
-    vf._tags = [];
+    vf._toggles = [];
     vf._rules = [];
     vf._previousState = [];
   }
@@ -52,7 +54,7 @@ class ViewsFilter {
   initListeners() {
     const vf = this;
 
-    vf.lStore.addListener({
+    vf._lStore.addListener({
       target: vf.opt.elFilterActivated,
       type: ['click'],
       callback: handleFilterActivatedView,
@@ -60,16 +62,16 @@ class ViewsFilter {
       bind: vf
     });
 
-    vf.lStore.addListener({
+    vf._lStore.addListener({
       target: vf.opt.elFilterTags,
       type: ['click'],
-      callback: handleFilterViewIdByTag,
+      callback: handleFilterViewIdByToggle,
       group: 'view_filter',
       bind: vf
     });
-    vf.lStore.addListener({
+    vf._lStore.addListener({
       target: vf.opt.elFilterText,
-      type: 'keyup',
+      type: ['keyup'],
       callback: handleFilterViewIdByText,
       group: 'view_filter',
       debounce: true,
@@ -77,13 +79,35 @@ class ViewsFilter {
       bind: vf
     });
   }
+  initSwitchMode() {
+    const vf = this;
+    vf.switchMode = new Switch(vf.opt.elFilterSwitch, {
+      labelLeft: el(
+        'div',
+        {dataset: {lang_key: 'filter_views_list_mode_intersection'}},
+        'Intersection'
+      ),
+      labelRight: el(
+        'div',
+        {dataset: {lang_key: 'filter_views_list_mode_union'}},
+        'Union'
+      ),
+      onChange: (enabled) => {
+        const op = enabled === true ? 'union' : 'intersection';
+        vf.setMode(op, false);
+        vf.filter('handler_switch_mode');
+      }
+    });
+  }
+
   destroy() {
     const vf = this;
     vf.clear();
-    vf.lStore.destroy();
+    vf._lStore.destroy();
+    vf.switchMode.destroy();
   }
 
-  filter() {
+  filter(from) {
     const vf = this;
     const pState = vf._previousState;
     const state = vf.getViewsIdSubset();
@@ -92,6 +116,9 @@ class ViewsFilter {
       vf._previousState = state;
       vf.opt.onFilter(state, rules);
       vf.updateCount();
+    }
+    if (vf.opt.debug) {
+      console.log('filter', from, rules);
     }
   }
 
@@ -105,55 +132,75 @@ class ViewsFilter {
     return this._views === views || [];
   }
 
+  getRuleByHash(hash) {
+    return this._rules.reduce(
+      (a, r) => (a ? a : r.hash === hash ? r : null),
+      null
+    );
+  }
+
   getRules() {
     return this._rules || [];
   }
+
   removeRules() {
     this._rules.length = 0;
   }
-  updateRule(idRule, ids, enable) {
-    const vf = this;
-    const rules = vf.getRules();
-    let rule = rules.filter((r) => r.idRule === idRule)[0];
-    const ruleExists = typeof rule !== 'undefined';
 
-    if (ruleExists && enable) {
-      rule.ids = ids;
+  updateRule(rule) {
+    const vf = this;
+    rule = Object.assign(
+      {},
+      {
+        idViews: [],
+        type: null,
+        id: null,
+        group: null,
+        enable: false
+      },
+      rule
+    );
+
+    const hash = [rule.group, rule.type, rule.id].join(':');
+    const rules = vf.getRules();
+    const ruleStored = vf.getRuleByHash(hash);
+    const ruleExists = !!ruleStored;
+
+    if (ruleExists && rule.enable) {
+      ruleStored.idViews.length = 0;
+      ruleStored.idViews.push(...rule.idViews);
     }
-    if (!ruleExists && enable) {
-      rule = {
-        idRule: idRule,
-        ids: ids
-      };
+
+    if (!ruleExists && rule.enable) {
+      rule.hash = hash;
       rules.push(rule);
     }
 
-    if (ruleExists && !enable) {
-      const pos = rules.indexOf(rule);
+    if (ruleExists && !rule.enable) {
+      const pos = rules.indexOf(ruleStored);
       rules.splice(pos, 1);
     }
-    vf.filter();
   }
 
   getViewsSubset() {
     const vf = this;
-    const ids = vf.getViewsIdSubset();
+    const idViews = vf.getViewsIdSubset();
     const views = vf.getViews();
-    const res = views.filter((v) => ids.indexOf(v.id) > -1);
+    const res = views.filter((v) => idViews.indexOf(v.id) > -1);
     return res;
   }
 
   getViewsIdSubset() {
     const vf = this;
     const rules = vf.getRules();
-    const isIntersect = vf.opt.operator.toLowerCase() === 'and';
+    const isIntersect = vf.opt.mode.toLowerCase() === 'intersection';
     const viewsBase = isIntersect ? vf.getViewsId() : [];
     const subset = rules.reduce((a, r) => {
-      const ids = r.ids;
+      const idViews = r.idViews;
       if (isIntersect) {
-        return getArrayIntersect(a, ids);
+        return getArrayIntersect(a, idViews);
       } else {
-        return a.concat(ids);
+        return a.concat(idViews);
       }
     }, viewsBase);
     let distinct = getArrayDistinct(subset);
@@ -167,74 +214,246 @@ class ViewsFilter {
     return distinct;
   }
 
-  setOperator(op) {
+  setMode(op, updateSwitch) {
     const vf = this;
-    vf.opt.operator = op;
-    vf.filter();
+    const modes = ['intersection', 'union'];
+    const opfinal = modes.indexOf(op) > -1 ? op : modes[0];
+    const enableSwitch = opfinal === 'union';
+    vf.opt.mode = opfinal;
+    if (updateSwitch !== false) {
+      vf.switchMode.setState(enableSwitch);
+    }
   }
 
-  setTags(tags) {
-    this._tags = tags;
-  }
-  addTag(tag, elParent) {
-    this._tags.push(tag);
+  addToggle(toggle, elParent) {
+    this._toggles.push(toggle);
     if (elParent) {
-      elParent.appendChild(tag.el);
-    }
-  }
-  getTags() {
-    return this._tags;
-  }
-  removeTag(tag) {
-    const tags = this._tags;
-    const pos = tags.indexOf(tag);
-    if (pos > -1) {
-      tags.splice(pos, 1);
+      elParent.appendChild(toggle.el);
     }
   }
 
-  updateTags() {
-    return updateTags.bind(this)();
+  getToggles() {
+    return this._toggles;
   }
-  updateTagsOrder() {
-    return updateTagsOrder.bind(this)();
+
+  getToggle(id, type) {
+    return this.getToggles().reduce(
+      (a, t) => (!a && t._id === id && t_type === type ? t : a),
+      null
+    );
+  }
+
+  filterCombined(opt) {
+    const vf = this;
+    opt = Object.assign(
+      {},
+      {
+        reset: false,
+        rules: [],
+        mode: 'intersection'
+      },
+      opt
+    );
+
+    if (opt.reset) {
+      vf.reset();
+    }
+
+    opt.rules.forEach((r) => {
+      if (r.type === 'view_collections' || r.type === 'view_components') {
+        vf.updateToggleState(r);
+      }
+      if (r.type === 'text') {
+        vf.updateRuleByText(r, true);
+      }
+    });
+
+    vf.getToggles().forEach((t) => {
+      vf.updateRuleByToggle(t);
+    });
+
+    vf.setMode(opt.mode);
+    vf.filter('filter_combined');
+  }
+
+  updateToggleState(opt) {
+    const vf = this;
+    opt = Object.assign(
+      {},
+      {
+        type: null,
+        value: [],
+        state: true
+      },
+      opt
+    );
+
+    opt.state = opt.state === false ? false : true;
+    opt.value = Array.isArray(opt.value) ? opt.value : [opt.value];
+
+    /*
+     * Enable or disable taggles
+     */
+    vf.getToggles().forEach((t) => {
+      const hasType = t._type === opt.type;
+      if (!hasType) {
+        return;
+      }
+      const hasId = opt.value.indexOf(t.id) > -1;
+      const enable = opt.state && hasId;
+      if (t.getState() !== enable) {
+        t.setState(enable);
+      }
+    });
+  }
+
+  updateRuleByText(opt, update) {
+    const vf = this;
+    const views = vf.getViews();
+    const id = vf.opt.elFilterText.id;
+    opt = Object.assign(
+      {},
+      {
+        value: '',
+        state: false
+      },
+      opt
+    );
+
+    if (update) {
+      vf.opt.elFilterText.value = opt.value;
+    }
+
+    const enable = opt.value.length > 0;
+    const expr = txtToRegex(opt.value);
+
+    const idViews = views.reduce((a, v) => {
+      const found =
+        enable &&
+        Object.values(path(v, 'data.title', {}))
+          .join(' ')
+          .toLowerCase()
+          .search(expr) > -1;
+
+      if (found) {
+        return a.concat(v.id);
+      }
+
+      return a;
+    }, []);
+
+    vf.updateRule({
+      group: 'input',
+      type: 'text',
+      id: id,
+      idViews: idViews,
+      enable: enable
+    });
+  }
+
+  updateRuleByToggle(tgl) {
+    const vf = this;
+
+    if (!(tgl instanceof Toggle)) {
+      return;
+    }
+
+    const views = vf.getViews();
+    const type = tgl.getType();
+    const id = tgl.getId();
+    const state = tgl.getState();
+    const idViews = [];
+    let found = false;
+
+    if (state) {
+      idViews.push(
+        ...views.reduce((a, v) => {
+          found = isFound(v, type, id);
+          if (found) {
+            a.push(v.id);
+          }
+          return a;
+        }, [])
+      );
+    }
+
+    vf.updateRule({
+      group: 'toggle',
+      type: type,
+      id: id,
+      idViews: idViews,
+      enable: state
+    });
+  }
+
+  removeToggle(toggle) {
+    const toggles = this._toggles;
+    const pos = toggles.indexOf(toggle);
+    if (pos > -1) {
+      toggles.splice(pos, 1);
+    }
+  }
+
+  updateToggles() {
+    return updateToggles.bind(this)();
+  }
+
+  updateTogglesOrder() {
+    return updateTogglesOrder.bind(this)();
+  }
+
+  reset() {
+    const vf = this;
+    vf.getToggles()
+      .forEach((t) => {
+      t.setState(false);
+    });
+    vf.removeRules();
+    
+    const elFilter = vf.opt.elFilterActivated;
+    const elFilterText = vf.opt.elFilterText;
+
+    elFilter.classList.remove('active');
+    elFilterText.value = '';
+    vf.filter('reset');
   }
 
   clear() {
     const vf = this;
-    vf.removeRules();
-    vf.filter();
-    vf._tags.forEach((t) => {
+    vf.reset();
+    /**
+    * Remove toggles
+    */
+    vf.getToggles()
+      .forEach((t) => {
       t.destroy();
-      vf.removeTag(t);
+      vf.removeToggle(t);
     });
-    const elTags = vf.opt.elFilterTags;
-    const elFilter = vf.opt.elFilterActivated;
-    while (elTags.firstElementChild) {
-      elTags.removeChild(elTags.firstElementChild);
+    const elToggles = vf.opt.elFilterTags;
+    while (elToggles.firstElementChild) {
+      elToggles.removeChild(elToggles.firstElementChild);
     }
-    elFilter.classList.remove('active');
   }
 
   updateCount() {
     const vf = this;
     const views = vf.getViews();
     const viewsSubset = vf.getViewsSubset();
-    const isIntersect = vf.opt.operator === 'and';
+    const isIntersect = vf.opt.mode === 'intersection';
     const viewsDisplayed = isIntersect ? viewsSubset : views;
-    const tags = vf.getTags();
-    const tagsCount = getFreqTable(viewsDisplayed);
+    const toggles = vf.getToggles();
+    const togglesCount = getFreqTable(viewsDisplayed);
     let count, byType, byId;
-    tags.forEach((tag) => {
+    toggles.forEach((toggle) => {
       count = 0;
-      byType = tagsCount[tag.getType()];
+      byType = togglesCount[toggle.getType()];
       if (byType) {
-        byId = byType[tag.getId()];
+        byId = byType[toggle.getId()];
         if (byId) {
           count = byId;
         }
       }
-      tag.setCount(count);
+      toggle.setCount(count);
     });
     vf.opt.onUpdateCount({
       nTot: views.length,
@@ -254,7 +473,6 @@ export {ViewsFilter};
 /**
  * Helpers
  */
-
 function isFound(view, type, filter) {
   let found = false;
   switch (type) {
@@ -307,21 +525,23 @@ function setViewsComponents(views) {
     if (isVt) {
       components.push('vt');
     }
+    
     if (isGj) {
       components.push('gj');
     }
+    
     if (isRt) {
       components.push('rt');
     }
+    
     if (isSm && story && story.length) {
-      components.push('story_map');
+      components.push('sm');
     }
-    if (isVt && widgets && widgets.length) {
+
+    if (Array.isArray(widgets)) {
       components.push('dashboard');
     }
-    if (!isSm) {
-      components.push('layer');
-    }
+ 
     if (isVt && attributes && attributes.indexOf('mx_t0') > -1) {
       components.push('time_slider');
     }
@@ -343,13 +563,13 @@ function setViewsComponents(views) {
   });
 }
 /**
- * Extract tags from various path in given views list and produce frequency tables
+ * Extract toggles from various path in given views list and produce frequency tables
  * @param {Array} v Views list
  * @note : expect type, data.collections
  */
 export function getFreqTable(views) {
   const path = mx.helpers.path;
-  const tags = {
+  const toggles = {
     components: [],
     collections: []
   };
@@ -357,31 +577,33 @@ export function getFreqTable(views) {
   const stat = {};
 
   views.forEach(function(v) {
-    tags.components = tags.components.concat(path(v, '_components', []));
-    tags.collections = tags.collections.concat(path(v, 'data.collections', []));
+    toggles.components = toggles.components.concat(path(v, '_components', []));
+    toggles.collections = toggles.collections.concat(
+      path(v, 'data.collections', [])
+    );
   });
 
   // grouprs
   stat.view_components = getArrayStat({
-    arr: tags.components,
+    arr: toggles.components,
     stat: 'frequency'
   });
 
   stat.view_collections = getArrayStat({
-    arr: tags.collections,
+    arr: toggles.collections,
     stat: 'frequency'
   });
 
   return stat;
 }
 
-function updateTagsOrder() {
+function updateTogglesOrder() {
   const vf = this;
-  const tags = vf.getTags();
+  const toggles = vf.getToggles();
   const types = ['view_components', 'view_collections'];
 
   types.forEach((t) => {
-    const tt = tags.filter((tag) => tag.getType() === t);
+    const tt = toggles.filter((toggle) => toggle.getType() === t);
     tt.sort((a, b) => {
       let aLabel = n(a.getLabel());
       let bLabel = n(b.getLabel());
@@ -402,20 +624,20 @@ function updateTagsOrder() {
    * Normalise
    */
   function n(txt) {
-    if(!txt || !txt.toLowerCase){
+    if (!txt || !txt.toLowerCase) {
       return txt;
     }
     return txt.toLowerCase().trim();
   }
 }
 
-function updateTags() {
+function updateToggles() {
   const vf = this;
   const views = vf.getViews();
   const elContainer = vf.opt.elFilterTags;
   const table = getFreqTable(views);
   const types = Object.keys(table);
-  const elTags = document.createDocumentFragment();
+  const elToggles = document.createDocumentFragment();
   const labels = [];
 
   let elTypes;
@@ -430,7 +652,7 @@ function updateTags() {
   ];
 
   parts.forEach((p) => {
-    elTags.appendChild(p);
+    elToggles.appendChild(p);
   });
 
   const groups = {
@@ -447,7 +669,7 @@ function updateTags() {
     }
     keys.forEach((key, i) => {
       const label = getDictItem(key);
-      const tag = new Toggle({
+      const toggle = new Toggle({
         order: i,
         id: key,
         label_key: key,
@@ -455,22 +677,22 @@ function updateTags() {
         count: tbl[key],
         type: type
       });
-      vf.addTag(tag, elParent);
+      vf.addToggle(toggle, elParent);
       labels.push(label);
     });
   });
 
   /**
-   * Update tags order when tags labels are updated
+   * Update toggles order when toggles labels are updated
    */
   Promise.all(labels).then(() => {
-    return vf.updateTagsOrder();
+    return vf.updateTogglesOrder();
   });
 
   /**
    * Render fragment
    */
-  elContainer.appendChild(elTags);
+  elContainer.appendChild(elToggles);
   /**
    * Helpers
    */
@@ -504,49 +726,69 @@ function updateTags() {
   }
 }
 
-/**
- * Filter view by text
- */
 function handleFilterViewIdByText(event) {
   const vf = this;
-  const txt = event.target.value.toLowerCase();
+  const text = event.target.value.toLowerCase();
+
+  vf.updateRuleByText({
+    value: text
+  });
+  vf.filter('handler_text');
+}
+
+function handleFilterViewIdByToggle(event) {
+  const vf = this;
+  if (!(event instanceof Event)) {
+    return;
+  }
+
+  const elToggle = findToggle(event.target);
+
+  if (!elToggle || !isToggle(elToggle)) {
+    return;
+  }
+
+  event.stopPropagation();
+  event.stopImmediatePropagation();
+
+  const tgl = elToggle.toggle;
+  vf.updateRuleByToggle(tgl);
+  vf.filter('handler_toggle');
+}
+
+function handleFilterActivatedView(event) {
+  const vf = this;
+  const clActive = 'active';
+  const elBtn = event.target;
+  const id = elBtn.id;
+  const toDisable = elBtn.classList.contains(clActive);
+  if (toDisable) {
+    elBtn.classList.remove(clActive);
+  } else {
+    elBtn.classList.add(clActive);
+  }
   const views = vf.getViews();
-  const expr = txtToRegex(txt);
-  let found = false;
-  let text = '';
-
-  const ids = views.reduce((a, v) => {
-    text = Object.values(path(v, 'data.title', {}))
-      .join(' ')
-      .toLowerCase();
-    found = text.search(expr) > -1;
-
-    if (found) {
-      return a.concat(v.id);
-    } else {
-      return a;
+  const idViews = views.reduce((a, v) => {
+    let isOpen = v._vb.isOpen();
+    if (!toDisable && isOpen) {
+      a.push(v.id);
     }
+    return a;
   }, []);
 
-  const enable = txt.length > 0;
-  vf.updateRule('text', ids, enable);
+  vf.updateRule({
+    group: 'input',
+    type: 'views_activated',
+    id: id,
+    idViews: idViews,
+    enable: !toDisable
+  });
+  vf.filter('handler_activated');
 }
 
-function txtToRegex(txt) {
-  txt = txt || '';
-  txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-  // OR
-
-  if (txt.match(/ or /)) {
-    txt = txt.split(' or ').join('|');
-  }
-  // AND
-  if (txt.match(/ and /)) {
-    txt = '(?=' + txt.split(' and ').join(')(=?') + ')';
-  }
-
-  return new RegExp(txt);
-}
+/**
+ * Misc
+ */
 
 function isToggle(el) {
   return el instanceof Element && el.toggle instanceof Toggle;
@@ -565,65 +807,18 @@ function findToggle(el) {
   return false;
 }
 
-/**
- * Filter view by tag
- */
-function handleFilterViewIdByTag(event) {
-  const vf = this;
-  const elToggle = findToggle(event.target);
+function txtToRegex(txt) {
+  txt = txt || '';
+  txt = txt.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  // OR
 
-  if (!elToggle || !isToggle(elToggle)) {
-    return;
+  if (txt.match(/ or /)) {
+    txt = txt.split(' or ').join('|');
+  }
+  // AND
+  if (txt.match(/ and /)) {
+    txt = '(?=' + txt.split(' and ').join(')(=?') + ')';
   }
 
-  event.stopImmediatePropagation();
-  const isMouseOver = event.type === 'mouseover';
-  const isMouseOut = event.type === 'mouseout';
-  const isClick = event.type === 'click';
-
-  const tgl = elToggle.toggle;
-  const views = vf.getViews();
-  const type = tgl.getType();
-  const id = tgl.getId();
-  const state = isClick ? tgl.getState() : isMouseOver && !isMouseOut;
-  const ids = [];
-  let found = false;
-
-  if (state) {
-    ids.push(
-      ...views.reduce((a, v) => {
-        found = isFound(v, type, id);
-        if (found) {
-          a.push(v.id);
-        }
-        return a;
-      }, [])
-    );
-  }
-  const mouseEvent = isMouseOver || isMouseOut ? 'mouse' : '';
-  const idRule = ['tag', type, id, mouseEvent].join(':');
-  vf.updateRule(idRule, ids, state);
-}
-
-function handleFilterActivatedView(event) {
-  console.log('Click on handle filter activated view');
-  const vf = this;
-  const clActive = 'active';
-  const elBtn = event.target;
-  const toDisable = elBtn.classList.contains(clActive);
-  if (toDisable) {
-    elBtn.classList.remove(clActive);
-  } else {
-    elBtn.classList.add(clActive);
-  }
-  const views = vf.getViews();
-  const ids = views.reduce((a, v) => {
-    let isOpen = v._vb.isOpen();
-    if (!toDisable && isOpen) {
-      a.push(v.id);
-    }
-    return a;
-  }, []);
-
-  vf.updateRule('views_activated', ids, !toDisable);
+  return new RegExp(txt);
 }

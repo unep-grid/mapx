@@ -1,6 +1,5 @@
 import {NestedList} from './nested_list/index.js';
 import {ViewsFilter} from './views_filter/index.js';
-import {Switch} from './switch/index.js';
 import {ViewBase} from './views_builder/view_base.js';
 
 /**
@@ -159,12 +158,14 @@ export async function viewsListAddSingle(view, settings) {
     mData.views.splice(idPosOld, 1);
   }
   mData.views.unshift(view);
-  mData.viewsFilter.update();
 
   await new Promise((resolve) => {
     mData.viewsList.once('render_item_content', resolve);
     mData.viewsList.addItem(settings);
   });
+
+  mData.viewsFilter.update();
+
   return settings;
 }
 
@@ -228,9 +229,6 @@ export function viewsListRenderNew(o) {
   if (mData.viewsList instanceof NestedList) {
     mData.viewsList.destroy();
   }
-  if (mData.viewsSwitchToggle instanceof Switch) {
-    mData.viewsSwitchToggle.destroy();
-  }
 
   /**
    * Should be always empty
@@ -279,6 +277,7 @@ export function viewsListRenderNew(o) {
   mData.viewsFilter = new ViewsFilter(mData.views, {
     elFilterActivated: elFilterActivated,
     elFilterTags: elFilterTags,
+    elFilterSwitch : elFilterSwitch,
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
@@ -302,21 +301,7 @@ export function viewsListRenderNew(o) {
     }
   });
 
-  /**
-   * Toggle between AND or OR operator for filter
-   */
-  mData.viewsSwitchToggle = new Switch(elFilterSwitch, {
-    labelLeft: h.el(
-      'div',
-      {dataset: {lang_key: 'operator_and'}},
-      'Intersection'
-    ),
-    labelRight: h.el('div', {dataset: {lang_key: 'operator_or'}}, 'Union'),
-    onChange: (s) => {
-      const op = s ? 'or' : 'and';
-      mData.viewsFilter.setOperator(op);
-    }
-  });
+
 
   /**
    *  Auto open

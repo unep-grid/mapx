@@ -4,6 +4,7 @@ import {onNextFrame} from '../../animation_frame/index.js';
 let settings = {
   onDestroy: () => {},
   onBuild: () => {},
+  onSetState : ()=>{},
   id: Math.random().toString(32),
   type: '',
   label: 'label',
@@ -211,6 +212,7 @@ class Toggle {
 
   setState(val) {
     this.elCheck.checked = val === true;
+    this.opt.onSetState(this);
   }
 
   getState() {

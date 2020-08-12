@@ -2232,18 +2232,6 @@
     "ps": "انټروال"
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "fr": "Couche",
-    "es": "Capa",
-    "ru": "",
-    "zh": "",
-    "de": "",
-    "bn": "",
-    "fa": "لایه",
-    "ps": "لایه"
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "fr": "Curseur temporel",
@@ -10488,7 +10476,7 @@
     "ps": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "fr": "Intersection",
     "es": "Intersección",
@@ -10500,7 +10488,7 @@
     "ps": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "fr": "Union",
     "es": "Union",

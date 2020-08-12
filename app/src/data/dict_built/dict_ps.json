@@ -930,11 +930,6 @@
     "ps": "انټروال"
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "ps": "لایه"
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "ps": ""
@@ -4370,12 +4365,12 @@
     "ps": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "ps": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "ps": ""
   },

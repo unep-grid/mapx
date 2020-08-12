@@ -930,11 +930,6 @@
     "zh": ""
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "zh": ""
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "zh": ""
@@ -4370,12 +4365,12 @@
     "zh": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "zh": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "zh": ""
   },

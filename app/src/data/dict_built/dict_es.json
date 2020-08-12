@@ -930,11 +930,6 @@
     "es": "Intervalo"
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "es": "Capa"
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "es": "Control deslizante de tiempo"
@@ -4370,12 +4365,12 @@
     "es": "<div style=\"max-width:400px;padding:20px\">Hola, <br><br> Aquí está la contraseña solicitada:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> Esta contraseña segura es válida solo una vez, para la sesión actual de MapX y se invalidará después de 20 minutos.<br>Saludos cordiales,<br><br>Su equipo de MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si no realizó esta solicitud, uno de nuestros usuarios probablemente ingresó su dirección de correo electrónico por error.</span></div>"
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "es": "Intersección"
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "es": "Union"
   },

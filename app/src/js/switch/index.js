@@ -11,7 +11,7 @@ let settings = {
 };
 
 class Switch {
-  constructor(el,opt) {
+  constructor(el, opt) {
     opt = opt || {};
     let sw = this;
     sw.elContainer = el;
@@ -29,7 +29,7 @@ class Switch {
       {class: 'switch'},
       el('span', sw.opt.labelLeft),
       (elInput = el('input', {
-         class : 'switch-input',
+        class: 'switch-input',
         type: 'checkbox',
         id: sw.id
       })),
@@ -49,7 +49,7 @@ class Switch {
     );
     sw.elSwitch = elSwitch;
     sw.elInput = elInput;
-    sw.elContainer.innerHTML = "";
+    sw.elContainer.innerHTML = '';
     sw.elContainer.appendChild(sw.elSwitch);
   }
 
@@ -58,7 +58,7 @@ class Switch {
     sw.build();
     sw.lStore = new ListenerStore();
     sw.lStore.addListener({
-      type : 'input',
+      type: 'input',
       target: sw.elInput,
       callback: sw.handleChange,
       bind: sw
@@ -78,16 +78,17 @@ class Switch {
   destroy() {
     this.elContainer.removeChild(this.elSwitch);
     this.lStore.destroy();
-
   }
 
-  enable() {
-    this.state = true;
+  setState(state) {
+    this.state = state === true;
     this.updateInput();
+  }
+  enable() {
+    this.setState(true);
   }
   disable() {
-    this.state = false;
-    this.updateInput();
+    this.setState(false);
   }
 
   toggle() {
@@ -100,7 +101,8 @@ class Switch {
   }
 
   updateInput() {
-    this.elInput.checked = this.state;
+    const sw = this;
+    sw.elInput.checked = this.state;
     sw.opt.onChange(sw.state);
   }
 }

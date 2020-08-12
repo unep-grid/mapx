@@ -930,11 +930,6 @@
     "ru": ""
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "ru": ""
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "ru": ""
@@ -4370,12 +4365,12 @@
     "ru": ""
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "ru": ""
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "ru": ""
   },

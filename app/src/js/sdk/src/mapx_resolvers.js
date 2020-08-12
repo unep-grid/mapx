@@ -702,7 +702,7 @@ class MapxResolvers {
     const conf = tools[opt.tool];
 
     if (!conf) {
-      rslv._err('err_tool_not_found',{
+      rslv._err('err_tool_not_found', {
         idTool: opt.tool || 'null'
       });
       return false;
@@ -713,7 +713,7 @@ class MapxResolvers {
     }, false);
 
     if (!allow) {
-      rslv._err('err_tool_roles_not_match',{
+      rslv._err('err_tool_roles_not_match', {
         idTool: opt.tool,
         roles: JSON.stringify(conf.roles)
       });
@@ -754,6 +754,60 @@ class MapxResolvers {
   get_views_list_state() {
     const v = h.getMapData().viewsList;
     return v.getState();
+  }
+
+  /**
+   * Set views list filter (ui)
+   * @param {Object} opt options
+   * @param {Boolean} opt.reset Reset and remove all rules
+   * @param {Array} opt.rules Array of filter object. e.g. {type:'text',value:'marine'}
+   * @param {Boolean} opt.mode Set mode : 'intersection' or 'union';
+   * @example
+   * // reset all rules
+   * mapx.ask('set_views_list_filter',{
+   *    reset:true
+   * })
+   * 
+   * // Reset rules and filter views with a dashboard
+   * mapx.ask('set_views_list_filter',{
+   *    reset: true,
+   *    rules : [{
+   *    type : 'view_components, 
+   *    value:'dashboard'
+   *    }]
+   * })
+   *
+   * // All views with marine or earth in title or abstract or vector views or raster views 
+   * mapx.ask('set_views_list_filter',{
+   *    rules:
+   *     [
+   *      {
+   *           type: 'text',
+   *           value: 'marine or earth'
+   *       },
+   *       {
+   *           type: 'view_components',
+   *           value: ['vt','rt']
+   *       }
+   *     ],
+   *     mode: 'union'
+   *   })
+   * @return {Boolean} done
+   */
+  set_views_list_filters(opt) {
+    opt = Object.assign({}, {rules: [], mode: 'intersection'}, opt);
+    const vf = h.getMapData().viewsFilter;
+    vf.filterCombined(opt);
+    return vf.getRules();
+  }
+
+  /**
+   * Get views list filter rules
+   * @return {Array} Rule list
+   */
+  get_views_list_filters() {
+    const vf = h.getMapData().viewsFilter;
+    return vf.getRules();
   }
 
   /**

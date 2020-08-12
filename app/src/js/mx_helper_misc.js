@@ -3,7 +3,7 @@
 /**
  * Retrieve nested item from object/array
  * @param {Object|Array} obj
- * @param {String} path dot separated
+ * @param {String|Array} path dot separated or array of string
  * @param {*} def default value ( if result undefined )
  * @note http://jsfiddle.net/Jw8XB/1/
  * @returns {*}
@@ -16,10 +16,13 @@ export function path(obj, path, def) {
   if (!hasDefault) {
     def = null;
   }
-  if (!h.isString(path)) {
+  if (!h.isString(path) && !h.isArrayOfString(path)) {
     return out(def);
   }
-  for (i = 0, path = path.split('.'), iL = path.length; i < iL; i++) {
+  if(h.isString(path)){
+      path = path.split('.'); 
+  }
+  for (i = 0, iL = path.length; i < iL; i++) {
     if (!obj || !h.isObject(obj)) {
       return out(def);
     }

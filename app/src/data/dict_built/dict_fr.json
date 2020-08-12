@@ -930,11 +930,6 @@
     "fr": "Intervalle"
   },
   {
-    "id": "layer",
-    "en": "Layer",
-    "fr": "Couche"
-  },
-  {
     "id": "time_slider",
     "en": "Time slider",
     "fr": "Curseur temporel"
@@ -4370,12 +4365,12 @@
     "fr": "<div style=\"max-width:400px;padding:20px\">Bonjour,  <br><br>Voici le mot de passe demandé:  <hr>  <span style=\"font-family:monospace;\">{{PASSWORD}}</span>  <hr> Ce mot de passe sécurisé ne sera vablable qu'une fois, pour la session MapX en cours et sera invalidé dans tous les cas après 20 minutes.<br>Meilleures salutations,<br><br>Votre équipe MapX.<br><br>  <span style=\"opacity:0.5;font-size:0.8em\">Si vous n'avez pas fait de demande, il s'agit probablement d'un utilisateur ayant entré votre adresse email par erreur</span></div>"
   },
   {
-    "id": "operator_and",
+    "id": "filter_views_list_mode_intersection",
     "en": "Intersection",
     "fr": "Intersection"
   },
   {
-    "id": "operator_or",
+    "id": "filter_views_list_mode_union",
     "en": "Union",
     "fr": "Union"
   },
