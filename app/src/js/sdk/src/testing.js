@@ -3,7 +3,8 @@ import * as is from '../../is_test/index.js';
 
 const defaults = {
   title: 'test',
-  container: document.body
+  container: document.body,
+  groups: []
 };
 const defaultsTests = {
   tests: [],
@@ -83,7 +84,10 @@ export class Testing {
   check(title, opt) {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
-    if (opt.ignore) {
+    if (!t._is_in_opt_set('titles', title)) {
+      return;
+    }
+    if (!t._is_in_opt_set('groups', opt.group)) {
       return;
     }
 
@@ -243,5 +247,15 @@ export class Testing {
       text: elText,
       timing: elTiming
     };
+  }
+
+  _is_in_opt_set(set, value) {
+    let out = false;
+    if (this.opt[set] !== undefined && this.opt[set].length === 0) {
+      out = true;
+    } else if (value !== undefined) {
+      out = this.opt[set].includes(value);
+    }
+    return out;
   }
 }
