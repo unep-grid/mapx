@@ -1197,7 +1197,8 @@ export function addSourceFromView(o) {
 
     if (o.view.type === 'vt') {
       const baseUrl = mx.helpers.getApiUrl('getTile');
-      const url = `${baseUrl}?view=${o.view.id}&date=${o.view.date_modified}`;
+      const url = `${baseUrl}?view=${o.view.id}`;
+        //&date=${o.view.date_modified}`;
       o.view.data.source.tiles = [url, url];
     }
 
