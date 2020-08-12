@@ -85,7 +85,7 @@ exports.getTile = async function(req, res) {
 
     const hash = crypto
       .createHash('md5')
-      .update(timestamp + data.layer + data.view + data.x + data.y + data.zoom)
+      .update(timestamp + data.attributes + data.layer + data.view + data.x + data.y + data.zoom)
       .digest('hex');
 
     return getTile(res, hash, data);
