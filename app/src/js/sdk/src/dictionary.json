@@ -7,42 +7,47 @@
   {
     "key": "err_tool_not_found",
     "en": "No tool for '${idTool}'. Use '{list:true}' to list available tools'",
-    "en": "L'outil '${idTool}' n'existe pas. Lister les outils avec cette option '{list:true}' '"
+    "fr": "L'outil '${idTool}' n'existe pas. Lister les outils avec cette option '{list:true}' '"
   },
   {
     "key": "err_tool_roles_not_match",
     "en": "Tool ${idTool} need specific role: ${roles}",
-    "en": "L'outil ${idTool} a besoin d'un role spécifique: ${roles}"
+    "fr": "L'outil ${idTool} a besoin d'un role spécifique: ${roles}"
   },
   {
     "key": "err_view_not_editable",
     "en": "The user can't edit this view",
-    "en": "L'utilisateur n'a pas les droits d'édition sur cette vue"
+    "fr": "L'utilisateur n'a pas les droits d'édition sur cette vue"
   },
   {
     "key": "err_view_invalid",
     "en": "This view is not valid",
-    "en": "Cette vue n'est pas valide"
+    "fr": "Cette vue n'est pas valide"
   },
   {
     "key": "err_layer_not_found",
     "en": "Layer or view not found ${idView}",
-    "en": "Couche ou vue introuvable ${idView}"
+    "fr": "Couche ou vue introuvable ${idView}"
   },
   {
     "key": "err_not_available_mode",
     "en": "Method not available in this mode: ${mode}",
-    "en": "Méthode non disponible dans ce mode: ${mode}"
+    "fr": "Méthode non disponible dans ce mode: ${mode}"
+  },
+  {
+    "key": "err_version_mismatch",
+    "en": "Version worker : ${versionWorker} - Version manager : ${versionManager}",
+    "fr": "Version worker : ${versionWorker} - Version manager : ${versionManager}"
   },
   {
     "key": "err_resolver_failed",
     "en": "Resolver failed ( idResolver =  ${idResolver}, idRequest = ${idRequest}, msg = ${msg}) ",
-    "fr": ""
+    "fr": "Resolver failed ( idResolver =  ${idResolver}, idRequest = ${idRequest}, msg = ${msg})"
   },
   {
     "key": "warn_already_init",
     "en": "Already initialized,ignoring",
-    "fr": ""
+    "fr": "Déjà initialisé, commande ingnorée"
   },
   {
     "key": "log_state",
