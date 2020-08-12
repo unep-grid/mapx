@@ -22,7 +22,7 @@ const settings = {
   elFilterTags: document.body,
   elFilterActivated: document.body,
   views: [],
-  debug: true
+  debug: false
 };
 
 class ViewsFilter {
