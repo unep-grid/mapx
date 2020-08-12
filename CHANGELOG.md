@@ -1,5 +1,13 @@
-
 ## Changelog
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.103-beta' target='_blank'>1.6.103-beta</a>
+    - New feature
+       - SDK : Set/Get views filter. The view list can be managed from new method in the SDK. See issue #576 for details.
+
+- 1.6.4 - 1.6.102 
+    
+    - Note: Changelog will be completed at that point. See commit messages for details.
+
 - <a href="https://github.com/unep-grid/map-x-mgl/tree/1.6.4-beta">1.6.4-beta</a>
 
     - New feature

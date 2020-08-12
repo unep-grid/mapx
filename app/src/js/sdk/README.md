@@ -521,6 +521,8 @@ Class to handle MapX specific method
     * [.toggle_draw_mode()](#MapxResolvers+toggle_draw_mode)
     * [.get_views_order()](#MapxResolvers+get_views_order) ⇒ <code>Array</code>
     * [.get_views_list_state()](#MapxResolvers+get_views_list_state) ⇒ <code>Array</code>
+    * [.set_views_list_filters(opt)](#MapxResolvers+set_views_list_filters) ⇒ <code>Boolean</code>
+    * [.get_views_list_filters()](#MapxResolvers+get_views_list_filters) ⇒ <code>Array</code>
     * [.get_views_title(opt)](#MapxResolvers+get_views_title) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state) ⇒ <code>Boolean</code>
     * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort) ⇒ <code>Boolean</code>
@@ -1137,6 +1139,60 @@ Get views current absolute order (without groups)
 Get views list state
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+<a name="MapxResolvers+set_views_list_filters"></a>
+
+### mapxResolvers.set\_views\_list\_filters(opt) ⇒ <code>Boolean</code>
+Set views list filter (ui)
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | options |
+| opt.reset | <code>Boolean</code> | Reset and remove all rules |
+| opt.rules | <code>Array</code> | Array of filter object. e.g. {type:'text',value:'marine'} |
+| opt.mode | <code>Boolean</code> | Set mode : 'intersection' or 'union'; |
+
+**Example**  
+```js
+// reset all rules
+mapx.ask('set_views_list_filter',{
+   reset:true
+})
+
+// Reset rules and filter views with a dashboard
+mapx.ask('set_views_list_filter',{
+   reset: true,
+   rules : [{
+   type : 'view_components, 
+   value:'dashboard'
+   }]
+})
+
+// All views with marine or earth in title or abstract or vector views or raster views 
+mapx.ask('set_views_list_filter',{
+   rules:
+    [
+     {
+          type: 'text',
+          value: 'marine or earth'
+      },
+      {
+          type: 'view_components',
+          value: ['vt','rt']
+      }
+    ],
+    mode: 'union'
+  })
+```
+<a name="MapxResolvers+get_views_list_filters"></a>
+
+### mapxResolvers.get\_views\_list\_filters() ⇒ <code>Array</code>
+Get views list filter rules
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Rule list  
 <a name="MapxResolvers+get_views_title"></a>
 
 ### mapxResolvers.get\_views\_title(opt) ⇒ <code>Array</code>
