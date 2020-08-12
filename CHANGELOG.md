@@ -1,6 +1,6 @@
 
 ## Changelog
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.6.4-beta">1.6.4-beta</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.6.4-beta">1.6.4-beta</a>
 
     - New feature
        - New view integrated filter system : search using text with basic regex parsing, tags, activated views. Tags order reacts to language change. Two mode are available: union and intersection. Views count is more accurate and match all kinds of filters.
@@ -24,35 +24,35 @@
         - We do not use connection pool : pooling should be done by a sensible pooling system, like pg_pool.
         - Instead of using OGR to transfer spatial data to the DB, a first step with "PGDump" is made, then the result is piped through psql.
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.54">1.5.54</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.54">1.5.54</a>
     - Improvement 
       - APP 
         - Added new contact field in project's role settings 
       - APP/API
         - Added text version of html email messages
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.53">1.5.53</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.53">1.5.53</a>
     - New feature
       - APP 
         - New 'root mode' that allows platform administrators to switch user in order to solve issues.
     - Improvement
       - APP
         - Login messages for single use passwords or tokens are sent using an html template instead of raw text.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.52">1.5.52</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.52">1.5.52</a>
     - Improvement
       - APP 
         - Added options in projects to enable or not the join buttons to request membership see issue #251; 
     - Bug fixes
       - APP
         -  Fixes a bug where a guest user could see the join buttons
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.51">1.5.51</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.51">1.5.51</a>
     - Improvement
       - APP 
         -  Cleaned configuration files
         -  Added email configuration for setting default emails : bot, admin, guest.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.50">1.5.50</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.50">1.5.50</a>
     - Improvement 
       - APP Added logic to remove service worker and cache if there is not enough storage space in the browser. See issue #441.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.48">1.5.48</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.48">1.5.48</a>
     - Improvement
       - API
         - Added exposed header : content-length;
@@ -68,30 +68,30 @@
     - Bug fixes
       - App
         - Solve issue where validation message did not work : login window, new view name, new project name, etc..
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.47">1.5.47</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.47">1.5.47</a>
     - Improvement
       - APP
         - Map Composer : new feature : change font size of current item; better resolution handling; various fixes;
         - Share manager : add auto start option for story map
         - Dashboard : add an option to ignore or not events that return no data or an empty array. Added callback arguments in widgets; Solved issues with dashboard modal window title;
         
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.46">1.5.46</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.46">1.5.46</a>
     - Improvement
       - APP
         - Map Composer : removed dependencies on medium-editor and interactjs use custom ones; Added new features to set page size, units and other settings.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.45">1.5.45</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.45">1.5.45</a>
     - New feature
       - APP
         - Each view based on a vector source have now a button to display the full attribute table of the source. There is a filtering system by attribute that will also filter the displayed elements on the map. The table can be exported as CSV.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.44">1.5.44</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.44">1.5.44</a>
     - New feature
       - APP
         - Map composer - early version. A module to compose a map based on currently visible views
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.43">1.5.43</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.43">1.5.43</a>
     - Bug fixes 
       - APP
         - Solved issue with secondary attributes that were unselected during view edit.
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.42">1.5.42</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.42">1.5.42</a>
     - Improvement
       - APP
         - Added support for languages in forms validation + french translation
@@ -101,7 +101,7 @@
         - Added support for languages in recovery system
         - Minor translation changes. See #327.
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.41">1.5.41</a>    
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.41">1.5.41</a>    
     - Improvement
       - APP
         - Story map :
@@ -125,7 +125,7 @@
         - Removed loop optimisation. Loop optimizer have some issue when used in expression : the for loop was rebuilt outside scope;
 
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.2">1.5.40.2</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.40.2">1.5.40.2</a>
     - Improvement
       - APP/API
         - Starting code style validation using JSHint. See .jshintrc. This implies majors changes in all js, css, and html files. This will be a long incremential work.
@@ -136,7 +136,7 @@
         - API
         - Issue with geometry validation: auto-correction / validation did not work due to typos and logic Separate json and xml utilities
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40.1">1.5.40.1</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.40.1">1.5.40.1</a>
 
     - Bug fixes 
       - API 
@@ -146,7 +146,7 @@
         - Draw tool. `mapbox-gl-draw`
         - Geojson view creation using resulting draw 
 
- - <a href="https://github.com/fxi/map-x-mgl/tree/1.5.40">1.5.40</a>
+ - <a href="https://github.com/unep-grid/map-x-mgl/tree/1.5.40">1.5.40</a>
 
     - Improvement 
       - APP 
@@ -156,7 +156,7 @@
          - Raster views and custom code views have a dashboard functionality 
          - The click event in dashboard is usable for querying raster sources.
 
-- <a href="https://github.com/fxi/map-x-mgl/tree/bbb37f">1.5.30</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/bbb37f">1.5.30</a>
     - Improvement
       - API/APP
           - Create new source based on overlap analysis
@@ -169,7 +169,7 @@
     - Bug fixes
           - Broken uploader
        
-- <a href="https://github.com/fxi/map-x-mgl/tree/ce3d0d54c1">1.5.29</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/ce3d0d54c1">1.5.29</a>
     - Iprovement
       - APP
           - Batch screenshot creation
@@ -180,7 +180,7 @@
       - API
           - Implemented precise area calculation of overlap between countries and selected layers.
           
-- <a href="https://github.com/fxi/map-x-mgl/tree/5515f88ef71">1.5.27</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/5515f88ef71">1.5.27</a>
     - Improvement
       - APP
           - Better loading screen : higher z-index, block events when the app is busy, smooth transition back, when the loading is done
@@ -194,50 +194,50 @@
     - New feature
       - API 
           - Method to get source metadata : "/get/souce/metadata:id"
-- <a href="https://github.com/fxi/map-x-mgl/tree/11f89e4fea966169df9089d5c2ca15b301a575c5" target="_blank">1.5.26</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/11f89e4fea966169df9089d5c2ca15b301a575c5" target="_blank">1.5.26</a>
     - Improvement
       - APP
           - Update build process : use smaller chunks – issue with babel loader that produced huge chunks –; add promise polyfill, manually add manifest, minor changes;
       - API
           - Added new numeric parser to avoid bug in tiles where numeric was converted to string. This is related to style on numeric columns not correctly handled.
-- <a href="https://github.com/fxi/map-x-mgl/tree/bba8abc110f67d7654a509099cc85a3f683b244e" target="_blank">1.5.25</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/bba8abc110f67d7654a509099cc85a3f683b244e" target="_blank">1.5.25</a>
     - Improvement 
       - APP 
           - Upgrade all dependencies, fixes related issues
           - Upgrade build system to Webpack 4
           - Solve issues with translation rendering in metadata viewer 
-- <a href="https://github.com/fxi/map-x-mgl/tree/20067870e8cbaf11af66ddfba39f2612c439236c" target="_blank">1.5.24</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/20067870e8cbaf11af66ddfba39f2612c439236c" target="_blank">1.5.24</a>
     - Improvement
       - APP : Testing session reconnection
       - APP : Instant estimate of overlap area
     - Bug fixing
       - APP : Overlap function in PixOp had issue with lines: the first coordinate of each line could have been omited.
       - APP : Changed the regular expression that "validate" email to a more strict one. 
-- <a href="https://github.com/fxi/map-x-mgl/tree/144d2a37bd30955c4ad8a3b5081db25b18625d97" target="_blank">1.5.23</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/144d2a37bd30955c4ad8a3b5081db25b18625d97" target="_blank">1.5.23</a>
     - Improvement
       - APP : save and update query parameters: project, language, lat, lng, zoom. 
     - Bug fixing
      - APP : Overlaps using pixop, numbers of layers to take in account did not unterstood "All layers". Should be ok
-- <a href="https://github.com/fxi/map-x-mgl/tree/9557502329e34b821f6c4df0e9aaf3bb1f12edaa" target="_blank">1.5.22</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/9557502329e34b821f6c4df0e9aaf3bb1f12edaa" target="_blank">1.5.22</a>
     - Improvement
       - APP/API Let the user provide a projection system for download
       - APP : add basic option for highlight overlap tools
       - APP/API : new environment variable to store tokens and allowed user id as creator
       - APP : Add public view from public project in story maps available views
-- <a href="https://github.com/fxi/map-x-mgl/tree/8ebeae87833c8447041669db0a45c6d77625319f" target="_blank">1.5.21</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/8ebeae87833c8447041669db0a45c6d77625319f" target="_blank">1.5.21</a>
    - Improvement
       - API : Set pre-simplification only for zoom > 10 in postgres. 
       - APP : Added new environment variables for handling mapbox token and allowed project creators
-- <a href="https://github.com/fxi/map-x-mgl/tree/61b5592bdf2de9afb14a4bf1cf1713571e0ca0b1" target="_blank">1.5.20</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/61b5592bdf2de9afb14a4bf1cf1713571e0ca0b1" target="_blank">1.5.20</a>
    - Improvement
       - Added an experimental tool to highlight potential overlaps between vector layers
     - Bug fixing
       - Story map bullets werent removed due to a DOM issue 
       - Confidentiality issue : a publisher with edit access to a story map editor was able to list and use views from a private projects to which she had no access. This could still occurs if the view is purposely shared or imported as public view to another non-private project.
-- <a href="https://github.com/fxi/map-x-mgl/tree/bc81b623ce09bc1359857c5e9cce00f8a1c24854" target="_blank">1.5.19</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/bc81b623ce09bc1359857c5e9cce00f8a1c24854" target="_blank">1.5.19</a>
    - Improvement
       - Added support for quering wms based raster source layer
-- <a href="https://github.com/fxi/map-x-mgl/tree/caaee2e9be52711da3c0805da215140653661d59" target="_blank">1.5.18</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/caaee2e9be52711da3c0805da215140653661d59" target="_blank">1.5.18</a>
    - Improvement 
       - Added support for download sources as CSV #212
       - Added projection data when downloading geospatial files #322
@@ -245,73 +245,73 @@
       - Solved issue when images in legend where broken into multiple columns #324
    - Rollback
       - Remove privilege to create new project for everyone. Only selected user can create new project.
-- <a href="https://github.com/fxi/map-x-mgl/tree/d02a7ce3c3985fe8629efb324014871881b70c9a" target="_blank">1.5.17</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/d02a7ce3c3985fe8629efb324014871881b70c9a" target="_blank">1.5.17</a>
    - Improvement
        - Add current view count in filters by category
        - Style minor change in filter by labels and filter by attributes 
-- <a href="https://github.com/fxi/map-x-mgl/tree/7362a8457e76cea32dca9fb1367edfe78660736f" target="_blank">1.5.16</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/7362a8457e76cea32dca9fb1367edfe78660736f" target="_blank">1.5.16</a>
    - Improvement 
        - Modal Added four preset button for modal panel, added an option to resize panel horizontally.
        - Added autoprefixer for CSS in webpack config
    - Bug fixing
        - Dashboard modules could be ignored after a view edition. In case of only one module, the script automatically converted the value in a JSON string, and the dashboard was expecting an array. The `module` key in the `view.data.dashboard` can now be a string or an array. Or empty.
-- <a href="https://github.com/fxi/map-x-mgl/tree/3c8d973fbb55a7c5d4fb57fb32b3eda2700c24ad" target="_blank">1.5.15</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/3c8d973fbb55a7c5d4fb57fb32b3eda2700c24ad" target="_blank">1.5.15</a>
    - Added translation support in filter views list by tags
    - Filter views by tags : use `AND` operator between filter types and `OR` within filter types. 
-- <a href="https://github.com/fxi/map-x-mgl/tree/c1e7616df923d9860264d79cc461dfa5b6d657d5" target="_blank">1.5.14</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/c1e7616df923d9860264d79cc461dfa5b6d657d5" target="_blank">1.5.14</a>
    - Removed bug where (empty) private project could be seen when pressing a shared view's "home" button
    - Added support for spanish. Thanks @GianlucaGygax !
    - Updated service workers strategy. Using no-cache in traefik should solve issue where old cache were kept.
    - Modification on entry files for webpack to enable a viewer only mode for the app.
-- <a href="https://github.com/fxi/map-x-mgl/tree/775e37f9d58f6f51df94bf890a19753f64d43e95" target="_blank">1.5.13</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/775e37f9d58f6f51df94bf890a19753f64d43e95" target="_blank">1.5.13</a>
    - Removed a bug where a dashboard was not removed if no source layer where used
    - Use pointer events instead of mouse event
    - Added a 'minimize' button in modal windows
    - Removed resize corner in modal windows – ( it's not widely used and it produced a bug with flexbox )
-- <a href="https://github.com/fxi/map-x-mgl/tree/0e8c7feae41290071b2fb728cd1ad369974868c0" target="_blank">1.5.12</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/0e8c7feae41290071b2fb728cd1ad369974868c0" target="_blank">1.5.12</a>
    - Solved an issue in view button when a zoom was applied in the browser: the nested circle was not well aligned producing a weird effect. Using SVG, the problem as been solved. 
    - Update dependencies, see `app/package.json`
    - Changed the service worker generator to `workbox-webpack-plugin` 
    - Solved #277 where removal of a project did not remove releated views that does not had sources (raster, story, etc). 
-- <a href="https://github.com/fxi/map-x-mgl/tree/d509c639fc1be78e81405a978a63db1ff5b1d190" target="_blank">1.5.11</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/d509c639fc1be78e81405a978a63db1ff5b1d190" target="_blank">1.5.11</a>
    - Solved #276
    - Solved #274
    - Added a function to unregister service worker 
-- <a href="https://github.com/fxi/map-x-mgl/tree/4c36b899fd5887b21536703eed61ba4c22ebc07f" target="_blank">1.5.10</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/4c36b899fd5887b21536703eed61ba4c22ebc07f" target="_blank">1.5.10</a>
    - New radial progress svg constructor
    - Direct local storage for views object, in addition to browser cache and service worker cache. Faster. 
    - Bug fixes : label too long in map data properties query popup. Display the full thing on hover.
    - Code cleaning
-- <a href="https://github.com/fxi/map-x-mgl/tree/d60a48cb841753e2578473a521b8d757cec6d5ff" target="_blank">1.5.9</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/d60a48cb841753e2578473a521b8d757cec6d5ff" target="_blank">1.5.9</a>
    - Improvement of road style : added more than 30 layers extracted and modified from style "Lè Shine" (https://frama.link/leshine),
    - Integrated simplified colors setting for roads, road border and building in style editor.
-- <a href="https://github.com/fxi/map-x-mgl/tree/36fdfebac77231db028b358dd173e4ab9fd4ed7a" target="_blank">1.5.8</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/36fdfebac77231db028b358dd173e4ab9fd4ed7a" target="_blank">1.5.8</a>
    - Solved #272 : the built date was wrong in the encrypted mail validation.
-- <a href="https://github.com/fxi/map-x-mgl/tree/dfc4013b8b69f572794bc3d691eec366289809af" target="_blank">1.5.7</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/dfc4013b8b69f572794bc3d691eec366289809af" target="_blank">1.5.7</a>
    - Add service worker to cache assets and tiles,
    - Migrate language dict file to JSON, instead of csv, to be able to merge pull requests more easily,
    - Minor changes.
-- <a href="https://github.com/fxi/map-x-mgl/tree/50b05b59d95b46ea3835b15d6ced9fc161d50455" target="_blank">1.5.6</a> 
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/50b05b59d95b46ea3835b15d6ced9fc161d50455" target="_blank">1.5.6</a> 
    - Updated version of R,
    - Added api upload for geojson stored client side,
    - Minor changes.
-- <a href="https://github.com/fxi/map-x-mgl/tree/032f969f49e167aeb8af70dcc899a6fb8f34b169" target="_blank">1.5.5</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/032f969f49e167aeb8af70dcc899a6fb8f34b169" target="_blank">1.5.5</a>
    - Added query parameter support to filter max role for view fetching : `?filterViewsByRoleMax=public` will show all public views only,
    - Added styling option for map labels :  outline color.
-- <a href="https://github.com/fxi/map-x-mgl/tree/62f76547809f342ad8c8a3b9c5f7a5ceba02c3ec" target="_blank">1.5.4</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/62f76547809f342ad8c8a3b9c5f7a5ceba02c3ec" target="_blank">1.5.4</a>
   - Faster and more accurate view count without analyzing sequentially every project. It should counts shared views, external views, private views, public views and targeted views for every project of the current user.
-- <a href="https://github.com/fxi/map-x-mgl/tree/05bd71f1c4bffa9b07e588a160770cb1c539cb84" target="_blank">1.5.3</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/05bd71f1c4bffa9b07e588a160770cb1c539cb84" target="_blank">1.5.3</a>
   - Added a new sharing option : any view can be imported as external, non-modifiable view in a project where the user is at least a publisher,
   - Removed www/ files from git repo : those are built with webpack, not useful to have them around.
-- <a href="https://github.com/fxi/map-x-mgl/tree/34674b85a3c1d0b34979b40a5fbca8febc0783bd" target="_blank">1.5.2</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/34674b85a3c1d0b34979b40a5fbca8febc0783bd" target="_blank">1.5.2</a>
   - Fixed story map view selection #255,
   - Fixed raster legend size : let the user click to expand the image into a modal,
   - Fixed legend label alignment,
   - Fixed long abstract #253.
-- <a href="https://github.com/fxi/map-x-mgl/tree/81596c1b7c6ff64740662067ae41080fccf78788" target="_blank">1.5.1</a>
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/81596c1b7c6ff64740662067ae41080fccf78788" target="_blank">1.5.1</a>
   - Solved bug where user was not able to authenticate when uploading an image,
   - Better legend and description of view content, using multi-column layout.
-- <a href="https://github.com/fxi/map-x-mgl/tree/2e8249a3142d5f9be01dfd0e5afd4b414ab336f4" target="_blank">1.5.0</a> 
+- <a href="https://github.com/unep-grid/map-x-mgl/tree/2e8249a3142d5f9be01dfd0e5afd4b414ab336f4" target="_blank">1.5.0</a> 
   - Refactoring,
   - Manage by project. It's now possible to manage your data by project, in addition to collections and classes, 
   - Using docker for the whole stack,
