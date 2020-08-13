@@ -7,7 +7,7 @@ const mx_valid = require('@fxi/mx_valid');
 
 const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
   {
-    expected: ['idView', 'idSource', 'idAttr', 'noCache']
+    expected: ['idView', 'idSource', 'idAttr', 'noCache','binsCompute','binsMethod','binsNumber']
   }
 );
 
@@ -15,12 +15,16 @@ exports.get = [validateParamsHandler, getSourceSummaryHandler];
 exports.getSourceSummary = getSourceSummary;
 
 async function getSourceSummaryHandler(req, res) {
+  
   try {
     const data = await getSourceSummary({
       idSource: req.query.idSource,
       idView: req.query.idView,
       idAttr: req.query.idAttr,
-      noCache: req.query.noCache
+      noCache: req.query.noCache,
+      binsCompute : req.query.binsCompute,
+      binsNumber : req.query.binsNumber,
+      binsMethod : req.query.binsMethod // heads_tails, jenks, equal_interval, quantile
     });
 
     if (data) {
@@ -96,7 +100,6 @@ async function getSourceSummary(opt) {
   opt.idAttrT0 = opt.hasT0 ? 'mx_t0' : 0;
   opt.idAttrT1 = opt.hasT1 ? 'mx_t1' : 0;
   opt.timestamp = timestamp;
-
   const hasGeom = columns.indexOf('geom') > -1;
   const hasAttr = columns.indexOf(opt.idAttr) > -1;
   const isCategorical = attrType === 'string';

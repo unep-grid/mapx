@@ -1,17 +1,32 @@
 const s = require('./../settings');
-const {Pool, types} = require('pg');
+const fs = require('fs');
+const path = require('path');
+const {Pool, Client, types} = require('pg');
 const redis = require('redis');
-const { promisify } = require("util");
+const {promisify} = require('util');
+const readFile = promisify(fs.readFile);
+const readDir = promisify(fs.readdir);
 /*
  * custom type parsing
  */
-types.setTypeParser(1700, function(val) {
+types.setTypeParser(1700, (val) => {
   return parseFloat(val);
 });
-types.setTypeParser(20, function(value) {
+types.setTypeParser(20, (value) => {
   return parseInt(value);
 });
 
+/**
+ * Init sql fun
+ */
+const start = Date.now();
+initSqlFun().then((r) => {
+  console.log(`${r.length} SQL function(s) imported in ${Date.now()-start} ms`);
+});
+
+/**
+ * Set write pool
+ */
 var pgWrite = new Pool({
   host: s.db.host,
   user: s.db.write.user,
@@ -27,6 +42,9 @@ pgWrite.on('error', (err) => {
   process.exit(-1);
 });
 
+/**
+ * Set read pool
+ */
 var pgRead = new Pool({
   host: s.db.host,
   user: s.db.read.user,
@@ -69,6 +87,54 @@ clientRedis.on('error', (err) => {
 });
 
 exports.clientRedis = clientRedis;
-exports.redisGet = promisify(clientRedis.get).bind(clientRedis); 
-exports.redisSet = promisify(clientRedis.set).bind(clientRedis); 
+exports.redisGet = promisify(clientRedis.get).bind(clientRedis);
+exports.redisSet = promisify(clientRedis.set).bind(clientRedis);
 
+async function initSqlFun() {
+  const pgAdmin = new Client({
+    host: s.db.host,
+    user: s.db.admin.user,
+    database: s.db.name,
+    password: s.db.admin.password,
+    port: s.db.port
+  });
+
+  pgAdmin.connect();
+
+  pgAdmin.on('error', (err) => {
+    console.error('Unexpected error on postgres client admin', err);
+    process.exit(-1);
+  });
+
+  /**
+   * Import plpsql functions
+   */
+  try {
+    const sqlFileDir = path.join(__dirname, 'sql');
+    /**
+     * Get files
+     */
+    const filesAll = await readDir(sqlFileDir, {encoding: 'utf8'});
+    const files = filesAll.reduce((a, f) => {
+      if (!!f.match(/\.sql$/)) {
+        a.push(f);
+      }
+      return a;
+    }, []);
+
+    /**
+     * Import
+     */
+    const queries = files.map(async (file) => {
+      const filePath = path.join(sqlFileDir, file);
+      const sql = await readFile(filePath, (endoding = 'UTF-8'));
+      return pgAdmin.query(sql);
+    });
+    const results = await Promise.all(queries);
+    pgAdmin.end();
+    return results;
+  } catch (e) {
+    console.error('Unexpected error when reading pg functions', err);
+    process.exit(-1);
+  }
+}

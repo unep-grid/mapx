@@ -9,37 +9,39 @@ attr_min as (
   min("{{idAttr}}")
   FROM "{{idSource}}"
 ),
-serie as (
-  SELECT array_agg(gs) as v FROM  generate_series(0, 1, 0.01) as gs
+attr_array as (
+  SELECT array_agg("{{idAttr}}") as agg 
+  FROM "{{idSource}}" 
 ),
-attr_percentile as (
+bins as (
   SELECT
-  percentile_cont((select v from serie)) 
-  WITHIN GROUP (ORDER BY "{{idAttr}}") as p
-  FROM {{idSource}}
-),
-attr_percentile_table as (
-  SELECT 
-  unnest(serie.v)*100 as percentile, 
-  unnest(ptable.p) as value
-  FROM attr_percentile ptable, serie
-),
-attr_percentile_table_json as (
-  SELECT json_agg(ptable) as table
-  FROM attr_percentile_table ptable
+  CASE
+  WHEN '{{binsMethod}}' = 'jenks'
+    THEN CDB_JenksBins( agg , {{binsNumber}})
+  WHEN '{{binsMethod}}' = 'quantile'
+    THEN CDB_QuantileBins( agg , {{binsNumber}})
+  WHEN '{{binsMethod}}' = 'heads_tails'
+    THEN CDB_HeadsTailsBins( agg , {{binsNumber}})
+  WHEN '{{binsMethod}}' = 'equal_interval'
+    THEN  CDB_EqualIntervalBins( agg , {{binsNumber}})
+END as bins
+FROM attr_array
 )
 
 SELECT json_build_object(
   'attribute_stat', json_build_object(
     'attribute', '{{idAttr}}',
     'type', 'continuous',
-    'min', to_json(amin.min),
-    'max', to_json(amax.max),
-    'table_percentiles', to_json(aperc.table)
+    'min', to_json(attr_min.min),
+    'max', to_json(attr_max.max),
+    'bins', to_json(bins.bins),
+    'binsMethod','{{binsMethod}}',
+    'binsNumber','{{binsNumber}}'
   )
 ) as res
 FROM
-attr_max as amax, 
-attr_min as amin, 
-attr_percentile_table_json as aperc
+attr_max, 
+attr_min, 
+bins
+-- attr_percentile_table_json as aperc
 
