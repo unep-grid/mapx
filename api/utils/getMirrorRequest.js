@@ -1,15 +1,15 @@
 const request = require('request');
-const auth = require('./authentication.js');
 /**
  * Request handler / middleware
  */
 
-module.exports.get = [auth.validateTokenHandler, mirrorHandler];
+module.exports.get = [mirrorHandler];
 
 function mirrorHandler(req, res) {
-  var query = req.query;
+  
+  const query = req.query;
 
-  var options = {
+  const options = {
     url: query.url,
     method: 'GET',
     headers: JSON.parse(query.headers || null),
