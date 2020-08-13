@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.105-beta' target='_blank'>1.6.105-beta</a>
+    - Internal
+       - API : remove token based restriction on route `/get/mirror` as it prevented usage from static site.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.104-beta' target='_blank'>1.6.104-beta</a>
 
     - Improvement
