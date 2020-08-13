@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.106-beta' target='_blank'>1.6.106-beta</a>
+
+   - New features
+       - API: Source summary can now return automatic binning for a continuous variable. Method implemented : jenks, equal_interval, heads_tails, quantile. e.g. `idSource=<id of the source >&idAttr=<variable name>&binsMethod=<jenks | equal_interval | heads_tails | quantile>&binsNumber=< integer >0 & <= 100>`
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.105-beta' target='_blank'>1.6.105-beta</a>
     - Internal
        - API : remove token based restriction on route `/get/mirror` as it prevented usage from static site.
