@@ -180,19 +180,22 @@ export function setQueryParametersUpdate(params) {
  */
 export function objToParams(data) {
   const h = mx.helpers;
-  var esc = encodeURIComponent;
-  var params = [];
+  const esc = encodeURIComponent;
 
-  Object.keys(data).forEach((k) => {
+  const params = Object.keys(data).map((k) => {
     if (k) {
-      const value = data[k];
+      let value = data[k];
       if (
         h.isString(value) ||
         h.isBoolean(value) ||
-        h.isArrayOfString(value) ||
-        h.isNumeric(value)
+        h.isObject(value) ||
+        h.isNumeric(value) ||
+        h.isArrayOfString(value)
       ) {
-        params.push(esc(k) + '=' + esc(value));
+        if (h.isObject(value)) {
+          value = JSON.stringify(value);
+        }
+        return `${esc(k)}=${esc(value)}`;
       }
     }
   });
