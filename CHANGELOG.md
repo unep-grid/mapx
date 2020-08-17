@@ -1,5 +1,17 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.107-beta' target='_blank'>1.6.107-beta</a>
+
+  - New feature
+      - APP : new method to ease fetching data through MapX mirror.
+  - Improvement
+      - API : simplify mirror method, copy back the response headers. 
+      - APP, WMS interaction : exception as image; added busy interface when waiting.
+  - Bug fixes
+      - APP, WMS request: solved issue occuring with with empty styles in getMap request.
+      - APP: Solved internal bug occuring when a new view without sources was saved.
+      - APP, error manager : Error message not correctly displayed when extracting promise error message.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.106-beta' target='_blank'>1.6.106-beta</a>
 
    - New features
