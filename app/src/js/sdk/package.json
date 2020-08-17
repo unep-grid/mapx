@@ -17,7 +17,7 @@
     "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
     "prod": "microbundle -o dist && npm run jsdoc && npm publish",
-    "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"
+    "jsdoc": "jsdoc2md --heading-depth 3 --template readme.hbs --files src/**/*.js > README.md"
   },
   "repository": {
     "type": "git",
