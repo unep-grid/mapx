@@ -222,6 +222,7 @@ async function wmsBuildQueryUi(opt) {
 
   function setBusy(busy) {
     if (busy) {
+      h.setBusy(true);
       elInputService.setAttribute('disabled', true);
       elButtonGetLayers.setAttribute('disabled', true);
       elButtonUpdate.setAttribute('disabled', true);
@@ -232,6 +233,7 @@ async function wmsBuildQueryUi(opt) {
         selectLayer.disable();
       }
     } else {
+      h.setBusy(false);
       elInputService.removeAttribute('disabled');
       elButtonGetLayers.removeAttribute('disabled', true);
       elButtonUpdate.removeAttribute('disabled', true);
@@ -258,18 +260,17 @@ async function wmsGetCapabilities(baseUrl) {
 
   data = await cacheGet(url);
 
-  if(!data){
+  if (!data) {
     const xmlString = await h.fetchProgress_xhr(url, {
       maxSize: mx.settings.maxByteFetch,
       timeout: 2e4
     });
 
     data = new WMSCapabilities(xmlString).toJSON();
-    cacheSet(url,data, {ttl:1000 * 60 * 60 * 24 * 2});
-  }else{
+    cacheSet(url, data, {ttl: 1000 * 60 * 60 * 24 * 2});
+  } else {
     console.log('Get from cache');
   }
-
 
   return h.path(data, 'Capability', {});
 }
@@ -319,6 +320,7 @@ function urlTile(opt) {
     styles: '',
     request: 'getMap',
     ZINDEX: 10,
+    EXCEPTIONS: 'application/vnd.ogc.se_inimage',
     srs: 'EPSG:3857',
     layers: opt.layer,
     format: 'image/png',

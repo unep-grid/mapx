@@ -87,14 +87,16 @@ export function isArrayOfViews(arr) {
   );
 }
 
+// jshint ignore:start
 /**
  * Test if a raster view has wms url
  * @param {Object} view
  * @return {Boolean} valid
  */
 export function isViewWms(view) {
-  return isViewRt(view) && isUrlValidWms(view.data.source.tiles[0]);
+  return isViewRt(view) && isUrlValidWms(view?.data?.source?.tiles[0]);
 }
+// jshint ignore:end
 
 /**
  * Test if array of views id

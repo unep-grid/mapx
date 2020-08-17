@@ -53,10 +53,10 @@ export function getQueryParameterInit(idParam) {
 
   function add(id) {
     const value = mx.initQueryParams[id];
-    if(value){
+    if (value) {
       if (h.isArray(value)) {
         out = out.concat(value);
-      }else{
+      } else {
         out.push(value);
       }
     }
@@ -111,16 +111,16 @@ function getQueryParameter_array(names) {
  */
 export function getQueryParametersAsObject(urlString, opt) {
   const out = {};
-  opt = Object.assign({},{lowerCase:false},opt);
+  opt = Object.assign({}, {lowerCase: false}, opt);
   const url = new URL(urlString || window.location.href);
   url.searchParams.forEach((v, k) => {
     /**
      * Note: check why lowercase was set
      * Answer : to lower case is more predictable, e.g. in checking for presence/absence of a parameter
      */
-    if(opt.lowerCase){
+    if (opt.lowerCase) {
       out[k.toLowerCase()] = asArray(v);
-    }else{
+    } else {
       out[k] = asArray(v);
     }
   });
@@ -179,17 +179,22 @@ export function setQueryParametersUpdate(params) {
  * @return {String} params string
  */
 export function objToParams(data) {
+  const h = mx.helpers;
   var esc = encodeURIComponent;
   var params = [];
 
   Object.keys(data).forEach((k) => {
     if (k) {
       const value = data[k];
-      if(value){
+      if (
+        h.isString(value) ||
+        h.isBoolean(value) ||
+        h.isArrayOfString(value) ||
+        h.isNumeric(value)
+      ) {
         params.push(esc(k) + '=' + esc(value));
       }
     }
   });
-
   return params.join('&');
 }
