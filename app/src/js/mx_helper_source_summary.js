@@ -45,6 +45,36 @@ export async function getSourceVtSummary(opt) {
   return summary;
 }
 
+export async function getSourceVtSummaryUI(opt) {
+  const h = mx.helpers;
+  const summary = await h.getSourceVtSummary(opt);
+  const aStat = summary.attribute_stat;
+  const elContainer = h.el('div');
+  let title = opt.idSource || opt.idView;
+  let titleTable = 'Table';
+  if (h.isViewId(opt.idView)) {
+    title = h.getViewTitle(opt.idView);
+  }
+
+  if (aStat.type === 'continuous') {
+    aStat.table.forEach((r) => {
+      Object.keys(r).forEach((k) => (r[k] = Math.round(r[k] * 1000) / 1000));
+    });
+    titleTable = `${titleTable} ( Method : ${
+      aStat.binsMethod
+    }, number of bins : ${aStat.binsNumber} )`;
+  }
+  const elTable = h.elAuto('array_table', aStat.table, {
+    tableTitle: titleTable
+  });
+  elContainer.appendChild(elTable);
+
+  h.modal({
+    title: title,
+    content: elContainer
+  });
+}
+
 /**
  * Get raster (wms) source summary
  */
