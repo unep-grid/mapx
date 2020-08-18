@@ -970,9 +970,10 @@ export async function handleClickEvent(e, idMap) {
   const hasDashboard = clickModes.indexOf('dashboard') > -1;
   const hasDraw = clickModes.indexOf('draw') > -1;
   const hasSdk = clickModes.indexOf('sdk') > -1;
+  const hasCC = clickModes.indexOf('cc') > -1;
 
   if (hasLayer && type === 'click') {
-    if (hasDashboard || hasDraw) {
+    if (hasDashboard || hasDraw || hasCC) {
       /**
        * Handled by Dashboard/Widget
        */
@@ -1524,7 +1525,8 @@ export function viewsCheckedUpdate(o) {
   /**
    * Update views groups
    */
-  vVisible.push(...h.getViewsLayersVisibles());
+  vVisible.push(...h.getViewsOpen());
+  //vVisible.push(...h.getViewsLayersVisibles());
   vToRemove.push(...h.getArrayDiff(vVisible, vChecked));
   vToAdd.push(...h.getArrayDiff(vChecked, vVisible));
 
@@ -2455,6 +2457,7 @@ export async function viewRemove(view) {
       }
     });
   });
+  
   await _viewUiClose(view);
   await h.viewLayersRemove({
     idView: view.id
