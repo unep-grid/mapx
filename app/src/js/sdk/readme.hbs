@@ -5,12 +5,12 @@ The package `MxSdk` ease the integration of MapX. It features a simple way to in
 
 ## Usage
 
-As an integrator you will interact with the `Manager` class which embeds an instance of MapX and allows to use specific methods or events.
+As an integrator you will use the `Manager` class to embed an instance of MapX and allow to interact with MapX's specific methods or events.
 
 ### Module include
 
 ```
-$ npm install @fxi@mxsdk
+$ npm install @fxi/mxsdk
 ...
 import {Manager} from '@fxi/mxsdk';
 ```
@@ -48,7 +48,7 @@ mapx.on('ready', async () => {
   console.log(views);
 
   /**
-   * Display a given view/layer on the embedded map
+   * Add a view to be displayed on the embedded map
    */
   mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
@@ -59,7 +59,7 @@ mapx.on('ready', async () => {
 
 ### Methods
 
-[Methods are handeld by the MapxResolvers class](#MapxResolvers) and are call using `Manager.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value.
+[Methods are handled by the MapxResolvers class](#MapxResolvers) and are call using `Manager.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value.
 
 ### Events
 
