@@ -22,7 +22,9 @@ const modules = {
   dashboard: loadDashboard,
   ace: loadAceEditor,
   'js-beautify': loadJsBeautify,
-  'html2canvas': loadHtmlToCanvas
+  html2canvas: loadHtmlToCanvas,
+  'chroma-js': loadChromaJs,
+  'radio-group':loadRadioGroup
 };
 
 export function moduleLoad(name) {
@@ -48,6 +50,19 @@ function loadHtmlToCanvas() {
     return m.default;
   });
 }
+
+function loadChromaJs() {
+  return import('chroma-js').then((m) => {
+    return m.default;
+  });
+}
+
+function loadRadioGroup() {
+  return import('./radio_group').then((m) => {
+     return m.RadioGroup
+  });
+}
+
 
 function loadJsBeautify() {
   return import('js-beautify').then((m) => {
@@ -95,10 +110,9 @@ function loadMapboxGlDraw() {
 }
 
 function loadAceEditor() {
-  return import('ace-builds')
-    .then((m) => {
-      return import('ace-builds/webpack-resolver.js');
-    })
+  return import('ace-builds').then((m) => {
+    return import('ace-builds/webpack-resolver.js');
+  });
 }
 
 function loadDragDropWorker() {
