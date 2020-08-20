@@ -81,19 +81,7 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-env',
-                {
-                  useBuiltIns: 'usage',
-                  corejs: 3
-                }
-              ]
-            ],
-            plugins: ['@babel/syntax-dynamic-import']
-          }
+          loader: 'babel-loader'
         }
       },
       {test: /\.dot$/, loader: 'dot-loader', options: {}},

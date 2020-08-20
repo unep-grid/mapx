@@ -36,6 +36,22 @@ then
 fi
 
 #
+# Should pass js linting
+#
+cd $DIR_APP
+npm run lint
+
+if [ $? -eq 0 ]; then
+  echo Linting passed
+else
+  echo Liniting failed
+  exit 1
+fi
+
+cd $DIR_CUR
+
+
+#
 # Update version + verification
 #
 
