@@ -1,0 +1,41 @@
+{
+  "name": "@fxi/el",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "module": "dist/el.mjs",
+  "unpkg": "dist/el.umd.js",
+  "browser": "dist/el.umd.js",
+  "amdName": "El",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/unep-grid/map-x-mgl"
+  },
+  "description": "Quick DOM elements creation in js.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "microbundle watch -o dist",
+    "serve": "live-server example --mount=/dist:dist",
+    "prod": "microbundle -o dist && npm publish"
+  },
+  "keywords": [
+    "el",
+    "dom",
+    "html",
+    "tags",
+    "minimalist",
+    "experiment"
+  ],
+  "author": "Fred Moser",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "microbundle": "^0.11.0"
+  },
+  "bugs": {
+    "url": "https://github.com/fxi/el/issues"
+  },
+  "homepage": "https://github.com/fxi/el#readme",
+  "directories": {
+    "lib": "lib"
+  }
+}
