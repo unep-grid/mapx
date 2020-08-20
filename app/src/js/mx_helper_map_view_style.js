@@ -1,15 +1,34 @@
+let vtStyle = null;
+
 export async function vtStyleBuilder(opt) {
   const h = mx.helpers;
 
+  if (!!vtStyle) {
+    return;
+  }
   /**
    * Init
    */
   const summary = await h.getSourceVtSummary(opt);
   const aStat = summary.attribute_stat;
+
+  opt = Object.assign(
+    {},
+    {
+      idView: null,
+      idSource: null,
+      binsMethod: 'jenks',
+      binsNumber: 5
+    },
+    opt
+  );
+
   opt._palette = null;
   opt._type = aStat.type;
   opt._elsParts = [];
   opt._elsInputs = [];
+  opt._out = [];
+  opt._buttons = [];
 
   /**
    * Labels
@@ -35,16 +54,16 @@ export async function vtStyleBuilder(opt) {
           class: 'form-control',
           type: 'number',
           value: opt.binsNumber,
-          min : 1,
-          max : 100,
+          min: 1,
+          max: 100,
           on: {
             change: (e) => {
               const value = e.target.value;
-              if(value < 5 || value > 100){
-                elValidNum.innerText = 'Value must be >= 5 and <= 100';
+              if (value < 1 || value > 100) {
+                elValidNum.innerText = 'Value must be >= 1 and <= 100';
                 elNbins.classList.add('has-error');
                 return;
-              }else{
+              } else {
                 elValidNum.innertext = '';
                 elNbins.classList.remove('has-error');
               }
@@ -53,7 +72,7 @@ export async function vtStyleBuilder(opt) {
             }
           }
         }),
-        elValidNum = h.el('span',{class:['help-block']})
+        (elValidNum = h.el('span', {class: ['help-block']}))
       ]
     );
     const elBinsOptions = [
@@ -115,7 +134,6 @@ export async function vtStyleBuilder(opt) {
     items: palettes,
     onUpdate: (palette) => {
       opt._palette = palette;
-      console.log(opt);
       update();
     },
     builder: (item) => {
@@ -167,6 +185,49 @@ export async function vtStyleBuilder(opt) {
   opt._elsParts.push(opt._elTableContainer);
 
   /**
+   * Button on done
+   */
+  if (h.isFunction(opt.onDone)) {
+    const elDone = h.el(
+      'button',
+      {
+        type: 'button',
+        class: ['btn', 'btn-default'],
+        on: [
+          'click',
+          () => {
+            opt.onDone(opt._out);
+          }
+        ]
+      },
+      'Update rules'
+    );
+    opt._buttons.push(elDone);
+  }
+
+  /**
+   * Modal
+   */
+  h.modal({
+    title: title,
+    content: h.el('div', opt._elsParts),
+    noShinyBinding: true,
+    addSelectize: false,
+    onClose: clean,
+    buttons: opt._buttons
+  });
+
+  update();
+
+  /**
+   * Clean
+   */
+  function clean() {
+    vtStyle = null;
+    rgPalette.destroy();
+  }
+
+  /**
    * Update
    */
   async function update() {
@@ -187,17 +248,25 @@ export async function vtStyleBuilder(opt) {
     /**
      * Clean values for display
      */
-      aStat.table.forEach((r) => {
-        Object.keys(r).forEach((k) => {
-          if (h.isNumeric(r[k])) {
-            r[k] = Math.round(r[k] * 1000) / 1000;
-          }
-          if (k === 'color') {
-            r[k] = h.el('div', {style: {backgroundColor: r[k]}}, r[k]);
-          }
-        });
+    aStat.table.forEach((r) => {
+      Object.keys(r).forEach((k) => {
+        if (h.isNumeric(r[k])) {
+          r[k] = Math.round(r[k] * 1000) / 1000;
+        }
+        if (k === 'color') {
+          r.preview = h.el('div', {
+            style: {
+              backgroundColor: r[k],
+              width: '20px',
+              height: '20px',
+              border: '1px solid ccc',
+              borderRadius: '5px'
+            }
+          });
+        }
       });
-    
+    });
+
     if (aStat.type === 'continuous') {
       titleTable = `${titleTable} ( Method : ${
         aStat.binsMethod
@@ -213,19 +282,6 @@ export async function vtStyleBuilder(opt) {
     opt._elTableContainer.innerHTML = '';
     opt._elTableContainer.appendChild(elTable);
 
-    console.log(aStat);
-  }
-
-  h.modal({
-    title: title,
-    content: h.el('div', opt._elsParts),
-    noShinyBinding: true,
-    addSelectize: false,
-    onClose : clean
-  });
-
-  update();
-  function clean(){
-    rgPalette.destroy();
+    opt._out = aStat;
   }
 }

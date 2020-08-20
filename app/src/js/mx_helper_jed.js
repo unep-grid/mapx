@@ -61,8 +61,6 @@ export function jedInit(o) {
       disable_collapse: false,
       disable_properties: true,
       disableSelectize: false,
-      pickolorEnable: false,
-      pickolorId: null,
       disable_edit_json: false,
       required_by_default: true,
       show_errors: 'always',
@@ -105,40 +103,6 @@ export function jedInit(o) {
     editor.on('ready', function() {
       jed.editors[id] = editor;
 
-      /**
-       * Configure pickolor
-       */
-      if (opt_final.pickolorEnable) {
-        var pk = window.pk;
-        var dict = [];
-        if (pk) {
-          pk.destroy();
-        }
-        h.getDict(mx.settings.language)
-          .then((d) => {
-            dict = d;
-            return h.moduleLoad('pickolor');
-          })
-          .then((Pickolor) => {
-            window.pk = new Pickolor({
-              language: mx.settings.language,
-              dict: dict,
-              idPalette: opt_final.pickolorId || null,
-              container: el,
-              onInitColor: (target) => {
-                return target.style.backgroundColor;
-              },
-              onPick: (color, target) => {
-                var idEditor = target.dataset.id_editor;
-                var ed = editor.editors[idEditor];
-                if (ed && ed.setValue) {
-                  ed.setValue(color);
-                }
-                target.style.backgroundColor = color;
-              }
-            });
-          });
-      }
 
       /**
        * Auto save draft

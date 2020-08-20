@@ -32,6 +32,11 @@ mxSchemaViewStyle <- function(
   data <- .get(view,c("data"))
 
   #
+  # id
+  #
+  idView <- .get(view,c("id"))
+
+  #
   # import style
   #
   style <- .get(data,c("style"))
@@ -195,11 +200,14 @@ mxSchemaViewStyle <- function(
     rules = list(
       propertyOrder = 1,
       type = "array",
-      format = "table",
+      format = "tableSourceAutoStyle",
       title = tt("schema_style_rules"),
       items = list(
         type = "object",
         title = tt("schema_style_rule"),
+        options = list(
+          idView = idView
+          ),
         properties = c(
           value,
           labels,
