@@ -1,4 +1,3 @@
-const $ = jQuery;
 const mapx = new mxsdk.Manager({
   container: document.getElementById('mapx'),
   url: 'http://dev.mapx.localhost:8880/?project=MX-6ZH-Y46-C7I-AD5-IO1&language=en',
@@ -30,7 +29,7 @@ mapx.on('ready', () => {
     var collections = {};
     collections[no_collection_name] = [];
     views.forEach((view) => {
-      var view_collections = [];
+      //var view_collections = [];
       if ('collections' in view.data && Array.isArray(view.data.collections)) {
         view.data.collections.forEach((collection) => {
           if (collections[collection] === undefined) {
@@ -51,24 +50,27 @@ mapx.on('ready', () => {
       collection.forEach((view) => {
         var $a = $('<a href="#">')
           .text(view.data.title.en)
-          .click(view, async function(e) {
+          .click(view, function(e) {
             e.preventDefault();
             var $this = $(this);
             var view = e.data;
             $this.toggleClass('active');
             var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
-            await mapx.ask(op, {
+            mapx.ask(op, {
               idView: view.id
-            });
-            if (op === 'view_add') {
-              $('#output').show();
-              $('#output .content').html(null);
-              $('#output .content').append($('<h3>').text(view.data.title.en));
-              $('#output .content').append($('<p>').html(view.data.abstract.en));
-              mapx.ask('get_view_legend_image', {idView: view.id}).then(function(data) {
-                $('#output .content').append($('<img>').attr('src', data));
-              });
-            }
+            })
+              .then(function(){
+                if (op === 'view_add') {
+                  $('#output').show();
+                  $('#output .content').html(null);
+                  $('#output .content').append($('<h3>').text(view.data.title.en));
+                  $('#output .content').append($('<p>').html(view.data.abstract.en));
+                  mapx.ask('get_view_legend_image', {idView: view.id}).then(function(data) {
+                    $('#output .content').append($('<img>').attr('src', data));
+                  });
+                }
+
+              })
           });
         $views_collection.append($('<li>').html($a));
       });
