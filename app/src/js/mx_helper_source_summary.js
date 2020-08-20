@@ -21,16 +21,37 @@ export async function getViewSourceSummary(view) {
  */
 export async function getSourceVtSummary(opt) {
   const h = mx.helpers;
-  opt = Object.assign(
-    {},
-    {idView: null, idSource: null, idAttr: null, noCache: false},
-    opt
-  );
+
+  /*
+   * Set defaults
+   */
+  const def = {
+    idView: null,
+    idSource: null,
+    idAttr: null,
+    noCache: false,
+    binsMethod: 'jenks',
+    binsNumber: 5
+  };
+  opt = Object.assign({}, def, opt);
+
+  /*
+   * Clean unwanted keys
+   */
+  const keys = Object.keys(def);
+  Object.keys(opt).forEach((k) => {
+    if (keys.indexOf(k) === -1) {
+      delete opt[k];
+    }
+  });
 
   if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
     throw new Error('Missing id of a view or a source');
   }
 
+  /*
+   * Fetch summary
+   */
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
@@ -38,6 +59,9 @@ export async function getSourceVtSummary(opt) {
   const resp = await fetch(url);
   const summary = await resp.json();
 
+  /*
+   * handle errors
+   */
   if (h.isObject(summary) && summary.type === 'error') {
     throw new Error(summary.msg);
   }
@@ -67,6 +91,7 @@ export async function getSourceVtSummaryUI(opt) {
   const elTable = h.elAuto('array_table', aStat.table, {
     tableTitle: titleTable
   });
+  
   elContainer.appendChild(elTable);
 
   h.modal({
