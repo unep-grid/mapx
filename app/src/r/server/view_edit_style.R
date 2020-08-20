@@ -45,8 +45,8 @@ observeEvent(input$styleEdit_init,{
   }else{
 
     schema <- mxSchemaViewStyle(
-      view=view,
-      language=language
+      view = view,
+      language = language
       )
 
     viewTimeStamp <- as.numeric(
@@ -58,11 +58,12 @@ observeEvent(input$styleEdit_init,{
       schema = schema,
       startVal = style,
       options = list(
+
         pickolorEnable = TRUE,
         pickolorId = view$id,
         disableSelectize = TRUE,
         draftAutoSaveId = view$id,
-        draftAutoSaveDbTimestamp= viewTimeStamp
+        draftAutoSaveDbTimestamp = viewTimeStamp
         )
       )
   }

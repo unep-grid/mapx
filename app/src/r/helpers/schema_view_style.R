@@ -341,11 +341,22 @@ mxSchemaViewStyle <- function(
           opacity,
           size,
           sprite
-          )
+        )
         ),
-      default = list(list(value=NULL,labels=list("en"="NO DATA"),color="#000",opacity=1,size=1,sprite=""))
+      default = list(
+        list(
+          value = NULL,
+          labels = list(
+            "en"  =   "NO DATA"
+            ),
+          color = "#000",
+          opacity = 1,
+          size = 1,
+          sprite = ""
+        )
       )
     )
+  )
 
 
   #
