@@ -107,6 +107,7 @@ export function modal(o) {
     elButtonClose = h.el(
       'button',
       {
+        id :'btnCloseModal',
         class: ['btn', 'btn-default'],
         on: {
           click: close
