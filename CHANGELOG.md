@@ -1,5 +1,17 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.109-beta' target='_blank'>1.6.109-beta</a>
+
+  - Improvement
+      - APP
+        - Auto style editor : binning method have translated label
+        - Vector view edit : a button to request source summary has been reactivated with the new stat summary overview
+  - Bug fixes 
+      - APP
+        - Source summary. 
+          - Total count did not match class count. 
+          - Default and validation in APP did not match validation in server resulting in a number of class by default in UI,  if it was not valid server side.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.108-beta' target='_blank'>1.6.108-beta</a>
 
   - New feature
