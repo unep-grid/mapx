@@ -1,12 +1,22 @@
-shared/logs/
-shared/postgres/data
-shared/userdata
 
-node_modules/
-.git/
+# Ignore everything
+**
 
-.dockerignore
-Dockerfile
+# Don't ignore that
+!/src/r
+!/src/data
+!/src/templates
+!/src/glyphs/dist/sprites
+!/www
+!global.R
+!server.R
+!run.R
+!start_mapx.sh
+!package.json
+!/settings
 
-.gitignore
-.prod.env
+
+# But ignore this inside it
+**/*~
+**/*.log
+**/.DS_Store

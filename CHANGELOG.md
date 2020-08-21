@@ -1,5 +1,14 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.108-beta' target='_blank'>1.6.108-beta</a>
+
+  - New feature
+      - APP 
+        - Automatic style creator based on stats produced by the API (experimental)
+        - New color picker : palettes are handled by the automatic style creator
+  - Internal
+     - APP: eslint step before any build, reorganising dot files.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.107-beta' target='_blank'>1.6.107-beta</a>
 
   - New feature
