@@ -18,5 +18,14 @@
 
 # But ignore this inside it
 **/*~
+**/*.swp
 **/*.log
 **/.DS_Store
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-v][a-z]
+[._]sw[a-p]
+
+

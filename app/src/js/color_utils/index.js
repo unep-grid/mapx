@@ -39,15 +39,16 @@ export function randomHsl(opacity, random, saturation, lightness) {
  * @param {number} opacity Value of opacity, from 0 to 1
  */
 export function hex2rgba(hex, opacity) {
-  var h = hex.replace('#', '');
+  hex = hex.slice(0,7);
+  hex = hex.replace('#', '');
   var rgba = 'rgba';
   var rgb = 'rgb';
   var out = '';
   var i;
-  h = h.match(new RegExp('(.{' + h.length / 3 + '})', 'g'));
+  hex = hex.match(new RegExp('(.{' + hex.length / 3 + '})', 'g'));
 
-  for (i = 0; i < h.length; i++) {
-    h[i] = parseInt(h[i].length === 1 ? h[i] + h[i] : h[i], 16);
+  for (i = 0; i < hex.length; i++) {
+    hex[i] = parseInt(hex[i].length === 1 ? hex[i] + hex[i] : hex[i], 16);
   }
 
   if (typeof opacity !== 'undefined') {
@@ -57,11 +58,11 @@ export function hex2rgba(hex, opacity) {
     if (opacity < 0) {
       opacity = 0;
     }
-    h.push(opacity);
+    hex.push(opacity);
     rgb = rgba;
   }
 
-  return rgb + '(' + h.join(',') + ')';
+  return rgb + '(' + hex.join(',') + ')';
 }
 
 /**

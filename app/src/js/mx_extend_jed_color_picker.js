@@ -75,7 +75,7 @@ const color_pickers = [];
               backgroundColor: that.value
             }
           });
-          elColorPicker.addEventListener('click',show);
+          elColorPicker.addEventListener('click', show);
           that.input.style.display = 'none';
           that.input.parentNode.insertBefore(elColorPicker, that.input);
           that._elColorPicker = elColorPicker;
@@ -85,16 +85,22 @@ const color_pickers = [];
           if (that._color_picker) {
             return;
           }
+
+          console.log('click show');
           while (color_pickers.length) {
             const p = color_pickers.pop();
             try {
               p.destroy();
             } catch (e) {}
           }
-          const picker = new Picker(elColorPicker);
+          const colorOrig = that.getValue();
+          const picker = new Picker({
+            parent: elColorPicker,
+            alpha: false,
+            color: colorOrig,
+            cancelButton: true
+          });
           picker.show();
-          picker.setColour(that.value);
-          console.log(picker);
           /**
            * Keep ref to keep things clean on destroy
            * or if another button is clicked
@@ -106,10 +112,8 @@ const color_pickers = [];
           /**
            * On Change
            */
-          picker.onChange = (color) => {
-            elColorPicker.style.background = color.rgbaString;
-            that.setValue(color.rgbaString);
-          };
+          //picker.onChange = (color) => {};
+
           /**
            * On close
            */
@@ -123,7 +127,9 @@ const color_pickers = [];
            * On done (click ok)
            */
           picker.onDone = (color) => {
-            that.input.value = color.rgbaString;
+            color.hex = color.hex.slice(0,7); // remove alpha part here
+            that.setValue(color.hex);
+            elColorPicker.style.backgroundColor = color.hex;
             that._color_picker = null;
             try {
               picker.destroy();
