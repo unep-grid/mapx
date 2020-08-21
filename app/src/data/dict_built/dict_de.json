@@ -4530,6 +4530,26 @@
     "de": ""
   },
   {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "de": ""
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "de": ""
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "de": ""
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "de": ""
+  },
+  {
     "id": "en",
     "en": "English",
     "de": ""

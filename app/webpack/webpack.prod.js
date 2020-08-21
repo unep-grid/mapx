@@ -39,6 +39,7 @@ module.exports = merge(common, {
       skipWaiting: false,
       clientsClaim: true,
       exclude : [
+        /\.DS*\//, 
         /^fontstack\//, 
         /^sprites\//
       ],

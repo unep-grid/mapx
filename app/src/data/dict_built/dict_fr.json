@@ -4530,6 +4530,26 @@
     "fr": "Ajouter au projet sélectionné"
   },
   {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "fr": "Seuils naturel (algorithm de Jenks)"
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "fr": "Quantile"
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "fr": "Seuils 'Head/tail'"
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "fr": "Intervalle égal"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"

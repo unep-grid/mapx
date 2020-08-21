@@ -45,8 +45,8 @@ freqtable as (
   (
     SELECT count(*) 
     FROM "{{idSource}}" a 
-    WHERE a.{{idAttr}} >= b.from 
-    AND a.{{idAttr}} <= b.to + 1e-10 
+    WHERE a.{{idAttr}} > b.from 
+    AND a.{{idAttr}} <= b.to 
   ) as count
   FROM classes b
 ),

@@ -59,6 +59,7 @@ export async function vtStyleBuilder(opt) {
           on: {
             change: (e) => {
               const value = e.target.value;
+              // see  api/utils/checkRouteParams_rules.js
               if (value < 1 || value > 100) {
                 elValidNum.innerText = 'Value must be >= 1 and <= 100';
                 elNbins.classList.add('has-error');
@@ -81,7 +82,8 @@ export async function vtStyleBuilder(opt) {
       'quantile',
       'equal_interval'
     ].map((m) => {
-      const elOpt = h.el('option', {value: m}, m);
+      const label = h.getDictItem(m);
+      const elOpt = h.el('option', {value: m}, label);
       if (m === opt.binsMethod) {
         elOpt.setAttribute('selected', 'true');
       }
@@ -234,6 +236,9 @@ export async function vtStyleBuilder(opt) {
     let titleTable = 'Table';
     const summary = await h.getSourceVtSummary(opt);
     const aStat = summary.attribute_stat;
+    const count = aStat.table.reduce((c, r) => {
+      return c + r.count;
+    }, 0);
 
     /**
      * Scale palette and set colors
@@ -270,7 +275,9 @@ export async function vtStyleBuilder(opt) {
     if (aStat.type === 'continuous') {
       titleTable = `${titleTable} ( Method : ${
         aStat.binsMethod
-      }, number of bins : ${aStat.binsNumber} )`;
+      }, number of bins : ${aStat.binsNumber}, count total : ${count} )`;
+    }else{
+      titleTable = `${titleTable} ( count total : ${count} )`;
     }
 
     /**

@@ -10870,5 +10870,53 @@
     "bn": "",
     "fa": "",
     "ps": ""
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "fr": "Seuils naturel (algorithm de Jenks)",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "fr": "Quantile",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "fr": "Seuils 'Head/tail'",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "fr": "Intervalle égal",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
   }
 ]

@@ -47,7 +47,7 @@ const rules = [
   {
     key: ['binsNumber'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 1 && d <= 100;
+      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
       return {
         valid: isValid,
         value: isValid ? d * 1 : 5

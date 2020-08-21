@@ -4530,6 +4530,26 @@
     "es": "Adjuntar al proyecto seleccionado"
   },
   {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "es": ""
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "es": ""
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "es": ""
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "es": ""
+  },
+  {
     "id": "en",
     "en": "English",
     "es": ""

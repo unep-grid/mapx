@@ -1019,27 +1019,18 @@ observe({
 # Main layer summary
 #
 observeEvent(input$btnGetLayerSummary,{
-  mxModal(
-    id =  "layerSummary",
-    title = d("Layer Summary",reactData$language),
-    content = tagList(
-      tags$input(
-        type="number",
-        id="triggerBtnGetLayerSummary",
-        class="form-control mx-hide",
-        value=runif(1)
-        ),
-      tags$label("Summary"),
-      uiOutput("uiLayerSummary")
-      )
-    )
-})
+  idAttr = input$selectSourceLayerMainVariable
+  idSource = input$selectSourceLayerMain
 
-output$uiLayerSummary <- renderUI({
-  input$triggerBtnGetLayerSummary
-  reactLayerSummary()$html
-})
+  if(noDataCheck(idAttr) || noDataCheck(idSource)){
+    return()
+  }
 
+  mglGetSourceStatModal(list(
+      idSource = idSource,
+      idAttr = idAttr
+      ))
+})
 
 
 
