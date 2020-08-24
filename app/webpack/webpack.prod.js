@@ -39,9 +39,9 @@ module.exports = merge(common, {
       skipWaiting: false,
       clientsClaim: true,
       exclude : [
-        /\.DS*\//, 
-        /^fontstack\//, 
-        /^sprites\//
+        /^\.DS*/, 
+        /^fontstack/, 
+        /^sprites/
       ],
       importScripts: ['sw_listen_skip_waiting_install.js'],
       runtimeCaching: [
