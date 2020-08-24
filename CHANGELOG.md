@@ -1,5 +1,13 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.110-beta' target='_blank'>1.6.110-beta</a>
+  - Bug fixes
+      - API
+        - Source summary, variable binning : solved an issue with max upper class, wrong binning when using integers, minor changes
+      - APP
+       - View 'auto style': Added a validation to test for duplicated rules. Could occurs when using quantile and a skewed distribution.
+       - Service worker : precache list included .DS_Store file, but ignored by git and dockerfile. Produced 404 errors. Solved by modifying the regex in the webpack prod file.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.109-beta' target='_blank'>1.6.109-beta</a>
 
   - Improvement
