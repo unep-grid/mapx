@@ -1,12 +1,12 @@
 WITH
 attr_max as (
   SELECT
-  max("{{idAttr}}")
+  max("{{idAttr}}")::numeric
   FROM "{{idSource}}"
 ),
 attr_min as (
   SELECT
-  min("{{idAttr}}")
+  min("{{idAttr}}")::numeric
   FROM "{{idSource}}"
 ),
 attr_array as (
@@ -14,6 +14,7 @@ attr_array as (
   FROM "{{idSource}}" 
 ),
 bins as (
+  -- return and array. e.g. {81742.142857142857,163484.285714285714,245226.428571428571,326968.571428571428,408710.714285714285,490452.857142857142,572194.999999999999}
   SELECT
   CASE
   WHEN '{{binsMethod}}' = 'jenks'
@@ -27,16 +28,40 @@ bins as (
 END as bins
 FROM attr_array
 ),
+attr_bin_max as (
+  -- workaround to find largest value in bins, as heads_tails and 
+  -- equal_interval do not always use max as the max bin
+  SELECT MAX(b) max FROM ( SELECT unnest(bins) b from bins) ub
+),
 classes as (
-  SELECT unnest(
+  -- return a table such as
+  --        from         |         to
+  --- --------------------+---------------------
+  --                   1 |  81742.142857142857
+  --  81743.142857142857 | 163484.285714285714
+  -- 163485.285714285714 | 245226.428571428571
+  -- 245227.428571428571 | 326968.571428571428
+  -- 326969.571428571428 | 408710.714285714285
+  -- 408711.714285714285 | 490452.857142857142
+  -- 490453.857142857142 | 572194.999999999999 <- should be replaced by real max
+  -- 
+  -- remove max bin class, add min as first 'from' class, unnest
+  SELECT
+  unnest(
     array_remove(
-      array_prepend(amin.min::numeric,b.bins),
-      amax.max::numeric
+      array_prepend(amin.min,b.bins),
+      abinmax.max
     )
   ) as "from" ,
-  unnest(b.bins) as "to"
-  FROM bins b, attr_min amin, attr_max amax
-), 
+  -- remove max bin class, add real max class as last 'to' class, unnest
+  unnest(
+    array_append(
+    array_remove(b.bins, abinmax.max),
+    amax.max
+   )
+  ) as "to"
+  FROM bins b, attr_min amin, attr_max amax, attr_bin_max abinmax
+),
 freqtable as (
   SELECT 
   "from", 
@@ -45,10 +70,16 @@ freqtable as (
   (
     SELECT count(*) 
     FROM "{{idSource}}" a 
-    WHERE a.{{idAttr}} > b.from 
-    AND a.{{idAttr}} <= b.to 
-  ) as count
-  FROM classes b
+    WHERE 
+    CASE 
+    WHEN b.from = amin.min
+      THEN 
+        a.{{idAttr}} >= b.from AND a.{{idAttr}} <= b.to
+      ELSE
+        a.{{idAttr}} > b.from AND a.{{idAttr}} <= b.to
+  END
+) as count
+FROM classes b, attr_min amin, attr_max amax
 ),
 freqtable_json as (
   SELECT json_agg(

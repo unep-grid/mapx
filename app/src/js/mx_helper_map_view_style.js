@@ -2,6 +2,7 @@ let vtStyle = null;
 
 export async function vtStyleBuilder(opt) {
   const h = mx.helpers;
+  let elDone;
 
   if (!!vtStyle) {
     return;
@@ -190,7 +191,7 @@ export async function vtStyleBuilder(opt) {
    * Button on done
    */
   if (h.isFunction(opt.onDone)) {
-    const elDone = h.el(
+    elDone = h.el(
       'button',
       {
         type: 'button',
@@ -236,9 +237,22 @@ export async function vtStyleBuilder(opt) {
     let titleTable = 'Table';
     const summary = await h.getSourceVtSummary(opt);
     const aStat = summary.attribute_stat;
+    const uniqueFrom = new Set(aStat.table.map((r)=>r.from));
+    const hasDuplicate = uniqueFrom.size !== aStat.table.length ;
+  
+    const valid = !hasDuplicate;
     const count = aStat.table.reduce((c, r) => {
       return c + r.count;
     }, 0);
+
+    /**
+    * Change elDone button state
+    */
+    if(h.isElement(elDone) && !valid){
+      elDone.setAttribute('disabled',true); 
+    }else{
+      elDone.removeAttribute('disabled'); 
+    }
 
     /**
      * Scale palette and set colors
@@ -275,9 +289,9 @@ export async function vtStyleBuilder(opt) {
     if (aStat.type === 'continuous') {
       titleTable = `${titleTable} ( Method : ${
         aStat.binsMethod
-      }, number of bins : ${aStat.binsNumber}, count total : ${count} )`;
+      }, number of bins : ${aStat.binsNumber}, count total : ${count}, valid: ${valid} )`;
     }else{
-      titleTable = `${titleTable} ( count total : ${count} )`;
+      titleTable = `${titleTable} ( count total : ${count}, valid : ${valid} ) `;
     }
 
     /**

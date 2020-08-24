@@ -14,7 +14,7 @@
 
 CREATE OR REPLACE FUNCTION CDB_EqualIntervalBins ( in_array anyarray, breaks INT ) RETURNS anyarray as $$
 WITH stats AS (
-  SELECT min(e), (max(e)-min(e))/breaks AS del
+  SELECT min(e), (max(e)::decimal-min(e))/breaks AS del
     FROM (SELECT unnest(in_array) e) AS p)
 SELECT array_agg(bins)
   FROM (

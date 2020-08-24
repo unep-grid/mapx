@@ -149,6 +149,10 @@ async function getSourceSummary(opt) {
 
 async function getOrCalc(idTemplate, opt) {
   const sql = utils.parseTemplate(template[idTemplate], opt);
+/*  if(idTemplate === 'getSourceSummary_attr_continuous'){*/
+    //var fs = require('fs');
+    //debugger;
+  /*}*/
   const hash = crypto
     .createHash('md5')
     .update(sql + opt.timestamp)
