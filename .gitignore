@@ -16,6 +16,8 @@ _*
 app/www/*
 app/src/built/*
 app/src/js/sdk/dist/*
+app/src/js/el/dist/*
+app/src/js/is_test/dist/*
 app/src/js/sdk/example/dist/*
 app/src/sprites/dist/*
 
@@ -98,7 +100,6 @@ bower_components
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
 build/Release
-**/dist/
 
 # Dependency directories
 node_modules/
