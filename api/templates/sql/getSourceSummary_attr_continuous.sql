@@ -74,9 +74,9 @@ freqtable as (
     CASE 
     WHEN b.from = amin.min
       THEN 
-        a.{{idAttr}} >= b.from AND a.{{idAttr}} <= b.to
+        a."{{idAttr}}" >= b.from AND a."{{idAttr}}" <= b.to
       ELSE
-        a.{{idAttr}} > b.from AND a.{{idAttr}} <= b.to
+        a."{{idAttr}}" > b.from AND a."{{idAttr}}" <= b.to
   END
 ) as count
 FROM classes b, attr_min amin, attr_max amax
