@@ -1,5 +1,29 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.111-beta' target='_blank'>1.6.111-beta</a>
+
+  - New features
+      - APP
+        - loadHighcharts / dashboard : added `exporting` and `export` data modules for highcharts
+        - Style rule parser :
+           - Added option to handle upper bound inside intervals. Both option and logic are supported now.
+           - Partial refactoring: reduce code size, use async / await instead of chaining promises
+  - Bug fixes
+      - SDK
+         - Issue with dependencies strangely not included in build. Need maybe further investigation
+      - APP 
+        - Excluded remaining swp file from precaching, which caused an error in console
+        - Issue with path construction for the download file link in download modal
+        - Source summary:  In case of error, return default and consol.warn instead of blocking. It could be expected in some cases and MapX should work without it
+        - View GeoJSON: added back 'zoom to visible features' with fallback to 'zoom to extent'
+        - Dashboard: added template value in script parsing rejection message
+
+      - API
+        - Source summary : allow spaces in attribute names
+        - Invalidate tile cache if the source, the mask or the attributes requested change
+  - Internal 
+      - Ignore module dist folder
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.110-beta' target='_blank'>1.6.110-beta</a>
   - Bug fixes
       - API
