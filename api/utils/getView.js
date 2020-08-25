@@ -60,7 +60,8 @@ exports.getTile = async function(req, res) {
       throw new Error('Error fetching view source and attribute');
     }
 
-    const viewSrcAttr = resultView.rows[0];
+    const viewSrcConfig = resultView.rows[0];
+
     /*
      * viewSrcAttr attributes:
      * layer
@@ -68,24 +69,28 @@ exports.getTile = async function(req, res) {
      * attributes
      * mask (optional)
      */
-    Object.assign(data, viewSrcAttr);
+    Object.assign(data, viewSrcConfig);
     data.geom = 'geom';
     data.zoom = req.params.z * 1;
     data.x = req.params.x * 1;
     data.y = req.params.y * 1;
     data.view = req.query.view;
     data.attributes = utils.attrToPgCol(data.attribute, data.attributes);
-
+    
     if (!data.layer || data.layer === Object) {
       sendTileEmpty(res);
       return;
     }
 
-    const timestamp = await db.getSourceLastTimestamp(data.layer);
+    data.sourceTimestamp = await db.getSourceLastTimestamp(data.layer);
+
+    if(data.mask){
+      data.maskTimestamp = await db.getSourceLastTimestamp(data.mask);
+    }
 
     const hash = crypto
       .createHash('md5')
-      .update(timestamp + data.attributes + data.layer + data.view + data.x + data.y + data.zoom)
+      .update( JSON.stringify(data))
       .digest('hex');
 
     return getTile(res, hash, data);
