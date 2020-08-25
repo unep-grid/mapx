@@ -69,7 +69,7 @@ export async function getSourceVtSummary(opt) {
    * handle errors
    */
   if (h.isObject(summary) && summary.type === 'error') {
-    throw new Error(summary.msg);
+    console.warn(summary.msg);
   }
 
   return summary;
