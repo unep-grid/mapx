@@ -211,13 +211,17 @@ function loadHighcharts() {
     import('highcharts/highcharts-more.js'),
     import('highcharts/modules/solid-gauge'),
     import('highcharts/modules/stock'),
-    import('highcharts/modules/heatmap')
+    import('highcharts/modules/heatmap'),
+    import('highcharts/modules/exporting.js'),
+    import('highcharts/modules/export-data.js')
   ]).then((m) => {
     var Highcharts = m[0].default;
     m[1].default(Highcharts);
     m[2].default(Highcharts);
     m[3].default(Highcharts);
     m[4].default(Highcharts);
+    m[5].default(Highcharts);
+    m[6].default(Highcharts);
     return Promise.resolve(Highcharts);
   });
 }
