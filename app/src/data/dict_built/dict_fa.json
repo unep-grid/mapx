@@ -410,6 +410,16 @@
     "fa": ""
   },
   {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "fa": ""
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "fa": ""
+  },
+  {
     "id": "schema_style_reverse_order",
     "en": "Reverse displayed layers order",
     "fa": ""
