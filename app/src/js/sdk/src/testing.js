@@ -1,5 +1,5 @@
-import {el} from '../node_modules/@fxi/el/src/index.js';
-import * as is from '../../is_test/index.js';
+import {el} from '@fxi/el';
+import * as is from '@fxi/mx_valid';
 
 const defaults = {
   title: 'test',

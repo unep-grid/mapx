@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "main": "src/index.js",
   "module": "dist/el.mjs",
   "unpkg": "dist/el.umd.js",
@@ -29,7 +29,11 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "microbundle": "^0.11.0"
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.11.0",
+    "core-js": "^3.6.5",
+    "microbundle": "^0.12.3"
   },
   "bugs": {
     "url": "https://github.com/fxi/el/issues"

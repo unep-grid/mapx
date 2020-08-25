@@ -295,7 +295,6 @@ class FrameManager extends Events {
           });
         }
 
-
         fm._message({
           level: 'log',
           key: 'log_state',
@@ -307,6 +306,7 @@ class FrameManager extends Events {
         return;
       }
     } catch (e) {
+      debugger;
       fm._message({
         level: 'error',
         key: 'err_handle_message_worker',

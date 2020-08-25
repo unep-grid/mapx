@@ -11,12 +11,12 @@
     "example": "example"
   },
   "scripts": {
-    "test": "microbundle -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
-    "dev": "microbundle watch -o dist --no-compress",
+    "test": "microbundle --external none -o dist --no-compress && live-server tests --mount=/dist:dist --mount=/data:data",
+    "dev": "microbundle --external none watch -o dist --no-compress",
     "dev-live": "live-server dev --mount=/dist:dist --mount=/data:data",
-    "examples": "microbundle -o dist --no-compress && live-server examples --mount=/dist:dist",
+    "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
-    "prod": "microbundle -o dist && npm run jsdoc && npm publish",
+    "prod": "microbundle --external none -o dist && npm run jsdoc && npm publish",
     "jsdoc": "jsdoc2md --template readme.hbs --files src/**/*.js > readme.md"
   },
   "repository": {
@@ -35,13 +35,17 @@
   "homepage": "https://github.com/unep-grid/map-x-mgl/app/src/js/sdk/#readme",
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.11.0",
+    "core-js": "^3.6.5",
+    "microbundle": "^0.12.3",
     "eslint": "^7.0.0",
     "eslint-plugin-react": "^7.20.0",
     "jsdoc-to-markdown": "^5.0.3",
-    "live-server": "^1.2.1",
-    "microbundle": "^0.12.0"
+    "live-server": "^1.2.1"
   },
   "dependencies": {
-    "@fxi/el": "0.0.12"
+    "@fxi/el": "0.1.2",
+    "@fxi/mx_valid": "0.0.6"
   }
 }
