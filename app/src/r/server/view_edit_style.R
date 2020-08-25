@@ -58,8 +58,6 @@ observeEvent(input$styleEdit_init,{
       schema = schema,
       startVal = style,
       options = list(
-        #pickolorEnable = TRUE,
-        #pickolorId = view$id,
         disableSelectize = TRUE,
         draftAutoSaveId = view$id,
         draftAutoSaveDbTimestamp = viewTimeStamp
@@ -120,6 +118,7 @@ observeEvent(input$styleEdit_values,{
     view <- .set(view, c("data", "style", "showSymbolLabel"), .get(style,c("showSymbolLabel")))
     view <- .set(view, c("data","style", "nulls"), .get(style,c("nulls")))
     view <- .set(view, c("data","style", "hideNulls"), .get(style,c("hideNulls")))
+    view <- .set(view, c("data","style", "includeUpperBoundInInterval"), .get(style,c("includeUpperBoundInInterval")))
     view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
     view <- .set(view, c("data", "style", "reverseLayer"), .get(style,c("reverseLayer")))
 

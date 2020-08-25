@@ -237,7 +237,7 @@ export async function vtStyleBuilder(opt) {
     let titleTable = 'Table';
     const summary = await h.getSourceVtSummary(opt);
     const aStat = summary.attribute_stat;
-    const uniqueFrom = new Set(aStat.table.map((r)=>r.from));
+    const uniqueFrom = new Set(aStat.table.map((r)=>r.from || r.value));
     const hasDuplicate = uniqueFrom.size !== aStat.table.length ;
   
     const valid = !hasDuplicate;
