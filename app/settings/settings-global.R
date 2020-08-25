@@ -100,7 +100,7 @@ config[["api"]] <- list(
     getViewsListGlobalPublic ="/get/views/list/global/public",
     getProjectsListByUser = "/get/projects/list/user",
     downloadSourceCreate = "/get/source/",
-    downloadSourceGet = "",
+    downloadSourceGet = "/", # location given by the api
     uploadImage = "/upload/image/",
     uploadVector = "/upload/vector/",
     postEmail = "/send/mail",

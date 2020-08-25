@@ -76,6 +76,8 @@ export function handlerDownloadVectorSource(o) {
   function cleanMsg(msg) {
     return mx.helpers.handleRequestMessage(msg, messageStore, {
       end: function(msg) {
+        const urlDownload = dlUrlGet + msg.filepath.slice(1,msg.filepath.length);
+
         var li = el(
           'li',
           {
@@ -93,7 +95,7 @@ export function handlerDownloadVectorSource(o) {
               dataset: {
                 lang_key: 'api_download_btn'
               },
-              href: dlUrlGet + msg.filepath,
+              href: urlDownload,
               target: '_blank'
             })
           )
