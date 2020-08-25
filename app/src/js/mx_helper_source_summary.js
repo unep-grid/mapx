@@ -7,13 +7,19 @@ export async function getViewSourceSummary(view) {
   if (view._source_summary) {
     return view._source_summary;
   }
+  let out = {};
   if (view.type === 'vt') {
-    view._source_summary = await getSourceVtSummary({idView: view.id});
+    out = await getSourceVtSummary({idView: view.id});
   }
   if (view.type === 'rt') {
-    view._source_summary = await getSourceRtSummary(view);
+    out = await getSourceRtSummary(view);
   }
-  return view._source_summary;
+  if (view.type === 'gj') {
+    out = await getSourceGjSummary(view);
+  }
+
+  view._source_summary = out;
+  return out;
 }
 
 /**
@@ -105,11 +111,7 @@ export async function getSourceVtSummaryUI(opt) {
  */
 export async function getSourceRtSummary(view) {
   const h = mx.helpers;
-  const out = {};
 
-  if (!h.isViewWms(view)) {
-    return out;
-  }
 
   const url = h.path(view, 'data.source.tiles', []);
   const urlQuery = url[0];
@@ -165,5 +167,15 @@ export async function getSourceRtSummary(view) {
     console.warn('Layer do not have valid bounding box', layer);
   }
 
+  return out;
+}
+
+
+export async function getSourceGjSummary(view){
+  const h = mx.helpers;
+  const out = {};
+  if (h.isViewGj(view)) {
+    out.extent_sp = h.path(view,'data.geometry.extent',{});
+  }
   return out;
 }

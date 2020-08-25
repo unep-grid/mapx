@@ -1623,21 +1623,20 @@ export function makeSimpleLayer(o) {
 
   const h = mx.helpers;
 
-
   const def = {
-    sizeFactorZoomMax : 0,
-    sizeFactorZoomMin :0,
-    sizeFactorZoomExponent : 1,
-    label : null,
-    sprite : null,
-    zoomMin : 0,
-    zoomMax : 22,
-    filter : ['all'],
-    opacity : 1,
-    size : null
+    sizeFactorZoomMax: 0,
+    sizeFactorZoomMin: 0,
+    sizeFactorZoomExponent: 1,
+    label: null,
+    sprite: null,
+    zoomMin: 0,
+    zoomMax: 22,
+    filter: ['all'],
+    opacity: 1,
+    size: null
   };
 
-  const opt = Object.assign({},def,o);
+  const opt = Object.assign({}, def, o);
   const dpx = window.devicePixelRatio || 1;
 
   if (!opt.size) {
@@ -1648,7 +1647,7 @@ export function makeSimpleLayer(o) {
     opt.size = opt.size / 10;
   }
 
-  if(opt.sprite === 'none'){
+  if (opt.sprite === 'none') {
     opt.sprite = null;
   }
 
@@ -1662,7 +1661,10 @@ export function makeSimpleLayer(o) {
     opt.sizeFactorZoomMax * opt.size
   ];
 
-  opt.size = opt.sizeFactorZoomMax > 0 || opt.sizeFactorZoomMin > 0 ? funSizeByZoom : opt.size;
+  opt.size =
+    opt.sizeFactorZoomMax > 0 || opt.sizeFactorZoomMin > 0
+      ? funSizeByZoom
+      : opt.size;
 
   if (!opt.hexColor) {
     ran = Math.random();
@@ -3809,7 +3811,7 @@ export async function viewLayersAddVt(o) {
         filter.push(['==', attr, '']);
       }
     }
-    
+
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
 
     const layerNull = buildLayer({
@@ -4564,7 +4566,7 @@ export async function zoomToViewId(o) {
     const sum = await h.getViewSourceSummary(view);
     const extent = h.path(sum, 'extent_sp', null);
     if (!extent) {
-      return;
+      throw new Error(`No extent found for ${view.id}`);
     }
     const llb = new mx.mapboxgl.LngLatBounds(
       [extent.lng1, extent.lat1],
@@ -4596,7 +4598,9 @@ export async function getViewsBounds(views) {
     lng2: -180
   };
 
-  let extents = await Promise.all(views.map(h.getViewSourceSummary));
+  let summaries = await Promise.all(views.map(h.getViewSourceSummary));
+  let extents = summaries.map(s => s.extent_sp);
+
 
   let extent = extents.reduce(
     (a, ext) => {

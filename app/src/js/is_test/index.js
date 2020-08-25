@@ -65,7 +65,13 @@ export function isViewVt(item) {
 export function isViewRt(item) {
   return isViewType(item, 'rt');
 }
-
+/**
+ * Test if it's a MapX view of type gj
+ * @param {Object} item to test
+ */
+export function isViewGj(item) {
+  return isViewType(item, 'gj');
+}
 /**
  * Test if it's a MapX view is editable
  * @param {Object} item to test
