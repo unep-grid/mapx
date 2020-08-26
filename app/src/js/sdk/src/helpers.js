@@ -1,4 +1,4 @@
-import * as t from '../../is_test/index.js';
+import * as t from '@fxi/mx_valid';
 
 export function stringify(data) {
   

@@ -1,7 +1,8 @@
 /* jshint esversion:6 */
-import {el} from '@fxi/el';
+//import {el} from '@fxi/el';
+import {el} from './el/src';
 
-export {el, elAuto};
+export {el, elAuto, elPanel};
 
 function elAuto(render, data, opt) {
   var h = mx.helpers;
@@ -178,29 +179,22 @@ function elAuto(render, data, opt) {
     if (labels.length === 0) {
       return el('table');
     }
-    var elTable = el(
-      'div',
+
+    const elTable = el(
+      'table',
       {
-        class: opt.tableContainerClass
+        class: opt.tableClass
       },
-      el(
-        'div',
-        {
-          class: opt.tableContainerHeaderClass
-        },
-        renderString(tTitle, opt.tableTitleAsLanguageKey)
-      ),
-      el(
-        'table',
-        {
-          class: opt.tableClass
-        },
-        makeHeaders(),
-        makeBody()
-      )
+      makeHeaders(),
+      makeBody()
     );
 
-    return elTable;
+    return elPanel({
+      classHeader: opt.tableContainerHeaderClass,
+      classContainer: opt.tableContainerClass,
+      title: renderString(tTitle, opt.tableTitleAsLanguageKey),
+      content: elTable
+    });
 
     /**
      * Table parts
@@ -244,4 +238,32 @@ function elAuto(render, data, opt) {
       );
     }
   }
+}
+
+function elPanel(opt) {
+  opt = Object.assign(
+    {},
+    {
+      classHeader: ['panel-heading'],
+      classContainer: ['panel', 'panel-default'],
+      content: null,
+      title: null
+    },
+    opt
+  );
+
+  return el(
+    'div',
+    {
+      class: opt.classContainer
+    },
+    el(
+      'div',
+      {
+        class: opt.classHeader
+      },
+      opt.title
+    ),
+    opt.content
+  );
 }

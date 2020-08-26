@@ -1,5 +1,88 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.111-beta' target='_blank'>1.6.111-beta</a>
+
+  - New features
+      - APP
+        - loadHighcharts / dashboard : added `exporting` and `export` data modules for highcharts
+        - Style rule parser :
+           - Added option to handle upper bound inside intervals. Both option and logic are supported now.
+           - Partial refactoring: reduce code size, use async / await instead of chaining promises
+  - Bug fixes
+      - SDK
+         - Issue with dependencies strangely not included in build. Need maybe further investigation
+      - APP 
+        - Excluded remaining swp file from precaching, which caused an error in console
+        - Issue with path construction for the download file link in download modal
+        - Source summary:  In case of error, return default and consol.warn instead of blocking. It could be expected in some cases and MapX should work without it
+        - View GeoJSON: added back 'zoom to visible features' with fallback to 'zoom to extent'
+        - Dashboard: added template value in script parsing rejection message
+
+      - API
+        - Source summary : allow spaces in attribute names
+        - Invalidate tile cache if the source, the mask or the attributes requested change
+  - Internal 
+      - Ignore module dist folder
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.110-beta' target='_blank'>1.6.110-beta</a>
+  - Bug fixes
+      - API
+        - Source summary, variable binning : solved an issue with max upper class, wrong binning when using integers, minor changes
+      - APP
+       - View 'auto style': Added a validation to test for duplicated rules. Could occurs when using quantile and a skewed distribution.
+       - Service worker : precache list included .DS_Store file, but ignored by git and dockerfile. Produced 404 errors. Solved by modifying the regex in the webpack prod file.
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.109-beta' target='_blank'>1.6.109-beta</a>
+
+  - Improvement
+      - APP
+        - Auto style editor : binning method have translated label
+        - Vector view edit : a button to request source summary has been reactivated with the new stat summary overview
+  - Bug fixes 
+      - APP
+        - Source summary. 
+          - Total count did not match class count. 
+          - Default and validation in APP did not match validation in server resulting in a number of class by default in UI,  if it was not valid server side.
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.108-beta' target='_blank'>1.6.108-beta</a>
+
+  - New feature
+      - APP 
+        - Automatic style creator based on stats produced by the API (experimental)
+        - New color picker : palettes are handled by the automatic style creator
+  - Internal
+     - APP: eslint step before any build, reorganising dot files.
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.107-beta' target='_blank'>1.6.107-beta</a>
+
+  - New feature
+      - APP : new method to ease fetching data through MapX mirror.
+  - Improvement
+      - API : simplify mirror method, copy back the response headers. 
+      - APP, WMS interaction : exception as image; added busy interface when waiting.
+  - Bug fixes
+      - APP, WMS request: solved issue occuring with with empty styles in getMap request.
+      - APP: Solved internal bug occuring when a new view without sources was saved.
+      - APP, error manager : Error message not correctly displayed when extracting promise error message.
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.106-beta' target='_blank'>1.6.106-beta</a>
+
+   - New features
+       - API: Source summary can now return automatic binning for a continuous variable. Method implemented : jenks, equal_interval, heads_tails, quantile. e.g. `idSource=<id of the source >&idAttr=<variable name>&binsMethod=<jenks | equal_interval | heads_tails | quantile>&binsNumber=< integer >0 & <= 100>`
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.105-beta' target='_blank'>1.6.105-beta</a>
+    - Internal
+       - API : remove token based restriction on route `/get/mirror` as it prevented usage from static site.
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.104-beta' target='_blank'>1.6.104-beta</a>
+
+    - Improvement
+       - APP, SDK : Added a test to control that the worker code match the manager version. An error is reported within the  messaging system if there is a mismatch. e.g. `mapx.on('message', (m)=>m.level=='error'?console.error(m.text):console.log('not an error'))`
+    - Bug fixes
+       - API : tile cache was not invalidated properly after the view's attributes list modification
+    - Internal 
+       - APP, ViewsFilter : all toggles are now called checkboxes.
+       - APP, SDK : ( PR #564 ) tests can be launched by group, via a parameter in the URL.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.103-beta' target='_blank'>1.6.103-beta</a>
     - New feature
        - SDK : Set/Get views filter. The view list can be managed from new method in the SDK. See issue #576 for details.

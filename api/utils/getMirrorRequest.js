@@ -1,36 +1,34 @@
 const request = require('request');
-const auth = require('./authentication.js');
 /**
  * Request handler / middleware
  */
 
-module.exports.get = [auth.validateTokenHandler, mirrorHandler];
+module.exports.get = [mirrorHandler];
 
 function mirrorHandler(req, res) {
-  var query = req.query;
+  const query = req.query;
 
-  var options = {
+  const options = {
     url: query.url,
     method: 'GET',
     headers: JSON.parse(query.headers || null),
     qs: JSON.parse(query.query || null)
   };
 
-  return new Promise((resolve) => {
-    request(options, function(error, response, body) {
+  try {
+    request(options, (error, response, body) => {
       if (error) {
         throw new Error(error);
       }
-      resolve(body);
-    });
-  })
-    .then((body) => {
+      Object.keys(response.headers).forEach((k) =>
+        res.setHeader(k, response.headers[k])
+      );
       return res.send(body);
-    })
-    .catch((e) => {
-      return res.send({
-        type: 'error',
-        msg: e
-      });
     });
+  } catch (e) {
+    return res.send({
+      type: 'error',
+      msg: e
+    });
+  }
 }

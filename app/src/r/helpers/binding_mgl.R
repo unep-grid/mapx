@@ -80,6 +80,16 @@ mglGetValidateSourceGeom <- function(opt,session=shiny::getDefaultReactiveDomain
     )
 }
 
+#' Get overlap result
+#' @param opt {List} list of option : idSource, idView, binsNumber, binsMethod, etc..
+#' @export
+mglGetSourceStatModal <- function(opt,session=shiny::getDefaultReactiveDomain()) {
+  session$sendCustomMessage("mglGetSourceStatModal",
+    opt
+    )
+}
+
+
 #' Set legend html template
 #' @param template {character} Dot.js compatible template for displaying legend
 #' @export

@@ -372,7 +372,7 @@ class Widget {
         }
         resolve(r);
       } else {
-        reject(`strToObj failed. Script = $str`);
+        reject(`strToObj failed. Script = ${str}`);
       }
     });
   }

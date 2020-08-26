@@ -32,6 +32,11 @@ mxSchemaViewStyle <- function(
   data <- .get(view,c("data"))
 
   #
+  # id
+  #
+  idView <- .get(view,c("id"))
+
+  #
   # import style
   #
   style <- .get(data,c("style"))
@@ -175,7 +180,7 @@ mxSchemaViewStyle <- function(
     size = list(
       title = tt("schema_style_size"),
       type = "number",
-      default = 1
+      default = ifelse(isPoint,10,1)
       )
     )
 
@@ -195,11 +200,14 @@ mxSchemaViewStyle <- function(
     rules = list(
       propertyOrder = 1,
       type = "array",
-      format = "table",
+      format = "tableSourceAutoStyle",
       title = tt("schema_style_rules"),
       items = list(
         type = "object",
         title = tt("schema_style_rule"),
+        options = list(
+          idView = idView
+          ),
         properties = c(
           value,
           labels,
@@ -209,6 +217,23 @@ mxSchemaViewStyle <- function(
           sprite
           )
         )
+      )
+    )
+
+
+  #
+  # Numeric : Include next value in class 
+  # >a  to <=b -> if checked
+  # or
+  # >=a to < b
+  includeUpperBoundInInterval <- list(
+    includeUpperBoundInInterval = list(
+      propertyOrder = 2,
+      title = tt("schema_style_include_upper_bound"),
+      description = tt("schema_style_include_upper_bound_desc"),
+      type = "boolean",
+      format ="checkbox",
+      default = TRUE
       )
     )
 
@@ -341,11 +366,22 @@ mxSchemaViewStyle <- function(
           opacity,
           size,
           sprite
-          )
+        )
         ),
-      default = list(list(value=NULL,labels=list("en"="NO DATA"),color="#000",opacity=1,size=1,sprite=""))
+      default = list(
+        list(
+          value = NULL,
+          labels = list(
+            "en"  =   "NO DATA"
+            ),
+          color = "#000",
+          opacity = 1,
+          size = 1,
+          sprite = ""
+        )
       )
     )
+  )
 
 
   #
@@ -415,6 +451,7 @@ mxSchemaViewStyle <- function(
     rules,
     zoomConfig,
     nulls,
+    if(isNumeric) includeUpperBoundInInterval,
     reverseLayer,
     showSymbolLabel,
     hideNulls,

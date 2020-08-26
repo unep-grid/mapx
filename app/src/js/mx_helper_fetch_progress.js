@@ -1,3 +1,4 @@
+
 export function fetchJsonProgress(url, opt) {
   return fetchProgress(url, opt).then((r) => {
     if (!r || !r.json) {
@@ -24,21 +25,21 @@ const defProgress = {
 };
 
 /**
-*  Fetch : wrapper around fetch + progress
-*  @param {String} url url to fetch
-*  @param {Object} opt options
-*/
+ *  Fetch : wrapper around fetch + progress
+ *  @param {String} url url to fetch
+ *  @param {Object} opt options
+ */
 export function fetchProgress(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
   const modeProgress = window.Response && window.ReadableStream;
   let err = '';
-  let loaded = 0;
-  let total = 0;
+  let loaded = 1;
+  let total = 1;
 
   const promTimeout = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
+      reject(`fetchProgress : timeout exceeded ( ${opt.timeout} ms )`);
     }, opt.timeout);
   });
 
@@ -104,10 +105,10 @@ export function fetchProgress(url, opt) {
 }
 
 /**
-*  Fetch : wrapper around XMLHttp request + progress + json
-*  @param {String} url url to fetch
-*  @param {Object} opt options
-*/
+ *  Fetch : wrapper around XMLHttp request + progress + json
+ *  @param {String} url url to fetch
+ *  @param {Object} opt options
+ */
 export function fetchJsonProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
   let hasMapxContentLength = false;
@@ -117,8 +118,8 @@ export function fetchJsonProgress_xhr(url, opt) {
       reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
     }, opt.timeout);
   });
-  
-  const promFetch =  new Promise((resolve, reject) => {
+
+  const promFetch = new Promise((resolve, reject) => {
     let xmlhttp = new XMLHttpRequest();
 
     xmlhttp.open('GET', url, true);
@@ -167,12 +168,11 @@ export function fetchJsonProgress_xhr(url, opt) {
   return Promise.race([promFetch, promTimeout]);
 }
 
-
 /**
-*  Fetch : wrapper around XMLHttp request + progress
-*  @param {String} url url to fetch
-*  @param {Object} opt options
-*/
+ *  Fetch : wrapper around XMLHttp request + progress
+ *  @param {String} url url to fetch
+ *  @param {Object} opt options
+ */
 export async function fetchProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
@@ -235,4 +235,30 @@ export async function fetchProgress_xhr(url, opt) {
   });
 
   return Promise.race([promFetch, promTimeout]);
+}
+
+
+/**
+* Fetch using MapX mirror : bypass cors browser verification
+* @param {Object} opt Option 
+* @param {String} opt.endpoint Endpoint to query
+* @param {Object|String} opt.query Query
+* @return Fetch response
+*/
+export async function fetchMirror(opt) {
+  const h = mx.helpers;
+  const esc = encodeURIComponent;
+
+  if (!h.isUrl(opt.endpoint)) {
+    throw new Error('Invalid endpoint', opt.endpoint);
+  }
+
+  if (h.isObject(opt.query)) {
+    opt.query = h.objToParams(opt.query);
+  }
+
+  const urlMirror = h.getApiUrl('/get/mirror');
+  const urlFetch = esc(`${opt.endpoint}?${opt.query}`);
+  const url = `${urlMirror}?url=${urlFetch}`;
+  return fetchProgress(url, opt);
 }

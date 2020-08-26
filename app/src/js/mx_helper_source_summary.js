@@ -7,13 +7,19 @@ export async function getViewSourceSummary(view) {
   if (view._source_summary) {
     return view._source_summary;
   }
+  let out = {};
   if (view.type === 'vt') {
-    view._source_summary = await getSourceVtSummary({idView: view.id});
+    out = await getSourceVtSummary({idView: view.id});
   }
   if (view.type === 'rt') {
-    view._source_summary = await getSourceRtSummary(view);
+    out = await getSourceRtSummary(view);
   }
-  return view._source_summary;
+  if (view.type === 'gj') {
+    out = await getSourceGjSummary(view);
+  }
+
+  view._source_summary = out;
+  return out;
 }
 
 /**
@@ -21,16 +27,37 @@ export async function getViewSourceSummary(view) {
  */
 export async function getSourceVtSummary(opt) {
   const h = mx.helpers;
-  opt = Object.assign(
-    {},
-    {idView: null, idSource: null, idAttr: null, noCache: false},
-    opt
-  );
+
+  /*
+   * Set defaults
+   */
+  const def = {
+    idView: null,
+    idSource: null,
+    idAttr: null,
+    noCache: false,
+    binsMethod: 'jenks',
+    binsNumber: 5
+  };
+  opt = Object.assign({}, def, opt);
+
+  /*
+   * Clean unwanted keys
+   */
+  const keys = Object.keys(def);
+  Object.keys(opt).forEach((k) => {
+    if (keys.indexOf(k) === -1) {
+      delete opt[k];
+    }
+  });
 
   if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
     throw new Error('Missing id of a view or a source');
   }
 
+  /*
+   * Fetch summary
+   */
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
@@ -38,11 +65,45 @@ export async function getSourceVtSummary(opt) {
   const resp = await fetch(url);
   const summary = await resp.json();
 
+  /*
+   * handle errors
+   */
   if (h.isObject(summary) && summary.type === 'error') {
-    throw new Error(summary.msg);
+    console.warn(summary.msg);
   }
 
   return summary;
+}
+
+export async function getSourceVtSummaryUI(opt) {
+  const h = mx.helpers;
+  const summary = await h.getSourceVtSummary(opt);
+  const aStat = summary.attribute_stat;
+  const elContainer = h.el('div');
+  let title = opt.idSource || opt.idView;
+  let titleTable = 'Table';
+  if (h.isViewId(opt.idView)) {
+    title = h.getViewTitle(opt.idView);
+  }
+
+  if (aStat.type === 'continuous') {
+    aStat.table.forEach((r) => {
+      Object.keys(r).forEach((k) => (r[k] = Math.round(r[k] * 1000) / 1000));
+    });
+    titleTable = `${titleTable} ( Method : ${
+      aStat.binsMethod
+    }, number of bins : ${aStat.binsNumber} )`;
+  }
+  const elTable = h.elAuto('array_table', aStat.table, {
+    tableTitle: titleTable
+  });
+  
+  elContainer.appendChild(elTable);
+
+  h.modal({
+    title: title,
+    content: elContainer
+  });
 }
 
 /**
@@ -50,11 +111,7 @@ export async function getSourceVtSummary(opt) {
  */
 export async function getSourceRtSummary(view) {
   const h = mx.helpers;
-  const out = {};
 
-  if (!h.isViewWms(view)) {
-    return out;
-  }
 
   const url = h.path(view, 'data.source.tiles', []);
   const urlQuery = url[0];
@@ -110,5 +167,15 @@ export async function getSourceRtSummary(view) {
     console.warn('Layer do not have valid bounding box', layer);
   }
 
+  return out;
+}
+
+
+export async function getSourceGjSummary(view){
+  const h = mx.helpers;
+  const out = {};
+  if (h.isViewGj(view)) {
+    out.extent_sp = h.path(view,'data.geometry.extent',{});
+  }
   return out;
 }

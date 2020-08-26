@@ -7,7 +7,15 @@ const mx_valid = require('@fxi/mx_valid');
 
 const validateParamsHandler = require('./checkRouteParams.js').getParamsValidator(
   {
-    expected: ['idView', 'idSource', 'idAttr', 'noCache']
+    expected: [
+      'idView',
+      'idSource',
+      'idAttr',
+      'noCache',
+      'binsCompute',
+      'binsMethod',
+      'binsNumber'
+    ]
   }
 );
 
@@ -20,7 +28,11 @@ async function getSourceSummaryHandler(req, res) {
       idSource: req.query.idSource,
       idView: req.query.idView,
       idAttr: req.query.idAttr,
-      noCache: req.query.noCache
+      noCache: req.query.noCache,
+      binsCompute: req.query.binsCompute,
+      binsNumber: req.query.binsNumber,
+      binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
+      histogramCompute: req.query.histogramCompute
     });
 
     if (data) {
@@ -66,7 +78,7 @@ async function getSourceSummary(opt) {
     }
   }
 
-  if(!mx_valid.isSourceId(opt.idSource)){
+  if (!mx_valid.isSourceId(opt.idSource)) {
     throw new Error('Source not valid');
   }
 
@@ -96,7 +108,6 @@ async function getSourceSummary(opt) {
   opt.idAttrT0 = opt.hasT0 ? 'mx_t0' : 0;
   opt.idAttrT1 = opt.hasT1 ? 'mx_t1' : 0;
   opt.timestamp = timestamp;
-
   const hasGeom = columns.indexOf('geom') > -1;
   const hasAttr = columns.indexOf(opt.idAttr) > -1;
   const isCategorical = attrType === 'string';
@@ -138,6 +149,10 @@ async function getSourceSummary(opt) {
 
 async function getOrCalc(idTemplate, opt) {
   const sql = utils.parseTemplate(template[idTemplate], opt);
+/*  if(idTemplate === 'getSourceSummary_attr_continuous'){*/
+    //var fs = require('fs');
+    //debugger;
+  /*}*/
   const hash = crypto
     .createHash('md5')
     .update(sql + opt.timestamp)

@@ -13,31 +13,31 @@ let settings = {
   animateType: 'seq_counter' // or 'class'
 };
 
-class Toggle {
+class Checkbox {
   constructor(opt) {
-    const tgl = this;
-    tgl.opt = Object.assign({}, settings, opt);
-    tgl.id = opt.id;
-    tgl._label = opt.label;
-    tgl._label_key = opt.label_key;
-    tgl._order = opt.order;
-    tgl._type = opt.type;
-    tgl._is_animating = false;
-    tgl._destroyed = false;
-    tgl._count = opt.count;
-    tgl._is_enabled = true;
-    tgl._count_displayed = 0;
-    tgl.build();
+    const cbx = this;
+    cbx.opt = Object.assign({}, settings, opt);
+    cbx.id = opt.id;
+    cbx._label = opt.label;
+    cbx._label_key = opt.label_key;
+    cbx._order = opt.order;
+    cbx._type = opt.type;
+    cbx._is_animating = false;
+    cbx._destroyed = false;
+    cbx._count = opt.count;
+    cbx._is_enabled = true;
+    cbx._count_displayed = 0;
+    cbx.build();
   }
 
   destroy() {
-    const tgl = this;
-    if (tgl._destroyed || !tgl.el.parentElement) {
+    const cbx = this;
+    if (cbx._destroyed || !cbx.el.parentElement) {
       return;
     }
-    tgl.el.parentElement.removeChild(tgl.el);
-    tgl.opt.onDestroy.bind(tgl)();
-    tgl._destroyed = true;
+    cbx.el.parentElement.removeChild(cbx.el);
+    cbx.opt.onDestroy.bind(cbx)();
+    cbx._destroyed = true;
   }
 
   getCountDisplayed() {
@@ -54,21 +54,21 @@ class Toggle {
   }
 
   setCount(n) {
-    const tgl = this;
-    const nD = tgl.getCountDisplayed();
+    const cbx = this;
+    const nD = cbx.getCountDisplayed();
 
-    tgl._count = n || 0;
-    tgl.enable(n > 0);
+    cbx._count = n || 0;
+    cbx.enable(n > 0);
     if (n === nD) {
       return;
     }
-    const animate = tgl.opt.animate;
-    const animating = tgl._isAnimating();
+    const animate = cbx.opt.animate;
+    const animating = cbx._isAnimating();
 
     if (animating || !animate) {
-      tgl._setCountLabel(n);
+      cbx._setCountLabel(n);
     } else {
-      tgl._animateCountUpdate(n);
+      cbx._animateCountUpdate(n);
     }
   }
 
@@ -77,8 +77,8 @@ class Toggle {
   }
 
   enable(enable) {
-    const tgl = this;
-    const enabled = tgl.isEnabled();
+    const cbx = this;
+    const enabled = cbx.isEnabled();
     enable = enable !== false;
     //const skipEnable = enable && enabled;
     //const skipDisable = !enable && !enabled;
@@ -89,49 +89,49 @@ class Toggle {
       this.elCheck.classList.add('disabled');
       this.elCheck.setAttribute('disabled', true);
     }
-    tgl._is_enabled = enabled;
+    cbx._is_enabled = enabled;
   }
 
   _setCountLabel(n) {
-    const tgl = this;
-    tgl._count_displayed = n;
-    tgl.elLabelCount.dataset.count = n;
+    const cbx = this;
+    cbx._count_displayed = n;
+    cbx.elLabelCount.dataset.count = n;
   }
 
   _animateCountUpdate() {
-    const tgl = this;
-    const animSeqCounter = tgl.opt.animateType === 'seq_counter';
+    const cbx = this;
+    const animSeqCounter = cbx.opt.animateType === 'seq_counter';
     if (animSeqCounter) {
-      tgl._animateCountProg();
+      cbx._animateCountProg();
     } else {
-      tgl._animateCountClass();
+      cbx._animateCountClass();
     }
   }
   _isAnimating() {
     return this._is_animating;
   }
   _setAnimating(enable) {
-    const tgl = this;
+    const cbx = this;
     enable = enable || false;
-    tgl._is_animating = enable;
+    cbx._is_animating = enable;
   }
 
   _animateCountClass() {
-    const tgl = this;
-    tgl._setAnimating(true);
-    tgl.elLabelCount.classList.add('updating');
+    const cbx = this;
+    cbx._setAnimating(true);
+    cbx.elLabelCount.classList.add('updating');
     setTimeout(() => {
       onNextFrame(() => {
-        const count = tgl.getCount();
-        tgl._setCountLabel(count);
-        tgl._setAnimating(false);
-        tgl.elLabelCount.classList.remove('updating');
+        const count = cbx.getCount();
+        cbx._setCountLabel(count);
+        cbx._setAnimating(false);
+        cbx.elLabelCount.classList.remove('updating');
       });
     }, 500);
   }
 
   _animateCountProg() {
-    const tgl = this;
+    const cbx = this;
     let c = 0;
     let inc = 1;
     let delta = 0;
@@ -140,9 +140,9 @@ class Toggle {
     next();
     function next() {
       delta = d();
-      count = tgl.getCount();
+      count = cbx.getCount();
       if (delta !== 0) {
-        tgl._setAnimating(true);
+        cbx._setAnimating(true);
         inc = Math.ceil(Math.abs(delta) / 10);
         if (up()) {
           c += inc;
@@ -151,24 +151,24 @@ class Toggle {
           c -= inc;
           c = c < 0 ? 0 : c;
         }
-        tgl._setCountLabel(Math.ceil(c));
+        cbx._setCountLabel(Math.ceil(c));
         onNextFrame(next);
       } else {
-        tgl._setAnimating(false);
+        cbx._setAnimating(false);
       }
     }
     function d() {
-      return tgl.getCount() - tgl.getCountDisplayed();
+      return cbx.getCount() - cbx.getCountDisplayed();
     }
     function up() {
       return d() > 0;
     }
     function init() {
-      c = tgl.getCountDisplayed();
+      c = cbx.getCountDisplayed();
     }
   }
   setLabel(txt) {
-    const tgl = this;
+    const cbx = this;
     if (txt instanceof Promise) {
       txt.then((t) => {
         set(t);
@@ -177,20 +177,20 @@ class Toggle {
       set(txt);
     }
     function set(txt) {
-      const curTxt = tgl.elLabelText.innerText;
+      const curTxt = cbx.elLabelText.innerText;
       if (txt && txt !== curTxt) {
         if (!txt) {
           txt = curTxt;
         }
-        tgl._label = txt;
-        tgl.elLabelText.innerText = txt;
+        cbx._label = txt;
+        cbx.elLabelText.innerText = txt;
       }
     }
   }
   setLabelKey(key) {
-    const tgl = this;
-    tgl._label_key = key;
-    tgl.elLabelText.dataset.lang_key = tgl._label_key;
+    const cbx = this;
+    cbx._label_key = key;
+    cbx.elLabelText.dataset.lang_key = cbx._label_key;
   }
   getLabelKey() {
     return this._label_key || '';
@@ -220,59 +220,59 @@ class Toggle {
   }
 
   build() {
-    buildToggle.bind(this)();
+    buildCheckbox.bind(this)();
     this.opt.onBuild.bind(this)();
   }
 }
 
-export {Toggle};
+export {Checkbox};
 
-function buildToggle() {
-  const tgl = this;
+function buildCheckbox() {
+  const cbx = this;
   let elLabelText;
   let elLabelCount;
   let elCheck;
 
-  const elCheckToggle = el(
+  const elCheckbox = el(
     'div',
     {
-      class: 'vf-check-toggle',
+      class: 'vf-checkbox',
       style: {
-        order: tgl._order
+        order: cbx._order
       }
     },
     (elCheck = el('input', {
-      id: 'toggle_' + tgl.id,
-      class: ['filter', 'vf-check-toggle-input'],
+      id: 'checkbox_' + cbx.id,
+      class: ['filter', 'vf-checkbox-input'],
       dataset: {
-        filter: tgl.id,
-        type: tgl._type
+        filter: cbx.id,
+        type: cbx._type
       },
       type: 'checkbox'
     })),
     el(
       'label',
       {
-        class: 'vf-check-toggle-label',
-        for: 'toggle_' + tgl.id
+        class: 'vf-checkbox-label',
+        for: 'checkbox_' + cbx.id
       },
       (elLabelText = el('span', {
-        class: 'vf-check-toggle-filter-text',
-        lang_key: tgl.id
+        class: 'vf-checkbox-filter-text',
+        lang_key: cbx.id
       })),
       (elLabelCount = el('span', {
-        class: 'vf-check-toggle-filter-count'
+        class: 'vf-checkbox-filter-count'
       }))
     )
   );
 
-  tgl.el = elCheckToggle;
-  tgl.el.toggle = tgl;
-  tgl.elLabelText = elLabelText;
-  tgl.elLabelCount = elLabelCount;
-  tgl.elCheck = elCheck;
+  cbx.el = elCheckbox;
+  cbx.el.checkbox = cbx;
+  cbx.elLabelText = elLabelText;
+  cbx.elLabelCount = elLabelCount;
+  cbx.elCheck = elCheck;
 
-  tgl.setLabel(tgl._label);
-  tgl.setLabelKey(tgl._label_key);
-  tgl.setCount(tgl._count);
+  cbx.setLabel(cbx._label);
+  cbx.setLabelKey(cbx._label_key);
+  cbx.setCount(cbx._count);
 }

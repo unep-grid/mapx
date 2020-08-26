@@ -65,7 +65,7 @@ export function handleIssues(err) {
                   zIndex: -1
                 }
               });
-              elText.innerHTML = JSON.stringify(errors.map(e=>e.msg));
+              elText.innerHTML = JSON.stringify(errors.map((e) => e.msg));
               document.body.appendChild(elText);
               elText.focus();
               elText.select();
@@ -92,8 +92,8 @@ export function handleIssues(err) {
     err?.msg ||
     err?.message ||
     err?.error?.message ||
-    err?.reason ||
     err?.reason?.message ||
+    err?.reason ||
     'Error undefined, check the console';
   var src = err?.sourceId;
 

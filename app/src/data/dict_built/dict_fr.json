@@ -410,6 +410,16 @@
     "fr": "Titre de la légende"
   },
   {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "fr": "Inclure la borne supérieure dans l'intervalle"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "fr": "Si cochée, cette option fera que les bornes supérieures soient incluses dans les intervalles. Dans tous les cas, le premier et le dernier intervalle contiendront les valeurs min et max."
+  },
+  {
     "id": "schema_style_reverse_order",
     "en": "Reverse displayed layers order",
     "fr": "Inverser l'ordre des couches sur la carte"
@@ -4528,6 +4538,26 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "fr": "Ajouter au projet sélectionné"
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "fr": "Seuils naturel (algorithm de Jenks)"
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "fr": "Quantile"
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "fr": "Seuils 'Head/tail'"
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "fr": "Intervalle égal"
   },
   {
     "id": "en",

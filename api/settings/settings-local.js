@@ -22,6 +22,10 @@ module.exports = Object.assign(s, {
     host: env.POSTGRES_HOST,
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
+    admin : {
+      user: env.POSTGRES_USER,
+      password : env.POSTGRES_PASSWORD
+    },
     write: {
       user: env.POSTGRES_USER_WRITE,
       password: env.POSTGRES_USER_WRITE_PASSWORD

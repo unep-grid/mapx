@@ -58,6 +58,7 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler('mglHandlerDownloadVectorSource', h.handlerDownloadVectorSource);
   Shiny.addCustomMessageHandler('mglGetOverlapAnalysis', h.getOverlapAnalysis);
   Shiny.addCustomMessageHandler('mglGetValidateSourceGeom', h.getValidateSourceGeom);
+  Shiny.addCustomMessageHandler('mglGetSourceStatModal', h.getSourceVtSummaryUI);
   Shiny.addCustomMessageHandler('mglGetProjectViewsState', h.getProjectViewsState);
   Shiny.addCustomMessageHandler("mglUpdateProject", h.updateProject);
   Shiny.addCustomMessageHandler('mglGetProjectViewsCollections', h.getProjectViewsCollectionsShiny);

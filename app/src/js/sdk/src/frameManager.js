@@ -2,6 +2,7 @@ import {Events} from './events.js';
 import * as settings from './settings.json';
 import {MessageFrameCom, RequestFrameCom} from './messages.js';
 import {parse, stringify} from './helpers.js';
+import {version} from '../package.json';
 
 /**
  * Class to create a manager to build an iframe and post message to a worker inside
@@ -147,6 +148,13 @@ class FrameManager extends Events {
   }
 
   /**
+  * Get version
+  */
+  get version() {
+    return version;
+  }
+
+  /**
    * Set message languages
    * @param {String} Two letter string language. e.g. 'en', 'fr'
    */
@@ -256,7 +264,7 @@ class FrameManager extends Events {
        * Redirect message to manager
        */
       if (message.type === 'message') {
-        Object.assign(message,{emitter:'worker'});  
+        Object.assign(message, {emitter: 'worker'});
         return fm._message(message);
       }
       /**
@@ -274,6 +282,19 @@ class FrameManager extends Events {
        */
       if (message.type === 'state') {
         fm.fire(message.state);
+
+        if(message.version !== fm.version){
+          fm._message({
+            level: 'error',
+            key: 'err_version_mismatch',
+            vars: {
+              versionManager : fm.version,
+              versionWorker : message.version
+            },
+            emitter: 'worker'
+          });
+        }
+
         fm._message({
           level: 'log',
           key: 'log_state',
@@ -285,6 +306,7 @@ class FrameManager extends Events {
         return;
       }
     } catch (e) {
+      debugger;
       fm._message({
         level: 'error',
         key: 'err_handle_message_worker',
@@ -316,8 +338,8 @@ class FrameManager extends Events {
       });
 
       /**
-      * Reject if to many request
-      */
+       * Reject if to many request
+       */
       if (nR > mR) {
         fm._message({
           level: 'warning',

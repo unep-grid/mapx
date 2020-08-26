@@ -22,7 +22,9 @@ const modules = {
   dashboard: loadDashboard,
   ace: loadAceEditor,
   'js-beautify': loadJsBeautify,
-  'html2canvas': loadHtmlToCanvas
+  html2canvas: loadHtmlToCanvas,
+  'chroma-js': loadChromaJs,
+  'radio-group':loadRadioGroup
 };
 
 export function moduleLoad(name) {
@@ -48,6 +50,19 @@ function loadHtmlToCanvas() {
     return m.default;
   });
 }
+
+function loadChromaJs() {
+  return import('chroma-js').then((m) => {
+    return m.default;
+  });
+}
+
+function loadRadioGroup() {
+  return import('./radio_group').then((m) => {
+     return m.RadioGroup
+  });
+}
+
 
 function loadJsBeautify() {
   return import('js-beautify').then((m) => {
@@ -95,10 +110,9 @@ function loadMapboxGlDraw() {
 }
 
 function loadAceEditor() {
-  return import('ace-builds')
-    .then((m) => {
-      return import('ace-builds/webpack-resolver.js');
-    })
+  return import('ace-builds').then((m) => {
+    return import('ace-builds/webpack-resolver.js');
+  });
 }
 
 function loadDragDropWorker() {
@@ -197,13 +211,17 @@ function loadHighcharts() {
     import('highcharts/highcharts-more.js'),
     import('highcharts/modules/solid-gauge'),
     import('highcharts/modules/stock'),
-    import('highcharts/modules/heatmap')
+    import('highcharts/modules/heatmap'),
+    import('highcharts/modules/exporting.js'),
+    import('highcharts/modules/export-data.js')
   ]).then((m) => {
     var Highcharts = m[0].default;
     m[1].default(Highcharts);
     m[2].default(Highcharts);
     m[3].default(Highcharts);
     m[4].default(Highcharts);
+    m[5].default(Highcharts);
+    m[6].default(Highcharts);
     return Promise.resolve(Highcharts);
   });
 }
@@ -219,7 +237,9 @@ function loadJsonEditor() {
       import('./mx_extend_jed_position.js'),
       import('./mx_extend_jed_array_confirm_delete'),
       import('./mx_extend_jed_ace.js'),
-      import('./mx_extend_jed_pickolor.js'),
+      import('./mx_extend_jed_table_source_stat_style.js'),
+      //import('./mx_extend_jed_pickolor.js'),
+      import('./mx_extend_jed_color_picker.js'),
       /***
        * Global plugin for all editors.
        */

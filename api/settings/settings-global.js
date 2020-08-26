@@ -19,6 +19,10 @@ module.exports = {
     host: 'localhost',
     poolMin: 1,
     poolMax: 1,
+    admin : {
+      user: 'postgres',
+      password : '1234'
+    },
     write: {
       user: 'postgres',
       password: '1234'
@@ -31,9 +35,9 @@ module.exports = {
       key: '1234'
     },
     stringRead:
-      'PG:host=localhost port=5432 user=pguser dbname=mydb password=pgpass',
+      'PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass',
     stringWrite:
-      'PG:host=localhost port=5432 user=pguser dbname=mydb password=pgpass'
+      'PG:host=localhost port=5432 user=postgres dbname=mydb password=pgpass'
   },
   image: {
     path: {

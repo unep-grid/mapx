@@ -18,7 +18,10 @@ const tableAttrNotQueryable = defaults.tables.attr_not_queryable;
 
 const rules = [
   {
-    key: ['noCache'],
+    /**
+     * Generic boolean
+     */
+    key: ['noCache', 'binsCompute', 'publicOnly'],
     test: (d) => {
       if (mx_valid.isString(d)) {
         switch (d) {
@@ -38,6 +41,27 @@ const rules = [
       return {
         valid: isValid,
         value: d
+      };
+    }
+  },
+  {
+    key: ['binsNumber'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : 5
+      };
+    }
+  },
+  {
+    key: ['binsMethod'],
+    test: (d) => {
+      const methods = ['equal_interval','heads_tails', 'jenks','quantile'];
+      const isValid = methods.indexOf(d) > -1;
+      return {
+        valid: isValid,
+        value: isValid ? d : methods[0]
       };
     }
   },
@@ -181,15 +205,6 @@ const rules = [
       return {
         valid: mx_valid.isStringRange(d, 2, 2),
         value: d || 'en'
-      };
-    }
-  },
-  {
-    key: 'publicOnly',
-    test: (d) => {
-      return {
-        valid: mx_valid.isBoolean(d),
-        value: d === 'true' || d === true ? true : ''
       };
     }
   },

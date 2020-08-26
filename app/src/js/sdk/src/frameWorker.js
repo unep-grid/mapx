@@ -1,6 +1,7 @@
 import {Events} from './events.js';
 import {parse, stringify} from './helpers.js';
-import {isObject} from '../../is_test/index.js';
+import {isObject} from '@fxi/mx_valid';
+import {version} from '../package.json';
 
 import {
   MessageFrameCom,
@@ -55,7 +56,8 @@ class FrameWorker extends Events {
     fw.opt.resolvers._bind(fw);
 
     fw.postState({
-      state: 'ready'
+      state: 'ready',
+      version : fw.version
     });
 
     fw.postMessage({
@@ -74,6 +76,13 @@ class FrameWorker extends Events {
         }
       });
     }
+  }
+
+  /**
+   * Get version
+   */
+  get version() {
+    return version;
   }
 
   /**
@@ -148,7 +157,6 @@ class FrameWorker extends Events {
     const idRequest = request.idRequest;
     const idResolver = request.idResolver;
     const resolver = fw.opt.resolvers[idResolver];
-
 
     try {
       /**

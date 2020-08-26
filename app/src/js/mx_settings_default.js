@@ -48,7 +48,7 @@ let settings = {
       getViewsListByProject: '/get/views/list/project/',
       getViewsListGlobalPublic: '/get/views/list/global/public',
       downloadSourceCreate: '/get/source/',
-      downloadSourceGet: '',
+      downloadSourceGet: '/', // location given by the api
       uploadImage: '/upload/image/',
       uploadVector: '/upload/vector/',
       collectLogs: '/collect/logs/'

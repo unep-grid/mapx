@@ -410,6 +410,16 @@
     "zh": ""
   },
   {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "zh": ""
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "zh": ""
+  },
+  {
     "id": "schema_style_reverse_order",
     "en": "Reverse displayed layers order",
     "zh": ""
@@ -4527,6 +4537,26 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
+    "zh": ""
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "zh": ""
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "zh": ""
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "zh": ""
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
     "zh": ""
   },
   {

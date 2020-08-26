@@ -33,11 +33,17 @@ Simple validation tool for MapX specific values
 <dt><a href="#isViewRt">isViewRt(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view of type rt</p>
 </dd>
+<dt><a href="#isViewGj">isViewGj(item)</a></dt>
+<dd><p>Test if it&#39;s a MapX view of type gj</p>
+</dd>
 <dt><a href="#isViewEditable">isViewEditable(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view is editable</p>
 </dd>
 <dt><a href="#isArrayOfViews">isArrayOfViews(arr)</a></dt>
 <dd><p>Test if is array of views object</p>
+</dd>
+<dt><a href="#isViewWms">isViewWms(view)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Test if a raster view has wms url</p>
 </dd>
 <dt><a href="#isArrayOfViewsId">isArrayOfViewsId(arr)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test if array of views id</p>
@@ -123,6 +129,9 @@ Simple validation tool for MapX specific values
 <dt><a href="#isUrl">isUrl(url)</a></dt>
 <dd><p>Validate url</p>
 </dd>
+<dt><a href="#isUrlValidWms">isUrlValidWms(url, opt)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Check if it&#39;s expected url for wms end point.</p>
+</dd>
 <dt><a href="#isDateString">isDateString(date)</a></dt>
 <dd><p>Validate date</p>
 </dd>
@@ -202,6 +211,17 @@ Test if it's a MapX view of type rt
 | --- | --- | --- |
 | item | <code>Object</code> | to test |
 
+<a name="isViewGj"></a>
+
+## isViewGj(item)
+Test if it's a MapX view of type gj
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
 <a name="isViewEditable"></a>
 
 ## isViewEditable(item)
@@ -223,6 +243,18 @@ Test if is array of views object
 | Param | Type | Description |
 | --- | --- | --- |
 | arr | <code>Array</code> | Array to test |
+
+<a name="isViewWms"></a>
+
+## isViewWms(view) ⇒ <code>Boolean</code>
+Test if a raster view has wms url
+
+**Kind**: global function  
+**Returns**: <code>Boolean</code> - valid  
+
+| Param | Type |
+| --- | --- |
+| view | <code>Object</code> | 
 
 <a name="isArrayOfViewsId"></a>
 
@@ -541,6 +573,20 @@ Validate url
 | Param | Type | Description |
 | --- | --- | --- |
 | url | <code>String</code> | to test |
+
+<a name="isUrlValidWms"></a>
+
+## isUrlValidWms(url, opt) ⇒ <code>Boolean</code>
+Check if it's expected url for wms end point.
+
+**Kind**: global function  
+**Returns**: <code>Boolean</code> - valid  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| url | <code>String</code> | to test |
+| opt | <code>Object</code> | options |
+| opt.layers | <code>Boolean</code> | Should the url contains layers param ? |
 
 <a name="isDateString"></a>
 
