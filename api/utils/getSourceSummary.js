@@ -14,7 +14,8 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
       'noCache',
       'binsCompute',
       'binsMethod',
-      'binsNumber'
+      'binsNumber',
+      'maxRowsCount'
     ]
   }
 );
@@ -32,7 +33,7 @@ async function getSourceSummaryHandler(req, res) {
       binsCompute: req.query.binsCompute,
       binsNumber: req.query.binsNumber,
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
-      histogramCompute: req.query.histogramCompute
+      maxRowsCount: req.query.maxRowsCount // limit table length
     });
 
     if (data) {
@@ -85,10 +86,10 @@ async function getSourceSummary(opt) {
   const start = Date.now();
   const columns = await db.getColumnsNames(opt.idSource);
   const timestamp = await db.getSourceLastTimestamp(opt.idSource);
-  const attrType =
-    columns.indexOf(opt.idAttr) > -1
-      ? await db.getColumnTypeSimple(opt.idSource, opt.idAttr)
-      : null;
+  const tableTypes = await db.getColumnsTypesSimple(opt.idSource, columns);
+  const attrType = opt.idAttr
+    ? tableTypes.filter((r) => r.id === opt.idAttr)[0].value
+    : null;
 
   const hash = crypto
     .createHash('md5')
@@ -115,7 +116,8 @@ async function getSourceSummary(opt) {
   const out = {
     id: opt.idSource,
     timestamp: opt.timestamp,
-    attributes: columns
+    attributes: columns,
+    attributes_types: tableTypes
   };
 
   Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
@@ -149,10 +151,7 @@ async function getSourceSummary(opt) {
 
 async function getOrCalc(idTemplate, opt) {
   const sql = utils.parseTemplate(template[idTemplate], opt);
-/*  if(idTemplate === 'getSourceSummary_attr_continuous'){*/
-    //var fs = require('fs');
-    //debugger;
-  /*}*/
+
   const hash = crypto
     .createHash('md5')
     .update(sql + opt.timestamp)

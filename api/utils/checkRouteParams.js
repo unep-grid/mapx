@@ -71,7 +71,6 @@ module.exports.getParamsValidator = function(opt) {
           message: e.message
         });
       }
-      console.error(e);
     }
   };
 };

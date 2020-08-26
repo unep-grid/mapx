@@ -186,7 +186,8 @@ export function featuresToPopup(o) {
               data: {
                 layer: idView,
                 attribute: attribute,
-                value: value
+                value: value,
+                type: h.isNumeric(value) ? 'numeric' : 'string'
               },
               labelBoxed: true,
               checked: false
@@ -255,7 +256,7 @@ export function featuresToPopup(o) {
     const elBtn = e.target;
     const elChecks = h
       .parentFinder({
-        selector: elBtn, 
+        selector: elBtn,
         class: 'mx-prop-group'
       })
       .querySelectorAll('.check-toggle input');
@@ -274,11 +275,11 @@ export function featuresToPopup(o) {
   function updateFilters(el) {
     const value = el.dataset.value;
     const layer = el.dataset.layer;
+    const type = el.dataset.type;
     const attribute = el.dataset.attribute;
     const add = el.checked;
-    const isNum = h.isNumeric(value);
+    const isNum = !h.isEmpty(type) ? type === 'numeric' : h.isNumeric(value);
     let rule = [];
-
     if (add) {
       if (isNum) {
         /**
@@ -293,14 +294,15 @@ export function featuresToPopup(o) {
   }
 
   function applyFilters(idV) {
-      var filter = filters[idV];
-      var view = h.getView(idV);
+    var filter = filters[idV];
+    var view = h.getView(idV);
 
-      view._setFilter({
-        filter: filter,
-        type: 'popup_filter'
-      });
+    view._setFilter({
+      filter: filter,
+      type: 'popup_filter'
+    });
 
-      filters[idV] = [];
+
+    filters[idV] = [];
   }
 }

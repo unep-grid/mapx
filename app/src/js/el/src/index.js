@@ -3,19 +3,21 @@ export {el};
 
 const config = {
   listeners: [],
-  observer: null,
-  debug: true
+  debug: true,
+  interval : null
 };
 
+/**
+* clean listeners at interval
+*/
 function el(type, ...opt) {
   var item;
-  /**
-   * Global listener
-   */
-  if (!config.observer) {
-    config.observer = create_observer();
-  }
 
+  if(!config.interval){
+    config.interval = setInterval(cleanListeners,1e4);
+    window.el_config = config;
+  }
+  
   /**
    * Create element
    */
@@ -38,6 +40,9 @@ function el(type, ...opt) {
           isFunction(item[1])
         ) {
           elOut.addEventListener(item[0], item[1]);
+          /**
+           * Keep track of listener
+           */
           config.listeners.push({
             target: elOut,
             type: item[0],
@@ -47,6 +52,9 @@ function el(type, ...opt) {
           Object.keys(item).forEach((i) => {
             if (isFunction(item[i])) {
               elOut.addEventListener(i, item[i]);
+              /**
+               * Keep track of listener
+               */
               config.listeners.push({
                 target: elOut,
                 type: i,
@@ -163,69 +171,16 @@ function isElement(obj) {
 /**
  * Automatically remove listeners
  */
-
-function create_observer() {
-  const observer = new MutationObserver((m) => {
-    let start = performance.now();
-    let hadChildRemoved = false;
-    let hadFoundListener = false;
-    let nListenersRemoved = 0;
-    let nNodeRemoved = 0;
-    for (let mutation of m) {
-      if (mutation.type === 'childList') {
-        let nNodeRemovedMutation = mutation.removedNodes.length;
-        if (nNodeRemovedMutation) {
-          hadChildRemoved = true;
-          nNodeRemoved = nNodeRemoved + nNodeRemovedMutation;
-          /*
-           * Inspect removed nodes
-           */
-          for (let node of mutation.removedNodes) {
-            /*
-             * Search for registered listeners
-             */
-            for (let l of config.listeners) {
-              if (node.contains(l.target) && l.type && l.listener) {
-                hadFoundListener = true;
-                l.target.removeEventListener(l.type, l.listener);
-                l._to_remove = true;
-              }
-            }
-          }
-
-          /*
-           * Remove found listeners
-           */
-          if (hadFoundListener) {
-            let n = config.listeners.length;
-            while (n--) {
-              if (config.listeners[n]._to_remove === true) {
-
-                nListenersRemoved ++;
-                config.listeners.splice(n, 1);
-              }
-            }
-          }
-        }
-      }
-    }
-    /*
-     * Debug log
-     */
-    if (hadChildRemoved && config.debug) {
-      const diff = performance.now() - start;
-      if (diff > 10) {
-        console.warn(`el observer performance issue.
-          It took ${Math.round(diff)} ms to finish. 
-          Number of listeners removed : ${nListenersRemoved}. 
-          Number of listeners left: ${config.listeners.length}. 
-          Number of removed nodes : ${nNodeRemoved}`);
-      }
-    }
-  });
-  observer.observe(document.body, {
-    childList: true,
-    subtree: true
-  });
-  return observer;
+function cleanListeners(){
+  let cL = config.listeners.length;
+  while(--cL){
+     const l = config.listeners[cL];
+     const s = document.body.contains(l.target);
+     if(!s){
+       config.listeners.pop();
+       l.target.removeEventListener(l.type, l.listener);
+     }
+  }
 }
+
+

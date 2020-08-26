@@ -78,12 +78,21 @@ export async function downloadViewRaster(opt) {
     throw new Error(`No view with id ${idView}`);
   }
 
+  const title = h.getViewTitle(view).replace(/\s/, '_');
   const url = h.path(view, 'data.source.urlDownload');
-  opt.url = url;
+  let filename = title;
 
   if (h.isUrl(url)) {
-    const download = await h.moduleLoad('downloadjs');
-    download(opt.url);
+    /**
+    * Don't try to download in the same page :
+    * Fetching can be very long, longer than mapx session AND HUGE
+    * using <a href=... download> , a same origin could be required by firefox
+    * using download js will try to fetch or xhr, which is basicaly the same as
+    * fetching ourself the file, and add a <a href='blob'>.
+    * href + target _blank
+    */
+    let elA = h.el('a',{href:url,target:'_blank'});
+    elA.click();
   } else {
     throw new Error(`Not a valid URL: ${url}`);
   }
@@ -3507,7 +3516,11 @@ export async function viewLayersAddVt(o) {
   /**
    * Source stat
    */
-  const sourceSummary = await h.getViewSourceSummary(view);
+  const sourceSummary = await h.getSourceVtSummary({
+       idAttr : attr,
+       idSource: idSourceLayer
+  });
+ 
   const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
   const isNumeric = statType === 'continuous';
   const max = p(sourceSummary, 'attribute_stat.max');
@@ -3825,6 +3838,7 @@ export async function viewLayersAddVt(o) {
       filter: filter
     });
 
+    ruleNulls.filter = filter;
     layers.push(layerNull);
     rules.push(ruleNulls);
   }
@@ -4599,8 +4613,7 @@ export async function getViewsBounds(views) {
   };
 
   let summaries = await Promise.all(views.map(h.getViewSourceSummary));
-  let extents = summaries.map(s => s.extent_sp);
-
+  let extents = summaries.map((s) => s.extent_sp);
 
   let extent = extents.reduce(
     (a, ext) => {

@@ -1,5 +1,3 @@
-/*jshint esversion: 6 , node: true */
-
 /**
  * @param {Object} o options
  * @param {String} o.id Id of target element
@@ -7,177 +5,168 @@
  * @param {Object} o.startVal JSON of initial values
  * @param {Object} o.options JSONEditor options
  */
-export function jedInit(o) {
+export async function jedInit(o) {
   var h = mx.helpers;
 
-  return Promise.all([
-    getDictJsonEditorDict(),
-    h.moduleLoad('json-editor')
-  ]).then((m) => {
-    var dict = m[0];
-    var id = o.id;
-    var schema = o.schema;
-    var startVal = o.startVal;
-    var options = o.options;
-    var JSONEditor = window.JSONEditor;
-    if (dict) {
-      JSONEditor.defaults.languages = dict;
-    }
-    JSONEditor.defaults.language = mx.settings.language;
-    var el = document.getElementById(id);
-    var idDraft;
-    var draftLock = true;
-    var draftDbTimeStamp = 0;
+  const dict = await getDictJsonEditorDict();
+  await h.moduleLoad('json-editor');
 
-    var jed = window.jed;
+  var id = o.id;
+  var schema = o.schema;
+  var startVal = o.startVal;
+  var options = o.options;
+  var JSONEditor = window.JSONEditor;
+  if (dict) {
+    JSONEditor.defaults.languages = dict;
+  }
+  JSONEditor.defaults.language = mx.settings.language;
+  var el = document.getElementById(id);
+  var idDraft;
+  var draftLock = true;
+  var draftDbTimeStamp = 0;
 
-    if (!el) {
-      console.warn(`jed element ${id} not found`);
-      return;
-    }
+  var jed = window.jed;
 
-    if (!jed) {
-      window.jed = jed = {
-        editors: {},
-        helper: {},
-        extend: {
-          position: {},
-          texteditor: {}
-        }
-      };
-    }
+  if (!el) {
+    console.warn(`jed element ${id} not found`);
+    return;
+  }
 
-    var opt_final = {};
-
-    if (!options) {
-      options = {};
-    }
-
-    // opt can't be changed after instantiation.
-    var opt = {
-      ajax: true,
-      theme: 'bootstrap3',
-      iconlib: 'bootstrap3',
-      disable_collapse: false,
-      disable_properties: true,
-      disableSelectize: false,
-      disable_edit_json: false,
-      required_by_default: true,
-      show_errors: 'always',
-      no_additional_properties: true,
-      schema: schema,
-      startval: startVal,
-      draftAutoSaveEnable: false,
-      draftAutoSaveId: null,
-      draftTimestamp: null,
-      getValidationOnChange: false,
-      getValuesOnChange: false
+  if (!jed) {
+    window.jed = jed = {
+      editors: {},
+      helper: {},
+      extend: {
+        position: {},
+        texteditor: {}
+      }
     };
+  }
 
-    opt_final = Object.assign({},opt, options);
+  var opt_final = {};
 
-    if (opt_final.draftAutoSaveId && opt_final.draftAutoSaveDbTimestamp) {
-      idDraft = id + '@' + opt_final.draftAutoSaveId;
-      draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
+  if (!options) {
+    options = {};
+  }
+
+  // opt can't be changed after instantiation.
+  var opt = {
+    ajax: true,
+    theme: 'bootstrap3',
+    iconlib: 'bootstrap3',
+    disable_collapse: false,
+    disable_properties: true,
+    disableSelectize: false,
+    disable_edit_json: false,
+    required_by_default: true,
+    show_errors: 'always',
+    no_additional_properties: true,
+    schema: schema,
+    startval: startVal,
+    draftAutoSaveEnable: false,
+    draftAutoSaveId: null,
+    draftTimestamp: null,
+    getValidationOnChange: false,
+    getValuesOnChange: false
+  };
+
+  opt_final = Object.assign({}, opt, options);
+
+  if (opt_final.draftAutoSaveId && opt_final.draftAutoSaveDbTimestamp) {
+    idDraft = id + '@' + opt_final.draftAutoSaveId;
+    draftDbTimeStamp = opt_final.draftAutoSaveDbTimestamp;
+  }
+
+  JSONEditor.plugins.ace.theme = 'github';
+  JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
+
+  /**
+   * Remove old editor if already exists
+   */
+  if (jed.editors[id] && h.isFunction(jed.editors[id].destroy)) {
+    jed.editors[id].destroy();
+  }
+  /**
+   * Create new editor
+   */
+  el.innerHTML = '';
+  el.dataset.jed_id = id;
+  var editor = new JSONEditor(el, opt_final);
+
+  /**
+   * Test for readyness
+   */
+  editor.on('ready', async function() {
+    jed.editors[id] = editor;
+
+    /**
+     * Auto save draft
+     */
+    if (idDraft) {
+      try {
+        const draft = await mx.data.draft.getItem(idDraft);
+        draftLock = false;
+        if (!draft || draft.type !== 'draft') {
+          return;
+        }
+        var draftClientTimeStamp = draft.timestamp;
+        // add 5 sec margin
+        var moreRecent = draftClientTimeStamp > draftDbTimeStamp;
+
+        if (moreRecent) {
+          await jedShowDraftRecovery({
+            jed: editor,
+            idDraft: idDraft,
+            timeDb: opt_final.draftAutoSaveDbTimestamp,
+            draft: draft,
+            saved: opt_final.startval
+          });
+        }
+      } catch (e) {
+        draftLock = false;
+        throw new Error(e);
+      }
+    }
+    /**
+     * Report ready state to shiny
+     */
+    if (window.Shiny) {
+      Shiny.onInputChange(id + '_ready', new Date());
+    } else {
+      console.log(id + '_ready');
+    }
+  });
+
+  /**
+   * On editor change
+   */
+  editor.on('change', async function() {
+    if (idDraft && !draftLock) {
+      var data = editor.getValue();
+      const saved = await mx.data.draft.setItem(idDraft, {
+        type: 'draft',
+        timestamp: Math.round(Date.now() / 1000),
+        data: data
+      });
     }
 
-    JSONEditor.plugins.ace.theme = 'github';
-    JSONEditor.plugins.selectize.enable = !opt_final.disableSelectize;
-
     /**
-     * Remove old editor if already exists
+     * Set custom ui classes for errors
      */
-    if (jed.editors[id] && h.isFunction(jed.editors[id].destroy)) {
-      jed.editors[id].destroy();
+    jedAddAncestorErrors(editor);
+    jedValidateSize(editor);
+    if (opt_final.getValidationOnChange) {
+      /**
+       * Continous validation transfer on input
+       */
+      jedGetValidationById({id: id, idEvent: 'change'});
     }
-    /**
-     * Create new editor
-     */
-    el.innerHTML = '';
-    el.dataset.jed_id = id;
-    var editor = new JSONEditor(el, opt_final);
-
-    /**
-     * Test for readyness
-     */
-    editor.on('ready', function() {
-      jed.editors[id] = editor;
-
-
+    if (opt_final.getValuesOnChange) {
       /**
-       * Auto save draft
+       * Continous data transfer on input
        */
-      if (idDraft) {
-        mx.data.draft
-          .getItem(idDraft)
-          .then((draft) => {
-            draftLock = false;
-            if (!draft || draft.type !== 'draft') {
-              return;
-            }
-            var draftClientTimeStamp = draft.timestamp;
-            var moreRecent = draftClientTimeStamp > draftDbTimeStamp;
-
-            if (moreRecent) {
-              jedShowDraftRecovery({
-                id: id,
-                idDraft: idDraft,
-                timeDb: opt_final.draftAutoSaveDbTimestamp,
-                draft: draft,
-                saved: opt_final.startval
-              });
-            }
-          })
-          .catch((e) => {
-            draftLock = false;
-            throw new Error(e);
-          });
-      }
-      /**
-       * Report ready state to shiny
-       */
-      if (window.Shiny) {
-        Shiny.onInputChange(id + '_ready', new Date());
-      } else {
-        console.log(id + '_ready');
-      }
-    });
-
-    /**
-     * On editor change
-     */
-    editor.on('change', function() {
-      if (idDraft && !draftLock) {
-        var data = editor.getValue();
-        mx.data.draft
-          .setItem(idDraft, {
-            type: 'draft',
-            timestamp: Math.round(Date.now() / 1000),
-            data: data
-          })
-          .then(() => {
-            //console.log( "Auto save " + idDraft );
-          });
-      }
-
-      /**
-       * Set custom ui classes for errors
-       */
-      jedAddAncestorErrors(editor);
-      jedValidateSize(editor);
-      if (opt_final.getValidationOnChange) {
-        /**
-         * Continous validation transfer on input
-         */
-        jedGetValidationById({id: id, idEvent: 'change'});
-      }
-      if (opt_final.getValuesOnChange) {
-        /**
-         * Continous data transfer on input
-         */
-        jedGetValuesById({id: id, idEvent: 'change'});
-      }
-    });
+      jedGetValuesById({id: id, idEvent: 'change'});
+    }
   });
 }
 
@@ -188,26 +177,25 @@ function jedValidateSize(editor) {
   const h = mx.helpers;
   var values = editor.getValue();
 
-  return h.getSizeOf(values, false)
-    .then(function(size) {
-      if (size > mx.settings.maxByteJed) {
-        var sizeReadable = h.formatByteSize(size);
-        h.modal({
-          addBackground: true,
-          id: 'warningSize',
-          title:
+  return h.getSizeOf(values, false).then(function(size) {
+    if (size > mx.settings.maxByteJed) {
+      var sizeReadable = h.formatByteSize(size);
+      h.modal({
+        addBackground: true,
+        id: 'warningSize',
+        title:
           'Warning : size greater than ' +
           mx.settings.maxByteJed +
           ' ( ' +
           sizeReadable +
           ')',
-          content: h.el(
-            'b',
-            'Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.'
-          )
-        });
-      }
-    });
+        content: h.el(
+          'b',
+          'Warning: this form data is too big. Please remove unnecessary item(s) and/or source data (images, binary files) from a dedicated server.'
+        )
+      });
+    }
+  });
 }
 
 /**
@@ -312,13 +300,13 @@ export function jedGetValidationById(o) {
 }
 /** Show recovery panel
  * @param {Object} o options
- * @param {String} o.id Id of the editor
+ * @param {Object} o.jed Editor
  * @param {String} o.idDraft Id of the draft
  * @param {Object} o.draft draft to recover
  * @param {Object} o.saved data provided from db
  * @param {Number} o.timeDb Posix time stamp of the db version
  */
-function jedShowDraftRecovery(o) {
+async function jedShowDraftRecovery(o) {
   const h = mx.helpers;
   const el = h.el;
 
@@ -329,11 +317,17 @@ function jedShowDraftRecovery(o) {
     });
   }
 
-  var jed = h.path(window, 'jed.editors.' + o.id);
+  var jed = o.jed;
   var recoveredData = o.draft.data;
   var dbData = o.saved;
   var dateTimeDb = formatDateTime(o.timeDb);
   var dateTimeBrowser = formatDateTime(o.draft.timestamp);
+
+  var diff = await getDiff();
+  var isEmpty = h.isEmpty(diff);
+  if (isEmpty) {
+    return;
+  }
 
   var btnYes = el('button', {
     type: 'button',
@@ -354,12 +348,15 @@ function jedShowDraftRecovery(o) {
   });
 
   var elData;
+
   var modal = h.modal({
     addBackground: true,
     id: 'modalDataRecovery',
     title: h.el('span', {dataset: {lang_key: 'draft_recover_modal_title'}}),
     buttons: [btnYes, btnDiffData],
-    textCloseButton: el('span', {dataset: {lang_key: 'draft_recover_cancel'}}),
+    textCloseButton: el('span', {
+      dataset: {lang_key: 'draft_recover_cancel'}
+    }),
     content: el(
       'div',
       el('h3', {
@@ -373,7 +370,9 @@ function jedShowDraftRecovery(o) {
           'ul',
           el(
             'li',
-            el('span', {dataset: {lang_key: 'draft_recover_last_saved_date'}}),
+            el('span', {
+              dataset: {lang_key: 'draft_recover_last_saved_date'}
+            }),
             el('span', ': ' + dateTimeDb)
           ),
           el(
@@ -393,7 +392,21 @@ function jedShowDraftRecovery(o) {
     el: modal
   });
 
-  function previewDiff() {
+  function getDiff() {
+    return h.jsonDiff(dbData, recoveredData, {
+      propertyFilter: function(name) {
+        var firstChar = name.slice(0, 1);
+        /**
+         * Set of known key that should not be used in diff
+         */
+        return (
+          name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
+        );
+      }
+    });
+  }
+
+  async function previewDiff() {
     var elItem = el('div', {
       class: ['mx-diff-item']
     });
@@ -403,8 +416,7 @@ function jedShowDraftRecovery(o) {
       el('h3', el('span', {dataset: {lang_key: 'draft_recover_diffs'}}))
     );
     elData.appendChild(elItem);
-
-    h.jsonDiff(dbData, recoveredData, {
+    var html = await h.jsonDiff(dbData, recoveredData, {
       toHTML: true,
       propertyFilter: function(name) {
         var firstChar = name.slice(0, 1);
@@ -415,9 +427,9 @@ function jedShowDraftRecovery(o) {
           name !== 'spriteEnable' && firstChar !== '_' && firstChar !== '$'
         );
       }
-    }).then((html) => {
-      elItem.innerHTML = html;
     });
+
+    elItem.innerHTML = html;
   }
 
   function restore() {

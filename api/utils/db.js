@@ -3,6 +3,8 @@ const pgWrite = require.main.require('./db').pgWrite;
 const settings = require.main.require('./settings');
 const utils = require('./utils.js');
 const key = settings.db.crypto.key;
+const valid = require('@fxi/mx_valid');
+const template = require('../templates');
 
 /**
  * Test if a table exists and has rows
@@ -192,41 +194,32 @@ exports.getColumnsNames = async function(idLayer) {
 
 /**
  * Get simple (json) column type
- * @param {String} idLayer Id of the table
+ * @param {String} idSource Id of the source
  * @param {String} idAttr Id of the attribute
  * @return {String} type
  */
-exports.getColumnTypeSimple = async function(idLayer, idAttr) {
-  if (!idLayer || !idAttr) {
+exports.getColumnsTypesSimple = async function(idSource, idAttr) {
+  if (!valid.isSourceId(idSource) || !idAttr) {
     return null;
   }
+  const cNames = valid.isArray(idAttr) ? idAttr : [idAttr];
+  const cNamesTxt = `('${cNames.join("','")}')`;
 
-  const q = {
-    values: [idLayer, idAttr],
-    text: `SELECT
-            CASE 
-              WHEN data_type='character varying' THEN 'string'
-              WHEN data_type='numeric' THEN 'number'
-              WHEN data_type='integer' THEN 'number'
-              WHEN data_type='double precision' THEN 'number'
-              ELSE data_type
-            END as attr_type
-            FROM information_schema.columns
-            WHERE table_name=$1 AND column_name = $2`
+  const opt = {
+    idSource: idSource,
+    idAttributesString: cNamesTxt
   };
-  const data = await pgRead.query(q);
-  const row = data.rows[0];
 
-  if (row) {
-    return row.attr_type;
-  }
+  const sqlSrcAttr = utils.parseTemplate(template.getColumnsTypesSimple, opt);
+  const resp = await pgRead.query(sqlSrcAttr);
+  return resp.rows;
 };
 
 /**
-* Get the latest timestamp from a source / layer / table
-* @param {String} idSource Id of the source
-* @return {numeric} timetamp
-*/
+ * Get the latest timestamp from a source / layer / table
+ * @param {String} idSource Id of the source
+ * @return {numeric} timetamp
+ */
 exports.getSourceLastTimestamp = async function(idSource) {
   if (!idSource) {
     return null;

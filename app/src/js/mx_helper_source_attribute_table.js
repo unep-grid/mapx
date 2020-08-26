@@ -1,14 +1,11 @@
 export function getSourceTableAttribute(opt) {
-  let h = mx.helpers;
-  let host = h.getApiUrl('getSourceTableAttribute');
-
-  let url =
-    host +
-    '?' +
-    h.objToParams({
-      id: opt.idSource,
-      attributes: opt.attributes
-    });
+  const h = mx.helpers;
+  const host = h.getApiUrl('getSourceTableAttribute');
+  const params = h.objToParams({
+    id: opt.idSource,
+    attributes: opt.attributes
+  });
+  const url = `${host}?${params}`;
 
   return h.fetchJsonProgress(url, {
     onProgress: onProgressData,
@@ -17,28 +14,31 @@ export function getSourceTableAttribute(opt) {
   });
 }
 
-export function showSourceTableAttributeModal(opt) {
-    if(!opt || !opt.idSource ){
+export async function showSourceTableAttributeModal(opt) {
+  if (!opt || !opt.idSource) {
     return Promise.resolve(false);
   }
-  let h = mx.helpers;
-  let el = h.el;
-  let hot;
-  let mutationObserver;
-
-  let labels = opt.labels || null;
-  let settings = {
+  const h = mx.helpers;
+  const el = h.el;
+  const settings = {
     idSource: opt.idSource,
     attributes: opt.attributes,
     view: opt.view
   };
 
+  let hot;
+  let mutationObserver;
+  let labels = opt.labels || null;
+
+  const summary = await h.getSourceVtSummary({
+    idSource: opt.idSource
+  });
   onProgressStart();
 
   return Promise.all([
     h.moduleLoad('handsontable'),
     h.getSourceMetadata(settings.idSource),
-    h.getSourceTableAttribute(settings),
+    h.getSourceTableAttribute(settings)
   ]).then((m) => {
     let handsontable = m[0];
     let meta = m[1] || {};
@@ -64,18 +64,18 @@ export function showSourceTableAttributeModal(opt) {
         on: {
           click: handleDownload
         },
-        title : allowDownload ? 'Download' : "Download disabled"
+        title: allowDownload ? 'Download' : 'Download disabled'
       },
       'Export CSV'
     );
-    if(!allowDownload){
-      elButtonDownload.setAttribute('disabled',true);
+    if (!allowDownload) {
+      elButtonDownload.setAttribute('disabled', true);
     }
     let elButtonClearFilter = el(
       'button',
       {
         class: 'btn btn-default',
-        disabled : true,
+        disabled: true,
         on: {
           click: handleClearFilter
         }
@@ -107,8 +107,13 @@ export function showSourceTableAttributeModal(opt) {
      * NOTE: get this from postgres
      */
     let columns = opt.attributes.map((a) => {
+      const type = summary.attributes_types.reduce(
+        (v, t) => (v ? v : t.id === a ? t.value : v),
+        null
+      );
+      
       return {
-        type: typeof data[0][a] === 'number' ? 'numeric' : 'text',
+        type: type === 'number' ? 'numeric' : 'string',
         data: a,
         readOnly: true
       };
@@ -146,7 +151,7 @@ export function showSourceTableAttributeModal(opt) {
      */
 
     function handleDownload() {
-      if(!allowDownload){
+      if (!allowDownload) {
         return;
       }
       let exportPlugin = hot.getPlugin('exportFile');
@@ -170,7 +175,7 @@ export function showSourceTableAttributeModal(opt) {
       filterPlugin.clearConditions();
       filterPlugin.filter();
       hot.render();
-      elButtonClearFilter.setAttribute('disabled',true);
+      elButtonClearFilter.setAttribute('disabled', true);
     }
 
     function addTitle() {
@@ -190,7 +195,8 @@ export function showSourceTableAttributeModal(opt) {
       if (hot && hot.render) {
         let elParent = elTable.parentElement;
         let pStyle = getComputedStyle(elParent);
-        let pad = parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
+        let pad =
+          parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
         let height = elParent.getBoundingClientRect().height;
         if (height > 350) {
           elTable.style.height = height - pad + 'px';

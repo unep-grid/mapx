@@ -320,7 +320,7 @@ function urlTile(opt) {
     styles: '',
     request: 'getMap',
     ZINDEX: 10,
-    EXCEPTIONS: 'application/vnd.ogc.se_inimage',
+    EXCEPTIONS: 'application/vnd.ogc.se_blank',
     srs: 'EPSG:3857',
     layers: opt.layer,
     format: 'image/png',

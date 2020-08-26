@@ -6,7 +6,7 @@ rows_count as (
 )
 
 SELECT json_build_object(
-  'rowCount', to_json(rc.count)
+  'row_count', to_json(rc.count)
 ) as res
 FROM rows_count rc;
 

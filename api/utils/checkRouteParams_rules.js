@@ -45,6 +45,16 @@ const rules = [
     }
   },
   {
+    key: ['maxRowsCount'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d > 0;
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : 100
+      };
+    }
+  },
+  {
     key: ['binsNumber'],
     test: (d) => {
       isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
@@ -57,7 +67,7 @@ const rules = [
   {
     key: ['binsMethod'],
     test: (d) => {
-      const methods = ['equal_interval','heads_tails', 'jenks','quantile'];
+      const methods = ['equal_interval', 'heads_tails', 'jenks', 'quantile'];
       const isValid = methods.indexOf(d) > -1;
       return {
         valid: isValid,

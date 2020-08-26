@@ -245,7 +245,9 @@ export var cssTransform = cssTransformFun();
 
 export function uiToggleBtn(o) {
   const h = mx.helpers;
-  var label = o.label || '';
+  o.label = h.isString(o.label) || h.isElement(o.label) ? o.label : JSON.stringify(o.label);
+  var noLabel = h.isEmpty(o.label);
+  var label = noLabel ? '' : o.label;
   var onChange = o.onChange || function() {};
   var data = o.data || {};
   var checked = o.checked || false;
@@ -258,14 +260,17 @@ export function uiToggleBtn(o) {
     (elInput = h.el('input', {
       class: 'check-toggle-input',
       id: id,
-      type: 'checkbox'
+      type: 'checkbox',
+      on : {'click': onChange}
     })),
     (elLabel = h.el('label', {
       class: `check-toggle-label ${
         o.labelBoxed ? 'check-toggle-label-boxed' : ''
       }`,
       for: id
-    }))
+    },
+      label
+    ))
   );
 
   elInput.checked = checked;
@@ -274,13 +279,11 @@ export function uiToggleBtn(o) {
     elInput.dataset[d] = data[d];
   }
 
-  elInput.onchange = function(e) {
-    onChange(e, e.target);
-  };
-
-  h.getDictItem('noValue').then((na) => {
-    elLabel.innerText = label || na;
-  });
+  if(noLabel){
+    h.getDictItem('noValue').then((na) => {
+      elLabel.innerText = na;
+    });
+  }
 
   return elContainer;
 }

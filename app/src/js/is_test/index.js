@@ -3,14 +3,18 @@
  * @param {Any} item item to test
  */
 export function isEmpty(item) {
-  if (!item) {
+  if (typeof item === 'undefined') {
     return true;
+  } else if (isString(item)){
+     return isEqual(item, '');
   } else if (isObject(item)) {
     return isEqual(item, {});
   } else if (isArray(item)) {
     return isEqual(item, []);
   }
+  return false;
 }
+
 export function isNotEmpty(item) {
   return !isEmpty(item);
 }

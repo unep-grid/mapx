@@ -338,7 +338,7 @@ export function uploadSource(o) {
     }
 
     function updateLayerList() {
-      Shiny.onInputChange('mx_update_source_list', {
+      Shiny.onInputChange('mx_client_update_source_list', {
         date: new Date() * 1
       });
     }

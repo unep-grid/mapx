@@ -37,3 +37,6 @@ exports.getProjectViewsStates = readTxt(
 exports.getViewSourceAndAttributes = readTxt(
   './templates/sql/getViewSourceAndAttributes.sql'
 );
+exports.getColumnsTypesSimple = readTxt(
+  './templates/sql/getColumnsTypesSimple.sql'
+);

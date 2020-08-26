@@ -52,7 +52,7 @@ export async function getSourceVtSummary(opt) {
   });
 
   if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
-    throw new Error('Missing id of a view or a source');
+    return {};
   }
 
   /*
@@ -97,7 +97,7 @@ export async function getSourceVtSummaryUI(opt) {
   const elTable = h.elAuto('array_table', aStat.table, {
     tableTitle: titleTable
   });
-  
+
   elContainer.appendChild(elTable);
 
   h.modal({
@@ -111,13 +111,12 @@ export async function getSourceVtSummaryUI(opt) {
  */
 export async function getSourceRtSummary(view) {
   const h = mx.helpers;
-
-
   const url = h.path(view, 'data.source.tiles', []);
   const urlQuery = url[0];
   const q = h.getQueryParametersAsObject(urlQuery);
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
+  const out = {};
 
   const layers = await h.wmsGetLayers(endpoint);
 
@@ -170,12 +169,11 @@ export async function getSourceRtSummary(view) {
   return out;
 }
 
-
-export async function getSourceGjSummary(view){
+export async function getSourceGjSummary(view) {
   const h = mx.helpers;
   const out = {};
   if (h.isViewGj(view)) {
-    out.extent_sp = h.path(view,'data.geometry.extent',{});
+    out.extent_sp = h.path(view, 'data.geometry.extent', {});
   }
   return out;
 }

@@ -171,7 +171,7 @@ mxSchemaViewStyle <- function(
       title = tt("schema_style_opacity"),
       type = "number",
       enum = c(0,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1),
-      default = 0.3
+      default = 0.7
       )
     )
 
@@ -375,7 +375,7 @@ mxSchemaViewStyle <- function(
             "en"  =   "NO DATA"
             ),
           color = "#000",
-          opacity = 1,
+          opacity = 0.7,
           size = 1,
           sprite = ""
         )
