@@ -45,7 +45,7 @@
     "live-server": "^1.2.1"
   },
   "dependencies": {
-    "@fxi/el": "0.1.3",
+    "@fxi/el": "0.1.4",
     "@fxi/mx_valid": "0.0.7"
   }
 }

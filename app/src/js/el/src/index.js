@@ -40,6 +40,7 @@ function el(type, ...opt) {
           isFunction(item[1])
         ) {
           elOut.addEventListener(item[0], item[1]);
+          elOut.dataset.el_id_listener = Math.random().toString(32);
           /**
            * Keep track of listener
            */
@@ -52,6 +53,7 @@ function el(type, ...opt) {
           Object.keys(item).forEach((i) => {
             if (isFunction(item[i])) {
               elOut.addEventListener(i, item[i]);
+              elOut.dataset.el_id_listener = Math.random().toString(32);
               /**
                * Keep track of listener
                */
@@ -173,9 +175,19 @@ function isElement(obj) {
  */
 function cleanListeners(){
   let cL = config.listeners.length;
+  if(cL < 1){
+    return;
+  }
   while(--cL){
      const l = config.listeners[cL];
-     const s = document.body.contains(l.target);
+     if(!l){
+      return
+     }
+     const id = l.target.dataset.el_id_listener;
+     /**
+     * use query select instead of contains : contains seems to fail in some browser
+     */
+     const s = document.body.querySelector(`[data-el_id_listener="${id}"]`);
      if(!s){
        config.listeners.pop();
        l.target.removeEventListener(l.type, l.listener);
