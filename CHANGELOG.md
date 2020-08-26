@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.113-beta' target='_blank'>1.6.113-beta</a>
+  - Bug fixes
+      - SDK : polyfill for <element>.contains method seems fail. Replaced with querySelector. Updated module list in app and sdk
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.112-beta' target='_blank'>1.6.112-beta</a>
 
   - Bug fixes 
