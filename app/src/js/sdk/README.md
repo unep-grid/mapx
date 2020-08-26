@@ -277,7 +277,7 @@ get url
 **Returns**: url object  
 <a name="FrameManager+version"></a>
 
-### frameManager.version
+#### frameManager.version
 Get version
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
@@ -418,7 +418,7 @@ create a worke
 
 <a name="FrameWorker+version"></a>
 
-### frameWorker.version
+#### frameWorker.version
 Get version
 
 **Kind**: instance property of [<code>FrameWorker</code>](#FrameWorker)  

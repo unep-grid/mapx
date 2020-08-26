@@ -1,5 +1,22 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.112-beta' target='_blank'>1.6.112-beta</a>
+
+  - Bug fixes 
+      - APP :
+        - Download raster -> wrong file type
+        - Zoom to wms raster 
+        - Filter by missing value (legend + popup) did not work
+        - Popup : value 0 produced "missing value" message
+        - First style of a new view : failed to detect attribute type
+        - Buttons 'find extent', 'zoom to displayed features', 'show attribute table' was visible event for new vt view without source
+        - JSON schema based form : diff message was shown even when no diff between locally saved data and data from db, if the timestamp was not the same. 
+        - Dynamic layer list was not invalidated after uploading a new source or creating a new source using the overlap tool
+        - Default opacity set to 0.7 for rules and null rule.
+  - Improvement
+      - SDK
+        - Better README.md
+       
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.111-beta' target='_blank'>1.6.111-beta</a>
 
   - New features
