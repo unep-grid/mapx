@@ -1,57 +1,111 @@
 
-## MapX SDK
+# MapX SDK
 
 The package `MxSdk` ease the integration of MapX. It features a simple way to interact with MapX within a static web page or from a full featured application.
 
-## Example
+## Usage
+
+As an integrator you will use the `Manager` class to embed an instance of MapX and allow to interact with MapX's specific methods or events.
+
+### Module include
+
+```
+$ npm install @fxi/mxsdk
+...
+import {Manager} from '@fxi/mxsdk';
+```
+
+### HTML inline include
+
+```
+<script src="https://unpkg.com/@fxi/mxsdk/dist/mxsdk.umd.js"></script>
+...
+const Manager = mxsdk.Manager;
+```
+
+## Methods and events
+
+The `ready` event is the entry point on which methods are to be used; example:
 
 ```js
-import {MxSdk} from 'mxsdk';
-
 /**
- * new instance
+ * Embed a MapX instance
  */
-const mapx = new MxSdk.manager({
-  host: 'http://dev.mapx.localhost/',
-  port: '8880',
-  project: 'MX-HPP-OWB-3SI-3FF-Q3R',
-  language: 'en'
+const mapx = new Manager({
+  container: document.getElementById('mapx'),
+  url: 'https://app.mapx.org/?project=MX-YBJ-YYF-08R-UUR-QW6&language=en',
 });
 
 /**
- * When ready, begin requests
+ * Use methods upon the ready event
  */
 mapx.on('ready', async () => {
+
   /**
-   * Get list of views, print them in console
-   * ( All requests to MapX resolvers return
-   * Promises or Promisified value)
+   * Get list of views
    */
   const views = await mapx.ask('get_views')
   console.log(views);
 
   /**
-   * Get geo ip info,  print it in console
+   * Add a view to be displayed on the embedded map
    */
-  const ipInfo = mapx.ask('get_user_ip');
-  console.log(ipInfo);
+  mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
-  /**
-   * Change project after 3000 ms
-   */
-  setTimeout( async () => {
-     const projects = await = mapx.ask('get_projects');
-     const newProject = projects[projects.length - 1];
-     if (newProject) {
-       await mapx.ask('set_project', {idProject: newProject.id});
-       const views = await mapx.ask('get_views');
-       console.log(views);
-     }
-  }, 3000);
+  // Etc, ...
+
 });
-
 ```
 
+### Methods
+
+[Methods are handled by the MapxResolvers class](#MapxResolvers) and are call using `Manager.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value.
+
+### Events
+
+Events are hookable using `Manager.on(<event name>, <callback>)`. Here are the available events.
+
+SDK events:
+- message
+- ready
+
+MapX events:
+- language_change
+- project_change
+- session_start
+- session_end
+- mapx_connected
+- mapx_disconnected
+- mapx_ready
+- click_attributes
+- views_list_updated
+- view_created
+- layers_ordered
+- view_deleted
+- view_remove
+- view_removed
+- view_filter
+- view_filtered
+- view_add
+- view_added
+- highlight_progress
+- highlight_update
+- settings_change
+- settings_user_change
+- story_step
+- view_panel_click
+
+### Resources
+
+Further usage resources:
+- [Observable collection](https://observablehq.com/collection/@trepmag/mapx-sdk) to have an interactive showcase
+- [Examples](examples/) within this repository
+- [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
+- [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
+- [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
+- [SDK Recipies](https://github.com/unep-grid/map-x-mgl/wiki/SDK---Recipes)
+
+## Documentation
 
 {{>main}}
 

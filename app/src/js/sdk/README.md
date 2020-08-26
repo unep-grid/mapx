@@ -1,59 +1,113 @@
 
-## MapX SDK
+# MapX SDK
 
 The package `MxSdk` ease the integration of MapX. It features a simple way to interact with MapX within a static web page or from a full featured application.
 
-## Example
+## Usage
+
+As an integrator you will use the `Manager` class to embed an instance of MapX and allow to interact with MapX's specific methods or events.
+
+### Module include
+
+```
+$ npm install @fxi/mxsdk
+...
+import {Manager} from '@fxi/mxsdk';
+```
+
+### HTML inline include
+
+```
+<script src="https://unpkg.com/@fxi/mxsdk/dist/mxsdk.umd.js"></script>
+...
+const Manager = mxsdk.Manager;
+```
+
+## Methods and events
+
+The `ready` event is the entry point on which methods are to be used; example:
 
 ```js
-import {MxSdk} from 'mxsdk';
-
 /**
- * new instance
+ * Embed a MapX instance
  */
-const mapx = new MxSdk.manager({
-  host: 'http://dev.mapx.localhost/',
-  port: '8880',
-  project: 'MX-HPP-OWB-3SI-3FF-Q3R',
-  language: 'en'
+const mapx = new Manager({
+  container: document.getElementById('mapx'),
+  url: 'https://app.mapx.org/?project=MX-YBJ-YYF-08R-UUR-QW6&language=en',
 });
 
 /**
- * When ready, begin requests
+ * Use methods upon the ready event
  */
 mapx.on('ready', async () => {
+
   /**
-   * Get list of views, print them in console
-   * ( All requests to MapX resolvers return
-   * Promises or Promisified value)
+   * Get list of views
    */
   const views = await mapx.ask('get_views')
   console.log(views);
 
   /**
-   * Get geo ip info,  print it in console
+   * Add a view to be displayed on the embedded map
    */
-  const ipInfo = mapx.ask('get_user_ip');
-  console.log(ipInfo);
+  mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
-  /**
-   * Change project after 3000 ms
-   */
-  setTimeout( async () => {
-     const projects = await = mapx.ask('get_projects');
-     const newProject = projects[projects.length - 1];
-     if (newProject) {
-       await mapx.ask('set_project', {idProject: newProject.id});
-       const views = await mapx.ask('get_views');
-       console.log(views);
-     }
-  }, 3000);
+  // Etc, ...
+
 });
-
 ```
 
+### Methods
 
-## Classes
+[Methods are handled by the MapxResolvers class](#MapxResolvers) and are call using `Manager.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value.
+
+### Events
+
+Events are hookable using `Manager.on(<event name>, <callback>)`. Here are the available events.
+
+SDK events:
+- message
+- ready
+
+MapX events:
+- language_change
+- project_change
+- session_start
+- session_end
+- mapx_connected
+- mapx_disconnected
+- mapx_ready
+- click_attributes
+- views_list_updated
+- view_created
+- layers_ordered
+- view_deleted
+- view_remove
+- view_removed
+- view_filter
+- view_filtered
+- view_add
+- view_added
+- highlight_progress
+- highlight_update
+- settings_change
+- settings_user_change
+- story_step
+- view_panel_click
+
+### Resources
+
+Further usage resources:
+- [Observable collection](https://observablehq.com/collection/@trepmag/mapx-sdk) to have an interactive showcase
+- [Examples](examples/) within this repository
+- [Starter project example](https://git.unepgrid.ch/drikc/mapx-sdk-starter-project)
+- [Prototype presentation (1-Jul-2020)](https://unepgrid.ch/storage/app/media/platforms/mapx-sdk-prototype-presentation-20200701.html)
+- [Package at npm registry](https://www.npmjs.com/package/@fxi/mxsdk)
+- [SDK Recipies](https://github.com/unep-grid/map-x-mgl/wiki/SDK---Recipes)
+
+## Documentation
+
+### Classes
 
 <dl>
 <dt><a href="#Events">Events</a></dt>
@@ -78,7 +132,7 @@ mapx.on('ready', async () => {
 
 <a name="Events"></a>
 
-## Events
+### Events
 Simple event management
 
 **Kind**: global class  
@@ -92,7 +146,7 @@ Simple event management
 
 <a name="new_Events_new"></a>
 
-### new Events()
+#### new Events()
 new Event handler
 
 **Example**  
@@ -103,7 +157,7 @@ var e = new Events();
 ```
 <a name="Events+fire"></a>
 
-### events.fire(type)
+#### events.fire(type)
 Fire callback based on type
 
 **Kind**: instance method of [<code>Events</code>](#Events)  
@@ -114,7 +168,7 @@ Fire callback based on type
 
 <a name="Events+on"></a>
 
-### events.on(type, cb)
+#### events.on(type, cb)
 Register new callback by type
 
 **Kind**: instance method of [<code>Events</code>](#Events)  
@@ -126,7 +180,7 @@ Register new callback by type
 
 <a name="Events+off"></a>
 
-### events.off(type, cb)
+#### events.off(type, cb)
 Unregister callback by type
 
 **Kind**: instance method of [<code>Events</code>](#Events)  
@@ -138,7 +192,7 @@ Unregister callback by type
 
 <a name="Events+once"></a>
 
-### events.once(type, cb)
+#### events.once(type, cb)
 Register a callback only and remove it after the first evaluation
 
 **Kind**: instance method of [<code>Events</code>](#Events)  
@@ -150,7 +204,7 @@ Register a callback only and remove it after the first evaluation
 
 <a name="FrameManager"></a>
 
-## FrameManager ⇐ [<code>Events</code>](#Events)
+### FrameManager ⇐ [<code>Events</code>](#Events)
 Class to create a manager to build an iframe and post message to a worker inside
 
 **Kind**: global class  
@@ -175,7 +229,7 @@ Class to create a manager to build an iframe and post message to a worker inside
 
 <a name="new_FrameManager_new"></a>
 
-### new FrameManager(opt)
+#### new FrameManager(opt)
 Create a manager
 
 
@@ -188,13 +242,13 @@ Create a manager
 
 <a name="FrameManager+rect"></a>
 
-### frameManager.rect
+#### frameManager.rect
 Get bounding client rect of the iframe
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
 <a name="FrameManager+width"></a>
 
-### frameManager.width
+#### frameManager.width
 Set iframe width
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
@@ -205,7 +259,7 @@ Set iframe width
 
 <a name="FrameManager+height"></a>
 
-### frameManager.height
+#### frameManager.height
 Set iframe height
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
@@ -216,7 +270,7 @@ Set iframe height
 
 <a name="FrameManager+url"></a>
 
-### frameManager.url ⇒
+#### frameManager.url ⇒
 get url
 
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
@@ -229,13 +283,13 @@ Get version
 **Kind**: instance property of [<code>FrameManager</code>](#FrameManager)  
 <a name="FrameManager+destroy"></a>
 
-### frameManager.destroy()
+#### frameManager.destroy()
 Destroy manager
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
 <a name="FrameManager+setUrl"></a>
 
-### frameManager.setUrl(Url)
+#### frameManager.setUrl(Url)
 Set url
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -246,7 +300,7 @@ Set url
 
 <a name="FrameManager+setLang"></a>
 
-### frameManager.setLang(Two)
+#### frameManager.setLang(Two)
 Set message languages
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -257,7 +311,7 @@ Set message languages
 
 <a name="FrameManager+ask"></a>
 
-### frameManager.ask(Id, data) ⇒ <code>Promise</code>
+#### frameManager.ask(Id, data) ⇒ <code>Promise</code>
 const id = request.id;
 Ask / request method to the worker
 
@@ -271,7 +325,7 @@ Ask / request method to the worker
 
 <a name="FrameManager+_getAndRemoveRequestById"></a>
 
-### frameManager.\_getAndRemoveRequestById(id) ⇒ <code>RequestFrameCom</code>
+#### frameManager.\_getAndRemoveRequestById(id) ⇒ <code>RequestFrameCom</code>
 Retrieve request by id and remove it
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -282,7 +336,7 @@ Retrieve request by id and remove it
 
 <a name="Events+fire"></a>
 
-### frameManager.fire(type)
+#### frameManager.fire(type)
 Fire callback based on type
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -294,7 +348,7 @@ Fire callback based on type
 
 <a name="Events+on"></a>
 
-### frameManager.on(type, cb)
+#### frameManager.on(type, cb)
 Register new callback by type
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -307,7 +361,7 @@ Register new callback by type
 
 <a name="Events+off"></a>
 
-### frameManager.off(type, cb)
+#### frameManager.off(type, cb)
 Unregister callback by type
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -320,7 +374,7 @@ Unregister callback by type
 
 <a name="Events+once"></a>
 
-### frameManager.once(type, cb)
+#### frameManager.once(type, cb)
 Register a callback only and remove it after the first evaluation
 
 **Kind**: instance method of [<code>FrameManager</code>](#FrameManager)  
@@ -333,7 +387,7 @@ Register a callback only and remove it after the first evaluation
 
 <a name="FrameWorker"></a>
 
-## FrameWorker ⇐ [<code>Events</code>](#Events)
+### FrameWorker ⇐ [<code>Events</code>](#Events)
 Class to create a worker / listener inside an application
 
 **Kind**: global class  
@@ -352,7 +406,7 @@ Class to create a worker / listener inside an application
 
 <a name="new_FrameWorker_new"></a>
 
-### new FrameWorker(opt)
+#### new FrameWorker(opt)
 create a worke
 
 
@@ -370,26 +424,26 @@ Get version
 **Kind**: instance property of [<code>FrameWorker</code>](#FrameWorker)  
 <a name="FrameWorker+isNested"></a>
 
-### frameWorker.isNested() ⇒ <code>Boolean</code>
+#### frameWorker.isNested() ⇒ <code>Boolean</code>
 Check if the worker has a parent (is nested)
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
 **Returns**: <code>Boolean</code> - true if the worker has a parent (is inside an iframe)  
 <a name="FrameWorker+destroy"></a>
 
-### frameWorker.destroy()
+#### frameWorker.destroy()
 Destroy the worker
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
 <a name="FrameWorker+removeListener"></a>
 
-### frameWorker.removeListener()
+#### frameWorker.removeListener()
 Remove message listener
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
 <a name="Events+fire"></a>
 
-### frameWorker.fire(type)
+#### frameWorker.fire(type)
 Fire callback based on type
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
@@ -401,7 +455,7 @@ Fire callback based on type
 
 <a name="Events+on"></a>
 
-### frameWorker.on(type, cb)
+#### frameWorker.on(type, cb)
 Register new callback by type
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
@@ -414,7 +468,7 @@ Register new callback by type
 
 <a name="Events+off"></a>
 
-### frameWorker.off(type, cb)
+#### frameWorker.off(type, cb)
 Unregister callback by type
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
@@ -427,7 +481,7 @@ Unregister callback by type
 
 <a name="Events+once"></a>
 
-### frameWorker.once(type, cb)
+#### frameWorker.once(type, cb)
 Register a callback only and remove it after the first evaluation
 
 **Kind**: instance method of [<code>FrameWorker</code>](#FrameWorker)  
@@ -440,13 +494,13 @@ Register a callback only and remove it after the first evaluation
 
 <a name="Manager"></a>
 
-## Manager
+### Manager
 Class to wrap frame manager with custom options
 
 **Kind**: global class  
 <a name="new_Manager_new"></a>
 
-### new Manager(opt)
+#### new Manager(opt)
 Create new manager with custom options
 
 
@@ -456,13 +510,13 @@ Create new manager with custom options
 
 <a name="Worker"></a>
 
-## Worker
+### Worker
 Class to wrap frame worker with custom options
 
 **Kind**: global class  
 <a name="new_Worker_new"></a>
 
-### new Worker(opt)
+#### new Worker(opt)
 Create new worker with custom options
 
 
@@ -472,7 +526,7 @@ Create new worker with custom options
 
 <a name="MapxResolvers"></a>
 
-## MapxResolvers
+### MapxResolvers
 Class to handle MapX specific method
 
 **Kind**: global class  
@@ -560,7 +614,7 @@ Class to handle MapX specific method
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
 
-### mapxResolvers.set\_panel\_left\_visibility(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_panel\_left\_visibility(opt) ⇒ <code>Boolean</code>
 Set panel visibility
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -575,7 +629,7 @@ Set panel visibility
 
 <a name="MapxResolvers+set_immersive_mode"></a>
 
-### mapxResolvers.set\_immersive\_mode() ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_immersive\_mode() ⇒ <code>Boolean</code>
 Toogle immersive mode
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -589,14 +643,14 @@ Toogle immersive mode
 
 <a name="MapxResolvers+get_immersive_mode"></a>
 
-### mapxResolvers.get\_immersive\_mode() ⇒ <code>Boolean</code>
+#### mapxResolvers.get\_immersive\_mode() ⇒ <code>Boolean</code>
 Get immersive mode state
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - Enabled  
 <a name="MapxResolvers+set_theme"></a>
 
-### mapxResolvers.set\_theme(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_theme(opt) ⇒ <code>Boolean</code>
 Set MapX theme by id or set custom colors.
 Both ways are exclusive.
 
@@ -611,28 +665,28 @@ Both ways are exclusive.
 
 <a name="MapxResolvers+get_themes_id"></a>
 
-### mapxResolvers.get\_themes\_id() ⇒ <code>Array</code>
+#### mapxResolvers.get\_themes\_id() ⇒ <code>Array</code>
 Get themes id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - array of themes id  
 <a name="MapxResolvers+get_themes"></a>
 
-### mapxResolvers.get\_themes() ⇒ <code>Object</code>
+#### mapxResolvers.get\_themes() ⇒ <code>Object</code>
 Get all themes
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Object</code> - Themes object with themes id as key  
 <a name="MapxResolvers+get_theme_id"></a>
 
-### mapxResolvers.get\_theme\_id() ⇒ <code>string</code>
+#### mapxResolvers.get\_theme\_id() ⇒ <code>string</code>
 Get current theme id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>string</code> - Theme id  
 <a name="MapxResolvers+has_el_id"></a>
 
-### mapxResolvers.has\_el\_id(opt)
+#### mapxResolvers.has\_el\_id(opt)
 Check if element is visible, by id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -645,7 +699,7 @@ Check if element is visible, by id
 
 <a name="MapxResolvers+set_dashboard_visibility"></a>
 
-### mapxResolvers.set\_dashboard\_visibility(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_dashboard\_visibility(opt) ⇒ <code>Boolean</code>
 Set dashboard visibility
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -659,14 +713,14 @@ Set dashboard visibility
 
 <a name="MapxResolvers+is_dashboard_visible"></a>
 
-### mapxResolvers.is\_dashboard\_visible() ⇒ <code>Boolean</code>
+#### mapxResolvers.is\_dashboard\_visible() ⇒ <code>Boolean</code>
 Check if the dashboard is visible
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - The dashboard is visible  
 <a name="MapxResolvers+get_source_meta"></a>
 
-### mapxResolvers.get\_source\_meta(opt) ⇒ <code>Object</code>
+#### mapxResolvers.get\_source\_meta(opt) ⇒ <code>Object</code>
 Get source metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -679,28 +733,28 @@ Get source metadata
 
 <a name="MapxResolvers+get_user_id"></a>
 
-### mapxResolvers.get\_user\_id() ⇒ <code>Number</code>
+#### mapxResolvers.get\_user\_id() ⇒ <code>Number</code>
 Get user id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Number</code> - Current user id  
 <a name="MapxResolvers+get_user_ip"></a>
 
-### mapxResolvers.get\_user\_ip() ⇒ <code>Object</code>
+#### mapxResolvers.get\_user\_ip() ⇒ <code>Object</code>
 Get user ip info
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Object</code> - Current user ip object (ip, country, region, etc)  
 <a name="MapxResolvers+get_user_roles"></a>
 
-### mapxResolvers.get\_user\_roles() ⇒ <code>Object</code>
+#### mapxResolvers.get\_user\_roles() ⇒ <code>Object</code>
 Get user roles
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Object</code> - Current user roles  
 <a name="MapxResolvers+check_user_role"></a>
 
-### mapxResolvers.check\_user\_role(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.check\_user\_role(opt) ⇒ <code>Boolean</code>
 Check if user as given role
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -714,14 +768,14 @@ Check if user as given role
 
 <a name="MapxResolvers+get_user_email"></a>
 
-### mapxResolvers.get\_user\_email() ⇒ <code>String</code>
+#### mapxResolvers.get\_user\_email() ⇒ <code>String</code>
 Get user email
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>String</code> - Current user email ( if logged, null if not)  
 <a name="MapxResolvers+set_project"></a>
 
-### mapxResolvers.set\_project(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_project(opt) ⇒ <code>Boolean</code>
 Set project
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -734,14 +788,14 @@ Set project
 
 <a name="MapxResolvers+get_language"></a>
 
-### mapxResolvers.get\_language() ⇒ <code>String</code>
+#### mapxResolvers.get\_language() ⇒ <code>String</code>
 Get current language
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>String</code> - Two letters language code  
 <a name="MapxResolvers+set_language"></a>
 
-### mapxResolvers.set\_language(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_language(opt) ⇒ <code>Boolean</code>
 Setlanguage
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -754,14 +808,14 @@ Setlanguage
 
 <a name="MapxResolvers+get_languages"></a>
 
-### mapxResolvers.get\_languages() ⇒ <code>Array</code>
+#### mapxResolvers.get\_languages() ⇒ <code>Array</code>
 Get list of supported current languages
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of two letters language code  
 <a name="MapxResolvers+get_projects"></a>
 
-### mapxResolvers.get\_projects(opt) ⇒ <code>Array</code>
+#### mapxResolvers.get\_projects(opt) ⇒ <code>Array</code>
 Get projects list
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -773,14 +827,14 @@ Get projects list
 
 <a name="MapxResolvers+get_project"></a>
 
-### mapxResolvers.get\_project() ⇒ <code>String</code>
+#### mapxResolvers.get\_project() ⇒ <code>String</code>
 Get current project id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>String</code> - Current project id  
 <a name="MapxResolvers+get_project_collections"></a>
 
-### mapxResolvers.get\_project\_collections(opt) ⇒ <code>Array</code>
+#### mapxResolvers.get\_project\_collections(opt) ⇒ <code>Array</code>
 Get list of collection for the current project
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -793,42 +847,42 @@ Get list of collection for the current project
 
 <a name="MapxResolvers+is_user_guest"></a>
 
-### mapxResolvers.is\_user\_guest() ⇒ <code>Boolean</code>
+#### mapxResolvers.is\_user\_guest() ⇒ <code>Boolean</code>
 Test if the current user is guest
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - User is guest  
 <a name="MapxResolvers+get_views"></a>
 
-### mapxResolvers.get\_views() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views() ⇒ <code>Array</code>
 Get list of available views as static objects
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolvers+get_views_with_visible_layer"></a>
 
-### mapxResolvers.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_with\_visible\_layer() ⇒ <code>Array</code>
 Get list views with visible layers
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of views  
 <a name="MapxResolvers+get_views_id"></a>
 
-### mapxResolvers.get\_views\_id() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_id() ⇒ <code>Array</code>
 Get list of available views id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of id  
 <a name="MapxResolvers+get_views_id_open"></a>
 
-### mapxResolvers.get\_views\_id\_open() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_id\_open() ⇒ <code>Array</code>
 Get list of available views id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Array of id  
 <a name="MapxResolvers+get_view_meta_vt_attribute"></a>
 
-### mapxResolvers.get\_view\_meta\_vt\_attribute(opt) ⇒ <code>Object</code>
+#### mapxResolvers.get\_view\_meta\_vt\_attribute(opt) ⇒ <code>Object</code>
 Get vector view (vt) metadata of the attribute
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -841,7 +895,7 @@ Get vector view (vt) metadata of the attribute
 
 <a name="MapxResolvers+get_view_meta"></a>
 
-### mapxResolvers.get\_view\_meta(opt, view) ⇒ <code>Object</code>
+#### mapxResolvers.get\_view\_meta(opt, view) ⇒ <code>Object</code>
 Get view metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -855,7 +909,7 @@ Get view metadata
 
 <a name="MapxResolvers+get_view_table_attribute_config"></a>
 
-### mapxResolvers.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
+#### mapxResolvers.get\_view\_table\_attribute\_config(opt) ⇒ <code>Object</code>
 Get view table attribute config
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -867,7 +921,7 @@ Get view table attribute config
 
 <a name="MapxResolvers+get_view_table_attribute_url"></a>
 
-### mapxResolvers.get\_view\_table\_attribute\_url(opt) ⇒ <code>String</code>
+#### mapxResolvers.get\_view\_table\_attribute\_url(opt) ⇒ <code>String</code>
 Get view table attribute url
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -879,7 +933,7 @@ Get view table attribute url
 
 <a name="MapxResolvers+get_view_table_attribute"></a>
 
-### mapxResolvers.get\_view\_table\_attribute(opt) ⇒ <code>Object</code>
+#### mapxResolvers.get\_view\_table\_attribute(opt) ⇒ <code>Object</code>
 Get view table attribute
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -891,7 +945,7 @@ Get view table attribute
 
 <a name="MapxResolvers+get_view_legend_image"></a>
 
-### mapxResolvers.get\_view\_legend\_image(opt) ⇒ <code>String</code>
+#### mapxResolvers.get\_view\_legend\_image(opt) ⇒ <code>String</code>
 Get view legend
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -905,7 +959,7 @@ Get view legend
 
 <a name="MapxResolvers+set_view_layer_filter_text"></a>
 
-### mapxResolvers.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
 Filter view layer by text (if attribute is text)
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -917,7 +971,7 @@ Filter view layer by text (if attribute is text)
 
 <a name="MapxResolvers+get_view_layer_filter_text"></a>
 
-### mapxResolvers.get\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.get\_view\_layer\_filter\_text(opt) ⇒ <code>Boolean</code>
 Get current search box item
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -929,7 +983,7 @@ Get current search box item
 
 <a name="MapxResolvers+set_view_layer_filter_numeric"></a>
 
-### mapxResolvers.set\_view\_layer\_filter\_numeric(opt)
+#### mapxResolvers.set\_view\_layer\_filter\_numeric(opt)
 Filter view layer by numeric (if attribute is numeric)
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -942,7 +996,7 @@ Filter view layer by numeric (if attribute is numeric)
 
 <a name="MapxResolvers+set_view_layer_filter_time"></a>
 
-### mapxResolvers.set\_view\_layer\_filter\_time(opt) ⇒
+#### mapxResolvers.set\_view\_layer\_filter\_time(opt) ⇒
 Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -956,7 +1010,7 @@ Filter view layer by time ( if posix mx_t0 and/or mx_t1 attributes exist )
 
 <a name="MapxResolvers+set_view_layer_transparency"></a>
 
-### mapxResolvers.set\_view\_layer\_transparency(opt) ⇒
+#### mapxResolvers.set\_view\_layer\_transparency(opt) ⇒
 Set layer transarency (0 : visible, 100 : 100% transparent)
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -970,7 +1024,7 @@ Set layer transarency (0 : visible, 100 : 100% transparent)
 
 <a name="MapxResolvers+get_view_layer_filter_numeric"></a>
 
-### mapxResolvers.get\_view\_layer\_filter\_numeric(opt) ⇒ <code>Number</code> \| <code>Array</code>
+#### mapxResolvers.get\_view\_layer\_filter\_numeric(opt) ⇒ <code>Number</code> \| <code>Array</code>
 Get current numeric slider value
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -983,7 +1037,7 @@ Get current numeric slider value
 
 <a name="MapxResolvers+get_view_layer_filter_time"></a>
 
-### mapxResolvers.get\_view\_layer\_filter\_time(opt) ⇒ <code>Number</code> \| <code>Array</code>
+#### mapxResolvers.get\_view\_layer\_filter\_time(opt) ⇒ <code>Number</code> \| <code>Array</code>
 Get current time slider value
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -996,7 +1050,7 @@ Get current time slider value
 
 <a name="MapxResolvers+get_view_layer_transparency"></a>
 
-### mapxResolvers.get\_view\_layer\_transparency(opt) ⇒ <code>Number</code>
+#### mapxResolvers.get\_view\_layer\_transparency(opt) ⇒ <code>Number</code>
 Get current transparency value for layers of a view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1009,7 +1063,7 @@ Get current transparency value for layers of a view
 
 <a name="MapxResolvers+view_add"></a>
 
-### mapxResolvers.view\_add(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.view\_add(opt) ⇒ <code>Boolean</code>
 Add a view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1022,7 +1076,7 @@ Add a view
 
 <a name="MapxResolvers+view_remove"></a>
 
-### mapxResolvers.view\_remove(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.view\_remove(opt) ⇒ <code>Boolean</code>
 remove a view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1035,7 +1089,7 @@ remove a view
 
 <a name="MapxResolvers+download_view_source_raster"></a>
 
-### mapxResolvers.download\_view\_source\_raster(opt) ⇒ <code>Object</code>
+#### mapxResolvers.download\_view\_source\_raster(opt) ⇒ <code>Object</code>
 Get the download link of the raster source
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1048,7 +1102,7 @@ Get the download link of the raster source
 
 <a name="MapxResolvers+download_view_source_vector"></a>
 
-### mapxResolvers.download\_view\_source\_vector(opt) ⇒ <code>Object</code>
+#### mapxResolvers.download\_view\_source\_vector(opt) ⇒ <code>Object</code>
 Open the download modal for vector views
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1061,7 +1115,7 @@ Open the download modal for vector views
 
 <a name="MapxResolvers+download_view_source_geojson"></a>
 
-### mapxResolvers.download\_view\_source\_geojson(opt) ⇒ <code>Object</code>
+#### mapxResolvers.download\_view\_source\_geojson(opt) ⇒ <code>Object</code>
 Get the data from geojson view or download geojsn as a file
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1075,35 +1129,35 @@ Get the data from geojson view or download geojsn as a file
 
 <a name="MapxResolvers+show_modal_login"></a>
 
-### mapxResolvers.show\_modal\_login() ⇒ <code>Boolean</code>
+#### mapxResolvers.show\_modal\_login() ⇒ <code>Boolean</code>
 Show the login modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_view_meta"></a>
 
-### mapxResolvers.show\_modal\_view\_meta() ⇒ <code>Boolean</code>
+#### mapxResolvers.show\_modal\_view\_meta() ⇒ <code>Boolean</code>
 Show view meta modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_view_edit"></a>
 
-### mapxResolvers.show\_modal\_view\_edit() ⇒ <code>Boolean</code>
+#### mapxResolvers.show\_modal\_view\_edit() ⇒ <code>Boolean</code>
 Show view edit modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_map_composer"></a>
 
-### mapxResolvers.show\_modal\_map\_composer() ⇒ <code>Boolean</code>
+#### mapxResolvers.show\_modal\_map\_composer() ⇒ <code>Boolean</code>
 Show map composer
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+show_modal_share"></a>
 
-### mapxResolvers.show\_modal\_share(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.show\_modal\_share(opt) ⇒ <code>Boolean</code>
 Show sharing modal window
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1116,7 +1170,7 @@ Show sharing modal window
 
 <a name="MapxResolvers+show_modal_tool"></a>
 
-### mapxResolvers.show\_modal\_tool(opt) ⇒ <code>Boolean</code> \| <code>Array</code>
+#### mapxResolvers.show\_modal\_tool(opt) ⇒ <code>Boolean</code> \| <code>Array</code>
 Show modal for tools
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1130,32 +1184,32 @@ Show modal for tools
 
 <a name="MapxResolvers+close_modal_all"></a>
 
-### mapxResolvers.close\_modal\_all() ⇒ <code>Boolean</code>
+#### mapxResolvers.close\_modal\_all() ⇒ <code>Boolean</code>
 close all modal windows
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - done  
 <a name="MapxResolvers+toggle_draw_mode"></a>
 
-### mapxResolvers.toggle\_draw\_mode()
+#### mapxResolvers.toggle\_draw\_mode()
 Toggle draw mode
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 <a name="MapxResolvers+get_views_order"></a>
 
-### mapxResolvers.get\_views\_order() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_order() ⇒ <code>Array</code>
 Get views current absolute order (without groups)
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 <a name="MapxResolvers+get_views_list_state"></a>
 
-### mapxResolvers.get\_views\_list\_state() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_list\_state() ⇒ <code>Array</code>
 Get views list state
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 <a name="MapxResolvers+set_views_list_filters"></a>
 
-### mapxResolvers.set\_views\_list\_filters(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_views\_list\_filters(opt) ⇒ <code>Boolean</code>
 Set views list filter (ui)
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1202,14 +1256,14 @@ mapx.ask('set_views_list_filter',{
 ```
 <a name="MapxResolvers+get_views_list_filters"></a>
 
-### mapxResolvers.get\_views\_list\_filters() ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_list\_filters() ⇒ <code>Array</code>
 Get views list filter rules
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Rule list  
 <a name="MapxResolvers+get_views_title"></a>
 
-### mapxResolvers.get\_views\_title(opt) ⇒ <code>Array</code>
+#### mapxResolvers.get\_views\_title(opt) ⇒ <code>Array</code>
 Get list of views title
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1222,7 +1276,7 @@ Get list of views title
 
 <a name="MapxResolvers+set_views_list_state"></a>
 
-### mapxResolvers.set\_views\_list\_state(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_views\_list\_state(opt) ⇒ <code>Boolean</code>
 Set state / views list order, groups, etc. Opened view will be closed
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1235,7 +1289,7 @@ Set state / views list order, groups, etc. Opened view will be closed
 
 <a name="MapxResolvers+set_views_list_sort"></a>
 
-### mapxResolvers.set\_views\_list\_sort(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_views\_list\_sort(opt) ⇒ <code>Boolean</code>
 Set views list order
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1249,7 +1303,7 @@ Set views list order
 
 <a name="MapxResolvers+move_view_top"></a>
 
-### mapxResolvers.move\_view\_top(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_top(opt) ⇒ <code>Boolean</code>
 Move view on top of its group
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1262,7 +1316,7 @@ Move view on top of its group
 
 <a name="MapxResolvers+move_view_bottom"></a>
 
-### mapxResolvers.move\_view\_bottom(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_bottom(opt) ⇒ <code>Boolean</code>
 Move view on the bottom of its group
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1275,7 +1329,7 @@ Move view on the bottom of its group
 
 <a name="MapxResolvers+move_view_after"></a>
 
-### mapxResolvers.move\_view\_after(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_after(opt) ⇒ <code>Boolean</code>
 Move view after anoter view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1289,7 +1343,7 @@ Move view after anoter view
 
 <a name="MapxResolvers+move_view_before"></a>
 
-### mapxResolvers.move\_view\_before(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_before(opt) ⇒ <code>Boolean</code>
 Move view before another view
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1303,7 +1357,7 @@ Move view before another view
 
 <a name="MapxResolvers+move_view_up"></a>
 
-### mapxResolvers.move\_view\_up(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_up(opt) ⇒ <code>Boolean</code>
 Move view up
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1316,7 +1370,7 @@ Move view up
 
 <a name="MapxResolvers+move_view_down"></a>
 
-### mapxResolvers.move\_view\_down(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.move\_view\_down(opt) ⇒ <code>Boolean</code>
 Move view down
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1329,7 +1383,7 @@ Move view down
 
 <a name="MapxResolvers+set_vector_highlight"></a>
 
-### mapxResolvers.set\_vector\_highlight(opt) ⇒ <code>Object</code>
+#### mapxResolvers.set\_vector\_highlight(opt) ⇒ <code>Object</code>
 Highlight vector feature : Enable, disable, toggle
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1344,7 +1398,7 @@ Highlight vector feature : Enable, disable, toggle
 
 <a name="MapxResolvers+view_geojson_create"></a>
 
-### mapxResolvers.view\_geojson\_create(opt) ⇒ <code>Object</code>
+#### mapxResolvers.view\_geojson\_create(opt) ⇒ <code>Object</code>
 Add geojson.
 ( Other supported file type may be supported )
 
@@ -1367,7 +1421,7 @@ Add geojson.
 
 <a name="MapxResolvers+view_geojson_set_style"></a>
 
-### mapxResolvers.view\_geojson\_set\_style(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.view\_geojson\_set\_style(opt) ⇒ <code>Boolean</code>
 Set geojson view layers style : layout and paint
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1382,7 +1436,7 @@ Set geojson view layers style : layout and paint
 
 <a name="MapxResolvers+view_geojson_delete"></a>
 
-### mapxResolvers.view\_geojson\_delete(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.view\_geojson\_delete(opt) ⇒ <code>Boolean</code>
 Delete view geojson
 Works with all view, but not permanently.
 
@@ -1396,7 +1450,7 @@ Works with all view, but not permanently.
 
 <a name="MapxResolvers+set_features_click_sdk_only"></a>
 
-### mapxResolvers.set\_features\_click\_sdk\_only(opt) ⇒ <code>Array</code>
+#### mapxResolvers.set\_features\_click\_sdk\_only(opt) ⇒ <code>Array</code>
 Set map feature click handler to sdk only
 A listener could be set to listen to 'click_attributes' events. e.g. mapx.on('click_attributes')
 if this option is enabled, only the SDK will receive the attribute table.
@@ -1412,14 +1466,14 @@ if this option is enabled, only the SDK will receive the attribute table.
 
 <a name="MapxResolvers+get_features_click_handlers"></a>
 
-### mapxResolvers.get\_features\_click\_handlers() ⇒ <code>Array</code>
+#### mapxResolvers.get\_features\_click\_handlers() ⇒ <code>Array</code>
 Get map feature click handlers id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Enabled modes  
 <a name="MapxResolvers+map_fly_to"></a>
 
-### mapxResolvers.map\_fly\_to(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.map\_fly\_to(opt) ⇒ <code>Boolean</code>
 Map flyTo position with flying animation
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1435,7 +1489,7 @@ mapx.ask('map_fly_to',{center:[46,23], zoom:5});
 ```
 <a name="MapxResolvers+map_jump_to"></a>
 
-### mapxResolvers.map\_jump\_to(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.map\_jump\_to(opt) ⇒ <code>Boolean</code>
 Map jumpTo position, without animation
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1451,21 +1505,21 @@ mapx.ask('set_map_jump_to',{lat:46,lng:23, zoom:5});
 ```
 <a name="MapxResolvers+map_get_zoom"></a>
 
-### mapxResolvers.map\_get\_zoom() ⇒ <code>Float</code>
+#### mapxResolvers.map\_get\_zoom() ⇒ <code>Float</code>
 Get current map zoom
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Float</code> - zoom  
 <a name="MapxResolvers+map_get_center"></a>
 
-### mapxResolvers.map\_get\_center() ⇒ <code>Array</code>
+#### mapxResolvers.map\_get\_center() ⇒ <code>Array</code>
 Get current map center
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - center  
 <a name="MapxResolvers+get_sdk_methods"></a>
 
-### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>
+#### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>
 List resolvers methods
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
