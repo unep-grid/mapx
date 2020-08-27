@@ -60,7 +60,7 @@ const rules = [
       isValid = mx_valid.isNumeric(d) && d > 0;
       return {
         valid: isValid,
-        value: isValid ? d * 1 : 100
+        value: isValid ? d * 1 : 1e4
       };
     }
   },

@@ -4,6 +4,9 @@ attr_table_raw as (
   "{{idAttr}}" as value,
   count(*) as count FROM
   {{idSource}}
+  WHERE 
+  "{{idAttr}}" IS NOT NULL
+  AND "{{idAttr}}" != ''
   GROUP BY
   "{{idAttr}}"
   ORDER BY count desc

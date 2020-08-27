@@ -63,11 +63,17 @@ mxSchemaViewStyle <- function(
   # NOTE: why do it here again ?
   #
   values <- mxDbGetQuery(sprintf(
-      "SELECT DISTINCT(\"%1$s\") from %2$s WHERE \"%1$s\" IS NOT NULL ORDER BY \"%1$s\" ASC LIMIT 100"
-      ,variableName
-      ,layerName
-      )
-    )[,variableName[[1]]]
+      "SELECT DISTINCT(\"%1$s\") 
+      FROM %2$s 
+      WHERE \"%1$s\" 
+      IS NOT NULL 
+      AND
+      \"%1$s\" != ''
+      ORDER BY \"%1$s\" ASC 
+      LIMIT 10000"
+      , variableName
+      , layerName
+  ))[,variableName[[1]]]
 
   #
   # If this not numeric, add "all" keyword for global styling
