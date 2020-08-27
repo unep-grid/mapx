@@ -1,5 +1,15 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.114-beta' target='_blank'>1.6.114-beta</a>
+  - Bug fixes
+      - APP/API 
+        - Solved an issue with cached source summary (extent, table, etc)
+        - Added a compatibility bridge for dot template that still use stat stored in views object
+      - APP
+        - Attribute table : wrong type for string -> should be 'text' in handsontable. 
+      - API
+        - Set default 'simple type' to 'string' -> if unexpected type, display as string
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.113-beta' target='_blank'>1.6.113-beta</a>
   - Bug fixes
       - SDK : polyfill for <element>.contains method seems fail. Replaced with querySelector. Updated module list in app and sdk
