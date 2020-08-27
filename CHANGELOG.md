@@ -1,5 +1,15 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.115-beta' target='_blank'>1.6.115-beta</a>
+
+   - Bug fixes
+      - APP: 
+        - Add the timestamp of the source to tile request, to invalidate browser or service worker cache.
+        - mx_valid module: Add regex rule to accept `_o_` in source id suffix
+        - Fixed issue when wms url is wrong or missing; 
+        - Removed abstract from wms list, set abstract content as (native) tooltip
+        - Solved issue where null values where filtered out after numeric slider update
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.114-beta' target='_blank'>1.6.114-beta</a>
   - Bug fixes
       - APP/API 
