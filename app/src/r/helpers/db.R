@@ -1551,11 +1551,11 @@ mxDbGetLayerGeomTypes <- function(table=NULL,geomColumn="geom"){
 #' @export
 mxDbGetLayerAttributeJsonType <- function(table=NULL,attribute=NULL){
 
-  q <- sprintf("
+  q <- sprintf('
     SELECT 
-    JSON_typeof(to_json(%1$s)) as type 
+    JSON_typeof(to_json("%1$s")) as type 
     FROM %2$s limit 1
-    "
+    '
     , attribute
     , table
   )

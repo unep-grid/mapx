@@ -35,212 +35,220 @@ export async function showSourceTableAttributeModal(opt) {
   });
   onProgressStart();
 
-  return Promise.all([
-    h.moduleLoad('handsontable'),
-    h.getSourceMetadata(settings.idSource),
-    h.getSourceTableAttribute(settings)
-  ]).then((m) => {
-    let handsontable = m[0];
-    let meta = m[1] || {};
-    let data = m[2] || {};
-    let services = meta._services || [];
-    let hasData = h.isArray(data) && data.length > 0;
-    let license = 'non-commercial-and-evaluation';
-    let elTable = el('div', {
-      style: {
-        width: '100%',
-        height: '350px',
-        minHeight: '350px',
-        minWidth: '100px',
-        overflow: 'hidden',
-        backgroundColor: 'var(--mx_ui_shadow)'
-      }
-    });
-    let allowDownload = services.indexOf('mx_download') > -1;
-    let elButtonDownload = el(
-      'button',
-      {
-        class: 'btn btn-default',
-        on: {
-          click: handleDownload
-        },
-        title: allowDownload ? 'Download' : 'Download disabled'
-      },
-      'Export CSV'
-    );
-    if (!allowDownload) {
-      elButtonDownload.setAttribute('disabled', true);
-    }
-    let elButtonClearFilter = el(
-      'button',
-      {
-        class: 'btn btn-default',
-        disabled: true,
-        on: {
-          click: handleClearFilter
-        }
-      },
-      'Clear filter'
-    );
-    let elTitle = el('div');
-    let buttons = [elButtonClearFilter, elButtonDownload];
-    if (!hasData) {
-      elTable = el('span', 'no data');
-      buttons = null;
-    }
+  const handsontable = await h.moduleLoad('handsontable');
+  const meta = await h.getSourceMetadata(settings.idSource);
+  const data = await h.getSourceTableAttribute(settings);
 
-    let elModal = h.modal({
-      title: elTitle,
-      content: elTable,
-      onClose: destroy,
-      buttons: buttons
-    });
-
-    mutationObserver = listenMutationAttribute(elModal, tableRender);
-
-    if (!hasData) {
-      onProgressEnd();
-      return;
-    }
-
-    /*
-     * NOTE: get this from postgres
-     */
-    let columns = opt.attributes.map((a) => {
-      const type = summary.attributes_types.reduce(
-        (v, t) => (v ? v : t.id === a ? t.value : v),
-        null
-      );
-      
-      return {
-        type: type === 'number' ? 'numeric' : 'string',
-        data: a,
-        readOnly: true
-      };
-    });
-
-    hot = new handsontable(elTable, {
-      columns: columns,
-      data: data,
-      rowHeaders: true,
-      columnSorting: true,
-      colHeaders: labels,
-      licenseKey: license,
-      dropdownMenu: [
-        'filter_by_condition',
-        'filter_operators',
-        'filter_by_condition2',
-        'filter_action_bar'
-      ],
-      filters: true,
-      language: getHandsonLanguageCode(),
-      afterFilter: handleViewFilter,
-      renderAllRows: false,
-      height: function() {
-        let r = elTable.getBoundingClientRect();
-        return r.height - 30;
-      },
-      disableVisualSelection: !allowDownload
-    });
-
-    addTitle();
-    onProgressEnd();
-
-    /**
-     * Helpers
-     */
-
-    function handleDownload() {
-      if (!allowDownload) {
-        return;
-      }
-      let exportPlugin = hot.getPlugin('exportFile');
-
-      exportPlugin.downloadFile('csv', {
-        bom: false,
-        columnDelimiter: ',',
-        columnHeaders: true,
-        exportHiddenColumns: false,
-        exportHiddenRows: false,
-        fileExtension: 'csv',
-        filename: 'mx_attribute_table',
-        mimeType: 'text/csv',
-        rowDelimiter: '\r\n',
-        rowHeaders: false
-      });
-    }
-
-    function handleClearFilter() {
-      let filterPlugin = hot.getPlugin('filters');
-      filterPlugin.clearConditions();
-      filterPlugin.filter();
-      hot.render();
-      elButtonClearFilter.setAttribute('disabled', true);
-    }
-
-    function addTitle() {
-      let view = settings.view;
-      if (!h.isView(view)) {
-        return;
-      }
-      let title = h.getViewTitle(view);
-      h.getDictItem('tbl_attr_modal_title')
-        .then((t) => {
-          elTitle.innerText = t + ' – ' + title;
-        })
-        .catch((e) => consol.warn(e));
-    }
-
-    function tableRender() {
-      if (hot && hot.render) {
-        let elParent = elTable.parentElement;
-        let pStyle = getComputedStyle(elParent);
-        let pad =
-          parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
-        let height = elParent.getBoundingClientRect().height;
-        if (height > 350) {
-          elTable.style.height = height - pad + 'px';
-          hot.render();
-        }
-      }
-    }
-
-    function destroy() {
-      if (hot) {
-        hot.destroy();
-      }
-      if (mutationObserver) {
-        mutationObserver.disconnect();
-      }
-      let view = settings.view;
-      if (!h.isView(view)) {
-        return;
-      }
-      view._setFilter({
-        type: 'attribute_table',
-        filter: []
-      });
-    }
-
-    function handleViewFilter() {
-      let idCol = 'gid';
-      let view = settings.view;
-      if (!h.isView(view)) {
-        return;
-      }
-      let data = hot.getData();
-      let attr = settings.attributes;
-      let posGid = attr.indexOf(idCol);
-      if (posGid > -1) {
-        let ids = data.map((d) => d[posGid]);
-        elButtonClearFilter.removeAttribute('disabled');
-        view._setFilter({
-          type: 'attribute_table',
-          filter: ['in', 'gid'].concat(ids)
-        });
-      }
+  const services = meta._services || [];
+  const hasData = h.isArray(data) && data.length > 0;
+  const license = 'non-commercial-and-evaluation';
+  let elTable = el('div', {
+    style: {
+      width: '100%',
+      height: '350px',
+      minHeight: '350px',
+      minWidth: '100px',
+      overflow: 'hidden',
+      backgroundColor: 'var(--mx_ui_shadow)'
     }
   });
+  const allowDownload = services.indexOf('mx_download') > -1;
+  const elButtonDownload = el(
+    'button',
+    {
+      class: 'btn btn-default',
+      on: {
+        click: handleDownload
+      },
+      title: allowDownload ? 'Download' : 'Download disabled'
+    },
+    'Export CSV'
+  );
+  if (!allowDownload) {
+    elButtonDownload.setAttribute('disabled', true);
+  }
+  const elButtonClearFilter = el(
+    'button',
+    {
+      class: 'btn btn-default',
+      disabled: true,
+      on: {
+        click: handleClearFilter
+      }
+    },
+    'Clear filter'
+  );
+  const elTitle = el('div');
+  const buttons = [elButtonClearFilter, elButtonDownload];
+  if (!hasData) {
+    elTable = el('span', 'no data');
+    buttons.length = 0;
+  }
+
+  const elModal = h.modal({
+    title: elTitle,
+    content: elTable,
+    onClose: destroy,
+    buttons: buttons
+  });
+
+  if (!hasData) {
+    onProgressEnd();
+    return;
+  }
+
+  /*
+   * Set columns type
+   */
+  const columns = opt.attributes.map((a) => {
+    let type = summary.attributes_types.reduce(
+      (v, t) => (v ? v : t.id === a ? t.value : v),
+      null
+    );
+
+    return {
+      type: typeConverter(type),
+      data: a,
+      readOnly: true
+    };
+  });
+
+  hot = new handsontable(elTable, {
+    columns: columns,
+    data: data,
+    rowHeaders: true,
+    columnSorting: true,
+    colHeaders: labels,
+    licenseKey: license,
+    dropdownMenu: [
+      'filter_by_condition',
+      'filter_operators',
+      'filter_by_condition2',
+      'filter_action_bar'
+    ],
+    filters: true,
+    language: getHandsonLanguageCode(),
+    afterFilter: handleViewFilter,
+    renderAllRows: false,
+    height: function() {
+      const r = elTable.getBoundingClientRect();
+      return r.height - 30;
+    },
+    disableVisualSelection: !allowDownload
+  });
+
+  addTitle();
+  onProgressEnd();
+
+  /**
+  * If everything is fine, add a mutation observer to render the table
+  */
+  mutationObserver = listenMutationAttribute(elModal, tableRender);
+
+  /**
+   * Helpers
+   */
+  function typeConverter(type) {
+    const def = 'text';
+    return (
+      {
+        number: 'numeric',
+        string: 'text',
+        date: 'date'
+      }[type] || def
+    );
+  }
+
+  function handleDownload() {
+    if (!allowDownload) {
+      return;
+    }
+    let exportPlugin = hot.getPlugin('exportFile');
+
+    exportPlugin.downloadFile('csv', {
+      bom: false,
+      columnDelimiter: ',',
+      columnHeaders: true,
+      exportHiddenColumns: false,
+      exportHiddenRows: false,
+      fileExtension: 'csv',
+      filename: 'mx_attribute_table',
+      mimeType: 'text/csv',
+      rowDelimiter: '\r\n',
+      rowHeaders: false
+    });
+  }
+
+  function handleClearFilter() {
+    let filterPlugin = hot.getPlugin('filters');
+    filterPlugin.clearConditions();
+    filterPlugin.filter();
+    hot.render();
+    elButtonClearFilter.setAttribute('disabled', true);
+  }
+
+  function addTitle() {
+    let view = settings.view;
+    if (!h.isView(view)) {
+      return;
+    }
+    let title = h.getViewTitle(view);
+    h.getDictItem('tbl_attr_modal_title')
+      .then((t) => {
+        elTitle.innerText = t + ' – ' + title;
+      })
+      .catch((e) => consol.warn(e));
+  }
+
+  function tableRender() {
+    if (hot && hot.render) {
+      let elParent = elTable.parentElement;
+      let pStyle = getComputedStyle(elParent);
+      let pad =
+        parseFloat(pStyle.paddingTop) + parseFloat(pStyle.paddingBottom);
+      let height = elParent.getBoundingClientRect().height;
+      if (height > 350) {
+        elTable.style.height = height - pad + 'px';
+        hot.render();
+      }
+    }
+  }
+
+  function destroy() {
+    if (hot) {
+      hot.destroy();
+    }
+    if (mutationObserver) {
+      mutationObserver.disconnect();
+    }
+    let view = settings.view;
+    if (!h.isView(view)) {
+      return;
+    }
+    view._setFilter({
+      type: 'attribute_table',
+      filter: []
+    });
+  }
+
+  function handleViewFilter() {
+    let idCol = 'gid';
+    let view = settings.view;
+    if (!h.isView(view)) {
+      return;
+    }
+    let data = hot.getData();
+    let attr = settings.attributes;
+    let posGid = attr.indexOf(idCol);
+    if (posGid > -1) {
+      let ids = data.map((d) => d[posGid]);
+      elButtonClearFilter.removeAttribute('disabled');
+      view._setFilter({
+        type: 'attribute_table',
+        filter: ['in', 'gid'].concat(ids)
+      });
+    }
+  }
 }
 
 export function viewToTableAttributeModal(idView) {
