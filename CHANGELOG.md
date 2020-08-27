@@ -1,5 +1,11 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.0' target='_blank'>1.7.0</a>
+   
+   - Bug fixes
+      - APP/API
+        - In style form and summary stat, changed the limit of distinct values for categorical variables in list and table to 1e4 instead of 100; Removed nulls and empty strings from lists as they will be managed by the 'missing values' section
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.6.115-beta' target='_blank'>1.6.115-beta</a>
 
    - Bug fixes
