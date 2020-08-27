@@ -45,6 +45,16 @@ const rules = [
     }
   },
   {
+    key: ['date'],
+    test: (d) => {
+      isValid = mx_valid.isDateString(d);
+      return {
+        valid: isValid,
+        value: d
+      };
+    }
+  },
+  {
     key: ['maxRowsCount'],
     test: (d) => {
       isValid = mx_valid.isNumeric(d) && d > 0;

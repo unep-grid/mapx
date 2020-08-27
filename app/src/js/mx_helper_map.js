@@ -84,14 +84,14 @@ export async function downloadViewRaster(opt) {
 
   if (h.isUrl(url)) {
     /**
-    * Don't try to download in the same page :
-    * Fetching can be very long, longer than mapx session AND HUGE
-    * using <a href=... download> , a same origin could be required by firefox
-    * using download js will try to fetch or xhr, which is basicaly the same as
-    * fetching ourself the file, and add a <a href='blob'>.
-    * href + target _blank
-    */
-    let elA = h.el('a',{href:url,target:'_blank'});
+     * Don't try to download in the same page :
+     * Fetching can be very long, longer than mapx session AND HUGE
+     * using <a href=... download> , a same origin could be required by firefox
+     * using download js will try to fetch or xhr, which is basicaly the same as
+     * fetching ourself the file, and add a <a href='blob'>.
+     * href + target _blank
+     */
+    let elA = h.el('a', {href: url, target: '_blank'});
     elA.click();
   } else {
     throw new Error(`Not a valid URL: ${url}`);
@@ -1940,6 +1940,7 @@ export async function makeTransparencySlider(o) {
 export async function makeNumericSlider(o) {
   const view = o.view;
   const h = mx.helpers;
+
   const el = document.querySelector(
     "[data-range_numeric_for='" + view.id + "']"
   );
@@ -1953,8 +1954,8 @@ export async function makeNumericSlider(o) {
     oldSlider.destroy();
   }
 
-  let min = mx.helpers.path(view, 'data.attribute.min');
-  let max = mx.helpers.path(view, 'data.attribute.max');
+  let min = h.path(view, 'data.attribute.min');
+  let max = h.path(view, 'data.attribute.max');
 
   if (view && min !== null && max !== null) {
     if (min === max) {
@@ -2933,6 +2934,7 @@ export async function viewLayersAdd(o) {
     }
   });
 
+  
   /*
    * Remove previous layer if needed
    */
@@ -2949,6 +2951,14 @@ export async function viewLayersAdd(o) {
     view: view
   });
 
+ /**
+   * Update view summary ( ⚠️  normally on demand but as it's used in
+   * dot templates,(viewBuildOptions)we need to include this here. 
+   * TODO: remove dot templates and
+   * use `el` in a class/builder such as view_base.js
+   */
+   await viewSourceSummaryCompat(view);
+   
   /**
    * Set/Reset filter
    */
@@ -3034,6 +3044,50 @@ export async function viewLayersAdd(o) {
   }
 }
 
+/**
+ *  As source stat is done async, view.data has no longer all
+ *  configuration for attribute, period and geometry stat values.
+ *  As those value could be retrieved using getViewSourceSummary,
+ *  some part of the application such as `dot` templates still need those value
+ *  Here we assign them
+ *  @param {Object} view View to alter with source values
+ */
+export async function viewSourceSummaryCompat(view) {
+  const h = mx.helpers;
+  const s= await h.getViewSourceSummary(view);
+
+  if(h.isObject(s.attribute_stat)){
+    view.data.attribute = Object.assign({}, view.data.attribute, {
+      name : s.attribute_stat.attribute,
+      type: s.attribute_stat.type === 'continuous' ? 'number' : 'string',
+      max: s.attribute_stat.max,
+      min: s.attribute_stat.min,
+      table: s.attribute_stat.table
+    });
+  }
+
+  if(h.isObject(s.extent_time)){
+    view.data.period = Object.assign({}, view.data.period, {
+      extent: s.extent_time
+    });
+  }
+
+  if(h.isObject(s.extent_sp)){
+
+    view.data.geometry = Object.assign({}, view.data.geometry, {
+      extent: s.extent_sp
+    });
+  }
+}
+
+/**
+* Build legend TODO : set as class, and complete as view_base.js
+* @param {Object} view View
+* @param {Object} settings
+* @param {Boolean} settings.removeOld Remove old legend
+* @param {String} settings.type Type of view (vt, rt)
+* @param {Boolean} settings.addTitle Add title
+*/
 export function elLegend(view, settings) {
   settings = Object.assign(
     {},
@@ -3517,10 +3571,10 @@ export async function viewLayersAddVt(o) {
    * Source stat
    */
   const sourceSummary = await h.getSourceVtSummary({
-       idAttr : attr,
-       idSource: idSourceLayer
+    idAttr: attr,
+    idSource: idSourceLayer
   });
- 
+
   const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
   const isNumeric = statType === 'continuous';
   const max = p(sourceSummary, 'attribute_stat.max');
@@ -4005,6 +4059,7 @@ export async function viewBuildOptions(id) {
   }
   const elView = h.getViewEl(view);
   const hasViewEl = h.isElement(elView);
+
   if (hasViewEl) {
     const elOptions = elView.querySelector(
       `[data-view_options_for='${view.id}']`
@@ -4412,7 +4467,7 @@ export async function makeSearchBox(o) {
   const elViewParent = h.getViewEl(view).parentElement;
 
   const s = await h.moduleLoad('selectize');
-  const table = h.path(view, 'data.attribute.table');
+
   const attr = h.path(view, 'data.attribute.name');
   const summary = await h.getViewSourceSummary(view);
   const choices = summaryToChoices(summary);

@@ -9,6 +9,7 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
   {
     expected: [
       'idView',
+      'date',
       'idSource',
       'idAttr',
       'noCache',

@@ -4,12 +4,12 @@
  * @return {Object} source summary
  */
 export async function getViewSourceSummary(view) {
-  if (view._source_summary) {
+  if (view._source_summary_date === view.date_modified) {
     return view._source_summary;
   }
   let out = {};
   if (view.type === 'vt') {
-    out = await getSourceVtSummary({idView: view.id});
+    out = await getSourceVtSummary({idView: view.id, date: view.date_modified});
   }
   if (view.type === 'rt') {
     out = await getSourceRtSummary(view);
@@ -19,26 +19,29 @@ export async function getViewSourceSummary(view) {
   }
 
   view._source_summary = out;
+  view._source_summary_date = view.date_modified;
   return out;
 }
 
 /**
  * Get vector source summary
  */
-export async function getSourceVtSummary(opt) {
-  const h = mx.helpers;
-
-  /*
-   * Set defaults
-   */
-  const def = {
+ const def = {
     idView: null,
     idSource: null,
     idAttr: null,
     noCache: false,
     binsMethod: 'jenks',
-    binsNumber: 5
+    binsNumber: 5,
+    date: new Date().toISOString()
   };
+
+export async function getSourceVtSummary(opt) {
+  const h = mx.helpers;
+
+  /*
+   * Set defaults
+   */ 
   opt = Object.assign({}, def, opt);
 
   /*
@@ -64,12 +67,11 @@ export async function getSourceVtSummary(opt) {
 
   const resp = await fetch(url);
   const summary = await resp.json();
-
   /*
    * handle errors
    */
   if (h.isObject(summary) && summary.type === 'error') {
-    console.warn(summary.msg);
+    console.warn(summary.msg || summary.message);
   }
 
   return summary;

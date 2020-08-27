@@ -5,6 +5,7 @@
 {{ var isCurrentProject =  mx.settings.project === view.project ; }}
 {{ var isDropedView = !!view._drop_shared ; }}
 {{ var isRegistered  = !h.path(mx,'settings.user.guest',true) ;}}
+
 <div>
   {{?view.type!='sm'}}
   <div class="mx-view-legend-container" id="view_legend_container_{{=view.id}}"></div>
@@ -121,7 +122,7 @@
   </div>
 </div>
 <div id="mx-search-tool-{{=view.id}}" class="mx-hide">
-  {{? h.any([view.type == 'vt',view.type == 'gj']) }}
+  {{? h.any([view.type == 'vt', view.type == 'gj']) }}
   {{? h.path(view,'data.attribute.type') == 'string'}}
   <label for="view_filter_by_values_{{=view.id}}" data-lang_key="view_filter_by_values"></label>
   <select id="view_filter_by_values_{{=view.id}}" data-search_box_for="{{=view.id}}" class="mx-search-box" multiple="TRUE"></select>
