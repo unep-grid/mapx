@@ -1166,11 +1166,12 @@ export function addSourceFromViews(o) {
  * @param {Oject} o.view View object
  * @param {Boolean} o.noLocationCheck Don't check for location matching
  */
-export function addSourceFromView(o) {
+export async function addSourceFromView(o) {
   const h = mx.helpers;
   const p = h.path;
-
+  
   if (o.map && p(o.view, 'data.source')) {
+    const summary = await h.getViewSourceSummary(o.view);
     const project = p(mx, 'settings.project');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
@@ -1195,7 +1196,7 @@ export function addSourceFromView(o) {
        * Handle case when old layers remain in map
        * This could prevent source removal
        */
-      mx.helpers.removeLayersByPrefix({
+      h.removeLayersByPrefix({
         prefix: o.view.id,
         map: o.map
       });
@@ -1206,9 +1207,12 @@ export function addSourceFromView(o) {
     }
 
     if (o.view.type === 'vt') {
-      const baseUrl = mx.helpers.getApiUrl('getTile');
-      const url = `${baseUrl}?view=${o.view.id}`;
-      //&date=${o.view.date_modified}`;
+      const baseUrl = h.getApiUrl('getTile');
+      const srcTimestamp = p(summary,'timestamp', null);
+      let url = `${baseUrl}?view=${o.view.id}`;
+      if(srcTimestamp){
+        url = `${url}&date=${srcTimestamp}`;
+      }
       o.view.data.source.tiles = [url, url];
     }
 
@@ -2950,7 +2954,7 @@ export async function viewLayersAdd(o) {
   /**
    * Add source from view
    */
-  h.addSourceFromView({
+  await h.addSourceFromView({
     map: m.map,
     view: view
   });
