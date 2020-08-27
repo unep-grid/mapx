@@ -113,12 +113,18 @@ export async function getSourceVtSummaryUI(opt) {
  */
 export async function getSourceRtSummary(view) {
   const h = mx.helpers;
+  const out = {};
   const url = h.path(view, 'data.source.tiles', []);
+  if(url.length === 0){
+      return out;
+  }
   const urlQuery = url[0];
+  if(!h.isUrlValidWms(urlQuery)){
+      return out;
+  }
   const q = h.getQueryParametersAsObject(urlQuery);
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
-  const out = {};
 
   const layers = await h.wmsGetLayers(endpoint);
 

@@ -132,33 +132,41 @@ async function wmsBuildQueryUi(opt) {
       searchField: ['Name', 'Title', 'Abstract'],
       render: {
         item: function(item, escape) {
-          return (
-            '<div class="item">' +
-            (item.Title
-              ? '<span class="item-label">' + escape(item.Title) + '</span>'
-              : '') +
-            (item.Name
-              ? '<span class="item-desc">' + escape(item.Name) + '</span>'
-              : '') +
-            (item.Abstract
-              ? '<span class="item-desc">' + escape(item.Abstract) + '</span>'
-              : '') +
-            '</div>'
+          const content = [];
+          if (item.Title) {
+            content.push(
+              h.el('span', {class: 'item-label'}, escape(item.Title))
+            );
+          }
+          if (item.Name) {
+            content.push(h.el('span', {class: 'item-desc'}, escape(item.Name)));
+          }
+          return h.el(
+            'div',
+            {
+              class: ['item-desc'],
+              'title': escape(item.Abstract)
+            },
+            content
           );
         },
         option: function(item, escape) {
-          return (
-            '<div class="item">' +
-            (item.Title
-              ? '<span class="item-label">' + escape(item.Title) + '</span>'
-              : '') +
-            (item.Name
-              ? '<span class="item-desc">' + escape(item.Name) + '</span>'
-              : '') +
-            (item.Abstract
-              ? '<span class="item-desc">' + escape(item.Abstract) + '</span>'
-              : '') +
-            '</div>'
+          const content = [];
+          if (item.Title) {
+            content.push(
+              h.el('span', {class: 'item-label'}, escape(item.Title))
+            );
+          }
+          if (item.Name) {
+            content.push(h.el('span', {class: 'item-desc'}, escape(item.Name)));
+          }
+          return h.el(
+            'div',
+            {
+              class: ['item-desc'],
+              'title': escape(item.Abstract)
+            },
+            content
           );
         }
       }
