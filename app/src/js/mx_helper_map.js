@@ -2013,6 +2013,10 @@ export async function makeNumericSlider(o) {
           ['!has', k]
         ];
 
+        if(h.isArray(view._null_filter)){
+          filter.push(view._null_filter);
+        }
+
         view._setFilter({
           filter: filter,
           type: 'numeric_slider'
@@ -2151,7 +2155,7 @@ export async function makeTimeSlider(o) {
   const k = {};
   k.t0 = 'mx_t0';
   k.t1 = 'mx_t1';
-
+  
   const view = o.view;
 
   const el = document.querySelector('[data-range_time_for="' + view.id + '"]');
@@ -2557,7 +2561,7 @@ export function viewSetFilter(o) {
 
   for (var l = 0, ll = layers.length; l < ll; l++) {
     var layer = layers[l];
-    var origFilter = mx.helpers.path(layer, 'metadata.filter_base');
+    var origFilter = h.path(layer, 'metadata.filter_base');
     var filterFinal = [];
     if (!origFilter) {
       filterFinal = filterNew;
@@ -3891,8 +3895,8 @@ export async function viewLayersAddVt(o) {
       sprite: hasSprite ? ruleNulls.sprite : null,
       filter: filter
     });
-
     ruleNulls.filter = filter;
+    view._null_filter = filter;
     layers.push(layerNull);
     rules.push(ruleNulls);
   }
