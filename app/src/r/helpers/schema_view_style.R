@@ -67,8 +67,6 @@ mxSchemaViewStyle <- function(
       FROM %2$s 
       WHERE \"%1$s\" 
       IS NOT NULL 
-      AND
-      \"%1$s\" != ''
       ORDER BY \"%1$s\" ASC 
       LIMIT 10000"
       , variableName
