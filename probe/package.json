@@ -25,7 +25,7 @@
     "browser-sync-webpack-plugin": "^2.2.2",
     "css-loader": "^2.1.0",
     "events-polyfill": "^2.1.0",
-    "node-sass": "^4.11.0",
+    "node-sass": "^4.13.1",
     "postcss-calc": "^7.0.1",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
