@@ -1,6 +1,6 @@
 FROM fredmoser/debian_r3.5.1_shinyserver1.5.7.890
 
-
+RUN apt-get update && apt-get install xtail -y
 
 # Overwrite SockJSAdapter.R by a custom version:
 # Remove _ga refs
