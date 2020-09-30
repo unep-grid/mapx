@@ -51,8 +51,14 @@ mxSource("settings/settings-local.R")
 #
 mxSetResourcePath(.get(config,c("resources")))
 
+
+
 #
 # Init pool and master direct connection
-# Cleaning is done usig the .Last method from within this init process
 #
 mxDbPoolInit()
+
+#
+# Set a finalizer when the app (runApp) is exiting
+#
+onStop(mxDbPoolClose)

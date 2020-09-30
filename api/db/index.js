@@ -33,7 +33,8 @@ var pgWrite = new Pool({
   database: s.db.name,
   password: s.db.write.password,
   port: s.db.port,
-  max: s.db.poolMax
+  max: s.db.poolMax,
+  application_name : 'mx_api_write'
 });
 exports.pgWrite = pgWrite;
 
@@ -52,7 +53,8 @@ var pgRead = new Pool({
   password: s.db.read.password,
   port: s.db.port,
   statement_timeout: 30 * 1000,
-  max: s.db.poolMax
+  max: s.db.poolMax,
+  application_name : 'mx_api_read'
 });
 exports.pgRead = pgRead;
 
@@ -68,7 +70,8 @@ var pgCustom = new Pool({
   password: s.db.custom.password,
   port: s.db.port,
   statement_timeout: 30 * 1000,
-  max: s.db.poolMax
+  max: s.db.poolMax,
+  application_name : 'mx_api_custom'
 });
 exports.pgCustom = pgCustom;
 

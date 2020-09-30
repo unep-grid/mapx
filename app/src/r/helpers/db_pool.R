@@ -1,61 +1,43 @@
 
 #' Get db connection
-#' @param {Boolean} useMaster : force to use master node
+#' @param {Function} cb Function with single param 'con'. The con will be returned to the pool
 #' @export
-mxDbGetCon <- function(useMaster=FALSE){ 
-  useMaster = isTRUE(useMaster)
-  pool <- mxDbGetPool(useMaster=useMaster)
+mxDbWithUniqueCon <- function(cb){
+  pool <- mxDbGetPool()
   con <- poolCheckout(pool)
-  mxDbAutoReturnCon(con)
-  return(con)
+  on.exit(poolReturn(con))
+  cb(con)
 }
 
 #' Get db pg pool
-#' @param {PostgresqlConnection} conReturn Connection to return
-mxDbAutoReturnCon <- function(conReturn,env=parent.frame(n=2)){ 
-  eval(
-    quote({
-      on.exit({
-        poolReturn(conReturn)
-      })
-    }),
-  env = list(conReturn=conReturn,env=env),
-  enclos = env
-  )
-}
-
-
-#' Get db pg pool
-#' @param {Logical} useMaster Use connection to master
 #' @return {PostgresqlConnection}
-mxDbGetPool <- function(useMaster=FALSE){
-  if(useMaster){
-    pool <- .get(db,c('pg','conPoolMaster'))
-  }else{
-    pool <- .get(db,c('pg','conPool'))
-  }
-  return(pool)
+mxDbGetPool <- function(){
+ .get(db,c('pg','conPool'))
+}
+
+#' Get db pg con
+#' ⚠️  Do not forget to return OR use mxDbWithUniqueCon instead
+#' @return {PostgresqlConnection}
+mxDbGetCon <- function(){
+  pool <- mxDbGetPool()
+  poolCheckout(pool)
+}
+
+#' Return con to pool
+#' @param {PostgresqlConnection} con 
+mxDbReturnCon <- function(con){
+  poolReturn(con)
 }
 
 #' Close db connection
 #' 
 #' @export
-mxDbPoolCloseAll <- function(){
-  tryCatch({
-    dbPool <- mxDbGetPool()
-    dbPoolMaster <- mxDbGetPool(TRUE)  
-    if(mxDbPoolIsValid(dbPool)){
-      message("Close pool")
-      poolClose(dbPool)
-    }
-    if(mxDbPoolIsValid(dbPoolMaster)){
-      message("Close master pool")
-      poolClose(dbPoolMaster)
-    }
-  },
-  error = function(e){
-    warning(e)
-  })
+mxDbPoolClose <- function(){
+  dbPool <- mxDbGetPool()
+  if(mxDbPoolIsValid(dbPool)){
+    message("Close pool")
+    poolClose(dbPool)
+  }
 }
 
 #' Check if pool is still valid
@@ -67,13 +49,16 @@ mxDbPoolIsValid <- function(pool){
     isTRUE(pool$valid)
 }
 
-#' Init pool
+#' Init pool 
+#' 
+#' ⚠️  Executed in .GlobalEnv !
+#'
 #' @export
 mxDbPoolInit <- function(){
   #
   # Close pool if needed
   #
-  mxDbPoolCloseAll()
+  mxDbPoolClose()
 
   init <- quote({
 
@@ -88,40 +73,23 @@ mxDbPoolInit <- function(){
       )
 
     #
-    # on exit, disconnect pg connection 
-    #
-    .Last <- function(){
-      mxDbPoolCloseAll()
-    }
-
-    #
     # Connection pool
     #
-    db <- .set(db,c('pg','conPool'),dbPool(
-        drv = dbDriver("PostgreSQL"),
-        dbname = pg$dbname,
-        host = pg$host,
-        port = pg$port,
-        user = pg$user,
-        password = pg$password,
-        minSize = pMin,
-        maxSize = pMax
+    db <- .set(db,
+        c('pg','conPool'),
+        dbPool(
+          drv = dbDriver("PostgreSQL"),
+          dbname = pg$dbname,
+          host = pg$host,
+          port = pg$port,
+          user = pg$user,
+          password = pg$password,
+          minSize = pMin,
+          maxSize = pMax,
+          options = "-c application_name=mx_app"
         )
       )
-    #
-    # Connection master
-    #
-    db <- .set(db,c('pg','conPoolMaster'),dbPool(
-        drv = dbDriver("PostgreSQL"),
-        dbname = pg$dbname,
-        host = pg$hostMaster,
-        port = pg$portMaster,
-        user = pg$user,
-        password = pg$password,
-        minSize = pMin,
-        maxSize = pMax
-        )
-      )
+
   })
 
   eval(init,env=.GlobalEnv)

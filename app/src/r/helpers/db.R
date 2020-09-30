@@ -1,5 +1,68 @@
 
-#' Create a temporary user in pg master node
+
+#' Test if role exists
+#'
+#' @param {Character} roleName Role name
+#' @return {Logical} 
+mxDbRoleExists <- function(roleName, con=NULL){
+  qRoleExists <- "SELECT count(*) = 1 as e FROM pg_roles WHERE rolname =\'" + roleName + "\'"
+  isTRUE(mxDbGetQuery(qRoleExists,con=con)$e)
+}
+
+
+#' Get table for a grantee
+#'
+#' @param {Character} grantee Grantee eg. userName, Temp user id / name
+#' @param {RPostgreSQL} con Connexion object
+#' @export
+mxDbGetAllTablesByGrantee <- function(grantee, con=NULL){
+
+  q <- "SELECT table_name as tbl" +
+    " FROM information_schema.role_table_grants "+
+    " WHERE grantee = \'" + grantee + "\'" + 
+    " AND table_schema  = 'public'"+ 
+    " GROUP BY 1 "
+
+  mxDbGetQuery(q,con=con)$tbl
+}
+
+#' Drop temporary user
+#'
+#' @param {Character} userName Temp user id / name
+#' @param {RPostgreSQL} con Connexion object
+#' @export
+mxDbDropTempUser <- function(userName,con=NULL){
+  roleExists <- mxDbRoleExists(userName,con=con)
+  
+  if(roleExists){
+    tryCatch({
+
+      allSources <- mxDbGetAllTablesByGrantee(userName, con=con)
+
+      dbSendQuery(con, "BEGIN TRANSACTION")
+
+      if(!noDataCheck(allSources)){
+
+        for(t in allSources){
+          dbSendQuery(con,"REVOKE ALL PRIVILEGES ON " + t + " FROM \"" + userName  + "\"")
+        }
+
+      }
+      dbSendQuery(con, "REVOKE ALL PRIVILEGES ON DATABASE mapx FROM \"" + userName + "\"" )
+      dbSendQuery(con, "DROP USER \"" + userName + "\"")
+    },
+    error = function(e){
+      dbRollback(con)
+      stop(e)
+    },
+    finally = {
+      dbCommit(con)
+    })
+  }
+}
+
+#' Create a temporary user in pg
+#'
 #' @param {Character} id Current user id. The id of the user asking for a temporary access
 #' @param {List} List of source id to edit
 #' @return {List} out List of parameters
@@ -10,94 +73,69 @@
 #'     out.validUntil = validity duration in days
 mxDbCreateTempUser <- function(id,srcList){
 
-  conMaster <- mxDbGetCon(useMaster=TRUE)
+  mxDbWithUniqueCon(function(con){
 
-  email <- mxDbGetEmailFromId(id)
-  token <- randomString("MX",splitIn=3,addLETTERS=T,addLetters=F)
-  tmpUser <- "mapx_temp_" + id
-
-  out <- list(
-    password = token,
-    user = tmpUser,
-    dropUser = function(){},
-    valid = FALSE,
-    validUntil = (Sys.Date() + 2)
+    email <- mxDbGetEmailFromId(id)
+    token <- randomString("MX",
+      splitIn = 3,
+      addLETTERS = TRUE,
+      addLetters = FALSE
     )
 
-  if(noDataCheck(email) || noDataCheck(srcList) || noDataCheck(token)){return(out)}
+    tmpUser <- "user" + id + "@mapxt"
 
-  out$valid <- TRUE
+    out <- list(
+      valid = FALSE,
+      password = token,
+      user = tmpUser,
+      dropUser = function(){},
+      validUntil = (Sys.Date() + 2)
+    )
 
-  roleExists <- function(){
-    qRoleExists <- "SELECT count(*) = 1 as e FROM pg_roles WHERE rolname ='" + tmpUser + "'"
-    isTRUE(mxDbGetQuery(qRoleExists,con=conMaster)$e)
-  }
-
-  getAllSources <- function(){
-
-    q <- "SELECT table_name as tbl" +
-      " FROM information_schema.role_table_grants "+
-      " WHERE grantee = '" + tmpUser + "'" + 
-      " AND table_schema  = 'public'"+ 
-      " GROUP BY 1 "
-
-    mxDbGetQuery(q,con=conMaster)$tbl
-  }
-
-  dropUser <- function(){
-    if(roleExists()){
-      tryCatch({
-        allSources <- getAllSources()
-        dbSendQuery(conMaster, "BEGIN TRANSACTION")
-        if(!noDataCheck(allSources)){
-          for(t in allSources){
-            dbSendQuery(conMaster,"REVOKE ALL PRIVILEGES ON " + t + " FROM " + tmpUser )
-          }
-        }
-        dbSendQuery(conMaster, "REVOKE ALL PRIVILEGES ON DATABASE mapx FROM " + tmpUser)
-        dbSendQuery(conMaster, "DROP USER " + tmpUser)
-      },
-      error = function(e){
-        dbRollback(conMaster)
-        stop(e)
-      },
-      finally = {
-        dbCommit(conMaster)
-      })
+    if(noDataCheck(email) || noDataCheck(srcList) || noDataCheck(token)){
+      return(out)
     }
-  }
 
-  if(roleExists()){
-    dropUser()
-  }
+    out$valid <- TRUE
 
-  dbSendQuery(conMaster,"BEGIN TRANSACTION")
-  tryCatch({
+    if(mxDbRoleExists(tmpUser,con)){
+      mxDbDropTempUser(tmpUser,con)
+    }
 
-    dbSendQuery(conMaster,
-      "CREATE ROLE "+ tmpUser + 
-        " WITH ENCRYPTED PASSWORD \'" + token + "\'"+
-        " VALID UNTIL \'" + out$validUntil +"\'"+
-        " CONNECTION LIMIT 5" +
-        " LOGIN "
+    dbSendQuery(con,"BEGIN TRANSACTION")
+
+    tryCatch({
+
+      browser()
+
+      dbSendQuery(con,
+        "CREATE ROLE \""+ tmpUser + "\"" +
+          " WITH ENCRYPTED PASSWORD \'" + token + "\'"+
+          " VALID UNTIL \'" + out$validUntil +"\'"+
+          " CONNECTION LIMIT 5" +
+          " LOGIN "
       )
-    dbSendQuery(conMaster,"REVOKE ALL PRIVILEGES ON SCHEMA public FROM " + tmpUser +"")
-    dbSendQuery(conMaster,"GRANT CONNECT ON DATABASE mapx TO " + tmpUser)
+      dbSendQuery(con,"REVOKE ALL PRIVILEGES ON SCHEMA public FROM \"" + tmpUser +"\"")
+      dbSendQuery(con,"GRANT CONNECT ON DATABASE mapx TO \"" + tmpUser + "\"")
 
-    for(t in srcList){
-      dbSendQuery(conMaster,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t + " TO " + tmpUser )
+      for(t in srcList){
+        dbSendQuery(con,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t + " TO \"" + tmpUser +"\"")
+      }
+
+    }, error = function(e){
+      dbRollback(con)
+      stop(e)
+    },finally = {
+      dbCommit(con)
+    })
+
+    out$dropUser <- function(){
+      mxDbDropTempUser(tmpUser,con)
     }
 
-  }, error = function(e){
-    dbRollback(conMaster)
-    stop(e)
-  },finally = {
-    dbCommit(conMaster)
-  })
+    return(out)
 
-  out$dropUser <- dropUser
-
-  return(out)
+    })
 }
 
 
@@ -248,6 +286,7 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
 #' Wrapper to execute a query 
 #'
 #' @param query SQL query
+#' @param {RPostgreSQL} con Connexion object
 #' @export
 mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r){r}){
   res <- NULL
@@ -257,11 +296,13 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
   #
   if(!hasCon){
     con <- mxDbGetCon()
+    on.exit(mxDbReturnCon(con))
   }
 
   tryCatch({
     #
-    # RPostgreSQL complain about jsonb.. 
+    # ⚠️  RPostgreSQL complain about jsonb.. 
+    # TODO: Check if this has been fixed and remove suppressWarnings
     #
     suppressWarnings({
       res <- dbSendQuery(con,query)
@@ -368,134 +409,138 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   # implicit check
   stopifnot(!noDataCheck(id))
   stopifnot(!noDataCheck(idCol))
-  # final query
-  query <- NULL
 
-  # get connection object
-  con <- mxDbGetCon()
+  # Use single connection for all
+  mxDbWithUniqueCon(function(con){
 
-  if(!is.null(path)){
-    # if value has no json class, convert it (single value update)
-    valueIsJson <- isTRUE("json" %in% class(value))
-    if( valueIsJson ){
-      valueJson <- value
+    # final query
+    query <- NULL
+
+    if(!is.null(path)){
+      # if value has no json class, convert it (single value update)
+      valueIsJson <- isTRUE("json" %in% class(value))
+      if( valueIsJson ){
+        valueJson <- value
+      }else{
+        valueJson <- mxToJsonForDb(value)
+      }
+
+      #
+      # json update
+      #
+      pathIsJson <- isTRUE("json" %in% class(path))
+      if( pathIsJson ){
+        pathJson <- path 
+      }else{ 
+        pathJson <- paste0("{",paste0(paste0("\"",path,"\""),collapse=","),"}")
+      }
+
+      #
+      # test if the whole path exists and if value is there 
+      #
+      isMissing <- sprintf("
+        SELECT NOT EXISTS(
+          SELECT \"%1$s\" from %2$s
+          WHERE \"%3$s\"='%4$s' 
+          AND \"%1$s\"#>>'%5$s' IS NOT NULL
+          ) AS missing
+        "
+        ,column
+        ,table
+        ,idCol
+        ,id 
+        ,pathJson
+        ) %>%
+      mxDbGetQuery(.,con=con) %>%
+      `[[`("missing") 
+    #
+    # create missing if needed
+    #
+    if(isMissing){
+      data <- sprintf("
+        SELECT \"%1$s\" 
+        FROM %2$s
+        WHERE \"%3$s\"='%4$s'
+        "
+        , column
+        , table
+        , idCol
+        , id
+        ) %>%
+      mxDbGetQuery(.,con=con) %>%
+      `[[`(column) %>%
+      jsonlite::fromJSON(.,simplifyDataFrame=FALSE)
+
+    value  <- mxSetListValue(data,path,value)
+
     }else{
-      valueJson <- mxToJsonForDb(value)
-    }
-    #
-    # json update
-    #
-    pathIsJson <- isTRUE("json" %in% class(path))
-    if( pathIsJson ){
-      pathJson <- path 
-    }else{ 
-      pathJson <- paste0("{",paste0(paste0("\"",path,"\""),collapse=","),"}")
-    }
 
-    #
-    # test if the whole path exists and if value is there 
-    #
-    isMissing <- sprintf("
-      SELECT NOT EXISTS(
-        SELECT \"%1$s\" from %2$s
-        WHERE \"%3$s\"='%4$s' 
-        AND \"%1$s\"#>>'%5$s' IS NOT NULL
-        ) AS missing
-      "
-      ,column
-      ,table
-      ,idCol
-      ,id 
-      ,pathJson
-      ) %>%
-    mxDbGetQuery(.) %>%
-    `[[`("missing") 
-  #
-  # create missing if needed
-  #
-  if(isMissing){
-    data <- sprintf("
-      SELECT \"%1$s\" 
-      FROM %2$s
-      WHERE \"%3$s\"='%4$s'
-      "
-      , column
-      , table
-      , idCol
-      , id
-      ) %>%
-    mxDbGetQuery() %>%
-    `[[`(column) %>%
-    jsonlite::fromJSON(.,simplifyDataFrame=FALSE)
-
-  value  <- mxSetListValue(data,path,value)
-
-  }else{
-
-    query <- sprintf("
-      UPDATE %1$s
-      SET \"%2$s\"= (
-      SELECT jsonb_set(
-        (
-          SELECT \"%2$s\" 
-          FROM %1$s
-          WHERE \"%4$s\"='%5$s'
-          ) ,
-        '%6$s',
-        '%3$s'
+      query <- sprintf("
+        UPDATE %1$s
+        SET \"%2$s\"= (
+        SELECT jsonb_set(
+          (
+            SELECT \"%2$s\" 
+            FROM %1$s
+            WHERE \"%4$s\"='%5$s'
+            ) ,
+          '%6$s',
+          '%3$s'
         )
       ) 
-    WHERE \"%4$s\"='%5$s'"
-    ,table
-    ,column
-    ,valueJson
-    ,idCol
-    ,id
-    ,pathJson
-    )
-  }
-
-  }
-  # End path 
-
-
-  # default update
-  if(is.null(query)){
-    # if it's a list, convert to json
-    if(is.list(value)) value <- mxToJsonForDb(value)
-    # standard update
-    query <- sprintf("
-      UPDATE %1$s
-      SET \"%2$s\"='%3$s'
       WHERE \"%4$s\"='%5$s'"
       ,table
       ,column
-      ,value
+      ,valueJson
       ,idCol
       ,id
-      )
-  }
-
-  isAsExpeced = TRUE
-
-  tryCatch({
-  dbWithTransaction(con,{
-    rs <- dbSendStatement(con,query)
-    ra <- dbGetRowsAffected(rs)
-
-    isAsExpected <- isTRUE( ra == expectedRowsAffected )
-    if( ! isAsExpected ){  
-      dbBreak()
-      warning(sprintf(
-          "Warning, number of rows affected does not match expected rows affected %s vs %s. Rollback requested",
-          ra,
-          expectedRowsAffected
-          ))
+      ,pathJson
+  )
     }
 
+    }
+    # End path 
+
+
+    # default update
+    if(is.null(query)){
+      # if it's a list, convert to json
+      if(is.list(value)) value <- mxToJsonForDb(value)
+      # standard update
+      query <- sprintf("
+        UPDATE %1$s
+        SET \"%2$s\"='%3$s'
+        WHERE \"%4$s\"='%5$s'"
+        ,table
+        ,column
+        ,value
+        ,idCol
+        ,id
+      )
+    }
+
+    isAsExpeced = TRUE
+
+    tryCatch({
+      dbWithTransaction(con,{
+        rs <- dbSendStatement(con,query)
+        ra <- dbGetRowsAffected(rs)
+
+        isAsExpected <- isTRUE( ra == expectedRowsAffected )
+        if( ! isAsExpected ){  
+          dbBreak()
+          warning(sprintf(
+              "Warning, number of rows affected does not match expected rows affected %s vs %s. Rollback requested",
+              ra,
+              expectedRowsAffected
+              ))
+        }
+
       })
-  })
-  return(isAsExpected)
+    })
+    return(isAsExpected)
+    })
+
 }
 
 #' Get layer extent
@@ -911,8 +956,8 @@ mxDbGetFilterCenter<-function(table=NULL,column=NULL,value=NULL,geomColumn='geom
 #' @param dbInfo Named list with dbName,host,port,user and password
 #' @export
 mxDbListTable<- function(){
-  con <- mxDbGetCon()
-  res <- dbListTables(con)
+  pool <- mxDbGetPool()
+  res <- dbListTables(pool)
   return(res)
 }
 
@@ -924,8 +969,8 @@ mxDbListTable<- function(){
 #' @export
 mxDbExistsTable<- function(table){
   if(is.null(table)) return(FALSE)
-  con <- mxDbGetCon();
-  res <- dbExistsTable(con,table)
+  pool <- mxDbGetPool();
+  res <- dbExistsTable(pool,table)
   return(res)
 }
 
@@ -985,46 +1030,9 @@ mxDbGetColumnsTypes <- function(table){
 }
 
 
-
-
-#' Add data to db
-#'
-#' 
-#'
-mxDbAddData <- function(data,table){
-
-  stopifnot(class(data)=="data.frame")
-  stopifnot(class(table)=="character")
-
-  con <- mxDbGetCon()
-
-  tAppend <- FALSE
-  tExists <- FALSE
-
-  tExists <- mxDbExistsTable(table)
-
-  if(tExists){
-    tNam <- sort(tolower(names(data)))
-    rNam <- sort(tolower(mxDbGetLayerColumnsNames(table)))
-    if(!isTRUE(identical(tNam,rNam))){
-      wText <- sprintf("mxDbAddData: append to %1$s. Name(s) not in remote table: '%2$s', remote name not in local table '%3$s'",
-        table,
-        paste(tNam[!tNam %in% rNam],collapse="; "),
-        paste(rNam[!rNam %in% tNam],collapse="; ")
-        )
-      stop(wText)
-    }else{
-      tAppend = TRUE
-    }
-  }
-  dbWriteTable(con, name=table, value=data,append=tAppend, row.names=F )
-  on.exit({
-    if(exists("con")) mxDbClearResult(con)
-  })
-}
-
-
-
+#' Format posix to timestamp template for postgres
+#' @param {Character} ts POSIXct object
+#' @return {Character} Timestamp postgres function
 mxDbTimeStampFormater <- function(ts){
   if(!isTRUE("POSIXct" %in% class(ts))) stop("need a POSIXct object")
   ts <- format(ts,"%d-%m-%Y %H:%M:%S")
@@ -1032,6 +1040,9 @@ mxDbTimeStampFormater <- function(ts){
 }
 
 
+#' Automatic add row to a table
+#' @param {Any} data
+#' @param {Character}
 mxDbAddRow <- function(data,table){
 
   tExists <- mxDbExistsTable(table)
@@ -1088,9 +1099,13 @@ mxDbAddRow <- function(data,table){
     paste(dataProc,collapse=",")
     )
 
-  con <- mxDbGetCon()
+  pool <- mxDbGetPool()
   res <- list()
-  dbExecute(con, q )
+
+  #'
+  #' ⚠️ This should be set into a transaction and validated
+  #'
+  dbExecute(pool, q )
 }
 
 mxDbAddRowBatch <- function(df,table){
@@ -1118,67 +1133,6 @@ mxDbClearResult <- function(con){
   }
 }
 
-
-#' Write spatial data frame to postgis
-#'
-#' Convert spatial data.frame to postgis table. Taken from https://philipphunziker.wordpress.com/2014/07/20/transferring-vector-data-between-postgis-and-r/
-#'
-#' @param spatial.df  Spatial  data frame object
-#' @param schemaname Target schema table
-#' @param tablename Target table name
-#' @param overwrite Overwrite if exists
-#' @param keyCol Set new primary key
-#' @param srid Set the epsg code / SRID
-#' @param geomCol Set the name of the geometry column
-mxDbWriteSpatial <- function(spatial.df=NULL, schemaname="public", tablename, overwrite=FALSE, keyCol="gid", srid=4326, geomCol="geom") {
-
-
-  mxDbDropLayer(tablename)
-
-  con <- mxDbGetCon()
-  # Create well known text and add to spatial DF
-  spatialwkt <- writeWKT(spatial.df, byid=TRUE)
-  spatial.df$wkt <- spatialwkt
-
-  # Add temporary unique ID to spatial DF
-  spatial.df$spatial_id <- 1:nrow(spatial.df)
-
-  # Set column names to lower case
-  names(spatial.df) <- tolower(names(spatial.df))
-
-  # Upload DF to DB
-  data.df <- spatial.df@data
-  rv <- dbWriteTable(con, c(schemaname, tablename), data.df, overwrite=overwrite, row.names=FALSE)
-
-
-  # Create geometry column and clean up table
-  schema.table <- paste(schemaname, ".", tablename, sep="")
-  query1 <- sprintf("ALTER TABLE %s ADD COLUMN %s GEOMETRY;", schema.table, geomCol)
-  query2 <- sprintf("UPDATE %s SET %s = ST_GEOMETRYFROMTEXT(t.wkt) FROM %s t  WHERE t.spatial_id = %s.spatial_id;",
-    schema.table, geomCol, schema.table, schema.table)
-  query3 <- sprintf("ALTER TABLE %s DROP COLUMN spatial_id;",schema.table)
-  query4 <- sprintf("ALTER TABLE %s DROP COLUMN wkt;",schema.table)
-  query5 <- sprintf("SELECT UpdateGeometrySRID('%s','%s','%s',%s);",schemaname,tablename,geomCol,srid)
-
-
-  er <- dbGetQuery(con, statement=query1)
-  er <- dbGetQuery(con, statement=query2)
-  er <- dbGetQuery(con, statement=query3)
-  er <- dbGetQuery(con, statement=query4)
-  er <- dbGetQuery(con, statement=query5)
-
-
-
-
-  if(!is.null(keyCol)){
-    query6 <- sprintf("ALTER TABLE %s ADD COLUMN %s SERIAL PRIMARY KEY;", schema.table, keyCol)
-    er <- dbGetQuery(con, statement=query6)
-  }
-
-  on.exit({
-    if(exists("con"))  mxDbClearResult(con)
-  })
-}
 #' Get user info
 #' @param email user email
 #' @param userTable DB users table

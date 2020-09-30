@@ -30,7 +30,7 @@ const t = new mxsdk.Testing({
  * MapX respond
  */
 mapx.once('ready', () => {
-
+  
   t.check('Get list methods', {
     init: () => {
       return mapx.ask('get_sdk_methods');

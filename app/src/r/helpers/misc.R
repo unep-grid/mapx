@@ -1,32 +1,4 @@
-#' Add pool of connection
-#' @return null
-mxDbInitPool <- function(){
 
-  # get configuration file
-  config <- mxGetDefaultConfig()
-
-  # db info
-  d <- .get(config,c("pg"))
-
-  if(!noDataCheck(d$pool)) stop("mxSetDbPool : Pool already defined. use poolClose to remove it ")
-
-  pool <- dbPool(
-    drv = dbDriver("PostgreSQL"),
-    dbname = d$dbname,
-    host = d$host,
-    user = d$user,
-    password = d$password,
-    port = d$port
-    )
-
-  onStop(function() {
-    poolClose(pool)
-    })
-
-  config <<- .set(config,c("pg","pool"),pool)
-
-  return(pool)
-}
 
 #' Clean role from query with partial match
 #' @param {Character} role Role name
