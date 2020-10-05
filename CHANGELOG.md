@@ -1,5 +1,14 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.2' target='_blank'>1.7.2</a>
+
+   - Improvement
+      - APP/API
+        - Added application_name parameter in api and app. This parameter is usefull to perform request on DB `SELECT usename, application_name, state FROM pg_stat_activity`.
+        - Removed references to a master connexion from the app : a single pool of connexion is used instead of two. Access to a master DB in case of DB clustering could still be made using `NO LOAD BALANCE` header in queries string.
+        - Rewrote mapx specific wrappers around library pool functions.
+        - Using onStop shiny function to launch cleaning steps should guarantee that no pool remains un-closed, and therefore avoiding memory leaks. Previous approach was made using the .Last command which is fired at the end of the R session. Maybe a combination of the two approaches could even be better.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.1' target='_blank'>1.7.1</a>
 
    - Bug fixes
