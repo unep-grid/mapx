@@ -472,7 +472,7 @@ export function initListenersApp() {
   mx.listeners.addListener({
     target: document.getElementById('btnClearCache'),
     type: 'click',
-    callback: h.clearCache,
+    callback: h.clearMapxCache,
     group: 'mapx-base'
   });
 
@@ -1113,14 +1113,16 @@ export function geolocateUser() {
 
 /**
  * Set app busy mode
- * @param {Boolean} enable
+ 
+ * @param {Object} opt
+ * @param {Boolean} opt.back
+ * @param {Boolean} opt.icon
  */
 export function setBusy(enable) {
-  const classesHtml = document.documentElement.classList;
   if (enable === true) {
-    classesHtml.add('shiny-busy');
+    document.body.style.cursor = 'progress';
   } else {
-    classesHtml.remove('shiny-busy');
+    document.body.style.cursor = 'auto';
   }
 }
 
@@ -1169,9 +1171,16 @@ export function addSourceFromViews(o) {
 export async function addSourceFromView(o) {
   const h = mx.helpers;
   const p = h.path;
-  
+
   if (o.map && p(o.view, 'data.source')) {
-    const summary = await h.getViewSourceSummary(o.view);
+    /**
+     * When adding source, we request the timestamp via ['base'] stat,
+     * without cache to be sure to have the latest value.
+     */
+    const summary = await h.getViewSourceSummary(o.view, {
+      stats: ['base'],
+      noCache: true
+    });
     const project = p(mx, 'settings.project');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
@@ -1208,9 +1217,9 @@ export async function addSourceFromView(o) {
 
     if (o.view.type === 'vt') {
       const baseUrl = h.getApiUrl('getTile');
-      const srcTimestamp = p(summary,'timestamp', null);
+      const srcTimestamp = p(summary, 'timestamp', null);
       let url = `${baseUrl}?view=${o.view.id}`;
-      if(srcTimestamp){
+      if (srcTimestamp) {
         url = `${url}&date=${srcTimestamp}`;
       }
       o.view.data.source.tiles = [url, url];
@@ -1903,7 +1912,7 @@ export async function makeTransparencySlider(o) {
 
   const module = await mx.helpers.moduleLoad('nouislider');
   const noUiSlider = module[0].default;
-  const oldSlider = view._interactive.transparencySlider;
+  const oldSlider = view._filters_tools.transparencySlider;
   if (oldSlider) {
     oldSlider.destroy();
   }
@@ -1920,7 +1929,7 @@ export async function makeTransparencySlider(o) {
   /*
    * Save the slider in the view
    */
-  view._interactive.transparencySlider = slider;
+  view._filters_tools.transparencySlider = slider;
 
   /*
    *
@@ -1953,7 +1962,7 @@ export async function makeNumericSlider(o) {
     return;
   }
 
-  const oldSlider = view._interactive.numericSlider;
+  const oldSlider = view._filters_tools.numericSlider;
   if (oldSlider) {
     oldSlider.destroy();
   }
@@ -1984,13 +1993,21 @@ export async function makeNumericSlider(o) {
     });
 
     slider._view = view;
+    slider._elMin = el.parentElement.querySelector('.mx-slider-range-min');
+    slider._elMax = el.parentElement.querySelector('.mx-slider-range-max');
     slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
     slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
+
+    /**
+     * update min / max range
+     */
+    slider._elMin.innerText = range.min;
+    slider._elMax.innerText = range.max;
 
     /*
      * Save the slider in the view
      */
-    view._interactive.numericSlider = slider;
+    view._filters_tools.numericSlider = slider;
 
     /*
      *
@@ -2017,7 +2034,7 @@ export async function makeNumericSlider(o) {
           ['!has', k]
         ];
 
-        if(h.isArray(view._null_filter)){
+        if (h.isArray(view._null_filter)) {
           filter.push(view._null_filter);
         }
 
@@ -2159,19 +2176,20 @@ export async function makeTimeSlider(o) {
   const k = {};
   k.t0 = 'mx_t0';
   k.t1 = 'mx_t1';
-  
+
   const view = o.view;
-
-  const el = document.querySelector('[data-range_time_for="' + view.id + '"]');
-  if (!el) {
-    return;
+  const elView = h.getViewEl(view);
+  let el;
+  if (elView) {
+     el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
+    if (!el) {
+      return;
+    }
   }
-
-  const oldSlider = view._interactive.timeSlider;
+  const oldSlider = view._filters_tools.timeSlider;
   if (oldSlider) {
     oldSlider.destroy();
   }
-
   const summary = await h.getViewSourceSummary(view);
   const extent = h.path(summary, 'extent_time', {});
   const attributes = h.path(summary, 'attributes', []);
@@ -2230,9 +2248,15 @@ export async function makeTimeSlider(o) {
        * Save slider in the view and view ref in target
        */
       slider._view = view;
-      slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
       slider._elDMin = el.parentElement.querySelector('.mx-slider-dyn-min');
-      view._interactive.timeSlider = slider;
+      slider._elDMax = el.parentElement.querySelector('.mx-slider-dyn-max');
+      slider._elMin = el.parentElement.querySelector('.mx-slider-range-min');
+      slider._elMax = el.parentElement.querySelector('.mx-slider-range-max');
+
+      slider._elMin.innerText = h.date(range.min);
+      slider._elMax.innerText = h.date(range.max);
+
+      view._filters_tools.timeSlider = slider;
 
       slider.on(
         'update',
@@ -2437,6 +2461,7 @@ export async function viewAdd(view) {
     return;
   }
   const idEvent = `'viewAdd_${view.id}_${h.makeId()}`;
+
   const confirmation = new Promise((resolve) => {
     mx.events.on({
       type: 'view_added',
@@ -2449,6 +2474,7 @@ export async function viewAdd(view) {
       }
     });
   });
+
   const timeout = new Promise((resolve) => {
     setTimeout(() => {
       cleanEvent();
@@ -2456,14 +2482,14 @@ export async function viewAdd(view) {
     }, 5000);
   });
 
+  await _viewUiOpen(view);
+
   await h.viewLayersAdd({
     view: view
   });
 
-  await _viewUiOpen(view);
-
   await h.updateLanguageElements({
-    el: view.el
+    el: h.getViewEl(view)
   });
 
   return Promise.race([timeout, confirmation]);
@@ -2900,7 +2926,6 @@ export function existsInList(li, it, val, inverse) {
 export async function viewLayersAdd(o) {
   const h = mx.helpers;
   const m = h.getMapData(o.id);
-  const proms = [];
   if (o.idView) {
     o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
   }
@@ -2942,7 +2967,6 @@ export async function viewLayersAdd(o) {
     }
   });
 
-  
   /*
    * Remove previous layer if needed
    */
@@ -2952,6 +2976,16 @@ export async function viewLayersAdd(o) {
   });
 
   /**
+   * Add content
+   */
+  await h.viewUiContent(view);
+
+  /**
+   * Set/Reset filter
+   */
+  await h.viewFiltersInit(view);
+
+  /**
    * Add source from view
    */
   await h.addSourceFromView({
@@ -2959,37 +2993,19 @@ export async function viewLayersAdd(o) {
     view: view
   });
 
- /**
-   * Update view summary ( ⚠️  normally on demand but as it's used in
-   * dot templates,(viewBuildOptions)we need to include this here. 
-   * TODO: remove dot templates and
-   * use `el` in a class/builder such as view_base.js
-   */
-   await viewSourceSummaryCompat(view);
-   
-  /**
-   * Set/Reset filter
-   */
-  proms.push(h.viewFiltersInit(view));
-
-  /**
-   * Build options
-   */
-  proms.push(h.viewBuildOptions(view));
-
-  /**
-   * Init modules
-   */
-  proms.push(h.viewModulesInit(view));
-
   /*
    * Add views layers
-   *
    */
-  proms.push(handler(idType));
+  await handleLayer(idType);
 
-  const done = await Promise.all(proms);
+  /**
+   * Dashboard
+   */
+  h.makeDashboard({view: view});
 
+  /**
+   * View aded fully : send event
+   */
   view._added_at = Date.now();
 
   mx.events.fire({
@@ -3003,7 +3019,7 @@ export async function viewLayersAdd(o) {
   /**
    * handler based on view type
    */
-  function handler(viewType) {
+  function handleLayer(viewType) {
     /* Switch on view type*/
     const types = {
       rt: function() {
@@ -3053,89 +3069,76 @@ export async function viewLayersAdd(o) {
 }
 
 /**
- *  As source stat is done async, view.data has no longer all
- *  configuration for attribute, period and geometry stat values.
- *  As those value could be retrieved using getViewSourceSummary,
- *  some part of the application such as `dot` templates still need those value
- *  Here we assign them
- *  @param {Object} view View to alter with source values
+ * Get a legend object
+ *
+ * ⚠️  This was done to handle legends in legend container outside view element,
+ * e.g. in static mode. This is fragile and probably too complex. Need
+ * refactoring.
+ *
+ * @param {Object} view View
+ * @param {Object} opt
+ * @param {Boolean} opt.removeOld Remove old legend
+ * @param {String} opt.type Type of view (vt, rt)
+ * @param {Boolean} opt.addTitle Add title
  */
-export async function viewSourceSummaryCompat(view) {
+export function elLegend(view, opt) {
   const h = mx.helpers;
-  const s= await h.getViewSourceSummary(view);
 
-  if(h.isObject(s.attribute_stat)){
-    view.data.attribute = Object.assign({}, view.data.attribute, {
-      name : s.attribute_stat.attribute,
-      type: s.attribute_stat.type === 'continuous' ? 'number' : 'string',
-      max: s.attribute_stat.max,
-      min: s.attribute_stat.min,
-      table: s.attribute_stat.table
-    });
+  if (!h.isView(view)) {
+    throw new Error('elLegend invalid view');
   }
 
-  if(h.isObject(s.extent_time)){
-    view.data.period = Object.assign({}, view.data.period, {
-      extent: s.extent_time
-    });
-  }
-
-  if(h.isObject(s.extent_sp)){
-
-    view.data.geometry = Object.assign({}, view.data.geometry, {
-      extent: s.extent_sp
-    });
-  }
-}
-
-/**
-* Build legend TODO : set as class, and complete as view_base.js
-* @param {Object} view View
-* @param {Object} settings
-* @param {Boolean} settings.removeOld Remove old legend
-* @param {String} settings.type Type of view (vt, rt)
-* @param {Boolean} settings.addTitle Add title
-*/
-export function elLegend(view, settings) {
-  settings = Object.assign(
+  /**
+   * Defaults
+   */
+  opt = Object.assign(
     {},
     {
       removeOld: true,
       type: 'vt',
-      addTitle: false
+      addTitle: false,
+      elLegendContainer: null
     },
-    settings
+    opt
   );
 
-  const h = mx.helpers;
-  if (!h.isView(view)) {
-    throw new Error('elLegend invalid view');
-  }
   const idView = view.id;
   const elView = h.getViewEl(view);
-  const idLegend = 'view_legend_' + idView;
-  const idLegendContainer = 'view_legend_container_' + idView;
-  const hasView = h.isElement(elView);
-  const hasContainer = h.isElement(settings.elLegendContainer);
+  const hasViewEl = h.isElement(elView);
+  const idLegend = `view_legend_${idView}`;
+  const hasExternalContainer = h.isElement(opt.elLegendContainer);
 
-  if (hasView && !hasContainer) {
-    settings.elLegendContainer = elView.querySelector('#' + idLegendContainer);
+  /**
+   * If no set external container, use container inside view element
+   */
+  if (hasViewEl && !hasExternalContainer) {
+    opt.elLegendContainer = elView.querySelector(
+      `#view_legend_container_${idView}`
+    );
   }
-  if (!settings.elLegendContainer) {
+
+  /**
+   * No container found in view or external
+   */
+  if (!opt.elLegendContainer) {
     console.warn("elLegend cant't find a legend container");
     return;
   }
-  const elLegendContainer = settings.elLegendContainer;
-  const hasLegend = elLegendContainer.childElementCount > 0;
 
-  if (settings.removeOld) {
+  /**
+   * Handle previous legends removal if needed
+   */
+  const elLegendContainer = opt.elLegendContainer;
+  let hasLegend = elLegendContainer.childElementCount > 0;
+
+  if (hasLegend && opt.removeOld) {
     if (view._elLegendGroup) {
       view._elLegendGroup.remove();
     }
-    const elOldLegend = elLegendContainer.querySelector('#' + idLegend);
-    if (elOldLegend) {
-      elOldLegend.remove();
+    if (view._elLegend) {
+      view._elLegend.remove();
     }
+    hasLegend = elLegendContainer.childElementCount > 0;
   }
 
   const title = h.getLabelFromObjectPath({
@@ -3150,25 +3153,39 @@ export function elLegend(view, settings) {
       class: ['mx-legend-view-title', 'text-muted', 'hint--bottom'],
       title: title
     },
-    settings.addTitle ? title : ''
+    opt.addTitle ? title : ''
   );
 
+  /**
+   * Legend element
+   */
   const elLegend = h.el('div', {
-    class: 'mx-view-legend-' + settings.type,
+    class: 'mx-view-legend-' + opt.type,
     id: idLegend
   });
+
+  /**
+   * Legend group
+   */
   const elLegendGroup = h.el(
     'div',
     {
       class: 'mx-view-legend-group'
     },
-    settings.addTitle ? elLegendTitle : null,
+    opt.addTitle ? elLegendTitle : null,
     elLegend
   );
+
   if (hasLegend) {
+    /**
+     * Stack legend in container
+     */
     const elPreviousLegend = elLegendContainer.firstChild;
     elLegendContainer.insertBefore(elLegendGroup, elPreviousLegend);
   } else {
+    /**
+     * Add single legend
+     */
     elLegendContainer.appendChild(elLegendGroup);
   }
 
@@ -3440,7 +3457,7 @@ function viewLayersAddRt(o) {
      * If no legend url is provided, use a minimap
      */
     if (!h.isUrl(legendUrl)) {
-      view._interactive.miniMap = new RasterMiniMap({
+      view._miniMap = new RasterMiniMap({
         elContainer: elLegendImageBox,
         width: 40,
         height: 40,
@@ -3578,9 +3595,9 @@ export async function viewLayersAddVt(o) {
   /**
    * Source stat
    */
-  const sourceSummary = await h.getSourceVtSummary({
+  const sourceSummary = await h.getViewSourceSummary(view, {
     idAttr: attr,
-    idSource: idSourceLayer
+    stats: ['attributes']
   });
 
   const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
@@ -4059,12 +4076,13 @@ export function viewFiltersInit(idView) {
   view._setOpacity = h.viewSetOpacity;
 }
 
-export async function viewBuildOptions(id) {
+export async function viewUiContent(id) {
   const h = mx.helpers;
   const view = h.getView(id);
   if (!h.isView(view)) {
     return;
   }
+
   const elView = h.getViewEl(view);
   const hasViewEl = h.isElement(elView);
 
@@ -4072,10 +4090,23 @@ export async function viewBuildOptions(id) {
     const elOptions = elView.querySelector(
       `[data-view_options_for='${view.id}']`
     );
+
     if (elOptions) {
       elOptions.innerHTML = mx.templates.viewListOptions(view);
-      return true;
     }
+    const elControls = elView.querySelector(
+      `#view_contols_container_${view.id}`
+    );
+    if (elControls) {
+      elControls.innerHTML = mx.templates.viewListControls(view);
+    }
+    const elFilters = elView.querySelector(
+      `#view_filters_container_${view.id}`
+    );
+    if (elFilters) {
+      elFilters.innerHTML = mx.templates.viewListFilters(view);
+    }
+    return true;
   }
 }
 
@@ -4083,36 +4114,40 @@ export async function viewBuildOptions(id) {
  * Add sliders and searchbox
  * @param {String|Object} id id or View to update
  */
-export async function viewModulesInit(id) {
+export async function viewFilterToolsInit(id, opt) {
+  opt = Object.assign({}, {clear: false}, opt);
   const h = mx.helpers;
-  const view = h.getView(id);
-  if (!h.isView(view)) {
-    return;
+  try {
+    h.setBusy(true);
+    const view = h.getView(id);
+    if (!h.isView(view)) {
+      clean();
+      return;
+    }
+    const idView = view.id;
+    const idMap = mx.settings.map.id;
+    if (view._filters_tools) {
+      clean();
+      return;
+    }
+    view._filters_tools = {};
+    const proms = [];
+    /**
+     * Add interactive module
+     */
+    proms.push(h.makeTimeSlider({view: view, idMap: idMap}));
+    proms.push(h.makeNumericSlider({view: view, idMap: idMap}));
+    proms.push(h.makeTransparencySlider({view: view, idMap: idMap}));
+    proms.push(h.makeSearchBox({view: view, idMap: idMap}));
+    await Promise.all(proms);
+    clean();
+  } catch (e) {
+    clean();
+    throw new Error(e);
   }
-  const idView = view.id;
-  const idMap = mx.settings.map.id;
-  if (!view._interactive) {
-    view._interactive = {};
+  function clean() {
+    h.setBusy(false);
   }
-  const proms = [];
-  /**
-   * Clean old modules
-   */
-  await h.viewModulesRemove(view);
-
-  /**
-   * Add interactive module
-   */
-  proms.push(h.makeTimeSlider({view: view, idMap: idMap}));
-  proms.push(h.makeNumericSlider({view: view, idMap: idMap}));
-  proms.push(h.makeTransparencySlider({view: view, idMap: idMap}));
-  proms.push(h.makeSearchBox({view: view, idMap: idMap}));
-  /**
-   * Non view list related modules
-   */
-  proms.push(h.makeDashboard({view: view}));
-
-  return Promise.all(proms);
 }
 
 /**
@@ -4124,7 +4159,8 @@ export async function viewModulesRemove(view) {
   if (!h.isView(view)) {
     return;
   }
-  const it = view._interactive;
+  const it = view._filters_tools || {};
+  delete view._filters_tools;
 
   if (h.isFunction(view._onRemoveCustomView)) {
     view._onRemoveCustomView();
@@ -4141,6 +4177,9 @@ export async function viewModulesRemove(view) {
       mx.dashboard.destroy();
     }
   }
+  if (view._miniMap) {
+    view._miniMap.destroy();
+  }
   if (it) {
     if (it.searchBox) {
       it.searchBox.destroy();
@@ -4153,9 +4192,6 @@ export async function viewModulesRemove(view) {
     }
     if (it.timeSlider) {
       it.timeSlider.destroy();
-    }
-    if (it.miniMap) {
-      it.miniMap.destroy();
     }
   }
 }
@@ -4477,6 +4513,7 @@ export async function makeSearchBox(o) {
   const s = await h.moduleLoad('selectize');
 
   const attr = h.path(view, 'data.attribute.name');
+
   const summary = await h.getViewSourceSummary(view);
   const choices = summaryToChoices(summary);
 
@@ -4497,7 +4534,7 @@ export async function makeSearchBox(o) {
    * Save selectr object in the view
    */
   searchBox.view = view;
-  view._interactive.searchBox = searchBox;
+  view._filters_tools.searchBox = searchBox;
 
   return searchBox;
 
@@ -4640,11 +4677,14 @@ export async function zoomToViewId(o) {
 
   try {
     h.setBusy(true);
+
     const sum = await h.getViewSourceSummary(view);
     const extent = h.path(sum, 'extent_sp', null);
+
     if (!extent) {
       throw new Error(`No extent found for ${view.id}`);
     }
+
     const llb = new mx.mapboxgl.LngLatBounds(
       [extent.lng1, extent.lat1],
       [extent.lng2, extent.lat2]

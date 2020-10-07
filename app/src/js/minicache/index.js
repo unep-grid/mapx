@@ -3,7 +3,7 @@ import {isObject} from './../is_test/index.js';
 /**
  * Based on https://gist.github.com/okoghenun/dc176adc88024a914ffaf8d6c4c7e6b9
  */
-const store = storage.createInstance({
+const miniCacheDb = storage.createInstance({
   name: 'minicache'
 });
 
@@ -11,17 +11,17 @@ const def = {
   ttl: 1000 * 60 * 60 * 24 // 1 day
 };
 
-export function cacheSet(key, value, opt) {
+export function miniCacheSet(key, value, opt) {
   opt = Object.assign({}, def, opt);
   const item = {
     ts: new Date().getTime() + parseInt(opt.ttl),
     value: value
   };
-  return store.setItem(key, item);
+  return miniCacheDb.setItem(key, item);
 }
 
-export async function cacheGet(key) {
-  const res = await store.getItem(key);
+export async function miniCacheGet(key) {
+  const res = await miniCacheDb.getItem(key);
   if (!isObject(res)) {
     return;
   }
@@ -29,7 +29,19 @@ export async function cacheGet(key) {
   if (valid) {
     return res.value;
   } else {
-    store.removeItem(key);
+    miniCacheDb.removeItem(key);
     return null;
   }
+}
+
+export async function miniCacheRemove(key) {
+  const res = await miniCacheDb.getItem(key);
+  if (!isObject(res)) {
+    return;
+  }
+  miniCacheDb.removeItem(key);
+}
+
+export async function miniCacheClear(){
+  return await miniCacheDb.dropInstance();
 }

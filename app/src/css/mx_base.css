@@ -19,11 +19,12 @@ body,
 /*
 * If shiny is busy, do not use pointer event
 */
-html.shiny-busy .mx-shiny-busy-panel,
-html.mx-busy .mx-shiny-busy-panel {
-  z-index: 10000;
+html.shiny-busy .mx-shiny-busy-panel{
   cursor: progress;
+  z-index: 10000;
+  pointer-events: auto;
 }
+
 .mx-shiny-busy-panel {
   z-index: -1;
   width: 100%;
@@ -31,6 +32,7 @@ html.mx-busy .mx-shiny-busy-panel {
   position: absolute;
   top: 0px;
   left: 0px;
+  pointer-events: none;
 }
 
 /**

@@ -1,2 +1,6 @@
-export {cacheSet, cacheGet} from './minicache';
-
+export {
+  miniCacheRemove,
+  miniCacheSet,
+  miniCacheGet,
+  miniCacheClear
+} from './minicache';

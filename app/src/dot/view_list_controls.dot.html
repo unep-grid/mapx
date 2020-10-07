@@ -1,0 +1,260 @@
+{{ 
+const view = it ;
+const h = mx.helpers ; 
+const isCurrentProject =  mx.settings.project === view.project ; 
+const isDropedView = !!view._drop_shared ; 
+const isRegistered  = !h.path(mx,'settings.user.guest',true) ;
+const isViewEditable = h.isViewEditable(view) ;
+const isSm = view.type === 'sm' ; 
+const isCc = view.type === 'cc' ;
+const isVt = view.type === 'vt' ;
+const isGj = view.type === 'gj' ;
+const isRt = view.type === 'rt' ;
+const isRtWms = h.isViewWms(view) ;
+const isVtWithAttr = isVt && h.path(view,'data.attribute.name') ;
+const isRtWithDownload = isRt && h.path(view,'data.source.urlDownload',false) ;
+const uIsPublisher = h.path(mx,'settings.user.roles.publisher');
+const uIsAdmin = h.path(mx,'settings.user.roles.admin');
+}}
+
+
+<div class="mx-controls-view">
+  <ul class="mx-controls-ul">
+    {{?isSm}}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_start_story"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_start_story"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-play"></div>
+    </li>
+    {{?isViewEditable && isCurrentProject}}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_edit_story"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_edit_story"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-file-text"></div>
+    </li>
+    {{?}} 
+    {{?}} 
+    {{? isGj || isVtWithAttr || isRtWms }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-view_action_key="btn_opt_zoom_all"
+      data-view_action_target="{{=view.id}}"
+      data-lang_key="btn_opt_zoom_all"
+      data-lang_type="tooltip"
+    >
+      <div class="fa fa-object-group"></div>
+    </li>
+    {{?}}
+    {{? isGj || isVtWithAttr }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_zoom_visible"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_zoom_visible"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-binoculars"></div>
+    </li>
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_reset"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_reset"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-undo"></div>
+    </li>
+    {{?}} 
+    {{? isGj || isVt || isRt }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-view_action_key="btn_opt_search"
+      data-view_action_el_target="mx-search-tool-{{=view.id}}"
+      data-view_action_target="{{=view.id}}"
+      data-lang_key="btn_opt_search"
+      data-lang_type="tooltip"
+    >
+      <div class="fa fa-sliders"></div>
+    </li>
+    {{?}}
+    {{? !isGj }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-view_action_key="btn_opt_meta"
+      data-view_action_target="{{=view.id}}"
+      data-lang_key="btn_opt_meta"
+      data-lang_type="tooltip"
+    >
+      <div class="fa fa-info-circle"></div>
+    </li>
+    {{?}} 
+    {{? isVtWithAttr }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_download"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_download"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-cloud-download"></div>
+    </li>
+    {{?}} 
+    {{? isRtWithDownload }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_download"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_get_raster"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-cloud-download"></div>
+    </li>
+    {{?}}
+    {{? isGj }} 
+    {{? uIsPublisher || uIsAdmin }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_upload"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_upload_geojson"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-cloud-upload"></div>
+    </li>
+    {{?}}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_download"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_get_geojson"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-cloud-download"></div>
+    </li>
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_delete_geojson"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_delete_geojson"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-trash-o"></div>
+    </li>
+    {{?}} 
+    {{? isVtWithAttr }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_attribute_table"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_attribute_table"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-table"></div>
+    </li>
+    {{?}}
+    {{? isViewEditable && isCurrentProject }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_edit_config"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_edit_config"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-pencil"></div>
+    </li>
+    {{? isVt || isRt || isCc }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_edit_dashboard"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_edit_dashboard"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-pie-chart"></div>
+    </li>
+    {{?}} 
+    {{? isCc }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--right"
+      data-lang_key="btn_opt_edit_custom_code"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_edit_custom_code"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-terminal"></div>
+    </li>
+    {{?}}
+    {{?isVtWithAttr }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_edit_style"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_edit_style"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-paint-brush"></div>
+    </li>
+    {{?}}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_delete"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_delete"
+      data-view_action_handler="shiny"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-trash-o"></div>
+    </li>
+    {{?}} 
+    {{? (isSm || isVt || isRt || isCc ) && !isDropedView }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_share"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_share"
+      data-view_action_target="{{=view.id}}"
+      data-view_action_handler="shiny"
+    >
+      <div class="fa fa-share-alt"></div>
+    </li>
+    {{? isRegistered }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_share_to_project"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_share_to_project"
+      data-view_action_target="{{=view.id}}"
+      data-view_action_handler="shiny"
+    >
+      <div class="fa fa-share"></div>
+    </li>
+    {{?}}
+    {{?}} 
+    {{? !isCurrentProject }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--left"
+      data-lang_key="btn_opt_home_project"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_home_project"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-home"></div>
+    </li>
+    {{?}}
+  </ul>
+</div>
+

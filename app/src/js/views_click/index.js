@@ -62,7 +62,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_raster',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        h.downloadViewRaster({idView:viewTarget});
+        h.downloadViewRaster({idView: viewTarget});
       }
     },
     {
@@ -70,7 +70,7 @@ function handleViewClick(event) {
       test: el.dataset.view_action_key === 'btn_opt_get_geojson',
       action: function() {
         const viewTarget = el.dataset.view_action_target;
-        h.downloadViewGeoJSON({idView:viewTarget, mode:'file'});
+        h.downloadViewGeoJSON({idView: viewTarget, mode: 'file'});
       }
     },
     {
@@ -93,7 +93,7 @@ function handleViewClick(event) {
       }
     },
     {
-      comment: 'target is the search button',
+      comment: 'target is the zoom button',
       test: el.dataset.view_action_key === 'btn_opt_zoom_visible',
       action: function() {
         h.zoomToViewIdVisible({
@@ -115,8 +115,15 @@ function handleViewClick(event) {
     {
       comment: 'target is tool search',
       test: el.dataset.view_action_key === 'btn_opt_search',
-      action: function() {
-        const elSearch = document.getElementById(el.dataset.view_action_target);
+      action: async ()=>{
+        const elSearch = document.getElementById(el.dataset.view_action_el_target);
+        const viewTarget = el.dataset.view_action_target;
+        const view = h.getView(viewTarget);
+        /**
+         * Init modules
+         */
+        await h.viewFilterToolsInit(view);
+
         h.classAction({
           selector: elSearch,
           action: 'toggle'

@@ -234,6 +234,14 @@ export function isArrayOfString(arr) {
     }, true)
   );
 }
+export function isArrayOfNumber(arr) {
+  return (
+    isArray(arr) &&
+    arr.reduce((a, p) => {
+      return a === false ? a : isNumeric(p);
+    }, true)
+  );
+}
 
 /**
  * Test if entry is an table (array of object)

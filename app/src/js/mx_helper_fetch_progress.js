@@ -20,7 +20,6 @@ const defProgress = {
     throw new Error(e);
   },
   maxSize: Infinity,
-  timeout: 5e3,
   headerContentLength: 'content-length'
 };
 
@@ -39,8 +38,8 @@ export function fetchProgress(url, opt) {
 
   const promTimeout = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`fetchProgress : timeout exceeded ( ${opt.timeout} ms )`);
-    }, opt.timeout);
+      reject(`fetchProgress : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
+    }, mx.settings.maxTimeFetch);
   });
 
   const promFetch = fetch(url, {cache: 'no-cache'}).then((response) => {
@@ -115,8 +114,8 @@ export function fetchJsonProgress_xhr(url, opt) {
 
   const promTimeout = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
-    }, opt.timeout);
+      reject(`fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
+    }, mx.settings.maxTimeFetch);
   });
 
   const promFetch = new Promise((resolve, reject) => {
@@ -178,8 +177,8 @@ export async function fetchProgress_xhr(url, opt) {
 
   const promTimeout = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`fetchProgress_xhr : timeout exceeded ( ${opt.timeout} ms )`);
-    }, opt.timeout);
+      reject(`fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
+    }, mx.settings.maxTimeFetch);
   });
 
   const promFetch = new Promise((resolve, reject) => {

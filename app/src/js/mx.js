@@ -7,8 +7,10 @@ import {settings} from './mx_settings_default.js';
 import {ListenerStore, EventStore} from './listener_store/index.js';
 
 const templates = {
-  viewListLegend: require('../dot/view_list_legend.dot'),
-  viewListOptions: require('../dot/view_list_options.dot')
+  viewListLegend: require('../dot/view_list_legend_vt.dot.html'),
+  viewListOptions: require('../dot/view_list_options.dot.html'),
+  viewListControls: require('../dot/view_list_controls.dot.html'),
+  viewListFilters: require('../dot/view_list_filters.dot.html')
 };
 
 const maps = {};
@@ -16,26 +18,8 @@ const data = {
   geojson: localforage.createInstance({
     name: 'geojson'
   }),
-  images: localforage.createInstance({
-    name: 'images'
-  }),
-  stories: localforage.createInstance({
-    name: 'stories'
-  }),
-  views: localforage.createInstance({
-    name: 'views'
-  }),
-  config: localforage.createInstance({
-    name: 'config'
-  }),
   draft: localforage.createInstance({
     name: 'draft'
-  }),
-  draw: localforage.createInstance({
-    name: 'draw'
-  }),
-  cache: localforage.createInstance({
-    name: 'cache'
   })
 };
 const initQueryParams = {}; // set in init_common.js

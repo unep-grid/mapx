@@ -1,15 +1,24 @@
+import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
+
 /**
  * Get source summary of a vector tile view source
  * @param {Object} view View to get source summary
+ * @param {Object} opt Additional option to pass to getSourceVtSummary
  * @return {Object} source summary
  */
-export async function getViewSourceSummary(view) {
-  if (view._source_summary_date === view.date_modified) {
-    return view._source_summary;
-  }
+export async function getViewSourceSummary(view, opt) {
+  const h = mx.helpers;
+
+  opt = Object.assign(
+    {},
+    {idView: view.id, timestamp: view._src_timestamp},
+    opt
+  );
+
   let out = {};
+
   if (view.type === 'vt') {
-    out = await getSourceVtSummary({idView: view.id, date: view.date_modified});
+    out = await getSourceVtSummary(opt);
   }
   if (view.type === 'rt') {
     out = await getSourceRtSummary(view);
@@ -18,32 +27,57 @@ export async function getViewSourceSummary(view) {
     out = await getSourceGjSummary(view);
   }
 
-  view._source_summary = out;
-  view._source_summary_date = view.date_modified;
+  /**
+   * ⚠️  Ensure compatibility with previous source summary method,
+   * generated when the view was saved and not on the fly
+   */
+  if (h.isObject(out.attribute_stat)) {
+    view.data.attribute = Object.assign({}, view.data.attribute, {
+      name: out.attribute_stat.attribute,
+      type: out.attribute_stat.type === 'continuous' ? 'number' : 'string',
+      max: out.attribute_stat.max,
+      min: out.attribute_stat.min,
+      table: out.attribute_stat.table
+    });
+  }
+
+  if (h.isObject(out.extent_time)) {
+    view.data.period = Object.assign({}, view.data.period, {
+      extent: out.extent_time
+    });
+  }
+
+  if (h.isObject(out.extent_sp)) {
+    view.data.geometry = Object.assign({}, view.data.geometry, {
+      extent: out.extent_sp
+    });
+  }
+  view._src_timestamp = out.timestamp;
   return out;
 }
+
+const def = {
+  idView: null,
+  idSource: null,
+  idAttr: null,
+  noCache: false,
+  binsMethod: 'jenks',
+  binsNumber: 5,
+  stats: ['base', 'attributes', 'temporal', 'spatial'],
+  timestamp: null
+};
 
 /**
  * Get vector source summary
  */
- const def = {
-    idView: null,
-    idSource: null,
-    idAttr: null,
-    noCache: false,
-    binsMethod: 'jenks',
-    binsNumber: 5,
-    date: new Date().toISOString()
-  };
-
 export async function getSourceVtSummary(opt) {
   const h = mx.helpers;
-
+  const start = performance.now();
+  let origin = 'cache';
   /*
    * Set defaults
-   */ 
+   */
   opt = Object.assign({}, def, opt);
-
   /*
    * Clean unwanted keys
    */
@@ -59,19 +93,50 @@ export async function getSourceVtSummary(opt) {
   }
 
   /*
-   * Fetch summary
+   * Fetch summary or use cache
    */
+  const useCache = mx.settings.cacheIgnore === false && opt.noCache === false;
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
+  let summary;
 
-  const resp = await fetch(url);
-  const summary = await resp.json();
+  if (useCache) {
+    summary = await miniCacheGet(url);
+    if (summary) {
+      origin = 'cache';
+    }
+  }
+  if (!summary) {
+    origin = 'fetch';
+    const resp = await fetch(url);
+    summary = await resp.json();
+    miniCacheSet(url, summary, {
+      ttl: mx.settings.maxTimeCache
+    });
+  }
+
   /*
    * handle errors
    */
   if (h.isObject(summary) && summary.type === 'error') {
-    console.warn(summary.msg || summary.message);
+    console.warn(summary);
+    miniCacheRemove(url);
+    return {};
+  }
+
+  /**
+   * debug
+   */
+  if (false) {
+    console.table([
+      {
+        op: 'getSourceSummary',
+        origin: origin,
+        timing: Math.round(performance.now() - start),
+        timestamp: summary.timestamp
+      }
+    ]);
   }
 
   return summary;
@@ -115,14 +180,23 @@ export async function getSourceRtSummary(view) {
   const h = mx.helpers;
   const out = {};
   const url = h.path(view, 'data.source.tiles', []);
-  if(url.length === 0){
-      return out;
+  if (url.length === 0) {
+    return out;
   }
   const urlQuery = url[0];
-  if(!h.isUrlValidWms(urlQuery)){
-      return out;
+  if (!h.isUrlValidWms(urlQuery)) {
+    return out;
   }
   const q = h.getQueryParametersAsObject(urlQuery);
+  
+  if(!h.isArray(q.layers) && !h.isArray(q.LAYERS)){
+    return out;
+  }
+
+  if(q.LAYERS){
+     q.layers = q.LAYERS;
+  }
+
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
 

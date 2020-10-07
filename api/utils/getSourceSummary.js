@@ -9,14 +9,15 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
   {
     expected: [
       'idView',
-      'date',
+      'timestamp',
       'idSource',
       'idAttr',
       'noCache',
       'binsCompute',
       'binsMethod',
       'binsNumber',
-      'maxRowsCount'
+      'maxRowsCount',
+      'stats'
     ]
   }
 );
@@ -34,13 +35,12 @@ async function getSourceSummaryHandler(req, res) {
       binsCompute: req.query.binsCompute,
       binsNumber: req.query.binsNumber,
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
-      maxRowsCount: req.query.maxRowsCount // limit table length
+      maxRowsCount: req.query.maxRowsCount, // limit table length
+      stats: req.query.stats // which stat to computed ['base','time','attr', 'spatial']
     });
 
     if (data) {
       utils.sendJSON(res, data, {end: true});
-    } else {
-      throw new Error('empty result');
     }
   } catch (e) {
     utils.sendError(res, e);
@@ -63,28 +63,14 @@ async function getSourceSummary(opt) {
   if (!opt.idAttr || opt.idAttr === 'undefined') {
     opt.idAttr = null;
   }
-  if (opt.idView) {
-    const sqlSrcAttr = utils.parseTemplate(
-      template.getViewSourceAndAttributes,
-      opt
-    );
-    const respSrcAttr = await pgRead.query(sqlSrcAttr);
-    if (respSrcAttr.rowCount > 0) {
-      const srcAttr = respSrcAttr.rows[0];
-      if (srcAttr.layer) {
-        opt.idSource = srcAttr.layer;
-      }
-      if (srcAttr.attribute) {
-        opt.idAttr = srcAttr.attribute;
-      }
-    }
-  }
+  opt = await updateSourceFromView(opt);
 
   if (!mx_valid.isSourceId(opt.idSource)) {
-    throw new Error('Source not valid');
+    return;
   }
 
   const start = Date.now();
+  const stats = opt.stats;
   const columns = await db.getColumnsNames(opt.idSource);
   const timestamp = await db.getSourceLastTimestamp(opt.idSource);
   const tableTypes = await db.getColumnsTypesSimple(opt.idSource, columns);
@@ -94,7 +80,7 @@ async function getSourceSummary(opt) {
 
   const hash = crypto
     .createHash('md5')
-    .update(timestamp + opt.idAttr + opt.idSource)
+    .update(timestamp + opt.idAttr + opt.idSource + JSON.stringify(opt.stats))
     .digest('hex');
 
   const cached = opt.noCache ? false : await redisGet(hash);
@@ -102,7 +88,7 @@ async function getSourceSummary(opt) {
   if (cached) {
     const data = JSON.parse(cached);
     data.timing = Date.now() - start;
-    return data;
+    return reduceStatOutput(stats, data);
   }
 
   opt.hasT0 = columns.indexOf('mx_t0') > -1;
@@ -121,17 +107,19 @@ async function getSourceSummary(opt) {
     attributes_types: tableTypes
   };
 
-  Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
+  if (stats.indexOf('base') > -1) {
+    Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
+  }
 
-  if (hasGeom) {
+  if (hasGeom && stats.indexOf('spatial') > -1) {
     Object.assign(out, await getOrCalc('getSourceSummary_ext_sp', opt));
   }
 
-  if (opt.hasT0 || opt.hasT1) {
+  if ((opt.hasT0 || opt.hasT1) && stats.indexOf('temporal') > -1) {
     Object.assign(out, await getOrCalc('getSourceSummary_ext_time', opt));
   }
 
-  if (hasAttr) {
+  if (hasAttr && stats.indexOf('attributes') > -1) {
     if (isCategorical) {
       Object.assign(
         out,
@@ -146,8 +134,7 @@ async function getSourceSummary(opt) {
   }
 
   out.timing = Date.now() - start;
-
-  return out;
+  return reduceStatOutput(stats, out);
 }
 
 async function getOrCalc(idTemplate, opt) {
@@ -171,4 +158,57 @@ async function getOrCalc(idTemplate, opt) {
   } else {
     return JSON.parse(cached);
   }
+}
+
+/**
+ * Update idSource and atribute list from view data
+ * @param {Object} opt Options
+ * @param {Object} opt.idView Id of the view from which to extract source info
+ * @return {Object} options
+ */
+async function updateSourceFromView(opt) {
+  if (opt.idView) {
+    const sqlSrcAttr = utils.parseTemplate(
+      template.getViewSourceAndAttributes,
+      opt
+    );
+    const respSrcAttr = await pgRead.query(sqlSrcAttr);
+    if (respSrcAttr.rowCount > 0) {
+      const srcAttr = respSrcAttr.rows[0];
+      if (srcAttr.layer) {
+        opt.idSource = srcAttr.layer;
+      }
+      if (srcAttr.attribute) {
+        opt.idAttr = srcAttr.attribute;
+      }
+    }
+  }
+  return opt;
+}
+
+/**
+* Remove item if they are not requested
+* @param {Array} Stats Group of stats to output
+* @param {Object} data Output summary
+* @return {Object} summary
+*/
+function reduceStatOutput(stats, data) {
+  /**
+   * Cleaning output to match requested stats
+   */
+  if (stats.indexOf('attributes') === -1) {
+    delete data.attributes;
+    delete data.attributes_types;
+    delete data.attribute_stat;
+  }
+  if (stats.indexOf('temporal') === -1) {
+    delete data.extent_time;
+  }
+  if (stats.indexOf('spatial') === -1) {
+    delete data.extent_sp;
+  }
+  if (stats.indexOf('base') === -1) {
+    delete data.row_count;
+  }
+  return data;
 }

@@ -1,4 +1,4 @@
-import {cacheSet, cacheGet} from './minicache';
+import {miniCacheSet, miniCacheGet} from './minicache';
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -15,6 +15,7 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
  *TODO: event delegation, destroy method
  */
 async function wmsBuildQueryUi(opt) {
+  opt = Object.assign({}, opt);
   var selectLayer, selectServices;
   const h = mx.helpers;
   await h.moduleLoad('selectize');
@@ -145,7 +146,7 @@ async function wmsBuildQueryUi(opt) {
             'div',
             {
               class: ['item-desc'],
-              'title': escape(item.Abstract)
+              title: escape(item.Abstract)
             },
             content
           );
@@ -164,7 +165,7 @@ async function wmsBuildQueryUi(opt) {
             'div',
             {
               class: ['item-desc'],
-              'title': escape(item.Abstract)
+              title: escape(item.Abstract)
             },
             content
           );
@@ -255,27 +256,29 @@ async function wmsBuildQueryUi(opt) {
   }
 }
 
-async function wmsGetCapabilities(baseUrl) {
+async function wmsGetCapabilities(baseUrl, opt) {
+  opt = Object.assign({}, opt);
   const h = mx.helpers;
   const def = {};
-  const url = baseUrl + '?service=WMS&request=GetCapabilities';
+  const url = `${baseUrl}?service=WMS&request=GetCapabilities`;
   let data = {};
+
   if (!h.isUrlValidWms(url)) {
     return def;
   }
 
   const WMSCapabilities = await h.moduleLoad('wms-capabilities');
 
-  data = await cacheGet(url);
+  data = await miniCacheGet(url);
 
-  if (!data) {
+  if (!data || mx.settings.cacheIgnore === true) {
     const xmlString = await h.fetchProgress_xhr(url, {
       maxSize: mx.settings.maxByteFetch,
       timeout: 2e4
     });
 
     data = new WMSCapabilities(xmlString).toJSON();
-    cacheSet(url, data, {ttl: 1000 * 60 * 60 * 24 * 2});
+    miniCacheSet(url, data, {ttl: mx.settings.maxTimeCache});
   } else {
     console.log('Get from cache');
   }
@@ -283,10 +286,10 @@ async function wmsGetCapabilities(baseUrl) {
   return h.path(data, 'Capability', {});
 }
 
-async function wmsGetLayers(baseUrl) {
+async function wmsGetLayers(baseUrl, opt) {
+  opt = Object.assign({}, opt);
   const layers = [];
-
-  const capability = await wmsGetCapabilities(baseUrl);
+  const capability = await wmsGetCapabilities(baseUrl, opt);
 
   if (!capability || !capability.Layer || !capability.Layer.Layer) {
     return layers;
@@ -367,6 +370,7 @@ function urlLegend(opt) {
  * @param {String} opt.url Service url
  */
 export async function queryWms(opt) {
+  opt = Object.assign({}, opt);
   const h = mx.helpers;
   const map = opt.map || h.getMap();
   const point = opt.point;
@@ -412,7 +416,7 @@ export async function queryWms(opt) {
   /**
    * Return fetch promise
    */
-  const cap = await wmsGetCapabilities(url);
+  const cap = await wmsGetCapabilities(url, opt);
 
   /**
    * Update formats using capabilities

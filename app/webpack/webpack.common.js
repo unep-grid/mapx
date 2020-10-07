@@ -84,7 +84,7 @@ module.exports = {
           loader: 'babel-loader'
         }
       },
-      {test: /\.dot$/, loader: 'dot-loader', options: {}},
+      {test: /\.dot.html$/, loader: 'dot-loader', options: {}},
       {
         test: /\.coffee$/,
         use: 'coffee-loader' //used mainly to extend ContentTools

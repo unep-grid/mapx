@@ -106,11 +106,11 @@ export function toggleSpotlight(opt) {
       });
     },
     onRendered: (px) => {
-      document.body.classList.remove('mx-busy');
+      h.setBusy(false);
       px.setOpacity(0.5);
     },
     onRender: (px) => {
-      document.body.classList.add('mx-busy');
+      h.setBusy(true);
       px.setOpacity(0.1);
     }
   };

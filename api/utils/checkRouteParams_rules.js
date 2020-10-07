@@ -55,6 +55,16 @@ const rules = [
     }
   },
   {
+    key: ['timestamp'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d > 0;
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : null
+      };
+    }
+  },
+  {
     key: ['maxRowsCount'],
     test: (d) => {
       isValid = mx_valid.isNumeric(d) && d > 0;
@@ -82,6 +92,18 @@ const rules = [
       return {
         valid: isValid,
         value: isValid ? d : methods[0]
+      };
+    }
+  },
+  {
+    key: ['stats'],
+    test: (d) => {
+      const methods = ['base','temporal', 'spatial', 'attributes'];
+      d = mx_valid.isString(d) ? d.split(',') : d;
+      const isValid = mx_valid.isArray(d) && d.reduce((a,c)=> a===false ? a : methods.indexOf(c) > -1, true);
+      return {
+        valid: isValid,
+        value: isValid ? d : methods
       };
     }
   },

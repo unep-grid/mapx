@@ -190,7 +190,8 @@ export function objToParams(data) {
         h.isBoolean(value) ||
         h.isObject(value) ||
         h.isNumeric(value) ||
-        h.isArrayOfString(value)
+        h.isArrayOfString(value) ||
+        h.isArrayOfNumber(value)
       ) {
         if (h.isObject(value)) {
           value = JSON.stringify(value);

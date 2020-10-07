@@ -24,7 +24,7 @@ if (isCompatible) {
     } else {
       log(`SW - There is not enough storage, MapX will try to remove cache.`);
       cleanSw()
-        .then(clearCache)
+        .then(clearSwCache)
         .then(hasEnoughStorage)
         .then((test) => {
           if (test === true) {
@@ -72,7 +72,7 @@ function cleanSw() {
   });
 }
 
-function clearCache() {
+function clearSwCache() {
   log(`SW - Clear cache`);
   return caches.keys().then((items) => items.forEach((i) => caches.delete(i)));
 }

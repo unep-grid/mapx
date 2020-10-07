@@ -1,13 +1,23 @@
-{{ var h = mx.helpers ; }}
-{{ var rules = h.path(it,'_rulesCopy') || h.path(it,'data.style.rules');  }}
+{{ 
+  var h = mx.helpers ; 
+  var rules = h.path(it,'_rulesCopy') || h.path(it,'data.style.rules'); 
+}}
 {{?rules}}
-{{ var titleLegend = h.getLabelFromObjectPath({obj: it,path: 'data.style.titleLegend'}); }}
-{{ var nRules = rules.length; }}
-{{?h.greaterThan(nRules,0)}}
-{{ var isPoint = h.path(it,'data.geometry.type') == 'point'; }}
-{{ var isLine = h.path(it,'data.geometry.type') == 'line'; }}
-{{ var isPolygon = h.path(it,'data.geometry.type') == 'polygon'; }}
-{{ var isNumeric = h.path(it,'data.attribute.type') !== 'string'; }}
+{{ 
+  var titleLegend = h.getLabelFromObjectPath({
+    obj: it,
+    path: 'data.style.titleLegend'
+  }); 
+  var nRules = rules.length; 
+}}
+{{? nRules > 0 }}
+{{ 
+  var isPoint = h.path(it,'data.geometry.type') == 'point'; 
+  var isLine = h.path(it,'data.geometry.type') == 'line'; 
+  var isPolygon = h.path(it,'data.geometry.type') == 'polygon';
+  var isNumeric = h.path(it,'data.attribute.type') !== 'string';
+}}
+
 <div class="mx-legend-vt-container">
   <label class="mx-legend-vt-title text-muted">{{=titleLegend}}</label>
   <div class="mx-legend-box">
