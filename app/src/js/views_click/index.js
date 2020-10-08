@@ -115,8 +115,10 @@ function handleViewClick(event) {
     {
       comment: 'target is tool search',
       test: el.dataset.view_action_key === 'btn_opt_search',
-      action: async ()=>{
-        const elSearch = document.getElementById(el.dataset.view_action_el_target);
+      action: async () => {
+        const elSearch = document.getElementById(
+          el.dataset.view_action_el_target
+        );
         const viewTarget = el.dataset.view_action_target;
         const view = h.getView(viewTarget);
         /**
@@ -250,7 +252,14 @@ function handleViewClick(event) {
     if (!found && t[i].test === true) {
       found = true;
       t[i].action();
-
+      h.iconFlash({
+        icon: 'circle-thin',
+        duration: 600,
+        scaleStart: 0.2,
+        scaleEnd: 0.7,
+        x: event.clientX,
+        y: event.clientY
+      });
       mx.events.fire({
         type: 'view_panel_click',
         data: {

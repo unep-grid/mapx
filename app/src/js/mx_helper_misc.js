@@ -1,4 +1,4 @@
-/*jshint esversion: 6 , node: true */ //'use strict';
+import {IconFlash} from './icon_flash';
 
 /**
  * Retrieve nested item from object/array
@@ -19,8 +19,8 @@ export function path(obj, path, def) {
   if (!h.isString(path) && !h.isArrayOfString(path)) {
     return out(def);
   }
-  if(h.isString(path)){
-      path = path.split('.'); 
+  if (h.isString(path)) {
+    path = path.split('.');
   }
   for (i = 0, iL = path.length; i < iL; i++) {
     if (!obj || !h.isObject(obj)) {
@@ -166,39 +166,11 @@ export function parseTemplate(template, data) {
  * @param {String} icon fontawesome name
  */
 export function iconFlash(icon) {
-  if (typeof icon === 'object') {
-    icon = icon.icon;
-  }
-
-  icon = icon || 'cog';
-
-  var elContainer;
-  var elIcon;
-
-  add();
-
-  function add() {
-    elContainer = document.createElement('div');
-    elIcon = document.createElement('i');
-    elContainer.classList.add('mx-flash');
-    elIcon.className = 'fa fa-' + icon;
-    elContainer.appendChild(elIcon);
-    document.body.appendChild(elContainer);
-    setTimeout(activate, 10);
-  }
-
-  function activate() {
-    elIcon.classList.add('active');
-    setTimeout(remove, 1000);
-  }
-
-  function remove() {
-    elContainer.remove();
-  }
+   new IconFlash(icon);  
 }
 
 export function iconFlashSave() {
-  mx.helpers.iconFlash('floppy-o');
+   new IconFlash('floppy-o');  
 }
 
 /**
@@ -245,7 +217,10 @@ export var cssTransform = cssTransformFun();
 
 export function uiToggleBtn(o) {
   const h = mx.helpers;
-  o.label = h.isString(o.label) || h.isElement(o.label) ? o.label : JSON.stringify(o.label);
+  o.label =
+    h.isString(o.label) || h.isElement(o.label)
+      ? o.label
+      : JSON.stringify(o.label);
   var noLabel = h.isEmpty(o.label);
   var label = noLabel ? '' : o.label;
   var onChange = o.onChange || function() {};
@@ -261,14 +236,16 @@ export function uiToggleBtn(o) {
       class: 'check-toggle-input',
       id: id,
       type: 'checkbox',
-      on : {'click': onChange}
+      on: {click: onChange}
     })),
-    (elLabel = h.el('label', {
-      class: `check-toggle-label ${
-        o.labelBoxed ? 'check-toggle-label-boxed' : ''
-      }`,
-      for: id
-    },
+    (elLabel = h.el(
+      'label',
+      {
+        class: `check-toggle-label ${
+          o.labelBoxed ? 'check-toggle-label-boxed' : ''
+        }`,
+        for: id
+      },
       label
     ))
   );
@@ -279,7 +256,7 @@ export function uiToggleBtn(o) {
     elInput.dataset[d] = data[d];
   }
 
-  if(noLabel){
+  if (noLabel) {
     h.getDictItem('noValue').then((na) => {
       elLabel.innerText = na;
     });

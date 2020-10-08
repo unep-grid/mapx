@@ -7,10 +7,10 @@ export function clearMapxCache() {
   const elModal = h.modal({
     title: 'Clear cached and stored data',
     content: h.el('div',
-      h.el('h3', 'Do you want to remove all cache?'),
+      h.el('h3', 'Do you want to remove all cached data?'),
       h.el(
         'p',
-        'This operation will remove all cache set by MapX, including tiles, GeoJSON, drafts, WMS responses, summaries. This will only impact your browser : no data will be removed server side.'
+        'This operation will remove all cached data set by MapX, including tiles, GeoJSON, drafts, WMS responses, summaries. This will only impact your browser : no data will be removed server side.'
       )
     ),
     buttons: [

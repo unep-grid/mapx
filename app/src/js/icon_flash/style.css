@@ -1,4 +1,4 @@
-.mx-flash {
+.icon-flash {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10,13 +10,9 @@
   z-index: 10000;
 }
 
-.mx-flash i {
+.icon-flash i {
   font-size: 150px;
-  opacity: 1;
-  transition: all 0.3s ease-out;
+  opacity: 0.3;
+  transition: all 4s ease-out;
 }
 
-.mx-flash i.active {
-  opacity: 0;
-  font-size: 200px;
-}
