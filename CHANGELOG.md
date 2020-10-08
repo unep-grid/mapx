@@ -1,5 +1,24 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.3-beta' target='_blank'>1.7.3-beta</a>
+   - Bug fixes
+      - APP
+        - Solved a bug when minicache encountered html values; 
+   - Improvement 
+    - APP/API
+        - Source summary, allow all binnings method to have bounds from a single number in case of very skewed distribution (#596) ; 
+    - APP
+        - Better modal background : use pseudo-elements. It should avoid having modal siblings still accessible when background is set.
+        - Added reverse mode in palette colors.
+        - Set icon flash as a module using class. 
+        - Added better click visual feedback on views panel - could be ported to the whole app.
+        - Refactoring cache / fetch  management for wms and source summary:  
+        - Unifiyng TTL and timeout (app side);
+        - The button to remove cache has a confirmation step; It will remove all cache and stored data know to MapX. At least, what is accessible by  service workers and localforage; It does not trigger a reload anymore.
+        - Source summary for views add a first step, no cached, to get source timestamp. This should avoid issues when the source is modified during a session. 
+        - Partial rewrite of main dot templates: more flexibility to partial view UI loading. 
+        - Filter tools are now generated only on demand. They need cached response of summary. Should be invalidated if the source or the view change.
+ 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.2' target='_blank'>1.7.2</a>
 
    - Improvement
