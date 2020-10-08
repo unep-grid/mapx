@@ -17,11 +17,12 @@
   display: inline-block;
 }
 
-.mx-modal-background {
+.mx-modal-container.mx-modal-background:before {
+  content:'';
   opacity: 0.8;
   width: 100%;
   height: 100%;
-  z-index: 500;
+  z-index: -1;
   top: 0;
   left: 0;
   position: fixed;

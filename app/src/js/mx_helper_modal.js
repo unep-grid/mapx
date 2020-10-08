@@ -30,7 +30,6 @@ export function modal(o) {
     elDialog,
     elValidation,
     elButtonClose,
-    elBackground;
   /**
    * Get or create modal and background
    */
@@ -40,12 +39,7 @@ export function modal(o) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
 
-  elBackground = document.getElementById(idBackground);
-  var hasBackground = h.isElement(elBackground);
 
-  if (!hasBackground) {
-    elBackground = buildBackground(idBackground);
-  }
 
   var hasJquery = h.isFunction(window.jQuery);
   var hasShiny = h.isObject(window.Shiny);
@@ -154,7 +148,8 @@ export function modal(o) {
   document.body.appendChild(elModal);
 
   if (o.addBackground) {
-    document.body.appendChild(elBackground);
+    elModal.classList.add('mx-modal-background');
+    //document.body.appendChild(elBackground);
   }
 
   /**
@@ -256,12 +251,6 @@ export function modal(o) {
     return elModal;
   }
 
-  function buildBackground(idBackground) {
-    return h.el('div', {
-      id: idBackground,
-      class: ['mx-modal-background']
-    });
-  }
   function setTitle(newTitle) {
     addContent(newTitle, elTitle);
   }
@@ -318,7 +307,6 @@ export function modal(o) {
      * Remove using jquery or DOM method.
      */
     elModal.remove();
-    elBackground.remove();
     /**
      * on close callback
      */

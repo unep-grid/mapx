@@ -10,7 +10,12 @@ export async function vtStyleBuilder(opt) {
   /**
    * Init
    */
-  const summary = await h.getSourceVtSummary(opt);
+  const summary = await h.getSourceVtSummary({
+    idSource: opt.idSource,
+    idView: opt.idView,
+    stats: ['base', 'attributes']
+  });
+
   const aStat = summary.attribute_stat;
 
   opt = Object.assign(
@@ -113,7 +118,6 @@ export async function vtStyleBuilder(opt) {
         )
       ]
     );
-
     opt._elsInputs.push(...[elNbins, elBinsMethod]);
   }
 
@@ -146,7 +150,8 @@ export async function vtStyleBuilder(opt) {
           style: {
             display: 'flex',
             padding: '5px',
-            alignItems: 'center'
+            alignItems: 'center',
+            justifyContent: 'space-between'
           }
         },
         h.el(
@@ -158,7 +163,14 @@ export async function vtStyleBuilder(opt) {
           },
           item.value
         ),
-        item.content
+        h.el(
+          'div',
+          {
+            class: 'auto_style_palettes',
+            style: {display: 'flex', flexDirection: 'row'}
+          },
+          item.content
+        )
       );
     },
     configForm: {
@@ -174,6 +186,48 @@ export async function vtStyleBuilder(opt) {
 
   opt._elsInputs.push(rgPalette.el);
 
+  /**
+   * Reverse palette order
+   */
+  const elCheckPaletteReverse = h.el(
+    'div',
+    {
+      class: 'checkbox'
+    },
+    h.el('label', [
+      h.el('input', {
+        type: 'checkbox',
+        on: {
+          change: (e) => {
+            opt.reversePalette = e.target.checked === true;
+            /**
+             * Update UI
+             */
+            const elsPalettes = rgPalette.el.querySelectorAll(
+              '.auto_style_palettes'
+            );
+            if (elsPalettes.length) {
+              elsPalettes.forEach((elP) => {
+                elP.style.flexDirection =
+                  e.target.checked === true ? 'row-reverse' : 'row';
+              });
+            }
+            /**
+             * Update table
+             */
+            update();
+          }
+        }
+      }),
+      h.el('span', 'Reverse the color palette')
+    ])
+  );
+
+  opt._elsInputs.push(elCheckPaletteReverse);
+
+  /**
+   * All inputs
+   */
   const elInputsContainer = h.elPanel({
     title: 'Settings',
     content: h.el('div', {style: {padding: '10px'}}, opt._elsInputs)
@@ -200,6 +254,7 @@ export async function vtStyleBuilder(opt) {
           'click',
           () => {
             opt.onDone(opt._out);
+            h.iconFlashSave();
           }
         ]
       },
@@ -216,6 +271,7 @@ export async function vtStyleBuilder(opt) {
     content: h.el('div', opt._elsParts),
     noShinyBinding: true,
     addSelectize: false,
+    addBackground: true,
     onClose: clean,
     buttons: opt._buttons
   });
@@ -235,31 +291,35 @@ export async function vtStyleBuilder(opt) {
    */
   async function update() {
     let titleTable = 'Table';
-    const summary = await h.getSourceVtSummary(opt);
+    const summary = await h.getSourceVtSummary({
+      idSource: opt.idSource,
+      idView: opt.idView,
+      binsNumber: opt.binsNumber,
+      binsMethod: opt.binsMethod
+    });
     const aStat = summary.attribute_stat;
-    const uniqueFrom = new Set(aStat.table.map((r)=>r.from || r.value));
-    const hasDuplicate = uniqueFrom.size !== aStat.table.length ;
-  
-    const valid = !hasDuplicate;
+    const countTotal = summary.row_count;
     const count = aStat.table.reduce((c, r) => {
       return c + r.count;
     }, 0);
 
     /**
-    * Change elDone button state
-    */
-    if(h.isElement(elDone) && !valid){
-      elDone.setAttribute('disabled',true); 
-    }else{
-      elDone.removeAttribute('disabled'); 
-    }
+     * Change elDone button state
+     */
+    //if (h.isElement(elDone) && !valid) {
+    //elDone.setAttribute('disabled', true);
+    //} else {
+    //elDone.removeAttribute('disabled');
+    //}
 
     /**
      * Scale palette and set colors
      */
-    const colors = chroma
-      .scale(chroma.brewer[opt._palette])
-      .colors(aStat.table.length);
+    const palette = chroma.brewer[opt._palette].map((c) => c); // clone
+    if (opt.reversePalette === true) {
+      palette.reverse();
+    }
+    const colors = chroma.scale(palette).colors(aStat.table.length);
     aStat.table.forEach((r, i) => {
       r.color = colors[i];
     });
@@ -289,9 +349,9 @@ export async function vtStyleBuilder(opt) {
     if (aStat.type === 'continuous') {
       titleTable = `${titleTable} ( Method : ${
         aStat.binsMethod
-      }, number of bins : ${aStat.binsNumber}, count total : ${count}, valid: ${valid} )`;
-    }else{
-      titleTable = `${titleTable} ( count total : ${count}, valid : ${valid} ) `;
+      }, number of bins : ${aStat.binsNumber}, count ${count} )`;
+    } else {
+      titleTable = `${titleTable} ( count: ${count} ) `;
     }
 
     /**

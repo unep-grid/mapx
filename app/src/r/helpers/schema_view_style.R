@@ -184,7 +184,7 @@ mxSchemaViewStyle <- function(
     size = list(
       title = tt("schema_style_size"),
       type = "number",
-      default = ifelse(isPoint,10,1)
+      default = ifelse(isPoint,5,1)
       )
     )
 

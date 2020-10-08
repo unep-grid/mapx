@@ -71,8 +71,11 @@ freqtable as (
     SELECT count(*) 
     FROM "{{idSource}}" a 
     WHERE 
-    CASE 
-    WHEN b.from = amin.min
+    CASE
+    WHEN b.from = b.to
+      THEN
+        a."{{idAttr}}" = b.from AND a."{{idAttr}}" = b.to
+    WHEN b.from > b.to AND b.from = amin.min
       THEN 
         a."{{idAttr}}" >= b.from AND a."{{idAttr}}" <= b.to
       ELSE

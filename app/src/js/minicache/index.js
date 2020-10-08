@@ -11,13 +11,20 @@ const def = {
   ttl: 1000 * 60 * 60 * 24 // 1 day
 };
 
-export function miniCacheSet(key, value, opt) {
+export async function miniCacheSet(key, value, opt) {
   opt = Object.assign({}, def, opt);
   const item = {
     ts: new Date().getTime() + parseInt(opt.ttl),
-    value: value
+    value: JSON.parse(JSON.stringify(value))
   };
-  return miniCacheDb.setItem(key, item);
+  let out = null;
+  try {
+    out = await miniCacheDb.setItem(key, item);
+  } catch (e) {
+    throw new Error(e);
+  }
+
+  return out;
 }
 
 export async function miniCacheGet(key) {
@@ -42,6 +49,6 @@ export async function miniCacheRemove(key) {
   miniCacheDb.removeItem(key);
 }
 
-export async function miniCacheClear(){
+export async function miniCacheClear() {
   return await miniCacheDb.dropInstance();
 }

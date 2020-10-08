@@ -175,11 +175,6 @@ body.mx {
   background-color: var(--mx_ui_text);
 }
 
-/* Note : see also loading screen background*/
-.mx .mx-modal-background {
-  background-color: var(--mx_ui_shadow);
-}
-
 .mx .mx-modal-body {
   border-top: 1px solid var(--mx_ui_border);
   border-bottom: 1px solid var(--mx_ui_border);

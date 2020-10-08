@@ -45,7 +45,7 @@ class RadioGroup {
 
   build() {
     const qs = this;
-    if(qs._built){
+    if (qs._built) {
       qs.destroy();
     }
     const group = Math.random().toString(32);
@@ -58,7 +58,7 @@ class RadioGroup {
         const elItem = el(
           'div',
           {
-            style: {display: 'block', width: '100%'}
+            style: {display: 'flex', alignItems: 'baseline'}
           },
           (elInput = el('input', {
             id: id,
@@ -70,7 +70,8 @@ class RadioGroup {
             'label',
             {
               style: {
-                display: 'inline-block'
+                width: '100%',
+                display: 'block'
               },
               for: id
             },
@@ -84,7 +85,7 @@ class RadioGroup {
         return elItem;
       })
     );
-    qs._listener =  qs.update.bind(qs);
+    qs._listener = qs.update.bind(qs);
     qs.el.addEventListener('change', qs._listener);
     qs._built = true;
   }
@@ -95,7 +96,7 @@ class RadioGroup {
     qs.el.remove();
   }
 
-  update(){
+  update() {
     const qs = this;
     const data = new FormData(qs.el);
     for (const entry of data) {
