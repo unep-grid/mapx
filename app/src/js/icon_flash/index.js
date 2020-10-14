@@ -59,4 +59,38 @@ class IconFlash {
   }
 }
 
-export {IconFlash};
+export {IconFlash, randomFlashIcon};
+
+function randomFlashIcon(n) {
+  var r = document.body.getBoundingClientRect();
+  var iter = 10;
+
+  next();
+
+  function next() {
+    generate();
+    if (iter-- > 0) {
+      setTimeout(next, 1000);
+    }
+  }
+  function generate() {
+    var m = n || 10;
+    while (m-- > 0) {
+      setTimeout(draw, random(0, 1000));
+    }
+  }
+  function draw() {
+    new IconFlash({
+      icon: 'circle-o',
+      x: random(0, r.width),
+      y: random(0, r.height),
+      scaleStart: random(0.2, 2),
+      scaleEnd: random(2, 4),
+      opacityStart: random(0.2, 0.5),
+      opacityEnd: random(0.2, 0.5)
+    });
+  }
+  function random(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+}
