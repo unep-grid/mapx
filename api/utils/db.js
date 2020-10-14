@@ -221,15 +221,26 @@ exports.getColumnsTypesSimple = async function(idSource, idAttr) {
  * @return {numeric} timetamp
  */
 exports.getSourceLastTimestamp = async function(idSource) {
-  if (!idSource) {
+  if (!valid.isSourceId(idSource)) {
     return null;
   }
-  const q = {
-    values: [idSource],
-    text: `SELECT
-             pg_xact_commit_timestamp(xmin) as timestamp
-             FROM pg_class where relname= $1`
-  };
+  const q = `WITH maxTimestampData as (
+            SELECT pg_xact_commit_timestamp(xmin) as t 
+            FROM ${idSource}
+          ),
+          maxTimestampStructure as (
+            SELECT pg_xact_commit_timestamp(xmin) as t 
+            FROM pg_class
+            WHERE relname = '${idSource}'
+          ),
+          maxBoth as (
+             SELECT t 
+             FROM maxTimestampData
+             UNION
+             SELECT t 
+            FROM maxTimestampStructure
+            )
+          SELECT max(t) as timestamp from maxBoth;`;
   const data = await pgRead.query(q);
   const row = data.rows[0];
 

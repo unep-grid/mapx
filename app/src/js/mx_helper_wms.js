@@ -15,8 +15,8 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
  *TODO: event delegation, destroy method
  */
 async function wmsBuildQueryUi(opt) {
-  opt = Object.assign({}, opt);
-  var selectLayer, selectServices;
+  opt = Object.assign({}, {useCache: false, timestamp: null}, opt);
+
   const h = mx.helpers;
   await h.moduleLoad('selectize');
   const el = h.el;
@@ -27,6 +27,8 @@ async function wmsBuildQueryUi(opt) {
     document.querySelector(opt.selectorParent) || elInputTile.parentElement;
   const services = opt.services;
   const tt = h.getTranslationTag;
+
+  var selectLayer, selectServices;
 
   if (!elInputTiles || !elInputLegend || !elInputMeta) {
     return;
@@ -110,7 +112,14 @@ async function wmsBuildQueryUi(opt) {
   async function getLayers() {
     setBusy(true);
     try {
-      const layers = await wmsGetLayers(elInputService.value);
+      const layers = await wmsGetLayers(elInputService.value, {
+        getCapabilities: {
+          searchParams: {
+            timestamp: opt.timestamp
+          },
+          useCache: opt.useCache
+        }
+      });
       initSelectLayer(layers);
       setBusy(false);
     } catch (e) {
@@ -191,8 +200,16 @@ async function wmsBuildQueryUi(opt) {
   }
 
   function updateInput() {
+    const layer = $(elSelectLayer).val();
+    if (!layer) {
+      h.modal({
+        title: 'No layer set',
+        content: h.el('p', 'No layer set: ignoring request')
+      });
+      return;
+    }
     elInputTiles.value = urlTile({
-      layer: $(elSelectLayer).val(),
+      layer: layer,
       url: elInputService.value,
       width: 512,
       height: 512
@@ -257,10 +274,30 @@ async function wmsBuildQueryUi(opt) {
 }
 
 async function wmsGetCapabilities(baseUrl, opt) {
-  opt = Object.assign({}, opt);
+  opt = Object.assign(
+    {},
+    {
+      useCache: true,
+      searchParams: null
+    },
+    opt
+  );
   const h = mx.helpers;
   const def = {};
-  const url = `${baseUrl}?service=WMS&request=GetCapabilities`;
+  const queryString = h.objToParams(
+    Object.assign(
+      {},
+      {
+        service: 'WMS',
+        request: 'GetCapabilities',
+        version: '1.1.1'
+      },
+      opt.searchParams
+    )
+  );
+
+  const url = `${baseUrl}?${queryString}`;
+
   let data = {};
 
   if (!h.isUrlValidWms(url)) {
@@ -269,9 +306,15 @@ async function wmsGetCapabilities(baseUrl, opt) {
 
   const WMSCapabilities = await h.moduleLoad('wms-capabilities');
 
+  console.log(url);
+
   data = await miniCacheGet(url);
 
-  if (!data || mx.settings.cacheIgnore === true) {
+  const ignoreCache =
+    opt.useCache === false || mx.settings.cacheIgnore === true || !data;
+
+  if (ignoreCache) {
+    console.log('WMS GetCapabilities from server');
     const xmlString = await h.fetchProgress_xhr(url, {
       maxSize: mx.settings.maxByteFetch,
       timeout: 2e4
@@ -280,16 +323,16 @@ async function wmsGetCapabilities(baseUrl, opt) {
     data = new WMSCapabilities(xmlString).toJSON();
     miniCacheSet(url, data, {ttl: mx.settings.maxTimeCache});
   } else {
-    console.log('Get from cache');
+    console.log('WMS GetCapabilities from cache');
   }
 
   return h.path(data, 'Capability', {});
 }
 
 async function wmsGetLayers(baseUrl, opt) {
-  opt = Object.assign({}, opt);
+  opt = Object.assign({}, {getCapabilities: {}}, opt);
   const layers = [];
-  const capability = await wmsGetCapabilities(baseUrl, opt);
+  const capability = await wmsGetCapabilities(baseUrl, opt.getCapabilities);
 
   if (!capability || !capability.Layer || !capability.Layer.Layer) {
     return layers;
@@ -369,14 +412,20 @@ function urlLegend(opt) {
  * @param {Array} opt.styles style list
  * @param {String} opt.url Service url
  */
-export async function queryWms(opt) {
+export async function wmsQuery(opt) {
   opt = Object.assign({}, opt);
   const h = mx.helpers;
   const map = opt.map || h.getMap();
   const point = opt.point;
-  const url = opt.url;
+  const urlBase = opt.url;
   const modeObject = opt.asObject === true || false;
   const ignoreBbox = true;
+
+  /**
+   * Return fetch promise
+   */
+  const cap = await wmsGetCapabilities(urlBase, opt.getCapabilities);
+
   /*
    * Build a bounding box
    */
@@ -396,7 +445,7 @@ export async function queryWms(opt) {
   const layers = opt.layers;
   const styles = opt.styles;
   const props = modeObject ? {} : [];
-  const paramsInfo = {
+  const query = {
     version: '1.1.1',
     service: 'WMS',
     request: 'GetFeatureInfo',
@@ -414,20 +463,17 @@ export async function queryWms(opt) {
     bbox: minLng + ',' + minLat + ',' + maxLng + ',' + maxLat
   };
   /**
-   * Return fetch promise
-   */
-  const cap = await wmsGetCapabilities(url, opt);
-
-  /**
    * Update formats using capabilities
    */
   const allowedFormatsInfo = ['application/json', 'application/geojson'];
   const formatsInfo = h.path(cap, 'Request.GetFeatureInfo.Format', []);
   const layersAll = h.path(cap, 'Layer.Layer', []);
-  paramsInfo.info_format = allowedFormatsInfo.reduce((a, f) => {
+
+  query.info_format = allowedFormatsInfo.reduce((a, f) => {
     return !a ? (formatsInfo.indexOf(f) > -1 ? f : a) : a;
   }, null);
-  paramsInfo.exception = h.path(cap, 'Exception', [])[1];
+
+  query.exception = h.path(cap, 'Exception', [])[1];
 
   /**
    * Test if layer is queryable
@@ -436,7 +482,7 @@ export async function queryWms(opt) {
     let isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
 
     if (!isQueryable && h.isArray(l.Layer)) {
-      isLayerQueryable = l.Layer.reduce(
+      isQueryable = l.Layer.reduce(
         (a, ll) => (a ? a : ll.queryable),
         false
       );
@@ -452,17 +498,18 @@ export async function queryWms(opt) {
    * Validate
    */
   const validLayer = layersQueryable.length > 0;
-  const validInfo = h.isString(paramsInfo.info_format);
-  const validException = h.isString(paramsInfo.exception);
+  const validInfo = h.isString(query.info_format);
+  const validException = h.isString(query.exception);
 
   /**
    * Fetch or stop here
    */
-  const request = `${url}?${h.objToParams(paramsInfo)}`;
+  const queryString = h.objToParams(query);
+  const url = `${urlBase}?${queryString}`;
 
   if (!validException || !validLayer || !validInfo) {
     console.warn({
-      'Request not fetched': request,
+      'Request not fetched': url,
       'Valid exception format': validException,
       'Valid (queryable) layer': validLayer,
       'Valid info format': validInfo
@@ -472,7 +519,10 @@ export async function queryWms(opt) {
     );
   }
 
-  const response = await fetch(request);
+  /**
+   * Apply GetFeatureInfo
+   */
+  const response = await fetch(url);
 
   if (response.exceptions) {
     console.warn(res.exceptions);

@@ -255,8 +255,10 @@ function handleViewClick(event) {
       h.iconFlash({
         icon: 'circle-thin',
         duration: 600,
-        scaleStart: 0.2,
-        scaleEnd: 0.7,
+        scaleStart: 0.3,
+        scaleEnd: 0.6,
+        opacityStart: 0.05,
+        opacityEnd: 0,
         x: event.clientX,
         y: event.clientY
       });

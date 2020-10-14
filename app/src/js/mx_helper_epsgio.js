@@ -1,4 +1,3 @@
-/* jshint esversion:6 */
 
 export function epsgBuildSearchBox(opt) {
   const h = mx.helpers;
@@ -121,7 +120,7 @@ export function epsgBuildSearchBox(opt) {
     var elEpsg = getEl('epsgTextInput');
     elInput.value = code;
     elEpsg.value = code;
-    if (mx.helpers.isObject(Shiny) && Shiny.onInputChange) {
+    if (h.isObject(Shiny) && Shiny.onInputChange) {
       Shiny.onInputChange(elInput.id, code);
     }
     elSearchGroup.style.display = 'none';
@@ -136,7 +135,7 @@ export function epsgBuildSearchBox(opt) {
   /**
    * Search epsg.io database and build results list as buttons
    */
-  function searchEpsg() {
+  async function searchEpsg() {
     var elInputSearch = getEl('epsgSearchInput');
     var elResults = getEl('epsgListResults');
     var txt = elInputSearch.value;
@@ -149,63 +148,58 @@ export function epsgBuildSearchBox(opt) {
      * Reset list search
      */
     elResults.innerHTML = '';
+    const res = epsgQuery(txt);
 
-    epsgQuery(txt, function(res) {
-      if (res.length === 0) {
-        var elEmpty = el('button', {
-          class: ['btn', 'btn-default', 'epsgio-btn-choose', 'disabled']
-        });
+    if (res.length === 0) {
+      var elEmpty = el('button', {
+        class: ['btn', 'btn-default', 'epsgio-btn-choose', 'disabled']
+      });
 
-        mx.helpers.getDictItem('noValue').then((r) => {
-          elEmpty.innerText = r;
-        });
+      h.getDictItem('noValue').then((r) => {
+        elEmpty.innerText = r;
+      });
 
-        elResults.appendChild(elEmpty);
-      } else {
-        res.forEach((r) => {
-          /**
-           * Build select button
-           */
-          var elRow = el(
-            'div',
-            el('button', {
-              on: ['click', choose],
-              innerText: r.name + ' (' + r.code + ')',
-              class: ['btn', 'btn-default', 'epsgio-btn-choose'],
-              dataset: {
-                code: r.code
-              }
-            })
-          );
-          elResults.appendChild(elRow);
-        });
-      }
-    });
+      elResults.appendChild(elEmpty);
+    } else {
+      res.forEach((r) => {
+        /**
+         * Build select button
+         */
+        var elRow = el(
+          'div',
+          el('button', {
+            on: ['click', choose],
+            innerText: r.name + ' (' + r.code + ')',
+            class: ['btn', 'btn-default', 'epsgio-btn-choose'],
+            dataset: {
+              code: r.code
+            }
+          })
+        );
+        elResults.appendChild(elRow);
+      });
+    }
   }
 }
 
 /**
  * Validate epsg
  */
-export function epsgQuery(code, cb) {
-  var url = 'https://epsg.io/?q=' + code + '&format=json';
+export async function epsgQuery(code) {
+  const h = mx.helpers;
+  const url = 'https://epsg.io/?q=' + code + '&format=json';
+  const res = [];
 
-  if (!code) {
-    cb([]);
-    return;
+  if (!h.isNumeric(code)) {
+    return res;
   }
 
-  /**
-   * Reset list search
-   */
-
-  return fetch(url)
-    .then((res) => res.json())
-    .then((res) => {
-      cb(res.results || []);
-    })
-    .catch((e) => {
-      cb([]);
-      throw new Error("Can't retrieve epsg code: " + e);
-    });
+  try{
+    const resFetch = await fetch(url);
+    const resJson = await resFetch.json();
+    res.push(...resJson.results);
+  }catch(e){
+    console.warn(e);
+  }
+  return res;
 }

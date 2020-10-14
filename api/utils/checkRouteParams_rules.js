@@ -21,7 +21,7 @@ const rules = [
     /**
      * Generic boolean
      */
-    key: ['noCache', 'binsCompute', 'publicOnly'],
+    key: ['useCache', 'binsCompute', 'publicOnly'],
     test: (d) => {
       if (mx_valid.isString(d)) {
         switch (d) {
@@ -45,19 +45,9 @@ const rules = [
     }
   },
   {
-    key: ['date'],
-    test: (d) => {
-      isValid = mx_valid.isDateString(d);
-      return {
-        valid: isValid,
-        value: d
-      };
-    }
-  },
-  {
     key: ['timestamp'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0;
+      isValid = mx_valid.isDateString(d) || mx_valid.isNumeric(d) && d > 0;
       return {
         valid: isValid,
         value: isValid ? d * 1 : null

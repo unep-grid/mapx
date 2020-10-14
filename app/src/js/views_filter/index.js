@@ -508,7 +508,9 @@ function setViewsComponents(views) {
       story,
       overlap,
       attributes,
-      customStyle;
+      customStyle,
+      local,
+      editable;
 
     isVt = v.type === 'vt';
     isSm = v.type === 'sm';
@@ -521,6 +523,9 @@ function setViewsComponents(views) {
     overlap = path(v, 'data.source.layerInfo.maskName', '');
     attributes = path(v, 'data.attribute.names', '');
     customStyle = path(v, 'data.style.custom', '');
+    local = path(v,'project') === mx.settings.project;
+    editable = path(v,'_edit') === true;
+
 
     if (isVt) {
       components.push('vt');
@@ -559,6 +564,14 @@ function setViewsComponents(views) {
     if (isCc) {
       components.push('custom_code');
     }
+
+    if(editable && local){
+      components.push('editable');
+    }
+    if(local){
+      components.push('local');
+    }
+
     v._components = components;
   });
 }

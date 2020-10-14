@@ -576,9 +576,20 @@ span.mx-badge-role {
   border-color: var(--mx_ui_border);
 }
 
+.mx .panel-default > .panel-heading.panel-heading-light {
+  color: var(--mx_ui_text);
+  background-color: var(--mx_ui_border);
+  border-color: var(--mx_ui_border);
+}
+
 .mx .panel-default > .panel-heading span {
   color: var(--mx_ui_background);
 }
+
+.mx .panel-default  > .panel-heading.panel-heading-light span {
+  color: var(--mx_ui_text);
+}
+
 .mx .panel {
   background-color: var(--mx_ui_background);
 }

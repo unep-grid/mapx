@@ -54,46 +54,46 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
           const lang = mx.settings.language;
           vtStyleBuilder({
             idView: idView,
-            onDone: (data) => {
+            onDone: (data, mergeLabelByRow) => {
               const editor = self;
-              const oldRules = editor.getValue();
+              const origRules = editor.getValue();
               const modeNumeric = data.type === 'continuous';
-              const rules = data.table.map((r) => {
+              const rules = data.table.map((r, i) => {
                 let newRule = {
                   value: modeNumeric ? r.from : r.value,
                   color: r.color
                 };
 
-                const matchRule = oldRules.reduce((a, r) => {
-                  if (a) {
-                    return a;
+                /**
+                 * Preserve label by merge
+                 */
+                if (mergeLabelByRow === true) {
+                  const ruleToMerge = origRules[i];
+                  if (ruleToMerge) {
+                    /**
+                     * Copy previous settings
+                     */
+                    newRule = Object.assign({}, ruleToMerge, newRule);
                   }
-                  if (newRule.value === r.value) {
-                    return r;
-                  }
-                }, null);
-
-                if (matchRule) {
-                  newRule = Object.assign({}, matchRule, newRule);
-                }
-
-                if(!newRule[`label_${lang}`]){
-                  if(modeNumeric){
+                } else {
+                  /**
+                   * Create label (other parameters will be defaults)
+                   */
+                  if (modeNumeric) {
                     newRule[`label_${lang}`] = `${r.from} - ${r.to}`;
-                  }else{
+                  } else {
                     newRule[`label_${lang}`] = `${r.value}`;
                   }
                 }
-                
+
                 return newRule;
               });
 
               editor.setValue(rules);
-              
+
               editor.onChange(true);
             }
           });
-
         }
       }
     }

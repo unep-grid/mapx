@@ -8,10 +8,14 @@ import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
  */
 export async function getViewSourceSummary(view, opt) {
   const h = mx.helpers;
-
+  view = h.getView(view);
   opt = Object.assign(
     {},
-    {idView: view.id, timestamp: view._src_timestamp},
+    {
+      idView: view.id,
+      timestamp: view._src_timestamp,
+      idAttr : h.path(view,'data.attribute.name')
+    },
     opt
   );
 
@@ -60,7 +64,7 @@ const def = {
   idView: null,
   idSource: null,
   idAttr: null,
-  noCache: false,
+  useCache: true,
   binsMethod: 'jenks',
   binsNumber: 5,
   stats: ['base', 'attributes', 'temporal', 'spatial'],
@@ -95,11 +99,12 @@ export async function getSourceVtSummary(opt) {
   /*
    * Fetch summary or use cache
    */
-  const useCache = mx.settings.cacheIgnore === false && opt.noCache === false;
+  const useCache = mx.settings.cacheIgnore === false && opt.useCache === true;
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
   let summary;
+
 
   if (useCache) {
     summary = await miniCacheGet(url);
@@ -111,6 +116,7 @@ export async function getSourceVtSummary(opt) {
     origin = 'fetch';
     const resp = await fetch(url);
     summary = await resp.json();
+
     miniCacheSet(url, summary, {
       ttl: mx.settings.maxTimeCache
     });
@@ -138,6 +144,7 @@ export async function getSourceVtSummary(opt) {
       }
     ]);
   }
+  summary._origin = origin;
 
   return summary;
 }
@@ -188,19 +195,28 @@ export async function getSourceRtSummary(view) {
     return out;
   }
   const q = h.getQueryParametersAsObject(urlQuery);
-  
-  if(!h.isArray(q.layers) && !h.isArray(q.LAYERS)){
+
+  if (!h.isArray(q.layers) && !h.isArray(q.LAYERS)) {
     return out;
   }
 
-  if(q.LAYERS){
-     q.layers = q.LAYERS;
+  if (q.LAYERS) {
+    q.layers = q.LAYERS;
   }
 
   const layerName = q.layers[0];
   const endpoint = urlQuery.split('?')[0];
 
-  const layers = await h.wmsGetLayers(endpoint);
+  const layers = await h.wmsGetLayers(endpoint, {
+    getCapabilities: {
+      searchParams: {
+        /**
+         * timestamp : Used to invalidate getCapabilities cache
+         */
+        timestamp: h.path(view, 'date_modified', null)
+      }
+    }
+  });
 
   const layer = layers.find((l) => {
     const nameMatch = h.isString(l.Name) && l.Name === layerName;
@@ -223,29 +239,73 @@ export async function getSourceRtSummary(view) {
     }
   });
 
-  if (layer && layer.BoundingBox) {
-    const bbx = layer.BoundingBox.find(
-      (b) => b.crs === 'EPSG:4326' || b.crs === 'CRS:84'
-    );
-    if (bbx && bbx.extent && bbx.crs === 'EPSG:4326') {
-      out.extent_sp = {
-        lat1: bbx.extent[2],
-        lng1: bbx.extent[1],
-        lat2: bbx.extent[0],
-        lng2: bbx.extent[3]
-      };
-    }
+  const validBbox =
+    h.isObject(layer) &&
+    h.isArray(layer.BoundingBox) &&
+    layer.BoundingBox.length > 0;
 
-    if (bbx && bbx.extent && bbx.crs === 'CRS:84') {
-      out.extent_sp = {
-        lat1: bbx.extent[1],
-        lng1: bbx.extent[2],
-        lat2: bbx.extent[3],
-        lng2: bbx.extent[0]
-      };
-    }
+  if (!validBbox) {
+    console.warn('No valid BoundingBox found');
   } else {
-    console.warn('Layer do not have valid bounding box', layer);
+    try {
+      let bbx;
+      /**
+       * lower left and upper right corners in a specified CRS
+       * minx miny maxx maxy
+       *
+       *  /°°°°°°°°(2,3)
+       *  |           |
+       *  |           |
+       *  (0,1)......./
+       */
+
+      bbx = layer.BoundingBox.find((b) => b.crs === 'EPSG:4326');
+
+      if (h.isObject(bbx) && h.isArray(bbx.extent)) {
+        /**
+         *  SAMPLE FROM GEOSERVER
+         *"[
+         *  -180,
+         *  -90,
+         *  180,
+         *  90
+         * ]"
+         */
+        out.extent_sp = {
+          lng1: bbx.extent[0],
+          lat2: bbx.extent[1],
+          lng2: bbx.extent[2],
+          lat1: bbx.extent[3]
+        };
+      } else {
+        /**
+         * try reprojection
+         */
+        bbx = layer.BoundingBox[0];
+        const epsg = h.isString(bbx.crs) ? bbx.crs.split(':')[1] : null;
+
+        if (epsg) {
+          const proj4 = await h.moduleLoad('proj4');
+          const resEpsg = await h.epsgQuery(epsg);
+          const proj4from = resEpsg.find((r) => r.proj4).proj4;
+
+          const proj4to = '+proj=longlat +datum=WGS84 +no_defs';
+          const sw_o = {x: bbx.extent[0], y: bbx.extent[1]};
+          const ne_o = {x: bbx.extent[2], y: bbx.extent[3]};
+          const sw = proj4(proj4from, proj4to, sw_o);
+          const ne = proj4(proj4from, proj4to, ne_o);
+
+          out.extent_sp = {
+            lng1: sw.x,
+            lat2: sw.y,
+            lng2: ne.x,
+            lat1: ne.y
+          };
+        }
+      }
+    } catch (e) {
+      console.warn(e);
+    }
   }
 
   return out;

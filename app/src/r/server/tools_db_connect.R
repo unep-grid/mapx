@@ -174,6 +174,23 @@ observeEvent(input$btnDbSelfGenerate,{
     }
     reactData$dbSelfClose <- dbSelfClose
 
+
+
+    #
+    # psql string
+    #
+    psqlstring <- sprintf('psql "host=%1$s \\\
+      port=%2$s \\\
+      dbname=%3$s \\\
+      user=%4$s \\\
+      password=%5$s"',
+      .get(config,c("pg","host")),
+      .get(config,c("pg","port")),
+      .get(config,c("pg","dbname")),
+      .get(dataTempUser,c("user")),
+      .get(dataTempUser,c("password"))
+    )
+
     #
     # Info list
     #
@@ -182,7 +199,9 @@ observeEvent(input$btnDbSelfGenerate,{
         db_host = .get(config,c("pg","host")),
         db_port = .get(config,c("pg","port")),
         db_username =  .get(dataTempUser,c("user")),
-        db_password =  .get(dataTempUser,c("password"))
+        db_password =  .get(dataTempUser,c("password")),
+        db_table = paste(sourcesList, sep=","),
+        db_psql_string = tags$pre(psqlstring,contentEditable="true")
         ))
 
     ui <- tags$p(

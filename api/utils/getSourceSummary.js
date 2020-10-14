@@ -12,7 +12,7 @@ const validateParamsHandler = require('./checkRouteParams.js').getParamsValidato
       'timestamp',
       'idSource',
       'idAttr',
-      'noCache',
+      'useCache',
       'binsCompute',
       'binsMethod',
       'binsNumber',
@@ -31,7 +31,7 @@ async function getSourceSummaryHandler(req, res) {
       idSource: req.query.idSource,
       idView: req.query.idView,
       idAttr: req.query.idAttr,
-      noCache: req.query.noCache,
+      useCache: req.query.useCache,
       binsCompute: req.query.binsCompute,
       binsNumber: req.query.binsNumber,
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
@@ -83,7 +83,7 @@ async function getSourceSummary(opt) {
     .update(timestamp + opt.idAttr + opt.idSource + JSON.stringify(opt.stats))
     .digest('hex');
 
-  const cached = opt.noCache ? false : await redisGet(hash);
+  const cached = opt.useCache ? await redisGet(hash) : false;
 
   if (cached) {
     const data = JSON.parse(cached);
@@ -145,7 +145,7 @@ async function getOrCalc(idTemplate, opt) {
     .update(sql + opt.timestamp)
     .digest('hex');
 
-  const cached = opt.noCache ? false : await redisGet(hash);
+  const cached = opt.useCache ? await redisGet(hash) : false;
 
   if (!cached) {
     const data = await pgRead.query(sql);
@@ -178,7 +178,7 @@ async function updateSourceFromView(opt) {
       if (srcAttr.layer) {
         opt.idSource = srcAttr.layer;
       }
-      if (srcAttr.attribute) {
+      if (!opt.idAttr && srcAttr.attribute) {
         opt.idAttr = srcAttr.attribute;
       }
     }
@@ -187,11 +187,11 @@ async function updateSourceFromView(opt) {
 }
 
 /**
-* Remove item if they are not requested
-* @param {Array} Stats Group of stats to output
-* @param {Object} data Output summary
-* @return {Object} summary
-*/
+ * Remove item if they are not requested
+ * @param {Array} Stats Group of stats to output
+ * @param {Object} data Output summary
+ * @return {Object} summary
+ */
 function reduceStatOutput(stats, data) {
   /**
    * Cleaning output to match requested stats

@@ -45,6 +45,7 @@ mxDbDropTempUser <- function(userName,con=NULL){
 
         for(t in allSources){
           dbSendQuery(con,"REVOKE ALL PRIVILEGES ON " + t + " FROM \"" + userName  + "\"")
+          dbSendQuery(con,"REVOKE ALL PRIVILEGES ON " + t + "_gid_seq" + " FROM \"" + userName  + "\"")
         }
 
       }
@@ -82,7 +83,7 @@ mxDbCreateTempUser <- function(id,srcList){
       addLetters = FALSE
     )
 
-    tmpUser <- "user" + id + "@mapxt"
+    tmpUser <- "mapxt_" + id
 
     out <- list(
       valid = FALSE,
@@ -105,9 +106,6 @@ mxDbCreateTempUser <- function(id,srcList){
     dbSendQuery(con,"BEGIN TRANSACTION")
 
     tryCatch({
-
-      browser()
-
       dbSendQuery(con,
         "CREATE ROLE \""+ tmpUser + "\"" +
           " WITH ENCRYPTED PASSWORD \'" + token + "\'"+
@@ -120,6 +118,7 @@ mxDbCreateTempUser <- function(id,srcList){
 
       for(t in srcList){
         dbSendQuery(con,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t + " TO \"" + tmpUser +"\"")
+        dbSendQuery(con,"GRANT INSERT, SELECT, DELETE, UPDATE ON " + t +"_gid_seq" + " TO \"" + tmpUser +"\"")
       }
 
     }, error = function(e){

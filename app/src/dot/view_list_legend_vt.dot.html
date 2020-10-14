@@ -1,21 +1,21 @@
 {{ 
-  var h = mx.helpers ; 
-  var rules = h.path(it,'_rulesCopy') || h.path(it,'data.style.rules'); 
+  const h = mx.helpers ; 
+  const rules = h.path(it,'_rulesCopy') || h.path(it,'data.style.rules'); 
 }}
 {{?rules}}
 {{ 
-  var titleLegend = h.getLabelFromObjectPath({
+  const titleLegend = h.getLabelFromObjectPath({
     obj: it,
     path: 'data.style.titleLegend'
   }); 
-  var nRules = rules.length; 
+  const nRules = rules.length; 
 }}
 {{? nRules > 0 }}
 {{ 
-  var isPoint = h.path(it,'data.geometry.type') == 'point'; 
-  var isLine = h.path(it,'data.geometry.type') == 'line'; 
-  var isPolygon = h.path(it,'data.geometry.type') == 'polygon';
-  var isNumeric = h.path(it,'data.attribute.type') !== 'string';
+  const isPoint = h.path(it,'data.geometry.type') == 'point'; 
+  const isLine = h.path(it,'data.geometry.type') == 'line'; 
+  const isPolygon = h.path(it,'data.geometry.type') == 'polygon';
+  const isNumeric = h.path(it,'data.attribute.type') !== 'string';
 }}
 
 <div class="mx-legend-vt-container">
@@ -25,9 +25,11 @@
   <tbody>
      {{~rules :item:index}}
      {{?item}}
-     {{ var lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ; }}
-     {{ var label = h.firstOf([item['label_'+lang], item.value]) ;  }}
-     {{ var hasSprite  = !!item.sprite; }}
+     {{ 
+       const lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ;
+       const label = h.firstOf([item['label_'+lang], item.value]) ;
+       const hasSprite  = !!item.sprite; 
+     }}
      <tr 
        class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}"
        style="z-index: {{=nRules-index}}"

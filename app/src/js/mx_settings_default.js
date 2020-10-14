@@ -82,7 +82,7 @@ let settings = {
   maxByteFetch: 5e6, // 5MB
   maxTimeFetch : 1000 * 60, // 1 minute
   maxTimeCache :  1000 * 60 * 60 * 24, // aka ttl = 1 day
-  //maxTimeCache :0, // aka ttl = 1 day
+  //maxTimeCache : 1, // aka ttl = 1 day
   cacheIgnore : false,
   user: {},
   ui: {

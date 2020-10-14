@@ -4,24 +4,24 @@ export {el};
 const config = {
   listeners: [],
   debug: true,
-  interval : null
+  interval: null
 };
 
 /**
-* clean listeners at interval
-*/
-function el(type, ...opt) {
+ * clean listeners at interval
+ */
+function el(tagName, ...opt) {
   var item;
 
-  if(!config.interval){
-    config.interval = setInterval(cleanListeners,1e4);
+  if (!config.interval) {
+    config.interval = setInterval(cleanListeners, 1e4);
     window.el_config = config;
   }
-  
+
   /**
    * Create element
    */
-  var elOut = document.createElement(type);
+  var elOut = document.createElement(tagName);
 
   /**
    * Compute options
@@ -31,10 +31,11 @@ function el(type, ...opt) {
      * Object part el("div",{Object})
      */
     if (isObject(o) && !isArray(o)) {
-      Object.keys(o).forEach((a) => {
-        item = o[a];
+      const keys = Object.keys(o);
+      keys.forEach((k) => {
+        item = o[k];
         if (
-          a === 'on' &&
+          k === 'on' &&
           isArray(item) &&
           isString(item[0]) &&
           isFunction(item[1])
@@ -46,10 +47,10 @@ function el(type, ...opt) {
            */
           config.listeners.push({
             target: elOut,
-            type: item[0],
+            tagName: item[0],
             listener: item[1]
           });
-        } else if (a === 'on' && isObject(item)) {
+        } else if (k === 'on' && isObject(item)) {
           Object.keys(item).forEach((i) => {
             if (isFunction(item[i])) {
               elOut.addEventListener(i, item[i]);
@@ -59,21 +60,27 @@ function el(type, ...opt) {
                */
               config.listeners.push({
                 target: elOut,
-                type: i,
+                tagName: i,
                 listener: item[i]
               });
             }
           });
-        } else if (a === 'innerText' && isString(item)) {
+        } else if (k === 'innerText' && isString(item)) {
           elOut.innerText = item;
-        } else if ((a === 'dataset' || a === 'style') && isObject(item)) {
+        } else if ((k === 'dataset' || k === 'style') && isObject(item)) {
           Object.keys(item).forEach((i) => {
-            elOut[a][i] = item[i];
+            elOut[k][i] = item[i];
           });
-        } else if (a === 'class' && isArray(item)) {
+        } else if (k === 'class' && isArray(item)) {
           item.forEach((c) => elOut.classList.add(c));
+        } else if (
+          tagName === 'input' &&
+          k === 'checked' &&
+          o.type === 'checkbox'
+        ) {
+          elOut.checked = item === true;
         } else {
-          elOut.setAttribute(a, o[a]);
+          elOut.setAttribute(k, o[k]);
         }
       });
     }
@@ -106,7 +113,7 @@ function el(type, ...opt) {
   return elOut;
 
   function setContent(str) {
-    if (isHTML(str) || type === 'style') {
+    if (isHTML(str) || tagName === 'style') {
       elOut.innerHTML = str;
     } else if (isString(str)) {
       elOut.innerText = str;
@@ -173,26 +180,24 @@ function isElement(obj) {
 /**
  * Automatically remove listeners
  */
-function cleanListeners(){
+function cleanListeners() {
   let cL = config.listeners.length;
-  if(cL < 1){
+  if (cL < 1) {
     return;
   }
-  while(--cL){
-     const l = config.listeners[cL];
-     if(!l){
-      return
-     }
-     const id = l.target.dataset.el_id_listener;
-     /**
+  while (--cL) {
+    const l = config.listeners[cL];
+    if (!l) {
+      return;
+    }
+    const id = l.target.dataset.el_id_listener;
+    /**
      * use query select instead of contains : contains seems to fail in some browser
      */
-     const s = document.body.querySelector(`[data-el_id_listener="${id}"]`);
-     if(!s){
-       config.listeners.pop();
-       l.target.removeEventListener(l.type, l.listener);
-     }
+    const s = document.body.querySelector(`[data-el_id_listener="${id}"]`);
+    if (!s) {
+      config.listeners.pop();
+      l.target.removeEventListener(l.tagName, l.listener);
+    }
   }
 }
-
-

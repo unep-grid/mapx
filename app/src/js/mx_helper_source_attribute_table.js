@@ -30,8 +30,8 @@ export async function showSourceTableAttributeModal(opt) {
   let mutationObserver;
   let labels = opt.labels || null;
 
-  const summary = await h.getSourceVtSummary({
-    idSource: opt.idSource
+  const summary = await h.getViewSourceSummary(opt.view.id, {
+    stats: ['base', 'attributes']
   });
   onProgressStart();
 
@@ -141,8 +141,8 @@ export async function showSourceTableAttributeModal(opt) {
   onProgressEnd();
 
   /**
-  * If everything is fine, add a mutation observer to render the table
-  */
+   * If everything is fine, add a mutation observer to render the table
+   */
   mutationObserver = listenMutationAttribute(elModal, tableRender);
 
   /**

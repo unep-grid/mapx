@@ -1173,14 +1173,6 @@ export async function addSourceFromView(o) {
   const p = h.path;
 
   if (o.map && p(o.view, 'data.source')) {
-    /**
-     * When adding source, we request the timestamp via ['base'] stat,
-     * without cache to be sure to have the latest value.
-     */
-    const summary = await h.getViewSourceSummary(o.view, {
-      stats: ['base'],
-      noCache: true
-    });
     const project = p(mx, 'settings.project');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
@@ -1216,11 +1208,19 @@ export async function addSourceFromView(o) {
     }
 
     if (o.view.type === 'vt') {
+      /**
+       * When adding source, we request the timestamp via ['base'] stat,
+       * without cache to be sure to have the latest value.
+       */
+      const summary = await h.getViewSourceSummary(o.view, {
+        stats: ['base'],
+        useCache: false
+      });
       const baseUrl = h.getApiUrl('getTile');
       const srcTimestamp = p(summary, 'timestamp', null);
       let url = `${baseUrl}?view=${o.view.id}`;
       if (srcTimestamp) {
-        url = `${url}&date=${srcTimestamp}`;
+        url = `${url}&timestamp=${srcTimestamp}`;
       }
       o.view.data.source.tiles = [url, url];
     }
@@ -2181,7 +2181,7 @@ export async function makeTimeSlider(o) {
   const elView = h.getViewEl(view);
   let el;
   if (elView) {
-     el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
+    el = elView.querySelector('[data-range_time_for="' + view.id + '"]');
     if (!el) {
       return;
     }
@@ -3936,34 +3936,37 @@ export async function viewLayersAddVt(o) {
        * - If next rules is identical, remove it from legend
        * - Set sprite path
        */
-      for (var i = 0; i < rules.length; i++) {
-        if (rules[i]) {
-          const ruleHasSprite = rules[i].sprite && rules[i].sprite !== 'none';
-          const nextRuleIsSame =
-            !!rules[i + 1] && rules[i + 1].value === rules[i].value;
-          const nextRuleHasSprite =
-            !!rules[i + 1] &&
-            rules[i + 1].sprite &&
-            rules[i + 1].sprite !== 'none';
+      const idRulesToRemove = [];
+      rules.forEach((rule, i) => {
+        const ruleNext = rule[i + 1];
+        const hasSprite = rule.sprite && rule.sprite !== 'none';
+        const nextHasSprite =
+          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
 
-          if (ruleHasSprite) {
-            rules[i].sprite = 'url(sprites/svg/' + rules[i].sprite + '.svg)';
-          } else {
-            rules[i].sprite = null;
-          }
+        const isDuplicated =
+          ruleNext &&
+          ruleNext.value === rule.value &&
+          ruleNext.color === ruleNext.color;
 
-          if (nextRuleIsSame) {
-            if (nextRuleHasSprite) {
-              rules[i].sprite =
-                rules[i].sprite +
-                ',' +
-                'url(sprites/svg/' +
-                rules[i + 1].sprite +
-                '.svg)';
-            }
-            rules[i + 1] = null;
-          }
+        if (hasSprite) {
+          rule.sprite = `url(sprites/svg/${rule.sprite}.svg)`;
+        } else {
+          rule.sprite = null;
         }
+
+        if (isDuplicated) {
+          if (nextHasSprite) {
+            rule.sprite = `${rule.sprite},url(sprites/svg/${
+              ruleNext.sprite
+            }.svg`;
+          }
+          idRulesToRemove.push(i + 1);
+        }
+      });
+
+      while (idRulesToRemove.length) {
+        const idRule = idRulesToRemove.pop();
+        rules.splice(idRule, 1);
       }
 
       /*
@@ -4438,12 +4441,20 @@ export function getLayersPropertiesAtPoint(opt) {
     const isWms = h.isUrlValidWms(urlFull, {layers: true, styles: true});
 
     if (isWms) {
-      return h.queryWms({
+      return h.wmsQuery({
         point: opt.point,
         layers: params.layers,
         styles: params.styles,
         url: endpoint,
-        asObject: modeObject
+        asObject: modeObject,
+        getCapabilities: {
+          searchParams: {
+            /**
+             * timestamp : Used to invalidate getCapabilities cache
+             */
+            timestamp: h.path(view, 'date_modified', null)
+          }
+        }
       });
     } else {
       return Promise.resolve(out);
@@ -4677,7 +4688,6 @@ export async function zoomToViewId(o) {
 
   try {
     h.setBusy(true);
-
     const sum = await h.getViewSourceSummary(view);
     const extent = h.path(sum, 'extent_sp', null);
 

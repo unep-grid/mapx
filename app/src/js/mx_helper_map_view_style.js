@@ -1,28 +1,24 @@
-let vtStyle = null;
-
 export async function vtStyleBuilder(opt) {
   const h = mx.helpers;
   let elDone;
 
-  if (!!vtStyle) {
-    return;
+  if (!h.isViewId(opt.idView) && !h.isView(opt.idView)) {
+    throw new Error('vtStyleBuilder need a view or view id');
   }
+
   /**
    * Init
    */
-  const summary = await h.getSourceVtSummary({
-    idSource: opt.idSource,
-    idView: opt.idView,
+
+  const summary = await h.getViewSourceSummary(opt.idView, {
     stats: ['base', 'attributes']
   });
-
   const aStat = summary.attribute_stat;
 
   opt = Object.assign(
     {},
     {
       idView: null,
-      idSource: null,
       binsMethod: 'jenks',
       binsNumber: 5
     },
@@ -30,10 +26,11 @@ export async function vtStyleBuilder(opt) {
   );
 
   opt._palette = null;
+  opt._mergeLabelByRow = false;
   opt._type = aStat.type;
   opt._elsParts = [];
   opt._elsInputs = [];
-  opt._out = [];
+  opt._data = {};
   opt._buttons = [];
 
   /**
@@ -225,11 +222,33 @@ export async function vtStyleBuilder(opt) {
 
   opt._elsInputs.push(elCheckPaletteReverse);
 
+  const elCheckMergeLabelByRow = h.el(
+    'div',
+    {
+      class: 'checkbox'
+    },
+    h.el('label', [
+      h.el('input', {
+        type: 'checkbox',
+        checked: opt._mergeLabelByRow,
+        on: {
+          change: (e) => {
+            opt._mergeLabelByRow = e.target.checked === true;
+          }
+        }
+      }),
+      h.el('span', 'Preserve labels : merge by row')
+    ])
+  );
+
+  opt._elsInputs.push(elCheckMergeLabelByRow);
+
   /**
    * All inputs
    */
   const elInputsContainer = h.elPanel({
     title: 'Settings',
+    classHeader: ['panel-heading', 'panel-heading-light'],
     content: h.el('div', {style: {padding: '10px'}}, opt._elsInputs)
   });
 
@@ -253,7 +272,7 @@ export async function vtStyleBuilder(opt) {
         on: [
           'click',
           () => {
-            opt.onDone(opt._out);
+            opt.onDone(opt._data, opt._mergeLabelByRow);
             h.iconFlashSave();
           }
         ]
@@ -282,7 +301,6 @@ export async function vtStyleBuilder(opt) {
    * Clean
    */
   function clean() {
-    vtStyle = null;
     rgPalette.destroy();
   }
 
@@ -291,9 +309,8 @@ export async function vtStyleBuilder(opt) {
    */
   async function update() {
     let titleTable = 'Table';
-    const summary = await h.getSourceVtSummary({
-      idSource: opt.idSource,
-      idView: opt.idView,
+    const summary = await h.getViewSourceSummary(opt.idView, {
+      stats: ['base', 'attributes'],
       binsNumber: opt.binsNumber,
       binsMethod: opt.binsMethod
     });
@@ -302,16 +319,6 @@ export async function vtStyleBuilder(opt) {
     const count = aStat.table.reduce((c, r) => {
       return c + r.count;
     }, 0);
-
-    /**
-     * Change elDone button state
-     */
-    //if (h.isElement(elDone) && !valid) {
-    //elDone.setAttribute('disabled', true);
-    //} else {
-    //elDone.removeAttribute('disabled');
-    //}
-
     /**
      * Scale palette and set colors
      */
@@ -358,11 +365,12 @@ export async function vtStyleBuilder(opt) {
      * Build / Update table
      */
     const elTable = h.elAuto('array_table', aStat.table, {
-      tableTitle: titleTable
+      tableTitle: titleTable,
+      tableContainerHeaderClass: ['panel-heading', 'panel-heading-light']
     });
     opt._elTableContainer.innerHTML = '';
     opt._elTableContainer.appendChild(elTable);
 
-    opt._out = aStat;
+    opt._data = aStat;
   }
 }
