@@ -20,6 +20,7 @@ module.exports = Object.assign(s, {
     name: env.POSTGRES_DB,
     port: env.POSTGRES_PORT,
     host: env.POSTGRES_HOST,
+    timeout : 1000 * 60 * 5, // 5 minutes
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
     admin : {

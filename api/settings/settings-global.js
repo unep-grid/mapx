@@ -17,6 +17,7 @@ module.exports = {
     name: 'postgres',
     port: 5432,
     host: 'localhost',
+    timeout : 1000 * 60 * 5, // 5 minutes
     poolMin: 1,
     poolMax: 1,
     admin : {

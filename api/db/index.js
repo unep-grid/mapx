@@ -52,7 +52,7 @@ var pgRead = new Pool({
   database: s.db.name,
   password: s.db.read.password,
   port: s.db.port,
-  statement_timeout: 30 * 1000,
+  statement_timeout: s.db.timeout,
   max: s.db.poolMax,
   application_name : 'mx_api_read'
 });
@@ -69,7 +69,7 @@ var pgCustom = new Pool({
   database: s.db.name,
   password: s.db.custom.password,
   port: s.db.port,
-  statement_timeout: 30 * 1000,
+  statement_timeout: s.db.timeout,
   max: s.db.poolMax,
   application_name : 'mx_api_custom'
 });
