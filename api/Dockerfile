@@ -1,8 +1,9 @@
-#FROM fredmoser/alpine_node8.15.1_gdal2.4.0
-FROM fredmoser/alpine_node12.18.3_gdal2.4.0
+FROM fredmoser/mapx_alpine_node_gdal:node12.19gdal3.1.3
+
 #
 # Install node packages, copy files
 #
+ENV NODE_OPTIONS="--max-old-space-size=5120"
 WORKDIR /build
 COPY package.json package-lock.json ./
 
@@ -15,5 +16,5 @@ COPY . .
 VOLUME /shared
 EXPOSE 3030
 
-CMD ["node","index.js"]
+CMD ["node", "index.js"]
 
