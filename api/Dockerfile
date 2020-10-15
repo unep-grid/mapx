@@ -3,7 +3,7 @@ FROM fredmoser/mapx_alpine_node_gdal:node12.19gdal3.1.3
 #
 # Install node packages, copy files
 #
-ENV NODE_OPTIONS="--max-old-space-size=5120"
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 WORKDIR /build
 COPY package.json package-lock.json ./
 
