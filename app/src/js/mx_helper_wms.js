@@ -306,8 +306,6 @@ async function wmsGetCapabilities(baseUrl, opt) {
 
   const WMSCapabilities = await h.moduleLoad('wms-capabilities');
 
-  console.log(url);
-
   data = await miniCacheGet(url);
 
   const ignoreCache =
