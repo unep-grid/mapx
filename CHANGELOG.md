@@ -1,5 +1,25 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.4-beta' target='_blank'>1.7.4-beta</a>
+   - New feature
+      - APP:
+        - Implemented new module to highlight things when clicking them on the map. Experimental.
+   - Changes
+      - API
+        - Set postgres timeout as settings. 
+      - APP
+       - InconFlash is now a module. Added example of usage. 
+   - Bug fixes
+      - APP
+        - Fixed issue with legend displayed incorrectly
+      - APP/API 
+        - Fixed some cache issue 
+   - Internal
+      - API
+        - Fully rebuilt API image on node:12.19-alpine
+          - Compiled GDAL 3.1.3 from scratch add needed modules + solve dependencies issue
+          - Added tags to base image instead of latest
+          - Set higher memory limit for node : 4GB
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.3-beta' target='_blank'>1.7.3-beta</a>
    - Bug fixes
       - APP
