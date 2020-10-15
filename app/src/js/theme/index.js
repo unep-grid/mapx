@@ -22,9 +22,12 @@ class Theme {
     const t = this;
     t.opt = Object.assign({}, global, opt);
     t.inputs = [];
+    t.listeners = [];
     t.init();
   }
-
+  /**
+   * Init
+   */
   init() {
     const t = this;
     const elContainer = t.opt.elInputsContainer;
@@ -184,10 +187,17 @@ class Theme {
       t.opt.colors = new_colors;
       t._updateCss();
       t._updateMap();
-      return true;
     }
-    return false;
+    t.fire('set_colors', new_colors);
   }
+
+  getColorItem(id){
+    const item = this.getTheme().colors[id];
+    if(item){
+      return item.color;
+    }
+  }
+
   _updateCss() {
     const t = this;
     global.elStyle.textContent = css_resolver(t.opt.colors);
@@ -335,6 +345,32 @@ class Theme {
   get() {
     const t = this;
     return t.getColorsFromInputs();
+  }
+
+  /**
+   * Events
+   */
+  on(id, cb) {
+    this.listeners.push({
+      id: id,
+      cb: cb
+    });
+  }
+  fire(id, data) {
+    this.listeners.forEach((l) => {
+      if (id === l.id) {
+        l.cb(data);
+      }
+    });
+  }
+  off(id, cb) {
+    let n = this.listener.length;
+    while (n--) {
+      const l = this.listener(n);
+      if (l.id === id && l.cb === cb) {
+        this.listener.splice(n, 1);
+      }
+    }
   }
 }
 

@@ -75,7 +75,7 @@ let settings = {
   style: styleDefault.default,
   layerBefore: 'mxlayers',
   separators: {
-    sublayer: '_@_'
+    sublayer: '-@'
   },
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb

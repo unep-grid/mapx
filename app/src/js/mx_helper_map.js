@@ -4,6 +4,7 @@ import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
+import {Highlighter} from './features_highlight/';
 
 /**
  * TODO: convert this in a MapxMap Class
@@ -356,7 +357,6 @@ export function initListenerGlobal() {
   /**
    * Handle view click
    */
-
   mx.listeners.addListener({
     target: document.body,
     type: 'click',
@@ -734,9 +734,31 @@ export function initMapListener(map) {
   });
 
   /**
+   * Highlight on event
+   */
+  mx.highlighter = new Highlighter(map, {
+    use_animation: true,
+    animation_duration: 1000,
+    highlight_color: mx.theme.getColorItem('mx_ui_text')
+  });
+
+  mx.events.on({
+    type: ['view_add', 'view_remove'],
+    idGroup: 'highlight_clear',
+    callback: () => {
+      mx.highlighter.clean();
+    }
+  });
+
+  mx.theme.on('set_colors', (colors) => {
+    mx.highlighter.setOptions({
+      highlight_color: colors.mx_ui_text.color
+    });
+  });
+
+  /**
    * Mouse move handling
    */
-
   map.on('mousemove', (e) => {
     if (false) {
       /**
@@ -1223,6 +1245,7 @@ export async function addSourceFromView(o) {
         url = `${url}&timestamp=${srcTimestamp}`;
       }
       o.view.data.source.tiles = [url, url];
+      o.view.data.source.promoteId = 'gid';
     }
 
     o.map.addSource(idSource, o.view.data.source);
@@ -1657,7 +1680,6 @@ export function makeSimpleLayer(o) {
     opacity: 1,
     size: null
   };
-
   const opt = Object.assign({}, def, o);
   const dpx = window.devicePixelRatio || 1;
 
@@ -1693,8 +1715,10 @@ export function makeSimpleLayer(o) {
     colA = h.randomHsl(0.5, ran);
     colB = h.randomHsl(0.8, ran);
   } else {
-    colA = h.hex2rgba(opt.hexColor, opt.opacity);
-    colB = h.hex2rgba(opt.hexColor, opt.opacity + 0.2);
+    //colA = h.hex2rgba(opt.hexColor, opt.opacity);
+    //colB = h.hex2rgba(opt.hexColor, opt.opacity + 0.2);
+    colA = opt.hexColor;
+    colB = opt.hexColor;
   }
 
   layer = {
@@ -1730,6 +1754,7 @@ export function makeSimpleLayer(o) {
     point: {
       type: 'circle',
       paint: {
+        'circle-opacity': opt.opacity,
         'circle-color': colA,
         'circle-radius': opt.size
       }
@@ -1737,8 +1762,9 @@ export function makeSimpleLayer(o) {
     polygon: {
       type: 'fill',
       paint: {
+        'fill-opacity': opt.opacity,
         'fill-color': colA,
-        'fill-outline-color': colB
+        'fill-outline-color': mx.theme.getColorItem('mx_ui_text')
       }
     },
     pattern: {
@@ -1753,6 +1779,7 @@ export function makeSimpleLayer(o) {
       type: 'line',
       paint: {
         'line-color': colA,
+        'line-opacity': opt.opacity,
         'line-width': opt.size
       },
       layout: {
@@ -2598,6 +2625,7 @@ export function viewSetFilter(o) {
     } else {
       filterFinal = filterNew.concat([origFilter]);
     }
+
     m.setFilter(layer.id, filterFinal);
   }
   mx.events.fire({
@@ -2687,30 +2715,6 @@ export function plotTimeSliderData(o) {
 }
 
 /**
- * Get layer by prefix
- * @param {Object} o Options
- * @param {string} o.id Map element id
- * @param {string } o.prefix Prefix to search for
- * @return {array} list of layers
- */
-export function getLayerByPrefix(o) {
-  o = o || {};
-  o.prefix = o.prefix || 'MX-';
-  o.base = o.base || false;
-  const map = o.map || mx.helpers.getMap(o.id);
-  const out = [];
-
-  if (map) {
-    const layers = map.style._layers;
-    for (var l in layers) {
-      if (l.indexOf(o.prefix) > -1) {
-        out.push(layers[l]);
-      }
-    }
-  }
-  return out;
-}
-/**
  * Get layer by id
  * @param {Object} o options
  * @param {string} o.id Map id
@@ -2742,33 +2746,54 @@ export function getLayerBaseName(str) {
 }
 
 /**
- * Get layer names by prefix
+ * Get layer by prefix
  * @param  {Object} o options
  * @param {String} o.id Map id
  * @param {Object} o.map (optional) Map object
  * @param {String} o.prefix Prefix to search for
+ * @param {Boolean} o.nameOnly Output layer id only (dedup)
  * @param {Boolean} o.base should return base layer only
  * @return {Array} Array of layer names / ids
  */
-export function getLayerNamesByPrefix(o) {
-  o = o || {};
-  o.prefix = o.prefix || 'MX-';
-  o.base = o.base || false;
-  const map = o.map || mx.helpers.getMap(o.id);
-  const out = [];
-  if (map) {
-    const layers = map.style._layers;
-    for (var l in layers) {
-      if (o.base) {
-        l = getLayerBaseName(l);
-      }
-      if (l.indexOf(o.prefix) > -1 && out.indexOf(l) === -1) {
-        out.push(l);
-      }
-    }
+export function getLayerByPrefix(o) {
+  o = Object.assign(
+    {},
+    {
+      prefix: /^MX/,
+      base: false,
+      nameOnly: false
+    },
+    o
+  );
+
+  const h = mx.helpers;
+  const map = o.map || h.getMap(o.id);
+
+  if (!h.isRegExp(o.prefix)) {
+    o.prefix = new RegExp('^' + o.prefix);
   }
 
-  return out;
+  const layers = map
+    .getStyle()
+    .layers.filter((layer) => layer.id.match(o.prefix));
+
+  if (o.nameOnly) {
+    const layerNames = layers.map((l) =>
+      o.base ? h.getLayerBaseName(l.id) : l.id
+    );
+    return h.getArrayDistinct(layerNames);
+  } else {
+    return layers;
+  }
+}
+
+/**
+ * Get layer names by prefix
+ */
+export function getLayerNamesByPrefix(o) {
+  const h = mx.helpers;
+  o = Object.assign({}, {nameOnly: true}, o);
+  return h.getLayerByPrefix(o);
 }
 
 /**
@@ -3651,7 +3676,7 @@ export async function viewLayersAddVt(o) {
     view._meta = {};
   }
 
-  const sepLayer = p(mx, 'settings.separators.sublayer') || '@';
+  const sepLayer = p(mx, 'settings.separators.sublayer');
 
   const layerConfigBase = {};
   /**
@@ -4251,11 +4276,9 @@ export function addSource(o) {
  * @param {array} o.filter Filter array to apply
  */
 export function setFilter(o) {
-  const exists = !!document.getElementById(o.id);
-  if (exists) {
-    const m = mx.helpers.getMap(o.id);
-    m.setFilter(o.idView, o.filter);
-  }
+  const h = mx.helpers;
+  const m = h.getMap(o.id);
+  m.setFilter(o.idView, o.filter);
 }
 /**
  * Apply a filter on country-code
@@ -4265,9 +4288,10 @@ export function setFilter(o) {
  * @param {array} o.countries Array of countries code
  */
 export function setHighlightedCountries(o) {
+  const h = mx.helpers;
   const countries = o.countries || null;
-  const m = mx.helpers.getMap(o.id);
-  const hasCountries = mx.helpers.isArray(countries) && countries.length > 0;
+  const m = h.getMap(o.id);
+  const hasCountries = h.isArray(countries) && countries.length > 0;
   const hasWorld = hasCountries && countries.indexOf('WLD') > -1;
   let filter = [];
   let rule = ['==', 'iso3code', ''];
@@ -4397,8 +4421,7 @@ export function getLayersPropertiesAtPoint(opt) {
     ? [opt.idView]
     : h.getLayerNamesByPrefix({
         map: map,
-        base: true,
-        prefix: 'MX-'
+        base: true
       });
 
   if (idViews.length === 0) {

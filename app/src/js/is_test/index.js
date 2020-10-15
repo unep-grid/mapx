@@ -136,6 +136,16 @@ export function isSorted(arr, desc) {
   );
 }
 
+
+/**
+* Test for RegExp instance
+* @param {Any} value
+* @return {Logical} is RegExp instance
+*/
+export function isRegExp(value){
+  return value instanceof RegExp;
+}
+
 /**
  * Test for valid project id
  * @param {String} id Project id to test
