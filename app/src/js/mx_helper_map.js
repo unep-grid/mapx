@@ -5,6 +5,7 @@ import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
+import chroma from 'chroma-js';
 
 /**
  * TODO: convert this in a MapxMap Class
@@ -1720,6 +1721,13 @@ export function makeSimpleLayer(o) {
     colA = opt.hexColor;
     colB = opt.hexColor;
   }
+
+  /**
+  * Color conversion to hex rgb
+  */
+  colA = chroma(colA).hex('rgb');
+  colB = chroma(colB).hex('rgb');
+
 
   layer = {
     symbol: {
