@@ -144,6 +144,7 @@ class Highlighter {
         f._animation.start();
       }
     });
+
   }
 
   /**
@@ -168,6 +169,13 @@ class Highlighter {
     return hl.opt.supported_types.indexOf(f.layer.type) > -1;
   }
 
+  /**
+  * Build opacity expression related to feature-state
+  * @param {Object} opt Options
+  * @param {Number} opt.on Opacity if feature-state has highlight == true
+  * @param {Number} opt.off Opacity if feature-state has highlight == false
+  * @return [Array] expression of opacity
+  */
   toFeatureStateOpacity(opt) {
     opt = Object.assign({}, {on: 1, off: 0.5}, opt);
     if (opt.on instanceof Array || opt.off instanceof Array) {
