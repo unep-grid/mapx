@@ -1,19 +1,18 @@
 const def = {
   map: null,
   use_animation: false,
-  transition_duration: 100,
+  transition_duration: 200,
   transition_delay: 0,
-  animation_duration: 2000, // 0 unlimited
+  animation_duration: 700, // 0 unlimited
   animation_on: 'line-width', // only option now
   highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
-  highlight_width: 4,
-  highlight_color: '#333',
+  highlight_width: 2,
+  highlight_color: '#F0F',
   supported_types: ['circle', 'symbol', 'fill', 'line'],
-  //highlight_line_dasharray: [2, 2, 10, 2], // dasharray produce bad results in many cases.
   regex_layer_id: /^MX/,
   highlight_opacity: 0.9,
-  event_type: 'click' // click, mouseover
+  event_type: 'click' // click, mousemove. Does not work yet with mousemove
 };
 
 class Highlighter {
@@ -144,7 +143,6 @@ class Highlighter {
         f._animation.start();
       }
     });
-
   }
 
   /**
@@ -164,18 +162,18 @@ class Highlighter {
     const hl = this;
     return f && hl.isValidLayer(f.layer) && hl.isSupportedType(f);
   }
+
   isSupportedType(f) {
     const hl = this;
-    return hl.opt.supported_types.indexOf(f.layer.type) > -1;
+    const paint = f.layer.paint;
+    const types = hl.opt.supported_types;
+    const supported =
+      types.indexOf(f.layer.type) > -1 &&
+      paint instanceof Object &&
+      paint[`${f.layer.type}-color`];
+    return supported;
   }
 
-  /**
-  * Build opacity expression related to feature-state
-  * @param {Object} opt Options
-  * @param {Number} opt.on Opacity if feature-state has highlight == true
-  * @param {Number} opt.off Opacity if feature-state has highlight == false
-  * @return [Array] expression of opacity
-  */
   toFeatureStateOpacity(opt) {
     opt = Object.assign({}, {on: 1, off: 0.5}, opt);
     if (opt.on instanceof Array || opt.off instanceof Array) {
@@ -210,7 +208,7 @@ class Highlighter {
       circle: 'circle-sort-key'
     }[type];
     const opacity = hl.toFeatureStateOpacity({
-      on: 1,
+      on: 0.2,
       off: path(f.layer, `paint.${propertyOpacity}`)
     });
     if (opacity !== null) {
@@ -318,6 +316,7 @@ class Animate {
     anim._time_limit = anim._opt.animation_duration
       ? Date.now() + anim._opt.animation_duration
       : 0;
+
     anim._idLayer = layer.id;
 
     anim._t = {
@@ -330,17 +329,17 @@ class Animate {
       fill: {
         param: 'line-width',
         min: layer.paint['line-width'],
-        max: layer.paint['line-width'] * 1.7
+        max: layer.paint['line-width'] * 1.5
       },
       line: {
         param: 'line-width',
         min: layer.paint['line-width'],
-        max: layer.paint['line-width'] * 1.7
+        max: layer.paint['line-width'] * 1.5
       },
       circle: {
         param: 'circle-stroke-width',
         min: layer.paint['circle-stroke-width'],
-        max: layer.paint['circle-stroke-width'] * 2
+        max: layer.paint['circle-stroke-width'] * 1.5
       }
     }[layer.type];
   }
@@ -365,8 +364,9 @@ class Animate {
   animate() {
     const anim = this;
     const map = anim._map;
+    const now = Date.now();
     try {
-      if (Date.now() >= anim._time_limit) {
+      if (now >= anim._time_limit) {
         anim.stop();
         return;
       }
@@ -421,6 +421,7 @@ class Animate {
   stop() {
     const anim = this;
     anim._toMin();
+    anim._map.stop();
     anim._stopped = true;
     window.clearInterval(anim._idInterval);
     anim._idInterval = null;

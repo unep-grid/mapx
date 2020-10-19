@@ -5,7 +5,6 @@ import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
-import chroma from 'chroma-js';
 
 /**
  * TODO: convert this in a MapxMap Class
@@ -738,9 +737,8 @@ export function initMapListener(map) {
    * Highlight on event
    */
   mx.highlighter = new Highlighter(map, {
-    use_animation: true,
-    animation_duration: 1000,
-    highlight_color: mx.theme.getColorItem('mx_ui_text')
+    use_animation: true
+    //highlight_color: mx.theme.getColorItem('mx_ui_text')
   });
 
   mx.events.on({
@@ -751,11 +749,11 @@ export function initMapListener(map) {
     }
   });
 
-  mx.theme.on('set_colors', (colors) => {
-    mx.highlighter.setOptions({
-      highlight_color: colors.mx_ui_text.color
-    });
-  });
+  //mx.theme.on('set_colors', (colors) => {
+    //mx.highlighter.setOptions({
+      //highlight_color: colors.mx_ui_text.color
+    //});
+  //});
 
   /**
    * Mouse move handling
@@ -1723,10 +1721,10 @@ export function makeSimpleLayer(o) {
   }
 
   /**
-  * Color conversion to hex rgb
+  * Color conversion to hex
   */
-  colA = chroma(colA).hex('rgb');
-  colB = chroma(colB).hex('rgb');
+  colA = h.color2obj(colA).color;
+  colB = h.color2obj(colB).color;
 
 
   layer = {

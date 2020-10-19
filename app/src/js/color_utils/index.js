@@ -84,6 +84,7 @@ export function rgba2hex(rgb) {
  * convert any color to obj with key alpha and hex color
  * @param {string} color string. e.g. hsl(10%,10%,0)
  * @param {Boolean} heyOnly return only the hex code
+ * @return {Object} Object with two keys : hex color and alpha. e.g. {color:"#000", alpha:0.2}
  */
 export function color2obj(color, hexOnly) {
   var alpha;
