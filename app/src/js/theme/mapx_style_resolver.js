@@ -21,7 +21,7 @@ function v(col) {
   if (hide) {
     obj.alpha = 0;
   }
-  const rgba = color_utils.hex2rgba(obj.color, obj.alpha);
+  const rgba = color_utils.colorToRgba(obj.color, obj.alpha);
   return rgba;
 }
 

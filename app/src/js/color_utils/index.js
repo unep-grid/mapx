@@ -1,3 +1,11 @@
+import chroma from 'chroma-js';
+
+
+/**
+*  TODO: Replace remaining custom functions with method from chroma
+*/
+
+
 /**
  * Generate a random hsla color string, with fixed saturation and lightness
  * @param {number} opacity opacity from 0 to 1
@@ -34,35 +42,24 @@ export function randomHsl(opacity, random, saturation, lightness) {
 }
 
 /**
- * convert hex to rgb or rgba
- * @param {string} hex Hex color
- * @param {number} opacity Value of opacity, from 0 to 1
+ * Any color to css : rgb or rgba
  */
-export function hex2rgba(hex, opacity) {
-  hex = hex.slice(0,7);
-  hex = hex.replace('#', '');
-  var rgba = 'rgba';
-  var rgb = 'rgb';
-  var out = '';
-  var i;
-  hex = hex.match(new RegExp('(.{' + hex.length / 3 + '})', 'g'));
-
-  for (i = 0; i < hex.length; i++) {
-    hex[i] = parseInt(hex[i].length === 1 ? hex[i] + hex[i] : hex[i], 16);
-  }
-
+export function colorToRgba(color, opacity) {
+  const c = chroma(color);
   if (typeof opacity !== 'undefined') {
-    if (opacity > 1) {
-      opacity = 1;
-    }
-    if (opacity < 0) {
-      opacity = 0;
-    }
-    hex.push(opacity);
-    rgb = rgba;
+    return c.alpha(opacity*1).css();
   }
+  return c.css();
+}
 
-  return rgb + '(' + hex.join(',') + ')';
+
+/**
+* Validate color
+* @param {Any} color
+* @return {Boolean} valid
+*/
+export function validate(color) {
+  return chroma.valid(color);
 }
 
 /**
@@ -70,72 +67,23 @@ export function hex2rgba(hex, opacity) {
  * @param {string} rgba string
  */
 export function rgba2hex(rgb) {
-  rgb = rgb.match(
-    /^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i
-  );
-  return rgb && rgb.length === 4
-    ? '#' +
-        ('0' + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-        ('0' + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-        ('0' + parseInt(rgb[3], 10).toString(16)).slice(-2)
-    : '';
-}
-/**
- * convert any color to obj with key alpha and hex color
- * @param {string} color string. e.g. hsl(10%,10%,0)
- * @param {Boolean} heyOnly return only the hex code
- * @return {Object} Object with two keys : hex color and alpha. e.g. {color:"#000", alpha:0.2}
- */
-export function color2obj(color, hexOnly) {
-  var alpha;
-  var col;
-  var out = {
-    alpha: 1,
-    color: '#000'
-  };
-  var div = document.createElement('div');
-  div.style.color = color;
-  col = div.style.color;
-  if (col) {
-    alpha = col.split(', ')[3];
-    if (alpha) {
-      out.alpha = alpha.replace(')', '') * 1;
-    }
-    out.color = rgba2hex(col);
-  }
-  if (hexOnly) {
-    out = out.color;
-  }
-  return out;
+  const c = chroma(rgb);
+  return c.hex('rgb');
 }
 
 /**
- * Scale an center value to get a hex color inside bounds
- * @param {Object} o Options
- * @param {Number} o.val Value
- * @param {Number} o.min Minimum value of the scale
- * @param {Number} o.max Maximum value of the scale
- * @param {Number} o.colMin Minimum hue in the 0-1 range
- * @param {Number} o.colMax Maximum hue in the 0-1 range
- * @example
- * var start =  window.performance.now();
- * for(var i=0;i<3000;i++){
- * colorLinear({min:-450,max:3000,val:i,colMin:0,colMax:0.5})
- * }
- * console.log("done in "+(window.performance.now()-start)/1000 +" [s]");
+ * convert any color to obj with key alpha and hex color
+ * @param {string} color string. e.g. hsl(10%,10%,0)
+ * @param {Boolean} hexOnly return only the hex code
+ * @return {Object} Object with two keys : hex color and alpha. e.g. {color:"#000", alpha:0.2}
  */
-export function colorLinear(o) {
-  var valMin = o.min * 1 || 0;
-  var valMax = o.max * 1 || 0;
-  var colMin = o.colMin * 1 || 0;
-  var colMax = o.colMax * 1 || 1;
-  var val = o.val;
-  var col;
-  var isRandom = valMin === valMax;
-  if (!isRandom) {
-    col = (val - valMin) / (valMax - valMin);
+export function color2obj(color, hexOnly) {
+  const c = chroma(color);
+  if (hexOnly) {
+    return c.hex('rgb');
   }
-  col = col * (colMax - colMin);
-  col = randomHsl(1, col);
-  return color2obj(col, true);
+  return {
+    color: c.hex(),
+    alpha: c.alpha()
+  };
 }

@@ -133,7 +133,7 @@ class Theme {
       const valid =
         colors instanceof Object &&
         Object.keys(colors).reduce((a, cid) => {
-          return a && !!color_utils.rgba2hex(colors[cid].color || colors[cid]);
+          return a && !!color_utils.validate(colors[cid].color || colors[cid]);
         }, true) &&
         layer_resolver(colors) &&
         css_resolver(colors) &&
@@ -337,7 +337,7 @@ class Theme {
     for (var cid in out) {
       out[cid] = {
         visibility: out[cid].visibility === true ? 'visible' : 'none',
-        color: color_utils.hex2rgba(out[cid].hex, out[cid].alpha)
+        color: color_utils.colorToRgba(out[cid].hex, out[cid].alpha)
       };
     }
     return out;

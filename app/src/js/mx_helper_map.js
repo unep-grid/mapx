@@ -1714,18 +1714,15 @@ export function makeSimpleLayer(o) {
     colA = h.randomHsl(0.5, ran);
     colB = h.randomHsl(0.8, ran);
   } else {
-    //colA = h.hex2rgba(opt.hexColor, opt.opacity);
-    //colB = h.hex2rgba(opt.hexColor, opt.opacity + 0.2);
     colA = opt.hexColor;
     colB = opt.hexColor;
   }
 
   /**
-  * Color conversion to hex
+  * Extract hex
   */
-  colA = h.color2obj(colA).color;
-  colB = h.color2obj(colB).color;
-
+  colA = h.colorToRgba(colA, opt.opacity);
+  colB = h.colorToRgba(colB, opt.opacity + 0.2);
 
   layer = {
     symbol: {
@@ -1760,7 +1757,7 @@ export function makeSimpleLayer(o) {
     point: {
       type: 'circle',
       paint: {
-        'circle-opacity': opt.opacity,
+        //'circle-opacity': opt.opacity,
         'circle-color': colA,
         'circle-radius': opt.size
       }
@@ -1768,7 +1765,7 @@ export function makeSimpleLayer(o) {
     polygon: {
       type: 'fill',
       paint: {
-        'fill-opacity': opt.opacity,
+        //'fill-opacity': opt.opacity,
         'fill-color': colA,
         'fill-outline-color': mx.theme.getColorItem('mx_ui_text')
       }
@@ -1776,7 +1773,7 @@ export function makeSimpleLayer(o) {
     pattern: {
       type: 'fill',
       paint: {
-        'fill-opacity': opt.opacity,
+        //'fill-opacity': opt.opacity,
         'fill-pattern': opt.sprite,
         'fill-antialias': false
       }
@@ -1785,7 +1782,7 @@ export function makeSimpleLayer(o) {
       type: 'line',
       paint: {
         'line-color': colA,
-        'line-opacity': opt.opacity,
+        //'line-opacity': opt.opacity,
         'line-width': opt.size
       },
       layout: {
@@ -3696,8 +3693,8 @@ export async function viewLayersAddVt(o) {
   rules = rules instanceof Array ? rules : [rules];
   rules = h.clone(rules);
   rules.forEach((rule) => {
-    rule.rgba = h.hex2rgba(rule.color, rule.opacity);
-    rule.rgb = h.hex2rgba(rule.color);
+    rule.rgba = h.colorToRgba(rule.color, rule.opacity);
+    rule.rgb = h.colorToRgba(rule.color);
   });
 
   /**
@@ -3724,6 +3721,7 @@ export async function viewLayersAddVt(o) {
    * Make custom layer
    */
   if (hasStyleCustom) {
+
     const layerCustom = {
       id: getIdLayer(),
       source: idSource,

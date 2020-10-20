@@ -1,3 +1,5 @@
+import chroma from 'chroma-js';
+
 const def = {
   map: null,
   use_animation: false,
@@ -9,9 +11,10 @@ const def = {
   highlight_blur: 0.2,
   highlight_width: 2,
   highlight_color: '#F0F',
+  highlight_opacity: 0.9,
+  highlight_feature_opacity : 0.8,
   supported_types: ['circle', 'symbol', 'fill', 'line'],
   regex_layer_id: /^MX/,
-  highlight_opacity: 0.9,
   event_type: 'click' // click, mousemove. Does not work yet with mousemove
 };
 
@@ -174,12 +177,8 @@ class Highlighter {
     return supported;
   }
 
-  toFeatureStateOpacity(opt) {
+  toFeatureStateConditional(opt) {
     opt = Object.assign({}, {on: 1, off: 0.5}, opt);
-    if (opt.on instanceof Array || opt.off instanceof Array) {
-      //console.warn('Expression for opacity not yet supported...');
-      return null;
-    }
     return [
       'case',
       ['boolean', ['feature-state', 'highlight'], false],
@@ -195,25 +194,59 @@ class Highlighter {
     const hl = this;
     const type = f.layer.type;
     const idLayer = f.layer.id;
-    const propertyOpacity = {
-      fill: 'fill-opacity',
-      line: 'line-opacity',
-      symbol: 'icon-opacity',
-      circle: 'circle-opacity'
+
+    /**
+     * Opacity can't be touched : reserved for opacity slider
+     *
+     *  -- fill
+     *  fill-color <-
+     *  fill-outline-color
+     *
+     *  -- line
+     *  line-color <-
+     *
+     *  -- symbol
+     *  icon-color <-
+     *  icon-halo-color
+     *
+     *  text-color
+     *
+     *
+     *  -- circle
+     *
+     *  circle-color <-
+     *  circle-stroke-color
+     */
+
+    const propertyColor = {
+      fill: 'fill-color',
+      line: 'line-color',
+      symbol: 'icon-color',
+      circle: 'circle-color'
     }[type];
+
+    const colorRaw= hl.map.getPaintProperty(idLayer, `${propertyColor}`);
+    const colorOrig = getChromaColor(colorRaw);
+
+    if (colorOrig) {
+      const colorExpr = hl.toFeatureStateConditional({
+        on: colorOrig.alpha(hl.opt.highlight_feature_opacity).css(),
+        off: colorOrig.css()
+      });
+      hl.map.setPaintProperty(idLayer, `${propertyColor}`,colorExpr);
+    }
+
+    /**
+     * Sort key : bring feature at top
+     */
+
     const propertySortKey = {
       fill: 'fill-sort-key',
       line: 'line-sort-key',
       symbol: 'symbol-sort-key',
       circle: 'circle-sort-key'
     }[type];
-    const opacity = hl.toFeatureStateOpacity({
-      on: 0.2,
-      off: path(f.layer, `paint.${propertyOpacity}`)
-    });
-    if (opacity !== null) {
-      hl.map.setPaintProperty(idLayer, `${propertyOpacity}`, opacity);
-    }
+
     const sortKey = path(f.layer, `layout.${propertySortKey}`);
     if (!sortKey) {
       hl.map.setLayoutProperty(idLayer, `${propertySortKey}`, 100);
@@ -230,7 +263,7 @@ class Highlighter {
     const idLayer = `@hl-${f.layer.id}`;
     const type = f.layer.type;
     let layer = null;
-    let opacity = hl.toFeatureStateOpacity({
+    const opacityExpr = hl.toFeatureStateConditional({
       on: hl.opt.highlight_opacity,
       off: 0
     });
@@ -254,7 +287,7 @@ class Highlighter {
             'line-width': hl.opt.highlight_width,
             'line-color': hl.opt.highlight_color,
             'line-blur': hl.opt.highlight_blur,
-            'line-opacity': opacity
+            'line-opacity': opacityExpr
           }
         };
         break;
@@ -274,7 +307,7 @@ class Highlighter {
             'line-width': hl.opt.highlight_width,
             'line-color': hl.opt.highlight_color,
             'line-blur': hl.opt.highlight_blur,
-            'line-opacity': opacity
+            'line-opacity': opacityExpr
           }
         };
         break;
@@ -297,7 +330,7 @@ class Highlighter {
             'circle-stroke-width': hl.opt.highlight_width,
             'circle-blur': hl.opt.highlight_blur / radius,
             'circle-radius': radius,
-            'circle-opacity': opacity
+            'circle-opacity': opacityExpr
           }
         };
     }
@@ -437,4 +470,15 @@ export {Highlighter};
 /* access to object properties by path */
 function path(object, path, def) {
   return path.split('.').reduce((a, k) => (a ? a[k] : def), object);
+}
+
+/* test if it's a valid color */
+function getChromaColor(color) {
+  if(color instanceof Array){
+      return;
+  }
+  const isValid = chroma.valid(color);
+  if(isValid){
+     return chroma(color);
+  }
 }
