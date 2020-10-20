@@ -5,7 +5,10 @@ observeEvent(reactData$sourceDownloadRequest,{
   idSource <- conf$idSource
   project <- reactData$project
   language <- reactData$language
-  isGuest <- isGuestUser()
+  userRole <- getUserRole()
+  isGuest <- isGuestUser() # duplicated request, userRole already has this value
+  isPublisher <- "publishers" %in% userRole$groups
+
   #meta <- mxDbGetLayerMeta(idSource)
   #isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
   isDownloadable <- "mx_download" %in%  mxDbGetLayerServices(idSource)
@@ -13,6 +16,23 @@ observeEvent(reactData$sourceDownloadRequest,{
   btnList = list()
 
   if( !isDownloadable || isGuest ){
+
+    if( isPublisher ){
+      #
+      # Allow user,if rights match, to manage the source configuration
+      #
+      layers <- reactListEditSources()
+      hasEditRight <- idSource %in% layers
+      if(hasEditRight){
+        btnList <- list(
+          actionButton(
+            inputId = "btnEditSourceFromDownload",
+            label = "Edit source settings"
+          )
+        )
+      }
+    }
+
 
     uiDl = tags$h3(d("src_download_issues",language))
 
@@ -85,6 +105,16 @@ observeEvent(reactData$sourceDownloadRequest,{
     mxEpsgBuildSearchBox('#numEpsgCode')
   }
 
+})
+
+
+#
+# Trigger source parameters settings
+#
+observeEvent(input$btnEditSourceFromDownload,{
+  reactData$triggerSourceManage <- list(
+     idSource = reactData$sourceDownloadRequest$idSource
+  )
 })
 
 #

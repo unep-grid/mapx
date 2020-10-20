@@ -1,7 +1,7 @@
 import {el} from '@fxi/el';
-import * as color_utils from './../color_utils';
 import {ListenerStore} from './../listener_store/index.js';
 import {getDictItem} from './../mx_helper_language.js';
+import chroma from 'chroma-js';
 import './style.css';
 import * as themes from './presets.js';
 import {layer_resolver, css_resolver} from './mapx_style_resolver.js';
@@ -49,7 +49,6 @@ class Theme {
         debounce: true,
         debounceTime: 200
       });
-      t.buildInputs();
     }
     t.setColorsByThemeId();
   }
@@ -133,7 +132,7 @@ class Theme {
       const valid =
         colors instanceof Object &&
         Object.keys(colors).reduce((a, cid) => {
-          return a && !!color_utils.validate(colors[cid].color || colors[cid]);
+          return a && chroma.valid(colors[cid].color || colors[cid]);
         }, true) &&
         layer_resolver(colors) &&
         css_resolver(colors) &&
@@ -191,9 +190,9 @@ class Theme {
     t.fire('set_colors', new_colors);
   }
 
-  getColorItem(id){
+  getColorThemeItem(id) {
     const item = this.getTheme().colors[id];
-    if(item){
+    if (item) {
       return item.color;
     }
   }
@@ -252,7 +251,7 @@ class Theme {
     const colors = t.opt.colors;
     const inputType = ['checkbox', 'color', 'range'];
     let elInputGrp, elLabel;
-    const color = color_utils.color2obj(colors[cid].color);
+    const color = chroma(colors[cid].color);
     const visible = colors[cid].visibility === 'visible';
 
     return el(
@@ -296,9 +295,15 @@ class Theme {
           } else {
             config.style = {maxWidth: '60px'};
           }
+          //config.on = {"change",t._updateFromInput}
           const elInput = el('input', config);
 
-          elInput.value = isRange ? color.alpha : isCheck ? true : color.color;
+          elInput.value = isRange
+            ? color.alpha()
+            : isCheck
+            ? true
+            : color.hex('rgb');
+
           if (isCheck) {
             elInput.checked = visible;
           }
@@ -320,31 +325,40 @@ class Theme {
       }
     }
   }
-  getColorsFromInputs() {
+  getColorsFromInputs(id) {
     const t = this;
     const out = {};
     t.inputs.forEach((input) => {
       const cid = input.dataset.id;
-      const isCheck = input.type === 'checkbox';
-      const value = isCheck ? input.checked : input.value;
-      const param = input.dataset.param;
-      if (!out[cid]) {
-        out[cid] = {};
+      if (!id || cid === id) {
+        const isCheck = input.type === 'checkbox';
+        const value = isCheck ? input.checked : input.value;
+        const param = input.dataset.param;
+        if (!out[cid]) {
+          out[cid] = {};
+        }
+        out[cid][param] = value;
       }
-      out[cid][param] = value;
     });
 
     for (var cid in out) {
       out[cid] = {
         visibility: out[cid].visibility === true ? 'visible' : 'none',
-        color: color_utils.colorToRgba(out[cid].hex, out[cid].alpha)
+        color: chroma(out[cid].hex)
+          .alpha(out[cid].alpha * 1)
+          .css()
       };
     }
-    return out;
+    if (id) {
+      return out[id];
+    } else {
+      return out;
+    }
   }
-  get() {
+
+  get(id) {
     const t = this;
-    return t.getColorsFromInputs();
+    return t.getColorsFromInputs(id);
   }
 
   /**

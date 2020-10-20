@@ -1,4 +1,4 @@
-import * as color_utils from './../color_utils';
+import chroma from 'chroma-js';
 
 export function css_resolver(c) {
   return `
@@ -17,12 +17,14 @@ export function css_resolver(c) {
 
 function v(col) {
   const hide = !col.visibility || col.visibility !== 'visible';
-  const obj = color_utils.color2obj(col.color || col);
+  const isStringCol = typeof col === 'string';
+  const color = isStringCol ? col : col.color;
+  const chromaColor = chroma(color);
   if (hide) {
-    obj.alpha = 0;
+    return chromaColor.alpha(0).css();
   }
-  const rgba = color_utils.colorToRgba(obj.color, obj.alpha);
-  return rgba;
+  const alpha = (isStringCol || !col.alpha ) ? chromaColor.alpha() : col.alpha;
+  return chromaColor.alpha(alpha).css();
 }
 
 export function layer_resolver(c) {
@@ -45,14 +47,14 @@ export function layer_resolver(c) {
         ])
       },
       paint: {
- "fill-color":[
-          "match",
-          ["get", "class"],
-          "highlight",
-           c.mx_map_hillshade_highlight.color,
-          "shadow",
-           c.mx_map_hillshade_shadow.color,
-          "hsla(0, 0%, 0%, 0)"
+        'fill-color': [
+          'match',
+          ['get', 'class'],
+          'highlight',
+          c.mx_map_hillshade_highlight.color,
+          'shadow',
+          c.mx_map_hillshade_shadow.color,
+          'hsla(0, 0%, 0%, 0)'
         ]
       }
     },
@@ -78,15 +80,15 @@ export function layer_resolver(c) {
       id: ['bathymetry'],
       layout: {
         visibility: allVisible([
-        c.mx_map_bathymetry_low.visibility,
-        c.mx_map_bathymetry_high.visibility
+          c.mx_map_bathymetry_low.visibility,
+          c.mx_map_bathymetry_high.visibility
         ])
       },
       paint: {
-        'fill-color':[
-          "interpolate",
-          ["cubic-bezier", 0, 0.5, 1, 0.5],
-          ["get", "depth"],
+        'fill-color': [
+          'interpolate',
+          ['cubic-bezier', 0, 0.5, 1, 0.5],
+          ['get', 'depth'],
           200,
           c.mx_map_bathymetry_high.color,
           9000,
@@ -259,14 +261,11 @@ export function layer_resolver(c) {
       }
     },
     {
-      id: [
-        'water-label-point',
-        'water-label-line'
-      ],
+      id: ['water-label-point', 'water-label-line'],
       layout: {
         visibility: allVisible([
           c.mx_map_text_water.visibility,
-          c.mx_map_text_water_outline.visibility,
+          c.mx_map_text_water_outline.visibility
         ])
       },
       paint: {

@@ -37,6 +37,10 @@
       "visibility": "visible",
       "color": "rgba(255,255,255,1)"
     },
+    "mx_map_feature_highlight": {
+      "visibility": "visible",
+      "color": "rgb(255,0,255)"
+    },
     "mx_map_hillshade_shadow": {
       "visibility": "visible",
       "color": "rgba(145,145,145,0.1)"

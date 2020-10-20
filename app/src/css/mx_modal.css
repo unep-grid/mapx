@@ -70,6 +70,12 @@
   cursor: pointer;
   padding: 2px;
 }
+.mx-modal-foot-btns {
+  display:flex;
+}
+.mx-modal-btn-float-right {
+  margin-left:auto!important;
+}
 .mx-modal-top,
 .mx-modal-foot {
   width: 100%;
@@ -122,3 +128,5 @@
 .mx-modal-body-hidden .mx-modal-body {
   height: 0vh !important;
 }
+
+

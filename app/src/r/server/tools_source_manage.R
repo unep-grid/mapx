@@ -75,13 +75,22 @@ observeEvent(input$selectSourceLayerEdit,{
 
 })
 
+
 observeEvent(input$btnEditSourceManage,{
 
-  mxCatch(title="Save source manage",{
+  reactData$triggerSourceManage <- list(
+     idSource = input$selectSourceLayerEdit,
+  )
+
+})
+
+observeEvent(reactData$triggerSourceManage,{
+
+  mxCatch(title="Edit source manage",{
     userRole <- getUserRole()
     isPublisher <- "publishers" %in% userRole$groups
     language <- reactData$language
-    layer <- input$selectSourceLayerEdit
+    layer <- reactData$triggerSourceManage$idSource
     layers <- reactListEditSources()
     isAllowed <- layer %in% layers
     project <- reactData$project
@@ -92,7 +101,7 @@ observeEvent(input$btnEditSourceManage,{
 
     }else{
 
-      idSource <- input$selectSourceLayerEdit 
+      idSource <- layer
       target <-  mxDbGetQuery("SELECT readers, editors FROM mx_sources WHERE id ='"+idSource+"'")
       services <- mxDbGetLayerServices(idSource)
       readers <- mxFromJSON(target$readers)
@@ -173,6 +182,7 @@ observeEvent(input$btnEditSourceManage,{
 
       btnDelete <- actionButton(
         inputId = "btnDeleteSource",
+        class = "mx-modal-btn-float-right",
         label = d("btn_delete",language)
         )
 
@@ -209,7 +219,8 @@ observeEvent(input$btnEditSourceManage,{
 # Validation
 #
 observe({
-  layer <- input$selectSourceLayerEdit 
+
+  idSource <- reactData$sourceDownloadRequest$idSource
   language <- reactData$language
   readers <- input$selectSourceReadersUpdate
   editors <- input$selectSourceEditorsUpdate
@@ -221,7 +232,7 @@ observe({
   isolate({
 
     hasData <- !noDataCheck(data)
-    hasNoLayer <- noDataCheck(layer)
+    hasNoLayer <- noDataCheck(idSource)
     hasNoReaders <- !isTRUE("publishers" %in% readers)
     hasViewsFromOthers <- !isTRUE(all(data$editor %in% idUser))
 
@@ -305,7 +316,7 @@ observeEvent(input$btnDeleteSourceConfirm,{
 
   if(blockDelete) return()
 
-  idSource <- input$selectSourceLayerEdit 
+  idSource <- reactData$sourceDownloadRequest$idSource
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id
@@ -342,7 +353,7 @@ observeEvent(input$btnDeleteSourceConfirm,{
 #
 observeEvent(input$btnUpdateSource,{
 
-  idSource <- input$selectSourceLayerEdit 
+  idSource <- reactData$sourceDownloadRequest$idSource
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id

@@ -12,7 +12,7 @@ const def = {
   highlight_width: 2,
   highlight_color: '#F0F',
   highlight_opacity: 0.9,
-  highlight_feature_opacity : 0.8,
+  highlight_feature_opacity: 0.5,
   supported_types: ['circle', 'symbol', 'fill', 'line'],
   regex_layer_id: /^MX/,
   event_type: 'click' // click, mousemove. Does not work yet with mousemove
@@ -40,10 +40,24 @@ class Highlighter {
     hl.init();
   }
 
+  /**
+   * Update options
+   */
   setOptions(opt) {
     const hl = this;
-    hl.clean();
     Object.assign(hl.opt, opt);
+    hl.render();
+  }
+
+  /**
+   * Destroy : remove listener and clean
+   */
+  destroy() {
+    const hl = this;
+    if (hl._listener) {
+      hl.map.off(hl.opt.event_type, hl._listener);
+    }
+    hl.clean();
   }
 
   /**
@@ -56,16 +70,20 @@ class Highlighter {
   }
 
   /**
-   * Clean and destroy
+   * Event handler
    */
-  destroy() {
+  handler(e) {
     const hl = this;
-    if (hl._listener) {
-      hl.map.off(hl.opt.event_type, hl._listener);
-    }
-    hl.clean();
+    hl.updateFeatures(e);
+    hl.render();
   }
 
+  /**
+   * Clean : for each feature :
+   * - Remove from list
+   * - Disable state
+   * - Clean highlight layer
+   */
   clean() {
     const hl = this;
     while (hl._features.length) {
@@ -73,26 +91,84 @@ class Highlighter {
       if (!f.id) {
         return;
       }
-      hl.cleanFeatureHighlight(f);
-      hl.map.setFeatureState(f, {
-        highlight: false
-      });
-      if (f._animate instanceof Animate) {
-        f._animate.stop();
-      }
+      hl.disableState(f);
+      hl.removeHighlightLayer(f);
     }
   }
 
   /**
-   * Cleaning
+   * Render : for each feature :
+   * - Enable state
+   * - Add highlight layer
    */
-  cleanFeatureHighlight(f) {
+  render() {
     const hl = this;
-    if (f._layer_hl) {
-      const l = hl.map.getLayer(f._layer_hl.id);
-      if (l) {
-        hl.map.removeLayer(l.id);
+    hl._features.forEach((f) => {
+      if (!f.id) {
+        return;
       }
+      hl.enableState(f);
+      hl.addHighlightLayer(f);
+    });
+  }
+
+  /**
+   * Remove highlight :
+   * - Remove layer if exists
+   * - reset feature state
+   * - Stop animation
+   */
+  disableState(f) {
+    const hl = this;
+    hl.map.setFeatureState(f, {
+      highlight: false
+    });
+  }
+
+  /**
+   * Add highlight
+   * - Clean previous highlight
+   * - Update layer to use feature state conditional expression
+   * - Set feature state
+   */
+  enableState(f) {
+    const hl = this;
+    hl.updateLayerStyle(f);
+    hl.map.setFeatureState(f, {
+      highlight: true
+    });
+  }
+
+  /**
+   * Add highlight layer
+   * - Remove previous layer
+   * - Add layer
+   * - start animation
+   */
+  addHighlightLayer(f) {
+    const hl = this;
+    hl.removeHighlightLayer(f);
+    f._layer_hl = hl.buildHighlightLayer(f);
+    hl.map.addLayer(f._layer_hl);
+    if (hl.opt.use_animation) {
+      f._animation = new Animate(hl, f._layer_hl);
+      f._animation.start();
+    }
+  }
+
+  /**
+   * Remove highlight layer
+   * - Remove layer
+   * - start animation
+   */
+  removeHighlightLayer(f) {
+    const hl = this;
+    if (!f._layer_hl) {
+      return;
+    }
+    const l = hl.map.getLayer(f._layer_hl.id);
+    if (l) {
+      hl.map.removeLayer(l.id);
     }
     if (f._animate instanceof Animate) {
       f._animate.stop();
@@ -100,52 +176,15 @@ class Highlighter {
   }
 
   /**
-   * Event handler
+   * Add feature from click event location
    */
-  handler(e) {
+  updateFeatures(e) {
     const hl = this;
-    /* Remove old stuff */
     hl.clean();
-
-    /* Update internal feature storage  */
     const rF = hl.map
       .queryRenderedFeatures(e.point)
       .filter(hl.isSupportedFeature.bind(hl));
     hl._features.push(...rF);
-
-    /* Builld and add layers  */
-    hl._features.forEach((f) => {
-      /**
-       * Modify displayed data
-       */
-
-      /* Update original layer style */
-      hl.updateLayerStyle(f);
-
-      /* set feature state as highlighted */
-      hl.map.setFeatureState(f, {
-        highlight: true
-      });
-
-      /**
-       * Add an associated highlight layer
-       */
-
-      /* Build a new layer based on feature properties */
-      f._layer_hl = hl.buildHighlightLayer(f);
-
-      /* remove any remainings */
-      hl.cleanFeatureHighlight(f);
-
-      /* Add layer on top */
-      hl.map.addLayer(f._layer_hl);
-
-      /* Set layer animation */
-      if (hl.opt.use_animation) {
-        f._animation = new Animate(hl, f._layer_hl);
-        f._animation.start();
-      }
-    });
   }
 
   /**
@@ -194,73 +233,71 @@ class Highlighter {
     const hl = this;
     const type = f.layer.type;
     const idLayer = f.layer.id;
+    const idFeature = f.id;
 
     /**
-     * Opacity can't be touched : reserved for opacity slider
+     * Update conditional style if it's a feature with an id, set an opacity effect
+     * when the feature is highlighted.
      *
-     *  -- fill
-     *  fill-color <-
-     *  fill-outline-color
-     *
-     *  -- line
-     *  line-color <-
-     *
-     *  -- symbol
-     *  icon-color <-
-     *  icon-halo-color
-     *
-     *  text-color
-     *
-     *
-     *  -- circle
-     *
-     *  circle-color <-
-     *  circle-stroke-color
+     * Caveat :
+     *     - feature must have and id
+     *     - feature color can't be an expression : string color only
      */
+    if (idFeature) {
+      /**
+       * {type}-opacity can't be used : it's reserved for opacity slider
+       *
+       *  -- fill
+       *  fill-color <-
+       *  fill-outline-color
+       *
+       *  -- line
+       *  line-color <-
+       *
+       *  -- symbol
+       *  icon-color <-
+       *  icon-halo-color
+       *
+       *  text-color
+       *
+       *
+       *  -- circle
+       *
+       *  circle-color <-
+       *  circle-stroke-color
+       */
 
-    const propertyColor = {
-      fill: 'fill-color',
-      line: 'line-color',
-      symbol: 'icon-color',
-      circle: 'circle-color'
-    }[type];
+      const propertyColor = {
+        fill: 'fill-color',
+        line: 'line-color',
+        symbol: 'icon-color',
+        circle: 'circle-color'
+      }[type];
 
-    const colorRaw= hl.map.getPaintProperty(idLayer, `${propertyColor}`);
-    const colorOrig = getChromaColor(colorRaw);
+      const colorRaw = hl.map.getPaintProperty(idLayer, `${propertyColor}`);
+      const colorOrig = getChromaColor(colorRaw);
 
-    if (colorOrig) {
-      const colorExpr = hl.toFeatureStateConditional({
-        on: colorOrig.alpha(hl.opt.highlight_feature_opacity).css(),
-        off: colorOrig.css()
-      });
-      hl.map.setPaintProperty(idLayer, `${propertyColor}`,colorExpr);
-    }
-
-    /**
-     * Sort key : bring feature at top
-     */
-
-    const propertySortKey = {
-      fill: 'fill-sort-key',
-      line: 'line-sort-key',
-      symbol: 'symbol-sort-key',
-      circle: 'circle-sort-key'
-    }[type];
-
-    const sortKey = path(f.layer, `layout.${propertySortKey}`);
-    if (!sortKey) {
-      hl.map.setLayoutProperty(idLayer, `${propertySortKey}`, 100);
+      if (colorOrig) {
+        const colorExpr = hl.toFeatureStateConditional({
+          on: colorOrig.alpha(hl.opt.highlight_feature_opacity).css(),
+          off: colorOrig.css()
+        });
+        hl.map.setPaintProperty(idLayer, `${propertyColor}`, colorExpr);
+      }
     }
   }
 
   /**
-   * Build highlight layer
+   * Build highlight layer:
+   * !!TODO: As some style property can't be set, e.g. fill-outline-width, we need to
+   * add a new line layer only for this. For now, adding one layer per feature, but
+   * we could group by feature with the same source and geometry.
    */
   buildHighlightLayer(f) {
     const hl = this;
     const idSource = f.layer.source;
     const idSourceLayer = f.layer['source-layer'];
-    const idLayer = `@hl-${f.layer.id}`;
+    const idLayer = `@hl-@${f.id}-${f.layer.id}`;
     const type = f.layer.type;
     let layer = null;
     const opacityExpr = hl.toFeatureStateConditional({
@@ -277,7 +314,6 @@ class Highlighter {
           type: 'line',
           source: idSource,
           filter: filter,
-          'source-layer': idSourceLayer,
           layout: {
             'line-cap': 'round',
             'line-join': 'round'
@@ -297,7 +333,6 @@ class Highlighter {
           type: 'line',
           source: idSource,
           filter: filter,
-          'source-layer': idSourceLayer,
           layout: {
             'line-cap': 'round',
             'line-join': 'round'
@@ -322,7 +357,6 @@ class Highlighter {
           id: idLayer,
           type: 'circle',
           source: idSource,
-          'source-layer': idSourceLayer,
           paint: {
             'circle-color': 'rgba(0,0,0,0)',
             'circle-stroke-color': hl.opt.highlight_color,
@@ -333,6 +367,9 @@ class Highlighter {
             'circle-opacity': opacityExpr
           }
         };
+    }
+    if (idSourceLayer) {
+      layer['source-layer'] = idSourceLayer;
     }
 
     return layer;
@@ -467,18 +504,13 @@ export {Highlighter};
  * Helpers
  */
 
-/* access to object properties by path */
-function path(object, path, def) {
-  return path.split('.').reduce((a, k) => (a ? a[k] : def), object);
-}
-
 /* test if it's a valid color */
 function getChromaColor(color) {
-  if(color instanceof Array){
-      return;
+  if (color instanceof Array) {
+    return;
   }
   const isValid = chroma.valid(color);
-  if(isValid){
-     return chroma(color);
+  if (isValid) {
+    return chroma(color);
   }
 }

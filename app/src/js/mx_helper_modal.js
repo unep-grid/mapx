@@ -30,16 +30,14 @@ export function modal(o) {
     elDialog,
     elValidation,
     elButtonClose,
-  /**
-   * Get or create modal and background
-   */
-  elModal = document.getElementById(o.id);
+    /**
+     * Get or create modal and background
+     */
+    elModal = document.getElementById(o.id);
   const hasModal = h.isElement(elModal);
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
   }
-
-
 
   var hasJquery = h.isFunction(window.jQuery);
   var hasShiny = h.isObject(window.Shiny);
@@ -50,7 +48,6 @@ export function modal(o) {
     !hasShiny || h.isBoolean(o.noShinyBinding) ? o.noShinyBinding : false;
 
   o.addSelectize = o.addSelectize === false ? false : true;
-
 
   if (o.close === true) {
     if (hasModal && h.isFunction(elModal.close)) {
@@ -101,7 +98,7 @@ export function modal(o) {
     elButtonClose = h.el(
       'button',
       {
-        id :'btnCloseModal',
+        id: 'btnCloseModal',
         class: ['btn', 'btn-default'],
         on: {
           click: close
@@ -172,7 +169,7 @@ export function modal(o) {
   h.draggable({
     selector: elModal,
     debounceTime: 10,
-    onStart : ()=>{ 
+    onStart: () => {
       h.closeSelectizeGroupById(id);
     }
   });
@@ -236,7 +233,7 @@ export function modal(o) {
           class: ['mx-modal-foot']
         },
         (elButtons = h.el('div', {
-          class: 'btn-group'
+          class: ['btn-group', 'mx-modal-foot-btns']
         })),
         (elDialog = h.el('div', {
           id: idModal + '_txt',
@@ -283,10 +280,7 @@ export function modal(o) {
       elJedContainers = elContent.querySelectorAll('[data-jed_id]');
       elJedContainers.forEach((elJed) => {
         var jedId = elJed.dataset.jed_id;
-        if (
-          jed.editors[jedId] &&
-          h.isFunction(jed.editors[jedId].destroy)
-        ) {
+        if (jed.editors[jedId] && h.isFunction(jed.editors[jedId].destroy)) {
           jed.editors[jedId].destroy();
         }
       });
@@ -339,10 +333,7 @@ export function modalGetAll(opt) {
   const hasIgnores =
     h.isArray(opt.ignoreSelectors) && opt.ignoreSelectors.length > 0;
   if (hasIgnores) {
-    selector = opt.ignoreSelectors.reduce(
-      (a, c) => `${a}:not(${c})`,
-      selector
-    );
+    selector = opt.ignoreSelectors.reduce((a, c) => `${a}:not(${c})`, selector);
   }
   return document.querySelectorAll(selector);
 }

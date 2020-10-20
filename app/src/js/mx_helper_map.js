@@ -737,8 +737,8 @@ export function initMapListener(map) {
    * Highlight on event
    */
   mx.highlighter = new Highlighter(map, {
-    use_animation: true
-    //highlight_color: mx.theme.getColorItem('mx_ui_text')
+    use_animation: true,
+    highlight_color: mx.theme.get('mx_map_feature_highlight').color
   });
 
   mx.events.on({
@@ -749,11 +749,11 @@ export function initMapListener(map) {
     }
   });
 
-  //mx.theme.on('set_colors', (colors) => {
-    //mx.highlighter.setOptions({
-      //highlight_color: colors.mx_ui_text.color
-    //});
-  //});
+  mx.theme.on('set_colors', (colors) => {
+    mx.highlighter.setOptions({
+      highlight_color: colors.mx_map_feature_highlight.color
+    });
+  });
 
   /**
    * Mouse move handling
@@ -994,7 +994,7 @@ export async function initMapxApp(o) {
 export async function handleClickEvent(e, idMap) {
   const type = e.type;
   const h = mx.helpers;
-  const hasLayer = h.getLayerNamesByPrefix({prefix: 'MX-'}).length > 0;
+  const hasLayer = h.getLayerNamesByPrefix().length > 0;
   const map = h.getMap(idMap);
   const clickModes = h.getClickHandlers();
   const hasDashboard = clickModes.indexOf('dashboard') > -1;
@@ -1038,7 +1038,7 @@ export async function handleClickEvent(e, idMap) {
       });
 
       /**
-       * NOTE: see mx_helper_map_features_popoup.js
+       * NOTE: see mx_helper_map_features_popup.js
        */
       h.featuresToPopup({
         layersAttributes: layersAttributes,
@@ -1244,6 +1244,22 @@ export async function addSourceFromView(o) {
         url = `${url}&timestamp=${srcTimestamp}`;
       }
       o.view.data.source.tiles = [url, url];
+      o.view.data.source.promoteId = 'gid';
+    }
+    if (o.view.type === 'gj') {
+      /**
+      * Add gid property if it does not exist
+      */
+      const features = h.path(o.view, 'data.source.data.features',[]);
+      let gid = 1;
+      features.forEach((f) => {
+        if (!f.properties) {
+          f.properties = {};
+        }
+        if (!f.properties.gid) {
+          f.properties.gid = gid++;
+        }
+      });
       o.view.data.source.promoteId = 'gid';
     }
 
@@ -1719,8 +1735,8 @@ export function makeSimpleLayer(o) {
   }
 
   /**
-  * Extract hex
-  */
+   * Extract hex
+   */
   colA = h.colorToRgba(colA, opt.opacity);
   colB = h.colorToRgba(colB, opt.opacity + 0.2);
 
@@ -1767,7 +1783,7 @@ export function makeSimpleLayer(o) {
       paint: {
         //'fill-opacity': opt.opacity,
         'fill-color': colA,
-        'fill-outline-color': mx.theme.getColorItem('mx_ui_text')
+        'fill-outline-color': mx.theme.get('mx_ui_text').color
       }
     },
     pattern: {
@@ -3721,7 +3737,6 @@ export async function viewLayersAddVt(o) {
    * Make custom layer
    */
   if (hasStyleCustom) {
-
     const layerCustom = {
       id: getIdLayer(),
       source: idSource,
@@ -4251,28 +4266,6 @@ export function viewLayersAddGj(opt) {
 }
 
 /**
- * Add source, handle existing
- * @param {Object} o Options
- * @param {String} o.id  Map id
- * @param {String} o.idSource  Source id
- * @param {Object} o.source Source values
- */
-export function addSource(o) {
-  const map = mx.helpers.getMap(o.id);
-
-  if (map) {
-    const sourceExists =
-      Object.keys(map.style.sourceCaches).indexOf(o.idSource) > -1;
-
-    if (sourceExists) {
-      map.removeSource(o.idSource);
-    }
-
-    map.addSource(o.idSource, o.source);
-  }
-}
-
-/**
  * Apply a filter on a layer
  * @param {object} o Options
  * @param {string} o.id Map id
@@ -4424,7 +4417,6 @@ export function getLayersPropertiesAtPoint(opt) {
   idViews = hasViewId
     ? [opt.idView]
     : h.getLayerNamesByPrefix({
-        map: map,
         base: true
       });
 
