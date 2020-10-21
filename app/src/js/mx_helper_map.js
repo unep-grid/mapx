@@ -1554,9 +1554,9 @@ async function getGeoJSONViewsFromStorage(o) {
 }
 
 /**
- *  View render / update : evalutate view state and enable/disable it depending on ui state
+ * TODO: Early/historic code. Refactor this and integrate into a view class
  */
-export function viewsCheckedUpdate(o) {
+export async function viewsCheckedUpdate(o) {
   const h = mx.helpers;
   o = o || {};
 
@@ -1564,6 +1564,7 @@ export function viewsCheckedUpdate(o) {
   const vToRemove = [];
   const vVisible = [];
   const vChecked = [];
+  const proms = [];
 
   let view, isChecked, id;
 
@@ -1586,19 +1587,18 @@ export function viewsCheckedUpdate(o) {
    * Update views groups
    */
   vVisible.push(...h.getViewsOpen());
-  //vVisible.push(...h.getViewsLayersVisibles());
   vToRemove.push(...h.getArrayDiff(vVisible, vChecked));
   vToAdd.push(...h.getArrayDiff(vChecked, vVisible));
 
   /**
    * View to add
    */
-  vToAdd.forEach(h.viewAdd);
+  proms.push(...vToAdd.map(h.viewAdd));
 
   /**
    * View to remove
    */
-  vToRemove.forEach(h.viewRemove);
+  proms.push(...vToRemove.map(h.viewRemove));
 
   /**
    * Inform Shiny about the state
@@ -1613,8 +1613,13 @@ export function viewsCheckedUpdate(o) {
     Shiny.onInputChange('mx_client_views_status', summary);
   }
 
+ /**
+   * Wait add/remove views operations to be completed
+   */
+  const done = await Promise.all(proms);
+
   /**
-   * Set order
+   * Set layer order
    */
   h.viewsLayersOrderUpdate(o);
 }
