@@ -621,10 +621,10 @@ function setViewsComponents(views) {
     }
 
     if (editable && local) {
-      components.push('editable');
+      components.push('view_editable');
     }
     if (local) {
-      components.push('local');
+      components.push('view_local');
     }
 
     v._components = components;

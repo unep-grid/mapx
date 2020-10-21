@@ -1200,6 +1200,16 @@
     "es": "Teselas raster"
   },
   {
+    "id": "view_editable",
+    "en": "Editable views",
+    "es": ""
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views",
+    "es": ""
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery",
     "es": "Imágenes satélites"
@@ -3601,7 +3611,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance",
+    "en": "Description of the data issuance",
     "es": "Información sobre la emisión de los datos"
   },
   {
@@ -4538,6 +4548,26 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "es": "Adjuntar al proyecto seleccionado"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "es": ""
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "es": ""
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "es": ""
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "es": ""
   },
   {
     "id": "jenks",

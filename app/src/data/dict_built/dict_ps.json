@@ -1200,6 +1200,16 @@
     "ps": "رسټري ټیلونه"
   },
   {
+    "id": "view_editable",
+    "en": "Editable views",
+    "ps": ""
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views",
+    "ps": ""
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery",
     "ps": "سټلایټي تصویر"
@@ -3601,7 +3611,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance",
+    "en": "Description of the data issuance",
     "ps": "ا اطلاعاتو د خپرولو تفصیلات"
   },
   {
@@ -4537,6 +4547,26 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
+    "ps": ""
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "ps": ""
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "ps": ""
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "ps": ""
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
     "ps": ""
   },
   {

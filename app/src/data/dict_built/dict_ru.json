@@ -1200,6 +1200,16 @@
     "ru": ""
   },
   {
+    "id": "view_editable",
+    "en": "Editable views",
+    "ru": ""
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views",
+    "ru": ""
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery",
     "ru": ""
@@ -3601,7 +3611,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance",
+    "en": "Description of the data issuance",
     "ru": ""
   },
   {
@@ -4537,6 +4547,26 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
+    "ru": ""
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "ru": ""
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "ru": ""
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "ru": ""
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
     "ru": ""
   },
   {

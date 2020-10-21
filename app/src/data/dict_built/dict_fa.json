@@ -1200,6 +1200,16 @@
     "fa": "تایل راستری"
   },
   {
+    "id": "view_editable",
+    "en": "Editable views",
+    "fa": ""
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views",
+    "fa": ""
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery",
     "fa": "تصویر ستلایتی"
@@ -3601,7 +3611,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance",
+    "en": "Description of the data issuance",
     "fa": "شرح انتشار اطلاعات"
   },
   {
@@ -4537,6 +4547,26 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project",
+    "fa": ""
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "fa": ""
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "fa": ""
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "fa": ""
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
     "fa": ""
   },
   {

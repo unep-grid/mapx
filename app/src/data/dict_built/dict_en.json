@@ -960,6 +960,14 @@
     "en": "Raster tiles"
   },
   {
+    "id": "view_editable",
+    "en": "Editable views"
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views"
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery"
   },
@@ -2881,7 +2889,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance"
+    "en": "Description of the data issuance"
   },
   {
     "id": "temporal_issuance_title",
@@ -3630,6 +3638,22 @@
   {
     "id": "share_in_project_btn",
     "en": "Add in selected project"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default"
   },
   {
     "id": "jenks",

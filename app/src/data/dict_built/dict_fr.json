@@ -1200,6 +1200,16 @@
     "fr": "Tuiles raster"
   },
   {
+    "id": "view_editable",
+    "en": "Editable views",
+    "fr": "Vues éditables"
+  },
+  {
+    "id": "view_local",
+    "en": "Project's views",
+    "fr": "Vues du projet"
+  },
+  {
     "id": "sat",
     "en": "Satellite imagery",
     "fr": "Imagerie satellite"
@@ -3601,7 +3611,7 @@
   },
   {
     "id": "temporal_issuance_desc",
-    "en": "Description if the data issuance",
+    "en": "Description of the data issuance",
     "fr": "Information sur l'émission de la donnée"
   },
   {
@@ -4538,6 +4548,26 @@
     "id": "share_in_project_btn",
     "en": "Add in selected project",
     "fr": "Ajouter au projet sélectionné"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "fr": "Filtrer les vues activées par défaut"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "fr": "Cette option permet de n'afficher que les vues ouvertes à l'initialisation"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "fr": "Cacher les catégories"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "fr": "La liste des vues n'affichera pas les catégories par défaut"
   },
   {
     "id": "jenks",
