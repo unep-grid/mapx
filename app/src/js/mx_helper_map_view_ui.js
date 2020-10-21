@@ -302,11 +302,10 @@ export function viewsListRenderNew(o) {
   });
 
 
-
   /**
    *  Auto open
    */
-  filterIfOpen();
+  //filterIfOpen();
 
   /**
    * Set image for the drag item
@@ -348,32 +347,16 @@ export function viewsListRenderNew(o) {
   }
 
   /**
-   * Trigger a filter activated if any view opened
-   */
-  function filterIfOpen() {
-    const views = h.getViews();
-    let found = false;
-    views.forEach((v) => {
-      if (!found && v._vb.isOpen()) {
-        found = true;
-      }
-    });
-    if (found) {
-      h.setBtnFilterActivated(true);
-    }
-  }
-
-  /*
    * Internal view rendering handler
    */
   function handleRenderItemContent(config) {
     const li = this;
     const elItem = config.el;
     const data = config.data;
-    const viewsOpen = h.getQueryParameterInit('viewsOpen');
+    //const viewsOpen = h.getQueryParameterInit('viewsOpen');
+    //const viewsFilter = h.getViewsFilter();
     const update = data.update;
     const open = data.open === true;
-
     /**
      * Add given element
      */
@@ -413,12 +396,13 @@ export function viewsListRenderNew(o) {
     /**
      * Test if registered to auto-open
      */
-    const idOpen = viewsOpen.indexOf(view.id);
-    if (idOpen > -1) {
-      data.open = true;
-      viewsOpen.splice(idOpen, 1);
-      h.setBtnFilterActivated(true);
-    }
+    //const idOpen = viewsOpen.indexOf(view.id);
+    //if (idOpen > -1) {
+      //data.open = true;
+      //viewsOpen.splice(idOpen, 1);
+      ////viewsFilter.filterActivated(true);
+      ////h.setBtnFilterActivated(true);
+    /*}*/
 
     /**
      * Get view element

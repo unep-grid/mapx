@@ -57,7 +57,7 @@ class ViewsFilter {
     vf._lStore.addListener({
       target: vf.opt.elFilterActivated,
       type: ['click'],
-      callback: handleFilterActivatedView,
+      callback: vf.filterActivated,
       group: 'view_filter',
       bind: vf
     });
@@ -95,7 +95,7 @@ class ViewsFilter {
       onChange: (enabled) => {
         const op = enabled === true ? 'union' : 'intersection';
         vf.setMode(op, false);
-        vf.filter('handler_switch_mode');
+        vf.apply('handler_switch_mode');
       }
     });
   }
@@ -107,7 +107,7 @@ class ViewsFilter {
     vf.switchMode.destroy();
   }
 
-  filter(from) {
+  apply(from) {
     const vf = this;
     const pState = vf._previousState;
     const state = vf.getViewsIdSubset();
@@ -273,7 +273,65 @@ class ViewsFilter {
     });
 
     vf.setMode(opt.mode);
-    vf.filter('filter_combined');
+    vf.apply('filter_combined');
+  }
+
+  /**
+   * Activate filter by activaed state
+   * @param {Boolean} enable/disable the filter and set button state accordingly
+   */
+  filterActivated(enable) {
+    const vf = this;
+    const elBtn = vf.opt.elFilterActivated;
+    const clActive = 'active';
+    const id = elBtn.id;
+    const isActive = elBtn.classList.contains(clActive) === true;
+    const isToggle = typeof(enable) !== 'boolean';
+
+    if (isToggle) {
+      enable = !isActive;
+    } else {
+      if ((isActive && enable) || (!isActive && !enable)) {
+        return;
+      }
+    }
+
+    /*
+     * Set classes
+     */
+    if (enable) {
+      elBtn.classList.add(clActive);
+    } else {
+      elBtn.classList.remove(clActive);
+    }
+
+    /*
+     * Filter views
+     */
+    const views = vf.getViews();
+    const idViews = views.reduce((a, v) => {
+      let isOpen = v._vb.isOpen();
+      if (enable && isOpen) {
+        a.push(v.id);
+      }
+      return a;
+    }, []);
+
+    /**
+     * Update rule
+     */
+    vf.updateRule({
+      group: 'input',
+      type: 'views_activated',
+      id: id,
+      idViews: idViews,
+      enable: enable
+    });
+
+    /**
+     * Apply
+     */
+    vf.apply('handler_activated');
   }
 
   updateCheckboxState(opt) {
@@ -404,28 +462,26 @@ class ViewsFilter {
 
   reset() {
     const vf = this;
-    vf.getCheckboxes()
-      .forEach((t) => {
+    vf.getCheckboxes().forEach((t) => {
       t.setState(false);
     });
     vf.removeRules();
-    
+
     const elFilter = vf.opt.elFilterActivated;
     const elFilterText = vf.opt.elFilterText;
 
     elFilter.classList.remove('active');
     elFilterText.value = '';
-    vf.filter('reset');
+    vf.apply('reset');
   }
 
   clear() {
     const vf = this;
     vf.reset();
     /**
-    * Remove checkboxes
-    */
-    vf.getCheckboxes()
-      .forEach((t) => {
+     * Remove checkboxes
+     */
+    vf.getCheckboxes().forEach((t) => {
       t.destroy();
       vf.removeCheckbox(t);
     });
@@ -523,22 +579,21 @@ function setViewsComponents(views) {
     overlap = path(v, 'data.source.layerInfo.maskName', '');
     attributes = path(v, 'data.attribute.names', '');
     customStyle = path(v, 'data.style.custom', '');
-    local = path(v,'project') === mx.settings.project;
-    editable = path(v,'_edit') === true;
-
+    local = path(v, 'project') === mx.settings.project;
+    editable = path(v, '_edit') === true;
 
     if (isVt) {
       components.push('vt');
     }
-    
+
     if (isGj) {
       components.push('gj');
     }
-    
+
     if (isRt) {
       components.push('rt');
     }
-    
+
     if (isSm && story && story.length) {
       components.push('sm');
     }
@@ -546,7 +601,7 @@ function setViewsComponents(views) {
     if (Array.isArray(widgets)) {
       components.push('dashboard');
     }
- 
+
     if (isVt && attributes && attributes.indexOf('mx_t0') > -1) {
       components.push('time_slider');
     }
@@ -565,10 +620,10 @@ function setViewsComponents(views) {
       components.push('custom_code');
     }
 
-    if(editable && local){
+    if (editable && local) {
       components.push('editable');
     }
-    if(local){
+    if (local) {
       components.push('local');
     }
 
@@ -590,7 +645,9 @@ export function getFreqTable(views) {
   const stat = {};
 
   views.forEach(function(v) {
-    checkboxes.components = checkboxes.components.concat(path(v, '_components', []));
+    checkboxes.components = checkboxes.components.concat(
+      path(v, '_components', [])
+    );
     checkboxes.collections = checkboxes.collections.concat(
       path(v, 'data.collections', [])
     );
@@ -746,7 +803,7 @@ function handleFilterViewIdByText(event) {
   vf.updateRuleByText({
     value: text
   });
-  vf.filter('handler_text');
+  vf.apply('handler_text');
 }
 
 function handleFilterViewIdByCheckbox(event) {
@@ -766,37 +823,7 @@ function handleFilterViewIdByCheckbox(event) {
 
   const cbx = elCheckbox.checkbox;
   vf.updateRuleByCheckbox(cbx);
-  vf.filter('handler_checkbox');
-}
-
-function handleFilterActivatedView(event) {
-  const vf = this;
-  const clActive = 'active';
-  const elBtn = event.target;
-  const id = elBtn.id;
-  const toDisable = elBtn.classList.contains(clActive);
-  if (toDisable) {
-    elBtn.classList.remove(clActive);
-  } else {
-    elBtn.classList.add(clActive);
-  }
-  const views = vf.getViews();
-  const idViews = views.reduce((a, v) => {
-    let isOpen = v._vb.isOpen();
-    if (!toDisable && isOpen) {
-      a.push(v.id);
-    }
-    return a;
-  }, []);
-
-  vf.updateRule({
-    group: 'input',
-    type: 'views_activated',
-    id: id,
-    idViews: idViews,
-    enable: !toDisable
-  });
-  vf.filter('handler_activated');
+  vf.apply('handler_checkbox');
 }
 
 /**

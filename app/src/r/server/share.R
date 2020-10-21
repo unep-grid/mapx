@@ -176,8 +176,8 @@ observeEvent(reactData$showShareManager,{
                       options = list(
                         sortField = "label",
                         plugins = list("remove_button")
-                        )
                       )
+                    )
                     ),
                   #
                   # Views collections
@@ -200,7 +200,7 @@ observeEvent(reactData$showShareManager,{
                         options = list(
                           sortField = "label",
                           plugins = list("remove_button")
-                          )
+                        )
                         ),
                       wellPanel(
                         radioButtons("checkShareCollectionOperator",
@@ -209,12 +209,30 @@ observeEvent(reactData$showShareManager,{
                           choiceNames = c(
                             tt('share_collections_check_operator_all',F),                     
                             tt('share_collections_check_operator_any',F)
-                            )
                           )
                         )
                       )
                     )
+                    ),
+                  #
+                  # Ignore/hide categories
+                  #
+                  checkboxInput("checkHideCategory",
+                    label = tt('share_category_hide')
+                    ),
+                  span(class="text-muted",
+                    tt("share_category_hide_desc")
+                    ),
+                  #
+                  # Set filter activated
+                  #
+                  checkboxInput("checkFilterActivated",
+                    label = tt('share_filter_activated')
+                    ),
+                  span(class="text-muted",
+                    tt("share_filter_activated_desc")
                   )
+                )
                 ),
               #
               # Map position
@@ -291,6 +309,8 @@ observe({
     viewsOpen <- ""
     mapPosition <- ""
     zoomToViews <- ""
+    hideCategory <- ""
+    filterActivated <- ""
     inMapPosition <- .get(input$shareMapPosition_values,c('data'),list())
 
     inCollections <- paste(input$selectShareCollections,collapse=",")
@@ -309,6 +329,8 @@ observe({
     addZoomToExtent <- isTRUE(input$checkShareZoomToViews)
     addViewsOpen <- isTRUE(input$checkShareViewsOpen)
     addMapPosition <- isTRUE(input$checkShareMapPosition)
+    addHideCategory <- !addStaticMode && isTRUE(input$checkHideCategory)
+    addFilterActivated <- !addStaticMode && isTRUE(input$checkFilterActivated)
 
     isolate({
       project <- sprintf("project=%s&", reactData$project)
@@ -378,6 +400,16 @@ observe({
       strLanguage = sprintf("language=%s&", inLanguage)
 
       #
+      # Category
+      #
+      if(addHideCategory) hideCategory <- "viewsListFlatMode=true&"
+      
+      #
+      # Filter activated
+      #
+      if(addFilterActivated) filterActivated <- "viewsListFilterActivated=true&"
+
+      #
       # Compose URL
       #
       urlBuilt <- ""
@@ -387,6 +419,7 @@ observe({
         viewsOpen + 
         zoomToViews +
         mapPosition +
+        hideCategory +
         strLanguage
 
       #

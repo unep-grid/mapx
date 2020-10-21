@@ -508,8 +508,19 @@ export function initListenersApp() {
     });
   }
 }
+
 /**
- * Set activated view button state
+ * Toggle or set filter by view activated
+ * @param {Boolean} enable Enable or disable filter. If undefined, toggle;
+ */
+//export function setBtnFilterActivated(enable) {
+//const h = mx.helpers;
+//const vf = h.getMapData().viewFilter;
+//vf.filterActivated(enable);
+/*}*/
+
+/**
+ * Check if there is view activated and disable button if needed
  */
 export function updateBtnFilterActivated() {
   const h = mx.helpers;
@@ -533,7 +544,6 @@ export function updateBtnFilterActivated() {
   /**
    * Set elFilter disabled class
    */
-
   const isActivated = elFilterActivated.classList.contains('active');
   if (isActivated || hasViewsActivated) {
     elFilterActivated.classList.remove('disabled');
@@ -541,19 +551,6 @@ export function updateBtnFilterActivated() {
     elFilterActivated.classList.add('disabled');
   }
 }
-
-export function setBtnFilterActivated(enable) {
-  const h = mx.helpers;
-  const elFilterActivated = document.getElementById('btnFilterChecked');
-  const isActivated = elFilterActivated.classList.contains('active');
-  const skip = (enable && isActivated) || (!enable && !isActivated);
-  if (skip) {
-    return;
-  }
-  const ev = new MouseEvent('click');
-  elFilterActivated.dispatchEvent(ev);
-}
-
 /**
  * Initial mgl and mapboxgl
  * @param {Object} o options
@@ -755,7 +752,7 @@ export function initMapListener(map) {
    */
   mx.highlighter = new Highlighter(map, {
     use_animation: true,
-    register_listener : false, //use  same click as for popup
+    register_listener: false, //use  same click as for popup
     highlight_color: mx.theme.get('mx_map_feature_highlight').color,
     regex_layer_id: /^MX/ // Highlighter will not work with feature without id : regex layer accordingly,
   });
@@ -805,8 +802,6 @@ export function initMapListener(map) {
     const features = map.queryRenderedFeatures(e.point, {layers: layers});
     map.getCanvas().style.cursor = features.length ? 'pointer' : '';
   });
-
-
 }
 
 export async function initMapxStatic(o) {
@@ -909,16 +904,20 @@ export async function initMapxApp(o) {
   const hasShiny = !!window.Shiny;
   const idViewsQueryOpen = h.getQueryParameter('viewsOpen');
   const idViewsQuery = h.getQueryParameter('views');
+  const isFlatMode = h.getQueryParameter('viewsListFlatMode')[0] === 'true';
+  const isFilterActivated =
+    h.getQueryParameter('viewsListFilterActivated')[0] === 'true';
+
   idViewsQuery.push(...idViewsQueryOpen);
   const idViews = h.getArrayDistinct(idViewsQuery);
 
   /**
-   * init app listeners: view add, language, project change, etc.
+   * Init app listeners: view add, language, project change, etc.
    */
   h.initListenersApp();
 
   /*
-   * set views list
+   * Fetch views and build ViewsList, ViewsFilter
    */
   await h.updateViewsList({
     id: o.id,
@@ -927,9 +926,25 @@ export async function initMapxApp(o) {
   });
 
   /**
-   * Add/open view
+   * Set flat mode (hide categories)
+   */
+  if (isFlatMode) {
+    const viewsList = h.getViewsList();
+    viewsList.setModeFlat(true);
+  }
+
+  /**
+   * Add/open views
    */
   await Promise.all(idViewsQueryOpen.map(h.viewAdd));
+
+  /**
+   * If any view requested to be open, filter activated
+   */
+  if (isFilterActivated && idViewsQueryOpen.length > 0) {
+    const viewsFilter = h.getViewsFilter();
+    viewsFilter.filterActivated(true)
+  }
 
   /**
    * set order
@@ -942,6 +957,7 @@ export async function initMapxApp(o) {
       ids: idViewsQuery
     });
   }
+
   /**
    * Fire ready event
    */
@@ -1065,7 +1081,7 @@ export async function handleClickEvent(e, idMap) {
      * be done BEFORE updaring highlighter
      * onNextFrame is needed to be sure to update after the popup close event.
      */
-    h.onNextFrame(()=>{
+    h.onNextFrame(() => {
       mx.highlighter.update(e);
     });
 
@@ -5158,13 +5174,24 @@ export function getMapData(idMap) {
 
 /**
  * Get view list object
- * @return {Object} ViewList
+ * @return {ViewsList} ViewList
  */
 export function getViewsList(o) {
   const h = mx.helpers;
   const data = h.getMapData(o);
   return data.viewsList;
 }
+
+/**
+ * Get view list object
+ * @return {Object} ViewList
+ */
+export function getViewsFilter(o) {
+  const h = mx.helpers;
+  const data = h.getMapData(o);
+  return data.viewsFilter;
+}
+
 /**
  * Get map position summary
  * @param {object} o options
