@@ -321,7 +321,7 @@ config[["languages"]][["list"]] <- list(
   "Français ( french )" = "fr",
   "Español ( spanish )" = "es",
   "Русский ( russian )" = "ru",
-  "中国 ( chinese )" = "zh",
+  "中文 ( chinese )" = "zh",
   "Deutsch ( german )" = "de",
   "বাংলা  (bengali)" = "bn",
   "فارسی (Dari/Persian)" = "fa",
