@@ -3,6 +3,8 @@ import chroma from 'chroma-js';
 const def = {
   map: null,
   use_animation: false,
+  register_listener: false, // If trhe highligther will be triggered by event "event_type"
+  event_type: 'click', // click, mousemove. Does not work yet with mousemove
   transition_duration: 200,
   transition_delay: 0,
   animation_duration: 700, // 0 unlimited
@@ -14,8 +16,7 @@ const def = {
   highlight_opacity: 0.9,
   highlight_feature_opacity: 0.5,
   supported_types: ['circle', 'symbol', 'fill', 'line'],
-  regex_layer_id: /^MX/,
-  event_type: 'click' // click, mousemove. Does not work yet with mousemove
+  regex_layer_id: /^MX/
 };
 
 class Highlighter {
@@ -65,14 +66,16 @@ class Highlighter {
    */
   init() {
     const hl = this;
-    hl._listener = hl.handler.bind(hl);
-    hl.map.on(hl.opt.event_type, hl._listener);
+    if (hl.opt.register_listener === true) {
+      hl._listener = hl.update.bind(hl);
+      hl.map.on(hl.opt.event_type, hl._listener);
+    }
   }
 
   /**
    * Event handler
    */
-  handler(e) {
+  update(e) {
     const hl = this;
     hl.updateFeatures(e);
     hl.render();
@@ -147,8 +150,12 @@ class Highlighter {
    */
   addHighlightLayer(f) {
     const hl = this;
-    hl.removeHighlightLayer(f);
     f._layer_hl = hl.buildHighlightLayer(f);
+    hl.removeHighlightLayer(f);
+    /**
+     * Even if we remove the layer in removeHighlightLayer, just before,
+     * it could still be there, somehow. TODO: check why.
+     */
     hl.map.addLayer(f._layer_hl);
     if (hl.opt.use_animation) {
       f._animation = new Animate(hl, f._layer_hl);

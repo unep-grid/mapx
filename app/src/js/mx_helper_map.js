@@ -719,6 +719,7 @@ export async function initMapx(o) {
 
 export function initMapListener(map) {
   const h = mx.helpers;
+
   /**
    * Error handling
    */
@@ -734,11 +735,29 @@ export function initMapListener(map) {
   });
 
   /**
+   * Click event : build popup, ignore or redirect
+   */
+  map.on('click', (e) => {
+    h.handleClickEvent(e, map.id);
+  });
+
+  /**
+   * Move north arrow
+   */
+  map.on('rotate', () => {
+    const r = -map.getBearing();
+    const northArrow = document.querySelector('.mx-north-arrow');
+    northArrow.style[h.cssTransformFun()] = 'rotateZ(' + r + 'deg) ';
+  });
+
+  /**
    * Highlight on event
    */
   mx.highlighter = new Highlighter(map, {
     use_animation: true,
-    highlight_color: mx.theme.get('mx_map_feature_highlight').color
+    register_listener : false, //use  same click as for popup
+    highlight_color: mx.theme.get('mx_map_feature_highlight').color,
+    regex_layer_id: /^MX/ // Highlighter will not work with feature without id : regex layer accordingly,
   });
 
   mx.events.on({
@@ -787,21 +806,7 @@ export function initMapListener(map) {
     map.getCanvas().style.cursor = features.length ? 'pointer' : '';
   });
 
-  /**
-   * Click event : build popup, ignore or redirect
-   */
-  map.on('click', function(e) {
-    h.handleClickEvent(e, map.id);
-  });
 
-  /**
-   * Move north arrow
-   */
-  map.on('rotate', function() {
-    const r = -map.getBearing();
-    const northArrow = document.querySelector('.mx-north-arrow');
-    northArrow.style[h.cssTransformFun()] = 'rotateZ(' + r + 'deg) ';
-  });
 }
 
 export async function initMapxStatic(o) {
@@ -1038,6 +1043,14 @@ export async function handleClickEvent(e, idMap) {
       });
 
       /**
+       * Remove highlighter too
+       */
+      popup.on('close', () => {
+        console.log('popup closed');
+        mx.highlighter.clean();
+      });
+
+      /**
        * NOTE: see mx_helper_map_features_popup.js
        */
       h.featuresToPopup({
@@ -1045,6 +1058,16 @@ export async function handleClickEvent(e, idMap) {
         popup: popup
       });
     }
+
+    /**
+     * Update highlighter after displaying popup:
+     * The popup, when closed, should remove highlighting : this should
+     * be done BEFORE updaring highlighter
+     * onNextFrame is needed to be sure to update after the popup close event.
+     */
+    h.onNextFrame(()=>{
+      mx.highlighter.update(e);
+    });
 
     /**
      * Fire events with attributes data
@@ -1248,9 +1271,9 @@ export async function addSourceFromView(o) {
     }
     if (o.view.type === 'gj') {
       /**
-      * Add gid property if it does not exist
-      */
-      const features = h.path(o.view, 'data.source.data.features',[]);
+       * Add gid property if it does not exist
+       */
+      const features = h.path(o.view, 'data.source.data.features', []);
       let gid = 1;
       features.forEach((f) => {
         if (!f.properties) {
@@ -1613,7 +1636,7 @@ export async function viewsCheckedUpdate(o) {
     Shiny.onInputChange('mx_client_views_status', summary);
   }
 
- /**
+  /**
    * Wait add/remove views operations to be completed
    */
   const done = await Promise.all(proms);
