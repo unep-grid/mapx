@@ -1,5 +1,21 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.5-beta' target='_blank'>1.7.5-beta</a>
+   - Improvement 
+      - Language : support for Chinese. Thanks Tuo Wang and Jingyi Jiang !
+      - Sharing manager : new options to filter views and hide category in the views' list
+      - Highlight tools : 
+          - Support for GeoJSON view
+          - Added theme entry to set highlight color
+          - If the popup close, remove the highlight layer
+          - Use color property of highlighter feature instead of opacity, as layer opacity is managed by the transparency slider only.
+          - General improvement and stability. Still experimental.
+          - More subtile animation
+      - Style creator, change remaining defaults requested in #596
+   - Bug fix
+      - Reordering layer was done before all layers were displayed resulting to inconsistancy
+   - Internal
+      - Removed most of the method to convert colors and use chroma-js instead to improve robustness with edge cases.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.4-beta' target='_blank'>1.7.4-beta</a>
    - New feature
       - APP:
