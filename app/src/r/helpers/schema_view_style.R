@@ -184,7 +184,7 @@ mxSchemaViewStyle <- function(
     size = list(
       title = tt("schema_style_size"),
       type = "number",
-      default = ifelse(isPoint,5,1)
+      default = ifelse(isPoint,7,1)
       )
     )
 
@@ -380,7 +380,7 @@ mxSchemaViewStyle <- function(
             ),
           color = "#000",
           opacity = 0.7,
-          size = 1,
+          size = ifelse(isPoint,7,1),
           sprite = ""
         )
       )
