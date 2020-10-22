@@ -420,7 +420,8 @@ observe({
         zoomToViews +
         mapPosition +
         hideCategory +
-        strLanguage
+        strLanguage +
+        filterActivated
 
       #
       # Build iframe
