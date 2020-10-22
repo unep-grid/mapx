@@ -95,7 +95,7 @@ class Theme {
 
   setColorsByThemeId(id) {
     const t = this;
-    id = id || t.opt.idThemeDefault;
+    id = id || t.opt.idTheme || t.opt.idThemeDefault;
     const theme = t.getTheme(id);
     if (theme.colors) {
       t._id_theme = theme.id;
