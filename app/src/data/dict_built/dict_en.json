@@ -1852,6 +1852,10 @@
     "en": "Map: background"
   },
   {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight"
+  },
+  {
     "id": "mx_map_hillshade_shadow",
     "en": "Map: hillshade shadow"
   },

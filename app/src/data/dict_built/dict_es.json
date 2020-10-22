@@ -2315,6 +2315,11 @@
     "es": "Mapa: fondo"
   },
   {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "es": ""
+  },
+  {
     "id": "mx_map_hillshade_shadow",
     "en": "Map: hillshade shadow",
     "es": "Mapa: hillshade shadow"

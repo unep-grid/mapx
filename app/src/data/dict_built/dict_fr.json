@@ -2315,6 +2315,11 @@
     "fr": "Carte : Arrière plan"
   },
   {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "fr": "Carte : mise en évidence des éléments"
+  },
+  {
     "id": "mx_map_hillshade_shadow",
     "en": "Map: hillshade shadow",
     "fr": "Carte : ombrage du relief"

@@ -5556,6 +5556,18 @@
     "ps": ""
   },
   {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "fr": "Carte : mise en évidence des éléments",
+    "es": "",
+    "ru": "",
+    "zh": "地图: 功能亮点",
+    "de": "",
+    "bn": "",
+    "fa": "",
+    "ps": ""
+  },
+  {
     "id": "mx_map_hillshade_shadow",
     "en": "Map: hillshade shadow",
     "fr": "Carte : ombrage du relief",
