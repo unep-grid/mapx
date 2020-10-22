@@ -943,7 +943,7 @@ export async function initMapxApp(o) {
    */
   if (isFilterActivated && idViewsQueryOpen.length > 0) {
     const viewsFilter = h.getViewsFilter();
-    viewsFilter.filterActivated(true)
+    viewsFilter.filterActivated(true);
   }
 
   /**
@@ -1022,15 +1022,16 @@ export async function handleClickEvent(e, idMap) {
   const hasDraw = clickModes.indexOf('draw') > -1;
   const hasSdk = clickModes.indexOf('sdk') > -1;
   const hasCC = clickModes.indexOf('cc') > -1;
+  const addPopup = !(hasCC || hasSdk || hasDraw || hasDashboard);
+  const addHighlight = !hasDraw;
 
-  if (hasLayer && type === 'click') {
-    if (hasDashboard || hasDraw || hasCC) {
-      /**
-       * Handled by Dashboard/Widget
-       */
-      return;
-    }
+  const retrieveAttributes = addPopup || hasSdk;
 
+  if (!hasLayer && type !== 'click') {
+    return;
+  }
+
+  if (retrieveAttributes) {
     /*
      * Extract attributes, return an object with idView
      * as key and prmises as value
@@ -1041,8 +1042,12 @@ export async function handleClickEvent(e, idMap) {
       type: ['vt', 'gj', 'cc', 'rt'],
       asObject: true
     });
+    /**
+     * Dispatch to event
+     */
+    promAttributesToEvent(layersAttributes, e);
 
-    if (!hasSdk) {
+    if (addPopup) {
       /**
        * Click event : make a popup with attributes
        */
@@ -1062,7 +1067,6 @@ export async function handleClickEvent(e, idMap) {
        * Remove highlighter too
        */
       popup.on('close', () => {
-        console.log('popup closed');
         mx.highlighter.clean();
       });
 
@@ -1074,30 +1078,53 @@ export async function handleClickEvent(e, idMap) {
         popup: popup
       });
     }
+  }
 
+  if (addHighlight) {
     /**
      * Update highlighter after displaying popup:
-     * The popup, when closed, should remove highlighting : this should
-     * be done BEFORE updaring highlighter
-     * onNextFrame is needed to be sure to update after the popup close event.
+     * The popup, when closed **on map click**, should remove highlighting : this should
+     * be done BEFORE updating highlighter.
+     * onNextFrame seems to do the job by delaying the upadte to the next animation frame.
      */
     h.onNextFrame(() => {
       mx.highlighter.update(e);
     });
+  }
+}
 
-    /**
-     * Fire events with attributes data
-     */
-    const idViews = Object.keys(layersAttributes);
-    const nViews = idViews.length;
-    let processed = 0;
-    for (let idView in layersAttributes) {
-      const attributes = await layersAttributes[idView];
-      processed++;
+/**
+ * Fire an event with resolved list of attributes per layer.
+ * @param {Object} List of promise of attributes with layers id as key
+ * @param {Event} e Map click event
+ */
+function promAttributesToEvent(layersAttributes, e) {
+  const h = mx.helpers;
+  const isValid = h.isObject(layersAttributes) && h.isObject(e);
+
+  if (!isValid) {
+    return;
+  }
+
+  /**
+   * Produce an event per attributes
+   */
+  const idViews = Object.keys(layersAttributes);
+  const nViews = idViews.length;
+  let processed = 0;
+  for (let idView in layersAttributes) {
+    dispatch(layersAttributes, idView);
+  }
+  /**
+   * Wait promise and fire event with attributes values as
+   * data
+   */
+  function dispatch(layersAttributes, idView) {
+    layersAttributes[idView].then((attributes) => {
       mx.events.fire({
         type: 'click_attributes',
         data: {
-          part: processed,
+          part: ++processed,
           nPart: nViews,
           idView: idView,
           attributes: attributes,
@@ -1105,7 +1132,7 @@ export async function handleClickEvent(e, idMap) {
           lngLat: e.lngLat
         }
       });
-    }
+    });
   }
 }
 
