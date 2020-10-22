@@ -1,5 +1,13 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.7' target='_blank'>1.7.7</a>
+    - Bug fix
+      - URL query string parameter "theme" e.g ?theme=smartgray ?theme=nolabdark did not work
+    - Improvement 
+      - Added missing dictionnary item for map feature highlight
+    - Internal
+      - Removed unused file
+      - Set `el` package to version 0.1.5, removed babel config, as microbundle has some sensible defaults.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.6-beta' target='_blank'>1.7.6-beta</a>
     - Bug fix
       - Fix bug where requested theme color item did not return in static mode
