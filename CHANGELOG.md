@@ -1,5 +1,11 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.6-beta' target='_blank'>1.7.6-beta</a>
+    - Bug fix
+      - Fix bug where requested theme color item did not return in static mode
+      - Fix missing string `filterActivated` in sharing url
+      - Fix issue with highlight not displayed in dashboard mode w/o popup
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.5-beta' target='_blank'>1.7.5-beta</a>
    - Improvement 
       - Language : support for Chinese. Thanks Tuo Wang and Jingyi Jiang !
@@ -16,6 +22,7 @@
       - Reordering layer was done before all layers were displayed resulting to inconsistancy
    - Internal
       - Removed most of the method to convert colors and use chroma-js instead to improve robustness with edge cases.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.4-beta' target='_blank'>1.7.4-beta</a>
    - New feature
       - APP:
@@ -36,7 +43,9 @@
           - Compiled GDAL 3.1.3 from scratch add needed modules + solve dependencies issue
           - Added tags to base image instead of latest
           - Set higher memory limit for node : 4GB
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.3-beta' target='_blank'>1.7.3-beta</a>
+
    - Bug fixes
       - APP
         - Solved a bug when minicache encountered html values; 
