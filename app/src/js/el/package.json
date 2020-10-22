@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "main": "src/index.js",
   "module": "dist/el.mjs",
   "unpkg": "dist/el.umd.js",
@@ -15,7 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "microbundle watch -o dist",
     "serve": "live-server example --mount=/dist:dist",
-    "prod": "microbundle -o dist && npm publish"
+    "build": "microbundle -o dist",
+    "prod": "npm build && npm publish"
   },
   "keywords": [
     "el",
@@ -29,16 +30,12 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.11.0",
-    "core-js": "^3.6.5",
-    "microbundle": "^0.12.3"
+    "microbundle": "^0.12.4"
   },
   "bugs": {
-    "url": "https://github.com/fxi/el/issues"
+    "url": "https://github.com/unep-grid/map-x-mgl"
   },
-  "homepage": "https://github.com/fxi/el#readme",
+  "homepage": "https://github.com/unep-grid/map-x-mgl/tree/master/app/src/js/el",
   "directories": {
     "lib": "lib"
   }
