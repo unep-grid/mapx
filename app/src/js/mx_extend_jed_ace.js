@@ -1,10 +1,3 @@
-
-/*
- * mx_extend_jed_medium.js
- * Copyright (C) 2017 fxi <fxi@mbp-fxi.home>
- *
- * Distributed under terms of the MIT license.
- */
 (function(){
   'use strict';
 
