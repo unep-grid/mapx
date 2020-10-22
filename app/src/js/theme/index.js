@@ -56,6 +56,14 @@ class Theme {
   get id_theme() {
     return this._id_theme;
   }
+  
+  get theme() {
+    return this._theme || {};
+  }
+  
+  get colors() {
+    return this._colors || {};
+  }
 
   destroy() {
     const t = this;
@@ -91,6 +99,7 @@ class Theme {
     const theme = t.getTheme(id);
     if (theme.colors) {
       t._id_theme = theme.id;
+      t._theme = theme;
       t.setColors(theme.colors);
       t.buildInputs();
       return true;
@@ -187,6 +196,7 @@ class Theme {
       t._updateCss();
       t._updateMap();
     }
+    t._colors = new_colors;
     t.fire('set_colors', new_colors);
   }
 
@@ -358,7 +368,7 @@ class Theme {
 
   get(id) {
     const t = this;
-    return t.getColorsFromInputs(id);
+    return t.colors[id];
   }
 
   /**
