@@ -77,11 +77,9 @@ observeEvent(input$selectSourceLayerEdit,{
 
 
 observeEvent(input$btnEditSourceManage,{
-
   reactData$triggerSourceManage <- list(
-     idSource = input$selectSourceLayerEdit,
+     idSource = input$selectSourceLayerEdit
   )
-
 })
 
 observeEvent(reactData$triggerSourceManage,{
