@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.8' target='_blank'>1.7.8</a>
+    - Bug fix
+      - Tools source manage : typo. Produced an error and the app crashed when a source was edited.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.7' target='_blank'>1.7.7</a>
     - Bug fix
       - URL query string parameter "theme" e.g ?theme=smartgray ?theme=nolabdark did not work
