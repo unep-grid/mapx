@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.9' target='_blank'>1.7.9</a>
+    - Bug fix
+     - Linkage between download source and manage source reactive object was not set properly. Table of view did not appear, and validation was not performed
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.8' target='_blank'>1.7.8</a>
     - Bug fix
       - Tools source manage : typo. Produced an error and the app crashed when a source was edited.
