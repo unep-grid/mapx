@@ -59,12 +59,21 @@ observeEvent(input$btnEditSources,{
 
 
 #
+# Trigger source manage
+#
+observeEvent(input$btnEditSourceManage,{
+  reactData$triggerSourceManage <- list(
+     idSource = input$selectSourceLayerEdit,
+     update = runif(1)
+  )
+})
+
+#
 # Disable btn edit if not allowed
 #
-observeEvent(input$selectSourceLayerEdit,{
-
+observeEvent(reactData$triggerSourceManage,{
   language <- reactData$language
-  layer <- input$selectSourceLayerEdit
+  layer <- reactData$triggerSourceManage$idSource
   layers <- reactListEditSources()
   isAllowed <- layer %in% layers
 
@@ -72,15 +81,9 @@ observeEvent(input$selectSourceLayerEdit,{
     id="btnEditSourceManage",
     disable = !isAllowed 
     )
-
 })
 
 
-observeEvent(input$btnEditSourceManage,{
-  reactData$triggerSourceManage <- list(
-     idSource = input$selectSourceLayerEdit
-  )
-})
 
 observeEvent(reactData$triggerSourceManage,{
 
@@ -218,7 +221,7 @@ observeEvent(reactData$triggerSourceManage,{
 #
 observe({
 
-  idSource <- reactData$sourceDownloadRequest$idSource
+  idSource <- reactData$triggerSourceManage$idSource
   language <- reactData$language
   readers <- input$selectSourceReadersUpdate
   editors <- input$selectSourceEditorsUpdate
@@ -314,7 +317,8 @@ observeEvent(input$btnDeleteSourceConfirm,{
 
   if(blockDelete) return()
 
-  idSource <- reactData$sourceDownloadRequest$idSource
+  idSource <- reactData$triggerSourceManage$idSource
+
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id
@@ -351,7 +355,7 @@ observeEvent(input$btnDeleteSourceConfirm,{
 #
 observeEvent(input$btnUpdateSource,{
 
-  idSource <- reactData$sourceDownloadRequest$idSource
+  idSource <- reactData$triggerSourceManage$idSource
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id

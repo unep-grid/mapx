@@ -149,10 +149,10 @@ reactTableViewsUsingSource <- reactive({
   #
   # Trigger
   #
-  idSource <- input$selectSourceLayerEdit 
+  idSource <- reactData$triggerSourceManage$idSource
   language <- reactData$language  
-  idViewSource <-input$selectSourceLayerMain
-  idViewSourceMask <- input$selectSourceLayerMask
+  #idViewSource <-input$selectSourceLayerMain
+  #idViewSourceMask <- input$selectSourceLayerMask
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
 

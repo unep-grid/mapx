@@ -110,10 +110,12 @@ observeEvent(reactData$sourceDownloadRequest,{
 
 #
 # Trigger source parameters settings
+# see tool_source_manage.R
 #
 observeEvent(input$btnEditSourceFromDownload,{
   reactData$triggerSourceManage <- list(
-     idSource = reactData$sourceDownloadRequest$idSource
+     idSource = reactData$sourceDownloadRequest$idSource,
+     update =  runif(1)
   )
 })
 
