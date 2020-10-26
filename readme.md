@@ -103,3 +103,12 @@ docker-compose exec api sh
 cd /apidev
 npm run
 ```
+
+## Database migration
+
+Migration use [db-migrate](https://www.npmjs.com/package/db-migrate) and you might update the database as follow:
+```
+$ docker-compose exec|run node npx db-migrate up
+```
+
+See [db-migrate documentation](https://db-migrate.readthedocs.io/) for more information.

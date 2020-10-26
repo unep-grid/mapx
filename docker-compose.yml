@@ -41,6 +41,14 @@ services:
     volumes:
       - ./app:/srv/shiny-server/dev
       - ./_shared:/shared
+  node:
+    env_file: mapx.dev.env
+    build: ./node
+    volumes:
+      - ./app:/srv/shiny-server/dev
+    working_dir: /srv/shiny-server/dev
+    user: node
+    command: sh -c "npm ci && npm run dev"
   api:
     env_file: mapx.dev.env
     build: ./api/.
