@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.10' target='_blank'>1.7.10</a>
+    - Bug fix
+     - When editing and previewing large story maps, fixes an issue with legends not being rendered, which blocked subsequent operations.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.9' target='_blank'>1.7.9</a>
     - Bug fix
      - Linkage between download source and manage source reactive object was not set properly. Table of view did not appear, and validation was not performed
