@@ -1277,22 +1277,6 @@ export async function addSourceFromView(o) {
     }
 
     const idSource = o.view.id + '-SRC';
-    const sourceExists = !!o.map.getSource(idSource);
-
-    if (sourceExists) {
-      /**
-       * Handle case when old layers remain in map
-       * This could prevent source removal
-       */
-      h.removeLayersByPrefix({
-        prefix: o.view.id,
-        map: o.map
-      });
-      /**
-       * Remove old source
-       */
-      o.map.removeSource(idSource);
-    }
 
     if (o.view.type === 'vt') {
       /**
@@ -1327,6 +1311,23 @@ export async function addSourceFromView(o) {
         }
       });
       o.view.data.source.promoteId = 'gid';
+    }
+
+    const sourceExists = !!o.map.getSource(idSource);
+
+    if (sourceExists) {
+      /**
+       * Handle case when old layers remain in map
+       * This could prevent source removal
+       */
+      h.removeLayersByPrefix({
+        prefix: o.view.id,
+        map: o.map
+      });
+      /**
+       * Remove old source
+       */
+      o.map.removeSource(idSource);
     }
 
     o.map.addSource(idSource, o.view.data.source);
@@ -3506,7 +3507,7 @@ async function viewLayersAddCc(o) {
  * @param {Boolean} o.addTitle Add title to the legend
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
-function viewLayersAddRt(o) {
+async function viewLayersAddRt(o) {
   const view = o.view;
   const map = o.map;
   const h = mx.helpers;
@@ -3515,16 +3516,32 @@ function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
-  const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.source.legendTitles',
     defaultValue: null
   });
+  const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
+
   let isLegendDefault = false;
+
   /**
-   * Add legend in container
+   * LAYERS
    */
+  map.addLayer(
+    {
+      id: idView,
+      type: 'raster',
+      source: idSource
+    },
+    o.before
+  );
+
+  /**
+   * LEGENDS
+   */
+
+  /* Legend element */
   const elLegend = h.elLegend(view, {
     type: 'rt',
     elLegendContainer: o.elLegendContainer,
@@ -3532,151 +3549,120 @@ function viewLayersAddRt(o) {
     removeOld: true
   });
 
-  return new Promise((resolve) => {
-    if (!tiles) {
-      resolve(false);
-      return;
-    }
+  if (!tiles) {
+    console.warn('viewLayersAddRt : missing tiles');
+    return false;
+  }
 
-    /*
-     * Add legend label
-     */
-    if (legendTitle) {
-      const elLabel = h.el(
-        'label',
-        {
-          class: ['mx-legend-rt-title', 'text-muted']
-        },
-        legendTitle
-      );
-      elLegend.appendChild(elLabel);
-    }
-    /**
-     * Add legend box
-     */
-    elLegend.appendChild(elLegendImageBox);
+  if (!h.isElement(elLegend)) {
+    console.warn('viewLayersAddRt : no target elLegend');
+    return false;
+  }
 
-    /**
-     * source has already be added. Add layer
-     */
-    map.addLayer(
+  /* Legend title  */
+  if (legendTitle) {
+    const elLabel = h.el(
+      'label',
       {
-        id: idView,
-        type: 'raster',
-        source: idSource
+        class: ['mx-legend-rt-title', 'text-muted']
       },
-      o.before
+      legendTitle
     );
+    elLegend.appendChild(elLabel);
+  }
 
-    /**
-     * If no legend url is provided, use a minimap
-     */
-    if (!h.isUrl(legendUrl)) {
-      view._miniMap = new RasterMiniMap({
-        elContainer: elLegendImageBox,
-        width: 40,
-        height: 40,
-        mapSync: map,
-        tiles: tiles
-      });
-      /**
-       * Resolve now
-       */
-      resolve(false);
-    } else {
-      /*
-       * Add legend image
-       */
-      const promLegendBase64 = h.urlToImageBase64(legendUrl);
-      resolve(promLegendBase64);
-    }
-  }).then((legendB64) => {
-    /**
-     * If empty, use default
-     */
-    if (legendB64 === false) {
-      return true;
-    }
-    /**
-     * If empty data or length < 'data:image/png;base64,' length
-     */
-    if (!h.isBase64img(legendB64)) {
-      legendB64 = legendB64Default;
-      isLegendDefault = true;
-    }
+  /*  Add legend to legend box */
+  elLegend.appendChild(elLegendImageBox);
 
-    if (isLegendDefault) {
-      /**
-       * Add tooltip 'missing legend'
-       */
-      elLegend.classList.add('hint--bottom');
-      elLegend.dataset.lang_key = 'noLegend';
-      elLegend.dataset.lang_type = 'tooltip';
-      h.updateLanguageElements({
-        el: o.elLegendContainer
-      });
-    } else {
-      /**
-       * Indicate that image can be zoomed
-       */
-      elLegend.style.cursor = 'zoom-in';
-    }
-    /**
-     * Create an image with given source
-     */
-    const img = h.el('img', {alt: 'Legend'});
-    img.alt = 'Legend';
-    img.addEventListener('error', handleImgError);
-    img.addEventListener('load', handleLoad, {once: true});
-    if (!isLegendDefault) {
-      img.addEventListener('click', handleClick);
-    }
-    img.src = legendB64;
+  /*  If no legend url is provided, use a minima */
+  let legendB64 = null;
 
+  if (!h.isUrl(legendUrl)) {
+    view._miniMap = new RasterMiniMap({
+      elContainer: elLegendImageBox,
+      width: 40,
+      height: 40,
+      mapSync: map,
+      tiles: tiles
+    });
+    /* Raster MiniMap added, here */
     return true;
+  }
 
-    /**
-     * Helpers
-     */
-    function handleClick() {
-      /**
-       * Show a bigger image if clicked
-       */
-      const title =
-        legendTitle ||
-        h.getLabelFromObjectPath({
-          obj: view,
-          path: 'data.title',
-          defaultValue: '[ missing title ]'
-        });
+  /* Get a base64 image from url */
+  if(h.isUrl(legendUrl)){
+    legendB64 = await h.urlToImageBase64(legendUrl);
+  }
 
-      const imgModal = h.el('img', {
-        src: img.src,
-        alt: 'Legend',
-        onerror: handleImgError
+  /* If empty data or length < 'data:image/png;base64,' length */
+  if (!h.isBase64img(legendB64)) {
+    legendB64 = legendB64Default;
+    isLegendDefault = true;
+  }
+
+  if (isLegendDefault) {
+    /* Add tooltip 'missing legend' */
+    elLegend.classList.add('hint--bottom');
+    elLegend.dataset.lang_key = 'noLegend';
+    elLegend.dataset.lang_type = 'tooltip';
+    h.updateLanguageElements({
+      el: o.elLegendContainer
+    });
+  } else {
+    /* Indicate that image can be zoomed */
+    elLegend.style.cursor = 'zoom-in';
+  }
+  /* Create an image with given source */
+  const img = h.el('img', {alt: 'Legend'});
+  img.alt = 'Legend';
+  img.addEventListener('error', handleImgError);
+  img.addEventListener('load', handleLoad, {once: true});
+  if (!isLegendDefault) {
+    img.addEventListener('click', handleClick);
+  }
+  /* Set base64 image as source */
+  img.src = legendB64;
+
+  return true;
+
+  /**
+   * Helpers
+   */
+
+  /*  Show a bigger image if clicked */
+  function handleClick() {
+    const title =
+      legendTitle ||
+      h.getLabelFromObjectPath({
+        obj: view,
+        path: 'data.title',
+        defaultValue: '[ missing title ]'
       });
 
-      /**
-       * Add in modal
-       */
-      h.modal({
-        title: title,
-        id: 'legend-raster-' + view.id,
-        content: imgModal,
-        addBackground: false
-      });
-    }
-    function handleLoad() {
-      /**
-       * Add image to
-       */
-      elLegendImageBox.appendChild(img);
-    }
-    function handleImgError() {
-      this.onerror = null;
-      this.src = legendB64Default;
-    }
-  });
+    const imgModal = h.el('img', {
+      src: img.src,
+      alt: 'Legend',
+      onerror: handleImgError
+    });
+
+    /* Add in modal */
+    h.modal({
+      title: title,
+      id: 'legend-raster-' + view.id,
+      content: imgModal,
+      addBackground: false
+    });
+  }
+
+  /*  Add image to image box */
+  function handleLoad() {
+    elLegendImageBox.appendChild(img);
+  }
+  /* error callback */
+  function handleImgError() {
+    this.onerror = null;
+    this.src = legendB64Default;
+  }
 }
 
 /**
@@ -3731,13 +3717,6 @@ export async function viewLayersAddVt(o) {
   if (!idSourceLayer) {
     return false;
   }
-
-  const elLegend = h.elLegend(view, {
-    type: 'vt',
-    removeOld: true,
-    elLegendContainer: o.elLegendContainer,
-    addTitle: o.addTitle
-  });
 
   /**
    * Set zoom default
@@ -4045,7 +4024,7 @@ export async function viewLayersAddVt(o) {
      * Update layer order based in displayed list
      */
 
-    if (hasStyleRules && elLegend) {
+    if (hasStyleRules) {
       /**
        * Clean rules;
        * - If next rules is identical, remove it from legend
@@ -4088,7 +4067,16 @@ export async function viewLayersAddVt(o) {
        * Add legend using template
        */
       view._rulesCopy = rules;
-      elLegend.innerHTML = mx.templates.viewListLegend(view);
+
+      const elLegend = h.elLegend(view, {
+        type: 'vt',
+        removeOld: true,
+        elLegendContainer: o.elLegendContainer,
+        addTitle: o.addTitle
+      });
+      if (h.isElement(elLegend)) {
+        elLegend.innerHTML = mx.templates.viewListLegend(view);
+      }
     }
 
     /**
@@ -4149,6 +4137,9 @@ function addLayers(layers, layersAfter, before) {
    * Add bottom layers now
    */
   layers.forEach((layer) => {
+    if (map.getLayer(layer.id)) {
+      map.removeLayer(layer.id);
+    }
     map.addLayer(layer, before);
   });
 

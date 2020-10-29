@@ -2146,7 +2146,7 @@ export function urlToImageBase64(url) {
       });
     })
     .catch((e) => {
-      console.error(`urlToImageBase64 failed: , ${e.message}`);
+      console.warn(`urlToImageBase64 failed: , ${e.message}`);
       return def;
     });
 
