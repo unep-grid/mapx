@@ -1938,8 +1938,6 @@ export function viewsLayersOrderUpdate(o) {
       }
     });
 
-    console.warn('Update layer order');
-
     mx.events.fire({
       type: 'layers_ordered',
       data: {

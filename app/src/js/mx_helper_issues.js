@@ -7,7 +7,7 @@ let errors = [];
 export function handleIssues(err) {
   const h = mx.helpers;
 
-  console.error(err);
+  //console.error(err);
 
   if (!btnError) {
     btnError = new ButtonPanel({
@@ -65,6 +65,7 @@ export function handleIssues(err) {
                   zIndex: -1
                 }
               });
+              debugger;
               elText.innerHTML = JSON.stringify(errors.map((e) => e.msg));
               document.body.appendChild(elText);
               elText.focus();
@@ -86,6 +87,8 @@ export function handleIssues(err) {
     btnError.elPanelContent.appendChild(elErrorsContainer);
   }
 
+  // bug with jshint thinking err is not used, because next block is ignored
+  err = err;
   // jshint ignore:start
   // mapx error, standard error, map error, promise errors
   var msg =
@@ -100,8 +103,8 @@ export function handleIssues(err) {
   if (src) {
     msg = `${msg} (source:${src})`;
   }
-
   // jshint ignore:end
+
   const elError = h.el(
     'div',
     {class: 'alert alert-danger'},
