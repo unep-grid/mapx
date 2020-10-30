@@ -123,11 +123,11 @@ async function cleanRemoveViews() {
   });
   await Promise.all(aProm);
 
-  while(viewsAdditional.length){
+  while (viewsAdditional.length) {
     const view = viewsAdditional.pop();
     const pos = views.indexOf(view);
-    if(pos > -1){
-       views.splice(pos,1);
+    if (pos > -1) {
+      views.splice(pos, 1);
     }
   }
   return true;
@@ -734,7 +734,7 @@ function storyHandleKeyDown(event) {
   event.preventDefault();
   event.stopPropagation();
   var h = mx.helpers;
- 
+
   switch (event.key) {
     case ' ':
       h.storyAutoPlay('start');
@@ -831,7 +831,7 @@ export function storyGoTo(to, useTimeout, funStop) {
 
 export function storyAutoPlay(cmd) {
   const h = mx.helpers;
-  
+
   var data = h.path(mx.data, 'story.data', {});
   var enabled = data.autoplay || false;
   var playStart = cmd === 'start' && !enabled;
@@ -1366,6 +1366,7 @@ export function storyPlayStep(o) {
   }
   mx.events.fire('story_step');
   data.currentStep = stepNum;
+
   /**
    * retrieve step information
    */
@@ -1378,48 +1379,6 @@ export function storyPlayStep(o) {
     method: 'easeTo'
   };
   const easing = h.easingFun({type: anim.easing, power: anim.easing_power});
-
-  /**
-   * Views set
-   */
-  const vStep = step.views.map((v) => v.view);
-  const vVisible = h.getViewsLayersVisibles();
-  const vToRemove = h.getArrayDiff(vVisible, vStep);
-  const vToAdd = h.getArrayDiff(vStep, vVisible);
- 
-  /**
-   * Add view if not alredy visible
-   */
-  vToAdd.forEach((v, i) => {
-    const vPrevious = vStep[i - 1] || mx.settings.layerBefore;
-    h.viewLayersAdd({
-      id: o.id,
-      idView: v,
-      openView: false,
-      addTitle: true,
-      before: vPrevious,
-      elLegendContainer: elLegendContainer
-    });
-  });
-
-  vToRemove.forEach((v) => {
-    h.viewLayersRemove({
-      id: o.id,
-      idView: v,
-      elLegendContainer: elLegendContainer
-    });
-    h.viewModulesRemove(v);
-  });
-
-  setTimeout(() => {
-    /**
-     * Set order after rendering
-     */
-    h.viewsLayersOrderUpdate({
-      order: vStep,
-      id: o.id
-    });
-  }, 0);
 
   /**
    * Fly to position
@@ -1443,5 +1402,49 @@ export function storyPlayStep(o) {
       center: [pos.lng, pos.lat]
     });
   }
-}
 
+  /**
+   * Views set
+   */
+  const vStep = step.views.map((v) => v.view);
+  const vVisible = h.getViewsLayersVisibles();
+  const vToRemove = h.getArrayDiff(vVisible, vStep);
+  const vToAdd = h.getArrayDiff(vStep, vVisible);
+
+  /**
+   * Add view if not alredy there
+   */
+  const vPromAdded = vToAdd.map((v, i) => {
+    const vPrevious = vStep[i - 1] || mx.settings.layerBefore;
+    return h.viewLayersAdd({
+      id: o.id,
+      idView: v,
+      openView: false,
+      addTitle: true,
+      before: vPrevious,
+      elLegendContainer: elLegendContainer
+    });
+  });
+
+  /**
+   * Remove view not used
+   */
+  const vPromRemoved = vToRemove.map((v) => {
+    return h.viewLayersRemove({
+      id: o.id,
+      idView: v,
+      elLegendContainer: elLegendContainer
+    });
+    //h.viewModulesRemove(v);
+  });
+
+  /**
+   * Once everything is done set order
+   */
+  Promise.all([...vPromAdded, ...vPromRemoved]).then(() => {
+    h.viewsLayersOrderUpdate({
+      order: vStep,
+      id: o.id
+    });
+  });
+}

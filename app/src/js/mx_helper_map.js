@@ -1938,6 +1938,8 @@ export function viewsLayersOrderUpdate(o) {
       }
     });
 
+    console.warn('Update layer order');
+
     mx.events.fire({
       type: 'layers_ordered',
       data: {
@@ -2466,7 +2468,6 @@ export async function viewDelete(o) {
   const geojsonData = mx.data.geojson;
 
   await h.viewLayersRemove(o);
-  await h.viewModulesRemove(view);
 
   mData.viewsList.removeItemById(view.id);
 
@@ -2497,7 +2498,6 @@ export async function viewLayersRemove(o) {
   if (!h.isView(view)) {
     return false;
   }
-
   const now = Date.now();
   const viewDuration = now - view._added_at || 0;
   delete view._added_at;
@@ -2514,6 +2514,8 @@ export async function viewLayersRemove(o) {
     id: o.id,
     prefix: o.idView
   });
+
+  await h.viewModulesRemove(view);
 
   mx.events.fire({
     type: 'view_removed',
@@ -2563,7 +2565,6 @@ async function _viewUiClose(view) {
   if (h.isView(view) && view._vb) {
     view._vb.close();
   }
-  await h.viewModulesRemove(view);
   view._open = false;
   return true;
 }
@@ -3590,7 +3591,7 @@ async function viewLayersAddRt(o) {
   }
 
   /* Get a base64 image from url */
-  if(h.isUrl(legendUrl)){
+  if (h.isUrl(legendUrl)) {
     legendB64 = await h.urlToImageBase64(legendUrl);
   }
 
@@ -4139,6 +4140,9 @@ function addLayers(layers, layersAfter, before) {
   layers.forEach((layer) => {
     if (map.getLayer(layer.id)) {
       map.removeLayer(layer.id);
+    }
+    if (!map.getLayer(before)) {
+      before = mx.settings.layerBefore;
     }
     map.addLayer(layer, before);
   });
@@ -4722,7 +4726,7 @@ export function addLayer(o) {
     }
     if (o.after) {
       /**
-       * Assume stable, rendered style
+       * Add after : find next layer
        */
       var layers = map.getStyle().layers;
       var found = false;
@@ -4734,10 +4738,13 @@ export function addLayer(o) {
           map.addLayer(o.layer, idBefore);
         }
       });
-      if (!found) {
-        console.warn(`addLayer after ${o.after} : layer not found`);
-      }
     } else {
+      /**
+       * Add before, if specified else use default
+       */
+      if (!map.getLayer(o.before)) {
+        o.before = mx.settings.layerBefore;
+      }
       map.addLayer(o.layer, o.before);
     }
   }
@@ -4881,21 +4888,20 @@ export async function zoomToViewIdVisible(o) {
   }
 }
 
-export function resetViewStyle(o) {
+export async function resetViewStyle(o) {
   const h = mx.helpers;
   if (!o.idView) {
     return;
   }
   const view = h.getView(o.idView);
-
-  h.viewLayersAdd({
-    id: o.id,
-    idView: o.idView
-  });
-
   h.updateLanguageElements({
     el: view._el
   });
+  await h.viewLayersAdd({
+    id: o.id,
+    idView: o.idView
+  });
+  h.viewsLayersOrderUpdate(o);
 }
 
 /**
