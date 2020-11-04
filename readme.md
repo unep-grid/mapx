@@ -72,11 +72,8 @@ Start the `Express.js` development server:
 
 ```sh
 $ docker-compose up -d
-$ docker-compose exec api sh
-$ cd /apidev
-$ node inspect index.js port=3333
+$ docker-compose exec api node inspect /apidev/index.js port=3333
 debug> c
-< listen to 3333
 ```
 
 The instance now should use the api service at <http://apidev.mapx.localhost:8880/> for which the source from `./api/` is mounted as `/apidev/` in the container.
