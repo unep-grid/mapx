@@ -243,9 +243,7 @@ export function layer_resolver(c) {
     {
       id: [
         'place-label-capital',
-        'place-label-capital-no-label',
         'place-label-city',
-        'place-label-city-no-label',
         'country-label'
       ],
       layout: {

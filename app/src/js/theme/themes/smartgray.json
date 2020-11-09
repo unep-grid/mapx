@@ -7,15 +7,15 @@
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
-      "color": "rgba(235,235,235,1)"
+      "color": "rgb(235,235,235)"
     },
     "mx_ui_link": {
       "visibility": "visible",
-      "color": "rgba(235,235,235,1)"
+      "color": "rgb(235,235,235)"
     },
     "mx_ui_text_faded": {
       "visibility": "visible",
-      "color": "rgba(192,192,192,1)"
+      "color": "rgb(192,192,192)"
     },
     "mx_ui_hidden": {
       "visibility": "visible",
@@ -27,7 +27,7 @@
     },
     "mx_ui_background": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,1)"
+      "color": "rgb(66,66,66)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",
@@ -35,7 +35,7 @@
     },
     "mx_map_background": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,1)"
+      "color": "rgb(66,66,66)"
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",
@@ -55,7 +55,7 @@
     },
     "mx_map_text_place": {
       "visibility": "visible",
-      "color": "rgba(192,192,192,0.5)"
+      "color": "rgba(186,186,186,0.9)"
     },
     "mx_map_text_place_outline": {
       "visibility": "visible",
@@ -79,7 +79,7 @@
     },
     "mx_map_water": {
       "visibility": "visible",
-      "color": "rgba(121,121,121,1)"
+      "color": "rgb(121,121,121)"
     },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
@@ -91,7 +91,7 @@
     },
     "mx_map_road": {
       "visibility": "visible",
-      "color": "rgba(94,94,94,1)"
+      "color": "rgb(94,94,94)"
     },
     "mx_map_road_border": {
       "visibility": "visible",
