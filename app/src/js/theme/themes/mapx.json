@@ -55,7 +55,7 @@
     },
     "mx_map_text_place": {
       "visibility": "visible",
-      "color": "rgba(36,36,36,0.5)"
+      "color": "rgba(36,36,36,0.6)"
     },
     "mx_map_text_place_outline": {
       "visibility": "visible",
