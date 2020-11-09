@@ -81,6 +81,7 @@ export class Testing {
   stop(msg){
      throw new Error(msg);
   }
+
   check(title, opt) {
     const t = this;
     opt = Object.assign({}, defaultsTests, opt);
@@ -123,10 +124,6 @@ export class Testing {
       } catch (e) {
         handleErrorSection(e);
       }
-
-
-
-
 
       function handleErrorSection(e) {
         uiSection.text.innerText = `: failed ( ${e} )`;

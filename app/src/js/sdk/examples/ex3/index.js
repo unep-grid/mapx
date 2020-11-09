@@ -1,17 +1,15 @@
 const mapx = new mxsdk.Manager({
   container: document.getElementById('mapx'),
-  url: 'http://dev.mapx.localhost:8880/?project=MX-6ZH-Y46-C7I-AD5-IO1&language=en',
-  // url: 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en',
+  url: 'http://dev.mapx.localhost:8880'
 });
 
 mapx.on('ready', () => {
-
   /**
    * Hide views panel
    */
   mapx.ask('set_panel_left_visibility', {
     panel: 'views',
-    show: false,
+    show: false
   });
 
   /**
@@ -37,8 +35,7 @@ mapx.on('ready', () => {
           }
           collections[collection].push(view);
         });
-      }
-      else {
+      } else {
         collections[no_collection_name].push(view);
       }
     });
@@ -56,21 +53,29 @@ mapx.on('ready', () => {
             var view = e.data;
             $this.toggleClass('active');
             var op = $this.hasClass('active') ? 'view_add' : 'view_remove';
-            mapx.ask(op, {
-              idView: view.id
-            })
-              .then(function(){
+            mapx
+              .ask(op, {
+                idView: view.id
+              })
+              .then(function() {
                 if (op === 'view_add') {
                   $('#output').show();
                   $('#output .content').html(null);
-                  $('#output .content').append($('<h3>').text(view.data.title.en));
-                  $('#output .content').append($('<p>').html(view.data.abstract.en));
-                  mapx.ask('get_view_legend_image', {idView: view.id}).then(function(data) {
-                    $('#output .content').append($('<img>').attr('src', data));
-                  });
+                  $('#output .content').append(
+                    $('<h3>').text(view.data.title.en)
+                  );
+                  $('#output .content').append(
+                    $('<p>').html(view.data.abstract.en)
+                  );
+                  mapx
+                    .ask('get_view_legend_image', {idView: view.id})
+                    .then(function(data) {
+                      $('#output .content').append(
+                        $('<img>').attr('src', data)
+                      );
+                    });
                 }
-
-              })
+              });
           });
         $views_collection.append($('<li>').html($a));
       });
@@ -85,5 +90,7 @@ mapx.on('ready', () => {
 
 $('#output .close').click(function(e) {
   e.preventDefault();
-  $(this).closest('#output').hide();
+  $(this)
+    .closest('#output')
+    .hide();
 });

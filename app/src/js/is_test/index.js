@@ -46,8 +46,11 @@ export function isView(item) {
  * @param {Function} validator Additionnal validator that must return boolean
  */
 export function isViewType(item, type, validator) {
+  if(isString(validator)){
+    validator = new Function(`return ${validator}`)();
+  }
   type = isArray(type) ? type : [type];
-  const valid = isFunction(validator) ? validator(item) : true;
+  const valid = isFunction(validator) ? validator(item,this) : true;
   const typeOk = type.reduce((a, t) => {
     return a ? a : item.type === t;
   }, false);

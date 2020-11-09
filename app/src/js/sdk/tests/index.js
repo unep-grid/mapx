@@ -2,7 +2,7 @@ const elContainer = document.getElementById('mapx');
 const elResults = document.getElementById('results');
 const mapx = new mxsdk.Manager({
   container: elContainer,
-  url: 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF'
+  url: 'http://dev.mapx.localhost:8880'
 });
 
 mapx.on('message', (message) => {
@@ -16,21 +16,24 @@ mapx.on('message', (message) => {
     console.info(`%c 🤬 ${message.text}`, 'color: #F00');
   }
 });
-
-const groups = (new window.URL(window.location.href)).searchParams.get('groups');
-const titles = (new window.URL(window.location.href)).searchParams.get('titles');
+const groups = new window.URL(window.location.href).searchParams.get('groups');
+const titles = new window.URL(window.location.href).searchParams.get('titles');
 const t = new mxsdk.Testing({
   container: elResults,
   title: 'mapx sdk test',
   groups: groups ? groups.split(',') : [],
-  titles:  titles ? titles.split(',') : [],
+  titles: titles ? titles.split(',') : []
 });
-
 /**
  * MapX respond
  */
+async function stopIfGuest() {
+  const isGuest = await mapx.ask('is_user_guest');
+  if (isGuest) {
+    return t.stop('Need logged user');
+  }
+}
 mapx.once('ready', () => {
-  
   t.check('Get list methods', {
     init: () => {
       return mapx.ask('get_sdk_methods');
@@ -38,8 +41,8 @@ mapx.once('ready', () => {
     tests: [
       {
         name: 'test if array of string',
-        test: (r) => {
-          return t.h.isArrayOfString(r);
+        test: (methods) => {
+          return t.h.isArrayOfString(methods);
         }
       }
     ]
@@ -51,15 +54,15 @@ mapx.once('ready', () => {
     tests: [
       {
         name: 'is array of views',
-        test: (r) => {
-          return t.h.isArrayOfViews(r);
+        test: (views) => {
+          return t.h.isArrayOfViews(views);
         }
       }
     ]
   });
-
   t.check('Trigger login window', {
-    init: () => {
+    init: async () => {
+      await stopIfGuest();
       return mapx.ask('show_modal_login');
     },
     tests: [
@@ -76,7 +79,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get / Set language', {
     tests: [
       {
@@ -93,7 +95,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get views id list', {
     init: () => {
       return mapx.ask('get_views_id');
@@ -101,16 +102,17 @@ mapx.once('ready', () => {
     tests: [
       {
         name: 'is array of views id',
-        test: (r) => {
-          return t.h.isArrayOfViewsId(r);
+        test: (idViews) => {
+          return t.h.isArrayOfViewsId(idViews);
         }
       }
     ]
   });
-
   t.check('Get views with active layers on map', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', ['vt', 'rt']);
+      const view = await mapx.ask('_get_random_view', {
+        type: ['vt', 'rt']
+      });
       await mapx.ask('view_add', {idView: view.id});
       const ids = await mapx.ask('get_views_with_visible_layer');
       await mapx.ask('view_remove', {idView: view.id});
@@ -134,7 +136,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Set view order', {
     init: async () => {
       await mapx.ask('set_views_list_sort', {asc: true, mode: 'text'});
@@ -154,10 +155,11 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view vt attribute meta', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', 'vt');
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt'
+      });
       const meta = await mapx.ask('get_view_meta_vt_attribute', {
         idView: view.id
       });
@@ -172,10 +174,11 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute config', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', 'vt');
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt'
+      });
       const config = await mapx.ask('get_view_table_attribute_config', {
         idView: view.id
       });
@@ -190,10 +193,11 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute url', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', 'vt');
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt'
+      });
       const url = await mapx.ask('get_view_table_attribute_url', {
         idView: view.id
       });
@@ -208,10 +212,11 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view table attribute', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', 'vt');
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt'
+      });
       const data = await mapx.ask('get_view_table_attribute', {
         idView: view.id
       });
@@ -226,11 +231,12 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view vt source meta', {
     init: async () => {
       // jshint ignore:start
-      const view = await mapx.ask('_get_random_view', 'vt');
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt'
+      });
       const idSource = view?.data?.source?.layerInfo?.name;
       // jshint ignore:end
       return mapx.ask('get_source_meta', {
@@ -246,19 +252,22 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view rt or vt legend', {
     init: async () => {
-      const h = t.h;
-      const view = await mapx.ask('_get_random_view', ['vt', 'rt'], (v) => {
-        // jshint ignore:start
-        const rules = v.data?.style?.rules ?? [];
-        const legend = v.data?.source?.legend ?? '';
-        // jshint ignore:end
-        return (
-          (h.isViewVt(v) && rules.length > 0) ||
-          (h.isViewRt(v) && legend && h.isUrl(legend))
-        );
+      const view = await mapx.ask('_get_random_view', {
+        type: ['vt', 'rt'],
+        filter: (view, test) => {
+          /**
+           * Evaluated in is_test module context
+           */ // jshint ignore:start
+          const rules = view.data?.style?.rules ?? [];
+          const legend = view.data?.source?.legend ?? '';
+          // jshint ignore:end
+          return (
+            (test.isViewVt(view) && rules.length > 0) ||
+            (test.isViewRt(view) && legend && test.isUrl(legend))
+          );
+        }
       });
       return mapx.ask('get_view_legend_image', {idView: view.id});
     },
@@ -271,7 +280,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get view meta', {
     timeout: 10000,
     init: async () => {
@@ -287,7 +295,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user id', {
     init: () => {
       return mapx.ask('get_user_id');
@@ -301,7 +308,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user ip', {
     init: () => {
       return mapx.ask('get_user_ip');
@@ -315,7 +321,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user roles', {
     init: () => {
       return mapx.ask('get_user_roles');
@@ -329,13 +334,9 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get user email', {
     init: async () => {
-      const isGuest = await mapx.ask('is_user_guest');
-      if (isGuest) {
-        return t.stop('Need logged user');
-      }
+      await stopIfGuest();
       return mapx.ask('get_user_email');
     },
     tests: [
@@ -347,13 +348,23 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Filter view by text', {
+    group: 'filters',
     init: async () => {
-      const view = await mapx.ask('_get_random_view', 'vt', (v) => {
-        return v.data.attribute && v.data.attribute.type;
+      const view = await mapx.ask('_get_random_view', {
+        type: 'vt',
+        filter: (view, test) => {
+          /**
+           * Evaluated in `is_test` module context
+           */ return (
+            test.isObject(view.data.attribute) &&
+            view.data.attribute.type === 'string'
+          );
+        }
       });
-      await mapx.ask('view_add', {idView: view.id});
+      if (!t.h.isView(view)) {
+        return t.stop('Need at least a vt view with string attribute');
+      }
       return view;
     },
     tests: [
@@ -364,6 +375,7 @@ mapx.once('ready', () => {
           if (!t.h.isView(view)) {
             return false;
           }
+          await mapx.ask('view_add', {idView: view.id});
           const values = view.data.attribute.table
             .map((v) => v.value)
             .filter((v) => t.h.isString(v));
@@ -374,17 +386,15 @@ mapx.once('ready', () => {
           const res = await mapx.ask('get_view_layer_filter_text', {
             idView: view.id
           });
-          const pass = values.reduce(
-            (a, v) => (!a ? a : res.indexOf(v) > -1),
-            true
-          );
+          const pass =
+            t.h.isArray(res) &&
+            values.reduce((a, v) => (!a ? a : res.indexOf(v) > -1), true);
           await mapx.ask('view_remove', {idView: view.id});
           return pass;
         }
       }
     ]
   });
-
   t.check('Get collection by project', {
     init: () => {
       return mapx.ask('get_project_collections');
@@ -398,7 +408,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Set dashboard visibility', {
     init: async () => {
       const views = await mapx.ask('get_views');
@@ -430,7 +439,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Get collection of open views', {
     init: async () => {
       const views = await mapx.ask('get_views');
@@ -461,7 +469,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Load projects', {
     init: () => {
       return mapx.ask('get_projects');
@@ -492,13 +499,21 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Show edit view modal', {
     init: async () => {
+      await stopIfGuest();
       const project = await mapx.ask('get_project');
-      const view = await mapx.ask('_get_random_view', null, (v) => {
-        return h.isViewEditable(v) && v.project === project;
+      const view = await mapx.ask('_get_random_view', {
+        type: null,
+        filter: (view, test) => {
+          /**
+           * Evaluated in `is_test` module context
+           */ return test.isViewEditable(view) && view.project === project;
+        }
       });
+      if (!t.isView(view)) {
+        return t.stop('Need at least a vt view wit string attribute');
+      }
       return view;
     },
     tests: [
@@ -529,7 +544,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger map composer', {
     init: async () => {
       return mapx.ask('show_modal_map_composer');
@@ -548,10 +562,12 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger download view source : vt', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', ['vt']);
+      await stopIfGuest();
+      const view = await mapx.ask('_get_random_view', {
+        type: ['vt']
+      });
       await mapx.ask('download_view_source_vector', {
         idView: view.id
       });
@@ -571,7 +587,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('GeoJSON: create view, download geojson data', {
     init: async () => {
       const view = await mapx.ask('view_geojson_create', {
@@ -603,10 +618,11 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Trigger share module for a view', {
     init: async () => {
-      const view = await mapx.ask('_get_random_view', ['vt', 'rt', 'sm', 'cc']);
+      const view = await mapx.ask('_get_random_view', {
+        type: ['vt', 'rt', 'sm', 'cc']
+      });
       await mapx.ask('show_modal_share', {
         idView: view.id
       });
@@ -626,7 +642,6 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Tools - trigger sharing manager', {
     init: async () => {
       return mapx.ask('show_modal_tool', {tool: 'sharing_manager'});
@@ -648,9 +663,9 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Tools - add new view', {
-    init: async () => { 
+    init: async () => {
+      await stopIfGuest();
       return await mapx.ask('show_modal_tool', {tool: 'view_new'});
     },
     tests: [
@@ -670,9 +685,9 @@ mapx.once('ready', () => {
       }
     ]
   });
-
   t.check('Tools - validate source geom', {
     init: async () => {
+      await stopIfGuest();
       return await mapx.ask('show_modal_tool', {tool: 'source_validate_geom'});
     },
     tests: [
@@ -686,15 +701,12 @@ mapx.once('ready', () => {
             id: 'validateSourceGeom',
             timeout: 2000
           });
-
           await mapx.ask('close_modal_all');
-
           return hasModalEl;
         }
       }
     ]
   });
-
   /**
    * Run tests
    */ t.run({

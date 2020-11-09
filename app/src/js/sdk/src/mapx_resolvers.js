@@ -199,6 +199,27 @@ class MapxResolvers {
       }
     }, false);
   }
+  /**
+   * Check for any matching roles, send an error if it does not match
+   * @param {Array} roleReq Array of required role. eg. ['members','admins']
+   * @param {Object} opt Options
+   * @param {Boolean} opt.reportError Report an error if no match (default true)
+   * @param {Any} opt.id An identifier
+   * @return {Boolean} matched
+   */
+  check_user_role_breaker(roleReq, opt) {
+    const rslv = this;
+    opt = Object.assign({}, {reportError: true, id: null}, opt);
+    roleReq = roleReq || [];
+    const pass = rslv.check_user_role({role: roleReq, all: false});
+    if (!pass && opt.reportError) {
+      rslv._err('err_tool_roles_not_match', {
+        idTool: opt.id,
+        roles: JSON.stringify(roleReq)
+      });
+    }
+    return pass;
+  }
 
   /**
    * Get user email
@@ -414,7 +435,11 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   set_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select('searchBox', 'setValue', opt);
+    return this._apply_filter_layer_select.bind(this)(
+      'searchBox',
+      'setValue',
+      opt
+    );
   }
   /**
    * Get current search box item
@@ -422,7 +447,11 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   get_view_layer_filter_text(opt) {
-    return this._apply_filter_layer_select('searchBox', 'getValue', opt);
+    return this._apply_filter_layer_select.bind(this)(
+      'searchBox',
+      'getValue',
+      opt
+    );
   }
 
   /**
@@ -432,7 +461,11 @@ class MapxResolvers {
    * @param {Numeric} opt.value Value
    */
   set_view_layer_filter_numeric(opt) {
-    return this._apply_filter_layer_slider('numericSlider', 'set', opt);
+    return this._apply_filter_layer_slider.bind(this)(
+      'numericSlider',
+      'set',
+      opt
+    );
   }
 
   /**
@@ -443,7 +476,7 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_filter_time(opt) {
-    return this._apply_filter_layer_slider('timeSlider', 'set', opt);
+    return this._apply_filter_layer_slider.bind(this)('timeSlider', 'set', opt);
   }
 
   /**
@@ -454,7 +487,11 @@ class MapxResolvers {
    * @return null
    */
   set_view_layer_transparency(opt) {
-    return this._apply_filter_layer_slider('transparencySlider', 'set', opt);
+    return this._apply_filter_layer_slider.bind(this)(
+      'transparencySlider',
+      'set',
+      opt
+    );
   }
 
   /**
@@ -464,7 +501,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_numeric() {
-    return this._apply_filter_layer_slider('numericSlider', 'get');
+    return this._apply_filter_layer_slider.bind(this)('numericSlider', 'get');
   }
 
   /**
@@ -474,7 +511,7 @@ class MapxResolvers {
    * @return {Number|Array} values
    */
   get_view_layer_filter_time() {
-    return this._apply_filter_layer_slider('timeSlider', 'get');
+    return this._apply_filter_layer_slider.bind(this)('timeSlider', 'get');
   }
 
   /**
@@ -484,7 +521,10 @@ class MapxResolvers {
    * @return {Number} value
    */
   get_view_layer_transparency() {
-    return this._apply_filter_layer_slider('transparencySlider', 'get');
+    return this._apply_filter_layer_slider.bind(this)(
+      'transparencySlider',
+      'get'
+    );
   }
 
   /**
@@ -585,8 +625,12 @@ class MapxResolvers {
    * @return {Boolean} done
    */
   show_modal_view_edit(opt) {
-    opt = Object.assign({}, {idView: null}, opt);
     const rslv = this;
+    const pass = rslv.check_user_role_breaker(['publisher']);
+    if (!pass) {
+      return;
+    }
+    opt = Object.assign({}, {idView: null}, opt);
     const view = h.getView(opt.idView);
     const valid = h.isView(view);
     const editable = valid && view._edit === true;
@@ -644,7 +688,6 @@ class MapxResolvers {
   show_modal_tool(opt) {
     const rslv = this;
     opt = Object.assign({}, opt);
-    const roles = h.path(mx, 'settings.user.roles.groups', []);
     const tools = {
       sharing_manager: {
         roles: ['public'],
@@ -708,19 +751,15 @@ class MapxResolvers {
       return false;
     }
 
-    const allow = conf.roles.reduce((a, r) => {
-      return a ? a : roles.indexOf(r) > -1;
-    }, false);
+    const pass = rslv.check_user_role_breaker(conf.roles, {
+      id: opt.tool
+    });
 
-    if (!allow) {
-      rslv._err('err_tool_roles_not_match', {
-        idTool: opt.tool,
-        roles: JSON.stringify(conf.roles)
-      });
+    if (pass) {
+      rslv._shiny_input(conf.id, {randomNumber: true});
+      return true;
     }
-
-    rslv._shiny_input(conf.id, {randomNumber: true});
-    return true;
+    return false;
   }
 
   /**
@@ -767,17 +806,17 @@ class MapxResolvers {
    * mapx.ask('set_views_list_filter',{
    *    reset:true
    * })
-   * 
+   *
    * // Reset rules and filter views with a dashboard
    * mapx.ask('set_views_list_filter',{
    *    reset: true,
    *    rules : [{
-   *    type : 'view_components, 
+   *    type : 'view_components,
    *    value:'dashboard'
    *    }]
    * })
    *
-   * // All views with marine or earth in title or abstract or vector views or raster views 
+   * // All views with marine or earth in title or abstract or vector views or raster views
    * mapx.ask('set_views_list_filter',{
    *    rules:
    *     [
@@ -1156,17 +1195,19 @@ class MapxResolvers {
    * Helper to work with sliders
    * @ignore
    */
-  _apply_filter_layer_slider(type, method, opt) {
+  async _apply_filter_layer_slider(type, method, opt) {
     opt = Object.assign({}, {idView: null, value: null}, opt);
+    const rslv = this;
     const view = h.getView(opt.idView);
+    await h.viewFilterToolsInit(view);
     const valid =
       h.isView(view) &&
-      h.isObject(view._interactive) &&
-      h.isObject(view._interactive[type]) &&
-      h.isFunction(view._interactive[type][method]);
+      h.isObject(view._filters_tools) &&
+      h.isObject(view._filters_tools[type]) &&
+      h.isFunction(view._filters_tools[type][method]);
 
     if (valid) {
-      return view._interactive[type][method](opt.value);
+      return view._filters_tools[type][method](opt.value);
     } else {
       return rslv._err('err_view_invalid');
     }
@@ -1176,18 +1217,20 @@ class MapxResolvers {
    * Helper to work with selectize
    * @ignore
    */
-  _apply_filter_layer_select(type, method, opt) {
+  async _apply_filter_layer_select(type, method, opt) {
     type = type || 'searchBox'; // selectize;
     opt = Object.assign({}, {idView: null, value: null}, opt);
+    const rslv = this;
     const view = h.getView(opt.idView);
+    await h.viewFilterToolsInit(view);
     const valid =
       h.isView(view) &&
-      h.isObject(view._interactive) &&
-      h.isObject(view._interactive[type]) &&
-      h.isFunction(view._interactive[type][method]);
+      h.isObject(view._filters_tools) &&
+      h.isObject(view._filters_tools[type]) &&
+      h.isFunction(view._filters_tools[type][method]);
 
     if (valid) {
-      return view._interactive[type][method](opt.value);
+      return view._filters_tools[type][method](opt.value);
     } else {
       return rslv._err('err_view_invalid');
     }
@@ -1242,16 +1285,18 @@ class MapxResolvers {
 
   /**
    * Get random view
-   * @param {String} type of view
-   * @param {Function} filter Filter view by using further validation
+   * @param {Object} opt Options
+   * @param {String} opt.type of view
+   * @param {Function} opt.filter Filter view by using further validation
    * @return view
    * @ignore
    */
-  async _get_random_view(type, filter) {
+  async _get_random_view(opt) {
+    opt = Object.assign({}, {type: ['vt', 'rt']}, opt);
     let views = h.getViews();
-    if (type) {
+    if (opt.type) {
       views = views.reduce((a, v) => {
-        if (h.isViewType(v, type, filter)) {
+        if (h.isViewType(v, opt.type, opt.filter)) {
           a.push(v);
         }
         return a;

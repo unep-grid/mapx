@@ -1,4 +1,5 @@
 export function getSourceTableAttribute(opt) {
+  opt = Object.assign({},opt);
   const h = mx.helpers;
   const host = h.getApiUrl('getSourceTableAttribute');
   const params = h.objToParams({
@@ -15,7 +16,8 @@ export function getSourceTableAttribute(opt) {
 }
 
 export async function showSourceTableAttributeModal(opt) {
-  if (!opt || !opt.idSource) {
+  opt = Object.assign({},opt);
+  if (!opt.idSource) {
     return Promise.resolve(false);
   }
   const h = mx.helpers;
