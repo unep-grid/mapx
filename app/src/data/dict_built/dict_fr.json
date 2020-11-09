@@ -4638,5 +4638,10 @@
     "id": "ps",
     "en": "Pashto",
     "fr": "Pashtou"
+  },
+  {
+    "id": "ar",
+    "en": "Arabic",
+    "fr": "Arabe"
   }
 ]

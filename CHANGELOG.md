@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.11' target='_blank'>1.7.11</a>
+    - Improvement 
+      - App : changed country label + style to better match UN clear map
+      - SDK : Better testing + allow passing function as text through messaging system 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.10' target='_blank'>1.7.10</a>
     - Bug fix
      - When editing and previewing large story maps, fixes an issue with legends not being rendered, which blocked subsequent operations.

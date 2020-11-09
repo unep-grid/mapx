@@ -547,6 +547,7 @@ Class to handle MapX specific method
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
     * [.check_user_role(opt)](#MapxResolvers+check_user_role) ⇒ <code>Boolean</code>
+    * [.check_user_role_breaker(roleReq, opt)](#MapxResolvers+check_user_role_breaker) ⇒ <code>Boolean</code>
     * [.get_user_email()](#MapxResolvers+get_user_email) ⇒ <code>String</code>
     * [.set_project(opt)](#MapxResolvers+set_project) ⇒ <code>Boolean</code>
     * [.get_language()](#MapxResolvers+get_language) ⇒ <code>String</code>
@@ -765,6 +766,21 @@ Check if user as given role
 | opt | <code>Object</code> | Options |
 | opt.role | <code>String</code> \| <code>Array</code> | Role(s) to check |
 | opt.all | <code>Boolean</code> | all roles must match, else at least one |
+
+<a name="MapxResolvers+check_user_role_breaker"></a>
+
+#### mapxResolvers.check\_user\_role\_breaker(roleReq, opt) ⇒ <code>Boolean</code>
+Check for any matching roles, send an error if it does not match
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - matched  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| roleReq | <code>Array</code> | Array of required role. eg. ['members','admins'] |
+| opt | <code>Object</code> | Options |
+| opt.reportError | <code>Boolean</code> | Report an error if no match (default true) |
+| opt.id | <code>Any</code> | An identifier |
 
 <a name="MapxResolvers+get_user_email"></a>
 
@@ -1233,12 +1249,12 @@ mapx.ask('set_views_list_filter',{
 mapx.ask('set_views_list_filter',{
    reset: true,
    rules : [{
-   type : 'view_components, 
+   type : 'view_components,
    value:'dashboard'
    }]
 })
 
-// All views with marine or earth in title or abstract or vector views or raster views 
+// All views with marine or earth in title or abstract or vector views or raster views
 mapx.ask('set_views_list_filter',{
    rules:
     [

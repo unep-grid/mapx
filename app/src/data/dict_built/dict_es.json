@@ -4597,46 +4597,51 @@
   {
     "id": "en",
     "en": "English",
-    "es": ""
+    "es": "Inglés"
   },
   {
     "id": "fr",
     "en": "French",
-    "es": ""
+    "es": "Francés"
   },
   {
     "id": "es",
     "en": "Spanish",
-    "es": ""
+    "es": "Español"
   },
   {
     "id": "ru",
     "en": "Russian",
-    "es": ""
+    "es": "Ruso"
   },
   {
     "id": "zh",
     "en": "Chinese",
-    "es": ""
+    "es": "Chino"
   },
   {
     "id": "de",
     "en": "German",
-    "es": ""
+    "es": "Alemán"
   },
   {
     "id": "bn",
     "en": "Bengali",
-    "es": ""
+    "es": "Bengalí"
   },
   {
     "id": "fa",
     "en": "Farsi",
-    "es": ""
+    "es": "Pastún"
   },
   {
     "id": "ps",
     "en": "Pashto",
-    "es": ""
+    "es": "Pastún"
+  },
+  {
+    "id": "ar",
+    "en": "Arabic",
+    "es": "Àrabe"
   }
 ]
