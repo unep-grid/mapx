@@ -51,6 +51,9 @@ Simple validation tool for MapX specific values
 <dt><a href="#isSorted">isSorted(arr, desc)</a></dt>
 <dd><p>Check if array is sorted</p>
 </dd>
+<dt><a href="#isRegExp">isRegExp(value)</a> ⇒ <code>Logical</code></dt>
+<dd><p>Test for RegExp instance</p>
+</dd>
 <dt><a href="#isProjectId">isProjectId(id)</a> ⇒ <code>Boolean</code></dt>
 <dd><p>Test for valid project id</p>
 </dd>
@@ -278,6 +281,18 @@ Check if array is sorted
 | --- | --- | --- |
 | arr | <code>Array</code> | Array to test |
 | desc | <code>Boolean</code> | Descendent ? |
+
+<a name="isRegExp"></a>
+
+## isRegExp(value) ⇒ <code>Logical</code>
+Test for RegExp instance
+
+**Kind**: global function  
+**Returns**: <code>Logical</code> - is RegExp instance  
+
+| Param | Type |
+| --- | --- |
+| value | <code>Any</code> | 
 
 <a name="isProjectId"></a>
 
