@@ -359,6 +359,7 @@ observeEvent(input$btnUpdateSource,{
   project <- reactData$project
   language <- reactData$language
   idUser <- reactUser$data$id
+  email <- reactUser$data$email
 
   mxCatch(title="btn update manage source",{
     userRoles <- getUserRole()
@@ -414,7 +415,8 @@ observeEvent(input$btnUpdateSource,{
       value = as.list(editors)
       )
 
-    mxUpdateGeoserverSourcePublishing(
+    mxUpdateGeoserverSourcePublishingAsync(
+      email = email,
       idProject = project,
       idSource = idSource,
       idGroups = as.list(idGroupsServices),

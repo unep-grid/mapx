@@ -674,13 +674,17 @@ observeEvent(input$viewRasterLegendTitles_init,{
 observeEvent(input$btnViewDeleteConfirm,{
 
   idView <- .get(reactData$viewDataEdited, c("id")) 
+  email <- reactUser$data$email
 
   if(noDataCheck(idView)) mxDebugMsg("View to delete not found")
-
   #
   # Update geoserver publication
   #
-  mxPublishGeoServerViewAuto(idView, publish = FALSE)
+  mxPublishGeoServerViewAutoAsync(
+    email = email,
+    idView = idView,
+    publish = FALSE
+  )
 
   #
   # Remove all views rows
@@ -811,6 +815,11 @@ observeEvent(input$btnViewSave,{
     hideView <- FALSE # remove view from ui after save
 
     #
+    # Email user for async
+    #
+    email <- reactUser$data$email
+
+    #
     # check for edit right, remove temporary edit mark
     #
     if(!isTRUE(view[["_edit"]])) return()
@@ -843,6 +852,7 @@ observeEvent(input$btnViewSave,{
     collections <- input$selViewCollectionsUpdate
     view[[c("data","collections")]] <- as.list(collections)
     hideView <- !noDataCheck(query$collections) && !any( collections %in% query$collections )
+
     #
     # Title and description
     #
@@ -857,6 +867,7 @@ observeEvent(input$btnViewSave,{
     view[[c("readers")]] <- as.list(readers)
     view[[c("editors")]] <- as.list(editors)
     view[[c("target")]] <- NULL
+
     #
     # vector tiles
     #
@@ -877,8 +888,11 @@ observeEvent(input$btnViewSave,{
       #
       # Update geoserver publication
       #
-      mxPublishGeoServerViewAuto(idView, publish = isPublishable)
-      
+      mxPublishGeoServerViewAutoAsync(
+        email = email,
+        idView = idView,
+        publish = isPublishable
+      )
     }
     #
     # raster tiles

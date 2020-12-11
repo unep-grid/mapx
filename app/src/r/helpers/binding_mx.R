@@ -399,7 +399,8 @@ mxNotify = function(notif,update=runif(1),session=shiny::getDefaultReactiveDomai
   isList <- is.list(notif)
   hasMsg <- isList && !noDataCheck(notif$msg)
   hasType <- isList && !noDataCheck(notif$type)
-  if(isList && hasMsg && hasType){
+  hasSession <- !noDataCheck(session)
+  if(hasSession && isList && hasMsg && hasType){
     notif$timestamp = as.numeric(Sys.time())*1000
     session$sendCustomMessage("mxNotify",list(
         update = update,

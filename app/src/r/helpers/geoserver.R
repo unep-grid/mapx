@@ -483,6 +483,47 @@ mxDeleteGeoServerAllProjectWorkspace <- function(idProject){
   return(all(res))
 }
 
+#' Async update view
+#'
+#'
+mxPublishGeoServerViewAutoAsync <- function(email, idView, publish = FALSE){
 
+  tmpConfig <- tempfile('gs_config')
+  config <- list(
+    email = email,
+    idView = idView,
+    publish = publish
+  )
+  saveRDS(config,tmpConfig)
+  scriptPath <- "./src/r/scripts/updateGeoserverView.R"
+  cmd <- paste("cd",getwd(),"&&","Rscript",scriptPath,tmpConfig)
+  system(cmd, 
+    wait = FALSE,
+    ignore.stdout =TRUE,
+    ignore.stderr =TRUE
+  )
+}
 
+#' Async publish
+#'
+#'
+mxUpdateGeoserverSourcePublishingAsync <- function(email, idSource,idProject=NULL,idGroups=list(),idGroupsOld=list()){
+
+  tmpConfig <- tempfile('gs_config')
+  config <- list(
+    email = email,
+    idSource = idSource,
+    idProject = idProject,
+    idsGroups = idGroups,
+    idsGroupsOld = idGroupsOld
+  )
+  saveRDS(config,tmpConfig)
+  scriptPath <- "./src/r/scripts/updateGeoserverSource.R"
+  cmd <- paste("cd",getwd(),"&&","Rscript",scriptPath,tmpConfig)
+  system(cmd, 
+    wait = FALSE,
+    ignore.stdout =TRUE,
+    ignore.stderr =TRUE
+  )
+}
 

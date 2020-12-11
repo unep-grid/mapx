@@ -76,7 +76,7 @@ mxSendMail <- function(
   toValid <- mxEmailIsValid(to)
   fromValid <- mxEmailIsValid(from) 
   hasSubject <- !noDataCheck(subject)
-
+  useNotify <- noDataCheck(shiny::getDefaultReactiveDomain()) && useNotify
   
   if(!hasContent || !toValid || !fromValid || !hasSubject){
     stop("Issue is email formating : can't send email")
