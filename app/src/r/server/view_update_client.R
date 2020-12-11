@@ -11,6 +11,7 @@ observe({
   isolate({
     mapIsReady <- isMapReady()
     role <- getUserRole()
+    isGuest <- isGuestUser()
 
     if(!mapIsReady) return()
     if(noDataCheck(role)) return()
@@ -24,6 +25,8 @@ observe({
       autoFetchAll = TRUE,
       resetView = TRUE
       )
+
+
 
     mxTimeDiff(timer)
   })

@@ -59,8 +59,12 @@ mxApiPost <- function(route,listParam){
     )
 
   req <- curl_fetch_memory(url, handle = h)
-
-  out <- fromJSON(rawToChar(req$content))
+  cnt <- rawToChar(req$content)
+  if(jsonlite:::validate(cnt)){
+    out <- fromJSON(cnt)
+  }else{
+    out <- list(msg=cnt)
+  }
 
   return(out)
 

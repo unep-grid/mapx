@@ -1,32 +1,29 @@
 
 
 observeEvent(input$btn_control,{
-
   mxCatch("controls.R",{
     switch(input$btn_control$value,
-      "showAbout"= {
-        reactData$showAbout <- runif(1)
+      "showAbout" = {
+        reactChainCallback('showAbout')
       },
-      "showLanguage"={
-        reactData$showLanguages <- runif(1)
+      "showLanguage" = {
+        reactChainCallback('showLanguages')
       },
-      "showProject"={
+      "showProject" = {
         if(!isTRUE(query$lockProject)){
-          reactData$showProjectsList <- runif(1)
+          reactChainCallback('showProjectsList')
         }
       },
-      "showLogin"={
-        reactData$showLogin <- runif(1)
+      "showLogin" = {
+        reactChainCallback('showLogin')
       }
-      )
+    )
 })
 })
 
 
 
-
-
-observeEvent(reactData$showLogin,{
+observeEvent(reactChain$showLogin,{
   btn <- list()
   userInfo <- ""
   userRole <- getUserRole()
@@ -36,21 +33,46 @@ observeEvent(reactData$showLogin,{
   projectName <- .get(projectData,c("title",language))
   projectAllowsJoin <- isTRUE(.get(projectData,c("allow_join")))
   #titleModalLogin <- titleModalLogin + " (" + projectName + ")"
-  event <- reactData$showLogin 
+
+  event <- reactChain$showLogin 
   msgLogin <- ""
   reactData$onLoggedIn <- function(){}
   userIsGuest <- isGuestUser()
+  showForm <- userIsGuest
 
-  if(typeof(event) == "list" && !noDataCheck(event$msg) ){
-     msgLogin <- event$msg
-    if(typeof(event$then) == 'closure'){
-      reactData$onLoggedIn = event$then
-    }
-  }
-  # 
-  # If not logged, build an input form
   #
-  if( userIsGuest ){
+  # Register actions after login
+  #
+  reactChainCallbackHandler(reactChain$showLogin,
+    #
+    # Show project list after log in
+    #
+    type  = 'login_requested_project_list',
+    expr = {
+      msgLogin <- reactChain$showLogin$message
+      reactChainCallback("onLoggedIn",
+        type = "on_logged_in",
+        callback = reactChain$showLogin$callback
+      )
+    })
+  reactChainCallbackHandler(reactChain$showLogin,
+    #
+    # Change project after login
+    #
+    type  = 'login_requested_project_access',
+    expr = {
+      msgLogin <- reactChain$showLogin$message
+      showForm <- TRUE 
+      reactChainCallback("onLoggedIn",
+        type = "on_logged_in",
+        callback = reactChain$showLogin$callback
+      )
+    })
+
+  # 
+  # If not logged or show form requested
+  #
+  if( showForm ){
 
     txtSubTitle <- d("login_subtitle",language)
     titleModalLogin <- d("user_authentication",language)
@@ -70,8 +92,8 @@ observeEvent(reactData$showLogin,{
             label= d("login_send_pwd",language),
             class="btn-square btn-black",
             disabled=TRUE
-            )
-          ) 
+          )
+        ) 
         ),
       div(
         tags$input(
@@ -79,13 +101,13 @@ observeEvent(reactData$showLogin,{
           type="text",
           placeholder = d("login_insert_pwd",language,web=F),
           class="form-control mx-login-input mx-login-input-black  mx-hide"
-          )
+        )
         ),
       div(
         class="mx-login-info",
         tags$p(d("login_info_box",language))
-        )
       )
+    )
 
   }else{
 
@@ -104,30 +126,30 @@ observeEvent(reactData$showLogin,{
         "login_email"=.get(reactUser,c("data","email")),
         "login_groups"= groupNames
         ),lang=language)
- 
+
     btnJoinProject <- actionButton(
       inputId='btnJoinProject',
       label <- sprintf(d('btn_join_current_project',language),projectName)
-      )
+    )
 
     btn <- tagList(
       actionButton(
         inputId = "btnLogout",
         label = d("login_out",language),
         class="btn btn-modal"
-        )
       )
+    )
 
     uiOut <- tagList(
       loginStatus,
       tags$div(id='mxListProjects')
-      )
+    )
 
     if(!userRole$member && projectAllowsJoin){
       btn <- tagList(
         btn,
         btnJoinProject
-        )
+      )
     }
 
   }
@@ -141,24 +163,21 @@ observeEvent(reactData$showLogin,{
     buttons=btn,
     replace = T,
     title = titleModalLogin,
-    #textCloseButton=d("login_cancel",language),
     textCloseButton=d("btn_close",language),
     content = tags$div(
-      #tags$b(msgLogin),
-      tags$b(div(id="txtLoginDialog",txtSubTitle)),
+      tags$b(
+        tags$span(msgLogin),
+        tags$div(id="txtLoginDialog",txtSubTitle)
+        ),
       uiOut
-      )
     )
-  # 
-  # Render it to panel login div
-  #
-  #output$panelLogin = renderUI(panModal)
+  )
 
 })
 
 
 
-observeEvent(reactData$showLanguages,{
+observeEvent(reactChain$showLanguages,{
 
   language <- reactData$language
   languages <- config[["languages"]][["list"]]
@@ -172,15 +191,15 @@ observeEvent(reactData$showLanguages,{
       choices=languages,
       label=d("ui_language",language),
       selected=language
-      )
     )
+  )
 
 })
 
 #
 # Show about panel
 #
-observeEvent(reactData$showAbout,{
+observeEvent(reactChain$showAbout,{
   userRole <- getUserRole()
   userData <- reactUser$data
 
@@ -205,7 +224,7 @@ observeEvent(reactData$showAbout,{
       section <- tags$section(
         tags$h4(title),
         tags$p(HTML(content))
-        )
+      )
 
       return(section)})
   }
@@ -215,7 +234,7 @@ observeEvent(reactData$showAbout,{
     title=d("title_about",language),
     textCloseButton=d("btn_close",language),
     content = tagList(out)
-    )
+  )
 
 })
 

@@ -51,6 +51,7 @@
 }
 
 .mx-views-list {
+  border-top:1px solid var(--mx_ui_border);
   height:100%;
   width:100%;
   padding: 0px;
@@ -110,7 +111,9 @@
 }
 
 .mx-view-item-desc-container {
-  margin: 5px;
+  /*margin: 5px;*/
+  display:flex;
+  justify-content:center;
 }
 
 .mx-view-item-desc {
@@ -126,11 +129,12 @@
   max-height: 220px;
   overflow-x: auto;
   overflow-y: hidden;
-  column-count: auto;
+  column-count: 2;
   column-width: 160px;
   column-count: auto;
   column-rule: 1px solid #ccc;
   column-gap: 10px;
+  max-width:500px; /*close to panel original panel size*/
 }
 
 .mx-view-item-index,

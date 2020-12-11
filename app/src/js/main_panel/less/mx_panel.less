@@ -1,0 +1,110 @@
+.mx-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .mx-panel--header {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    .mx-panel--header-btn {
+      position: relative;
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      flex-grow: 1;
+      justify-content: center;
+      padding: 7.5px;
+      /*overflow: hidden;*/
+      /*text-overflow: ellipsis;*/
+      /*white-space: nowrap;*/
+      * {
+        pointer-events: none;
+      }
+      .mx-panel--header-btn-logo {
+        height: 1.5em;
+      }
+      .mx-panel--header-btn-label {
+        padding-left: 10px;
+        padding-right: 8px;
+        text-decoration: underline;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      &.mx-panel--header-btn-title {
+        font-size: 1.3em;
+        width: 100%;
+      }
+      &:hover {
+        background: var(--mx_ui_text);
+        * {
+          color: var(--mx_ui_background);
+        }
+      }
+    }
+  }
+}
+
+.mx-tab--tabs {
+  display: flex;
+  .mx-tab--tab {
+    justify-content: center;
+    display: flex;
+    padding: 7px;
+    border-top: 1px solid var(--mx_ui_border);
+    border-right: 1px solid var(--mx_ui_border);
+    border-bottom: 1px solid var(--mx_ui_border);
+    cursor: pointer;
+    flex-grow: 1;
+    align-items: center;
+    filter: contrast(0.5);
+    &:first-of-type {
+      /*border-top-left-radius: 10px;*/
+      /*border-left: 1px solid var(--mx_ui_border);*/
+    }
+    &:last-of-type {
+      border-right: none;
+    }
+    &:not(active):hover {
+      filter: none;
+      background: var(--mx_ui_text);
+      * {
+        color: var(--mx_ui_background);
+      }
+    }
+
+    &.active {
+      border-bottom: none;
+      pointer-events: none;
+      cursor: auto;
+      filter: none;
+    }
+    * {
+      padding-left: 10px;
+      pointer-events: none;
+    }
+  }
+}
+.mx-tab--panel {
+  position: absolute;
+  left: -10000px;
+  top: -10000px;
+  width: 100%;
+  min-height: min-content;
+  flex-direction: column;
+  overflow: hidden;
+  &.active {
+    display: flex;
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+  .mx-tab--content-scrollable {
+    overflow: auto;
+    /*display: flex;*/
+    /*flex-direction: column;*/
+  }
+  .mx-tab--content-padding {
+    padding: 20px;
+  }
+}

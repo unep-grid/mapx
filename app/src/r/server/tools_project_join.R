@@ -1,23 +1,23 @@
-
-
-
 #
 # Request project membership
 #
 
+#
+# Trigger request project join/membership:
+#  - from project list : data from object
+#  - using direct button : data from current project
 observeEvent(input$requestProjectMembership,{
   reactData$requestProjectMembership <- input$requestProjectMembership;
 })
-
 observeEvent(input$btnJoinProject,{
-   reactData$requestProjectMembership <- list(id=reactData$project,date=Sys.time())
+  reactData$requestProjectMembership <- list(id=reactData$project,date=Sys.time())
 })
 
-
+#
+# Show modal with textarea
+#
 observeEvent(reactData$requestProjectMembership,{
-  
-  emailAdmin <- ""
-  emailUser <- ""
+
   projectRequestData <- reactData$requestProjectMembership
   project <- projectRequestData$id
 
@@ -25,24 +25,28 @@ observeEvent(reactData$requestProjectMembership,{
 
   userData <- reactUser$data
   language <- reactData$language
-  msgRequestMembership <- d("project_request_membership_message",language)
   projectTitle <- mxDbGetProjectTitle(project,language)
   projectData <- mxDbGetProjectData(project)
-  modalTitle <- d('project_request_membership_message_compose',language)
+  modalTitle <- d('project_request_membership',language)
   userRole <- mxDbGetProjectUserRoles(userData$id,project)
   projectAllowsJoin <- isTRUE(.get(projectData,c('allow_join')))
   isNotMember <- !isTRUE(userRole$member)
   isGuest <- isGuestUser()
+  emailContact <- mxDbGetProjectEmailContact(project)
 
   if( !isGuest ){
     emailUser <- userData$email
   }
 
+  languageCom <- mxDbGetUsersLanguageMatch(language,emailContact)
+
   if( isNotMember && projectAllowsJoin ){
 
     btn <- list()
-    msgRequestMembership <- mxUnescapeNewLine(msgRequestMembership)
-    msgRequestMembership <- gsub("<projectname>",projectTitle,msgRequestMembership)
+
+    msgRequestMembership <- mxParseTemplateDict("project_request_membership_message",languageCom, list(
+        projectName = projectTitle
+        ))
 
     uiOutput <- tagList(
       textInput(
@@ -58,7 +62,7 @@ observeEvent(reactData$requestProjectMembership,{
         placeholder = modalTitle 
         ),
       uiOutput("uiValidateRquestMembership")
-      )
+    )
 
     btn = list(
       actionButton(
@@ -73,13 +77,11 @@ observeEvent(reactData$requestProjectMembership,{
       content = uiOutput,
       textCloseButton = d("btn_close",language),
       buttons = btn
-      )
+    )
 
   }
 
 })
-
-
 
 #
 # Validation requestMembership email
@@ -100,9 +102,9 @@ observe({
   isEmailBad <- mxProfanityChecker(email)
 
   isEmailMember <- !isEmailNotValid && mxDbProjectCheckEmailMembership(
-     idProject = project,
-     email = email
-    )
+    idProject = project,
+    email = email
+  )
 
   errors <- logical(0)
   warning <- logical(0)
@@ -118,23 +120,26 @@ observe({
   hasError <- length(errors) > 0
 
   output$uiValidateRquestMembership <- renderUI(
-      mxErrorsToUi(
-        errors = errors,
-        warning = warning,
-        language = language
-        )
-      )
+    mxErrorsToUi(
+      errors = errors,
+      warning = warning,
+      language = language
+    )
+  )
 
   mxToggleButton(
     id="btnSendRequestMembershipMessage",
     disable = hasError
-    )
+  )
 
   reactData$hasErrorRequestMembership <- hasError
 
 })
 
 
+#
+# Send message
+#
 observeEvent(input$btnSendRequestMembershipMessage,{
   mxCatch(title="Send invitation",{
 
@@ -143,86 +148,74 @@ observeEvent(input$btnSendRequestMembershipMessage,{
     language <- reactData$language
     projectRequestData <- reactData$requestProjectMembership
     project <- projectRequestData$id
-    
-    projectData <- mxDbGetProjectData(project)
-    projectTitle <- projectData$title[language]
-    projectAdmin <- projectData$admins
-    projectContact <- projectData$contacts
-
-    if( !noDataCheck(projectContact) ){
-      nContacts <- length(projectContact)
-      if( nContacts > 1 ) projectContact <- projectContact[ceiling(runif(1)*nContacts)]
-      emailContact <- mxDbGetEmailListFromId(projectContact)
-    }else{
-      nAdmins <- length(projectAdmin)
-      if( nAdmins>1 ) projectAdmin <- projectAdmin[ceiling(runif(1)*nAdmins)]
-      emailContact <- mxDbGetEmailListFromId(projectAdmin)
-    }
-    
-
-
-    #
-    # TO REMOVE IN PROD
-    #
-    #emailAdmin <- "frederic.moser@unepgrid.ch"
 
     emailUser <- input$txtEmailRquestMembership 
-    emailUserIsRegistered <- mxDbEmailIsKnown()
-    urlAction <- mxCreateEncryptedUrlAction("confirmregister",list(
-        emailUser = emailUser,
-        emailAdmin = emailContact,
+    emailUserIsRegistered <- mxDbEmailIsKnown(emailUser)
+    emailContact <- mxDbGetProjectEmailContact(project)
+    languageContact <- mxDbGetUserLanguage(emailContact)
+   
+    projectTitle <- mxDbGetProjectTitle(project,languageContact)
+
+
+    # Message
+    msgRequestMembership <- input$txtAreaRequestMembershipMessage
+
+    #
+    # Action link that will open mapx, log in, and open the invitation window. 
+    # data evaluated in mxLogin().
+    #
+    urlAction <- mxCreateEncryptedUrlAction("invite_member",list(
+        email_invite = emailUser,
+        email_admin = emailContact,
         project = project,
         role = "member"
         ))
+    linkTitle <- mxParseTemplateDict('project_join_message_reply',languageContact,list(
+        project = projectTitle,
+        email = emailUser
+        ))
+    
+    # Link to the project
+    projectUrl <- mxGetProjectUrl(project)
+    projectUrlTitle <- mxParseTemplateDict('project_open_url',languageContact,list(
+      project = projectTitle
+    ))
 
-    msgRequestMembership <- input$txtAreaRequestMembershipMessage
-    msgRequest <- d("project_request_membership_message_recap",language)
-    msgRequest <- mxUnescapeNewLine(msgRequest)
-    msgRequest <- gsub("<msg>",msgRequestMembership,msgRequest)
-    msgRequest <- gsub("<from>",emailUser,msgRequest)
-    msgRequest <- gsub("<link>",urlAction,msgRequest)
-    msgRequest <- gsub("<data>",toJSON(projectRequestData),msgRequest)
+    # Email subject
+    title <- d('project_request_membership',languageContact)
+
+    # Email subject
+    subject <- mxParseTemplateDict('project_request_membership_subject',languageContact,list(
+          project = projectTitle
+          ))
+
+    msgRequest <- mxParseTemplateDict('project_request_membership_message_recap',languageContact,list(
+        msg = msgRequestMembership,
+        from = emailUser,
+        userStatus = ifelse(emailUserIsRegistered,'Registered','Unregistered'),
+        actionUrl = tags$a(href=urlAction,linkTitle),
+        projectUrl= tags$a(href=projectUrl,projectUrlTitle),
+        data = toJSON(projectRequestData)
+        ))
 
 
-    res <- mxSendMail(
+    mxSendMail(
       from = emailUser,
       to = emailContact,
-      body = msgRequest,
-      subject = "[ membership request ]" + projectTitle    
-      )
+      content = msgRequest,
+      title = title,
+      subject = subject,
+      subtitle = subject,
+      language = language
+    )
 
 
-    if(!noDataCheck(res)){
-      mxModal(
-        id=randomString(),
-        zIndex=100000,
-        title="Unexpected issue",
-        content=tagList(
-          tags$b("An error occured while sending the message"),
-          mxFold(labelText="More info",
-            content = tags$div(
-              tags$span(stye="color:red",res)
-              )
-            )
-          )
-        )
-    }else{
-      mxModal(
-        close = T,
-        id  =  "modalSendProjectRequestMembership"
-        )
+    mxModal(
+      id = "modalSendProjectRequestMembership",
+      close = true
+    )
 
-      mxModal(
-        id = "modalSendProjectRequestMembership",
-        title = projectTitle,
-        content = d('project_request_membership_message_sent',language)
-        )
+    mxFlashIcon('envelope')
 
-    }
-    })
-
-
+  })
 })
-
-
-

@@ -1,44 +1,63 @@
-/*jshint esversion: 6 , node: true */
+import {create} from 'jsondiffpatch';
+import 'jsondiffpatch/dist/formatters-styles/html.css';
 
-
-
-export function jsonPreview(json,options){
-   return Promise.all([
-    import("json-formatter-js"),
-   ])
-  .then(m => {
-    var JSONFormatter = m[0].default;
-    var formatted = new JSONFormatter(json,options);
-    return formatted.render();
-  });
+export async function jsonPreview(json, options) {
+  const m = import('json-formatter-js');
+  const JSONFormatter = m[0].default;
+  var formatted = new JSONFormatter(json, options);
+  return formatted.render();
 }
 
-export function jsonDiff(a,b,opt){
+export async function jsonDiff(a, b, opt) {
   opt = opt || {};
-  return Promise.all([
-    import("jsondiffpatch"),
-    import("../../node_modules/jsondiffpatch/dist/formatters-styles/html.css")
-  ])
-    .then(m => {
-      var jsondiffpatch = m[0];
-      var instance = jsondiffpatch.create({
-        arrays: {
-          detectMove: true,
-          includeValueOnMove: false
-        },
-        textDiff: {
-          minLength: 60
-        },
-        propertyFilter: opt.propertyFilter instanceof Function ? opt.propertyFilter : null,
-        cloneDiffValues: false 
-      });
+  const instance = create({
+    arrays: {
+      detectMove: true,
+      includeValueOnMove: false
+    },
+    textDiff: {
+      minLength: 60
+    },
+    propertyFilter:
+      opt.propertyFilter instanceof Function ? opt.propertyFilter : null,
+    cloneDiffValues: false
+  });
 
-      var delta = instance.diff(a, b);
+  const delta = instance.diff(a, b);
 
-      if(opt.toHTML){
-        jsondiffpatch.formatters.html.hideUnchanged();
-        return jsondiffpatch.formatters.html.format(delta, a);
-      }
-      return delta;
-    });
+  if (opt.toHTML) {
+    instance.formatters.html.hideUnchanged();
+    return instance.formatters.html.format(delta, a);
+  }
+  return delta;
+}
+
+
+/**
+ * Performs a deep merge of `source` into `target`.
+ * Mutates `target` only but not its objects and arrays.
+ *
+ * @author inspired by [jhildenbiddle](https://stackoverflow.com/a/48218209).
+ */
+export function mergeDeep(target, source) {
+  const isObject = (obj) => obj && typeof obj === 'object';
+
+  if (!isObject(target) || !isObject(source)) {
+    return source;
+  }
+
+  Object.keys(source).forEach(key => {
+    const targetValue = target[key];
+    const sourceValue = source[key];
+
+    if (Array.isArray(targetValue) && Array.isArray(sourceValue)) {
+      target[key] = targetValue.concat(sourceValue);
+    } else if (isObject(targetValue) && isObject(sourceValue)) {
+      target[key] = mergeDeep(Object.assign({}, targetValue), sourceValue);
+    } else {
+      target[key] = sourceValue;
+    }
+  });
+
+  return target;
 }

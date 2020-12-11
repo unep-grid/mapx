@@ -18,10 +18,16 @@ config[["system"]] <- list(
   )
 
 
+config[['brand']] <- list(
+  name = 'MapX'
+)
+
 config[["links"]] <- list(
+  mainProjectPage = "https://mapx.org",
   repositoryIssues = "https://github.com/unep-grid/map-x-mgl/issues",
   repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
-  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer"
+  repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
+  appKnowlegdeBase = 'https://www.mapx.org/knowledge-base/'
   )
 
 #
@@ -302,11 +308,12 @@ config[["templates"]] <- list()
 
 # html template
 config[[c("templates","html")]] <-  list()
-config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_simple.html"),collapse="\n")
+config[[c("templates","html","email")]] <- paste(readLines("src/templates/email_base.html"),collapse="\n")
+config[[c("templates","html","email_footer")]] <- paste(readLines("src/templates/email_footer.html"),collapse="\n")
+config[[c("templates","html","email_error")]] <- paste(readLines("src/templates/email_error.html"),collapse="\n")
 
 # text template
 config[[c("templates","text")]] <-  list()
-config[[c("templates","text","email_error")]] <- paste(readLines("src/templates/email_error.txt"),collapse="\n")
 config[[c("templates","text","widget_function")]] <- paste(readLines("src/templates/widget_function.js"),collapse="\n")
 config[[c("templates","text","custom_view")]] <- paste(readLines("src/templates/custom_view.js"),collapse="\n")
 config[[c("templates","text","custom_paint")]] <- paste(readLines("src/templates/custom_paint.json"),collapse="\n")
@@ -510,6 +517,8 @@ config[["users"]] <- list(
   loginTimerMinutes = 20,
   loginMaxAttempts = 5,
   cookieExpireDays = 7,
+  tokenExpireDays = 7,
+  actionLinkExpireDays = 7,
   cookieName = "mx_token",
   apiExpireDays = 1
   )

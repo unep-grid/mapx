@@ -1,15 +1,41 @@
-const settings = require.main.require('./settings');
+/**
+ * Set local module path
+ * ( to avoid require.main.require or ../../mess)
+ */
+const moduleAlias = require('module-alias');
+moduleAlias.addAliases({
+  '@mapx': __dirname + '/modules/',
+  '@root': __dirname
+});
+/**
+ * Import modules
+ */
+const http = require('http');
 const express = require('express');
-const app = express();
-const utils = require('./utils');
-let port = settings.api.port || 3030;
+const sock = require('socket.io');
+const settings = require('@root/settings');
+
+const view = require('@mapx/view');
+const query = require('@mapx/query');
+const source = require('@mapx/source');
+const project = require('@mapx/project');
+const upload = require('@mapx/upload');
+const mirror = require('@mapx/mirror');
+const mail = require('@mapx/mail');
+const ip = require('@mapx/ip');
+const tile = require('@mapx/tile');
+const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
+const log = require('@mapx/log');
+const {mwIoConnect} = require('@mapx/io');
+const {mwNotify} = require('@mapx/notify');
 
 /**
  * If port argument is set, use this instead
  * e.g. node inspect index.js port=3333
  * will replace the port by 3333
  */
-process.argv.forEach(function(val) {
+let port = settings.api.port || 3030;
+process.argv.forEach((val) => {
   val = val.split('=');
   if (val[0] === 'port') {
     port = val[1];
@@ -17,50 +43,51 @@ process.argv.forEach(function(val) {
 });
 
 /**
- * Options
+ * Init
  */
-app.set('trust proxy', true); // see https://expressjs.com/en/guide/behind-proxies.html
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Expose-Headers', 'Content-Length');
-  res.header('Access-Control-Expose-Headers', 'Mapx-Content-Length');
-  res.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-});
+const app = express();
+const server = http.createServer(app);
+const io = sock(server, settings.socket_io);
+app.use(mwSetHeaders);
+app.set('trust proxy', true);
 app.use('/download', express.static(settings.vector.path.download));
 
-/*
- * Define routes for get method
- */
-app.get('/get/view/item/:id', utils.view.get);
-app.get('/get/view/metadata/:id', utils.viewMetadata.get);
-app.get('/get/views/list/project/', utils.views.get);
-app.get('/get/views/list/global/public/', utils.viewsPublic.get);
-app.get('/get/tile/:x/:y/:z.:ext', utils.view.getTile);
-app.get('/get/query/', utils.query.get);
-app.get('/get/sql/', utils.query.get);
-app.get('/get/mirror/', utils.mirror.get);
-app.get('/get/config/map', utils.config.map.get);
-app.get('/get/source/', utils.source.get);
-app.get('/get/source/metadata/:id', utils.sourceMetadata.get);
-app.get('/get/source/summary/', utils.sourceSummary.get);
-app.get('/get/source/table/attribute/', utils.sourceTableAttribute.get);
-app.get('/get/source/overlap/', utils.sourceOverlap.get); //countries=[]&layers=[]&='area';
-app.get('/get/source/validate/geom', utils.sourceValidityGeom.get);
-app.get('/get/ip', utils.ip.get);
-app.post('/upload/image/', utils.image.upload);
-app.post('/upload/vector/', utils.vector.upload);
-app.post('/send/mail/', utils.mail.sendMailApi);
-app.post('/collect/logs/', utils.logs.collect);
-app.get('/get/projects/list/user/', utils.projects.getByUser);
+/**
+* Notification sytem with ws OR http write
+*/
+//app.use(mwNotify(io));
 
 /**
- * Start
+ * IO routes
  */
-console.log('listen to ' + port);
-app.listen(port);
+io.on('connection', mwIoConnect(io));
 
-module.exports = app;
+/*
+ * Express routes
+ */
+app.get('/get/view/item/:id', view.mwGet);
+app.get('/get/view/metadata/:id', view.mwGetMetadata);
+app.get('/get/views/list/project/', view.mwGetListByProject);
+app.get('/get/views/list/global/public/', view.mwGetListPublic);
+app.get('/get/tile/:x/:y/:z.:ext', tile.mwGet);
+app.get('/get/query/', query.mwGet);
+app.get('/get/sql/', query.mwGet);
+app.get('/get/mirror/', mirror.mwGet);
+
+app.get('/get/config/map', mwGetConfigMap);
+app.get('/get/source/', [mwNotify(io),...source.mwGet]);
+app.get('/get/source/metadata/:id', source.mwGetMetadata);
+app.get('/get/source/summary/', source.mwGetSummary);
+app.get('/get/source/table/attribute/', source.mwGetAttributeTable);
+app.get('/get/source/overlap/', source.mwGetOverlap); //countries=[]&layers=[]&='area';
+app.get('/get/source/validate/geom', source.mwGetGeomValidate);
+app.get('/get/projects/list/user/', project.mwGetListByUser);
+app.get('/get/ip', ip.mwGet);
+
+app.post('/upload/image/', upload.mwImage);
+app.post('/upload/vector/', upload.mwVector);
+app.post('/send/mail/', mail.mwSend);
+app.post('/collect/logs/', log.mwCollect);
+
+server.listen(port);
+console.log('listen to ' + port);

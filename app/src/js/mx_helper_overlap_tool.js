@@ -16,7 +16,7 @@ export function getOverlapAnalysis(opt) {
     method: opt.method || 'getArea',
     idUser: mx.settings.user.id,
     token: mx.settings.user.token,
-    idProject: mx.settings.project,
+    idProject: mx.settings.project.id,
     sourceTitle: opt.sourceTitle
   };
 

@@ -103,9 +103,15 @@ module.exports = Object.assign(s, {
     },
     options: {
       from: env.MAIL_FROM,
+      to: env.MAIL_ADMIN,
       subject: 'info',
       text: 'info',
-      html: '<b>info</b>'
+      html: '<b>info</b>',
+      // sendAuto
+      title: 'MapX',
+      subtitle: null,
+      content: '<b>Info</b>',
+      subjectPrefix : '[ MapX ]'
     }
   }
 });

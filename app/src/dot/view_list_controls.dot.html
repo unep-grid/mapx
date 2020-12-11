@@ -1,7 +1,7 @@
 {{ 
 const view = it ;
 const h = mx.helpers ; 
-const isCurrentProject =  mx.settings.project === view.project ; 
+const isCurrentProject =  mx.settings.project.id === view.project ; 
 const isDropedView = !!view._drop_shared ; 
 const isRegistered  = !h.path(mx,'settings.user.guest',true) ;
 const isViewEditable = h.isViewEditable(view) ;

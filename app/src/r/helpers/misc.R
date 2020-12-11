@@ -390,23 +390,26 @@ mxGetCountryList <- function(language="en",includeWorld=TRUE){
 #' @param {Character} txt Text where to replace escaped new lines
 #' @return {Character} Text with new lines
 mxUnescapeNewLine <- function(txt){
-  #ff <- tempfile()
   txt <-  gsub("\\\\n","\n",txt)
-  #write(txt,ff)
-  #readChar(ff,file.info(ff)$size)
   txt
 }
 
 
-mxDictTranslateSimple <- function(id,dict=.get(config,"dict"),language='en'){
-
-  if(noDataCheck(dict)) return(id);
+#' Simple version mxDictTranslate. Just get the entry.
+#' @param id {Character} Id from the dict to get
+#' @param dict {List} Dictionnary 
+#' @param language {Character} Language (two letters code)
+#' @return Dictionary item
+mxDictTranslateSimple <- function(id,
+  language=.get(config,c('languages','codes')),
+  dict=.get(config,"dict")
+  ){
+  language = match.arg(language)
+  if(noDataCheck(dict)) return(id)
   out <- dict[ dict$id == id, language ]
   if(noDataCheck(out))   out <- dict[dict$id==id,'en']
   if(noDataCheck(out))   out <- id
-
   return(out)
-
 }
 
 dd <- mxDictTranslateSimple
@@ -921,14 +924,17 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
 
     }
 
-    text <- .get(config,c("templates","text","email_error"))
-    text <- gsub("\\{\\{TYPE\\}\\}",err$type,text)
-    text <- gsub("\\{\\{DATE\\}\\}",err$time,text)
-    text <- gsub("\\{\\{CDATA\\}\\}",err$cdata,text)
-    text <- gsub("\\{\\{MESSAGE\\}\\}",err$message,text)
-    text <- gsub("\\{\\{CALL\\}\\}",err$stack,text)
 
-    if(noDataCheck(text)) text = "<no text>"
+    template <- .get(config,c("templates","html","email_error"))
+    content <- mxParseTemplate(template,list(
+             TYPE = err$type,
+             DATE = err$time,
+             CDATA = err$cdata,
+             MESSAGE = err$message,
+             CALL = err$stack
+        ))
+
+    if(noDataCheck(content)) content = ""
     #
     # else send an email
     #
@@ -937,31 +943,61 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
     if(isDev){
       mxDebugMsg(message)
       mxDebugMsg(err)
-    }else{
-      res <- mxSendMail(
-        from = .get(config,c("mail","bot")),
-        to = .get(config,c("mail","admin")),
+    }else{ 
+      mxSendMail(
+        to = .get(config,c("mail","admin")), 
         subject = subject,
-        body = text
-        )
-
-      if(!noDataCheck(res)){
-        mxModal(
-          id=randomString(),
-          zIndex=100000,
-          title="Unexpected issue",
-          content=tagList(
-            tags$b("An error occured while sending the message"),
-            mxFold(labelText="More info",
-              content = tags$div(
-                tags$span(stye="color:red",res)
-                )
-              )
-            )
-          )
-      }
+        content = content,
+        useNotify = FALSE
+      )
     }
   })
+}
+
+#' Parse template
+#' 
+#' @param template {Character} Template
+#' @param config {List} Named list / key pair value
+#' @return parsed template
+#' @export
+mxParseTemplate <- function(template,config){
+  for(i in names(config)){
+    label <- sprintf("\\{\\{%1$s\\}\\}",i)
+    template <- gsub(label,config[[i]],template)
+  }
+  #' R encode new line as a character. Need the real thing.
+  template <- mxUnescapeNewLine(template)
+  return(template)
+}
+
+#' Check key (without {{}}) in template
+#'
+#' @param template {Character} Template
+#' @param key {Character} Key to search for
+#' @return {Logical} key is there
+#' @example mxParseTemplateHasKey("hello {you}}", "you") -> true
+#' @export
+mxParseTemplateHasKey <- function(template,key){
+   grepl(sprintf("\\{\\{%1$s\\}\\}",key),template)
+}
+
+mxNewLineToBr <- function(str){
+  gsub('\n|$','</br>',str)
+}
+
+#' Parse template from dict entry
+#' 
+#' @param idTemplate {Character} idTemplate e.g. `saved_at`
+#' @param lang {Character} Two letter language code
+#' @param config {List} Named list / key pair value
+#' @return parsed template
+#' @export
+mxParseTemplateDict <- function(idTemplate,lang=NULL,config=list()){
+  template = dd(idTemplate,language=lang)
+  mxParseTemplate(
+    template,
+    config
+  )
 }
 
 #' Catch errors
@@ -1276,7 +1312,7 @@ mxTextValidation <- function(textToTest,existingTexts,idTextValidation,minChar=5
 #' @param default If nothing found, value returning
 #' @return value extracted or NULL
 #' @export
-mxGetListValue <- function(listInput,path,flattenList=FALSE,default=NULL){
+mxGetListValue <- function(listInput,path,default=NULL,flattenList=FALSE){
   tryCatch({
     out <- default
     if( "reactivevalues" %in% class(listInput)){
@@ -1891,6 +1927,16 @@ mxGetAppUrl <- function(session=shiny::getDefaultReactiveDomain()){
   return(urlProtocol + "//" + urlHost + urlPort)
 }
 
+#' Get project url
+#'
+#' @param project {Character} id of the project
+#' @return {Character} project url
+mxGetProjectUrl <- function(project){
+ sprintf("%1$s?project=%2$s",mxGetAppUrl(),project)
+}
+
+
+
 #' Create encrypted link for an action
 #' @param {Character} id of the action in query parameter
 #' @param {List|Character} Parameters of the action. 
@@ -1899,7 +1945,8 @@ mxCreateEncryptedUrlAction = function(id,value,session=shiny::getDefaultReactive
 
   action = mxDbEncrypt(list(
       id = id,
-      value = value
+      data = value,
+      timestamp = as.numeric(Sys.time())
       ))
   url <- mxGetAppUrl()
 

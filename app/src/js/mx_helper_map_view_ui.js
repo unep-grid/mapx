@@ -14,11 +14,11 @@ export function getProjectViewsState(opt) {
   const h = mx.helpers;
   opt = Object.assign(
     {},
-    {idProject: mx.settings.project, idInput: 'projectViewsStates'},
+    {idProject: mx.settings.project.id, idInput: 'projectViewsStates'},
     opt
   );
   const idInput = opt.idInput;
-  const isCurrentProject = opt.idProject === mx.settings.project;
+  const isCurrentProject = opt.idProject === mx.settings.project.id;
   const hasShiny = h.isObject(window.Shiny);
   const state = [];
   if (isCurrentProject) {
@@ -65,7 +65,7 @@ export function getProjectViewsCollectionsShiny(opt) {
 export function getProjectViewsCollections(opt) {
   const h = mx.helpers;
   opt = Object.assign({open: null}, opt);
-  var useOpen = opt.open === true;
+  const useOpen = opt.open === true;
   const collections = h.getViews().reduce((a, v) => {
     if (useOpen && !h.isViewOpen(v)) {
       return a;
@@ -217,7 +217,7 @@ export function viewsListRenderNew(o) {
   const elFilterActivated = document.getElementById('btnFilterChecked');
   const elFilterSwitch = document.getElementById('viewsFilterSwitch');
   const elFilterCount = document.getElementById('viewsFilterCount');
-  const elViewsList = elViewsContainer.querySelector('.mx-views-list');
+  const elViewsList = document.getElementById('mxViewsList');
   const views = o.views;
   const hasState = o.state && h.isArray(o.state) && o.state.length > 0;
   const state = hasState ? o.state : h.viewsToNestedListState(views);
@@ -246,7 +246,7 @@ export function viewsListRenderNew(o) {
    * Create views list ui
    */
   mData.viewsList = new NestedList(elViewsList, {
-    id: mx.settings.project,
+    id: mx.settings.project.id,
     state: state,
     locked: noViewsMode,
     useStateStored: true,

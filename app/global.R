@@ -59,6 +59,21 @@ mxSetResourcePath(.get(config,c("resources")))
 mxDbPoolInit()
 
 #
-# Set a finalizer when the app (runApp) is exiting
+# Set finalizers when the app (runApp) is exiting
 #
-onStop(mxDbPoolClose)
+
+# Shiny stop
+onStop(function(){
+  cat("mxDbPoolClose (onStop), global.R\n")
+  mxDbPoolClose()
+})
+# Session end
+.Last <- function() {
+  cat("mxDbPoolClose (.Last), global.R\n")
+  mxDbPoolClose()
+}
+## Current function exit
+#on.exit({
+  #cat("mxDbPoolClose (on.exit), global.R\n")
+  #mxDbPoolClose()
+#})

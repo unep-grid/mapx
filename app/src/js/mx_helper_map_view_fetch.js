@@ -1,30 +1,31 @@
-var start;
+let start;
 
 export function fetchViews(opt) {
   opt = opt || {};
-  var h = mx.helpers;
-  var idProject = mx.settings.project;
-  var idUser = mx.settings.user.id;
-  var language = mx.settings.language || mx.settings.languages[0];
-  var token = mx.settings.user.token;
+  const h = mx.helpers;
+  const idProject = mx.settings.project.id;
+  const idUser = mx.settings.user.id;
+  const language = mx.settings.language || mx.settings.languages[0];
+  const token = mx.settings.user.token;
   
-  var idViews = h.getQueryParameterInit(['idViews', 'views']);
-  var idViewsOpen = h.getQueryParameterInit(['idViewsOpen','viewsOpen']);
-  var collections = h.getQueryParameterInit(['idCollections','collections' ]);
+  const idViewsOpen = h.getQueryParameterInit(['idViewsOpen','viewsOpen']);
+  const collections = h.getQueryParameterInit(['idCollections','collections' ]);
   
-  var collectionsSelectOperator = h.getQueryParameterInit(
+  const collectionsSelectOperator = h.getQueryParameterInit(
     'collectionsSelectOperator'
   );
-  var roleMax =
+  const roleMax =
     h.getQueryParameterInit(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
-  var noViews = h.getQueryParameterInit('noViews')[0] || '';
+  const noViews = h.getQueryParameterInit('noViews')[0] || '';
 
-  var dataEmpty = {
+  const dataEmpty = {
     views: [],
     states: [],
     timing: 0
   };
-  var host = h.getApiUrl('getViewsListByProject');
+  const host = h.getApiUrl('getViewsListByProject');
+
+  let idViews = h.getQueryParameterInit(['idViews', 'views']);
 
   if (noViews === true || noViews.toLowerCase() === 'true') {
     dataEmpty.noViews = true;
@@ -36,7 +37,7 @@ export function fetchViews(opt) {
     idViews = h.getArrayDistinct(idViews);
   }
 
-  var url =
+  const url =
     host +
     '?' +
     h.objToParams({

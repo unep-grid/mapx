@@ -17,7 +17,6 @@ observe({
     if(noDataCheck(project)) return()
     if(noDataCheck(language)) return()
 
-    #dd <- reactViewsProject()
 
     timer <- mxTimeDiff("Init map")
     projectData <- mxDbGetProjectData(project)

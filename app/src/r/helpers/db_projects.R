@@ -346,7 +346,9 @@ mxDbProjectCheckEmailMembership <-function(email,idProject){
 mxDbGetProjectData <- function(idProject){
   projectData <- as.list(mxDbGetQuery("SELECT * from mx_projects where id='" + idProject + "' OR id_old='"+ idProject +"'")[1,])
 
-  if(noDataCheck(projectData)) stop("Project not found")
+  if(noDataCheck(projectData)) {
+    return(list())
+  }
 
   for(i in 1:length(projectData)){
      p <- projectData[i]
@@ -361,6 +363,29 @@ mxDbGetProjectData <- function(idProject){
   
   return(projectData)
 }
+
+#' Get contact email of a project, with fallback to admin email
+#'
+#' @param project {Character} Id of the project
+#' @return {Character} email of contact with admin fallback 
+mxDbGetProjectEmailContact <- function(idProject){
+    projectData <- mxDbGetProjectData(idProject)
+    projectAdmin <- projectData$admins
+    projectContact <- projectData$contacts
+    emailContact <- NULL
+    if( !noDataCheck(projectContact) ){
+      nContacts <- length(projectContact)
+      if( nContacts > 1 ) projectContact <- projectContact[ceiling(runif(1)*nContacts)]
+      emailContact <- mxDbGetEmailListFromId(projectContact)
+    }else{
+      nAdmins <- length(projectAdmin)
+      if( nAdmins>1 ) projectAdmin <- projectAdmin[ceiling(runif(1)*nAdmins)]
+      emailContact <- mxDbGetEmailListFromId(projectAdmin)
+    }
+  return(emailContact)
+}
+
+
 
 mxDbSaveProjectData <- function(idProject,values = list(
     public = NULL,
@@ -530,3 +555,266 @@ mxDbProjectCheck <- function(idProject,idDefault=config[[c("project","default")]
 
   return(idDefault)
 }
+
+
+
+mxProjectSendEmailsRolesChange <- function(admins, res, project, lang){
+  # res = 
+  #$new_contacts
+  #[1] "frederic.moser@unepgrid.ch"
+
+  #$rem_admins
+  #[1] "antonio.benvenuti@unepgrid.ch"
+
+  #$rem_contacts
+  #[1] "antonio.benvenuti@unepgrid.ch"
+
+  dfStacked <- stack(res)
+  listSplited <- split(dfStacked$ind,dfStacked$values)
+  urlProject <- mxGetProjectUrl(project) 
+  idGroupNotify <- randomString('role_change')
+  #
+  # For each users email, compile changes
+  #
+  for(email in names(listSplited)){
+    languageUser <- mxDbGetUserLanguage(email)
+    projectTitle <- mxDbGetProjectTitle(project,languageUser)
+    changes <- as.character(listSplited[[email]])
+    changesList <- mxProjectRoleChangesToList(changes,languageUser)
+    #
+    # Changes notice template
+    #
+    notice <- mxParseTemplateDict(
+      'roles_updated_mail_content',
+      languageUser,
+      config = list(
+        txtRoleChange = changesList,
+        projectLink = tags$a(href=urlProject,projectTitle)
+      )
+    )
+    #
+    # If the notice content is not empty nd
+    # email is valid, compose the message
+    #
+    isValid = !noDataCheck(notice) && mxEmailIsValid(email)
+    if(isValid){
+      title <-  d('roles_updated_mail_title', lang)
+      subject <- mxParseTemplateDict(
+        'roles_updated_mail_subject',
+        languageUser,
+        list(
+          nameProject = projectTitle 
+        )
+      )
+
+      mxSendMail(
+        to = email,
+        content = notice,
+        title = title,
+        subject = subject,
+        subtitle = subject,
+        language = lang,
+        idGroupNotify = idGroupNotify
+      )
+
+    }
+  }
+  #
+  # Summary for all admins
+  #
+  listChangesSummary <- listToHtmlSimple(lapply(res,listToHtmlSimple))
+  emailAdmins <- unique(mxDbGetEmailListFromId(admins));
+
+  for(email in emailAdmins){
+    
+    languageAdmin <- mxDbGetUserLanguage(email)
+    projectTitle <- mxDbGetProjectTitle(project,languageAdmin)
+    title <-  d('roles_updated_mail_title', lang)
+    subject <- mxParseTemplateDict(
+      'roles_updated_mail_subject',
+      languageUser,
+      list(
+        nameProject = projectTitle 
+      )
+    )
+    notice <- mxParseTemplateDict(
+      'roles_updated_mail_content_admin_summary',
+      languageAdmin,
+      config = list(
+        changes = listChangesSummary,
+        projectLink = tags$a(href=urlProject,projectTitle)
+      )
+    )
+
+    mxSendMail(
+      to = email,
+      content = notice,
+      title = title,
+      subject = subject,
+      subtitle = subject,
+      language = languageAdmin,
+      idGroupNotify = idGroupNotify
+    )
+
+      mailSent <- TRUE
+  }
+}
+
+#' Add user to a project
+#'
+#' @param idProject {Character} Project id
+#' @param idProject {Character} User id
+#' @param roles {Character} Role group name : members, admins, publishers
+#' @param useNotify {Logical} Report in notification center
+#' @return done
+mxDbProjectAddUser <- function(idProject,idUser, roles=c('members'), useNotify=TRUE){
+  projectData <- mxDbGetProjectData(idProject)
+ 
+  emailUser <- mxDbGetEmailFromId(idUser)
+  isKnown <- mxDbEmailIsKnown(emailUser)
+  idGroupNotify <- "added_user"
+  added <- FALSE
+  urlProject <- mxGetProjectUrl(idProject) 
+  if(noDataCheck(projectData)){
+    stop("Can't add user to project : no project data")
+  }
+
+  if(!isKnown){
+    stop("Can't add to project : user not known")
+  }
+
+  #
+  # Update roles in DB
+  #
+  for(role in roles){
+    hasRole = idUser %in% projectData[[role]]
+    if(!hasRole){
+      members <- unique(c(projectData[[role]],idUser))
+      added <- TRUE
+      mxDbUpdate(
+        table = "mx_projects",
+        idCol = 'id',
+        id = idProject,
+        column = role,
+        value = as.list(members) 
+      )
+    }
+  }
+
+  if(added){
+    #
+    # Inform user
+    #
+    languageUser <- mxDbGetUserLanguage(emailUser)
+    projectTitle <- mxDbGetProjectTitle(idProject,languageUser)
+    subjectEmail <- mxParseTemplateDict("project_user_added_email_user_subject",languageUser,list(
+        project = projectTitle
+        ))
+    txtEmailUser <- mxParseTemplateDict('project_user_added_email_user',languageUser,list(
+        project = tags$a(href=urlProject,projectTitle),
+        roles = paste(roles,collapse=", ")
+        ))
+    mxSendMail(
+      to = emailUser,
+      content = txtEmailUser,
+      subject = subjectEmail,
+      language = languageUser,
+      useNotify = useNotify,
+      idGroup = idGroupNotify
+    )
+    #
+    # Inform admins
+    #
+    admins <- projectData$admins
+    for(idAdmin in admins){
+      emailAdmin <- mxDbGetEmailFromId(idAdmin)
+      languageAdmin <- mxDbGetUserLanguage(emailAdmin)
+      projectTitle <- mxDbGetProjectTitle(idProject,languageAdmin)
+      subjectEmail <- mxParseTemplateDict("project_user_added_email_admin_subject",
+        lang = languageAdmin,   
+        config = list(
+          project = projectTitle
+          ))
+      txtEmailAdmin <- mxParseTemplateDict('project_user_added_email_admin',
+        lang = languageAdmin,
+        config = list(
+          project = tags$a(href=urlProject,projectTitle),
+          emailUser = emailUser,
+          roles = paste(roles,collapse=", ")
+          ))
+      mxSendMail(
+        to = emailAdmin,
+        content = txtEmailAdmin,
+        subject = subjectEmail,
+        language = languageAdmin,
+        useNotify = useNotify,
+        idGroup = idGroupNotify
+      )
+    }
+
+  }
+
+  return(added)
+}
+
+
+#' Convert key_value role change (new_publishers, new_contact, ...) to notice role text "Addd to 'publishers'"
+#' @param changes {Character} key as new_publishers, ...
+#' @param lang {Character} Language
+#' @param asHTML {Logical} Output an html list
+#' @return notice role as text
+mxProjectRoleChangesToList <- function(changes,lang,asHTML=TRUE){
+  removed <- c()
+  added <- c()
+  out <- c()
+
+  for( key in changes ){
+    splited <- strsplit(key,'_')[[1]]
+    if(splited[[1]]=="rem"){
+      removed <- c(removed,d(splited[[2]],lang))
+    }
+    if(splited[[1]]=="new"){
+      added <- c(added,d(splited[[2]],lang))
+    }
+  }
+
+  if(length(removed)>0){
+    #
+    # `removed from groups : g1, g2`
+    #
+    out <- c(out, mxParseTemplateDict(
+        'removed_from_group',
+        lang,
+        list(
+          group = paste(removed,collapse=", ")
+        )
+      )
+    )
+  }
+  if(length(added)>0){
+    #
+    # `added to groups : g1, g2`
+    #
+    out <- c(out, mxParseTemplateDict(
+        'added_to_group',
+        lang,
+        list(
+          group = paste(added,collapse=", ")
+        )
+    )
+    )
+  }
+  #
+  # Build HTML list if needed
+  #
+  if(asHTML){
+    out <- tags$ul(
+      sapply(out,tags$li,simplify=F)
+    )
+  }
+
+  return(out)
+}
+
+
+

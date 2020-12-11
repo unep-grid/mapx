@@ -136,12 +136,16 @@ observeEvent(input$btnAddProjectConfirm,{
       )
     )
 
+  msg <- mxParseTemplateDict("project_created",language,list(
+        title = title
+      ))
+
   mxModal(
     id = "createNewProject",
     title = d("project_new_title",language),
     textCloseButton = d("btn_close",language),
     buttons = btns,
-    content = tags$span(sprintf(d("project_created",language,web=F),title))
+    content = tags$span(msg)
     )
 
 })

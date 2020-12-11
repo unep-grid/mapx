@@ -1,3 +1,6 @@
+
+
+
 #
 # Define project selection.
 #
@@ -8,107 +11,142 @@
 # 4. current
 # 5. default
 observe({
+  mxCatch("project_access_logic",{
+    #
+    # Static
+    #
+    project_def <- config[[c("project","default")]]
+    project_query <- query$project
 
-  project_def <- config[[c("project","default")]]
-  project_query <- query$project
-  project_ui <- input$selectProject 
-  project_db <- mxDbProjectCheck(.get(reactUser$data,c("data","user","cache","last_project")),project_def)
+    #
+    # Reactive
+    #
+    project_ui <- input$selectProject 
+    project_react <- .get(reactChain$requestProject,'value')
 
-  id_user <- .get(reactUser$data,c("id"))
-  isolate({
+    #
+    # Deduced
+    #
+    id_user <- .get(reactUser$data,c("id"))
+    data_user <- mxDbGetUserInfoList(id_user)
+    project_last <- .get(data_user,c('data','user','cache','last_project'),project_def)
+    project_db <- mxDbProjectCheck(project_last,project_def)
 
-    # user info
-    isGuest <- isGuestUser()
-    language <- reactData$language
 
-    # If this is guest, over ride db project
-    if( isGuest ){
-      project_db <- project_def
-    }
+    isolate({
 
-    # check current project
-    project_react <- reactData$project
+      # user info
+      isGuest <- isGuestUser()
+      language <- reactData$language
 
-    if(!noDataCheck(project_ui) && (project_ui != project_react)){
-      project_query = NULL
-    }
-
-    # Project requested can be an iso3 code or mapx project id or custom alias.
-    if(!noDataCheck(project_query)){
-
-      # case project requested is an iso3code. e.g. COD, USA, etc
-      if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
-      
-      # case project requested is an alias
-      project_query <- mxDbGetProjectIdByAlias(project_query)
-      
-      # General check
-      project_query <- mxDbProjectCheck(project_query)
-    }
-
-    if(!noDataCheck(project_query)){
-      # priority to query
-      project_out <- project_query
-    }else{
-
-      # if there is no already defined project but there is something from the db, use the later
-      if(noDataCheck(project_react) && !noDataCheck(project_db)){
-
-        project_out <- project_db
-
-        # if the change comes from the ui, apply
-      }else if(!noDataCheck(project_ui)){
-        mxModal(id="uiSelectProject",close=T)
-        project_out <- project_ui
-      }else{
-        # nothing to do
-        return()
+      # If this is guest, over ride db project
+      if( isGuest ){
+        project_db <- project_def
       }
-    }
 
-    # Set requested project to null
-    query$project <<- NULL
+      # check current project
+      project_react <- reactData$project
 
-    #
-    # Check roles, change project, set roles, log action
-    #
-    if(!noDataCheck(project_out)){
+      if(!noDataCheck(project_ui) && (project_ui != project_react)){
+        project_query = NULL
+      }
 
-      project_out <- toupper(project_out)
+      # Project requested can be an iso3 code or mapx project id or custom alias.
+      if(!noDataCheck(project_query)){
+
+        # case project requested is an iso3code. e.g. COD, USA, etc
+        if(nchar(project_query)==3) project_query <- mxDbGetProjectIdByOldId(project_query) 
+
+        # case project requested is an alias
+        project_query <- mxDbGetProjectIdByAlias(project_query)
+
+        # General check
+        project_query <- mxDbProjectCheck(project_query)
+      }
+
+      if(!noDataCheck(project_query)){
+        # priority to query
+        project_out <- project_query
+      }else{
+
+        # if there is no already defined project but there is something from the db, use the later
+        if(noDataCheck(project_react) && !noDataCheck(project_db)){
+
+          project_out <- project_db
+
+          # if the change comes from the ui, apply
+        }else if(!noDataCheck(project_ui)){
+          mxModal(id="uiSelectProject",close=T)
+          project_out <- project_ui
+        }else{
+          # nothing to do
+          return()
+        }
+      }
 
       #
-      # Roles checking
+      # Check roles, change project, set roles, log action
       #
-      roles <- mxDbGetProjectUserRoles(id_user,project_out)
-      if(noDataCheck(roles$groups)) project_out <- project_def;
-      
-      reactData$project <- project_out
-      reactData$projectPrevious <- project_react
+      if(!noDataCheck(project_out)){
 
 
-       mxUpdateSettingsUser(list(
-        roles = roles
-        ));
+        project_out <- toupper(project_out)
 
-    }
+        #
+        # Roles checking
+        #
+        roles <- mxDbGetProjectUserRoles(id_user,project_out)
 
-  })
+
+        if(noDataCheck(roles$groups)) project_out <- project_def;
+
+
+        if(isTRUE(query$project != project_out)){
+          #
+          # Handle case when requested project is known, but user can't
+          # access it.
+          #
+          # 1) user not logged in -> login callback 
+          #   - Logged in 
+          #         -> available -> ok
+          #         -> not available -> retry 
+          idMsg <- ifelse(
+            isGuest,
+            "login_required_for_project_access_guest", 
+            "login_required_for_project_access_non_member"
+          )
+          reactChainCallback('showLogin',
+            message =  d(idMsg, language),
+            type = "login_requested_project_access",
+            callback = function(){
+              reactChainCallback('requestProject',
+                value = query$project
+              )
+            }
+          )
+          #
+          # Quit here, login should trigger reactChain$requestProject
+          #
+          reactData$project <- project_out
+          return()
+        }
+
+
+        reactData$project <- project_out
+        reactData$projectPrevious <- project_react
+      }
+
+      #
+      # Set requested project to null
+      #
+      query$project <<- NULL
+
+    })
+
+})
 })
 
 
-observeEvent(reactData$project,{
-  #
-  # Update browser query parameter
-  #
-  idProject <- reactData$project
-  mxUpdateQueryParameters(list(
-      project = idProject
-      ))
-  mxUpdateSettings(list(
-      project = idProject
-      ))
-
-})
 
 
 
@@ -140,32 +178,32 @@ observe({
 
 })
 
-
 #
-# After map is ready, check query for 
+# Query request -> show project list 
 # showProjectsListByTitle or showProjectsListByRole
+# Trigger the project panel
+# Trigger -> user not logged in -> show login panel -> retry show project list
 #
 observeEvent(reactData$mapIsReady,{
   if(reactData$mapIsReady){
     byTitle = !noDataCheck(query$showProjectsListByTitle)
     byRole = !noDataCheck(query$showProjectsListByRole)
     if(byRole || byTitle){
-      reactData$showProjectsList <- list( 
-        msg = "start",
-        time = Sys.time()
-        )
+      reactChainCallback('showProjectsList',
+        type = "show_projects_query",
+      )
     }
   }
 })
 
+
 #
 # Show project panel
 #
-observeEvent(reactData$showProjectsList,{
+observeEvent(reactChain$showProjectsList,{
   
   reactData$timerProjectList = mxTimeDiff('Build project list') ## end timer in control.js
 
-  event <- reactData$showProjectsList 
   userRole <- getUserRole()
   userData <- reactUser$data
   project <- reactData$project
@@ -179,32 +217,41 @@ observeEvent(reactData$showProjectsList,{
 
   filterRoles <- 'any'
   filterTitle <- NULL
-
-  if( typeof(event) == "list" && event$msg == "start"){
-
-    if(userIsGuest){
-      reactData$showLogin <- list(
-        msg = d("login_first_before_action",language),
-        then = function(){
-          reactData$showProjectsList <- list( 
-            msg = "start",
-            time = Sys.time()
+    
+  # "showProjectsList" requested with required authentication.
+  # If the user is not logged in, display the login panel and try again after
+  # logged in.
+  reactChainCallbackHandler(reactChain$showProjectsList,
+    type = "show_projects_query",
+    expr = {
+      if(userIsGuest){
+        #
+        # Trigger show login panel with a callback :
+        # Retry showsProjectList after log in
+        #
+        reactChainCallback('showLogin',
+          message =  d("login_required_for_project_list",language),
+          type = "login_requested_project_list",
+          callback = function(){
+            reactChainCallback('showProjectsList',
+              message = "",
+              type = "show_projects_query"
             )
-        },
-        time = Sys.time()
+          }
         )
 
-      return()
-    }
-    filterRoles <- mxQueryRoleParser(query$showProjectsListByRole,'any')
-    filterTitle <- mxQueryTitleParser(query$showProjectsListByTitle,'')
-    #
-    # Reset query parameters
-    #
-    query$showProjectsListByRole <<- NULL
-    query$showProjectsListByTitle <<- NULL
+        return()
+      }
+     
+      filterRoles <- mxQueryRoleParser(query$showProjectsListByRole,'any')
+      filterTitle <- mxQueryTitleParser(query$showProjectsListByTitle,'')
+      #
+      # Reset query parameters
+      #
+      query$showProjectsListByRole <<- NULL
+      query$showProjectsListByTitle <<- NULL
+    })
 
-  }
 
   btn <- list();
 
@@ -230,11 +277,11 @@ observeEvent(reactData$showProjectsList,{
     label = sprintf(d('btn_join_current_project',language), projectName)
     )
 
-  reactData$renderUserProjectsList <- list(
-    idList = "mxListProjects",
-    data = projects,
-    trigger = runif(1)
-    )
+  reactChainCallback('renderUserProjectsList',
+    data =  list(
+      idList = "mxListProjects",
+      projects = projects
+    ))
 
   uiProjects <- tagList(
     tags$h3(d("project_list",language)),
@@ -263,14 +310,45 @@ observeEvent(reactData$showProjectsList,{
 #
 # Render project list
 #
-observeEvent(reactData$renderUserProjectsList,{
-  session$sendCustomMessage("mxRenderUserProjectsList",reactData$renderUserProjectsList)
+observeEvent(reactChain$renderUserProjectsList,{
+  session$sendCustomMessage("mxRenderUserProjectsList",reactChain$renderUserProjectsList$data)
   mxTimeDiff(reactData$timerProjectList)
 })
 
 
 #
 # Update project related stuff
+#
+observeEvent(reactData$project,{
+
+  idProject <- reactData$project
+  projectData <- mxDbGetProjectData(idProject)
+  isGuest <- isGuestUser()
+
+  mxUpdateQueryParameters(list(
+      project = idProject
+      ))
+
+  mxUpdateSettings(list(
+      project = list(
+        id = idProject,
+        public = projectData$public,
+        title = projectData$title
+      )
+    ))
+
+  if(!isGuest){
+    # update reactive value and db if needed
+    mxDbUpdateUserData(reactUser,
+      path = c("user","cache","last_project"),
+      value = idProject
+    )
+  }
+
+})
+
+#
+# Update map position based on project config
 #
 observe({
 
@@ -279,7 +357,6 @@ observe({
   project <- reactData$project
   hasProject <- !noDataCheck(project)
   hasMap <- isTRUE(reactData$mapIsReady)
-  isGuest <- isGuestUser()
   update <- reactData$updateProject
  
   isolate({
@@ -324,22 +401,8 @@ observe({
         mapPos
         )
 
-      mxUpdateText(
-        "btnShowProject",
-        mxDbGetProjectTitle(project,language)
-        )
-
-      if(!isGuest){
-        # update reactive value and db if needed
-        mxDbUpdateUserData(reactUser,
-          path = c("user","cache","last_project"),
-          value = project
-          )
-      }
     }
 
   })
 })
-
-
 

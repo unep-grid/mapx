@@ -29,9 +29,11 @@ observe({
       }
     }
     if(!identical(lang_out,lang_react)){  
-      mxUpdateLanguage(lang_out)
+      mxUpdateSettings(list(
+          language = lang_out
+          ))
       reactData$language <- lang_out
-    } 
+    }
     mxUpdateQueryParameters(list(
         language = lang_out
         ))
@@ -39,7 +41,7 @@ observe({
 })
 
 #
-# Send dictionnary to client.
+# Update last_language
 #
 observeEvent(reactData$language,{
 
@@ -47,18 +49,11 @@ observeEvent(reactData$language,{
   isGuest <- isGuestUser()
 
   if(!isGuest){
-    # update reactive value and db if needed
     mxDbUpdateUserData(reactUser,
       path = c("user","cache","last_language"),
       value = language
       )
   }
-
-  mxUpdateText(
-    "btnShowProject",
-    mxDbGetProjectTitle(reactData$project,language)
-    )
-
 })
 
 

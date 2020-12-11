@@ -94,7 +94,7 @@ observeEvent(reactData$sourceDownloadRequest,{
     id = "modalSourceDownload",
     title = tags$b(sourceTitle),
     content = uiOut,
-    textCloseButton = d("btn_close",language),
+    textCloseButton = d("btn_cancel",language),
     buttons = btnList
     )
   #
@@ -149,7 +149,7 @@ observe({
 
 observeEvent(input$btnSourceDownload,{
   mxCatch(title="btnSourceDownload",{
-  
+
 
     #
     # Get values
@@ -169,35 +169,30 @@ observeEvent(input$btnSourceDownload,{
     iso3codes <- input$selectFilterDataByCountries
     sourceTitle <- mxDbGetLayerTitle(idSource,language=language,asNamedList=FALSE)
 
-    request = list(
-        idSource = idSource,
-        email =  emailUser,
-        filename = filename,
-        format = format,
-        iso3codes = iso3codes,
-        epsgCode = epsgCode,
-        idUser = idUser,
-        token = token,
-        idProject = idProject
-        )
-
-    mxModal(
-      id = "modalSourceDownload",
-      title = tags$b(sourceTitle),
-      content = tags$div(
-        tags$div(id='mxDownloadHandler')
-        ),
-      textCloseButton = d("btn_close",language)
-      )
-
     mglHandlerDownloadVectorSource(list(
-        request = request,
-        idHandlerContainer = "mxDownloadHandler"
-        ))
+        request = list(
+          idSource = idSource,
+          email =  emailUser,
+          filename = filename,
+          format = format,
+          iso3codes = iso3codes,
+          epsgCode = epsgCode,
+          idUser = idUser,
+          token = token,
+          idProject = idProject,
+          language = language
+        )
+      )
+    )
 
+  mxModal(
+    id = "modalSourceDownload",
+    close = TRUE
+    )
 
+  mxFlashIcon('bell')
 
-    })
+  })
 })
 
 

@@ -174,7 +174,7 @@ function isFunction(fun) {
  * @param {Object} obj object to test
  */
 function isElement(obj) {
-  return obj instanceof Element;
+  return obj instanceof Element || obj instanceof DocumentFragment;
 }
 
 /**

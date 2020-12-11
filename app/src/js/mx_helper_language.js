@@ -1,50 +1,36 @@
 /**
- * Update language : Element, view list and map
- * @param {Object} o Options
- * @param {String} o.id Map id
- * @param {String} o.lang Language code
+ * Update language : Elements, view list and map
  */
-export function updateLanguage(o) {
-  let previousLang = mx.settings.language;
-  o.id = 'map_main';
-  o.lang = o.lang || previousLang || 'en';
+export async function updateLanguage() {
+  const lang = mx.settings.language;
+
   /**
    * Fire language_change
    */
   mx.events.fire({
     type: 'language_change',
     data: {
-      old_language: previousLang,
-      new_language: o.lang
+      new_language: lang
     }
   });
 
   /*
    * Set language for the document
    */
-  document.querySelector('html').setAttribute('lang', o.lang);
-
-  /**
-   * Update language settings
-   */
-  mx.settings.language = o.lang;
+  document.querySelector('html').setAttribute('lang', lang);
 
   /**
    * Update lang of interface
    */
- return updateLanguageElements(o)
-    .then(() => {
-      /**
-       * Update map language
-       */
-      return updateLanguageMap(o);
-    })
-    .then(() => {
-      /**
-       * Update views language : labels, desc, title
-       */
-      return updateLanguageViewsList(o);
-    });
+  await updateLanguageElements();
+  /**
+   * Update map language
+   */
+  await updateLanguageMap();
+  /**
+   * Update views language : labels, desc, title
+   */
+  await updateLanguageViewsList();
 }
 
 export function splitnwords(str) {
@@ -101,96 +87,90 @@ export function getDict(lang) {
  * @param {Element} o.el Target element. If omitted, the whole document will be translated.
  * @param {String} o.lang Language code. e.g. "en" or "fr".
  */
-export function updateLanguageElements(o) {
+export async function updateLanguageElements(o) {
+  o = Object.assign({}, o);
   const h = mx.helpers;
-  o = o || {};
-  o.lang = o.lang || mx.settings.language || 'en';
-  var langDefault = 'en';
+  let langDefault = 'en';
+  o.lang = o.lang || mx.settings.language || langDefault;
+  let els, el, doc, label, found, type, id;
+  let i, iL, j, jL;
   let changes = [];
-  return getDict(o.lang).then((dict) => {
-    var i, iL, j, jL;
-    var els, el, doc, label, found, type, id;
-    var lang = o.lang;
+  const dict = await getDict(o.lang);
+  const lang = o.lang;
 
-    // custom buttons
-    var elBtnLanguage = document.querySelector('#btnShowLanguage');
-    if (elBtnLanguage) {
-      elBtnLanguage.dataset.lang_key = o.lang;
+  // if no el to look at, serach the whole document
+  doc = h.isElement(o.el) ? o.el : document;
+
+  // fetch all elements with data-lang_key attr
+  els = doc.querySelectorAll('[data-lang_key]');
+ 
+  for (i = 0, iL = els.length; i < iL; i++) {
+    el = els[i];
+    type = el.dataset.lang_type;
+    id = el.dataset.lang_key;
+    found = false;
+    label = '';
+
+    /*
+     * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
+     */
+    if (!type) {
+      type = el.getAttribute('data-lang_type');
     }
 
-    // if no el to look at, serach the whole document
-    doc = h.isElement(o.el) ? o.el : document;
+    /*
+     * Default is text : inner text will be updated
+     */
+    if (!type) {
+      type = 'text';
+    }
 
-    // fetch all elements with data-lang_key attr
-    els = doc.querySelectorAll('[data-lang_key]');
-    for (i = 0, iL = els.length; i < iL; i++) {
-      el = els[i];
-      type = el.dataset.lang_type;
-      id = el.dataset.lang_key;
-      found = false;
-      label = '';
-
-      /*
-       * NOTE: BUG IN SAFARI : sometimes, dataset is not returning correctly
-       */
-      if (!type) {
-        type = el.getAttribute('data-lang_type');
-      }
-
-      /*
-       * Default is text : inner text will be updated
-       */
-      if (!type) {
-        type = 'text';
-      }
-
-      for (j = 0, jL = dict.length; j < jL; j++) {
-        if (!found) {
-          if (dict[j].id === id) {
-            found = true;
-            label = dict[j][lang];
-            if (!label) {
-              label = dict[j][langDefault];
-            }
+    for (j = 0, jL = dict.length; j < jL; j++) {
+      if (!found) {
+        if (dict[j].id === id) {
+          found = true;
+          label = dict[j][lang];
+          if (!label) {
+            label = dict[j][langDefault];
           }
         }
       }
-
-      changes.push([type, el, label]);
     }
 
-    /**
-     * Group all change to avoid many reflow;
-     */
-    changes.forEach((c) => {
-      setValue(c[0], c[1], c[2]);
-    });
+    changes.push([type, el, label]);
+  }
 
-    /**
-     * Helpers
-     */
-    function setValue(type, el, label) {
-      if (!label) {
-        return;
-      }
-      if (type === 'tooltip') {
-        if (el.dataset.lang_split) {
-          label = splitnwords(label);
-        }
-        el.setAttribute('aria-label', label);
-        if (el.className.indexOf('hint--') === -1) {
-          el.className += ' hint--left';
-        }
-        return;
-      }
-
-      if (type === 'placeholder') {
-        el.setAttribute('placeholder', label);
-        return;
-      }
-      el.innerText = label;
-    }
+  /**
+   * Group all change to avoid many reflow;
+   */
+  changes.forEach((c) => {
+    setValue(c[0], c[1], c[2]);
   });
+
+  /**
+   * Helpers
+   */
+  function setValue(type, el, label) {
+    if (!label) {
+      return;
+    }
+    if (type === 'tooltip') {
+      if (el.dataset.lang_split) {
+        label = splitnwords(label);
+      }
+      el.setAttribute('aria-label', label);
+      if (el.className.indexOf('hint--') === -1) {
+        el.className += ' hint--left';
+      }
+      return;
+    }
+
+    if (type === 'placeholder') {
+      el.setAttribute('placeholder', label);
+      return;
+    }
+    el.innerText = label;
+  }
 }
 
 /**
@@ -198,37 +178,36 @@ export function updateLanguageElements(o) {
  * @param {string} keys Key to look for in the dictionnary
  * @param {string} lang  Two letters language code
  */
-export function getDictItem(key, lang) {
+export async function getDictItem(key, lang) {
   'use strict';
-  var keys = [];
-  var res = [];
-  var defaultLang = 'en';
-  var isArray = key instanceof Array;
+  let keys = [];
+  let defaultLang = 'en';
+  let isArray = key instanceof Array;
   lang = lang || mx.settings.language || defaultLang;
 
-  return getDict(lang).then(function(dict) {
-    if (!(dict instanceof Array)) {
-      dict = mx.helpers.objectToArray(dict);
-    }
+  let dict = await getDict(lang);
 
-    if (isArray) {
-      keys = key;
-    } else {
-      keys = keys.concat(key);
-    }
+  if (!(dict instanceof Array)) {
+    dict = mx.helpers.objectToArray(dict);
+  }
 
-    keys.forEach(function(k) {
-      var item = dict.find(function(a) {
-        return a.id === k;
-      });
+  if (isArray) {
+    keys = key;
+  } else {
+    keys = keys.concat(key);
+  }
 
-      var out = item ? item[lang] || item[defaultLang] : k;
-      res.push(out);
+  let res = keys.reduce((a, k) => {
+    const item = dict.find((a) => {
+      return a.id === k;
     });
+    const out = item ? item[lang] || item[defaultLang] : k;
+    a.push(out);
+    return a;
+  }, []);
 
-    res = isArray ? res : res[0];
-    return res;
-  });
+  res = isArray ? res : res[0];
+  return res;
 }
 
 /**
@@ -237,15 +216,15 @@ export function getDictItem(key, lang) {
  * @param {String} lang  Two letters language code
  * @return {Element} span element with dataset-lang_key
  */
-export function getTranslationTag(key, lang) {
-  var el = mx.helpers.el('span', {
+export async function getTranslationTag(key, lang) {
+  const el = mx.helpers.el('span', {
     dataset: {
       lang_key: key
     }
   });
 
-  getDictItem(key, lang).then((item) => (el.innerText = item));
-
+  const item = await getDictItem(key, lang);
+  el.innerText = item;
   return el;
 }
 
@@ -260,19 +239,19 @@ export function getTranslationTag(key, lang) {
 export function getLabelFromObjectPath(o) {
   'use strict';
   const h = mx.helpers;
-  var defaultLang = 'en';
+  const defaultLang = 'en';
   o.lang = o.lang ? o.lang : mx.settings.language || defaultLang;
   o.sep = o.sep ? o.sep : '.';
   o.path = o.path ? o.path + o.sep : '';
-  var defaultValue = o.defaultValue || '';
-  var out = h.path(o.obj, o.path + o.lang, null);
-  var langs = mx.settings.languages;
+  const defaultValue = o.defaultValue || '';
+  const langs = mx.settings.languages;
+  let out = h.path(o.obj, o.path + o.lang, null);
 
   if (!out) {
     /**
      * Try default language
      */
-    out = mx.helpers.path(o.obj, o.path + defaultLang, null);
+    out = h.path(o.obj, o.path + defaultLang, null);
   }
 
   if (!out) {
@@ -281,7 +260,7 @@ export function getLabelFromObjectPath(o) {
      */
     out = langs.reduce((a, l) => {
       if (!a) {
-        return mx.helpers.path(o.obj, o.path + l, null);
+        return h.path(o.obj, o.path + l, null);
       } else {
         return a;
       }
@@ -316,11 +295,11 @@ export function getLabelFromObjectPath(o) {
  */
 export function checkLanguage(o) {
   'use strict';
-  var langs = o.languages || mx.settings.languages;
-  var lang = o.language || mx.settings.language || langs[0];
-  var concat = !!o.concat;
-  var out = lang;
-  var found = false;
+  const langs = o.languages || mx.settings.languages;
+  const concat = !!o.concat;
+  let lang = o.language || mx.settings.language || langs[0];
+  let out = lang;
+  let found = false;
 
   /**
    * Test if lang value return something
@@ -359,6 +338,7 @@ export function checkLanguage(o) {
  * @param {string} o.language language code expected
  */
 export function getTranslationFromObject(o) {
+  o = Object.assign({}, o);
   var h = mx.helpers;
   var lang = checkLanguage(o);
   var out = h.path(o.obj, o.path + '.' + lang, '');
@@ -366,6 +346,7 @@ export function getTranslationFromObject(o) {
 }
 
 export function updateLanguageViewsList(o) {
+  o = Object.assign({}, o);
   const h = mx.helpers;
   const lang = o.lang || mx.settings.language;
   const views = h.getViews();
@@ -441,6 +422,7 @@ export function updateLanguageViewsList(o) {
  * @param {string} [o.language='en'] Two letter language code
  */
 export function updateLanguageMap(o) {
+  o = Object.assign({}, o);
   return new Promise((resolve) => {
     var map = mx.helpers.getMap(o.id);
     if (!mx.helpers.isMap(map)) {
@@ -485,11 +467,11 @@ export function updateLanguageMap(o) {
           }).length > 0;
 
         if (layerExists) {
-          map.setLayoutProperty(
-            layer,
-            'text-field',
-            ["coalesce", ["get", `name_${o.language}`], ["get", "name"]]
-          );
+          map.setLayoutProperty(layer, 'text-field', [
+            'coalesce',
+            ['get', `name_${o.language}`],
+            ['get', 'name']
+          ]);
         }
       }
       resolve(true);

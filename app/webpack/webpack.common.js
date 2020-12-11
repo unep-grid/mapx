@@ -58,7 +58,13 @@ module.exports = {
     rules: [
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'less-loader']
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          'icon-font-loader',
+          'less-loader',
+        ]
       },
       {
         test: /\.css$/,
@@ -85,6 +91,7 @@ module.exports = {
         }
       },
       {test: /\.dot.html$/, loader: 'dot-loader', options: {}},
+      {test: /\.html$/, loader: 'html-loader', options: {}},
       {
         test: /\.coffee$/,
         use: 'coffee-loader' //used mainly to extend ContentTools

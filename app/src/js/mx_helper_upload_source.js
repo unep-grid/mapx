@@ -55,11 +55,6 @@ export function triggerUploadForm(opt) {
 export function uploadGeoJSONModal(idView) {
   var h = mx.helpers;
   var el = mx.helpers.el;
-  //var email = mx.settings.user.email;
-  //var role = mx.settings.user.role;
-  //var idUser = mx.settings.user.id;
-  //var project = mx.settings.project;
-  //var token = mx.settings.user.token;
 
   mx.data.geojson.getItem(idView).then(function(item) {
     var geojson = mx.helpers.path(item, 'view.data.source.data');
@@ -261,7 +256,7 @@ export function uploadSource(o) {
     form.append('token', o.token || mx.settings.user.token);
     form.append('idUser', o.idUser || mx.settings.user.id);
     form.append('email', o.email || mx.settings.user.email);
-    form.append('project', o.idProject || mx.settings.project);
+    form.append('project', o.idProject || mx.settings.project.id);
     form.append('sourceSrs', o.sourceSrs || '');
 
     /**

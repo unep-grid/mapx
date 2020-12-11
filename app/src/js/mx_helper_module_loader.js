@@ -25,7 +25,8 @@ const modules = {
   html2canvas: loadHtmlToCanvas,
   'chroma-js': loadChromaJs,
   'radio-group':loadRadioGroup,
-  'proj4':loadProj4
+  'proj4':loadProj4,
+  'button_panel':loadButtonPanel
 };
 
 export function moduleLoad(name) {
@@ -46,6 +47,9 @@ export function modulesLoad(arr) {
 /*
  * Loader definitions
  */
+
+
+
 function loadProj4() {
   return import('proj4').then((m) => {
     return m.default || m;
@@ -70,6 +74,12 @@ function loadRadioGroup() {
   });
 }
 
+function loadButtonPanel(){
+  return import('./button_panel').then((m) => {
+    return m.ButtonPanel
+  });
+
+}
 
 function loadJsBeautify() {
   return import('js-beautify').then((m) => {
@@ -109,8 +119,8 @@ function loadDownloadjs() {
 }
 function loadMapboxGlDraw() {
   return Promise.all([
-    import('@mapbox/mapbox-gl-draw'),
-    import('@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css')
+    import('@mapbox/mapbox-gl-draw')
+    //import('@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css')
   ]).then((m) => {
     return m[0].default;
   });

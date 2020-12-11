@@ -3,13 +3,12 @@ version: '3.2'
 # ports : host:container
 services:
   traefik:
-    image: traefik:v1.7.4-alpine
+    image : traefik:v2.3.2
     command: 
-      - --api
-      - --docker
-      - --docker.domain=mapx.localhost
-      - --defaultentrypoints=http
-      - "--entryPoints=Name:http Address::80 Compress:true"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
     ports:
       - target: 80
         published: 8880
@@ -32,12 +31,16 @@ services:
       - pg
       - traefik
     labels:
-      - traefik.s1.frontend.rule=Host:app.mapx.localhost
-      - traefik.s1.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
-      - traefik.s1.port=3838
-      - traefik.s2.frontend.rule=Host:dev.mapx.localhost
-      - traefik.s2.frontend.headers.customResponseHeaders=CACHE-CONTROL:no-cache
-      - traefik.s2.port=3434
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache"
+      - "traefik.http.routers.app.rule=Host(`app.mapx.localhost`)"
+      - "traefik.http.routers.app.entrypoints=web"
+      - "traefik.http.routers.app.service=app"
+      - "traefik.http.services.app.loadbalancer.server.port=3838"
+      - "traefik.http.routers.dev.rule=Host(`dev.mapx.localhost`)"
+      - "traefik.http.routers.dev.entrypoints=web"
+      - "traefik.http.routers.dev.service=dev"
+      - "traefik.http.services.dev.loadbalancer.server.port=3434"
     volumes:
       - ./app:/srv/shiny-server/dev
       - ./_shared:/shared
@@ -54,23 +57,34 @@ services:
       - redis
       - traefik
     labels:
-      - traefik.s1.frontend.rule=Host:api.mapx.localhost
-      - traefik.s1.port=3030
-      - traefik.s2.frontend.rule=Host:apidev.mapx.localhost
-      - traefik.s2.port=3333
+      - "traefik.enable=true"
+      - "traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache"
+      - "traefik.http.middlewares.wcompress.compress=true"
+      - "traefik.http.middlewares.wcompress.compress.excludedcontenttypes=text/plain"
+      - "traefik.http.routers.api.rule=Host(`api.mapx.localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.service=api"
+      - "traefik.http.services.api.loadbalancer.server.port=3030"
+      - "traefik.http.routers.apidev.rule=Host(`apidev.mapx.localhost`)"
+      - "traefik.http.routers.apidev.entrypoints=web"
+      - "traefik.http.routers.apidev.service=apidev"
+      - "traefik.http.services.apidev.loadbalancer.server.port=3333"
     volumes:
       - ./api:/apidev
       - ./_shared:/shared
   geoserver :
     env_file: mapx.dev.env
     build: ./geoserver/.
-    image: fredmoser/mx-api-geoserver:2.17.0-alpine
+    image: fredmoser/mx-api-geoserver:2.18.1-alpine
     ports: 
       - 8882:8080
     volumes:
       - ./_shared/geoserver:/shared/geoserver
     labels:
-      - traefik.frontend.rule=Host:geoserver.mapx.localhost
+      - "traefik.enable=true"
+      - "traefik.http.routers.geoserver.rule=Host(`geoserver.mapx.localhost`)"
+      - "traefik.http.routers.geoserver.entrypoints=web"
+      - "traefik.http.routers.geoserver.port=8080"
   pg:
     env_file: mapx.dev.env
     image: mdillon/postgis:10-alpine
@@ -96,15 +110,19 @@ services:
     build: ./probe/.
     image: fredmoser/mx-probe:0.2-go
     labels:
-      - traefik.frontend.rule=Host:probe.mapx.localhost
-      - traefik.port=8080
+      - "traefik.enable=true"
+      - "traefik.http.routers.probe.rule=Host(`probe.mapx.localhost`)"
+      - "traefik.http.routers.probe.entrypoints=web"
+      - "traefik.http.services.probe.loadbalancer.server.port=8080"
     ports:
       - 8080
   wsecho:
     image: jmalloc/echo-server
     labels:
-      - traefik.frontend.rule=Host:wsecho.mapx.localhost
-      - traefik.port=8080
+      - "traefik.enable=true"
+      - "traefik.http.routers.wsecho.rule=Host(`wsecho.mapx.localhost`)"
+      - "traefik.http.routers.wsecho.entrypoints=web"
+      - "traefik.http.services.wsecho.loadbalancer.server.port=8080"
     ports:
       - 8080
   mailhog:
@@ -112,5 +130,7 @@ services:
     logging:
       driver: none
     labels:
-      - traefik.s1.frontend.rule=Host:mail.mapx.localhost
-      - traefik.s1.port=8025
+      - "traefik.enable=true"
+      - "traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)"
+      - "traefik.http.routers.mailhog.entrypoints=web"
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"

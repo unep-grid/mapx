@@ -280,7 +280,7 @@ class MapxResolvers {
    * @return {String} Current project id
    */
   get_project() {
-    return mx.settings.project;
+    return mx.settings.project.id;
   }
 
   /**

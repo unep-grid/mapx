@@ -26,16 +26,24 @@ mapControlLiveCoord.prototype.onRemove = function() {
 
 export function mapxLogo() {}
 mapxLogo.prototype.onAdd = function() {
-  var logo = document.createElement('a');
-  logo.classList.add('mx-logo');
-
-  logo.style.backgroundImage =
-    'url(' + require('../svg/map-x-logo-full.svg') + ')';
-  this._container = document.createElement('div');
+  const h = mx.helpers;
+  var elLogo = h.el('a', {
+    href: h.path(mx, 'settings.links.mainProjectPage'),
+    class: 'mx-logo',
+    target : '_blank',
+    rel:'noreferrer',
+    style: {
+      backgroundImage: `url(${require('../svg/map-x-logo-full.svg')})`,
+      fontSize:'0em'
+    }
+  },
+  'Main project page' 
+  );
+  this._container = h.el('div');
   this._container.className = 'mapboxgl-ctrl';
   this._container.style.display = 'inline-block';
   this._container.style.float = 'none';
-  this._container.appendChild(logo);
+  this._container.appendChild(elLogo);
   return this._container;
 };
 
@@ -56,6 +64,14 @@ export function showSelectLanguage() {
   var val = {
     time: new Date(),
     value: 'showLanguage'
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+export function showLogin() {
+  var val = {
+    time: new Date(),
+    value: 'showLogin'
   };
   Shiny.onInputChange('btn_control', val);
 }
@@ -118,68 +134,10 @@ mapControlApp.prototype.onAdd = function(map) {
    * Build buttons list
    */
   var btns = {
-    btnToggleBtns: {
-      classes: ['fa', 'fa-desktop'],
-      classeActive: 'active',
-      key: 'btn_toggle_all',
-      hidden: false,
-      position: 'top-left',
-      action: h.setImmersiveMode,
-    },
-    btnShowLogin: {
-      classes: ['fa', 'fa-user'],
-      remove: modeStatic,
-      key: 'btn_login',
-      action: function() {
-        var val = {
-          time: new Date(),
-          value: 'showLogin'
-        };
-        Shiny.onInputChange('btn_control', val);
-      }
-    },
-    btnTabView: {
-      classes: ['fa', 'fa-list-ul'],
-      key: 'btn_tab_views',
-      remove: modeStatic,
-      action: () => {
-        h.panelLeftSwitch({
-          id: 'panel-views',
-          panel: 'views',
-          toggle: true
-        });
-      }
-    },
-    btnTabTools: {
-      classes: ['fa', 'fa-cogs'],
-      remove: modeStatic,
-      key: 'btn_tab_tools',
-      action: () => {
-        h.panelLeftSwitch({
-          id: 'panel-tools',
-          panel: 'tools',
-          toggle: true
-        });
-      }
-    },
-    btnPrint: {
-      classes: ['fa', 'fa-map-o'],
-      key: 'btn_map_composer',
-      action: function() {
-        h.mapComposerModalAuto();
-      }
-    },
     btnStoryClose: {
       classes: ['fa', 'fa-arrow-left'],
       liClasses: 'mx-display-none',
       key: 'btn_story_close'
-    },
-    btnFullScreen: {
-      classes: ['fa', 'fa-expand'],
-      key: 'btn_fullscreen',
-      action: function() {
-        h.toggleFullScreen('btnFullScreen');
-      }
     },
     btnStoryUnlockMap: {
       classes: ['fa', 'fa-lock'],
@@ -187,60 +145,14 @@ mapControlApp.prototype.onAdd = function(map) {
       key: 'btn_story_unlock_map',
       action: h.storyControlMapPan
     },
-    btnShowAbout: {
-      classes: ['fa', 'fa-info'],
-      key: 'btn_about',
-      remove: modeStatic,
+    btnSetNorth: {
+      classes: ['mx-north-arrow'],
+      key: 'btn_north_arrow',
       action: function() {
-        var val = {
-          time: new Date(),
-          value: 'showAbout'
-        };
-        Shiny.onInputChange('btn_control', val);
-      }
-    },
-    btnGeolocateUser: {
-      classes: ['fa', 'fa-map-marker'],
-      key: 'btn_geolocate_user',
-      hidden: false,
-      action: h.geolocateUser
-    },
-    btnThemeAerial: {
-      classes: ['fa', 'fa-plane'],
-      key: 'btn_theme_sat',
-      action: function() {
-        h.btnToggleLayer({
-          id: 'map_main',
-          idLayer: 'here_aerial',
-          idSwitch: 'btnThemeAerial',
-          action: 'toggle'
-        });
-      }
-    },
-    btnThemeSwitch: {
-      classes: ['fa', 'fa-adjust', 'fa-transition-generic'],
-      key: 'btn_theme_switch',
-      action: function() {
-        const elIcon = this.querySelector('.fa');
-        elIcon.classList.toggle('fa-rotate-180');
-        mx.theme.setColorsByThemeNext();
-      }
-    },
-    btnOverlapSpotlight: {
-      classes: ['fa', 'fa-bullseye'],
-      key: 'btn_overlap_spotlight',
-      //remove: modeStatic,
-      action: function(e) {
-        //var el = e.target;
-        h.toggleSpotlight(e.target);
-      }
-    },
-    btnDrawMode: {
-      classes: 'mx-edit-vector',
-      remove: modeStatic,
-      key: 'btn_draw_mode',
-      action: function(e) {
-        h.drawModeToggle(e);
+        var map = h.getMap();
+        if (map) {
+          map.easeTo({bearing: 0, pitch: 0});
+        }
       }
     },
     btnZoomIn: {
@@ -257,14 +169,84 @@ mapControlApp.prototype.onAdd = function(map) {
         map.zoomOut();
       }
     },
-    btnSetNorth: {
-      classes: ['mx-north-arrow'],
-      key: 'btn_north_arrow',
+    btnFullScreen: {
+      classes: ['fa', 'fa-expand'],
+      key: 'btn_fullscreen',
       action: function() {
-        var map = h.getMap();
-        if (map) {
-          map.easeTo({bearing: 0, pitch: 0});
-        }
+        h.toggleFullScreen('btnFullScreen');
+      }
+    },
+    btnThemeSwitch: {
+      classes: ['fa', 'fa-adjust', 'fa-transition-generic'],
+      key: 'btn_theme_switch',
+      action: function() {
+        const elIcon = this.querySelector('.fa');
+        elIcon.classList.toggle('fa-rotate-180');
+        mx.theme.setColorsByThemeNext();
+      }
+    },
+    btnThemeAerial: {
+      classes: ['fa', 'fa-plane'],
+      key: 'btn_theme_sat',
+      action: function() {
+        h.btnToggleLayer({
+          id: 'map_main',
+          idLayer: 'here_aerial',
+          idSwitch: 'btnThemeAerial',
+          action: 'toggle'
+        });
+      }
+    },
+
+    btnOverlapSpotlight: {
+      classes: ['fa', 'fa-bullseye'],
+      key: 'btn_overlap_spotlight',
+      //remove: modeStatic,
+      action: function(e) {
+        //var el = e.target;
+        h.toggleSpotlight(e.target);
+      }
+    },
+    btnToggleBtns: {
+      classes: ['fa', 'fa-desktop'],
+      classeActive: 'active',
+      key: 'btn_toggle_all',
+      hidden: false,
+      position: 'top-left',
+      action: h.setImmersiveMode
+    },
+
+    btnGeolocateUser: {
+      classes: ['fa', 'fa-map-marker'],
+      key: 'btn_geolocate_user',
+      hidden: false,
+      action: h.geolocateUser
+    },
+    btnPrint: {
+      classes: ['fa', 'fa-map-o'],
+      key: 'btn_map_composer',
+      action: function() {
+        h.mapComposerModalAuto();
+      }
+    },
+    btnDrawMode: {
+      classes: 'mx-edit-vector',
+      remove: modeStatic,
+      key: 'btn_draw_mode',
+      action: function(e) {
+        h.drawModeToggle(e);
+      }
+    },
+    btnShowAbout: {
+      classes: ['fa', 'fa-info'],
+      key: 'btn_about',
+      remove: modeStatic,
+      action: function() {
+        var val = {
+          time: new Date(),
+          value: 'showAbout'
+        };
+        Shiny.onInputChange('btn_control', val);
       }
     }
   };

@@ -286,7 +286,7 @@ export async function spatialDataToView(opt) {
         c.view = {
           id: m.id,
           type: 'gj',
-          project: mx.settings.project,
+          project: mx.settings.project.id,
           date_modified: new Date().toLocaleDateString(),
           data: {
             title: {

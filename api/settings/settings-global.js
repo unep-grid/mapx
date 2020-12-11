@@ -5,6 +5,18 @@ module.exports = {
     host_public: 'app.mapx.localhost',
     port_public: '8880'
   },
+  socket_io: {
+    cors: {
+      methods: ['GET', 'POST'],
+      credentials: true,
+      origin: [
+        'http://dev.mapx.localhost:8880',
+        'app.mapx.localhost',
+        'app.mapx.org',
+        'app.staging.mapx.org'
+      ]
+    }
+  },
   map: {
     token: ''
   },
@@ -17,12 +29,12 @@ module.exports = {
     name: 'postgres',
     port: 5432,
     host: 'localhost',
-    timeout : 1000 * 60 * 5, // 5 minutes
+    timeout: 1000 * 60 * 5, // 5 minutes
     poolMin: 1,
     poolMax: 1,
-    admin : {
+    admin: {
       user: 'postgres',
-      password : '1234'
+      password: '1234'
     },
     write: {
       user: 'postgres',
@@ -67,14 +79,20 @@ module.exports = {
     },
     options: {
       from: 'bot@mapx.org',
+      to : null,
       subject: 'test',
-      text: 'yoply',
-      html: '<b>yopla</b>'
+      text: 'info',
+      html: '<b>info</b>',
+      // sendAuto
+      title: 'MapX',
+      subtitle: null,
+      content: '<b>info</b>',
+      subjectPrefix : '[ MapX ]'
     }
   },
   validation_defaults: {
-    db : {
-      array_operators : {
+    db: {
+      array_operators: {
         ALL: '?&',
         ANY: '?|',
         OR: '?|',
@@ -82,24 +100,20 @@ module.exports = {
       }
     },
     users: {
-      roles: ['admin','publisher','member','public'],
+      roles: ['admin', 'publisher', 'member', 'public'],
       id_public: 96,
       id_admin: 1
     },
-    tables : {
-     attr_not_queryable : [
-      "geom",
-       "gid",
-       "pid"
-     ],
-     name_not_queryable : [
-       'mx_users',
-       'mx_sources',
-       'mx_views',
-       'mx_views_latest',
-       'mx_config',
-       'mx_logs'
-     ]
+    tables: {
+      attr_not_queryable: ['geom', 'gid', 'pid'],
+      name_not_queryable: [
+        'mx_users',
+        'mx_sources',
+        'mx_views',
+        'mx_views_latest',
+        'mx_config',
+        'mx_logs'
+      ]
     },
     views: {
       types: ['vt', 'rt', 'sm', 'cc'],

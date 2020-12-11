@@ -1,11 +1,12 @@
-/* jshint evil:true, laxbreak:true */
 import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
-
+import {WsHandler} from './ws_handler/';
+import {NotifCenter} from './notif_center/';
+import {MainPanel} from './main_panel';
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -168,6 +169,26 @@ export function getGeoJSONRandomPoints(opt) {
 }
 
 /**
+ * Get login info
+ * @note : now from settings, but could be fetched
+ * @returns {Object} loginInfo
+ * @returns {Integer} loginInfo.idUser Id of the user
+ * @returns {String} loginInfo.idProject id of the current project
+ * @returns {Boolean} loginInfo.isGuest Is the user guest
+ * @returns {String} loginInfo.token Encrypted string with as {key:<key from mx_users>, is_guest: <boolean>, valid_until:<unixtime>}
+ */
+export async function getLoginInfo() {
+  const s = mx.settings;
+  return {
+    idUser: s.user.id,
+    idProject: s.project,
+    isGuest: s.user.guest,
+    token: s.user.token,
+    language: s.language
+  };
+}
+
+/**
  * Get url for api
  * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
  */
@@ -178,6 +199,9 @@ export function getApiUrl(id) {
   }
   const urlBase =
     s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
+  if (!id) {
+    return urlBase;
+  }
   return urlBase + (s.api.routes[id] || id);
 }
 
@@ -235,7 +259,7 @@ export function getAppPathUrl(id) {
 export function setProject(idProject, opt) {
   const h = mx.helpers;
   opt = Object.assign({}, opt);
-  const idCurrentProject = mx.settings.project;
+  const idCurrentProject = h.path(mx, 'settings.project.id');
   return new Promise((resolve) => {
     if (idProject === idCurrentProject) {
       resolve(true);
@@ -280,7 +304,8 @@ export function setProject(idProject, opt) {
         type: 'settings_change',
         idGroup: 'project_change',
         callback: (s) => {
-          if (s.new_settings.project !== idProject) {
+          const idProjectNew = h.path(s, 'delta.project.id');
+          if (idProjectNew !== idProject) {
             resolve(false);
           } else {
             mx.events.once({
@@ -300,6 +325,7 @@ export function setProject(idProject, opt) {
       if (hasShiny) {
         Shiny.onInputChange('selectProject', idProject);
       }
+
       mx.events.fire({
         type: 'project_change',
         data: {
@@ -393,6 +419,34 @@ export function initListenerGlobal() {
   });
 }
 
+/*
+ * Init match media query + listener
+ */
+function initMatchMedia(theme) {
+  try {
+    const valid = theme instanceof Theme;
+    if (!valid) {
+      return;
+    }
+    /**
+     * theme color auto
+     */
+    const matchDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    if (matchDark) {
+      theme.setColorsByThemeId('smartgray');
+    }
+    window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+      return e.matches && theme.setColorsByThemeId('smartgray');
+    });
+    window.matchMedia('(prefers-color-scheme: light)').addListener((e) => {
+      return e.matches && theme.setColorsByThemeId('mapx');
+    });
+  } catch (e) {
+    console.warn(e);
+  }
+}
+
 /**
  * Init app listeners
  */
@@ -409,10 +463,40 @@ export function initListenersApp() {
     group: 'mapx-base'
   });
 
+  /**
+   * Panel tab click
+   * TODO: Move all this in 'main_panel' module
+   */
+  mx.listeners.addListener({
+    target: mx.main_panel.elContent,
+    type: 'click',
+    callback: (e) => {
+      if (e.target.dataset.btn_tab) {
+        e.preventDefault();
+        e.stopPropagation();
+        const elPanels = e.currentTarget.querySelectorAll('.mx-tab--panel');
+        const elTabs = e.currentTarget.querySelectorAll('.mx-tab--tab');
+        elPanels.forEach((el) => el.classList.remove('active'));
+        elTabs.forEach((el) => el.classList.remove('active'));
+        const elPanel = document.getElementById(e.target.dataset.btn_tab);
+        e.target.classList.add('active');
+        elPanel.classList.add('active');
+      }
+    },
+    group: 'mapx-base'
+  });
+
   mx.listeners.addListener({
     target: document.getElementById('btnShowLanguage'),
     type: 'click',
     callback: h.showSelectLanguage,
+    group: 'mapx-base'
+  });
+
+  mx.listeners.addListener({
+    target: document.getElementById('btnShowLogin'),
+    type: 'click',
+    callback: h.showLogin,
     group: 'mapx-base'
   });
 
@@ -442,6 +526,13 @@ export function initListenersApp() {
       }
     }
   });
+
+  mx.events.on({
+    type: ['settings_user_change', 'settings_change'],
+    idGroup: 'mapx-base',
+    callback: h.updateUiSettings
+  });
+  h.updateUiSettings();
 
   mx.events.on({
     type: 'views_list_updated',
@@ -510,14 +601,56 @@ export function initListenersApp() {
 }
 
 /**
- * Toggle or set filter by view activated
- * @param {Boolean} enable Enable or disable filter. If undefined, toggle;
+ * Update element and button text that could not be translated automatically
+ * after a settings change
  */
-//export function setBtnFilterActivated(enable) {
-//const h = mx.helpers;
-//const vf = h.getMapData().viewFilter;
-//vf.filterActivated(enable);
-/*}*/
+export async function updateUiSettings() {
+  const h = mx.helpers;
+  const langDef = mx.settings.languages[0];
+  const lang = mx.settings.language;
+  /**
+   * User / login labels
+   */
+  const elBtnLogin = document.getElementById('btnShowLoginLabel');
+  const sUser = h.path(mx, 'settings.user', {});
+  const sRole = h.path(mx, 'settings.user.roles', {});
+
+  if (sUser.guest) {
+    elBtnLogin.innerText = await h.getDictItem('login_label');
+  } else {
+    const role = sRole.admin ? 
+      'admin' 
+      : sRole.publisher
+      ? 'publisher'
+      : sRole.member
+      ? 'member'
+      : 'public';
+
+    const roleLabel = await h.getDictItem(role);
+    elBtnLogin.innerText = `${sUser.email} – ${roleLabel}`;
+  }
+
+  /**
+   * Project labels
+   */
+  const elBtnProject = document.getElementById('btnShowProjectLabel');
+  const elBtnProjectPrivate = document.getElementById('btnShowProjectPrivate');
+  const title = h.path(mx, 'settings.project.title');
+  elBtnProject.innerText =
+    title[lang] || title[langDef] || mx.settings.project.id;
+  if (mx.settings.project.public) {
+    elBtnProjectPrivate.classList.remove('fa-lock');
+  } else {
+    elBtnProjectPrivate.classList.add('fa-lock');
+  }
+
+  /**
+   * Language
+   */
+  await h.updateLanguage();
+  const elBtnLanguage = document.getElementById('btnShowLanguageLabel');
+  elBtnLanguage.innerText = await h.getDictItem(lang);
+}
 
 /**
  * Check if there is view activated and disable button if needed
@@ -619,6 +752,20 @@ export async function initMapx(o) {
   mx.settings.style.glyphs = h.getAppPathUrl('fontstack');
 
   /**
+   * Handle socket io session
+   */
+  mx.ws = new WsHandler({
+    url: getApiUrl(),
+    auth: getLoginInfo, // evaluated for each connect
+    handlers: {
+      job_state: async (m) => {
+        await mx.nc.notify(m); // wrap avoid double bind
+      },
+      server_state: console.log,
+      error: console.warn
+    }
+  });
+  /**
    * TEst if mapbox gl is supported
    */
   if (!mx.mapboxgl.supported()) {
@@ -674,6 +821,30 @@ export async function initMapx(o) {
   await new Promise((resolve) => {
     o.map.on('load', resolve);
   });
+
+  if (!mx.settings.mode.static) {
+    /**
+     * Init left panel
+     */
+    mx.main_panel = new MainPanel({
+      panel: {
+        elContainer: document.body,
+        position: 'top-left',
+        title_text: null,
+        button_text: h.getDictItem('app_panel'),
+        button_lang_key: 'app_panel',
+        button_classes: ['fa', 'fa-list-ul'],
+        container_style: {
+          width: '480px',
+          height: '90%',
+          minWidth: '200px',
+          minHeight: '400px'
+        }
+      }
+    });
+    mx.main_panel.panel.open();
+  }
+
   /**
    * Set theme
    */
@@ -688,10 +859,17 @@ export async function initMapx(o) {
     map: o.map
   });
 
+  if (!colors) {
+    /**
+     * Auto
+     */
+    initMatchMedia(mx.theme);
+  }
+
   /**
    * Add controls
    */
-  o.map.addControl(new h.mapControlApp(), 'top-left');
+  o.map.addControl(new h.mapControlApp(), 'top-right');
   o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
   o.map.addControl(new h.mapControlScale(), 'bottom-right');
   o.map.addControl(new h.mapxLogo(), 'bottom-left');
@@ -700,6 +878,7 @@ export async function initMapx(o) {
    * Init global listeners
    */
   h.initLog();
+  h.initListenerNotificationCenter();
   h.initListenerGlobal();
   h.initMapListener(o.map);
   /**
@@ -825,16 +1004,19 @@ export async function initMapxStatic(o) {
   const idViews = h.getArrayDistinct(idViewsQuery).reverse();
 
   const btnLegend = new ButtonPanel({
-    elContainer: elMap,
-    position: 'top-right',
+    elContainer: document.body,
+    panelFull: true,
+    position: 'top-left',
     title_text: h.getDictItem('button_legend_title'),
     title_lang_key: 'button_legend_title',
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
     container_style: {
-      maxHeight: '50%',
-      maxWidth: '50%'
+      width: '300px',
+      height: '300%',
+      minWidth: '200px',
+      minHeight: '200px'
     }
   });
 
@@ -911,6 +1093,7 @@ export async function initMapxApp(o) {
   idViewsQuery.push(...idViewsQueryOpen);
   const idViews = h.getArrayDistinct(idViewsQuery);
 
+ 
   /**
    * Init app listeners: view add, language, project change, etc.
    */
@@ -977,7 +1160,7 @@ export async function initMapxApp(o) {
    */
   if (h.handleMapDragOver && h.handleMapDrop) {
     /**
-     * Allow view to be dropped when glopbal drag mode is enabled
+     * Allow view to be dropped when global drag mode is enabled
      */
     elMap.classList.add('li-keep-enable-drop');
 
@@ -1006,6 +1189,71 @@ export async function initMapxApp(o) {
    */
 
   h.cleanTemporaryQueryParameters();
+}
+
+export function initListenerNotificationCenter() {
+  const h = mx.helpers;
+  /**
+   * Init notifiation control
+   */
+  h.initNotification();
+  mx.events.on({
+    type: ['settings_user_change'],
+    idGroup: 'notif',
+    callback: () => {
+      h.initNotification();
+    }
+  });
+}
+
+export async function initNotification() {
+  if (mx.settings.user.guest) {
+    return;
+  }
+
+  if (mx.nc instanceof NotifCenter) {
+    mx.nc.remove();
+  }
+
+  const logo = require('../png/map-x-logo.png');
+
+  mx.nc = new NotifCenter({
+    config: {
+      id: mx.settings.user.id,
+      on: {
+        add: (nc) => {
+          mx.theme.on('mode_changed', nc.setMode);
+        },
+        remove: (nc) => {
+          mx.theme.off('mode_changed', nc.setMode);
+        }
+      }
+    },
+    panel: {
+      title_text: 'Notifications',
+      title_lang_key: 'nc_title',
+      position: 'bottom-left',
+      elContainer: document.body,
+      container_style: {
+        width: '480px',
+      }
+    },
+    ui: {
+      logo: logo,
+      mode: mx.theme.mode
+    }
+  });
+}
+
+/**
+ * Binding to notify from shiny
+ * @param {Object} opt Options
+ * @param {Object} opt.notif Notification object
+ */
+export async function shinyNotify(opt) {
+  if (mx.nc instanceof NotifCenter) {
+    mx.nc.notify(opt.notif);
+  }
 }
 
 /**
@@ -1260,7 +1508,7 @@ export async function addSourceFromView(o) {
   const p = h.path;
 
   if (o.map && p(o.view, 'data.source')) {
-    const project = p(mx, 'settings.project');
+    const project = p(mx, 'settings.project.id');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
     const isEditable = h.isViewEditable(o.view);
@@ -1392,7 +1640,7 @@ export async function updateViewsList(o) {
     id: 'map_main',
     viewList: [],
     viewsCompact: false,
-    project: mx.settings.project
+    project: h.path(mx, 'settings.project.id')
   };
   o = Object.assign({}, def, o);
   const viewsToAdd = o.viewsList;
@@ -1401,7 +1649,8 @@ export async function updateViewsList(o) {
   const hasViewsList =
     h.isArrayOfViewsId(viewsToAdd) && h.isNotEmpty(viewsToAdd);
   const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
-  const updateProject = o.project && o.project !== mx.settings.project;
+  const updateProject =
+    o.project && o.project !== h.path(mx, 'settings.project.id');
   let elProgContainer;
   let mode = 'array_async_all';
   let nCache = 0,
@@ -1410,7 +1659,7 @@ export async function updateViewsList(o) {
     prog;
 
   if (updateProject) {
-    mx.settings.project = o.project;
+    mx.settings.project.id = o.project;
   }
 
   if (hasViewsList) {
@@ -1607,7 +1856,7 @@ export async function updateViewsList(o) {
 async function getGeoJSONViewsFromStorage(o) {
   const out = [];
 
-  const project = o.project || mx.settings.project;
+  const project = o.project || mx.settings.project.id;
   /**
    * extract views from local storage
    */
@@ -2217,8 +2466,8 @@ export async function makeDashboard(o) {
         }
       },
       panel: {
-        elContainer: elMap,
-        title_text: h.getDictItem('Dashboard', 'fr'),
+        elContainer: document.body,
+        title_text: h.getDictItem('Dashboard'),
         title_lang_key: 'dashboard',
         button_text: 'dashboard',
         button_lang_key: 'button_dashboard_panel',
@@ -5382,22 +5631,18 @@ export function setImmersiveMode(opt) {
      */
     '.mapboxgl-ctrl-bottom-left',
     '.mapboxgl-ctrl-bottom-right',
-    '.mapboxgl-ctrl-top-right',
+    '.mapboxgl-ctrl-top-left',
     /**
      * MapX views and settings panel
      */
-    '#mxPanelViews',
-    '#mxPanelTools',
+    '.button-panel-main--top-left',
+    '.button-panel-main--bottom-left',
     /**
      * Non essential buttons
      */
-    '#btnShowLogin',
-    '#btnTabView',
-    '#btnTabTools',
     '#btnPrint',
     '#btnShowAbout',
     '#btnGeolocateUser',
-    '#btnThemeAerial',
     '#btnDrawMode'
   ];
 

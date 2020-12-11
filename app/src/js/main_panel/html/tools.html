@@ -1,0 +1,98 @@
+<div id="mxTabPanelTools" class="mx-tab--panel">
+  <!-- highlight -->
+  <div class="mx-tab--content-scrollable mx-tab--content-padding">
+    <h4 data-lang_key="title_config_highlight"></h4>
+    <div class="well">
+      <div class="form-group shiny-input-container">
+        <label
+          class="control-label"
+          data-lang_key="select_highlight_mode"
+          for="selectNLayersOverlap"
+          >highlight_mode</label
+        >
+        <div>
+          <select id="selectNLayersOverlap">
+            <option value="0">Highlight zones where all layers overlap</option>
+            <option selected="TRUE" value="1"
+              >Highlight any visible features</option
+            >
+            <option value="2"
+              >Highlight zones where at least two layers overlap</option
+            >
+            <option value="3"
+              >Highlight zones where at least three layers overlap</option
+            >
+            <option value="4"
+              >Highlight zones where at least four layers overlap</option
+            >
+            <option value="5"
+              >Highlight zones where at least five layers overlap</option
+            >
+          </select>
+        </div>
+      </div>
+      <div class="fold-container form-group shiny-input-container fold-check">
+        <input
+          type="checkbox"
+          id="checkEnableOverlapArea"
+          class="fold-switch fold-check"
+        />
+        <label
+          class="fold-label"
+          for="checkEnableOverlapArea"
+          data-lang_key="label_check_instant_overlap"
+        ></label>
+        <div class="fold-content mx-scroll-styled">
+          <div class="form-group">
+            <label data-lang_key="label_area_instant_overlap"></label>
+            <div class="form-control" id="txtAreaOverlap"></div>
+            <small
+              data-lang_key="label_help_area_instant_overlap"
+              class="text-muted"
+            ></small>
+          </div>
+          <div class="form-group">
+            <label data-lang_key="label_resol_instant_overlap"></label>
+            <div class="form-control" id="txtResolOverlap"></div>
+            <small
+              data-lang_key="label_help_resol_instant_overlap"
+              class="text-muted"
+            ></small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 data-lang_key="title_tools_share"></h3>
+    <button
+      id="btnIframeBuilder"
+      data-lang_key="btn_iframe_builder"
+      class=" btn btn-default btn-sm action-button hint shiny-bound-input"
+    ></button>
+    <div id="uiBtnViewAdd" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnSourceUpload" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnSourceEdit" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnShowDbInfo" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnShowRoleManager" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnShowAppConfig" class="mx-tools-group shiny-html-output"></div>
+    <div id="uiBtnProjectConfig" class="mx-tools-group shiny-html-output"></div>
+    <h3 data-lang_key="title_settings_colors"></h3>
+    <details>
+    <div class="mx-settings-colors"><div id="mxInputThemeColors"></div></div>
+    </details>
+    <h3 data-lang_key="title_utilities"></h3>
+    <button
+      id="btnClearCache"
+      class="btn btn-default"
+      data-lang_key="btn_clear_cache"
+    >
+      Clear cached data
+    </button>
+
+    <div>
+      <hr />
+      <small class="text-muted"
+        >Version <span class="text-muted">1.7.11</span></small
+      >
+    </div>
+  </div>
+</div>

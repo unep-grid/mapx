@@ -1,10 +1,4 @@
 
-#' Update user settings
-#' @param userData {list} list of user data such as id, email, nickname
-#' @export
-mxUpdateSettingsUser <- function( userData, session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mxUpdateSettingsUser",userData)
-}
 
 #' Set user id
 #' @param userData {list} list of user data such as id, email, nickname
@@ -13,15 +7,7 @@ mxUpdateSettings <- function( userData, session=shiny::getDefaultReactiveDomain(
   session$sendCustomMessage("mxUpdateSettings",userData)
 }
 
-#' Set language
-#' @param language code
-#' @export
-mxUpdateLanguage <- function( language = "en", session=shiny::getDefaultReactiveDomain()) {
-  session$sendCustomMessage("mxUpdateLanguage",list(
-      lang = language 
-      )
-    )
-}
+
 
 
 #' Toggle disabling of given button, based on its id.
@@ -344,7 +330,6 @@ mxModal = function(
   textCloseButton = "ok",
   session=shiny::getDefaultReactiveDomain()){
 
-  stopifnot(!noDataCheck(id))
 
   if(!noDataCheck(buttons) && is.list(buttons)){
     buttons <- lapply(buttons,function(b){as.character(b)})
@@ -402,5 +387,25 @@ mxFlashIcon = function(icon="cog",text="",update=runif(1),session=shiny::getDefa
   session$sendCustomMessage("mxFlashIcon",list(
       icon = icon
       ))
+}
+
+#' Notification binding
+#'
+#' @param notif {List} notif list with at least msg and type param
+#' @param update {Any} Ignore cached request, if any. 
+#' @param session {Session} Shiny session
+#' @return
+mxNotify = function(notif,update=runif(1),session=shiny::getDefaultReactiveDomain()){
+  isList <- is.list(notif)
+  hasMsg <- isList && !noDataCheck(notif$msg)
+  hasType <- isList && !noDataCheck(notif$type)
+  if(isList && hasMsg && hasType){
+    notif$timestamp = as.numeric(Sys.time())*1000
+    session$sendCustomMessage("mxNotify",list(
+        update = update,
+        notif = notif
+    )
+    )
+  }
 }
 

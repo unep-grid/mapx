@@ -1,0 +1,37 @@
+<div id="mxTabPanelViews" class="mx-tab--panel active">
+  <!-- views search filter by text -->
+  <div class="mx-views-filters">
+    <input
+      id="viewsFilterText"
+      class="mx-views-filter-text-input"
+      type="text"
+      data-lang_key="view_filter_input"
+      data-lang_type="placeholder"
+    />
+    <label class="mx-hide" for="viewsFilterText">Filter views by text</label>
+    <!-- view filtering buttons  -->
+    <div class="mx-bar-filter mx-bar-item">
+      <div class="mx-btn-toggle-filter" id="btnFilterChecked">
+        <span data-lang_key="btn_filter_checked"> Activated views only </span>
+      </div>
+      <div
+        class="mx-btn-toggle-filter bottom_tick mx-bar-item"
+        id="btnFilterShowPanel"
+      >
+        <span data-lang_key="btn_filter_show_panel"> Advanced filter </span>
+        <span class="mx-btn-toggle-filter-count" id="viewsFilterCount"> </span>
+      </div>
+    </div>
+    <div
+      class="mx-views-filter-panel base_background mx-hide"
+      id="viewsFilterPanel"
+    >
+      <div id="viewsFilterContainer" class="mx-views-filter-container"></div>
+      <div id="viewsFilterSwitch" class="mx-views-filter-switch"></div>
+    </div>
+  </div>
+  <!-- views list -->
+  <div id="mxViewsList" class="mx-views-list mx-tab--content-scrollable"></div>
+</div>
+
+

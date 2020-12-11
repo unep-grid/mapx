@@ -1,13 +1,14 @@
-import {el} from '@fxi/el';
+//import {el} from '@fxi/el';
+import {el} from './../el/src/index.js';
 import {ListenerStore} from '../listener_store/index.js';
-import './style.css';
+import './style.less';
 
 const options = {
   elContainer: document.body,
   title_text: 'Title',
-  title_lang_key: 'title',
-  button_lang_key: 'button',
+  title_lang_key: null,
   button_text: 'Toggle',
+  button_lang_key: null,
   button_classes: ['fa', 'fa-list-ul'],
   position: 'top-right',
   container_style: {},
@@ -78,154 +79,215 @@ class ButtonPanel {
   }
 
   build() {
-    this.el = el(
+    const panel = this;
+    const elMain = panel.opt.elContainer.querySelector(`.button-panel--main`);
+
+    if (!elMain) {
+      panel.elMain = panel._el_main();
+      panel.opt.elContainer.appendChild(panel.elMain);
+    } else {
+      panel.elMain = elMain;
+    }
+
+    panel.elContainer = el(
       'div',
       {
-        class: ['button-panel-container', `button-panel--${this.opt.position}`],
-        style: this.opt.container_style
+        class: [
+          'button-panel--container',
+          `button-panel--${panel.opt.position}`
+        ],
+        style: panel.opt.container_style
       },
-      (this.elBtnPanel = el(
+      (panel.elBtnPanel = el(
         'div',
         {
-          class: ['button-panel-btn', 'shadow'],
+          class: [
+            'button-panel--btn',
+            `button-panel--${panel.opt.position}`,
+            'shadow'
+          ],
           dataset: {
-            lang_key: this.opt.button_lang_key,
+            lang_key: panel.opt.button_lang_key,
             lang_type: 'tooltip',
             button_panel_action: 'toggle'
           }
         },
         el('span', {
-          class: ['button-panel-btn-icon'].concat(this.opt.button_classes)
-        })
+          class: ['button-panel--btn-icon'].concat(panel.opt.button_classes)
+        }),
+        (panel.elBtnFlag = el('span', {
+          class: ['button-panel--btn-flag', 'button-panel--hidden']
+        }))
       )),
-      (this.elPanel = el(
+      (panel.elPanel = el(
         'div',
         {
           class: [
-            'button-panel',
+            'button-panel--item',
             'shadow',
-            this.opt.panelFull ? 'button-panel-full' : null
+            panel.opt.panelFull ? 'button-panel--item-full' : null
           ]
         },
         /**
          * Panel title
          */
-        (this.elTitle = el('span', {
-          class: 'button-panel-title',
+        (panel.elTitle = el('span', {
+          class: 'button-panel--item-title',
           dataset: {
-            lang_key: this.opt.title_lang_key
+            lang_key: panel.opt.title_lang_key
           }
         })),
         /**
          * Where the content will appear
          */
-        (this.elPanelContent = el('div', {
-          class: 'button-panel-content'
-        }))
-      )),
-      /**
-       * Handles / Buttons
-       */
-      (this.elHandles = el(
-        'div',
-        {
-          class: 'button-panel--handles'
-        },
+        (panel.elPanelContent = el('div', {
+          class: 'button-panel--item-content'
+        })),
+        /**
+         * Handles / Buttons
+         */
+        (panel.elHandles = el(
+          'div',
+          {
+            class: 'button-panel--item-handles'
+          },
 
-        /**
-         * Top Left
-         */
-        el(
-          'div',
-          {
-            class: 'button-panel--handle-group-top-left'
-          },
-          el('div', {
-            class: [
-              'button-panel--handle',
-              'button-panel--handle-resizer',
-              'fa',
-              'fa-circle'
-            ],
-            dataset: {action: 'resize', type: 'free', corner: 'top-left'}
-          }),
-          el('div', {
-            class: ['button-panel--handle', 'button-panel--handle-button'],
-            dataset: {action: 'resize', type: 'auto', id: 'half-width'}
-          }),
-          el('div', {
-            class: ['button-panel--handle', 'button-panel--handle-button'],
-            dataset: {action: 'resize', type: 'auto', id: 'half-height'}
-          }),
-          el('div', {
-            class: ['button-panel--handle', 'button-panel--handle-button'],
-            dataset: {action: 'resize', type: 'auto', id: 'full'}
-          })
-        ),
-        /**
-         * Top right
-         */
-        el(
-          'div',
-          {
-            class: 'button-panel--handle-group-top-right'
-          },
-          el('div', {
-            class: [
-              'button-panel--handle',
-              'button-panel--handle-resizer',
-              'fa',
-              'fa-circle'
-            ],
-            dataset: {action: 'resize', type: 'free', corner: 'top-right'}
-          })
-        ),
-        /**
-         * bottom right
-         */
-        el(
-          'div',
-          {
-            class: 'button-panel--handle-group-bottom-right'
-          },
-          el('div', {
-            class: [
-              'button-panel--handle',
-              'button-panel--handle-resizer',
-              'fa',
-              'fa-circle'
-            ],
-            dataset: {action: 'resize', type: 'free', corner: 'bottom-right'}
-          })
-        ),
-        /**
-         * Bottom left
-         */
-        el(
-          'div',
-          {
-            class: 'button-panel--handle-group-bottom-left'
-          },
-          el('div', {
-            class: [
-              'button-panel--handle',
-              'button-panel--handle-resizer',
-              'fa',
-              'fa-circle'
-            ],
-            dataset: {action: 'resize', type: 'free', corner: 'bottom-left'}
-          })
-        )
+          /**
+           * Top Left
+           */
+          panel._el_handles('top-left'),
+          panel._el_handles('top-right'),
+          panel._el_handles('bottom-right'),
+          panel._el_handles('bottom-left')
+        ))
       ))
     );
+    panel.elMain.appendChild(panel.elContainer);
+  }
+
+  _el_main() {
+    //const panel = this;
+    return el(
+      'div',
+      {
+        class: `button-panel--main`
+      }
+      /*el(*/
+      //'div',
+      //{
+      //class: `button-panel--main-top`
+      //},
+      //(panel.elPanelMainTopLeft = el('div', {
+      //class: `button-panel--main-top-left`
+      //})),
+      //(panel.elPanelMainTopRight = el('div', {
+      //class: `button-panel--main-top-right`
+      //}))
+      //),
+      //el(
+      //'div',
+      //{
+      //class: `button-panel--main-bottom`
+      //},
+      //(panel.elPanelMainBottomLeft = el('div', {
+      //class: `button-panel--main-bottom-left`
+      //})),
+      //(panel.elPanelMainBottomRight = el('div', {
+      //class: `button-panel--main-bottom-right`
+      /*}))*/
+      //)
+    );
+  }
+
+  _el_handles(pos) {
+    const panel = this;
+    if (pos === panel.opt.position) {
+      return; // no handles near the button
+    }
+    const p = pos.split('-');
+    const loc = p[0]; // top, bottom
+    const side = p[1]; // left right
+    const op = `${loc === 'top' ? 'bottom' : 'top'}-${
+      side === 'left' ? 'right' : 'left'
+    }`;
+    const elResizes = panel._el_resize_btns(op);
+    const elFree = panel._el_resize(pos);
+    const cl = ['button-panel--item-handles-group', `button-panel--${pos}`];
+    if (loc === 'top') {
+      return el(
+        'div',
+        {
+          class: cl
+        },
+        elFree,
+        elResizes
+      );
+    } else {
+      return el(
+        'div',
+        {
+          class: cl
+        },
+        elResizes,
+        elFree
+      );
+    }
+  }
+
+  _el_resize(pos) {
+    return el('div', {
+      class: ['button-panel--item-handle', 'fa', 'fa-circle'],
+      dataset: {action: 'resize', type: 'free', corner: pos}
+    });
+  }
+
+  _el_resize_btns(pos) {
+    const panel = this;
+    const add = panel.opt.position === pos;
+    const elGroup = new DocumentFragment();
+    if (add) {
+      elGroup.appendChild(
+        el('div', {
+          class: [
+            'button-panel--item-handle',
+            'button-panel--item-handle-button'
+          ],
+          dataset: {action: 'resize', type: 'auto', id: 'half-width'}
+        })
+      );
+      elGroup.appendChild(
+        el('div', {
+          class: [
+            'button-panel--item-handle',
+            'button-panel--item-handle-button'
+          ],
+          dataset: {action: 'resize', type: 'auto', id: 'half-height'}
+        })
+      );
+      elGroup.appendChild(
+        el('div', {
+          class: [
+            'button-panel--item-handle',
+            'button-panel--item-handle-button'
+          ],
+          dataset: {action: 'resize', type: 'auto', id: 'full'}
+        })
+      );
+    }
+    return elGroup;
   }
 
   setTitle(txt) {
     txt = txt || this.opt.title_text;
     if (txt) {
-      txtResolve(txt).then((t) => {
-        this.elTitle.innerText = t;
-      });
+      if (txt instanceof Element) {
+        this.elTitle.innerHtml = '';
+        this.elTitle.appendChild(txt);
+      } else {
+        txtResolve(txt).then((t) => {
+          this.elTitle.innerHtml = t;
+        });
+      }
     }
   }
 
@@ -234,6 +296,17 @@ class ButtonPanel {
     txtResolve(txt).then((t) => {
       this.elBtnPanel.setAttribute('aria-label', t);
     });
+  }
+
+  showFlag() {
+    const panel = this;
+    if (!panel.isActive()) {
+      this.elBtnFlag.classList.remove('button-panel--hidden');
+    }
+  }
+
+  hideFlag() {
+    this.elBtnFlag.classList.add('button-panel--hidden');
   }
 
   handleResize(e) {
@@ -298,19 +371,19 @@ class ButtonPanel {
   }
 
   get rectParent() {
-    return this.el.parentElement.getBoundingClientRect();
+    return this.elContainer.parentElement.getBoundingClientRect();
   }
 
   resizeAuto(type) {
     const panel = this;
-    panel.el.classList.add('animate');
+    panel.elContainer.classList.add('button-panel--container-animate');
 
     /**
      * Remove animate class according to
      * animate rules in css
      */
     setTimeout(() => {
-      panel.el.classList.remove('animate');
+      panel.elContainer.classList.remove('button-panel--container-animate');
     }, 500);
 
     /**
@@ -336,22 +409,22 @@ class ButtonPanel {
         panel.height = panel.rectParent.height;
         break;
       default:
-        console.log(`Resize auto '${type}' not handled`);
+        console.warn(`Resize auto '${type}' not handled`);
     }
 
     panel.fire('resize-auto', type);
   }
 
   get width() {
-    return this._width || this.el.getBoundingClientRect().width;
+    return this._width || this.elContainer.getBoundingClientRect().width;
   }
   get height() {
-    return this._height || this.el.getBoundingClientRect().height;
+    return this._height || this.elContainer.getBoundingClientRect().height;
   }
   set width(w) {
     const panel = this;
     panel._width = Math.round(w / 10) * 10;
-    panel.el.style.width = panel.width + 'px';
+    panel.elContainer.style.width = panel.width + 'px';
     setTimeout(() => {
       panel.fire('resize');
     }, 500);
@@ -359,44 +432,54 @@ class ButtonPanel {
   set height(h) {
     const panel = this;
     panel._height = Math.round(h / 10) * 10;
-    panel.el.style.height = panel.height + 'px';
+    panel.elContainer.style.height = panel.height + 'px';
     setTimeout(() => {
       panel.fire('resize');
     }, 500);
+  }
+  resetStyle() {
+    const panel = this;
+    panel.width = 10;
+    panel.height = 10;
+    for (var s in panel.opt.container_style) {
+      panel.elContainer.style[s] = panel.opt.container_style[s];
+    }
   }
 
   destroy() {
     const panel = this;
     panel.fire('destroy');
     panel.cb.length = 0;
-    panel.el.remove();
+    panel.elContainer.remove();
     panel.ls.destroy();
   }
+
+  get _visible() {
+    const panel = this;
+    return !panel.elContainer.classList.contains('button-panel--hidden');
+  }
+
   hide() {
     const panel = this;
-    panel.el.classList.add('button-panel--hidden');
+    panel.elContainer.classList.add('button-panel--hidden');
     panel.fire('hide');
-    panel._visible = false;
   }
+
   show() {
     const panel = this;
-    panel.el.classList.remove('button-panel--hidden');
-    const hasPanel = panel.opt.elContainer.contains(panel.el);
-    if (!hasPanel) {
-      panel.opt.elContainer.appendChild(panel.el);
-    }
+    panel.elContainer.classList.remove('button-panel--hidden');
     panel.fire('show');
-    panel._visible = true;
   }
 
   isActive() {
-    return this.el.classList.contains('active');
+    return this.elContainer.classList.contains('active');
   }
 
   open(skipFire) {
     const panel = this;
     if (!panel.isActive()) {
-      panel.el.classList.add('active');
+      panel.hideFlag();
+      panel.elContainer.classList.add('active');
       if (!skipFire) {
         panel.fire('open');
       }
@@ -405,7 +488,8 @@ class ButtonPanel {
   close(skipFire) {
     const panel = this;
     if (panel.isActive()) {
-      panel.el.classList.remove('active');
+      panel.elContainer.classList.remove('active');
+      panel.resetStyle();
       if (!skipFire) {
         panel.fire('close');
       }

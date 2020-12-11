@@ -14,7 +14,7 @@ $(document).on('shiny:connected', function() {
   * General bindings
   */
 
-  Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
+  //Shiny.addCustomMessageHandler("mxUpdateLanguage", h.updateLanguage);
   Shiny.addCustomMessageHandler("mxSetCookie",h.writeCookie);
   Shiny.addCustomMessageHandler('mxModal', h.modal);
   Shiny.addCustomMessageHandler('mxSetElementAttribute', h.setElementAttribute);
@@ -35,9 +35,10 @@ $(document).on('shiny:connected', function() {
   Shiny.addCustomMessageHandler("mxUpdateSelectizeItems",h.updateSelectizeItems);
   Shiny.addCustomMessageHandler("mxInitSelectizeAll",h.initSelectizeAll);
   Shiny.addCustomMessageHandler('mxFlashIcon', h.iconFlash);
-  Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
+  //Shiny.addCustomMessageHandler('mxUpdateSettingsUser', h.updateSettingsUser );
   Shiny.addCustomMessageHandler('mxUpdateSettings', h.updateSettings );
   Shiny.addCustomMessageHandler('mxUpdateCheckboxInput', h.updateCheckboxInput );
+  Shiny.addCustomMessageHandler('mxNotify', h.shinyNotify);
   
   /**
   * Mapx map and view related binding

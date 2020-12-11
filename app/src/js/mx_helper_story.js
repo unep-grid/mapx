@@ -495,7 +495,7 @@ function initButtonsListener(o) {
    */
   o.data.buttonLegend = new ButtonPanel({
     elContainer: o.data.elMapContainer,
-    position: 'top-right',
+    position: 'top-left',
     title_text: h.getDictItem('button_legend_title'),
     title_lang_key: 'button_legend_title',
     button_text: h.getDictItem('button_legend_button'),
@@ -943,7 +943,8 @@ export function storyController(o) {
     '#btnZoomIn',
     '#btnZoomOut',
     '#btnDrawMode',
-    '.mx-panels-container'
+    '.button-panel-main--top-left',
+    '.button-panel-main--bottom-left'
   ];
   o.selectorEnable = o.selectorEnable || [
     '#btnStoryUnlockMap',

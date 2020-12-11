@@ -1133,6 +1133,7 @@ mxDbClearResult <- function(con){
 }
 
 #' Get user info
+#'
 #' @param email user email
 #' @param userTable DB users table
 #' @return list containing id, email and data from the user
@@ -1154,7 +1155,7 @@ mxDbGetUserInfoList <- function(id=NULL,email=NULL,userTable="mx_users"){
   }
 
   quer <- sprintf(
-    "SELECT id,email,data::text as data 
+    "SELECT id,key,email,data::text as data 
     FROM %1$s
     WHERE %2$s = %3$s
     LIMIT 1 
@@ -1174,7 +1175,28 @@ mxDbGetUserInfoList <- function(id=NULL,email=NULL,userTable="mx_users"){
   return(res)
 }
 
+#' Get user last used language
+#'
+#' @param email {Character} User email
+#' @param id {Integer} Id user
+#' @param default {Character} Default language
+#' @return {Character} two letters language code
+mxDbGetUserLanguage <- function(email=NULL, id=NULL, default='en'){
+  userInfo <- mxDbGetUserInfoList(email=email, id=id)
+  .get(userInfo,c('data','user','cache','last_language'),default)
+}
 
+#' Get matching language or default for two user
+#'
+#' @param a {Character} User language or email a
+#' @param b {Character} User language or email b
+#' @param default {Character} Default language
+#' @return {Character} two letters language code
+mxDbGetUsersLanguageMatch <- function(a=NULL, b=NULL, default="en"){
+  languageA <- ifelse(mxEmailIsValid(a),mxDbGetUserLanguage(a),a)
+  languageB <- ifelse(mxEmailIsValid(b),mxDbGetUserLanguage(b),b)
+  ifelse(languageA==languageB,languageA,default)
+}
 
 #WHERE s.role#>>'{\"role\"}' in %2$s 
 mxDbGetUserByRoles <- function(roles="user", userTable="mx_users"){
@@ -1219,25 +1241,29 @@ mxDbGetUserRoles <- function(id=1,userTable="mx_users"){
 
 
 
-
-
-#' Add 
+#' Add new user using email
+#'
+#' @param email {Character} User email to register
+#' @param timeStamp {POSIXct} Timestamp 
+#' @param language {Character} two letters language code
+#' @return 
 mxDbCreateUser <- function(
-  email=NULL,
-  timeStamp=Sys.time()
+  email = NULL,
+  timeStamp = Sys.time(),
+  language = 'en'
   ){
 
   conf <- mxGetDefaultConfig()
 
-  dataUserDefault = conf[["users"]][["data"]][["public"]]
-  dataUserSuperuser = conf[["users"]][["data"]][["superUser"]]
-  userTable = conf[["pg"]][["tables"]][["users"]]
-  userNameDefault = conf[["users"]][["defaultName"]]
+  dataUserDefault <- .get(conf,c("users","data","public"))
+  dataUserSuperuser <- .get(conf,c("users","data","superUser"))
+  userTable <- .get(conf,c("pg","tables","users"))
+  userNameDefault <- .get(conf,c("users","defaultName"))
 
   stopifnot("POSIXct" %in% class(timeStamp))
   stopifnot(mxEmailIsValid(email))
   stopifnot(mxDbExistsTable(userTable))
-
+  stopifnot(!mxDbEmailIsKnown(email))
 
   # check if the db does not hold any user
   # empty db means : first time we launch it.
@@ -1247,9 +1273,9 @@ mxDbCreateUser <- function(
       sprintf(
         "SELECT count(id) FROM %s"
         , userTable
-        )
       )
     )
+  )
 
   if(emptyDb){
     # first is superuser
@@ -1267,7 +1293,7 @@ mxDbCreateUser <- function(
   getCurId <- sprintf(
     "SELECT last_value as id FROM public.%s_id_seq"
     , userTable
-    )
+  )
   nextId <- mxDbGetQuery(getCurId,onError=function(x){stop(x)})
 
   # quick check on what we get is what we expect
@@ -1281,7 +1307,7 @@ mxDbCreateUser <- function(
     "%s_%s"
     , userNameDefault
     , nextId
-    ) 
+  ) 
 
   newUser = list(
     username        = userName,
@@ -1292,16 +1318,27 @@ mxDbCreateUser <- function(
     date_validated  = timeStamp,
     date_last_visit = timeStamp,
     data            = mxToJsonForDb(dat)
-    )
+  )
 
   mxDbAddRow(newUser,userTable)
 
+
+  #
+  # Send welcome Email
+  #
+  subject <- mxParseTemplateDict('login_email_new_account_welcome_subject',language)
+
+  msgWelcome <- mxParseTemplateDict('login_email_new_account_welcome',language,list(
+      linkKnowledgeBase = .get(config,c('links','appKnowlegdeBase')),
+      linkIssue = .get(config,c('links','repositoryIssues'))
+      ))
+
+  mxSendMail(
+    to = email,
+    content = msgWelcome,
+    subject = subject
+  )
 }
-
-
-mxDbSaveView <- function(id=NULL,type=c("vt","wms","geojson"), project=NULL, editor=NULL, target="public", date=NULL, data=NULL){
-}
-
 
 #' Create pg compatible version of json, from a R list
 #' @param {list} listInput List to send in a pg table
@@ -1722,6 +1759,7 @@ mxDbDecrypt <- function(data=NULL,key=NULL){
   },silent=T)
   return(out)
 }
+
 
 #' Get group table for users
 #' @param idFilter optional filter of vector containing ids

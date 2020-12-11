@@ -166,11 +166,11 @@ export function parseTemplate(template, data) {
  * @param {String} icon fontawesome name
  */
 export function iconFlash(icon) {
-   new IconFlash(icon);  
+  new IconFlash(icon);
 }
 
 export function iconFlashSave() {
-   new IconFlash('floppy-o');  
+  new IconFlash('floppy-o');
 }
 
 /**
@@ -754,6 +754,7 @@ export function getJSON(o) {
     url: o.url,
     beforeSend: function(xhr) {
       xhr.setRequestHeader('Accept', 'application/json, text/javascript');
+      xhr.setRequestHeader('Accept', 'application/json, text/javascript');
     },
     onMessage: function(res) {
       if (res) {
@@ -1118,7 +1119,11 @@ export function updateText(o) {
   var el = document.getElementById(o.id);
   if (el) {
     var str = o.txt.toString();
-    el.innerHTML = b64_to_utf8(str);
+    if (el.tagName === 'INPUT') {
+      el.value = b64_to_utf8(str);
+    } else {
+      el.innerHTML = b64_to_utf8(str);
+    }
   }
 }
 

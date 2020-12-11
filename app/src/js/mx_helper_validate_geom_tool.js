@@ -13,7 +13,7 @@ export function getValidateSourceGeom(opt) {
     idSource: opt.idSource,
     idUser: mx.settings.user.id,
     token: mx.settings.user.token,
-    idProject: mx.settings.project,
+    idProject: mx.settings.project.id,
     useCache: opt.useCache || false,
     autoCorrect: opt.autoCorrect || false
   };

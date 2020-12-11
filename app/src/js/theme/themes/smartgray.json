@@ -4,6 +4,7 @@
     "en": "Dark gray theme."
   },
   "author": "F.Moser",
+  "mode":"dark",
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
@@ -11,7 +12,7 @@
     },
     "mx_ui_link": {
       "visibility": "visible",
-      "color": "rgb(235,235,235)"
+      "color": "rgb(91,146,236)"
     },
     "mx_ui_text_faded": {
       "visibility": "visible",

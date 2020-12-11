@@ -39,7 +39,7 @@ export function setViewBadges(opt){
   const hasEdit = view._edit === true;
   const isValidable = view.type === "rt" || view.type === "vt";
   const hasPublic = readers.indexOf("public") > -1;
-  const isShared = view.project !== mx.settings.project;
+  const isShared = view.project !== mx.settings.project.id;
   const elViewBadgesContainer =  document.getElementById("view_badges_" + view.id);
   if(!elViewBadgesContainer){
     return;

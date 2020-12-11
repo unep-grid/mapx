@@ -1,22 +1,33 @@
-
+#
+# Invite a member to join a project
+# - Directly, after clicking on a "invite new member" button
+# - Indirectly, if a member sumbmited a membership application
+# Both case are handled here.
 observeEvent(input$btnShowInviteMember,{
   reactData$showInviteMember <- runif(1)
 })
 
+observeEvent(input$btnInviteMemberEmail,{
+  reactData$showInviteMemberCompose <- runif(1)
+})
+
+#
+# When map is ready, apply invite member action
+#
 observeEvent(reactData$mapIsReady,{
   if(reactData$mapIsReady){
-    if(!noDataCheck(query$action) && isTRUE(.get(query$action,c("id")) == "confirmregister")){
-      emailUser <- .get(query,c("action","value","emailUser"))
-      reactData$showInviteMemberCompose <- list(
-        emailUser = emailUser       
-        )
+    hasAction <- !noDataCheck(query$action)
+    if(hasAction && .get(query$action,c("id")) == 'invite_member'){
+      reactData$showInviteMemberCompose <- .get(query,c("action","data"))
     }
   }
 })
 
 
-
-
+#
+# Display a modal for inviting new user
+# - Single input : email
+#
 observeEvent(reactData$showInviteMember,{
 
   emailToInvite <- ""
@@ -48,27 +59,39 @@ observeEvent(reactData$showInviteMember,{
           actionButton(
             inputId = "btnInviteMemberEmail",
             label= d("btn_invite",language),
-            class = "btn-square btn-black",
+            class = "btn-square btn-black hint hint--top-left",
+            'aria-label'=d("btn_invite_form_hint",language),
             disabled=TRUE
-            )
+            
           )
         ),
+       tags$span(
+          class="input-group-btn",   
+          actionButton(
+            inputId = "btnAddMemberEmail",
+            label= d("btn_add",language),
+            class = "btn-square btn-black hint hint--top-left",
+            'aria-label'=d("btn_add_user_hint",language),
+            disabled=TRUE
+          )
+        )
+        ),
       uiOutput("uiInviteMember_validation")
-      )
+    )
 
     mxModal(
       id = "modalSendProjectInvite",
       title = d("project_invite_modal_title",language),
       content = ui,
-      textCloseButton = d("btn_cancel",language,web=F)
-      )
+      textCloseButton = d("btn_close",language,web=F)
+    )
   }
 })
 
 
 
 #
-# Validation invite email
+# Validation of invitation email form 
 #
 observeEvent(input$txtInviteEmail,{
 
@@ -79,6 +102,7 @@ observeEvent(input$txtInviteEmail,{
   isValid <- mxEmailIsValid(email)
   isRegistered <- mxDbEmailIsKnown(email)
   isMember <- FALSE
+  isAddable <- FALSE
   errors <- logical(0)
   warning <- logical(0)
 
@@ -86,80 +110,110 @@ observeEvent(input$txtInviteEmail,{
     idUser <- mxDbGetIdFromEmail(email) 
     userRole <- mxDbGetProjectUserRoles(id=idUser,idProject=project)
     isMember <- userRole$member
+    isAddable <- !isMember
   }
 
   if(!isEmpty){
-    
+
     errors['error_email_not_valid'] <- !isValid
     warning['error_email_not_registered'] <- isValid && !isRegistered
-    errors['error_email_already_member'] <- isMember
+    errors['error_email_is_member'] <- isMember
 
     errors <- errors[errors]
     hasError <- length(errors) > 0
 
 
-    }else{
+  }else{
     hasError <- TRUE
   }
 
   output$uiInviteMember_validation <- renderUI(
-      mxErrorsToUi(
-        errors = errors,
-        warning = warning,
-        language = language
-        )
-      )
+    mxErrorsToUi(
+      errors = errors,
+      warning = warning,
+      language = language
+    )
+  )
 
   mxToggleButton(
     id="btnInviteMemberEmail",
     disable = hasError
-    )
+  )
 
-  reactData$hasErrorInviteEmail <- hasError
+  mxToggleButton(
+    id="btnAddMemberEmail",
+    disable = !isAddable
+  )
+  reactData$inviteEmailHasError <- hasError
+  reactData$inviteEmailIsAddable <- isAddable
 
 })
 
 
-observeEvent(input$btnInviteMemberEmail,{
-   reactData$showInviteMemberCompose <- runif(1)
-})
-
+#
+# Display modal :
+#  - Email message composer: 
+#       - Direct invitation
+#       - Invitation through join request
+#
 observeEvent(reactData$showInviteMemberCompose,{
-  inviteData <- reactData$showInviteMemberCompose 
-  isListInviteData <- isTRUE(!noDataCheck(inviteData) && class(inviteData) == "list" && !noDataCheck(inviteData$emailUser))
-  language <- reactData$language
+  mxCatch('invite member compose',{
+
+  # Init
+ language <- reactData$language
   project <- reactData$project
   projectTitle <- mxDbGetProjectTitle(project,language)
-  modalTitle <- d('project_invite_message_compose',language)
   userRole <- getUserRole()
   isAdmin <- isTRUE(userRole$admin)
   userData <- reactUser$data
   emailAdmin <- userData$email
-  
+  modalTitle <- d('project_invite_message_compose',language)
 
   #
-  # If action was set in query, use that instead of form
+  # From a join request, data should be available
   #
+  inviteData <- reactData$showInviteMemberCompose 
+  isListInviteData <- isTRUE(
+    !noDataCheck(inviteData) && class(inviteData) == "list"
+  )
   if( isListInviteData ){
-    email <- inviteData$emailUser
-    isValid <- TRUE
-    msgInvite <- d("project_invite_message_confirm",language)
+    #
+    # If there is data -e.g. from query / join request.
+    # Use that instead of form value
+    #
+    email <- inviteData$email_invite
+    isValid <- mxEmailIsValid(email)
+    if(!isValid){
+      stop('invalid email from invitation data: '+ email)
+    }
+    languageCom <- mxDbGetUsersLanguageMatch(language,email)
+    msgInvite <- mxParseTemplateDict("project_invite_message_confirm",languageCom,list(
+        projectName = projectTitle
+        ))
   }else{
-    email <- input$txtInviteEmail 
-    isValid <- !isTRUE(reactData$hasErrorInviteEmail)
-    msgInvite <- d("project_invite_message",language)
+    #
+    # Use form data
+    #
+    email <- input$txtInviteEmail
+    isValid <- mxEmailIsValid(email) || !isTRUE(reactData$inviteEmailHasError)
+    if(!isValid){
+      stop('invalid email from invite form: ' + email)
+    }
+    languageCom <- mxDbGetUsersLanguageMatch(language,email)
+    msgInvite <- mxParseTemplateDict("project_invite_message",languageCom, list(
+        projectName = projectTitle
+        ))
   }
 
   #
-  # Hack. New lines are not respected by textArea input 
+  # Only admins can display invitation panel
   #
-
   if( isValid  && isAdmin ){
 
+    #
+    # Build UI for the text area form input
+    #
     btn <- list()
-
-    msgInvite <- mxUnescapeNewLine(msgInvite)
-    msgInvite <- gsub("<projectname>",projectTitle,msgInvite)
 
     uiOutput <- tagList(
       tags$label(d("from",language)),
@@ -174,7 +228,7 @@ observeEvent(reactData$showInviteMemberCompose,{
         placeholder = modalTitle 
         ),
       tags$p(d("project_invite_message_tips",language))
-      )
+    )
 
     btn = list(
       actionButton(
@@ -183,92 +237,204 @@ observeEvent(reactData$showInviteMemberCompose,{
         ))
 
     mxModal(
-      id = "modalSendProjectInvite",
+      id = "modalSendProjectInviteForm",
       title = modalTitle,
       content = uiOutput,
       textCloseButton = d("btn_close",language),
       buttons = btn
-      )
+    )
 
   }
+  })
+})
+#
+# Direct add user
+#
+observeEvent(input$btnAddMemberEmail,{
+  mxCatch(title="Add user to project",{
 
+
+    # New member
+    email <- input$txtInviteEmail 
+    idUser <- mxDbGetIdFromEmail(email)
+    isValid <- mxEmailIsValid(email)
+    isRegistered <- mxDbEmailIsKnown(email)
+    project <- reactData$project
+
+    # Current admin
+    userRole <- getUserRole()
+    isAdmin <- isTRUE(userRole$admin)
+    language <- reactData$language
+
+    # Update UI
+    updateTextInput(
+      session = session,
+      inputId = "txtInviteEmail",
+      value = ""
+    )
+
+    mxToggleButton(
+      id="btnAddMemberEmail",
+      disable = TRUE
+    )
+
+    if(!isAdmin || !isValid || !isRegistered){
+      stop('Action unauthorized')
+    }
+
+    mxDbProjectAddUser(
+      idProject = project,
+      idUser = idUser,
+      roles=c('members')
+    )
+
+    mxFlashIcon('envelope')
+
+  })
 
 })
 
+#
+# Send invitation
+#
 observeEvent(input$btnSendInviteMessage,{
   mxCatch(title="Send invitation",{
 
     inviteData <- reactData$showInviteMemberCompose 
-    if( !noDataCheck(inviteData) && class(inviteData) == "list" && !noDataCheck(inviteData$emailUser)){
-      email <- inviteData$emailUser
+    if( !noDataCheck(inviteData) && class(inviteData) == "list"){
+      email <- inviteData$email_invite
     }else{
       email <- input$txtInviteEmail 
     }
+
+    if(!mxEmailIsValid(email)){
+      stop("Invalid email: "+email)
+    }
+
     userData <- reactUser$data
     emailAdmin <- userData$email
-    isValid <- !isTRUE(reactData$hasErrorInviteEmail)
+    isValid <- !isTRUE(reactData$inviteEmailHasError)
     language <- reactData$language
     msgInvite <- input$txtAreaInviteMessage
     project <- reactData$project
     projectTitle <- mxDbGetProjectTitle(project,language)
-    modalTitle <- d('project_invite_message_compose',language)
     userRole <- getUserRole()
     isAdmin <- isTRUE(userRole$admin)
-    #
-    # Hack. New lines are not respected by textArea input 
-    #
+    languageDest <- mxDbGetUserLanguage(email)
+    timeNowSeconds <- as.numeric(Sys.time())
 
+
+    modalTitle <- d('project_invite_message_compose',language)
+
+    #
+    # Only admins can send invitation
+    #
     if( isValid  && isAdmin ){
 
-     urlAction <- mxCreateEncryptedUrlAction("autoregister",list(
-          email = email,
+
+      isTemplateValid <- mxParseTemplateHasKey(msgInvite,'link')
+
+      if(!isTemplateValid){
+        stop('Messsage not valid. Check for missing tag e.g. {{link}}')
+      }
+
+      # Create action link to auto_register user
+      urlAction <- mxCreateEncryptedUrlAction("auto_register",list(
+          email_auto = email,
           project = project,
           role = "member",
-          valid_until = as.numeric((Sys.time()+2*60*60*24))
+          timestamp = timeNowSeconds
           ))
 
-      if(!grepl("<link>",msgInvite)) msgInvite <- msgInvite +"/n"+"<link>"
+      # Link label
+      linkTitle <- mxParseTemplateDict('project_invite_message_accept',languageDest,list(
+          project = projectTitle
+          ))
 
-      msgInvite <- gsub("<link>",urlAction,msgInvite)
+      # Add link to text from <textarea>
+      msgInvite <- mxParseTemplate(msgInvite,list(
+          link = tags$a(href=urlAction,linkTitle),
+          projectName = projectTitle
+          ))
 
-      res <- mxSendMail(
+      # Text to HTML: convert \n to <br>
+      msgInvite <- mxNewLineToBr(msgInvite)
+
+      # Create subject
+      subject <- mxParseTemplateDict('project_invite_message_subject',languageDest,list(
+          project = projectTitle 
+          ))
+
+      # Title
+      title <- dd('project_invite_message_title',languageDest)
+
+           # Send mail with default template
+      mxSendMail(
         from = emailAdmin,
         to = email,
-        body = msgInvite,
-        subject = projectTitle    
-        )
+        content = msgInvite,
+        title = title,
+        subject = subject,
+        subtitle = subject,
+        language = language
+      )
 
-      if(!noDataCheck(res)){
-        mxModal(
-          id=randomString(),
-          zIndex=100000,
-          title="Unexpected issue",
-          content=tagList(
-            tags$b("An error occured while sending the message"),
-            mxFold(labelText="More info",
-              content = tags$div(
-                tags$span(stye="color:red",res)
-                )
-              )
-            )
-          )
-      }else{
-        mxModal(
-          close = T,
-          id  =  "modalSendProjectInvite"
-          )
+      mxFlashIcon('envelope')
 
-        mxModal(
-          id = "modalSendProjectInvite",
-          title = modalTitle,
-          content = d('project_invite_message_sent',language)
-          )
-      }
+      mxModal(
+        close = TRUE,
+        id = "modalSendProjectInviteForm",
+      )
+      
+      updateTextInput(
+        session = session,
+        inputId = "txtInviteEmail",
+        value = ""
+      )
     }
 
-})
+  })
 
 })
 
+#
+# Notification to admins : someone used a auto_register link
+#
+observeEvent(reactData$notifyAdminAutoRegister,{
+  data <- reactData$notifyAdminAutoRegister
+  #dataProject <- mxDbGetProjectData(data$project)
+  emailUser <- data$email
+  timeExpire <- data$timeExpire
 
+  projectMembers <- mxDbGetProjectMembers(data$project)$members
+  emailContact <- mxDbGetProjectEmailContact(data$project)
+  emailKnown <- mxDbEmailIsKnown(emailUser)
+  alreadyMember <-  emailKnown && isTRUE(mxDbGetIdFromEmail(emailUser) %in% projectMembers)
+  languageDest <- mxDbGetUserLanguage(emailContact)
+  projectTitle <- mxDbGetProjectTitle(data$project,languageDest)
+  urlProject <- mxGetProjectUrl(data$project)
 
+  #
+  # NOTE: Should an email be sent if the link as been used multiple time ?
+  #
+  content <- mxParseTemplateDict('project_invite_notify_auto_register_email',languageDest,list(
+      project = tags$a(href=urlProject,projectTitle),
+      emailUser = emailUser,
+      timeExpire = timeExpire,
+      previouslyMember= alreadyMember,
+      previouslyMapxUser = emailKnown
+      ))
+
+  subject <- mxParseTemplateDict('project_invite_notify_auto_register_email_subject', languageDest
+    ,list(
+      project = projectTitle
+      ))
+
+  mxSendMail(
+    to = emailContact,
+    subject = subject,
+    content = content,
+    useNotify = FALSE
+  )
+
+})

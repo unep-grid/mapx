@@ -141,12 +141,15 @@ body.mx {
 
 .mx .mx-modal-container,
 .mx .selectize-dropdown,
-.mx .mapboxgl-popup-content,
-.mx .mapboxgl-ctrl-group {
+.mx .mapboxgl-popup-content {
   border: 1px solid var(--mx_ui_border);
   background-color: var(--mx_ui_background);
   box-shadow: 2px 2px 5px 0 var(--mx_ui_shadow);
 }
+.mx .selectize-input input {
+  color : var(--mx_ui_text);
+}
+
 
 .mx .selectize-control .item .item-desc,
 .mx-login-info p,
@@ -216,32 +219,6 @@ span.mx-badge-role {
   padding: 3px;
 }
 
-.mx-bar-sort > .mx-btn-sort:hover {
-  background-color: var(--mx_ui_text);
-  color: var(--mx_ui_background);
-}
-
-.mx-bar-sort > * {
-  color: var(--mx_ui_text_faded);
-}
-
-.mx-bar-sort > .mx-btn-toggle-filter {
-  border-left: 1px solid var(--mx_ui_border);
-}
-
-.mx-bar-sort > .mx-btn-toggle-filter:hover,
-.mx-bar-sort > .mx-btn-toggle-filter.active {
-  background: var(--mx_ui_text);
-}
-
-.mx-bar-sort .mx-btn-toggle-filter.bottom_tick.active:after {
-  border-top: 5px solid var(--mx_ui_text);
-}
-
-.mx-bar-sort > .mx-btn-toggle-filter:hover span,
-.mx-bar-sort > .mx-btn-toggle-filter.active span {
-  color: var(--mx_ui_background);
-}
 
 .mx .mx-views-filter-switch .switch-handle {
   background: var(--mx_ui_text);
@@ -289,6 +266,22 @@ span.mx-badge-role {
   outline: 0;
   text-shadow: none;
   box-shadow: 4px 4px 8px var(--mx-shadow);
+}
+
+/**
+* Hint arrow. 
+*/
+.mx [class*=hint--left]:before {
+  border-left-color: var(--mx_ui_text);
+}
+.mx [class*=hint--right]:before {
+  border-right-color: var(--mx_ui_text);
+}
+.mx [class*=hint--bottom]:before {
+  border-bottom-color: var(--mx_ui_text);
+}
+.mx [class*=hint--top]:before {
+  border-top-color: var(--mx_ui_text);
 }
 
 .mx .btn-circle,
@@ -536,13 +529,16 @@ span.mx-badge-role {
   background: var(--mx_ui_background);
 }
 
+.mx .button-panel-container.active > .button-panel-btn,
 .mx .button-panel-btn:hover {
   background: var(--mx_ui_text);
 }
 
+.mx .button-panel-container.active > .button-panel-btn .button-panel-btn-icon,
 .mx .button-panel-btn:hover .button-panel-btn-icon {
   color: var(--mx_ui_background);
 }
+
 .mx .button-panel {
   background: var(--mx_ui_background);
   border: 1px solid var(--mx_ui_border);

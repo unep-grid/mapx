@@ -3,7 +3,7 @@ export function renderUserProjectsList(o) {
   var el = h.el;
   var elDest, elContainer, elProjects, elSearchInput, elsRows;
   var cnt = 0;
-  var dat = o.data;
+  var dat = o.projects;
   var idCol = o.idCol || dat.id ? 'id' : 'project';
   var nRow = dat[idCol].length;
   var titles = Object.keys(dat);
@@ -167,7 +167,7 @@ export function renderUserProjectsList(o) {
       for (j = 0, jL = nCol; j < jL; j++) {
         row[titles[j]] = dat[titles[j]][i];
       }
-      if (row.id !== mx.settings.project) {
+      if (row.id !== mx.settings.project.id) {
         var elRow = buildRow(row);
         elsRows.push(elRow);
         elProjects.appendChild(elRow);

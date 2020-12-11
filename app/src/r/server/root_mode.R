@@ -55,27 +55,24 @@ observeEvent(input$switchUser,{
       #
       # Send email
       #
+      text <- mxParseTemplateDict('login_single_use_password_email',language,list(
+             password = reactData$rootToken
+          ))
 
-      template <- d('login_single_use_password_email',language)
-
-      text <- gsub("\\{\\{PASSWORD\\}\\}",reactData$rootToken,template)
-
-      res <- mxSendMail(
+      status <- mxSendMail(
         from = .get(config,c("mail","bot")),
         to = email_user,
-        bodyHTML = text,
-        type = "text",
-        subject = "MAPX SWITCH USER TOKEN",
-        wait = F
+        subject = "SWITCH USER TOKEN",
+        content = text,
+        language = language
         )
 
-      if(!noDataCheck(res)){
-        stop("Can't send email")
+      if(!isTRUE(status$success)){
         reactData$rootToken <- NULL
       }
 
     }else{
-      reactData$forceLogout <- runif(1) 
+      reactChainCallback('forceLogout')
     }
 
 })
@@ -99,7 +96,7 @@ observeEvent(input$btnSwitchUser,{
   if(isValidId && isValidToken && isValidCheckPrivacy && isAuthorised ){
     target_email <- mxDbGetEmailFromId(id_user_target)
     reactData$loginUserEmail <- target_email
-    reactData$loginRequested <- runif(1)
+    reactChainCallback('loginRequested')
   }else{
     reactData$forceLogout <- runif(1) 
   }

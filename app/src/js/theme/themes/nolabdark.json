@@ -3,6 +3,7 @@
   "description": {
     "en": "Dark theme with no label or text. Royal blue water bodies."
   },
+  "mode":"dark",
   "author": "F.Moser",
   "colors": {
     "mx_ui_text": {
@@ -11,7 +12,7 @@
     },
     "mx_ui_link": {
       "visibility": "visible",
-      "color": "rgba(235,235,235,1)"
+      "color": "rgb(91,146,236)"
     },
     "mx_ui_text_faded": {
       "visibility": "visible",

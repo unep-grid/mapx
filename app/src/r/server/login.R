@@ -4,17 +4,19 @@
 #
 
 observeEvent(input$btnLogout,{
-  reactData$forceLogout <- runif(1)
+  reactChainCallback('forceLogout')
 })
 
 
-observeEvent(reactData$forceLogout,{
+observeEvent(reactChain$forceLogout,{
 
   isolate({
     mxCatch(title="Logout",{
       reactUser <- reactiveValues()
       reactData <- reactiveValues()
-
+      mxUpdateQueryParameters(list(
+          project = ""
+      ))
       mxUpdateValue(id="loginUserEmail",value="")
       mxSetCookie(
         deleteAll = TRUE,
@@ -51,7 +53,6 @@ observeEvent(input$btnSendLoginKey,{
   mxCatch(title="Btn send password event",{
     email <- input$loginUserEmail
     emailIsValid <- mxEmailIsValid(email)
-    res <- NULL
     msg <- character(0) 
     language <- reactData$language
 
@@ -83,32 +84,32 @@ observeEvent(input$btnSendLoginKey,{
       #
       # Send email
       #
-      res <- try({
+      subject <- dd('login_single_use_password_email_subject',language)
+      msgPassword <- mxParseTemplateDict('login_single_use_password_email',language,list(
+          password = reactData$loginToken 
+          ))
+     
+      status <- mxSendMail(
+        to = email,
+        content = msgPassword,
+        subject = subject,
+        language = language
+      )
 
-        templateHtml <- d('login_single_use_password_email',language)
-        emailHtml <- gsub("\\{\\{PASSWORD\\}\\}",reactData$loginToken,templateHtml)
+      #
+      # Handle issues
+      #
+      if(!isTRUE(status$success)){
 
-        res <- mxSendMail(
-          from = .get(config,c("mail","bot")),
-          to = email,
-          bodyHTML = emailHtml,
-          body = "",
-          type = "text",
-          subject = "MAPX SECURE PASSWORD",
-          wait = F
-          )
-
-        if(!noDataCheck(res)){
-          stop("Can't send email")
-        }
-      })
-
-      if("try-error" %in% class(res)){
-
+        #
+        # Simple error message for dialog txt
+        #
         msg <- d("login_pwd_mail_sent_error",language)
 
       }else{
-
+        #
+        # Simple success message for dialog txt
+        #
         msg <- d("login_pwd_mail_sent",language)
         #
         # save the provided address as the input could be change during the interval.
@@ -159,7 +160,7 @@ observe({
     if( hasNoError ){
 
       # trigger login observer
-      reactData$loginRequested <- runif(1)
+      reactChainCallback('loginRequested')
 
       # close the panel
       mxModal(id="loginCode",close=T)
@@ -181,20 +182,15 @@ observe({
           id="txtLoginDialog",
           text=HTML(msg)
           )
-
-
       }
-
-
     }
-
   })
 })
 
 #
 # Handle new login 
 #
-observeEvent(reactData$loginRequested,{ 
+observeEvent(reactChain$loginRequested,{ 
   mxCatch(title="Login process",{
 
     #
@@ -209,16 +205,55 @@ observeEvent(reactData$loginRequested,{
 
     reactUser$data <- userInfo$info;
     reactUser$token <- userInfo$token;
- 
+
     #
     # Execute login callback
     #
-    if(!noDataCheck(reactData$onLoggedIn) && typeof(reactData$onLoggedIn) == "closure"){
-      reactData$onLoggedIn()
-      reactData$onLoggedIn <- NULL
+    if(!noDataCheck(reactChain$onLoggedIn)){
+      reactChainCallbackHandler(reactChain$onLoggedIn,
+        type = 'on_logged_in',
+        expr = {
+          reactChain$onLoggedIn$callback() 
+          reactChain$onLoggedIn <- NULL
+        }
+      )
     }
 
   })
 })
+#
+# Update user settings
+#
+
+observe({
+  project <- reactData$project
+  userData <- reactUser$data
+  idUser <- userData$id
+
+  isolate({
+    if(noDataCheck(project)) return()
+    if(noDataCheck(idUser)) return()
+
+    isGuest <- isGuestUser()  
+    userEmail <-  ifelse(isGuest,"",userData$email)
+    token <- reactUser$token
+    roles <- getUserRole()
+
+    mxUpdateSettings(list(
+        user = list(
+          roles = roles,
+          id = idUser,
+          guest = isGuest,
+          email =  userEmail,
+          token = token
+        )
+      )
+    )
+  })
+})
+
+
+
+
 
 

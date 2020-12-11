@@ -1,6 +1,6 @@
 {
   "name": "@fxi/el",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "src/index.js",
   "umd:main": "dist/el.umd.js",
   "module": "dist/el.mjs",

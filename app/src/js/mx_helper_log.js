@@ -160,7 +160,7 @@ function formatValidateLog(log) {
    */
   let def = {
     id_user: mx.settings.user.id,
-    id_project: mx.settings.project,
+    id_project: mx.settings.project.id,
     is_guest: mx.settings.user.guest === true,
     side: 'browser',
     level: 'USER_ACTION'

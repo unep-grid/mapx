@@ -3,6 +3,7 @@
   "description": {
     "en": "White and dark gray."
   },
+  "mode":"light",
   "author": "F.Moser",
   "colors": {
     "mx_ui_text": {
@@ -55,11 +56,11 @@
     },
     "mx_map_text_place": {
       "visibility": "visible",
-      "color": "rgba(36,36,36,0.6)"
+      "color": "rgba(47,47,47,0.8)"
     },
     "mx_map_text_place_outline": {
       "visibility": "visible",
-      "color": "rgba(0,0,0,0)"
+      "color": "rgba(48,48,48,0)"
     },
     "mx_map_text_road": {
       "visibility": "visible",
@@ -71,7 +72,7 @@
     },
     "mx_map_text_water": {
       "visibility": "visible",
-      "color": "rgba(199,199,199,0.7)"
+      "color": "rgba(47,47,47,0.7)"
     },
     "mx_map_text_water_outline": {
       "visibility": "visible",
@@ -79,15 +80,15 @@
     },
     "mx_map_water": {
       "visibility": "visible",
-      "color": "rgb(169,169,169)"
+      "color": "rgb(115,115,115)"
     },
     "mx_map_bathymetry_high": {
       "visibility": "visible",
-      "color": "rgba(169,169,169,0.4)"
+      "color": "rgba(100,100,100,0.4)"
     },
     "mx_map_bathymetry_low": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,0.4)"
+      "color": "rgba(20,20,20,0.4)"
     },
     "mx_map_road": {
       "visibility": "visible",

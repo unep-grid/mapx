@@ -18,6 +18,7 @@ import '../css/mx_dashboard.css';
 import '../css/mx_handsontable.css';
 import '../css/mx_legends.css';
 
+
 import * as mx from './mx.js';
 window.mx = mx;
 /**

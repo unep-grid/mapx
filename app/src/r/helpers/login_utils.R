@@ -1,240 +1,27 @@
-#' Login : get user info and set cookies
-#' @param {Character} email to login
-#' @param {Clist} list of data for fingerprinting browser
-#' @param {List} query URL query
-#' @return {List} user data
-mxLogin <- function(email,browserData,query){
-
-  isReactiveContext <- !noDataCheck(shiny:::getDefaultReactiveDomain())
-  hasExpired <- FALSE
-  hasInvalidMail <- FALSE
-
-  isGuest <- FALSE
-  emailGuest <- .get(config,c("mail","guest"))
-  emailNewMember <- ""
-  timeStamp <- Sys.time()
-  nowPosix <- as.numeric(timeStamp)
-  queryAction <- .get(query,c("action"))
-  useAutoRegister <- !noDataCheck(queryAction) && isTRUE(.get(queryAction,c("id")) == "autoregister")
-  useConfirmMembership <- !noDataCheck(queryAction) && isTRUE(.get(queryAction,c("id")) == "confirmregister")
-
-  forceProject <- ""
-
-  if( useConfirmMembership ){
-    #
-    # The admin clicked in the link to confirm membership.
-    # We bypass browser data to automatically login the user as admin
-    # Then when the map is ready, display a panel to send a proper invite
-    # to verify the email account of the invited user.
-    # Search for query -> action -> confirmregister
-    #
-    val <- .get(query,c("action","value"))
-    email <- .get(val,c('emailAdmin'))
-    forceProject <- .get(val,c('project')) 
-  }
-
-  if( useAutoRegister ){
-    #
-    # The new user has been confirmed and invited
-    #
-    val <- .get(query,c("action","value"))
-    email <- .get(val,c('email'))
-    forceProject <- .get(val,c('project'))
-    validUntil <- .get(val,c('valid_until'))
-    hasExpired <- noDataCheck(validUntil) || isTRUE(nowPosix > validUntil)
-  }
-
-  # make sure to use lowercase and trimed email
-  email <- trimws(tolower(email))
-
-  # test for invalid email
-  hasInvalidMail <- !mxEmailIsValid(email)
-
-  #
-  # Modal with issue if any
-  # if any, set email to emailGuest
-  #
-  if( hasInvalidMail || hasExpired ){
-    err <- tagList()
-
-    if(hasInvalidMail) err <- tagList(err,p(d("error_email_not_valid")))
-    if(hasExpired) err <-  tagList(err,p(d("error_email_confirm_too_old")))
-
-    mxModal(
-      id = 'valid_issue',
-      content = err
-      )
-
-    email <- emailGuest
-    isGuest <- TRUE
-  }
+#
+# Login utilities
+#
 
 
-  # Check if this is a new account (unknown email)
-  newAccount <- !mxDbEmailIsKnown(email)
+#' Get email of the user based on browser data object
+#'
+#' @param browserData {List} Browser data
+#' @return email {Character} Email of user or guest email
+#' @export
+mxGetInitEmail <- function(browserData){
 
-  # get default user table name
-  userTable <-  .get(config,c("pg","tables","users"))
-
-  # check if the account is "guest"
-  isGuest <- isTRUE(isGuest) || isTRUE(email == .get(config,c("mail","guest")))
-
-  if( newAccount ){
-
-    #
-    # Create new user
-    # 
-    mxDbCreateUser(
-      email = email,
-      timeStamp = timeStamp
-      ) 
-
-  }else{
-
-    #
-    # Save last visit
-    #
-    mxDbUpdate(
-      table = userTable,
-      column = 'date_last_visit',
-      idCol = 'email',
-      id = email,
-      value = timeStamp
-      )
-
-  }
-
-  #
-  # Get user ID
-  #
-  res <- mxDbGetQuery(
-    sprintf("SELECT id, key from %1$s WHERE email='%2$s'",
-      userTable,
-      email
-      )
-    )
-
-  hasValidId <- isTRUE(is.integer(res$id))
-
-  # if it's empty or not an integer, stop
-  if( !hasValidId ) {
-
-    email <- emailGuest
-    isGuest <- TRUE
-
-  }
-
-  #
-  # Handle autoregister after account validation
-  #
-
-  if( !isGuest && useAutoRegister ){
-
-    projectData <- mxDbGetProjectData(forceProject)
-    members <- unique(c(projectData$members,list(res$id)))
-
-    mxDbUpdate(
-      table = "mx_projects",
-      idCol = 'id',
-      id = forceProject,
-      column = 'members',
-      value = as.list(members)
-      )
-  }
-
-  #
-  # If query action was performed, forceProject is set and
-  # bypass last_project value. 
-  #
-  if( !isGuest && (useAutoRegister || useConfirmMembership ) && !noDataCheck(forceProject) ){
-    mxDbUpdate(
-      table = userTable,
-      idCol = 'id',
-      id = res$id,
-      column = 'data',
-      path = c("user","cache","last_project"),
-      value = forceProject
-      )
-  }
-
-  #
-  # Encrypt and save cookie
-  #
-  toStore = list(
-    id_user = res$id,
-    date_created = nowPosix
-    )
-
-  toStore <- c(
-    toStore,
-    browserData[.get(config,c("browser","params"))]
-    )
-
-  ck <- mxDbEncrypt(toStore)
-
-  # As we could have more than one cookie, save as list, name it
-  ck <- list(ck)
-  names(ck) <- .get(config,c("users","cookieName"))
-
-  # Send to client
-  mxSetCookie(
-    cookie = ck,
-    expireDays = .get(config,c("users","cookieExpireDays"))
-    )
-
-  #
-  # Save user id in mx.settings.user.id
-  #
-  token <- mxDbEncrypt(list(
-      token = res$key,
-      is_guest = isGuest,
-      valid_until = as.numeric(Sys.time()) + 2 * 86400
-      )
-    )
-
-  userInfo <- mxDbGetUserInfoList(id=res$id)
-
-  if( isReactiveContext ){
-    mxUpdateSettingsUser(list(
-        id = res$id,
-        guest = isGuest,
-        email =  ifelse(isGuest,"",userInfo$email),
-        token = token
-        ));
-  }
-
-  #
-  # Get user info
-  #
-  mxDebugMsg(" User " + email +" loged in.")
-
-  #
-  # Return user info data
-  #
-  return(list(
-      isGuest = isGuest,
-      info = userInfo,
-      token = token
-      ))
-
-
-}
-
-#' Get email of the user based on cookies
-#' @param {String} cookies string
-#' @param {Function} callback with a unique argument : email
-mxInitBrowserData <- function(browserData,callback){
-
-  dat <- NULL
   res <- NULL
 
-  dateNow <- as.numeric(Sys.time())
+  timeNowSeconds <- as.numeric(Sys.time())
   maxSecondsValid <- .get(config,c("users","cookieExpireDays")) * 86400
   emailGuest <- .get(config,c("mail","guest"))
   emailUser <- NULL
 
+  # TODO: make better validation
+  isBrowserDataValid <- isTRUE(length(browserData)>0) && !noDataCheck(browserData$cookies)
+
   #
-  # Check that the account exists
+  # Check that the GUEST account exists
   #
   if(!mxDbEmailIsKnown(emailGuest)){
     mxDbCreateUser(emailGuest)
@@ -243,7 +30,7 @@ mxInitBrowserData <- function(browserData,callback){
   #
   # If there is values in cookies
   #
-  if(isTRUE(length(browserData)>0) && !noDataCheck(browserData$cookies)){
+  if(isBrowserDataValid){
     #
     # Look for the default cookie name (e.g. mx_data)
     #
@@ -253,11 +40,7 @@ mxInitBrowserData <- function(browserData,callback){
     #
     # Check for issues
     #
-
-    #
-    # NOTE: dat is not used, check for try-error on cookieData ?
-    #
-    hasNoError <- !isTRUE("try-error" %in% class(dat))
+    hasNoError <- !isTRUE("try-error" %in% class(cookieData))
     hasLength <- isTRUE(length(cookieData)>0)
     browserParams <- .get(config,c("browser","params"))
 
@@ -269,16 +52,16 @@ mxInitBrowserData <- function(browserData,callback){
     if( hasNoError && hasLength && hasExpectedKeys){
 
       #
-      # Check if ip match
+      # Check if values match
       #
       browserMatch <- identical(
         cookieData[browserParams],
         browserData[browserParams]
-        )
+      )
 
       isYetValid <- isTRUE( 
-        dateNow <= cookieData$date_created + maxSecondsValid 
-        )
+        timeNowSeconds <= cookieData$timestamp + maxSecondsValid 
+      )
 
       if( browserMatch && isYetValid ){
         #
@@ -296,31 +79,204 @@ mxInitBrowserData <- function(browserData,callback){
     emailUser = emailGuest 
   }
 
-  callback(emailUser)
-
+  return(emailUser)
 }
 
+#' Login : get user info and set cookies
+#' @param {Character} email to login
+#' @param {List} browserData list of data for fingerprinting browser
+#' @param {List} query URL query
+#' @param {ReactiveList} reactData Reactive list
+#' @return {List} user data
+mxLogin <- function(email,browserData,query, reactData){
 
+  isReactiveContext <- !noDataCheck(shiny:::getDefaultReactiveDomain())
+  hasExpired <- FALSE
+  hasInvalidMail <- FALSE
 
+  forceProject <- ""
 
-#' Parse cookies string
-#' @param {String} str cookie string
-#' @return {List} Named list with cookie values
-mxParseCookies <- function(str){
-  if(class(str)=="list") return(str);
+  isGuest <- FALSE
+  emailGuest <- .get(config,c("mail","guest"))
+  actionLinkExpireSeconds <- .get(config,c("users","actionLinkExpireDays")) * 86400
+  emailNewMember <- ""
+  timeNow <- Sys.time()
+  timeNowSeconds <- as.numeric(timeNow)
+  actionLink <- .get(query,c("action"),list())
+  useAutoRegister <- isTRUE(.get(actionLink,c("id")) == "auto_register")
+  useInviteMember <- isTRUE(.get(actionLink,c("id")) == "invite_member")
+  language <- .get(query,c("language"),.get(config,c("language","default")))
 
-  out <- list()
-  if(!noDataCheck(str)){
+  if( useInviteMember || useAutoRegister ){
+    #
+    # useInviteMember : user request join > email > admin click > she is here > quick login
+    # useAutoRegister : Admin invited user > email > user click > he is here > quick login
+    #
+    timestamp <- as.POSIXlt(.get(actionLink,c('timestamp')),origin = "1970-01-01", tz = "UTC")
+    data <- .get(actionLink,c('data'),list())
+    email <- ifelse(useInviteMember,
+      .get(data,c('email_admin')),
+      .get(data,c('email_auto'))
+    )
+    forceProject <- .get(data,c('project'))
+    timeExpire <- timestamp + actionLinkExpireSeconds 
+    hasExpired <- isTRUE(timeExpire < timeNow)
 
-    pairs <- strsplit(str,"; ",fixed=T)[[1]]
-
-    for(p in pairs){
-      dat <- strsplit(p,"=")[[1]]
-      key <- trimws(dat[[1]])
-      value <- dat[[2]]
-      out[[key]] <- value
-    } 
+    if(!hasExpired && useAutoRegister){
+      #
+      # Trigger notification to admins / contact
+      #
+      reactData$notifyAdminAutoRegister <- list(
+           timeExpire = timeExpire,
+           project = forceProject,
+           email = .get(data,c('email_auto'))
+      )    
+    }
   }
-  return(out)
-}
 
+  # make sure to use lowercase and trimed email
+  email <- trimws(tolower(email))
+
+  # test for invalid email
+  hasInvalidMail <- !mxEmailIsValid(email)
+
+  #
+  # Modal with issue if any
+  # if any, set email to emailGuest
+  #
+  if( hasInvalidMail || hasExpired ){
+    err <- tagList()
+
+    if(hasInvalidMail) err <- tagList(err,tags$p(dd("error_email_not_valid",language)))
+    if(hasExpired) err <-  tagList(err,tags$p(dd("error_action_link_expired",language)))
+
+    mxModal(
+      title = dd("error_login",language),
+      content = err
+    )
+
+    email <- emailGuest
+    isGuest <- TRUE
+  }
+
+  # check if the account is "guest"
+  isGuest <- isTRUE(isGuest) || isTRUE(email == .get(config,c("mail","guest")))
+
+  # Check if this is a new account (unknown email)
+  newAccount <- !isTRUE(isGuest) && !mxDbEmailIsKnown(email)
+
+  if( newAccount ){
+
+    #
+    # Create new user
+    # 
+    mxDbCreateUser(
+      email = email,
+      timeStamp = timeNow,
+      language = language
+    )
+
+  }else{
+
+    #
+    # Save last visit
+    #
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","users")),
+      column = 'date_last_visit',
+      idCol = 'email',
+      id = email,
+      value = timeNow
+    )
+  }
+  #
+  # Get user info
+  #
+  userInfo <- mxDbGetUserInfoList(email=email)
+
+  hasValidId <- isTRUE(is.integer(userInfo$id))
+
+  # if it's empty or not an integer, stop
+  if( !hasValidId ) {
+    email <- emailGuest
+    isGuest <- TRUE
+  }
+
+  #
+  # Handle auto_register after account validation
+  #
+  if( !isGuest && useAutoRegister ){
+    mxDbProjectAddUser(
+      idProject = forceProject,
+      idUser = userInfo$id,
+      roles=c('members') # could be extracted from invite link ?
+    )
+  }
+  
+  #
+  # If query action was performed, forceProject is set and
+  # bypass last_project value. 
+  #
+  updateProject <- !isGuest && (useAutoRegister || useInviteMember ) && !noDataCheck(forceProject) 
+  if( updateProject ){
+    mxDbUpdate(
+      table = .get(config,c("pg","tables","users")),
+      idCol = 'id',
+      id = userInfo$id,
+      column = 'data',
+      path = c("user","cache","last_project"),
+      value = forceProject
+    )
+    ctrlProject <- .get(mxDbGetUserInfoList(1),c('data','user','cache','last_project'))
+    mxDebugMsg('Project match:'+ identical(forceProject,ctrlProject))
+  }
+
+  #
+  # Encrypt and save cookie
+  #
+  toStore = list(
+    id_user = userInfo$id,
+    timestamp = timeNowSeconds
+  )
+
+  toStore <- c(
+    toStore,
+    browserData[.get(config,c("browser","params"))]
+  )
+
+  ck <- mxDbEncrypt(toStore)
+
+  # As we could have more than one cookie, save as list, name it
+  ck <- list(ck)
+  names(ck) <- .get(config,c("users","cookieName"))
+
+  # Send to client
+  mxSetCookie(
+    cookie = ck,
+    expireDays = .get(config,c("users","cookieExpireDays"))
+  )
+
+  #
+  # Save user id in mx.settings.user.id
+  #
+  token <- mxDbEncrypt(list(
+      key = userInfo$key,
+      is_guest = isGuest,
+      valid_until = timeNowSeconds + .get(config,c("users","cookieExpireDays")) * 86400
+      ))
+
+
+  #
+  # Get user info
+  #
+  mxDebugMsg(" User " + email +" loged in.")
+  #
+  # Return user info data
+  #
+  return(list(
+      isGuest = isGuest,
+      info = userInfo,
+      token = token
+      ))
+
+}

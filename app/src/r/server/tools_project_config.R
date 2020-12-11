@@ -94,7 +94,11 @@ observe({
     errorsList <- list()
     warningsList <- list()
 
+    
     project <- reactData$project
+    if(noDataCheck(project)){
+       return()
+    }
     projectTitle <- input$projectTitleSchema_values$data
     projectDesc <- input$projectDescriptionSchema_values$data
     projectAlias <- input$txtProjectNameAlias

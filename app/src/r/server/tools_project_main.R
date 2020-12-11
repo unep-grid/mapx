@@ -85,11 +85,9 @@ observe({
         )
     }
 
-    editProject <- tags$div(
+    editProject <- tagList(
       toolsTitle,
-      tags$div(
-        btns
-        )
+      btns
       )
 
     output$uiBtnShowRoleManager <- renderUI(editProject)

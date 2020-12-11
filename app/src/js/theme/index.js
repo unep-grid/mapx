@@ -5,6 +5,7 @@ import chroma from 'chroma-js';
 import './style.css';
 import * as themes from './presets.js';
 import {layer_resolver, css_resolver} from './mapx_style_resolver.js';
+import {bindAll} from '../bind_class_methods';
 
 const global = {
   elStyle: null,
@@ -14,12 +15,14 @@ const global = {
   idThemeDefault: 'mapx',
   idTheme: 'mapx',
   colors: null,
-  debug: false
+  debug: false,
+  on: {}
 };
 
 class Theme {
   constructor(opt) {
     const t = this;
+    bindAll(t);
     t.opt = Object.assign({}, global, opt);
     t.inputs = [];
     t.listeners = [];
@@ -50,19 +53,28 @@ class Theme {
         debounceTime: 200
       });
     }
+
+    Object.keys(t.opt.on).forEach((k) => {
+      t.on(k, t.opt.on[k]);
+    });
+
     t.setColorsByThemeId();
   }
 
   get id_theme() {
     return this._id_theme;
   }
-  
+
   get theme() {
     return this._theme || {};
   }
-  
+
   get colors() {
     return this._colors || {};
+  }
+
+  get mode() {
+    return this._mode;
   }
 
   destroy() {
@@ -98,6 +110,8 @@ class Theme {
     id = id || t.opt.idTheme || t.opt.idThemeDefault;
     const theme = t.getTheme(id);
     if (theme.colors) {
+      t._mode = theme.mode;
+      t.fire('mode_changed', t._mode);
       t._id_theme = theme.id;
       t._theme = theme;
       t.setColors(theme.colors);
@@ -268,29 +282,30 @@ class Theme {
       'div',
       {
         id: cid,
-        class: ['mx-theme-color-container']
+        class: ['mx-theme--color-container']
       },
       (elLabel = el(
         'label',
         {
-          class: ['mx-theme-color-label', 'hint--right'],
+          class: ['mx-theme--color-label', 'hint--right'],
           dataset: {lang_key: cid},
           'aria-label': cid,
           title: cid,
-          for: `${cid}_inputs`
+          for: `${cid}_inputs_wrap`
         },
         getDictItem(cid)
       )),
       (elInputGrp = el(
         'div',
         {
-          class: ['mx-theme-colors-input']
+          class: ['mx-theme--colors-input']
         },
         inputType.map((type) => {
           const isRange = type === 'range';
           const isCheck = type === 'checkbox';
+          const id = `${cid}_inputs_${type}`;
           const config = {
-            id: `${cid}_inputs`,
+            id: id,
             type: type,
             dataset: {
               action: 'update',
@@ -305,8 +320,24 @@ class Theme {
           } else {
             config.style = {maxWidth: '60px'};
           }
-          //config.on = {"change",t._updateFromInput}
           const elInput = el('input', config);
+          const elLabel = el(
+            'label',
+            {
+              for: id,
+              'aria-label': cid,
+              class: 'mx-theme--colors-input-wrap'
+            },
+            `${type} input for ${id}`
+          );
+          const elWrap = el(
+            'div',
+            {
+              id: `${cid}_inputs_wrap_${type}`
+            },
+            elInput,
+            elLabel
+          );
 
           elInput.value = isRange
             ? color.alpha()
@@ -318,7 +349,7 @@ class Theme {
             elInput.checked = visible;
           }
           t.inputs.push(elInput);
-          return elInput;
+          return elWrap;
         })
       ))
     );
@@ -388,11 +419,11 @@ class Theme {
     });
   }
   off(id, cb) {
-    let n = this.listener.length;
+    let n = this.listeners.length;
     while (n--) {
-      const l = this.listener(n);
+      const l = this.listeners[n];
       if (l.id === id && l.cb === cb) {
-        this.listener.splice(n, 1);
+        this.listeners.splice(n, 1);
       }
     }
   }

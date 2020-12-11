@@ -579,7 +579,7 @@ function setViewsComponents(views) {
     overlap = path(v, 'data.source.layerInfo.maskName', '');
     attributes = path(v, 'data.attribute.names', '');
     customStyle = path(v, 'data.style.custom', '');
-    local = path(v, 'project') === mx.settings.project;
+    local = path(v, 'project') === mx.settings.project.id;
     editable = path(v, '_edit') === true;
 
     if (isVt) {

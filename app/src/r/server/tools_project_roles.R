@@ -174,11 +174,12 @@ observeEvent(input$btnSaveProjectConfigRoles,{
 
     res <- sapply(res,mxDbGetEmailListFromId)
     res <- res[!sapply(res,noDataCheck)]
-
+   
     if(length(res)>0){
 
-      res <- sapply(res,paste,collapse=", ")
-      ui <- listToHtmlSimple(res,lang=language)
+      reactData$rolesChangesList <- res
+      resText <- sapply(res,paste,collapse=", ")
+      ui <- listToHtmlSimple(resText,lang=language)
 
       btnConfirm <- list(
         actionButton(
@@ -210,13 +211,15 @@ observeEvent(input$btnConfirmProjectConfigRoles,{
   project <- reactData$project
   language <- reactData$language 
   isAdmin <- isTRUE(userRole$admin)
+  changesList <- reactData$rolesChangesList 
+  isValid <- length(changesList) > 0
 
-  if(isAdmin){
-
-    members <- as.integer(input$selectProjectMembers)
-    admins <- as.integer(input$selectProjectAdmins)
-    publishers <- as.integer(input$selectProjectPublishers)
-    contacts <- as.integer(input$selectProjectContacts)
+  if(isAdmin && isValid){
+   
+    members <- unique(as.integer(input$selectProjectMembers))
+    admins <- unique(as.integer(input$selectProjectAdmins))
+    publishers <- unique(as.integer(input$selectProjectPublishers))
+    contacts <- unique(as.integer(input$selectProjectContacts))
 
       mxDbUpdate(
         table = "mx_projects",
@@ -260,9 +263,17 @@ observeEvent(input$btnConfirmProjectConfigRoles,{
           value = as.list(unique(admins))
           )
       }
-
+    #
+    # Send emails with changes
+    #
+    mxProjectSendEmailsRolesChange(admins, changesList, project, language)
     reactData$updateRoleList <- runif(1)
-
+    reactData$rolesChangesList <- NULL
+    mxFlashIcon('envelope')
+    
+    #
+    # Last message
+    #
     ui = tags$span(d("roles_updated",lang=language,web=F));
     
     mxModal(
