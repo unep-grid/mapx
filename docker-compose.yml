@@ -22,7 +22,7 @@ services:
   app:
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.7.11-debian
+    image: fredmoser/mx-app-shiny:1.8.0-alpha-debian
     restart: always
     ports:
       - 3838
@@ -42,7 +42,7 @@ services:
       - "traefik.http.routers.dev.service=dev"
       - "traefik.http.services.dev.loadbalancer.server.port=3434"
     volumes:
-      - ./app:/srv/shiny-server/dev
+      - ./app:/appdev
       - ./_shared:/shared
   api:
     env_file: mapx.dev.env

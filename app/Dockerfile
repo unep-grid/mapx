@@ -1,23 +1,10 @@
-FROM fredmoser/debian_r3.5.1_shinyserver1.5.7.890
+FROM fredmoser/mapx_debian:r_4.0.3_2020-12-10
 
-
-
-# Overwrite SockJSAdapter.R by a custom version:
-# Remove _ga refs
-# Add a mode where if the string 'mx-no-shiny' is found,
-# no script is injected in head
-#
-COPY ./src/r/scripts/SockJSAdapter.R /opt/shiny-server/R/SockJSAdapter.R
-
+WORKDIR /app
 #
 # Add MapX files
 #
-COPY . /srv/shiny-server/mapx
+COPY . .
 
-#
-# Add start script
-#
-COPY ./start_mapx.sh /usr/bin/start_mapx.sh
-
-CMD ["sh","/usr/bin/start_mapx.sh"]
+CMD ["sh","./start_mapx.sh"]
 
