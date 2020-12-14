@@ -1,5 +1,22 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.0-alpha' target='_blank'>1.8.0-alpha</a>
+    **NOTE: preview version, not tested**
+    - Improvement
+      - App: 
+         - UI update. Unification of buttons, panels. 
+         - Better UX with fixes requested in #617, #618, #619
+         - Start uniformization of notification with the "Nofification center". For now, only message sent during download and email feedback is sent. Once stable, will cover all async and long processes: attribute table, overlaps, upload, etc. 
+         - Geoserver Async call with email feedback for views and source update. All requests were blocking. It should be a lot faster now
+         - Experimental shiny-server removal, as it was interfering with the docker logic when a process was failing. We rely on direct connexion. Traefik should ensure sticky connexion. 
+         - Minor changes.
+      - Api:
+        - Major refactoring:
+           - All modules are required using unfied '@mapx/<module>'.
+           - Translation system ported.
+           - Email templating ported.
+           - A lot of migration from promises chain to async/await.
+           - Websocket with authentication (now used only for upload progress). Backward compatible with HTTP partial write. 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.7.11' target='_blank'>1.7.11</a>
     - Improvement 
       - App : changed country label + style to better match UN clear map
