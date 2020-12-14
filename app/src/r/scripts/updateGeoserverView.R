@@ -11,16 +11,18 @@ tryCatch({
   msgSuccess <<- sprintf("WMS layer updated successfully for view %1$s", titleView)
   msgError <<- sprintf("WMS layer not updated for view %1$s", titleView)
 
-  mxPublishGeoServerViewAuto(
+  updated <- mxPublishGeoServerViewAuto(
     idView = cgs$idView,
     publish = cgs$publish
   )
 
-  mxSendMail(
-    to=cgs$email,
-    subject = msgSuccess,
-    content= msgSuccess
-  )
+  if(updated){
+    mxSendMail(
+      to=cgs$email,
+      subject = msgSuccess,
+      content= msgSuccess
+    )
+  }
   print('Finished success')
 
 },error=function(e){

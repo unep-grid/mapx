@@ -25,7 +25,6 @@ body.mx {
 }
 
 .mx .base_background {
-  transition: background-color 0.3s ease-in 0s;
   background-color: var(--mx_ui_background);
   border-color: var(--mx_ui_border);
 }

@@ -1,4 +1,13 @@
 
+#' Validate date
+#'
+#' @param {Date|string} d Date to test
+#' @return {Logical} 
+mxIsDate <- function(d){
+  valid <- TRUE
+  tryCatch(as.Date(d),error=function(e){valid<<-FALSE})
+  return(valid)
+}
 
 #' Clean role from query with partial match
 #' @param {Character} role Role name
@@ -2042,105 +2051,3 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
 
 }
 
-#' Get metadata of the view
-#' 
-#' @param {List} viewData view data object
-#' @param {Character} Two letter code of the language
-#' @return {List} List of selected metadata
-mxGetViewMeta <- function(viewData,language){
-
-  #
-  # Get layer name 
-  #
-  viewLayerName  <- .get(viewData, c("data","source","layerInfo","name"))
-  if(noDataCheck(viewLayerName)) return(list())
-
-  #
-  # Base layer meta
-  #
-  layerMeta <- mxDbGetLayerMeta(viewLayerName)
-  idSource <- tolower(viewLayerName)
-  # title of source title
-  srcTitle <- .get(layerMeta,c("text","title",language))
-  if(noDataCheck(srcTitle)) srcTitle <- .get(layerMeta,c("text","title","en"))
-  # homeage of source
-  homepage <- tags$a(target="_blank",href=.get(layerMeta,c("origin","homepage","url")),srcTitle) 
-  # from meta, get data temporal range
-  dateSourceRangeStart <- .get(layerMeta,c("temporal","range","start_at"))
-  dateSourceRangeEnd <- .get(layerMeta,c("temporal","range","end_at"))
-
-  #
-  # View meta
-  #
-  idView <- toupper(viewData$id)
-  viewLayerMaskName  <- .get(
-    viewData, 
-    c("data","source","layerInfo","maskName")
-    )
-  # Date created = 1st date modified
-  dateCreated <- mxDbGetQuery("
-    SELECT date_modified 
-    FROM mx_views where id = '" + idView + "' 
-    ORDER BY date_modified ASC LIMIT 1 
-    ")$date_modified
-    # last modified
-    dateModified <- viewData$date_modified
-    # count iterations
-    numberUpdate <- mxDbGetQuery("
-      SELECT count(pid) 
-      FROM mx_views where id = '" + idView +"'"
-      )$count
-    # get all editors
-    idUsers <- mxDbGetQuery("
-      SELECT distinct(editor) as id 
-      FRED (
-        SELECT editor 
-        FROM mx_views 
-        WHERE id = '" + idView +"' 
-        ORDER BY date_modified DESC
-        ) as b")$id
-      # current editor
-      idUser <- viewData$editor
-      # email of all editors
-      emailUsers <- mxDbGetEmailListFromId(idUsers)
-      # email of last editor
-      emailUser <-mxDbGetEmailListFromId(idUser)
-      viewTitle <- .get(viewData,c("_title"))
-      # format date
-      dateModified <- format(as.Date(dateModified),"%a %d %B %Y")
-      dateCreated <- format(as.Date(dateCreated),"%a %d %B %Y")
-      # project data
-      project <- .get(viewData,c("project"))
-      projects <- .get(viewData,c("data","projects"))
-      target <- .get(viewData,c("target"))
-
-      #
-      # Return a list of subset meta
-      #
-      subsetMeta <- list(
-        meta_last_editor_id = emailUser,
-        meta_number_changes = numberUpdate,
-        meta_view_title = viewTitle,
-        meta_view_id = idView,
-        meta_date_modified = dateModified,
-        meta_date_created = dateCreated,
-        meta_target_roles = paste(target,collapse = ","),
-        meta_view_project = project,
-        meta_view_projects = paste(projects,collapse = ","),
-        meta_source_title = mxDbGetLayerTitle(idSource,language = language,asNamedList = F),
-        meta_source_id = idSource,
-        meta_source_homepage = homepage,
-        meta_source_time_range  =  list(
-          meta_source_time_range_min  =  dateSourceRangeStart,
-          meta_source_time_range_max  = dateSourceRangeEnd
-          )
-        )
-
-      return(
-        list(
-          view  = subsetMeta,
-          source = layerMeta
-          )
-        )
-
-}

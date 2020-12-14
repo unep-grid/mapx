@@ -98,7 +98,7 @@ export function createControlBtns(btns) {
               'btn',
               'btn-circle',
               'btn-circle-medium',
-              'hint--bottom-right',
+              'hint--left',
               'shadow'
             ].concat(btn.liClasses),
             dataset: Object.assign(
@@ -182,7 +182,7 @@ mapControlApp.prototype.onAdd = function(map) {
       action: function() {
         const elIcon = this.querySelector('.fa');
         elIcon.classList.toggle('fa-rotate-180');
-        mx.theme.setColorsByThemeNext();
+        mx.theme.toggleDarkMode();
       }
     },
     btnThemeAerial: {

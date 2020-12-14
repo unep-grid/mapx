@@ -9,8 +9,8 @@ tryCatch({
   args <- commandArgs(trailingOnly=TRUE)
   cgs <- readRDS(args[1])
   titleSource <<- mxDbGetLayerTitle(cgs$idSource, asNamedList=F)
-  msgSuccess <<- sprintf("WMS layer updated successfully for source %1$s", titleSource)
-  msgError <<- sprintf("WMS layer not updated for source %1$s", titleSource)
+  msgSuccess <<- sprintf("WMS layer settings updated successfully for source %1$s", titleSource)
+  msgError <<- sprintf("WMS layer settings  not updated for source %1$s", titleSource)
 
   mxUpdateGeoserverSourcePublishing(
     idProject = cgs$project,

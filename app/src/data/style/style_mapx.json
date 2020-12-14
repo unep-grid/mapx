@@ -24,8 +24,7 @@
         "visibility": "visible"
       },
       "paint": {
-        "background-color": "#474747",
-        "background-opacity": 0.5
+        "background-color": "#ccc"
       }
     },
     {

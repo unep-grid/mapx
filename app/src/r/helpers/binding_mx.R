@@ -334,22 +334,22 @@ mxModal = function(
   if(!noDataCheck(buttons) && is.list(buttons)){
     buttons <- lapply(buttons,function(b){as.character(b)})
   }
-
+  
   session$sendCustomMessage(
     type="mxModal",
     list(
       id = id,
       replace = as.logical(replace),
-      zIndex = zIndex,
+      zIndex = as.numeric(zIndex),
       title = as.character(title),
       subtitle = as.character(subtitle),
       textCloseButton = as.character(textCloseButton),
-      buttons = buttons,
-      minHeight = minHeight,
-      minWidth = minWidth,
+      buttons = as.character(buttons),
+      minHeight = as.numeric(minHeight),
+      minWidth = as.numeric(minWidth),
       content = as.character(content),
       addBackground = as.logical(addBackground),
-      addSelectize = addSelectize,
+      addSelectize = as.logical(addSelectize),
       removeCloseButton = as.logical(removeCloseButton),
       close = as.logical(close)
       )

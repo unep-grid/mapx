@@ -1718,7 +1718,8 @@ export async function updateViewsList(o) {
       h.childRemover(elProgContainer);
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
-        stroke: 4
+        stroke: 4,
+        strockColor:'#f00'
       });
     }
 

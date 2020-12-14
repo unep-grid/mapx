@@ -4,18 +4,20 @@
 # After project change, send new set of views (initial set of views send when map init)
 #
 observe({
-
-  project <- reactData$project
   userData <- reactUser$data
-
+  mapIsReady <- reactData$mapIsReady
+  project <- reactData$project
+ 
   isolate({
-    mapIsReady <- isMapReady()
-    role <- getUserRole()
-    isGuest <- isGuestUser()
 
-    if(!mapIsReady) return()
-    if(noDataCheck(role)) return()
-    if(noDataCheck(project)) return()
+    isMapOk <- isMapReady()
+    isGuest <- isGuestUser()
+    hasProject <- !noDataCheck(project)
+    hasRole <- !noDataCheck(getUserRole())
+
+    if(!isMapOk) return()
+    if(!hasRole) return()
+    if(!hasProject) return()
 
     timer <- mxTimeDiff("Sending view")
 

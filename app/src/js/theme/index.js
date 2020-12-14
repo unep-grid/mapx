@@ -16,6 +16,7 @@ const global = {
   idTheme: 'mapx',
   colors: null,
   debug: false,
+  idThemesDarkLight: ['mapx', 'smartgray'],
   on: {}
 };
 
@@ -178,6 +179,28 @@ class Theme {
     } else {
       return false;
     }
+  }
+
+  toggleDarkMode(force) {
+    const t = this;
+    const idCurrent = t.id_theme;
+    const idsTheme = t.opt.idThemesDarkLight;
+    let pos = idsTheme.indexOf(idCurrent);
+    if (force) {
+      pos = 1;
+    } else if (pos === -1) {
+      pos = 0;
+    } else if (pos === 1) {
+      pos = 0;
+    } else {
+      pos = 1;
+    }
+    if(pos===1){
+      t.sound('switch-off');
+    }else{
+      t.sound('switch-on');
+    }
+    t.setColorsByThemeId(idsTheme[pos]);
   }
 
   setColorsByThemeNext() {
@@ -403,6 +426,16 @@ class Theme {
   }
 
   /**
+  * Sound
+  */
+  sound(id){
+    const audio = el('audio',{
+      src : require(`./sound/${id}.mp3`)
+    });
+    audio.play();
+  }
+
+  /**
    * Events
    */
   on(id, cb) {
@@ -448,3 +481,6 @@ function isBase64Json(txt) {
 function b64ToJson(txt) {
   return JSON.parse(atob(txt));
 }
+
+
+

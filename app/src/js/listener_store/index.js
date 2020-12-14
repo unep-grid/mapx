@@ -21,7 +21,8 @@ class ListenerStore {
        */
       return function() {
         clearTimeout(idTimeout);
-        const funCall = () => {
+        const funCall = (e) => {
+          autoPreventDefault(e);
           fun.apply(bind, arguments);
           idTimeout = 0;
         };
@@ -30,7 +31,8 @@ class ListenerStore {
     } else {
       return function() {
         cancelFrame(idTimeout);
-        const funCall = () => {
+        const funCall = (e) => {
+          autoPreventDefault(e);
           fun.apply(bind, arguments);
           idTimeout = 0;
         };
@@ -38,6 +40,7 @@ class ListenerStore {
       };
     }
   }
+
   throttle(fun, opt) {
     /**
      * If less than x milliseconds ellapsed : ignore.
@@ -46,7 +49,8 @@ class ListenerStore {
     var bind = opt.bind || this;
     var start = performance.now();
     var delta = 0;
-    return function() {
+    return function(e) {
+      autoPreventDefault(e);
       delta = performance.now() - start;
       if (delta > opt.time) {
         fun.apply(bind, arguments);
@@ -169,7 +173,7 @@ class ListenerStore {
 
 class EventStore {
   constructor() {
-    this.className = "EventStore";
+    this.className = 'EventStore';
     this.lStore = new ListenerStore();
     this.passthroughs = [];
   }
@@ -178,10 +182,10 @@ class EventStore {
   }
 
   /**
-  * Delegate fire event to another function
-  * @param {Object} opt Options
-  * @param {Function} opt.cb Callback
-  */
+   * Delegate fire event to another function
+   * @param {Object} opt Options
+   * @param {Function} opt.cb Callback
+   */
   addPassthrough(opt) {
     opt = Object.assign({}, opt);
     var eStore = this;
@@ -269,3 +273,13 @@ class EventStore {
 }
 
 export {ListenerStore, EventStore};
+
+/**
+ * Helpers
+ */
+
+function autoPreventDefault(e) {
+  if (true && e instanceof Event) {
+    e.preventDefault();
+  }
+}

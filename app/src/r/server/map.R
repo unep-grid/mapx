@@ -38,6 +38,6 @@ observe({
 
 
 observeEvent(input$mx_client_ready,{
-  reactData$mapIsReady <- !noDataCheck(input$mx_client_ready)
+  reactData$mapIsReady <- mxIsDate(input$mx_client_ready)
 })
 

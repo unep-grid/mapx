@@ -18,8 +18,7 @@ export function modal(o) {
   const h = mx.helpers;
   const id = o.id || h.makeId();
   const idBackground = 'mx_background_for_' + id;
-  var elModal,
-    elTop,
+  var elTop,
     elTitle,
     elCollapse,
     elHead,
@@ -34,6 +33,7 @@ export function modal(o) {
      * Get or create modal and background
      */
     elModal = document.getElementById(o.id);
+
   const hasModal = h.isElement(elModal);
   if (!hasModal) {
     elModal = buildModal(id, o.style, o.styleContent);
@@ -115,7 +115,8 @@ export function modal(o) {
     elButtons.appendChild(elButtonClose);
   }
 
-  if (o.buttons && o.buttons.constructor === Array) {
+  if (o.buttons) {
+    o.buttons = h.isArray(o.buttons)?o.buttons:[o.buttons];
     o.buttons.forEach(function(b) {
       if (h.isHTML(b)) {
         b = h.textToDom(b);

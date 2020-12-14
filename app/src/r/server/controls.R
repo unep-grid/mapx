@@ -154,7 +154,6 @@ observeEvent(reactChain$showLogin,{
 
   }
 
-
   #
   # Build the final modal 
   #

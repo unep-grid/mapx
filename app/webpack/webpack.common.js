@@ -63,7 +63,7 @@ module.exports = {
           'css-loader',
           'postcss-loader',
           'icon-font-loader',
-          'less-loader',
+          'less-loader'
         ]
       },
       {
@@ -109,6 +109,10 @@ module.exports = {
           header: true,
           skipEmptyLines: true
         }
+      },
+      {
+        test: /\.mp3$/,
+        loader: 'file-loader'
       }
     ]
   }

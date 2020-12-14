@@ -1422,7 +1422,7 @@ function handleMouseDown(evt) {
       bind: li,
       callback: handleDragEnter,
       group: 'item_dragging',
-      type: 'dragenter'
+      type: ['dragenter']
     });
 
     li.listenerStore.addListener({
@@ -1432,15 +1432,15 @@ function handleMouseDown(evt) {
       callback: handleDragOver,
       throttle: true,
       throttleTime: 200,
-      type: 'dragover'
+      type: ['dragover']
     });
 
     li.listenerStore.addListener({
-      target: window,
+      target: elTarget,
       bind: li,
       callback: handleDrop,
       group: 'item_dragging',
-      type: 'drop'
+      type: ['drop']
     });
   }
 }
@@ -1486,6 +1486,7 @@ function handleDragEnter(evt) {
  */
 function handleDrop(evt) {
   const li = this;
+  console.log('drop')
   li.setDragClean();
   evt.preventDefault();
 }
@@ -1495,6 +1496,10 @@ function handleDrop(evt) {
  */
 function handleDragEnd(evt) {
   const li = this;
+  const elNoImg = el('img');
+  console.log('end')
+  evt.dataTransfer.setDragImage(elNoImg,0,0);
+  
   if (!li.isModeEmpty()) {
     li.fire('sort_end', evt);
     if (li.elNext !== li.drag.el.nextSibling) {
