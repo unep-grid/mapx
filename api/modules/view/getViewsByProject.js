@@ -58,7 +58,7 @@ async function getProjectViewsStates(opt) {
   opt = opt || {};
   let states = [];
   const sql = helpers.parseTemplate(template.getProjectViewsStates, opt);
-  const res = pgRead.query(sql);
+  const res = await pgRead.query(sql);
   if (res.rowCount > 0) {
     states = res.rows[0].states_views;
   }
