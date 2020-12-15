@@ -72,12 +72,13 @@ body.mx {
 }
 
 .mx-views-project-language-bar > span:hover {
-  background-color: var(--mx_ui_text);
-  color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background_contrast);
+  /*color: var(--mx_ui_background);*/
 }
 
 .mx .mx-view-item-desc {
   color: var(--mx_ui_text_text);
+  column-rule: 1px solid var(--mx_ui_border);
 }
 
 .mx-views-filter-text-input {
@@ -150,31 +151,27 @@ body.mx {
 }
 
 
-.mx .selectize-control .item .item-desc,
-.mx-login-info p,
-.mx .list-group .list-group-title-small,
-.text-muted,
-.text-muted > div {
-  transition: color 500ms ease-in-out;
-  color: var(--mx_ui_text_faded);
-}
+/*.mx .selectize-control .item .item-desc,*/
+/*.mx-login-info p,*/
+/*.mx .list-group .list-group-title-small,*/
+/*.text-muted,*/
+/*.text-muted > div {*/
+  /*transition: color 500ms ease-in-out;*/
+  /*color: var(--mx_ui_text_faded);*/
+/*}*/
 
-.mx .selectize-control .item .item-desc:hover,
-.mx-login-info p:hover,
-.mx .mx-view-tgl-more label:hover,
-.mx .list-group .list-group-title-small:hover,
-.text-muted:hover,
-.text-muted:hover > div {
-  color: var(--mx_ui_text);
-}
+/*.mx .selectize-control .item .item-desc:hover,*/
+/*.mx-login-info p:hover,*/
+/*.mx .mx-view-tgl-more label:hover,*/
+/*.mx .list-group .list-group-title-small:hover,*/
+/*.text-muted:hover,*/
+/*.text-muted:hover > div {*/
+  /*color: var(--mx_ui_text);*/
+/*}*/
 
-.mx .mx-modal-top,
-.mx .mx-modal-top * {
-  color: var(--mx_ui_background);
-}
 
 .mx .mx-modal-top {
-  background-color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_faded);
 }
 
 .mx .mx-modal-body {
@@ -210,8 +207,7 @@ span.mx-badge-role {
 }
 
 .mx .selectize-control.multi .selectize-input > .active {
-  color: var(--mx_ui_background);
-  background-color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
 }
 .mx .selectize-control.multi .selectize-input > div {
   border: 1px solid var(--mx_ui_border);
@@ -246,8 +242,8 @@ span.mx-badge-role {
 
 .mx .selectize-dropdown [data-selectable].active,
 .mx .selectize-dropdown [data-selectable].active span {
-  color: var(--mx_ui_background);
-  background: var(--mx_ui_text);
+  color: var(--mx_ui_text);
+  background: var(--mx_ui_background_contrast);
 }
 
 .mx .selectize-dropdown .active,
@@ -260,8 +256,8 @@ span.mx-badge-role {
 /*.mx .btn-default:hover span,*/
 .mx .btn-default:hover > *,
 .mx [class*=hint--]:after {
-  color: var(--mx_ui_background);
-  background-color: var(--mx_ui_text);
+  color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
   outline: 0;
   text-shadow: none;
   box-shadow: 4px 4px 8px var(--mx-shadow);
@@ -292,7 +288,10 @@ span.mx-badge-role {
 
 .mx .btn-circle:hover,
 .mx .btn-circle:hover > div,
-.mx .btn-circle:hover > div:before,
+.mx .btn-circle:hover > div:before {
+  background-color: var(--mx_ui_background_contast);
+}
+
 .mx .btn-circle.active,
 .mx .btn-circle.active > div,
 .mx .btn-circle.active > div:before {
@@ -305,13 +304,13 @@ span.mx-badge-role {
 */
 
 .mx .loading-container {
-  background-color: var(--mx_ui_text);
-  color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background_faded);
+  color: var(--mx_ui_text);
 }
 
 /* Note : see also modal background*/
 .mx .loading-screen-background {
-  background-color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_faded);
   opacity: 0.1;
 }
 .mx .loading-screen .loading-bar-out {
@@ -323,7 +322,7 @@ span.mx-badge-role {
 }
 
 .mx .loading-screen .loading-bar-txt {
-  color: var(--mx_ui_background);
+  color: var(--mx_ui_text);
 }
 
 /**
@@ -462,9 +461,9 @@ span.mx-badge-role {
   fill: hsla(348, 100%, 50%, 1);
 }
 
-.mx-view-item {
-  background-color: var(--mx_ui_background);
-}
+/*.mx-view-item {*/
+  /*background-color: var(--mx_ui_background);*/
+/*}*/
 
 /**
 * Boostrap fixes
@@ -566,24 +565,25 @@ span.mx-badge-role {
 }
 
 .mx .panel-default > .panel-heading {
-  color: var(--mx_ui_background);
-  background-color: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_faded);
   border-color: var(--mx_ui_border);
 }
 
 .mx .panel-default > .panel-heading.panel-heading-light {
   color: var(--mx_ui_text);
-  background-color: var(--mx_ui_border);
+  background-color: var(--mx_ui_background_faded);
   border-color: var(--mx_ui_border);
 }
-
-.mx .panel-default > .panel-heading span {
-  color: var(--mx_ui_background);
+.panel-default {
+    border-color: var(--mx_ui_border);
 }
+/*.mx .panel-default > .panel-heading span {*/
+  /*color: var(--mx_ui_background);*/
+/*}*/
 
-.mx .panel-default  > .panel-heading.panel-heading-light span {
-  color: var(--mx_ui_text);
-}
+/*.mx .panel-default  > .panel-heading.panel-heading-light span {*/
+  /*color: var(--mx_ui_text);*/
+/*}*/
 
 .mx .panel {
   background-color: var(--mx_ui_background);

@@ -4,9 +4,9 @@
 }
 
 .mx-legend-box {
-  padding: 5px;
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
+  /*padding: 5px;*/
+  border-top: 1px solid var(--mx_ui_border);
+  border-bottom: 1px solid var(--mx_ui_border);
   width: 100%;
 }
 .mx-view-tgl-more-container .mx-legend-box {
@@ -94,7 +94,8 @@
 }
 
 .mx-legend-vt-rule:hover {
-  background: var(--mx_ui_shadow);
+  background: var(--mx_ui_background_contrast);
+  border-radius:5px;
   z-index:1000;
 }
 

@@ -6,6 +6,7 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: wrap;
+    background: var(--mx_ui_background_faded);
     .mx-panel--header-btn {
       position: relative;
       display: flex;
@@ -14,9 +15,11 @@
       flex-grow: 1;
       justify-content: center;
       padding: 7.5px;
-      /*overflow: hidden;*/
-      /*text-overflow: ellipsis;*/
-      /*white-space: nowrap;*/
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+      border-radius: 10px;
+      margin: 5px;
       * {
         pointer-events: none;
       }
@@ -26,20 +29,19 @@
       .mx-panel--header-btn-label {
         padding-left: 10px;
         padding-right: 8px;
-        text-decoration: underline;
         overflow: hidden;
-        text-overflow: ellipsis;
         white-space: nowrap;
+        font-size: 0.9em;
+        text-overflow: ellipsis;
       }
       &.mx-panel--header-btn-title {
         font-size: 1.3em;
         width: 100%;
+        text-transform: uppercase;
+        max-width: 90%;
       }
       &:hover {
-        background: var(--mx_ui_text);
-        * {
-          color: var(--mx_ui_background);
-        }
+        background: var(--mx_ui_background_contrast);
       }
     }
   }
@@ -47,37 +49,50 @@
 
 .mx-tab--tabs {
   display: flex;
+  background: var(--mx_ui_background_faded);
   .mx-tab--tab {
     justify-content: center;
     display: flex;
     padding: 7px;
-    border-top: 1px solid var(--mx_ui_border);
-    border-right: 1px solid var(--mx_ui_border);
-    border-bottom: 1px solid var(--mx_ui_border);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     cursor: pointer;
     flex-grow: 1;
     align-items: center;
-    filter: contrast(0.5);
-    &:first-of-type {
-      /*border-top-left-radius: 10px;*/
-      /*border-left: 1px solid var(--mx_ui_border);*/
+    position: relative;
+    &:hover {
+      background: var(--mx_ui_background_contrast);
+      /*border-radius:5px;*/
     }
-    &:last-of-type {
-      border-right: none;
-    }
-    &:not(active):hover {
-      filter: none;
-      background: var(--mx_ui_text);
-      * {
-        color: var(--mx_ui_background);
-      }
-    }
-
     &.active {
-      border-bottom: none;
       pointer-events: none;
       cursor: auto;
-      filter: none;
+      background: var(--mx_ui_background);
+      z-index: 1;
+    }
+    &:not(:last-of-type).active:after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      bottom: -3px;
+      right: -17px;
+      overflow: hidden;
+      border-bottom-left-radius: 10px;
+      border-bottom: 3px solid var(--mx_ui_background);
+      border-left: 3px solid var(--mx_ui_background);
+    }
+    &:not(:first-of-type).active:before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      bottom: -3px;
+      left: -17px;
+      overflow: hidden;
+      border-bottom-right-radius: 10px;
+      border-bottom: 3px solid var(--mx_ui_background);
+      border-right: 3px solid var(--mx_ui_background);
     }
     * {
       padding-left: 10px;
@@ -94,6 +109,8 @@
   flex-direction: column;
   overflow: hidden;
   &.active {
+    min-height: 0px;
+    flex: 1;
     display: flex;
     position: relative;
     left: 0;

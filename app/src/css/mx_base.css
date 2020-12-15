@@ -189,14 +189,13 @@ blockquote {
   transition: opacity ease-in-out 1s;
 }
 
-
 /**
 * Filter + search
 */
 .mx-views-filters {
-  display:flex;
-  flex-direction:column;
-  padding:10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
 }
 
 /**
@@ -256,13 +255,12 @@ blockquote {
 }
 
 .mx-bar-filter > .mx-btn-sort:hover {
-  background-color: var(--mx_ui_text);
-  color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background_contrast);
 }
 
 .mx-bar-filter > .mx-btn-toggle-filter:hover,
 .mx-bar-filter > .mx-btn-toggle-filter.active {
-  background: var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
 }
 
 .mx-bar-filter .mx-btn-toggle-filter.bottom_tick.active:after {
@@ -271,7 +269,7 @@ blockquote {
 
 .mx-bar-filter > .mx-btn-toggle-filter:hover span,
 .mx-bar-filter > .mx-btn-toggle-filter.active span {
-  color: var(--mx_ui_background);
+  background-color: var(--mx_ui_background_contrast);
 }
 /**
 * Search box
@@ -332,16 +330,14 @@ blockquote {
 * Tools
 */
 .mx-tools-group {
-  display:flex;
-  flex-direction:column;
+  display: flex;
+  flex-direction: column;
 }
 
 .mx-tools-group .btn {
-    margin: 3px;
-    text-align: left;
-    padding: 10px;
+  margin: 3px;
+  text-align: left;
 }
-
 
 /***
 * Project bar
@@ -480,9 +476,6 @@ blockquote {
 .mapboxgl-ctrl-scale {
   height: 30px;
 }
-
-
-
 
 /**
 * boostrap list-group 
@@ -973,7 +966,7 @@ blockquote {
 }
 
 .mx-prop-container {
-  border-top: 1px solid #ccc;
+  border-top: 1px solid var(--mx-ui-border);
 }
 
 .mx-prop-content {

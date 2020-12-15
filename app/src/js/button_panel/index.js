@@ -124,7 +124,6 @@ class ButtonPanel {
         {
           class: [
             'button-panel--item',
-            'shadow',
             panel.opt.panelFull ? 'button-panel--item-full' : null
           ]
         },
@@ -141,7 +140,7 @@ class ButtonPanel {
          * Where the content will appear
          */
         (panel.elPanelContent = el('div', {
-          class: 'button-panel--item-content'
+          class: ['button-panel--item-content','shadow']
         })),
         /**
          * Handles / Buttons

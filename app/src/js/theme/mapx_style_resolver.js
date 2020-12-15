@@ -8,6 +8,8 @@ export function css_resolver(c) {
   --mx_ui_hidden: ${v(c.mx_ui_hidden)};
   --mx_ui_border: ${v(c.mx_ui_border)};
   --mx_ui_background: ${v(c.mx_ui_background)};
+  --mx_ui_background_faded: ${v(c.mx_ui_background_faded)};
+  --mx_ui_background_contrast: ${v(c.mx_ui_background_contrast)};
   --mx_ui_shadow: ${v(c.mx_ui_shadow)};
   --mx_ui_link: ${v(c.mx_ui_link)};
   border-color: var(--mx_ui_border);

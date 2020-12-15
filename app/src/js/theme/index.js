@@ -17,7 +17,11 @@ const global = {
   colors: null,
   debug: false,
   idThemesDarkLight: ['mapx', 'smartgray'],
-  on: {}
+  on: {},
+  sounds:{
+    'switch-on':require('./sound/switch-on.mp3'),
+    'switch-off':require('./sound/switch-off.mp3')
+  }
 };
 
 class Theme {
@@ -429,8 +433,9 @@ class Theme {
   * Sound
   */
   sound(id){
+    const t= this;
     const audio = el('audio',{
-      src : require(`./sound/${id}.mp3`)
+      src : t.opt.sounds[id] 
     });
     audio.play();
   }

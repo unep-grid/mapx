@@ -58,7 +58,7 @@
 .mx-modal-container.mx-modal-collapsed {
   min-height: 45px!important;
   height:45px!important;
-  overflow:visible;
+  overflow: hidden;
 }
 
 .mx-modal-top {

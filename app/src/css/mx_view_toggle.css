@@ -162,6 +162,11 @@
   flex-direction: row;
   padding-right: 70px;
   background-color:inherit;
+  cursor:pointer;
+}
+
+.mx-view-tgl-content:hover {
+  background-color:var(--mx_ui_background_contrast)
 }
 
 .mx-view-tgl-title {
@@ -234,7 +239,7 @@
 }
 
 .mx-view-tgl-input:not(:checked) ~ label:hover .mx-view-tgl-btn:not(:hover) .mx-view-tgl-btn-in {
-  transform : scale(0.9);
+  transform : scale(0.8);
 }
 
 .mx-view-tgl-input ~ label:hover .mx-view-tgl-btn:hover .mx-view-tgl-btn-in {

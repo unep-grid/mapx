@@ -4,7 +4,7 @@
     "en": "Dark gray theme."
   },
   "author": "F.Moser",
-  "mode":"dark",
+  "mode": "dark",
   "colors": {
     "mx_ui_text": {
       "visibility": "visible",
@@ -12,7 +12,7 @@
     },
     "mx_ui_link": {
       "visibility": "visible",
-      "color": "rgb(91,146,236)"
+      "color": "rgb(17,176,248)"
     },
     "mx_ui_text_faded": {
       "visibility": "visible",
@@ -29,6 +29,14 @@
     "mx_ui_background": {
       "visibility": "visible",
       "color": "rgb(66,66,66)"
+    },
+    "mx_ui_background_faded": {
+      "visibility": "visible",
+      "color": "rgb(51,51,51)"
+    },
+    "mx_ui_background_contrast": {
+      "visibility": "visible",
+      "color": "rgb(58,58,58)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",

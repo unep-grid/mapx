@@ -99,8 +99,6 @@ export function renderUserProjectsList(o) {
       debounce: true,
       debounceTime: 100
     });
-    //elContainer.addEventListener('keyup', filterList);
-    //elContainer.addEventListener('click', handleClick);
   }
 
   /**
@@ -109,6 +107,7 @@ export function renderUserProjectsList(o) {
   function handleClick(e) {
     var el = e.target;
     var ds = el.dataset;
+
     var actions = {
       request_membership: function() {
         if (ds.allow_join === 'true' && !userIsGuest) {
@@ -204,7 +203,8 @@ export function renderUserProjectsList(o) {
       {
         class: 'mx-list-projects-row',
         dataset: {
-          text: cleanString(row.description + ' ' + row.title)
+          text: cleanString(row.description + ' ' + row.title),
+          load_project: row[idCol]
         }
       },
       (elTop = el(
@@ -221,7 +221,7 @@ export function renderUserProjectsList(o) {
             'a',
             {
               href: '#',
-              dataset: {
+              dataset :{
                 load_project: row[idCol]
               }
             },

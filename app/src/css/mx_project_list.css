@@ -28,6 +28,19 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
+  cursor:pointer;
+}
+
+.mx-list-projects-row * {
+  pointer-events:none;
+}
+
+.mx-list-projects-row a {
+  pointer-events:auto;
+}
+
+.mx-list-projects-row:hover {
+  background: var(--mx_ui_background_contrast);
 }
 
 .mx-list-projects-top,
@@ -52,14 +65,14 @@
 }
 .mx-list-projects-container {
   overflow: hidden;
-  border: 1px solid #ccc;
+  border: 1px solid var(--mx_ui_border);
   border-radius: 3px;
 }
 .mx-list-projects-search {
   padding: 10px 10px 10px 10px;
   width: 100%;
   border: none;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--mx_ui_border);
   margin-bottom: 5px;
   outline: none;
 }

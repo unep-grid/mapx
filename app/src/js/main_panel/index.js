@@ -48,7 +48,7 @@ class MainPanel {
     this.elContent = el(
       'div',
       {
-        class: ['mx-panel', 'shadow']
+        class: ['mx-panel']
       },
       htmlImport
     );
