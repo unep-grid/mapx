@@ -20,6 +20,7 @@
       overflow: hidden;
       border-radius: 10px;
       margin: 5px;
+      border: 1px solid var(--mx_ui_border);
       * {
         pointer-events: none;
       }
@@ -38,7 +39,9 @@
         font-size: 1.3em;
         width: 100%;
         text-transform: uppercase;
-        max-width: 90%;
+        .mx-panel--header-btn-label {
+          max-width: 80%;
+        }
       }
       &:hover {
         background: var(--mx_ui_background_contrast);

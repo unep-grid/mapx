@@ -618,8 +618,8 @@ export async function updateUiSettings() {
   if (sUser.guest) {
     elBtnLogin.innerText = await h.getDictItem('login_label');
   } else {
-    const role = sRole.admin ? 
-      'admin' 
+    const role = sRole.admin
+      ? 'admin'
       : sRole.publisher
       ? 'publisher'
       : sRole.member
@@ -1093,7 +1093,6 @@ export async function initMapxApp(o) {
   idViewsQuery.push(...idViewsQueryOpen);
   const idViews = h.getArrayDistinct(idViewsQuery);
 
- 
   /**
    * Init app listeners: view add, language, project change, etc.
    */
@@ -1104,8 +1103,7 @@ export async function initMapxApp(o) {
    */
   await h.updateViewsList({
     id: o.id,
-    autoFetchAll: true,
-    project: o.project
+    autoFetchAll: true
   });
 
   /**
@@ -1235,7 +1233,7 @@ export async function initNotification() {
       position: 'bottom-left',
       elContainer: document.body,
       container_style: {
-        width: '480px',
+        width: '480px'
       }
     },
     ui: {
@@ -1719,7 +1717,7 @@ export async function updateViewsList(o) {
       prog = new RadialProgress(elProgContainer, {
         radius: 30,
         stroke: 4,
-        strockColor:'#f00'
+        strokeColor: '#f00'
       });
     }
 

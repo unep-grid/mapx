@@ -84,6 +84,8 @@ server <- function(input,output,session){
         #
         emailInit <- mxGetInitEmail(browserData)
         userInfo <- mxLogin(emailInit,browserData, query, reactData)
+
+        mxDebugMsg("LOGIN DONE")
         #
         # Set reactUser reactives values 
         #
@@ -102,6 +104,7 @@ server <- function(input,output,session){
             #
             "login.R",
             "ip.R",
+            "user.R",
             "project.R",
             "language.R",
             "controls.R",

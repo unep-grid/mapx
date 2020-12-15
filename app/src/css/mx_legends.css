@@ -123,7 +123,8 @@
 /**
 * Add a margin for first div (panels item)
 */
-.button-panel-content > .mx-view-legend-group {
-  padding: 20px;
+.button-panel--item-content > .mx-view-legend-group {
+  padding: 10px;
   padding-top: 0px;
 }
+

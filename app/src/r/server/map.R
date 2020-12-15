@@ -3,7 +3,6 @@
 # Main map 
 # NOTE: use config file for default.  
 #
-
 observe({
   mxCatch("map.R",{
 
@@ -22,6 +21,7 @@ observe({
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
 
+
     #
     # Set map options
     # 
@@ -30,6 +30,7 @@ observe({
       colorScheme =  query$style
       )
 
+    mxDebugMsg("INIT MAP")
     # init map
     mglInit(mapConfig)
     mxTimeDiff(timer)

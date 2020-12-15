@@ -291,7 +291,7 @@ function initMouseMoveListener(o) {
     var destroyed = false;
     var elBody = document.body;
     var elsCtrls = o.data.elMap.querySelectorAll(
-      '.mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-left'
+      '.mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-right'
     );
 
     var classOpacitySmooth = 'mx-smooth-opacity';
@@ -324,7 +324,7 @@ function initMouseMoveListener(o) {
     function hide() {
       mx.helpers.onNextFrame(function() {
         elsCtrls.forEach(function(el) {
-          el.style.opacity = 0;
+          el.style.opacity = 0.2;
         });
         elBody.classList.add(classNoCursor);
       });
@@ -650,6 +650,7 @@ export function storyUpdateSlides(o) {
   var elSlides;
   var elStep;
   var elBullet;
+  var elBullets = o.data.elBullets;
   var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
   var clHidden = 'mx-visibility-hidden';
   var clRemove = 'mx-display-none';
@@ -715,7 +716,9 @@ export function storyUpdateSlides(o) {
       /**
        * Update bullet values
        */
-      for (var b = 0, bL = data.stepsConfig.length; b < bL; b++) {
+      const nStep = data.stepsConfig.length;
+
+      for (var b = 0; b < nStep; b++) {
         elBullet = data.stepsConfig[b].elBullet;
         if (b <= s) {
           elBullet.classList.add('mx-story-step-active');
@@ -723,6 +726,14 @@ export function storyUpdateSlides(o) {
           elBullet.classList.remove('mx-story-step-active');
         }
       }
+      /**
+      * Update bullet container center
+      */
+      const bContWidth = elBullets.getBoundingClientRect().width;
+      const bItemWidth = bContWidth / nStep;
+      const dist = bContWidth / 2 - (s+1) * bItemWidth ;
+      elBullets.style.transform = `translateX(${dist}px)`;
+
     }
   });
 }
@@ -933,18 +944,12 @@ export function storyController(o) {
   o.selectorDisable = o.selectorDisable || [
     '#btnToggleBtns',
     '#btnPrint',
-    '#btnTabTools',
     '#btnThemeAerial',
-    '#btnTabSettings',
-    '#btnTabView',
-    '#btnShowLanguage',
-    '#btnShowCountry',
-    '#btnShowLogin',
     '#btnZoomIn',
     '#btnZoomOut',
     '#btnDrawMode',
-    '.button-panel-main--top-left',
-    '.button-panel-main--bottom-left'
+    '.button-panel--top-left',
+    '.button-panel--bottom-left'
   ];
   o.selectorEnable = o.selectorEnable || [
     '#btnStoryUnlockMap',

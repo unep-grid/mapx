@@ -5,11 +5,10 @@
 #
 observe({
   userData <- reactUser$data
-  mapIsReady <- reactData$mapIsReady
-  project <- reactData$project
- 
-  isolate({
+  project <- reactData$project 
 
+  isolate({
+  
     isMapOk <- isMapReady()
     isGuest <- isGuestUser()
     hasProject <- !noDataCheck(project)
@@ -20,6 +19,9 @@ observe({
     if(!hasProject) return()
 
     timer <- mxTimeDiff("Sending view")
+
+
+    mxDebugMsg("UPDATE VIEWS LIST")
 
     mglUpdateViewsList(
       id = .get(config,c("map","id")),

@@ -993,7 +993,7 @@ blockquote {
   width: 60%;
   float: right;
   padding-left: 20px;
-  border-left: 1px solid #ccc;
+  border-left: 1px solid var(--mx_ui_border);
 }
 
 .mx-prop-static {

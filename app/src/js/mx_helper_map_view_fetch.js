@@ -25,6 +25,7 @@ export function fetchViews(opt) {
   };
   const host = h.getApiUrl('getViewsListByProject');
 
+
   let idViews = h.getQueryParameterInit(['idViews', 'views']);
 
   if (noViews === true || noViews.toLowerCase() === 'true') {

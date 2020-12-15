@@ -212,23 +212,25 @@
 }
 
 .mx-story-step-bullets {
-  width: 80%;
   position: fixed;
   bottom: 0;
   margin-top: 30px;
   z-index: 1000;
   pointer-events: none;
   padding: 10px;
-  display: flex;
-  flex-wrap: wrap;
+  display: inline;
+  white-space: nowrap;
+  transform: translateX(0px); /* will change */
+  transition: 100ms transform ease-in-out, 500ms opacity ease-in-out;
 }
+
 .mx-story-step-bullet{
   cursor: pointer;
   pointer-events:auto;
-  border-radius: 50%;
+  border-radius: 10px;
   text-align: center;
   line-height: 30px;
-  font-family: sans, helvetica;
+  font-family: "helvetica", sans;
   font-size: 16px;
   width: 30px;
   height: 30px;
