@@ -260,3 +260,13 @@
   column-gap: 0px;
   overflow: auto;
 }
+
+
+.mx-search-tool-wait {
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+  cursor: wait;
+}
+
+

@@ -44,7 +44,7 @@
     },
     "mx_map_background": {
       "visibility": "visible",
-      "color": "rgb(66,66,66)"
+      "color": "rgb(48,48,48)"
     },
     "mx_map_feature_highlight": {
       "visibility": "visible",

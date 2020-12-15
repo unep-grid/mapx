@@ -830,9 +830,9 @@ export async function initMapx(o) {
       panel: {
         elContainer: document.body,
         position: 'top-left',
-        title_text: null,
         button_text: h.getDictItem('app_panel'),
-        button_lang_key: 'app_panel',
+        button_lang_key: 'btn_panel_main',
+        tooltip_position: 'bottom-right',
         button_classes: ['fa', 'fa-list-ul'],
         container_style: {
           width: '480px',
@@ -1007,14 +1007,13 @@ export async function initMapxStatic(o) {
     elContainer: document.body,
     panelFull: true,
     position: 'top-left',
-    title_text: h.getDictItem('button_legend_title'),
-    title_lang_key: 'button_legend_title',
+    tooltip_position : 'right',
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
     container_style: {
       width: '300px',
-      height: '300%',
+      height: '300px',
       minWidth: '200px',
       minHeight: '200px'
     }
@@ -2333,8 +2332,10 @@ export async function makeNumericSlider(o) {
     oldSlider.destroy();
   }
 
-  let min = h.path(view, 'data.attribute.min');
-  let max = h.path(view, 'data.attribute.max');
+  const summary = await h.getViewSourceSummary(view);
+
+  let min = h.path(summary, 'attribute_stat.min',0);
+  let max = h.path(summary, 'attribute_stat.max',min);
 
   if (view && min !== null && max !== null) {
     if (min === max) {
@@ -2556,6 +2557,7 @@ export async function makeTimeSlider(o) {
   if (oldSlider) {
     oldSlider.destroy();
   }
+
   const summary = await h.getViewSourceSummary(view);
   const extent = h.path(summary, 'extent_time', {});
   const attributes = h.path(summary, 'attributes', []);
@@ -4477,16 +4479,13 @@ export async function viewFilterToolsInit(id, opt) {
   opt = Object.assign({}, {clear: false}, opt);
   const h = mx.helpers;
   try {
-    h.setBusy(true);
     const view = h.getView(id);
     if (!h.isView(view)) {
-      clean();
       return;
     }
     const idView = view.id;
     const idMap = mx.settings.map.id;
     if (view._filters_tools) {
-      clean();
       return;
     }
     view._filters_tools = {};
@@ -4499,13 +4498,8 @@ export async function viewFilterToolsInit(id, opt) {
     proms.push(h.makeTransparencySlider({view: view, idMap: idMap}));
     proms.push(h.makeSearchBox({view: view, idMap: idMap}));
     await Promise.all(proms);
-    clean();
   } catch (e) {
-    clean();
     throw new Error(e);
-  }
-  function clean() {
-    h.setBusy(false);
   }
 }
 

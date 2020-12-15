@@ -172,6 +172,10 @@ observeEvent(input$btnDeleteProjectConfirm,{
 
   if( !isAdmin || isProjectDefault ) return()
 
+  mxUpdateQueryParameters(list(
+      project = NULL
+      ))
+
   #
   # Remove all related views
   #
@@ -191,18 +195,19 @@ observeEvent(input$btnDeleteProjectConfirm,{
   mxDbGetQuery("delete from mx_projects where id = '" + idProject + "'")
 
   #
+  # Force logout
+  #
+  mxModal(
+    id='deleteProject',
+    close=TRUE
+  )
+  reactData$project <- .get(config,c('project','default'))
+  
+  #
   # Remove Services
   #
   mxDeleteGeoServerAllProjectWorkspace(idProject)
 
-
-  reactUser <- reactiveValues()
-  reactData <- reactiveValues()
-  mxUpdateValue(id="loginUserEmail",value="")
-  mxSetCookie(
-    #deleteAll = TRUE,
-    reloadPage = TRUE
-  )
 
 
 })

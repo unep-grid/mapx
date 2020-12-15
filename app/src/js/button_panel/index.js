@@ -5,12 +5,11 @@ import './style.less';
 
 const options = {
   elContainer: document.body,
-  title_text: 'Title',
-  title_lang_key: null,
   button_text: 'Toggle',
   button_lang_key: null,
   button_classes: ['fa', 'fa-list-ul'],
   position: 'top-right',
+  tooltip_position : 'bottom-left',
   container_style: {},
   add: true
 };
@@ -27,7 +26,7 @@ class ButtonPanel {
     const panel = this;
     panel.cb = [];
     panel.build();
-    panel.setTitle();
+    //panel.setTitle();
     panel.setButtonLabel();
     panel.show();
     panel.ls.addListener({
@@ -104,7 +103,9 @@ class ButtonPanel {
           class: [
             'button-panel--btn',
             `button-panel--${panel.opt.position}`,
-            'shadow'
+            'hint',
+            `hint--${panel.opt.tooltip_position}`,
+            'buttin-panel--sahdow'
           ],
           dataset: {
             lang_key: panel.opt.button_lang_key,
@@ -128,19 +129,10 @@ class ButtonPanel {
           ]
         },
         /**
-         * Panel title
-         */
-        (panel.elTitle = el('span', {
-          class: 'button-panel--item-title',
-          dataset: {
-            lang_key: panel.opt.title_lang_key
-          }
-        })),
-        /**
          * Where the content will appear
          */
         (panel.elPanelContent = el('div', {
-          class: ['button-panel--item-content','shadow']
+          class: ['button-panel--item-content','shadow','button-panel--shadow']
         })),
         /**
          * Handles / Buttons
@@ -276,19 +268,19 @@ class ButtonPanel {
     return elGroup;
   }
 
-  setTitle(txt) {
-    txt = txt || this.opt.title_text;
-    if (txt) {
-      if (txt instanceof Element) {
-        this.elTitle.innerHtml = '';
-        this.elTitle.appendChild(txt);
-      } else {
-        txtResolve(txt).then((t) => {
-          this.elTitle.innerHtml = t;
-        });
-      }
-    }
-  }
+  /*setTitle(txt) {*/
+    //txt = txt || this.opt.title_text;
+    //if (txt) {
+      //if (txt instanceof Element) {
+        //this.elTitle.innerHtml = '';
+        //this.elTitle.appendChild(txt);
+      //} else {
+        //txtResolve(txt).then((t) => {
+          //this.elTitle.innerHtml = t;
+        //});
+      //}
+    //}
+  /*}*/
 
   setButtonLabel(txt) {
     txt = txt || this.opt.button_text;

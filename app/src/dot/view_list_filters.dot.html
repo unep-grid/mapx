@@ -17,6 +17,8 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
 }}
 
 <div id="mx-search-tool-{{=view.id}}" class="mx-hide">
+  <div class="mx-search-tool-wait" data-lang_key="stat_load_please_wait">Please wait..</div>
+  <div class="mx-search-tool-content mx-hide">
   {{? isVt || isGj }} 
   {{? isVtGjWithString }}
   <label
@@ -93,5 +95,6 @@ const isVtTemporal = h.hasIndex(vtProps,'mx_t0');
       <div class="mx-slider-range-min">0%</div>
       <div class="mx-slider-range-max">100%</div>
     </div>
+  </div>
   </div>
 </div>

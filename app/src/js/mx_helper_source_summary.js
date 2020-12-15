@@ -91,7 +91,7 @@ export async function getSourceVtSummary(opt) {
       delete opt[k];
     }
   });
-
+  
   if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
     return {};
   }

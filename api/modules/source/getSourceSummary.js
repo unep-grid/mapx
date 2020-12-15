@@ -68,7 +68,8 @@ async function getSourceSummary(opt) {
   opt = await updateSourceFromView(opt);
 
   if (!mx_valid.isSourceId(opt.idSource)) {
-    throw new Error('Id of the source missing');
+    return {};
+    //throw new Error('Id of the source missing');
   }
 
   const start = Date.now();

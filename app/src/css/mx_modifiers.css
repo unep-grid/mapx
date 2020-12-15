@@ -150,6 +150,11 @@ body.mx {
   color: var(--mx_ui_text);
 }
 
+.mx .selectize-input {
+  background: var(--mx_ui_backround_contrast);
+  border: 1px solid var(--mx_ui_border);
+}
+
 /*.mx .selectize-control .item .item-desc,*/
 /*.mx-login-info p,*/
 /*.mx .list-group .list-group-title-small,*/

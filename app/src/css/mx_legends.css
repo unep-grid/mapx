@@ -121,10 +121,17 @@
 }
 
 /**
-* Add a margin for first div (panels item)
+* Leged in button panel (static, story)
 */
-.button-panel--item-content > .mx-view-legend-group {
-  padding: 10px;
-  padding-top: 0px;
+.button-panel--item-content  .mx-view-legend-group {
+  padding: 0 10px 10px;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-y:hidden;
 }
-
+.button-panel--item-content  .mx-legend-box {
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

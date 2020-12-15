@@ -1,5 +1,5 @@
 [
- {
+  {
     "id": "brand",
     "en": "MapX",
     "fr": "MapX",
@@ -38,7 +38,7 @@
     "bn": "",
     "de": ""
   },
-  
+
   {
     "id": "bottom",
     "en": "Bottom",
@@ -2210,7 +2210,7 @@
     "bn": "",
     "de": ""
   },
- {
+  {
     "id": "error_login",
     "en": "Login issue",
     "fr": "Problème de login",
@@ -12601,6 +12601,32 @@
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
     "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "stat_load_please_wait",
+    "en": "Statistics extraction ... ",
+    "fr": "Extraction des statistiques ...",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_panel_main",
+    "en": "Main panel",
+    "fr": "Panneau principal",
     "es": "",
     "ru": "",
     "zh": "",

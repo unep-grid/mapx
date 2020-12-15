@@ -119,17 +119,19 @@ function handleViewClick(event) {
         const elSearch = document.getElementById(
           el.dataset.view_action_el_target
         );
-        const viewTarget = el.dataset.view_action_target;
-        const view = h.getView(viewTarget);
-        /**
-         * Init modules
-         */
-        await h.viewFilterToolsInit(view);
+        const elSearchWait = elSearch.querySelector('.mx-search-tool-wait');
+        const elSearchContent = elSearch.querySelector('.mx-search-tool-content');
+        elSearch.classList.toggle('mx-hide');
 
-        h.classAction({
-          selector: elSearch,
-          action: 'toggle'
-        });
+        if(!elSearch.classList.contains('mx-hide')){
+          elSearchWait.classList.remove('mx-hide');
+          elSearchContent.classList.add('mx-hide');
+          const viewTarget = el.dataset.view_action_target;
+          const view = h.getView(viewTarget);
+          await h.viewFilterToolsInit(view);
+          elSearchWait.classList.add('mx-hide');
+          elSearchContent.classList.remove('mx-hide');
+        }
       }
     },
     {

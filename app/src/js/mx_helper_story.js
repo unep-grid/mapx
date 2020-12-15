@@ -493,17 +493,19 @@ function initButtonsListener(o) {
   /**
    * Button Legend
    */
-  o.data.buttonLegend = new ButtonPanel({
+   o.data.buttonLegend = new ButtonPanel({
     elContainer: o.data.elMapContainer,
+    panelFull: true,
     position: 'top-left',
-    title_text: h.getDictItem('button_legend_title'),
-    title_lang_key: 'button_legend_title',
+    tooltip_position : 'right',
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
     container_style: {
-      maxHeight: '50%',
-      maxWidth: '50%'
+      width: '300px',
+      height: '300px',
+      minWidth: '200px',
+      minHeight: '200px'
     }
   });
 
