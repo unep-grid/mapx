@@ -181,7 +181,7 @@ export async function getLoginInfo() {
   const s = mx.settings;
   return {
     idUser: s.user.id,
-    idProject: s.project,
+    idProject: s.project.id,
     isGuest: s.user.guest,
     token: s.user.token,
     language: s.language

@@ -66,7 +66,7 @@ class WsHandler {
       arrQuery.push(`${k}=${JSON.stringify(query[k])}`);
     }
     const url = `${ws.opt.url}?${arrQuery.join('&')}`;
-    ws.io = io(url);
+    ws.io = io(url, {transports: ['websocket']});
     cache.io = ws.io;
   }
 
