@@ -212,7 +212,7 @@ observeEvent(input$btnSendRequestMembershipMessage,{
 
     mxModal(
       id = "modalSendProjectRequestMembership",
-      close = true
+      close = TRUE
     )
 
     mxFlashIcon('envelope')
