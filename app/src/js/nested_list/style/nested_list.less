@@ -37,6 +37,7 @@
   padding: 12px;
   margin: 5px;
   border-radius: 10px;
+  overflow:hidden;
   &:not(.li-group-collapsed) {
     min-height: 40px;
     >.li-group-header >.li-group-caret {
@@ -66,10 +67,10 @@
 .li-group:before {
   content: ' ';
   position: absolute;
-  height: calc(100% - 10px);
-  top: 5px;
-  left: 5px;
-  border-left: 1px solid var(--border_color);
+  height: 100%;
+  top: 0px;
+  left: 0px;
+  border-left: 4px solid var(--border_color);
 }
 
 .li-group.li-group-invisible {
