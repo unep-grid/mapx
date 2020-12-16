@@ -379,6 +379,18 @@ observeEvent(input$btnSaveProjectConfig,{
       id="btnSaveProjectConfig",
       disable = FALSE
       )
+
+    #
+    # Update UI
+    #
+    mxUpdateSettings(list(
+      project = list(
+        id = project,
+        public = isPublic,
+        title = input$projectTitleSchema_values$data
+      )
+    ))
+
     mxFlashIcon("floppy-o")
 
   }

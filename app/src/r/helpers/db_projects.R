@@ -550,10 +550,14 @@ mxDbProjectTitleExists <- function(title,ignore=NULL,languages=NULL){
 #' @return {Character} Id of the project or default
 mxDbProjectCheck <- function(idProject,idDefault=config[[c("project","default")]]){
 
-  idExists <- isTRUE(mxDbGetQuery("select count(id) from mx_projects where id='"+idProject+ "'")$count == 1)
-  if(idExists) return(idProject)
+  idExists <- isTRUE(mxDbGetQuery(sprintf("select count(*) from mx_projects where id='%1$s'",idProject))$count == 1)
+  
+  if(idExists){
+    return(idProject)
+  }else{
+    return(idDefault)
+  }
 
-  return(idDefault)
 }
 
 

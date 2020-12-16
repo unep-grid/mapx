@@ -101,7 +101,8 @@ observe({
         if(noDataCheck(roles$groups)) project_out <- project_def;
 
 
-        if(isTRUE(query$project != project_out)){
+        #if(isTRUE(query$project != project_out)){
+        if(isTRUE(project_query != project_out)){
           #
           # Handle case when requested project is known, but user can't
           # access it.
