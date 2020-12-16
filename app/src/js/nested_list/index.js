@@ -247,8 +247,8 @@ class NestedList {
         }
         item.value = new Date(item.value || 0);
       }
-      if(opt.mode === "ids"){
-         item.value = opt.ids.indexOf(item.id);
+      if (opt.mode === 'ids') {
+        item.value = opt.ids.indexOf(item.id);
       }
       data.push(item);
     });
@@ -612,8 +612,7 @@ class NestedList {
       return;
     }
     el.dataset.li_color = color;
-    const elCaret = el.querySelector('.li-group-caret');
-    elCaret.style.borderColor = color;
+    el.style = `--border_color:${color}`;
   }
 
   /**
@@ -1341,6 +1340,8 @@ function handleContextClick(evt) {
   if (li.isModeEmpty()) {
     return;
   }
+  evt.stopPropagation();
+  evt.stopImmediatePropagation();
   li.contextMenu = new ContextMenu(evt, li);
 }
 
@@ -1487,7 +1488,7 @@ function handleDragEnter(evt) {
  */
 function handleDrop(evt) {
   const li = this;
-  console.log('drop')
+  console.log('drop');
   li.setDragClean();
   evt.preventDefault();
 }
@@ -1498,9 +1499,9 @@ function handleDrop(evt) {
 function handleDragEnd(evt) {
   const li = this;
   const elNoImg = el('img');
-  console.log('end')
-  evt.dataTransfer.setDragImage(elNoImg,0,0);
-  
+  console.log('end');
+  evt.dataTransfer.setDragImage(elNoImg, 0, 0);
+
   if (!li.isModeEmpty()) {
     li.fire('sort_end', evt);
     if (li.elNext !== li.drag.el.nextSibling) {

@@ -5,7 +5,7 @@
   padding: 5px;
   margin: 5px;
   border-top: 1px solid var(--mx_ui_border);
-  border-bottom: 1px solid  var(--mx_ui_border);
+  border-bottom: 1px solid var(--mx_ui_border);
   margin-bottom: 10px;
 }
 
@@ -17,6 +17,10 @@
 
 .vf-checkbox {
   display: flex;
+}
+
+.vf-checkbox .vf-checkbox-input {
+  margin: 0px;
 }
 
 .vf-checkbox .vf-checkbox-label {

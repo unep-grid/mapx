@@ -102,7 +102,6 @@
 .mx-view-item-checkbox-label {
   padding: 10px;
   width: 100%;
-  /*background*/
 }
 
 .mx-view-item-checkbox {
@@ -110,20 +109,14 @@
 }
 
 .mx-view-item-desc-container {
-  /*margin: 5px;*/
   display: flex;
-  justify-content: center;
 }
 
 .mx-view-item-desc {
   font-style: italic;
   font-size: 0.9em;
-  padding: 10px;
+  padding: 17px;
   margin: 0px;
-  text-align: justify;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  -ms-hypens: auto;
   hyphens: auto;
   max-height: 220px;
   overflow-x: auto;
@@ -133,7 +126,7 @@
   column-count: auto;
   column-rule: 1px solid #ccc;
   column-gap: 10px;
-  max-width: 500px; /*close to panel original panel size*/
+  width: calc(100% - 10px);
 }
 
 .mx-view-item-index,
