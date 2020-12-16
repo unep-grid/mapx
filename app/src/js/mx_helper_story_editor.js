@@ -253,7 +253,7 @@ function contentToolsImageUploader(dialog) {
         form.append('height', height);
         form.append('token', h.path(mx, 'settings.user.token'));
         form.append('idUser', h.path(mx, 'settings.user.id'));
-        form.append('project', h.path(mx, 'settings.project'));
+        form.append('project', h.path(mx, 'settings.project.id'));
 
         mx.helpers.sendData({
           url: mx.helpers.getApiUrl('uploadImage'),
