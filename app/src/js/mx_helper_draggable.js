@@ -1,5 +1,4 @@
-/*jshint esversion: 6 , node: true */ //'use strict';
-
+import {onNextFrame, cancelFrame} from './animation_frame/index.js';
 
 export function draggable(o) {
   var xMin, xMax, yMin, yMax;
@@ -13,7 +12,6 @@ export function draggable(o) {
   o.classHandle = o.classHandle || 'mx-drag-handle';
   o.classDraggable = o.classDraggable || 'mx-draggable';
   o.classDragged = o.classDragged || 'mx-dragged';
-  o.debounceTime = o.debounceTime || 10;
   o.forceDim = o.forceDim || false;
   o.elHandle = o.el.querySelector('.' + o.classHandle);
   o.listener = {};
@@ -67,19 +65,23 @@ export function draggable(o) {
   };
 
   /**
-   * mouse down + move : change element coordinate
+   * mouse down + move 
    */
-  o.listener.mousemove = mx.helpers.debounce(function(event) {
-    if (o.block === false) {
-      o.block = true;
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      o.setPosElement(o.el, event.clientX, event.clientY);
-      if (o.onDragMove instanceof Function) {
-        o.onDragMove(o, event);
+  let idFrame = 0;
+  o.listener.mousemove = (event) => {
+    cancelFrame(idFrame);
+    idFrame = onNextFrame(() => {
+      if (o.block === false) {
+        o.block = true;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        o.setPosElement(o.el, event.clientX, event.clientY);
+        if (o.onDragMove instanceof Function) {
+          o.onDragMove(o, event);
+        }
       }
-    }
-  }, o.debouceTime);
+    });
+  };
 
   /*
    * mouse up : remove "up" and "move" listener
@@ -172,4 +174,3 @@ function sumScrollY(el) {
   }
   return offsetY;
 }
-

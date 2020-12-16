@@ -36,11 +36,11 @@
     },
     "mx_ui_background_contrast": {
       "visibility": "visible",
-      "color": "rgba(208,208,208,1)"
+      "color": "rgba(243,243,243,1)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",
-      "color": "rgba(153,153,153,0.4)"
+      "color": "rgba(61,61,61,0.5)"
     },
     "mx_map_background": {
       "visibility": "visible",

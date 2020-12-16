@@ -3,7 +3,7 @@
 */
 html,
 body.mx {
-  font-size: var(--mx_font_size_base);
+  font-size: var(--mx_ui_font_size_base);
 }
 
 /**
@@ -30,20 +30,9 @@ body.mx {
 }
 
 .mx .shadow {
-  box-shadow: 1px 1px 4px 0px var(--mx_ui_shadow);
+  box-shadow: var(--mx_ui_box_shadow);
 }
-.mx .shadow-inset {
-  box-shadow: inset 1px 1px 4px 0px var(--mx_ui_shadow);
-}
-.mx .shadow-caster-inset:after {
-  content: '';
-  width: 100%;
-  height: 100%;
-  box-shadow: inset 1px 1px 4px 0px var(--mx_ui_shadow);
-  display: block;
-  position: absolute;
-  top: 0;
-}
+
 /*
 * Badge and icons
 */
@@ -86,6 +75,7 @@ body.mx {
 }
 .mx-views-filter-container {
   border: 1px solid var(--mx_ui_border);
+  background: var(--mx_ui_background_contrast);
 }
 .mx-views-filters-container .mx-check-toggle-filter-count {
   color: var(--mx_ui_text_faded);
@@ -143,7 +133,7 @@ body.mx {
 .mx .mapboxgl-popup-content {
   border: 1px solid var(--mx_ui_border);
   background-color: var(--mx_ui_background);
-  box-shadow: 2px 2px 5px 0 var(--mx_ui_shadow);
+  box-shadow: var(--mx_ui_box_shadow);
   border-radius: 10px;
 }
 .mx .selectize-input input {
@@ -154,24 +144,6 @@ body.mx {
   background: var(--mx_ui_backround_contrast);
   border: 1px solid var(--mx_ui_border);
 }
-
-/*.mx .selectize-control .item .item-desc,*/
-/*.mx-login-info p,*/
-/*.mx .list-group .list-group-title-small,*/
-/*.text-muted,*/
-/*.text-muted > div {*/
-/*transition: color 500ms ease-in-out;*/
-/*color: var(--mx_ui_text_faded);*/
-/*}*/
-
-/*.mx .selectize-control .item .item-desc:hover,*/
-/*.mx-login-info p:hover,*/
-/*.mx .mx-view-tgl-more label:hover,*/
-/*.mx .list-group .list-group-title-small:hover,*/
-/*.text-muted:hover,*/
-/*.text-muted:hover > div {*/
-/*color: var(--mx_ui_text);*/
-/*}*/
 
 .mx .mx-modal-top {
   background-color: var(--mx_ui_background_faded);
@@ -244,6 +216,7 @@ span.mx-badge-role {
 
 .mx .selectize-dropdown [data-selectable].active,
 .mx .selectize-dropdown [data-selectable].active span {
+  cursor: pointer;
   color: var(--mx_ui_text);
   background: var(--mx_ui_background_contrast);
 }
@@ -254,31 +227,28 @@ span.mx-badge-role {
 .mx .selectize-dropdown .active.create,
 .mx .selectize-dropdown .active.create *,
 .mx .btn-default:hover,
-/*.mx .btn-default:hover div,*/
-/*.mx .btn-default:hover span,*/
 .mx .btn-default:hover > *,
 .mx [class*=hint--]:after {
   color: var(--mx_ui_text);
   background-color: var(--mx_ui_background_contrast);
   outline: 0;
   text-shadow: none;
-  box-shadow: 4px 4px 8px var(--mx-shadow);
 }
 
 /**
 * Hint arrow. 
 */
 .mx [class*='hint--left']:before {
-  border-left-color: var(--mx_ui_text);
+  border-left-color: var(--mx_ui_background_contrast);
 }
 .mx [class*='hint--right']:before {
-  border-right-color: var(--mx_ui_text);
+  border-right-color: var(--mx_ui_background_contrast);
 }
 .mx [class*='hint--bottom']:before {
-  border-bottom-color: var(--mx_ui_text);
+  border-bottom-color: var(--mx_ui_background_contrast);
 }
 .mx [class*='hint--top']:before {
-  border-top-color: var(--mx_ui_text);
+  border-top-color: var(--mx_ui_background_contrast);
 }
 
 .mx .btn-circle,
@@ -381,102 +351,35 @@ span.mx-badge-role {
   border-right: 1px solid var(--mx_ui_text);
 }
 
-/**
- * View toggle button
- */
-.mx .mx-view-tgl-btn .mx-view-tgl-btn-in {
-  fill: var(--mx_ui_background);
-}
-.mx .mx-view-tgl-content:hover .mx-view-tgl-btn-in {
-  fill: var(--mx_ui_background_contrast);
-}
 
-.mx-view-item-vt
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(118, 100%, 64%, 1);
-}
-.mx-view-item-vt
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(118, 100%, 45%, 1);
-}
-
-.mx-view-item-gj
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 64%, 1);
-}
-.mx-view-item-gj
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(30, 100%, 50%, 1);
-}
-
-.mx-view-item-sm
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(216, 42%, 50%, 1);
-}
-.mx-view-item-sm
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(216, 100%, 50%, 1);
-}
-
-.mx-view-item-rt
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(307, 84%, 41%, 1);
-}
-.mx-view-item-rt
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(307, 100%, 50%, 1);
-}
-
-.mx-view-item-cc
-  .mx-view-tgl-input:checked
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(348, 100%, 61%, 1);
-}
-.mx-view-item-cc
-  .mx-view-tgl-input:not(checked)
-  ~ .mx-view-tgl-content
-  .mx-view-tgl-btn
-  .mx-view-tgl-btn-out {
-  fill: hsla(348, 100%, 50%, 1);
-}
 
 /*.mx-view-item {*/
 /*background-color: var(--mx_ui_background);*/
 /*}*/
 
 /**
+* jsondiffpatch
+*/
+.mx .jsondiffpatch-deleted .jsondiffpatch-property-name,
+.mx .jsondiffpatch-deleted pre,
+.mx .jsondiffpatch-modified .jsondiffpatch-left-value pre,
+.mx .jsondiffpatch-textdiff-deleted {
+  background: #e60606;
+  text-decoration: line-through;
+}
+.mx .jsondiffpatch-added .jsondiffpatch-property-name,
+.mx .jsondiffpatch-added .jsondiffpatch-value pre,
+.mx .jsondiffpatch-modified .jsondiffpatch-right-value pre,
+.mx .jsondiffpatch-textdiff-added {
+  background: #549a03;
+}
+/**
 * Boostrap fixes
 */
 .mx pre {
   color: var(--mx_ui_text);
-  background-color: inherit;
-  border: 1px solid var(--mx_ui_text);
+  background-color: var(--mx_ui_background_contrast);
+  border: 1px solid var(--mx_ui_border);
 }
 
 /**
@@ -484,16 +387,16 @@ span.mx-badge-role {
 */
 
 .mx .li-group {
-  border-left: 3px solid var(--mx_ui_border);
+  background: var(--mx_ui_background_contrast);
 }
 
 .mx .li-context-menu {
-  box-shadow: 0px 0px 14px 0px var(--mx_ui_shadow);
+  box-shadow: var(--mx_ui_box_shadow);
   background: var(--mx_ui_background);
 }
 
 .mx .li-context-menu-target-focus {
-  box-shadow: 0px 0px 14px 0px var(--mx_ui_shadow);
+  box-shadow: var(--mx_ui_box_shadow);
 }
 .mx .li-context-menu-group > * {
   border-bottom: 1px solid var(--mx_ui_border);
@@ -506,9 +409,9 @@ span.mx-badge-role {
   background: var(--mx_ui_background);
 }
 .mx .li-context-menu-button:hover {
-  transform: scale(1.05);
-  background: var(--mx_ui_background);
+  background: var(--mx_ui_background_contrast);
 }
+
 
 .mx .li-context-menu-input {
   border: 1px solid var(--mx_ui_border);
@@ -599,5 +502,5 @@ span.mx-badge-role {
 */
 .mx .dashboard {
   line-height: 1.4em;
-  font-size: var(--mx_font_size_base);
+  font-size: var(--mx_ui_font_size_base);
 }

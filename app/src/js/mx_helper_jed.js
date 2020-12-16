@@ -428,7 +428,6 @@ async function jedShowDraftRecovery(o) {
         );
       }
     });
-
     elItem.innerHTML = html;
   }
 

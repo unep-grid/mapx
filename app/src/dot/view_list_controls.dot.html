@@ -22,7 +22,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
   <ul class="mx-controls-ul">
     {{?isSm}}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_start_story"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_start_story"
@@ -32,7 +32,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     </li>
     {{?isViewEditable && isCurrentProject}}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_story"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_edit_story"
@@ -45,7 +45,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isGj || isVtWithAttr || isRtWms }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-view_action_key="btn_opt_zoom_all"
       data-view_action_target="{{=view.id}}"
       data-lang_key="btn_opt_zoom_all"
@@ -56,7 +56,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}}
     {{? isGj || isVtWithAttr }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_zoom_visible"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_zoom_visible"
@@ -65,7 +65,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-binoculars"></div>
     </li>
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_reset"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_reset"
@@ -76,7 +76,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isGj || isVt || isRt }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-view_action_key="btn_opt_search"
       data-view_action_el_target="mx-search-tool-{{=view.id}}"
       data-view_action_target="{{=view.id}}"
@@ -88,7 +88,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}}
     {{? !isGj }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-view_action_key="btn_opt_meta"
       data-view_action_target="{{=view.id}}"
       data-lang_key="btn_opt_meta"
@@ -99,7 +99,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isVtWithAttr }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_download"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_download"
@@ -111,7 +111,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isRtWithDownload }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_download"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_get_raster"
@@ -123,7 +123,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{? isGj }} 
     {{? uIsPublisher || uIsAdmin }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_upload"
       data-lang_type="tooltip"
       data-view_action_key="btn_upload_geojson"
@@ -133,7 +133,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     </li>
     {{?}}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_download"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_get_geojson"
@@ -142,7 +142,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-cloud-download"></div>
     </li>
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_delete_geojson"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_delete_geojson"
@@ -153,7 +153,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isVtWithAttr }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_attribute_table"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_attribute_table"
@@ -164,7 +164,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}}
     {{? isViewEditable && isCurrentProject }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_config"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_edit_config"
@@ -175,7 +175,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     </li>
     {{? isVt || isRt || isCc }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_dashboard"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_edit_dashboard"
@@ -187,7 +187,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? isCc }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--right"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_custom_code"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_edit_custom_code"
@@ -199,7 +199,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}}
     {{?isVtWithAttr }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_style"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_edit_style"
@@ -210,7 +210,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     </li>
     {{?}}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_delete"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_delete"
@@ -222,7 +222,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? (isSm || isVt || isRt || isCc ) && !isDropedView }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_share"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_share"
@@ -233,7 +233,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     </li>
     {{? isRegistered }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_share_to_project"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_share_to_project"
@@ -246,7 +246,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     {{?}} 
     {{? !isCurrentProject }}
     <li
-      class="mx-pointer btn-circle btn-circle-small hint--left"
+      class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_home_project"
       data-lang_type="tooltip"
       data-view_action_key="btn_opt_home_project"

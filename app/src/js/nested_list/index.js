@@ -5,7 +5,7 @@ import {Group} from './components/group.js';
 import {ContextMenu} from './components/contextMenu.js';
 import {ListenerStore} from '../listener_store/index.js';
 
-import './style/nested_list.css';
+import './style/nested_list.less';
 
 class NestedList {
   constructor(elRoot, opt) {
@@ -611,8 +611,9 @@ class NestedList {
     if (!isGroup) {
       return;
     }
-    el.style.borderColor = color;
     el.dataset.li_color = color;
+    const elCaret = el.querySelector('.li-group-caret');
+    elCaret.style.borderColor = color;
   }
 
   /**

@@ -1,4 +1,4 @@
-import {create} from 'jsondiffpatch';
+import {create, formatters} from 'jsondiffpatch';
 import 'jsondiffpatch/dist/formatters-styles/html.css';
 
 export async function jsonPreview(json, options) {
@@ -26,8 +26,8 @@ export async function jsonDiff(a, b, opt) {
   const delta = instance.diff(a, b);
 
   if (opt.toHTML) {
-    instance.formatters.html.hideUnchanged();
-    return instance.formatters.html.format(delta, a);
+    formatters.html.hideUnchanged();
+    return formatters.html.format(delta, a);
   }
   return delta;
 }

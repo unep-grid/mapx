@@ -169,7 +169,7 @@ export function modal(o) {
 
   h.draggable({
     selector: elModal,
-    debounceTime: 10,
+    debounceTime: 2000,
     onStart: () => {
       h.closeSelectizeGroupById(id);
     }

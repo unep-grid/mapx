@@ -105,7 +105,7 @@ class ButtonPanel {
             `button-panel--${panel.opt.position}`,
             'hint',
             `hint--${panel.opt.tooltip_position}`,
-            'buttin-panel--sahdow'
+            'button-panel--shadow'
           ],
           dataset: {
             lang_key: panel.opt.button_lang_key,
@@ -132,7 +132,7 @@ class ButtonPanel {
          * Where the content will appear
          */
         (panel.elPanelContent = el('div', {
-          class: ['button-panel--item-content','shadow','button-panel--shadow']
+          class: ['button-panel--item-content','button-panel--shadow']
         })),
         /**
          * Handles / Buttons

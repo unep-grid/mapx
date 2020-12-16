@@ -46,21 +46,9 @@ function build(enable) {
 
   let title = view.data.title
     ? view.data.title[lang]
-    : 'Undefined'; /**
-  
-  /*
-   * Chrome does not render at all svg produced with 'el';
-   */
-  let elButton = `
-  <svg 
-    class='mx-view-tgl-btn' 
-    viewBox='0 0 30 30' 
-    width='30px' 
-    height='30px' 
-    preserveAspectRatio='xMinYMin meet'>
-       <circle class='mx-view-tgl-btn-out' r=15 cx=15 cy=15></circle>
-       <circle class='mx-view-tgl-btn-in' r=13 cx=15 cy=15></circle>
-  </svg>`;
+    : 'Undefined';
+
+  let elButton = el('div', {class: 'mx-view-tgl-btn'});
 
   let elTitle = el(
     'span',
@@ -134,8 +122,7 @@ function build(enable) {
       class: [
         'mx-view-item',
         'mx-view-item-' + view.type,
-        'noselect',
-        'base_background'
+        'noselect'
       ]
     },
     elInput,

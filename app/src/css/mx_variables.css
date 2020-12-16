@@ -20,5 +20,24 @@
   /**
   * font size
   */
-  --mx_font_size_base: 14px;
+  --mx_ui_font_size_base: 14px;
+
+  /**
+  * Shadow
+  */
+  --mx_ui_box_shadow: 0px 0px 14px 0px var(--mx_ui_shadow);
+
+  /**
+  * Views colors
+  */
+  --mx_ui_view_vt: hsla(118, 100%, 45%, 1);
+  --mx_ui_view_vt_checked: hsla(118, 100%, 64%, 1);
+  --mx_ui_view_rt: hsla(307, 84%, 41%, 1);
+  --mx_ui_view_rt_checked: hsla(307, 84%, 50%, 1);
+  --mx_ui_view_gj: hsla(30, 100%, 50%, 1);
+  --mx_ui_view_gj_checked: hsla(30, 100%, 64%, 1);
+  --mx_ui_view_sm: hsla(216, 42%, 45%, 1);
+  --mx_ui_view_sm_checked: hsla(216, 42%, 65%, 1);
+  --mx_ui_view_cc: hsla(348, 100%, 50%, 1);
+  --mx_ui_view_cc_checked: hsla(348, 100%, 61%, 1);
 }

@@ -11,7 +11,7 @@ body,
   background: #474747;
   padding: 0px;
   margin: 0px;
-  overflow: auto;
+  overflow: hidden;
   position: fixed;
   -webkit-text-size-adjust: 100%;
 }
@@ -264,7 +264,7 @@ blockquote {
 }
 
 .mx-bar-filter .mx-btn-toggle-filter.bottom_tick.active:after {
-  border-top: 5px solid var(--mx_ui_text);
+  border-top: 5px solid var(--mx_ui_background_contrast);
 }
 
 .mx-bar-filter > .mx-btn-toggle-filter:hover span,
@@ -819,7 +819,7 @@ blockquote {
 }
 
 .mx .mx-diff-item {
-  background-color: #e8e8e8;
+  background-color: var(--mx_ui_background_faded);
   border-radius: 5px;
   padding: 10px;
   overflow-x: auto;

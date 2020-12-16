@@ -6163,6 +6163,32 @@
     "de": ""
   },
   {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "fr": "Arrière-plan de contraste",
+    "es": "Contraste de fondo",
+    "ru": "",
+    "zh": "背景对比",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "fr": "Arrière-plan estompé",
+    "es": "Capa de fondo descolorida",
+    "ru": "",
+    "zh": "淡出背景层",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "fr": "Ombrage",

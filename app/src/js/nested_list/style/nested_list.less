@@ -1,160 +1,144 @@
 .li-item {
   width: 100%;
-}
-
-.li-item {
   max-height: 1000px;
   opacity: 1;
   will-change: transform;
+  transition: box-shadow 1s;
+  &:hover {
+    position: relative;
+    z-index: 100;
+  }
 }
-
-.li-item:hover {
-  position: relative;
-  z-index: 100;
-}
-
-.li-item.li-item-hidden,
-.li-group.li-group-collapsed:not(.li-group-invisible) .li-item {
+.li-item.li-item-hidden {
   display: none;
 }
-/*
-* If we display:none nested li-group in li-group-invisible, 
-* li-item will also be display:none. Solution: 
-* - remove border, padding and margin,
-* - hide header.
-*/
-.li-group.li-group-collapsed .li-group {
-  border: none;
-  padding: 0;
-  margin: 0;
-  min-height: 0;
+.li-group.li-group-collapsed {
+  &:not(.li-group-invisible) {
+    .li-item {
+      display: none;
+    }
+  }
+  .li-group {
+    border: none;
+    padding: 0;
+    margin: 0;
+    min-height: 0;
+    .li-group-header {
+      display: none;
+    }
+  }
 }
-.li-group.li-group-collapsed .li-group .li-group-header {
-  display: none;
-}
-
 .li-item-content {
   height: auto;
 }
-
-.li-item,
 .li-group {
   transition: box-shadow 1s;
+  padding: 12px;
+  margin: 5px;
+  border-radius: 10px;
+  &:not(.li-group-collapsed) {
+    min-height: 40px;
+  }
 }
-
-.li-group {
-  padding: 5px;
-  margin: 1px;
-  border-left: 3px solid #333;
-}
-
-.li-group:not(.li-group-collapsed) {
-  min-height: 40px;
-}
-
 .li-group.li-group-invisible {
   padding: 0px;
   margin: 0px;
   border: none;
   min-height: 0px;
+  .li-group-header {
+    display: none;
+  }
 }
-
-.li-group.li-group-invisible .li-group-header {
-  display: none;
-}
-
 .li-group-header {
   font-size: 1em;
   width: 100%;
   display: flex;
   align-items: center;
+  &:hover {
+    .li-group-button {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
 }
 .li-group-label {
   opacity: 0.6;
   font-size: 0.8em;
   margin-left: 5px;
-}
-.li-group-label {
   font-size: 0.8em;
 }
 .li-group-caret {
   margin: 4px;
-  transition: transform 0.2s ease-in-out;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1px solid #ccc;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.li-group-caret:hover {
-  cursor: pointer;
-  transform: scale(1.2);
-}
-.li-group-collapsed .li-group-caret {
+  border: 3px solid var(--mx_ui_border);
+  transition: border 100ms ease-in-out, transform 100ms ease-in-out;
+  border-radius: 50%;
   transform: rotate(-90deg);
+  &:hover {
+    border-width: px;
+    cursor: pointer;
+  }
 }
-.li-group-collapsed .li-group-caret:hover {
-  transform: rotate(-90deg) scale(1.5);
-}
-
-.li-group-button span {
-}
-
-.li-group-header:hover .li-group-button {
-  opacity: 1;
-  pointer-events: auto;
+.li-group:not(.li-group-collapsed) {
+  .li-group-caret {
+    border-width: 5px;
+    transform: rotate(0deg);
+  }
 }
 
 .li-drag-handle {
   cursor: grab;
   position: relative;
 }
+.li-group-title {
+  margin-left: 15px;
+}
 .li-dragged {
   opacity: 1;
   z-index: 1;
+  > * {
+    opacity: 0.2;
+  }
 }
-.li-dragged > * {
-  opacity: 0.2;
-}
-
 .li-global-dragging {
   cursor: grabbing !important;
+  * {
+    &:not(.li-keep-enable-drop) {
+      pointer-events: none !important;
+    }
+  }
+  .li-draggable {
+    pointer-events: auto !important;
+  }
 }
-.li-global-dragging *:not(.li-keep-enable-drop) {
-  pointer-events: none !important;
-}
-.li-global-dragging .li-draggable {
-  pointer-events: auto !important;
-}
-
 .li-context-menu {
   z-index: 1000;
   padding: 5px;
   width: 300px;
   min-height: 40px;
-  border-radius: 3px;
+  border-radius: 10px;
   box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.38);
   background: #eee;
 }
-
 .li-context-menu-target-focus {
   position: relative;
   z-index: 100;
   box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.38);
 }
-
 .li-context-menu-item {
   min-height: 40px;
   width: 100%;
 }
 .li-context-menu-group {
   width: 100%;
-}
-.li-context-menu-group > * {
-  border-bottom: 1px solid #ddd;
-  padding-bottom: 2px;
+  > * {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px;
+  }
 }
 .li-context-menu-header {
   display: block;
@@ -171,10 +155,9 @@
   background: #eee;
   line-height: 1.6em;
   cursor: pointer;
-}
-
-.li-context-menu-button:hover {
-  background: #fff;
+  &:hover {
+    background: #fff;
+  }
 }
 .li-context-menu-input-group {
   display: flex;
@@ -182,7 +165,6 @@
   align-items: center;
   justify-content: space-between;
 }
-
 .li-context-menu-input {
   border: 1px solid #ccc;
   border-radius: 3px;
@@ -192,8 +174,9 @@
   margin-left: 5px;
   max-width: 50%;
 }
-
-.li-arrow-bottom:before {
-  icon-font: url(./svg/arrow_bottom.svg);
-  font-size: 0.6em;
+.li-arrow-bottom {
+  &:before {
+    icon-font: url(./svg/arrow_bottom.svg);
+    font-size: 0.6em;
+  }
 }
