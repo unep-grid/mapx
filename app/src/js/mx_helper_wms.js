@@ -44,7 +44,7 @@ async function wmsBuildQueryUi(opt) {
   const elSelectServicesGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_select_reviewed_service')),
+    el('label', await tt('wms_select_reviewed_service')),
     el('div', elSelectServices)
   );
 
@@ -57,17 +57,17 @@ async function wmsBuildQueryUi(opt) {
     }
   });
 
-  const elButtonGetLayers = el('button', tt('wms_btn_get_layers'), {
+  const elButtonGetLayers = el('button',{
     class: ['btn', 'btn-default'],
     on: {
       click: getLayers
     }
-  });
+  },await tt('wms_btn_get_layers'));
 
   const elInputServiceGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_input_service_url')),
+    el('label', await tt('wms_input_service_url')),
     el(
       'div',
       {
@@ -84,7 +84,7 @@ async function wmsBuildQueryUi(opt) {
     )
   );
 
-  const elButtonUpdate = el('button', tt('wms_btn_generate_url'), {
+  const elButtonUpdate = el('button', await tt('wms_btn_generate_url'), {
     class: ['btn', 'btn-default'],
     on: {
       click: updateInput
@@ -94,7 +94,7 @@ async function wmsBuildQueryUi(opt) {
   const elInputLayerGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_select_layer')),
+    el('label', await tt('wms_select_layer')),
     elSelectLayer,
     elButtonUpdate
   );
