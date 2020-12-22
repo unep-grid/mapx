@@ -63,12 +63,7 @@ classes AS (
   FROM bins b, attr_min amin, attr_max amax, attr_bin_max abinmax
 ),
 bin_vmin_count AS (
-  SELECT
-  CASE
-    WHEN count(a.from) = 1
-    THEN TRUE
-    ELSE FALSE
-  END AS bin_vmin_unique
+  SELECT count(a.from) = 1 AS bin_vmin_unique
   FROM classes a, attr_min amin
   WHERE a.from = amin.min
 ),
@@ -85,7 +80,7 @@ freqtable AS (
       WHEN b.from = b.to
       THEN
         a."{{idAttr}}" = b.from AND a."{{idAttr}}" = b.to
-      WHEN b.from < b.to AND b.from = amin.min AND bvminc.bin_vmin_unique 
+      WHEN b.from < b.to AND b.from = amin.min AND bvminc.bin_vmin_unique
       THEN 
         a."{{idAttr}}" >= b.from AND a."{{idAttr}}" <= b.to
       ELSE
