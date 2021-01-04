@@ -473,6 +473,9 @@ span.mx-badge-role {
 }
 
 .mx .panel-default > .panel-heading {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
   background-color: var(--mx_ui_background_faded);
   border-color: var(--mx_ui_border);
 }

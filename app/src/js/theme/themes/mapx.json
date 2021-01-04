@@ -3,7 +3,7 @@
   "description": {
     "en": "White and dark gray."
   },
-  "mode":"light",
+  "mode": "light",
   "author": "F.Moser",
   "colors": {
     "mx_ui_text": {
@@ -32,11 +32,11 @@
     },
     "mx_ui_background_faded": {
       "visibility": "visible",
-      "color": "rgb(232,232,232)"
+      "color": "rgb(250,250,250)"
     },
     "mx_ui_background_contrast": {
       "visibility": "visible",
-      "color": "rgba(243,243,243,1)"
+      "color": "rgb(245,245,245)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",
