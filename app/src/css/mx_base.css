@@ -715,11 +715,23 @@ blockquote {
 }
 
 .btn-circle-medium {
-  font-size: 12px;
   width: 45px;
   margin-right: 5px;
   margin-bottom: 5px;
   height: 45px;
+}
+
+@media (max-width: 800px), (max-height: 700px){
+  .btn-circle-medium{
+    width: 40px;
+    height: 25px;
+    margin-right: 0px;
+    margin-bottom: 3px;
+    border-radius: 10px;
+  }
+  .mx-controls-top .mx-controls-ul li {
+    font-size: 10px;
+  }
 }
 
 .btn-circle-small {
@@ -729,6 +741,7 @@ blockquote {
   margin-bottom: 0px;
   font-size: 10px;
 }
+
 .btn-map-nav {
   width: 25px;
   height: 25px;

@@ -1,3 +1,4 @@
+
 .button-panel--main {
   z-index: 500;
   pointer-events: none;
@@ -26,9 +27,6 @@
       .button-panel--handles {
         display: block;
       }
-     /* .button-panel--btn {*/
-        /*opacity: 0.;*/
-      /*}*/
     }
     &.button-panel--container-animate {
       transition: width 500ms ease-in-out, height 500ms ease-in-out;
@@ -200,6 +198,29 @@
     }
   }
 }
+
+/* responsive */
+@media (max-width: 800px), (max-height: 700px){
+  .button-panel--main {
+    left: 0px;
+    bottom: 0px;
+    top: 0px;
+    right: 0px;
+    .button-panel--container {
+      margin:0px;
+      .button-panel--btn {
+        height:30px;
+        width:30px;
+        margin:5px;
+        .button-panel--btn-icon {
+          font-size: 15px;
+          line-height: 30px;
+        }
+      }
+    }
+  }
+}
+
 
 /* Modifiers */
 
