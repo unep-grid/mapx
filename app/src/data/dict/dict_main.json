@@ -1743,6 +1743,19 @@
     "de": ""
   },
   {
+    "id": "btn_3d_terrain",
+    "en": "Add 3d terrain",
+    "fr": "Ajouter le relief en 3D",
+    "es": "Añade relieve en 3D",
+    "ru": "",
+    "zh": "添加3D浮雕",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_toggle_all",
     "en": "Immersive mode",
     "fr": "Mode immersif",

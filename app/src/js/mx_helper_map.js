@@ -1006,7 +1006,7 @@ export async function initMapxStatic(o) {
     elContainer: document.body,
     panelFull: true,
     position: 'top-left',
-    tooltip_position : 'right',
+    tooltip_position: 'right',
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
@@ -1186,8 +1186,6 @@ export async function initMapxApp(o) {
 
   h.cleanTemporaryQueryParameters();
 }
-
-
 
 /**
  * Handle click event
@@ -2270,8 +2268,8 @@ export async function makeNumericSlider(o) {
 
   const summary = await h.getViewSourceSummary(view);
 
-  let min = h.path(summary, 'attribute_stat.min',0);
-  let max = h.path(summary, 'attribute_stat.max',min);
+  let min = h.path(summary, 'attribute_stat.min', 0);
+  let max = h.path(summary, 'attribute_stat.max', min);
 
   if (view && min !== null && max !== null) {
     if (min === max) {
@@ -5137,13 +5135,14 @@ export function btnToggleLayer(o) {
 
   o.action = o.action || 'toggle';
   const isAerial = o.idLayer === 'here_aerial'; // hide also shades...
+  const isTerrain = o.idLayer === 'terrain_sky'; // hide shade + show terrain...
   const toShow = o.action === 'show';
   const toHide = o.action === 'hide';
   const isVisible = lay.visibility === 'visible';
   const toToggle =
     o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
 
-  if (isAerial) {
+  if (isAerial || isTerrain) {
     shades = h.getLayerNamesByPrefix({id: o.id, prefix: 'hillshading'});
     bathy = h.getLayerNamesByPrefix({id: o.id, prefix: 'bathymetry'});
   }
@@ -5151,26 +5150,35 @@ export function btnToggleLayer(o) {
   if (toToggle) {
     if (isVisible) {
       map.setLayoutProperty(o.idLayer, 'visibility', 'none');
+
       if (isAerial) {
-        shades.forEach(function(s) {
+        shades.forEach((s) => {
           map.setLayoutProperty(s, 'visibility', 'visible');
         });
-        bathy.forEach(function(s) {
+        bathy.forEach((s) => {
           map.setLayoutProperty(s, 'visibility', 'visible');
         });
       }
+
+      if (isTerrain) {
+        map.setTerrain(null);
+      }
+
       if (btn) {
         btn.classList.remove('active');
       }
     } else {
       map.setLayoutProperty(o.idLayer, 'visibility', 'visible');
       if (isAerial) {
-        shades.forEach(function(s) {
+        shades.forEach((s) => {
           map.setLayoutProperty(s, 'visibility', 'none');
         });
-        bathy.forEach(function(s) {
+        bathy.forEach((s) => {
           map.setLayoutProperty(s, 'visibility', 'none');
         });
+      }
+      if (isTerrain) {
+        map.setTerrain({source: 'mapbox_dem', exaggeration: 1.5});
       }
       if (btn) {
         btn.classList.add('active');

@@ -8,6 +8,12 @@
       "type": "vector",
       "url": "mapbox://mapbox.mapbox-terrain-v2,mapbox.mapbox-streets-v8,helsinki.drcnsbpx,helsinki.2pni6w09"
     },
+    "mapbox_dem": {
+      "type": "raster-dem",
+      "url": "mapbox://mapbox.mapbox-terrain-dem-v1",
+      "tileSize": 512,
+      "maxzoom": 14
+    },
     "here_aerial": {
       "type": "raster",
       "tiles": [
@@ -25,6 +31,18 @@
       },
       "paint": {
         "background-color": "#ccc"
+      }
+    },
+    {
+      "id": "terrain_sky",
+      "type": "sky",
+      "layout": {
+        "visibility": "none"
+      },
+      "paint": {
+        "sky-type": "atmosphere",
+        "sky-atmosphere-sun": [0.0, 0.0],
+        "sky-atmosphere-sun-intensity": 5
       }
     },
     {
@@ -193,12 +211,22 @@
       "source": "mapbox_composite",
       "source-layer": "bathymetry",
       "filter": ["all", ["==", ["geometry-type"], "Polygon"]],
-      "minzoom":3,
+      "minzoom": 3,
       "layout": {
         "visibility": "visible"
       },
       "paint": {
-        "fill-opacity": ["interpolate", ["linear"], ["zoom"], 3, 0.001, 4, 0.1, 7, 1],
+        "fill-opacity": [
+          "interpolate",
+          ["linear"],
+          ["zoom"],
+          3,
+          0.001,
+          4,
+          0.1,
+          7,
+          1
+        ],
         "fill-outline-color": "hsla(0, 0%, 0%, 0)",
         "fill-color": [
           "interpolate",
@@ -1791,7 +1819,7 @@
         ],
         "text-offset": [0, 0],
         "text-radial-offset": 0,
-        "symbol-sort-key": ["-",1,["coalesce",["get","pop2020"],0]],
+        "symbol-sort-key": ["-", 1, ["coalesce", ["get", "pop2020"], 0]],
         "text-field": ["coalesce", ["get", "name_en"], ["get", "name"]],
         "text-font": [
           "match",

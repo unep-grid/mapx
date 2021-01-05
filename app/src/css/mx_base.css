@@ -323,6 +323,9 @@ blockquote {
 .mx-north-arrow:before {
   icon-font: url('../svg/arrow-north.svg');
 }
+.mx-mountain:before {
+  icon-font: url('../svg/mountain.svg');
+}
 .mx-edit-vector:before {
   icon-font: url('../svg/edit-vector.svg');
 }

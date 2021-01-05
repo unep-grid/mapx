@@ -27,17 +27,19 @@ mapControlLiveCoord.prototype.onRemove = function() {
 export function mapxLogo() {}
 mapxLogo.prototype.onAdd = function() {
   const h = mx.helpers;
-  var elLogo = h.el('a', {
-    href: h.path(mx, 'settings.links.mainProjectPage'),
-    class: 'mx-logo',
-    target : '_blank',
-    rel:'noreferrer',
-    style: {
-      backgroundImage: `url(${require('../svg/map-x-logo-full.svg')})`,
-      fontSize:'0em'
-    }
-  },
-  'Main project page' 
+  var elLogo = h.el(
+    'a',
+    {
+      href: h.path(mx, 'settings.links.mainProjectPage'),
+      class: 'mx-logo',
+      target: '_blank',
+      rel: 'noreferrer',
+      style: {
+        backgroundImage: `url(${require('../svg/map-x-logo-full.svg')})`,
+        fontSize: '0em'
+      }
+    },
+    'Main project page'
   );
   this._container = h.el('div');
   this._container.className = 'mapboxgl-ctrl';
@@ -185,10 +187,22 @@ mapControlApp.prototype.onAdd = function(map) {
         mx.theme.toggleDarkMode();
       }
     },
+    btn3dTerrain: {
+      classes: ['mx-mountain'],
+      key: 'btn_3d_terrain',
+      action: ()=>{
+        h.btnToggleLayer({
+          id: 'map_main',
+          idLayer: 'terrain_sky',
+          idSwitch: 'btn3dTerrain',
+          action: 'toggle'
+        });
+      }
+    },
     btnThemeAerial: {
       classes: ['fa', 'fa-plane'],
       key: 'btn_theme_sat',
-      action: function() {
+      action: ()=>{
         h.btnToggleLayer({
           id: 'map_main',
           idLayer: 'here_aerial',
