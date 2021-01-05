@@ -3,6 +3,8 @@
 mkdir -p _shared/userdata
 mkdir -p _shared/download
 mkdir -p _shared/geoserver
+mkdir -p _shared/postgres
+
 echo "1. './_shared' directory and subdirectories created (only if missing)..."
 
 if [ ! -f mapx.dev.env ]

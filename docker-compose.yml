@@ -87,7 +87,7 @@ services:
       - "traefik.http.routers.geoserver.port=8080"
   pg:
     env_file: mapx.dev.env
-    image: mdillon/postgis:10-alpine
+    image: postgis/postgis:13-3.1-alpine
     restart: always
     hostname: pg
     volumes:
