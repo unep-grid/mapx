@@ -1,6 +1,6 @@
 
 .button-panel--main {
-  z-index: 500;
+  z-index: 1000;
   pointer-events: none;
   position: absolute;
   left: 10px;
@@ -100,6 +100,15 @@
         overflow: auto;
         border-radius: 10px;
         background: var(--mx_ui_background);
+      }
+      .button-panel--item-content:empty:after {
+        content: attr(data-empty_title);
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 1.4em;
+        opacity: 0.2;
+        margin-top: 50px;
       }
       .button-panel--item-handles {
         z-index: 10;

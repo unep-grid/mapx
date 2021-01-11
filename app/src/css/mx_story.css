@@ -211,17 +211,27 @@
   top: 33%;
 }
 
-.mx-story-step-bullets {
+.mx-story-step-bullets-container {
+  z-index: 500;
   position: fixed;
-  bottom: 0;
   margin-top: 30px;
-  z-index: 1000;
-  pointer-events: none;
   padding: 10px;
-  display: inline;
+  pointer-events: none;
+  bottom: 0;
+  display:flex;
+  width:100%;
+  overflow:visible;
+  justify-content:center;
+}
+
+
+.mx-story-step-bullets {
+  pointer-events: none;
+  display: flex;
+  flex-direction:row;
   white-space: nowrap;
   transform: translateX(0px); /* will change */
-  transition: 100ms transform ease-in-out, 500ms opacity ease-in-out;
+  transition: 500ms transform ease-in-out, 500ms opacity ease-in-out;
 }
 
 .mx-story-step-bullet{

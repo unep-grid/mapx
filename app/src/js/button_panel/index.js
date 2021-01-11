@@ -286,6 +286,7 @@ class ButtonPanel {
     txt = txt || this.opt.button_text;
     txtResolve(txt).then((t) => {
       this.elBtnPanel.setAttribute('aria-label', t);
+      this.elPanelContent.dataset.empty_title = t;
     });
   }
 

@@ -290,8 +290,13 @@ function initMouseMoveListener(o) {
     var timer;
     var destroyed = false;
     var elBody = document.body;
-    var elsCtrls = o.data.elMap.querySelectorAll(
-      '.mx-story-step-bullets, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right, .mapboxgl-ctrl-top-right'
+    var elsCtrls = o.data.elMap.querySelectorAll(`
+      .mx-story-step-bullets,
+      .mapboxgl-ctrl-bottom-left,
+      .mapboxgl-ctrl-bottom-right,
+      .mapboxgl-ctrl-top-right
+      `
+      //.button-panel--main : hidden or displayed by user choice
     );
 
     var classOpacitySmooth = 'mx-smooth-opacity';
@@ -493,11 +498,11 @@ function initButtonsListener(o) {
   /**
    * Button Legend
    */
-   o.data.buttonLegend = new ButtonPanel({
+  o.data.buttonLegend = new ButtonPanel({
     elContainer: o.data.elMapContainer,
     panelFull: true,
-    position: 'top-left',
-    tooltip_position : 'right',
+    position: 'bottom-left',
+    tooltip_position: 'right',
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
@@ -512,9 +517,22 @@ function initButtonsListener(o) {
   /**
    * Bullets
    */
-  var elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']});
+  let elBullets;
+  const elBulletsContainer = h.el(
+    'div',
+    {
+      class: ['mx-story-step-bullets-container', 'noselect']
+    },
+    (elBullets = h.el('div', {class: ['mx-story-step-bullets', 'noselect']}))
+  );
+
   o.data.elBullets = elBullets;
-  o.data.elMapControls.appendChild(elBullets);
+  o.data.elBulletsContainer = elBulletsContainer;
+  o.data.elMapControls.appendChild(elBulletsContainer);
+
+  /**
+   * When click, scroll to step
+   */
   mx.listeners.addListener({
     target: elBullets,
     type: 'click',
@@ -729,13 +747,12 @@ export function storyUpdateSlides(o) {
         }
       }
       /**
-      * Update bullet container center
-      */
+       * Update bullet container center
+       */
       const bContWidth = elBullets.getBoundingClientRect().width;
       const bItemWidth = bContWidth / nStep;
-      const dist = bContWidth / 2 - (s+1) * bItemWidth ;
+      const dist = bContWidth / 2 - (s + 1) * bItemWidth;
       elBullets.style.transform = `translateX(${dist}px)`;
-
     }
   });
 }
@@ -1113,6 +1130,11 @@ export function storyController(o) {
         o.data.elBullets.remove();
       } else {
         console.log('no bullets');
+      }
+      if (o.data.elBulletsContainer) {
+        o.data.elBulletsContainer.remove();
+      } else {
+        console.log('no bullets container');
       }
 
       if (o.data.elScroll) {
