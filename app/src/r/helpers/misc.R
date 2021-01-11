@@ -321,23 +321,48 @@ noDataCheck <- function( val = NULL, debug = FALSE ){
 
   noDatas <- config$noData;
 
+
   res = isTRUE(
     is.null(val)
     ) ||
   isTRUE(
-    isTRUE( is.data.frame(val) && nrow(val) == 0 ) ||
-      isTRUE( is.list(val) && (
-          ( length(val) == 0 ) || 
-            ( all(sapply(val, noDataCheck )))
-          )
+    #
+    # data.frame: 
+    #
+    isTRUE(
+      is.data.frame(val) && 
+        # - No row
+        nrow(val) == 0 
+      ) ||
+    #
+    # list, one of:
+    # - length 0 
+    # - all 'noData'
+    #
+    isTRUE(
+      !is.data.frame(val) && 
+        is.list(val) && 
+        (
+          length(val) == 0 || 
+            all(sapply(val, noDataCheck ))
+        )
         ) ||
-    isTRUE( !is.list(val) && is.vector(val) && (
-        length(val) == 0 || 
-          val[[1]] %in% noDatas || 
-          is.na(val[[1]]) || 
-          nchar(val[[1]]) == 0 )
-      )
+    #
+    # vector one of :
+    # - length 0 
+    # - first value is special 'noData' ( other values ignored )
+    # - first value is 'na'
+    # - first value is length 0
+    isTRUE(
+      !is.list(val) && 
+        is.vector(val) && 
+        (
+          length(val) == 0 || 
+            val[[1]] %in% noDatas || 
+            is.na(val[[1]]) || 
+            nchar(val[[1]]) == 0 )
     )
+  )
 
   return(res)
 }

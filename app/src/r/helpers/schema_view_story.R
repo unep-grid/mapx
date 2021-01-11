@@ -90,7 +90,7 @@ mxSchemaViewStory <- function(view,views,language){
         title=tt("map_pitch"),
         type="number",
         minimum=0,
-        maximum=60
+        maximum=80
         ),
       bearing = list(
         title=tt("map_bearing"),
