@@ -126,7 +126,7 @@
 .button-panel--item-content  .mx-view-legend-group {
   padding: 0 10px 10px;
   width: 100%;
-  height: 100%;
+  /*height: 100%;*/
   overflow-y: auto;
   overflow-y:hidden;
 }

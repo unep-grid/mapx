@@ -1019,9 +1019,9 @@ export async function initMapxStatic(o) {
   });
 
   /**
-   *
+   * Update language
    */
-  h.updateLanguage({lang: language});
+  h.updateLanguage(language);
 
   /**
    * Get view and set order

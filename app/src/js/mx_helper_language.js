@@ -1,7 +1,10 @@
 /**
  * Update language : Elements, view list and map
  */
-export async function updateLanguage() {
+export async function updateLanguage(language) {
+  if(language){
+    mx.settings.language = language;
+  }
   const lang = mx.settings.language;
 
   /**
