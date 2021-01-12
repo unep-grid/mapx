@@ -249,13 +249,14 @@ function loadShapefile() {
 
 function loadJsonEditor() {
   return import('json-editor').then(() => {
+
     return Promise.all([
       import('../css/mx_jed.css'),
       import('./mx_extend_jed_position.js'),
       import('./mx_extend_jed_array_confirm_delete'),
       import('./mx_extend_jed_ace.js'),
+      import('./mx_extend_jed_validation.js'),
       import('./mx_extend_jed_table_source_stat_style.js'),
-      //import('./mx_extend_jed_pickolor.js'),
       import('./mx_extend_jed_color_picker.js'),
       /***
        * Global plugin for all editors.

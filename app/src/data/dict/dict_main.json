@@ -8997,6 +8997,19 @@
     "de": ""
   },
   {
+    "id": "schema_title",
+    "en": "Source metadata",
+    "fr": "Métadonnées de la source",
+    "es": "Metadatos de origen",
+    "ru": "",
+    "zh": "源元数据",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "schema_desc",
     "en": "Metadata editor for MapX sources.",
     "fr": "Editeur de métadonnées pour les sources de MapX.",
@@ -9006,19 +9019,6 @@
     "ar": "",
     "fa": "ویرایشگر ابرداده برای منابع MapX",
     "ps": "د MapX سرچینو لپاره د میټا دیټا ایډیټ کوونکی",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "schema_title",
-    "en": "MapX metadata",
-    "fr": "Métadonnées MapX",
-    "es": "Metadatos MapX",
-    "ru": "",
-    "zh": "MapX元数据",
-    "ar": "",
-    "fa": "ابرداده یی MapX",
-    "ps": "د MapX میټاډیټا",
     "bn": "",
     "de": ""
   },
@@ -11278,6 +11278,19 @@
     "es": "Valor requerido",
     "ru": "",
     "zh": "值是必填项",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "fr": "La valeur ne peut être composée que d'espace vide (espace, tab, nouvelle ligne)",
+    "es": "El valor no puede estar compuesto solo por espacios en blanco (espacio, tabulación, salto de línea)",
+    "ru": "",
+    "zh": "该值不能仅由空格（空格，制表符，换行符）组成",
     "ar": "",
     "fa": "",
     "ps": "",

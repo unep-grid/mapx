@@ -41,6 +41,7 @@ export async function jedInit(o) {
         texteditor: {}
       }
     };
+    
   }
 
   var opt_final = {};
@@ -92,13 +93,19 @@ export async function jedInit(o) {
   el.innerHTML = '';
   el.dataset.jed_id = id;
   var editor = new JSONEditor(el, opt_final);
+  jed.editors[id] = editor;
+  if(!jed.helper.translate){
+    /**
+    * Translate not available in custom validator (not binded).. 
+    * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
+    */
+    jed.helper.translate = editor.translate; 
+  }
 
   /**
    * Test for readyness
    */
   editor.on('ready', async function() {
-    jed.editors[id] = editor;
-
     /**
      * Auto save draft
      */
