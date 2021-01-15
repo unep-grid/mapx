@@ -210,7 +210,7 @@ config[["dictionaries"]] <- list(
   main = fromJSON(
     file.path(
       config[[c("resources","data")]],"dict","dict_main.json"
-      )
+    )
     ),
   countries = fromJSON(
     file.path(
@@ -218,14 +218,16 @@ config[["dictionaries"]] <- list(
       # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
       #
       config[[c("resources","data")]],"dict","dict_countries.json"
-      )
+    )
     ),
   languages = fromJSON(
     file.path(
       config[[c("resources","data")]],"dict","dict_languages.json"
-      )
     )
   )
+)
+
+
 
 #
 # Update main dictionary 
@@ -322,18 +324,21 @@ config[[c("templates","text","custom_paint_example")]] <- paste(readLines("src/t
 #
 # default languages
 #
+# TODO: Generate language list based on dict_language.json
 config[["languages"]] <- list()
 config[["languages"]][["list"]] <- list(
   "English ( english )" = "en",
-  "Français ( french )" = "fr",
-  "Español ( spanish )" = "es",
-  "Русский ( russian )" = "ru",
-  "中文 ( chinese )" = "zh",
-  "Deutsch ( german )" = "de",
-  "বাংলা  (bengali)" = "bn",
-  "فارسی (Dari/Persian)" = "fa",
-  "پښتو (Pashto)"="ps"
+  "Français ( French )" = "fr",
+  "Español ( Spanish )" = "es",
+  "عربى ( Arabic )" = "ar",
+  "Русский ( Russian )" = "ru",
+  "中文 ( Chinese )" = "zh",
+  "Deutsch ( German )" = "de",
+  "বাংলা   ( Bengali )" = "bn",
+  "فارسی ( Dari/Persian )" = "fa",
+  "پښتو ( Pashto )" = "ps"
   )
+
 config[["languages"]][["codes"]] <- unname(unlist(config[["languages"]][["list"]]))
 
 config[["language"]] <- list(
@@ -393,6 +398,21 @@ config[["countries"]] <- list()
 config[[c("countries","table")]] <- na.omit(
   .get(config,c("dictionaries","countries"))
   )
+
+
+#
+# Buld geo keyword from list. 
+# List key is from 
+#
+config[["m49_geo_keywords"]] <- list(
+  global=list("WLD"),
+  region=as.list(fromJSON('src/data/dict/dict_m49_regions.json')$id),
+  intermediate_region=as.list(fromJSON('src/data/dict/dict_m49_intermediate_regions.json')$id),
+  sub_region=as.list(fromJSON('src/data/dict/dict_m49_subregions.json')$id),
+  other_region=as.list(fromJSON('src/data/dict/dict_m49_custom.json')$id),
+  country=as.list(.get(config, c('countries','table','id'),list()))
+)
+
 
 #
 # Set default no data keys

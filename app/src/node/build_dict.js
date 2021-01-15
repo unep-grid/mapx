@@ -10,16 +10,18 @@ const config = Object.assign(
   {
     dict_dir: '/tmp',
     dict_dir_built: ['/tmp'],
-    dict_files: ['dict_main.json', 'dict_languages.json'],
-    languages: ['en', 'fr', 'es', 'ru', 'zh', 'de', 'bn', 'fa', 'ps'],
+    languages: [],
     language_default: 'en'
   },
   uConfig
 );
 
+const files = fs.readdirSync(path.resolve(config.dict_dir));
 const dict = [];
-config.dict_files.forEach((file) => {
-  dict.push(...readJSON(config.dict_dir, file));
+files.forEach((file) => {
+  if(file.match(/\.json$/)){
+    dict.push(...readJSON(config.dict_dir, file));
+  }
 });
 
 /**
@@ -52,8 +54,9 @@ config.languages.forEach((language) => {
   console.log(`Built dict file for ${language}`);
 });
 
-function readJSON(dir, file) {
+function readJSON(dir,file) {
   let buffer = fs.readFileSync(path.resolve(dir || './', file || ''));
   let data = JSON.parse(buffer);
   return data;
 }
+

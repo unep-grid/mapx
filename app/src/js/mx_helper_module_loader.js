@@ -258,6 +258,7 @@ function loadJsonEditor() {
       import('./mx_extend_jed_validation.js'),
       import('./mx_extend_jed_table_source_stat_style.js'),
       import('./mx_extend_jed_color_picker.js'),
+      import('./mx_extend_jed_selectize.js'),
       /***
        * Global plugin for all editors.
        */

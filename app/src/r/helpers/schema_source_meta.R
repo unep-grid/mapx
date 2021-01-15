@@ -30,8 +30,11 @@ mxSchemaSourceMeta <- function(
   #  
   mxCounter(reset=T)
 
-  t <- function(i=NULL){
-    d(id=i,lang=language,dict=dict,web=F,asChar=T)
+  #
+  # Avoid replicating language when extracting dict item
+  #
+  t <- function(id=NULL){
+    d(id=id,lang=language)
   }
 
   #
@@ -77,14 +80,28 @@ mxSchemaSourceMeta <- function(
               keys = list(
                 title = t("textual_keywords_title"),
                 type = "array",
-                format = "table",
+                uniqueItems = TRUE,
+                format = "select",
                 items = list(
                   type = "string",
                   title = t("textual_keyword_item_title"),
                   minLength = v$sourceKeywords$min
-                  )
+                )
+                ),
+              keys_m49 = list(
+                title = t("textual_keywords_m49_title"),
+                type = "array",
+                #uniqueItems = TRUE,
+                format = "selectizeOptGroup",
+                minLength =  0,
+                options = list(
+                  groupOptions = .get(config,c("m49_geo_keywords"))
+                  ),
+                items = list(
+                  type = "string"
                 )
               )
+            )
             ),
           attributes = list(
             propertyOrder = mxCounter("b"),
@@ -103,7 +120,7 @@ mxSchemaSourceMeta <- function(
               dict = dict,
               maxLength = v$sourceAttributeDesc$max,
               minLength = v$sourceAttributeDesc$min
-              )
+            )
             ),
           attributes_alias = list(
             propertyOrder = mxCounter("b"),
@@ -122,7 +139,7 @@ mxSchemaSourceMeta <- function(
               dict = dict,
               maxLength = v$sourceAttributeAlias$max,
               minLength = v$sourceAttributeAlias$min
-              )
+            )
             ),
           notes = mxSchemaMultiLingualInput(
             language =  language,
@@ -154,13 +171,13 @@ mxSchemaSourceMeta <- function(
                       type = "string",
                       pattern = "[a-z]{2}",
                       default = "en"
-                      )
                     )
                   )
                 )
               )
             )
           )
+        )
         ), 
       temporal = list(
         propertyOrder = mxCounter("a"),
@@ -225,8 +242,8 @@ mxSchemaSourceMeta <- function(
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
                 default = "0001-01-01"
-                )
               )
+            )
             ),
           range = list(
             title = t("temporal_range_title"),
@@ -252,10 +269,10 @@ mxSchemaSourceMeta <- function(
                 format = "date",
                 pattern = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
                 default = "0001-01-01"
-                )
               )
             )
           )
+        )
         ),
       spatial = list(
         propertyOrder = mxCounter("a"),
@@ -280,8 +297,8 @@ mxSchemaSourceMeta <- function(
                 title = t("spatial_srs_desc_url"),
                 type = "string",
                 default = "http://spatialreference.org/ref/epsg/4326/"
-                )
               )
+            )
             ),
           bbox = list(
             title = t("spatial_bbx_title"),
@@ -316,10 +333,10 @@ mxSchemaSourceMeta <- function(
                 minumum = -90,
                 maximum = 90, 
                 default = .get(extent,"lat2") 
-                )
               )
             )
           )
+        )
         ),
       contact = list(
         propertyOrder = mxCounter("a"),
@@ -353,11 +370,11 @@ mxSchemaSourceMeta <- function(
                   title = t("contact_email"),
                   type = "string",
                   minLength = 3
-                  )
                 )
               )
             )
           )
+        )
         ),
       origin = list(
         propertyOrder = mxCounter("a"),
@@ -376,8 +393,8 @@ mxSchemaSourceMeta <- function(
                 title = t("origin_homepage_item_title"),
                 type = "string",
                 format = "uri"
-                )
               )
+            )
             ),
           `source` = list(
             type = "object",
@@ -405,13 +422,13 @@ mxSchemaSourceMeta <- function(
                       title = t("origin_source_url_title"),
                       type = "string",
                       format = "uri"
-                      )
                     )
                   )
                 )
               )
             )
           )
+        )
         ),
       license = list(
         propertyOrder = mxCounter("a"),
@@ -439,11 +456,11 @@ mxSchemaSourceMeta <- function(
                   title = t("license_text"),
                   type="string",
                   format="textarea"
-                  )
                 )
               )
             )
           )
+        )
         ),
       annex = list(
         propertyOrder = mxCounter("a"),
@@ -467,14 +484,14 @@ mxSchemaSourceMeta <- function(
                   title =t("additional_doc_item_url"), 
                   type = "string",
                   format = "uri"
-                  )
                 )
+              )
               ),
             uniqueItems = TRUE)
-          )
-        ) 
-      )
+        )
+      ) 
     )
+  )
 
   if(noAttributes){
     out <- .set(out,c('properties','text','properties','attributes'),NULL)

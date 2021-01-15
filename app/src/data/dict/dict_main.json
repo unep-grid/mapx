@@ -10050,6 +10050,19 @@
     "de": ""
   },
   {
+    "id": "textual_keywords_m49_title",
+    "en": "Geographic M49 Keywords list",
+    "fr": "Liste de mots clés géographiques M49",
+    "es": "Lista de palabras clave geográficas M49",
+    "ru": "Список ключевых слов Geographic M49",
+    "zh": "地理M49关键字列表",
+    "ar": "قائمة الكلمات الرئيسية الجغرافية M49",
+    "fa": "لیست کلمات کلیدی M49 جغرافیایی",
+    "ps": "د جغرافیه M49 کلیدي لیست",
+    "bn": "ভৌগলিক এম 49 কীওয়ার্ডের তালিকা",
+    "de": "Geografische M49-Schlüsselwortliste"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "fr": "Texte",
@@ -10334,6 +10347,19 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords M49",
+    "fr": "Mots clés géographiques M49",
+    "es": "Palabras clave geográficas M49",
+    "ru": "Географические ключевые слова M49",
+    "zh": "地理关键字M49",
+    "ar": "الكلمات الرئيسية الجغرافية M49",
+    "fa": "کلیدواژه های جغرافیایی M49",
+    "ps": "د جغرافیایی کلیمې M49",
+    "bn": "ভৌগলিক কীওয়ার্ড এম 49",
+    "de": "Geografische M49-Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",

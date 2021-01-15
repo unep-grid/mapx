@@ -86,14 +86,15 @@ export function viewToMetaModal(view) {
   view = mx.helpers.getView(id);
   const meta = {};
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
-  const hasSourceMeta = (['rt','vt','cc'].indexOf(view.type) > -1) 
-    && (view._meta || h.path(view,'data.source.meta'));
+  const hasSourceMeta =
+    ['rt', 'vt', 'cc'].indexOf(view.type) > -1 &&
+    (view._meta || h.path(view, 'data.source.meta'));
 
   getViewMetadata(id, true).then((data) => {
     const elContent = el('div');
 
     if (data.meta) {
-      Object.assign(meta,data.meta);
+      Object.assign(meta, data.meta);
     }
     meta.id = id;
 
@@ -144,7 +145,7 @@ export function metaSourceRasterToUi(rasterMeta) {
   rasterMeta = rasterMeta || {};
 
   if (!h.isUrl(rasterMeta.url)) {
-    return el("div");
+    return el('div');
   }
 
   rasterMeta = h.objectToArray(
@@ -162,7 +163,6 @@ export function metaSourceRasterToUi(rasterMeta) {
     stringAsLanguageKey: true,
     urlDefaultLabel: 'Link'
   });
-
 }
 
 function metaViewToUi(meta) {
@@ -229,14 +229,14 @@ export function metaSourceToUi(meta) {
   const oToA = h.objectToArray;
 
   /**
-  * Path to meta object
-  */
+   * Path to meta object
+   */
   const p = function(p, d) {
     return h.path(meta, p, d);
   };
   /**
-  * Label from object path
-  */
+   * Label from object path
+   */
   const lfo = function(o, d, p) {
     return glfo({
       obj: o,
@@ -290,7 +290,7 @@ export function metaSourceToUi(meta) {
       if (!h.isUrl(url)) {
         return;
       }
-      let hostname = (new URL(url)).hostname;
+      let hostname = new URL(url).hostname;
       return el(
         'li',
         el(
@@ -304,13 +304,13 @@ export function metaSourceToUi(meta) {
       );
     })
   );
-const elAnnexesUrl = el(
+  const elAnnexesUrl = el(
     'ul',
     urlAnnexes.map((url) => {
       if (!h.isUrl(url)) {
         return;
       }
-      let hostname = (new URL(url)).hostname;
+      let hostname = new URL(url).hostname;
       return el(
         'li',
         el(
@@ -330,6 +330,11 @@ const elAnnexesUrl = el(
   const elAbstract = el('p', l('text.abstract', '-'));
   const elNotes = el('p', l('text.notes', '-'));
   const elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
+
+  const elKeywordsM49 = el('ul',
+    p('text.keywords.keys_m49', ['-']).map(k =>el('li', h.getDictItem(k)))
+  );
+
   const elLanguages = elAuto(
     'array_string',
     p('text.language.codes', []).map((l) => l.code),
@@ -347,7 +352,10 @@ const elAnnexesUrl = el(
           {
             href: 'mailto:' + c.email
           },
-          el('div', el('span', c.name + (c.function?(' ( ' + c.function + ' ) '):'')))
+          el(
+            'div',
+            el('span', c.name + (c.function ? ' ( ' + c.function + ' ) ' : ''))
+          )
         ),
         el(
           'span',
@@ -364,10 +372,14 @@ const elAnnexesUrl = el(
   });
   const elReleasedAt = elAuto('date', p('temporal.issuance.released_at', null));
   const elModifiedAt = elAuto('date', p('temporal.issuance.modified_at', null));
-  const elIsTimeless = elAuto('boolean', p('temporal.range.is_timeless', null), {
-    booleanValues: ['yes', 'no'],
-    stringAsLanguageKey: true
-  });
+  const elIsTimeless = elAuto(
+    'boolean',
+    p('temporal.range.is_timeless', null),
+    {
+      booleanValues: ['yes', 'no'],
+      stringAsLanguageKey: true
+    }
+  );
   const elStartAt = elAuto('date', p('temporal.range.start_at', null));
 
   const elEndAt = elAuto('date', p('temporal.range.end_at', null));
@@ -381,6 +393,7 @@ const elAnnexesUrl = el(
       abstract: elAbstract,
       notes: elNotes,
       keywords: elKeywords,
+      keywords_m49: elKeywordsM49,
       languages: elLanguages,
       contacts: elContacts,
       homepage: elHomepage,

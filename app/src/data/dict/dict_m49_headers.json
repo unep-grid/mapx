@@ -1,0 +1,67 @@
+[
+  {
+    "id": "global",
+    "en": "Global",
+    "fr": "Global",
+    "es": "Global",
+    "ru": "Глобальный",
+    "zh": "全球",
+    "ar": "عالمي",
+    "fa": "جهانی",
+    "ps": "نړیوال",
+    "bn": "গ্লোবাল",
+    "de": "Global"
+  },
+  {
+    "id": "region",
+    "en": "Region",
+    "fr": "Région",
+    "es": "Región",
+    "ru": "Область",
+    "zh": "地區",
+    "ar": "منطقة",
+    "fa": "منطقه",
+    "ps": "سیمه",
+    "bn": "অঞ্চল",
+    "de": "Region"
+  },
+  {
+    "id": "other_region",
+    "en": "Other region",
+    "fr": "Autre région",
+    "es": "Otra región",
+    "ru": "Другой регион",
+    "zh": "其他地區",
+    "ar": "منطقة أخرى",
+    "fa": "منطقه دیگر",
+    "ps": "بله سیمه",
+    "bn": "অন্যান্য অঞ্চল",
+    "de": "Andere Region"
+  },
+  {
+    "id": "sub_region",
+    "en": "Sub-region",
+    "fr": "Sous-région",
+    "es": "Subregión",
+    "ru": "Субрегион",
+    "zh": "次區域",
+    "ar": "المنطقة الفرعية",
+    "fa": "منطقه فرعی",
+    "ps": "فرعي سیمه",
+    "bn": "উপ-অঞ্চল",
+    "de": "Unterregion"
+  },
+  {
+    "id": "intermediate_region",
+    "en": "Intermediate region",
+    "fr": "Région intermédiaire",
+    "es": "Región intermedia",
+    "ru": "Промежуточный регион",
+    "zh": "中級地區",
+    "ar": "منطقة وسيطة",
+    "fa": "منطقه متوسط",
+    "ps": "منځمهاله سیمه",
+    "bn": "মধ্যবর্তী অঞ্চল",
+    "de": "Zwischenregion"
+  }
+]
