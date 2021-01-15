@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.2-beta' target='_blank'>1.8.2-beta</a>
+    - Bug fixes
+      - Stability and improvement from previous 1.8.* changes 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.1-alpha' target='_blank'>1.8.1-alpha</a>
     - Bug fixes
       - Internal checklist
