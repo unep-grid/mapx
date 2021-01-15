@@ -26,7 +26,7 @@ let settings = {
     state: 'li-state',
     history: 'li-history'
   },
-  colorDefault: '#474747',
+  colorDefault: 'var(--mx_ui_text)',
   maxHistoryLength: 100,
   /*
    * Events

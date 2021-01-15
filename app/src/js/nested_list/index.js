@@ -612,7 +612,7 @@ class NestedList {
       return;
     }
     el.dataset.li_color = color;
-    el.style = `--border_color:${color}`;
+    el.style = `--group_color:${color}`;
   }
 
   /**

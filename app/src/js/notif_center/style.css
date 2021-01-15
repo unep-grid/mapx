@@ -57,10 +57,14 @@
   overflow: auto;
   width: 100%;
 }
+
 .nc-container:empty:after {
-  content: '0 Notification';
+  content: "0 Notification";
   text-align: center;
-  padding: 20px;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .nc-group {

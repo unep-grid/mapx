@@ -499,7 +499,8 @@ function initButtonsListener(o) {
    * Button Legend
    */
   o.data.buttonLegend = new ButtonPanel({
-    elContainer: o.data.elMapContainer,
+    //elContainer: o.data.elMapContainer,
+    elContainer: document.body,
     panelFull: true,
     position: 'bottom-left',
     tooltip_position: 'right',

@@ -250,6 +250,11 @@ observe({
                   )
                 )
 
+              if(viewType=="cc"){
+                uiType <- tagList(
+                  jedOutput("viewSourceMetadata"),
+                )
+              }
               #
               # vector tile specific
               #
@@ -375,7 +380,7 @@ observe({
                       tags$h3("WMS URL helper"),
                       tags$hr(),
                       tags$div(id="wmsGenerator")
-                      )
+                    )
                     ),
                   textAreaInput(
                     inputId = "textRasterTileUrl",
@@ -388,17 +393,18 @@ observe({
                     value = legend 
                     ),
                   jedOutput("viewRasterLegendTitles"),
-                  textAreaInput(
-                    inputId = "textRasterTileUrlMetadata",
-                    label = d("source_raster_tile_url_metadata",language),
-                    value = urlMetadata
-                    ),
-                  textAreaInput(
-                    inputId = "textRasterTileUrlDownload",
-                    label = d("source_raster_tile_url_download",language),
-                    value = urlDownload
-                    )
-                  )
+         #         textAreaInput(
+                    #inputId = "textRasterTileUrlMetadata",
+                    #label = d("source_raster_tile_url_metadata",language),
+                    #value = urlMetadata
+                    #),
+                  #textAreaInput(
+                    #inputId = "textRasterTileUrlDownload",
+                    #label = d("source_raster_tile_url_download",language),
+                    #value = urlDownload
+                    #),
+                  jedOutput("viewSourceMetadata"),
+                )
               }
 
               #
@@ -443,8 +449,8 @@ observe({
                     services = .get(config,c("wms")),
                     selectorParent = '#wmsGenerator',
                     selectorTileInput = '#textRasterTileUrl',
-                    selectorLegendInput = '#textRasterTileLegend',
-                    selectorMetaInput = '#textRasterTileUrlMetadata'
+                    selectorLegendInput = '#textRasterTileLegend'
+                    #selectorMetaInput = '#textRasterTileUrlMetadata'
                     ))
               }
 
@@ -668,6 +674,64 @@ observeEvent(input$viewRasterLegendTitles_init,{
     )
   )
 })
+
+
+#
+# View source metadata, rt, cc, where the source is not
+# stored in mx_sources.
+#
+observeEvent(input$viewSourceMetadata_init,{
+  view <- reactData$viewDataEdited
+  language <- reactData$language
+  viewSourceMetadata <- .get(view,c("data","source","meta"))
+
+  schemaMeta <- mxSchemaSourceMeta(
+    language = language,
+    noAttributes = TRUE
+  )
+
+  #
+  # Auto fill view meta for view < mapx 1.8
+  #
+  if(noDataCheck(viewSourceMetadata)){
+    hasUrlDownload <- !noDataCheck(.get(view,c('data','source','urlDownload')))
+    if(hasUrlDownload){
+      source <- list(
+        urls = list(
+          list(
+            is_download_link = TRUE,
+            url = .get(view,c('data','source','urlDownload'),'')
+          )
+        )
+      )
+    }else{
+      source <- list()
+    }
+    viewSourceMetadata <- list(
+      text = list(
+        title = list("en" = .get(view,c('data','title','en'))),
+        abstract = list("en" = .get(view,c('data','abstract','en')))
+        ),
+      origin = list(
+        homepage = list(
+          url = .get(view,c('data','source','urlMetadata'),'')
+          ),
+        source = source
+      )
+    )
+  }
+
+  jedSchema(
+    id = "viewSourceMetadata",
+    schema = schemaMeta,
+    startVal = viewSourceMetadata,
+    options = list(
+      getValidationOnChange = TRUE,
+      getValuesOnChange = TRUE
+    )
+  )
+})
+
 #
 # View removal
 #
@@ -759,11 +823,24 @@ observe({
     hasAbstractIssues <- !noDataCheck( .get(abstractIssues, c("data")) )
 
     if( view[["type"]] == "rt" ){
+      #
+      # Issue with raster legend
+      #
       legendTitlesIssues <- input$viewRasterLegendTitles_issues
       hasLegendTitlesIssues <- !noDataCheck( .get(legendTitlesIssues, c("data")) )
     }else{
       hasLegendTitlesIssues <- FALSE 
     }
+    if( view[["type"]] %in% c("cc","rt") ){
+      #
+      # Issue with view metadata
+      #
+      viewSourceMetadataIssues <- input$viewSourceMetadata_issues
+      hasViewMetadataIssues <- !noDataCheck( .get(viewSourceMetadataIssues, c("data")) )
+    }else{
+      hasViewMetadataIssues <- FALSE 
+    }
+
 
     errors <- c(
       errors,
@@ -771,7 +848,8 @@ observe({
       hasAbstractIssues,
       hasNoSchemaTitle,
       hasNoSchemaAbstract,
-      hasLegendTitlesIssues
+      hasLegendTitlesIssues,
+      hasViewMetadataIssues
       )
 
     disabled =  any(sapply(errors,isTRUE))
@@ -905,12 +983,20 @@ observeEvent(input$btnViewSave,{
         type = "raster",
         tiles =  rep(input$textRasterTileUrl,2),
         legend = input$textRasterTileLegend,
-        urlMetadata = input$textRasterTileUrlMetadata,
-        urlDownload = input$textRasterTileUrlDownload,
+        #urlMetadata = input$textRasterTileUrlMetadata,
+        #urlDownload = input$textRasterTileUrlDownload,
         tileSize = as.integer(input$selectRasterTileSize)
         )
 
        view[[c("data","source","legendTitles")]] <- input$viewRasterLegendTitles_values$data
+    }
+
+    #
+    # View metadata : rt and cc
+    # 
+    if( view[["type"]] %in%  c("rt","cc") ){
+      viewSourceMetadata <- .get(input,c('viewSourceMetadata_values','data'))
+      view <- .set(view,c('data','source','meta'),viewSourceMetadata)
     }
 
     #
@@ -919,7 +1005,7 @@ observeEvent(input$btnViewSave,{
     mxDbAddRow(
       data=view,
       table=.get(config,c("pg","tables","views"))
-      )
+    )
 
     # edit flag
     view$`_edit` = TRUE 

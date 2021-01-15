@@ -1,6 +1,22 @@
-
-
-mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list(), title="", abstract="", notes="" ){
+#' Produce a MapX JSON schema for sources metadata
+#' 
+#' @param language {Character} Two letter language code
+#' @param attributesNames {Character} Vector of attribute names. Used to generate attribute and attribute_alias translation schema. 
+#' @param extent {List} Default extent
+#' @param title {Character} Default Title
+#' @param abstract {Character} Default abstract
+#' @param notes {Character} Default notes
+#' @param noAttributes {Logical} Do not output schema for attributes and attributes alias.
+#' @return Ready to parse JSON schema
+mxSchemaSourceMeta <- function(
+  language = NULL,
+  attributesNames = c(),
+  extent = list(),
+  title = "",
+  abstract = "",
+  notes = "",
+  noAttributes = FALSE
+  ){
 
   #
   # 
@@ -460,6 +476,10 @@ mxSchemaSourceMeta <- function(language=NULL, attributesNames=c(), extent=list()
       )
     )
 
+  if(noAttributes){
+    out <- .set(out,c('properties','text','properties','attributes'),NULL)
+    out <- .set(out,c('properties','text','properties','attributes_alias'),NULL)
+  }
 
   return(out)
 }

@@ -9,7 +9,6 @@ export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
  * @param {Array} opt.services Array of default services
  * @param {Sting} opt.selectorTileInput Id of the tile input
  * @param {Sting} opt.selectorLegendInput Id of the legend input
- * @param {Sting} opt.selectorMetaInput Id of the metadata input
  *
  *
  *TODO: event delegation, destroy method
@@ -22,7 +21,6 @@ async function wmsBuildQueryUi(opt) {
   const el = h.el;
   const elInputTiles = document.querySelector(opt.selectorTileInput);
   const elInputLegend = document.querySelector(opt.selectorLegendInput);
-  const elInputMeta = document.querySelector(opt.selectorMetaInput);
   const elParent =
     document.querySelector(opt.selectorParent) || elInputTile.parentElement;
   const services = opt.services;
@@ -30,7 +28,7 @@ async function wmsBuildQueryUi(opt) {
 
   var selectLayer, selectServices;
 
-  if (!elInputTiles || !elInputLegend || !elInputMeta) {
+  if (!elInputTiles || !elInputLegend) {
     return;
   }
 

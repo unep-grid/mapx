@@ -5,8 +5,8 @@
  */
 
 .jed-container .jed-error {
-  border-left: 1px solid red;
   margin-left: 1px;
+  border-left: 1px solid red !important;
 }
 
 .jed-container .table > tbody > tr > td,
@@ -63,6 +63,7 @@
   padding: 10px 5px 10px 5px;
   border: none;
   box-shadow: none;
+  background-color: rgba(1, 1, 1, 0);
 }
 
 .jed-container .btn.btn-default {
@@ -76,8 +77,11 @@
   padding: 15px;
   max-width: 100%;
   margin-bottom: 20px;
-  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: var(--mx_ui_box_shadow);
 }
+
+
 
 /**
 * Pickr modifier
@@ -92,7 +96,7 @@
   width: 1px;
 }
 .jed-container .color-picker {
-  border: 1px solid #ccc;
+  border: 1px solid var(--mx_ui_border);
   border-radius: 3px;
   padding: 5px;
   cursor: pointer;
@@ -101,3 +105,7 @@
 .jed-container .color-picker > .color-picker-content {
   height: 22px;
 }
+
+
+
+

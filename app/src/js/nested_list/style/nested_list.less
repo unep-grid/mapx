@@ -3,7 +3,8 @@
   max-height: 1000px;
   opacity: 1;
   will-change: transform;
-  transition: box-shadow 1s;
+  border-radius: 10px;
+  margin: 10px;
   &:hover {
     position: relative;
     z-index: 100;
@@ -32,12 +33,12 @@
   height: auto;
 }
 .li-group {
-  transition: box-shadow 1s;
   position: relative;
-  padding: 12px;
-  margin: 5px;
+  padding: 8px;
+  margin: 11px;
   border-radius: 10px;
-  overflow:hidden;
+  overflow: hidden;
+  box-shadow: 1px 1px 4px 1px var(--mx_ui_shadow);
   &:not(.li-group-collapsed) {
     min-height: 40px;
     >.li-group-header >.li-group-caret {
@@ -58,26 +59,27 @@
     justify-content: center;
     transition: transform 100ms ease-in-out;
     transform: rotate(-90deg);
+    border-radius:15px;
+    color: var(--group_color);
     &:hover {
       cursor: pointer;
+      background-color: var(--mx_ui_background_contrast);
+      
     }
   }
 }
 
-.li-group:before {
-  content: ' ';
-  position: absolute;
-  height: 100%;
-  top: 0px;
-  left: 0px;
-  border-left: 4px solid var(--border_color);
-}
 
 .li-group.li-group-invisible {
   padding: 0px;
   margin: 0px;
   border: none;
   min-height: 0px;
+  background: none;
+  box-shadow: none;
+  :before {
+   border:none;
+  }
   .li-group-header {
     display: none;
   }
@@ -130,17 +132,17 @@
 }
 .li-context-menu {
   z-index: 1000;
-  padding: 5px;
+  padding: 15px;
   width: 300px;
   min-height: 40px;
   border-radius: 10px;
-  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.38);
-  background: #eee;
+  box-shadow: var(--mx_ui_box_shadow);
+  background: var(--mx_ui_background);
 }
 .li-context-menu-target-focus {
   position: relative;
   z-index: 100;
-  box-shadow: 0px 0px 14px 0px rgba(0, 0, 0, 0.38);
+  box-shadow: var(--mx_ui_box_shadow);
 }
 .li-context-menu-item {
   min-height: 40px;
@@ -149,14 +151,14 @@
 .li-context-menu-group {
   width: 100%;
   > * {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--mx_ui_border);
     padding-bottom: 2px;
   }
 }
 .li-context-menu-header {
   display: block;
   padding-top: 5px;
-  background: #eee;
+  background: var(--mx_ui_background);
   line-height: 1.6em;
   opacity: 0.7;
   font-size: 0.85em;
@@ -168,8 +170,10 @@
   background: #eee;
   line-height: 1.6em;
   cursor: pointer;
+  background: var(--mx_ui_background);
   &:hover {
     background: #fff;
+    background: var(--mx_ui_background_contrast);
   }
 }
 .li-context-menu-input-group {
@@ -179,7 +183,8 @@
   justify-content: space-between;
 }
 .li-context-menu-input {
-  border: 1px solid #ccc;
+  border: 1px solid var(--mx_ui_border);
+  background: var(--mx_ui_background);
   border-radius: 3px;
   flex-grow: 1;
   background: #fff;
@@ -193,3 +198,5 @@
     font-size: 0.6em;
   }
 }
+
+

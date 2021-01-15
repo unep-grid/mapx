@@ -402,14 +402,9 @@ observeEvent(input$btnSendInviteMessage,{
 #
 observeEvent(reactData$notifyAdminAutoRegister,{
   data <- reactData$notifyAdminAutoRegister
-  #dataProject <- mxDbGetProjectData(data$project)
   emailUser <- data$email
   timeExpire <- data$timeExpire
-
-  projectMembers <- mxDbGetProjectMembers(data$project)$members
-  emailContact <- mxDbGetProjectEmailContact(data$project)
-  emailKnown <- mxDbEmailIsKnown(emailUser)
-  alreadyMember <-  emailKnown && isTRUE(mxDbGetIdFromEmail(emailUser) %in% projectMembers)
+  emailContact <- mxDbGetProjectEmailContact(data$project) 
   languageDest <- mxDbGetUserLanguage(emailContact)
   projectTitle <- mxDbGetProjectTitle(data$project,languageDest)
   urlProject <- mxGetProjectUrl(data$project)
@@ -420,9 +415,7 @@ observeEvent(reactData$notifyAdminAutoRegister,{
   content <- mxParseTemplateDict('project_invite_notify_auto_register_email',languageDest,list(
       project = tags$a(href=urlProject,projectTitle),
       emailUser = emailUser,
-      timeExpire = timeExpire,
-      previouslyMember= alreadyMember,
-      previouslyMapxUser = emailKnown
+      timeExpire = timeExpire
       ))
 
   subject <- mxParseTemplateDict('project_invite_notify_auto_register_email_subject', languageDest

@@ -40,7 +40,7 @@
     },
     "mx_ui_shadow": {
       "visibility": "visible",
-      "color": "rgba(28,28,28,0.7)"
+      "color": "rgba(28,28,28,0.2)"
     },
     "mx_map_background": {
       "visibility": "visible",

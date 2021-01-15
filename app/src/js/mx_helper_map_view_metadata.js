@@ -86,6 +86,8 @@ export function viewToMetaModal(view) {
   view = mx.helpers.getView(id);
   const meta = {};
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
+  const hasSourceMeta = (['rt','vt','cc'].indexOf(view.type) > -1) 
+    && (view._meta || h.path(view,'data.source.meta'));
 
   getViewMetadata(id, true).then((data) => {
     const elContent = el('div');
@@ -110,8 +112,8 @@ export function viewToMetaModal(view) {
       }
     }
 
-    if ( view.type === 'vt' && view._meta) {
-      const sourceMeta = view._meta;
+    if (hasSourceMeta) {
+      const sourceMeta = view._meta || view.data.source.meta;
       const elSourceMeta = metaSourceToUi(sourceMeta);
       if (elSourceMeta) {
         elContent.appendChild(elSourceMeta);

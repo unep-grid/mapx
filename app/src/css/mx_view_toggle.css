@@ -59,6 +59,16 @@
   position: relative;
 }
 
+.mx-views-list:empty:after {
+  content: '0 views';
+  text-align: center;
+  padding: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5em;
+}
+
 .mx-views-footer {
   min-height: 30px;
 }
@@ -69,10 +79,18 @@
   position: relative;
   width: 100%;
   z-index: 3;
-  transition: transform 0.2s ease-in-out;
+  /*transition: background 0.2s ease-in-out;*/
   display: flex;
   flex-direction: column;
+  border-radius: 10px;
+  padding: 5px;
+  max-width: calc(100% - 20px);
+  box-shadow: var(--mx_ui_box_shadow);
 }
+
+/*.mx-view-item:hover {*/
+  /*background-color: var(--mx_ui_background_contrast);*/
+/*}*/
 
 .mx-view-item-empty {
   text-align: center;
@@ -80,12 +98,12 @@
   font-size: 1.1em;
 }
 
-.mx-view-item:after {
-  content: '';
-  margin-left: 20px;
-  margin-right: 20px;
-  border-bottom: 1px solid #ccc;
-}
+/*.mx-view-item:after {*/
+  /*content: '';*/
+  /*margin-left: 20px;*/
+  /*margin-right: 20px;*/
+  /*border-bottom: 1px solid #ccc;*/
+/*}*/
 
 .mx-view-item.mx-filter-text,
 .mx-view-item.mx-filter-class,
@@ -110,23 +128,20 @@
 
 .mx-view-item-desc-container {
   display: flex;
+  margin-top: 20px;
 }
 
 .mx-view-item-desc {
-  font-style: italic;
-  font-size: 0.9em;
-  padding: 17px;
-  margin: 0px;
-  hyphens: auto;
+  padding: 10px;
+  font-size: .9em;
+  padding: 10px;
+  text-align: justify;
   max-height: 220px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  column-count: 2;
-  column-width: 160px;
-  column-count: auto;
-  column-rule: 1px solid #ccc;
-  column-gap: 10px;
-  width: calc(100% - 10px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  border-top: 1px solid var(--mx_ui_border);
+  border-bottom: 1px solid var(--mx_ui_border);
 }
 
 .mx-view-item-index,
@@ -145,10 +160,9 @@
 
 .mx-view-tgl-content {
   position: relative;
-  width: 100%;
   z-index: 0;
-  margin: 0px;
-  padding: 15px;
+  margin: 5px;
+  padding: 10px;
   display: flex;
   align-items: center;
   flex-direction: row;
@@ -157,9 +171,6 @@
   cursor: pointer;
 }
 
-.mx-view-tgl-content:hover {
-  background-color: var(--mx_ui_background_contrast);
-}
 
 .mx-view-tgl-title {
   font-weight: 400;

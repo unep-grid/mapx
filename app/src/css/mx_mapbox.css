@@ -6,6 +6,7 @@
 }
 .mx .mapboxgl-popup {
   max-width: 440px !important;
+  z-index: 2000;
   /**
   * see .mx-popup-container
   */
