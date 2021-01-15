@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.3-beta' target='_blank'>1.8.3-beta</a>
+    - New feature
+      - APP
+        - Added for M49 official geographic keywords in the source metadata editor. This will be improved in the future.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.2-beta' target='_blank'>1.8.2-beta</a>
     - Bug fixes
       - Stability and improvement from previous 1.8.* changes 
