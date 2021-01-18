@@ -315,6 +315,8 @@ class ButtonPanel {
     }
 
     e.preventDefault();
+    panel.elContainer.classList.add('button-panel--container-resize');
+
     panel._resize = {
       rect: panel.elPanel.getBoundingClientRect(),
       x: e.clientX,
@@ -329,6 +331,7 @@ class ButtonPanel {
       callback: () => {
         panel.ls.removeListenerByGroup('resize');
         panel._rect = null;
+        panel.elContainer.classList.remove('button-panel--container-resize');
       },
       group: 'resize',
       type: ['mouseup', 'mouseleave', 'contextmenu', 'dblclik']
@@ -349,7 +352,6 @@ class ButtonPanel {
     const panel = this;
     const orig = panel._resize;
     const a = posCornerResolver(orig.position, orig.corner);
-
     if (a.w_allow) {
       const dW = orig.x - e.clientX;
       const newW = orig.rect.width + (a.w_dir ? -dW : dW);
@@ -369,6 +371,7 @@ class ButtonPanel {
   resizeAuto(type) {
     const panel = this;
     panel.elContainer.classList.add('button-panel--container-animate');
+    panel.elContainer.classList.add('button-panel--container-resize');
 
     /**
      * Remove animate class according to
@@ -376,6 +379,7 @@ class ButtonPanel {
      */
     setTimeout(() => {
       panel.elContainer.classList.remove('button-panel--container-animate');
+      panel.elContainer.classList.remove('button-panel--container-resize');
     }, 500);
 
     /**
