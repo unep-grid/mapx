@@ -10,6 +10,9 @@ import './less/mx_panel.less';
  */
 
 const settings = {
+  mapx: {
+    version: ''
+  },
   panel: {
     elContainer: document.body,
     position: 'top-left',
@@ -54,15 +57,21 @@ class MainPanel {
     );
     this.panel = new ButtonPanel(this.opt.panel);
     this.panel.elPanelContent.appendChild(this.elContent);
-  
-    if(hasShiny){
+
+    if (hasShiny) {
       Shiny.bindAll(this.elContent);
     }
+    if (this.opt.mapx.version) {
+      const elVersion = this.elContent.querySelector('.mx-version');
+      if (elVersion) {
+        elVersion.innerText = this.opt.mapx.version;
+      }
+    }
     /**
-   * TODO : implement all dynamic changes E.g. translation, role changes, etc, filters, etc.
-   * here instead of having disconnected function all over the place, mainly in mx_helpers_map
-   */
-     //this.elProjectLabel = document.getElementById('btnShowProjectLabel');*/
+     * TODO : implement all dynamic changes E.g. translation, role changes, etc, filters, etc.
+     * here instead of having disconnected function all over the place, mainly in mx_helpers_map
+     */
+    //this.elProjectLabel = document.getElementById('btnShowProjectLabel');*/
     //this.elProjectLock = document.getElemebtById('btnShowProjectPrivate');
     //this.elLoginLabel = document.getElementById('btnShowLoginLabel');
     //this.elLanguageLabel = document.getElementById('btnShowLanguageLabel');
@@ -70,4 +79,3 @@ class MainPanel {
   }
 }
 export {MainPanel};
-

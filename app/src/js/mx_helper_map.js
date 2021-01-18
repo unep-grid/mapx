@@ -826,6 +826,9 @@ export async function initMapx(o) {
      * Init left panel
      */
     mx.main_panel = new MainPanel({
+      mapx : {
+        version : h.getVersion()
+      },
       panel: {
         elContainer: document.body,
         position: 'top-left',
