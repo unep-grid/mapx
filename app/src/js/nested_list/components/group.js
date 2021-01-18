@@ -36,7 +36,7 @@ class Group {
     group.el = li.el('div', {
       id: group.id,
       class: cl,
-      style: `--border_color: ${opt.color}`,
+      style: `--group_color: ${opt.color}`,
       dataset: {
         li_date : opt.date,
         li_color: opt.color,
