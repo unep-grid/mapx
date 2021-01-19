@@ -3769,20 +3769,7 @@
     "ps": "",
     "bn": "",
     "de": ""
-  },
-  {
-    "id": "schema_style_sprite",
-    "en": "Symbol",
-    "fr": "Symbole",
-    "es": "Símbolo",
-    "ru": "",
-    "zh": "符号",
-    "ar": "",
-    "fa": "سمبول",
-    "ps": "سمبول",
-    "bn": "",
-    "de": ""
-  },
+  }, 
   {
     "id": "schema_story_tips_title",
     "en": "Tips:",
@@ -4339,19 +4326,6 @@
     "ar": "",
     "fa": "متحول اصلی",
     "ps": "اصلي متغیر",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "source_select_variable_alt",
-    "en": "Secondary attributes",
-    "fr": "Attributs secondaires",
-    "es": "Atributos secundarios",
-    "ru": "",
-    "zh": "次要属性",
-    "ar": "",
-    "fa": "",
-    "ps": "",
     "bn": "",
     "de": ""
   },
@@ -5058,7 +5032,7 @@
     "de": ""
   },
   {
-    "id": "view_shared",
+    "id": "view_badge_shared",
     "en": "View shared",
     "fr": "Vue partagée",
     "es": "Vista compartida",
@@ -5402,19 +5376,6 @@
     "es": "",
     "ru": "",
     "zh": "设置仪表板初始布局",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "view_dashboard_txt_layout_horizontal",
-    "en": "Horizontal",
-    "fr": "Horizontal",
-    "es": "",
-    "ru": "",
-    "zh": "水平",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -7489,7 +7450,7 @@
     "de": ""
   },
   {
-    "id": "view_public_valid",
+    "id": "view_badge_public_valid",
     "en": "This view is publicly available",
     "fr": "Cette vue est visible par tous les utilisateurs",
     "es": "Esta vista es visible para todos los usuarios",
@@ -7502,7 +7463,7 @@
     "de": ""
   },
   {
-    "id": "view_public_not_valid",
+    "id": "view_badge_public_not_valid",
     "en": "This view is publicly available \n with incomplete metadata",
     "fr": "Cette vue est visible par tous les utilisateurs \n avec des métadonnées non-valides",
     "es": "Esta vista está disponible para todos los usuarios \n con metadatos incompletos",
@@ -7515,7 +7476,7 @@
     "de": ""
   },
   {
-    "id": "view_editable",
+    "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fr": "Vous disposez de droits d'édition pour cette vue",
     "es": "Tiene derechos de editor en esta vista",
@@ -7528,7 +7489,7 @@
     "de": ""
   },
   {
-    "id": "view_locked",
+    "id": "view_badge_locked",
     "en": "You do not have editor rights",
     "fr": "Vous ne disposez pas de droits d'édition",
     "es": "No tiene derechos de editor",
@@ -7749,7 +7710,7 @@
     "de": ""
   },
   {
-    "id": "validate_meta_title",
+    "id": "validate_meta_modal_title",
     "en": "Metadata validation",
     "fr": "Validation des métadonnées",
     "es": "Validación de los metadatos",
@@ -10063,6 +10024,19 @@
     "de": "Geografische M49-Schlüsselwortliste"
   },
   {
+    "id": "textual_keywords_m49_desc",
+    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
+    "fr": "Pour une recherche spatiale, MapX peut déterminer la relation entre plusieurs entités spatiales, en fonction de leur géométrie, de leur étendue et / ou de leurs attributs. Dans certains cas, il est préférable d'associer un mot-clé géographique à la source, pour améliorer la pertinence lors des recherches textuelles. Les mots-clés M49 vous permettent de faire cela. Au moins un mot clé est requis.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "fr": "Texte",
@@ -10160,19 +10134,6 @@
     "es": "Metadatos de la vista",
     "ru": "",
     "zh": "视图元数据",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "meta_view_table_summary_title",
-    "en": "Summary",
-    "fr": "Résumé",
-    "es": "Resumen",
-    "ru": "",
-    "zh": "摘要",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -11083,19 +11044,6 @@
     "es": "Utilizar la paleta predeterminada",
     "ru": "",
     "zh": "使用默认调色板",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
-    "id": "btn_opt_meta",
-    "en": "Enable draw mode",
-    "fr": "Activer le mode dessin",
-    "es": "Activar el modo de diseño",
-    "ru": "",
-    "zh": "启用绘图模式",
     "ar": "",
     "fa": "",
     "ps": "",

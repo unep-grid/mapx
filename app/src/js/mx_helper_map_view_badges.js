@@ -139,7 +139,7 @@ function addBadgePublic(opt){
   const elBadge  = createViewBadge({
     iconClasses : ["mx-view-public-valid","fa","fa-check-circle"],
     tooltipClasses : ["hint--left"],
-    tooltipKey : "view_public_valid"
+    tooltipKey : "view_badge_public_valid"
   });
   elBadges.appendChild(elBadge);
 
@@ -154,7 +154,7 @@ function addBadgeEdit(opt){
   const elBadge  = createViewBadge({
     iconClasses : ["fa", hasEdit ? "fa-unlock" : "fa-lock" ],
     tooltipClasses : ["hint--left"],
-    tooltipKey : hasEdit ? "view_editable" : "view_locked"
+    tooltipKey : hasEdit ? "view_badge_editable" : "view_badge_locked"
   });
   elBadges.appendChild(elBadge);
 }
@@ -168,7 +168,7 @@ function addBadgeShared(opt){
   const elBadge = createViewBadge({
     iconClasses : ["fa","fa-share-alt-square"],
     tooltipClasses : ["hint--left"],
-    tooltipKey : "view_shared"
+    tooltipKey : "view_badge_shared"
   });
   elBadges.appendChild(elBadge);
 }
@@ -188,7 +188,7 @@ function addBadgePublicNotValid(opt){
       color : "red"
     },
     tooltipClasses : ["hint--left"],
-    tooltipKey : "view_public_not_valid"
+    tooltipKey : "view_badge_public_not_valid"
   });
 
   elBadge.dataset.view_action_key="btn_badge_warning_invalid_meta";
@@ -204,7 +204,7 @@ function addBadgePublicNotValid(opt){
 * @param {Object} results validation results
 */
 export function displayMetadataIssuesModal(results){
-  mx.helpers.getDictItem("validate_meta_title")
+  mx.helpers.getDictItem("validate_meta_modal_title")
     .then( title => {
       mx.helpers.modal({
         id : "modal_validation_metadata",

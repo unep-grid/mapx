@@ -128,7 +128,7 @@ body.mx {
 }
 
 .mx .selectize-input {
-  background: var(--mx_ui_backround_contrast);
+  background: var(--mx_ui_backround_faded);
   border: 1px solid var(--mx_ui_border);
 }
 
@@ -167,6 +167,9 @@ span.mx-badge-role {
   border-color: var(--mx_ui_border);
   background-color: var(--mx_ui_background);
 }
+
+
+
 
 .mx .selectize-control.multi .selectize-input > .active {
   background-color: var(--mx_ui_background_contrast);
