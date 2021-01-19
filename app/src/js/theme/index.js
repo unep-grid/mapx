@@ -95,7 +95,7 @@ class Theme {
 
   getTheme(id) {
     const t = this;
-    const idTheme = id || t.opt.idTheme;
+    const idTheme = id || t.id_theme || t.opt.idTheme;
     const valid = t.validateThemeId(idTheme);
     return t.opt.themes[valid ? idTheme : t.opt.idThemeDefault];
   }

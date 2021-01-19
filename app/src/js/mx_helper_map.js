@@ -950,6 +950,9 @@ export function initMapListener(map) {
     mx.highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color
     });
+    if(window.jed && jed.aceEditors){
+       jed.aceEditors.forEach(e=>e._set_theme_auto());
+    }
   });
 
   /**
