@@ -31,10 +31,11 @@
             selectize.addOptionGroup(k, {
               key: k
             });
-            const values = grp[k];
-            for (let i = 0, iL = values.length; i < iL; i++) {
-              const it = values[i];
+            const items = grp[k];
+            for (let i = 0, iL = items.length; i < iL; i++) {
+              const it = items[i];
               selectize.addOption({
+                label : it, // will be replaced in render
                 value: it,
                 optgroup: k
               });
@@ -75,11 +76,12 @@
             item : editor.renderOption,
             option: editor.renderOption,
             optgroup_header: editor.renderOptionHeader
-          }
+          },
+          searchField: ['label','value'],
         });
       },
       renderOption: function(option) {
-        return h.el(
+        const elOption = h.el(
           'div',
           {
             class: 'option',
@@ -88,8 +90,15 @@
               value: option.value
             }
           },
-          h.getDictItem(option.value)
+          option.value
         );
+
+        h.getDictItem(option.value).then(label => {
+          elOption.innerText = label;
+          option.label = label;
+        });
+
+        return elOption;
       },
       renderOptionHeader: function(option) {
         /**
