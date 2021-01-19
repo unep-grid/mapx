@@ -826,8 +826,8 @@ export async function initMapx(o) {
      * Init left panel
      */
     mx.main_panel = new MainPanel({
-      mapx : {
-        version : h.getVersion()
+      mapx: {
+        version: h.getVersion()
       },
       panel: {
         elContainer: document.body,
@@ -950,8 +950,8 @@ export function initMapListener(map) {
     mx.highlighter.setOptions({
       highlight_color: colors.mx_map_feature_highlight.color
     });
-    if(window.jed && jed.aceEditors){
-       jed.aceEditors.forEach(e=>e._set_theme_auto());
+    if (window.jed && jed.aceEditors) {
+      jed.aceEditors.forEach((e) => e._set_theme_auto());
     }
   });
 
@@ -1444,7 +1444,14 @@ export async function addSourceFromView(o) {
   const h = mx.helpers;
   const p = h.path;
 
-  if (o.map && p(o.view, 'data.source')) {
+  const vType = p(o.view, 'type');
+  const isVt = vType === 'vt';
+  const isRt = vType === 'rt';
+  const isGj = vType === 'gj';
+  const validType = isVt || isRt || isGj;
+  const hasSource = p(o.view, 'data.source');
+
+  if (validType && hasSource) {
     const project = p(mx, 'settings.project.id');
     const projectView = p(o.view, 'project');
     const projectsView = p(o.view, 'data.projects') || [];
@@ -1463,7 +1470,7 @@ export async function addSourceFromView(o) {
 
     const idSource = o.view.id + '-SRC';
 
-    if (o.view.type === 'vt') {
+    if (isVt) {
       /**
        * When adding source, we request the timestamp via ['base'] stat,
        * without cache to be sure to have the latest value.
@@ -1481,7 +1488,8 @@ export async function addSourceFromView(o) {
       o.view.data.source.tiles = [url, url];
       o.view.data.source.promoteId = 'gid';
     }
-    if (o.view.type === 'gj') {
+
+    if (isGj) {
       /**
        * Add gid property if it does not exist
        */
