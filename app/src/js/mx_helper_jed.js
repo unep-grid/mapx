@@ -36,12 +36,12 @@ export async function jedInit(o) {
     window.jed = jed = {
       editors: {},
       helper: {},
+      aceEditors : [],
       extend: {
         position: {},
         texteditor: {}
       }
     };
-    
   }
 
   var opt_final = {};

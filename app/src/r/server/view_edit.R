@@ -94,7 +94,7 @@ observe({
           #
           # Initial button list for the modal
           #
-          btnList <- list()
+          btnList <- tagList()
 
           #
           # Switch through actions
@@ -140,11 +140,11 @@ observe({
                 )
 
               mxModal(
-                id="modalViewEdit",
-                title=sprintf(d('view_delete_modal_title',language),viewTitle),
-                content=uiOut,
-                textCloseButton=d("btn_close",language),
-                buttons=btnList
+                id = "modalViewEdit",
+                title = sprintf(d('view_delete_modal_title',language),viewTitle),
+                content = uiOut,
+                textCloseButton = d("btn_close",language),
+                buttons = btnList
                 )
 
             },
@@ -182,7 +182,7 @@ observe({
               #
               # Specific ui for each type (sm,vt,rt). Default empty ;        
               #
-              uiType <- tags$div();
+              uiType <- tagList();
 
               #
               # Common ui 
@@ -250,11 +250,6 @@ observe({
                   )
                 )
 
-              if(viewType=="cc"){
-                uiType <- tagList(
-                  jedOutput("viewSourceMetadata"),
-                )
-              }
               #
               # vector tile specific
               #
@@ -392,20 +387,29 @@ observe({
                     label = d("source_raster_tile_legend",language),
                     value = legend 
                     ),
-                  jedOutput("viewRasterLegendTitles"),
-         #         textAreaInput(
-                    #inputId = "textRasterTileUrlMetadata",
-                    #label = d("source_raster_tile_url_metadata",language),
-                    #value = urlMetadata
-                    #),
-                  #textAreaInput(
-                    #inputId = "textRasterTileUrlDownload",
-                    #label = d("source_raster_tile_url_download",language),
-                    #value = urlDownload
-                    #),
-                  jedOutput("viewSourceMetadata"),
+                  jedOutput("viewRasterLegendTitles")
+                ) 
+              }
+
+              #
+              # Add source metedata for view
+              #
+              if( viewType %in% c('rt','cc')){
+                uiType <- tagList(
+                  uiType,
+                  jedOutput('viewSourceMetadata')
+                )
+                # Used to trigger fetching value from editor
+                # and then, validate 'in depth', independently from
+                # schema. 
+                btnList <- tagList(
+                  actionButton(
+                    inputId = "btnValidateViewMetadata",
+                    label = d("btn_validate_metadata",language)
+                  )
                 )
               }
+
 
               #
               # ui title/ desc and type specific ui
@@ -419,6 +423,7 @@ observe({
               # Buttons 
               #
               btnList <- tagList(
+                btnList,
                 actionButton(
                   inputId="btnViewSave",
                   label=d("btn_save",language),
@@ -676,6 +681,15 @@ observeEvent(input$viewRasterLegendTitles_init,{
 })
 
 
+
+#
+# Validate metadata
+#
+observeEvent(input$btnValidateViewMetadata,{
+  # will be validate by mxValidateMetadataModal (r) through client function (js) mx.helpers.validateMetadataModal
+  jedTriggerGetValues("viewSourceMetadata","validate")
+})
+
 #
 # View source metadata, rt, cc, where the source is not
 # stored in mx_sources.
@@ -775,6 +789,17 @@ observeEvent(input$btnViewDeleteConfirm,{
     id="modalViewEdit",
     close=TRUE
     )
+})
+
+
+#
+# Trigger in depth valdiation of source meta stored in view (rt,cc)
+#
+observeEvent(input$btnValidateViewMetadata,{
+  values = input$viewSourceMetadata_values
+  if(noDataCheck(values)) return()
+  meta <- .get(values,c("data"))
+  mxValidateMetadataModal(meta)
 })
 
 

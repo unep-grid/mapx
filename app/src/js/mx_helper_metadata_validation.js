@@ -2,14 +2,14 @@
 
 export function validateMetadataView(opt) {
   opt = opt || {};
-  var view = opt.view || {};
-  var forceUpdateMeta = opt.forceUpdateMeta || false;
-  var h = mx.helpers;
-  var type = h.path(view, 'type');
-  var isRt = type === 'rt';
-  var isVt = type === 'vt';
+  const view = opt.view || {};
+  const forceUpdateMeta = opt.forceUpdateMeta || false;
+  const h = mx.helpers;
+  const type = h.path(view, 'type');
+  const isRt = type === 'rt';
+  const isVt = type === 'vt';
 
-  var out = {
+  const out = {
     type: type,
     validated: false,
     valid: null
@@ -19,27 +19,37 @@ export function validateMetadataView(opt) {
    * Type raster tiles / wms
    */
   if (isRt) {
-    /*
-     * TODO: wrap this in a propre validation function,
-     * like VT metadata validation. E.g. validateSource
-     */
-    out.valid = h.isUrl(h.path(view, 'data.source.urlMetadata', ''));
-    var reasons = [];
+    const meta = h.path(view, 'data.source.meta');
+    if (meta) {
+      /**
+       * Validate rt metadata
+       */
+      const results = validateMetadataTests(meta);
+      out.validated = true;
+      out.valid = h.all(results.tests.map((t) => t.valid));
+      out.results = results;
+    } else {
+      /**
+       * If no metadata (views < mapx 1.8), use urlMetadata
+       */
+      out.valid = h.isUrl(h.path(view, 'data.source.urlMetadata', ''));
+      const reasons = [];
 
-    if (!out.valid) {
-      reasons.push('validate_meta_invalid_external_link');
+      if (!out.valid) {
+        reasons.push('validate_meta_invalid_external_link');
+      }
+
+      out.validated = true;
+      out.results = {
+        tests: [
+          {
+            type: 'url',
+            valid: out.valid,
+            reasons: reasons
+          }
+        ]
+      };
     }
-
-    out.validated = true;
-    out.results = {
-      tests: [
-        {
-          type: 'url',
-          valid: out.valid,
-          reasons: reasons
-        }
-      ]
-    };
     return Promise.resolve(out);
   }
 
@@ -53,10 +63,10 @@ export function validateMetadataView(opt) {
         forceUpdateMeta: forceUpdateMeta
       })
       .then((meta) => {
-        var attr = h.path(view, 'data.attribute.name');
-        var results = validateMetadataTests(meta, attr);
+        const attr = h.path(view, 'data.attribute.name');
+        const results = validateMetadataTests(meta, attr);
         out.validated = true;
-        out.valid = mx.helpers.all(results.tests.map((t) => t.valid));
+        out.valid = h.all(results.tests.map((t) => t.valid));
         out.results = results;
         return out;
       });
@@ -75,22 +85,28 @@ export function validateMetadataView(opt) {
  * @return {Array} array of tests
  */
 export function validateMetadataTests(meta, attr) {
-  var v = mx.settings.validation.input.nchar;
-  var tests = [
-    validateAttribute(
+  const v = mx.settings.validation.input.nchar;
+  const tests = [];
+
+  if(attr){
+      tests.push(validateAttribute(
       meta,
       attr,
       v.sourceAttributesDesc.min,
       v.sourceAttributesDesc.max
-    ),
+    ));
+  }
+
+  tests.push(...[
     validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
     validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
     validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
+    validateKeywordsM49(meta, v.sourceKeywords.min, v.sourceKeywords.max),
     validateContact(meta),
     validateIssuance(meta),
     validateSource(meta),
     validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max)
-  ];
+  ]);
 
   return {
     tests: tests,
@@ -108,19 +124,19 @@ export function validateMetadataTests(meta, attr) {
 function validateAttribute(meta, attr, min, max) {
   min = min || 3;
   max = max || 10;
-  var h = mx.helpers;
-  var reasons = [];
-  var attributes = h.path(meta, 'text.attributes', {});
+  const h = mx.helpers;
+  const reasons = [];
+  const attributes = h.path(meta, 'text.attributes', {});
   // if no attr given, get the first one.
   attr = attr || Object.keys(attributes)[0];
-  var str = h.path(attributes, attr + '.en', '');
-  var hasAttr = h.isStringRange(attr) && h.isStringRange(str, min, max);
+  const str = h.path(attributes, attr + '.en', '');
+  const hasAttr = h.isStringRange(attr) && h.isStringRange(str, min, max);
 
   if (!hasAttr) {
     reasons.push('validate_meta_invalid_attribute');
   }
 
-  var valid = hasAttr;
+  const valid = hasAttr;
 
   return {
     type: 'validate_meta_attribute',
@@ -140,10 +156,10 @@ function validateAttribute(meta, attr, min, max) {
 function validateAbstract(meta, min, max) {
   min = min || 3;
   max = max || 10;
-  var reasons = [];
-  var h = mx.helpers;
-  var str = h.path(meta, 'text.abstract.en', '');
-  var hasAbstract = h.isStringRange(str, min, max);
+  const reasons = [];
+  const h = mx.helpers;
+  const str = h.path(meta, 'text.abstract.en', '');
+  const hasAbstract = h.isStringRange(str, min, max);
 
   if (!hasAbstract) {
     reasons.push('validate_meta_invalid_abstract');
@@ -167,10 +183,10 @@ function validateAbstract(meta, min, max) {
 function validateTitle(meta, min, max) {
   min = min || 3;
   max = max || 10;
-  var reasons = [];
-  var h = mx.helpers;
-  var str = h.path(meta, 'text.title.en', '');
-  var hasTitle = h.isStringRange(str, min, max);
+  const reasons = [];
+  const h = mx.helpers;
+  const str = h.path(meta, 'text.title.en', '');
+  const hasTitle = h.isStringRange(str, min, max);
 
   if (!hasTitle) {
     reasons.push('validate_meta_invalid_title');
@@ -194,11 +210,11 @@ function validateTitle(meta, min, max) {
 function validateKeywords(meta, min, max) {
   min = min || 3;
   max = max || 10;
-  var reasons = [];
-  var h = mx.helpers;
-  var keywords = h.path(meta, 'text.keywords.keys', []);
-  var hasKeywords = !h.isEmpty(keywords);
-  var hasValidKeywords = h.all(
+  const reasons = [];
+  const h = mx.helpers;
+  const keywords = h.path(meta, 'text.keywords.keys', []);
+  const hasKeywords = !h.isEmpty(keywords);
+  const hasValidKeywords = h.all(
     keywords.map((k) => h.isStringRange(k, min, max))
   );
 
@@ -218,6 +234,40 @@ function validateKeywords(meta, min, max) {
 }
 
 /**
+ * Validate m49 keywords
+ * - At least one m49 keyword
+ * @param {Object} MapX metadata object
+ * @param {Integer} min Number of character default 3
+ * @param {Integer} max Number of character default 10
+ * @return {Object} Validation result : type, valid, reason
+ */
+function validateKeywordsM49(meta, min, max) {
+  min = min || 3;
+  max = max || 10;
+  const reasons = [];
+  const h = mx.helpers;
+  const keywords = h.path(meta, 'text.keywords.keys_m49', []);
+  const hasKeywords = !h.isEmpty(keywords);
+  const hasValidKeywords = h.all(
+    keywords.map((k) => h.isStringRange(k, min, max))
+  );
+
+  if (!hasKeywords) {
+    reasons.push('validate_meta_no_keyword');
+  }
+
+  if (!hasValidKeywords) {
+    reasons.push('validate_meta_invalid_keyword');
+  }
+
+  return {
+    type: 'validate_meta_keyword_m49',
+    valid: hasKeywords,
+    reasons: reasons
+  };
+}
+
+/**
  * Validate contacts
  * - At least one contact item
  * - All contact email valids
@@ -225,11 +275,11 @@ function validateKeywords(meta, min, max) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateContact(meta) {
-  var reasons = [];
-  var h = mx.helpers;
-  var contacts = h.path(meta, 'contact.contacts', []);
-  var hasContact = !h.isEmpty(contacts);
-  var hasValidContact = h.all(contacts.map((c) => h.isEmail(c.email)));
+  const reasons = [];
+  const h = mx.helpers;
+  const contacts = h.path(meta, 'contact.contacts', []);
+  const hasContact = !h.isEmpty(contacts);
+  const hasValidContact = h.all(contacts.map((c) => h.isEmail(c.email)));
 
   if (!hasContact) {
     reasons.push('validate_meta_no_contact');
@@ -238,7 +288,7 @@ function validateContact(meta) {
     reasons.push('validate_meta_invalid_contact_email');
   }
 
-  var valid = h.isEmpty(reasons);
+  const valid = h.isEmpty(reasons);
 
   return {
     type: 'validate_meta_contact',
@@ -255,17 +305,17 @@ function validateContact(meta) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateIssuance(meta) {
-  var h = mx.helpers;
-  var reasons = [];
+  const h = mx.helpers;
+  const reasons = [];
 
-  var hasPeriodicity = h.isStringRange(
+  const hasPeriodicity = h.isStringRange(
     h.path(meta, 'temporal.issuance.periodicity', ''),
     3
   );
-  var hasReleasedAt = h.isDateString(
+  const hasReleasedAt = h.isDateString(
     h.path(meta, 'temporal.issuance.released_at', '')
   );
-  var hasModifiedAt = h.isDateString(
+  const hasModifiedAt = h.isDateString(
     h.path(meta, 'temporal.issuance.modified_at', '')
   );
 
@@ -279,7 +329,7 @@ function validateIssuance(meta) {
     reasons.push('validate_meta_invalid_issuance_modified_at');
   }
 
-  var valid = h.isEmpty(reasons);
+  const valid = h.isEmpty(reasons);
 
   return {
     type: 'validate_meta_issuance',
@@ -297,16 +347,18 @@ function validateIssuance(meta) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateLicense(meta, min, max) {
-  var reasons = [];
+  const reasons = [];
   min = min || 3;
   max = max || 10;
 
-  var h = mx.helpers;
-  var licenses = h.path(meta, 'license.licenses', []);
-  var hasLicense = !h.isEmpty(licenses);
-  var hasValidLicenses = h.all(
+  const h = mx.helpers;
+  const licenses = h.path(meta, 'license.licenses', []);
+  const hasLicense = !h.isEmpty(licenses);
+  const hasValidLicenses = h.all(
     licenses.map((l) => {
-      return h.isStringRange(l.text, min, max) && h.isStringRange(l.name, min, max);
+      return (
+        h.isStringRange(l.text, min, max) && h.isStringRange(l.name, min, max)
+      );
     })
   );
 
@@ -317,7 +369,7 @@ function validateLicense(meta, min, max) {
     reasons.push('validate_meta_invalid_license');
   }
 
-  var valid = hasLicense && hasValidLicenses;
+  const valid = hasLicense && hasValidLicenses;
 
   return {
     type: 'validate_meta_license',
@@ -334,11 +386,11 @@ function validateLicense(meta, min, max) {
  * @return {Object} Validation result : type, valid, reason
  */
 function validateSource(meta) {
-  var h = mx.helpers;
-  var reasons = [];
-  var sources = h.path(meta, 'origin.source.urls', []);
-  var hasSources = !h.isEmpty(sources);
-  var hasValidSources = h.all(sources.map((source) => h.isUrl(source.url)));
+  const h = mx.helpers;
+  const reasons = [];
+  const sources = h.path(meta, 'origin.source.urls', []);
+  const hasSources = !h.isEmpty(sources);
+  const hasValidSources = h.all(sources.map((source) => h.isUrl(source.url)));
 
   if (!hasSources) {
     reasons.push('validate_meta_no_source');
@@ -347,7 +399,7 @@ function validateSource(meta) {
     reasons.push('validate_meta_invalid_source');
   }
 
-  var valid = hasSources && hasValidSources;
+  const valid = hasSources && hasValidSources;
 
   return {
     type: 'validate_meta_source',
@@ -360,13 +412,13 @@ function validateSource(meta) {
  * Validation object to HTML
  */
 export function validationMetadataTestsToHTML(results) {
-  var tests = results.tests;
-  var meta = results.meta;
-  var h = mx.helpers;
-  var elValidation = h.el('div');
-  var noIssue = true;
-  var elItem;
-  var elEditorInfo;
+  const tests = results.tests;
+  const meta = results.meta;
+  const h = mx.helpers;
+  let elValidation = h.el('div');
+  let noIssue = true;
+  let elItem;
+  let elEditorInfo;
 
   /**
    * For each test, display the result of the test
@@ -449,14 +501,15 @@ export function validationMetadataTestsToHTML(results) {
  */
 export function validateMetadataModal(meta) {
   meta = meta.metadata ? meta.metadata : meta;
-  var h = mx.helpers;
-  var results = h.validateMetadataTests(meta);
+  const h = mx.helpers;
+  const results = h.validateMetadataTests(meta);
   /**
    * Build a modal
    */
   h.getDictItem('validate_meta_title').then((title) => {
     h.modal({
       id: 'modal_validation_metadata',
+      addBackground:true,
       replace: true,
       title: title,
       content: h.validationMetadataTestsToHTML(results)
