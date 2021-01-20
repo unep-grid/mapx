@@ -7021,7 +7021,7 @@
   },
   {
     "id": "project_invite_notify_auto_register_email",
-    "en": "Hello, </br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> </br> Have a nice day !",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
     "fr": "",
     "es": "",
     "ru": "",
@@ -7060,7 +7060,7 @@
   },
   {
     "id": "project_user_added_email_user",
-    "en": "Hello, </br> You have been added to project {{project}} in group(s):  {{roles}}.</br> Have a nice day !",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
     "fr": "",
     "es": "",
     "ru": "",
@@ -7086,7 +7086,7 @@
   },
   {
     "id": "project_user_added_email_admin",
-    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} </br> Have a nice day !",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
     "fr": "",
     "es": "",
     "ru": "",
@@ -10843,11 +10843,11 @@
   },
   {
     "id": "app_maintenance_text",
-    "en": "MapX is currently unavailable due to server maintenance. </br> Come back later in the day !  </br> </br> Sincerely, your MapX team",
-    "fr": "MapX est temporairement indisisponible, des travaux de maintenance sont en cours. </br> Merci de revenir plus tard dans la journée ! </br></br> Votre équipe MapX.",
-    "es": "MapX no está disponible actualmente debido al mantenimiento del servidor. </br> ¡Vuelve más tarde en el día! </br> </br> Atentamente, su equipo de MapX ",
+    "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team",
+    "fr": "MapX est temporairement indisisponible, des travaux de maintenance sont en cours. <br> Merci de revenir plus tard dans la journée ! <br><br> Votre équipe MapX.",
+    "es": "MapX no está disponible actualmente debido al mantenimiento del servidor. <br> ¡Vuelve más tarde en el día! <br> <br> Atentamente, su equipo de MapX ",
     "ru": "",
-    "zh": "由于服务器维护，MapX当前不可用。 </br> 请稍后回来！ </br>此致，</br>敬礼！</br> MapX Team",
+    "zh": "由于服务器维护，MapX当前不可用。 <br> 请稍后回来！ <br>此致，<br>敬礼！<br> MapX Team",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -11792,8 +11792,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! </br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> </br> Thanks !",
-    "fr": "Bienvnue! </br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}'>traqueur d'incidents</a> </br> Merci !",
+    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "fr": "Bienvnue! <br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}'>traqueur d'incidents</a> <br> Merci !",
     "es": "",
     "ru": "",
     "zh": "",

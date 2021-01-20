@@ -1016,7 +1016,7 @@ mxParseTemplateHasKey <- function(template,key){
 }
 
 mxNewLineToBr <- function(str){
-  gsub('\n|$','</br>',str)
+  gsub('\n|$','<br>',str)
 }
 
 #' Parse template from dict entry
