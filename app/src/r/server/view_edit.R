@@ -706,6 +706,7 @@ observeEvent(input$viewSourceMetadata_init,{
 
   #
   # Auto fill view meta for view < mapx 1.8
+  # if the view has ho metadata
   #
   if(noDataCheck(viewSourceMetadata)){
     hasUrlDownload <- !noDataCheck(.get(view,c('data','source','urlDownload')))

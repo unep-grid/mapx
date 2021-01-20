@@ -1,6 +1,4 @@
-/* jshint  esversion:6  */
-
-export function validateMetadataView(opt) {
+export async function validateMetadataView(opt) {
   opt = opt || {};
   const view = opt.view || {};
   const forceUpdateMeta = opt.forceUpdateMeta || false;
@@ -8,75 +6,54 @@ export function validateMetadataView(opt) {
   const type = h.path(view, 'type');
   const isRt = type === 'rt';
   const isVt = type === 'vt';
+  const isCc = type === 'cc';
 
   const out = {
-    type: type,
     validated: false,
-    valid: null
+    results: {},
+    type: type,
+    valid: false
   };
 
   /**
    * Type raster tiles / wms
    */
-  if (isRt) {
-    const meta = h.path(view, 'data.source.meta');
-    if (meta) {
-      /**
-       * Validate rt metadata
-       */
-      const results = validateMetadataTests(meta);
-      out.validated = true;
-      out.valid = h.all(results.tests.map((t) => t.valid));
-      out.results = results;
-    } else {
-      /**
-       * If no metadata (views < mapx 1.8), use urlMetadata
-       */
-      out.valid = h.isUrl(h.path(view, 'data.source.urlMetadata', ''));
-      const reasons = [];
-
-      if (!out.valid) {
-        reasons.push('validate_meta_invalid_external_link');
-      }
-
-      out.validated = true;
-      out.results = {
-        tests: [
-          {
-            type: 'url',
-            valid: out.valid,
-            reasons: reasons
-          }
-        ]
-      };
-    }
-    return Promise.resolve(out);
+  if (isRt || isCc) {
+    const meta = h.path(view, 'data.source.meta', {});
+    /**
+     * Validate rt metadata
+     */
+    const results = validateMetadataTests(meta);
+    Object.assign(out, {
+      validated: true,
+      valid: h.all(results.tests.map((t) => t.valid)),
+      results: results
+    });
   }
 
   /**
    * Type vector tiles
    */
   if (isVt) {
-    return mx.helpers
-      .addSourceMetadataToView({
-        view: view,
-        forceUpdateMeta: forceUpdateMeta
-      })
-      .then((meta) => {
-        const attr = h.path(view, 'data.attribute.name');
-        const results = validateMetadataTests(meta, attr);
-        out.validated = true;
-        out.valid = h.all(results.tests.map((t) => t.valid));
-        out.results = results;
-        return out;
-      });
+    const meta = await h.addSourceMetadataToView({
+      view: view,
+      forceUpdateMeta: forceUpdateMeta
+    });
+
+    const attr = h.path(view, 'data.attribute.name');
+    const results = validateMetadataTests(meta, attr);
+
+    Object.assign(out, {
+      validated: true,
+      valid: h.all(results.tests.map((t) => t.valid)),
+      results: results
+    });
   }
 
   /**
    * Type not handled
    */
-
-  return Promise.resolve(out);
+  return out;
 }
 
 /**
@@ -88,25 +65,29 @@ export function validateMetadataTests(meta, attr) {
   const v = mx.settings.validation.input.nchar;
   const tests = [];
 
-  if(attr){
-      tests.push(validateAttribute(
-      meta,
-      attr,
-      v.sourceAttributesDesc.min,
-      v.sourceAttributesDesc.max
-    ));
+  if (attr) {
+    tests.push(
+      validateAttribute(
+        meta,
+        attr,
+        v.sourceAttributesDesc.min,
+        v.sourceAttributesDesc.max
+      )
+    );
   }
 
-  tests.push(...[
-    validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
-    validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
-    validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
-    validateKeywordsM49(meta, v.sourceKeywords.min, v.sourceKeywords.max),
-    validateContact(meta),
-    validateIssuance(meta),
-    validateSource(meta),
-    validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max)
-  ]);
+  tests.push(
+    ...[
+      validateAbstract(meta, v.sourceAbstract.min, v.sourceAbstract.max),
+      validateTitle(meta, v.sourceTitle.min, v.sourceTitle.max),
+      validateKeywords(meta, v.sourceKeywords.min, v.sourceKeywords.max),
+      validateKeywordsM49(meta, v.sourceKeywords.min, v.sourceKeywords.max),
+      validateContact(meta),
+      validateIssuance(meta),
+      validateSource(meta),
+      validateLicense(meta, v.sourceLicense.min, v.sourceLicense.max)
+    ]
+  );
 
   return {
     tests: tests,
@@ -509,7 +490,7 @@ export function validateMetadataModal(meta) {
   h.getDictItem('validate_meta_title').then((title) => {
     h.modal({
       id: 'modal_validation_metadata',
-      addBackground:true,
+      addBackground: true,
       replace: true,
       title: title,
       content: h.validationMetadataTestsToHTML(results)
