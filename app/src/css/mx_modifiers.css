@@ -19,6 +19,9 @@ body.mx {
 .mx input {
   background: var(--mx_ui_background);
 }
+.mx hr {
+  border-color: var(--mx_ui_border);
+}
 
 .mx .theme_colors label {
   color: var(--mx_ui_text);
@@ -49,7 +52,7 @@ body.mx {
   border-top: 1px solid var(--mx_ui_border);
 }
 /*.mx .mx-view-item:after {*/
-  /*border-bottom: 1px solid var(--mx_ui_border);*/
+/*border-bottom: 1px solid var(--mx_ui_border);*/
 /*}*/
 .mx .mx-view-item-empty {
   color: var(--mx_ui_text_faded);
@@ -168,9 +171,6 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background);
 }
 
-
-
-
 .mx .selectize-control.multi .selectize-input > .active {
   background-color: var(--mx_ui_background_contrast);
 }
@@ -186,7 +186,6 @@ span.mx-badge-role {
 .list-group .list-group-item-member {
   border: 1px solid var(--mx_ui_border);
 }
-
 
 .mx .form.group .form-control.selectize-control {
   border: none;
@@ -214,7 +213,7 @@ span.mx-badge-role {
 .mx .selectize-dropdown .active.create *,
 .mx .btn-default:hover,
 .mx .btn-default:hover > *,
-.mx [class*=hint--]:after {
+.mx [class*='hint--']:after {
   color: var(--mx_ui_text);
   background-color: var(--mx_ui_background_contrast);
   outline: 0;
@@ -336,8 +335,6 @@ span.mx-badge-role {
   border-left: 1px solid var(--mx_ui_text);
   border-right: 1px solid var(--mx_ui_text);
 }
-
-
 
 /*.mx-view-item {*/
 /*background-color: var(--mx_ui_background);*/

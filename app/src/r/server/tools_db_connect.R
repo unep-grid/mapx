@@ -19,18 +19,18 @@ observe({
     if( isMember ){
 
       dbInfo <- tagList(
-        tags$h4(d("title_tools_db",language)),
+        tags$h4(d("title_tools_db",language, web=T)),
         actionButton(
-          label = d("btn_show_db_info_self",language),
+          label = d("btn_show_db_info_self",language, web=T),
           inputId = "btnShowDbInfoSelf",
-          class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_db_info_self"
+          class = "btn btn-sm btn-default hint"
+          #`data-lang_key` = "btn_show_db_info_self"
           ),
         actionButton(
-          label = d("btn_show_db_query_maker",language),
+          label = d("btn_show_db_query_maker",language, web=T),
           inputId = "btnShowQueryMaker",
-          class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_db_query_maker"
+          class = "btn btn-sm btn-default hint"
+          #`data-lang_key` = "btn_show_db_query_maker"
           )
         )
     }

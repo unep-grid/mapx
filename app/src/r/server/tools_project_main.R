@@ -18,7 +18,7 @@ observe({
   isolate({
     language <- reactData$language
     toolsTitle <- tagList(
-      tags$h4(d("title_tools_admin_project",language,web=FALSE))
+      tags$h4(d("title_tools_admin_project",language,web=T))
       )
     
     btns <- tagList();
@@ -29,10 +29,9 @@ observe({
     btns <- tagList(
       btns,
       actionButton(
-        label = d(labelBtnAdd,language),
+        label = d(labelBtnAdd,language, web=T),
         inputId = "btnShowAddProject",
-        class = "btn btn-sm btn-default hint " + ifelse(isProjectCreator,"","disabled"),
-        `data-lang_key` = labelBtnAdd
+        class = "btn btn-sm btn-default hint " + ifelse(isProjectCreator,"","disabled")
         )
       )
 
@@ -40,10 +39,9 @@ observe({
       btns <- tagList(
         btns,
         actionButton(
-          label = d("btn_show_project_external_views",language),
+          label = d("btn_show_project_external_views",language,web=T),
           inputId = "btnShowProjectExternalViews",
-          class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_project_external_views"
+          class = "btn btn-sm btn-default hint"
           )
         )
     }
@@ -53,32 +51,27 @@ observe({
       btns <- tagList(
         btns,
         actionButton(
-          label = d("btn_show_role_manager",language),
+          label = d("btn_show_role_manager",language,web=T),
           inputId = "btnShowRoleManager",
           class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_role_manager"
           ),
         actionButton(
-          label = d("btn_show_invite_member",language),
+          label = d("btn_show_invite_member",language,web=T),
           inputId = "btnShowInviteMember",
           class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_invite_member"
           ),
         actionButton(
-          label = d("btn_show_project_config",language),
+          label = d("btn_show_project_config",language,web=T),
           inputId = "btnShowProjectConfig",
           class = "btn btn-sm btn-default hint",
-          `data-lang_key` = "btn_show_project_config"
           ),
         actionButton(
-          label =  d(labelBtnDelete,language),
-          `data-lang_key` = labelBtnDelete,
+          label =  d(labelBtnDelete,language,web=T),
           inputId = "btnShowProjectDelete",
           class = "btn btn-sm btn-default hint " + ifelse(isProjectDefault,"disabled",""),
           ),
         actionButton(
-          label =  d('btn_show_project_views_states',language),
-          `data-lang_key` = 'btn_show_project_views_states',
+          label =  d('btn_show_project_views_states',language, web=T),
           inputId = "btnShowProjectViewsStates",
           class = "btn btn-sm btn-default hint "
           )
