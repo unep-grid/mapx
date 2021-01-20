@@ -154,6 +154,7 @@
         selectize.clear(true);
         value = h.isArray(value) ? value : [value];
         editor.input.selectize.setValue(value);
+        editor.refreshValue();
       },
       refreshValue: function() {
         const editor = this;

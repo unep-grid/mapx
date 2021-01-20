@@ -94,6 +94,7 @@ mxSchemaSourceMeta <- function(
                 type = "array",
                 description = t("textual_keywords_m49_desc"),
                 format = "selectizeOptGroup",
+                uniqueItems = TRUE,
                 minItems =  1,
                 options = list(
                   groupOptions = .get(config,c("m49_geo_keywords"))
