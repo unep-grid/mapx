@@ -12673,6 +12673,32 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+ {
+   "id": "fetch_views_diff_modal_title",
+    "en": "Views not available",
+    "fr": "Vues non disponible",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+   "id": "fetch_views_diff_message",
+    "en": "You have requested views that are not available in this project.",
+    "fr": "Vous avez demandé des vues qui ne sont pas disponibles dans ce projet.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]
 

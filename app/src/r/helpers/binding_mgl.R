@@ -168,7 +168,17 @@ mglRemoveView <- function( id=NULL, idView, session=shiny::getDefaultReactiveDom
 #' @param idViewsListContainer {character} Id of the view list container
 #' @note mgl init has already saved idViewsList and idViewsListContainer. Duplicate ? 
 #' @export
-mglUpdateViewsList <- function(viewsList=NULL, id=NULL, project=NULL, resetViews=FALSE, viewsCompact=FALSE,autoFetchAll=FALSE, idViewsList=NULL, idViewsListContainer=NULL, render=TRUE, session=shiny::getDefaultReactiveDomain()) {
+mglUpdateViewsList <- function(
+  viewsList = NULL,
+  id = NULL, 
+  project = NULL,
+  resetViews = FALSE,
+  viewsCompact = FALSE,
+  autoFetchAll = FALSE,
+  idViewsList = NULL,
+  idViewsListContainer = NULL,
+  render=TRUE,
+  session=shiny::getDefaultReactiveDomain()) {
 
   conf <- mxGetDefaultConfig()
 

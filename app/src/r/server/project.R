@@ -16,13 +16,12 @@ observe({
     # Static
     #
     project_def <- config[[c("project","default")]]
-    project_query <- query$project
 
     #
     # Reactive
     #
     project_ui <- input$selectProject 
-    project_react <- .get(reactChain$requestProject,'value')
+    project_query <- .get(reactChain$requestProject,c('value','project'),query$project)
 
     #
     # Deduced
@@ -120,8 +119,17 @@ observe({
             message =  d(idMsg, language),
             type = "login_requested_project_access",
             callback = function(){
+              #
+              # 'views' item is not used here
+              # Views id are taken from origin views query in autoFetchAll, which call 
+              # src/js/mx_helper_map_view_fetch.js 
+              # Views ids from original query are invalidated after a project change only.
+              #
               reactChainCallback('requestProject',
-                value = query$project
+                value = list(
+                  views = query$views,
+                  project=query$project
+                )
               )
             }
           )

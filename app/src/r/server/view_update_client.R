@@ -20,7 +20,6 @@ observe({
 
     timer <- mxTimeDiff("Sending view")
 
-
     mxDebugMsg("UPDATE VIEWS LIST")
 
     mglUpdateViewsList(
@@ -29,8 +28,6 @@ observe({
       autoFetchAll = TRUE,
       resetView = TRUE
       )
-
-
 
     mxTimeDiff(timer)
   })
