@@ -1,5 +1,10 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.5-beta' target='_blank'>1.8.5-beta</a>
+    - Improvement
+      - Issue #635:
+        - Better handling when a user access a private project whithout being logged in. The default project is shown, with all views.
+        - If requested views are not available, a message is shown, and all views are displayed.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.4-beta' target='_blank'>1.8.4-beta</a>
     - Bug fixes
       - Stability and improvement from previous 1.8.* changes 
