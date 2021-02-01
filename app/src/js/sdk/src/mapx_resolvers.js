@@ -20,15 +20,38 @@ class MapxResolvers {
   /**
    * Set panel visibility
    * @param {Object} opt Options
-   * @param {String} opt.panel Name of the panel (views, tools)
-   * @param {Boolean} opt.show If true, show the panel (and hide other)
-   * @param {Boolean} opt.toggle Toggle the panel
-   * @return {Boolean} done
+   * @param {Boolean} opt.show Show the panel. If false, hide.
+   * @param {Boolean} opt.open Open the panel. If false, close.
+   * @param {Boolean} opt.toggle If closed, open. If open, close.
    */
   set_panel_left_visibility(opt) {
-    opt = Object.assign({panel: 'views', show: true, toggle: false}, opt);
-    h.panelLeftSwitch(opt);
-    return true;
+    opt = Object.assign({show: null, toggle: null, open: null}, opt);
+    const panel = mx.main_panel.panel;
+
+    if (opt.show !== null) {
+      if (opt.show === true) {
+        panel.show();
+      } else {
+        panel.hide();
+      }
+      return;
+    }
+
+    if (opt.open !== null) {
+      if (opt.open === true) {
+        panel.open();
+      } else {
+        panel.close();
+      }
+      return;
+    }
+
+    if (opt.toggle !== null) {
+      if (opt.toggle === true) {
+        panel.toggle();
+      }
+      return;
+    }
   }
 
   has_dashboard() {

@@ -1,16 +1,16 @@
 import {FrameManager} from './frameManager.js';
 import {FrameWorker} from './frameWorker.js';
-import {Testing} from  './testing.js';
-import * as settings from './settings.json'; 
+import {Testing} from './testing.js';
+import * as settings from './settings.json';
 
 /**
-* Class to wrap frame manager with custom options
-*/
+ * Class to wrap frame manager with custom options
+ */
 class Manager extends FrameManager {
   /**
-  * Create new manager with custom options
-  * @param {Object} opt Options
-  */
+   * Create new manager with custom options
+   * @param {Object} opt Options
+   */
   constructor(opt) {
     super(opt);
     this.opt = Object.assign({}, settings, opt);
@@ -18,16 +18,16 @@ class Manager extends FrameManager {
 }
 
 /**
-* Class to wrap frame worker with custom options
-*/
+ * Class to wrap frame worker with custom options
+ */
 class Worker extends FrameWorker {
   /**
-  * Create new worker with custom options
-  * @param {Object} opt Options
-  */
-   constructor(opt){
-     super(opt);
-   }
+   * Create new worker with custom options
+   * @param {Object} opt Options
+   */
+  constructor(opt) {
+    super(opt);
+  }
 }
 
 export {Manager, Worker, Testing};
