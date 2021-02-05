@@ -1,4 +1,4 @@
-FROM fredmoser/mapx_alpine_node_gdal:node12.19gdal3.1.3
+FROM fredmoser/mapx_alpine_node_gdal:node15.8.0gdal3.1.3
 
 #
 # Install node packages, copy files

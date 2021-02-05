@@ -1,4 +1,4 @@
-FROM node:12.19-alpine as builder
+FROM node:15.8.0-alpine as builder
 
 ARG GDAL_VERSION=v3.1.3
 ARG LIBKML_VERSION=1.3.0
