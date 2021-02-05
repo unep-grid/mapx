@@ -17,16 +17,6 @@ types.setTypeParser(20, (value) => {
 });
 
 /**
- * Init sql fun
- */
-const start = Date.now();
-initSqlFun().then((r) => {
-  console.log(
-    `${r.length} SQL function(s) imported in ${Date.now() - start} ms`
-  );
-});
-
-/**
  * Set write pool
  */
 const pgWrite = new Pool({
@@ -63,6 +53,9 @@ pgRead.on('error', (err) => {
   process.exit(-1);
 });
 
+/**
+* Set custom pool
+*/ 
 const pgCustom = new Pool({
   host: s.db.host,
   user: s.db.custom.user,
@@ -79,6 +72,29 @@ pgCustom.on('error', (err) => {
   process.exit(-1);
 });
 
+/**
+ * Set master pool
+ */
+const pgAdmin = new Pool({
+  host: s.db.host,
+  user: s.db.admin.user,
+  database: s.db.name,
+  password: s.db.admin.password,
+  port: s.db.port,
+  statement_timeout: s.db.timeout,
+  max: s.db.poolMax,
+  application_name: 'mx_api_admin'
+});
+
+pgAdmin.on('error', (err) => {
+  console.error('Unexpected error on postgres client admin', err);
+  process.exit(-1);
+});
+
+
+/**
+* Redis
+*/ 
 const clientRedis = redis.createClient({
   url: 'redis://' + s.redis.host + ':' + s.redis.port
 });
@@ -97,58 +113,7 @@ module.exports = {
   clientRedis,
   pgCustom,
   pgRead,
-  pgWrite
+  pgWrite,
+  pgAdmin
 };
 
-/**
- * Import/refresh SQL function at init
- */
-async function initSqlFun() {
-  const pgAdmin = new Client({
-    host: s.db.host,
-    user: s.db.admin.user,
-    database: s.db.name,
-    password: s.db.admin.password,
-    port: s.db.port
-  });
-
-  pgAdmin.connect();
-
-  pgAdmin.on('error', (err) => {
-    console.error('Unexpected error on postgres client admin', err);
-    process.exit(-1);
-  });
-
-  /**
-   * Import plpsql functions
-   */
-  try {
-    const sqlFileDir = path.join(__dirname, 'sql');
-    /**
-     * Get files
-     */
-    const filesAll = await readDir(sqlFileDir, {encoding: 'utf8'});
-    const files = filesAll.reduce((a, f) => {
-      if (!!f.match(/\.sql$/)) {
-        a.push(f);
-      }
-      return a;
-    }, []);
-
-    /**
-     * Import
-     */
-    const queries = files.map(async (file) => {
-      const filePath = path.join(sqlFileDir, file);
-      const sql = await readFile(filePath, (endoding = 'UTF-8'));
-      return pgAdmin.query(sql);
-    });
-    const results = await Promise.all(queries);
-    pgAdmin.end();
-    return results;
-  } catch (e) {
-    pgAdmin.end();
-    console.error('Unexpected error when reading pg functions', e);
-    process.exit(-1);
-  }
-}
