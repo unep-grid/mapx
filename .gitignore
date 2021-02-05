@@ -22,7 +22,7 @@ app/src/js/sdk/example/dist/*
 app/src/sprites/dist/*
 
 # Built dictionnaries
-dict_built/*
+dict_built/
 
 # Parcel
 .cache
