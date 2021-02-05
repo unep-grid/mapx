@@ -105,7 +105,7 @@ cd $DIR_CUR
 docker-compose build app 
 
 echo "Build api"
-docker-compose build api 
+docker-compose build api
 
 echo "Push images, git stage, commit, tag"
 docker-compose push api

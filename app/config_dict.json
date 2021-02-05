@@ -1,9 +1,0 @@
-{
-  "dict_dir": "./src/data/dict",
-  "dict_dir_built": [
-    "./src/data/dict_built",
-    "../api/modules/language/dict_built"
-  ],
-  "languages": ["en", "fr", "es", "ru", "zh", "de", "bn", "fa", "ps", "ar"],
-  "language_default": "en"
-}

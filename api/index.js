@@ -14,7 +14,8 @@ const http = require('http');
 const express = require('express');
 const sock = require('socket.io');
 const settings = require('@root/settings');
-
+const migrate = require('@mapx/migrate');
+const language = require('@mapx/language');
 const view = require('@mapx/view');
 const query = require('@mapx/query');
 const source = require('@mapx/source');
@@ -28,6 +29,13 @@ const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const log = require('@mapx/log');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
+
+
+/**
+* Pre-init scripts
+*/ 
+migrate.apply()
+.then(language.init)
 
 /**
  * If port argument is set, use this instead

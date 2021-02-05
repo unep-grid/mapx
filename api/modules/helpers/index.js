@@ -25,16 +25,6 @@ function getDistinct(arr) {
   });
   return out;
 }
-
-/**
- * Simple template parsing
- */
-function parseTemplate(template, data) {
-  return template.replace(/{{([^{}]+)}}/g, function(matched, key) {
-    return data[key];
-  });
-}
-
 /**
  * Send string for result message
  * @param {Object} obj object to be converted in string for messages
@@ -150,6 +140,26 @@ function readTxt(p) {
   return fs.readFileSync(p, (endoding = 'UTF-8'));
 }
 
+/**
+ * Simple template parsing
+ */
+function parseTemplate(template, data) {
+  return template.replace(/{{([^{}]+)}}/g, function(matched, key) {
+    return data[key];
+  });
+}
+
+/**
+* Combine sync method for readTxt + parseTemplate
+*/  
+function readTemplate(file,data){
+  const txt = readTxt(file);
+  return parseTemplate(txt, data);
+}
+
+
+
+
 /*
  * Get user ip
  */
@@ -206,7 +216,7 @@ function arrayToPgArray(arr, def) {
  * @return {Promise} Promise object with zip buffer
  */
 function dataToJsonZip(data) {
-  const buffer = new Buffer(JSON.stringify(data), 'utf-8');
+  const buffer = Buffer.from(JSON.stringify(data), 'utf-8');
   return new Promise((resolve, reject) => {
     zlib.gzip(buffer, function(err, zOut) {
       if (err) {
@@ -330,6 +340,7 @@ module.exports = {
   toBoolean,
   randomString,
   readTxt,
+  readTemplate,
   stop,
   asyncDelay,
   /**
