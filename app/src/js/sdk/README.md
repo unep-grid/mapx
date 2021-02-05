@@ -532,7 +532,7 @@ Class to handle MapX specific method
 **Kind**: global class  
 
 * [MapxResolvers](#MapxResolvers)
-    * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
+    * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility)
     * [.set_immersive_mode()](#MapxResolvers+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolvers+get_immersive_mode) ⇒ <code>Boolean</code>
     * [.set_theme(opt)](#MapxResolvers+set_theme) ⇒ <code>Boolean</code>
@@ -615,18 +615,17 @@ Class to handle MapX specific method
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
 
-#### mapxResolvers.set\_panel\_left\_visibility(opt) ⇒ <code>Boolean</code>
+#### mapxResolvers.set\_panel\_left\_visibility(opt)
 Set panel visibility
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Boolean</code> - done  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | opt | <code>Object</code> | Options |
-| opt.panel | <code>String</code> | Name of the panel (views, tools) |
-| opt.show | <code>Boolean</code> | If true, show the panel (and hide other) |
-| opt.toggle | <code>Boolean</code> | Toggle the panel |
+| opt.show | <code>Boolean</code> | Show the panel. If false, hide. |
+| opt.open | <code>Boolean</code> | Open the panel. If false, close. |
+| opt.toggle | <code>Boolean</code> | If closed, open. If open, close. |
 
 <a name="MapxResolvers+set_immersive_mode"></a>
 

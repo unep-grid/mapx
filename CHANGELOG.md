@@ -1,5 +1,12 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.6-beta' target='_blank'>1.8.6-beta</a>
+    - APP 
+      - SDK : updated function to open/close views/settings panel 
+    - API ( internal )
+      - Upgraded docker image to node 15.08
+      - New module for forward only, transactional SQL migration patching. With lock support.
+      - Translation table available and automatically updated in DB
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.5-beta' target='_blank'>1.8.5-beta</a>
     - Improvement
       - Issue #635:
