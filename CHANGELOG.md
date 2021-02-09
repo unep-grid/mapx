@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.7-beta' target='_blank'>1.8.7-beta</a>
+    - APP
+      - Using Mapbox satellite base map for "aerial theme". 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.6-beta' target='_blank'>1.8.6-beta</a>
     - APP 
       - SDK : updated function to open/close views/settings panel 
