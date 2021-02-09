@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.8-beta' target='_blank'>1.8.8-beta</a>
+    - API 
+      - Added migration step for making sure postgres 'track_commit_timestamp' is set.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.7-beta' target='_blank'>1.8.7-beta</a>
     - APP
       - Using Mapbox satellite base map for "aerial theme". 
