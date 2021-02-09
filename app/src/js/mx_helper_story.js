@@ -1021,7 +1021,7 @@ export function storyController(o) {
       currentStep: 0,
       hasAerial: h.btnToggleLayer({
         id: 'map_main',
-        idLayer: 'here_aerial',
+        idLayer: 'mapbox_satellite',
         idSwitch: 'btnThemeAerial',
         action: 'hide'
       }),
@@ -1099,7 +1099,7 @@ export function storyController(o) {
         if (o.data.hasAerial) {
           h.btnToggleLayer({
             id: 'map_main',
-            idLayer: 'here_aerial',
+            idLayer: 'mapbox_satellite',
             idSwitch: 'btnThemeAerial',
             action: 'show'
           });

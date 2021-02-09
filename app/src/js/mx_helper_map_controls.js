@@ -205,7 +205,7 @@ mapControlApp.prototype.onAdd = function(map) {
       action: ()=>{
         h.btnToggleLayer({
           id: 'map_main',
-          idLayer: 'here_aerial',
+          idLayer: 'mapbox_satellite',
           idSwitch: 'btnThemeAerial',
           action: 'toggle'
         });
@@ -304,7 +304,7 @@ mapControlNav.prototype.onAdd = function(map) {
       action: function() {
         h.btnToggleLayer({
           id: 'map_main',
-          idLayer: 'here_aerial',
+          idLayer: 'mapbox_satellite',
           idSwitch: 'btnThemeAerial',
           action: 'toggle'
         });
