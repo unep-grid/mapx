@@ -11,8 +11,9 @@ const fs = require('fs');
  * Paths
  */
 const dirSqlPatches = path.join(__dirname, 'sql_patches');
-const dirSqlRoutines = path.join(__dirname)
+//const dirSqlRoutines = path.join(__dirname, 'sql_routines') # not used 
 const dirSqlBase = path.join(__dirname, 'sql_base');
+const dirSqlAdmin = path.join(__dirname, 'sql_admin');
 
 /*
  * Load sql/templates
@@ -45,9 +46,17 @@ async function apply() {
  */
 async function applyPatches() {
   const applied = [];
+
+  // With transaction
   const patches = fs
     .readdirSync(dirSqlPatches)
     .filter((f) => f.match(/\.sql$/));
+
+  // No transaction
+ const patchesAdmin = fs
+    .readdirSync(dirSqlAdmin)
+    .filter((f) => f.match(/\.sql$/));
+
 
   /**
    * Init patch table
@@ -59,7 +68,31 @@ async function applyPatches() {
   }
 
   /**
-   * Transactional patches applying
+  * No transaction patches ( repeatable admin stuff )
+  */
+  for (p of patchesAdmin) {
+    const fInfo = path.parse(p);
+    const id = fInfo.name;
+    const sqlHas = parseTemplate(sqlHasPatch, {id});
+    const sqlReg = parseTemplate(sqlRegisterPatch, {id});
+    /**
+     * Don't apply patch more than once
+     */ 
+    const resHas = await pgAdmin.query(sqlHas);
+    if (!resHas.rowCount>0) {
+      try{
+        const sqlPatch = readTxt(path.join(dirSqlAdmin, fInfo.base));
+        await pgAdmin.query(sqlPatch);
+        await pgAdmin.query(sqlReg);
+        applied.push(id);
+      }catch(e){
+        console.error(e);
+      }
+    }
+  }
+
+  /**
+   * Transactional patches applying ( once and once only )
    */ 
   const client = await pgAdmin.connect();
   try{
