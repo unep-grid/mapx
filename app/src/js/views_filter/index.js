@@ -644,16 +644,12 @@ export function getFreqTable(views) {
 
   const stat = {};
 
-  views.forEach(function(v) {
-    checkboxes.components = checkboxes.components.concat(
-      path(v, '_components', [])
-    );
-    checkboxes.collections = checkboxes.collections.concat(
-      path(v, 'data.collections', [])
-    );
+  views.forEach((v)=>{
+    checkboxes.components.push(...path(v, '_components', []));
+    checkboxes.collections.push(...path(v, 'data.collections', []));    
   });
 
-  // grouprs
+  // groupes
   stat.view_components = getArrayStat({
     arr: checkboxes.components,
     stat: 'frequency'
@@ -732,6 +728,7 @@ function updateCheckboxes() {
 
   types.forEach((type) => {
     const tbl = table[type];
+    const addTooltip = type !== 'view_collections';
     const keys = Object.keys(tbl);
     const elParent = groups[type];
     if (keys.length === 0) {
@@ -739,11 +736,16 @@ function updateCheckboxes() {
     }
     keys.forEach((key, i) => {
       const label = getDictItem(key);
+      const tooltipKey = addTooltip ? `${key}_desc` : null;
+      const tooltipText = addTooltip ? getDictItem(tooltipKey) : null;
+
       const checkbox = new Checkbox({
         order: i,
         id: key,
-        label_key: key,
+        label_key: key,  
         label: label,
+        tooltip_key : tooltipKey,
+        tooltip_text : tooltipText,
         count: tbl[key],
         type: type
       });

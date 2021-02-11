@@ -4,10 +4,12 @@ import {onNextFrame} from '../../animation_frame/index.js';
 let settings = {
   onDestroy: () => {},
   onBuild: () => {},
-  onSetState : ()=>{},
+  onSetState: () => {},
   id: Math.random().toString(32),
   type: '',
   label: 'label',
+  tooltip_key: null,
+  tooltip_text: null,
   count: 0,
   animate: true,
   animateType: 'seq_counter' // or 'class'
@@ -18,8 +20,14 @@ class Checkbox {
     const cbx = this;
     cbx.opt = Object.assign({}, settings, opt);
     cbx.id = opt.id;
+    /*
+     * NOTE: why copying stuff here ?
+     */
+
     cbx._label = opt.label;
     cbx._label_key = opt.label_key;
+    cbx._tooltip_text = opt.tooltip_text;
+    cbx._tooltip_key = opt.tooltip_key;
     cbx._order = opt.order;
     cbx._type = opt.type;
     cbx._is_animating = false;
@@ -229,6 +237,7 @@ export {Checkbox};
 
 function buildCheckbox() {
   const cbx = this;
+  let elLabel;
   let elLabelText;
   let elLabelCount;
   let elCheck;
@@ -250,16 +259,24 @@ function buildCheckbox() {
       },
       type: 'checkbox'
     })),
-    el(
+    elLabel = el(
       'label',
       {
-        class: 'vf-checkbox-label',
-        for: 'checkbox_' + cbx.id
+        class: ['vf-checkbox-label'],
+        for: 'checkbox_' + cbx.id,
+        dataset : {
+          lang_key: cbx._tooltip_key,
+          lang_type : 'title',
+        }
       },
       (elLabelText = el('span', {
         class: 'vf-checkbox-filter-text',
-        lang_key: cbx.id
-      })),
+        dataset: {
+          lang_key: cbx._label_key
+        }
+      },
+        cbx._label
+      )),
       (elLabelCount = el('span', {
         class: 'vf-checkbox-filter-count'
       }))
@@ -272,7 +289,16 @@ function buildCheckbox() {
   cbx.elLabelCount = elLabelCount;
   cbx.elCheck = elCheck;
 
-  cbx.setLabel(cbx._label);
-  cbx.setLabelKey(cbx._label_key);
   cbx.setCount(cbx._count);
+
+  // tooltip text 
+  if(cbx._tooltip_text instanceof Promise){
+    cbx._tooltip_text.then(t => {
+      elLabel.setAttribute('title', t);
+    })
+  }
+
+
+  //cbx.setLabel(cbx._label);
+  //cbx.setLabelKey(cbx._label_key);
 }

@@ -157,6 +157,10 @@ export async function updateLanguageElements(o) {
     if (!label) {
       return;
     }
+    if (type === 'title') {
+      el.setAttribute('title', label);
+      return;
+    }
     if (type === 'tooltip') {
       if (el.dataset.lang_split) {
         label = splitnwords(label);
