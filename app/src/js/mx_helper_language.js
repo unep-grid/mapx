@@ -76,6 +76,9 @@ export function getDict(lang) {
     case 'zh':
       out = import('../data/dict_built/dict_zh.json');
       break;
+    case 'ar':
+      out = import('../data/dict_built/dict_ar.json');
+      break;
     default:
       out = import('../data/dict_built/dict_en.json');
       break;

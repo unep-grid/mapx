@@ -209,7 +209,7 @@ config[["uploadDirPath"]] = tempdir()
 config[["dictionaries"]] <- list(
   main = fromJSON(
     file.path(
-      config[[c("resources","data")]],"dict","dict_main.json"
+      config[[c("resources","data")]],"dict_full","dict_full.json"
     )
     ),
   countries = fromJSON(

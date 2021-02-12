@@ -83,7 +83,13 @@ server <- function(input,output,session){
         # -> default = guest
         #
         emailInit <- mxGetInitEmail(browserData)
-        userInfo <- mxLogin(emailInit,browserData, query, reactData)
+        
+        userInfo <- mxLogin(
+          email = emailInit,
+          browserData = browserData, 
+          query = query, 
+          reactData = reactData
+        )
 
         mxDebugMsg("LOGIN DONE")
         #

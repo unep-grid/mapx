@@ -12,7 +12,7 @@ observe({
   token <- reactUser$token
   roles <- getUserRole()
 
-  mxDebugMsg("UPDATE USER")
+  mxDebugMsg("Update client user settings")
 
   mxUpdateSettings(list(
       user = list(

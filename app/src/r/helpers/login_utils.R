@@ -105,7 +105,12 @@ mxLogin <- function(email,browserData,query, reactData){
   actionLink <- .get(query,c("action"),list())
   useAutoRegister <- isTRUE(.get(actionLink,c("id")) == "auto_register")
   useInviteMember <- isTRUE(.get(actionLink,c("id")) == "invite_member")
-  language <- .get(query,c("language"),.get(config,c("language","default")))
+  language <- .get(reactData,c('language'),
+    .get(query,c("language"),
+      .get(config,c("language","default")
+      )
+    )
+  )
 
   if( useInviteMember || useAutoRegister ){
     #

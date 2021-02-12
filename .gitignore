@@ -21,9 +21,6 @@ app/src/js/is_test/dist/*
 app/src/js/sdk/example/dist/*
 app/src/sprites/dist/*
 
-# Built dictionnaries
-**/dict_built/*
-
 # Parcel
 .cache
 

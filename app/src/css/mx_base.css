@@ -899,7 +899,8 @@ details {
 /** 
 * login panel
 */
-.mx-login-info {
+.mx-login-info,
+.mx-language-info {
   font-size: 0.9em;
   padding: 5px;
   margin-top: 12px;

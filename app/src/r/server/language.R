@@ -8,6 +8,7 @@ observe({
   lang_ui <- input$selectLanguage
   lang_query <- query$language
   lang_db <- .get(reactUser$data,c("data","user","cache","last_language"))
+  
   isolate({
 
     lang_react <- reactData$language
@@ -28,6 +29,7 @@ observe({
         lang_out <- lang_def
       }
     }
+    
     if(!identical(lang_out,lang_react)){  
       mxUpdateSettings(list(
           language = lang_out

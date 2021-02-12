@@ -5,11 +5,12 @@ const {pgAdmin} = require('@mapx/db');
 const fs = require('fs');
 const path = require('path');
 
-const dir = 'dict_built';
+const dirFull = 'dict_full';
+const dirBuilt = 'dict_built';
 const db = {};
-const files = fs.readdirSync(path.join(__dirname, dir));
+const files = fs.readdirSync(path.join(__dirname, dirBuilt));
 const dicts_lang = files.filter((f) => f.match(/.*dict_[a-z]{2}\.json$/gm));
-const dict_full = path.join(__dirname, dir, 'dict_full.json');
+const dict_full = path.join(__dirname, dirFull, 'dict_full.json');
 
 /**
  * Init language;
@@ -34,7 +35,7 @@ async function init() {
     dicts_lang.forEach((file) => {
       const name = path.parse(file).name;
       const lang = name.split(/_|\./)[1];
-      const data = JSON.parse(readTxt(path.join(__dirname, dir, file)));
+      const data = JSON.parse(readTxt(path.join(__dirname, dirBuilt, file)));
       db[lang] = {};
       data.forEach((d) => {
         db[lang][d.id] = d[lang] || d.en || d.id;

@@ -183,13 +183,20 @@ observeEvent(reactChain$showLanguages,{
 
   mxModal(
     id="uiSelectLanguage",
-    title = d("ui_language",language),
-    textCloseButton=d("btn_close",language),
-    content = selectizeInput(
-      inputId="selectLanguage",
-      choices=languages,
-      label=d("ui_language",language),
-      selected=language
+    title = d("ui_language",language, web = TRUE),
+    textCloseButton=d("btn_close",language, web = TRUE),
+    content = tags$div(
+
+      selectizeInput(
+        inputId="selectLanguage",
+        choices= languages,
+        label = d("ui_language",language, web=TRUE),
+        selected = language
+        ),
+      tags$div(
+        class = "mx-language-info",
+        d('language_auto_warning', language, web=TRUE)
+      )
     )
   )
 
