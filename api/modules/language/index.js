@@ -4,13 +4,11 @@ const {pgAdmin} = require('@mapx/db');
 //const pgCopyFrom = require('pg-copy-streams').from;
 const fs = require('fs');
 const path = require('path');
-
-const dirFull = 'dict_full';
-const dirBuilt = 'dict_built';
+const dir = 'dict/_built';
 const db = {};
-const files = fs.readdirSync(path.join(__dirname, dirBuilt));
+const files = fs.readdirSync(path.join(__dirname, dir));
 const dicts_lang = files.filter((f) => f.match(/.*dict_[a-z]{2}\.json$/gm));
-const dict_full = path.join(__dirname, dirFull, 'dict_full.json');
+const dict_full = path.join(__dirname, dir, 'dict_full.json');
 
 /**
  * Init language;
@@ -35,7 +33,7 @@ async function init() {
     dicts_lang.forEach((file) => {
       const name = path.parse(file).name;
       const lang = name.split(/_|\./)[1];
-      const data = JSON.parse(readTxt(path.join(__dirname, dirBuilt, file)));
+      const data = JSON.parse(readTxt(path.join(__dirname, dir, file)));
       db[lang] = {};
       data.forEach((d) => {
         db[lang][d.id] = d[lang] || d.en || d.id;
@@ -83,7 +81,9 @@ async function importDict() {
       const values = Object.values(row)
         .map(client.escapeLiteral)
         .join(',');
-      await client.query(`INSERT INTO mx_dict_translate (${keys}) VALUES (${values})`);
+      await client.query(
+        `INSERT INTO mx_dict_translate (${keys}) VALUES (${values})`
+      );
     }
     await client.query('COMMIT');
   } catch (e) {

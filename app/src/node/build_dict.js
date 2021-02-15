@@ -24,9 +24,8 @@ async function update(confFile) {
 
   const uDefault = {
     dict_dir: '/tmp',
-    dict_dir_out_built: ['/tmp'],
-    dict_dir_out_cache: '/tmp',
-    dict_dir_out_full: ['/tmp'],
+    dict_dir_out: ['/tmp'],
+    dict_file_cache: '/tmp/cache.json',
     languages: [],
     language_default: 'en'
   };
@@ -34,7 +33,7 @@ async function update(confFile) {
   const uConfig = await readJSON('./', confFile);
   const config = Object.assign({}, uDefault, uConfig);
   const files = await readdir(path.resolve(config.dict_dir));
-  const cacheFile = path.resolve(config.dict_dir_out_cache, 'dict_cache.json');
+  const cacheFile = path.resolve(config.dict_file_cache);
 
   /**
    * Merge all dict
@@ -113,26 +112,28 @@ async function update(confFile) {
    * Write cache
    */
   if (updateCache) {
-    await writeFile(cacheFile, JSON.stringify(dict));
+    await writeFile(cacheFile, JSON.stringify(dict,0,2));
   }
 
-  /**
-   * Write full JSON
-   */
-  for (let dir of config.dict_dir_out_full) {
-    const file = path.resolve(dir, `dict_full.json`);
-    await writeFile(file, JSON.stringify(dict));
-  }
 
   /**
    * Test if output dirs exist
    */
-  for (let dir of config.dict_dir_out_built) {
+  for (let dir of config.dict_dir_out) {
     const pathDest = path.resolve(dir);
     if (!(await exists(pathDest))) {
       throw new Error(`Output directory ${pathDest} does not exist`);
     }
   }
+
+  /**
+   * Write full JSON
+   */
+  for (let dir of config.dict_dir_out) {
+    const file = path.resolve(dir, `dict_full.json`);
+    await writeFile(file, JSON.stringify(dict,0,2));
+  }
+
 
   /**
    * Build one dictionary file per language
@@ -149,9 +150,9 @@ async function update(confFile) {
       return o;
     });
 
-    for (let dir of config.dict_dir_out_built) {
+    for (let dir of config.dict_dir_out) {
       let file = path.resolve(dir, `dict_${language}.json`);
-      await writeFile(file, JSON.stringify(d));
+      await writeFile(file, JSON.stringify(d,0,2));
     }
     console.log(`Built dict file for ${language}`);
   }

@@ -50,37 +50,37 @@ export function getDict(lang) {
 
   switch (lang) {
     case 'en':
-      out = import('../data/dict_built/dict_en.json');
+      out = import('../data/dict/_built/dict_en.json');
       break;
     case 'fr':
-      out = import('../data/dict_built/dict_fr.json');
+      out = import('../data/dict/_built/dict_fr.json');
       break;
     case 'es':
-      out = import('../data/dict_built/dict_es.json');
+      out = import('../data/dict/_built/dict_es.json');
       break;
     case 'de':
-      out = import('../data/dict_built/dict_de.json');
+      out = import('../data/dict/_built/dict_de.json');
       break;
     case 'ru':
-      out = import('../data/dict_built/dict_ru.json');
+      out = import('../data/dict/_built/dict_ru.json');
       break;
     case 'fa':
-      out = import('../data/dict_built/dict_fa.json');
+      out = import('../data/dict/_built/dict_fa.json');
       break;
     case 'ps':
-      out = import('../data/dict_built/dict_ps.json');
+      out = import('../data/dict/_built/dict_ps.json');
       break;
     case 'bn':
-      out = import('../data/dict_built/dict_bn.json');
+      out = import('../data/dict/_built/dict_bn.json');
       break;
     case 'zh':
-      out = import('../data/dict_built/dict_zh.json');
+      out = import('../data/dict/_built/dict_zh.json');
       break;
     case 'ar':
-      out = import('../data/dict_built/dict_ar.json');
+      out = import('../data/dict/_built/dict_ar.json');
       break;
     default:
-      out = import('../data/dict_built/dict_en.json');
+      out = import('../data/dict/_built/dict_en.json');
       break;
   }
   return out.then((m) => {
