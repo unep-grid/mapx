@@ -18,9 +18,7 @@ observe({
     if(!hasRole) return()
     if(!hasProject) return()
 
-    timer <- mxTimeDiff("Sending view")
-
-    mxDebugMsg("UPDATE VIEWS LIST")
+    mxDebugMsg("Update views request ( autoFetchAll )")
 
     mglUpdateViewsList(
       id = .get(config,c("map","id")),
@@ -29,7 +27,6 @@ observe({
       resetView = TRUE
       )
 
-    mxTimeDiff(timer)
   })
 })
 

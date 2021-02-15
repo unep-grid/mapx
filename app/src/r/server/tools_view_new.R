@@ -167,10 +167,10 @@ observeEvent(input$btnAddViewConfirm,{
   # add this as new (empty) source
   mglUpdateViewsList(
     id = .get(config,c("map","id")),
-    viewsList = newView,
+    viewsList = list(newView),
     render = TRUE,
     project = project
-    )
+  )
 
   reactData$updateViewListFetchOnly <- runif(1)
 

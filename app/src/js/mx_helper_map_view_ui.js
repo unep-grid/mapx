@@ -207,11 +207,11 @@ export function updateViewsFilter() {
  * @param {Object} o.views views to render
  * @param {boolean} o.add Add views to an existing list
  */
-export function viewsListRenderNew(o) {
+export async function viewsListRenderNew(o) {
   const h = mx.helpers;
   const idMap = o.id;
   const mData = h.getMapData(idMap);
-  const elViewsContainer = document.querySelector('.mx-views-container');
+  //const elViewsContainer = document.querySelector('.mx-views-container');
   const elFilterText = document.getElementById('viewsFilterText');
   const elFilterTags = document.getElementById('viewsFilterContainer');
   const elFilterActivated = document.getElementById('btnFilterChecked');
@@ -227,7 +227,8 @@ export function viewsListRenderNew(o) {
     mData.viewsFilter.destroy();
   }
   if (mData.viewsList instanceof NestedList) {
-    mData.viewsList.destroy();
+    const ddd = mData.viewsList.destroy();
+    await Promise.all(ddd);
   }
 
   /**

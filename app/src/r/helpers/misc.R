@@ -1897,11 +1897,16 @@ mxProfanityChecker <- function(txt){
 
   if(!noDataCheck(txt)){
     for(dict in words){
-      for( w in dict){
-        if(nchar(w)<5) w <- "\\b" + w + "\\b"
-        if(grepl(w,txt,ignore.case=TRUE)){
-          pass <- FALSE
-        }   
+      for( w in dict ){
+        n <- nchar(w)
+        if( n > 1 ){
+          if( n < 5){
+            w <- sprintf("\\b%1$s\\b", w )
+          }
+          if(grepl(w,txt,ignore.case=TRUE)){
+            pass <- FALSE
+          }
+        }
       }
     }
   }

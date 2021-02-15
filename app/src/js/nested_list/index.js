@@ -73,7 +73,7 @@ class NestedList {
     li.listenerStore.destroy();
     li.clearHistory();
     li.clearAllItems();
-    li.fire('destroy');
+    return li.fire('destroy');
   }
   /**
    * Get/set options
@@ -906,7 +906,7 @@ class NestedList {
     var elContent = li.getItemContent(el, li.opt.class.itemContent);
     li.fire('render_item_content', {el: elContent, data: attr});
   }
-  async addItem(attr) {
+  addItem(attr) {
     const li = this;
 
     attr.render = attr.render || !attr.content || false;
@@ -1488,7 +1488,6 @@ function handleDragEnter(evt) {
  */
 function handleDrop(evt) {
   const li = this;
-  console.log('drop');
   li.setDragClean();
   evt.preventDefault();
 }
@@ -1499,7 +1498,6 @@ function handleDrop(evt) {
 function handleDragEnd(evt) {
   const li = this;
   const elNoImg = el('img');
-  console.log('end');
   evt.dataTransfer.setDragImage(elNoImg, 0, 0);
 
   if (!li.isModeEmpty()) {

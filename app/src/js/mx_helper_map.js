@@ -41,7 +41,6 @@ export function metersToDegrees(point) {
 export async function downloadViewGeoJSON(opt) {
   opt = Object.assign({}, {idView: null, mode: 'data'}, opt);
   const h = mx.helpers;
-  const map = h.getMap();
   const view = h.getView(opt.idView);
 
   if (!h.isView(view)) {
@@ -79,9 +78,9 @@ export async function downloadViewRaster(opt) {
     throw new Error(`No view with id ${idView}`);
   }
 
-  const title = h.getViewTitle(view).replace(/\s/, '_');
+  //const title = h.getViewTitle(view).replace(/\s/, '_');
   const url = h.path(view, 'data.source.urlDownload');
-  let filename = title;
+  //let filename = title;
 
   if (h.isUrl(url)) {
     /**
@@ -293,8 +292,8 @@ export function setProject(idProject, opt) {
      * Change confirmed : remove all views, close modals, send
      * selected project to shiny
      */
-    function change() {
-      h.viewsCloseAll();
+    async function change() {
+      await h.viewsCloseAll();
       closeModals();
       h.setQueryParametersInitReset();
       const hasShiny = window.Shiny;
@@ -459,7 +458,7 @@ export function initListenersApp() {
     target: document.getElementById('btnShowProject'),
     type: 'click',
     callback: h.showSelectProject,
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   /**
@@ -482,21 +481,21 @@ export function initListenersApp() {
         elPanel.classList.add('active');
       }
     },
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   mx.listeners.addListener({
     target: document.getElementById('btnShowLanguage'),
     type: 'click',
     callback: h.showSelectLanguage,
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   mx.listeners.addListener({
     target: document.getElementById('btnShowLogin'),
     type: 'click',
     callback: h.showLogin,
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   mx.events.on({
@@ -528,7 +527,7 @@ export function initListenersApp() {
 
   mx.events.on({
     type: ['settings_user_change', 'settings_change'],
-    idGroup: 'mapx-base',
+    idGroup: 'mapx_base',
     callback: h.updateUiSettings
   });
   h.updateUiSettings();
@@ -547,7 +546,6 @@ export function initListenersApp() {
     type: ['view_created', 'view_deleted'],
     idGroup: 'clean_history_and_state',
     callback: () => {
-      let dat = h.getMapData();
       h.updateViewsFilter();
       h.viewsCheckedUpdate();
     }
@@ -563,7 +561,7 @@ export function initListenersApp() {
     target: document.getElementById('btnClearCache'),
     type: 'click',
     callback: h.clearMapxCache,
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   mx.listeners.addListener({
@@ -583,7 +581,7 @@ export function initListenersApp() {
         elBtn.classList.remove(clActive);
       }
     },
-    group: 'mapx-base'
+    group: 'mapx_base'
   });
 
   /**
@@ -733,7 +731,6 @@ export async function initMapx(o) {
      * Temporary hack : force redirect here. URL rewrite in Traefik does
      * not allow lookaround : it's not possible to have non trivial redirect.
      */
-    const params = h.getQueryParametersAsObject(window.location.href);
     const url = new URL(window.location);
     url.searchParams.set('storyAutoStart', false);
     url.pathname = '/static.html';
@@ -959,25 +956,25 @@ export function initMapListener(map) {
    * Mouse move handling
    */
   map.on('mousemove', (e) => {
-    if (false) {
+//    if (false) {
       /**
        * Change illuminaion direction accoding to mouse position
        * Quite intensive on GPU.
        */
-      const elCanvas = map.getCanvas();
-      const dpx = window.devicePixelRatio || 1;
-      const wMap = elCanvas.width;
-      const hMap = elCanvas.height;
-      const x = e.point.x - wMap / (2 * dpx);
-      const y = hMap / (2 * dpx) - e.point.y;
-      const deg = h.xyToDegree(x, y);
+      //const elCanvas = map.getCanvas();
+      //const dpx = window.devicePixelRatio || 1;
+      //const wMap = elCanvas.width;
+      //const hMap = elCanvas.height;
+      //const x = e.point.x - wMap / (2 * dpx);
+      //const y = hMap / (2 * dpx) - e.point.y;
+      //const deg = h.xyToDegree(x, y);
 
-      map.setPaintProperty(
-        'hillshading',
-        'hillshade-illumination-direction',
-        deg
-      );
-    }
+      //map.setPaintProperty(
+        //'hillshading',
+        //'hillshade-illumination-direction',
+        //deg
+      //);
+    //}
 
     const layers = h.getLayerNamesByPrefix({
       id: map.id,
@@ -1086,7 +1083,6 @@ export async function initMapxApp(o) {
   const h = mx.helpers;
   const map = o.map;
   const elMap = map.getContainer();
-  const settings = mx.settings;
   const hasShiny = !!window.Shiny;
   const idViewsQueryOpen = h.getQueryParameter('viewsOpen');
   const idViewsQuery = h.getQueryParameter('views');
@@ -1104,6 +1100,7 @@ export async function initMapxApp(o) {
 
   /*
    * Fetch views and build ViewsList, ViewsFilter
+   *
    */
   await h.updateViewsList({
     id: o.id,
@@ -1400,19 +1397,20 @@ export function setBusy(enable) {
 
 /**
  * Reset project : remove view, dashboards, etc
+ * NOTE: Shiny require at least one argument. Not used, but, needed.
  *
  */
 export function viewsCloseAll(o) {
   o = o || {};
   const h = mx.helpers;
   const views = h.getViews();
-  const mData = h.getMapData();
   /*
    * Close and remove layers
    */
   const removed = views.map((view) => {
-    h.viewRemove(view.id);
+    return h.viewRemove(view.id);
   });
+  return Promise.all(removed);
 }
 
 /**
@@ -1573,154 +1571,104 @@ export async function getViewsRemote(idViews) {
 
 /**
  * Save view list to views
- * @param {Object} o options
- * @param {String} o.id ID of the map
- * @param {Object} o.viewList views list
- * @param {Boolean} o.viewsCompact The view list is in compact form (id and row only)
- * @param {String} o.project code
+ * @param {Object} opt options
+ * @param {String} opt.id ID of the map
+ * @param {Array} opt.viewList views list
+ * @param {Boolean} opt.viewsCompact The view list is in compact form (id and row only)
+ * @param {String} opt.project code
  */
-export async function updateViewsList(o) {
+export async function updateViewsList(opt) {
   const h = mx.helpers;
-  const def = {
-    id: 'map_main',
-    viewList: [],
-    viewsCompact: false,
-    project: h.path(mx, 'settings.project.id')
-  };
-  o = Object.assign({}, def, o);
-  const viewsToAdd = o.viewsList;
-  const isCompactList = o.viewsCompact === true;
-  const autoFetchAll = o.autoFetchAll === true;
-  const hasViewsList =
-    h.isArrayOfViewsId(viewsToAdd) && h.isNotEmpty(viewsToAdd);
-  const hasSingleView = !hasViewsList && h.isView(viewsToAdd);
-  const updateProject =
-    o.project && o.project !== h.path(mx, 'settings.project.id');
   let elProgContainer;
-  let mode = 'array_async_all';
+  let views = [];
   let nCache = 0,
     nNetwork = 0,
     nTot = 0,
     prog;
 
-  if (updateProject) {
-    mx.settings.project.id = o.project;
+  /*
+   * See default used:
+   * - app/src/r/server/view_update_client.R
+   * - app/src/r/helpers/binding_mgl.R
+   */
+  const def = {
+    id: 'map_main',
+    viewsList: [],
+    render: false,
+    autoFetchAll: false,
+    project: h.path(mx, 'settings.project.id'),
+    resetViews: false
+  };
+
+  opt = Object.assign({}, def, opt);
+
+  const viewsToAdd = opt.viewsList;
+  const autoFetchAll = opt.autoFetchAll === true;
+  const hasViewsList =
+    h.isArrayOfViewsId(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+
+  if (!hasViewsList && !autoFetchAll) {
+    throw new Error(
+      'updateViewsList need a list of views or autoFetchAll set to true'
+    );
   }
+
+  /**
+   * If update is requested server side, project is already set, and
+   * upadte views list is the last step here.
+   * Note: this should have been done in mxUpdateSettings,  app/src/r/server/project.R
+   */
+
+  //const updateproject =
+  //h.isprojectid(opt.project) &&
+  //opt.project !== h.path(mx, 'settings.project.id');
+
+  //if (updateproject) {
+  //mx.settings.project.id = opt.project;
+  //}
 
   if (hasViewsList) {
     nTot = viewsToAdd.length;
   }
 
-  if (autoFetchAll) {
-    mode = 'array_async_all';
+  /**
+   * Set fetch mode
+   */
+  if (hasViewsList) {
+    views = await addLocal(viewsToAdd);
   } else {
-    if (hasSingleView) {
-      mode = 'object_single';
-    } else if (hasViewsList && isCompactList) {
-      mode = 'array_async';
-    } else if (hasViewsList && !isCompactList) {
-      mode = 'array_sync';
-    }
+    views = await addAsyncAll();
   }
+
+  /**
+   * Remove progress if it has been instanciated. See :
+   *  - updateProgress
+   */
+  if (prog instanceof RadialProgress) {
+    prog.destroy();
+  }
+
+  return views;
+
   /**
    * Helpers
    */
 
-  /* Switch according to mode */
-  async function addViews() {
-    let add = {
-      object_single: addSingle,
-      array_sync: addSync,
-      array_async: addAsync,
-      array_async_all: addAsyncAll
-    }[mode];
-    const views = await add(viewsToAdd);
-    cleanProgress();
-    return views;
-  }
-
-  /* Clean progress radial */
-  function cleanProgress() {
-    if (prog instanceof RadialProgress) {
-      prog.destroy();
-    }
-  }
-
-  /* update progress */
-  function updateProgress(d) {
-    let percent = 0;
-
-    d = d || {
-      loaded: nCache + nNetwork,
-      total: nTot
-    };
-
-    if (!elProgContainer) {
-      elProgContainer = document.querySelector('.mx-views-list');
-    }
-
-    if (!prog && elProgContainer) {
-      h.childRemover(elProgContainer);
-      prog = new RadialProgress(elProgContainer, {
-        radius: 30,
-        stroke: 4,
-        strokeColor: '#f00'
-      });
-    }
-
-    if (prog instanceof RadialProgress && prog.update && elProgContainer) {
-      percent = (d.loaded / d.total) * 100;
-      prog.update(percent);
-    }
-  }
-
-  /* get view object from storage or network */
-  function getViewObject(v) {
-    const apiUrlViews = h.getApiUrl('getView');
-    const keyStore = v.id + '@' + v.pid;
-    const keyNet = apiUrlViews + v.id + '?' + v.pid;
-    const editable = h.isViewEditable(v);
-    return mx.data.viewsToAdd.getItem(keyStore).then((view) => {
-      if (view) {
-        nCache++;
-        updateProgress();
-        view._edit = editable;
-        return Promise.resolve(view);
-      } else {
-        return fetch(keyNet)
-          .then((r) => r.json())
-          .then((view) => {
-            nNetwork++;
-            updateProgress();
-            view._edit = editable;
-            return view;
-          })
-          .then((view) => mx.data.viewsToAdd.setItem(keyStore, view));
-      }
-    });
-  }
-
-  /* Add array of compact viewsToAdd object*/
-  async function addAsync(viewsToAdd) {
-    const viewsToAddFetched = await Promise.all(viewsToAdd.map(getViewObject));
-    const viewsGeoJSON = await getGeoJSONViewsFromStorage(o);
-    const views = [];
-    views.push(...viewsToAddFetched);
-    views.push(...viewsGeoJSON);
-
-    h.viewsListRenderNew({
-      id: o.id,
-      views: views
-    });
-    mx.events.fire({
-      type: 'views_list_updated'
-    });
-    return views;
-  }
-
+  /* Add all view from automatic fetch. */
   async function addAsyncAll() {
     const views = [];
     const state = [];
+    /**
+     * Local GeoJSON views
+     */
+    const viewsGeoJSON = await h.getGeoJSONViewsFromStorage({
+      project: opt.project
+    });
+    views.push(...viewsGeoJSON);
+
+    /**
+     * Remote views
+     */
     const data = await h.fetchViews({
       onProgress: updateProgress
     });
@@ -1735,12 +1683,11 @@ export async function updateViewsList(o) {
       }, state)
     );
 
-    const viewsGeoJSON = await getGeoJSONViewsFromStorage(o);
-
-    views.push(...viewsGeoJSON);
-
-    h.viewsListRenderNew({
-      id: o.id,
+    /**
+     * Render
+     */
+    await h.viewsListRenderNew({
+      id: opt.id,
       views: views,
       state: state
     });
@@ -1752,27 +1699,8 @@ export async function updateViewsList(o) {
     return views;
   }
 
-  /* Add array of coomplete viewsToAdd object*/
-  async function addSync() {
-    if (true) {
-      throw new Error('addSync disabled');
-    }
-    h.viewsListRenderNew({
-      id: o.id,
-      views: viewsToAdd
-    });
-
-    loadGeoJSONFromStorage(o);
-
-    mx.events.fire({
-      type: 'views_list_updated'
-    });
-
-    return viewsToAdd;
-  }
-
-  /* Add single view object */
-  async function addSingle(view) {
+  /* Add single view object, typically after an update */
+  async function addLocal(view) {
     await h.viewsListAddSingle(view, {
       open: true,
       render: true
@@ -1786,27 +1714,54 @@ export async function updateViewsList(o) {
     return view;
   }
 
-  /**
-   * Process view list
-   */
-  return await addViews();
+  /* Update progress */
+  function updateProgress(d) {
+    d = d || {
+      loaded: nCache + nNetwork,
+      total: nTot
+    };
+
+    /**
+     * Init
+     */
+
+    if (!elProgContainer) {
+      elProgContainer = document.querySelector('.mx-views-list');
+    }
+
+    if (!prog && elProgContainer) {
+      h.childRemover(elProgContainer);
+      prog = new RadialProgress(elProgContainer, {
+        radius: 30,
+        stroke: 4,
+        strokeColor: '#f00'
+      });
+    }
+
+    /**
+     * Update
+     */
+
+    if (prog instanceof RadialProgress && prog.update && elProgContainer) {
+      prog.update((d.loaded / d.total) * 100);
+    }
+  }
 }
 
 /**
  * Load geojson from localstorage,
  * @param {Object} o options
- * @param {String} o.id Map id
  * @param {String} o.project Current project to filter geojson view. Default to settings.project
  * @return {Array} array of views;
  */
-async function getGeoJSONViewsFromStorage(o) {
+export async function getGeoJSONViewsFromStorage(o) {
   const out = [];
 
   const project = o.project || mx.settings.project.id;
   /**
    * extract views from local storage
    */
-  await mx.data.geojson.iterate(function(value) {
+  await mx.data.geojson.iterate((value) => {
     const view = value.view;
     if (view.project === project) {
       out.push(view);
@@ -1828,7 +1783,7 @@ export async function viewsCheckedUpdate(o) {
   const vChecked = [];
   const proms = [];
 
-  let view, isChecked, id;
+  let isChecked, id;
 
   /**
    * Get views checked
@@ -2713,8 +2668,11 @@ export async function viewLayersRemove(o) {
 
   await h.viewModulesRemove(view);
 
+  const idEvent = `'view_remove_${o.idView}`;
+
   mx.events.fire({
     type: 'view_removed',
+    idGroup: idEvent,
     data: {
       idView: o.idView,
       time: now,
@@ -2817,25 +2775,36 @@ export async function viewAdd(view) {
   }
 }
 
+/**
+* Removed both view UI and layers, handle view_removed event 
+* @param {Object} view 
+* @return {Promise} Confirmation -> resolve to boolean
+*/
 export async function viewRemove(view) {
   const h = mx.helpers;
   view = h.getView(view);
-
+  const idView = view.id;
   if (!h.isView(view)) {
-    return Promise.resolve(false);
+    return true;
   }
 
   const confirmation = new Promise((resolve) => {
+    /**
+    * 'view_removed' fired by viewLayersRemove
+    */
+    
+    const idEvent = `'view_remove_${idView}`;
     mx.events.once({
       type: 'view_removed',
-      idGroup: 'viewRemove',
-      callback: (d) => {
-        if (d.idView === view.id) {
+      idGroup: idEvent,
+      callback: (data) => {
+        if (data.idView === idView) {
           resolve(true);
         }
       }
     });
   });
+
 
   await _viewUiClose(view);
   await h.viewLayersRemove({
@@ -4454,51 +4423,58 @@ export async function viewFilterToolsInit(id, opt) {
 /**
  * Clean stored modules : dashboard, custom view, etc.
  */
-export async function viewModulesRemove(view) {
-  const h = mx.helpers;
-  view = h.isViewId(view) ? h.getView(view) : view;
-  if (!h.isView(view)) {
-    return;
-  }
-  const it = view._filters_tools || {};
-  delete view._filters_tools;
+export function viewModulesRemove(view) {
+    const h = mx.helpers;
+  return new Promise(resolve => {
+    view = h.isViewId(view) ? h.getView(view) : view;
+    if (!h.isView(view)) {
+      resolve(true);
+    }
+    const it = view._filters_tools || {};
+    delete view._filters_tools;
 
-  if (h.isFunction(view._onRemoveCustomView)) {
-    view._onRemoveCustomView();
-  }
-  if (h.isElement(view._elLegend)) {
-    view._elLegend.remove();
-  }
+    if (h.isFunction(view._onRemoveCustomView)) {
+      view._onRemoveCustomView();
+    }
+    if (h.isElement(view._elLegend)) {
+      view._elLegend.remove();
+    }
 
-  if (h.isArray(view._widgets)) {
-    view._widgets.forEach((w) => {
-      w.destroy();
-    });
-    if (mx.dashboard && mx.dashboard.widgets.length === 0) {
-      mx.dashboard.destroy();
+    if (h.isArray(view._widgets)) {
+      view._widgets.forEach((w) => {
+        w.destroy();
+      });
+      if (mx.dashboard && mx.dashboard.widgets.length === 0) {
+        mx.dashboard.destroy();
+      }
     }
-  }
-  if (view._miniMap) {
-    view._miniMap.destroy();
-  }
-  if (it) {
-    if (it.searchBox) {
-      it.searchBox.destroy();
+    if (view._miniMap) {
+      view._miniMap.destroy();
     }
-    if (it.transparencySlider) {
-      it.transparencySlider.destroy();
+
+
+    if (it) {
+      if (it.searchBox) {
+        it.searchBox.destroy();
+      }
+      if (it.transparencySlider) {
+        it.transparencySlider.destroy();
+      }
+      if (it.numericSlider) {
+        it.numericSlider.destroy();
+      }
+      if (it.timeSlider) {
+        it.timeSlider.destroy();
+      }
     }
-    if (it.numericSlider) {
-      it.numericSlider.destroy();
-    }
-    if (it.timeSlider) {
-      it.timeSlider.destroy();
-    }
-  }
-}
+    resolve(true);
+  })
+};
+
 export function viewsModulesRemove(views) {
   const h = mx.helpers;
   views = views instanceof Array ? views : [views];
+
   return Promise.all(views.map((v) => h.viewModulesRemove(v)));
 }
 

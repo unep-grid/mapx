@@ -159,26 +159,20 @@ mglRemoveView <- function( id=NULL, idView, session=shiny::getDefaultReactiveDom
 #' Trigger an update or send new view list, possibly compact.
 #'
 #' @param id {character} Id of the map to associate views
-#' @param viewsList {list} List of view to save
-#' @param viewsCompact {boolean} For compact views list (ask remote server for full view)
+#' @param viewsList {list} Optional list of views.
+#' @param render {logical} Render views lsit
 #' @param autoFetchAll {boolean} Auto fetch views client side based on user id and project
 #' @param project {character} Project code
-#' @param resetViews {boolean} remove old views and replace them by those one
-#' @param idViewsList {character} Id of the view list where to put views
-#' @param idViewsListContainer {character} Id of the view list container
-#' @note mgl init has already saved idViewsList and idViewsListContainer. Duplicate ? 
+#' @param resetViews {boolean} Removes old views
 #' @export
 mglUpdateViewsList <- function(
-  viewsList = NULL,
   id = NULL, 
+  viewsList = NULL,
+  render = TRUE,
+  autoFetchAll = FALSE,
   project = NULL,
   resetViews = FALSE,
-  viewsCompact = FALSE,
-  autoFetchAll = FALSE,
-  idViewsList = NULL,
-  idViewsListContainer = NULL,
-  render=TRUE,
-  session=shiny::getDefaultReactiveDomain()) {
+  session = shiny::getDefaultReactiveDomain()) {
 
   conf <- mxGetDefaultConfig()
 
@@ -186,24 +180,15 @@ mglUpdateViewsList <- function(
     id <- conf[[c("map","id")]]
   }
 
-  if(noDataCheck(idViewsList)){
-    idViewsList <- conf[[c("map","idViewsList")]]
-  }
-
-  if(noDataCheck(idViewsListContainer)){
-    idViewsListContainer <- conf[[c("map","idViewsListContainer")]]
-  }
-
   session$sendCustomMessage("mglUpdateViewsList",list(
       id = id,
       viewsList = viewsList,
-      idViewsList = idViewsList,
-      idViewsListContainer = idViewsListContainer,
       render = render,
+      autoFetchAll = autoFetchAll,
       project = project,
-      viewsCompact = viewsCompact,
       resetViews =resetViews
-      ))
+      )
+  )
 
 }
 
