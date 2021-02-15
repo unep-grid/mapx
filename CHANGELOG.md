@@ -1,5 +1,13 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.9-beta' target='_blank'>1.8.9-beta</a>
+    - APP
+      - Issue #657 should be solved : views' functionalities not properly removed after project or role change. 
+      - Issue regarding the profanity checker. Words collection for Arabic language produced an error. This should have been solved.
+      - Views + category list : fixed a style issue with nested categories shadows in a collapsed parent category. 
+    - APP + API
+      - Missing MapX app related text is automatically translated when building internal dictionary. Original dictionaries are not modified. Descriptions, abstracts, and any sensitive or contextual non-MapX text is not translated automatically. If a text has been translated, an asterisk is shown. A message describing this is also shown during language change. This has been done to mitigate the growing issue regarding the lack of contributions for our translation system for technical terms and templates. Contributions are welcome ! 
+      - Reorganization of dictionaries in the project.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.8-beta' target='_blank'>1.8.8-beta</a>
     - API 
       - Added migration step for making sure postgres 'track_commit_timestamp' is set.
