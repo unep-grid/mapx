@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.10-beta' target='_blank'>1.8.10-beta</a>
+   - APP + API 
+      - Changed .gitignore to allow _built and _cache being committed
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.9-beta' target='_blank'>1.8.9-beta</a>
     - APP
       - Issue #657 should be solved : views' functionalities not properly removed after project or role change. 
