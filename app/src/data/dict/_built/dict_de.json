@@ -1,0 +1,6457 @@
+[
+  {
+    "id": "ABW",
+    "en": "Aruba",
+    "de": "Aruba"
+  },
+  {
+    "id": "AFG",
+    "en": "Afghanistan",
+    "de": "Afghanistan"
+  },
+  {
+    "id": "AGO",
+    "en": "Angola",
+    "de": "Angola"
+  },
+  {
+    "id": "AIA",
+    "en": "Anguilla",
+    "de": "Anguilla"
+  },
+  {
+    "id": "ALA",
+    "en": "Åland Islands",
+    "de": "Åland-Inseln"
+  },
+  {
+    "id": "ALB",
+    "en": "Albania",
+    "de": "Albanien"
+  },
+  {
+    "id": "AND",
+    "en": "Andorra",
+    "de": "Andorra"
+  },
+  {
+    "id": "ARE",
+    "en": "United Arab Emirates",
+    "de": "Vereinigte Arabische Emirate"
+  },
+  {
+    "id": "ARG",
+    "en": "Argentina",
+    "de": "Argentinien"
+  },
+  {
+    "id": "ARM",
+    "en": "Armenia",
+    "de": "Armenien"
+  },
+  {
+    "id": "ASM",
+    "en": "American Samoa",
+    "de": "Amerikanisch-Samoa"
+  },
+  {
+    "id": "ATA",
+    "en": "Antarctica",
+    "de": "Antarktis"
+  },
+  {
+    "id": "ATF",
+    "en": "French Southern Territories",
+    "de": "Französische Süd- und Antarktisgebiete"
+  },
+  {
+    "id": "ATG",
+    "en": "Antigua and Barbuda",
+    "de": "Antigua und Barbuda *"
+  },
+  {
+    "id": "AUS",
+    "en": "Australia",
+    "de": "Australien"
+  },
+  {
+    "id": "AUT",
+    "en": "Austria",
+    "de": "Österreich"
+  },
+  {
+    "id": "AZE",
+    "en": "Azerbaijan",
+    "de": "Aserbaidschan"
+  },
+  {
+    "id": "BDI",
+    "en": "Burundi",
+    "de": "Burundi"
+  },
+  {
+    "id": "BEL",
+    "en": "Belgium",
+    "de": "Belgien"
+  },
+  {
+    "id": "BEN",
+    "en": "Benin",
+    "de": "Benin"
+  },
+  {
+    "id": "BES",
+    "en": "Bonaire, Sint Eustatius and Saba",
+    "de": "Bonaire, Sint Eustatius und Saba *"
+  },
+  {
+    "id": "BFA",
+    "en": "Burkina Faso",
+    "de": "Burkina Faso"
+  },
+  {
+    "id": "BGD",
+    "en": "Bangladesh",
+    "de": "Bangladesch"
+  },
+  {
+    "id": "BGR",
+    "en": "Bulgaria",
+    "de": "Bulgarien"
+  },
+  {
+    "id": "BHR",
+    "en": "Bahrain",
+    "de": "Bahrain"
+  },
+  {
+    "id": "BHS",
+    "en": "Bahamas",
+    "de": "Bahamas"
+  },
+  {
+    "id": "BIH",
+    "en": "Bosnia and Herzegovina",
+    "de": "Bosnien und Herzegowina *"
+  },
+  {
+    "id": "BLM",
+    "en": "Saint Barthélemy",
+    "de": "Saint Barthélemy *"
+  },
+  {
+    "id": "BLR",
+    "en": "Belarus",
+    "de": "Belarus"
+  },
+  {
+    "id": "BLZ",
+    "en": "Belize",
+    "de": "Belize"
+  },
+  {
+    "id": "BMU",
+    "en": "Bermuda",
+    "de": "Bermuda"
+  },
+  {
+    "id": "BOL",
+    "en": "Bolivia (Plurinational State of)",
+    "de": "Bolivien (Plurinational State of) *"
+  },
+  {
+    "id": "BRA",
+    "en": "Brazil",
+    "de": "Brasilien"
+  },
+  {
+    "id": "BRB",
+    "en": "Barbados",
+    "de": "Barbados"
+  },
+  {
+    "id": "BRN",
+    "en": "Brunei Darussalam",
+    "de": "Brunei Darussalam *"
+  },
+  {
+    "id": "BTN",
+    "en": "Bhutan",
+    "de": "Bhutan"
+  },
+  {
+    "id": "BVT",
+    "en": "Bouvet Island",
+    "de": "Bouvet Island *"
+  },
+  {
+    "id": "BWA",
+    "en": "Botswana",
+    "de": "Botsuana"
+  },
+  {
+    "id": "CAF",
+    "en": "Central African Republic",
+    "de": "Zentralafrikanische Republik"
+  },
+  {
+    "id": "CAN",
+    "en": "Canada",
+    "de": "Kanada"
+  },
+  {
+    "id": "CCK",
+    "en": "Cocos (Keeling) Islands",
+    "de": "Kokosinseln"
+  },
+  {
+    "id": "CHE",
+    "en": "Switzerland",
+    "de": "Schweiz"
+  },
+  {
+    "id": "CHL",
+    "en": "Chile",
+    "de": "Chile"
+  },
+  {
+    "id": "CHN",
+    "en": "China",
+    "de": "China"
+  },
+  {
+    "id": "CIV",
+    "en": "Côte d’Ivoire",
+    "de": "Côte d’Ivoire"
+  },
+  {
+    "id": "CMR",
+    "en": "Cameroon",
+    "de": "Kamerun"
+  },
+  {
+    "id": "COD",
+    "en": "Democratic Republic of the Congo",
+    "de": "Demokratische Republik Kongo *"
+  },
+  {
+    "id": "COG",
+    "en": "Congo",
+    "de": "Kongo *"
+  },
+  {
+    "id": "COK",
+    "en": "Cook Islands",
+    "de": "Cookinseln"
+  },
+  {
+    "id": "COL",
+    "en": "Colombia",
+    "de": "Kolumbien"
+  },
+  {
+    "id": "COM",
+    "en": "Comoros",
+    "de": "Komoren"
+  },
+  {
+    "id": "CPV",
+    "en": "Cabo Verde",
+    "de": "Cabo Verde *"
+  },
+  {
+    "id": "CRI",
+    "en": "Costa Rica",
+    "de": "Costa Rica"
+  },
+  {
+    "id": "CUB",
+    "en": "Cuba",
+    "de": "Kuba"
+  },
+  {
+    "id": "CUW",
+    "en": "Curaçao",
+    "de": "Curaçao"
+  },
+  {
+    "id": "CXR",
+    "en": "Christmas Island",
+    "de": "Weihnachtsinsel"
+  },
+  {
+    "id": "CYM",
+    "en": "Cayman Islands",
+    "de": "Kaimaninseln"
+  },
+  {
+    "id": "CYP",
+    "en": "Cyprus",
+    "de": "Zypern"
+  },
+  {
+    "id": "CZE",
+    "en": "Czechia",
+    "de": "Tschechien *"
+  },
+  {
+    "id": "DEU",
+    "en": "Germany",
+    "de": "Deutschland"
+  },
+  {
+    "id": "DJI",
+    "en": "Djibouti",
+    "de": "Dschibuti"
+  },
+  {
+    "id": "DMA",
+    "en": "Dominica",
+    "de": "Dominica"
+  },
+  {
+    "id": "DNK",
+    "en": "Denmark",
+    "de": "Dänemark"
+  },
+  {
+    "id": "DOM",
+    "en": "Dominican Republic",
+    "de": "Dominikanische Republik"
+  },
+  {
+    "id": "DZA",
+    "en": "Algeria",
+    "de": "Algerien"
+  },
+  {
+    "id": "ECU",
+    "en": "Ecuador",
+    "de": "Ecuador"
+  },
+  {
+    "id": "EGY",
+    "en": "Egypt",
+    "de": "Ägypten"
+  },
+  {
+    "id": "ERI",
+    "en": "Eritrea",
+    "de": "Eritrea"
+  },
+  {
+    "id": "ESH",
+    "en": "Western Sahara",
+    "de": "Westsahara"
+  },
+  {
+    "id": "ESP",
+    "en": "Spain",
+    "de": "Spanien"
+  },
+  {
+    "id": "EST",
+    "en": "Estonia",
+    "de": "Estland"
+  },
+  {
+    "id": "ETH",
+    "en": "Ethiopia",
+    "de": "Äthiopien"
+  },
+  {
+    "id": "FIN",
+    "en": "Finland",
+    "de": "Finnland"
+  },
+  {
+    "id": "FJI",
+    "en": "Fiji",
+    "de": "Fidschi"
+  },
+  {
+    "id": "FLK",
+    "en": "Falkland Islands (Malvinas)",
+    "de": "Falklandinseln (Malvinas) *"
+  },
+  {
+    "id": "FRA",
+    "en": "France",
+    "de": "Frankreich"
+  },
+  {
+    "id": "FRO",
+    "en": "Faroe Islands",
+    "de": "Färöer"
+  },
+  {
+    "id": "FSM",
+    "en": "Micronesia (Federated States of)",
+    "de": "Mikronesien (Föderierte Staaten von) *"
+  },
+  {
+    "id": "GAB",
+    "en": "Gabon",
+    "de": "Gabun"
+  },
+  {
+    "id": "GBR",
+    "en": "United Kingdom of Great Britain and Northern Ireland",
+    "de": "Vereinigtes Königreich Großbritannien und Nordirland *"
+  },
+  {
+    "id": "GEO",
+    "en": "Georgia",
+    "de": "Georgien"
+  },
+  {
+    "id": "GGY",
+    "en": "Guernsey",
+    "de": "Guernsey"
+  },
+  {
+    "id": "GHA",
+    "en": "Ghana",
+    "de": "Ghana"
+  },
+  {
+    "id": "GIB",
+    "en": "Gibraltar",
+    "de": "Gibraltar"
+  },
+  {
+    "id": "GIN",
+    "en": "Guinea",
+    "de": "Guinea"
+  },
+  {
+    "id": "GLP",
+    "en": "Guadeloupe",
+    "de": "Guadeloupe"
+  },
+  {
+    "id": "GMB",
+    "en": "Gambia",
+    "de": "Gambia"
+  },
+  {
+    "id": "GNB",
+    "en": "Guinea-Bissau",
+    "de": "Guinea-Bissau"
+  },
+  {
+    "id": "GNQ",
+    "en": "Equatorial Guinea",
+    "de": "Äquatorialguinea"
+  },
+  {
+    "id": "GRC",
+    "en": "Greece",
+    "de": "Griechenland"
+  },
+  {
+    "id": "GRD",
+    "en": "Grenada",
+    "de": "Grenada"
+  },
+  {
+    "id": "GRL",
+    "en": "Greenland",
+    "de": "Grönland"
+  },
+  {
+    "id": "GTM",
+    "en": "Guatemala",
+    "de": "Guatemala"
+  },
+  {
+    "id": "GUF",
+    "en": "French Guiana",
+    "de": "Französisch-Guayana"
+  },
+  {
+    "id": "GUM",
+    "en": "Guam",
+    "de": "Guam"
+  },
+  {
+    "id": "GUY",
+    "en": "Guyana",
+    "de": "Guyana"
+  },
+  {
+    "id": "HKG",
+    "en": "China, Hong Kong Special Administrative Region",
+    "de": "Sonderverwaltungsregion China, Hongkong *"
+  },
+  {
+    "id": "HMD",
+    "en": "Heard Island and McDonald Islands",
+    "de": "Heard Island und McDonald Islands *"
+  },
+  {
+    "id": "HND",
+    "en": "Honduras",
+    "de": "Honduras"
+  },
+  {
+    "id": "HRV",
+    "en": "Croatia",
+    "de": "Kroatien"
+  },
+  {
+    "id": "HTI",
+    "en": "Haiti",
+    "de": "Haiti"
+  },
+  {
+    "id": "HUN",
+    "en": "Hungary",
+    "de": "Ungarn"
+  },
+  {
+    "id": "IDN",
+    "en": "Indonesia",
+    "de": "Indonesien"
+  },
+  {
+    "id": "IMN",
+    "en": "Isle of Man",
+    "de": "Isle of Man"
+  },
+  {
+    "id": "IND",
+    "en": "India",
+    "de": "Indien"
+  },
+  {
+    "id": "IOT",
+    "en": "British Indian Ocean Territory",
+    "de": "Britisches Territorium im Indischen Ozean"
+  },
+  {
+    "id": "IRL",
+    "en": "Ireland",
+    "de": "Irland"
+  },
+  {
+    "id": "IRN",
+    "en": "Iran (Islamic Republic of)",
+    "de": "Iran (Islamische Republik) *"
+  },
+  {
+    "id": "IRQ",
+    "en": "Iraq",
+    "de": "Irak"
+  },
+  {
+    "id": "ISL",
+    "en": "Iceland",
+    "de": "Island"
+  },
+  {
+    "id": "ISR",
+    "en": "Israel",
+    "de": "Israel"
+  },
+  {
+    "id": "ITA",
+    "en": "Italy",
+    "de": "Italien"
+  },
+  {
+    "id": "JAM",
+    "en": "Jamaica",
+    "de": "Jamaika"
+  },
+  {
+    "id": "JEY",
+    "en": "Jersey",
+    "de": "Jersey"
+  },
+  {
+    "id": "JOR",
+    "en": "Jordan",
+    "de": "Jordanien"
+  },
+  {
+    "id": "JPN",
+    "en": "Japan",
+    "de": "Japan"
+  },
+  {
+    "id": "KAZ",
+    "en": "Kazakhstan",
+    "de": "Kasachstan"
+  },
+  {
+    "id": "KEN",
+    "en": "Kenya",
+    "de": "Kenia"
+  },
+  {
+    "id": "KGZ",
+    "en": "Kyrgyzstan",
+    "de": "Kirgisistan"
+  },
+  {
+    "id": "KHM",
+    "en": "Cambodia",
+    "de": "Kambodscha"
+  },
+  {
+    "id": "KIR",
+    "en": "Kiribati",
+    "de": "Kiribati"
+  },
+  {
+    "id": "KNA",
+    "en": "Saint Kitts and Nevis",
+    "de": "St. Kitts und Nevis *"
+  },
+  {
+    "id": "KOR",
+    "en": "Republic of Korea",
+    "de": "Republik Korea *"
+  },
+  {
+    "id": "KWT",
+    "en": "Kuwait",
+    "de": "Kuwait"
+  },
+  {
+    "id": "LAO",
+    "en": "Lao People's Democratic Republic",
+    "de": "Demokratische Volksrepublik Laos *"
+  },
+  {
+    "id": "LBN",
+    "en": "Lebanon",
+    "de": "Libanon"
+  },
+  {
+    "id": "LBR",
+    "en": "Liberia",
+    "de": "Liberia"
+  },
+  {
+    "id": "LBY",
+    "en": "Libya",
+    "de": "Libyen"
+  },
+  {
+    "id": "LCA",
+    "en": "Saint Lucia",
+    "de": "St. Lucia *"
+  },
+  {
+    "id": "LIE",
+    "en": "Liechtenstein",
+    "de": "Liechtenstein"
+  },
+  {
+    "id": "LKA",
+    "en": "Sri Lanka",
+    "de": "Sri Lanka"
+  },
+  {
+    "id": "LSO",
+    "en": "Lesotho",
+    "de": "Lesotho"
+  },
+  {
+    "id": "LTU",
+    "en": "Lithuania",
+    "de": "Litauen"
+  },
+  {
+    "id": "LUX",
+    "en": "Luxembourg",
+    "de": "Luxemburg"
+  },
+  {
+    "id": "LVA",
+    "en": "Latvia",
+    "de": "Lettland"
+  },
+  {
+    "id": "MAC",
+    "en": "China, Macao Special Administrative Region",
+    "de": "China, Sonderverwaltungsregion Macau *"
+  },
+  {
+    "id": "MAF",
+    "en": "Saint Martin (French Part)",
+    "de": "Saint Martin (französischer Teil) *"
+  },
+  {
+    "id": "MAR",
+    "en": "Morocco",
+    "de": "Marokko"
+  },
+  {
+    "id": "MCO",
+    "en": "Monaco",
+    "de": "Monaco"
+  },
+  {
+    "id": "MDA",
+    "en": "Republic of Moldova",
+    "de": "Republik Moldawien *"
+  },
+  {
+    "id": "MDG",
+    "en": "Madagascar",
+    "de": "Madagaskar"
+  },
+  {
+    "id": "MDV",
+    "en": "Maldives",
+    "de": "Malediven"
+  },
+  {
+    "id": "MEX",
+    "en": "Mexico",
+    "de": "Mexiko"
+  },
+  {
+    "id": "MHL",
+    "en": "Marshall Islands",
+    "de": "Marshallinseln"
+  },
+  {
+    "id": "MKD",
+    "en": "North Macedonia",
+    "de": "Nordmakedonien *"
+  },
+  {
+    "id": "MLI",
+    "en": "Mali",
+    "de": "Mali"
+  },
+  {
+    "id": "MLT",
+    "en": "Malta",
+    "de": "Malta"
+  },
+  {
+    "id": "MMR",
+    "en": "Myanmar",
+    "de": "Myanmar *"
+  },
+  {
+    "id": "MNE",
+    "en": "Montenegro",
+    "de": "Montenegro"
+  },
+  {
+    "id": "MNG",
+    "en": "Mongolia",
+    "de": "Mongolei"
+  },
+  {
+    "id": "MNP",
+    "en": "Northern Mariana Islands",
+    "de": "Nördliche Marianen"
+  },
+  {
+    "id": "MOZ",
+    "en": "Mozambique",
+    "de": "Mosambik"
+  },
+  {
+    "id": "MRT",
+    "en": "Mauritania",
+    "de": "Mauretanien"
+  },
+  {
+    "id": "MSR",
+    "en": "Montserrat",
+    "de": "Montserrat"
+  },
+  {
+    "id": "MTQ",
+    "en": "Martinique",
+    "de": "Martinique"
+  },
+  {
+    "id": "MUS",
+    "en": "Mauritius",
+    "de": "Mauritius"
+  },
+  {
+    "id": "MWI",
+    "en": "Malawi",
+    "de": "Malawi"
+  },
+  {
+    "id": "MYS",
+    "en": "Malaysia",
+    "de": "Malaysia"
+  },
+  {
+    "id": "MYT",
+    "en": "Mayotte",
+    "de": "Mayotte"
+  },
+  {
+    "id": "NAM",
+    "en": "Namibia",
+    "de": "Namibia"
+  },
+  {
+    "id": "NCL",
+    "en": "New Caledonia",
+    "de": "Neukaledonien"
+  },
+  {
+    "id": "NER",
+    "en": "Niger",
+    "de": "Niger"
+  },
+  {
+    "id": "NFK",
+    "en": "Norfolk Island",
+    "de": "Norfolkinsel"
+  },
+  {
+    "id": "NGA",
+    "en": "Nigeria",
+    "de": "Nigeria"
+  },
+  {
+    "id": "NIC",
+    "en": "Nicaragua",
+    "de": "Nicaragua"
+  },
+  {
+    "id": "NIU",
+    "en": "Niue",
+    "de": "Niue"
+  },
+  {
+    "id": "NLD",
+    "en": "Netherlands",
+    "de": "Niederlande"
+  },
+  {
+    "id": "NOR",
+    "en": "Norway",
+    "de": "Norwegen"
+  },
+  {
+    "id": "NPL",
+    "en": "Nepal",
+    "de": "Nepal"
+  },
+  {
+    "id": "NRU",
+    "en": "Nauru",
+    "de": "Nauru"
+  },
+  {
+    "id": "NZL",
+    "en": "New Zealand",
+    "de": "Neuseeland"
+  },
+  {
+    "id": "OMN",
+    "en": "Oman",
+    "de": "Oman"
+  },
+  {
+    "id": "PAK",
+    "en": "Pakistan",
+    "de": "Pakistan"
+  },
+  {
+    "id": "PAN",
+    "en": "Panama",
+    "de": "Panama"
+  },
+  {
+    "id": "PCN",
+    "en": "Pitcairn",
+    "de": "Pitcairn *"
+  },
+  {
+    "id": "PER",
+    "en": "Peru",
+    "de": "Peru"
+  },
+  {
+    "id": "PHL",
+    "en": "Philippines",
+    "de": "Philippinen"
+  },
+  {
+    "id": "PLW",
+    "en": "Palau",
+    "de": "Palau"
+  },
+  {
+    "id": "PNG",
+    "en": "Papua New Guinea",
+    "de": "Papua-Neuguinea"
+  },
+  {
+    "id": "POL",
+    "en": "Poland",
+    "de": "Polen"
+  },
+  {
+    "id": "PRI",
+    "en": "Puerto Rico",
+    "de": "Puerto Rico"
+  },
+  {
+    "id": "PRK",
+    "en": "Democratic People's Republic of Korea",
+    "de": "Demokratische Volksrepublik Korea *"
+  },
+  {
+    "id": "PRT",
+    "en": "Portugal",
+    "de": "Portugal"
+  },
+  {
+    "id": "PRY",
+    "en": "Paraguay",
+    "de": "Paraguay"
+  },
+  {
+    "id": "PSE",
+    "en": "State of Palestine",
+    "de": "Staat Palästina"
+  },
+  {
+    "id": "PYF",
+    "en": "French Polynesia",
+    "de": "Französisch-Polynesien"
+  },
+  {
+    "id": "QAT",
+    "en": "Qatar",
+    "de": "Katar"
+  },
+  {
+    "id": "REU",
+    "en": "Réunion",
+    "de": "Réunion"
+  },
+  {
+    "id": "ROU",
+    "en": "Romania",
+    "de": "Rumänien"
+  },
+  {
+    "id": "RUS",
+    "en": "Russian Federation",
+    "de": "Russische Föderation *"
+  },
+  {
+    "id": "RWA",
+    "en": "Rwanda",
+    "de": "Ruanda"
+  },
+  {
+    "id": "SAU",
+    "en": "Saudi Arabia",
+    "de": "Saudi-Arabien"
+  },
+  {
+    "id": "SDN",
+    "en": "Sudan",
+    "de": "Sudan"
+  },
+  {
+    "id": "SEN",
+    "en": "Senegal",
+    "de": "Senegal"
+  },
+  {
+    "id": "SGP",
+    "en": "Singapore",
+    "de": "Singapur"
+  },
+  {
+    "id": "SGS",
+    "en": "South Georgia and the South Sandwich Islands",
+    "de": "Süd-Georgien und die südlichen Sandwich-Inseln *"
+  },
+  {
+    "id": "SHN",
+    "en": "Saint Helena",
+    "de": "Heilige Helena *"
+  },
+  {
+    "id": "SJM",
+    "en": "Svalbard and Jan Mayen Islands",
+    "de": "Spitzbergen und Jan Mayen Inseln *"
+  },
+  {
+    "id": "SLB",
+    "en": "Solomon Islands",
+    "de": "Salomonen"
+  },
+  {
+    "id": "SLE",
+    "en": "Sierra Leone",
+    "de": "Sierra Leone"
+  },
+  {
+    "id": "SLV",
+    "en": "El Salvador",
+    "de": "El Salvador"
+  },
+  {
+    "id": "SMR",
+    "en": "San Marino",
+    "de": "San Marino"
+  },
+  {
+    "id": "SOM",
+    "en": "Somalia",
+    "de": "Somalia"
+  },
+  {
+    "id": "SPM",
+    "en": "Saint Pierre and Miquelon",
+    "de": "Saint Pierre und Miquelon *"
+  },
+  {
+    "id": "SRB",
+    "en": "Serbia",
+    "de": "Serbien"
+  },
+  {
+    "id": "SSD",
+    "en": "South Sudan",
+    "de": "Südsudan"
+  },
+  {
+    "id": "STP",
+    "en": "Sao Tome and Principe",
+    "de": "Sao Tome und Principe *"
+  },
+  {
+    "id": "SUR",
+    "en": "Suriname",
+    "de": "Suriname"
+  },
+  {
+    "id": "SVK",
+    "en": "Slovakia",
+    "de": "Slowakei"
+  },
+  {
+    "id": "SVN",
+    "en": "Slovenia",
+    "de": "Slowenien"
+  },
+  {
+    "id": "SWE",
+    "en": "Sweden",
+    "de": "Schweden"
+  },
+  {
+    "id": "SWZ",
+    "en": "Eswatini",
+    "de": "Eswatini"
+  },
+  {
+    "id": "SXM",
+    "en": "Sint Maarten (Dutch part)",
+    "de": "Sint Maarten (niederländischer Teil) *"
+  },
+  {
+    "id": "SYC",
+    "en": "Seychelles",
+    "de": "Seychellen"
+  },
+  {
+    "id": "SYR",
+    "en": "Syrian Arab Republic",
+    "de": "Syrische Arabische Republik *"
+  },
+  {
+    "id": "TCA",
+    "en": "Turks and Caicos Islands",
+    "de": "Turks- und Caicosinseln *"
+  },
+  {
+    "id": "TCD",
+    "en": "Chad",
+    "de": "Tschad"
+  },
+  {
+    "id": "TGO",
+    "en": "Togo",
+    "de": "Togo"
+  },
+  {
+    "id": "THA",
+    "en": "Thailand",
+    "de": "Thailand"
+  },
+  {
+    "id": "TJK",
+    "en": "Tajikistan",
+    "de": "Tadschikistan"
+  },
+  {
+    "id": "TKL",
+    "en": "Tokelau",
+    "de": "Tokelau"
+  },
+  {
+    "id": "TKM",
+    "en": "Turkmenistan",
+    "de": "Turkmenistan"
+  },
+  {
+    "id": "TLS",
+    "en": "Timor-Leste",
+    "de": "Timor-Leste"
+  },
+  {
+    "id": "TON",
+    "en": "Tonga",
+    "de": "Tonga"
+  },
+  {
+    "id": "TTO",
+    "en": "Trinidad and Tobago",
+    "de": "Trinidad und Tobago *"
+  },
+  {
+    "id": "TUN",
+    "en": "Tunisia",
+    "de": "Tunesien"
+  },
+  {
+    "id": "TUR",
+    "en": "Turkey",
+    "de": "Türkei"
+  },
+  {
+    "id": "TUV",
+    "en": "Tuvalu",
+    "de": "Tuvalu"
+  },
+  {
+    "id": "TZA",
+    "en": "United Republic of Tanzania",
+    "de": "Vereinigte Republik Tansania *"
+  },
+  {
+    "id": "UGA",
+    "en": "Uganda",
+    "de": "Uganda"
+  },
+  {
+    "id": "UKR",
+    "en": "Ukraine",
+    "de": "Ukraine"
+  },
+  {
+    "id": "UMI",
+    "en": "United States Minor Outlying Islands",
+    "de": "Kleinere abgelegene Inseln der Vereinigten Staaten *"
+  },
+  {
+    "id": "URY",
+    "en": "Uruguay",
+    "de": "Uruguay"
+  },
+  {
+    "id": "USA",
+    "en": "United States of America",
+    "de": "vereinigte Staaten von Amerika *"
+  },
+  {
+    "id": "UZB",
+    "en": "Uzbekistan",
+    "de": "Usbekistan"
+  },
+  {
+    "id": "VAT",
+    "en": "Holy See",
+    "de": "Heiliger Stuhl *"
+  },
+  {
+    "id": "VCT",
+    "en": "Saint Vincent and the Grenadines",
+    "de": "St. Vincent und die Grenadinen *"
+  },
+  {
+    "id": "VEN",
+    "en": "Venezuela (Bolivarian Republic of)",
+    "de": "Venezuela (Bolivarische Republik) *"
+  },
+  {
+    "id": "VGB",
+    "en": "British Virgin Islands",
+    "de": "Britische Jungferninseln"
+  },
+  {
+    "id": "VIR",
+    "en": "United States Virgin Islands",
+    "de": "Amerikanische Jungferninseln *"
+  },
+  {
+    "id": "VNM",
+    "en": "Viet Nam",
+    "de": "Vietnam *"
+  },
+  {
+    "id": "VUT",
+    "en": "Vanuatu",
+    "de": "Vanuatu"
+  },
+  {
+    "id": "WLD",
+    "en": "World",
+    "de": "Welt"
+  },
+  {
+    "id": "WLF",
+    "en": "Wallis and Futuna Islands",
+    "de": "Wallis und Futuna Inseln *"
+  },
+  {
+    "id": "WSM",
+    "en": "Samoa",
+    "de": "Samoa"
+  },
+  {
+    "id": "YEM",
+    "en": "Yemen",
+    "de": "Jemen"
+  },
+  {
+    "id": "ZAF",
+    "en": "South Africa",
+    "de": "Südafrika"
+  },
+  {
+    "id": "ZMB",
+    "en": "Zambia",
+    "de": "Sambia"
+  },
+  {
+    "id": "ZWE",
+    "en": "Zimbabwe",
+    "de": "Simbabwe"
+  },
+  {
+    "id": "en",
+    "en": "English",
+    "de": "Englisch *"
+  },
+  {
+    "id": "fr",
+    "en": "French",
+    "de": "Französisch *"
+  },
+  {
+    "id": "es",
+    "en": "Spanish",
+    "de": "Spanisch *"
+  },
+  {
+    "id": "ru",
+    "en": "Russian",
+    "de": "Russisch *"
+  },
+  {
+    "id": "zh",
+    "en": "Chinese",
+    "de": "Chinesisch *"
+  },
+  {
+    "id": "de",
+    "en": "German",
+    "de": "Deutsche *"
+  },
+  {
+    "id": "bn",
+    "en": "Bengali",
+    "de": "Bengali *"
+  },
+  {
+    "id": "fa",
+    "en": "Farsi",
+    "de": "Farsi *"
+  },
+  {
+    "id": "ps",
+    "en": "Pashto",
+    "de": "Paschtu *"
+  },
+  {
+    "id": "ar",
+    "en": "Arabic",
+    "de": "Arabisch *"
+  },
+  {
+    "id": "m49_901",
+    "en": "50°S-50°N",
+    "de": "50 ° S-50 ° N. *"
+  },
+  {
+    "id": "m49_902",
+    "en": "Pantropical",
+    "de": "Pantropisch *"
+  },
+  {
+    "id": "global",
+    "en": "Global",
+    "de": "Global"
+  },
+  {
+    "id": "region",
+    "en": "Region",
+    "de": "Region"
+  },
+  {
+    "id": "other_region",
+    "en": "Other region",
+    "de": "Andere Region"
+  },
+  {
+    "id": "sub_region",
+    "en": "Sub-region",
+    "de": "Unterregion"
+  },
+  {
+    "id": "intermediate_region",
+    "en": "Intermediate region",
+    "de": "Zwischenregion"
+  },
+  {
+    "id": "m49_005",
+    "en": "South America",
+    "de": "Südamerika *"
+  },
+  {
+    "id": "m49_011",
+    "en": "Western Africa",
+    "de": "Westafrika *"
+  },
+  {
+    "id": "m49_013",
+    "en": "Central America",
+    "de": "Zentralamerika *"
+  },
+  {
+    "id": "m49_014",
+    "en": "Eastern Africa",
+    "de": "Ostafrika *"
+  },
+  {
+    "id": "m49_017",
+    "en": "Middle Africa",
+    "de": "Mittelafrika *"
+  },
+  {
+    "id": "m49_018",
+    "en": "Southern Africa",
+    "de": "Südafrika *"
+  },
+  {
+    "id": "m49_029",
+    "en": "Caribbean",
+    "de": "Karibik *"
+  },
+  {
+    "id": "m49_830",
+    "en": "Channel Islands",
+    "de": "Kanalinseln *"
+  },
+  {
+    "id": "m49_002",
+    "en": "Africa",
+    "de": "Afrika *"
+  },
+  {
+    "id": "m49_009",
+    "en": "Oceania",
+    "de": "Ozeanien *"
+  },
+  {
+    "id": "m49_019",
+    "en": "Americas",
+    "de": "Amerika *"
+  },
+  {
+    "id": "m49_142",
+    "en": "Asia",
+    "de": "Asien *"
+  },
+  {
+    "id": "m49_150",
+    "en": "Europe",
+    "de": "Europa *"
+  },
+  {
+    "id": "m49_015",
+    "en": "Northern Africa",
+    "de": "Nordafrika *"
+  },
+  {
+    "id": "m49_021",
+    "en": "Northern America",
+    "de": "Nordamerika *"
+  },
+  {
+    "id": "m49_030",
+    "en": "Eastern Asia",
+    "de": "Ostasien *"
+  },
+  {
+    "id": "m49_034",
+    "en": "Southern Asia",
+    "de": "Südasien *"
+  },
+  {
+    "id": "m49_035",
+    "en": "South-eastern Asia",
+    "de": "Südostasien *"
+  },
+  {
+    "id": "m49_039",
+    "en": "Southern Europe",
+    "de": "Südeuropa *"
+  },
+  {
+    "id": "m49_053",
+    "en": "Australia and New Zealand",
+    "de": "Australien und Neuseeland *"
+  },
+  {
+    "id": "m49_054",
+    "en": "Melanesia",
+    "de": "Melanesien *"
+  },
+  {
+    "id": "m49_057",
+    "en": "Micronesia",
+    "de": "Mikronesien *"
+  },
+  {
+    "id": "m49_061",
+    "en": "Polynesia",
+    "de": "Polynesien *"
+  },
+  {
+    "id": "m49_143",
+    "en": "Central Asia",
+    "de": "Zentralasien *"
+  },
+  {
+    "id": "m49_145",
+    "en": "Western Asia",
+    "de": "West-Asien *"
+  },
+  {
+    "id": "m49_151",
+    "en": "Eastern Europe",
+    "de": "Osteuropa *"
+  },
+  {
+    "id": "m49_154",
+    "en": "Northern Europe",
+    "de": "Nordeuropa *"
+  },
+  {
+    "id": "m49_155",
+    "en": "Western Europe",
+    "de": "Westeuropa *"
+  },
+  {
+    "id": "m49_202",
+    "en": "Sub-Saharan Africa",
+    "de": "Afrika südlich der Sahara *"
+  },
+  {
+    "id": "m49_419",
+    "en": "Latin America and the Caribbean",
+    "de": "Lateinamerika und die Karibik *"
+  },
+  {
+    "id": "brand",
+    "en": "MapX",
+    "de": "MapX *"
+  },
+  {
+    "id": "admin",
+    "en": "Administrator",
+    "de": "Administrator *"
+  },
+  {
+    "id": "admins",
+    "en": "Administrators",
+    "de": "Administratoren *"
+  },
+  {
+    "id": "bottom",
+    "en": "Bottom",
+    "de": "Unterseite *"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "de": "Durchsuche... *"
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "de": "Hilfe *"
+  },
+  {
+    "id": "epsg_set_projection_export",
+    "en": "Set the export projection, using a code from the EPSG format",
+    "de": "Legen Sie die Exportprojektion mit einem Code aus dem EPSG-Format fest *"
+  },
+  {
+    "id": "epsg_set_projection_import",
+    "en": "Assign a projection system to the data ( code EPSG, optional )",
+    "de": "Ordnen Sie den Daten ein Projektionssystem zu (Code EPSG, optional) *"
+  },
+  {
+    "id": "epsg_btn_search",
+    "en": "Search",
+    "de": "Suche *"
+  },
+  {
+    "id": "epsg_placeholder_search",
+    "en": "Country or projection name ...",
+    "de": "Land oder Projektionsname ... *"
+  },
+  {
+    "id": "epsg_label_search",
+    "en": "Enter a country or projection name",
+    "de": "Geben Sie einen Länder- oder Projektionsnamen ein *"
+  },
+  {
+    "id": "epsg_placeholder_input",
+    "en": "EPSG code. e.g. '4326'",
+    "de": "EPSG-Code. zB '4326' *"
+  },
+  {
+    "id": "epsg_btn_open_search",
+    "en": "Find epsg code ...",
+    "de": "Epsg-Code finden ... *"
+  },
+  {
+    "id": "btn_add_source",
+    "en": "Add a source layer",
+    "de": "Fügen Sie eine Quellenebene hinzu *"
+  },
+  {
+    "id": "btn_about",
+    "en": "About",
+    "de": "Über *"
+  },
+  {
+    "id": "title_about",
+    "en": "About",
+    "de": "Über *"
+  },
+  {
+    "id": "btn_load_new_project",
+    "en": "Load the new project",
+    "de": "Laden Sie das neue Projekt *"
+  },
+  {
+    "id": "btn_add_view",
+    "en": "Create a new view",
+    "de": "Erstellen Sie eine neue Ansicht *"
+  },
+  {
+    "id": "btn_show_db_info",
+    "en": "Full access",
+    "de": "Voller Zugriff *"
+  },
+  {
+    "id": "btn_show_project_external_views",
+    "en": "Manage external views",
+    "de": "Externe Ansichten verwalten *"
+  },
+  {
+    "id": "btn_show_db_query_maker",
+    "en": "API SQL query maker",
+    "de": "API SQL Query Maker *"
+  },
+  {
+    "id": "label_query_write",
+    "en": "Write your SQL query",
+    "de": "Schreiben Sie Ihre SQL-Abfrage *"
+  },
+  {
+    "id": "label_layer_available",
+    "en": "Relations available",
+    "de": "Beziehungen verfügbar *"
+  },
+  {
+    "id": "btn_show_add_project",
+    "en": "Add a new project",
+    "de": "Fügen Sie ein neues Projekt hinzu *"
+  },
+  {
+    "id": "btn_show_add_project_disabled",
+    "en": "Add a new project ( disabled )",
+    "de": "Neues Projekt hinzufügen (deaktiviert) *"
+  },
+  {
+    "id": "btn_show_db_info_self",
+    "en": "Get temporary access to edit a dataset",
+    "de": "Erhalten Sie temporären Zugriff zum Bearbeiten eines Datensatzes *"
+  },
+  {
+    "id": "btn_cancel",
+    "en": "Cancel",
+    "de": "Stornieren *"
+  },
+  {
+    "id": "btn_copy",
+    "en": "Copy",
+    "de": "Kopieren *"
+  },
+  {
+    "id": "btn_geolocate_user",
+    "en": "Geolocate",
+    "de": "Geolocate *"
+  },
+  {
+    "id": "btn_close",
+    "en": "Close",
+    "de": "Schließen *"
+  },
+  {
+    "id": "btn_join_project_long",
+    "en": "Membership request for this project",
+    "de": "Mitgliedschaftsantrag für dieses Projekt *"
+  },
+  {
+    "id": "btn_join_project",
+    "en": "Join",
+    "de": "Beitreten *"
+  },
+  {
+    "id": "btn_join_current_project",
+    "en": "Join current project ( %s )",
+    "de": "Aktuelles Projekt beitreten (%s ) *"
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "de": "Bestätigen *"
+  },
+  {
+    "id": "btn_country",
+    "en": "Select country",
+    "de": "Land auswählen *"
+  },
+  {
+    "id": "btn_create",
+    "en": "Create",
+    "de": "Erstellen *"
+  },
+  {
+    "id": "btn_delete",
+    "en": "Delete",
+    "de": "Löschen *"
+  },
+  {
+    "id": "btn_edit_selected",
+    "en": "Edit selected",
+    "de": "Bearbeiten ausgewählt *"
+  },
+  {
+    "id": "btn_edit_source",
+    "en": "Manage sources",
+    "de": "Quellen verwalten *"
+  },
+  {
+    "id": "btn_source_overlap_utilities",
+    "en": "Area intersection tools",
+    "de": "Bereichskreuzungswerkzeuge *"
+  },
+  {
+    "id": "btn_source_validate_geom",
+    "en": "Geometry validation",
+    "de": "Geometrievalidierung *"
+  },
+  {
+    "id": "btn_analyse",
+    "en": "Run analysis",
+    "de": "Führen Sie die Analyse aus *"
+  },
+  {
+    "id": "logs",
+    "en": "Logs",
+    "de": "Protokolle *"
+  },
+  {
+    "id": "calc_area_result",
+    "en": "Area of intersection (km2)",
+    "de": "Kreuzungsbereich (km2) *"
+  },
+  {
+    "id": "radio_source_overlap_mode",
+    "en": "Select analysis",
+    "de": "Analyse auswählen *"
+  },
+  {
+    "id": "source_overlap_mode_area",
+    "en": "Calculate area of intersection",
+    "de": "Schnittfläche berechnen *"
+  },
+  {
+    "id": "source_overlap_mode_create_source",
+    "en": "Create new layer based on the intersection",
+    "de": "Erstellen Sie eine neue Ebene basierend auf dem Schnittpunkt *"
+  },
+  {
+    "id": "check_add_source_from_view",
+    "en": "Add sources by views",
+    "de": "Quellen nach Ansichten hinzufügen *"
+  },
+  {
+    "id": "select_overlap_source_from_view",
+    "en": "Select views",
+    "de": "Ansichten auswählen *"
+  },
+  {
+    "id": "btn_add_source_from_view",
+    "en": "Add sources from those views",
+    "de": "Fügen Sie Quellen aus diesen Ansichten hinzu *"
+  },
+  {
+    "id": "select_overlap_layers",
+    "en": "Layers : minimum 1, maximum 3, reorder if needed ",
+    "de": "Ebenen: mindestens 1, maximal 3, bei Bedarf neu anordnen *"
+  },
+  {
+    "id": "select_overlap_countries",
+    "en": "Country",
+    "de": "Land *"
+  },
+  {
+    "id": "n_layers_more_3",
+    "en": "More than three layers selected",
+    "de": "Mehr als drei Ebenen ausgewählt *"
+  },
+  {
+    "id": "n_layers_less_1",
+    "en": "Less that one layer selected",
+    "de": "Weniger als eine Ebene ausgewählt *"
+  },
+  {
+    "id": "n_country_not_1",
+    "en": "Only one country should be selected",
+    "de": "Es sollte nur ein Land ausgewählt werden *"
+  },
+  {
+    "id": "title_overlap_tools",
+    "en": "Area intersection utilities",
+    "de": "Dienstprogramme für Gebietskreuzungen *"
+  },
+  {
+    "id": "source_overlap_new_source_email_info",
+    "en": "An email will be send to '%s' at the end of the process",
+    "de": "Eine E-Mail wird gesendet an '%s 'am Ende des Prozesses *"
+  },
+  {
+    "id": "btn_edit_source_metadata",
+    "en": "Edit sources metadata",
+    "de": "Bearbeiten Sie die Metadaten der Quellen *"
+  },
+  {
+    "id": "btn_finish",
+    "en": "Finish",
+    "de": "Fertig *"
+  },
+  {
+    "id": "btn_fullscreen",
+    "en": "Display the app in fullscreen mode",
+    "de": "Zeigen Sie die App im Vollbildmodus an *"
+  },
+  {
+    "id": "btn_get_area_visible",
+    "en": "Area of visible features",
+    "de": "Bereich der sichtbaren Merkmale *"
+  },
+  {
+    "id": "btn_get_overlap_visible",
+    "en": "Overlaps to geojson",
+    "de": "Überlappungen mit Geojson *"
+  },
+  {
+    "id": "btn_get_layer_summary",
+    "en": "Get layer summary",
+    "de": "Ebenenübersicht abrufen *"
+  },
+  {
+    "id": "btn_iframe_builder",
+    "en": "Embed MapX",
+    "de": "MapX einbetten *"
+  },
+  {
+    "id": "btn_language",
+    "en": "Language",
+    "de": "Sprache *"
+  },
+  {
+    "id": "btn_login",
+    "en": "Login window",
+    "de": "Anmeldefenster *"
+  },
+  {
+    "id": "btn_north_arrow",
+    "en": "Reset bearing",
+    "de": "Lager zurücksetzen *"
+  },
+  {
+    "id": "btn_draw_mode",
+    "en": "Vector draw tools",
+    "de": "Vektor-Zeichenwerkzeuge *"
+  },
+  {
+    "id": "btn_map_composer",
+    "en": "Map composer",
+    "de": "Kartenkomponist *"
+  },
+  {
+    "id": "btn_opt_date",
+    "en": "Filter date",
+    "de": "Datum filtern *"
+  },
+  {
+    "id": "btn_opt_attribute_table",
+    "en": "Attribute table",
+    "de": "Attributtabelle *"
+  },
+  {
+    "id": "btn_opt_delete",
+    "en": "Remove this view",
+    "de": "Entfernen Sie diese Ansicht *"
+  },
+  {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "de": "Öffnen Sie das ursprüngliche Projekt *"
+  },
+  {
+    "id": "btn_opt_move_top",
+    "en": "Move to top",
+    "de": "Nach oben gehen *"
+  },
+  {
+    "id": "btn_opt_move_bottom",
+    "en": "Move to bottom",
+    "de": "Gehe nach unten *"
+  },
+  {
+    "id": "btn_opt_delete_geojson",
+    "en": "Delete",
+    "de": "Löschen *"
+  },
+  {
+    "id": "btn_opt_download",
+    "en": "Download the data",
+    "de": "Laden Sie die Daten herunter *"
+  },
+  {
+    "id": "btn_opt_edit_config",
+    "en": "Configure this view",
+    "de": "Konfigurieren Sie diese Ansicht *"
+  },
+  {
+    "id": "btn_opt_edit_custom_code",
+    "en": "Edit code",
+    "de": "Code bearbeiten *"
+  },
+  {
+    "id": "btn_opt_edit_dashboard",
+    "en": "Edit dashboard",
+    "de": "Dashboard bearbeiten *"
+  },
+  {
+    "id": "btn_opt_edit_story",
+    "en": "Edit story map",
+    "de": "Story Map bearbeiten *"
+  },
+  {
+    "id": "btn_opt_edit_style",
+    "en": "Set the style of this view",
+    "de": "Legen Sie den Stil dieser Ansicht fest *"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "de": "Legendentitel *"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "de": "Obergrenze in Intervall einschließen *"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die Obergrenze. Unabhängig von der ausgewählten Option sind der minimale und der maximale Wert immer im ersten und letzten Intervall enthalten *"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "de": "Reihenfolge der angezeigten Ebenen umkehren *"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "de": "Wenn diese Option aktiviert ist, wird der Ebenenstapel umgekehrt: Die obere Regel zeichnet eine Ebene am unteren Rand des Stapels *"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "de": "Symbol mit Beschriftung anzeigen *"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "de": "Wenn MapX Symbole mit Punktdaten verwendet, sollte MapX Beschriftungen hinzufügen? *"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Ignore missing values",
+    "de": "Fehlende Werte ignorieren *"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, null or missing values will be ignored in the style",
+    "de": "Wenn diese Option aktiviert ist, werden null oder fehlende Werte im Stil ignoriert *"
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "de": "Metadaten anzeigen *"
+  },
+  {
+    "id": "btn_opt_numeric",
+    "en": "Filter by numeric value",
+    "de": "Nach numerischem Wert filtern *"
+  },
+  {
+    "id": "btn_opt_reset",
+    "en": "Reset the view",
+    "de": "Setzen Sie die Ansicht zurück *"
+  },
+  {
+    "id": "btn_opt_screenshot",
+    "en": "Take a screenshoot",
+    "de": "Mach ein Screenshoot *"
+  },
+  {
+    "id": "btn_opt_search",
+    "en": "Settings",
+    "de": "die Einstellungen *"
+  },
+  {
+    "id": "btn_opt_share",
+    "en": "Share a link to this view",
+    "de": "Teilen Sie einen Link zu dieser Ansicht *"
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "de": "Teilen Sie diese Ansicht in einem anderen Projekt *"
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "de": "Sie haben noch kein Projekt, in dem Sie diese Ansicht veröffentlichen möchten *"
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "de": "Keine Ansicht zum Teilen *"
+  },
+  {
+    "id": "btn_opt_start_story",
+    "en": "Read this story map",
+    "de": "Lesen Sie diese Story Map *"
+  },
+  {
+    "id": "btn_opt_transparency",
+    "en": "Transparency",
+    "de": "Transparenz *"
+  },
+  {
+    "id": "btn_opt_zoom_all",
+    "en": "Zoom to all features",
+    "de": "Zoomen Sie auf alle Funktionen *"
+  },
+  {
+    "id": "btn_opt_zoom_visible",
+    "en": "Zoom on displayed features",
+    "de": "Vergrößern Sie die angezeigten Funktionen *"
+  },
+  {
+    "id": "btn_preview",
+    "en": "Preview",
+    "de": "Vorschau *"
+  },
+  {
+    "id": "btn_selfdb_generate_info",
+    "en": "Generate",
+    "de": "Generieren *"
+  },
+  {
+    "id": "btn_print",
+    "en": "Print current",
+    "de": "Strom drucken *"
+  },
+  {
+    "id": "btn_reset",
+    "en": "Reset",
+    "de": "Zurücksetzen *"
+  },
+  {
+    "id": "btn_save",
+    "en": "Save",
+    "de": "speichern *"
+  },
+  {
+    "id": "btn_send",
+    "en": "Submit",
+    "de": "einreichen *"
+  },
+  {
+    "id": "btn_show_app_config",
+    "en": "Configuration",
+    "de": "Aufbau *"
+  },
+  {
+    "id": "btn_show_project_config",
+    "en": "Project configuration",
+    "de": "Projektkonfiguration *"
+  },
+  {
+    "id": "btn_show_project_views_states",
+    "en": "Save views list state",
+    "de": "Status der Ansichtsliste speichern *"
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "de": "Löschen Sie dieses Projekt *"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "de": "Dieses Projekt löschen (deaktiviert) *"
+  },
+  {
+    "id": "btn_show_role_manager",
+    "en": "Define roles",
+    "de": "Rollen definieren *"
+  },
+  {
+    "id": "btn_sort_date",
+    "en": "Date",
+    "de": "Datum *"
+  },
+  {
+    "id": "btn_filter_checked",
+    "en": "Filter activated views",
+    "de": "Aktivierte Ansichten filtern *"
+  },
+  {
+    "id": "btn_filter_show_panel",
+    "en": "Advanced filter",
+    "de": "Erweiterter Filter *"
+  },
+  {
+    "id": "btn_sort_title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "sort_label",
+    "en": "Sort by",
+    "de": "Sortieren nach *"
+  },
+  {
+    "id": "btn_story_unlock_map",
+    "en": "Toggle map interaction",
+    "de": "Karteninteraktion umschalten *"
+  },
+  {
+    "id": "btn_story_close",
+    "en": "Back to the map explorer",
+    "de": "Zurück zum Karten-Explorer *"
+  },
+  {
+    "id": "btn_story_edit_cancel",
+    "en": "Cancel edition",
+    "de": "Ausgabe abbrechen *"
+  },
+  {
+    "id": "btn_story_edit_save",
+    "en": "Save edition",
+    "de": "Ausgabe speichern *"
+  },
+  {
+    "id": "btn_story_edit",
+    "en": "Start edition",
+    "de": "Ausgabe starten *"
+  },
+  {
+    "id": "btn_switchui",
+    "en": "Toggle the color of the interface",
+    "de": "Schalten Sie die Farbe der Benutzeroberfläche um *"
+  },
+  {
+    "id": "btn_tab_dashboard",
+    "en": "Toggle dashboards",
+    "de": "Dashboards umschalten *"
+  },
+  {
+    "id": "btn_tab_settings",
+    "en": "Settings ",
+    "de": "die Einstellungen *"
+  },
+  {
+    "id": "btn_tab_tools",
+    "en": "Toolbox",
+    "de": "Werkzeugkasten *"
+  },
+  {
+    "id": "btn_tab_views",
+    "en": "Views",
+    "de": "Ansichten *"
+  },
+  {
+    "id": "btn_tab_search",
+    "en": "Search",
+    "de": "Suche *"
+  },
+  {
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
+    "de": "Thema wechseln *"
+  },
+  {
+    "id": "btn_theme_sat",
+    "en": "Switch theme : aerial",
+    "de": "Thema wechseln: Antenne *"
+  },
+  {
+    "id": "btn_3d_terrain",
+    "en": "Add 3d terrain",
+    "de": "3D-Terrain hinzufügen *"
+  },
+  {
+    "id": "btn_toggle_all",
+    "en": "Immersive mode",
+    "de": "Immersiver Modus *"
+  },
+  {
+    "id": "btn_update",
+    "en": "Update  ",
+    "de": "Aktualisieren *"
+  },
+  {
+    "id": "btn_upload",
+    "en": "Upload",
+    "de": "Hochladen *"
+  },
+  {
+    "id": "btn_zoom_in",
+    "en": "Zoom in",
+    "de": "Hineinzoomen *"
+  },
+  {
+    "id": "btn_zoom_out",
+    "en": "Zoom out",
+    "de": "Rauszoomen *"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Highlight vector features",
+    "de": "Markieren Sie Vektormerkmale *"
+  },
+  {
+    "id": "title_config_highlight",
+    "en": "Highlight tool configuration",
+    "de": "Markieren Sie die Werkzeugkonfiguration *"
+  },
+  {
+    "id": "select_highlight_mode",
+    "en": "Select highlight mode",
+    "de": "Wählen Sie den Markierungsmodus *"
+  },
+  {
+    "id": "highlight_where_all",
+    "en": "Highlight where all features overlap",
+    "de": "Markieren Sie, wo sich alle Funktionen überschneiden *"
+  },
+  {
+    "id": "highlight_where_any",
+    "en": "Highlight any visible feature",
+    "de": "Markieren Sie alle sichtbaren Merkmale *"
+  },
+  {
+    "id": "highlight_where_two",
+    "en": "Highlight where two features overlap",
+    "de": "Markieren Sie, wo sich zwei Features überschneiden *"
+  },
+  {
+    "id": "highlight_where_three",
+    "en": "Highlight where three features overlap",
+    "de": "Markieren Sie, wo sich drei Features überschneiden *"
+  },
+  {
+    "id": "highlight_where_four",
+    "en": "Highlight where four features overlap",
+    "de": "Markieren Sie, wo sich vier Features überlappen *"
+  },
+  {
+    "id": "highlight_where_five",
+    "en": "Highlight where five features overlap",
+    "de": "Markieren Sie, wo sich fünf Features überlappen *"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "de": "Aktivieren Sie die Überlappungsbereichsschätzung *"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "de": "Sofortige Flächenschätzung *"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "de": "Die Überlappungsfläche wird unter Verwendung einer sphärischen Darstellung der Erde geschätzt. Das Ergebnis hängt von der Datenqualität, den aktuellen Filtern und der aktuellen Auflösung ab. *"
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "de": "Aktuelle Auflösung *"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "de": "Die aktuelle Auflösung hängt von der Zoomstufe und dem Breitengrad ab. Es stellt die durchschnittliche Fläche dar, die von einem Pixel abgedeckt wird. *"
+  },
+  {
+    "id": "categorical",
+    "en": "Categorical",
+    "de": "Kategorial *"
+  },
+  {
+    "id": "cc",
+    "en": "Custom code",
+    "de": "Benutzerdefinierter Code *"
+  },
+  {
+    "id": "center",
+    "en": "Center",
+    "de": "Center *"
+  },
+  {
+    "id": "country",
+    "en": "Country",
+    "de": "Land *"
+  },
+  {
+    "id": "create",
+    "en": "Create",
+    "de": "Erstellen *"
+  },
+  {
+    "id": "content",
+    "en": "Content",
+    "de": "Inhalt *"
+  },
+  {
+    "id": "title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "join_project",
+    "en": "Join",
+    "de": "Beitreten *"
+  },
+  {
+    "id": "dev",
+    "en": "Development",
+    "de": "Entwicklung *"
+  },
+  {
+    "id": "env",
+    "en": "Environment",
+    "de": "Umgebung *"
+  },
+  {
+    "id": "error_no_layer",
+    "en": "No source layer set",
+    "de": "Keine Quellenebene festgelegt *"
+  },
+  {
+    "id": "error_form_issues",
+    "en": "There are some issues in the form, please correct them",
+    "de": "Das Formular enthält einige Probleme. Bitte beheben Sie diese *"
+  },
+  {
+    "id": "warning_delete_project",
+    "en": "Project deletion also remove all views, data, settings and anything related to this project, including views used in other project. Data shared from other project will be preserved",
+    "de": "Durch das Löschen von Projekten werden auch alle Ansichten, Daten, Einstellungen und alles, was mit diesem Projekt zu tun hat, entfernt, einschließlich der in anderen Projekten verwendeten Ansichten. Daten, die von anderen Projekten geteilt wurden, bleiben erhalten *"
+  },
+  {
+    "id": "error_no_source",
+    "en": "No source layer found",
+    "de": "Keine Quellenebene gefunden *"
+  },
+  {
+    "id": "error_title_exists",
+    "en": "This title already exists",
+    "de": "Dieser Titel existiert bereits *"
+  },
+  {
+    "id": "error_title_no_match",
+    "en": "The title does not match",
+    "de": "Der Titel stimmt nicht überein *"
+  },
+  {
+    "id": "error_title_short",
+    "en": "The title is too short",
+    "de": "Der Titel ist zu kurz *"
+  },
+  {
+    "id": "error_title_not_valid",
+    "en": "The title is not valid",
+    "de": "Der Titel ist ungültig *"
+  },
+  {
+    "id": "error_description_short",
+    "en": "The description is too short",
+    "de": "Die Beschreibung ist zu kurz *"
+  },
+  {
+    "id": "error_title_bad",
+    "en": "The title is not valid",
+    "de": "Der Titel ist ungültig *"
+  },
+  {
+    "id": "error_project_default_not_public",
+    "en": "The default project must be public",
+    "de": "Das Standardprojekt muss öffentlich sein *"
+  },
+  {
+    "id": "error_email_not_valid",
+    "en": "This email is not valid",
+    "de": "Diese E-Mail ist ungültig *"
+  },
+  {
+    "id": "error_email_is_member",
+    "en": "A member with this email already exists",
+    "de": "Ein Mitglied mit dieser E-Mail existiert bereits *"
+  },
+  {
+    "id": "error_login",
+    "en": "Login issue",
+    "de": "Anmeldeproblem *"
+  },
+  {
+    "id": "error_email_bad",
+    "en": "This email is not accepted",
+    "de": "Diese E-Mail wird nicht akzeptiert *"
+  },
+  {
+    "id": "error_action_link_expired",
+    "en": "This link has expired",
+    "de": "Dieser Link ist abgelaufen *"
+  },
+  {
+    "id": "error_msg_too_long",
+    "en": "This message is too long",
+    "de": "Diese Nachricht ist zu lang *"
+  },
+  {
+    "id": "error_msg_too_short",
+    "en": "This message is too short",
+    "de": "Diese Nachricht ist zu kurz *"
+  },
+  {
+    "id": "error_email_not_registered",
+    "en": "This email does not belongs to a current MapX user. Once open, the activation link will also create automatically a new account on MapX.",
+    "de": "Diese E-Mail gehört keinem aktuellen MapX-Benutzer. Nach dem Öffnen erstellt der Aktivierungslink automatisch ein neues Konto in MapX. *"
+  },
+  {
+    "id": "error_description_bad",
+    "en": "The description is not valid",
+    "de": "Die Beschreibung ist ungültig *"
+  },
+  {
+    "id": "error_title_long",
+    "en": "The title is to long",
+    "de": "Der Titel ist zu lang *"
+  },
+  {
+    "id": "error_description_long",
+    "en": "The description is to long",
+    "de": "Die Beschreibung ist zu lang *"
+  },
+  {
+    "id": "error_cant_geolocate_msg",
+    "en": "Sorry, MapX can't find your position",
+    "de": "Leider kann MapX Ihre Position nicht finden *"
+  },
+  {
+    "id": "error_geolocate_issue",
+    "en": "Geolocation issue",
+    "de": "Geolokalisierungsproblem *"
+  },
+  {
+    "id": "exponential",
+    "en": "Continuous",
+    "de": "Kontinuierlich *"
+  },
+  {
+    "id": "ext",
+    "en": "Extractive",
+    "de": "Extraktiv *"
+  },
+  {
+    "id": "fold_view_legend",
+    "en": "Legend",
+    "de": "Legende *"
+  },
+  {
+    "id": "fold_view_tools",
+    "en": "Tools",
+    "de": "Werkzeuge *"
+  },
+  {
+    "id": "fold_views_filter",
+    "en": "Filter options",
+    "de": "Filteroptionen *"
+  },
+  {
+    "id": "fold_views_sort",
+    "en": "Sort views",
+    "de": "Ansichten sortieren *"
+  },
+  {
+    "id": "gj",
+    "en": "Local GeoJSON",
+    "de": "Lokales GeoJSON *"
+  },
+  {
+    "id": "inf",
+    "en": "Infrastructure",
+    "de": "Infrastruktur *"
+  },
+  {
+    "id": "interval",
+    "en": "Interval",
+    "de": "Intervall *"
+  },
+  {
+    "id": "time_slider",
+    "en": "Time slider",
+    "de": "Zeitschieber *"
+  },
+  {
+    "id": "custom_code",
+    "en": "Custom code",
+    "de": "Benutzerdefinierter Code *"
+  },
+  {
+    "id": "custom_style",
+    "en": "Custom style",
+    "de": "Benutzerdefinierter Stil *"
+  },
+  {
+    "id": "custom_style_edit",
+    "en": "Edit custom style",
+    "de": "Benutzerdefinierten Stil bearbeiten *"
+  },
+  {
+    "id": "story_map",
+    "en": "Story map",
+    "de": "Story Map *"
+  },
+  {
+    "id": "dashboard",
+    "en": "Dashboard",
+    "de": "Instrumententafel *"
+  },
+  {
+    "id": "overlap",
+    "en": "Overlap",
+    "de": "Überlappung *"
+  },
+  {
+    "id": "left",
+    "en": "Left",
+    "de": "Links *"
+  },
+  {
+    "id": "line",
+    "en": "Line",
+    "de": "Linie *"
+  },
+  {
+    "id": "loading_img",
+    "en": "Image loading, please wait ...",
+    "de": "Bild laden, bitte warten ... *"
+  },
+  {
+    "id": "login_cancel",
+    "en": "Cancel",
+    "de": "Stornieren *"
+  },
+  {
+    "id": "login_required_for_project_access_guest",
+    "en": "Accessing a private project requires to be authenticated",
+    "de": "Der Zugriff auf ein privates Projekt muss authentifiziert werden *"
+  },
+  {
+    "id": "login_required_for_project_access_non_member",
+    "en": "You are not authorized to access this project. You can try with another account.",
+    "de": "Sie sind nicht berechtigt, auf dieses Projekt zuzugreifen. Sie können es mit einem anderen Konto versuchen. *"
+  },
+  {
+    "id": "login_required_for_project_list",
+    "en": "The filtered project list request requires authentication",
+    "de": "Die gefilterte Projektlistenanforderung erfordert eine Authentifizierung *"
+  },
+  {
+    "id": "login_pwd_mail_sent",
+    "en": "An email has been sent, please check your inbox and copy the received password in the field below",
+    "de": "Eine E-Mail wurde gesendet. Bitte überprüfen Sie Ihren Posteingang und kopieren Sie das erhaltene Passwort in das Feld unten *"
+  },
+  {
+    "id": "login_pwd_mail_sent_error",
+    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
+    "de": "Es ist ein Fehler aufgetreten. Wir konnten Ihnen das Kennwort für die einmalige Verwendung nicht senden. Bitte versuchen Sie es später noch einmal. *"
+  },
+  {
+    "id": "login_project",
+    "en": "Project or country name in which the role applies",
+    "de": "Projekt- oder Ländername, in dem die Rolle gilt *"
+  },
+  {
+    "id": "login_email",
+    "en": "Email",
+    "de": "Email *"
+  },
+  {
+    "id": "login_insert_pwd",
+    "en": "Insert the single usage password",
+    "de": "Geben Sie das Kennwort für die einmalige Verwendung ein *"
+  },
+  {
+    "id": "login_info_box",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
+    "de": "Wenn Sie noch nicht registriert sind, erstellt eine erfolgreiche Authentifizierung ein neues Konto und entsperrt neue Funktionen. Wenn Sie bereits registriert sind, erhalten Sie durch eine erfolgreiche Authentifizierung zusätzlich Zugriff auf alle Projekte, bei denen Sie bereits Mitglied sind. Die Benutzerregistrierung bei MapX impliziert die Zustimmung zur Erfassung und Veröffentlichung von Leistungsdaten nicht persönlich identifizierbarer Informationen auf aggregierter Ebene. *"
+  },
+  {
+    "id": "login_out",
+    "en": "Log out",
+    "de": "Ausloggen *"
+  },
+  {
+    "id": "login_groups",
+    "en": "Groups",
+    "de": "Gruppen *"
+  },
+  {
+    "id": "login_send_pwd",
+    "en": "Send",
+    "de": "Senden *"
+  },
+  {
+    "id": "login_subtitle",
+    "en": "Please enter your email to receive a single usage secure password",
+    "de": "Bitte geben Sie Ihre E-Mail-Adresse ein, um ein sicheres Passwort für die einmalige Verwendung zu erhalten *"
+  },
+  {
+    "id": "login_title",
+    "en": "Log in",
+    "de": "Einloggen *"
+  },
+  {
+    "id": "login_user_status",
+    "en": "User status",
+    "de": "Benutzerstatus *"
+  },
+  {
+    "id": "more",
+    "en": "More",
+    "de": "Mehr *"
+  },
+  {
+    "id": "noAbstract",
+    "en": "[ Abstract missing ]",
+    "de": "[Abstract fehlt] *"
+  },
+  {
+    "id": "noLegend",
+    "en": "[ Missing legend ]",
+    "de": "[Fehlende Legende] *"
+  },
+  {
+    "id": "noData",
+    "en": "[ Missing value ]",
+    "de": "[ Fehlender Wert ] *"
+  },
+  {
+    "id": "noFilter",
+    "en": "[ No filter ]",
+    "de": "[ Kein Filter ] *"
+  },
+  {
+    "id": "noLayer",
+    "en": "[ No source layer ]",
+    "de": "[Keine Quellenebene] *"
+  },
+  {
+    "id": "noValue",
+    "en": "[ No value ]",
+    "de": "[ Kein Wert ] *"
+  },
+  {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "de": "[Attribute konnten nicht angezeigt werden] *"
+  },
+  {
+    "id": "none",
+    "en": "None",
+    "de": "Keiner *"
+  },
+  {
+    "id": "noSelect",
+    "en": "[ Empty selection ]",
+    "de": "[Leere Auswahl] *"
+  },
+  {
+    "id": "noTitle",
+    "en": "[ Title missing ]",
+    "de": "[Titel fehlt] *"
+  },
+  {
+    "id": "noVariable",
+    "en": "[ Missing value ]",
+    "de": "[ Fehlender Wert ] *"
+  },
+  {
+    "id": "noViewOrig",
+    "en": "[ No view available ]",
+    "de": "[Keine Ansicht verfügbar] *"
+  },
+  {
+    "id": "noView",
+    "en": "[ Select a different project, category or country to display available data ]",
+    "de": "[Wählen Sie ein anderes Projekt, eine andere Kategorie oder ein anderes Land aus, um die verfügbaren Daten anzuzeigen.] *"
+  },
+  {
+    "id": "view_fetching_progress",
+    "en": "[ {{vOk}}/{{vTot}} ]",
+    "de": "[{{vOk}} /.{{vTot}} ]] *"
+  },
+  {
+    "id": "nrg",
+    "en": "Energy",
+    "de": "Energie *"
+  },
+  {
+    "id": "old_add_view",
+    "en": "Add a new view",
+    "de": "Fügen Sie eine neue Ansicht hinzu *"
+  },
+  {
+    "id": "oth",
+    "en": "Other",
+    "de": "Andere *"
+  },
+  {
+    "id": "point",
+    "en": "Point",
+    "de": "Punkt *"
+  },
+  {
+    "id": "pol",
+    "en": "Politics",
+    "de": "Politik *"
+  },
+  {
+    "id": "polygon",
+    "en": "Polygon",
+    "de": "Polygon *"
+  },
+  {
+    "id": "public",
+    "en": "Public",
+    "de": "Öffentlichkeit *"
+  },
+  {
+    "id": "login_label",
+    "en": "Login",
+    "de": "Anmeldung *"
+  },
+  {
+    "id": "publish",
+    "en": "Publish",
+    "de": "Veröffentlichen *"
+  },
+  {
+    "id": "publisher",
+    "en": "Publisher",
+    "de": "Verleger *"
+  },
+  {
+    "id": "publishers",
+    "en": "Publishers",
+    "de": "Verlag *"
+  },
+  {
+    "id": "member",
+    "en": "Member",
+    "de": "Mitglied *"
+  },
+  {
+    "id": "members",
+    "en": "Members",
+    "de": "Mitglieder *"
+  },
+  {
+    "id": "contacts",
+    "en": "Contacts",
+    "de": "Kontakte *"
+  },
+  {
+    "id": "right",
+    "en": "Right",
+    "de": "Richtig *"
+  },
+  {
+    "id": "rt",
+    "en": "Raster",
+    "de": "Raster *"
+  },
+  {
+    "id": "view_editable",
+    "en": "Editable",
+    "de": "Bearbeitbar *"
+  },
+  {
+    "id": "view_local",
+    "en": "Curent project",
+    "de": "Aktuelles Projekt *"
+  },
+  {
+    "id": "sat",
+    "en": "Satellite imagery",
+    "de": "Satellitenbilder *"
+  },
+  {
+    "id": "save",
+    "en": "Save",
+    "de": "speichern *"
+  },
+  {
+    "id": "saved_at",
+    "en": "Saved at %s",
+    "de": "Gespeichert bei%s *"
+  },
+  {
+    "id": "email",
+    "en": "Email",
+    "de": "Email *"
+  },
+  {
+    "id": "from",
+    "en": "From",
+    "de": "Von *"
+  },
+  {
+    "id": "to",
+    "en": "To",
+    "de": "Zu *"
+  },
+  {
+    "id": "email_manager_title",
+    "en": "Email manager",
+    "de": "E-Mail-Manager *"
+  },
+  {
+    "id": "email_manager_sent_success_generic",
+    "en": "An email has been sent to {{email}}",
+    "de": "Eine email wurde gesendet an{{email}} *"
+  },
+  {
+    "id": "email_manager_sent_error_generic",
+    "en": "An error occuried, the email has not been sent to {{email}}",
+    "de": "Es ist ein Fehler aufgetreten, an den die E-Mail nicht gesendet wurde{{email}} *"
+  },
+  {
+    "id": "invite_member_email",
+    "en": "Invite a new member",
+    "de": "Lade ein neues Mitglied ein *"
+  },
+  {
+    "id": "btn_invite",
+    "en": "Invite",
+    "de": "Einladen *"
+  },
+  {
+    "id": "btn_invite_form_hint",
+    "en": "Open an invitation form",
+    "de": "Öffnen Sie ein Einladungsformular *"
+  },
+  {
+    "id": "btn_add",
+    "en": "Add",
+    "de": "Hinzufügen *"
+  },
+  {
+    "id": "btn_add_user_hint",
+    "en": "Add this MapX user directly",
+    "de": "Fügen Sie diesen MapX-Benutzer direkt hinzu *"
+  },
+  {
+    "id": "schema_class",
+    "en": "Class",
+    "de": "Klasse *"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "de": "Fehlende Werte *"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "de": "Farbe *"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "de": "Beschreibung *"
+  },
+  {
+    "id": "schema_item",
+    "en": "Item",
+    "de": "Artikel *"
+  },
+  {
+    "id": "schema_key",
+    "en": "Key",
+    "de": "Schlüssel *"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "de": "Etikette *"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "de": "Letzte Regel *"
+  },
+  {
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "de": "Metadaten *"
+  },
+  {
+    "id": "schema_method",
+    "en": "Method",
+    "de": "Methode *"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Opacity",
+    "de": "Opazität *"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "de": "Regel *"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "de": "Regeln *"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "de": "Größe *"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "de": "Zoomeinstellungen *"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "de": "Größenkoeffizient bei Zoom max *"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "de": "Größenkoeffizient bei Zoom min *"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "de": "Größeninterpolationsexponent *"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "de": "Größeninterpolationsexponentenfunktion. Ein Wert von 1 ergibt eine lineare Interpolation. *"
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "de": "Zoom max *"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "de": "Zoom min *"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "de": "Symbol *"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "de": "Wenn größer als 0, Koeffizient der Größe für Linien und Punkte bei Zoom min. *"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "de": "Wenn größer als 0, wird der Größenkoeffizient für Linien und Punkte bei Zoom max. *"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "de": "Minimaler Zoom, um die Daten anzuzeigen *"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "de": "Maximaler Zoom zur Anzeige der Daten *"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "de": "Tipps: *"
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "de": "<p>Hier ist eine Liste bewährter Verfahren, um den Lesern ein nahtloses Erlebnis zu bieten:</p><ol><li> Halte es einfach.</li><li> Es ist besser, Kurzgeschichtenkarten zu erstellen, um das Interesse Ihres Publikums zu wahren.</li><li> Für eine gute Lesbarkeit wird empfohlen, zwei Folien pro Schritt und mehr als zwei Ebenen auf der Karte im selben Schritt nicht zu überschreiten.</li><li> Bilder, Videos und Infografiken können nützliche und wirkungsvolle Medien sein, um Ihre Geschichte zu kontextualisieren. Sie sollten jedoch die räumliche Komponente Ihrer Geschichte nicht überschatten. Karten sollten in der Mitte sein.</li><li> Effekte, Übergänge oder 3D-Transformationen können die Lesbarkeit Ihrer Story Map auf langsamen Geräten beeinträchtigen. Verwenden Sie sie sparsam.</li></ol> *"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "de": "Autor der Geschichte *"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "de": "Position der Karte *"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "de": "Metadaten *"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "de": "Name der Organisation *"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "de": "Aktualisieren Sie mit den aktuellen Kartenparametern *"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "de": "Rutschen *"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "de": "Farbthema *"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "de": "Hintergrundfarbe *"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "de": "Textfarbe *"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "de": "Aufbau *"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "de": "Inhaltslayout *"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "de": "Hintergrundopazität *"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "de": "Tiefe (z-Achse) *"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "de": "Geschwindigkeitsverhältnis *"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "de": "Folien *"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "de": "Schritt *"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "de": "Inhalt *"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "de": "Titel *"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "de": "Schritte *"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "de": "Schritte der Geschichte *"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "de": "Textposition *"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "de": "Geschichte *"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "de": "Wert *"
+  },
+  {
+    "id": "self",
+    "en": "Myself",
+    "de": "Mich selber *"
+  },
+  {
+    "id": "sm",
+    "en": "Story map",
+    "de": "Story Map *"
+  },
+  {
+    "id": "soc",
+    "en": "Social",
+    "de": "Sozial *"
+  },
+  {
+    "id": "source_meta_data",
+    "en": "Metadata for the source",
+    "de": "Metadaten für die Quelle *"
+  },
+  {
+    "id": "source_confirm_remove",
+    "en": "Confirm source deletion",
+    "de": "Bestätigen Sie das Löschen der Quelle *"
+  },
+  {
+    "id": "source_allow_download",
+    "en": "Allow download",
+    "de": "Download erlauben *"
+  },
+  {
+    "id": "source_allow_WMS",
+    "en": "Activate WMS",
+    "de": "Aktivieren Sie WMS *"
+  },
+  {
+    "id": "source_allow_WFS",
+    "en": "Activate WFS",
+    "de": "Aktivieren Sie WFS *"
+  },
+  {
+    "id": "source_removed",
+    "en": "Source deleted",
+    "de": "Quelle gelöscht *"
+  },
+  {
+    "id": "source_raster_tile_legend",
+    "en": "URL of the legend (png)",
+    "de": "URL der Legende (png) *"
+  },
+  {
+    "id": "source_raster_tile_size",
+    "en": "Size of the tiles (pixels)",
+    "de": "Größe der Kacheln (Pixel) *"
+  },
+  {
+    "id": "source_raster_tile_url",
+    "en": "URL of tiles endpoint ",
+    "de": "URL des Kachelendpunkts *"
+  },
+  {
+    "id": "source_raster_tile_url_download",
+    "en": "Download link",
+    "de": "Download-Link *"
+  },
+  {
+    "id": "source_raster_tile_url_metadata",
+    "en": "Link to the metadata",
+    "de": "Link zu den Metadaten *"
+  },
+  {
+    "id": "source_select_geometry",
+    "en": "Source geometry type",
+    "de": "Quellgeometrietyp *"
+  },
+  {
+    "id": "source_select_layer",
+    "en": "Source layer",
+    "de": "Quellschicht *"
+  },
+  {
+    "id": "source_select_layer_mask",
+    "en": "Source layer mask",
+    "de": "Quellebenenmaske *"
+  },
+  {
+    "id": "source_select_variable",
+    "en": "Source attribute",
+    "de": "Quellattribut *"
+  },
+  {
+    "id": "source_select_variable_alt",
+    "en": "Secondary attributes",
+    "de": "Sekundäre Attribute *"
+  },
+  {
+    "id": "source_target_readers",
+    "en": "Groups with use access ",
+    "de": "Gruppen mit Nutzungszugriff *"
+  },
+  {
+    "id": "source_target_editors",
+    "en": "Groups with write access",
+    "de": "Gruppen mit Schreibzugriff *"
+  },
+  {
+    "id": "source_services",
+    "en": "Services",
+    "de": "Dienstleistungen *"
+  },
+  {
+    "id": "source_validate_title",
+    "en": "Geometry validation tool",
+    "de": "Tool zur Validierung der Geometrie *"
+  },
+  {
+    "id": "source_validate_geom_show_expert_options",
+    "en": "Show expert options",
+    "de": "Expertenoptionen anzeigen *"
+  },
+  {
+    "id": "source_validate_geom_use_cache",
+    "en": "Use cached results – if any – instead of recalculate",
+    "de": "Verwenden Sie zwischengespeicherte Ergebnisse (falls vorhanden), anstatt sie neu zu berechnen *"
+  },
+  {
+    "id": "source_validate_geom_auto_correct",
+    "en": "Try an automatic correction ( experimental )",
+    "de": "Versuchen Sie eine automatische Korrektur (experimentell) *"
+  },
+  {
+    "id": "source_validate_geom_auto_correct_info",
+    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
+    "de": "Achtung, dies könnte die Geometrie verändern. Für (Mehrfach-) Polygone verwendet die automatische Korrektur einen Puffer von 0 um jedes Merkmal. Für andere Typen wird ST_MakeValid verwendet. *"
+  },
+  {
+    "id": "download_select_format_vector",
+    "en": "Output format",
+    "de": "Ausgabeformat *"
+  },
+  {
+    "id": "download_select_by_countries",
+    "en": "Country used to spatially extract the data (clip)",
+    "de": "Land, in dem die Daten räumlich extrahiert wurden (Clip) *"
+  },
+  {
+    "id": "download_file_name",
+    "en": "Filename",
+    "de": "Dateinamen *"
+  },
+  {
+    "id": "source_sum_geom_type",
+    "en": "Type of the geometry",
+    "de": "Typ der Geometrie *"
+  },
+  {
+    "id": "source_sum_n_distinct",
+    "en": "Number of distinct values",
+    "de": "Anzahl der unterschiedlichen Werte *"
+  },
+  {
+    "id": "source_sum_n_null",
+    "en": "Number of missing or null values",
+    "de": "Anzahl der fehlenden oder Nullwerte *"
+  },
+  {
+    "id": "source_sum_n_row",
+    "en": "Number of values",
+    "de": "Anzahl der Werte *"
+  },
+  {
+    "id": "source_sum_sample",
+    "en": "Sample values",
+    "de": "Beispielwerte *"
+  },
+  {
+    "id": "source_sum_title",
+    "en": "Variable summary",
+    "de": "Variablenübersicht *"
+  },
+  {
+    "id": "source_sum_variable_type",
+    "en": "Type of the attribut",
+    "de": "Art des Attributs *"
+  },
+  {
+    "id": "source_summary_check",
+    "en": "Show attribut summary",
+    "de": "Attributzusammenfassung anzeigen *"
+  },
+  {
+    "id": "source_time_range",
+    "en": "Time range",
+    "de": "Zeitspanne *"
+  },
+  {
+    "id": "source_title",
+    "en": "Source title",
+    "de": "Quellentitel *"
+  },
+  {
+    "id": "str",
+    "en": "Stress",
+    "de": "Stress *"
+  },
+  {
+    "id": "superuser",
+    "en": "Superuser",
+    "de": "Superuser *"
+  },
+  {
+    "id": "title_app",
+    "en": "MapX",
+    "de": "MapX"
+  },
+  {
+    "id": "user_profile",
+    "en": "User profile",
+    "de": "Benutzerprofil *"
+  },
+  {
+    "id": "user_authentication",
+    "en": "Authentication",
+    "de": "Authentifizierung *"
+  },
+  {
+    "id": "title_settings",
+    "en": "Settings",
+    "de": "die Einstellungen *"
+  },
+  {
+    "id": "title_settings_colors",
+    "en": "Theme configuration",
+    "de": "Themenkonfiguration *"
+  },
+  {
+    "id": "title_tools",
+    "en": "Tools",
+    "de": "Werkzeuge *"
+  },
+  {
+    "id": "title_tools_db",
+    "en": "Database",
+    "de": "Datenbank *"
+  },
+  {
+    "id": "title_tools_admin_project",
+    "en": "Projects",
+    "de": "Projekte *"
+  },
+  {
+    "id": "title_tools_config",
+    "en": "Configuration",
+    "de": "Aufbau *"
+  },
+  {
+    "id": "title_tools_map",
+    "en": "Map",
+    "de": "Karte *"
+  },
+  {
+    "id": "title_tools_share",
+    "en": "Share",
+    "de": "Aktie *"
+  },
+  {
+    "id": "title_tools_sources",
+    "en": "Sources",
+    "de": "Quellen *"
+  },
+  {
+    "id": "title_tools_views",
+    "en": "Views",
+    "de": "Ansichten *"
+  },
+  {
+    "id": "title_tools_dbself_info",
+    "en": "Connection information",
+    "de": "Verbindungsinformationen *"
+  },
+  {
+    "id": "title_tools_dbself_select",
+    "en": "Select source(s) to edit",
+    "de": "Wählen Sie die zu bearbeitenden Quellen aus *"
+  },
+  {
+    "id": "title_views",
+    "en": "Views",
+    "de": "Ansichten *"
+  },
+  {
+    "id": "top",
+    "en": "Top",
+    "de": "oben *"
+  },
+  {
+    "id": "ui_country",
+    "en": "Select country",
+    "de": "Land auswählen *"
+  },
+  {
+    "id": "ui_project",
+    "en": "Select project",
+    "de": "Projekt auswählen *"
+  },
+  {
+    "id": "select_member_project",
+    "en": "Switch to another project where you are a member",
+    "de": "Wechseln Sie zu einem anderen Projekt, in dem Sie Mitglied sind *"
+  },
+  {
+    "id": "ui_language",
+    "en": "Language of the interface",
+    "de": "Sprache für das Interface."
+  },
+  {
+    "id": "update_view_list",
+    "en": "Update view list",
+    "de": "Ansichtsliste aktualisieren *"
+  },
+  {
+    "id": "user",
+    "en": "Registered user",
+    "de": "Registrierter Nutzer *"
+  },
+  {
+    "id": "group_project",
+    "en": "Groups in project",
+    "de": "Gruppen im Projekt *"
+  },
+  {
+    "id": "view",
+    "en": "View",
+    "de": "Aussicht *"
+  },
+  {
+    "id": "views",
+    "en": "Views",
+    "de": "Ansichten *"
+  },
+  {
+    "id": "views_external",
+    "en": "External views",
+    "de": "Außenansichten *"
+  },
+  {
+    "id": "views_external_modal_title",
+    "en": "Manage external views",
+    "de": "Externe Ansichten verwalten *"
+  },
+  {
+    "id": "view_project_short",
+    "en": "( p )",
+    "de": "(p) *"
+  },
+  {
+    "id": "view_external_short",
+    "en": "( e )",
+    "de": "(e) *"
+  },
+  {
+    "id": "view_badge_shared",
+    "en": "View shared",
+    "de": "Freigegeben anzeigen *"
+  },
+  {
+    "id": "view_delete_modal_title",
+    "en": "View to delete %s",
+    "de": "Ansicht zum Löschen%s *"
+  },
+  {
+    "id": "view_edit_custom_code_modal_title",
+    "en": "Edit custom code of %s",
+    "de": "Bearbeiten Sie den benutzerdefinierten Code von%s *"
+  },
+  {
+    "id": "view_edit_dashboard_modal_title",
+    "en": "Edit dashboard of  %s",
+    "de": "Dashboard von bearbeiten%s *"
+  },
+  {
+    "id": "view_edit_story_modal_title",
+    "en": "Edit story map of  %s",
+    "de": "Story Map von bearbeiten%s *"
+  },
+  {
+    "id": "view_edit_style_modal_title",
+    "en": "Edit style of  %s",
+    "de": "Stil bearbeiten von%s *"
+  },
+  {
+    "id": "view_abstract",
+    "en": "View abstract",
+    "de": "Zusammenfassung anzeigen *"
+  },
+  {
+    "id": "view_add_dashboard",
+    "en": "Add a dashboard",
+    "de": "Fügen Sie ein Dashboard hinzu *"
+  },
+  {
+    "id": "view_add_download_btn",
+    "en": "Allow download of the source",
+    "de": "Download der Quelle zulassen *"
+  },
+  {
+    "id": "view_add_overlap_layer",
+    "en": "Add an mask",
+    "de": "Fügen Sie eine Maske hinzu *"
+  },
+  {
+    "id": "view_component",
+    "en": "Type of views",
+    "de": "Art der Ansichten *"
+  },
+  {
+    "id": "view_components",
+    "en": "Feature",
+    "de": "Merkmal *"
+  },
+  {
+    "id": "view_collections",
+    "en": "Collections",
+    "de": "Sammlungen *"
+  },
+  {
+    "id": "view_projects",
+    "en": "Other projects where the view is visible",
+    "de": "Andere Projekte, bei denen die Ansicht sichtbar ist *"
+  },
+  {
+    "id": "view_project",
+    "en": "Project of the view",
+    "de": "Projekt der Ansicht *"
+  },
+  {
+    "id": "view_country",
+    "en": "Country of the view",
+    "de": "Land der Ansicht *"
+  },
+  {
+    "id": "view_dashboard",
+    "en": "Dashboard",
+    "de": "Instrumententafel *"
+  },
+  {
+    "id": "view_dashboard_config",
+    "en": "Configure a dashboard",
+    "de": "Konfigurieren Sie ein Dashboard *"
+  },
+  {
+    "id": "view_dashboard_script",
+    "en": "Your script",
+    "de": "Dein Skript *"
+  },
+  {
+    "id": "view_dashboard_src_layerChange",
+    "en": "All attributes and values from the displayed features",
+    "de": "Alle Attribute und Werte aus den angezeigten Features *"
+  },
+  {
+    "id": "view_dashboard_src_layerClick",
+    "en": "All attributes and values from the clicked feature",
+    "de": "Alle Attribute und Werte der angeklickten Funktion *"
+  },
+  {
+    "id": "view_dashboard_src_none",
+    "en": "None. Value provided by the script.",
+    "de": "Keiner. Vom Skript bereitgestellter Wert. *"
+  },
+  {
+    "id": "view_dashboard_src_view",
+    "en": "The frequency table of the selected attribute",
+    "de": "Die Häufigkeitstabelle des ausgewählten Attributs *"
+  },
+  {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "de": "Alle Attribute und Werte an der Mausposition *"
+  },
+  {
+    "id": "view_dashboard_title",
+    "en": "Dashboard title",
+    "de": "Dashboard-Titel *"
+  },
+  {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "de": "Anfängliches Dashboard-Layout *"
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "de": "Legen Sie das anfängliche Dashboard-Layout fest *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "de": "Volle Größe *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "de": "An das größte Widget anpassen *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "de": "Vertikal *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "de": "Horizontal *"
+  },
+  {
+    "id": "view_dashboard_txt_height",
+    "en": "Height class",
+    "de": "Höhenklasse *"
+  },
+  {
+    "id": "view_dashboard_txt_script",
+    "en": "Your script",
+    "de": "Dein Skript *"
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "de": "Hintergrundfarbe hinzufügen *"
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
+    "de": "Hintergrundfarbe *"
+  },
+  {
+    "id": "view_dashboard_txt_which_data",
+    "en": "Which source to use for the data ?",
+    "de": "Welche Quelle soll für die Daten verwendet werden? *"
+  },
+  {
+    "id": "view_dashboard_txt_ignore_empty_data",
+    "en": "Ignore events that returns an empty array ?",
+    "de": "Ereignisse ignorieren, die ein leeres Array zurückgeben? *"
+  },
+  {
+    "id": "view_dashboard_txt_which_module",
+    "en": "Which modules to load?",
+    "de": "Welche Module sollen geladen werden? *"
+  },
+  {
+    "id": "view_dashboard_txt_desc_module",
+    "en": "Modules will be loaded under `widget.modules`",
+    "de": "Module werden unter \"widget.modules\" geladen *"
+  },
+  {
+    "id": "view_dashboard_txt_width",
+    "en": "Width class",
+    "de": "Breitenklasse *"
+  },
+  {
+    "id": "view_dashboard_widget",
+    "en": "Widget",
+    "de": "Widget *"
+  },
+  {
+    "id": "view_dashboard_widgets",
+    "en": "Widgets",
+    "de": "Widgets *"
+  },
+  {
+    "id": "view_delete_confirm",
+    "en": "Click on the confirm button to delete this view, its history and all translations.",
+    "de": "Klicken Sie auf die Schaltfläche Bestätigen, um diese Ansicht, ihren Verlauf und alle Übersetzungen zu löschen. *"
+  },
+  {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "de": "Klicken Sie auf die Bestätigung, um das Dashboard dauerhaft zu entfernen *"
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "de": "Bestätigung *"
+  },
+  {
+    "id": "view_download_layer",
+    "en": "Download the source layer",
+    "de": "Laden Sie die Quellschicht herunter *"
+  },
+  {
+    "id": "view_edit_current",
+    "en": "Edit view",
+    "de": "Ansicht bearbeiten *"
+  },
+  {
+    "id": "source_edit_metadata",
+    "en": "Edit source metadata",
+    "de": "Quellmetadaten bearbeiten *"
+  },
+  {
+    "id": "source_edit",
+    "en": "Edit source",
+    "de": "Quelle bearbeiten *"
+  },
+  {
+    "id": "view_id",
+    "en": "View identifier",
+    "de": "Bezeichner anzeigen *"
+  },
+  {
+    "id": "view_new_created",
+    "en": "View created",
+    "de": "Ansicht erstellt *"
+  },
+  {
+    "id": "view_new_text",
+    "en": "Create a new View",
+    "de": "Erstellen Sie eine neue Ansicht *"
+  },
+  {
+    "id": "view_no_layer_found",
+    "en": "No source layer found",
+    "de": "Keine Quellenebene gefunden *"
+  },
+  {
+    "id": "view_num_overlap",
+    "en": "Number of overlaps",
+    "de": "Anzahl der Überlappungen *"
+  },
+  {
+    "id": "view_filter_input",
+    "en": "Filter views ...",
+    "de": "Ansichten filtern ... *"
+  },
+  {
+    "id": "view_filter_by_tags",
+    "en": "Filter views by tag",
+    "de": "Ansichten nach Tag filtern *"
+  },
+  {
+    "id": "view_search_values",
+    "en": "Search values",
+    "de": "Suchwerte *"
+  },
+  {
+    "id": "view_filter_by_values",
+    "en": "Filter by values",
+    "de": "Nach Werten filtern *"
+  },
+  {
+    "id": "view_show_abstract_languages",
+    "en": "Show other languages abstract",
+    "de": "Andere Sprachen abstrakt anzeigen *"
+  },
+  {
+    "id": "view_show_title_languages",
+    "en": "Show other languages titles",
+    "de": "Titel anderer Sprachen anzeigen *"
+  },
+  {
+    "id": "view_target",
+    "en": "Target group. Who can view this.",
+    "de": "Zielgruppe. Wer kann das sehen. *"
+  },
+  {
+    "id": "view_target_readers",
+    "en": "Read access groups",
+    "de": "Zugriffsgruppen lesen *"
+  },
+  {
+    "id": "view_target_editors",
+    "en": "Edit access groups",
+    "de": "Zugriffsgruppen bearbeiten *"
+  },
+  {
+    "id": "view_text",
+    "en": "View text",
+    "de": "Text anzeigen *"
+  },
+  {
+    "id": "view_title",
+    "en": "View title",
+    "de": "Titel anzeigen *"
+  },
+  {
+    "id": "view_type_select",
+    "en": "Type of the view",
+    "de": "Art der Ansicht *"
+  },
+  {
+    "id": "vt",
+    "en": "Vector",
+    "de": "Vektor *"
+  },
+  {
+    "id": "wms",
+    "en": "Web Map Service (wms)",
+    "de": "Web Map Service (wms) *"
+  },
+  {
+    "id": "mx_download",
+    "en": "Allow this source to be downloaded",
+    "de": "Lassen Sie diese Quelle herunterladen *"
+  },
+  {
+    "id": "gs_ws_a",
+    "en": "Publish all related views via WMS",
+    "de": "Veröffentlichen Sie alle zugehörigen Ansichten über WMS *"
+  },
+  {
+    "id": "gs_ws_b",
+    "en": "Publish all related views via WMS/WFS/WCS",
+    "de": "Veröffentlichen Sie alle zugehörigen Ansichten über WMS / WFS / WCS *"
+  },
+  {
+    "id": "src_download_issues",
+    "en": "The source can't be downloaded",
+    "de": "Die Quelle kann nicht heruntergeladen werden *"
+  },
+  {
+    "id": "src_upload_add",
+    "en": "Upload a new source layer",
+    "de": "Laden Sie eine neue Quellenebene hoch *"
+  },
+  {
+    "id": "src_upload_issues",
+    "en": "Upload issue(s)",
+    "de": "Problem (e) hochladen *"
+  },
+  {
+    "id": "source_upload_vector",
+    "en": "Upload new vector source",
+    "de": "Neue Vektorquelle hochladen *"
+  },
+  {
+    "id": "upload_source_title",
+    "en": "Title of the new source",
+    "de": "Titel der neuen Quelle *"
+  },
+  {
+    "id": "you_not_logged_in",
+    "en": "You are not logged in.",
+    "de": "Du bist nicht eingeloggt. *"
+  },
+  {
+    "id": "you_not_allowed",
+    "en": "You are not allowed to do this.",
+    "de": "Sie dürfen dies nicht tun. *"
+  },
+  {
+    "id": "src_download_disabled",
+    "en": "The download is not allowed.",
+    "de": "Der Download ist nicht erlaubt. *"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "de": "Text der Schnittstelle *"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "de": "Links *"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "de": "Sekundärtextfarbe *"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "de": "Versteckte Elemente *"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "de": "Grenzen *"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "de": "Hintergrund *"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "de": "Hintergrundkontrast *"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "de": "Hintergrund ausgeblendet *"
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "de": "Schatten *"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "de": "Karte: Hintergrund *"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "de": "Karte: Funktionshighlight *"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "de": "Karte: Hügelschatten *"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "de": "Karte: Hügelschatten-Highlight *"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "de": "Karte: Akzent des Hügelschattens *"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "de": "Karte: Landschatten *"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "de": "Karte: Wasser *"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "de": "Karte: Bathymetrie (niedrig) *"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "de": "Karte: Bathymetrie (hoch) *"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "de": "Karte: Straße *"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "de": "Karte: Straßengrenze *"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "de": "Karte: Gebäude *"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "de": "Karte: Internationale Grenze *"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "de": "Karte: Spezielle Grenzlinie *"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "de": "Karte: Waffenstillstand oder internationale Grenzlinie *"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "de": "Karte: Andere Trennlinie *"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "de": "Karte: Autonome Regionsgrenze *"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "de": "Karte: Souveränes Basislimit *"
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational",
+    "en": "Map: Subnational boundaries",
+    "de": "Karte: Subnationale Grenzen *"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "de": "Karte: Text platzieren *"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "de": "Karte: Textumriss platzieren *"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "de": "Karte: Straßentext *"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "de": "Karte: Straßentextumriss *"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "de": "Karte: Gewässertext *"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "de": "Karte: Wasserkörpertextumriss *"
+  },
+  {
+    "id": "list_publishers",
+    "en": "List of publishers",
+    "de": "Liste der Verlage *"
+  },
+  {
+    "id": "list_members",
+    "en": "List of members",
+    "de": "Mitgliederliste *"
+  },
+  {
+    "id": "list_admins",
+    "en": "List of administrators",
+    "de": "Liste der Administratoren *"
+  },
+  {
+    "id": "list_contacts",
+    "en": "Contact person",
+    "de": "Gesprächspartner *"
+  },
+  {
+    "id": "new_publishers",
+    "en": "New publishers",
+    "de": "Neue Verlage *"
+  },
+  {
+    "id": "new_members",
+    "en": "New members",
+    "de": "Neue Mitglieder *"
+  },
+  {
+    "id": "new_admins",
+    "en": "New administrators",
+    "de": "Neue Administratoren *"
+  },
+  {
+    "id": "new_contacts",
+    "en": "New admin. contacts",
+    "de": "Neuer Admin. Kontakte *"
+  },
+  {
+    "id": "rem_publishers",
+    "en": "Publishers removed",
+    "de": "Verleger entfernt *"
+  },
+  {
+    "id": "rem_members",
+    "en": "Members removed",
+    "de": "Mitglieder entfernt *"
+  },
+  {
+    "id": "rem_admins",
+    "en": "Administrators removed",
+    "de": "Administratoren entfernt *"
+  },
+  {
+    "id": "rem_contacts",
+    "en": "Contacts removed",
+    "de": "Kontakte entfernt *"
+  },
+  {
+    "id": "no_changes",
+    "en": "No change",
+    "de": "Keine Änderung *"
+  },
+  {
+    "id": "roles_updated",
+    "en": "Roles updated",
+    "de": "Rollen aktualisiert *"
+  },
+  {
+    "id": "roles",
+    "en": "Roles",
+    "de": "Rollen *"
+  },
+  {
+    "id": "success_update",
+    "en": "Update successful",
+    "de": "Aktualisierung erfolgreich *"
+  },
+  {
+    "id": "error_roles_no_admins",
+    "en": "Require at least one admin",
+    "de": "Benötigen Sie mindestens einen Administrator *"
+  },
+  {
+    "id": "error_views_need_data",
+    "en": "Deletion of a source disabled because at least one view depends on it",
+    "de": "Das Löschen einer Quelle ist deaktiviert, da mindestens eine Ansicht davon abhängt *"
+  },
+  {
+    "id": "error_views_need_publishers",
+    "en": "At least one view needs this source to be available for publishers. Update disabled.",
+    "de": "Für mindestens eine Ansicht muss diese Quelle für Verlage verfügbar sein. Update deaktiviert. *"
+  },
+  {
+    "id": "error_roles_removed_self",
+    "en": "You can't remove yourself from admin group",
+    "de": "Sie können sich nicht aus der Administratorgruppe entfernen *"
+  },
+  {
+    "id": "project_enable_public",
+    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "de": "Dieses Projekt ist öffentlich. Es wird im Projektkatalog aufgeführt. Alle in diesem Projekt veröffentlichten öffentlichen Ansichten sind für alle lesbar. *"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project.",
+    "de": "Erlauben Sie Nichtmitgliedern, eine Mitgliedschaft in diesem Projekt anzufordern. *"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "de": "Kennung *"
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "de": "Ansichtsstatus speichern *"
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "de": "Rollenverwaltung *"
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "de": "Alias des Projekts *"
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "de": "Mindestens 1, maximal 30 Kleinbuchstaben innerhalb von ASCII-Zeichen [az], Zahlen [0-9], Bindestrichen [-] und Unterstrichen zulässig [_] *"
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "de": "Projektalias ungültig oder bereits vergeben *"
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "de": "Zugriff abgelehnt. Sie können nicht auf das angeforderte Projekt zugreifen *"
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "de": "Schreiben Sie den Projektnamen, den Sie löschen möchten *"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "de": "Lade ein neues Mitglied ein *"
+  },
+  {
+    "id": "btn_show_invite_member",
+    "en": "Invite a new member",
+    "de": "Lade ein neues Mitglied ein *"
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "de": "Verfassen Sie eine Einladungs-E-Mail *"
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "de": "MapX-Einladung *"
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project \"{{project}}\"",
+    "de": "Einladung zur Teilnahme am Projekt\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project \"{{project}}\"",
+    "de": "Einladung zum Projekt annehmen\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "de": "E-Mail gesendet. *"
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "de": "Das Tag{{link}} wird durch einen verschlüsselten Link ersetzt. *"
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "de": "Hallo!\n Ich möchte Sie als Mitglied zum Projekt einladen\"{{projectName}}\" in MapX.\n Bitte klicken Sie zur Bestätigung auf den angegebenen Link.\n{{link}}\n Der Administrator des Projekts. *"
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "de": "Hallo!\n Vielen Dank, dass Sie uns erreicht haben.\n Um Ihre Mitgliedschaft im Projekt zu bestätigen{{projectName}} Klicken Sie in MapX auf den folgenden Link:\n{{link}}\n Freundliche Grüße,\n Der Administrator des Projekts *"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "de": "Hallo,<br> Nutzer '{{emailUser}} 'hat einen Einladungslink verwendet, um das Projekt aufzurufen{{project}} .<ul><li> Haltbarkeitsdatum:{{timeExpire}}</li></ul><br> Einen schönen Tag noch ! *"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "de": "Einladungslink im Projekt verwendet{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "de": "Sie wurden zum Projekt hinzugefügt{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "de": "Hallo,<br> Sie wurden zum Projekt hinzugefügt{{project}} in Gruppen):{{roles}} .<br> Einen schönen Tag noch ! *"
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "de": "Dem Projekt wurde ein Benutzer hinzugefügt{{project}} . *"
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "de": "Ein Benutzer ({{emailUser}} ) wurde dem Projekt hinzugefügt{{project}} in Gruppen){{roles}}<br> Einen schönen Tag noch ! *"
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "de": "Länder, die auf der Karte hervorgehoben werden sollen *"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "de": "Projekte suchen *"
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "de": "Projekt gespeichert *"
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "de": "Projekt{{title}} erstellt *"
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "de": "Projekt gelöscht *"
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "de": "Analysieren, bitte warten ... *"
+  },
+  {
+    "id": "project_delete_number_of_sources",
+    "en": "Number of sources to delete",
+    "de": "Anzahl der zu löschenden Quellen *"
+  },
+  {
+    "id": "project_delete_number_of_views",
+    "en": "Number of views to delete",
+    "de": "Anzahl der zu löschenden Ansichten *"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "de": "Projekt löschen *"
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "de": "Titel des Projekts *"
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "de": "Liste der Projekte *"
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "de": "Klicken Sie auf einen Projektnamen, um darauf zuzugreifen. Wenn Sie nicht Mitglied eines Projekts sind, können Sie durch Klicken auf die Schaltfläche \"Beitreten\" die Teilnahme beantragen *"
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "de": "Beschreibung *"
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "de": "Projekt Einstellungen *"
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "de": "Anfängliche Kartenposition *"
+  },
+  {
+    "id": "project_map_pos_get",
+    "en": "Use current map parameters",
+    "de": "Verwenden Sie die aktuellen Kartenparameter *"
+  },
+  {
+    "id": "map_fit_to_bounds",
+    "en": "Use extent to center the map",
+    "de": "Verwenden Sie die Ausdehnung, um die Karte zu zentrieren *"
+  },
+  {
+    "id": "map_zoom",
+    "en": "Zoom",
+    "de": "Zoomen *"
+  },
+  {
+    "id": "map_longitude_center",
+    "en": "Longitude at center",
+    "de": "Längengrad in der Mitte *"
+  },
+  {
+    "id": "map_latitude_center",
+    "en": "Latitude at center",
+    "de": "Breitengrad in der Mitte *"
+  },
+  {
+    "id": "map_pitch",
+    "en": "Camera pitch",
+    "de": "Kamerapitch *"
+  },
+  {
+    "id": "map_bearing",
+    "en": "Camera bearing",
+    "de": "Kameralager *"
+  },
+  {
+    "id": "map_north_max",
+    "en": "Max north latitude",
+    "de": "Max nördlicher Breitengrad *"
+  },
+  {
+    "id": "map_south_max",
+    "en": "Max south latitude",
+    "de": "Max südlicher Breitengrad *"
+  },
+  {
+    "id": "map_east_max",
+    "en": "Max east longitude",
+    "de": "Max östlicher Längengrad *"
+  },
+  {
+    "id": "map_west_max",
+    "en": "Max west longitude",
+    "de": "Max westlicher Längengrad *"
+  },
+  {
+    "id": "view_badge_public_valid",
+    "en": "This view is publicly available",
+    "de": "Diese Ansicht ist öffentlich verfügbar *"
+  },
+  {
+    "id": "view_badge_public_not_valid",
+    "en": "This view is publicly available \n with incomplete metadata",
+    "de": "Diese Ansicht ist öffentlich verfügbar\n mit unvollständigen Metadaten *"
+  },
+  {
+    "id": "view_badge_editable",
+    "en": "You have editor rights for this view",
+    "de": "Sie haben Editorrechte für diese Ansicht *"
+  },
+  {
+    "id": "view_badge_locked",
+    "en": "You do not have editor rights",
+    "de": "Sie haben keine Editorrechte *"
+  },
+  {
+    "id": "txt_too_short_min_3",
+    "en": "Text too short, minimum 3 characters",
+    "de": "Text zu kurz, mindestens 3 Zeichen *"
+  },
+  {
+    "id": "txt_email_not_valid",
+    "en": "Email not valid",
+    "de": "E-Mail nicht gültig *"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "de": "Hallo!\\n Bitte füge mich zum Projekt hinzu{{projectName}} .\\n Freundliche Grüße,\\n Ein motiviertes zukünftiges Mitglied\\n *"
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "de": "Mitgliedschaftsantrag *"
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "de": "Antrag auf Beitritt zum{{project}} Projekt *"
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "de": "<span>Eine Mitgliedschaftsanfrage von</span>{{from}} <span>wurde erhalten.</span><ul><li> Botschaft:{{msg}}</li><li> Benutzerstatus:{{userStatus}}</li><li> Aktion:{{actionUrl}}</li><li> Verknüpfung:{{projectUrl}}</li><li> Daten:<pre>{{data}}</pre></li></ul> *"
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "de": "Antworten Sie auf die Mitgliedschaftsanfrage von\"{{email}}\" für das Projekt\"{{project}}\" *"
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "de": "Öffnen Sie das Projekt\"{{project}}\" *"
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "de": "Ihre Anfrage wurde an den Projektadministrator gesendet. In den kommenden Tagen erhalten Sie eine Bestätigungs-E-Mail. Überprüfen Sie Ihren Posteingang auf eine E-Mail vom MapX-Bot und klicken Sie auf den Link, um auf das Projekt zuzugreifen! *"
+  },
+  {
+    "id": "update_app_msg",
+    "en": "MapX has been updated, this page will be reloaded now.",
+    "de": "MapX wurde aktualisiert, diese Seite wird jetzt neu geladen. *"
+  },
+  {
+    "id": "btn_clear_cache",
+    "en": "Clear cached data",
+    "de": "Zwischengespeicherte Daten löschen *"
+  },
+  {
+    "id": "title_utilities",
+    "en": "Utilities",
+    "de": "Dienstprogramme *"
+  },
+  {
+    "id": "update_app_title",
+    "en": "Update",
+    "de": "Aktualisieren *"
+  },
+  {
+    "id": "btn_install_update",
+    "en": "Install and reload",
+    "de": "Installieren und neu laden *"
+  },
+  {
+    "id": "tbl_views_depending_source",
+    "en": "Table of views depending on the source",
+    "de": "Ansichtstabelle je nach Quelle *"
+  },
+  {
+    "id": "btn_validate_metadata",
+    "en": "In depth validation",
+    "de": "Eingehende Validierung *"
+  },
+  {
+    "id": "validate_meta_modal_title",
+    "en": "Metadata validation",
+    "de": "Validierung von Metadaten *"
+  },
+  {
+    "id": "validate_meta_no_issue",
+    "en": "Metadata are valid.",
+    "de": "Metadaten sind gültig. *"
+  },
+  {
+    "id": "validate_meta_attribute",
+    "en": "Attributes",
+    "de": "Attribute *"
+  },
+  {
+    "id": "validate_meta_invalid_attribute",
+    "en": "Invalid attribute description entry",
+    "de": "Ungültiger Attributbeschreibungseintrag *"
+  },
+  {
+    "id": "validate_meta_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt *"
+  },
+  {
+    "id": "validate_meta_invalid_abstract",
+    "en": "Invalid abstract",
+    "de": "Ungültige Zusammenfassung *"
+  },
+  {
+    "id": "validate_meta_title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "validate_meta_invalid_title",
+    "en": "Invalid title",
+    "de": "Ungültiger Titel *"
+  },
+  {
+    "id": "validate_meta_keyword",
+    "en": "Keywords",
+    "de": "Schlüsselwörter *"
+  },
+  {
+    "id": "validate_meta_keyword_m49",
+    "en": "Geographic M49 Keywords list",
+    "de": "Geografische M49-Schlüsselwortliste"
+  },
+  {
+    "id": "validate_meta_no_keyword",
+    "en": "Missing keywords",
+    "de": "Fehlende Schlüsselwörter *"
+  },
+  {
+    "id": "validate_meta_invalid_keyword",
+    "en": "Invalid keywords",
+    "de": "Ungültige Schlüsselwörter *"
+  },
+  {
+    "id": "validate_meta_contact",
+    "en": "Contacts",
+    "de": "Kontakte *"
+  },
+  {
+    "id": "validate_meta_no_contact",
+    "en": "Missing contact",
+    "de": "Fehlender Kontakt *"
+  },
+  {
+    "id": "validate_meta_invalid_contact_email",
+    "en": "Invalid contact email",
+    "de": "Ungültige Kontakt-E-Mail *"
+  },
+  {
+    "id": "validate_meta_issuance",
+    "en": "Issuance",
+    "de": "Ausgabe *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_periodicity",
+    "en": "Invalid periodicity",
+    "de": "Ungültige Periodizität *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_released_at",
+    "en": "Invalid date of release",
+    "de": "Ungültiges Veröffentlichungsdatum *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_modified_at",
+    "en": "Invalid date of modification",
+    "de": "Ungültiges Änderungsdatum *"
+  },
+  {
+    "id": "validate_meta_license",
+    "en": "License",
+    "de": "Lizenz *"
+  },
+  {
+    "id": "validate_meta_no_license",
+    "en": "Missing license",
+    "de": "Fehlende Lizenz *"
+  },
+  {
+    "id": "validate_meta_invalid_license",
+    "en": "Invalid license",
+    "de": "Ungültige Lizenz *"
+  },
+  {
+    "id": "validate_meta_source",
+    "en": "Source",
+    "de": "Quelle *"
+  },
+  {
+    "id": "validate_meta_no_source",
+    "en": "Source missing",
+    "de": "Quelle fehlt *"
+  },
+  {
+    "id": "validate_meta_invalid_source",
+    "en": "Invalid source",
+    "de": "Ungültige Quelle *"
+  },
+  {
+    "id": "validate_meta_invalid_external_link",
+    "en": "Invalid external link",
+    "de": "Ungültiger externer Link *"
+  },
+  {
+    "id": "source_last_editor_email",
+    "en": "Email of the last editor",
+    "de": "E-Mail des letzten Editors *"
+  },
+  {
+    "id": "additional_doc_desc",
+    "en": "If any, list of additional documents",
+    "de": "Falls vorhanden, Liste der zusätzlichen Dokumente *"
+  },
+  {
+    "id": "additional_doc_items_desc",
+    "en": "Related documents such as technical information about a dataset",
+    "de": "Verwandte Dokumente wie technische Informationen zu einem Datensatz *"
+  },
+  {
+    "id": "additional_doc_items_title",
+    "en": "List of annexes",
+    "de": "Liste der Anhänge *"
+  },
+  {
+    "id": "additional_doc_item_title",
+    "en": "Document",
+    "de": "Dokument *"
+  },
+  {
+    "id": "additional_doc_item_url",
+    "en": "URL to the document",
+    "de": "URL zum Dokument *"
+  },
+  {
+    "id": "additional_doc_title",
+    "en": "Annexes",
+    "de": "Anhänge *"
+  },
+  {
+    "id": "annually",
+    "en": "Data is updated every year",
+    "de": "Die Daten werden jedes Jahr aktualisiert *"
+  },
+  {
+    "id": "as_needed",
+    "en": "Data is updated as deemed necessary",
+    "de": "Die Daten werden nach Bedarf aktualisiert *"
+  },
+  {
+    "id": "attribute_item_title",
+    "en": "Attribute",
+    "de": "Attribut *"
+  },
+  {
+    "id": "attribute_name_title",
+    "en": "Attribute name",
+    "de": "Attributname *"
+  },
+  {
+    "id": "attributes_list_title",
+    "en": "Attributes list",
+    "de": "Attributliste *"
+  },
+  {
+    "id": "attributes_desc_title",
+    "en": "Attributes description",
+    "de": "Attributbeschreibung *"
+  },
+  {
+    "id": "attributes_desc_desc",
+    "en": "Description of the attributes contained in the data",
+    "de": "Beschreibung der in den Daten enthaltenen Attribute *"
+  },
+  {
+    "id": "attribute_desc_item_title",
+    "en": "Description",
+    "de": "Beschreibung *"
+  },
+  {
+    "id": "attributes_alias_title",
+    "en": "Alias for attributes names",
+    "de": "Alias für Attributnamen *"
+  },
+  {
+    "id": "attributes_alias_desc",
+    "en": "Set attributes short names (alias)",
+    "de": "Set Attribute Kurznamen (Alias) *"
+  },
+  {
+    "id": "attribute_alias_item_title",
+    "en": "Alias",
+    "de": "Alias *"
+  },
+  {
+    "id": "biannually",
+    "en": "Data is updated twice each year",
+    "de": "Die Daten werden zweimal jährlich aktualisiert *"
+  },
+  {
+    "id": "confirm_source_remove",
+    "en": "Are you sure to delete the source with all related views and metadata ? This can't be undone",
+    "de": "Sind Sie sicher, die Quelle mit allen zugehörigen Ansichten und Metadaten zu löschen? Dies kann nicht rückgängig gemacht werden *"
+  },
+  {
+    "id": "contact_address",
+    "en": "Contact address",
+    "de": "Kontakt Anschrift *"
+  },
+  {
+    "id": "contact_desc",
+    "en": "Information about people or organisation related to this data",
+    "de": "Informationen zu Personen oder Organisationen im Zusammenhang mit diesen Daten *"
+  },
+  {
+    "id": "contact_email",
+    "en": "Contact email",
+    "de": "Kontakt E-mail *"
+  },
+  {
+    "id": "contact_function",
+    "en": "Function",
+    "de": "Funktion *"
+  },
+  {
+    "id": "contact_function_desc",
+    "en": "Name of the contact function, e.g. Administrator, Publisher",
+    "de": "Name der Kontaktfunktion, zB Administrator, Publisher *"
+  },
+  {
+    "id": "contact_item_title",
+    "en": "Contact",
+    "de": "Kontakt *"
+  },
+  {
+    "id": "contact_list_title",
+    "en": "List of contacts",
+    "de": "Liste der Kontakte *"
+  },
+  {
+    "id": "contact_name",
+    "en": "Contact name",
+    "de": "Kontaktname *"
+  },
+  {
+    "id": "contact_title",
+    "en": "Contacts",
+    "de": "Kontakte *"
+  },
+  {
+    "id": "continual",
+    "en": "Data is repeatedly and frequently updated",
+    "de": "Daten werden wiederholt und häufig aktualisiert *"
+  },
+  {
+    "id": "daily",
+    "en": "Data is updated each day",
+    "de": "Die Daten werden jeden Tag aktualisiert *"
+  },
+  {
+    "id": "fortnightly",
+    "en": "Data is updated every two weeks",
+    "de": "Die Daten werden alle zwei Wochen aktualisiert *"
+  },
+  {
+    "id": "irregular",
+    "en": "Data is updated in intervals that are uneven in duration",
+    "de": "Die Daten werden in ungleichmäßigen Intervallen aktualisiert *"
+  },
+  {
+    "id": "lang_desc",
+    "en": "Language(s) used in content",
+    "de": "In Inhalten verwendete Sprache (n) *"
+  },
+  {
+    "id": "lang_item_title",
+    "en": "Language",
+    "de": "Sprache *"
+  },
+  {
+    "id": "lang_list_desc",
+    "en": "Two letters code of languages",
+    "de": "Zwei Buchstaben Code der Sprachen *"
+  },
+  {
+    "id": "lang_list_title",
+    "en": "List of languages",
+    "de": "Liste der Sprachen *"
+  },
+  {
+    "id": "lang_title",
+    "en": "Language",
+    "de": "Sprache *"
+  },
+  {
+    "id": "license_allow_download",
+    "en": "Allow download source",
+    "de": "Downloadquelle zulassen *"
+  },
+  {
+    "id": "license_desc",
+    "en": "If any, description of the data licenses",
+    "de": "Falls vorhanden, Beschreibung der Datenlizenzen *"
+  },
+  {
+    "id": "license_item_title",
+    "en": "License",
+    "de": "Lizenz *"
+  },
+  {
+    "id": "license_list_desc",
+    "en": "Name and/or description of the licence",
+    "de": "Name und / oder Beschreibung der Lizenz *"
+  },
+  {
+    "id": "license_list_title",
+    "en": "List of licences",
+    "de": "Liste der Lizenzen *"
+  },
+  {
+    "id": "license_name",
+    "en": "Name",
+    "de": "Name *"
+  },
+  {
+    "id": "license_text",
+    "en": "Text",
+    "de": "Text *"
+  },
+  {
+    "id": "license_title",
+    "en": "Licensing",
+    "de": "Lizenzierung *"
+  },
+  {
+    "id": "maintainer",
+    "en": "Maintainer",
+    "de": "Betreuer *"
+  },
+  {
+    "id": "monthly",
+    "en": "Data is updated each month",
+    "de": "Die Daten werden jeden Monat aktualisiert *"
+  },
+  {
+    "id": "msg_error_duplicate",
+    "en": "This source already exists and is available for you",
+    "de": "Diese Quelle existiert bereits und steht Ihnen zur Verfügung *"
+  },
+  {
+    "id": "msg_error_import",
+    "en": "Data was not imported",
+    "de": "Daten wurden nicht importiert *"
+  },
+  {
+    "id": "msg_process_wait",
+    "en": "Data is processed, please wait",
+    "de": "Daten werden verarbeitet, bitte warten *"
+  },
+  {
+    "id": "msg_success_delete",
+    "en": "Source successfully removed",
+    "de": "Quelle erfolgreich entfernt *"
+  },
+  {
+    "id": "msg_success_import",
+    "en": "Data imported successfully",
+    "de": "Daten erfolgreich importiert *"
+  },
+  {
+    "id": "msg_success_update",
+    "en": "Meta data successfully updated",
+    "de": "Metadaten erfolgreich aktualisiert *"
+  },
+  {
+    "id": "not_planned",
+    "en": "There are no plans to update the data",
+    "de": "Es ist nicht geplant, die Daten zu aktualisieren *"
+  },
+  {
+    "id": "optional_view_show_attribute_preview",
+    "en": "Show a summary of the attributes names and values",
+    "de": "Zeigen Sie eine Zusammenfassung der Attributnamen und -werte an *"
+  },
+  {
+    "id": "optional_view_text",
+    "en": "Select an attribute from the source to create a simple view or click on finish to end the importation",
+    "de": "Wählen Sie ein Attribut aus der Quelle aus, um eine einfache Ansicht zu erstellen, oder klicken Sie auf Fertig stellen, um den Import zu beenden *"
+  },
+  {
+    "id": "optional_view_title",
+    "en": "Optional creation of a new view",
+    "de": "Optionale Erstellung einer neuen Ansicht *"
+  },
+  {
+    "id": "origin_desc",
+    "en": "Origin of the data and how to retrieve it",
+    "de": "Herkunft der Daten und wie man sie abruft *"
+  },
+  {
+    "id": "origin_homepage_desc",
+    "en": "Homepage for the data",
+    "de": "Homepage für die Daten *"
+  },
+  {
+    "id": "origin_homepage_item_title",
+    "en": "Homepage (URL)",
+    "de": "Homepage (URL) *"
+  },
+  {
+    "id": "origin_homepage_title",
+    "en": "Homepage",
+    "de": "Startseite *"
+  },
+  {
+    "id": "origin_source_is_full_request_title",
+    "en": "The url contain a request to retrieve the data automatically",
+    "de": "Die URL enthält eine Anforderung zum automatischen Abrufen der Daten *"
+  },
+  {
+    "id": "origin_sources_desc",
+    "en": "Method to retrieve the data",
+    "de": "Methode zum Abrufen der Daten *"
+  },
+  {
+    "id": "origin_sources_list",
+    "en": "List of sources",
+    "de": "Liste der Quellen *"
+  },
+  {
+    "id": "origin_sources_title",
+    "en": "Sources",
+    "de": "Quellen *"
+  },
+  {
+    "id": "origin_source_title",
+    "en": "Source",
+    "de": "Quelle *"
+  },
+  {
+    "id": "origin_source_url_title",
+    "en": "URL",
+    "de": "URL *"
+  },
+  {
+    "id": "origin_title",
+    "en": "Source",
+    "de": "Quelle *"
+  },
+  {
+    "id": "other",
+    "en": "Other",
+    "de": "Andere *"
+  },
+  {
+    "id": "quarterly",
+    "en": "Data is updated every three months",
+    "de": "Die Daten werden alle drei Monate aktualisiert *"
+  },
+  {
+    "id": "schema_title",
+    "en": "Source metadata",
+    "de": "Quellmetadaten *"
+  },
+  {
+    "id": "schema_desc",
+    "en": "Metadata editor for the source of the data",
+    "de": "Metadaten-Editor für die Datenquelle *"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "de": "Ansichten zum Aktivieren *"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "de": "Folienklassen *"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "de": "Klassennamen *"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "de": "Scrollen zulassen *"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "de": "Wenn sich der Folieninhalt außerhalb des Containers befindet, wird eine Bildlaufleiste angezeigt. *"
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "de": "Basistextgröße in Pixel *"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "de": "Auswirkungen *"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "de": "Start *"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "de": "Ende *"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "de": "Offset *"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "de": "Faktor *"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "de": "Art *"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "de": "Folienname *"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "de": "Animationsdauer [ms] *"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "de": "Ändern Sie die gesamte Animationsdauer *"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "de": "Flugbahnmethode *"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "de": "Stellen Sie die Reisemethode der Kamera während der Animation ein *"
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "de": "Animationsfunktion *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "de": "Ändern Sie die Standardanimationsfunktion. Erleichtern Sie den Start und / oder das Ende der Animation. *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "de": "Exponent der Animationsfunktion *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "de": "Ändern Sie den Standardfunktionsexponenten. Dadurch wird die Lockerungsrate verstärkt oder verringert. *"
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "de": "Kartenanimation *"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "de": "Zeitüberschreitung [ms] *"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "de": "Wartezeit, bevor Sie mit dem nächsten Schritt fortfahren. *"
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "de": "Übergang [ms] *"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "de": "Dauer des Übergangs zwischen den Schritten. *"
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "de": "Autoplay-Einstellungen *"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "de": "Schrittname *"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "de": "Bildschirmauflösung *"
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "de": "Basisauflösung der Seite während einer Story Map. Es wird automatisch an den Bildschirm angepasst und behält die Formatierung des Inhalts bei. *"
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "de": "die Einstellungen *"
+  },
+  {
+    "id": "button_legend_title",
+    "en": "Legends",
+    "de": "Legenden *"
+  },
+  {
+    "id": "button_legend_button",
+    "en": "Legends",
+    "de": "Legenden *"
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
+    "de": "Probleme *"
+  },
+  {
+    "id": "select_optional_view_attribute",
+    "en": "Select attribute",
+    "de": "Attribut auswählen *"
+  },
+  {
+    "id": "spatial_bbx_desc",
+    "en": "Spatial bounding box of the data using latitude and longitude",
+    "de": "Räumlicher Begrenzungsrahmen der Daten unter Verwendung von Längen- und Breitengraden *"
+  },
+  {
+    "id": "spatial_bbx_lat_max",
+    "en": "Max. latitude",
+    "de": "Max. Breite *"
+  },
+  {
+    "id": "spatial_bbx_lat_min",
+    "en": "Min. latitude",
+    "de": "Mindest. Breite *"
+  },
+  {
+    "id": "spatial_bbx_lng_max",
+    "en": "Max. longitude",
+    "de": "Max. Längengrad *"
+  },
+  {
+    "id": "spatial_bbx_lng_min",
+    "en": "Min. longitude",
+    "de": "Mindest. Längengrad *"
+  },
+  {
+    "id": "spatial_bbx_title",
+    "en": "Bounding box",
+    "de": "Begrenzungsrahmen *"
+  },
+  {
+    "id": "spatial_desc",
+    "en": "Description of the data using spatial reference: bounding box, and spatial reference system (SRS)",
+    "de": "Beschreibung der Daten unter Verwendung des Raumbezugs: Begrenzungsrahmen und Raumbezugssystem (SRS) *"
+  },
+  {
+    "id": "spatial_srs_code",
+    "en": "Code of the SRS",
+    "de": "Code des SRS *"
+  },
+  {
+    "id": "spatial_srs_desc",
+    "en": "Description of the spatial reference system",
+    "de": "Beschreibung des Raumbezugssystems *"
+  },
+  {
+    "id": "spatial_srs_desc_url",
+    "en": "URL to the SRS code definition",
+    "de": "URL zur SRS-Code-Definition *"
+  },
+  {
+    "id": "spatial_srs_title",
+    "en": "Spatial reference system",
+    "de": "Raumbezugssystem *"
+  },
+  {
+    "id": "spatial_title",
+    "en": "Spatial",
+    "de": "Räumlich *"
+  },
+  {
+    "id": "summary_attribute",
+    "en": "Summary ",
+    "de": "Zusammenfassung *"
+  },
+  {
+    "id": "target_desc",
+    "en": "Modality and restriction of access to the data",
+    "de": "Modalität und Einschränkung des Zugriffs auf die Daten *"
+  },
+  {
+    "id": "target_role_item_title",
+    "en": "Role",
+    "de": "Rolle *"
+  },
+  {
+    "id": "target_roles_read_title",
+    "en": "Roles allowed to read",
+    "de": "Rollen dürfen lesen *"
+  },
+  {
+    "id": "target_roles_admin_title",
+    "en": "Roles allowed to manage",
+    "de": "Rollen dürfen verwaltet werden *"
+  },
+  {
+    "id": "target_roles_get_title",
+    "en": "Roles allowed to download",
+    "de": "Rollen dürfen heruntergeladen werden *"
+  },
+  {
+    "id": "target_roles_list_title",
+    "en": "List of roles",
+    "de": "Liste der Rollen *"
+  },
+  {
+    "id": "target_roles_title",
+    "en": "Roles",
+    "de": "Rollen *"
+  },
+  {
+    "id": "target_title",
+    "en": "Access",
+    "de": "Zugriff *"
+  },
+  {
+    "id": "temporal_desc",
+    "en": "Description of the dataset using temporal references: periodicity, initial release, update and range",
+    "de": "Beschreibung des Datensatzes unter Verwendung zeitlicher Referenzen: Periodizität, Erstveröffentlichung, Aktualisierung und Bereich *"
+  },
+  {
+    "id": "temporal_issuance_desc",
+    "en": "Description of the data issuance",
+    "de": "Beschreibung der Datenausgabe *"
+  },
+  {
+    "id": "temporal_issuance_title",
+    "en": "Issuance",
+    "de": "Ausgabe *"
+  },
+  {
+    "id": "temporal_periodicity",
+    "en": "Periodicity",
+    "de": "Periodizität *"
+  },
+  {
+    "id": "temporal_periodicity_desc",
+    "en": "Frenquency with wich data is published or updated",
+    "de": "Häufigkeit, mit der Daten veröffentlicht oder aktualisiert werden *"
+  },
+  {
+    "id": "temporal_range_desc",
+    "en": "The temporal range of the data",
+    "de": "Der zeitliche Bereich der Daten *"
+  },
+  {
+    "id": "temporal_range_end",
+    "en": "End",
+    "de": "Ende *"
+  },
+  {
+    "id": "temporal_range_start",
+    "en": "Start",
+    "de": "Start *"
+  },
+  {
+    "id": "temporal_range_timeless",
+    "en": "There is no time range for this data",
+    "de": "Für diese Daten gibt es keinen Zeitbereich *"
+  },
+  {
+    "id": "temporal_range_title",
+    "en": "Range",
+    "de": "Reichweite *"
+  },
+  {
+    "id": "temporal_release_desc",
+    "en": "Date of formal issuance",
+    "de": "Datum der formellen Ausstellung *"
+  },
+  {
+    "id": "temporal_release_title",
+    "en": "Release date",
+    "de": "Veröffentlichungsdatum *"
+  },
+  {
+    "id": "temporal_title",
+    "en": "Temporal",
+    "de": "Zeitlich *"
+  },
+  {
+    "id": "temporal_update_desc",
+    "en": "Date of the latest update",
+    "de": "Datum des letzten Updates *"
+  },
+  {
+    "id": "temporal_update_title",
+    "en": "Last update",
+    "de": "Letztes Update *"
+  },
+  {
+    "id": "textual_desc",
+    "en": "Textual description of the data using title, abstract and tags",
+    "de": "Textbeschreibung der Daten mit Titel, Abstract und Tags *"
+  },
+  {
+    "id": "textual_desc_notes",
+    "en": "Additional notes",
+    "de": "Zusätzliche Bemerkungen *"
+  },
+  {
+    "id": "textual_desc_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt *"
+  },
+  {
+    "id": "textual_desc_title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "textual_keyword_desc",
+    "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
+    "de": "Mithilfe von Schlüsselwörtern (oder Tags) können Benutzer Ihren Datensatz erkennen. Bitte geben Sie Begriffe an, die von technischen und nichttechnischen Benutzern verwendet werden. *"
+  },
+  {
+    "id": "textual_keyword_item_title",
+    "en": "Keyword",
+    "de": "Stichwort *"
+  },
+  {
+    "id": "textual_keywords_title",
+    "en": "Keywords list",
+    "de": "Schlüsselwortliste *"
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keywords",
+    "de": "Schlüsselwörter *"
+  },
+  {
+    "id": "textual_keywords_m49_title",
+    "en": "Geographic M49 Keywords list",
+    "de": "Geografische M49-Schlüsselwortliste"
+  },
+  {
+    "id": "textual_keywords_m49_desc",
+    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
+    "de": "Für die räumliche Suche kann MapX die Beziehung zwischen mehreren räumlichen Merkmalen basierend auf ihrer Geometrie, Ausdehnung und / oder Attributen bestimmen. In einigen Fällen ist es vorzuziehen, der Quelle ein geografisches Schlüsselwort zuzuordnen, um die Relevanz bei der Textsuche zu verbessern. Mit den M49-Schlüsselwörtern können Sie dies tun. Es ist mindestens ein Schlüsselwort erforderlich. *"
+  },
+  {
+    "id": "textual_title",
+    "en": "Textual",
+    "de": "Text *"
+  },
+  {
+    "id": "unknown",
+    "en": "Frequency of maintenance for the data is not known",
+    "de": "Die Häufigkeit der Wartung der Daten ist nicht bekannt *"
+  },
+  {
+    "id": "weekly",
+    "en": "Data is updated on a weekly basis",
+    "de": "Die Daten werden wöchentlich aktualisiert *"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "de": "Metadaten der Quelle *"
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "de": "Zusammenfassung der Ansichtsmetadaten *"
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "de": "Editor-ID *"
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "de": "ID aller Editoren *"
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "de": "Metadaten der Ansicht *"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "de": "Metadateneintrag *"
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "de": "Änderungsübersicht *"
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "de": "Anzahl der Änderungen *"
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "de": "Editor *"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "de": "Letzte Änderung *"
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "de": "Titel anzeigen *"
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt *"
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of viewing",
+    "de": "Anzahl der Anzeigen *"
+  },
+  {
+    "id": "meta_view_stat_n_distinct_user",
+    "en": "Number of distinct users",
+    "de": "Anzahl unterschiedlicher Benutzer *"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "de": "Titel *"
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "de": "Abstrakt *"
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "de": "Anmerkungen *"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "de": "Schlüsselwörter *"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords M49",
+    "de": "Geografische M49-Schlüsselwortliste"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "de": "In den Daten verwendete Sprachen *"
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "de": "Kontaktliste *"
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "de": "Periodizität *"
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "de": "Erscheinungsdatum *"
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "de": "Datum der Änderung *"
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "de": "Startdatum der Datenwerte *"
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "de": "Enddatum der Datenwerte *"
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "de": "Daten ohne zeitliche Werte *"
+  },
+  {
+    "id": "meta_view_projects_titles",
+    "en": "Also published in those projects",
+    "de": "Auch in diesen Projekten veröffentlicht *"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "de": "Ursprüngliches Projekt *"
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "de": "Projekte *"
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "de": "ID anzeigen *"
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "de": "Sammlungen *"
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "de": "Änderungsdatum *"
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "de": "Erstellungsdatum *"
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "de": "Editor *"
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "de": "Gruppen mit Bearbeitungszugriff *"
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "de": "Gruppen mit Lesezugriff *"
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "de": "Art *"
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "de": "Zusammenfassung der Ansicht *"
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "de": "Quell-ID *"
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "de": "Zusammenfassung der Quelle *"
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "de": "Quellhomepage *"
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "de": "Originalquelle herunterladen *"
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "de": "Anhänge herunterladen *"
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "de": "Integritätsbewertung *"
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "de": "Zeitbereich *"
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "de": "Von *"
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "de": "Zu *"
+  },
+  {
+    "id": "dont_know",
+    "en": "I don't know",
+    "de": "Ich weiß es nicht *"
+  },
+  {
+    "id": "yes",
+    "en": "Yes",
+    "de": "Ja *"
+  },
+  {
+    "id": "no",
+    "en": "No",
+    "de": "Nein *"
+  },
+  {
+    "id": "partial",
+    "en": "Partially",
+    "de": "Teilweise *"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select stored service",
+    "de": "Wählen Sie den gespeicherten Dienst aus *"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "de": "Ebene auswählen *"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "de": "Geben Sie die Service-URL ein *"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "de": "Generierte URL aktualisieren (Kachelserver, Legenden) *"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "de": "Ebenenliste aktualisieren *"
+  },
+  {
+    "id": "app_maintenance_title",
+    "en": "Maintenance",
+    "de": "Instandhaltung *"
+  },
+  {
+    "id": "app_maintenance_text",
+    "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team",
+    "de": "MapX ist derzeit aufgrund der Serverwartung nicht verfügbar.<br> Komm später am Tag zurück!<br><br> Mit freundlichen Grüßen Ihr MapX-Team *"
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "de": "Anzeigeoptionen *"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "de": "Palettenwerkzeug *"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "de": "Paletten *"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "de": "Bearbeiten Sie JSON *"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "de": "Hinzufügen *"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "de": "Schließen *"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "de": "Anzahl der Farbtonrotationen *"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "de": "Anzahl der Farben *"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "de": "Farbtonverschiebung *"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "de": "Farben Raum *"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "de": "Sättigung *"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "de": "Helligkeit *"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "de": "Mischen *"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "de": "Umkehren *"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "de": "Divergieren *"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "de": "Verwenden Sie die Standardpalette *"
+  },
+  {
+    "id": "draft_recover_modal_title",
+    "en": "Data recovery",
+    "de": "Datenwiederherstellung *"
+  },
+  {
+    "id": "draft_recover_use_most_recent",
+    "en": "Use the most recent",
+    "de": "Verwenden Sie die neueste *"
+  },
+  {
+    "id": "draft_recover_cancel",
+    "en": "Cancel",
+    "de": "Stornieren *"
+  },
+  {
+    "id": "draft_recover_preview_diff",
+    "en": "Preview differences",
+    "de": "Vorschau von Unterschieden *"
+  },
+  {
+    "id": "draft_recover_last_saved_date",
+    "en": "Date of the last saved version",
+    "de": "Datum der zuletzt gespeicherten Version *"
+  },
+  {
+    "id": "draft_recover_recovered_date",
+    "en": "Date of the recovered version",
+    "de": "Datum der wiederhergestellten Version *"
+  },
+  {
+    "id": "draft_recover_diffs",
+    "en": "Differences",
+    "de": "Unterschiede *"
+  },
+  {
+    "id": "draft_recover_summary_title",
+    "en": "Summary",
+    "de": "Zusammenfassung *"
+  },
+  {
+    "id": "api_download_ready",
+    "en": "Process done, the data is available for download : ",
+    "de": "Prozess abgeschlossen, die Daten stehen zum Download zur Verfügung: *"
+  },
+  {
+    "id": "api_upload_ready",
+    "en": "Process done, the data will be available in source list.",
+    "de": "Nach Abschluss des Vorgangs sind die Daten in der Quellenliste verfügbar. *"
+  },
+  {
+    "id": "api_upload_done_wait_db",
+    "en": "Upload done. Importation in DB, please wait, this could take multiple minutes for complex layers. Please be patient.",
+    "de": "Upload abgeschlossen. Import in DB, bitte warten Sie, dies kann für komplexe Ebenen mehrere Minuten dauern. Bitte haben Sie Geduld. *"
+  },
+  {
+    "id": "api_download_btn",
+    "en": "click here",
+    "de": "Klicke hier *"
+  },
+  {
+    "id": "api_progress_title",
+    "en": "Progress",
+    "de": "Fortschritt *"
+  },
+  {
+    "id": "api_log_title",
+    "en": "Log",
+    "de": "Log *"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "de": "Eigenschaft muss festgelegt werden *"
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "de": "Wert erforderlich *"
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "de": "Der Wert kann nicht nur aus Leerzeichen bestehen (Leerzeichen, Tabulator, Zeilenumbruch). *"
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "de": "Der Wert muss einer der aufgezählten Werte sein *"
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "de": "Der Wert muss anhand mindestens eines der bereitgestellten Schemas validiert werden *"
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "de": "Der Wert muss für genau eines der bereitgestellten Schemas validiert werden. Es validiert derzeit gegen{{0}} der Schemata. *"
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "de": "Der Wert darf nicht anhand des angegebenen Schemas überprüft werden *"
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "de": "Der Wert muss einer der angegebenen Typen sein *"
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "de": "Der Wert muss vom Typ sein{{0}} *"
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "de": "Der Wert darf nicht zu den angegebenen unzulässigen Typen gehören *"
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "de": "Der Wert darf nicht vom Typ sein{{0}} *"
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "de": "Der Wert muss ein Vielfaches von sein{{0}} *"
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "de": "Wert muss kleiner sein als{{0}} *"
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "de": "Wert muss höchstens sein{{0}} *"
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "de": "Wert muss größer sein als{{0}} *"
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "de": "Wert muss mindestens sein{{0}} *"
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "de": "Wert muss höchstens sein{{0}} Zeichen lang *"
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "de": "Wert muss mindestens sein{{0}} Zeichen lang *"
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "de": "Der Wert muss mit dem Muster übereinstimmen{{0}} *"
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "de": "In diesem Array sind keine zusätzlichen Elemente zulässig *"
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "de": "Wert muss höchstens haben{{0}} Artikel *"
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "de": "Wert muss mindestens haben{{0}} Artikel *"
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "de": "Das Array muss eindeutige Elemente enthalten *"
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "de": "Objekt muss höchstens haben{{0}} Eigenschaften *"
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "de": "Objekt muss mindestens haben{{0}} Eigenschaften *"
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "de": "Objekt fehlt die erforderliche Eigenschaft '{{0}} ' *"
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "de": "Keine zusätzlichen Eigenschaften erlaubt, aber Eigenschaft{{0}} eingestellt ist *"
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "de": "Muss Eigentum haben{{0}} *"
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "de": "Alle *"
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "de": "Alles löschen *"
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "de": "Letzte{{0}} *"
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "de": "Letzte löschen{{0}} *"
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "de": "Hinzufügen{{0}} *"
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "de": "Sich abwärts bewegen *"
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "de": "Bewegen Sie sich nach oben *"
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "de": "Löschen{{0}} *"
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "de": "Löschen *"
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "de": "Zusammenbruch *"
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "de": "Erweitern *"
+  },
+  {
+    "id": "tbl_attr_modal_title",
+    "en": "Attribute table",
+    "de": "Attributtabelle *"
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "de": "Einmalige Passwortanfrage *"
+  },
+  {
+    "id": "login_single_use_password_email",
+    "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
+    "de": "<div style='max-width:400px;padding:20px'>Hallo,<br><br> Hier ist das angeforderte Passwort:<hr>{{password}}<hr> Dieses sichere Kennwort ist für die aktuelle MapX-Sitzung nur einmal gültig und wird nach 20 Minuten ungültig.<br> Freundliche Grüße,<br><br> Ihr MapX-Team.<br><br> <span style='opacity:0.5;font-size:0.8em'>Wenn Sie diese Anfrage nicht gestellt haben, hat wahrscheinlich einer unserer Benutzer versehentlich Ihre E-Mail-Adresse eingegeben.</span></div> *"
+  },
+  {
+    "id": "login_email_new_account_welcome",
+    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "de": "Herzlich willkommen!<br> Technische Informationen finden Sie in unserer <a href='{{linkKnowledgeBase}}'>Knowledge Base</a> . Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href='{{linkIssue}}'>Issue-Tracker</a><br> Vielen Dank ! *"
+  },
+  {
+    "id": "login_email_new_account_welcome_subject",
+    "en": "Welcome ! New account created.",
+    "de": "Herzlich willkommen ! Neues Konto erstellt. *"
+  },
+  {
+    "id": "filter_views_list_mode_intersection",
+    "en": "Intersection",
+    "de": "Überschneidung *"
+  },
+  {
+    "id": "filter_views_list_mode_union",
+    "en": "Union",
+    "de": "Union *"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded_title",
+    "en": "Maximum size reached",
+    "de": "Maximale Größe erreicht *"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded",
+    "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
+    "de": "Maximale Dateigröße von{{size}} wurde erreicht. Sie dürfen keine größeren Dateien hochladen. Bitte kontaktieren Sie uns für weitere Informationen. *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_txt",
+    "en": "Are you sure to change project now ? Unsaved changes could be lost.",
+    "de": "Sind Sie sicher, das Projekt jetzt zu ändern? Nicht gespeicherte Änderungen können verloren gehen. *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_btn",
+    "en": "Change project now, discard changes.",
+    "de": "Projekt jetzt ändern, Änderungen verwerfen. *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_title",
+    "en": "Change project confirmation",
+    "de": "Projektbestätigung ändern *"
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "de": "Kartenposition einstellen *"
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "de": "Aktuelle Position abrufen *"
+  },
+  {
+    "id": "view_filter_no_items",
+    "en": "Empty",
+    "de": "Leer *"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "de": "Sharing Manager *"
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "de": "Einen Link teilen *"
+  },
+  {
+    "id": "share_options",
+    "en": "Share options",
+    "de": "Optionen teilen *"
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "de": "Verwenden Sie den Modus 'statisch' (empfohlen) *"
+  },
+  {
+    "id": "share_mode_static_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
+    "de": "Verwenden Sie den statischen Modus, wenn Sie eine Ansicht mit einer leichtgewichtigen und schnelleren Version von MapX mit eingeschränkten Funktionen freigeben möchten. Mit dieser Methode kann jeder mit dem freigegebenen Link die ausgewählte Ansicht lesen, ohne in MapX registriert sein zu müssen. Wenn Sie eine Story Map hinzufügen, wird diese automatisch gestartet und alle anderen Ansichten werden verworfen. *"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "de": "Fügen Sie Ansichten zum Teilen hinzu *"
+  },
+  {
+    "id": "share_views_check_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "de": "Zu zeigende Ansichten. Die Liste kann neu angeordnet werden: In Draufsichten werden Ebenen oben angezeigt. Im statischen Modus werden diese Ansichten automatisch gerendert. Story Maps werden direkt gestartet. Im \"normalen\" Modus werden die Ansichten in der Liste angezeigt. Wenn die Auswahl leer ist, werden alle Ansichten des Projekts aufgelistet. *"
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "de": "Auf Ansicht vergrößern *"
+  },
+  {
+    "id": "share_views_zoom_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "de": "Im statischen Modus wird die Kartenausdehnung so eingestellt, dass sie der Ausdehnung der Ansichtsebenen entspricht, sofern verfügbar. *"
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "de": "Legen Sie die zu aktivierenden Ansichten fest *"
+  },
+  {
+    "id": "share_views_open_check_desc",
+    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
+    "de": "Fügen Sie Ansichten hinzu, die beim Start der Anwendung automatisch aktiviert werden. Dadurch wird die Schaltfläche \"Filteraktivierungsansicht\" aktiviert und die nicht aktivierte Ansicht ausgeblendet. *"
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "de": "Sammlungen festlegen *"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "de": "Auswahlmodus (wenn mehr als eine Sammlung) *"
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "de": "Überschneidung *"
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "de": "Union *"
+  },
+  {
+    "id": "share_collections_check_desc",
+    "en": "Add groups of views by using collections",
+    "de": "Fügen Sie mithilfe von Sammlungen Gruppen von Ansichten hinzu *"
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "de": "Kartenposition einstellen *"
+  },
+  {
+    "id": "share_map_pos_check_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "de": "Wenn Sie die Position der Karte festlegen, wird eine definierte räumliche Ausdehnung angezeigt, anstatt eine Darstellung der gesamten Welt anzuzeigen. *"
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "de": "In HTML-Tags einbetten *"
+  },
+  {
+    "id": "share_iframe_check_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "de": "Betten Sie den Link in ein<iframe> HTML-Tag zum einfachen Hinzufügen von MapX zu Ihrer Website. *"
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "de": "In einem anderen Projekt teilen *"
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "de": "Teilen Sie eine Ansicht in einem Projekt, für das Sie Publisher-Rechte haben *"
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "de": "In ausgewähltem Projekt hinzufügen *"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "de": "Aktivierte Ansicht standardmäßig filtern *"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "de": "Diese Option zeigt nur Ansichten an, die von Anfang an geöffnet werden sollen *"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "de": "Kategorien ausblenden *"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "de": "Kategorien werden standardmäßig in der Liste der Ansichten ausgeblendet *"
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "de": "Jenks natürliche Pausen *"
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "de": "Quantil *"
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "de": "Kopf / Schwanz bricht *"
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "de": "Gleiches Intervall *"
+  },
+  {
+    "id": "roles_updated_mail_title",
+    "en": "Roles updated",
+    "de": "Rollen aktualisiert *"
+  },
+  {
+    "id": "roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "de": "Rollen im Projekt aktualisiert{{nameProject}} *"
+  },
+  {
+    "id": "roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "de": "<p>Hallo,</p><p> Ein Administrator hat Ihre Rollen im Projekt geändert{{projectLink}} .</p><p> Hier ist die Liste der Änderungen:</p><p>{{txtRoleChange}}</p><p> Einen schönen Tag noch !</p> <i style='float:right'>Das MapX-Team.</i> *"
+  },
+  {
+    "id": "roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "de": "<p>Hallo,</p><p> Die Rollen in Ihrem Projekt haben sich geändert{{projectLink}} .</p><p> Hier ist die Liste der Änderungen:{{changes}}<p> Einen schönen Tag noch !</p> *"
+  },
+  {
+    "id": "added_to_group",
+    "en": "added to: {{group}} \n",
+    "de": "hinzugefügt zu:{{group}}\n *"
+  },
+  {
+    "id": "removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "de": "entfernt von:{{group}}\n *"
+  },
+  {
+    "id": "get_source_format_invalid",
+    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
+    "de": "Ungültiges Format{{format}} im Standardformat{{formatDefault}} . *"
+  },
+  {
+    "id": "get_source_meta_extracted",
+    "en": "Metadata extracted",
+    "de": "Metadaten extrahiert *"
+  },
+  {
+    "id": "get_source_invalid_geom",
+    "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
+    "de": "Ungültige Geometrien für Schicht gefunden '{{title}} '(({{idLayer}} ). *"
+  },
+  {
+    "id": "get_source_email_dl_link",
+    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
+    "de": "Eine E-Mail wird an gesendet{{email}} . Der Download- <a href='{{url}}'>Link</a> wird am Ende des Vorgangs aktiviert *"
+  },
+  {
+    "id": "get_source_extraction_wait",
+    "en": "Starting data conversion. This could take a while, please wait",
+    "de": "Starten der Datenkonvertierung. Dies kann eine Weile dauern, bitte warten Sie *"
+  },
+  {
+    "id": "get_source_conversion_progress",
+    "en": "Conversion progress",
+    "de": "Konvertierungsfortschritt *"
+  },
+  {
+    "id": "get_source_conversion_stdout",
+    "en": "Conversion message: {{stdout}}",
+    "de": "Conversion-Nachricht:{{stdout}} *"
+  },
+  {
+    "id": "get_source_conversion_stderr",
+    "en": "Conversion warning: {{stderr}}",
+    "de": "Conversion-Warnung:{{stderr}} *"
+  },
+  {
+    "id": "get_source_conversion_error",
+    "en": "Conversion error. {{error}} ",
+    "de": "Konvertierungsfehler.{{error}} *"
+  },
+  {
+    "id": "get_source_conversion_done_link",
+    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
+    "de": "Konvertierung im Format{{format}} . <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_conversion_done_browser",
+    "en": "Layer {{title}} exported",
+    "de": "Schicht{{title}} exportiert *"
+  },
+  {
+    "id": "get_source_conversion_done_browser_title",
+    "en": "Layer exported",
+    "de": "Ebene exportiert *"
+  },
+  {
+    "id": "get_source_conversion_done_email",
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
+    "de": "Die angeforderten Daten können über diesen Link heruntergeladen werden: <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_zip_progress",
+    "en": "Compression progress",
+    "de": "Komprimierungsfortschritt *"
+  },
+  {
+    "id": "get_source_zip_warning",
+    "en": "Compression warning: {{err}}",
+    "de": "Kompressionswarnung:{{err}} *"
+  },
+  {
+    "id": "get_source_zip_error",
+    "en": "Compression error : {{err}}",
+    "de": "Komprimierungsfehler:{{err}} *"
+  },
+  {
+    "id": "get_source_file_timestamp",
+    "en": "Downloaded from MapX on {{date}}",
+    "de": "Von MapX auf heruntergeladen{{date}} *"
+  },
+  {
+    "id": "stat_load_please_wait",
+    "en": "Statistics extraction ... ",
+    "de": "Statistik-Extraktion ... *"
+  },
+  {
+    "id": "btn_panel_main",
+    "en": "Main panel",
+    "de": "Hauptfeld *"
+  },
+  {
+    "id": "fetch_views_diff_modal_title",
+    "en": "Views not available",
+    "de": "Ansichten nicht verfügbar *"
+  },
+  {
+    "id": "fetch_views_diff_message",
+    "en": "You have requested views that are not available in this project.",
+    "de": "Sie haben Ansichten angefordert, die in diesem Projekt nicht verfügbar sind. *"
+  },
+  {
+    "id": "vt_desc",
+    "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
+    "de": "Ansichten, die eine Vektorebene kennzeichnen. Diese Art von Ebenen zeigt Geometrien und die zugehörigen Informationen an, die in einer Attributtabelle enthalten sind. Viele interaktive Funktionen wie Filtern, Zoomen oder Hervorheben sind aktiviert. *"
+  },
+  {
+    "id": "gj_desc",
+    "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
+    "de": "Ansichten mit einer Vektorebene, die in Ihrem Internetbrowser als GeoJSON-Format gespeichert ist. *"
+  },
+  {
+    "id": "rt_desc",
+    "en": "Views featuring a raster layer. This type of data shows an image made up of a matrix of pixels, each pixel having its own values.",
+    "de": "Ansichten mit einer Rasterebene. Diese Art von Daten zeigt ein Bild, das aus einer Matrix von Pixeln besteht, wobei jedes Pixel seine eigenen Werte hat. *"
+  },
+  {
+    "id": "sm_desc",
+    "en": "Interactive document featuring stories combining text, interactive maps and other multimedia content.",
+    "de": "Interaktives Dokument mit Geschichten, die Text, interaktive Karten und andere Multimedia-Inhalte kombinieren. *"
+  },
+  {
+    "id": "dashboard_desc",
+    "en": "Views with a dashboard that interacts with the data displayed in the map.",
+    "de": "Ansichten mit einem Dashboard, das mit den in der Karte angezeigten Daten interagiert. *"
+  },
+  {
+    "id": "time_slider_desc",
+    "en": "Views with a time slider (accessible in the view settings).",
+    "de": "Ansichten mit einem Zeitschieberegler (zugänglich in den Ansichtseinstellungen). *"
+  },
+  {
+    "id": "overlap_desc",
+    "en": "Views featuring vector layers resulting from the overlap between two data sources.",
+    "de": "Ansichten mit Vektorebenen, die sich aus der Überlappung zweier Datenquellen ergeben. *"
+  },
+  {
+    "id": "custom_style_desc",
+    "en": "Views with a customized style. e.g. heat maps, bivariate classification.",
+    "de": "Ansichten mit einem benutzerdefinierten Stil. zB Heatmaps, bivariate Klassifikation. *"
+  },
+  {
+    "id": "custom_code_desc",
+    "en": "Views featuring a customized script. The result could be anything. e.g. a time slider on raster data or a prototype that uses external data.",
+    "de": "Ansichten mit einem benutzerdefinierten Skript. Das Ergebnis könnte alles sein. zB ein Zeitschieber für Rasterdaten oder ein Prototyp, der externe Daten verwendet. *"
+  },
+  {
+    "id": "view_editable_desc",
+    "en": "Views for which you have editing rights.",
+    "de": "Ansichten, für die Sie Bearbeitungsrechte haben. *"
+  },
+  {
+    "id": "view_local_desc",
+    "en": "Views from this project ( excludes external views ).",
+    "de": "Ansichten aus diesem Projekt (ausgenommen externe Ansichten). *"
+  },
+  {
+    "id": "language_auto_warning",
+    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
+    "de": "Eine andere Sprache als Englisch kann bei fehlender Übersetzung automatisch übersetzt werden. In solchen Fällen wird ein Sternchen angezeigt. *"
+  }
+]

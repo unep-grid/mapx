@@ -7,7 +7,6 @@ _mail.txt
 _logs.txt
 _shared
 _data
-_*
 
 # Env variable
 *.env

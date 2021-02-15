@@ -1,0 +1,6457 @@
+[
+  {
+    "id": "ABW",
+    "en": "Aruba",
+    "zh": "阿鲁巴"
+  },
+  {
+    "id": "AFG",
+    "en": "Afghanistan",
+    "zh": "阿富汗"
+  },
+  {
+    "id": "AGO",
+    "en": "Angola",
+    "zh": "安哥拉"
+  },
+  {
+    "id": "AIA",
+    "en": "Anguilla",
+    "zh": "安圭拉"
+  },
+  {
+    "id": "ALA",
+    "en": "Åland Islands",
+    "zh": "奥兰群岛"
+  },
+  {
+    "id": "ALB",
+    "en": "Albania",
+    "zh": "阿尔巴尼亚"
+  },
+  {
+    "id": "AND",
+    "en": "Andorra",
+    "zh": "安道尔"
+  },
+  {
+    "id": "ARE",
+    "en": "United Arab Emirates",
+    "zh": "阿拉伯联合酋长国"
+  },
+  {
+    "id": "ARG",
+    "en": "Argentina",
+    "zh": "阿根廷"
+  },
+  {
+    "id": "ARM",
+    "en": "Armenia",
+    "zh": "亚美尼亚"
+  },
+  {
+    "id": "ASM",
+    "en": "American Samoa",
+    "zh": "美属萨摩亚"
+  },
+  {
+    "id": "ATA",
+    "en": "Antarctica",
+    "zh": "南极洲"
+  },
+  {
+    "id": "ATF",
+    "en": "French Southern Territories",
+    "zh": "法属南方领地"
+  },
+  {
+    "id": "ATG",
+    "en": "Antigua and Barbuda",
+    "zh": "安提瓜和巴布达"
+  },
+  {
+    "id": "AUS",
+    "en": "Australia",
+    "zh": "澳大利亚"
+  },
+  {
+    "id": "AUT",
+    "en": "Austria",
+    "zh": "奥地利"
+  },
+  {
+    "id": "AZE",
+    "en": "Azerbaijan",
+    "zh": "阿塞拜疆"
+  },
+  {
+    "id": "BDI",
+    "en": "Burundi",
+    "zh": "布隆迪"
+  },
+  {
+    "id": "BEL",
+    "en": "Belgium",
+    "zh": "比利时"
+  },
+  {
+    "id": "BEN",
+    "en": "Benin",
+    "zh": "贝宁"
+  },
+  {
+    "id": "BES",
+    "en": "Bonaire, Sint Eustatius and Saba",
+    "zh": "博纳尔，圣俄斯塔休斯和萨巴"
+  },
+  {
+    "id": "BFA",
+    "en": "Burkina Faso",
+    "zh": "布基纳法索"
+  },
+  {
+    "id": "BGD",
+    "en": "Bangladesh",
+    "zh": "孟加拉国"
+  },
+  {
+    "id": "BGR",
+    "en": "Bulgaria",
+    "zh": "保加利亚"
+  },
+  {
+    "id": "BHR",
+    "en": "Bahrain",
+    "zh": "巴林"
+  },
+  {
+    "id": "BHS",
+    "en": "Bahamas",
+    "zh": "巴哈马"
+  },
+  {
+    "id": "BIH",
+    "en": "Bosnia and Herzegovina",
+    "zh": "波斯尼亚和黑塞哥维那"
+  },
+  {
+    "id": "BLM",
+    "en": "Saint Barthélemy",
+    "zh": "圣巴泰勒米"
+  },
+  {
+    "id": "BLR",
+    "en": "Belarus",
+    "zh": "白俄罗斯"
+  },
+  {
+    "id": "BLZ",
+    "en": "Belize",
+    "zh": "伯利兹"
+  },
+  {
+    "id": "BMU",
+    "en": "Bermuda",
+    "zh": "百慕大"
+  },
+  {
+    "id": "BOL",
+    "en": "Bolivia (Plurinational State of)",
+    "zh": "多民族玻利维亚国"
+  },
+  {
+    "id": "BRA",
+    "en": "Brazil",
+    "zh": "巴西"
+  },
+  {
+    "id": "BRB",
+    "en": "Barbados",
+    "zh": "巴巴多斯"
+  },
+  {
+    "id": "BRN",
+    "en": "Brunei Darussalam",
+    "zh": "文莱达鲁萨兰国"
+  },
+  {
+    "id": "BTN",
+    "en": "Bhutan",
+    "zh": "不丹"
+  },
+  {
+    "id": "BVT",
+    "en": "Bouvet Island",
+    "zh": "布维岛"
+  },
+  {
+    "id": "BWA",
+    "en": "Botswana",
+    "zh": "博茨瓦纳"
+  },
+  {
+    "id": "CAF",
+    "en": "Central African Republic",
+    "zh": "中非共和国"
+  },
+  {
+    "id": "CAN",
+    "en": "Canada",
+    "zh": "加拿大"
+  },
+  {
+    "id": "CCK",
+    "en": "Cocos (Keeling) Islands",
+    "zh": "科科斯（基林）群岛"
+  },
+  {
+    "id": "CHE",
+    "en": "Switzerland",
+    "zh": "瑞士"
+  },
+  {
+    "id": "CHL",
+    "en": "Chile",
+    "zh": "智利"
+  },
+  {
+    "id": "CHN",
+    "en": "China",
+    "zh": "中国"
+  },
+  {
+    "id": "CIV",
+    "en": "Côte d’Ivoire",
+    "zh": "科特迪瓦"
+  },
+  {
+    "id": "CMR",
+    "en": "Cameroon",
+    "zh": "喀麦隆"
+  },
+  {
+    "id": "COD",
+    "en": "Democratic Republic of the Congo",
+    "zh": "刚果民主共和国"
+  },
+  {
+    "id": "COG",
+    "en": "Congo",
+    "zh": "刚果"
+  },
+  {
+    "id": "COK",
+    "en": "Cook Islands",
+    "zh": "库克群岛"
+  },
+  {
+    "id": "COL",
+    "en": "Colombia",
+    "zh": "哥伦比亚"
+  },
+  {
+    "id": "COM",
+    "en": "Comoros",
+    "zh": "科摩罗"
+  },
+  {
+    "id": "CPV",
+    "en": "Cabo Verde",
+    "zh": "佛得角"
+  },
+  {
+    "id": "CRI",
+    "en": "Costa Rica",
+    "zh": "哥斯达黎加"
+  },
+  {
+    "id": "CUB",
+    "en": "Cuba",
+    "zh": "古巴"
+  },
+  {
+    "id": "CUW",
+    "en": "Curaçao",
+    "zh": "库拉索"
+  },
+  {
+    "id": "CXR",
+    "en": "Christmas Island",
+    "zh": "圣诞岛"
+  },
+  {
+    "id": "CYM",
+    "en": "Cayman Islands",
+    "zh": "开曼群岛"
+  },
+  {
+    "id": "CYP",
+    "en": "Cyprus",
+    "zh": "塞浦路斯"
+  },
+  {
+    "id": "CZE",
+    "en": "Czechia",
+    "zh": "捷克"
+  },
+  {
+    "id": "DEU",
+    "en": "Germany",
+    "zh": "德国"
+  },
+  {
+    "id": "DJI",
+    "en": "Djibouti",
+    "zh": "吉布提"
+  },
+  {
+    "id": "DMA",
+    "en": "Dominica",
+    "zh": "多米尼克"
+  },
+  {
+    "id": "DNK",
+    "en": "Denmark",
+    "zh": "丹麦"
+  },
+  {
+    "id": "DOM",
+    "en": "Dominican Republic",
+    "zh": "多米尼加"
+  },
+  {
+    "id": "DZA",
+    "en": "Algeria",
+    "zh": "阿尔及利亚"
+  },
+  {
+    "id": "ECU",
+    "en": "Ecuador",
+    "zh": "厄瓜多尔"
+  },
+  {
+    "id": "EGY",
+    "en": "Egypt",
+    "zh": "埃及"
+  },
+  {
+    "id": "ERI",
+    "en": "Eritrea",
+    "zh": "厄立特里亚"
+  },
+  {
+    "id": "ESH",
+    "en": "Western Sahara",
+    "zh": "西撒哈拉"
+  },
+  {
+    "id": "ESP",
+    "en": "Spain",
+    "zh": "西班牙"
+  },
+  {
+    "id": "EST",
+    "en": "Estonia",
+    "zh": "爱沙尼亚"
+  },
+  {
+    "id": "ETH",
+    "en": "Ethiopia",
+    "zh": "埃塞俄比亚"
+  },
+  {
+    "id": "FIN",
+    "en": "Finland",
+    "zh": "芬兰"
+  },
+  {
+    "id": "FJI",
+    "en": "Fiji",
+    "zh": "斐济"
+  },
+  {
+    "id": "FLK",
+    "en": "Falkland Islands (Malvinas)",
+    "zh": "福克兰群岛（马尔维纳斯）"
+  },
+  {
+    "id": "FRA",
+    "en": "France",
+    "zh": "法国"
+  },
+  {
+    "id": "FRO",
+    "en": "Faroe Islands",
+    "zh": "法罗群岛"
+  },
+  {
+    "id": "FSM",
+    "en": "Micronesia (Federated States of)",
+    "zh": "密克罗尼西亚联邦"
+  },
+  {
+    "id": "GAB",
+    "en": "Gabon",
+    "zh": "加蓬"
+  },
+  {
+    "id": "GBR",
+    "en": "United Kingdom of Great Britain and Northern Ireland",
+    "zh": "大不列颠及北爱尔兰联合王国"
+  },
+  {
+    "id": "GEO",
+    "en": "Georgia",
+    "zh": "格鲁吉亚"
+  },
+  {
+    "id": "GGY",
+    "en": "Guernsey",
+    "zh": "格恩西"
+  },
+  {
+    "id": "GHA",
+    "en": "Ghana",
+    "zh": "加纳"
+  },
+  {
+    "id": "GIB",
+    "en": "Gibraltar",
+    "zh": "直布罗陀"
+  },
+  {
+    "id": "GIN",
+    "en": "Guinea",
+    "zh": "几内亚"
+  },
+  {
+    "id": "GLP",
+    "en": "Guadeloupe",
+    "zh": "瓜德罗普"
+  },
+  {
+    "id": "GMB",
+    "en": "Gambia",
+    "zh": "冈比亚"
+  },
+  {
+    "id": "GNB",
+    "en": "Guinea-Bissau",
+    "zh": "几内亚比绍"
+  },
+  {
+    "id": "GNQ",
+    "en": "Equatorial Guinea",
+    "zh": "赤道几内亚"
+  },
+  {
+    "id": "GRC",
+    "en": "Greece",
+    "zh": "希腊"
+  },
+  {
+    "id": "GRD",
+    "en": "Grenada",
+    "zh": "格林纳达"
+  },
+  {
+    "id": "GRL",
+    "en": "Greenland",
+    "zh": "格陵兰"
+  },
+  {
+    "id": "GTM",
+    "en": "Guatemala",
+    "zh": "危地马拉"
+  },
+  {
+    "id": "GUF",
+    "en": "French Guiana",
+    "zh": "法属圭亚那"
+  },
+  {
+    "id": "GUM",
+    "en": "Guam",
+    "zh": "关岛"
+  },
+  {
+    "id": "GUY",
+    "en": "Guyana",
+    "zh": "圭亚那"
+  },
+  {
+    "id": "HKG",
+    "en": "China, Hong Kong Special Administrative Region",
+    "zh": "中国香港特别行政区"
+  },
+  {
+    "id": "HMD",
+    "en": "Heard Island and McDonald Islands",
+    "zh": "赫德岛和麦克唐纳岛"
+  },
+  {
+    "id": "HND",
+    "en": "Honduras",
+    "zh": "洪都拉斯"
+  },
+  {
+    "id": "HRV",
+    "en": "Croatia",
+    "zh": "克罗地亚"
+  },
+  {
+    "id": "HTI",
+    "en": "Haiti",
+    "zh": "海地"
+  },
+  {
+    "id": "HUN",
+    "en": "Hungary",
+    "zh": "匈牙利"
+  },
+  {
+    "id": "IDN",
+    "en": "Indonesia",
+    "zh": "印度尼西亚"
+  },
+  {
+    "id": "IMN",
+    "en": "Isle of Man",
+    "zh": "马恩岛"
+  },
+  {
+    "id": "IND",
+    "en": "India",
+    "zh": "印度"
+  },
+  {
+    "id": "IOT",
+    "en": "British Indian Ocean Territory",
+    "zh": "英属印度洋领土"
+  },
+  {
+    "id": "IRL",
+    "en": "Ireland",
+    "zh": "爱尔兰"
+  },
+  {
+    "id": "IRN",
+    "en": "Iran (Islamic Republic of)",
+    "zh": "伊朗伊斯兰共和国"
+  },
+  {
+    "id": "IRQ",
+    "en": "Iraq",
+    "zh": "伊拉克"
+  },
+  {
+    "id": "ISL",
+    "en": "Iceland",
+    "zh": "冰岛"
+  },
+  {
+    "id": "ISR",
+    "en": "Israel",
+    "zh": "以色列"
+  },
+  {
+    "id": "ITA",
+    "en": "Italy",
+    "zh": "意大利"
+  },
+  {
+    "id": "JAM",
+    "en": "Jamaica",
+    "zh": "牙买加"
+  },
+  {
+    "id": "JEY",
+    "en": "Jersey",
+    "zh": "泽西"
+  },
+  {
+    "id": "JOR",
+    "en": "Jordan",
+    "zh": "约旦"
+  },
+  {
+    "id": "JPN",
+    "en": "Japan",
+    "zh": "日本"
+  },
+  {
+    "id": "KAZ",
+    "en": "Kazakhstan",
+    "zh": "哈萨克斯坦"
+  },
+  {
+    "id": "KEN",
+    "en": "Kenya",
+    "zh": "肯尼亚"
+  },
+  {
+    "id": "KGZ",
+    "en": "Kyrgyzstan",
+    "zh": "吉尔吉斯斯坦"
+  },
+  {
+    "id": "KHM",
+    "en": "Cambodia",
+    "zh": "柬埔寨"
+  },
+  {
+    "id": "KIR",
+    "en": "Kiribati",
+    "zh": "基里巴斯"
+  },
+  {
+    "id": "KNA",
+    "en": "Saint Kitts and Nevis",
+    "zh": "圣基茨和尼维斯"
+  },
+  {
+    "id": "KOR",
+    "en": "Republic of Korea",
+    "zh": "大韩民国"
+  },
+  {
+    "id": "KWT",
+    "en": "Kuwait",
+    "zh": "科威特"
+  },
+  {
+    "id": "LAO",
+    "en": "Lao People's Democratic Republic",
+    "zh": "老挝人民民主共和国"
+  },
+  {
+    "id": "LBN",
+    "en": "Lebanon",
+    "zh": "黎巴嫩"
+  },
+  {
+    "id": "LBR",
+    "en": "Liberia",
+    "zh": "利比里亚"
+  },
+  {
+    "id": "LBY",
+    "en": "Libya",
+    "zh": "利比亚"
+  },
+  {
+    "id": "LCA",
+    "en": "Saint Lucia",
+    "zh": "圣卢西亚"
+  },
+  {
+    "id": "LIE",
+    "en": "Liechtenstein",
+    "zh": "列支敦士登"
+  },
+  {
+    "id": "LKA",
+    "en": "Sri Lanka",
+    "zh": "斯里兰卡"
+  },
+  {
+    "id": "LSO",
+    "en": "Lesotho",
+    "zh": "莱索托"
+  },
+  {
+    "id": "LTU",
+    "en": "Lithuania",
+    "zh": "立陶宛"
+  },
+  {
+    "id": "LUX",
+    "en": "Luxembourg",
+    "zh": "卢森堡"
+  },
+  {
+    "id": "LVA",
+    "en": "Latvia",
+    "zh": "拉脱维亚"
+  },
+  {
+    "id": "MAC",
+    "en": "China, Macao Special Administrative Region",
+    "zh": "中国澳门特别行政区"
+  },
+  {
+    "id": "MAF",
+    "en": "Saint Martin (French Part)",
+    "zh": "圣马丁（法属）"
+  },
+  {
+    "id": "MAR",
+    "en": "Morocco",
+    "zh": "摩洛哥"
+  },
+  {
+    "id": "MCO",
+    "en": "Monaco",
+    "zh": "摩纳哥"
+  },
+  {
+    "id": "MDA",
+    "en": "Republic of Moldova",
+    "zh": "摩尔多瓦共和国"
+  },
+  {
+    "id": "MDG",
+    "en": "Madagascar",
+    "zh": "马达加斯加"
+  },
+  {
+    "id": "MDV",
+    "en": "Maldives",
+    "zh": "马尔代夫"
+  },
+  {
+    "id": "MEX",
+    "en": "Mexico",
+    "zh": "墨西哥"
+  },
+  {
+    "id": "MHL",
+    "en": "Marshall Islands",
+    "zh": "马绍尔群岛"
+  },
+  {
+    "id": "MKD",
+    "en": "North Macedonia",
+    "zh": "北马其顿"
+  },
+  {
+    "id": "MLI",
+    "en": "Mali",
+    "zh": "马里"
+  },
+  {
+    "id": "MLT",
+    "en": "Malta",
+    "zh": "马耳他"
+  },
+  {
+    "id": "MMR",
+    "en": "Myanmar",
+    "zh": "缅甸"
+  },
+  {
+    "id": "MNE",
+    "en": "Montenegro",
+    "zh": "黑山"
+  },
+  {
+    "id": "MNG",
+    "en": "Mongolia",
+    "zh": "蒙古"
+  },
+  {
+    "id": "MNP",
+    "en": "Northern Mariana Islands",
+    "zh": "北马里亚纳群岛"
+  },
+  {
+    "id": "MOZ",
+    "en": "Mozambique",
+    "zh": "莫桑比克"
+  },
+  {
+    "id": "MRT",
+    "en": "Mauritania",
+    "zh": "毛里塔尼亚"
+  },
+  {
+    "id": "MSR",
+    "en": "Montserrat",
+    "zh": "蒙特塞拉特"
+  },
+  {
+    "id": "MTQ",
+    "en": "Martinique",
+    "zh": "马提尼克"
+  },
+  {
+    "id": "MUS",
+    "en": "Mauritius",
+    "zh": "毛里求斯"
+  },
+  {
+    "id": "MWI",
+    "en": "Malawi",
+    "zh": "马拉维"
+  },
+  {
+    "id": "MYS",
+    "en": "Malaysia",
+    "zh": "马来西亚"
+  },
+  {
+    "id": "MYT",
+    "en": "Mayotte",
+    "zh": "马约特"
+  },
+  {
+    "id": "NAM",
+    "en": "Namibia",
+    "zh": "纳米比亚"
+  },
+  {
+    "id": "NCL",
+    "en": "New Caledonia",
+    "zh": "新喀里多尼亚"
+  },
+  {
+    "id": "NER",
+    "en": "Niger",
+    "zh": "尼日尔"
+  },
+  {
+    "id": "NFK",
+    "en": "Norfolk Island",
+    "zh": "诺福克岛"
+  },
+  {
+    "id": "NGA",
+    "en": "Nigeria",
+    "zh": "尼日利亚"
+  },
+  {
+    "id": "NIC",
+    "en": "Nicaragua",
+    "zh": "尼加拉瓜"
+  },
+  {
+    "id": "NIU",
+    "en": "Niue",
+    "zh": "纽埃"
+  },
+  {
+    "id": "NLD",
+    "en": "Netherlands",
+    "zh": "荷兰"
+  },
+  {
+    "id": "NOR",
+    "en": "Norway",
+    "zh": "挪威"
+  },
+  {
+    "id": "NPL",
+    "en": "Nepal",
+    "zh": "尼泊尔"
+  },
+  {
+    "id": "NRU",
+    "en": "Nauru",
+    "zh": "瑙鲁"
+  },
+  {
+    "id": "NZL",
+    "en": "New Zealand",
+    "zh": "新西兰"
+  },
+  {
+    "id": "OMN",
+    "en": "Oman",
+    "zh": "阿曼"
+  },
+  {
+    "id": "PAK",
+    "en": "Pakistan",
+    "zh": "巴基斯坦"
+  },
+  {
+    "id": "PAN",
+    "en": "Panama",
+    "zh": "巴拿马"
+  },
+  {
+    "id": "PCN",
+    "en": "Pitcairn",
+    "zh": "皮特凯恩"
+  },
+  {
+    "id": "PER",
+    "en": "Peru",
+    "zh": "秘鲁"
+  },
+  {
+    "id": "PHL",
+    "en": "Philippines",
+    "zh": "菲律宾"
+  },
+  {
+    "id": "PLW",
+    "en": "Palau",
+    "zh": "帕劳"
+  },
+  {
+    "id": "PNG",
+    "en": "Papua New Guinea",
+    "zh": "巴布亚新几内亚"
+  },
+  {
+    "id": "POL",
+    "en": "Poland",
+    "zh": "波兰"
+  },
+  {
+    "id": "PRI",
+    "en": "Puerto Rico",
+    "zh": "波多黎各"
+  },
+  {
+    "id": "PRK",
+    "en": "Democratic People's Republic of Korea",
+    "zh": "朝鲜民主主义人民共和国"
+  },
+  {
+    "id": "PRT",
+    "en": "Portugal",
+    "zh": "葡萄牙"
+  },
+  {
+    "id": "PRY",
+    "en": "Paraguay",
+    "zh": "巴拉圭"
+  },
+  {
+    "id": "PSE",
+    "en": "State of Palestine",
+    "zh": "巴勒斯坦国"
+  },
+  {
+    "id": "PYF",
+    "en": "French Polynesia",
+    "zh": "法属波利尼西亚"
+  },
+  {
+    "id": "QAT",
+    "en": "Qatar",
+    "zh": "卡塔尔"
+  },
+  {
+    "id": "REU",
+    "en": "Réunion",
+    "zh": "留尼汪"
+  },
+  {
+    "id": "ROU",
+    "en": "Romania",
+    "zh": "罗马尼亚"
+  },
+  {
+    "id": "RUS",
+    "en": "Russian Federation",
+    "zh": "俄罗斯联邦"
+  },
+  {
+    "id": "RWA",
+    "en": "Rwanda",
+    "zh": "卢旺达"
+  },
+  {
+    "id": "SAU",
+    "en": "Saudi Arabia",
+    "zh": "沙特阿拉伯"
+  },
+  {
+    "id": "SDN",
+    "en": "Sudan",
+    "zh": "苏丹"
+  },
+  {
+    "id": "SEN",
+    "en": "Senegal",
+    "zh": "塞内加尔"
+  },
+  {
+    "id": "SGP",
+    "en": "Singapore",
+    "zh": "新加坡"
+  },
+  {
+    "id": "SGS",
+    "en": "South Georgia and the South Sandwich Islands",
+    "zh": "南乔治亚岛和南桑德韦奇岛"
+  },
+  {
+    "id": "SHN",
+    "en": "Saint Helena",
+    "zh": "圣赫勒拿"
+  },
+  {
+    "id": "SJM",
+    "en": "Svalbard and Jan Mayen Islands",
+    "zh": "斯瓦尔巴群岛和扬马延岛"
+  },
+  {
+    "id": "SLB",
+    "en": "Solomon Islands",
+    "zh": "所罗门群岛"
+  },
+  {
+    "id": "SLE",
+    "en": "Sierra Leone",
+    "zh": "塞拉利昂"
+  },
+  {
+    "id": "SLV",
+    "en": "El Salvador",
+    "zh": "萨尔瓦多"
+  },
+  {
+    "id": "SMR",
+    "en": "San Marino",
+    "zh": "圣马力诺"
+  },
+  {
+    "id": "SOM",
+    "en": "Somalia",
+    "zh": "索马里"
+  },
+  {
+    "id": "SPM",
+    "en": "Saint Pierre and Miquelon",
+    "zh": "圣皮埃尔和密克隆"
+  },
+  {
+    "id": "SRB",
+    "en": "Serbia",
+    "zh": "塞尔维亚"
+  },
+  {
+    "id": "SSD",
+    "en": "South Sudan",
+    "zh": "南苏丹"
+  },
+  {
+    "id": "STP",
+    "en": "Sao Tome and Principe",
+    "zh": "圣多美和普林西比"
+  },
+  {
+    "id": "SUR",
+    "en": "Suriname",
+    "zh": "苏里南"
+  },
+  {
+    "id": "SVK",
+    "en": "Slovakia",
+    "zh": "斯洛伐克"
+  },
+  {
+    "id": "SVN",
+    "en": "Slovenia",
+    "zh": "斯洛文尼亚"
+  },
+  {
+    "id": "SWE",
+    "en": "Sweden",
+    "zh": "瑞典"
+  },
+  {
+    "id": "SWZ",
+    "en": "Eswatini",
+    "zh": "斯威士兰"
+  },
+  {
+    "id": "SXM",
+    "en": "Sint Maarten (Dutch part)",
+    "zh": "圣马丁（荷属）"
+  },
+  {
+    "id": "SYC",
+    "en": "Seychelles",
+    "zh": "塞舌尔"
+  },
+  {
+    "id": "SYR",
+    "en": "Syrian Arab Republic",
+    "zh": "阿拉伯叙利亚共和国"
+  },
+  {
+    "id": "TCA",
+    "en": "Turks and Caicos Islands",
+    "zh": "特克斯和凯科斯群岛"
+  },
+  {
+    "id": "TCD",
+    "en": "Chad",
+    "zh": "乍得"
+  },
+  {
+    "id": "TGO",
+    "en": "Togo",
+    "zh": "多哥"
+  },
+  {
+    "id": "THA",
+    "en": "Thailand",
+    "zh": "泰国"
+  },
+  {
+    "id": "TJK",
+    "en": "Tajikistan",
+    "zh": "塔吉克斯坦"
+  },
+  {
+    "id": "TKL",
+    "en": "Tokelau",
+    "zh": "托克劳"
+  },
+  {
+    "id": "TKM",
+    "en": "Turkmenistan",
+    "zh": "土库曼斯坦"
+  },
+  {
+    "id": "TLS",
+    "en": "Timor-Leste",
+    "zh": "东帝汶"
+  },
+  {
+    "id": "TON",
+    "en": "Tonga",
+    "zh": "汤加"
+  },
+  {
+    "id": "TTO",
+    "en": "Trinidad and Tobago",
+    "zh": "特立尼达和多巴哥"
+  },
+  {
+    "id": "TUN",
+    "en": "Tunisia",
+    "zh": "突尼斯"
+  },
+  {
+    "id": "TUR",
+    "en": "Turkey",
+    "zh": "土耳其"
+  },
+  {
+    "id": "TUV",
+    "en": "Tuvalu",
+    "zh": "图瓦卢"
+  },
+  {
+    "id": "TZA",
+    "en": "United Republic of Tanzania",
+    "zh": "坦桑尼亚联合共和国"
+  },
+  {
+    "id": "UGA",
+    "en": "Uganda",
+    "zh": "乌干达"
+  },
+  {
+    "id": "UKR",
+    "en": "Ukraine",
+    "zh": "乌克兰"
+  },
+  {
+    "id": "UMI",
+    "en": "United States Minor Outlying Islands",
+    "zh": "美国本土外小岛屿"
+  },
+  {
+    "id": "URY",
+    "en": "Uruguay",
+    "zh": "乌拉圭"
+  },
+  {
+    "id": "USA",
+    "en": "United States of America",
+    "zh": "美利坚合众国"
+  },
+  {
+    "id": "UZB",
+    "en": "Uzbekistan",
+    "zh": "乌兹别克斯坦"
+  },
+  {
+    "id": "VAT",
+    "en": "Holy See",
+    "zh": "教廷"
+  },
+  {
+    "id": "VCT",
+    "en": "Saint Vincent and the Grenadines",
+    "zh": "圣文森特和格林纳丁斯"
+  },
+  {
+    "id": "VEN",
+    "en": "Venezuela (Bolivarian Republic of)",
+    "zh": "委内瑞拉玻利瓦尔共和国"
+  },
+  {
+    "id": "VGB",
+    "en": "British Virgin Islands",
+    "zh": "英属维尔京群岛"
+  },
+  {
+    "id": "VIR",
+    "en": "United States Virgin Islands",
+    "zh": "美属维尔京群岛"
+  },
+  {
+    "id": "VNM",
+    "en": "Viet Nam",
+    "zh": "越南"
+  },
+  {
+    "id": "VUT",
+    "en": "Vanuatu",
+    "zh": "瓦努阿图"
+  },
+  {
+    "id": "WLD",
+    "en": "World",
+    "zh": "世界"
+  },
+  {
+    "id": "WLF",
+    "en": "Wallis and Futuna Islands",
+    "zh": "瓦利斯群岛和富图纳群岛"
+  },
+  {
+    "id": "WSM",
+    "en": "Samoa",
+    "zh": "萨摩亚"
+  },
+  {
+    "id": "YEM",
+    "en": "Yemen",
+    "zh": "也门"
+  },
+  {
+    "id": "ZAF",
+    "en": "South Africa",
+    "zh": "南非"
+  },
+  {
+    "id": "ZMB",
+    "en": "Zambia",
+    "zh": "赞比亚"
+  },
+  {
+    "id": "ZWE",
+    "en": "Zimbabwe",
+    "zh": "津巴布韦"
+  },
+  {
+    "id": "en",
+    "en": "English",
+    "zh": "英语"
+  },
+  {
+    "id": "fr",
+    "en": "French",
+    "zh": "法语"
+  },
+  {
+    "id": "es",
+    "en": "Spanish",
+    "zh": "西班牙语"
+  },
+  {
+    "id": "ru",
+    "en": "Russian",
+    "zh": "俄语"
+  },
+  {
+    "id": "zh",
+    "en": "Chinese",
+    "zh": "汉语"
+  },
+  {
+    "id": "de",
+    "en": "German",
+    "zh": "德语"
+  },
+  {
+    "id": "bn",
+    "en": "Bengali",
+    "zh": "孟加拉语"
+  },
+  {
+    "id": "fa",
+    "en": "Farsi",
+    "zh": "波斯语"
+  },
+  {
+    "id": "ps",
+    "en": "Pashto",
+    "zh": "普什图语"
+  },
+  {
+    "id": "ar",
+    "en": "Arabic",
+    "zh": "阿拉伯语"
+  },
+  {
+    "id": "m49_901",
+    "en": "50°S-50°N",
+    "zh": "50°S-50°N"
+  },
+  {
+    "id": "m49_902",
+    "en": "Pantropical",
+    "zh": "泛热带 *"
+  },
+  {
+    "id": "global",
+    "en": "Global",
+    "zh": "全球"
+  },
+  {
+    "id": "region",
+    "en": "Region",
+    "zh": "地區"
+  },
+  {
+    "id": "other_region",
+    "en": "Other region",
+    "zh": "其他地區"
+  },
+  {
+    "id": "sub_region",
+    "en": "Sub-region",
+    "zh": "次區域"
+  },
+  {
+    "id": "intermediate_region",
+    "en": "Intermediate region",
+    "zh": "中級地區"
+  },
+  {
+    "id": "m49_005",
+    "en": "South America",
+    "zh": "南美洲"
+  },
+  {
+    "id": "m49_011",
+    "en": "Western Africa",
+    "zh": "西非"
+  },
+  {
+    "id": "m49_013",
+    "en": "Central America",
+    "zh": "中美洲"
+  },
+  {
+    "id": "m49_014",
+    "en": "Eastern Africa",
+    "zh": "东非"
+  },
+  {
+    "id": "m49_017",
+    "en": "Middle Africa",
+    "zh": "中非"
+  },
+  {
+    "id": "m49_018",
+    "en": "Southern Africa",
+    "zh": "南部非洲"
+  },
+  {
+    "id": "m49_029",
+    "en": "Caribbean",
+    "zh": "加勒比"
+  },
+  {
+    "id": "m49_830",
+    "en": "Channel Islands",
+    "zh": "海峡群岛"
+  },
+  {
+    "id": "m49_002",
+    "en": "Africa",
+    "zh": "非洲"
+  },
+  {
+    "id": "m49_009",
+    "en": "Oceania",
+    "zh": "大洋洲"
+  },
+  {
+    "id": "m49_019",
+    "en": "Americas",
+    "zh": "美洲"
+  },
+  {
+    "id": "m49_142",
+    "en": "Asia",
+    "zh": "亚洲"
+  },
+  {
+    "id": "m49_150",
+    "en": "Europe",
+    "zh": "欧洲"
+  },
+  {
+    "id": "m49_015",
+    "en": "Northern Africa",
+    "zh": "北非"
+  },
+  {
+    "id": "m49_021",
+    "en": "Northern America",
+    "zh": "北美"
+  },
+  {
+    "id": "m49_030",
+    "en": "Eastern Asia",
+    "zh": "东亚"
+  },
+  {
+    "id": "m49_034",
+    "en": "Southern Asia",
+    "zh": "南亚"
+  },
+  {
+    "id": "m49_035",
+    "en": "South-eastern Asia",
+    "zh": "东南亚"
+  },
+  {
+    "id": "m49_039",
+    "en": "Southern Europe",
+    "zh": "南欧"
+  },
+  {
+    "id": "m49_053",
+    "en": "Australia and New Zealand",
+    "zh": "澳大利亚和新西兰"
+  },
+  {
+    "id": "m49_054",
+    "en": "Melanesia",
+    "zh": "美拉尼西亚"
+  },
+  {
+    "id": "m49_057",
+    "en": "Micronesia",
+    "zh": "密克罗尼西亚"
+  },
+  {
+    "id": "m49_061",
+    "en": "Polynesia",
+    "zh": "波利尼西亚"
+  },
+  {
+    "id": "m49_143",
+    "en": "Central Asia",
+    "zh": "中亚"
+  },
+  {
+    "id": "m49_145",
+    "en": "Western Asia",
+    "zh": "西亚"
+  },
+  {
+    "id": "m49_151",
+    "en": "Eastern Europe",
+    "zh": "东欧"
+  },
+  {
+    "id": "m49_154",
+    "en": "Northern Europe",
+    "zh": "北欧"
+  },
+  {
+    "id": "m49_155",
+    "en": "Western Europe",
+    "zh": "西欧"
+  },
+  {
+    "id": "m49_202",
+    "en": "Sub-Saharan Africa",
+    "zh": "撒哈拉以南非洲"
+  },
+  {
+    "id": "m49_419",
+    "en": "Latin America and the Caribbean",
+    "zh": "拉丁美洲和加勒比"
+  },
+  {
+    "id": "brand",
+    "en": "MapX",
+    "zh": "MapX"
+  },
+  {
+    "id": "admin",
+    "en": "Administrator",
+    "zh": "管理员"
+  },
+  {
+    "id": "admins",
+    "en": "Administrators",
+    "zh": "管理员"
+  },
+  {
+    "id": "bottom",
+    "en": "Bottom",
+    "zh": "底部"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "zh": "浏览"
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "zh": "帮助"
+  },
+  {
+    "id": "epsg_set_projection_export",
+    "en": "Set the export projection, using a code from the EPSG format",
+    "zh": "使用 EPSG 代码设置导出数据的投影"
+  },
+  {
+    "id": "epsg_set_projection_import",
+    "en": "Assign a projection system to the data ( code EPSG, optional )",
+    "zh": "指定数据的投影系统（EPSG代码，可选）"
+  },
+  {
+    "id": "epsg_btn_search",
+    "en": "Search",
+    "zh": "搜索"
+  },
+  {
+    "id": "epsg_placeholder_search",
+    "en": "Country or projection name ...",
+    "zh": "国家/地区或投影名称"
+  },
+  {
+    "id": "epsg_label_search",
+    "en": "Enter a country or projection name",
+    "zh": "输入国家/地区或投影名称"
+  },
+  {
+    "id": "epsg_placeholder_input",
+    "en": "EPSG code. e.g. '4326'",
+    "zh": "EPSG代码，例如：4326"
+  },
+  {
+    "id": "epsg_btn_open_search",
+    "en": "Find epsg code ...",
+    "zh": "查找EPSG代码"
+  },
+  {
+    "id": "btn_add_source",
+    "en": "Add a source layer",
+    "zh": "添加源图层"
+  },
+  {
+    "id": "btn_about",
+    "en": "About",
+    "zh": "关于"
+  },
+  {
+    "id": "title_about",
+    "en": "About",
+    "zh": "关于"
+  },
+  {
+    "id": "btn_load_new_project",
+    "en": "Load the new project",
+    "zh": "加载新项目"
+  },
+  {
+    "id": "btn_add_view",
+    "en": "Create a new view",
+    "zh": "创建新视图"
+  },
+  {
+    "id": "btn_show_db_info",
+    "en": "Full access",
+    "zh": "完全访问权限"
+  },
+  {
+    "id": "btn_show_project_external_views",
+    "en": "Manage external views",
+    "zh": "管理外部视图"
+  },
+  {
+    "id": "btn_show_db_query_maker",
+    "en": "API SQL query maker",
+    "zh": "API SQL查询生成器"
+  },
+  {
+    "id": "label_query_write",
+    "en": "Write your SQL query",
+    "zh": "输入SQL查询"
+  },
+  {
+    "id": "label_layer_available",
+    "en": "Relations available",
+    "zh": "可用关系"
+  },
+  {
+    "id": "btn_show_add_project",
+    "en": "Add a new project",
+    "zh": "添加新项目"
+  },
+  {
+    "id": "btn_show_add_project_disabled",
+    "en": "Add a new project ( disabled )",
+    "zh": "添加新项目（不可用）"
+  },
+  {
+    "id": "btn_show_db_info_self",
+    "en": "Get temporary access to edit a dataset",
+    "zh": "获得临时访问权限以编辑数据集"
+  },
+  {
+    "id": "btn_cancel",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "btn_copy",
+    "en": "Copy",
+    "zh": "复制"
+  },
+  {
+    "id": "btn_geolocate_user",
+    "en": "Geolocate",
+    "zh": "地理位置"
+  },
+  {
+    "id": "btn_close",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "btn_join_project_long",
+    "en": "Membership request for this project",
+    "zh": "申请成为此项目的成员"
+  },
+  {
+    "id": "btn_join_project",
+    "en": "Join",
+    "zh": "加入"
+  },
+  {
+    "id": "btn_join_current_project",
+    "en": "Join current project ( %s )",
+    "zh": "加入当前项目 ( %s )"
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "zh": "确认"
+  },
+  {
+    "id": "btn_country",
+    "en": "Select country",
+    "zh": "选择国家/地区"
+  },
+  {
+    "id": "btn_create",
+    "en": "Create",
+    "zh": "创建"
+  },
+  {
+    "id": "btn_delete",
+    "en": "Delete",
+    "zh": "删除"
+  },
+  {
+    "id": "btn_edit_selected",
+    "en": "Edit selected",
+    "zh": "编辑选定内容"
+  },
+  {
+    "id": "btn_edit_source",
+    "en": "Manage sources",
+    "zh": "管理源"
+  },
+  {
+    "id": "btn_source_overlap_utilities",
+    "en": "Area intersection tools",
+    "zh": "重叠分析工具"
+  },
+  {
+    "id": "btn_source_validate_geom",
+    "en": "Geometry validation",
+    "zh": "几何验证"
+  },
+  {
+    "id": "btn_analyse",
+    "en": "Run analysis",
+    "zh": "运行分析"
+  },
+  {
+    "id": "logs",
+    "en": "Logs",
+    "zh": "日志"
+  },
+  {
+    "id": "calc_area_result",
+    "en": "Area of intersection (km2)",
+    "zh": "重叠部分面积(km2)"
+  },
+  {
+    "id": "radio_source_overlap_mode",
+    "en": "Select analysis",
+    "zh": "选择分析"
+  },
+  {
+    "id": "source_overlap_mode_area",
+    "en": "Calculate area of intersection",
+    "zh": "计算重叠部分面积"
+  },
+  {
+    "id": "source_overlap_mode_create_source",
+    "en": "Create new layer based on the intersection",
+    "zh": "基于交集创建新图层"
+  },
+  {
+    "id": "check_add_source_from_view",
+    "en": "Add sources by views",
+    "zh": "按视图添加源"
+  },
+  {
+    "id": "select_overlap_source_from_view",
+    "en": "Select views",
+    "zh": "选择视图"
+  },
+  {
+    "id": "btn_add_source_from_view",
+    "en": "Add sources from those views",
+    "zh": "从这些视图添加源"
+  },
+  {
+    "id": "select_overlap_layers",
+    "en": "Layers : minimum 1, maximum 3, reorder if needed ",
+    "zh": "图层: 最少1层，最多3层，如果需要可以重新排序"
+  },
+  {
+    "id": "select_overlap_countries",
+    "en": "Country",
+    "zh": "国家/地区"
+  },
+  {
+    "id": "n_layers_more_3",
+    "en": "More than three layers selected",
+    "zh": "选定的图层数量大于3"
+  },
+  {
+    "id": "n_layers_less_1",
+    "en": "Less that one layer selected",
+    "zh": "选定的图层数量小于1"
+  },
+  {
+    "id": "n_country_not_1",
+    "en": "Only one country should be selected",
+    "zh": "只能选择一个国家/地区"
+  },
+  {
+    "id": "title_overlap_tools",
+    "en": "Area intersection utilities",
+    "zh": "重叠分析工具"
+  },
+  {
+    "id": "source_overlap_new_source_email_info",
+    "en": "An email will be send to '%s' at the end of the process",
+    "zh": "过程结束时将会向 '%s' 发送一封邮件"
+  },
+  {
+    "id": "btn_edit_source_metadata",
+    "en": "Edit sources metadata",
+    "zh": "编辑源的元数据"
+  },
+  {
+    "id": "btn_finish",
+    "en": "Finish",
+    "zh": "完成"
+  },
+  {
+    "id": "btn_fullscreen",
+    "en": "Display the app in fullscreen mode",
+    "zh": "以全屏模式显示应用程序"
+  },
+  {
+    "id": "btn_get_area_visible",
+    "en": "Area of visible features",
+    "zh": "可见要素区域"
+  },
+  {
+    "id": "btn_get_overlap_visible",
+    "en": "Overlaps to geojson",
+    "zh": "与geojson叠加"
+  },
+  {
+    "id": "btn_get_layer_summary",
+    "en": "Get layer summary",
+    "zh": "获取图层摘要"
+  },
+  {
+    "id": "btn_iframe_builder",
+    "en": "Embed MapX",
+    "zh": "嵌入MapX"
+  },
+  {
+    "id": "btn_language",
+    "en": "Language",
+    "zh": "语言"
+  },
+  {
+    "id": "btn_login",
+    "en": "Login window",
+    "zh": "登录窗口"
+  },
+  {
+    "id": "btn_north_arrow",
+    "en": "Reset bearing",
+    "zh": "重置方向"
+  },
+  {
+    "id": "btn_draw_mode",
+    "en": "Vector draw tools",
+    "zh": "矢量绘图工具"
+  },
+  {
+    "id": "btn_map_composer",
+    "en": "Map composer",
+    "zh": "地图编辑器"
+  },
+  {
+    "id": "btn_opt_date",
+    "en": "Filter date",
+    "zh": "筛选日期"
+  },
+  {
+    "id": "btn_opt_attribute_table",
+    "en": "Attribute table",
+    "zh": "属性表"
+  },
+  {
+    "id": "btn_opt_delete",
+    "en": "Remove this view",
+    "zh": "删除此视图"
+  },
+  {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "zh": "打开原始项目"
+  },
+  {
+    "id": "btn_opt_move_top",
+    "en": "Move to top",
+    "zh": "移至顶部"
+  },
+  {
+    "id": "btn_opt_move_bottom",
+    "en": "Move to bottom",
+    "zh": "移到底部"
+  },
+  {
+    "id": "btn_opt_delete_geojson",
+    "en": "Delete",
+    "zh": "删除"
+  },
+  {
+    "id": "btn_opt_download",
+    "en": "Download the data",
+    "zh": "下载数据"
+  },
+  {
+    "id": "btn_opt_edit_config",
+    "en": "Configure this view",
+    "zh": "配置视图"
+  },
+  {
+    "id": "btn_opt_edit_custom_code",
+    "en": "Edit code",
+    "zh": "编辑代码"
+  },
+  {
+    "id": "btn_opt_edit_dashboard",
+    "en": "Edit dashboard",
+    "zh": "编辑操控版"
+  },
+  {
+    "id": "btn_opt_edit_story",
+    "en": "Edit story map",
+    "zh": "编辑 Story Map"
+  },
+  {
+    "id": "btn_opt_edit_style",
+    "en": "Set the style of this view",
+    "zh": "设置视图样式"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "zh": "图例标题"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "zh": "区间包含上限"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "zh": "如果勾选，区间将包含上限。无论选定哪个选项，最小值和最大值总是包括在第一个和最后一个区间中"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "zh": "反向显示图层顺序"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "zh": "如果勾选，则图层堆栈将颠倒：顶部规则将会堆栈底部绘制一个图层"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "zh": "显示符号的标签"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "zh": "使用符号表示点数据时，是否在其周围添加标签？"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Ignore missing values",
+    "zh": "忽略缺失值"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, null or missing values will be ignored in the style",
+    "zh": "如果勾选，将忽略样式中的空值或缺失值"
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "zh": "显示元数据"
+  },
+  {
+    "id": "btn_opt_numeric",
+    "en": "Filter by numeric value",
+    "zh": "按数值筛选"
+  },
+  {
+    "id": "btn_opt_reset",
+    "en": "Reset the view",
+    "zh": "重置视图"
+  },
+  {
+    "id": "btn_opt_screenshot",
+    "en": "Take a screenshoot",
+    "zh": "截屏"
+  },
+  {
+    "id": "btn_opt_search",
+    "en": "Settings",
+    "zh": "设置"
+  },
+  {
+    "id": "btn_opt_share",
+    "en": "Share a link to this view",
+    "zh": "分享此视图的链接"
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "zh": "分享此视图到另一个项目"
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "zh": "你还没有项目，无法发布此视图"
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "zh": "没有视图可以分享"
+  },
+  {
+    "id": "btn_opt_start_story",
+    "en": "Read this story map",
+    "zh": "阅读此Story Map"
+  },
+  {
+    "id": "btn_opt_transparency",
+    "en": "Transparency",
+    "zh": "透明度"
+  },
+  {
+    "id": "btn_opt_zoom_all",
+    "en": "Zoom to all features",
+    "zh": "缩放到所有要素"
+  },
+  {
+    "id": "btn_opt_zoom_visible",
+    "en": "Zoom on displayed features",
+    "zh": "缩放到显示的要素"
+  },
+  {
+    "id": "btn_preview",
+    "en": "Preview",
+    "zh": "预览"
+  },
+  {
+    "id": "btn_selfdb_generate_info",
+    "en": "Generate",
+    "zh": "生成"
+  },
+  {
+    "id": "btn_print",
+    "en": "Print current",
+    "zh": "打印"
+  },
+  {
+    "id": "btn_reset",
+    "en": "Reset",
+    "zh": "重置"
+  },
+  {
+    "id": "btn_save",
+    "en": "Save",
+    "zh": "保存"
+  },
+  {
+    "id": "btn_send",
+    "en": "Submit",
+    "zh": "提交"
+  },
+  {
+    "id": "btn_show_app_config",
+    "en": "Configuration",
+    "zh": "配置"
+  },
+  {
+    "id": "btn_show_project_config",
+    "en": "Project configuration",
+    "zh": "项目配置"
+  },
+  {
+    "id": "btn_show_project_views_states",
+    "en": "Save views list state",
+    "zh": "保存视图列表状态"
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "zh": "删除此项目"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "zh": "删除此项目（不可用）"
+  },
+  {
+    "id": "btn_show_role_manager",
+    "en": "Define roles",
+    "zh": "定义角色"
+  },
+  {
+    "id": "btn_sort_date",
+    "en": "Date",
+    "zh": "日期"
+  },
+  {
+    "id": "btn_filter_checked",
+    "en": "Filter activated views",
+    "zh": "筛选激活的视图"
+  },
+  {
+    "id": "btn_filter_show_panel",
+    "en": "Advanced filter",
+    "zh": "高级筛选器"
+  },
+  {
+    "id": "btn_sort_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "sort_label",
+    "en": "Sort by",
+    "zh": "排序依据"
+  },
+  {
+    "id": "btn_story_unlock_map",
+    "en": "Toggle map interaction",
+    "zh": "切换地图交互"
+  },
+  {
+    "id": "btn_story_close",
+    "en": "Back to the map explorer",
+    "zh": "返回地图浏览器"
+  },
+  {
+    "id": "btn_story_edit_cancel",
+    "en": "Cancel edition",
+    "zh": "取消编辑"
+  },
+  {
+    "id": "btn_story_edit_save",
+    "en": "Save edition",
+    "zh": "保存编辑"
+  },
+  {
+    "id": "btn_story_edit",
+    "en": "Start edition",
+    "zh": "开始编辑"
+  },
+  {
+    "id": "btn_switchui",
+    "en": "Toggle the color of the interface",
+    "zh": "切换界面颜色"
+  },
+  {
+    "id": "btn_tab_dashboard",
+    "en": "Toggle dashboards",
+    "zh": "切换操控版"
+  },
+  {
+    "id": "btn_tab_settings",
+    "en": "Settings ",
+    "zh": "设置"
+  },
+  {
+    "id": "btn_tab_tools",
+    "en": "Toolbox",
+    "zh": "工具箱"
+  },
+  {
+    "id": "btn_tab_views",
+    "en": "Views",
+    "zh": "视图"
+  },
+  {
+    "id": "btn_tab_search",
+    "en": "Search",
+    "zh": "搜索"
+  },
+  {
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
+    "zh": "切换主题"
+  },
+  {
+    "id": "btn_theme_sat",
+    "en": "Switch theme : aerial",
+    "zh": "切换主题：航空影像"
+  },
+  {
+    "id": "btn_3d_terrain",
+    "en": "Add 3d terrain",
+    "zh": "添加3D浮雕"
+  },
+  {
+    "id": "btn_toggle_all",
+    "en": "Immersive mode",
+    "zh": "沉浸模式"
+  },
+  {
+    "id": "btn_update",
+    "en": "Update  ",
+    "zh": "更新"
+  },
+  {
+    "id": "btn_upload",
+    "en": "Upload",
+    "zh": "上传"
+  },
+  {
+    "id": "btn_zoom_in",
+    "en": "Zoom in",
+    "zh": "放大"
+  },
+  {
+    "id": "btn_zoom_out",
+    "en": "Zoom out",
+    "zh": "缩小"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Highlight vector features",
+    "zh": "突出显示矢量要素"
+  },
+  {
+    "id": "title_config_highlight",
+    "en": "Highlight tool configuration",
+    "zh": "突出显示工具配置"
+  },
+  {
+    "id": "select_highlight_mode",
+    "en": "Select highlight mode",
+    "zh": "选择突出显示模式"
+  },
+  {
+    "id": "highlight_where_all",
+    "en": "Highlight where all features overlap",
+    "zh": "突出显示所有功能重叠的地方 *"
+  },
+  {
+    "id": "highlight_where_any",
+    "en": "Highlight any visible feature",
+    "zh": "突出显示任何可见功能 *"
+  },
+  {
+    "id": "highlight_where_two",
+    "en": "Highlight where two features overlap",
+    "zh": "突出显示两个要素重叠的地方 *"
+  },
+  {
+    "id": "highlight_where_three",
+    "en": "Highlight where three features overlap",
+    "zh": "突出显示三个功能重叠的地方 *"
+  },
+  {
+    "id": "highlight_where_four",
+    "en": "Highlight where four features overlap",
+    "zh": "突出显示四个要素重叠的地方 *"
+  },
+  {
+    "id": "highlight_where_five",
+    "en": "Highlight where five features overlap",
+    "zh": "突出显示五个功能重叠的地方 *"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "zh": "启用重叠面积估计"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "zh": "即时面积估计"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "zh": "重叠面是用地球的球形表面来估计的。结果将根据数据质量，当前筛选器和分辨率而有所不同。"
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "zh": "当前分辨率"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "zh": "当前分辨率取决于缩放级别和纬度。它表示一个像元覆盖的平均面积。"
+  },
+  {
+    "id": "categorical",
+    "en": "Categorical",
+    "zh": "类别"
+  },
+  {
+    "id": "cc",
+    "en": "Custom code",
+    "zh": "自定义代码"
+  },
+  {
+    "id": "center",
+    "en": "Center",
+    "zh": "中心"
+  },
+  {
+    "id": "country",
+    "en": "Country",
+    "zh": "国家/地区"
+  },
+  {
+    "id": "create",
+    "en": "Create",
+    "zh": "创建"
+  },
+  {
+    "id": "content",
+    "en": "Content",
+    "zh": "内容"
+  },
+  {
+    "id": "title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "join_project",
+    "en": "Join",
+    "zh": "加入"
+  },
+  {
+    "id": "dev",
+    "en": "Development",
+    "zh": "开发"
+  },
+  {
+    "id": "env",
+    "en": "Environment",
+    "zh": "环境"
+  },
+  {
+    "id": "error_no_layer",
+    "en": "No source layer set",
+    "zh": "没有设置源图层"
+  },
+  {
+    "id": "error_form_issues",
+    "en": "There are some issues in the form, please correct them",
+    "zh": "表单中有一些问题，请更正"
+  },
+  {
+    "id": "warning_delete_project",
+    "en": "Project deletion also remove all views, data, settings and anything related to this project, including views used in other project. Data shared from other project will be preserved",
+    "zh": "删除项目还会删除所有视图、数据、设置和与此项目相关的任何内容，包括其他项目中使用的视图。但来自其他项目的共享数据将被保留。"
+  },
+  {
+    "id": "error_no_source",
+    "en": "No source layer found",
+    "zh": "没有找到源图层"
+  },
+  {
+    "id": "error_title_exists",
+    "en": "This title already exists",
+    "zh": "标题已经存在"
+  },
+  {
+    "id": "error_title_no_match",
+    "en": "The title does not match",
+    "zh": "标题不匹配"
+  },
+  {
+    "id": "error_title_short",
+    "en": "The title is too short",
+    "zh": "标题太短"
+  },
+  {
+    "id": "error_title_not_valid",
+    "en": "The title is not valid",
+    "zh": "标题无效"
+  },
+  {
+    "id": "error_description_short",
+    "en": "The description is too short",
+    "zh": "描述太短"
+  },
+  {
+    "id": "error_title_bad",
+    "en": "The title is not valid",
+    "zh": "标题无效"
+  },
+  {
+    "id": "error_project_default_not_public",
+    "en": "The default project must be public",
+    "zh": "默认项目必须公开"
+  },
+  {
+    "id": "error_email_not_valid",
+    "en": "This email is not valid",
+    "zh": "邮箱无效"
+  },
+  {
+    "id": "error_email_is_member",
+    "en": "A member with this email already exists",
+    "zh": "邮箱已经在此项目中注册"
+  },
+  {
+    "id": "error_login",
+    "en": "Login issue",
+    "zh": "登录问题 *"
+  },
+  {
+    "id": "error_email_bad",
+    "en": "This email is not accepted",
+    "zh": "邮箱不被接受"
+  },
+  {
+    "id": "error_action_link_expired",
+    "en": "This link has expired",
+    "zh": "该链接已过期"
+  },
+  {
+    "id": "error_msg_too_long",
+    "en": "This message is too long",
+    "zh": "消息太长"
+  },
+  {
+    "id": "error_msg_too_short",
+    "en": "This message is too short",
+    "zh": "消息太短"
+  },
+  {
+    "id": "error_email_not_registered",
+    "en": "This email does not belongs to a current MapX user. Once open, the activation link will also create automatically a new account on MapX.",
+    "zh": "此邮箱当前不属于MapX用户。一旦打开激活链接，将自动创建一个新的MapX帐户。"
+  },
+  {
+    "id": "error_description_bad",
+    "en": "The description is not valid",
+    "zh": "描述无效"
+  },
+  {
+    "id": "error_title_long",
+    "en": "The title is to long",
+    "zh": "标题太长"
+  },
+  {
+    "id": "error_description_long",
+    "en": "The description is to long",
+    "zh": "描述太长"
+  },
+  {
+    "id": "error_cant_geolocate_msg",
+    "en": "Sorry, MapX can't find your position",
+    "zh": "抱歉，MapX无法获取你的位置"
+  },
+  {
+    "id": "error_geolocate_issue",
+    "en": "Geolocation issue",
+    "zh": "地理位置问题"
+  },
+  {
+    "id": "exponential",
+    "en": "Continuous",
+    "zh": "连续"
+  },
+  {
+    "id": "ext",
+    "en": "Extractive",
+    "zh": "提取"
+  },
+  {
+    "id": "fold_view_legend",
+    "en": "Legend",
+    "zh": "图例"
+  },
+  {
+    "id": "fold_view_tools",
+    "en": "Tools",
+    "zh": "工具"
+  },
+  {
+    "id": "fold_views_filter",
+    "en": "Filter options",
+    "zh": "筛选器选项"
+  },
+  {
+    "id": "fold_views_sort",
+    "en": "Sort views",
+    "zh": "视图排序"
+  },
+  {
+    "id": "gj",
+    "en": "Local GeoJSON",
+    "zh": "本地GeoJSON"
+  },
+  {
+    "id": "inf",
+    "en": "Infrastructure",
+    "zh": "基础设施"
+  },
+  {
+    "id": "interval",
+    "en": "Interval",
+    "zh": "间隔"
+  },
+  {
+    "id": "time_slider",
+    "en": "Time slider",
+    "zh": "时间滑块"
+  },
+  {
+    "id": "custom_code",
+    "en": "Custom code",
+    "zh": "自定义代码"
+  },
+  {
+    "id": "custom_style",
+    "en": "Custom style",
+    "zh": "自定义样式"
+  },
+  {
+    "id": "custom_style_edit",
+    "en": "Edit custom style",
+    "zh": "编辑自定义样式"
+  },
+  {
+    "id": "story_map",
+    "en": "Story map",
+    "zh": "Story Map"
+  },
+  {
+    "id": "dashboard",
+    "en": "Dashboard",
+    "zh": "操控版"
+  },
+  {
+    "id": "overlap",
+    "en": "Overlap",
+    "zh": "重叠"
+  },
+  {
+    "id": "left",
+    "en": "Left",
+    "zh": "左边"
+  },
+  {
+    "id": "line",
+    "en": "Line",
+    "zh": "线"
+  },
+  {
+    "id": "loading_img",
+    "en": "Image loading, please wait ...",
+    "zh": "图像加载中，请稍候..."
+  },
+  {
+    "id": "login_cancel",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "login_required_for_project_access_guest",
+    "en": "Accessing a private project requires to be authenticated",
+    "zh": "访问私有项目需要经过身份验证 *"
+  },
+  {
+    "id": "login_required_for_project_access_non_member",
+    "en": "You are not authorized to access this project. You can try with another account.",
+    "zh": "您无权访问此项目。您可以尝试使用另一个帐户。 *"
+  },
+  {
+    "id": "login_required_for_project_list",
+    "en": "The filtered project list request requires authentication",
+    "zh": "过滤后的项目列表请求需要身份验证 *"
+  },
+  {
+    "id": "login_pwd_mail_sent",
+    "en": "An email has been sent, please check your inbox and copy the received password in the field below",
+    "zh": "邮件已发送，请检查你的收件箱，并将收到的密码复制到下面"
+  },
+  {
+    "id": "login_pwd_mail_sent_error",
+    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
+    "zh": "发生错误，我们无法向你发送一次性密码。请稍后再试。"
+  },
+  {
+    "id": "login_project",
+    "en": "Project or country name in which the role applies",
+    "zh": "适用此角色的项目或国家/地区名称"
+  },
+  {
+    "id": "login_email",
+    "en": "Email",
+    "zh": "邮箱"
+  },
+  {
+    "id": "login_insert_pwd",
+    "en": "Insert the single usage password",
+    "zh": "输入一次性密码"
+  },
+  {
+    "id": "login_info_box",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
+    "zh": "如果你尚未注册，验证成功后将会创建一个新帐户，并解锁新功能。如果你已经注册，验证成功后你将可以访问你所在的所有项目。 用户在 MapX 上注册意味着同意MapX收集和汇总公布性能数据，这些数据不包含可识别个人的信息。"
+  },
+  {
+    "id": "login_out",
+    "en": "Log out",
+    "zh": "退出登录"
+  },
+  {
+    "id": "login_groups",
+    "en": "Groups",
+    "zh": "组"
+  },
+  {
+    "id": "login_send_pwd",
+    "en": "Send",
+    "zh": "发送"
+  },
+  {
+    "id": "login_subtitle",
+    "en": "Please enter your email to receive a single usage secure password",
+    "zh": "请输入你的邮箱以接收一次性的安全密码"
+  },
+  {
+    "id": "login_title",
+    "en": "Log in",
+    "zh": "登录"
+  },
+  {
+    "id": "login_user_status",
+    "en": "User status",
+    "zh": "用户状态"
+  },
+  {
+    "id": "more",
+    "en": "More",
+    "zh": "更多"
+  },
+  {
+    "id": "noAbstract",
+    "en": "[ Abstract missing ]",
+    "zh": "[ 缺少摘要 ]"
+  },
+  {
+    "id": "noLegend",
+    "en": "[ Missing legend ]",
+    "zh": "[ 缺少图例 ]"
+  },
+  {
+    "id": "noData",
+    "en": "[ Missing value ]",
+    "zh": "[ 缺少值 ]"
+  },
+  {
+    "id": "noFilter",
+    "en": "[ No filter ]",
+    "zh": "[ 无筛选器 ]"
+  },
+  {
+    "id": "noLayer",
+    "en": "[ No source layer ]",
+    "zh": "[ 无源图层 ]"
+  },
+  {
+    "id": "noValue",
+    "en": "[ No value ]",
+    "zh": "[ 无值 ]"
+  },
+  {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "zh": "[ 显示属性失败 ]"
+  },
+  {
+    "id": "none",
+    "en": "None",
+    "zh": "无"
+  },
+  {
+    "id": "noSelect",
+    "en": "[ Empty selection ]",
+    "zh": "[ 空白选则 ]"
+  },
+  {
+    "id": "noTitle",
+    "en": "[ Title missing ]",
+    "zh": "[ 缺少标题 ]"
+  },
+  {
+    "id": "noVariable",
+    "en": "[ Missing value ]",
+    "zh": "[ 缺少值 ]"
+  },
+  {
+    "id": "noViewOrig",
+    "en": "[ No view available ]",
+    "zh": "[ 无可用视图 ]"
+  },
+  {
+    "id": "noView",
+    "en": "[ Select a different project, category or country to display available data ]",
+    "zh": "[ 选择不同的项目、类别或国家/地区以显示可用数据 ]"
+  },
+  {
+    "id": "view_fetching_progress",
+    "en": "[ {{vOk}}/{{vTot}} ]",
+    "zh": "[ {{vOk}}/{{vTot}} ]"
+  },
+  {
+    "id": "nrg",
+    "en": "Energy",
+    "zh": "能源"
+  },
+  {
+    "id": "old_add_view",
+    "en": "Add a new view",
+    "zh": "添加新视图"
+  },
+  {
+    "id": "oth",
+    "en": "Other",
+    "zh": "其他"
+  },
+  {
+    "id": "point",
+    "en": "Point",
+    "zh": "点"
+  },
+  {
+    "id": "pol",
+    "en": "Politics",
+    "zh": "政治"
+  },
+  {
+    "id": "polygon",
+    "en": "Polygon",
+    "zh": "多边形"
+  },
+  {
+    "id": "public",
+    "en": "Public",
+    "zh": "公开"
+  },
+  {
+    "id": "login_label",
+    "en": "Login",
+    "zh": "登录"
+  },
+  {
+    "id": "publish",
+    "en": "Publish",
+    "zh": "发布"
+  },
+  {
+    "id": "publisher",
+    "en": "Publisher",
+    "zh": "发布者"
+  },
+  {
+    "id": "publishers",
+    "en": "Publishers",
+    "zh": "发布者"
+  },
+  {
+    "id": "member",
+    "en": "Member",
+    "zh": "成员"
+  },
+  {
+    "id": "members",
+    "en": "Members",
+    "zh": "成员"
+  },
+  {
+    "id": "contacts",
+    "en": "Contacts",
+    "zh": "联络人 *"
+  },
+  {
+    "id": "right",
+    "en": "Right",
+    "zh": "右边"
+  },
+  {
+    "id": "rt",
+    "en": "Raster",
+    "zh": "栅格"
+  },
+  {
+    "id": "view_editable",
+    "en": "Editable",
+    "zh": "可编辑的"
+  },
+  {
+    "id": "view_local",
+    "en": "Curent project",
+    "zh": "当前的项目"
+  },
+  {
+    "id": "sat",
+    "en": "Satellite imagery",
+    "zh": "卫星影像"
+  },
+  {
+    "id": "save",
+    "en": "Save",
+    "zh": "保存"
+  },
+  {
+    "id": "saved_at",
+    "en": "Saved at %s",
+    "zh": "保存在 %s"
+  },
+  {
+    "id": "email",
+    "en": "Email",
+    "zh": "邮箱"
+  },
+  {
+    "id": "from",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "to",
+    "en": "To",
+    "zh": "到"
+  },
+  {
+    "id": "email_manager_title",
+    "en": "Email manager",
+    "zh": "邮件管理员 *"
+  },
+  {
+    "id": "email_manager_sent_success_generic",
+    "en": "An email has been sent to {{email}}",
+    "zh": "一封电子邮件已经发送至{{email}} *"
+  },
+  {
+    "id": "email_manager_sent_error_generic",
+    "en": "An error occuried, the email has not been sent to {{email}}",
+    "zh": "发生错误，电子邮件尚未发送至{{email}} *"
+  },
+  {
+    "id": "invite_member_email",
+    "en": "Invite a new member",
+    "zh": "邀请新成员"
+  },
+  {
+    "id": "btn_invite",
+    "en": "Invite",
+    "zh": "邀请"
+  },
+  {
+    "id": "btn_invite_form_hint",
+    "en": "Open an invitation form",
+    "zh": "打开邀请表格 *"
+  },
+  {
+    "id": "btn_add",
+    "en": "Add",
+    "zh": "加"
+  },
+  {
+    "id": "btn_add_user_hint",
+    "en": "Add this MapX user directly",
+    "zh": "直接添加此MapX用户 *"
+  },
+  {
+    "id": "schema_class",
+    "en": "Class",
+    "zh": "类"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "zh": "缺少值"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "zh": "颜色"
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "schema_item",
+    "en": "Item",
+    "zh": "项目"
+  },
+  {
+    "id": "schema_key",
+    "en": "Key",
+    "zh": "主键"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "zh": "标签"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "zh": "最后规则"
+  },
+  {
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "zh": "元数据"
+  },
+  {
+    "id": "schema_method",
+    "en": "Method",
+    "zh": "方法"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Opacity",
+    "zh": "不透明度"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "zh": "规则"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "zh": "尺寸"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "zh": "缩放设置"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "zh": "最大缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "zh": "最小缩放时尺寸的系数"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "zh": "尺寸的指数插值"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "zh": "尺寸的指数插值函数。1表示线性插值。"
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "zh": "最大缩放"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "zh": "最小缩放"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "zh": "符号"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最小值。"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "zh": "如果大于0，则线和点尺寸的系数为缩放最大值。"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "zh": "最小缩放以显示数据"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "zh": "最大缩放以显示数据"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "zh": "提示："
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "zh": "<p>这里列出了一些能够为读者提供流畅体验的好方法：</p><ol><li>保持简单。</li><li>建议创建简短的Story Map，以吸引读者。</li><li>为了获得良好的可读性，建议每步不超过两张幻灯片，并且在同一步骤中不超过两个图层。</li><li>图片、视频和信息图表可以作为有效且有影响力的媒介来将你的故事情景化。但是，它们不应掩盖故事的空间信息。地图应是故事的中心。</li><li>效果，过渡或3D转换会影响Story Map在慢速设备上的可读性，请谨慎使用。</li></ol>"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "zh": "故事作者"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "zh": "地图位置"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "zh": "元数据"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "zh": "组织名称"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "zh": "使用当前地图参数更新"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "zh": "幻灯片"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "zh": "颜色主题"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "zh": "背景颜色"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "zh": "文本颜色"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "zh": "配置"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "zh": "内容布局"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "zh": "背景不透明度"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "zh": "深度（Z轴）"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "zh": "速度比"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "zh": "幻灯片"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "zh": "步骤"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "zh": "内容"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "zh": "标题"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "zh": "步骤"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "zh": "故事步骤"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "zh": "文本位置"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "zh": "故事"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "zh": "值"
+  },
+  {
+    "id": "self",
+    "en": "Myself",
+    "zh": "我自己"
+  },
+  {
+    "id": "sm",
+    "en": "Story map",
+    "zh": "Story Map"
+  },
+  {
+    "id": "soc",
+    "en": "Social",
+    "zh": "社会"
+  },
+  {
+    "id": "source_meta_data",
+    "en": "Metadata for the source",
+    "zh": "源的元数据"
+  },
+  {
+    "id": "source_confirm_remove",
+    "en": "Confirm source deletion",
+    "zh": "确认删除源"
+  },
+  {
+    "id": "source_allow_download",
+    "en": "Allow download",
+    "zh": "允许下载"
+  },
+  {
+    "id": "source_allow_WMS",
+    "en": "Activate WMS",
+    "zh": "激活WMS"
+  },
+  {
+    "id": "source_allow_WFS",
+    "en": "Activate WFS",
+    "zh": "激活WFS"
+  },
+  {
+    "id": "source_removed",
+    "en": "Source deleted",
+    "zh": "源已删除"
+  },
+  {
+    "id": "source_raster_tile_legend",
+    "en": "URL of the legend (png)",
+    "zh": "图例（png）的URL"
+  },
+  {
+    "id": "source_raster_tile_size",
+    "en": "Size of the tiles (pixels)",
+    "zh": "切片（像元）大小"
+  },
+  {
+    "id": "source_raster_tile_url",
+    "en": "URL of tiles endpoint ",
+    "zh": "切片端点的URL"
+  },
+  {
+    "id": "source_raster_tile_url_download",
+    "en": "Download link",
+    "zh": "下载链接"
+  },
+  {
+    "id": "source_raster_tile_url_metadata",
+    "en": "Link to the metadata",
+    "zh": "元数据链接"
+  },
+  {
+    "id": "source_select_geometry",
+    "en": "Source geometry type",
+    "zh": "源的几何类型"
+  },
+  {
+    "id": "source_select_layer",
+    "en": "Source layer",
+    "zh": "源图层"
+  },
+  {
+    "id": "source_select_layer_mask",
+    "en": "Source layer mask",
+    "zh": "源图层蒙版"
+  },
+  {
+    "id": "source_select_variable",
+    "en": "Source attribute",
+    "zh": "源属性"
+  },
+  {
+    "id": "source_select_variable_alt",
+    "en": "Secondary attributes",
+    "zh": "次要属性"
+  },
+  {
+    "id": "source_target_readers",
+    "en": "Groups with use access ",
+    "zh": "使用权限组"
+  },
+  {
+    "id": "source_target_editors",
+    "en": "Groups with write access",
+    "zh": "写权限组"
+  },
+  {
+    "id": "source_services",
+    "en": "Services",
+    "zh": "服务"
+  },
+  {
+    "id": "source_validate_title",
+    "en": "Geometry validation tool",
+    "zh": "几何验证工具"
+  },
+  {
+    "id": "source_validate_geom_show_expert_options",
+    "en": "Show expert options",
+    "zh": "显示专家选项"
+  },
+  {
+    "id": "source_validate_geom_use_cache",
+    "en": "Use cached results – if any – instead of recalculate",
+    "zh": "使用缓存结果（如有）而不是重新计算"
+  },
+  {
+    "id": "source_validate_geom_auto_correct",
+    "en": "Try an automatic correction ( experimental )",
+    "zh": "尝试自动更正（实验版）"
+  },
+  {
+    "id": "source_validate_geom_auto_correct_info",
+    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
+    "zh": "警告，这可能会改变几何形状。对于（多个）多边形，自动更正会在每个要素周围使用大小为0的缓冲。对于其他类型，将使用ST_MakeValid。"
+  },
+  {
+    "id": "download_select_format_vector",
+    "en": "Output format",
+    "zh": "输出格式"
+  },
+  {
+    "id": "download_select_by_countries",
+    "en": "Country used to spatially extract the data (clip)",
+    "zh": "数据提取（裁剪）范围-国家/地区"
+  },
+  {
+    "id": "download_file_name",
+    "en": "Filename",
+    "zh": "文件名"
+  },
+  {
+    "id": "source_sum_geom_type",
+    "en": "Type of the geometry",
+    "zh": "几何类型"
+  },
+  {
+    "id": "source_sum_n_distinct",
+    "en": "Number of distinct values",
+    "zh": "非重复值的数量"
+  },
+  {
+    "id": "source_sum_n_null",
+    "en": "Number of missing or null values",
+    "zh": "缺失值或空值的数量"
+  },
+  {
+    "id": "source_sum_n_row",
+    "en": "Number of values",
+    "zh": "值的数量"
+  },
+  {
+    "id": "source_sum_sample",
+    "en": "Sample values",
+    "zh": "样本值"
+  },
+  {
+    "id": "source_sum_title",
+    "en": "Variable summary",
+    "zh": "变量摘要"
+  },
+  {
+    "id": "source_sum_variable_type",
+    "en": "Type of the attribut",
+    "zh": "属性类型"
+  },
+  {
+    "id": "source_summary_check",
+    "en": "Show attribut summary",
+    "zh": "显示属性摘要"
+  },
+  {
+    "id": "source_time_range",
+    "en": "Time range",
+    "zh": "时间范围"
+  },
+  {
+    "id": "source_title",
+    "en": "Source title",
+    "zh": "源标题"
+  },
+  {
+    "id": "str",
+    "en": "Stress",
+    "zh": "强调"
+  },
+  {
+    "id": "superuser",
+    "en": "Superuser",
+    "zh": "超级用户"
+  },
+  {
+    "id": "title_app",
+    "en": "MapX",
+    "zh": "MapX"
+  },
+  {
+    "id": "user_profile",
+    "en": "User profile",
+    "zh": "用户资料"
+  },
+  {
+    "id": "user_authentication",
+    "en": "Authentication",
+    "zh": "身份验证"
+  },
+  {
+    "id": "title_settings",
+    "en": "Settings",
+    "zh": "设置"
+  },
+  {
+    "id": "title_settings_colors",
+    "en": "Theme configuration",
+    "zh": "主题配置"
+  },
+  {
+    "id": "title_tools",
+    "en": "Tools",
+    "zh": "工具"
+  },
+  {
+    "id": "title_tools_db",
+    "en": "Database",
+    "zh": "数据库"
+  },
+  {
+    "id": "title_tools_admin_project",
+    "en": "Projects",
+    "zh": "项目"
+  },
+  {
+    "id": "title_tools_config",
+    "en": "Configuration",
+    "zh": "配置"
+  },
+  {
+    "id": "title_tools_map",
+    "en": "Map",
+    "zh": "地图"
+  },
+  {
+    "id": "title_tools_share",
+    "en": "Share",
+    "zh": "分享"
+  },
+  {
+    "id": "title_tools_sources",
+    "en": "Sources",
+    "zh": "源"
+  },
+  {
+    "id": "title_tools_views",
+    "en": "Views",
+    "zh": "视图"
+  },
+  {
+    "id": "title_tools_dbself_info",
+    "en": "Connection information",
+    "zh": "连接信息"
+  },
+  {
+    "id": "title_tools_dbself_select",
+    "en": "Select source(s) to edit",
+    "zh": "选择要编辑的源"
+  },
+  {
+    "id": "title_views",
+    "en": "Views",
+    "zh": "视图"
+  },
+  {
+    "id": "top",
+    "en": "Top",
+    "zh": "顶部"
+  },
+  {
+    "id": "ui_country",
+    "en": "Select country",
+    "zh": "选择国家/地区"
+  },
+  {
+    "id": "ui_project",
+    "en": "Select project",
+    "zh": "选择项目"
+  },
+  {
+    "id": "select_member_project",
+    "en": "Switch to another project where you are a member",
+    "zh": "切换到您所在的另一个项目"
+  },
+  {
+    "id": "ui_language",
+    "en": "Language of the interface",
+    "zh": "界面语言"
+  },
+  {
+    "id": "update_view_list",
+    "en": "Update view list",
+    "zh": "更新视图列表"
+  },
+  {
+    "id": "user",
+    "en": "Registered user",
+    "zh": "已注册的用户"
+  },
+  {
+    "id": "group_project",
+    "en": "Groups in project",
+    "zh": "项目中的组"
+  },
+  {
+    "id": "view",
+    "en": "View",
+    "zh": "视图"
+  },
+  {
+    "id": "views",
+    "en": "Views",
+    "zh": "视图"
+  },
+  {
+    "id": "views_external",
+    "en": "External views",
+    "zh": "外部视图"
+  },
+  {
+    "id": "views_external_modal_title",
+    "en": "Manage external views",
+    "zh": "管理外部视图"
+  },
+  {
+    "id": "view_project_short",
+    "en": "( p )",
+    "zh": "( p )"
+  },
+  {
+    "id": "view_external_short",
+    "en": "( e )",
+    "zh": "( e )"
+  },
+  {
+    "id": "view_badge_shared",
+    "en": "View shared",
+    "zh": "分享的视图"
+  },
+  {
+    "id": "view_delete_modal_title",
+    "en": "View to delete %s",
+    "zh": "将要删除的视图 %s"
+  },
+  {
+    "id": "view_edit_custom_code_modal_title",
+    "en": "Edit custom code of %s",
+    "zh": "编辑 %s 的自定义代码"
+  },
+  {
+    "id": "view_edit_dashboard_modal_title",
+    "en": "Edit dashboard of  %s",
+    "zh": "编辑 %s 的操控版"
+  },
+  {
+    "id": "view_edit_story_modal_title",
+    "en": "Edit story map of  %s",
+    "zh": "编辑 %s 的Story Map"
+  },
+  {
+    "id": "view_edit_style_modal_title",
+    "en": "Edit style of  %s",
+    "zh": "编辑 %s 的样式"
+  },
+  {
+    "id": "view_abstract",
+    "en": "View abstract",
+    "zh": "视图摘要"
+  },
+  {
+    "id": "view_add_dashboard",
+    "en": "Add a dashboard",
+    "zh": "添加操控版"
+  },
+  {
+    "id": "view_add_download_btn",
+    "en": "Allow download of the source",
+    "zh": "允许下载此源"
+  },
+  {
+    "id": "view_add_overlap_layer",
+    "en": "Add an mask",
+    "zh": "添加蒙版"
+  },
+  {
+    "id": "view_component",
+    "en": "Type of views",
+    "zh": "视图类型"
+  },
+  {
+    "id": "view_components",
+    "en": "Feature",
+    "zh": "特征"
+  },
+  {
+    "id": "view_collections",
+    "en": "Collections",
+    "zh": "集合"
+  },
+  {
+    "id": "view_projects",
+    "en": "Other projects where the view is visible",
+    "zh": "此视图可见的其他项目"
+  },
+  {
+    "id": "view_project",
+    "en": "Project of the view",
+    "zh": "视图所在的项目"
+  },
+  {
+    "id": "view_country",
+    "en": "Country of the view",
+    "zh": "视图所在国家/地区"
+  },
+  {
+    "id": "view_dashboard",
+    "en": "Dashboard",
+    "zh": "操控版"
+  },
+  {
+    "id": "view_dashboard_config",
+    "en": "Configure a dashboard",
+    "zh": "配置操控版"
+  },
+  {
+    "id": "view_dashboard_script",
+    "en": "Your script",
+    "zh": "你的脚本"
+  },
+  {
+    "id": "view_dashboard_src_layerChange",
+    "en": "All attributes and values from the displayed features",
+    "zh": "已显示要素的所有属性和值"
+  },
+  {
+    "id": "view_dashboard_src_layerClick",
+    "en": "All attributes and values from the clicked feature",
+    "zh": "被点击要素的所有属性和值"
+  },
+  {
+    "id": "view_dashboard_src_none",
+    "en": "None. Value provided by the script.",
+    "zh": "无。 脚本提供的值。"
+  },
+  {
+    "id": "view_dashboard_src_view",
+    "en": "The frequency table of the selected attribute",
+    "zh": "选定属性的频率表"
+  },
+  {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "zh": "鼠标所在位置的所有属性和值"
+  },
+  {
+    "id": "view_dashboard_title",
+    "en": "Dashboard title",
+    "zh": "操控版标题"
+  },
+  {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "zh": "初始化操控版布局"
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "zh": "设置操控版初始布局"
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "zh": "最大尺寸"
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "zh": "适应最大组件"
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "zh": "垂直"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "zh": "水平"
+  },
+  {
+    "id": "view_dashboard_txt_height",
+    "en": "Height class",
+    "zh": "高度等级"
+  },
+  {
+    "id": "view_dashboard_txt_script",
+    "en": "Your script",
+    "zh": "你的脚本"
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "zh": "添加背景色"
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
+    "zh": "背景色"
+  },
+  {
+    "id": "view_dashboard_txt_which_data",
+    "en": "Which source to use for the data ?",
+    "zh": "数据使用哪个源？"
+  },
+  {
+    "id": "view_dashboard_txt_ignore_empty_data",
+    "en": "Ignore events that returns an empty array ?",
+    "zh": "忽略返回空数组的事件？"
+  },
+  {
+    "id": "view_dashboard_txt_which_module",
+    "en": "Which modules to load?",
+    "zh": "加载哪些模块？"
+  },
+  {
+    "id": "view_dashboard_txt_desc_module",
+    "en": "Modules will be loaded under `widget.modules`",
+    "zh": "模块将被加载到 widget.modules 下"
+  },
+  {
+    "id": "view_dashboard_txt_width",
+    "en": "Width class",
+    "zh": "宽度等级"
+  },
+  {
+    "id": "view_dashboard_widget",
+    "en": "Widget",
+    "zh": "小组件"
+  },
+  {
+    "id": "view_dashboard_widgets",
+    "en": "Widgets",
+    "zh": "小组件"
+  },
+  {
+    "id": "view_delete_confirm",
+    "en": "Click on the confirm button to delete this view, its history and all translations.",
+    "zh": "单击确认按钮以删除此视图，包括历史记录和所有翻译。"
+  },
+  {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "zh": "单击确认以永久删除操控版"
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "zh": "确认"
+  },
+  {
+    "id": "view_download_layer",
+    "en": "Download the source layer",
+    "zh": "下载源图层"
+  },
+  {
+    "id": "view_edit_current",
+    "en": "Edit view",
+    "zh": "编辑视图"
+  },
+  {
+    "id": "source_edit_metadata",
+    "en": "Edit source metadata",
+    "zh": "编辑源的元数据"
+  },
+  {
+    "id": "source_edit",
+    "en": "Edit source",
+    "zh": "编辑源"
+  },
+  {
+    "id": "view_id",
+    "en": "View identifier",
+    "zh": "视图ID"
+  },
+  {
+    "id": "view_new_created",
+    "en": "View created",
+    "zh": "已创建视图"
+  },
+  {
+    "id": "view_new_text",
+    "en": "Create a new View",
+    "zh": "创建新视图"
+  },
+  {
+    "id": "view_no_layer_found",
+    "en": "No source layer found",
+    "zh": "没有找到源图层"
+  },
+  {
+    "id": "view_num_overlap",
+    "en": "Number of overlaps",
+    "zh": "重叠的数量"
+  },
+  {
+    "id": "view_filter_input",
+    "en": "Filter views ...",
+    "zh": "筛选视图..."
+  },
+  {
+    "id": "view_filter_by_tags",
+    "en": "Filter views by tag",
+    "zh": "按标签筛选视图"
+  },
+  {
+    "id": "view_search_values",
+    "en": "Search values",
+    "zh": "搜索值"
+  },
+  {
+    "id": "view_filter_by_values",
+    "en": "Filter by values",
+    "zh": "按值筛选"
+  },
+  {
+    "id": "view_show_abstract_languages",
+    "en": "Show other languages abstract",
+    "zh": "显示其他语言的摘要"
+  },
+  {
+    "id": "view_show_title_languages",
+    "en": "Show other languages titles",
+    "zh": "显示其他语言的标题"
+  },
+  {
+    "id": "view_target",
+    "en": "Target group. Who can view this.",
+    "zh": "目标组。谁可以查看此内容。"
+  },
+  {
+    "id": "view_target_readers",
+    "en": "Read access groups",
+    "zh": "有读取权限的组"
+  },
+  {
+    "id": "view_target_editors",
+    "en": "Edit access groups",
+    "zh": "有编辑权限的组"
+  },
+  {
+    "id": "view_text",
+    "en": "View text",
+    "zh": "视图文本"
+  },
+  {
+    "id": "view_title",
+    "en": "View title",
+    "zh": "视图标题"
+  },
+  {
+    "id": "view_type_select",
+    "en": "Type of the view",
+    "zh": "视图类型"
+  },
+  {
+    "id": "vt",
+    "en": "Vector",
+    "zh": "向量"
+  },
+  {
+    "id": "wms",
+    "en": "Web Map Service (wms)",
+    "zh": "网络地图服务（WMS）"
+  },
+  {
+    "id": "mx_download",
+    "en": "Allow this source to be downloaded",
+    "zh": "允许下载此源"
+  },
+  {
+    "id": "gs_ws_a",
+    "en": "Publish all related views via WMS",
+    "zh": "通过WMS发布所有相关视图"
+  },
+  {
+    "id": "gs_ws_b",
+    "en": "Publish all related views via WMS/WFS/WCS",
+    "zh": "通过WMS/WFS/WCS发布所有相关视图"
+  },
+  {
+    "id": "src_download_issues",
+    "en": "The source can't be downloaded",
+    "zh": "无法下载此源"
+  },
+  {
+    "id": "src_upload_add",
+    "en": "Upload a new source layer",
+    "zh": "上传新的源图层"
+  },
+  {
+    "id": "src_upload_issues",
+    "en": "Upload issue(s)",
+    "zh": "上传问题"
+  },
+  {
+    "id": "source_upload_vector",
+    "en": "Upload new vector source",
+    "zh": "上传新的矢量源"
+  },
+  {
+    "id": "upload_source_title",
+    "en": "Title of the new source",
+    "zh": "新源的标题"
+  },
+  {
+    "id": "you_not_logged_in",
+    "en": "You are not logged in.",
+    "zh": "未登录。"
+  },
+  {
+    "id": "you_not_allowed",
+    "en": "You are not allowed to do this.",
+    "zh": "未授权此操作。"
+  },
+  {
+    "id": "src_download_disabled",
+    "en": "The download is not allowed.",
+    "zh": "不允许下载。"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "zh": "界面文本"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "zh": "链接"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "zh": "次要文本颜色"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "zh": "隐藏元素"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "zh": "边框"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "zh": "背景"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "zh": "背景对比"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "zh": "淡出背景层"
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "zh": "阴影"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "zh": "地图：背景"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "zh": "地图：高亮要素"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "zh": "地图：山体阴影"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "zh": "地图：山体阴影突出显示"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "zh": "地图：山体阴影强调"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "zh": "地图：国家/地区阴影"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "zh": "地图：水"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "zh": "地图：测深（低）"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "zh": "地图：测深（高）"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "zh": "地图：道路"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "zh": "地图：道路边框"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "zh": "地图：建筑物"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "zh": "地图：国际边界"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "zh": "地图：特殊边界线"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "zh": "地图：停战线或国际边界线"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "zh": "地图：其他分割线"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "zh": "地图：自治区域边界"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "zh": "地图：主权基地限制"
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational",
+    "en": "Map: Subnational boundaries",
+    "zh": "地图：国家以下边界"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "zh": "地图：放置文本"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "zh": "地图：放置文本边框"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "zh": "地图：道路文本"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "zh": "地图：道路文本边框"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "zh": "地图：水体文本"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "zh": "地图：水体文本边框"
+  },
+  {
+    "id": "list_publishers",
+    "en": "List of publishers",
+    "zh": "发布者列表"
+  },
+  {
+    "id": "list_members",
+    "en": "List of members",
+    "zh": "成员列表"
+  },
+  {
+    "id": "list_admins",
+    "en": "List of administrators",
+    "zh": "管理员列表"
+  },
+  {
+    "id": "list_contacts",
+    "en": "Contact person",
+    "zh": "联系人"
+  },
+  {
+    "id": "new_publishers",
+    "en": "New publishers",
+    "zh": "新发布者"
+  },
+  {
+    "id": "new_members",
+    "en": "New members",
+    "zh": "新成员"
+  },
+  {
+    "id": "new_admins",
+    "en": "New administrators",
+    "zh": "新管理员"
+  },
+  {
+    "id": "new_contacts",
+    "en": "New admin. contacts",
+    "zh": "新管理员、联系人"
+  },
+  {
+    "id": "rem_publishers",
+    "en": "Publishers removed",
+    "zh": "发布者已移除"
+  },
+  {
+    "id": "rem_members",
+    "en": "Members removed",
+    "zh": "成员已删除"
+  },
+  {
+    "id": "rem_admins",
+    "en": "Administrators removed",
+    "zh": "管理员已删除"
+  },
+  {
+    "id": "rem_contacts",
+    "en": "Contacts removed",
+    "zh": "联系人已删除"
+  },
+  {
+    "id": "no_changes",
+    "en": "No change",
+    "zh": "无变化"
+  },
+  {
+    "id": "roles_updated",
+    "en": "Roles updated",
+    "zh": "角色已更新"
+  },
+  {
+    "id": "roles",
+    "en": "Roles",
+    "zh": "角色"
+  },
+  {
+    "id": "success_update",
+    "en": "Update successful",
+    "zh": "更新成功"
+  },
+  {
+    "id": "error_roles_no_admins",
+    "en": "Require at least one admin",
+    "zh": "需要至少一名管理员"
+  },
+  {
+    "id": "error_views_need_data",
+    "en": "Deletion of a source disabled because at least one view depends on it",
+    "zh": "禁用源的删除，因为至少一个视图依赖此源"
+  },
+  {
+    "id": "error_views_need_publishers",
+    "en": "At least one view needs this source to be available for publishers. Update disabled.",
+    "zh": "至少有一个视图需要此源供发布者使用。 禁用更新。"
+  },
+  {
+    "id": "error_roles_removed_self",
+    "en": "You can't remove yourself from admin group",
+    "zh": "你不能从管理组中删除自己"
+  },
+  {
+    "id": "project_enable_public",
+    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "zh": "此项目是公开的。它将被列入项目目录中。项目发布的所有公开视图对每个人可读。"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project.",
+    "zh": "允许非成员申请成为此项目的成员。"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "zh": "ID"
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "zh": "保存视图状态"
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "zh": "角色管理"
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "zh": "项目别名"
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "zh": "最少1个字符，最多30个字符，允许小写ASCII字符[a-z]，数字[0-9]，破折号[-]和下划线[_]"
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "zh": "项目别名无效或已使用"
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "zh": "拒绝访问，你无法访问请求的项目"
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "zh": "输入要删除的项目名称"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "zh": "邀请新成员"
+  },
+  {
+    "id": "btn_show_invite_member",
+    "en": "Invite a new member",
+    "zh": "邀请新成员"
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "zh": "撰写邀请邮件"
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "zh": "MapX邀请 *"
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project \"{{project}}\"",
+    "zh": "邀请参加该项目\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project \"{{project}}\"",
+    "zh": "接受项目邀请\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "zh": "邮件已发送"
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "zh": "标签{{link}}将被加密的链接替换。"
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "zh": "你好！ \n 我想邀请你成为MapX项目 \"{{projectName}}\" 的成员。 \n请单击提供的链接进行确认。 \n{{link}} \n项目管理员"
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "zh": "你好！ \n感谢你与我们联系。 \n为了确认你加入MapX项目 {{projectName}} ，成为其成员，请单击以下链接： \n{{link}} \n此致， \n敬礼！ \n项目管理员"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "zh": "你好，<br>用户'{{emailUser}} '使用邀请链接进入项目{{project}}。<ul><li>截止日期：{{timeExpire}}</li></ul><br>祝你今天过得愉快 ！ *"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "zh": "项目中使用的邀请链接{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "zh": "您已被添加到项目中{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "zh": "你好，<br>您已添加到项目{{project}}在群组里）：{{roles}} 。<br>祝你今天过得愉快 ！ *"
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "zh": "用户已添加到项目{{project}}。 *"
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "zh": "用户（{{emailUser}} ）已添加到项目中{{project}}在群组里）{{roles}}<br>祝你今天过得愉快 ！ *"
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "zh": "地图上要突出显示的国家/地区"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "zh": "搜索项目"
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "zh": "项目已保存"
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "zh": "项目 {{title}} 已创建"
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "zh": "项目已删除"
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "zh": "分析中，请稍候..."
+  },
+  {
+    "id": "project_delete_number_of_sources",
+    "en": "Number of sources to delete",
+    "zh": "要删除的源数量"
+  },
+  {
+    "id": "project_delete_number_of_views",
+    "en": "Number of views to delete",
+    "zh": "要删除的视图数量"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "zh": "删除项目"
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "zh": "项目标题"
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "zh": "项目列表"
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "zh": "单击项目名称以访问它。如果你不是项目成员，可以通过单击 加入 按钮请求加入此项目。"
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "zh": "项目设置"
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "zh": "初始化地图位置"
+  },
+  {
+    "id": "project_map_pos_get",
+    "en": "Use current map parameters",
+    "zh": "使用当前地图参数"
+  },
+  {
+    "id": "map_fit_to_bounds",
+    "en": "Use extent to center the map",
+    "zh": "使用扩展范围使地图居中"
+  },
+  {
+    "id": "map_zoom",
+    "en": "Zoom",
+    "zh": "缩放"
+  },
+  {
+    "id": "map_longitude_center",
+    "en": "Longitude at center",
+    "zh": "中心经度"
+  },
+  {
+    "id": "map_latitude_center",
+    "en": "Latitude at center",
+    "zh": "中心纬度"
+  },
+  {
+    "id": "map_pitch",
+    "en": "Camera pitch",
+    "zh": "相机俯仰角"
+  },
+  {
+    "id": "map_bearing",
+    "en": "Camera bearing",
+    "zh": "相机方位角"
+  },
+  {
+    "id": "map_north_max",
+    "en": "Max north latitude",
+    "zh": "北纬最大值"
+  },
+  {
+    "id": "map_south_max",
+    "en": "Max south latitude",
+    "zh": "南纬最大值"
+  },
+  {
+    "id": "map_east_max",
+    "en": "Max east longitude",
+    "zh": "东经最大值"
+  },
+  {
+    "id": "map_west_max",
+    "en": "Max west longitude",
+    "zh": "西经最大值"
+  },
+  {
+    "id": "view_badge_public_valid",
+    "en": "This view is publicly available",
+    "zh": "此视图公开可用"
+  },
+  {
+    "id": "view_badge_public_not_valid",
+    "en": "This view is publicly available \n with incomplete metadata",
+    "zh": "此视图公开可用。 \n 元数据不完整"
+  },
+  {
+    "id": "view_badge_editable",
+    "en": "You have editor rights for this view",
+    "zh": "你拥有此视图的编辑权限"
+  },
+  {
+    "id": "view_badge_locked",
+    "en": "You do not have editor rights",
+    "zh": "你没有编辑权限"
+  },
+  {
+    "id": "txt_too_short_min_3",
+    "en": "Text too short, minimum 3 characters",
+    "zh": "文本太短，最少3个字符"
+  },
+  {
+    "id": "txt_email_not_valid",
+    "en": "Email not valid",
+    "zh": "邮箱无效"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "zh": "你好！ \\n 请把我添加到项目 {{projectName}} 。 \\n 此致， \\n敬礼！ \\n 一位积极的未来成员 \\n"
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "zh": "成员资格申请"
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "zh": "申请加入{{project}}项目 *"
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "zh": "<span> 已经收到来自 {{from}} 的成员资格申请。</span><ul><li>消息: <b>{{msg}}</b></li><li>用户状态:  <b>{{userStatus}}</b></li><li>行动: {{actionUrl}}</li><li>网址: {{projectUrl}}</li><li>数据:<pre>{{data}}</pre></li></ul>"
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "zh": "回应来自的会员要求\"{{email}}\"为项目\"{{project}}\" *"
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "zh": "打开项目\"{{project}}\" *"
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "zh": "你的申请已发送至项目管理员，你将在未来几天内收到一封确认邮件。 请检查你的收件箱中来自MapX的邮件，并点击链接以访问此项目！"
+  },
+  {
+    "id": "update_app_msg",
+    "en": "MapX has been updated, this page will be reloaded now.",
+    "zh": "MapX 已更新，此页面现在将重新加载"
+  },
+  {
+    "id": "btn_clear_cache",
+    "en": "Clear cached data",
+    "zh": "清除缓存数据"
+  },
+  {
+    "id": "title_utilities",
+    "en": "Utilities",
+    "zh": "实用程序"
+  },
+  {
+    "id": "update_app_title",
+    "en": "Update",
+    "zh": "更新"
+  },
+  {
+    "id": "btn_install_update",
+    "en": "Install and reload",
+    "zh": "安装并重新加载"
+  },
+  {
+    "id": "tbl_views_depending_source",
+    "en": "Table of views depending on the source",
+    "zh": "依赖此源的视图表"
+  },
+  {
+    "id": "btn_validate_metadata",
+    "en": "In depth validation",
+    "zh": "深度验证"
+  },
+  {
+    "id": "validate_meta_modal_title",
+    "en": "Metadata validation",
+    "zh": "元数据验证"
+  },
+  {
+    "id": "validate_meta_no_issue",
+    "en": "Metadata are valid.",
+    "zh": "元数据已验证"
+  },
+  {
+    "id": "validate_meta_attribute",
+    "en": "Attributes",
+    "zh": "属性"
+  },
+  {
+    "id": "validate_meta_invalid_attribute",
+    "en": "Invalid attribute description entry",
+    "zh": "属性描述项无效"
+  },
+  {
+    "id": "validate_meta_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "validate_meta_invalid_abstract",
+    "en": "Invalid abstract",
+    "zh": "摘要无效"
+  },
+  {
+    "id": "validate_meta_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "validate_meta_invalid_title",
+    "en": "Invalid title",
+    "zh": "标题无效"
+  },
+  {
+    "id": "validate_meta_keyword",
+    "en": "Keywords",
+    "zh": "关键字"
+  },
+  {
+    "id": "validate_meta_keyword_m49",
+    "en": "Geographic M49 Keywords list",
+    "zh": "地理M49关键字列表"
+  },
+  {
+    "id": "validate_meta_no_keyword",
+    "en": "Missing keywords",
+    "zh": "缺少关键字"
+  },
+  {
+    "id": "validate_meta_invalid_keyword",
+    "en": "Invalid keywords",
+    "zh": "关键字无效"
+  },
+  {
+    "id": "validate_meta_contact",
+    "en": "Contacts",
+    "zh": "联系人"
+  },
+  {
+    "id": "validate_meta_no_contact",
+    "en": "Missing contact",
+    "zh": "缺少联系人"
+  },
+  {
+    "id": "validate_meta_invalid_contact_email",
+    "en": "Invalid contact email",
+    "zh": "联系邮箱无效"
+  },
+  {
+    "id": "validate_meta_issuance",
+    "en": "Issuance",
+    "zh": "发布"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_periodicity",
+    "en": "Invalid periodicity",
+    "zh": "周期无效"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_released_at",
+    "en": "Invalid date of release",
+    "zh": "发布日期无效"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_modified_at",
+    "en": "Invalid date of modification",
+    "zh": "修改日期无效"
+  },
+  {
+    "id": "validate_meta_license",
+    "en": "License",
+    "zh": "许可"
+  },
+  {
+    "id": "validate_meta_no_license",
+    "en": "Missing license",
+    "zh": "缺少许可"
+  },
+  {
+    "id": "validate_meta_invalid_license",
+    "en": "Invalid license",
+    "zh": "许可无效"
+  },
+  {
+    "id": "validate_meta_source",
+    "en": "Source",
+    "zh": "源"
+  },
+  {
+    "id": "validate_meta_no_source",
+    "en": "Source missing",
+    "zh": "缺少源"
+  },
+  {
+    "id": "validate_meta_invalid_source",
+    "en": "Invalid source",
+    "zh": "源无效"
+  },
+  {
+    "id": "validate_meta_invalid_external_link",
+    "en": "Invalid external link",
+    "zh": "外部链接无效"
+  },
+  {
+    "id": "source_last_editor_email",
+    "en": "Email of the last editor",
+    "zh": "最后一位编辑者的邮箱"
+  },
+  {
+    "id": "additional_doc_desc",
+    "en": "If any, list of additional documents",
+    "zh": "附加文档列表(如有)"
+  },
+  {
+    "id": "additional_doc_items_desc",
+    "en": "Related documents such as technical information about a dataset",
+    "zh": "相关文档，比如数据集的技术信息等"
+  },
+  {
+    "id": "additional_doc_items_title",
+    "en": "List of annexes",
+    "zh": "附件列表"
+  },
+  {
+    "id": "additional_doc_item_title",
+    "en": "Document",
+    "zh": "文档"
+  },
+  {
+    "id": "additional_doc_item_url",
+    "en": "URL to the document",
+    "zh": "文档的URL"
+  },
+  {
+    "id": "additional_doc_title",
+    "en": "Annexes",
+    "zh": "附件"
+  },
+  {
+    "id": "annually",
+    "en": "Data is updated every year",
+    "zh": "数据每年更新"
+  },
+  {
+    "id": "as_needed",
+    "en": "Data is updated as deemed necessary",
+    "zh": "根据需要更新数据"
+  },
+  {
+    "id": "attribute_item_title",
+    "en": "Attribute",
+    "zh": "属性"
+  },
+  {
+    "id": "attribute_name_title",
+    "en": "Attribute name",
+    "zh": "属性名称"
+  },
+  {
+    "id": "attributes_list_title",
+    "en": "Attributes list",
+    "zh": "属性列表"
+  },
+  {
+    "id": "attributes_desc_title",
+    "en": "Attributes description",
+    "zh": "属性描述"
+  },
+  {
+    "id": "attributes_desc_desc",
+    "en": "Description of the attributes contained in the data",
+    "zh": "数据中包含的属性描述"
+  },
+  {
+    "id": "attribute_desc_item_title",
+    "en": "Description",
+    "zh": "描述"
+  },
+  {
+    "id": "attributes_alias_title",
+    "en": "Alias for attributes names",
+    "zh": "属性名称的别名"
+  },
+  {
+    "id": "attributes_alias_desc",
+    "en": "Set attributes short names (alias)",
+    "zh": "设置属性短名称（别名）"
+  },
+  {
+    "id": "attribute_alias_item_title",
+    "en": "Alias",
+    "zh": "别名"
+  },
+  {
+    "id": "biannually",
+    "en": "Data is updated twice each year",
+    "zh": "数据每年更新两次"
+  },
+  {
+    "id": "confirm_source_remove",
+    "en": "Are you sure to delete the source with all related views and metadata ? This can't be undone",
+    "zh": "确定要删除此源及所有相关视图和元数据吗？ 此操作无法撤消！"
+  },
+  {
+    "id": "contact_address",
+    "en": "Contact address",
+    "zh": "联系地址"
+  },
+  {
+    "id": "contact_desc",
+    "en": "Information about people or organisation related to this data",
+    "zh": "此数据相关人员或组织的信息"
+  },
+  {
+    "id": "contact_email",
+    "en": "Contact email",
+    "zh": "联系邮箱"
+  },
+  {
+    "id": "contact_function",
+    "en": "Function",
+    "zh": "职能"
+  },
+  {
+    "id": "contact_function_desc",
+    "en": "Name of the contact function, e.g. Administrator, Publisher",
+    "zh": "联系人的职能名称，比如管理员、发布者"
+  },
+  {
+    "id": "contact_item_title",
+    "en": "Contact",
+    "zh": "联系人"
+  },
+  {
+    "id": "contact_list_title",
+    "en": "List of contacts",
+    "zh": "联系人列表"
+  },
+  {
+    "id": "contact_name",
+    "en": "Contact name",
+    "zh": "联系人姓名"
+  },
+  {
+    "id": "contact_title",
+    "en": "Contacts",
+    "zh": "联系人"
+  },
+  {
+    "id": "continual",
+    "en": "Data is repeatedly and frequently updated",
+    "zh": "数据反复频繁更新"
+  },
+  {
+    "id": "daily",
+    "en": "Data is updated each day",
+    "zh": "数据每天更新"
+  },
+  {
+    "id": "fortnightly",
+    "en": "Data is updated every two weeks",
+    "zh": "数据两周更新一次"
+  },
+  {
+    "id": "irregular",
+    "en": "Data is updated in intervals that are uneven in duration",
+    "zh": "数据更新时间不规律"
+  },
+  {
+    "id": "lang_desc",
+    "en": "Language(s) used in content",
+    "zh": "内容中使用的语言"
+  },
+  {
+    "id": "lang_item_title",
+    "en": "Language",
+    "zh": "语言"
+  },
+  {
+    "id": "lang_list_desc",
+    "en": "Two letters code of languages",
+    "zh": "两个字母组成的语言代码"
+  },
+  {
+    "id": "lang_list_title",
+    "en": "List of languages",
+    "zh": "语言列表"
+  },
+  {
+    "id": "lang_title",
+    "en": "Language",
+    "zh": "语言"
+  },
+  {
+    "id": "license_allow_download",
+    "en": "Allow download source",
+    "zh": "允许下载源"
+  },
+  {
+    "id": "license_desc",
+    "en": "If any, description of the data licenses",
+    "zh": "数据许可描述（如有）"
+  },
+  {
+    "id": "license_item_title",
+    "en": "License",
+    "zh": "许可"
+  },
+  {
+    "id": "license_list_desc",
+    "en": "Name and/or description of the licence",
+    "zh": "许可的名称和/或描述"
+  },
+  {
+    "id": "license_list_title",
+    "en": "List of licences",
+    "zh": "许可列表"
+  },
+  {
+    "id": "license_name",
+    "en": "Name",
+    "zh": "名称"
+  },
+  {
+    "id": "license_text",
+    "en": "Text",
+    "zh": "文本"
+  },
+  {
+    "id": "license_title",
+    "en": "Licensing",
+    "zh": "许可"
+  },
+  {
+    "id": "maintainer",
+    "en": "Maintainer",
+    "zh": "维护者"
+  },
+  {
+    "id": "monthly",
+    "en": "Data is updated each month",
+    "zh": "数据每月更新一次"
+  },
+  {
+    "id": "msg_error_duplicate",
+    "en": "This source already exists and is available for you",
+    "zh": "此源已经存在并且可以使用"
+  },
+  {
+    "id": "msg_error_import",
+    "en": "Data was not imported",
+    "zh": "数据未被导入"
+  },
+  {
+    "id": "msg_process_wait",
+    "en": "Data is processed, please wait",
+    "zh": "数据处理中，请稍候"
+  },
+  {
+    "id": "msg_success_delete",
+    "en": "Source successfully removed",
+    "zh": "源已成功删除"
+  },
+  {
+    "id": "msg_success_import",
+    "en": "Data imported successfully",
+    "zh": "数据导入成功"
+  },
+  {
+    "id": "msg_success_update",
+    "en": "Meta data successfully updated",
+    "zh": "元数据更新成功"
+  },
+  {
+    "id": "not_planned",
+    "en": "There are no plans to update the data",
+    "zh": "无数据更新计划"
+  },
+  {
+    "id": "optional_view_show_attribute_preview",
+    "en": "Show a summary of the attributes names and values",
+    "zh": "显示属性名称和值的摘要"
+  },
+  {
+    "id": "optional_view_text",
+    "en": "Select an attribute from the source to create a simple view or click on finish to end the importation",
+    "zh": "从源中选择一个属性创建一个简单的视图，或者点击完成结束导入过程"
+  },
+  {
+    "id": "optional_view_title",
+    "en": "Optional creation of a new view",
+    "zh": "可选创建新视图"
+  },
+  {
+    "id": "origin_desc",
+    "en": "Origin of the data and how to retrieve it",
+    "zh": "数据的来源以及获取方法"
+  },
+  {
+    "id": "origin_homepage_desc",
+    "en": "Homepage for the data",
+    "zh": "数据主页"
+  },
+  {
+    "id": "origin_homepage_item_title",
+    "en": "Homepage (URL)",
+    "zh": "主页（URL）"
+  },
+  {
+    "id": "origin_homepage_title",
+    "en": "Homepage",
+    "zh": "主页"
+  },
+  {
+    "id": "origin_source_is_full_request_title",
+    "en": "The url contain a request to retrieve the data automatically",
+    "zh": "URL中包含自动获取数据的请求"
+  },
+  {
+    "id": "origin_sources_desc",
+    "en": "Method to retrieve the data",
+    "zh": "数据获取方法"
+  },
+  {
+    "id": "origin_sources_list",
+    "en": "List of sources",
+    "zh": "源列表"
+  },
+  {
+    "id": "origin_sources_title",
+    "en": "Sources",
+    "zh": "源"
+  },
+  {
+    "id": "origin_source_title",
+    "en": "Source",
+    "zh": "源"
+  },
+  {
+    "id": "origin_source_url_title",
+    "en": "URL",
+    "zh": "URL"
+  },
+  {
+    "id": "origin_title",
+    "en": "Source",
+    "zh": "源"
+  },
+  {
+    "id": "other",
+    "en": "Other",
+    "zh": "其他"
+  },
+  {
+    "id": "quarterly",
+    "en": "Data is updated every three months",
+    "zh": "数据每三个月更新一次"
+  },
+  {
+    "id": "schema_title",
+    "en": "Source metadata",
+    "zh": "MapX元数据"
+  },
+  {
+    "id": "schema_desc",
+    "en": "Metadata editor for the source of the data",
+    "zh": "MapX源的元数据编辑。"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "zh": "要激活的视图"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "zh": "幻灯片类别"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "zh": "类别名称"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "zh": "允许滚动"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "zh": "如果幻灯片内容超出范围，则会显示滚动条。"
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "zh": "基础文字大小（以像素为单位）"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "zh": "效果"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "zh": "开始"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "zh": "结束"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "zh": "偏移"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "zh": "要素"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "zh": "类型"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "zh": "幻灯片名称"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "zh": "动画持续时间 [ms]"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "zh": "更改动画总持续时间"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "zh": "轨迹法"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "zh": "设置动画过程中摄像机的移动方式"
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "zh": "动画函数"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "zh": "更改默认动画函数。缓入和缓出。"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "zh": "动画函数-指数"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "zh": "更改默认指数函数，这将放大或降低缓入的比率。"
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "zh": "地图动画"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "zh": "超时 [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "zh": "下一步前的等待时间"
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "zh": "切换 [ms]"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "zh": "步骤切换的持续时间"
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "zh": "自动播放设置"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "zh": "步骤名称"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "zh": "屏幕分辨率"
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "zh": "Story Map中页面的基础分辨率。它会自动缩放以适应屏幕并保留内容格式。"
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "zh": "设置"
+  },
+  {
+    "id": "button_legend_title",
+    "en": "Legends",
+    "zh": "图例"
+  },
+  {
+    "id": "button_legend_button",
+    "en": "Legends",
+    "zh": "图例"
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
+    "zh": "问题"
+  },
+  {
+    "id": "select_optional_view_attribute",
+    "en": "Select attribute",
+    "zh": "选择属性"
+  },
+  {
+    "id": "spatial_bbx_desc",
+    "en": "Spatial bounding box of the data using latitude and longitude",
+    "zh": "使用经纬度的数据空间边界框"
+  },
+  {
+    "id": "spatial_bbx_lat_max",
+    "en": "Max. latitude",
+    "zh": "纬度最大值"
+  },
+  {
+    "id": "spatial_bbx_lat_min",
+    "en": "Min. latitude",
+    "zh": "纬度最小值"
+  },
+  {
+    "id": "spatial_bbx_lng_max",
+    "en": "Max. longitude",
+    "zh": "经度最大值"
+  },
+  {
+    "id": "spatial_bbx_lng_min",
+    "en": "Min. longitude",
+    "zh": "经度最小值"
+  },
+  {
+    "id": "spatial_bbx_title",
+    "en": "Bounding box",
+    "zh": "边界框"
+  },
+  {
+    "id": "spatial_desc",
+    "en": "Description of the data using spatial reference: bounding box, and spatial reference system (SRS)",
+    "zh": "使用空间参考的数据描述：边界框和空间参照系（SRS）"
+  },
+  {
+    "id": "spatial_srs_code",
+    "en": "Code of the SRS",
+    "zh": "SRS代码"
+  },
+  {
+    "id": "spatial_srs_desc",
+    "en": "Description of the spatial reference system",
+    "zh": "空间参照系的描述"
+  },
+  {
+    "id": "spatial_srs_desc_url",
+    "en": "URL to the SRS code definition",
+    "zh": "定义SRS代码的URL"
+  },
+  {
+    "id": "spatial_srs_title",
+    "en": "Spatial reference system",
+    "zh": "空间参照系"
+  },
+  {
+    "id": "spatial_title",
+    "en": "Spatial",
+    "zh": "空间"
+  },
+  {
+    "id": "summary_attribute",
+    "en": "Summary ",
+    "zh": "摘要"
+  },
+  {
+    "id": "target_desc",
+    "en": "Modality and restriction of access to the data",
+    "zh": "数据访问的方式和限制"
+  },
+  {
+    "id": "target_role_item_title",
+    "en": "Role",
+    "zh": "角色"
+  },
+  {
+    "id": "target_roles_read_title",
+    "en": "Roles allowed to read",
+    "zh": "允许读取的角色"
+  },
+  {
+    "id": "target_roles_admin_title",
+    "en": "Roles allowed to manage",
+    "zh": "允许管理的角色"
+  },
+  {
+    "id": "target_roles_get_title",
+    "en": "Roles allowed to download",
+    "zh": "允许下载的角色"
+  },
+  {
+    "id": "target_roles_list_title",
+    "en": "List of roles",
+    "zh": "角色列表"
+  },
+  {
+    "id": "target_roles_title",
+    "en": "Roles",
+    "zh": "角色"
+  },
+  {
+    "id": "target_title",
+    "en": "Access",
+    "zh": "访问"
+  },
+  {
+    "id": "temporal_desc",
+    "en": "Description of the dataset using temporal references: periodicity, initial release, update and range",
+    "zh": "使用时间参考的数据集描述：周期、初始发布、更新和范围"
+  },
+  {
+    "id": "temporal_issuance_desc",
+    "en": "Description of the data issuance",
+    "zh": "数据发布说明"
+  },
+  {
+    "id": "temporal_issuance_title",
+    "en": "Issuance",
+    "zh": "颁发"
+  },
+  {
+    "id": "temporal_periodicity",
+    "en": "Periodicity",
+    "zh": "周期"
+  },
+  {
+    "id": "temporal_periodicity_desc",
+    "en": "Frenquency with wich data is published or updated",
+    "zh": "数据发布或更新的频率"
+  },
+  {
+    "id": "temporal_range_desc",
+    "en": "The temporal range of the data",
+    "zh": "数据的时间范围"
+  },
+  {
+    "id": "temporal_range_end",
+    "en": "End",
+    "zh": "结束"
+  },
+  {
+    "id": "temporal_range_start",
+    "en": "Start",
+    "zh": "开始"
+  },
+  {
+    "id": "temporal_range_timeless",
+    "en": "There is no time range for this data",
+    "zh": "此数据没有时间范围"
+  },
+  {
+    "id": "temporal_range_title",
+    "en": "Range",
+    "zh": "范围"
+  },
+  {
+    "id": "temporal_release_desc",
+    "en": "Date of formal issuance",
+    "zh": "正式发布时间"
+  },
+  {
+    "id": "temporal_release_title",
+    "en": "Release date",
+    "zh": "发布日期"
+  },
+  {
+    "id": "temporal_title",
+    "en": "Temporal",
+    "zh": "时间"
+  },
+  {
+    "id": "temporal_update_desc",
+    "en": "Date of the latest update",
+    "zh": "最后更新日期"
+  },
+  {
+    "id": "temporal_update_title",
+    "en": "Last update",
+    "zh": "上次更新"
+  },
+  {
+    "id": "textual_desc",
+    "en": "Textual description of the data using title, abstract and tags",
+    "zh": "使用标题、摘要和标签对数据进行文本描述"
+  },
+  {
+    "id": "textual_desc_notes",
+    "en": "Additional notes",
+    "zh": "附加注释"
+  },
+  {
+    "id": "textual_desc_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "textual_desc_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "textual_keyword_desc",
+    "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
+    "zh": "关键字（或标签）可帮助用户发现你的数据集。请包括技术和非技术用户使用的术语。"
+  },
+  {
+    "id": "textual_keyword_item_title",
+    "en": "Keyword",
+    "zh": "关键字"
+  },
+  {
+    "id": "textual_keywords_title",
+    "en": "Keywords list",
+    "zh": "关键字列表"
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keywords",
+    "zh": "关键字"
+  },
+  {
+    "id": "textual_keywords_m49_title",
+    "en": "Geographic M49 Keywords list",
+    "zh": "地理M49关键字列表"
+  },
+  {
+    "id": "textual_keywords_m49_desc",
+    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
+    "zh": "对于空间搜索，MapX可以根据其几何形状，范围和/或属性确定多个空间特征之间的关系。在某些情况下，最好将地理关键字与来源相关联，以改善文本搜索过程中的相关性。 M49关键字允许您执行此操作。至少需要一个关键字。 *"
+  },
+  {
+    "id": "textual_title",
+    "en": "Textual",
+    "zh": "文本"
+  },
+  {
+    "id": "unknown",
+    "en": "Frequency of maintenance for the data is not known",
+    "zh": "数据的维护频率未知"
+  },
+  {
+    "id": "weekly",
+    "en": "Data is updated on a weekly basis",
+    "zh": "数据每周更新一次"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "zh": "源的元数据"
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "zh": "视图元数据摘要"
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "zh": "编辑者ID"
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "zh": "所有编辑者的ID"
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "zh": "视图元数据"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "zh": "元数据项"
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "zh": "更改概述"
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "zh": "更改次数"
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "zh": "编辑者"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "zh": "最新编辑"
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "zh": "视图标题"
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of viewing",
+    "zh": "观看次数"
+  },
+  {
+    "id": "meta_view_stat_n_distinct_user",
+    "en": "Number of distinct users",
+    "zh": "用户数量"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "zh": "标题"
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "zh": "摘要"
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "zh": "注释"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "zh": "关键字"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords M49",
+    "zh": "地理关键字M49"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "zh": "数据使用的语言"
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "zh": "联系人列表"
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "zh": "周期"
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "zh": "发布日期"
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "zh": "修改日期"
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "zh": "数据值开始日期"
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "zh": "数据值结束日期"
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "zh": "没有时间值的数据"
+  },
+  {
+    "id": "meta_view_projects_titles",
+    "en": "Also published in those projects",
+    "zh": "也发布在这些项目中"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "zh": "原始项目"
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "zh": "项目"
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "zh": "视图ID"
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "zh": "集合"
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "zh": "修改日期"
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "zh": "创建日期"
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "zh": "编辑"
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "zh": "具有编辑权限的访问组"
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "zh": "具有读取权限的访问组"
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "zh": "类型"
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "zh": "视图摘要"
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "zh": "源ID"
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "zh": "源摘要"
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "zh": "源主页"
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "zh": "下载原始的源"
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "zh": "下载附件"
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "zh": "完整性评分"
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "zh": "时间范围"
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "zh": "到"
+  },
+  {
+    "id": "dont_know",
+    "en": "I don't know",
+    "zh": "我不知道"
+  },
+  {
+    "id": "yes",
+    "en": "Yes",
+    "zh": "是"
+  },
+  {
+    "id": "no",
+    "en": "No",
+    "zh": "否"
+  },
+  {
+    "id": "partial",
+    "en": "Partially",
+    "zh": "部分"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select stored service",
+    "zh": "选择存储的服务"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "zh": "选择图层"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "zh": "输入服务的URL"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "zh": "更新生成的URL（切片服务器，图例）"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "zh": "更新图层列表"
+  },
+  {
+    "id": "app_maintenance_title",
+    "en": "Maintenance",
+    "zh": "维护"
+  },
+  {
+    "id": "app_maintenance_text",
+    "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team",
+    "zh": "由于服务器维护，MapX当前不可用。 <br> 请稍后回来！ <br>此致，<br>敬礼！<br> MapX Team"
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "zh": "显示选项"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "zh": "调色板工具"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "zh": "调色板"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "zh": "编辑JSON"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "zh": "添加"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "zh": "色调旋转次数"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "zh": "颜色的数量"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "zh": "色调变换"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "zh": "颜色空间"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "zh": "饱和度"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "zh": "亮度"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "zh": "随机"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "zh": "反向"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "zh": "发散"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "zh": "使用默认调色板"
+  },
+  {
+    "id": "draft_recover_modal_title",
+    "en": "Data recovery",
+    "zh": "数据恢复"
+  },
+  {
+    "id": "draft_recover_use_most_recent",
+    "en": "Use the most recent",
+    "zh": "使用最近的"
+  },
+  {
+    "id": "draft_recover_cancel",
+    "en": "Cancel",
+    "zh": "取消"
+  },
+  {
+    "id": "draft_recover_preview_diff",
+    "en": "Preview differences",
+    "zh": "预览差异"
+  },
+  {
+    "id": "draft_recover_last_saved_date",
+    "en": "Date of the last saved version",
+    "zh": "上次保存版本的日期"
+  },
+  {
+    "id": "draft_recover_recovered_date",
+    "en": "Date of the recovered version",
+    "zh": "恢复版本的日期"
+  },
+  {
+    "id": "draft_recover_diffs",
+    "en": "Differences",
+    "zh": "差异"
+  },
+  {
+    "id": "draft_recover_summary_title",
+    "en": "Summary",
+    "zh": "摘要"
+  },
+  {
+    "id": "api_download_ready",
+    "en": "Process done, the data is available for download : ",
+    "zh": "处理完成，数据可供下载："
+  },
+  {
+    "id": "api_upload_ready",
+    "en": "Process done, the data will be available in source list.",
+    "zh": "处理完成，数据将在源列表中可用。"
+  },
+  {
+    "id": "api_upload_done_wait_db",
+    "en": "Upload done. Importation in DB, please wait, this could take multiple minutes for complex layers. Please be patient.",
+    "zh": "上传完成。 正在导入数据库中，请稍候，复杂的图层可能需要花费几分钟。 请耐心等待。"
+  },
+  {
+    "id": "api_download_btn",
+    "en": "click here",
+    "zh": "单击此处"
+  },
+  {
+    "id": "api_progress_title",
+    "en": "Progress",
+    "zh": "进度"
+  },
+  {
+    "id": "api_log_title",
+    "en": "Log",
+    "zh": "日志"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "zh": "属性必须设置"
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "zh": "值是必填项"
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "zh": "该值不能仅由空格（空格，制表符，换行符）组成"
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "zh": "值必须是枚举值之一"
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "zh": "值必须根据至少一种提供的模式进行验证"
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "zh": "值必须严格按照提供的模式之一进行验证。 当前，它针对 {{0}} 个模式进行了验证。"
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "zh": "禁止值根据提供的任何模式进行验证"
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "zh": "值必须是提供的类型之一"
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "zh": "值必须为 {{0}} 类型"
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "zh": "值不能为所提供的禁用类型之一"
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "zh": "值的类型不能为 {{0}}"
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "zh": "值必须是 {{0}} 的倍数"
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "zh": "值必须小于 {{0}}"
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "zh": "值不得超过 {{0}}"
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "zh": "值必须大于 {{0}}"
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "zh": "值必须至少为 {{0}}"
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "zh": "值最多不能超过 {{0}} 个字符"
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "zh": "值必须至少为 {{0}} 个字符"
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "zh": "值必须匹配模式 {{0}}"
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "zh": "此数组中不允许有其他项"
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "zh": "值最多只能有 {{0}} 项"
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "zh": "值必须至少有 {{0}} 项"
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "zh": "数组不能有重复项"
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "zh": "对象最多有 {{0}} 个属性"
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "zh": "对象必须至少有 {{0}} 个属性"
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "zh": "对象缺少必需的属性 '{{0}}'"
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "zh": "不允许其他属性，但属性 {{0}} 已设置"
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "zh": "必须有属性 {{0}}"
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "zh": "所有"
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "zh": "全部删除"
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "zh": "最后 {{0}} 个"
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "zh": "删除最后 {{0}} 个"
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "zh": "添加 {{0}}"
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "zh": "下移"
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "zh": "上移"
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "zh": "删除 {{0}}"
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "zh": "删除"
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "zh": "折叠"
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "zh": "展开"
+  },
+  {
+    "id": "tbl_attr_modal_title",
+    "en": "Attribute table",
+    "zh": "属性表"
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "zh": "一次性密码要求 *"
+  },
+  {
+    "id": "login_single_use_password_email",
+    "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
+    "zh": "<div style='max-width:400px;padding:20px'>你好，  <br><br> 这是你请求的密码：  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> 此密码为一次性密码, 仅对当前MapX会话有效，20分钟后将失效。<br>此致，<br>敬礼！<br><br>MapX Team<br><br>  <span style='opacity:0.5;font-size:0.8em'>如果你没有提出此请求，可能是我们的用户错误地输入了你的邮箱。</span></div>"
+  },
+  {
+    "id": "login_email_new_account_welcome",
+    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href='{{linkKnowledgeBase}}'>知识库</a>。如果您对本网站有建议，或者想要报告错误，请访问我们的<a href='{{linkIssue}}'>问题跟踪器</a><br>谢谢 ！ *"
+  },
+  {
+    "id": "login_email_new_account_welcome_subject",
+    "en": "Welcome ! New account created.",
+    "zh": "欢迎 ！已创建新帐户。 *"
+  },
+  {
+    "id": "filter_views_list_mode_intersection",
+    "en": "Intersection",
+    "zh": "交集"
+  },
+  {
+    "id": "filter_views_list_mode_union",
+    "en": "Union",
+    "zh": "并集"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded_title",
+    "en": "Maximum size reached",
+    "zh": "已达到最大大小"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded",
+    "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
+    "zh": "文件大小已达上限 {{size}} 。 不允许上传大于此大小的文件。 请与我们联系获取更多信息。"
+  },
+  {
+    "id": "modal_check_confirm_project_change_txt",
+    "en": "Are you sure to change project now ? Unsaved changes could be lost.",
+    "zh": "你确定现在要更改项目吗？ 未保存的更改可能会丢失。"
+  },
+  {
+    "id": "modal_check_confirm_project_change_btn",
+    "en": "Change project now, discard changes.",
+    "zh": "立即更改项目，放弃更改。"
+  },
+  {
+    "id": "modal_check_confirm_project_change_title",
+    "en": "Change project confirmation",
+    "zh": "确认更改项目"
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "zh": "设置地图位置"
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "zh": "获取当前位置"
+  },
+  {
+    "id": "view_filter_no_items",
+    "en": "Empty",
+    "zh": "空"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "zh": "分享管理"
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "zh": "分享链接"
+  },
+  {
+    "id": "share_options",
+    "en": "Share options",
+    "zh": "分享选项"
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "zh": "使用“静态”模式（推荐）"
+  },
+  {
+    "id": "share_mode_static_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
+    "zh": "如果你想使用轻量级、更快捷的、功能有限的MapX来分享视图，请使用“静态”模式。 使用此方法，将允许获得链接的任何人读取选定的视图，而无需在MapX中注册。 如果你添加了Story Map，它将自动启动，并丢弃任何其他视图。"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "zh": "添加要分享的视图"
+  },
+  {
+    "id": "share_views_check_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "zh": "要显示的视图。 列表可以重新排序：顶部视图将显示在顶部的图层。 在“静态”模式下，这些视图将自动呈现。 Story Map将直接启动。 在“正常”模式下，视图将显示在列表中，如果所选内容为空，则将列出项目的所有视图。"
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "zh": "缩放到视图范围"
+  },
+  {
+    "id": "share_views_zoom_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "zh": "在“静态”模式下，将设置地图范围以适应视图图层范围（如果可用）。"
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "zh": "设置要激活的试图"
+  },
+  {
+    "id": "share_views_open_check_desc",
+    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
+    "zh": "添加在应用程序启动时自动激活的视图。将开启“筛选激活视图”功能并隐藏未激活的视图。"
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "zh": "设置集合"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "zh": "选择模式（如果多于一个集合）"
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "zh": "交集"
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "zh": "并集"
+  },
+  {
+    "id": "share_collections_check_desc",
+    "en": "Add groups of views by using collections",
+    "zh": "使用集合添加视图组"
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "zh": "设置地图位置"
+  },
+  {
+    "id": "share_map_pos_check_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "zh": "设置地图的位置将显示已定义的空间范围，而非世界地图。"
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "zh": "嵌入HTML标签"
+  },
+  {
+    "id": "share_iframe_check_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "zh": "将链接嵌入 <iframe> HTML标签中，即可轻松的将MapX添加到你的网站。"
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "zh": "分享到另一个项目"
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "zh": "在你拥有发布者权限的项目中分享视图"
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "zh": "加入选定的项目"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "zh": "默认筛选已激活视图"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "zh": "仅显示初始设定为打开的视图"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "zh": "隐藏类别"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "zh": "试图列表默认隐藏类别"
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "zh": "自然间断点分级(Jenks）"
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "zh": "分位数"
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "zh": "首尾分割"
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "zh": "相等间隔"
+  },
+  {
+    "id": "roles_updated_mail_title",
+    "en": "Roles updated",
+    "zh": "角色已更新 *"
+  },
+  {
+    "id": "roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "zh": "项目中的角色已更新{{nameProject}} *"
+  },
+  {
+    "id": "roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "zh": "<p>你好，</p><p>管理员更改了您在项目中的角色{{projectLink}}。</p><p>以下是更改列表：</p><p>{{txtRoleChange}}</p><p>祝你今天过得愉快 ！</p> <i style='float:right'>MapX小组。</i> *"
+  },
+  {
+    "id": "roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "zh": "<p>你好，</p><p>项目中的角色已更改{{projectLink}}。</p><p>以下是更改列表：{{changes}}<p>祝你今天过得愉快 ！</p> *"
+  },
+  {
+    "id": "added_to_group",
+    "en": "added to: {{group}} \n",
+    "zh": "添加到：{{group}}\n *"
+  },
+  {
+    "id": "removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "zh": "已经从...删除：{{group}}\n *"
+  },
+  {
+    "id": "get_source_format_invalid",
+    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
+    "zh": "无效的格式{{format}}，使用默认格式{{formatDefault}}。 *"
+  },
+  {
+    "id": "get_source_meta_extracted",
+    "en": "Metadata extracted",
+    "zh": "提取元数据 *"
+  },
+  {
+    "id": "get_source_invalid_geom",
+    "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
+    "zh": "发现图层“”的几何无效{{title}}'（{{idLayer}} ）。 *"
+  },
+  {
+    "id": "get_source_email_dl_link",
+    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
+    "zh": "电子邮件将发送至{{email}}。下载<a href='{{url}}'>链接</a>将在流程结束时激活 *"
+  },
+  {
+    "id": "get_source_extraction_wait",
+    "en": "Starting data conversion. This could take a while, please wait",
+    "zh": "开始数据转换。这可能需要一段时间，请稍候 *"
+  },
+  {
+    "id": "get_source_conversion_progress",
+    "en": "Conversion progress",
+    "zh": "转换进度 *"
+  },
+  {
+    "id": "get_source_conversion_stdout",
+    "en": "Conversion message: {{stdout}}",
+    "zh": "转换讯息：{{stdout}} *"
+  },
+  {
+    "id": "get_source_conversion_stderr",
+    "en": "Conversion warning: {{stderr}}",
+    "zh": "转换警告：{{stderr}} *"
+  },
+  {
+    "id": "get_source_conversion_error",
+    "en": "Conversion error. {{error}} ",
+    "zh": "转换错误。{{error}} *"
+  },
+  {
+    "id": "get_source_conversion_done_link",
+    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
+    "zh": "使用格式完成转换{{format}}。 <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_conversion_done_browser",
+    "en": "Layer {{title}} exported",
+    "zh": "层{{title}}出口的 *"
+  },
+  {
+    "id": "get_source_conversion_done_browser_title",
+    "en": "Layer exported",
+    "zh": "图层导出 *"
+  },
+  {
+    "id": "get_source_conversion_done_email",
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
+    "zh": "可以使用此链接下载所需的数据： <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_zip_progress",
+    "en": "Compression progress",
+    "zh": "压缩进度 *"
+  },
+  {
+    "id": "get_source_zip_warning",
+    "en": "Compression warning: {{err}}",
+    "zh": "压缩警告：{{err}} *"
+  },
+  {
+    "id": "get_source_zip_error",
+    "en": "Compression error : {{err}}",
+    "zh": "压缩错误：{{err}} *"
+  },
+  {
+    "id": "get_source_file_timestamp",
+    "en": "Downloaded from MapX on {{date}}",
+    "zh": "从MapX上下载{{date}} *"
+  },
+  {
+    "id": "stat_load_please_wait",
+    "en": "Statistics extraction ... ",
+    "zh": "统计提取... *"
+  },
+  {
+    "id": "btn_panel_main",
+    "en": "Main panel",
+    "zh": "主面板 *"
+  },
+  {
+    "id": "fetch_views_diff_modal_title",
+    "en": "Views not available",
+    "zh": "视图不可用 *"
+  },
+  {
+    "id": "fetch_views_diff_message",
+    "en": "You have requested views that are not available in this project.",
+    "zh": "您请求的视图在该项目中不可用。 *"
+  },
+  {
+    "id": "vt_desc",
+    "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
+    "zh": "具有矢量图层的视图。这种类型的图层显示属性表中包含的几何形状和相关信息。启用了许多交互式功能，例如过滤，缩放或突出显示。 *"
+  },
+  {
+    "id": "gj_desc",
+    "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
+    "zh": "具有以GeoJSON格式存储在您的Internet浏览器中的矢量图层的视图。 *"
+  },
+  {
+    "id": "rt_desc",
+    "en": "Views featuring a raster layer. This type of data shows an image made up of a matrix of pixels, each pixel having its own values.",
+    "zh": "具有栅格图层的视图。此类数据显示由像素矩阵组成的图像，每个像素都有自己的值。 *"
+  },
+  {
+    "id": "sm_desc",
+    "en": "Interactive document featuring stories combining text, interactive maps and other multimedia content.",
+    "zh": "交互式文档，其故事结合了文本，交互式地图和其他多媒体内容。 *"
+  },
+  {
+    "id": "dashboard_desc",
+    "en": "Views with a dashboard that interacts with the data displayed in the map.",
+    "zh": "具有仪表板的视图，该仪表板与地图中显示的数据进行交互。 *"
+  },
+  {
+    "id": "time_slider_desc",
+    "en": "Views with a time slider (accessible in the view settings).",
+    "zh": "带时间滑块的视图（在视图设置中可访问）。 *"
+  },
+  {
+    "id": "overlap_desc",
+    "en": "Views featuring vector layers resulting from the overlap between two data sources.",
+    "zh": "具有两个数据源之间重叠的矢量层的视图。 *"
+  },
+  {
+    "id": "custom_style_desc",
+    "en": "Views with a customized style. e.g. heat maps, bivariate classification.",
+    "zh": "具有自定义样式的视图。例如热图，双变量分类。 *"
+  },
+  {
+    "id": "custom_code_desc",
+    "en": "Views featuring a customized script. The result could be anything. e.g. a time slider on raster data or a prototype that uses external data.",
+    "zh": "具有自定义脚本的视图。结果可能是任何事情。例如，栅格数据上的时间滑块或使用外部数据的原型。 *"
+  },
+  {
+    "id": "view_editable_desc",
+    "en": "Views for which you have editing rights.",
+    "zh": "您拥有编辑权限的视图。 *"
+  },
+  {
+    "id": "view_local_desc",
+    "en": "Views from this project ( excludes external views ).",
+    "zh": "该项目的视图（不包括外部视图）。 *"
+  },
+  {
+    "id": "language_auto_warning",
+    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
+    "zh": "如果缺少翻译，可以自动翻译英语以外的语言。在这种情况下，将显示一个星号。 *"
+  }
+]

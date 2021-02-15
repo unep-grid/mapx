@@ -1,0 +1,6457 @@
+[
+  {
+    "id": "ABW",
+    "en": "Aruba",
+    "fa": "آروبا"
+  },
+  {
+    "id": "AFG",
+    "en": "Afghanistan",
+    "fa": "افغانستان"
+  },
+  {
+    "id": "AGO",
+    "en": "Angola",
+    "fa": "آنگولا"
+  },
+  {
+    "id": "AIA",
+    "en": "Anguilla",
+    "fa": "آنگویلا"
+  },
+  {
+    "id": "ALA",
+    "en": "Åland Islands",
+    "fa": "جزایر اُلند"
+  },
+  {
+    "id": "ALB",
+    "en": "Albania",
+    "fa": "آلبانی"
+  },
+  {
+    "id": "AND",
+    "en": "Andorra",
+    "fa": "آندورا"
+  },
+  {
+    "id": "ARE",
+    "en": "United Arab Emirates",
+    "fa": "امارات متحدهٔ عربی"
+  },
+  {
+    "id": "ARG",
+    "en": "Argentina",
+    "fa": "آرژانتین"
+  },
+  {
+    "id": "ARM",
+    "en": "Armenia",
+    "fa": "ارمنستان"
+  },
+  {
+    "id": "ASM",
+    "en": "American Samoa",
+    "fa": "ساموآی آمریکا"
+  },
+  {
+    "id": "ATA",
+    "en": "Antarctica",
+    "fa": "جنوبگان"
+  },
+  {
+    "id": "ATF",
+    "en": "French Southern Territories",
+    "fa": "قلمروهای جنوبی فرانسه"
+  },
+  {
+    "id": "ATG",
+    "en": "Antigua and Barbuda",
+    "fa": "آنتیگوا و باربودا *"
+  },
+  {
+    "id": "AUS",
+    "en": "Australia",
+    "fa": "استرالیا"
+  },
+  {
+    "id": "AUT",
+    "en": "Austria",
+    "fa": "اتریش"
+  },
+  {
+    "id": "AZE",
+    "en": "Azerbaijan",
+    "fa": "جمهوری آذربایجان"
+  },
+  {
+    "id": "BDI",
+    "en": "Burundi",
+    "fa": "بوروندی"
+  },
+  {
+    "id": "BEL",
+    "en": "Belgium",
+    "fa": "بلژیک"
+  },
+  {
+    "id": "BEN",
+    "en": "Benin",
+    "fa": "بنین"
+  },
+  {
+    "id": "BES",
+    "en": "Bonaire, Sint Eustatius and Saba",
+    "fa": "بونیر ، سینت اوستاتیوس و صبا *"
+  },
+  {
+    "id": "BFA",
+    "en": "Burkina Faso",
+    "fa": "بورکینافاسو"
+  },
+  {
+    "id": "BGD",
+    "en": "Bangladesh",
+    "fa": "بنگلادش"
+  },
+  {
+    "id": "BGR",
+    "en": "Bulgaria",
+    "fa": "بلغارستان"
+  },
+  {
+    "id": "BHR",
+    "en": "Bahrain",
+    "fa": "بحرین"
+  },
+  {
+    "id": "BHS",
+    "en": "Bahamas",
+    "fa": "باهاما"
+  },
+  {
+    "id": "BIH",
+    "en": "Bosnia and Herzegovina",
+    "fa": "بوسنی و هرزگوین *"
+  },
+  {
+    "id": "BLM",
+    "en": "Saint Barthélemy",
+    "fa": "سنت بارتلیمی *"
+  },
+  {
+    "id": "BLR",
+    "en": "Belarus",
+    "fa": "بلاروس"
+  },
+  {
+    "id": "BLZ",
+    "en": "Belize",
+    "fa": "بلیز"
+  },
+  {
+    "id": "BMU",
+    "en": "Bermuda",
+    "fa": "برمودا"
+  },
+  {
+    "id": "BOL",
+    "en": "Bolivia (Plurinational State of)",
+    "fa": "بولیوی (دولت چندملیتی) *"
+  },
+  {
+    "id": "BRA",
+    "en": "Brazil",
+    "fa": "برزیل"
+  },
+  {
+    "id": "BRB",
+    "en": "Barbados",
+    "fa": "باربادوس"
+  },
+  {
+    "id": "BRN",
+    "en": "Brunei Darussalam",
+    "fa": "برونئی دارالسلام *"
+  },
+  {
+    "id": "BTN",
+    "en": "Bhutan",
+    "fa": "بوتان"
+  },
+  {
+    "id": "BVT",
+    "en": "Bouvet Island",
+    "fa": "جزیره بووت *"
+  },
+  {
+    "id": "BWA",
+    "en": "Botswana",
+    "fa": "بوتسوانا"
+  },
+  {
+    "id": "CAF",
+    "en": "Central African Republic",
+    "fa": "جمهوری افریقای مرکزی"
+  },
+  {
+    "id": "CAN",
+    "en": "Canada",
+    "fa": "کانادا"
+  },
+  {
+    "id": "CCK",
+    "en": "Cocos (Keeling) Islands",
+    "fa": "جزایر کوکوس (کیلینگ)"
+  },
+  {
+    "id": "CHE",
+    "en": "Switzerland",
+    "fa": "سوئیس"
+  },
+  {
+    "id": "CHL",
+    "en": "Chile",
+    "fa": "شیلی"
+  },
+  {
+    "id": "CHN",
+    "en": "China",
+    "fa": "چین"
+  },
+  {
+    "id": "CIV",
+    "en": "Côte d’Ivoire",
+    "fa": "ساحل عاج"
+  },
+  {
+    "id": "CMR",
+    "en": "Cameroon",
+    "fa": "کامرون"
+  },
+  {
+    "id": "COD",
+    "en": "Democratic Republic of the Congo",
+    "fa": "جمهوری دموکراتیک کنگو *"
+  },
+  {
+    "id": "COG",
+    "en": "Congo",
+    "fa": "کنگو *"
+  },
+  {
+    "id": "COK",
+    "en": "Cook Islands",
+    "fa": "جزایر کوک"
+  },
+  {
+    "id": "COL",
+    "en": "Colombia",
+    "fa": "کلمبیا"
+  },
+  {
+    "id": "COM",
+    "en": "Comoros",
+    "fa": "کومور"
+  },
+  {
+    "id": "CPV",
+    "en": "Cabo Verde",
+    "fa": "کابو ورده *"
+  },
+  {
+    "id": "CRI",
+    "en": "Costa Rica",
+    "fa": "کاستاریکا"
+  },
+  {
+    "id": "CUB",
+    "en": "Cuba",
+    "fa": "کوبا"
+  },
+  {
+    "id": "CUW",
+    "en": "Curaçao",
+    "fa": "کوراسائو"
+  },
+  {
+    "id": "CXR",
+    "en": "Christmas Island",
+    "fa": "جزیرهٔ کریسمس"
+  },
+  {
+    "id": "CYM",
+    "en": "Cayman Islands",
+    "fa": "جزایر کِیمن"
+  },
+  {
+    "id": "CYP",
+    "en": "Cyprus",
+    "fa": "قبرس"
+  },
+  {
+    "id": "CZE",
+    "en": "Czechia",
+    "fa": "چکی *"
+  },
+  {
+    "id": "DEU",
+    "en": "Germany",
+    "fa": "آلمان"
+  },
+  {
+    "id": "DJI",
+    "en": "Djibouti",
+    "fa": "جیبوتی"
+  },
+  {
+    "id": "DMA",
+    "en": "Dominica",
+    "fa": "دومینیکا"
+  },
+  {
+    "id": "DNK",
+    "en": "Denmark",
+    "fa": "دانمارک"
+  },
+  {
+    "id": "DOM",
+    "en": "Dominican Republic",
+    "fa": "جمهوری دومینیکن"
+  },
+  {
+    "id": "DZA",
+    "en": "Algeria",
+    "fa": "الجزایر"
+  },
+  {
+    "id": "ECU",
+    "en": "Ecuador",
+    "fa": "اکوادور"
+  },
+  {
+    "id": "EGY",
+    "en": "Egypt",
+    "fa": "مصر"
+  },
+  {
+    "id": "ERI",
+    "en": "Eritrea",
+    "fa": "اریتره"
+  },
+  {
+    "id": "ESH",
+    "en": "Western Sahara",
+    "fa": "صحرای غربی"
+  },
+  {
+    "id": "ESP",
+    "en": "Spain",
+    "fa": "اسپانیا"
+  },
+  {
+    "id": "EST",
+    "en": "Estonia",
+    "fa": "استونی"
+  },
+  {
+    "id": "ETH",
+    "en": "Ethiopia",
+    "fa": "اتیوپی"
+  },
+  {
+    "id": "FIN",
+    "en": "Finland",
+    "fa": "فنلاند"
+  },
+  {
+    "id": "FJI",
+    "en": "Fiji",
+    "fa": "فیجی"
+  },
+  {
+    "id": "FLK",
+    "en": "Falkland Islands (Malvinas)",
+    "fa": "جزایر فالکلند (مالویناس) *"
+  },
+  {
+    "id": "FRA",
+    "en": "France",
+    "fa": "فرانسه"
+  },
+  {
+    "id": "FRO",
+    "en": "Faroe Islands",
+    "fa": "جزایر فارو"
+  },
+  {
+    "id": "FSM",
+    "en": "Micronesia (Federated States of)",
+    "fa": "میکرونزی (ایالات فدرال) *"
+  },
+  {
+    "id": "GAB",
+    "en": "Gabon",
+    "fa": "گابن"
+  },
+  {
+    "id": "GBR",
+    "en": "United Kingdom of Great Britain and Northern Ireland",
+    "fa": "پادشاهی متحده بریتانیا و ایرلند شمالی *"
+  },
+  {
+    "id": "GEO",
+    "en": "Georgia",
+    "fa": "گرجستان"
+  },
+  {
+    "id": "GGY",
+    "en": "Guernsey",
+    "fa": "گرنزی"
+  },
+  {
+    "id": "GHA",
+    "en": "Ghana",
+    "fa": "غنا"
+  },
+  {
+    "id": "GIB",
+    "en": "Gibraltar",
+    "fa": "جبل‌الطارق"
+  },
+  {
+    "id": "GIN",
+    "en": "Guinea",
+    "fa": "گینه"
+  },
+  {
+    "id": "GLP",
+    "en": "Guadeloupe",
+    "fa": "گوادلوپ"
+  },
+  {
+    "id": "GMB",
+    "en": "Gambia",
+    "fa": "گامبیا"
+  },
+  {
+    "id": "GNB",
+    "en": "Guinea-Bissau",
+    "fa": "گینهٔ بیسائو"
+  },
+  {
+    "id": "GNQ",
+    "en": "Equatorial Guinea",
+    "fa": "گینهٔ استوایی"
+  },
+  {
+    "id": "GRC",
+    "en": "Greece",
+    "fa": "یونان"
+  },
+  {
+    "id": "GRD",
+    "en": "Grenada",
+    "fa": "گرنادا"
+  },
+  {
+    "id": "GRL",
+    "en": "Greenland",
+    "fa": "گرینلند"
+  },
+  {
+    "id": "GTM",
+    "en": "Guatemala",
+    "fa": "گواتمالا"
+  },
+  {
+    "id": "GUF",
+    "en": "French Guiana",
+    "fa": "گویان فرانسه"
+  },
+  {
+    "id": "GUM",
+    "en": "Guam",
+    "fa": "گوام"
+  },
+  {
+    "id": "GUY",
+    "en": "Guyana",
+    "fa": "گویان"
+  },
+  {
+    "id": "HKG",
+    "en": "China, Hong Kong Special Administrative Region",
+    "fa": "چین ، منطقه ویژه اداری هنگ کنگ *"
+  },
+  {
+    "id": "HMD",
+    "en": "Heard Island and McDonald Islands",
+    "fa": "جزایر شنیده شده و جزایر مک دونالد *"
+  },
+  {
+    "id": "HND",
+    "en": "Honduras",
+    "fa": "هندوراس"
+  },
+  {
+    "id": "HRV",
+    "en": "Croatia",
+    "fa": "کرواسی"
+  },
+  {
+    "id": "HTI",
+    "en": "Haiti",
+    "fa": "هائیتی"
+  },
+  {
+    "id": "HUN",
+    "en": "Hungary",
+    "fa": "مجارستان"
+  },
+  {
+    "id": "IDN",
+    "en": "Indonesia",
+    "fa": "اندونزی"
+  },
+  {
+    "id": "IMN",
+    "en": "Isle of Man",
+    "fa": "جزیرهٔ من"
+  },
+  {
+    "id": "IND",
+    "en": "India",
+    "fa": "هند"
+  },
+  {
+    "id": "IOT",
+    "en": "British Indian Ocean Territory",
+    "fa": "قلمرو بریتانیا در اقیانوس هند"
+  },
+  {
+    "id": "IRL",
+    "en": "Ireland",
+    "fa": "ایرلند"
+  },
+  {
+    "id": "IRN",
+    "en": "Iran (Islamic Republic of)",
+    "fa": "ایران (جمهوری اسلامی) *"
+  },
+  {
+    "id": "IRQ",
+    "en": "Iraq",
+    "fa": "عراق"
+  },
+  {
+    "id": "ISL",
+    "en": "Iceland",
+    "fa": "ایسلند"
+  },
+  {
+    "id": "ISR",
+    "en": "Israel",
+    "fa": "اسرائیل"
+  },
+  {
+    "id": "ITA",
+    "en": "Italy",
+    "fa": "ایتالیا"
+  },
+  {
+    "id": "JAM",
+    "en": "Jamaica",
+    "fa": "جامائیکا"
+  },
+  {
+    "id": "JEY",
+    "en": "Jersey",
+    "fa": "جرزی"
+  },
+  {
+    "id": "JOR",
+    "en": "Jordan",
+    "fa": "اردن"
+  },
+  {
+    "id": "JPN",
+    "en": "Japan",
+    "fa": "ژاپن"
+  },
+  {
+    "id": "KAZ",
+    "en": "Kazakhstan",
+    "fa": "قزاقستان"
+  },
+  {
+    "id": "KEN",
+    "en": "Kenya",
+    "fa": "کنیا"
+  },
+  {
+    "id": "KGZ",
+    "en": "Kyrgyzstan",
+    "fa": "قرقیزستان"
+  },
+  {
+    "id": "KHM",
+    "en": "Cambodia",
+    "fa": "کامبوج"
+  },
+  {
+    "id": "KIR",
+    "en": "Kiribati",
+    "fa": "کیریباتی"
+  },
+  {
+    "id": "KNA",
+    "en": "Saint Kitts and Nevis",
+    "fa": "سنت کیتس و نویس *"
+  },
+  {
+    "id": "KOR",
+    "en": "Republic of Korea",
+    "fa": "جمهوری کره *"
+  },
+  {
+    "id": "KWT",
+    "en": "Kuwait",
+    "fa": "کویت"
+  },
+  {
+    "id": "LAO",
+    "en": "Lao People's Democratic Republic",
+    "fa": "جمهوری دموکراتیک خلق لائو *"
+  },
+  {
+    "id": "LBN",
+    "en": "Lebanon",
+    "fa": "لبنان"
+  },
+  {
+    "id": "LBR",
+    "en": "Liberia",
+    "fa": "لیبریا"
+  },
+  {
+    "id": "LBY",
+    "en": "Libya",
+    "fa": "لیبی"
+  },
+  {
+    "id": "LCA",
+    "en": "Saint Lucia",
+    "fa": "سنت لوسیا *"
+  },
+  {
+    "id": "LIE",
+    "en": "Liechtenstein",
+    "fa": "لیختن‌اشتاین"
+  },
+  {
+    "id": "LKA",
+    "en": "Sri Lanka",
+    "fa": "سری‌لانکا"
+  },
+  {
+    "id": "LSO",
+    "en": "Lesotho",
+    "fa": "لسوتو"
+  },
+  {
+    "id": "LTU",
+    "en": "Lithuania",
+    "fa": "لیتوانی"
+  },
+  {
+    "id": "LUX",
+    "en": "Luxembourg",
+    "fa": "لوکزامبورگ"
+  },
+  {
+    "id": "LVA",
+    "en": "Latvia",
+    "fa": "لتونی"
+  },
+  {
+    "id": "MAC",
+    "en": "China, Macao Special Administrative Region",
+    "fa": "چین ، منطقه اداری ویژه ماکائو *"
+  },
+  {
+    "id": "MAF",
+    "en": "Saint Martin (French Part)",
+    "fa": "سنت مارتین (قسمت فرانسوی) *"
+  },
+  {
+    "id": "MAR",
+    "en": "Morocco",
+    "fa": "مراکش"
+  },
+  {
+    "id": "MCO",
+    "en": "Monaco",
+    "fa": "موناکو"
+  },
+  {
+    "id": "MDA",
+    "en": "Republic of Moldova",
+    "fa": "جمهوری مولداوی *"
+  },
+  {
+    "id": "MDG",
+    "en": "Madagascar",
+    "fa": "ماداگاسکار"
+  },
+  {
+    "id": "MDV",
+    "en": "Maldives",
+    "fa": "مالدیو"
+  },
+  {
+    "id": "MEX",
+    "en": "Mexico",
+    "fa": "مکزیک"
+  },
+  {
+    "id": "MHL",
+    "en": "Marshall Islands",
+    "fa": "جزایر مارشال"
+  },
+  {
+    "id": "MKD",
+    "en": "North Macedonia",
+    "fa": "مقدونیه شمالی *"
+  },
+  {
+    "id": "MLI",
+    "en": "Mali",
+    "fa": "مالی"
+  },
+  {
+    "id": "MLT",
+    "en": "Malta",
+    "fa": "مالت"
+  },
+  {
+    "id": "MMR",
+    "en": "Myanmar",
+    "fa": "میانمار *"
+  },
+  {
+    "id": "MNE",
+    "en": "Montenegro",
+    "fa": "مونته‌نگرو"
+  },
+  {
+    "id": "MNG",
+    "en": "Mongolia",
+    "fa": "مغولستان"
+  },
+  {
+    "id": "MNP",
+    "en": "Northern Mariana Islands",
+    "fa": "جزایر ماریانای شمالی"
+  },
+  {
+    "id": "MOZ",
+    "en": "Mozambique",
+    "fa": "موزامبیک"
+  },
+  {
+    "id": "MRT",
+    "en": "Mauritania",
+    "fa": "موریتانی"
+  },
+  {
+    "id": "MSR",
+    "en": "Montserrat",
+    "fa": "مونت‌سرات"
+  },
+  {
+    "id": "MTQ",
+    "en": "Martinique",
+    "fa": "مارتینیک"
+  },
+  {
+    "id": "MUS",
+    "en": "Mauritius",
+    "fa": "موریس"
+  },
+  {
+    "id": "MWI",
+    "en": "Malawi",
+    "fa": "مالاوی"
+  },
+  {
+    "id": "MYS",
+    "en": "Malaysia",
+    "fa": "مالزی"
+  },
+  {
+    "id": "MYT",
+    "en": "Mayotte",
+    "fa": "مایوت"
+  },
+  {
+    "id": "NAM",
+    "en": "Namibia",
+    "fa": "نامیبیا"
+  },
+  {
+    "id": "NCL",
+    "en": "New Caledonia",
+    "fa": "کالدونیای جدید"
+  },
+  {
+    "id": "NER",
+    "en": "Niger",
+    "fa": "نیجر"
+  },
+  {
+    "id": "NFK",
+    "en": "Norfolk Island",
+    "fa": "جزیره نورفک"
+  },
+  {
+    "id": "NGA",
+    "en": "Nigeria",
+    "fa": "نیجریه"
+  },
+  {
+    "id": "NIC",
+    "en": "Nicaragua",
+    "fa": "نیکاراگوئه"
+  },
+  {
+    "id": "NIU",
+    "en": "Niue",
+    "fa": "نیوئه"
+  },
+  {
+    "id": "NLD",
+    "en": "Netherlands",
+    "fa": "هلند"
+  },
+  {
+    "id": "NOR",
+    "en": "Norway",
+    "fa": "نروژ"
+  },
+  {
+    "id": "NPL",
+    "en": "Nepal",
+    "fa": "نپال"
+  },
+  {
+    "id": "NRU",
+    "en": "Nauru",
+    "fa": "نائورو"
+  },
+  {
+    "id": "NZL",
+    "en": "New Zealand",
+    "fa": "زلاند نو"
+  },
+  {
+    "id": "OMN",
+    "en": "Oman",
+    "fa": "عمان"
+  },
+  {
+    "id": "PAK",
+    "en": "Pakistan",
+    "fa": "پاکستان"
+  },
+  {
+    "id": "PAN",
+    "en": "Panama",
+    "fa": "پاناما"
+  },
+  {
+    "id": "PCN",
+    "en": "Pitcairn",
+    "fa": "پیتکرن *"
+  },
+  {
+    "id": "PER",
+    "en": "Peru",
+    "fa": "پرو"
+  },
+  {
+    "id": "PHL",
+    "en": "Philippines",
+    "fa": "فیلیپین"
+  },
+  {
+    "id": "PLW",
+    "en": "Palau",
+    "fa": "پالائو"
+  },
+  {
+    "id": "PNG",
+    "en": "Papua New Guinea",
+    "fa": "پاپوا گینهٔ نو"
+  },
+  {
+    "id": "POL",
+    "en": "Poland",
+    "fa": "لهستان"
+  },
+  {
+    "id": "PRI",
+    "en": "Puerto Rico",
+    "fa": "پورتوریکو"
+  },
+  {
+    "id": "PRK",
+    "en": "Democratic People's Republic of Korea",
+    "fa": "جمهوری دموکراتیک خلق کره *"
+  },
+  {
+    "id": "PRT",
+    "en": "Portugal",
+    "fa": "پرتغال"
+  },
+  {
+    "id": "PRY",
+    "en": "Paraguay",
+    "fa": "پاراگوئه"
+  },
+  {
+    "id": "PSE",
+    "en": "State of Palestine",
+    "fa": "دولت فلسطین"
+  },
+  {
+    "id": "PYF",
+    "en": "French Polynesia",
+    "fa": "پلی‌نزی فرانسه"
+  },
+  {
+    "id": "QAT",
+    "en": "Qatar",
+    "fa": "قطر"
+  },
+  {
+    "id": "REU",
+    "en": "Réunion",
+    "fa": "رئونیون"
+  },
+  {
+    "id": "ROU",
+    "en": "Romania",
+    "fa": "رومانی"
+  },
+  {
+    "id": "RUS",
+    "en": "Russian Federation",
+    "fa": "فدراسیون روسیه *"
+  },
+  {
+    "id": "RWA",
+    "en": "Rwanda",
+    "fa": "رواندا"
+  },
+  {
+    "id": "SAU",
+    "en": "Saudi Arabia",
+    "fa": "عربستان سعودی"
+  },
+  {
+    "id": "SDN",
+    "en": "Sudan",
+    "fa": "سودان"
+  },
+  {
+    "id": "SEN",
+    "en": "Senegal",
+    "fa": "سنگال"
+  },
+  {
+    "id": "SGP",
+    "en": "Singapore",
+    "fa": "سنگاپور"
+  },
+  {
+    "id": "SGS",
+    "en": "South Georgia and the South Sandwich Islands",
+    "fa": "جنوب جورجیا و جزایر ساندویچ جنوبی *"
+  },
+  {
+    "id": "SHN",
+    "en": "Saint Helena",
+    "fa": "سنت هلنا *"
+  },
+  {
+    "id": "SJM",
+    "en": "Svalbard and Jan Mayen Islands",
+    "fa": "جزایر سوالبارد و جان ماین *"
+  },
+  {
+    "id": "SLB",
+    "en": "Solomon Islands",
+    "fa": "جزایر سلیمان"
+  },
+  {
+    "id": "SLE",
+    "en": "Sierra Leone",
+    "fa": "سیرالئون"
+  },
+  {
+    "id": "SLV",
+    "en": "El Salvador",
+    "fa": "السالوادور"
+  },
+  {
+    "id": "SMR",
+    "en": "San Marino",
+    "fa": "سن مارینو"
+  },
+  {
+    "id": "SOM",
+    "en": "Somalia",
+    "fa": "سومالی"
+  },
+  {
+    "id": "SPM",
+    "en": "Saint Pierre and Miquelon",
+    "fa": "سنت پیر و میکلون *"
+  },
+  {
+    "id": "SRB",
+    "en": "Serbia",
+    "fa": "صربستان"
+  },
+  {
+    "id": "SSD",
+    "en": "South Sudan",
+    "fa": "سودان جنوبی"
+  },
+  {
+    "id": "STP",
+    "en": "Sao Tome and Principe",
+    "fa": "سائوتومه و پرینسیپ *"
+  },
+  {
+    "id": "SUR",
+    "en": "Suriname",
+    "fa": "سورینام"
+  },
+  {
+    "id": "SVK",
+    "en": "Slovakia",
+    "fa": "اسلواکی"
+  },
+  {
+    "id": "SVN",
+    "en": "Slovenia",
+    "fa": "اسلوونی"
+  },
+  {
+    "id": "SWE",
+    "en": "Sweden",
+    "fa": "سوئد"
+  },
+  {
+    "id": "SWZ",
+    "en": "Eswatini",
+    "fa": "اسواتینی"
+  },
+  {
+    "id": "SXM",
+    "en": "Sint Maarten (Dutch part)",
+    "fa": "سینت مارتن (قسمت هلندی) *"
+  },
+  {
+    "id": "SYC",
+    "en": "Seychelles",
+    "fa": "سیشل"
+  },
+  {
+    "id": "SYR",
+    "en": "Syrian Arab Republic",
+    "fa": "جمهوری عربی سوریه *"
+  },
+  {
+    "id": "TCA",
+    "en": "Turks and Caicos Islands",
+    "fa": "جزایر ترک و کایکوس *"
+  },
+  {
+    "id": "TCD",
+    "en": "Chad",
+    "fa": "چاد"
+  },
+  {
+    "id": "TGO",
+    "en": "Togo",
+    "fa": "توگو"
+  },
+  {
+    "id": "THA",
+    "en": "Thailand",
+    "fa": "تایلند"
+  },
+  {
+    "id": "TJK",
+    "en": "Tajikistan",
+    "fa": "تاجیکستان"
+  },
+  {
+    "id": "TKL",
+    "en": "Tokelau",
+    "fa": "توکلائو"
+  },
+  {
+    "id": "TKM",
+    "en": "Turkmenistan",
+    "fa": "ترکمنستان"
+  },
+  {
+    "id": "TLS",
+    "en": "Timor-Leste",
+    "fa": "تیمور شرقی"
+  },
+  {
+    "id": "TON",
+    "en": "Tonga",
+    "fa": "تونگا"
+  },
+  {
+    "id": "TTO",
+    "en": "Trinidad and Tobago",
+    "fa": "ترینیداد و توباگو *"
+  },
+  {
+    "id": "TUN",
+    "en": "Tunisia",
+    "fa": "تونس"
+  },
+  {
+    "id": "TUR",
+    "en": "Turkey",
+    "fa": "ترکیه"
+  },
+  {
+    "id": "TUV",
+    "en": "Tuvalu",
+    "fa": "تووالو"
+  },
+  {
+    "id": "TZA",
+    "en": "United Republic of Tanzania",
+    "fa": "جمهوری متحد تانزانیا *"
+  },
+  {
+    "id": "UGA",
+    "en": "Uganda",
+    "fa": "اوگاندا"
+  },
+  {
+    "id": "UKR",
+    "en": "Ukraine",
+    "fa": "اوکراین"
+  },
+  {
+    "id": "UMI",
+    "en": "United States Minor Outlying Islands",
+    "fa": "جزایر کوچک حاشیه های ایالات متحده *"
+  },
+  {
+    "id": "URY",
+    "en": "Uruguay",
+    "fa": "اروگوئه"
+  },
+  {
+    "id": "USA",
+    "en": "United States of America",
+    "fa": "ایالات متحده آمریکا *"
+  },
+  {
+    "id": "UZB",
+    "en": "Uzbekistan",
+    "fa": "ازبکستان"
+  },
+  {
+    "id": "VAT",
+    "en": "Holy See",
+    "fa": "قدمگاه مقدس *"
+  },
+  {
+    "id": "VCT",
+    "en": "Saint Vincent and the Grenadines",
+    "fa": "سنت وینسنت و گرنادین ها *"
+  },
+  {
+    "id": "VEN",
+    "en": "Venezuela (Bolivarian Republic of)",
+    "fa": "ونزوئلا (جمهوری بولیواری) *"
+  },
+  {
+    "id": "VGB",
+    "en": "British Virgin Islands",
+    "fa": "جزایر ویرجین بریتانیا"
+  },
+  {
+    "id": "VIR",
+    "en": "United States Virgin Islands",
+    "fa": "جزایر ویرجین ایالات متحده *"
+  },
+  {
+    "id": "VNM",
+    "en": "Viet Nam",
+    "fa": "ویتنام *"
+  },
+  {
+    "id": "VUT",
+    "en": "Vanuatu",
+    "fa": "وانواتو"
+  },
+  {
+    "id": "WLD",
+    "en": "World",
+    "fa": "ﺞﻫﺎﻧ"
+  },
+  {
+    "id": "WLF",
+    "en": "Wallis and Futuna Islands",
+    "fa": "جزایر والیس و فوتونا *"
+  },
+  {
+    "id": "WSM",
+    "en": "Samoa",
+    "fa": "ساموآ"
+  },
+  {
+    "id": "YEM",
+    "en": "Yemen",
+    "fa": "یمن"
+  },
+  {
+    "id": "ZAF",
+    "en": "South Africa",
+    "fa": "افریقای جنوبی"
+  },
+  {
+    "id": "ZMB",
+    "en": "Zambia",
+    "fa": "زامبیا"
+  },
+  {
+    "id": "ZWE",
+    "en": "Zimbabwe",
+    "fa": "زیمبابوه"
+  },
+  {
+    "id": "en",
+    "en": "English",
+    "fa": "انگلیسی"
+  },
+  {
+    "id": "fr",
+    "en": "French",
+    "fa": "فرانسوی"
+  },
+  {
+    "id": "es",
+    "en": "Spanish",
+    "fa": "اسپانیایی"
+  },
+  {
+    "id": "ru",
+    "en": "Russian",
+    "fa": "روسی"
+  },
+  {
+    "id": "zh",
+    "en": "Chinese",
+    "fa": "چینی"
+  },
+  {
+    "id": "de",
+    "en": "German",
+    "fa": "آلمانی"
+  },
+  {
+    "id": "bn",
+    "en": "Bengali",
+    "fa": "بنگالی"
+  },
+  {
+    "id": "fa",
+    "en": "Farsi",
+    "fa": "فارسی"
+  },
+  {
+    "id": "ps",
+    "en": "Pashto",
+    "fa": "پاستو"
+  },
+  {
+    "id": "ar",
+    "en": "Arabic",
+    "fa": "عربی *"
+  },
+  {
+    "id": "m49_901",
+    "en": "50°S-50°N",
+    "fa": "50 درجه جنوبی -50 درجه شمالی *"
+  },
+  {
+    "id": "m49_902",
+    "en": "Pantropical",
+    "fa": "گرمسیری *"
+  },
+  {
+    "id": "global",
+    "en": "Global",
+    "fa": "جهانی"
+  },
+  {
+    "id": "region",
+    "en": "Region",
+    "fa": "منطقه"
+  },
+  {
+    "id": "other_region",
+    "en": "Other region",
+    "fa": "منطقه دیگر"
+  },
+  {
+    "id": "sub_region",
+    "en": "Sub-region",
+    "fa": "منطقه فرعی"
+  },
+  {
+    "id": "intermediate_region",
+    "en": "Intermediate region",
+    "fa": "منطقه متوسط"
+  },
+  {
+    "id": "m49_005",
+    "en": "South America",
+    "fa": "آمریکای جنوبی *"
+  },
+  {
+    "id": "m49_011",
+    "en": "Western Africa",
+    "fa": "آفریقای غربی *"
+  },
+  {
+    "id": "m49_013",
+    "en": "Central America",
+    "fa": "آمریکای مرکزی *"
+  },
+  {
+    "id": "m49_014",
+    "en": "Eastern Africa",
+    "fa": "آفریقای شرقی *"
+  },
+  {
+    "id": "m49_017",
+    "en": "Middle Africa",
+    "fa": "آفریقای میانه *"
+  },
+  {
+    "id": "m49_018",
+    "en": "Southern Africa",
+    "fa": "آفریقای جنوبی *"
+  },
+  {
+    "id": "m49_029",
+    "en": "Caribbean",
+    "fa": "کارائیب *"
+  },
+  {
+    "id": "m49_830",
+    "en": "Channel Islands",
+    "fa": "جزایر کانال *"
+  },
+  {
+    "id": "m49_002",
+    "en": "Africa",
+    "fa": "آفریقا *"
+  },
+  {
+    "id": "m49_009",
+    "en": "Oceania",
+    "fa": "اقیانوسیه *"
+  },
+  {
+    "id": "m49_019",
+    "en": "Americas",
+    "fa": "قاره آمریکا *"
+  },
+  {
+    "id": "m49_142",
+    "en": "Asia",
+    "fa": "آسیا *"
+  },
+  {
+    "id": "m49_150",
+    "en": "Europe",
+    "fa": "اروپا *"
+  },
+  {
+    "id": "m49_015",
+    "en": "Northern Africa",
+    "fa": "شمال آفریقا *"
+  },
+  {
+    "id": "m49_021",
+    "en": "Northern America",
+    "fa": "آمریکای شمالی *"
+  },
+  {
+    "id": "m49_030",
+    "en": "Eastern Asia",
+    "fa": "آسیای شرقی *"
+  },
+  {
+    "id": "m49_034",
+    "en": "Southern Asia",
+    "fa": "جنوب آسیا *"
+  },
+  {
+    "id": "m49_035",
+    "en": "South-eastern Asia",
+    "fa": "جنوب شرقی آسیا *"
+  },
+  {
+    "id": "m49_039",
+    "en": "Southern Europe",
+    "fa": "اروپای جنوبی *"
+  },
+  {
+    "id": "m49_053",
+    "en": "Australia and New Zealand",
+    "fa": "استرالیا و نیوزیلند *"
+  },
+  {
+    "id": "m49_054",
+    "en": "Melanesia",
+    "fa": "ملانزی *"
+  },
+  {
+    "id": "m49_057",
+    "en": "Micronesia",
+    "fa": "میکرونزی *"
+  },
+  {
+    "id": "m49_061",
+    "en": "Polynesia",
+    "fa": "پولینزی *"
+  },
+  {
+    "id": "m49_143",
+    "en": "Central Asia",
+    "fa": "آسیای مرکزی *"
+  },
+  {
+    "id": "m49_145",
+    "en": "Western Asia",
+    "fa": "آسیای غربی *"
+  },
+  {
+    "id": "m49_151",
+    "en": "Eastern Europe",
+    "fa": "اروپای شرقی *"
+  },
+  {
+    "id": "m49_154",
+    "en": "Northern Europe",
+    "fa": "اروپای شمالی *"
+  },
+  {
+    "id": "m49_155",
+    "en": "Western Europe",
+    "fa": "اروپای غربی *"
+  },
+  {
+    "id": "m49_202",
+    "en": "Sub-Saharan Africa",
+    "fa": "جنوب صحرای آفریقا *"
+  },
+  {
+    "id": "m49_419",
+    "en": "Latin America and the Caribbean",
+    "fa": "آمریکای لاتین و کارائیب *"
+  },
+  {
+    "id": "brand",
+    "en": "MapX",
+    "fa": "MapX"
+  },
+  {
+    "id": "admin",
+    "en": "Administrator",
+    "fa": "مدیران"
+  },
+  {
+    "id": "admins",
+    "en": "Administrators",
+    "fa": "سرپرستان *"
+  },
+  {
+    "id": "bottom",
+    "en": "Bottom",
+    "fa": "پایین"
+  },
+  {
+    "id": "btn_browse",
+    "en": "Browse...",
+    "fa": "مرور کردن... *"
+  },
+  {
+    "id": "btn_help",
+    "en": "Help",
+    "fa": "کمک *"
+  },
+  {
+    "id": "epsg_set_projection_export",
+    "en": "Set the export projection, using a code from the EPSG format",
+    "fa": "پیش بینی صادرات را با استفاده از کدی از قالب EPSG تنظیم کنید *"
+  },
+  {
+    "id": "epsg_set_projection_import",
+    "en": "Assign a projection system to the data ( code EPSG, optional )",
+    "fa": "یک سیستم طرح ریزی به داده ها اختصاص دهید (کد EPSG ، اختیاری) *"
+  },
+  {
+    "id": "epsg_btn_search",
+    "en": "Search",
+    "fa": "جستجو کردن *"
+  },
+  {
+    "id": "epsg_placeholder_search",
+    "en": "Country or projection name ...",
+    "fa": "نام کشور یا طرح ... *"
+  },
+  {
+    "id": "epsg_label_search",
+    "en": "Enter a country or projection name",
+    "fa": "یک کشور یا نام طرح را وارد کنید *"
+  },
+  {
+    "id": "epsg_placeholder_input",
+    "en": "EPSG code. e.g. '4326'",
+    "fa": "کد EPSG به عنوان مثال \"4326\" *"
+  },
+  {
+    "id": "epsg_btn_open_search",
+    "en": "Find epsg code ...",
+    "fa": "کد epsg را پیدا کنید ... *"
+  },
+  {
+    "id": "btn_add_source",
+    "en": "Add a source layer",
+    "fa": "افزودن لایه اصلی"
+  },
+  {
+    "id": "btn_about",
+    "en": "About",
+    "fa": "در باره *"
+  },
+  {
+    "id": "title_about",
+    "en": "About",
+    "fa": "در باره *"
+  },
+  {
+    "id": "btn_load_new_project",
+    "en": "Load the new project",
+    "fa": "پروژه جدید را بارگیری کنید *"
+  },
+  {
+    "id": "btn_add_view",
+    "en": "Create a new view",
+    "fa": "افزودن نمایه"
+  },
+  {
+    "id": "btn_show_db_info",
+    "en": "Full access",
+    "fa": "دسترسی کامل *"
+  },
+  {
+    "id": "btn_show_project_external_views",
+    "en": "Manage external views",
+    "fa": "نماهای خارجی را مدیریت کنید *"
+  },
+  {
+    "id": "btn_show_db_query_maker",
+    "en": "API SQL query maker",
+    "fa": "API SQL سازنده پرس و جو *"
+  },
+  {
+    "id": "label_query_write",
+    "en": "Write your SQL query",
+    "fa": "درخواست SQL خود را بنویسید *"
+  },
+  {
+    "id": "label_layer_available",
+    "en": "Relations available",
+    "fa": "روابط موجود است *"
+  },
+  {
+    "id": "btn_show_add_project",
+    "en": "Add a new project",
+    "fa": "یک پروژه جدید اضافه کنید *"
+  },
+  {
+    "id": "btn_show_add_project_disabled",
+    "en": "Add a new project ( disabled )",
+    "fa": "اضافه کردن یک پروژه جدید (غیرفعال) *"
+  },
+  {
+    "id": "btn_show_db_info_self",
+    "en": "Get temporary access to edit a dataset",
+    "fa": "برای ویرایش یک مجموعه داده به طور موقت دسترسی پیدا کنید *"
+  },
+  {
+    "id": "btn_cancel",
+    "en": "Cancel",
+    "fa": "لغو "
+  },
+  {
+    "id": "btn_copy",
+    "en": "Copy",
+    "fa": "کپی 🀄 *"
+  },
+  {
+    "id": "btn_geolocate_user",
+    "en": "Geolocate",
+    "fa": "لغو "
+  },
+  {
+    "id": "btn_close",
+    "en": "Close",
+    "fa": "بستن"
+  },
+  {
+    "id": "btn_join_project_long",
+    "en": "Membership request for this project",
+    "fa": "درخواست عضویت در این پروژه *"
+  },
+  {
+    "id": "btn_join_project",
+    "en": "Join",
+    "fa": "پیوستن *"
+  },
+  {
+    "id": "btn_join_current_project",
+    "en": "Join current project ( %s )",
+    "fa": "به پروژه فعلی بپیوندید (%s ) *"
+  },
+  {
+    "id": "btn_confirm",
+    "en": "Confirm",
+    "fa": "تایید"
+  },
+  {
+    "id": "btn_country",
+    "en": "Select country",
+    "fa": "انتخاب کشور"
+  },
+  {
+    "id": "btn_create",
+    "en": "Create",
+    "fa": "ایجاد"
+  },
+  {
+    "id": "btn_delete",
+    "en": "Delete",
+    "fa": "حذف"
+  },
+  {
+    "id": "btn_edit_selected",
+    "en": "Edit selected",
+    "fa": "ویرایش انتخاب شد *"
+  },
+  {
+    "id": "btn_edit_source",
+    "en": "Manage sources",
+    "fa": "منابع را مدیریت کنید *"
+  },
+  {
+    "id": "btn_source_overlap_utilities",
+    "en": "Area intersection tools",
+    "fa": "ابزار تقاطع منطقه *"
+  },
+  {
+    "id": "btn_source_validate_geom",
+    "en": "Geometry validation",
+    "fa": "اعتبارسنجی هندسه *"
+  },
+  {
+    "id": "btn_analyse",
+    "en": "Run analysis",
+    "fa": "تجزیه و تحلیل را اجرا کنید *"
+  },
+  {
+    "id": "logs",
+    "en": "Logs",
+    "fa": "سیاهههای مربوط *"
+  },
+  {
+    "id": "calc_area_result",
+    "en": "Area of intersection (km2)",
+    "fa": "سطح تقاطع (km2) *"
+  },
+  {
+    "id": "radio_source_overlap_mode",
+    "en": "Select analysis",
+    "fa": "تجزیه و تحلیل را انتخاب کنید *"
+  },
+  {
+    "id": "source_overlap_mode_area",
+    "en": "Calculate area of intersection",
+    "fa": "مساحت تقاطع را محاسبه کنید *"
+  },
+  {
+    "id": "source_overlap_mode_create_source",
+    "en": "Create new layer based on the intersection",
+    "fa": "بر اساس تقاطع لایه جدید ایجاد کنید *"
+  },
+  {
+    "id": "check_add_source_from_view",
+    "en": "Add sources by views",
+    "fa": "منابع را براساس بازدیدها اضافه کنید *"
+  },
+  {
+    "id": "select_overlap_source_from_view",
+    "en": "Select views",
+    "fa": "نماها را انتخاب کنید *"
+  },
+  {
+    "id": "btn_add_source_from_view",
+    "en": "Add sources from those views",
+    "fa": "منابعی را از این نماها اضافه کنید *"
+  },
+  {
+    "id": "select_overlap_layers",
+    "en": "Layers : minimum 1, maximum 3, reorder if needed ",
+    "fa": "لایه ها: حداقل 1 ، حداکثر 3 ، در صورت نیاز دوباره مرتب کنید *"
+  },
+  {
+    "id": "select_overlap_countries",
+    "en": "Country",
+    "fa": "کشور *"
+  },
+  {
+    "id": "n_layers_more_3",
+    "en": "More than three layers selected",
+    "fa": "بیش از سه لایه انتخاب شده است *"
+  },
+  {
+    "id": "n_layers_less_1",
+    "en": "Less that one layer selected",
+    "fa": "کمتر از یک لایه انتخاب شده است *"
+  },
+  {
+    "id": "n_country_not_1",
+    "en": "Only one country should be selected",
+    "fa": "فقط یک کشور باید انتخاب شود *"
+  },
+  {
+    "id": "title_overlap_tools",
+    "en": "Area intersection utilities",
+    "fa": "مصارف تقاطع منطقه *"
+  },
+  {
+    "id": "source_overlap_new_source_email_info",
+    "en": "An email will be send to '%s' at the end of the process",
+    "fa": "ایمیل به 'ارسال خواهد شد%s در پایان روند *"
+  },
+  {
+    "id": "btn_edit_source_metadata",
+    "en": "Edit sources metadata",
+    "fa": "فراداده منابع را ویرایش کنید *"
+  },
+  {
+    "id": "btn_finish",
+    "en": "Finish",
+    "fa": "تمام"
+  },
+  {
+    "id": "btn_fullscreen",
+    "en": "Display the app in fullscreen mode",
+    "fa": "نمایش برنامه بشکل صفحه کامل"
+  },
+  {
+    "id": "btn_get_area_visible",
+    "en": "Area of visible features",
+    "fa": "ساحه پدیده های قابل دید"
+  },
+  {
+    "id": "btn_get_overlap_visible",
+    "en": "Overlaps to geojson",
+    "fa": "با geojson همپوشانی دارد *"
+  },
+  {
+    "id": "btn_get_layer_summary",
+    "en": "Get layer summary",
+    "fa": "تنظیم  منابع\""
+  },
+  {
+    "id": "btn_iframe_builder",
+    "en": "Embed MapX",
+    "fa": "MapX را تعبیه کنید *"
+  },
+  {
+    "id": "btn_language",
+    "en": "Language",
+    "fa": "زبان"
+  },
+  {
+    "id": "btn_login",
+    "en": "Login window",
+    "fa": "صفحه ورودی "
+  },
+  {
+    "id": "btn_north_arrow",
+    "en": "Reset bearing",
+    "fa": "تنظیم مجدد تحمل *"
+  },
+  {
+    "id": "btn_draw_mode",
+    "en": "Vector draw tools",
+    "fa": "ابزار رسم بردار *"
+  },
+  {
+    "id": "btn_map_composer",
+    "en": "Map composer",
+    "fa": "آهنگساز نقشه *"
+  },
+  {
+    "id": "btn_opt_date",
+    "en": "Filter date",
+    "fa": "تاریخ فیلتر *"
+  },
+  {
+    "id": "btn_opt_attribute_table",
+    "en": "Attribute table",
+    "fa": "جدول صفات *"
+  },
+  {
+    "id": "btn_opt_delete",
+    "en": "Remove this view",
+    "fa": "حذف این نمایه"
+  },
+  {
+    "id": "btn_opt_home_project",
+    "en": "Open original project",
+    "fa": "پروژه اصلی را باز کنید *"
+  },
+  {
+    "id": "btn_opt_move_top",
+    "en": "Move to top",
+    "fa": "به بالا بروید *"
+  },
+  {
+    "id": "btn_opt_move_bottom",
+    "en": "Move to bottom",
+    "fa": "به پایین بروید *"
+  },
+  {
+    "id": "btn_opt_delete_geojson",
+    "en": "Delete",
+    "fa": "حذف"
+  },
+  {
+    "id": "btn_opt_download",
+    "en": "Download the data",
+    "fa": "دانلود معلومات"
+  },
+  {
+    "id": "btn_opt_edit_config",
+    "en": "Configure this view",
+    "fa": "تنظیم این نمایه"
+  },
+  {
+    "id": "btn_opt_edit_custom_code",
+    "en": "Edit code",
+    "fa": "ویرایش کد *"
+  },
+  {
+    "id": "btn_opt_edit_dashboard",
+    "en": "Edit dashboard",
+    "fa": "داشبورد را ویرایش کنید *"
+  },
+  {
+    "id": "btn_opt_edit_story",
+    "en": "Edit story map",
+    "fa": "نقشه داستان را ویرایش کنید *"
+  },
+  {
+    "id": "btn_opt_edit_style",
+    "en": "Set the style of this view",
+    "fa": "تنظیم ستایل این نمایه"
+  },
+  {
+    "id": "schema_style_title_legend",
+    "en": "Legend title",
+    "fa": "عنوان افسانه ای *"
+  },
+  {
+    "id": "schema_style_include_upper_bound",
+    "en": "Include upper bound in interval",
+    "fa": "محدوده فوقانی را در فاصله قرار دهید *"
+  },
+  {
+    "id": "schema_style_include_upper_bound_desc",
+    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
+    "fa": "در صورت علامت گذاری ، بازه ها شامل حد بالایی خواهد بود. هر گزینه ای که انتخاب شود ، حداقل و حداکثر مقدار همیشه در بازه های اول و آخر قرار می گیرند *"
+  },
+  {
+    "id": "schema_style_reverse_order",
+    "en": "Reverse displayed layers order",
+    "fa": "ترتیب لایه های نمایش داده شده را معکوس کنید *"
+  },
+  {
+    "id": "schema_style_reverse_order_desc",
+    "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
+    "fa": "در صورت علامت گذاری ، پشته لایه برعکس خواهد شد: قانون بالا یک لایه در پایین پشته رسم می کند *"
+  },
+  {
+    "id": "schema_style_show_symbol_label",
+    "en": "Show symbol with label",
+    "fa": "نماد را با برچسب نشان دهید *"
+  },
+  {
+    "id": "schema_style_show_symbol_label_desc",
+    "en": "If using symbols with point data, should MapX add labels around it?",
+    "fa": "اگر از نمادهایی با داده های نقطه ای استفاده می کنید ، آیا MapX باید برچسب های اطراف خود را اضافه کند؟ *"
+  },
+  {
+    "id": "schema_style_hide_nulls",
+    "en": "Ignore missing values",
+    "fa": "مقادیر از دست رفته را نادیده بگیرید *"
+  },
+  {
+    "id": "schema_style_hide_nulls_desc",
+    "en": "If checked, null or missing values will be ignored in the style",
+    "fa": "اگر علامت زده شود ، مقادیر پوچ یا از دست رفته در سبک نادیده گرفته می شوند *"
+  },
+  {
+    "id": "btn_opt_meta",
+    "en": "Display metadata",
+    "fa": "نمایش ابرداده"
+  },
+  {
+    "id": "btn_opt_numeric",
+    "en": "Filter by numeric value",
+    "fa": "با مقدار عددی فیلتر کنید *"
+  },
+  {
+    "id": "btn_opt_reset",
+    "en": "Reset the view",
+    "fa": "تنظیم دوباره نمایش"
+  },
+  {
+    "id": "btn_opt_screenshot",
+    "en": "Take a screenshoot",
+    "fa": "گرفتن تصویر"
+  },
+  {
+    "id": "btn_opt_search",
+    "en": "Settings",
+    "fa": "جستجو و فلتر"
+  },
+  {
+    "id": "btn_opt_share",
+    "en": "Share a link to this view",
+    "fa": "پیوندی به این نمای به اشتراک بگذارید *"
+  },
+  {
+    "id": "btn_opt_share_to_project",
+    "en": "Share this view in another project",
+    "fa": "این نظر را در پروژه دیگری به اشتراک بگذارید *"
+  },
+  {
+    "id": "share_in_project_no_publisher_project",
+    "en": "You have no project yet where to publish this view",
+    "fa": "هنوز هیچ پروژه ای برای انتشار این دیدگاه ندارید *"
+  },
+  {
+    "id": "share_in_project_no_view",
+    "en": "No view to share",
+    "fa": "دیدگاهی برای اشتراک گذاری وجود ندارد *"
+  },
+  {
+    "id": "btn_opt_start_story",
+    "en": "Read this story map",
+    "fa": "این تاریخ را بخوانید"
+  },
+  {
+    "id": "btn_opt_transparency",
+    "en": "Transparency",
+    "fa": "شفافیت *"
+  },
+  {
+    "id": "btn_opt_zoom_all",
+    "en": "Zoom to all features",
+    "fa": "بزرگنمایی به همه پدیده ها"
+  },
+  {
+    "id": "btn_opt_zoom_visible",
+    "en": "Zoom on displayed features",
+    "fa": "بزرگنمایی به اندازه نمایش پدیده ها"
+  },
+  {
+    "id": "btn_preview",
+    "en": "Preview",
+    "fa": "پیش نمایش *"
+  },
+  {
+    "id": "btn_selfdb_generate_info",
+    "en": "Generate",
+    "fa": "تولید می کنند *"
+  },
+  {
+    "id": "btn_print",
+    "en": "Print current",
+    "fa": "پرنت صفحه فعلی"
+  },
+  {
+    "id": "btn_reset",
+    "en": "Reset",
+    "fa": "تنظیم دوباره"
+  },
+  {
+    "id": "btn_save",
+    "en": "Save",
+    "fa": "ذخیره"
+  },
+  {
+    "id": "btn_send",
+    "en": "Submit",
+    "fa": "ارسال"
+  },
+  {
+    "id": "btn_show_app_config",
+    "en": "Configuration",
+    "fa": "پیکربندی *"
+  },
+  {
+    "id": "btn_show_project_config",
+    "en": "Project configuration",
+    "fa": "پیکربندی پروژه *"
+  },
+  {
+    "id": "btn_show_project_views_states",
+    "en": "Save views list state",
+    "fa": "حالت لیست بازدیدها را ذخیره کنید *"
+  },
+  {
+    "id": "btn_show_project_delete",
+    "en": "Delete this project",
+    "fa": "این پروژه را حذف کنید *"
+  },
+  {
+    "id": "btn_show_project_delete_disabled",
+    "en": "Delete this project ( disabled )",
+    "fa": "حذف این پروژه (غیرفعال) *"
+  },
+  {
+    "id": "btn_show_role_manager",
+    "en": "Define roles",
+    "fa": "نقش ها را تعریف کنید *"
+  },
+  {
+    "id": "btn_sort_date",
+    "en": "Date",
+    "fa": "تاریخ *"
+  },
+  {
+    "id": "btn_filter_checked",
+    "en": "Filter activated views",
+    "fa": "نماهای فعال شده را فیلتر کنید *"
+  },
+  {
+    "id": "btn_filter_show_panel",
+    "en": "Advanced filter",
+    "fa": "فیلتر پیشرفته *"
+  },
+  {
+    "id": "btn_sort_title",
+    "en": "Title",
+    "fa": "عنوان *"
+  },
+  {
+    "id": "sort_label",
+    "en": "Sort by",
+    "fa": "مرتب سازی بر اساس *"
+  },
+  {
+    "id": "btn_story_unlock_map",
+    "en": "Toggle map interaction",
+    "fa": "تعامل نقشه را تغییر دهید *"
+  },
+  {
+    "id": "btn_story_close",
+    "en": "Back to the map explorer",
+    "fa": "بازگشت به کاوشگر نقشه *"
+  },
+  {
+    "id": "btn_story_edit_cancel",
+    "en": "Cancel edition",
+    "fa": "لغو نسخه *"
+  },
+  {
+    "id": "btn_story_edit_save",
+    "en": "Save edition",
+    "fa": "ذخیره نسخه *"
+  },
+  {
+    "id": "btn_story_edit",
+    "en": "Start edition",
+    "fa": "شروع نسخه *"
+  },
+  {
+    "id": "btn_switchui",
+    "en": "Toggle the color of the interface",
+    "fa": "تغییر رنگ صفحه رابط"
+  },
+  {
+    "id": "btn_tab_dashboard",
+    "en": "Toggle dashboards",
+    "fa": "تغییر داشبورد *"
+  },
+  {
+    "id": "btn_tab_settings",
+    "en": "Settings ",
+    "fa": "تنظیمات "
+  },
+  {
+    "id": "btn_tab_tools",
+    "en": "Toolbox",
+    "fa": "جبعه ابزار"
+  },
+  {
+    "id": "btn_tab_views",
+    "en": "Views",
+    "fa": "نمایه ها"
+  },
+  {
+    "id": "btn_tab_search",
+    "en": "Search",
+    "fa": "جستجو کردن *"
+  },
+  {
+    "id": "btn_theme_switch",
+    "en": "Switch theme",
+    "fa": "تغییر طرح زمینه *"
+  },
+  {
+    "id": "btn_theme_sat",
+    "en": "Switch theme : aerial",
+    "fa": "هوایی"
+  },
+  {
+    "id": "btn_3d_terrain",
+    "en": "Add 3d terrain",
+    "fa": "زمین سه بعدی اضافه کنید *"
+  },
+  {
+    "id": "btn_toggle_all",
+    "en": "Immersive mode",
+    "fa": "حالت غوطه وری *"
+  },
+  {
+    "id": "btn_update",
+    "en": "Update  ",
+    "fa": "تجدید"
+  },
+  {
+    "id": "btn_upload",
+    "en": "Upload",
+    "fa": "آپلود\""
+  },
+  {
+    "id": "btn_zoom_in",
+    "en": "Zoom in",
+    "fa": "بزرگنمایی"
+  },
+  {
+    "id": "btn_zoom_out",
+    "en": "Zoom out",
+    "fa": "کوچک نمایی"
+  },
+  {
+    "id": "btn_overlap_spotlight",
+    "en": "Highlight vector features",
+    "fa": "ویژگی های برداری را برجسته کنید *"
+  },
+  {
+    "id": "title_config_highlight",
+    "en": "Highlight tool configuration",
+    "fa": "پیکربندی ابزار را برجسته کنید *"
+  },
+  {
+    "id": "select_highlight_mode",
+    "en": "Select highlight mode",
+    "fa": "حالت برجسته را انتخاب کنید *"
+  },
+  {
+    "id": "highlight_where_all",
+    "en": "Highlight where all features overlap",
+    "fa": "در جایی که همه ویژگی ها با هم تداخل دارند برجسته کنید *"
+  },
+  {
+    "id": "highlight_where_any",
+    "en": "Highlight any visible feature",
+    "fa": "هر ویژگی قابل مشاهده را برجسته کنید *"
+  },
+  {
+    "id": "highlight_where_two",
+    "en": "Highlight where two features overlap",
+    "fa": "در جایی که دو ویژگی با هم تداخل دارند برجسته کنید *"
+  },
+  {
+    "id": "highlight_where_three",
+    "en": "Highlight where three features overlap",
+    "fa": "در جایی که سه ویژگی با هم تداخل دارند برجسته کنید *"
+  },
+  {
+    "id": "highlight_where_four",
+    "en": "Highlight where four features overlap",
+    "fa": "در جایی که چهار ویژگی با هم تداخل دارند برجسته کنید *"
+  },
+  {
+    "id": "highlight_where_five",
+    "en": "Highlight where five features overlap",
+    "fa": "در جایی که پنج ویژگی با هم تداخل دارند برجسته کنید *"
+  },
+  {
+    "id": "label_check_instant_overlap",
+    "en": "Enable overlap area estimation",
+    "fa": "تخمین منطقه همپوشانی را فعال کنید *"
+  },
+  {
+    "id": "label_area_instant_overlap",
+    "en": "Instant area estimation",
+    "fa": "برآورد فوری منطقه *"
+  },
+  {
+    "id": "label_help_area_instant_overlap",
+    "en": "The overlap surface is estimated using a spherical representation of the Earth. The result will vary depending on the data quality, current filters and current resolution.",
+    "fa": "سطح همپوشانی با استفاده از یک نمایش کروی از زمین تخمین زده می شود. نتیجه بسته به کیفیت داده ، فیلترهای فعلی و وضوح فعلی متفاوت خواهد بود. *"
+  },
+  {
+    "id": "label_resol_instant_overlap",
+    "en": "Current resolution",
+    "fa": "وضوح فعلی *"
+  },
+  {
+    "id": "label_help_resol_instant_overlap",
+    "en": "The current resolution depends on the zoom level and latitude. It represents the average area covered by one pixel.",
+    "fa": "وضوح فعلی به سطح زوم و عرض جغرافیایی بستگی دارد. این نشان دهنده مساحت متوسط تحت پوشش یک پیکسل است. *"
+  },
+  {
+    "id": "categorical",
+    "en": "Categorical",
+    "fa": "طبقه ایی"
+  },
+  {
+    "id": "cc",
+    "en": "Custom code",
+    "fa": "کد سفارشی *"
+  },
+  {
+    "id": "center",
+    "en": "Center",
+    "fa": "وسط"
+  },
+  {
+    "id": "country",
+    "en": "Country",
+    "fa": "کشور"
+  },
+  {
+    "id": "create",
+    "en": "Create",
+    "fa": "ایجاد"
+  },
+  {
+    "id": "content",
+    "en": "Content",
+    "fa": "محتوا *"
+  },
+  {
+    "id": "title",
+    "en": "Title",
+    "fa": "عنوان *"
+  },
+  {
+    "id": "join_project",
+    "en": "Join",
+    "fa": "پیوستن *"
+  },
+  {
+    "id": "dev",
+    "en": "Development",
+    "fa": "توسعه"
+  },
+  {
+    "id": "env",
+    "en": "Environment",
+    "fa": "محیط"
+  },
+  {
+    "id": "error_no_layer",
+    "en": "No source layer set",
+    "fa": "لایه منبع ایجاد نشد"
+  },
+  {
+    "id": "error_form_issues",
+    "en": "There are some issues in the form, please correct them",
+    "fa": "برخی از موارد در فرم وجود دارد ، لطفا آنها را اصلاح کنید *"
+  },
+  {
+    "id": "warning_delete_project",
+    "en": "Project deletion also remove all views, data, settings and anything related to this project, including views used in other project. Data shared from other project will be preserved",
+    "fa": "لایه منبع ایجاد نشد"
+  },
+  {
+    "id": "error_no_source",
+    "en": "No source layer found",
+    "fa": "منبع لایه مرتبط پیدا نشد"
+  },
+  {
+    "id": "error_title_exists",
+    "en": "This title already exists",
+    "fa": " عنوان از قبل موجود میباشد"
+  },
+  {
+    "id": "error_title_no_match",
+    "en": "The title does not match",
+    "fa": "عنوان مطابقت ندارد *"
+  },
+  {
+    "id": "error_title_short",
+    "en": "The title is too short",
+    "fa": "عنوان بسیار کوتاه است"
+  },
+  {
+    "id": "error_title_not_valid",
+    "en": "The title is not valid",
+    "fa": "عنوان معتبر نیست *"
+  },
+  {
+    "id": "error_description_short",
+    "en": "The description is too short",
+    "fa": "توضیحات خیلی کوتاه است *"
+  },
+  {
+    "id": "error_title_bad",
+    "en": "The title is not valid",
+    "fa": "عنوان معتبر نیست *"
+  },
+  {
+    "id": "error_project_default_not_public",
+    "en": "The default project must be public",
+    "fa": "پروژه پیش فرض باید عمومی باشد *"
+  },
+  {
+    "id": "error_email_not_valid",
+    "en": "This email is not valid",
+    "fa": "این ایمیل معتبر نیست *"
+  },
+  {
+    "id": "error_email_is_member",
+    "en": "A member with this email already exists",
+    "fa": "عضوی با این ایمیل از قبل وجود دارد *"
+  },
+  {
+    "id": "error_login",
+    "en": "Login issue",
+    "fa": "مشکل ورود به سیستم *"
+  },
+  {
+    "id": "error_email_bad",
+    "en": "This email is not accepted",
+    "fa": "این ایمیل پذیرفته نیست *"
+  },
+  {
+    "id": "error_action_link_expired",
+    "en": "This link has expired",
+    "fa": "این پیوند منقضی شده است *"
+  },
+  {
+    "id": "error_msg_too_long",
+    "en": "This message is too long",
+    "fa": "این پیام خیلی طولانی است *"
+  },
+  {
+    "id": "error_msg_too_short",
+    "en": "This message is too short",
+    "fa": "این پیام خیلی کوتاه است *"
+  },
+  {
+    "id": "error_email_not_registered",
+    "en": "This email does not belongs to a current MapX user. Once open, the activation link will also create automatically a new account on MapX.",
+    "fa": "این ایمیل به کاربر فعلی MapX تعلق ندارد. پس از باز شدن ، پیوند فعال سازی همچنین به طور خودکار یک حساب جدید در MapX ایجاد می کند. *"
+  },
+  {
+    "id": "error_description_bad",
+    "en": "The description is not valid",
+    "fa": "شرح معتبر نیست *"
+  },
+  {
+    "id": "error_title_long",
+    "en": "The title is to long",
+    "fa": "عنوان طولانی است *"
+  },
+  {
+    "id": "error_description_long",
+    "en": "The description is to long",
+    "fa": "شرح طولانی است *"
+  },
+  {
+    "id": "error_cant_geolocate_msg",
+    "en": "Sorry, MapX can't find your position",
+    "fa": "با عرض پوزش ، MapX موقعیت شما را پیدا نمی کند *"
+  },
+  {
+    "id": "error_geolocate_issue",
+    "en": "Geolocation issue",
+    "fa": "مسئله موقعیت جغرافیایی *"
+  },
+  {
+    "id": "exponential",
+    "en": "Continuous",
+    "fa": "پیوسته"
+  },
+  {
+    "id": "ext",
+    "en": "Extractive",
+    "fa": "مواد استخراجی"
+  },
+  {
+    "id": "fold_view_legend",
+    "en": "Legend",
+    "fa": "علایم"
+  },
+  {
+    "id": "fold_view_tools",
+    "en": "Tools",
+    "fa": "ابزار"
+  },
+  {
+    "id": "fold_views_filter",
+    "en": "Filter options",
+    "fa": "گزینه های فلتر"
+  },
+  {
+    "id": "fold_views_sort",
+    "en": "Sort views",
+    "fa": "مرتب سازی نمایه ها"
+  },
+  {
+    "id": "gj",
+    "en": "Local GeoJSON",
+    "fa": "GeoJSON محلی *"
+  },
+  {
+    "id": "inf",
+    "en": "Infrastructure",
+    "fa": "زیر بنا"
+  },
+  {
+    "id": "interval",
+    "en": "Interval",
+    "fa": "فاصله"
+  },
+  {
+    "id": "time_slider",
+    "en": "Time slider",
+    "fa": "نوار لغزنده زمان *"
+  },
+  {
+    "id": "custom_code",
+    "en": "Custom code",
+    "fa": "کد سفارشی *"
+  },
+  {
+    "id": "custom_style",
+    "en": "Custom style",
+    "fa": "سبک سفارشی *"
+  },
+  {
+    "id": "custom_style_edit",
+    "en": "Edit custom style",
+    "fa": "ویرایش سبک سفارشی *"
+  },
+  {
+    "id": "story_map",
+    "en": "Story map",
+    "fa": "نقشه داستان *"
+  },
+  {
+    "id": "dashboard",
+    "en": "Dashboard",
+    "fa": "داشبورد *"
+  },
+  {
+    "id": "overlap",
+    "en": "Overlap",
+    "fa": "همپوشانی *"
+  },
+  {
+    "id": "left",
+    "en": "Left",
+    "fa": "چپ"
+  },
+  {
+    "id": "line",
+    "en": "Line",
+    "fa": "خط"
+  },
+  {
+    "id": "loading_img",
+    "en": "Image loading, please wait ...",
+    "fa": "تصویر در حال اجرا، لطفا منتظر باشید..."
+  },
+  {
+    "id": "login_cancel",
+    "en": "Cancel",
+    "fa": "لغو"
+  },
+  {
+    "id": "login_required_for_project_access_guest",
+    "en": "Accessing a private project requires to be authenticated",
+    "fa": "دسترسی به یک پروژه خصوصی نیاز به احراز هویت دارد *"
+  },
+  {
+    "id": "login_required_for_project_access_non_member",
+    "en": "You are not authorized to access this project. You can try with another account.",
+    "fa": "شما مجاز به دسترسی به این پروژه نیستید. می توانید با یک حساب دیگر امتحان کنید. *"
+  },
+  {
+    "id": "login_required_for_project_list",
+    "en": "The filtered project list request requires authentication",
+    "fa": "درخواست لیست پروژه فیلتر شده نیاز به احراز هویت دارد *"
+  },
+  {
+    "id": "login_pwd_mail_sent",
+    "en": "An email has been sent, please check your inbox and copy the received password in the field below",
+    "fa": "یک ایمیل ارسال شده است ، لطفا صندوق ورودی خود را بررسی کنید و رمز عبور دریافت شده را در قسمت زیر کپی کنید *"
+  },
+  {
+    "id": "login_pwd_mail_sent_error",
+    "en": "An error occuried, we were not able to send you the single usage password. Please try again later.",
+    "fa": "خطایی رخ داد ، ما نتوانستیم رمز عبور یکبار مصرف را برای شما ارسال کنیم. لطفاً بعداً دوباره امتحان کنید. *"
+  },
+  {
+    "id": "login_project",
+    "en": "Project or country name in which the role applies",
+    "fa": "نام پروژه یا کشور که در آن نقش عملی میشود"
+  },
+  {
+    "id": "login_email",
+    "en": "Email",
+    "fa": "آدرس الکترونیکی"
+  },
+  {
+    "id": "login_insert_pwd",
+    "en": "Insert the single usage password",
+    "fa": "رمز عبور را وارد نمایید"
+  },
+  {
+    "id": "login_info_box",
+    "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
+    "fa": "اگر هنوز ثبت نام نکرده اید ، با احراز هویت موفق یک حساب جدید ایجاد می شود و ویژگی های جدید باز می شود. اگر قبلاً ثبت نام کرده اید ، با احراز هویت موفقیت آمیز امکان دسترسی به همه پروژه هایی که قبلاً در آن عضو شده اید فراهم می شود. ثبت نام کاربر در MapX به معنای رضایت برای جمع آوری و انتشار اطلاعات عملکرد اطلاعات قابل شناسایی غیر شخصی در سطح کل است. *"
+  },
+  {
+    "id": "login_out",
+    "en": "Log out",
+    "fa": "خروج"
+  },
+  {
+    "id": "login_groups",
+    "en": "Groups",
+    "fa": "گروه ها *"
+  },
+  {
+    "id": "login_send_pwd",
+    "en": "Send",
+    "fa": "ارسال"
+  },
+  {
+    "id": "login_subtitle",
+    "en": "Please enter your email to receive a single usage secure password",
+    "fa": "لطفا آدرس الکترونیکی خود را جهت دریافت رمز عبور وارد نمایید"
+  },
+  {
+    "id": "login_title",
+    "en": "Log in",
+    "fa": "ورود"
+  },
+  {
+    "id": "login_user_status",
+    "en": "User status",
+    "fa": "وضعیت کاربر *"
+  },
+  {
+    "id": "more",
+    "en": "More",
+    "fa": "بیشتر"
+  },
+  {
+    "id": "noAbstract",
+    "en": "[ Abstract missing ]",
+    "fa": "فاقد خلاصه"
+  },
+  {
+    "id": "noLegend",
+    "en": "[ Missing legend ]",
+    "fa": "[افسانه گمشده] *"
+  },
+  {
+    "id": "noData",
+    "en": "[ Missing value ]",
+    "fa": "فاقد قیمت"
+  },
+  {
+    "id": "noFilter",
+    "en": "[ No filter ]",
+    "fa": "عدم موجودیت فلتر"
+  },
+  {
+    "id": "noLayer",
+    "en": "[ No source layer ]",
+    "fa": "فاقد لایه منبع"
+  },
+  {
+    "id": "noValue",
+    "en": "[ No value ]",
+    "fa": "[بدون ارزش] *"
+  },
+  {
+    "id": "property_list_failed",
+    "en": "[ Failed to display attributes ]",
+    "fa": "[ویژگی ها نمایش داده نشد] *"
+  },
+  {
+    "id": "none",
+    "en": "None",
+    "fa": "هیچکدام"
+  },
+  {
+    "id": "noSelect",
+    "en": "[ Empty selection ]",
+    "fa": "فاقد انتخاب "
+  },
+  {
+    "id": "noTitle",
+    "en": "[ Title missing ]",
+    "fa": "فاقد عنوان"
+  },
+  {
+    "id": "noVariable",
+    "en": "[ Missing value ]",
+    "fa": "فاقد قیمت"
+  },
+  {
+    "id": "noViewOrig",
+    "en": "[ No view available ]",
+    "fa": "نمایش در دسترس نیست "
+  },
+  {
+    "id": "noView",
+    "en": "[ Select a different project, category or country to display available data ]",
+    "fa": "نمایش در دسترس نیست "
+  },
+  {
+    "id": "view_fetching_progress",
+    "en": "[ {{vOk}}/{{vTot}} ]",
+    "fa": "[{{vOk}} /{{vTot}} ] *"
+  },
+  {
+    "id": "nrg",
+    "en": "Energy",
+    "fa": "انرژی"
+  },
+  {
+    "id": "old_add_view",
+    "en": "Add a new view",
+    "fa": "افزودن نمای جدید"
+  },
+  {
+    "id": "oth",
+    "en": "Other",
+    "fa": "سایر"
+  },
+  {
+    "id": "point",
+    "en": "Point",
+    "fa": "نقطه"
+  },
+  {
+    "id": "pol",
+    "en": "Politics",
+    "fa": "سیاست"
+  },
+  {
+    "id": "polygon",
+    "en": "Polygon",
+    "fa": "چند ضلعی"
+  },
+  {
+    "id": "public",
+    "en": "Public",
+    "fa": "عمومی *"
+  },
+  {
+    "id": "login_label",
+    "en": "Login",
+    "fa": "وارد شدن *"
+  },
+  {
+    "id": "publish",
+    "en": "Publish",
+    "fa": "نشر"
+  },
+  {
+    "id": "publisher",
+    "en": "Publisher",
+    "fa": "ناشران"
+  },
+  {
+    "id": "publishers",
+    "en": "Publishers",
+    "fa": "ناشران *"
+  },
+  {
+    "id": "member",
+    "en": "Member",
+    "fa": "عضو *"
+  },
+  {
+    "id": "members",
+    "en": "Members",
+    "fa": "اعضا *"
+  },
+  {
+    "id": "contacts",
+    "en": "Contacts",
+    "fa": "مخاطب *"
+  },
+  {
+    "id": "right",
+    "en": "Right",
+    "fa": "راست"
+  },
+  {
+    "id": "rt",
+    "en": "Raster",
+    "fa": "رستر"
+  },
+  {
+    "id": "view_editable",
+    "en": "Editable",
+    "fa": "قابل ویرایش *"
+  },
+  {
+    "id": "view_local",
+    "en": "Curent project",
+    "fa": "پروژه Curent *"
+  },
+  {
+    "id": "sat",
+    "en": "Satellite imagery",
+    "fa": "تصویر ستلایتی"
+  },
+  {
+    "id": "save",
+    "en": "Save",
+    "fa": "ذخیره"
+  },
+  {
+    "id": "saved_at",
+    "en": "Saved at %s",
+    "fa": "ذخیره شده در%s *"
+  },
+  {
+    "id": "email",
+    "en": "Email",
+    "fa": "پست الکترونیک *"
+  },
+  {
+    "id": "from",
+    "en": "From",
+    "fa": "از جانب *"
+  },
+  {
+    "id": "to",
+    "en": "To",
+    "fa": "به *"
+  },
+  {
+    "id": "email_manager_title",
+    "en": "Email manager",
+    "fa": "مدیر ایمیل *"
+  },
+  {
+    "id": "email_manager_sent_success_generic",
+    "en": "An email has been sent to {{email}}",
+    "fa": "یک ایمیل به ارسال شده است{{email}} *"
+  },
+  {
+    "id": "email_manager_sent_error_generic",
+    "en": "An error occuried, the email has not been sent to {{email}}",
+    "fa": "خطایی رخ داد ، ایمیل به آن ارسال نشده است{{email}} *"
+  },
+  {
+    "id": "invite_member_email",
+    "en": "Invite a new member",
+    "fa": "عضو جدیدی دعوت کنید *"
+  },
+  {
+    "id": "btn_invite",
+    "en": "Invite",
+    "fa": "دعوت *"
+  },
+  {
+    "id": "btn_invite_form_hint",
+    "en": "Open an invitation form",
+    "fa": "فرم دعوت را باز کنید *"
+  },
+  {
+    "id": "btn_add",
+    "en": "Add",
+    "fa": "اضافه کردن *"
+  },
+  {
+    "id": "btn_add_user_hint",
+    "en": "Add this MapX user directly",
+    "fa": "این کاربر MapX را مستقیماً اضافه کنید *"
+  },
+  {
+    "id": "schema_class",
+    "en": "Class",
+    "fa": "صنف"
+  },
+  {
+    "id": "schema_style_nulls",
+    "en": "Missing values",
+    "fa": "ارزش از دست رفته *"
+  },
+  {
+    "id": "schema_style_color",
+    "en": "Color",
+    "fa": "رنگ "
+  },
+  {
+    "id": "schema_style_description",
+    "en": "Description",
+    "fa": "توضیحات"
+  },
+  {
+    "id": "schema_item",
+    "en": "Item",
+    "fa": "بخش"
+  },
+  {
+    "id": "schema_key",
+    "en": "Key",
+    "fa": "کلید"
+  },
+  {
+    "id": "schema_style_label",
+    "en": "Label",
+    "fa": "لیبل"
+  },
+  {
+    "id": "schema_style_last_rule",
+    "en": "Last rule",
+    "fa": "قانون آخر"
+  },
+  {
+    "id": "schema_metadata",
+    "en": "Meta data",
+    "fa": "ابرداده"
+  },
+  {
+    "id": "schema_method",
+    "en": "Method",
+    "fa": "روش"
+  },
+  {
+    "id": "schema_style_opacity",
+    "en": "Opacity",
+    "fa": "مکدریت"
+  },
+  {
+    "id": "schema_style_rule",
+    "en": "Rule",
+    "fa": "قانون"
+  },
+  {
+    "id": "schema_style_rules",
+    "en": "Rules",
+    "fa": "قوانین"
+  },
+  {
+    "id": "schema_style_size",
+    "en": "Size",
+    "fa": "اندازه"
+  },
+  {
+    "id": "schema_style_config_zoom",
+    "en": "Zoom settings",
+    "fa": "تنظیمات بزرگنمایی *"
+  },
+  {
+    "id": "schema_style_size_zoom_max",
+    "en": "Coeficient of size at zoom max",
+    "fa": "ضریب اندازه در حداکثر بزرگنمایی *"
+  },
+  {
+    "id": "schema_style_size_zoom_min",
+    "en": "Coeficient of size at zoom min",
+    "fa": "ضریب اندازه در بزرگنمایی حداقل *"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent",
+    "en": "Size interpolation exponent",
+    "fa": "اندازه بینابینی اندازه *"
+  },
+  {
+    "id": "schema_style_size_zoom_exponent_desc",
+    "en": "Size interpolation exponent function. A value of 1 give a linear interpolation.",
+    "fa": "تابع نمایشگر درون یابی اندازه. مقدار 1 یک درون یابی خطی را نشان می دهد. *"
+  },
+  {
+    "id": "schema_style_zoom_max",
+    "en": "Zoom max",
+    "fa": "بزرگنمایی حداکثر *"
+  },
+  {
+    "id": "schema_style_zoom_min",
+    "en": "Zoom min",
+    "fa": "حداقل بزرگنمایی *"
+  },
+  {
+    "id": "schema_style_sprite",
+    "en": "Symbol",
+    "fa": "سمبول"
+  },
+  {
+    "id": "schema_style_size_zoom_min_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom min.",
+    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در زوم دقیقه. *"
+  },
+  {
+    "id": "schema_style_size_zoom_max_desc",
+    "en": "If greater than 0, coefficient of the size for lines and points at zoom max.",
+    "fa": "اگر بیشتر از 0 باشد ، ضریب اندازه خطوط و نقاط در بزرگنمایی حداکثر. *"
+  },
+  {
+    "id": "schema_style_zoom_min_desc",
+    "en": "Minimum zoom to show the data",
+    "fa": "حداقل بزرگنمایی برای نمایش داده ها *"
+  },
+  {
+    "id": "schema_style_zoom_max_desc",
+    "en": "Maximum zoom to display the data",
+    "fa": "بزرگنمایی حداکثر برای نمایش داده ها *"
+  },
+  {
+    "id": "schema_story_tips_title",
+    "en": "Tips:",
+    "fa": "نکات: *"
+  },
+  {
+    "id": "schema_story_tips",
+    "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">در اینجا لیستی از اقدامات خوب برای ارائه یک تجربه یکپارچه برای خوانندگان آورده شده است:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> ساده باش</li><li style=\";text-align:right;direction:rtl\"> بهتر است برای حفظ علاقه مخاطبان خود نقشه های داستان کوتاه ایجاد کنید.</li><li style=\";text-align:right;direction:rtl\"> برای خوانایی خوب ، توصیه می شود در همان مرحله از دو اسلاید و بیش از دو لایه روی نقشه فراتر نروید.</li><li style=\";text-align:right;direction:rtl\"> تصاویر ، فیلم ها و اینفوگرافیک ها می توانند رسانه های مفید و تأثیرگذاری برای متنی سازی داستان شما باشند. با این حال ، آنها نباید م componentلفه فضایی داستان شما را تحت الشعاع قرار دهند. نقشه ها باید در مرکز آن باشند.</li><li style=\";text-align:right;direction:rtl\"> جلوه ها ، انتقال ها یا تبدیل های سه بعدی می توانند بر خوانایی نقشه داستان شما در دستگاه های کند تأثیر بگذارند ، از آنها کم استفاده کنید.</li></ol> *"
+  },
+  {
+    "id": "schema_story_author",
+    "en": "Author of the story",
+    "fa": "مولف داستان"
+  },
+  {
+    "id": "schema_story_map_pos",
+    "en": "Position of the map",
+    "fa": "موقعیت نقشه"
+  },
+  {
+    "id": "schema_story_meta",
+    "en": "Metadata",
+    "fa": "ابرداده"
+  },
+  {
+    "id": "schema_story_org",
+    "en": "Organisation name",
+    "fa": "نام سازمان"
+  },
+  {
+    "id": "schema_story_pos_get",
+    "en": "Update using current map parameters",
+    "fa": "تجدید با استفاده از پارامتر های موجود"
+  },
+  {
+    "id": "schema_story_slide",
+    "en": "Slide",
+    "fa": "رانش"
+  },
+  {
+    "id": "schema_story_slide_color",
+    "en": "Color theme",
+    "fa": "رنگ موضوع"
+  },
+  {
+    "id": "schema_story_slide_color_bg",
+    "en": "Background color",
+    "fa": "رنگ پس زمینه"
+  },
+  {
+    "id": "schema_story_slide_color_fg",
+    "en": "Text color",
+    "fa": "رنگ متن"
+  },
+  {
+    "id": "schema_story_slide_config",
+    "en": "Configuration",
+    "fa": "عیار سازی"
+  },
+  {
+    "id": "schema_story_slide_layout",
+    "en": "Content layout",
+    "fa": "طراحی محتوا"
+  },
+  {
+    "id": "schema_story_slide_opacity_bg",
+    "en": "Background opacity",
+    "fa": "مکدریت پس زمینه"
+  },
+  {
+    "id": "schema_story_slide_pos_z",
+    "en": "Depth (z axis)",
+    "fa": "عمق (محور z)"
+  },
+  {
+    "id": "schema_story_slide_speed",
+    "en": "Speed ratio",
+    "fa": "تناسب سرعت"
+  },
+  {
+    "id": "schema_story_slides",
+    "en": "Slides",
+    "fa": "رانش ها"
+  },
+  {
+    "id": "schema_story_step",
+    "en": "Step",
+    "fa": "مرحله"
+  },
+  {
+    "id": "schema_story_step_content",
+    "en": "Content",
+    "fa": "محتویات"
+  },
+  {
+    "id": "schema_story_step_title",
+    "en": "Title ",
+    "fa": "عنوان"
+  },
+  {
+    "id": "schema_story_steps",
+    "en": "Steps",
+    "fa": "مراحل"
+  },
+  {
+    "id": "schema_story_steps_title",
+    "en": "Steps of the story",
+    "fa": "مرحله از تاریخ"
+  },
+  {
+    "id": "schema_story_text_pos",
+    "en": "Text position",
+    "fa": "موقعیت متن"
+  },
+  {
+    "id": "schema_story_title",
+    "en": "Story",
+    "fa": "داستان"
+  },
+  {
+    "id": "schema_style_value",
+    "en": "Value",
+    "fa": "قیمت"
+  },
+  {
+    "id": "self",
+    "en": "Myself",
+    "fa": "بنده"
+  },
+  {
+    "id": "sm",
+    "en": "Story map",
+    "fa": "تاریخچه"
+  },
+  {
+    "id": "soc",
+    "en": "Social",
+    "fa": "اجتماعی"
+  },
+  {
+    "id": "source_meta_data",
+    "en": "Metadata for the source",
+    "fa": "عناوین برای منابع"
+  },
+  {
+    "id": "source_confirm_remove",
+    "en": "Confirm source deletion",
+    "fa": "حذف منبع را تأیید کنید *"
+  },
+  {
+    "id": "source_allow_download",
+    "en": "Allow download",
+    "fa": "بارگیری مجاز است *"
+  },
+  {
+    "id": "source_allow_WMS",
+    "en": "Activate WMS",
+    "fa": "WMS را فعال کنید *"
+  },
+  {
+    "id": "source_allow_WFS",
+    "en": "Activate WFS",
+    "fa": "WFS را فعال کنید *"
+  },
+  {
+    "id": "source_removed",
+    "en": "Source deleted",
+    "fa": "منبع حذف شد *"
+  },
+  {
+    "id": "source_raster_tile_legend",
+    "en": "URL of the legend (png)",
+    "fa": "URL افسانه (png) *"
+  },
+  {
+    "id": "source_raster_tile_size",
+    "en": "Size of the tiles (pixels)",
+    "fa": "اندازه پکسل ها"
+  },
+  {
+    "id": "source_raster_tile_url",
+    "en": "URL of tiles endpoint ",
+    "fa": "آدرس پکسل های آخری"
+  },
+  {
+    "id": "source_raster_tile_url_download",
+    "en": "Download link",
+    "fa": "لینک دانلود *"
+  },
+  {
+    "id": "source_raster_tile_url_metadata",
+    "en": "Link to the metadata",
+    "fa": "پیوند به فراداده *"
+  },
+  {
+    "id": "source_select_geometry",
+    "en": "Source geometry type",
+    "fa": "انواع منبع هندسی"
+  },
+  {
+    "id": "source_select_layer",
+    "en": "Source layer",
+    "fa": "لایه اصلی"
+  },
+  {
+    "id": "source_select_layer_mask",
+    "en": "Source layer mask",
+    "fa": "منبع لایه ماسک"
+  },
+  {
+    "id": "source_select_variable",
+    "en": "Source attribute",
+    "fa": "متحول اصلی"
+  },
+  {
+    "id": "source_select_variable_alt",
+    "en": "Secondary attributes",
+    "fa": "صفات ثانویه *"
+  },
+  {
+    "id": "source_target_readers",
+    "en": "Groups with use access ",
+    "fa": "گروههایی که از دسترسی استفاده می کنند *"
+  },
+  {
+    "id": "source_target_editors",
+    "en": "Groups with write access",
+    "fa": "گروههایی که دسترسی به نوشتن دارند *"
+  },
+  {
+    "id": "source_services",
+    "en": "Services",
+    "fa": "خدمات *"
+  },
+  {
+    "id": "source_validate_title",
+    "en": "Geometry validation tool",
+    "fa": "ابزار اعتبارسنجی هندسه *"
+  },
+  {
+    "id": "source_validate_geom_show_expert_options",
+    "en": "Show expert options",
+    "fa": "گزینه های متخصص را نشان دهید *"
+  },
+  {
+    "id": "source_validate_geom_use_cache",
+    "en": "Use cached results – if any – instead of recalculate",
+    "fa": "به جای محاسبه مجدد ، از نتایج ذخیره شده - در صورت وجود - استفاده کنید *"
+  },
+  {
+    "id": "source_validate_geom_auto_correct",
+    "en": "Try an automatic correction ( experimental )",
+    "fa": "تصحیح خودکار (آزمایشی) را امتحان کنید *"
+  },
+  {
+    "id": "source_validate_geom_auto_correct_info",
+    "en": "Warning, this could alter the geometry. For (multi) polygons, the automatic correction use a buffer of 0 around each feature. For other types, ST_MakeValid is used.",
+    "fa": "هشدار ، این می تواند هندسه را تغییر دهد. برای چند ضلعی ها (چند) ، تصحیح خودکار از یک بافر 0 در اطراف هر ویژگی استفاده می کند. برای انواع دیگر ، از ST_MakeValid استفاده می شود. *"
+  },
+  {
+    "id": "download_select_format_vector",
+    "en": "Output format",
+    "fa": "فرمت خروجی *"
+  },
+  {
+    "id": "download_select_by_countries",
+    "en": "Country used to spatially extract the data (clip)",
+    "fa": "کشور مورد استفاده برای استخراج فضایی داده ها (کلیپ) *"
+  },
+  {
+    "id": "download_file_name",
+    "en": "Filename",
+    "fa": "نام فایل *"
+  },
+  {
+    "id": "source_sum_geom_type",
+    "en": "Type of the geometry",
+    "fa": "انواع هندسی"
+  },
+  {
+    "id": "source_sum_n_distinct",
+    "en": "Number of distinct values",
+    "fa": "تعداد  قیمت های متمایز"
+  },
+  {
+    "id": "source_sum_n_null",
+    "en": "Number of missing or null values",
+    "fa": "تعداد  قیمت های از دست رفته یا خالی"
+  },
+  {
+    "id": "source_sum_n_row",
+    "en": "Number of values",
+    "fa": "تعداد قیمت ها"
+  },
+  {
+    "id": "source_sum_sample",
+    "en": "Sample values",
+    "fa": "مقادیر نمونه"
+  },
+  {
+    "id": "source_sum_title",
+    "en": "Variable summary",
+    "fa": "خلاصه متحول "
+  },
+  {
+    "id": "source_sum_variable_type",
+    "en": "Type of the attribut",
+    "fa": "انواع متحول"
+  },
+  {
+    "id": "source_summary_check",
+    "en": "Show attribut summary",
+    "fa": "نمایش خلاصه متحول"
+  },
+  {
+    "id": "source_time_range",
+    "en": "Time range",
+    "fa": "محدوده زمانی"
+  },
+  {
+    "id": "source_title",
+    "en": "Source title",
+    "fa": "عنوان اصلی"
+  },
+  {
+    "id": "str",
+    "en": "Stress",
+    "fa": "فشار"
+  },
+  {
+    "id": "superuser",
+    "en": "Superuser",
+    "fa": "ابر کاربران"
+  },
+  {
+    "id": "title_app",
+    "en": "MapX",
+    "fa": "MapX"
+  },
+  {
+    "id": "user_profile",
+    "en": "User profile",
+    "fa": "مشخصات کاربر *"
+  },
+  {
+    "id": "user_authentication",
+    "en": "Authentication",
+    "fa": "احراز هویت *"
+  },
+  {
+    "id": "title_settings",
+    "en": "Settings",
+    "fa": "تنظیمات"
+  },
+  {
+    "id": "title_settings_colors",
+    "en": "Theme configuration",
+    "fa": "پیکربندی تم *"
+  },
+  {
+    "id": "title_tools",
+    "en": "Tools",
+    "fa": "ابزار"
+  },
+  {
+    "id": "title_tools_db",
+    "en": "Database",
+    "fa": "DB\""
+  },
+  {
+    "id": "title_tools_admin_project",
+    "en": "Projects",
+    "fa": "پروژه ها *"
+  },
+  {
+    "id": "title_tools_config",
+    "en": "Configuration",
+    "fa": "پیکربندی *"
+  },
+  {
+    "id": "title_tools_map",
+    "en": "Map",
+    "fa": "نقشه"
+  },
+  {
+    "id": "title_tools_share",
+    "en": "Share",
+    "fa": "اشتراک گذاری *"
+  },
+  {
+    "id": "title_tools_sources",
+    "en": "Sources",
+    "fa": "منابع"
+  },
+  {
+    "id": "title_tools_views",
+    "en": "Views",
+    "fa": "نمایش"
+  },
+  {
+    "id": "title_tools_dbself_info",
+    "en": "Connection information",
+    "fa": "اطلاعات اتصال *"
+  },
+  {
+    "id": "title_tools_dbself_select",
+    "en": "Select source(s) to edit",
+    "fa": "منبع (ها) را برای ویرایش انتخاب کنید *"
+  },
+  {
+    "id": "title_views",
+    "en": "Views",
+    "fa": "نمایش"
+  },
+  {
+    "id": "top",
+    "en": "Top",
+    "fa": "بالا"
+  },
+  {
+    "id": "ui_country",
+    "en": "Select country",
+    "fa": "انتخاب کشور"
+  },
+  {
+    "id": "ui_project",
+    "en": "Select project",
+    "fa": "پروژه را انتخاب کنید *"
+  },
+  {
+    "id": "select_member_project",
+    "en": "Switch to another project where you are a member",
+    "fa": "به پروژه دیگری بروید که در آن عضو هستید *"
+  },
+  {
+    "id": "ui_language",
+    "en": "Language of the interface",
+    "fa": "زبان رابط"
+  },
+  {
+    "id": "update_view_list",
+    "en": "Update view list",
+    "fa": "تجدید لست نمایش"
+  },
+  {
+    "id": "user",
+    "en": "Registered user",
+    "fa": "کاربران ثبت شده"
+  },
+  {
+    "id": "group_project",
+    "en": "Groups in project",
+    "fa": "گروههای موجود در پروژه *"
+  },
+  {
+    "id": "view",
+    "en": "View",
+    "fa": "نمایش"
+  },
+  {
+    "id": "views",
+    "en": "Views",
+    "fa": "بازدیدها *"
+  },
+  {
+    "id": "views_external",
+    "en": "External views",
+    "fa": "دیدگاه های خارجی *"
+  },
+  {
+    "id": "views_external_modal_title",
+    "en": "Manage external views",
+    "fa": "نماهای خارجی را مدیریت کنید *"
+  },
+  {
+    "id": "view_project_short",
+    "en": "( p )",
+    "fa": "( پ ) *"
+  },
+  {
+    "id": "view_external_short",
+    "en": "( e )",
+    "fa": "(ه) *"
+  },
+  {
+    "id": "view_badge_shared",
+    "en": "View shared",
+    "fa": "نمایش به اشتراک گذاشته شده *"
+  },
+  {
+    "id": "view_delete_modal_title",
+    "en": "View to delete %s",
+    "fa": "مشاهده برای حذف%s *"
+  },
+  {
+    "id": "view_edit_custom_code_modal_title",
+    "en": "Edit custom code of %s",
+    "fa": "ویرایش کد سفارشی از%s *"
+  },
+  {
+    "id": "view_edit_dashboard_modal_title",
+    "en": "Edit dashboard of  %s",
+    "fa": "ویرایش داشبورد از%s *"
+  },
+  {
+    "id": "view_edit_story_modal_title",
+    "en": "Edit story map of  %s",
+    "fa": "ویرایش نقشه داستان از%s *"
+  },
+  {
+    "id": "view_edit_style_modal_title",
+    "en": "Edit style of  %s",
+    "fa": "ویرایش سبک%s *"
+  },
+  {
+    "id": "view_abstract",
+    "en": "View abstract",
+    "fa": "نمایش خلاصه"
+  },
+  {
+    "id": "view_add_dashboard",
+    "en": "Add a dashboard",
+    "fa": "داشبورد اضافه کنید *"
+  },
+  {
+    "id": "view_add_download_btn",
+    "en": "Allow download of the source",
+    "fa": "بارگیری منبع را مجاز کنید *"
+  },
+  {
+    "id": "view_add_overlap_layer",
+    "en": "Add an mask",
+    "fa": "افزودن نقاب"
+  },
+  {
+    "id": "view_component",
+    "en": "Type of views",
+    "fa": "نوع بازدیدها *"
+  },
+  {
+    "id": "view_components",
+    "en": "Feature",
+    "fa": "ویژگی"
+  },
+  {
+    "id": "view_collections",
+    "en": "Collections",
+    "fa": "مجموعه ها *"
+  },
+  {
+    "id": "view_projects",
+    "en": "Other projects where the view is visible",
+    "fa": "پروژه های دیگری که نمای قابل مشاهده است *"
+  },
+  {
+    "id": "view_project",
+    "en": "Project of the view",
+    "fa": "پروژه نمای *"
+  },
+  {
+    "id": "view_country",
+    "en": "Country of the view",
+    "fa": "کشور دیدگاه *"
+  },
+  {
+    "id": "view_dashboard",
+    "en": "Dashboard",
+    "fa": "داشبورد *"
+  },
+  {
+    "id": "view_dashboard_config",
+    "en": "Configure a dashboard",
+    "fa": "داشبورد را پیکربندی کنید *"
+  },
+  {
+    "id": "view_dashboard_script",
+    "en": "Your script",
+    "fa": "فیلمنامه شما *"
+  },
+  {
+    "id": "view_dashboard_src_layerChange",
+    "en": "All attributes and values from the displayed features",
+    "fa": "همه ویژگی ها و مقادیر از ویژگی های نمایش داده شده *"
+  },
+  {
+    "id": "view_dashboard_src_layerClick",
+    "en": "All attributes and values from the clicked feature",
+    "fa": "همه ویژگی ها و مقادیر از ویژگی کلیک شده *"
+  },
+  {
+    "id": "view_dashboard_src_none",
+    "en": "None. Value provided by the script.",
+    "fa": "هیچ یک. ارزش ارائه شده توسط اسکریپت. *"
+  },
+  {
+    "id": "view_dashboard_src_view",
+    "en": "The frequency table of the selected attribute",
+    "fa": "جدول فرکانس ویژگی انتخاب شده *"
+  },
+  {
+    "id": "view_dashboard_src_mousemove",
+    "en": "All attributes and values at mouse position",
+    "fa": "همه ویژگی ها و مقادیر در موقعیت ماوس قرار دارند *"
+  },
+  {
+    "id": "view_dashboard_title",
+    "en": "Dashboard title",
+    "fa": "عنوان داشبورد *"
+  },
+  {
+    "id": "view_dashboard_txt_layout",
+    "en": "Initial dashboard layout",
+    "fa": "طرح اولیه داشبورد *"
+  },
+  {
+    "id": "view_dashboard_txt_desc_layout",
+    "en": "Set the initial dashboard layout",
+    "fa": "طرح اولیه داشبورد را تنظیم کنید *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_full",
+    "en": "Full size",
+    "fa": "اندازه کامل *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_fit",
+    "en": "Fit to largest widget",
+    "fa": "متناسب با بزرگترین ابزارک *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_vertical",
+    "en": "Vertical",
+    "fa": "عمودی *"
+  },
+  {
+    "id": "view_dashboard_txt_layout_horizontal",
+    "en": "Horizontal",
+    "fa": "افقی *"
+  },
+  {
+    "id": "view_dashboard_txt_height",
+    "en": "Height class",
+    "fa": "کلاس قد *"
+  },
+  {
+    "id": "view_dashboard_txt_script",
+    "en": "Your script",
+    "fa": "فیلمنامه شما *"
+  },
+  {
+    "id": "view_dashboard_txt_add_background_color",
+    "en": "Add background color",
+    "fa": "رنگ زمینه را اضافه کنید *"
+  },
+  {
+    "id": "view_dashboard_txt_color_background",
+    "en": "Background color",
+    "fa": "رنگ پس زمینه *"
+  },
+  {
+    "id": "view_dashboard_txt_which_data",
+    "en": "Which source to use for the data ?",
+    "fa": "از کدام منبع برای داده استفاده شود؟ *"
+  },
+  {
+    "id": "view_dashboard_txt_ignore_empty_data",
+    "en": "Ignore events that returns an empty array ?",
+    "fa": "از رویدادهایی که یک آرایه خالی برمی گرداند ، صرف نظر می شود؟ *"
+  },
+  {
+    "id": "view_dashboard_txt_which_module",
+    "en": "Which modules to load?",
+    "fa": "کدام ماژول ها بارگیری می شوند؟ *"
+  },
+  {
+    "id": "view_dashboard_txt_desc_module",
+    "en": "Modules will be loaded under `widget.modules`",
+    "fa": "ماژول ها تحت \"widget.modules\" بارگیری می شوند *"
+  },
+  {
+    "id": "view_dashboard_txt_width",
+    "en": "Width class",
+    "fa": "کلاس عرض *"
+  },
+  {
+    "id": "view_dashboard_widget",
+    "en": "Widget",
+    "fa": "ویجت *"
+  },
+  {
+    "id": "view_dashboard_widgets",
+    "en": "Widgets",
+    "fa": "ابزارک ها *"
+  },
+  {
+    "id": "view_delete_confirm",
+    "en": "Click on the confirm button to delete this view, its history and all translations.",
+    "fa": "بالای کلید تایید کلیک نمایید تا این نمایش، تاریخچه اش و تمام ترجمه هایش حذف گردد."
+  },
+  {
+    "id": "view_remove_dashboard_confirm",
+    "en": "Click on the confirm to remove permanently the dashboard",
+    "fa": "برای حذف داشبورد برای همیشه روی تأیید کلیک کنید *"
+  },
+  {
+    "id": "view_remove_dashboard_confirm_title",
+    "en": "Confirmation",
+    "fa": "تائیدیه *"
+  },
+  {
+    "id": "view_download_layer",
+    "en": "Download the source layer",
+    "fa": "دانلود لایه منبع "
+  },
+  {
+    "id": "view_edit_current",
+    "en": "Edit view",
+    "fa": "ویرایش نمای *"
+  },
+  {
+    "id": "source_edit_metadata",
+    "en": "Edit source metadata",
+    "fa": "ویرایش فراداده منبع *"
+  },
+  {
+    "id": "source_edit",
+    "en": "Edit source",
+    "fa": "منبع را ویرایش کنید *"
+  },
+  {
+    "id": "view_id",
+    "en": "View identifier",
+    "fa": "نمایش مشخص کننده"
+  },
+  {
+    "id": "view_new_created",
+    "en": "View created",
+    "fa": "نمایه ایجاد شد"
+  },
+  {
+    "id": "view_new_text",
+    "en": "Create a new View",
+    "fa": "ایجاد نمای جدید و افزودن آن به لست "
+  },
+  {
+    "id": "view_no_layer_found",
+    "en": "No source layer found",
+    "fa": " لایه منبع یافت نشد"
+  },
+  {
+    "id": "view_num_overlap",
+    "en": "Number of overlaps",
+    "fa": "تعداد لایه های روی هم قرار گرفته"
+  },
+  {
+    "id": "view_filter_input",
+    "en": "Filter views ...",
+    "fa": " جستجوی نمایه"
+  },
+  {
+    "id": "view_filter_by_tags",
+    "en": "Filter views by tag",
+    "fa": "نماها را براساس برچسب فیلتر کنید *"
+  },
+  {
+    "id": "view_search_values",
+    "en": "Search values",
+    "fa": " جستجوی ارقام"
+  },
+  {
+    "id": "view_filter_by_values",
+    "en": "Filter by values",
+    "fa": "براساس مقادیر فیلتر کنید *"
+  },
+  {
+    "id": "view_show_abstract_languages",
+    "en": "Show other languages abstract",
+    "fa": "نمایش خلاصه به سایر زبانها"
+  },
+  {
+    "id": "view_show_title_languages",
+    "en": "Show other languages titles",
+    "fa": "نمایش عناوین به سایر زبانها"
+  },
+  {
+    "id": "view_target",
+    "en": "Target group. Who can view this.",
+    "fa": "گروه مورد نظر، کی دیده میتواند"
+  },
+  {
+    "id": "view_target_readers",
+    "en": "Read access groups",
+    "fa": "گروههای دسترسی را بخوانید *"
+  },
+  {
+    "id": "view_target_editors",
+    "en": "Edit access groups",
+    "fa": "گروههای دسترسی را ویرایش کنید *"
+  },
+  {
+    "id": "view_text",
+    "en": "View text",
+    "fa": "نمایش متن "
+  },
+  {
+    "id": "view_title",
+    "en": "View title",
+    "fa": "نمایش عنوان"
+  },
+  {
+    "id": "view_type_select",
+    "en": "Type of the view",
+    "fa": "نوع نما"
+  },
+  {
+    "id": "vt",
+    "en": "Vector",
+    "fa": "بردار"
+  },
+  {
+    "id": "wms",
+    "en": "Web Map Service (wms)",
+    "fa": "خدمات آنلاین نقشه (WMS)"
+  },
+  {
+    "id": "mx_download",
+    "en": "Allow this source to be downloaded",
+    "fa": "اجازه دهید این منبع بارگیری شود *"
+  },
+  {
+    "id": "gs_ws_a",
+    "en": "Publish all related views via WMS",
+    "fa": "همه نماهای مرتبط را از طریق WMS منتشر کنید *"
+  },
+  {
+    "id": "gs_ws_b",
+    "en": "Publish all related views via WMS/WFS/WCS",
+    "fa": "همه نماهای مرتبط را از طریق WMS / WFS / WCS منتشر کنید *"
+  },
+  {
+    "id": "src_download_issues",
+    "en": "The source can't be downloaded",
+    "fa": "منبع قابل بارگیری نیست *"
+  },
+  {
+    "id": "src_upload_add",
+    "en": "Upload a new source layer",
+    "fa": "یک لایه منبع جدید بارگذاری کنید *"
+  },
+  {
+    "id": "src_upload_issues",
+    "en": "Upload issue(s)",
+    "fa": "شماره (ها) را بارگذاری کنید *"
+  },
+  {
+    "id": "source_upload_vector",
+    "en": "Upload new vector source",
+    "fa": "منبع برداری جدید بارگذاری کنید *"
+  },
+  {
+    "id": "upload_source_title",
+    "en": "Title of the new source",
+    "fa": "عنوان منبع جدید *"
+  },
+  {
+    "id": "you_not_logged_in",
+    "en": "You are not logged in.",
+    "fa": "شما وارد نشده اید. *"
+  },
+  {
+    "id": "you_not_allowed",
+    "en": "You are not allowed to do this.",
+    "fa": "شما مجاز به این کار نیستید. *"
+  },
+  {
+    "id": "src_download_disabled",
+    "en": "The download is not allowed.",
+    "fa": "بارگیری مجاز نیست *"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "fa": "متن رابط کاربری *"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "fa": "پیوندها *"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "fa": "رنگ متن ثانویه *"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "fa": "عناصر پنهان *"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "fa": "مرز ها *"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "fa": "زمینه *"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "fa": "کنتراست پس زمینه *"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "fa": "پس زمینه محو شد *"
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "fa": "سایه ها *"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "fa": "نقشه: پس زمینه *"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "fa": "نقشه: ویژگی برجسته *"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "fa": "نقشه: سایه hillshade *"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "fa": "نقشه: برجسته hillshade *"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "fa": "نقشه: لهجه hillshade *"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "fa": "نقشه: کشور سایه *"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "fa": "نقشه: آب *"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "fa": "نقشه: حجامت (کم) *"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "fa": "نقشه: متقارن (بالا) *"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "fa": "نقشه: جاده *"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "fa": "نقشه: مرز جاده *"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "fa": "نقشه: ساختمانها *"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "fa": "نقشه: مرز بین المللی *"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "fa": "نقشه: خط مرزی ویژه *"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "fa": "نقشه: آتش بس یا خط بین المللی_محدوده بین المللی *"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "fa": "نقشه: خط جدایی دیگر *"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "fa": "نقشه: مرز منطقه خودمختار *"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "fa": "نقشه: حد مجاز حاکمیت *"
+  },
+  {
+    "id": "mx_map_boundary_osm_subnational",
+    "en": "Map: Subnational boundaries",
+    "fa": "نقشه: مرزهای فرعی *"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "fa": "نقشه: متن متن *"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "fa": "نقشه: طرح کلی متن را قرار دهید *"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "fa": "نقشه: متن جاده *"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "fa": "نقشه: طرح کلی متن جاده *"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "fa": "نقشه: متن بدنه آب *"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "fa": "نقشه: طرح متن متن متناسب با آب *"
+  },
+  {
+    "id": "list_publishers",
+    "en": "List of publishers",
+    "fa": "لیست ناشران *"
+  },
+  {
+    "id": "list_members",
+    "en": "List of members",
+    "fa": "لیست اعضا *"
+  },
+  {
+    "id": "list_admins",
+    "en": "List of administrators",
+    "fa": "لیست مدیران *"
+  },
+  {
+    "id": "list_contacts",
+    "en": "Contact person",
+    "fa": "تماس با شخص *"
+  },
+  {
+    "id": "new_publishers",
+    "en": "New publishers",
+    "fa": "ناشران جدید *"
+  },
+  {
+    "id": "new_members",
+    "en": "New members",
+    "fa": "اعضای جدید *"
+  },
+  {
+    "id": "new_admins",
+    "en": "New administrators",
+    "fa": "مدیران جدید *"
+  },
+  {
+    "id": "new_contacts",
+    "en": "New admin. contacts",
+    "fa": "مدیر جدید مخاطب *"
+  },
+  {
+    "id": "rem_publishers",
+    "en": "Publishers removed",
+    "fa": "ناشران حذف شدند *"
+  },
+  {
+    "id": "rem_members",
+    "en": "Members removed",
+    "fa": "اعضا حذف شدند *"
+  },
+  {
+    "id": "rem_admins",
+    "en": "Administrators removed",
+    "fa": "سرپرستان حذف شدند *"
+  },
+  {
+    "id": "rem_contacts",
+    "en": "Contacts removed",
+    "fa": "مخاطبین برداشته شدند *"
+  },
+  {
+    "id": "no_changes",
+    "en": "No change",
+    "fa": "بدون تغییر *"
+  },
+  {
+    "id": "roles_updated",
+    "en": "Roles updated",
+    "fa": "نقش ها به روز شد *"
+  },
+  {
+    "id": "roles",
+    "en": "Roles",
+    "fa": "نقش ها *"
+  },
+  {
+    "id": "success_update",
+    "en": "Update successful",
+    "fa": "بروز رسانی موفق *"
+  },
+  {
+    "id": "error_roles_no_admins",
+    "en": "Require at least one admin",
+    "fa": "حداقل به یک مدیر نیاز دارید *"
+  },
+  {
+    "id": "error_views_need_data",
+    "en": "Deletion of a source disabled because at least one view depends on it",
+    "fa": "حذف منبع غیرفعال است زیرا حداقل یک نمایش به آن بستگی دارد *"
+  },
+  {
+    "id": "error_views_need_publishers",
+    "en": "At least one view needs this source to be available for publishers. Update disabled.",
+    "fa": "حداقل یک نمایش برای در دسترس بودن ناشران به این منبع نیاز دارد. به روزرسانی غیرفعال است *"
+  },
+  {
+    "id": "error_roles_removed_self",
+    "en": "You can't remove yourself from admin group",
+    "fa": "نمی توانید خود را از گروه سرپرست حذف کنید *"
+  },
+  {
+    "id": "project_enable_public",
+    "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
+    "fa": "این پروژه عمومی است. در فهرست پروژه ها ذکر خواهد شد. همه دیدگاه های عمومی منتشر شده در این پروژه برای همه قابل خواندن است. *"
+  },
+  {
+    "id": "project_enable_join",
+    "en": "Allow non-members to request a membership to this project.",
+    "fa": "به غیرعضوها اجازه دهید عضویت در این پروژه را درخواست کنند. *"
+  },
+  {
+    "id": "project_state_key",
+    "en": "Identifier",
+    "fa": "مشخص کننده *"
+  },
+  {
+    "id": "project_save_views_state",
+    "en": "Save views state",
+    "fa": "حالت مشاهده را ذخیره کنید *"
+  },
+  {
+    "id": "project_roles_modal_title",
+    "en": "Roles administration",
+    "fa": "دولت نقش *"
+  },
+  {
+    "id": "project_alias_name",
+    "en": "Alias of the project",
+    "fa": "نام مستعار پروژه *"
+  },
+  {
+    "id": "project_alias_name_desc",
+    "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
+    "fa": "حداقل 1 ، حداکثر 30 حرف کوچک با حروف ASCII [az] ، اعداد [0-9] ، خط تیره [-] و زیرخط مجاز است [_] *"
+  },
+  {
+    "id": "error_project_alias_not_valid",
+    "en": "Project alias not valid or already taken",
+    "fa": "نام مستعار پروژه معتبر نیست یا قبلاً گرفته شده است *"
+  },
+  {
+    "id": "project_access_denied",
+    "en": "Access denied. You cannot access the requested project",
+    "fa": "دسترسی ممنوع است. شما نمی توانید به پروژه درخواستی دسترسی پیدا کنید *"
+  },
+  {
+    "id": "project_delete_confirm_title",
+    "en": "Write the project name you want to delete",
+    "fa": "نام پروژه ای را که می خواهید حذف کنید بنویسید *"
+  },
+  {
+    "id": "project_invite_modal_title",
+    "en": "Invite a new member",
+    "fa": "عضو جدیدی دعوت کنید *"
+  },
+  {
+    "id": "btn_show_invite_member",
+    "en": "Invite a new member",
+    "fa": "عضو جدیدی دعوت کنید *"
+  },
+  {
+    "id": "project_invite_message_compose",
+    "en": "Compose invite email",
+    "fa": "نوشتن ایمیل دعوت *"
+  },
+  {
+    "id": "project_invite_message_title",
+    "en": "MapX invitation",
+    "fa": "دعوت از MapX *"
+  },
+  {
+    "id": "project_invite_message_subject",
+    "en": "Invitation to join the project \"{{project}}\"",
+    "fa": "دعوت برای پیوستن به پروژه\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_accept",
+    "en": "Accept invitation to the project \"{{project}}\"",
+    "fa": "دعوت به پروژه را بپذیرید\"{{project}}\" *"
+  },
+  {
+    "id": "project_invite_message_sent",
+    "en": "Email sent.",
+    "fa": "ایمیل ارسال شد *"
+  },
+  {
+    "id": "project_invite_message_tips",
+    "en": "The tag {{link}} will be replaced by an encrypted link.",
+    "fa": "برچسب{{link}} با یک لینک رمزگذاری شده جایگزین خواهد شد. *"
+  },
+  {
+    "id": "project_invite_message",
+    "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
+    "fa": "سلام!\n من می خواهم شما را به عنوان عضو پروژه دعوت کنم\"{{projectName}}\" در MapX.\n برای تأیید لطفاً روی پیوند ارائه شده کلیک کنید.\n{{link}}\n مجری طرح. *"
+  },
+  {
+    "id": "project_invite_message_confirm",
+    "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
+    "fa": "سلام!\n ممنون که به ما رسیدید\n برای تأیید عضویت در پروژه{{projectName}} در MapX ، لطفاً روی پیوند زیر کلیک کنید:\n{{link}}\n با احترام،\n مجری طرح *"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email",
+    "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
+    "fa": "سلام،<br> کاربر '{{emailUser}} برای ورود به پروژه از پیوند دعوت استفاده کرد{{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاریخ انقضا:{{timeExpire}}</li></ul><br> روز خوبی داشته باشید ! *"
+  },
+  {
+    "id": "project_invite_notify_auto_register_email_subject",
+    "en": "Invitation link used in project {{project}}",
+    "fa": "پیوند دعوت در پروژه استفاده می شود{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user_subject",
+    "en": "You've have been added to project {{project}}",
+    "fa": "شما به پروژه اضافه شده اید{{project}} *"
+  },
+  {
+    "id": "project_user_added_email_user",
+    "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
+    "fa": "سلام،<br> شما به پروژه اضافه شده اید{{project}} در گروه):{{roles}} .<br> روز خوبی داشته باشید ! *"
+  },
+  {
+    "id": "project_user_added_email_admin_subject",
+    "en": "A user has been added to project {{project}}.",
+    "fa": "یک کاربر به پروژه اضافه شده است{{project}} . *"
+  },
+  {
+    "id": "project_user_added_email_admin",
+    "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
+    "fa": "یک کاربر ({{emailUser}} ) به پروژه اضافه شده است{{project}} در گروه){{roles}}<br> روز خوبی داشته باشید ! *"
+  },
+  {
+    "id": "project_countries_highlight",
+    "en": "Countries to be highlighted on the map",
+    "fa": "کشورهایی که باید روی نقشه برجسته شوند *"
+  },
+  {
+    "id": "project_search_values",
+    "en": "Search projects",
+    "fa": "جستجوی پروژه ها *"
+  },
+  {
+    "id": "project_saved",
+    "en": "Project saved",
+    "fa": "پروژه ذخیره شد *"
+  },
+  {
+    "id": "project_created",
+    "en": "Project {{title}} created",
+    "fa": "پروژه{{title}} ایجاد شده *"
+  },
+  {
+    "id": "project_deleted",
+    "en": "Project deleted",
+    "fa": "پروژه حذف شد *"
+  },
+  {
+    "id": "project_delete_analyze",
+    "en": "Analysing, please wait...",
+    "fa": "با تجزیه و تحلیل ، لطفا صبر کنید ... *"
+  },
+  {
+    "id": "project_delete_number_of_sources",
+    "en": "Number of sources to delete",
+    "fa": "تعداد منابع برای حذف *"
+  },
+  {
+    "id": "project_delete_number_of_views",
+    "en": "Number of views to delete",
+    "fa": "تعداد بازدید برای حذف *"
+  },
+  {
+    "id": "project_delete_title",
+    "en": "Project deletion",
+    "fa": "حذف پروژه *"
+  },
+  {
+    "id": "project_new_title",
+    "en": "Title of the project",
+    "fa": "عنوان پروژه *"
+  },
+  {
+    "id": "project_list",
+    "en": "List of projects",
+    "fa": "لیست پروژه ها *"
+  },
+  {
+    "id": "project_list_select_desc",
+    "en": "Click on a project name to access it. If you are not member of a project, you can ask to join it by clicking the join button ",
+    "fa": "برای دسترسی به یک پروژه ، روی آن کلیک کنید. اگر عضو پروژه ای نیستید ، می توانید با کلیک روی دکمه عضویت درخواست پیوستن به آن را داشته باشید *"
+  },
+  {
+    "id": "project_title",
+    "en": "Title",
+    "fa": "عنوان *"
+  },
+  {
+    "id": "project_description",
+    "en": "Description",
+    "fa": "شرح *"
+  },
+  {
+    "id": "project_settings",
+    "en": "Project settings",
+    "fa": "تنظیمات پروژه *"
+  },
+  {
+    "id": "project_map_pos_set",
+    "en": "Initial map position",
+    "fa": "موقعیت اولیه نقشه *"
+  },
+  {
+    "id": "project_map_pos_get",
+    "en": "Use current map parameters",
+    "fa": "از پارامترهای نقشه فعلی استفاده کنید *"
+  },
+  {
+    "id": "map_fit_to_bounds",
+    "en": "Use extent to center the map",
+    "fa": "برای مرکزیت نقشه از میزان استفاده کنید *"
+  },
+  {
+    "id": "map_zoom",
+    "en": "Zoom",
+    "fa": "بزرگنمایی *"
+  },
+  {
+    "id": "map_longitude_center",
+    "en": "Longitude at center",
+    "fa": "طول در مرکز *"
+  },
+  {
+    "id": "map_latitude_center",
+    "en": "Latitude at center",
+    "fa": "عرض جغرافیایی در مرکز *"
+  },
+  {
+    "id": "map_pitch",
+    "en": "Camera pitch",
+    "fa": "سرعت دوربین *"
+  },
+  {
+    "id": "map_bearing",
+    "en": "Camera bearing",
+    "fa": "یاتاقان دوربین *"
+  },
+  {
+    "id": "map_north_max",
+    "en": "Max north latitude",
+    "fa": "حداکثر عرض شمالی *"
+  },
+  {
+    "id": "map_south_max",
+    "en": "Max south latitude",
+    "fa": "حداکثر عرض جنوبی *"
+  },
+  {
+    "id": "map_east_max",
+    "en": "Max east longitude",
+    "fa": "حداکثر طول شرقی *"
+  },
+  {
+    "id": "map_west_max",
+    "en": "Max west longitude",
+    "fa": "حداکثر طول جغرافیایی *"
+  },
+  {
+    "id": "view_badge_public_valid",
+    "en": "This view is publicly available",
+    "fa": "این نما به صورت عمومی در دسترس است *"
+  },
+  {
+    "id": "view_badge_public_not_valid",
+    "en": "This view is publicly available \n with incomplete metadata",
+    "fa": "این نما به صورت عمومی در دسترس است\n با فراداده ناقص *"
+  },
+  {
+    "id": "view_badge_editable",
+    "en": "You have editor rights for this view",
+    "fa": "شما برای این نمایش حق ویرایشگر دارید *"
+  },
+  {
+    "id": "view_badge_locked",
+    "en": "You do not have editor rights",
+    "fa": "شما حق ویرایشگر ندارید *"
+  },
+  {
+    "id": "txt_too_short_min_3",
+    "en": "Text too short, minimum 3 characters",
+    "fa": "متن خیلی کوتاه است ، حداقل 3 حرف است *"
+  },
+  {
+    "id": "txt_email_not_valid",
+    "en": "Email not valid",
+    "fa": "ایمیل معتبر نیست *"
+  },
+  {
+    "id": "project_request_membership_message",
+    "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
+    "fa": "سلام!\\n لطفا من را به پروژه اضافه کنید{{projectName}} .\\n با احترام،\\n یک عضو آینده با انگیزه\\n *"
+  },
+  {
+    "id": "project_request_membership",
+    "en": "Membership request",
+    "fa": "درخواست عضویت *"
+  },
+  {
+    "id": "project_request_membership_subject",
+    "en": "Application to join the {{project}} project ",
+    "fa": "برنامه پیوستن به{{project}} پروژه *"
+  },
+  {
+    "id": "project_request_membership_message_recap",
+    "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
+    "fa": "<span>درخواست عضویت از</span>{{from}} <span>قبلا رسیده.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیام:{{msg}}</li><li style=\";text-align:right;direction:rtl\"> وضعیت کاربر:{{userStatus}}</li><li style=\";text-align:right;direction:rtl\"> عمل:{{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> ارتباط دادن:{{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> داده ها:<pre style=\";text-align:right;direction:rtl\">{{data}}</pre></li></ul> *"
+  },
+  {
+    "id": "project_join_message_reply",
+    "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
+    "fa": "به درخواست عضویت از طریق پاسخ دهید\"{{email}}\" برای پروژه\"{{project}}\" *"
+  },
+  {
+    "id": "project_open_url",
+    "en": "Open the project \"{{project}}\"",
+    "fa": "پروژه را باز کنید\"{{project}}\" *"
+  },
+  {
+    "id": "project_request_membership_message_sent",
+    "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
+    "fa": "درخواست شما به مدیر پروژه ارسال شده است ، شما طی روزهای آینده یک ایمیل تأیید دریافت خواهید کرد. صندوق ورودی خود را برای دریافت ایمیل از ربات MapX بررسی کنید و برای دسترسی به پروژه روی پیوند کلیک کنید! *"
+  },
+  {
+    "id": "update_app_msg",
+    "en": "MapX has been updated, this page will be reloaded now.",
+    "fa": "MapX به روز شده است ، این صفحه اکنون بارگیری می شود. *"
+  },
+  {
+    "id": "btn_clear_cache",
+    "en": "Clear cached data",
+    "fa": "پاک کردن داده های ذخیره شده *"
+  },
+  {
+    "id": "title_utilities",
+    "en": "Utilities",
+    "fa": "خدمات رفاهی *"
+  },
+  {
+    "id": "update_app_title",
+    "en": "Update",
+    "fa": "به روز رسانی *"
+  },
+  {
+    "id": "btn_install_update",
+    "en": "Install and reload",
+    "fa": "نصب و بارگیری مجدد *"
+  },
+  {
+    "id": "tbl_views_depending_source",
+    "en": "Table of views depending on the source",
+    "fa": "جدول نماها بسته به منبع *"
+  },
+  {
+    "id": "btn_validate_metadata",
+    "en": "In depth validation",
+    "fa": "در اعتبار سنجی عمیق *"
+  },
+  {
+    "id": "validate_meta_modal_title",
+    "en": "Metadata validation",
+    "fa": "اعتبار سنجی فراداده *"
+  },
+  {
+    "id": "validate_meta_no_issue",
+    "en": "Metadata are valid.",
+    "fa": "فراداده معتبر است. *"
+  },
+  {
+    "id": "validate_meta_attribute",
+    "en": "Attributes",
+    "fa": "ویژگی های *"
+  },
+  {
+    "id": "validate_meta_invalid_attribute",
+    "en": "Invalid attribute description entry",
+    "fa": "ورودی توصیف ویژگی نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_abstract",
+    "en": "Abstract",
+    "fa": "خلاصه *"
+  },
+  {
+    "id": "validate_meta_invalid_abstract",
+    "en": "Invalid abstract",
+    "fa": "چکیده نامعتبر *"
+  },
+  {
+    "id": "validate_meta_title",
+    "en": "Title",
+    "fa": "عنوان *"
+  },
+  {
+    "id": "validate_meta_invalid_title",
+    "en": "Invalid title",
+    "fa": "عنوان نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_keyword",
+    "en": "Keywords",
+    "fa": "کلید واژه ها *"
+  },
+  {
+    "id": "validate_meta_keyword_m49",
+    "en": "Geographic M49 Keywords list",
+    "fa": "لیست کلمات کلیدی M49 جغرافیایی"
+  },
+  {
+    "id": "validate_meta_no_keyword",
+    "en": "Missing keywords",
+    "fa": "کلمات کلیدی از دست رفته است *"
+  },
+  {
+    "id": "validate_meta_invalid_keyword",
+    "en": "Invalid keywords",
+    "fa": "کلمات کلیدی نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_contact",
+    "en": "Contacts",
+    "fa": "مخاطب *"
+  },
+  {
+    "id": "validate_meta_no_contact",
+    "en": "Missing contact",
+    "fa": "مخاطب از دست رفته است *"
+  },
+  {
+    "id": "validate_meta_invalid_contact_email",
+    "en": "Invalid contact email",
+    "fa": "ایمیل تماس نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_issuance",
+    "en": "Issuance",
+    "fa": "صدور *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_periodicity",
+    "en": "Invalid periodicity",
+    "fa": "تناوبی نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_released_at",
+    "en": "Invalid date of release",
+    "fa": "تاریخ انتشار نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_invalid_issuance_modified_at",
+    "en": "Invalid date of modification",
+    "fa": "تاریخ اصلاح نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_license",
+    "en": "License",
+    "fa": "مجوز *"
+  },
+  {
+    "id": "validate_meta_no_license",
+    "en": "Missing license",
+    "fa": "مجوز موجود نیست *"
+  },
+  {
+    "id": "validate_meta_invalid_license",
+    "en": "Invalid license",
+    "fa": "مجوز نامعتبر است *"
+  },
+  {
+    "id": "validate_meta_source",
+    "en": "Source",
+    "fa": "منبع *"
+  },
+  {
+    "id": "validate_meta_no_source",
+    "en": "Source missing",
+    "fa": "منبع موجود نیست *"
+  },
+  {
+    "id": "validate_meta_invalid_source",
+    "en": "Invalid source",
+    "fa": "منبع نامعتبر *"
+  },
+  {
+    "id": "validate_meta_invalid_external_link",
+    "en": "Invalid external link",
+    "fa": "پیوند خارجی نامعتبر است *"
+  },
+  {
+    "id": "source_last_editor_email",
+    "en": "Email of the last editor",
+    "fa": "ایمیل آخرین ویرایشگر *"
+  },
+  {
+    "id": "additional_doc_desc",
+    "en": "If any, list of additional documents",
+    "fa": "اگر هر گونه، لست اسناد اضافی"
+  },
+  {
+    "id": "additional_doc_items_desc",
+    "en": "Related documents such as technical information about a dataset",
+    "fa": "اسناد مرتبط مثل اطلاعات تخنیکی در باره مجموعه اطلاعات"
+  },
+  {
+    "id": "additional_doc_items_title",
+    "en": "List of annexes",
+    "fa": "لست ضمایم"
+  },
+  {
+    "id": "additional_doc_item_title",
+    "en": "Document",
+    "fa": "سند"
+  },
+  {
+    "id": "additional_doc_item_url",
+    "en": "URL to the document",
+    "fa": "برای سند URL "
+  },
+  {
+    "id": "additional_doc_title",
+    "en": "Annexes",
+    "fa": "ضمایم "
+  },
+  {
+    "id": "annually",
+    "en": "Data is updated every year",
+    "fa": "اطلاعات هر ساله تجدید می شوند"
+  },
+  {
+    "id": "as_needed",
+    "en": "Data is updated as deemed necessary",
+    "fa": "اطلاعات به صورت ضروری تجدید می شوند"
+  },
+  {
+    "id": "attribute_item_title",
+    "en": "Attribute",
+    "fa": "ویژه گی "
+  },
+  {
+    "id": "attribute_name_title",
+    "en": "Attribute name",
+    "fa": "نام ویژه گی "
+  },
+  {
+    "id": "attributes_list_title",
+    "en": "Attributes list",
+    "fa": "لست ویژه گی ها"
+  },
+  {
+    "id": "attributes_desc_title",
+    "en": "Attributes description",
+    "fa": "شرح صفات *"
+  },
+  {
+    "id": "attributes_desc_desc",
+    "en": "Description of the attributes contained in the data",
+    "fa": "شرح ویژه گی های که در اطلاعات موجود می باشد"
+  },
+  {
+    "id": "attribute_desc_item_title",
+    "en": "Description",
+    "fa": "شرح"
+  },
+  {
+    "id": "attributes_alias_title",
+    "en": "Alias for attributes names",
+    "fa": "نام مستعار برای نام ویژگی ها *"
+  },
+  {
+    "id": "attributes_alias_desc",
+    "en": "Set attributes short names (alias)",
+    "fa": "تنظیم ویژگی های کوتاه (نام مستعار) *"
+  },
+  {
+    "id": "attribute_alias_item_title",
+    "en": "Alias",
+    "fa": "نام مستعار *"
+  },
+  {
+    "id": "biannually",
+    "en": "Data is updated twice each year",
+    "fa": "اطلاعات دو بار در سال تجدید می شوند"
+  },
+  {
+    "id": "confirm_source_remove",
+    "en": "Are you sure to delete the source with all related views and metadata ? This can't be undone",
+    "fa": "آیا مطمئن هستید که منبع را با تمام مشاهدات و ابرداده های مرتبط حذف شود؟ این کار را نمیتوان لغو کرد"
+  },
+  {
+    "id": "contact_address",
+    "en": "Contact address",
+    "fa": "آدرس مخاطب"
+  },
+  {
+    "id": "contact_desc",
+    "en": "Information about people or organisation related to this data",
+    "fa": "معلومات مربوط به افراد یا سازمان مرتبط به این اطلاعات"
+  },
+  {
+    "id": "contact_email",
+    "en": "Contact email",
+    "fa": "ایمل مخاطب"
+  },
+  {
+    "id": "contact_function",
+    "en": "Function",
+    "fa": "عملکرد"
+  },
+  {
+    "id": "contact_function_desc",
+    "en": "Name of the contact function, e.g. Administrator, Publisher",
+    "fa": "نام مخاطب عمل کننده، مثل مدیر، ناشر "
+  },
+  {
+    "id": "contact_item_title",
+    "en": "Contact",
+    "fa": "مخاطب"
+  },
+  {
+    "id": "contact_list_title",
+    "en": "List of contacts",
+    "fa": "لست مخاطبین"
+  },
+  {
+    "id": "contact_name",
+    "en": "Contact name",
+    "fa": "نام مخاطب  "
+  },
+  {
+    "id": "contact_title",
+    "en": "Contacts",
+    "fa": "مخاطبین"
+  },
+  {
+    "id": "continual",
+    "en": "Data is repeatedly and frequently updated",
+    "fa": "اطلاعات مکرراَ و دوره ایی تجدید شده اند"
+  },
+  {
+    "id": "daily",
+    "en": "Data is updated each day",
+    "fa": "اطلاعات هر روز تجدید شده اند"
+  },
+  {
+    "id": "fortnightly",
+    "en": "Data is updated every two weeks",
+    "fa": "اطلاعات هر دو هفته تجدید می شوند"
+  },
+  {
+    "id": "irregular",
+    "en": "Data is updated in intervals that are uneven in duration",
+    "fa": "اطلاعات در فواصل زمانی که در طول زمان ناهموار هستند تحدید می شوند"
+  },
+  {
+    "id": "lang_desc",
+    "en": "Language(s) used in content",
+    "fa": "زبان (زبانهای) که در محتوا استفاده شده است"
+  },
+  {
+    "id": "lang_item_title",
+    "en": "Language",
+    "fa": "زبان"
+  },
+  {
+    "id": "lang_list_desc",
+    "en": "Two letters code of languages",
+    "fa": "دو دستورالعمل نامه از زبان ها"
+  },
+  {
+    "id": "lang_list_title",
+    "en": "List of languages",
+    "fa": "لست زبان ها"
+  },
+  {
+    "id": "lang_title",
+    "en": "Language",
+    "fa": "زبان"
+  },
+  {
+    "id": "license_allow_download",
+    "en": "Allow download source",
+    "fa": "منبع بارگیری مجاز است *"
+  },
+  {
+    "id": "license_desc",
+    "en": "If any, description of the data licenses",
+    "fa": "اگر هر گونه، شرح مجوز اطلاعات"
+  },
+  {
+    "id": "license_item_title",
+    "en": "License",
+    "fa": "مجوز"
+  },
+  {
+    "id": "license_list_desc",
+    "en": "Name and/or description of the licence",
+    "fa": "نام و/یا شرح مجوز"
+  },
+  {
+    "id": "license_list_title",
+    "en": "List of licences",
+    "fa": "لست مجوز "
+  },
+  {
+    "id": "license_name",
+    "en": "Name",
+    "fa": "نام"
+  },
+  {
+    "id": "license_text",
+    "en": "Text",
+    "fa": "متن"
+  },
+  {
+    "id": "license_title",
+    "en": "Licensing",
+    "fa": "صدور مجوز"
+  },
+  {
+    "id": "maintainer",
+    "en": "Maintainer",
+    "fa": "نگهدارنده"
+  },
+  {
+    "id": "monthly",
+    "en": "Data is updated each month",
+    "fa": "اطلاعات هر ماه تجدید می شوند"
+  },
+  {
+    "id": "msg_error_duplicate",
+    "en": "This source already exists and is available for you",
+    "fa": "این منبع از قبل موجود و در دسترس شما است"
+  },
+  {
+    "id": "msg_error_import",
+    "en": "Data was not imported",
+    "fa": "اطلاعات وارد نشد "
+  },
+  {
+    "id": "msg_process_wait",
+    "en": "Data is processed, please wait",
+    "fa": "اطلاعات پروسس شد، لطفا صبر نمایید"
+  },
+  {
+    "id": "msg_success_delete",
+    "en": "Source successfully removed",
+    "fa": "ابرداده با موفقیت حذف شد"
+  },
+  {
+    "id": "msg_success_import",
+    "en": "Data imported successfully",
+    "fa": "اطلاعات با موفقیت وارد شدند"
+  },
+  {
+    "id": "msg_success_update",
+    "en": "Meta data successfully updated",
+    "fa": "ابرداده با موفقیت به روز شد "
+  },
+  {
+    "id": "not_planned",
+    "en": "There are no plans to update the data",
+    "fa": "هیچ برنامه ای برای تجدید اطلاعات وجود ندارد"
+  },
+  {
+    "id": "optional_view_show_attribute_preview",
+    "en": "Show a summary of the attributes names and values",
+    "fa": "خلاصه ای از نام های ویژه گی و مقادیر را نمایش دهید"
+  },
+  {
+    "id": "optional_view_text",
+    "en": "Select an attribute from the source to create a simple view or click on finish to end the importation",
+    "fa": "یک ویژگی از منبع برای ایجاد یک نمای ساده انتخاب کنید یا روی دکمه پایان کلیک کنید تا واردات را پایان دهید"
+  },
+  {
+    "id": "optional_view_title",
+    "en": "Optional creation of a new view",
+    "fa": "ایجاد اختیاری یک نمای جدید"
+  },
+  {
+    "id": "origin_desc",
+    "en": "Origin of the data and how to retrieve it",
+    "fa": "اصلیت اطلاعات و روش بازیابی آن"
+  },
+  {
+    "id": "origin_homepage_desc",
+    "en": "Homepage for the data",
+    "fa": "صفحه اصلی برای اطلاعات"
+  },
+  {
+    "id": "origin_homepage_item_title",
+    "en": "Homepage (URL)",
+    "fa": "صفحه اصلی (URL)"
+  },
+  {
+    "id": "origin_homepage_title",
+    "en": "Homepage",
+    "fa": "صفحه اصلی"
+  },
+  {
+    "id": "origin_source_is_full_request_title",
+    "en": "The url contain a request to retrieve the data automatically",
+    "fa": " دارایی یک درخواست جهت بازیابی اطلاعات به شکل خودکار میباشد URL"
+  },
+  {
+    "id": "origin_sources_desc",
+    "en": "Method to retrieve the data",
+    "fa": "روش بازیابی اطلاعات"
+  },
+  {
+    "id": "origin_sources_list",
+    "en": "List of sources",
+    "fa": "لست منابع"
+  },
+  {
+    "id": "origin_sources_title",
+    "en": "Sources",
+    "fa": "منابع"
+  },
+  {
+    "id": "origin_source_title",
+    "en": "Source",
+    "fa": "منبع"
+  },
+  {
+    "id": "origin_source_url_title",
+    "en": "URL",
+    "fa": "URL"
+  },
+  {
+    "id": "origin_title",
+    "en": "Source",
+    "fa": "منبع"
+  },
+  {
+    "id": "other",
+    "en": "Other",
+    "fa": "سایر"
+  },
+  {
+    "id": "quarterly",
+    "en": "Data is updated every three months",
+    "fa": "اطلاعات هر سه ماه تجدید می شوند"
+  },
+  {
+    "id": "schema_title",
+    "en": "Source metadata",
+    "fa": "فراداده منبع *"
+  },
+  {
+    "id": "schema_desc",
+    "en": "Metadata editor for the source of the data",
+    "fa": "ویرایشگر فراداده برای منبع داده ها *"
+  },
+  {
+    "id": "schema_story_views_activate",
+    "en": "Views to activate",
+    "fa": "بازدیدها برای فعال شدن *"
+  },
+  {
+    "id": "schema_story_slide_classes",
+    "en": "Slide classes",
+    "fa": "کلاسهای اسلاید *"
+  },
+  {
+    "id": "schema_story_slide_classes_name",
+    "en": "Class names",
+    "fa": "نام کلاس ها *"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll",
+    "en": "Allow scrolling",
+    "fa": "پیمایش را مجاز کنید *"
+  },
+  {
+    "id": "schema_story_slide_allow_scroll_desc",
+    "en": "If the slide content goes outside the container, a scrollbar will be displayed.",
+    "fa": "اگر محتوای اسلاید به خارج از ظرف برود ، نوار پیمایشی نمایش داده می شود. *"
+  },
+  {
+    "id": "schema_story_slide_base_txt_size_px",
+    "en": "Base text size in pixels",
+    "fa": "اندازه متن پایه در پیکسل *"
+  },
+  {
+    "id": "schema_story_slide_effects",
+    "en": "Effects",
+    "fa": "جلوه ها *"
+  },
+  {
+    "id": "schema_story_slide_effect_start",
+    "en": "Start",
+    "fa": "شروع کنید *"
+  },
+  {
+    "id": "schema_story_slide_effect_end",
+    "en": "End",
+    "fa": "پایان *"
+  },
+  {
+    "id": "schema_story_slide_effect_offset",
+    "en": "Offset",
+    "fa": "انحراف *"
+  },
+  {
+    "id": "schema_story_slide_effect_factor",
+    "en": "Factor",
+    "fa": "عامل *"
+  },
+  {
+    "id": "schema_story_slide_effect_type",
+    "en": "Type",
+    "fa": "تایپ کنید *"
+  },
+  {
+    "id": "schema_story_slide_name",
+    "en": "Slide name",
+    "fa": "نام اسلاید *"
+  },
+  {
+    "id": "schema_story_map_anim_duration",
+    "en": "Animation duration [ms]",
+    "fa": "مدت زمان انیمیشن [میلی ثانیه] *"
+  },
+  {
+    "id": "schema_story_map_anim_duration_desc",
+    "en": "Change the total animation duration",
+    "fa": "کل مدت زمان انیمیشن را تغییر دهید *"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method",
+    "en": "Trajectory method",
+    "fa": "روش خط سیر *"
+  },
+  {
+    "id": "schema_story_map_anim_traj_method_desc",
+    "en": "Set the traveling method of the camera during the animation",
+    "fa": "روش پیمایش دوربین را هنگام انیمیشن تنظیم کنید *"
+  },
+  {
+    "id": "schema_story_map_anim_fun",
+    "en": "Animation function",
+    "fa": "عملکرد انیمیشن *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_desc",
+    "en": "Change the default animation function. Ease the start and/or end of the animation.",
+    "fa": "عملکرد پیش فرض انیمیشن را تغییر دهید. شروع و / یا پایان انیمیشن را آسان کنید. *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp",
+    "en": "Animation function exponent",
+    "fa": "نماینده عملکرد انیمیشن *"
+  },
+  {
+    "id": "schema_story_map_anim_fun_exp_desc",
+    "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
+    "fa": "نمایانگر عملکرد پیش فرض را تغییر دهید. این میزان تخفیف را تقویت یا کاهش می دهد. *"
+  },
+  {
+    "id": "schema_story_map_anim",
+    "en": "Map animation",
+    "fa": "انیمیشن نقشه *"
+  },
+  {
+    "id": "schema_story_autoplay_timeout",
+    "en": "Timeout [ms]",
+    "fa": "مهلت زمانی [میلی ثانیه] *"
+  },
+  {
+    "id": "schema_story_autoplay_timeout_desc",
+    "en": "Waiting time before going to the next step.",
+    "fa": "زمان انتظار قبل از رفتن به مرحله بعدی. *"
+  },
+  {
+    "id": "schema_story_autoplay_transition",
+    "en": "Transition [ms]",
+    "fa": "انتقال [میلی ثانیه] *"
+  },
+  {
+    "id": "schema_story_autoplay_transition_desc",
+    "en": "Duration of the transition between steps.",
+    "fa": "مدت زمان انتقال بین مراحل. *"
+  },
+  {
+    "id": "schema_story_autoplay",
+    "en": "Autoplay settings",
+    "fa": "تنظیمات پخش خودکار *"
+  },
+  {
+    "id": "schema_story_step_name",
+    "en": "Step name",
+    "fa": "نام مرحله *"
+  },
+  {
+    "id": "schema_story_screen_res",
+    "en": "Screen resolution",
+    "fa": "وضوح صفحه *"
+  },
+  {
+    "id": "schema_story_screen_res_desc",
+    "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
+    "fa": "وضوح صفحه در طول نقشه داستان. به طور خودکار مقیاس بندی می شود تا متناسب با صفحه باشد و قالب بندی محتوا را حفظ کند. *"
+  },
+  {
+    "id": "schema_story_settings",
+    "en": "Settings",
+    "fa": "تنظیمات *"
+  },
+  {
+    "id": "button_legend_title",
+    "en": "Legends",
+    "fa": "افسانه ها *"
+  },
+  {
+    "id": "button_legend_button",
+    "en": "Legends",
+    "fa": "افسانه ها *"
+  },
+  {
+    "id": "button_issues",
+    "en": "Issues",
+    "fa": "مسائل *"
+  },
+  {
+    "id": "select_optional_view_attribute",
+    "en": "Select attribute",
+    "fa": "ویژه گی را انتخاب نمایید"
+  },
+  {
+    "id": "spatial_bbx_desc",
+    "en": "Spatial bounding box of the data using latitude and longitude",
+    "fa": "جبعه محدود فضایی  اطلاعات که از عرض و طول جغرافیایی استفاده می کنند"
+  },
+  {
+    "id": "spatial_bbx_lat_max",
+    "en": "Max. latitude",
+    "fa": "بیشترین. عرض جغرافیای "
+  },
+  {
+    "id": "spatial_bbx_lat_min",
+    "en": "Min. latitude",
+    "fa": "کمترین. عرض جغرافیایی"
+  },
+  {
+    "id": "spatial_bbx_lng_max",
+    "en": "Max. longitude",
+    "fa": "بیشترین. طول جغرافیای "
+  },
+  {
+    "id": "spatial_bbx_lng_min",
+    "en": "Min. longitude",
+    "fa": "کمترین. طول جغرافیایی"
+  },
+  {
+    "id": "spatial_bbx_title",
+    "en": "Bounding box",
+    "fa": "جبعه محدود"
+  },
+  {
+    "id": "spatial_desc",
+    "en": "Description of the data using spatial reference: bounding box, and spatial reference system (SRS)",
+    "fa": "شرح اطلاعات که منبع فضایی استفاده می کنند: جبعه محدود، و سیستم منبع فضایی (SRS)"
+  },
+  {
+    "id": "spatial_srs_code",
+    "en": "Code of the SRS",
+    "fa": "دستورالعمل SRS"
+  },
+  {
+    "id": "spatial_srs_desc",
+    "en": "Description of the spatial reference system",
+    "fa": "شرح سیستم منبع فضایی"
+  },
+  {
+    "id": "spatial_srs_desc_url",
+    "en": "URL to the SRS code definition",
+    "fa": " SRS برای تعریف دستورالعمل URL"
+  },
+  {
+    "id": "spatial_srs_title",
+    "en": "Spatial reference system",
+    "fa": "سیستم منبع فضایی"
+  },
+  {
+    "id": "spatial_title",
+    "en": "Spatial",
+    "fa": "فضایی"
+  },
+  {
+    "id": "summary_attribute",
+    "en": "Summary ",
+    "fa": "خلاصه"
+  },
+  {
+    "id": "target_desc",
+    "en": "Modality and restriction of access to the data",
+    "fa": "چگونگی محدودیت دسترسی به اطلاعات"
+  },
+  {
+    "id": "target_role_item_title",
+    "en": "Role",
+    "fa": "نقش"
+  },
+  {
+    "id": "target_roles_read_title",
+    "en": "Roles allowed to read",
+    "fa": "نقش های مجاز برای خواندن"
+  },
+  {
+    "id": "target_roles_admin_title",
+    "en": "Roles allowed to manage",
+    "fa": "نقش های مجاز برای مدیریت *"
+  },
+  {
+    "id": "target_roles_get_title",
+    "en": "Roles allowed to download",
+    "fa": "نقش ها مجاز به بارگیری هستند *"
+  },
+  {
+    "id": "target_roles_list_title",
+    "en": "List of roles",
+    "fa": "لست نقش ها"
+  },
+  {
+    "id": "target_roles_title",
+    "en": "Roles",
+    "fa": "نقش ها"
+  },
+  {
+    "id": "target_title",
+    "en": "Access",
+    "fa": "دسترسی"
+  },
+  {
+    "id": "temporal_desc",
+    "en": "Description of the dataset using temporal references: periodicity, initial release, update and range",
+    "fa": "شرح مجموعه اطلاعات با استفاده منابع موقتی: پخش اولیه، تجدید و محدوده"
+  },
+  {
+    "id": "temporal_issuance_desc",
+    "en": "Description of the data issuance",
+    "fa": "شرح انتشار اطلاعات"
+  },
+  {
+    "id": "temporal_issuance_title",
+    "en": "Issuance",
+    "fa": "صدور  "
+  },
+  {
+    "id": "temporal_periodicity",
+    "en": "Periodicity",
+    "fa": "دوره ایی"
+  },
+  {
+    "id": "temporal_periodicity_desc",
+    "en": "Frenquency with wich data is published or updated",
+    "fa": "دوره ای که در آن اطلاعات پخش یا تجدید می شود"
+  },
+  {
+    "id": "temporal_range_desc",
+    "en": "The temporal range of the data",
+    "fa": "محدوده موقتی اطلاعات"
+  },
+  {
+    "id": "temporal_range_end",
+    "en": "End",
+    "fa": "ختم"
+  },
+  {
+    "id": "temporal_range_start",
+    "en": "Start",
+    "fa": "شروع"
+  },
+  {
+    "id": "temporal_range_timeless",
+    "en": "There is no time range for this data",
+    "fa": "محدوده زمانی برای این اطلاعات موجود نمی باشد "
+  },
+  {
+    "id": "temporal_range_title",
+    "en": "Range",
+    "fa": "محدوده"
+  },
+  {
+    "id": "temporal_release_desc",
+    "en": "Date of formal issuance",
+    "fa": "تاریخ صدور رسمی "
+  },
+  {
+    "id": "temporal_release_title",
+    "en": "Release date",
+    "fa": "تاریخ پخش "
+  },
+  {
+    "id": "temporal_title",
+    "en": "Temporal",
+    "fa": "موقتی"
+  },
+  {
+    "id": "temporal_update_desc",
+    "en": "Date of the latest update",
+    "fa": "تاریخ آخرین تجدید"
+  },
+  {
+    "id": "temporal_update_title",
+    "en": "Last update",
+    "fa": "اخرین تجدید"
+  },
+  {
+    "id": "textual_desc",
+    "en": "Textual description of the data using title, abstract and tags",
+    "fa": "شرح متنی اطلاعات با استفاده عنوان، چکیده و علامت ها"
+  },
+  {
+    "id": "textual_desc_notes",
+    "en": "Additional notes",
+    "fa": "یادداشت های اضافی *"
+  },
+  {
+    "id": "textual_desc_abstract",
+    "en": "Abstract",
+    "fa": "چکیده"
+  },
+  {
+    "id": "textual_desc_title",
+    "en": "Title",
+    "fa": "عنوان"
+  },
+  {
+    "id": "textual_keyword_desc",
+    "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
+    "fa": "کلید واژه ها (یا علامت ها) کاربران را  برای کشف اطلاعات شان  کمک می کند. لطفاً اصطلاحات را که  توسط کاربران تخصصی و غیر تخصصی مورد استفاده قرار میگیرد٬ را اضافه نمایید."
+  },
+  {
+    "id": "textual_keyword_item_title",
+    "en": "Keyword",
+    "fa": "کلید واژه"
+  },
+  {
+    "id": "textual_keywords_title",
+    "en": "Keywords list",
+    "fa": "لست کلید واژه ها"
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keywords",
+    "fa": "کلید واژه ها"
+  },
+  {
+    "id": "textual_keywords_m49_title",
+    "en": "Geographic M49 Keywords list",
+    "fa": "لیست کلمات کلیدی M49 جغرافیایی"
+  },
+  {
+    "id": "textual_keywords_m49_desc",
+    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
+    "fa": "برای جستجوی فضایی ، MapX می تواند رابطه بین چندین ویژگی فضایی را براساس هندسه ، میزان و / یا ویژگی های آنها تعیین کند. در برخی موارد ، بهتر است که یک کلمه کلیدی جغرافیایی را با منبع مرتبط کنید ، تا ارتباط را در هنگام جستجوی متن بهبود بخشد. کلمات کلیدی M49 این امکان را به شما می دهد. حداقل یک کلمه کلیدی لازم است. *"
+  },
+  {
+    "id": "textual_title",
+    "en": "Textual",
+    "fa": "متنی"
+  },
+  {
+    "id": "unknown",
+    "en": "Frequency of maintenance for the data is not known",
+    "fa": "فرکانس تعمیر و نگهداری اطلاعات شناخته شده نیست"
+  },
+  {
+    "id": "weekly",
+    "en": "Data is updated on a weekly basis",
+    "fa": "اطلاعات به صورت هفته وار تجدید می شوند"
+  },
+  {
+    "id": "meta_display_source_title",
+    "en": "Metadata of the source",
+    "fa": "فراداده منبع *"
+  },
+  {
+    "id": "meta_display_view_title",
+    "en": "Summary of the view metadata",
+    "fa": "خلاصه فوق داده مشاهده *"
+  },
+  {
+    "id": "meta_last_editor_id",
+    "en": "Editor id",
+    "fa": "شناسه ویرایشگر *"
+  },
+  {
+    "id": "meta_all_editor_id",
+    "en": "Id of all editors",
+    "fa": "شناسه همه ویراستاران *"
+  },
+  {
+    "id": "meta_view_modal_title",
+    "en": "Metadata of the view",
+    "fa": "فراداده نمایش *"
+  },
+  {
+    "id": "meta_view_raster_meta",
+    "en": "Metadata Entry",
+    "fa": "ورودی فراداده *"
+  },
+  {
+    "id": "meta_view_table_editors_title",
+    "en": "Changes overview",
+    "fa": "بررسی اجمالی تغییرات *"
+  },
+  {
+    "id": "meta_view_table_editors_changes",
+    "en": "N. of changes",
+    "fa": "N. تغییرات *"
+  },
+  {
+    "id": "meta_view_table_editors_email",
+    "en": "Editor",
+    "fa": "ویرایشگر *"
+  },
+  {
+    "id": "meta_view_table_editors_current",
+    "en": "Latest edit",
+    "fa": "آخرین ویرایش *"
+  },
+  {
+    "id": "meta_view_title",
+    "en": "View title",
+    "fa": "مشاهده عنوان *"
+  },
+  {
+    "id": "meta_view_abstract",
+    "en": "Abstract",
+    "fa": "خلاصه *"
+  },
+  {
+    "id": "meta_view_stat_n_add",
+    "en": "Number of viewing",
+    "fa": "تعداد مشاهده *"
+  },
+  {
+    "id": "meta_view_stat_n_distinct_user",
+    "en": "Number of distinct users",
+    "fa": "تعداد کاربران مشخص *"
+  },
+  {
+    "id": "meta_source_title",
+    "en": "Title",
+    "fa": "عنوان *"
+  },
+  {
+    "id": "meta_source_abstract",
+    "en": "Abstract",
+    "fa": "خلاصه *"
+  },
+  {
+    "id": "meta_source_notes",
+    "en": "Notes",
+    "fa": "یادداشت *"
+  },
+  {
+    "id": "meta_source_keywords",
+    "en": "Keywords",
+    "fa": "کلید واژه ها *"
+  },
+  {
+    "id": "meta_source_keywords_m49",
+    "en": "Geographic Keywords M49",
+    "fa": "کلیدواژه های جغرافیایی M49"
+  },
+  {
+    "id": "meta_source_languages",
+    "en": "Languages used in the data",
+    "fa": "زبانهای مورد استفاده در داده ها *"
+  },
+  {
+    "id": "meta_source_contacts",
+    "en": "Contacts list",
+    "fa": "لیست مخاطبین *"
+  },
+  {
+    "id": "meta_source_periodicity",
+    "en": "Periodicity",
+    "fa": "دوره ای بودن *"
+  },
+  {
+    "id": "meta_source_released_at",
+    "en": "Date of release",
+    "fa": "تاریخ انتشار *"
+  },
+  {
+    "id": "meta_source_modified_at",
+    "en": "Date of modification",
+    "fa": "تاریخ اصلاح *"
+  },
+  {
+    "id": "meta_source_start_at",
+    "en": "Data values starting date",
+    "fa": "مقادیر تاریخ شروع تاریخ *"
+  },
+  {
+    "id": "meta_source_end_at",
+    "en": "Data values ending date",
+    "fa": "مقادیر تاریخ پایان تاریخ *"
+  },
+  {
+    "id": "meta_source_is_timeless",
+    "en": "Data without temporal values",
+    "fa": "داده بدون مقادیر زمانی *"
+  },
+  {
+    "id": "meta_view_projects_titles",
+    "en": "Also published in those projects",
+    "fa": "همچنین در آن پروژه ها منتشر شده است *"
+  },
+  {
+    "id": "meta_view_project_title",
+    "en": "Original project",
+    "fa": "پروژه اصلی *"
+  },
+  {
+    "id": "meta_view_projects",
+    "en": "Projects",
+    "fa": "پروژه ها *"
+  },
+  {
+    "id": "meta_view_id",
+    "en": "View id",
+    "fa": "شناسه را مشاهده کنید *"
+  },
+  {
+    "id": "meta_view_collections",
+    "en": "Collections",
+    "fa": "مجموعه ها *"
+  },
+  {
+    "id": "meta_view_date_modified",
+    "en": "Modification date",
+    "fa": "تاریخ اصلاح *"
+  },
+  {
+    "id": "meta_view_date_created",
+    "en": "Creation date",
+    "fa": "تاریخ ایجاد *"
+  },
+  {
+    "id": "meta_view_editor",
+    "en": "Editor",
+    "fa": "ویرایشگر *"
+  },
+  {
+    "id": "meta_view_editors",
+    "en": "Groups with editing access",
+    "fa": "گروههایی با دسترسی ویرایش *"
+  },
+  {
+    "id": "meta_view_readers",
+    "en": "Groups with reading access",
+    "fa": "گروههایی که دسترسی خواندن دارند *"
+  },
+  {
+    "id": "meta_view_type",
+    "en": "Type",
+    "fa": "تایپ کنید *"
+  },
+  {
+    "id": "meta_view_table_summary_title",
+    "en": "Summary of the view",
+    "fa": "خلاصه دیدگاه *"
+  },
+  {
+    "id": "meta_source_id",
+    "en": "Source id",
+    "fa": "شناسه منبع *"
+  },
+  {
+    "id": "meta_source_table_summary_title",
+    "en": "Summary of the source",
+    "fa": "خلاصه منبع *"
+  },
+  {
+    "id": "meta_source_homepage",
+    "en": "Source homepage",
+    "fa": "صفحه اصلی منبع *"
+  },
+  {
+    "id": "meta_source_url_download",
+    "en": "Download original source",
+    "fa": "منبع اصلی را بارگیری کنید *"
+  },
+  {
+    "id": "meta_source_url_annexes",
+    "en": "Download annexes",
+    "fa": "ضمیمه ها را بارگیری کنید *"
+  },
+  {
+    "id": "meta_source_integrity_score",
+    "en": "Integrity score",
+    "fa": "نمره یکپارچگی *"
+  },
+  {
+    "id": "meta_source_time_range",
+    "en": "Temporal range",
+    "fa": "محدوده زمانی *"
+  },
+  {
+    "id": "meta_source_time_range_min",
+    "en": "From",
+    "fa": "از جانب *"
+  },
+  {
+    "id": "meta_source_time_range_max",
+    "en": "To",
+    "fa": "به *"
+  },
+  {
+    "id": "dont_know",
+    "en": "I don't know",
+    "fa": "من نمی دانم"
+  },
+  {
+    "id": "yes",
+    "en": "Yes",
+    "fa": "بلی "
+  },
+  {
+    "id": "no",
+    "en": "No",
+    "fa": "نخیر"
+  },
+  {
+    "id": "partial",
+    "en": "Partially",
+    "fa": "تا اندازه ای"
+  },
+  {
+    "id": "wms_select_reviewed_service",
+    "en": "Select stored service",
+    "fa": "سرویس ذخیره شده را انتخاب کنید *"
+  },
+  {
+    "id": "wms_select_layer",
+    "en": "Select layer",
+    "fa": "لایه را انتخاب کنید *"
+  },
+  {
+    "id": "wms_input_service_url",
+    "en": "Enter service URL",
+    "fa": "آدرس URL سرویس را وارد کنید *"
+  },
+  {
+    "id": "wms_btn_generate_url",
+    "en": "Update generated URL ( tiles server, legends )",
+    "fa": "URL تولید شده را به روز کنید (سرور کاشی ، افسانه ها) *"
+  },
+  {
+    "id": "wms_btn_get_layers",
+    "en": "Update layer list",
+    "fa": "لیست لایه را به روز کنید *"
+  },
+  {
+    "id": "app_maintenance_title",
+    "en": "Maintenance",
+    "fa": "نگهداری *"
+  },
+  {
+    "id": "app_maintenance_text",
+    "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team",
+    "fa": "MapX در حال حاضر به دلیل نگهداری سرور در دسترس نیست.<br> در روز بعد برگرد!<br><br> با احترام ، تیم MapX شما *"
+  },
+  {
+    "id": "pk_panel_options",
+    "en": "Display options",
+    "fa": "گزینه های نمایش *"
+  },
+  {
+    "id": "pk_tab_settings",
+    "en": "Palette tool",
+    "fa": "ابزار پالت *"
+  },
+  {
+    "id": "pk_tab_palettes",
+    "en": "Palettes",
+    "fa": "پالت ها *"
+  },
+  {
+    "id": "pk_tab_edit_json",
+    "en": "Edit JSON",
+    "fa": "JSON را ویرایش کنید *"
+  },
+  {
+    "id": "pk_btn_add",
+    "en": "Add",
+    "fa": "اضافه کردن *"
+  },
+  {
+    "id": "pk_btn_close",
+    "en": "Close",
+    "fa": "نزدیک *"
+  },
+  {
+    "id": "pk_slider_n_hue_rotation",
+    "en": "Number of hue rotation",
+    "fa": "تعداد چرخش رنگ *"
+  },
+  {
+    "id": "pk_slider_n_colors",
+    "en": "Number of colors",
+    "fa": "تعداد رنگها *"
+  },
+  {
+    "id": "pk_slider_hue_shift",
+    "en": "Hue shift",
+    "fa": "تغییر رنگ *"
+  },
+  {
+    "id": "pk_slider_colors",
+    "en": "Colors space",
+    "fa": "فضای رنگها *"
+  },
+  {
+    "id": "pk_slider_saturation",
+    "en": "Saturation",
+    "fa": "اشباع *"
+  },
+  {
+    "id": "pk_slider_luminosity",
+    "en": "Luminosity",
+    "fa": "درخشندگی *"
+  },
+  {
+    "id": "pk_slider_randomize",
+    "en": "Shuffle",
+    "fa": "بر زدن *"
+  },
+  {
+    "id": "pk_slider_reverse",
+    "en": "Reverse",
+    "fa": "معکوس *"
+  },
+  {
+    "id": "pk_slider_diverge",
+    "en": "Diverge",
+    "fa": "واگرایی *"
+  },
+  {
+    "id": "pk_btn_set_default_palette",
+    "en": "Use the default palette",
+    "fa": "از پالت پیش فرض استفاده کنید *"
+  },
+  {
+    "id": "draft_recover_modal_title",
+    "en": "Data recovery",
+    "fa": "بازیابی اطلاعات *"
+  },
+  {
+    "id": "draft_recover_use_most_recent",
+    "en": "Use the most recent",
+    "fa": "از جدیدترین استفاده کنید *"
+  },
+  {
+    "id": "draft_recover_cancel",
+    "en": "Cancel",
+    "fa": "لغو *"
+  },
+  {
+    "id": "draft_recover_preview_diff",
+    "en": "Preview differences",
+    "fa": "تفاوت پیش نمایش *"
+  },
+  {
+    "id": "draft_recover_last_saved_date",
+    "en": "Date of the last saved version",
+    "fa": "تاریخ آخرین نسخه ذخیره شده *"
+  },
+  {
+    "id": "draft_recover_recovered_date",
+    "en": "Date of the recovered version",
+    "fa": "تاریخ نسخه بازیابی شده *"
+  },
+  {
+    "id": "draft_recover_diffs",
+    "en": "Differences",
+    "fa": "تفاوت *"
+  },
+  {
+    "id": "draft_recover_summary_title",
+    "en": "Summary",
+    "fa": "خلاصه *"
+  },
+  {
+    "id": "api_download_ready",
+    "en": "Process done, the data is available for download : ",
+    "fa": "روند کار تمام شد ، داده ها برای بارگیری در دسترس هستند: *"
+  },
+  {
+    "id": "api_upload_ready",
+    "en": "Process done, the data will be available in source list.",
+    "fa": "فرآیند انجام شده ، داده ها در لیست منبع در دسترس خواهند بود. *"
+  },
+  {
+    "id": "api_upload_done_wait_db",
+    "en": "Upload done. Importation in DB, please wait, this could take multiple minutes for complex layers. Please be patient.",
+    "fa": "بارگذاری انجام شد واردات در DB ، لطفا صبر کنید ، این ممکن است چندین دقیقه برای لایه های پیچیده طول بکشد. لطفا صبور باشید. *"
+  },
+  {
+    "id": "api_download_btn",
+    "en": "click here",
+    "fa": "اینجا کلیک کنید *"
+  },
+  {
+    "id": "api_progress_title",
+    "en": "Progress",
+    "fa": "پیش رفتن *"
+  },
+  {
+    "id": "api_log_title",
+    "en": "Log",
+    "fa": "ورود به سیستم *"
+  },
+  {
+    "id": "error_notset",
+    "en": "Property must be set",
+    "fa": "ملک باید تنظیم شود *"
+  },
+  {
+    "id": "error_notempty",
+    "en": "Value required",
+    "fa": "مقدار مورد نیاز *"
+  },
+  {
+    "id": "error_space_only",
+    "en": "The value can't be composed of whitespace only (space, tab, line break)",
+    "fa": "این مقدار را نمی توان فقط از فضای خالی تشکیل داد (فضا ، برگه ، شکست خط) *"
+  },
+  {
+    "id": "error_enum",
+    "en": "Value must be one of the enumerated values",
+    "fa": "مقدار باید یکی از مقادیر برشمرده شده باشد *"
+  },
+  {
+    "id": "error_anyOf",
+    "en": "Value must validate against at least one of the provided schemas",
+    "fa": "مقدار باید حداقل در برابر یکی از طرح های ارائه شده معتبر باشد *"
+  },
+  {
+    "id": "error_oneOf",
+    "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
+    "fa": "مقدار باید دقیقاً در برابر یکی از طرح های ارائه شده تأیید شود. در حال حاضر خلاف اعتبار دارد{{0}} از طرح ها *"
+  },
+  {
+    "id": "error_not",
+    "en": "Value must not validate against the provided schema",
+    "fa": "مقدار نباید در برابر طرح ارائه شده معتبر باشد *"
+  },
+  {
+    "id": "error_type_union",
+    "en": "Value must be one of the provided types",
+    "fa": "مقدار باید یکی از انواع ارائه شده باشد *"
+  },
+  {
+    "id": "error_type",
+    "en": "Value must be of type {{0}}",
+    "fa": "مقدار باید از نوع باشد{{0}} *"
+  },
+  {
+    "id": "error_disallow_union",
+    "en": "Value must not be one of the provided disallowed types",
+    "fa": "مقدار نباید یکی از انواع ممنوع ارائه شده باشد *"
+  },
+  {
+    "id": "error_disallow",
+    "en": "Value must not be of type {{0}}",
+    "fa": "مقدار نباید از نوع باشد{{0}} *"
+  },
+  {
+    "id": "error_multipleOf",
+    "en": "Value must be a multiple of {{0}}",
+    "fa": "مقدار باید مضربی از باشد{{0}} *"
+  },
+  {
+    "id": "error_maximum_excl",
+    "en": "Value must be less than {{0}}",
+    "fa": "مقدار باید کمتر از باشد{{0}} *"
+  },
+  {
+    "id": "error_maximum_incl",
+    "en": "Value must be at most {{0}}",
+    "fa": "ارزش باید حداکثر باشد{{0}} *"
+  },
+  {
+    "id": "error_minimum_excl",
+    "en": "Value must be greater than {{0}}",
+    "fa": "ارزش باید بیشتر از باشد{{0}} *"
+  },
+  {
+    "id": "error_minimum_incl",
+    "en": "Value must be at least {{0}}",
+    "fa": "ارزش باید حداقل باشد{{0}} *"
+  },
+  {
+    "id": "error_maxLength",
+    "en": "Value must be at most {{0}} characters long",
+    "fa": "ارزش باید حداکثر باشد{{0}} شخصیت های طولانی *"
+  },
+  {
+    "id": "error_minLength",
+    "en": "Value must be at least {{0}} characters long",
+    "fa": "ارزش باید حداقل باشد{{0}} شخصیت های طولانی *"
+  },
+  {
+    "id": "error_pattern",
+    "en": "Value must match the pattern {{0}}",
+    "fa": "مقدار باید با الگو مطابقت داشته باشد{{0}} *"
+  },
+  {
+    "id": "error_additionalItems",
+    "en": "No additional items allowed in this array",
+    "fa": "هیچ مورد اضافی در این آرایه مجاز نیست *"
+  },
+  {
+    "id": "error_maxItems",
+    "en": "Value must have at most {{0}} items",
+    "fa": "ارزش باید حداکثر داشته باشد{{0}} موارد *"
+  },
+  {
+    "id": "error_minItems",
+    "en": "Value must have at least {{0}} items",
+    "fa": "ارزش باید حداقل داشته باشد{{0}} موارد *"
+  },
+  {
+    "id": "error_uniqueItems",
+    "en": "Array must have unique items",
+    "fa": "آرایه باید موارد منحصر به فردی داشته باشد *"
+  },
+  {
+    "id": "error_maxProperties",
+    "en": "Object must have at most {{0}} properties",
+    "fa": "شی باید حداکثر داشته باشد{{0}} خواص *"
+  },
+  {
+    "id": "error_minProperties",
+    "en": "Object must have at least {{0}} properties",
+    "fa": "شی باید حداقل داشته باشد{{0}} خواص *"
+  },
+  {
+    "id": "error_required",
+    "en": "Object is missing the required property '{{0}}'",
+    "fa": "اشیا is ملک مورد نیاز را از دست می دهند \"{{0}} \" *"
+  },
+  {
+    "id": "error_additional_properties",
+    "en": "No additional properties allowed, but property {{0}} is set",
+    "fa": "هیچ ویژگی اضافی مجاز نیست ، اما ملک{{0}} تنظیم شده است *"
+  },
+  {
+    "id": "error_dependency",
+    "en": "Must have property {{0}}",
+    "fa": "باید دارایی داشته باشد{{0}} *"
+  },
+  {
+    "id": "button_delete_all",
+    "en": "All",
+    "fa": "همه *"
+  },
+  {
+    "id": "button_delete_all_title",
+    "en": "Delete All",
+    "fa": "حذف همه *"
+  },
+  {
+    "id": "button_delete_last",
+    "en": "Last {{0}}",
+    "fa": "آخر{{0}} *"
+  },
+  {
+    "id": "button_delete_last_title",
+    "en": "Delete Last {{0}}",
+    "fa": "حذف آخرین{{0}} *"
+  },
+  {
+    "id": "button_add_row_title",
+    "en": "Add {{0}}",
+    "fa": "اضافه کردن{{0}} *"
+  },
+  {
+    "id": "button_move_down_title",
+    "en": "Move down",
+    "fa": "حرکت به پایین *"
+  },
+  {
+    "id": "button_move_up_title",
+    "en": "Move up",
+    "fa": "بالا بروید *"
+  },
+  {
+    "id": "button_delete_row_title",
+    "en": "Delete {{0}}",
+    "fa": "حذف{{0}} *"
+  },
+  {
+    "id": "button_delete_row_title_short",
+    "en": "Delete",
+    "fa": "حذف *"
+  },
+  {
+    "id": "button_collapse",
+    "en": "Collapse",
+    "fa": "سقوط - فروپاشی *"
+  },
+  {
+    "id": "button_expand",
+    "en": "Expand",
+    "fa": "بسط دادن *"
+  },
+  {
+    "id": "tbl_attr_modal_title",
+    "en": "Attribute table",
+    "fa": "جدول صفات *"
+  },
+  {
+    "id": "login_single_use_password_email_subject",
+    "en": "Single use password request",
+    "fa": "درخواست رمز عبور یکبار مصرف *"
+  },
+  {
+    "id": "login_single_use_password_email",
+    "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
+    "fa": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">سلام،<br><br> در اینجا رمز ورود درخواست شده است:<hr>{{password}}<hr> این گذرواژه امن برای جلسه MapX فقط یک بار معتبر است و پس از 20 دقیقه باطل می شود.<br> با احترام،<br><br> تیم MapX شما.<br><br> <span style='opacity:0.5;font-size:0.8em'>اگر این درخواست را نکردید ، یکی از کاربران ما به اشتباه آدرس ایمیل شما را وارد کرده است.</span></div> *"
+  },
+  {
+    "id": "login_email_new_account_welcome",
+    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "fa": "خوش آمدی!<br> برای اطلاعات فنی ، می توانید <a href='{{linkKnowledgeBase}}'>پایگاه دانش</a> ما را مطالعه کنید. اگر در مورد این وب سایت پیشنهادی دارید ، یا اگر می خواهید یک اشکال را گزارش دهید ، از <a href='{{linkIssue}}'>ردیاب مشکل ما دیدن کنید</a><br> با تشکر ! *"
+  },
+  {
+    "id": "login_email_new_account_welcome_subject",
+    "en": "Welcome ! New account created.",
+    "fa": "خوش آمدی ! حساب جدید ایجاد شد *"
+  },
+  {
+    "id": "filter_views_list_mode_intersection",
+    "en": "Intersection",
+    "fa": "تقاطع *"
+  },
+  {
+    "id": "filter_views_list_mode_union",
+    "en": "Union",
+    "fa": "اتحاد. اتصال *"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded_title",
+    "en": "Maximum size reached",
+    "fa": "حداکثر اندازه رسیده است *"
+  },
+  {
+    "id": "api_upload_file_max_size_exceeded",
+    "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
+    "fa": "حداکثر اندازه پرونده از{{size}} رسیده است شما مجاز به بارگذاری پرونده بزرگتر از آن نیستید. لطفا برای اطلاعات بیشتر با ما تماس بگیرید *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_txt",
+    "en": "Are you sure to change project now ? Unsaved changes could be lost.",
+    "fa": "آیا مطمئن هستید که اکنون پروژه را تغییر می دهید؟ تغییرات ذخیره نشده ممکن است از بین بروند. *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_btn",
+    "en": "Change project now, discard changes.",
+    "fa": "اکنون پروژه را تغییر دهید ، تغییرات را کنار بگذارید. *"
+  },
+  {
+    "id": "modal_check_confirm_project_change_title",
+    "en": "Change project confirmation",
+    "fa": "تأیید پروژه را تغییر دهید *"
+  },
+  {
+    "id": "share_map_pos_set",
+    "en": "Set map position",
+    "fa": "موقعیت نقشه را تنظیم کنید *"
+  },
+  {
+    "id": "share_map_pos_get",
+    "en": "Get current position",
+    "fa": "موقعیت فعلی را بدست آورید *"
+  },
+  {
+    "id": "view_filter_no_items",
+    "en": "Empty",
+    "fa": "خالی *"
+  },
+  {
+    "id": "share_manager_title",
+    "en": "Sharing manager",
+    "fa": "مدیر اشتراک گذاری *"
+  },
+  {
+    "id": "share_link_title",
+    "en": "Share link",
+    "fa": "لینک را به اشتراک بگذارید *"
+  },
+  {
+    "id": "share_options",
+    "en": "Share options",
+    "fa": "گزینه های اشتراک گذاری *"
+  },
+  {
+    "id": "share_mode_static_label",
+    "en": "Use the mode 'static' ( recommended )",
+    "fa": "از حالت \"ثابت\" استفاده کنید (توصیه می شود) *"
+  },
+  {
+    "id": "share_mode_static_desc",
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
+    "fa": "اگر می خواهید با استفاده از یک نسخه سبک و سریعتر از MapX ، دارای ویژگی های محدود ، از حالت \"ثابت\" استفاده کنید ، از حالت \"ثابت\" استفاده کنید. با استفاده از این روش ، هرکسی که پیوند مشترک دارد مجاز به خواندن نمای انتخاب شده بدون نیاز به ثبت در MapX خواهد بود. اگر نقشه داستانی را اضافه کنید ، به طور خودکار شروع می شود و هرگونه نمایش دیگر را کنار می گذارد. *"
+  },
+  {
+    "id": "share_views_check_label",
+    "en": "Add views to share",
+    "fa": "بازدیدها را برای به اشتراک گذاشتن اضافه کنید *"
+  },
+  {
+    "id": "share_views_check_desc",
+    "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
+    "fa": "بازدید برای نمایش لیست می تواند مرتب شود: در نمای بالا لایه هایی در بالا نمایش داده می شوند. در حالت \"ثابت\" ، آن نمایش ها به طور خودکار ارائه می شوند. نقشه های داستان مستقیماً شروع می شوند. در حالت \"عادی\" ، نماها در لیست نمایش داده می شوند و اگر انتخاب خالی باشد ، تمام نماهای پروژه لیست می شوند. *"
+  },
+  {
+    "id": "share_views_zoom_label",
+    "en": "Zoom to views extent",
+    "fa": "تا اندازه نمایش بزرگنمایی کنید *"
+  },
+  {
+    "id": "share_views_zoom_desc",
+    "en": "In 'static' mode, this will set the map extent to fit views layers extent, if available.",
+    "fa": "در حالت \"ثابت\" ، این مقدار نقشه را متناسب با میزان نمایش لایه ها تنظیم می کند ، در صورت وجود. *"
+  },
+  {
+    "id": "share_views_open_check_label",
+    "en": "Set views to activate",
+    "fa": "نماها را برای فعال سازی تنظیم کنید *"
+  },
+  {
+    "id": "share_views_open_check_desc",
+    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
+    "fa": "نمایش ها را اضافه کنید تا هنگام راه اندازی برنامه به طور خودکار فعال شوند. با این کار دکمه 'فیلتر فعال کردن نمایش' فعال شده و نمای غیر فعال شده پنهان می شود. *"
+  },
+  {
+    "id": "share_collections_check_label",
+    "en": "Set collections",
+    "fa": "مجموعه ها را تنظیم کنید *"
+  },
+  {
+    "id": "share_collections_check_operator_label",
+    "en": "Selection mode (if more that one collection)",
+    "fa": "حالت انتخاب (اگر بیش از یک مجموعه باشد) *"
+  },
+  {
+    "id": "share_collections_check_operator_all",
+    "en": "Intersection",
+    "fa": "تقاطع *"
+  },
+  {
+    "id": "share_collections_check_operator_any",
+    "en": "Union",
+    "fa": "اتحاد. اتصال *"
+  },
+  {
+    "id": "share_collections_check_desc",
+    "en": "Add groups of views by using collections",
+    "fa": "با استفاده از مجموعه ها گروه بازدیدها را اضافه کنید *"
+  },
+  {
+    "id": "share_map_pos_check_label",
+    "en": "Set map position",
+    "fa": "موقعیت نقشه را تنظیم کنید *"
+  },
+  {
+    "id": "share_map_pos_check_desc",
+    "en": "Setting the position of the map will show a defined spatial extend instead of exposing a representation of the whole world.",
+    "fa": "تنظیم موقعیت نقشه به جای اینکه نمایشی از کل جهان را نشان دهد ، یک گسترش فضایی مشخص را نشان می دهد. *"
+  },
+  {
+    "id": "share_iframe_check_label",
+    "en": "Embed in HTML tags",
+    "fa": "قرار دادن در برچسب های HTML *"
+  },
+  {
+    "id": "share_iframe_check_desc",
+    "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
+    "fa": "پیوند را در یک قرار دهید<iframe> برچسب HTML برای اضافه کردن آسان MapX به وب سایت خود. *"
+  },
+  {
+    "id": "share_in_project_title",
+    "en": "Share in another project",
+    "fa": "در پروژه دیگری به اشتراک بگذارید *"
+  },
+  {
+    "id": "share_in_project_desc",
+    "en": "Share a view in a project where you have publisher rights",
+    "fa": "در پروژه ای که از حقوق ناشر برخوردار هستید ، نمایی را به اشتراک بگذارید *"
+  },
+  {
+    "id": "share_in_project_btn",
+    "en": "Add in selected project",
+    "fa": "اضافه کردن در پروژه انتخاب شده *"
+  },
+  {
+    "id": "share_filter_activated",
+    "en": "Filter activated view by default",
+    "fa": "نمای فعال شده را به طور پیش فرض فیلتر کنید *"
+  },
+  {
+    "id": "share_filter_activated_desc",
+    "en": "This option will show only views set to be opened from the beginning",
+    "fa": "این گزینه فقط نماهایی را نشان می دهد که از ابتدا باز می شوند *"
+  },
+  {
+    "id": "share_category_hide",
+    "en": "Hide categories",
+    "fa": "پنهان کردن دسته ها *"
+  },
+  {
+    "id": "share_category_hide_desc",
+    "en": "Categories will be hidden in the list of views by default",
+    "fa": "دسته ها به طور پیش فرض در لیست بازدیدها پنهان می شوند *"
+  },
+  {
+    "id": "jenks",
+    "en": "Jenks natural breaks",
+    "fa": "وقفه های طبیعی جنکس *"
+  },
+  {
+    "id": "quantile",
+    "en": "Quantile",
+    "fa": "کوانتیل *"
+  },
+  {
+    "id": "head_tails",
+    "en": "Head/tail Breaks",
+    "fa": "شکستگی سر / دم *"
+  },
+  {
+    "id": "equal_interval",
+    "en": "Equal interval",
+    "fa": "فاصله برابر *"
+  },
+  {
+    "id": "roles_updated_mail_title",
+    "en": "Roles updated",
+    "fa": "نقش ها به روز شد *"
+  },
+  {
+    "id": "roles_updated_mail_subject",
+    "en": "Roles updated in project {{nameProject}}",
+    "fa": "نقش ها در پروژه به روز می شوند{{nameProject}} *"
+  },
+  {
+    "id": "roles_updated_mail_content",
+    "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یک مدیر نقش شما را در پروژه تغییر داد{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد:</p><p style=\";text-align:right;direction:rtl\">{{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> <i style='float:right'>تیم MapX.</i> *"
+  },
+  {
+    "id": "roles_updated_mail_content_admin_summary",
+    "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش ها در پروژه شما تغییر کرده است{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد:{{changes}}<p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> *"
+  },
+  {
+    "id": "added_to_group",
+    "en": "added to: {{group}} \n",
+    "fa": "اضافه شده به:{{group}}\n *"
+  },
+  {
+    "id": "removed_from_group",
+    "en": "removed from: {{group}} \n",
+    "fa": "حذف شده از:{{group}}\n *"
+  },
+  {
+    "id": "get_source_format_invalid",
+    "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
+    "fa": "قالب نامعتبر است{{format}} ، با استفاده از قالب پیش فرض{{formatDefault}} . *"
+  },
+  {
+    "id": "get_source_meta_extracted",
+    "en": "Metadata extracted",
+    "fa": "فراداده استخراج شد *"
+  },
+  {
+    "id": "get_source_invalid_geom",
+    "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
+    "fa": "هندسه های نامعتبر برای لایه '{{title}} '({{idLayer}} ) *"
+  },
+  {
+    "id": "get_source_email_dl_link",
+    "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
+    "fa": "یک ایمیل به ارسال می شود{{email}} . در پایان مراحل <a href='{{url}}'>لینک</a> بارگیری فعال خواهد شد *"
+  },
+  {
+    "id": "get_source_extraction_wait",
+    "en": "Starting data conversion. This could take a while, please wait",
+    "fa": "شروع تبدیل داده این ممکن است مدتی طول بکشد ، لطفا صبر کنید *"
+  },
+  {
+    "id": "get_source_conversion_progress",
+    "en": "Conversion progress",
+    "fa": "پیشرفت تبدیل *"
+  },
+  {
+    "id": "get_source_conversion_stdout",
+    "en": "Conversion message: {{stdout}}",
+    "fa": "پیام تبدیل:{{stdout}} *"
+  },
+  {
+    "id": "get_source_conversion_stderr",
+    "en": "Conversion warning: {{stderr}}",
+    "fa": "هشدار تبدیل:{{stderr}} *"
+  },
+  {
+    "id": "get_source_conversion_error",
+    "en": "Conversion error. {{error}} ",
+    "fa": "خطای تبدیل{{error}} *"
+  },
+  {
+    "id": "get_source_conversion_done_link",
+    "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
+    "fa": "تبدیل با استفاده از قالب انجام شد{{format}} . <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_conversion_done_browser",
+    "en": "Layer {{title}} exported",
+    "fa": "لایه{{title}} صادر شده *"
+  },
+  {
+    "id": "get_source_conversion_done_browser_title",
+    "en": "Layer exported",
+    "fa": "لایه صادر می شود *"
+  },
+  {
+    "id": "get_source_conversion_done_email",
+    "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
+    "fa": "داده های درخواستی با استفاده از این پیوند بارگیری می شود: <a href={{url}}></a>{{title}} *"
+  },
+  {
+    "id": "get_source_zip_progress",
+    "en": "Compression progress",
+    "fa": "پیشرفت فشرده سازی *"
+  },
+  {
+    "id": "get_source_zip_warning",
+    "en": "Compression warning: {{err}}",
+    "fa": "هشدار فشرده سازی:{{err}} *"
+  },
+  {
+    "id": "get_source_zip_error",
+    "en": "Compression error : {{err}}",
+    "fa": "خطای فشرده سازی:{{err}} *"
+  },
+  {
+    "id": "get_source_file_timestamp",
+    "en": "Downloaded from MapX on {{date}}",
+    "fa": "از MapX در بارگیری شد{{date}} *"
+  },
+  {
+    "id": "stat_load_please_wait",
+    "en": "Statistics extraction ... ",
+    "fa": "استخراج آمار ... *"
+  },
+  {
+    "id": "btn_panel_main",
+    "en": "Main panel",
+    "fa": "صفحه اصلی *"
+  },
+  {
+    "id": "fetch_views_diff_modal_title",
+    "en": "Views not available",
+    "fa": "بازدیدها در دسترس نیست *"
+  },
+  {
+    "id": "fetch_views_diff_message",
+    "en": "You have requested views that are not available in this project.",
+    "fa": "شما نماهایی را درخواست کرده اید که در این پروژه موجود نیست. *"
+  },
+  {
+    "id": "vt_desc",
+    "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
+    "fa": "نماهایی که دارای یک لایه برداری هستند. این نوع لایه ها هندسه ها و اطلاعات مربوط به آن را در یک جدول ویژگی نشان می دهد. بسیاری از ویژگی های تعاملی مانند فیلتر کردن ، بزرگنمایی یا برجسته سازی فعال هستند. *"
+  },
+  {
+    "id": "gj_desc",
+    "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
+    "fa": "نماهایی که دارای یک لایه برداری است که در مرورگر اینترنت شما با قالب GeoJSON ذخیره شده است. *"
+  },
+  {
+    "id": "rt_desc",
+    "en": "Views featuring a raster layer. This type of data shows an image made up of a matrix of pixels, each pixel having its own values.",
+    "fa": "نماهایی که دارای یک لایه شطرنجی هستند. این نوع داده تصویری را نشان می دهد که از ماتریس پیکسل تشکیل شده است و هر پیکسل مقادیر خاص خود را دارد. *"
+  },
+  {
+    "id": "sm_desc",
+    "en": "Interactive document featuring stories combining text, interactive maps and other multimedia content.",
+    "fa": "سندی تعاملی شامل داستان هایی که متن ، نقشه های تعاملی و سایر محتوای چندرسانه ای را با هم ترکیب می کند. *"
+  },
+  {
+    "id": "dashboard_desc",
+    "en": "Views with a dashboard that interacts with the data displayed in the map.",
+    "fa": "بازدیدها با داشبوردی که با داده های نمایش داده شده در نقشه ارتباط برقرار می کند. *"
+  },
+  {
+    "id": "time_slider_desc",
+    "en": "Views with a time slider (accessible in the view settings).",
+    "fa": "بازدیدها با نوار لغزنده زمان (قابل دسترسی در تنظیمات نمایش). *"
+  },
+  {
+    "id": "overlap_desc",
+    "en": "Views featuring vector layers resulting from the overlap between two data sources.",
+    "fa": "نماهایی با لایه های برداری حاصل از همپوشانی بین دو منبع داده. *"
+  },
+  {
+    "id": "custom_style_desc",
+    "en": "Views with a customized style. e.g. heat maps, bivariate classification.",
+    "fa": "نماها با سبک سفارشی به عنوان مثال نقشه های حرارتی ، طبقه بندی دو متغیره. *"
+  },
+  {
+    "id": "custom_code_desc",
+    "en": "Views featuring a customized script. The result could be anything. e.g. a time slider on raster data or a prototype that uses external data.",
+    "fa": "نماهایی با اسکریپت سفارشی نتیجه می تواند هر چیزی باشد. به عنوان مثال یک نوار لغزنده زمان بر روی داده های شطرنجی یا نمونه اولیه ای که از داده های خارجی استفاده می کند. *"
+  },
+  {
+    "id": "view_editable_desc",
+    "en": "Views for which you have editing rights.",
+    "fa": "بازدیدهایی که حق ویرایش برای آنها دارید. *"
+  },
+  {
+    "id": "view_local_desc",
+    "en": "Views from this project ( excludes external views ).",
+    "fa": "نماهای این پروژه (شامل نماهای خارجی نیست). *"
+  },
+  {
+    "id": "language_auto_warning",
+    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
+    "fa": "در صورت عدم وجود ترجمه ، غیر از انگلیسی می تواند به صورت خودکار ترجمه شود. در چنین مواردی ، asterix نشان داده می شود. *"
+  }
+]
