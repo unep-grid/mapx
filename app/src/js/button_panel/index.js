@@ -9,7 +9,7 @@ const options = {
   button_lang_key: null,
   button_classes: ['fa', 'fa-list-ul'],
   position: 'top-right',
-  tooltip_position : 'bottom-left',
+  tooltip_position: 'bottom-left',
   container_style: {},
   add: true
 };
@@ -26,7 +26,6 @@ class ButtonPanel {
     const panel = this;
     panel.cb = [];
     panel.build();
-    //panel.setTitle();
     panel.setButtonLabel();
     panel.show();
     panel.ls.addListener({
@@ -66,6 +65,7 @@ class ButtonPanel {
       });
     }
   }
+
   off(type, cb) {
     const panel = this;
     const item = panel.cb.reduce((a, c) => {
@@ -132,7 +132,7 @@ class ButtonPanel {
          * Where the content will appear
          */
         (panel.elPanelContent = el('div', {
-          class: ['button-panel--item-content','button-panel--shadow']
+          class: ['button-panel--item-content', 'button-panel--shadow']
         })),
         /**
          * Handles / Buttons
@@ -157,37 +157,9 @@ class ButtonPanel {
   }
 
   _el_main() {
-    //const panel = this;
-    return el(
-      'div',
-      {
-        class: `button-panel--main`
-      }
-      /*el(*/
-      //'div',
-      //{
-      //class: `button-panel--main-top`
-      //},
-      //(panel.elPanelMainTopLeft = el('div', {
-      //class: `button-panel--main-top-left`
-      //})),
-      //(panel.elPanelMainTopRight = el('div', {
-      //class: `button-panel--main-top-right`
-      //}))
-      //),
-      //el(
-      //'div',
-      //{
-      //class: `button-panel--main-bottom`
-      //},
-      //(panel.elPanelMainBottomLeft = el('div', {
-      //class: `button-panel--main-bottom-left`
-      //})),
-      //(panel.elPanelMainBottomRight = el('div', {
-      //class: `button-panel--main-bottom-right`
-      /*}))*/
-      //)
-    );
+    return el('div', {
+      class: `button-panel--main`
+    });
   }
 
   _el_handles(pos) {
@@ -268,26 +240,21 @@ class ButtonPanel {
     return elGroup;
   }
 
-  /*setTitle(txt) {*/
-    //txt = txt || this.opt.title_text;
-    //if (txt) {
-      //if (txt instanceof Element) {
-        //this.elTitle.innerHtml = '';
-        //this.elTitle.appendChild(txt);
-      //} else {
-        //txtResolve(txt).then((t) => {
-          //this.elTitle.innerHtml = t;
-        //});
-      //}
-    //}
-  /*}*/
-
   setButtonLabel(txt) {
     txt = txt || this.opt.button_text;
     txtResolve(txt).then((t) => {
       this.elBtnPanel.setAttribute('aria-label', t);
       this.elPanelContent.dataset.empty_title = t;
     });
+  }
+
+  hintHandles() {
+    const panel = this;
+    clearTimeout(panel._hint_handles_timeout);
+    panel.elHandles.classList.add('button-panel--handle-hint');
+    panel._hint_handles_timeout = setTimeout(() => {
+      panel.elHandles.classList.remove('button-panel--handle-hint');
+    }, 1000);
   }
 
   showFlag() {
@@ -476,6 +443,7 @@ class ButtonPanel {
     if (!panel.isActive()) {
       panel.hideFlag();
       panel.elContainer.classList.add('active');
+      panel.hintHandles();
       if (!skipFire) {
         panel.fire('open');
       }

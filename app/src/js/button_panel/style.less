@@ -1,4 +1,3 @@
-
 .button-panel--main {
   z-index: 1000;
   pointer-events: none;
@@ -7,7 +6,7 @@
   bottom: 10px;
   top: 10px;
   right: 10px;
-  display: block; 
+  display: block;
   .button-panel--container {
     pointer-events: none;
     position: absolute;
@@ -21,7 +20,7 @@
       max-width: calc(100% - 60px);
       max-height: calc(100% - 60px);
       &:hover,
-      &.button-panel--container-resize{
+      &.button-panel--container-resize {
         z-index: 1500;
       }
       > .button-panel--item {
@@ -122,6 +121,11 @@
         left: 0px;
         width: 100%;
         height: 100%;
+        &.button-panel--handle-hint {
+          .button-panel--item-handles-group {
+            opacity: 1;
+          }
+        }
         .button-panel--item-handles-group {
           position: absolute;
           pointer-events: auto;
@@ -213,18 +217,18 @@
 }
 
 /* responsive */
-@media (max-width: 800px), (max-height: 700px){
+@media (max-width: 800px), (max-height: 700px) {
   .button-panel--main {
     left: 0px;
     bottom: 0px;
     top: 0px;
     right: 0px;
     .button-panel--container {
-      margin:0px;
+      margin: 0px;
       .button-panel--btn {
-        height:30px;
-        width:30px;
-        margin:5px;
+        height: 30px;
+        width: 30px;
+        margin: 5px;
         .button-panel--btn-icon {
           font-size: 15px;
           line-height: 30px;
@@ -233,7 +237,6 @@
     }
   }
 }
-
 
 /* Modifiers */
 
