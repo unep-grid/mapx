@@ -31,12 +31,14 @@ Postgis: `OperationalError: could not access file "$libdir/postgis-X.X` _Solutio
 
 ## Development session for the `app` service
 
-Install all modules listed as dependencies in `package.json` for the `app` service and the `sdk`:
+Install all modules listed as dependencies in `package.json` for the `app` service, the `sdk` and the websocket handler `ws_handler` :
 
 ```sh
 cd ./app
 npm install
 cd ./app/src/js/sdk/
+npm install
+cd ./app/src/js/ws_handler/
 npm install
 ```
 
