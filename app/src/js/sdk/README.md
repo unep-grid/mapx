@@ -544,6 +544,8 @@ Class to handle MapX specific method
     * [.is_dashboard_visible()](#MapxResolvers+is_dashboard_visible) ⇒ <code>Boolean</code>
     * [.get_source_meta(opt)](#MapxResolvers+get_source_meta) ⇒ <code>Object</code>
     * [.get_user_id()](#MapxResolvers+get_user_id) ⇒ <code>Number</code>
+    * [.set_token(Mapx)](#MapxResolvers+set_token)
+    * [.get_token()](#MapxResolvers+get_token) ⇒ <code>String</code>
     * [.get_user_ip()](#MapxResolvers+get_user_ip) ⇒ <code>Object</code>
     * [.get_user_roles()](#MapxResolvers+get_user_roles) ⇒ <code>Object</code>
     * [.check_user_role(opt)](#MapxResolvers+check_user_role) ⇒ <code>Boolean</code>
@@ -738,6 +740,28 @@ Get user id
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Number</code> - Current user id  
+<a name="MapxResolvers+set_token"></a>
+
+#### mapxResolvers.set\_token(Mapx)
+Manually set MapX app token and reload the app. 
+This encrypted token is used to fingerprint
+user, browser and time since the last log in. It could be generated using
+MapX cryptography private key, or if not available, retrived from a live 
+session with mx.helpers.getToken() or with the SDK, get_mapx_token.
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| Mapx | <code>String</code> | valid encrypted token |
+
+<a name="MapxResolvers+get_token"></a>
+
+#### mapxResolvers.get\_token() ⇒ <code>String</code>
+Retrieve MapX token.
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>String</code> - MapX token.  
 <a name="MapxResolvers+get_user_ip"></a>
 
 #### mapxResolvers.get\_user\_ip() ⇒ <code>Object</code>
