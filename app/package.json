@@ -39,6 +39,7 @@
     "icon-font-loader": "^2.2.0",
     "imagemin": "^6.1.0",
     "img-loader": "^3.0.2",
+    "jsdom": "^16.4.0",
     "less": "^3.13.1",
     "less-loader": "^5.0.0",
     "localforage": "^1.9.0",
@@ -72,7 +73,7 @@
   },
   "dependencies": {
     "@fxi/el": "^0.1.6",
-    "@mapbox/mapbox-gl-draw": "^1.2.0",
+    "@mapbox/mapbox-gl-draw": "^1.2.1",
     "@turf/turf": "^5.1.6",
     "ace-builds": "^1.4.12",
     "bootstrap": "^3.4.1",

@@ -95,7 +95,9 @@ function mapComposerModalAuto() {
           attributionControl: false,
           style: style,
           center: map.getCenter(),
-          zoom: map.getZoom()
+          zoom: map.getZoom(),
+          pitch : map.getPitch(),
+          bearing: map.getBearing()
         });
       }
     });

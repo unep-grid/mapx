@@ -182,6 +182,30 @@ class MapxResolvers {
     return mx.settings.user.id;
   }
 
+
+
+  /**
+  * Manually set MapX app token and reload the app. 
+  * This encrypted token is used to fingerprint
+  * user, browser and time since the last log in. It could be generated using
+  * MapX cryptography private key, or if not available, retrived from a live 
+  * session with mx.helpers.getToken() or with the SDK, get_mapx_token.
+  * @param {String} Mapx valid encrypted token
+  */ 
+  set_token(str){
+    if(str){
+     h.setToken(str);
+    }
+  }
+
+  /**
+  * Retrieve MapX token. 
+  * @return {String} MapX token.
+  */ 
+  get_token(){
+    return h.getToken()
+  }
+
   /**
    * Get user ip info
    * @return {Object} Current user ip object (ip, country, region, etc)
@@ -278,7 +302,8 @@ class MapxResolvers {
    * @return {Boolean} Laguage change process finished
    */
   set_language(opt) {
-    return h.updateLanguage(opt);
+    opt = Object.assign({}, {lang: 'en'}, opt);
+    return h.updateLanguage(opt.lang);
   }
 
   /**
@@ -649,7 +674,7 @@ class MapxResolvers {
    */
   show_modal_view_edit(opt) {
     const rslv = this;
-    const pass = rslv.check_user_role_breaker(['publisher']);
+    const pass = rslv.check_user_role_breaker(['publishers', 'admins']);
     if (!pass) {
       return;
     }
@@ -1328,6 +1353,7 @@ class MapxResolvers {
     const pos = Math.floor(Math.random() * (views.length - 1));
     return h.getViewJson(views[pos], {asString: false});
   }
+
 }
 
 export {MapxResolvers};

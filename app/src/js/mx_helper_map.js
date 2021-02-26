@@ -5,7 +5,12 @@ import {RasterMiniMap} from './raster_mini_map';
 import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
 import {WsHandler} from './ws_handler/';
-import {MainPanel} from './main_panel';
+import {MainPanel} from './panel_main';
+import {MapxLogo, MapControlLiveCoord, MapControlScale} from './map_controls';
+import {ControlsPanel} from './panel_controls';
+import {MapxDraw} from './draw';
+import {NotifCenter} from './notif_center/';
+
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -258,6 +263,7 @@ export function setProject(idProject, opt) {
   const h = mx.helpers;
   opt = Object.assign({}, opt);
   const idCurrentProject = h.path(mx, 'settings.project.id');
+  
   return new Promise((resolve) => {
     if (idProject === idCurrentProject) {
       resolve(true);
@@ -299,10 +305,10 @@ export function setProject(idProject, opt) {
       const hasShiny = window.Shiny;
 
       mx.events.once({
-        type: 'settings_change',
+        type: 'settings_project_change',
         idGroup: 'project_change',
         callback: (s) => {
-          const idProjectNew = h.path(s, 'delta.project.id');
+          const idProjectNew = h.path(s,'new_project');
           if (idProjectNew !== idProject) {
             resolve(false);
           } else {
@@ -429,15 +435,16 @@ function initMatchMedia(theme) {
     /**
      * theme color auto
      */
-    const matchDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const wMdark = window.matchMedia('(prefers-color-scheme: dark)');
+    const wMlight = window.matchMedia('(prefers-color-scheme: light)');
 
-    if (matchDark) {
+    if (wMdark.matches) {
       theme.setColorsByThemeId('smartgray');
     }
-    window.matchMedia('(prefers-color-scheme: dark)').addListener((e) => {
+    wMdark.addEventListener('change', (e) => {
       return e.matches && theme.setColorsByThemeId('smartgray');
     });
-    window.matchMedia('(prefers-color-scheme: light)').addListener((e) => {
+    wMlight.addEventListener('change', (e) => {
       return e.matches && theme.setColorsByThemeId('mapx');
     });
   } catch (e) {
@@ -458,29 +465,6 @@ export function initListenersApp() {
     target: document.getElementById('btnShowProject'),
     type: 'click',
     callback: h.showSelectProject,
-    group: 'mapx_base'
-  });
-
-  /**
-   * Panel tab click
-   * TODO: Move all this in 'main_panel' module
-   */
-  mx.listeners.addListener({
-    target: mx.main_panel.elContent,
-    type: 'click',
-    callback: (e) => {
-      if (e.target.dataset.btn_tab) {
-        e.preventDefault();
-        e.stopPropagation();
-        const elPanels = e.currentTarget.querySelectorAll('.mx-tab--panel');
-        const elTabs = e.currentTarget.querySelectorAll('.mx-tab--tab');
-        elPanels.forEach((el) => el.classList.remove('active'));
-        elTabs.forEach((el) => el.classList.remove('active'));
-        const elPanel = document.getElementById(e.target.dataset.btn_tab);
-        e.target.classList.add('active');
-        elPanel.classList.add('active');
-      }
-    },
     group: 'mapx_base'
   });
 
@@ -505,6 +489,26 @@ export function initListenersApp() {
       const mData = h.getMapData();
       if (mData.viewsFilter) {
         mData.viewsFilter.updateCheckboxesOrder();
+      }
+    }
+  });
+
+  /**
+   * When user change, re-init notifications.
+   * The message will be cleaared and a  new localforage
+   * will be loaded for that user,
+   */
+
+  mx.events.on({
+    type: ['settings_user_change'],
+    idGroup: 'notif',
+    callback: (data) => {
+      if (data.delta.id) {
+        mx.nc.init({
+          config: {
+            id: data.new_user.id
+          }
+        });
       }
     }
   });
@@ -561,6 +565,17 @@ export function initListenersApp() {
     target: document.getElementById('btnClearCache'),
     type: 'click',
     callback: h.clearMapxCache,
+    group: 'mapx_base'
+  });
+
+  mx.listeners.addListener({
+    target: document.getElementById('btnResetPanelSize'),
+    type: 'click',
+    callback: () => {
+      if (window._button_panels) {
+        _button_panels.forEach((p) => p.resetSize());
+      }
+    },
     group: 'mapx_base'
   });
 
@@ -757,7 +772,7 @@ export async function initMapx(o) {
       job_state: async (m) => {
         await mx.nc.notify(m); // wrap avoid double bind
       },
-      server_state: console.log,
+      server_state: () => {},
       error: console.warn
     }
   });
@@ -809,6 +824,8 @@ export async function initMapx(o) {
    */
   o.map = new mx.mapboxgl.Map(mapOptions);
   mx.maps[o.id].map = o.map;
+  const elCanvas = o.map.getCanvas();
+  elCanvas.setAttribute('tabindex', '-1');
 
   /**
    * Continue according to mode
@@ -822,27 +839,75 @@ export async function initMapx(o) {
     /**
      * Init left panel
      */
-    mx.main_panel = new MainPanel({
+    mx.panel_main = new MainPanel({
       mapx: {
         version: h.getVersion()
       },
       panel: {
+        id: 'main_panel',
         elContainer: document.body,
         position: 'top-left',
-        button_text: h.getDictItem('app_panel'),
+        button_text: h.getDictItem('btn_panel_main'),
         button_lang_key: 'btn_panel_main',
         tooltip_position: 'bottom-right',
         button_classes: ['fa', 'fa-list-ul'],
         container_style: {
-          width: '480px',
+          width: '470px',
           height: '90%',
-          minWidth: '200px',
-          minHeight: '400px'
+          minWidth: '340px',
+          minHeight: '450px'
         }
       }
     });
-    mx.main_panel.panel.open();
+    mx.panel_main.panel.open();
   }
+
+  /**
+   * Add map controls + left bar toolbox
+   */
+  mx.panel_tools = new ControlsPanel({
+    panel: {
+      id: 'controls_panel',
+      elContainer: document.body,
+      position: 'top-right',
+      noHandles: true,
+      button_text: h.getDictItem('btn_panel_controls'),
+      button_lang_key: 'btn_panel_controls',
+      tooltip_position: 'bottom-left',
+      handles: ['free'],
+      container_style: {
+        width: '50px',
+        height: '100%',
+        minWidth: '50px',
+        minHeight: '50px'
+      },
+      container_classes: ['button-panel--container-no-full-width'],
+      item_content_classes: [
+        'button-panel--item-content-transparent-background'
+      ]
+    }
+  });
+  mx.panel_tools.panel.open();
+
+  /**
+   * Add mapx draw handler
+   */
+  mx.draw = new MapxDraw({
+    map: o.map,
+    panel_tools: mx.panel_tools
+  });
+  mx.draw.on('enable', () => {
+    mx.helpers.setClickHandler({
+      type: 'draw',
+      enable: true
+    });
+  });
+  mx.draw.on('disable', () => {
+    mx.helpers.setClickHandler({
+      type: 'draw',
+      enable: false
+    });
+  });
 
   /**
    * Set theme
@@ -868,16 +933,38 @@ export async function initMapx(o) {
   /**
    * Add controls
    */
-  o.map.addControl(new h.mapControlApp(), 'top-right');
-  o.map.addControl(new h.mapControlLiveCoord(), 'bottom-right');
-  o.map.addControl(new h.mapControlScale(), 'bottom-right');
-  o.map.addControl(new h.mapxLogo(), 'bottom-left');
+  o.map.addControl(new MapControlLiveCoord(), 'bottom-right');
+  o.map.addControl(new MapControlScale(), 'bottom-right');
+  o.map.addControl(new MapxLogo(), 'bottom-left');
+
+  /**
+   * Notification center
+   */
+  mx.nc = new NotifCenter({
+    config: {
+      id: mx.settings.user.id,
+      on: {
+        add: (nc) => {
+          mx.theme.on('mode_changed', nc.setMode);
+        },
+        remove: (nc) => {
+          mx.theme.off('mode_changed', nc.setMode);
+        }
+      }
+    },
+    ui: {
+      mode: mx.theme.mode
+    },
+    panel: {
+      id: 'notif_center',
+      elContainer: document.body
+    }
+  });
 
   /**
    * Init global listeners
    */
   h.initLog();
-  h.initListenerNotificationCenter();
   h.initListenerGlobal();
   h.initMapListener(o.map);
   /**
@@ -956,24 +1043,24 @@ export function initMapListener(map) {
    * Mouse move handling
    */
   map.on('mousemove', (e) => {
-//    if (false) {
-      /**
-       * Change illuminaion direction accoding to mouse position
-       * Quite intensive on GPU.
-       */
-      //const elCanvas = map.getCanvas();
-      //const dpx = window.devicePixelRatio || 1;
-      //const wMap = elCanvas.width;
-      //const hMap = elCanvas.height;
-      //const x = e.point.x - wMap / (2 * dpx);
-      //const y = hMap / (2 * dpx) - e.point.y;
-      //const deg = h.xyToDegree(x, y);
+    //    if (false) {
+    /**
+     * Change illuminaion direction accoding to mouse position
+     * Quite intensive on GPU.
+     */
+    //const elCanvas = map.getCanvas();
+    //const dpx = window.devicePixelRatio || 1;
+    //const wMap = elCanvas.width;
+    //const hMap = elCanvas.height;
+    //const x = e.point.x - wMap / (2 * dpx);
+    //const y = hMap / (2 * dpx) - e.point.y;
+    //const deg = h.xyToDegree(x, y);
 
-      //map.setPaintProperty(
-        //'hillshading',
-        //'hillshade-illumination-direction',
-        //deg
-      //);
+    //map.setPaintProperty(
+    //'hillshading',
+    //'hillshade-illumination-direction',
+    //deg
+    //);
     //}
 
     const layers = h.getLayerNamesByPrefix({
@@ -1006,6 +1093,7 @@ export async function initMapxStatic(o) {
   const idViews = h.getArrayDistinct(idViewsQuery).reverse();
 
   const btnLegend = new ButtonPanel({
+    id: 'button_legend',
     elContainer: document.body,
     panelFull: true,
     position: 'top-left',
@@ -1604,8 +1692,7 @@ export async function updateViewsList(opt) {
 
   const viewsToAdd = opt.viewsList;
   const autoFetchAll = opt.autoFetchAll === true;
-  const hasViewsList =
-    h.isArrayOfViewsId(viewsToAdd) && h.isNotEmpty(viewsToAdd);
+  const hasViewsList = h.isArrayOfViews(viewsToAdd) && h.isNotEmpty(viewsToAdd);
 
   if (!hasViewsList && !autoFetchAll) {
     throw new Error(
@@ -1701,6 +1788,9 @@ export async function updateViewsList(opt) {
 
   /* Add single view object, typically after an update */
   async function addLocal(view) {
+    if (h.isArrayOfViews(view)) {
+      view = view[0];
+    }
     await h.viewsListAddSingle(view, {
       open: true,
       render: true
@@ -1822,7 +1912,7 @@ export async function viewsCheckedUpdate(o) {
    */
   if (true) {
     const summary = {
-      vVisible: h.getViewsLayersVisibles(),
+      vVisible: getViewsLayersVisibles(),
       vChecked: vChecked,
       vToRemove: vToRemove,
       vToAdd: vToAdd
@@ -1839,6 +1929,7 @@ export async function viewsCheckedUpdate(o) {
    * Set layer order
    */
   h.viewsLayersOrderUpdate(o);
+  return done;
 }
 
 /**
@@ -1852,6 +1943,7 @@ export function getViewsLayersVisibles() {
     base: true
   });
 }
+
 
 /**
  * Manual events on view list items
@@ -2776,10 +2868,10 @@ export async function viewAdd(view) {
 }
 
 /**
-* Removed both view UI and layers, handle view_removed event 
-* @param {Object} view 
-* @return {Promise} Confirmation -> resolve to boolean
-*/
+ * Removed both view UI and layers, handle view_removed event
+ * @param {Object} view
+ * @return {Promise} Confirmation -> resolve to boolean
+ */
 export async function viewRemove(view) {
   const h = mx.helpers;
   view = h.getView(view);
@@ -2790,9 +2882,9 @@ export async function viewRemove(view) {
 
   const confirmation = new Promise((resolve) => {
     /**
-    * 'view_removed' fired by viewLayersRemove
-    */
-    
+     * 'view_removed' fired by viewLayersRemove
+     */
+
     const idEvent = `'view_remove_${idView}`;
     mx.events.once({
       type: 'view_removed',
@@ -2804,7 +2896,6 @@ export async function viewRemove(view) {
       }
     });
   });
-
 
   await _viewUiClose(view);
   await h.viewLayersRemove({
@@ -3283,7 +3374,7 @@ export async function viewLayersAdd(o) {
   /**
    * Dashboard
    */
-  h.makeDashboard({view: view});
+  await h.makeDashboard({view: view});
 
   /**
    * View aded fully : send event
@@ -3682,14 +3773,18 @@ async function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
+  const hasTiles = h.isArray(tiles) && tiles.length > 0;
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.source.legendTitles',
     defaultValue: null
   });
   const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
-
   let isLegendDefault = false;
+
+  if (hasTiles) {
+    return false;
+  }
 
   /**
    * LAYERS
@@ -3703,6 +3798,7 @@ async function viewLayersAddRt(o) {
     o.before
   );
 
+
   /**
    * LEGENDS
    */
@@ -3715,13 +3811,7 @@ async function viewLayersAddRt(o) {
     removeOld: true
   });
 
-  if (!tiles) {
-    console.warn('viewLayersAddRt : missing tiles');
-    return false;
-  }
-
   if (!h.isElement(elLegend)) {
-    console.warn('viewLayersAddRt : no target elLegend');
     return false;
   }
 
@@ -4424,8 +4514,8 @@ export async function viewFilterToolsInit(id, opt) {
  * Clean stored modules : dashboard, custom view, etc.
  */
 export function viewModulesRemove(view) {
-    const h = mx.helpers;
-  return new Promise(resolve => {
+  const h = mx.helpers;
+  return new Promise((resolve) => {
     view = h.isViewId(view) ? h.getView(view) : view;
     if (!h.isView(view)) {
       resolve(true);
@@ -4452,7 +4542,6 @@ export function viewModulesRemove(view) {
       view._miniMap.destroy();
     }
 
-
     if (it) {
       if (it.searchBox) {
         it.searchBox.destroy();
@@ -4468,8 +4557,8 @@ export function viewModulesRemove(view) {
       }
     }
     resolve(true);
-  })
-};
+  });
+}
 
 export function viewsModulesRemove(views) {
   const h = mx.helpers;
@@ -5103,79 +5192,51 @@ export function flyTo(o) {
 /**
  * Toggle visibility for existing layer in style
  * TODO: This is quite messy : simplify, generalize
- * @param {Object} o options
- * @param {String} o.id map id
- * @param {String} o.idLayer Layer id to toggle
- * @param {String} o.idSwitch Add a class "active" to given element id.
- * @param {String} o.action hide, show, toggle
+ * @param {Object} opt options
+ * @param {String} opt.idLayer Layer id to toggle
+ * @param {Element} opt.elButton Button element to add 'active' class
+ * @param {String} opt.action hide, show, toggle
  * @return {String} Toggled
  */
-export function btnToggleLayer(o) {
-  let shades, bathy;
+export function btnToggleLayer(opt) {
+  const def = {
+    action: 'toggle'
+  };
   const h = mx.helpers;
-  o.id = o.id || mx.settings.map.id;
-  const map = h.getMap(o.id);
-  const btn = document.getElementById(o.idSwitch);
-  const lay = map.getLayer(o.idLayer);
+  const map = h.getMap();
+  const btn = opt.elButton;
+  const layer = map.getLayer(opt.idLayer);
+  const altLayers = [];
 
-  if (!lay) {
-    alert("Layer '" + o.idLayer + "' not found");
-    return;
-  }
-
-  o.action = o.action || 'toggle';
-  const isAerial = o.idLayer === 'mapbox_satellite'; // hide also shades...
-  const isTerrain = o.idLayer === 'terrain_sky'; // hide shade + show terrain...
-  const toShow = o.action === 'show';
-  const toHide = o.action === 'hide';
-  const isVisible = lay.visibility === 'visible';
-  const toToggle =
-    o.action === 'toggle' || (toShow && !isVisible) || (toHide && isVisible);
+  opt = Object.assign({}, def, opt);
+  const isAerial = opt.idLayer === 'mapbox_satellite'; // hide also shades...
+  const isTerrain = opt.idLayer === 'terrain_sky'; // hide shade + show terrain...
+  const isVisible = layer.visibility === 'visible';
+  const reqShow = opt.action === 'show';
+  const reqHide = opt.action === 'hide';
+  const reqToggle = opt.action === 'toggle';
+  const toShow = reqToggle ? !isVisible : reqShow || !reqHide;
 
   if (isAerial || isTerrain) {
-    shades = h.getLayerNamesByPrefix({id: o.id, prefix: 'hillshading'});
-    bathy = h.getLayerNamesByPrefix({id: o.id, prefix: 'bathymetry'});
+    /**
+     * Special case : aerial and terrain mode should not have
+     * hillshading or bathymetry.
+     */
+    altLayers.push(...h.getLayerNamesByPrefix({prefix: 'hillshading'}));
+    altLayers.push(...h.getLayerNamesByPrefix({prefix: 'bathymetry'}));
   }
 
-  if (toToggle) {
-    if (isVisible) {
-      map.setLayoutProperty(o.idLayer, 'visibility', 'none');
-
-      if (isAerial) {
-        shades.forEach((s) => {
-          map.setLayoutProperty(s, 'visibility', 'visible');
-        });
-        bathy.forEach((s) => {
-          map.setLayoutProperty(s, 'visibility', 'visible');
-        });
-      }
-
-      if (isTerrain) {
-        map.setTerrain(null);
-      }
-
-      if (btn) {
-        btn.classList.remove('active');
-      }
-    } else {
-      map.setLayoutProperty(o.idLayer, 'visibility', 'visible');
-      if (isAerial) {
-        shades.forEach((s) => {
-          map.setLayoutProperty(s, 'visibility', 'none');
-        });
-        bathy.forEach((s) => {
-          map.setLayoutProperty(s, 'visibility', 'none');
-        });
-      }
-      if (isTerrain) {
-        map.setTerrain({source: 'mapbox_dem', exaggeration: 1.5});
-      }
-      if (btn) {
-        btn.classList.add('active');
-      }
-    }
+  map.setLayoutProperty(opt.idLayer, 'visibility', toShow ? 'visible' : 'none');
+  for (let id of altLayers) {
+    map.setLayoutProperty(id, 'visibility', toShow ? 'none' : 'visible');
   }
-  return toToggle;
+  if (isTerrain) {
+    map.setTerrain(toShow ? {source: 'mapbox_dem', exaggeration: 1.5} : null);
+  }
+  if (btn) {
+    btn.classList[toShow ? 'add' : 'remove']('active');
+  }
+  return toShow;
 }
 
 /**
@@ -5618,22 +5679,13 @@ export function randomUiColorAuto() {
   }
 }
 
-export function randomUicolor() {
-  return mx.theme.setColors({
-    mx_ui_text: mx.helpers.randomHsl(1),
-    mx_ui_text_faded: mx.helpers.randomHsl(1),
-    mx_ui_hidden: mx.helpers.randomHsl(1),
-    mx_ui_border: mx.helpers.randomHsl(1),
-    mx_ui_background: mx.helpers.randomHsl(1),
-    mx_ui_shadow: mx.helpers.randomHsl(1),
-    mx_map_text: mx.helpers.randomHsl(1),
-    mx_map_background: mx.helpers.randomHsl(1),
-    mx_map_mask: mx.helpers.randomHsl(1),
-    mx_map_water: mx.helpers.randomHsl(1),
-    mx_map_road: mx.helpers.randomHsl(1),
-    mx_map_road_border: mx.helpers.randomHsl(1),
-    mx_map_building: mx.helpers.randomHsl(1),
-    mx_map_admin: mx.helpers.randomHsl(1),
-    mx_map_admin_disputed: mx.helpers.randomHsl(1)
-  });
+/**
+ * Notify binding for shiny
+ * @param {Object} NotifyCenter notify options
+ */
+
+export async function shinyNotify(opt) {
+  if (mx.nc instanceof NotifCenter) {
+    mx.nc.notify(opt.notif);
+  }
 }

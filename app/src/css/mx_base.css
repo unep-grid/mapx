@@ -85,7 +85,7 @@ blockquote {
 }
 
 details {
-  padding:10px;
+  padding: 10px;
 }
 
 .mx-inline-progress-container {
@@ -202,6 +202,7 @@ details {
   padding: 10px;
 }
 
+
 /**
 * filter bar
 */
@@ -213,11 +214,28 @@ details {
   flex-wrap: wrap;
   justify-content: space-evenly;
 }
+@media (max-width: 700px), (max-height: 700px) {
+  .mx-bar-filter {
+    display: none;
+  }
+}
+
+.mx-bar-filter > button {
+   border:none;
+   background: none;;
+}
 
 .mx-bar-filter .mx-btn-toggle-filter {
   border-radius: 15px;
   padding: 5px;
   cursor: pointer;
+}
+
+.mx-bar-filter .mx-btn-toggle-filter:focus {
+  outline:none;
+}
+.mx-bar-filter .mx-btn-toggle-filter:focus > span {
+  text-decoration: underline;
 }
 
 .mx-bar-filter .mx-btn-toggle-filter.disabled {
@@ -330,9 +348,7 @@ details {
 .mx-mountain:before {
   icon-font: url('../svg/mountain.svg');
 }
-.mx-edit-vector:before {
-  icon-font: url('../svg/edit-vector.svg');
-}
+
 /**
 * Tools
 */
@@ -712,6 +728,10 @@ details {
   flex-grow: 0;
   flex-shrink: 0;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 4px;
 }
 
 .btn-circle > div {
@@ -722,15 +742,16 @@ details {
 }
 
 .btn-circle-medium {
-  width: 45px;
+  width: 40px;
   margin-right: 5px;
   margin-bottom: 5px;
-  height: 45px;
+  height: 40px;
+  border: none;
 }
 
-@media (max-width: 800px), (max-height: 700px){
-  .btn-circle-medium{
-    width: 40px;
+@media (max-width: 700px), (max-height: 700px) {
+  .btn-circle-medium {
+    width: 35px;
     height: 25px;
     margin-right: 0px;
     margin-bottom: 3px;
@@ -1292,17 +1313,12 @@ details {
 }
 
 /**
-* Hint default
-*/
-[class*='hint--']:hover:after,
-[class*='hint--']:hover:before {
-  transition-delay: 1000ms;
-}
-/**
 * Multiline support
 * https://github.com/chinchang/hint.css/issues/24#issuecomment-311977579
 */
 [class*='hint--']:after {
-  white-space: pre;
   line-height: 20px;
+  white-space: normal;
+  max-width: 500px;
+  width: max-content;
 }

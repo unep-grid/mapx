@@ -38,6 +38,10 @@
       "visibility": "visible",
       "color": "rgb(245,245,245)"
     },
+    "mx_ui_background_transparent": {
+      "visibility": "visible",
+      "color": "rgba(245,245,245,0.4)"
+    },
     "mx_ui_shadow": {
       "visibility": "visible",
       "color": "rgba(61,61,61,0.09)"

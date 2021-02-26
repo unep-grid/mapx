@@ -2,7 +2,12 @@ const elContainer = document.getElementById('mapx');
 const elResults = document.getElementById('results');
 const mapx = new mxsdk.Manager({
   container: elContainer,
-  url: 'http://dev.mapx.localhost:8880'
+  url: 'http://dev.mapx.localhost:8880',
+  style: {
+    minHeight: '800px',
+    minWidth: '800px',
+    width: '100%'
+  }
 });
 
 mapx.on('message', (message) => {
@@ -30,10 +35,22 @@ const t = new mxsdk.Testing({
 async function stopIfGuest() {
   const isGuest = await mapx.ask('is_user_guest');
   if (isGuest) {
+    const token = prompt(`\
+       Please enter a valid MapX app ecrypted token to use this tool : 
+       some tests require authentication.
+       If you don't have such token, you can get one with the "get_token" method 
+       or in a MapX instance on the same domain, "mx.helpers.getToken()"
+      `
+    );
+    if (token) {
+      await mapx.ask('set_token', token);
+      window.location.reload();
+    }
     return t.stop('Need logged user');
   }
 }
-mapx.once('ready', () => {
+mapx.once('ready', async () => {
+  await stopIfGuest();
   t.check('Get list methods', {
     init: () => {
       return mapx.ask('get_sdk_methods');
@@ -111,7 +128,12 @@ mapx.once('ready', () => {
   t.check('Get views with active layers on map', {
     init: async () => {
       const view = await mapx.ask('_get_random_view', {
-        type: ['vt', 'rt']
+        type: ['vt', 'rt'],
+        filter: (view, test) => {
+           // Evaluated in is_test module context
+          const tiles = view.data?.source?.tiles ?? '';
+          return test.isViewVt(view) || (test.isViewRt(view) && tiles);
+        }
       });
       await mapx.ask('view_add', {idView: view.id});
       const ids = await mapx.ask('get_views_with_visible_layer');
@@ -131,7 +153,8 @@ mapx.once('ready', () => {
       {
         name: 'id in ids',
         test: (r) => {
-          return r.ids.indexOf(r.id) > -1;
+          const hasId = r.ids.indexOf(r.id) > -1;
+          return hasId;
         }
       }
     ]
@@ -502,16 +525,14 @@ mapx.once('ready', () => {
   t.check('Show edit view modal', {
     init: async () => {
       await stopIfGuest();
-      const project = await mapx.ask('get_project');
       const view = await mapx.ask('_get_random_view', {
         type: null,
         filter: (view, test) => {
-          /**
-           * Evaluated in `is_test` module context
-           */ return test.isViewEditable(view) && view.project === project;
+          // Evaluated in is_test module context
+          return test.isViewEditable(view) && test.isViewLocal(view);
         }
       });
-      if (!t.isView(view)) {
+      if (!t.h.isView(view)) {
         return t.stop('Need at least a vt view wit string attribute');
       }
       return view;
@@ -676,7 +697,7 @@ mapx.once('ready', () => {
             return false;
           }
           const hasModalEl = await mapx.ask('has_el_id', {
-            id: 'modalShare',
+            id: 'createNewView',
             timeout: 2000
           });
           await mapx.ask('close_modal_all');

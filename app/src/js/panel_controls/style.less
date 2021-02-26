@@ -1,0 +1,32 @@
+.btn-ctrl--group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible; //tooltips need this...
+  .btn-ctrl--item {
+    display: flex;
+    .btn-ctrl--item-no-mobile {
+    }
+  }
+}
+
+@media (max-width: 800px), (max-height: 800px) {
+  .btn-ctrl--group {
+    .btn-ctrl--item {
+      &.btn-ctrl--item-no-mobile {
+        display: none;
+      }
+    }
+  }
+}
+
+@media (max-height: 720px) {
+  .btn-ctrl--group {
+    padding-top: 70px; // avoid overlap with the pannel button in landscape
+  }
+}

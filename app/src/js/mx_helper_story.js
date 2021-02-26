@@ -16,6 +16,30 @@ import {ButtonPanel} from './button_panel/index.js';
 const viewsAdditional = [];
 
 /**
+ * Default settings
+ */
+const settings = {
+  ctrl_btn_disable: [
+    'btn_overlap_spotlight',
+    'btn_map_composer',
+    'btn_map_rotate_left',
+    'btn_map_rotate_right',
+    'btn_geolocate_user',
+    'btn_overlap_spotlight',
+    'btn_map_composer'
+  ],
+  ctrl_btn_enable: ['btn_story_close', 'btn_story_unlock_map'],
+  ctrl_btn_enable_update_mode: ['btn_story_unlock_map'],
+  ctrl_btn_lock: 'btn_story_unlock_map',
+  ctrl_btn_close: 'btn_story_close',
+  ctrl_btn_3d_terrain: 'btn_3d_terrain',
+  ctrl_btn_theme_sat: 'btn_theme_sat',
+  panel_enable: [],
+  panel_disable: ['main_panel', 'notif_center'],
+  id_story: ['#story']
+};
+
+/**
  * Read and evaluate story map
  * @param {Object} o o.options
  * @param {String} o.id Map id
@@ -63,23 +87,19 @@ export function storyClose() {
 /**
  * Get story view or fetch it remotely
  */
-function getStory(o) {
+async function getStory(o) {
   const h = mx.helpers;
   let view = h.getView(o.view || o.idView);
   if (!h.isView(view)) {
-    view = h.getViewRemote(o.idView);
+    view = await h.getViewRemote(o.idView);
   }
-  return new Promise((resolve) => {
-    resolve(view);
-  }).then((view) => {
-    if (h.isStory(view)) {
-      o.view = view;
-      o.idView = view.id;
-    } else {
-      throw new Error('No story to read');
-    }
-    return o;
-  });
+  if (h.isStory(view)) {
+    o.view = view;
+    o.idView = view.id;
+  } else {
+    throw new Error('No story to read');
+  }
+  return o;
 }
 
 /**
@@ -93,7 +113,7 @@ async function cleanInit(o) {
   mx.listeners.removeListenerByGroup('story_map');
 
   /** Remove old stuff if any */
-  var oldData = h.path(mx.data, 'story.data');
+  const oldData = h.path(mx.data, 'story.data');
   if (oldData) {
     o.startScroll = oldData.elScroll.scrollTop;
   }
@@ -113,15 +133,12 @@ async function cleanRemoveViews() {
 
   map.stop();
 
-  const aProm = vVisible.map(async (idView) => {
-    if (h.isViewId(idView)) {
-      await h.viewLayersRemove({
-        idView: idView
-      });
-      await h.viewModulesRemove(idView);
-    }
-  });
-  await Promise.all(aProm);
+  for (let idView of vVisible) {
+    await h.viewLayersRemove({
+      idView: idView
+    });
+    await h.viewModulesRemove(idView);
+  }
 
   while (viewsAdditional.length) {
     const view = viewsAdditional.pop();
@@ -231,41 +248,39 @@ function setUi(o) {
  * Add listeners : scroll, key, adaptive screen
  */
 
-function setListeners(o) {
-  return new Promise(function(resolve) {
-    /**
-     * Handle key events
-     */
-    if (!o.edit) {
-      initKeydownListener(o);
-      initMouseMoveListener(o);
-    } else {
-      initEditing(o);
-    }
+async function setListeners(o) {
+  /**
+   * Handle key events
+   */
+  if (!o.edit) {
+    initKeydownListener(o);
+    initMouseMoveListener(o);
+  } else {
+    initEditing(o);
+  }
 
-    /**
-     * Init bullet container and listener
-     */
-    initButtonsListener(o);
+  /**
+   * Init bullet container and listener
+   */
+  initButtonsListener(o);
 
-    /* Listen to scroll on the main container. */
-    storyOnScroll({
-      selector: '.mx-story',
-      callback: mx.helpers.storyUpdateSlides,
-      view: o.view,
-      data: o.data,
-      enableCheck: function() {
-        return o.enable;
-      },
-      startPos: o.startScroll
-    });
-
-    /* Set lock map pan to current value */
-    mx.helpers.storyControlMapPan('recalc');
-
-    /* Return options */
-    resolve(o);
+  /* Listen to scroll on the main container. */
+  storyOnScroll({
+    selector: '.mx-story',
+    callback: storyUpdateSlides,
+    view: o.view,
+    data: o.data,
+    enableCheck: function() {
+      return o.enable;
+    },
+    startPos: o.startScroll
   });
+
+  /* Set lock map pan to current value */
+  storyControlMapPan('recalc');
+
+  /* Return options */
+  return o;
 }
 
 /**
@@ -290,14 +305,14 @@ function initMouseMoveListener(o) {
     var timer;
     var destroyed = false;
     var elBody = document.body;
-    var elsCtrls = o.data.elMap.querySelectorAll(`
+    var elsCtrls = elBody.querySelectorAll(`
       .mx-story-step-bullets,
       .mapboxgl-ctrl-bottom-left,
       .mapboxgl-ctrl-bottom-right,
-      .mapboxgl-ctrl-top-right
-      `
-      //.button-panel--main : hidden or displayed by user choice
-    );
+      .mapboxgl-ctrl-top-right,
+      .button-panel--main
+      `);
+    //.button-panel--main : hidden or displayed by user choice
 
     var classOpacitySmooth = 'mx-smooth-opacity';
     var classNoCursor = 'nocursor';
@@ -357,6 +372,7 @@ function initMouseMoveListener(o) {
       clean();
     }
   });
+  return o;
 }
 
 /**
@@ -507,13 +523,21 @@ function initButtonsListener(o) {
     button_text: h.getDictItem('button_legend_button'),
     button_lang_key: 'button_legend_button',
     button_classes: ['fa', 'fa-list-ul'],
+    container_classes: ['button-panel--container-no-full-width'],
     container_style: {
       width: '300px',
       height: '300px',
       minWidth: '200px',
-      minHeight: '200px'
+      minHeight: '200px',
+      maxWidth: '50vw'
     }
   });
+
+  /**
+   * Control panel buttons
+   */
+  o.data.ctrlMode3d = mx.panel_tools.controls.getButton('btn_3d_terrain');
+  o.data.ctrlAerial = mx.panel_tools.controls.getButton('btn_theme_sat');
 
   /**
    * Bullets
@@ -672,7 +696,7 @@ export function storyUpdateSlides(o) {
   var elStep;
   var elBullet;
   var elBullets = o.data.elBullets;
-  var isActive, isInRange, isInRangeAnim, toActivate, toRemove;
+  var isActive, isInRange, isInRangeAnim, toActivate;
   var clHidden = 'mx-visibility-hidden';
   var clRemove = 'mx-display-none';
   var isHidden = false;
@@ -694,7 +718,6 @@ export function storyUpdateSlides(o) {
     isInRangeAnim = percent < 100 && percent >= 0;
     isActive = data.stepActive === s;
     toActivate = isInRange && !isActive;
-    toRemove = !isInRange && isActive;
     isHidden = config.elStep.classList.contains(clHidden);
     elStep = config.elStep;
     elSlides = config.elSlides;
@@ -761,50 +784,54 @@ export function storyUpdateSlides(o) {
 /*
  * listen for keydown
  */
-function storyHandleKeyDown(event) {
+async function storyHandleKeyDown(event) {
   event.preventDefault();
   event.stopPropagation();
   var h = mx.helpers;
 
   switch (event.key) {
+    case 'Escape':
+      const close = h.path(mx, 'data.story.data.close');
+      if (h.isFunction(close)) {
+        close();
+      }
+      break;
     case ' ':
-      h.storyAutoPlay('start');
+      await h.storyAutoPlay('start');
       break;
     case 'ArrowDown':
     case 'ArrowRight':
-      h.storyAutoPlay('stop').then(function() {
-        h.storyGoTo('next');
-      });
+      await h.storyAutoPlay('stop');
+      await h.storyGoTo('next');
       break;
     case 'ArrowUp':
     case 'ArrowLeft':
-      h.storyAutoPlay('stop').then(function() {
-        h.storyGoTo('previous');
-      });
+      await h.storyAutoPlay('stop');
+      await h.storyGoTo('previous');
       break;
     default:
       if (h.isNumeric(event.key)) {
-        h.storyAutoPlay('stop').then(function() {
-          h.storyGoTo(event.key * 1 - 1);
-        });
+        await h.storyGoTo(event.key * 1 - 1);
       }
       return;
   }
 }
 
-export function storyGoTo(to, useTimeout, funStop) {
-  var h = mx.helpers;
-  var data = h.path(mx, 'data.story');
-  if (!data || !data.data || !data.data.stepsConfig) {
+let storyGoToDone = true;
+export async function storyGoTo(to, useTimeout, funStop) {
+  const h = mx.helpers;
+  var story = h.path(mx, 'data.story');
+  if (!story || !story.data || !story.data.stepsConfig) {
     return;
   }
-  var steps = h.path(data, 'view.data.story.steps', []);
-  var stepsDim = h.path(data, 'data.stepsConfig');
-  var elStory = data.data.elScroll;
+  var steps = h.path(story, 'view.data.story.steps', []);
+  var stepsDim = h.path(story, 'data.stepsConfig');
+  var elStory = story.data.elScroll;
+  var height = h.path(story, 'data.rectStory.height');
   var start = elStory.scrollTop;
   var stop = 0;
   var timeout = 0;
-  var currentStep = h.path(data, 'data.currentStep') || 0;
+  var currentStep = h.path(story, 'data.currentStep') || 0;
   var step,
     maxStep,
     nextStep,
@@ -816,16 +843,21 @@ export function storyGoTo(to, useTimeout, funStop) {
 
   maxStep = steps.length - 1;
 
-  if (h.isNumeric(to)) {
-    destStep = to >= maxStep ? maxStep : to < 0 ? 0 : to;
-  } else if (to === 'next' || to === 'n') {
-    nextStep = currentStep + 1;
-    destStep = nextStep > maxStep ? 0 : nextStep;
-  } else if (to === 'previous' || to === 'p') {
-    previousStep = currentStep - 1;
-    destStep = previousStep < 0 ? maxStep : previousStep;
-  } else {
-    return;
+  switch (to) {
+    case 'next':
+    case 'n':
+      nextStep = currentStep + 1;
+      destStep = nextStep > maxStep ? 0 : nextStep;
+      break;
+    case 'previous':
+    case 'p':
+      previousStep = currentStep - 1;
+      destStep = previousStep < 0 ? maxStep : previousStep;
+      break;
+    default:
+      if (h.isNumeric(to)) {
+        destStep = to >= maxStep ? maxStep : to < 0 ? 0 : to;
+      }
   }
 
   stop = stepsDim[destStep].startUnscaled;
@@ -835,32 +867,59 @@ export function storyGoTo(to, useTimeout, funStop) {
   duration = h.path(step, 'autoplay.duration') || 1000;
   easing_p = h.path(step, 'autoplay.easing_power') || 1;
 
+  //story.data.currentStep = destStep;
+
   if (useTimeout) {
     timeout = h.path(step, 'autoplay.timeout') || 1000;
   }
 
-  return h
-    .scrollFromTo({
-      emergencyStop: funStop,
-      timeout: timeout,
-      el: elStory,
-      from: start,
-      to: stop,
-      during: duration,
-      using: h.easingFun({
-        type: easing,
-        power: easing_p
-      })
-    })
-    .then(function() {
-      return {
-        step: destStep,
-        end: destStep === maxStep
-      };
-    });
+  const easeFun = h.easingFun({
+    type: easing,
+    power: easing_p
+  });
+
+  const jump = storyGoToDone === false || Math.abs(stop - start) > height;
+
+  storyGoToDone = false;
+
+  const promScroll = h.scrollFromTo({
+    emergencyStop: funStop,
+    timeout: timeout,
+    el: elStory,
+    from: start,
+    to: stop,
+    jump: jump,
+    during: duration,
+    using: easeFun
+  });
+
+  await maxWait(promScroll, duration + timeout);
+
+  storyGoToDone = true;
+
+  return {
+    step: destStep,
+    end: destStep === maxStep
+  };
 }
 
-export function storyAutoPlay(cmd) {
+/**
+ * Prmise race
+ */
+
+function maxWait(prom, duration) {
+  return Promise.race([
+    prom,
+    new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true);
+      }, duration);
+    })
+  ]);
+}
+
+let n = 0;
+export async function storyAutoPlay(cmd) {
   const h = mx.helpers;
 
   var data = h.path(mx.data, 'story.data', {});
@@ -869,31 +928,28 @@ export function storyAutoPlay(cmd) {
   var playStop = (cmd === 'stop' && enabled) || (cmd === 'start' && enabled);
   var playNext = cmd === 'next' && enabled;
 
-  return new Promise(function(resolve) {
-    var stopControl = function() {
-      return data.autoplay === false;
-    };
+  var stopControl = function() {
+    return data.autoplay === false;
+  };
 
-    if (playStart) {
-      h.iconFlash('play');
-      data.autoplay = true;
+  if (playStart) {
+    h.iconFlash('play');
+    data.autoplay = true;
+    storyAutoPlay('next');
+  }
+
+  if (playStop) {
+    data.autoplay = false;
+    h.iconFlash('stop');
+  }
+
+  if (playNext) {
+    await h.storyGoTo('next', true, stopControl);
+    if (data.autoplay) {
       storyAutoPlay('next');
     }
-
-    if (playStop) {
-      data.autoplay = false;
-      h.iconFlash('stop');
-    }
-
-    if (playNext) {
-      h.storyGoTo('next', true, stopControl).then(function() {
-        if (data.autoplay) {
-          storyAutoPlay('next');
-        }
-      });
-    }
-    resolve(data.autoplay);
-  });
+  }
+  return data.autoplay;
 }
 
 /**
@@ -906,14 +962,15 @@ export function storyControlMapPan(cmd) {
   if (!valid) {
     cmd = 'toggle';
   }
-
-  const liBtn = document.getElementById('btnStoryUnlockMap');
+  const keyBtnUnlock = settings.ctrl_btn_lock;
+  const btn = mx.panel_tools.controls.getButton(keyBtnUnlock);
+  const elButton = btn.elButton;
+  const elIcon = elButton.querySelector('.fa');
   const elStory = document.getElementById('story');
-  const btn = liBtn.querySelector('div');
   const classLock = 'fa-lock';
   const classUnlock = 'fa-unlock';
   const classNoEvent = 'mx-events-off';
-  const isLocked = btn.classList.contains(classLock);
+  const isLocked = elIcon.classList.contains(classLock);
   const isUnlocked = !isLocked;
   const isRecalc = cmd === 'recalc';
 
@@ -928,20 +985,19 @@ export function storyControlMapPan(cmd) {
   const hasChanged = toUnlock !== isUnlocked;
 
   if (toUnlock) {
-    btn.classList.remove(classLock);
-    btn.classList.add(classUnlock);
+    elIcon.classList.remove(classLock);
+    elIcon.classList.add(classUnlock);
     elStory.classList.add(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('unlock');
     }
   } else {
-    btn.classList.add(classLock);
-    btn.classList.remove(classUnlock);
+    elIcon.classList.add(classLock);
+    elIcon.classList.remove(classUnlock);
     elStory.classList.remove(classNoEvent);
     if (!isRecalc && hasChanged) {
       mx.helpers.iconFlash('lock');
     }
-
     if (mx.dashboard && mx.dashboard.panel) {
       mx.dashboard.panel.close(true);
     }
@@ -955,50 +1011,50 @@ export function storyControlMapPan(cmd) {
  * @param {Boolean} o.enable Enable / start story
  */
 export function storyController(o) {
+  o.id = o.id || 'map_main';
+
   const h = mx.helpers;
-  const map = h.getMap();
+  const ctrls = mx.panel_tools.controls;
   const enableMode = o.enable === true || o.update === true;
   const quitMode = o.enable === false;
   const updateMode = o.update === true;
+  const autoStart = o.autoStart === true;
+  const keyBtnShow =
+    autoStart || updateMode
+      ? settings.ctrl_btn_enable_update_mode
+      : settings.ctrl_btn_enable;
+  const keyBtnHide = settings.ctrl_btn_disable;
+  const panelDisable = settings.panel_disable;
 
-  o.selectorDisable = o.selectorDisable || [
-    '#btnToggleBtns',
-    '#btnPrint',
-    '#btnThemeAerial',
-    '#btnZoomIn',
-    '#btnZoomOut',
-    '#btnDrawMode',
-    '.button-panel--top-left',
-    '.button-panel--bottom-left'
-  ];
-  o.selectorEnable = o.selectorEnable || [
-    '#btnStoryUnlockMap',
-    '#btnStoryClose',
-    '#story'
-  ];
-
-  if (o.autoStart || updateMode) {
-    o.selectorEnable = ['#btnStoryUnlockMap', '#story'];
+  for (let key of enableMode ? keyBtnShow : keyBtnHide) {
+    const btn = ctrls.getButton(key);
+    btn.show();
+  }
+  for (let key of enableMode ? keyBtnHide : keyBtnShow) {
+    const btn = ctrls.getButton(key);
+    btn.hide();
+  }
+  for (let panel of window._button_panels) {
+    for (let key of panelDisable) {
+      if (panel.opt.id === key) {
+        panel[enableMode ? 'hide' : 'show']();
+      }
+    }
   }
 
-  const elBtnClose = document.querySelector('#btnStoryClose');
+  const keyBtn3d = settings.ctrl_btn_3d_terrain;
+  const keyBtnSat = settings.ctrl_btn_theme_sat;
+
+  const btn3d = ctrls.getButton(keyBtn3d);
+  const btnSat = ctrls.getButton(keyBtnSat);
+
   const elBtnPreview = document.querySelector('#btnViewPreviewStory');
-  const toDisable = {
-    selector: enableMode ? o.selectorDisable : o.selectorEnable,
-    action: 'add',
-    class: 'mx-display-none'
-  };
-
-  const toEnable = {
-    selector: enableMode ? o.selectorEnable : o.selectorDisable,
-    action: 'remove',
-    class: 'mx-display-none'
-  };
-
-  h.classAction(toEnable);
-  h.classAction(toDisable);
-  o.id = o.id || 'map_main';
-
+  /**
+   * elBtnPreview always enabled
+   */
+  if (elBtnPreview) {
+    elBtnPreview.removeAttribute('disabled');
+  }
   /**
    * Enable story
    */
@@ -1019,12 +1075,8 @@ export function storyController(o) {
       setWrapperLayout: function() {},
       position: h.getMapPos(o),
       currentStep: 0,
-      hasAerial: h.btnToggleLayer({
-        id: 'map_main',
-        idLayer: 'mapbox_satellite',
-        idSwitch: 'btnThemeAerial',
-        action: 'hide'
-      }),
+      hasAerial: btnSat.action('hide'),
+      has3d: btn3d.action('hide'),
       listeners: [],
       autoplayStop: true
     };
@@ -1032,28 +1084,18 @@ export function storyController(o) {
     /**
      * Remove non stop map views
      */
-    oldViews.forEach((id) => {
+    for (let id of oldViews) {
       h.viewRemove(id);
-    });
+    }
 
     /**
      * Create a callback for when the story is closed
      */
     o.data.close = function(cmd) {
-      if (this && this.hasAttribute && this.hasAttribute('disabled')) {
-        return;
-      }
       o.enable = false;
       o = Object.assign(o, cmd);
       storyController(o);
     };
-
-    mx.listeners.addListener({
-      target: elBtnClose,
-      type: 'click',
-      callback: o.data.close,
-      group: 'story_map'
-    });
   }
 
   /**
@@ -1097,28 +1139,29 @@ export function storyController(o) {
        */
       if (!updateMode) {
         if (o.data.hasAerial) {
-          h.btnToggleLayer({
-            id: 'map_main',
-            idLayer: 'mapbox_satellite',
-            idSwitch: 'btnThemeAerial',
-            action: 'show'
-          });
+          btnSat.action('show');
+        } else {
+          btnSat.action('hide');
+        }
+        if (o.data.has3d) {
+          btn3d.action('show');
+        } else {
+          btn3d.action('hide');
         }
 
         /**
          * Re-add previously enabled views
          */
-        o.data.views.forEach((idView) => {
-          h.viewAdd(idView);
-        });
+        for (let id of o.data.views) {
+          h.viewAdd(id);
+        }
       }
 
       /**
        * Rest previous position
        */
-
       if (!updateMode && o.data.position) {
-        var pos = o.data.position;
+        const pos = o.data.position;
         o.data.map.jumpTo({
           zoom: pos.z,
           bearing: pos.b,
@@ -1169,14 +1212,6 @@ export function storyController(o) {
         mx.data.story = {};
       }
     }
-  }
-
-  /**
-   * If button preview exist, set disabled to false
-   */
-
-  if (elBtnPreview) {
-    elBtnPreview.removeAttribute('disabled');
   }
 }
 
@@ -1410,6 +1445,22 @@ export function storyPlayStep(o) {
     method: 'easeTo'
   };
   const easing = h.easingFun({type: anim.easing, power: anim.easing_power});
+
+  /**
+   * Set base map mode
+   */
+  if (step.base_layer) {
+    if (step.base_layer.add_aerial) {
+      data.ctrlAerial.action('show');
+    } else {
+      data.ctrlAerial.action('hide');
+    }
+    if (step.base_layer.add_3d_terrain) {
+      data.ctrlMode3d.action('show');
+    } else {
+      data.ctrlMode3d.action('hide');
+    }
+  }
 
   /**
    * Fly to position

@@ -7,7 +7,6 @@ const modules = {
   highcharts: loadHighcharts,
   'json-editor': loadJsonEditor,
   selectize: loadSelectize,
-  'mapbox-gl-draw': loadMapboxGlDraw,
   pickolor: loadPickolor,
   nouislider: loadNoUiSlider,
   downloadjs: loadDownloadjs,
@@ -115,14 +114,6 @@ function loadTurfBbox() {
 function loadDownloadjs() {
   return import('downloadjs').then((m) => {
     return m.default;
-  });
-}
-function loadMapboxGlDraw() {
-  return Promise.all([
-    import('@mapbox/mapbox-gl-draw')
-    //import('@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css')
-  ]).then((m) => {
-    return m[0].default;
   });
 }
 

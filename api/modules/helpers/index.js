@@ -144,7 +144,10 @@ function readTxt(p) {
  * Simple template parsing
  */
 function parseTemplate(template, data) {
-  return template.replace(/{{([^{}]+)}}/g, function(matched, key) {
+  if(!template){
+    template = "< template empty >";
+  }
+  return template.replace(/{{([^{}]+)}}/g, (matched, key)=>{
     return data[key];
   });
 }

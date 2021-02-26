@@ -1245,6 +1245,121 @@
     "de": "Simbabwe"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "de": "Schalten Sie die Vektorzeichnungswerkzeuge um *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "de": "Erstellen Sie mit dieser Ebene eine neue Ansicht und schließen Sie die Werkzeuge *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "de": "Fügen Sie einen neuen Punkt hinzu *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "de": "Fügen Sie eine neue Zeile hinzu *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "de": "Fügen Sie ein neues Polygon hinzu *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "de": "Punkt *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "de": "Linie *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "de": "Polygon *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "de": "Ebenenname *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "de": "Art der Funktion *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "de": "Neue leere Ebene erstellen *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "de": "Konfigurieren Sie die neue Ebene *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "de": "Hilfe zum Zeichnen von Werkzeugen *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "de": "Hilfe zum Zeichenwerkzeug anzeigen *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "de": "Bitte besuchen Sie unsere {{wiki}} um zu lernen, wie man das Zeichenwerkzeug benutzt *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "de": "Möchten Sie die Änderungen löschen? Wenn dies bestätigt wird, kann dies nicht rückgängig gemacht werden. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "de": "Änderungen löschen? *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "de": "Stornieren *"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "de": "Bestätigen und löschen Sie die Daten *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "de": "Ansicht erstellt. Jetzt beenden oder weiter bearbeiten? *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "de": "Weiter bearbeiten? *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "de": "Bearbeiten Sie weiter *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "de": "Schließen Sie das Werkzeug *"
+  },
+  {
     "id": "en",
     "en": "English",
     "de": "Englisch *"
@@ -1717,7 +1832,7 @@
   {
     "id": "check_add_source_from_view",
     "en": "Add sources by views",
-    "de": "Quellen nach Ansichten hinzufügen *"
+    "de": "Fügen Sie Quellen nach Ansichten hinzu *"
   },
   {
     "id": "select_overlap_source_from_view",
@@ -1815,6 +1930,16 @@
     "de": "Lager zurücksetzen *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "de": "Drehen Sie die Karte nach links *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "de": "Drehen Sie die Karte nach rechts *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "de": "Vektor-Zeichenwerkzeuge *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "de": "Löschen *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "de": "Löschen der Ansicht *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "de": "Möchten Sie diese Ansicht löschen? *"
   },
   {
     "id": "btn_opt_download",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "de": "Zurück zum Karten-Explorer *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "de": "Zurück zum Karten-Explorer (oder drücken Sie die 'Escape'-Taste) *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2412,7 +2547,7 @@
   {
     "id": "error_cant_geolocate_msg",
     "en": "Sorry, MapX can't find your position",
-    "de": "Leider kann MapX Ihre Position nicht finden *"
+    "de": "Entschuldigung, MapX kann Ihre Position nicht finden *"
   },
   {
     "id": "error_geolocate_issue",
@@ -2622,7 +2757,7 @@
   {
     "id": "noLayer",
     "en": "[ No source layer ]",
-    "de": "[Keine Quellenebene] *"
+    "de": "[Keine Quellenschicht] *"
   },
   {
     "id": "noValue",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "de": "[{{vOk}} /.{{vTot}} ]] *"
+    "de": "[ {{vOk}} /. {{vTot}} ]] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "de": "Eine email wurde gesendet an{{email}} *"
+    "de": "Eine email wurde gesendet an {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "de": "Es ist ein Fehler aufgetreten, an den die E-Mail nicht gesendet wurde{{email}} *"
+    "de": "Es ist ein Fehler aufgetreten, an den die E-Mail nicht gesendet wurde {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -3880,6 +4015,11 @@
     "de": "Hintergrund ausgeblendet *"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "de": "Hintergrund transparent *"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "de": "Schatten *"
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "de": "Einladung zur Teilnahme am Projekt\"{{project}}\" *"
+    "de": "Einladung zum Projekt \" {{project}} \"\" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "de": "Einladung zum Projekt annehmen\"{{project}}\" *"
+    "de": "Einladung zum Projekt annehmen \" {{project}} \"\" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "de": "Das Tag{{link}} wird durch einen verschlüsselten Link ersetzt. *"
+    "de": "Das Tag {{link}} wird durch einen verschlüsselten Link ersetzt. *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "de": "Hallo!\n Ich möchte Sie als Mitglied zum Projekt einladen\"{{projectName}}\" in MapX.\n Bitte klicken Sie zur Bestätigung auf den angegebenen Link.\n{{link}}\n Der Administrator des Projekts. *"
+    "de": "Hallo!\n Ich möchte Sie als Mitglied zum Projekt einladen \" {{projectName}} \"in MapX.\n Bitte klicken Sie zur Bestätigung auf den angegebenen Link.\n {{link}}\n Der Administrator des Projekts. *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "de": "Hallo!\n Vielen Dank, dass Sie uns erreicht haben.\n Um Ihre Mitgliedschaft im Projekt zu bestätigen{{projectName}} Klicken Sie in MapX auf den folgenden Link:\n{{link}}\n Freundliche Grüße,\n Der Administrator des Projekts *"
+    "de": "Hallo!\n Vielen Dank, dass Sie uns erreicht haben.\n Um Ihre Mitgliedschaft im Projekt zu bestätigen {{projectName}} Klicken Sie in MapX auf den folgenden Link:\n {{link}}\n Freundliche Grüße,\n Der Administrator des Projekts *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "de": "Hallo,<br> Nutzer '{{emailUser}} 'hat einen Einladungslink verwendet, um das Projekt aufzurufen{{project}} .<ul><li> Haltbarkeitsdatum:{{timeExpire}}</li></ul><br> Einen schönen Tag noch ! *"
+    "de": "Hallo,<br> Nutzer ' {{emailUser}} 'hat einen Einladungslink verwendet, um das Projekt aufzurufen {{project}} .<ul><li> Haltbarkeitsdatum: {{timeExpire}}</li></ul><br> Einen schönen Tag noch ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "de": "Einladungslink im Projekt verwendet{{project}} *"
+    "de": "Einladungslink im Projekt verwendet {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "de": "Sie wurden zum Projekt hinzugefügt{{project}} *"
+    "de": "Sie wurden zum Projekt hinzugefügt {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "de": "Hallo,<br> Sie wurden zum Projekt hinzugefügt{{project}} in Gruppen):{{roles}} .<br> Einen schönen Tag noch ! *"
+    "de": "Hallo,<br> Sie wurden zum Projekt hinzugefügt {{project}} in Gruppen): {{roles}} .<br> Einen schönen Tag noch ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "de": "Dem Projekt wurde ein Benutzer hinzugefügt{{project}} . *"
+    "de": "Dem Projekt wurde ein Benutzer hinzugefügt {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "de": "Ein Benutzer ({{emailUser}} ) wurde dem Projekt hinzugefügt{{project}} in Gruppen){{roles}}<br> Einen schönen Tag noch ! *"
+    "de": "Ein Benutzer ( {{emailUser}} ) wurde dem Projekt hinzugefügt {{project}} in Gruppen) {{roles}}<br> Einen schönen Tag noch ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "de": "Projekt{{title}} erstellt *"
+    "de": "Projekt {{title}} erstellt *"
   },
   {
     "id": "project_deleted",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "de": "Hallo!\\n Bitte füge mich zum Projekt hinzu{{projectName}} .\\n Freundliche Grüße,\\n Ein motiviertes zukünftiges Mitglied\\n *"
+    "de": "Hallo!\\n Bitte füge mich zum Projekt hinzu {{projectName}} .\\n Freundliche Grüße,\\n Ein motiviertes zukünftiges Mitglied\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,22 +4557,22 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "de": "Antrag auf Beitritt zum{{project}} Projekt *"
+    "de": "Antrag auf Beitritt zum {{project}} Projekt *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "de": "<span>Eine Mitgliedschaftsanfrage von</span>{{from}} <span>wurde erhalten.</span><ul><li> Botschaft:{{msg}}</li><li> Benutzerstatus:{{userStatus}}</li><li> Aktion:{{actionUrl}}</li><li> Verknüpfung:{{projectUrl}}</li><li> Daten:<pre>{{data}}</pre></li></ul> *"
+    "de": "<span>Eine Mitgliedschaftsanfrage von {{from}} wurde erhalten.</span><ul><li> Botschaft:<b> {{msg}}</b></li><li> Benutzerstatus:<b> {{userStatus}}</b></li><li> Aktion: {{actionUrl}}</li><li> Verknüpfung: {{projectUrl}}</li><li> Daten:<pre> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "de": "Antworten Sie auf die Mitgliedschaftsanfrage von\"{{email}}\" für das Projekt\"{{project}}\" *"
+    "de": "Antworten Sie auf die Mitgliedschaftsanfrage von \" {{email}} \" für das Projekt \" {{project}} \"\" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "de": "Öffnen Sie das Projekt\"{{project}}\" *"
+    "de": "Öffnen Sie das Projekt \" {{project}} \"\" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "de": "Zwischengespeicherte Daten löschen *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "de": "Setzen Sie die Standard-Panelgrößen zurück *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "de": "Zwischengespeicherte Daten löschen *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "de": "Durch diesen Vorgang werden alle von MapX zwischengespeicherten Datensätze entfernt, einschließlich Kartenkacheln, GeoJSON-Layern, Entwürfen, WMS-Antworten, Zusammenfassungen und benutzerdefinierten Skripten. Dies wirkt sich nur auf Ihren Browser aus: Auf der Serverseite werden keine Daten entfernt. Dieser Vorgang wird ungefähr freigegeben<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "de": "Diese Sitzung schließen und neu starten? *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "de": "Möchten Sie diese Sitzung schließen und jetzt neu starten? Nicht gespeicherte Änderungen gehen verloren, da der gesamte Cache gelöscht wurde. *"
   },
   {
     "id": "title_utilities",
@@ -5072,7 +5237,7 @@
   {
     "id": "schema_story_map_anim_fun_exp_desc",
     "en": "Change the default function exponent. This will amplify or reduce the rate of the easing.",
-    "de": "Ändern Sie den Standardfunktionsexponenten. Dadurch wird die Lockerungsrate verstärkt oder verringert. *"
+    "de": "Ändern Sie den Standardfunktionsexponenten. Dies erhöht oder verringert die Geschwindigkeit der Lockerung. *"
   },
   {
     "id": "schema_story_map_anim",
@@ -5113,6 +5278,31 @@
     "id": "schema_story_screen_res",
     "en": "Screen resolution",
     "de": "Bildschirmauflösung *"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "de": "Basisschichtkonfiguration *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "de": "Aktivieren Sie den Antennenmodus für diesen Schritt *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "de": "Der Luftbildmodus fügt der Karte hochauflösende Luftbilder hinzu *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "de": "Aktivieren Sie für diesen Schritt den 3D-Geländemodus *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "de": "Das '3D-Gelände' lässt die Höhe in 3 Dimensionen erscheinen. Dies ist nützlich bei hohem Zoom bei geneigter Kamera. Verwenden Sie Ihre Steuertaste und Ihre Maus, um die Steigung und Peilung zu ändern. *"
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "de": "Der Wert muss für genau eines der bereitgestellten Schemas validiert werden. Es validiert derzeit gegen{{0}} der Schemata. *"
+    "de": "Der Wert muss für genau eines der bereitgestellten Schemas validiert werden. Es validiert derzeit gegen {{0}} der Schemata. *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "de": "Der Wert muss vom Typ sein{{0}} *"
+    "de": "Der Wert muss vom Typ sein {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "de": "Der Wert darf nicht vom Typ sein{{0}} *"
+    "de": "Der Wert darf nicht vom Typ sein {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "de": "Der Wert muss ein Vielfaches von sein{{0}} *"
+    "de": "Der Wert muss ein Vielfaches von sein {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "de": "Wert muss kleiner sein als{{0}} *"
+    "de": "Wert muss kleiner sein als {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "de": "Wert muss höchstens sein{{0}} *"
+    "de": "Wert muss höchstens sein {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "de": "Wert muss größer sein als{{0}} *"
+    "de": "Wert muss größer sein als {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "de": "Wert muss mindestens sein{{0}} *"
+    "de": "Wert muss mindestens sein {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "de": "Wert muss höchstens sein{{0}} Zeichen lang *"
+    "de": "Wert muss höchstens sein {{0}} Zeichen lang *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "de": "Wert muss mindestens sein{{0}} Zeichen lang *"
+    "de": "Wert muss mindestens sein {{0}} Zeichen lang *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "de": "Der Wert muss mit dem Muster übereinstimmen{{0}} *"
+    "de": "Der Wert muss mit dem Muster übereinstimmen {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "de": "Wert muss höchstens haben{{0}} Artikel *"
+    "de": "Wert muss höchstens haben {{0}} Artikel *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "de": "Wert muss mindestens haben{{0}} Artikel *"
+    "de": "Wert muss mindestens haben {{0}} Artikel *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "de": "Objekt muss höchstens haben{{0}} Eigenschaften *"
+    "de": "Objekt muss höchstens haben {{0}} Eigenschaften *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "de": "Objekt muss mindestens haben{{0}} Eigenschaften *"
+    "de": "Objekt muss mindestens haben {{0}} Eigenschaften *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "de": "Objekt fehlt die erforderliche Eigenschaft '{{0}} ' *"
+    "de": "Objekt fehlt die erforderliche Eigenschaft ' {{0}} ' *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "de": "Keine zusätzlichen Eigenschaften erlaubt, aber Eigenschaft{{0}} eingestellt ist *"
+    "de": "Keine zusätzlichen Eigenschaften erlaubt, aber Eigenschaft {{0}} eingestellt ist *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "de": "Muss Eigentum haben{{0}} *"
+    "de": "Muss Eigentum haben {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "de": "Letzte{{0}} *"
+    "de": "Letzte {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "de": "Letzte löschen{{0}} *"
+    "de": "Letzte löschen {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "de": "Hinzufügen{{0}} *"
+    "de": "Hinzufügen {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "de": "Löschen{{0}} *"
+    "de": "Löschen {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "de": "<div style='max-width:400px;padding:20px'>Hallo,<br><br> Hier ist das angeforderte Passwort:<hr>{{password}}<hr> Dieses sichere Kennwort ist für die aktuelle MapX-Sitzung nur einmal gültig und wird nach 20 Minuten ungültig.<br> Freundliche Grüße,<br><br> Ihr MapX-Team.<br><br> <span style='opacity:0.5;font-size:0.8em'>Wenn Sie diese Anfrage nicht gestellt haben, hat wahrscheinlich einer unserer Benutzer versehentlich Ihre E-Mail-Adresse eingegeben.</span></div> *"
+    "de": "<div style=\"max-width:400px;padding:20px\">Hallo,<br><br> Hier ist das angeforderte Passwort:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> Dieses sichere Kennwort ist für die aktuelle MapX-Sitzung nur einmal gültig und wird nach 20 Minuten ungültig.<br> Freundliche Grüße,<br><br> Ihr MapX-Team.<br><br> <span style=\"opacity:0.5;font-size:0.8em\">Wenn Sie diese Anfrage nicht gestellt haben, hat wahrscheinlich einer unserer Benutzer versehentlich Ihre E-Mail-Adresse eingegeben.</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "de": "Herzlich willkommen!<br> Technische Informationen finden Sie in unserer <a href='{{linkKnowledgeBase}}'>Knowledge Base</a> . Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href='{{linkIssue}}'>Issue-Tracker</a><br> Vielen Dank ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "de": "Herzlich willkommen!<br> Technische Informationen finden Sie in unserer <a href=\"{{linkKnowledgeBase}}\">Knowledge Base</a> . Wenn Sie Vorschläge zu dieser Website haben oder einen Fehler melden möchten, besuchen Sie unseren <a href=\"{{linkIssue}}\">Issue-Tracker</a><br> Vielen Dank ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "de": "Maximale Dateigröße von{{size}} wurde erreicht. Sie dürfen keine größeren Dateien hochladen. Bitte kontaktieren Sie uns für weitere Informationen. *"
+    "de": "Maximale Dateigröße von {{size}} wurde erreicht. Sie dürfen keine größeren Dateien hochladen. Bitte kontaktieren Sie uns für weitere Informationen. *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "de": "Betten Sie den Link in ein<iframe> HTML-Tag zum einfachen Hinzufügen von MapX zu Ihrer Website. *"
+    "de": "Betten Sie den Link in ein<iframe> HTML-Tag zum einfachen Hinzufügen von MapX zu Ihrer Website.</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "de": "Rollen im Projekt aktualisiert{{nameProject}} *"
+    "de": "Rollen im Projekt aktualisiert {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "de": "<p>Hallo,</p><p> Ein Administrator hat Ihre Rollen im Projekt geändert{{projectLink}} .</p><p> Hier ist die Liste der Änderungen:</p><p>{{txtRoleChange}}</p><p> Einen schönen Tag noch !</p> <i style='float:right'>Das MapX-Team.</i> *"
+    "de": "<p>Hallo,</p><p> Ein Administrator hat Ihre Rollen im Projekt geändert {{projectLink}} .</p><p> Hier ist die Liste der Änderungen:</p><p> {{txtRoleChange}}</p><p> Einen schönen Tag noch !</p> <i style=\"float:right\">Das MapX-Team.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "de": "<p>Hallo,</p><p> Die Rollen in Ihrem Projekt haben sich geändert{{projectLink}} .</p><p> Hier ist die Liste der Änderungen:{{changes}}<p> Einen schönen Tag noch !</p> *"
+    "de": "<p>Hallo,</p><p> Die Rollen in Ihrem Projekt haben sich geändert {{projectLink}} .</p><p> Hier ist die Liste der Änderungen: {{changes}}</p><p> Einen schönen Tag noch !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "de": "hinzugefügt zu:{{group}}\n *"
+    "de": "hinzugefügt zu: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "de": "entfernt von:{{group}}\n *"
+    "de": "entfernt von: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "de": "Ungültiges Format{{format}} im Standardformat{{formatDefault}} . *"
+    "de": "Ungültiges Format {{format}} im Standardformat {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "de": "Ungültige Geometrien für Schicht gefunden '{{title}} '(({{idLayer}} ). *"
+    "de": "Ungültige Geometrien für Schicht gefunden ' {{title}} '(( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "de": "Eine E-Mail wird an gesendet{{email}} . Der Download- <a href='{{url}}'>Link</a> wird am Ende des Vorgangs aktiviert *"
+    "de": "Eine E-Mail wird an gesendet<a href=\"mailto:={{email}}\"> {{email}}</a> . Der Download- <a href=\"{{url}}\">Link</a> wird am Ende des Vorgangs aktiviert *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "de": "Conversion-Nachricht:{{stdout}} *"
+    "de": "Conversion-Nachricht: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "de": "Conversion-Warnung:{{stderr}} *"
+    "de": "Conversion-Warnung: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "de": "Konvertierungsfehler.{{error}} *"
+    "de": "Konvertierungsfehler. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "de": "Konvertierung im Format{{format}} . <a href={{url}}></a>{{title}} *"
+    "de": "Konvertierung im Format {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "de": "Schicht{{title}} exportiert *"
+    "de": "Schicht {{title}} exportiert *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "de": "Die angeforderten Daten können über diesen Link heruntergeladen werden: <a href={{url}}></a>{{title}} *"
+    "de": "Die angeforderten Daten können über diesen Link heruntergeladen werden:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "de": "Kompressionswarnung:{{err}} *"
+    "de": "Kompressionswarnung: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "de": "Komprimierungsfehler:{{err}} *"
+    "de": "Komprimierungsfehler: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "de": "Von MapX auf heruntergeladen{{date}} *"
+    "de": "Von MapX auf heruntergeladen {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "de": "Hauptfeld *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "de": "Bedienfeld *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6453,5 +6648,10 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "de": "Eine andere Sprache als Englisch kann bei fehlender Übersetzung automatisch übersetzt werden. In solchen Fällen wird ein Sternchen angezeigt. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "de": "Benachrichtigungen *"
   }
 ]

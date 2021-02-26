@@ -1245,6 +1245,121 @@
     "ps": "زيمبابوي"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "ps": "د ویکټر ډرا اوزارونه وباسئ *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "ps": "د دې پرت سره نوی لید رامینځته کړئ او وسیلې یې وتړئ *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "ps": "یو نوی ټکی اضافه کړئ *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "ps": "یوه نوې کرښه اضافه کړئ *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "ps": "یو نوی کثیر الاضله اضافه کړئ *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "ps": "ټکی *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "ps": "کرښه *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "ps": "پولیګان *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "ps": "د پوړ نوم *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "ps": "د ب ofې ډول *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "ps": "نوی تش پرت جوړ کړئ *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "ps": "نوی پرت جوړ کړئ *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "ps": "د توکی مرسته رسم کړئ *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "ps": "د انځور توکی مرسته وښیه *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "ps": "مهرباني وکړئ زموږ څخه لیدنه وکړئ {{wiki}} د انځورګرۍ وسیلې کارولو زده کولو لپاره *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "ps": "ایا تاسو غواړئ چې بدلونونه حذف کړئ؟ که تایید شوی ، نو دا نشي ناکام کیدی. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "ps": "بدلونونه حذف کړئ؟ *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "ps": "لغوه کړی"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "ps": "ډاټا تصدیق او حذف کړئ *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "ps": "لید جوړ شو. اوس بندول یا ترمیم ته ادامه ورکول؟ *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "ps": "ایڈیٹ ته دوام ورکوئ؟ *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "ps": "ایڈیٹ ته ادامه ورکړه *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "ps": "وسیله وتړئ *"
+  },
+  {
     "id": "en",
     "en": "English",
     "ps": "انګلیسي"
@@ -1502,7 +1617,7 @@
   {
     "id": "btn_browse",
     "en": "Browse...",
-    "ps": "لټول ... *"
+    "ps": "لټون کول ... *"
   },
   {
     "id": "btn_help",
@@ -1815,6 +1930,16 @@
     "ps": "د بیرغ ریسیټ کول *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "ps": "کیپ کیot اړخ ته تاوول *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "ps": "ښي خوا ته وخوځئ *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "ps": "د ویکټر ډرا اوزارونه *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "ps": "دا GeoJSON پاک کړئ"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "ps": "د لید حذف کول *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "ps": "ایا تاسو غواړئ دا لید ړنګ کړئ؟ *"
   },
   {
     "id": "btn_opt_download",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "ps": "بېرته د نقشې سپړونکي ته *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "ps": "د نقشې سپړونکي ته بیرته ستنید (یا د 'فرار' کلي ت pressۍ کېکاږئ) *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2327,7 +2462,7 @@
   {
     "id": "error_title_no_match",
     "en": "The title does not match",
-    "ps": "سرلیک سره سمون نه خوري *"
+    "ps": "سرلیک ورته ندی *"
   },
   {
     "id": "error_title_short",
@@ -2562,7 +2697,7 @@
   {
     "id": "login_info_box",
     "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
-    "ps": "که تاسو لاهم راجسټر نه یاست ، نو بریالی تصدیق به نوی حساب جوړ کړي ، او نوې ب .ې به خلاصې کړي. که تاسو دمخه راجسټر شوي یاست ، یو بریالی تصدیق به اضافتا تاسو ته ټولو پروژو ته لاسرسی درکړي چیرې چې تاسو دمخه غړي یاست. د میپ ایکس سره د کارن راجسټریشن په مجموعي کچه د غیر شخصي پیژندنې وړ معلوماتو د کار کولو ډیټا راټولولو او خپرولو رضایت ټاکي. *"
+    "ps": "که تاسو لاهم راجسټر نه یاست ، نو بریالی تصدیق به نوی حساب جوړ کړي ، او نوې ب .ې به خلاصې کړي. که تاسو دمخه راجسټر شوي یاست ، یو بریالی تصدیق به اضافتا تاسو ته ټولو پروژو ته لاسرسی درکړي چیرې چې تاسو دمخه غړیتوب لرئ. د میپ ایکس سره د کارن راجسټریشن په مجموعي کچه د غیر شخصي پیژندنې وړ معلوماتو د کار کولو ډیټا راټولولو او خپرولو رضایت ټاکي. *"
   },
   {
     "id": "login_out",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "ps": "[{{vOk}} /{{vTot}} ] *"
+    "ps": "[ {{vOk}} / {{vTot}} ] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "ps": "ته یو بریښنالیک لیږل شوی{{email}} *"
+    "ps": "ته یو بریښنالیک لیږل شوی {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "ps": "یوه تیروتنه وشوه ، بریښنالیک نه لیږل شوی{{email}} *"
+    "ps": "یوه تیروتنه وشوه ، بریښنالیک ته نه لیږل شوی {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -2967,7 +3102,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">دلته د ښو عملونو لیست دی چې د لوستونکو لپاره بې تجربه تجربه چمتو کوي:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> دا ساده وساتئ.</li><li style=\";text-align:right;direction:rtl\"> دا غوره ده چې د لنډې کیسې نقشه جوړه کړئ ترڅو ستاسو د لیدونکو علاقه وساتي.</li><li style=\";text-align:right;direction:rtl\"> د ښه لوستلو لپاره ، سپارښتنه کیږي چې په هر مرحله کې دوه سلایډونه او په ورته مرحله کې په نقشه کې له دوه پرتونو څخه ډیر نه.</li><li style=\";text-align:right;direction:rtl\"> انځورونه ، ویډیوګانې او انفرافګرافونه ستاسو د کیسې شرایطو لپاره ګټور او اغیزمن مینځنۍ کیدی شي. په هرصورت ، دوی باید ستاسو د کیسې ځایي برخې تر سیوري لاندې نه کړي. نقشې باید په خپل مرکز کې وي.</li><li style=\";text-align:right;direction:rtl\"> تاثیرات ، لیږدونې یا 3d بدلونونه کولی شي په ورو وسیلو کې ستاسو د کیسې نقشې لوستلو باندې اغیزه وکړي ، په لږه اندازه یې وکاروئ.</li></ol> *"
+    "ps": "<p style=\";text-align:right;direction:rtl\">دلته د ښو عملونو لیست دی چې د لوستونکو لپاره بې تجربه تجربه چمتو کوي:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> دا ساده وساتئ.</li><li style=\";text-align:right;direction:rtl\"> دا غوره ده چې د لنډې کیسې نقشه جوړه کړئ ترڅو ستاسو د لیدونکو علاقه وساتي.</li><li style=\";text-align:right;direction:rtl\"> د ښه لوستلو لپاره ، سپارښتنه کیږي چې په هر مرحله کې دوه سلایډونه او په ورته مرحله کې په نقشه کې له دوه پرتونو څخه ډیر نه.</li><li style=\";text-align:right;direction:rtl\"> انځورونه ، ویډیوګانې او انفرافګرافونه ستاسو د کیسې شرایطو لپاره ګټور او اغیزمنې مینځنۍ کیدی شي. په هرصورت ، دوی باید ستاسو د کیسې ځایي برخې تر سیوري لاندې نه کړي. نقشې باید په خپل مرکز کې وي.</li><li style=\";text-align:right;direction:rtl\"> تاثیرات ، لیږدونې یا 3d بدلونونه کولی شي په ورو وسیلو کې ستاسو د کیسې نقشې لوستلو اغیزه وکړي ، په لږه اندازه یې وکاروئ.</li></ol> *"
   },
   {
     "id": "schema_story_author",
@@ -3877,7 +4012,12 @@
   {
     "id": "mx_ui_background_faded",
     "en": "Background faded out",
-    "ps": "شالید له منځه تللی *"
+    "ps": "شاليد له منځه تللی *"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ps": "شالید شفاف *"
   },
   {
     "id": "mx_ui_shadow",
@@ -3957,7 +4097,7 @@
   {
     "id": "mx_map_boundary_un_3",
     "en": "Map: Armistice or international boundary_unistrative line",
-    "ps": "نخشه: آرمسټیس یا نړیوال حدود_واړخیزه لیکه *"
+    "ps": "نقشه: آرمسټیس یا نړیوال حدود_اینسټریټ لاین *"
   },
   {
     "id": "mx_map_boundary_un_4",
@@ -3987,7 +4127,7 @@
   {
     "id": "mx_map_text_place_outline",
     "en": "Map: place text outline",
-    "ps": "نقشه: د متن خط وټاکئ *"
+    "ps": "نقشه: د متن متن وټاکئ *"
   },
   {
     "id": "mx_map_text_road",
@@ -4142,7 +4282,7 @@
   {
     "id": "project_alias_name_desc",
     "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "ps": "لږترلږه 1 ، لږ تر لږه 30 ټیټ قضیه چې د ASCII حروف [از] سره ، شمیرې [0-9] ، ډیسکونه [-] او د سکتور اجازه ورکړل شوې [_] *"
+    "ps": "لږترلږه 1 ، لږترلږه 30 ټیټ قضیه چې د ASCII حروف [از] ، شمیر [0-9] ، ټوټې ټوټې [-] او لاندې سکور ته اجازه ورکړل شوې [_] *"
   },
   {
     "id": "error_project_alias_not_valid",
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "ps": "په پروژه کې د ګډون بلنه\"{{project}}\" *"
+    "ps": "په پروژه کې د ګډون بلنه \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "ps": "پروژې ته بلنه ومنئ\"{{project}}\" *"
+    "ps": "پروژې ته بلنه ومنئ \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "ps": "ټاګ{{link}} به د یوې کوډ شوې لینک سره ځای په ځای شي. *"
+    "ps": "ټاګ {{link}} به د یوې کوډ شوې لینک سره ځای په ځای شي. *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "ps": "سلام!\n زه غواړم تاسو ته دې پروژې ته د غړي په توګه بلنه درکړم\"{{projectName}}\" په میپ ایکس کې.\n د تایید لپاره مهرباني وکړئ چمتو شوي لینک باندې کلیک وکړئ.\n{{link}}\n د پروژې مدیر *"
+    "ps": "سلام!\n زه غواړم تاسو ته دې پروژې ته د غړي په توګه بلنه درکړم \" {{projectName}} \"په میپ ایکس کې.\n د تایید لپاره مهرباني وکړئ چمتو شوي لینک باندې کلیک وکړئ.\n {{link}}\n د پروژې مدیر *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "ps": "سلام!\n موږ ته د رسېدو لپاره مننه.\n ترڅو خپلې پروژې غړیتوب تایید کړئ{{projectName}} په میپ ایکس کې ، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ:\n{{link}}\n په ډیر درنښت،\n د پروژې مدیر *"
+    "ps": "سلام!\n موږ ته د رسېدو لپاره مننه.\n ترڅو خپلې پروژې غړیتوب تایید کړئ {{projectName}} په میپ ایکس کې ، مهرباني وکړئ لاندې لینک باندې کلیک وکړئ:\n {{link}}\n په ډیر درنښت،\n د پروژې مدیر *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "ps": "سلام،<br> کارن{{emailUser}} 'پروژې ته د ننوتلو لپاره د بلنې لینک وکاروه{{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> له کاره وتنې نېټه:{{timeExpire}}</li></ul><br> ښه ورځ ولرئ ! *"
+    "ps": "سلام،<br> کارن {{emailUser}} 'پروژې ته د ننوتلو لپاره د بلنې لینک وکاروه {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> له کاره وتنې نېټه: {{timeExpire}}</li></ul><br> ښه ورځ ولرئ ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "ps": "د بلنې لینک په پروژه کې کارول شوی{{project}} *"
+    "ps": "د بلنې لینک په پروژه کې کارول شوی {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "ps": "تاسو په پروژه کې اضافه شوي{{project}} *"
+    "ps": "تاسو په پروژه کې اضافه شوي {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "ps": "سلام،<br> تاسو په پروژه کې شامل شوي{{project}} په ګروپ (ګروپونو) کې:{{roles}} .<br> ښه ورځ ولرئ ! *"
+    "ps": "سلام،<br> تاسو په پروژه کې شامل شوي {{project}} په ګروپ (ګروپونو) کې: {{roles}} .<br> ښه ورځ ولرئ ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "ps": "یو کاروونکی په پروژه کې شامل شوی{{project}} . *"
+    "ps": "یو کاروونکی په پروژه کې شامل شوی {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "ps": "یو کارن ({{emailUser}} ) په پروژه کې اضافه شوی{{project}} په ګروپ کې{{roles}}<br> ښه ورځ ولرئ ! *"
+    "ps": "یو کارن ( {{emailUser}} ) په پروژه کې اضافه شوی {{project}} په ګروپ کې {{roles}}<br> ښه ورځ ولرئ ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "ps": "پروژه{{title}} جوړ شوی *"
+    "ps": "پروژه {{title}} جوړ شوی *"
   },
   {
     "id": "project_deleted",
@@ -4327,7 +4467,7 @@
   {
     "id": "map_fit_to_bounds",
     "en": "Use extent to center the map",
-    "ps": "د نقشې مرکزي کولو لپاره تر حد حد پورې وکاروئ *"
+    "ps": "د نقشې مرکز ورکولو لپاره تر حد حد پورې وکاروئ *"
   },
   {
     "id": "map_zoom",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "ps": "سلام!\\n مهرباني وکړئ ما په پروژه کې اضافه کړئ{{projectName}} .\\n په ډیر درنښت،\\n د راتلونکي هڅونکی غړی\\n *"
+    "ps": "سلام!\\n مهرباني وکړئ ما په پروژه کې اضافه کړئ {{projectName}} .\\n په ډیر درنښت،\\n د راتلونکي هڅونکی غړی\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,22 +4557,22 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "ps": "د شمولیت لپاره غوښتنلیک{{project}} پروژه *"
+    "ps": "د شمولیت لپاره غوښتنلیک {{project}} پروژه *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "ps": "<span>څخه د غړیتوب غوښتنه</span>{{from}} <span>ترلاسه شوی دی</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیغام:{{msg}}</li><li style=\";text-align:right;direction:rtl\"> د کارونکي حالت:{{userStatus}}</li><li style=\";text-align:right;direction:rtl\"> عمل:{{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> لینک:{{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> معلومات:<pre style=\";text-align:right;direction:rtl\">{{data}}</pre></li></ul> *"
+    "ps": "<span>څخه د غړیتوب غوښتنه {{from}} ترلاسه شوی دی</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیغام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> د کارونکي حالت:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> لینک: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> معلومات:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "ps": "څخه د غړیتوب غوښتنې ته ځواب ووایی\"{{email}}\" د پروژې لپاره\"{{project}}\" *"
+    "ps": "د غړیتوب غوښتنې ته ځواب ووایی \" {{email}} \"د پروژې لپاره\" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "ps": "پروژه خلاصه کړئ\"{{project}}\" *"
+    "ps": "پروژه پرانسته \" {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ps": "ساتل شوي ډاټا پاک کړئ *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "ps": "د ډیفالټ پینل اندازې بیا تنظیم کړئ *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "ps": "ساتل شوي ډاټا پاک کړئ *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "ps": "دا عملیات به د میپ ایکس لخوا ترتیب شوي ټول زیرمه شوي ډاټا لرې کړي ، پشمول د نقشې ټایلونه ، د GeoJSON پرتونه ، مسودې ، د WMS ځوابونه ، لنډیز او دودیز سکریپټونه. دا به یوازې ستاسو په براوزر اغیزه وکړي: هیڅ ډاټا به د سرور اړخ نه لرې شي. دا عملیات به په اړه خلاص شي<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "ps": "دا ناسته وتړئ او بیا چالان شئ؟ *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "ps": "ایا تاسو غواړئ دا ناسته وتړئ او اوس یې پیل کړئ؟ هر خوندي شوي بدلونونه به ورک شي ، ځکه چې ټولې زیرمه حذف شوې. *"
   },
   {
     "id": "title_utilities",
@@ -5115,6 +5280,31 @@
     "ps": "د پردې هوارول *"
   },
   {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ps": "د بنسټ پرت ترتیب *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ps": "د دې مرحلې لپاره هوایی حالت فعال کړئ *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ps": "هوایی حالت په نقشه کې د لوړ ریزولوشن هوایی عکس العمل اضافه کوي *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ps": "د دې مرحلې لپاره د '3d خاورې' حالت فعال کړئ *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ps": "د 3d خاوره به لوړوالی په 3 ابعادو کې څرګند شي. دا په لوړ زوم کې ګټور دی ، د کیمرې سره ټیل شوی. د کنټرول کیلي او ماوس د پیچ او بیرنگ بدلولو لپاره وکاروئ. *"
+  },
+  {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
     "ps": "د کیسې نقشې پر مهال د پا ofې اساس حل. دا به په اتوماتيک ډول د سکرین فټ کولو لپاره اندازه کړي او د مینځپانګو جوړښت خوندي کړي. *"
@@ -5372,7 +5562,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "ps": "د ځایي لټون لپاره ، میپ ایکس کولی شي د ډیری جغرافیوي ب featuresو تر مینځ اړیکې وټاکي ، د دوی د جیومیٹری ، اندازې ، او / یا صفاتو پراساس. په ځینو مواردو کې ، غوره ده چې د سرچینې سره د جغرافیې کلیدي ټکي شریک کړئ ، ترڅو د متن لټونونو پرمهال مطابقت ښه کړئ. د M49 کلیدي ټکي تاسو ته اجازه درکوي. لږترلږه یوه کلیدي ټکي اړین دي. *"
+    "ps": "د ځایي لټون لپاره ، میپ ایکس کولی شي د ډیری جغرافیوي ب featuresو تر مینځ اړیکې وټاکي ، د دوی د جیومیٹری ، اندازې ، او / یا صفاتو پراساس. په ځینو مواردو کې ، غوره ده چې د سرچینې سره د جغرافیې کلیدي اړیکه ونیسئ ، ترڅو د متن لټونونو پرمهال مطابقت ښه کړئ. د M49 کلیدي ټکي تاسو ته اجازه درکوي. لږترلږه یوه کلیدي ټکي اړین دي. *"
   },
   {
     "id": "textual_title",
@@ -5762,7 +5952,7 @@
   {
     "id": "pk_btn_set_default_palette",
     "en": "Use the default palette",
-    "ps": "د تلواله پیلټ کارول *"
+    "ps": "د تلواله پیلیټ وکاروه *"
   },
   {
     "id": "draft_recover_modal_title",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ps": "ارزښت باید د ورکړل شوي سکیما څخه دقیقه په وړاندې تایید شي. دا مهال د دې په وړاندې باوري کیږي{{0}} د. *"
+    "ps": "ارزښت باید د ورکړل شوي سکیما څخه دقیقه په وړاندې تایید شي. دا مهال د دې په وړاندې باوري کیږي {{0}} د. *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "ps": "ارزښت باید ډول وي{{0}} *"
+    "ps": "ارزښت باید ډول وي {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "ps": "ارزښت باید ډول نه وي{{0}} *"
+    "ps": "ارزښت باید ډول نه وي {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "ps": "ارزښت باید یو څو وي{{0}} *"
+    "ps": "ارزښت باید یو څو وي {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "ps": "ارزښت باید له دې څخه کم وي{{0}} *"
+    "ps": "ارزښت باید له دې څخه کم وي {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "ps": "ارزښت باید حد اکثر وي{{0}} *"
+    "ps": "ارزښت باید حد اکثر وي {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "ps": "ارزښت باید له دې څخه ډیر وي{{0}} *"
+    "ps": "ارزښت باید له دې څخه ډیر وي {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "ps": "ارزښت باید لږترلږه وي{{0}} *"
+    "ps": "ارزښت باید لږترلږه وي {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "ps": "ارزښت باید حد اکثر وي{{0}} لوښه اوږده *"
+    "ps": "ارزښت باید حد اکثر وي {{0}} لوښه اوږده *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "ps": "ارزښت باید لږترلږه وي{{0}} لوښه اوږده *"
+    "ps": "ارزښت باید لږترلږه وي {{0}} لوښه اوږده *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "ps": "ارزښت باید له نمونې سره مطابقت ولري{{0}} *"
+    "ps": "ارزښت باید له نمونې سره مطابقت ولري {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "ps": "ارزښت باید لږ تر لږه وي{{0}} توکي *"
+    "ps": "ارزښت باید لږ تر لږه وي {{0}} توکي *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "ps": "ارزښت باید لږترلږه وي{{0}} توکي *"
+    "ps": "ارزښت باید لږترلږه وي {{0}} توکي *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "ps": "اعتراض باید لږترلږه وي{{0}} ځانتياوې *"
+    "ps": "اعتراض باید لږترلږه وي {{0}} ځانتياوې *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "ps": "څیز باید لږترلږه ولري{{0}} ځانتياوې *"
+    "ps": "څیز باید لږترلږه ولري {{0}} ځانتياوې *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "ps": "اعتراض اړین ملکیت ورک دی '{{0}} ' *"
+    "ps": "اعتراض اړین ملکیت ورک دی ' {{0}} ' *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "ps": "د اضافي ملکیت اجازه نشته ، مګر ملکیت{{0}} ټاکل شوی *"
+    "ps": "د اضافي ملکیت اجازه نشته ، مګر ملکیت {{0}} ټاکل شوی *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "ps": "باید ملکیت ولری{{0}} *"
+    "ps": "باید ملکیت ولری {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "ps": "اخري{{0}} *"
+    "ps": "اخري {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "ps": "وروستۍ ړنګ کړئ{{0}} *"
+    "ps": "وروستۍ ړنګ کړئ {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "ps": "اضافه کول{{0}} *"
+    "ps": "اضافه کول {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "ps": "ړنګول{{0}} *"
+    "ps": "ړنګول {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "ps": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">سلام،<br><br> دلته غوښتل شوی رمز دی:<hr>{{password}}<hr> دا خوندي رمز یوازې د یو ځل لپاره د اعتبار وړ دی ، د موجوده میپ ایکس غونډې لپاره او له 20 دقیقو وروسته به باطله شي.<br> په ډیر درنښت،<br><br> ستاسو د MapX ټیم.<br><br> <span style='opacity:0.5;font-size:0.8em'>که تاسو دا غوښتنه نه وي کړې ، نو زموږ یو کارن ممکن په غلطۍ سره ستاسو د بریښنالیک پته دننه کړي.</span></div> *"
+    "ps": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">سلام،<br><br> دلته غوښتل شوی رمز دی:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> دا خوندي رمز یوازې د یو ځل لپاره د اعتبار وړ دی ، د موجوده میپ ایکس غونډې لپاره او له 20 دقیقو وروسته به باطله شي.<br> په ډیر درنښت،<br><br> ستاسو د MapX ټیم.<br><br> <span style=\"opacity:0.5;font-size:0.8em\">که تاسو دا غوښتنه نه وي کړې ، نو زموږ یو کارن ممکن په غلطۍ سره ستاسو د بریښنالیک پته دننه کړي.</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره ، تاسو کولی شئ زموږ د <a href='{{linkKnowledgeBase}}'>پوهې اساس</a> ولولئ. که تاسو د دې ویب پا aboutې په اړه وړاندیز لرئ ، یا که تاسو غواړئ یو غلط راپور ورکړئ ، نو زموږ د <a href='{{linkIssue}}'>مسلې تعقیب کونکي ته مراجعه وکړئ</a><br> مننه ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "ps": "ښه راغلاست!<br> د تخنیکي معلوماتو لپاره ، تاسو ممکن زموږ د <a href=\"{{linkKnowledgeBase}}\">پوهې اساس</a> ولولئ. که تاسو د دې ویب پا aboutې په اړه وړاندیز لرئ ، یا که تاسو غواړئ یو غلط راپور ورکړئ ، نو زموږ د <a href=\"{{linkIssue}}\">مسلې تعقیب کونکي ته مراجعه وکړئ</a><br> مننه ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "ps": "د فایل اعظمي اندازه{{size}} رسېدلی دی. تاسو څخه اجازه نشته چې له دې څخه لوی فایل اپلوډ کړئ. مهرباني وکړئ موږ سره د نورو معلوماتو لپاره اړیکه ونیسئ. *"
+    "ps": "د فایل اعظمي اندازه {{size}} رسېدلی دی. تاسو څخه اجازه نشته چې له دې څخه لوی فایل اپلوډ کړئ. مهرباني وکړئ موږ سره د نورو معلوماتو لپاره اړیکه ونیسئ. *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6127,7 +6317,7 @@
   {
     "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "ps": "د 'جامد' حالت وکاروئ که تاسو غواړئ د میپ ایکس لږ سپک او ګړندی نسخه کارولو سره نظر شریک کړئ ، د محدود فعالیتونو سره. د دې میتود په کارولو سره ، هرڅوک چې شریک شوي لینک ولري د انتخاب شوي لید لوستلو ته اجازه ورکړل شي ، پرته لدې چې په MapX کې راجستر شي. که تاسو د کیسې نقشه اضافه کړئ ، نو دا به په اوتومات ډول پیل شي ، د نورو نظرونو په تخفیف سره. *"
+    "ps": "د 'جامد' حالت وکاروئ که تاسو غواړئ د نقشو سپک او ګړندی نسخه کارولو سره نظر شریک کړئ ، د محدود فعالیتونو سره. د دې میتود په کارولو سره ، هرڅوک چې شریک شوي لینک ولري د انتخاب شوي لید لوستلو ته اجازه ورکړل شي ، پرته لدې چې په MapX کې راجستر شي. که تاسو د کیسې نقشه اضافه کړئ ، نو دا به په اوتومات ډول پیل شي ، د نورو نظرونو په تخفیف سره. *"
   },
   {
     "id": "share_views_check_label",
@@ -6157,7 +6347,7 @@
   {
     "id": "share_views_open_check_desc",
     "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "ps": "د لیدونو اضافه کول په اتوماتيک ډول فعال شي کله چې غوښتنلیک په لاره واچول شي. دا به ت theۍ د 'فلټر فعال لید' وړ کړي او غیر فعال لید پټ کړي. *"
+    "ps": "د لیدونو اضافه کول په اتوماتیکه توګه فعال شي کله چې غوښتنلیک په لاره واچول شي. دا به ت theۍ د 'فلټر فعال لید' وړ کړي او غیر فعال لید پټ کړي. *"
   },
   {
     "id": "share_collections_check_label",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "ps": "لینک په یوه کې ضمیمه کړئ<iframe> HTML ټګ په اسانۍ سره ستاسو ویب پا Mapې ته MapX اضافه کولو لپاره. *"
+    "ps": "لینک په یوه کې ضمیمه کړئ<iframe> HTML ټګ په اسانۍ سره ستاسو ویب پا Mapې ته MapX اضافه کولو لپاره.</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "ps": "رولونه په پروژه کې نوي شوي{{nameProject}} *"
+    "ps": "رولونه په پروژه کې نوي شوي {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یوه مدیر ستاسو په پروژې کې رول بدل کړ{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p><p style=\";text-align:right;direction:rtl\">{{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style='float:right'>د میپ ایکس ټیم.</i> *"
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یوه مدیر ستاسو په پروژې کې رول بدل کړ {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> <i style=\"float:right\">د میپ ایکس ټیم.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی:{{changes}}<p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> *"
+    "ps": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> ستاسو په پروژه کې رولونه بدل شوي دي {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> دلته د بدلونونو لیست دی: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> ښه ورځ ولرئ !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "ps": "ورزياته شوي:{{group}}\n *"
+    "ps": "ورزياته شوي: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "ps": "د دې څخه لرې شوی:{{group}}\n *"
+    "ps": "د دې څخه لرې شوی: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ps": "ناباوره ب .ه{{format}} د افتراضي ب usingه کاروي{{formatDefault}} . *"
+    "ps": "ناباوره ب .ه {{format}} د افتراضي ب usingه کاروي {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "ps": "د پرت لپاره ناسمه جغرافیه وموندل شوه{{title}} '({{idLayer}} ). *"
+    "ps": "د پرت لپاره ناسمه جغرافیه وموندل شوه {{title}} '( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ps": "بریښنالیک ته به لیږل کیږي{{email}} . د ډاونلوډ <a href='{{url}}'>لینک</a> به د پروسې په پای کې فعال شي *"
+    "ps": "بریښنالیک ته به لیږل کیږي<a href=\"mailto:={{email}}\"> {{email}}</a> . د ډاونلوډ <a href=\"{{url}}\">لینک</a> به د پروسې په پای کې فعال شي *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "ps": "د بدلون پیغام:{{stdout}} *"
+    "ps": "د بدلون پیغام: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "ps": "د تبادلې خبرتیا:{{stderr}} *"
+    "ps": "د تبادلې خبرتیا: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "ps": "د بدلولو تېروتنه.{{error}} *"
+    "ps": "د بدلولو تېروتنه. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "ps": "د شکل په کارولو سره تبادله ترسره شوه{{format}} . <a href={{url}}></a>{{title}} *"
+    "ps": "د شکل په کارولو سره تبادله ترسره شوه {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "ps": "پوړ{{title}} صادرول *"
+    "ps": "پوړ {{title}} صادرول *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,27 +6542,27 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ps": "غوښتل شوی معلومات د دې لینک په کارولو سره ډاونلوډ کولو ته چمتو دي: <a href={{url}}></a>{{title}} *"
+    "ps": "غوښتل شوي معلومات د دې لینک په کارولو سره ډاونلوډ ته چمتو دي:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
     "en": "Compression progress",
-    "ps": "د فشار پرمختګ *"
+    "ps": "د کمپریشن پرمختګ *"
   },
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "ps": "د فشار فشار:{{err}} *"
+    "ps": "د فشار فشار: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "ps": "د کمپریشن تېروتنه:{{err}} *"
+    "ps": "د کمپریشن تېروتنه: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "ps": "له میپ ایکس څخه په ډاونلوډ شوی{{date}} *"
+    "ps": "له میپ ایکس څخه په ډاونلوډ شوی {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "ps": "اصلي تخته *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "ps": "د کنټرول پینل *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6452,6 +6647,11 @@
   {
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
-    "ps": "د انګلیسي نه پرته ژبه کولی شي پخپله ژبه وژباړل شي ، د ژباړې ورکیدو په صورت کې. په داسې حالتونو کې ، یو ستوری به وښودل شي. *"
+    "ps": "د انګلیسي نه پرته ژبه کولی شي پخپله ژبه وژباړل شي ، د ژباړې د ورکیدو په حالت کې. په داسې حالتونو کې ، یو ستوری به وښودل شي. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "ps": "خبرتیاوې *"
   }
 ]

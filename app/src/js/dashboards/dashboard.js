@@ -39,6 +39,8 @@ const defaults = {
     button_text: '',
     button_lang_key: 'button_dashboard_panel',
     button_classes: ['fa', 'fa-pie-chart'],
+    tooltip_position: 'top-left',
+    container_classes : ['button-panel--container-no-full-height'],
     position: 'bottom-right'
   }
 };
@@ -62,6 +64,9 @@ class Dashboard {
     d.widgets = [];
     d.cb = [];
     d.panel = new ButtonPanel(d.opt.panel);
+    if(d.panel.isSmallHeight()){
+      d.panel.height = '50vh';
+    }
     d.elDashboard = el('div', {class: 'dashboard'});
     d.panel.elPanelContent.appendChild(d.elDashboard);
     d.grid = new Muuri(d.elDashboard, d.opt.grid);
@@ -172,6 +177,9 @@ class Dashboard {
 
   fitPanelToWidgetsWidth() {
     const d = this;
+    if(d.panel.isSmallWidth()){
+      return;
+    }
     const m = d.opt.dashboard.marginFitWidth;
     const wmax = d.widgets.reduce((a, w) => {
       const ww = w.width;
@@ -184,6 +192,9 @@ class Dashboard {
 
   fitPanelToWidgetsHeight() {
     const d = this;
+    if(d.panel.isSmallHeight()){
+      return;
+    }
     const m = d.opt.dashboard.marginFitHeight;
     const hmax = d.widgets.reduce((a, w) => {
       const hw = w.height;

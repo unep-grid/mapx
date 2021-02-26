@@ -24,7 +24,7 @@
     },
     "mx_ui_border": {
       "visibility": "visible",
-      "color": "rgba(255,255,255,0.2)"
+      "color": "rgba(255,255,255,0.1)"
     },
     "mx_ui_background": {
       "visibility": "visible",
@@ -38,9 +38,13 @@
       "visibility": "visible",
       "color": "rgb(58,58,58)"
     },
+    "mx_ui_background_transparent": {
+      "visibility": "visible",
+      "color": "rgba(66,66,66,0.2)"
+    },
     "mx_ui_shadow": {
       "visibility": "visible",
-      "color": "rgba(28,28,28,0.2)"
+      "color": "rgba(28,28,28,0.3)"
     },
     "mx_map_background": {
       "visibility": "visible",

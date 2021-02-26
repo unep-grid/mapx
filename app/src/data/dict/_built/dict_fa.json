@@ -677,7 +677,7 @@
   {
     "id": "MAC",
     "en": "China, Macao Special Administrative Region",
-    "fa": "چین ، منطقه اداری ویژه ماکائو *"
+    "fa": "چین ، منطقه ویژه اداری ماکائو *"
   },
   {
     "id": "MAF",
@@ -1243,6 +1243,121 @@
     "id": "ZWE",
     "en": "Zimbabwe",
     "fa": "زیمبابوه"
+  },
+  {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "fa": "ابزار رسم بردار را تغییر دهید *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "fa": "با این لایه نمایی جدید ایجاد کنید و ابزارها را ببندید *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "fa": "یک نکته جدید اضافه کنید *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "fa": "یک خط جدید اضافه کنید *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "fa": "چند ضلعی جدید اضافه کنید *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "fa": "نقطه *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "fa": "خط *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "fa": "چند ضلعی *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "fa": "نام لایه *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "fa": "نوع ویژگی *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "fa": "یک لایه خالی جدید ایجاد کنید *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "fa": "لایه جدید را پیکربندی کنید *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "fa": "کمک ابزار رسم کنید *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "fa": "نمایش راهنمای ابزار طراحی *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "fa": "لطفا از ما دیدن کنید {{wiki}} برای یادگیری نحوه استفاده از ابزار طراحی *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "fa": "آیا می خواهید تغییرات را حذف کنید؟ در صورت تأیید ، این کار قابل واگرد نیست. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "fa": "تغییرات حذف شود؟ *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "fa": "لغو "
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "fa": "داده ها را تأیید و حذف کنید *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "fa": "نمایش ایجاد شد. اکنون ترک می کنید یا ویرایش را ادامه می دهید؟ *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "fa": "ویرایش ادامه دارد؟ *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "fa": "ویرایش را ادامه دهید *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "fa": "ابزار را ببندید *"
   },
   {
     "id": "en",
@@ -1815,6 +1930,16 @@
     "fa": "تنظیم مجدد تحمل *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "fa": "نقشه را به سمت چپ بچرخانید *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "fa": "نقشه را به سمت راست بچرخانید *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "fa": "ابزار رسم بردار *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "fa": "حذف"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "fa": "حذف نمای *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "fa": "آیا می خواهید این نمای را حذف کنید؟ *"
   },
   {
     "id": "btn_opt_download",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "fa": "بازگشت به کاوشگر نقشه *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "fa": "بازگشت به کاوشگر نقشه (یا کلید \"Escape\" را فشار دهید) *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2562,7 +2697,7 @@
   {
     "id": "login_info_box",
     "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
-    "fa": "اگر هنوز ثبت نام نکرده اید ، با احراز هویت موفق یک حساب جدید ایجاد می شود و ویژگی های جدید باز می شود. اگر قبلاً ثبت نام کرده اید ، با احراز هویت موفقیت آمیز امکان دسترسی به همه پروژه هایی که قبلاً در آن عضو شده اید فراهم می شود. ثبت نام کاربر در MapX به معنای رضایت برای جمع آوری و انتشار اطلاعات عملکرد اطلاعات قابل شناسایی غیر شخصی در سطح کل است. *"
+    "fa": "اگر هنوز ثبت نام نکرده اید ، با احراز هویت موفق یک حساب جدید ایجاد می شود و ویژگی های جدید باز می شود. اگر قبلاً ثبت نام کرده باشید ، با احراز هویت موفقیت آمیز امکان دسترسی به همه پروژه هایی که قبلاً در آن عضو شده اید فراهم می شود. ثبت نام کاربر در MapX به معنای رضایت برای جمع آوری و انتشار اطلاعات عملکرد اطلاعات قابل شناسایی غیر شخصی در سطح کل است. *"
   },
   {
     "id": "login_out",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "fa": "[{{vOk}} /{{vTot}} ] *"
+    "fa": "[ {{vOk}} / {{vTot}} ] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "fa": "یک ایمیل به ارسال شده است{{email}} *"
+    "fa": "یک ایمیل به ارسال شده است {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "fa": "خطایی رخ داد ، ایمیل به آن ارسال نشده است{{email}} *"
+    "fa": "خطایی رخ داد ، ایمیل به آن ارسال نشده است {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -3187,7 +3322,7 @@
   {
     "id": "source_target_editors",
     "en": "Groups with write access",
-    "fa": "گروههایی که دسترسی به نوشتن دارند *"
+    "fa": "گروههایی که دسترسی نوشتن دارند *"
   },
   {
     "id": "source_services",
@@ -3412,7 +3547,7 @@
   {
     "id": "group_project",
     "en": "Groups in project",
-    "fa": "گروههای موجود در پروژه *"
+    "fa": "گروه های موجود در پروژه *"
   },
   {
     "id": "view",
@@ -3427,7 +3562,7 @@
   {
     "id": "views_external",
     "en": "External views",
-    "fa": "دیدگاه های خارجی *"
+    "fa": "نماهای خارجی *"
   },
   {
     "id": "views_external_modal_title",
@@ -3457,7 +3592,7 @@
   {
     "id": "view_edit_custom_code_modal_title",
     "en": "Edit custom code of %s",
-    "fa": "ویرایش کد سفارشی از%s *"
+    "fa": "کد سفارشی ویرایش کنید%s *"
   },
   {
     "id": "view_edit_dashboard_modal_title",
@@ -3627,7 +3762,7 @@
   {
     "id": "view_dashboard_txt_ignore_empty_data",
     "en": "Ignore events that returns an empty array ?",
-    "fa": "از رویدادهایی که یک آرایه خالی برمی گرداند ، صرف نظر می شود؟ *"
+    "fa": "از رویدادهایی که یک آرایه خالی را برمی گرداند نادیده گرفته می شود؟ *"
   },
   {
     "id": "view_dashboard_txt_which_module",
@@ -3880,6 +4015,11 @@
     "fa": "پس زمینه محو شد *"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "fa": "پس زمینه شفاف *"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "fa": "سایه ها *"
@@ -4112,7 +4252,7 @@
   {
     "id": "project_enable_public",
     "en": "This project is public. It will be listed in the catalog of projects. All public views published in this project will be readable for everyone.",
-    "fa": "این پروژه عمومی است. در فهرست پروژه ها ذکر خواهد شد. همه دیدگاه های عمومی منتشر شده در این پروژه برای همه قابل خواندن است. *"
+    "fa": "این پروژه عمومی است. در فهرست پروژه ها ذکر خواهد شد. تمام نماهای عمومی منتشر شده در این پروژه برای همه قابل خواندن است. *"
   },
   {
     "id": "project_enable_join",
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "fa": "دعوت برای پیوستن به پروژه\"{{project}}\" *"
+    "fa": "دعوت برای پیوستن به پروژه \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "fa": "دعوت به پروژه را بپذیرید\"{{project}}\" *"
+    "fa": "پذیرش دعوتنامه به پروژه \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "fa": "برچسب{{link}} با یک لینک رمزگذاری شده جایگزین خواهد شد. *"
+    "fa": "برچسب {{link}} با یک لینک رمزگذاری شده جایگزین خواهد شد. *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "fa": "سلام!\n من می خواهم شما را به عنوان عضو پروژه دعوت کنم\"{{projectName}}\" در MapX.\n برای تأیید لطفاً روی پیوند ارائه شده کلیک کنید.\n{{link}}\n مجری طرح. *"
+    "fa": "سلام!\n من می خواهم شما را به عنوان عضو پروژه دعوت کنم \" {{projectName}} \"در MapX.\n برای تأیید لطفاً روی پیوند ارائه شده کلیک کنید.\n {{link}}\n مجری طرح. *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "fa": "سلام!\n ممنون که به ما رسیدید\n برای تأیید عضویت در پروژه{{projectName}} در MapX ، لطفاً روی پیوند زیر کلیک کنید:\n{{link}}\n با احترام،\n مجری طرح *"
+    "fa": "سلام!\n ممنون که به ما رسیدید\n برای تأیید عضویت در پروژه {{projectName}} در MapX ، لطفاً روی پیوند زیر کلیک کنید:\n {{link}}\n با احترام،\n مجری طرح *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "fa": "سلام،<br> کاربر '{{emailUser}} برای ورود به پروژه از پیوند دعوت استفاده کرد{{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاریخ انقضا:{{timeExpire}}</li></ul><br> روز خوبی داشته باشید ! *"
+    "fa": "سلام،<br> کاربر ' {{emailUser}} از پیوند دعوت برای ورود به پروژه استفاده کرد {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاریخ انقضا: {{timeExpire}}</li></ul><br> روز خوبی داشته باشید ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "fa": "پیوند دعوت در پروژه استفاده می شود{{project}} *"
+    "fa": "پیوند دعوت در پروژه استفاده می شود {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "fa": "شما به پروژه اضافه شده اید{{project}} *"
+    "fa": "شما به پروژه اضافه شده اید {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "fa": "سلام،<br> شما به پروژه اضافه شده اید{{project}} در گروه):{{roles}} .<br> روز خوبی داشته باشید ! *"
+    "fa": "سلام،<br> شما به پروژه اضافه شده اید {{project}} در گروه): {{roles}} .<br> روز خوبی داشته باشید ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "fa": "یک کاربر به پروژه اضافه شده است{{project}} . *"
+    "fa": "یک کاربر به پروژه اضافه شده است {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "fa": "یک کاربر ({{emailUser}} ) به پروژه اضافه شده است{{project}} در گروه){{roles}}<br> روز خوبی داشته باشید ! *"
+    "fa": "یک کاربر ( {{emailUser}} ) به پروژه اضافه شده است {{project}} در گروه) {{roles}}<br> روز خوبی داشته باشید ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "fa": "پروژه{{title}} ایجاد شده *"
+    "fa": "پروژه {{title}} ایجاد شده *"
   },
   {
     "id": "project_deleted",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "fa": "سلام!\\n لطفا من را به پروژه اضافه کنید{{projectName}} .\\n با احترام،\\n یک عضو آینده با انگیزه\\n *"
+    "fa": "سلام!\\n لطفا من را به پروژه اضافه کنید {{projectName}} .\\n با احترام،\\n یک عضو آینده با انگیزه\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,22 +4557,22 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "fa": "برنامه پیوستن به{{project}} پروژه *"
+    "fa": "برنامه پیوستن به {{project}} پروژه *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "fa": "<span>درخواست عضویت از</span>{{from}} <span>قبلا رسیده.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیام:{{msg}}</li><li style=\";text-align:right;direction:rtl\"> وضعیت کاربر:{{userStatus}}</li><li style=\";text-align:right;direction:rtl\"> عمل:{{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> ارتباط دادن:{{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> داده ها:<pre style=\";text-align:right;direction:rtl\">{{data}}</pre></li></ul> *"
+    "fa": "<span>درخواست عضویت از {{from}} قبلا رسیده.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> پیام:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> وضعیت کاربر:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> عمل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> ارتباط دادن: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> داده ها:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "fa": "به درخواست عضویت از طریق پاسخ دهید\"{{email}}\" برای پروژه\"{{project}}\" *"
+    "fa": "به درخواست عضویت از \"پاسخ دهید {{email}} \"برای پروژه\" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "fa": "پروژه را باز کنید\"{{project}}\" *"
+    "fa": "پروژه را باز کنید \" {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fa": "پاک کردن داده های ذخیره شده *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "fa": "تنظیم مجدد اندازه های پیش فرض پنل *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "fa": "پاک کردن داده های ذخیره شده *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "fa": "این عملیات کلیه داده های ذخیره شده توسط MapX ، از جمله کاشی های نقشه ، لایه های GeoJSON ، پیش نویس ها ، پاسخ های WMS ، خلاصه ها و اسکریپت های سفارشی را حذف می کند. این فقط بر روی مرورگر شما تأثیر می گذارد: هیچ داده ای از سمت سرور حذف نمی شود. این عملیات تقریباً آزاد می شود<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "fa": "این جلسه را ببندید و دوباره راه اندازی شود؟ *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "fa": "آیا می خواهید این جلسه را ببندید و اکنون دوباره راه اندازی کنید؟ هرگونه تغییر ذخیره نشده از بین خواهد رفت ، زیرا تمام حافظه پنهان حذف شده است. *"
   },
   {
     "id": "title_utilities",
@@ -4687,7 +4852,7 @@
   {
     "id": "attributes_alias_desc",
     "en": "Set attributes short names (alias)",
-    "fa": "تنظیم ویژگی های کوتاه (نام مستعار) *"
+    "fa": "تنظیم ویژگی های نام کوتاه (نام مستعار) *"
   },
   {
     "id": "attribute_alias_item_title",
@@ -5113,6 +5278,31 @@
     "id": "schema_story_screen_res",
     "en": "Screen resolution",
     "fa": "وضوح صفحه *"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "fa": "پیکربندی لایه پایه *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "fa": "حالت هوایی را برای این مرحله فعال کنید *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "fa": "حالت هوایی تصاویر هوایی با وضوح بالا را به نقشه اضافه می کند *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "fa": "حالت \"3D terrain\" را برای این مرحله فعال کنید *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fa": "\"زمین سه بعدی\" باعث می شود که ارتفاع در 3 بعد ظاهر شود. این در حالی است که دوربین کج است و در بزرگنمایی زیاد مفید است. با استفاده از کلید کنترل و موس خود ، پیچ و بلبرینگ را تغییر دهید. *"
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "fa": "مقدار باید دقیقاً در برابر یکی از طرح های ارائه شده تأیید شود. در حال حاضر خلاف اعتبار دارد{{0}} از طرح ها *"
+    "fa": "مقدار باید دقیقاً در برابر یکی از طرح های ارائه شده تأیید شود. در حال حاضر خلاف اعتبار دارد {{0}} از طرح ها *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "fa": "مقدار باید از نوع باشد{{0}} *"
+    "fa": "مقدار باید از نوع باشد {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "fa": "مقدار نباید از نوع باشد{{0}} *"
+    "fa": "مقدار نباید از نوع باشد {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "fa": "مقدار باید مضربی از باشد{{0}} *"
+    "fa": "مقدار باید مضربی از باشد {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "fa": "مقدار باید کمتر از باشد{{0}} *"
+    "fa": "مقدار باید کمتر از باشد {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "fa": "ارزش باید حداکثر باشد{{0}} *"
+    "fa": "ارزش باید حداکثر باشد {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "fa": "ارزش باید بیشتر از باشد{{0}} *"
+    "fa": "ارزش باید بیشتر از باشد {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "fa": "ارزش باید حداقل باشد{{0}} *"
+    "fa": "ارزش باید حداقل باشد {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "fa": "ارزش باید حداکثر باشد{{0}} شخصیت های طولانی *"
+    "fa": "ارزش باید حداکثر باشد {{0}} شخصیت های طولانی *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "fa": "ارزش باید حداقل باشد{{0}} شخصیت های طولانی *"
+    "fa": "ارزش باید حداقل باشد {{0}} شخصیت های طولانی *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "fa": "مقدار باید با الگو مطابقت داشته باشد{{0}} *"
+    "fa": "مقدار باید با الگو مطابقت داشته باشد {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "fa": "ارزش باید حداکثر داشته باشد{{0}} موارد *"
+    "fa": "ارزش باید حداکثر داشته باشد {{0}} موارد *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "fa": "ارزش باید حداقل داشته باشد{{0}} موارد *"
+    "fa": "ارزش باید حداقل داشته باشد {{0}} موارد *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "fa": "شی باید حداکثر داشته باشد{{0}} خواص *"
+    "fa": "شی باید حداکثر داشته باشد {{0}} خواص *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "fa": "شی باید حداقل داشته باشد{{0}} خواص *"
+    "fa": "شی باید حداقل داشته باشد {{0}} خواص *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "fa": "اشیا is ملک مورد نیاز را از دست می دهند \"{{0}} \" *"
+    "fa": "شیject مورد نیاز را از دست می دهد \" {{0}} \" *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "fa": "هیچ ویژگی اضافی مجاز نیست ، اما ملک{{0}} تنظیم شده است *"
+    "fa": "هیچ ویژگی اضافی مجاز نیست ، اما ملک {{0}} تنظیم شده است *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "fa": "باید دارایی داشته باشد{{0}} *"
+    "fa": "باید دارایی داشته باشد {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "fa": "آخر{{0}} *"
+    "fa": "آخر {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "fa": "حذف آخرین{{0}} *"
+    "fa": "حذف آخرین {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "fa": "اضافه کردن{{0}} *"
+    "fa": "اضافه کردن {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "fa": "حذف{{0}} *"
+    "fa": "حذف {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "fa": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">سلام،<br><br> در اینجا رمز ورود درخواست شده است:<hr>{{password}}<hr> این گذرواژه امن برای جلسه MapX فقط یک بار معتبر است و پس از 20 دقیقه باطل می شود.<br> با احترام،<br><br> تیم MapX شما.<br><br> <span style='opacity:0.5;font-size:0.8em'>اگر این درخواست را نکردید ، یکی از کاربران ما به اشتباه آدرس ایمیل شما را وارد کرده است.</span></div> *"
+    "fa": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">سلام،<br><br> در اینجا رمز ورود درخواست شده است:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> این گذرواژه امن برای جلسه MapX فقط یک بار معتبر است و پس از 20 دقیقه باطل می شود.<br> با احترام،<br><br> تیم MapX شما.<br><br> <span style=\"opacity:0.5;font-size:0.8em\">اگر این درخواست را نکردید ، یکی از کاربران ما به اشتباه آدرس ایمیل شما را وارد کرده است.</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "fa": "خوش آمدی!<br> برای اطلاعات فنی ، می توانید <a href='{{linkKnowledgeBase}}'>پایگاه دانش</a> ما را مطالعه کنید. اگر در مورد این وب سایت پیشنهادی دارید ، یا اگر می خواهید یک اشکال را گزارش دهید ، از <a href='{{linkIssue}}'>ردیاب مشکل ما دیدن کنید</a><br> با تشکر ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "fa": "خوش آمدی!<br> برای کسب اطلاعات فنی ، می توانید <a href=\"{{linkKnowledgeBase}}\">پایگاه دانش</a> ما را مطالعه کنید. اگر در مورد این وب سایت پیشنهادی دارید ، یا اگر می خواهید یک اشکال را گزارش دهید ، از <a href=\"{{linkIssue}}\">ردیاب مشکل ما دیدن کنید</a><br> با تشکر ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "fa": "حداکثر اندازه پرونده از{{size}} رسیده است شما مجاز به بارگذاری پرونده بزرگتر از آن نیستید. لطفا برای اطلاعات بیشتر با ما تماس بگیرید *"
+    "fa": "حداکثر اندازه پرونده {{size}} رسیده است شما مجاز به بارگذاری پرونده بزرگتر از آن نیستید. لطفا برای اطلاعات بیشتر با ما تماس بگیرید *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6137,7 +6327,7 @@
   {
     "id": "share_views_check_desc",
     "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "fa": "بازدید برای نمایش لیست می تواند مرتب شود: در نمای بالا لایه هایی در بالا نمایش داده می شوند. در حالت \"ثابت\" ، آن نمایش ها به طور خودکار ارائه می شوند. نقشه های داستان مستقیماً شروع می شوند. در حالت \"عادی\" ، نماها در لیست نمایش داده می شوند و اگر انتخاب خالی باشد ، تمام نماهای پروژه لیست می شوند. *"
+    "fa": "بازدید برای نمایش لیست را می توان مرتب کرد: در نمای بالا لایه هایی در بالا نمایش داده می شوند. در حالت \"ثابت\" ، آن نمایش ها به طور خودکار ارائه می شوند. نقشه های داستان مستقیماً شروع می شوند. در حالت \"عادی\" ، نماها در لیست نمایش داده می شوند و اگر انتخاب خالی باشد ، تمام نماهای پروژه لیست می شوند. *"
   },
   {
     "id": "share_views_zoom_label",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "fa": "پیوند را در یک قرار دهید<iframe> برچسب HTML برای اضافه کردن آسان MapX به وب سایت خود. *"
+    "fa": "پیوند را در یک قرار دهید<iframe> برچسب HTML برای اضافه کردن آسان MapX به وب سایت خود.</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "fa": "نقش ها در پروژه به روز می شوند{{nameProject}} *"
+    "fa": "نقش ها در پروژه به روز می شوند {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یک مدیر نقش شما را در پروژه تغییر داد{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد:</p><p style=\";text-align:right;direction:rtl\">{{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> <i style='float:right'>تیم MapX.</i> *"
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> یک مدیر نقش شما را در پروژه تغییر داد {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> <i style=\"float:right\">تیم MapX.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش ها در پروژه شما تغییر کرده است{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد:{{changes}}<p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> *"
+    "fa": "<p style=\";text-align:right;direction:rtl\">سلام،</p><p style=\";text-align:right;direction:rtl\"> نقش ها در پروژه شما تغییر کرده است {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> در اینجا لیستی از تغییرات وجود دارد: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> روز خوبی داشته باشید !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "fa": "اضافه شده به:{{group}}\n *"
+    "fa": "اضافه شده به: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "fa": "حذف شده از:{{group}}\n *"
+    "fa": "حذف شده از: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "fa": "قالب نامعتبر است{{format}} ، با استفاده از قالب پیش فرض{{formatDefault}} . *"
+    "fa": "قالب نامعتبر است {{format}} ، با استفاده از قالب پیش فرض {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "fa": "هندسه های نامعتبر برای لایه '{{title}} '({{idLayer}} ) *"
+    "fa": "هندسه های نامعتبر برای لایه ' {{title}} '( {{idLayer}} ) *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "fa": "یک ایمیل به ارسال می شود{{email}} . در پایان مراحل <a href='{{url}}'>لینک</a> بارگیری فعال خواهد شد *"
+    "fa": "یک ایمیل به ارسال می شود<a href=\"mailto:={{email}}\"> {{email}}</a> . در پایان مراحل <a href=\"{{url}}\">لینک</a> بارگیری فعال خواهد شد *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "fa": "پیام تبدیل:{{stdout}} *"
+    "fa": "پیام تبدیل: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "fa": "هشدار تبدیل:{{stderr}} *"
+    "fa": "هشدار تبدیل: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "fa": "خطای تبدیل{{error}} *"
+    "fa": "خطای تبدیل {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "fa": "تبدیل با استفاده از قالب انجام شد{{format}} . <a href={{url}}></a>{{title}} *"
+    "fa": "تبدیل با استفاده از قالب انجام شد {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "fa": "لایه{{title}} صادر شده *"
+    "fa": "لایه {{title}} صادر شده *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "fa": "داده های درخواستی با استفاده از این پیوند بارگیری می شود: <a href={{url}}></a>{{title}} *"
+    "fa": "داده های درخواستی با استفاده از این پیوند بارگیری می شوند:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "fa": "هشدار فشرده سازی:{{err}} *"
+    "fa": "هشدار فشرده سازی: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "fa": "خطای فشرده سازی:{{err}} *"
+    "fa": "خطای فشرده سازی: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "fa": "از MapX در بارگیری شد{{date}} *"
+    "fa": "از MapX در بارگیری شد {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "fa": "صفحه اصلی *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "fa": "پانل کنترل *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6453,5 +6648,10 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "fa": "در صورت عدم وجود ترجمه ، غیر از انگلیسی می تواند به صورت خودکار ترجمه شود. در چنین مواردی ، asterix نشان داده می شود. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "fa": "اطلاعیه *"
   }
 ]

@@ -82,8 +82,8 @@ export function renderUserProjectsList(o) {
   function listen() {
     detach();
     mx.listeners.addListener({
-      target: elContainer,
-      bind: elContainer,
+      target: elSearchInput,
+      bind: elSearchInput,
       type: 'keyup',
       idGroup: 'project_list',
       callback: filterList,
@@ -91,9 +91,9 @@ export function renderUserProjectsList(o) {
       debounceTime: 100
     });
     mx.listeners.addListener({
-      target: elContainer,
-      bind: elContainer,
-      type: 'click',
+      target: elProjects,
+      bind: elProjects,
+      type: ['pointerdown','keydown'],
       idGroup: 'project_list',
       callback: handleClick,
       debounce: true,
@@ -105,21 +105,26 @@ export function renderUserProjectsList(o) {
    * Handle click
    */
   function handleClick(e) {
-    var el = e.target;
-    var ds = el.dataset;
+    const el = e.target;
+    const ds = el.dataset;
+    console.log(el);
+    if(e.type === 'keydown' && e.key !== 'Enter' ){
+       return;
+    }
 
-    var actions = {
-      request_membership: function() {
+    const actions = {
+      request_membership: ()=>{
         if (ds.allow_join === 'true' && !userIsGuest) {
           h.requestProjectMembership(ds.request_membership);
         }
       },
-      load_project: function() {
+      load_project: ()=>{
         h.setProject(ds.load_project, {
           onSuccess: detach
         });
       }
     };
+
     Object.keys(actions).forEach((a) => {
       if (ds[a]) {
         actions[a]();
@@ -133,8 +138,6 @@ export function renderUserProjectsList(o) {
   function filterList(e) {
     var elTarget = e.target;
     var elRow, textSearch, textRow;
-    var toAdd = [];
-    var toRemove = [];
     var i, iL;
     if (elTarget && elTarget.dataset.project_search) {
       textSearch = cleanString(elTarget.value);
@@ -197,63 +200,55 @@ export function renderUserProjectsList(o) {
     /*
      * Create content
      */
-    var elTop, elBottom, elTitle, elDesc, elLeft, elRight, elRowBadges;
-    var elRow = el(
+    let elRowBadges;
+    let elRow = el(
       'div',
       {
         class: 'mx-list-projects-row',
+        tabindex: 0,
         dataset: {
           text: cleanString(row.description + ' ' + row.title),
           load_project: row[idCol]
         }
       },
-      (elTop = el(
+      el(
         'div',
         {
           class: 'mx-list-projects-top'
         },
-        (elTitle = el(
+        el(
           'h4',
           {
             class: 'mx-list-projects-title'
           },
-          el(
-            'a',
-            {
-              href: '#',
-              dataset :{
-                load_project: row[idCol]
-              }
-            },
-            row.title
-          )
-        )),
+          row.title
+        ),
         (elRowBadges = el('div', {
           class: 'mx-list-project-opt'
         }))
-      )),
-      (elBottom = el(
+      ),
+      el(
         'div',
         {
           class: 'mx-list-projects-bottom'
         },
-        (elLeft = el(
+        el(
           'div',
           {
             class: 'mx-list-projects-left'
           },
-          (elDesc = el(
+          el(
             'div',
             {
               class: 'mx-list-projects-desc'
             },
             row.description
-          ))
-        )),
-        (elRight = el('div', {
+          )
+        ),
+        el('div', {
           class: 'mx-list-project-right'
-        }))
-      ))
+        })
+      )
     );
 
     makeBadges({

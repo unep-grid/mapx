@@ -262,11 +262,11 @@ function buildCheckbox() {
     elLabel = el(
       'label',
       {
-        class: ['vf-checkbox-label'],
+        class: ['vf-checkbox-label','hint--bottom-right'],
         for: 'checkbox_' + cbx.id,
         dataset : {
           lang_key: cbx._tooltip_key,
-          lang_type : 'title',
+          lang_type : 'tooltip',
         }
       },
       (elLabelText = el('span', {
@@ -294,7 +294,7 @@ function buildCheckbox() {
   // tooltip text 
   if(cbx._tooltip_text instanceof Promise){
     cbx._tooltip_text.then(t => {
-      elLabel.setAttribute('title', t);
+      elLabel.setAttribute('aria-label', t);
     })
   }
 

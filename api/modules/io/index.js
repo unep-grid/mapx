@@ -1,5 +1,5 @@
 const {paramsValidator} = require('@mapx/route_validation');
-
+const enableAuth = false;
 /**
  * Handle connect/disconnect
  * @param {Object} io socket.io instance
@@ -20,8 +20,8 @@ module.exports.mwIoConnect = function(io) {
       msg: 'Connected',
       id: socket.id
     });
-
-    if (false) {
+    
+    if (enableAuth) {
       /**
        * Handle query param validation
        */

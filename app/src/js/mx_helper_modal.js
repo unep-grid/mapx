@@ -1,3 +1,5 @@
+import {el} from "@fxi/el";
+
 /**
  * Display a panel modal
  * @param {Object} o Options
@@ -9,7 +11,7 @@
  * @param {Object} o.style Style object to apply to modal window. Default : empty
  * @param {Object} o.styleContent Style object to apply to content of the modal window. Default : empty
  * @param {String|Element} o.content Body content of the modal. Default  : undefined
- * @param {Functoin} o.onClose On close callback
+ * @param {Function} o.onClose On close callback
  * @param {Array.<String>|Array.<Element>} o.buttons Array of buttons to in footer.
  *
  */
@@ -17,17 +19,12 @@ export function modal(o) {
   o = o || {};
   const h = mx.helpers;
   const id = o.id || h.makeId();
-  const idBackground = 'mx_background_for_' + id;
-  var elTop,
-    elTitle,
+
+  var elTitle,
     elCollapse,
-    elHead,
     elBody,
     elContent,
-    elFooter,
     elButtons,
-    elDialog,
-    elValidation,
     elButtonClose,
     /**
      * Get or create modal and background
@@ -95,7 +92,7 @@ export function modal(o) {
   }
 
   if (!o.removeCloseButton) {
-    elButtonClose = h.el(
+    elButtonClose = el(
       'button',
       {
         id: 'btnCloseModal',
@@ -116,7 +113,7 @@ export function modal(o) {
   }
 
   if (o.buttons) {
-    o.buttons = h.isArray(o.buttons)?o.buttons:[o.buttons];
+    o.buttons = h.isArray(o.buttons) ? o.buttons : [o.buttons];
     o.buttons.forEach(function(b) {
       if (h.isHTML(b)) {
         b = h.textToDom(b);
@@ -184,22 +181,22 @@ export function modal(o) {
    * Helpers
    */
   function buildModal(idModal, style, styleContent) {
-    const elModal = h.el(
+    const elModal = el(
       'div',
       {
         id: idModal,
         class: ['mx-modal-container', 'mx-draggable'],
         style: style
       },
-      (elTop = h.el(
+      el(
         'div',
         {
           class: ['mx-drag-handle', 'mx-modal-top']
         },
-        (elTitle = h.el('div', {
+        (elTitle = el('div', {
           class: ['mx-modal-drag-enable', 'mx-modal-title']
         })),
-        (elCollapse = h.el('i', {
+        (elCollapse = el('i', {
           class: [
             'mx-modal-top-btn-control',
             'fa',
@@ -214,37 +211,37 @@ export function modal(o) {
             }
           ]
         }))
-      )),
-      (elHead = h.el('div', {
+      ),
+      el('div', {
         class: ['mx-modal-head']
-      })),
-      (elBody = h.el(
+      }),
+      (elBody = el(
         'div',
         {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
-        (elContent = h.el('div', {
+        (elContent = el('div', {
           style: styleContent,
           class: ['mx-modal-content']
         }))
       )),
-      (elFooter = h.el(
+      el(
         'div',
         {
           class: ['mx-modal-foot']
         },
-        (elButtons = h.el('div', {
+        (elButtons = el('div', {
           class: ['btn-group', 'mx-modal-foot-btns']
         })),
-        (elDialog = h.el('div', {
+        el('div', {
           id: idModal + '_txt',
           class: ['shiny-text-output', 'mx-modal-foot-text']
-        }))
-      )),
-      (elValidation = h.el('div', {
+        })
+      ),
+      el('div', {
         id: idModal + '_validation',
         class: ['shiny-html-output', 'mx-modal-validation']
-      }))
+      })
     );
     return elModal;
   }
@@ -337,4 +334,60 @@ export function modalGetAll(opt) {
     selector = opt.ignoreSelectors.reduce((a, c) => `${a}:not(${c})`, selector);
   }
   return document.querySelectorAll(selector);
+}
+
+/**
+ * Simple async confirm modal : confirm / cancel
+ * @param {Object} opt Options
+ * @param {String|Promise|Element} opt.title Title
+ * @param {String|Promise|Element} opt.content Title
+ * @param {String|Promise|Element} opt.cancel Cancel text  
+ * @param {String|Promise|Element} opt.confirm Confirm text
+ * @return {Promise} resolve to boolean
+ */
+export function modalConfirm(opt) {
+  const h = mx.helpers;
+  let elModal;
+  return new Promise((resolve) => {
+    const elContent = el('div', opt.content);
+
+    const elBtnCancel = el(
+      'div',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: () => {
+            resolve(false);
+            elModal.close();
+          }
+        }
+      },
+      opt.cancel || h.getDictItem('btn_cancel')
+    );
+
+    const elBtnConfirm = el(
+      'div',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: () => {
+            resolve(true);
+            elModal.close();
+          }
+        }
+      },
+      opt.confirm || h.getDictItem('btn_confirm')
+    );
+
+    elModal = modal({
+      noShinyBinding: true,
+      addSelectize: false,
+      removeCloseButton: true,
+      title: opt.title,
+      content: elContent,
+      buttons: [elBtnConfirm, elBtnCancel],
+      addBackground: true,
+      onClose: resolve
+    });
+  });
 }

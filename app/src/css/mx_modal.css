@@ -50,6 +50,21 @@
   flex-direction: column;
 }
 
+@media screen and (max-width: 800px), (max-height: 700px) {
+  /* border and size are defined in mx_modifiers.css*/
+  .mx-modal-container {
+    top: 0px !important;
+    left: 0px !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    border-radius: 0px !important;
+    border: none !important;
+  }
+  .mx-modal-top-btn-control {
+    display: none;
+  }
+}
+
 .mx-modal-container.mx-modal-collapsed .mx-modal-foot,
 .mx-modal-container.mx-modal-collapsed .mx-modal-body {
   display: none;
@@ -99,6 +114,12 @@
 .mx-modal-content {
   height: 100%;
   padding: 20px;
+}
+
+@media screen and (max-width: 800px), (max-height: 700px) {
+  .mx-modal-content {
+    padding: 10px;
+  }
 }
 
 .mx-modal-foot-text {

@@ -47,12 +47,12 @@ mxSchemaViewStory <- function(view,views,language){
               # create = TRUE is HARDCODED in jsoneditor
               #
               create = FALSE
-              )
             )
           )
         )
       )
     )
+  )
 
   #
   # Map position
@@ -111,9 +111,9 @@ mxSchemaViewStory <- function(view,views,language){
       w = list(
         title=tt("map_west_max"),
         type = "number"
-        )
       )
     )
+  )
 
   #
   # Slides
@@ -139,7 +139,7 @@ mxSchemaViewStory <- function(view,views,language){
     #keyTitle = d("content",web=F),
     keyTitle = tt("content"),
     dict = config$dict
-    )
+  )
 
   #
   # Slide classes 
@@ -174,11 +174,11 @@ mxSchemaViewStory <- function(view,views,language){
             "half-top",
             "half-bottom",
             "cube-face"
-            )
           )
         )
       )
     )
+  )
 
   #
   # Slide background color
@@ -188,7 +188,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "string",
     format = "color",
     default = "#ffffff"
-    )
+  )
 
   #
   # Slide background color
@@ -199,7 +199,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "boolean",
     format = "checkbox",
     defaut = TRUE
-    )
+  )
   #
   # Slide background opacity
   #
@@ -209,7 +209,7 @@ mxSchemaViewStory <- function(view,views,language){
     minimum = 0,
     maximum = 1,
     default = 0.2
-    )
+  )
 
   #
   # Slide text color
@@ -219,7 +219,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "string",
     format = "color",
     default = "#000000"
-    )
+  )
 
   #
   # Slide text size
@@ -229,7 +229,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "number",
     min = 0,
     default = 40
-    )
+  )
 
   # 
   # Slide effect
@@ -288,18 +288,18 @@ mxSchemaViewStory <- function(view,views,language){
               "rotateY",
               "rotateZ",
               "scale"
-              )
             )
           )
         )
       )
     )
+  )
 
   slideName = list(
     propertyOrder = 0,
     type = "string",
     title = tt("schema_story_slide_name")
-    )
+  )
 
   #
   # All slide config
@@ -327,12 +327,12 @@ mxSchemaViewStory <- function(view,views,language){
         effects = slideEffects,
         scroll_enable = slideScroll,
         classes = slideClasses
-        )
+      )
       ),
     options = list(
       collapsed = TRUE
-      )          
-    )
+    )          
+  )
 
 
 
@@ -345,7 +345,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "number",
     min = 1,
     default = 1
-    )
+  )
 
   animPathMethod <- list(
     title = tt("schema_story_map_anim_traj_method"),
@@ -359,16 +359,16 @@ mxSchemaViewStory <- function(view,views,language){
         "Ease to ( follow a linear path ) ",
         "Jump to ( move directly to the position )",
         "Fit bounds ( Fit exactly the saved extend )"
-        )
       )
     )
+  )
 
   animFunction = list(
     title = tt("schema_story_map_anim_fun"),
     description = tt("schema_story_map_anim_fun_desc"),
     type =  "string",
     enum =  list("easeIn","easeOut","easeInOut")
-    )
+  )
 
   animFunctionPower = list(
     title = tt("schema_story_map_anim_fun_exp"),
@@ -377,7 +377,7 @@ mxSchemaViewStory <- function(view,views,language){
     min = 0,
     max = 10,
     default =1
-    )
+  )
 
   stepMapAnimation <- list(
     type = "object",
@@ -390,8 +390,8 @@ mxSchemaViewStory <- function(view,views,language){
       ),
     options = list(
       collapsed = TRUE
-      )
     )
+  )
 
   #
   # autoplay
@@ -402,7 +402,7 @@ mxSchemaViewStory <- function(view,views,language){
     type = "number",
     min = 1000,
     default = 3000
-    )
+  )
 
   autoplayTransition <- list(
     title = tt("schema_story_autoplay_transition"),
@@ -410,14 +410,14 @@ mxSchemaViewStory <- function(view,views,language){
     type = "number",
     min = 1,
     default = 1
-    )
+  )
 
   autoplayAnimFunction = list(
     title = tt("schema_story_map_anim_fun"),
     description = tt("schema_story_map_anim_fun_desc"),
     type =  "string",
     enum =  list("easeIn","easeOut","easeInOut")
-    )
+  )
 
   autoplayAnimFunctionPower = list(
     title = tt("schema_story_map_anim_fun_exp"),
@@ -426,7 +426,7 @@ mxSchemaViewStory <- function(view,views,language){
     min = 0,
     max = 10,
     default =1
-    )
+  )
 
   stepAutoplay <- list(
     type = "object",
@@ -439,13 +439,41 @@ mxSchemaViewStory <- function(view,views,language){
       ),
     options = list(
       collapsed = TRUE
-      )
     )
+  )
 
   stepName = list(
     type = "string",
     title = tt("schema_story_step_name")
+  )
+
+
+  settingsAddTerrain3d = list(
+    title = tt("schema_story_step_add_3d_terrain"),
+    description = tt("schema_story_step_add_3d_terrain_desc"),
+    type = "boolean",
+    format = "checkbox",
+    defaut = FALSE
+  )
+  settingsAddAerial = list(
+    title = tt("schema_story_step_add_aerial"),
+    description = tt("schema_story_step_add_aerial_desc"),
+    type = "boolean",
+    format = "checkbox",
+    defaut = FALSE
+  )
+
+  stepBaseLayer <- list(
+    type = "object",
+    title = tt("schema_story_step_base_layer"),
+    properties = list(
+      add_aerial = settingsAddAerial,
+      add_3d_terrain = settingsAddTerrain3d
+      ),
+    options = list(
+      collapsed = TRUE
     )
+  )
 
   stepConfig = list(
     type = "object",
@@ -458,11 +486,12 @@ mxSchemaViewStory <- function(view,views,language){
       name = stepName,
       slides = stepSlide,
       views = stepMapViews,
+      base_layer = stepBaseLayer,
       position = stepMapPosition,
       animation = stepMapAnimation,
       autoplay = stepAutoplay
-      )
     )
+  )
 
 
   #
@@ -489,10 +518,10 @@ mxSchemaViewStory <- function(view,views,language){
         "720p (16:9)",
         "1080p (16:9)",
         "1440p (16:9)"
-        )
+      )
       ),
     default = "mx-story-screen-720p"
-    )
+  )
 
   #
   # Final schema
@@ -509,7 +538,7 @@ mxSchemaViewStory <- function(view,views,language){
           ),
         properties = list(
           class_wrapper = settingsPageClass
-          )
+        )
         ),
       steps = list(
         type = "array", 
@@ -521,9 +550,9 @@ mxSchemaViewStory <- function(view,views,language){
         format = "confirmDelete",
         title = tt("schema_story_steps"), 
         items = stepConfig
-        )
       )
     )
+  )
 
 
   return(main)

@@ -59,7 +59,22 @@ class IconFlash {
   }
 }
 
-export {IconFlash, randomFlashIcon};
+class ButtonCircle extends IconFlash {
+  constructor(opt) {
+    super(Object.assign({},{
+      icon: 'circle-thin',
+      duration: 600,
+      scaleStart: 0.3,
+      scaleEnd: 0.6,
+      opacityStart: 0.05,
+      opacityEnd: 0,
+      x: null,
+      y: null
+    },opt));
+  }
+}
+
+export {ButtonCircle, IconFlash, randomFlashIcon};
 
 function randomFlashIcon(n) {
   var r = document.body.getBoundingClientRect();

@@ -10,7 +10,6 @@ class Translator {
   setLang(l){
     const tl = this;
     tl.opt._lang = tl._lang = l || tl.opt.langDefault ;
-    console.log("New lang set =", tl.opt.lang);
   }
 
   get(key, vars, lang) {

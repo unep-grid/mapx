@@ -86,7 +86,13 @@ export function isViewGj(item) {
 export function isViewEditable(item) {
   return isView(item) && item._edit === true;
 }
-
+/**
+ * Test if it's a MapX view is local
+ * @param {Object} item to test
+ */
+export function isViewLocal(item) {
+  return isView(item) && isArray(item._components) && item._components.indexOf('view_local') > -1;
+}
 /**
  * Test if is array of views object
  * @param {Array} arr Array to test

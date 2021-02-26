@@ -49,12 +49,18 @@ function handleViewClick(event) {
     {
       comment: 'target is the delete geojson button',
       test: el.dataset.view_action_key === 'btn_opt_delete_geojson',
-      action: function() {
-        const arg = el.dataset;
-        h.viewDelete({
-          id: idMap,
-          idView: arg.view_action_target
+      action: async () => {
+        const confirm = await h.modalConfirm({
+          title: h.getTranslationTag('delete_confirm_geojson_modal_title'),
+          content: h.getTranslationTag('delete_confirm_geojson_modal')
         });
+        if (confirm) {
+          const arg = el.dataset;
+          h.viewDelete({
+            id: idMap,
+            idView: arg.view_action_target
+          });
+        }
       }
     },
     {
@@ -120,10 +126,12 @@ function handleViewClick(event) {
           el.dataset.view_action_el_target
         );
         const elSearchWait = elSearch.querySelector('.mx-search-tool-wait');
-        const elSearchContent = elSearch.querySelector('.mx-search-tool-content');
+        const elSearchContent = elSearch.querySelector(
+          '.mx-search-tool-content'
+        );
         elSearch.classList.toggle('mx-hide');
 
-        if(!elSearch.classList.contains('mx-hide')){
+        if (!elSearch.classList.contains('mx-hide')) {
           elSearchWait.classList.remove('mx-hide');
           elSearchContent.classList.add('mx-hide');
           const viewTarget = el.dataset.view_action_target;
@@ -254,13 +262,7 @@ function handleViewClick(event) {
     if (!found && t[i].test === true) {
       found = true;
       t[i].action();
-      h.iconFlash({
-        icon: 'circle-thin',
-        duration: 600,
-        scaleStart: 0.3,
-        scaleEnd: 0.6,
-        opacityStart: 0.05,
-        opacityEnd: 0,
+      h.buttonCircle({
         x: event.clientX,
         y: event.clientY
       });

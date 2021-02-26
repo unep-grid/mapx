@@ -4,7 +4,7 @@ import {bindAll} from '../bind_class_methods';
 import localforage from 'localforage';
 import {isFunction, isObject} from '../is_test/index.js';
 import 'font-awesome/css/font-awesome.min.css';
-import './style.css';
+import './style.less';
 
 const def = {
   config: {
@@ -16,19 +16,19 @@ const def = {
   },
   ui: {
     mode: 'light',
-    logo:
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z/C/HgAGgwJ/lK3Q6wAAAABJRU5ErkJggg=='
+    logo: require('./../../png/map-x-logo.png')
   },
   panel: {
-    panelFull: true,
-    elContainer: document.body,
-    button_text: '',
-    button_lang_key: 'button_notif_center',
+    id: 'notif_center',
+    elContainer: null,
+    button_lang_key: 'nc_button',
     button_classes: ['fa', 'fa-bell'],
-    position: 'bottom-right',
-    container_style: {minWidth: '500px'},
-    title_text: 'Notifications',
-    title_lang_key: 'nc_title'
+    tooltip_position: 'top-right',
+    position: 'bottom-left',
+    container_style: {
+      minWidth: '470px',
+      minHeight: '250px'
+    }
   },
   items: {
     maxMerge: 20
@@ -38,42 +38,85 @@ const def = {
 export class NotifCenter {
   constructor(opt) {
     const nc = this;
-    nc.opt = Object.assign({}, opt);
-
-    Object.keys(def).forEach((k) => {
-      nc.opt[k] = Object.assign({}, def[k], opt[k]);
-    });
     bindAll(nc);
-    nc.init();
+    nc.init(opt);
   }
-  async init() {
-    const nc = this;
-    if (nc._init) {
-      return;
-    }
-    nc._init = true;
-    nc.store = await localforage.createInstance({
-      name: 'notif_center_' + nc.opt.config.id
-    });
-    nc.panel = new ButtonPanel(nc.opt.panel);
-    nc.build();
-    nc.setMode(nc.opt.ui.mode);
 
-    nc.panel.on('open', () => {
-      nc.setSeenAll();
-      nc.restore();
-      nc.enableRender();
-    });
-    nc.panel.on('close', () => {
+  async init(opt) {
+    try {
+      const nc = this;
+      nc.updateOptions(opt);
       nc.clear();
-      nc.disableRender();
-    });
-    if (isFunction(nc.opt.config.on.add)) {
-      nc.opt.config.on.add(nc);
+      nc.store = await nc.createStorage(); 
+     
+      /**
+      * Panel button
+      */ 
+      if(!nc.panel){
+        nc.panel = new ButtonPanel(nc.opt.panel);
+      }
+
+      nc.restore();
+
+      nc.panel.on('open', () => {
+        nc.setSeenAll();
+        nc.restore();
+        nc.enableRender();
+      });
+
+      nc.panel.on('close', () => {
+        nc.clear();
+        nc.disableRender();
+      });
+
+      /**
+      * Build panel content items
+      */ 
+      if(!nc.elMain){
+        nc.build();
+      }
+
+      /**
+      * Set theme mode ( dark light )
+      */ 
+      nc.setMode(nc.opt.ui.mode);
+      
+      /**
+      * Add callback
+      */ 
+            
+      if (isFunction(nc.opt.config.on.add)) {
+        nc.opt.config.on.add(nc);
+      }
+
+      /**
+      * Set initial unseen count
+      */ 
+      const nUnseen = await nc.getUnseenCount();
+
+      if (nUnseen > 0) {
+        nc.panel.showFlag();
+      }
+    } catch (e) {
+      console.error(e);
     }
-    let nUnseen = await nc.getUnseenCount();
-    if (nUnseen > 0) {
-      nc.panel.showFlag();
+  }
+
+  async createStorage() {
+    const nc = this;
+    return localforage.createInstance({
+      name: `notif_center_${nc.opt.config.id}`
+    });
+  }
+  updateOptions(opt) {
+    const nc = this;
+    const orig = nc.opt || def;
+    nc.opt = Object.assign({}, orig, opt);
+    Object.keys(orig).forEach((k) => {
+      nc.opt[k] = Object.assign({}, orig[k], opt[k]);
+    });
+    if (!nc.opt.panel.elContainer) {
+      throw new Error('No container found');
     }
   }
 
@@ -111,7 +154,9 @@ export class NotifCenter {
   }
   clear() {
     const nc = this;
-    nc.elContainer.innerHTML = '';
+    if (nc.elContainer) {
+      nc.elContainer.innerHTML = '';
+    }
   }
 
   clearHistory() {

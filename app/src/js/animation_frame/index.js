@@ -32,7 +32,9 @@ function onNextFrame(cb) {
  * @param {Number} frame number
  */
 function cancelFrame(id) {
-  cf(id || idDefault);
+  if(id > 0 ){
+    cf(id);
+  }
 }
 
 export {onNextFrame, cancelFrame};

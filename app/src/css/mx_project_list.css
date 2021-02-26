@@ -28,15 +28,21 @@
   padding: 10px;
   display: flex;
   flex-direction: column;
-  cursor:pointer;
+  cursor: pointer;
 }
-
+.mx-list-projects-row:focus {
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-color: -webkit-focus-ring-color;
+  outline-style: auto;
+  outline-width: 5px;
+  outline-offset: -2px;
+}
 .mx-list-projects-row * {
-  pointer-events:none;
+  pointer-events: none;
 }
 
 .mx-list-projects-row a {
-  pointer-events:auto;
+  pointer-events: auto;
 }
 
 .mx-list-projects-row:hover {
@@ -79,4 +85,3 @@
 .mx-list-projects-search:focus {
   /*border-bottom: 2px solid #ccc;*/
 }
-

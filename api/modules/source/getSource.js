@@ -89,7 +89,7 @@ async function extractFromPostgres(config, res) {
   const filename = config.filename || id;
   const ext = fileFormat[config.format].ext;
   const layername = filename;
-  const title = await getLayerTitle(id, language);
+  let title = await getLayerTitle(id, language);
   let format = config.format;
   let iso3codes = config.iso3codes;
   let isShapefile = false;

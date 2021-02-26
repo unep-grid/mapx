@@ -996,6 +996,98 @@
     "en": "Zimbabwe"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone."
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool"
+  },
+  {
     "id": "en",
     "en": "English"
   },
@@ -1452,6 +1544,14 @@
     "en": "Reset bearing"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools"
   },
@@ -1486,6 +1586,14 @@
   {
     "id": "btn_opt_delete_geojson",
     "en": "Delete"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?"
   },
   {
     "id": "btn_opt_download",
@@ -1673,7 +1781,7 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer"
+    "en": "Back to the map explorer (or press the 'Escape' key)"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -3104,6 +3212,10 @@
     "en": "Background faded out"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows"
   },
@@ -3558,6 +3670,26 @@
   {
     "id": "btn_clear_cache",
     "en": "Clear cached data"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>."
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted."
   },
   {
     "id": "title_utilities",
@@ -4090,6 +4222,26 @@
   {
     "id": "schema_story_screen_res",
     "en": "Screen resolution"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing."
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -4837,7 +4989,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -5108,6 +5260,10 @@
     "en": "Main panel"
   },
   {
+    "id": "btn_panel_controls",
+    "en": "Controls panel"
+  },
+  {
     "id": "fetch_views_diff_modal_title",
     "en": "Views not available"
   },
@@ -5162,5 +5318,9 @@
   {
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown."
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications"
   }
 ]

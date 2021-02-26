@@ -99,9 +99,9 @@ function archiverProgress(options) {
       if (options.folders) {
         options.folders.forEach((t) => {
           /**
-          * Archivers consider / as subfolder... 
-          */
-          t.name = t.name.replace(/\//gi,"");
+           * Archivers consider / as subfolder...
+           */
+          t.name = t.name.replace(/\//gi, '');
           archive.directory(t.path, t.name);
         });
       }

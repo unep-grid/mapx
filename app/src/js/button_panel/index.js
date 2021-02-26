@@ -1,22 +1,29 @@
 //import {el} from '@fxi/el';
 import {el} from './../el/src/index.js';
 import {ListenerStore} from '../listener_store/index.js';
+import {isNumeric} from '../is_test/index.js';
 import './style.less';
 
-const options = {
-  elContainer: document.body,
-  button_text: 'Toggle',
-  button_lang_key: null,
-  button_classes: ['fa', 'fa-list-ul'],
-  position: 'top-right',
-  tooltip_position: 'bottom-left',
-  container_style: {},
-  add: true
-};
+window._button_panels = [];
 
 class ButtonPanel {
   constructor(opt) {
     const panel = this;
+    const options = {
+      id: null,
+      elContainer: document.body,
+      button_text: 'Toggle',
+      button_lang_key: null,
+      button_classes: ['fa', 'fa-list-ul'],
+      position: 'top-right',
+      tooltip_position: 'bottom-left',
+      container_style: {height: '0px', width: '0px'},
+      container_classes: [],
+      item_content_classes: [],
+      panel_style: {},
+      add: true,
+      handles: ['free', 'resize']
+    };
     panel.opt = Object.assign({}, options, opt);
     panel.ls = new ListenerStore();
     panel.init();
@@ -24,24 +31,96 @@ class ButtonPanel {
 
   init() {
     const panel = this;
+    _button_panels.push(panel);
     panel.cb = [];
     panel.build();
     panel.setButtonLabel();
+    panel.setExclusiveMode(); // close other panel automatically;
     panel.show();
     panel.ls.addListener({
       target: panel.elBtnPanel,
       bind: panel,
       callback: panel.toggle,
       group: 'base',
-      type: 'click'
+      type: ['click', 'tap']
     });
+
     panel.ls.addListener({
       target: panel.elHandles,
       bind: panel,
       callback: panel.handleResize,
       group: 'base',
-      type: 'mousedown'
+      type: ['mousedown', 'touchstart']
     });
+
+    panel.ls.addListener({
+      target: window,
+      bind: panel,
+      callback: panel.setExclusiveMode,
+      group: 'base',
+      type: 'resize'
+    });
+    panel.restoreSize();
+    panel.on('resize', panel.saveSize.bind(panel));
+    panel.on('resize-auto', panel.saveSize.bind(panel));
+  }
+
+  saveSize() {
+    const panel = this;
+    const id = panel.opt.id;
+    if (panel.isSmall()) {
+      return;
+    }
+    if (id && window.localStorage) {
+      clearTimeout(panel._timeout_size);
+      panel._timeout_size = setTimeout(() => {
+        try {
+          const size = JSON.stringify({
+            w: panel.width,
+            h: panel.height
+          });
+          localStorage.setItem(`button_panel@${id}`, size);
+        } catch (e) {
+          console.warn(e);
+        }
+      }, 1000);
+    }
+  }
+
+  restoreSize() {
+    const panel = this;
+    const id = panel.opt.id;
+    if (panel.isSmall()) {
+      return;
+    }
+    if (id && window.localStorage) {
+      const size = localStorage.getItem(`button_panel@${id}`);
+      if (size) {
+        try {
+          const sizeRestore = JSON.parse(size);
+          if (sizeRestore.w) {
+            this.width = sizeRestore.w;
+          }
+          if (sizeRestore.h) {
+            this.height = sizeRestore.h;
+          }
+        } catch (e) {
+          console.warn(e);
+        }
+      }
+    }
+  }
+
+  resetSize() {
+    const panel = this;
+    const id = panel.opt.id;
+    if (id && window.localStorage) {
+      const size = localStorage.getItem(`button_panel@${id}`);
+      if (size) {
+        localStorage.removeItem(`button_panel@${id}`);
+      }
+      panel.resetStyle();
+    }
   }
 
   fire(type, data) {
@@ -93,7 +172,8 @@ class ButtonPanel {
       {
         class: [
           'button-panel--container',
-          `button-panel--${panel.opt.position}`
+          `button-panel--${panel.opt.position}`,
+          ...panel.opt.container_classes
         ],
         style: panel.opt.container_style
       },
@@ -114,7 +194,7 @@ class ButtonPanel {
           }
         },
         el('span', {
-          class: ['button-panel--btn-icon'].concat(panel.opt.button_classes)
+          class: ['button-panel--btn-icon',...panel.opt.button_classes]
         }),
         (panel.elBtnFlag = el('span', {
           class: ['button-panel--btn-flag', 'button-panel--hidden']
@@ -126,13 +206,18 @@ class ButtonPanel {
           class: [
             'button-panel--item',
             panel.opt.panelFull ? 'button-panel--item-full' : null
-          ]
+          ],
+          style: panel.opt.panel_style
         },
         /**
          * Where the content will appear
          */
         (panel.elPanelContent = el('div', {
-          class: ['button-panel--item-content', 'button-panel--shadow']
+          class: [
+            'button-panel--item-content',
+            'button-panel--shadow',
+            ...panel.opt.item_content_classes
+          ]
         })),
         /**
          * Handles / Buttons
@@ -167,14 +252,17 @@ class ButtonPanel {
     if (pos === panel.opt.position) {
       return; // no handles near the button
     }
+    const handles = panel.opt.handles;
+    const addResize = handles.indexOf('resize') > -1;
+    const addFree = handles.indexOf('free') > -1;
     const p = pos.split('-');
     const loc = p[0]; // top, bottom
     const side = p[1]; // left right
     const op = `${loc === 'top' ? 'bottom' : 'top'}-${
       side === 'left' ? 'right' : 'left'
     }`;
-    const elResizes = panel._el_resize_btns(op);
-    const elFree = panel._el_resize(pos);
+    const elResizes = addResize ? panel._el_resize_btns(op) : null;
+    const elFree = addFree ? panel._el_resize(pos) : null;
     const cl = ['button-panel--item-handles-group', `button-panel--${pos}`];
     if (loc === 'top') {
       return el(
@@ -198,10 +286,14 @@ class ButtonPanel {
   }
 
   _el_resize(pos) {
-    return el('div', {
-      class: ['button-panel--item-handle', 'fa', 'fa-circle'],
-      dataset: {action: 'resize', type: 'free', corner: pos}
-    });
+    return el(
+      'div',
+      {
+        class: ['button-panel--item-handle'],
+        dataset: {action: 'resize', type: 'free', corner: pos}
+      },
+      el('i', {class: ['button-panel--item-handle-icon', 'fa', 'fa-circle']})
+    );
   }
 
   _el_resize_btns(pos) {
@@ -210,31 +302,34 @@ class ButtonPanel {
     const elGroup = new DocumentFragment();
     if (add) {
       elGroup.appendChild(
-        el('div', {
-          class: [
-            'button-panel--item-handle',
-            'button-panel--item-handle-button'
-          ],
-          dataset: {action: 'resize', type: 'auto', id: 'half-width'}
-        })
+        el(
+          'div',
+          {
+            class: ['button-panel--item-handle'],
+            dataset: {action: 'resize', type: 'auto', id: 'half-width'}
+          },
+          el('i', {class: ['button-panel--item-handle-icon']})
+        )
       );
       elGroup.appendChild(
-        el('div', {
-          class: [
-            'button-panel--item-handle',
-            'button-panel--item-handle-button'
-          ],
-          dataset: {action: 'resize', type: 'auto', id: 'half-height'}
-        })
+        el(
+          'div',
+          {
+            class: ['button-panel--item-handle'],
+            dataset: {action: 'resize', type: 'auto', id: 'half-height'}
+          },
+          el('i', {class: ['button-panel--item-handle-icon']})
+        )
       );
       elGroup.appendChild(
-        el('div', {
-          class: [
-            'button-panel--item-handle',
-            'button-panel--item-handle-button'
-          ],
-          dataset: {action: 'resize', type: 'auto', id: 'full'}
-        })
+        el(
+          'div',
+          {
+            class: ['button-panel--item-handle'],
+            dataset: {action: 'resize', type: 'auto', id: 'full'}
+          },
+          el('i', {class: ['button-panel--item-handle-icon']})
+        )
       );
     }
     return elGroup;
@@ -301,7 +396,14 @@ class ButtonPanel {
         panel.elContainer.classList.remove('button-panel--container-resize');
       },
       group: 'resize',
-      type: ['mouseup', 'mouseleave', 'contextmenu', 'dblclik']
+      type: [
+        'mouseup',
+        'mouseleave',
+        'contextmenu',
+        'dblclik',
+        'touchend',
+        'touchcancel'
+      ]
     });
 
     panel.ls.addListener({
@@ -309,7 +411,7 @@ class ButtonPanel {
       bind: panel,
       callback: panel.resize,
       group: 'resize',
-      type: 'mousemove',
+      type: ['mousemove', 'touchmove'],
       debounce: true,
       debouceTime: 100
     });
@@ -379,31 +481,42 @@ class ButtonPanel {
   }
 
   get width() {
-    return this._width || this.elContainer.getBoundingClientRect().width;
+    return this.elContainer.getBoundingClientRect().width;
   }
   get height() {
-    return this._height || this.elContainer.getBoundingClientRect().height;
+    return this.elContainer.getBoundingClientRect().height;
   }
   set width(w) {
     const panel = this;
-    panel._width = Math.round(w / 10) * 10;
-    panel.elContainer.style.width = panel.width + 'px';
+    const isNum = isNumeric(w);
+    if (isNum) {
+      const width = Math.round(w / 10) * 10;
+      panel.elContainer.style.width = width + 'px';
+    } else {
+      panel.elContainer.style.width = w;
+    }
     setTimeout(() => {
       panel.fire('resize');
     }, 500);
   }
   set height(h) {
     const panel = this;
-    panel._height = Math.round(h / 10) * 10;
-    panel.elContainer.style.height = panel.height + 'px';
+    const isNum = isNumeric(h);
+    if (isNum) {
+      const height = Math.round(h / 10) * 10;
+      panel.elContainer.style.height = height + 'px';
+    } else {
+      panel.elContainer.style.height = h;
+    }
     setTimeout(() => {
       panel.fire('resize');
     }, 500);
   }
+
   resetStyle() {
     const panel = this;
-    panel.width = 10;
-    panel.height = 10;
+    panel.height = '';
+    panel.width = '';
     for (var s in panel.opt.container_style) {
       panel.elContainer.style[s] = panel.opt.container_style[s];
     }
@@ -441,6 +554,9 @@ class ButtonPanel {
   open(skipFire) {
     const panel = this;
     if (!panel.isActive()) {
+      if (panel.exclusiveMode) {
+        _button_panels.forEach((p) => p.close());
+      }
       panel.hideFlag();
       panel.elContainer.classList.add('active');
       panel.hintHandles();
@@ -453,7 +569,6 @@ class ButtonPanel {
     const panel = this;
     if (panel.isActive()) {
       panel.elContainer.classList.remove('active');
-      panel.resetStyle();
       if (!skipFire) {
         panel.fire('close');
       }
@@ -469,6 +584,21 @@ class ButtonPanel {
   }
   isEmpty() {
     return this.elPanelContent.childElementCount === 0;
+  }
+
+  isSmall() {
+    return this.isSmallHeight() || this.isSmallWidth();
+  }
+  isSmallHeight() {
+    return window.innerHeight < 800;
+  }
+  isSmallWidth() {
+    return window.innerWidth < 800;
+  }
+  setExclusiveMode(enable) {
+    const panel = this;
+    panel.exclusiveMode =
+      typeof enable === 'boolean' ? enable : panel.isSmall();
   }
 }
 

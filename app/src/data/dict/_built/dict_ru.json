@@ -1245,6 +1245,121 @@
     "ru": "Зимбабве"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "ru": "Переключить инструменты векторного рисования *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "ru": "Создайте новый вид с этим слоем и закройте инструменты *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "ru": "Добавить новую точку *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "ru": "Добавить новую строку *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "ru": "Добавить новый многоугольник *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "ru": "Точка *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "ru": "Линия *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "ru": "Многоугольник *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "ru": "Имя слоя *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "ru": "Тип объекта *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "ru": "Создать новый пустой слой *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "ru": "Настроить новый слой *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "ru": "Помощь инструмента рисования *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "ru": "Показать справку по инструменту рисования *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "ru": "Посетите наш {{wiki}} научиться пользоваться инструментом рисования *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "ru": "Вы хотите удалить изменения? В случае подтверждения это не может быть отменено. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "ru": "Удалить изменения? *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "ru": "Отмена *"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "ru": "Подтвердите и удалите данные *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "ru": "Просмотр создан. Выйти или продолжить редактирование? *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "ru": "Продолжить редактирование? *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "ru": "Продолжить редактирование *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "ru": "Закройте инструмент *"
+  },
+  {
     "id": "en",
     "en": "English",
     "ru": "английский *"
@@ -1815,6 +1930,16 @@
     "ru": "Сброс подшипника *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "ru": "Поверните карту влево *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "ru": "Поверните карту вправо *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "ru": "Инструменты векторного рисования *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "ru": "Удалить *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "ru": "Удаление представления *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "ru": "Вы хотите удалить это представление? *"
   },
   {
     "id": "btn_opt_download",
@@ -1982,7 +2117,7 @@
   {
     "id": "btn_opt_start_story",
     "en": "Read this story map",
-    "ru": "Прочтите эту карту-историю *"
+    "ru": "Прочтите эту карту истории *"
   },
   {
     "id": "btn_opt_transparency",
@@ -2067,7 +2202,7 @@
   {
     "id": "btn_filter_checked",
     "en": "Filter activated views",
-    "ru": "Фильтр активированных просмотров *"
+    "ru": "Фильтровать активированные просмотры *"
   },
   {
     "id": "btn_filter_show_panel",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "ru": "Вернуться к обозревателю карты *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "ru": "Вернитесь в обозреватель карты (или нажмите клавишу Escape) *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2392,7 +2527,7 @@
   {
     "id": "error_email_not_registered",
     "en": "This email does not belongs to a current MapX user. Once open, the activation link will also create automatically a new account on MapX.",
-    "ru": "Этот адрес электронной почты не принадлежит текущему пользователю MapX. После открытия ссылка для активации также автоматически создаст новую учетную запись на MapX. *"
+    "ru": "Этот адрес электронной почты не принадлежит текущему пользователю MapX. После открытия ссылка для активации автоматически создаст новую учетную запись на MapX. *"
   },
   {
     "id": "error_description_bad",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "ru": "[{{vOk}} /{{vTot}} ] *"
+    "ru": "[ {{vOk}} / {{vTot}} ] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "ru": "E-mail был отправлен{{email}} *"
+    "ru": "E-mail был отправлен {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "ru": "Произошла ошибка, письмо не было отправлено на{{email}} *"
+    "ru": "Произошла ошибка, письмо не было отправлено на {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -2967,7 +3102,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ru": "<p>Вот список передовых практик, которые помогут читателям беспрепятственно работать:</p><ol><li> Будь проще.</li><li> Лучше создавать карты рассказов, чтобы поддерживать интерес вашей аудитории.</li><li> Для удобства чтения рекомендуется не превышать двух слайдов на шаг и более двух слоев на карте за один шаг.</li><li> Изображения, видео и инфографика могут быть полезными и эффективными средствами для контекстуализации вашей истории. Однако они не должны заслонять пространственную составляющую вашего рассказа. Карты должны быть в центре.</li><li> Эффекты, переходы или трехмерные преобразования могут повлиять на читаемость вашей карты-истории на медленных устройствах, поэтому используйте их экономно.</li></ol> *"
+    "ru": "<p>Вот список передовых практик, которые помогут читателям беспрепятственно работать:</p><ol><li> Будь проще.</li><li> Лучше создавать карты рассказов, чтобы поддерживать интерес аудитории.</li><li> Для удобства чтения рекомендуется не превышать двух слайдов на шаг и более двух слоев на карте за один шаг.</li><li> Изображения, видео и инфографика могут быть полезными и эффективными средствами для контекстуализации вашей истории. Однако они не должны заслонять пространственную составляющую вашего рассказа. Карты должны быть в центре.</li><li> Эффекты, переходы или трехмерные преобразования могут повлиять на читаемость вашей карты-истории на медленных устройствах, поэтому используйте их экономно.</li></ol> *"
   },
   {
     "id": "schema_story_author",
@@ -3022,7 +3157,7 @@
   {
     "id": "schema_story_slide_layout",
     "en": "Content layout",
-    "ru": "Макет контента *"
+    "ru": "Макет содержания *"
   },
   {
     "id": "schema_story_slide_opacity_bg",
@@ -3142,7 +3277,7 @@
   {
     "id": "source_raster_tile_url",
     "en": "URL of tiles endpoint ",
-    "ru": "URL конечной точки тайлов *"
+    "ru": "URL конечной точки плиток *"
   },
   {
     "id": "source_raster_tile_url_download",
@@ -3597,7 +3732,7 @@
   {
     "id": "view_dashboard_txt_layout_horizontal",
     "en": "Horizontal",
-    "ru": "Горизонтальный *"
+    "ru": "По горизонтали *"
   },
   {
     "id": "view_dashboard_txt_height",
@@ -3878,6 +4013,11 @@
     "id": "mx_ui_background_faded",
     "en": "Background faded out",
     "ru": "Фон исчез *"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ru": "Фон прозрачный *"
   },
   {
     "id": "mx_ui_shadow",
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "ru": "Приглашение присоединиться к проекту\"{{project}}\" *"
+    "ru": "Приглашение присоединиться к проекту » {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "ru": "Принять приглашение в проект\"{{project}}\" *"
+    "ru": "Принять приглашение в проект » {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "ru": "Тег{{link}} будет заменен зашифрованной ссылкой. *"
+    "ru": "Тег {{link}} будет заменен зашифрованной ссылкой. *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "ru": "Здравствуй!\n Хочу пригласить вас в качестве участника в проект\"{{projectName}}\" в MapX.\n Пожалуйста, нажмите на предоставленную ссылку для подтверждения.\n{{link}}\n Администратор проекта. *"
+    "ru": "Здравствуй!\n Хочу пригласить вас в качестве участника проекта » {{projectName}} \"в MapX.\n Пожалуйста, нажмите на предоставленную ссылку для подтверждения.\n {{link}}\n Администратор проекта. *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "ru": "Здравствуй!\n Спасибо, что обратились к нам.\n Подтвердить свое участие в проекте{{projectName}} в MapX щелкните следующую ссылку:\n{{link}}\n С наилучшими пожеланиями,\n Администратор проекта *"
+    "ru": "Здравствуй!\n Спасибо, что обратились к нам.\n Подтвердить свое участие в проекте {{projectName}} в MapX щелкните следующую ссылку:\n {{link}}\n С наилучшими пожеланиями,\n Администратор проекта *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "ru": "Привет,<br> Пользователь '{{emailUser}} 'использовали пригласительную ссылку для входа в проект{{project}} .<ul><li> Дата окончания срока:{{timeExpire}}</li></ul><br> Хорошего дня ! *"
+    "ru": "Привет,<br> Пользователь ' {{emailUser}} 'использовали пригласительную ссылку для входа в проект {{project}} .<ul><li> Дата окончания срока: {{timeExpire}}</li></ul><br> Хорошего дня ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "ru": "Ссылка-приглашение, используемая в проекте{{project}} *"
+    "ru": "Ссылка-приглашение, используемая в проекте {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "ru": "Вас добавили в проект{{project}} *"
+    "ru": "Вас добавили в проект {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "ru": "Привет,<br> Вы добавлены в проект{{project}} в группах):{{roles}} .<br> Хорошего дня ! *"
+    "ru": "Привет,<br> Вы добавлены в проект {{project}} в группах): {{roles}} .<br> Хорошего дня ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "ru": "Пользователь добавлен в проект{{project}} . *"
+    "ru": "Пользователь добавлен в проект {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "ru": "Пользователь ({{emailUser}} ) добавлен в проект{{project}} в группах){{roles}}<br> Хорошего дня ! *"
+    "ru": "Пользователь ( {{emailUser}} ) добавлен в проект {{project}} в группах) {{roles}}<br> Хорошего дня ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "ru": "Проект{{title}} созданный *"
+    "ru": "Проект {{title}} созданный *"
   },
   {
     "id": "project_deleted",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "ru": "Здравствуй!\\n Пожалуйста, добавь меня в проект{{projectName}} .\\n С наилучшими пожеланиями,\\n Мотивированный будущий участник\\n *"
+    "ru": "Здравствуй!\\n Пожалуйста, добавь меня в проект {{projectName}} .\\n С наилучшими пожеланиями,\\n Мотивированный будущий участник\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,27 +4557,27 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "ru": "Заявление на вступление в{{project}} проект *"
+    "ru": "Заявление на вступление в {{project}} проект *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "ru": "<span>Запрос на членство от</span>{{from}} <span>был получен.</span><ul><li> Сообщение:{{msg}}</li><li> Статус пользователя:{{userStatus}}</li><li> Действие:{{actionUrl}}</li><li> Связь:{{projectUrl}}</li><li> Данные:<pre>{{data}}</pre></li></ul> *"
+    "ru": "<span>Запрос на членство от {{from}} был получен.</span><ul><li> Сообщение:<b> {{msg}}</b></li><li> Статус пользователя:<b> {{userStatus}}</b></li><li> Действие: {{actionUrl}}</li><li> Связь: {{projectUrl}}</li><li> Данные:<pre> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "ru": "Ответьте на запрос о членстве от\"{{email}}\" для проекта\"{{project}}\" *"
+    "ru": "Ответьте на запрос о членстве от \" {{email}} \"для проекта\" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "ru": "Открыть проект\"{{project}}\" *"
+    "ru": "Откройте проект » {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
     "en": "Your request has been sent to the project administrator, you will receive a confirmation email in the coming days. Check your inbox for an email from the MapX bot and click the link to access the project!",
-    "ru": "Ваш запрос был отправлен администратору проекта, вы получите письмо с подтверждением в ближайшие дни. Проверьте свой почтовый ящик на наличие электронного письма от бота MapX и щелкните ссылку, чтобы получить доступ к проекту! *"
+    "ru": "Ваш запрос отправлен администратору проекта, вы получите письмо с подтверждением в ближайшие дни. Проверьте свой почтовый ящик на наличие электронного письма от бота MapX и щелкните ссылку, чтобы получить доступ к проекту! *"
   },
   {
     "id": "update_app_msg",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ru": "Очистить кешированные данные *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "ru": "Сбросить размеры панели по умолчанию *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "ru": "Очистить кешированные данные *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "ru": "Эта операция удалит все кэшированные данные, установленные MapX, включая фрагменты карты, слои GeoJSON, черновики, ответы WMS, сводки и пользовательские сценарии. Это повлияет только на ваш браузер: никакие данные не будут удалены на стороне сервера. Эта операция высвободит около<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "ru": "Закрыть этот сеанс и перезапустить? *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "ru": "Вы хотите закрыть этот сеанс и перезапустить сейчас? Любые несохраненные изменения будут потеряны, потому что весь кеш был удален. *"
   },
   {
     "id": "title_utilities",
@@ -4512,7 +4677,7 @@
   {
     "id": "validate_meta_invalid_title",
     "en": "Invalid title",
-    "ru": "Неверное название *"
+    "ru": "Недействительный заголовок *"
   },
   {
     "id": "validate_meta_keyword",
@@ -4917,7 +5082,7 @@
   {
     "id": "origin_source_is_full_request_title",
     "en": "The url contain a request to retrieve the data automatically",
-    "ru": "URL-адрес содержит запрос на автоматическое получение данных *"
+    "ru": "URL-адрес содержит запрос на автоматическое получение данных. *"
   },
   {
     "id": "origin_sources_desc",
@@ -5115,6 +5280,31 @@
     "ru": "Разрешение экрана *"
   },
   {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ru": "Конфигурация базового слоя *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ru": "Включите воздушный режим для этого шага *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ru": "Аэрофотоснимок добавляет на карту аэрофотоснимки высокого разрешения. *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ru": "Включите режим 3D Terrain для этого шага *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ru": "«Трехмерный ландшафт» будет отображать высоту в трехмерном пространстве. Это полезно при большом увеличении, когда камера наклонена. С помощью клавиши управления и мыши измените угол наклона и азимут. *"
+  },
+  {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
     "ru": "Базовое разрешение страницы во время карты-истории. Он автоматически масштабируется по размеру экрана и сохраняет форматирование содержимого. *"
@@ -5182,7 +5372,7 @@
   {
     "id": "spatial_srs_code",
     "en": "Code of the SRS",
-    "ru": "Кодекс СГД *"
+    "ru": "Код СГД *"
   },
   {
     "id": "spatial_srs_desc",
@@ -5402,7 +5592,7 @@
   {
     "id": "meta_last_editor_id",
     "en": "Editor id",
-    "ru": "ID редактора *"
+    "ru": "Идентификатор редактора *"
   },
   {
     "id": "meta_all_editor_id",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ru": "Значение должно соответствовать ровно одной из предоставленных схем. В настоящее время он проверяется на соответствие{{0}} схем. *"
+    "ru": "Значение должно соответствовать ровно одной из предоставленных схем. В настоящее время он проверяется на соответствие {{0}} схем. *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "ru": "Значение должно быть типа{{0}} *"
+    "ru": "Значение должно быть типа {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "ru": "Значение не должно быть типа{{0}} *"
+    "ru": "Значение не должно быть типа {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "ru": "Значение должно быть кратным{{0}} *"
+    "ru": "Значение должно быть кратным {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "ru": "Значение должно быть меньше{{0}} *"
+    "ru": "Значение должно быть меньше {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "ru": "Значение должно быть не более{{0}} *"
+    "ru": "Значение должно быть не более {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "ru": "Значение должно быть больше, чем{{0}} *"
+    "ru": "Значение должно быть больше, чем {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "ru": "Значение должно быть не менее{{0}} *"
+    "ru": "Значение должно быть не менее {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "ru": "Значение должно быть не более{{0}} длинные символы *"
+    "ru": "Значение должно быть не более {{0}} длинные символы *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "ru": "Значение должно быть не менее{{0}} длинные символы *"
+    "ru": "Значение должно быть не менее {{0}} длинные символы *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "ru": "Значение должно соответствовать шаблону{{0}} *"
+    "ru": "Значение должно соответствовать шаблону {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "ru": "Значение должно иметь не более{{0}} Предметы *"
+    "ru": "Значение должно иметь не более {{0}} Предметы *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "ru": "Значение должно иметь не менее{{0}} Предметы *"
+    "ru": "Значение должно иметь не менее {{0}} Предметы *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "ru": "Объект должен иметь не более{{0}} характеристики *"
+    "ru": "Объект должен иметь не более {{0}} характеристики *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "ru": "Объект должен иметь не менее{{0}} характеристики *"
+    "ru": "Объект должен иметь не менее {{0}} характеристики *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "ru": "У объекта отсутствует требуемое свойство '{{0}} ' *"
+    "ru": "У объекта отсутствует требуемое свойство ' {{0}} ' *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "ru": "Дополнительные свойства не допускаются, кроме собственности{{0}} установлен *"
+    "ru": "Дополнительные свойства не допускаются, кроме собственности {{0}} установлен *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "ru": "Должен иметь собственность{{0}} *"
+    "ru": "Должен иметь собственность {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "ru": "Последний{{0}} *"
+    "ru": "Последний {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "ru": "Удалить последнее{{0}} *"
+    "ru": "Удалить последнее {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "ru": "Добавлять{{0}} *"
+    "ru": "Добавлять {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "ru": "Удалить{{0}} *"
+    "ru": "Удалить {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "ru": "<div style='max-width:400px;padding:20px'>Привет,<br><br> Вот запрошенный пароль:<hr>{{password}}<hr> Этот безопасный пароль действителен только один раз для текущего сеанса MapX и будет аннулирован через 20 минут.<br> С наилучшими пожеланиями,<br><br> Ваша команда MapX.<br><br> <span style='opacity:0.5;font-size:0.8em'>Если вы не отправляли этот запрос, возможно, один из наших пользователей по ошибке ввел ваш адрес электронной почты.</span></div> *"
+    "ru": "<div style=\"max-width:400px;padding:20px\">Привет,<br><br> Вот запрошенный пароль:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> Этот безопасный пароль действителен только один раз для текущего сеанса MapX и будет аннулирован через 20 минут.<br> С наилучшими пожеланиями,<br><br> Ваша команда MapX.<br><br> <span style=\"opacity:0.5;font-size:0.8em\">Если вы не отправляли этот запрос, возможно, один из наших пользователей по ошибке ввел ваш адрес электронной почты.</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href='{{linkKnowledgeBase}}'>базу знаний</a> . Если у вас есть предложения по поводу этого веб-сайта или вы хотите сообщить об ошибке, посетите нашу систему <a href='{{linkIssue}}'>отслеживания проблем.</a><br> Спасибо ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "ru": "Добро пожаловать!<br> Для получения технической информации вы можете прочитать нашу <a href=\"{{linkKnowledgeBase}}\">базу знаний</a> . Если у вас есть предложения по поводу этого веб-сайта или вы хотите сообщить об ошибке, посетите нашу систему <a href=\"{{linkIssue}}\">отслеживания проблем.</a><br> Спасибо ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "ru": "Максимальный размер файла{{size}} Был достигнут. Вам не разрешено загружать файл большего размера. Пожалуйста, свяжитесь с нами для получения дополнительной информации. *"
+    "ru": "Максимальный размер файла {{size}} Был достигнут. Вам не разрешено загружать файл большего размера. Пожалуйста, свяжитесь с нами для получения дополнительной информации. *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6127,7 +6317,7 @@
   {
     "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной и быстрой версии MapX с ограниченными функциями. Используя этот метод, любой, у кого есть общая ссылка, сможет прочитать выбранное представление без необходимости регистрироваться в MapX. Если вы добавите карту-историю, она запустится автоматически, все остальные виды будут удалены. *"
+    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной и более быстрой версии MapX с ограниченными функциями. Используя этот метод, любой, у кого есть общая ссылка, сможет прочитать выбранное представление без необходимости регистрироваться в MapX. Если вы добавите карту-историю, она запустится автоматически, все остальные виды будут удалены. *"
   },
   {
     "id": "share_views_check_label",
@@ -6182,7 +6372,7 @@
   {
     "id": "share_collections_check_desc",
     "en": "Add groups of views by using collections",
-    "ru": "Добавляйте группы представлений с помощью коллекций *"
+    "ru": "Добавление групп представлений с помощью коллекций *"
   },
   {
     "id": "share_map_pos_check_label",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "ru": "Вставьте ссылку в<iframe> HTML-тег, чтобы легко добавить MapX на ваш сайт. *"
+    "ru": "Вставьте ссылку в<iframe> HTML-тег, чтобы легко добавить MapX на ваш сайт.</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "ru": "Роли обновлены в проекте{{nameProject}} *"
+    "ru": "Роли обновлены в проекте {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ru": "<p>Привет,</p><p> Администратор поменял ваши роли в проекте{{projectLink}} .</p><p> Вот список изменений:</p><p>{{txtRoleChange}}</p><p> Хорошего дня !</p> <i style='float:right'>Команда MapX.</i> *"
+    "ru": "<p>Привет,</p><p> Администратор поменял ваши роли в проекте {{projectLink}} .</p><p> Вот список изменений:</p><p> {{txtRoleChange}}</p><p> Хорошего дня !</p> <i style=\"float:right\">Команда MapX.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ru": "<p>Привет,</p><p> Роли в вашем проекте изменились{{projectLink}} .</p><p> Вот список изменений:{{changes}}<p> Хорошего дня !</p> *"
+    "ru": "<p>Привет,</p><p> Роли в вашем проекте изменились {{projectLink}} .</p><p> Вот список изменений: {{changes}}</p><p> Хорошего дня !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "ru": "Добавлено в:{{group}}\n *"
+    "ru": "Добавлено в: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "ru": "удалено из:{{group}}\n *"
+    "ru": "удалено из: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ru": "Недопустимый формат{{format}} , используя формат по умолчанию{{formatDefault}} . *"
+    "ru": "Недопустимый формат {{format}} , используя формат по умолчанию {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "ru": "Для слоя \"найдены недопустимые геометрии\"{{title}} '({{idLayer}} ). *"
+    "ru": "Для слоя \"найдены недопустимые геометрии\" {{title}} '( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ru": "Электронное письмо будет отправлено на адрес{{email}} . <a href='{{url}}'>Ссылка для</a> скачивания будет активирована в конце процесса. *"
+    "ru": "Электронное письмо будет отправлено на адрес<a href=\"mailto:={{email}}\"> {{email}}</a> . <a href=\"{{url}}\">Ссылка для</a> скачивания будет активирована в конце процесса. *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "ru": "Сообщение преобразования:{{stdout}} *"
+    "ru": "Сообщение преобразования: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "ru": "Предупреждение о преобразовании:{{stderr}} *"
+    "ru": "Предупреждение преобразования: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "ru": "Ошибка преобразования.{{error}} *"
+    "ru": "Ошибка преобразования. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "ru": "Преобразование выполнено с использованием формата{{format}} . <a href={{url}}></a>{{title}} *"
+    "ru": "Преобразование выполнено с использованием формата {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "ru": "Слой{{title}} экспортированный *"
+    "ru": "Слой {{title}} экспортируется *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ru": "Запрошенные данные готовы к загрузке по этой ссылке: <a href={{url}}></a>{{title}} *"
+    "ru": "Запрошенные данные готовы к загрузке по этой ссылке:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "ru": "Предупреждение о сжатии:{{err}} *"
+    "ru": "Предупреждение о сжатии: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "ru": "Ошибка сжатия:{{err}} *"
+    "ru": "Ошибка сжатия: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "ru": "Загружено с MapX на{{date}} *"
+    "ru": "Загружено с MapX на {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "ru": "Главная панель *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "ru": "Панель управления *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6402,7 +6597,7 @@
   {
     "id": "gj_desc",
     "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
-    "ru": "Виды с векторным слоем, хранящимся в вашем интернет-браузере в формате GeoJSON. *"
+    "ru": "Виды с векторным слоем, сохраненным в вашем интернет-браузере в формате GeoJSON. *"
   },
   {
     "id": "rt_desc",
@@ -6437,7 +6632,7 @@
   {
     "id": "custom_code_desc",
     "en": "Views featuring a customized script. The result could be anything. e.g. a time slider on raster data or a prototype that uses external data.",
-    "ru": "Просмотры с индивидуальным сценарием. Результат мог быть любым. например, ползунок времени на растровых данных или прототип, использующий внешние данные. *"
+    "ru": "Просмотры с индивидуальным сценарием. Результат может быть любым. например, ползунок времени на растровых данных или прототип, использующий внешние данные. *"
   },
   {
     "id": "view_editable_desc",
@@ -6453,5 +6648,10 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "ru": "Если перевод отсутствует, возможен автоматический перевод на любой другой язык, кроме английского. В таких случаях будет отображаться звездочка. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "ru": "Уведомления *"
   }
 ]

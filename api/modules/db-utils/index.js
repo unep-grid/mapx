@@ -247,13 +247,16 @@ async function getSourceLastTimestamp(idSource) {
 async function getLayerTitle(idLayer, language) {
   language = language || 'en';
   var queryAttributes = {
-    text: `SELECT data#>>'{"meta","text","title","${language}"}' AS title 
+    text: `SELECT 
+    data#>>'{"meta","text","title","${language}"}' AS title_lang,
+    data#>>'{"meta","text","title","en"}' AS title_en
     FROM mx_sources
     WHERE id=$1`,
     values: [idLayer]
   };
   const res = await pgRead.query(queryAttributes);
-  return res.rows[0].title;
+  const titles = res.rows[0];
+  return titles.title_lang || titles.title_en || idLayer;
 }
 
 /**

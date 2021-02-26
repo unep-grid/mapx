@@ -315,9 +315,11 @@ export async function viewsListRenderNew(o) {
     const li = this;
     const isGroup = li.isGroup(el);
     const isItem = !isGroup && li.isItem(el);
+
     if (isGroup) {
       return el.querySelector('.li-group-header');
     }
+
     if (isItem) {
       return el.querySelector('label');
     }

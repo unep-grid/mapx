@@ -1245,6 +1245,121 @@
     "ar": "زمبابوي"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "ar": "قم بتبديل أدوات رسم المتجه *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "ar": "قم بإنشاء عرض جديد بهذه الطبقة وأغلق الأدوات *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "ar": "أضف نقطة جديدة *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "ar": "أضف سطرًا جديدًا *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "ar": "أضف مضلعًا جديدًا *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "ar": "نقطة *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "ar": "خط *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "ar": "مضلع *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "ar": "اسم الطبقة *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "ar": "نوع الميزة *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "ar": "إنشاء طبقة فارغة جديدة *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "ar": "تكوين الطبقة الجديدة *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "ar": "مساعدة أداة الرسم *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "ar": "إظهار تعليمات أداة الرسم *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "ar": "يرجى زيارة موقعنا {{wiki}} لمعرفة كيفية استخدام أداة الرسم *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "ar": "هل تريد حذف التغييرات؟ إذا تم التأكيد ، لا يمكن التراجع عن هذا. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "ar": "حذف التغييرات؟ *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "ar": "يلغي *"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "ar": "أكد وحذف البيانات *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "ar": "تم إنشاء العرض. إنهاء الآن أو متابعة التحرير؟ *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "ar": "الاستمرار في التعديل ؟ *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "ar": "الاستمرار في التعديل *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "ar": "أغلق الأداة *"
+  },
+  {
     "id": "en",
     "en": "English",
     "ar": "الإنجليزية *"
@@ -1512,7 +1627,7 @@
   {
     "id": "epsg_set_projection_export",
     "en": "Set the export projection, using a code from the EPSG format",
-    "ar": "قم بتعيين إسقاط التصدير ، باستخدام رمز من تنسيق EPSG *"
+    "ar": "اضبط إسقاط التصدير ، باستخدام كود من تنسيق EPSG *"
   },
   {
     "id": "epsg_set_projection_import",
@@ -1815,6 +1930,16 @@
     "ar": "إعادة تعيين المحمل *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "ar": "تدوير الخريطة إلى اليسار *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "ar": "تدوير الخريطة إلى اليمين *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "ar": "أدوات رسم المتجهات *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "ar": "حذف *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "ar": "حذف العرض *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "ar": "هل ترغب في حذف هذا العرض؟ *"
   },
   {
     "id": "btn_opt_download",
@@ -1912,7 +2047,7 @@
   {
     "id": "schema_style_reverse_order_desc",
     "en": "If checked, the layer stack will be reversed : the top rule will draw a layer at the bottom of the stack",
-    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل المجموعة *"
+    "ar": "إذا تم تحديده ، سيتم عكس مكدس الطبقة: سترسم القاعدة العليا طبقة في أسفل الحزمة *"
   },
   {
     "id": "schema_style_show_symbol_label",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "ar": "العودة إلى مستكشف الخريطة *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "ar": "العودة إلى مستكشف الخريطة (أو اضغط على مفتاح \"Escape\") *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "ar": "[{{vOk}} /{{vTot}} ] *"
+    "ar": "[ {{vOk}} / {{vTot}} ] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "ar": "تم إرسال رسالة إلكترونية إلى{{email}} *"
+    "ar": "تم إرسال رسالة إلكترونية إلى {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "ar": "حدث خطأ ، لم يتم إرسال البريد الإلكتروني إلى{{email}} *"
+    "ar": "حدث خطأ ، لم يتم إرسال البريد الإلكتروني إلى {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -2967,7 +3102,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">فيما يلي قائمة بالممارسات الجيدة لتوفير تجربة سلسة للقراء:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> أبقيها بسيطة.</li><li style=\";text-align:right;direction:rtl\"> من الأفضل إنشاء خرائط قصص قصيرة للحفاظ على اهتمام جمهورك.</li><li style=\";text-align:right;direction:rtl\"> لسهولة القراءة ، يوصى بعدم تجاوز شريحتين لكل خطوة وأكثر من طبقتين على الخريطة في نفس الخطوة.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تكون الصور ومقاطع الفيديو والرسوم البيانية وسائط مفيدة ومؤثرة لوضع قصتك في سياقها. ومع ذلك ، لا ينبغي أن تلقي بظلالها على المكون المكاني لقصتك. يجب أن تكون الخرائط في مركزها.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تؤثر التأثيرات أو التحولات أو التحويلات ثلاثية الأبعاد على قابلية قراءة خريطة قصتك على الأجهزة البطيئة ، استخدمها باعتدال</li></ol> *"
+    "ar": "<p style=\";text-align:right;direction:rtl\">فيما يلي قائمة بالممارسات الجيدة لتوفير تجربة سلسة للقراء:</p><ol style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> أبقيها بسيطة.</li><li style=\";text-align:right;direction:rtl\"> من الأفضل إنشاء خرائط قصص قصيرة للحفاظ على اهتمام جمهورك.</li><li style=\";text-align:right;direction:rtl\"> لسهولة القراءة ، يوصى بعدم تجاوز شريحتين لكل خطوة وأكثر من طبقتين على الخريطة في نفس الخطوة.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تكون الصور ومقاطع الفيديو والرسوم البيانية وسائط مفيدة ومؤثرة لوضع قصتك في سياقها. ومع ذلك ، لا ينبغي أن تلقي بظلالها على المكون المكاني لقصتك. يجب أن تكون الخرائط في مركزها.</li><li style=\";text-align:right;direction:rtl\"> يمكن أن تؤثر التأثيرات أو التحولات أو التحويلات ثلاثية الأبعاد على قابلية قراءة خريطة قصتك على الأجهزة البطيئة ، فاستخدمها باعتدال.</li></ol> *"
   },
   {
     "id": "schema_story_author",
@@ -3880,6 +4015,11 @@
     "ar": "تلاشت الخلفية *"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ar": "خلفية شفافة *"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "ar": "الظلال *"
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "ar": "دعوة للانضمام إلى المشروع\"{{project}}\" *"
+    "ar": "دعوة للانضمام الى المشروع \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "ar": "قبول الدعوة للمشروع\"{{project}}\" *"
+    "ar": "قبول الدعوة إلى المشروع \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "ar": "الوسم{{link}} سيتم استبداله برابط مشفر. *"
+    "ar": "الوسم {{link}} سيتم استبداله برابط مشفر. *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "ar": "مرحبا!\n أود أن أدعوكم كعضو في المشروع\"{{projectName}}\" في MapX.\n الرجاء الضغط على الرابط المقدم للتأكيد.\n{{link}}\n مدير المشروع. *"
+    "ar": "مرحبا!\n أود دعوتك كعضو في المشروع \" {{projectName}} \"في MapX.\n الرجاء الضغط على الرابط المقدم للتأكيد.\n {{link}}\n مدير المشروع. *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "ar": "مرحبا!\n شكرا لتواصلك معنا.\n لتأكيد عضويتك في المشروع{{projectName}} في MapX ، الرجاء الضغط على الرابط التالي:\n{{link}}\n تحياتي الحارة،\n مدير المشروع *"
+    "ar": "مرحبا!\n شكرا لتواصلك معنا.\n لتأكيد عضويتك في المشروع {{projectName}} في MapX ، الرجاء الضغط على الرابط التالي:\n {{link}}\n تحياتي الحارة،\n مدير المشروع *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "ar": "مرحبا،<br> مستخدم '{{emailUser}} \"رابط دعوة للدخول إلى المشروع{{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاريخ إنتهاء الصلاحية:{{timeExpire}}</li></ul><br> طاب يومك ! *"
+    "ar": "مرحبا،<br> مستخدم ' {{emailUser}} \"رابط دعوة للدخول إلى المشروع {{project}} .<ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> تاريخ إنتهاء الصلاحية: {{timeExpire}}</li></ul><br> طاب يومك ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "ar": "رابط الدعوة المستخدم في المشروع{{project}} *"
+    "ar": "رابط الدعوة المستخدم في المشروع {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "ar": "لقد تمت إضافتك إلى المشروع{{project}} *"
+    "ar": "لقد تمت إضافتك إلى المشروع {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "ar": "مرحبا،<br> لقد تمت إضافتك إلى المشروع{{project}} في مجموعات):{{roles}} .<br> طاب يومك ! *"
+    "ar": "مرحبا،<br> لقد تمت إضافتك إلى المشروع {{project}} في مجموعات): {{roles}} .<br> طاب يومك ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "ar": "تمت إضافة مستخدم إلى المشروع{{project}} . *"
+    "ar": "تمت إضافة مستخدم إلى المشروع {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "ar": "مستخدم ({{emailUser}} ) إلى المشروع{{project}} في مجموعات){{roles}}<br> طاب يومك ! *"
+    "ar": "مستخدم ( {{emailUser}} ) إلى المشروع {{project}} في مجموعات) {{roles}}<br> طاب يومك ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "ar": "المشروع{{title}} خلقت *"
+    "ar": "المشروع {{title}} خلقت *"
   },
   {
     "id": "project_deleted",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "ar": "مرحبا!\\n من فضلك أضفني إلى المشروع{{projectName}} .\\n تحياتي الحارة،\\n عضو مستقبلي متحمس\\n *"
+    "ar": "مرحبا!\\n من فضلك أضفني إلى المشروع {{projectName}} .\\n تحياتي الحارة،\\n عضو مستقبلي متحمس\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,22 +4557,22 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "ar": "تطبيق للانضمام إلى{{project}} المشروع *"
+    "ar": "تطبيق للانضمام إلى {{project}} المشروع *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "ar": "<span>طلب عضوية من</span>{{from}} <span>تم استلام.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> رسالة:{{msg}}</li><li style=\";text-align:right;direction:rtl\"> حالة المستخدم:{{userStatus}}</li><li style=\";text-align:right;direction:rtl\"> فعل:{{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> نهاية لهذه الغاية:{{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> البيانات:<pre style=\";text-align:right;direction:rtl\">{{data}}</pre></li></ul> *"
+    "ar": "<span>طلب عضوية من {{from}} تم استلام.</span><ul style=\";text-align:right;direction:rtl\"><li style=\";text-align:right;direction:rtl\"> رسالة:<b> {{msg}}</b></li><li style=\";text-align:right;direction:rtl\"> حالة المستخدم:<b> {{userStatus}}</b></li><li style=\";text-align:right;direction:rtl\"> فعل: {{actionUrl}}</li><li style=\";text-align:right;direction:rtl\"> نهاية لهذه الغاية: {{projectUrl}}</li><li style=\";text-align:right;direction:rtl\"> البيانات:<pre style=\";text-align:right;direction:rtl\"> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "ar": "الرد على طلب العضوية من\"{{email}}\" للمشروع\"{{project}}\" *"
+    "ar": "الاستجابة لطلب العضوية من \" {{email}} \"للمشروع\" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "ar": "افتح المشروع\"{{project}}\" *"
+    "ar": "افتح المشروع \" {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "ar": "مسح البيانات المخزنة مؤقتًا *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "ar": "إعادة تعيين أحجام اللوحات الافتراضية *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "ar": "مسح البيانات المخزنة مؤقتًا *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "ar": "ستزيل هذه العملية جميع البيانات المخزنة مؤقتًا التي تم تعيينها بواسطة MapX ، بما في ذلك مربعات الخرائط وطبقات GeoJSON والمسودات واستجابات WMS والملخصات والبرامج النصية المخصصة. سيؤثر هذا فقط على متصفحك: لن تتم إزالة أي بيانات من جانب الخادم. هذه العملية سوف تحرر حوالي<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "ar": "أغلق هذه الجلسة وأعد التشغيل؟ *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "ar": "هل تريد إغلاق هذه الجلسة وإعادة التشغيل الآن؟ ستفقد أي تغييرات غير محفوظة ، لأنه تم حذف كل ذاكرة التخزين المؤقت. *"
   },
   {
     "id": "title_utilities",
@@ -5115,6 +5280,31 @@
     "ar": "دقة الشاشة *"
   },
   {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "ar": "تكوين الطبقة الأساسية *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "ar": "قم بتمكين الوضع الجوي لهذه الخطوة *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "ar": "يضيف الوضع الجوي صورًا جوية عالية الدقة إلى الخريطة *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "ar": "قم بتمكين وضع \"التضاريس ثلاثية الأبعاد\" لهذه الخطوة *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "ar": "ستجعل \"التضاريس ثلاثية الأبعاد\" الارتفاع يظهر بثلاثة أبعاد. هذا مفيد عند التكبير العالي ، مع إمالة الكاميرا. استخدم مفتاح التحكم والماوس لتعديل درجة الصوت والاتجاه. *"
+  },
+  {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
     "ar": "الدقة الأساسية للصفحة أثناء خريطة القصة. سيتم تحجيمه تلقائيًا ليلائم الشاشة ويحافظ على تنسيق المحتوى. *"
@@ -5572,7 +5762,7 @@
   {
     "id": "meta_view_readers",
     "en": "Groups with reading access",
-    "ar": "المجموعات التي لها حق القراءة *"
+    "ar": "المجموعات التي لها حق الوصول للقراءة *"
   },
   {
     "id": "meta_view_type",
@@ -5817,7 +6007,7 @@
   {
     "id": "api_upload_done_wait_db",
     "en": "Upload done. Importation in DB, please wait, this could take multiple minutes for complex layers. Please be patient.",
-    "ar": "تم التحميل. الاستيراد في قاعدة البيانات ، يرجى الانتظار ، فقد يستغرق هذا عدة دقائق للطبقات المعقدة. يرجى التحلي بالصبر. *"
+    "ar": "تم التحميل. الاستيراد في قاعدة البيانات ، يرجى الانتظار ، فقد يستغرق ذلك عدة دقائق للطبقات المعقدة. يرجى التحلي بالصبر. *"
   },
   {
     "id": "api_download_btn",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "ar": "يجب التحقق من القيمة مقابل أحد المخططات المتوفرة بالضبط. هو يتحقق حاليا ضد{{0}} من المخططات. *"
+    "ar": "يجب التحقق من القيمة مقابل أحد المخططات المتوفرة بالضبط. هو يتحقق حاليا ضد {{0}} من المخططات. *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "ar": "يجب أن تكون القيمة من النوع{{0}} *"
+    "ar": "يجب أن تكون القيمة من النوع {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "ar": "يجب ألا تكون القيمة من النوع{{0}} *"
+    "ar": "يجب ألا تكون القيمة من النوع {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "ar": "يجب أن تكون القيمة من مضاعفات{{0}} *"
+    "ar": "يجب أن تكون القيمة من مضاعفات {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "ar": "يجب أن تكون القيمة أقل من{{0}} *"
+    "ar": "يجب أن تكون القيمة أقل من {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "ar": "يجب أن تكون القيمة على الأكثر{{0}} *"
+    "ar": "يجب أن تكون القيمة على الأكثر {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "ar": "يجب أن تكون القيمة أكبر من{{0}} *"
+    "ar": "يجب أن تكون القيمة أكبر من {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "ar": "يجب أن تكون القيمة على الأقل{{0}} *"
+    "ar": "يجب أن تكون القيمة على الأقل {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "ar": "يجب أن تكون القيمة على الأكثر{{0}} الحروف طويلة *"
+    "ar": "يجب أن تكون القيمة على الأكثر {{0}} الحروف طويلة *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "ar": "يجب أن تكون القيمة على الأقل{{0}} الحروف طويلة *"
+    "ar": "يجب أن تكون القيمة على الأقل {{0}} الحروف طويلة *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "ar": "يجب أن تتطابق القيمة مع النمط{{0}} *"
+    "ar": "يجب أن تتطابق القيمة مع النمط {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "ar": "يجب أن تحتوي القيمة على الأكثر{{0}} العناصر *"
+    "ar": "يجب أن تحتوي القيمة على الأكثر {{0}} العناصر *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "ar": "يجب أن تحتوي القيمة على الأقل{{0}} العناصر *"
+    "ar": "يجب أن تحتوي القيمة على الأقل {{0}} العناصر *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "ar": "يجب أن يحتوي الكائن على الأكثر{{0}} ملكيات *"
+    "ar": "يجب أن يحتوي الكائن على الأكثر {{0}} ملكيات *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "ar": "يجب أن يحتوي الكائن على الأقل{{0}} ملكيات *"
+    "ar": "يجب أن يحتوي الكائن على الأقل {{0}} ملكيات *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "ar": "يفتقد الكائن الخاصية المطلوبة '{{0}} \" *"
+    "ar": "يفتقد الكائن الخاصية المطلوبة ' {{0}} \" *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "ar": "لا يسمح بخصائص إضافية ، ولكن الممتلكات{{0}} تم تعيينه *"
+    "ar": "لا يسمح بخصائص إضافية ، ولكن الممتلكات {{0}} تم تعيينه *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "ar": "يجب أن يكون لديك ممتلكات{{0}} *"
+    "ar": "يجب أن يكون لديك ملكية {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "ar": "آخر{{0}} *"
+    "ar": "آخر {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "ar": "حذف الأخير{{0}} *"
+    "ar": "حذف الأخير {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "ar": "يضيف{{0}} *"
+    "ar": "يضيف {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "ar": "حذف{{0}} *"
+    "ar": "حذف {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "ar": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">مرحبا،<br><br> هذه هي كلمة المرور المطلوبة:<hr>{{password}}<hr> كلمة المرور الآمنة هذه صالحة مرة واحدة فقط لجلسة MapX الحالية وسيتم إبطالها بعد 20 دقيقة.<br> تحياتي الحارة،<br><br> فريق MapX الخاص بك.<br><br> <span style='opacity:0.5;font-size:0.8em'>إذا لم تقدم هذا الطلب ، فمن المحتمل أن أحد مستخدمينا قد أدخل عنوان بريدك الإلكتروني عن طريق الخطأ.</span></div> *"
+    "ar": "<div style=\"max-width:400px;padding:20px;text-align:right;direction:rtl\">مرحبا،<br><br> هذه هي كلمة المرور المطلوبة:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> كلمة المرور الآمنة هذه صالحة مرة واحدة فقط لجلسة MapX الحالية وسيتم إبطالها بعد 20 دقيقة.<br> تحياتي الحارة،<br><br> فريق MapX الخاص بك.<br><br> <span style=\"opacity:0.5;font-size:0.8em\">إذا لم تقدم هذا الطلب ، فمن المحتمل أن أحد مستخدمينا قد أدخل عنوان بريدك الإلكتروني عن طريق الخطأ.</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href='{{linkKnowledgeBase}}'>قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href='{{linkIssue}}'>تعقب المشكلات الخاصة بنا</a><br> شكرا ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "ar": "أهلا بك!<br> للحصول على معلومات تقنية ، يمكنك قراءة <a href=\"{{linkKnowledgeBase}}\">قاعدة المعرفة الخاصة</a> بنا. إذا كان لديك اقتراح حول هذا الموقع ، أو إذا كنت تريد الإبلاغ عن خطأ ، فتفضل بزيارة أداة <a href=\"{{linkIssue}}\">تعقب المشكلات الخاصة بنا</a><br> شكرا ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "ar": "الحد الأقصى لحجم الملف هو{{size}} تم الوصول إليه. لا يسمح لك بتحميل ملف أكبر من ذلك. يرجى الاتصال بنا للحصول على مزيد من المعلومات. *"
+    "ar": "الحد الأقصى لحجم الملف هو {{size}} تم الوصول إليه. لا يسمح لك بتحميل ملف أكبر من ذلك. يرجى الاتصال بنا للحصول على مزيد من المعلومات. *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6122,7 +6312,7 @@
   {
     "id": "share_mode_static_label",
     "en": "Use the mode 'static' ( recommended )",
-    "ar": "استخدم الوضع \"ثابت\" (مستحسن) *"
+    "ar": "استخدم الوضع \"ثابت\" (موصى به) *"
   },
   {
     "id": "share_mode_static_desc",
@@ -6137,7 +6327,7 @@
   {
     "id": "share_views_check_desc",
     "en": "Views to display. The list can be reordered : top views will have layers displayed on top. In 'static' mode, those views will be rendered automatically. Story maps will start directly. In 'normal' mode, the views will be displayed in the list and if the selection is empty, all views of the project will be listed.",
-    "ar": "طرق العرض المراد عرضها. يمكن إعادة ترتيب القائمة: سيتم عرض الطبقات في أعلى العروض. في الوضع \"الثابت\" ، سيتم عرض هذه العروض تلقائيًا. ستبدأ خرائط القصة مباشرة. في الوضع \"العادي\" ، سيتم عرض طرق العرض في القائمة وإذا كان التحديد فارغًا ، فسيتم إدراج جميع عروض المشروع. *"
+    "ar": "طرق العرض المراد عرضها. يمكن إعادة ترتيب القائمة: سيتم عرض الطبقات في أعلى العروض. في الوضع \"الثابت\" ، سيتم عرض هذه العروض تلقائيًا. ستبدأ خرائط القصة مباشرة. في الوضع \"العادي\" ، سيتم عرض طرق العرض في القائمة وإذا كان التحديد فارغًا ، فسيتم سرد جميع عروض المشروع. *"
   },
   {
     "id": "share_views_zoom_label",
@@ -6182,7 +6372,7 @@
   {
     "id": "share_collections_check_desc",
     "en": "Add groups of views by using collections",
-    "ar": "أضف مجموعات من المشاهدات باستخدام المجموعات *"
+    "ar": "أضف مجموعات وجهات النظر باستخدام المجموعات *"
   },
   {
     "id": "share_map_pos_check_label",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "ar": "قم بتضمين الارتباط في ملف<iframe> علامة HTML لإضافة MapX بسهولة إلى موقع الويب الخاص بك. *"
+    "ar": "قم بتضمين الارتباط في ملف<iframe> علامة HTML لإضافة MapX بسهولة إلى موقع الويب الخاص بك.</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "ar": "تم تحديث الأدوار في المشروع{{nameProject}} *"
+    "ar": "تم تحديث الأدوار في المشروع {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> قام المسؤول بتغيير أدوارك في المشروع{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات:</p><p style=\";text-align:right;direction:rtl\">{{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style='float:right'>فريق MapX.</i> *"
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> قام المسؤول بتغيير أدوارك في المشروع {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات:</p><p style=\";text-align:right;direction:rtl\"> {{txtRoleChange}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> <i style=\"float:right\">فريق MapX.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك{{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات:{{changes}}<p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> *"
+    "ar": "<p style=\";text-align:right;direction:rtl\">مرحبا،</p><p style=\";text-align:right;direction:rtl\"> لقد تغيرت الأدوار في مشروعك {{projectLink}} .</p><p style=\";text-align:right;direction:rtl\"> فيما يلي قائمة التغييرات: {{changes}}</p><p style=\";text-align:right;direction:rtl\"> طاب يومك !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "ar": "مضاف إلى:{{group}}\n *"
+    "ar": "مضاف إلى: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "ar": "تمت إزالته من:{{group}}\n *"
+    "ar": "تمت إزالته من: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "ar": "تنسيق غير صالح{{format}} باستخدام التنسيق الافتراضي{{formatDefault}} . *"
+    "ar": "تنسيق غير صالح {{format}} باستخدام التنسيق الافتراضي {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "ar": "تم العثور على أشكال هندسية غير صالحة للطبقة '{{title}} ({{idLayer}} ). *"
+    "ar": "تم العثور على أشكال هندسية غير صالحة للطبقة ' {{title}} ( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "ar": "سيتم إرسال بريد إلكتروني إلى{{email}} . <a href='{{url}}'>سيتم تفعيل رابط</a> التنزيل في نهاية العملية *"
+    "ar": "سيتم إرسال بريد إلكتروني إلى<a href=\"mailto:={{email}}\"> {{email}}</a> . <a href=\"{{url}}\">سيتم تفعيل رابط</a> التنزيل في نهاية العملية *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "ar": "رسالة التحويل:{{stdout}} *"
+    "ar": "رسالة التحويل: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "ar": "تحذير التحويل:{{stderr}} *"
+    "ar": "تحذير التحويل: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "ar": "خطأ في التحويل.{{error}} *"
+    "ar": "خطأ في التحويل. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "ar": "تم التحويل باستخدام التنسيق{{format}} . <a href={{url}}></a>{{title}} *"
+    "ar": "تم التحويل باستخدام التنسيق {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "ar": "طبقة{{title}} تصدير *"
+    "ar": "طبقة {{title}} تصدير *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "ar": "البيانات المطلوبة جاهزة للتحميل باستخدام هذا الرابط: <a href={{url}}></a>{{title}} *"
+    "ar": "البيانات المطلوبة جاهزة للتنزيل باستخدام هذا الرابط:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "ar": "تحذير الضغط:{{err}} *"
+    "ar": "تحذير الضغط: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "ar": "خطأ في الضغط:{{err}} *"
+    "ar": "خطأ في الضغط: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "ar": "تم تنزيله من MapX على{{date}} *"
+    "ar": "تم تنزيله من MapX على {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "ar": "لوحة رئيسية *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "ar": "لوحة تحكم *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6402,7 +6597,7 @@
   {
     "id": "gj_desc",
     "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
-    "ar": "طرق عرض تتميز بطبقة متجه مخزنة في متصفح الإنترنت الخاص بك بتنسيق GeoJSON. *"
+    "ar": "العروض التي تعرض طبقة متجه مخزنة في متصفح الإنترنت الخاص بك بتنسيق GeoJSON. *"
   },
   {
     "id": "rt_desc",
@@ -6453,5 +6648,10 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "ar": "يمكن ترجمة لغة أخرى غير الإنجليزية تلقائيًا ، في حالة فقد الترجمة. في مثل هذه الحالات ، سيتم عرض نجمة. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "ar": "إشعارات *"
   }
 ]

@@ -1,4 +1,4 @@
-import {IconFlash} from './icon_flash';
+import {IconFlash, ButtonCircle} from './icon_flash';
 
 /**
  * Retrieve nested item from object/array
@@ -168,7 +168,9 @@ export function parseTemplate(template, data) {
 export function iconFlash(icon) {
   new IconFlash(icon);
 }
-
+export function buttonCircle(opt) {
+  new ButtonCircle(opt);
+}
 export function iconFlashSave() {
   new IconFlash('floppy-o');
 }
@@ -1156,6 +1158,34 @@ export function updateCheckboxInput(o) {
 }
 
 /**
+ * btn control helper
+ */
+
+export function showSelectProject() {
+  var val = {
+    time: new Date(),
+    value: 'showProject'
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+export function showSelectLanguage() {
+  var val = {
+    time: new Date(),
+    value: 'showLanguage'
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+export function showLogin() {
+  var val = {
+    time: new Date(),
+    value: 'showLogin'
+  };
+  Shiny.onInputChange('btn_control', val);
+}
+
+/**
  * convert b64 to utf8
  * @param {string} str String to convert
  * @note  taken from http://stackoverflow.com/questions/30106476/using-javascripts-atob-to-decode-base64-doesnt-properly-decode-utf-8-strings
@@ -1298,81 +1328,103 @@ export function formatByteSize(bytes) {
 /**
  * Smooth scroll
  * @note https://stackoverflow.com/questions/17722497/scroll-smoothly-to-specific-element-on-page
- * @param {Object} o options
- * @param {Element} o.el Element to scroll on
- * @param {Number} o.from Starting point in px
- * @param {Number} o.to Ending point in px
- * @param {String} o.axis x (left) or y (top) ;
- * @param {Number} o.during Duration in ms for 1000 px
- * @param {String} o.using Easing function name
- * @param {Number} o.timeout Set a timeout before moving. Default to 0;
- * @param {Function} o.emergencyStop Function called during animation. If return true, animation is stoped.
+ * @param {Object} opt options
+ * @param {Element} opt.el Element to scroll on
+ * @param {Number} opt.from Starting point in px
+ * @param {Number} opt.to Ending point in px
+ * @param {String} opt.axis x (left) or y (top) ;
+ * @param {Number} opt.during Duration in ms for 1000 px
+ * @param {String} opt.using Easing function name
+ * @param {Number} opt.timeout Set a timeout before moving. Default to 0;
+ * @param {Function} opt.emergencyStop Function called during animation. If return true, animation is stoped.
  */
-export function scrollFromTo(o) {
-  var start, time, percent, stop, duration, easing, bodyDim;
-  var diff = o.to - o.from;
-  var axis = o.axis || 'y';
+const scrollToBreaks = {
+  idTimeout: 0,
+  idFrame: 0
+};
+export function scrollFromTo(opt) {
+  const h = mx.helpers;
+  opt = Object.assign({}, opt);
 
-  if (o.using && o.using.constructor === Function) {
-    easing = o.using;
+  let start, time, percent, duration, easing, bodyDim;
+  const diff = opt.to - opt.from;
+  const axis = opt.axis || 'y';
+  const stop = opt.emergencyStop instanceof Function ? opt.emergencyStop : null;
+
+  if (opt.using && opt.using.constructor === Function) {
+    easing = opt.using;
   } else {
     easing = easingFun({
-      type: o.using || 'easeInOut',
+      type: opt.using || 'easeInOut',
       power: 2
     });
   }
 
-  stop = o.emergencyStop instanceof Function ? o.emergencyStop : null;
+  return new Promise((resolve) => {
+    
+    /*
+    * Cancel previous timeout
+    */ 
+    clearTimeout(scrollToBreaks.idTimeout);
 
-  return new Promise(function(resolve) {
-    setTimeout(function() {
-      mx.helpers.onNextFrame(function() {
+    if (stop && stop()) {
+      return resolve(true);
+    }
+    
+    /*
+    * Cancel previous frame request
+    */ 
+    h.cancelFrame(scrollToBreaks.idFrame)
+
+    scrollToBreaks.idTimeout = setTimeout(() => {
+      if (axis === 'y') {
+        bodyDim = document.body.clientHeight || 800;
+      }
+      if (axis === 'x') {
+        bodyDim = document.body.clientWidth || 800;
+      }
+      if (!diff || diff === 0) {
+        resolve(true);
+      } else if (opt.jump === true || Math.abs(diff) > bodyDim * 11) {
+        // instant scroll
         if (axis === 'y') {
-          bodyDim = document.body.clientHeight || 800;
+          opt.el.scrollTop = opt.to;
         }
         if (axis === 'x') {
-          bodyDim = document.body.clientWidth || 800;
+          opt.el.scrollLeft = opt.to;
         }
-        if (!diff || diff === 0) {
-          resolve(true);
-        } else if (Math.abs(diff) > bodyDim * 1.5) {
-          // instant scroll
+
+        resolve(true);
+      } else {
+        duration = opt.during || 1000;
+
+        scrollToBreaks.idFrame = h.onNextFrame(step);
+
+        function step(timestamp) {
+          
+          if (!start) {
+            start = timestamp;
+          }
+
+          time = timestamp - start;
+          percent = easing(Math.min(time / duration, 1));
+
           if (axis === 'y') {
-            o.el.scrollTop = o.to;
+            opt.el.scrollTop = opt.from + diff * percent;
           }
+
           if (axis === 'x') {
-            o.el.scrollLeft = o.to;
+            opt.el.scrollLeft = opt.from + diff * percent;
           }
 
-          resolve(true);
-        } else {
-          // var duration = (o.during || 1000) * (Math.abs(diff)/1000);
-          duration = o.during || 1000;
-          // scroll on next frame
-          mx.helpers.onNextFrame(function step(timestamp) {
-            if (!start) {
-              start = timestamp;
-            }
-
-            time = timestamp - start;
-            percent = easing(Math.min(time / duration, 1));
-
-            if (axis === 'y') {
-              o.el.scrollTop = o.from + diff * percent;
-            }
-            if (axis === 'x') {
-              o.el.scrollLeft = o.from + diff * percent;
-            }
-
-            if (time < duration && !(stop && stop())) {
-              mx.helpers.onNextFrame(step);
-            } else {
-              resolve(true);
-            }
-          });
+          if (time < duration && !(stop && stop())) {
+            scrollToBreaks.idFrame = h.onNextFrame(step);
+          } else {
+            resolve(true);
+          }
         }
-      });
-    }, o.timeout || 0);
+      }
+    }, opt.timeout || 0);
   });
 }
 /**
@@ -1489,7 +1541,6 @@ export function hide(m) {
     }
   }
 }
-
 
 /**
  * Class handling : add, remove and toggle

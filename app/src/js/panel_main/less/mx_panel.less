@@ -20,9 +20,8 @@
       overflow: hidden;
       border-radius: 10px;
       margin: 5px;
-      /*border: 1px solid var(--mx_ui_border);*/
-
-      /*background: var(--mx_ui_background_contrast);*/
+      border: none;
+      background: none;
       * {
         pointer-events: none;
       }
@@ -51,6 +50,7 @@
           left: 20%;
           right: 20%;
           border-bottom: 1px solid var(--mx_ui_border);
+          z-index: -1;
         }
       }
       &:hover {
@@ -73,9 +73,16 @@
     flex-grow: 1;
     align-items: center;
     position: relative;
+    background: none;
+    border: none;
+    &:focus {
+      outline: none;
+      > span {
+        text-decoration: underline;
+      }
+    }
     &:hover {
       background: var(--mx_ui_background_contrast);
-      /*border-radius:5px;*/
     }
     &.active {
       pointer-events: none;
@@ -94,6 +101,7 @@
       border-bottom-left-radius: 10px;
       border-bottom: 3px solid var(--mx_ui_background);
       border-left: 3px solid var(--mx_ui_background);
+      z-index: -1;
     }
     &:not(:first-of-type).active:before {
       content: '';
@@ -106,6 +114,7 @@
       border-bottom-right-radius: 10px;
       border-bottom: 3px solid var(--mx_ui_background);
       border-right: 3px solid var(--mx_ui_background);
+      z-index: -1;
     }
     * {
       padding-left: 10px;
@@ -135,5 +144,67 @@
   }
   .mx-tab--content-padding {
     padding: 20px;
+  }
+}
+
+@media screen and (max-width: 800px), (max-height: 700px) {
+  .mx-panel {
+    .mx-panel--header {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      background: var(--mx_ui_background_faded);
+      .mx-panel--header-btn {
+        padding: 3px;
+        border-radius: 3px;
+        margin: 2px;
+        * {
+          pointer-events: none;
+        }
+        .mx-panel--header-btn-logo {
+          height: 1.2em;
+        }
+        .mx-panel--header-btn-label {
+          font-size: 1em;
+        }
+        &.mx-panel--header-btn-title {
+          font-size: 1em;
+          width: 50%;
+          text-transform: none;
+          .mx-panel--header-btn-label {
+            max-width: 80%;
+          }
+          &:after {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+
+  .mx-tab--tabs {
+    display: flex;
+    background: var(--mx_ui_background_faded);
+    .mx-tab--tab {
+      padding: 2px;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      &:not(:last-of-type).active:after {
+        border-bottom-left-radius: 3px;
+        z-index: -1;
+      }
+      &:not(:first-of-type).active:before {
+        border-bottom-right-radius: 3px;
+      }
+      * {
+        padding-left: 10px;
+        pointer-events: none;
+      }
+    }
+  }
+  .mx-tab--panel {
+    .mx-tab--content-padding {
+      padding: 10px;
+    }
   }
 }

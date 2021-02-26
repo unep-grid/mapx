@@ -1245,6 +1245,121 @@
     "bn": "জিম্বাবোয়ে"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "bn": "ভেক্টর আঁকার সরঞ্জামগুলি টগল করুন *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "bn": "এই স্তরটি দিয়ে একটি নতুন দৃশ্য তৈরি করুন এবং সরঞ্জামগুলি বন্ধ করুন *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "bn": "একটি নতুন পয়েন্ট যোগ করুন *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "bn": "একটি নতুন লাইন যুক্ত করুন *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "bn": "একটি নতুন বহুভুজ যুক্ত করুন *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "bn": "পয়েন্ট *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "bn": "লাইন *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "bn": "বহুভুজ *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "bn": "স্তর নাম *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "bn": "বৈশিষ্ট্য প্রকার *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "bn": "নতুন খালি স্তর তৈরি করুন *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "bn": "নতুন স্তরটি কনফিগার করুন *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "bn": "সরঞ্জাম সহায়তা আঁকুন *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "bn": "অঙ্কন সরঞ্জাম সহায়তা প্রদর্শন করুন *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "bn": "আমাদের দেখুন {{wiki}} কীভাবে অঙ্কন সরঞ্জামটি ব্যবহার করতে হয় তা শিখতে *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "bn": "আপনি কি পরিবর্তনগুলি মুছতে চান? যদি নিশ্চিত হয়ে থাকে তবে এটিকে পূর্বাবস্থায় ফেরানো যাবে না। *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "bn": "পরিবর্তনগুলি মুছবেন? *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "bn": "বাতিল *"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "bn": "নিশ্চিত করুন এবং ডেটা মুছুন *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "bn": "ভিউ তৈরি হয়েছে। এখনই প্রস্থান করবেন নাকি সম্পাদনা চালিয়ে যাবেন? *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "bn": "সম্পাদনা চালিয়ে যাবেন? *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "bn": "সম্পাদনা চালিয়ে যান *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "bn": "সরঞ্জামটি বন্ধ করুন *"
+  },
+  {
     "id": "en",
     "en": "English",
     "bn": "ইংরেজি *"
@@ -1252,7 +1367,7 @@
   {
     "id": "fr",
     "en": "French",
-    "bn": "ফ্রেঞ্চ *"
+    "bn": "ফরাসি *"
   },
   {
     "id": "es",
@@ -1607,7 +1722,7 @@
   {
     "id": "btn_show_db_info_self",
     "en": "Get temporary access to edit a dataset",
-    "bn": "একটি ডেটাসেট সম্পাদনা করতে অস্থায়ী অ্যাক্সেস পান *"
+    "bn": "একটি ডেটাসেট সম্পাদনা করার জন্য অস্থায়ী অ্যাক্সেস পান *"
   },
   {
     "id": "btn_cancel",
@@ -1815,6 +1930,16 @@
     "bn": "ভারবহন পুনরায় সেট করুন *"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "bn": "বামদিকে মানচিত্রটি ঘোরান *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "bn": "ডানদিকে মানচিত্র ঘোরান *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "bn": "ভেক্টর আঁকার সরঞ্জাম *"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "bn": "মুছে ফেলা *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "bn": "ভিউ মুছে ফেলা হচ্ছে *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "bn": "আপনি এই দৃশ্যটি মুছতে চান? *"
   },
   {
     "id": "btn_opt_download",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "bn": "মানচিত্র এক্সপ্লোরার ফিরে *"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "bn": "মানচিত্রের অন্বেষণে ফিরে যান (বা 'এস্কেপ' কী টিপুন) *"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2522,7 +2657,7 @@
   {
     "id": "login_required_for_project_access_guest",
     "en": "Accessing a private project requires to be authenticated",
-    "bn": "একটি বেসরকারী প্রকল্প অ্যাক্সেস প্রমাণীকরণ করা প্রয়োজন *"
+    "bn": "একটি বেসরকারী প্রকল্প অ্যাক্সেস অনুমোদন করা প্রয়োজন *"
   },
   {
     "id": "login_required_for_project_access_non_member",
@@ -2537,7 +2672,7 @@
   {
     "id": "login_pwd_mail_sent",
     "en": "An email has been sent, please check your inbox and copy the received password in the field below",
-    "bn": "একটি ইমেল প্রেরণ করা হয়েছে, দয়া করে আপনার ইনবক্সটি পরীক্ষা করে নিন এবং নীচের ক্ষেত্রে প্রাপ্ত পাসওয়ার্ডটি অনুলিপি করুন *"
+    "bn": "একটি ইমেল প্রেরণ করা হয়েছে, দয়া করে আপনার ইনবক্সটি দেখুন এবং নীচের ক্ষেত্রে প্রাপ্ত পাসওয়ার্ডটি অনুলিপি করুন *"
   },
   {
     "id": "login_pwd_mail_sent_error",
@@ -2562,7 +2697,7 @@
   {
     "id": "login_info_box",
     "en": "If you are not yet registered, a successful authentication will create a new account, and unlock new features. If you are already registered, a successful authentication will additionally give you access to all projects where you are already a member. User registration with MapX implies consent to collect and publish performance data of non-personally identifiable information at an aggregate level.",
-    "bn": "আপনি যদি এখনও নিবন্ধভুক্ত না হন তবে একটি সফল প্রমাণীকরণ একটি নতুন অ্যাকাউন্ট তৈরি করবে এবং নতুন বৈশিষ্ট্যগুলি আনলক করবে। আপনি যদি ইতিমধ্যে নিবন্ধভুক্ত থাকেন তবে একটি সফল প্রমাণীকরণ আপনাকে সেই সাথে সমস্ত প্রকল্পে অ্যাক্সেস দেবে যেখানে আপনি ইতিমধ্যে সদস্য রয়েছেন। ম্যাপএক্সের সাথে ব্যবহারকারীর নিবন্ধকরণটি সামগ্রিক স্তরে ব্যক্তিগতভাবে সনাক্তযোগ্য তথ্যগুলির পারফরম্যান্স ডেটা সংগ্রহ এবং প্রকাশের সম্মতি বোঝায়। *"
+    "bn": "আপনি যদি এখনও নিবন্ধভুক্ত না হন তবে একটি সফল প্রমাণীকরণ একটি নতুন অ্যাকাউন্ট তৈরি করবে এবং নতুন বৈশিষ্ট্যগুলি আনলক করবে। আপনি যদি ইতিমধ্যে নিবন্ধভুক্ত থাকেন তবে একটি সফল প্রমাণীকরণ আপনাকে সেই সাথে সমস্ত প্রকল্পে অ্যাক্সেস দেবে যেখানে আপনি ইতিমধ্যে সদস্য রয়েছেন। ম্যাপএক্সের সাথে ব্যবহারকারীর নিবন্ধকরণ সামগ্রিক স্তরে ব্যক্তিগতভাবে সনাক্তযোগ্য তথ্যগুলির পারফরম্যান্স ডেটা সংগ্রহ এবং প্রকাশের সম্মতি বোঝায়। *"
   },
   {
     "id": "login_out",
@@ -2582,7 +2717,7 @@
   {
     "id": "login_subtitle",
     "en": "Please enter your email to receive a single usage secure password",
-    "bn": "একটি একক ব্যবহার সুরক্ষিত পাসওয়ার্ড পেতে দয়া করে আপনার ইমেল প্রবেশ করান *"
+    "bn": "একটি একক ব্যবহার নিরাপদ পাসওয়ার্ড পেতে দয়া করে আপনার ইমেল প্রবেশ করান *"
   },
   {
     "id": "login_title",
@@ -2667,7 +2802,7 @@
   {
     "id": "view_fetching_progress",
     "en": "[ {{vOk}}/{{vTot}} ]",
-    "bn": "[{{vOk}} /{{vTot}} ] *"
+    "bn": "[ {{vOk}} / {{vTot}} ] *"
   },
   {
     "id": "nrg",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "bn": "একটি ইমেইল পাঠানো হয়েছে{{email}} *"
+    "bn": "একটি ইমেইল পাঠানো হয়েছে {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "bn": "একটি ত্রুটি ঘটেছে, ইমেলটি প্রেরণ করা হয়নি{{email}} *"
+    "bn": "একটি ত্রুটি ঘটেছে, ইমেলটি প্রেরণ করা হয়নি {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -2967,7 +3102,7 @@
   {
     "id": "schema_story_tips",
     "en": "<p>Here is a list of good practices to provide a seamless experience for readers:</p><ol><li>Keep it simple.</li><li>It is better to create short story maps to keep the interest of your audience.</li><li>For good readability, it is recommended not to exceed two slides per steps and more than two layers on the map in the same step.</li><li>Pictures, videos and infographics can be useful and impactful mediums to contextualize your story. However, they should not overshadow the spatial component of your story. Maps should be at its center.</li><li>Effects, transitions or 3d transformations can affect the readability of your story map on slow devices, use them sparingly.</li></ol>",
-    "bn": "<p>পাঠকদের জন্য বিরামবিহীন অভিজ্ঞতা প্রদানের জন্য এখানে ভাল অনুশীলনের তালিকা রয়েছে:</p><ol><li> সহজবোধ্য রাখো.</li><li> আপনার দর্শকদের আগ্রহ বজায় রাখতে ছোট গল্পের মানচিত্র তৈরি করা ভাল।</li><li> ভাল পাঠযোগ্যতার জন্য, একই ধাপে প্রতি ধাপে দুটি স্লাইড এবং মানচিত্রে দুটি স্তরের বেশি না হওয়ার পরামর্শ দেওয়া হয়।</li><li> ছবি, ভিডিও এবং ইনফোগ্রাফিকগুলি আপনার গল্পটিকে প্রাসঙ্গিক করে তোলার জন্য কার্যকর এবং প্রভাবশালী মাধ্যম হতে পারে। তবে তাদের আপনার গল্পের স্থানিক উপাদানটিকে ছাপিয়ে দেওয়া উচিত নয়। মানচিত্রগুলি এর কেন্দ্রে থাকা উচিত।</li><li> প্রভাব, ট্রানজিশন বা 3 ডি রূপান্তরগুলি ধীর ডিভাইসে আপনার গল্পের মানচিত্রের পঠনযোগ্যতাকে প্রভাবিত করতে পারে, এগুলিকে অল্প পরিমাণে ব্যবহার করুন।</li></ol> *"
+    "bn": "<p>পাঠকদের জন্য বিরামবিহীন অভিজ্ঞতা প্রদানের জন্য এখানে ভাল অনুশীলনের তালিকা রয়েছে:</p><ol><li> সহজবোধ্য রাখো.</li><li> আপনার দর্শকদের আগ্রহ বজায় রাখতে ছোট গল্পের মানচিত্র তৈরি করা ভাল।</li><li> ভাল পাঠযোগ্যতার জন্য, একই ধাপে প্রতি ধাপে দুটি স্লাইড এবং মানচিত্রে দুটি স্তরের বেশি না হওয়ার পরামর্শ দেওয়া হয়।</li><li> ছবি, ভিডিও এবং ইনফোগ্রাফিকগুলি আপনার গল্পটিকে প্রাসঙ্গিক করে তোলার জন্য দরকারী এবং প্রভাবশালী মাধ্যম হতে পারে। তবে তাদের আপনার গল্পের স্থানিক উপাদানটিকে ছাপিয়ে দেওয়া উচিত নয়। মানচিত্রগুলি এর কেন্দ্রে থাকা উচিত।</li><li> প্রভাব, ট্রানজিশন বা 3 ডি রূপান্তরগুলি ধীর ডিভাইসে আপনার গল্পের মানচিত্রের পঠনযোগ্যতাকে প্রভাবিত করতে পারে, এগুলিকে অল্প পরিমাণে ব্যবহার করুন।</li></ol> *"
   },
   {
     "id": "schema_story_author",
@@ -3412,7 +3547,7 @@
   {
     "id": "group_project",
     "en": "Groups in project",
-    "bn": "প্রকল্পে গ্রুপ *"
+    "bn": "প্রকল্পে গ্রুপগুলি *"
   },
   {
     "id": "view",
@@ -3517,7 +3652,7 @@
   {
     "id": "view_project",
     "en": "Project of the view",
-    "bn": "দর্শন প্রকল্প *"
+    "bn": "দেখার প্রকল্প *"
   },
   {
     "id": "view_country",
@@ -3657,7 +3792,7 @@
   {
     "id": "view_delete_confirm",
     "en": "Click on the confirm button to delete this view, its history and all translations.",
-    "bn": "এই দৃশ্যটি, এর ইতিহাস এবং সমস্ত অনুবাদ মুছতে নিশ্চিতকরণ বোতামে ক্লিক করুন। *"
+    "bn": "এই দৃশ্যটি, এর ইতিহাস এবং সমস্ত অনুবাদ মুছতে কনফার্ম বাটনে ক্লিক করুন। *"
   },
   {
     "id": "view_remove_dashboard_confirm",
@@ -3878,6 +4013,11 @@
     "id": "mx_ui_background_faded",
     "en": "Background faded out",
     "bn": "পটভূমি বিবর্ণ *"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "bn": "পটভূমি স্বচ্ছ *"
   },
   {
     "id": "mx_ui_shadow",
@@ -4142,7 +4282,7 @@
   {
     "id": "project_alias_name_desc",
     "en": "Minimum 1, maximum 30 lower case whithin ASCII characters [a-z], numbers [0-9], dashes [-] and underscores allowed [_]",
-    "bn": "ন্যূনতম 1, সর্বাধিক 30 লোয়ার কেসিসহ ASCII অক্ষর [অ্যাজেড], সংখ্যা [0-9], ড্যাশ [-] এবং আন্ডারস্কোর অনুমোদিত [_] *"
+    "bn": "ন্যূনতম 1, সর্বাধিক 30 নিম্ন কেসির মধ্যে ASCII অক্ষর [এজেড], সংখ্যা [0-9], ড্যাশ [-] এবং আন্ডারস্কোর অনুমোদিত [_] *"
   },
   {
     "id": "error_project_alias_not_valid",
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "bn": "প্রকল্পে যোগদানের আমন্ত্রণ\"{{project}}\" *"
+    "bn": "প্রকল্পে যোগদানের আমন্ত্রণ \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "bn": "প্রকল্পে আমন্ত্রণ গ্রহণ করুন\"{{project}}\" *"
+    "bn": "প্রকল্পে আমন্ত্রণ গ্রহণ করুন \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4197,47 +4337,47 @@
   {
     "id": "project_invite_message_tips",
     "en": "The tag {{link}} will be replaced by an encrypted link.",
-    "bn": "ট্যাগ{{link}} একটি এনক্রিপ্ট লিঙ্ক দ্বারা প্রতিস্থাপন করা হবে। *"
+    "bn": "ট্যাগ {{link}} একটি এনক্রিপ্ট লিঙ্ক দ্বারা প্রতিস্থাপন করা হবে। *"
   },
   {
     "id": "project_invite_message",
     "en": "Hi! \nI would like to invite you as a member to the project \"{{projectName}}\" in MapX. \nPlease click on the provided link to confirm. \n{{link}} \n The administrator of the project.",
-    "bn": "ওহে!\n আমি আপনাকে প্রকল্পের একজন সদস্য হিসাবে আমন্ত্রণ জানাতে চাই\"{{projectName}}\" ম্যাপএক্সে\n নিশ্চিত করার জন্য প্রদত্ত লিঙ্কটিতে ক্লিক করুন।\n{{link}}\n প্রকল্পের প্রশাসক। *"
+    "bn": "ওহে!\n আমি আপনাকে প্রকল্পের একজন সদস্য হিসাবে আমন্ত্রণ জানাতে চাই \" {{projectName}} \"ম্যাপএক্সে\n নিশ্চিত করার জন্য প্রদত্ত লিঙ্কটিতে ক্লিক করুন।\n {{link}}\n প্রকল্পের প্রশাসক। *"
   },
   {
     "id": "project_invite_message_confirm",
     "en": "Hi! \nThanks for reaching us. \nTo confirm your membership to the project {{projectName}} in MapX, please click on the following link: \n{{link}} \nBest regards, \nThe administrator of the project",
-    "bn": "ওহে!\n আমাদের পৌঁছানোর জন্য ধন্যবাদ।\n প্রকল্পে আপনার সদস্যতা নিশ্চিত করতে{{projectName}} ম্যাপএক্স-এ, দয়া করে নীচের লিঙ্কটিতে ক্লিক করুন:\n{{link}}\n শুভেচ্ছান্তে,\n প্রকল্পের প্রশাসক *"
+    "bn": "ওহে!\n আমাদের পৌঁছানোর জন্য ধন্যবাদ।\n প্রকল্পে আপনার সদস্যতা নিশ্চিত করতে {{projectName}} ম্যাপএক্স-এ, দয়া করে নীচের লিঙ্কটিতে ক্লিক করুন:\n {{link}}\n শুভেচ্ছান্তে,\n প্রকল্পের প্রশাসক *"
   },
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "bn": "হ্যালো,<br> ব্যবহারকারী '{{emailUser}} 'প্রকল্পে প্রবেশের জন্য একটি আমন্ত্রণ লিঙ্ক ব্যবহার করেছে{{project}} ।<ul><li> মেয়াদ শেষ হওয়ার তারিখ:{{timeExpire}}</li></ul><br> আপনার দিনটি শুভ হোক ! *"
+    "bn": "হ্যালো,<br> ব্যবহারকারী ' {{emailUser}} 'প্রকল্পে প্রবেশের জন্য একটি আমন্ত্রণ লিঙ্ক ব্যবহার করেছে {{project}} ।<ul><li> মেয়াদ শেষ হওয়ার তারিখ: {{timeExpire}}</li></ul><br> আপনার দিনটি শুভ হোক ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "bn": "প্রকল্পে আমন্ত্রণ লিঙ্ক ব্যবহৃত হয়{{project}} *"
+    "bn": "প্রকল্পে আমন্ত্রণ লিঙ্ক ব্যবহৃত হয় {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "bn": "আপনাকে প্রকল্পে যুক্ত করা হয়েছে{{project}} *"
+    "bn": "আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "bn": "হ্যালো,<br> আপনাকে প্রকল্পে যুক্ত করা হয়েছে{{project}} দলের মধ্যে):{{roles}} ।<br> আপনার দিনটি শুভ হোক ! *"
+    "bn": "হ্যালো,<br> আপনাকে প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে): {{roles}} ।<br> আপনার দিনটি শুভ হোক ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "bn": "একটি ব্যবহারকারী প্রকল্পে যুক্ত করা হয়েছে{{project}} । *"
+    "bn": "একটি ব্যবহারকারী প্রকল্পে যুক্ত করা হয়েছে {{project}} । *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "bn": "একজন ব্যাবহারকারি ({{emailUser}} ) প্রকল্পে যুক্ত করা হয়েছে{{project}} দলের মধ্যে){{roles}}<br> আপনার দিনটি শুভ হোক ! *"
+    "bn": "একজন ব্যাবহারকারি ( {{emailUser}} ) প্রকল্পে যুক্ত করা হয়েছে {{project}} দলের মধ্যে) {{roles}}<br> আপনার দিনটি শুভ হোক ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4257,7 +4397,7 @@
   {
     "id": "project_created",
     "en": "Project {{title}} created",
-    "bn": "প্রকল্প{{title}} তৈরি *"
+    "bn": "প্রকল্প {{title}} তৈরি *"
   },
   {
     "id": "project_deleted",
@@ -4407,7 +4547,7 @@
   {
     "id": "project_request_membership_message",
     "en": "Hi! \\nPlease add me to the project {{projectName}}. \\nBest regards, \\nA motivated future member \\n",
-    "bn": "ওহে!\\n প্রকল্পে আমাকে যোগ করুন{{projectName}} ।\\n শুভেচ্ছান্তে,\\n অনুপ্রাণিত ভবিষ্যতের সদস্য\\n *"
+    "bn": "ওহে!\\n প্রকল্পে আমাকে যুক্ত করুন {{projectName}} ।\\n শুভেচ্ছান্তে,\\n অনুপ্রাণিত ভবিষ্যতের সদস্য\\n *"
   },
   {
     "id": "project_request_membership",
@@ -4417,22 +4557,22 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "bn": "যোগদানের জন্য আবেদন{{project}} প্রকল্প *"
+    "bn": "যোগদানের জন্য আবেদন {{project}} প্রকল্প *"
   },
   {
     "id": "project_request_membership_message_recap",
     "en": "<span> A membership request from {{from}} has been received. </span><ul><li>Message: <b>{{msg}}</b></li><li>User status: <b>{{userStatus}}</b></li><li>Action: {{actionUrl}}</li><li>Link: {{projectUrl}}</li><li>Data:<pre>{{data}}</pre></li></ul>",
-    "bn": "<span>থেকে একটি সদস্যতার অনুরোধ</span>{{from}} <span>গৃহীত হয়েছে.</span><ul><li> বার্তা:{{msg}}</li><li> ব্যবহারকারীর অবস্থা:{{userStatus}}</li><li> কর্ম:{{actionUrl}}</li><li> লিঙ্ক:{{projectUrl}}</li><li> ডেটা:<pre>{{data}}</pre></li></ul> *"
+    "bn": "<span>থেকে একটি সদস্যতার অনুরোধ {{from}} গৃহীত হয়েছে.</span><ul><li> বার্তা:<b> {{msg}}</b></li><li> ব্যবহারকারীর অবস্থা:<b> {{userStatus}}</b></li><li> কর্ম: {{actionUrl}}</li><li> লিঙ্ক: {{projectUrl}}</li><li> ডেটা:<pre> {{data}}</pre></li></ul> *"
   },
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "bn": "থেকে সদস্যতার অনুরোধ সাড়া\"{{email}}\" প্রকল্পের জন্য\"{{project}}\" *"
+    "bn": "\"থেকে সদস্যতার অনুরোধের প্রতিক্রিয়া {{email}} \"প্রকল্পের জন্য\" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "bn": "প্রকল্প খুলুন\"{{project}}\" *"
+    "bn": "প্রকল্পটি খুলুন \" {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "bn": "ক্যাশেড ডেটা সাফ করুন *"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "bn": "ডিফল্ট প্যানেল আকারগুলি পুনরায় সেট করুন *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "bn": "ক্যাশেড ডেটা সাফ করুন *"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "bn": "এই অপারেশনটি মানচিত্র টাইলস, জিওজেএসএন স্তরগুলি, খসড়াগুলি, ডাব্লুএমএস প্রতিক্রিয়াগুলি, সারাংশ এবং কাস্টম স্ক্রিপ্টগুলি সহ ম্যাপএক্স দ্বারা সেট করা সমস্ত ক্যাশেড ডেটা সরিয়ে ফেলবে। এটি কেবল আপনার ব্রাউজারকেই প্রভাবিত করবে: কোনও ডেটা সার্ভারের দিক থেকে সরানো হবে না। এই অপারেশন প্রায় মুক্ত হবে<b> {{usage}}</b> । *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "bn": "এই সেশনটি বন্ধ করে পুনরায় চালু করবেন? *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "bn": "আপনি কি এই সেশনটি বন্ধ করে এখনই আবার চালু করতে চান? কোনও সংরক্ষিত পরিবর্তনগুলি হারিয়ে যাবে, কারণ সমস্ত ক্যাশে মুছে ফেলা হয়েছে। *"
   },
   {
     "id": "title_utilities",
@@ -5115,6 +5280,31 @@
     "bn": "পর্দা রেজল্যুশন *"
   },
   {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "bn": "বেস স্তর কনফিগারেশন *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "bn": "এই পদক্ষেপের জন্য বায়ু মোড সক্ষম করুন *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "bn": "এরিয়াল মোড মানচিত্রে একটি উচ্চ রেজোলিউশন বায়বীয় চিত্র যুক্ত করে *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "bn": "এই পদক্ষেপের জন্য '3 ডি অঞ্চল' মোড সক্ষম করুন *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "bn": "'3 ডি অঞ্চল' উচ্চতা 3 মাত্রায় প্রদর্শিত হবে। এটি উচ্চ জুমে ব্যবহারযোগ্য, ক্যামেরাটি কাত করে দেওয়া হয়েছে। পিচ এবং ভারবহন পরিবর্তন করতে আপনার নিয়ন্ত্রণ কী এবং আপনার মাউস ব্যবহার করুন। *"
+  },
+  {
     "id": "schema_story_screen_res_desc",
     "en": "Base resolution of the page during a story map. It will automatically scale to fit the screen and preserve content formating.",
     "bn": "একটি গল্পের মানচিত্রের সময় পৃষ্ঠার বেস রেজোলিউশন। এটি স্বয়ংক্রিয়ভাবে স্ক্রিনে ফিট হওয়ার জন্য এবং সামগ্রী বিন্যাস সংরক্ষণের জন্য স্কেল করবে। *"
@@ -5372,7 +5562,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "bn": "স্থানিক অনুসন্ধানের জন্য, ম্যাপএক্স তাদের জ্যামিতি, ব্যাপ্তি এবং / বা বৈশিষ্ট্যের উপর ভিত্তি করে একাধিক স্থানিক বৈশিষ্ট্যগুলির মধ্যে সম্পর্ক নির্ধারণ করতে পারে। কিছু ক্ষেত্রে, পাঠ্য অনুসন্ধানের সময় প্রাসঙ্গিকতা উন্নত করার জন্য উত্সের সাথে কোনও ভৌগলিক কীওয়ার্ড সংযুক্ত করা ভাল। এম 49 কীওয়ার্ডগুলি আপনাকে এটি করার অনুমতি দেয়। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন। *"
+    "bn": "স্থানিক অনুসন্ধানের জন্য, ম্যাপএক্স তাদের জ্যামিতি, ব্যাপ্তি এবং / বা বৈশিষ্ট্যের উপর ভিত্তি করে একাধিক স্থানিক বৈশিষ্ট্যগুলির মধ্যে সম্পর্ক নির্ধারণ করতে পারে। কিছু ক্ষেত্রে, পাঠ্য অনুসন্ধানের সময় প্রাসঙ্গিকতা উন্নত করার জন্য, উত্সের সাথে কোনও ভৌগলিক কীওয়ার্ড সংযুক্ত করা ভাল। এম 49 কীওয়ার্ডগুলি আপনাকে এটি করার অনুমতি দেয়। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন। *"
   },
   {
     "id": "textual_title",
@@ -5662,7 +5852,7 @@
   {
     "id": "wms_input_service_url",
     "en": "Enter service URL",
-    "bn": "পরিষেবা URL প্রবেশ করান Enter *"
+    "bn": "পরিষেবা URL প্রবেশ করান *"
   },
   {
     "id": "wms_btn_generate_url",
@@ -5862,7 +6052,7 @@
   {
     "id": "error_oneOf",
     "en": "Value must validate against exactly one of the provided schemas. It currently validates against {{0}} of the schemas.",
-    "bn": "প্রদত্ত স্কিমার ঠিক একটিতে মানটিকে অবশ্যই বৈধতা দিতে হবে। এটি বর্তমানে বিরুদ্ধে বৈধতা{{0}} স্কিমার। *"
+    "bn": "প্রদত্ত স্কিমার ঠিক একটিতে মানটিকে অবশ্যই বৈধতা দিতে হবে। এটি বর্তমানে বিরুদ্ধে বৈধতা {{0}} স্কিমার। *"
   },
   {
     "id": "error_not",
@@ -5877,7 +6067,7 @@
   {
     "id": "error_type",
     "en": "Value must be of type {{0}}",
-    "bn": "মান অবশ্যই প্রকারের হতে হবে{{0}} *"
+    "bn": "মান অবশ্যই প্রকারের হতে হবে {{0}} *"
   },
   {
     "id": "error_disallow_union",
@@ -5887,47 +6077,47 @@
   {
     "id": "error_disallow",
     "en": "Value must not be of type {{0}}",
-    "bn": "মান অবশ্যই প্রকারের নয়{{0}} *"
+    "bn": "মান অবশ্যই প্রকারের নয় {{0}} *"
   },
   {
     "id": "error_multipleOf",
     "en": "Value must be a multiple of {{0}}",
-    "bn": "মান অবশ্যই একাধিক হতে হবে{{0}} *"
+    "bn": "মান অবশ্যই একাধিক হতে হবে {{0}} *"
   },
   {
     "id": "error_maximum_excl",
     "en": "Value must be less than {{0}}",
-    "bn": "মান অবশ্যই এর চেয়ে কম হওয়া উচিত{{0}} *"
+    "bn": "মান অবশ্যই এর চেয়ে কম হওয়া উচিত {{0}} *"
   },
   {
     "id": "error_maximum_incl",
     "en": "Value must be at most {{0}}",
-    "bn": "মান সর্বাধিক হওয়া উচিত{{0}} *"
+    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} *"
   },
   {
     "id": "error_minimum_excl",
     "en": "Value must be greater than {{0}}",
-    "bn": "মান অবশ্যই এর চেয়ে বড় হতে হবে{{0}} *"
+    "bn": "মান অবশ্যই এর চেয়ে বড় হতে হবে {{0}} *"
   },
   {
     "id": "error_minimum_incl",
     "en": "Value must be at least {{0}}",
-    "bn": "মান কমপক্ষে হওয়া উচিত{{0}} *"
+    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} *"
   },
   {
     "id": "error_maxLength",
     "en": "Value must be at most {{0}} characters long",
-    "bn": "মান সর্বাধিক হওয়া উচিত{{0}} অক্ষর দীর্ঘ *"
+    "bn": "মান সর্বাধিক হওয়া উচিত {{0}} অক্ষর দীর্ঘ *"
   },
   {
     "id": "error_minLength",
     "en": "Value must be at least {{0}} characters long",
-    "bn": "মান কমপক্ষে হওয়া উচিত{{0}} অক্ষর দীর্ঘ *"
+    "bn": "মান কমপক্ষে হওয়া উচিত {{0}} অক্ষর দীর্ঘ *"
   },
   {
     "id": "error_pattern",
     "en": "Value must match the pattern {{0}}",
-    "bn": "মানটি অবশ্যই প্যাটার্নের সাথে মেলে{{0}} *"
+    "bn": "মানটি অবশ্যই প্যাটার্নের সাথে মেলে {{0}} *"
   },
   {
     "id": "error_additionalItems",
@@ -5937,12 +6127,12 @@
   {
     "id": "error_maxItems",
     "en": "Value must have at most {{0}} items",
-    "bn": "সর্বাধিক মান থাকতে হবে{{0}} আইটেম *"
+    "bn": "সর্বাধিক মান থাকতে হবে {{0}} আইটেম *"
   },
   {
     "id": "error_minItems",
     "en": "Value must have at least {{0}} items",
-    "bn": "মান কমপক্ষে থাকতে হবে{{0}} আইটেম *"
+    "bn": "মান কমপক্ষে থাকতে হবে {{0}} আইটেম *"
   },
   {
     "id": "error_uniqueItems",
@@ -5952,27 +6142,27 @@
   {
     "id": "error_maxProperties",
     "en": "Object must have at most {{0}} properties",
-    "bn": "অবজেক্টের সর্বাধিক থাকতে হবে{{0}} বৈশিষ্ট্য *"
+    "bn": "অবজেক্টের সর্বাধিক থাকতে হবে {{0}} বৈশিষ্ট্য *"
   },
   {
     "id": "error_minProperties",
     "en": "Object must have at least {{0}} properties",
-    "bn": "অবজেক্টের কমপক্ষে থাকতে হবে{{0}} বৈশিষ্ট্য *"
+    "bn": "অবজেক্টের কমপক্ষে থাকতে হবে {{0}} বৈশিষ্ট্য *"
   },
   {
     "id": "error_required",
     "en": "Object is missing the required property '{{0}}'",
-    "bn": "অবজেক্টটি প্রয়োজনীয় সম্পত্তি হারিয়েছে '{{0}} ' *"
+    "bn": "অবজেক্টটি প্রয়োজনীয় সম্পত্তি হারিয়েছে ' {{0}} ' *"
   },
   {
     "id": "error_additional_properties",
     "en": "No additional properties allowed, but property {{0}} is set",
-    "bn": "কোনও অতিরিক্ত সম্পত্তি অনুমোদিত নয়, কিন্তু সম্পত্তি{{0}} সেট করা আছে *"
+    "bn": "কোনও অতিরিক্ত সম্পত্তি অনুমোদিত নয়, কিন্তু সম্পত্তি {{0}} সেট করা আছে *"
   },
   {
     "id": "error_dependency",
     "en": "Must have property {{0}}",
-    "bn": "সম্পত্তি থাকতে হবে{{0}} *"
+    "bn": "সম্পত্তি থাকতে হবে {{0}} *"
   },
   {
     "id": "button_delete_all",
@@ -5987,17 +6177,17 @@
   {
     "id": "button_delete_last",
     "en": "Last {{0}}",
-    "bn": "শেষ{{0}} *"
+    "bn": "শেষ {{0}} *"
   },
   {
     "id": "button_delete_last_title",
     "en": "Delete Last {{0}}",
-    "bn": "শেষ মুছুন{{0}} *"
+    "bn": "শেষ মুছুন {{0}} *"
   },
   {
     "id": "button_add_row_title",
     "en": "Add {{0}}",
-    "bn": "অ্যাড{{0}} *"
+    "bn": "অ্যাড {{0}} *"
   },
   {
     "id": "button_move_down_title",
@@ -6012,7 +6202,7 @@
   {
     "id": "button_delete_row_title",
     "en": "Delete {{0}}",
-    "bn": "মুছে ফেলা{{0}} *"
+    "bn": "মুছে ফেলা {{0}} *"
   },
   {
     "id": "button_delete_row_title_short",
@@ -6042,12 +6232,12 @@
   {
     "id": "login_single_use_password_email",
     "en": "<div style='max-width:400px;padding:20px'>Hello,  <br><br> Here is the requested password:  <hr>  <span style='font-family:monospace;'>{{password}}</span>  <hr> This secure password is valid only once, for the current MapX session and will be invalidated after 20 minutes.<br>Best regards,<br><br>Your MapX team.<br><br>  <span style='opacity:0.5;font-size:0.8em'>If you did not make this request, one of our user probably entered your email address by mistake.</span></div>",
-    "bn": "<div style='max-width:400px;padding:20px'>হ্যালো,<br><br> অনুরোধ করা পাসওয়ার্ডটি এখানে:<hr>{{password}}<hr> এই সুরক্ষিত পাসওয়ার্ডটি কেবলমাত্র বর্তমান মানচিত্রের সেশনের জন্য একবারেই বৈধ এবং 20 মিনিটের পরে অবৈধ হয়ে যাবে।<br> শুভেচ্ছান্তে,<br><br> আপনার ম্যাপএক্স টিম।<br><br> <span style='opacity:0.5;font-size:0.8em'>আপনি যদি এই অনুরোধটি না করেন তবে আমাদের একজন ব্যবহারকারী সম্ভবত ভুলক্রমে আপনার ইমেল ঠিকানাটি প্রবেশ করেছেন।</span></div> *"
+    "bn": "<div style=\"max-width:400px;padding:20px\">হ্যালো,<br><br> অনুরোধ করা পাসওয়ার্ডটি এখানে:<hr><span style=\"font-family:monospace;\"> {{password}}</span><hr> এই সুরক্ষিত পাসওয়ার্ডটি কেবলমাত্র বর্তমান মানচিত্রের সেশনের জন্য একবারেই বৈধ এবং 20 মিনিটের পরে অবৈধ হয়ে যাবে।<br> শুভেচ্ছান্তে,<br><br> আপনার ম্যাপএক্স টিম।<br><br> <span style=\"opacity:0.5;font-size:0.8em\">আপনি যদি এই অনুরোধটি না করেন তবে আমাদের একজন ব্যবহারকারী সম্ভবত ভুলক্রমে আপনার ইমেল ঠিকানাটি প্রবেশ করেছেন।</span></div> *"
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href='{{linkKnowledgeBase}}'>জ্ঞান বেসটি</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে কোনও পরামর্শ থাকে বা আপনি যদি কোনও বাগ রিপোর্ট করতে চান তবে আমাদের <a href='{{linkIssue}}'>ইস্যু ট্র্যাকারটি দেখুন</a><br> ধন্যবাদ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "bn": "স্বাগত!<br> প্রযুক্তিগত তথ্যের জন্য, আপনি আমাদের <a href=\"{{linkKnowledgeBase}}\">জ্ঞান বেসটি</a> পড়তে পারেন। আপনার যদি এই ওয়েবসাইট সম্পর্কে কোনও পরামর্শ থাকে বা আপনি যদি কোনও বাগ রিপোর্ট করতে চান তবে আমাদের <a href=\"{{linkIssue}}\">ইস্যু ট্র্যাকারটি দেখুন</a><br> ধন্যবাদ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6072,7 +6262,7 @@
   {
     "id": "api_upload_file_max_size_exceeded",
     "en": "Maximum file size of {{size}} has been reached. You are not allowed to upload file greater than that. Please contact us for more information.",
-    "bn": "সর্বোচ্চ ফাইল আকার{{size}} পৌছে গেছে. এর চেয়ে বড় আপনাকে আপলোড করার অনুমতি নেই। আরও তথ্যের জন্য আমাদের সাথে যোগাযোগ করুন। *"
+    "bn": "সর্বোচ্চ ফাইল আকার {{size}} পৌছে গেছে. এর চেয়ে বড় আপনাকে আপলোড করার অনুমতি নেই। আরও তথ্যের জন্য আমাদের সাথে যোগাযোগ করুন। *"
   },
   {
     "id": "modal_check_confirm_project_change_txt",
@@ -6127,7 +6317,7 @@
   {
     "id": "share_mode_static_desc",
     "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন যদি আপনি সীমিত কার্যকারিতা সহ ম্যাপএক্সের একটি হালকা ও দ্রুত সংস্করণ ব্যবহার করে কোনও মতামত ভাগ করতে চান। এই পদ্ধতিটি ব্যবহার করে, ভাগ করা লিঙ্কটি সহ যে কাউকে ম্যাপএক্সে নিবন্ধভুক্ত না করে নির্বাচিত ভিউটি পড়তে দেওয়া হবে। আপনি যদি কোনও গল্পের মানচিত্র যুক্ত করেন তবে এটি অন্য কোনও দর্শন বর্জন করে স্বয়ংক্রিয়ভাবে শুরু হবে। *"
+    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন যদি আপনি সীমিত কার্যকারিতা সহ ম্যাপএক্সের লাইটওয়েট এবং দ্রুত সংস্করণ ব্যবহার করে কোনও মতামত ভাগ করতে চান। এই পদ্ধতিটি ব্যবহার করে, ভাগ করা লিঙ্কটি সহ যে কাউকে ম্যাপএক্সে নিবন্ধভুক্ত না করে নির্বাচিত ভিউটি পড়তে দেওয়া হবে। আপনি যদি কোনও গল্পের মানচিত্র যুক্ত করেন তবে এটি অন্য কোনও দর্শন বর্জন করে স্বয়ংক্রিয়ভাবে শুরু হবে। *"
   },
   {
     "id": "share_views_check_label",
@@ -6157,7 +6347,7 @@
   {
     "id": "share_views_open_check_desc",
     "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "bn": "অ্যাপ্লিকেশন চালু হওয়ার পরে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য ভিউগুলি যুক্ত করুন। এটি বোতামটি 'ফিল্টার অ্যাক্টিভেট ভিউ' সক্ষম করবে এবং অ-অ্যাক্টিভেটেড ভিউটি লুকিয়ে রাখবে। *"
+    "bn": "অ্যাপ্লিকেশন চালু হওয়ার পরে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য দর্শন যুক্ত করুন। এটি বোতামটি 'ফিল্টার অ্যাক্টিভেট ভিউ' সক্ষম করবে এবং অ-অ্যাক্টিভেটেড ভিউটি লুকিয়ে রাখবে। *"
   },
   {
     "id": "share_collections_check_label",
@@ -6202,7 +6392,7 @@
   {
     "id": "share_iframe_check_desc",
     "en": "Embed the link in an <iframe> HTML tag to easily add MapX to your website.",
-    "bn": "লিঙ্কটি একটিতে এম্বেড করুন<iframe> এইচটিএমএল ট্যাগটি সহজেই আপনার ওয়েবসাইটে ম্যাপএক্স যুক্ত করতে পারে। *"
+    "bn": "লিঙ্কটি একটিতে এম্বেড করুন<iframe> এইচটিএমএল ট্যাগটি সহজেই আপনার ওয়েবসাইটে ম্যাপএক্স যুক্ত করতে পারে।</iframe> *"
   },
   {
     "id": "share_in_project_title",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "bn": "প্রকল্পে ভূমিকা আপডেট হয়েছে{{nameProject}} *"
+    "bn": "প্রকল্পে ভূমিকা আপডেট হয়েছে {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "bn": "<p>হ্যালো,</p><p> একজন প্রশাসক আপনার প্রকল্পের ভূমিকা পরিবর্তন করেছেন{{projectLink}} ।</p><p> পরিবর্তনগুলির তালিকা এখানে রয়েছে:</p><p>{{txtRoleChange}}</p><p> আপনার দিনটি শুভ হোক !</p> <i style='float:right'>ম্যাপএক্স টিম।</i> *"
+    "bn": "<p>হ্যালো,</p><p> একজন প্রশাসক আপনার প্রকল্পের ভূমিকা পরিবর্তন করেছেন {{projectLink}} ।</p><p> পরিবর্তনগুলির তালিকা এখানে রয়েছে:</p><p> {{txtRoleChange}}</p><p> আপনার দিনটি শুভ হোক !</p> <i style=\"float:right\">ম্যাপএক্স টিম।</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "bn": "<p>হ্যালো,</p><p> আপনার প্রকল্পের ভূমিকা পরিবর্তন হয়েছে{{projectLink}} ।</p><p> পরিবর্তনগুলির তালিকা এখানে রয়েছে:{{changes}}<p> আপনার দিনটি শুভ হোক !</p> *"
+    "bn": "<p>হ্যালো,</p><p> আপনার প্রকল্পের ভূমিকা পরিবর্তন হয়েছে {{projectLink}} ।</p><p> পরিবর্তনগুলির তালিকা এখানে রয়েছে: {{changes}}</p><p> আপনার দিনটি শুভ হোক !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "bn": "যোগ করো:{{group}}\n *"
+    "bn": "যোগ করো: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "bn": "থেকে সরানো:{{group}}\n *"
+    "bn": "থেকে সরানো: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "bn": "ভুল ফরম্যাট{{format}} , ডিফল্ট ফর্ম্যাট ব্যবহার করে{{formatDefault}} । *"
+    "bn": "ভুল ফরম্যাট {{format}} , ডিফল্ট ফর্ম্যাট ব্যবহার করে {{formatDefault}} । *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "bn": "স্তর 'এর জন্য অবৈধ জ্যামিতি পাওয়া গেছে{{title}} '({{idLayer}} )। *"
+    "bn": "স্তর 'এর জন্য অবৈধ জ্যামিতি পাওয়া গেছে {{title}} '( {{idLayer}} )। *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "bn": "একটি ইমেল পাঠানো হবে{{email}} । ডাউনলোড <a href='{{url}}'>লিঙ্কটি</a> প্রক্রিয়া শেষে সক্রিয় করা হবে *"
+    "bn": "একটি ইমেল পাঠানো হবে<a href=\"mailto:={{email}}\"> {{email}}</a> । ডাউনলোড <a href=\"{{url}}\">লিঙ্কটি</a> প্রক্রিয়া শেষে সক্রিয় করা হবে *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "bn": "রূপান্তর বার্তা:{{stdout}} *"
+    "bn": "রূপান্তর বার্তা: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "bn": "রূপান্তর সতর্কতা:{{stderr}} *"
+    "bn": "রূপান্তর সতর্কতা: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "bn": "রূপান্তর ত্রুটি।{{error}} *"
+    "bn": "রূপান্তর ত্রুটি। {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর হয়েছে{{format}} । <a href={{url}}></a>{{title}} *"
+    "bn": "ফর্ম্যাট ব্যবহার করে রূপান্তর হয়েছে {{format}} ।<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "bn": "স্তর{{title}} রফতানি করা *"
+    "bn": "স্তর {{title}} রফতানি করা *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত: <a href={{url}}></a>{{title}} *"
+    "bn": "অনুরোধ করা ডেটা এই লিঙ্কটি ব্যবহার করে ডাউনলোড করার জন্য প্রস্তুত:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "bn": "সংক্ষেপণের সতর্কতা:{{err}} *"
+    "bn": "সংক্ষেপণের সতর্কতা: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "bn": "সংক্ষেপণ ত্রুটি:{{err}} *"
+    "bn": "সংক্ষেপণ ত্রুটি: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "bn": "ম্যাপএক্স থেকে ডাউনলোড করা হয়েছে{{date}} *"
+    "bn": "ম্যাপএক্স থেকে ডাউনলোড করা হয়েছে {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "bn": "প্রধান প্যানেল *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "bn": "প্যানেল নিয়ন্ত্রণ করে *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6397,7 +6592,7 @@
   {
     "id": "vt_desc",
     "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
-    "bn": "একটি ভেক্টর স্তরযুক্ত বৈশিষ্ট্যগুলি। এই ধরণের স্তরগুলি জ্যামিতি এবং একটি বিশিষ্ট সারণীতে থাকা সম্পর্কিত তথ্য প্রদর্শন করে। ফিল্টারিং, জুমিং বা হাইলাইটিংয়ের মতো অনেকগুলি ইন্টারেক্টিভ বৈশিষ্ট্য সক্ষম করা আছে। *"
+    "bn": "একটি ভেক্টর স্তরযুক্ত বৈশিষ্ট্যগুলি। এই ধরণের স্তরগুলি জ্যামিতি এবং একটি বিশিষ্ট সারণীতে থাকা সম্পর্কিত তথ্য প্রদর্শন করে। ফিল্টারিং, জুমিং বা হাইলাইটিংয়ের মতো অনেকগুলি ইন্টারেক্টিভ বৈশিষ্ট্য সক্ষম। *"
   },
   {
     "id": "gj_desc",
@@ -6447,11 +6642,16 @@
   {
     "id": "view_local_desc",
     "en": "Views from this project ( excludes external views ).",
-    "bn": "এই প্রকল্পের দর্শনগুলি (বাহ্যিক দর্শনগুলি বাদ দেয়)। *"
+    "bn": "এই প্রকল্পের দর্শন (বাহ্যিক দর্শনগুলি বাদ দেয়)। *"
   },
   {
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "bn": "অনুবাদ বাদ দিলে ইংরেজী ব্যতীত অন্য ভাষাও স্বয়ংক্রিয় অনুবাদ করা যেতে পারে। এই জাতীয় ক্ষেত্রে, একটি গ্রহাণু দেখানো হবে। *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "bn": "বিজ্ঞপ্তি *"
   }
 ]

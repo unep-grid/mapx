@@ -1,0 +1,126 @@
+/*.mx-draw--btn-edit {*/
+/*&:before {*/
+/*icon-font: url('./svg/edit.svg');*/
+/*}*/
+/*}*/
+.mx-draw--btn-edit {
+  &:before {
+    icon-font: url('./svg/vertices.svg');
+  }
+  &:after {
+    content: '';
+    icon-font: url('./svg/pointer.svg');
+    position: absolute;
+    top: 3px;
+    left: 3px;
+  }
+}
+.mx-draw--btn-point {
+  &:before {
+    icon-font: url('./svg/point.svg');
+  }
+  &:after {
+    content: '+';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+  }
+}
+.mx-draw--btn-line {
+  &:before {
+    icon-font: url('./svg/line.svg');
+  }
+  &:after {
+    content: '+';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+  }
+}
+.mx-draw--btn-polygon {
+  &:before {
+    icon-font: url('./svg/polygon.svg');
+  }
+  &:after {
+    content: '+';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+  }
+}
+.mx-draw--btn-trash {
+  &:before {
+    icon-font: url('./svg/trash.svg');
+  }
+}
+.mx-draw--btn-save {
+  &:before {
+    icon-font: url('./svg/floppy.svg');
+  }
+}
+.mx-draw--btn-combine {
+  &:before {
+    icon-font: url('./svg/combine.svg');
+  }
+}
+.mx-draw--btn-uncombine {
+  &:before {
+    icon-font: url('./svg/uncombine.svg');
+  }
+}
+.mx-draw--btn-help {
+  &:before {
+    icon-font: url('./svg/vertices.svg');
+  }
+  &:after {
+    content: '?';
+    position: absolute;
+    top: 9px;
+    left: 10px;
+    font-size: 0.7em;
+  }
+}
+.mapboxgl-map.mouse-pointer {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: pointer;
+  }
+}
+.mapboxgl-map.mouse-move {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: move;
+  }
+}
+.mapboxgl-map.mouse-add {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: crosshair;
+  }
+}
+.mapboxgl-map.mouse-move.mode-direct_select {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+}
+.mapboxgl-map.mode-direct_select.feature-vertex.mouse-move {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: move;
+  }
+}
+.mapboxgl-map.mode-direct_select.feature-midpoint.mouse-pointer {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: cell;
+  }
+}
+.mapboxgl-map.mode-direct_select.feature-feature.mouse-move {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: move;
+  }
+}
+.mapboxgl-map.mode-static.mouse-pointer {
+  .mapboxgl-canvas-container.mapboxgl-interactive {
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+  }
+}

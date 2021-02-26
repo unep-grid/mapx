@@ -1,5 +1,3 @@
-/* jshint evil:true, esversion:6  */
-
 /*
  * Update all badges at once
  * @param {Object} o Options
@@ -121,7 +119,7 @@ function addBadgePublic(opt) {
 
   const elBadge = createViewBadge({
     iconClasses: ['mx-view-public-valid', 'fa', 'fa-check-circle'],
-    tooltipClasses: ['hint--left'],
+    tooltipClasses: ['hint--bottom-right'],
     tooltipKey: 'view_badge_public_valid'
   });
   elBadges.appendChild(elBadge);
@@ -135,7 +133,7 @@ function addBadgeEdit(opt) {
   const elBadges = opt.elBadges;
   const elBadge = createViewBadge({
     iconClasses: ['fa', hasEdit ? 'fa-unlock' : 'fa-lock'],
-    tooltipClasses: ['hint--left'],
+    tooltipClasses: ['hint--bottom-right'],
     tooltipKey: hasEdit ? 'view_badge_editable' : 'view_badge_locked'
   });
   elBadges.appendChild(elBadge);
@@ -148,7 +146,7 @@ function addBadgeShared(opt) {
   const elBadges = opt.elBadges;
   const elBadge = createViewBadge({
     iconClasses: ['fa', 'fa-share-alt-square'],
-    tooltipClasses: ['hint--left'],
+    tooltipClasses: ['hint--bottom-right'],
     tooltipKey: 'view_badge_shared'
   });
   elBadges.appendChild(elBadge);
@@ -167,7 +165,7 @@ function addBadgePublicNotValid(opt) {
     style: {
       color: 'red'
     },
-    tooltipClasses: ['hint--left'],
+    tooltipClasses: ['hint--bottom-right'],
     tooltipKey: 'view_badge_public_not_valid'
   });
 
@@ -200,7 +198,7 @@ function createViewBadge(opt) {
   return el(
     'span',
     {
-      class: opt.tooltipClasses || 'hint--left',
+      class: opt.tooltipClasses || 'hint--bottom-right',
       dataset: {
         lang_type: 'tooltip',
         lang_key: opt.tooltipKey || ''

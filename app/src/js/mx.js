@@ -5,6 +5,7 @@ import localforage from 'localforage';
 import mapboxgl from 'mapbox-gl';
 import {settings} from './mx_settings_default.js';
 import {ListenerStore, EventStore} from './listener_store/index.js';
+import {HintHack} from './hint_hack/index.js';
 
 const templates = {
   viewListLegend: require('../dot/view_list_legend_vt.dot.html'),
@@ -25,6 +26,7 @@ const data = {
 const initQueryParams = {}; // set in init_common.js
 const listeners = new ListenerStore();
 const events = new EventStore();
+const hinthack = new HintHack();
 const selectize = {};
 const editors = {};
 const extend = {
@@ -41,6 +43,8 @@ export {
   // listener manager / store
   listeners,
   events,
+  // tooltip helper
+  hinthack,
   // mapx storage
   initQueryParams,
   templates,

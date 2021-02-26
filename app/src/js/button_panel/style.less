@@ -1,3 +1,7 @@
+/*--main */
+/*--container*/
+/*--item*/
+/*--item--content */
 .button-panel--main {
   z-index: 1000;
   pointer-events: none;
@@ -11,23 +15,39 @@
     pointer-events: none;
     position: absolute;
     margin: 5px;
-    min-width: 40px;
-    min-height: 40px;
-    /*flex-grow:1*/
+    min-height: 0px;
+    min-width: 0px;
+    max-width: calc(100vw - 30px);
+    max-height: calc(100vh - 30px);
+    &.button-panel--top-right,
+    &.button-panel--bottom-right {
+      > .button-panel--item {
+        transform: translateX(calc(100% + 50px));
+      }
+    }
+    &.button-panel--top-left,
+    &.button-panel--bottom-left {
+      > .button-panel--item {
+        transform: translateX(calc(-100% - 50px));
+      }
+    }
+    &:focus {
+      .button-panel--item-handles-group {
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
     &.active {
-      min-width: 200px;
-      min-height: 200px;
-      max-width: calc(100% - 60px);
-      max-height: calc(100% - 60px);
       &:hover,
       &.button-panel--container-resize {
         z-index: 1500;
       }
       > .button-panel--item {
-        display: block;
         pointer-events: auto;
+        transform: translateX(0);
       }
-      .button-panel--handles {
+      .button-panel--item-handles {
         display: block;
       }
     }
@@ -38,19 +58,18 @@
       width: 40px;
       height: 40px;
       padding: 0px;
-      z-index: 1;
+      z-index: 1501;
       margin: -5px;
       position: absolute;
-      display: inline-block;
       pointer-events: auto;
       border-radius: 10px;
       opacity: 1;
       background: var(--mx_ui_background);
       transition: opacity 300ms ease-in-out;
       cursor: pointer;
-      &:hover {
-        opacity: 1;
-      }
+      display:flex;
+      justify-content: center;
+      align-items: center;
       .button-panel--btn-flag {
         background-color: red;
         position: absolute;
@@ -64,45 +83,36 @@
         text-align: center;
       }
       .button-panel--btn-icon {
-        width: 100%;
-        height: 100%;
+        /*width: 100%;*/
+        /*height: 100%;*/
         font-family: 'fontawesome';
         font-size: 20px;
-        text-align: center;
-        line-height: 40px;
+        /*text-align: center;*/
+        /*line-height: 40px;*/
         color: inherit;
       }
     }
     .button-panel--item {
-      display: none;
       position: absolute;
       height: 100%;
       width: 100%;
-      min-height: 100px;
-      min-width: 100px;
-      max-width: calc(100vw - 60px);
-      max-height: calc(100vh - 60px);
       z-index: 0;
       padding: 0px;
-      &.button-panel--item-full {
-        width: 100%;
-        height: 100%;
-      }
-      .button-panel--item-title {
-        display: block;
-        &:not(:empty) {
-          padding: 20px;
-        }
-      }
+      transition: transform ease-in-out 500ms;
+      pointer-events: none;
+
       .button-panel--item-content {
         position: absolute;
         height: 100%;
         width: 100%;
         max-height: 100%;
         max-width: 100%;
-        overflow: auto;
+        overflow: auto; 
         border-radius: 10px;
         background: var(--mx_ui_background);
+      }
+      .button-panel--item-content-transparent-background {
+        background: var(--mx_ui_background_transparent);
       }
       .button-panel--item-content:empty:after {
         content: attr(data-empty_title);
@@ -137,6 +147,7 @@
           transition: opacity 200ms ease-in-out;
           &:hover {
             opacity: 1;
+            margin: 30px;
           }
           &.button-panel--top-right {
             margin-top: -15px;
@@ -165,46 +176,53 @@
             background: var(--mx_ui_background);
             text-align: center;
             line-height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
             &:before {
               display: block;
             }
-            .button-panel--item-handle-button {
-              font-size: 1em;
-              &:hover {
-                cursor: pointer;
+            .button-panel--item-handle-icon {
+              pointer-events: none;
+            }
+            &[data-id='half-height'] {
+              > .button-panel--item-handle-icon {
+                &:before {
+                  icon-font: url(./svg/resize_auto_half_height.svg);
+                }
               }
             }
-            &.button-panel--item-handle-button[data-id='half-height'] {
-              &:before {
-                icon-font: url(./svg/resize_auto_half_height.svg);
+            &[data-id='half-width'] {
+              > .button-panel--item-handle-icon {
+                &:before {
+                  icon-font: url(./svg/resize_auto_half_width.svg);
+                }
               }
             }
-            &.button-panel--item-handle-button[data-id='half-width'] {
-              &:before {
-                icon-font: url(./svg/resize_auto_half_width.svg);
+            &[data-id='full'] {
+              > .button-panel--item-handle-icon {
+                &:before {
+                  icon-font: url(./svg/resize_auto_full.svg);
+                }
               }
             }
-            &.button-panel--item-handle-button[data-id='full'] {
-              &:before {
-                icon-font: url(./svg/resize_auto_full.svg);
-              }
-            }
-            .button-panel--item-handle[data-corner='top-right'] {
+            &[data-corner='top-right'] {
               &:hover {
                 cursor: ne-resize;
               }
             }
-            .button-panel--item-handle[data-corner='top-left'] {
+            &[data-corner='top-left'] {
               &:hover {
                 cursor: nw-resize;
               }
             }
-            .button-panel--item-handle[data-corner='bottom-right'] {
+            &[data-corner='bottom-right'] {
               &:hover {
                 cursor: se-resize;
               }
             }
-            .button-panel--item-handle[data-corner='bottom-left'] {
+            &[data-corner='bottom-left'] {
               &:hover {
                 cursor: sw-resize;
               }
@@ -217,7 +235,7 @@
 }
 
 /* responsive */
-@media (max-width: 800px), (max-height: 700px) {
+@media (max-width: 700px), (max-height: 700px) {
   .button-panel--main {
     left: 0px;
     bottom: 0px;
@@ -225,15 +243,42 @@
     right: 0px;
     .button-panel--container {
       margin: 0px;
-      .button-panel--btn {
-        height: 30px;
-        width: 30px;
-        margin: 5px;
-        .button-panel--btn-icon {
-          font-size: 15px;
-          line-height: 30px;
+      .button-panel--item {
+        .button-panel--item-handles {
+          display: none;
+        }
+        .button-panel--item-content {
+          border-radius: 0px;
         }
       }
+      .button-panel--btn {
+        height: 35px;
+        width: 35px;
+        margin: 2px;
+        /*border-radius: 3px;*/
+        border-radius: 50%;
+        opacity: 0.7;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .button-panel--btn-icon {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 700px) {
+  .button-panel--main {
+    .button-panel--container:not(.button-panel--container-no-full-width) {
+      min-width: 100vw !important;
+    }
+  }
+}
+@media (max-height: 700px) {
+  .button-panel--main {
+    .button-panel--container:not(.button-panel--container-no-full-height) {
+      min-height: 100vh !important;
     }
   }
 }

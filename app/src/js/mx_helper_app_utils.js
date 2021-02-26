@@ -1,59 +1,54 @@
+import {miniCacheClear} from './minicache';
+import {IconFlash} from './icon_flash/index.js';
+import {getDictItem, getDictTemplate} from './mx_helper_language.js';
+import {modalConfirm} from './mx_helper_modal.js';
+import {removeCookie} from './mx_helper_cookies.js';
+import {formatByteSize} from './mx_helper_misc';
 /**
  * Remove service worker cache
  */
-export function clearMapxCache() {
-  const h = mx.helpers;
-
-  const elModal = h.modal({
-    title: 'Clear cached and stored data',
-    content: h.el('div',
-      h.el('h3', 'Do you want to remove all cached data?'),
-      h.el(
-        'p',
-        'This operation will remove all cached data set by MapX, including tiles, GeoJSON, drafts, WMS responses, summaries. This will only impact your browser : no data will be removed server side.'
-      )
-    ),
-    buttons: [
-      h.el(
-        'button',
-        {
-          class: ['btn', 'btn-default'],
-          on: {click: clean}
-        },
-        'Yes'
-      )
-    ],
-    textCloseButton: 'Cancel',
-    addBackground : true
+export async function clearMapxCache() {
+  const remove = await modalConfirm({
+    title: getDictItem('utils_clear_cache_title'),
+    content: getDictTemplate('utils_clear_cache', {
+      usage: await getStorageEstimate({format: true})
+    })
   });
-
-  function clean() {
+  if (remove) {
     if ('serviceWorker' in navigator) {
-      caches.keys().then((cacheNames) => {
-        cacheNames.forEach((cacheName) => {
-          caches.delete(cacheName);
-        });
-      });
+      const cacheNames = await caches.keys();
+      for (let cacheName of cacheNames) {
+        caches.delete(cacheName);
+      }
       mx.data.draft.dropInstance();
       mx.data.geojson.dropInstance();
-      h.miniCacheClear(); // minicache
-      h.clearServiceWorker();
-      h.iconFlash('trash-o');
+      if (mx.nc) {
+        mx.nc.clearHistory();
+      }
+      miniCacheClear();
+      clearServiceWorker();
+      new IconFlash('trash-o');
+      const confirmReload = await modalConfirm({
+        title: getDictItem('utils_clear_cache_reload_title'),
+        content: getDictItem('utils_clear_cache_reload')
+      });
+      if (confirmReload) {
+        removeCookie();
+        reload();
+      }
     }
-    elModal.close();
   }
 }
 
 /**
  * Unregister service worker
  */
-export function clearServiceWorker() {
+async function clearServiceWorker() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(function(registrations) {
-      for (let registration of registrations) {
-        registration.unregister();
-      }
-    });
+    const registrations = await navigator.serviceWorker.getRegistrations();
+    for (let registration of registrations) {
+      registration.unregister();
+    }
   }
 }
 
@@ -69,4 +64,27 @@ export function reload() {
  */
 export function getVersion() {
   return mx.version;
+}
+
+/**
+ * Get usage browser storage usage estimate, with optional formating
+ * @param {Object} opt Options
+ * @param {Boolean} opt.format Return human friendly string, e.g (31 MiB)
+ * @return {Numeric|String} Estimated usage
+ */
+
+export async function getStorageEstimate(opt) {
+  let usage = 0;
+  try {
+    opt = Object.assign({}, {format: true}, opt);
+    const est = await navigator.storage.estimate();
+    usage = est.usage;
+  } catch (e) {
+    console.warn('getStorageEstimate failed to estimate storage size.');
+  }
+  if (opt.format) {
+    usage = formatByteSize(usage);
+  }
+
+  return usage;
 }

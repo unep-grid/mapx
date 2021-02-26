@@ -13,6 +13,7 @@
   --mx_ui_background: hsla(0, 0%, 97%, 0.95);
   --mx_ui_background_faded: hsla(0, 0%, 21%, 0.95);
   --mx_ui_background_contrast: hsla(0, 0%, 21%, 0.95);
+  --mx_ui_background_transparent: hsla(0, 0%, 21%, 0.13);
   --mx_ui_shadow: hsla(0, 0%, 60%, 0.3);
   --mx_ui_link: #12b0f8;
   border-color: var(--mx_ui_border);

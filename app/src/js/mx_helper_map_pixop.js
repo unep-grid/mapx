@@ -11,7 +11,11 @@ export function toggleSpotlight(opt) {
    * Mendatory expected ui
    */
   const elToggleMain = document.getElementById('btnOverlapSpotlight');
-  const elToggle = h.isElement(opt.elToggle) ? opt.elToggle : elToggleMain;
+  const elToggle = opt.currentTarget
+    ? opt.currentTarget
+    : h.isElement(opt.elToggle)
+    ? opt.elToggle
+    : elToggleMain;
 
   /*
    * Select number of layer

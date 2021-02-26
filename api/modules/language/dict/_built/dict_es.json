@@ -1245,6 +1245,121 @@
     "es": "Zimbabwe"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "es": "Alternar las herramientas de dibujo de vectores *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "es": "Crea una nueva vista con esta capa y cierra las herramientas *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "es": "Agregar un nuevo punto *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "es": "Agregar una nueva línea *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "es": "Agregar un polígono nuevo *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "es": "Punto *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "es": "Línea *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "es": "Polígono *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "es": "Nombre de la capa *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "es": "Tipo de característica *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "es": "Crear nueva capa vacía *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "es": "Configurar la nueva capa *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "es": "Ayuda de la herramienta de dibujo *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "es": "Mostrar ayuda de la herramienta de dibujo *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "es": "Visite nuestro {{wiki}} para aprender a usar la herramienta de dibujo *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "es": "¿Quieres borrar los cambios? Si se confirma, esto no se puede deshacer. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "es": "¿Eliminar cambios? *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "es": "Cancelar"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "es": "Confirmar y borrar los datos *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "es": "Vista creada. ¿Salir ahora o continuar editando? *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "es": "Continua editando ? *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "es": "Continua editando *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "es": "Cerrar la herramienta *"
+  },
+  {
     "id": "en",
     "en": "English",
     "es": "Inglés"
@@ -1815,6 +1930,16 @@
     "es": "Restablecer orientacion"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "es": "Rotar el mapa a la izquierda *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "es": "Rotar el mapa a la derecha *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "es": "Herramientas de diseño vectorial"
@@ -1860,6 +1985,16 @@
     "es": "Eliminar"
   },
   {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "es": "Eliminación de la vista *"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "es": "¿Le gustaría eliminar esta vista? *"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "es": "Descargar los datos"
@@ -1897,7 +2032,7 @@
   {
     "id": "schema_style_include_upper_bound",
     "en": "Include upper bound in interval",
-    "es": "Incluir límite superior en intervalo *"
+    "es": "Incluir límite superior en el intervalo *"
   },
   {
     "id": "schema_style_include_upper_bound_desc",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "es": "Volver al explorador del mapa"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "es": "Volver al explorador de mapas (o presionar la tecla 'Escape')"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -2797,12 +2932,12 @@
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "es": "Se ha enviado un correo electrónico a{{email}} *"
+    "es": "Se ha enviado un correo electrónico a {{email}} *"
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "es": "Se produjo un error, el correo electrónico no se ha enviado a{{email}} *"
+    "es": "Se produjo un error, el correo electrónico no se ha enviado a {{email}} *"
   },
   {
     "id": "invite_member_email",
@@ -3880,6 +4015,11 @@
     "es": "Capa de fondo descolorida"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "es": "Fondo transparente *"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "es": "Sombra"
@@ -4182,12 +4322,12 @@
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "es": "Invitación para unirse al proyecto\"{{project}}\" *"
+    "es": "Invitación para unirse al proyecto \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "es": "Acepta invitación al proyecto\"{{project}}\" *"
+    "es": "Aceptar invitación al proyecto \" {{project}} \" *"
   },
   {
     "id": "project_invite_message_sent",
@@ -4212,32 +4352,32 @@
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "es": "Hola,<br> Usuario{{emailUser}} 'usó un enlace de invitación para ingresar al proyecto{{project}} .<ul><li> Fecha de caducidad:{{timeExpire}}</li></ul><br> Que tenga un lindo día ! *"
+    "es": "Hola,<br> Usuario {{emailUser}} 'usó un enlace de invitación para ingresar al proyecto {{project}} .<ul><li> Fecha de caducidad: {{timeExpire}}</li></ul><br> Que tenga un lindo día ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "es": "Enlace de invitación utilizado en el proyecto{{project}} *"
+    "es": "Enlace de invitación utilizado en el proyecto {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "es": "Te han agregado al proyecto{{project}} *"
+    "es": "Te han agregado al proyecto {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "es": "Hola,<br> Has sido agregado al proyecto{{project}} en grupos):{{roles}} .<br> Que tenga un lindo día ! *"
+    "es": "Hola,<br> Has sido agregado al proyecto {{project}} en grupos): {{roles}} .<br> Que tenga un lindo día ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "es": "Se ha agregado un usuario al proyecto{{project}} . *"
+    "es": "Se ha agregado un usuario al proyecto {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "es": "Un usuario ({{emailUser}} ) se ha añadido al proyecto{{project}} en grupos){{roles}}<br> Que tenga un lindo día ! *"
+    "es": "Un usuario ( {{emailUser}} ) se ha añadido al proyecto {{project}} en grupos) {{roles}}<br> Que tenga un lindo día ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4417,7 +4557,7 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "es": "Solicitud para unirse al{{project}} proyecto *"
+    "es": "Solicitud para unirse al {{project}} proyecto *"
   },
   {
     "id": "project_request_membership_message_recap",
@@ -4427,12 +4567,12 @@
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "es": "Responder a la solicitud de membresía de\"{{email}}\" Para el proyecto\"{{project}}\" *"
+    "es": "Responder a la solicitud de membresía de \" {{email}} \" Para el proyecto \" {{project}} \" *"
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "es": "Abra el proyecto\"{{project}}\" *"
+    "es": "Abra el proyecto \" {{project}} \" *"
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "es": "Suprimir los datos en caché"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "es": "Restablecer tamaños de panel predeterminados *"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "es": "Suprimir los datos en caché"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "es": "Esta operación eliminará todos los datos almacenados en caché establecidos por MapX, incluidos mosaicos de mapas, capas GeoJSON, borradores, respuestas WMS, resúmenes y scripts personalizados. Esto solo afectará a su navegador: no se eliminarán datos del lado del servidor. Esta operación liberará aproximadamente<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "es": "¿Cerrar esta sesión y reiniciar? *"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "es": "¿Quieres cerrar esta sesión y reiniciar ahora? Los cambios que no se hayan guardado se perderán porque se eliminó todo el caché. *"
   },
   {
     "id": "title_utilities",
@@ -5113,6 +5278,31 @@
     "id": "schema_story_screen_res",
     "en": "Screen resolution",
     "es": "Resolución de la pantalla"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "es": "Configuración de la capa base *"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "es": "Habilite el modo aéreo para este paso *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "es": "El modo aéreo agrega imágenes aéreas de alta resolución al mapa *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "es": "Habilite el modo 'Terreno 3D' para este paso *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "es": "El 'terreno 3d' hará que la elevación aparezca en 3 dimensiones. Esto es útil con un zoom alto, con la cámara inclinada. Utilice su tecla de control y su ratón para modificar el tono y el rumbo. *"
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -6046,8 +6236,8 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "es": "¡Bienvenida!<br> Para obtener información técnica, puede leer nuestra <a href='{{linkKnowledgeBase}}'>Base de conocimientos</a> . Si tiene alguna sugerencia sobre este sitio web, o si desea informar un error, visite nuestro <a href='{{linkIssue}}'>rastreador de problemas</a><br> Gracias ! *"
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "es": "¡Bienvenida!<br> Para obtener información técnica, puede leer nuestra <a href=\"{{linkKnowledgeBase}}\">Base de conocimientos</a> . Si tiene alguna sugerencia sobre este sitio web, o si desea informar un error, visite nuestro <a href=\"{{linkIssue}}\">rastreador de problemas</a><br> Gracias ! *"
   },
   {
     "id": "login_email_new_account_welcome_subject",
@@ -6267,32 +6457,32 @@
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "es": "Roles actualizados en el proyecto{{nameProject}} *"
+    "es": "Roles actualizados en el proyecto {{nameProject}} *"
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "es": "<p>Hola,</p><p> Un administrador cambió sus roles en el proyecto{{projectLink}} .</p><p> Aquí está la lista de cambios:</p><p>{{txtRoleChange}}</p><p> Que tenga un lindo día !</p> <i style='float:right'>El equipo de MapX.</i> *"
+    "es": "<p>Hola,</p><p> Un administrador cambió sus roles en el proyecto {{projectLink}} .</p><p> Aquí está la lista de cambios:</p><p> {{txtRoleChange}}</p><p> Que tenga un lindo día !</p> <i style=\"float:right\">El equipo de MapX.</i> *"
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "es": "<p>Hola,</p><p> Los roles han cambiado en su proyecto{{projectLink}} .</p><p> Aquí está la lista de cambios:{{changes}}<p> Que tenga un lindo día !</p> *"
+    "es": "<p>Hola,</p><p> Los roles han cambiado en su proyecto {{projectLink}} .</p><p> Aquí está la lista de cambios: {{changes}}</p><p> Que tenga un lindo día !</p> *"
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "es": "añadido a:{{group}}\n *"
+    "es": "añadido a: {{group}}\n *"
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "es": "retirado de:{{group}}\n *"
+    "es": "retirado de: {{group}}\n *"
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "es": "Formato inválido{{format}} , usando el formato predeterminado{{formatDefault}} . *"
+    "es": "Formato inválido {{format}} , usando el formato predeterminado {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,17 +6492,17 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "es": "Se encontraron geometrías no válidas para la capa '{{title}} '({{idLayer}} ). *"
+    "es": "Se encontraron geometrías no válidas para la capa ' {{title}} '( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "es": "Se enviará un correo electrónico a{{email}} . El <a href='{{url}}'>enlace de</a> descarga se activará al final del proceso. *"
+    "es": "Se enviará un correo electrónico a<a href=\"mailto:={{email}}\"> {{email}}</a> . El <a href=\"{{url}}\">enlace de</a> descarga se activará al final del proceso. *"
   },
   {
     "id": "get_source_extraction_wait",
     "en": "Starting data conversion. This could take a while, please wait",
-    "es": "Iniciando la conversión de datos. Esto puede tardar un poco, espere *"
+    "es": "Iniciando la conversión de datos. Esto podría tardar un poco, espere *"
   },
   {
     "id": "get_source_conversion_progress",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "es": "Mensaje de conversión:{{stdout}} *"
+    "es": "Mensaje de conversión: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "es": "Advertencia de conversión:{{stderr}} *"
+    "es": "Advertencia de conversión: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "es": "Error de conversión.{{error}} *"
+    "es": "Error de conversión. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "es": "Conversión realizada usando formato{{format}} . <a href={{url}}></a>{{title}} *"
+    "es": "Conversión realizada usando formato {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "es": "Capa{{title}} exportado *"
+    "es": "Capa {{title}} exportado *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "es": "Los datos solicitados están listos para ser descargados usando este enlace: <a href={{url}}></a>{{title}} *"
+    "es": "Los datos solicitados están listos para descargar a través de este enlace:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "es": "Advertencia de compresión:{{err}} *"
+    "es": "Advertencia de compresión: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "es": "Error de compresión:{{err}} *"
+    "es": "Error de compresión: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "es": "Descargado de MapX en{{date}} *"
+    "es": "Descargado de MapX en {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "es": "Panel principal *"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "es": "Panel de controles *"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6422,7 +6617,7 @@
   {
     "id": "time_slider_desc",
     "en": "Views with a time slider (accessible in the view settings).",
-    "es": "Vistas con control deslizante de tiempo (accesible en la configuración de la vista). *"
+    "es": "Vistas con un control deslizante de tiempo (accesible en la configuración de la vista). *"
   },
   {
     "id": "overlap_desc",
@@ -6432,7 +6627,7 @@
   {
     "id": "custom_style_desc",
     "en": "Views with a customized style. e.g. heat maps, bivariate classification.",
-    "es": "Vistas con estilo personalizado. por ejemplo, mapas de calor, clasificación bivariada. *"
+    "es": "Vistas con un estilo personalizado. por ejemplo, mapas de calor, clasificación bivariada. *"
   },
   {
     "id": "custom_code_desc",
@@ -6452,6 +6647,11 @@
   {
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
-    "es": "Se puede traducir automáticamente un idioma que no sea el inglés, en caso de que falte la traducción. En tales casos, se mostrará un asterisco. *"
+    "es": "Se puede traducir automáticamente un idioma que no sea inglés, en caso de que falte la traducción. En tales casos, se mostrará un asterisco. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "es": "Notificaciones *"
   }
 ]

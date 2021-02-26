@@ -1245,6 +1245,121 @@
     "fr": "Zimbabwe"
   },
   {
+    "id": "draw_btn_toggle",
+    "en": "Toggle the vector draw tools",
+    "fr": "Activer / désactiver les outils de dessin vectoriel *"
+  },
+  {
+    "id": "draw_btn_save",
+    "en": "Create a new view with this layer and close the tools",
+    "fr": "Créez une nouvelle vue avec ce calque et fermez les outils *"
+  },
+  {
+    "id": "draw_btn_mode_point",
+    "en": "Add a new point",
+    "fr": "Ajouter un nouveau point *"
+  },
+  {
+    "id": "draw_btn_mode_line",
+    "en": "Add a new line",
+    "fr": "Ajouter une nouvelle ligne *"
+  },
+  {
+    "id": "draw_btn_mode_polygon",
+    "en": "Add a new polygon",
+    "fr": "Ajouter un nouveau polygone *"
+  },
+  {
+    "id": "draw_point",
+    "en": "Point",
+    "fr": "Point *"
+  },
+  {
+    "id": "draw_line",
+    "en": "Line",
+    "fr": "Ligne *"
+  },
+  {
+    "id": "draw_polygon",
+    "en": "Polygon",
+    "fr": "Polygone *"
+  },
+  {
+    "id": "draw_layer_name",
+    "en": "Layer name",
+    "fr": "Nom du calque *"
+  },
+  {
+    "id": "draw_feature_type",
+    "en": "Type of feature",
+    "fr": "Type de fonctionnalité *"
+  },
+  {
+    "id": "draw_config_submit",
+    "en": "Create new empty layer",
+    "fr": "Créer un nouveau calque vide *"
+  },
+  {
+    "id": "draw_config_title",
+    "en": "Configure the new layer",
+    "fr": "Configurer la nouvelle couche *"
+  },
+  {
+    "id": "draw_help_title",
+    "en": "Draw tool help",
+    "fr": "Aide de l'outil de dessin *"
+  },
+  {
+    "id": "draw_btn_help",
+    "en": "Show drawing tool help",
+    "fr": "Afficher l'aide de l'outil de dessin *"
+  },
+  {
+    "id": "draw_help_link",
+    "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
+    "fr": "Veuillez visiter notre {{wiki}} pour apprendre à utiliser l'outil de dessin *"
+  },
+  {
+    "id": "draw_discard_change",
+    "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
+    "fr": "Voulez-vous supprimer les modifications? Si cela est confirmé, cela ne peut pas être annulé. *"
+  },
+  {
+    "id": "draw_discard_change_title",
+    "en": "Delete changes ?",
+    "fr": "Supprimer les modifications? *"
+  },
+  {
+    "id": "draw_discard_change_btn_cancel",
+    "en": "Cancel",
+    "fr": "Annuler"
+  },
+  {
+    "id": "draw_discard_change_btn_confirm",
+    "en": "Confirm and delete the data",
+    "fr": "Confirmer et supprimer les données *"
+  },
+  {
+    "id": "draw_saved_quit",
+    "en": "View created. Quit now or continue editing ?",
+    "fr": "Vue créée. Quitter maintenant ou continuer à modifier? *"
+  },
+  {
+    "id": "draw_saved_quit_title",
+    "en": "Continue editing ?",
+    "fr": "Continuer l'édition? *"
+  },
+  {
+    "id": "draw_saved_quit_stay",
+    "en": "Continue editing",
+    "fr": "Continuer l'édition *"
+  },
+  {
+    "id": "draw_saved_quit_confirm",
+    "en": "Close the tool",
+    "fr": "Fermer l'outil *"
+  },
+  {
     "id": "en",
     "en": "English",
     "fr": "Anglais"
@@ -1815,6 +1930,16 @@
     "fr": "Réinitialiser l'orientation"
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "fr": "Faire pivoter la carte vers la gauche *"
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "fr": "Faites pivoter la carte vers la droite *"
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "fr": "Outils de \n dessin vectoriel"
@@ -1858,6 +1983,16 @@
     "id": "btn_opt_delete_geojson",
     "en": "Delete",
     "fr": "Supprimer"
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "fr": "Suppression de la vue"
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "fr": "Souhaitez-vous supprimier cette vue ?"
   },
   {
     "id": "btn_opt_download",
@@ -2091,8 +2226,8 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "fr": "Revenir à l'explorateur"
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "fr": "Revenir à l'explorateur (ou pressez la touche Escape)"
   },
   {
     "id": "btn_story_edit_cancel",
@@ -3880,6 +4015,11 @@
     "fr": "Arrière-plan estompé"
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "fr": "Arrière-plan transparent"
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "fr": "Ombrage"
@@ -4212,32 +4352,32 @@
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "fr": "Bonjour,<br> Utilisateur '{{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet{{project}} .<ul><li> Date d'expiration:{{timeExpire}}</li></ul><br> Passe une bonne journée ! *"
+    "fr": "Bonjour,<br> Utilisateur ' {{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet {{project}} .<ul><li> Date d'expiration: {{timeExpire}}</li></ul><br> Passe une bonne journée ! *"
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "fr": "Lien d'invitation utilisé dans le projet{{project}} *"
+    "fr": "Lien d'invitation utilisé dans le projet {{project}} *"
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "fr": "Vous avez été ajouté au projet{{project}} *"
+    "fr": "Vous avez été ajouté au projet {{project}} *"
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "fr": "Bonjour,<br> Vous avez été ajouté au projet{{project}} en groupes):{{roles}} .<br> Passe une bonne journée ! *"
+    "fr": "Bonjour,<br> Vous avez été ajouté au projet {{project}} en groupes): {{roles}} .<br> Passe une bonne journée ! *"
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "fr": "Un utilisateur a été ajouté au projet{{project}} . *"
+    "fr": "Un utilisateur a été ajouté au projet {{project}} . *"
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "fr": "Un utilisateur ({{emailUser}} ) a été ajouté au projet{{project}} en groupes){{roles}}<br> Passe une bonne journée ! *"
+    "fr": "Un utilisateur ( {{emailUser}} ) a été ajouté au projet {{project}} en groupes) {{roles}}<br> Passe une bonne journée ! *"
   },
   {
     "id": "project_countries_highlight",
@@ -4448,6 +4588,31 @@
     "id": "btn_clear_cache",
     "en": "Clear cached data",
     "fr": "Supprimer les données en cache"
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "fr": "Rétablir la taille des panneaux"
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "fr": "Supprimer les données en cache"
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "fr": "Cette opération supprimera toutes les données mises en cache par MapX, y compris les tuiles de carte, les couches GeoJSON, les brouillons, les réponses WMS, les résumés et les scripts personnalisés. Cela n'impactera que votre navigateur: aucune donnée ne sera supprimée côté serveur. Cette opération libérera environ<b> {{usage}}</b> . *"
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "fr": "Fermer cette session et redémarrer ?"
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "fr": "Souhaitez-vous fermer cette session et redémarrer maintenant ? Tout changement non sauvegardé sera perdu, car tout le cache a été supprimé."
   },
   {
     "id": "title_utilities",
@@ -5113,6 +5278,31 @@
     "id": "schema_story_screen_res",
     "en": "Screen resolution",
     "fr": "Résolution de l'écran"
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "fr": "Configuration de la couche de base"
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "fr": "Activer le mode aérien pour cette étape *"
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "fr": "Le mode aérien ajoute une imagerie aérienne haute résolution à la carte *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "fr": "Activez le mode 'terrain 3D' pour cette étape *"
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fr": "Le «terrain 3D» fera apparaître l'élévation en 3 dimensions. Ceci est utile avec un zoom élevé, avec la caméra inclinée. Utilisez votre touche de contrôle et votre souris pour modifier le pas et le relèvement. *"
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -6046,7 +6236,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
     "fr": "Bienvnue! <br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}'>traqueur d'incidents</a> <br> Merci !"
   },
   {
@@ -6292,7 +6482,7 @@
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "fr": "Format invalide{{format}} , en utilisant le format par défaut{{formatDefault}} . *"
+    "fr": "Format invalide {{format}} , en utilisant le format par défaut {{formatDefault}} . *"
   },
   {
     "id": "get_source_meta_extracted",
@@ -6302,12 +6492,12 @@
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "fr": "Géométries incorrectes trouvées pour la couche '{{title}} '({{idLayer}} ). *"
+    "fr": "Géométries incorrectes trouvées pour la couche ' {{title}} '( {{idLayer}} ). *"
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "fr": "Un e-mail sera envoyé à{{email}} . Le <a href='{{url}}'>lien de</a> téléchargement sera activé à la fin du processus *"
+    "fr": "Un e-mail sera envoyé à<a href=\"mailto:={{email}}\"> {{email}}</a> . Le <a href=\"{{url}}\">lien de</a> téléchargement sera activé à la fin du processus *"
   },
   {
     "id": "get_source_extraction_wait",
@@ -6322,27 +6512,27 @@
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "fr": "Message de conversion:{{stdout}} *"
+    "fr": "Message de conversion: {{stdout}} *"
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "fr": "Avertissement de conversion:{{stderr}} *"
+    "fr": "Avertissement de conversion: {{stderr}} *"
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "fr": "Erreur de conversion.{{error}} *"
+    "fr": "Erreur de conversion. {{error}} *"
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "fr": "Conversion effectuée en utilisant le format{{format}} . <a href={{url}}></a>{{title}} *"
+    "fr": "Conversion effectuée en utilisant le format {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "fr": "Couche{{title}} exporté *"
+    "fr": "Couche {{title}} exporté *"
   },
   {
     "id": "get_source_conversion_done_browser_title",
@@ -6352,7 +6542,7 @@
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien: <a href={{url}}></a>{{title}} *"
+    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien:<a href=\"{{url}}\"> {{title}}</a> *"
   },
   {
     "id": "get_source_zip_progress",
@@ -6362,17 +6552,17 @@
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "fr": "Avertissement de compression:{{err}} *"
+    "fr": "Avertissement de compression: {{err}} *"
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "fr": "Erreur de compression:{{err}} *"
+    "fr": "Erreur de compression: {{err}} *"
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "fr": "Téléchargé depuis MapX sur{{date}} *"
+    "fr": "Téléchargé depuis MapX sur {{date}} *"
   },
   {
     "id": "stat_load_please_wait",
@@ -6383,6 +6573,11 @@
     "id": "btn_panel_main",
     "en": "Main panel",
     "fr": "Panneau principal"
+  },
+  {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "fr": "Panneau des contrôles"
   },
   {
     "id": "fetch_views_diff_modal_title",
@@ -6453,5 +6648,10 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "fr": "Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Dans de tels cas, un astérisque sera affiché. *"
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "fr": "Notifications"
   }
 ]

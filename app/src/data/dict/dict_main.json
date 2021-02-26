@@ -871,6 +871,32 @@
     "de": ""
   },
   {
+    "id": "btn_map_rotate_left",
+    "en": "Rotate the map to the left",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_map_rotate_right",
+    "en": "Rotate the map to the right",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "btn_draw_mode",
     "en": "Vector draw tools",
     "fr": "Outils de \n dessin vectoriel",
@@ -984,6 +1010,32 @@
     "ar": "",
     "fa": "حذف",
     "ps": "دا GeoJSON پاک کړئ",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "delete_confirm_geojson_modal_title",
+    "en": "Deletion of the view",
+    "fr": "Suppression de la vue",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "delete_confirm_geojson_modal",
+    "en": "Would you like to delete this view ?",
+    "fr": "Souhaitez-vous supprimier cette vue ?",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
     "bn": "",
     "de": ""
   },
@@ -1587,11 +1639,11 @@
   },
   {
     "id": "btn_story_close",
-    "en": "Back to the map explorer",
-    "fr": "Revenir à l'explorateur",
-    "es": "Volver al explorador del mapa",
+    "en": "Back to the map explorer (or press the 'Escape' key)",
+    "fr": "Revenir à l'explorateur (ou pressez la touche Escape)",
+    "es": "Volver al explorador de mapas (o presionar la tecla 'Escape')",
     "ru": "",
-    "zh": "返回地图浏览器",
+    "zh": "返回地图浏览器（或按“退出”键)",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -1858,7 +1910,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "highlight_where_all",
     "en": "Highlight where all features overlap",
     "fr": "",
@@ -1871,7 +1923,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "highlight_where_any",
     "en": "Highlight any visible feature",
     "fr": "",
@@ -1884,7 +1936,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "highlight_where_two",
     "en": "Highlight where two features overlap",
     "fr": "",
@@ -1897,7 +1949,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "highlight_where_three",
     "en": "Highlight where three features overlap",
     "fr": "",
@@ -1910,7 +1962,7 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "highlight_where_four",
     "en": "Highlight where four features overlap",
     "fr": "",
@@ -6240,6 +6292,19 @@
     "de": ""
   },
   {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "fr": "Arrière-plan transparent",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "mx_ui_shadow",
     "en": "Shadows",
     "fr": "Ombrage",
@@ -7715,6 +7780,71 @@
     "es": "Suprimir los datos en caché",
     "ru": "",
     "zh": "清除缓存数据",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "btn_reset_panel_size",
+    "en": "Reset default panel sizes",
+    "fr": "Rétablir la taille des panneaux",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "utils_clear_cache_title",
+    "en": "Clear cached data",
+    "fr": "Supprimer les données en cache",
+    "es": "Suprimir los datos en caché",
+    "ru": "",
+    "zh": "清除缓存数据",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "utils_clear_cache",
+    "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "utils_clear_cache_reload_title",
+    "en": "Close this session and restart ?",
+    "fr": "Fermer cette session et redémarrer ?",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "utils_clear_cache_reload",
+    "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
+    "fr": "Souhaitez-vous fermer cette session et redémarrer maintenant ? Tout changement non sauvegardé sera perdu, car tout le cache a été supprimé.",
+    "es": "",
+    "ru": "",
+    "zh": "",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -9444,6 +9574,71 @@
     "es": "Resolución de la pantalla",
     "ru": "",
     "zh": "屏幕分辨率",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_step_base_layer",
+    "en": "Base layer configuration",
+    "fr": "Configuration de la couche de base",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_step_add_aerial",
+    "en": "Enable aerial mode for this step",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_step_add_aerial_desc",
+    "en": "The aerial mode add a high resolution aerial imagery to the map",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain",
+    "en": "Enable '3d terrain' mode for this step",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "schema_story_step_add_3d_terrain_desc",
+    "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
     "ar": "",
     "fa": "",
     "ps": "",
@@ -11870,7 +12065,7 @@
   },
   {
     "id": "login_email_new_account_welcome",
-    "en": "Welcome! <br> For technical informations, you can read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
+    "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
     "fr": "Bienvnue! <br> Pour des informations techniques, vous pouvez consulter notre <a href='{{linkKnowledgeBase}}'>Base de connaissances</a>. Si vous avez des suggestions ou si vous souhaitez nous informer d'un bug, n'hésitez pas à utiliser notre <a href='{{linkIssue}}'>traqueur d'incidents</a> <br> Merci !",
     "es": "",
     "ru": "",
@@ -12753,6 +12948,19 @@
     "de": ""
   },
   {
+    "id": "btn_panel_controls",
+    "en": "Controls panel",
+    "fr": "Panneau des contrôles",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "fetch_views_diff_modal_title",
     "en": "Views not available",
     "fr": "Vues non disponible",
@@ -12780,8 +12988,8 @@
   },
   {
     "id": "vt_desc",
-    "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled." ,
-    "fr":"Vues présentant une couche vectorielle. Ce type de couche affiche les géométries et les informations associées contenues dans une table attributaire. Cela permet d'activer des fonctionnalités intéractive comme le filtrage, le zoom ou la mise en évidence.",
+    "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
+    "fr": "Vues présentant une couche vectorielle. Ce type de couche affiche les géométries et les informations associées contenues dans une table attributaire. Cela permet d'activer des fonctionnalités intéractive comme le filtrage, le zoom ou la mise en évidence.",
     "es": "",
     "ru": "",
     "zh": "",
@@ -12925,6 +13133,19 @@
     "id": "language_auto_warning",
     "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
     "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "nc_button",
+    "en": "Notifications",
+    "fr": "Notifications",
     "es": "",
     "ru": "",
     "zh": "",

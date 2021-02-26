@@ -1,0 +1,117 @@
+.nc-main {
+  --nc_notif_message: #4246ef;
+  --nc_notif_progress: #9c8e0f;
+  --nc_notif_verbose: #5d5c5c;
+  --nc_group_border: #525252;
+  --nc_notif_default: #000;
+  --nc_background: #f7f5f5;
+  --nc_notif_error: #da0606;
+  --nc_notif_warning: #f3ab05;
+  --nc_notif_success: #7ed41b;
+  --nc_notif_text: #292929;
+  --nc_progress_background: #868686;
+
+  &.nc-dark {
+    /**
+     * Colors
+     */
+    --nc_background: #252525;
+    --nc_notif_text: #efefef;
+  }
+  display: flex;
+  flex-direction: row-reverse;
+  margin: 5px;
+  max-height: calc(100% - 10px);
+  min-height: calc(100% - 10px);
+  overflow: hidden;
+  color: var(--nc_notif_text);
+  background-color: var(--nc_background);
+  border-radius: 10px;
+  * {
+    color: var(--nc_notif_text);
+  }
+  .nc-controls {
+    width: 100%;
+    display: flex;
+    position: absolute;
+    justify-content: center;
+    bottom: 5px;
+
+    .nc-button {
+      background: var(--nc_background);
+      height: 30px;
+      width: 30px;
+      margin: 4px;
+      border-radius: 50%;
+    }
+  }
+  .nc-container {
+    overflow: auto;
+    width: 100%;
+    &:empty:after {
+      content: '0 Notification';
+      text-align: center;
+      padding: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nc-group-container {
+      .nc-group-header {
+        display: flex;
+        justify-content: center;
+        .nc-group-date {
+          font-size: 0.85em;
+        }
+      }
+      .nc-group {
+        padding: 10px;
+        overflow: hidden;
+        &:after {
+          content: '';
+          margin-left: 20px;
+          margin-right: 20px;
+          border-bottom: 1px solid var(--nc_group_border);
+        }
+        .nc-notif {
+          padding-left: 10px;
+          border-left: 1px solid var(--nc_notif_default);
+          margin-top: 9px;
+          font-size: 0.95em;
+          &.nc-notif-progress {
+            border-color: var(--nc_notif_progress);
+            .nc-progress-bar-container {
+              border-radius: 5px;
+              overflow: hidden;
+              background: var(--nc_progress_background);
+              -webkit-box-shadow: inset 1px 0px 7px -1px #000000;
+              box-shadow: inset 1px 0px 7px -1px #000000;
+              .nc-progress-bar {
+                width: 0%;
+                background: var(--nc_notif_progress);
+                height: 5px;
+                transition: width 200ms ease-in;
+              }
+            }
+          }
+
+          &.nc-notif-info-verbose {
+            border-color: var(--nc_notif_verbose);
+          }
+          &.nc-notif-info-success {
+            border-color: var(--nc_notif_success);
+          }
+          &.nc-notif-info-message {
+            border-color: var(--nc_notif_message);
+          }
+          &.nc-notif-info-error {
+            border-color: var(--nc_notif_error);
+          }
+          &.nc-notif-info-warning {
+            border-color: var(--nc_notif_warning);
+          }
+        }
+      }
+    }
+  }
+}

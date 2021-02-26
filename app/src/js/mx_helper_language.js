@@ -1,10 +1,18 @@
+import {isStringRange} from './is_test/index.js';
+
 /**
  * Update language : Elements, view list and map
+ * @param {String} Language code
  */
 export async function updateLanguage(language) {
-  if(language){
-    mx.settings.language = language;
+  
+  const validLang = isStringRange(language,2,2);
+  
+  if(!validLang){
+    language = mx.settings.language || 'en';
   }
+  
+  mx.settings.language = language;
   const lang = mx.settings.language;
 
   /**
@@ -109,7 +117,7 @@ export async function updateLanguageElements(o) {
 
   // fetch all elements with data-lang_key attr
   els = doc.querySelectorAll('[data-lang_key]');
- 
+
   for (i = 0, iL = els.length; i < iL; i++) {
     el = els[i];
     type = el.dataset.lang_type;
@@ -226,16 +234,30 @@ export async function getDictItem(key, lang) {
  * @param {String} lang  Two letters language code
  * @return {Element} span element with dataset-lang_key
  */
-export async function getTranslationTag(key, lang) {
-  const el = mx.helpers.el('span', {
-    dataset: {
-      lang_key: key
-    }
-  });
+export function getTranslationTag(key, lang) {
+  return mx.helpers.el(
+    'span',
+    {
+      dataset: {
+        lang_key: key
+      }
+    },
+    getDictItem(key, lang)
+  );
+}
 
-  const item = await getDictItem(key, lang);
-  el.innerText = item;
-  return el;
+/**
+* Get template from dict and use an object to replace {{<key>}} parts
+* @param {String} key Dict key 
+* @param {Object} data Object to use for remplacement
+* @param  {String} lang Two letters language
+* @return {String} Parsed template string
+*/
+export async function getDictTemplate(key, data, lang){
+  const template = await getDictItem(key,lang);
+  return template.replace(/{{([^{}]+)}}/g, (matched, key)=>{
+    return data[key];
+  });
 }
 
 /**

@@ -118,6 +118,10 @@ body.mx {
   color: var(--mx_ui_border);
 }
 
+.mx .mapboxgl-map, 
+.mx .mapboxgl-canvas {
+  outline: none;
+}
 .mx .mx-modal-container,
 .mx .selectize-dropdown,
 .mx .mapboxgl-popup-content {
@@ -126,6 +130,8 @@ body.mx {
   box-shadow: var(--mx_ui_box_shadow);
   border-radius: 10px;
 }
+
+
 .mx .selectize-input input {
   color: var(--mx_ui_text);
 }
@@ -218,6 +224,12 @@ span.mx-badge-role {
   background-color: var(--mx_ui_background_contrast);
   outline: 0;
   text-shadow: none;
+}
+
+
+
+.mx [class*='hint--']:after {
+  box-shadow: var(--mx_ui_box_shadow);
 }
 
 /**
@@ -454,4 +466,23 @@ span.mx-badge-role {
 .mx .dashboard {
   line-height: 1.4em;
   font-size: var(--mx_ui_font_size_base);
+}
+
+/**
+* picker
+*/
+.mx .picker_wrapper.popup,
+.mx .picker_wrapper.popup .picker_arrow::before,
+.mx .picker_wrapper.popup .picker_arrow::after {
+  background: var(--mx_ui_background);
+}
+.mx .picker_wrapper button {
+  background-color: var(--mx_ui_background_faded);
+  color: var(--mx_ui_text);
+  background-image: none;
+}
+
+.mx .picker_wrapper button:hover {
+  background-color: var(--mx_ui_text);
+  color: var(--mx_ui_background_faded);
 }
