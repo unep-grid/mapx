@@ -248,7 +248,7 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?",
+    "en": "View created. Quit now or create a new view ?",
     "fr": "",
     "es": "",
     "ru": "",
@@ -261,7 +261,7 @@
   },
   {
     "id": "draw_saved_quit_title",
-    "en": "Continue editing ?",
+    "en": "Create a new view ?",
     "fr": "",
     "es": "",
     "ru": "",
@@ -274,7 +274,7 @@
   },
   {
     "id": "draw_saved_quit_stay",
-    "en": "Continue editing",
+    "en": "Create a new view",
     "fr": "",
     "es": "",
     "ru": "",
