@@ -86,6 +86,12 @@ blockquote {
 
 details {
   padding: 10px;
+  cursor:pointer;
+}
+
+details > summary {
+  cursor:pointer;
+  outline:none;
 }
 
 .mx-inline-progress-container {
