@@ -1342,7 +1342,7 @@
   {
     "id": "draw_saved_quit",
     "en": "View created. Quit now or continue editing ?",
-    "ar": "تم إنشاء العرض. إنهاء الآن أو متابعة التحرير؟ *"
+    "ar": "تم إنشاء العرض. إنهاء الآن أو مواصلة التحرير؟ *"
   },
   {
     "id": "draw_saved_quit_title",
