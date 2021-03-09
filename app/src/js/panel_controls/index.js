@@ -18,26 +18,46 @@ const settings = {
 
 class ControlsPanel {
   constructor(opt) {
-    this.opt = Object.assign({}, opt);
-    this.init();
+    const cp = this;
+    cp.opt = Object.assign({}, opt);
+    cp.sizeOptimizer = cp.sizeOptimizer.bind(cp);
+    cp.init();
   }
 
   init() {
-    const opt = this.opt;
+    const cp = this;
+    const opt = cp.opt;
     Object.keys(settings).forEach((k) => {
       opt[k] = Object.assign({}, settings[k], opt[k]);
     });
     const buttons = generateButtons();
-    this.controls = new ButtonsControls(buttons);
-    this.panel = new ButtonPanel(this.opt.panel);
-    this.panel.elPanelContent.appendChild(this.controls.elGroup);
+    cp.controls = new ButtonsControls(buttons);
+    cp.panel = new ButtonPanel(cp.opt.panel);
+    cp.panel.elPanelContent.appendChild(cp.controls.elGroup);
+    cp.panel.on('resize-end', cp.sizeOptimizer);
+    cp.controls.on('register', cp.sizeOptimizer);
   }
 
-  destroy(){
-   this.panel.destroy();
-   this.controls.destroy();
+  destroy() {
+    const cp = this;
+    cp.panel.destroy();
+    cp.controls.destroy();
   }
 
+  sizeOptimizer() {
+    const cp = this;
+    const rectP = cp.panel.elPanelContent.getBoundingClientRect();
+    const rectC = cp.controls.getInnerRect();
+    const oHeight = rectC.top < rectP.top || rectC.bottom > rectP.bottom || rectP.height > rectC.height + 60 ;
+    const oWidth = rectC.right > rectP.right || rectP.left < rectP.left || rectP.width > rectC.width + 60 ;
+    cp.panel.setAnimate(true);
+    if (oHeight) {
+      cp.panel.height = rectC.height + 60;
+    }
+    if (oWidth) {
+      cp.panel.width =  rectC.width + 60;
+    }
+  }
 }
 
 export {ControlsPanel};

@@ -9,6 +9,7 @@ import {
 import {bindAll} from './../bind_class_methods/index.js';
 import {spatialDataToView} from './../mx_helper_map_dragdrop.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
+import {EventSimple} from '../listener_store/index.js';
 
 import './style.less';
 
@@ -17,8 +18,9 @@ const def = {
     'https://github.com/unep-grid/map-x-mgl/wiki/Draw-:-how-to-create-a-new-vector-layer-from-scratch-in-MapX'
 };
 
-class MapxDraw {
+class MapxDraw extends EventSimple {
   constructor(opt) {
+    super();
     const md = this;
     md.opt = Object.assign({}, opt, def);
     md._map = md.opt.map;
@@ -58,7 +60,6 @@ class MapxDraw {
      * internal storage
      */
     md._buttons = [];
-    md._on_cb = [];
 
     /**
      * Add the main toggle button
@@ -71,20 +72,6 @@ class MapxDraw {
     });
   }
 
-  fire(type) {
-    const md = this;
-    md._on_cb.forEach((c) => {
-      if (c.type === type) {
-        c.cb(md);
-      }
-    });
-  }
-
-  on(type, cb) {
-    const md = this;
-    md._on_cb.push({type: type, cb: cb});
-  }
-
   destroy() {
     const md = this;
     md.discard();
@@ -92,7 +79,6 @@ class MapxDraw {
     if (md._modal_config) {
       md._modal_config.close();
     }
-    md._on_cb.length = null;
     md.fire('destroy');
   }
 
@@ -139,10 +125,6 @@ class MapxDraw {
     md.fire('enable');
   }
 
-  // editGeojson(gj){
-  //const md = this;
-  //md._draw.add(gj);
-  //}
 
   async disable() {
     const md = this;
@@ -204,7 +186,6 @@ class MapxDraw {
    * Remove button by key or button instance
    * @param {String | Button} Key identifire or Button to remove
    */
-
   removeButton(key) {
     const md = this;
     let i = md._buttons.length;

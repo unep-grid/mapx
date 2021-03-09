@@ -272,7 +272,48 @@ class EventStore {
   }
 }
 
-export {ListenerStore, EventStore};
+
+/**
+* Simple event management
+*/ 
+class EventSimple {
+  constructor() {
+    const evt = this;
+    evt.cb = [];
+  }
+  fire(type, data) {
+    const evt = this;
+    evt.cb.forEach((c) => {
+      if (c.type === type) {
+        c.cb(evt, data);
+      }
+    });
+  }
+  on(type, cb) {
+    const evt = this;
+    const item = evt.cb.reduce((a, c) => {
+      return a || (c.type === type && c.cb === cb ? c : a);
+    }, false);
+    if (!item) {
+      evt.cb.push({
+        type: type,
+        cb: cb
+      });
+    }
+  }
+  off(type, cb) {
+    const evt = this;
+    const item = evt.cb.reduce((a, c) => {
+      return a || (c.type === type && c.cb === cb ? c : a);
+    }, false);
+    if (item) {
+      const pos = evt.cb.indexOf(item);
+      evt.cb.splice(pos, 1);
+    }
+  }
+}
+
+export {ListenerStore, EventStore, EventSimple};
 
 /**
  * Helpers

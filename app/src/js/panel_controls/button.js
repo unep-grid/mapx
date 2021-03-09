@@ -3,9 +3,11 @@ import {el} from '../el/src/index.js';
 import {getDictItem} from './../mx_helpers.js';
 import {ButtonCircle} from './../icon_flash/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
+import {EventSimple} from '../listener_store/index.js';
 
-class Button {
+class Button extends EventSimple {
   constructor(opt) {
+    super();
     const btn = this;
     const def = {
       action: () => {},
@@ -27,21 +29,14 @@ class Button {
       btn.opt.action = () => {};
     }
     btn.opt.action = btn.opt.action.bind(btn);
-    btn._on_cb = [];
   }
 
-  fire(type) {
+  get rect(){
     const btn = this;
-    btn._on_cb.forEach((c) => {
-      if (c.type === type) {
-        c.cb(btn);
-      }
-    });
-  }
-
-  on(type, cb) {
-    const btn = this;
-    btn._on_cb.push({type: type, cb: cb});
+    if(!btn.elButton){
+      return {}
+    }
+    return btn.elButton.getBoundingClientRect()
   }
 
   build() {

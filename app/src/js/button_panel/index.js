@@ -1,13 +1,14 @@
 //import {el} from '@fxi/el';
 import {el} from './../el/src/index.js';
-import {ListenerStore} from '../listener_store/index.js';
+import {ListenerStore, EventSimple} from '../listener_store/index.js';
 import {isNumeric} from '../is_test/index.js';
 import './style.less';
 
 window._button_panels = [];
 
-class ButtonPanel {
+class ButtonPanel extends EventSimple {
   constructor(opt) {
+    super();
     const panel = this;
     const options = {
       id: null,
@@ -32,7 +33,6 @@ class ButtonPanel {
   init() {
     const panel = this;
     _button_panels.push(panel);
-    panel.cb = [];
     panel.build();
     panel.setButtonLabel();
     panel.setExclusiveMode(); // close other panel automatically;
@@ -123,39 +123,6 @@ class ButtonPanel {
     }
   }
 
-  fire(type, data) {
-    const panel = this;
-    panel.cb.forEach((c) => {
-      if (c.type === type) {
-        c.cb(panel, data);
-      }
-    });
-  }
-
-  on(type, cb) {
-    const panel = this;
-    const item = panel.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (!item) {
-      panel.cb.push({
-        type: type,
-        cb: cb
-      });
-    }
-  }
-
-  off(type, cb) {
-    const panel = this;
-    const item = panel.cb.reduce((a, c) => {
-      return a || (c.type === type && c.cb === cb ? c : a);
-    }, false);
-    if (item) {
-      const pos = panel.cb.indexOf(item);
-      panel.cb.splice(pos, 1);
-    }
-  }
-
   build() {
     const panel = this;
     const elMain = panel.opt.elContainer.querySelector(`.button-panel--main`);
@@ -194,7 +161,7 @@ class ButtonPanel {
           }
         },
         el('span', {
-          class: ['button-panel--btn-icon',...panel.opt.button_classes]
+          class: ['button-panel--btn-icon', ...panel.opt.button_classes]
         }),
         (panel.elBtnFlag = el('span', {
           class: ['button-panel--btn-flag', 'button-panel--hidden']
@@ -394,6 +361,7 @@ class ButtonPanel {
         panel.ls.removeListenerByGroup('resize');
         panel._rect = null;
         panel.elContainer.classList.remove('button-panel--container-resize');
+        panel.fire('resize-end');
       },
       group: 'resize',
       type: [
@@ -431,25 +399,32 @@ class ButtonPanel {
       const newH = orig.rect.height + (a.h_dir ? -dH : dH);
       panel.height = newH;
     }
+    panel.fire('resize-free');
+    panel.fire('resize-button');
   }
 
   get rectParent() {
     return this.elContainer.parentElement.getBoundingClientRect();
   }
 
-  resizeAuto(type) {
+  setAnimate(enable) {
     const panel = this;
-    panel.elContainer.classList.add('button-panel--container-animate');
-    panel.elContainer.classList.add('button-panel--container-resize');
-
-    /**
-     * Remove animate class according to
-     * animate rules in css
-     */
-    setTimeout(() => {
+    if (enable) {
+      panel.elContainer.classList.add('button-panel--container-animate');
+      panel.elContainer.classList.add('button-panel--container-resize');
+      clearTimeout(panel._to_set_animate);
+      panel._to_set_animate = setTimeout(() => {
+        panel.setAnimate(false);
+      }, 500);
+    } else {
       panel.elContainer.classList.remove('button-panel--container-animate');
       panel.elContainer.classList.remove('button-panel--container-resize');
-    }, 500);
+    }
+  }
+
+  resizeAuto(type) {
+    const panel = this;
+    panel.setAnimate(true);
 
     /**
      * Solve bug where the first animation did not work
@@ -478,6 +453,7 @@ class ButtonPanel {
     }
 
     panel.fire('resize-auto', type);
+    panel.fire('resize-button');
   }
 
   get width() {
@@ -488,36 +464,49 @@ class ButtonPanel {
   }
   set width(w) {
     const panel = this;
-    const isNum = isNumeric(w);
-    if (isNum) {
-      const width = Math.round(w / 10) * 10;
-      panel.elContainer.style.width = width + 'px';
-    } else {
-      panel.elContainer.style.width = w;
+    cancelAnimationFrame(panel._af_wifth);
+    if (!w) {
+      return;
     }
-    setTimeout(() => {
-      panel.fire('resize');
-    }, 500);
+    panel._af_wifth = requestAnimationFrame(() => {
+      const isNum = isNumeric(w);
+      if (isNum) {
+        const width = Math.round(w / 10) * 10;
+        panel.elContainer.style.width = width + 'px';
+      } else {
+        panel.elContainer.style.width = w;
+      }
+      clearTimeout(panel._to_width);
+      panel._to_width = setTimeout(() => {
+        panel.fire('resize');
+      }, 500);
+    });
   }
   set height(h) {
     const panel = this;
-    const isNum = isNumeric(h);
-    if (isNum) {
-      const height = Math.round(h / 10) * 10;
-      panel.elContainer.style.height = height + 'px';
-    } else {
-      panel.elContainer.style.height = h;
+    if (!h) {
+      return;
     }
-    setTimeout(() => {
-      panel.fire('resize');
-    }, 500);
+    cancelAnimationFrame(panel._af_height);
+    panel._af_height = requestAnimationFrame(() => {
+      const isNum = isNumeric(h);
+      if (isNum) {
+        const height = Math.round(h / 10) * 10;
+        panel.elContainer.style.height = height + 'px';
+      } else {
+        panel.elContainer.style.height = h;
+      }
+      clearTimeout(panel._to_height);
+      panel._to_height = setTimeout(() => {
+        panel.fire('resize');
+      }, 500);
+    });
   }
 
   resetStyle() {
     const panel = this;
-    panel.height = '';
-    panel.width = '';
-    for (var s in panel.opt.container_style) {
+    panel.setAnimate(true);
+    for (let s in panel.opt.container_style) {
       panel.elContainer.style[s] = panel.opt.container_style[s];
     }
   }

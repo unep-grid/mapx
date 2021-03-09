@@ -1,13 +1,16 @@
 import {el} from '@fxi/el';
 import {Button} from './button.js';
+import {EventSimple} from '../listener_store/index.js';
 
-class ButtonsControls {
+class ButtonsControls extends EventSimple {
   constructor(buttons) {
-    this._btns = {};
-    this.buttons = buttons;
-    this.build();
-    this.register();
-    return this;
+    super();
+    const btnGrp = this;
+    btnGrp._btns = {};
+    btnGrp.buttons = buttons;
+    btnGrp.build();
+    btnGrp.register();
+    return btnGrp;
   }
 
   build() {
@@ -39,6 +42,9 @@ class ButtonsControls {
       }
     }
     btnGrp.elGroup.appendChild(elFrag);
+    setTimeout(() => {
+      btnGrp.fire('register');
+    }, 200);
   }
 
   unregister(btns) {
@@ -48,7 +54,7 @@ class ButtonsControls {
     }
     btns = !Array.isArray(btns) ? [btns] : btns;
     for (let btn of btns) {
-      btnGrp._btns[btn.opt.key] = null;
+      delete btnGrp._btns[btn.opt.key];
     }
   }
 
@@ -69,6 +75,53 @@ class ButtonsControls {
     const btnGrp = this;
     btnGrp.elGroup.remove();
     btnGrp.buttons.forEach((btn) => btn.destroy());
+  }
+
+  getInnerRect() {
+    /**
+     * Measure space taken by current
+     * content. As it's flex based, only solution
+     * is to put all button in a non flex container
+     * and measure once. But we don't want non-flex,
+     * so... measure each ?
+     */
+    let count = 0;
+    let dim = {};
+    const btnGrp = this;
+    for (let key in btnGrp._btns) {
+      const btn = btnGrp._btns[key];
+      //const dim = btnGrp.buttons.reduce((a, btn) => {
+      const r = btn.rect;
+      const mX = r.x + r.width;
+      const mY = r.y + r.height;
+      if (r.y && r.x) {
+        count++;
+        if (count === 1) {
+          dim = {
+            left: r.x,
+            top: r.y,
+            right: mX,
+            bottom: mY
+          };
+        } else {
+          if (r.y < dim.top) {
+            dim.top = r.y;
+          }
+          if (mY > dim.bottom) {
+            dim.bottom = mY;
+          }
+          if (r.x < dim.left) {
+            dim.left = r.x;
+          }
+          if (mX > dim.right) {
+            dim.right = mX;
+          }
+        }
+      }
+    }
+    dim.width = dim.right - dim.left;
+    dim.height = dim.bottom - dim.top;
+    return dim;
   }
 }
 
