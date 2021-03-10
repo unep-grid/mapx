@@ -718,7 +718,7 @@ export function updateBtnFilterActivated() {
  */
 export async function initMapx(o) {
   const h = mx.helpers;
-  let mp, map;
+  let mp;
   o = o || {};
   o.id = o.id || mx.settings.map.id;
   mp = o.mapPosition || {};
@@ -751,6 +751,13 @@ export async function initMapx(o) {
     url.pathname = '/static.html';
     window.location = url.href;
     return;
+  }
+
+  /**
+   * Update closed panel setting
+   */
+  if (h.getQueryParameter('closePanels')[0] === 'true') {
+    mx.settings.initClosedPanels = true;
   }
 
   mx.settings.mode.static = o.modeStatic || mx.settings.mode.storyAutoStart;
@@ -859,7 +866,9 @@ export async function initMapx(o) {
         }
       }
     });
-    mx.panel_main.panel.open();
+    if (!mx.settings.initClosedPanels) {
+      mx.panel_main.panel.open();
+    }
   }
 
   /**
@@ -887,7 +896,9 @@ export async function initMapx(o) {
       ]
     }
   });
-  mx.panel_tools.panel.open();
+  if (!mx.settings.initClosedPanels) {
+    mx.panel_tools.panel.open();
+  }
 
   /**
    * Add mapx draw handler
@@ -1280,7 +1291,6 @@ export async function initMapxApp(o) {
    * From now, query parameter should be requested using
    * getQueryParameterInit
    */
-
   h.cleanTemporaryQueryParameters();
 }
 

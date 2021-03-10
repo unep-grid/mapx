@@ -5,6 +5,7 @@ let settings = {
   language: 'en',
   languages: ['en', 'fr'],
   highlightedCountries: [],
+  initClosedPanels : false,
   project: '',
   logs: {
     disabled: false, // set in cookies as preferences ?
