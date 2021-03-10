@@ -263,7 +263,7 @@ export function setProject(idProject, opt) {
   const h = mx.helpers;
   opt = Object.assign({}, opt);
   const idCurrentProject = h.path(mx, 'settings.project.id');
-  
+
   return new Promise((resolve) => {
     if (idProject === idCurrentProject) {
       resolve(true);
@@ -308,7 +308,7 @@ export function setProject(idProject, opt) {
         type: 'settings_project_change',
         idGroup: 'project_change',
         callback: (s) => {
-          const idProjectNew = h.path(s,'new_project');
+          const idProjectNew = h.path(s, 'new_project');
           if (idProjectNew !== idProject) {
             resolve(false);
           } else {
@@ -876,8 +876,8 @@ export async function initMapx(o) {
       tooltip_position: 'bottom-left',
       handles: ['free'],
       container_style: {
-        width: '50px',
-        height: '100%',
+        width: '120px',
+        height: '420px',
         minWidth: '50px',
         minHeight: '50px'
       },
@@ -957,7 +957,13 @@ export async function initMapx(o) {
     },
     panel: {
       id: 'notif_center',
-      elContainer: document.body
+      elContainer: document.body,
+      container_style: {
+        width: '470px', // same as MainPanel
+        height: '40%',
+        minWidth: '340px',
+        minHeight: '100px'
+      }
     }
   });
 
@@ -1943,7 +1949,6 @@ export function getViewsLayersVisibles() {
     base: true
   });
 }
-
 
 /**
  * Manual events on view list items
@@ -3797,7 +3802,6 @@ async function viewLayersAddRt(o) {
     },
     o.before
   );
-
 
   /**
    * LEGENDS

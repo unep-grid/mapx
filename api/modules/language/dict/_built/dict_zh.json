@@ -1255,6 +1255,31 @@
     "zh": "在此层创建一个新视图并关闭工具 *"
   },
   {
+    "id": "draw_btn_trash",
+    "en": "Delete selected objects",
+    "zh": "删除所选对象 *"
+  },
+  {
+    "id": "draw_trash_confirm_content",
+    "en": "Do you want to remove selected objects?",
+    "zh": "您要删除选定的对象吗？ *"
+  },
+  {
+    "id": "draw_trash_confirm_title",
+    "en": "Remove objects confirmation",
+    "zh": "移除物件确认 *"
+  },
+  {
+    "id": "draw_btn_combine",
+    "en": "Combine (merge) objects into an object with single multigeometry",
+    "zh": "使用单个多几何体将对象合并（合并）为对象 *"
+  },
+  {
+    "id": "draw_btn_uncombine",
+    "en": "Uncombine (split) object with multigeometry into objects with single geometry",
+    "zh": "将具有多几何形状的对象分解（拆分）为具有单个几何形状的对象 *"
+  },
+  {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
     "zh": "添加一个新点 *"
@@ -1290,9 +1315,9 @@
     "zh": "图层名称 *"
   },
   {
-    "id": "draw_feature_type",
-    "en": "Type of feature",
-    "zh": "功能类型 *"
+    "id": "draw_object_type",
+    "en": "Type of object",
+    "zh": "对象类型 *"
   },
   {
     "id": "draw_config_submit",
@@ -1341,8 +1366,8 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?",
-    "zh": "视图已创建。现在退出还是继续编辑？ *"
+    "en": "View created. Quit now or continue editing the current layer for another view ?",
+    "zh": "视图已创建。现在退出还是继续编辑当前图层以获取另一个视图？ *"
   },
   {
     "id": "draw_saved_quit_title",
@@ -1358,6 +1383,21 @@
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
     "zh": "关闭工具 *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_title",
+    "en": "Circle radius",
+    "zh": "圆半径 *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_label",
+    "en": "Enter the radius in kilometers, confirm and click on the map",
+    "zh": "输入以公里为单位的半径，确认并单击地图 *"
+  },
+  {
+    "id": "draw_btn_mode_circle",
+    "en": "Add a new polygon in the shape of a circle, with a defined radius",
+    "zh": "添加具有定义半径的圆形的新多边形 *"
   },
   {
     "id": "en",

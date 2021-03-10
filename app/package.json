@@ -109,6 +109,7 @@
     "jspdf": "^1.5.3",
     "jszip": "^3.5.0",
     "mapbox-gl": "^2.0.1",
+    "mapbox-gl-draw-circle": "^1.1.2",
     "martinez-polygon-clipping": "^0.5.0",
     "muuri": "^0.8.0",
     "nouislider": "^12.1.0",

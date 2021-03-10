@@ -31,12 +31,12 @@ class Button extends EventSimple {
     btn.opt.action = btn.opt.action.bind(btn);
   }
 
-  get rect(){
+  get rect() {
     const btn = this;
-    if(!btn.elButton){
-      return {}
+    if (!btn.elButton) {
+      return {};
     }
-    return btn.elButton.getBoundingClientRect()
+    return btn.elButton.getBoundingClientRect();
   }
 
   build() {
@@ -81,6 +81,16 @@ class Button extends EventSimple {
     );
   }
 
+  shake() {
+    const btn = this;
+    const duration = '820';
+    btn.elButton.classList.add('btn-ctrl--shake');
+    clearTimeout(btn._timeout_shake);
+    btn._timeout_shake = setTimeout(() => {
+      btn.elButton.classList.remove('btn-ctrl--shake');
+    }, duration);
+  }
+
   action(event) {
     const btn = this;
     new ButtonCircle({
@@ -89,7 +99,6 @@ class Button extends EventSimple {
     });
     btn.opt.action(event);
   }
-
 
   flash(event) {
     h.iconFlash({

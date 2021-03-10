@@ -1,3 +1,36 @@
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+.btn-ctrl--shake {
+  /* taken from https://css-tricks.com/snippets/css/shake-css-keyframe-animation/*/
+  animation: shake 820ms cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 .btn-ctrl--group {
   display: flex;
   flex-direction: row;
@@ -6,17 +39,15 @@
   align-content: center;
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: visible; //tooltips need this...
+  overflow: hidden;
   .btn-ctrl--item {
     display: flex;
-    .btn-ctrl--item-no-mobile {
-    }
   }
 }
 
 @media (max-width: 800px), (max-height: 800px) {
   .btn-ctrl--group {
+    overflow: auto;
     .btn-ctrl--item {
       &.btn-ctrl--item-no-mobile {
         display: none;

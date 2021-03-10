@@ -1,4 +1,4 @@
-import {el} from "@fxi/el";
+import {el} from '@fxi/el';
 
 /**
  * Display a panel modal
@@ -341,7 +341,7 @@ export function modalGetAll(opt) {
  * @param {Object} opt Options
  * @param {String|Promise|Element} opt.title Title
  * @param {String|Promise|Element} opt.content Title
- * @param {String|Promise|Element} opt.cancel Cancel text  
+ * @param {String|Promise|Element} opt.cancel Cancel text
  * @param {String|Promise|Element} opt.confirm Confirm text
  * @return {Promise} resolve to boolean
  */
@@ -362,7 +362,7 @@ export function modalConfirm(opt) {
           }
         }
       },
-      opt.cancel || h.getDictItem('btn_cancel')
+      opt.cancel || h.getDictItem('btn_cancel')
     );
 
     const elBtnConfirm = el(
@@ -372,6 +372,79 @@ export function modalConfirm(opt) {
         on: {
           click: () => {
             resolve(true);
+            elModal.close();
+          }
+        }
+      },
+      opt.confirm || h.getDictItem('btn_confirm')
+    );
+
+    elModal = modal({
+      noShinyBinding: true,
+      addSelectize: false,
+      removeCloseButton: true,
+      title: opt.title,
+      content: elContent,
+      buttons: [elBtnConfirm, elBtnCancel],
+      addBackground: true,
+      onClose: resolve
+    });
+  });
+}
+
+/**
+ * Simple async prompt modal, ok, cancel
+ * @param {Object} opt Options
+ * @param {Object} opt.inputOptions Input options
+ * @param {String|Promise|Element} opt.title Title
+ * @param {String|Promise|Element} opt.label Input label
+ * @param {String|Promise|Element} opt.cancel Cancel text
+ * @param {String|Promise|Element} opt.confirm Confirm text
+ * @return {Promise} resolve to input type
+ */
+export function modalPrompt(opt) {
+  const h = mx.helpers;
+  let elModal;
+  const def = {
+    inputOptions: {
+      type: 'number',
+      class: 'form-control',
+      min: 0,
+      max: 1000,
+      value: 10,
+      id: Math.random().toString(32)
+    }
+  };
+  opt.inputOptions = Object.assign({}, def.inputOptions, opt.inputOptions);
+  return new Promise((resolve) => {
+    const elInput = el('input', opt.inputOptions);
+    const elContent = el(
+      'div',
+      {class: 'form-group'},
+      el('label', {for: opt.inputOptions.id}, opt.label || 'Enter your value'),
+      elInput
+    );
+    const elBtnCancel = el(
+      'div',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: () => {
+            resolve(false);
+            elModal.close();
+          }
+        }
+      },
+      opt.cancel || h.getDictItem('btn_cancel')
+    );
+
+    const elBtnConfirm = el(
+      'div',
+      {
+        class: 'btn btn-default',
+        on: {
+          click: () => {
+            resolve(elInput.value);
             elModal.close();
           }
         }

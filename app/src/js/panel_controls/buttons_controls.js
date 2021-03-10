@@ -44,7 +44,7 @@ class ButtonsControls extends EventSimple {
     btnGrp.elGroup.appendChild(elFrag);
     setTimeout(() => {
       btnGrp.fire('register');
-    }, 200);
+    }, 100);
   }
 
   unregister(btns) {
@@ -56,6 +56,9 @@ class ButtonsControls extends EventSimple {
     for (let btn of btns) {
       delete btnGrp._btns[btn.opt.key];
     }
+    setTimeout(() => {
+      btnGrp.fire('unregister');
+    }, 100);
   }
 
   getButton(key) {
@@ -87,6 +90,14 @@ class ButtonsControls extends EventSimple {
      */
     let count = 0;
     let dim = {};
+    /*
+     * Flex should render a grid of buttons.
+     * how to keep track of the grid shape ?
+     * Use object keys.
+     */
+    const gridX = {};
+    const gridY = {};
+    const stat = {btnMaxWidth: 0, btnMaxHeight: 0};
     const btnGrp = this;
     for (let key in btnGrp._btns) {
       const btn = btnGrp._btns[key];
@@ -95,8 +106,12 @@ class ButtonsControls extends EventSimple {
       const mX = r.x + r.width;
       const mY = r.y + r.height;
       if (r.y && r.x) {
+        gridX[Math.floor(r.x / r.width)] = true;
+        gridY[Math.floor(r.y / r.height)] = true;
         count++;
         if (count === 1) {
+          stat.btnMaxWidth = r.width;
+          stat.btnMaxHeight = r.height;
           dim = {
             left: r.x,
             top: r.y,
@@ -104,6 +119,12 @@ class ButtonsControls extends EventSimple {
             bottom: mY
           };
         } else {
+          if (r.width > stat.btnMaxWidth) {
+            stat.btnMaxWidth = r.width;
+          }
+          if (r.height > stat.btnMaxHeight) {
+            stat.btnMaxHeight = r.height;
+          }
           if (r.y < dim.top) {
             dim.top = r.y;
           }
@@ -119,6 +140,11 @@ class ButtonsControls extends EventSimple {
         }
       }
     }
+    dim.stat = stat;
+    dim.grid = {
+      nCol: Object.keys(gridX).length,
+      nRow: Object.keys(gridY).length
+    };
     dim.width = dim.right - dim.left;
     dim.height = dim.bottom - dim.top;
     return dim;

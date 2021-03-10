@@ -1255,6 +1255,31 @@
     "ps": "د دې پرت سره نوی لید رامینځته کړئ او وسیلې یې وتړئ *"
   },
   {
+    "id": "draw_btn_trash",
+    "en": "Delete selected objects",
+    "ps": "ټاکل شوي څیزونه حذف کړئ *"
+  },
+  {
+    "id": "draw_trash_confirm_content",
+    "en": "Do you want to remove selected objects?",
+    "ps": "ایا تاسو غواړئ ټاکل شوي توکي لرې کړئ؟ *"
+  },
+  {
+    "id": "draw_trash_confirm_title",
+    "en": "Remove objects confirmation",
+    "ps": "د توکو تایید لرې کړئ *"
+  },
+  {
+    "id": "draw_btn_combine",
+    "en": "Combine (merge) objects into an object with single multigeometry",
+    "ps": "څیزونه د واحد کثیر الثبیتې سره په یو څیز کې یوځای کړئ *"
+  },
+  {
+    "id": "draw_btn_uncombine",
+    "en": "Uncombine (split) object with multigeometry into objects with single geometry",
+    "ps": "Uncombine (split) څیزونه د څو جیومیټری سره په واحد جیومیټری سره شیانو ته *"
+  },
+  {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
     "ps": "یو نوی ټکی اضافه کړئ *"
@@ -1290,9 +1315,9 @@
     "ps": "د پوړ نوم *"
   },
   {
-    "id": "draw_feature_type",
-    "en": "Type of feature",
-    "ps": "د ب ofې ډول *"
+    "id": "draw_object_type",
+    "en": "Type of object",
+    "ps": "د څيز ډول *"
   },
   {
     "id": "draw_config_submit",
@@ -1341,8 +1366,8 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?",
-    "ps": "لید جوړ شو. اوس بندول یا ترمیم ته ادامه ورکول؟ *"
+    "en": "View created. Quit now or continue editing the current layer for another view ?",
+    "ps": "لید جوړ شو. همدا اوس وتل یا د بلې کتنې لپاره اوسنی پرت ترمیم ته دوام ورکوئ؟ *"
   },
   {
     "id": "draw_saved_quit_title",
@@ -1358,6 +1383,21 @@
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
     "ps": "وسیله وتړئ *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_title",
+    "en": "Circle radius",
+    "ps": "د حلقې رiusا *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_label",
+    "en": "Enter the radius in kilometers, confirm and click on the map",
+    "ps": "ریموډز په کیلومترۍ کې دننه کړئ ، تایید کړئ او په نقشه کې کلیک وکړئ *"
+  },
+  {
+    "id": "draw_btn_mode_circle",
+    "en": "Add a new polygon in the shape of a circle, with a defined radius",
+    "ps": "د ټاکل شوې رادېو سره د حلقې په ب inه کې نوی کثیر العاده اضافه کړئ *"
   },
   {
     "id": "en",

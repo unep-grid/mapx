@@ -22,8 +22,6 @@ const settings = {
   ctrl_btn_disable: [
     'btn_overlap_spotlight',
     'btn_map_composer',
-    'btn_map_rotate_left',
-    'btn_map_rotate_right',
     'btn_geolocate_user',
     'btn_overlap_spotlight',
     'btn_map_composer'

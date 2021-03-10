@@ -36,6 +36,7 @@ class ControlsPanel {
     cp.panel.elPanelContent.appendChild(cp.controls.elGroup);
     cp.panel.on('resize-end', cp.sizeOptimizer);
     cp.controls.on('register', cp.sizeOptimizer);
+    cp.controls.on('unregister', cp.sizeOptimizer);
   }
 
   destroy() {
@@ -46,17 +47,46 @@ class ControlsPanel {
 
   sizeOptimizer() {
     const cp = this;
+    const optTimeout = 100;
+    clearTimeout(cp._timeout_optimizer);
+    cp._timeout_optimizer = setTimeout(() => {
+      const s = cp.getSizeState();
+      let optimWidth = s.underWidth || s.overWidth;
+      let optimHeight = s.underHeight || s.overHeight;
+      cp.panel.setAnimate(true);
+
+      if (optimHeight) {
+        cp.panel.height = s.optimalHeight;
+      }
+
+      if (optimWidth) {
+        cp.panel.height = s.optimalHeight;
+      }
+    }, optTimeout);
+  }
+
+  getSizeState() {
+    const cp = this;
     const rectP = cp.panel.elPanelContent.getBoundingClientRect();
     const rectC = cp.controls.getInnerRect();
-    const oHeight = rectC.top < rectP.top || rectC.bottom > rectP.bottom || rectP.height > rectC.height + 60 ;
-    const oWidth = rectC.right > rectP.right || rectP.left < rectP.left || rectP.width > rectC.width + 60 ;
-    cp.panel.setAnimate(true);
-    if (oHeight) {
-      cp.panel.height = rectC.height + 60;
-    }
-    if (oWidth) {
-      cp.panel.width =  rectC.width + 60;
-    }
+    let spacerWidth = rectC.stat.btnMaxWidth;
+    let spacerHeight = rectC.stat.btnMaxHeight;
+
+    return {
+      grid: rectC.grid,
+      btnWidth: rectC.stat.btnMaxWidth,
+      btnHeight: rectC.stat.btnMaxHeight,
+      controlsWidth: rectC.width,
+      panelWidth: rectP.width,
+      controlHeight: rectC.height,
+      panelHeight: rectP.height,
+      overHeight: rectC.top < rectP.top || rectC.bottom > rectP.bottom,
+      overWidth: rectC.right > rectP.right || rectP.left < rectP.left,
+      underWidth: rectP.width > rectC.width + spacerWidth,
+      underHeight: rectP.height > rectC.height + spacerHeight,
+      optimalHeight: rectC.height + spacerHeight,
+      optimalWidth: rectC.width + spacerWidth
+    };
   }
 }
 

@@ -40,7 +40,7 @@
     },
     "mx_ui_background_transparent": {
       "visibility": "visible",
-      "color": "rgba(66,66,66,0.2)"
+      "color": "rgba(66,66,66,0.5)"
     },
     "mx_ui_shadow": {
       "visibility": "visible",

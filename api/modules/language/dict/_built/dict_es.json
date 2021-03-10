@@ -1255,6 +1255,31 @@
     "es": "Crea una nueva vista con esta capa y cierra las herramientas *"
   },
   {
+    "id": "draw_btn_trash",
+    "en": "Delete selected objects",
+    "es": "Eliminar objetos seleccionados *"
+  },
+  {
+    "id": "draw_trash_confirm_content",
+    "en": "Do you want to remove selected objects?",
+    "es": "¿Quieres eliminar los objetos seleccionados? *"
+  },
+  {
+    "id": "draw_trash_confirm_title",
+    "en": "Remove objects confirmation",
+    "es": "Confirmación de eliminación de objetos *"
+  },
+  {
+    "id": "draw_btn_combine",
+    "en": "Combine (merge) objects into an object with single multigeometry",
+    "es": "Combinar (fusionar) objetos en un objeto con una sola multigeometría *"
+  },
+  {
+    "id": "draw_btn_uncombine",
+    "en": "Uncombine (split) object with multigeometry into objects with single geometry",
+    "es": "Descombina (dividir) objeto con multigeometría en objetos con geometría única *"
+  },
+  {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
     "es": "Agregar un nuevo punto *"
@@ -1290,9 +1315,9 @@
     "es": "Nombre de la capa *"
   },
   {
-    "id": "draw_feature_type",
-    "en": "Type of feature",
-    "es": "Tipo de característica *"
+    "id": "draw_object_type",
+    "en": "Type of object",
+    "es": "Tipo de objeto *"
   },
   {
     "id": "draw_config_submit",
@@ -1341,8 +1366,8 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?",
-    "es": "Vista creada. ¿Salir ahora o continuar editando? *"
+    "en": "View created. Quit now or continue editing the current layer for another view ?",
+    "es": "Vista creada. ¿Salir ahora o continuar editando la capa actual para otra vista? *"
   },
   {
     "id": "draw_saved_quit_title",
@@ -1358,6 +1383,21 @@
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
     "es": "Cerrar la herramienta *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_title",
+    "en": "Circle radius",
+    "es": "Radio del círculo *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_label",
+    "en": "Enter the radius in kilometers, confirm and click on the map",
+    "es": "Ingrese el radio en kilómetros, confirme y haga clic en el mapa *"
+  },
+  {
+    "id": "draw_btn_mode_circle",
+    "en": "Add a new polygon in the shape of a circle, with a defined radius",
+    "es": "Agregue un nuevo polígono en forma de círculo, con un radio definido *"
   },
   {
     "id": "en",

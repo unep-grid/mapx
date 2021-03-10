@@ -1255,6 +1255,31 @@
     "bn": "এই স্তরটি দিয়ে একটি নতুন দৃশ্য তৈরি করুন এবং সরঞ্জামগুলি বন্ধ করুন *"
   },
   {
+    "id": "draw_btn_trash",
+    "en": "Delete selected objects",
+    "bn": "নির্বাচিত বস্তুগুলি মুছুন *"
+  },
+  {
+    "id": "draw_trash_confirm_content",
+    "en": "Do you want to remove selected objects?",
+    "bn": "আপনি কি নির্বাচিত বস্তুগুলি সরাতে চান? *"
+  },
+  {
+    "id": "draw_trash_confirm_title",
+    "en": "Remove objects confirmation",
+    "bn": "বস্তুর নিশ্চিতকরণ সরান *"
+  },
+  {
+    "id": "draw_btn_combine",
+    "en": "Combine (merge) objects into an object with single multigeometry",
+    "bn": "একক বহুবৃত্তের সাথে একটি বস্তুতে বস্তুগুলিকে একত্রিত (মার্জ) করুন *"
+  },
+  {
+    "id": "draw_btn_uncombine",
+    "en": "Uncombine (split) object with multigeometry into objects with single geometry",
+    "bn": "একক জ্যামিতি সহ বস্তুগুলিতে বহুগুণিত সঙ্গে আনকোবাইন (বিভাজন) অবজেক্ট *"
+  },
+  {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
     "bn": "একটি নতুন পয়েন্ট যোগ করুন *"
@@ -1290,9 +1315,9 @@
     "bn": "স্তর নাম *"
   },
   {
-    "id": "draw_feature_type",
-    "en": "Type of feature",
-    "bn": "বৈশিষ্ট্য প্রকার *"
+    "id": "draw_object_type",
+    "en": "Type of object",
+    "bn": "বস্তুর ধরণ *"
   },
   {
     "id": "draw_config_submit",
@@ -1341,8 +1366,8 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?",
-    "bn": "ভিউ তৈরি হয়েছে। এখনই প্রস্থান করবেন নাকি সম্পাদনা চালিয়ে যাবেন? *"
+    "en": "View created. Quit now or continue editing the current layer for another view ?",
+    "bn": "ভিউ তৈরি হয়েছে। এখনই প্রস্থান করবেন বা অন্য দর্শনের জন্য বর্তমান স্তরটি সম্পাদনা চালিয়ে যেতে চান? *"
   },
   {
     "id": "draw_saved_quit_title",
@@ -1358,6 +1383,21 @@
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
     "bn": "সরঞ্জামটি বন্ধ করুন *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_title",
+    "en": "Circle radius",
+    "bn": "বৃত্তের ব্যাসার্ধ *"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_label",
+    "en": "Enter the radius in kilometers, confirm and click on the map",
+    "bn": "কিলোমিটারে ব্যাসার্ধ প্রবেশ করুন, নিশ্চিত করুন এবং মানচিত্রে ক্লিক করুন *"
+  },
+  {
+    "id": "draw_btn_mode_circle",
+    "en": "Add a new polygon in the shape of a circle, with a defined radius",
+    "bn": "সংজ্ঞাযুক্ত ব্যাসার্ধ সহ বৃত্তের আকারে একটি নতুন বহুভুজ যুক্ত করুন *"
   },
   {
     "id": "en",

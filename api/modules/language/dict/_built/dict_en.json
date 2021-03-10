@@ -1004,6 +1004,26 @@
     "en": "Create a new view with this layer and close the tools"
   },
   {
+    "id": "draw_btn_trash",
+    "en": "Delete selected objects"
+  },
+  {
+    "id": "draw_trash_confirm_content",
+    "en": "Do you want to remove selected objects?"
+  },
+  {
+    "id": "draw_trash_confirm_title",
+    "en": "Remove objects confirmation"
+  },
+  {
+    "id": "draw_btn_combine",
+    "en": "Combine (merge) objects into an object with single multigeometry"
+  },
+  {
+    "id": "draw_btn_uncombine",
+    "en": "Uncombine (split) object with multigeometry into objects with single geometry"
+  },
+  {
     "id": "draw_btn_mode_point",
     "en": "Add a new point"
   },
@@ -1032,8 +1052,8 @@
     "en": "Layer name"
   },
   {
-    "id": "draw_feature_type",
-    "en": "Type of feature"
+    "id": "draw_object_type",
+    "en": "Type of object"
   },
   {
     "id": "draw_config_submit",
@@ -1073,7 +1093,7 @@
   },
   {
     "id": "draw_saved_quit",
-    "en": "View created. Quit now or continue editing ?"
+    "en": "View created. Quit now or continue editing the current layer for another view ?"
   },
   {
     "id": "draw_saved_quit_title",
@@ -1086,6 +1106,18 @@
   {
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_title",
+    "en": "Circle radius"
+  },
+  {
+    "id": "draw_mode_circle_radius_prompt_label",
+    "en": "Enter the radius in kilometers, confirm and click on the map"
+  },
+  {
+    "id": "draw_btn_mode_circle",
+    "en": "Add a new polygon in the shape of a circle, with a defined radius"
   },
   {
     "id": "en",

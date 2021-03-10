@@ -422,6 +422,14 @@ class ButtonPanel extends EventSimple {
     }
   }
 
+  shake(){
+    const panel = this;
+    panel.elContainer.classList.add('button-panel--shake');
+    setTimeout(()=>{
+      panel.elContainer.classList.remove('button-panel--shake');
+    },820)
+  }
+
   resizeAuto(type) {
     const panel = this;
     panel.setAnimate(true);

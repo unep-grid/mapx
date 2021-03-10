@@ -48,6 +48,17 @@
     left: 10px;
   }
 }
+.mx-draw--btn-circle {
+  &:before {
+    icon-font: url('./svg/circle.svg');
+  }
+  &:after {
+    content: '+';
+    position: absolute;
+    top: 5px;
+    left: 10px;
+  }
+}
 .mx-draw--btn-trash {
   &:before {
     icon-font: url('./svg/trash.svg');
@@ -58,11 +69,13 @@
     icon-font: url('./svg/floppy.svg');
   }
 }
+
 .mx-draw--btn-combine {
   &:before {
     icon-font: url('./svg/combine.svg');
   }
 }
+
 .mx-draw--btn-uncombine {
   &:before {
     icon-font: url('./svg/uncombine.svg');
@@ -79,6 +92,9 @@
     left: 10px;
     font-size: 0.7em;
   }
+}
+.mx-draw--btn {
+  border: 1px solid var(--mx_ui_view_gj_checked)!important;
 }
 .mapboxgl-map.mouse-pointer {
   .mapboxgl-canvas-container.mapboxgl-interactive {

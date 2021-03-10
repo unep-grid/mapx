@@ -47,12 +47,13 @@ export class NotifCenter {
       const nc = this;
       nc.updateOptions(opt);
       nc.clear();
-      nc.store = await nc.createStorage(); 
-     
+      nc.store = await nc.createStorage();
+
       /**
-      * Panel button
-      */ 
-      if(!nc.panel){
+       * Panel button
+       */
+
+      if (!nc.panel) {
         nc.panel = new ButtonPanel(nc.opt.panel);
       }
 
@@ -70,28 +71,31 @@ export class NotifCenter {
       });
 
       /**
-      * Build panel content items
-      */ 
-      if(!nc.elMain){
+       * Build panel content items
+       */
+
+      if (!nc.elMain) {
         nc.build();
       }
 
       /**
-      * Set theme mode ( dark light )
-      */ 
+       * Set theme mode ( dark light )
+       */
+
       nc.setMode(nc.opt.ui.mode);
-      
+
       /**
-      * Add callback
-      */ 
-            
+       * Add callback
+       */
+
       if (isFunction(nc.opt.config.on.add)) {
         nc.opt.config.on.add(nc);
       }
 
       /**
-      * Set initial unseen count
-      */ 
+       * Set initial unseen count
+       */
+
       const nUnseen = await nc.getUnseenCount();
 
       if (nUnseen > 0) {
@@ -114,6 +118,9 @@ export class NotifCenter {
     nc.opt = Object.assign({}, orig, opt);
     Object.keys(orig).forEach((k) => {
       nc.opt[k] = Object.assign({}, orig[k], opt[k]);
+      if (k === 'panel') {
+        console.log(nc.opt[k].container_style);
+      }
     });
     if (!nc.opt.panel.elContainer) {
       throw new Error('No container found');
