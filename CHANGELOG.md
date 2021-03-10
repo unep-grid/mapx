@@ -9,19 +9,18 @@
       - Widget container in dashboard did not react to touchmove event, when widget size was larger than the dashboad size.
 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.11-beta' target='_blank'>1.8.11-beta</a>
-
    - APP + API
-       -  Refactor of the lateral toolbar and depent modules: removed all controls for mapbox gl and built a new control panel as set of Classes that bind to mx and mapbox-gl. 
-       -  Wrote a dynamic wrapper for the tooltip system. CSS based tooltip are not suitable when positioned inside small containers : the tooltip box is often hidden by the overflow param. Now, tooltips should be visible in any cases. 
-       -  Solved language auto translation issues with templates (double bracket, sprintf) and html. Order of tags were altered by the translation system.
-       -  Removed cookies from MapX -> replaced with localstorage methods.
-       -  SDK : improved consistency, added prompt for a token request when the user has role "guest". It's now possible to set MapX token from the SDK. Solved some issues with mapx resolvers.
-       -  Rewrote most of the drawing tool using object oriented methods. For the user, change will be visible in buttons, general layout and modal prompts.  
-       -  Improved notification center and removed app errors from notification - use console instead.
-       -  Adaptation of story map to the new controls : added step configuration for displaying 3d relief and default aerial base layer. Support for escape keystrock to quit the story map to match most video player behavior. Simplified a lot the auto the scroll function. Stability should be improved in case of very fast steps change. 
-       -  Overall style rewrites : better support for small screens. Not perfect, but better.
-       -  Download : solved a bug when the download layer did not have proper title in other languages than English.
-       -  Many minor changes
+      -  Refactoring of the lateral controls toolbar.
+      -  Patched overflow issue with CSS tooltip. Hovering a tooltip element trigger a tooltip even if the element is nested in a container with overflow not visible: e.g. in views filter.
+      -  Solved language auto translation issues with templates (double bracket, sprintf) and html. Order of tags were altered by the translation system.
+      -  Removed cookies from MapX -> replaced with localstorage methods. When removing the cache, this storage will also be cleaned.
+      -  SDK : improved consistency. It's now possible to set the MapX encrypted token from the SDK. Solved some issues with MapX resolvers. The testing script should be ported to a standard test system, but in the meantime, this commit solved some issue with it. 
+      -  Rewrote most of the drawing tool using better object oriented methods. For the user, change will be visible in buttons, general layout and modal prompts.
+      -  Improved notification center and removed app errors from notification - use console instead.
+      -  Adaptation of the story map module to the new controls : added step configuration for displaying 3d relief and default aerial base layer. Support for escape keystrock to quit the story map to match most video player behavior. Simplified a lot the "auto scroll" function. Stability should be improved in case of very fast step changes.
+      -  Overall style rewrites : better support for small screens. Not perfect, but better.
+      -  Download : solved a bug when the download layer did not have proper title in other languages than English.
+      -  Many minor changes
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.10-beta' target='_blank'>1.8.10-beta</a>
    - APP + API 
       - Changed .gitignore to allow _built and _cache being committed
