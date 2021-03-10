@@ -111,7 +111,7 @@
     "mapbox-gl": "^2.0.1",
     "mapbox-gl-draw-circle": "^1.1.2",
     "martinez-polygon-clipping": "^0.5.0",
-    "muuri": "^0.8.0",
+    "muuri": "^0.9.0",
     "nouislider": "^12.1.0",
     "object-sizeof": "^1.6.1",
     "packery": "^2.1.2",

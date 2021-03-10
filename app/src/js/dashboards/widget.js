@@ -31,7 +31,7 @@ class Widget {
     widget.init();
   }
 
-  init() {
+  async init() {
     const widget = this;
     if (widget._init) {
       return;
@@ -52,26 +52,22 @@ class Widget {
     /**
      * Eval the script, dump error in console
      */
-    return widget
-      .strToObj(widget.opt.conf.script)
-      .then(function(register) {
-        for (var r in register) {
-          widget[r] = register[r];
-        }
-      })
-      .then(function() {
-        widget.modules = h.path(widget.opt, 'dashboard.modules', {});
-        widget.add();
-        widget.setUpdateDataMethod();
-        /**
-         * Set init flag to true
-         */
-        widget._init = true;
-      })
-      .catch((e) => {
-        console.error(e);
-        widget.destroy();
-      });
+    try {
+      const register = await widget.strToObj(widget.opt.conf.script);
+      for (var r in register) {
+        widget[r] = register[r];
+      }
+      widget.modules = h.path(widget.opt, 'dashboard.modules', {});
+      widget.add();
+      widget.setUpdateDataMethod();
+      /**
+       * Set init flag to true
+       */
+      widget._init = true;
+    } catch (e) {
+      console.error(e);
+      widget.destroy();
+    }
   }
 
   /**
@@ -350,7 +346,7 @@ class Widget {
   setData(d) {
     const widget = this;
     const hasData = !h.isEmpty(d);
-    const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty ;
+    const ignoreEmptyData = widget.opt.conf.sourceIgnoreEmpty;
     const triggerOnData = hasData || (!hasData && !ignoreEmptyData);
     if (triggerOnData) {
       widget.data = hasData ? d : [];

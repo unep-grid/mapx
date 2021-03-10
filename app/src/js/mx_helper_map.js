@@ -885,8 +885,11 @@ export async function initMapx(o) {
       tooltip_position: 'bottom-left',
       handles: ['free'],
       container_style: {
-        width: '120px',
-        height: '420px',
+        /**
+        * TODO : Set this as a class, same technique as no-ful-width/height
+        */ 
+        width: window.innerWidth < 800 ? '50px' : '120px',
+        height: window.innerHeight < 800 ? '100%' : '420px',
         minWidth: '50px',
         minHeight: '50px'
       },

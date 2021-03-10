@@ -16,12 +16,10 @@ const defaults = {
   },
   grid: {
     dragEnabled: true,
+    dragHandle: '.handle',
     dragSortPredicate: {
       action: 'move',
       threshold: 10
-    },
-    dragStartPredicate: {
-      handle: '.handle'
     },
     layout: {
       horizontal: true,
@@ -117,7 +115,7 @@ class Dashboard {
   show() {
     const d = this;
     d.panel.open();
-    d.grid.show();
+    d.grid.show(d.grid.getItems());
     d.setPanelInitSize();
     d.grid.refreshItems().layout();
     d._visible = true;
@@ -132,7 +130,7 @@ class Dashboard {
   hide() {
     const d = this;
     d.panel.close();
-    d.grid.hide();
+    d.grid.hide(d.grid.getItems());
     d._visible = false;
     d.fire('hide');
   }
