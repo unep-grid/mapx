@@ -1,5 +1,13 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.12' target='_blank'>1.8.12</a>
+   - APP
+      - Controls panel : auto-resize. Not perfect, but cover most cases.
+      - Storymap : added rotation buttons in control panel
+      - Draw : improved UI/UX, added circle tool
+      - Modals, new modal type: async prompt. Let the user enter value. Used in draw tool > polygon > circle > radius  
+      - Widget container in dashboard did not react to touchmove event, when widget size was larger than the dashboad size.
+
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.11-beta' target='_blank'>1.8.11-beta</a>
 
    - APP + API
