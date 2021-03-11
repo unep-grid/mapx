@@ -41,7 +41,7 @@ export function generateButtons() {
       classesIcon: ['mx-north-arrow'],
       action: () => {
         const map = getMap();
-        map.easeTo({bearing: 0});
+        map.easeTo({bearing: 0, pitch:0});
       }
     }),
     new Button({
