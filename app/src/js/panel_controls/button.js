@@ -4,6 +4,7 @@ import {getDictItem} from './../mx_helpers.js';
 import {ButtonCircle} from './../icon_flash/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import {EventSimple} from '../listener_store/index.js';
+import {shake} from '../elshake/index.js';
 
 class Button extends EventSimple {
   constructor(opt) {
@@ -82,13 +83,7 @@ class Button extends EventSimple {
   }
 
   shake() {
-    const btn = this;
-    const duration = '820';
-    btn.elButton.classList.add('btn-ctrl--shake');
-    clearTimeout(btn._timeout_shake);
-    btn._timeout_shake = setTimeout(() => {
-      btn.elButton.classList.remove('btn-ctrl--shake');
-    }, duration);
+    shake(this.elButton); 
   }
 
   action(event) {
