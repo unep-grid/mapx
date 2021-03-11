@@ -107,7 +107,7 @@ async function update(confFile) {
           let res = await translate(job);
           for (let translated of res) {
             let item = dict.find((c) => c.id === translated.id);
-            item[language] = `${translated[language]} *`;
+            item[language] = `${translated[language]}`;
           }
         }
       }

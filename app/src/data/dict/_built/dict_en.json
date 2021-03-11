@@ -1573,7 +1573,7 @@
   },
   {
     "id": "btn_north_arrow",
-    "en": "Reset bearing"
+    "en": "Reset the tilt and orientation of the map"
   },
   {
     "id": "btn_map_rotate_left",
@@ -5349,7 +5349,7 @@
   },
   {
     "id": "language_auto_warning",
-    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown."
+    "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software."
   },
   {
     "id": "nc_button",

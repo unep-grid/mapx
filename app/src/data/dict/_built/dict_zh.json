@@ -1247,112 +1247,112 @@
   {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
-    "zh": "切换矢量绘制工具 *"
+    "zh": "切换矢量绘制工具 "
   },
   {
     "id": "draw_btn_save",
     "en": "Create a new view with this layer and close the tools",
-    "zh": "在此层创建一个新视图并关闭工具 *"
+    "zh": "在此层创建一个新视图并关闭工具 "
   },
   {
     "id": "draw_btn_trash",
     "en": "Delete selected objects",
-    "zh": "删除所选对象 *"
+    "zh": "删除所选对象 "
   },
   {
     "id": "draw_trash_confirm_content",
     "en": "Do you want to remove selected objects?",
-    "zh": "您要删除选定的对象吗？ *"
+    "zh": "您要删除选定的对象吗？ "
   },
   {
     "id": "draw_trash_confirm_title",
     "en": "Remove objects confirmation",
-    "zh": "移除物件确认 *"
+    "zh": "移除物件确认 "
   },
   {
     "id": "draw_btn_combine",
     "en": "Combine (merge) objects into an object with single multigeometry",
-    "zh": "使用单个多几何体将对象合并（合并）为对象 *"
+    "zh": "使用单个多几何体将对象合并（合并）为对象 "
   },
   {
     "id": "draw_btn_uncombine",
     "en": "Uncombine (split) object with multigeometry into objects with single geometry",
-    "zh": "将具有多几何形状的对象分解（拆分）为具有单个几何形状的对象 *"
+    "zh": "将具有多几何形状的对象分解（拆分）为具有单个几何形状的对象 "
   },
   {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
-    "zh": "添加一个新点 *"
+    "zh": "添加一个新点 "
   },
   {
     "id": "draw_btn_mode_line",
     "en": "Add a new line",
-    "zh": "新增一行 *"
+    "zh": "新增一行 "
   },
   {
     "id": "draw_btn_mode_polygon",
     "en": "Add a new polygon",
-    "zh": "添加一个新的多边形 *"
+    "zh": "添加一个新的多边形 "
   },
   {
     "id": "draw_point",
     "en": "Point",
-    "zh": "观点 *"
+    "zh": "观点 "
   },
   {
     "id": "draw_line",
     "en": "Line",
-    "zh": "线 *"
+    "zh": "线 "
   },
   {
     "id": "draw_polygon",
     "en": "Polygon",
-    "zh": "多边形 *"
+    "zh": "多边形 "
   },
   {
     "id": "draw_layer_name",
     "en": "Layer name",
-    "zh": "图层名称 *"
+    "zh": "图层名称 "
   },
   {
     "id": "draw_object_type",
     "en": "Type of object",
-    "zh": "对象类型 *"
+    "zh": "对象类型 "
   },
   {
     "id": "draw_config_submit",
     "en": "Create new empty layer",
-    "zh": "创建新的空层 *"
+    "zh": "创建新的空层 "
   },
   {
     "id": "draw_config_title",
     "en": "Configure the new layer",
-    "zh": "配置新层 *"
+    "zh": "配置新层 "
   },
   {
     "id": "draw_help_title",
     "en": "Draw tool help",
-    "zh": "绘图工具帮助 *"
+    "zh": "绘图工具帮助 "
   },
   {
     "id": "draw_btn_help",
     "en": "Show drawing tool help",
-    "zh": "显示绘图工具帮助 *"
+    "zh": "显示绘图工具帮助 "
   },
   {
     "id": "draw_help_link",
     "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
-    "zh": "请访问我们的 {{wiki}}学习如何使用绘图工具 *"
+    "zh": "请访问我们的 {{wiki}}学习如何使用绘图工具 "
   },
   {
     "id": "draw_discard_change",
     "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
-    "zh": "您要删除更改吗？如果确认，则无法撤消。 *"
+    "zh": "您要删除更改吗？如果确认，则无法撤消。 "
   },
   {
     "id": "draw_discard_change_title",
     "en": "Delete changes ?",
-    "zh": "删除更改？ *"
+    "zh": "删除更改？ "
   },
   {
     "id": "draw_discard_change_btn_cancel",
@@ -1362,42 +1362,42 @@
   {
     "id": "draw_discard_change_btn_confirm",
     "en": "Confirm and delete the data",
-    "zh": "确认并删除数据 *"
+    "zh": "确认并删除数据 "
   },
   {
     "id": "draw_saved_quit",
     "en": "View created. Quit now or continue editing the current layer for another view ?",
-    "zh": "视图已创建。现在退出还是继续编辑当前图层以获取另一个视图？ *"
+    "zh": "视图已创建。现在退出还是继续编辑当前图层以获取另一个视图？ "
   },
   {
     "id": "draw_saved_quit_title",
     "en": "Continue editing ?",
-    "zh": "继续编辑吗？ *"
+    "zh": "继续编辑吗？ "
   },
   {
     "id": "draw_saved_quit_stay",
     "en": "Continue editing",
-    "zh": "继续编辑 *"
+    "zh": "继续编辑 "
   },
   {
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
-    "zh": "关闭工具 *"
+    "zh": "关闭工具 "
   },
   {
     "id": "draw_mode_circle_radius_prompt_title",
     "en": "Circle radius",
-    "zh": "圆半径 *"
+    "zh": "圆半径 "
   },
   {
     "id": "draw_mode_circle_radius_prompt_label",
     "en": "Enter the radius in kilometers, confirm and click on the map",
-    "zh": "输入以公里为单位的半径，确认并单击地图 *"
+    "zh": "输入以公里为单位的半径，确认并单击地图 "
   },
   {
     "id": "draw_btn_mode_circle",
     "en": "Add a new polygon in the shape of a circle, with a defined radius",
-    "zh": "添加具有定义半径的圆形的新多边形 *"
+    "zh": "添加具有定义半径的圆形的新多边形 "
   },
   {
     "id": "en",
@@ -1457,7 +1457,7 @@
   {
     "id": "m49_902",
     "en": "Pantropical",
-    "zh": "泛热带 *"
+    "zh": "泛热带 "
   },
   {
     "id": "global",
@@ -1966,18 +1966,18 @@
   },
   {
     "id": "btn_north_arrow",
-    "en": "Reset bearing",
-    "zh": "重置方向"
+    "en": "Reset the tilt and orientation of the map",
+    "zh": "重置地图的倾斜度和方向"
   },
   {
     "id": "btn_map_rotate_left",
     "en": "Rotate the map to the left",
-    "zh": "向左旋转地图 *"
+    "zh": "向左旋转地图 "
   },
   {
     "id": "btn_map_rotate_right",
     "en": "Rotate the map to the right",
-    "zh": "向右旋转地图 *"
+    "zh": "向右旋转地图 "
   },
   {
     "id": "btn_draw_mode",
@@ -2027,12 +2027,12 @@
   {
     "id": "delete_confirm_geojson_modal_title",
     "en": "Deletion of the view",
-    "zh": "删除视图 *"
+    "zh": "删除视图 "
   },
   {
     "id": "delete_confirm_geojson_modal",
     "en": "Would you like to delete this view ?",
-    "zh": "您要删除此视图吗？ *"
+    "zh": "您要删除此视图吗？ "
   },
   {
     "id": "btn_opt_download",
@@ -2372,32 +2372,32 @@
   {
     "id": "highlight_where_all",
     "en": "Highlight where all features overlap",
-    "zh": "突出显示所有功能重叠的地方 *"
+    "zh": "突出显示所有功能重叠的地方 "
   },
   {
     "id": "highlight_where_any",
     "en": "Highlight any visible feature",
-    "zh": "突出显示任何可见功能 *"
+    "zh": "突出显示任何可见功能 "
   },
   {
     "id": "highlight_where_two",
     "en": "Highlight where two features overlap",
-    "zh": "突出显示两个要素重叠的地方 *"
+    "zh": "突出显示两个要素重叠的地方 "
   },
   {
     "id": "highlight_where_three",
     "en": "Highlight where three features overlap",
-    "zh": "突出显示三个功能重叠的地方 *"
+    "zh": "突出显示三个功能重叠的地方 "
   },
   {
     "id": "highlight_where_four",
     "en": "Highlight where four features overlap",
-    "zh": "突出显示四个要素重叠的地方 *"
+    "zh": "突出显示四个要素重叠的地方 "
   },
   {
     "id": "highlight_where_five",
     "en": "Highlight where five features overlap",
-    "zh": "突出显示五个功能重叠的地方 *"
+    "zh": "突出显示五个功能重叠的地方 "
   },
   {
     "id": "label_check_instant_overlap",
@@ -2542,7 +2542,7 @@
   {
     "id": "error_login",
     "en": "Login issue",
-    "zh": "登录问题 *"
+    "zh": "登录问题 "
   },
   {
     "id": "error_email_bad",
@@ -2697,17 +2697,17 @@
   {
     "id": "login_required_for_project_access_guest",
     "en": "Accessing a private project requires to be authenticated",
-    "zh": "访问私有项目需要经过身份验证 *"
+    "zh": "访问私有项目需要经过身份验证 "
   },
   {
     "id": "login_required_for_project_access_non_member",
     "en": "You are not authorized to access this project. You can try with another account.",
-    "zh": "您无权访问此项目。您可以尝试使用另一个帐户。 *"
+    "zh": "您无权访问此项目。您可以尝试使用另一个帐户。 "
   },
   {
     "id": "login_required_for_project_list",
     "en": "The filtered project list request requires authentication",
-    "zh": "过滤后的项目列表请求需要身份验证 *"
+    "zh": "过滤后的项目列表请求需要身份验证 "
   },
   {
     "id": "login_pwd_mail_sent",
@@ -2912,7 +2912,7 @@
   {
     "id": "contacts",
     "en": "Contacts",
-    "zh": "联络人 *"
+    "zh": "联络人 "
   },
   {
     "id": "right",
@@ -2967,17 +2967,17 @@
   {
     "id": "email_manager_title",
     "en": "Email manager",
-    "zh": "邮件管理员 *"
+    "zh": "邮件管理员 "
   },
   {
     "id": "email_manager_sent_success_generic",
     "en": "An email has been sent to {{email}}",
-    "zh": "一封电子邮件已经发送至 {{email}} *"
+    "zh": "一封电子邮件已经发送至 {{email}} "
   },
   {
     "id": "email_manager_sent_error_generic",
     "en": "An error occuried, the email has not been sent to {{email}}",
-    "zh": "发生错误，电子邮件尚未发送至 {{email}} *"
+    "zh": "发生错误，电子邮件尚未发送至 {{email}} "
   },
   {
     "id": "invite_member_email",
@@ -2992,7 +2992,7 @@
   {
     "id": "btn_invite_form_hint",
     "en": "Open an invitation form",
-    "zh": "打开邀请表格 *"
+    "zh": "打开邀请表格 "
   },
   {
     "id": "btn_add",
@@ -3002,7 +3002,7 @@
   {
     "id": "btn_add_user_hint",
     "en": "Add this MapX user directly",
-    "zh": "直接添加此MapX用户 *"
+    "zh": "直接添加此MapX用户 "
   },
   {
     "id": "schema_class",
@@ -4057,7 +4057,7 @@
   {
     "id": "mx_ui_background_transparent",
     "en": "Background transparent",
-    "zh": "背景透明 *"
+    "zh": "背景透明 "
   },
   {
     "id": "mx_ui_shadow",
@@ -4357,17 +4357,17 @@
   {
     "id": "project_invite_message_title",
     "en": "MapX invitation",
-    "zh": "MapX邀请 *"
+    "zh": "MapX邀请 "
   },
   {
     "id": "project_invite_message_subject",
     "en": "Invitation to join the project \"{{project}}\"",
-    "zh": "邀请参加该项目“ {{project}} ” *"
+    "zh": "邀请参加该项目“ {{project}} ” "
   },
   {
     "id": "project_invite_message_accept",
     "en": "Accept invitation to the project \"{{project}}\"",
-    "zh": "接受项目邀请 {{project}}” *"
+    "zh": "接受项目邀请 {{project}}” "
   },
   {
     "id": "project_invite_message_sent",
@@ -4392,32 +4392,32 @@
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "zh": "你好，<br>用户' {{emailUser}} '使用邀请链接进入项目 {{project}}。<ul><li>截止日期： {{timeExpire}}</li></ul><br>祝你今天过得愉快 ！ *"
+    "zh": "你好，<br>用户' {{emailUser}} '使用邀请链接进入项目 {{project}}。<ul><li>截止日期： {{timeExpire}}</li></ul><br>祝你今天过得愉快 ！ "
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "zh": "项目中使用的邀请链接 {{project}} *"
+    "zh": "项目中使用的邀请链接 {{project}} "
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "zh": "您已被添加到项目中 {{project}} *"
+    "zh": "您已被添加到项目中 {{project}} "
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "zh": "你好，<br>您已添加到项目 {{project}}在群组里）： {{roles}} 。<br>祝你今天过得愉快 ！ *"
+    "zh": "你好，<br>您已添加到项目 {{project}}在群组里）： {{roles}} 。<br>祝你今天过得愉快 ！ "
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "zh": "用户已添加到项目 {{project}}。 *"
+    "zh": "用户已添加到项目 {{project}}。 "
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "zh": "用户（ {{emailUser}} ）已添加到项目中 {{project}}在群组里） {{roles}}<br>祝你今天过得愉快 ！ *"
+    "zh": "用户（ {{emailUser}} ）已添加到项目中 {{project}}在群组里） {{roles}}<br>祝你今天过得愉快 ！ "
   },
   {
     "id": "project_countries_highlight",
@@ -4597,7 +4597,7 @@
   {
     "id": "project_request_membership_subject",
     "en": "Application to join the {{project}} project ",
-    "zh": "申请加入 {{project}}项目 *"
+    "zh": "申请加入 {{project}}项目 "
   },
   {
     "id": "project_request_membership_message_recap",
@@ -4607,12 +4607,12 @@
   {
     "id": "project_join_message_reply",
     "en": "Respond to the membership request from \"{{email}}\" for the project \"{{project}}\"",
-    "zh": "回应来自“ {{email}} “为项目” {{project}} ” *"
+    "zh": "回应来自“ {{email}} “为项目” {{project}} ” "
   },
   {
     "id": "project_open_url",
     "en": "Open the project \"{{project}}\"",
-    "zh": "打开项目“ {{project}} ” *"
+    "zh": "打开项目“ {{project}} ” "
   },
   {
     "id": "project_request_membership_message_sent",
@@ -4632,7 +4632,7 @@
   {
     "id": "btn_reset_panel_size",
     "en": "Reset default panel sizes",
-    "zh": "重置默认面板尺寸 *"
+    "zh": "重置默认面板尺寸 "
   },
   {
     "id": "utils_clear_cache_title",
@@ -4642,17 +4642,17 @@
   {
     "id": "utils_clear_cache",
     "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
-    "zh": "此操作将删除MapX设置的所有缓存数据，包括地图图块，GeoJSON图层，草稿，WMS响应，摘要和自定义脚本。这只会影响您的浏览器：服务器端不会删除任何数据。此操作将释放大约<b> {{usage}}</b>。 *"
+    "zh": "此操作将删除MapX设置的所有缓存数据，包括地图图块，GeoJSON图层，草稿，WMS响应，摘要和自定义脚本。这只会影响您的浏览器：服务器端不会删除任何数据。此操作将释放大约<b> {{usage}}</b>。 "
   },
   {
     "id": "utils_clear_cache_reload_title",
     "en": "Close this session and restart ?",
-    "zh": "关闭此会话并重新启动？ *"
+    "zh": "关闭此会话并重新启动？ "
   },
   {
     "id": "utils_clear_cache_reload",
     "en": "Do you want to close this session and restart now? Any unsaved changes will be lost, because all the cache has been deleted.",
-    "zh": "您要关闭此会话并立即重新启动吗？任何未保存的更改都将丢失，因为所有缓存均已删除。 *"
+    "zh": "您要关闭此会话并立即重新启动吗？任何未保存的更改都将丢失，因为所有缓存均已删除。 "
   },
   {
     "id": "title_utilities",
@@ -5322,27 +5322,27 @@
   {
     "id": "schema_story_step_base_layer",
     "en": "Base layer configuration",
-    "zh": "基本层配置 *"
+    "zh": "基本层配置 "
   },
   {
     "id": "schema_story_step_add_aerial",
     "en": "Enable aerial mode for this step",
-    "zh": "为此步骤启用航拍模式 *"
+    "zh": "为此步骤启用航拍模式 "
   },
   {
     "id": "schema_story_step_add_aerial_desc",
     "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "zh": "航拍模式向地图添加高分辨率的航拍图像 *"
+    "zh": "航拍模式向地图添加高分辨率的航拍图像 "
   },
   {
     "id": "schema_story_step_add_3d_terrain",
     "en": "Enable '3d terrain' mode for this step",
-    "zh": "为此步骤启用“ 3d地形”模式 *"
+    "zh": "为此步骤启用“ 3d地形”模式 "
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
     "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "zh": "“ 3d地形”将使高程以3维显示。在相机倾斜的情况下进行高变焦时很有用。使用控制键和鼠标修改音高和方位。 *"
+    "zh": "“ 3d地形”将使高程以3维显示。在相机倾斜的情况下进行高变焦时很有用。使用控制键和鼠标修改音高和方位。 "
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -5602,7 +5602,7 @@
   {
     "id": "textual_keywords_m49_desc",
     "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "zh": "对于空间搜索，MapX可以根据其几何形状，范围和/或属性确定多个空间特征之间的关系。在某些情况下，最好将地理关键字与来源相关联，以改善文本搜索过程中的相关性。 M49关键字允许您执行此操作。至少需要一个关键字。 *"
+    "zh": "对于空间搜索，MapX可以根据其几何形状，范围和/或属性确定多个空间特征之间的关系。在某些情况下，最好将地理关键字与来源相关联，以改善文本搜索过程中的相关性。 M49关键字允许您执行此操作。至少需要一个关键字。 "
   },
   {
     "id": "textual_title",
@@ -6267,7 +6267,7 @@
   {
     "id": "login_single_use_password_email_subject",
     "en": "Single use password request",
-    "zh": "一次性密码要求 *"
+    "zh": "一次性密码要求 "
   },
   {
     "id": "login_single_use_password_email",
@@ -6277,12 +6277,12 @@
   {
     "id": "login_email_new_account_welcome",
     "en": "Welcome! <br> For technical informations, you may read our <a href='{{linkKnowledgeBase}}'>Knowledge Base</a>. If you have suggestion about this website, or if you want report a bug, visit our <a href='{{linkIssue}}'>issue tracker</a> <br> Thanks !",
-    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\">知识库</a>。如果您对本网站有建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\">问题跟踪器</a><br>谢谢 ！ *"
+    "zh": "欢迎！<br>有关技术信息，您可以阅读我们的<a href=\"{{linkKnowledgeBase}}\">知识库</a>。如果您对本网站有建议，或者想要报告错误，请访问我们的<a href=\"{{linkIssue}}\">问题跟踪器</a><br>谢谢 ！ "
   },
   {
     "id": "login_email_new_account_welcome_subject",
     "en": "Welcome ! New account created.",
-    "zh": "欢迎 ！已创建新帐户。 *"
+    "zh": "欢迎 ！已创建新帐户。 "
   },
   {
     "id": "filter_views_list_mode_intersection",
@@ -6492,206 +6492,206 @@
   {
     "id": "roles_updated_mail_title",
     "en": "Roles updated",
-    "zh": "角色已更新 *"
+    "zh": "角色已更新 "
   },
   {
     "id": "roles_updated_mail_subject",
     "en": "Roles updated in project {{nameProject}}",
-    "zh": "项目中的角色已更新 {{nameProject}} *"
+    "zh": "项目中的角色已更新 {{nameProject}} "
   },
   {
     "id": "roles_updated_mail_content",
     "en": "<p>Hello,</p><p>An administrator changed your roles in the project {{projectLink}}.</p> <p> Here is the list of changes :</p><p>{{txtRoleChange}}</p><p>Have a nice day !</p><i style='float:right'> The MapX team.</i>",
-    "zh": "<p>你好，</p><p>管理员更改了您在项目中的角色 {{projectLink}}。</p><p>以下是更改列表：</p><p> {{txtRoleChange}}</p><p>祝你今天过得愉快 ！</p> <i style=\"float:right\">MapX小组。</i> *"
+    "zh": "<p>你好，</p><p>管理员更改了您在项目中的角色 {{projectLink}}。</p><p>以下是更改列表：</p><p> {{txtRoleChange}}</p><p>祝你今天过得愉快 ！</p> <i style=\"float:right\">MapX小组。</i> "
   },
   {
     "id": "roles_updated_mail_content_admin_summary",
     "en": "<p>Hello,</p><p>Roles have changed in your project {{projectLink}}.</p> <p> Here is the list of changes : {{changes}} <p>Have a nice day !</p>",
-    "zh": "<p>你好，</p><p>项目中的角色已更改 {{projectLink}}。</p><p>以下是更改列表： {{changes}}</p><p>祝你今天过得愉快 ！</p> *"
+    "zh": "<p>你好，</p><p>项目中的角色已更改 {{projectLink}}。</p><p>以下是更改列表： {{changes}}</p><p>祝你今天过得愉快 ！</p> "
   },
   {
     "id": "added_to_group",
     "en": "added to: {{group}} \n",
-    "zh": "添加到： {{group}}\n *"
+    "zh": "添加到： {{group}}\n "
   },
   {
     "id": "removed_from_group",
     "en": "removed from: {{group}} \n",
-    "zh": "已经从...删除： {{group}}\n *"
+    "zh": "已经从...删除： {{group}}\n "
   },
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "zh": "无效的格式 {{format}}，使用默认格式 {{formatDefault}}。 *"
+    "zh": "无效的格式 {{format}}，使用默认格式 {{formatDefault}}。 "
   },
   {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
-    "zh": "提取元数据 *"
+    "zh": "提取元数据 "
   },
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "zh": "发现图层“”的几何无效 {{title}}'（ {{idLayer}} ）。 *"
+    "zh": "发现图层“”的几何无效 {{title}}'（ {{idLayer}} ）。 "
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "zh": "电子邮件将发送至<a href=\"mailto:={{email}}\"> {{email}}</a>。下载<a href=\"{{url}}\">链接</a>将在流程结束时激活 *"
+    "zh": "电子邮件将发送至<a href=\"mailto:={{email}}\"> {{email}}</a>。下载<a href=\"{{url}}\">链接</a>将在流程结束时激活 "
   },
   {
     "id": "get_source_extraction_wait",
     "en": "Starting data conversion. This could take a while, please wait",
-    "zh": "开始数据转换。这可能需要一段时间，请稍候 *"
+    "zh": "开始数据转换。这可能需要一段时间，请稍候 "
   },
   {
     "id": "get_source_conversion_progress",
     "en": "Conversion progress",
-    "zh": "转换进度 *"
+    "zh": "转换进度 "
   },
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "zh": "转换讯息： {{stdout}} *"
+    "zh": "转换讯息： {{stdout}} "
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "zh": "转换警告： {{stderr}} *"
+    "zh": "转换警告： {{stderr}} "
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "zh": "转换错误。 {{error}} *"
+    "zh": "转换错误。 {{error}} "
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "zh": "使用格式完成转换 {{format}}。<a href=\"{{url}}\"> {{title}}</a> *"
+    "zh": "使用格式完成转换 {{format}}。<a href=\"{{url}}\"> {{title}}</a> "
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "zh": "层 {{title}}出口的 *"
+    "zh": "层 {{title}}出口的 "
   },
   {
     "id": "get_source_conversion_done_browser_title",
     "en": "Layer exported",
-    "zh": "图层导出 *"
+    "zh": "图层导出 "
   },
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "zh": "可以使用此链接下载所需的数据：<a href=\"{{url}}\"> {{title}}</a> *"
+    "zh": "可以使用此链接下载所需的数据：<a href=\"{{url}}\"> {{title}}</a> "
   },
   {
     "id": "get_source_zip_progress",
     "en": "Compression progress",
-    "zh": "压缩进度 *"
+    "zh": "压缩进度 "
   },
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "zh": "压缩警告： {{err}} *"
+    "zh": "压缩警告： {{err}} "
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "zh": "压缩错误： {{err}} *"
+    "zh": "压缩错误： {{err}} "
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "zh": "从MapX上下载 {{date}} *"
+    "zh": "从MapX上下载 {{date}} "
   },
   {
     "id": "stat_load_please_wait",
     "en": "Statistics extraction ... ",
-    "zh": "统计提取... *"
+    "zh": "统计提取... "
   },
   {
     "id": "btn_panel_main",
     "en": "Main panel",
-    "zh": "主面板 *"
+    "zh": "主面板 "
   },
   {
     "id": "btn_panel_controls",
     "en": "Controls panel",
-    "zh": "控制面板 *"
+    "zh": "控制面板 "
   },
   {
     "id": "fetch_views_diff_modal_title",
     "en": "Views not available",
-    "zh": "视图不可用 *"
+    "zh": "视图不可用 "
   },
   {
     "id": "fetch_views_diff_message",
     "en": "You have requested views that are not available in this project.",
-    "zh": "您请求的视图在该项目中不可用。 *"
+    "zh": "您请求的视图在该项目中不可用。 "
   },
   {
     "id": "vt_desc",
     "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",
-    "zh": "具有矢量图层的视图。这种类型的图层显示属性表中包含的几何形状和相关信息。启用了许多交互式功能，例如过滤，缩放或突出显示。 *"
+    "zh": "具有矢量图层的视图。这种类型的图层显示属性表中包含的几何形状和相关信息。启用了许多交互式功能，例如过滤，缩放或突出显示。 "
   },
   {
     "id": "gj_desc",
     "en": "Views featuring a vector layer stored in your internet browser as GeoJSON format.",
-    "zh": "具有以GeoJSON格式存储在您的Internet浏览器中的矢量图层的视图。 *"
+    "zh": "具有以GeoJSON格式存储在您的Internet浏览器中的矢量图层的视图。 "
   },
   {
     "id": "rt_desc",
     "en": "Views featuring a raster layer. This type of data shows an image made up of a matrix of pixels, each pixel having its own values.",
-    "zh": "具有栅格图层的视图。此类数据显示由像素矩阵组成的图像，每个像素都有自己的值。 *"
+    "zh": "具有栅格图层的视图。此类数据显示由像素矩阵组成的图像，每个像素都有自己的值。 "
   },
   {
     "id": "sm_desc",
     "en": "Interactive document featuring stories combining text, interactive maps and other multimedia content.",
-    "zh": "交互式文档，其故事结合了文本，交互式地图和其他多媒体内容。 *"
+    "zh": "交互式文档，其故事结合了文本，交互式地图和其他多媒体内容。 "
   },
   {
     "id": "dashboard_desc",
     "en": "Views with a dashboard that interacts with the data displayed in the map.",
-    "zh": "具有仪表板的视图，该仪表板与地图中显示的数据进行交互。 *"
+    "zh": "具有仪表板的视图，该仪表板与地图中显示的数据进行交互。 "
   },
   {
     "id": "time_slider_desc",
     "en": "Views with a time slider (accessible in the view settings).",
-    "zh": "带时间滑块的视图（在视图设置中可访问）。 *"
+    "zh": "带时间滑块的视图（在视图设置中可访问）。 "
   },
   {
     "id": "overlap_desc",
     "en": "Views featuring vector layers resulting from the overlap between two data sources.",
-    "zh": "具有两个数据源之间重叠的矢量层的视图。 *"
+    "zh": "具有两个数据源之间重叠的矢量层的视图。 "
   },
   {
     "id": "custom_style_desc",
     "en": "Views with a customized style. e.g. heat maps, bivariate classification.",
-    "zh": "具有自定义样式的视图。例如热图，双变量分类。 *"
+    "zh": "具有自定义样式的视图。例如热图，双变量分类。 "
   },
   {
     "id": "custom_code_desc",
     "en": "Views featuring a customized script. The result could be anything. e.g. a time slider on raster data or a prototype that uses external data.",
-    "zh": "具有自定义脚本的视图。结果可能是任何事情。例如，栅格数据上的时间滑块或使用外部数据的原型。 *"
+    "zh": "具有自定义脚本的视图。结果可能是任何事情。例如，栅格数据上的时间滑块或使用外部数据的原型。 "
   },
   {
     "id": "view_editable_desc",
     "en": "Views for which you have editing rights.",
-    "zh": "您拥有编辑权限的视图。 *"
+    "zh": "您拥有编辑权限的视图。 "
   },
   {
     "id": "view_local_desc",
     "en": "Views from this project ( excludes external views ).",
-    "zh": "该项目的视图（不包括外部视图）。 *"
+    "zh": "该项目的视图（不包括外部视图）。 "
   },
   {
     "id": "language_auto_warning",
-    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
-    "zh": "如果缺少翻译，可以自动翻译英语以外的语言。在这种情况下，将显示一个星号。 *"
+    "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
+    "zh": "如果缺少翻译，可以自动翻译除英语以外的其他语言。这不适用于用户创建的内容，例如项目，源，视图，故事，图层，标题和自定义代码。用户编写的标题，描述，属性，许可或任何其他文本，即使是多语言条目也不会被该软件以任何方式更改。"
   },
   {
     "id": "nc_button",
     "en": "Notifications",
-    "zh": "通知事项 *"
+    "zh": "通知事项 "
   }
 ]

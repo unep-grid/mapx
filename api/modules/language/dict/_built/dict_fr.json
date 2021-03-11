@@ -1247,112 +1247,112 @@
   {
     "id": "draw_btn_toggle",
     "en": "Toggle the vector draw tools",
-    "fr": "Activer / désactiver les outils de dessin vectoriel *"
+    "fr": "Activer / désactiver les outils de dessin vectoriel "
   },
   {
     "id": "draw_btn_save",
     "en": "Create a new view with this layer and close the tools",
-    "fr": "Créez une nouvelle vue avec ce calque et fermez les outils *"
+    "fr": "Créez une nouvelle vue avec ce calque et fermez les outils "
   },
   {
     "id": "draw_btn_trash",
     "en": "Delete selected objects",
-    "fr": "Supprimer les objets sélectionnés *"
+    "fr": "Supprimer les objets sélectionnés "
   },
   {
     "id": "draw_trash_confirm_content",
     "en": "Do you want to remove selected objects?",
-    "fr": "Voulez-vous supprimer les objets sélectionnés? *"
+    "fr": "Voulez-vous supprimer les objets sélectionnés? "
   },
   {
     "id": "draw_trash_confirm_title",
     "en": "Remove objects confirmation",
-    "fr": "Confirmation de la suppression des objets *"
+    "fr": "Confirmation de la suppression des objets "
   },
   {
     "id": "draw_btn_combine",
     "en": "Combine (merge) objects into an object with single multigeometry",
-    "fr": "Combiner (fusionner) des objets en un objet avec une seule multigégométrie *"
+    "fr": "Combiner (fusionner) des objets en un objet avec une seule multigégométrie "
   },
   {
     "id": "draw_btn_uncombine",
     "en": "Uncombine (split) object with multigeometry into objects with single geometry",
-    "fr": "Décomposer (scinder) un objet avec la multi-géométrie en objets avec une seule géométrie *"
+    "fr": "Décomposer (scinder) un objet avec la multi-géométrie en objets avec une seule géométrie "
   },
   {
     "id": "draw_btn_mode_point",
     "en": "Add a new point",
-    "fr": "Ajouter un nouveau point *"
+    "fr": "Ajouter un nouveau point "
   },
   {
     "id": "draw_btn_mode_line",
     "en": "Add a new line",
-    "fr": "Ajouter une nouvelle ligne *"
+    "fr": "Ajouter une nouvelle ligne "
   },
   {
     "id": "draw_btn_mode_polygon",
     "en": "Add a new polygon",
-    "fr": "Ajouter un nouveau polygone *"
+    "fr": "Ajouter un nouveau polygone "
   },
   {
     "id": "draw_point",
     "en": "Point",
-    "fr": "Point *"
+    "fr": "Point "
   },
   {
     "id": "draw_line",
     "en": "Line",
-    "fr": "Ligne *"
+    "fr": "Ligne "
   },
   {
     "id": "draw_polygon",
     "en": "Polygon",
-    "fr": "Polygone *"
+    "fr": "Polygone "
   },
   {
     "id": "draw_layer_name",
     "en": "Layer name",
-    "fr": "Nom du calque *"
+    "fr": "Nom du calque "
   },
   {
     "id": "draw_object_type",
     "en": "Type of object",
-    "fr": "Type d'objet *"
+    "fr": "Type d'objet "
   },
   {
     "id": "draw_config_submit",
     "en": "Create new empty layer",
-    "fr": "Créer un nouveau calque vide *"
+    "fr": "Créer un nouveau calque vide "
   },
   {
     "id": "draw_config_title",
     "en": "Configure the new layer",
-    "fr": "Configurer la nouvelle couche *"
+    "fr": "Configurer la nouvelle couche "
   },
   {
     "id": "draw_help_title",
     "en": "Draw tool help",
-    "fr": "Aide de l'outil de dessin *"
+    "fr": "Aide de l'outil de dessin "
   },
   {
     "id": "draw_btn_help",
     "en": "Show drawing tool help",
-    "fr": "Afficher l'aide de l'outil de dessin *"
+    "fr": "Afficher l'aide de l'outil de dessin "
   },
   {
     "id": "draw_help_link",
     "en": "Please visit our {{wiki}} to learn how to use the drawing tool",
-    "fr": "Veuillez visiter notre {{wiki}} pour apprendre à utiliser l'outil de dessin *"
+    "fr": "Veuillez visiter notre {{wiki}} pour apprendre à utiliser l'outil de dessin "
   },
   {
     "id": "draw_discard_change",
     "en": "Do you want to delete the changes ? If confirmed, this can't be undone.",
-    "fr": "Voulez-vous supprimer les modifications? Si cela est confirmé, cela ne peut pas être annulé. *"
+    "fr": "Voulez-vous supprimer les modifications? Si cela est confirmé, cela ne peut pas être annulé. "
   },
   {
     "id": "draw_discard_change_title",
     "en": "Delete changes ?",
-    "fr": "Supprimer les modifications? *"
+    "fr": "Supprimer les modifications? "
   },
   {
     "id": "draw_discard_change_btn_cancel",
@@ -1362,42 +1362,42 @@
   {
     "id": "draw_discard_change_btn_confirm",
     "en": "Confirm and delete the data",
-    "fr": "Confirmer et supprimer les données *"
+    "fr": "Confirmer et supprimer les données "
   },
   {
     "id": "draw_saved_quit",
     "en": "View created. Quit now or continue editing the current layer for another view ?",
-    "fr": "Vue créée. Quitter maintenant ou continuer à modifier le calque actuel pour une autre vue? *"
+    "fr": "Vue créée. Quitter maintenant ou continuer à modifier le calque actuel pour une autre vue? "
   },
   {
     "id": "draw_saved_quit_title",
     "en": "Continue editing ?",
-    "fr": "Continuer l'édition? *"
+    "fr": "Continuer l'édition? "
   },
   {
     "id": "draw_saved_quit_stay",
     "en": "Continue editing",
-    "fr": "Continuer l'édition *"
+    "fr": "Continuer l'édition "
   },
   {
     "id": "draw_saved_quit_confirm",
     "en": "Close the tool",
-    "fr": "Fermer l'outil *"
+    "fr": "Fermer l'outil "
   },
   {
     "id": "draw_mode_circle_radius_prompt_title",
     "en": "Circle radius",
-    "fr": "Rayon du cercle *"
+    "fr": "Rayon du cercle "
   },
   {
     "id": "draw_mode_circle_radius_prompt_label",
     "en": "Enter the radius in kilometers, confirm and click on the map",
-    "fr": "Entrez le rayon en kilomètres, confirmez et cliquez sur la carte *"
+    "fr": "Entrez le rayon en kilomètres, confirmez et cliquez sur la carte "
   },
   {
     "id": "draw_btn_mode_circle",
     "en": "Add a new polygon in the shape of a circle, with a defined radius",
-    "fr": "Ajouter un nouveau polygone en forme de cercle, avec un rayon défini *"
+    "fr": "Ajouter un nouveau polygone en forme de cercle, avec un rayon défini "
   },
   {
     "id": "en",
@@ -1966,18 +1966,18 @@
   },
   {
     "id": "btn_north_arrow",
-    "en": "Reset bearing",
-    "fr": "Réinitialiser l'orientation"
+    "en": "Reset the tilt and orientation of the map",
+    "fr": "Réinitialiser l'inclinaison et l'orientation de la carte"
   },
   {
     "id": "btn_map_rotate_left",
     "en": "Rotate the map to the left",
-    "fr": "Faire pivoter la carte vers la gauche *"
+    "fr": "Faire pivoter la carte vers la gauche "
   },
   {
     "id": "btn_map_rotate_right",
     "en": "Rotate the map to the right",
-    "fr": "Faites pivoter la carte vers la droite *"
+    "fr": "Faites pivoter la carte vers la droite "
   },
   {
     "id": "btn_draw_mode",
@@ -2372,32 +2372,32 @@
   {
     "id": "highlight_where_all",
     "en": "Highlight where all features overlap",
-    "fr": "Mettez en surbrillance où toutes les fonctionnalités se chevauchent *"
+    "fr": "Mettez en surbrillance où toutes les fonctionnalités se chevauchent "
   },
   {
     "id": "highlight_where_any",
     "en": "Highlight any visible feature",
-    "fr": "Mettez en surbrillance toute caractéristique visible *"
+    "fr": "Mettez en surbrillance toute caractéristique visible "
   },
   {
     "id": "highlight_where_two",
     "en": "Highlight where two features overlap",
-    "fr": "Mettez en surbrillance où deux entités se chevauchent *"
+    "fr": "Mettez en surbrillance où deux entités se chevauchent "
   },
   {
     "id": "highlight_where_three",
     "en": "Highlight where three features overlap",
-    "fr": "Mettez en surbrillance où trois éléments se chevauchent *"
+    "fr": "Mettez en surbrillance où trois éléments se chevauchent "
   },
   {
     "id": "highlight_where_four",
     "en": "Highlight where four features overlap",
-    "fr": "Mettez en surbrillance où quatre entités se chevauchent *"
+    "fr": "Mettez en surbrillance où quatre entités se chevauchent "
   },
   {
     "id": "highlight_where_five",
     "en": "Highlight where five features overlap",
-    "fr": "Mettez en surbrillance où cinq entités se chevauchent *"
+    "fr": "Mettez en surbrillance où cinq entités se chevauchent "
   },
   {
     "id": "label_check_instant_overlap",
@@ -4392,32 +4392,32 @@
   {
     "id": "project_invite_notify_auto_register_email",
     "en": "Hello, <br> User '{{emailUser}}' used an invitation link to enter the project {{project}}. <ul><li>Expiration date: {{timeExpire}}</li></ul> <br> Have a nice day !",
-    "fr": "Bonjour,<br> Utilisateur ' {{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet {{project}} .<ul><li> Date d'expiration: {{timeExpire}}</li></ul><br> Passe une bonne journée ! *"
+    "fr": "Bonjour,<br> Utilisateur ' {{emailUser}} 'a utilisé un lien d'invitation pour entrer dans le projet {{project}} .<ul><li> Date d'expiration: {{timeExpire}}</li></ul><br> Passe une bonne journée ! "
   },
   {
     "id": "project_invite_notify_auto_register_email_subject",
     "en": "Invitation link used in project {{project}}",
-    "fr": "Lien d'invitation utilisé dans le projet {{project}} *"
+    "fr": "Lien d'invitation utilisé dans le projet {{project}} "
   },
   {
     "id": "project_user_added_email_user_subject",
     "en": "You've have been added to project {{project}}",
-    "fr": "Vous avez été ajouté au projet {{project}} *"
+    "fr": "Vous avez été ajouté au projet {{project}} "
   },
   {
     "id": "project_user_added_email_user",
     "en": "Hello, <br> You have been added to project {{project}} in group(s):  {{roles}}.<br> Have a nice day !",
-    "fr": "Bonjour,<br> Vous avez été ajouté au projet {{project}} en groupes): {{roles}} .<br> Passe une bonne journée ! *"
+    "fr": "Bonjour,<br> Vous avez été ajouté au projet {{project}} en groupes): {{roles}} .<br> Passe une bonne journée ! "
   },
   {
     "id": "project_user_added_email_admin_subject",
     "en": "A user has been added to project {{project}}.",
-    "fr": "Un utilisateur a été ajouté au projet {{project}} . *"
+    "fr": "Un utilisateur a été ajouté au projet {{project}} . "
   },
   {
     "id": "project_user_added_email_admin",
     "en": "A user ( {{emailUser}} ) has been added to project {{project}} in group(s) {{roles}} <br> Have a nice day !",
-    "fr": "Un utilisateur ( {{emailUser}} ) a été ajouté au projet {{project}} en groupes) {{roles}}<br> Passe une bonne journée ! *"
+    "fr": "Un utilisateur ( {{emailUser}} ) a été ajouté au projet {{project}} en groupes) {{roles}}<br> Passe une bonne journée ! "
   },
   {
     "id": "project_countries_highlight",
@@ -4642,7 +4642,7 @@
   {
     "id": "utils_clear_cache",
     "en": "This operation will remove all cached data set by MapX, including map tiles, GeoJSON layers, drafts, WMS responses, summaries and custom scripts. This will only impact your browser : no data will be removed server side. This operation will free up about <b>{{usage}}</b>.",
-    "fr": "Cette opération supprimera toutes les données mises en cache par MapX, y compris les tuiles de carte, les couches GeoJSON, les brouillons, les réponses WMS, les résumés et les scripts personnalisés. Cela n'impactera que votre navigateur: aucune donnée ne sera supprimée côté serveur. Cette opération libérera environ<b> {{usage}}</b> . *"
+    "fr": "Cette opération supprimera toutes les données mises en cache par MapX, y compris les tuiles de carte, les couches GeoJSON, les brouillons, les réponses WMS, les résumés et les scripts personnalisés. Cela n'impactera que votre navigateur: aucune donnée ne sera supprimée côté serveur. Cette opération libérera environ<b> {{usage}}</b> . "
   },
   {
     "id": "utils_clear_cache_reload_title",
@@ -5327,22 +5327,22 @@
   {
     "id": "schema_story_step_add_aerial",
     "en": "Enable aerial mode for this step",
-    "fr": "Activer le mode aérien pour cette étape *"
+    "fr": "Activer le mode aérien pour cette étape "
   },
   {
     "id": "schema_story_step_add_aerial_desc",
     "en": "The aerial mode add a high resolution aerial imagery to the map",
-    "fr": "Le mode aérien ajoute une imagerie aérienne haute résolution à la carte *"
+    "fr": "Le mode aérien ajoute une imagerie aérienne haute résolution à la carte "
   },
   {
     "id": "schema_story_step_add_3d_terrain",
     "en": "Enable '3d terrain' mode for this step",
-    "fr": "Activez le mode 'terrain 3D' pour cette étape *"
+    "fr": "Activez le mode 'terrain 3D' pour cette étape "
   },
   {
     "id": "schema_story_step_add_3d_terrain_desc",
     "en": "The '3d terrain' will make elevation appears in 3 dimension. This is usefull at high zoom, with the camera tilted. Use your control key and your mouse to modify the pitch and bearing.",
-    "fr": "Le «terrain 3D» fera apparaître l'élévation en 3 dimensions. Ceci est utile avec un zoom élevé, avec la caméra inclinée. Utilisez votre touche de contrôle et votre souris pour modifier le pas et le relèvement. *"
+    "fr": "Le «terrain 3D» fera apparaître l'élévation en 3 dimensions. Ceci est utile avec un zoom élevé, avec la caméra inclinée. Utilisez votre touche de contrôle et votre souris pour modifier le pas et le relèvement. "
   },
   {
     "id": "schema_story_screen_res_desc",
@@ -5912,7 +5912,7 @@
   {
     "id": "app_maintenance_text",
     "en": "MapX is currently unavailable due to server maintenance. <br> Come back later in the day !  <br> <br> Sincerely, your MapX team",
-    "fr": "MapX est temporairement indisisponible, des travaux de maintenance sont en cours. <br> Merci de revenir plus tard dans la journée ! <br><br> Votre équipe MapX."
+    "fr": "MapX est temporairement indisponible, des travaux de maintenance sont en cours. <br> Merci de revenir plus tard dans la journée ! <br><br> Votre équipe MapX."
   },
   {
     "id": "pk_panel_options",
@@ -6522,87 +6522,87 @@
   {
     "id": "get_source_format_invalid",
     "en": "Invalid format {{format}}, using default format {{formatDefault}}.",
-    "fr": "Format invalide {{format}} , en utilisant le format par défaut {{formatDefault}} . *"
+    "fr": "Format invalide {{format}} , en utilisant le format par défaut {{formatDefault}} . "
   },
   {
     "id": "get_source_meta_extracted",
     "en": "Metadata extracted",
-    "fr": "Métadonnées extraites *"
+    "fr": "Métadonnées extraites "
   },
   {
     "id": "get_source_invalid_geom",
     "en": "Invalid geometries found for layer '{{title}}' ({{idLayer}}).",
-    "fr": "Géométries incorrectes trouvées pour la couche ' {{title}} '( {{idLayer}} ). *"
+    "fr": "Géométries incorrectes trouvées pour la couche ' {{title}} '( {{idLayer}} ). "
   },
   {
     "id": "get_source_email_dl_link",
     "en": "An email will be sent to <a href='mailto:={{email}}'>{{email}}</a>. The download <a href='{{url}}'>link</a> will be activated at the end of the process",
-    "fr": "Un e-mail sera envoyé à<a href=\"mailto:={{email}}\"> {{email}}</a> . Le <a href=\"{{url}}\">lien de</a> téléchargement sera activé à la fin du processus *"
+    "fr": "Un e-mail sera envoyé à<a href=\"mailto:={{email}}\"> {{email}}</a> . Le <a href=\"{{url}}\">lien de</a> téléchargement sera activé à la fin du processus "
   },
   {
     "id": "get_source_extraction_wait",
     "en": "Starting data conversion. This could take a while, please wait",
-    "fr": "Démarrage de la conversion des données. Cela peut prendre un certain temps, veuillez patienter *"
+    "fr": "Démarrage de la conversion des données. Cela peut prendre un certain temps, veuillez patienter "
   },
   {
     "id": "get_source_conversion_progress",
     "en": "Conversion progress",
-    "fr": "Progression de la conversion *"
+    "fr": "Progression de la conversion "
   },
   {
     "id": "get_source_conversion_stdout",
     "en": "Conversion message: {{stdout}}",
-    "fr": "Message de conversion: {{stdout}} *"
+    "fr": "Message de conversion: {{stdout}} "
   },
   {
     "id": "get_source_conversion_stderr",
     "en": "Conversion warning: {{stderr}}",
-    "fr": "Avertissement de conversion: {{stderr}} *"
+    "fr": "Avertissement de conversion: {{stderr}} "
   },
   {
     "id": "get_source_conversion_error",
     "en": "Conversion error. {{error}} ",
-    "fr": "Erreur de conversion. {{error}} *"
+    "fr": "Erreur de conversion. {{error}} "
   },
   {
     "id": "get_source_conversion_done_link",
     "en": "Conversion done using format {{format}}.  <a href={{url}}>{{title}}</a>",
-    "fr": "Conversion effectuée en utilisant le format {{format}} .<a href=\"{{url}}\"> {{title}}</a> *"
+    "fr": "Conversion effectuée en utilisant le format {{format}} .<a href=\"{{url}}\"> {{title}}</a> "
   },
   {
     "id": "get_source_conversion_done_browser",
     "en": "Layer {{title}} exported",
-    "fr": "Couche {{title}} exporté *"
+    "fr": "Couche {{title}} exporté "
   },
   {
     "id": "get_source_conversion_done_browser_title",
     "en": "Layer exported",
-    "fr": "Calque exporté *"
+    "fr": "Calque exporté "
   },
   {
     "id": "get_source_conversion_done_email",
     "en": "The requested data is ready to be downloaded using this link: <a href={{url}}>{{title}}</a>",
-    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien:<a href=\"{{url}}\"> {{title}}</a> *"
+    "fr": "Les données demandées sont prêtes à être téléchargées via ce lien:<a href=\"{{url}}\"> {{title}}</a> "
   },
   {
     "id": "get_source_zip_progress",
     "en": "Compression progress",
-    "fr": "Progression de la compression *"
+    "fr": "Progression de la compression "
   },
   {
     "id": "get_source_zip_warning",
     "en": "Compression warning: {{err}}",
-    "fr": "Avertissement de compression: {{err}} *"
+    "fr": "Avertissement de compression: {{err}} "
   },
   {
     "id": "get_source_zip_error",
     "en": "Compression error : {{err}}",
-    "fr": "Erreur de compression: {{err}} *"
+    "fr": "Erreur de compression: {{err}} "
   },
   {
     "id": "get_source_file_timestamp",
     "en": "Downloaded from MapX on {{date}}",
-    "fr": "Téléchargé depuis MapX sur {{date}} *"
+    "fr": "Téléchargé depuis MapX sur {{date}} "
   },
   {
     "id": "stat_load_please_wait",
@@ -6686,8 +6686,8 @@
   },
   {
     "id": "language_auto_warning",
-    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
-    "fr": "Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Dans de tels cas, un astérisque sera affiché. *"
+    "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
+    "fr": "Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Cela ne s'applique pas au contenu créé par l'utilisateur tel que les projets, sources, vues, couches, récits, légendes ou le code personnalisé. Les titres, descriptions, attributs, licences ou tout autre texte écrit par l'utilisateur, même dans les entrées multi langues, ne sont pas modifiés par ce logiciel."
   },
   {
     "id": "nc_button",

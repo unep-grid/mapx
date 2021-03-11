@@ -13131,8 +13131,8 @@
   },
   {
     "id": "language_auto_warning",
-    "en": "Language other than English can be auto-translated, in case of missing translation. In such cases, an asterix will be shown.",
-    "fr": "",
+    "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
+    "fr":"Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Cela ne s'applique pas au contenu créé par l'utilisateur tel que les projets, sources, vues, couches, récits, légendes ou le code personnalisé. Les titres, descriptions, attributs, licences ou tout autre texte écrit par l'utilisateur, même dans les entrées multi langues, ne sont pas modifiés par ce logiciel.",
     "es": "",
     "ru": "",
     "zh": "",
