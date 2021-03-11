@@ -60,7 +60,7 @@ class ControlsPanel {
       }
 
       if (optimWidth) {
-        cp.panel.height = s.optimalHeight;
+        cp.panel.width = s.optimalWidth;
       }
     }, optTimeout);
   }
@@ -84,8 +84,8 @@ class ControlsPanel {
       overWidth: rectC.right > rectP.right || rectP.left < rectP.left,
       underWidth: rectP.width > rectC.width + spacerWidth,
       underHeight: rectP.height > rectC.height + spacerHeight,
-      optimalHeight: rectC.height + spacerHeight,
-      optimalWidth: rectC.width + spacerWidth
+      optimalHeight: rectC.height + spacerHeight * 2 ,
+      optimalWidth: rectC.width + spacerWidth * 2
     };
   }
 }

@@ -118,9 +118,6 @@ export class NotifCenter {
     nc.opt = Object.assign({}, orig, opt);
     Object.keys(orig).forEach((k) => {
       nc.opt[k] = Object.assign({}, orig[k], opt[k]);
-      if (k === 'panel') {
-        console.log(nc.opt[k].container_style);
-      }
     });
     if (!nc.opt.panel.elContainer) {
       throw new Error('No container found');
