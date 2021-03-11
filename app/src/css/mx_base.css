@@ -86,12 +86,13 @@ blockquote {
 
 details {
   padding: 10px;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 details > summary {
-  cursor:pointer;
-  outline:none;
+  cursor: pointer;
+  outline: none;
+  display: list-item;
 }
 
 .mx-inline-progress-container {
@@ -208,7 +209,6 @@ details > summary {
   padding: 10px;
 }
 
-
 /**
 * filter bar
 */
@@ -227,8 +227,8 @@ details > summary {
 }
 
 .mx-bar-filter > button {
-   border:none;
-   background: none;;
+  border: none;
+  background: none;
 }
 
 .mx-bar-filter .mx-btn-toggle-filter {
@@ -238,7 +238,7 @@ details > summary {
 }
 
 .mx-bar-filter .mx-btn-toggle-filter:focus {
-  outline:none;
+  outline: none;
 }
 .mx-bar-filter .mx-btn-toggle-filter:focus > span {
   text-decoration: underline;
