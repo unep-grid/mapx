@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.13' target='_blank'>1.8.13</a>
+   - APP
+    - Fixed issues with auto-resize control panel feature: in horizontal layout the calculation was wrong and sometimes the panel button overlapped with the control buttons
+    - Auto translated application texts have no more asterisk in suffix. Instead, a better explanation is written in the language selection panel
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.12' target='_blank'>1.8.12</a>
    - APP
       - Controls panel : auto-resize. Not perfect, but cover most cases.
