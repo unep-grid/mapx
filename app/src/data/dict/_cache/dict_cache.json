@@ -7619,16 +7619,16 @@
   },
   {
     "id": "view_local",
-    "en": "Curent project",
+    "en": "Current project",
     "fr": "Projet courant",
-    "es": "Proyecto actual ",
-    "ru": "Текущий проект ",
+    "es": "Proyecto actual",
+    "ru": "Текущий проект",
     "zh": "当前的项目",
-    "ar": "مشروع حالي ",
-    "fa": "پروژه Curent ",
-    "ps": "د درملنې پروژه ",
-    "bn": "কুরেন্ট প্রকল্প ",
-    "de": "Aktuelles Projekt "
+    "ar": "المشروع الحالي",
+    "fa": "پروژه کنونی",
+    "ps": "اوسنۍ پروژه",
+    "bn": "বর্তমান প্রকল্প",
+    "de": "Derzeitiges Projekt"
   },
   {
     "id": "sat",
