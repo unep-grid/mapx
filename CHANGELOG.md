@@ -1,5 +1,9 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.14' target='_blank'>1.8.14</a>
+   - APP
+     - Added SQL patch to improve fetching the latest version of views
+     - Minor improvement in sources management tools, that could improve MapX loading time
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.13' target='_blank'>1.8.13</a>
    - APP
     - Fixed issues with auto-resize control panel feature: in horizontal layout the calculation was wrong and sometimes the panel button overlapped with the control buttons
