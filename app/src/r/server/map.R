@@ -17,7 +17,7 @@ observe({
     if(noDataCheck(language)) return()
 
 
-    timer <- mxTimeDiff("Init map")
+    timer <- mxTimeDiff("INIT MAP")
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
 
@@ -30,7 +30,6 @@ observe({
       colorScheme =  query$style
       )
 
-    mxDebugMsg("INIT MAP")
     # init map
     mglInit(mapConfig)
     mxTimeDiff(timer)

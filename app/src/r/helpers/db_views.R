@@ -71,7 +71,9 @@ mxDbGetViewsIdBySourceId <- function(idSource,selectAlsoByMask=TRUE,language="en
   JOIN mx_users 
   ON views_table.editor = mx_users.id"
 
+  timer <- mxTimeDiff('mxDbGetViewsIdBySourceId')
   out <- mxDbGetQuery(sql)
+  mxTimeDiff(timer);
 
   return(out)
 

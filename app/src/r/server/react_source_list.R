@@ -17,9 +17,6 @@ reactTableReadSources <- reactive({
   project <- reactData$project
   language <- reactData$language
 
-  mxDebugMsg("UPDATE READ SOURCE LIST")
-
-
   ## non reactif
   additionalLayers <- c()
   userCanRead <- .get(userRole,c("read"))
@@ -45,7 +42,7 @@ reactTableReadSources <- reactive({
     additionalLayers = mxDbGetLayerListByViews(viewsIds)
 
   }
- 
+
   #
   # Get layer table
   #
@@ -56,7 +53,7 @@ reactTableReadSources <- reactive({
     language = language,
     additionalSourcesIds = additionalLayers,
     editableOnly = FALSE
-    )
+  )
 
   return(layers)
 
@@ -101,7 +98,7 @@ reactSourceVariables <- reactive({
 })
 
 reactTableEditSources <- reactive({
-  
+
   update <- reactData$updateSourceLayerList
   userRole <- getUserRole()
   isPublisher <- "publishers" %in% userRole$groups
@@ -109,8 +106,6 @@ reactTableEditSources <- reactive({
   project <- reactData$project
   userData <- reactUser
   idUser <- .get(userData,c("data","id"))
-
-  mxDebugMsg("UPDATE EDIT SOURCE LIST")
 
   tbl <- data.frame()
   if( isPublisher ){
@@ -120,7 +115,7 @@ reactTableEditSources <- reactive({
       roleInProject = userRole,
       language = language,
       editableOnly = TRUE
-      )
+    )
   }
 
   return(tbl)
@@ -129,30 +124,33 @@ reactTableEditSources <- reactive({
 
 reactListEditSources <- reactive({
 
-    layers <- reactTableEditSources()
-    if(noDataCheck(layers)){
-      layers <- list("noLayer")
-    }else{
-      layers <- mxGetLayerNamedList( layers )
-    }
+  layers <- reactTableEditSources()
+  if(noDataCheck(layers)){
+    layers <- list("noLayer")
+  }else{
+    layers <- mxGetLayerNamedList( layers )
+  }
 
-    return(layers)
+  return(layers)
 
 })
 
 
 
-##
+#
 # Reactive table of views depending on selected source
 #
 reactTableViewsUsingSource <- reactive({
+
   #
-  # Trigger
+  # Values
   #
   idSource <- reactData$triggerSourceManage$idSource
   language <- reactData$language  
-  #idViewSource <-input$selectSourceLayerMain
-  #idViewSourceMask <- input$selectSourceLayerMask
+
+  #
+  # Other triggers
+  #
   update <- reactData$updateViewList
   updateFetchOnly <- reactData$updateViewListFetchOnly
 

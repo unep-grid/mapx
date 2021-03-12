@@ -731,6 +731,7 @@ mxTimeDiff <- function(titleOrTimer="test"){
 
     diff <- paste(round(difftime(now,dat$start,units="secs"),3))
     mxDebugMsg(paste(dat$title,diff,"s"))
+    return(diff)
 
   }else{
     out = list(

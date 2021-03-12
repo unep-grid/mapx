@@ -169,7 +169,6 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
   iP <- 0
  
   updateView <- function(view){
-    mxDebugMsg("Start view update. View id = " + view$id + " for source id = " + idSource )
       #
       # Get user roles in project
       #
@@ -261,7 +260,6 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
         viewUpdated = view
       }
 
-      mxDebugMsg("End view update. View id = " + view$id + " for source id = " + idSource )
 
       onProgress(
         progress = round(iP/iL*100)/100,
@@ -298,11 +296,19 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
     on.exit(mxDbReturnCon(con))
   }
 
+  #
+  #  Timing flag
+  #
+  timing <- FALSE
+
   tryCatch({
     #
     # ⚠️  RPostgreSQL complain about jsonb.. 
     # TODO: Check if this has been fixed and remove suppressWarnings
     #
+    if(timing){
+      timer <- mxTimeDiff('request')
+    }
     suppressWarnings({
       res <- dbSendQuery(con,query)
       if(!dbHasCompleted(res)){
@@ -314,6 +320,13 @@ mxDbGetQuery <- function(query,stringAsFactors=FALSE,con=NULL,onError=function(r
       res <- NULL
     }
 
+    if(timing){
+      diff <- mxTimeDiff(timer)
+      if(diff > 0.1){
+        mxDebugMsg('SLOW REQUEST')
+        mxDebugMsg(sql)
+      }
+    }
 
   },
     finally={

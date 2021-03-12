@@ -107,7 +107,6 @@ export function renderUserProjectsList(o) {
   function handleClick(e) {
     const el = e.target;
     const ds = el.dataset;
-    console.log(el);
     if(e.type === 'keydown' && e.key !== 'Enter' ){
        return;
     }

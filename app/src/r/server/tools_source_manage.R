@@ -33,17 +33,17 @@ observeEvent(input$btnEditSources,{
           multiple = FALSE,
           options = list(
             sortField="label"
-            )
           )
         )
+      )
 
       btn <- list(
         actionButton(
           "btnEditSourceManage",
           d("btn_edit_selected",language),
           disabled = disabled
-          )
         )
+      )
 
       mxModal(
         id = "editSourceManage",
@@ -51,7 +51,7 @@ observeEvent(input$btnEditSources,{
         content = uiOut,
         buttons = btn,
         textCloseButton = d("btn_close",language)
-        )
+      )
 
     }
 })
@@ -63,8 +63,8 @@ observeEvent(input$btnEditSources,{
 #
 observeEvent(input$btnEditSourceManage,{
   reactData$triggerSourceManage <- list(
-     idSource = input$selectSourceLayerEdit,
-     update = runif(1)
+    idSource = input$selectSourceLayerEdit,
+    update = runif(1)
   )
 })
 
@@ -80,7 +80,7 @@ observeEvent(reactData$triggerSourceManage,{
   mxToggleButton(
     id="btnEditSourceManage",
     disable = !isAllowed 
-    )
+  )
 })
 
 
@@ -130,12 +130,12 @@ observeEvent(reactData$triggerSourceManage,{
         names(data) <- c(
           d("view_title",w=F,lang=language),
           d("login_email",w=F,lang=language)
-          )       
+        )       
 
         tblViews <- tagList(
           tags$label(d("tbl_views_depending_source",language)),
           mxTableToHtml(data)
-          )
+        )
 
       }else{
         tblViews <- tagList()
@@ -152,7 +152,7 @@ observeEvent(reactData$triggerSourceManage,{
           options=list(
             sortField = "label",
             plugins = list("remove_button")
-            )
+          )
           ),
         selectizeInput(
           inputId="selectSourceEditorsUpdate",
@@ -163,7 +163,7 @@ observeEvent(reactData$triggerSourceManage,{
           options=list(
             sortField = "label",
             plugins = list("remove_button")
-            )
+          )
           ),
         selectizeInput(
           inputId="selectSourceServicesUpdate",
@@ -174,25 +174,25 @@ observeEvent(reactData$triggerSourceManage,{
           options=list(
             sortField = "label",
             plugins = list("remove_button")
-            )
+          )
           ),
         tblViews,    
         uiOutput("uiValidateSourceEdit")
-        )
+      )
 
 
       btnDelete <- actionButton(
         inputId = "btnDeleteSource",
         class = "mx-modal-btn-float-right",
         label = d("btn_delete",language)
-        )
+      )
 
       btnList <- tagList(
         actionButton(
           inputId = "btnUpdateSource",
           label = d("btn_update",language)
-          )
         )
+      )
 
       #
       # Todo : check why btnDelete 'disabled' attribute
@@ -208,11 +208,11 @@ observeEvent(reactData$triggerSourceManage,{
         content=uiOut,
         buttons=btnList,
         textCloseButton=d("btn_close",language)
-        )
+      )
 
     }
 
-    })
+  })
 })
 
 
@@ -221,7 +221,8 @@ observeEvent(reactData$triggerSourceManage,{
 #
 observe({
 
-  idSource <- reactData$triggerSourceManage$idSource
+  userRole <- getUserRole()
+  idSource <- reactData$triggerSourceManage$idSource 
   language <- reactData$language
   readers <- input$selectSourceReadersUpdate
   editors <- input$selectSourceEditorsUpdate
@@ -229,22 +230,31 @@ observe({
   warning <- logical(0)
   userData <- reactUser$data
   idUser <-  .get(userData,c("id"))
+  hasNoLayer <- noDataCheck(idSource)
+  hasNoReaders <- !isTRUE("publishers" %in% readers)
+  isPublisher <- "publishers" %in% userRole$groups
+
+  if(hasNoLayer || !isPublisher){
+    return()
+  }
+
   data <- reactTableViewsUsingSource()
+
   isolate({
 
     hasData <- !noDataCheck(data)
-    hasNoLayer <- noDataCheck(idSource)
-    hasNoReaders <- !isTRUE("publishers" %in% readers)
     hasViewsFromOthers <- !isTRUE(all(data$editor %in% idUser))
 
     blockUpdate <- (hasNoLayer||(hasData && hasNoReaders && hasViewsFromOthers))
     blockDelete <- (hasNoLayer||(hasData))
 
     errors['error_no_layer'] <- hasNoLayer
+
     if(!hasNoLayer){
       errors['error_views_need_publishers'] <- blockUpdate
       errors['error_views_need_data'] <- hasData
     }
+
     errors <- errors[errors]
     hasError <- length(errors) > 0
 
@@ -256,18 +266,18 @@ observe({
         errors = errors,
         warning = warning,
         language = language
-        )
       )
+    )
 
     mxToggleButton(
       id="btnUpdateSource",
       disable = blockUpdate  
-      )
+    )
 
     mxToggleButton(
       id="btnDeleteSource",
       disable = blockDelete
-      )
+    )
 
   })
 })
@@ -291,8 +301,8 @@ observeEvent(input$btnDeleteSource,{
     actionButton(
       inputId="btnDeleteSourceConfirm",
       label=d("btn_confirm",language)
-      )
     )
+  )
   #
   # Generate the modal panel
   #
@@ -303,7 +313,7 @@ observeEvent(input$btnDeleteSource,{
     buttons=btnList,
     textCloseButton=d("btn_close",language),
     addBackground=T
-    )
+  )
 })
 
 
@@ -327,12 +337,12 @@ observeEvent(input$btnDeleteSourceConfirm,{
   mxModal(
     id="editSourceManageDeleteConfirm",
     close=TRUE
-    )
+  )
 
   mxModal(
     id="editSourceManage",
     close=TRUE
-    )
+  )
 
   mxDbDropLayer(idSource)
 
@@ -345,7 +355,7 @@ observeEvent(input$btnDeleteSourceConfirm,{
     title=d("source_removed"),
     content=tags$span(d("source_removed",lang=language)),
     textCloseButton=d("btn_close",language)
-    )
+  )
 
 })
 
@@ -381,7 +391,7 @@ observeEvent(input$btnUpdateSource,{
       id = idSource,
       column = "date_modified",
       value = Sys.time()
-      )
+    )
 
     mxDbUpdate(
       table = .get(config,c("pg","tables","sources")),
@@ -389,7 +399,7 @@ observeEvent(input$btnUpdateSource,{
       id = idSource,
       column = "services",
       value = as.list(idGroupsServices)
-      )
+    )
 
     mxDbUpdate(
       table = .get(config,c("pg","tables","sources")),
@@ -397,7 +407,7 @@ observeEvent(input$btnUpdateSource,{
       id = idSource,
       column = "readers",
       value = as.list(readers)
-      )
+    )
 
     mxDbUpdate(
       table = .get(config,c("pg","tables","sources")),
@@ -405,7 +415,7 @@ observeEvent(input$btnUpdateSource,{
       id = idSource,
       column = "editor",
       value = idUser
-      )
+    )
 
     mxDbUpdate(
       table = .get(config,c("pg","tables","sources")),
@@ -413,7 +423,7 @@ observeEvent(input$btnUpdateSource,{
       id = idSource,
       column = "editors",
       value = as.list(editors)
-      )
+    )
 
     mxUpdateGeoserverSourcePublishingAsync(
       email = email,
@@ -421,7 +431,7 @@ observeEvent(input$btnUpdateSource,{
       idSource = idSource,
       idGroups = as.list(idGroupsServices),
       idGroupsOld = as.list(idGroupsServicesOld)
-      )
+    )
 
     #
     # Generate the modal panel
@@ -434,7 +444,7 @@ observeEvent(input$btnUpdateSource,{
     #
 
     reactData$updateEditSourceLayerList <- runif(1)
-    })
+  })
 })
 
 
