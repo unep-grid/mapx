@@ -106,7 +106,7 @@
     "json-editor": "^0.7.28",
     "json-formatter-js": "^2.3.4",
     "jsondiffpatch": "^0.3.11",
-    "jspdf": "^1.5.3",
+    "jspdf": "^2.3.1",
     "jszip": "^3.5.0",
     "mapbox-gl": "^2.0.1",
     "mapbox-gl-draw-circle": "^1.1.2",
