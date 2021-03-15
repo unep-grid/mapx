@@ -55,11 +55,11 @@
   .mx-modal-container {
     top: 0px !important;
     left: 0px !important;
-    height: 100vh !important;
+    height: 100% !important;
     width: 100vw !important;
     border-radius: 0px !important;
     border: none !important;
-    max-height: 100vh;
+    max-height: 100%;
   }
   .mx-modal-top-btn-control {
     display: none;
