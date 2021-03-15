@@ -4,6 +4,7 @@
 #
 server <- function(input,output,session){
 
+  session$allowReconnect(TRUE);
   #
   # Session query search string
   #
