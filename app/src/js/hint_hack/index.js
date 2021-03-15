@@ -1,3 +1,5 @@
+import {isTouchDevice} from '../is_touch_device/index.js';
+
 const def = {
   style: {
     width: '1px',
@@ -10,7 +12,7 @@ const def = {
     pointerEvents: 'none'
   },
   options: {
-    delay: 2000
+    delay: 1000
   }
 };
 
@@ -23,9 +25,10 @@ class HintHack {
     hh.reset = hh.reset.bind(hh);
     hh.init(opt);
   }
+
   init(opt) {
     const hh = this;
-    if (hh._init) {
+    if (hh._init || isTouchDevice()) {
       return;
     }
     hh.opt = Object.assign({}, def.options, opt);
@@ -39,8 +42,9 @@ class HintHack {
     hh._el_head = document.querySelector(`HEAD`);
     hh._el_head.appendChild(hh._el_style);
     document.addEventListener('mouseenter', hh.update, true);
+    document.addEventListener('mouseleave', hh.cancel, true);
+    document.addEventListener('mousedown', hh.cancel, true);
     document.addEventListener('wheel', hh.cancel, true);
-    document.addEventListener('pointerdown', hh.cancel, true);
   }
   update(e) {
     const hh = this;
