@@ -28,7 +28,7 @@ class HintHack {
 
   init(opt) {
     const hh = this;
-    if (hh._init || isTouchDevice()) {
+    if (hh._init) {
       return;
     }
     hh.opt = Object.assign({}, def.options, opt);
@@ -41,6 +41,9 @@ class HintHack {
     }`;
     hh._el_head = document.querySelector(`HEAD`);
     hh._el_head.appendChild(hh._el_style);
+    if (isTouchDevice()) {
+      return;
+    }
     document.addEventListener('mouseenter', hh.update, true);
     document.addEventListener('mouseleave', hh.cancel, true);
     document.addEventListener('mousedown', hh.cancel, true);

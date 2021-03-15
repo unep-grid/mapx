@@ -31,6 +31,8 @@ module.exports = {
       description:
         'A cloud solution for mapping and monitoring the sustainable use of natural resources',
       background_color: '#15b0f8',
+      orientation: "portrait",
+      display: "standalone",
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
       filename: 'manifest.json',
       inject: true,

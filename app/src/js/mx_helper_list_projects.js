@@ -93,7 +93,7 @@ export function renderUserProjectsList(o) {
     mx.listeners.addListener({
       target: elProjects,
       bind: elProjects,
-      type: ['pointerdown','keydown'],
+      type: ['click','keydown'],
       idGroup: 'project_list',
       callback: handleClick,
       debounce: true,
