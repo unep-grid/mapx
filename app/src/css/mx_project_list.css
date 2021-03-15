@@ -7,8 +7,10 @@
 }
 
 .mx-list-projects {
-  max-height: 300px;
+  max-height: 40vh;
   overflow: auto;
+  display: flex;
+  flex-direction: column;
 }
 .mx-list-projects-title {
   cursor: pointer;
@@ -67,8 +69,6 @@
   flex: 1;
 }
 
-.mx-list-projects-right {
-}
 .mx-list-projects-container {
   overflow: hidden;
   border: 1px solid var(--mx_ui_border);

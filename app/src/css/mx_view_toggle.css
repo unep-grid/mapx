@@ -8,11 +8,6 @@
   flex-direction: column;
 }
 
-.mx-views-header {
-  /*flex: 1 0 auto;*/
-  /*padding: 5px;*/
-}
-
 .mx-view-badges {
   padding: 10px;
   position: absolute;
@@ -20,6 +15,11 @@
   bottom: 0;
   opacity: 0.5;
   transition: opacity ease-in-out 0.3s 0.3s;
+}
+@media (max-width: 700px), (max-height: 700px) {
+  .mx-view-badges {
+    display: none;
+  }
 }
 
 .mx-view-badges:hover {
@@ -178,7 +178,7 @@
   }
   .mx-view-item {
     max-width: 100%;
-    border-radius:3px;
+    border-radius: 3px;
   }
 }
 

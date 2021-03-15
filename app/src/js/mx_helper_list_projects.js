@@ -265,10 +265,12 @@ export function renderUserProjectsList(o) {
   function makeBadges(opt) {
     var dat = opt.dat;
     var elBadgeContainer = el('div');
-    var roles = ['member', 'publisher', 'admin'];
+    var roles = ['admin', 'publisher', 'member'];
+    var roleSet =  false;
     opt.elTarget.appendChild(elBadgeContainer);
     roles.forEach((r) => {
-      if (dat[r]) {
+      if (!roleSet && dat[r]) {
+        roleSet = true;
         var elBadgeMember = el('span', {class: 'mx-badge-role'});
         elBadgeContainer.appendChild(elBadgeMember);
         h.getDictItem(r).then(function(t) {
