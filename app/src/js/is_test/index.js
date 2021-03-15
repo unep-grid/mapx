@@ -93,6 +93,22 @@ export function isViewEditable(item) {
 export function isViewLocal(item) {
   return isView(item) && isArray(item._components) && item._components.indexOf('view_local') > -1;
 }
+
+/**
+* Generic "array of" tester
+* @param {Array} arr Array 
+* @param {Function} fun Function
+* @return {Boolean}
+*/ 
+export function isArrayOf(arr, fun){
+  return (
+    isArray(arr) &&
+    arr.reduce((a, i) => {
+      return !a ? a : fun(i);
+    }, true)
+  );
+}
+
 /**
  * Test if is array of views object
  * @param {Array} arr Array to test
@@ -105,6 +121,9 @@ export function isArrayOfViews(arr) {
     }, true)
   );
 }
+
+
+
 
 // jshint ignore:start
 /**

@@ -1554,7 +1554,7 @@ export async function addSourceFromView(o) {
   const isRt = vType === 'rt';
   const isGj = vType === 'gj';
   const validType = isVt || isRt || isGj;
-  const hasSource = p(o.view, 'data.source');
+  const hasSource = !!p(o.view, 'data.source');
 
   if (validType && hasSource) {
     const project = p(mx, 'settings.project.id');
@@ -3791,7 +3791,7 @@ async function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
-  const hasTiles = h.isArray(tiles) && tiles.length > 0;
+  const hasTiles = h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles,h.isUrl);
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.source.legendTitles',
@@ -3800,9 +3800,10 @@ async function viewLayersAddRt(o) {
   const elLegendImageBox = h.el('div', {class: 'mx-legend-box'});
   let isLegendDefault = false;
 
-  if (hasTiles) {
+  if (!hasTiles) {
     return false;
   }
+
 
   /**
    * LAYERS

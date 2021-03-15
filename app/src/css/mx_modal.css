@@ -33,8 +33,7 @@
   position: absolute;
   width: 550px;
   height: auto;
-  /*max-height: calc(100% - 10px);*/
-  max-height:100%;
+  max-height: calc(100% - 30px);
   max-width: 100%;
   min-width: 300px;
   min-height: 150px;
@@ -60,8 +59,12 @@
     width: 100vw !important;
     border-radius: 0px !important;
     border: none !important;
+    max-height: 100vh;
   }
   .mx-modal-top-btn-control {
+    display: none;
+  }
+  .mx-modal-foot-text {
     display: none;
   }
 }
@@ -104,9 +107,6 @@
   justify-content: space-between;
 }
 
-.mx-modal-head {
-}
-
 .mx-modal-body {
   overflow: auto;
   flex: 1;
@@ -122,11 +122,10 @@
     padding: 10px;
   }
 }
-
 .mx-modal-foot-text {
-  float: right;
   margin: 5px;
 }
+
 .mx-modal-half-left {
   position: fixed;
   top: 0px !important;

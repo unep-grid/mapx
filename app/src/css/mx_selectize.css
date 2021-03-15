@@ -7,25 +7,28 @@
 
 /* when multiple items are selected, adapt the height. Default : 34 px */
 .mx .form-control .selectize-input {
-  height:auto;
+  height: auto;
 }
 
-
 .mx .form-control .selectize-input.dropdown-active input {
-  min-width:50%;
+  min-width: 50%;
 }
 
 .mx .selectize-dropdown {
-   z-index:10000!important;
+  z-index: 10000 !important;
+}
+
+.mx .selectize-dropdown .create {
+  padding: 10px;
 }
 
 .mx .form-control .selectize-input.items > .item {
-  width:95%;
-  display:inline-block;
+  width: 95%;
+  display: inline-block;
 }
 
 .mx .selectize-control.single .selectize-input:after {
-  content: "\F0D7";
+  content: '\F0D7';
   font-family: fontawesome;
   display: block;
   float: right;
@@ -40,16 +43,15 @@
 }
 
 .selectize-control.multi .selectize-input.has-items {
-  height:auto
+  height: auto;
 }
 
-
 .mx .selectize-control .item-label {
-  font-size : 1em;
-  margin : 5px;
+  font-size: 1em;
+  margin: 5px;
 }
 
 .mx .selectize-control .item-desc {
-  font-size : 0.9em;
-  margin : 5px;
+  font-size: 0.9em;
+  margin: 5px;
 }
