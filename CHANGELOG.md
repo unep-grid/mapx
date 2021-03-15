@@ -1,5 +1,13 @@
 ## Changelog
-
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.15' target='_blank'>1.8.15</a>
+   - APP
+     - Solved issue when creating new raster view: layers were added even when no sources or tiles were configured, which produced errors messages in the console.
+     - Modal : hide foot text for small screens; 
+     - Dropdown select with additional options allowed ( e.g. tags ): added padding. Adding tag is more visible. The user can click on an enlarged button or use the tab key to enter new tags.
+     - Project list: show only higher role to save space.
+     - Modal: removed bottom margin due to a max-height, in small screens. 
+     - Views list: removed view badges for small screens as there is not enough space.
+     - Improved main panel layout upper buttons (title, language, user). 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.14' target='_blank'>1.8.14</a>
    - APP
      - Added SQL patch to improve fetching the latest version of views
