@@ -1,4 +1,9 @@
 ## Changelog
+
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.17' target='_blank'>1.8.17</a>
+   - APP
+    - Fixed project changes when swiping the projet list with touch devices
+    - Tooltip removal for touch device in previous revision was not effective, as only the dynamic tooltip placement was affected, the style was still visible.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.16' target='_blank'>1.8.16</a>
    - APP
     - Fixed a visual issue in mobile devices, where the lower part of a full height element was hidden behind the browser navigation bars.
