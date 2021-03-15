@@ -1,4 +1,9 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.16' target='_blank'>1.8.16</a>
+   - APP
+    - Fixed a visual issue in mobile devices, where the lower part of a full height element was hidden behind the browser navigation bars.
+    - Removed tooltips for touch device + added listener to properly cancel tooltip when the pointer leaves a tooltiped element
+    - Attempt to mitigate fragile websocket connection, enable 'allow reconnection'.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.15' target='_blank'>1.8.15</a>
    - APP
      - Solved issue when creating new raster view: layers were added even when no sources or tiles were configured, which produced errors messages in the console.
