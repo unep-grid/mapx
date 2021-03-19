@@ -6693,5 +6693,15 @@
     "id": "nc_button",
     "en": "Notifications",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "de": "Durchsuchen Sie den öffentlichen MapX-Katalog"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "de": "Geben Sie hier Schlüsselwörter ein ..."
   }
 ]

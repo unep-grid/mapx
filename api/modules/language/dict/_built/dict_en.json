@@ -5354,5 +5354,13 @@
   {
     "id": "nc_button",
     "en": "Notifications"
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ..."
   }
 ]

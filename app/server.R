@@ -32,6 +32,7 @@ server <- function(input,output,session){
     #
     list(
       api = .get(config,c("api")),
+      search = .get(config, c("search")),
       validation = .get(config,c('validation')),
       dbLogLevels = .get(config,c("db_log","levels"),default=c("ERROR")),
       language = .get(config,c("language","default")),

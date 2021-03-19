@@ -6,6 +6,7 @@ import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
 import {WsHandler} from './ws_handler/';
 import {MainPanel} from './panel_main';
+import {Search} from './search';
 import {MapxLogo, MapControlLiveCoord, MapControlScale} from './map_controls';
 import {ControlsPanel} from './panel_controls';
 import {MapxDraw} from './draw';
@@ -192,21 +193,30 @@ export async function getLoginInfo() {
 }
 
 /**
- * Get url for api
- * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
+ * Get url for service
+ * @param {String} id Id of service : api, search .. .
+ * @param {String} route Additional route id, if exists in config
+ * @return {String} url
  */
-export function getApiUrl(id) {
+export function getServiceUrl(id, route) {
   const s = mx.settings;
+  const service = s[id];
   if (location.protocol === 'https:') {
-    s.api.protocol = 'https:';
+    service.protocol = 'https:';
   }
-  const urlBase =
-    s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
-  if (!id) {
+  const urlBase = `${service.protocol}//${service.host_public}:${service.port_public}`;
+  if (!route) {
     return urlBase;
   }
-  return urlBase + (s.api.routes[id] || id);
+  return urlBase + (service.routes[route] || route);
 }
+export function getApiUrl(route) {
+  return getServiceUrl('api', route);
+}
+export function getSearchUrl() {
+  return getServiceUrl('search');
+}
+
 
 /**
  * Set mapx API host info when started without server app
@@ -869,6 +879,14 @@ export async function initMapx(o) {
     if (!mx.settings.initClosedPanels) {
       mx.panel_main.panel.open();
     }
+
+   mx.search = new Search({
+     container :  '#mxSearchContainer'
+   })
+
+
+
+
   }
 
   /**

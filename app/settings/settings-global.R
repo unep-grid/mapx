@@ -115,6 +115,20 @@ config[["api"]] <- list(
 )
 
 #
+# Search service config
+#
+config[["search"]] <- list(
+  port = 7700,
+  port_public = 8880,
+  host = "localhost",
+  host_public = "locahost",
+  protocol = "http:",
+  key =  ""
+)
+
+
+
+#
 # postgres configuration
 #
 config[["pg"]] = list(

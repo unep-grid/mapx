@@ -6693,5 +6693,15 @@
     "id": "nc_button",
     "en": "Notifications",
     "zh": "通知事项 "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "zh": "搜索MapX公共目录"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "zh": "在此处输入关键字..."
   }
 ]

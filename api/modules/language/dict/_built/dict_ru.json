@@ -6693,5 +6693,15 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "ru": "Поиск в общедоступном каталоге MapX"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "ru": "Введите здесь ключевые слова ..."
   }
 ]

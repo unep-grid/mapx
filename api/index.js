@@ -25,11 +25,11 @@ const mirror = require('@mapx/mirror');
 const mail = require('@mapx/mail');
 const ip = require('@mapx/ip');
 const tile = require('@mapx/tile');
-const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const log = require('@mapx/log');
+const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
-
+const {mwSearch} = require('@mapx/meili');
 
 /**
 * Pre-init scripts
@@ -91,6 +91,7 @@ app.get('/get/source/overlap/', source.mwGetOverlap); //countries=[]&layers=[]&=
 app.get('/get/source/validate/geom', source.mwGetGeomValidate);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
 app.get('/get/ip', ip.mwGet);
+app.get('/get/search', mwSearch);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);

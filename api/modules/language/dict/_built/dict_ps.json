@@ -6693,5 +6693,15 @@
     "id": "nc_button",
     "en": "Notifications",
     "ps": "خبرتیاوې "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "ps": "د میپ ایکس عامه کتلاګ ومومئ"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "ps": "کلیدي ټکي دلته دننه کړئ ..."
   }
 ]

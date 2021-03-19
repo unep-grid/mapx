@@ -1,5 +1,5 @@
 const {pgRead} = require('@mapx/db');
-const helpers = require('@mapx/helpers');
+const {parseTemplate, sendJSON, sendError} = require('@mapx/helpers');
 const template = require('@mapx/template');
 const {validateTokenHandler} = require('@mapx/authentication');
 const {getParamsValidator} = require('@mapx/route_validation');
@@ -23,14 +23,14 @@ module.exports = {
 async function getViewsPublicHandler(req, res) {
   try {
     const start = new Date();
-    const data = await getViewsPublic(req.query || {});
+    const data = await getViewsPublic(req.query);
     const out = {
       views: data,
       timing: new Date() - start
     };
-    helpers.sendJSON(res, out, {end: true});
+    sendJSON(res, out, {end: true});
   } catch (err) {
-    helpers.sendError(res, err);
+    sendError(res, err);
   }
 }
 /**
@@ -59,7 +59,7 @@ async function getViewsPublic(opt) {
   /**
    * Parse sql template
    */
-  const sql = helpers.parseTemplate(template.getViewsPublic, opt);
+  const sql = parseTemplate(template.getViewsPublic, opt);
 
   /**
    * Query DB

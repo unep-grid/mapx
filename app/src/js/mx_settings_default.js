@@ -27,6 +27,11 @@ let settings = {
     maxZoom: 20,
     minZoom: 0
   },
+  search : {
+    host_public: 'search.mapx.org',
+    port_public: '8880',
+    protocol: 'https:',
+  },
   api: {
     host: 'api',
     port: '3333',

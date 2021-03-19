@@ -17,6 +17,8 @@ const viewKeysPublic = def.views.keys_out_public;
 const arrayOperators = def.db.array_operators;
 const types = def.views.types;
 const roles = def.users.roles;
+const languages = def.languages;
+const search = def.search;
 const tableNotQueryable = def.tables.name_not_queryable;
 const tableAttrNotQueryable = def.tables.attr_not_queryable;
 
@@ -253,8 +255,8 @@ const rules = [
     test: (d) => {
       d = d.toLowerCase();
       return {
-        valid: mx_valid.isStringRange(d, 2, 2),
-        value: d || 'en'
+        valid: languages.codes.indexOf(d) > -1,
+        value: d || languages.default
       };
     }
   },
@@ -268,11 +270,22 @@ const rules = [
       'subject',
       'content',
       'subtitle',
-      'subjectPrefix'
+      'subjectPrefix',
+      'searchQuery'
     ],
     test: (d) => {
       return {
         valid: mx_valid.isStringRange(d, 1),
+        value: d
+      };
+    }
+  },
+  {
+    key: ['searchIndexName'],
+    test: (d) => {
+      d = d || search.index;
+      return {
+        valid: search.indices.indexOf(d) > -1,
         value: d
       };
     }

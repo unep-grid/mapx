@@ -17405,5 +17405,31 @@
     "ps": "خبرتیاوې ",
     "bn": "বিজ্ঞপ্তি ",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "fr": "Rechercher dans le catalogue public MapX",
+    "es": "Buscar en el catálogo público de MapX",
+    "ru": "Поиск в общедоступном каталоге MapX",
+    "zh": "搜索MapX公共目录",
+    "ar": "ابحث في كتالوج MapX العام",
+    "fa": "در فهرست عمومی MapX جستجو کنید",
+    "ps": "د میپ ایکس عامه کتلاګ ومومئ",
+    "bn": "মানচিত্রের সর্বজনীন ক্যাটালগ অনুসন্ধান করুন",
+    "de": "Durchsuchen Sie den öffentlichen MapX-Katalog"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "fr": "Entrez les mots-clés ici ...",
+    "es": "Ingrese palabras clave aquí ...",
+    "ru": "Введите здесь ключевые слова ...",
+    "zh": "在此处输入关键字...",
+    "ar": "أدخل الكلمات الأساسية هنا ...",
+    "fa": "کلمات کلیدی را اینجا وارد کنید ...",
+    "ps": "کلیدي ټکي دلته دننه کړئ ...",
+    "bn": "কীওয়ার্ডগুলি এখানে প্রবেশ করান ...",
+    "de": "Geben Sie hier Schlüsselwörter ein ..."
   }
 ]

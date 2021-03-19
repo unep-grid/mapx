@@ -1,0 +1,28 @@
+[
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "fr": "Rechercher dans le catalogue public MapX",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }
+]

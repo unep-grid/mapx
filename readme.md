@@ -22,6 +22,7 @@ Some browsers require to modify your hosts file to link custom MapX local "subdo
 ```sh
 127.0.0.1 app.mapx.localhost 
 127.0.0.1 api.mapx.localhost
+127.0.0.1 search.mapx.localhost
 127.0.0.1 wsecho.mapx.localhost
 127.0.0.1 probe.mapx.localhost
 127.0.0.1 apidev.mapx.localhost

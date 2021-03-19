@@ -16,16 +16,21 @@ module.exports = Object.assign(s, {
     port: env.REDIS_PORT,
     host: env.REDIS_HOST
   },
+  meili: {
+    master_key: env.MEILI_MASTER_KEY,
+    port: env.MEILI_PORT,
+    host: env.MEILI_HOST
+  },
   db: {
     name: env.POSTGRES_DB,
     port: env.POSTGRES_PORT,
     host: env.POSTGRES_HOST,
-    timeout : 1000 * 60 * 5, // 5 minutes
+    timeout: 1000 * 60 * 5, // 5 minutes
     poolMin: env.POSTGRES_POOL_MIN,
     poolMax: env.POSTGRES_POOL_MAX,
-    admin : {
+    admin: {
       user: env.POSTGRES_USER,
-      password : env.POSTGRES_PASSWORD
+      password: env.POSTGRES_PASSWORD
     },
     write: {
       user: env.POSTGRES_USER_WRITE,
@@ -111,7 +116,7 @@ module.exports = Object.assign(s, {
       title: 'MapX',
       subtitle: null,
       content: '<b>Info</b>',
-      subjectPrefix : '[ MapX ]'
+      subjectPrefix: '[ MapX ]'
     }
   }
 });

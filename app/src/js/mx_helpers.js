@@ -7,7 +7,6 @@ export * from './mx_helper_utils_json.js';
 export * from './mx_helper_el.js'; /* createElement / simple framework */
 export * from './mx_helper_is_test.js'; /* test "is" isArray, isObject, isNumeric, is... */
 export * from './mx_helper_misc.js';
-export * from './mx_helper_read_more.js';
 export * from './mx_helper_modal.js';
 export * from './mx_helper_selectize.js';
 export * from './mx_helper_language.js';

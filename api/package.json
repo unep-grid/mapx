@@ -4,7 +4,8 @@
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
-    "test": "API_PORT=3636; POSTGRES_DB=mapx_test; node test.js"
+    "test": "API_PORT=3636; POSTGRES_DB=mapx_test; node test.js",
+    "lint": "eslint ./index.js"
   },
   "author": "Fred Moser",
   "license": "MIT",
@@ -16,9 +17,10 @@
     "express": "^4.17.1",
     "geoip-lite": "^1.4.2",
     "geojson-vt": "^3.2.1",
-    "html-to-text": "^5.1.1",
+    "html-to-text": "^7.0.0",
     "martinez-polygon-clipping": "^0.5.0",
     "md5-file": "^4.0.0",
+    "meilisearch": "^0.18.1",
     "module-alias": "^2.2.2",
     "multer": "^1.4.2",
     "node-sql-parser": "^3.1.0",
@@ -36,6 +38,8 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^7.17.0",
+    "eslint-config-prettier": "^6.15.0",
     "mocha": "^7.2.0",
     "supertest": "^4.0.2"
   }

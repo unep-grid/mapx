@@ -25,6 +25,11 @@ module.exports = {
     port: 6379,
     host: 'localhost'
   },
+  meili: {
+    master_key: null,
+    port: 7700,
+    host: 'meili'
+  },
   db: {
     name: 'postgres',
     port: 5432,
@@ -79,7 +84,7 @@ module.exports = {
     },
     options: {
       from: 'bot@mapx.org',
-      to : null,
+      to: null,
       subject: 'test',
       text: 'info',
       html: '<b>info</b>',
@@ -87,7 +92,7 @@ module.exports = {
       title: 'MapX',
       subtitle: null,
       content: '<b>info</b>',
-      subjectPrefix : '[ MapX ]'
+      subjectPrefix: '[ MapX ]'
     }
   },
   validation_defaults: {
@@ -103,6 +108,23 @@ module.exports = {
       roles: ['admin', 'publisher', 'member', 'public'],
       id_public: 96,
       id_admin: 1
+    },
+    languages: {
+      codes: [
+        'en',
+        'fr',
+        'en',
+        'fr',
+        'es',
+        'ar',
+        'ru',
+        'zh',
+        'de',
+        'bn',
+        'fa',
+        'ps'
+      ],
+      default: 'en'
     },
     tables: {
       attr_not_queryable: ['geom', 'gid', 'pid'],
@@ -149,6 +171,10 @@ module.exports = {
         '_title_project',
         '_meta'
       ]
+    },
+    search: {
+      index: 'views',
+      indices: ['views', 'projects', 'sources']
     }
   }
 };
