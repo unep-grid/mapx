@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "bn": "শিরোনাম "
+    "bn": "প্রকল্প"
   },
   {
     "id": "project_description",
@@ -6703,5 +6703,35 @@
     "id": "search_placeholder",
     "en": "Enter keywords here ...",
     "bn": "কীওয়ার্ডগুলি এখানে প্রবেশ করান ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "bn": "উত্স শিরোনাম"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "bn": "উত্স বিবরণ"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "bn": "দর্শন বর্ণনা"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "bn": "প্রকল্প শিরোনাম"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "bn": "পূর্ণ মেটাডেটা প্রদর্শন করুন"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "bn": "দেখান / লুকান"
   }
 ]

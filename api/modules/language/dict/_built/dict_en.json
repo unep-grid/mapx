@@ -5362,5 +5362,29 @@
   {
     "id": "search_placeholder",
     "en": "Enter keywords here ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view"
   }
 ]

@@ -24,5 +24,83 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }, 
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+{
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

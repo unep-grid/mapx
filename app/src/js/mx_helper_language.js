@@ -228,23 +228,6 @@ export async function getDictItem(key, lang) {
   return res;
 }
 
-/**
- * Create a tag and set translation item in it
- * @param {String} keys Key to look for in the dictionnary
- * @param {String} lang  Two letters language code
- * @return {Element} span element with dataset-lang_key
- */
-export function getTranslationTag(key, lang) {
-  return mx.helpers.el(
-    'span',
-    {
-      dataset: {
-        lang_key: key
-      }
-    },
-    getDictItem(key, lang)
-  );
-}
 
 /**
 * Get template from dict and use an object to replace {{<key>}} parts

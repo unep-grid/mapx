@@ -1,4 +1,5 @@
 import {miniCacheSet, miniCacheGet} from './minicache';
+import {el, elSpanTranslate} from './el_mapx/index.js';
 export {wmsBuildQueryUi, wmsGetCapabilities, wmsGetLayers};
 
 /**
@@ -18,13 +19,11 @@ async function wmsBuildQueryUi(opt) {
 
   const h = mx.helpers;
   await h.moduleLoad('selectize');
-  const el = h.el;
   const elInputTiles = document.querySelector(opt.selectorTileInput);
   const elInputLegend = document.querySelector(opt.selectorLegendInput);
   const elParent =
     document.querySelector(opt.selectorParent) || elInputTile.parentElement;
   const services = opt.services;
-  const tt = h.getTranslationTag;
 
   var selectLayer, selectServices;
 
@@ -42,7 +41,7 @@ async function wmsBuildQueryUi(opt) {
   const elSelectServicesGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_select_reviewed_service')),
+    el('label', elSpanTranslate('wms_select_reviewed_service')),
     el('div', elSelectServices)
   );
 
@@ -55,17 +54,21 @@ async function wmsBuildQueryUi(opt) {
     }
   });
 
-  const elButtonGetLayers = el('button',{
-    class: ['btn', 'btn-default'],
-    on: {
-      click: getLayers
-    }
-  },tt('wms_btn_get_layers'));
+  const elButtonGetLayers = el(
+    'button',
+    {
+      class: ['btn', 'btn-default'],
+      on: {
+        click: getLayers
+      }
+    },
+    elSpanTranslate('wms_btn_get_layers')
+  );
 
   const elInputServiceGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_input_service_url')),
+    el('label', elSpanTranslate('wms_input_service_url')),
     el(
       'div',
       {
@@ -82,7 +85,7 @@ async function wmsBuildQueryUi(opt) {
     )
   );
 
-  const elButtonUpdate = el('button', tt('wms_btn_generate_url'), {
+  const elButtonUpdate = el('button', elSpanTranslate('wms_btn_generate_url'), {
     class: ['btn', 'btn-default'],
     on: {
       click: updateInput
@@ -92,7 +95,7 @@ async function wmsBuildQueryUi(opt) {
   const elInputLayerGroup = el(
     'div',
     {class: ['form-group']},
-    el('label', tt('wms_select_layer')),
+    el('label', elSpanTranslate('wms_select_layer')),
     elSelectLayer,
     elButtonUpdate
   );
@@ -142,14 +145,12 @@ async function wmsBuildQueryUi(opt) {
         item: function(item, escape) {
           const content = [];
           if (item.Title) {
-            content.push(
-              h.el('span', {class: 'item-label'}, escape(item.Title))
-            );
+            content.push(el('span', {class: 'item-label'}, escape(item.Title)));
           }
           if (item.Name) {
-            content.push(h.el('span', {class: 'item-desc'}, escape(item.Name)));
+            content.push(el('span', {class: 'item-desc'}, escape(item.Name)));
           }
-          return h.el(
+          return el(
             'div',
             {
               class: ['item-desc'],
@@ -161,14 +162,12 @@ async function wmsBuildQueryUi(opt) {
         option: function(item, escape) {
           const content = [];
           if (item.Title) {
-            content.push(
-              h.el('span', {class: 'item-label'}, escape(item.Title))
-            );
+            content.push(el('span', {class: 'item-label'}, escape(item.Title)));
           }
           if (item.Name) {
-            content.push(h.el('span', {class: 'item-desc'}, escape(item.Name)));
+            content.push(el('span', {class: 'item-desc'}, escape(item.Name)));
           }
-          return h.el(
+          return el(
             'div',
             {
               class: ['item-desc'],
@@ -202,7 +201,7 @@ async function wmsBuildQueryUi(opt) {
     if (!layer) {
       h.modal({
         title: 'No layer set',
-        content: h.el('p', 'No layer set: ignoring request')
+        content: el('p', 'No layer set: ignoring request')
       });
       return;
     }
@@ -478,10 +477,7 @@ export async function wmsQuery(opt) {
     let isQueryable = layers.indexOf(l.Name) > -1 && l.queryable === true;
 
     if (!isQueryable && h.isArray(l.Layer)) {
-      isQueryable = l.Layer.reduce(
-        (a, ll) => (a ? a : ll.queryable),
-        false
-      );
+      isQueryable = l.Layer.reduce((a, ll) => (a ? a : ll.queryable), false);
     }
 
     if (isQueryable) {

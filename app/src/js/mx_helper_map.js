@@ -204,7 +204,9 @@ export function getServiceUrl(id, route) {
   if (location.protocol === 'https:') {
     service.protocol = 'https:';
   }
-  const urlBase = `${service.protocol}//${service.host_public}:${service.port_public}`;
+  const urlBase = `${service.protocol}//${service.host_public}:${
+    service.port_public
+  }`;
   if (!route) {
     return urlBase;
   }
@@ -216,7 +218,6 @@ export function getApiUrl(route) {
 export function getSearchUrl() {
   return getServiceUrl('search');
 }
-
 
 /**
  * Set mapx API host info when started without server app
@@ -880,13 +881,27 @@ export async function initMapx(o) {
       mx.panel_main.panel.open();
     }
 
-   mx.search = new Search({
-     container :  '#mxSearchContainer'
-   })
+    new Search({
+      container: '#mxTabPanelSearch',
+      language: mx.settings.language
+    }).then((s) => {
+      mx.search = s;
+    });
 
-
-
-
+    mx.events.on(
+      'language_change',
+      (data) => {
+        if (mx.search?.isReady) {
+          mx.search.setLanguage(data.new_language);
+        }
+      },
+      'search_tool'
+    );
+    mx.panel_main.on('tab_change',(e,id)=>{
+       if(id === "search"){
+          mx.search.update();
+       }
+    })
   }
 
   /**
@@ -904,8 +919,9 @@ export async function initMapx(o) {
       handles: ['free'],
       container_style: {
         /**
-        * TODO : Set this as a class, same technique as no-ful-width/height
-        */ 
+         * TODO : Set this as a class, same technique as no-ful-width/height
+         */
+
         width: window.innerWidth < 800 ? '50px' : '120px',
         height: window.innerHeight < 800 ? '100%' : '420px',
         minWidth: '50px',
@@ -1115,7 +1131,6 @@ export async function initMapxStatic(o) {
   const map = h.getMap();
   const settings = mx.settings;
   const mapData = h.getMapData();
-  const elMap = map.getContainer();
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
   const language = h.getQueryParameter('language')[0] || settings.languages[0];
   /**
@@ -1183,7 +1198,7 @@ export async function initMapxStatic(o) {
   /**
    * Display views
    */
-  const tt = await Promise.all(
+  await Promise.all(
     idViews.map((idView) => {
       return h.viewLayersAdd({
         view: h.getView(idView),
@@ -3809,7 +3824,8 @@ async function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
-  const hasTiles = h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles,h.isUrl);
+  const hasTiles =
+    h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles, h.isUrl);
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.source.legendTitles',
@@ -3821,7 +3837,6 @@ async function viewLayersAddRt(o) {
   if (!hasTiles) {
     return false;
   }
-
 
   /**
    * LAYERS

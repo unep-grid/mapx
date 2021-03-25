@@ -1,4 +1,3 @@
-/* jshint esversion:6 */
 export {el};
 
 const config = {
@@ -40,7 +39,10 @@ function el(tagName, ...opt) {
           isString(item[0]) &&
           isFunction(item[1])
         ) {
-          elOut.addEventListener(item[0], item[1]);
+          /**
+          * If array = allow third item as listener option
+          */ 
+          elOut.addEventListener(item[0], item[1], item[2]);
           elOut.dataset.el_id_listener = Math.random().toString(32);
           /**
            * Keep track of listener

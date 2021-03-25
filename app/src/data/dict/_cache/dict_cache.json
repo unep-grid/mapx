@@ -11652,13 +11652,13 @@
     "en": "Title",
     "fr": "Titre",
     "es": "Título",
-    "ru": "Заголовок ",
+    "ru": "Проект",
     "zh": "标题",
-    "ar": "لقب ",
-    "fa": "عنوان ",
-    "ps": "سرلیک ",
-    "bn": "শিরোনাম ",
-    "de": "Titel "
+    "ar": "المشروع",
+    "fa": "پروژه",
+    "ps": "پروژه",
+    "bn": "প্রকল্প",
+    "de": "Projekt"
   },
   {
     "id": "project_description",
@@ -17431,5 +17431,83 @@
     "ps": "کلیدي ټکي دلته دننه کړئ ...",
     "bn": "কীওয়ার্ডগুলি এখানে প্রবেশ করান ...",
     "de": "Geben Sie hier Schlüsselwörter ein ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "fr": "Titre de la source",
+    "es": "Título de la fuente",
+    "ru": "Название источника",
+    "zh": "来源标题",
+    "ar": "عنوان المصدر",
+    "fa": "عنوان منبع",
+    "ps": "د سرچینې سرلیک",
+    "bn": "উত্স শিরোনাম",
+    "de": "Quellentitel"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "fr": "Description de la source",
+    "es": "Descripción de la fuente",
+    "ru": "Описание источника",
+    "zh": "来源描述",
+    "ar": "وصف المصدر",
+    "fa": "شرح منبع",
+    "ps": "د سرچینې وضاحت",
+    "bn": "উত্স বিবরণ",
+    "de": "Quellenbeschreibung"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "fr": "Description de la vue",
+    "es": "Descripción de la vista",
+    "ru": "Описание вида",
+    "zh": "视图描述",
+    "ar": "وصف المنظر",
+    "fa": "شرح منظره",
+    "ps": "د لید تفصیل",
+    "bn": "দর্শন বর্ণনা",
+    "de": "Beschreibung der Ansicht"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "fr": "Titre du projet",
+    "es": "Título del Proyecto",
+    "ru": "Название Проекта",
+    "zh": "项目名称",
+    "ar": "عنوان المشروع",
+    "fa": "عنوان پروژه",
+    "ps": "د پروژې سرلیک",
+    "bn": "প্রকল্প শিরোনাম",
+    "de": "Projekttitel"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "fr": "Afficher les métadonnées complètes",
+    "es": "Mostrar metadatos completos",
+    "ru": "Показать полные метаданные",
+    "zh": "显示完整的元数据",
+    "ar": "عرض البيانات الوصفية الكاملة",
+    "fa": "نمایش فراداده کامل",
+    "ps": "بشپړ میټاډاټا ښودل",
+    "bn": "পূর্ণ মেটাডেটা প্রদর্শন করুন",
+    "de": "Vollständige Metadaten anzeigen"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "fr": "Afficher / masquer la vue",
+    "es": "Mostrar / ocultar la vista",
+    "ru": "Показать / скрыть вид",
+    "zh": "显示/隐藏视图",
+    "ar": "إظهار / إخفاء العرض",
+    "fa": "نمایش / پنهان کردن نمای",
+    "ps": "لید وښودئ / پټ کړئ",
+    "bn": "দেখান / লুকান",
+    "de": "Ansicht ein- / ausblenden"
   }
 ]

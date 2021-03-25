@@ -23,13 +23,13 @@ observe({
         actionButton(
           label = d("btn_show_db_info_self",language, web=T),
           inputId = "btnShowDbInfoSelf",
-          class = "btn btn-sm btn-default hint"
+          class = "btn btn-default"
           #`data-lang_key` = "btn_show_db_info_self"
           ),
         actionButton(
           label = d("btn_show_db_query_maker",language, web=T),
           inputId = "btnShowQueryMaker",
-          class = "btn btn-sm btn-default hint"
+          class = "btn btn-default"
           #`data-lang_key` = "btn_show_db_query_maker"
           )
         )

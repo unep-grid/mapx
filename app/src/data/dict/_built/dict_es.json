@@ -6703,5 +6703,35 @@
     "id": "search_placeholder",
     "en": "Enter keywords here ...",
     "es": "Ingrese palabras clave aquí ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "es": "Título de la fuente"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "es": "Descripción de la fuente"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "es": "Descripción de la vista"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "es": "Título del Proyecto"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "es": "Mostrar metadatos completos"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "es": "Mostrar / ocultar la vista"
   }
 ]

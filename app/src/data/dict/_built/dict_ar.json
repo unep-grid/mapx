@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "ar": "لقب "
+    "ar": "المشروع"
   },
   {
     "id": "project_description",
@@ -6703,5 +6703,35 @@
     "id": "search_placeholder",
     "en": "Enter keywords here ...",
     "ar": "أدخل الكلمات الأساسية هنا ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "ar": "عنوان المصدر"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "ar": "وصف المصدر"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "ar": "وصف المنظر"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "ar": "عنوان المشروع"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "ar": "عرض البيانات الوصفية الكاملة"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "ar": "إظهار / إخفاء العرض"
   }
 ]

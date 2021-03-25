@@ -1,5 +1,5 @@
 const {readTxt, parseTemplate} = require('@mapx/helpers');
-const {pgAdmin} = require('@mapx/db');
+const {pgAdmin, pgRead} = require('@mapx/db');
 //const {pipeline} = require('stream/promises');
 //const pgCopyFrom = require('pg-copy-streams').from;
 const fs = require('fs');
@@ -96,9 +96,25 @@ async function importDict() {
 }
 
 /**
+ * Get m49 and iso3 countries translation
+ */
+async function getDictM49iso3() {
+  try {
+    const resp = await pgRead.query(
+      `select * from mx_dict_translate where id ~ '(^m49_.*|^[A-Z]{3})'`
+    );
+    return resp.rows;
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/**
  * Exports
  */
-
-module.exports.t = translate;
-module.exports.translate = translate;
-module.exports.init = init;
+module.exports = {
+  t: translate,
+  translate,
+  init,
+  getDictM49iso3
+};

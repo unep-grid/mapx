@@ -1,11 +1,9 @@
-/* jshint esversion:6 */
-//import {el} from '@fxi/el';
-import {el} from './el/src';
-
-export {el, elAuto, elPanel};
+import {el} from '@fxi/el';
+import {getDictItem} from './../mx_helper_language.js';
+import * as test from './../is_test_mapx/index.js';
+export {el, elAuto, elPanel, elButtonIcon, elSpanTranslate};
 
 function elAuto(render, data, opt) {
-  var h = mx.helpers;
   opt = opt || {};
 
   var def = {
@@ -36,7 +34,6 @@ function elAuto(render, data, opt) {
    */
   Object.assign(opt, def);
 
-  const el = h.el;
   const r = {
     auto: renderAuto,
     string: renderString,
@@ -54,37 +51,34 @@ function elAuto(render, data, opt) {
    * renderer
    */
   function renderAuto(x) {
-    if (h.isElement(x)) {
+    if (test.isElement(x)) {
       return x;
     }
-    if (h.isDateString(x)) {
+    if (test.isDateString(x)) {
       return renderDate(x);
     }
-    if (h.isUrl(x)) {
+    if (test.isUrl(x)) {
       return renderUrl(x);
     }
-    if (h.isString(x)) {
+    if (test.isString(x)) {
       return renderString(x);
     }
-    if (h.isNumeric(x)) {
+    if (test.isNumeric(x)) {
       return renderNumeric(x);
     }
-    if (h.isBoolean(x)) {
+    if (test.isBoolean(x)) {
       return renderBoolean(x);
     }
-    if (h.isLanguageObject(x)) {
+    if (test.isLanguageObject(x)) {
       return renderStringLanguage(x);
     }
-    if (h.isLanguageObjectArray(x)) {
+    if (test.isLanguageObjectArray(x)) {
       return renderStringLanguageArray(x);
     }
-    if (h.isTable(x)) {
+    if (test.isTable(x)) {
       return renderArrayTable(x);
     }
-    /* if (h.isObject(x)) {*/
-    //return renderList(x);
-    /*}*/
-    if (h.isArray(x)) {
+    if (test.isArray(x)) {
       return renderArrayAuto(x);
     }
   }
@@ -131,7 +125,7 @@ function elAuto(render, data, opt) {
     );
   }
   function renderString(str, asLanguageKey) {
-    asLanguageKey = h.isBoolean(asLanguageKey)
+    asLanguageKey = test.isBoolean(asLanguageKey)
       ? asLanguageKey
       : opt.stringAsLanguageKey;
 
@@ -266,4 +260,66 @@ function elPanel(opt) {
     ),
     opt.content
   );
+}
+
+/**
+ * Create a tag and set translation item in it
+ * @param {String} keys Key to look for in the dictionnary
+ * @param {String} lang  Two letters language code
+ * @return {Element} span element with dataset-lang_key
+ */
+function elSpanTranslate(key, lang) {
+  return el(
+    'span',
+    {
+      dataset: {
+        lang_key: key
+      }
+    },
+    getDictItem(key, lang)
+  );
+}
+
+/**
+ * Create a standard button with icon
+ * @param {String} key Translation key
+ * @param {Object} opt options
+ * @param {Array} opt.classes Additional button classes
+ * @param {String} opt.icon Icon class
+ * @param {String} opt.mode Mode : text_icon, icon, text
+ * @param {Object} opt.dataset Button dataset
+ */
+function elButtonIcon(key, opt) {
+  opt = Object.assign(
+    {},
+    {mode: 'text_icon', classes: [], icon: null, dataset: {}},
+    opt
+  );
+
+  const addIcon = opt.mode === 'text_icon' || opt.mode === 'icon';
+  const addText = opt.mode === 'text_icon' || opt.mode === 'text';
+
+  if (addIcon && !addText) {
+    opt.dataset.lang_type = 'tooltip';
+    opt.classes.push('hint--bottom');
+    opt.dataset.lang_key = opt.key;
+  }
+
+  const elBtn = el(
+    'button',
+    {
+      type: 'button',
+      class: ['btn', 'btn-default', 'btn-button-icon', ...opt.classes],
+      dataset: opt.dataset
+    },
+    addText ? elSpanTranslate(key) : null,
+    addIcon ? el('i', {class: ['fa', opt.icon]}) : null
+  );
+
+  if (!addText) {
+    getDictItem(key).then((txt) => {
+      elBtn.setAttribute('aria-label', txt);
+    });
+  }
+  return elBtn;
 }

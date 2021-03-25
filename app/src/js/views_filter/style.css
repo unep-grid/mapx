@@ -17,6 +17,7 @@
 
 .vf-checkbox {
   display: flex;
+  align-items: center;
 }
 
 .vf-checkbox .vf-checkbox-input {

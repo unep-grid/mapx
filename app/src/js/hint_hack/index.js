@@ -1,4 +1,5 @@
 import {isTouchDevice} from '../is_touch_device/index.js';
+import {getDictItem} from '../mx_helper_language.js';
 
 const def = {
   style: {
@@ -49,7 +50,7 @@ class HintHack {
     document.addEventListener('mousedown', hh.cancel, true);
     document.addEventListener('wheel', hh.cancel, true);
   }
-  update(e) {
+  async update(e) {
     const hh = this;
     try {
       if (!e.target || !e.target.getAttribute || !e.target.className) {
@@ -58,8 +59,17 @@ class HintHack {
       if (hh._target && hh._target.contains(e.target)) {
         return;
       }
-      const label = e.target.getAttribute('aria-label');
       const isHint = !!e.target.className.match('hint--');
+      
+      if(!isHint){
+        return;
+      }
+
+      let label = e.target.getAttribute('aria-label');
+      let keyLabel = e.target.dataset.lang_key;
+      if (!label) {
+        label = await getDictItem(keyLabel);
+      }
       if (label && isHint) {
         hh.cancel();
         hh._target = e.target;
@@ -67,6 +77,7 @@ class HintHack {
         hh._timeout_show = setTimeout(hh.show, hh.opt.delay);
       }
     } catch (e) {
+      console.error(e);
       hh.cancel();
     }
   }

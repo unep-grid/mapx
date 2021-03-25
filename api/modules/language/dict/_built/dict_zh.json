@@ -6703,5 +6703,35 @@
     "id": "search_placeholder",
     "en": "Enter keywords here ...",
     "zh": "在此处输入关键字..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "zh": "来源标题"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "zh": "来源描述"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "zh": "视图描述"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "zh": "项目名称"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "zh": "显示完整的元数据"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "zh": "显示/隐藏视图"
   }
 ]

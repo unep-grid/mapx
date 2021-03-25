@@ -16,12 +16,13 @@
   --mx_ui_background_transparent: hsla(0, 0%, 21%, 0.13);
   --mx_ui_shadow: hsla(0, 0%, 60%, 0.3);
   --mx_ui_link: #12b0f8;
+
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
   /**
   * font size
   */
-  --mx_ui_font_size_base: 14px;
+  --mx_ui_font_size_base: 0.95em;
 
   /**
   * Shadow

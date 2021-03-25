@@ -129,7 +129,8 @@ export function viewToMetaModal(view) {
 
     const elModal = h.modal({
       title: elTitleModal,
-      content: elContent
+      content: elContent,
+      addBackground : true
     });
 
     h.updateLanguageElements({

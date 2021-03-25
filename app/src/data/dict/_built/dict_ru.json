@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "ru": "Заголовок "
+    "ru": "Проект"
   },
   {
     "id": "project_description",
@@ -6703,5 +6703,35 @@
     "id": "search_placeholder",
     "en": "Enter keywords here ...",
     "ru": "Введите здесь ключевые слова ..."
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "ru": "Название источника"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "ru": "Описание источника"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "ru": "Описание вида"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "ru": "Название Проекта"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "ru": "Показать полные метаданные"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Show / hide the view",
+    "ru": "Показать / скрыть вид"
   }
 ]
