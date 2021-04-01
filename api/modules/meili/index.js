@@ -143,7 +143,7 @@ function flatLanguageStrings(item, language) {
     const tr = ml[m] || {};
     item[m] = tr[language] || tr[languages.default];
     if (config.attributesStripHTML.indexOf(m) > -1) {
-      item[m] = htmlToText(item[m]);
+      item[m] = htmlToText(item[m],{wordwrap:false});
     }
   }
   delete item.meta_multilingual;

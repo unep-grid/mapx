@@ -13,14 +13,19 @@
     padding: 10px;
     .search--input-container {
       position: relative;
+      display: flex;
+      flex-wrap: wrap;
       .search--input {
         border-radius: 10px;
         box-shadow: none;
         transition: none;
         padding: 4px 4px 4px 15px;
-        width: 100%;
+        flex-grow: 1;
         border: 1px solid var(--mx_ui_border);
         border-radius: 10px;
+        min-height: 30px;
+        resize: none;
+        background: var(--mx_ui_background_contrast);
       }
     }
   }
@@ -59,7 +64,7 @@
       box-shadow: var(--mx_ui_box_shadow);
       background: var(--mx_ui_background);
       margin: 10px;
-      padding: 10px;
+      padding: 20px;
       .search--item-title {
         display: flex;
         font-size: 1.2em;

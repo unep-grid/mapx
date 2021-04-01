@@ -1,47 +1,22 @@
-//import {el} from '@fxi/el';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
+import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
+import {
+  zoomToViewId,
+  getView,
+  getViewRemote,
+  viewAdd,
+  viewRemove,
+  getViewsOpen
+} from './../mx_helper_map.js';
+import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {MeiliSearch} from 'meilisearch';
 import {getDictItem} from './../mx_helper_language.js';
 import {getSearchUrl} from './../mx_helper_map.js';
 import {EventSimple} from './../listener_store';
-import * as test from './../is_test_mapx';
 
 import './style.less';
-
-const def = {
-  key: null,
-  host: 'localhost',
-  port: 80,
-  container: '#idcontainer',
-  language: 'en',
-  index: 'views',
-  filters: {
-    operators: ['=', '!=', '>', '>=', '<', '<='],
-    date: [
-      'view_modified_at',
-      'view_created_at',
-      'source_start_at',
-      'source_end_at',
-      'source_released_at',
-      'source_modified_at'
-    ]
-  },
-  index_setting: {
-    views: {
-      facetsDistribution: [
-        'view_type',
-        'source_keywords',
-        'source_keywords_m49'
-      ],
-      attributesToHighlight: [
-        'view_title',
-        'view_abstract',
-        'source_title',
-        'source_abstract'
-      ]
-    }
-  }
-};
+import {def} from './default.js';
+import {parser} from './parser.js';
 
 class Search extends EventSimple {
   constructor(opt) {
@@ -97,7 +72,7 @@ class Search extends EventSimple {
       'div',
       {
         class: ['search--container'],
-        on: ['click', s._handleClick]
+        on: ['click', s._handleClick.bind(s)]
       },
       el(
         'div',
@@ -109,6 +84,11 @@ class Search extends EventSimple {
           key_placeholder: 'search_placeholder'
         })
       ),
+      //     (s._elFacetsContainer = el(
+      //'details',
+      //el('summary', getDictItem('search_filters_show')),
+      //(s._elFacets = el('div', {class: ['search--facets']}))
+      //)),
       (s._elResults = el('div', {class: ['search--results']}))
     );
     s._elContainer.appendChild(s._elSearch);
@@ -137,24 +117,111 @@ class Search extends EventSimple {
         {
           class: 'search--input-container'
         },
-        (s[name] = el('input', {
+        (s[name] = el('div', {
+          contenteditable: true,
           class: 'search--input',
           id: id,
           type: 'text',
-          on: ['input', s.update],
           lang_key: opt.key_placeholder,
           placeholder: await getDictItem(opt.key_placeholder),
-          on: {input: s.update.bind(s)}
-        }))
+          on: {
+            input: () => {
+              s.update();
+              s.autosize();
+            }
+          }
+        })),
+        elButtonIcon('search_clear_query', {
+          icon: 'fa-times',
+          mode: 'icon',
+          classes: [],
+          dataset: {action: 'search_clear'}
+        })
       )
     );
   }
 
-  _handleClick(e) {
-    const elItem = e.target.closest('.search--show-toggle');
-    if (elItem) {
-      elItem.classList.toggle('search--show-less');
-      return;
+
+  parse(str) {
+    return parser(str);
+  }
+  /**
+   * Resize text area according to height of scrollHeight
+   */
+  autosize() {
+    const s = this;
+    s._elInput.style.height = '';
+    s._elInput.style.height = 5 + s._elInput.scrollHeight + 'px';
+  }
+
+  async _handleClick(e) {
+    const s = this;
+    const ds = e.target?.dataset || {};
+
+    const action = ds.action;
+    switch (action) {
+      case 'search_clear':
+        {
+          s._elInput.value = '';
+          s.update();
+        }
+        break;
+      case 'search_filter_keyword':
+        {
+          const m49 = ds.keyword_type === 'm49';
+          const keyword = ds.filter_keyword;
+          /**
+          * Space in keyword => add quotes
+          */ 
+          const hasSpace = keyword.match(/\s+/);
+          const keywordSafe = hasSpace ? `"${keyword}"` : keyword;
+          const search = s.parse(s._elInput.innerText);
+          const filters = search.filtersArray;
+          const keyFilter = m49
+            ? `source_keywords_m49=${keywordSafe}`
+            : `source_keywords=${keywordSafe}`;
+          const pos = filters.indexOf(keyFilter);
+
+          /**
+          * Add or remove filter
+          */ 
+          if (pos === -1) {
+            filters.push(keyFilter);
+          } else {
+            filters.splice(pos, 1);
+          }
+
+          s._elInput.innerText = `${search.text} ${filters.join(' ')}`;
+
+          s.update();
+        }
+        break;
+      case 'search_view_toggle':
+        {
+          const idView = ds.id_view;
+          const view = getView(idView);
+          if (view) {
+            const hasView = getViewsOpen().includes(idView);
+            if (hasView) {
+              await viewRemove(view);
+            } else {
+              await viewAdd(view);
+            }
+          } else {
+            const viewRemote = await getViewRemote(idView);
+            viewsListAddSingle(viewRemote);
+          }
+          zoomToViewId(idView);
+        }
+        break;
+      case 'search_show_view_meta':
+        {
+          const idView = ds.id_view;
+          viewToMetaModal(idView);
+        }
+        break;
+      default:
+        null;
     }
   }
 
@@ -162,11 +229,6 @@ class Search extends EventSimple {
     const s = this;
     const frag = new DocumentFragment();
     for (let v of hits) {
-      const keywords = [];
-
-      keywords.push(...(v.source_keywords || []));
-      keywords.push(...(v.source_keywords_m49 || []));
-
       const elKeywords = el(
         'div',
         {class: ['search--button-group']},
@@ -177,8 +239,8 @@ class Search extends EventSimple {
           return elButtonIcon(keyword, {
             icon: 'fa-tag',
             mode: 'text_icon',
-            classes: ['btn-xs'],
-            dataset: {filter_keyword: keyword}
+            classes: [],
+            dataset: {action: 'search_filter_keyword', filter_keyword: keyword}
           });
         }),
         v.source_keywords_m49.map((keyword) => {
@@ -188,8 +250,12 @@ class Search extends EventSimple {
           return elButtonIcon(keyword, {
             icon: 'fa-map-marker',
             mode: 'text_icon',
-            classes: ['btn-xs'],
-            dataset: {filter_keyword: keyword}
+            classes: [],
+            dataset: {
+              action: 'search_filter_keyword',
+              keyword_type: 'm49',
+              filter_keyword: keyword
+            }
           });
         })
       );
@@ -200,13 +266,13 @@ class Search extends EventSimple {
         elButtonIcon('search_view_toggle', {
           icon: 'fa-eye',
           mode: 'icon',
-          classes: ['btn-xs'],
+          classes: [],
           dataset: {action: 'search_view_toggle', id_view: v.view_id}
         }),
         elButtonIcon('search_show_view_meta', {
           icon: 'fa-info-circle',
           mode: 'icon',
-          classes: ['btn-xs'],
+          classes: [],
           dataset: {action: 'search_show_view_meta', id_view: v.view_id}
         })
       );
@@ -272,65 +338,46 @@ class Search extends EventSimple {
    */
   cutext(str, max) {
     max = max || 50;
+    // NOTE: Can split html div. but description should not contain html.
     const wrds = (str || '').split(/\b/);
     const strShow = wrds.filter((w, i) => i <= max).join('');
     const strHide = wrds.filter((w, i) => i > max).join('');
-    if (strHide.length > 0) {
-      str = `<details class="search--cutext"><summary>${strShow}</summary>${strHide}</details>`;
-    }
-    return str;
-  }
 
-  parse(str) {
-    const s = this;
-    let text = '';
-    let filters = '';
-    const groups = str.split(/\s+/);
-    const regOps = new RegExp(s._opt.filters.operators.join('|'));
-    for (let group of groups) {
-      updateFilters(group);
+    if (strHide.length === 0) {
+      return el('p', str);
     }
 
-    console.log({text, filters});
-    return {text, filters};
-
-    function updateFilters(group) {
-      try {
-        const op = (group.match(regOps) || [])[0];
-        if (!op) {
-          return (text += ` ${group}`);
-        }
-        const sub = group.split(op);
-        if (sub.length !== 2) {
-          return (text =+ ` ${group}`);
-        }
-        let attribute = sub[0];
-        let value = sub[1];
-        if (!value) {
-          return (text =+ ` ${group}`);
-        }
-        if (s._opt.filters.date.includes(attribute)) {
-          value = Math.ceil((new Date(value) * 1) / 1000);
-        }
-        filters += `${filters ? 'AND' : ''} ${attribute}${op}${value} `;
-      } catch (e) {
-        console.warn(e);
-      }
-    }
+    const elSummary = el('summary', strShow);
+    const elHide = el('p', strHide);
+    return el(
+      'details',
+      {
+        class: ['search--cutext']
+      },
+      elSummary,
+      elHide
+    );
   }
 
   update() {
     const s = this;
     clearTimeout(s._id_update_timeout);
     s._id_update_timeout = setTimeout(async () => {
-      const query = s.parse(s._elInput.value);
-      const settingsBase = s._opt.index_setting[s._opt.index];
-      const settings = Object.assign({}, settingsBase, {
-        filters: query.filters || null
-      });
-      const results = await s._index.search(query.text, settings);
-      const fragList = await s.buildList(results.hits);
-      s._elResults.replaceChildren(fragList);
+      try {
+        const query = s.parse(s._elInput.innerText);
+        const settingsBase = s._opt.index_setting[s._opt.index];
+        const settings = Object.assign({}, settingsBase, {
+          filters: query.filters || null
+        });
+        //console.log(query);
+        const results = await s._index.search(query.text, settings);
+        const fragItems = await s.buildList(results.hits);
+        s._elResults.replaceChildren(fragItems);
+      } catch (e) {
+        console.warn('Issue while searching',{error:e})
+      }
+      //const fragFilter = await s.buildFilters(results.hits);
+      //s._elFacets.replaceChildren(fragFilter);
     }, 100);
   }
 }

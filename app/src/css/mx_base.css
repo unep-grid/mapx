@@ -640,11 +640,15 @@ details > summary {
  * Buttons
  *
  */
-.btn-button-icon{
-  margin:5px;
+.btn-icon {
+  margin: 5px;
 }
-.btn-button-icon > span{
-  margin-right:5px;
+.btn-icon > span {
+  margin-right: 5px;
+}
+.btn-icon > span,
+.btn-icon > i {
+  pointer-events: none;
 }
 
 .btn-circle {
