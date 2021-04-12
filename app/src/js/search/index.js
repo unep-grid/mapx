@@ -1,3 +1,4 @@
+import {MeiliSearch} from 'meilisearch';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {
@@ -9,7 +10,6 @@ import {
   getViewsOpen
 } from './../mx_helper_map.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
-import {MeiliSearch} from 'meilisearch';
 import {getDictItem} from './../mx_helper_language.js';
 import {getSearchUrl} from './../mx_helper_map.js';
 import {EventSimple} from './../listener_store';

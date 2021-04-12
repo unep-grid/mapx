@@ -3987,7 +3987,6 @@ export async function viewLayersAddVt(o) {
 
   const view = o.view;
   const idView = view.id;
-  const map = o.map;
   const viewData = p(view, 'data');
   const attr = p(viewData, 'attribute.name', null);
   const idSource = view.id + '-SRC';
@@ -4013,7 +4012,6 @@ export async function viewLayersAddVt(o) {
   const max = p(sourceSummary, 'attribute_stat.max');
   const min = p(sourceSummary, 'attribute_stat.min');
 
-  var idLayer;
   var layers = [];
   var layersAfter = [];
   var num = 0;
@@ -4054,7 +4052,6 @@ export async function viewLayersAddVt(o) {
 
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
-  const layerConfigBase = {};
   /**
    * clean values
    */

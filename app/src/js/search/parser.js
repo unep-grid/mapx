@@ -1,7 +1,5 @@
 import {def as opt} from './default.js';
 
-const debug = true;
-
 const regCompare = new RegExp(opt.filters.op_compare.join('|') + '+', 'g');
 const regLogic = new RegExp(opt.filters.op_logic.join('|') + '+', 'g');
 const regNest = new RegExp(opt.filters.op_nest.join('|') + '+', 'g');
@@ -19,9 +17,6 @@ const regGroup = new RegExp(
  * - separate filters from text
  */
 function parser(str) {
-  if (debug) {
-    console.time('parse');
-  }
 
   let text = '';
   let filters = '';
@@ -84,9 +79,7 @@ function parser(str) {
 
   text = text.trim();
   filters = filtersArray.join(' ').trim();
-  if (debug) {
-    console.timeEnd('parse');
-  }
+  console.log(text,filters, filtersArray);
   return {text, filters, filtersArray};
 }
 
