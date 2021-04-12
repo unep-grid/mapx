@@ -43,8 +43,8 @@ async function getViewsHandler(req, res) {
     };
     helpers.sendJSON(res, data, {end: true});
   } catch (e) {
-    console.log(err);
-    helpers.sendError(res, err);
+    console.log(e);
+    helpers.sendError(res, e);
   }
 }
 
