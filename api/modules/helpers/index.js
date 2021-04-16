@@ -144,24 +144,22 @@ function readTxt(p) {
  * Simple template parsing
  */
 function parseTemplate(template, data) {
-  if(!template){
-    template = "< template empty >";
+  if (!template) {
+    template = '< template empty >';
   }
-  return template.replace(/{{([^{}]+)}}/g, (matched, key)=>{
+  return template.replace(/{{([^{}]+)}}/g, (matched, key) => {
     return data[key];
   });
 }
 
 /**
-* Combine sync method for readTxt + parseTemplate
-*/  
-function readTemplate(file,data){
+ * Combine sync method for readTxt + parseTemplate
+ */
+
+function readTemplate(file, data) {
   const txt = readTxt(file);
   return parseTemplate(txt, data);
 }
-
-
-
 
 /*
  * Get user ip
@@ -303,12 +301,88 @@ function mwGetConfigMap(req, res) {
 }
 
 /**
-* Delay
-*/
-function asyncDelay(ms){
-  return new Promise(resolve => setTimeout(resolve, ms))
+ * Delay
+ */
+function wait(duration) {
+  return new Promise((resolve, reject) => {
+    try {
+      setTimeout(resolve, duration);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+const asyncDelay = wait;
+
+/**
+ * Apply once a serie of callback, with timeout
+ *
+ * @param {Array} cbs Array of callback
+ * @param {Object} opt Options
+ * @param {Number} opt.timeoutMs Maximum time (ms);
+ * @param {Function} opt.onSuccess Cb on sucess
+ * @param {Function} opt.onError Cb on error
+ */
+async function once(cbs, opt) {
+  opt = Object.assign(
+    {},
+    {
+      onError: console.error,
+      onSuccess: console.log,
+      timeoutMs: 1 * 60 * 1000
+    },
+    opt
+  );
+  for (let cb of cbs) {
+    try {
+      await race(cb, opt.timeoutMs);
+      opt.onSuccess(cb);
+    } catch (e) {
+      opt.onError(cb, e);
+    }
+  }
 }
 
+/**
+ * Repeat once every n milisecond
+ *
+ * @param {Array} cbs Array of callback
+ * @param {Object} opt Options
+ * @param {Numer} opt.intervalMs Repeat after n ms
+ * @param {Number} opt.timeoutMs Maximum time (ms);
+ * @param {Function} opt.onSuccess Cb on sucess
+ * @param {Function} opt.onError Cb on error
+ */
+async function onceInterval(cbs, opt) {
+  try {
+    opt = Object.assign(
+      {},
+      {
+        intervalMs : 1 * 60* 60 * 1000,
+      },
+      opt
+    );
+    await once(cbs, opt);
+    await wait(opt.intervalMs);
+    await onceInterval(cbs, opt);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/**
+ * Reject if timeout is reached
+ * @param {Function} cb Callback
+ * @param {Number} timeoutMs Timeout in ms
+ */
+async function race(cb, timeoutMs) {
+  timeoutMs = timeoutMs || 1 * 60 * 1000;
+  return Promise.race([cb(), maxTime()]);
+  async function maxTime() {
+    await wait(timeoutMs);
+    throw new Error(`Timeout ${cb.name} (${timeoutMs})`);
+  }
+}
 
 /**
  * Set default headers
@@ -346,6 +420,10 @@ module.exports = {
   readTemplate,
   stop,
   asyncDelay,
+  wait,
+  once,
+  onceInterval,
+  race,
   /**
    * Middleware
    */

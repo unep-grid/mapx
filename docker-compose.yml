@@ -3,12 +3,12 @@ version: '3.2'
 # ports : host:container
 services:
   traefik:
-    image : traefik:v2.3.2
-    command: 
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+    image: traefik:v2.3.2
+    command:
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--entrypoints.web.address=:80'
     ports:
       - target: 80
         published: 8880
@@ -31,16 +31,16 @@ services:
       - pg
       - traefik
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache"
-      - "traefik.http.routers.app.rule=Host(`app.mapx.localhost`)"
-      - "traefik.http.routers.app.entrypoints=web"
-      - "traefik.http.routers.app.service=app"
-      - "traefik.http.services.app.loadbalancer.server.port=3838"
-      - "traefik.http.routers.dev.rule=Host(`dev.mapx.localhost`)"
-      - "traefik.http.routers.dev.entrypoints=web"
-      - "traefik.http.routers.dev.service=dev"
-      - "traefik.http.services.dev.loadbalancer.server.port=3434"
+      - 'traefik.enable=true'
+      - 'traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache'
+      - 'traefik.http.routers.app.rule=Host(`app.mapx.localhost`)'
+      - 'traefik.http.routers.app.entrypoints=web'
+      - 'traefik.http.routers.app.service=app'
+      - 'traefik.http.services.app.loadbalancer.server.port=3838'
+      - 'traefik.http.routers.dev.rule=Host(`dev.mapx.localhost`)'
+      - 'traefik.http.routers.dev.entrypoints=web'
+      - 'traefik.http.routers.dev.service=dev'
+      - 'traefik.http.services.dev.loadbalancer.server.port=3434'
     volumes:
       - ./app:/appdev
       - ./_shared:/shared
@@ -49,7 +49,7 @@ services:
     build: ./api/.
     image: fredmoser/mx-api-node:1.8.17-alpine
     restart: always
-    ports: 
+    ports:
       - 3030
     hostname: mx_api
     depends_on:
@@ -57,34 +57,34 @@ services:
       - redis
       - traefik
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache"
-      - "traefik.http.middlewares.wcompress.compress=true"
-      - "traefik.http.middlewares.wcompress.compress.excludedcontenttypes=text/plain"
-      - "traefik.http.routers.api.rule=Host(`api.mapx.localhost`)"
-      - "traefik.http.routers.api.entrypoints=web"
-      - "traefik.http.routers.api.service=api"
-      - "traefik.http.services.api.loadbalancer.server.port=3030"
-      - "traefik.http.routers.apidev.rule=Host(`apidev.mapx.localhost`)"
-      - "traefik.http.routers.apidev.entrypoints=web"
-      - "traefik.http.routers.apidev.service=apidev"
-      - "traefik.http.services.apidev.loadbalancer.server.port=3333"
+      - 'traefik.enable=true'
+      - 'traefik.http.middlewares.nocache.headers.customresponseheaders.CACHE-CONTROL:no-cache'
+      - 'traefik.http.middlewares.wcompress.compress=true'
+      - 'traefik.http.middlewares.wcompress.compress.excludedcontenttypes=text/plain'
+      - 'traefik.http.routers.api.rule=Host(`api.mapx.localhost`)'
+      - 'traefik.http.routers.api.entrypoints=web'
+      - 'traefik.http.routers.api.service=api'
+      - 'traefik.http.services.api.loadbalancer.server.port=3030'
+      - 'traefik.http.routers.apidev.rule=Host(`apidev.mapx.localhost`)'
+      - 'traefik.http.routers.apidev.entrypoints=web'
+      - 'traefik.http.routers.apidev.service=apidev'
+      - 'traefik.http.services.apidev.loadbalancer.server.port=3333'
     volumes:
       - ./api:/apidev
       - ./_shared:/shared
-  geoserver :
+  geoserver:
     env_file: mapx.dev.env
     build: ./geoserver/.
     image: fredmoser/mx-api-geoserver:2.18.1-alpine
-    ports: 
+    ports:
       - 8882:8080
     volumes:
       - ./_shared/geoserver:/shared/geoserver
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.geoserver.rule=Host(`geoserver.mapx.localhost`)"
-      - "traefik.http.routers.geoserver.entrypoints=web"
-      - "traefik.http.services.geoserver.loadbalancer.server.port=8080"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.geoserver.rule=Host(`geoserver.mapx.localhost`)'
+      - 'traefik.http.routers.geoserver.entrypoints=web'
+      - 'traefik.http.services.geoserver.loadbalancer.server.port=8080'
   pg:
     env_file: mapx.dev.env
     image: postgis/postgis:13-3.1-alpine
@@ -95,26 +95,57 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
       - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
-    ports :
+    ports:
       - 5432:5432
+  migration:
+    env_file: mapx.dev.env
+    image: fredmoser/mx-api-node:1.8.17-alpine
+    hostname: mx_api
+    depends_on:
+      - pg
+      - redis
+      - traefik
+      - meili
+    command: ['node', '/migratedev/migration.js']
+    volumes:
+      - ./api:/migratedev
   meili:
-    image: getmeili/meilisearch
+    image: fredmoser/meiliscratch:v0.20.0
+    build: ./meili/minideb.
+    init: true #https://docs.docker.com/compose/compose-file/compose-file-v3/#init 
     restart: always
     hostname: meili
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.search.rule=Host(`search.mapx.localhost`)"
-      - "traefik.http.routers.search.entrypoints=web"
-      - "traefik.http.services.search.loadbalancer.server.port=7700"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.search.rule=Host(`search.mapx.localhost`)'
+      - 'traefik.http.routers.search.entrypoints=web'
+      - 'traefik.http.services.search.loadbalancer.server.port=7700'
     volumes:
       - ./_shared/meili/data.ms:/data.ms
     ports:
       - 7700
+    environment:
+      - MEILI_NO_ANALYTICS=true
+      - MEILI_NO_SENTRY=true
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'wget',
+          '-q',
+          '-t 1',
+          '--spider',
+          'http://localhost:7700/health'
+        ]
+      interval: 60m
+      timeout: 10s
+      retries: 3
+      start_period: 45s
   redis:
     image: redis:alpine
     restart: always
     hostname: redis
-    command: redis-server /usr/local/etc/redis/redis.conf 
+    command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ./redis.conf:/usr/local/etc/redis/redis.conf
     ports:
@@ -123,19 +154,19 @@ services:
     build: ./probe/.
     image: fredmoser/mx-probe:0.2-go
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.probe.rule=Host(`probe.mapx.localhost`)"
-      - "traefik.http.routers.probe.entrypoints=web"
-      - "traefik.http.services.probe.loadbalancer.server.port=8080"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.probe.rule=Host(`probe.mapx.localhost`)'
+      - 'traefik.http.routers.probe.entrypoints=web'
+      - 'traefik.http.services.probe.loadbalancer.server.port=8080'
     ports:
       - 8080
   wsecho:
     image: jmalloc/echo-server
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.wsecho.rule=Host(`wsecho.mapx.localhost`)"
-      - "traefik.http.routers.wsecho.entrypoints=web"
-      - "traefik.http.services.wsecho.loadbalancer.server.port=8080"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.wsecho.rule=Host(`wsecho.mapx.localhost`)'
+      - 'traefik.http.routers.wsecho.entrypoints=web'
+      - 'traefik.http.services.wsecho.loadbalancer.server.port=8080'
     ports:
       - 8080
   mailhog:
@@ -143,7 +174,7 @@ services:
     logging:
       driver: none
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)"
-      - "traefik.http.routers.mailhog.entrypoints=web"
-      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.mailhog.rule=Host(`mail.mapx.localhost`)'
+      - 'traefik.http.routers.mailhog.entrypoints=web'
+      - 'traefik.http.services.mailhog.loadbalancer.server.port=8025'

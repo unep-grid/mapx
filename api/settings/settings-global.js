@@ -111,10 +111,8 @@ module.exports = {
     },
     languages: {
       codes: [
-        'en',
         'fr',
         'en',
-        'fr',
         'es',
         'ar',
         'ru',

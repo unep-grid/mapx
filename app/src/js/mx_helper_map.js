@@ -881,10 +881,14 @@ export async function initMapx(o) {
       mx.panel_main.panel.open();
     }
 
+    /**
+    * Configure search tool
+    */ 
     new Search({
       container: '#mxTabPanelSearch',
       language: mx.settings.language
     }).then((s) => {
+      // search programatically: e.g. tab switch
       mx.search = s;
     });
 

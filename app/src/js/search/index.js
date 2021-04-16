@@ -1,4 +1,5 @@
 import {MeiliSearch} from 'meilisearch';
+
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {
@@ -13,10 +14,10 @@ import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
 import {getSearchUrl} from './../mx_helper_map.js';
 import {EventSimple} from './../listener_store';
-
 import './style.less';
 import {def} from './default.js';
 import {parser} from './parser.js';
+import {AutoComplete} from './autocomplete.js';
 
 class Search extends EventSimple {
   constructor(opt) {
@@ -32,12 +33,20 @@ class Search extends EventSimple {
       return;
     }
     s._elContainer = document.querySelector(s._opt.container);
+    // Init meili and init index used =>  _index.search
     s._meili = new MeiliSearch({
       host: getSearchUrl(),
       apiKey: s._opt.key || null
     });
     await s.setIndex();
+    // build search group UI
     await s.build();
+    // Init autocomplete feature
+    s.ac = new AutoComplete({
+      elInput : s._elInput,
+      index : s._index
+    });
+    // flag init to ignore second init. 
     s._init = true;
     s.fire('ready');
     return s;
@@ -84,11 +93,6 @@ class Search extends EventSimple {
           key_placeholder: 'search_placeholder'
         })
       ),
-      //     (s._elFacetsContainer = el(
-      //'details',
-      //el('summary', getDictItem('search_filters_show')),
-      //(s._elFacets = el('div', {class: ['search--facets']}))
-      //)),
       (s._elResults = el('div', {class: ['search--results']}))
     );
     s._elContainer.appendChild(s._elSearch);
@@ -162,7 +166,7 @@ class Search extends EventSimple {
     switch (action) {
       case 'search_clear':
         {
-          s._elInput.value = '';
+          s._elInput.innerText = '';
           s.update();
         }
         break;
@@ -328,6 +332,7 @@ class Search extends EventSimple {
   destroy() {
     const s = this;
     s._elSearch.remove();
+    s.ac.destroy();
   }
 
   /**

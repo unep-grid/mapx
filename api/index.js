@@ -1,4 +1,8 @@
 /**
+ * Import modules
+ */
+
+/**
  * Set local module path
  * ( to avoid require.main.require or ../../mess)
  */
@@ -7,15 +11,11 @@ moduleAlias.addAliases({
   '@mapx': __dirname + '/modules/',
   '@root': __dirname
 });
-/**
- * Import modules
- */
+
 const http = require('http');
 const express = require('express');
 const sock = require('socket.io');
 const settings = require('@root/settings');
-const migrate = require('@mapx/migrate');
-const language = require('@mapx/language');
 const view = require('@mapx/view');
 const query = require('@mapx/query');
 const source = require('@mapx/source');
@@ -29,13 +29,6 @@ const log = require('@mapx/log');
 const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
-const {mwSearch} = require('@mapx/meili');
-
-/**
-* Pre-init scripts
-*/ 
-migrate.apply()
-.then(language.init)
 
 /**
  * If port argument is set, use this instead
@@ -61,8 +54,8 @@ app.set('trust proxy', true);
 app.use('/download', express.static(settings.vector.path.download));
 
 /**
-* Notification sytem with ws OR http write
-*/
+ * Notification sytem with ws OR http write
+ */
 //app.use(mwNotify(io));
 
 /**
@@ -83,7 +76,7 @@ app.get('/get/sql/', query.mwGet);
 app.get('/get/mirror/', mirror.mwGet);
 
 app.get('/get/config/map', mwGetConfigMap);
-app.get('/get/source/', [mwNotify(io),...source.mwGet]);
+app.get('/get/source/', [mwNotify(io), ...source.mwGet]);
 app.get('/get/source/metadata/:id', source.mwGetMetadata);
 app.get('/get/source/summary/', source.mwGetSummary);
 app.get('/get/source/table/attribute/', source.mwGetAttributeTable);
@@ -91,7 +84,6 @@ app.get('/get/source/overlap/', source.mwGetOverlap); //countries=[]&layers=[]&=
 app.get('/get/source/validate/geom', source.mwGetGeomValidate);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
 app.get('/get/ip', ip.mwGet);
-app.get('/get/search', mwSearch);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);

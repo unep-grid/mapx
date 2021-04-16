@@ -40,11 +40,6 @@ const def = {
   },
   index_setting: {
     views: {
-      //facetsDistribution: [
-      //'view_type',
-      //'source_keywords',
-      //'source_keywords_m49'
-      //],
       attributesToHighlight: [
         'view_title',
         'view_abstract',
