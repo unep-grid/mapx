@@ -28,9 +28,9 @@ let settings = {
     minZoom: 0
   },
   search : {
-    host_public: 'search.mapx.org',
-    port_public: '8880',
-    protocol: 'https:',
+    host: 'localhost',
+    port: '8880',
+    protocol: 'http://',
   },
   api: {
     host: 'api',
@@ -40,6 +40,7 @@ let settings = {
     protocol: 'https:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
+      getSearchKey : '/get/search/key',
       getApiSql: '/get/sql',
       getConfigMap: '/get/config/map',
       getIpInfo: '/get/ip',

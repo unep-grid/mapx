@@ -1,7 +1,7 @@
 WITH
 /**
-* Use only public proejct
-*/
+ * Use only public proejct
+ */
 projects_public as ( 
   SELECT id, title, description, views_external
   FROM mx_projects
@@ -9,18 +9,18 @@ projects_public as (
   public = true
 ),
 /**
-* Views public from public project
-*/
+ * Views public from public project
+ */
 views_id_public_projects as (
   SELECT v.id id_view
   FROM mx_views_latest v, projects_public pp
   WHERE v.readers @> '["public"]'
   AND
   v.project = pp.id
-  ),
+),
 /**
-* View imported
-*/
+ * View imported
+ */
 views_id_imported_project_public as (
   SELECT DISTINCT jsonb_array_elements_text(views_external) id_view
   FROM projects_public
@@ -31,8 +31,8 @@ views_id_imported  as (
   WHERE v.id = vp.id_view
 ),
 /**
-* View exported to public projects
-*/
+ * View exported to public projects
+ */
 views_id_exported as (
   SELECT id id_view, jsonb_array_elements_text(data #> '{\"projects\"}') id_project
   FROM mx_views_latest
@@ -44,8 +44,8 @@ views_id_projects_public as (
   WHERE ve.id_project = pp.id
 ),
 /**
-* Merge
-*/
+ * Merge
+ */
 views_id_merge as (
   SELECT DISTINCT id_view 
   FROM views_id_exported 
@@ -54,11 +54,11 @@ views_id_merge as (
 ), 
 
 /**
-* Views create date ( lower pid )
-* initialy: released_at, but first public apparition date of a view
-* is unknown : it could be not public in its own project, but publicly available
-* in an external project
-*/ 
+ * Views create date ( lower pid )
+ * initialy: released_at, but first public apparition date of a view
+ * is unknown : it could be not public in its own project, but publicly available
+ * in an external project
+ */ 
 views_oldest_public as (
   SELECT v.id,
   min(v.pid) AS pid
@@ -74,8 +74,8 @@ views_created_at as (
 ),
 
 /**
-* Meta for non vt -> local meta
-*/ 
+ * Meta for non vt -> local meta
+ */ 
 views_non_vt_meta as (
   SELECT 
   v.id id_view,
@@ -90,8 +90,8 @@ views_non_vt_meta as (
   -- v.data #> '{"source"}' ? 'meta' 
 ),
 /**
-* Meta for vt -> from source
-*/ 
+ * Meta for vt -> from source
+ */ 
 views_vt_meta as (
   SELECT 
   v.id id_view,
@@ -107,16 +107,16 @@ views_vt_meta as (
 ),
 
 /**
-* Merge both 
-*/ 
+ * Merge both 
+ */ 
 views_meta as (
   SELECT * FROM views_vt_meta UNION 
   SELECT * FROM views_non_vt_meta
 ),
 
 /**
-* Project description
-*/ 
+ * Project description
+ */ 
 projects_subset as (
   SELECT DISTINCT id_project 
   FROM 
@@ -126,60 +126,63 @@ projects_desc as (
   SELECT 
   p.id as id_project,
   jsonb_build_object(
-  'project_title',
-  p.title, 
-  'project_abstract', 
-  p.description
+    'project_title',
+    p.title, 
+    'project_abstract', 
+    p.description
   ) as meta_multilingual
   FROM mx_projects p 
   WHERE id IN (SELECT id_project from projects_subset)
 ),
 
 /**
-* Extract / append value from jsonb
-*/
+ * Extract / append value from jsonb
+ */
 views_built as (
   SELECT 
-     v.id view_id,
-     v.project project_id,
-     jsonb_build_object(
-     'view_title' , v.data #> '{title}',
-     'view_abstract', v.data #> '{abstract}',
-     'source_title', m.meta #> '{text,title}', 
-     'source_abstract', m.meta #> '{text,abstract}',
-     'source_notes', m.meta #> '{text,notes}' 
-    ) || p.meta_multilingual AS meta_multilingual,
-     m.meta #> '{text,keywords,keys}' AS source_keywords,
-     m.meta #> '{text,keywords,keys_m49}' AS source_keywords_m49,
-     m.meta #>> '{temporal,range,start_at}' AS source_start_at,
-     m.meta #>> '{temporal,range,end_at}' AS source_end_at,
-     m.meta #>> '{temporal,issuance,released_at}' source_released_at,
-     m.meta #>> '{temporal,issuance,modified_at}' source_modified_at,
-     m.created_at view_created_at,
-     v.date_modified view_modified_at,
-     v.type view_type
+  MD5(ROW(v.id,v.date_modified,m.meta)::text) AS hash,
+  v.id view_id,
+  v.project project_id,
+  jsonb_build_object(
+    'view_title' , v.data #> '{title}',
+    'view_abstract', v.data #> '{abstract}',
+    'source_title', m.meta #> '{text,title}', 
+    'source_abstract', m.meta #> '{text,abstract}',
+    'source_notes', m.meta #> '{text,notes}' 
+  ) || p.meta_multilingual AS meta_multilingual,
+  m.meta as meta,
+  m.meta #> '{text,keywords,keys}' AS source_keywords,
+  m.meta #> '{text,keywords,keys_m49}' AS source_keywords_m49,
+  m.meta #>> '{temporal,range,start_at}' AS source_start_at,
+  m.meta #>> '{temporal,range,end_at}' AS source_end_at,
+  m.meta #>> '{temporal,issuance,released_at}' source_released_at,
+  m.meta #>> '{temporal,issuance,modified_at}' source_modified_at,
+  m.created_at view_created_at,
+  v.date_modified view_modified_at,
+  v.type view_type
   FROM mx_views_latest v
   INNER JOIN views_meta m ON v.id = m.id_view 
   INNER JOIN projects_desc p ON v.project = p.id_project
 ),
 
 /**
-* Alter types
-*/ 
+ * Alter types
+ */ 
 views_searchable as (
-  SELECT 
-     view_id,
-     view_type,
-     project_id,
-     meta_multilingual,
-     coalesce(source_keywords,'[]'::jsonb) as source_keywords,
-     coalesce(source_keywords_m49,'[]'::jsonb) as source_keywords_m49,
-     extract(epoch from source_start_at::timestamp) AS source_start_at,
-     extract(epoch from source_end_at::timestamp) AS source_end_at,
-     extract(epoch from source_released_at::timestamp) source_released_at,
-     extract(epoch from source_modified_at::timestamp) source_modified_at,
-     extract(epoch from view_created_at::timestamp) view_created_at,
-     extract(epoch from view_modified_at::timestamp) view_modified_at
+  SELECT
+  hash,   
+  view_id,
+  view_type,
+  project_id,
+  meta_multilingual,
+  coalesce(source_keywords,'[]'::jsonb) as source_keywords,
+  coalesce(source_keywords_m49,'[]'::jsonb) as source_keywords_m49,
+  extract(epoch from source_start_at::timestamp) AS source_start_at,
+  extract(epoch from source_end_at::timestamp) AS source_end_at,
+  extract(epoch from source_released_at::timestamp) source_released_at,
+  extract(epoch from source_modified_at::timestamp) source_modified_at,
+  extract(epoch from view_created_at::timestamp) view_created_at,
+  extract(epoch from view_modified_at::timestamp) view_modified_at
   FROM views_built 
 )
 

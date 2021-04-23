@@ -29,6 +29,7 @@ const log = require('@mapx/log');
 const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
+const {mwGetSearchKey} = require('@mapx/search');
 
 /**
  * If port argument is set, use this instead
@@ -84,6 +85,7 @@ app.get('/get/source/overlap/', source.mwGetOverlap); //countries=[]&layers=[]&=
 app.get('/get/source/validate/geom', source.mwGetGeomValidate);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
 app.get('/get/ip', ip.mwGet);
+app.get('/get/search/key', mwGetSearchKey);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);

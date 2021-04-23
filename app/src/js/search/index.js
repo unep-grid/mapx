@@ -1,5 +1,4 @@
 import {MeiliSearch} from 'meilisearch';
-
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {
@@ -12,44 +11,46 @@ import {
 } from './../mx_helper_map.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
-import {getSearchUrl} from './../mx_helper_map.js';
 import {EventSimple} from './../listener_store';
 import './style.less';
 import {def} from './default.js';
-import {parser} from './parser.js';
-import {AutoComplete} from './autocomplete.js';
 
 class Search extends EventSimple {
   constructor(opt) {
     super();
     const s = this;
-    s._opt = Object.assign({}, def, opt);
-    return s.init();
+    return s.init(opt);
   }
 
-  async init() {
+  async init(opt) {
     const s = this;
     if (s._init) {
       return;
     }
-    s._elContainer = document.querySelector(s._opt.container);
-    // Init meili and init index used =>  _index.search
+    s.setOpt(opt);
+    s._elContainer = document.querySelector(s.opt('container'));
     s._meili = new MeiliSearch({
-      host: getSearchUrl(),
-      apiKey: s._opt.key || null
+      host: `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`,
+      apiKey: s.opt('key') || null
     });
+
     await s.setIndex();
-    // build search group UI
     await s.build();
-    // Init autocomplete feature
-    s.ac = new AutoComplete({
-      elInput : s._elInput,
-      index : s._index
-    });
-    // flag init to ignore second init. 
     s._init = true;
     s.fire('ready');
     return s;
+  }
+
+  opt(k) {
+    return this._opt[k];
+  }
+
+  setOpt(opt) {
+    const s = this;
+    if (!s._opt) {
+      s._opt = {};
+    }
+    Object.assign(s._opt, def, s._opt, opt);
   }
 
   get isReady() {
@@ -58,16 +59,17 @@ class Search extends EventSimple {
 
   async setLanguage(lang) {
     const s = this;
-    s._opt.language = lang;
+    s.setOpt({language: lang});
     s.setIndex();
   }
 
   async setIndex(id) {
     const s = this;
-    if (id) {
-      s._opt.index = id;
+    if (!id) {
+      id = s.template(s.opt('index_template'));
     }
-    s._index = await s._meili.getIndex(`${s._opt.index}_${s._opt.language}`);
+    s.setOpt({index: id});
+    s._index = await s._meili.getIndex(id);
   }
 
   async build() {
@@ -76,6 +78,27 @@ class Search extends EventSimple {
       return;
     }
     s._built = true;
+    s._elResults = el('div', {class: ['search--results']});
+    s._elPagination = el('div', {class: ['search--pagination']});
+    s._elFilters = el(
+      'div',
+      {
+        class: ['search--filters', 'search--hidden']
+      },
+      'FILTERS'
+    );
+
+    s._elHeader = el(
+      'div',
+      {
+        class: 'search--header'
+      },
+      await s._build_input('_elInput', {
+        key_label: 'search_title',
+        key_placeholder: 'search_placeholder'
+      }),
+      s._elFilters
+    );
 
     s._elSearch = el(
       'div',
@@ -83,18 +106,11 @@ class Search extends EventSimple {
         class: ['search--container'],
         on: ['click', s._handleClick.bind(s)]
       },
-      el(
-        'div',
-        {
-          class: 'search--header'
-        },
-        await s._build_input('_elInput', {
-          key_label: 'search_title',
-          key_placeholder: 'search_placeholder'
-        })
-      ),
-      (s._elResults = el('div', {class: ['search--results']}))
+      s._elHeader,
+      s._elResults,
+      s._elPagination
     );
+
     s._elContainer.appendChild(s._elSearch);
   }
 
@@ -121,8 +137,7 @@ class Search extends EventSimple {
         {
           class: 'search--input-container'
         },
-        (s[name] = el('div', {
-          contenteditable: true,
+        (s[name] = el('input', {
           class: 'search--input',
           id: id,
           type: 'text',
@@ -140,15 +155,17 @@ class Search extends EventSimple {
           mode: 'icon',
           classes: [],
           dataset: {action: 'search_clear'}
+        }),
+        elButtonIcon('search_filters', {
+          icon: 'fa-sliders',
+          mode: 'icon',
+          classes: [],
+          dataset: {action: 'toggle_filters'}
         })
       )
     );
   }
 
-
-  parse(str) {
-    return parser(str);
-  }
   /**
    * Resize text area according to height of scrollHeight
    */
@@ -164,40 +181,48 @@ class Search extends EventSimple {
 
     const action = ds.action;
     switch (action) {
+      case 'toggle_filters':
+        {
+          s._elFilters.classList.toggle('search--hidden');
+        }
+        break;
       case 'search_clear':
         {
-          s._elInput.innerText = '';
+          s._elInput.value = '';
           s.update();
+        }
+        break;
+      case 'search_set_page':
+        {
+          s.update(ds.page);
         }
         break;
       case 'search_filter_keyword':
         {
-          const m49 = ds.keyword_type === 'm49';
-          const keyword = ds.filter_keyword;
+          //return;
+          //   const m49 = ds.keyword_type === 'm49';
+          //const keyword = ds.filter_keyword;
           /**
-          * Space in keyword => add quotes
-          */ 
-          const hasSpace = keyword.match(/\s+/);
-          const keywordSafe = hasSpace ? `"${keyword}"` : keyword;
-          const search = s.parse(s._elInput.innerText);
-          const filters = search.filtersArray;
-          const keyFilter = m49
-            ? `source_keywords_m49=${keywordSafe}`
-            : `source_keywords=${keywordSafe}`;
-          const pos = filters.indexOf(keyFilter);
-
+           * Space in keyword => add quotes
+           */
+          //const hasSpace = keyword.match(/\s+/);
+          //const keywordSafe = hasSpace ? `"${keyword}"` : keyword;
+          //const search = s.parse(s._elInput.innerText);
+          //const filters = search.filtersArray;
+          //const keyFilter = m49
+          //? `source_keywords_m49=${keywordSafe}`
+          //: `source_keywords=${keywordSafe}`;
+          //const pos = filters.indexOf(keyFilter);
           /**
-          * Add or remove filter
-          */ 
-          if (pos === -1) {
-            filters.push(keyFilter);
-          } else {
-            filters.splice(pos, 1);
-          }
-
-          s._elInput.innerText = `${search.text} ${filters.join(' ')}`;
-
-          s.update();
+           * Add or remove filter
+           */
+          //if (pos === -1) {
+          //filters.push(keyFilter);
+          //} else {
+          //filters.splice(pos, 1);
+          //}
+          //s._elInput.innerText = `${search.text} ${filters.join(' ')}`;
+          //s.update();
         }
         break;
       case 'search_view_toggle':
@@ -364,26 +389,177 @@ class Search extends EventSimple {
     );
   }
 
-  update() {
+  update(page) {
     const s = this;
     clearTimeout(s._id_update_timeout);
     s._id_update_timeout = setTimeout(async () => {
       try {
-        const query = s.parse(s._elInput.innerText);
-        const settingsBase = s._opt.index_setting[s._opt.index];
-        const settings = Object.assign({}, settingsBase, {
-          filters: query.filters || null
-        });
-        //console.log(query);
-        const results = await s._index.search(query.text, settings);
+        const attr = s.opt('attributes');
+        const search = {
+          q: s._elInput.value,
+          offset: page * 20,
+          limit: 20,
+          filters: null,
+          facetFilters: null,
+          facetsDistribution: null,
+          attributesToRetrieve: ['*'],
+          attributesToCrop: null,
+          cropLength: 400,
+          attributesToHighlight: attr.text,
+          matches: false
+        };
+        const results = await s._index.search(search.q, search);
         const fragItems = await s.buildList(results.hits);
         s._elResults.replaceChildren(fragItems);
+        const elPaginationItems = s.buildPaginationItems(results);
+        s._elPagination.replaceChildren(elPaginationItems);
       } catch (e) {
-        console.warn('Issue while searching',{error:e})
+        console.warn('Issue while searching', {error: e});
       }
-      //const fragFilter = await s.buildFilters(results.hits);
-      //s._elFacets.replaceChildren(fragFilter);
     }, 100);
+  }
+
+  /**
+   * Pagination builder
+   */
+
+  buildPaginationItems(results) {
+    const elItems = el('div', {class: ['search--pagination-items']});
+
+    const nPage = Math.ceil(results.nbHits / results.limit);
+    const cPage =
+      Math.ceil(nPage - (results.nbHits - results.offset) / results.limit) - 1;
+
+    let type = '';
+    let fillerPos = [];
+
+    /*
+     * Pagination layout
+     */
+
+    if (nPage <= 10) {
+      /**
+       * oooooooXoo
+       */
+      type = 'all';
+    } else if (cPage < 4) {
+      /**
+       * ooXoo ooo
+       */
+      type = '5_3';
+      fillerPos.push(6);
+    } else if (cPage > nPage - 4) {
+      /**
+       * ooo oXooo
+       */
+      type = '3_5';
+      fillerPos.push(4);
+    } else {
+      /**
+       * ooo oXo ooo
+       */
+      type = '3_5_3';
+      fillerPos.push(...[3, nPage - 4]);
+    }
+
+    /**
+     * Populate pagination
+     */
+    for (let i = 0; i < nPage; i++) {
+      let add = false;
+      switch (type) {
+        case 'all':
+          add = true;
+          break;
+        case '3_5_3':
+          if (
+            i < 3 ||
+            i === cPage - 2 ||
+            i === cPage - 1 ||
+            i === cPage ||
+            i === cPage + 1 ||
+            i === cPage + 2 ||
+            i > nPage - 4
+          ) {
+            add = true;
+          }
+          break;
+        case '5_3':
+          if (i < 5 || i > nPage - 4) {
+            add = true;
+          }
+          break;
+        case '3_5':
+          if (i < 3 || i > nPage - 6) {
+            add = true;
+          }
+          break;
+        default:
+      }
+
+      /**
+       * Add filler if needed
+       */
+      if (fillerPos.includes(i)) {
+        const elFiller = el('span', {
+          class: ['search--pagination-item-filler']
+        });
+        elItems.appendChild(elFiller);
+      }
+
+      if (add) {
+        /**
+         * Build item
+         */
+
+        let elItem;
+        const elItemContainer = el(
+          'span',
+          {
+            class: ['search--pagination-item-container'],
+            dataset: {
+              action: 'search_set_page',
+              page: i
+            }
+          },
+          (elItem = el('span', {
+            class: ['search--pagination-item'],
+            dataset: {page: i + 1}
+          }))
+        );
+        /**
+         * The item is the current page
+         */
+
+        if (i === cPage) {
+          elItem.classList.add('active');
+          elItem.setAttribute('disabled', true);
+        }
+        /**
+         * Add the item
+         */
+
+        elItems.appendChild(elItemContainer);
+      }
+    }
+    return elItems;
+  }
+
+  /**
+   * Simple template parser
+   * @param {String} template string
+   * @param {Object} data Object with key : value pair
+   * @return {String} template with replaced values
+   */
+
+  template(str, data) {
+    const s = this;
+    if (!data) {
+      data = s._opt;
+    }
+    return str.replace(/{{([^{}]+)}}/g, (matched, key) => {
+      return data[key];
+    });
   }
 }
 

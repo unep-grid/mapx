@@ -28,7 +28,8 @@ module.exports = {
   meili: {
     master_key: null,
     port: 7700,
-    host: 'meili'
+    host: 'meili',
+    protocol : 'http://'
   },
   db: {
     name: 'postgres',
@@ -110,18 +111,7 @@ module.exports = {
       id_admin: 1
     },
     languages: {
-      codes: [
-        'fr',
-        'en',
-        'es',
-        'ar',
-        'ru',
-        'zh',
-        'de',
-        'bn',
-        'fa',
-        'ps'
-      ],
+      codes: ['fr', 'en', 'es', 'ar', 'ru', 'zh', 'de', 'bn', 'fa', 'ps'],
       default: 'en'
     },
     tables: {

@@ -18,11 +18,9 @@ if(noDataCheck(config[["api"]][["host_public"]])){
   config[["api"]][["host_public"]] <- Sys.getenv("API_HOST_PUBLIC")
 }
 
-
-config[["search"]][["port"]] <- Sys.getenv("MEILI_PORT")
-config[["search"]][["port_public"]] <- Sys.getenv("MEILI_PORT_PUBLIC")
+config[["search"]][["protocol"]] <- Sys.getenv("MEILI_PROTOCOL")
 config[["search"]][["host"]] <- Sys.getenv("MEILI_HOST")
-config[["search"]][["host_public"]] <- Sys.getenv("MEILI_HOST_PUBLIC")
+config[["search"]][["port"]] <- Sys.getenv("MEILI_PORT")
 
 
 config[["resources"]][["userdata"]] <- Sys.getenv("MAPX_PATH_USERDATA")

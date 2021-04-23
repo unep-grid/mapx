@@ -881,31 +881,56 @@ export async function initMapx(o) {
       mx.panel_main.panel.open();
     }
 
-    /**
-    * Configure search tool
-    */ 
-    new Search({
-      container: '#mxTabPanelSearch',
-      language: mx.settings.language
-    }).then((s) => {
-      // search programatically: e.g. tab switch
-      mx.search = s;
-    });
-
-    mx.events.on(
-      'language_change',
-      (data) => {
-        if (mx.search?.isReady) {
-          mx.search.setLanguage(data.new_language);
-        }
-      },
-      'search_tool'
-    );
-    mx.panel_main.on('tab_change',(e,id)=>{
-       if(id === "search"){
-          mx.search.update();
-       }
-    })
+    try {
+      /**
+       * Configure search tool
+       */
+      const urlKey = getApiUrl('getSearchKey');
+      const ss = mx.settings;
+      const qs = h.objToParams({
+        idUser: ss.user.id,
+        token: ss.user.token
+      });
+      const urlKeyFetch = `${urlKey}?${qs}`;
+      const keyData = await fetch(urlKeyFetch).then((r) => r.json());
+      new Search({
+        key: keyData.key,
+        container: '#mxTabPanelSearch',
+        host: ss.search.host,
+        protocol: ss.search.protocol,
+        port: ss.search.port,
+        language: mx.settings.language,
+        index_template: 'views_{{language}}',
+      }).then((s) => {
+        mx.search = s;
+        /**
+         * On language change, update
+         */
+        mx.events.on({
+          type: 'language_change',
+          idGroup: 'search_index',
+          callback: (data) => {
+            if (mx.search) {
+              const lang = data?.new_language;
+              mx.search.setOpt({
+                language: lang,
+                index: `views_${lang}`
+              });
+            }
+          }
+        });
+        /**
+         * On tab change to search, perform a search
+         */
+        mx.panel_main.on('tab_change', (e, id) => {
+          if (id === 'search') { 
+            mx.search.update();
+          }
+        });
+      });
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**

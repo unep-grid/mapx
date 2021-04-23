@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "meilisearch": "^0.18.1",
-    "tributejs": "^5.1.3"
+    "meilisearch": "^0.18.1"
   }
 }

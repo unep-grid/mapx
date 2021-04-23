@@ -2,13 +2,15 @@ const def = {
   key: null,
   host: 'localhost',
   port: 80,
+  protocol:'',
   container: '#idcontainer',
   language: 'en',
-  index: 'views',
-  filters: {
-    op_compare: ['=', '!=', '>', '>=', '<', '<='],
-    op_logic: ['AND', 'OR', 'NOT'],
-    op_nest: ['\\(', '\\)'],
+  index_template: 'views_{{language}}',
+  index: 'views_en',
+  meili : {
+    index_setting:{}
+  },
+  attributes: {
     date: [
       'view_modified_at',
       'view_created_at',
@@ -17,7 +19,7 @@ const def = {
       'source_released_at',
       'source_modified_at'
     ],
-    searchable: [
+    text: [
       'view_title',
       'view_abstract',
       'source_title',
@@ -29,24 +31,9 @@ const def = {
       'project_abstract',
       'view_id',
       'project_id',
-      'view_type',
-      'view_modified_at',
-      'view_created_at',
-      'source_start_at',
-      'source_end_at',
-      'source_released_at',
-      'source_modified_at'
-    ]
-  },
-  index_setting: {
-    views: {
-      attributesToHighlight: [
-        'view_title',
-        'view_abstract',
-        'source_title',
-        'source_abstract'
-      ]
-    }
+      'view_type'
+    ],
+    facets: ['source_keywords', 'source_keywords_m49', 'view_type']
   }
 };
 

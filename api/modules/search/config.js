@@ -3,17 +3,17 @@ const languages = validation_defaults.languages;
 
 const config = {
   // Distinct keywords currently used
-  keywords: {
+  idx_keywords: {
     primaryKey : 'id_hash',
     searchableAttributes: ['keyword']
   },
   // All m49 keywords from dict in DB
-  keywords_m49: {
+  idx_keywords_m49: {
     primaryKey : 'id',
     searchableAttributes: ['id', ...languages.codes]
   },
   // public views
-  views: {
+  idx_views: {
     primaryKey : 'view_id',
     atributesForFaceting: [
       'view_type',

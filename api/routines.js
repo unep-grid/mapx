@@ -9,7 +9,7 @@ moduleAlias.addAliases({
 });
 const migrate = require('@mapx/migrate');
 const language = require('@mapx/language');
-const {updateIndex} = require('@mapx/meili');
+const {updateIndexes} = require('@mapx/search');
 const {once, onceInterval} = require('@mapx/helpers');
 
 /*
@@ -18,27 +18,30 @@ const {once, onceInterval} = require('@mapx/helpers');
  */
 const updateDb = () => migrate.apply();
 const updateLanguage = () => language.init();
-const updateIndexes = () => updateIndex();
+const updateIndexesRoutine = () => updateIndexes({});
 
 /**
  * Config
  */
 const optCommon = {
-  timeoutMs: 1 * 60 * 1000,
-  onSuccess: (r) => {
-    console.log(`Update success for ${r.name}`);
+  timeoutMs: 10 * 60 * 1000,
+  onSuccess: (cbs) => {
+    const str = cbs.map(c=>c.name).join(',');
+    console.log(`Update success for ${str}`);
   },
-  onError: (r, e) => {
-    console.error(`Update failed for ${r.name}`, e);
+  onError: (cbs,e) => {
+    const str = cbs.map(c=>c.name).join(',');
+    console.error(`Update for ${str} had issue`, e);
   }
 };
 const optHourly = Object.assign({}, optCommon, {
-  intervalMs: 10 * 60 * 60 * 1000
+  intervalMs: 10 * 60 * 60 * 1000,
+  before: false
   //intervalMs: 1 * 60 * 60 * 1000
 });
 
 /**
  * Apply
  */
-once([updateDb, updateLanguage], optCommon);
-onceInterval([updateIndexes], optHourly);
+once([updateDb, updateLanguage, updateIndexes], optCommon);
+onceInterval([updateIndexesRoutine], optHourly);

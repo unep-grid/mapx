@@ -641,7 +641,7 @@ details > summary {
  *
  */
 .btn-icon {
-  margin: 5px;
+  margin-left: 5px;
 }
 .btn-icon > span {
   margin-right: 5px;

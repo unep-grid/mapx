@@ -17,9 +17,10 @@ module.exports = Object.assign(s, {
     host: env.REDIS_HOST
   },
   meili: {
-    master_key: env.MEILI_MASTER_KEY,
+    master_key: env.MEILI_KEY_MASTER,
     port: env.MEILI_PORT,
-    host: env.MEILI_HOST
+    host: env.MEILI_HOST,
+    protocol : env.MEILI_PROTOCOL
   },
   db: {
     name: env.POSTGRES_DB,

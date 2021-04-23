@@ -3,10 +3,7 @@ const s = require('@root/settings');
 const {Pool, types} = require('pg');
 const redis = require('redis');
 const {promisify} = require('util');
-//const readFile = promisify(fs.readFile);
-//const readDir = promisify(fs.readdir);
 const { MeiliSearch } = require('meilisearch');
-
 /*
  * custom type parsing
  */
@@ -55,8 +52,9 @@ pgRead.on('error', (err) => {
 });
 
 /**
-* Set custom pool
-*/ 
+ * Set custom pool
+ */
+
 const pgCustom = new Pool({
   host: s.db.host,
   user: s.db.custom.user,
@@ -92,10 +90,10 @@ pgAdmin.on('error', (err) => {
   process.exit(-1);
 });
 
-
 /**
-* Redis
-*/ 
+ * Redis
+ */
+
 const clientRedis = redis.createClient({
   url: 'redis://' + s.redis.host + ':' + s.redis.port
 });
@@ -108,14 +106,13 @@ clientRedis.on('error', (err) => {
 const redisGet = promisify(clientRedis.get).bind(clientRedis);
 const redisSet = promisify(clientRedis.set).bind(clientRedis);
 
-/**
+ /**
 * MeiliSearch
-*/ 
+*/
 const meili = new MeiliSearch({
-  host: `http://${s.meili.host}:${s.meili.port}`, 
+  host: `${s.meili.protocol}${s.meili.host}:${s.meili.port}`,
   apiKey: s.meili.master_key || null
 });
-
 
 module.exports = {
   redisGet,
@@ -125,11 +122,5 @@ module.exports = {
   pgRead,
   pgWrite,
   pgAdmin,
-  meili,
+  meili
 };
-
-
-
-
-
-

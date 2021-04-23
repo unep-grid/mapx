@@ -9,6 +9,10 @@
   },
   "author": "Fred Moser",
   "license": "MIT",
+  "old_dep": {
+    "@babel/runtime": "^7.13.10",
+    "typesense": "^0.11.2"
+  },
   "dependencies": {
     "@fxi/mx_valid": "0.0.8",
     "@turf/turf": "^5.1.6",
