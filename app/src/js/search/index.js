@@ -146,7 +146,6 @@ class Search extends EventSimple {
           on: {
             input: () => {
               s.update();
-              s.autosize();
             }
           }
         })),
@@ -169,10 +168,10 @@ class Search extends EventSimple {
   /**
    * Resize text area according to height of scrollHeight
    */
-  autosize() {
+  autosize(elTarget) {
     const s = this;
-    s._elInput.style.height = '';
-    s._elInput.style.height = 5 + s._elInput.scrollHeight + 'px';
+    elTarget.style.height = '';
+    elTarget.style.height = 5 + s._elInput.scrollHeight + 'px';
   }
 
   async _handleClick(e) {
@@ -411,6 +410,9 @@ class Search extends EventSimple {
         const results = await s._index.search(search.q, search);
         const fragItems = await s.buildList(results.hits);
         s._elResults.replaceChildren(fragItems);
+        if (s._elResults.firstChild) {
+          s._elResults.firstChild.scrollIntoView();
+        }
         const elPaginationItems = s.buildPaginationItems(results);
         s._elPagination.replaceChildren(elPaginationItems);
       } catch (e) {
