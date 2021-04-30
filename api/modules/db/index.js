@@ -3,7 +3,7 @@ const s = require('@root/settings');
 const {Pool, types} = require('pg');
 const redis = require('redis');
 const {promisify} = require('util');
-const { MeiliSearch } = require('meilisearch');
+const {MeiliSearch} = require('meilisearch');
 /*
  * custom type parsing
  */
@@ -106,11 +106,11 @@ clientRedis.on('error', (err) => {
 const redisGet = promisify(clientRedis.get).bind(clientRedis);
 const redisSet = promisify(clientRedis.set).bind(clientRedis);
 
- /**
-* MeiliSearch
-*/
+/**
+ * MeiliSearch
+ */
 const meili = new MeiliSearch({
-  host: `${s.meili.protocol}${s.meili.host}:${s.meili.port}`,
+  host: `http://${s.meili.host}:${s.meili.port}`,
   apiKey: s.meili.master_key || null
 });
 

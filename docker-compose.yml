@@ -21,6 +21,7 @@ services:
       - ./_shared/traefik/certs:/certs
   search:
     image: getmeili/meilisearch:v0.20.0
+    env_file: mapx.dev.env
     restart: always
     hostname: search
     labels:
@@ -32,10 +33,6 @@ services:
       - searchidx:/data.ms
     ports:
       - 7700
-    environment:
-      - MEILI_NO_ANALYTICS=true
-      - MEILI_NO_SENTRY=true
-      - MEILISEARCH_MASTER_KEY=co2imfc3_k
   app:
     env_file: mapx.dev.env
     build: ./app/.
