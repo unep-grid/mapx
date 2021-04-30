@@ -9,6 +9,6 @@ echo "1. './_shared' directory and subdirectories created (only if missing)..."
 
 if [ ! -f mapx.dev.env ]
 then
-  cp -p mapx.dev.default_env mapx.dev.env
-	echo "2. './mapx.dev.default_env' file was copied as './mapx.dev.env'..."
+  cp -p mapx.dev.EXAMPLE.env mapx.dev.env
+	echo "2. './mapx.dev.EXAMPLE.env' file was copied as './mapx.dev.env'..."
 fi

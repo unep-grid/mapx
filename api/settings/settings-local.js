@@ -17,7 +17,7 @@ module.exports = Object.assign(s, {
     host: env.REDIS_HOST
   },
   meili: {
-    master_key: env.MEILI_KEY_MASTER,
+    master_key: env.MEILI_MASTER_KEY,
     port: env.MEILI_PORT,
     host: env.MEILI_HOST,
     protocol : env.MEILI_PROTOCOL
