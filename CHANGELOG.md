@@ -1,5 +1,8 @@
 ## Changelog
 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.18' target='_blank'>1.8.18</a>
+   - APP/API
+    - Added prototype for instant search on MapX public catalog
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.17' target='_blank'>1.8.17</a>
    - APP
     - Fixed project changes when swiping the projet list with touch devices
