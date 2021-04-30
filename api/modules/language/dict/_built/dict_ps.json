@@ -6705,6 +6705,21 @@
     "ps": "کلیدي ټکي دلته دننه کړئ ..."
   },
   {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "ps": "د سرچینې ټکي"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "ps": "سرچینه جیو ټکي"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "ps": "ډول وګوره"
+  },
+  {
     "id": "search_source_title",
     "en": "Source title",
     "ps": "د سرچینې سرلیک"
@@ -6731,12 +6746,67 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Show / hide the view ( add as temporary external view if needed )",
-    "ps": "لید ښکاره کول / پټول (د اړتیا په صورت کې د لنډمهاله بهرني لید په توګه اضافه کړئ)"
+    "en": "Add this view to the list and open it",
+    "ps": "دا لید لست کې اضافه کړئ او خلاص یې کړئ"
   },
   {
     "id": "search_clear_query",
     "en": "Clear query",
     "ps": "روښانه پوښتنه"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "ps": "پاک"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "ps": "د فلټرونو پینل ٹوگل کړئ"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "ps": "د تعدیل نیټه وګورئ"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "ps": "د جوړولو نیټه وګورئ"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "ps": "د سرچینې ریکارډونه د پیل نیټه"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "ps": "د سرچینې ریکارډونه د پای نیټه"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "ps": "د سرچینې د خپریدو نیټه"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "ps": "د سرچینې د تعدیل نیټه"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "ps": "په نیټه چاter"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "ps": "ایا تاسو غواړئ اوس کیسه و لوبئ؟"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "ps": "د کيسې نقشه اوتومات لوبه"
   }
 ]

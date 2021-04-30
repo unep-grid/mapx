@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "meilisearch": "^0.18.1"
+    "flatpickr": "^4.6.9",
+    "meilisearch": "^0.18.1",
+    "tributejs": "^5.1.3"
   }
 }

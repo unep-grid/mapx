@@ -53,7 +53,7 @@ class HintHack {
   async update(e) {
     const hh = this;
     try {
-      if (!e.target || !e.target.getAttribute || !e.target.className) {
+      if (!e.target || !e.target.getAttribute || !e.target.className || !e.target.className.match) {
         return;
       }
       if (hh._target && hh._target.contains(e.target)) {

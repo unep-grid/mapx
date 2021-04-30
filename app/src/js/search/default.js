@@ -2,13 +2,13 @@ const def = {
   key: null,
   host: 'localhost',
   port: 80,
-  protocol:'',
-  container: '#idcontainer',
+  protocol: '',
+  container: 'idcontainer',
   language: 'en',
   index_template: 'views_{{language}}',
   index: 'views_en',
-  meili : {
-    index_setting:{}
+  meili: {
+    index_setting: {}
   },
   attributes: {
     date: [
@@ -32,9 +32,22 @@ const def = {
       'view_id',
       'project_id',
       'view_type'
-    ],
-    facets: ['source_keywords', 'source_keywords_m49', 'view_type']
-  }
+    ]
+  },
+  keywords: [
+    {
+      type: 'source_keywords',
+      icon: 'fa-tag'
+    },
+    {
+      type: 'source_keywords_m49',
+      icon: 'fa-map-marker'
+    },
+    {
+      type: 'view_type',
+      icon: 'fa-file-o'
+    }
+  ]
 };
 
 export {def};

@@ -1,20 +1,10 @@
 import * as test from './../is_test/index.js';
 import {getView} from './../mx_helper_map.js';
-import {path} from './../mx_helper_misc.js';
 export * from './../is_test/index.js';
 /**
  * MapX specific method to extend 'is_test'
  */
 
-/**
- * Test if story map
- * @param {Object} item Item to test
- * @return {Boolean}
- */
-
-export function isStory(item) {
-  return isView(item) && !!path(item, 'data.story', false);
-}
 
 /**
  * Test if item is an language object, e.g. as defined in json schema
@@ -22,7 +12,6 @@ export function isStory(item) {
  * @return {Boolean}
  */
 export function isLanguageObject(item) {
-  const languages = mx.settings.languages;
   const isObject = test.isObject(item);
   if (!isObject) {
     return false;
@@ -32,14 +21,24 @@ export function isLanguageObject(item) {
    * No other keys than language code allowed,
    * but missing keys accepted.
    */
-
-  for (let l of languages) {
-    if (keys.indexOf(l) == -1) {
+  for (let k of keys) {
+    if(isLanguageId(k)){
       return false;
     }
   }
   return true;
 }
+
+/**
+* Test if language code os supported
+* @param {String} id Two letter language id
+* @return {Boolean}
+*/ 
+export function isLanguageId(id){
+  return mx.settings.languages.includes(id)
+}
+
+
 
 /**
  * Test if item is an language object array, e.g. as defined in json schema

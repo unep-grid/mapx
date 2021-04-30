@@ -893,41 +893,37 @@ export async function initMapx(o) {
       });
       const urlKeyFetch = `${urlKey}?${qs}`;
       const keyData = await fetch(urlKeyFetch).then((r) => r.json());
-      new Search({
+      mx.search = new Search({
         key: keyData.key,
         container: '#mxTabPanelSearch',
         host: ss.search.host,
         protocol: ss.search.protocol,
         port: ss.search.port,
         language: mx.settings.language,
-        index_template: 'views_{{language}}',
-      }).then((s) => {
-        mx.search = s;
-        /**
-         * On language change, update
-         */
-        mx.events.on({
-          type: 'language_change',
-          idGroup: 'search_index',
-          callback: (data) => {
-            if (mx.search) {
-              const lang = data?.new_language;
-              mx.search.setOpt({
-                language: lang,
-                index: `views_${lang}`
-              });
-            }
-          }
-        });
-        /**
-         * On tab change to search, perform a search
-         */
-        mx.panel_main.on('tab_change', (e, id) => {
-          if (id === 'search') { 
-            mx.search.update();
-          }
-        });
+        index_template: 'views_{{language}}'
       });
+
+      /**
+       * On tab change to search, perform a search
+       */
+      mx.panel_main.on('tab_change', (e, id) => {
+        if (id === 'search') {
+          mx.search.update();
+        }
+      });
+
+      /**
+       * On language change, update
+       */
+      mx.events.on({
+        type: 'language_change',
+        idGroup: 'search_index',
+        callback: (data) => {
+          mx.search.setLanguage(data?.new_language);
+        }
+      });
+
+      console.log('mx instant search ready');
     } catch (e) {
       console.error(e);
     }
@@ -5086,44 +5082,69 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
-  const h = mx.helpers;
-  const map = h.getMap();
-
-  if (h.isViewId(o)) {
-    o = {
-      idView: o
-    };
-  }
-
-  const isArray = h.isArray(o.idView);
-  o.idView = isArray ? o.idView[0] : o.idView;
-  o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-  const view = h.getView(o.idView);
-
-  if (!h.isView(view)) {
-    return;
-  }
-
   try {
-    h.setBusy(true);
-    const sum = await h.getViewSourceSummary(view);
-    const extent = h.path(sum, 'extent_sp', null);
+    const h = mx.helpers;
+    const map = h.getMap();
+    const timeout = 3 * 1000;
+    let cancelByTimeout = false;
 
-    if (!extent) {
-      throw new Error(`No extent found for ${view.id}`);
+    if (h.isViewId(o)) {
+      o = {
+        idView: o
+      };
     }
 
-    const llb = new mx.mapboxgl.LngLatBounds(
-      [extent.lng1, extent.lat1],
-      [extent.lng2, extent.lat2]
-    );
-    map.fitBounds(llb);
+    const isArray = h.isArray(o.idView);
+    o.idView = isArray ? o.idView[0] : o.idView;
+    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+    const view = h.getView(o.idView);
+
+    if (!h.isView(view)) {
+      console.warn('zoomToViewId : view object required');
+      return;
+    }
+
+    const res = await Promise.race([zoom(), wait(timeout)]);
+
+    if (res === 'timeout') {
+      console.warn(
+        `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`
+      );
+    }
+
+    async function zoom() {
+      const sum = await h.getViewSourceSummary(view);
+      const extent = h.path(sum, 'extent_sp', null);
+
+      if (cancelByTimeout) {
+        return;
+      }
+
+      if (!extent) {
+        console.warn(`zoomToViewId no extent found for ${view.id}`);
+        return;
+      }
+
+      const llb = new mx.mapboxgl.LngLatBounds(
+        [extent.lng1, extent.lat1],
+        [extent.lng2, extent.lat2]
+      );
+
+      map.fitBounds(llb);
+      return true;
+    }
+
+    async function wait(n) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          cancelByTimeout = true;
+          resolve('timeout');
+        }, n || 1000);
+      });
+    }
   } catch (e) {
-    h.setBusy(false);
     throw new Error(e);
   }
-
-  h.setBusy(false);
 }
 
 /**
@@ -5133,7 +5154,6 @@ export async function zoomToViewId(o) {
  */
 export async function getViewsBounds(views) {
   const h = mx.helpers;
-  let bounds;
   views = views.constructor === Array ? views : [views];
   let set = false;
   const def = {

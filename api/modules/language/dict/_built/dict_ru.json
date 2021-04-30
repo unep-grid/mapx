@@ -6705,6 +6705,21 @@
     "ru": "Введите здесь ключевые слова ..."
   },
   {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "ru": "Исходные ключевые слова"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "ru": "Исходные гео-ключевые слова"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "ru": "Тип просмотра"
+  },
+  {
     "id": "search_source_title",
     "en": "Source title",
     "ru": "Название источника"
@@ -6731,12 +6746,67 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Show / hide the view ( add as temporary external view if needed )",
-    "ru": "Показать / скрыть представление (при необходимости добавить как временное внешнее представление)"
+    "en": "Add this view to the list and open it",
+    "ru": "Добавьте это представление в список и откройте его"
   },
   {
     "id": "search_clear_query",
     "en": "Clear query",
     "ru": "Очистить запрос"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "ru": "ясно"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "ru": "Переключить панель фильтров"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "ru": "Дата изменения представления"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "ru": "Дата создания представления"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "ru": "Дата начала записи источника"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "ru": "Дата окончания записи источника"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "ru": "Дата выпуска источника"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "ru": "Дата изменения источника"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "ru": "Фильтровать по дате"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "ru": "Хотели бы вы сыграть в историю сейчас?"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "ru": "Автоматическое воспроизведение сюжетной карты"
   }
 ]

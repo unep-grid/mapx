@@ -99,6 +99,16 @@ export function isViewLocal(item) {
 }
 
 /**
+ * Test if story map
+ * @param {Object} item Item to test
+ * @return {Boolean}
+ */
+export function isStory(item) {
+  return isViewType(item,'sm') && !!item?.data?.story;
+}
+
+
+/**
  * Generic "array of" tester
  * @param {Array} arr Array
  * @param {Function} fun Function

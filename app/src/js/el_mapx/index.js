@@ -290,6 +290,7 @@ function elSpanTranslate(key, lang) {
  * @param {Object} opt.dataset Button dataset
  * @param {Object} opt.style Additional style
  * @param {String} opt.badgeContent Value to show in badge
+ * @param {Element} opt.content Additinal content
  */
 function elButtonIcon(key, opt) {
   opt = Object.assign(
@@ -300,7 +301,8 @@ function elButtonIcon(key, opt) {
       icon: null,
       dataset: {},
       badgeContent: null,
-      style : null
+      style : null,
+      content : null
     },
     opt
   );
@@ -308,6 +310,7 @@ function elButtonIcon(key, opt) {
   const addIcon = opt.mode === 'text_icon' || opt.mode === 'icon';
   const addText = opt.mode === 'text_icon' || opt.mode === 'text';
   const addBadge = !!opt.badgeContent; 
+  const addContent = !!opt.content;
 
   if (addIcon && !addText) {
     opt.dataset.lang_type = 'tooltip';
@@ -326,7 +329,8 @@ function elButtonIcon(key, opt) {
     [
       addBadge ? el('span', {class: ['badge']}, `${opt.badgeContent}`) : false,
       addText ? elSpanTranslate(key) : false,
-      addIcon ? el('i', {class: ['fa', opt.icon]}) : false
+      addIcon ? el('i', {class: ['fa', opt.icon]}) : false,
+      addContent ? opt.content : false
     ]
   );
 

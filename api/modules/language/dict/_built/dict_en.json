@@ -5364,6 +5364,18 @@
     "en": "Enter keywords here ..."
   },
   {
+    "id": "search_source_keywords",
+    "en": "Source keywords"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type"
+  },
+  {
     "id": "search_source_title",
     "en": "Source title"
   },
@@ -5385,10 +5397,54 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Show / hide the view ( add as temporary external view if needed )"
+    "en": "Add this view to the list and open it"
   },
   {
     "id": "search_clear_query",
     "en": "Clear query"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play"
   }
 ]
