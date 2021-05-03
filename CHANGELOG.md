@@ -1,4 +1,9 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.20-alpha' target='_blank'>1.8.20-alpha</a>
+   - APP
+    - Solved an issue with EPGS code searching
+   - API
+    - Solved an issue with missing server-side translation
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.19-alpha' target='_blank'>1.8.19-alpha</a>
    - Merged search feature in master 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.18-alpha' target='_blank'>1.8.18-alpha</a>
