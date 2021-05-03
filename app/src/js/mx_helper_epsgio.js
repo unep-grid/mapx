@@ -1,4 +1,3 @@
-
 export function epsgBuildSearchBox(opt) {
   const h = mx.helpers;
   const el = h.el;
@@ -148,24 +147,21 @@ export function epsgBuildSearchBox(opt) {
      * Reset list search
      */
     elResults.innerHTML = '';
-    const res = epsgQuery(txt);
+
+    const res = await epsgQuery(txt);
 
     if (res.length === 0) {
-      var elEmpty = el('button', {
+      const elEmpty = el('button', {
         class: ['btn', 'btn-default', 'epsgio-btn-choose', 'disabled']
       });
-
-      h.getDictItem('noValue').then((r) => {
-        elEmpty.innerText = r;
-      });
-
+      elEmpty.innerText = await h.getDictItem('noValue');
       elResults.appendChild(elEmpty);
     } else {
       res.forEach((r) => {
         /**
          * Build select button
          */
-        var elRow = el(
+        const elRow = el(
           'div',
           el('button', {
             on: ['click', choose],
@@ -183,22 +179,19 @@ export function epsgBuildSearchBox(opt) {
 }
 
 /**
- * Validate epsg
+ * Search epsg.io database using string value
+ * @param {String} str Any string, like country name, region, or code
+ * @return {Array} Array of match projection system
  */
-export async function epsgQuery(code) {
-  const h = mx.helpers;
-  const url = 'https://epsg.io/?q=' + code + '&format=json';
+export async function epsgQuery(str) {
+  const url = `https://epsg.io/?q=${str}&format=json`;
   const res = [];
 
-  if (!h.isNumeric(code)) {
-    return res;
-  }
-
-  try{
+  try {
     const resFetch = await fetch(url);
     const resJson = await resFetch.json();
     res.push(...resJson.results);
-  }catch(e){
+  } catch (e) {
     console.warn(e);
   }
   return res;

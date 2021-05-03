@@ -1,7 +1,6 @@
 const {readTxt, parseTemplate} = require('@mapx/helpers');
 const {pgAdmin, pgRead} = require('@mapx/db');
-//const {pipeline} = require('stream/promises');
-//const pgCopyFrom = require('pg-copy-streams').from;
+
 const fs = require('fs');
 const path = require('path');
 const dir = 'dict/_built';
@@ -10,10 +9,19 @@ const files = fs.readdirSync(path.join(__dirname, dir));
 const dicts_lang = files.filter((f) => f.match(/.*dict_[a-z]{2}\.json$/gm));
 const dict_full = path.join(__dirname, dir, 'dict_full.json');
 
+dicts_lang.forEach((file) => {
+  const name = path.parse(file).name;
+  const lang = name.split(/_|\./)[1];
+  const data = JSON.parse(readTxt(path.join(__dirname, dir, file)));
+  db[lang] = {};
+  data.forEach((d) => {
+    db[lang][d.id] = d[lang] || d.en || d.id;
+  });
+});
+
 /**
  * Init language;
  */
-
 async function init() {
   try {
     /**
@@ -24,21 +32,6 @@ async function init() {
     if (done) {
       console.log(`Imported dict in ${Date.now() - start} ms`);
     }
-
-    /**
-     * Populate language object, used in translate function
-     * e.g. data.en.id = 'value'
-     * @param {String} file File path
-     */
-    dicts_lang.forEach((file) => {
-      const name = path.parse(file).name;
-      const lang = name.split(/_|\./)[1];
-      const data = JSON.parse(readTxt(path.join(__dirname, dir, file)));
-      db[lang] = {};
-      data.forEach((d) => {
-        db[lang][d.id] = d[lang] || d.en || d.id;
-      });
-    });
   } catch (e) {
     console.error(e);
   }
