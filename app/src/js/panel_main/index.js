@@ -2,6 +2,7 @@ import {ButtonPanel} from './../button_panel';
 import {el} from './../el/src/index.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import './less/mx_panel.less';
+import {EventSimple} from './../listener_store';
 
 /**
  * This is a partial implementation of the main MapX panel
@@ -31,8 +32,9 @@ const settings = {
   }
 };
 
-class MainPanel {
+class MainPanel extends EventSimple {
   constructor(opt) {
+    super();
     const mp = this;
     mp.opt = Object.assign({}, opt);
     Object.keys(settings).forEach((k) => {
@@ -74,21 +76,33 @@ class MainPanel {
       }
     }
     mp.elTabs = mp.elContent.querySelector('.mx-tab--tabs');
-    mp.elTabs.addEventListener('pointerdown', mp.handleTabClick);
+    mp.elTabs.addEventListener('click', mp.handleTabClick);
   }
   handleTabClick(e) {
     const mp = this;
-    if (e.target.dataset.btn_tab) {
-      e.preventDefault();
-      e.stopPropagation();
-      const elTab = e.target;
-      const elPanel = mp.elContent.querySelector(`#${elTab.dataset.btn_tab}`);
-      const elPanels = mp.elContent.querySelectorAll('.mx-tab--panel');
-      const elTabs = mp.elContent.querySelectorAll('.mx-tab--tab');
+    const elTab = e.target;
+    const idTab = elTab.dataset.tab;
+    if (idTab) {
+      mp.tabActivate(idTab);
+    }
+  }
+  tabActivate(id) {
+    const mp = this;
+    const elPanels = mp.elContent.querySelectorAll('.mx-tab--panel');
+    const elTabs = mp.elContent.querySelectorAll('.mx-tab--tab');
+    const elPanel = mp.elContent.querySelector(`[data-panel=${id}]`);
+    const elTab = mp.elContent.querySelector(`[data-tab=${id}]`);
+
+    if (elTab) {
+      const isActive = elTab.classList.contains('active');
+      if (isActive) {
+        return;
+      }
       elPanels.forEach((el) => el.classList.remove('active'));
       elTabs.forEach((el) => el.classList.remove('active'));
       elTab.classList.add('active');
       elPanel.classList.add('active');
+      mp.fire('tab_change', id);
     }
   }
 }

@@ -223,12 +223,22 @@ class EventStore {
   }
   /**
    * Register new listener for eventy type
-   * @param {Object} opt options
+   * @param {Object||String} opt options or event type
    * @param {String||Array} opt.type Type of event
    * @param {String} opt.idGroup Id of group
    * @param {Function} opt.callback Callback to trigger
+   * @param {Function} cb Alternative callback to trigger
+   * @param {String} id Alternative id group
    */
-  on(opt) {
+  on(opt, cb, id) {
+    if (typeof opt === 'string' && cb instanceof Function) {
+      opt = {
+        type: opt,
+        idGroup: id || 'default',
+        callback: cb
+      };
+    }
+
     opt = Object.assign({}, opt);
     if (!opt.type || !opt.idGroup || !opt.callback) {
       throw new Error('Missing argument');
@@ -272,10 +282,10 @@ class EventStore {
   }
 }
 
-
 /**
-* Simple event management
-*/ 
+ * Simple event management
+ */
+
 class EventSimple {
   constructor() {
     const evt = this;

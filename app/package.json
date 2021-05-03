@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.8.17",
+  "version": "1.8.18-alpha",
   "description": "",
   "main": "main.js",
   "devDependencies": {
@@ -75,11 +75,11 @@
     "@fxi/el": "^0.1.6",
     "@mapbox/mapbox-gl-draw": "^1.2.1",
     "@turf/turf": "^5.1.6",
+    "ContentTools": "^1.6.12",
     "ace-builds": "^1.4.12",
     "bootstrap": "^3.4.1",
     "chroma-js": "^2.1.0",
     "codemirror": "^5.59.1",
-    "ContentTools": "^1.6.12",
     "cookies-js": "^1.2.3",
     "core-js": "^3.8.2",
     "csvjson": "^5.1.0",
@@ -106,7 +106,6 @@
     "json-editor": "^0.7.28",
     "json-formatter-js": "^2.3.4",
     "jsondiffpatch": "^0.3.11",
-    "jspdf": "^1.5.3",
     "jszip": "^3.5.0",
     "mapbox-gl": "^2.0.1",
     "mapbox-gl-draw-circle": "^1.1.2",

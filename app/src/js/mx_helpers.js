@@ -4,10 +4,7 @@ export * from './mx_helper_cookies.js';
 export * from './mx_helper_log.js';
 export * from './mx_helper_utils_xml.js';
 export * from './mx_helper_utils_json.js';
-export * from './mx_helper_el.js'; /* createElement / simple framework */
-export * from './mx_helper_is_test.js'; /* test "is" isArray, isObject, isNumeric, is... */
 export * from './mx_helper_misc.js';
-export * from './mx_helper_read_more.js';
 export * from './mx_helper_modal.js';
 export * from './mx_helper_selectize.js';
 export * from './mx_helper_language.js';
@@ -57,7 +54,10 @@ export * from './mx_helper_issues.js';
 /**
 * imported module available in mx.helpers 
 */
-
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';
 export * from './color_utils/index.js';
+export * from './el_mapx/index.js';
+export * from './is_test';
+export * from './is_test_mapx';
+

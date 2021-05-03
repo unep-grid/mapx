@@ -1,8 +1,9 @@
 import {el} from '@fxi/el';
+import {elSpanTranslate} from './../el_mapx/index.js';
 import {modal, modalConfirm, modalPrompt} from './../mx_helper_modal.js';
 import {Button} from './../panel_controls/button.js';
 import {ControlsPanel} from './../panel_controls/index.js';
-import {getDictTemplate, getTranslationTag} from './../mx_helper_language.js';
+import {getDictTemplate} from './../mx_helper_language.js';
 import {bindAll} from './../bind_class_methods/index.js';
 import {spatialDataToView} from './../mx_helper_map_dragdrop.js';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
@@ -165,10 +166,10 @@ class MapxDraw extends EventSimple {
     const hasData = md.hasData();
     if (hasData) {
       const discard = await modalConfirm({
-        title: getTranslationTag('draw_discard_change_title'),
-        content: getTranslationTag('draw_discard_change'),
-        cancel: getTranslationTag('draw_discard_change_btn_cancel'),
-        confirm: getTranslationTag('draw_discard_change_btn_confirm')
+        title: elSpanTranslate('draw_discard_change_title'),
+        content: elSpanTranslate('draw_discard_change'),
+        cancel: elSpanTranslate('draw_discard_change_btn_cancel'),
+        confirm: elSpanTranslate('draw_discard_change_btn_confirm')
       });
       return discard;
     }
@@ -278,8 +279,8 @@ class MapxDraw extends EventSimple {
             const idStorage = 'mx_draw_circle_radius';
             const previousRadius = localStorage.getItem(idStorage);
             const radius = await modalPrompt({
-              title: getTranslationTag('draw_mode_circle_radius_prompt_title'),
-              label: getTranslationTag('draw_mode_circle_radius_prompt_label'),
+              title: elSpanTranslate('draw_mode_circle_radius_prompt_title'),
+              label: elSpanTranslate('draw_mode_circle_radius_prompt_label'),
               inputOptions: {
                 value: previousRadius * 1,
                 type: 'numeric'
@@ -371,7 +372,7 @@ class MapxDraw extends EventSimple {
     return modal({
       noShinyBinding: true,
       addSelectize: false,
-      title: getTranslationTag('draw_help_title'),
+      title: elSpanTranslate('draw_help_title'),
       content: elInfo,
       addBackground: true
     });
@@ -384,20 +385,20 @@ class MapxDraw extends EventSimple {
       const elForm = el(
         'form',
         el('div', {class: 'form-group'}, [
-          el('label', getTranslationTag('draw_feature_type')),
+          el('label', elSpanTranslate('draw_feature_type')),
           (elType = el(
             'select',
             {class: 'form-control'},
-            el('option', {value: 'point'}, getTranslationTag('draw_point')),
-            el('option', {value: 'line'}, getTranslationTag('draw_line')),
-            el('option', {value: 'polygon'}, getTranslationTag('draw_polygon'))
+            el('option', {value: 'point'}, elSpanTranslate('draw_point')),
+            el('option', {value: 'line'}, elSpanTranslate('draw_line')),
+            el('option', {value: 'polygon'}, elSpanTranslate('draw_polygon'))
           ))
         ]),
         el('div', {class: 'form-group'}, [
           el(
             'label',
             {class: 'control-label'},
-            getTranslationTag('draw_layer_name')
+            elSpanTranslate('draw_layer_name')
           ),
           (elTitle = el('input', {
             class: 'form-control',
@@ -423,12 +424,12 @@ class MapxDraw extends EventSimple {
             }
           }
         },
-        getTranslationTag('draw_config_submit')
+        elSpanTranslate('draw_config_submit')
       );
       md._modal_config = modal({
         noShinyBinding: true,
         addSelectize: false,
-        title: getTranslationTag('draw_config_title'),
+        title: elSpanTranslate('draw_config_title'),
         content: elForm,
         buttons: [elBtnSubmit],
         addBackground: true,
@@ -441,8 +442,8 @@ class MapxDraw extends EventSimple {
     const md = this;
     md.noActionIfEmpty('get_selected_ids', 'draw_btn_trash', async () => {
       const confirmed = await modalConfirm({
-        title: getTranslationTag('draw_trash_confirm_title'),
-        content: getTranslationTag('draw_trash_confirm_content')
+        title: elSpanTranslate('draw_trash_confirm_title'),
+        content: elSpanTranslate('draw_trash_confirm_content')
       });
       if (confirmed) {
         md._draw.trash();
@@ -468,10 +469,10 @@ class MapxDraw extends EventSimple {
       });
 
       const quit = await modalConfirm({
-        title: getTranslationTag('draw_saved_quit_title'),
-        content: getTranslationTag('draw_saved_quit'),
-        confirm: getTranslationTag('draw_saved_quit_confirm'),
-        cancel: getTranslationTag('draw_saved_quit_stay')
+        title: elSpanTranslate('draw_saved_quit_title'),
+        content: elSpanTranslate('draw_saved_quit'),
+        confirm: elSpanTranslate('draw_saved_quit_confirm'),
+        cancel: elSpanTranslate('draw_saved_quit_stay')
       });
 
       if (quit) {

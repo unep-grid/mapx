@@ -79,11 +79,11 @@ export function addSourceMetadataToView(opt) {
   });
 }
 
-export function viewToMetaModal(view) {
+export async function viewToMetaModal(view) {
   const h = mx.helpers;
   const el = h.el;
   const id = h.isView(view) ? view.id : view;
-  view = mx.helpers.getView(id);
+  view = h.getView(id) || await h.getViewRemote(id);
   const meta = {};
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
   const hasSourceMeta =
@@ -129,7 +129,8 @@ export function viewToMetaModal(view) {
 
     const elModal = h.modal({
       title: elTitleModal,
-      content: elContent
+      content: elContent,
+      addBackground : true
     });
 
     h.updateLanguageElements({

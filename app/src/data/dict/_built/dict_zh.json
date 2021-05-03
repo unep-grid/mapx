@@ -6693,5 +6693,120 @@
     "id": "nc_button",
     "en": "Notifications",
     "zh": "通知事项 "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "zh": "搜索MapX公共目录"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "zh": "在此处输入关键字..."
+  },
+  {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "zh": "来源关键字"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "zh": "来源地理关键字"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "zh": "查看类型"
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "zh": "来源标题"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "zh": "来源描述"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "zh": "视图描述"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "zh": "项目名称"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "zh": "显示完整的元数据"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Add this view to the list and open it",
+    "zh": "将此视图添加到列表中并打开它"
+  },
+  {
+    "id": "search_clear_query",
+    "en": "Clear query",
+    "zh": "清除查询"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "zh": "清除"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "zh": "切换过滤器面板"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "zh": "查看的修改日期"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "zh": "视图的创建日期"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "zh": "来源的记录开始日期"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "zh": "来源的记录结束日期"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "zh": "来源的发行日期"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "zh": "来源的修改日期"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "zh": "按日期筛选"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "zh": "你想现在播放这个故事吗？"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "zh": "故事图自动播放"
   }
 ]

@@ -92,6 +92,7 @@ config[["api"]] <- list(
   protocol = "http:",
   upload_size_max = 100 * 1024^2,#100MiB
   routes = list(
+    getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",
     getConfigMap = '/get/config/map',
     getTile = "/get/tile/{x}/{y}/{z}.mvt",
@@ -113,6 +114,17 @@ config[["api"]] <- list(
     collectLogs = "/collect/logs/"
   )
 )
+
+#
+# Search service config
+#
+config[["search"]] <- list(
+  protocol = "http://",
+  host = "localhost",
+  port = 7700
+)
+
+
 
 #
 # postgres configuration

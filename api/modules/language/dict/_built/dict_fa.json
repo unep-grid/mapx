@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "fa": "عنوان "
+    "fa": "پروژه"
   },
   {
     "id": "project_description",
@@ -6693,5 +6693,120 @@
     "id": "nc_button",
     "en": "Notifications",
     "fa": "اطلاعیه "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "fa": "در فهرست عمومی MapX جستجو کنید"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "fa": "کلمات کلیدی را اینجا وارد کنید ..."
+  },
+  {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "fa": "کلمات کلیدی منبع"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "fa": "کلمات کلیدی جغرافیایی منبع"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "fa": "نوع نمایش"
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "fa": "عنوان منبع"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "fa": "شرح منبع"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "fa": "شرح منظره"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "fa": "عنوان پروژه"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "fa": "نمایش فراداده کامل"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Add this view to the list and open it",
+    "fa": "این نما را به لیست اضافه کنید و آن را باز کنید"
+  },
+  {
+    "id": "search_clear_query",
+    "en": "Clear query",
+    "fa": "پاک کردن س Cleال"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "fa": "پاک کردن"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "fa": "صفحه فیلترها را تغییر دهید"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "fa": "تاریخ تغییر مشاهده"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "fa": "تاریخ ایجاد View"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "fa": "سوابق منبع تاریخ شروع"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "fa": "سوابق منبع تاریخ پایان است"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "fa": "تاریخ انتشار منبع"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "fa": "تاریخ اصلاح منبع"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "fa": "فیلتر بر اساس تاریخ"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "fa": "دوست دارید الان داستان را پخش کنید؟"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "fa": "داستان داستان بازی خودکار"
   }
 ]

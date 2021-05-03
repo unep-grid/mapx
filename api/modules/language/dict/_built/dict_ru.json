@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "ru": "Заголовок "
+    "ru": "Проект"
   },
   {
     "id": "project_description",
@@ -6693,5 +6693,120 @@
     "id": "nc_button",
     "en": "Notifications",
     "ru": "Уведомления "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "ru": "Поиск в общедоступном каталоге MapX"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "ru": "Введите здесь ключевые слова ..."
+  },
+  {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "ru": "Исходные ключевые слова"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "ru": "Исходные гео-ключевые слова"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "ru": "Тип просмотра"
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "ru": "Название источника"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "ru": "Описание источника"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "ru": "Описание вида"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "ru": "Название Проекта"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "ru": "Показать полные метаданные"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Add this view to the list and open it",
+    "ru": "Добавьте это представление в список и откройте его"
+  },
+  {
+    "id": "search_clear_query",
+    "en": "Clear query",
+    "ru": "Очистить запрос"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "ru": "ясно"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "ru": "Переключить панель фильтров"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "ru": "Дата изменения представления"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "ru": "Дата создания представления"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "ru": "Дата начала записи источника"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "ru": "Дата окончания записи источника"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "ru": "Дата выпуска источника"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "ru": "Дата изменения источника"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "ru": "Фильтровать по дате"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "ru": "Хотели бы вы сыграть в историю сейчас?"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "ru": "Автоматическое воспроизведение сюжетной карты"
   }
 ]

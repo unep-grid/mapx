@@ -1,3 +1,5 @@
+import {uiReadMore} from './readmore/index.js';
+
 /*
  * Convert result from getFeaturesValuesByLayers to HTML
  * @param {Object} o Options
@@ -8,7 +10,6 @@ export function featuresToPopup(o) {
   const h = mx.helpers;
   const popup = o.popup;
   const attributes = o.layersAttributes;
-  const map = h.getMap();
   const elContainer = h.el('div', {
     class: ['mx-popup-container', 'mx-scroll-styled']
   });
@@ -45,7 +46,7 @@ export function featuresToPopup(o) {
   }
 
   function updateReadMore() {
-    h.uiReadMore('.mx-prop-container', {
+    uiReadMore('.mx-prop-container', {
       maxHeightClosed: 100,
       selectorParent: elContainer,
       boxedContent: false
@@ -65,7 +66,7 @@ export function featuresToPopup(o) {
     const labels = h.path(view, '_meta.text.attributes_alias');
     const isVector = view.type === 'vt' || view.type === 'gj';
     const title = h.getViewTitle(idView);
-    var elLayer, elProps, elWait, elSpinner, elTitle;
+    var elLayer, elProps, elWait;
 
     try {
       /**
@@ -79,21 +80,21 @@ export function featuresToPopup(o) {
             l: idView
           }
         },
-        (elTitle = h.el(
+        h.el(
           'span',
           {
             class: 'mx-prop-layer-title'
           },
           title
-        )),
+        ),
         (elWait = h.el(
           'div',
           {
             class: 'mx-inline-spinner-container'
           },
-          (elSpinner = h.el('div', {
+          h.el('div', {
             class: 'fa fa-cog fa-spin'
-          }))
+          })
         )),
         (elProps = h.el('div'))
       );
@@ -118,12 +119,7 @@ export function featuresToPopup(o) {
        * For each attributes, add
        */
       attrNames.forEach((attribute) => {
-        var elValue,
-          elPropContainer,
-          elPropContent,
-          elPropWrapper,
-          elPropTitle,
-          elPropToggles;
+        var elValue, elPropContainer, elPropToggles;
 
         var values = h.getArrayStat({
           stat: 'sortNatural',
@@ -147,26 +143,26 @@ export function featuresToPopup(o) {
           {
             class: 'mx-prop-container'
           },
-          (elPropWrapper = h.el(
+          h.el(
             'div',
-            (elPropContent = h.el(
+            h.el(
               'div',
               {
                 class: 'mx-prop-content'
               },
-              (elPropTitle = h.el(
+              h.el(
                 'span',
                 {
                   class: 'mx-prop-title',
                   title: attribute
                 },
                 label
-              )),
+              ),
               (elPropToggles = h.el('div', {
                 class: 'mx-prop-toggles'
               }))
-            ))
-          ))
+            )
+          )
         );
 
         elProps.appendChild(elPropContainer);
@@ -301,7 +297,6 @@ export function featuresToPopup(o) {
       filter: filter,
       type: 'popup_filter'
     });
-
 
     filters[idV] = [];
   }

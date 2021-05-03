@@ -5,8 +5,8 @@
 export function isEmpty(item) {
   if (typeof item === 'undefined') {
     return true;
-  } else if (isString(item)){
-     return isEqual(item, '');
+  } else if (isString(item)) {
+    return isEqual(item, '');
   } else if (isObject(item)) {
     return isEqual(item, {});
   } else if (isArray(item)) {
@@ -46,11 +46,11 @@ export function isView(item) {
  * @param {Function} validator Additionnal validator that must return boolean
  */
 export function isViewType(item, type, validator) {
-  if(isString(validator)){
+  if (isString(validator)) {
     validator = new Function(`return ${validator}`)();
   }
   type = isArray(type) ? type : [type];
-  const valid = isFunction(validator) ? validator(item,this) : true;
+  const valid = isFunction(validator) ? validator(item, this) : true;
   const typeOk = type.reduce((a, t) => {
     return a ? a : item.type === t;
   }, false);
@@ -91,16 +91,30 @@ export function isViewEditable(item) {
  * @param {Object} item to test
  */
 export function isViewLocal(item) {
-  return isView(item) && isArray(item._components) && item._components.indexOf('view_local') > -1;
+  return (
+    isView(item) &&
+    isArray(item._components) &&
+    item._components.indexOf('view_local') > -1
+  );
 }
 
 /**
-* Generic "array of" tester
-* @param {Array} arr Array 
-* @param {Function} fun Function
-* @return {Boolean}
-*/ 
-export function isArrayOf(arr, fun){
+ * Test if story map
+ * @param {Object} item Item to test
+ * @return {Boolean}
+ */
+export function isStory(item) {
+  return isViewType(item,'sm') && !!item?.data?.story;
+}
+
+
+/**
+ * Generic "array of" tester
+ * @param {Array} arr Array
+ * @param {Function} fun Function
+ * @return {Boolean}
+ */
+export function isArrayOf(arr, fun) {
   return (
     isArray(arr) &&
     arr.reduce((a, i) => {
@@ -114,16 +128,8 @@ export function isArrayOf(arr, fun){
  * @param {Array} arr Array to test
  */
 export function isArrayOfViews(arr) {
-  return (
-    isArray(arr) &&
-    arr.reduce((a, i) => {
-      return !a ? a : isView(i);
-    }, true)
-  );
+   return isArrayOf(arr, isView);
 }
-
-
-
 
 // jshint ignore:start
 /**
@@ -142,12 +148,7 @@ export function isViewWms(view) {
  * @return {Boolean}
  */
 export function isArrayOfViewsId(arr) {
-  return (
-    isArray(arr) &&
-    arr.reduce((a, i) => {
-      return a === false ? a : isViewId(i);
-    }, true)
-  );
+  return isArrayOf(arr, isViewId);
 }
 
 /**
@@ -164,13 +165,12 @@ export function isSorted(arr, desc) {
   );
 }
 
-
 /**
-* Test for RegExp instance
-* @param {Any} value
-* @return {Logical} is RegExp instance
-*/
-export function isRegExp(value){
+ * Test for RegExp instance
+ * @param {Any} value
+ * @return {Logical} is RegExp instance
+ */
+export function isRegExp(value) {
   return value instanceof RegExp;
 }
 
@@ -226,12 +226,7 @@ export function isProject(p) {
  * @return {Boolean}
  */
 export function isProjectsArray(arr) {
-  return (
-    isArray(arr) &&
-    arr.reduce((a, p) => {
-      return a === false ? a : isProject(p);
-    }, true)
-  );
+   return isArrayOf(arr, isProject); 
 }
 /**
  * Test for promise
@@ -264,21 +259,11 @@ export function isIconFont(item) {
 export function isArray(item) {
   return !!item && typeof item === 'object' && Array.isArray(item);
 }
-export function isArrayOfString(arr) {
-  return (
-    isArray(arr) &&
-    arr.reduce((a, p) => {
-      return a === false ? a : isString(p);
-    }, true)
-  );
+export function isArrayOfString(item) {
+   return isArrayOf(item, isString);
 }
-export function isArrayOfNumber(arr) {
-  return (
-    isArray(arr) &&
-    arr.reduce((a, p) => {
-      return a === false ? a : isNumeric(p);
-    }, true)
-  );
+export function isArrayOfNumber(item) {
+  return isArrayOf(item, isNumeric); 
 }
 
 /**
@@ -286,12 +271,7 @@ export function isArrayOfNumber(arr) {
  * @param {Array} item array
  */
 export function isTable(item) {
-  return (
-    isArray(item) &&
-    (function() {
-      return item.reduce((a, i) => (!a ? a : isObject(i)), true);
-    })()
-  );
+  return isArrayOf(item, isObject);
 }
 
 export function isArrayOfObject(item) {

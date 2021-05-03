@@ -144,24 +144,22 @@ function readTxt(p) {
  * Simple template parsing
  */
 function parseTemplate(template, data) {
-  if(!template){
-    template = "< template empty >";
+  if (!template) {
+    template = '< template empty >';
   }
-  return template.replace(/{{([^{}]+)}}/g, (matched, key)=>{
+  return template.replace(/{{([^{}]+)}}/g, (matched, key) => {
     return data[key];
   });
 }
 
 /**
-* Combine sync method for readTxt + parseTemplate
-*/  
-function readTemplate(file,data){
+ * Combine sync method for readTxt + parseTemplate
+ */
+
+function readTemplate(file, data) {
   const txt = readTxt(file);
   return parseTemplate(txt, data);
 }
-
-
-
 
 /*
  * Get user ip
@@ -303,12 +301,129 @@ function mwGetConfigMap(req, res) {
 }
 
 /**
-* Delay
-*/
-function asyncDelay(ms){
-  return new Promise(resolve => setTimeout(resolve, ms))
+ * Delay
+ */
+function wait(duration) {
+  return new Promise((resolve, reject) => {
+    try {
+      setTimeout(resolve, duration);
+    } catch (e) {
+      reject(e);
+    }
+  });
+}
+const asyncDelay = wait;
+
+/**
+ * Apply once a serie of callback, with timeout
+ *
+ * @param {Array} cbs Array of callback
+ * @param {Object} opt Options
+ * @param {Number} opt.timeoutMs Maximum time (ms);
+ * @param {Function} opt.onSuccess Cb on sucess
+ * @param {Function} opt.onError Cb on error
+ */
+async function once(cbs, opt) {
+  opt = Object.assign(
+    {},
+    {
+      onError: console.error,
+      onSuccess: console.log,
+      timeoutMs: 1 * 60 * 1000
+    },
+    opt
+  );
+  try {
+    const r = await withTimeLimit(cbs, opt.timeoutMs);
+    opt.onSuccess(cbs, r);
+  } catch (e) {
+    opt.onError(cbs, e);
+  }
 }
 
+/**
+ * Repeat once every n milisecond
+ *
+ * @param {Array} cbs Array of callback
+ * @param {Object} opt Options
+ * @param {Boolean} opt.before Apply callback before interval. Default : false, apply after interval
+ * @param {Numer} opt.intervalMs Repeat after n ms
+ * @param {Number} opt.timeoutMs Maximum time (ms);
+ * @param {Function} opt.onSuccess Cb on sucess
+ * @param {Function} opt.onError Cb on error
+ */
+async function onceInterval(cbs, opt) {
+  try {
+    opt = Object.assign(
+      {},
+      {
+        intervalMs: 1 * 60 * 60 * 1000,
+        before: false
+      },
+      opt
+    );
+    if (opt.before) {
+      await once(cbs, opt);
+    }
+    await wait(opt.intervalMs);
+    if (!opt.before) {
+      await once(cbs, opt);
+    }
+    await onceInterval(cbs, opt);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+/**
+ * Do something if timeout is reached
+ *
+ * NOTE: this should be simplified or converted to AbortController
+ *
+ * @param {Function||Array} cbs Callback ori arary of callback
+ * @param {Number} timeoutMs Timeout in ms
+ * @param {Function} cbTimeout Optional timeout function, with a single param, the callback evaluated. NOTE: this will be called for each failed cb from cbs;
+ */
+async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
+  timeoutMs = timeoutMs || 1 * 60 * 1000;
+  if (!Array.isArray(cbs)) {
+    cbs = [cbs];
+  }
+  /**
+   * Wait for all promises
+   */
+
+  const res = await Promise.all(
+    cbs.map(async (c) => {
+      /**
+       * Check if the timeout or the cb resolve first
+       */
+
+      const r = await Promise.race([c(), tOut(c)]);
+      if (r && r._timeout) {
+        /**
+         * If the timeout wins, use the cbTimeout, reject
+         */
+        if (cbTimeout instanceof Function) {
+          cbTimeout(r._cb);
+        } else {
+          console.warn(`Timeout reached for ${r._cb.name} (${timeoutMs})`);
+        }
+        return Promise.reject(r);
+      }
+      return r;
+    })
+  );
+  return res;
+
+  /**
+   * Timeout evaluation
+   */
+  async function tOut(c) {
+    await wait(timeoutMs);
+    return {_timeout: timeoutMs, _cb: c};
+  }
+}
 
 /**
  * Set default headers
@@ -346,6 +461,10 @@ module.exports = {
   readTemplate,
   stop,
   asyncDelay,
+  wait,
+  once,
+  onceInterval,
+  withTimeLimit,
   /**
    * Middleware
    */

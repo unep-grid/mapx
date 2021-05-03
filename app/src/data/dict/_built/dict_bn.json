@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "bn": "শিরোনাম "
+    "bn": "প্রকল্প"
   },
   {
     "id": "project_description",
@@ -6693,5 +6693,120 @@
     "id": "nc_button",
     "en": "Notifications",
     "bn": "বিজ্ঞপ্তি "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "bn": "মানচিত্রের সর্বজনীন ক্যাটালগ অনুসন্ধান করুন"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "bn": "কীওয়ার্ডগুলি এখানে প্রবেশ করান ..."
+  },
+  {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "bn": "উত্স কীওয়ার্ড"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "bn": "উত্স ভূ-কীওয়ার্ডগুলি"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "bn": "দেখুন প্রকার"
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "bn": "উত্স শিরোনাম"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "bn": "উত্স বিবরণ"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "bn": "দর্শন বর্ণনা"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "bn": "প্রকল্প শিরোনাম"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "bn": "পূর্ণ মেটাডেটা প্রদর্শন করুন"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Add this view to the list and open it",
+    "bn": "এই ভিউটি তালিকায় যুক্ত করুন এবং এটি খুলুন"
+  },
+  {
+    "id": "search_clear_query",
+    "en": "Clear query",
+    "bn": "ক্যোয়ারী সাফ করুন"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "bn": "স্পষ্ট"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "bn": "ফিল্টার প্যানেল টগল করুন"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "bn": "দেখার পরিবর্তনের তারিখ"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "bn": "দেখার তৈরির তারিখ"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "bn": "উত্স এর রেকর্ড শুরু তারিখ"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "bn": "উত্স এর রেকর্ডস শেষ তারিখ"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "bn": "উত্স প্রকাশের তারিখ"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "bn": "উত্সের পরিবর্তনের তারিখ"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "bn": "তারিখ অনুসারে ফিল্টার"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "bn": "আপনি কি এখন গল্পটি খেলতে চান?"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "bn": "গল্পের মানচিত্র অটো প্লে"
   }
 ]

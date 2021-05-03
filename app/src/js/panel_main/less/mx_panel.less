@@ -77,9 +77,6 @@
     border: none;
     &:focus {
       outline: none;
-      > span {
-        text-decoration: underline;
-      }
     }
     &:hover {
       background: var(--mx_ui_background_contrast);
@@ -89,6 +86,9 @@
       cursor: auto;
       background: var(--mx_ui_background);
       z-index: 1;
+      > span {
+        text-decoration: underline;
+      }
     }
     &:not(:last-of-type).active:after {
       content: '';
@@ -144,6 +144,7 @@
   }
   .mx-tab--content-padding {
     padding: 20px;
+    height: 100%;
   }
 }
 
@@ -197,7 +198,7 @@
       &:not(:first-of-type).active:before {
         border-bottom-right-radius: 3px;
       }
-      * {
+      span {
         padding-left: 10px;
         pointer-events: none;
       }

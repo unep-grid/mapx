@@ -4482,7 +4482,7 @@
   {
     "id": "project_title",
     "en": "Title",
-    "de": "Titel "
+    "de": "Projekt"
   },
   {
     "id": "project_description",
@@ -6693,5 +6693,120 @@
     "id": "nc_button",
     "en": "Notifications",
     "de": "Benachrichtigungen "
+  },
+  {
+    "id": "search_title",
+    "en": "Search the MapX public catalog",
+    "de": "Durchsuchen Sie den öffentlichen MapX-Katalog"
+  },
+  {
+    "id": "search_placeholder",
+    "en": "Enter keywords here ...",
+    "de": "Geben Sie hier Schlüsselwörter ein ..."
+  },
+  {
+    "id": "search_source_keywords",
+    "en": "Source keywords",
+    "de": "Quellschlüsselwörter"
+  },
+  {
+    "id": "search_source_keywords_m49",
+    "en": "Source geo-keywords",
+    "de": "Quell-Geo-Keywords"
+  },
+  {
+    "id": "search_view_type",
+    "en": "View type",
+    "de": "Ansichtstyp"
+  },
+  {
+    "id": "search_source_title",
+    "en": "Source title",
+    "de": "Quellentitel"
+  },
+  {
+    "id": "search_source_abstract",
+    "en": "Source description",
+    "de": "Quellenbeschreibung"
+  },
+  {
+    "id": "search_view_abstract",
+    "en": "Description of the view",
+    "de": "Beschreibung der Ansicht"
+  },
+  {
+    "id": "search_project_title",
+    "en": "Project title",
+    "de": "Projekttitel"
+  },
+  {
+    "id": "search_show_view_meta",
+    "en": "Display full metadata",
+    "de": "Vollständige Metadaten anzeigen"
+  },
+  {
+    "id": "search_view_toggle",
+    "en": "Add this view to the list and open it",
+    "de": "Fügen Sie diese Ansicht der Liste hinzu und öffnen Sie sie"
+  },
+  {
+    "id": "search_clear_query",
+    "en": "Clear query",
+    "de": "Abfrage löschen"
+  },
+  {
+    "id": "search_clear",
+    "en": "Clear",
+    "de": "klar"
+  },
+  {
+    "id": "search_filters",
+    "en": "Toggle the filters panel",
+    "de": "Schalten Sie das Filterfeld um"
+  },
+  {
+    "id": "search_filter_view_modified_at",
+    "en": "View's modification date",
+    "de": "Änderungsdatum der Ansicht"
+  },
+  {
+    "id": "search_filter_view_created_at",
+    "en": "View's creation date",
+    "de": "Erstellungsdatum der Ansicht"
+  },
+  {
+    "id": "search_filter_source_start_at",
+    "en": "Source's records start date",
+    "de": "Startdatum der Quelldatensätze"
+  },
+  {
+    "id": "search_filter_source_end_at",
+    "en": "Source's records end date",
+    "de": "Enddatum der Quelldatensätze"
+  },
+  {
+    "id": "search_filter_source_released_at",
+    "en": "Source's release date",
+    "de": "Erscheinungsdatum der Quelle"
+  },
+  {
+    "id": "search_filter_source_modified_at",
+    "en": "Source's modification date",
+    "de": "Änderungsdatum der Quelle"
+  },
+  {
+    "id": "source_filter_date_placeholder",
+    "en": "Filter by date",
+    "de": "Nach Datum filtern"
+  },
+  {
+    "id": "search_story_auto_play_confirm",
+    "en": "Would you like to play the story now ?",
+    "de": "Möchten Sie die Geschichte jetzt spielen?"
+  },
+  {
+    "id": "search_story_auto_play_confirm_title",
+    "en": "Story map auto play",
+    "de": "Automatische Wiedergabe der Story Map"
   }
 ]

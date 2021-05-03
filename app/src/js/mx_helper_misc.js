@@ -1,4 +1,4 @@
-import {IconFlash, ButtonCircle} from './icon_flash';
+import {IconFlash} from './icon_flash';
 
 /**
  * Retrieve nested item from object/array
@@ -168,9 +168,7 @@ export function parseTemplate(template, data) {
 export function iconFlash(icon) {
   new IconFlash(icon);
 }
-export function buttonCircle(opt) {
-  new ButtonCircle(opt);
-}
+
 export function iconFlashSave() {
   new IconFlash('floppy-o');
 }

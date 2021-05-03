@@ -6,6 +6,7 @@ import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
 import {WsHandler} from './ws_handler/';
 import {MainPanel} from './panel_main';
+import {Search} from './search';
 import {MapxLogo, MapControlLiveCoord, MapControlScale} from './map_controls';
 import {ControlsPanel} from './panel_controls';
 import {MapxDraw} from './draw';
@@ -192,20 +193,30 @@ export async function getLoginInfo() {
 }
 
 /**
- * Get url for api
- * @param {String} id Id of the url route : views,tiles, downloadSourceCreate,downloadSourceGet, etc.
+ * Get url for service
+ * @param {String} id Id of service : api, search .. .
+ * @param {String} route Additional route id, if exists in config
+ * @return {String} url
  */
-export function getApiUrl(id) {
+export function getServiceUrl(id, route) {
   const s = mx.settings;
+  const service = s[id];
   if (location.protocol === 'https:') {
-    s.api.protocol = 'https:';
+    service.protocol = 'https:';
   }
-  const urlBase =
-    s.api.protocol + '//' + s.api.host_public + ':' + s.api.port_public;
-  if (!id) {
+  const urlBase = `${service.protocol}//${service.host_public}:${
+    service.port_public
+  }`;
+  if (!route) {
     return urlBase;
   }
-  return urlBase + (s.api.routes[id] || id);
+  return urlBase + (service.routes[route] || route);
+}
+export function getApiUrl(route) {
+  return getServiceUrl('api', route);
+}
+export function getSearchUrl() {
+  return getServiceUrl('search');
 }
 
 /**
@@ -869,6 +880,53 @@ export async function initMapx(o) {
     if (!mx.settings.initClosedPanels) {
       mx.panel_main.panel.open();
     }
+
+    try {
+      /**
+       * Configure search tool
+       */
+      const urlKey = getApiUrl('getSearchKey');
+      const ss = mx.settings;
+      const qs = h.objToParams({
+        idUser: ss.user.id,
+        token: ss.user.token
+      });
+      const urlKeyFetch = `${urlKey}?${qs}`;
+      const keyData = await fetch(urlKeyFetch).then((r) => r.json());
+      mx.search = new Search({
+        key: keyData.key,
+        container: '#mxTabPanelSearch',
+        host: ss.search.host,
+        protocol: ss.search.protocol,
+        port: ss.search.port,
+        language: mx.settings.language,
+        index_template: 'views_{{language}}'
+      });
+
+      /**
+       * On tab change to search, perform a search
+       */
+      mx.panel_main.on('tab_change', (e, id) => {
+        if (id === 'search') {
+          mx.search.update();
+        }
+      });
+
+      /**
+       * On language change, update
+       */
+      mx.events.on({
+        type: 'language_change',
+        idGroup: 'search_index',
+        callback: (data) => {
+          mx.search.setLanguage(data?.new_language);
+        }
+      });
+
+      console.log('mx instant search ready');
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   /**
@@ -886,8 +944,9 @@ export async function initMapx(o) {
       handles: ['free'],
       container_style: {
         /**
-        * TODO : Set this as a class, same technique as no-ful-width/height
-        */ 
+         * TODO : Set this as a class, same technique as no-ful-width/height
+         */
+
         width: window.innerWidth < 800 ? '50px' : '120px',
         height: window.innerHeight < 800 ? '100%' : '420px',
         minWidth: '50px',
@@ -1097,7 +1156,6 @@ export async function initMapxStatic(o) {
   const map = h.getMap();
   const settings = mx.settings;
   const mapData = h.getMapData();
-  const elMap = map.getContainer();
   const zoomToViews = h.getQueryParameter('zoomToViews')[0] === 'true';
   const language = h.getQueryParameter('language')[0] || settings.languages[0];
   /**
@@ -1165,7 +1223,7 @@ export async function initMapxStatic(o) {
   /**
    * Display views
    */
-  const tt = await Promise.all(
+  await Promise.all(
     idViews.map((idView) => {
       return h.viewLayersAdd({
         view: h.getView(idView),
@@ -3791,7 +3849,8 @@ async function viewLayersAddRt(o) {
   const legendB64Default = require('../../src/svg/no_legend.svg');
   const legendUrl = h.path(view, 'data.source.legend', null);
   const tiles = h.path(view, 'data.source.tiles', null);
-  const hasTiles = h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles,h.isUrl);
+  const hasTiles =
+    h.isArray(tiles) && tiles.length > 0 && h.isArrayOf(tiles, h.isUrl);
   const legendTitle = h.getLabelFromObjectPath({
     obj: view,
     path: 'data.source.legendTitles',
@@ -3803,7 +3862,6 @@ async function viewLayersAddRt(o) {
   if (!hasTiles) {
     return false;
   }
-
 
   /**
    * LAYERS
@@ -3954,7 +4012,6 @@ export async function viewLayersAddVt(o) {
 
   const view = o.view;
   const idView = view.id;
-  const map = o.map;
   const viewData = p(view, 'data');
   const attr = p(viewData, 'attribute.name', null);
   const idSource = view.id + '-SRC';
@@ -3980,7 +4037,6 @@ export async function viewLayersAddVt(o) {
   const max = p(sourceSummary, 'attribute_stat.max');
   const min = p(sourceSummary, 'attribute_stat.min');
 
-  var idLayer;
   var layers = [];
   var layersAfter = [];
   var num = 0;
@@ -4021,7 +4077,6 @@ export async function viewLayersAddVt(o) {
 
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
-  const layerConfigBase = {};
   /**
    * clean values
    */
@@ -5027,44 +5082,69 @@ export function addLayer(o) {
  * @param {String} o.idView view id
  */
 export async function zoomToViewId(o) {
-  const h = mx.helpers;
-  const map = h.getMap();
-
-  if (h.isViewId(o)) {
-    o = {
-      idView: o
-    };
-  }
-
-  const isArray = h.isArray(o.idView);
-  o.idView = isArray ? o.idView[0] : o.idView;
-  o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
-  const view = h.getView(o.idView);
-
-  if (!h.isView(view)) {
-    return;
-  }
-
   try {
-    h.setBusy(true);
-    const sum = await h.getViewSourceSummary(view);
-    const extent = h.path(sum, 'extent_sp', null);
+    const h = mx.helpers;
+    const map = h.getMap();
+    const timeout = 3 * 1000;
+    let cancelByTimeout = false;
 
-    if (!extent) {
-      throw new Error(`No extent found for ${view.id}`);
+    if (h.isViewId(o)) {
+      o = {
+        idView: o
+      };
     }
 
-    const llb = new mx.mapboxgl.LngLatBounds(
-      [extent.lng1, extent.lat1],
-      [extent.lng2, extent.lat2]
-    );
-    map.fitBounds(llb);
+    const isArray = h.isArray(o.idView);
+    o.idView = isArray ? o.idView[0] : o.idView;
+    o.idView = o.idView.split(mx.settings.separators.sublayer)[0];
+    const view = h.getView(o.idView);
+
+    if (!h.isView(view)) {
+      console.warn('zoomToViewId : view object required');
+      return;
+    }
+
+    const res = await Promise.race([zoom(), wait(timeout)]);
+
+    if (res === 'timeout') {
+      console.warn(
+        `zoomToViewId for ${view.id}, was canceled ( ${timeout} ms )`
+      );
+    }
+
+    async function zoom() {
+      const sum = await h.getViewSourceSummary(view);
+      const extent = h.path(sum, 'extent_sp', null);
+
+      if (cancelByTimeout) {
+        return;
+      }
+
+      if (!extent) {
+        console.warn(`zoomToViewId no extent found for ${view.id}`);
+        return;
+      }
+
+      const llb = new mx.mapboxgl.LngLatBounds(
+        [extent.lng1, extent.lat1],
+        [extent.lng2, extent.lat2]
+      );
+
+      map.fitBounds(llb);
+      return true;
+    }
+
+    async function wait(n) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          cancelByTimeout = true;
+          resolve('timeout');
+        }, n || 1000);
+      });
+    }
   } catch (e) {
-    h.setBusy(false);
     throw new Error(e);
   }
-
-  h.setBusy(false);
 }
 
 /**
@@ -5074,7 +5154,6 @@ export async function zoomToViewId(o) {
  */
 export async function getViewsBounds(views) {
   const h = mx.helpers;
-  let bounds;
   views = views.constructor === Array ? views : [views];
   let set = false;
   const def = {

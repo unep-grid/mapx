@@ -6,22 +6,23 @@
   /**
   * Colors
   */
-  --mx_ui_text: hsl(0, 0%, 21%);
-  --mx_ui_text_faded: hsla(0, 0%, 21%, 0.5);
+  --mx_ui_text: hsla(0, 0%, 21%, 0.1);
+  --mx_ui_text_faded: hsla(0, 0%, 21%, 0.1);
   --mx_ui_hidden: hsla(196, 98%, 50%, 0);
-  --mx_ui_border: hsl(0, 0%, 81%);
-  --mx_ui_background: hsla(0, 0%, 97%, 0.95);
-  --mx_ui_background_faded: hsla(0, 0%, 21%, 0.95);
-  --mx_ui_background_contrast: hsla(0, 0%, 21%, 0.95);
-  --mx_ui_background_transparent: hsla(0, 0%, 21%, 0.13);
-  --mx_ui_shadow: hsla(0, 0%, 60%, 0.3);
+  --mx_ui_border: hsl(0, 0%, 81%, 0.1);
+  --mx_ui_background: hsla(0, 0%, 97%, 0.1);
+  --mx_ui_background_faded: hsla(0, 0%, 21%, 0.1);
+  --mx_ui_background_contrast: hsla(0, 0%, 21%, 0.1);
+  --mx_ui_background_transparent: hsla(0, 0%, 21%, 0.1);
+  --mx_ui_shadow: hsla(0, 0%, 60%, 0.1);
   --mx_ui_link: #12b0f8;
+
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
   /**
   * font size
   */
-  --mx_ui_font_size_base: 14px;
+  --mx_ui_font_size_base: 0.95em;
 
   /**
   * Shadow

@@ -10,6 +10,7 @@ _data
 
 # Env variable
 *.env
+!*.EXAMPLE.env
 
 # compiled js by webpack or parcel
 app/www/*

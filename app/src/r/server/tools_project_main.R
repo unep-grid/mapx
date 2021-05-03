@@ -31,7 +31,7 @@ observe({
       actionButton(
         label = d(labelBtnAdd,language, web=T),
         inputId = "btnShowAddProject",
-        class = "btn btn-sm btn-default hint " + ifelse(isProjectCreator,"","disabled")
+        class = "btn btn-default " + ifelse(isProjectCreator,"","disabled")
         )
       )
 
@@ -41,7 +41,7 @@ observe({
         actionButton(
           label = d("btn_show_project_external_views",language,web=T),
           inputId = "btnShowProjectExternalViews",
-          class = "btn btn-sm btn-default hint"
+          class = "btn btn-default"
           )
         )
     }
@@ -53,27 +53,27 @@ observe({
         actionButton(
           label = d("btn_show_role_manager",language,web=T),
           inputId = "btnShowRoleManager",
-          class = "btn btn-sm btn-default hint",
+          class = "btn btn-default",
           ),
         actionButton(
           label = d("btn_show_invite_member",language,web=T),
           inputId = "btnShowInviteMember",
-          class = "btn btn-sm btn-default hint",
+          class = "btn btn-default",
           ),
         actionButton(
           label = d("btn_show_project_config",language,web=T),
           inputId = "btnShowProjectConfig",
-          class = "btn btn-sm btn-default hint",
+          class = "btn btn-default",
           ),
         actionButton(
           label =  d(labelBtnDelete,language,web=T),
           inputId = "btnShowProjectDelete",
-          class = "btn btn-sm btn-default hint " + ifelse(isProjectDefault,"disabled",""),
+          class = "btn btn-default " + ifelse(isProjectDefault,"disabled",""),
           ),
         actionButton(
           label =  d('btn_show_project_views_states',language, web=T),
           inputId = "btnShowProjectViewsStates",
-          class = "btn btn-sm btn-default hint "
+          class = "btn btn-default "
           )
         )
     }
