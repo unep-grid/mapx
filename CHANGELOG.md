@@ -1,6 +1,5 @@
 ## Changelog
-
-- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.18' target='_blank'>1.8.18</a>
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.18-alpha' target='_blank'>1.8.18-alpha</a>
    - APP/API
     - Added prototype for instant search on MapX public catalog
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.17' target='_blank'>1.8.17</a>
