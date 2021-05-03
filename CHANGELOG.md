@@ -1,4 +1,6 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.19-alpha' target='_blank'>1.8.19-alpha</a>
+   - Merged search feature in master 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.18-alpha' target='_blank'>1.8.18-alpha</a>
    - APP/API
     - Added prototype for instant search on MapX public catalog
