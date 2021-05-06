@@ -10,7 +10,7 @@ const defaultsTests = {
   tests: [],
   name: 'test',
   ignore: false,
-  timeout: 5000
+  timeout: 10000
 };
 const defaultsTest = {
   test: () => {
@@ -18,7 +18,7 @@ const defaultsTest = {
   },
   name: 'test',
   ignore: false,
-  timeout: 5000
+  timeout: 10000
 };
 const queue = [];
 
@@ -48,6 +48,7 @@ export class Testing {
     const t = this;
     t.h = is;
     t.opt = Object.assign({}, defaults, opt);
+    t._results = [];
   }
 
   destroy() {
@@ -69,7 +70,7 @@ export class Testing {
     const t = this;
     const c = queue.shift();
     if (c) {
-      const x = await c();
+      await c();
       return t._next();
     } else {
       if (t._finally) {
@@ -78,8 +79,8 @@ export class Testing {
     }
   }
 
-  stop(msg){
-     throw new Error(msg);
+  stop(msg) {
+    throw new Error(msg);
   }
 
   check(title, opt) {
@@ -92,8 +93,15 @@ export class Testing {
       return;
     }
 
+    const result = {
+      title :  title,
+      message : '',
+      tests : []
+    }
+    t._results.push(result);
+
     queue.push(async () => {
-      let pass = true;
+      let pass = true; 
       const uiSection = t._ui_section(title);
       try {
         const initSuccess = t._promise(opt.init);
@@ -107,8 +115,9 @@ export class Testing {
           /**
            * Timeout returned before success
            */
+          result.message = `timeout ( ${opt.timeout} ms)`;
           uiSection.icon.innerText = '⏱';
-          uiSection.text.innerText = `: timeout ( ${opt.timeout} ms) `;
+          uiSection.text.innerText = `: ${result.message} `;
           return;
         } else {
           /**
@@ -129,8 +138,9 @@ export class Testing {
         uiSection.text.innerText = `: failed ( ${e} )`;
         uiSection.icon.innerText = '🐞';
       }
+
       async function nextTest(data) {
-        let res = null;
+
         const test = opt.tests.shift();
         if (!pass) {
           return false;
@@ -138,38 +148,49 @@ export class Testing {
         if (!test) {
           return null;
         }
+
         const it = Object.assign({}, defaultsTest, test);
         const uiResult = t._ui_result(it.name, uiSection);
         if (it.ignore) {
           return null;
         }
+        const r = {
+          success : false,
+          message : '',
+          name : it.name,
+          timing :0
+        };
+        result.tests.push(r);
         const resSuccess = t._promise(it.test, data);
         const resTimeout = t._promise_timeout(it.timeout);
         /**
          * Race between timeout and success
          */ const start = performance.now();
         const resOut = await Promise.race([resSuccess, resTimeout]);
-        const success = resOut === true;
-        const timing = Math.round((performance.now() - start) * 1e4) / 1e4;
+        r.success = resOut === true;
+        r.timing = Math.round((performance.now() - start) * 1e4) / 1e4;
         /**
          * Timeout resolve first
          */ if (resOut === 'timeout') {
+          r.success = pass;
+          r.message = `timeout ( ${it.timeout} ms)` 
           uiResult.icon.innerText = '⏱';
-          uiResult.text.innerText = `: timeout ( ${it.timeout} ms) `;
+          uiResult.text.innerText = `: ${r.message}`;
           pass = false;
         } else {
           /**
            * Test resolve first
-           */ uiResult.icon.innerText = success ? '✅' : '❌';
-          uiResult.text.innerText = success
-            ? ''
-            : `( ${JSON.stringify(resOut)} )`;
+           */
+
+          uiResult.icon.innerText = r.success ? '✅' : '❌';
+          r.message = r.success ? '' : JSON.stringify(resOut); 
+          uiResult.text.innerText = r.message;
         }
         /**
          * Add timing info
-         */ uiResult.timing.innerText = ` (timing :${timing} ms) `;
+         */ uiResult.timing.innerText = ` (timing :${r.timing} ms) `;
 
-        if (!pass || !success) {
+        if (!pass || !r.success) {
           handleErrorSection();
           return false;
         } else {
@@ -245,7 +266,6 @@ export class Testing {
       timing: elTiming
     };
   }
-
   _is_in_opt_set(set, value) {
     let out = false;
     if (this.opt[set] !== undefined && this.opt[set].length === 0) {

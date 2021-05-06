@@ -40,8 +40,7 @@ async function stopIfGuest() {
        some tests require authentication.
        If you don't have such token, you can get one with the "get_token" method 
        or in a MapX instance on the same domain, "mx.helpers.getToken()"
-      `
-    );
+      `);
     if (token) {
       await mapx.ask('set_token', token);
       window.location.reload();
@@ -60,6 +59,37 @@ mapx.once('ready', async () => {
         name: 'test if array of string',
         test: (methods) => {
           return t.h.isArrayOfString(methods);
+        }
+      }
+    ]
+  });
+  t.check('Immersive mode', {
+    init: async () => {
+      return await mapx.ask('set_immersive_mode', {enable: true});
+    },
+    tests: [
+      {
+        name: 'initial state',
+        test: async (state) => {
+          return !!state;
+        }
+      },
+      {
+        name: 'switch state',
+        test: async () => {
+          let state = await mapx.ask('get_immersive_mode');
+          if (state !== true) {
+            return false;
+          }
+          state = await mapx.ask('set_immersive_mode', {enable: false});
+          if (state !== false) {
+            return false;
+          }
+          state = await mapx.ask('get_immersive_mode');
+          if (state !== false) {
+            return false;
+          }
+          return true;
         }
       }
     ]
@@ -130,7 +160,7 @@ mapx.once('ready', async () => {
       const view = await mapx.ask('_get_random_view', {
         type: ['vt', 'rt'],
         filter: (view, test) => {
-           // Evaluated in is_test module context
+          // Evaluated in is_test module context
           const tiles = view.data?.source?.tiles ?? '';
           return test.isViewVt(view) || (test.isViewRt(view) && tiles);
         }
@@ -162,18 +192,20 @@ mapx.once('ready', async () => {
   t.check('Set view order', {
     init: async () => {
       await mapx.ask('set_views_list_sort', {asc: true, mode: 'text'});
-      const viewsOrder = await mapx.ask('get_views_order');
-      const titlesAfter = await mapx.ask('get_views_title', {
-        lang: 'en',
-        views: viewsOrder
-      });
-      return titlesAfter;
     },
     tests: [
       {
         name: 'Order is ok',
-        test: (titles) => {
-          return t.h.isSorted(titles);
+        test: async () => {
+          const sorted_desc = await mapx.ask('is_views_list_sorted', {
+            asc: false,
+            mode: 'text'
+          });
+          const sorted_asc = await mapx.ask('is_views_list_sorted', {
+            asc: true,
+            mode: 'text'
+          });
+          return sorted_asc && !sorted_desc;
         }
       }
     ]
@@ -377,12 +409,10 @@ mapx.once('ready', async () => {
       const view = await mapx.ask('_get_random_view', {
         type: 'vt',
         filter: (view, test) => {
-          /**
-           * Evaluated in `is_test` module context
-           */ return (
-            test.isObject(view.data.attribute) &&
-            view.data.attribute.type === 'string'
-          );
+          const hasAttributes = test.isObject(view?.data?.attribute);
+          const isString =
+            hasAttributes && view.data.attribute.type === 'string';
+          return isString;
         }
       });
       if (!t.h.isView(view)) {
@@ -393,15 +423,18 @@ mapx.once('ready', async () => {
     tests: [
       {
         name: 'Set/get filter layers by text values',
-        timeout: 10000,
+        timeout: 30000,
         test: async (view) => {
           if (!t.h.isView(view)) {
             return false;
           }
           await mapx.ask('view_add', {idView: view.id});
-          const values = view.data.attribute.table
-            .map((v) => v.value)
-            .filter((v) => t.h.isString(v));
+          const summary = await mapx.ask('get_view_source_summary', {
+            idView: view.id,
+            stats: ['attributes'],
+            idAttr: view?.data?.attribute?.name
+          });
+          const values = summary.attribute_stat.table.map((row) => row.value);
           await mapx.ask('set_view_layer_filter_text', {
             idView: view.id,
             value: values
@@ -409,9 +442,7 @@ mapx.once('ready', async () => {
           const res = await mapx.ask('get_view_layer_filter_text', {
             idView: view.id
           });
-          const pass =
-            t.h.isArray(res) &&
-            values.reduce((a, v) => (!a ? a : res.indexOf(v) > -1), true);
+          const pass = values.every((v) => res.includes(v));
           await mapx.ask('view_remove', {idView: view.id});
           return pass;
         }
@@ -442,22 +473,23 @@ mapx.once('ready', async () => {
     },
     tests: [
       {
-        name: 'Dashboard is visible',
+        name: 'Dashboard is added and removed properly',
         test: async (view) => {
-          let pass = false;
+          let visible = false;
+          let removed = false;
           const hasDashboard = await mapx.ask('has_dashboard');
           if (hasDashboard) {
             await mapx.ask('set_dashboard_visibility', {
               show: true
             });
-            pass = await mapx.ask('is_dashboard_visible');
+            visible = await mapx.ask('is_dashboard_visible');
             await mapx.ask('set_dashboard_visibility', {
               show: false
             });
-            pass = pass && !(await mapx.ask('is_dashboard_visible'));
           }
           await mapx.ask('view_remove', {idView: view.id});
-          return hasDashboard && pass;
+          removed = !(await mapx.ask('is_dashboard_visible'));
+          return hasDashboard && visible && removed;
         }
       }
     ]
@@ -608,7 +640,7 @@ mapx.once('ready', async () => {
       }
     ]
   });
-  t.check('GeoJSON: create view, download geojson data', {
+  t.check('GeoJSON create view download geojson data', {
     init: async () => {
       const view = await mapx.ask('view_geojson_create', {
         random: {n: 100},
@@ -625,7 +657,7 @@ mapx.once('ready', async () => {
     tests: [
       {
         name: 'has data',
-        test: async (res) => {
+        test: (res) => {
           return res.data.features.length === 100;
         }
       },
@@ -633,8 +665,16 @@ mapx.once('ready', async () => {
         name: 'has layers',
         test: async (res) => {
           const visibles = await mapx.ask('get_views_with_visible_layer');
-          await mapx.ask('view_geojson_delete', {idView: res.id});
-          return visibles.indexOf(res.id) >= 0;
+          return visibles.includes(res.id);
+        }
+      },
+      {
+        name: 'properly removed',
+        test: async (res) => {
+          const removed = await mapx.ask('view_geojson_delete', {
+            idView: res.id
+          });
+          return removed;
         }
       }
     ]
@@ -733,6 +773,7 @@ mapx.once('ready', async () => {
    */ t.run({
     finally: () => {
       console.log('Tests finished');
+      console.log(t._results);
     }
   });
 });

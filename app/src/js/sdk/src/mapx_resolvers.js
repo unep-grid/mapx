@@ -23,50 +23,31 @@ class MapxResolvers {
    * @param {Boolean} opt.show Show the panel. If false, hide.
    * @param {Boolean} opt.open Open the panel. If false, close.
    * @param {Boolean} opt.toggle If closed, open. If open, close.
+   * @return {Boolean} done
    */
   set_panel_left_visibility(opt) {
-    opt = Object.assign({show: null, toggle: null, open: null}, opt);
-    const panel = mx.main_panel.panel;
-
-    if (opt.show !== null) {
-      if (opt.show === true) {
-        panel.show();
-      } else {
-        panel.hide();
-      }
-      return;
-    }
-
-    if (opt.open !== null) {
-      if (opt.open === true) {
-        panel.open();
-      } else {
-        panel.close();
-      }
-      return;
-    }
-
-    if (opt.toggle !== null) {
-      if (opt.toggle === true) {
-        panel.toggle();
-      }
-      return;
-    }
+    const rslv = this;
+    const panel = mx.panel_main.panel;
+    return rslv._handle_panel_visibility(panel, opt);
   }
 
+  /**
+   * Test if dashboard exists
+   * @return {Boolean} exists
+   */
   has_dashboard() {
     return !!mx.dashboard && !mx.dashboard._destroyed;
   }
 
   /**
-   * Toogle immersive mode
+   * Toogle immersive mode: hide or show ALL panels. 
    * @aram {Object} opt Options
    * @param {Boolean} opt.enable Force enable
    * @param {Boolean} opt.toggle Toggle
    * @return {Boolean} enabled
    */
   set_immersive_mode(opt) {
-    h.setImmersiveMode(opt);
+   return h.setImmersiveMode(opt);
   }
 
   /**
@@ -141,18 +122,11 @@ class MapxResolvers {
    */
   set_dashboard_visibility(opt) {
     const rslv = this;
-    opt = Object.assign({show: true, toggle: false}, opt);
-    if (rslv.has_dashboard()) {
-      if (opt.toggle === true) {
-        mx.dashboard.toggle();
-      } else if (opt.show === true) {
-        mx.dashboard.show();
-      } else {
-        mx.dashboard.hide();
-      }
-      return true;
+    if (!rslv.has_dashboard()) {
+       throw new Error('No dashboard container found') 
     }
-    return false;
+    const panel = mx.dashboard;
+    return rslv._handle_panel_visibility(panel, opt);
   }
 
   /**
@@ -175,6 +149,17 @@ class MapxResolvers {
   }
 
   /**
+   * Get view's source summary
+   * @param {Object} opt Options
+   * @param {String} opt.idView Id of the view
+   * @param {Array} opt.stats Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial']
+   * @return {Object} Source summary
+   */
+  get_view_source_summary(opt) {
+    return h.getViewSourceSummary(opt.idView, opt);
+  }
+
+  /**
    * Get user id
    * @return {Number} Current user id
    */
@@ -182,28 +167,28 @@ class MapxResolvers {
     return mx.settings.user.id;
   }
 
-
-
   /**
-  * Manually set MapX app token and reload the app. 
-  * This encrypted token is used to fingerprint
-  * user, browser and time since the last log in. It could be generated using
-  * MapX cryptography private key, or if not available, retrived from a live 
-  * session with mx.helpers.getToken() or with the SDK, get_mapx_token.
-  * @param {String} Mapx valid encrypted token
-  */ 
-  set_token(str){
-    if(str){
-     h.setToken(str);
+   * Manually set MapX app token and reload the app.
+   * This encrypted token is used to fingerprint
+   * user, browser and time since the last log in. It could be generated using
+   * MapX cryptography private key, or if not available, retrived from a live
+   * session with mx.helpers.getToken() or with the SDK, get_mapx_token.
+   * @param {String} Mapx valid encrypted token
+   */
+
+  set_token(str) {
+    if (str) {
+      h.setToken(str);
     }
   }
 
   /**
-  * Retrieve MapX token. 
-  * @return {String} MapX token.
-  */ 
-  get_token(){
-    return h.getToken()
+   * Retrieve MapX token.
+   * @return {String} MapX token.
+   */
+
+  get_token() {
+    return h.getToken();
   }
 
   /**
@@ -948,6 +933,19 @@ class MapxResolvers {
   }
 
   /**
+   * Test if views list is sorted
+   * @param {Object} opt Options
+   * @param {Boolean} opt.asc Asc
+   * @param {String} opt.mode Mode : 'string' or 'date';
+   * @return {Boolean} Sorted
+   */
+  is_views_list_sorted(opt) {
+    const v = h.getMapData().viewsList;
+    opt = Object.assign({}, {check: true}, opt);
+    return v.sortGroup(null, opt);
+  }
+
+  /**
    * Move view on top of its group
    * @param {Object} opt Options
    * @param {Sring} opt.idView
@@ -1318,14 +1316,15 @@ class MapxResolvers {
    * Promisify mapbox method
    * @param {String} type of event to listen to resolve the promise
    * @param {Function} cb Function to wrap
+   * @return {EventData}
    * @ignore
    */
   _map_resolve_when(type, cb) {
     const map = h.getMap();
     return new Promise((resolve) => {
       map.stop();
-      map.once(type, () => {
-        resolve(true);
+      map.once(type, (data) => {
+        resolve(data);
       });
       cb();
     });
@@ -1354,6 +1353,46 @@ class MapxResolvers {
     return h.getViewJson(views[pos], {asString: false});
   }
 
+  /**
+   * Generic panel helper (dashbaord, notif, left panel ...
+   * @return {Boolean} done. Event has been fired.
+   * @ignore
+   */
+  _handle_panel_visibility(panel, opt) {
+    opt = Object.assign({show: null, toggle: null, open: null}, opt);
+    return new Promise((resolve, reject) => {
+      if (opt.show === null && opt.toggle === null && opt.open === null) {
+        reject('At least one option needed show,toggle or open');
+      }
+      if (opt.show !== null) {
+        if (opt.show === true) {
+          panel.on('show', ok);
+          panel.show();
+        } else {
+          panel.on('hide', ok);
+          panel.hide();
+        }
+      }
+      if (opt.open !== null) {
+        if (opt.open === true) {
+          panel.on('open', ok);
+          panel.open();
+        } else {
+          panel.on('close', ok);
+          panel.close();
+        }
+      }
+      if (opt.toggle !== null) {
+        if (opt.toggle === true) {
+          panel.on('toggle', ok);
+          panel.toggle();
+        }
+      }
+      function ok() {
+        resolve(true);
+      }
+    });
+  }
 }
 
 export {MapxResolvers};
