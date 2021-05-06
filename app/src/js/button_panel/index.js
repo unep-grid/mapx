@@ -527,7 +527,7 @@ class ButtonPanel extends EventSimple {
     panel.ls.destroy();
   }
 
-  get _visible() {
+  isVisible() {
     const panel = this;
     return !panel.elContainer.classList.contains('button-panel--hidden');
   }
@@ -578,6 +578,7 @@ class ButtonPanel extends EventSimple {
     } else {
       panel.open();
     }
+    panel.fire('toggle');
   }
   isEmpty() {
     return this.elPanelContent.childElementCount === 0;

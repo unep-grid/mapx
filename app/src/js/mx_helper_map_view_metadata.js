@@ -92,7 +92,7 @@ export async function viewToMetaModal(view) {
 
   getViewMetadata(id, true).then((data) => {
     const elContent = el('div');
-
+    
     if (data.meta) {
       Object.assign(meta, data.meta);
     }

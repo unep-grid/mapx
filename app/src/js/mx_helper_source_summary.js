@@ -1,7 +1,7 @@
 import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
 
 /**
- * Get source summary of a vector tile view source
+ * Get source summary of a view source
  * @param {Object} view View to get source summary
  * @param {Object} opt Additional option to pass to getSourceVtSummary
  * @return {Object} source summary
@@ -134,7 +134,7 @@ export async function getSourceVtSummary(opt) {
   /**
    * debug
    */
-  if (false) {
+  if (0) {
     console.table([
       {
         op: 'getSourceSummary',

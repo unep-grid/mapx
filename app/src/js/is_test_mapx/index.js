@@ -22,7 +22,7 @@ export function isLanguageObject(item) {
    * but missing keys accepted.
    */
   for (let k of keys) {
-    if(isLanguageId(k)){
+    if(!isLanguageId(k)){
       return false;
     }
   }

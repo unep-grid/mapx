@@ -210,19 +210,10 @@ class NestedList {
     li.fire('filter_end', ids);
   }
 
-  /**
-   *  Sort items
-   *  @param {Element} elTarget Target group element
-   * @param {Object} opt Options
-   * @param {Boolean} opt.asc Ascendent
-   * @param {String} opt.mode : text, date, ids
-   * @param {Array} opt.ids : Array of ids
-   */
-  sortGroup(elTarget, opt) {
-    const def = {asc: true, mode: 'text', ids: []};
-    opt = Object.assign({}, def, opt);
+  getStateForSorting(elTarget, opt) {
     const li = this;
-    li.setModeAnimate(false);
+    const def = {mode: 'text', ids: [], recursive: true};
+    opt = Object.assign({}, def, opt);
     let elGroup = li.isGroup(elTarget) ? elTarget : li.getGroup(elTarget);
     let els = li.getChildrenTarget(elGroup, true);
     let data = [];
@@ -236,6 +227,9 @@ class NestedList {
         value: 0,
         isGroup: li.isGroup(el)
       };
+      if (item.isGroup && opt.recursive) {
+        item.children = li.getStateForSorting(el, opt);
+      }
       if (opt.mode === 'text') {
         item.value = item.isGroup ? li.getGroupTitle(el) : li.getItemText(el);
         item.value = item.value.toLowerCase().trim();
@@ -253,37 +247,97 @@ class NestedList {
       data.push(item);
     });
 
+    return data;
+  }
+
+  /**
+   * Sort items
+   * @param {Element} elTarget Target group element
+   * @param {Object} opt Options
+   * @param {Boolean} opt.asc Ascendent
+   * @param {String} opt.mode : text, date, ids
+   * @param {Array} opt.ids : Array of ids
+   * @param {Boolean} opt.recursive Sort nested group
+   * @param {Boolean} opt.check Check if it's sorted
+   * @return {Boolean} sorted
+   */
+  sortGroup(elTarget, opt) {
+    const li = this;
+    const def = {asc: true, mode: 'text', ids: [], recursive: true};
+    opt = Object.assign({}, def, opt);
+    const data = li.getStateForSorting(elTarget, opt);
+
+    /**
+     * Check order only
+     */
+
+    if (opt.check) {
+      const sorted = isSorted(data);
+      li.fire('state_order_check', sorted);
+      return sorted;
+    }
     /**
      * Sort
      */
-    data = data.sort((a, b) => {
-      if (lt(a.value, b.value)) {
-        return -1;
-      }
-      if (gt(a.value, b.value)) {
-        return 1;
-      }
-      return 0;
-    });
-
+    sort(data);
     /**
      * Move targets
      */
-    var elPrevious;
-    data.forEach((d, i) => {
-      if (i === 0) {
-        li.moveTargetTop(d.el);
-      } else {
-        li.moveTargetAfter(d.el, elPrevious);
-      }
-      elPrevious = d.el;
-    });
-
+    li.setModeAnimate(false);
+    move(data);
     li.setModeAnimate(true);
     li.fire('state_order');
+
     /**
      * Helpers
      */
+    function move(arr) {
+      let elPrevious;
+      for (let item of arr) {
+        if (item.children) {
+          move(item.children);
+        }
+        if (!elPrevious) {
+          li.moveTargetTop(item.el);
+        } else {
+          li.moveTargetAfter(item.el, elPrevious);
+        }
+        elPrevious = item.el;
+      }
+    }
+    function isSorted(arr) {
+      let res = true;
+      let previous;
+      for (let item of arr) {
+        if (item.children) {
+          res = res && isSorted(item.children);
+        }
+        if (previous) {
+          if (opt.asc) {
+            res = res && item.value > previous.value;
+          } else {
+            res = res && item.value <= previous.value;
+          }
+        }
+          previous = item;
+      }
+      return res;
+    }
+    function sort(arr) {
+      arr.sort((a, b) => {
+        if (a.children) {
+          sort(a.children);
+        }
+        if (lt(a.value, b.value)) {
+          return -1;
+        }
+        if (gt(a.value, b.value)) {
+          return 1;
+        }
+        return 0;
+      });
+      return arr;
+    }
     function gt(a, b) {
       return opt.asc ? a > b : a < b;
     }

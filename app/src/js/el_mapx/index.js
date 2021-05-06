@@ -17,7 +17,7 @@ function elAuto(render, data, opt) {
     tableContainerHeaderClass: ['panel-heading'],
     tableContainerClass: ['panel', 'panel-default'],
     booleanValues: [true, false],
-    stringStyle: {paddingRight: '5px'},
+    stringStyle: {},
     numberStyle: {float: 'right'},
     dateStyle: {float: 'right'},
     langKeyPrefix: '',
@@ -99,6 +99,12 @@ function elAuto(render, data, opt) {
   function renderStringLanguageArray(arr) {
     return el(
       'ul',
+      {
+        style: {
+          maxHeight: '200px',
+          overflow: 'auto'
+        }
+      },
       arr.map((d) => {
         return el('li', renderStringLanguage(d));
       })
@@ -301,15 +307,15 @@ function elButtonIcon(key, opt) {
       icon: null,
       dataset: {},
       badgeContent: null,
-      style : null,
-      content : null
+      style: null,
+      content: null
     },
     opt
   );
 
   const addIcon = opt.mode === 'text_icon' || opt.mode === 'icon';
   const addText = opt.mode === 'text_icon' || opt.mode === 'text';
-  const addBadge = !!opt.badgeContent; 
+  const addBadge = !!opt.badgeContent;
   const addContent = !!opt.content;
 
   if (addIcon && !addText) {
@@ -324,7 +330,7 @@ function elButtonIcon(key, opt) {
       type: 'button',
       class: ['btn', 'btn-default', 'btn-icon', ...opt.classes],
       dataset: opt.dataset,
-      style : opt.style
+      style: opt.style
     },
     [
       addBadge ? el('span', {class: ['badge']}, `${opt.badgeContent}`) : false,

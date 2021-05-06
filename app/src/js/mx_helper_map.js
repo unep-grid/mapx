@@ -62,7 +62,6 @@ export async function downloadViewGeoJSON(opt) {
     const data = JSON.stringify(geojson);
     await download(data, filename);
   }
-
   if (opt.mode === 'data') {
     opt.data = geojson;
   }
@@ -5696,59 +5695,37 @@ export function makeLayerJiggle(mapId, prefix) {
 }
 
 /**
- * Toogle immersive mode
+ * Toogle immersive mode : hide ALL panels. 
  * @aram {Object} opt Options
  * @param {Boolean} opt.enable Force enable
  * @param {Boolean} opt.toggle Toggle
  * @return {Boolean} enabled
  */
 export function setImmersiveMode(opt) {
-  opt = Object.assign({}, {enable: false, toggle: true});
   const h = mx.helpers;
-  const elBtn = document.getElementById('btnToggleBtns');
-  const enabled = elBtn.classList.contains('active');
-  const enable = opt.enable === true || (opt.toggle === true && !enabled);
-  const classHide = 'mx-hide-immersive';
-
-  const selectors = [
-    /**
-     * Mapbox controls, except top-left
-     */
-    '.mapboxgl-ctrl-bottom-left',
-    '.mapboxgl-ctrl-bottom-right',
-    '.mapboxgl-ctrl-top-left',
-    /**
-     * MapX views and settings panel
-     */
-    '.button-panel-main--top-left',
-    '.button-panel-main--bottom-left',
-    /**
-     * Non essential buttons
-     */
-    '#btnPrint',
-    '#btnShowAbout',
-    '#btnGeolocateUser',
-    '#btnDrawMode'
-  ];
-
-  if (enable) {
-    elBtn.classList.add('active');
-  } else {
-    elBtn.classList.remove('active');
+  opt = Object.assign({}, {enable: null, toggle: true, disable: null}, opt);
+  const panels = window._button_panels;
+  if (h.isBoolean(opt.disable)) {
+    opt.enable = !opt.disable;
   }
-
-  selectors.forEach((s) => {
-    const elItem = document.querySelector(s);
-    if (h.isElement(elItem)) {
-      if (enable) {
-        elItem.classList.add(classHide);
+  const force = opt.toggle === false || h.isBoolean(opt.enable);
+  const isImmersive = h.getImmersiveMode();
+  let immersive = false;
+  if (force) {
+    immersive = opt.enable === true;
+  } else {
+    immersive = !isImmersive;
+  }
+  if (panels) {
+    for (let panel of panels) {
+      if (immersive) {
+        panel.hide();
       } else {
-        elItem.classList.remove(classHide);
+        panel.show();
       }
     }
-  });
-
-  return enable;
+  }
+  return immersive;
 }
 
 /**
@@ -5756,8 +5733,12 @@ export function setImmersiveMode(opt) {
  * @return {Boolean} Enabled
  */
 export function getImmersiveMode() {
-  const elBtn = document.getElementById('btnToggleBtns');
-  return elBtn.classList.contains('active');
+  const panels = window._button_panels;
+  let isImmersive = false;
+  if (panels) {
+    isImmersive = panels.every((p) => !p.isVisible());
+  }
+  return isImmersive;
 }
 
 /**

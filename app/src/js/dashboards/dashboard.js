@@ -124,25 +124,19 @@ class Dashboard {
 
   isVisible() {
     const d = this;
-    return d._visible === true;
+    return d.panel.isVisible();
   }
 
   hide() {
     const d = this;
     d.panel.close();
     d.grid.hide(d.grid.getItems());
-    d._visible = false;
     d.fire('hide');
   }
 
   toggle() {
     const d = this;
-    const show = !d._visible;
-    if (show) {
-      d.show();
-    } else {
-      d.hide();
-    }
+    d.panel.toggle(); 
     d.fire('toggle');
   }
 
