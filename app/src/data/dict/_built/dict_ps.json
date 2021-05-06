@@ -6795,7 +6795,7 @@
     "ps": "د سرچینې د تعدیل نیټه"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "ps": "په نیټه چاter"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "ps": "د کيسې نقشه اوتومات لوبه"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "ps": " {{strNbHit}}پایلې په کې وموندل شوې {{strTime}} . پا Displayه ښودل {{cPage}} / {{nPage}}"
   }
 ]

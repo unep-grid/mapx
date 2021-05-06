@@ -6795,7 +6795,7 @@
     "ru": "Дата изменения источника"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "ru": "Фильтровать по дате"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "ru": "Автоматическое воспроизведение сюжетной карты"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "ru": " {{strNbHit}}результаты найдены в {{strTime}} . Отображение страницы {{cPage}} / {{nPage}}"
   }
 ]

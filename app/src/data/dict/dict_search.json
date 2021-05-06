@@ -261,7 +261,7 @@
     "de": ""
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "fr": "",
     "es": "",
@@ -289,6 +289,19 @@
   {
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+{
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "fr": "",
     "es": "",
     "ru": "",

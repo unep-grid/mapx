@@ -6795,7 +6795,7 @@
     "de": "Änderungsdatum der Quelle"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "de": "Nach Datum filtern"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "de": "Automatische Wiedergabe der Story Map"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "de": " {{strNbHit}}Ergebnisse gefunden in {{strTime}} . Seite anzeigen {{cPage}} /. {{nPage}}"
   }
 ]

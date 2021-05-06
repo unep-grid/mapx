@@ -6795,7 +6795,7 @@
     "ar": "تاريخ تعديل المصدر"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "ar": "تصفية حسب التاريخ"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "ar": "اللعب التلقائي لخريطة القصة"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في {{strTime}} . عرض الصفحة {{cPage}} / {{nPage}}"
   }
 ]

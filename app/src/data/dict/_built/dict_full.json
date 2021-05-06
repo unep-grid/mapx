@@ -17667,7 +17667,7 @@
     "de": "Änderungsdatum der Quelle"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "fr": "Filtrer par date",
     "es": "Filtrar por fecha",
@@ -17704,5 +17704,18 @@
     "ps": "د کيسې نقشه اوتومات لوبه",
     "bn": "গল্পের মানচিত্র অটো প্লে",
     "de": "Automatische Wiedergabe der Story Map"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "fr": " {{strNbHit}}résultats trouvés dans {{strTime}} . Affichage de la page {{cPage}} / {{nPage}}",
+    "es": " {{strNbHit}}resultados encontrados en {{strTime}} . Visualización de la página {{cPage}} / {{nPage}}",
+    "ru": " {{strNbHit}}результаты найдены в {{strTime}} . Отображение страницы {{cPage}} / {{nPage}}",
+    "zh": " {{strNbHit}}在中找到结果 {{strTime}}。显示页面 {{cPage}}/ {{nPage}}",
+    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في {{strTime}} . عرض الصفحة {{cPage}} / {{nPage}}",
+    "fa": " {{strNbHit}}نتایج یافت شده در {{strTime}} . نمایش صفحه {{cPage}} / {{nPage}}",
+    "ps": " {{strNbHit}}پایلې په کې وموندل شوې {{strTime}} . پا Displayه ښودل {{cPage}} / {{nPage}}",
+    "bn": " {{strNbHit}}ফলাফল পাওয়া গেছে {{strTime}} । পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}",
+    "de": " {{strNbHit}}Ergebnisse gefunden in {{strTime}} . Seite anzeigen {{cPage}} /. {{nPage}}"
   }
 ]

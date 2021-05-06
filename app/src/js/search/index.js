@@ -154,13 +154,16 @@ class Search extends EventSimple {
     }
     s._built = true;
 
+    /**
+     * Result and pagination
+     */
+
     s._elResults = el('div', {class: ['search--results']});
     s._elPagination = el('div', {class: ['search--pagination']});
 
     /**
      * Filters and facet
      */
-
     s._elFiltersFacets = el('div', {class: 'search--filter-facets'});
     s._elFiltersDate = el('div', {class: 'search--filter-dates'});
     s._elFilters = el(
@@ -171,6 +174,24 @@ class Search extends EventSimple {
       s._elFiltersFacets,
       s._elFiltersDate
     );
+
+    /**
+     * Stats
+     */
+    s._elStatHits = el('span', {
+      class: ['search--stats-item']
+    });
+    s._elStats = el(
+      'div',
+      {
+        class: ['search--stats']
+      },
+      s._elStatHits
+    );
+
+    /**
+     * Search header
+     */
 
     s._elHeader = el(
       'div',
@@ -184,6 +205,10 @@ class Search extends EventSimple {
       s._elFilters
     );
 
+    /**
+     * Search complete
+     */
+
     s._elSearch = el(
       'div',
       {
@@ -192,7 +217,8 @@ class Search extends EventSimple {
       },
       s._elHeader,
       s._elResults,
-      s._elPagination
+      s._elPagination,
+      s._elStats
     );
 
     s._elContainer.appendChild(s._elSearch);
@@ -370,7 +396,7 @@ class Search extends EventSimple {
     const s = this;
     s._flatpickr_filters = [];
     const attrDate = s.opt('attributes').date;
-    const txtPlaceholder = await getDictItem('source_filter_date_placeholder');
+    const txtPlaceholder = await getDictItem('search_filter_date_placeholder');
 
     for (let attr of attrDate) {
       /**
@@ -646,21 +672,28 @@ class Search extends EventSimple {
           for (let keyword of keywords) {
             if (isStringRange(keyword, 2)) {
               const facetEnabled = s.hasFilterFacet(k.type, keyword);
-              const elBtn = elButtonIcon(keyword, {
-                icon: k.icon,
-                mode: 'text_icon',
-                classes: [
-                  `search--button-keyword-${
-                    facetEnabled ? 'enabled' : 'disabled'
-                  }`
-                ],
-                dataset: {
-                  action: 'search_keyword_toggle',
-                  keyword: keyword,
-                  type: k.type
-                }
-              });
-              elKeywords.appendChild(elBtn);
+              const clEnabled = facetEnabled ? 'enabled' : 'disabled';
+              const elKeyword = el(
+                'div',
+                {
+                  class: [
+                    'search--button-keyword',
+                    `search--button-keyword-${clEnabled}`
+                  ],
+                  dataset: {
+                    action: 'search_keyword_toggle',
+                    keyword: keyword,
+                    type: k.type
+                  }
+                },
+                [
+                  el('i', {
+                    class: ['fa', k.icon]
+                  }),
+                  elSpanTranslate(keyword)
+                ]
+              );
+              elKeywords.appendChild(elKeyword);
             }
           }
         }
@@ -698,11 +731,7 @@ class Search extends EventSimple {
           el(
             'p',
             {
-              class: [
-                'search--item-info',
-                'search--show-toggle',
-                'search--show-less'
-              ]
+              class: ['search--item-info']
             },
             [
               {key: 'view_abstract', id: 'view_id', type: 'view'},
@@ -711,18 +740,15 @@ class Search extends EventSimple {
               {key: 'project_title', id: 'project_id', type: 'project'}
             ].map((row) => {
               return el(
-                'div',
-                {class: 'search--item-info-columns'},
-                el(
-                  'div',
-                  {class: 'search--item-info-column-title'},
-                  elSpanTranslate(`search_${row.key}`)
-                ),
-                el(
-                  'div',
-                  {class: 'search--item-info-column-content'},
-                  s.cutext(v._formatted[row.key], 50)
-                )
+                'span',
+                {
+                  class: ['search--item-info-snipet', 'hint--top'],
+                  dataset: {
+                    lang_key: `search_${row.key}`,
+                    lang_type: 'tooltip'
+                  }
+                },
+                s.formatCroppedText(v._formatted[row.key])
               );
             })
           ),
@@ -767,6 +793,25 @@ class Search extends EventSimple {
       elSummary,
       elHide
     );
+  }
+
+  /**
+   * Format cropped text: add ellipsis when needed
+   * @param {String} str Croped tring to format
+   * @return {String} str String formated like '...on mercury analysis' or 'A mercury analysis...' ;
+   */
+
+  formatCroppedText(str) {
+    if (!isStringRange(str, 1)) {
+      return '';
+    }
+    if (str[0] !== str[0].toUpperCase()) {
+      str = `…${str}`;
+    }
+    if (['.', '!', '?'].indexOf(str[str.length - 1]) === -1) {
+      str = `${str}…`;
+    }
+    return str;
   }
 
   getFilters(op) {
@@ -851,6 +896,9 @@ class Search extends EventSimple {
           target: s._elFilterFlag,
           enable: !!facetFilters && !!facetFilters.length
         });
+
+        console.time('search update');
+
         const results = await s.search({
           q: s._elInput.value,
           offset: page * 20,
@@ -859,11 +907,13 @@ class Search extends EventSimple {
           facetFilters: facetFilters || null,
           attributesToRetrieve: ['*'],
           attributesToHighlight: attr.text,
+          attributesToCrop: attr.text,
           facetsDistribution: attrKeys,
           matches: false
         });
 
-        console.time('results');
+        await s._update_stats(results);
+
         const fragItems = s._build_result_list(results.hits);
         s._elResults.replaceChildren(fragItems);
 
@@ -881,7 +931,7 @@ class Search extends EventSimple {
           s._elResults.firstChild.scrollIntoView();
         }
 
-        console.timeEnd('results');
+        console.timeEnd('search update');
       } catch (e) {
         console.warn('Issue while searching', {error: e});
       }
@@ -906,7 +956,7 @@ class Search extends EventSimple {
         facetsDistribution: null,
         attributesToRetrieve: ['*'],
         attributesToCrop: null,
-        cropLength: 400,
+        cropLength: 40,
         attributesToHighlight: null,
         matches: false
       },
@@ -916,10 +966,28 @@ class Search extends EventSimple {
   }
 
   /**
+   * Update stats
+   */
+  async _update_stats(results) {
+    const s = this;
+    const nPage = Math.ceil(results.nbHits / results.limit);
+    const cPage = Math.ceil(
+      nPage - (results.nbHits - results.offset) / results.limit
+    );
+    const strTime = `${results.processingTimeMs} ms`;
+    const strNbHit = `${results.nbHits} `;
+    const tmpl = await getDictItem('search_results_stats');
+
+    const txt = s.template(tmpl, {strNbHit, strTime, cPage, nPage});
+    s._elStatHits.innerText = txt;
+  }
+
+  /**
    * Pagination builder
    */
 
   _build_pagination_items(results) {
+    const s = this;
     const elItems = el('div', {class: ['search--pagination-items']});
 
     const nPage = Math.ceil(results.nbHits / results.limit);

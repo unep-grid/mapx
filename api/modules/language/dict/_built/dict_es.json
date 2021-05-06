@@ -6795,7 +6795,7 @@
     "es": "Fecha de modificación de la fuente"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "es": "Filtrar por fecha"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "es": "Reproducción automática del mapa de la historia"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "es": " {{strNbHit}}resultados encontrados en {{strTime}} . Visualización de la página {{cPage}} / {{nPage}}"
   }
 ]

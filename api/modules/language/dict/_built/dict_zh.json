@@ -6795,7 +6795,7 @@
     "zh": "来源的修改日期"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "zh": "按日期筛选"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "zh": "故事图自动播放"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "zh": " {{strNbHit}}在中找到结果 {{strTime}}。显示页面 {{cPage}}/ {{nPage}}"
   }
 ]

@@ -5436,7 +5436,7 @@
     "en": "Source's modification date"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date"
   },
   {
@@ -5446,5 +5446,9 @@
   {
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}"
   }
 ]

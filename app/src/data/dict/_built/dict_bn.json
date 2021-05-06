@@ -6795,7 +6795,7 @@
     "bn": "উত্সের পরিবর্তনের তারিখ"
   },
   {
-    "id": "source_filter_date_placeholder",
+    "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "bn": "তারিখ অনুসারে ফিল্টার"
   },
@@ -6808,5 +6808,10 @@
     "id": "search_story_auto_play_confirm_title",
     "en": "Story map auto play",
     "bn": "গল্পের মানচিত্র অটো প্লে"
+  },
+  {
+    "id": "search_results_stats",
+    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "bn": " {{strNbHit}}ফলাফল পাওয়া গেছে {{strTime}} । পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}"
   }
 ]
