@@ -1,4 +1,13 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.21-alpha' target='_blank'>1.8.21-alpha</a>
+   - APP
+     - Search tool improved look and performance, less space wasted + added search stats line;
+     - Modified immersive mode definition: all registered button-panels instance are hidden;
+     - Solved a bug where view's summary did not render correctly for multi-lingual items, such as project tiltles;
+     - Views list, recursive sorting of the list : sorting impacts views order inside nested groups. Should not alter ancestors. Required for consistency and for testing rendered order.
+   - SDK
+     - Solved issue with immersive mode set/get and panels show/hide open/close. Should solve #670 
+     - Added JSON export to tests
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.20-alpha' target='_blank'>1.8.20-alpha</a>
    - APP
     - Solved an issue with EPGS code searching

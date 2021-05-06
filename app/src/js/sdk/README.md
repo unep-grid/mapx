@@ -532,7 +532,8 @@ Class to handle MapX specific method
 **Kind**: global class  
 
 * [MapxResolvers](#MapxResolvers)
-    * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility)
+    * [.set_panel_left_visibility(opt)](#MapxResolvers+set_panel_left_visibility) ⇒ <code>Boolean</code>
+    * [.has_dashboard()](#MapxResolvers+has_dashboard) ⇒ <code>Boolean</code>
     * [.set_immersive_mode()](#MapxResolvers+set_immersive_mode) ⇒ <code>Boolean</code>
     * [.get_immersive_mode()](#MapxResolvers+get_immersive_mode) ⇒ <code>Boolean</code>
     * [.set_theme(opt)](#MapxResolvers+set_theme) ⇒ <code>Boolean</code>
@@ -543,6 +544,7 @@ Class to handle MapX specific method
     * [.set_dashboard_visibility(opt)](#MapxResolvers+set_dashboard_visibility) ⇒ <code>Boolean</code>
     * [.is_dashboard_visible()](#MapxResolvers+is_dashboard_visible) ⇒ <code>Boolean</code>
     * [.get_source_meta(opt)](#MapxResolvers+get_source_meta) ⇒ <code>Object</code>
+    * [.get_view_source_summary(opt)](#MapxResolvers+get_view_source_summary) ⇒ <code>Object</code>
     * [.get_user_id()](#MapxResolvers+get_user_id) ⇒ <code>Number</code>
     * [.set_token(Mapx)](#MapxResolvers+set_token)
     * [.get_token()](#MapxResolvers+get_token) ⇒ <code>String</code>
@@ -597,6 +599,7 @@ Class to handle MapX specific method
     * [.get_views_title(opt)](#MapxResolvers+get_views_title) ⇒ <code>Array</code>
     * [.set_views_list_state(opt)](#MapxResolvers+set_views_list_state) ⇒ <code>Boolean</code>
     * [.set_views_list_sort(opt)](#MapxResolvers+set_views_list_sort) ⇒ <code>Boolean</code>
+    * [.is_views_list_sorted(opt)](#MapxResolvers+is_views_list_sorted) ⇒ <code>Boolean</code>
     * [.move_view_top(opt)](#MapxResolvers+move_view_top) ⇒ <code>Boolean</code>
     * [.move_view_bottom(opt)](#MapxResolvers+move_view_bottom) ⇒ <code>Boolean</code>
     * [.move_view_after(opt)](#MapxResolvers+move_view_after) ⇒ <code>Boolean</code>
@@ -617,10 +620,11 @@ Class to handle MapX specific method
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
 
-#### mapxResolvers.set\_panel\_left\_visibility(opt)
+#### mapxResolvers.set\_panel\_left\_visibility(opt) ⇒ <code>Boolean</code>
 Set panel visibility
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - done  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -629,10 +633,17 @@ Set panel visibility
 | opt.open | <code>Boolean</code> | Open the panel. If false, close. |
 | opt.toggle | <code>Boolean</code> | If closed, open. If open, close. |
 
+<a name="MapxResolvers+has_dashboard"></a>
+
+#### mapxResolvers.has\_dashboard() ⇒ <code>Boolean</code>
+Test if dashboard exists
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - exists  
 <a name="MapxResolvers+set_immersive_mode"></a>
 
 #### mapxResolvers.set\_immersive\_mode() ⇒ <code>Boolean</code>
-Toogle immersive mode
+Toogle immersive mode: hide or show ALL panels.
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - enabled  
@@ -733,6 +744,20 @@ Get source metadata
 | opt | <code>Object</code> | Options |
 | opt.idSource | <code>String</code> | Id of the source |
 
+<a name="MapxResolvers+get_view_source_summary"></a>
+
+#### mapxResolvers.get\_view\_source\_summary(opt) ⇒ <code>Object</code>
+Get view's source summary
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Object</code> - Source summary  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.idView | <code>String</code> | Id of the view |
+| opt.stats | <code>Array</code> | Stats to retrieve. ['base', 'attributes', 'temporal', 'spatial'] |
+
 <a name="MapxResolvers+get_user_id"></a>
 
 #### mapxResolvers.get\_user\_id() ⇒ <code>Number</code>
@@ -743,10 +768,10 @@ Get user id
 <a name="MapxResolvers+set_token"></a>
 
 #### mapxResolvers.set\_token(Mapx)
-Manually set MapX app token and reload the app. 
+Manually set MapX app token and reload the app.
 This encrypted token is used to fingerprint
 user, browser and time since the last log in. It could be generated using
-MapX cryptography private key, or if not available, retrived from a live 
+MapX cryptography private key, or if not available, retrived from a live
 session with mx.helpers.getToken() or with the SDK, get_mapx_token.
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
@@ -1333,6 +1358,20 @@ Set views list order
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Boolean</code> - Done  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.asc | <code>Boolean</code> | Asc |
+| opt.mode | <code>String</code> | Mode : 'string' or 'date'; |
+
+<a name="MapxResolvers+is_views_list_sorted"></a>
+
+#### mapxResolvers.is\_views\_list\_sorted(opt) ⇒ <code>Boolean</code>
+Test if views list is sorted
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Sorted  
 
 | Param | Type | Description |
 | --- | --- | --- |
