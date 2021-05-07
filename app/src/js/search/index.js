@@ -157,8 +157,7 @@ class Search extends EventSimple {
     /**
      * Result and pagination
      */
-
-    s._elResults = el('div', {class: ['search--results']});
+    s._elResults = el('div', {class: ['search--results']}); 
     s._elPagination = el('div', {class: ['search--pagination']});
 
     /**
@@ -780,11 +779,11 @@ class Search extends EventSimple {
     const strHide = wrds.filter((w, i) => i > max).join('');
 
     if (strHide.length === 0) {
-      return el('p', str);
+      return el('span', str);
     }
 
     const elSummary = el('summary', strShow);
-    const elHide = el('p', strHide);
+    const elHide = el('span', strHide);
     return el(
       'details',
       {
