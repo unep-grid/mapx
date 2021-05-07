@@ -1,4 +1,7 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.22-alpha' target='_blank'>1.8.22-alpha</a>
+   - APP
+    - Search tool : the list of results is visually simpler. Border, shadow and unnecessary styles have been replaced by a better position of elements.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.21-alpha' target='_blank'>1.8.21-alpha</a>
    - APP
      - Search tool improved look and performance, less space wasted + added search stats line;
