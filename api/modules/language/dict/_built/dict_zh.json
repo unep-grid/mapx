@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "zh": "显示完整的元数据"
+    "en": "Metadata",
+    "zh": "元数据"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "zh": "将此视图添加到列表中并打开它"
+    "en": "Open/Close",
+    "zh": "开关"
   },
   {
     "id": "search_clear_query",

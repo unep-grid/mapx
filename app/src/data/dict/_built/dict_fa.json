@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "fa": "نمایش فراداده کامل"
+    "en": "Metadata",
+    "fa": "فراداده"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "fa": "این نما را به لیست اضافه کنید و آن را باز کنید"
+    "en": "Open/Close",
+    "fa": "باز بسته"
   },
   {
     "id": "search_clear_query",

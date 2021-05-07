@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "es": "Mostrar metadatos completos"
+    "en": "Metadata",
+    "es": "Metadatos"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "es": "Agregue esta vista a la lista y ábrala"
+    "en": "Open/Close",
+    "es": "Abierto cerrado"
   },
   {
     "id": "search_clear_query",

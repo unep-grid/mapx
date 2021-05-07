@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "ps": "بشپړ میټاډاټا ښودل"
+    "en": "Metadata",
+    "ps": "میټاډیټا"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "ps": "دا لید لست کې اضافه کړئ او خلاص یې کړئ"
+    "en": "Open/Close",
+    "ps": "خلاص / بندول"
   },
   {
     "id": "search_clear_query",

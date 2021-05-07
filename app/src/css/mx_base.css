@@ -668,6 +668,7 @@ details > summary {
   display: flex;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .btn-circle-medium {

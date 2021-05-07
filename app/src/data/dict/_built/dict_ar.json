@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "ar": "عرض البيانات الوصفية الكاملة"
+    "en": "Metadata",
+    "ar": "البيانات الوصفية"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "ar": "أضف هذا العرض إلى القائمة وافتحه"
+    "en": "Open/Close",
+    "ar": "فتح / إغلاق"
   },
   {
     "id": "search_clear_query",

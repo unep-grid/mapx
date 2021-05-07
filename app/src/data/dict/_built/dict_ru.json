@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "ru": "Показать полные метаданные"
+    "en": "Metadata",
+    "ru": "Метаданные"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "ru": "Добавьте это представление в список и откройте его"
+    "en": "Open/Close",
+    "ru": "Открыто закрыто"
   },
   {
     "id": "search_clear_query",

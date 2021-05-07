@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
-    "bn": "পূর্ণ মেটাডেটা প্রদর্শন করুন"
+    "en": "Metadata",
+    "bn": "মেটাডেটা"
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
-    "bn": "এই ভিউটি তালিকায় যুক্ত করুন এবং এটি খুলুন"
+    "en": "Open/Close",
+    "bn": "খোলা বন্ধ"
   },
   {
     "id": "search_clear_query",

@@ -119,7 +119,7 @@
   },
   {
     "id": "search_show_view_meta",
-    "en": "Display full metadata",
+    "en": "Metadata",
     "fr": "",
     "es": "",
     "ru": "",
@@ -132,7 +132,7 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Add this view to the list and open it",
+    "en": "Open/Close",
     "fr": "",
     "es": "",
     "ru": "",

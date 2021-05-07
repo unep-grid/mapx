@@ -157,7 +157,7 @@ class Search extends EventSimple {
     /**
      * Result and pagination
      */
-    s._elResults = el('div', {class: ['search--results']}); 
+    s._elResults = el('div', {class: ['search--results']});
     s._elPagination = el('div', {class: ['search--pagination']});
 
     /**
@@ -701,21 +701,38 @@ class Search extends EventSimple {
       /**
        * Add actions
        */
+
       const elButtonsBar = el(
         'div',
-        {class: 'search--item-buttons-bar'},
-        elButtonIcon('search_view_toggle', {
-          icon: 'fa-plus',
-          mode: 'icon',
-          classes: [],
-          dataset: {action: 'search_view_toggle', id_view: v.view_id}
-        }),
-        elButtonIcon('search_show_view_meta', {
-          icon: 'fa-info-circle',
-          mode: 'icon',
-          classes: [],
-          dataset: {action: 'search_show_view_meta', id_view: v.view_id}
-        })
+        {class: ['search--button-group', 'search--button-group-right']},
+        [
+          el(
+            'div',
+            {
+              class: ['search--button-keyword'],
+              dataset: {action: 'search_show_view_meta', id_view: v.view_id}
+            },
+            [
+              el('i', {
+                class: ['fa', 'fa-info-circle']
+              }),
+              elSpanTranslate('search_show_view_meta')
+            ]
+          ),
+          el(
+            'div',
+            {
+              class: ['search--button-keyword'],
+              dataset: {action: 'search_view_toggle', id_view: v.view_id}
+            },
+            [
+              el('i', {
+                class: ['fa', 'fa-plus']
+              }),
+              elSpanTranslate('search_view_toggle')
+            ]
+          )
+        ]
       );
 
       frag.appendChild(
@@ -725,7 +742,7 @@ class Search extends EventSimple {
           el(
             'div',
             {class: 'search--item-title'},
-            el('span', v._formatted.view_title)
+            el('span', s.formatCroppedText(v._formatted.view_title))
           ),
           el(
             'p',
@@ -751,8 +768,8 @@ class Search extends EventSimple {
               );
             })
           ),
-          elKeywords,
-          elButtonsBar
+          elButtonsBar,
+          elKeywords
         )
       );
     }
@@ -955,7 +972,7 @@ class Search extends EventSimple {
         facetsDistribution: null,
         attributesToRetrieve: ['*'],
         attributesToCrop: null,
-        cropLength: 40,
+        cropLength: 60,
         attributesToHighlight: null,
         matches: false
       },
