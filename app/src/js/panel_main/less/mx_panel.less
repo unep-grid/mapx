@@ -2,6 +2,9 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  .fa {
+    font-size: 0.8em;
+  }
   .mx-panel--header {
     display: flex;
     justify-content: flex-end;
@@ -75,20 +78,26 @@
     position: relative;
     background: none;
     border: none;
+    &:not(.active):not(:hover):after {
+      content: '';
+      border-left: 1px solid var(--mx_ui_border);
+      left: -2px;
+      height: 50%;
+      position: absolute;
+    }
     &:focus {
       outline: none;
     }
     &:hover {
       background: var(--mx_ui_background_contrast);
+      z-index: 1;
     }
     &.active {
       pointer-events: none;
       cursor: auto;
       background: var(--mx_ui_background);
       z-index: 1;
-      > span {
-        text-decoration: underline;
-      }
+      box-shadow: 0px -1px 2px var(--mx_ui_shadow);
     }
     &:not(:last-of-type).active:after {
       content: '';
@@ -130,6 +139,12 @@
   min-height: min-content;
   flex-direction: column;
   overflow: hidden;
+  &.mx-tab--panel-border-padding {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border-top: 1px solid var(--mx_ui_border);
+    border-bottom: 1px solid var(--mx_ui_border);
+  }
   &.active {
     min-height: 0px;
     flex: 1;

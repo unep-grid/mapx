@@ -10,7 +10,8 @@
   .search--filter-facets {
     .search--filter-facets-group {
       margin: 10px;
-      .search--filter-facets-title {
+      .search--filter-facets-title,
+      .search--filter-facets-group-title {
         display: block;
         opacity: 0.5;
         font-size: 0.8em;
@@ -62,6 +63,9 @@
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             text-align: right;
+            &:after{
+              content:attr(count);
+            }
           }
         }
       }

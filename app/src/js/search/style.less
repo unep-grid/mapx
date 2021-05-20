@@ -2,7 +2,7 @@
   @import 'style_pagination.less';
   @import 'style_stats.less';
   @import 'style_filters.less';
-
+  
   height: 100%;
   overflow: hidden;
   display: flex;
@@ -53,14 +53,15 @@
     background: var(--mx_ui_background);
     padding: 30px;
     &:empty:after {
-      content: 'No matches';
+      content: 'No views found';
       text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 10px;
       width: 100%;
-    }
+      height:100%;
+    } 
     .search--results-item {
       display: flex;
       flex-direction: column;

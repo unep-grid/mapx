@@ -905,9 +905,10 @@ export async function initMapx(o) {
       /**
        * On tab change to search, perform a search
        */
-      mx.panel_main.on('tab_change', (e, id) => {
+      mx.panel_main.on('tab_change', async (e, id) => {
         if (id === 'search') {
-          mx.search.update();
+          await mx.search.initCheck();
+          mx.search._elInput.focus()
         }
       });
 
@@ -922,7 +923,14 @@ export async function initMapx(o) {
         }
       });
 
-      console.log('mx instant search ready');
+      mx.events.on({
+        type: ['view_removed', 'view_added'],
+        idGroup: 'search_index',
+        callback: () => {
+          mx.search._update_toggles_icons();
+        }
+      });
+
     } catch (e) {
       console.error(e);
     }
@@ -2828,18 +2836,15 @@ export async function viewLayersRemove(o) {
     }
   });
 
-  mx.helpers.removeLayersByPrefix({
+  h.removeLayersByPrefix({
     id: o.id,
     prefix: o.idView
   });
 
   await h.viewModulesRemove(view);
 
-  const idEvent = `'view_remove_${o.idView}`;
-
   mx.events.fire({
     type: 'view_removed',
-    idGroup: idEvent,
     data: {
       idView: o.idView,
       time: now,
@@ -2893,90 +2898,50 @@ async function _viewUiClose(view) {
 /**
  * Get view, open it and add layers if any
  * @param {Object} view View to open
+ * @return {Promise} Boolean
  */
 export async function viewAdd(view) {
-  const h = mx.helpers;
-  view = h.getView(view);
-  if (!view) {
-    return;
-  }
-  const idEvent = `'viewAdd_${view.id}_${h.makeId()}`;
-
-  const confirmation = new Promise((resolve) => {
-    mx.events.on({
-      type: 'view_added',
-      idGroup: idEvent,
-      callback: (d) => {
-        if (d.idView === view.id) {
-          cleanEvent();
-          resolve(true);
-        }
-      }
+  try {
+    const h = mx.helpers;
+    view = h.getView(view);
+    if (!h.isView(view)) {
+      return;
+    }
+    await _viewUiOpen(view);
+    await h.updateLanguageElements({
+      el: h.getViewEl(view)
     });
-  });
-
-  const timeout = new Promise((resolve) => {
-    setTimeout(() => {
-      cleanEvent();
-      resolve(false);
-    }, 5000);
-  });
-
-  await _viewUiOpen(view);
-
-  await h.viewLayersAdd({
-    view: view
-  });
-
-  await h.updateLanguageElements({
-    el: h.getViewEl(view)
-  });
-
-  return Promise.race([timeout, confirmation]);
-
-  function cleanEvent() {
-    mx.events.off({
-      idGroup: idEvent,
-      type: 'view_added'
+    await h.viewLayersAdd({
+      view: view
     });
+    return true;
+  } catch (e) {
+    console.warn(e);
+    return false;
   }
 }
 
 /**
  * Removed both view UI and layers, handle view_removed event
  * @param {Object} view
- * @return {Promise} Confirmation -> resolve to boolean
+ * @return {Promise} Boolean
  */
 export async function viewRemove(view) {
-  const h = mx.helpers;
-  view = h.getView(view);
-  const idView = view.id;
-  if (!h.isView(view)) {
-    return true;
-  }
-
-  const confirmation = new Promise((resolve) => {
-    /**
-     * 'view_removed' fired by viewLayersRemove
-     */
-
-    const idEvent = `'view_remove_${idView}`;
-    mx.events.once({
-      type: 'view_removed',
-      idGroup: idEvent,
-      callback: (data) => {
-        if (data.idView === idView) {
-          resolve(true);
-        }
-      }
+  try {
+    const h = mx.helpers;
+    view = h.getView(view);
+    if (!h.isView(view)) {
+      return;
+    }
+    await _viewUiClose(view);
+    await h.viewLayersRemove({
+      idView: view.id
     });
-  });
-
-  await _viewUiClose(view);
-  await h.viewLayersRemove({
-    idView: view.id
-  });
-  return confirmation;
+    return true
+  }catch(e){
+    console.warn(e);
+    return false
+  }
 }
 
 /**
@@ -3422,6 +3387,10 @@ export async function viewLayersAdd(o) {
     id: idMap,
     prefix: idView
   });
+  /*
+  * Remove modules if needed
+  */ 
+  await viewModulesRemove(view);
 
   /**
    * Add content
@@ -4589,6 +4558,7 @@ export function viewModulesRemove(view) {
   const h = mx.helpers;
   return new Promise((resolve) => {
     view = h.isViewId(view) ? h.getView(view) : view;
+
     if (!h.isView(view)) {
       resolve(true);
     }
@@ -5695,7 +5665,7 @@ export function makeLayerJiggle(mapId, prefix) {
 }
 
 /**
- * Toogle immersive mode : hide ALL panels. 
+ * Toogle immersive mode : hide ALL panels.
  * @aram {Object} opt Options
  * @param {Boolean} opt.enable Force enable
  * @param {Boolean} opt.toggle Toggle
