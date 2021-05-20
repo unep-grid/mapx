@@ -5,13 +5,12 @@ import {isStringRange} from './is_test/index.js';
  * @param {String} Language code
  */
 export async function updateLanguage(language) {
-  
-  const validLang = isStringRange(language,2,2);
-  
-  if(!validLang){
+  const validLang = isStringRange(language, 2, 2);
+
+  if (!validLang) {
     language = mx.settings.language || 'en';
   }
-  
+
   mx.settings.language = language;
   const lang = mx.settings.language;
 
@@ -51,49 +50,53 @@ export function splitnwords(str) {
     .join('\n');
 }
 
-export function getDict(lang) {
+const _dict_cache = {};
+export async function getDict(lang) {
   'use strict';
   lang = lang || mx.settings.language || 'en';
   var out;
 
+  if (_dict_cache[lang]) {
+    return _dict_cache[lang];
+  }
+
   switch (lang) {
     case 'en':
-      out = import('../data/dict/_built/dict_en.json');
+      out = await import('../data/dict/_built/dict_en.json');
       break;
     case 'fr':
-      out = import('../data/dict/_built/dict_fr.json');
+      out = await import('../data/dict/_built/dict_fr.json');
       break;
     case 'es':
-      out = import('../data/dict/_built/dict_es.json');
+      out = await import('../data/dict/_built/dict_es.json');
       break;
     case 'de':
-      out = import('../data/dict/_built/dict_de.json');
+      out = await import('../data/dict/_built/dict_de.json');
       break;
     case 'ru':
-      out = import('../data/dict/_built/dict_ru.json');
+      out = await import('../data/dict/_built/dict_ru.json');
       break;
     case 'fa':
-      out = import('../data/dict/_built/dict_fa.json');
+      out = await import('../data/dict/_built/dict_fa.json');
       break;
     case 'ps':
-      out = import('../data/dict/_built/dict_ps.json');
+      out = await import('../data/dict/_built/dict_ps.json');
       break;
     case 'bn':
-      out = import('../data/dict/_built/dict_bn.json');
+      out = await import('../data/dict/_built/dict_bn.json');
       break;
     case 'zh':
-      out = import('../data/dict/_built/dict_zh.json');
+      out = await import('../data/dict/_built/dict_zh.json');
       break;
     case 'ar':
-      out = import('../data/dict/_built/dict_ar.json');
+      out = await import('../data/dict/_built/dict_ar.json');
       break;
     default:
-      out = import('../data/dict/_built/dict_en.json');
+      out = await import('../data/dict/_built/dict_en.json');
       break;
   }
-  return out.then((m) => {
-    return m.default;
-  });
+  _dict_cache[lang] = out.default;
+  return _dict_cache[lang];
 }
 
 /** Translate text, tooltype or placeholder in element based on "[data-lang_key]" id and a json key-value pair dictionnary
@@ -228,17 +231,16 @@ export async function getDictItem(key, lang) {
   return res;
 }
 
-
 /**
-* Get template from dict and use an object to replace {{<key>}} parts
-* @param {String} key Dict key 
-* @param {Object} data Object to use for remplacement
-* @param  {String} lang Two letters language
-* @return {String} Parsed template string
-*/
-export async function getDictTemplate(key, data, lang){
-  const template = await getDictItem(key,lang);
-  return template.replace(/{{([^{}]+)}}/g, (matched, key)=>{
+ * Get template from dict and use an object to replace {{<key>}} parts
+ * @param {String} key Dict key
+ * @param {Object} data Object to use for remplacement
+ * @param  {String} lang Two letters language
+ * @return {String} Parsed template string
+ */
+export async function getDictTemplate(key, data, lang) {
+  const template = await getDictItem(key, lang);
+  return template.replace(/{{([^{}]+)}}/g, (matched, key) => {
     return data[key];
   });
 }
