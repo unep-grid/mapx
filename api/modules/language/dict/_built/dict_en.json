@@ -1845,11 +1845,11 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views"
+    "en": "Project's views"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search"
+    "en": "Catalog"
   },
   {
     "id": "btn_theme_switch",
@@ -3113,7 +3113,7 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ..."
+    "en": "Filter views within current project..."
   },
   {
     "id": "view_filter_by_tags",
@@ -5356,20 +5356,16 @@
     "en": "Notifications"
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ..."
+    "en": "Search public views in all projects ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords"
+    "en": "Keywords"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords"
+    "en": "Geographic keywords"
   },
   {
     "id": "search_view_type",
@@ -5397,7 +5393,11 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close"
+    "en": "show"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link"
   },
   {
     "id": "search_clear_query",
@@ -5409,7 +5409,7 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel"
+    "en": "Advanced filtering options"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -5450,5 +5450,13 @@
   {
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country"
   }
 ]

@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "fr": "Vues"
+    "en": "Project's views",
+    "fr": "Vues du projet"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "fr": "Recherche"
+    "en": "Catalog",
+    "fr": "Catalogue"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "fr": "Filtrer les vues ..."
+    "en": "Filter views within current project...",
+    "fr": "Filtrer les vues du projet courant..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "fr": "Notifications"
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "fr": "Rechercher dans le catalogue public MapX"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "fr": "Entrez les mots-clés ici ..."
+    "en": "Search public views in all projects ...",
+    "fr": "Rechercher des vues publiques dans tous les projets ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "fr": "Mots-clés sources"
+    "en": "Keywords",
+    "fr": "Mots clés"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "fr": "Mots-clés géographiques sources"
+    "en": "Geographic keywords",
+    "fr": "Mots-clés géographiques"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "fr": "Ouvrir fermer"
+    "en": "show",
+    "fr": "spectacle"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "fr": "Relier"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "fr": "Basculer le panneau des filtres"
+    "en": "Advanced filtering options",
+    "fr": "Options de filtrage avancées"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "fr": " {{strNbHit}}résultats trouvés dans {{strTime}} . Affichage de la page {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "fr": "Région"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "fr": "Pays"
   }
 ]

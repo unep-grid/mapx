@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "de": "Ansichten "
+    "en": "Project's views",
+    "de": "Projektansichten"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "de": "Suche "
+    "en": "Catalog",
+    "de": "Katalog"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "de": "Ansichten filtern ... "
+    "en": "Filter views within current project...",
+    "de": "Ansichten innerhalb des aktuellen Projekts filtern ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "de": "Benachrichtigungen "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "de": "Durchsuchen Sie den öffentlichen MapX-Katalog"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "de": "Geben Sie hier Schlüsselwörter ein ..."
+    "en": "Search public views in all projects ...",
+    "de": "Suche nach öffentlichen Ansichten in allen Projekten ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "de": "Quellschlüsselwörter"
+    "en": "Keywords",
+    "de": "Schlüsselwörter"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "de": "Quell-Geo-Keywords"
+    "en": "Geographic keywords",
+    "de": "Geografische Schlüsselwörter"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "de": "Öffnen schließen"
+    "en": "show",
+    "de": "Show"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "de": "Verknüpfung"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "de": "Schalten Sie das Filterfeld um"
+    "en": "Advanced filtering options",
+    "de": "Erweiterte Filteroptionen"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "de": " {{strNbHit}}Ergebnisse gefunden in {{strTime}} . Seite anzeigen {{cPage}} /. {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "de": "Region"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "de": "Land"
   }
 ]

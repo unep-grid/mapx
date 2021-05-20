@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "ru": "Взгляды "
+    "en": "Project's views",
+    "ru": "Просмотры проекта"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "ru": "Поиск"
+    "en": "Catalog",
+    "ru": "Каталог"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "ru": "Фильтровать просмотры ... "
+    "en": "Filter views within current project...",
+    "ru": "Фильтровать представления в текущем проекте ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "ru": "Уведомления "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "ru": "Поиск в общедоступном каталоге MapX"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "ru": "Введите здесь ключевые слова ..."
+    "en": "Search public views in all projects ...",
+    "ru": "Искать в публичных представлениях во всех проектах ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "ru": "Исходные ключевые слова"
+    "en": "Keywords",
+    "ru": "Ключевые слова"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "ru": "Исходные гео-ключевые слова"
+    "en": "Geographic keywords",
+    "ru": "Географические ключевые слова"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "ru": "Открыто закрыто"
+    "en": "show",
+    "ru": "показывать"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "ru": "Ссылка на сайт"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "ru": "Переключить панель фильтров"
+    "en": "Advanced filtering options",
+    "ru": "Расширенные возможности фильтрации"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "ru": " {{strNbHit}}результаты найдены в {{strTime}} . Отображение страницы {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "ru": "Область, край"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "ru": "Страна"
   }
 ]

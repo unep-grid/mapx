@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "ps": "لیدنې"
+    "en": "Project's views",
+    "ps": "د پروژې نظرونه"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "ps": "لټون "
+    "en": "Catalog",
+    "ps": "نوملړ"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "ps": "لټون وګوری"
+    "en": "Filter views within current project...",
+    "ps": "د موجوده پروژې دننه د فلټر لیدونه ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "ps": "خبرتیاوې "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "ps": "د میپ ایکس عامه کتلاګ ومومئ"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "ps": "کلیدي ټکي دلته دننه کړئ ..."
+    "en": "Search public views in all projects ...",
+    "ps": "په ټولو پروژو کې د عامه نظرونو لټون وکړئ ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "ps": "د سرچینې ټکي"
+    "en": "Keywords",
+    "ps": "کلیدي ټکي"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "ps": "سرچینه جیو ټکي"
+    "en": "Geographic keywords",
+    "ps": "جغرافیوي ټکي"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "ps": "خلاص / بندول"
+    "en": "show",
+    "ps": "ښودل"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "ps": "لینک"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "ps": "د فلټرونو پینل ٹوگل کړئ"
+    "en": "Advanced filtering options",
+    "ps": "د فلټر کولو پرمختللي انتخابونه"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "ps": " {{strNbHit}}پایلې په کې وموندل شوې {{strTime}} . پا Displayه ښودل {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "ps": "سیمه"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "ps": "هیواد"
   }
 ]

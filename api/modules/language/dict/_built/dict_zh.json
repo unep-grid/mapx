@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "zh": "视图"
+    "en": "Project's views",
+    "zh": "项目观点"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "zh": "搜索"
+    "en": "Catalog",
+    "zh": "目录"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "zh": "筛选视图..."
+    "en": "Filter views within current project...",
+    "zh": "筛选当前项目中的视图..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "zh": "通知事项 "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "zh": "搜索MapX公共目录"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "zh": "在此处输入关键字..."
+    "en": "Search public views in all projects ...",
+    "zh": "在所有项目中搜索公众意见..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "zh": "来源关键字"
+    "en": "Keywords",
+    "zh": "关键字词"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "zh": "来源地理关键字"
+    "en": "Geographic keywords",
+    "zh": "地理关键字"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "zh": "开关"
+    "en": "show",
+    "zh": "表演"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "zh": "关联"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "zh": "切换过滤器面板"
+    "en": "Advanced filtering options",
+    "zh": "进阶筛选选项"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "zh": " {{strNbHit}}在中找到结果 {{strTime}}。显示页面 {{cPage}}/ {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "zh": "地区"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "zh": "国家"
   }
 ]

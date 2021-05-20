@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "es": "Vistas"
+    "en": "Project's views",
+    "es": "Vistas del proyecto"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "es": "Buscar"
+    "en": "Catalog",
+    "es": "Catalogar"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "es": "Filtrar las vistas ..."
+    "en": "Filter views within current project...",
+    "es": "Filtrar vistas dentro del proyecto actual ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "es": "Notificaciones "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "es": "Buscar en el catálogo público de MapX"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "es": "Ingrese palabras clave aquí ..."
+    "en": "Search public views in all projects ...",
+    "es": "Buscar vistas públicas en todos los proyectos ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "es": "Palabras clave de origen"
+    "en": "Keywords",
+    "es": "Palabras clave"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "es": "Palabras clave geográficas de origen"
+    "en": "Geographic keywords",
+    "es": "Palabras clave geográficas"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "es": "Abierto cerrado"
+    "en": "show",
+    "es": "show"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "es": "Enlace"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "es": "Alternar el panel de filtros"
+    "en": "Advanced filtering options",
+    "es": "Opciones de filtrado avanzadas"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "es": " {{strNbHit}}resultados encontrados en {{strTime}} . Visualización de la página {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "es": "Región"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "es": "País"
   }
 ]

@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "ar": "الآراء "
+    "en": "Project's views",
+    "ar": "وجهات نظر المشروع"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "ar": "بحث"
+    "en": "Catalog",
+    "ar": "فهرس"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "ar": "عروض الفلاتر ... "
+    "en": "Filter views within current project...",
+    "ar": "تصفية العروض ضمن المشروع الحالي ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "ar": "إشعارات "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "ar": "ابحث في كتالوج MapX العام"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "ar": "أدخل الكلمات الأساسية هنا ..."
+    "en": "Search public views in all projects ...",
+    "ar": "بحث في وجهات النظر العامة في جميع المشاريع ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "ar": "الكلمات الرئيسية المصدر"
+    "en": "Keywords",
+    "ar": "الكلمات الدالة"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "ar": "مصدر الكلمات الرئيسية الجغرافية"
+    "en": "Geographic keywords",
+    "ar": "الكلمات الرئيسية الجغرافية"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "ar": "فتح / إغلاق"
+    "en": "show",
+    "ar": "تبين"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "ar": "نهاية لهذه الغاية"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "ar": "تبديل لوحة المرشحات"
+    "en": "Advanced filtering options",
+    "ar": "خيارات التصفية المتقدمة"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "ar": " {{strNbHit}}النتائج التي تم العثور عليها في {{strTime}} . عرض الصفحة {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "ar": "منطقة"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "ar": "دولة"
   }
 ]

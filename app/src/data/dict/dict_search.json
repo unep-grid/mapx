@@ -1,21 +1,8 @@
 [
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "fr": "Rechercher dans le catalogue public MapX",
-    "es": "",
-    "ru": "",
-    "zh": "",
-    "ar": "",
-    "fa": "",
-    "ps": "",
-    "bn": "",
-    "de": ""
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "fr": "",
+    "en": "Search public views in all projects ...",
+    "fr": "Rechercher des vues publiques dans tous les projets ...",
     "es": "",
     "ru": "",
     "zh": "",
@@ -27,7 +14,7 @@
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
+    "en": "Keywords",
     "fr": "",
     "es": "",
     "ru": "",
@@ -40,7 +27,7 @@
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
+    "en": "Geographic keywords",
     "fr": "",
     "es": "",
     "ru": "",
@@ -132,7 +119,20 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
+    "en": "show",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
     "fr": "",
     "es": "",
     "ru": "",
@@ -171,7 +171,7 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
+    "en": "Advanced filtering options",
     "fr": "",
     "es": "",
     "ru": "",
@@ -299,9 +299,35 @@
     "bn": "",
     "de": ""
   },
-{
+  {
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
     "fr": "",
     "es": "",
     "ru": "",

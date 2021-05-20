@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "bn": "ভিউ "
+    "en": "Project's views",
+    "bn": "প্রকল্পের মতামত"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "bn": "অনুসন্ধান করুন "
+    "en": "Catalog",
+    "bn": "ক্যাটালগ"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "bn": "ফিল্টার দর্শন ... "
+    "en": "Filter views within current project...",
+    "bn": "বর্তমান প্রকল্পের মধ্যে ফিল্টার দর্শনগুলি ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "bn": "বিজ্ঞপ্তি "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "bn": "মানচিত্রের সর্বজনীন ক্যাটালগ অনুসন্ধান করুন"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "bn": "কীওয়ার্ডগুলি এখানে প্রবেশ করান ..."
+    "en": "Search public views in all projects ...",
+    "bn": "সমস্ত প্রকল্পে সর্বজনীন দর্শন অনুসন্ধান করুন ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "bn": "উত্স কীওয়ার্ড"
+    "en": "Keywords",
+    "bn": "কীওয়ার্ডস"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "bn": "উত্স ভূ-কীওয়ার্ডগুলি"
+    "en": "Geographic keywords",
+    "bn": "ভৌগলিক কীওয়ার্ড"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "bn": "খোলা বন্ধ"
+    "en": "show",
+    "bn": "দেখান"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "bn": "লিঙ্ক"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "bn": "ফিল্টার প্যানেল টগল করুন"
+    "en": "Advanced filtering options",
+    "bn": "উন্নত ফিল্টারিং বিকল্প"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "bn": " {{strNbHit}}ফলাফল পাওয়া গেছে {{strTime}} । পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "bn": "অঞ্চল"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "bn": "দেশ"
   }
 ]

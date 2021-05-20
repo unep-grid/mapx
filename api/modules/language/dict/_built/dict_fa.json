@@ -2306,13 +2306,13 @@
   },
   {
     "id": "btn_tab_views",
-    "en": "Views",
-    "fa": "نمایه ها"
+    "en": "Project's views",
+    "fa": "نظرات پروژه"
   },
   {
     "id": "btn_tab_search",
-    "en": "Search",
-    "fa": "جستجو کردن "
+    "en": "Catalog",
+    "fa": "کاتالوگ"
   },
   {
     "id": "btn_theme_switch",
@@ -3891,8 +3891,8 @@
   },
   {
     "id": "view_filter_input",
-    "en": "Filter views ...",
-    "fa": " جستجوی نمایه"
+    "en": "Filter views within current project...",
+    "fa": "فیلتر کردن نمایش ها در پروژه فعلی ..."
   },
   {
     "id": "view_filter_by_tags",
@@ -6695,24 +6695,19 @@
     "fa": "اطلاعیه "
   },
   {
-    "id": "search_title",
-    "en": "Search the MapX public catalog",
-    "fa": "در فهرست عمومی MapX جستجو کنید"
-  },
-  {
     "id": "search_placeholder",
-    "en": "Enter keywords here ...",
-    "fa": "کلمات کلیدی را اینجا وارد کنید ..."
+    "en": "Search public views in all projects ...",
+    "fa": "مشاهده بازدیدهای عمومی در همه پروژه ها ..."
   },
   {
     "id": "search_source_keywords",
-    "en": "Source keywords",
-    "fa": "کلمات کلیدی منبع"
+    "en": "Keywords",
+    "fa": "کلید واژه ها"
   },
   {
     "id": "search_source_keywords_m49",
-    "en": "Source geo-keywords",
-    "fa": "کلمات کلیدی جغرافیایی منبع"
+    "en": "Geographic keywords",
+    "fa": "کلمات کلیدی جغرافیایی"
   },
   {
     "id": "search_view_type",
@@ -6746,8 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Open/Close",
-    "fa": "باز بسته"
+    "en": "show",
+    "fa": "نشان دادن"
+  },
+  {
+    "id": "search_view_link",
+    "en": "Link",
+    "fa": "ارتباط دادن"
   },
   {
     "id": "search_clear_query",
@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_filters",
-    "en": "Toggle the filters panel",
-    "fa": "صفحه فیلترها را تغییر دهید"
+    "en": "Advanced filtering options",
+    "fa": "گزینه های پیشرفته فیلتر"
   },
   {
     "id": "search_filter_view_modified_at",
@@ -6813,5 +6813,15 @@
     "id": "search_results_stats",
     "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
     "fa": " {{strNbHit}}نتایج یافت شده در {{strTime}} . نمایش صفحه {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_source_keywords_group_region",
+    "en": "Region",
+    "fa": "منطقه"
+  },
+  {
+    "id": "search_source_keywords_group_country",
+    "en": "Country",
+    "fa": "کشور"
   }
 ]
