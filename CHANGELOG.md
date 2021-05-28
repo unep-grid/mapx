@@ -1,4 +1,9 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.24-alpha' target='_blank'>1.8.24-alpha</a>
+  - APP
+    - Search tool : added range slider to filter view by generic years
+  - API
+    - Search indexes include many new fields for filtering by years + optimisation
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.23-alpha' target='_blank'>1.8.23-alpha</a>
   - APP 
     - Search tools :
