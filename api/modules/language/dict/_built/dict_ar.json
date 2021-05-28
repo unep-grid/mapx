@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "ar": "تبين"
+    "en": "Enable",
+    "ar": "ممكن"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "ar": "نهاية لهذه الغاية"
+    "en": "Direct link",
+    "ar": "رابط مباشر"
   },
   {
     "id": "search_clear_query",

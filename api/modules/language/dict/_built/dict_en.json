@@ -5393,11 +5393,11 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show"
+    "en": "Enable"
   },
   {
     "id": "search_view_link",
-    "en": "Link"
+    "en": "Direct link"
   },
   {
     "id": "search_clear_query",

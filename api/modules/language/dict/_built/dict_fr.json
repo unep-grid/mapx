@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "fr": "spectacle"
+    "en": "Enable",
+    "fr": "Activer"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "fr": "Relier"
+    "en": "Direct link",
+    "fr": "Lien direct"
   },
   {
     "id": "search_clear_query",

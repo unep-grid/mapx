@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "de": "Show"
+    "en": "Enable",
+    "de": "Aktivieren"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "de": "Verknüpfung"
+    "en": "Direct link",
+    "de": "Direkte Verbindung"
   },
   {
     "id": "search_clear_query",

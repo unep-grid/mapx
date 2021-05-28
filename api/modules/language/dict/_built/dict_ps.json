@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "ps": "ښودل"
+    "en": "Enable",
+    "ps": "وړول"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "ps": "لینک"
+    "en": "Direct link",
+    "ps": "مستقیم لینک"
   },
   {
     "id": "search_clear_query",

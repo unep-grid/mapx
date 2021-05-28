@@ -119,7 +119,7 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
+    "en": "Enable",
     "fr": "",
     "es": "",
     "ru": "",
@@ -132,7 +132,7 @@
   },
   {
     "id": "search_view_link",
-    "en": "Link",
+    "en": "Direct link",
     "fr": "",
     "es": "",
     "ru": "",

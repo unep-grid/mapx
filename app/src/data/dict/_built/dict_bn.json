@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "bn": "দেখান"
+    "en": "Enable",
+    "bn": "সক্ষম করুন"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "bn": "লিঙ্ক"
+    "en": "Direct link",
+    "bn": "সরাসরি লিঙ্ক"
   },
   {
     "id": "search_clear_query",

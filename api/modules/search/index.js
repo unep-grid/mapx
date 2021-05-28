@@ -1,5 +1,6 @@
 const {meili, pgRead} = require('@mapx/db');
 const {getParamsValidator} = require('@mapx/route_validation');
+const valid = require('@fxi/mx_valid');
 const {validateTokenHandler} = require('@mapx/authentication');
 const {sendError, sendJSON, wait} = require('@mapx/helpers');
 const template = require('@mapx/template');
@@ -86,6 +87,9 @@ async function updateIndexes() {
         return flatLanguageStrings(item, language);
       });
       await indexView.addDocuments(doc);
+      /**
+      * Avoid bug https://github.com/meilisearch/MeiliSearch/issues/1196
+      */ 
       await wait(5000);
     }
     console.log(`Created search index in ${Date.now() - start} ms`);
@@ -123,10 +127,27 @@ async function handlerSearch(req, res) {
 }
 
 function flatLanguageStrings(item, language) {
-  const ml = item.meta_multilingual;
+  const ml = item.meta_multilingual || {};
+  const pd = item.projects_data || [];
+  /**
+   * Extend document with items from meta_multilingual
+   */
+
   for (let m in ml) {
+    /*
+     * e.g. 'view_title', 'source_notes',...
+     */
+
     const tr = ml[m] || {};
+    /*
+     * e.g. {en:'My view title',fr:'Mon titre'}
+     */
+
     item[m] = tr[language] || tr[languages.default];
+    /*
+     * e.g. {view_title:'My view title', ...}
+     */
+
     const as = config.idx_views.attributesStripHTML;
     const toStrip = as.includes(m);
     if (toStrip) {
@@ -134,6 +155,19 @@ function flatLanguageStrings(item, language) {
     }
   }
   delete item.meta_multilingual;
+
+  /**
+   * Set language in project data. Object => string
+   * {title:{en:'Title','fr':'Titre'},...} => {title:'Title',...}
+   */
+  for (let p of pd) {
+    for (let k in p) {
+      if (valid.isObject(p[k])) {
+        p[k] = p[k][language] || p[k][languages.default];
+      }
+    }
+  }
+
   return item;
 }
 

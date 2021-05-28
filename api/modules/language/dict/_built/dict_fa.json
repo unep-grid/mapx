@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "fa": "نشان دادن"
+    "en": "Enable",
+    "fa": "فعال کردن"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "fa": "ارتباط دادن"
+    "en": "Direct link",
+    "fa": "لینک مستقیم"
   },
   {
     "id": "search_clear_query",

@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "zh": "表演"
+    "en": "Enable",
+    "zh": "使能够"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "zh": "关联"
+    "en": "Direct link",
+    "zh": "直接链接"
   },
   {
     "id": "search_clear_query",

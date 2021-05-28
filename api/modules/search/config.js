@@ -4,17 +4,17 @@ const languages = validation_defaults.languages;
 const config = {
   // Distinct keywords currently used
   idx_keywords: {
-    primaryKey : 'id_hash',
+    primaryKey: 'id_hash',
     searchableAttributes: ['keyword']
   },
   // All m49 keywords from dict in DB
   idx_keywords_m49: {
-    primaryKey : 'id',
+    primaryKey: 'id',
     searchableAttributes: ['id', ...languages.codes]
   },
   // public views
   idx_views: {
-    primaryKey : 'view_id',
+    primaryKey: 'view_id',
     atributesForFaceting: [
       'view_type',
       'source_keywords',
@@ -56,10 +56,15 @@ const config = {
       'source_start_at',
       'source_end_at',
       'source_released_at',
-      'source_modified_at'
+      'source_modified_at',
+      'range_start_at',
+      'range_end_at',
+      'range_start_at_year',
+      'range_end_at_year',
+      'range_years',
+      'projects_data'
     ]
   }
 };
-
 
 exports.config = config;

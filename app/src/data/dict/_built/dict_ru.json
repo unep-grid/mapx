@@ -6741,13 +6741,13 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "show",
-    "ru": "показывать"
+    "en": "Enable",
+    "ru": "Давать возможность"
   },
   {
     "id": "search_view_link",
-    "en": "Link",
-    "ru": "Ссылка на сайт"
+    "en": "Direct link",
+    "ru": "Прямая ссылка"
   },
   {
     "id": "search_clear_query",
