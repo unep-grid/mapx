@@ -11,7 +11,33 @@ const def = {
   meili: {
     index_setting: {}
   },
+  dates : {
+      year_min : 1950,
+      year_max : (new Date()).getFullYear()
+  },
   attributes: {
+    retrieve: [
+      'view_modified_at',
+      'view_created_at',
+      'source_start_at',
+      'source_end_at',
+      'source_released_at',
+      'source_modified_at',
+      'view_title',
+      'view_abstract',
+      'source_title',
+      'source_abstract',
+      'source_keywords',
+      'source_keywords_m49',
+      'source_notes',
+      'project_title',
+      'project_abstract',
+      'view_id',
+      'project_id',
+      'view_type',
+      'range_end_at_year',
+      'range_start_at_year'
+    ],
     date: [
       'view_modified_at',
       'view_created_at',

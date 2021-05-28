@@ -44,10 +44,12 @@ class Search extends EventSimple {
     /**
      * Dynamic import
      */
-    import('./style.less');
-    import('./style_flatpickr.less');
+    await import('./style.less');
+    await import('./style_flatpickr.less');
+    await import('/node_modules/nouislider/distribute/nouislider.css');
 
-    s._MeiliSearch = (await import('meilisearch')).MeiliSearch;
+    (s._nouislider = (await import('nouislider')).default),
+      (s._MeiliSearch = (await import('meilisearch')).MeiliSearch);
     s._flatpickr = (await import('flatpickr')).default;
     s._flatpickr_langs = await import('./flatpickr_locales');
     s._elContainer = document.querySelector(s.opt('container'));
@@ -155,7 +157,7 @@ class Search extends EventSimple {
     s._built = true;
 
     /**
-     * Result and pagination
+     * Results and pagination
      */
     s._elResults = el('div', {class: ['search--results']});
     s._elPagination = el('div', {class: ['search--pagination']});
@@ -165,11 +167,15 @@ class Search extends EventSimple {
      */
     s._elFiltersFacets = el('div', {class: 'search--filter-facets'});
     s._elFiltersDate = el('div', {class: 'search--filter-dates'});
+    s._elFiltersYearsRange = el('div', {
+      class: ['search--filter-years', 'mx-slider-container']
+    });
     s._elFilters = el(
       'div',
       {
         class: ['search--filters', 'search--hidden']
       },
+      s._elFiltersYearsRange,
       s._elFiltersFacets,
       s._elFiltersDate
     );
@@ -201,6 +207,7 @@ class Search extends EventSimple {
         key_label: 'search_title',
         key_placeholder: 'search_placeholder'
       }),
+      s._elSliderYearContainer,
       s._elFilters
     );
 
@@ -227,6 +234,7 @@ class Search extends EventSimple {
      */
     s._filters = {};
     await s._build_filter_date();
+    await s._build_filter_years_range();
   }
 
   _update_facets(distrib) {
@@ -429,6 +437,75 @@ class Search extends EventSimple {
     s._tribute.attach(elTarget);
   }
 
+  async _build_filter_years_range() {
+    const s = this;
+    /**
+     * Year slider container and labels
+     */
+    const yMin = s.opt('dates').year_min;
+    const yMax = s.opt('dates').year_max;
+
+    const elSliderYear = el('div');
+    const elSliderYearInputMin = el('span', {
+      class: 'search--filter-years-value'
+    });
+    const elSliderYearInputMax = el('span', {
+      class: 'search--filter-years-value'
+    });
+
+    const elSliderYearRowTop = el(
+      'div',
+      {
+        class: 'search--filter-years-row'
+      },
+      [elSliderYearInputMin, elSliderYearInputMax]
+    );
+    const elSliderYearRowBottom = el(
+      'div',
+      {
+        class: 'search--filter-years-row'
+      },
+      [el('span', `${yMin}`), el('span', `${yMax}`)]
+    );
+
+    s._elFiltersYearsRange.appendChild(elSliderYearRowTop);
+    s._elFiltersYearsRange.appendChild(elSliderYear);
+    s._elFiltersYearsRange.appendChild(elSliderYearRowBottom);
+
+    /**
+     * Slider
+     */
+    s._year_slider = s._nouislider.create(elSliderYear, {
+      range: {min: yMin, max: yMax},
+      step: 1,
+      start: [yMin, yMax],
+      connect: true,
+      behaviour: 'drag',
+      tooltips: false
+    });
+    /**
+     * - drag produce end event
+     * - update produce set event
+     * -> unable to have a smart way of handling fast changes
+     * -> using 'update' for all
+     */
+    s._year_slider.on('update', update);
+    /**
+     * Update filters
+     */
+    function update(d) {
+      const start = parseInt(d[0]);
+      const end = parseInt(d[1]);
+      const attrStart = 'range_start_at_year';
+      const attrEnd = 'range_end_at_year';
+      const strFilter = `${attrStart} >= ${start} AND ${attrEnd} <= ${end}`;
+      elSliderYearInputMin.dataset.year = start;
+      elSliderYearInputMax.dataset.year = end;
+      s._filters['range_years'] = strFilter;
+      s.update();
+    }
+  }
+
   /**
    * Build filter date for each item in options > attributes > date
    * connect flatpickr and add to UI
@@ -485,6 +562,7 @@ class Search extends EventSimple {
             strFilter = strFilter + `AND ${attr}<=${(e[1] * 1) / 1000}`;
           }
           s._filters[attr] = strFilter;
+          //debugger;
           await s.update();
         }
       });
@@ -578,6 +656,20 @@ class Search extends EventSimple {
     const action = ds.action;
     try {
       switch (action) {
+        case 'search_year_set_min':
+          {
+            const values = s._year_slider.get();
+            values[0] = ds.year;
+            s._year_slider.set(values);
+          }
+          break;
+        case 'search_year_set_max':
+          {
+            const values = s._year_slider.get();
+            values[1] = ds.year;
+            s._year_slider.set(values);
+          }
+          break;
         case 'toggle_filters':
           {
             s._elFilters.classList.toggle('search--hidden');
@@ -634,7 +726,7 @@ class Search extends EventSimple {
               view = await getViewRemote(idView);
               if (isView(view)) {
                 view._drop_shared = true;
-                await viewsListAddSingle(view,{open:false});
+                await viewsListAddSingle(view, {open: false});
               }
             }
             if (!isView(view)) {
@@ -741,6 +833,44 @@ class Search extends EventSimple {
       }
 
       /**
+       * Add years keyword
+       */
+      const elYears = el('div', {class: ['search--button-group']}, [
+        el(
+          'div',
+          {
+            class: ['search--button-keyword'],
+            dataset: {
+              action: 'search_year_set_min',
+              year: v.range_start_at_year
+            }
+          },
+          [
+            el('i', {
+              class: ['fa', 'fa-hourglass-start']
+            }),
+            el('span', `${v.range_start_at_year}`)
+          ]
+        ),
+        el(
+          'div',
+          {
+            class: ['search--button-keyword'],
+            dataset: {
+              action: 'search_year_set_max',
+              year: v.range_end_at_year
+            }
+          },
+          [
+            el('i', {
+              class: ['fa', 'fa-hourglass-end']
+            }),
+            el('span', `${v.range_end_at_year}`)
+          ]
+        )
+      ]);
+
+      /**
        * Add actions
        */
       const elButtonsBar = el(
@@ -823,7 +953,8 @@ class Search extends EventSimple {
             })
           ),
           elButtonsBar,
-          elKeywords
+          elKeywords,
+          elYears
         )
       );
     }
@@ -972,13 +1103,22 @@ class Search extends EventSimple {
         enable: !!facetFilters && !!facetFilters.length
       });
 
+      /**
+       * Prevent extrem quick chamges
+       * -> Do not render further.
+       */
+      if (s._timer_debounce !== timer) {
+        console.log('cancel before search');
+        return;
+      }
+
       const results = await s.search({
         q: s._elInput.value,
         offset: page * 20,
         limit: 20,
         filters: strFilters || null,
         facetFilters: facetFilters || null,
-        attributesToRetrieve: ['*'],
+        attributesToRetrieve: attr.retrieve,
         attributesToHighlight: attr.text,
         attributesToCrop: attr.text,
         facetsDistribution: attrKeys,
@@ -986,11 +1126,12 @@ class Search extends EventSimple {
       });
 
       /**
-      * Search is not cancellable, but if the timer 
-      * has changed, another request is on its way. 
-      * -> Do not render further.
-      */ 
+       * Search is not cancellable, but if the timer
+       * has changed, another request is on its way.
+       * -> Do not render further.
+       */
       if (s._timer_debounce !== timer) {
+        console.log('cancel after search');
         return;
       }
 
@@ -1015,7 +1156,6 @@ class Search extends EventSimple {
       } else {
         s._update_facets(results.facetsDistribution);
       }
-
     } catch (e) {
       console.warn('Issue while searching', {error: e});
     }
@@ -1289,8 +1429,8 @@ class Facet {
       'div',
       {
         class: 'search--filter-facet-item',
-        style : {
-          order : 1000 - fc._opt.count
+        style: {
+          order: 1000 - fc._opt.count
         }
       },
       [fc._elCheckbox, fc._elLabel, fc._elCount]

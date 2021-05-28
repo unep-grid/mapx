@@ -7,6 +7,25 @@
   padding: 10px;
   max-height: 15em;
   overflow: auto;
+  .search--filter-years {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    .search--filter-years-row {
+      display: flex;
+      justify-content: space-between;
+      span {
+        color: var(--mx_ui_text_faded);
+        font-size: 0.8em;
+      }
+    }
+    .search--filter-years-value {
+      &:after {
+        color: var(--mx_ui_text);
+        content: attr(data-year);
+      }
+    }
+  }
   .search--filter-facets {
     .search--filter-facets-group {
       margin: 10px;
@@ -63,8 +82,8 @@
             -webkit-backface-visibility: hidden;
             backface-visibility: hidden;
             text-align: right;
-            &:after{
-              content:attr(count);
+            &:after {
+              content: attr(count);
             }
           }
         }
