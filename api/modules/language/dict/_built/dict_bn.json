@@ -6766,13 +6766,13 @@
   },
   {
     "id": "search_filter_view_modified_at",
-    "en": "View's modification date",
-    "bn": "দেখার পরিবর্তনের তারিখ"
+    "en": "View's modification date (range)",
+    "bn": "দেখার পরিবর্তনের তারিখ (ব্যাপ্তি)"
   },
   {
     "id": "search_filter_view_created_at",
-    "en": "View's creation date",
-    "bn": "দেখার তৈরির তারিখ"
+    "en": "View's creation date (range)",
+    "bn": "দেখুন এর তৈরি তারিখ (ব্যাপ্তি)"
   },
   {
     "id": "search_filter_source_start_at",
@@ -6786,18 +6786,23 @@
   },
   {
     "id": "search_filter_source_released_at",
-    "en": "Source's release date",
-    "bn": "উত্স প্রকাশের তারিখ"
+    "en": "Source's release date (range) ",
+    "bn": "উত্সের প্রকাশের তারিখ (ব্যাপ্তি)"
   },
   {
     "id": "search_filter_source_modified_at",
-    "en": "Source's modification date",
-    "bn": "উত্সের পরিবর্তনের তারিখ"
+    "en": "Source's modification date (range)",
+    "bn": "উত্সের পরিবর্তনের তারিখ (ব্যাপ্তি)"
   },
   {
     "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "bn": "তারিখ অনুসারে ফিল্টার"
+  },
+  {
+    "id": "search_filter_date_details",
+    "en": "Advanced filtering by date",
+    "bn": "তারিখ অনুসারে উন্নত ফিল্টারিং"
   },
   {
     "id": "search_story_auto_play_confirm",
@@ -6823,5 +6828,10 @@
     "id": "search_source_keywords_group_country",
     "en": "Country",
     "bn": "দেশ"
+  },
+  {
+    "id": "search_year_composite_range",
+    "en": "Temporal range",
+    "bn": "অস্থায়ী পরিসীমা"
   }
 ]

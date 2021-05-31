@@ -6766,13 +6766,13 @@
   },
   {
     "id": "search_filter_view_modified_at",
-    "en": "View's modification date",
-    "ar": "تاريخ تعديل العرض"
+    "en": "View's modification date (range)",
+    "ar": "تاريخ تعديل العرض (النطاق)"
   },
   {
     "id": "search_filter_view_created_at",
-    "en": "View's creation date",
-    "ar": "تاريخ إنشاء العرض"
+    "en": "View's creation date (range)",
+    "ar": "تاريخ إنشاء العرض (النطاق)"
   },
   {
     "id": "search_filter_source_start_at",
@@ -6786,18 +6786,23 @@
   },
   {
     "id": "search_filter_source_released_at",
-    "en": "Source's release date",
-    "ar": "تاريخ الافراج عن المصدر"
+    "en": "Source's release date (range) ",
+    "ar": "تاريخ إصدار المصدر (النطاق)"
   },
   {
     "id": "search_filter_source_modified_at",
-    "en": "Source's modification date",
-    "ar": "تاريخ تعديل المصدر"
+    "en": "Source's modification date (range)",
+    "ar": "تاريخ تعديل المصدر (النطاق)"
   },
   {
     "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "ar": "تصفية حسب التاريخ"
+  },
+  {
+    "id": "search_filter_date_details",
+    "en": "Advanced filtering by date",
+    "ar": "تصفية متقدمة حسب التاريخ"
   },
   {
     "id": "search_story_auto_play_confirm",
@@ -6823,5 +6828,10 @@
     "id": "search_source_keywords_group_country",
     "en": "Country",
     "ar": "دولة"
+  },
+  {
+    "id": "search_year_composite_range",
+    "en": "Temporal range",
+    "ar": "النطاق الزمني"
   }
 ]

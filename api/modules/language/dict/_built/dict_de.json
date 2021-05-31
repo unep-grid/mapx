@@ -6766,13 +6766,13 @@
   },
   {
     "id": "search_filter_view_modified_at",
-    "en": "View's modification date",
-    "de": "Änderungsdatum der Ansicht"
+    "en": "View's modification date (range)",
+    "de": "Änderungsdatum der Ansicht (Bereich)"
   },
   {
     "id": "search_filter_view_created_at",
-    "en": "View's creation date",
-    "de": "Erstellungsdatum der Ansicht"
+    "en": "View's creation date (range)",
+    "de": "Erstellungsdatum der Ansicht (Bereich)"
   },
   {
     "id": "search_filter_source_start_at",
@@ -6786,18 +6786,23 @@
   },
   {
     "id": "search_filter_source_released_at",
-    "en": "Source's release date",
-    "de": "Erscheinungsdatum der Quelle"
+    "en": "Source's release date (range) ",
+    "de": "Erscheinungsdatum der Quelle (Bereich)"
   },
   {
     "id": "search_filter_source_modified_at",
-    "en": "Source's modification date",
-    "de": "Änderungsdatum der Quelle"
+    "en": "Source's modification date (range)",
+    "de": "Änderungsdatum der Quelle (Bereich)"
   },
   {
     "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "de": "Nach Datum filtern"
+  },
+  {
+    "id": "search_filter_date_details",
+    "en": "Advanced filtering by date",
+    "de": "Erweiterte Filterung nach Datum"
   },
   {
     "id": "search_story_auto_play_confirm",
@@ -6823,5 +6828,10 @@
     "id": "search_source_keywords_group_country",
     "en": "Country",
     "de": "Land"
+  },
+  {
+    "id": "search_year_composite_range",
+    "en": "Temporal range",
+    "de": "Zeitbereich"
   }
 ]

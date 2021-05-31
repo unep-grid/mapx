@@ -26,16 +26,17 @@
       }
     }
   }
+
+  .search--filter-group-title {
+    display: block;
+    opacity: 0.5;
+    font-size: 0.8em;
+    font-weight: normal;
+  }
+
   .search--filter-facets {
     .search--filter-facets-group {
       margin: 10px;
-      .search--filter-facets-title,
-      .search--filter-facets-group-title {
-        display: block;
-        opacity: 0.5;
-        font-size: 0.8em;
-        font-weight: normal;
-      }
       .search--filter-facets-items {
         display: flex;
         flex-wrap: wrap;
@@ -91,9 +92,11 @@
     }
   }
   .search--filter-dates {
-    margin-top: 50px;
+    margin: 5px;
+    padding: 5px;
     display: flex;
     flex-wrap: wrap;
+    border-left: 1px solid var(--mx_ui_border);
     .search--filter-date-item {
       display: flex;
       flex-wrap: wrap;

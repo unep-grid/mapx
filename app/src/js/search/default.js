@@ -39,10 +39,12 @@ const def = {
       'range_start_at_year'
     ],
     date: [
+      'source_start_at',
+      'source_end_at'
+    ],
+    date_range: [
       'view_modified_at',
       'view_created_at',
-      'source_start_at',
-      'source_end_at',
       'source_released_at',
       'source_modified_at'
     ],

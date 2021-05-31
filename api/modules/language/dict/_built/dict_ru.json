@@ -6766,13 +6766,13 @@
   },
   {
     "id": "search_filter_view_modified_at",
-    "en": "View's modification date",
-    "ru": "Дата изменения представления"
+    "en": "View's modification date (range)",
+    "ru": "Дата изменения представления (диапазон)"
   },
   {
     "id": "search_filter_view_created_at",
-    "en": "View's creation date",
-    "ru": "Дата создания представления"
+    "en": "View's creation date (range)",
+    "ru": "Дата создания представления (диапазон)"
   },
   {
     "id": "search_filter_source_start_at",
@@ -6786,18 +6786,23 @@
   },
   {
     "id": "search_filter_source_released_at",
-    "en": "Source's release date",
-    "ru": "Дата выпуска источника"
+    "en": "Source's release date (range) ",
+    "ru": "Дата выпуска источника (диапазон)"
   },
   {
     "id": "search_filter_source_modified_at",
-    "en": "Source's modification date",
-    "ru": "Дата изменения источника"
+    "en": "Source's modification date (range)",
+    "ru": "Дата изменения источника (диапазон)"
   },
   {
     "id": "search_filter_date_placeholder",
     "en": "Filter by date",
     "ru": "Фильтровать по дате"
+  },
+  {
+    "id": "search_filter_date_details",
+    "en": "Advanced filtering by date",
+    "ru": "Расширенная фильтрация по дате"
   },
   {
     "id": "search_story_auto_play_confirm",
@@ -6823,5 +6828,10 @@
     "id": "search_source_keywords_group_country",
     "en": "Country",
     "ru": "Страна"
+  },
+  {
+    "id": "search_year_composite_range",
+    "en": "Temporal range",
+    "ru": "Временной диапазон"
   }
 ]

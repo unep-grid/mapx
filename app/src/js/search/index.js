@@ -40,7 +40,7 @@ class Search extends EventSimple {
       return;
     }
     s._init = true;
-
+    s._filters = {};
     /**
      * Dynamic import
      */
@@ -167,6 +167,10 @@ class Search extends EventSimple {
      */
     s._elFiltersFacets = el('div', {class: 'search--filter-facets'});
     s._elFiltersDate = el('div', {class: 'search--filter-dates'});
+    s._elFiltersDateGroup = el('details', [
+      el('summary', elSpanTranslate('search_filter_date_details')),
+      s._elFiltersDate
+    ]);
     s._elFiltersYearsRange = el('div', {
       class: ['search--filter-years', 'mx-slider-container']
     });
@@ -177,7 +181,7 @@ class Search extends EventSimple {
       },
       s._elFiltersYearsRange,
       s._elFiltersFacets,
-      s._elFiltersDate
+      s._elFiltersDateGroup
     );
 
     /**
@@ -232,7 +236,6 @@ class Search extends EventSimple {
     /**
      * Filters
      */
-    s._filters = {};
     await s._build_filter_date();
     await s._build_filter_years_range();
   }
@@ -290,7 +293,7 @@ class Search extends EventSimple {
           el(
             'label',
             {
-              class: 'search--filter-facets-title'
+              class: 'search--filter-group-title'
             },
             elSpanTranslate(`search_${attr}`)
           ),
@@ -312,7 +315,7 @@ class Search extends EventSimple {
           g._el_group_container = el('div', [
             el(
               'div',
-              {class: 'search--filter-facets-group-title'},
+              {class: 'search--filter-group-title'},
               elSpanTranslate(g.key)
             ),
             g._el_group
@@ -449,6 +452,8 @@ class Search extends EventSimple {
     const elSliderYearInputMin = el('span', {
       class: 'search--filter-years-value'
     });
+    const elSliderYearTitle = elSpanTranslate('search_year_composite_range');
+
     const elSliderYearInputMax = el('span', {
       class: 'search--filter-years-value'
     });
@@ -458,7 +463,7 @@ class Search extends EventSimple {
       {
         class: 'search--filter-years-row'
       },
-      [elSliderYearInputMin, elSliderYearInputMax]
+      [elSliderYearInputMin, elSliderYearTitle, elSliderYearInputMax]
     );
     const elSliderYearRowBottom = el(
       'div',
@@ -501,7 +506,7 @@ class Search extends EventSimple {
       const strFilter = `${attrStart} >= ${start} AND ${attrEnd} <= ${end}`;
       elSliderYearInputMin.dataset.year = start;
       elSliderYearInputMax.dataset.year = end;
-      s._filters['range_years'] = strFilter;
+      s.setFilter('range_years', strFilter);
       s.update();
     }
   }
@@ -512,11 +517,19 @@ class Search extends EventSimple {
    */
   async _build_filter_date() {
     const s = this;
-    s._flatpickr_filters = [];
     const attrDate = s.opt('attributes').date;
+    const attrDateRange = s.opt('attributes').date_range;
+    s._flatpickr_filters = [];
+    const attrDateItems = attrDate.map((attr) => {
+      return {attr, range: false};
+    });
+    attrDateItems.push(
+      ...attrDateRange.map((attr) => {
+        return {attr, range: true};
+      })
+    );
     const txtPlaceholder = await getDictItem('search_filter_date_placeholder');
-
-    for (let attr of attrDate) {
+    for (let item of attrDateItems) {
       /**
        * Layout
        */
@@ -537,7 +550,7 @@ class Search extends EventSimple {
           class: 'search--filter-date-label',
           for: elFilterDate.id
         },
-        elSpanTranslate(`search_filter_${attr}`)
+        elSpanTranslate(`search_filter_${item.attr}`)
       );
       const elFilterContainer = el(
         'div',
@@ -551,18 +564,27 @@ class Search extends EventSimple {
        * Date picker
        */
       const fpickr = s._flatpickr(elFilterDate, {
-        mode: 'range',
+        mode: item.range ? 'range' : 'single',
         allowInput: true,
         onChange: async (e) => {
           let strFilter = '';
-          if (e[0]) {
-            strFilter = strFilter + `${attr}>=${(e[0] * 1) / 1000} `;
+          if (item.range) {
+            if (e[0]) {
+              strFilter = `${item.attr} >= ${(e[0] * 1) / 1000}`;
+            }
+            if (e[1]) {
+              strFilter = `${strFilter} AND ${item.attr}<=${(e[1] * 1) / 1000}`;
+            }
+          } else {
+            const isStart = item.attr.includes('_start_');
+
+            if (e[0]) {
+              strFilter = `${item.attr}${isStart ? '>' : '<'}=${(e[0] * 1) /
+                1000}`;
+            }
           }
-          if (e[1]) {
-            strFilter = strFilter + `AND ${attr}<=${(e[1] * 1) / 1000}`;
-          }
-          s._filters[attr] = strFilter;
-          //debugger;
+          console.log({attr: item.attr, filter: strFilter});
+          s.setFilter(item.attr, strFilter);
           await s.update();
         }
       });
@@ -1027,6 +1049,11 @@ class Search extends EventSimple {
       }
     }
     return filters.join(` ${op} `);
+  }
+
+  setFilter(id, value) {
+    const s = this;
+    s._filters[id] = value;
   }
 
   getFiltersFacets(op) {

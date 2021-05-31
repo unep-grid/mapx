@@ -17590,29 +17590,29 @@
   },
   {
     "id": "search_filter_view_modified_at",
-    "en": "View's modification date",
-    "fr": "Date de modification de la vue",
-    "es": "Ver fecha de modificación",
-    "ru": "Дата изменения представления",
-    "zh": "查看的修改日期",
-    "ar": "تاريخ تعديل العرض",
-    "fa": "تاریخ تغییر مشاهده",
-    "ps": "د تعدیل نیټه وګورئ",
-    "bn": "দেখার পরিবর্তনের তারিখ",
-    "de": "Änderungsdatum der Ansicht"
+    "en": "View's modification date (range)",
+    "fr": "Date de modification de la vue (plage)",
+    "es": "Fecha de modificación de la vista (rango)",
+    "ru": "Дата изменения представления (диапазон)",
+    "zh": "查看的修改日期（范围）",
+    "ar": "تاريخ تعديل العرض (النطاق)",
+    "fa": "تاریخ تغییر مشاهده (دامنه)",
+    "ps": "د کتنې د بدلون نیټه (حد)",
+    "bn": "দেখার পরিবর্তনের তারিখ (ব্যাপ্তি)",
+    "de": "Änderungsdatum der Ansicht (Bereich)"
   },
   {
     "id": "search_filter_view_created_at",
-    "en": "View's creation date",
-    "fr": "Date de création de la vue",
-    "es": "Fecha de creación de la vista",
-    "ru": "Дата создания представления",
-    "zh": "视图的创建日期",
-    "ar": "تاريخ إنشاء العرض",
-    "fa": "تاریخ ایجاد View",
-    "ps": "د جوړولو نیټه وګورئ",
-    "bn": "দেখার তৈরির তারিখ",
-    "de": "Erstellungsdatum der Ansicht"
+    "en": "View's creation date (range)",
+    "fr": "Date de création de la vue (plage)",
+    "es": "Fecha de creación de la vista (rango)",
+    "ru": "Дата создания представления (диапазон)",
+    "zh": "视图的创建日期（范围）",
+    "ar": "تاريخ إنشاء العرض (النطاق)",
+    "fa": "تاریخ ایجاد (محدوده) مشاهده",
+    "ps": "د جوړېدو نیټه (حد)",
+    "bn": "দেখুন এর তৈরি তারিখ (ব্যাপ্তি)",
+    "de": "Erstellungsdatum der Ansicht (Bereich)"
   },
   {
     "id": "search_filter_source_start_at",
@@ -17642,29 +17642,29 @@
   },
   {
     "id": "search_filter_source_released_at",
-    "en": "Source's release date",
-    "fr": "Date de sortie de la source",
-    "es": "Fecha de lanzamiento de la fuente",
-    "ru": "Дата выпуска источника",
-    "zh": "来源的发行日期",
-    "ar": "تاريخ الافراج عن المصدر",
-    "fa": "تاریخ انتشار منبع",
-    "ps": "د سرچینې د خپریدو نیټه",
-    "bn": "উত্স প্রকাশের তারিখ",
-    "de": "Erscheinungsdatum der Quelle"
+    "en": "Source's release date (range) ",
+    "fr": "Date de sortie de la source (plage)",
+    "es": "Fecha de lanzamiento de la fuente (rango)",
+    "ru": "Дата выпуска источника (диапазон)",
+    "zh": "来源的发布日期（范围）",
+    "ar": "تاريخ إصدار المصدر (النطاق)",
+    "fa": "تاریخ انتشار منبع (محدوده)",
+    "ps": "د سرچینې د خپریدو نیټه (حد)",
+    "bn": "উত্সের প্রকাশের তারিখ (ব্যাপ্তি)",
+    "de": "Erscheinungsdatum der Quelle (Bereich)"
   },
   {
     "id": "search_filter_source_modified_at",
-    "en": "Source's modification date",
-    "fr": "Date de modification de la source",
-    "es": "Fecha de modificación de la fuente",
-    "ru": "Дата изменения источника",
-    "zh": "来源的修改日期",
-    "ar": "تاريخ تعديل المصدر",
-    "fa": "تاریخ اصلاح منبع",
-    "ps": "د سرچینې د تعدیل نیټه",
-    "bn": "উত্সের পরিবর্তনের তারিখ",
-    "de": "Änderungsdatum der Quelle"
+    "en": "Source's modification date (range)",
+    "fr": "Date de modification de la source (plage)",
+    "es": "Fecha de modificación de la fuente (rango)",
+    "ru": "Дата изменения источника (диапазон)",
+    "zh": "来源的修改日期（范围）",
+    "ar": "تاريخ تعديل المصدر (النطاق)",
+    "fa": "تاریخ اصلاح منبع (دامنه)",
+    "ps": "د سرچینې د تعدیل نیټه (حد)",
+    "bn": "উত্সের পরিবর্তনের তারিখ (ব্যাপ্তি)",
+    "de": "Änderungsdatum der Quelle (Bereich)"
   },
   {
     "id": "search_filter_date_placeholder",
@@ -17678,6 +17678,19 @@
     "ps": "په نیټه چاter",
     "bn": "তারিখ অনুসারে ফিল্টার",
     "de": "Nach Datum filtern"
+  },
+  {
+    "id": "search_filter_date_details",
+    "en": "Advanced filtering by date",
+    "fr": "Filtrage avancé par date",
+    "es": "Filtrado avanzado por fecha",
+    "ru": "Расширенная фильтрация по дате",
+    "zh": "按日期进行高级过滤",
+    "ar": "تصفية متقدمة حسب التاريخ",
+    "fa": "فیلتر پیشرفته براساس تاریخ",
+    "ps": "په نیټه پرمختللي فلټر کول",
+    "bn": "তারিখ অনুসারে উন্নত ফিল্টারিং",
+    "de": "Erweiterte Filterung nach Datum"
   },
   {
     "id": "search_story_auto_play_confirm",
@@ -17743,5 +17756,18 @@
     "ps": "هیواد",
     "bn": "দেশ",
     "de": "Land"
+  },
+  {
+    "id": "search_year_composite_range",
+    "en": "Temporal range",
+    "fr": "Plage temporelle",
+    "es": "Rango temporal",
+    "ru": "Временной диапазон",
+    "zh": "时间范围",
+    "ar": "النطاق الزمني",
+    "fa": "محدوده زمانی",
+    "ps": "لنډمهاله لړۍ",
+    "bn": "অস্থায়ী পরিসীমা",
+    "de": "Zeitbereich"
   }
 ]
