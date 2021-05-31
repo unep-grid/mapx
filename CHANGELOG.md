@@ -1,4 +1,10 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.25-alpha' target='_blank'>1.8.25-alpha</a>
+  - APP
+    - Search tool: Minor update. 
+      - Advanced date search in dedicated panel; 
+      - Source data date start and end do no use date range anymore; 
+      - Range year selection have a title; 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.24-alpha' target='_blank'>1.8.24-alpha</a>
   - APP
     - Search tool : added range slider to filter view by generic years
