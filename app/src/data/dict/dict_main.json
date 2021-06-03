@@ -10322,6 +10322,33 @@
     "de": ""
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "fr": "Recherchez et sélectionnez des mots-clés parmi les concepts GEMET standardisés. Par example, tapez 'environment', 'industrie minière' ou 'stock de carbone'",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+
+  {
     "id": "textual_title",
     "en": "Textual",
     "fr": "Texte",
@@ -10595,17 +10622,30 @@
     "de": ""
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fr": "Mots clés géographiques M49",
-    "es": "Palabras clave geográficas M49",
-    "ru": "Географические ключевые слова M49",
+    "en": "Geographic Keywords",
+    "fr": "Mots clés géographiques",
+    "es": "Palabras clave geográficas",
+    "ru": "Географические ключевые слова",
     "zh": "地理关键字M49",
-    "ar": "الكلمات الرئيسية الجغرافية M49",
-    "fa": "کلیدواژه های جغرافیایی M49",
-    "ps": "د جغرافیایی کلیمې M49",
+    "ar": "الكلمات الرئيسية الجغرافية",
+    "fa": "کلیدواژه های جغرافیایی",
+    "ps": "د جغرافیایی کلیمې",
     "bn": "ভৌগলিক কীওয়ার্ড এম 49",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "de": "Geografische Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",
@@ -13132,7 +13172,7 @@
   {
     "id": "language_auto_warning",
     "en": "Languages other than English can be translated automatically, in case of missing translation. This does not apply to user-created content such as projects, sources, views, stories, layers, captions, and custom code. Titles, descriptions, attributes, licenses or any other text written by the user, even in multilanguage entries are not altered in any ways by this software.",
-    "fr":"Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Cela ne s'applique pas au contenu créé par l'utilisateur tel que les projets, sources, vues, couches, récits, légendes ou le code personnalisé. Les titres, descriptions, attributs, licences ou tout autre texte écrit par l'utilisateur, même dans les entrées multi langues, ne sont pas modifiés par ce logiciel.",
+    "fr": "Une langue autre que l'anglais peut être traduite automatiquement, en cas de traduction manquante. Cela ne s'applique pas au contenu créé par l'utilisateur tel que les projets, sources, vues, couches, récits, légendes ou le code personnalisé. Les titres, descriptions, attributs, licences ou tout autre texte écrit par l'utilisateur, même dans les entrées multi langues, ne sont pas modifiés par ce logiciel.",
     "es": "",
     "ru": "",
     "zh": "",

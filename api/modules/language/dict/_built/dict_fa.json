@@ -5605,6 +5605,16 @@
     "fa": "برای جستجوی فضایی ، MapX می تواند رابطه بین چندین ویژگی فضایی را براساس هندسه ، میزان و / یا ویژگی های آنها تعیین کند. در برخی موارد ، بهتر است که یک کلمه کلیدی جغرافیایی را با منبع مرتبط کنید ، تا ارتباط را در هنگام جستجوی متن بهبود بخشد. کلمات کلیدی M49 این امکان را به شما می دهد. حداقل یک کلمه کلیدی لازم است. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "fa": "کلمات کلیدی GEMET"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "fa": "کلمات کلیدی را از مفاهیم استاندارد GEMET جستجو و انتخاب کنید. به عنوان مثال ، نوع \"محیط\" ، \"استخراج\" یا \"ذخیره کربن\""
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "fa": "متنی"
@@ -5710,9 +5720,14 @@
     "fa": "کلید واژه ها "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "fa": "کلمات کلیدی GEMET"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fa": "کلیدواژه های جغرافیایی M49"
+    "en": "Geographic Keywords",
+    "fa": "کلیدواژه های جغرافیایی"
   },
   {
     "id": "meta_source_languages",

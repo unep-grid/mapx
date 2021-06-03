@@ -14573,6 +14573,32 @@
     "de": "Für die räumliche Suche kann MapX die Beziehung zwischen mehreren räumlichen Merkmalen basierend auf ihrer Geometrie, Ausdehnung und / oder Attributen bestimmen. In einigen Fällen ist es vorzuziehen, der Quelle ein geografisches Schlüsselwort zuzuordnen, um die Relevanz bei der Textsuche zu verbessern. Mit den M49-Schlüsselwörtern können Sie dies tun. Es ist mindestens ein Schlüsselwort erforderlich. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET",
+    "es": "Palabras clave GEMET",
+    "ru": "GEMET ключевые слова",
+    "zh": "GEMET 关键词",
+    "ar": "كلمات GEMET",
+    "fa": "کلمات کلیدی GEMET",
+    "ps": "د GEET ټکي",
+    "bn": "গেমেট কীওয়ার্ড",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "fr": "Recherchez et sélectionnez des mots-clés parmi les concepts GEMET standardisés. Par example, tapez 'environment', 'industrie minière' ou 'stock de carbone'",
+    "es": "Busque y seleccione palabras clave de conceptos GEMET estandarizados. Por ejemplo, escriba 'medio ambiente', 'minería' o 'reserva de carbono'",
+    "ru": "Найдите и выберите ключевые слова из стандартных концепций GEMET. Например, введите \"окружающая среда\", \"добыча полезных ископаемых\" или \"запас углерода\".",
+    "zh": "从标准化的 GEMET 概念中搜索和选择关键字。例如，输入“环境”、“采矿”或“碳储量”",
+    "ar": "ابحث عن الكلمات الرئيسية وحددها من مفاهيم GEMET الموحدة. على سبيل المثال ، اكتب \"البيئة\" أو \"التعدين\" أو \"مخزون الكربون\"",
+    "fa": "کلمات کلیدی را از مفاهیم استاندارد GEMET جستجو و انتخاب کنید. به عنوان مثال ، نوع \"محیط\" ، \"استخراج\" یا \"ذخیره کربن\"",
+    "ps": "د معیاري GEMET مفاهیمو څخه کلیدي لټون وکړئ او غوره کړئ. د مثال په توګه ، 'چاپیریال' ، 'کان کیندنې' یا 'کاربن سټاک' ټایپ کړئ.",
+    "bn": "মানকযুক্ত গেমেট ধারণা থেকে কীওয়ার্ডগুলি অনুসন্ধান করুন এবং নির্বাচন করুন। উদাহরণস্বরূপ, 'পরিবেশ', 'খনন' বা 'কার্বন স্টক' টাইপ করুন",
+    "de": "Suchen und wählen Sie Schlüsselwörter aus standardisierten GEMET-Konzepten. Geben Sie beispielsweise \"Umwelt\", \"Bergbau\" oder \"Kohlenstoffbestand\" ein"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "fr": "Texte",
@@ -14846,17 +14872,30 @@
     "de": "Schlüsselwörter "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET",
+    "es": "Palabras clave GEMET",
+    "ru": "GEMET ключевые слова",
+    "zh": "GEMET关键词",
+    "ar": "كلمات GEMET",
+    "fa": "کلمات کلیدی GEMET",
+    "ps": "د GEET ټکي",
+    "bn": "গেমেট কীওয়ার্ড",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fr": "Mots clés géographiques M49",
-    "es": "Palabras clave geográficas M49",
-    "ru": "Географические ключевые слова M49",
+    "en": "Geographic Keywords",
+    "fr": "Mots clés géographiques",
+    "es": "Palabras clave geográficas",
+    "ru": "Географические ключевые слова",
     "zh": "地理关键字M49",
-    "ar": "الكلمات الرئيسية الجغرافية M49",
-    "fa": "کلیدواژه های جغرافیایی M49",
-    "ps": "د جغرافیایی کلیمې M49",
+    "ar": "الكلمات الرئيسية الجغرافية",
+    "fa": "کلیدواژه های جغرافیایی",
+    "ps": "د جغرافیایی کلیمې",
     "bn": "ভৌগলিক কীওয়ার্ড এম 49",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "de": "Geografische Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",

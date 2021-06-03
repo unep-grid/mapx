@@ -5605,6 +5605,16 @@
     "de": "Für die räumliche Suche kann MapX die Beziehung zwischen mehreren räumlichen Merkmalen basierend auf ihrer Geometrie, Ausdehnung und / oder Attributen bestimmen. In einigen Fällen ist es vorzuziehen, der Quelle ein geografisches Schlüsselwort zuzuordnen, um die Relevanz bei der Textsuche zu verbessern. Mit den M49-Schlüsselwörtern können Sie dies tun. Es ist mindestens ein Schlüsselwort erforderlich. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "de": "Suchen und wählen Sie Schlüsselwörter aus standardisierten GEMET-Konzepten. Geben Sie beispielsweise \"Umwelt\", \"Bergbau\" oder \"Kohlenstoffbestand\" ein"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "de": "Text "
@@ -5710,9 +5720,14 @@
     "de": "Schlüsselwörter "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "de": "GEMET-Schlüsselwörter"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "en": "Geographic Keywords",
+    "de": "Geografische Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",

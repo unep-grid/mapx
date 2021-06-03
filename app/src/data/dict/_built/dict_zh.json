@@ -5605,6 +5605,16 @@
     "zh": "对于空间搜索，MapX可以根据其几何形状，范围和/或属性确定多个空间特征之间的关系。在某些情况下，最好将地理关键字与来源相关联，以改善文本搜索过程中的相关性。 M49关键字允许您执行此操作。至少需要一个关键字。 "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "zh": "GEMET 关键词"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "zh": "从标准化的 GEMET 概念中搜索和选择关键字。例如，输入“环境”、“采矿”或“碳储量”"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "zh": "文本"
@@ -5710,8 +5720,13 @@
     "zh": "关键字"
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "zh": "GEMET关键词"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
+    "en": "Geographic Keywords",
     "zh": "地理关键字M49"
   },
   {

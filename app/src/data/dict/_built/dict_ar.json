@@ -5605,6 +5605,16 @@
     "ar": "للبحث المكاني ، يمكن لـ MapX تحديد العلاقة بين السمات المكانية المتعددة ، بناءً على هندستها ومدىها و / أو سماتها. في بعض الحالات ، يُفضل ربط كلمة رئيسية جغرافية بالمصدر لتحسين الصلة أثناء البحث عن النص. تتيح لك الكلمات الرئيسية M49 القيام بذلك. مطلوب كلمة رئيسية واحدة على الأقل. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "ar": "كلمات GEMET"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "ar": "ابحث عن الكلمات الرئيسية وحددها من مفاهيم GEMET الموحدة. على سبيل المثال ، اكتب \"البيئة\" أو \"التعدين\" أو \"مخزون الكربون\""
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "ar": "نصي "
@@ -5710,9 +5720,14 @@
     "ar": "الكلمات الدالة "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ar": "كلمات GEMET"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "ar": "الكلمات الرئيسية الجغرافية M49"
+    "en": "Geographic Keywords",
+    "ar": "الكلمات الرئيسية الجغرافية"
   },
   {
     "id": "meta_source_languages",

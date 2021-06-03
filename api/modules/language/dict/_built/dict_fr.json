@@ -5605,6 +5605,16 @@
     "fr": "Pour une recherche spatiale, MapX peut déterminer la relation entre plusieurs entités spatiales, en fonction de leur géométrie, de leur étendue et / ou de leurs attributs. Dans certains cas, il est préférable d'associer un mot-clé géographique à la source, pour améliorer la pertinence lors des recherches textuelles. Les mots-clés M49 vous permettent de faire cela. Au moins un mot clé est requis."
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "fr": "Recherchez et sélectionnez des mots-clés parmi les concepts GEMET standardisés. Par example, tapez 'environment', 'industrie minière' ou 'stock de carbone'"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "fr": "Texte"
@@ -5710,9 +5720,14 @@
     "fr": "Mots clefs"
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "fr": "Mots clefs GEMET"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fr": "Mots clés géographiques M49"
+    "en": "Geographic Keywords",
+    "fr": "Mots clés géographiques"
   },
   {
     "id": "meta_source_languages",

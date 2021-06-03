@@ -4484,6 +4484,14 @@
     "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required."
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'"
+  },
+  {
     "id": "textual_title",
     "en": "Textual"
   },
@@ -4568,8 +4576,12 @@
     "en": "Keywords"
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49"
+    "en": "Geographic Keywords"
   },
   {
     "id": "meta_source_languages",

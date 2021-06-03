@@ -5605,6 +5605,16 @@
     "ru": "Для пространственного поиска MapX может определять взаимосвязь между несколькими пространственными объектами на основе их геометрии, экстента и / или атрибутов. В некоторых случаях предпочтительнее связать географическое ключевое слово с источником, чтобы повысить релевантность во время текстового поиска. Ключевые слова M49 позволяют вам это делать. Требуется хотя бы одно ключевое слово. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "ru": "GEMET ключевые слова"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "ru": "Найдите и выберите ключевые слова из стандартных концепций GEMET. Например, введите \"окружающая среда\", \"добыча полезных ископаемых\" или \"запас углерода\"."
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "ru": "Текстовый "
@@ -5710,9 +5720,14 @@
     "ru": "Ключевые слова "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ru": "GEMET ключевые слова"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "ru": "Географические ключевые слова M49"
+    "en": "Geographic Keywords",
+    "ru": "Географические ключевые слова"
   },
   {
     "id": "meta_source_languages",

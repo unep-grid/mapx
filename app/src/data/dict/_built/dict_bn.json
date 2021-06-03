@@ -5605,6 +5605,16 @@
     "bn": "স্থানিক অনুসন্ধানের জন্য, ম্যাপএক্স তাদের জ্যামিতি, ব্যাপ্তি এবং / বা বৈশিষ্ট্যের উপর ভিত্তি করে একাধিক স্থানিক বৈশিষ্ট্যগুলির মধ্যে সম্পর্ক নির্ধারণ করতে পারে। কিছু ক্ষেত্রে, পাঠ্য অনুসন্ধানের সময় প্রাসঙ্গিকতা উন্নত করার জন্য, উত্সের সাথে কোনও ভৌগলিক কীওয়ার্ড সংযুক্ত করা ভাল। এম 49 কীওয়ার্ডগুলি আপনাকে এটি করার অনুমতি দেয়। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন। "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "bn": "গেমেট কীওয়ার্ড"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "bn": "মানকযুক্ত গেমেট ধারণা থেকে কীওয়ার্ডগুলি অনুসন্ধান করুন এবং নির্বাচন করুন। উদাহরণস্বরূপ, 'পরিবেশ', 'খনন' বা 'কার্বন স্টক' টাইপ করুন"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "bn": "পাঠ্য "
@@ -5710,8 +5720,13 @@
     "bn": "কীওয়ার্ডস "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "bn": "গেমেট কীওয়ার্ড"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
+    "en": "Geographic Keywords",
     "bn": "ভৌগলিক কীওয়ার্ড এম 49"
   },
   {

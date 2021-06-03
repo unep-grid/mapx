@@ -5605,6 +5605,16 @@
     "es": "Para la búsqueda espacial, MapX puede determinar la relación entre múltiples características espaciales, basándose en su geometría, extensión y / o atributos. En algunos casos, es preferible asociar una palabra clave geográfica con la fuente, para mejorar la relevancia durante las búsquedas de texto. Las palabras clave M49 le permiten hacer esto. Se requiere al menos una palabra clave. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "es": "Palabras clave GEMET"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "es": "Busque y seleccione palabras clave de conceptos GEMET estandarizados. Por ejemplo, escriba 'medio ambiente', 'minería' o 'reserva de carbono'"
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "es": "Texto"
@@ -5710,9 +5720,14 @@
     "es": "Palabras clave"
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "es": "Palabras clave GEMET"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "es": "Palabras clave geográficas M49"
+    "en": "Geographic Keywords",
+    "es": "Palabras clave geográficas"
   },
   {
     "id": "meta_source_languages",

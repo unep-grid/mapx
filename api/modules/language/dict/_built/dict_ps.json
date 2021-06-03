@@ -5605,6 +5605,16 @@
     "ps": "د ځایي لټون لپاره ، میپ ایکس کولی شي د ډیری جغرافیوي ب featuresو تر مینځ اړیکې وټاکي ، د دوی د جیومیٹری ، اندازې ، او / یا صفاتو پراساس. په ځینو مواردو کې ، غوره ده چې د سرچینې سره د جغرافیې کلیدي اړیکه ونیسئ ، ترڅو د متن لټونونو پرمهال مطابقت ښه کړئ. د M49 کلیدي ټکي تاسو ته اجازه درکوي. لږترلږه یوه کلیدي ټکي اړین دي. "
   },
   {
+    "id": "textual_keywords_gemet_title",
+    "en": "GEMET keywords",
+    "ps": "د GEET ټکي"
+  },
+  {
+    "id": "textual_keywords_gemet_desc",
+    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
+    "ps": "د معیاري GEMET مفاهیمو څخه کلیدي لټون وکړئ او غوره کړئ. د مثال په توګه ، 'چاپیریال' ، 'کان کیندنې' یا 'کاربن سټاک' ټایپ کړئ."
+  },
+  {
     "id": "textual_title",
     "en": "Textual",
     "ps": "متني "
@@ -5710,9 +5720,14 @@
     "ps": "کلیدي ټکي "
   },
   {
+    "id": "meta_source_keywords_gemet",
+    "en": "GEMET keywords",
+    "ps": "د GEET ټکي"
+  },
+  {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "ps": "د جغرافیایی کلیمې M49"
+    "en": "Geographic Keywords",
+    "ps": "د جغرافیایی کلیمې"
   },
   {
     "id": "meta_source_languages",
