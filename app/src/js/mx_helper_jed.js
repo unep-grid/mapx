@@ -6,28 +6,26 @@
  * @param {Object} o.options JSONEditor options
  */
 export async function jedInit(o) {
-  var h = mx.helpers;
+  const h = mx.helpers;
 
   const dict = await getDictJsonEditorDict();
   await h.moduleLoad('json-editor');
-
-  var id = o.id;
-  var schema = o.schema;
-  var startVal = o.startVal;
-  var options = o.options;
-  var JSONEditor = window.JSONEditor;
+  const id = o.id;
+  const schema = o.schema;
+  const startVal = o.startVal;
+  const options = o.options;
+  const JSONEditor = window.JSONEditor;
   if (dict) {
     JSONEditor.defaults.languages = dict;
   }
   JSONEditor.defaults.language = mx.settings.language;
-  var el = document.getElementById(id);
-  var idDraft;
-  var draftLock = true;
-  var draftDbTimeStamp = 0;
+  const elJed = document.getElementById(id);
+  let draftLock = true;
+  let draftDbTimeStamp = 0;
+  let jed = window.jed;
+  let idDraft;
 
-  var jed = window.jed;
-
-  if (!el) {
+  if (!elJed) {
     console.warn(`jed element ${id} not found`);
     return;
   }
@@ -36,7 +34,7 @@ export async function jedInit(o) {
     window.jed = jed = {
       editors: {},
       helper: {},
-      aceEditors : [],
+      aceEditors: [],
       extend: {
         position: {},
         texteditor: {}
@@ -44,14 +42,14 @@ export async function jedInit(o) {
     };
   }
 
-  var opt_final = {};
+  const opt_final = {};
 
   if (!options) {
     options = {};
   }
 
   // opt can't be changed after instantiation.
-  var opt = {
+  const opt = {
     ajax: true,
     theme: 'bootstrap3',
     iconlib: 'bootstrap3',
@@ -71,7 +69,7 @@ export async function jedInit(o) {
     getValuesOnChange: false
   };
 
-  opt_final = Object.assign({}, opt, options);
+   Object.assign(opt_final, opt, options);
 
   if (opt_final.draftAutoSaveId && opt_final.draftAutoSaveDbTimestamp) {
     idDraft = id + '@' + opt_final.draftAutoSaveId;
@@ -90,16 +88,16 @@ export async function jedInit(o) {
   /**
    * Create new editor
    */
-  el.innerHTML = '';
-  el.dataset.jed_id = id;
-  var editor = new JSONEditor(el, opt_final);
+  elJed.innerHTML = '';
+  elJed.dataset.jed_id = id;
+  const editor = new JSONEditor(elJed, opt_final);
   jed.editors[id] = editor;
-  if(!jed.helper.translate){
+  if (!jed.helper.translate) {
     /**
-    * Translate not available in custom validator (not binded).. 
-    * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
-    */
-    jed.helper.translate = editor.translate; 
+     * Translate not available in custom validator (not binded)..
+     * we set one globaly here in jed object. Used in e.g. mx_extend_validation.js
+     */
+    jed.helper.translate = editor.translate;
   }
 
   /**
@@ -116,9 +114,9 @@ export async function jedInit(o) {
         if (!draft || draft.type !== 'draft') {
           return;
         }
-        var draftClientTimeStamp = draft.timestamp;
+        const draftClientTimeStamp = draft.timestamp;
         // add 5 sec margin
-        var moreRecent = draftClientTimeStamp > draftDbTimeStamp;
+        const moreRecent = draftClientTimeStamp > draftDbTimeStamp;
 
         if (moreRecent) {
           await jedShowDraftRecovery({
@@ -149,8 +147,8 @@ export async function jedInit(o) {
    */
   editor.on('change', async function() {
     if (idDraft && !draftLock) {
-      var data = editor.getValue();
-      const saved = await mx.data.draft.setItem(idDraft, {
+      const data = editor.getValue();
+      await mx.data.draft.setItem(idDraft, {
         type: 'draft',
         timestamp: Math.round(Date.now() / 1000),
         data: data
@@ -182,11 +180,11 @@ function jedValidateSize(editor) {
    * Test size
    */
   const h = mx.helpers;
-  var values = editor.getValue();
+  const values = editor.getValue();
 
   return h.getSizeOf(values, false).then(function(size) {
     if (size > mx.settings.maxByteJed) {
-      var sizeReadable = h.formatByteSize(size);
+      const sizeReadable = h.formatByteSize(size);
       h.modal({
         addBackground: true,
         id: 'warningSize',
@@ -210,22 +208,22 @@ function jedValidateSize(editor) {
  * @param {Object} editor json-editor
  */
 function jedAddAncestorErrors(editor) {
-  var elEditor = editor.element;
-  var elsJedError = elEditor.querySelectorAll('.jed-error');
+  const elEditor = editor.element;
+  const elsJedError = elEditor.querySelectorAll('.jed-error');
 
-  for (var i = 0; i < elsJedError.length; i++) {
+  for (let i = 0; i < elsJedError.length; i++) {
     elsJedError[i].classList.remove('jed-error');
   }
 
-  var valid = editor.validate();
-  var issueLength = valid.length;
+  const valid = editor.validate();
+  const issueLength = valid.length;
 
   if (issueLength > 0) {
     valid.forEach((v) => {
-      var p = v.path.split('.');
-      var pL = p.length;
-      for (var k = 0; k < pL; k++) {
-        var elError = elEditor.querySelector(
+      const p = v.path.split('.');
+      const pL = p.length;
+      for (let k = 0; k < pL; k++) {
+        const elError = elEditor.querySelector(
           "[data-schemapath='" + p.join('.') + "']"
         );
         if (elError) {
@@ -242,9 +240,9 @@ function jedAddAncestorErrors(editor) {
  * @param {Object} o.idItem id of the item to remove
  */
 export function jedRemoveDraft(o) {
-  var idEditor = o.id;
-  var idItem = o.idItem;
-  var idDraft = idEditor + '@' + idItem;
+  const idEditor = o.id;
+  const idItem = o.idItem;
+  const idDraft = idEditor + '@' + idItem;
   mx.data.draft.removeItem(idDraft).then(() => {
     console.log('item ' + idDraft + 'removed from mx.data.draft');
   });
@@ -256,9 +254,9 @@ export function jedRemoveDraft(o) {
  * @param {Object} o.val JSON of initial values
  */
 export function jedUpdate(o) {
-  var id = o.id;
-  var val = o.val;
-  var jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const id = o.id;
+  const val = o.val;
+  const jed = mx.helpers.path(window, 'jed.editors.' + id);
   if (jed) {
     jed.setValue(val);
   }
@@ -269,10 +267,10 @@ export function jedUpdate(o) {
  * @param {String} o.id Id of target element
  */
 export function jedGetValuesById(o) {
-  var id = o.id;
-  var jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const id = o.id;
+  const jed = mx.helpers.path(window, 'jed.editors.' + id);
   if (jed) {
-    var values = {
+    const values = {
       data: jed.getValue(),
       time: Date.now(),
       idEvent: o.idEvent
@@ -290,10 +288,10 @@ export function jedGetValuesById(o) {
  * @param {String} o.id Id of target element
  */
 export function jedGetValidationById(o) {
-  var id = o.id;
-  var jed = mx.helpers.path(window, 'jed.editors.' + id);
+  const id = o.id;
+  const jed = mx.helpers.path(window, 'jed.editors.' + id);
   if (jed) {
-    var valid = {
+    const valid = {
       data: jed.validate(),
       time: Date.now(),
       idEvent: o.idEvent
@@ -324,19 +322,19 @@ async function jedShowDraftRecovery(o) {
     });
   }
 
-  var jed = o.jed;
-  var recoveredData = o.draft.data;
-  var dbData = o.saved;
-  var dateTimeDb = formatDateTime(o.timeDb);
-  var dateTimeBrowser = formatDateTime(o.draft.timestamp);
+  const jed = o.jed;
+  const recoveredData = o.draft.data;
+  const dbData = o.saved;
+  const dateTimeDb = formatDateTime(o.timeDb);
+  const dateTimeBrowser = formatDateTime(o.draft.timestamp);
 
-  var diff = await getDiff();
-  var isEmpty = h.isEmpty(diff);
+  const diff = await getDiff();
+  const isEmpty = h.isEmpty(diff);
   if (isEmpty) {
     return;
   }
 
-  var btnYes = el('button', {
+  const btnYes = el('button', {
     type: 'button',
     class: ['btn', 'btn-default'],
     on: ['click', restore],
@@ -345,7 +343,7 @@ async function jedShowDraftRecovery(o) {
     }
   });
 
-  var btnDiffData = el('button', {
+  const btnDiffData = el('button', {
     type: 'button',
     class: ['btn', 'btn-default'],
     on: ['click', previewDiff],
@@ -354,9 +352,9 @@ async function jedShowDraftRecovery(o) {
     }
   });
 
-  var elData;
+  let elData;
 
-  var modal = h.modal({
+  const modal = h.modal({
     addBackground: true,
     id: 'modalDataRecovery',
     title: h.el('span', {dataset: {lang_key: 'draft_recover_modal_title'}}),
@@ -402,7 +400,7 @@ async function jedShowDraftRecovery(o) {
   function getDiff() {
     return h.jsonDiff(dbData, recoveredData, {
       propertyFilter: function(name) {
-        var firstChar = name.slice(0, 1);
+        const firstChar = name.slice(0, 1);
         /**
          * Set of known key that should not be used in diff
          */
@@ -414,7 +412,7 @@ async function jedShowDraftRecovery(o) {
   }
 
   async function previewDiff() {
-    var elItem = el('div', {
+    const elItem = el('div', {
       class: ['mx-diff-item']
     });
     elData.innerHTML = '';
@@ -423,10 +421,10 @@ async function jedShowDraftRecovery(o) {
       el('h3', el('span', {dataset: {lang_key: 'draft_recover_diffs'}}))
     );
     elData.appendChild(elItem);
-    var html = await h.jsonDiff(dbData, recoveredData, {
+    const html = await h.jsonDiff(dbData, recoveredData, {
       toHTML: true,
       propertyFilter: function(name) {
-        var firstChar = name.slice(0, 1);
+        const firstChar = name.slice(0, 1);
         /**
          * Set of known key that should not be used in diff
          */
@@ -446,9 +444,9 @@ async function jedShowDraftRecovery(o) {
 }
 
 function formatDateTime(posix) {
-  var d = new Date(posix * 1000);
-  var date = d.toLocaleDateString();
-  var time = d.toLocaleTimeString();
+  const d = new Date(posix * 1000);
+  const date = d.toLocaleDateString();
+  const time = d.toLocaleTimeString();
   return date + ' at ' + time;
 }
 
@@ -457,22 +455,29 @@ function formatDateTime(posix) {
  *
  * @return {Promise} resolve to JSONEditor dict
  */
-function getDictJsonEditorDict() {
+async function getDictJsonEditorDict() {
   const h = mx.helpers;
-  var out = {};
-  return h.getDict(mx.settings.language).then((dict) => {
-    dict.forEach((d) => {
-      var k = d.id;
-      Object.keys(d).forEach((l) => {
-        if (l === 'id') {
-          return;
-        }
-        if (!out[l]) {
-          out[l] = {};
-        }
-        out[l][k] = d[l];
-      });
-    });
-    return out;
-  });
+  const out = {};
+  const dict = await h.getDict(mx.settings.language);
+  /**
+   * For each item
+   */
+
+  for (let d of dict) {
+    let k = d.id;
+    /**
+     * For each language
+     */
+
+    for (let l in d) {
+      if (l === 'id') {
+        continue;
+      }
+      if (!out[l]) {
+        out[l] = {};
+      }
+      out[l][k] = d[l];
+    }
+  }
+  return out;
 }

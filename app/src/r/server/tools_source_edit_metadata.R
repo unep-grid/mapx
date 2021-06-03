@@ -264,7 +264,7 @@ observeEvent(input$jedSourceMetadata_values,{
         isAllowed <- isPublisher && layer %in% layers
 
         if( hasNoIssues && isAllowed ){
-
+         
           mxDbUpdate(
             table = .get(config,c("pg","tables","sources")),
             idCol = "id",

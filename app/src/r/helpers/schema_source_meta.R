@@ -102,6 +102,17 @@ mxSchemaSourceMeta <- function(
                 items = list(
                   type = "string"
                 )
+                ),
+              keys_gemet = list(
+                title = t("textual_keywords_gemet_title"),
+                type = "array",
+                description = t("textual_keywords_gemet_desc"),
+                format = "selectizeGemet",
+                uniqueItems = TRUE,
+                minItems =  0,
+                items = list(
+                  type = "string"
+                )
               )
             )
             ),

@@ -124,8 +124,6 @@ config[["search"]] <- list(
   port = 7700
 )
 
-
-
 #
 # postgres configuration
 #

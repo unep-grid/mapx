@@ -1,49 +1,40 @@
+import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
+
+async function getGemetConceptLabel(id) {
+  const item = await getGemetConcept(id);
+  return item.label;
+}
+
 /**
  * Get view's source metadata
  * @param {String} id Name/Id of the source layer
  */
-export function getSourceMetadata(id, force) {
+export async function getSourceMetadata(id, force) {
   const urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
-
-  return new Promise((resolve, reject) => {
-    if (!id) {
-      return reject('missing id');
-    }
-
-    force = force || false;
-    const url = urlSourceMeta + id + '?date=' + performance.now();
-
-    resolve(url);
-  })
-    .then(fetch)
-    .then((meta) => meta.json())
-    .then((meta) => {
-      return meta;
-    });
+  if (!id) {
+    return console.warn('getSourceMetadata : missing id');
+  }
+  force = force || false;
+  const url = urlSourceMeta + id + '?date=' + performance.now();
+  const r = await fetch(url);
+  const meta = await r.json();
+  return meta;
 }
 
 /**
  * Get view metadata
  * @param {String} id Name/Id of the view
  */
-export function getViewMetadata(id, force) {
+export async function getViewMetadata(id, force) {
   const urlViewMeta = mx.helpers.getApiUrl('getViewMetadata');
-
-  return new Promise((resolve, reject) => {
-    if (!id) {
-      return reject('missing id');
-    }
-
-    force = force || false;
-    const url = urlViewMeta + id + '?date=' + performance.now();
-
-    resolve(url);
-  })
-    .then(fetch)
-    .then((meta) => meta.json())
-    .then((meta) => {
-      return meta;
-    });
+  if (!id) {
+    return console.warn('getSourceMetadata : missing id');
+  }
+  force = force || false;
+  const url = urlViewMeta + id + '?date=' + performance.now();
+  const r = await fetch(url);
+  const meta = await r.json();
+  return meta;
 }
 
 /**
@@ -51,7 +42,7 @@ export function getViewMetadata(id, force) {
  * @param {Obejct} view object
  * @param {Boolean} force force / replace meta object
  */
-export function addSourceMetadataToView(opt) {
+export async function addSourceMetadataToView(opt) {
   opt = opt || {};
   const view = opt.view || {};
   const force = opt.forceUpdateMeta || false;
@@ -59,83 +50,82 @@ export function addSourceMetadataToView(opt) {
   const empty = {};
 
   if (!idSourceLayer) {
-    return Promise.resolve(empty);
+    return empty;
   }
 
   if (view._meta && !force) {
-    return Promise.resolve(view._meta);
+    view._meta;
   }
-
-  return mx.helpers.getSourceMetadata(idSourceLayer, force).then((meta) => {
-    /**
-     * Save meta in view
-     */
-    if (meta && meta.text) {
-      view._meta = meta;
-      return meta;
-    } else {
-      return empty;
-    }
-  });
+  const meta = await getSourceMetadata(idSourceLayer, force);
+  /**
+   * Save meta in view
+   */
+  if (meta && meta.text) {
+    view._meta = meta;
+    return meta;
+  } else {
+    return empty;
+  }
 }
 
 export async function viewToMetaModal(view) {
   const h = mx.helpers;
   const el = h.el;
   const id = h.isView(view) ? view.id : view;
-  view = h.getView(id) || await h.getViewRemote(id);
+  view = h.getView(id) || (await h.getViewRemote(id));
   const meta = {};
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
   const hasSourceMeta =
     ['rt', 'vt', 'cc'].indexOf(view.type) > -1 &&
     (view._meta || h.path(view, 'data.source.meta'));
 
-  getViewMetadata(id, true).then((data) => {
-    const elContent = el('div');
-    
-    if (data.meta) {
-      Object.assign(meta, data.meta);
-    }
-    meta.id = id;
+  const data = await getViewMetadata(id, true);
 
-    const elViewMeta = metaViewToUi(meta);
+  const elContent = el('div');
 
-    if (elViewMeta) {
-      elContent.appendChild(elViewMeta);
-    }
+  if (data.meta) {
+    Object.assign(meta, data.meta);
+  }
 
-    if (metaRasterLink) {
-      const elRasterMetaLink = metaSourceRasterToUi({
-        url: metaRasterLink
-      });
-      if (elRasterMetaLink) {
-        elContent.appendChild(elRasterMetaLink);
-      }
-    }
+  meta.id = id;
 
-    if (hasSourceMeta) {
-      const sourceMeta = view._meta || view.data.source.meta;
-      const elSourceMeta = metaSourceToUi(sourceMeta);
-      if (elSourceMeta) {
-        elContent.appendChild(elSourceMeta);
-      }
-    }
+  const elViewMeta = metaViewToUi(meta);
 
-    const elTitleModal = el('span', {
-      dataset: {
-        lang_key: 'meta_view_modal_title'
-      }
+  if (elViewMeta) {
+    elContent.appendChild(elViewMeta);
+  }
+
+  if (metaRasterLink) {
+    const elRasterMetaLink = metaSourceRasterToUi({
+      url: metaRasterLink
     });
+    if (elRasterMetaLink) {
+      elContent.appendChild(elRasterMetaLink);
+    }
+  }
 
-    const elModal = h.modal({
-      title: elTitleModal,
-      content: elContent,
-      addBackground : true
-    });
+  if (hasSourceMeta) {
+    const sourceMeta = view._meta || view.data.source.meta;
+    const elSourceMeta = metaSourceToUi(sourceMeta);
+    if (elSourceMeta) {
+      elContent.appendChild(elSourceMeta);
+    }
+  }
 
-    h.updateLanguageElements({
-      el: elModal
-    });
+  const elTitleModal = el('span', {
+    dataset: {
+      lang_key: 'meta_view_modal_title'
+    }
+  });
+
+  const elModal = h.modal({
+    title: elTitleModal,
+    content: elContent,
+    addBackground: true
+  });
+
+  h.updateLanguageElements({
+    el: elModal
   });
 }
 
@@ -332,8 +322,26 @@ export function metaSourceToUi(meta) {
   const elNotes = el('p', l('text.notes', '-'));
   const elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
 
-  const elKeywordsM49 = el('ul',
-    p('text.keywords.keys_m49', ['-']).map(k =>el('li', h.getDictItem(k)))
+  const elKeywordsM49 = el(
+    'ul',
+    p('text.keywords.keys_m49', []).map((k) => el('li', h.getDictItem(k)))
+  );
+
+  const elKeywordsGemet = el(
+    'ul',
+    p('text.keywords.keys_gemet', []).map((k) =>
+      el(
+        'li',
+        el(
+          'a',
+          {
+            target : '_blank',
+            href: getGemetConceptLink(k)
+          },
+          getGemetConceptLabel(k)
+        )
+      )
+    )
   );
 
   const elLanguages = elAuto(
@@ -343,6 +351,7 @@ export function metaSourceToUi(meta) {
       stringAsLanguageKey: true
     }
   );
+
   const elContacts = el(
     'ul',
     p('contact.contacts', []).map((c) => {
@@ -395,6 +404,7 @@ export function metaSourceToUi(meta) {
       notes: elNotes,
       keywords: elKeywords,
       keywords_m49: elKeywordsM49,
+      keywords_gemet: elKeywordsGemet,
       languages: elLanguages,
       contacts: elContacts,
       homepage: elHomepage,
