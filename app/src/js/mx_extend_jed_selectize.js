@@ -136,7 +136,6 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
           selectize.clear(true);
           value = h.isArray(value) ? value : [value];
           await editor.initValue(value);
-          console.log('setValue', value);
           selectize.setValue(value);
           editor.refreshValue();
         } catch (e) {
