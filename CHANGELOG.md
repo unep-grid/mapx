@@ -1,4 +1,9 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.26-alpha' target='_blank'>1.8.26-alpha</a>
+  - APP
+    - GEMET 
+        - Integration of gemet keywords translation in view metadata visualizer. With link to concepts.
+        - Integration of gemet concepts search in the source metadata editor
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.25-alpha' target='_blank'>1.8.25-alpha</a>
   - APP
     - Search tool: Minor update. 
