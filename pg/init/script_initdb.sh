@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Immediately exits if any error occurs during the script execution.
 # If not set, an error could occur and the script would continue its execution.
@@ -12,6 +12,7 @@ readonly REQUIRED_ENV_VARS=(
   "POSTGRES_PASSWORD"
   "POSTGRES_USER_WRITE_PASSWORD"
   "POSTGRES_USER_READ_PASSWORD"
+  "POSTGRES_USER_CUSTOM_PASSWORD"
   "MAIL_ADMIN"
   "MAIL_GUEST")
 
@@ -41,8 +42,12 @@ Aborting."
 
 # Initializes MapX database in the already-started PostgreSQL.
 init_db_mapx() {
-  cat /docker-entrypoint-initdb.d/sql_files/*.sql | psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" -f -
-  createdb -T "$POSTGRES_DB" "mapx_test"
+  echo "Add base data"
+  cat /docker-entrypoint-initdb.d/sql_files/*.sql | psql \
+    -v ON_ERROR_STOP=1 \
+    -U "$POSTGRES_USER" \
+    -d "$POSTGRES_DB" \
+    -f - 
 }
 
 # Executes the main routine.

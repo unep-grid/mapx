@@ -106,7 +106,6 @@ services:
     hostname: pg
     volumes:
       - ./_shared:/shared
-      - /var/run/docker.sock:/var/run/docker.sock
       - ./pg/init/script_initdb.sh:/docker-entrypoint-initdb.d/script_initdb.sh
       - ./pg/init/sql_files:/docker-entrypoint-initdb.d/sql_files
     ports:

@@ -51,7 +51,11 @@ Trigger the following script which init some required directories and copy the d
 Finally, launch the mapx stack:
 
 ```sh
+# Pull the latest builds
 docker-compose pull
+# Launch postgres first : in case of first launch, some tables and roles must be created
+docker-compose up pg
+# Launch other services
 docker-compose up
 ```
 
@@ -166,3 +170,93 @@ docker-compose exec api sh
 cd /apidev
 npm run
 ```
+
+### 
+
+
+# Countries boundaries layer
+
+A sample dataset of countries boundaries (  polygons ) is included in this code repo, and will add a table named `mx_countries` in the database. The main purpose of this layer is croping dataset during exportation. 
+
+## Citation
+
+Administrative boundaries generalized by UNEP/GRID-Geneva (2019) based on the Global Administrative Unit Layers (GAUL) dataset (G2015_2014), implemented by FAO within the CountrySTAT and Agricultural Market Information System (AMIS) projects (2015).
+
+## Generalization >= mapx 1.8.26 
+
+Starting with version 1.8.26, a lightweight version of `mx_countries` is included.
+
+It was generated with [mapshaper](https://mapshaper.org/) using the following parameters:
+
+- import:
+  - detect line intersections = true
+  - snap vertices = true
+- simplification:
+  - prevent shape removal = true
+  - method: Visvalingam / weighted area
+  - percentage of removable points to retain: 3%
+
+Once the simplification was done, the data was repaired in `mapshaper` and then in `QGIS 3.18` using the `Fix geometries` tool. All geometries are valid according to GEOS rules.
+
+
+## Generalization < mapx 1.8.26 
+
+The generalization was made using Feature Manipulation Engine (FME) with the following settings:
+
+- Algorithm: Douglas (generalize)
+- Generalization Tolerance: 0.02
+- Preserve Shared Boundaries: Yes
+- Shared Boundaries Tolerance: None
+- Preserve Path Segment: No
+
+Geometries obtained from FME have been repaired in PostGIS using ST_MakeValid() function.
+
+
+## Restrictions
+
+You are free to modify and/or adapt any Data provided for your own use, reproduction as well as unlimited use within your organization. The Data is licensed and distributed by UNEP/GRID-Geneva. Redistribution to a Third party or reseller is formerly prohibited at any stage whatsoever by UNEP/GRID-Geneva.
+
+## Disclaimer
+
+Due to the generalization process, the administrative boundaries of the countries have been modified. Therefore, this dataset can only be used for unofficial cartographic purposes for global mapping using a scale not higher than 1:25 million. It should not be used in any way as a reference for national boundaries. Territorial information from this dataset do not imply the expression of any opinion whatsoever on the part of the UNEP/GRID-Geneva concerning the legal status of any country, territory, city or area, or of its authorities, or concerning the delimitation of its frontiers or boundaries. The Data is being delivered to you “AS IS” and UNEP/GRID-Geneva makes no warranty as to its use or performance.
+
+UNEP/GRID-Geneva cannot be held responsible for a misuse of this file and its consequences.
+
+# PostgreSQL passwords update
+
+Procedure to follow if PostgreSQL passwords need to be updated for security reason (or any other reasons).
+
+1. Launch MapX stack with Docker Compose:
+
+    ```sh
+    docker-compose up
+    ```
+
+2. Once your stack is up, update PostgreSQL passwords in the environment file:
+
+    - `POSTGRES_PASSWORD`
+    - `POSTGRES_USER_WRITE_PASSWORD`
+    - `POSTGRES_USER_READ_PASSWORD`
+    - `POSTGRES_USER_CUSTOM_PASSWORD`
+
+3. Connect to PostgreSQL using psql:
+
+    ```sh
+    docker-compose exec pg psql -U {POSTGRES_USER}
+    ```
+
+4. Queries to run in psql to update the passwords. Be careful to respect the order in which the queries are run.
+
+    ```sql
+    ALTER ROLE {POSTGRES_USER_READ} WITH PASSWORD '{POSTGRES_USER_READ_PASSWORD}';
+    ALTER ROLE {POSTGRES_USER_WRITE} WITH PASSWORD '{POSTGRES_USER_WRITE_PASSWORD}';
+    ALTER ROLE {POSTGRES_USER_CUSTOM} WITH PASSWORD '{POSTGRES_USER_CUSTOM_PASSWORD}';
+    ALTER ROLE {POSTGRES_USER} WITH PASSWORD '{POSTGRES_PASSWORD}';
+    \q
+    ```
+
+5. Force Compose to stop and recreate all containers to avoid any problems related to passwords update:
+
+    ```sh
+    docker-compose up -d --force-recreate
+    ```
