@@ -1,6 +1,14 @@
-# [MapX](https://www.mapx.org/)
+# [MapX](https://app.mapx.org/)
 
-[MapX](https://www.mapx.org/) is a spatial data infrastructure that aims to support the sustainable use of natural resources and the environment by increasing access to the best available geospatial information and related monitoring technologies. MapX is supported by an online platform that provides authoritative spatial data at local, national and global scales, an authentication data integrity framework using a scorecard and a set of on-line tools to visualize, analyse and access geospatial data. Originally created for stakeholders involved in the extractives sector, MapX has expanded in 2017 to other fields where spatial data can help inform stakeholder dialogue, prioritization of investments and impact monitoring such as disaster risk reduction, chemicals management, biodiversity planning, renewable energy and environmental security.
+[MapX](https://app.mapx.org/) is a an online platform for managing geospatial data on natural resources, developed by [UNEP/GRID-Geneva](https://unepgrid.ch/en) and [UN Environment](https://www.unep.org/).
+
+Field applications of MapX are varied and include chemical management, disaster risk reduction, biodiversity planning, land-use planning, extractive industry, renewable energy and environmental security. 
+
+MapX targets a wide community of users that are primarily UN Environment and partners, the Secretariats of Multilateral Environmental Agreements (MEAs) and other UN agencies mandated to collect and use geospatial data in environmental decision-making. Civil society groups, non-governmental organizations, academia and citizens complement this set of users. 
+
+MapX was designed in 2014 and since then continuously improved with wide international stakeholder consultations. 
+
+MapX is fully integrated into the World Environment Situation Room, which is the UNEP data and knowledge platform.
 
 ![mapx preview](app/src/png/mapx-preview.png "MapX")
 
