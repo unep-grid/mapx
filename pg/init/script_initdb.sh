@@ -48,6 +48,8 @@ init_db_mapx() {
     -U "$POSTGRES_USER" \
     -d "$POSTGRES_DB" \
     -f - 
+   echo "Duplicate db as template for tests"
+   createdb -T "$POSTGRES_DB" "$POSTGRES_DB_TEST"
 }
 
 # Executes the main routine.

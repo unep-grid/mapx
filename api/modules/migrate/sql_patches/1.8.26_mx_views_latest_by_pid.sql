@@ -36,4 +36,4 @@ ALTER TABLE public.mx_views_latest
 OWNER TO mapxw;
 
 GRANT SELECT ON TABLE public.mx_views_latest TO readonly;
-GRANT ALL ON TABLE public.mx_views_latest TO mapxw;
+GRANT ALL ON TABLE public.mx_views_latest TO readwrite;

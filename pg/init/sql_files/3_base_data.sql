@@ -1,4 +1,3 @@
-
 \set admin `echo "$MAIL_ADMIN"`
 \set guest `echo "$MAIL_GUEST"`
 \set projectdef `echo "$MAPX_PROJECT_DEFAULT"`

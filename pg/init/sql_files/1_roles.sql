@@ -67,4 +67,24 @@ NOBYPASSRLS;
 GRANT readonly TO mapxr GRANTED BY postgres;
 GRANT readwrite TO mapxw GRANTED BY postgres;
 
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: pguser
+--
 
+GRANT USAGE ON SCHEMA public TO mapxc;
+GRANT USAGE ON SCHEMA public TO readonly;
+GRANT USAGE ON SCHEMA public TO readwrite;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: -; Owner: mapxw
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE mapxw GRANT SELECT ON TABLES  TO readonly;
+
+
+--
+-- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: mapxw
+--
+
+ALTER DEFAULT PRIVILEGES FOR ROLE mapxw IN SCHEMA public GRANT SELECT ON TABLES TO mapxc;
