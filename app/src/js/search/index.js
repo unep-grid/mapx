@@ -1,7 +1,11 @@
-import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
-import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {ButtonCircle} from './../icon_flash';
 import {modalConfirm} from './../mx_helper_modal.js';
+import {storyRead} from './../mx_helper_story.js';
+import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
+import {getDictItem} from './../mx_helper_language.js';
+import {EventSimple} from './../listener_store';
+import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
+import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {
   zoomToViewId,
   getView,
@@ -10,12 +14,6 @@ import {
   viewRemove,
   getViewsOpen
 } from './../mx_helper_map.js';
-
-import {storyRead} from './../mx_helper_story.js';
-
-import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
-import {getDictItem} from './../mx_helper_language.js';
-import {EventSimple} from './../listener_store';
 import {
   isStory,
   isView,

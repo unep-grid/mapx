@@ -95,7 +95,7 @@ observeEvent(input$btnSendLoginKey,{
         subject = subject,
         language = language
       )
-
+        
       #
       # Handle issues
       #

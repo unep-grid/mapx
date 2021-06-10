@@ -9,8 +9,8 @@ const languages = validation_defaults.languages;
 const {config} = require(__dirname + '/config.js');
 const {getDictM49iso3} = require('@mapx/language');
 const validateParamsHandler = getParamsValidator({
-  required: ['idUser', 'token', 'searchQuery'],
-  expected: ['searchIndexName']
+  required: ['idUser', 'token'],
+  expected: ['searchIndexName', 'searchQuery']
 });
 const {htmlToText} = require('html-to-text');
 

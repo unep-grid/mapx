@@ -884,20 +884,13 @@ export async function initMapx(o) {
       /**
        * Configure search tool
        */
-      const urlKey = getApiUrl('getSearchKey');
-      const ss = mx.settings;
-      const qs = h.objToParams({
-        idUser: ss.user.id,
-        token: ss.user.token
-      });
-      const urlKeyFetch = `${urlKey}?${qs}`;
-      const keyData = await fetch(urlKeyFetch).then((r) => r.json());
+      const key = await getSearchApiKey();
       mx.search = new Search({
-        key: keyData.key,
+        key: key,
         container: '#mxTabPanelSearch',
-        host: ss.search.host,
-        protocol: ss.search.protocol,
-        port: ss.search.port,
+        host: mx.settings.search.host,
+        protocol: mx.settings.search.protocol,
+        port: mx.settings.search.port,
         language: mx.settings.language,
         index_template: 'views_{{language}}'
       });
@@ -908,7 +901,7 @@ export async function initMapx(o) {
       mx.panel_main.on('tab_change', async (e, id) => {
         if (id === 'search') {
           await mx.search.initCheck();
-          mx.search._elInput.focus()
+          mx.search._elInput.focus();
         }
       });
 
@@ -930,7 +923,6 @@ export async function initMapx(o) {
           mx.search._update_toggles_icons();
         }
       });
-
     } catch (e) {
       console.error(e);
     }
@@ -2937,10 +2929,10 @@ export async function viewRemove(view) {
     await h.viewLayersRemove({
       idView: view.id
     });
-    return true
-  }catch(e){
+    return true;
+  } catch (e) {
     console.warn(e);
-    return false
+    return false;
   }
 }
 
@@ -3388,8 +3380,9 @@ export async function viewLayersAdd(o) {
     prefix: idView
   });
   /*
-  * Remove modules if needed
-  */ 
+   * Remove modules if needed
+   */
+
   await viewModulesRemove(view);
 
   /**
@@ -5736,4 +5729,25 @@ export async function shinyNotify(opt) {
   if (mx.nc instanceof NotifCenter) {
     mx.nc.notify(opt.notif);
   }
+}
+
+/**
+* Fetch search API, using user id and token stored in config
+* @return {String} Search api key
+*/ 
+async function getSearchApiKey() {
+  const h = mx.helpers;
+  const urlKey = getApiUrl('getSearchKey');
+  const ss = mx.settings;
+  const qs = h.objToParams({
+    idUser: ss.user.id,
+    token: ss.user.token
+  });
+  const urlKeyFetch = `${urlKey}?${qs}`;
+  const r = await fetch(urlKeyFetch);
+  const keyData = await r.json();
+  if (keyData?.type === 'error') {
+    throw new Error(keyData.message);
+  }
+  return keyData.key;
 }

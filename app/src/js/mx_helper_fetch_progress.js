@@ -1,16 +1,14 @@
-
-export function fetchJsonProgress(url, opt) {
-  return fetchProgress(url, opt).then((r) => {
-    if (!r || !r.json) {
-      /**
-       * Prbably because Response not implemented.
-       * try with xhr
-       */
-      return fetchJsonProgress_xhr(url, opt);
-    } else {
-      return r.json();
-    }
-  });
+export async function fetchJsonProgress(url, opt) {
+  const r = await fetchProgress(url, opt);
+  if (!r || !r.json) {
+    /**
+     * Response not implemented ?
+     * -> try with xhr
+     */
+    return fetchJsonProgress_xhr(url, opt);
+  } else {
+    return r.json();
+  }
 }
 
 const defProgress = {
@@ -24,11 +22,27 @@ const defProgress = {
 };
 
 /**
+ * Produce a promise that reject after mx.settings.maxTimeFetch ms ellapsed
+ * @return {Promise}
+ */
+
+function getPromMaxTime() {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(
+        `fetchProgress : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`
+      );
+      resolve(null);
+    }, mx.settings.maxTimeFetch);
+  });
+}
+
+/**
  *  Fetch : wrapper around fetch + progress
  *  @param {String} url url to fetch
  *  @param {Object} opt options
  */
-export function fetchProgress(url, opt) {
+export async function fetchProgress(url, opt) {
   opt = Object.assign({}, defProgress, opt);
 
   const modeProgress = window.Response && window.ReadableStream;
@@ -36,70 +50,69 @@ export function fetchProgress(url, opt) {
   let loaded = 1;
   let total = 1;
 
-  const promTimeout = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject(`fetchProgress : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
-    }, mx.settings.maxTimeFetch);
-  });
+  const promTimeout = getPromMaxTime();
+  const promFetch = fetch(url, {cache: 'no-cache'});
+  const response = await Promise.race([promFetch, promTimeout]);
 
-  const promFetch = fetch(url, {cache: 'no-cache'}).then((response) => {
-    err = '';
-    if (!response.ok) {
-      err = response.status + ' ' + response.statusText;
-      throw Error(err);
-    }
+  if (!response.ok) {
+    err = response.status + ' ' + response.statusText;
+    throw new Error(err);
+  }
 
-    const contentLength =
-      response.headers.get('Mapx-Content-Length') ||
-      response.headers.get('content-length');
+  const contentLength =
+    response.headers.get('Mapx-Content-Length') ||
+    response.headers.get('content-length');
 
-    if (!modeProgress || !contentLength) {
+  if (!modeProgress || !contentLength) {
+    opt.onProgress({
+      loaded: loaded,
+      total: total
+    });
+    return response;
+  }
+
+  total = parseInt(contentLength, 10);
+  loaded = 0;
+
+  /**
+   * Return readable stream instead of json
+   */
+
+  return new Response(
+    new ReadableStream({
+      start(controller) {
+        const reader = response.body.getReader();
+        read(reader, controller);
+      }
+    })
+  );
+
+  /**
+   * Read helper
+   */
+
+  async function read(reader, controller) {
+    try {
+      const {done, value} = await reader.read();
+      if (done) {
+        opt.onComplete({
+          loaded: loaded,
+          total: total
+        });
+        controller.close();
+        return;
+      }
+      loaded += value.byteLength;
       opt.onProgress({
         loaded: loaded,
         total: total
       });
-      return response;
+      controller.enqueue(value);
+      read(reader, controller);
+    } catch (e) {
+      controller.error(error);
+      throw new Error(error);
     }
-
-    total = parseInt(contentLength, 10);
-    loaded = 0;
-
-    return new Response(
-      new ReadableStream({
-        start(controller) {
-          const reader = response.body.getReader();
-          read(reader, controller);
-        }
-      })
-    );
-  });
-
-  return Promise.race([promFetch, promTimeout]);
-
-  function read(reader, controller) {
-    reader
-      .read()
-      .then(({done, value}) => {
-        if (done) {
-          opt.onComplete({
-            loaded: loaded,
-            total: total
-          });
-          controller.close();
-          return;
-        }
-        loaded += value.byteLength;
-        opt.onProgress({
-          loaded: loaded,
-          total: total
-        });
-        controller.enqueue(value);
-        read(reader, controller);
-      })
-      .catch((error) => {
-        controller.error(error);
-        throw new Error(error);
-      });
   }
 }
 
@@ -112,12 +125,7 @@ export function fetchJsonProgress_xhr(url, opt) {
   opt = Object.assign({}, defProgress, opt);
   let hasMapxContentLength = false;
 
-  const promTimeout = new Promise((resolve, reject) => {
-    setTimeout(() => {
-      reject(`fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
-    }, mx.settings.maxTimeFetch);
-  });
-
+  const promTimeout = getPromMaxTime();
   const promFetch = new Promise((resolve, reject) => {
     let xmlhttp = new XMLHttpRequest();
 
@@ -177,7 +185,11 @@ export async function fetchProgress_xhr(url, opt) {
 
   const promTimeout = new Promise((resolve, reject) => {
     setTimeout(() => {
-      reject(`fetchProgress_xhr : timeout exceeded ( ${mx.settings.maxTimeFetch} ms )`);
+      reject(
+        `fetchProgress_xhr : timeout exceeded ( ${
+          mx.settings.maxTimeFetch
+        } ms )`
+      );
     }, mx.settings.maxTimeFetch);
   });
 
@@ -236,14 +248,13 @@ export async function fetchProgress_xhr(url, opt) {
   return Promise.race([promFetch, promTimeout]);
 }
 
-
 /**
-* Fetch using MapX mirror : bypass cors browser verification
-* @param {Object} opt Option 
-* @param {String} opt.endpoint Endpoint to query
-* @param {Object|String} opt.query Query
-* @return Fetch response
-*/
+ * Fetch using MapX mirror : bypass cors browser verification
+ * @param {Object} opt Option
+ * @param {String} opt.endpoint Endpoint to query
+ * @param {Object|String} opt.query Query
+ * @return Fetch response
+ */
 export async function fetchMirror(opt) {
   const h = mx.helpers;
   const esc = encodeURIComponent;

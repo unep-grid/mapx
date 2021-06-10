@@ -72,7 +72,7 @@ function paramsValidator(obj, opt) {
       obj[k] = null;
     }
   });
-
+  
   out.ok =
     out.missing.length === 0 &&
     out.unexpected.length === 0 &&
@@ -100,18 +100,22 @@ function getParamsValidator(opt) {
 
       const result = paramsValidator(body, opt);
 
-      if (result.invalid.length > 1) {
-        return stop(
-          `Invalid parameters found : ${JSON.stringify(result.invalid)}`
-        );
-      }
-      if (result.missing.length > 1) {
-        return stop(`Missing input:  ${JSON.stringify(result.missing)}`);
+      if (result.missing.length > 0) {
+        return stop(`Missing parameter:  ${JSON.stringify(result.missing)}`);
       }
 
-      if (result.unexpected.length > 1) {
-        return stop(`Unexpected input:  ${JSON.stringify(result.unexpected)}`);
+
+      if (result.unexpected.length > 0 ) {
+        return stop(`Unexpected parameter:  ${JSON.stringify(result.unexpected)}`);
       }
+      
+
+      if (result.invalid.length > 0) {
+        return stop(
+          `Invalid parameter: ${JSON.stringify(result.invalid)}`
+        );
+      }
+
 
       if (next) {
         next();

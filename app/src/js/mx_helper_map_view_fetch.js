@@ -1,6 +1,6 @@
 let start;
 
-export function fetchViews(opt) {
+export async function fetchViews(opt) {
   opt = opt || {};
   const h = mx.helpers;
   const idProject = mx.settings.project.id;
@@ -55,20 +55,21 @@ export function fetchViews(opt) {
 
   const url = ` ${host}?${queryString}`;
 
-  return h
-    .fetchJsonProgress(url, {
-      onProgress: opt.onProgress || onProgress,
-      onError: opt.onError || onError,
-      onComplete: opt.onComplete || onComplete
-    })
-    .then((data) => {
-      const out = Object.assign({}, dataDefault, data);
-      const diff = h.getArrayDiff(idViewsRequested, out.views.map((v) => v.id));
-      if (diff.length > 0) {
-        fetchDiffWarn(diff);
-      }
-      return data;
-    });
+  const data = await h.fetchJsonProgress(url, {
+    onProgress: opt.onProgress || onProgress,
+    onError: opt.onError || onError,
+    onComplete: opt.onComplete || onComplete
+  });
+  if(data.type === 'error'){
+      throw new Error(data.message);
+  }
+  const out = Object.assign({}, dataDefault, data);
+  const diff = h.getArrayDiff(idViewsRequested, out.views.map((v) => v.id));
+  if (diff.length > 0) {
+    fetchDiffWarn(diff);
+  }
+
+  return data;
 }
 
 function onProgress(d) {
@@ -86,10 +87,10 @@ function onComplete() {
 }
 
 async function fetchDiffWarn(diff) {
-  const h = mx.helpers;  
+  const h = mx.helpers;
   const title = await h.getDictItem('fetch_views_diff_modal_title');
-  const text =  await h.getDictItem('fetch_views_diff_message');
-  console.warn('Views not available in this project:',diff);
+  const text = await h.getDictItem('fetch_views_diff_message');
+  console.warn('Views not available in this project:', diff);
   h.modal({
     title: title,
     content: text,

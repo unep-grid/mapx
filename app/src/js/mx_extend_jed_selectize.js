@@ -1,4 +1,4 @@
-import {getGemetConcept, searchGemet} from './gemet_util/index.js';
+import {getGemetConcept, searchGemetLabelDefinition} from './gemet_util/index.js';
 
 (function() {
   'use strict';
@@ -96,7 +96,7 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
              */
             if (!query.length) return callback();
             try {
-              const value = await searchGemet(query);
+              const value = await searchGemetLabelDefinition(query);
               return callback(value);
             } catch (e) {
               callback();

@@ -206,9 +206,8 @@ function arrayToPgArray(arr, def) {
   arr = arr || [];
   if (arr.length === 0) {
     return def || "('')";
-  } else {
-    return "('" + arr.join("','") + "')";
-  }
+  } 
+  return "('" + arr.join("','") + "')";
 }
 
 /**
