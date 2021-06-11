@@ -1,4 +1,12 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.27-alpha' target='_blank'>1.8.27-alpha</a>
+  - APP / API
+    - GEMET 
+        - Reshaped gemet local db,
+        - Integration of multilingual keywords from gemet in the search index generator,
+        - Modified api search by text, by list of concept : faster, more accurate, query by multiple concept ids,
+        - Adapted metadata visualizer,
+        - Integration of multilingual GEMET keywords in the search tool
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.26-alpha' target='_blank'>1.8.26-alpha</a>
   - APP
     - GEMET 
