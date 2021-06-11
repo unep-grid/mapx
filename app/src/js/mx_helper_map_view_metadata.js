@@ -1,8 +1,29 @@
 import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
+import {el, elAuto} from './el_mapx';
 
-async function getGemetConceptLabel(id) {
-  const item = await getGemetConcept(id);
-  return item.label;
+
+/**
+* Given a list of gemet concept id, produce an array of '<li>', with a link to the
+* gemet oncept
+* @param {Array} ids Array of concept id
+* @return {Array} Array of '<li>'
+*/ 
+async function gemetLi(ids) {
+  const concepts = await getGemetConcept(ids);
+  const lis = concepts.map((k) => {
+   return el(
+      'li',
+      el(
+        'a',
+        {
+          target: '_blank',
+          href: getGemetConceptLink(k.concept)
+        },
+        k.label
+      )
+    );
+  });
+  return lis;
 }
 
 /**
@@ -70,7 +91,6 @@ export async function addSourceMetadataToView(opt) {
 
 export async function viewToMetaModal(view) {
   const h = mx.helpers;
-  const el = h.el;
   const id = h.isView(view) ? view.id : view;
   view = h.getView(id) || (await h.getViewRemote(id));
   const meta = {};
@@ -106,7 +126,7 @@ export async function viewToMetaModal(view) {
 
   if (hasSourceMeta) {
     const sourceMeta = view._meta || view.data.source.meta;
-    const elSourceMeta = metaSourceToUi(sourceMeta);
+    const elSourceMeta = await metaSourceToUi(sourceMeta);
     if (elSourceMeta) {
       elContent.appendChild(elSourceMeta);
     }
@@ -131,7 +151,6 @@ export async function viewToMetaModal(view) {
 
 export function metaSourceRasterToUi(rasterMeta) {
   const h = mx.helpers;
-  const el = h.el;
 
   rasterMeta = rasterMeta || {};
 
@@ -146,7 +165,7 @@ export function metaSourceRasterToUi(rasterMeta) {
     true
   );
 
-  return h.elAuto('array_table', rasterMeta, {
+  return elAuto('array_table', rasterMeta, {
     render: 'array_table',
     tableHeadersSkip: true,
     tableTitle: 'meta_view_raster_meta',
@@ -158,8 +177,6 @@ export function metaSourceRasterToUi(rasterMeta) {
 
 function metaViewToUi(meta) {
   const h = mx.helpers;
-  const el = h.el;
-  const elAuto = h.elAuto;
   const prefixKey = 'meta_view_';
   const keys = [
     'project_title',
@@ -212,10 +229,8 @@ function metaViewToUi(meta) {
 /**
  * Vector source meta data to UI
  */
-export function metaSourceToUi(meta) {
+export async function metaSourceToUi(meta) {
   const h = mx.helpers;
-  const el = h.el;
-  const elAuto = h.elAuto;
   const glfo = h.getLabelFromObjectPath;
   const oToA = h.objectToArray;
 
@@ -329,19 +344,7 @@ export function metaSourceToUi(meta) {
 
   const elKeywordsGemet = el(
     'ul',
-    p('text.keywords.keys_gemet', []).map((k) =>
-      el(
-        'li',
-        el(
-          'a',
-          {
-            target : '_blank',
-            href: getGemetConceptLink(k)
-          },
-          getGemetConceptLabel(k)
-        )
-      )
-    )
+     await gemetLi(p('text.keywords.keys_gemet', []))
   );
 
   const elLanguages = elAuto(

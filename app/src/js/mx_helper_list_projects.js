@@ -1,3 +1,5 @@
+import {cleanDiacritic} from './string_util/';
+
 export function renderUserProjectsList(o) {
   var h = mx.helpers;
   var el = h.el;
@@ -192,7 +194,7 @@ export function renderUserProjectsList(o) {
    * clean strings
    */
   function cleanString(str) {
-    return h.cleanDiacritic(str.toLowerCase());
+    return cleanDiacritic(str.toLowerCase());
   }
 
   function buildRow(row) {

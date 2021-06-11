@@ -1,9 +1,10 @@
 WITH sim AS (
   SELECT
-  type,
   concept,
-  text,
-  similarity('{{text}}', text) s
+  label,
+  definition,
+  -- (similarity('{{text}}', label) + similarity('{{text}}', definition)) / 2 AS s
+  similarity('{{text}}', label) as s
   FROM
   mx_gemet
   WHERE
@@ -15,7 +16,7 @@ sub AS (
   FROM
   sim
   WHERE
-  s > 0.10
+  s > 0.05 
 ),
 count_sim  as (
   SELECT
@@ -31,9 +32,9 @@ count_all  as (
 hits as (
   SELECT
   json_build_object(
-    'type',type,
     'concept',concept,
-    'text',text,
+    'label',label,
+    'definition',definition,
     'score',s
   ) hits
   FROM sub
@@ -55,7 +56,6 @@ built as (
     'n_found',cs.n,
     'n_pages', ceiling(cs.n::float / {{limit}}),
     'page', {{offset}}/{{limit}} + 1
-    
   ) res
   FROM hits_agg h, count_all ca, count_sim cs
 )

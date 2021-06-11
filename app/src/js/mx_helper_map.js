@@ -11,6 +11,7 @@ import {MapxLogo, MapControlLiveCoord, MapControlScale} from './map_controls';
 import {ControlsPanel} from './panel_controls';
 import {MapxDraw} from './draw';
 import {NotifCenter} from './notif_center/';
+import {cleanDiacritic} from './string_util/';
 
 /**
  * TODO: convert this in a MapxMap Class
@@ -912,7 +913,9 @@ export async function initMapx(o) {
         type: 'language_change',
         idGroup: 'search_index',
         callback: (data) => {
-          mx.search.setLanguage(data?.new_language);
+          mx.search.setLanguage({
+            language: data?.new_language,
+          });
         }
       });
 
@@ -5349,8 +5352,7 @@ export function getViewTitleNormalized(view, lang) {
     path: 'data.title',
     defaultValue: ''
   });
-  title = h
-    .cleanDiacritic(title)
+  title = cleanDiacritic(title)
     .toLowerCase()
     .trim();
   return title;
@@ -5732,9 +5734,10 @@ export async function shinyNotify(opt) {
 }
 
 /**
-* Fetch search API, using user id and token stored in config
-* @return {String} Search api key
-*/ 
+ * Fetch search API, using user id and token stored in config
+ * @return {String} Search api key
+ */
+
 async function getSearchApiKey() {
   const h = mx.helpers;
   const urlKey = getApiUrl('getSearchKey');

@@ -19,8 +19,7 @@ import {
   isView,
   isArray,
   isStringRange,
-  isBoolean,
-  isUndefined
+  isBoolean
 } from './../is_test/index.js';
 
 import {def} from './default.js';
@@ -59,7 +58,7 @@ class Search extends EventSimple {
     /**
      * Build ui
      */
-    await s.setLanguage();
+    await s.setLanguage({reset: false});
     await s.build();
 
     /*
@@ -92,13 +91,17 @@ class Search extends EventSimple {
     return !!this._init;
   }
 
-  async setLanguage(lang) {
+  async setLanguage(opt) {
     const s = this;
-    if (lang) {
-      s.setOpt({language: lang});
+    opt = Object.assign({}, {reset: true, language: null}, opt);
+    if (opt.language) {
+      s.setOpt({language: opt.language});
     }
     await s.setIndex();
     await s.setLocaleFlatpickr();
+    if (opt.reset) {
+      s.reset();
+    }
   }
 
   async setLocaleFlatpickr(lang) {
@@ -115,8 +118,11 @@ class Search extends EventSimple {
      * instead of language code.
      * -> `locs.default[lang]` as workaround ?
      */
-
-    const locs = await s._flatpickr_langs[lang]();
+    let locFun = s._flatpickr_langs[lang];
+    if (!locFun) {
+      locFun = s._flatpickr_langs['en'];
+    }
+    const locs = await locFun();
     let loc = s._flatpickr.l10ns.default;
 
     if (locs) {
@@ -369,75 +375,6 @@ class Search extends EventSimple {
     return frag;
   }
 
-  /**
-   * Init tribute autocomplete
-   * NOTE: to be removed
-   */
-  _init_tribute(elTarget, elContainer) {
-    const s = this;
-
-    const tributeAttributes = {
-      menuContainer: elContainer,
-      autocompleteMode: true,
-      positionMenu: true,
-      values: async (text, cb) => {
-        /**
-         * Query index on keyword attributes only
-         * and transform hits to distinct list of keywords,
-         * with translation of available
-         */
-        const attrKeys = s.opt('keywords').map((k) => k.type);
-        const results = await s.search({
-          q: text,
-          attributesToRetrieve: attrKeys,
-          facetsDistribution: attrKeys
-        });
-        const v = [];
-        const seen = {};
-
-        for (let hit of results.hits) {
-          //{source_keyword:[]}
-          for (let type in hit) {
-            let keywords = hit[type];
-            // ["COD","CHE"]
-            if (!isArray(keywords)) {
-              keywords = [keywords];
-            }
-            for (let keyword of keywords) {
-              let hash = type + keyword;
-              if (!seen[hash]) {
-                seen[hash] = true;
-                v.push({
-                  type: type,
-                  key: keyword,
-                  value: await getDictItem(keyword)
-                });
-              }
-            }
-          }
-        }
-        cb(v);
-      },
-      noMatchTemplate: () => {
-        return null;
-      },
-      selectTemplate: (item) => {
-        if (isUndefined(item)) {
-          return null;
-        }
-        return item.original.value;
-      },
-      menuItemTemplate: function(item) {
-        return item.original.value;
-      }
-    };
-    /**
-     * Create new Tribute instance
-     */
-    s._tribute = new s.Tribute(tributeAttributes);
-    s._tribute.attach(elTarget);
-  }
-
   async _build_filter_years_range() {
     const s = this;
     /**
@@ -496,7 +433,7 @@ class Search extends EventSimple {
     /**
      * Update filters
      */
-    function update(d) {
+    async function update(d) {
       const start = parseInt(d[0]);
       const end = parseInt(d[1]);
       const attrStart = 'range_start_at_year';
@@ -505,7 +442,7 @@ class Search extends EventSimple {
       elSliderYearInputMin.dataset.year = start;
       elSliderYearInputMax.dataset.year = end;
       s.setFilter('range_years', strFilter);
-      s.update();
+      await s.update();
     }
   }
 
@@ -581,7 +518,6 @@ class Search extends EventSimple {
                 1000}`;
             }
           }
-          console.log({attr: item.attr, filter: strFilter});
           s.setFilter(item.attr, strFilter);
           await s.update();
         }
@@ -606,7 +542,10 @@ class Search extends EventSimple {
       class: 'search--input',
       id: id,
       type: 'text',
-      lang_key: opt.key_placeholder,
+      dataset: {
+        lang_key: opt.key_placeholder,
+        lang_type: 'placeholder'
+      },
       placeholder: await getDictItem(opt.key_placeholder),
       on: {
         input: async () => {
@@ -656,6 +595,9 @@ class Search extends EventSimple {
 
   clear() {
     const s = this;
+    if (!s._built) {
+      return;
+    }
     s._elInput.value = '';
     const facets = s.getFacetsArray();
     for (let facet of facets) {
@@ -667,7 +609,24 @@ class Search extends EventSimple {
     for (let date of dates) {
       date.clear();
     }
-    s.update();
+  }
+
+  async reset() {
+    const s = this;
+    if (!s._built) {
+      return;
+    }
+    s._elInput.value = '';
+    const facets = s.getFacetsArray();
+    for (let facet of facets) {
+      facet.destroy();
+    }
+    delete s._facets;
+    const dates = s._flatpickr_filters;
+    for (let date of dates) {
+      date.clear();
+    }
+    await s.update();
   }
 
   async _handle_click(e) {
@@ -697,7 +656,11 @@ class Search extends EventSimple {
           }
           break;
         case 'update_facet_filter':
-          s.update();
+          await s.update();
+          setTimeout(() => {
+            e.target.scrollIntoView({block: 'center', inline: 'nearest'});
+          }, 200);
+
           break;
         case 'search_clear':
           {
@@ -709,7 +672,7 @@ class Search extends EventSimple {
         case 'search_set_page':
           {
             s.vFeedback(e);
-            s.update(ds.page);
+            await s.update(ds.page);
           }
           break;
         case 'search_keyword_toggle':
@@ -719,7 +682,7 @@ class Search extends EventSimple {
             const facet = s._facets[`${type}:${keyword}`];
             if (facet) {
               facet.checked = !facet.checked;
-              s.update();
+              await s.update();
             }
           }
 
@@ -1133,7 +1096,6 @@ class Search extends EventSimple {
        * -> Do not render further.
        */
       if (s._timer_debounce !== timer) {
-        console.log('cancel before search');
         return;
       }
 
@@ -1156,7 +1118,6 @@ class Search extends EventSimple {
        * -> Do not render further.
        */
       if (s._timer_debounce !== timer) {
-        console.log('cancel after search');
         return;
       }
 
@@ -1425,6 +1386,11 @@ class Facet {
     }
     fc.build();
     fc._init = true;
+  }
+
+  destroy() {
+    const fc = this;
+    fc._elTag.remove();
   }
 
   build() {
