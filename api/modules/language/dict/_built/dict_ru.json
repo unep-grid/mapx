@@ -6720,6 +6720,11 @@
     "ru": "Ключевые слова"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "ru": "Ключевые слова GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "ru": "Географические ключевые слова"

@@ -14886,16 +14886,16 @@
   },
   {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fr": "Mots clés géographiques M49",
-    "es": "Palabras clave geográficas M49",
-    "ru": "Географические ключевые слова M49",
+    "en": "Geographic Keywords",
+    "fr": "Mots clés géographiques",
+    "es": "Palabras clave geográficas",
+    "ru": "Географические ключевые слова",
     "zh": "地理关键字M49",
-    "ar": "الكلمات الرئيسية الجغرافية M49",
-    "fa": "کلیدواژه های جغرافیایی M49",
-    "ps": "د جغرافیایی کلیمې M49",
+    "ar": "الكلمات الرئيسية الجغرافية",
+    "fa": "کلیدواژه های جغرافیایی",
+    "ps": "د جغرافیایی کلیمې",
     "bn": "ভৌগলিক কীওয়ার্ড এম 49",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "de": "Geografische Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",
@@ -17470,6 +17470,19 @@
     "ps": "کلیدي ټکي",
     "bn": "কীওয়ার্ডস",
     "de": "Schlüsselwörter"
+  },
+  {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fr": "Mots-clés GEMET",
+    "es": "Palabras clave GEMET",
+    "ru": "Ключевые слова GEMET",
+    "zh": "关键词 GEMET",
+    "ar": "الكلمات المفتاحية GEMET",
+    "fa": "کلمات کلیدی GEMET",
+    "ps": "کلیدي ټیمونه",
+    "bn": "কীওয়ার্ডগুলি",
+    "de": "Schlüsselwörter GEMET"
   },
   {
     "id": "search_source_keywords_m49",

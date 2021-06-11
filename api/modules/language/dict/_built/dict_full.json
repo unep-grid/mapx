@@ -17472,6 +17472,19 @@
     "de": "Schlüsselwörter"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fr": "Mots-clés GEMET",
+    "es": "Palabras clave GEMET",
+    "ru": "Ключевые слова GEMET",
+    "zh": "关键词 GEMET",
+    "ar": "الكلمات المفتاحية GEMET",
+    "fa": "کلمات کلیدی GEMET",
+    "ps": "کلیدي ټیمونه",
+    "bn": "কীওয়ার্ডগুলি",
+    "de": "Schlüsselwörter GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "fr": "Mots-clés géographiques",

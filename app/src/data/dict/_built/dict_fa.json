@@ -6720,6 +6720,11 @@
     "fa": "کلید واژه ها"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fa": "کلمات کلیدی GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "fa": "کلمات کلیدی جغرافیایی"

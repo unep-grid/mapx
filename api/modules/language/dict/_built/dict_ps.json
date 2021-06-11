@@ -6720,6 +6720,11 @@
     "ps": "کلیدي ټکي"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "ps": "کلیدي ټیمونه"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "ps": "جغرافیوي ټکي"

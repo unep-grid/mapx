@@ -6720,6 +6720,11 @@
     "de": "Schlüsselwörter"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "de": "Schlüsselwörter GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "de": "Geografische Schlüsselwörter"

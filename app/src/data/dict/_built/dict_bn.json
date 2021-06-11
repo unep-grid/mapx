@@ -6720,6 +6720,11 @@
     "bn": "কীওয়ার্ডস"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "bn": "কীওয়ার্ডগুলি"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "bn": "ভৌগলিক কীওয়ার্ড"
