@@ -30,8 +30,7 @@ services:
       - 'traefik.http.routers.search.entrypoints=web'
       - 'traefik.http.services.search.loadbalancer.server.port=7700'
     volumes:
-      #- searchidx:/data.ms
-      - searchidx2:/data.ms
+      - searchmeili:/data.ms
     ports:
       - 7700
   app:
@@ -162,6 +161,5 @@ services:
       - 'traefik.http.services.mailhog.loadbalancer.server.port=8025'
 
 volumes:
-  searchidx:
-  searchidx2:
+  searchmeili:
 
