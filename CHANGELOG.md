@@ -1,4 +1,7 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.28-alpha' target='_blank'>1.8.28-alpha</a>
+  - API :
+    - Missing 'create extension pg_trgm' in migration script
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.27-alpha' target='_blank'>1.8.27-alpha</a>
   - APP / API
     - GEMET 
