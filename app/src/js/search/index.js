@@ -446,16 +446,17 @@ class Search extends EventSimple {
       const attrEnd = 'range_end_at_year';
       /**
        * Strict
-       * ✅[--|___-|--]
-       * 🚫[-_|___-|--]
+       * :) [--|___-|--]
+       * :( [-_|___-|--]
        * const strFilter = `${attrStart} >= ${start} AND ${attrEnd} <= ${end}`;
        *
        * Partial
-       * ✅[--|___-|--]
-       * ✅[-_|___-|--]
-       * ✅[--|---_|__]
-       * 🚫[__|----|--]
-       */ const strFilter = `${attrStart} <= ${end} AND ${attrEnd} >= ${start}`;
+       * :) [--|___-|--]
+       * :) [-_|___-|--]
+       * :) [--|---_|__]
+       * :( [__|----|--]
+       */
+      const strFilter = `${attrStart} <= ${end} AND ${attrEnd} >= ${start}`;
       elSliderYearInputMin.dataset.year = start;
       elSliderYearInputMax.dataset.year = end;
       s.setFilter('range_years', strFilter);
@@ -465,7 +466,8 @@ class Search extends EventSimple {
   /**
    * Build filter date for each item in options > attributes > date
    * connect flatpickr and add to UI
-   */ async _build_filter_date() {
+   */
+  async _build_filter_date() {
     const s = this;
     const attrDate = s.opt('attributes').date;
     const attrDateRange = s.opt('attributes').date_range;
@@ -482,7 +484,8 @@ class Search extends EventSimple {
     for (let item of attrDateItems) {
       /**
        * Layout
-       */ const elFilterDate = el('input', {
+       */
+      const elFilterDate = el('input', {
         type: 'text',
         class: 'search--filter-date-input',
         dataset: {
@@ -507,7 +510,8 @@ class Search extends EventSimple {
       s._elFiltersDate.appendChild(elFilterContainer);
       /**
        * Date picker
-       */ const fpickr = s._flatpickr(elFilterDate, {
+       */
+      const fpickr = s._flatpickr(elFilterDate, {
         mode: item.range ? 'range' : 'single',
         allowInput: true,
         onChange: async (e) => {
@@ -537,7 +541,8 @@ class Search extends EventSimple {
    * Input builder
    * @param {Options} opt Options
    * @param {String} opt.key_placeholder translation key for the placeholder
-   */ async _build_input(opt) {
+   */
+  async _build_input(opt) {
     const s = this;
     const id = Math.random().toString(32);
     opt = Object.assign({}, {key_placeholder: null}, opt);
@@ -717,13 +722,16 @@ class Search extends EventSimple {
               await viewAdd(view);
               /**
                * All views exept story : zoom
-               */ if (!isStory(view)) {
+               */
+
+              if (!isStory(view)) {
                 await zoomToViewId(idView);
                 return;
               }
               /**
                * Story handling
-               */ const confirmed = await modalConfirm({
+               */
+              const confirmed = await modalConfirm({
                 title: elSpanTranslate('search_story_auto_play_confirm_title'),
                 content: elSpanTranslate('search_story_auto_play_confirm')
               });
@@ -764,7 +772,8 @@ class Search extends EventSimple {
     for (let v of hits) {
       /**
        * Add keywords buttons
-       */ const elKeywords = el('div', {class: ['search--button-group']});
+       */
+      const elKeywords = el('div', {class: ['search--button-group']});
       for (let k of confKeywords) {
         let keywords = v[k.type];
         if (keywords) {
@@ -802,7 +811,8 @@ class Search extends EventSimple {
       }
       /**
        * Add years keyword
-       */ const elYears = el('div', {class: ['search--button-group']}, [
+       */
+      const elYears = el('div', {class: ['search--button-group']}, [
         el(
           'div',
           {
@@ -838,7 +848,8 @@ class Search extends EventSimple {
       ]);
       /**
        * Add actions
-       */ const elButtonsBar = el(
+       */
+      const elButtonsBar = el(
         'div',
         {class: ['search--button-group', 'search--button-group-right']},
         [
@@ -934,7 +945,9 @@ class Search extends EventSimple {
    * @param {String} str string
    * @param {Integer} max Number of words to use
    * @return {String} If max number of word reached,string with <details>+<summary>
-   */ cutext(str, max) {
+   */
+
+  cutext(str, max) {
     max = max || 50;
     // NOTE: Can split html div. but description should not contain html.
     const wrds = (str || '').split(/\b/);
@@ -958,7 +971,9 @@ class Search extends EventSimple {
    * Format cropped text: add ellipsis when needed
    * @param {String} str Croped tring to format
    * @return {String} str String formated like '...on mercury analysis' or 'A mercury analysis...' ;
-   */ formatCroppedText(str) {
+   */
+
+  formatCroppedText(str) {
     if (!isStringRange(str, 1)) {
       return '';
     }
@@ -1019,7 +1034,8 @@ class Search extends EventSimple {
    * @param {String} attr Attribute (eg. keyword type)
    * @param {String} tag Keyword/tag
    * @return {Boolean}
-   */ hasFilterFacet(attr, tag) {
+   */
+  hasFilterFacet(attr, tag) {
     const s = this;
     let out = false;
     const id = `${attr}:${tag}`;
@@ -1041,7 +1057,8 @@ class Search extends EventSimple {
   /**
    * Update the results, and set the page
    * @param {Integer} page Page number - saved in pagination.
-   */ async update(page) {
+   */
+  async update(page) {
     const s = this;
     await s.initCheck();
     s._timer_debounce = performance.now();
@@ -1059,7 +1076,8 @@ class Search extends EventSimple {
       /**
        * Prevent extrem quick chamges
        * -> Do not render further.
-       */ if (s._timer_debounce !== timer) {
+       */
+      if (s._timer_debounce !== timer) {
         return;
       }
       const results = await s.search({
@@ -1078,7 +1096,8 @@ class Search extends EventSimple {
        * Search is not cancellable, but if the timer
        * has changed, another request is on its way.
        * -> Do not render further.
-       */ if (s._timer_debounce !== timer) {
+       */
+      if (s._timer_debounce !== timer) {
         return;
       }
       s._results = results;
@@ -1091,7 +1110,9 @@ class Search extends EventSimple {
       /**
        * ⚠️  fragile: if the list is not complete, subsequent search
        * will not display new facets.
-       */ if (!s._facets) {
+       */
+
+      if (!s._facets) {
         const fragFacet = s._build_facets(results.facetsDistribution);
         s._elFiltersFacets.replaceChildren(fragFacet);
       } else {
@@ -1103,7 +1124,8 @@ class Search extends EventSimple {
   }
   /**
    * Update open/close tag
-   */ _update_toggles_icons() {
+   */
+  _update_toggles_icons() {
     const s = this;
     if (!s._elResults) {
       return;
@@ -1127,7 +1149,8 @@ class Search extends EventSimple {
    * Search on current index, with default params.
    * @param {Object} opt Options for index.search
    * @return {Object} Search result
-   */ async search(opt) {
+   */
+  async search(opt) {
     const s = this;
     const search = Object.assign(
       {},
@@ -1150,7 +1173,8 @@ class Search extends EventSimple {
   }
   /**
    * Update stats
-   */ async _update_stats(results) {
+   */
+  async _update_stats(results) {
     const s = this;
     const nPage = Math.ceil(results.nbHits / results.limit);
     const cPage = Math.ceil(
@@ -1164,8 +1188,8 @@ class Search extends EventSimple {
   }
   /**
    * Pagination builder
-   */ _build_pagination_items(results) {
-    const s = this;
+   */
+  _build_pagination_items(results) {
     const elItems = el('div', {class: ['search--pagination-items']});
     const nPage = Math.ceil(results.nbHits / results.limit);
     const cPage =
@@ -1174,29 +1198,35 @@ class Search extends EventSimple {
     let fillerPos = [];
     /*
      * Pagination layout
-     */ if (nPage <= 10) {
+     */
+    if (nPage <= 10) {
       /**
        * oooooooXoo
-       */ type = 'all';
+       */
+      type = 'all';
     } else if (cPage < 4) {
       /**
        * ooXoo ooo
-       */ type = '5_3';
+       */
+      type = '5_3';
       fillerPos.push(6);
     } else if (cPage > nPage - 4) {
       /**
        * ooo oXooo
-       */ type = '3_5';
+       */
+      type = '3_5';
       fillerPos.push(4);
     } else {
       /**
        * ooo oXo ooo
-       */ type = '3_5_3';
+       */
+      type = '3_5_3';
       fillerPos.push(...[3, nPage - 4]);
     }
     /**
      * Populate pagination
-     */ for (let i = 0; i < nPage; i++) {
+     */
+    for (let i = 0; i < nPage; i++) {
       let add = false;
       switch (type) {
         case 'all':
@@ -1229,7 +1259,8 @@ class Search extends EventSimple {
       }
       /**
        * Add filler if needed
-       */ if (fillerPos.includes(i)) {
+       */
+      if (fillerPos.includes(i)) {
         const elFiller = el('span', {
           class: ['search--pagination-item-filler']
         });
@@ -1238,7 +1269,8 @@ class Search extends EventSimple {
       if (add) {
         /**
          * Build item
-         */ let elItem;
+         */
+        let elItem;
         const elItemContainer = el(
           'span',
           {
@@ -1255,13 +1287,16 @@ class Search extends EventSimple {
         );
         /**
          * The item is the current page
-         */ if (i === cPage) {
+         */
+        if (i === cPage) {
           elItem.classList.add('active');
           elItem.setAttribute('disabled', true);
         }
         /**
          * Add the item
-         */ elItems.appendChild(elItemContainer);
+         */
+
+        elItems.appendChild(elItemContainer);
       }
     }
     return elItems;
@@ -1271,7 +1306,9 @@ class Search extends EventSimple {
    * @param {String} template string
    * @param {Object} data Object with key : value pair
    * @return {String} template with replaced values
-   */ template(str, data) {
+   */
+
+  template(str, data) {
     const s = this;
     if (!data) {
       data = s._opt;
