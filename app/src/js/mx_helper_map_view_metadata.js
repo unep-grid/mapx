@@ -9,6 +9,9 @@ import {el, elAuto} from './el_mapx';
 * @return {Array} Array of '<li>'
 */ 
 async function gemetLi(ids) {
+  if(ids.length === 0){
+     return null;
+  }
   const concepts = await getGemetConcept(ids);
   const lis = concepts.map((k) => {
    return el(

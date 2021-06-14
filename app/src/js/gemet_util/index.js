@@ -7,12 +7,20 @@ import {getApiUrl} from './../mx_helper_map.js';
  * @return {Object} {hits:[{type:<string>,concept:<id>,text:<string>}], ...}
  */
 async function searchGemet(txt) {
-  const lang = mx.settings.language;
-  const url = new URL(getApiUrl(config.path_api_search));
-  url.searchParams.set('language', lang);
-  url.searchParams.set('searchText', txt);
-  const resp = await fetch(url);
-  return await resp.json();
+  try {
+    const lang = mx.settings.language;
+    const url = new URL(getApiUrl(config.path_api_search));
+    url.searchParams.set('language', lang);
+    url.searchParams.set('searchText', txt);
+    const resp = await fetch(url);
+    const res = await resp.json();
+    if (res && res.type === 'error') {
+      throw new Error(res.message);
+    }
+    return res;
+  } catch (e) {
+    throw new Error(e);
+  }
 }
 
 /**
@@ -21,22 +29,26 @@ async function searchGemet(txt) {
  * @return {Object} {label:<string>,value:id,definition:<string>}
  */
 async function getGemetConcept(id) {
-  const lang = mx.settings.language;
-  const url = new URL(getApiUrl(config.path_api_concept));
-  url.searchParams.set('idConcepts',id);
-  url.searchParams.set('language', lang);
-  const resp = await fetch(url);
-  return await resp.json();
+  try {
+    const lang = mx.settings.language;
+    const url = new URL(getApiUrl(config.path_api_concept));
+    url.searchParams.set('idConcepts', id);
+    url.searchParams.set('language', lang);
+    const resp = await fetch(url);
+    const res = await resp.json();
+    if (res || res.type === 'error') {
+      throw new Error(res.message);
+    }
+    return res;
+  } catch (e) {
+    throw new Error(e);
+  }
 }
 
 function getGemetConceptLink(id) {
   const url = new URL(config.thesaurus_link + id);
-  url.searchParams.set('language',mx.settings.language);
+  url.searchParams.set('language', mx.settings.language);
   return url;
 }
 
-export {
-  searchGemet,
-  getGemetConcept,
-  getGemetConceptLink
-};
+export {searchGemet, getGemetConcept, getGemetConceptLink};
