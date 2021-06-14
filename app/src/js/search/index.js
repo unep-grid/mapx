@@ -685,7 +685,6 @@ class Search extends EventSimple {
               await s.update();
             }
           }
-
           break;
         case 'search_view_link': {
           s.vFeedback(e);
@@ -697,6 +696,7 @@ class Search extends EventSimple {
           urlStatic.searchParams.append('zoomToViews', true);
           window.open(urlStatic, '_newtab');
         }
+        break;
         case 'search_view_toggle':
           {
             s.vFeedback(e);
