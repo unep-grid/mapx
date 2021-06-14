@@ -88,7 +88,7 @@ mxSchemaViewStyle <- function(
     .get(conf,c("resources","sprites")),
     "sprite.json"
     )
-
+  
   # stop if the path is not found
   if(!file.exists(jsonSpritePath)) stop("json path is not found")
 

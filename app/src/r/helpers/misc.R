@@ -386,9 +386,7 @@ mxGetDefaultConfig <- function(){
 }
 
 
-
-
-#' Set web ressource path
+#' Set web resource path
 mxSetResourcePath <- function(resources){
   if(is.null(resources)){
     res <- .get(config,"resources")
@@ -626,18 +624,6 @@ mxSetNameGeomType <- function(geomTypeDf,language){
   return(as.list(geomType))
 
 }
-
-
-#' Get style list
-#' @param directory containgin stles
-#' @export
-mxGetViewList <- function(){
-  conf <- mxGetDefaultConfig()
-  stylePath <- file.path(conf[["ressources"]][["views"]])
-  if( ! dir.exists(stylePath )) stop(sprintf("Directory %s not found",stylePath))
-  list.files(stylePath,"(^poly|^poin|^lines|^concess).*\\.json$")
-}
-
 
 
 #' Recursive search and filter on named list

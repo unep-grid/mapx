@@ -1,6 +1,7 @@
 #
 # Dependencies
 #
+tryCatch({
 library(shiny)
 library(RPostgreSQL)
 library(memoise)
@@ -77,3 +78,7 @@ onStop(function(){
   #cat("mxDbPoolClose (on.exit), global.R\n")
   #mxDbPoolClose()
 #})
+},error = function(e){
+  browser()
+
+})
