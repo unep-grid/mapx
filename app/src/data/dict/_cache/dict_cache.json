@@ -17577,16 +17577,16 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "fr": "Activer",
-    "es": "Permitir",
-    "ru": "Давать возможность",
-    "zh": "使能够",
-    "ar": "ممكن",
-    "fa": "فعال کردن",
-    "ps": "وړول",
-    "bn": "সক্ষম করুন",
-    "de": "Aktivieren"
+    "en": "Display on map",
+    "fr": "Afficher sur la carte",
+    "es": "Mostrar en el mapa",
+    "ru": "Показать на карте",
+    "zh": "在地图上显示",
+    "ar": "عرض على الخريطة",
+    "fa": "نمایش بر روی نقشه",
+    "ps": "په نقشه ښودل",
+    "bn": "মানচিত্রে প্রদর্শন করুন",
+    "de": "Auf Karte anzeigen"
   },
   {
     "id": "search_view_link",

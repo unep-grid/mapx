@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "es": "Permitir"
+    "en": "Display on map",
+    "es": "Mostrar en el mapa"
   },
   {
     "id": "search_view_link",

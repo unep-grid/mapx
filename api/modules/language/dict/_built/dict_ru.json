@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "ru": "Давать возможность"
+    "en": "Display on map",
+    "ru": "Показать на карте"
   },
   {
     "id": "search_view_link",

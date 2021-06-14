@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "fa": "فعال کردن"
+    "en": "Display on map",
+    "fa": "نمایش بر روی نقشه"
   },
   {
     "id": "search_view_link",

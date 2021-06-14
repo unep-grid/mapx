@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "zh": "使能够"
+    "en": "Display on map",
+    "zh": "在地图上显示"
   },
   {
     "id": "search_view_link",

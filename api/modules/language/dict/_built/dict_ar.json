@@ -6761,8 +6761,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "ar": "ممكن"
+    "en": "Display on map",
+    "ar": "عرض على الخريطة"
   },
   {
     "id": "search_view_link",

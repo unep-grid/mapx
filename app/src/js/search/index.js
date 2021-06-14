@@ -262,9 +262,6 @@ class Search extends EventSimple {
              * Label or key, e.g. vt, environment, global
              */
             const count = tags[tag];
-            if (tag === 'WLD') {
-              console.log(tag, count);
-            }
             const facet = s._facets[k];
             facet.count = count;
           }
@@ -768,7 +765,7 @@ class Search extends EventSimple {
     const s = this;
     const frag = new DocumentFragment();
     const confKeywords = s.opt('keywords');
-    //const viewsOpen = getViewsOpen();
+    const sliderYears = s._year_slider.get().map(v=>parseInt(v*1));
     for (let v of hits) {
       /**
        * Add keywords buttons
@@ -812,11 +809,16 @@ class Search extends EventSimple {
       /**
        * Add years keyword
        */
+      const emphaseYearStart = sliderYears.includes(v.range_start_at_year);
+      const emphaseYearEnd = sliderYears.includes(v.range_end_at_year);
       const elYears = el('div', {class: ['search--button-group']}, [
         el(
           'div',
           {
-            class: ['search--button-keyword'],
+            class: [
+              'search--button-keyword',
+              emphaseYearStart ? `search--button-keyword-enabled` : null
+            ],
             dataset: {
               action: 'search_year_set_min',
               year: v.range_start_at_year
@@ -832,7 +834,10 @@ class Search extends EventSimple {
         el(
           'div',
           {
-            class: ['search--button-keyword'],
+            class: [
+              'search--button-keyword',
+              emphaseYearEnd ? `search--button-keyword-enabled` : null
+            ],
             dataset: {
               action: 'search_year_set_max',
               year: v.range_end_at_year
@@ -1068,7 +1073,7 @@ class Search extends EventSimple {
       const attrKeys = s.opt('keywords').map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
-      console.log(facetFilters);
+
       s.setFlag({
         target: s._elFilterFlag,
         enable: !!facetFilters && !!facetFilters.length
