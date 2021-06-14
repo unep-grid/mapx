@@ -248,6 +248,7 @@ class Search extends EventSimple {
     const s = this;
     clearTimeout(s._timeout_facets);
     s._timeout_facets = setTimeout(() => {
+      console.log('updat facet dist')
       const attrKeys = s.opt('keywords').map((k) => k.type);
 
       for (let attr of attrKeys) {
@@ -438,7 +439,19 @@ class Search extends EventSimple {
       const end = parseInt(d[1]);
       const attrStart = 'range_start_at_year';
       const attrEnd = 'range_end_at_year';
-      const strFilter = `${attrStart} >= ${start} AND ${attrEnd} <= ${end}`;
+      /** 
+      * Strict
+      * ✅[--|___-|--]
+      * 🚫[-_|___-|--]
+      * const strFilter = `${attrStart} >= ${start} AND ${attrEnd} <= ${end}`;
+      *
+      * Partial
+      * ✅[--|___-|--]
+      * ✅[-_|___-|--]
+      * ✅[--|---_|__]
+      * 🚫[__|----|--]
+      */ 
+      const strFilter = `${attrStart} <= ${end} AND ${attrEnd} >= ${start}`;
       elSliderYearInputMin.dataset.year = start;
       elSliderYearInputMax.dataset.year = end;
       s.setFilter('range_years', strFilter);
@@ -1086,6 +1099,8 @@ class Search extends EventSimple {
       const attrKeys = s.opt('keywords').map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
+      console.log(facetFilters);
+
       s.setFlag({
         target: s._elFilterFlag,
         enable: !!facetFilters && !!facetFilters.length
