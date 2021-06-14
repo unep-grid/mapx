@@ -1,4 +1,16 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.29-alpha' target='_blank'>1.8.29-alpha</a>
+   - APP
+    - Solves missing sprites in legends; 
+    - Cleaning old 'resources' config from legacy mapx version -> probable breaking changes
+    - Minor improvements of the search tool
+      - Sync date keyword with slider + keyword emphasis
+      - Solve nested facet groups not updating order when filtered
+      - Year range slider: allow partial date ranges instead of strict min/max bounds.
+      - Metadata viewer : handle cases where no concept is set
+      - Fixed broken external link button 
+    - Gemet search + dropdown :
+      - Avoid displaying full description of gemet dropdown: use tooltip instead, but keep the same heading. 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.28-alpha' target='_blank'>1.8.28-alpha</a>
   - API :
     - Missing 'create extension pg_trgm' in migration script
