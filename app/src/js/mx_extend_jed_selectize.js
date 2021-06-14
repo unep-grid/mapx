@@ -82,21 +82,24 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
               return el(
                 'div',
                 {
+                  class: ['hint', 'hint--top-right'],
                   style: {
-                    padding: '10px'
-                  }
+                    padding: '10px',
+                    display: 'flex'
+                  },
+                  'aria-label': escape(item.definition)
                 },
-                el('h3', escape(item.label)),
-                el('p', escape(item.definition))
+                el('h3', escape(item.label))
               );
             }
           },
           score: function() {
             /**
-            * For sifter score on the 'github repos' example, check this:
-            * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
-            * Here, we use score from similarity, trgm
-            */ 
+             * For sifter score on the 'github repos' example, check this:
+             * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
+             * Here, we use score from similarity, trgm
+             */
+
             return function(item) {
               return item.score;
             };

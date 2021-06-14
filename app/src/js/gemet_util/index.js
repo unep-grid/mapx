@@ -36,7 +36,7 @@ async function getGemetConcept(id) {
     url.searchParams.set('language', lang);
     const resp = await fetch(url);
     const res = await resp.json();
-    if (res || res.type === 'error') {
+    if (res && res.type === 'error') {
       throw new Error(res.message);
     }
     return res;
