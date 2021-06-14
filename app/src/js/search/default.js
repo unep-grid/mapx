@@ -77,14 +77,14 @@ const def = {
     {
       type: 'source_keywords_m49',
       icon: 'fa-map-marker',
-      groups: [
+      subgroups: [
         {
-          key: 'search_source_keywords_group_region',
+          key: 'source_keywords_group_region',
           match: /wld|WLD|^m49_.*/,
           exclude: null
         },
         {
-          key: 'search_source_keywords_group_country',
+          key: 'source_keywords_group_country',
           match: /[a-zA-Z]{3}/,
           exclude: /wld|WLD/
         }
