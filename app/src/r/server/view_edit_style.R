@@ -13,6 +13,7 @@ observeEvent(input$styleEdit_init,{
   hasSources <- !noDataCheck(reactListReadSources())
   hasStyle <- !noDataCheck(style)
 
+
   if(!hasStyle) style = NULL
   if(!hasLayer || ! hasSources){
 

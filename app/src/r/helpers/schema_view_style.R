@@ -84,24 +84,19 @@ mxSchemaViewStyle <- function(
   #
   # sprite settings
   #
-  jsonSpritePath <- file.path(
-    .get(conf,c("resources","sprites")),
-    "sprite.json"
-    )
+  jsonSpritePath <- file.path("src/glyphs/dist/sprites/sprite.json")
   
   # stop if the path is not found
   if(!file.exists(jsonSpritePath)) stop("json path is not found")
 
   # fetch sprite name
   sprites <- sort(names(jsonlite::fromJSON(jsonSpritePath)))
- 
   #
   # Points : maki-
   # Polygon : t_ & geol_
   #
   spritesPrefix <-  .get(config, c('sprites_prefix'))
   sprites <- sprites[grepl(spritesPrefix[[geomType]],sprites)]
-
   #
   # Legend title
   #
