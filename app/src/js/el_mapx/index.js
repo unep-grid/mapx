@@ -17,7 +17,7 @@ function elAuto(render, data, opt) {
     tableContainerHeaderClass: ['panel-heading'],
     tableContainerClass: ['panel', 'panel-default'],
     booleanValues: [true, false],
-    stringStyle: {},
+    stringStyle: {marginRight:'5px'},
     numberStyle: {float: 'right'},
     dateStyle: {float: 'right'},
     langKeyPrefix: '',
