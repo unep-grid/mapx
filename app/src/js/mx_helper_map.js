@@ -2315,22 +2315,23 @@ export function viewsLayersOrderUpdate(o) {
 }
 
 /**
-* Sort layer helper 
-*
-* Set layers order, while keeping priority in order:
-*
-* true     false
-* ----     -----
-* 0,1      1,1 
-* 0,0      1,0
-* 1,1      0,1
-* 1,0      0,0 
-*
-* Last layer will be on top 
-*
-* @param {Array} layers Layers list, with metadata attribute
-* @param {Boolean} reverse Reverse pos, keep priority 
-*/ 
+ * Sort layer helper
+ *
+ * Set layers order, while keeping priority in order:
+ *
+ * true     false
+ * ----     -----
+ * 0,1      1,1
+ * 0,0      1,0
+ * 1,1      0,1
+ * 1,0      0,0
+ *
+ * Last layer will be on top
+ *
+ * @param {Array} layers Layers list, with metadata attribute
+ * @param {Boolean} reverse Reverse pos, keep priority
+ */
+
 function sortLayers(layers, reverse) {
   layers.sort((a, b) => {
     const ap = a.metadata.position;
@@ -2338,10 +2339,10 @@ function sortLayers(layers, reverse) {
     const bp = b.metadata.position;
     const br = b.metadata.priority;
     const d1 = reverse ? bp - ap : ap - bp;
-    if(d1!==0){
-      return d1
+    if (d1 !== 0) {
+      return d1;
     }
-    return ar - br ;
+    return ar - br;
   });
 }
 
@@ -4160,8 +4161,8 @@ export async function viewLayersAddVt(o) {
    */
   const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
   const useStyleDefault = !useStyleCustom && !hasStyleRules;
-  const useStyleAll = !useStyleDefault && hasRuleAll;
-  const useStyleFull = !useStyleAll && hasStyleRules;
+  const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
+  const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
 
   if (!useStyleCustom && !useStyleDefault && !useStyleAll && !useStyleFull) {
     console.warn('viewLayersAddVt: invalid settings', opt);
@@ -4173,18 +4174,22 @@ export async function viewLayersAddVt(o) {
    */
   if (useStyleCustom) {
     const layerCustom = {
-      id: _get_id_increment(),
+      id: `${idView}${sepLayer}${0}__custom`,
       source: idSource,
       'source-layer': idView,
       type: styleCustom.type || 'circle',
       paint: styleCustom.paint || {},
       layout: styleCustom.layout || {},
       minzoom: styleCustom.minzoom || zoomConfig.zoomMin,
-      maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax
+      maxzoom: styleCustom.maxzoom || zoomConfig.zoomMax,
+      metadata: {
+        position: 0,
+        priority: 0,
+        idView: idView,
+        filterOrig: []
+      }
     };
-
     layers.push(layerCustom);
-
     view._setFilter({
       filter: styleCustom.filter || ['all'],
       type: 'custom_style'
@@ -4472,9 +4477,6 @@ export async function viewLayersAddVt(o) {
     return false;
   }
 
-  function _get_id_increment() {
-    return idView + sepLayer + num++;
-  }
   function _build_layer(opt) {
     const config = Object.assign(
       {},
@@ -4497,7 +4499,7 @@ export async function viewLayersAddVt(o) {
     );
 
     if (!config.id) {
-      config.id = idView + sepLayer + opt.position + '_' + opt.priority;
+      config.id = idView + sepLayer + config.position + '_' + config.priority;
     }
 
     return makeSimpleLayer(config);
