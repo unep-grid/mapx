@@ -5,6 +5,7 @@ observeEvent(input$styleEdit_init,{
 
   view <- reactData$viewDataEdited
 
+
   if(!isTRUE(.get(view,c("_edit")))) return()
 
   style <- .get(view,c("data","style"))
@@ -13,58 +14,60 @@ observeEvent(input$styleEdit_init,{
   hasSources <- !noDataCheck(reactListReadSources())
   hasStyle <- !noDataCheck(style)
 
+  mxCatch(title="style edit init",{
 
-  if(!hasStyle) style = NULL
-  if(!hasLayer || ! hasSources){
+    if(!hasStyle) style = NULL
+    if(!hasLayer || ! hasSources){
 
-    errors <- logical(0)
-    warnings <- logical(0)
+      errors <- logical(0)
+      warnings <- logical(0)
 
-    if(!hasLayer) warnings["error_no_layer"] <- TRUE
-    if(!hasSources) errors["error_no_source"] <- TRUE
+      if(!hasLayer) warnings["error_no_layer"] <- TRUE
+      if(!hasSources) errors["error_no_source"] <- TRUE
 
-    output$txtValidSchema <- renderUI({
-      mxErrorsToUi(
-        errors=errors,
-        warning=warnings,
-        language=language
+      output$txtValidSchema <- renderUI({
+        mxErrorsToUi(
+          errors=errors,
+          warning=warnings,
+          language=language
         )
 
-    })
+      })
 
-    if(length(errors)>0 || length(warnings) >0){
-      mxToggleButton(
-        id="btnViewSaveStyle",
-        disable=TRUE
+      if(length(errors)>0 || length(warnings) >0){
+        mxToggleButton(
+          id="btnViewSaveStyle",
+          disable=TRUE
         )
-      mxToggleButton(
-        id="btnViewResetStyle",
-        disable=TRUE
+        mxToggleButton(
+          id="btnViewResetStyle",
+          disable=TRUE
         )
+      }
+
+    }else{
+
+      schema <- mxSchemaViewStyle(
+        view = view,
+        language = language
+      )
+
+      viewTimeStamp <- as.numeric(
+        as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
+      )
+
+      jedSchema(
+        id="styleEdit",
+        schema = schema,
+        startVal = style,
+        options = list(
+          disableSelectize = TRUE,
+          draftAutoSaveId = view$id,
+          draftAutoSaveDbTimestamp = viewTimeStamp
+        )
+      )
     }
-
-  }else{
-
-    schema <- mxSchemaViewStyle(
-      view = view,
-      language = language
-      )
-
-    viewTimeStamp <- as.numeric(
-      as.POSIXct(view$date_modified,format="%Y-%m-%d%tT%T",tz="UTC")
-      )
-
-    jedSchema(
-      id="styleEdit",
-      schema = schema,
-      startVal = style,
-      options = list(
-        disableSelectize = TRUE,
-        draftAutoSaveId = view$id,
-        draftAutoSaveDbTimestamp = viewTimeStamp
-        )
-      )
-  }
+})
 })
 
 #

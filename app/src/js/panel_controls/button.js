@@ -83,26 +83,17 @@ class Button extends EventSimple {
   }
 
   shake() {
-    shake(this.elButton); 
+    shake(this.elButton);
   }
 
   action(event) {
     const btn = this;
-    new ButtonCircle({
-      x: event.clientX,
-      y: event.clientY
-    });
+    btn.flash(event);
     btn.opt.action(event);
   }
 
   flash(event) {
-    h.iconFlash({
-      icon: 'circle-thin',
-      duration: 600,
-      scaleStart: 0.3,
-      scaleEnd: 0.6,
-      opacityStart: 0.05,
-      opacityEnd: 0,
+    new ButtonCircle({
       x: event.clientX,
       y: event.clientY
     });

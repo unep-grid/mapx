@@ -8,10 +8,10 @@ import {storyRead} from './../mx_helper_story.js';
 import {viewToTableAttributeModal} from './../mx_helper_source_attribute_table.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
-import {uploadGeoJSONModal} from  './../mx_helper_upload_source.js';
+import {uploadGeoJSONModal} from './../mx_helper_upload_source.js';
 import {
-downloadViewRaster,
-downloadViewGeoJSON,
+  downloadViewRaster,
+  downloadViewGeoJSON,
   resetViewStyle,
   viewsCheckedUpdate,
   viewFilterToolsInit,
@@ -184,17 +184,16 @@ function handleViewClick(event) {
         const idView = dataset.view_action_target;
         const view = getView(idView);
         const filter = ['any'];
-        const rules = path(view, '_rulesCopy', []);
-
+        const rules = path(view, '_rulesLegend', []);
+        //const attr = path(view, 'data.attribute.name');
+        //debugger;
         for (var i = 0, iL = legendInputs.length; i < iL; i++) {
           const li = legendInputs[i];
           if (li.checked) {
             const index = li.dataset.view_action_index * 1;
             const ruleIndex = rules[index];
-            if (
-              typeof ruleIndex !== 'undefined' &&
-              typeof ruleIndex.filter !== 'undefined'
-            ) {
+            if (ruleIndex && ruleIndex.filter) {
+              //filter.push(['==', attr, ruleIndex.value]);
               filter.push(ruleIndex.filter);
             }
           }

@@ -914,7 +914,7 @@ export async function initMapx(o) {
         idGroup: 'search_index',
         callback: (data) => {
           mx.search.setLanguage({
-            language: data?.new_language,
+            language: data?.new_language
           });
         }
       });
@@ -1235,7 +1235,7 @@ export async function initMapxStatic(o) {
     })
   );
 
-  h.viewsLayersOrderUpdate({
+  await h.viewsLayersOrderUpdate({
     order: idViews.reverse()
   });
 
@@ -2007,7 +2007,7 @@ export async function viewsCheckedUpdate(o) {
   /**
    * Set layer order
    */
-  h.viewsLayersOrderUpdate(o);
+  await h.viewsLayersOrderUpdate(o);
   return done;
 }
 
@@ -2059,7 +2059,9 @@ export function viewLiAction(o) {
  * @param {object} o Options
  * @param {string} o.id Id of the layer
  * @param {string} o.idSuffix Suffix of the layer id
+ * @param {number} o.priority Set inner priority in case of layer group. 0 important, > 0 less important
  * @param {string} o.idSourceLayer Id of the source layer / id of the view
+ * @param {string} o.idView id of the view
  * @param {string} o.idAfter Id of the layer after
  * @param {string} o.idSource Id of the source
  * @param {string} o.geomType Geometry type (point, line, polygon)
@@ -2071,24 +2073,37 @@ export function viewLiAction(o) {
  * @param {string} o.sprite
  */
 export function makeSimpleLayer(o) {
+  const h = mx.helpers;
   let ran, colA, colB, layer;
 
-  const h = mx.helpers;
-
   const def = {
+    id: null,
+    idSuffix: '',
+    priority: 0,
+    idSourceLayer: null,
+    idView: null,
+    idAfter: null,
+    geomType: null,
+    showSymbolLabel: null,
+    label: null,
+    hexColor: '#fff',
+    filter: ['all'],
+    size: 1,
+    sprite: null,
+    // to document
     sizeFactorZoomMax: 0,
     sizeFactorZoomMin: 0,
     sizeFactorZoomExponent: 1,
-    label: null,
-    sprite: null,
     zoomMin: 0,
     zoomMax: 22,
-    filter: ['all'],
-    opacity: 1,
-    size: null
+    opacity: 1
   };
   const opt = Object.assign({}, def, o);
-  const dpx = window.devicePixelRatio || 1;
+
+  if (!opt.id) {
+    console.warn('makeSimpleLayer: layer with no ID');
+    return;
+  }
 
   if (!opt.size) {
     opt.size = opt.geomType === 'point' || opt.geomType === 'symbol' ? 10 : 2;
@@ -2202,69 +2217,132 @@ export function makeSimpleLayer(o) {
 
   layer = layer[opt.geomType];
 
-  layer.id = opt.idSuffix ? `${opt.id}_${opt.idSuffix}` : opt.id;
+  layer.id = `${opt.id}${opt.idSuffix}`;
   layer.source = opt.idSource;
-  layer.idAfter = opt.idAfter;
   layer.minzoom = opt.zoomMin;
   layer.maxzoom = opt.zoomMax;
-  layer['source-layer'] = opt.idSourceLayer;
   layer.filter = opt.filter;
-  layer.metadata = {};
-  layer.metadata.filter_base = opt.filter;
+  layer['source-layer'] = opt.idSourceLayer;
 
+  /*
+   * MapX stuff
+   */
+  layer.metadata = {
+    position: opt.position,
+    priority: opt.priority,
+    idView: opt.idView,
+    filterOrig: opt.filter
+  };
   return layer;
 }
 
 /**
  * Update layer order based on view list position
- * @param {object} o Options
- * @param {string} o.id Id of the map
- * @param {string} o.order Array of layer base name. If empty, use `getViewsOrder`
- * @param
+ * @param {Object} o Options
+ * @param {String} o.id Id of the map
+ * @param {Array} o.order Array of layer base name. If empty, use `getViewsOrder`
+ * @return {Promise}
  */
+let order_update_timeout;
 export function viewsLayersOrderUpdate(o) {
-  o = o || {};
   const h = mx.helpers;
-  const map = h.getMap(o.id);
-  const views = h.getViews({id: o.id});
-  const order = o.order || h.getViewsOrder() || views.map((v) => v.id) || [];
-  let layerBefore = mx.settings.layerBefore;
+  o = o || {};
+  return new Promise((resolve) => {
+    /**
+     * Simple debounce
+     */
+    if (order_update_timeout) {
+      clearTimeout(order_update_timeout);
+    }
 
-  if (!order) {
-    return;
-  }
+    /**
+     * Get order list by priority :
+     * 1) Given order
+     * 2) Order of displayed views (ui, list)
+     * 3) Views list
+     */
+    const map = h.getMap(o.id);
+    const views = h.getViews({id: o.id});
+    const order =
+      o.order || h.getViewsOrder() || views.map((v) => v.id) || null;
 
-  setTimeout(() => {
-    const displayed = h.getLayerNamesByPrefix({
-      id: o.id,
-      prefix: 'MX-'
-    });
+    if (!order || order.length === 0) {
+      return;
+    }
 
-    displayed.sort(function(a, b) {
-      const posA = order.indexOf(h.getLayerBaseName(a));
-      const posB = order.indexOf(h.getLayerBaseName(b));
-      return posA - posB;
-    });
+    order_update_timeout = setTimeout(() => {
+      /**
+       * Get displayed layer
+       */
+      const layersDiplayed = h.getLayerByPrefix({
+        prefix: /^MX-/
+      });
+      /**
+       * For each group (view id) [a,b,c],
+       * 1) Get corresponding layers [a_1,a_0],
+       * 2) Set inner order [a_0,a_1]
+       * 3) Push result
+       */
+      let incView = 0;
+      let idPrevious;
+      const sorted = [];
+      for (let idView of order) {
+        const layersView = layersDiplayed.filter(
+          (d) => h.path(d, 'metadata.idView', d.id) === idView
+        );
 
-    displayed.forEach(function(x) {
-      if (map.getLayer(x)) {
-        const posBefore = displayed.indexOf(x) - 1;
-
-        if (posBefore > -1) {
-          layerBefore = displayed[posBefore];
+        if (layersView.length > 0) {
+          sortLayers(layersView);
+          for (let layer of layersView) {
+            const firstOfAll = incView++ === 0;
+            const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
+            map.moveLayer(layer.id, idBefore);
+            idPrevious = layer.id;
+            sorted.push({id: layer.id, idBefore});
+          }
         }
-
-        map.moveLayer(x, layerBefore);
       }
-    });
 
-    mx.events.fire({
-      type: 'layers_ordered',
-      data: {
-        layers: displayed
-      }
-    });
-  }, 0);
+      mx.events.fire({
+        type: 'layers_ordered',
+        data: {
+          layers: order
+        }
+      });
+      resolve(order);
+    }, 100);
+  });
+}
+
+/**
+* Sort layer helper 
+*
+* Set layers order, while keeping priority in order:
+*
+* true     false
+* ----     -----
+* 0,1      1,1 
+* 0,0      1,0
+* 1,1      0,1
+* 1,0      0,0 
+*
+* Last layer will be on top 
+*
+* @param {Array} layers Layers list, with metadata attribute
+* @param {Boolean} reverse Reverse pos, keep priority 
+*/ 
+function sortLayers(layers, reverse) {
+  layers.sort((a, b) => {
+    const ap = a.metadata.position;
+    const ar = a.metadata.priority;
+    const bp = b.metadata.position;
+    const br = b.metadata.priority;
+    const d1 = reverse ? bp - ap : ap - bp;
+    if(d1!==0){
+      return d1
+    }
+    return ar - br ;
+  });
 }
 
 /**
@@ -2284,11 +2362,14 @@ export function updateViewParams(o) {
 
 /**
  * Get the current view order
- * @return {array} view id array
+ * @return {Array} view id array or null
  */
 export function getViewsOrder() {
   const res = [];
   const viewContainer = document.querySelector('.mx-views-list');
+  if (!viewContainer) {
+    return null;
+  }
   const els = viewContainer.querySelectorAll('.mx-view-item');
   els.forEach((el) => res.push(el.dataset.view_id));
   return res;
@@ -2970,52 +3051,60 @@ export function getViewEl(view) {
 export function viewSetFilter(o) {
   o = o || {};
   const h = mx.helpers;
+  const m = h.getMap();
   const view = this;
   const idView = view.id;
+  const filterView = view._filters;
   const filter = o.filter;
-  const filters = view._filters;
-  const filterNew = ['all'];
   const type = o.type ? o.type : 'default';
-  const idMap = view._idMap ? view._idMap : mx.settings.map.id;
-  const m = h.getMap(idMap);
-  const layers = h.getLayerByPrefix({id: idMap, prefix: idView});
+  const layers = h.getLayerByPrefix({prefix: idView});
+  const hasFilter = h.isArray(filter) && filter.length > 1;
+  const filterNew = [];
 
   mx.events.fire({
     type: 'view_filter',
     data: {
       idView: idView,
-      filter: filters
+      filter: filter
     }
   });
 
-  if (filter && filter.constructor === Array && filter.length > 1) {
-    filters[type] = filter;
-  } else {
-    filters[type] = ['all'];
-  }
+  /**
+   * Add filter to filter type e.g. {legend:["all"],...} -> {legend:["all",["==","value","a"],...}
+   * ... or reset to default null
+   */
+  filterView[type] = hasFilter ? filter : null;
 
-  for (var t in filters) {
-    var f = filters[t];
-    filterNew.push(f);
-  }
-
-  for (var l = 0, ll = layers.length; l < ll; l++) {
-    var layer = layers[l];
-    var origFilter = h.path(layer, 'metadata.filter_base');
-    var filterFinal = [];
-    if (!origFilter) {
-      filterFinal = filterNew;
-    } else {
-      filterFinal = filterNew.concat([origFilter]);
+  /**
+   * Filter object to filter array
+   */
+  for (let t in filterView) {
+    let f = filterView[t];
+    if (f) {
+      filterNew.push(f);
     }
+  }
 
+  /**
+   * Apply filters to each layer, in top of base filters
+   */
+
+  for (let layer of layers) {
+    let filterOrig = h.path(layer, 'metadata.filterOrig', null);
+    let filterFinal = [];
+    if (!filterOrig) {
+      filterFinal.push('all', ...filterNew);
+    } else {
+      filterFinal.push(...filterOrig, ...filterNew);
+    }
     m.setFilter(layer.id, filterFinal);
   }
+
   mx.events.fire({
     type: 'view_filtered',
     data: {
       idView: idView,
-      filter: filters
+      filter: filterView
     }
   });
 }
@@ -3738,7 +3827,7 @@ async function viewLayersAddCc(o) {
   opt.onInit = tryCatched(cc.onInit.bind());
   opt.onClose = cc.onClose.bind(opt);
 
-  mx.helpers.removeLayersByPrefix({
+  h.removeLayersByPrefix({
     prefix: opt.idView,
     id: mx.settings.map.id
   });
@@ -3834,7 +3923,12 @@ async function viewLayersAddRt(o) {
     {
       id: idView,
       type: 'raster',
-      source: idSource
+      source: idSource,
+      metadata: {
+        idView: idView,
+        priority: 0,
+        position: 0
+      }
     },
     o.before
   );
@@ -4002,9 +4096,7 @@ export async function viewLayersAddVt(o) {
   const min = p(sourceSummary, 'attribute_stat.min');
 
   var layers = [];
-  var layersAfter = [];
   var num = 0;
-  var defaultOrder = true;
   var rules = p(style, 'rules', []);
   var styleCustom;
 
@@ -4042,14 +4134,14 @@ export async function viewLayersAddVt(o) {
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
-   * clean values
+   * Clean rules
    */
+  rules = h.isArray(rules) ? rules : [rules];
 
   rules = rules.filter((r) => {
     return r && r.value !== undefined;
   });
 
-  rules = rules instanceof Array ? rules : [rules];
   rules = h.clone(rules);
   rules.forEach((rule) => {
     rule.rgba = h.colorToRgba(rule.color, rule.opacity);
@@ -4057,31 +4149,31 @@ export async function viewLayersAddVt(o) {
   });
 
   /**
-   * Order
+   * Check rules
    */
-
-  if (style && style.reverseLayer === true) {
-    defaultOrder = false;
-    num = rules.length || 1;
-  }
+  const ruleAll = rules.find((r) => r.value === 'all');
+  const hasRuleAll = !!ruleAll;
+  const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
 
   /**
-   * Check for a rulle == 'all' -> style for all
+   * Set style type
    */
-  const ruleAll = rules.filter(function(r) {
-    return r.value === 'all';
-  });
+  const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
+  const useStyleDefault = !useStyleCustom && !hasStyleRules;
+  const useStyleAll = !useStyleDefault && hasRuleAll;
+  const useStyleFull = !useStyleAll && hasStyleRules;
 
-  const hasStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
-  const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
-  const hasRuleAll = ruleAll.length > 0;
+  if (!useStyleCustom && !useStyleDefault && !useStyleAll && !useStyleFull) {
+    console.warn('viewLayersAddVt: invalid settings', opt);
+    return;
+  }
 
   /**
    * Make custom layer
    */
-  if (hasStyleCustom) {
+  if (useStyleCustom) {
     const layerCustom = {
-      id: getIdLayer(),
+      id: _get_id_increment(),
       source: idSource,
       'source-layer': idView,
       type: styleCustom.type || 'circle',
@@ -4099,76 +4191,78 @@ export async function viewLayersAddVt(o) {
     });
   }
 
-  /**
-   * Create layer for single rule covering all values
-   */
-  if (hasRuleAll && !hasStyleCustom) {
-    const rule = ruleAll.splice(0, 1, 1)[0];
-    const hasSprite = rule.sprite && rule.sprite !== 'none';
-    const hasSymbol = hasSprite && geomType === 'point';
-    const hasPattern = hasSprite && geomType === 'polygon';
-    const skipLayer = hasSymbol;
-
-    if (hasSymbol) {
-      const label = h.getLabelFromObjectPath({
-        obj: rule,
-        sep: '_',
-        path: 'label',
-        defaultValue: rule.value
-      });
-
-      const layerSprite = buildLayer({
-        geomType: 'symbol',
-        label: label,
-        hexColor: rule.color,
-        sprite: rule.sprite,
-        opacity: rule.opacity,
-        size: rule.size
-      });
-
-      layers.push(layerSprite);
-    }
-
-    if (hasPattern) {
-      const layerPattern = buildLayer({
-        geomType: 'pattern',
-        hexColor: rule.color,
-        sprite: rule.sprite,
-        opacity: rule.opacity,
-        size: rule.size
-      });
-      layersAfter.push(layerPattern);
-    }
-
-    /*
-     * add the layer for all
-     */
-    if (!skipLayer) {
-      const layerAll = buildLayer({
-        geomType: geomType,
-        hexColor: rule.color,
-        sprite: rule.sprite,
-        opacity: rule.opacity,
-        size: rule.size
-      });
-      layers.push(layerAll);
-    }
-  }
-
   /*
    * Apply default style is no style is defined
    */
-  if (!hasStyleRules && !hasStyleCustom) {
-    const layerDefault = buildLayer({
+  if (useStyleDefault) {
+    const layerDefault = _build_layer({
       geomType: geomType
     });
     layers.push(layerDefault);
   }
 
+  /**
+   * Create layer for single rule covering all values
+   */
+  if (useStyleAll) {
+    const hasSprite = ruleAll.sprite && ruleAll.sprite !== 'none';
+    const hasSymbol = hasSprite && geomType === 'point';
+    const hasPattern = hasSprite && geomType === 'polygon';
+
+    if (!hasSymbol) {
+      /**
+       * Base layer and pattern
+       */
+      const layerAll = _build_layer({
+        geomType: geomType,
+        priority: 1,
+        hexColor: ruleAll.color,
+        sprite: ruleAll.sprite,
+        opacity: ruleAll.opacity,
+        size: ruleAll.size
+      });
+
+      layers.push(layerAll);
+
+      if (hasPattern) {
+        const layerPattern = _build_layer({
+          priority: 0,
+          geomType: 'pattern',
+          hexColor: ruleAll.color,
+          sprite: ruleAll.sprite,
+          opacity: ruleAll.opacity,
+          size: ruleAll.size
+        });
+        layers.push(layerPattern);
+      }
+    } else {
+      /**
+       * Symbol only
+       */
+      const label = h.getLabelFromObjectPath({
+        obj: ruleAll,
+        sep: '_',
+        path: 'label',
+        defaultValue: ruleAll.value
+      });
+
+      const layerSprite = _build_layer({
+        geomType: 'symbol',
+        label: label,
+        hexColor: ruleAll.color,
+        sprite: ruleAll.sprite,
+        opacity: ruleAll.opacity,
+        size: ruleAll.size
+      });
+
+      layers.push(layerSprite);
+    }
+  }
+
   /*
    * Apply style if avaialble
    */
-  if (hasStyleRules && !hasRuleAll && !hasStyleCustom) {
+  if (useStyleFull) {
     /**
      * evaluate rules
      */
@@ -4177,20 +4271,21 @@ export async function viewLayersAddVt(o) {
       /*
        * Set logic for rules
        */
-      const nextRule = rules[i + 1];
-      const isLast = i === rules.length - 1;
+      const nRules = rules.length - 1;
+      const position = style.reverseLayer ? nRules - i : i;
+      const isLast = i === nRules;
       const isFirst = i === 0;
+
+      const nextRule = rules[i + 1];
       const nextVal = p(nextRule, 'value', max);
       const fromValue = isNumeric ? (isFirst ? min : rule.value) : rule.value;
       const toValue = isNumeric ? (isLast ? max : nextVal) : null;
-      const idLayerRule = getIdLayer();
       /**
        *  Symboles and pattern check
        */
       const hasSprite = rule.sprite && rule.sprite !== 'none';
       const hasSymbol = hasSprite && geomType === 'point';
       const hasPattern = hasSprite && geomType === 'polygon';
-      const skipLayer = hasSymbol;
 
       if (isNumeric) {
         /**
@@ -4209,12 +4304,13 @@ export async function viewLayersAddVt(o) {
 
       rule.filter = filter;
 
-      /**
-       * Add layer for curent rule
-       */
-      if (!skipLayer) {
-        const layerMain = buildLayer({
-          id: idLayerRule,
+      if (!hasSymbol) {
+        /**
+         * Normal layer and pattern
+         */
+        const layerMain = _build_layer({
+          position: position,
+          priority: 1,
           geomType: geomType,
           hexColor: rule.color,
           opacity: rule.opacity,
@@ -4222,23 +4318,32 @@ export async function viewLayersAddVt(o) {
           sprite: rule.sprite,
           filter: filter
         });
-
         layers.push(layerMain);
-      }
 
-      /**
-       * Add layer for symbols
-       */
-      if (hasSymbol) {
+        if (hasPattern) {
+          const layerPattern = _build_layer({
+            position: position,
+            priority: 0,
+            geomType: 'pattern',
+            hexColor: rule.color,
+            opacity: rule.opacity,
+            sprite: rule.sprite,
+            filter: filter
+          });
+          layers.push(layerPattern);
+        }
+      } else {
+        /**
+         * Layer for symbols
+         */
         const label = h.getLabelFromObjectPath({
           obj: rule,
           sep: '_',
           path: 'label',
           defaultValue: rule.value
         });
-        const layerSprite = buildLayer({
-          id: getIdLayer(),
-          idSuffix: '_symbol',
+
+        const layerSprite = _build_layer({
           geomType: 'symbol',
           label: label,
           hexColor: rule.color,
@@ -4250,23 +4355,13 @@ export async function viewLayersAddVt(o) {
 
         layers.push(layerSprite);
       }
-
-      if (hasPattern) {
-        const layerPattern = buildLayer({
-          id: getIdLayer(),
-          idSuffix: '_pattern',
-          idAfter: idLayerRule,
-          geomType: 'pattern',
-          hexColor: rule.color,
-          opacity: rule.opacity,
-          sprite: rule.sprite,
-          filter: filter
-        });
-
-        layersAfter.push(layerPattern);
-      }
     });
   }
+
+  /**
+   * Handle layers order based on position
+   */
+  sortLayers(layers);
 
   /**
    * Handle layer for null values
@@ -4277,10 +4372,8 @@ export async function viewLayersAddVt(o) {
 
     if (isNumeric) {
       if (value) {
-        // Convert to numeric if there is a value, included 0
         filter.push(['==', attr, value * 1]);
       } else {
-        // As we can't [==, attr, null], try to use has
         filter.push(['==', attr, '']);
       }
     } else {
@@ -4293,9 +4386,9 @@ export async function viewLayersAddVt(o) {
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
 
-    const layerNull = buildLayer({
-      id: getIdLayer(),
+    const layerNull = _build_layer({
       idSuffix: '_null',
+      priority: 1,
       geomType: geomType === 'point' && hasSprite ? 'symbol' : geomType,
       hexColor: ruleNulls.color,
       opacity: ruleNulls.opacity,
@@ -4306,99 +4399,93 @@ export async function viewLayersAddVt(o) {
     ruleNulls.filter = filter;
     view._null_filter = filter;
     layers.push(layerNull);
-    rules.push(ruleNulls);
   }
 
   /**
    * Add layer and legends
    */
   if (layers.length > 0) {
-    /*
-     * Update layer order based in displayed list
+    /**
+     * Clean rules;
+     * - If next rules is identical, remove it from legend
+     * - Set sprite path
      */
-
-    if (hasStyleRules) {
-      /**
-       * Clean rules;
-       * - If next rules is identical, remove it from legend
-       * - Set sprite path
-       */
-      const idRulesToRemove = [];
-      rules.forEach((rule, i) => {
-        const ruleNext = rule[i + 1];
-        const hasSprite = rule.sprite && rule.sprite !== 'none';
-        const nextHasSprite =
-          !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
-
-        const isDuplicated =
-          ruleNext &&
-          ruleNext.value === rule.value &&
-          ruleNext.color === ruleNext.color;
-
-        if (hasSprite) {
-          rule.sprite = `url(sprites/svg/${rule.sprite}.svg)`;
-        } else {
-          rule.sprite = null;
-        }
-
-        if (isDuplicated) {
-          if (nextHasSprite) {
-            rule.sprite = `${rule.sprite},url(sprites/svg/${
-              ruleNext.sprite
-            }.svg`;
-          }
-          idRulesToRemove.push(i + 1);
-        }
-      });
-
-      while (idRulesToRemove.length) {
-        const idRule = idRulesToRemove.pop();
-        rules.splice(idRule, 1);
-      }
-
-      /*
-       * Add legend using template
-       */
-      view._rulesCopy = rules;
-
-      const elLegend = h.elLegend(view, {
-        type: 'vt',
-        removeOld: true,
-        elLegendContainer: o.elLegendContainer,
-        addTitle: o.addTitle
-      });
-      if (h.isElement(elLegend)) {
-        elLegend.innerHTML = mx.templates.viewListLegend(view);
-      }
+    const rulesLegend = h.clone(rules);
+    if (ruleNulls) {
+      rulesLegend.push(ruleNulls);
     }
 
-    /**
-     * handle order
+    const idRulesToRemove = [];
+    rulesLegend.forEach((rule, i) => {
+      const ruleNext = rule[i + 1];
+      const hasSprite = rule.sprite && rule.sprite !== 'none';
+      const nextHasSprite =
+        !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
+
+      const isDuplicated =
+        ruleNext &&
+        ruleNext.value === rule.value &&
+        ruleNext.color === ruleNext.color;
+
+      if (hasSprite) {
+        rule.sprite = `url(sprites/svg/${rule.sprite}.svg)`;
+      } else {
+        rule.sprite = null;
+      }
+
+      if (isDuplicated) {
+        if (nextHasSprite) {
+          rule.sprite = `${rule.sprite},url(sprites/svg/${ruleNext.sprite}.svg`;
+        }
+        idRulesToRemove.push(i + 1);
+      }
+    });
+
+    while (idRulesToRemove.length) {
+      const rulePos = idRulesToRemove.pop();
+      rulesLegend.splice(rulePos, 1);
+    }
+
+    /*
+     * Add legend using template
      */
-    if (defaultOrder) {
-      layers = layers.reverse();
+    view._rulesLegend = rulesLegend;
+
+    const elLegend = h.elLegend(view, {
+      type: 'vt',
+      removeOld: true,
+      elLegendContainer: o.elLegendContainer,
+      addTitle: o.addTitle
+    });
+    if (h.isElement(elLegend)) {
+      elLegend.innerHTML = mx.templates.viewListLegend(view);
     }
 
     /*
      * Add layers to map
      */
-
-    await addLayers(layers, layersAfter, o.before);
+    await addLayers(layers, o.before);
+    await viewsLayersOrderUpdate();
 
     return true;
   } else {
     return false;
   }
 
-  function getIdLayer() {
-    return idView + sepLayer + (defaultOrder ? num++ : num--);
+  function _get_id_increment() {
+    return idView + sepLayer + num++;
   }
-  function buildLayer(opt) {
+  function _build_layer(opt) {
     const config = Object.assign(
       {},
       {
+        id: null,
         idSource: idSource,
         idSourceLayer: idView,
+        idView: idView,
+        idSuffix: '',
+        position: 0,
+        priority: 0,
         showSymbolLabel: showSymbolLabel,
         sizeFactorZoomExponent: zoomConfig.sizeFactorZoomExponent,
         sizeFactorZoomMax: zoomConfig.sizeFactorZoomMax,
@@ -4408,8 +4495,9 @@ export async function viewLayersAddVt(o) {
       },
       opt
     );
+
     if (!config.id) {
-      config.id = getIdLayer();
+      config.id = idView + sepLayer + opt.position + '_' + opt.priority;
     }
 
     return makeSimpleLayer(config);
@@ -4418,41 +4506,32 @@ export async function viewLayersAddVt(o) {
 
 /**
  * Add mutiple layers at once
- * NOTE: should be converted to data driven methods
+ * TODO: convert MapX layers to datadriven layers.
  * @param {Array} layers Array of layers
- * @param {Array} layersAfter Array of additional layers to add on top of layers
+ * @param {String} idBefore Id of the layer to insert before
  */
-function addLayers(layers, layersAfter, before) {
-  const h = mx.helpers;
-  const map = h.getMap();
-
-  /**
-   * Add bottom layers now
-   */
-  layers.forEach((layer) => {
-    if (map.getLayer(layer.id)) {
-      map.removeLayer(layer.id);
-    }
-    if (!map.getLayer(before)) {
-      before = mx.settings.layerBefore;
-    }
-    map.addLayer(layer, before);
-  });
-
-  /**
-   * Wait a bit before adding top layers
-   */
+function addLayers(layers, idBefore) {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      layersAfter.forEach((layer) => {
-        h.addLayer({
-          layer: layer,
-          after: layer.idAfter
-        });
-      });
+    const h = mx.helpers;
+    const map = h.getMap();
+    /**
+     * Add bottom layers now
+     */
+    for (let layer of layers) {
+      const hasLayer = map.getLayer(layer.id);
+      const hasLayerBefore = map.getLayer(idBefore);
 
-      resolve(true);
-    }, 10);
+      if (hasLayer) {
+        map.removeLayer(layer.id);
+      }
+      if (!hasLayerBefore) {
+        idBefore = mx.settings.layerBefore;
+      }
+
+      map.addLayer(layer, idBefore);
+    }
+
+    resolve(true);
   });
 }
 
@@ -4615,8 +4694,19 @@ export function viewsModulesRemove(views) {
  * @param {String} o.before Name of an existing layer to insert the new layer(s) before.
  */
 export function viewLayersAddGj(opt) {
+  const h = mx.helpers;
   return new Promise((resolve) => {
-    const layer = mx.helpers.path(opt.view, 'data.layer');
+    const layer = h.path(opt.view, 'data.layer');
+
+    if (!layer.metadata) {
+      layer.metadata = {
+        priority: 0,
+        position: 0,
+        idView: opt.view.id,
+        filterOrig: []
+      };
+    }
+
     opt.map.addLayer(layer, opt.before);
     resolve(true);
   });
@@ -5216,7 +5306,7 @@ export async function resetViewStyle(o) {
     id: o.id,
     idView: o.idView
   });
-  h.viewsLayersOrderUpdate(o);
+  await h.viewsLayersOrderUpdate(o);
 }
 
 /**
