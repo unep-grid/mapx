@@ -1,6 +1,12 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.30-alpha' target='_blank'>1.8.30-alpha</a>
+  - API
+    - Faster vector source bounding box. E.g. used in vector views -> Zoom to extent. This issue penalized some features such as views settings or static viewer.
+  - APP
+    - Fixed bug where sprites/pattern were not shown in legends,
+    - Bug correction / improvement: partial refactoring of the construction of vector layers. Should be faster, while rendering the order correctly, especially when using overlay patterns using sprite.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.29-alpha' target='_blank'>1.8.29-alpha</a>
-   - APP
+  - APP
     - Solves missing sprites in legends; 
     - Cleaning old 'resources' config from legacy mapx version -> probable breaking changes
     - Minor improvements of the search tool
