@@ -2035,6 +2035,26 @@
     "zh": "您要删除此视图吗？ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "zh": "将此视图保留在列表中"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "zh": "这个观点与这个项目无关。无论如何，是否要将其暂时保留在列表中？"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "zh": "保持"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "zh": "去掉"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "zh": "下载数据"
@@ -4565,6 +4585,11 @@
     "zh": "此视图公开可用。 \n 元数据不完整"
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "zh": "此视图与此项目取消链接，关闭后不会保留\n或项目变更后"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "zh": "你拥有此视图的编辑权限"
@@ -5715,6 +5740,11 @@
     "zh": "注释"
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "zh": "执照"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "zh": "关键字"
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "zh": "你确定现在要更改项目吗？ 未保存的更改可能会丢失。"
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "zh": "立即更改项目，放弃更改。"
   },
   {
     "id": "modal_check_confirm_project_change_title",

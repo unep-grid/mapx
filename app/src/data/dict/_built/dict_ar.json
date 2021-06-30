@@ -2035,6 +2035,26 @@
     "ar": "هل ترغب في حذف هذا العرض؟ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "ar": "احتفظ بهذا العرض في القائمة"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "ar": "هذا الرأي لا علاقة له بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "ar": "احتفظ"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "ar": "إزالة"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "ar": "قم بتنزيل البيانات "
@@ -4565,6 +4585,11 @@
     "ar": "هذا الرأي متاح للجمهور\n مع بيانات وصفية غير كاملة "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه\n أو بعد تغيير المشروع"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "ar": "لديك حقوق محرر لهذا العرض "
@@ -5715,6 +5740,11 @@
     "ar": "ملاحظات "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ar": "التراخيص"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "ar": "الكلمات الدالة "
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "ar": "هل أنت متأكد من تغيير المشروع الآن؟ يمكن أن تضيع التغييرات غير المحفوظة. "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "ar": "تغيير المشروع الآن ، تجاهل التغييرات. "
   },
   {
     "id": "modal_check_confirm_project_change_title",

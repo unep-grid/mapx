@@ -1628,6 +1628,22 @@
     "en": "Would you like to delete this view ?"
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep"
+  },
+  {
+    "id": "remove",
+    "en": "Remove"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data"
   },
@@ -3652,6 +3668,10 @@
     "en": "This view is publicly available \n with incomplete metadata"
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view"
   },
@@ -4572,6 +4592,10 @@
     "en": "Notes"
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords"
   },
@@ -5058,10 +5082,6 @@
   {
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost."
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes."
   },
   {
     "id": "modal_check_confirm_project_change_title",

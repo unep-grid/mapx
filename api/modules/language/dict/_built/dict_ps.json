@@ -2035,6 +2035,26 @@
     "ps": "ایا تاسو غواړئ دا لید ړنګ کړئ؟ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "ps": "دا لید په لیست کې وساتئ"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "ps": "دا نظر پدې پروژه پورې تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "ps": "ساتل"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "ps": "لرې کړئ"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "ps": "ډیټا ډانلوډ کړئ"
@@ -4565,6 +4585,11 @@
     "ps": "دا لید په عامه ډول شتون لري\n د نامکمل میټاډاټا سره "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "ps": "دا لید پدې پروژه پورې تړلی دی او د تړل کیدو وروسته به خوندي نشي\n یا د پروژې بدلون وروسته"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "ps": "تاسو د دې نظر لپاره د مدیر حق لرئ "
@@ -5715,6 +5740,11 @@
     "ps": "یادونه "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ps": "جوازونه"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "ps": "کلیدي ټکي "
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "ps": "ایا تاسو ډاډه اوسئ چې پروژه بدله کړئ؟ خوندي نه شوي بدلونونه ورکیدای شي. "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "ps": "اوس پروژه بدله کړئ ، بدلونونه وغورځئ. "
   },
   {
     "id": "modal_check_confirm_project_change_title",

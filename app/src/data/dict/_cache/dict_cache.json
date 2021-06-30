@@ -5280,7 +5280,7 @@
   {
     "id": "delete_confirm_geojson_modal",
     "en": "Would you like to delete this view ?",
-    "fr": "Souhaitez-vous supprimier cette vue ?",
+    "fr": "Souhaitez-vous supprimer cette vue ?",
     "es": "¿Le gustaría eliminar esta vista? ",
     "ru": "Вы хотите удалить это представление? ",
     "zh": "您要删除此视图吗？ ",
@@ -5289,6 +5289,58 @@
     "ps": "ایا تاسو غواړئ دا لید ړنګ کړئ؟ ",
     "bn": "আপনি এই দৃশ্যটি মুছতে চান? ",
     "de": "Möchten Sie diese Ansicht löschen? "
+  },
+  {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fr": "Garder cette vue dans la liste",
+    "es": "Mantener esta vista en la lista",
+    "ru": "Сохранить это представление в списке",
+    "zh": "将此视图保留在列表中",
+    "ar": "احتفظ بهذا العرض في القائمة",
+    "fa": "این نمای را در لیست نگه دارید",
+    "ps": "دا لید په لیست کې وساتئ",
+    "bn": "এই ভিউটি তালিকায় রাখুন",
+    "de": "Behalten Sie diese Ansicht in der Liste bei"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "fr": "Cette vue n'est pas liée à ce projet. Souhaitez-vous quand même la conserver temporairement dans la liste ?",
+    "es": "Esta vista no está relacionada con este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?",
+    "ru": "Это мнение не имеет отношения к этому проекту. Вы все равно хотите временно оставить его в списке?",
+    "zh": "这个观点与这个项目无关。无论如何，是否要将其暂时保留在列表中？",
+    "ar": "هذا الرأي لا علاقة له بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟",
+    "fa": "این دیدگاه هیچ ارتباطی با این پروژه ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟",
+    "ps": "دا نظر پدې پروژه پورې تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সম্পর্কিত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?",
+    "de": "Diese Ansicht hat nichts mit diesem Projekt zu tun. Möchten Sie es trotzdem vorübergehend in der Liste behalten?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fr": "Conserver",
+    "es": "Mantenerse",
+    "ru": "Хранить",
+    "zh": "保持",
+    "ar": "احتفظ",
+    "fa": "نگاه داشتن",
+    "ps": "ساتل",
+    "bn": "রাখুন",
+    "de": "Behalten"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fr": "Enlever",
+    "es": "Eliminar",
+    "ru": "Удалять",
+    "zh": "去掉",
+    "ar": "إزالة",
+    "fa": "برداشتن",
+    "ps": "لرې کړئ",
+    "bn": "অপসারণ",
+    "de": "Entfernen"
   },
   {
     "id": "btn_opt_download",
@@ -11869,6 +11921,19 @@
     "de": "Diese Ansicht ist öffentlich verfügbar\n mit unvollständigen Metadaten "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "fr": "Cette vue n'est pas liée à ce projet et ne sera pas conservée après sa fermeture\n ou après changement de projet",
+    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse.\n o después de un cambio de proyecto",
+    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия.\n или после изменения проекта",
+    "zh": "此视图与此项目取消链接，关闭后不会保留\n或项目变更后",
+    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه\n أو بعد تغيير المشروع",
+    "fa": "این نما پیوندی با این پروژه ندارد و پس از بسته شدن حفظ نخواهد شد\n یا بعد از تغییر پروژه",
+    "ps": "دا لید پدې پروژه پورې تړلی دی او د تړل کیدو وروسته به خوندي نشي\n یا د پروژې بدلون وروسته",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত এবং বন্ধ হওয়ার পরে এটি সংরক্ষণ করা হবে না\n বা প্রকল্পের পরিবর্তনের পরে",
+    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft und wird nach dem Schließen nicht beibehalten\n oder nach Projektwechsel"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fr": "Vous disposez de droits d'édition pour cette vue",
@@ -14859,6 +14924,19 @@
     "de": "Anmerkungen "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fr": "Licences",
+    "es": "Licencias",
+    "ru": "Лицензии",
+    "zh": "执照",
+    "ar": "التراخيص",
+    "fa": "مجوزها",
+    "ps": "جوازونه",
+    "bn": "লাইসেন্স",
+    "de": "Lizenzen"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fr": "Mots clefs",
@@ -16443,19 +16521,6 @@
     "ps": "ایا تاسو ډاډه اوسئ چې پروژه بدله کړئ؟ خوندي نه شوي بدلونونه ورکیدای شي. ",
     "bn": "আপনি কি এখন প্রকল্পটি পরিবর্তন করতে নিশ্চিত? সংরক্ষিত পরিবর্তনগুলি হারিয়ে যেতে পারে। ",
     "de": "Sind Sie sicher, das Projekt jetzt zu ändern? Nicht gespeicherte Änderungen können verloren gehen. "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fr": "Changer de projet maintenant, ignorer les changements",
-    "es": "Cambiar de proyecto ahora, descartar cambios",
-    "ru": "Измените проект сейчас, отмените изменения. ",
-    "zh": "立即更改项目，放弃更改。",
-    "ar": "تغيير المشروع الآن ، تجاهل التغييرات. ",
-    "fa": "اکنون پروژه را تغییر دهید ، تغییرات را کنار بگذارید. ",
-    "ps": "اوس پروژه بدله کړئ ، بدلونونه وغورځئ. ",
-    "bn": "এখনই প্রকল্প পরিবর্তন করুন, পরিবর্তনগুলি বাতিল করুন। ",
-    "de": "Projekt jetzt ändern, Änderungen verwerfen. "
   },
   {
     "id": "modal_check_confirm_project_change_title",

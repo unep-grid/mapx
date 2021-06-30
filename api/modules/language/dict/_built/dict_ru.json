@@ -2035,6 +2035,26 @@
     "ru": "Вы хотите удалить это представление? "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "ru": "Сохранить это представление в списке"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "ru": "Это мнение не имеет отношения к этому проекту. Вы все равно хотите временно оставить его в списке?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "ru": "Хранить"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "ru": "Удалять"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "ru": "Скачать данные "
@@ -4565,6 +4585,11 @@
     "ru": "Это представление общедоступно\n с неполными метаданными "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия.\n или после изменения проекта"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "ru": "У вас есть права редактора для этого представления "
@@ -5715,6 +5740,11 @@
     "ru": "Примечания "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ru": "Лицензии"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "ru": "Ключевые слова "
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "ru": "Вы уверены, что смените проект сейчас? Несохраненные изменения могут быть потеряны. "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "ru": "Измените проект сейчас, отмените изменения. "
   },
   {
     "id": "modal_check_confirm_project_change_title",

@@ -2035,6 +2035,26 @@
     "es": "¿Le gustaría eliminar esta vista? "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "es": "Mantener esta vista en la lista"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "es": "Esta vista no está relacionada con este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "es": "Mantenerse"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "es": "Eliminar"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "es": "Descargar los datos"
@@ -4565,6 +4585,11 @@
     "es": "Esta vista está disponible para todos los usuarios \n con metadatos incompletos"
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse.\n o después de un cambio de proyecto"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "es": "Tiene derechos de editor en esta vista"
@@ -5715,6 +5740,11 @@
     "es": "Notas"
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "es": "Licencias"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "es": "Palabras clave"
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "es": "¿Estás seguro de querer cambiar de proyecto? Los cambios no guardados podrían perderse."
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "es": "Cambiar de proyecto ahora, descartar cambios"
   },
   {
     "id": "modal_check_confirm_project_change_title",

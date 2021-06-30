@@ -2035,6 +2035,26 @@
     "bn": "আপনি এই দৃশ্যটি মুছতে চান? "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "bn": "এই ভিউটি তালিকায় রাখুন"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সম্পর্কিত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "bn": "রাখুন"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "bn": "অপসারণ"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "bn": "ডেটা ডাউনলোড করুন "
@@ -4565,6 +4585,11 @@
     "bn": "এই দৃশ্যটি সর্বজনীনভাবে উপলব্ধ\n অসম্পূর্ণ মেটাডেটা সহ "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত এবং বন্ধ হওয়ার পরে এটি সংরক্ষণ করা হবে না\n বা প্রকল্পের পরিবর্তনের পরে"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "bn": "আপনার এই দর্শনটির জন্য সম্পাদক অধিকার রয়েছে "
@@ -5715,6 +5740,11 @@
     "bn": "মন্তব্য "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "bn": "লাইসেন্স"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "bn": "কীওয়ার্ডস "
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "bn": "আপনি কি এখন প্রকল্পটি পরিবর্তন করতে নিশ্চিত? সংরক্ষিত পরিবর্তনগুলি হারিয়ে যেতে পারে। "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "bn": "এখনই প্রকল্প পরিবর্তন করুন, পরিবর্তনগুলি বাতিল করুন। "
   },
   {
     "id": "modal_check_confirm_project_change_title",

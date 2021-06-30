@@ -2032,7 +2032,27 @@
   {
     "id": "delete_confirm_geojson_modal",
     "en": "Would you like to delete this view ?",
-    "fr": "Souhaitez-vous supprimier cette vue ?"
+    "fr": "Souhaitez-vous supprimer cette vue ?"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fr": "Garder cette vue dans la liste"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "fr": "Cette vue n'est pas liée à ce projet. Souhaitez-vous quand même la conserver temporairement dans la liste ?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fr": "Conserver"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fr": "Enlever"
   },
   {
     "id": "btn_opt_download",
@@ -4565,6 +4585,11 @@
     "fr": "Cette vue est visible par tous les utilisateurs \n avec des métadonnées non-valides"
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "fr": "Cette vue n'est pas liée à ce projet et ne sera pas conservée après sa fermeture\n ou après changement de projet"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fr": "Vous disposez de droits d'édition pour cette vue"
@@ -5715,6 +5740,11 @@
     "fr": "Notes"
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fr": "Licences"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fr": "Mots clefs"
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "fr": "Êtes-vous certain de vouloir changer de project maintenant ? Les changements non-sauvegardés pourraient être perdus."
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fr": "Changer de projet maintenant, ignorer les changements"
   },
   {
     "id": "modal_check_confirm_project_change_title",

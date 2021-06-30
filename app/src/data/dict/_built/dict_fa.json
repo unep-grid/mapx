@@ -2035,6 +2035,26 @@
     "fa": "آیا می خواهید این نمای را حذف کنید؟ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fa": "این نمای را در لیست نگه دارید"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "fa": "این دیدگاه هیچ ارتباطی با این پروژه ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fa": "نگاه داشتن"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fa": "برداشتن"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "fa": "دانلود معلومات"
@@ -4565,6 +4585,11 @@
     "fa": "این نما به صورت عمومی در دسترس است\n با فراداده ناقص "
   },
   {
+    "id": "view_badge_temp_shared_unlink",
+    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
+    "fa": "این نما پیوندی با این پروژه ندارد و پس از بسته شدن حفظ نخواهد شد\n یا بعد از تغییر پروژه"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fa": "شما برای این نمایش حق ویرایشگر دارید "
@@ -5715,6 +5740,11 @@
     "fa": "یادداشت "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fa": "مجوزها"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fa": "کلید واژه ها "
@@ -6323,11 +6353,6 @@
     "id": "modal_check_confirm_project_change_txt",
     "en": "Are you sure to change project now ? Unsaved changes could be lost.",
     "fa": "آیا مطمئن هستید که اکنون پروژه را تغییر می دهید؟ تغییرات ذخیره نشده ممکن است از بین بروند. "
-  },
-  {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fa": "اکنون پروژه را تغییر دهید ، تغییرات را کنار بگذارید. "
   },
   {
     "id": "modal_check_confirm_project_change_title",
