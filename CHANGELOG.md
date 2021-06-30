@@ -1,4 +1,10 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.31-alpha' target='_blank'>1.8.31-alpha</a>
+  - API/APP
+    - Improved handling of view not linked, added using drag-drop or search tool 
+    - Fixed missing license in source metadata viewer
+    - Fixed issue with local cache, that was hanging sometimes
+    - Various minor changes in UI, e.g. views badges colors
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.30-alpha' target='_blank'>1.8.30-alpha</a>
   - API
     - Faster vector source bounding box. E.g. used in vector views -> Zoom to extent. This issue penalized some features such as views settings or static viewer.
