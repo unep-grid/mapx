@@ -1023,6 +1023,8 @@ observeEvent(input$btnViewSave,{
     if( view[["type"]] %in%  c("rt","cc") ){
       viewSourceMetadata <- .get(input,c('viewSourceMetadata_values','data'))
       view <- .set(view,c('data','source','meta'),viewSourceMetadata)
+      # A copy is required for current session 
+      view$`_meta` <- viewSourceMetadata 
     }
 
     #
@@ -1032,14 +1034,11 @@ observeEvent(input$btnViewSave,{
       data=view,
       table=.get(config,c("pg","tables","views"))
     )
-
+    
     # edit flag
     view$`_edit` = TRUE 
 
     if(!hideView){
-      # edit flag
-      view$`_edit` = TRUE 
-
       mglUpdateView(view)
     }
     #

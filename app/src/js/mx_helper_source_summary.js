@@ -91,8 +91,8 @@ export async function getSourceVtSummary(opt) {
       delete opt[k];
     }
   });
-  
-  if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
+ 
+  if (!h.isViewId(opt.idView)) {
     return {};
   }
 
@@ -105,13 +105,13 @@ export async function getSourceVtSummary(opt) {
   const url = `${urlSourceSummary}?${query}`;
   let summary;
 
-
   if (useCache) {
     summary = await miniCacheGet(url);
     if (summary) {
       origin = 'cache';
     }
   }
+  
   if (!summary) {
     origin = 'fetch';
     const resp = await fetch(url);
@@ -145,6 +145,8 @@ export async function getSourceVtSummary(opt) {
     ]);
   }
   summary._origin = origin;
+
+
 
   return summary;
 }

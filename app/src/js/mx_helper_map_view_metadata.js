@@ -1,45 +1,17 @@
 import {getGemetConcept, getGemetConceptLink} from './gemet_util/index.js';
 import {el, elAuto} from './el_mapx';
 
-
-/**
-* Given a list of gemet concept id, produce an array of '<li>', with a link to the
-* gemet oncept
-* @param {Array} ids Array of concept id
-* @return {Array} Array of '<li>'
-*/ 
-async function gemetLi(ids) {
-  if(ids.length === 0){
-     return null;
-  }
-  const concepts = await getGemetConcept(ids);
-  const lis = concepts.map((k) => {
-   return el(
-      'li',
-      el(
-        'a',
-        {
-          target: '_blank',
-          href: getGemetConceptLink(k.concept)
-        },
-        k.label
-      )
-    );
-  });
-  return lis;
-}
-
 /**
  * Get view's source metadata
  * @param {String} id Name/Id of the source layer
  */
-export async function getSourceMetadata(id, force) {
-  const urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
+export async function fetchSourceMetadata(id) {
   if (!id) {
-    return console.warn('getSourceMetadata : missing id');
+    return console.warn('getSourceMetaDataRemote : missing id');
   }
-  force = force || false;
-  const url = urlSourceMeta + id + '?date=' + performance.now();
+  const urlSourceMeta = mx.helpers.getApiUrl('getSourceMetadata');
+  const date = performance.now();
+  const url = `${urlSourceMeta}${id}?date=${date}`;
   const r = await fetch(url);
   const meta = await r.json();
   return meta;
@@ -49,60 +21,32 @@ export async function getSourceMetadata(id, force) {
  * Get view metadata
  * @param {String} id Name/Id of the view
  */
-export async function getViewMetadata(id, force) {
-  const urlViewMeta = mx.helpers.getApiUrl('getViewMetadata');
+export async function fetchViewMetadata(id) {
+  const h = mx.helpers;
   if (!id) {
-    return console.warn('getSourceMetadata : missing id');
+    return console.warn('fetchViewMetadata : missing id');
   }
-  force = force || false;
-  const url = urlViewMeta + id + '?date=' + performance.now();
+  const urlViewMeta = h.getApiUrl('getViewMetadata');
+  const date = performance.now();
+  const url = `${urlViewMeta}${id}?date=${date}`;
   const r = await fetch(url);
   const meta = await r.json();
   return meta;
 }
 
-/**
- * Add source meta object to given view
- * @param {Obejct} view object
- * @param {Boolean} force force / replace meta object
- */
-export async function addSourceMetadataToView(opt) {
-  opt = opt || {};
-  const view = opt.view || {};
-  const force = opt.forceUpdateMeta || false;
-  const idSourceLayer = mx.helpers.path(view, 'data.source.layerInfo.name', '');
-  const empty = {};
-
-  if (!idSourceLayer) {
-    return empty;
-  }
-
-  if (view._meta && !force) {
-    view._meta;
-  }
-  const meta = await getSourceMetadata(idSourceLayer, force);
-  /**
-   * Save meta in view
-   */
-  if (meta && meta.text) {
-    view._meta = meta;
-    return meta;
-  } else {
-    return empty;
-  }
-}
-
 export async function viewToMetaModal(view) {
   const h = mx.helpers;
   const id = h.isView(view) ? view.id : view;
-  view = h.getView(id) || (await h.getViewRemote(id));
+  view = (await h.getView(id)) || (await h.getViewRemote(id));
+
   const meta = {};
+
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
   const hasSourceMeta =
-    ['rt', 'vt', 'cc'].indexOf(view.type) > -1 &&
-    (view._meta || h.path(view, 'data.source.meta'));
+    ['rt', 'vt', 'cc'].includes(view.type) &&
+    (view._meta || h.path(view, 'data.source.meta', false));
 
-  const data = await getViewMetadata(id, true);
+  const data = await fetchViewMetadata(id);
 
   const elContent = el('div');
 
@@ -128,7 +72,8 @@ export async function viewToMetaModal(view) {
   }
 
   if (hasSourceMeta) {
-    const sourceMeta = view._meta || view.data.source.meta;
+    const sourceMeta = view._meta || h.path(view, 'data.source.meta');
+    sourceMeta._id_source = view._id_source;
     const elSourceMeta = await metaSourceToUi(sourceMeta);
     if (elSourceMeta) {
       elContent.appendChild(elSourceMeta);
@@ -339,6 +284,12 @@ export async function metaSourceToUi(meta) {
   const elAbstract = el('p', l('text.abstract', '-'));
   const elNotes = el('p', l('text.notes', '-'));
   const elKeywords = elAuto('array_string', p('text.keywords.keys', ['-']));
+  const elLicenses = el(
+    'ul',
+    p('license.licenses', []).map((lic) =>
+      el('li', [el('i', lic.name), el('p', lic.text)])
+    )
+  );
 
   const elKeywordsM49 = el(
     'ul',
@@ -347,7 +298,7 @@ export async function metaSourceToUi(meta) {
 
   const elKeywordsGemet = el(
     'ul',
-     await gemetLi(p('text.keywords.keys_gemet', []))
+    await gemetLi(p('text.keywords.keys_gemet', []))
   );
 
   const elLanguages = elAuto(
@@ -420,6 +371,7 @@ export async function metaSourceToUi(meta) {
       released_at: elReleasedAt,
       modified_at: elModifiedAt,
       is_timeless: elIsTimeless,
+      licenses : elLicenses,
       start_at: elStartAt,
       end_at: elEndAt,
       id: elId
@@ -439,4 +391,32 @@ export async function metaSourceToUi(meta) {
   const elMeta = el('div', elTblSummary, elTblAttributes);
 
   return elMeta;
+}
+
+/**
+ * Given a list of gemet concept id, produce an array of '<li>', with a link to the
+ * gemet oncept
+ * @param {Array} ids Array of concept id
+ * @return {Promise::Array} Array of '<li>'
+ */
+
+async function gemetLi(ids) {
+  if (ids.length === 0) {
+    return null;
+  }
+  const concepts = await getGemetConcept(ids);
+  const lis = concepts.map((k) => {
+    return el(
+      'li',
+      el(
+        'a',
+        {
+          target: '_blank',
+          href: getGemetConceptLink(k.concept)
+        },
+        k.label
+      )
+    );
+  });
+  return lis;
 }

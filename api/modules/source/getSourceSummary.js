@@ -7,22 +7,20 @@ const helpers = require('@mapx/helpers');
 const template = require('@mapx/template');
 const db = require('@mapx/db-utils');
 
-const validateParamsHandler = getParamsValidator(
-  {
-    expected: [
-      'idView',
-      'timestamp',
-      'idSource',
-      'idAttr',
-      'useCache',
-      'binsCompute',
-      'binsMethod',
-      'binsNumber',
-      'maxRowsCount',
-      'stats'
-    ]
-  }
-);
+const validateParamsHandler = getParamsValidator({
+  expected: [
+    'idView',
+    'timestamp',
+    'idSource',
+    'idAttr',
+    'useCache',
+    'binsCompute',
+    'binsMethod',
+    'binsNumber',
+    'maxRowsCount',
+    'stats'
+  ]
+});
 
 module.exports.mwGetSummary = [validateParamsHandler, getSummaryHandler];
 module.exports.getSourceSummary = getSourceSummary;
@@ -91,7 +89,7 @@ async function getSourceSummary(opt) {
   if (cached) {
     const data = JSON.parse(cached);
     data.timing = Date.now() - start;
-    return reduceStatOutput(stats, data);
+    return cleanStatOutput(stats, data);
   }
 
   opt.hasT0 = columns.indexOf('mx_t0') > -1;
@@ -136,8 +134,9 @@ async function getSourceSummary(opt) {
     }
   }
 
-  out.timing = Date.now() - start;
-  return reduceStatOutput(stats, out);
+  out._timing = Date.now() - start;
+
+  return cleanStatOutput(stats, out);
 }
 
 async function getOrCalc(idTemplate, opt) {
@@ -195,22 +194,22 @@ async function updateSourceFromView(opt) {
  * @param {Object} data Output summary
  * @return {Object} summary
  */
-function reduceStatOutput(stats, data) {
+function cleanStatOutput(stats, data) {
   /**
    * Cleaning output to match requested stats
    */
-  if (stats.indexOf('attributes') === -1) {
+  if (!stats.includes('attributes')) {
     delete data.attributes;
     delete data.attributes_types;
     delete data.attribute_stat;
   }
-  if (stats.indexOf('temporal') === -1) {
+  if (!stats.includes('temporal')) {
     delete data.extent_time;
   }
-  if (stats.indexOf('spatial') === -1) {
+  if (!stats.includes('spatial')) {
     delete data.extent_sp;
   }
-  if (stats.indexOf('base') === -1) {
+  if (!stats.includes('base')) {
     delete data.row_count;
   }
   return data;

@@ -145,7 +145,7 @@ class MapxResolvers {
    * @return {Object} Source MapX metadata
    */
   get_source_meta(opt) {
-    return h.getSourceMetadata(opt.idSource, opt.force);
+    return h.fetchSourceMetadata(opt.idSource, opt.force);
   }
 
   /**
@@ -385,11 +385,11 @@ class MapxResolvers {
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
    * @param {Object} view meta data object
-   * @return {Object} view metadata
+   * @return {Promise::Object} view metadata
    */
   get_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);
-    return h.getViewMetadata(opt.idView, true);
+    return h.fetchViewMetadata(opt.idView);
   }
 
   /**

@@ -247,7 +247,14 @@ observeEvent(input$jedSourceMetadata_values,{
       mxToggleButton(
         id="btnSaveSourceMetadata",
         disable = TRUE
+      )
+
+      on.exit({
+        mxToggleButton(
+          id="btnSaveSourceMetadata",
+          disable = FALSE
         )
+      })
 
       mxCatch(title="Save source meta",{
 
@@ -293,14 +300,20 @@ observeEvent(input$jedSourceMetadata_values,{
           mxFlashIcon("floppy-o")
           mxUpdateText("editSourceMetadata_txt","Saved at " + format(Sys.time(),"%H:%M"))
           reactData$updateSourceLayerList <- runif(1)
+
+          #
+          # Reload views that use this source 
+          #
+          views <- mxDbGetViewsIdBySourceId(idSource,language=language)
+          
+          mglUpdateViewsBadges(list(
+              views=as.list(views$id)
+              ))
+
         }
 
         })
 
-      mxToggleButton(
-        id="btnSaveSourceMetadata",
-        disable = FALSE
-        )
     })
 })
 

@@ -1,4 +1,4 @@
-export function getSourceTableAttribute(opt) {
+export function fetchSourceTableAttribute(opt) {
   opt = Object.assign({},opt);
   const h = mx.helpers;
   const host = h.getApiUrl('getSourceTableAttribute');
@@ -38,8 +38,8 @@ export async function showSourceTableAttributeModal(opt) {
   onProgressStart();
 
   const handsontable = await h.moduleLoad('handsontable');
-  const meta = await h.getSourceMetadata(settings.idSource);
-  const data = await h.getSourceTableAttribute(settings);
+  const meta = await h.fetchSourceMetadata(settings.idSource);
+  const data = await h.fetchSourceTableAttribute(settings);
 
   const services = meta._services || [];
   const hasData = h.isArray(data) && data.length > 0;

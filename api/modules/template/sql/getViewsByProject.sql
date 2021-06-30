@@ -43,7 +43,17 @@ p_config AS (
   FROM p_base, role_filter r
 ),
 v_all AS (
-  SELECT v.*,
+  SELECT 
+  v.id,
+  v.editor,
+  v.target,
+  v.date_modified,
+  v.data #- '{attribute,table}'::text[] as data,
+  v.type,
+  v.pid,
+  v.project,
+  v.readers,
+  v.editors,
   /**
    * alias edit
    */
@@ -153,19 +163,20 @@ AND
 v_meta AS (
   SELECT
   v.id as id,
-  coalesce( s.data #> '{"meta"}', '{}' ) AS _meta,
-  v.data #> '{"source","layerInfo","name"}' AS _id_source
+  coalesce( s.data #> '{meta}', v.data #> '{source,meta}','{}'::jsonb ) AS _meta,
+  v.data #> '{source,layerInfo,name}' AS _id_source
   FROM v_all v LEFT OUTER JOIN mx_sources s
-  ON v.data #>> '{"source","layerInfo","name"}' = s.id
+  ON v.data #>> '{source,layerInfo,name}' = s.id
 ),
-
+/**
+* View list 
+* -> single project, repeated on all row
+*/ 
 v_list AS (
-  /**
-   * View list
-   */
   SELECT 
   v.*,
-  jsonb_insert(m._meta,'{"_id_source"}',m._id_source) as _meta,
+  m._meta,
+  m._id_source,
   p.title _title_project
   FROM v_all v, v_meta m, p_base p 
   WHERE v.id = m.id

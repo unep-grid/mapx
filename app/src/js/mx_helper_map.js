@@ -2,6 +2,8 @@ import {RadialProgress} from './radial_progress';
 import {handleViewClick} from './views_click';
 import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
+import {modalConfirm} from './mx_helper_modal.js';
+import {elSpanTranslate} from './el_mapx/index.js';
 import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
 import {WsHandler} from './ws_handler/';
@@ -270,47 +272,40 @@ export function getAppPathUrl(id) {
  * @param {Function} opt.onSuccess : Optional callback if project is changed
  * @return null
  */
-export function setProject(idProject, opt) {
+export async function setProject(idProject, opt) {
   const h = mx.helpers;
-  opt = Object.assign({}, opt);
+  opt = Object.assign({}, {askConfirmIfModal: true, askConfirm: false}, opt);
   const idCurrentProject = h.path(mx, 'settings.project.id');
 
-  return new Promise((resolve) => {
-    if (idProject === idCurrentProject) {
-      resolve(true);
-    }
-    /**
-     * Check if some modal are still there
-     */
-    const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+  if (idProject === idCurrentProject) {
+    return false;
+  }
+  /**
+   * Check if some modal are still there
+   */
+  const modals = h.modalGetAll({ignoreSelectors: ['#uiSelectProject']});
+  const askConfirm =
+    opt.askConfirm || (opt.askConfirmIfModal && modals.length > 0);
+  let changeNow = true;
 
-    if (modals.length > 0) {
-      const elContinue = h.el(
-        'btn',
-        {
-          class: ['btn', 'btn-default'],
-          on: {click: change}
-        },
-        h.getDictItem('modal_check_confirm_project_change_btn')
-      );
+  if (askConfirm) {
+    changeNow = await modalConfirm({
+      title: elSpanTranslate('modal_check_confirm_project_change_title'),
+      content: elSpanTranslate('modal_check_confirm_project_change_txt')
+    });
+  }
+  if (changeNow) {
+    await h.viewsCloseAll();
+    const res = await change();
+    return res;
+  }
 
-      h.modal({
-        id: 'confirm_change_project',
-        title: 'Confirm change project',
-        content: h.getDictItem('modal_check_confirm_project_change_txt'),
-        buttons: [elContinue],
-        addBackground: true
-      });
-    } else {
-      change();
-    }
-
-    /**
-     * Change confirmed : remove all views, close modals, send
-     * selected project to shiny
-     */
-    async function change() {
-      await h.viewsCloseAll();
+  /**
+   * Change confirmed : remove all views, close modals, send
+   * selected project to shiny
+   */
+  function change() {
+    return new Promise((resolve) => {
       closeModals();
       h.setQueryParametersInitReset();
       const hasShiny = window.Shiny;
@@ -348,12 +343,12 @@ export function setProject(idProject, opt) {
           old_project: idCurrentProject
         }
       });
-    }
+    });
+  }
 
-    function closeModals() {
-      h.modalCloseAll();
-    }
-  });
+  function closeModals() {
+    h.modalCloseAll();
+  }
 }
 
 /**
@@ -1575,7 +1570,7 @@ export function viewsCloseAll(o) {
    * Close and remove layers
    */
   const removed = views.map((view) => {
-    return h.viewRemove(view.id);
+    return h.viewRemove(view.id, true);
   });
   return Promise.all(removed);
 }
@@ -2190,7 +2185,8 @@ export function makeSimpleLayer(o) {
       paint: {
         //'fill-opacity': opt.opacity,
         'fill-color': colA,
-        'fill-outline-color': mx.theme.get('mx_ui_text').color
+        //'fill-outline-color': mx.theme.get('mx_ui_text').color
+        'fill-outline-color': colB
       }
     },
     pattern: {
@@ -2854,24 +2850,23 @@ export function handleViewValueFilterText(o) {
 
 /**
  * Remove view from views list and geojson database
- * @param {object} o options;
- * @param {string} o.id map id
- * @param {string} o.idView view id
+ * @param {Object} view View to remove from the list
  */
-export async function viewDelete(o) {
+export async function viewDelete(view) {
   const h = mx.helpers;
   const mData = h.getMapData();
-  const views = mData.views;
-  const idView = o.idView;
-  const view = views.filter((v) => v.id === idView)[0];
-  if (!view) {
+  const views = h.getViews();
+  view = h.getView(view);
+  const exists = views.includes(view);
+  if (!exists) {
     return;
   }
   const vIndex = views.indexOf(view);
   const geojsonData = mx.data.geojson;
 
-  await h.viewLayersRemove(o);
-
+  await h.viewLayersRemove({
+    idView: view.id
+  });
   mData.viewsList.removeItemById(view.id);
 
   if (view.type === 'gj') {
@@ -3003,7 +2998,7 @@ export async function viewAdd(view) {
  * @param {Object} view
  * @return {Promise} Boolean
  */
-export async function viewRemove(view) {
+export async function viewRemove(view, force) {
   try {
     const h = mx.helpers;
     view = h.getView(view);
@@ -3014,6 +3009,18 @@ export async function viewRemove(view) {
     await h.viewLayersRemove({
       idView: view.id
     });
+    if (!force && view._drop_shared) {
+      const resp = await modalConfirm({
+        title: elSpanTranslate('confirm_keep_view_temp_modal_title'),
+        content: elSpanTranslate('confirm_keep_view_temp_modal'),
+        confirm: elSpanTranslate('keep'),
+        cancel: elSpanTranslate('remove')
+      });
+      if (!resp) {
+        await h.viewDelete(view);
+        console.log({resp});
+      }
+    }
     return true;
   } catch (e) {
     console.warn(e);
@@ -4122,16 +4129,6 @@ export async function viewLayersAddVt(o) {
    */
   styleCustom = JSON.parse(p(style, 'custom.json'));
 
-  /**
-   * Add source meta
-   */
-  if (!view._meta) {
-    /**
-     * ! metadata are added erlier, using h.addSourceMetadataToView()
-     */
-    view._meta = {};
-  }
-
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
@@ -5169,6 +5166,7 @@ export async function zoomToViewId(o) {
       );
     }
 
+
     async function zoom() {
       const sum = await h.getViewSourceSummary(view);
       const extent = h.path(sum, 'extent_sp', null);
@@ -5663,7 +5661,7 @@ export function getViewsForJSON() {
     'id',
     'editor',
     'target',
-    'date_modifed',
+    'date_modified',
     'data',
     'type',
     'pid',

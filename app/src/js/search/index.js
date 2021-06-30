@@ -744,8 +744,8 @@ class Search extends EventSimple {
         case 'search_show_view_meta':
           {
             const idView = ds.id_view;
-            viewToMetaModal(idView);
             s.vFeedback(e);
+            await viewToMetaModal(idView);
           }
           break;
         default:
