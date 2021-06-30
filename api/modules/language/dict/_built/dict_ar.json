@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "ar": "هذا الرأي لا علاقة له بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "ar": "هذا الرأي غير مرتبط بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه\n أو بعد تغيير المشروع"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه أو بعد تغيير المشروع"
   },
   {
     "id": "view_badge_editable",

@@ -1633,7 +1633,7 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?"
   },
   {
     "id": "keep",
@@ -3669,7 +3669,7 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change"
   },
   {
     "id": "view_badge_editable",

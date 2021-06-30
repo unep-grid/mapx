@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "ru": "Это мнение не имеет отношения к этому проекту. Вы все равно хотите временно оставить его в списке?"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "ru": "Это представление не связано с этим проектом. Вы все равно хотите временно оставить его в списке?"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия.\n или после изменения проекта"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия или изменения проекта."
   },
   {
     "id": "view_badge_editable",

@@ -5305,16 +5305,16 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
     "fr": "Cette vue n'est pas liée à ce projet. Souhaitez-vous quand même la conserver temporairement dans la liste ?",
-    "es": "Esta vista no está relacionada con este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?",
-    "ru": "Это мнение не имеет отношения к этому проекту. Вы все равно хотите временно оставить его в списке?",
-    "zh": "这个观点与这个项目无关。无论如何，是否要将其暂时保留在列表中？",
-    "ar": "هذا الرأي لا علاقة له بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟",
-    "fa": "این دیدگاه هیچ ارتباطی با این پروژه ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟",
-    "ps": "دا نظر پدې پروژه پورې تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟",
-    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সম্পর্কিত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?",
-    "de": "Diese Ansicht hat nichts mit diesem Projekt zu tun. Möchten Sie es trotzdem vorübergehend in der Liste behalten?"
+    "es": "Esta vista no está vinculada a este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?",
+    "ru": "Это представление не связано с этим проектом. Вы все равно хотите временно оставить его в списке?",
+    "zh": "此视图未链接到此项目。无论如何，是否要将其暂时保留在列表中？",
+    "ar": "هذا الرأي غير مرتبط بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟",
+    "fa": "این دیدگاه به این پروژه پیوند ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟",
+    "ps": "دا لید له دې پروژې سره تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?",
+    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft. Möchten Sie es trotzdem vorübergehend in der Liste behalten?"
   },
   {
     "id": "keep",
@@ -11922,16 +11922,16 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "fr": "Cette vue n'est pas liée à ce projet et ne sera pas conservée après sa fermeture\n ou après changement de projet",
-    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse.\n o después de un cambio de proyecto",
-    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия.\n или после изменения проекта",
-    "zh": "此视图与此项目取消链接，关闭后不会保留\n或项目变更后",
-    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه\n أو بعد تغيير المشروع",
-    "fa": "این نما پیوندی با این پروژه ندارد و پس از بسته شدن حفظ نخواهد شد\n یا بعد از تغییر پروژه",
-    "ps": "دا لید پدې پروژه پورې تړلی دی او د تړل کیدو وروسته به خوندي نشي\n یا د پروژې بدلون وروسته",
-    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত এবং বন্ধ হওয়ার পরে এটি সংরক্ষণ করা হবে না\n বা প্রকল্পের পরিবর্তনের পরে",
-    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft und wird nach dem Schließen nicht beibehalten\n oder nach Projektwechsel"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "fr": "Cette vue n'est pas liée à ce projet et ne sera pas conservée après fermeture ou changement de projet",
+    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse o después de un cambio de proyecto.",
+    "ru": "Это представление не связано с этим проектом и не будет сохранено после закрытия или изменения проекта.",
+    "zh": "此视图未链接到此项目，并且在关闭或项目更改后不会保留",
+    "ar": "هذا العرض غير مرتبط بهذا المشروع ولن يتم الاحتفاظ به بعد إغلاقه أو بعد تغيير المشروع",
+    "fa": "این نما به این پروژه پیوند ندارد و پس از بسته شدن یا پس از تغییر پروژه حفظ نخواهد شد",
+    "ps": "دا لید له دې پروژې سره تړاو نلري او د تړل کیدو یا د پروژې د بدلون وروسته به خوندي نشي",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয় এবং এটি বন্ধ হওয়ার পরে বা প্রকল্প পরিবর্তনের পরে সংরক্ষণ করা হবে না",
+    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft und wird nach dem Schließen oder nach einer Projektänderung nicht beibehalten"
   },
   {
     "id": "view_badge_editable",

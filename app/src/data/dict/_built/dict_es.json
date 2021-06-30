@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "es": "Esta vista no está relacionada con este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "es": "Esta vista no está vinculada a este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse.\n o después de un cambio de proyecto"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse o después de un cambio de proyecto."
   },
   {
     "id": "view_badge_editable",

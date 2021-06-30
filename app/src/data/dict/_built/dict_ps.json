@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "ps": "دا نظر پدې پروژه پورې تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "ps": "دا لید له دې پروژې سره تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "ps": "دا لید پدې پروژه پورې تړلی دی او د تړل کیدو وروسته به خوندي نشي\n یا د پروژې بدلون وروسته"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "ps": "دا لید له دې پروژې سره تړاو نلري او د تړل کیدو یا د پروژې د بدلون وروسته به خوندي نشي"
   },
   {
     "id": "view_badge_editable",

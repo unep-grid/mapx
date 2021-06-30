@@ -81,7 +81,7 @@ async function handleViewClick(event) {
       },
       {
         comment: 'target is the badge for temp shared view ',
-        test: dataset.view_action_key === 'btn_badge_temp_shared',
+        test: dataset.view_action_key === 'btn_badge_temp_shared_unlink',
         action: async () => {
           const type = dataset.view_action_data;
           modal({

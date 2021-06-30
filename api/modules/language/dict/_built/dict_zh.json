@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "zh": "这个观点与这个项目无关。无论如何，是否要将其暂时保留在列表中？"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "zh": "此视图未链接到此项目。无论如何，是否要将其暂时保留在列表中？"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "zh": "此视图与此项目取消链接，关闭后不会保留\n或项目变更后"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "zh": "此视图未链接到此项目，并且在关闭或项目更改后不会保留"
   },
   {
     "id": "view_badge_editable",

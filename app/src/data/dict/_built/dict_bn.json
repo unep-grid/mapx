@@ -2041,8 +2041,8 @@
   },
   {
     "id": "confirm_keep_view_temp_modal",
-    "en": "This view is unrelated to this project. Would you like to keep it temporarily in the list anyway?",
-    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সম্পর্কিত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?"
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?"
   },
   {
     "id": "keep",
@@ -4586,8 +4586,8 @@
   },
   {
     "id": "view_badge_temp_shared_unlink",
-    "en": "This view is unlinked to this project and will not be preserved after being closed \n or after project change",
-    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত এবং বন্ধ হওয়ার পরে এটি সংরক্ষণ করা হবে না\n বা প্রকল্পের পরিবর্তনের পরে"
+    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয় এবং এটি বন্ধ হওয়ার পরে বা প্রকল্প পরিবর্তনের পরে সংরক্ষণ করা হবে না"
   },
   {
     "id": "view_badge_editable",
