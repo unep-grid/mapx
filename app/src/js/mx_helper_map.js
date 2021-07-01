@@ -5166,7 +5166,6 @@ export async function zoomToViewId(o) {
       );
     }
 
-
     async function zoom() {
       const sum = await h.getViewSourceSummary(view);
       const extent = h.path(sum, 'extent_sp', null);
@@ -5682,18 +5681,20 @@ export function getViewsForJSON() {
 
 /**
  * Return a single view
- * @param {String} id of the view
- * @param {String} idMap Id of the map
+ * @param {String|Object} id Id of the view or view object or view list
  */
-export function getView(id, idMap) {
+export function getView(id) {
   const h = mx.helpers;
   if (h.isView(id)) {
     return id;
   }
+  if (h.isObject(id) && h.isViewId(id.idView)) {
+    id = id.idView;
+  }
   if (!h.isViewId(id)) {
     throw new Error('No valid view id given');
   }
-  return mx.helpers.getViews({idView: id, id: idMap})[0];
+  return h.getViews({idView: id})[0];
 }
 
 /**

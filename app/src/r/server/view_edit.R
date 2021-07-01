@@ -53,7 +53,10 @@ observe({
                return()
           }
           if(length(viewData) > 1){
-            stop("View edit can't edit more than one view")
+            #
+            # mxApiGetViews did not found the view and return everything. 
+            #
+            return()
           }else{
             viewData <- viewData[[1]]
           }
@@ -778,9 +781,7 @@ observeEvent(input$btnViewDeleteConfirm,{
   #
   # Remove client view
   #
-  mglRemoveView(
-    idView = idView
-    )
+  mglRemoveView(idView)
 
   reactData$updateViewList <- runif(1)
   #
