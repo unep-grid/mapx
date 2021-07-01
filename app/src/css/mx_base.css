@@ -1147,9 +1147,6 @@ details > summary {
   text-align: justify;
   hyphens: auto;
 }
-.mx .btn {
-  font-size: 1em;
-}
 
 /**
 * EPSG epsg ; projection code select group list
