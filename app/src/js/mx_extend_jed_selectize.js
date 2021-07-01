@@ -89,7 +89,7 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
                   },
                   'aria-label': escape(item.definition)
                 },
-                el('h3', escape(item.label))
+                el('span', escape(item.label))
               );
             }
           },
@@ -110,6 +110,7 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
              * format results for the callback
              */
             if (!query.length) return callback();
+            this.clearOptions();
             try {
               const data = await searchGemet(query);
               return callback(data.hits);

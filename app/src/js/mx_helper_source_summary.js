@@ -14,7 +14,8 @@ export async function getViewSourceSummary(view, opt) {
     {
       idView: view.id,
       timestamp: view._src_timestamp,
-      idAttr : h.path(view,'data.attribute.name')
+      idAttr : h.path(view,'data.attribute.name'),
+      idSource : h.path(view,'data.source.layerInfo.name')
     },
     opt
   );
@@ -92,7 +93,8 @@ export async function getSourceVtSummary(opt) {
     }
   });
  
-  if (!h.isViewId(opt.idView)) {
+  if (!h.isViewId(opt.idView) && !h.isSourceId(opt.idSource)) {
+    console.warn('getSourceVtSummary : at least id source or id view are required');
     return {};
   }
 
