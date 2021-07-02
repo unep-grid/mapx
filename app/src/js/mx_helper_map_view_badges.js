@@ -46,7 +46,7 @@ export async function setViewBadges(view) {
     const isValidable = ['rt', 'vt', 'cc'].includes(view.type);
     const hasPublic = readers.includes('public');
     const elBadges = document.getElementById(`view_badges_${view.id}`);
-    const isTempShared = view._drop_shared === true;
+    const isTemp = view._temp === true;
     //const isPublisher = mx.settings.user.roles.publisher;
 
     if (!elBadges) {
@@ -55,12 +55,12 @@ export async function setViewBadges(view) {
     elBadges.innerHTML = '';
     const badges = [];
 
-    if (isTempShared) {
+    if (isTemp) {
       /**
        * Add public Badge
        */
-      const elBadgeUnlinkTempShared = elBadge('temp-shared-unlink');
-      badges.push(elBadgeUnlinkTempShared);
+      const elBadgeLinkTemp = elBadge('temp-link');
+      badges.push(elBadgeLinkTemp);
     }
 
     if (hasPublic) {
@@ -159,16 +159,16 @@ function elBadge(type, opt) {
         }
       });
     }
-    case 'temp-shared-unlink': {
+    case 'temp-link': {
       return createViewBadge({
-        iconClasses: ['fa', 'fa-chain-broken'],
+        iconClasses: ['fa', 'fa-chain'],
         style: {
           color: 'HotPink'
         },
         tooltipClasses: ['hint--bottom-right'],
-        tooltipKey: 'view_badge_temp_shared_unlink',
+        tooltipKey: 'view_badge_temp_shared',
         dataset: {
-          view_action_key: 'btn_badge_temp_shared_unlink'
+          view_action_key: 'btn_badge_temp_shared'
         }
       });
     }

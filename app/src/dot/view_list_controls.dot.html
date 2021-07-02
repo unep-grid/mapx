@@ -2,7 +2,6 @@
 const view = it ;
 const h = mx.helpers ; 
 const isCurrentProject =  mx.settings.project.id === view.project ; 
-const isDropedView = !!view._drop_shared ; 
 const isRegistered  = !h.path(mx,'settings.user.guest',true) ;
 const isViewEditable = h.isViewEditable(view) ;
 const isSm = view.type === 'sm' ; 
@@ -10,6 +9,7 @@ const isCc = view.type === 'cc' ;
 const isVt = view.type === 'vt' ;
 const isGj = view.type === 'gj' ;
 const isRt = view.type === 'rt' ;
+const isTemp = !!view._temp ;
 const isRtWms = h.isViewWms(view) ;
 const isVtWithAttr = isVt && h.path(view,'data.attribute.name') ;
 const isRtWithDownload = isRt && h.path(view,'data.source.urlDownload',false) ;
@@ -20,6 +20,17 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
 
 <div class="mx-controls-view">
   <ul class="mx-controls-ul">
+    {{? isTemp }}
+    <li
+      class="mx-pointer btn-circle btn-circle-small hint--top"
+      data-lang_key="btn_opt_remove_linked"
+      data-lang_type="tooltip"
+      data-view_action_key="btn_opt_remove_linked"
+      data-view_action_target="{{=view.id}}"
+    >
+      <div class="fa fa-unlink"></div>
+    </li>
+    {{?}}
     {{?isSm}}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
@@ -30,7 +41,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     >
       <div class="fa fa-play"></div>
     </li>
-    {{?isViewEditable && isCurrentProject && !isDropedView}}
+    {{?isViewEditable && isCurrentProject && !isTemp}}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_story"
@@ -97,7 +108,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-info-circle"></div>
     </li>
     {{?}} 
-    {{? isVtWithAttr && !isDropedView }}
+    {{? isVtWithAttr && !isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_download"
@@ -162,7 +173,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-table"></div>
     </li>
     {{?}}
-    {{? isViewEditable && isCurrentProject &&!isDropedView }}
+    {{? isViewEditable && isCurrentProject &&!isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_edit_config"
@@ -220,7 +231,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
       <div class="fa fa-trash-o"></div>
     </li>
     {{?}} 
-    {{? (isSm || isVt || isRt || isCc ) && !isDropedView }}
+    {{? (isSm || isVt || isRt || isCc ) && !isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_share"
@@ -231,7 +242,7 @@ const uIsAdmin = h.path(mx,'settings.user.roles.admin');
     >
       <div class="fa fa-share-alt"></div>
     </li>
-    {{? isRegistered && !isDropedView }}
+    {{? isRegistered && !isTemp }}
     <li
       class="mx-pointer btn-circle btn-circle-small hint--top"
       data-lang_key="btn_opt_share_to_project"

@@ -59,4 +59,4 @@ export * from './color_utils/index.js';
 export * from './el_mapx/index.js';
 export * from './is_test';
 export * from './is_test_mapx';
-
+export * from './user_pref';

@@ -915,7 +915,7 @@ export async function initMapx(o) {
       });
 
       mx.events.on({
-        type: ['view_removed', 'view_added'],
+        type: ['view_removed', 'view_added','view_deleted'],
         idGroup: 'search_index',
         callback: () => {
           mx.search._update_toggles_icons();
@@ -1570,7 +1570,7 @@ export function viewsCloseAll(o) {
    * Close and remove layers
    */
   const removed = views.map((view) => {
-    return h.viewRemove(view.id, true);
+    return h.viewRemove(view.id);
   });
   return Promise.all(removed);
 }
@@ -2996,9 +2996,9 @@ export async function viewAdd(view) {
 /**
  * Removed both view UI and layers, handle view_removed event
  * @param {Object} view
- * @return {Promise} Boolean
+ * @return {Promise::Boolean} Boolean
  */
-export async function viewRemove(view, force) {
+export async function viewRemove(view) {
   try {
     const h = mx.helpers;
     view = h.getView(view);
@@ -3009,18 +3009,6 @@ export async function viewRemove(view, force) {
     await h.viewLayersRemove({
       idView: view.id
     });
-    if (!force && view._drop_shared) {
-      const resp = await modalConfirm({
-        title: elSpanTranslate('confirm_keep_view_temp_modal_title'),
-        content: elSpanTranslate('confirm_keep_view_temp_modal'),
-        confirm: elSpanTranslate('keep'),
-        cancel: elSpanTranslate('remove')
-      });
-      if (!resp) {
-        await h.viewDelete(view);
-        console.log({resp});
-      }
-    }
     return true;
   } catch (e) {
     console.warn(e);

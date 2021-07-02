@@ -405,7 +405,7 @@ function handleView(view) {
     const viewOld = h.getView(view.id);
     h.viewAdd(viewOld);
   } else {
-    view._drop_shared = true;
+    view._temp = true;
     h.viewsListAddSingle(view);
   }
 }

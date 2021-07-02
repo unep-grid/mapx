@@ -81,11 +81,11 @@ async function handleViewClick(event) {
       },
       {
         comment: 'target is the badge for temp shared view ',
-        test: dataset.view_action_key === 'btn_badge_temp_shared_unlink',
+        test: dataset.view_action_key === 'btn_badge_temp_shared',
         action: async () => {
           const type = dataset.view_action_data;
           modal({
-            content: getDictItem(type),
+            content: getDictItem(`${type}_desc`),
             addBackground: true
           });
         }
@@ -106,6 +106,20 @@ async function handleViewClick(event) {
           const resp = await modalConfirm({
             title: elSpanTranslate('delete_confirm_geojson_modal_title'),
             content: elSpanTranslate('delete_confirm_geojson_modal')
+          });
+          if (resp) {
+            const arg = dataset;
+            await viewDelete(arg.view_action_target);
+          }
+        }
+      },
+      {
+        comment: 'target is the remove linked view button',
+        test: dataset.view_action_key === 'btn_opt_remove_linked',
+        action: async () => {
+          const resp = await modalConfirm({
+            title: elSpanTranslate('remove_confirm_temp_modal_title'),
+            content: elSpanTranslate('remove_confirm_temp_modal')
           });
           if (resp) {
             const arg = dataset;

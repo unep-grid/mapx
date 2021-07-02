@@ -1,4 +1,4 @@
-import {ButtonCircle} from './../icon_flash';
+import {ButtonCircle, IconFlash} from './../icon_flash';
 import {modalConfirm} from './../mx_helper_modal.js';
 import {storyRead} from './../mx_helper_story.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
@@ -6,6 +6,8 @@ import {getDictItem} from './../mx_helper_language.js';
 import {EventSimple} from './../listener_store';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
+import {prefGet,prefSet} from './../user_pref';
+
 import {
   zoomToViewId,
   getView,
@@ -38,6 +40,8 @@ class Search extends EventSimple {
     }
     s._init = true;
     s._filters = {};
+
+
     /**
      * Dynamic import
      */
@@ -706,8 +710,18 @@ class Search extends EventSimple {
             if (!isValid) {
               view = await getViewRemote(idView);
               if (isView(view)) {
-                view._drop_shared = true;
+                view._temp = true;
                 await viewsListAddSingle(view, {open: false});
+                const showNotify = await prefGet('pref_show_notify_add_view_temp');
+                if (showNotify === null || showNotify === true) {
+                  const keepShowing = await modalConfirm({
+                    title: getDictItem('search_view_added_temporarily_title'),
+                    content: getDictItem('search_view_added_temporarily'),
+                    cancel: getDictItem('search_view_added_temporarily_ok_no_more'),
+                    confirm: getDictItem('search_view_added_temporarily_ok')
+                  });
+                  await prefSet('pref_show_notify_add_view_temp', keepShowing);
+                }
               }
             }
             if (!isView(view)) {
@@ -765,7 +779,7 @@ class Search extends EventSimple {
     const s = this;
     const frag = new DocumentFragment();
     const confKeywords = s.opt('keywords');
-    const sliderYears = s._year_slider.get().map(v=>parseInt(v*1));
+    const sliderYears = s._year_slider.get().map((v) => parseInt(v * 1));
     for (let v of hits) {
       /**
        * Add keywords buttons
