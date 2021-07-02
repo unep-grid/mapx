@@ -1,0 +1,11 @@
+{
+  "title": "Settings",
+  "type": "object",
+  "properties": {
+    "pref_show_notify_add_view_temp": {
+      "type": "boolean",
+      "default": true,
+      "enum": [true, false]
+    }
+  }
+}
