@@ -4585,9 +4585,29 @@
     "ps": "دا لید په عامه ډول شتون لري\n د نامکمل میټاډاټا سره "
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
-    "ps": "دا لید له دې پروژې سره تړاو نلري او د تړل کیدو یا د پروژې د بدلون وروسته به خوندي نشي"
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "ps": "دا لید په لنډ ډول د دې پروژې سره تړاو لري"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "ps": "دا لید په لنډمهاله توګه له دې پروژې سره تړلی دی: دا به د پروژې له بیا پیلیدو وروسته څرګند نشي. تاسو کولی شئ د غیر لینک ت buttonۍ وکاروئ<i class=\"fa fa-unlink\"></i> د دې لرې کولو لپاره."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "ps": "ایا تاسو غواړئ دا لنډمهاله لید له لیست څخه لرې کړئ؟ هیڅ معلومات به له لاسه ورنکړي"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "ps": "لنډمهاله لید لیرې کول"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "ps": "دا لنډمهاله لید لرې کړئ / لړلیک کړئ"
   },
   {
     "id": "view_badge_editable",
@@ -6878,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "ps": "لنډمهاله لړۍ"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "ps": "لنډمهاله اضافه کول وګورئ"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "ps": "دا لید په لنډ ډول د لید لست کې اضافه شوی. دا به لرې شي کله چې پروژه ډاونلوډ شي. تاسو کولی شئ دا د غیر لینک ت buttonۍ په کارولو سره لرې کړئ<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "ps": "بندول"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "ps": "نږدې یې کړئ او ما ته دا یاد مه کوئ"
   }
 ]

@@ -376,5 +376,57 @@
     "ps": "",
     "bn": "",
     "de": ""
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "fr": "Cette vue a été ajoutée temporairement dans la liste des vues. Elle sera enlevée lors du rechargement du projet. Vous pouvez l'enlever en utilisant le bouton dissocier <i class='fa fa-unlink'></i>.",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
   }
 ]

@@ -4585,9 +4585,29 @@
     "de": "Diese Ansicht ist öffentlich verfügbar\n mit unvollständigen Metadaten "
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
-    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft und wird nach dem Schließen oder nach einer Projektänderung nicht beibehalten"
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft: Sie wird nicht angezeigt, nachdem das Projekt neu geladen wurde. Sie können die Schaltfläche zum Aufheben der Verknüpfung verwenden<i class=\"fa fa-unlink\"></i> um es jetzt zu entfernen."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "de": "Möchten Sie diese temporäre Ansicht aus der Liste entfernen? Es gehen keine Daten verloren"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "de": "Vorübergehende Entfernung der Ansicht"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "de": "Entfernen / Verknüpfung dieser temporären Ansicht aufheben"
   },
   {
     "id": "view_badge_editable",
@@ -6878,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "de": "Zeitbereich"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "de": "Ansicht vorübergehend hinzugefügt"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "de": "Diese Ansicht wurde vorübergehend zur Ansichtsliste hinzugefügt. Es wird entfernt, wenn das Projekt neu geladen wird. Sie können es mit der Schaltfläche zum Aufheben der Verknüpfung entfernen<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "de": "Schließen"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "de": "Schließe und erinnere mich nicht daran"
   }
 ]

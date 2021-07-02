@@ -4585,9 +4585,29 @@
     "es": "Esta vista está disponible para todos los usuarios \n con metadatos incompletos"
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
-    "es": "Esta vista no está vinculada a este proyecto y no se conservará después de cerrarse o después de un cambio de proyecto."
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "es": "Esta vista está temporalmente vinculada a este proyecto."
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "es": "Esta vista está vinculada temporalmente a este proyecto: no se mostrará después de que se vuelva a cargar el proyecto. Puedes usar el botón desvincular<i class=\"fa fa-unlink\"></i> para eliminarlo ahora."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "es": "¿Quieres eliminar esta vista temporal de la lista? No se perderán los datos"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "es": "Eliminación temporal de la vista"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "es": "Eliminar / desvincular esta vista temporal"
   },
   {
     "id": "view_badge_editable",
@@ -6878,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "es": "Rango temporal"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "es": "Ver agregado temporalmente"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "es": "Esta vista se ha agregado temporalmente a la lista de vistas. Se eliminará cuando se vuelva a cargar el proyecto. Puedes eliminarlo usando el botón desvincular<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "es": "Cerca"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "es": "Cierra y no me recuerdes esto"
   }
 ]

@@ -3668,8 +3668,24 @@
     "en": "This view is publicly available \n with incomplete metadata"
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change"
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view"
   },
   {
     "id": "view_badge_editable",
@@ -5502,5 +5518,21 @@
   {
     "id": "search_year_composite_range",
     "en": "Temporal range"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this"
   }
 ]

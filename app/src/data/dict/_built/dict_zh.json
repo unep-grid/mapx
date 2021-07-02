@@ -4585,9 +4585,29 @@
     "zh": "此视图公开可用。 \n 元数据不完整"
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
-    "zh": "此视图未链接到此项目，并且在关闭或项目更改后不会保留"
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "zh": "此视图暂时链接到此项目"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "zh": "此视图临时链接到此项目：在项目重新加载后不会显示。您可以使用取消链接按钮<i class=\"fa fa-unlink\"></i>现在删除它。"
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "zh": "您想从列表中删除这个临时视图吗？不会丢失任何数据"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "zh": "临时视图移除"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "zh": "删除/取消链接此临时视图"
   },
   {
     "id": "view_badge_editable",
@@ -6878,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "zh": "时间范围"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "zh": "临时添加的视图"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "zh": "此视图已临时添加到视图列表中。当项目重新加载时，它将被删除。您可以使用取消链接按钮将其删除<i class=\"fa fa-unlink\"></i>."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "zh": "关闭"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "zh": "关闭，不要提醒我这个"
   }
 ]

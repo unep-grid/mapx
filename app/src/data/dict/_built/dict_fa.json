@@ -4585,9 +4585,29 @@
     "fa": "این نما به صورت عمومی در دسترس است\n با فراداده ناقص "
   },
   {
-    "id": "view_badge_temp_shared_unlink",
-    "en": "This view is not linked to this project and will not be preserved after being closed or after project change",
-    "fa": "این نما به این پروژه پیوند ندارد و پس از بسته شدن یا پس از تغییر پروژه حفظ نخواهد شد"
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است: پس از بارگیری مجدد پروژه نمایش داده نمی شود. می توانید از دکمه لغو پیوند استفاده کنید<i class=\"fa fa-unlink\"></i> برای حذف آن در حال حاضر."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "fa": "آیا می خواهید این نمای موقت را از لیست حذف کنید؟ هیچ داده ای از بین نمی رود"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "fa": "حذف موقت نمایش"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "fa": "حذف / لغو پیوند این نمای موقت"
   },
   {
     "id": "view_badge_editable",
@@ -6878,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "fa": "محدوده زمانی"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "fa": "نمایش به طور موقت اضافه شد"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "fa": "این نما به طور موقت در لیست بازدیدها اضافه شده است. با بارگیری مجدد پروژه ، حذف خواهد شد. با استفاده از دکمه لغو پیوند می توانید آن را حذف کنید<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "fa": "نزدیک"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "fa": "ببند و این را به من یادآوری نکن"
   }
 ]
