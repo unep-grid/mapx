@@ -2081,7 +2081,7 @@ export function makeSimpleLayer(o) {
     geomType: null,
     showSymbolLabel: null,
     label: null,
-    hexColor: '#fff',
+    hexColor: null,
     filter: ['all'],
     size: 1,
     sprite: null,
