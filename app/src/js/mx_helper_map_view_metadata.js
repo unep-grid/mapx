@@ -397,7 +397,7 @@ export async function metaSourceToUi(meta) {
  * Given a list of gemet concept id, produce an array of '<li>', with a link to the
  * gemet oncept
  * @param {Array} ids Array of concept id
- * @return {Promise::Array} Array of '<li>'
+ * @return {Promise<Array>} Array of '<li>'
  */
 
 async function gemetLi(ids) {

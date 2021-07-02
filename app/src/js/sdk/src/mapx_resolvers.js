@@ -385,7 +385,7 @@ class MapxResolvers {
    * @param {Object} opt options
    * @param {String} opt.idView Id of the view
    * @param {Object} view meta data object
-   * @return {Promise::Object} view metadata
+   * @return {Promise<Object>} view metadata
    */
   get_view_meta(opt) {
     opt = Object.assign({}, {idView: null}, opt);

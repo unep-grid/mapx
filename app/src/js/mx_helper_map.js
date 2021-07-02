@@ -2996,7 +2996,7 @@ export async function viewAdd(view) {
 /**
  * Removed both view UI and layers, handle view_removed event
  * @param {Object} view
- * @return {Promise::Boolean} Boolean
+ * @return {Promise<Boolean>} Boolean
  */
 export async function viewRemove(view) {
   try {

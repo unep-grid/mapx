@@ -131,7 +131,7 @@ function sanitizeState(states) {
  * @param {Boolean} settings.render Trigger item rendering
  * @param {Boolean} settings.open Open and add view to the map
  * @param {Object} settings.view View object to render
- * @return {Promise::Object} Object settings realised
+ * @return {Promise<Object>} Object settings realised
  */
 export async function viewsListAddSingle(view, settings) {
   settings = settings || {};

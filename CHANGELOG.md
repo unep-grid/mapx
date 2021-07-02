@@ -1,4 +1,8 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.32-alpha' target='_blank'>1.8.32-alpha</a>
+  - APP
+    - Added basic user preference storage ( not yet available in UI )
+    - Reworked temporary view management : store preference; added "unlink" button to remove temporary view; text changes
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.31-alpha' target='_blank'>1.8.31-alpha</a>
   - API/APP
     - Improved handling of view not linked, added using drag-drop or search tool 
