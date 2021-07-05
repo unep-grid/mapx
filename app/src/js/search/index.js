@@ -1,4 +1,4 @@
-import {ButtonCircle, IconFlash} from './../icon_flash';
+import {ButtonCircle} from './../icon_flash';
 import {modalConfirm} from './../mx_helper_modal.js';
 import {storyRead} from './../mx_helper_story.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
@@ -65,14 +65,6 @@ class Search extends EventSimple {
     await s.setLanguage({reset: false});
     await s.build();
 
-    /*
-     * Autocomplete (mhé)
-     */
-    if (s.opt('autocomplete')) {
-      s.Tribute = (await import('tributejs')).default;
-      import('./style_tribute.less');
-      s._init_tribute(s._elInput, s._elInputContainer);
-    }
     await s.update();
     s.fire('ready');
     return s;
@@ -996,10 +988,13 @@ class Search extends EventSimple {
     if (!isStringRange(str, 1)) {
       return '';
     }
+    if (isStringRange(str, 1, 20)) {
+      return str + " ";
+    }
     if (str[0] !== str[0].toUpperCase()) {
       str = `…${str}`;
     }
-    if (['.', '!', '?'].indexOf(str[str.length - 1]) === -1) {
+    if (!['.', '!', '?',')'].includes(str[str.length - 1])) {
       str = `${str}…`;
     }
     return str;
