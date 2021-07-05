@@ -6,7 +6,7 @@ import {getDictItem} from './../mx_helper_language.js';
 import {EventSimple} from './../listener_store';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
-import {prefGet,prefSet} from './../user_pref';
+import {prefGet, prefSet} from './../user_pref';
 
 import {
   zoomToViewId,
@@ -40,7 +40,6 @@ class Search extends EventSimple {
     }
     s._init = true;
     s._filters = {};
-
 
     /**
      * Dynamic import
@@ -554,27 +553,32 @@ class Search extends EventSimple {
         }
       }
     });
+
+    s._elFilterFlag = el('span', {
+      class: ['search--flag']
+    });
+
+    s._elBtnClear = elButtonIcon('search_clear_query', {
+      icon: 'fa-undo',
+      mode: 'icon',
+      classes: [],
+      dataset: {action: 'search_clear'}
+    });
+
+    s._elBtnToggleFilters = elButtonIcon('search_filters', {
+      icon: 'fa-filter',
+      mode: 'icon',
+      classes: [],
+      dataset: {action: 'toggle_filters'},
+      content: s._elFilterFlag
+    });
+
     s._elInputContainer = el(
       'div',
       {
         class: 'search--input-container'
       },
-      s._elInput,
-      elButtonIcon('search_clear_query', {
-        icon: 'fa-times',
-        mode: 'icon',
-        classes: [],
-        dataset: {action: 'search_clear'}
-      }),
-      elButtonIcon('search_filters', {
-        icon: 'fa-filter',
-        mode: 'icon',
-        classes: [],
-        dataset: {action: 'toggle_filters'},
-        content: s._elFilterFlag = el('span', {
-          class: ['search--flag']
-        })
-      })
+      [s._elInput, s._elBtnClear, s._elBtnToggleFilters]
     );
     return s._elInputContainer;
   }
@@ -590,6 +594,10 @@ class Search extends EventSimple {
     // slower ? return Object.values(s._facets);
     return out;
   }
+
+  /**
+   * Clear filters
+   */
   clear() {
     const s = this;
     if (!s._built) {
@@ -606,7 +614,14 @@ class Search extends EventSimple {
     for (let date of dates) {
       date.clear();
     }
+    const yMin = s.opt('dates').year_min;
+    const yMax = s.opt('dates').year_max;
+    s._year_slider.set([yMin, yMax]);
   }
+  /**
+   * Reset filters
+   */
+
   async reset() {
     const s = this;
     if (!s._built) {
@@ -658,7 +673,6 @@ class Search extends EventSimple {
           break;
         case 'search_clear':
           {
-            s._elInput.value = '';
             s.vFeedback(e);
             s.clear();
           }
@@ -704,12 +718,16 @@ class Search extends EventSimple {
               if (isView(view)) {
                 view._temp = true;
                 await viewsListAddSingle(view, {open: false});
-                const showNotify = await prefGet('pref_show_notify_add_view_temp');
+                const showNotify = await prefGet(
+                  'pref_show_notify_add_view_temp'
+                );
                 if (showNotify === null || showNotify === true) {
                   const keepShowing = await modalConfirm({
                     title: getDictItem('search_view_added_temporarily_title'),
                     content: getDictItem('search_view_added_temporarily'),
-                    cancel: getDictItem('search_view_added_temporarily_ok_no_more'),
+                    cancel: getDictItem(
+                      'search_view_added_temporarily_ok_no_more'
+                    ),
                     confirm: getDictItem('search_view_added_temporarily_ok')
                   });
                   await prefSet('pref_show_notify_add_view_temp', keepShowing);
@@ -989,12 +1007,12 @@ class Search extends EventSimple {
       return '';
     }
     if (isStringRange(str, 1, 20)) {
-      return str + " ";
+      return str + ' ';
     }
     if (str[0] !== str[0].toUpperCase()) {
       str = `…${str}`;
     }
-    if (!['.', '!', '?',')'].includes(str[str.length - 1])) {
+    if (!['.', '!', '?', ')'].includes(str[str.length - 1])) {
       str = `${str}…`;
     }
     return str;
@@ -1061,13 +1079,40 @@ class Search extends EventSimple {
     }
     return out;
   }
-  setFlag(opt) {
-    if (opt.enable) {
-      opt.target.classList.add('active');
+  hasFilter() {
+    const s = this;
+    const ff = s.getFiltersFacets();
+    return !!ff && !!ff.length;
+  }
+  hasFilterDate() {
+    const s = this;
+    const yMin = s.opt('dates').year_min;
+    const yMax = s.opt('dates').year_max;
+    const yrs = s._year_slider.get().map((v) => parseInt(v * 1));
+    return !yrs.includes(yMin) || !yrs.includes(yMax);
+  }
+  hasFilterText() {
+    const s = this;
+    return s._elInput.value.length > 0;
+  }
+  updateFlagAuto() {
+    const s = this;
+    const hasFilter = s.hasFilter() || s.hasFilterDate();
+    const hasFilterText = s.hasFilterText();
+
+    if (hasFilter) {
+      s._elFilterFlag.classList.add('active');
     } else {
-      opt.target.classList.remove('active');
+      s._elFilterFlag.classList.remove('active');
+    }
+
+    if (hasFilter || hasFilterText) {
+      s._elBtnClear.removeAttribute('disabled');
+    } else {
+      s._elBtnClear.setAttribute('disabled', true);
     }
   }
+
   /**
    * Update the results, and set the page
    * @param {Integer} page Page number - saved in pagination.
@@ -1082,11 +1127,7 @@ class Search extends EventSimple {
       const attrKeys = s.opt('keywords').map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
-
-      s.setFlag({
-        target: s._elFilterFlag,
-        enable: !!facetFilters && !!facetFilters.length
-      });
+      s.updateFlagAuto();
       /**
        * Prevent extrem quick chamges
        * -> Do not render further.
