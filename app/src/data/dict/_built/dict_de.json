@@ -2035,6 +2035,26 @@
     "de": "Möchten Sie diese Ansicht löschen? "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "de": "Behalten Sie diese Ansicht in der Liste bei"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft. Möchten Sie es trotzdem vorübergehend in der Liste behalten?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "de": "Behalten"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "de": "Entfernen"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "de": "Laden Sie die Daten herunter "
@@ -4565,6 +4585,31 @@
     "de": "Diese Ansicht ist öffentlich verfügbar\n mit unvollständigen Metadaten "
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft: Sie wird nicht angezeigt, nachdem das Projekt neu geladen wurde. Sie können die Schaltfläche zum Aufheben der Verknüpfung verwenden<i class=\"fa fa-unlink\"></i> um es jetzt zu entfernen."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "de": "Möchten Sie diese temporäre Ansicht aus der Liste entfernen? Es gehen keine Daten verloren"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "de": "Vorübergehende Entfernung der Ansicht"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "de": "Entfernen / Verknüpfung dieser temporären Ansicht aufheben"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "de": "Sie haben Editorrechte für diese Ansicht "
@@ -5715,6 +5760,11 @@
     "de": "Anmerkungen "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "de": "Lizenzen"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "de": "Schlüsselwörter "
@@ -6325,11 +6375,6 @@
     "de": "Sind Sie sicher, das Projekt jetzt zu ändern? Nicht gespeicherte Änderungen können verloren gehen. "
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "de": "Projekt jetzt ändern, Änderungen verwerfen. "
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "de": "Projektbestätigung ändern "
@@ -6720,6 +6765,11 @@
     "de": "Schlüsselwörter"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "de": "Schlüsselwörter GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "de": "Geografische Schlüsselwörter"
@@ -6756,8 +6806,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "de": "Aktivieren"
+    "en": "Display on map",
+    "de": "Auf Karte anzeigen"
   },
   {
     "id": "search_view_link",
@@ -6848,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "de": "Zeitbereich"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "de": "Ansicht vorübergehend hinzugefügt"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "de": "Diese Ansicht wurde vorübergehend zur Ansichtsliste hinzugefügt. Es wird entfernt, wenn das Projekt neu geladen wird. Sie können es mit der Schaltfläche zum Aufheben der Verknüpfung entfernen<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "de": "Schließen"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "de": "Schließe und erinnere mich nicht daran"
   }
 ]

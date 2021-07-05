@@ -28,7 +28,10 @@ export async function miniCacheSet(key, value, opt) {
 }
 
 export async function miniCacheGet(key) {
-  const res = await miniCacheDb.getItem(key);
+  const res = await Promise.race([miniCacheDb.getItem(key), wait(200)]);
+  if (res === 'timeout') {
+    console.warn('miniCacheGet: timeout');
+  }
   if (!isObject(res)) {
     return;
   }
@@ -37,7 +40,7 @@ export async function miniCacheGet(key) {
     return res.value;
   } else {
     miniCacheDb.removeItem(key);
-    return null;
+    return;
   }
 }
 
@@ -51,4 +54,12 @@ export async function miniCacheRemove(key) {
 
 export async function miniCacheClear() {
   return await miniCacheDb.dropInstance();
+}
+
+async function wait(n) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('timeout');
+    }, n || 1000);
+  });
 }

@@ -1,25 +1,5 @@
 
 #
-# Update view badges and metadata
-#
-observe({
-  update <- reactData$updateViewList
-  updateFetchOnly <- reactData$updateViewListFetchOnly
-  update <- reactData$updateSourceLayerList
-
-  isolate({
-    isMapReady <- isTRUE(reactData$mapIsReady)
-
-    if(isMapReady){
-      mglUpdateViewsBadges(list(
-          forceUpdateMeta = TRUE
-          ))
-    }
-  })
-})
-
-
-#
 # React list of collections
 #
 reactCollections <- reactive({

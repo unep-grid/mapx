@@ -130,12 +130,13 @@ function sanitizeState(states) {
  * @param {Boolean} settings.moveTop Move view item to top
  * @param {Boolean} settings.render Trigger item rendering
  * @param {Boolean} settings.open Open and add view to the map
- * @param {Oject} settings.view View object to render
- * @return {Promise} Object settings realised
+ * @param {Object} settings.view View object to render
+ * @return {Promise<Object>} Object settings realised
  */
 export async function viewsListAddSingle(view, settings) {
   settings = settings || {};
   const h = mx.helpers;
+
   if (!h.isView(view)) {
     return;
   }
@@ -150,7 +151,7 @@ export async function viewsListAddSingle(view, settings) {
 
   settings = Object.assign({}, settings_default, settings);
 
-  const mData = mx.helpers.getMapData();
+  const mData = h.getMapData();
   const ids = mData.views.map((v) => v.id);
   const idPosOld = ids.indexOf(view.id);
   const idNew = idPosOld === -1;
@@ -278,7 +279,7 @@ export async function viewsListRenderNew(o) {
   mData.viewsFilter = new ViewsFilter(mData.views, {
     elFilterActivated: elFilterActivated,
     elFilterTags: elFilterTags,
-    elFilterSwitch : elFilterSwitch,
+    elFilterSwitch: elFilterSwitch,
     elFilterText: elFilterText,
     operator: 'and',
     onFilter: (ids, rules) => {
@@ -301,7 +302,6 @@ export async function viewsListRenderNew(o) {
       elFilterCount.innerText = `( ${count.nSubset} / ${count.nTot} )`;
     }
   });
-
 
   /**
    *  Auto open
@@ -327,8 +327,8 @@ export async function viewsListRenderNew(o) {
   }
 
   /**
-  * Handle drag text
-  */
+   * Handle drag text
+   */
   function handleSetDragText(el) {
     const li = this;
     const isGroup = li.isGroup(el);
@@ -338,7 +338,6 @@ export async function viewsListRenderNew(o) {
     }
     if (isItem) {
       const elView = el.querySelector('.mx-view-item');
-      let out = '';
       if (elView && elView._vb) {
         let out = mx.helpers.getViewJson(elView._vb.view);
         return out;
@@ -352,80 +351,74 @@ export async function viewsListRenderNew(o) {
   /**
    * Internal view rendering handler
    */
-  function handleRenderItemContent(config) {
-    const li = this;
-    const elItem = config.el;
-    const data = config.data;
-    //const viewsOpen = h.getQueryParameterInit('viewsOpen');
-    //const viewsFilter = h.getViewsFilter();
-    const update = data.update;
-    const open = data.open === true;
-    /**
-     * Add given element
-     */
+  async function handleRenderItemContent(config) {
+    try {
+      const li = this;
+      const elItem = config.el;
+      const data = config.data;
+      //const viewsOpen = h.getQueryParameterInit('viewsOpen');
+      //const viewsFilter = h.getViewsFilter();
+      const update = data.update;
+      const open = data.open === true;
+      /**
+       * Add given element
+       */
 
-    if (data.el) {
-      elItem.appendChild(data.el);
-      return;
-    }
-
-    /**
-     * No given element, assume it's a view
-     */
-    const view = data.view || mData.views.find((v) => v.id === data.id);
-    const missing = !h.isView(view);
-
-    /**
-     * View requested but not vailable)
-     */
-    if (missing) {
-      li.log(`View ${data.id} unavailable`);
-      li.removeItemById(data.id);
-      return;
-    }
-
-    /**
-     * Remove view element
-     */
-    if (update && view._el) {
-      view._el.remove();
-    }
-
-    /**
-     * Create / update view element.
-     */
-    const viewBase = new ViewBase(view, update);
-
-    /**
-     * Test if registered to auto-open
-     */
-    //const idOpen = viewsOpen.indexOf(view.id);
-    //if (idOpen > -1) {
-      //data.open = true;
-      //viewsOpen.splice(idOpen, 1);
-      ////viewsFilter.filterActivated(true);
-      ////h.setBtnFilterActivated(true);
-    /*}*/
-
-    /**
-     * Get view element
-     */
-    const elView = viewBase.getEl();
-
-    if (elView) {
-      elItem.appendChild(elView);
-      h.setViewBadges({view: view});
-      if (update) {
-        h.viewLayersAdd({
-          view: view
-        });
-        h.updateLanguageElements({
-          el: view._el
-        });
+      if (data.el) {
+        elItem.appendChild(data.el);
+        return;
       }
-      if (!update && open) {
-        h.viewAdd(view);
+
+      /**
+       * No given element, assume it's a view
+       */
+      const view = data.view || mData.views.find((v) => v.id === data.id);
+      const missing = !h.isView(view);
+
+      /**
+       * View requested but not vailable)
+       */
+      if (missing) {
+        li.log(`View ${data.id} unavailable`);
+        li.removeItemById(data.id);
+        return;
       }
+
+      /**
+       * Remove view element
+       */
+      if (update && view._el) {
+        view._el.remove();
+      }
+
+      /**
+       * Create / update view element.
+       */
+      const viewBase = new ViewBase(view, update);
+
+      /**
+       * Get view element
+       */
+      const elView = viewBase.getEl();
+
+      if (elView) {
+        elItem.appendChild(elView);
+
+        if (update) {
+          h.viewLayersAdd({
+            view: view
+          });
+          h.updateLanguageElements({
+            el: view._el
+          });
+        }
+        if (!update && open) {
+          h.viewAdd(view);
+        }
+        await h.setViewBadges(view);
+      }
+    } catch (e) {
+      console.error('handleRenderItemContent error', e);
     }
   }
 }

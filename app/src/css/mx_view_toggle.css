@@ -9,29 +9,27 @@
 }
 
 .mx-view-badges {
-  padding: 10px;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  opacity: 0.5;
-  transition: opacity ease-in-out 0.3s 0.3s;
+  opacity: 0.4;
+  display: flex;
+  filter: saturate(.4);
+  transition: opacity ease-in-out 0.3s, filter ease-in-out 0.3s;
 }
+
 @media (max-width: 700px), (max-height: 700px) {
   .mx-view-badges {
     display: none;
   }
 }
 
-.mx-view-badges:hover {
+.mx-view-tgl-content:hover .mx-view-badges {
   opacity: 1;
+  filter: none;
 }
+
 .mx-view-badges i {
   font-size: 10px;
   color: #ccc;
   margin: 3px;
-}
-.mx-view-badges .mx-view-public-not-valid {
-  color: #ffa900;
 }
 
 .mx-views-content,
@@ -57,7 +55,7 @@
   padding: 0px;
   margin: 0px;
   position: relative;
-  background : var(--mx_ui_background_faded);
+  background: var(--mx_ui_background_faded);
 }
 
 .mx-views-list:empty:after {
@@ -87,7 +85,7 @@
   padding: 5px;
   max-width: calc(100% - 20px);
   box-shadow: var(--mx_ui_box_shadow);
-  background : var(--mx_ui_background);
+  background: var(--mx_ui_background);
 }
 
 /*.mx-view-item:hover {*/
@@ -149,10 +147,7 @@
 
 .mx-view-item-index,
 .mx-view-item-classes {
-  visibility: hidden;
-  width: 0px;
-  height: 0px;
-  font-size: 0px;
+  display: none;
 }
 
 .mx-view-tgl-container {
@@ -162,15 +157,12 @@
 }
 
 .mx-view-tgl-content {
-  position: relative;
-  z-index: 0;
   margin: 5px;
-  padding: 10px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   flex-direction: row;
-  padding-right: 70px;
-  background-color: inherit;
+  padding: 10px;
   cursor: pointer;
 }
 
@@ -187,8 +179,10 @@
 .mx-view-tgl-title {
   font-weight: 400;
   font-size: 1em;
-  margin-left: 20px;
+  margin: 0 20px 0 20px;
+  cursor: -webkit-grab;
   cursor: grab;
+  flex-grow: 1;
 }
 
 .mx-view-tgl-input {
@@ -213,9 +207,9 @@
   display: none;
 }
 
-.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-badges {
-  opacity: 0;
-}
+/*.mx-view-tgl-input:checked ~ .mx-view-tgl-content .mx-view-badges {*/
+/*opacity: 0;*/
+/*}*/
 
 .mx-view-tgl-more-container {
   overflow: hidden;

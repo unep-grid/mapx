@@ -34,7 +34,6 @@ export * from './mx_helper_map_view_ui.js';
 export * from './mx_helper_metadata_validation.js';
 export * from './mx_helper_map_view_metadata.js';
 export * from './mx_helper_map_features_popup.js';
-export * from './mx_helper_diacritics.js';
 export * from './mx_helper_canvas_star.js';
 export * from './mx_helper_canvas.js';
 export * from './mx_helper_jed.js';
@@ -60,4 +59,4 @@ export * from './color_utils/index.js';
 export * from './el_mapx/index.js';
 export * from './is_test';
 export * from './is_test_mapx';
-
+export * from './user_pref';

@@ -282,6 +282,13 @@ export async function spatialDataToView(opt) {
           text: c.fileName + ' done'
         });
 
+        m.layer.metadata = {
+          prority: 0,
+          position :0,
+          idView: m.id,
+          filterOrig: []
+        };
+
         // mx default view
         c.view = {
           id: m.id,
@@ -398,7 +405,7 @@ function handleView(view) {
     const viewOld = h.getView(view.id);
     h.viewAdd(viewOld);
   } else {
-    view._drop_shared = true;
+    view._temp = true;
     h.viewsListAddSingle(view);
   }
 }

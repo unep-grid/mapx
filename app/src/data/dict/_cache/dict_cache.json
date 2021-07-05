@@ -5280,7 +5280,7 @@
   {
     "id": "delete_confirm_geojson_modal",
     "en": "Would you like to delete this view ?",
-    "fr": "Souhaitez-vous supprimier cette vue ?",
+    "fr": "Souhaitez-vous supprimer cette vue ?",
     "es": "¿Le gustaría eliminar esta vista? ",
     "ru": "Вы хотите удалить это представление? ",
     "zh": "您要删除此视图吗？ ",
@@ -5289,6 +5289,58 @@
     "ps": "ایا تاسو غواړئ دا لید ړنګ کړئ؟ ",
     "bn": "আপনি এই দৃশ্যটি মুছতে চান? ",
     "de": "Möchten Sie diese Ansicht löschen? "
+  },
+  {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fr": "Garder cette vue dans la liste",
+    "es": "Mantener esta vista en la lista",
+    "ru": "Сохранить это представление в списке",
+    "zh": "将此视图保留在列表中",
+    "ar": "احتفظ بهذا العرض في القائمة",
+    "fa": "این نمای را در لیست نگه دارید",
+    "ps": "دا لید په لیست کې وساتئ",
+    "bn": "এই ভিউটি তালিকায় রাখুন",
+    "de": "Behalten Sie diese Ansicht in der Liste bei"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "fr": "Cette vue n'est pas liée à ce projet. Souhaitez-vous quand même la conserver temporairement dans la liste ?",
+    "es": "Esta vista no está vinculada a este proyecto. ¿Le gustaría mantenerlo temporalmente en la lista de todos modos?",
+    "ru": "Это представление не связано с этим проектом. Вы все равно хотите временно оставить его в списке?",
+    "zh": "此视图未链接到此项目。无论如何，是否要将其暂时保留在列表中？",
+    "ar": "هذا الرأي غير مرتبط بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟",
+    "fa": "این دیدگاه به این پروژه پیوند ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟",
+    "ps": "دا لید له دې پروژې سره تړاو نلري. ایا تاسو غواړئ دا په لنډمهاله توګه په لیست کې وساتئ؟",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?",
+    "de": "Diese Ansicht ist nicht mit diesem Projekt verknüpft. Möchten Sie es trotzdem vorübergehend in der Liste behalten?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fr": "Conserver",
+    "es": "Mantenerse",
+    "ru": "Хранить",
+    "zh": "保持",
+    "ar": "احتفظ",
+    "fa": "نگاه داشتن",
+    "ps": "ساتل",
+    "bn": "রাখুন",
+    "de": "Behalten"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fr": "Enlever",
+    "es": "Eliminar",
+    "ru": "Удалять",
+    "zh": "去掉",
+    "ar": "إزالة",
+    "fa": "برداشتن",
+    "ps": "لرې کړئ",
+    "bn": "অপসারণ",
+    "de": "Entfernen"
   },
   {
     "id": "btn_opt_download",
@@ -11869,6 +11921,71 @@
     "de": "Diese Ansicht ist öffentlich verfügbar\n mit unvollständigen Metadaten "
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "fr": "Cette vue est temporairement liée à ce projet",
+    "es": "Esta vista está temporalmente vinculada a este proyecto.",
+    "ru": "Это представление временно связано с этим проектом",
+    "zh": "此视图暂时链接到此项目",
+    "ar": "هذا العرض مرتبط مؤقتًا بهذا المشروع",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است",
+    "ps": "دا لید په لنډ ډول د دې پروژې سره تړاو لري",
+    "bn": "এই দৃশ্যটি অস্থায়ীভাবে এই প্রকল্পের সাথে যুক্ত",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "fr": "Cette vue est temporairement liée à ce projet : elle ne sera pas affichée après le rechargement du projet. Vous pouvez utiliser le bouton de dissociation <i class='fa fa-unlink'></i> pour l'enlever maintenant.",
+    "es": "Esta vista está vinculada temporalmente a este proyecto: no se mostrará después de que se vuelva a cargar el proyecto. Puedes usar el botón desvincular<i class=\"fa fa-unlink\"></i> para eliminarlo ahora.",
+    "ru": "Это представление временно связано с этим проектом: оно не будет отображаться после перезагрузки проекта. Вы можете использовать кнопку отмены связи<i class=\"fa fa-unlink\"></i> удалить его сейчас.",
+    "zh": "此视图临时链接到此项目：在项目重新加载后不会显示。您可以使用取消链接按钮<i class=\"fa fa-unlink\"></i>现在删除它。",
+    "ar": "هذا العرض مرتبط مؤقتًا بهذا المشروع: لن يتم عرضه بعد إعادة تحميل المشروع. يمكنك استخدام زر إلغاء الربط<i class=\"fa fa-unlink\"></i> لإزالته الآن.",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است: پس از بارگیری مجدد پروژه نمایش داده نمی شود. می توانید از دکمه لغو پیوند استفاده کنید<i class=\"fa fa-unlink\"></i> برای حذف آن در حال حاضر.",
+    "ps": "دا لید په لنډمهاله توګه له دې پروژې سره تړلی دی: دا به د پروژې له بیا پیلیدو وروسته څرګند نشي. تاسو کولی شئ د غیر لینک ت buttonۍ وکاروئ<i class=\"fa fa-unlink\"></i> د دې لرې کولو لپاره.",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সাময়িকভাবে সংযুক্ত রয়েছে: প্রকল্পটি পুনরায় লোড হওয়ার পরে এটি প্রদর্শিত হবে না। আপনি আনলিঙ্ক বোতামটি ব্যবহার করতে পারেন<i class=\"fa fa-unlink\"></i> এখনই এটি অপসারণ করতে।",
+    "de": "Diese Ansicht ist vorübergehend mit diesem Projekt verknüpft: Sie wird nicht angezeigt, nachdem das Projekt neu geladen wurde. Sie können die Schaltfläche zum Aufheben der Verknüpfung verwenden<i class=\"fa fa-unlink\"></i> um es jetzt zu entfernen."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "fr": "Voulez-vous supprimer cette vue temporaire de la liste ? Aucune donnée ne sera perdue",
+    "es": "¿Quieres eliminar esta vista temporal de la lista? No se perderán los datos",
+    "ru": "Вы хотите удалить это временное представление из списка? Данные не будут потеряны",
+    "zh": "您想从列表中删除这个临时视图吗？不会丢失任何数据",
+    "ar": "هل تريد إزالة هذا العرض المؤقت من القائمة؟ سيتم فقدان أية بيانات",
+    "fa": "آیا می خواهید این نمای موقت را از لیست حذف کنید؟ هیچ داده ای از بین نمی رود",
+    "ps": "ایا تاسو غواړئ دا لنډمهاله لید له لیست څخه لرې کړئ؟ هیڅ معلومات به له لاسه ورنکړي",
+    "bn": "আপনি কি এই অস্থায়ী দর্শনটি তালিকা থেকে সরাতে চান? কোনও ডেটা নষ্ট হবে না",
+    "de": "Möchten Sie diese temporäre Ansicht aus der Liste entfernen? Es gehen keine Daten verloren"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "fr": "Suppression temporaire de la vue",
+    "es": "Eliminación temporal de la vista",
+    "ru": "Удаление временного вида",
+    "zh": "临时视图移除",
+    "ar": "إزالة العرض المؤقت",
+    "fa": "حذف موقت نمایش",
+    "ps": "لنډمهاله لید لیرې کول",
+    "bn": "অস্থায়ী দর্শন অপসারণ",
+    "de": "Vorübergehende Entfernung der Ansicht"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "fr": "Supprimer / Dissocier cette vue temporaire",
+    "es": "Eliminar / desvincular esta vista temporal",
+    "ru": "Удалить / отменить связь с этим временным представлением",
+    "zh": "删除/取消链接此临时视图",
+    "ar": "إزالة / إلغاء ربط هذا العرض المؤقت",
+    "fa": "حذف / لغو پیوند این نمای موقت",
+    "ps": "دا لنډمهاله لید لرې کړئ / لړلیک کړئ",
+    "bn": "এই অস্থায়ী দর্শনটি সরান / লিঙ্কমুক্ত করুন",
+    "de": "Entfernen / Verknüpfung dieser temporären Ansicht aufheben"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fr": "Vous disposez de droits d'édition pour cette vue",
@@ -14859,6 +14976,19 @@
     "de": "Anmerkungen "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fr": "Licences",
+    "es": "Licencias",
+    "ru": "Лицензии",
+    "zh": "执照",
+    "ar": "التراخيص",
+    "fa": "مجوزها",
+    "ps": "جوازونه",
+    "bn": "লাইসেন্স",
+    "de": "Lizenzen"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fr": "Mots clefs",
@@ -14886,16 +15016,16 @@
   },
   {
     "id": "meta_source_keywords_m49",
-    "en": "Geographic Keywords M49",
-    "fr": "Mots clés géographiques M49",
-    "es": "Palabras clave geográficas M49",
-    "ru": "Географические ключевые слова M49",
+    "en": "Geographic Keywords",
+    "fr": "Mots clés géographiques",
+    "es": "Palabras clave geográficas",
+    "ru": "Географические ключевые слова",
     "zh": "地理关键字M49",
-    "ar": "الكلمات الرئيسية الجغرافية M49",
-    "fa": "کلیدواژه های جغرافیایی M49",
-    "ps": "د جغرافیایی کلیمې M49",
+    "ar": "الكلمات الرئيسية الجغرافية",
+    "fa": "کلیدواژه های جغرافیایی",
+    "ps": "د جغرافیایی کلیمې",
     "bn": "ভৌগলিক কীওয়ার্ড এম 49",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "de": "Geografische Schlüsselwortliste"
   },
   {
     "id": "meta_source_languages",
@@ -16445,19 +16575,6 @@
     "de": "Sind Sie sicher, das Projekt jetzt zu ändern? Nicht gespeicherte Änderungen können verloren gehen. "
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fr": "Changer de projet maintenant, ignorer les changements",
-    "es": "Cambiar de proyecto ahora, descartar cambios",
-    "ru": "Измените проект сейчас, отмените изменения. ",
-    "zh": "立即更改项目，放弃更改。",
-    "ar": "تغيير المشروع الآن ، تجاهل التغييرات. ",
-    "fa": "اکنون پروژه را تغییر دهید ، تغییرات را کنار بگذارید. ",
-    "ps": "اوس پروژه بدله کړئ ، بدلونونه وغورځئ. ",
-    "bn": "এখনই প্রকল্প পরিবর্তন করুন, পরিবর্তনগুলি বাতিল করুন। ",
-    "de": "Projekt jetzt ändern, Änderungen verwerfen. "
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "fr": "Confirmation de changement de projet",
@@ -17472,6 +17589,19 @@
     "de": "Schlüsselwörter"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fr": "Mots-clés GEMET",
+    "es": "Palabras clave GEMET",
+    "ru": "Ключевые слова GEMET",
+    "zh": "关键词 GEMET",
+    "ar": "الكلمات المفتاحية GEMET",
+    "fa": "کلمات کلیدی GEMET",
+    "ps": "کلیدي ټیمونه",
+    "bn": "কীওয়ার্ডগুলি",
+    "de": "Schlüsselwörter GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "fr": "Mots-clés géographiques",
@@ -17564,16 +17694,16 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "fr": "Activer",
-    "es": "Permitir",
-    "ru": "Давать возможность",
-    "zh": "使能够",
-    "ar": "ممكن",
-    "fa": "فعال کردن",
-    "ps": "وړول",
-    "bn": "সক্ষম করুন",
-    "de": "Aktivieren"
+    "en": "Display on map",
+    "fr": "Afficher sur la carte",
+    "es": "Mostrar en el mapa",
+    "ru": "Показать на карте",
+    "zh": "在地图上显示",
+    "ar": "عرض على الخريطة",
+    "fa": "نمایش بر روی نقشه",
+    "ps": "په نقشه ښودل",
+    "bn": "মানচিত্রে প্রদর্শন করুন",
+    "de": "Auf Karte anzeigen"
   },
   {
     "id": "search_view_link",
@@ -17808,5 +17938,57 @@
     "ps": "لنډمهاله لړۍ",
     "bn": "অস্থায়ী পরিসীমা",
     "de": "Zeitbereich"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "fr": "Vue ajoutée temporairement",
+    "es": "Ver agregado temporalmente",
+    "ru": "Просмотр добавлен временно",
+    "zh": "临时添加的视图",
+    "ar": "تمت إضافة العرض مؤقتًا",
+    "fa": "نمایش به طور موقت اضافه شد",
+    "ps": "لنډمهاله اضافه کول وګورئ",
+    "bn": "অস্থায়ীভাবে দেখুন দেখুন",
+    "de": "Ansicht vorübergehend hinzugefügt"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "fr": "Cette vue a été ajoutée temporairement dans la liste des vues. Elle sera enlvée lors du rechargement du projet. Vous pouvez l'enlever en utilisant le bouton dissocier <i class='fa fa-unlink'></i>.",
+    "es": "Esta vista se ha agregado temporalmente a la lista de vistas. Se eliminará cuando se vuelva a cargar el proyecto. Puedes eliminarlo usando el botón desvincular<i class=\"fa fa-unlink\"></i> .",
+    "ru": "Это представление временно добавлено в список представлений. Он будет удален при перезагрузке проекта. Вы можете удалить его, нажав кнопку \"Отменить связь\".<i class=\"fa fa-unlink\"></i> .",
+    "zh": "此视图已临时添加到视图列表中。当项目重新加载时，它将被删除。您可以使用取消链接按钮将其删除<i class=\"fa fa-unlink\"></i>.",
+    "ar": "تمت إضافة هذا العرض مؤقتًا في قائمة المشاهدات. ستتم إزالته عند إعادة تحميل المشروع. يمكنك إزالته باستخدام زر إلغاء الارتباط<i class=\"fa fa-unlink\"></i> .",
+    "fa": "این نما به طور موقت در لیست بازدیدها اضافه شده است. با بارگیری مجدد پروژه ، حذف خواهد شد. با استفاده از دکمه لغو پیوند می توانید آن را حذف کنید<i class=\"fa fa-unlink\"></i> .",
+    "ps": "دا لید په لنډ ډول د لید لست کې اضافه شوی. دا به لرې شي کله چې پروژه ډاونلوډ شي. تاسو کولی شئ دا د غیر لینک ت buttonۍ په کارولو سره لرې کړئ<i class=\"fa fa-unlink\"></i> .",
+    "bn": "এই দর্শনটি ভিউ তালিকায় সাময়িকভাবে যুক্ত করা হয়েছে। প্রকল্পটি পুনরায় লোড হয়ে গেলে এটি সরানো হবে। আপনি আনলিঙ্ক বোতামটি ব্যবহার করে এটি সরাতে পারেন<i class=\"fa fa-unlink\"></i> ।",
+    "de": "Diese Ansicht wurde vorübergehend zur Ansichtsliste hinzugefügt. Es wird entfernt, wenn das Projekt neu geladen wird. Sie können es mit der Schaltfläche zum Aufheben der Verknüpfung entfernen<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "fr": "Fermer",
+    "es": "Cerca",
+    "ru": "Закрывать",
+    "zh": "关闭",
+    "ar": "يغلق",
+    "fa": "نزدیک",
+    "ps": "بندول",
+    "bn": "বন্ধ",
+    "de": "Schließen"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "fr": "Ferme et ne me rappelle pas ça",
+    "es": "Cierra y no me recuerdes esto",
+    "ru": "Закройте и не напоминайте мне об этом",
+    "zh": "关闭，不要提醒我这个",
+    "ar": "أغلق ولا تذكرني بهذا",
+    "fa": "ببند و این را به من یادآوری نکن",
+    "ps": "نږدې یې کړئ او ما ته دا یاد مه کوئ",
+    "bn": "বন্ধ করুন এবং আমাকে এটি মনে করিয়ে দিবেন না",
+    "de": "Schließe und erinnere mich nicht daran"
   }
 ]

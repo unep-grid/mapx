@@ -15,7 +15,7 @@ config[["system"]] <- list(
   os = Sys.info()[["sysname"]],
   hostname = Sys.info()[["nodename"]],
   hostnameRemote = "map-x-full"
-  )
+)
 
 
 config[['brand']] <- list(
@@ -28,7 +28,7 @@ config[["links"]] <- list(
   repositoryWiki = "https://github.com/unep-grid/map-x-mgl/wiki", 
   repositoryWikiMapComposer = "https://github.com/unep-grid/map-x-mgl/wiki/Map-composer",
   appKnowlegdeBase = 'https://www.mapx.org/knowledge-base/'
-  )
+)
 
 #
 # MapX version
@@ -57,8 +57,8 @@ config[["browser"]] <- list(
     "hasLocalStorage",
     "hasSessionStorage",
     "hasGeolocation"
-    )  
-  )
+  )  
+)
 
 #
 # Input control
@@ -77,9 +77,9 @@ config[['validation']] <- list(
       projectAlias = list(min=1,max=30),
       viewAbstract = list(min=1,max=5000),
       viewTitle = list(min=1,max=300)
-      )
     )
   )
+)
 
 #
 # api configuration
@@ -149,7 +149,7 @@ config[["pg"]] = list(
     ),
   poolMin = 1,
   poolMax = 1
-  )
+)
 
 #
 # Geoserver
@@ -170,30 +170,24 @@ config[["geoserver"]] = list(
       "gs_ws_b" = c("WMS","WFS","WCS")
       ),
     groupSep = "@"
-    )
   )
+)
 
 #
 # web resources : will be exposed to the client using shiny::addRessourcePath. 
-# TODO: maybe duplicate with webpack copy plugin ! Check how things work in static mode
-# List name will be prefix 
 # The key is used from the client as :
 # http://{location}:{port}/{prefix}/{resource.xxx}
+#
 config[["resources"]]  =  list(
-  "data"  = file.path("src","data"),
-  "sprites" = file.path("src","glyphs","dist","sprites"),
-  "src" = file.path("src"),
-  "dist" = file.path("www"),
-  "userdata" = file.path("./userdata"), ## expected shared folder from vagrant
-  "download" = file.path("/tmp/mapx/download")
-  )
+  "dist" = file.path("www")
+)
 #
 # Client side path
 #
 config[['paths']] = list(
   sprites = "sprites/sprite",
   fontstack = "fontstack/{fontstack}/{range}.pbf"
-  )
+)
 
 config[['sprites_prefix']] <- list(
   point = '^maki-',
@@ -202,39 +196,19 @@ config[['sprites_prefix']] <- list(
 )
 
 #
-# create temp dirs if not exists
-#
-dir.create(.get(config,c("resources","download")),showWarnings=F,recursive=TRUE)
-
-#
 # Server and UI folder path
 #
 config[["srvPath"]] = file.path("src","r","server")
 #config[["uiPath"]] = file.path("src","ui")
-config[["uploadDirPath"]] = tempdir()
+#config[["uploadDirPath"]] = tempdir()
 
 #
 # Import dictionaries
 #
 config[["dictionaries"]] <- list(
-  main = fromJSON(
-    file.path(
-      config[[c("resources","data")]],"dict","_built","dict_full.json"
-    )
-    ),
-  countries = fromJSON(
-    file.path(
-      #
-      # all country codes. data from https://github.com/umpirsky/country-list/tree/master/data
-      #
-      config[[c("resources","data")]],"dict","dict_countries.json"
-    )
-    ),
-  languages = fromJSON(
-    file.path(
-      config[[c("resources","data")]],"dict","dict_languages.json"
-    )
-  )
+  main = fromJSON("src/data/dict/_built/dict_full.json"),
+  countries = fromJSON("src/data/dict/dict_countries.json"),
+  languages = fromJSON("src/data/dict/dict_languages.json")
 )
 
 
@@ -255,7 +229,7 @@ config[["map"]] <- list(
   minZoom = 0,
   token = "",
   id = "map_main"
-  )
+)
 
 #
 # Default ui and map colors
@@ -270,7 +244,7 @@ config[["ui"]] <- list(
     idInputThemeColors = "mxInputThemeColors"
     ),
   ui = list()
-  )
+)
 
 
 #
@@ -300,8 +274,8 @@ config[["wms"]] = list(
   list(
     label="nowcoast.noaa.gov",
     value="https://nowcoast.noaa.gov/arcgis/services/nowcoast/analysis_meteohydro_sfc_qpe_time/MapServer/WmsServer"
-    )
   )
+)
 
 #
 # Set default variable names
@@ -311,7 +285,7 @@ config[["variables"]] <- list()
 config[[c("variables","time")]] <- list(
   "t0"="mx_t0",
   "t1"="mx_t1"
-  ) 
+) 
 
 #
 # Templates
@@ -353,17 +327,14 @@ config[["languages"]][["codes"]] <- unname(unlist(config[["languages"]][["list"]
 
 config[["language"]] <- list(
   "default"="en"
-  )
+)
 #
 # Dictionnary of badwords for the profanity checker
 #
 config[["badwords"]] = list(
-  "path" = file.path(
-    config[[c("resources","data")]],
-    "badwords"
-    ),
+  "path" = 'src/data/badwords',
   "words" = list()
-  )
+)
 
 for(l in .get(config,c("languages","list"))){
   dFile <- file.path(.get(config,c("badwords","path")),l)
@@ -384,8 +355,8 @@ config[["project"]] <- list(
   default = "MX-YHJ-6JJ-YLS-SCV-VL1",
   creation = list(
     usersAllowed = c(1)
-    )
   )
+)
 
 #
 # Root mode
@@ -395,7 +366,7 @@ config[["root_mode"]] <- list(
   # Members of the root group
   #
   members = c(1) 
-  )
+)
 
 #
 # countries configuration
@@ -407,7 +378,7 @@ config[["countries"]] <- list()
 #
 config[[c("countries","table")]] <- na.omit(
   .get(config,c("dictionaries","countries"))
-  )
+)
 
 
 #
@@ -434,7 +405,7 @@ config[["noData"]] <- list(
   "noTitle",
   "noSelect",
   "noFilter"
-  )
+)
 
 
 #
@@ -450,7 +421,7 @@ config[[c("views","type")]] <- list(
   "rt", # raster tiles
   "sm", # story map
   "cc" # custom code
-  )
+)
 
 #
 # Data configuration
@@ -525,8 +496,8 @@ config[[c("data","format")]] <- list(
     type = "vector",
     fileExt = c(".csv"),
     multiple = FALSE
-    )
   )
+)
 
 
 #
@@ -536,7 +507,7 @@ config[["mail"]] =  list(
   "bot" = "bot@localhost",
   "guest" = "guest@localhost",
   "admin" = "admin@localhost"
-  )
+)
 
 #
 # default user value
@@ -551,7 +522,7 @@ config[["users"]] <- list(
   actionLinkExpireDays = 7,
   cookieName = "mx_token",
   apiExpireDays = 1
-  )
+)
 
 #
 # default data
@@ -566,9 +537,9 @@ config[[c("users","data","public")]] <- list(
     cache = list (
       last_project = config[["project"]][['default']],
       last_language = config[["languages"]][["list"]][[1]]
-      )
     )
   )
+)
 
 #
 # default data for new  superuser if database is empty
@@ -578,7 +549,7 @@ config[["users"]][["data"]][["superUser"]]  <- list(
     cache = list (
       last_project = config[["project"]][['default']],
       last_language = config[["languages"]][["list"]][[1]]
-      )
     )
   )
+)
 

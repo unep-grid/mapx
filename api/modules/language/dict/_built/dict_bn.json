@@ -2035,6 +2035,26 @@
     "bn": "আপনি এই দৃশ্যটি মুছতে চান? "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "bn": "এই ভিউটি তালিকায় রাখুন"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে লিঙ্কযুক্ত নয়। আপনি কি এটিকে যাইহোক তালিকায় সাময়িকভাবে রাখতে চান?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "bn": "রাখুন"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "bn": "অপসারণ"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "bn": "ডেটা ডাউনলোড করুন "
@@ -4565,6 +4585,31 @@
     "bn": "এই দৃশ্যটি সর্বজনীনভাবে উপলব্ধ\n অসম্পূর্ণ মেটাডেটা সহ "
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "bn": "এই দৃশ্যটি অস্থায়ীভাবে এই প্রকল্পের সাথে যুক্ত"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "bn": "এই দৃশ্যটি এই প্রকল্পের সাথে সাময়িকভাবে সংযুক্ত রয়েছে: প্রকল্পটি পুনরায় লোড হওয়ার পরে এটি প্রদর্শিত হবে না। আপনি আনলিঙ্ক বোতামটি ব্যবহার করতে পারেন<i class=\"fa fa-unlink\"></i> এখনই এটি অপসারণ করতে।"
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "bn": "আপনি কি এই অস্থায়ী দর্শনটি তালিকা থেকে সরাতে চান? কোনও ডেটা নষ্ট হবে না"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "bn": "অস্থায়ী দর্শন অপসারণ"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "bn": "এই অস্থায়ী দর্শনটি সরান / লিঙ্কমুক্ত করুন"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "bn": "আপনার এই দর্শনটির জন্য সম্পাদক অধিকার রয়েছে "
@@ -5715,6 +5760,11 @@
     "bn": "মন্তব্য "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "bn": "লাইসেন্স"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "bn": "কীওয়ার্ডস "
@@ -6325,11 +6375,6 @@
     "bn": "আপনি কি এখন প্রকল্পটি পরিবর্তন করতে নিশ্চিত? সংরক্ষিত পরিবর্তনগুলি হারিয়ে যেতে পারে। "
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "bn": "এখনই প্রকল্প পরিবর্তন করুন, পরিবর্তনগুলি বাতিল করুন। "
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "bn": "প্রকল্পের নিশ্চয়তা পরিবর্তন করুন "
@@ -6720,6 +6765,11 @@
     "bn": "কীওয়ার্ডস"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "bn": "কীওয়ার্ডগুলি"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "bn": "ভৌগলিক কীওয়ার্ড"
@@ -6756,8 +6806,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "bn": "সক্ষম করুন"
+    "en": "Display on map",
+    "bn": "মানচিত্রে প্রদর্শন করুন"
   },
   {
     "id": "search_view_link",
@@ -6848,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "bn": "অস্থায়ী পরিসীমা"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "bn": "অস্থায়ীভাবে দেখুন দেখুন"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "bn": "এই দর্শনটি ভিউ তালিকায় সাময়িকভাবে যুক্ত করা হয়েছে। প্রকল্পটি পুনরায় লোড হয়ে গেলে এটি সরানো হবে। আপনি আনলিঙ্ক বোতামটি ব্যবহার করে এটি সরাতে পারেন<i class=\"fa fa-unlink\"></i> ।"
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "bn": "বন্ধ"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "bn": "বন্ধ করুন এবং আমাকে এটি মনে করিয়ে দিবেন না"
   }
 ]

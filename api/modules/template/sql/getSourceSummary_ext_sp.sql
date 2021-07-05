@@ -1,26 +1,18 @@
-WITH layer_geojson_ext as ( 
+WITH bbox as (
   SELECT 
-  ST_AsGeoJSON(
-    ST_Extent(
-      ST_buffer(
-        ST_Envelope(geom)::geography
-        , 1 )::geometry
-    )
-  )::json #> '{"coordinates",0}'
-  AS extent FROM "{{idSource}}"
+    ST_EstimatedExtent('{{idSource}}','geom') as extent
 ),
 layer_sp_ext as (
-  SELECT 
+  SELECT
   json_build_object(
     'extent_sp', json_build_object(
-      'lat1', lse.extent #> '{3,1}',
-      'lng1', lse.extent #> '{3,0}',
-      'lat2', lse.extent #> '{1,1}',
-      'lng2', lse.extent #> '{1,0}'
+      'lat1', ST_Ymin(bbox.extent),
+      'lng1', ST_Xmin(bbox.extent),
+      'lat2', ST_Ymax(bbox.extent),
+      'lng2', ST_Xmax(bbox.extent)
     )
-  )::json as extent
-  FROM layer_geojson_ext as lse
+  ) as extent
+  FROM bbox
 )
 
 SELECT extent::json as res from layer_sp_ext;
-

@@ -1,55 +1,27 @@
-export async function validateMetadataView(opt) {
-  opt = opt || {};
-  const view = opt.view || {};
-  const forceUpdateMeta = opt.forceUpdateMeta || false;
+
+/**
+* Validate metadata for a view
+* @param {Object} view View object
+* @return {{results: Object, valid:Boolean, validated:Boolean}} 
+*/
+export function validateMetadataView(view) {
   const h = mx.helpers;
-  const type = h.path(view, 'type');
-  const isRt = type === 'rt';
-  const isVt = type === 'vt';
-  const isCc = type === 'cc';
 
   const out = {
     validated: false,
-    results: {},
-    type: type,
-    valid: false
+    valid: false,
+    results: {}
   };
 
-  /**
-   * Type raster tiles / wms
-   */
-  if (isRt || isCc) {
-    const meta = h.path(view, 'data.source.meta', {});
-    /**
-     * Validate rt metadata
-     */
-    const results = validateMetadataTests(meta);
-    Object.assign(out, {
-      validated: true,
-      valid: h.all(results.tests.map((t) => t.valid)),
-      results: results
-    });
-  }
-
-  /**
-   * Type vector tiles
-   */
-  if (isVt) {
-    const meta = await h.addSourceMetadataToView({
-      view: view,
-      forceUpdateMeta: forceUpdateMeta
-    });
-
+  try {
+    const meta = h.path(view,'_meta',{});
     const attr = h.path(view, 'data.attribute.name');
-    const results = validateMetadataTests(meta, attr);
-
-    Object.assign(out, {
-      validated: true,
-      valid: h.all(results.tests.map((t) => t.valid)),
-      results: results
-    });
+    out.results = validateMetadataTests(meta, attr);
+    out.validated = true;
+    out.valid = h.all(out.results.tests.map((t) => t.valid));
+  } catch (e) {
+    console.error('validateMetadataView error', e);
   }
-
   /**
    * Type not handled
    */

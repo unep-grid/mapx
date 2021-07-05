@@ -41,7 +41,7 @@ html.shiny-busy .mx-shiny-busy-panel {
 
 html,
 body {
-  font-size: 0.9em;
+  font-size: 0.8em;
 }
 
 h1 {
@@ -399,7 +399,7 @@ details > summary {
 
 .mx #ss-connect-dialog a:after {
   content: '\f021';
-  font-family: fontawesome;
+  font-family: 'FontAwesome';
   padding: 3px;
 }
 /**
@@ -574,6 +574,7 @@ details > summary {
 */
 .mx-controls-ul {
   display: flex;
+  padding: 0;
 }
 
 .mx-controls-view {
@@ -1057,7 +1058,7 @@ details > summary {
   margin-top: 8px;
   font-size: 0.95em;
   content: '\F054';
-  font-family: fontawesome;
+  font-family: 'FontAwesome';
 }
 
 .fold-container .fold-switch:checked.fold-caret ~ .fold-label::after {
@@ -1145,9 +1146,6 @@ details > summary {
   font-size: 0.9em;
   text-align: justify;
   hyphens: auto;
-}
-.mx .btn {
-  font-size: 1rem;
 }
 
 /**

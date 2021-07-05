@@ -245,8 +245,15 @@ export class NotifCenter {
       if (nc._removed) {
         return;
       }
+      const valid = nc.validateNotif(notif);
+      if (!valid) {
+        return console.warn('Invalid notification');
+      }
       if (!notif.id) {
         notif.id = nc.idRandom();
+      }
+      if (!notif.timestamp) {
+        notif.timestamp = Date.now();
       }
       if (!notif.idGroup) {
         notif.idGroup = notif.id;
@@ -293,26 +300,17 @@ export class NotifCenter {
   }
 
   async setSeenAll() {
-    let c = 0;
     const nc = this;
     return nc.store.iterate((notif, key) => {
-      if (!notif.seen) {
-        c++;
-      }
       notif.seen = true;
       nc.store.setItem(key, notif);
     });
   }
 
   validateNotif(notif) {
-    const mendatory = ['id', 'idGroup', 'type', 'msg'];
+    const mendatory = ['type', 'msg'];
     const isObj = isObject(notif);
-    const isNotEmpty =
-      isObj &&
-      mendatory.reduce((a, k) => {
-        return !a ? false : !!notif[k];
-      }, false);
-    return isObj && isNotEmpty;
+    return isObj && mendatory.reduce((a, k) => a && notif[k], true);
   }
 
   /**
@@ -320,8 +318,9 @@ export class NotifCenter {
    */
   async _handler_browser(notif) {
     const nc = this;
+    nc._handler_info(notif);
     if (await nc.hasNotifPermission()) {
-      const notification = new Notification(notif.title, {
+      new Notification(notif.title, {
         body: notif.msg,
         icon: nc.opt.ui.logo
       });
@@ -335,7 +334,6 @@ export class NotifCenter {
     const nc = this;
     if (nc._enable_render) {
       const elMsg = nc._el_info(notif);
-      let save = true;
       if (notif.idMerge) {
         const elMerge = nc.getElMerge(notif);
         if (elMerge.childElementCount <= nc.opt.items.maxMerge) {

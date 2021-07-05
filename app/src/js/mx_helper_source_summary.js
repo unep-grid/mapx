@@ -14,7 +14,8 @@ export async function getViewSourceSummary(view, opt) {
     {
       idView: view.id,
       timestamp: view._src_timestamp,
-      idAttr : h.path(view,'data.attribute.name')
+      idAttr : h.path(view,'data.attribute.name'),
+      idSource : h.path(view,'data.source.layerInfo.name')
     },
     opt
   );
@@ -91,8 +92,9 @@ export async function getSourceVtSummary(opt) {
       delete opt[k];
     }
   });
-  
-  if (!h.isSourceId(opt.idSource) && !h.isViewId(opt.idView)) {
+ 
+  if (!h.isViewId(opt.idView) && !h.isSourceId(opt.idSource)) {
+    console.warn('getSourceVtSummary : at least id source or id view are required');
     return {};
   }
 
@@ -105,13 +107,13 @@ export async function getSourceVtSummary(opt) {
   const url = `${urlSourceSummary}?${query}`;
   let summary;
 
-
   if (useCache) {
     summary = await miniCacheGet(url);
     if (summary) {
       origin = 'cache';
     }
   }
+  
   if (!summary) {
     origin = 'fetch';
     const resp = await fetch(url);
@@ -145,6 +147,8 @@ export async function getSourceVtSummary(opt) {
     ]);
   }
   summary._origin = origin;
+
+
 
   return summary;
 }

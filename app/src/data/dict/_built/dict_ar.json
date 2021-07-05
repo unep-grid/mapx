@@ -2035,6 +2035,26 @@
     "ar": "هل ترغب في حذف هذا العرض؟ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "ar": "احتفظ بهذا العرض في القائمة"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "ar": "هذا الرأي غير مرتبط بهذا المشروع. هل ترغب في الاحتفاظ به مؤقتًا في القائمة على أي حال؟"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "ar": "احتفظ"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "ar": "إزالة"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "ar": "قم بتنزيل البيانات "
@@ -4565,6 +4585,31 @@
     "ar": "هذا الرأي متاح للجمهور\n مع بيانات وصفية غير كاملة "
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "ar": "هذا العرض مرتبط مؤقتًا بهذا المشروع"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "ar": "هذا العرض مرتبط مؤقتًا بهذا المشروع: لن يتم عرضه بعد إعادة تحميل المشروع. يمكنك استخدام زر إلغاء الربط<i class=\"fa fa-unlink\"></i> لإزالته الآن."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "ar": "هل تريد إزالة هذا العرض المؤقت من القائمة؟ سيتم فقدان أية بيانات"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "ar": "إزالة العرض المؤقت"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "ar": "إزالة / إلغاء ربط هذا العرض المؤقت"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "ar": "لديك حقوق محرر لهذا العرض "
@@ -5715,6 +5760,11 @@
     "ar": "ملاحظات "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "ar": "التراخيص"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "ar": "الكلمات الدالة "
@@ -6325,11 +6375,6 @@
     "ar": "هل أنت متأكد من تغيير المشروع الآن؟ يمكن أن تضيع التغييرات غير المحفوظة. "
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "ar": "تغيير المشروع الآن ، تجاهل التغييرات. "
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "ar": "تأكيد تغيير المشروع "
@@ -6720,6 +6765,11 @@
     "ar": "الكلمات الدالة"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "ar": "الكلمات المفتاحية GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "ar": "الكلمات الرئيسية الجغرافية"
@@ -6756,8 +6806,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "ar": "ممكن"
+    "en": "Display on map",
+    "ar": "عرض على الخريطة"
   },
   {
     "id": "search_view_link",
@@ -6848,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "ar": "النطاق الزمني"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "ar": "تمت إضافة العرض مؤقتًا"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "ar": "تمت إضافة هذا العرض مؤقتًا في قائمة المشاهدات. ستتم إزالته عند إعادة تحميل المشروع. يمكنك إزالته باستخدام زر إلغاء الارتباط<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "ar": "يغلق"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "ar": "أغلق ولا تذكرني بهذا"
   }
 ]

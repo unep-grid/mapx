@@ -3,7 +3,7 @@
 #
 # Script to build and push new image in remote docker repository
 #
-BRANCH=master
+BRANCH=$(git branch --show-current)
 REMOTE=github
 NEW_VERSION=$1
 OLD_VERSION=`cat version.txt`
@@ -22,12 +22,6 @@ REPO="https://github.com/unep-grid/map-x-mgl"
 
 USAGE="Usage : bash build.sh $OLD_VERSION"
 
-if [ $CHANGES_CHECK -gt 0 ]
-then 
-  echo "This project as uncommited changes, stop here"
-  exit 1
-fi
-
 if [ -z "$NEW_VERSION" ] || [ "$NEW_VERSION" == "$OLD_VERSION" ]
 then
   echo "Wrong or missing version. Old version version =  $OLD_VERSION new version = $NEW_VERSION"
@@ -35,6 +29,22 @@ then
   exit 1
 fi
 
+echo -e "Build, commit and push $FG_GREEN$NEW_VERSION$FG_NORMAL on branch $FG_GREEN$BRANCH$FG_NORMAL in remote $FG_GREEN$REMOTE$FG_NORMAL [YES/NO]"
+
+read confirm_diff
+
+if [ "$confirm_diff" != "YES"  ]
+then
+  echo "Stop here " 
+  exit 1
+fi
+
+
+if [ $CHANGES_CHECK -gt 0 ]
+then 
+  echo "This project as uncommited changes, stop here"
+  exit 1
+fi
 #
 # Should pass js linting
 #

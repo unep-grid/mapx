@@ -1521,10 +1521,12 @@ export function storyPlayStep(o) {
   /**
    * Once everything is done set order
    */
-  Promise.all([...vPromAdded, ...vPromRemoved]).then(() => {
-    h.viewsLayersOrderUpdate({
-      order: vStep,
-      id: o.id
-    });
-  });
+  Promise.all([...vPromAdded, ...vPromRemoved])
+    .then(() => {
+      return h.viewsLayersOrderUpdate({
+        order: vStep,
+        id: o.id
+      });
+    })
+    .catch((e) => console.error);
 }

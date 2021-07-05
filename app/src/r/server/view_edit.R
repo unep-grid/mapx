@@ -53,7 +53,10 @@ observe({
                return()
           }
           if(length(viewData) > 1){
-            stop("View edit can't edit more than one view")
+            #
+            # mxApiGetViews did not found the view and return everything. 
+            #
+            return()
           }else{
             viewData <- viewData[[1]]
           }
@@ -778,9 +781,7 @@ observeEvent(input$btnViewDeleteConfirm,{
   #
   # Remove client view
   #
-  mglRemoveView(
-    idView = idView
-    )
+  mglRemoveView(idView)
 
   reactData$updateViewList <- runif(1)
   #
@@ -1023,6 +1024,8 @@ observeEvent(input$btnViewSave,{
     if( view[["type"]] %in%  c("rt","cc") ){
       viewSourceMetadata <- .get(input,c('viewSourceMetadata_values','data'))
       view <- .set(view,c('data','source','meta'),viewSourceMetadata)
+      # A copy is required for current session 
+      view$`_meta` <- viewSourceMetadata 
     }
 
     #
@@ -1032,14 +1035,11 @@ observeEvent(input$btnViewSave,{
       data=view,
       table=.get(config,c("pg","tables","views"))
     )
-
+    
     # edit flag
     view$`_edit` = TRUE 
 
     if(!hideView){
-      # edit flag
-      view$`_edit` = TRUE 
-
       mglUpdateView(view)
     }
     #

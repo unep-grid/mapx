@@ -1,4 +1,43 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.32-alpha' target='_blank'>1.8.32-alpha</a>
+  - APP
+    - Added basic user preference storage ( not yet available in UI )
+    - Reworked temporary view management : store preference; added "unlink" button to remove temporary view; text changes
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.31-alpha' target='_blank'>1.8.31-alpha</a>
+  - API/APP
+    - Improved handling of view not linked, added using drag-drop or search tool 
+    - Fixed missing license in source metadata viewer
+    - Fixed issue with local cache, that was hanging sometimes
+    - Various minor changes in UI, e.g. views badges colors
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.30-alpha' target='_blank'>1.8.30-alpha</a>
+  - API
+    - Faster vector source bounding box. E.g. used in vector views -> Zoom to extent. This issue penalized some features such as views settings or static viewer.
+  - APP
+    - Fixed bug where sprites/pattern were not shown in legends,
+    - Bug correction / improvement: partial refactoring of the construction of vector layers. Should be faster, while rendering the order correctly, especially when using overlay patterns using sprite.
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.29-alpha' target='_blank'>1.8.29-alpha</a>
+  - APP
+    - Solves missing sprites in legends; 
+    - Cleaning old 'resources' config from legacy mapx version -> probable breaking changes
+    - Minor improvements of the search tool
+      - Sync date keyword with slider + keyword emphasis
+      - Solve nested facet groups not updating order when filtered
+      - Year range slider: allow partial date ranges instead of strict min/max bounds.
+      - Metadata viewer : handle cases where no concept is set
+      - Fixed broken external link button 
+    - Gemet search + dropdown :
+      - Avoid displaying full description of gemet dropdown: use tooltip instead, but keep the same heading. 
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.28-alpha' target='_blank'>1.8.28-alpha</a>
+  - API :
+    - Missing 'create extension pg_trgm' in migration script
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.27-alpha' target='_blank'>1.8.27-alpha</a>
+  - APP / API
+    - GEMET 
+        - Reshaped gemet local db,
+        - Integration of multilingual keywords from gemet in the search index generator,
+        - Modified api search by text, by list of concept : faster, more accurate, query by multiple concept ids,
+        - Adapted metadata visualizer,
+        - Integration of multilingual GEMET keywords in the search tool
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.26-alpha' target='_blank'>1.8.26-alpha</a>
   - APP
     - GEMET 

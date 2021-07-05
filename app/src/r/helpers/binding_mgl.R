@@ -138,17 +138,17 @@ mglGetLocalForageData <- function(idStore,idKey,idInput,session=shiny::getDefaul
 
 
 
-#' Remove geojson from view list and geojson  db
-#' @param id {character} map id
+#' Remove view
 #' @param idView {character} geojson view id
 #' @export
-mglRemoveView <- function( id=NULL, idView, session=shiny::getDefaultReactiveDomain()) {
+mglRemoveView <- function( idView=NULL, session=shiny::getDefaultReactiveDomain()) {
   
-  if(is.null(id)) id = .get(config,c("map","id"))
+  if(is.null(idView)) {
+        return();
+  } 
 
   session$sendCustomMessage("mglRemoveView",
     list(
-      id = id,
       idView = idView
       )
     )

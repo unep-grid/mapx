@@ -29,6 +29,7 @@ const def = {
       'source_abstract',
       'source_keywords',
       'source_keywords_m49',
+      'source_keywords_gemet',
       'source_notes',
       'project_title',
       'project_abstract',
@@ -55,6 +56,7 @@ const def = {
       'source_abstract',
       'source_keywords',
       'source_keywords_m49',
+      'source_keywords_gemet',
       'source_notes',
       'project_title',
       'project_abstract',
@@ -69,16 +71,20 @@ const def = {
       icon: 'fa-tag'
     },
     {
+      type: 'source_keywords_gemet',
+      icon: 'fa-leaf'
+    },
+    {
       type: 'source_keywords_m49',
       icon: 'fa-map-marker',
-      groups: [
+      subgroups: [
         {
-          key: 'search_source_keywords_group_region',
+          key: 'source_keywords_group_region',
           match: /wld|WLD|^m49_.*/,
           exclude: null
         },
         {
-          key: 'search_source_keywords_group_country',
+          key: 'source_keywords_group_country',
           match: /[a-zA-Z]{3}/,
           exclude: /wld|WLD/
         }

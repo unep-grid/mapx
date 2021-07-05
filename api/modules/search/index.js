@@ -9,8 +9,8 @@ const languages = validation_defaults.languages;
 const {config} = require(__dirname + '/config.js');
 const {getDictM49iso3} = require('@mapx/language');
 const validateParamsHandler = getParamsValidator({
-  required: ['idUser', 'token', 'searchQuery'],
-  expected: ['searchIndexName']
+  required: ['idUser', 'token'],
+  expected: ['searchIndexName', 'searchQuery']
 });
 const {htmlToText} = require('html-to-text');
 
@@ -27,11 +27,17 @@ module.exports = {
   updateIndexes
 };
 
+//updateIndexes();
+
 async function updateIndexes() {
   try {
     const cid = config.idx_views;
     const start = Date.now();
     const result = await pgRead.query(template.getViewsPublicForSearchIndex);
+    /**
+     * TODO this step, m49 dict matching, could be done within the query
+     */
+  
     const m49iso3 = await getDictM49iso3();
     const documents = result.rows;
     /**
@@ -86,10 +92,12 @@ async function updateIndexes() {
       const doc = documents.map((item) => {
         return flatLanguageStrings(item, language);
       });
+
       await indexView.addDocuments(doc);
       /**
-      * Avoid bug https://github.com/meilisearch/MeiliSearch/issues/1196
-      */ 
+       * Avoid bug https://github.com/meilisearch/MeiliSearch/issues/1196
+       */
+
       await wait(5000);
     }
     console.log(`Created search index in ${Date.now() - start} ms`);
@@ -129,10 +137,18 @@ async function handlerSearch(req, res) {
 function flatLanguageStrings(item, language) {
   const ml = item.meta_multilingual || {};
   const pd = item.projects_data || [];
+  const gm = item.source_keywords_gemet_multilingual;
+
+  const g = item.source_keywords_gemet;
+  g.length = 0; // id replaced by label
+  for (let k of gm) {
+    if (k.language === language) {
+      g.push(k.label);
+    }
+  }
   /**
    * Extend document with items from meta_multilingual
    */
-
   for (let m in ml) {
     /*
      * e.g. 'view_title', 'source_notes',...
@@ -154,7 +170,6 @@ function flatLanguageStrings(item, language) {
       item[m] = htmlToText(item[m], {wordwrap: false});
     }
   }
-  delete item.meta_multilingual;
 
   /**
    * Set language in project data. Object => string

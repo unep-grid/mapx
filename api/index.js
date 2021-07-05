@@ -29,6 +29,7 @@ const log = require('@mapx/log');
 const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
+const {mwSearchText, mwSearchConcept} = require('@mapx/gemet');
 const {mwGetSearchKey} = require('@mapx/search');
 
 /**
@@ -86,6 +87,8 @@ app.get('/get/source/validate/geom', source.mwGetGeomValidate);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
 app.get('/get/ip', ip.mwGet);
 app.get('/get/search/key', mwGetSearchKey);
+app.get('/get/gemet/search', mwSearchText);
+app.get('/get/gemet/concept', mwSearchConcept);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);

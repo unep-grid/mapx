@@ -2032,7 +2032,27 @@
   {
     "id": "delete_confirm_geojson_modal",
     "en": "Would you like to delete this view ?",
-    "fr": "Souhaitez-vous supprimier cette vue ?"
+    "fr": "Souhaitez-vous supprimer cette vue ?"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fr": "Garder cette vue dans la liste"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "fr": "Cette vue n'est pas liée à ce projet. Souhaitez-vous quand même la conserver temporairement dans la liste ?"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fr": "Conserver"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fr": "Enlever"
   },
   {
     "id": "btn_opt_download",
@@ -4565,6 +4585,31 @@
     "fr": "Cette vue est visible par tous les utilisateurs \n avec des métadonnées non-valides"
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "fr": "Cette vue est temporairement liée à ce projet"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "fr": "Cette vue est temporairement liée à ce projet : elle ne sera pas affichée après le rechargement du projet. Vous pouvez utiliser le bouton de dissociation <i class='fa fa-unlink'></i> pour l'enlever maintenant."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "fr": "Voulez-vous enlever cette vue temporaire de la liste ? Aucune donnée ne sera perdue"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "fr": "Suppression temporaire de la vue"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "fr": "Supprimer / Dissocier cette vue temporaire"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fr": "Vous disposez de droits d'édition pour cette vue"
@@ -5715,6 +5760,11 @@
     "fr": "Notes"
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fr": "Licences"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fr": "Mots clefs"
@@ -6325,11 +6375,6 @@
     "fr": "Êtes-vous certain de vouloir changer de project maintenant ? Les changements non-sauvegardés pourraient être perdus."
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fr": "Changer de projet maintenant, ignorer les changements"
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "fr": "Confirmation de changement de projet"
@@ -6720,6 +6765,11 @@
     "fr": "Mots clés"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fr": "Mots-clés GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "fr": "Mots-clés géographiques"
@@ -6756,8 +6806,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "fr": "Activer"
+    "en": "Display on map",
+    "fr": "Afficher sur la carte"
   },
   {
     "id": "search_view_link",
@@ -6848,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "fr": "Plage temporelle"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "fr": "Vue ajoutée temporairement"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "fr": "Cette vue a été ajoutée temporairement dans la liste des vues. Elle sera enlevée lors du rechargement du projet. Vous pouvez l'enlever en utilisant le bouton dissocier <i class='fa fa-unlink'></i>."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "fr": "Fermer"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "fr": "Ferme et ne me rappelle pas ça"
   }
 ]

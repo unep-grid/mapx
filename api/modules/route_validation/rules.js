@@ -93,6 +93,26 @@ const rules = [
     }
   },
   {
+    key: ['maxByPage'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : 20
+      };
+    }
+  },
+  {
+    key: ['pageNumber'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d >= 1; // see mx_helper_map_view_style.js
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : 1
+      };
+    }
+  },
+  {
     key: ['binsMethod'],
     test: (d) => {
       const methods = ['equal_interval', 'heads_tails', 'jenks', 'quantile'];
@@ -150,6 +170,17 @@ const rules = [
     test: (d) => {
       d = asArray(d);
       isValid = d.reduce((a, x) => a && mx_valid.isViewId(x), true);
+      return {
+        valid: isValid,
+        value: isValid ? d : []
+      };
+    }
+  },
+  {
+    key: ['idConcepts'],
+    test: (d) => {
+      d = asArray(d);
+      isValid = d.reduce((a, x) => a && mx_valid.isStringRange(x, 1, 6), true);
       return {
         valid: isValid,
         value: isValid ? d : []
@@ -262,20 +293,36 @@ const rules = [
   },
   {
     key: [
-      'idSocket',
-      'token',
       'title',
       'titlePrefix',
       'titleFuzzy',
       'subject',
-      'content',
       'subtitle',
       'subjectPrefix',
-      'searchQuery'
+      'searchQuery',
+      'searchText'
     ],
     test: (d) => {
       return {
+        valid: mx_valid.isStringRange(d, 1, 200),
+        value: d
+      };
+    }
+  },
+  {
+    key: ['content'],
+    test: (d) => {
+      return {
         valid: mx_valid.isStringRange(d, 1),
+        value: d
+      };
+    }
+  },
+  {
+    key: ['idSocket', 'token'],
+    test: (d) => {
+      return {
+        valid: mx_valid.isStringRange(d, 1, 600),
         value: d
       };
     }

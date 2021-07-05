@@ -252,6 +252,7 @@ views_built AS (
     p.projects_data,
     m.meta #> '{text, keywords, keys}' AS source_keywords,
     m.meta #> '{text, keywords, keys_m49}' AS source_keywords_m49,
+    m.meta #> '{text, keywords, keys_gemet}' AS source_keywords_gemet,
     NULLIF(
       m.meta #>> '{temporal, range, start_at}',
       '0001-01-01'
@@ -278,6 +279,37 @@ views_built AS (
     INNER JOIN tmp_views_public p ON v.id = p.id_view
 ),
 /**
+* Gemet multilingual
+*/
+views_gemet_rows as (
+  SELECT view_id, jsonb_array_elements_text(source_keywords_gemet::jsonb)::int concept
+  FROM views_built
+),
+views_gemet_lang as (
+  SELECT vg.view_id, vg.concept, mg.label, mg.language  
+  FROM views_gemet_rows vg
+  JOIN  mx_gemet mg USING (concept)
+),
+views_gemet_agg as (
+  SELECT 
+  view_id,
+  jsonb_agg(
+    jsonb_build_object(
+      'concept',concept,
+      'language',language,
+      'label',label
+    )
+  ) source_keywords_gemet_multilingual
+  FROM views_gemet_lang 
+  GROUP BY view_id
+),
+views_built_gemet as (
+  SELECT *
+  -- FROM views_gemet_agg vg JOIN views_built_types vb
+  FROM views_built vg FULL JOIN views_gemet_agg vb
+  USING (view_id)
+),
+/**
  * Convert to useable types
  */
 views_built_types AS (
@@ -290,6 +322,8 @@ views_built_types AS (
     view_type,
     COALESCE(source_keywords, '[]'::jsonb) AS source_keywords,
     COALESCE(source_keywords_m49, '[]'::jsonb) AS source_keywords_m49,
+    COALESCE(source_keywords_gemet, '[]'::jsonb) AS source_keywords_gemet,
+    COALESCE(source_keywords_gemet_multilingual, '[]'::jsonb) AS source_keywords_gemet_multilingual,
     EXTRACT(
       EPOCH
       FROM
@@ -321,8 +355,9 @@ views_built_types AS (
         view_modified_at
     )::bigint AS view_modified_at
   FROM
-    views_built
+    views_built_gemet
 ),
+
 /**
  * Add range epoch start / end
  */

@@ -566,7 +566,7 @@ Class to handle MapX specific method
     * [.get_views_id()](#MapxResolvers+get_views_id) ⇒ <code>Array</code>
     * [.get_views_id_open()](#MapxResolvers+get_views_id_open) ⇒ <code>Array</code>
     * [.get_view_meta_vt_attribute(opt)](#MapxResolvers+get_view_meta_vt_attribute) ⇒ <code>Object</code>
-    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta) ⇒ <code>Object</code>
+    * [.get_view_meta(opt, view)](#MapxResolvers+get_view_meta) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.get_view_table_attribute_config(opt)](#MapxResolvers+get_view_table_attribute_config) ⇒ <code>Object</code>
     * [.get_view_table_attribute_url(opt)](#MapxResolvers+get_view_table_attribute_url) ⇒ <code>String</code>
     * [.get_view_table_attribute(opt)](#MapxResolvers+get_view_table_attribute) ⇒ <code>Object</code>
@@ -959,11 +959,11 @@ Get vector view (vt) metadata of the attribute
 
 <a name="MapxResolvers+get_view_meta"></a>
 
-#### mapxResolvers.get\_view\_meta(opt, view) ⇒ <code>Object</code>
+#### mapxResolvers.get\_view\_meta(opt, view) ⇒ <code>Promise.&lt;Object&gt;</code>
 Get view metadata
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
-**Returns**: <code>Object</code> - view metadata  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - view metadata  
 
 | Param | Type | Description |
 | --- | --- | --- |

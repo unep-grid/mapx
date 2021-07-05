@@ -2035,6 +2035,26 @@
     "fa": "آیا می خواهید این نمای را حذف کنید؟ "
   },
   {
+    "id": "confirm_keep_view_temp_modal_title",
+    "en": "Keep this view in the list",
+    "fa": "این نمای را در لیست نگه دارید"
+  },
+  {
+    "id": "confirm_keep_view_temp_modal",
+    "en": "This view is not linked to this project. Would you like to keep it temporarily in the list anyway?",
+    "fa": "این دیدگاه به این پروژه پیوند ندارد. آیا به هر حال دوست دارید آن را به طور موقت در لیست نگه دارید؟"
+  },
+  {
+    "id": "keep",
+    "en": "Keep",
+    "fa": "نگاه داشتن"
+  },
+  {
+    "id": "remove",
+    "en": "Remove",
+    "fa": "برداشتن"
+  },
+  {
     "id": "btn_opt_download",
     "en": "Download the data",
     "fa": "دانلود معلومات"
@@ -4565,6 +4585,31 @@
     "fa": "این نما به صورت عمومی در دسترس است\n با فراداده ناقص "
   },
   {
+    "id": "view_badge_temp_shared",
+    "en": "This view is temporarily linked to this project",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است"
+  },
+  {
+    "id": "view_badge_temp_shared_desc",
+    "en": "This view is temporarily linked to this project : it will not be displayed after the project reloads. You can use the unlink button  <i class='fa fa-unlink'></i> to remove it now.",
+    "fa": "این نما به طور موقت با این پروژه مرتبط است: پس از بارگیری مجدد پروژه نمایش داده نمی شود. می توانید از دکمه لغو پیوند استفاده کنید<i class=\"fa fa-unlink\"></i> برای حذف آن در حال حاضر."
+  },
+  {
+    "id": "remove_confirm_temp_modal",
+    "en": "Do you want to remove this temporary view from the list ? No data will be lost",
+    "fa": "آیا می خواهید این نمای موقت را از لیست حذف کنید؟ هیچ داده ای از بین نمی رود"
+  },
+  {
+    "id": "remove_confirm_temp_modal_title",
+    "en": "Temporary view removal",
+    "fa": "حذف موقت نمایش"
+  },
+  {
+    "id": "btn_opt_remove_linked",
+    "en": "Remove / Unlink this temporary view",
+    "fa": "حذف / لغو پیوند این نمای موقت"
+  },
+  {
     "id": "view_badge_editable",
     "en": "You have editor rights for this view",
     "fa": "شما برای این نمایش حق ویرایشگر دارید "
@@ -5715,6 +5760,11 @@
     "fa": "یادداشت "
   },
   {
+    "id": "meta_source_licenses",
+    "en": "Licenses",
+    "fa": "مجوزها"
+  },
+  {
     "id": "meta_source_keywords",
     "en": "Keywords",
     "fa": "کلید واژه ها "
@@ -6325,11 +6375,6 @@
     "fa": "آیا مطمئن هستید که اکنون پروژه را تغییر می دهید؟ تغییرات ذخیره نشده ممکن است از بین بروند. "
   },
   {
-    "id": "modal_check_confirm_project_change_btn",
-    "en": "Change project now, discard changes.",
-    "fa": "اکنون پروژه را تغییر دهید ، تغییرات را کنار بگذارید. "
-  },
-  {
     "id": "modal_check_confirm_project_change_title",
     "en": "Change project confirmation",
     "fa": "تأیید پروژه را تغییر دهید "
@@ -6720,6 +6765,11 @@
     "fa": "کلید واژه ها"
   },
   {
+    "id": "search_source_keywords_gemet",
+    "en": "Keywords GEMET",
+    "fa": "کلمات کلیدی GEMET"
+  },
+  {
     "id": "search_source_keywords_m49",
     "en": "Geographic keywords",
     "fa": "کلمات کلیدی جغرافیایی"
@@ -6756,8 +6806,8 @@
   },
   {
     "id": "search_view_toggle",
-    "en": "Enable",
-    "fa": "فعال کردن"
+    "en": "Display on map",
+    "fa": "نمایش بر روی نقشه"
   },
   {
     "id": "search_view_link",
@@ -6848,5 +6898,25 @@
     "id": "search_year_composite_range",
     "en": "Temporal range",
     "fa": "محدوده زمانی"
+  },
+  {
+    "id": "search_view_added_temporarily_title",
+    "en": "View added temporarily",
+    "fa": "نمایش به طور موقت اضافه شد"
+  },
+  {
+    "id": "search_view_added_temporarily",
+    "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
+    "fa": "این نما به طور موقت در لیست بازدیدها اضافه شده است. با بارگیری مجدد پروژه ، حذف خواهد شد. با استفاده از دکمه لغو پیوند می توانید آن را حذف کنید<i class=\"fa fa-unlink\"></i> ."
+  },
+  {
+    "id": "search_view_added_temporarily_ok",
+    "en": "Close",
+    "fa": "نزدیک"
+  },
+  {
+    "id": "search_view_added_temporarily_ok_no_more",
+    "en": "Close and don't remind me this",
+    "fa": "ببند و این را به من یادآوری نکن"
   }
 ]

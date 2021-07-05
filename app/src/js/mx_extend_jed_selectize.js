@@ -36,8 +36,8 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
          * {value:<string>,definition:<string>,label:<string>}
          */
         if (value.length > 0) {
-          for (let v of value) {
-            const c = await getGemetConcept(v);
+          const concepts = await getGemetConcept(value);
+          for (let c of concepts) {
             selectize.addOption(c);
           }
           editor._init_value = true;
@@ -69,25 +69,40 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
         editor.container.appendChild(editor.error_holder);
 
         window.jQuery(editor.input).selectize({
-          valueField: 'value',
+          valueField: 'concept',
           labelField: 'label',
           searchField: ['label', 'definition'],
+          //sortField : 'score', //do not work :(
           options: [],
+          //create: false,
           multiple: true,
-          maxItems: 30,
+          maxItems: 20,
           render: {
             option: function(item, escape) {
               return el(
                 'div',
                 {
+                  class: ['hint', 'hint--top-right'],
                   style: {
-                    padding: '10px'
-                  }
+                    padding: '10px',
+                    display: 'flex'
+                  },
+                  'aria-label': escape(item.definition)
                 },
-                el('h3', escape(item.label)),
-                el('p', escape(item.definition))
+                el('span', escape(item.label))
               );
             }
+          },
+          score: function() {
+            /**
+             * For sifter score on the 'github repos' example, check this:
+             * https://github.com/selectize/selectize.js/blob/efcd689fc1590bc085aee728bcda71373f6bd0ff/examples/github.html#L129
+             * Here, we use score from similarity, trgm
+             */
+
+            return function(item) {
+              return item.score;
+            };
           },
           load: async function(query, callback) {
             /**
@@ -95,12 +110,13 @@ import {getGemetConcept, searchGemet} from './gemet_util/index.js';
              * format results for the callback
              */
             if (!query.length) return callback();
+            this.clearOptions();
             try {
-              const value = await searchGemet(query);
-              return callback(value);
+              const data = await searchGemet(query);
+              return callback(data.hits);
             } catch (e) {
-              callback();
               console.warn(e);
+              return callback();
             }
           }
         });
