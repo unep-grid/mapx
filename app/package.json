@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.8.32-alpha",
+  "version": "1.8.33-beta",
   "description": "",
   "main": "main.js",
   "devDependencies": {

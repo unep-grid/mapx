@@ -1,4 +1,9 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.33-beta' target='_blank'>1.8.33-beta</a>
+  - APP
+    - Search tool :
+      - Button "Clear search" has now an "undo" icon, and triggers reset year filters too. It's disabled if no text, year or facet filters are set.
+      - Red flag/badge is now visible if year filters are set, too.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.32-alpha' target='_blank'>1.8.32-alpha</a>
   - APP
     - Added basic user preference storage ( not yet available in UI )
