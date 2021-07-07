@@ -1,4 +1,8 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.34-beta' target='_blank'>1.8.34-beta</a>
+  - APP
+    - Integration of new UN layer for countries borders, countries names, and other official UN sub-national borders when available; Tweaked style : added an attribute 'group_size' to deterministically set country label style according to country size (countries classified on a scale from 0 to 100, based on geographic area)
+    - To facilitate map style development: Added a minimal style editor mapbox-gl-js (json) to quickly test the style tweaks. Available using `mx.helpers.showDevStyleEditor`
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.33-beta' target='_blank'>1.8.33-beta</a>
   - APP
     - Search tool :
