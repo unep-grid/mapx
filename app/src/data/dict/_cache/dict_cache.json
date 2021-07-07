@@ -10855,17 +10855,17 @@
     "de": "Karte: Souveränes Basislimit "
   },
   {
-    "id": "mx_map_boundary_osm_subnational",
+    "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "fr": "Carte : Frontières sous-nationales",
     "es": "Mapa: Fronteras subnacionales",
-    "ru": "Карта: субнациональные границы ",
+    "ru": "Карта: субнациональные границы",
     "zh": "地图：国家以下边界",
-    "ar": "الخريطة: الحدود دون الوطنية ",
-    "fa": "نقشه: مرزهای فرعی ",
-    "ps": "نقشه: سیمه ییز سرحدونه ",
-    "bn": "মানচিত্র: আঞ্চলিক সীমানা ",
-    "de": "Karte: Subnationale Grenzen "
+    "ar": "الخريطة: الحدود دون الوطنية",
+    "fa": "نقشه: مرزهای فرعی",
+    "ps": "نقشه: سیمه ییز سرحدونه",
+    "bn": "মানচিত্র: আঞ্চলিক সীমানা",
+    "de": "Karte: Subnationale Grenzen"
   },
   {
     "id": "mx_map_text_place",
@@ -11949,7 +11949,7 @@
   {
     "id": "remove_confirm_temp_modal",
     "en": "Do you want to remove this temporary view from the list ? No data will be lost",
-    "fr": "Voulez-vous supprimer cette vue temporaire de la liste ? Aucune donnée ne sera perdue",
+    "fr": "Voulez-vous enlever cette vue temporaire de la liste ? Aucune donnée ne sera perdue",
     "es": "¿Quieres eliminar esta vista temporal de la lista? No se perderán los datos",
     "ru": "Вы хотите удалить это временное представление из списка? Данные не будут потеряны",
     "zh": "您想从列表中删除这个临时视图吗？不会丢失任何数据",
@@ -17955,7 +17955,7 @@
   {
     "id": "search_view_added_temporarily",
     "en": "This view has been added temporarily in the views list. It will be removed when the project reloads. You can remove it using the unlink button <i class='fa fa-unlink'></i>.",
-    "fr": "Cette vue a été ajoutée temporairement dans la liste des vues. Elle sera enlvée lors du rechargement du projet. Vous pouvez l'enlever en utilisant le bouton dissocier <i class='fa fa-unlink'></i>.",
+    "fr": "Cette vue a été ajoutée temporairement dans la liste des vues. Elle sera enlevée lors du rechargement du projet. Vous pouvez l'enlever en utilisant le bouton dissocier <i class='fa fa-unlink'></i>.",
     "es": "Esta vista se ha agregado temporalmente a la lista de vistas. Se eliminará cuando se vuelva a cargar el proyecto. Puedes eliminarlo usando el botón desvincular<i class=\"fa fa-unlink\"></i> .",
     "ru": "Это представление временно добавлено в список представлений. Он будет удален при перезагрузке проекта. Вы можете удалить его, нажав кнопку \"Отменить связь\".<i class=\"fa fa-unlink\"></i> .",
     "zh": "此视图已临时添加到视图列表中。当项目重新加载时，它将被删除。您可以使用取消链接按钮将其删除<i class=\"fa fa-unlink\"></i>.",

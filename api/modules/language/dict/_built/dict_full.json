@@ -10855,17 +10855,17 @@
     "de": "Karte: Souveränes Basislimit "
   },
   {
-    "id": "mx_map_boundary_osm_subnational",
+    "id": "mx_map_boundary_un_6",
     "en": "Map: Subnational boundaries",
     "fr": "Carte : Frontières sous-nationales",
     "es": "Mapa: Fronteras subnacionales",
-    "ru": "Карта: субнациональные границы ",
+    "ru": "Карта: субнациональные границы",
     "zh": "地图：国家以下边界",
-    "ar": "الخريطة: الحدود دون الوطنية ",
-    "fa": "نقشه: مرزهای فرعی ",
-    "ps": "نقشه: سیمه ییز سرحدونه ",
-    "bn": "মানচিত্র: আঞ্চলিক সীমানা ",
-    "de": "Karte: Subnationale Grenzen "
+    "ar": "الخريطة: الحدود دون الوطنية",
+    "fa": "نقشه: مرزهای فرعی",
+    "ps": "نقشه: سیمه ییز سرحدونه",
+    "bn": "মানচিত্র: আঞ্চলিক সীমানা",
+    "de": "Karte: Subnationale Grenzen"
   },
   {
     "id": "mx_map_text_place",

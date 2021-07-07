@@ -235,12 +235,12 @@ export function layer_resolver(c) {
       }
     },
     {
-      id: ['boundary_osm_subnational'],
+      id: ['boundary_un_6'],
       layout: {
-        visibility: c.mx_map_boundary_osm_subnational.visibility
+        visibility: c.mx_map_boundary_un_6.visibility
       },
       paint: {
-        'line-color': c.mx_map_boundary_osm_subnational.color
+        'line-color': c.mx_map_boundary_un_6.color
       }
     },
     {

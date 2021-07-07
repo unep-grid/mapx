@@ -221,7 +221,7 @@ export function modal(o) {
           class: ['mx-modal-body', 'mx-scroll-styled']
         },
         (elContent = el('div', {
-          style: styleContent,
+          style: styleContent || {position:'relative'},
           class: ['mx-modal-content']
         }))
       )),

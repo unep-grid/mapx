@@ -826,6 +826,7 @@ export async function initMapx(o) {
     minZoom: mx.settings.map.minZoom,
     preserveDrawingBuffer: false,
     attributionControl: false,
+    crossSourceCollisions: true,
     zoom: mp.z || mp.zoom || 0,
     bearing: mp.bearing || 0,
     pitch: mp.pitch || 0,
