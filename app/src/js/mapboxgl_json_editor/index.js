@@ -55,7 +55,7 @@ export async function showDevStyleEditor() {
 
   function update() {
     const newStyle = s.getValue();
-    map.setStyle(JSON.parse(newStyle));
+    map.setStyle(JSON.parse(newStyle),{diff:false});
   }
   function clean(){
     map.setStyle(JSON.parse(style));
