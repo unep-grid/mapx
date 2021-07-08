@@ -58,7 +58,7 @@ export async function showDevStyleEditor() {
     map.setStyle(JSON.parse(newStyle),{diff:false});
   }
   function clean(){
-    map.setStyle(JSON.parse(style));
+    map.setStyle(JSON.parse(style),{diff:false});
     editor.destroy();
     delete window.elDevStyleEditor;
   }
