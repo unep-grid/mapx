@@ -6918,5 +6918,10 @@
     "id": "search_view_added_temporarily_ok_no_more",
     "en": "Close and don't remind me this",
     "zh": "关闭，不要提醒我这个"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "zh": "获取搜索 API 密钥和配置"
   }
 ]

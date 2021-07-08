@@ -575,6 +575,17 @@ export function initListenersApp() {
   });
 
   mx.listeners.addListener({
+    target: document.getElementById('btnShowSearchApiConfig'),
+    type: 'click',
+    callback: ()=>{
+      if(mx.search){
+        return mx.search.showApiConfig();
+      }
+    },
+    group: 'mapx_base'
+  });
+
+  mx.listeners.addListener({
     target: document.getElementById('btnResetPanelSize'),
     type: 'click',
     callback: () => {

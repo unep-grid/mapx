@@ -5534,5 +5534,9 @@
   {
     "id": "search_view_added_temporarily_ok_no_more",
     "en": "Close and don't remind me this"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration"
   }
 ]

@@ -17990,5 +17990,18 @@
     "ps": "نږدې یې کړئ او ما ته دا یاد مه کوئ",
     "bn": "বন্ধ করুন এবং আমাকে এটি মনে করিয়ে দিবেন না",
     "de": "Schließe und erinnere mich nicht daran"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "fr": "Obtenir la clé et la configuration de l'API de recherche",
+    "es": "Obtenga la clave y la configuración de la API de búsqueda",
+    "ru": "Получить ключ и конфигурацию API поиска",
+    "zh": "获取搜索 API 密钥和配置",
+    "ar": "الحصول على مفتاح البحث والتكوين API",
+    "fa": "کلید و پیکربندی API جستجو را دریافت کنید",
+    "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ",
+    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান",
+    "de": "Such-API-Schlüssel und -Konfiguration abrufen"
   }
 ]

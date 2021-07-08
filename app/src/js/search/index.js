@@ -1,5 +1,5 @@
 import {ButtonCircle} from './../icon_flash';
-import {modalConfirm} from './../mx_helper_modal.js';
+import {modal, modalConfirm} from './../mx_helper_modal.js';
 import {storyRead} from './../mx_helper_story.js';
 import {viewToMetaModal} from './../mx_helper_map_view_metadata.js';
 import {getDictItem} from './../mx_helper_language.js';
@@ -84,6 +84,41 @@ class Search extends EventSimple {
 
   get isReady() {
     return !!this._init;
+  }
+
+  showApiConfig() {
+    const s = this;
+    if (s._elModalShowApiConfig) {
+      return;
+    }
+    const url = `${s.opt('protocol')}${s.opt('host')}:${s.opt('port')}`;
+    const elConfig = el('div', [
+      el('label', 'Search engine API key'),
+      el('pre', s.opt('key')),
+      el('label', 'Search engine host'),
+      el('pre', url),
+      el('label', 'Example'),
+      el(
+        'details',
+        {open: true},
+        el('summary', 'CURL'),
+        el(
+          'pre',
+          `curl '${url}/indexes/views_en/search' \\\n` +
+            `-H 'X-Meili-API-Key: ${s.opt('key')}' \\\n` +
+            `--data-raw '{"q":"water"}' \\\n` +
+            `--compressed;\n`
+        )
+      )
+    ]);
+    s._elModalShowApiConfig = modal({
+      title: 'Search engine API',
+      content: elConfig,
+      addBackground: true,
+      onClose: () => {
+        delete s._elModalShowApiConfig;
+      }
+    });
   }
 
   async setLanguage(opt) {

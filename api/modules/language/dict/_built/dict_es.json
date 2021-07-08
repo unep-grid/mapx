@@ -6918,5 +6918,10 @@
     "id": "search_view_added_temporarily_ok_no_more",
     "en": "Close and don't remind me this",
     "es": "Cierra y no me recuerdes esto"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "es": "Obtenga la clave y la configuración de la API de búsqueda"
   }
 ]

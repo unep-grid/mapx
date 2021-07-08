@@ -6918,5 +6918,10 @@
     "id": "search_view_added_temporarily_ok_no_more",
     "en": "Close and don't remind me this",
     "bn": "বন্ধ করুন এবং আমাকে এটি মনে করিয়ে দিবেন না"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান"
   }
 ]

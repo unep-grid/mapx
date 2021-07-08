@@ -6918,5 +6918,10 @@
     "id": "search_view_added_temporarily_ok_no_more",
     "en": "Close and don't remind me this",
     "fa": "ببند و این را به من یادآوری نکن"
+  },
+  {
+    "id": "search_show_api_config",
+    "en": "Get search API key and configuration",
+    "fa": "کلید و پیکربندی API جستجو را دریافت کنید"
   }
 ]
