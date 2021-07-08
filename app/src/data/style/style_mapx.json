@@ -35,7 +35,7 @@
               "iso3code": "string",
               "iso3code_admin": "string",
               "stscod": "number",
-              "group_size":"number",
+              "group_size": "number",
               "name_ar": "string",
               "name_en": "string",
               "name_es": "string",
@@ -197,15 +197,16 @@
         "line-join": "bevel",
         "visibility": "visible"
       },
+      "minzoom": 4,
       "paint": {
         "line-color": "rgba(121,121,121,0.6)",
-        "line-width": ["interpolate", ["linear"], ["zoom"], 0, 0.5, 22, 1],
+        "line-width": ["interpolate", ["linear"], ["zoom"], 4, 0.5, 22, 1],
         "line-opacity": [
           "interpolate",
           ["exponential", 0.8],
           ["zoom"],
-          0,
-          0,
+          4,
+          0.7,
           22,
           1
         ]
