@@ -1,4 +1,12 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.35-beta' target='_blank'>1.8.35-beta</a>
+  - APP
+    -  Search tool :
+      - Fixed issue with date input not linked to the filter 'badge'
+      - Improved "year buttons" in result list : it should toggle between default value and selected value
+    - Base admin sub national borders style : do not show before zoom 4
+    - Dev style editor : do not try to diff at reset
+    - Added modal panel to get search API key and configuration -> tools tab
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.34-beta' target='_blank'>1.8.34-beta</a>
   - APP
     - Integration of new UN layer for countries borders, countries names, and other official UN sub-national borders when available; Tweaked style : added an attribute 'group_size' to deterministically set country label style according to country size (countries classified on a scale from 0 to 100, based on geographic area)
