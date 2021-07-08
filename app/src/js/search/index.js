@@ -656,7 +656,6 @@ class Search extends EventSimple {
   /**
    * Reset filters
    */
-
   async reset() {
     const s = this;
     if (!s._built) {
@@ -683,14 +682,16 @@ class Search extends EventSimple {
         case 'search_year_set_min':
           {
             const values = s._year_slider.get();
-            values[0] = ds.year;
+            const change = parseInt(values[0]) !== parseInt(ds.year);
+            values[0] = change ? ds.year : s.opt('dates').year_min;
             s._year_slider.set(values);
           }
           break;
         case 'search_year_set_max':
           {
             const values = s._year_slider.get();
-            values[1] = ds.year;
+            const change = parseInt(values[1]) !== parseInt(ds.year);
+            values[1] = change  ? ds.year : s.opt('dates').year_max;
             s._year_slider.set(values);
           }
           break;
@@ -1119,12 +1120,21 @@ class Search extends EventSimple {
     const ff = s.getFiltersFacets();
     return !!ff && !!ff.length;
   }
-  hasFilterDate() {
+  hasFilterDateSlider() {
     const s = this;
     const yMin = s.opt('dates').year_min;
     const yMax = s.opt('dates').year_max;
     const yrs = s._year_slider.get().map((v) => parseInt(v * 1));
     return !yrs.includes(yMin) || !yrs.includes(yMax);
+  }
+  hasFilterDateInput() {
+    const s = this;
+    const dates = s._flatpickr_filters;
+    let out = false;
+    for (let date of dates) {
+      out = out || !!date.input.value;
+    }
+    return out;
   }
   hasFilterText() {
     const s = this;
@@ -1132,7 +1142,11 @@ class Search extends EventSimple {
   }
   updateFlagAuto() {
     const s = this;
-    const hasFilter = s.hasFilter() || s.hasFilterDate();
+    const hasFilter =
+      s.hasFilter() ||
+      s.hasFilterDateInput() ||
+      s.hasFilterDateSlider() ||
+      s.hasFilterDateInput();
     const hasFilterText = s.hasFilterText();
 
     if (hasFilter) {
