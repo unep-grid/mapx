@@ -108,7 +108,8 @@
 }
 
 .mx-modal-body {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
 }
 
