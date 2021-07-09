@@ -1,4 +1,20 @@
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.36-beta' target='_blank'>1.8.36-beta</a>
+ - APP/API
+  - Should solve issue with geometry validation tool not updated as a reactive select input not triggered
+  - Quick solve issue with public list of view used in story map editor : bad commit at some point. TODO: use search api for instead
+  - Set max upload size at 200MiB
+  - Added new simple type conversions -> PG to js. Bigint were handled as string, which produced a bug
+  - Fix wrong use of mglRemoveView -> app crashed when removing a view from 'manage external views'
+  - Promoted use of promise in download source handler 
+  - Fixed an issue with empty files being generated (txt.info and metadata.json)
+  - Solved a bug where clicked features were not filtered properly, therefore, breaking the highlighter tool
+  - Set max line for style dev editor : Infinity was not appropritate for large styles (performance drop)
+  - Use chroma -> darken to set feature secondary color (e.g. polygon borders)
+  - Lower opacity for map popup if mouse not over 
+  - Modal body : presence of a unnecessary scrollbar : overflow auto only on y 
+  - Fixed style issue with drop down filter menu in vector attribute table: bad zIndex of handsontable, as it's not relative to table's container 
+  - Attribute table : issue with mouse hover patched this to solve highlight issue
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.35-beta' target='_blank'>1.8.35-beta</a>
   - APP
     -  Search tool :
