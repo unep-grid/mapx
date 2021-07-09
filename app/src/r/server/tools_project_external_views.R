@@ -69,7 +69,6 @@ observeEvent(input$btnSaveProjectExternalViews,{
     #
     for( v in viewsExternal ){
       toRemove <- !isTRUE(v %in% viewsSelected)
-
       if(toRemove){
         mxDbProjectSetViewExternal(
           idProject = project,
@@ -77,11 +76,7 @@ observeEvent(input$btnSaveProjectExternalViews,{
           action ="remove")
         reactData$triggerExternalViews <- runif(1)
         viewsExternal <- viewsExternal[!viewsExternal %in% v]
-
-        mglRemoveView(
-          id = .get(config,c("map","id")), 
-          idView = v
-          )
+        mglRemoveView(v)
       }
     }
 
