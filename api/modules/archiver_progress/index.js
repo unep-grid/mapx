@@ -28,11 +28,16 @@ function archiverProgress(options) {
       });
 
       /**
+       * pipe archive data to the file
+       */
+      archive.pipe(zipFile);
+
+      /**
        *  When close, resolve for all archive data to be written
        * 'close' event is fired only when a file descriptor is involved
        */
       zipFile.on('close', () => {
-        resolve(true);
+        resolve(true)
       });
 
       /**
@@ -44,6 +49,7 @@ function archiverProgress(options) {
           if (options.onProgress) {
             options.onProgress(100);
           }
+        resolve(true);
         } catch (e) {
           reject(e);
         }
@@ -80,16 +86,12 @@ function archiverProgress(options) {
       archive.on('error', reject);
 
       /**
-       * pipe archive data to the file
-       */
-      archive.pipe(zipFile);
-
-      /**
        * Add text files
+       * TODO: This does not work... -> use fsPromise::writeFile instead !
        */
       if (options.textFiles) {
         options.textFiles.forEach((t) => {
-          archive.append(t.text, {name: t.name});
+          archive.append(Buffer.from(t.text), {name: t.name});
         });
       }
 
@@ -108,8 +110,10 @@ function archiverProgress(options) {
 
       /**
        * We're done, let's go
+       * NOTE: this return a promise.. Why ? The whole thing is CB based, 
+       * but it return a promise here...
        */
-      archive.finalize();
+       archive.finalize();
     } catch (e) {
       reject(e);
     }

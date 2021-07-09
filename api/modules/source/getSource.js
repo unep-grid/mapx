@@ -1,6 +1,7 @@
 //var ogr2ogr = require("ogr2ogr");
 //const spawn = require('child_process').spawn;
-const fs = require('fs');
+//const fs = require('fs');
+const {mkdir, writeFile, access} = require('fs/promises');
 const helpers = require('@mapx/helpers');
 const settings = require('@root/settings');
 const archiverProgress = require('@mapx/archiver_progress');
@@ -182,9 +183,12 @@ async function extractFromPostgres(config, res) {
   /**
    * Create folder
    */
-  if (!fs.existsSync(folderPath)) {
-    fs.mkdirSync(folderPath);
+  try {
+    await access(folderPath);
+  } catch (e) {
+    await mkdir(folderPath);
   }
+
   await res.notifyInfoMessage('job_state', {
     msg: t(language, 'get_source_extraction_wait', {
       format: format
@@ -235,6 +239,15 @@ async function extractFromPostgres(config, res) {
   }
 
   /**
+   * Add files
+   */
+  const txtTimeStamp = t(language, 'get_source_file_timestamp', {
+    date: `${Date()}`
+  });
+  await writeFile(`${folderPath}/info.txt`, txtTimeStamp);
+  await writeFile(`${folderPath}/metadata.json`, JSON.stringify(metadata));
+
+  /**
    * Archive data
    */
   try {
@@ -244,18 +257,6 @@ async function extractFromPostgres(config, res) {
         {
           path: folderPath,
           name: title
-        }
-      ],
-      textFiles: [
-        {
-          text: t(language, 'get_source_file_timestamp', {
-            date: `${Date()}`
-          }),
-          name: 'info.txt'
-        },
-        {
-          text: JSON.stringify(metadata),
-          name: 'metadata'
         }
       ],
       onProgress: (percent) => {
@@ -304,7 +305,7 @@ async function extractFromPostgres(config, res) {
   });
 
   await res.notifyBrowser('job_state', {
-    title : t(language, 'get_source_conversion_done_browser_title'),
+    title: t(language, 'get_source_conversion_done_browser_title'),
     msg: t(language, 'get_source_conversion_done_browser', {
       title: title
     })
