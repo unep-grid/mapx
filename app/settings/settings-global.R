@@ -90,7 +90,7 @@ config[["api"]] <- list(
   host = "localhost",
   host_public = "locahost",
   protocol = "http:",
-  upload_size_max = 100 * 1024^2,#100MiB
+  upload_size_max = 200 * 1024^2,#100MiB
   routes = list(
     getSearchKey = "/get/search/key",
     getIpInfo = "/get/ip",

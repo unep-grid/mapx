@@ -75,6 +75,7 @@ async function getSourceSummary(opt) {
   const columns = await db.getColumnsNames(opt.idSource);
   const timestamp = await db.getSourceLastTimestamp(opt.idSource);
   const tableTypes = await db.getColumnsTypesSimple(opt.idSource, columns);
+  
   const attrType = opt.idAttr
     ? tableTypes.filter((r) => r.id === opt.idAttr)[0].value
     : null;
