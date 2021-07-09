@@ -76,25 +76,34 @@ observeEvent(input$btnValidateSourceGeom,{
         textCloseButton = d("btn_close",language)
         )
 
+      reactData$triggerValidationValidateGeom <- runif(1)
     }
 })
 })
 
+
+observe({
+  reactData$triggerValidationValidateGeom <- input$selectSourceValidateGeom
+})
+
+
 #
 # Disable btn edit if not allowed
 #
-observeEvent(input$selectSourceValidateGeom,{
+observeEvent(reactData$triggerValidationValidateGeom,{
 
   language <- reactData$language
   layer <- input$selectSourceValidateGeom
   layers <- reactListEditSources()
-  isAllowed <- layer %in% layers
   disableValidate <- TRUE
   disableCorrect <- TRUE
 
-  if(isAllowed){
-    disableValidate <- FALSE
-    disableCorrect <- !all(mxDbGetLayerGeomTypes(layer)$geom_type %in% c('polygon'))
+  if(!noDataCheck(layer) && !noDataCheck(layers)){
+    isAllowed <- layer %in% layers
+    if(isAllowed){
+      disableValidate <- FALSE
+      disableCorrect <- !all(mxDbGetLayerGeomTypes(layer)$geom_type %in% c('polygon'))
+    }
   }
   mxToggleButton(
     id="btnValidateGeom",
