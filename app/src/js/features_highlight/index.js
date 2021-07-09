@@ -11,7 +11,7 @@ const def = {
   animation_on: 'line-width', // only option now
   highlight_offset: 2, // greater that 2 is too much for lines
   highlight_blur: 0.2,
-  highlight_width: 2,
+  highlight_width: 5,
   highlight_color: '#F0F',
   highlight_opacity: 0.9,
   highlight_feature_opacity: 0.5,
@@ -110,8 +110,8 @@ class Highlighter {
       if (!f.id) {
         return;
       }
-      hl.enableState(f);
       hl.addHighlightLayer(f);
+      hl.enableState(f);
     });
   }
 
@@ -136,7 +136,7 @@ class Highlighter {
    */
   enableState(f) {
     const hl = this;
-    hl.updateLayerStyle(f);
+    //hl.updateLayerStyle(f);
     hl.map.setFeatureState(f, {
       highlight: true
     });
@@ -312,7 +312,13 @@ class Highlighter {
       off: 0
     });
 
-    const filter = f.id ? ['==', ['id'], f.id] : [];
+    /**
+    * This highlight layer display all features : we have to filter only the current feature. 
+    * Should have worked with ['id'] as https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/#id
+    * workaround -> using properties -> gid. Works with vector/geojson point, line, polygons
+    */
+    const gid = f?.properties?.gid;
+    const filter = gid !== null ? ['==',['get','gid'],f.id] : f.id !== null ? ['==', ['id'], f.id] : []; 
 
     switch (type) {
       case 'fill':
