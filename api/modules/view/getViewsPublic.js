@@ -38,7 +38,7 @@ async function getViewsPublicHandler(req, res) {
  * @param {Object} opt options
  * @param {String} opt.idUser Id of the user
  * @param {String} opt.idProjectExclude Id of a project to exclude
- * @return {Array} List of views
+ * @return {Promise<Array>} List of views
  */
 async function getViewsPublic(opt) {
   opt = opt || {};
