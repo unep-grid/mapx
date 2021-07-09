@@ -19,7 +19,8 @@ export async function showDevStyleEditor() {
         top: 0,
         right: 0,
         bottom: 0,
-        left: 0
+        left: 0,
+        height: '60%'
       }
     },
     style
@@ -44,7 +45,7 @@ export async function showDevStyleEditor() {
   const editor = ace.edit(window.elDevStyleEditor);
   editor.session.setMode('ace/mode/json');
   editor.setOptions({
-    maxLines: Infinity
+    maxLines: 200
   });
   const s = editor.getSession();
   const v = s.getValue();
