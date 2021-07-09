@@ -14,7 +14,7 @@ import {ControlsPanel} from './panel_controls';
 import {MapxDraw} from './draw';
 import {NotifCenter} from './notif_center/';
 import {cleanDiacritic} from './string_util/';
-
+import chroma from 'chroma-js';
 /**
  * TODO: convert this in a MapxMap Class
  */
@@ -577,8 +577,8 @@ export function initListenersApp() {
   mx.listeners.addListener({
     target: document.getElementById('btnShowSearchApiConfig'),
     type: 'click',
-    callback: ()=>{
-      if(mx.search){
+    callback: () => {
+      if (mx.search) {
         return mx.search.showApiConfig();
       }
     },
@@ -927,7 +927,7 @@ export async function initMapx(o) {
       });
 
       mx.events.on({
-        type: ['view_removed', 'view_added','view_deleted'],
+        type: ['view_removed', 'view_added', 'view_deleted'],
         idGroup: 'search_index',
         callback: () => {
           mx.search._update_toggles_icons();
@@ -2151,8 +2151,13 @@ export function makeSimpleLayer(o) {
   /**
    * Extract hex
    */
-  colA = h.colorToRgba(colA, opt.opacity);
-  colB = h.colorToRgba(colB, opt.opacity + 0.2);
+  colA = chroma(colA)
+    .alpha(opt.opacity)
+    .css();
+  colB = chroma(colB)
+    .alpha(opt.opacity)
+    .darken(1)
+    .css();
 
   layer = {
     symbol: {
