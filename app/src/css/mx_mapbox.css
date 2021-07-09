@@ -4,9 +4,14 @@
 .mx .mapboxgl-popup-content {
   padding-top: 25px;
 }
+.mx .mapboxgl-popup:hover {
+  opacity: 1;
+}
 .mx .mapboxgl-popup {
   max-width: 440px !important;
   z-index: 2000;
+  opacity: 0.4;
+  transition: opacity ease-in-out 400ms;
   /**
   * see .mx-popup-container
   */
@@ -33,5 +38,3 @@
 .mx .mapboxgl-popup-anchor-right .mapboxgl-popup-tip {
   border-left-color: var(--mx_ui_text);
 }
-
-
