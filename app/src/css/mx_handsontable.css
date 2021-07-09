@@ -61,7 +61,6 @@
 .mx .ht_master table td.htCustomMenuRenderer ,
 .mx .ht_master table td.htCustomMenuRenderer .htUISelectCaption  {
   background-color: var(--mx_ui_background);
-  background-color: var(--mx_ui_background);
   color : var(--mx_ui_text);
 }
 .mx .ht_master *,
@@ -91,9 +90,12 @@
 /*Cell*/
 /*Background*/
 
-/* Selected cell */
+/* Selected cell (and drop down menu cells */
 .mx .ht_master tr > td.current {
   background-color: var(--mx_ui_text);
+  color : var(--mx_ui_background);
+}
+.mx .ht_master tr > td.current > div {
   color : var(--mx_ui_background);
 }
 
@@ -106,3 +108,11 @@
 .mx .handsontable td.area {
   background-color: #F00;
 }
+.mx .htDropdownMenu:not(.htGhostTable) {
+    z-index: 2000;
+}
+.mx .htFiltersConditionsMenu:not(.htGhostTable) {
+    z-index: 2010;
+}
+
+
