@@ -7,6 +7,7 @@ import {EventSimple} from './../listener_store';
 import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {prefGet, prefSet} from './../user_pref';
+import {isDate} from './../is_test/index.js';
 
 import {
   zoomToViewId,
@@ -543,19 +544,16 @@ class Search extends EventSimple {
         allowInput: true,
         onChange: async (e) => {
           let strFilter = '';
-          if (item.range) {
-            if (e[0]) {
-              strFilter = `${item.attr} >= ${(e[0] * 1) / 1000}`;
-            }
-            if (e[1]) {
-              strFilter = `${strFilter} AND ${item.attr}<=${(e[1] * 1) / 1000}`;
-            }
-          } else {
+          const isDateA = isDate(e[0]);
+          const isDateB = isDate(e[1]);
+          if (item.range && isDateA && isDateB) {
+            strFilter = `${item.attr} >= ${(e[0] * 1) / 1000}`;
+            strFilter = `${strFilter} AND ${item.attr}<=${(e[1] * 1) / 1000}`;
+          }
+          if (!item.range && isDateA) {
             const isStart = item.attr.includes('_start_');
-            if (e[0]) {
-              strFilter = `${item.attr}${isStart ? '>' : '<'}=${(e[0] * 1) /
-                1000}`;
-            }
+            strFilter = `${item.attr}${isStart ? '>' : '<'}=${(e[0] * 1) /
+              1000}`;
           }
           s.setFilter(item.attr, strFilter);
           await s.update();
@@ -691,7 +689,7 @@ class Search extends EventSimple {
           {
             const values = s._year_slider.get();
             const change = parseInt(values[1]) !== parseInt(ds.year);
-            values[1] = change  ? ds.year : s.opt('dates').year_max;
+            values[1] = change ? ds.year : s.opt('dates').year_max;
             s._year_slider.set(values);
           }
           break;
@@ -1132,7 +1130,10 @@ class Search extends EventSimple {
     const dates = s._flatpickr_filters;
     let out = false;
     for (let date of dates) {
-      out = out || !!date.input.value;
+      const isRange = date.config.mode === 'range';
+      const sel = date.selectedDates || [];
+      const valid = isRange ? sel.length === 2 : sel.length === 1;
+      out = out || valid;
     }
     return out;
   }
@@ -1143,10 +1144,7 @@ class Search extends EventSimple {
   updateFlagAuto() {
     const s = this;
     const hasFilter =
-      s.hasFilter() ||
-      s.hasFilterDateInput() ||
-      s.hasFilterDateSlider() ||
-      s.hasFilterDateInput();
+      s.hasFilter() || s.hasFilterDateInput() || s.hasFilterDateSlider();
     const hasFilterText = s.hasFilterText();
 
     if (hasFilter) {

@@ -545,7 +545,7 @@ export function isUrlValidWms(url, opt) {
 }
 
 /**
- * Validate date
+ * Validate date string
  * @param {String|Number} date to validate
  */
 export function isDateString(date) {
@@ -556,4 +556,12 @@ export function isDateString(date) {
         date
       ))
   );
+}
+
+/**
+ * Validate date object
+ * @param {Date} date to validate
+ */
+export function isDate(date) {
+  return date instanceof Date;
 }
