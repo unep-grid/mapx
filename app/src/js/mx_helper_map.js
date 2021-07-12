@@ -3662,14 +3662,31 @@ export function elLegend(view, opt) {
     defaultValue: '[ missing title ]'
   });
 
-  const elLegendTitle = h.el(
-    'span',
-    {
-      class: ['mx-legend-view-title', 'text-muted', 'hint--bottom'],
-      title: title
-    },
-    opt.addTitle ? title : ''
-  );
+  const elLegendTitle = h.el('div', [
+    h.el(
+      'div',
+      {
+        class: ['mx-legend-view-title-container', 'hint--bottom'],
+        dataset: {
+          view_action_key: 'btn_opt_meta',
+          view_action_target: view.id,
+          lang_key: 'btn_opt_meta',
+          lang_type: 'tooltip'
+        },
+        title: title
+      },
+      h.el(
+        'span',
+        {
+          class: ['mx-legend-view-title', 'text-muted']
+        },
+        opt.addTitle ? title : ''
+      ),
+      h.el('i', {
+        class: ['fa', 'fa-info-circle', 'text-muted', 'mx-legend-btn-meta']
+      })
+    )
+  ]);
 
   /**
    * Legend element

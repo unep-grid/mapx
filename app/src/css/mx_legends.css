@@ -50,17 +50,23 @@
   max-width: 100%;
 }
 
-.mx-legend-view-title {
+.mx-legend-view-title-container {
   margin-top: 20px;
-  font-weight: 500;
-  font-size: 1.1em;
-  display: inline-block;
-  text-transform: uppercase;
   width: 100%;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mx-legend-view-title {
+  font-size: 1.1em;
+  text-transform: uppercase;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.mx-legend-btn-meta {
+  cursor: pointer;
 }
 
 .mx-legend-vt-rules {
