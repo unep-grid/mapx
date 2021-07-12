@@ -1,5 +1,6 @@
 import {initEditing} from './mx_helper_story_editor.js';
 import {ButtonPanel} from './button_panel/index.js';
+import {isViewId} from './is_test/index.js';
 /**
  * Story map prototype
  * TODO:
@@ -164,7 +165,9 @@ async function setLocalViews(o) {
    * Case views are stored within data.views (deprecated)
    */
   h.path(view, 'data.views', []).forEach((id) => {
-    idViewsStory.push(id);
+    if (id) {
+      idViewsStory.push(id);
+    }
   });
 
   /**
@@ -414,7 +417,7 @@ function getStoryViewsId(story) {
   story.steps.forEach((step) => {
     if (step && h.isArray(step.views)) {
       step.views.forEach((d) => {
-        if (h.isObject(d)) {
+        if (h.isObject(d) && isViewId(d.view)) {
           idViewsStory.push(d.view);
         }
       });
