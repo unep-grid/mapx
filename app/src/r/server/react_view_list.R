@@ -118,6 +118,9 @@ reactViewsListIdAll <- reactive({
 
 reactViewsCompactListVector <- reactive({
   views <- reactViewsCompact()
+  if(noDataCheck(views)){
+     return(list())
+  }
   views <- views[sapply(views,function(v){v$type %in% c("vt")})]
   idViews <- sapply(views,`[[`,'id')
   names(idViews) <- trimws(sapply(views,`[[`,'_title'))
