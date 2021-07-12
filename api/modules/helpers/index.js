@@ -303,12 +303,8 @@ function mwGetConfigMap(req, res) {
  * Delay
  */
 function wait(duration) {
-  return new Promise((resolve, reject) => {
-    try {
-      setTimeout(resolve, duration);
-    } catch (e) {
-      reject(e);
-    }
+  return new Promise((resolve) => {
+      setTimeout(()=>resolve({_timeout:duration}), duration);
   });
 }
 const asyncDelay = wait;
@@ -388,40 +384,24 @@ async function withTimeLimit(cbs, timeoutMs, cbTimeout) {
   if (!Array.isArray(cbs)) {
     cbs = [cbs];
   }
-  /**
-   * Wait for all promises
-   */
-
-  const res = await Promise.all(
-    cbs.map(async (c) => {
-      /**
-       * Check if the timeout or the cb resolve first
-       */
-
-      const r = await Promise.race([c(), tOut(c)]);
-      if (r && r._timeout) {
-        /**
-         * If the timeout wins, use the cbTimeout, reject
-         */
-        if (cbTimeout instanceof Function) {
-          cbTimeout(r._cb);
+  const hasFallback = cbTimeout instanceof Function;
+  const out = [];
+  for(const cb of cbs){
+    let res = await Promise.race([cb(), asyncDelay(timeoutMs)]);
+    /**
+    * Reject if timeouted and apply fallback cb (cbTimeout)
+    */
+    if (res && res._timeout) {
+        if (hasFallback) {
+          res = await cbTimeout(cb);
         } else {
-          console.warn(`Timeout reached for ${r._cb.name} (${timeoutMs})`);
+          throw new Error(`Timeout reached for ${cb.name} (${timeoutMs})`);
         }
-        return Promise.reject(r);
       }
-      return r;
-    })
-  );
-  return res;
-
-  /**
-   * Timeout evaluation
-   */
-  async function tOut(c) {
-    await wait(timeoutMs);
-    return {_timeout: timeoutMs, _cb: c};
+      out.push({cb:cb, res:res});
   }
+
+  return out;
 }
 
 /**

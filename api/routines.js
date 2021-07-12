@@ -24,25 +24,25 @@ const updateIndexesRoutine = () => updateIndexes({});
  * Config
  */
 const optCommon = {
- /**
-  * Fails if passed 10 minutes
-  * intervalMs: 10 * 60 * 1000,
-  */
+  /**
+   * Fails if passed 10 minutes
+   * intervalMs: 10 * 60 * 1000,
+   */
   timeoutMs: 10 * 60 * 1000,
   onSuccess: (cbs) => {
-    const str = cbs.map(c=>c.name).join(',');
+    const str = cbs.map((cb) => cb.name).join(',');
     console.log(`Update success for ${str}`);
   },
-  onError: (cbs,e) => {
-    const str = cbs.map(c=>c.name).join(',');
+  onError: (cbs, e) => {
+    const str = cbs.map((cb) => cb.name).join(',');
     console.error(`Update for ${str} had issue`, e);
   }
 };
 const optHourly = Object.assign({}, optCommon, {
   /**
-  * Each hour
-  * intervalMs: 1 * 60 * 60 * 1000,
-  */ 
+   * Each hour
+   * intervalMs: 1 * 60 * 60 * 1000,
+   */
   intervalMs: 1 * 60 * 60 * 1000,
   before: false
 });
