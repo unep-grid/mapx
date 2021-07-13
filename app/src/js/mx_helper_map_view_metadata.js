@@ -39,6 +39,12 @@ export async function viewToMetaModal(view) {
   const id = h.isView(view) ? view.id : view;
   view = (await h.getView(id)) || (await h.getViewRemote(id));
 
+  if(!h.isView(view)){
+    return h.modal({
+       content : 'View not found'
+    })
+  }
+
   const meta = {};
 
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
