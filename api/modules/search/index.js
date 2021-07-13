@@ -59,6 +59,13 @@ async function updateIndexes() {
      */
     for (let language of languages.codes) {
       const indexView = await meili.getOrCreateIndex(`views_${language}`);
+      
+      /**
+      * Remove previous documents
+      * Alternative : retrieve all id -> for each, delete those not in new documents 
+      */ 
+      console.log(`Delete all documents for index ${language}`);
+      await indexView.deleteAllDocuments();
 
       /**
        * Update settings
