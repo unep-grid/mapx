@@ -1,6 +1,6 @@
 /**
-* mapx api db-utils
-*/
+ * mapx api db-utils
+ */
 const {pgRead, pgWrite} = require('@mapx/db');
 const settings = require('@root/settings');
 const helpers = require('@mapx/helpers');
@@ -31,7 +31,7 @@ async function tableHasValues(idTable, schema) {
    )`;
   const sqlEmpty = `
    /*NO LOAD BALANCE*/
-   SELECT count(geom) as n from ${idTable}
+   SELECT count(*) as n from ${idTable}
   `;
   let isThere = false;
   let hasValues = false;
@@ -82,20 +82,43 @@ async function encrypt(txt) {
  * @param {Integer} idUser Id of the user
  * @param {String} idProject Id of the project
  * @param {String} title English title
- * @return {Boolean} inserted
+ * @param {String} type Type : vector,raster,tabular
+ * @return {Promise<Boolean>} inserted
  */
-async function registerSource(idSource, idUser, idProject, title) {
-  var options = {};
-
+async function registerSource(
+  idSource,
+  idUser,
+  idProject,
+  title,
+  type = 'vector'
+) {
   if (typeof idSource === 'object') {
-    options = idSource;
+    const options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
     idProject = options.idProject;
     title = options.sourceTitle || options.layerTitle || options.title;
+    type = options.vector || 'vector';
   }
 
-  var sqlAddSource = `INSERT INTO mx_sources (
+  /**
+   * Validation
+   */
+  if (!valid.isSourceId(idSource)) {
+    throw new Error('Register source : idSource not valid');
+  }
+  if (!valid.isProjectId(idProject)) {
+    throw new Error('Register source : idProject not valid');
+  }
+  if (!valid.isNumeric(idUser)) {
+    // check instead of existing user...
+    throw new Error('Register source : idUser not valid');
+  }
+  if (!['vector', 'raster', 'tabular'].includes(type)) {
+    throw new Error('Register source : type not valid');
+  }
+
+  const sqlAddSource = `INSERT INTO mx_sources (
     id, editor, readers, editors, date_modified, type, project, data
   ) VALUES (
     $1::text,
@@ -103,13 +126,12 @@ async function registerSource(idSource, idUser, idProject, title) {
     '["publishers"]',
     '["publishers"]',
     now(),
-    'vector',
     $3::text,
+    $4::text,
     '{"meta":{"text":{"title":{"en":"${title}"}}}}' 
   )`;
 
-
-  await pgWrite.query(sqlAddSource, [idSource, idUser, idProject]);
+  await pgWrite.query(sqlAddSource, [idSource, idUser, type, idProject]);
   return true;
 }
 
@@ -117,35 +139,36 @@ async function registerSource(idSource, idUser, idProject, title) {
  * Test empty table : if no records, remove table, else register it as source
  * @param {String|Object} idSource id of the layer to add, or object with idSource, idUser, idProject, title.
  */
-async function registerOrRemoveSource(idSource, idUser, idProject, title) {
+async function registerOrRemoveSource(idSource, idUser, idProject, title, type='vector') {
   if (typeof idSource === 'object') {
-    options = idSource;
+    const options = idSource;
     idSource = options.idSource;
     idUser = options.idUser * 1;
     idProject = options.idProject;
     title = options.sourceTitle || options.layerTitle || options.title;
+    type = options.vector || 'vector';
   }
-
-  var sqlCountRow = {
-    text: `SELECT count(*) n FROM ${idSource}`
-  };
-  const r = await pgRead.query(sqlCountRow);
-  const count = r.rowCount > 0 ? r.rows[0].n * 1 : 0;
   const stats = {
     removed: false,
     registered: false
   };
+  const sqlCountRow = {
+    text: `SELECT count(*) n FROM ${idSource}`
+  };
 
-  
+  const r = await pgRead.query(sqlCountRow);
+  const count = r.rowCount > 0 ? r.rows[0].n * 1 : 0;
+
   if (count === 0) {
     await removeSource(idSource);
     stats.removed = true;
   }
 
   if (stats.removed === false) {
-    await registerSource(idSource, idUser, idProject, title);
+    await registerSource(idSource, idUser, idProject, title, type);
     stats.registered = true;
   }
+
   return stats;
 }
 
@@ -389,8 +412,8 @@ function areLayersValid(idsLayers, useCache, autoCorrect) {
 }
 
 /**
-* Exports
-*/
+ * Exports
+ */
 module.exports = {
   getColumnsNames,
   getColumnsTypesSimple,
@@ -403,5 +426,5 @@ module.exports = {
   decrypt,
   encrypt,
   registerSource,
-  registerOrRemoveSource,
+  registerOrRemoveSource
 };

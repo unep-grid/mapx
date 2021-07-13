@@ -15,7 +15,7 @@ observeEvent(input$btnAnalysisOverlap,{
       return()
 
     }else{
-      layers <- reactListEditSources()
+      layers <- reactListEditSourcesVector()
       countries <- mxDbGetProjectData(project)$countries
 
       uiOut <- tags$form(id='formOverlapTool',tagList(
@@ -187,8 +187,8 @@ observeEvent(input$btnOverlapAddSourceFromView,{
   #
   # Build all source list
   #
-  idSourcesAll <- unique(c(reactListEditSources(),idSourcesViews))
-  idSourcesAll <-  mxDbGetLayerTitle(idSourcesAll,asNamedList=TRUE, language=language)
+  idSourcesAll <- unique(c(reactListEditSourcesVector(),idSourcesViews))
+  idSourcesAll <-  mxDbGetSourceTitle(idSourcesAll,asNamedList=TRUE, language=language)
   
   #
   # Build selected list

@@ -11,8 +11,8 @@ observeEvent(input$btnValidateSourceGeom,{
       return()
     }else{
 
-      layers <- reactListEditSources()
-
+      layers <- reactListEditSourcesVector()
+      
       uiOut <- tags$form(id='formValidateGeomTool',tagList(
           selectizeInput(
             inputId = "selectSourceValidateGeom",
@@ -94,7 +94,7 @@ observeEvent(reactData$triggerValidationValidateGeom,{
 
   language <- reactData$language
   layer <- input$selectSourceValidateGeom
-  layers <- reactListEditSources()
+  layers <- reactListEditSourcesVector()
   disableValidate <- TRUE
   disableCorrect <- TRUE
 

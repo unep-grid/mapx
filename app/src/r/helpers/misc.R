@@ -562,9 +562,9 @@ mxDictTranslate <- function(id=NULL,lang=NULL,langDefault="en",namedVector=FALSE
 # shortcut
 d <- mxDictTranslate
 
-#' Create layer named list from layer table
+#' Create source named list from layer table
 #' @param layerTable {table} table with columns "id", "title", "date_modified"
-mxGetLayerNamedList <- function( layerTable){
+mxGetSourceNamedList <- function( layerTable){
 
   out <- as.list(layerTable$id)
   titles <- layerTable$title
@@ -1997,7 +1997,7 @@ mxUpdateDefViewVt <- function(view,sourceData=NULL,sourceDataMask=NULL,additiona
     
     layerName <- .get(sourceData,c("layerName"))
     viewData <- .get(view,c("data"))
-    meta <- mxDbGetLayerMeta(layerName)
+    meta <- mxDbGetSourceMeta(layerName)
 
     #
     # Source info

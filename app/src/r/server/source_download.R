@@ -9,10 +9,10 @@ observeEvent(reactData$sourceDownloadRequest,{
   isGuest <- isGuestUser() # duplicated request, userRole already has this value
   isPublisher <- "publishers" %in% userRole$groups
 
-  #meta <- mxDbGetLayerMeta(idSource)
+  #meta <- mxDbGetSourceMeta(idSource)
   #isDownloadable <- isTRUE(.get(meta,c("license","allowDownload")))
-  isDownloadable <- "mx_download" %in%  mxDbGetLayerServices(idSource)
-  sourceTitle <- mxDbGetLayerTitle(idSource,language=language,asNamedList=FALSE) 
+  isDownloadable <- "mx_download" %in%  mxDbGetSourceServices(idSource)
+  sourceTitle <- mxDbGetSourceTitle(idSource,language=language,asNamedList=FALSE) 
   btnList = list()
 
   if( !isDownloadable || isGuest ){
@@ -167,7 +167,7 @@ observeEvent(input$btnSourceDownload,{
     filename <- removeExtension(input$txtDownloadFileName)
     filename <- subPunct(filename)
     iso3codes <- input$selectFilterDataByCountries
-    sourceTitle <- mxDbGetLayerTitle(idSource,language=language,asNamedList=FALSE)
+    sourceTitle <- mxDbGetSourceTitle(idSource,language=language,asNamedList=FALSE)
 
     mglHandlerDownloadVectorSource(list(
         request = list(

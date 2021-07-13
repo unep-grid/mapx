@@ -82,9 +82,11 @@ async function convertOgrHandler(req, res, next) {
     req.file.mimetype === 'application/zip' ||
     req.file.mimetype === 'application/x-zip-compressed' ||
     req.file.mimetype === 'multipart/x-zip';
+  const isCsv = req.file.mimeType === 'text/csv' || !!fileName.match(/.csv$/);
 
   await fileToPostgres({
     isZipped: isZipped,
+    isCsv : isCsv,
     fileName: fileName,
     sourceSrs: sourceSrs,
     onSuccess: (idSource) => {
@@ -129,7 +131,12 @@ async function addSourceHandler(req, res) {
   const idUser = req.body.idUser * 1;
   const idSource = req.body.idSource;
   const fileToRemove = req.file.path;
+  const fileName = req.file.filename;
   const msg = {};
+  const isCsv = req.file.mimetype === 'text/csv' || !!fileName.match(/.csv$/);
+  const sourceType = isCsv ? 'tabular' : 'vector';
+  const isVector = sourceType === 'vector';
+  let isValid = true;
 
   msg.waitValidation = `Geometry validation – This could take a while, please wait. If an error occurs, a message will be displayed `;
   msg.addedNewEntry = `Added new entry "${title}" ( ${idSource} ) in project ${idProject}.`;
@@ -144,7 +151,8 @@ async function addSourceHandler(req, res) {
       idSource,
       idUser,
       idProject,
-      title
+      title,
+      sourceType
     );
 
     if (reg.registered !== true) {
@@ -160,19 +168,20 @@ async function addSourceHandler(req, res) {
         msg: msg.waitValidation
       })
     );
-    const layerTest = await isLayerValid(idSource, false);
-    isValid = layerTest.valid;
+    if (isVector) {
+      const layerTest = await isLayerValid(idSource, false);
+      isValid = layerTest.valid;
+      if (!isValid) {
+        res.write(
+          toRes({
+            type: 'warning',
+            msg: msg.invalidGeom
+          })
+        );
+      }
+    }
 
     cleanFile(fileToRemove, res);
-
-    if (!isValid) {
-      res.write(
-        toRes({
-          type: 'warning',
-          msg: msg.invalidGeom
-        })
-      );
-    }
 
     res.write(
       toRes({
@@ -260,6 +269,7 @@ async function cleanAll(fileToRemove, idSource, res) {
  * @param {Object} config Config
  * @param {String} config.fileName Filename
  * @param {String} config.sourceSrs Original SRS
+ * @param {Boolean} config.isCsv CSV mode -> type tabular
  * @param {Function} config.onError Callback on error
  * @param {Function} config.onMessage Callback on message
  * @param {Function} config.onSuccess Callback on success
@@ -273,6 +283,7 @@ async function fileToPostgres(config) {
   const onSuccess = config.onSuccess || function() {};
   const idSource = helpers.randomString('mx_vector', 4, 5).toLowerCase();
   const isZipped = config.isZipped === true;
+  const isCsv = config.isCsv === true;
 
   try {
     if (!fileName) {
@@ -319,9 +330,9 @@ async function fileToPostgres(config) {
       path.join(__dirname, '/sh/import_vector.sh'),
       filePath,
       idSource,
-      sourceSrs
+      sourceSrs,
+      isCsv ? 'yes' : 'no'
     ];
-
     const ogr = spawn('sh', args);
 
     ogr.stdout.on('data', (data) => {
@@ -355,33 +366,40 @@ async function fileToPostgres(config) {
     });
 
     ogr.on('exit', async (code, signal) => {
-      if (code !== 0) {
-        onError({
-          code: code,
-          msg: `The import function exited with code ${code} ( ${signal} )`
-        });
-        return;
-      }
+      try {
+        if (code !== 0) {
+          onError({
+            code: code,
+            msg: `The import function exited with code ${code} ( ${signal} )`
+          });
+          return;
+        }
 
-      const hasValues = await tableHasValues(idSource);
-      if (hasValues) {
-        onMessage({
-          msg: `The import was successful`,
-          type: 'message'
-        });
+        const hasValues = await tableHasValues(idSource);
 
-        onSuccess(idSource);
-      } else {
+        if (hasValues) {
+          onMessage({
+            msg: `The import was successful`,
+            type: 'message'
+          });
+
+          onSuccess(idSource);
+        } else {
+          onError({
+            code: code,
+            msg: `The import function failed No layer has been created. Verify your logs.`
+          });
+          return;
+        }
+      } catch (e) {
         onError({
-          code: code,
-          msg: `The import function failed No layer has been created. Verify your logs.`
+          msg: `An error occured in import function, on exit handler (${handleErrorText(e)})`
         });
         return;
       }
     });
   } catch (e) {
     onError({
-      code: code,
       msg: `An error occured in import function (${handleErrorText(e)})`
     });
   }

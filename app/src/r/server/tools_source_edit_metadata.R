@@ -148,12 +148,12 @@ observeEvent(input$btnEditSourceMetadata,{
       #
       # Get old layer meta
       #
-      meta <- mxDbGetLayerMeta(layer)
+      meta <- mxDbGetSourceMeta(layer)
 
       #
       # Clean and/or update attribute
       #
-      attributesNames <- mxDbGetLayerColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1","_mx_valid"))
+      attributesNames <- mxDbGetTableColumnsNames(layer,notIn=c("gid","geom","mx_t0","mx_t1","_mx_valid"))
       attributesOld <- names(.get(meta,c("text","attributes")))
       attributesRemoved <- attributesOld[ ! attributesOld %in% attributesNames]
 

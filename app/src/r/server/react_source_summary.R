@@ -8,7 +8,7 @@ reactLayerMaskSummary <- reactive({
 
   useMask <- input$checkAddMaskLayer
   layerMaskName <- input$selectSourceLayerMask
-  isLayerOk <- isTRUE(layerMaskName %in% reactListReadSources())
+  isLayerOk <- isTRUE(layerMaskName %in% reactListReadSourcesVector())
 
   if(useMask && isLayerOk){
     out$layerMaskName <- layerMaskName
@@ -40,8 +40,8 @@ reactLayerSummary <- reactive({
   if(hasVariable && hasLayer){
 
     geomTypes <- mxDbGetLayerGeomTypes(layerName)
-    isVariableOk <- isTRUE(variableName %in% reactSourceVariables())
-    isLayerOk <- isTRUE(layerName %in% reactListReadSources())
+    isVariableOk <- isTRUE(variableName %in% reactLayerVariables())
+    isLayerOk <- isTRUE(layerName %in% reactListReadSourcesVector())
     isGeomOk <- isTRUE(geomType %in% geomTypes$geom_type)
 
     if(isLayerOk && isGeomOk && isVariableOk){
@@ -58,5 +58,28 @@ reactLayerSummary <- reactive({
   return(out)
 })
 
+#
+# List of variable
+#
+reactLayerVariables <- reactive({
+
+  layerName <- input$selectSourceLayerMain
+  hasLayer <- !noDataCheck(layerName)
+  language <- reactData$language
+
+  out <- "noVariable"
+  names(out) <- d(out,language)
+
+  if(hasLayer){
+    isLayerOk <- isTRUE(layerName %in% reactListReadSourcesVector())
+
+    if(isLayerOk){
+      outLocal <- mxDbGetTableColumnsNames(layerName,notIn=c("geom","gid","_mx_valid"))
+
+      if(!noDataCheck(outLocal)) out <- outLocal
+    }
+  }
+  return(out)
+})
 
 

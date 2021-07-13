@@ -46,7 +46,7 @@ reactTableReadSources <- reactive({
   #
   # Get layer table
   #
-  layers <-  mxDbGetLayerTable(
+  layers <-  mxDbGetSourceTable(
     project = project,
     idUser = idUser,
     roleInProject = userRole,
@@ -59,43 +59,25 @@ reactTableReadSources <- reactive({
 
 })
 
-
 reactListReadSources <- reactive({
   layers <- reactTableReadSources()
+    layers <- mxGetSourceNamedList( layers )
+  return(layers)
+})
+reactListReadSourcesVector <- reactive({
+  layers <- reactTableReadSources()
+  layers <- layers[layers$type %in% c('vector'),]
 
   if(noDataCheck(layers)){
     layers <- list("noLayer")
   }else{
-    layers <- mxGetLayerNamedList( layers )
+    layers <- mxGetSourceNamedList( layers )
   }
-
   return(layers)
-
 })
 
-#
-# List of variable
-#
-reactSourceVariables <- reactive({
 
-  layerName <- input$selectSourceLayerMain
-  hasLayer <- !noDataCheck(layerName)
-  language <- reactData$language
 
-  out <- "noVariable"
-  names(out) <- d(out,language)
-
-  if(hasLayer){
-    isLayerOk <- isTRUE(layerName %in% reactListReadSources())
-
-    if(isLayerOk){
-      outLocal <- mxDbGetLayerColumnsNames(layerName,notIn=c("geom","gid","_mx_valid"))
-
-      if(!noDataCheck(outLocal)) out <- outLocal
-    }
-  }
-  return(out)
-})
 
 reactTableEditSources <- reactive({
 
@@ -109,7 +91,7 @@ reactTableEditSources <- reactive({
 
   tbl <- data.frame()
   if( isPublisher ){
-    tbl <- mxDbGetLayerTable(
+    tbl <- mxDbGetSourceTable(
       project = project,
       idUser = idUser,
       roleInProject = userRole,
@@ -117,24 +99,23 @@ reactTableEditSources <- reactive({
       editableOnly = TRUE
     )
   }
-
   return(tbl)
 })
-
-
 reactListEditSources <- reactive({
-
   layers <- reactTableEditSources()
+  layers <- mxGetSourceNamedList( layers )
+  return(layers)
+})
+reactListEditSourcesVector <- reactive({
+  layers <- reactTableEditSources()
+  layers <- layers[layers$type %in% c('vector'),]
   if(noDataCheck(layers)){
     layers <- list("noLayer")
   }else{
-    layers <- mxGetLayerNamedList( layers )
+    layers <- mxGetSourceNamedList( layers )
   }
-
   return(layers)
-
 })
-
 
 
 #

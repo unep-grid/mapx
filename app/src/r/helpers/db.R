@@ -216,7 +216,7 @@ mxDbUpdateAllViewDataFromSource <- function(idSource,onProgress=function(progres
         # TODO: Check in mapx where mxUpdateDefViewVt should replace those values
         #
         oldAttributes <- .get(viewData,c("data","attribute","names"))
-        newAttributes <- mxDbGetLayerColumnsNames(idSource)
+        newAttributes <- mxDbGetTableColumnsNames(idSource)
 
         viewUpdated <- .set(viewUpdated,
           path = c("data","attribute","names"),
@@ -417,7 +417,7 @@ mxDbUpdate <- function(table,column,idCol="id",id,value,path=NULL,expectedRowsAf
   # explicit check
   stopifnot(mxDbExistsTable(table))
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table)))
+  stopifnot(tolower(column) %in% tolower(mxDbGetTableColumnsNames(table)))
   # implicit check
   stopifnot(!noDataCheck(id))
   stopifnot(!noDataCheck(idCol))
@@ -644,18 +644,31 @@ mxDbGetLayerListByViews <- function(idViews=c()){
 #' Extract table of layer for one project, for given role or userid
 #' @param project Project code
 #' @param projects Projects code
-#' @param target Groupe/role set as target
-#' @param ifUser Integer user id
-#' @param language language for layer name. Default is english.
+#' @param idUser Integer user id
+#' @param roleInProject Role
+#' @param type Type : vector, raster, tabular
+#' @param language language for layer name. Default is en.
+#' @param additionalSourcesIds Additional id to add in the list 
+#' @param editableOnly Only editable 
 #' @export
-mxDbGetLayerTable <- function(project, projects, idUser, roleInProject, language="en", additionalSourcesIds=c(),editableOnly=FALSE){
+mxDbGetSourceTable <- function(
+  project,
+  projects,
+  idUser,
+  roleInProject,
+  types = c('vector','raster','tabular'),
+  language = "en",
+  additionalSourcesIds = c(),
+  editableOnly = FALSE
+  ){
 
   sourceIds <- paste(paste0("'",additionalSourcesIds,"'"),collapse=",")
+  types <- paste(paste0("'",types,"'"),collapse=",")
+
   role <- roleInProject
   filterRead <- "false"
   filterEdit <- "false"
   filter <- "false"
-  type <- "vector" 
 
   if(role$member){
     filterRead = "readers ?| array['public'] OR editor = " + idUser + " OR readers ?| array['members'] OR readers @> '[" + idUser + "]'"
@@ -678,7 +691,7 @@ mxDbGetLayerTable <- function(project, projects, idUser, roleInProject, language
   }
 
   sql <-"
-  SELECT id, 
+  SELECT id, type,
   CASE 
     WHEN  
       coalesce(data #>> '{\"meta\",\"text\",\"title\",\"" + language + "\"}','') = ''
@@ -690,8 +703,8 @@ mxDbGetLayerTable <- function(project, projects, idUser, roleInProject, language
   FROM mx_sources
   WHERE 
     project = '" + project +"'
-  AND
-    type = '" + type + "'
+  AND 
+    type in (" + types + ") 
   AND 
     (
       id in ("+ sourceIds +") 
@@ -794,7 +807,7 @@ mxDbGetColumnInfo<-function(table=NULL,column=NULL){
   if(noDataCheck(table) || noDataCheck(column) || isTRUE(column=='gid'))return() 
 
 
-  stopifnot(tolower(column) %in% tolower(mxDbGetLayerColumnsNames(table)))
+  stopifnot(tolower(column) %in% tolower(mxDbGetTableColumnsNames(table)))
   timing<-system.time({
 
     q <- sprintf(
@@ -995,7 +1008,7 @@ mxDbExistsTable<- function(table){
 #' @param table {character} table name
 #' @param avoid {vector} notIn names to remove
 #' @export
-mxDbGetLayerColumnsNames <- function(table,notIn=NULL){
+mxDbGetTableColumnsNames <- function(table,notIn=NULL){
   query <- sprintf("select column_name as res from information_schema.columns where table_schema='public' and table_name='%s'",
     table
     )
@@ -1069,7 +1082,7 @@ mxDbAddRow <- function(data,table){
   # Compare names in table vs names in db table 
   #
   tName <- names(data)
-  rName <- mxDbGetLayerColumnsNames(table)
+  rName <- mxDbGetTableColumnsNames(table)
   # Subset only existing
   data <- data[ tName %in% rName ]
   fName <- names(data)
@@ -1552,7 +1565,7 @@ mxDbGetLayerGeomTypes <- function(table=NULL,geomColumn="geom"){
 #' @param table {character} Layer name
 #' @param attribute {character} Attribute name
 #' @export
-mxDbGetLayerAttributeJsonType <- function(table=NULL,attribute=NULL){
+mxDbGetTableAttributeJsonType <- function(table=NULL,attribute=NULL){
 
   q <- sprintf('
     SELECT 
@@ -1582,7 +1595,7 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL){
   summary = list(
     layerName  = layer,
     variableName = variable,
-    variableType = mxDbGetLayerAttributeJsonType(layer,variable),
+    variableType = mxDbGetTableAttributeJsonType(layer,variable),
     geomType = mxDbGetLayerGeomTypes(layer)[1,"geom_type"]
   )
   return(summary)
@@ -1592,7 +1605,7 @@ mxDbGetLayerSummary <- function(layer=NULL,variable=NULL){
 #' Get layer meta stored in default layer table
 #' @param layer Postgis layer stored in layer table. Should have a meta field.
 #' @export
-mxDbGetLayerMeta <- function(layer){
+mxDbGetSourceMeta <- function(layer){
  
   layerTable <- .get(config,c("pg","tables","sources"))
   
@@ -1626,7 +1639,7 @@ mxDbGetLayerMeta <- function(layer){
 #' Get layer services in default layer table
 #' @param layer Postgis layer stored in layer table.
 #' @export
-mxDbGetLayerServices <- function(idSource){
+mxDbGetSourceServices <- function(idSource){
   isDownloadableOld <-  isTRUE(mxDbGetQuery("
       SELECT data#>>'{\"meta\",\"license\",\"allowDownload\"}' as allow_download
       FROM mx_sources 
@@ -1648,7 +1661,7 @@ mxDbGetLayerServices <- function(idSource){
 #' Get layer title
 #' @param layer Postgis layer stored in layer table.
 #' @export
-mxDbGetLayerTitle <- function(layer,asNamedList=TRUE,language="en"){
+mxDbGetSourceTitle <- function(layer,asNamedList=TRUE,language="en"){
 
   layer <- paste(paste0("'",layer,"'"),collapse=",")
 
@@ -1685,7 +1698,7 @@ mxDbGetLayerTitle <- function(layer,asNamedList=TRUE,language="en"){
 #' Get layer project id
 #' @param layer Postgis layer stored in layer table.
 #' @export
-mxDbGetLayerProject <- function(layer){
+mxDbGetSourceProject <- function(layer){
   mxDbGetQuery("SELECT project FROM mx_sources where id = '" + tolower(layer) + "'" )$project
 }
 

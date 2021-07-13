@@ -101,18 +101,22 @@ observeEvent(reactData$triggerSourceManage,{
       return()
 
     }else{
-
       idSource <- layer
-      target <-  mxDbGetQuery("SELECT readers, editors FROM mx_sources WHERE id ='"+idSource+"'")
-      services <- mxDbGetLayerServices(idSource)
-      readers <- mxFromJSON(target$readers)
-      editors <- mxFromJSON(target$editors)
+      sourceData <-  mxDbGetQuery("SELECT readers, editors,type FROM mx_sources WHERE id ='"+idSource+"'")
+      services <- mxDbGetSourceServices(idSource)
+      readers <- mxFromJSON(sourceData$readers)
+      editors <- mxFromJSON(sourceData$editors)
+      type <- sourceData$type
       #
       # Who can view this
       #
       sourceReadTarget <- c("publishers","admins")
       sourceEditTarget <- c("publishers","admins")
-      sourceEditServices <- c("mx_download","gs_ws_a","gs_ws_b") # set in dict_main,settings-global. Used in geoserver.R.
+      if(type == 'vector'){
+        sourceEditServices <- c("mx_download","gs_ws_a","gs_ws_b") # set in dict_main,settings-global. Used in geoserver.R.
+      }else{
+        sourceEditServices <- c("mx_download") 
+      }
       names(sourceEditServices) <- d(sourceEditServices,lang=language)
 
       # mx_download -> MapX : button download in each view
@@ -377,7 +381,7 @@ observeEvent(input$btnUpdateSource,{
     blockUpdate <- isTRUE(reactData$sourceEditBlockUpdate)
 
     if(blockUpdate) return()
-    idGroupsServicesOld <- mxDbGetLayerServices(idSource)
+    idGroupsServicesOld <- mxDbGetSourceServices(idSource)
     idGroupsServices <- input$selectSourceServicesUpdate
 
     readers <- input$selectSourceReadersUpdate

@@ -56,8 +56,8 @@ mxGetGeoServerManager = function(){
 #' @return Names of the workspaces 
 mxGetGeoServerSourceWorkspaceNames <- function(idSource,idGroup=NULL){
 
-  idProject <- mxDbGetLayerProject(idSource) 
-  if(noDataCheck(idGroup)) idGroup <- mxDbGetLayerServices(idSource)
+  idProject <- mxDbGetSourceProject(idSource) 
+  if(noDataCheck(idGroup)) idGroup <- mxDbGetSourceServices(idSource)
   groups <- names(mxGetGeoServerServices()$groups)
   groups <- groups[groups %in% idGroup]
 
@@ -85,7 +85,7 @@ mxGetGeoServerWorkspaceName <- function(idProject,idGroup = "gs_ws_a"){
 #' @param {Chracter} idSource Id of the source
 #' @return Names of source groups
 mxGetGeoServerSourceGroupNames <- function(idSource){
-  services <- mxDbGetLayerServices(idSource)
+  services <- mxDbGetSourceServices(idSource)
   idGroup <- names(mxGetGeoServerServices()$groups)
   idGroup <- idGroup[idGroup %in% services]
   return(idGroups)
@@ -246,7 +246,7 @@ mxPublishGeoServerViewAuto <- function(idView,idSource=NULL,publish=FALSE){
   if(noDataCheck(idSource)) return(updated)
   if(noDataCheck(publish)) return(updated)
 
-  idGroupsServices <- mxDbGetLayerServices(idSource)
+  idGroupsServices <- mxDbGetSourceServices(idSource)
   idGroupsAll <- names(mxGetGeoServerServices()$groups)
   hasServices <- any(idGroupsServices %in% idGroupsAll)
   
@@ -448,7 +448,7 @@ mxUnpublishGeoServerAllViewsBySource <- function(idSource,idWorkspace=NULL){
 #' @return {Logical} success
 mxUpdateGeoserverSourcePublishing <- function(idSource,idProject=NULL,idGroups=list(),idGroupsOld=list()){
 
-  if(noDataCheck(idProject)) idProject <- mxDbGetLayerProject(idSource)
+  if(noDataCheck(idProject)) idProject <- mxDbGetSourceProject(idSource)
   if(noDataCheck(idSource)) {
     mxDebugMsg("mxUpdateGeoserverSourcePublishing no source")
     return(FALSE)

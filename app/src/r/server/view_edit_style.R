@@ -11,7 +11,7 @@ observeEvent(input$styleEdit_init,{
   style <- .get(view,c("data","style"))
   language <- reactData$language 
   hasLayer <- !noDataCheck(.get(view,c("data","source","layerInfo","name")))
-  hasSources <- !noDataCheck(reactListReadSources())
+  hasSources <- !noDataCheck(reactListReadSourcesVector())
   hasStyle <- !noDataCheck(style)
 
   mxCatch(title="style edit init",{

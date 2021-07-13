@@ -258,7 +258,7 @@ observe({
               #
               if(viewType=="vt"){
 
-                srcAvailable <- reactListReadSources()
+                srcAvailable <- reactListReadSourcesVector()
                 srcSet <- .get(viewData,c("data","source","layerInfo","name"))
                 srcSetMask <- .get(viewData,c("data","source","layerInfo","maskName"))
                 srcAvailableMask <- srcAvailable[! srcAvailable %in% srcSet ]
@@ -830,7 +830,7 @@ observe({
     layer <- input$selectSourceLayerMain
     errors <- c(
         noDataCheck(layer),
-        !layer %in% reactListReadSources()
+        !layer %in% reactListReadSourcesVector()
       )
     }
 
@@ -1101,7 +1101,7 @@ observe({
 
     geomTypes <- mxSetNameGeomType(geomTypesDf,language)
 
-    variables <- mxDbGetLayerColumnsNames(
+    variables <- mxDbGetTableColumnsNames(
       table = layerMain,
       notIn = c("geom","gid",'_mx_valid')
       )
@@ -1207,7 +1207,7 @@ observe({
     if( hasLayer && useMask ){
       language <- reactData$language
       layerMask <- input$selectSourceLayerMask
-      layers <- reactListReadSources()
+      layers <- reactListReadSourcesVector()
       layers <- layers[!layers %in% layer]
 
       if( length(layers) > 0 ){
