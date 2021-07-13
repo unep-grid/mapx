@@ -1,5 +1,8 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.38-beta' target='_blank'>1.8.38-beta</a>
+  - APP/API
+    - Support for non spatial CSV as source -> useful for custom sql queries or encrypted queries
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.37-rc1' target='_blank'>1.8.37-rc1</a>
   - APP
     - Fix bug when having no view in project triggered an error in reactViewsCompactVector list ( used in source overlap tool )
