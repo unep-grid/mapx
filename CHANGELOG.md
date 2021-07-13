@@ -1,5 +1,9 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.39-beta' target='_blank'>1.8.39-beta</a>
+  - APP/Routines
+   - Reset search index in routines index update to avoid missing view 
+   - In case of missing view when requesting view's metadata in search tool, display a message
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.38-beta' target='_blank'>1.8.38-beta</a>
   - APP/API
     - Support for non spatial CSV as source -> useful for custom sql queries or encrypted queries
