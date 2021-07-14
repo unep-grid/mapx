@@ -3,7 +3,7 @@
  */
 const {pgRead, pgWrite} = require('@mapx/db');
 const settings = require('@root/settings');
-const helpers = require('@mapx/helpers');
+const {parseTemplate, toBoolean} = require('@mapx/helpers');
 const template = require('@mapx/template');
 const valid = require('@fxi/mx_valid');
 
@@ -22,7 +22,6 @@ const key = settings.db.crypto.key;
 async function tableHasValues(idTable, schema) {
   schema = schema || 'public';
   const sqlExists = `
-  /*NO LOAD BALANCE*/
   SELECT EXISTS (
    SELECT 1
    FROM   information_schema.tables 
@@ -30,20 +29,17 @@ async function tableHasValues(idTable, schema) {
    AND    table_name = '${idTable}'
    )`;
   const sqlEmpty = `
-   /*NO LOAD BALANCE*/
    SELECT count(*) as n from ${idTable}
   `;
-  let isThere = false;
-  let hasValues = false;
-
+  let exists = false;
+  let hasRows = false;
   const res = await pgRead.query(sqlExists);
-  isThere = res.rowCount > 0 && res.rows[0].exists === true;
-
-  if (isThere) {
+  exists = res.rowCount > 0 && res.rows[0].exists === true;
+  if (exists) {
     const resEmpty = await pgRead.query(sqlEmpty);
-    hasValues = resEmpty.rowCount > 0 && resEmpty.rows[0].n * 1 > 0;
+    hasRows = resEmpty.rowCount > 0 && resEmpty.rows[0].n * 1 > 0;
   }
-  return isThere && hasValues;
+  return exists && hasRows;
 }
 
 /**
@@ -139,7 +135,13 @@ async function registerSource(
  * Test empty table : if no records, remove table, else register it as source
  * @param {String|Object} idSource id of the layer to add, or object with idSource, idUser, idProject, title.
  */
-async function registerOrRemoveSource(idSource, idUser, idProject, title, type='vector') {
+async function registerOrRemoveSource(
+  idSource,
+  idUser,
+  idProject,
+  title,
+  type = 'vector'
+) {
   if (typeof idSource === 'object') {
     const options = idSource;
     idSource = options.idSource;
@@ -188,7 +190,7 @@ async function removeSource(idSource) {
   const rmDelete = await pgWrite.query(sqlDelete);
   return {
     drop: rmDrop,
-    delete: rmDelete
+    unregister: rmDelete
   };
 }
 
@@ -225,7 +227,7 @@ async function getColumnsTypesSimple(idSource, idAttr) {
     idAttributesString: cNamesTxt
   };
 
-  const sqlSrcAttr = helpers.parseTemplate(template.getColumnsTypesSimple, opt);
+  const sqlSrcAttr = parseTemplate(template.getColumnsTypesSimple, opt);
   const resp = await pgRead.query(sqlSrcAttr);
   return resp.rows;
 }
@@ -289,8 +291,8 @@ async function getLayerTitle(idLayer, language) {
  * @param {Boolean} autoCorrect Try an automatic correction
  */
 async function isLayerValid(idLayer, useCache, autoCorrect) {
-  useCache = helpers.toBoolean(useCache, true);
-  autoCorrect = helpers.toBoolean(autoCorrect, false);
+  useCache = toBoolean(useCache, true);
+  autoCorrect = toBoolean(autoCorrect, false);
 
   var idValidColumn = '_mx_valid';
 
