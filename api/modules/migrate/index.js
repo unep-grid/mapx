@@ -11,7 +11,7 @@ const fs = require('fs');
  * Paths
  */
 const dirSqlPatches = path.join(__dirname, 'sql_patches');
-//const dirSqlRoutines = path.join(__dirname, 'sql_routines') # not used 
+//const dirSqlRoutines = path.join(__dirname, 'sql_routines') # not used
 const dirSqlBase = path.join(__dirname, 'sql_base');
 const dirSqlAdmin = path.join(__dirname, 'sql_admin');
 
@@ -37,7 +37,10 @@ async function apply() {
       console.log(`Migrate : No patch applied`);
     }
   } catch (e) {
-    console.error(e);
+    /*
+    * Handled in parent, e.g. once / withTimeLimit 
+    */ 
+    throw new Error(e); 
   }
 }
 
@@ -53,70 +56,69 @@ async function applyPatches() {
     .filter((f) => f.match(/\.sql$/));
 
   // No transaction
- const patchesAdmin = fs
+  const patchesAdmin = fs
     .readdirSync(dirSqlAdmin)
     .filter((f) => f.match(/\.sql$/));
 
-
   /**
    * Init patch table
-   */ 
+   */
+
   const res = await pgAdmin.query(sqlIsInit);
-  const init = (res.rows[0] || {}).exists === true;
-  if(!init){
+  const init = (res.rows[0] || {}).exists === true;
+  if (!init) {
     await pgAdmin.query(sqlInit);
   }
 
   /**
-  * No transaction patches ( repeatable admin stuff )
-  */
-  for (p of patchesAdmin) {
+   * No transaction patches ( repeatable admin stuff )
+   */
+  for (let p of patchesAdmin) {
     const fInfo = path.parse(p);
     const id = fInfo.name;
     const sqlHas = parseTemplate(sqlHasPatch, {id});
     const sqlReg = parseTemplate(sqlRegisterPatch, {id});
     /**
      * Don't apply patch more than once
-     */ 
+     */
+
     const resHas = await pgAdmin.query(sqlHas);
-    if (!resHas.rowCount>0) {
-      try{
-        const sqlPatch = readTxt(path.join(dirSqlAdmin, fInfo.base));
-        await pgAdmin.query(sqlPatch);
-        await pgAdmin.query(sqlReg);
-        applied.push(id);
-      }catch(e){
-        console.error(e);
-      }
+    if (!resHas.rowCount > 0) {
+      const sqlPatch = readTxt(path.join(dirSqlAdmin, fInfo.base));
+      await pgAdmin.query(sqlPatch);
+      await pgAdmin.query(sqlReg);
+      applied.push(id);
     }
   }
 
   /**
    * Transactional patches applying ( once and once only )
-   */ 
+   */
+
   const client = await pgAdmin.connect();
-  try{
+  try {
     await client.query('BEGIN');
     /**
-    * LOCK
-    * - because we don't want another process 
-    *   do the same operation at the same time
-    * - Lock released when commit/rollback.
-    */
+     * LOCK
+     * - because we don't want another process
+     *   do the same operation at the same time
+     * - Lock released when commit/rollback.
+     */
     await client.query('LOCK mx_patches');
 
-    for (p of patches) {
+    for (let p of patches) {
       const fInfo = path.parse(p);
       const id = fInfo.name;
       const sqlHas = parseTemplate(sqlHasPatch, {id});
       const sqlReg = parseTemplate(sqlRegisterPatch, {id});
       /**
-      * Don't apply patch more than once
-      */ 
+       * Don't apply patch more than once
+       */
+
       const resHas = await client.query(sqlHas);
-      if (!resHas.rowCount>0) {
+      if (!resHas.rowCount > 0) {
         const sqlPatch = readTxt(path.join(dirSqlPatches, fInfo.base));
-        try{
+        try {
           await client.query(sqlPatch);
           await client.query(sqlReg);
           applied.push(id);
@@ -124,17 +126,20 @@ async function applyPatches() {
           /**
            * Log an error + stop early, this should be rollbacked
            */
-          console.error(`Patch ${id} not applied`,e);
+          console.error(`Patch ${id} not applied`, e);
           throw new Error(e);
         }
       }
     }
     client.query('COMMIT');
-  }catch(e){
+  } catch (e) {
+    /*
+     * Rollack and propagate
+     */
     client.query('ROLLBACK');
-    console.error(e)
-  }finally{
-    client.release()
+    throw new Error(e);
+  } finally {
+    client.release();
   }
   return applied;
 }
