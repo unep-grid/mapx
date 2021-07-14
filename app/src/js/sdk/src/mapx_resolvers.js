@@ -80,7 +80,7 @@ class MapxResolvers {
    * @return {Array} array of themes id
    */
   get_themes_id() {
-    return mx.themes.getThemesIdList();
+    return mx.theme.getThemesIdList();
   }
 
   /**
@@ -88,7 +88,7 @@ class MapxResolvers {
    * @return {Object} Themes object with themes id as key
    */
   get_themes() {
-    return mx.themes.getThemes();
+    return mx.theme.getThemes();
   }
 
   /**
@@ -96,7 +96,7 @@ class MapxResolvers {
    * @return {string} Theme id
    */
   get_theme_id() {
-    return mx.themes.id_theme;
+    return mx.theme.id_theme;
   }
   /**
    * Check if element is visible, by id
