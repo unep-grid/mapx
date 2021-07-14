@@ -3,42 +3,8 @@
 \set custom_pwd `echo "$POSTGRES_USER_CUSTOM_PASSWORD"`
 
 --
--- Roles
+-- Roles read/write
 --
-
-CREATE ROLE mapxr;
-ALTER ROLE mapxr WITH
-NOSUPERUSER 
-INHERIT 
-NOCREATEROLE 
-NOCREATEDB 
-LOGIN 
-NOREPLICATION 
-NOBYPASSRLS 
-PASSWORD :'read_pwd';
-
-CREATE ROLE mapxw;
-ALTER ROLE mapxw WITH 
-NOSUPERUSER 
-INHERIT 
-CREATEROLE 
-NOCREATEDB 
-LOGIN 
-NOREPLICATION 
-NOBYPASSRLS 
-PASSWORD :'write_pwd';
-
-CREATE ROLE mapxc;
-ALTER ROLE mapxc
-WITH 
-NOSUPERUSER 
-NOINHERIT 
-NOCREATEROLE 
-NOCREATEDB 
-LOGIN 
-NOREPLICATION 
-NOBYPASSRLS 
-PASSWORD :'custom_pwd';
 
 CREATE ROLE readonly;
 ALTER ROLE readonly WITH 
@@ -61,22 +27,30 @@ NOREPLICATION
 NOBYPASSRLS;
 
 --
--- Role memberships
+--  Mapx roles
 --
+CREATE ROLE mapxw;
+ALTER ROLE mapxw WITH 
+LOGIN 
+PASSWORD :'write_pwd';
 
-GRANT readonly TO mapxr GRANTED BY postgres;
-GRANT readwrite TO mapxw GRANTED BY postgres;
+CREATE ROLE mapxr;
+ALTER ROLE mapxr WITH
+LOGIN 
+PASSWORD :'read_pwd';
 
---
--- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
---
+CREATE ROLE mapxc;
+ALTER ROLE mapxc
+WITH 
+LOGIN 
+PASSWORD :'custom_pwd';
 
-GRANT USAGE ON SCHEMA public TO mapxc;
 GRANT USAGE ON SCHEMA public TO readonly;
 GRANT USAGE ON SCHEMA public TO readwrite;
+ALTER DEFAULT PRIVILEGES FOR USER mapxw IN SCHEMA public GRANT SELECT ON TABLES TO readonly;
 
---
--- Name: DEFAULT PRIVILEGES FOR TABLES; Type: DEFAULT ACL; Schema: public; Owner: postgres
---
+GRANT readwrite TO mapxw;
+GRANT readonly TO mapxr;
+GRANT readonly TO mapxc;
 
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO mapxc;
+
