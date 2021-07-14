@@ -7,13 +7,14 @@
  */
 const multer = require('multer');
 const fs = require('fs');
+const {access, unlink} = require('fs/promises');
 const path = require('path');
 const {spawn} = require('child_process');
 
 const {sendMailAuto} = require('@mapx/mail');
 const {handleErrorText} = require('@mapx/error');
 const settings = require('@root/settings');
-const helpers = require('@mapx/helpers');
+const {toRes, randomString, wait} = require('@mapx/helpers');
 const {
   removeSource,
   isLayerValid,
@@ -29,7 +30,6 @@ const {
  * Shortcut
  */
 const emailAdmin = settings.mail.config.emailAdmin;
-const toRes = helpers.toRes;
 
 /**
  * Set multer storage
@@ -86,7 +86,7 @@ async function convertOgrHandler(req, res, next) {
 
   await fileToPostgres({
     isZipped: isZipped,
-    isCsv : isCsv,
+    isCsv: isCsv,
     fileName: fileName,
     sourceSrs: sourceSrs,
     onSuccess: (idSource) => {
@@ -115,7 +115,6 @@ async function convertOgrHandler(req, res, next) {
         content: data.msg,
         subject: `MapX import error`
       });
-
       res.status(500).end();
     }
   });
@@ -162,13 +161,13 @@ async function addSourceHandler(req, res) {
     /**
      * Layer validation
      */
-    res.write(
-      toRes({
-        type: 'message',
-        msg: msg.waitValidation
-      })
-    );
     if (isVector) {
+      res.write(
+        toRes({
+          type: 'message',
+          msg: msg.waitValidation
+        })
+      );
       const layerTest = await isLayerValid(idSource, false);
       isValid = layerTest.valid;
       if (!isValid) {
@@ -181,7 +180,14 @@ async function addSourceHandler(req, res) {
       }
     }
 
-    cleanFile(fileToRemove, res);
+    const fileRemoved = await cleanFile(fileToRemove);
+
+    res.write(
+      toRes({
+        type: 'message',
+        msg: `Removed temporary files: ${fileRemoved}`
+      })
+    );
 
     res.write(
       toRes({
@@ -237,28 +243,26 @@ async function addSourceHandler(req, res) {
 /**
  * If importeed file exists, remove it
  */
-function cleanFile(fileToRemove, res) {
-  if (fs.existsSync(fileToRemove)) {
-    fs.unlinkSync(fileToRemove);
+async function cleanFile(fileToRemove) {
+  let removed;
+  if (await access(fileToRemove)) {
+    removed = await unlink(fileToRemove);
   }
-  res.write(
-    toRes({
-      type: 'message',
-      msg: `Removed temporary files`
-    })
-  );
+  return removed;
 }
 
 /**
  * In case of faillure, clean the db : remove added entry and table
  */
 async function cleanAll(fileToRemove, idSource, res) {
-  await removeSource(idSource);
-  cleanFile(fileToRemove, res);
+  const rmSrc = await removeSource(idSource);
+  const rmFile = await cleanFile(fileToRemove);
+  const txtSrc = JSON.stringify(rmSrc);
+  const txtFile = JSON.stringify(rmFile);
   res.write(
     toRes({
       type: 'message',
-      msg: `New entry and table were removed, if needed.`
+      msg: `Removed source : ${txtSrc}; Removed file : ${txtFile}`
     })
   );
 }
@@ -281,7 +285,7 @@ async function fileToPostgres(config) {
   const onMessage = config.onMessage || function() {};
   const onError = config.onError || function() {};
   const onSuccess = config.onSuccess || function() {};
-  const idSource = helpers.randomString('mx_vector', 4, 5).toLowerCase();
+  const idSource = randomString('mx_vector', 4, 5).toLowerCase();
   const isZipped = config.isZipped === true;
   const isCsv = config.isCsv === true;
 
@@ -368,32 +372,27 @@ async function fileToPostgres(config) {
     ogr.on('exit', async (code, signal) => {
       try {
         if (code !== 0) {
-          onError({
-            code: code,
-            msg: `The import function exited with code ${code} ( ${signal} )`
-          });
-          return;
+          throw new Error(
+            `The import function exited with code ${code} ( ${signal} )`
+          );
         }
-
         const hasValues = await tableHasValues(idSource);
-
-        if (hasValues) {
-          onMessage({
-            msg: `The import was successful`,
-            type: 'message'
-          });
-
-          onSuccess(idSource);
-        } else {
-          onError({
-            code: code,
-            msg: `The import function failed No layer has been created. Verify your logs.`
-          });
-          return;
+        if (!hasValues) {
+          throw new Error(`No values for ${idSource}, or table not readable by current user`);
         }
+
+        onMessage({
+          msg: `The import was successful`,
+          type: 'message'
+        });
+
+        onSuccess(idSource);
       } catch (e) {
+        const err = handleErrorText(e);
+        const rmSrc = await removeSource(idSource);
+        const txtRmSrc = JSON.stringify(rmSrc);
         onError({
-          msg: `An error occured in import function, on exit handler (${handleErrorText(e)})`
+          msg: `An error occured on exit, in import function (${err}). Source removed : ${txtRmSrc}`
         });
         return;
       }
