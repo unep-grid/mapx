@@ -1,5 +1,16 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.40-rc1' target='_blank'>1.8.40-rc1</a>
+  - APP 
+    - SDK resolver : typo mx.themes -> mx.theme
+  - API 
+    - Merge PR : update role management for mapxc 
+    - Upload ogr script : removed `AUTODETECT_WIDTH` and `AUTODETECT_SIZE_LIMIT` options, keeping default
+    - Avoid nested error handling in `ogr.on('exit' ...`
+    - Migration scripts : error handled in parent/ main method
+    - formating db-utils source management (regiserOrRemove + check if table has values)
+    - MapX db init : fixed role issue + added timestamp setting as init step
+    - Updated migration script file names: order was not ok using file name
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.39-beta' target='_blank'>1.8.39-beta</a>
   - APP/Routines
    - Reset search index in routines index update to avoid missing view 
