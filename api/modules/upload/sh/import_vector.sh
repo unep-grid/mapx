@@ -18,8 +18,6 @@ fi
 if [ "$CSV_MODE" == "yes" ]
 then
   OPT=$OPT' -oo AUTODETECT_TYPE=YES'
-  OPT=$OPT' -oo AUTODETECT_WIDTH=YES'
-  OPT=$OPT' -oo AUTODETECT_SIZE_LIMIT=10000000'
 else
   OPT=$OPT' -t_srs EPSG:4326'
   OPT=$OPT' -s_srs EPSG:'$SRC_SRS''
