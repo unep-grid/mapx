@@ -185,7 +185,7 @@ async function addSourceHandler(req, res) {
     res.write(
       toRes({
         type: 'message',
-        msg: `Removed temporary files: ${fileRemoved}`
+        msg: `Cleaned temporary files: ${fileRemoved}`
       })
     );
 
@@ -244,9 +244,13 @@ async function addSourceHandler(req, res) {
  * If importeed file exists, remove it
  */
 async function cleanFile(fileToRemove) {
-  let removed;
-  if (await access(fileToRemove)) {
-    removed = await unlink(fileToRemove);
+  let removed = true;
+  try {
+    await access(fileToRemove);
+    await unlink(fileToRemove);
+  } catch (e) {
+    console.error('cleanFile error',e);
+    removed = false;
   }
   return removed;
 }
@@ -378,7 +382,9 @@ async function fileToPostgres(config) {
         }
         const hasValues = await tableHasValues(idSource);
         if (!hasValues) {
-          throw new Error(`No values for ${idSource}, or table not readable by current user`);
+          throw new Error(
+            `No values for ${idSource}, or table not readable by current user`
+          );
         }
 
         onMessage({
