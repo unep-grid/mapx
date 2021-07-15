@@ -232,7 +232,6 @@ views_built_peformance_issue_if_not_there AS (
  */
 views_built AS (
   SELECT
-    MD5(ROW (v.id, v.date_modified, m.meta)::text) AS hash,
     v.id AS view_id,
     v.project AS project_id,
     (
@@ -314,7 +313,6 @@ views_built_gemet as (
  */
 views_built_types AS (
   SELECT
-    hash,
     view_id,
     project_id,
     meta_multilingual,

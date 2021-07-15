@@ -40,6 +40,7 @@ async function updateIndexes() {
   
     const m49iso3 = await getDictM49iso3();
     const documents = result.rows;
+
     /**
      * Clean keywords: trim, lowercase, ..
      * NOTE: this should have been done at save time : it's not
@@ -51,6 +52,7 @@ async function updateIndexes() {
     }
     /**
      * Views.
+     * - Primary key, e.g. 'view_id' column, must be present in documents
      * - Create an index for each language.
      * NOTE: we could search in the multilingual object, but the search
      * tool do not <em> stuff in object or array. Client side, this step should be added.
@@ -58,7 +60,9 @@ async function updateIndexes() {
      * if another language – not dispayed – matched the query.
      */
     for (let language of languages.codes) {
-      const indexView = await meili.getOrCreateIndex(`views_${language}`);
+      const indexView = await meili.getOrCreateIndex(`views_${language}`, {
+        primaryKey: cid.primaryKey
+      });
       
       /**
       * Remove previous documents
