@@ -63,7 +63,7 @@ VALUES
   2,
   2,
   'user_2',
-  :'env_mail_guest,
+  :'env_mail_guest',
   'g8ejy73lqe7e8m6',
   't', 
   'f',
