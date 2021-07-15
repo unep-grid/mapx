@@ -42,7 +42,7 @@ CREATE ROLE mapxc;
 ALTER ROLE mapxc
 WITH 
 LOGIN 
-PASSWORD : 'env_mapxc_password';
+PASSWORD :'env_mapxc_password';
 
 GRANT USAGE ON SCHEMA public TO readonly;
 GRANT USAGE ON SCHEMA public TO readwrite;
