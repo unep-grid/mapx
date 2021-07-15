@@ -1,5 +1,9 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.41-rc2' target='_blank'>1.8.41-rc2</a>
+  - API
+    - Routines: set primary key instead of using default (first column with 'id'
+    - Upload csv/layer. Fix issue where temporary file were not cleaned 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.40-rc1' target='_blank'>1.8.40-rc1</a>
   - APP 
     - SDK resolver : typo mx.themes -> mx.theme

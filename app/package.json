@@ -1,6 +1,6 @@
 {
   "name": "mapx",
-  "version": "1.8.40-rc1",
+  "version": "1.8.41-rc2",
   "description": "",
   "main": "main.js",
   "devDependencies": {
