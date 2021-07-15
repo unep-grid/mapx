@@ -1,6 +1,6 @@
-\set admin `echo "$MAIL_ADMIN"`
-\set guest `echo "$MAIL_GUEST"`
-\set projectdef `echo "$MAPX_PROJECT_DEFAULT"`
+\set env_mail_admin `echo "$MAIL_ADMIN"`
+\set env_mail_guest `echo "$MAIL_GUEST"`
+\set env_project_def `echo "$MAPX_PROJECT_DEFAULT"`
 --
 -- Data for Name: mx_config; Type: TABLE DATA; Schema: public; Owner: mapxw
 --
@@ -19,7 +19,7 @@ INSERT INTO public.mx_config (pid, key, data, date_modified) VALUES
 INSERT INTO public.mx_projects (pid, id, id_old, title, description, active, public, admins, members, publishers, map_position, countries, creator, date_created, date_modified, views_external, alias, allow_join, contacts, states_views) VALUES
 (
   1,
-  :'projectdef',
+  :'env_project_def',
   'WLD',
   '{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}',
   '{"bn": "বিশ্", "de": "Welt", "en": "World", "es": "Mundo", "fa": "ﺞﻫﺎﻧ", "fr": "Monde", "ps": "نړۍ", "ru": "Мир", "zh": "世界"}',
@@ -51,7 +51,7 @@ VALUES
   1,
   1,
   'user_1',
-  'admin@localhost',
+  :'env_mail_admin',
   '3oqf43x3mbr1j78',
   't',
   'f',
@@ -63,7 +63,7 @@ VALUES
   2,
   2,
   'user_2',
-  'guest@localhost',
+  :'env_mail_guest,
   'g8ejy73lqe7e8m6',
   't', 
   'f',
