@@ -1,7 +1,6 @@
-\set read_pwd `echo "$POSTGRES_USER_READ_PASSWORD"`
-\set write_pwd `echo "$POSTGRES_USER_WRITE_PASSWORD"`
-\set custom_pwd `echo "$POSTGRES_USER_CUSTOM_PASSWORD"`
-
+\set env_mapxr_password `echo "$POSTGRES_USER_READ_PASSWORD"`
+\set env_mapxw_password `echo "$POSTGRES_USER_WRITE_PASSWORD"`
+\set env_mapxc_password `echo "$POSTGRES_USER_CUSTOM_PASSWORD"`
 --
 -- Roles read/write
 --
@@ -32,18 +31,18 @@ NOBYPASSRLS;
 CREATE ROLE mapxw;
 ALTER ROLE mapxw WITH 
 LOGIN 
-PASSWORD :'write_pwd';
+PASSWORD :'env_mapxw_password';
 
 CREATE ROLE mapxr;
 ALTER ROLE mapxr WITH
 LOGIN 
-PASSWORD :'read_pwd';
+PASSWORD :'env_mapxr_password';
 
 CREATE ROLE mapxc;
 ALTER ROLE mapxc
 WITH 
 LOGIN 
-PASSWORD :'custom_pwd';
+PASSWORD : 'env_mapxc_password';
 
 GRANT USAGE ON SCHEMA public TO readonly;
 GRANT USAGE ON SCHEMA public TO readwrite;
