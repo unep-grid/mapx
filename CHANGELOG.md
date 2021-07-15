@@ -1,5 +1,10 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.0' target='_blank'>1.9.0</a>
+  - APP
+    - 1.9 serie release
+  - PG init 
+    - Updated pg init varibles names 
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.8.41-rc2' target='_blank'>1.8.41-rc2</a>
   - API
     - Routines: set primary key instead of using default (first column with 'id'
