@@ -1,5 +1,10 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.1' target='_blank'>1.9.1</a>
+  - APP
+    - Search tool :
+      - Issue #711 reported bad behavior of the pagination. This is linked to the search tool used in backend : it does not report exact number of hits, which break the pagiation system, especially when combining filters and page offset.
+      - Initial search and subsequent fast search update, e.g. using the time slider, produced a large amount of requests. An async debounce has been added to prevent this.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.0' target='_blank'>1.9.0</a>
   - APP
     - 1.9 serie release
