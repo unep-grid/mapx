@@ -34,6 +34,9 @@ class Search extends EventSimple {
     s.setOpt(opt);
     //s.search = pDebounce(s.search, 150).bind(s);
     s.update = pDebounce(s.update, 200).bind(s);
+    s._handle_infinite_scroll = pDebounce(s._handle_infinite_scroll, 200).bind(
+      s
+    );
     return s;
   }
 
@@ -44,6 +47,7 @@ class Search extends EventSimple {
     }
     s._init = true;
     s._filters = {};
+    s._infinite_page = 0;
 
     /**
      * Dynamic import
@@ -65,8 +69,8 @@ class Search extends EventSimple {
     /**
      * Build ui
      */
-    await s.setLanguage({reset: false});
     await s.build();
+    await s.setLanguage({reset: false});
     await s.update();
     s.fire('ready');
     return s;
@@ -126,7 +130,10 @@ class Search extends EventSimple {
 
   async setLanguage(opt) {
     const s = this;
-    opt = Object.assign({}, {reset: true, language: null}, opt);
+    if (!s.isReady) {
+      return;
+    }
+    opt = Object.assign({}, {reset: true, language: 'en'}, opt);
     if (opt.language) {
       s.setOpt({language: opt.language});
     }
@@ -135,6 +142,12 @@ class Search extends EventSimple {
     if (opt.reset) {
       s.reset();
     }
+    /*
+     * Misc ui language
+     */
+
+    const msgNoViews = await getDictItem('search_results_empty');
+    s._elResults.setAttribute('msg_no_views', msgNoViews);
   }
 
   async setLocaleFlatpickr(lang) {
@@ -194,10 +207,18 @@ class Search extends EventSimple {
     s._built = true;
 
     /**
-     * Results and pagination
+     * Results
      */
     s._elResults = el('div', {class: ['search--results']});
-    s._elPagination = el('div', {class: ['search--pagination']});
+    s._elResults.addEventListener('scroll', s._handle_infinite_scroll);
+
+    /**
+     * Pagination
+     * MeiliSearch nbHits issue : no pagination possible, see #711
+     */
+    if (0) {
+      s._elPagination = el('div', {class: ['search--pagination']});
+    }
 
     /**
      * Filters and facet
@@ -264,7 +285,7 @@ class Search extends EventSimple {
       },
       s._elHeader,
       s._elResults,
-      s._elPagination,
+      //s._elPagination,
       s._elStats
     );
 
@@ -680,6 +701,37 @@ class Search extends EventSimple {
     }
     await s.update();
   }
+
+  async _handle_infinite_scroll() {
+    const s = this;
+    if (s._infinite_scroll_updating || s._infinite_scroll_last) {
+      return;
+    }
+    const {scrollTop, scrollHeight, clientHeight} = s._elResults;
+    try {
+      if (clientHeight + scrollTop >= scrollHeight - 5) {
+        const msgLoading = await getDictItem('search_results_loading');
+        s._elResults.setAttribute('msg_loading', msgLoading);
+        s._infinite_page++;
+        s._infinite_scroll_updating = true;
+        const results = await s.update({
+          append: true,
+          page: s._infinite_page
+        });
+        if (results && results.hits.length === 0) {
+          s._infinite_scroll_last = true;
+          const msgNoMore = await getDictItem('search_results_end_of');
+          s._elResults.setAttribute('msg_loading', msgNoMore);
+        } else {
+          s._elResults.setAttribute('msg_loading', '');
+        }
+      }
+    } catch (e) {
+      console.warn(e);
+    }
+    s._infinite_scroll_updating = false;
+  }
+
   async _handle_click(e) {
     const s = this;
     const ds = e.target?.dataset || {};
@@ -1180,7 +1232,18 @@ class Search extends EventSimple {
    */
   async update(opt) {
     const s = this;
-    const options = Object.assign({page: 0}, opt);
+    const options = Object.assign(
+      {page: 0, append: false, page_stat: false},
+      opt
+    );
+    if (options.append === false) {
+      /**
+       * Reset infinite counter if non-append mode
+       */
+
+      s._infinite_page = 0;
+      s._infinite_scroll_last = false;
+    }
     await s.initCheck();
     s._timer_update_cancel = performance.now();
     try {
@@ -1206,19 +1269,62 @@ class Search extends EventSimple {
       /**
        * Search is not cancellable, but if the timer
        * has changed, another request is on its way.
-       * -> Do not render further.
+       * -> Do not render the old one, cancel.
        */
       if (s._timer_update_cancel !== timer) {
         return;
       }
-      await s._update_stats(results);
+      /**
+       * Resulting list append/replace
+       */
+
       const fragItems = s._build_result_list(results.hits);
-      const elPaginationItems = s._build_pagination_items(results);
-      s._elResults.replaceChildren(fragItems);
-      s._elPagination.replaceChildren(elPaginationItems);
+      if (options.append) {
+        s._elResults.appendChild(fragItems);
+      } else {
+        s._elResults.replaceChildren(fragItems);
+        s._elResults.scrollTop = 0;
+      }
+      if (options.page_stat) {
+        /**
+         * -> page_stat should be always false, for now, because
+         * MeiliSearch nbHits issue : no pagination possible, see #711
+         */
+        const elPaginationItems = s._build_pagination_items(results);
+        s._elPagination.replaceChildren(elPaginationItems);
+        await s._update_stats_pagination(results);
+        //}else if(!options.append){
+      } else {
+        /**
+         * Only display stats if append is false, as append implies
+         * offset, and offset + filter = meiliSearch wrong nbHits.
+         */
+
+        await s._update_stats_simple(results);
+      }
+      /**
+       * Update filter flag (red dot)
+       */
+
       s._update_flag_auto();
-      s._update_toggles_icons();
+      /**
+       * Facets are built on the very first "placeholder" search, when all
+       * items are returned, then, subsequent results only update facets.
+       */
+
       s._build_facets_or_update(results.facetsDistribution);
+      /**
+       * Reset item toggle: new result could have displayed views that
+       * are already on the map
+       */
+
+      s._update_toggles_icons();
+
+      /**
+       * Return full results
+       */
+
+      return results;
     } catch (e) {
       console.warn('Issue while searching', {error: e});
     }
@@ -1273,21 +1379,33 @@ class Search extends EventSimple {
     );
     const res = await s._index.search(search.q, search);
 
-    return(res);
+    return res;
   }
   /**
-   * Update stats
+   * Update stats pagition
    */
-  async _update_stats(results) {
+  async _update_stats_pagination(results) {
     const s = this;
     const nPage = Math.ceil(results.nbHits / results.limit);
     const cPage = Math.ceil(
       nPage - (results.nbHits - results.offset) / results.limit
     );
-    const strTime = `${results.processingTimeMs} ms`;
-    const strNbHit = `${results.nbHits} `;
-    const tmpl = await getDictItem('search_results_stats');
+    const strTime = `${results.processingTimeMs}`;
+    const strNbHit = `${results.nbHits}`;
+    const tmpl = await getDictItem('search_results_stats_pagination');
     const txt = s.template(tmpl, {strNbHit, strTime, cPage, nPage});
+    s._elStatHits.setAttribute('stat', txt);
+  }
+
+  /**
+   * Update stats simple
+   */
+  async _update_stats_simple(results) {
+    const s = this;
+    const strTime = `${results.processingTimeMs}`;
+    const strNbHit = `${results.nbHits}`;
+    const tmpl = await getDictItem('search_results_stats_simple');
+    const txt = s.template(tmpl, {strNbHit, strTime});
     s._elStatHits.setAttribute('stat', txt);
   }
   /**
