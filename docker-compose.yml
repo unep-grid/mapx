@@ -3,6 +3,9 @@ version: '3.2'
 # ports : host:container
 services:
   traefik:
+    networks:
+      - backend
+      - frontend
     image: traefik:v2.3.2
     command:
       - '--api.insecure=true'
@@ -20,6 +23,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./_shared/traefik/certs:/certs
   search:
+    networks:
+      - backend
+      - frontend
     image: getmeili/meilisearch:v0.20.0
     env_file: mapx.dev.env
     restart: always
@@ -34,6 +40,9 @@ services:
     ports:
       - 7700
   app:
+    networks:
+      - backend
+      - frontend
     env_file: mapx.dev.env
     build: ./app/.
     image: fredmoser/mx-app-shiny:1.9.0-debian
@@ -59,6 +68,9 @@ services:
       - ./app:/appdev
       - ./_shared:/shared
   api:
+    networks:
+      - backend
+      - frontend
     env_file: mapx.dev.env
     build: ./api/.
     image: fredmoser/mx-api-node:1.9.0-alpine
@@ -87,6 +99,9 @@ services:
       - ./api:/apidev
       - ./_shared:/shared
   geoserver:
+    networks:
+      - backend
+      - frontend
     env_file: mapx.dev.env
     build: ./geoserver/.
     image: fredmoser/mx-api-geoserver:2.18.1-alpine
@@ -100,6 +115,9 @@ services:
       - 'traefik.http.routers.geoserver.entrypoints=web'
       - 'traefik.http.services.geoserver.loadbalancer.server.port=8080'
   pg:
+    networks:
+      - backend
+      - frontend
     env_file: mapx.dev.env
     image: postgis/postgis:13-3.1-alpine
     restart: always
@@ -111,6 +129,8 @@ services:
     ports:
       - 5432:5432
   routines:
+    networks:
+      - backend
     env_file: mapx.dev.env
     image: fredmoser/mx-api-node:1.9.0-alpine
     hostname: mx_routines
@@ -123,6 +143,8 @@ services:
     volumes:
       - ./api:/routinesdev
   redis:
+    networks:
+      - backend
     image: redis:alpine
     restart: always
     hostname: redis
@@ -132,6 +154,8 @@ services:
     ports:
       - 6379
   probe:
+    networks:
+      - frontend
     build: ./probe/.
     image: fredmoser/mx-probe:0.2-go
     labels:
@@ -142,6 +166,8 @@ services:
     ports:
       - 8080
   wsecho:
+    networks:
+      - frontend
     image: jmalloc/echo-server
     labels:
       - 'traefik.enable=true'
@@ -151,6 +177,8 @@ services:
     ports:
       - 8080
   mailhog:
+    networks:
+      - frontend
     image: mailhog/mailhog
     logging:
       driver: none
@@ -163,3 +191,6 @@ services:
 volumes:
   searchmeili:
 
+networks:
+  frontend:
+  backend:
