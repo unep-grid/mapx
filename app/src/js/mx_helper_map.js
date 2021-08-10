@@ -5848,7 +5848,7 @@ export async function shinyNotify(opt) {
 
 /**
  * Fetch search API, using user id and token stored in config
- * @return {String} Search api key
+ * @return {Promise<String>} Search api key
  */
 
 async function getSearchApiKey() {

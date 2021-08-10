@@ -8,6 +8,7 @@ const def = {
   index_template: 'views_{{language}}',
   index: 'views_en',
   link_pathname: '/static.html',
+  hitsPerPage : 20,
   meili: {
     index_setting: {}
   },

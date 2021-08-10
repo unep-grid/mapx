@@ -8,6 +8,7 @@ import {viewsListAddSingle} from './../mx_helper_map_view_ui.js';
 import {el, elSpanTranslate, elButtonIcon} from '../el_mapx/index.js';
 import {prefGet, prefSet} from './../user_pref';
 import {isDate} from './../is_test/index.js';
+import pDebounce from 'p-debounce';
 
 import {
   zoomToViewId,
@@ -31,6 +32,8 @@ class Search extends EventSimple {
     super();
     const s = this;
     s.setOpt(opt);
+    //s.search = pDebounce(s.search, 150).bind(s);
+    s.update = pDebounce(s.update, 200).bind(s);
     return s;
   }
 
@@ -64,7 +67,6 @@ class Search extends EventSimple {
      */
     await s.setLanguage({reset: false});
     await s.build();
-
     await s.update();
     s.fire('ready');
     return s;
@@ -277,28 +279,25 @@ class Search extends EventSimple {
 
   _update_facets(distrib) {
     const s = this;
-    clearTimeout(s._timeout_facets);
-    s._timeout_facets = setTimeout(() => {
-      const attrKeys = s.opt('keywords').map((k) => k.type);
+    const attrKeys = s.opt('keywords').map((k) => k.type);
 
-      for (let attr of attrKeys) {
-        /**
-         * source_keyword, source_keywords_m49, view_type
-         */
-        const tags = distrib[attr];
-        for (let tag in tags) {
-          if (tag) {
-            const k = `${attr}:${tag}`;
-            /**
-             * Label or key, e.g. vt, environment, global
-             */
-            const count = tags[tag];
-            const facet = s._facets[k];
-            facet.count = count;
-          }
+    for (let attr of attrKeys) {
+      /**
+       * source_keyword, source_keywords_m49, view_type
+       */
+      const tags = distrib[attr];
+      for (let tag in tags) {
+        if (tag) {
+          const k = `${attr}:${tag}`;
+          /**
+           * Label or key, e.g. vt, environment, global
+           */
+          const count = tags[tag];
+          const facet = s._facets[k];
+          facet.count = count;
         }
       }
-    }, 200);
+    }
   }
 
   _build_facets(distrib) {
@@ -407,6 +406,16 @@ class Search extends EventSimple {
     }
 
     return frag;
+  }
+
+  async _build_facets_or_update(distrib) {
+    const s = this;
+    if (!s._facets) {
+      const fragFacet = s._build_facets(distrib);
+      s._elFiltersFacets.replaceChildren(fragFacet);
+    } else {
+      s._update_facets(distrib);
+    }
   }
 
   async _build_filter_years_range() {
@@ -701,9 +710,11 @@ class Search extends EventSimple {
           break;
         case 'update_facet_filter':
           await s.update();
-          setTimeout(() => {
-            e.target.scrollIntoView({block: 'center', inline: 'nearest'});
-          }, 200);
+          e.target.scrollIntoView({
+            block: 'center',
+            inline: 'nearest',
+            behaviour: 'smooth'
+          });
           break;
         case 'search_clear':
           {
@@ -714,7 +725,9 @@ class Search extends EventSimple {
         case 'search_set_page':
           {
             s.vFeedback(e);
-            await s.update(ds.page);
+            await s.update({
+              page: ds.page
+            });
           }
           break;
         case 'search_keyword_toggle':
@@ -1062,7 +1075,7 @@ class Search extends EventSimple {
         filters.push(filter);
       }
     }
-    return filters.join(` ${op} `);
+    return filters.join(` ${op} `) || null;
   }
   setFilter(id, value) {
     const s = this;
@@ -1141,7 +1154,7 @@ class Search extends EventSimple {
     const s = this;
     return s._elInput.value.length > 0;
   }
-  updateFlagAuto() {
+  _update_flag_auto() {
     const s = this;
     const hasFilter =
       s.hasFilter() || s.hasFilterDateInput() || s.hasFilterDateSlider();
@@ -1161,33 +1174,29 @@ class Search extends EventSimple {
   }
 
   /**
-   * Update the results, and set the page
-   * @param {Integer} page Page number - saved in pagination.
+   * Update the results
+   * @param {Object} opt Options.
+   * @param {Integer} opt.page Page number - saved in pagination.
    */
-  async update(page) {
+  async update(opt) {
     const s = this;
+    const options = Object.assign({page: 0}, opt);
     await s.initCheck();
-    s._timer_debounce = performance.now();
+    s._timer_update_cancel = performance.now();
     try {
-      const timer = s._timer_debounce;
+      const timer = s._timer_update_cancel;
       const attr = s.opt('attributes');
+      const hPage = s.opt('hitsPerPage');
       const attrKeys = s.opt('keywords').map((k) => k.type);
       const strFilters = s.getFilters();
       const facetFilters = s.getFiltersFacets();
-      s.updateFlagAuto();
-      /**
-       * Prevent extrem quick chamges
-       * -> Do not render further.
-       */
-      if (s._timer_debounce !== timer) {
-        return;
-      }
+
       const results = await s.search({
         q: s._elInput.value,
-        offset: page * 20,
-        limit: 20,
-        filters: strFilters || null,
-        facetFilters: facetFilters || null,
+        offset: options.page * hPage,
+        limit: hPage,
+        filters: strFilters,
+        facetFilters: facetFilters,
         attributesToRetrieve: attr.retrieve,
         attributesToHighlight: attr.text,
         attributesToCrop: attr.text,
@@ -1199,31 +1208,22 @@ class Search extends EventSimple {
        * has changed, another request is on its way.
        * -> Do not render further.
        */
-      if (s._timer_debounce !== timer) {
+      if (s._timer_update_cancel !== timer) {
         return;
       }
-      s._results = results;
       await s._update_stats(results);
       const fragItems = s._build_result_list(results.hits);
-      s._elResults.replaceChildren(fragItems);
-      s._update_toggles_icons();
       const elPaginationItems = s._build_pagination_items(results);
+      s._elResults.replaceChildren(fragItems);
       s._elPagination.replaceChildren(elPaginationItems);
-      /**
-       * ⚠️  fragile: if the list is not complete, subsequent search
-       * will not display new facets.
-       */
-
-      if (!s._facets) {
-        const fragFacet = s._build_facets(results.facetsDistribution);
-        s._elFiltersFacets.replaceChildren(fragFacet);
-      } else {
-        s._update_facets(results.facetsDistribution);
-      }
+      s._update_flag_auto();
+      s._update_toggles_icons();
+      s._build_facets_or_update(results.facetsDistribution);
     } catch (e) {
       console.warn('Issue while searching', {error: e});
     }
   }
+
   /**
    * Update open/close tag
    */
@@ -1271,7 +1271,9 @@ class Search extends EventSimple {
       },
       opt
     );
-    return await s._index.search(search.q, search);
+    const res = await s._index.search(search.q, search);
+
+    return(res);
   }
   /**
    * Update stats
@@ -1409,7 +1411,6 @@ class Search extends EventSimple {
    * @param {Object} data Object with key : value pair
    * @return {String} template with replaced values
    */
-
   template(str, data) {
     const s = this;
     if (!data) {
