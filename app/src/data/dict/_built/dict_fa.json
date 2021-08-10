@@ -6880,9 +6880,14 @@
     "fa": "داستان داستان بازی خودکار"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "fa": " {{strNbHit}}نتایج یافت شده در {{strTime}} . نمایش صفحه {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "fa": " {{strNbHit}}نتایج در found یافت شد {{strTime}} میلی ثانیه نمایش صفحه {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "fa": "~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه"
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "fa": "کلید و پیکربندی API جستجو را دریافت کنید"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "fa": "بارگذاری..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "fa": "پایان نتایج."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "fa": "هیچ نمایشی یافت نشد"
   }
 ]

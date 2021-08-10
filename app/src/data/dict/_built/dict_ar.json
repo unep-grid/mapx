@@ -6880,9 +6880,14 @@
     "ar": "اللعب التلقائي لخريطة القصة"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في {{strTime}} . عرض الصفحة {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في ~ {{strTime}} ميلي ثانية. عرض الصفحة {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "ar": "~ {{strNbHit}} النتائج التي تم العثور عليها في {{strTime}} مللي ثانية."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "ar": "الحصول على مفتاح البحث والتكوين API"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "ar": "تحميل..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "ar": "نهاية النتائج."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "ar": "لم يتم العثور على مشاهدات"
   }
 ]

@@ -6880,9 +6880,14 @@
     "zh": "故事图自动播放"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "zh": " {{strNbHit}}在中找到结果 {{strTime}}。显示页面 {{cPage}}/ {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "zh": " {{strNbHit}}结果发现~ {{strTime}}毫秒。显示页面 {{cPage}}/ {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "zh": "~ {{strNbHit}}结果在 {{strTime}}毫秒。"
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "zh": "获取搜索 API 密钥和配置"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "zh": "正在加载..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "zh": "结果结束。"
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "zh": "未找到任何视图"
   }
 ]

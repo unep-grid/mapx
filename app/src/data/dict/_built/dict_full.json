@@ -17888,17 +17888,30 @@
     "de": "Automatische Wiedergabe der Story Map"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "fr": " {{strNbHit}}résultats trouvés dans {{strTime}} . Affichage de la page {{cPage}} / {{nPage}}",
-    "es": " {{strNbHit}}resultados encontrados en {{strTime}} . Visualización de la página {{cPage}} / {{nPage}}",
-    "ru": " {{strNbHit}}результаты найдены в {{strTime}} . Отображение страницы {{cPage}} / {{nPage}}",
-    "zh": " {{strNbHit}}在中找到结果 {{strTime}}。显示页面 {{cPage}}/ {{nPage}}",
-    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في {{strTime}} . عرض الصفحة {{cPage}} / {{nPage}}",
-    "fa": " {{strNbHit}}نتایج یافت شده در {{strTime}} . نمایش صفحه {{cPage}} / {{nPage}}",
-    "ps": " {{strNbHit}}پایلې په کې وموندل شوې {{strTime}} . پا Displayه ښودل {{cPage}} / {{nPage}}",
-    "bn": " {{strNbHit}}ফলাফল পাওয়া গেছে {{strTime}} । পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}",
-    "de": " {{strNbHit}}Ergebnisse gefunden in {{strTime}} . Seite anzeigen {{cPage}} /. {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "fr": "{{strNbHit}} resultats trouvés en ~ {{strTime}} millisecondes. Affichage de la page {{cPage}}/{{nPage}}",
+    "es": " {{strNbHit}}resultados encontrados en ~ {{strTime}} milisegundos. Visualización de la página {{cPage}} / {{nPage}}",
+    "ru": " {{strNbHit}}результаты найдены в ~ {{strTime}} миллисекунды. Отображение страницы {{cPage}} / {{nPage}}",
+    "zh": " {{strNbHit}}结果发现~ {{strTime}}毫秒。显示页面 {{cPage}}/ {{nPage}}",
+    "ar": " {{strNbHit}}النتائج التي تم العثور عليها في ~ {{strTime}} ميلي ثانية. عرض الصفحة {{cPage}} / {{nPage}}",
+    "fa": " {{strNbHit}}نتایج در found یافت شد {{strTime}} میلی ثانیه نمایش صفحه {{cPage}} / {{nPage}}",
+    "ps": " {{strNbHit}}پایلې په in کې موندل شوي {{strTime}} ملی ثانیه د پا pageې ښودل {{cPage}} / {{nPage}}",
+    "bn": " {{strNbHit}}ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}",
+    "de": " {{strNbHit}}Ergebnisse gefunden in ~ {{strTime}} Millisekunden. Seite anzeigen {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "fr": " ~ {{strNbHit}} résultats trouvés en {{strTime}} millisecondes.",
+    "es": "~ {{strNbHit}} resultados encontrados en {{strTime}} milisegundos.",
+    "ru": "~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды.",
+    "zh": "~ {{strNbHit}}结果在 {{strTime}}毫秒。",
+    "ar": "~ {{strNbHit}} النتائج التي تم العثور عليها في {{strTime}} مللي ثانية.",
+    "fa": "~ {{strNbHit}} نتایج یافت شده در {{strTime}} میلی ثانیه",
+    "ps": "د {{strNbHit}} پایلې وموندل شوې {{strTime}} ملی ثانیه",
+    "bn": "~ {{strNbHit}} ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড",
+    "de": "~ {{strNbHit}} Ergebnisse gefunden in {{strTime}} Millisekunden."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -18003,5 +18016,44 @@
     "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ",
     "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান",
     "de": "Such-API-Schlüssel und -Konfiguration abrufen"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "fr": "Chargement...",
+    "es": "Cargando...",
+    "ru": "Загружается ...",
+    "zh": "正在加载...",
+    "ar": "تحميل...",
+    "fa": "بارگذاری...",
+    "ps": "بارول ...",
+    "bn": "লোড হচ্ছে ...",
+    "de": "Wird geladen..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "fr": "Fin des résultats.",
+    "es": "Fin de los resultados.",
+    "ru": "Конец результатов.",
+    "zh": "结果结束。",
+    "ar": "نهاية النتائج.",
+    "fa": "پایان نتایج.",
+    "ps": "د پایلو پای.",
+    "bn": "ফলাফল শেষ।",
+    "de": "Ende der Ergebnisse."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "fr": "Aucune vue trouvée",
+    "es": "No se encontraron vistas",
+    "ru": "Просмотры не найдены",
+    "zh": "未找到任何视图",
+    "ar": "لم يتم العثور على مشاهدات",
+    "fa": "هیچ نمایشی یافت نشد",
+    "ps": "هیڅ لید ونه موندل شو",
+    "bn": "কোনো ভিউ পাওয়া যায়নি",
+    "de": "Keine Ansichten gefunden"
   }
 ]

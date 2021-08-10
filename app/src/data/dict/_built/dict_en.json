@@ -5504,8 +5504,12 @@
     "en": "Story map auto play"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -5538,5 +5542,17 @@
   {
     "id": "search_show_api_config",
     "en": "Get search API key and configuration"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found"
   }
 ]

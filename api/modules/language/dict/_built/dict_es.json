@@ -6880,9 +6880,14 @@
     "es": "Reproducción automática del mapa de la historia"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "es": " {{strNbHit}}resultados encontrados en {{strTime}} . Visualización de la página {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "es": " {{strNbHit}}resultados encontrados en ~ {{strTime}} milisegundos. Visualización de la página {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "es": "~ {{strNbHit}} resultados encontrados en {{strTime}} milisegundos."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "es": "Obtenga la clave y la configuración de la API de búsqueda"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "es": "Cargando..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "es": "Fin de los resultados."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "es": "No se encontraron vistas"
   }
 ]

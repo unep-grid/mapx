@@ -6880,9 +6880,14 @@
     "de": "Automatische Wiedergabe der Story Map"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "de": " {{strNbHit}}Ergebnisse gefunden in {{strTime}} . Seite anzeigen {{cPage}} /. {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "de": " {{strNbHit}}Ergebnisse gefunden in ~ {{strTime}} Millisekunden. Seite anzeigen {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "de": "~ {{strNbHit}} Ergebnisse gefunden in {{strTime}} Millisekunden."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "de": "Such-API-Schlüssel und -Konfiguration abrufen"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "de": "Wird geladen..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "de": "Ende der Ergebnisse."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "de": "Keine Ansichten gefunden"
   }
 ]

@@ -6880,9 +6880,14 @@
     "ru": "Автоматическое воспроизведение сюжетной карты"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "ru": " {{strNbHit}}результаты найдены в {{strTime}} . Отображение страницы {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "ru": " {{strNbHit}}результаты найдены в ~ {{strTime}} миллисекунды. Отображение страницы {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "ru": "~ {{strNbHit}} результаты найдены в {{strTime}} миллисекунды."
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "ru": "Получить ключ и конфигурацию API поиска"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "ru": "Загружается ..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "ru": "Конец результатов."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "ru": "Просмотры не найдены"
   }
 ]

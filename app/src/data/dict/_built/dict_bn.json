@@ -6880,9 +6880,14 @@
     "bn": "গল্পের মানচিত্র অটো প্লে"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "bn": " {{strNbHit}}ফলাফল পাওয়া গেছে {{strTime}} । পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "bn": " {{strNbHit}}ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড পৃষ্ঠা প্রদর্শন করা হচ্ছে {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "bn": "~ {{strNbHit}} ফলাফল পাওয়া যায় {{strTime}} মিলিসেকেন্ড"
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "bn": "অনুসন্ধান API কী এবং কনফিগারেশন পান"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "bn": "লোড হচ্ছে ..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "bn": "ফলাফল শেষ।"
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "bn": "কোনো ভিউ পাওয়া যায়নি"
   }
 ]

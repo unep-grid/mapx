@@ -6880,9 +6880,14 @@
     "ps": "د کيسې نقشه اوتومات لوبه"
   },
   {
-    "id": "search_results_stats",
-    "en": "{{strNbHit}}  results found in {{strTime}}. Displaying page {{cPage}}/{{nPage}}",
-    "ps": " {{strNbHit}}پایلې په کې وموندل شوې {{strTime}} . پا Displayه ښودل {{cPage}} / {{nPage}}"
+    "id": "search_results_stats_pagination",
+    "en": "{{strNbHit}} results found in ~ {{strTime}} milliseconds. Displaying page {{cPage}}/{{nPage}}",
+    "ps": " {{strNbHit}}پایلې په in کې موندل شوي {{strTime}} ملی ثانیه د پا pageې ښودل {{cPage}} / {{nPage}}"
+  },
+  {
+    "id": "search_results_stats_simple",
+    "en": " ~ {{strNbHit}} results found in {{strTime}} milliseconds.",
+    "ps": "د {{strNbHit}} پایلې وموندل شوې {{strTime}} ملی ثانیه"
   },
   {
     "id": "search_source_keywords_group_region",
@@ -6923,5 +6928,20 @@
     "id": "search_show_api_config",
     "en": "Get search API key and configuration",
     "ps": "د لټون API کیلي او تنظیمات ترلاسه کړئ"
+  },
+  {
+    "id": "search_results_loading",
+    "en": "Loading...",
+    "ps": "بارول ..."
+  },
+  {
+    "id": "search_results_end_of",
+    "en": "End of results.",
+    "ps": "د پایلو پای."
+  },
+  {
+    "id": "search_results_empty",
+    "en": "No views found",
+    "ps": "هیڅ لید ونه موندل شو"
   }
 ]
