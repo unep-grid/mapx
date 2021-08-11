@@ -1,5 +1,14 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.2' target='_blank'>1.9.2</a>
+  - URL for downloading rasters has been moved to metadata, the download button has been modified accordingly ( #658 ) 
+  - View's metadata includes abstract and title, useful in static mode (#666) 
+  - Static mode fixes issues with languages object not being detected 
+  - Option to style table's odd row ( Theme -> background accent )
+  - Moved themes' dictionary items to a separate file
+  - Search index update, #712 : project data was not translated after the first index iteration, as the original item was mutated. Cloning it solved the issue.
+  - Search tool : changed layout for the filter panel to reduce layout shifts, e.g. reordering facets produced a lot of shifts, and the panel itself when toggled shifted/obstructed results list
+  - Panels: changed orientation of handles to avoid obstructing scrollbar in some case
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.1' target='_blank'>1.9.1</a>
   - APP
     - Search tool :
