@@ -14,24 +14,22 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  .search--header {
+  .search--input-container {
     padding: 10px;
-    .search--input-container {
-      position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      .search--input {
-        border-radius: 5px;
-        box-shadow: none;
-        transition: none;
-        padding: 4px 4px 4px 15px;
-        flex-grow: 1;
-        border: 1px solid var(--mx_ui_border);
-        border-radius: 10px;
-        min-height: 30px;
-        resize: none;
-        background: var(--mx_ui_background_contrast);
-      }
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    .search--input {
+      border-radius: 5px;
+      box-shadow: none;
+      transition: none;
+      padding: 4px 4px 4px 15px;
+      flex-grow: 1;
+      border: 1px solid var(--mx_ui_border);
+      border-radius: 10px;
+      min-height: 30px;
+      resize: none;
+      background: var(--mx_ui_background_contrast);
     }
   }
   .search--footer {

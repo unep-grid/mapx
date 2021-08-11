@@ -237,9 +237,11 @@ class Search extends EventSimple {
       {
         class: ['search--filters', 'search--hidden']
       },
-      s._elFiltersYearsRange,
-      s._elFiltersFacets,
-      s._elFiltersDateGroup
+      el('div', {class: 'search--filters-items'}, [
+        s._elFiltersYearsRange,
+        s._elFiltersFacets,
+        s._elFiltersDateGroup
+      ])
     );
 
     /**
@@ -259,19 +261,10 @@ class Search extends EventSimple {
     /**
      * Search header
      */
-
-    s._elHeader = el(
-      'div',
-      {
-        class: 'search--header'
-      },
-      await s._build_input({
-        key_label: 'search_title',
-        key_placeholder: 'search_placeholder'
-      }),
-      s._elSliderYearContainer,
-      s._elFilters
-    );
+    s._elInputs = await s._build_input({
+      key_label: 'search_title',
+      key_placeholder: 'search_placeholder'
+    });
 
     /**
      * Search complete
@@ -283,7 +276,8 @@ class Search extends EventSimple {
         class: ['search--container'],
         on: ['click', s._handle_click.bind(s)]
       },
-      s._elHeader,
+      s._elInputs,
+      s._elFilters,
       s._elResults,
       //s._elPagination,
       s._elStats
@@ -338,7 +332,10 @@ class Search extends EventSimple {
       /**
        * source_keyword, source_keywords_m49, view_type
        */
-      const {elFacetGroup, elFacetItems} = build_facets_group(attr);
+      const {elFacetGroup, elFacetItems} = build_facets_group(attr, {
+        details: true,
+        open: !frag.firstElementChild
+      });
       s._facets_containers.push(elFacetItems);
       frag.appendChild(elFacetGroup);
 
@@ -347,10 +344,11 @@ class Search extends EventSimple {
        */
 
       if (subgroups) {
-        elFacetItems.className = '';
+        elFacetItems.className = 'search--filter-facets-sub-items';
         for (let g of subgroups) {
           const {elFacetGroup: elFg, elFacetItems: elFi} = build_facets_group(
-            g.key
+            g.key,
+            {details: false}
           );
           elFacetItems.appendChild(elFg);
           g._elSubFacetItems = elFi;
@@ -402,16 +400,17 @@ class Search extends EventSimple {
       }
     }
 
-    function build_facets_group(key) {
+    function build_facets_group(key, opt) {
       let elFacetItems;
+      opt = Object.assign({}, {details: true, open: false}, opt);
       const elFacetGroup = el(
-        'div',
+        opt.details ? 'details' : 'div',
         {
           class: 'search--filter-facets-group'
         },
         [
           el(
-            'label',
+            opt.details ? 'summary' : 'span',
             {
               class: 'search--filter-group-title'
             },
@@ -422,7 +421,9 @@ class Search extends EventSimple {
           }))
         ]
       );
-
+      if (opt.details && opt.open) {
+        elFacetGroup.setAttribute('open', true);
+      }
       return {elFacetItems, elFacetGroup};
     }
 
@@ -629,7 +630,7 @@ class Search extends EventSimple {
     });
 
     s._elBtnToggleFilters = elButtonIcon('search_filters', {
-      icon: 'fa-filter',
+      icon: 'fa-bars',
       mode: 'icon',
       classes: [],
       dataset: {action: 'toggle_filters'},
@@ -762,11 +763,19 @@ class Search extends EventSimple {
           break;
         case 'update_facet_filter':
           await s.update();
-          e.target.scrollIntoView({
-            block: 'center',
-            inline: 'nearest',
-            behaviour: 'smooth'
-          });
+          if (0) {
+            /**
+             * Avoid scrollIntoView as this
+             * produce a lot of layout shift.
+             * See also Facet > set count
+             */
+
+            e.target.scrollIntoView({
+              block: 'center',
+              inline: 'nearest',
+              behaviour: 'smooth'
+            });
+          }
           break;
         case 'search_clear':
           {
@@ -1293,37 +1302,36 @@ class Search extends EventSimple {
         const elPaginationItems = s._build_pagination_items(results);
         s._elPagination.replaceChildren(elPaginationItems);
         await s._update_stats_pagination(results);
-        //}else if(!options.append){
       } else {
-        /**
-         * Only display stats if append is false, as append implies
-         * offset, and offset + filter = meiliSearch wrong nbHits.
-         */
-
-        await s._update_stats_simple(results);
+        if (!options.append) {
+          /**
+           * Only display stats if append is false, as append implies
+           * offset, and offset + filter = meiliSearch wrong nbHits.
+           */
+          await s._update_stats_simple(results);
+        }
       }
+
       /**
        * Update filter flag (red dot)
        */
-
       s._update_flag_auto();
+
       /**
        * Facets are built on the very first "placeholder" search, when all
        * items are returned, then, subsequent results only update facets.
        */
-
       s._build_facets_or_update(results.facetsDistribution);
+
       /**
        * Reset item toggle: new result could have displayed views that
        * are already on the map
        */
-
       s._update_toggles_icons();
 
       /**
-       * Return full results
+       * Return full results object
        */
-
       return results;
     } catch (e) {
       console.warn('Issue while searching', {error: e});
@@ -1652,7 +1660,16 @@ class Facet {
     fc._opt.count = c;
     fc._elCount.setAttribute('count', c);
     fc.enable = !!c;
-    fc.order = 1000 - c;
+    /*
+     * Avoid reordening, as this produce
+     * a lot of layout shifts. The facet even disapears.
+     * scrollIntoView could help, but in > 2 columns, shift
+     * could be also horizontal. It does not work well in nested
+     * scrollable items. See handle_click > update_facet_filter.
+     */
+    if (0) {
+      fc.order = 1000 - c;
+    }
   }
 }
 export {Search};
