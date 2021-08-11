@@ -1,1 +1,8 @@
-
+.mx .table > tbody > tr > td,
+.mx .table > tbody > tr > th,
+.mx .table > tfoot > tr > td,
+.mx .table > tfoot > tr > th,
+.mx .table > thead > tr > td,
+.mx .table > thead > tr > th {
+  width: 1%;
+}

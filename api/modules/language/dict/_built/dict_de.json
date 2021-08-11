@@ -4035,181 +4035,6 @@
     "de": "Der Download ist nicht erlaubt. "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "de": "Text der Schnittstelle "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "de": "Links "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "de": "Sekundärtextfarbe "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "de": "Versteckte Elemente "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "de": "Grenzen "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "de": "Hintergrund "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "de": "Hintergrundkontrast "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "de": "Hintergrund ausgeblendet "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "de": "Hintergrund transparent "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "de": "Schatten "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "de": "Karte: Hintergrund "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "de": "Karte: Funktionshighlight "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "de": "Karte: Hügelschatten "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "de": "Karte: Hügelschatten-Highlight "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "de": "Karte: Akzent des Hügelschattens "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "de": "Karte: Landschatten "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "de": "Karte: Wasser "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "de": "Karte: Bathymetrie (niedrig) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "de": "Karte: Bathymetrie (hoch) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "de": "Karte: Straße "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "de": "Karte: Straßengrenze "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "de": "Karte: Gebäude "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "de": "Karte: Internationale Grenze "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "de": "Karte: Spezielle Grenzlinie "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "de": "Karte: Waffenstillstand oder internationale Grenzlinie "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "de": "Karte: Andere Trennlinie "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "de": "Karte: Autonome Regionsgrenze "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "de": "Karte: Souveränes Basislimit "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "de": "Karte: Subnationale Grenzen"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "de": "Karte: Text platzieren "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "de": "Karte: Textumriss platzieren "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "de": "Karte: Straßentext "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "de": "Karte: Straßentextumriss "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "de": "Karte: Gewässertext "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "de": "Karte: Wasserkörpertextumriss "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "de": "Liste der Verlage "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "de": "Keine Ansichten gefunden"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "de": "Text der Schnittstelle "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "de": "Links "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "de": "Sekundärtextfarbe "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "de": "Versteckte Elemente "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "de": "Grenzen "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "de": "Hintergrund "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "de": "Hintergrundkontrast "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "de": "Hintergrund ausgeblendet "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "de": "Akzentuierter Hintergrund"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "de": "Hintergrund transparent "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "de": "Schatten "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "de": "Karte: Hintergrund "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "de": "Karte: Funktionshighlight "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "de": "Karte: Hügelschatten "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "de": "Karte: Hügelschatten-Highlight "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "de": "Karte: Akzent des Hügelschattens "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "de": "Karte: Landschatten "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "de": "Karte: Wasser "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "de": "Karte: Bathymetrie (niedrig) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "de": "Karte: Bathymetrie (hoch) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "de": "Karte: Straße "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "de": "Karte: Straßengrenze "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "de": "Karte: Gebäude "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "de": "Karte: Internationale Grenze "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "de": "Karte: Spezielle Grenzlinie "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "de": "Karte: Waffenstillstand oder internationale Grenzlinie "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "de": "Karte: Andere Trennlinie "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "de": "Karte: Autonome Regionsgrenze "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "de": "Karte: Souveränes Basislimit "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "de": "Karte: Subnationale Grenzen"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "de": "Karte: Text platzieren "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "de": "Karte: Textumriss platzieren "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "de": "Karte: Straßentext "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "de": "Karte: Straßentextumriss "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "de": "Karte: Gewässertext "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "de": "Karte: Wasserkörpertextumriss "
   }
 ]

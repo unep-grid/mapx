@@ -4035,181 +4035,6 @@
     "zh": "不允许下载。"
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "zh": "界面文本"
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "zh": "链接"
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "zh": "次要文本颜色"
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "zh": "隐藏元素"
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "zh": "边框"
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "zh": "背景"
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "zh": "背景对比"
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "zh": "淡出背景层"
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "zh": "背景透明 "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "zh": "阴影"
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "zh": "地图：背景"
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "zh": "地图：高亮要素"
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "zh": "地图：山体阴影"
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "zh": "地图：山体阴影突出显示"
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "zh": "地图：山体阴影强调"
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "zh": "地图：国家/地区阴影"
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "zh": "地图：水"
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "zh": "地图：测深（低）"
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "zh": "地图：测深（高）"
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "zh": "地图：道路"
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "zh": "地图：道路边框"
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "zh": "地图：建筑物"
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "zh": "地图：国际边界"
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "zh": "地图：特殊边界线"
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "zh": "地图：停战线或国际边界线"
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "zh": "地图：其他分割线"
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "zh": "地图：自治区域边界"
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "zh": "地图：主权基地限制"
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "zh": "地图：国家以下边界"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "zh": "地图：放置文本"
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "zh": "地图：放置文本边框"
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "zh": "地图：道路文本"
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "zh": "地图：道路文本边框"
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "zh": "地图：水体文本"
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "zh": "地图：水体文本边框"
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "zh": "发布者列表"
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "zh": "未找到任何视图"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "zh": "界面文本"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "zh": "链接"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "zh": "次要文本颜色"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "zh": "隐藏元素"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "zh": "边框"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "zh": "背景"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "zh": "背景对比"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "zh": "淡出背景层"
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "zh": "突出背景"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "zh": "背景透明 "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "zh": "阴影"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "zh": "地图：背景"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "zh": "地图：高亮要素"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "zh": "地图：山体阴影"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "zh": "地图：山体阴影突出显示"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "zh": "地图：山体阴影强调"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "zh": "地图：国家/地区阴影"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "zh": "地图：水"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "zh": "地图：测深（低）"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "zh": "地图：测深（高）"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "zh": "地图：道路"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "zh": "地图：道路边框"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "zh": "地图：建筑物"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "zh": "地图：国际边界"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "zh": "地图：特殊边界线"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "zh": "地图：停战线或国际边界线"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "zh": "地图：其他分割线"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "zh": "地图：自治区域边界"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "zh": "地图：主权基地限制"
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "zh": "地图：国家以下边界"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "zh": "地图：放置文本"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "zh": "地图：放置文本边框"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "zh": "地图：道路文本"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "zh": "地图：道路文本边框"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "zh": "地图：水体文本"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "zh": "地图：水体文本边框"
   }
 ]

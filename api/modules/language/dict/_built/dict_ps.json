@@ -4035,181 +4035,6 @@
     "ps": "د کښته کولو اجازه نشته. "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "ps": "د انٹرفیس متن "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "ps": "لینکونه "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "ps": "د ثانوي متن رنګ "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "ps": "پټ عناصر "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "ps": "سرحدونه "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "ps": "شالید "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "ps": "د شالید توپیر "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "ps": "شاليد له منځه تللی "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "ps": "شالید شفاف "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "ps": "سیوري "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "ps": "نقشه: شالید "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "ps": "نقشه: د ب featureې څرګندونه "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "ps": "نقشه: د غونډۍ سیوري "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "ps": "نقشه: د هیلشډ روښانه کول "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "ps": "نقشه: د هیلشډ تلفظ "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "ps": "نقشه: د هیواد سیوري "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "ps": "نقشه: اوبه "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "ps": "نقشه: حمامونه (ټیټ) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "ps": "نقشه: حمامونه (لوړ) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "ps": "نقشه: سړک "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "ps": "نقشه: د سړک پوله "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "ps": "نقشه: ودانۍ "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "ps": "نقشه: نړیوال حد "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "ps": "نقشه: د ځانګړي حد کرښه "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "ps": "نقشه: آرمسټیس یا نړیوال حدود_اینسټریټ لاین "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "ps": "نقشه: د جلا کولو بله کرښه "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "ps": "نقشه: د خودمختاره سیمه حد "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "ps": "نقشه: د حاکمیت اساس حد "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "ps": "نقشه: سیمه ییز سرحدونه"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "ps": "نقشه: ځای ځای "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "ps": "نقشه: د متن متن وټاکئ "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "ps": "نقشه: د سړک متن "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "ps": "نقشه: د سړک متن خطیر "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "ps": "نقشه: د اوبو د بدن متن "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "ps": "نقشه: د اوبو د بدن متن لنډیز "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "ps": "د خپرونکو لیست "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "ps": "هیڅ لید ونه موندل شو"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "ps": "د انٹرفیس متن "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "ps": "لینکونه "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "ps": "د ثانوي متن رنګ "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "ps": "پټ عناصر "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "ps": "سرحدونه "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "ps": "شالید "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "ps": "د شالید توپیر "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "ps": "شاليد له منځه تللی "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "ps": "په زړه پوری شالید"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ps": "شالید شفاف "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "ps": "سیوري "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "ps": "نقشه: شالید "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "ps": "نقشه: د ب featureې څرګندونه "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "ps": "نقشه: د غونډۍ سیوري "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "ps": "نقشه: د هیلشډ روښانه کول "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "ps": "نقشه: د هیلشډ تلفظ "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "ps": "نقشه: د هیواد سیوري "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "ps": "نقشه: اوبه "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "ps": "نقشه: حمامونه (ټیټ) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "ps": "نقشه: حمامونه (لوړ) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "ps": "نقشه: سړک "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "ps": "نقشه: د سړک پوله "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "ps": "نقشه: ودانۍ "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "ps": "نقشه: نړیوال حد "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "ps": "نقشه: د ځانګړي حد کرښه "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "ps": "نقشه: آرمسټیس یا نړیوال حدود_اینسټریټ لاین "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "ps": "نقشه: د جلا کولو بله کرښه "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "ps": "نقشه: د خودمختاره سیمه حد "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "ps": "نقشه: د حاکمیت اساس حد "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "ps": "نقشه: سیمه ییز سرحدونه"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "ps": "نقشه: ځای ځای "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "ps": "نقشه: د متن متن وټاکئ "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "ps": "نقشه: د سړک متن "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "ps": "نقشه: د سړک متن خطیر "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "ps": "نقشه: د اوبو د بدن متن "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "ps": "نقشه: د اوبو د بدن متن لنډیز "
   }
 ]

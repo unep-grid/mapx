@@ -4035,181 +4035,6 @@
     "ru": "Скачивание не разрешено. "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "ru": "Текст интерфейса "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "ru": "Ссылки "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "ru": "Дополнительный цвет текста "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "ru": "Скрытые элементы "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "ru": "Границы "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "ru": "Фон "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "ru": "Контраст фона "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "ru": "Фон исчез "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "ru": "Фон прозрачный "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "ru": "Тени "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "ru": "Карта: фон "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "ru": "Карта: основные моменты "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "ru": "Карта: тень отмывки "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "ru": "Карта: выделение отмывки "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "ru": "Карта: акцент на отмывке "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "ru": "Карта: тень страны "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "ru": "Карта: вода "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "ru": "Карта: батиметрия (низкая) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "ru": "Карта: батиметрия (высокая) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "ru": "Карта: дорога "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "ru": "Карта: дорожная граница "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "ru": "Карта: постройки "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "ru": "Карта: международная граница "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "ru": "Карта: Специальная пограничная линия "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "ru": "Карта: перемирие или международная граница_унистративная линия "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "ru": "Карта: Другая линия разделения "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "ru": "Карта: граница автономного округа "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "ru": "Карта: суверенный базовый предел "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "ru": "Карта: субнациональные границы"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "ru": "Карта: разместить текст "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "ru": "Карта: разместить контур текста "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "ru": "Карта: текст дороги "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "ru": "Карта: контур текста дороги "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "ru": "Карта: текст водного объекта "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "ru": "Карта: контур текста водоема "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "ru": "Список издателей "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "ru": "Просмотры не найдены"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "ru": "Текст интерфейса "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "ru": "Ссылки "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "ru": "Дополнительный цвет текста "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "ru": "Скрытые элементы "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "ru": "Границы "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "ru": "Фон "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "ru": "Контраст фона "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "ru": "Фон исчез "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "ru": "Акцентированный фон"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ru": "Фон прозрачный "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "ru": "Тени "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "ru": "Карта: фон "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "ru": "Карта: основные моменты "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "ru": "Карта: тень отмывки "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "ru": "Карта: выделение отмывки "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "ru": "Карта: акцент на отмывке "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "ru": "Карта: тень страны "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "ru": "Карта: вода "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "ru": "Карта: батиметрия (низкая) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "ru": "Карта: батиметрия (высокая) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "ru": "Карта: дорога "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "ru": "Карта: дорожная граница "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "ru": "Карта: постройки "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "ru": "Карта: международная граница "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "ru": "Карта: Специальная пограничная линия "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "ru": "Карта: перемирие или международная граница_унистративная линия "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "ru": "Карта: Другая линия разделения "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "ru": "Карта: граница автономного округа "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "ru": "Карта: суверенный базовый предел "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "ru": "Карта: субнациональные границы"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "ru": "Карта: разместить текст "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "ru": "Карта: разместить контур текста "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "ru": "Карта: текст дороги "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "ru": "Карта: контур текста дороги "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "ru": "Карта: текст водного объекта "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "ru": "Карта: контур текста водоема "
   }
 ]

@@ -11,6 +11,7 @@ import '../css/mx_ace_editor.css';
 import '../css/mx_modifiers.css';
 import '../css/mx_mapbox.css';
 import '../css/mx_tabs.css';
+import '../css/mx_table.css';
 import '../css/mx_modal.css';
 import '../css/mx_story.css';
 import '../css/mx_project_list.css';

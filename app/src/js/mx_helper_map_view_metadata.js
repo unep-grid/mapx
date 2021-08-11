@@ -39,10 +39,10 @@ export async function viewToMetaModal(view) {
   const id = h.isView(view) ? view.id : view;
   view = (await h.getView(id)) || (await h.getViewRemote(id));
 
-  if(!h.isView(view)){
+  if (!h.isView(view)) {
     return h.modal({
-       content : 'View not found'
-    })
+      content: 'View not found'
+    });
   }
 
   const meta = {};
@@ -133,6 +133,8 @@ function metaViewToUi(meta) {
   const h = mx.helpers;
   const prefixKey = 'meta_view_';
   const keys = [
+    'title',
+    'abstract',
     'project_title',
     'projects_titles',
     'collections',
@@ -148,7 +150,7 @@ function metaViewToUi(meta) {
   let tblSummary = h.objectToArray(meta, true);
 
   tblSummary = tblSummary
-    .filter((row) => keys.indexOf(row.key) > -1)
+    .filter((row) => keys.includes(row.key))
     .sort((a, b) => {
       return keys.indexOf(a.key) - keys.indexOf(b.key);
     })
@@ -377,7 +379,7 @@ export async function metaSourceToUi(meta) {
       released_at: elReleasedAt,
       modified_at: elModifiedAt,
       is_timeless: elIsTimeless,
-      licenses : elLicenses,
+      licenses: elLicenses,
       start_at: elStartAt,
       end_at: elEndAt,
       id: elId

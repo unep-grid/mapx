@@ -4035,181 +4035,6 @@
     "es": "La descarga no está permitida"
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "es": "Texto de la interfaz"
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "es": "Enlaces"
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "es": "Color secundario del texto"
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "es": "Elementos escondidos"
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "es": "Bordes"
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "es": "Fondo"
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "es": "Contraste de fondo"
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "es": "Capa de fondo descolorida"
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "es": "Fondo transparente "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "es": "Sombra"
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "es": "Mapa: fondo"
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "es": "Mapa: característica destacada "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "es": "Mapa: hillshade shadow"
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "es": "Mapa: hillshade luz"
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "es": "Mapa: hillshade énfasis"
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "es": "Mapa: sombre de los países"
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "es": "Mapa: agua"
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "es": "Mapa: batimetría (baja)"
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "es": "Mapa: batimetría (alta)"
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "es": "Mapa: rutas"
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "es": "Mapa: borde de carreteras y caminos"
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "es": "Mapa: edificios"
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "es": "Mapa: frontera internacional"
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "es": "Mapa: línea de fronteras especiales"
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "es": "Mapa: armisticio o línea internacional"
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "es": "Mapa: otras líneas de separación"
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "es": "Mapa: fronteras de regiones autónomas"
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "es": "Mapa: límite de base soberana"
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "es": "Mapa: Fronteras subnacionales"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "es": "Mapa: texto lugar"
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "es": "Mapa: borde del texto lugar"
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "es": "Mapa: camino texto"
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "es": "Mapa: borde del texto camino"
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "es": "Mapa: texto cuerpo de agua"
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "es": "Mapa: borde del texto cuerop de agua"
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "es": "Lista de editores"
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "es": "No se encontraron vistas"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "es": "Texto de la interfaz"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "es": "Enlaces"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "es": "Color secundario del texto"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "es": "Elementos escondidos"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "es": "Bordes"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "es": "Fondo"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "es": "Contraste de fondo"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "es": "Capa de fondo descolorida"
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "es": "Fondo acentuado"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "es": "Fondo transparente "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "es": "Sombra"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "es": "Mapa: fondo"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "es": "Mapa: característica destacada "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "es": "Mapa: hillshade shadow"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "es": "Mapa: hillshade luz"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "es": "Mapa: hillshade énfasis"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "es": "Mapa: sombre de los países"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "es": "Mapa: agua"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "es": "Mapa: batimetría (baja)"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "es": "Mapa: batimetría (alta)"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "es": "Mapa: rutas"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "es": "Mapa: borde de carreteras y caminos"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "es": "Mapa: edificios"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "es": "Mapa: frontera internacional"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "es": "Mapa: línea de fronteras especiales"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "es": "Mapa: armisticio o línea internacional"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "es": "Mapa: otras líneas de separación"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "es": "Mapa: fronteras de regiones autónomas"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "es": "Mapa: límite de base soberana"
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "es": "Mapa: Fronteras subnacionales"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "es": "Mapa: texto lugar"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "es": "Mapa: borde del texto lugar"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "es": "Mapa: camino texto"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "es": "Mapa: borde del texto camino"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "es": "Mapa: texto cuerpo de agua"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "es": "Mapa: borde del texto cuerop de agua"
   }
 ]

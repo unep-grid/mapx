@@ -3228,146 +3228,6 @@
     "en": "The download is not allowed."
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface"
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links"
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color"
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements"
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders"
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background"
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast"
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out"
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent"
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows"
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background"
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight"
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow"
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight"
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent"
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow"
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water"
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)"
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)"
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road"
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border"
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings"
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary"
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line"
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line"
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation"
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary"
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit"
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text"
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline"
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text"
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline"
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text"
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline"
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers"
   },
@@ -5554,5 +5414,149 @@
   {
     "id": "search_results_empty",
     "en": "No views found"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out"
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent"
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit"
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline"
   }
 ]

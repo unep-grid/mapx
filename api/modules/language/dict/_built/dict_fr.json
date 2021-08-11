@@ -4035,181 +4035,6 @@
     "fr": "Le téléchargement n'est pas permis."
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "fr": "Texte de l'interface"
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "fr": "Liens"
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "fr": "Couleur secondaire pour le texte"
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "fr": "Élements non-visibles"
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "fr": "Bordures"
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "fr": "Arrière-plan"
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "fr": "Arrière-plan de contraste"
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "fr": "Arrière-plan estompé"
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "fr": "Arrière-plan transparent"
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "fr": "Ombrage"
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "fr": "Carte : Arrière plan"
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "fr": "Carte : mise en évidence des éléments"
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "fr": "Carte : ombrage du relief"
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "fr": "Carte : lumière du relief"
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "fr": "Carte : accentuation du relief"
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "fr": "Carte : Ombrage des pays"
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "fr": "Carte : cours d'eau"
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "fr": "Carte : bathymétrie (bas)"
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "fr": "Carte : bathymétrie (haut)"
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "fr": "Carte : routes"
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "fr": "Carte : bord des routes"
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "fr": "Carte : bâtiments"
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "fr": "Carte : Frontières internationales"
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "fr": "Carte : Frontière ligne spéciale"
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "fr": "Carte : Armistice ou ligne boundary_unistrative internationale"
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "fr": "Carte : Autres lignes de séparation"
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "fr": "Carte : Frontière de régions autonomes"
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "fr": "Carte : Limite de base souveraine"
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "fr": "Carte : Frontières sous-nationales"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "fr": "Carte : texte lieu"
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "fr": "Carte : texte lieu bordure"
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "fr": "Carte : texte routes"
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "fr": "Carte : bordure texte routes"
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "fr": "Carte : texte plan d'eau"
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "fr": "Carte : bordure texte plan d'eau"
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "fr": "Liste des éditeurs"
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "fr": "Aucune vue trouvée"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "fr": "Texte de l'interface"
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "fr": "Liens"
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "fr": "Couleur secondaire pour le texte"
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "fr": "Élements non-visibles"
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "fr": "Bordures"
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "fr": "Arrière-plan"
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "fr": "Arrière-plan de contraste"
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "fr": "Arrière-plan estompé"
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "fr": "Arrière-plan accentué"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "fr": "Arrière-plan transparent"
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "fr": "Ombrage"
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "fr": "Carte : Arrière plan"
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "fr": "Carte : mise en évidence des éléments"
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "fr": "Carte : ombrage du relief"
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "fr": "Carte : lumière du relief"
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "fr": "Carte : accentuation du relief"
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "fr": "Carte : Ombrage des pays"
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "fr": "Carte : cours d'eau"
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "fr": "Carte : bathymétrie (bas)"
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "fr": "Carte : bathymétrie (haut)"
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "fr": "Carte : routes"
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "fr": "Carte : bord des routes"
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "fr": "Carte : bâtiments"
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "fr": "Carte : Frontières internationales"
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "fr": "Carte : Frontière ligne spéciale"
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "fr": "Carte : Armistice ou ligne boundary_unistrative internationale"
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "fr": "Carte : Autres lignes de séparation"
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "fr": "Carte : Frontière de régions autonomes"
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "fr": "Carte : Limite de base souveraine"
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "fr": "Carte : Frontières sous-nationales"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "fr": "Carte : texte lieu"
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "fr": "Carte : texte lieu bordure"
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "fr": "Carte : texte routes"
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "fr": "Carte : bordure texte routes"
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "fr": "Carte : texte plan d'eau"
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "fr": "Carte : bordure texte plan d'eau"
   }
 ]

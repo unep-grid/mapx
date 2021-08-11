@@ -4035,181 +4035,6 @@
     "bn": "ডাউনলোডের অনুমতি নেই। "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "bn": "ইন্টারফেসের পাঠ্য "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "bn": "লিঙ্কগুলি "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "bn": "গৌণ পাঠ্য রঙ "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "bn": "লুকানো উপাদান "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "bn": "সীমানা "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "bn": "পটভূমি "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "bn": "পটভূমির বিপরীতে "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "bn": "পটভূমি বিবর্ণ "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "bn": "পটভূমি স্বচ্ছ "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "bn": "ছায়া "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "bn": "মানচিত্র: পটভূমি "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "bn": "মানচিত্র: বৈশিষ্ট্য হাইলাইট "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "bn": "মানচিত্র: পাহাড়ের ছায়া "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "bn": "মানচিত্র: হিলশ্যাড হাইলাইট "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "bn": "মানচিত্র: পাহাড়ের একসেন্ট অ্যাকসেন্ট "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "bn": "মানচিত্র: দেশের ছায়া "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "bn": "মানচিত্র: জল "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "bn": "মানচিত্র: বাথমেট্রি (কম) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "bn": "মানচিত্র: রাস্তা "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "bn": "মানচিত্র: রাস্তা বর্ডার "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "bn": "মানচিত্র: বিল্ডিং "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "bn": "মানচিত্র: আন্তর্জাতিক সীমানা "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "bn": "মানচিত্র: বিশেষ সীমানা রেখা "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "bn": "মানচিত্র: আর্মিস্টাইস বা আন্তর্জাতিক সীমানা_অন্টিস্টেটিভ লাইন "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "bn": "মানচিত্র: বিচ্ছেদ অন্যান্য লাইন "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "bn": "মানচিত্র: স্বায়ত্তশাসিত অঞ্চল সীমানা "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "bn": "মানচিত্র: সার্বভৌম বেস সীমা "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "bn": "মানচিত্র: আঞ্চলিক সীমানা"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "bn": "মানচিত্র: স্থান পাঠ্য "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "bn": "মানচিত্র: পাঠ্য রূপরেখা রাখুন "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "bn": "মানচিত্র: রাস্তার পাঠ্য "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "bn": "মানচিত্র: রাস্তার পাঠ্য রূপরেখা "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "bn": "মানচিত্র: জলের শরীরের পাঠ্য "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "bn": "প্রকাশকদের তালিকা "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "bn": "কোনো ভিউ পাওয়া যায়নি"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "bn": "ইন্টারফেসের পাঠ্য "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "bn": "লিঙ্কগুলি "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "bn": "গৌণ পাঠ্য রঙ "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "bn": "লুকানো উপাদান "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "bn": "সীমানা "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "bn": "পটভূমি "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "bn": "পটভূমির বিপরীতে "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "bn": "পটভূমি বিবর্ণ "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "bn": "উচ্চারিত পটভূমি"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "bn": "পটভূমি স্বচ্ছ "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "bn": "ছায়া "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "bn": "মানচিত্র: পটভূমি "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "bn": "মানচিত্র: বৈশিষ্ট্য হাইলাইট "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "bn": "মানচিত্র: পাহাড়ের ছায়া "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "bn": "মানচিত্র: হিলশ্যাড হাইলাইট "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "bn": "মানচিত্র: পাহাড়ের একসেন্ট অ্যাকসেন্ট "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "bn": "মানচিত্র: দেশের ছায়া "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "bn": "মানচিত্র: জল "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "bn": "মানচিত্র: বাথমেট্রি (কম) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "bn": "মানচিত্র: বাথমেট্রি (উচ্চ) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "bn": "মানচিত্র: রাস্তা "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "bn": "মানচিত্র: রাস্তা বর্ডার "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "bn": "মানচিত্র: বিল্ডিং "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "bn": "মানচিত্র: আন্তর্জাতিক সীমানা "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "bn": "মানচিত্র: বিশেষ সীমানা রেখা "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "bn": "মানচিত্র: আর্মিস্টাইস বা আন্তর্জাতিক সীমানা_অন্টিস্টেটিভ লাইন "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "bn": "মানচিত্র: বিচ্ছেদ অন্যান্য লাইন "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "bn": "মানচিত্র: স্বায়ত্তশাসিত অঞ্চল সীমানা "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "bn": "মানচিত্র: সার্বভৌম বেস সীমা "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "bn": "মানচিত্র: আঞ্চলিক সীমানা"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "bn": "মানচিত্র: স্থান পাঠ্য "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "bn": "মানচিত্র: পাঠ্য রূপরেখা রাখুন "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "bn": "মানচিত্র: রাস্তার পাঠ্য "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "bn": "মানচিত্র: রাস্তার পাঠ্য রূপরেখা "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "bn": "মানচিত্র: জলের শরীরের পাঠ্য "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "bn": "মানচিত্র: জলের দেহের পাঠ্য রূপরেখা "
   }
 ]

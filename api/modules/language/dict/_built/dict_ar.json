@@ -4035,181 +4035,6 @@
     "ar": "التنزيل غير مسموح به. "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "ar": "نص الواجهة "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "ar": "الروابط "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "ar": "لون النص الثانوي "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "ar": "العناصر المخفية "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "ar": "الحدود "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "ar": "خلفية "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "ar": "تباين الخلفية "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "ar": "تلاشت الخلفية "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "ar": "خلفية شفافة "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "ar": "الظلال "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "ar": "الخريطة: الخلفية "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "ar": "الخريطة: تسليط الضوء على الميزة "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "ar": "الخريطة: ظل التلال "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "ar": "الخريطة: تسليط الضوء على التلال "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "ar": "الخريطة: لهجة التلال "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "ar": "الخريطة: بلد الظل "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "ar": "الخريطة: المياه "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "ar": "الخريطة: قياس الأعماق (منخفض) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "ar": "الخريطة: قياس الأعماق (مرتفع) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "ar": "الخريطة: الطريق "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "ar": "الخريطة: حدود الطريق "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "ar": "الخريطة: المباني "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "ar": "الخريطة: الحدود الدولية "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "ar": "الخريطة: خط الحدود الخاص "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "ar": "الخريطة: الهدنة أو خط الحدود الدولي الموحد "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "ar": "الخريطة: خط فاصل آخر "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "ar": "الخريطة: حدود منطقة الحكم الذاتي "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "ar": "الخريطة: حد القاعدة السيادية "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "ar": "الخريطة: الحدود دون الوطنية"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "ar": "الخريطة: ضع النص "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "ar": "الخريطة: مكان مخطط النص "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "ar": "الخريطة: نص الطريق "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "ar": "الخريطة: مخطط نص الطريق "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "ar": "الخريطة: نص جسم مائي "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "ar": "الخريطة: مخطط نص الجسم المائي "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "ar": "قائمة الناشرين "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "ar": "لم يتم العثور على مشاهدات"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "ar": "نص الواجهة "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "ar": "الروابط "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "ar": "لون النص الثانوي "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "ar": "العناصر المخفية "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "ar": "الحدود "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "ar": "خلفية "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "ar": "تباين الخلفية "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "ar": "تلاشت الخلفية "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "ar": "خلفية بارزة"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "ar": "خلفية شفافة "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "ar": "الظلال "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "ar": "الخريطة: الخلفية "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "ar": "الخريطة: تسليط الضوء على الميزة "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "ar": "الخريطة: ظل التلال "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "ar": "الخريطة: تسليط الضوء على التلال "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "ar": "الخريطة: لهجة التلال "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "ar": "الخريطة: بلد الظل "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "ar": "الخريطة: المياه "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "ar": "الخريطة: قياس الأعماق (منخفض) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "ar": "الخريطة: قياس الأعماق (مرتفع) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "ar": "الخريطة: الطريق "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "ar": "الخريطة: حدود الطريق "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "ar": "الخريطة: المباني "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "ar": "الخريطة: الحدود الدولية "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "ar": "الخريطة: خط الحدود الخاص "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "ar": "الخريطة: الهدنة أو خط الحدود الدولي الموحد "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "ar": "الخريطة: خط فاصل آخر "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "ar": "الخريطة: حدود منطقة الحكم الذاتي "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "ar": "الخريطة: حد القاعدة السيادية "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "ar": "الخريطة: الحدود دون الوطنية"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "ar": "الخريطة: ضع النص "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "ar": "الخريطة: مكان مخطط النص "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "ar": "الخريطة: نص الطريق "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "ar": "الخريطة: مخطط نص الطريق "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "ar": "الخريطة: نص جسم مائي "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "ar": "الخريطة: مخطط نص الجسم المائي "
   }
 ]

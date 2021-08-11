@@ -85,12 +85,38 @@ export async function downloadViewRaster(opt) {
   if (!h.isView(view)) {
     throw new Error(`No view with id ${idView}`);
   }
-
+  let url = '';
   //const title = h.getViewTitle(view).replace(/\s/, '_');
-  const url = h.path(view, 'data.source.urlDownload');
+  const dlItem = h.path(view, 'data.source.meta.origin.source.urls', [])[0];
+  if (h.isObject(dlItem)) {
+    url = dlItem.url;
+  }
+  if (!url) {
+    url = h.path(view, 'data.source.urlDownload');
+  }
   //let filename = title;
 
   if (h.isUrl(url)) {
+    /**
+     * Confirm
+     */
+
+    const c = await modalConfirm({
+      title: 'This will open a new window outside this application.',
+      content: h.el(
+        'div',
+        h.el(
+          'span',
+          'Do you want to visit the following link:',
+          h.el('pre', url)
+        )
+      ),
+      addBackground: true
+    });
+    if (!c) {
+      return;
+    }
+
     /**
      * Don't try to download in the same page :
      * Fetching can be very long, longer than mapx session AND HUGE

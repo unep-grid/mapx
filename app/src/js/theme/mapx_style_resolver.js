@@ -10,6 +10,7 @@ export function css_resolver(c) {
   --mx_ui_background: ${v(c.mx_ui_background)};
   --mx_ui_background_faded: ${v(c.mx_ui_background_faded)};
   --mx_ui_background_contrast: ${v(c.mx_ui_background_contrast)};
+  --mx_ui_background_accent: ${v(c.mx_ui_background_accent)};
   --mx_ui_background_transparent: ${v(c.mx_ui_background_transparent)};
   --mx_ui_shadow: ${v(c.mx_ui_shadow)};
   --mx_ui_link: ${v(c.mx_ui_link)};

@@ -30,6 +30,10 @@
       "visibility": "visible",
       "color": "rgb(255,255,255)"
     },
+    "mx_ui_background_accent": {
+      "visibility": "visible",
+      "color": "rgb(252,252,252)"
+    },
     "mx_ui_background_faded": {
       "visibility": "visible",
       "color": "rgb(250,250,250)"

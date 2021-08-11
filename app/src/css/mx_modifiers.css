@@ -432,6 +432,10 @@ span.mx-badge-role {
   border-color: var(--mx_ui_border);
 }
 
+.mx .table > tbody > tr:nth-child(odd){
+  background-color: var(--mx_ui_background_accent);
+}
+
 .mx .panel-default > .panel-heading {
   display: flex;
   justify-content: center;

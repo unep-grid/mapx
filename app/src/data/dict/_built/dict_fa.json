@@ -4035,181 +4035,6 @@
     "fa": "بارگیری مجاز نیست "
   },
   {
-    "id": "mx_ui_text",
-    "en": "Text of the interface",
-    "fa": "متن رابط کاربری "
-  },
-  {
-    "id": "mx_ui_link",
-    "en": "Links",
-    "fa": "پیوندها "
-  },
-  {
-    "id": "mx_ui_text_faded",
-    "en": "Secondary text color",
-    "fa": "رنگ متن ثانویه "
-  },
-  {
-    "id": "mx_ui_hidden",
-    "en": "Hidden elements",
-    "fa": "عناصر پنهان "
-  },
-  {
-    "id": "mx_ui_border",
-    "en": "Borders",
-    "fa": "مرز ها "
-  },
-  {
-    "id": "mx_ui_background",
-    "en": "Background",
-    "fa": "زمینه "
-  },
-  {
-    "id": "mx_ui_background_contrast",
-    "en": "Background contrast",
-    "fa": "کنتراست پس زمینه "
-  },
-  {
-    "id": "mx_ui_background_faded",
-    "en": "Background faded out",
-    "fa": "پس زمینه محو شد "
-  },
-  {
-    "id": "mx_ui_background_transparent",
-    "en": "Background transparent",
-    "fa": "پس زمینه شفاف "
-  },
-  {
-    "id": "mx_ui_shadow",
-    "en": "Shadows",
-    "fa": "سایه ها "
-  },
-  {
-    "id": "mx_map_background",
-    "en": "Map: background",
-    "fa": "نقشه: پس زمینه "
-  },
-  {
-    "id": "mx_map_feature_highlight",
-    "en": "Map: feature highlight",
-    "fa": "نقشه: ویژگی برجسته "
-  },
-  {
-    "id": "mx_map_hillshade_shadow",
-    "en": "Map: hillshade shadow",
-    "fa": "نقشه: سایه hillshade "
-  },
-  {
-    "id": "mx_map_hillshade_highlight",
-    "en": "Map: hillshade highlight",
-    "fa": "نقشه: برجسته hillshade "
-  },
-  {
-    "id": "mx_map_hillshade_accent",
-    "en": "Map: hillshade accent",
-    "fa": "نقشه: لهجه hillshade "
-  },
-  {
-    "id": "mx_map_mask",
-    "en": "Map: country shadow",
-    "fa": "نقشه: کشور سایه "
-  },
-  {
-    "id": "mx_map_water",
-    "en": "Map: water",
-    "fa": "نقشه: آب "
-  },
-  {
-    "id": "mx_map_bathymetry_low",
-    "en": "Map: bathymetry (low)",
-    "fa": "نقشه: حجامت (کم) "
-  },
-  {
-    "id": "mx_map_bathymetry_high",
-    "en": "Map: bathymetry (high)",
-    "fa": "نقشه: متقارن (بالا) "
-  },
-  {
-    "id": "mx_map_road",
-    "en": "Map: road",
-    "fa": "نقشه: جاده "
-  },
-  {
-    "id": "mx_map_road_border",
-    "en": "Map: road border",
-    "fa": "نقشه: مرز جاده "
-  },
-  {
-    "id": "mx_map_building",
-    "en": "Map: buildings",
-    "fa": "نقشه: ساختمانها "
-  },
-  {
-    "id": "mx_map_boundary_un_1",
-    "en": "Map: International boundary",
-    "fa": "نقشه: مرز بین المللی "
-  },
-  {
-    "id": "mx_map_boundary_un_2",
-    "en": "Map: Special boundary line",
-    "fa": "نقشه: خط مرزی ویژه "
-  },
-  {
-    "id": "mx_map_boundary_un_3",
-    "en": "Map: Armistice or international boundary_unistrative line",
-    "fa": "نقشه: آتش بس یا خط بین المللی_محدوده بین المللی "
-  },
-  {
-    "id": "mx_map_boundary_un_4",
-    "en": "Map: Other line of separation",
-    "fa": "نقشه: خط جدایی دیگر "
-  },
-  {
-    "id": "mx_map_boundary_un_8",
-    "en": "Map: Autonomous region boundary",
-    "fa": "نقشه: مرز منطقه خودمختار "
-  },
-  {
-    "id": "mx_map_boundary_un_9",
-    "en": "Map: Sovereign base limit",
-    "fa": "نقشه: حد مجاز حاکمیت "
-  },
-  {
-    "id": "mx_map_boundary_un_6",
-    "en": "Map: Subnational boundaries",
-    "fa": "نقشه: مرزهای فرعی"
-  },
-  {
-    "id": "mx_map_text_place",
-    "en": "Map: place text",
-    "fa": "نقشه: متن متن "
-  },
-  {
-    "id": "mx_map_text_place_outline",
-    "en": "Map: place text outline",
-    "fa": "نقشه: طرح کلی متن را قرار دهید "
-  },
-  {
-    "id": "mx_map_text_road",
-    "en": "Map: road text",
-    "fa": "نقشه: متن جاده "
-  },
-  {
-    "id": "mx_map_text_road_outline",
-    "en": "Map: road text outline",
-    "fa": "نقشه: طرح کلی متن جاده "
-  },
-  {
-    "id": "mx_map_text_water",
-    "en": "Map: water body text",
-    "fa": "نقشه: متن بدنه آب "
-  },
-  {
-    "id": "mx_map_text_water_outline",
-    "en": "Map: water body text outline",
-    "fa": "نقشه: طرح متن متن متناسب با آب "
-  },
-  {
     "id": "list_publishers",
     "en": "List of publishers",
     "fa": "لیست ناشران "
@@ -6943,5 +6768,185 @@
     "id": "search_results_empty",
     "en": "No views found",
     "fa": "هیچ نمایشی یافت نشد"
+  },
+  {
+    "id": "mx_ui_text",
+    "en": "Text of the interface",
+    "fa": "متن رابط کاربری "
+  },
+  {
+    "id": "mx_ui_link",
+    "en": "Links",
+    "fa": "پیوندها "
+  },
+  {
+    "id": "mx_ui_text_faded",
+    "en": "Secondary text color",
+    "fa": "رنگ متن ثانویه "
+  },
+  {
+    "id": "mx_ui_hidden",
+    "en": "Hidden elements",
+    "fa": "عناصر پنهان "
+  },
+  {
+    "id": "mx_ui_border",
+    "en": "Borders",
+    "fa": "مرز ها "
+  },
+  {
+    "id": "mx_ui_background",
+    "en": "Background",
+    "fa": "زمینه "
+  },
+  {
+    "id": "mx_ui_background_contrast",
+    "en": "Background contrast",
+    "fa": "کنتراست پس زمینه "
+  },
+  {
+    "id": "mx_ui_background_faded",
+    "en": "Background faded out",
+    "fa": "پس زمینه محو شد "
+  },
+  {
+    "id": "mx_ui_background_accent",
+    "en": "Accentuated background",
+    "fa": "پس زمینه برجسته"
+  },
+  {
+    "id": "mx_ui_background_transparent",
+    "en": "Background transparent",
+    "fa": "پس زمینه شفاف "
+  },
+  {
+    "id": "mx_ui_shadow",
+    "en": "Shadows",
+    "fa": "سایه ها "
+  },
+  {
+    "id": "mx_map_background",
+    "en": "Map: background",
+    "fa": "نقشه: پس زمینه "
+  },
+  {
+    "id": "mx_map_feature_highlight",
+    "en": "Map: feature highlight",
+    "fa": "نقشه: ویژگی برجسته "
+  },
+  {
+    "id": "mx_map_hillshade_shadow",
+    "en": "Map: hillshade shadow",
+    "fa": "نقشه: سایه hillshade "
+  },
+  {
+    "id": "mx_map_hillshade_highlight",
+    "en": "Map: hillshade highlight",
+    "fa": "نقشه: برجسته hillshade "
+  },
+  {
+    "id": "mx_map_hillshade_accent",
+    "en": "Map: hillshade accent",
+    "fa": "نقشه: لهجه hillshade "
+  },
+  {
+    "id": "mx_map_mask",
+    "en": "Map: country shadow",
+    "fa": "نقشه: کشور سایه "
+  },
+  {
+    "id": "mx_map_water",
+    "en": "Map: water",
+    "fa": "نقشه: آب "
+  },
+  {
+    "id": "mx_map_bathymetry_low",
+    "en": "Map: bathymetry (low)",
+    "fa": "نقشه: حجامت (کم) "
+  },
+  {
+    "id": "mx_map_bathymetry_high",
+    "en": "Map: bathymetry (high)",
+    "fa": "نقشه: متقارن (بالا) "
+  },
+  {
+    "id": "mx_map_road",
+    "en": "Map: road",
+    "fa": "نقشه: جاده "
+  },
+  {
+    "id": "mx_map_road_border",
+    "en": "Map: road border",
+    "fa": "نقشه: مرز جاده "
+  },
+  {
+    "id": "mx_map_building",
+    "en": "Map: buildings",
+    "fa": "نقشه: ساختمانها "
+  },
+  {
+    "id": "mx_map_boundary_un_1",
+    "en": "Map: International boundary",
+    "fa": "نقشه: مرز بین المللی "
+  },
+  {
+    "id": "mx_map_boundary_un_2",
+    "en": "Map: Special boundary line",
+    "fa": "نقشه: خط مرزی ویژه "
+  },
+  {
+    "id": "mx_map_boundary_un_3",
+    "en": "Map: Armistice or international boundary_unistrative line",
+    "fa": "نقشه: آتش بس یا خط بین المللی_محدوده بین المللی "
+  },
+  {
+    "id": "mx_map_boundary_un_4",
+    "en": "Map: Other line of separation",
+    "fa": "نقشه: خط جدایی دیگر "
+  },
+  {
+    "id": "mx_map_boundary_un_8",
+    "en": "Map: Autonomous region boundary",
+    "fa": "نقشه: مرز منطقه خودمختار "
+  },
+  {
+    "id": "mx_map_boundary_un_9",
+    "en": "Map: Sovereign base limit",
+    "fa": "نقشه: حد مجاز حاکمیت "
+  },
+  {
+    "id": "mx_map_boundary_un_6",
+    "en": "Map: Subnational boundaries",
+    "fa": "نقشه: مرزهای فرعی"
+  },
+  {
+    "id": "mx_map_text_place",
+    "en": "Map: place text",
+    "fa": "نقشه: متن متن "
+  },
+  {
+    "id": "mx_map_text_place_outline",
+    "en": "Map: place text outline",
+    "fa": "نقشه: طرح کلی متن را قرار دهید "
+  },
+  {
+    "id": "mx_map_text_road",
+    "en": "Map: road text",
+    "fa": "نقشه: متن جاده "
+  },
+  {
+    "id": "mx_map_text_road_outline",
+    "en": "Map: road text outline",
+    "fa": "نقشه: طرح کلی متن جاده "
+  },
+  {
+    "id": "mx_map_text_water",
+    "en": "Map: water body text",
+    "fa": "نقشه: متن بدنه آب "
+  },
+  {
+    "id": "mx_map_text_water_outline",
+    "en": "Map: water body text outline",
+    "fa": "نقشه: طرح متن متن متناسب با آب "
   }
 ]

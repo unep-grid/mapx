@@ -3,9 +3,20 @@ import * as styleDefault from './../data/style/style_mapx.json';
 let settings = {
   devicePixelRatio: 0, // updated by getPixelRatio()
   language: 'en',
-  languages: ['en', 'fr'],
+  languages: [
+    'en',
+    'fr',
+    'es',
+    'ar',
+    'ru',
+    'zh',
+    'de',
+    'bn',
+    'fa',
+    'ps'
+  ],
   highlightedCountries: [],
-  initClosedPanels : false,
+  initClosedPanels: false,
   project: '',
   logs: {
     disabled: false, // set in cookies as preferences ?
@@ -27,10 +38,10 @@ let settings = {
     maxZoom: 20,
     minZoom: 0
   },
-  search : {
+  search: {
     host: 'localhost',
     port: '8880',
-    protocol: 'http://',
+    protocol: 'http://'
   },
   api: {
     host: 'api',
@@ -40,7 +51,7 @@ let settings = {
     protocol: 'https:',
     upload_size_max: Math.pow(1024, 2) * 100, //100 MiB
     routes: {
-      getSearchKey : '/get/search/key',
+      getSearchKey: '/get/search/key',
       getApiSql: '/get/sql',
       getConfigMap: '/get/config/map',
       getIpInfo: '/get/ip',
@@ -83,15 +94,15 @@ let settings = {
   layerBefore: 'mxlayers',
   separators: {
     //sublayer: '-@'
-    sublayer:'@'
+    sublayer: '@'
   },
   clickHandlers: [],
   maxByteJed: 300000, // 300 Kb
   maxByteFetch: 5e6, // 5MB
-  maxTimeFetch : 1000 * 60, // 1 minute
-  maxTimeCache :  1000 * 60 * 60 * 24, // aka ttl = 1 day
+  maxTimeFetch: 1000 * 60, // 1 minute
+  maxTimeCache: 1000 * 60 * 60 * 24, // aka ttl = 1 day
   //maxTimeCache : 1, // aka ttl = 1 day
-  cacheIgnore : false,
+  cacheIgnore: false,
   user: {},
   ui: {
     colors: null
