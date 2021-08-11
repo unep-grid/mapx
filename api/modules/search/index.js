@@ -37,7 +37,7 @@ async function updateIndexes() {
     /**
      * TODO this step, m49 dict matching, could be done within the query
      */
-  
+
     const m49iso3 = await getDictM49iso3();
     const documents = result.rows;
 
@@ -63,11 +63,12 @@ async function updateIndexes() {
       const indexView = await meili.getOrCreateIndex(`views_${language}`, {
         primaryKey: cid.primaryKey
       });
-      
+
       /**
-      * Remove previous documents
-      * Alternative : retrieve all id -> for each, delete those not in new documents 
-      */ 
+       * Remove previous documents
+       * Alternative : retrieve all id -> for each, delete those not in new documents
+       */
+
       console.log(`Delete all documents for index ${language}`);
       await indexView.deleteAllDocuments();
 
@@ -146,11 +147,12 @@ async function handlerSearch(req, res) {
 }
 
 function flatLanguageStrings(item, language) {
-  const ml = item.meta_multilingual || {};
-  const pd = item.projects_data || [];
-  const gm = item.source_keywords_gemet_multilingual;
+  const itemClone = JSON.parse(JSON.stringify(item));
+  const ml = itemClone.meta_multilingual || {};
+  const pd = itemClone.projects_data || [];
+  const gm = itemClone.source_keywords_gemet_multilingual;
 
-  const g = item.source_keywords_gemet;
+  const g = itemClone.source_keywords_gemet;
   g.length = 0; // id replaced by label
   for (let k of gm) {
     if (k.language === language) {
@@ -158,7 +160,7 @@ function flatLanguageStrings(item, language) {
     }
   }
   /**
-   * Extend document with items from meta_multilingual
+   * Extend document with itemClones from meta_multilingual
    */
   for (let m in ml) {
     /*
@@ -170,7 +172,7 @@ function flatLanguageStrings(item, language) {
      * e.g. {en:'My view title',fr:'Mon titre'}
      */
 
-    item[m] = tr[language] || tr[languages.default];
+    itemClone[m] = tr[language] || tr[languages.default];
     /*
      * e.g. {view_title:'My view title', ...}
      */
@@ -178,7 +180,7 @@ function flatLanguageStrings(item, language) {
     const as = config.idx_views.attributesStripHTML;
     const toStrip = as.includes(m);
     if (toStrip) {
-      item[m] = htmlToText(item[m], {wordwrap: false});
+      itemClone[m] = htmlToText(itemClone[m], {wordwrap: false});
     }
   }
 
@@ -194,7 +196,7 @@ function flatLanguageStrings(item, language) {
     }
   }
 
-  return item;
+  return itemClone;
 }
 
 function cleanKeywords(arr) {
