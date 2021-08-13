@@ -51,8 +51,8 @@ export * from './mx_helper_sdk.js';
 export * from './mx_helper_issues.js';
 
 /**
-* imported module available in mx.helpers 
-*/
+ * imported module available in mx.helpers
+ */
 export * from './animation_frame/index.js';
 export * from './array_stat/index.js';
 export * from './color_utils/index.js';
@@ -61,3 +61,4 @@ export * from './is_test';
 export * from './is_test_mapx';
 export * from './user_pref';
 export * from './mapboxgl_json_editor';
+export * from './commonloc';

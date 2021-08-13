@@ -369,64 +369,64 @@ export async function updateLanguageViewsList(o) {
   const views = h.getViews();
   const isModeStatic = h.path(mx, 'settings.mode.static') === true;
 
-  try{
-  if (isModeStatic) {
-    return false;
-  }
-
-  views.forEach((view) => {
-    const elTitle = view._el.querySelector('.mx-view-tgl-title');
-    const elText = view._el.querySelector('.mx-view-item-desc');
-    const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
-    const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
-
-    /**
-     * Regenerate vt legend
-     */
-    if (elLegendVt) {
-      elLegendVt.innerHTML = mx.templates.viewListLegend(view);
+  try {
+    if (isModeStatic) {
+      return false;
     }
 
-    /**
-     * Update rt legend text only
-     */
-    if (elLegendRtTitle) {
-      const legendTitle = h.getLabelFromObjectPath({
-        lang: lang,
-        obj: view,
-        path: 'data.source.legendTitles',
-        defaultValue: null
-      });
-      if (legendTitle) {
-        elLegendRtTitle.innerText = legendTitle;
-        elLegendRtTitle.setAttribute('title', legendTitle);
+    views.forEach((view) => {
+      const elTitle = view._el.querySelector('.mx-view-tgl-title');
+      const elText = view._el.querySelector('.mx-view-item-desc');
+      const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
+      const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
+
+      /**
+       * Regenerate vt legend
+       */
+      if (elLegendVt) {
+        elLegendVt.innerHTML = mx.templates.viewListLegend(view);
       }
-    }
 
-    /**
-     * Update view title
-     */
-    if (elTitle) {
-      elTitle.innerHTML = h.getLabelFromObjectPath({
-        lang: lang,
-        obj: view,
-        path: 'data.title'
-      });
-    }
+      /**
+       * Update rt legend text only
+       */
+      if (elLegendRtTitle) {
+        const legendTitle = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.source.legendTitles',
+          defaultValue: null
+        });
+        if (legendTitle) {
+          elLegendRtTitle.innerText = legendTitle;
+          elLegendRtTitle.setAttribute('title', legendTitle);
+        }
+      }
 
-    /**
-     * Update view description
-     */
-    if (elText) {
-      elText.innerHTML = h.getLabelFromObjectPath({
-        lang: lang,
-        obj: view,
-        path: 'data.abstract'
-      });
-    }
-  });
-  }catch(e){
-    console.warn('updateLanguageViewsList error',e.message)
+      /**
+       * Update view title
+       */
+      if (elTitle) {
+        elTitle.innerHTML = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.title'
+        });
+      }
+
+      /**
+       * Update view description
+       */
+      if (elText) {
+        elText.innerHTML = h.getLabelFromObjectPath({
+          lang: lang,
+          obj: view,
+          path: 'data.abstract'
+        });
+      }
+    });
+  } catch (e) {
+    console.warn('updateLanguageViewsList error', e.message);
   }
   return true;
 }
@@ -437,60 +437,73 @@ export async function updateLanguageViewsList(o) {
  * @param {string} o.mapId Map id
  * @param {string} [o.language='en'] Two letter language code
  */
-export function updateLanguageMap(o) {
+export async function updateLanguageMap(o) {
   o = Object.assign({}, o);
-  return new Promise((resolve) => {
-    var map = mx.helpers.getMap(o.id);
-    if (!mx.helpers.isMap(map)) {
-      return;
+  var map = mx.helpers.getMap(o.id);
+  if (!mx.helpers.isMap(map)) {
+    return;
+  }
+  var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
+  var defaultLang = 'en';
+  var layers = [
+    'place-label-city',
+    'place-label-capital',
+    'country-label',
+    'water-label-line',
+    'water-label-point',
+    'poi-label'
+  ];
+
+  if (map) {
+    if (!o.language || mapLang.indexOf(o.language) === -1) {
+      o.language = mx.settings.language;
     }
-    var mapLang = ['en', 'es', 'fr', 'de', 'ru', 'zh', 'pt', 'ar'];
-    var defaultLang = 'en';
-    var layers = [
-      'place-label-city',
-      'place-label-capital',
-      'country-label',
-      'water-label-line',
-      'water-label-point',
-      'poi-label'
-    ];
 
-    if (map) {
-      if (!o.language || mapLang.indexOf(o.language) === -1) {
-        o.language = mx.settings.language;
-      }
-
-      if (!o.language) {
-        o.language = defaultLang;
-      }
-
-      /*
-       * set default to english for the map layers if not in language set
-       */
-      if (mapLang.indexOf(o.language) === -1) {
-        o.language = defaultLang;
-      }
-
-      /**
-       * Set language in layers
-       */
-      for (var i = 0; i < layers.length; i++) {
-        var layer = layers[i];
-        var layerExists =
-          mx.helpers.getLayerNamesByPrefix({
-            id: o.id,
-            prefix: layer
-          }).length > 0;
-
-        if (layerExists) {
-          map.setLayoutProperty(layer, 'text-field', [
-            'coalesce',
-            ['get', `name_${o.language}`],
-            ['get', 'name_en']
-          ]);
-        }
-      }
-      resolve(true);
+    if (!o.language) {
+      o.language = defaultLang;
     }
+
+    /*
+     * set default to english for the map layers if not in language set
+     */
+    if (mapLang.indexOf(o.language) === -1) {
+      o.language = defaultLang;
+    }
+
+    /**
+     * Set language in layers
+     */
+    for (var i = 0; i < layers.length; i++) {
+      var layer = layers[i];
+      var layerExists =
+        mx.helpers.getLayerNamesByPrefix({
+          id: o.id,
+          prefix: layer
+        }).length > 0;
+
+      if (layerExists) {
+        map.setLayoutProperty(layer, 'text-field', [
+          'coalesce',
+          ['get', `name_${o.language}`],
+          ['get', 'name_en']
+        ]);
+      }
+    }
+    return true;
+  }
+}
+
+/**
+* Get dict id by name + language 
+*/ 
+export async function getDictItemId(txt, language) {
+  language = language || mx.settings.language ||  'en';
+  const dict = await getDict(language);
+  const reg = new RegExp('^' + txt );
+  const res = dict.find((d) => {
+    return d[language].match(reg) || d.en.match(reg);
   });
+  if (res && res?.id) {
+    return res.id;
+  }
 }

@@ -113,6 +113,16 @@ const rules = [
     }
   },
   {
+    key: ['srid'],
+    test: (d) => {
+      isValid = mx_valid.isNumeric(d) && d >= 0;
+      return {
+        valid: isValid,
+        value: isValid ? d * 1 : 4326
+      };
+    }
+  },
+  {
     key: ['binsMethod'],
     test: (d) => {
       const methods = ['equal_interval', 'heads_tails', 'jenks', 'quantile'];
@@ -300,7 +310,9 @@ const rules = [
       'subtitle',
       'subjectPrefix',
       'searchQuery',
-      'searchText'
+      'searchText',
+      'name',
+      'code'
     ],
     test: (d) => {
       return {

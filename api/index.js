@@ -31,6 +31,7 @@ const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
 const {mwSearchText, mwSearchConcept} = require('@mapx/gemet');
 const {mwGetSearchKey} = require('@mapx/search');
+const {mwGetBbox} = require('@mapx/bbox');
 
 /**
  * If port argument is set, use this instead
@@ -89,6 +90,8 @@ app.get('/get/ip', ip.mwGet);
 app.get('/get/search/key', mwGetSearchKey);
 app.get('/get/gemet/search', mwSearchText);
 app.get('/get/gemet/concept', mwSearchConcept);
+app.get('/get/bbox/',mwGetBbox);
+
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);
