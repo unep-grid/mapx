@@ -362,74 +362,73 @@ export function getTranslationFromObject(o) {
   return out;
 }
 
-export function updateLanguageViewsList(o) {
+export async function updateLanguageViewsList(o) {
   o = Object.assign({}, o);
   const h = mx.helpers;
   const lang = o.lang || mx.settings.language;
   const views = h.getViews();
   const isModeStatic = h.path(mx, 'settings.mode.static') === true;
 
+  try{
   if (isModeStatic) {
-    return Promise.resolve(false);
+    return false;
   }
 
-  return new Promise((resolve) => {
-    views.forEach((view) => {
-      const elTitle = view._el.querySelector('.mx-view-tgl-title');
-      const elText = view._el.querySelector('.mx-view-item-desc');
-      const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
-      const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
+  views.forEach((view) => {
+    const elTitle = view._el.querySelector('.mx-view-tgl-title');
+    const elText = view._el.querySelector('.mx-view-item-desc');
+    const elLegendVt = view._el.querySelector('.mx-view-legend-vt');
+    const elLegendRtTitle = view._el.querySelector('.mx-legend-rt-title');
 
-      /**
-       * Regenerate vt legend
-       */
-      if (elLegendVt) {
-        elLegendVt.innerHTML = mx.templates.viewListLegend(view);
-      }
+    /**
+     * Regenerate vt legend
+     */
+    if (elLegendVt) {
+      elLegendVt.innerHTML = mx.templates.viewListLegend(view);
+    }
 
-      /**
-       * Update rt legend text only
-       */
-      if (elLegendRtTitle) {
-        const legendTitle = h.getLabelFromObjectPath({
-          lang: lang,
-          obj: view,
-          path: 'data.source.legendTitles',
-          defaultValue: null
-        });
-        if (legendTitle) {
-          elLegendRtTitle.innerText = legendTitle;
-          elLegendRtTitle.setAttribute('title', legendTitle);
-        }
+    /**
+     * Update rt legend text only
+     */
+    if (elLegendRtTitle) {
+      const legendTitle = h.getLabelFromObjectPath({
+        lang: lang,
+        obj: view,
+        path: 'data.source.legendTitles',
+        defaultValue: null
+      });
+      if (legendTitle) {
+        elLegendRtTitle.innerText = legendTitle;
+        elLegendRtTitle.setAttribute('title', legendTitle);
       }
+    }
 
-      /**
-       * Update view title
-       */
-      if (elTitle) {
-        elTitle.innerHTML = h.getLabelFromObjectPath({
-          lang: lang,
-          obj: view,
-          path: 'data.title'
-        });
-      }
+    /**
+     * Update view title
+     */
+    if (elTitle) {
+      elTitle.innerHTML = h.getLabelFromObjectPath({
+        lang: lang,
+        obj: view,
+        path: 'data.title'
+      });
+    }
 
-      /**
-       * Update view description
-       */
-      if (elText) {
-        elText.innerHTML = h.getLabelFromObjectPath({
-          lang: lang,
-          obj: view,
-          path: 'data.abstract'
-        });
-      }
-    });
-    resolve(true);
-  }).catch((e) => {
-    console.error(e);
-    return false;
+    /**
+     * Update view description
+     */
+    if (elText) {
+      elText.innerHTML = h.getLabelFromObjectPath({
+        lang: lang,
+        obj: view,
+        path: 'data.abstract'
+      });
+    }
   });
+  }catch(e){
+    console.warn('updateLanguageViewsList error',e.message)
+  }
+  return true;
 }
 
 /**
