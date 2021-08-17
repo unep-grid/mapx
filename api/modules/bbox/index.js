@@ -1,7 +1,6 @@
 const {redisGet, redisSet, pgRead} = require('@mapx/db');
 const {getParamsValidator} = require('@mapx/route_validation');
 const {sendError, sendJSON} = require('@mapx/helpers');
-const valid = require('@fxi/mx_valid');
 const crypto = require('crypto');
 const validateParamsHandlerBbox = getParamsValidator({
   expected: ['name','code','srid', 'language']
@@ -32,9 +31,9 @@ async function handlerBbox(req, res) {
       .digest('hex');
 
     const cached = await redisGet(hash);
-
+    
     if (cached) {
-      return sendJSON(res, cached);
+      return sendJSON(res, JSON.parse(cached));
     } else {
       const result = await pgRead.query(q);
       const data = result.rows[0];
@@ -55,7 +54,7 @@ async function handlerBbox(req, res) {
         coords[2][1]//north
       ];
       
-      //await redisSet(hash, JSON.stringify(bbox));
+      await redisSet(hash, JSON.stringify(bbox));
 
       return sendJSON(res, bbox);
     }

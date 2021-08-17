@@ -616,6 +616,11 @@ Class to handle MapX specific method
     * [.map_jump_to(opt)](#MapxResolvers+map_jump_to) ⇒ <code>Boolean</code>
     * [.map_get_zoom()](#MapxResolvers+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolvers+map_get_center) ⇒ <code>Array</code>
+    * [.map_get_bounds_array()](#MapxResolvers+map_get_bounds_array) ⇒ <code>Array</code>
+    * [.common_loc_get_list_codes()](#MapxResolvers+common_loc_get_list_codes) ⇒ <code>Array</code>
+    * [.common_loc_get_table_codes(opt)](#MapxResolvers+common_loc_get_table_codes) ⇒ <code>Promise.&lt;Array&gt;</code>
+    * [.common_loc_get_bbox(o)](#MapxResolvers+common_loc_get_bbox) ⇒ <code>Promise.&lt;Array&gt;</code>
+    * [.common_loc_fit_bbox(o)](#MapxResolvers+common_loc_fit_bbox) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.get_sdk_methods()](#MapxResolvers+get_sdk_methods) ⇒ <code>Array</code>
 
 <a name="MapxResolvers+set_panel_left_visibility"></a>
@@ -1595,6 +1600,76 @@ Get current map center
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - center  
+<a name="MapxResolvers+map_get_bounds_array"></a>
+
+#### mapxResolvers.map\_get\_bounds\_array() ⇒ <code>Array</code>
+Get current map bounds as array
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Bounds [west, south, east, north]  
+<a name="MapxResolvers+common_loc_get_list_codes"></a>
+
+#### mapxResolvers.common\_loc\_get\_list\_codes() ⇒ <code>Array</code>
+Get list of common location codes
+Codes as defined in ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49 region codes (ex. m49_901)
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Array</code> - Array of codes as strings  
+<a name="MapxResolvers+common_loc_get_table_codes"></a>
+
+#### mapxResolvers.common\_loc\_get\_table\_codes(opt) ⇒ <code>Promise.&lt;Array&gt;</code>
+Get table of common location codes and names
+Same as common_loc_get_list_codes, but with names in set language. ex. [{code:"ABW",name:"Aruba"},...]
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Promise.&lt;Array&gt;</code> - Array of codes and name as object  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.language | <code>String</code> | Language (ISO 639-1 two letters code, default 'en') |
+
+**Example**  
+```js
+mapx.ask('common_loc_get_table_codes',{
+   reset:true
+}).then(console.table);
+// code  name
+// -----------------
+// ABW   Aruba
+// AFG   Afghanistan
+// AGO   Angola
+// AIA   Anguilla
+```
+<a name="MapxResolvers+common_loc_get_bbox"></a>
+
+#### mapxResolvers.common\_loc\_get\_bbox(o) ⇒ <code>Promise.&lt;Array&gt;</code>
+Get Bounding box for code iso3, m49 and text + language
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Promise.&lt;Array&gt;</code> - Array of geographic bounds [west, south, east, north]  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| o | <code>Object</code> | options |
+| o.code | <code>String</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
+| o.name | <code>String</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
+
+<a name="MapxResolvers+common_loc_fit_bbox"></a>
+
+#### mapxResolvers.common\_loc\_fit\_bbox(o) ⇒ <code>Promise.&lt;Array&gt;</code>
+Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49 region codes) or name (ex. Africa)
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Promise.&lt;Array&gt;</code> - Array of geographic bounds [west, south, east, north]  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| o | <code>Object</code> | options |
+| o.code | <code>String</code> | Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004' |
+| o.name | <code>String</code> | Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh |
+| o.param | <code>Object</code> | Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions |
+
 <a name="MapxResolvers+get_sdk_methods"></a>
 
 #### mapxResolvers.get\_sdk\_methods() ⇒ <code>Array</code>

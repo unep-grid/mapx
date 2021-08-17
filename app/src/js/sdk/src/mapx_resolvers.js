@@ -40,14 +40,14 @@ class MapxResolvers {
   }
 
   /**
-   * Toogle immersive mode: hide or show ALL panels. 
+   * Toogle immersive mode: hide or show ALL panels.
    * @aram {Object} opt Options
    * @param {Boolean} opt.enable Force enable
    * @param {Boolean} opt.toggle Toggle
    * @return {Boolean} enabled
    */
   set_immersive_mode(opt) {
-   return h.setImmersiveMode(opt);
+    return h.setImmersiveMode(opt);
   }
 
   /**
@@ -123,7 +123,7 @@ class MapxResolvers {
   set_dashboard_visibility(opt) {
     const rslv = this;
     if (!rslv.has_dashboard()) {
-       throw new Error('No dashboard container found') 
+      throw new Error('No dashboard container found');
     }
     const panel = mx.dashboard;
     return rslv._handle_panel_visibility(panel, opt);
@@ -1182,6 +1182,73 @@ class MapxResolvers {
   map_get_center() {
     const map = h.getMap();
     map.getCenter();
+  }
+
+  /**
+   * Get current map bounds as array
+   * @return {Array} Bounds [west, south, east, north]
+   */
+  map_get_bounds_array() {
+    return h.getBoundsArray();
+  }
+
+  async map_wait_idle() {
+    const map = h.getMap();
+    await map.once('idle');
+    return true;
+  }
+
+  /**
+   * Get list of common location codes
+   * Codes as defined in ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49 region codes (ex. m49_901)
+   * @return {Array} Array of codes as strings
+   */
+  common_loc_get_list_codes() {
+    return h.commonLocGetListCodes();
+  }
+
+  /**
+   * Get table of common location codes and names
+   * Same as common_loc_get_list_codes, but with names in set language. ex. [{code:"ABW",name:"Aruba"},...]
+   * @example 
+   * mapx.ask('common_loc_get_table_codes',{
+   *    reset:true
+   * }).then(console.table);
+   * // code  name
+   * // -----------------
+   * // ABW   Aruba
+   * // AFG   Afghanistan
+   * // AGO   Angola
+   * // AIA   Anguilla
+   * @param {Object} opt Options
+   * @param {String} opt.language Language (ISO 639-1 two letters code, default 'en')
+   * @return {Promise<Array>} Array of codes and name as object
+   */
+  common_loc_get_table_codes(opt) {
+    return h.commonLocGetTableCodes(opt);
+  }
+
+  /**
+   * Get Bounding box for code iso3, m49 and text + language
+   * @param {Object} o options
+   * @param {String} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
+   * @param {String} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
+   * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
+   */
+  common_loc_get_bbox(opt) {
+    return h.commonLocGetBbox(opt);
+  }
+
+  /**
+   * Set map bounding box based on code (ISO 3166-1 alpha-3 (ex. AFG, COD) and UN M49 region codes) or name (ex. Africa)
+   * @param {Object} o options
+   * @param {String} o.code Code: ISO 3166-1 alpha-3 (iso3) or UN M49 region code. E.g. 'COD','m49_004'
+   * @param {String} o.name Name (alternative to code, less recommanded): Country or region mame. e.g. Africa, Bangladesh
+   * @param {Object} o.param Animation options, see https://docs.mapbox.com/mapbox-gl-js/api/properties/#animationoptions
+   * @return {Promise<Array>} Array of geographic bounds [west, south, east, north]
+   */
+  common_loc_fit_bbox(opt) {
+    return h.commonLocFitBbox(opt);
   }
 
   /**

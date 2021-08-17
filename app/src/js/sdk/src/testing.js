@@ -94,14 +94,14 @@ export class Testing {
     }
 
     const result = {
-      title :  title,
-      message : '',
-      tests : []
-    }
+      title: title,
+      message: '',
+      tests: []
+    };
     t._results.push(result);
 
     queue.push(async () => {
-      let pass = true; 
+      let pass = true;
       const uiSection = t._ui_section(title);
       try {
         const initSuccess = t._promise(opt.init);
@@ -138,9 +138,7 @@ export class Testing {
         uiSection.text.innerText = `: failed ( ${e} )`;
         uiSection.icon.innerText = '🐞';
       }
-
       async function nextTest(data) {
-
         const test = opt.tests.shift();
         if (!pass) {
           return false;
@@ -148,20 +146,19 @@ export class Testing {
         if (!test) {
           return null;
         }
-
         const it = Object.assign({}, defaultsTest, test);
         const uiResult = t._ui_result(it.name, uiSection);
         if (it.ignore) {
           return null;
         }
         const r = {
-          success : false,
-          message : '',
-          name : it.name,
-          timing :0
+          success: false,
+          message: '',
+          name: it.name,
+          timing: 0
         };
         result.tests.push(r);
-        const resSuccess = t._promise(it.test, data);
+        const resSuccess = t._promise(it.test, data, it);
         const resTimeout = t._promise_timeout(it.timeout);
         /**
          * Race between timeout and success
@@ -173,17 +170,15 @@ export class Testing {
          * Timeout resolve first
          */ if (resOut === 'timeout') {
           r.success = pass;
-          r.message = `timeout ( ${it.timeout} ms)` 
+          r.message = `timeout ( ${it.timeout} ms)`;
           uiResult.icon.innerText = '⏱';
           uiResult.text.innerText = `: ${r.message}`;
           pass = false;
         } else {
           /**
            * Test resolve first
-           */
-
-          uiResult.icon.innerText = r.success ? '✅' : '❌';
-          r.message = r.success ? '' : JSON.stringify(resOut); 
+           */ uiResult.icon.innerText = r.success ? '✅' : '❌';
+          r.message = r.success ? '' : JSON.stringify(resOut);
           uiResult.text.innerText = r.message;
         }
         /**
@@ -206,8 +201,11 @@ export class Testing {
       }, ms || 1000);
     });
   }
-  _promise(cb, data) {
+  _promise(cb, data, test) {
     cb = is.isFunction(cb) ? cb : () => {};
+    if (test) {
+      cb = cb.bind(test);
+    }
     return new Promise(async (resolve, reject) => {
       try {
         const res = await cb(data);
