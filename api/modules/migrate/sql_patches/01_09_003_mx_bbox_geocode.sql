@@ -40,7 +40,7 @@ declare
     ),
     extent as (
       SELECT ST_Extent(c.geom) AS box
-      FROM mx_countries_un c,iso i
+      FROM mx_countries c,iso i
       WHERE c.iso3code = i.iso3code
     )
     SELECT box from extent
