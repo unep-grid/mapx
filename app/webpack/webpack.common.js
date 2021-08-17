@@ -16,6 +16,7 @@ module.exports = {
     jquery: './src/js/init_jquery.js',
     shiny: './src/js/init_shiny.js',
     static: './src/js/init_static.js',
+    theme : './src/js/init_theme.js',
     sw: './src/js/init_sw.js'
   },
   output: {

@@ -4,7 +4,6 @@ import {ButtonPanel} from './button_panel';
 import {RasterMiniMap} from './raster_mini_map';
 import {modalConfirm} from './mx_helper_modal.js';
 import {elSpanTranslate} from './el_mapx/index.js';
-import {Theme} from './theme';
 import {Highlighter} from './features_highlight/';
 import {WsHandler} from './ws_handler/';
 import {MainPanel} from './panel_main';
@@ -455,35 +454,6 @@ export function initListenerGlobal() {
   });
 }
 
-/*
- * Init match media query + listener
- */
-function initMatchMedia(theme) {
-  try {
-    const valid = theme instanceof Theme;
-    if (!valid) {
-      return;
-    }
-    /**
-     * theme color auto
-     */
-    const wMdark = window.matchMedia('(prefers-color-scheme: dark)');
-    const wMlight = window.matchMedia('(prefers-color-scheme: light)');
-
-    if (wMdark.matches) {
-      theme.setColorsByThemeId('smartgray');
-    }
-    wMdark.addEventListener('change', (e) => {
-      return e.matches && theme.setColorsByThemeId('smartgray');
-    });
-    wMlight.addEventListener('change', (e) => {
-      return e.matches && theme.setColorsByThemeId('mapx');
-    });
-  } catch (e) {
-    console.warn(e);
-  }
-}
-
 /**
  * Init app listeners
  */
@@ -879,12 +849,14 @@ export async function initMapx(o) {
   elCanvas.setAttribute('tabindex', '-1');
 
   /**
-   * Continue according to mode
+   * Wait for map to be loaded
    */
+  await o.map.once('load');
 
-  await new Promise((resolve) => {
-    o.map.on('load', resolve);
-  });
+  /**
+   * Link theme to map
+   */
+  mx.theme.linkMap(o.map);
 
   if (!mx.settings.mode.static) {
     /**
@@ -914,54 +886,60 @@ export async function initMapx(o) {
       mx.panel_main.panel.open();
     }
 
-    try {
-      /**
-       * Configure search tool
-       */
-      const key = await getSearchApiKey();
-      mx.search = new Search({
-        key: key,
-        container: '#mxTabPanelSearch',
-        host: mx.settings.search.host,
-        protocol: mx.settings.search.protocol,
-        port: mx.settings.search.port,
-        language: mx.settings.language,
-        index_template: 'views_{{language}}'
-      });
+    /**
+     * Build theme config inputs only when settings tab is displayed
+     */
+    mx.panel_main.on('tab_change', (e, id) => {
+      if (id === 'tools') {
+        const elInputs = document.getElementById('mxInputThemeColors');
+        mx.theme.linkInputs(elInputs);
+      }
+    });
 
-      /**
-       * On tab change to search, perform a search
-       */
-      mx.panel_main.on('tab_change', async (e, id) => {
-        if (id === 'search') {
-          await mx.search.initCheck();
-          mx.search._elInput.focus();
-        }
-      });
+    /**
+     * Configure search tool
+     */
+    const key = await getSearchApiKey();
+    mx.search = new Search({
+      key: key,
+      container: '#mxTabPanelSearch',
+      host: mx.settings.search.host,
+      protocol: mx.settings.search.protocol,
+      port: mx.settings.search.port,
+      language: mx.settings.language,
+      index_template: 'views_{{language}}'
+    });
 
-      /**
-       * On language change, update
-       */
-      mx.events.on({
-        type: 'language_change',
-        idGroup: 'search_index',
-        callback: (data) => {
-          mx.search.setLanguage({
-            language: data?.new_language
-          });
-        }
-      });
+    /**
+     * On tab change to search, perform a search
+     */
+    mx.panel_main.on('tab_change', async (e, id) => {
+      if (id === 'search') {
+        await mx.search.initCheck();
+        mx.search._elInput.focus();
+      }
+    });
 
-      mx.events.on({
-        type: ['view_removed', 'view_added', 'view_deleted'],
-        idGroup: 'search_index',
-        callback: () => {
-          mx.search._update_toggles_icons();
-        }
-      });
-    } catch (e) {
-      console.error(e);
-    }
+    /**
+     * On language change, update
+     */
+    mx.events.on({
+      type: 'language_change',
+      idGroup: 'search_index',
+      callback: (data) => {
+        mx.search.setLanguage({
+          language: data?.new_language
+        });
+      }
+    });
+
+    mx.events.on({
+      type: ['view_removed', 'view_added', 'view_deleted'],
+      idGroup: 'search_index',
+      callback: () => {
+        mx.search._update_toggles_icons();
+      }
+    });
   }
 
   /**
@@ -1016,27 +994,6 @@ export async function initMapx(o) {
       enable: false
     });
   });
-
-  /**
-   * Set theme
-   */
-  const queryIdTheme = h.getQueryParameter('theme')[0];
-  const queryColors = h.getQueryParameter(['colors', 'style'])[0];
-  const colors = queryIdTheme ? null : queryColors;
-
-  mx.theme = new Theme({
-    idTheme: queryIdTheme,
-    colors: colors || o.colors || o.colorScheme || mx.settings.ui.colors,
-    elInputsContainer: document.getElementById('mxInputThemeColors'),
-    map: o.map
-  });
-
-  if (!colors) {
-    /**
-     * Auto
-     */
-    initMatchMedia(mx.theme);
-  }
 
   /**
    * Add controls
@@ -4879,7 +4836,8 @@ export function sendRenderedLayersAreaToUi(o) {
  * @param {Object} o.map Map (optional, overwrite id)
  */
 export function getBoundsArray(o) {
-  const map = o.map || mx.maps[o.id].map;
+  const h = mx.helpers;
+  const map = h.getMap(o);
   const a = map.getBounds();
   return [a.getWest(), a.getSouth(), a.getEast(), a.getNorth()];
 }
@@ -5387,9 +5345,6 @@ export function flyTo(o) {
     }
   }
 }
-
-
-
 
 /**
  * Toggle visibility for existing layer in style

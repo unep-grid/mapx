@@ -25,12 +25,12 @@ module.exports = merge(common, {
     new HtmlWebpackPlugin({
       template: './src/html/static.html',
       filename: './static.html',
-      chunks: ['mx', 'static', 'jquery']
+      chunks: ['mx','theme', 'static', 'jquery']
     }),
     new HtmlWebpackPlugin({
       inject: 'head',
       template: './src/html/index.html',
-      chunks: ['mx', 'jquery', 'shiny']
+      chunks: ['mx', 'theme', 'jquery', 'shiny']
     }),
     new webpack.DefinePlugin({
       API_PORT_PUBLIC: JSON.stringify(process.env.API_PORT_PUBLIC),

@@ -6,6 +6,9 @@ import './style.css';
 import * as themes from './presets.js';
 import {layer_resolver, css_resolver} from './mapx_style_resolver.js';
 import {bindAll} from '../bind_class_methods';
+import switchOn from './sound/switch-on.mp3';
+import switchOff from './sound/switch-off.mp3';
+import {onNextFrame} from '../animation_frame/index.js';
 
 const global = {
   elStyle: null,
@@ -18,9 +21,10 @@ const global = {
   debug: false,
   idThemesDarkLight: ['mapx', 'smartgray'],
   on: {},
-  sounds:{
-    'switch-on':require('./sound/switch-on.mp3'),
-    'switch-off':require('./sound/switch-off.mp3')
+  sounds: {
+    'switch-test': switchOn,
+    'switch-on': switchOn,
+    'switch-off': switchOff
   }
 };
 
@@ -38,25 +42,11 @@ class Theme {
    */
   init() {
     const t = this;
-    const elContainer = t.opt.elInputsContainer;
-    const hasContainer = elContainer instanceof Element;
     t.ls = new ListenerStore();
 
     if (!global.elStyle) {
       global.elStyle = el('style');
       document.head.appendChild(global.elStyle);
-    }
-
-    if (hasContainer) {
-      t.ls.addListener({
-        bind: t,
-        target: elContainer,
-        callback: t._updateFromInput,
-        group: 'base',
-        type: 'change',
-        debounce: true,
-        debounceTime: 200
-      });
     }
 
     Object.keys(t.opt.on).forEach((k) => {
@@ -120,7 +110,7 @@ class Theme {
       t._id_theme = theme.id;
       t._theme = theme;
       t.setColors(theme.colors);
-      t.buildInputs();
+      t._buildInputs();
       return true;
     }
     return false;
@@ -199,9 +189,9 @@ class Theme {
     } else {
       pos = 1;
     }
-    if(pos===1){
+    if (pos === 1) {
       t.sound('switch-off');
-    }else{
+    } else {
       t.sound('switch-on');
     }
     t.setColorsByThemeId(idsTheme[pos]);
@@ -252,25 +242,27 @@ class Theme {
     const t = this;
     global.elStyle.textContent = css_resolver(t.opt.colors);
   }
+  linkMap(map) {
+    const t = this;
+    t.opt.map = map;
+    t._updateMap();
+  }
   _updateMap() {
     const t = this;
     const map = t.opt.map;
+    if (!map) {
+      return;
+    }
     const isMapStyleLoaded = map.isStyleLoaded();
     const skipWaitMapLoad = t._map_skip_wait_load;
 
     if (!isMapStyleLoaded && !skipWaitMapLoad) {
-      t.ls.addListenerOnce({
-        target: map,
-        type: 'load',
-        bind: t,
-        callback: t._updateMap
-      });
+      map.once('load', t._updateMap.bind(t));
       return;
     }
     t._map_skip_wait_load = true;
 
     const layers = layer_resolver(t.opt.colors);
-
     layers.forEach((grp) => {
       grp.id.forEach((id) => {
         const layer = map.getLayer(id);
@@ -297,11 +289,11 @@ class Theme {
     t.opt.colors = t.getColorsFromInputs();
     t.setColors();
   }
+
   _buildInputGroup(cid) {
     const t = this;
     const colors = t.opt.colors;
     const inputType = ['checkbox', 'color', 'range'];
-    let elInputGrp, elLabel;
     const color = chroma(colors[cid].color);
     const visible = colors[cid].visibility === 'visible';
 
@@ -311,7 +303,7 @@ class Theme {
         id: cid,
         class: ['mx-theme--color-container']
       },
-      (elLabel = el(
+      el(
         'label',
         {
           class: ['mx-theme--color-label', 'hint--right'],
@@ -321,8 +313,8 @@ class Theme {
           for: `${cid}_inputs_wrap`
         },
         getDictItem(cid)
-      )),
-      (elInputGrp = el(
+      ),
+      el(
         'div',
         {
           class: ['mx-theme--colors-input']
@@ -378,20 +370,52 @@ class Theme {
           t.inputs.push(elInput);
           return elWrap;
         })
-      ))
+      )
     );
   }
-  buildInputs() {
+  linkInputs(elInputsContainer) {
+    const t = this;
+    const elContainer = elInputsContainer || t.opt.elInputsContainer;
+    if (!elContainer instanceof Element || t._el_inputs_init) {
+      return;
+    }
+    t.ls.addListener({
+      bind: t,
+      target: elContainer,
+      callback: t._updateFromInput,
+      group: 'base',
+      type: 'change',
+      debounce: true,
+      debounceTime: 200
+    });
+    t._el_inputs_init = true;
+    t.opt.elInputsContainer = elContainer;
+    t._buildInputs();
+  }
+
+  _buildInputs() {
     const t = this;
     const colors = t.opt.colors;
     const elContainer = t.opt.elInputsContainer;
-    if (elContainer instanceof Element) {
-      elContainer.innerHTML = '';
-      for (var cid in colors) {
-        const elInputGrp = t._buildInputGroup(cid);
-        elContainer.appendChild(elInputGrp);
-      }
+    const elFrag = new DocumentFragment();
+    if (!(elContainer instanceof Element)) {
+      return;
     }
+    elContainer.innerHTML = '';
+    for (var cid in colors) {
+      const elInputGrp = t._buildInputGroup(cid);
+      elFrag.appendChild(elInputGrp);
+    }
+    /**
+    * Replacing input is not a priority. In case
+    * of theme change, a lot of update is happening
+    * at the same time. Building input in the next
+    * frame improve performance. That and using
+    * fragment require 10ms instead of 28ms.
+    */
+    onNextFrame(() => {
+      elContainer.replaceChildren(elFrag);
+    });
   }
   getColorsFromInputs(id) {
     const t = this;
@@ -430,14 +454,12 @@ class Theme {
   }
 
   /**
-  * Sound
-  */
-  sound(id){
-    const t= this;
-    const audio = el('audio',{
-      src : t.opt.sounds[id] 
-    });
-    audio.play();
+   * Sound
+   */
+  sound(id) {
+    const t = this;
+    t._elAudio = t._elAudio || el('audio');
+    t._elAudio.setAttribute('src', t.opt.sounds[id]), t._elAudio.play();
   }
 
   /**
@@ -486,6 +508,3 @@ function isBase64Json(txt) {
 function b64ToJson(txt) {
   return JSON.parse(atob(txt));
 }
-
-
-
