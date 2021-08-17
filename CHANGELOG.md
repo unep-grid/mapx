@@ -1,5 +1,16 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.3' target='_blank'>1.9.3</a>
+  - SDK
+    - integration of 'common locations' methods, tests and documentation; 
+    - Provide latest SDK builds as assets (e.g. downloadable from the running instance of mapx, in <url>/sdk/mxsdk.umd.js)
+    - Update caniuse db
+  - APP 
+    - Allow sending unencrypted mail: Usefull to report errors of postgres ( which is used to encrypt mails).
+    - Init theme as separate entry point, to get stuff done early. It should solve the issue when the server stops before loading initial style, e.g. DB is not working -> error message -> display modal : the style should be readyat this point. Link to the map object is done during the remaining js initialisation. Theme configurator inputs are built only when needed, after tools tab click.
+    - Async views list translation
+  - API/APP
+    - Add common location tools : find bbox and map fit bounds based on iso3 code, m49 code or name + language. API and client side version. API version handle re-projection too.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.2' target='_blank'>1.9.2</a>
   - URL for downloading rasters has been moved to metadata, the download button has been modified accordingly ( #658 ) 
   - View's metadata includes abstract and title, useful in static mode (#666) 
