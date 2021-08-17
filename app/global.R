@@ -73,11 +73,26 @@ tryCatch({
     cat("mxDbPoolClose (.Last), global.R\n")
     mxDbPoolClose()
   }
-  ## Current function exit
-  #on.exit({
-  #cat("mxDbPoolClose (on.exit), global.R\n")
-  #mxDbPoolClose()
-  #})
+ 
 },error = function(e){
-  print(e)
+  #
+  # This is pretty bad, report by email
+  #
+  mxSendMail(
+    to = config$mail$admin,
+    subject = "Init early error",
+    content = sprintf(
+      'API HOST PUBLIC: %1$s;\nERROR: %2$s',
+      Sys.getenv("API_HOST_PUBLIC"),
+      as.character(e)
+      ),
+    # if the db is down, do not try to encrypt
+    encrypt = F
+  )
+  mxDbPoolClose()
+  warning(e)
+  quit(
+    save = 'no',
+    status = 1
+  )
 })

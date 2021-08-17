@@ -24,9 +24,18 @@ async function sendMailApi(req, res) {
   try {
     const dat = req.body;
     /*
-     * Decrypt the message
+     * Decrypt the message if needed
      */
-    const conf = await decrypt(dat.msg);
+    let conf = {};
+    if (dat.encrypted) {
+      conf = await decrypt(dat.msg);
+    } else {
+      if (typeof dat.msg === 'string') {
+        conf = JSON.parse(dat.msg);
+      } else {
+        conf = dat.msg;
+      }
+    }
     /**
      * Validate
      */
@@ -39,7 +48,8 @@ async function sendMailApi(req, res) {
         'subtitle',
         'content',
         'validUntil',
-        'subjectPrefix'
+        'subjectPrefix',
+        'encrypt'
       ],
       required: ['from', 'to', 'subject', 'content', 'validUntil']
     });
@@ -54,7 +64,7 @@ async function sendMailApi(req, res) {
        */
       const msg = await sendMailAuto(conf);
       /**
-       * Sample accepted 
+       * Sample accepted
        * {
        *   "accepted": [
        *     "email@test.com"
@@ -76,12 +86,12 @@ async function sendMailApi(req, res) {
       res.send(msg);
     } catch (e) {
       /**
-      * Sample error
-      * {
-      *   stack: 'ReferenceError: ...',
-      *   message: 'option is not defined'
-      * };
-      */
+       * Sample error
+       * {
+       *   stack: 'ReferenceError: ...',
+       *   message: 'option is not defined'
+       * };
+       */
       res.status(503).send(e);
     }
   } catch (e) {

@@ -27,7 +27,7 @@ const rules = [
     /**
      * Generic boolean
      */
-    key: ['useCache', 'binsCompute', 'publicOnly', 'isGuest'],
+    key: ['useCache', 'binsCompute', 'publicOnly', 'isGuest','encrypt'],
     test: (d) => {
       if (mx_valid.isString(d)) {
         switch (d) {

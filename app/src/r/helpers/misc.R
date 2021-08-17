@@ -917,30 +917,38 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
 
     if(type == "error"){
       #
-      # outut message
+      # outut user facing message
       #
       if(!noDataCheck(session)){   
         mxModal(
           id=randomString(),
           zIndex=100000,
           title="Unexpected issue",
-          content=tagList(
+          content = tagList(
             tags$b("Something went wrong :/"),
             tags$p("An unexpected issue happened : our team has received a notification about it. If this keeps happening, you can also post something here:"),
-            tags$a(href=.get(
-                config, c("links","repositoryIssues")),
+            tags$a(
+              href=.get(
+                config,
+                c("links","repositoryIssues")),
               target="_blank",
-              .get(config,c("links","repositoryIssues")
-                )
+              .get(
+                config,
+                c("links","repositoryIssues")
+              )
               ),
-            mxFold(labelText="More info",
-              content = tags$div(
-                tags$span(stye="color:red",message),
+            tags$details(
+              tags$summary('More info'),
+              tags$div(
+                tags$span(
+                  style="color:red",
+                  message
+                  ),
                 mxTableToHtml(sysStack[[1]])
-                )
               )
             )
           )
+        )
       }
 
     }
@@ -964,14 +972,17 @@ mxCatchHandler <- function(type="error",cond=NULL,session=shiny::getDefaultReact
     if(isDev){
       mxDebugMsg(message)
       mxDebugMsg(err)
-    }else{ 
-      mxSendMail(
-        to = .get(config,c("mail","admin")), 
-        subject = subject,
-        content = content,
-        useNotify = FALSE
-      )
     }
+
+    mxSendMail(
+      to = .get(config,c("mail","admin")), 
+      subject = subject,
+      content = content,
+      useNotify = FALSE,
+      # If the DB is down, encryption is down
+      encrypt = FALSE
+    )
+
   })
 }
 

@@ -55,7 +55,8 @@ mxSendMail <- function(
   subjectPrefix = NULL,
   useNotify = TRUE,
   idGroupNotify = NULL,
-  language = "en"
+  language = "en",
+  encrypt = TRUE
   ){
   res <- NULL
   brand <- .get(config,c('brand','name'))
@@ -82,7 +83,7 @@ mxSendMail <- function(
     stop("Issue is email formating : can't send email")
   }
 
-  msgClear <- list(
+  msg <- list(
     from = from,
     to = to,
     content = content,
@@ -93,13 +94,19 @@ mxSendMail <- function(
     validUntil = as.character(Sys.time() + 24*60*60)
   )
 
+  if(isTRUE(encrypt)){
+    tryCatch({
+      msg <- mxDbEncrypt(msg)
+    },error = function(e){
+      encrypt <<- FALSE
+    })
+  }
 
-  msg <- mxDbEncrypt(msgClear)
   route <- .get(config,c('api','routes','postEmail'))
 
-
   res <- mxApiPost(route,list(
-      msg = msg
+      msg = msg,
+      encrypted = encrypt
       ))
 
   success <- class(res) == "list" && to %in% res$accepted
