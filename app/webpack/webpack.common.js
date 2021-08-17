@@ -16,7 +16,7 @@ module.exports = {
     jquery: './src/js/init_jquery.js',
     shiny: './src/js/init_shiny.js',
     static: './src/js/init_static.js',
-    theme : './src/js/init_theme.js',
+    theme: './src/js/init_theme.js',
     sw: './src/js/init_sw.js'
   },
   output: {
@@ -32,8 +32,8 @@ module.exports = {
       description:
         'A cloud solution for mapping and monitoring the sustainable use of natural resources',
       background_color: '#15b0f8',
-      orientation: "portrait",
-      display: "standalone",
+      orientation: 'portrait',
+      display: 'standalone',
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
       filename: 'manifest.json',
       inject: true,
@@ -54,7 +54,8 @@ module.exports = {
       {from: './src/glyphs/dist/sprites/', to: 'sprites/'},
       {from: './src/glyphs/dist/svg/', to: 'sprites/svg/'},
       {from: './src/glyphs/dist/fontstack', to: 'fontstack/'},
-      {from: './src/favicons', to: '.'}
+      {from: './src/favicons', to: '.'},
+      {from: './src/js/sdk/dist/', to: 'sdk/'}
     ])
   ],
   module: {

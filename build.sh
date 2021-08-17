@@ -106,6 +106,7 @@ cd $DIR_SDK
 npm run prod
 
 echo "Build webpack prod"
+# AFTER SDK, as it copy built packages in www/sdk 
 cd $DIR_CUR
 cd $DIR_APP
 npm run prod

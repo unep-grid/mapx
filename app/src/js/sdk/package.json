@@ -16,7 +16,8 @@
     "dev-live": "live-server dev --mount=/dist:dist --mount=/data:data",
     "examples": "microbundle --external none -o dist --no-compress && live-server examples --mount=/dist:dist",
     "examples-lint": "eslint examples/",
-    "prod": "microbundle --external none -o dist && npm run jsdoc && npm publish",
+    "build": "microbundle --external none -o dist && npm run jsdoc",
+    "prod": "npm run build && npm publish",
     "jsdoc": "jsdoc2md --heading-depth 3 --template readme.hbs --files src/**/*.js > README.md"
   },
   "repository": {
