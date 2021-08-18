@@ -1191,7 +1191,34 @@ class MapxResolvers {
   map_get_bounds_array() {
     return h.getBoundsArray();
   }
+  
+  /**
+   * Generic map (mapbox-gl-js) methods
+   * This give you FULL control of the map object. Use with caution.
+   * see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
+   * @example 
+   * mapx.ask('map',{
+   *    method: 'setPaintProperty',
+   *    parameters : ['background', 'background-color', '#faafee'] 
+   * }).then(console.table);
+   * @param {Object} opt Options
+   * @param {String} opt.method Method/Instance member name (ex. `setPaintProperty`);
+   * @param {Array} opt.parameters Array of parameters (ex. "['background', 'background-color', '#faafee']")
+   * @return {Any|Boolean} If returned value can be parsed, the value. If not, true;
+   */
+  map(opt){
+    const map = h.getMap();
+    const res = map[opt.method](...opt.parameters);
+    if(h.isMap(res)){
+     return true;
+    }
+    return res
+  }
 
+  /**
+   * Async wait for map idle 
+   * @return {Boolean} Map is idle
+   */
   async map_wait_idle() {
     const map = h.getMap();
     await map.once('idle');
@@ -1212,7 +1239,7 @@ class MapxResolvers {
    * Same as common_loc_get_list_codes, but with names in set language. ex. [{code:"ABW",name:"Aruba"},...]
    * @example 
    * mapx.ask('common_loc_get_table_codes',{
-   *    reset:true
+   *    language: english
    * }).then(console.table);
    * // code  name
    * // -----------------

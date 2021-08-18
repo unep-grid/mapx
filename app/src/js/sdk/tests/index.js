@@ -63,6 +63,39 @@ mapx.once('ready', async () => {
       }
     ]
   });
+  t.check('Generic map methods', {
+    tests: [
+      {
+        name: 'test set/get background colors',
+        test: async () => {
+          const newColor = 'rgb(255,238,34)';
+          const origColor = await mapx.ask('map', {
+            method: 'getPaintProperty',
+            parameters: ['background', 'background-color']
+          });
+          const okNew = await mapx.ask('map', {
+            method: 'setPaintProperty',
+            parameters: ['background', 'background-color', newColor]
+          });
+          const controlColor = await mapx.ask('map', {
+            method: 'getPaintProperty',
+            parameters: ['background', 'background-color']
+          });
+          const okReset = await mapx.ask('map', {
+            method: 'setPaintProperty',
+            parameters: ['background', 'background-color', origColor]
+          });
+          const resetColor = await mapx.ask('map', {
+            method: 'getPaintProperty',
+            parameters: ['background', 'background-color']
+          });
+          return (
+            okNew && okReset && controlColor === newColor && resetColor === origColor
+          );
+        }
+      }
+    ]
+  });
   t.check('Common loc', {
     init: () => {
       return mapx.ask('common_loc_get_list_codes');
@@ -77,26 +110,25 @@ mapx.once('ready', async () => {
       {
         name: 'test 50 random common locations',
         timeout: 20000,
-        test: async function(codes){
+        test: async function(codes) {
           const item = this;
-          const now = performance.now(); 
+          const now = performance.now();
           const n = 50;
           const l = codes.length;
-          
           /**
-          * Wait ( map 
-          */
-          await mapx.ask('map_wait_idle');
+           * Wait ( map
+           */ await mapx.ask('map_wait_idle');
           //await (() => new Promise((r) => setTimeout(() => r(true), 500)))();
-
-
           for (let i = 0; i < n; i++) {
-            if(performance.now() - now > item.timeout ){
-               return;
+            if (performance.now() - now > item.timeout) {
+              return;
             }
             const r = Math.floor(Math.random() * l);
             const c = codes[r];
-            const bbx = await mapx.ask('common_loc_fit_bbox', {code: c, param:{duration:200}});
+            const bbx = await mapx.ask('common_loc_fit_bbox', {
+              code: c,
+              param: {duration: 200}
+            });
             const bbxA = await mapx.ask('map_get_bounds_array');
             /**
              *                 n
@@ -109,12 +141,10 @@ mapx.once('ready', async () => {
              *     └──────┴────────┴──────┘
              *                 s
              * NOTE: mapbox do not allow south < -86 and north > 86, which
-             * means.. validation could fail with 
-             */ 
-             
-            const included =
+             * means.. validation could fail with
+             */ const included =
               bbx[0] >= Math.floor(bbxA[0]) && // w
-              (bbx[1] >= Math.floor(bbxA[1]) || bbx[1] >= - 90) && // s
+              (bbx[1] >= Math.floor(bbxA[1]) || bbx[1] >= -90) && // s
               bbx[2] <= Math.ceil(bbxA[2]) && // e
               (bbx[3] <= Math.ceil(bbxA[3]) || bbx[3] <= 90); // n
             if (!included) {

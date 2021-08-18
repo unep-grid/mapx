@@ -617,6 +617,8 @@ Class to handle MapX specific method
     * [.map_get_zoom()](#MapxResolvers+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolvers+map_get_center) ⇒ <code>Array</code>
     * [.map_get_bounds_array()](#MapxResolvers+map_get_bounds_array) ⇒ <code>Array</code>
+    * [.map(opt)](#MapxResolvers+map) ⇒ <code>Any</code> \| <code>Boolean</code>
+    * [.map_wait_idle()](#MapxResolvers+map_wait_idle) ⇒ <code>Boolean</code>
     * [.common_loc_get_list_codes()](#MapxResolvers+common_loc_get_list_codes) ⇒ <code>Array</code>
     * [.common_loc_get_table_codes(opt)](#MapxResolvers+common_loc_get_table_codes) ⇒ <code>Promise.&lt;Array&gt;</code>
     * [.common_loc_get_bbox(o)](#MapxResolvers+common_loc_get_bbox) ⇒ <code>Promise.&lt;Array&gt;</code>
@@ -1607,6 +1609,36 @@ Get current map bounds as array
 
 **Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
 **Returns**: <code>Array</code> - Bounds [west, south, east, north]  
+<a name="MapxResolvers+map"></a>
+
+#### mapxResolvers.map(opt) ⇒ <code>Any</code> \| <code>Boolean</code>
+Generic map (mapbox-gl-js) methods
+This give you FULL control of the map object. Use with caution.
+see https://docs.mapbox.com/mapbox-gl-js/api/map for all references
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Any</code> \| <code>Boolean</code> - If returned value can be parsed, the value. If not, true;  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| opt | <code>Object</code> | Options |
+| opt.method | <code>String</code> | Method/Instance member name (ex. `setPaintProperty`); |
+| opt.parameters | <code>Array</code> | Array of parameters (ex. "['background', 'background-color', '#faafee']") |
+
+**Example**  
+```js
+mapx.ask('map',{
+   method: 'setPaintProperty',
+   parameters : ['background', 'background-color', '#faafee'] 
+}).then(console.table);
+```
+<a name="MapxResolvers+map_wait_idle"></a>
+
+#### mapxResolvers.map\_wait\_idle() ⇒ <code>Boolean</code>
+Async wait for map idle
+
+**Kind**: instance method of [<code>MapxResolvers</code>](#MapxResolvers)  
+**Returns**: <code>Boolean</code> - Map is idle  
 <a name="MapxResolvers+common_loc_get_list_codes"></a>
 
 #### mapxResolvers.common\_loc\_get\_list\_codes() ⇒ <code>Array</code>
@@ -1632,7 +1664,7 @@ Same as common_loc_get_list_codes, but with names in set language. ex. [{code:"A
 **Example**  
 ```js
 mapx.ask('common_loc_get_table_codes',{
-   reset:true
+   language: english
 }).then(console.table);
 // code  name
 // -----------------
