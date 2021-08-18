@@ -1,0 +1,38 @@
+<h1>Example common locations</h1>
+<style>
+  html,
+  body {
+    font-family: helvetica;
+  }
+
+  .container {
+    width: 100%;
+    min-height: 500px;
+    display: flex;
+  }
+
+  .pane-left {
+    background: #eee;
+    font-size: 0.8em;
+    padding: 0 1em;
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pane-right {
+    flex-grow: 1;
+  }
+</style>
+<script src="/dist/mxsdk.umd.js"></script>
+<div class="container">
+  <div class="pane-left item">
+    <label for="selLoc">Select a location</label>
+    <select id="selLoc"></select>
+  </div>
+  <div id="mapx" class="mapx pane-right item"></div>
+
+  <script src="index.js"></script>
+</div>
+<p>Source <a href="index.js" target="_blank">>></a></p>
+<p>Examples home <a href="/index.html">>></a></p>
