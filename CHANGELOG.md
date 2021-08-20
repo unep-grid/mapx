@@ -1,5 +1,16 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.4' target='_blank'>1.9.4</a>
+  - SDK: 
+    - Integration of static mode; 
+    - New interface to set the manager: url can be an object with host, port, protocol; 
+    - Query string could be set as an object too. Set views, and all options from mapx url api are supported, and simple url still allowed. See the sdk documentation; 
+    - Update all examples; 
+    - Upgraded jsdoc; 
+    - Added support for generic mapbox-gl call. No limitation, but no guarantee that everything works. Use mapx specific methods if not sure. See basic example in src/js/sdk/examples/ex6/index.js
+    - Added tests + documentation
+    - Added example for 'common location' methods; 
+    - Fix issue with wrong `mx_countries` table when requesting bbox
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.3' target='_blank'>1.9.3</a>
   - SDK
     - integration of 'common locations' methods, tests and documentation; 
