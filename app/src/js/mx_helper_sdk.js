@@ -1,17 +1,24 @@
 import {Worker} from './sdk/src/index.js';
-import {MapxResolvers} from './sdk/src/mapx_resolvers.js';
+import {MapxResolversApp, MapxResolversStatic} from './sdk/src/mapx_resolvers';
 
 window.addEventListener('load', () => {
   mx.events.once({
     type: ['mapx_ready'],
     idGroup: 'sdk_binding',
     callback: () => {
-      const resolvers = new MapxResolvers({
-        helpers: mx.helpers
-      });
+      let resolvers;
+      if (mx.settings.mode.static) {
+        resolvers = new MapxResolversStatic({
+          helpers: mx.helpers
+        });
+      } else {
+        resolvers = new MapxResolversApp({
+          helpers: mx.helpers
+        });
+      }
       window.mxsdkworker = new Worker({
         resolvers: resolvers,
-        eventStore: mx.events 
+        eventStore: mx.events
       });
     }
   });

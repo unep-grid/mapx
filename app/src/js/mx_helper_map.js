@@ -1182,56 +1182,60 @@ export async function initMapxStatic(o) {
   /**
    * Update language
    */
-  h.updateLanguage(language);
+  await h.updateLanguage(language);
 
   /**
-   * Get view and set order
+   * If no views, send mapx_ready early
    */
-  mapData.views = await h.getViewsRemote(idViews);
 
-  /*
-   * If a story is found, ignore other options
-   */
-  const story = mapData.views.find((v) => v.type === 'sm');
-  if (story) {
-    h.storyRead({
-      id: o.id,
-      idView: story.id,
-      save: false,
-      autoStart: true
-    });
+  if (idViews.length) {
+    /**
+     * Get view and set order
+     */
+    mapData.views = await h.getViewsRemote(idViews);
 
-    return;
-  }
+    /*
+     * If a story is found, ignore other options
+     */
+    const story = mapData.views.find((v) => v.type === 'sm');
+    if (story) {
+      h.storyRead({
+        id: o.id,
+        idView: story.id,
+        save: false,
+        autoStart: true
+      });
+      return;
+    }
 
-  /**
-   * Extract all views bounds
-   */
-  if (zoomToViews) {
-    const bounds = await h.getViewsBounds(mapData.views);
-    map.fitBounds(bounds);
-  }
+    /**
+     * Extract all views bounds
+     */
+    if (zoomToViews) {
+      const bounds = await h.getViewsBounds(mapData.views);
+      map.fitBounds(bounds);
+    }
 
-  /**
-   * Display views
-   */
-  await Promise.all(
-    idViews.map((idView) => {
-      return h.viewLayersAdd({
-        view: h.getView(idView),
+    /**
+     * Display views
+     */
+    for (const view of mapData.views) {
+
+      await h.viewLayersAdd({
+        view: view,
         elLegendContainer: btnLegend.elPanelContent,
         addTitle: true
       });
-    })
-  );
-
-  await h.viewsLayersOrderUpdate({
-    order: idViews.reverse()
-  });
+    }
+    await h.viewsLayersOrderUpdate({
+      order: idViews.reverse()
+    });
+  }
 
   mx.events.fire({
     type: 'mapx_ready'
   });
+  return;
 }
 
 /**

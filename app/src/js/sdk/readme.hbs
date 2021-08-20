@@ -15,13 +15,28 @@ $ npm install @fxi/mxsdk
 import {Manager} from '@fxi/mxsdk';
 ```
 
-### HTML inline include
+### HTML inline 
 
+```html
+<script src="https://app.mapx.org/sdk/mxsdk.umd.js"></script>
 ```
-<script src="https://unpkg.com/@fxi/mxsdk/dist/mxsdk.umd.js"></script>
-...
-const Manager = mxsdk.Manager;
+
+```js
+const mapx = new mxsdk.Manager({
+  container: document.getElementById('mapx'),
+  url: {
+    host: 'app.mapx.org'
+  },
+  static: true,
+  verbose: true,
+  params: {
+    closePanels: true,
+    views: ['MX-Z741Z-HA4JJ-OGV29'],
+    language: 'fr'
+  }
+});
 ```
+
 
 ## Methods and events
 
@@ -50,7 +65,7 @@ mapx.on('ready', async () => {
   /**
    * Add a view to be displayed on the embedded map
    */
-  mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
+  await mapx.ask('view_add', {idView: 'MX-ML9PZ-PZ1SI-WVV85'});
 
   // Etc, ...
 
@@ -59,7 +74,7 @@ mapx.on('ready', async () => {
 
 ### Methods
 
-[Methods are handled by the MapxResolvers class](#MapxResolvers) and are call using `Manager.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value.
+Methods are handled by the [MapxResolvers class](#MapxResolversApp) and are call using `mapx.ask(<method name>[, <object param(s)>])` which returns a Promise or a Promisified value. E.g. `mapx.ask('get_user_ip').then(console.log)`. In app mode, all methods from [MapxResolvers app](#MapxResolversApp) and [MapxResolvers static](#MapxResolversStatic) are avaible. In static mode, only the subset from [MapxResolvers static](#MapxResolversStatic) can be used.
 
 ### Events
 
@@ -112,4 +127,4 @@ Further usage resources:
 * * *
 
 
-&copy; 2019-2020 unepgrid.ch
+&copy; 2019-2021 unepgrid.ch

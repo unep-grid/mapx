@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Examples</title>
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <style>
+      .ctrl {
+        width: 200px;
+        height: 200px;
+        background: #ccc;
+        border-radius: 30px;
+        cursor: grab;
+        position: relative;
+      }
+    </style>
+    <script src="/dist/mxsdk.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nipplejs@0.9.0/dist/nipplejs.min.js"></script>
+  </head>
+  <body>
+    <h1>Control the map with a joystick</h1>
+    <h3>( in static mode )</h3>
+    <div class="container">
+      <div class="pane-left item">
+        <p>Direction</p>
+        <div class="ctrl" id="ctrlDirection"></div>
+       <!-- <p>Height & pitch</p>-->
+        <!--<div class="ctrl" id="ctrlHeightPitch"></div>-->
+      </div>
+      <div id="mapx" class="mapx pane-right item"></div>
+      <script src="index.js"></script>
+    </div>
+
+    <p>Source <a href="index.js" target="_blank">>></a></p>
+    <p>Examples home <a href="/index.html">>></a></p>
+  </body>
+</html>

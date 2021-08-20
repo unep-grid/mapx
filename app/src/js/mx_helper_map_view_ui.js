@@ -136,6 +136,7 @@ function sanitizeState(states) {
 export async function viewsListAddSingle(view, settings) {
   settings = settings || {};
   const h = mx.helpers;
+  const staticMode = !!mx.settings.mode.static;
 
   if (!h.isView(view)) {
     return;
@@ -160,12 +161,21 @@ export async function viewsListAddSingle(view, settings) {
   }
   mData.views.unshift(view);
 
-  await new Promise((resolve) => {
-    mData.viewsList.once('render_item_content', resolve);
-    mData.viewsList.addItem(settings);
-  });
+  if (!staticMode) {
+    await new Promise((resolve) => {
+      //mData.viewsList.once('render_item_content', resolve);
+      mx.events.once({
+        type: 'view_added',
+        idGroup: 'view_list_add_single',
+        callback:resolve 
+      });
+      mData.viewsList.addItem(settings);
+    });
 
-  mData.viewsFilter.update();
+    mData.viewsFilter.update();
+  }else{
+    h.viewAdd(view.id);
+  }
 
   return settings;
 }

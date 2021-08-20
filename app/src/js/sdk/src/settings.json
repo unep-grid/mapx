@@ -1,7 +1,27 @@
 {
-  "url": "http://localhost:80",
+  "static": false,
+  "verbose": false,
+  "url": {
+    "protocol": "http",
+    "host": "localhost",
+    "port": 80
+  },
+  "params": {
+    "closePanels": null,
+    "showProjectsListByTitle": null,
+    "showProjectsListByRole": null,
+    "project": null,
+    "views": null,
+    "collections": null,
+    "collectionsSelectOperator": null,
+    "lockProject": null,
+    "noViews": null,
+    "lat": null,
+    "lng": null,
+    "zoom": null,
+    "language": null
+  },
   "container": "body",
-  "params": {},
   "style": {
     "width": "100%",
     "height": "100%",
@@ -11,5 +31,5 @@
     "maxHeight": "100%",
     "maxWidth": "100%"
   },
-  "maxSimultaneousRequest" : 10
+  "maxSimultaneousRequest": 10
 }

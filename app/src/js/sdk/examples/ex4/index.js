@@ -1,7 +1,3 @@
-'use strict';
-
-const mapxUrl = 'http://dev.mapx.localhost:8880/?project=MX-3ZK-82N-DY8-WU2-IGF&language=en';
-// const mapxUrl = 'https://app.mapx.org/?project=MX-2LD-FBB-58N-ROK-8RH&language=en';
 
 class App extends React.Component {
   constructor(props) {
@@ -17,18 +13,24 @@ class App extends React.Component {
   componentDidMount() {
     const mapx = new mxsdk.Manager({
       container: this.mxContainer,
-      url: mapxUrl
+      verbose : true,
+      url: {
+        host: 'dev.mapx.localhost',
+        port: 8880
+      },
+      params: {
+        closePanels: true,
+        language: 'en'
+      }
     });
 
     mapx.on('ready', () => {
-      /**
-       * Hide views panel
-       */
+      // Hide views panel
       mapx.ask('set_panel_left_visibility', {
         panel: 'views',
         show: false
       });
-
+      // Set state
       Promise.all([mapx.ask('get_project'), mapx.ask('get_views')]).then(
         (values) => {
           this.setState({
@@ -40,7 +42,6 @@ class App extends React.Component {
       );
     });
   }
-
   render() {
     return (
       <div className="container">
@@ -59,7 +60,6 @@ class App extends React.Component {
     );
   }
 }
-
 class MxViewsCollections extends React.Component {
   render() {
     var no_collection_name = 'Views in no collection';
@@ -81,7 +81,6 @@ class MxViewsCollections extends React.Component {
         collections[no_collection_name].push(view);
       }
     });
-
     return (
       <div className="views-collections" id="actions">
         <h2>Collection(s)</h2>
@@ -100,7 +99,6 @@ class MxViewsCollections extends React.Component {
     );
   }
 }
-
 class MxViewsCollection extends React.Component {
   render() {
     var out = <span>: No views</span>;
@@ -127,7 +125,6 @@ class MxViewsCollection extends React.Component {
     );
   }
 }
-
 class MxView extends React.Component {
   constructor(props) {
     super(props);
@@ -144,11 +141,13 @@ class MxView extends React.Component {
         className={this.state.active ? 'active' : null}
         onClick={() => {
           var op = !this.state.active ? 'view_add' : 'view_remove';
-          mapx.ask(op, {
-            idView: view.id
-          }).then(() => {
-            this.setState({active: !this.state.active});
-          });
+          mapx
+            .ask(op, {
+              idView: view.id
+            })
+            .then(() => {
+              this.setState({active: !this.state.active});
+            });
         }}
       >
         {view.data.title.en}
@@ -156,5 +155,4 @@ class MxView extends React.Component {
     );
   }
 }
-
 ReactDOM.render(<App />, document.getElementById('app'));

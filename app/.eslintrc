@@ -1,8 +1,11 @@
 {
   "extends": ["prettier"],
   "parser": "@babel/eslint-parser",
+  "env": {
+    "es6": true
+  },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 2020,
     "sourceType": "module"
   }
 }

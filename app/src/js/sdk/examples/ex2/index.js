@@ -1,6 +1,13 @@
 const mapx = new mxsdk.Manager({
   container: document.getElementById('mapx'),
-  url:'http://dev.mapx.localhost:8880'
+  verbose: true,
+  url: {
+    host: 'dev.mapx.localhost',
+    port: 8880
+  },
+  params: {
+    closePanels: true
+  }
 });
 
 mapx.on('ready', () => {
