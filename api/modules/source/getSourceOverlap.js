@@ -139,36 +139,32 @@ async function getOverlapHandler(req, res) {
     );
 
     res.end();
-
   } catch (e) {
-  
-
-    res.write(
-      toRes({
-        type: 'error',
-        msg: e.message
-      })
-    );
- 
-    res.end();
-
-    if (method === 'createSource' && config.emailUser) {
-      sendMailAuto({
-        to: [config.emailUser],
-        content: `Source '${config.sourceTitle}' not created. Error : ${
-          e.message
-        }`,
-        subject: `MapX - overlap tool error : source '${
-          config.sourceTitle
-        }' not created.`
-      });
-    }
-
-    /**
-     * Cleaning if needed
-     */
-
     try {
+      res.write(
+        toRes({
+          type: 'error',
+          msg: e.message
+        })
+      );
+
+      res.end();
+
+      if (method === 'createSource' && config.emailUser) {
+        sendMailAuto({
+          to: [config.emailUser],
+          content: `Source '${config.sourceTitle}' not created. Error : ${
+            e.message
+          }`,
+          subject: `MapX - overlap tool error : source '${
+            config.sourceTitle
+          }' not created.`
+        });
+      }
+
+      /**
+       * Cleaning if needed
+       */
       await removeSource(idSource);
     } catch (e) {
       console.error(e);

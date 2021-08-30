@@ -114,7 +114,8 @@ export function uploadGeoJSONModal(idView) {
         }
       }),
       content: elFormUpload,
-      buttons: [elBtnUpload]
+      buttons: [elBtnUpload],
+      addBackground : true
     });
 
     h.updateLanguageElements({

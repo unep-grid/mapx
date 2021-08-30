@@ -6,7 +6,6 @@
  * usage of schema / models.etc..
  */
 const multer = require('multer');
-const fs = require('fs');
 const {access, unlink} = require('fs/promises');
 const path = require('path');
 const {spawn} = require('child_process');
@@ -14,7 +13,7 @@ const {spawn} = require('child_process');
 const {sendMailAuto} = require('@mapx/mail');
 const {handleErrorText} = require('@mapx/error');
 const settings = require('@root/settings');
-const {toRes, randomString, wait} = require('@mapx/helpers');
+const {toRes, randomString} = require('@mapx/helpers');
 const {
   removeSource,
   isLayerValid,
@@ -35,13 +34,15 @@ const emailAdmin = settings.mail.config.emailAdmin;
  * Set multer storage
  */
 const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
+  destination: (req, file, cb) => {
     const pathTemp = settings.vector.path.temporary;
     cb(null, pathTemp);
   },
-  filename: function(req, file, cb) {
-    const filename =
-      Date.now() + '_' + file.originalname.replace(new RegExp(/\s+/, 'g'), '_');
+  filename: (req, file, cb) => {
+    const now = Date.now();
+    const regSpaces = new RegExp(/\s+/, 'g');
+    const name = file.originalname.replace(regSpaces, '_');
+    const filename = `${now}_${name}`;
     cb(null, filename);
   }
 });
@@ -77,6 +78,7 @@ async function convertOgrHandler(req, res, next) {
 
   const userEmail = req.body.email;
   const sourceSrs = req.body.sourceSrs;
+  const title = req.body.title;
   const fileName = req.file.filename;
   const isZipped =
     req.file.mimetype === 'application/zip' ||
@@ -104,17 +106,22 @@ async function convertOgrHandler(req, res, next) {
       }
     },
     onError: (data) => {
+      const subject = `MapX conversion of "${title}" failed`;
+      const err = `Error during the conversion of "${title}": ${data.msg}`;
+
       res.write(
         toRes({
           type: 'error',
-          msg: data.msg
+          msg: err
         })
       );
+      
       sendMailAuto({
         to: [userEmail, emailAdmin].join(','),
         content: data.msg,
-        subject: `MapX import error`
+        subject: subject
       });
+
       res.status(500).end();
     }
   });
@@ -241,7 +248,7 @@ async function addSourceHandler(req, res) {
 }
 
 /**
- * If importeed file exists, remove it
+ * If imported file exists, remove it
  */
 async function cleanFile(fileToRemove) {
   let removed = true;
@@ -249,7 +256,7 @@ async function cleanFile(fileToRemove) {
     await access(fileToRemove);
     await unlink(fileToRemove);
   } catch (e) {
-    console.error('cleanFile error',e);
+    console.error('cleanFile error', e);
     removed = false;
   }
   return removed;
@@ -259,14 +266,12 @@ async function cleanFile(fileToRemove) {
  * In case of faillure, clean the db : remove added entry and table
  */
 async function cleanAll(fileToRemove, idSource, res) {
-  const rmSrc = await removeSource(idSource);
-  const rmFile = await cleanFile(fileToRemove);
-  const txtSrc = JSON.stringify(rmSrc);
-  const txtFile = JSON.stringify(rmFile);
+  const sourceRemoved = await removeSource(idSource);
+  const fileRemoved = await cleanFile(fileToRemove);
   res.write(
     toRes({
       type: 'message',
-      msg: `Removed source : ${txtSrc}; Removed file : ${txtFile}`
+      msg: `Removed source : ${sourceRemoved}; Removed file : ${fileRemoved}`
     })
   );
 }
@@ -383,7 +388,7 @@ async function fileToPostgres(config) {
         const hasValues = await tableHasValues(idSource);
         if (!hasValues) {
           throw new Error(
-            `No values for ${idSource}, or table not readable by current user`
+            `The table ${idSource} is not valid. At least one attribute with value is required.`
           );
         }
 
@@ -395,10 +400,9 @@ async function fileToPostgres(config) {
         onSuccess(idSource);
       } catch (e) {
         const err = handleErrorText(e);
-        const rmSrc = await removeSource(idSource);
-        const txtRmSrc = JSON.stringify(rmSrc);
+        const sourceRemoved = await removeSource(idSource);
         onError({
-          msg: `An error occured on exit, in import function (${err}). Source removed : ${txtRmSrc}`
+          msg: `${err}. Source removed : ${sourceRemoved}`
         });
         return;
       }

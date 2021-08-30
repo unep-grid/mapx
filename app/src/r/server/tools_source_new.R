@@ -59,7 +59,8 @@ observeEvent(input$btnUploadSourceApi,{
       id = "modalSourceUpload",
       title = d("src_upload_add",language),
       content = uiOut,
-      buttons = btnList
+      buttons = btnList,
+      addBackground = TRUE
       )
 
     #

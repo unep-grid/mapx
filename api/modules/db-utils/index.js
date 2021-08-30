@@ -13,13 +13,12 @@ const valid = require('@fxi/mx_valid');
 const key = settings.db.crypto.key;
 
 /**
- * Test if a table exists and has rows
+ * Test if a table exists
  *
- * @async
- * @param {String} id of the table
+ * @param {String} idTable id of the table
  * @return {Promise<Boolean>} Table exists
  */
-async function tableHasValues(idTable, schema) {
+async function tableExists(idTable, schema) {
   schema = schema || 'public';
   const sqlExists = `
   SELECT EXISTS (
@@ -28,18 +27,48 @@ async function tableHasValues(idTable, schema) {
    WHERE  table_schema = '${schema}'
    AND    table_name = '${idTable}'
    )`;
-  const sqlEmpty = `
-   SELECT count(*) as n from ${idTable}
-  `;
-  let exists = false;
-  let hasRows = false;
   const res = await pgRead.query(sqlExists);
-  exists = res.rowCount > 0 && res.rows[0].exists === true;
-  if (exists) {
-    const resEmpty = await pgRead.query(sqlEmpty);
-    hasRows = resEmpty.rowCount > 0 && resEmpty.rows[0].n * 1 > 0;
+  const exists = res.rowCount > 0 && res.rows[0].exists === true;
+
+  return exists;
+}
+
+/**
+ * Test if a table exists, has rows, has attribute and a value
+ *
+ * @param {String} idTable id of the table
+ * @return {Promise<Boolean>} Table exists and has value
+ */
+async function tableHasValues(idTable, schema) {
+  schema = schema || 'public';
+  const sqlFirstRow = `
+   SELECT * FROM ${idTable} LIMIT 1
+  `;
+  const exists = await tableExists(idTable, schema);
+
+  if (!exists) {
+    return false;
   }
-  return exists && hasRows;
+
+  const resFirstRow = await pgRead.query(sqlFirstRow);
+
+  if (resFirstRow.rowCount === 0) {
+    return false;
+  }
+  /**
+   * Check if at least one attribute column besides gid and geom
+   * exists and has value;
+   */
+  const firstRow = resFirstRow.rows[0];
+  const attributes = Object.keys(firstRow);
+
+  for (const attr of attributes) {
+    const hasAttr = !!attr && !['gid', 'geom'].includes(attr);
+    if (hasAttr && firstRow[attr]) {
+      return true;
+    }
+  }
+  return false;
 }
 
 /**
@@ -162,8 +191,7 @@ async function registerOrRemoveSource(
   const count = r.rowCount > 0 ? r.rows[0].n * 1 : 0;
 
   if (count === 0) {
-    await removeSource(idSource);
-    stats.removed = true;
+    stats.removed = await removeSource(idSource);
   }
 
   if (stats.removed === false) {
@@ -177,6 +205,7 @@ async function registerOrRemoveSource(
 /**
  * Remove source
  * @param {String} idSource Source to remove
+ * @return {Promise<Boolean>} Removed
  */
 async function removeSource(idSource) {
   var sqlDelete = {
@@ -186,12 +215,10 @@ async function removeSource(idSource) {
   var sqlDrop = {
     text: `DROP TABLE IF EXISTS ${idSource}`
   };
-  const rmDrop = await pgWrite.query(sqlDrop);
-  const rmDelete = await pgWrite.query(sqlDelete);
-  return {
-    drop: rmDrop,
-    unregister: rmDelete
-  };
+  await pgWrite.query(sqlDrop);
+  await pgWrite.query(sqlDelete);
+  const sourceExists = await tableExists(idSource);
+  return !sourceExists;
 }
 
 /**
@@ -425,6 +452,7 @@ module.exports = {
   areLayersValid,
   removeSource,
   tableHasValues,
+  tableExists,
   decrypt,
   encrypt,
   registerSource,
