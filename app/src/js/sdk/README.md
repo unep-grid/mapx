@@ -144,6 +144,7 @@ MapX resolvers available in app only
     * [.get_sdk_methods()](#MapxResolversApp+get_sdk_methods) ⇒ <code>Array</code>
     * [.show_modal_login()](#MapxResolversApp+show_modal_login) ⇒ <code>Boolean</code>
     * [.show_modal_view_meta()](#MapxResolversApp+show_modal_view_meta) ⇒ <code>Boolean</code>
+    * [.launch_chaos_test()](#MapxResolversApp+launch_chaos_test) ⇒ <code>Boolean</code>
     * [.show_modal_view_edit()](#MapxResolversApp+show_modal_view_edit) ⇒ <code>Boolean</code>
     * [.show_modal_share(opt)](#MapxResolversApp+show_modal_share) ⇒ <code>Boolean</code>
     * [.show_modal_tool(opt)](#MapxResolversApp+show_modal_tool) ⇒ <code>Boolean</code> \| <code>Array</code>
@@ -194,6 +195,13 @@ Show view meta modal window
 
 **Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
 **Returns**: <code>Boolean</code> - done  
+<a name="MapxResolversApp+launch_chaos_test"></a>
+
+#### mapxResolversApp.launch\_chaos\_test() ⇒ <code>Boolean</code>
+Launch chaos test : open / close views by batch for a minute
+
+**Kind**: instance method of [<code>MapxResolversApp</code>](#MapxResolversApp)  
+**Returns**: <code>Boolean</code> - pass  
 <a name="MapxResolversApp+show_modal_view_edit"></a>
 
 #### mapxResolversApp.show\_modal\_view\_edit() ⇒ <code>Boolean</code>

@@ -1,5 +1,17 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.5' target='_blank'>1.9.5</a>
+  - APP
+    - Accent: new firefox/chrome introduced accent-color: added to thèmes options + modified style sheet. This brings a more custom look to radio/checkbox input. 
+    - Solved issue with duplicated id in view legend #629 
+    - Solved missing correct promise handling for view add/remove operation 
+    - Added tests for 'chaos' handling : check that everything works as expected when a lot of views are added and removed in different order ( overlap in "on map" timing, very fast add/removal, etc ); 
+    - Added events `view_ui_open` `view_ui_close` to have matching behaviour in the search tool when opening / closing a view. Ex. in search tool, the button should immediately switch, instead of waiting the layers of the view to be rendered.
+    - Modified nested views list to handle better async callback with the fire method
+    - Updated 'path' method: solved an issue when default was 'false'
+  - APP/API
+    - Add support for custom null values in stats : impacts vt style creator, auto-style, and all stat/source summary server side. Null values can be defined and will not be counted in reports. Such value will overwrite default null values, like empty string, null, etc.
+    - Uploading a vector layer with an empty attributes table should not be possible ( #114 )
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.4' target='_blank'>1.9.4</a>
   - SDK: 
     - Integration of static mode; 
