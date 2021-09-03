@@ -162,19 +162,10 @@ export async function viewsListAddSingle(view, settings) {
   mData.views.unshift(view);
 
   if (!staticMode) {
-    await new Promise((resolve) => {
-      //mData.viewsList.once('render_item_content', resolve);
-      mx.events.once({
-        type: 'view_added',
-        idGroup: 'view_list_add_single',
-        callback:resolve 
-      });
-      mData.viewsList.addItem(settings);
-    });
-
+    await mData.viewsList.addItem(settings);
     mData.viewsFilter.update();
-  }else{
-    h.viewAdd(view.id);
+  } else {
+    await h.viewAdd(view.id);
   }
 
   return settings;
@@ -184,12 +175,12 @@ export async function viewsListAddSingle(view, settings) {
  * Update single view alread in the view list
  * @param {Object} view View object to add
  */
-export function viewsListUpdateSingle(view) {
+export async function viewsListUpdateSingle(view) {
   const h = mx.helpers;
   const mData = mx.helpers.getMapData();
   const oldView = h.getView(view.id);
   if (h.isView(oldView)) {
-    h.viewModulesRemove(oldView);
+    await h.viewModulesRemove(oldView);
   } else {
     console.warn('No old view to update');
   }
@@ -200,7 +191,7 @@ export function viewsListUpdateSingle(view) {
     update: true,
     open: true
   };
-  mData.viewsList.updateItem(settings);
+  await mData.viewsList.updateItem(settings);
   mData.viewsFilter.updateViewsComponents();
   mData.viewsFilter.updateCount();
 }
@@ -235,11 +226,10 @@ export async function viewsListRenderNew(o) {
   const noViewsMode = h.getQueryParameterInit('noViews')[0] === 'true';
 
   if (mData.viewsFilter instanceof ViewsFilter) {
-    mData.viewsFilter.destroy();
+    await mData.viewsFilter.destroy();
   }
   if (mData.viewsList instanceof NestedList) {
-    const ddd = mData.viewsList.destroy();
-    await Promise.all(ddd);
+    await mData.viewsList.destroy();
   }
 
   /**
@@ -269,16 +259,24 @@ export async function viewsListRenderNew(o) {
       {id: 'name_group', en: 'category', fr: 'catégorie'},
       {id: 'name_item', en: 'view', fr: 'vue'}
     ],
+
     eventsCallback: [
+      /**
+       * handlers non async
+       */
       {id: 'set_drag_image', action: handleSetDragImage},
       {id: 'set_drag_text', action: handleSetDragText},
-      {id: 'render_item_content', action: handleRenderItemContent},
-      {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
-      {id: 'get_item_date_by_id', action: h.getViewDateModified},
-      {id: 'state_reset', action: h.viewsCheckedUpdate},
-      {id: 'state_order', action: h.viewsLayersOrderUpdate},
       {id: 'state_save_local', action: h.iconFlashSave},
       {id: 'state_sanitize', action: sanitizeState},
+      {id: 'get_item_text_by_id', action: h.getViewTitleNormalized},
+      {id: 'get_item_date_by_id', action: h.getViewDateModified},
+
+      /**
+       * Async handlers
+       */
+      {id: 'render_item_content', action: handleRenderItemContent},
+      {id: 'state_reset', action: h.viewsCheckedUpdate},
+      {id: 'state_order', action: h.viewsLayersOrderUpdate},
       {id: 'destroy', action: h.viewsCloseAll}
     ]
   });
@@ -415,15 +413,15 @@ export async function viewsListRenderNew(o) {
         elItem.appendChild(elView);
 
         if (update) {
-          h.viewLayersAdd({
+          await h.viewLayersAdd({
             view: view
           });
-          h.updateLanguageElements({
+          await h.updateLanguageElements({
             el: view._el
           });
         }
         if (!update && open) {
-          h.viewAdd(view);
+          await h.viewAdd(view);
         }
         await h.setViewBadges(view);
       }

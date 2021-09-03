@@ -73,7 +73,7 @@ class NestedList {
     li.listenerStore.destroy();
     li.clearHistory();
     li.clearAllItems();
-    return li.fire('destroy');
+    return li.fireAsync('destroy');
   }
   /**
    * Get/set options
@@ -121,10 +121,10 @@ class NestedList {
   /**
    * Events callback
    */
-  fire(type, data) {
+
+  _fire_collect_cb(type, data) {
     const li = this;
     const onces = [];
-    const results = [];
     const cb = [];
 
     li.opt.eventsCallback.forEach((e) => {
@@ -146,12 +146,33 @@ class NestedList {
       const pos = li.opt.eventsCallback.indexOf(e);
       li.opt.eventsCallback.splice(pos, 1);
     }
+    return cb;
+  }
 
+  fire(type, data) {
+    const li = this;
+    const cb = li._fire_collect_cb(type, data);
+    const results = [];
     /**
      * Apply callbacks
      */
     while (cb.length) {
       const res = cb[cb.length - 1].bind(li)(data);
+      results.push(res);
+      cb.pop();
+    }
+    return results;
+  }
+
+  async fireAsync(type, data) {
+    const li = this;
+    const cb = li._fire_collect_cb(type, data);
+    const results = [];
+    /**
+     * Apply async callbacks
+     */
+    while (cb.length) {
+      const res = await cb[cb.length - 1].bind(li)(data);
       results.push(res);
       cb.pop();
     }
@@ -207,7 +228,7 @@ class NestedList {
         }
       }
     });
-    li.fire('filter_end', ids);
+    return li.fire('filter_end', ids);
   }
 
   getStateForSorting(elTarget, opt) {
@@ -270,12 +291,10 @@ class NestedList {
     /**
      * Check order only
      */
-
     if (opt.check) {
-      const sorted = isSorted(data);
-      li.fire('state_order_check', sorted);
-      return sorted;
+      return isSorted(data);
     }
+
     /**
      * Sort
      */
@@ -286,7 +305,7 @@ class NestedList {
     li.setModeAnimate(false);
     move(data);
     li.setModeAnimate(true);
-    li.fire('state_order');
+    return li.fire('state_order');
 
     /**
      * Helpers
@@ -319,7 +338,7 @@ class NestedList {
             res = res && item.value <= previous.value;
           }
         }
-          previous = item;
+        previous = item;
       }
       return res;
     }
@@ -744,7 +763,7 @@ class NestedList {
     let key = li.getStorageKey('state');
     if (state && window.localStorage) {
       window.localStorage.setItem(key, JSON.stringify(state));
-      li.fire('state_save_local', state);
+      return li.fire('state_save_local', state);
     }
   }
 
@@ -893,7 +912,7 @@ class NestedList {
     li.clearAllItems();
     li.setStateStored([]);
     li.setState({render: true, state: state, useStateStored: false});
-    li.fire('state_reset', state);
+    return li.fireAsync('state_reset', state);
   }
   setState(opt) {
     const li = this;
@@ -958,8 +977,9 @@ class NestedList {
     const li = this;
     var el = li.getItemById(attr.id);
     var elContent = li.getItemContent(el, li.opt.class.itemContent);
-    li.fire('render_item_content', {el: elContent, data: attr});
+    return li.fireAsync('render_item_content', {el: elContent, data: attr});
   }
+
   addItem(attr) {
     const li = this;
 
@@ -985,14 +1005,12 @@ class NestedList {
 
     elGroupParent.appendChild(elItem);
 
-    if (attr.render) {
-      li.fire('render_item_content', {el: elContent, data: attr});
-    }
     if (attr.moveTop) {
       li.moveTargetTop(elItem);
     }
-
-    return elItem;
+    if (attr.render) {
+      return li.fireAsync('render_item_content', {el: elContent, data: attr});
+    }
   }
 
   addGroup(attr) {
@@ -1368,7 +1386,7 @@ class NestedList {
     function end() {
       if (done.length === els.length) {
         setTimeout(() => {
-          li.fire('state_order');
+          li.fireAsync('state_order');
           li.setBusy(false);
         }, relaxDuration);
       }

@@ -90,8 +90,25 @@ mapx.once('ready', async () => {
             parameters: ['background', 'background-color']
           });
           return (
-            okNew && okReset && controlColor === newColor && resetColor === origColor
+            okNew &&
+            okReset &&
+            controlColor === newColor &&
+            resetColor === origColor
           );
+        }
+      }
+    ]
+  });
+  t.check('chaos views display', {
+    tests: [
+      {
+        name: 'Adding / removing views in random order during a specified duration',
+        timeout : 30000,
+        test: async () => {
+          return await mapx.ask('launch_chaos_test', {
+            nBatch: 5,
+            duration: 20 * 1000
+          });
         }
       }
     ]
@@ -115,10 +132,7 @@ mapx.once('ready', async () => {
           const now = performance.now();
           const n = 50;
           const l = codes.length;
-          /**
-           * Wait ( map
-           */ await mapx.ask('map_wait_idle');
-          //await (() => new Promise((r) => setTimeout(() => r(true), 500)))();
+          await mapx.ask('map_wait_idle');
           for (let i = 0; i < n; i++) {
             if (performance.now() - now > item.timeout) {
               return;

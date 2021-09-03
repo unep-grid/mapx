@@ -6,6 +6,11 @@ body.mx {
   font-size: var(--mx_ui_font_size_base);
 }
 
+input {
+  accent-color : var(--mx_ui_input_accent);
+}
+
+
 /**
 * Input
 */

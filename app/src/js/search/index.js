@@ -15,6 +15,7 @@ import {
   getView,
   getViewRemote,
   viewAdd,
+  isViewLocal,
   viewRemove,
   getViewsOpen
 } from './../mx_helper_map.js';
@@ -818,33 +819,47 @@ class Search extends EventSimple {
           {
             s.vFeedback(e);
             const idView = ds.id_view;
-            let view = getView(idView);
-            const isValid = isView(view);
-            const viewIsOpen = getViewsOpen().includes(idView);
-            if (!isValid) {
-              view = await getViewRemote(idView);
-              if (isView(view)) {
-                view._temp = true;
-                await viewsListAddSingle(view, {open: false});
-                const showNotify = await prefGet(
-                  'pref_show_notify_add_view_temp'
-                );
-                if (showNotify === null || showNotify === true) {
-                  const keepShowing = await modalConfirm({
-                    title: getDictItem('search_view_added_temporarily_title'),
-                    content: getDictItem('search_view_added_temporarily'),
-                    cancel: getDictItem(
-                      'search_view_added_temporarily_ok_no_more'
-                    ),
-                    confirm: getDictItem('search_view_added_temporarily_ok')
-                  });
-                  await prefSet('pref_show_notify_add_view_temp', keepShowing);
-                }
+            const viewIsLocal = isViewLocal(idView);
+            const view = viewIsLocal
+              ? getView(idView)
+              : await getViewRemote(idView);
+            const viewIsValid = isView(view);
+
+            if (!viewIsValid) {
+              console.warn('View not valid');
+            }
+            const viewIsStory = isStory(view);
+            if (!viewIsLocal) {
+              /**
+               * Handle external view
+               * - Add viewList item
+               * - Show message about what's happening
+               * - Save preferences
+               */
+
+              view._temp = true;
+              await viewsListAddSingle(view, {open: false, render: true});
+              const showNotify = await prefGet(
+                'pref_show_notify_add_view_temp'
+              );
+              if (showNotify === null || showNotify === true) {
+                const keepShowing = await modalConfirm({
+                  title: getDictItem('search_view_added_temporarily_title'),
+                  content: getDictItem('search_view_added_temporarily'),
+                  cancel: getDictItem(
+                    'search_view_added_temporarily_ok_no_more'
+                  ),
+                  confirm: getDictItem('search_view_added_temporarily_ok')
+                });
+                await prefSet('pref_show_notify_add_view_temp', keepShowing);
               }
             }
-            if (!isView(view)) {
-              return;
-            }
+            /*
+             * Check if it's open
+             * - Add or remove view
+             */
+            const viewIsOpen = getViewsOpen().includes(idView);
+
             if (viewIsOpen) {
               await viewRemove(view);
             } else {
@@ -852,8 +867,7 @@ class Search extends EventSimple {
               /**
                * All views exept story : zoom
                */
-
-              if (!isStory(view)) {
+              if (!viewIsStory) {
                 await zoomToViewId(idView);
                 return;
               }
@@ -1340,6 +1354,7 @@ class Search extends EventSimple {
 
   /**
    * Update open/close tag
+   * Note: this is also linked with 'view_ui_close/open' from mx.events
    */
   _update_toggles_icons() {
     const s = this;
@@ -1361,6 +1376,9 @@ class Search extends EventSimple {
       }
     }
   }
+
+  //toggleEnable
+
   /**
    * Search on current index, with default params.
    * @param {Object} opt Options for index.search

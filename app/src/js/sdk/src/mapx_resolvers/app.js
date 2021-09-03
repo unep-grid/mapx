@@ -46,6 +46,17 @@ class MapxResolversApp extends MapxResolversStatic {
   }
 
   /**
+  * Launch chaos test : open / close views by batch for a minute
+  * @return {Boolean} pass 
+  */
+  async launch_chaos_test(opt){
+    const rslv = this;
+    opt = Object.assign({}, {nBatch:5,duration:1000}, opt);
+    const res = await rslv._h.chaosTest(opt);
+    return res;
+  }
+
+  /**
    * Show view edit modal window
    * @return {Boolean} done
    */

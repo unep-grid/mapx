@@ -14,6 +14,7 @@ export function css_resolver(c) {
   --mx_ui_background_transparent: ${v(c.mx_ui_background_transparent)};
   --mx_ui_shadow: ${v(c.mx_ui_shadow)};
   --mx_ui_link: ${v(c.mx_ui_link)};
+  --mx_ui_input_accent: ${v(c.mx_ui_input_accent)};
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);
 }`;

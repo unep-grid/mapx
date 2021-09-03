@@ -837,7 +837,10 @@ class MapxResolversStatic extends ResolversBase {
   async map_wait_idle() {
     const rslv = this;
     const map = rslv._h.getMap();
-    await map.once('idle');
+    const isMoving  = map.isMoving();
+    if(isMoving){
+      await map.once('idle');
+    }
     return true;
   }
 

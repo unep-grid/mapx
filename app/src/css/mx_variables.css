@@ -1,6 +1,6 @@
 /** 
 * Set colors of mapx
-* This could be overwritten by css generated in themes/index.js
+* This will be overwritten by css generated in themes/mapx_style_resolver.js
 */
 * {
   /**
@@ -17,6 +17,7 @@
   --mx_ui_background_transparent: hsla(0, 0%, 21%, 0.1);
   --mx_ui_shadow: hsla(0, 0%, 60%, 0.1);
   --mx_ui_link: #12b0f8;
+  --mx_ui_input_accent: #12b0f8;
 
   border-color: var(--mx_ui_border);
   color: var(--mx_ui_text);

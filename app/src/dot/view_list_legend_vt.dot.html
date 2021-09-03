@@ -29,6 +29,7 @@
        const lang = h.checkLanguage({obj:item, path:'label_', concat:true}) ;
        const label = h.firstOf([item['label_'+lang], item.value]) ;
        const hasSprite  = !!item.sprite; 
+       const inputId = h.makeId();
      }}
      <tr 
        class="mx-legend-vt-rule {{?isNumeric }} mx-legend-vt-rule-numeric {{?}}"
@@ -58,11 +59,14 @@
                {{?}}
              {{?}}
              background-color:{{=item.color}};
-             {{?isPolygon && hasSprite }}
-                background-image:{{=item.sprite}};
-                background-size:inherit;
-             {{?}}">
+             ">
              </div>
+             {{?isPolygon && hasSprite }}
+                <div class="mx-legend-vt-rule-background" style="
+                background-image:{{=item.sprite}};
+                ">
+                </div>
+              {{?}}
            </div>
          </td>
 
@@ -73,11 +77,10 @@
            data-view_action_key = "btn_legend_filter" 
            data-view_action_target = "{{=it.id}}" 
            data-view_action_index = "{{=index}}" 
-           name = "{{=it.id}}_{{=item.value}}" 
-           id = "{{=it.id}}_{{=item.value}}"/>
-   
+           name = "{{=inputId}}" 
+           id = "{{=inputId}}"/>
            <label 
-           for = "{{=it.id}}_{{=item.value}}" 
+           for = "{{=inputId}}" 
            class = "mx-legend-vt-rule-label"
            >
              <div 
