@@ -27,7 +27,7 @@ const rules = [
     /**
      * Generic boolean
      */
-    key: ['useCache', 'binsCompute', 'publicOnly', 'isGuest','encrypt'],
+    key: ['useCache', 'binsCompute', 'publicOnly', 'isGuest', 'encrypt'],
     test: (d) => {
       if (mx_valid.isString(d)) {
         switch (d) {
@@ -109,6 +109,19 @@ const rules = [
       return {
         valid: isValid,
         value: isValid ? d * 1 : 1
+      };
+    }
+  },
+  {
+    key: ['nullValue'],
+    test: (d) => {
+      isValid = mx_valid.isSafe(d);
+      if(!isValid){
+        d = null;
+      }
+      return {
+        valid: isValid,
+        value: d
       };
     }
   },

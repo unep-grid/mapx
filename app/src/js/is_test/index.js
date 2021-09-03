@@ -104,9 +104,8 @@ export function isViewLocal(item) {
  * @return {Boolean}
  */
 export function isStory(item) {
-  return isViewType(item,'sm') && !!item?.data?.story;
+  return isViewType(item, 'sm') && !!item?.data?.story;
 }
-
 
 /**
  * Generic "array of" tester
@@ -128,7 +127,7 @@ export function isArrayOf(arr, fun) {
  * @param {Array} arr Array to test
  */
 export function isArrayOfViews(arr) {
-   return isArrayOf(arr, isView);
+  return isArrayOf(arr, isView);
 }
 
 // jshint ignore:start
@@ -226,7 +225,7 @@ export function isProject(p) {
  * @return {Boolean}
  */
 export function isProjectsArray(arr) {
-   return isArrayOf(arr, isProject); 
+  return isArrayOf(arr, isProject);
 }
 /**
  * Test for promise
@@ -260,10 +259,10 @@ export function isArray(item) {
   return !!item && typeof item === 'object' && Array.isArray(item);
 }
 export function isArrayOfString(item) {
-   return isArrayOf(item, isString);
+  return isArrayOf(item, isString);
 }
 export function isArrayOfNumber(item) {
-  return isArrayOf(item, isNumeric); 
+  return isArrayOf(item, isNumeric);
 }
 
 /**
@@ -356,9 +355,32 @@ export function isStringRange(str, min, max) {
 }
 
 /**
+ * Test for special char : not allowed
+ */
+const regexSafe = new RegExp(
+  /^[^{}(),+=:;?\'\"\\\/\s]*$/
+);
+
+
+/**
+* Test if input is "safe" 
+* -> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
+* @param {Any} Any 
+*/
+export function isSafe(x) {
+  if (!x) {
+    return true;
+  }
+  if (isNumeric(x)) {
+    return true;
+  }
+  return isString(x) && regexSafe.test(x);
+}
+
+/**
  * Test if valide base64
  */
-let regexDataImg = new RegExp(
+const regexDataImg = new RegExp(
   /^data:image\/(png|jpeg|svg);base64\,[a-zA-Z0-9\+\/\=]+$/
 );
 export function isBase64img(str) {

@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
-    "ps": "که چک شوی وي ، وقفې به پورتني حد ولري. هر هغه اختیار چې غوره شوی وي ، لږترلږه او اعظمي ارزښت یې تل په لومړي او اخري وقفو کې شامل وي "
+    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
+    "ps": "که چک شوی وي ، وقفو کې به پورتنی حد شامل وي. وروستی حد د احصایو څخه اعظمي دی یا په مقرراتو کې تعریف شوی ، د غوره شوي انتخاب پورې اړه لري"
   },
   {
     "id": "schema_style_reverse_order",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "ps": "ارزښت"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ps": "د ټیټ / لوړ حدونو لپاره دقیق / اعظمي احصایې له پامه وغورځوئ"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ps": "د مطلق ټیټ / پورتني حدونو لپاره د سرچینې احصایو څخه دقیق / اعظمي له پامه غورځول. دا ارزښتونه به د ټاکل شوي مقرراتو څخه اخیستل کیږي."
   },
   {
     "id": "self",

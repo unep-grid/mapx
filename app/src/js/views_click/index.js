@@ -221,15 +221,11 @@ async function handleViewClick(event) {
           const view = getView(idView);
           const filter = ['any'];
           const rules = path(view, '_rulesLegend', []);
-          //const attr = path(view, 'data.attribute.name');
-          //debugger;
-          for (var i = 0, iL = legendInputs.length; i < iL; i++) {
-            const li = legendInputs[i];
+          for(const li of legendInputs){
             if (li.checked) {
               const index = li.dataset.view_action_index * 1;
               const ruleIndex = rules[index];
               if (ruleIndex && ruleIndex.filter) {
-                //filter.push(['==', attr, ruleIndex.value]);
                 filter.push(ruleIndex.filter);
               }
             }

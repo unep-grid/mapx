@@ -50,10 +50,14 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
         function autoStyle() {
           const editor = self;
           const schema = editor.getItemSchema();
+          const style = editor.parent.getValue();
           const idView = path(schema, 'options.idView');
           const lang = mx.settings.language;
+          const nullValue = style.hideNulls ? null : style?.nulls[0]?.value;
+          
           vtStyleBuilder({
             idView: idView,
+            nullValue : nullValue,
             onDone: (data, mergeLabelByRow) => {
               const editor = self;
               const origRules = editor.getValue();

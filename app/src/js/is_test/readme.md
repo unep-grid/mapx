@@ -4,9 +4,12 @@ Simple validation tool for MapX specific values
 
 * * *
 
-## Members
+## Constants
 
 <dl>
+<dt><a href="#regexSafe">regexSafe</a></dt>
+<dd><p>Test for special char : not allowed</p>
+</dd>
 <dt><a href="#regexDataImg">regexDataImg</a></dt>
 <dd><p>Test if valide base64</p>
 </dd>
@@ -38,6 +41,15 @@ Simple validation tool for MapX specific values
 </dd>
 <dt><a href="#isViewEditable">isViewEditable(item)</a></dt>
 <dd><p>Test if it&#39;s a MapX view is editable</p>
+</dd>
+<dt><a href="#isViewLocal">isViewLocal(item)</a></dt>
+<dd><p>Test if it&#39;s a MapX view is local</p>
+</dd>
+<dt><a href="#isStory">isStory(item)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Test if story map</p>
+</dd>
+<dt><a href="#isArrayOf">isArrayOf(arr, fun)</a> ⇒ <code>Boolean</code></dt>
+<dd><p>Generic &quot;array of&quot; tester</p>
 </dd>
 <dt><a href="#isArrayOfViews">isArrayOfViews(arr)</a></dt>
 <dd><p>Test if is array of views object</p>
@@ -108,6 +120,10 @@ Simple validation tool for MapX specific values
 <dt><a href="#isStringRange">isStringRange(str,, min, max)</a></dt>
 <dd><p>Test if entry is string and have the correct number of characters</p>
 </dd>
+<dt><a href="#isSafe">isSafe(Any)</a></dt>
+<dd><p>Test if input is &quot;safe&quot; 
+-&gt; avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.</p>
+</dd>
 <dt><a href="#isValidType">isValidType(type, group)</a></dt>
 <dd><p>Quick type checker by group eg. image</p>
 </dd>
@@ -136,16 +152,25 @@ Simple validation tool for MapX specific values
 <dd><p>Check if it&#39;s expected url for wms end point.</p>
 </dd>
 <dt><a href="#isDateString">isDateString(date)</a></dt>
-<dd><p>Validate date</p>
+<dd><p>Validate date string</p>
+</dd>
+<dt><a href="#isDate">isDate(date)</a></dt>
+<dd><p>Validate date object</p>
 </dd>
 </dl>
 
+<a name="regexSafe"></a>
+
+## regexSafe
+Test for special char : not allowed
+
+**Kind**: global constant  
 <a name="regexDataImg"></a>
 
 ## regexDataImg
 Test if valide base64
 
-**Kind**: global variable  
+**Kind**: global constant  
 <a name="isEmpty"></a>
 
 ## isEmpty(item)
@@ -235,6 +260,40 @@ Test if it's a MapX view is editable
 | Param | Type | Description |
 | --- | --- | --- |
 | item | <code>Object</code> | to test |
+
+<a name="isViewLocal"></a>
+
+## isViewLocal(item)
+Test if it's a MapX view is local
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | to test |
+
+<a name="isStory"></a>
+
+## isStory(item) ⇒ <code>Boolean</code>
+Test if story map
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| item | <code>Object</code> | Item to test |
+
+<a name="isArrayOf"></a>
+
+## isArrayOf(arr, fun) ⇒ <code>Boolean</code>
+Generic "array of" tester
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| arr | <code>Array</code> | Array |
+| fun | <code>function</code> | Function |
 
 <a name="isArrayOfViews"></a>
 
@@ -494,6 +553,18 @@ Test if entry is string and have the correct number of characters
 | min | <code>Number</code> | Minumum number of characters. Default 0. |
 | max | <code>Number</code> | Maximum number of characters. Default Infinity. |
 
+<a name="isSafe"></a>
+
+## isSafe(Any)
+Test if input is "safe" 
+-> avoid dangerous stuff for db : columns, values, .. when prepared queries are not possible. Not secure client side.
+
+**Kind**: global function  
+
+| Param | Type |
+| --- | --- |
+| Any | <code>Any</code> | 
+
 <a name="isValidType"></a>
 
 ## isValidType(type, group)
@@ -606,13 +677,24 @@ Check if it's expected url for wms end point.
 <a name="isDateString"></a>
 
 ## isDateString(date)
-Validate date
+Validate date string
 
 **Kind**: global function  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | date | <code>String</code> \| <code>Number</code> | to validate |
+
+<a name="isDate"></a>
+
+## isDate(date)
+Validate date object
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| date | <code>Date</code> | to validate |
 
 
 * * *

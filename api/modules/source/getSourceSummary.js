@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const mx_valid = require('@fxi/mx_valid');
+const {isSourceId, isViewId, isNumeric} = require('@fxi/mx_valid');
 
 const {redisGet, redisSet, pgRead} = require('@mapx/db');
 const {getParamsValidator} = require('@mapx/route_validation');
@@ -18,7 +18,8 @@ const validateParamsHandler = getParamsValidator({
     'binsMethod',
     'binsNumber',
     'maxRowsCount',
-    'stats'
+    'stats',
+    'nullValue'
   ]
 });
 
@@ -36,7 +37,8 @@ async function getSummaryHandler(req, res) {
       binsNumber: req.query.binsNumber,
       binsMethod: req.query.binsMethod, // heads_tails, jenks, equal_interval, quantile
       maxRowsCount: req.query.maxRowsCount, // limit table length
-      stats: req.query.stats // which stat to computed ['base','time','attr', 'spatial']
+      stats: req.query.stats, // which stat to computed ['base','time','attr', 'spatial']
+      nullValue: req.query.nullValue
     });
 
     if (data) {
@@ -54,10 +56,11 @@ async function getSummaryHandler(req, res) {
  * @param {String} opt.idView Id of the view
  * @param {String} opt.idAttr Id of the attribute (optional)
  * @param {String} opt.format format (disabled now. Will be mapx-json or iso-xml)
+ * @param {String} opt.nullValue Value to express nulls
  * @return {Object} metadata object
  */
 async function getSourceSummary(opt) {
-  if (!mx_valid.isSourceId(opt.idSource) && !mx_valid.isViewId(opt.idView)) {
+  if (!isSourceId(opt.idSource) && !isViewId(opt.idView)) {
     throw new Error('Missing id of the source or the view');
   }
   if (!opt.idAttr || opt.idAttr === 'undefined') {
@@ -65,9 +68,8 @@ async function getSourceSummary(opt) {
   }
   opt = await updateSourceFromView(opt);
 
-  if (!mx_valid.isSourceId(opt.idSource)) {
+  if (!isSourceId(opt.idSource)) {
     return {};
-    //throw new Error('Id of the source missing');
   }
 
   const start = Date.now();
@@ -75,7 +77,7 @@ async function getSourceSummary(opt) {
   const columns = await db.getColumnsNames(opt.idSource);
   const timestamp = await db.getSourceLastTimestamp(opt.idSource);
   const tableTypes = await db.getColumnsTypesSimple(opt.idSource, columns);
-  
+
   const attrType = opt.idAttr
     ? tableTypes.filter((r) => r.id === opt.idAttr)[0].value
     : null;
@@ -86,7 +88,7 @@ async function getSourceSummary(opt) {
     .digest('hex');
 
   const cached = opt.useCache ? await redisGet(hash) : false;
-
+ 
   if (cached) {
     const data = JSON.parse(cached);
     data.timing = Date.now() - start;
@@ -108,7 +110,6 @@ async function getSourceSummary(opt) {
     attributes: columns,
     attributes_types: tableTypes
   };
-
   if (stats.indexOf('base') > -1) {
     Object.assign(out, await getOrCalc('getSourceSummary_base', opt));
   }

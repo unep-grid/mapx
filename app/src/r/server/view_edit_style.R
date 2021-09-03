@@ -123,8 +123,10 @@ observeEvent(input$styleEdit_values,{
     view <- .set(view, c("data","style", "nulls"), .get(style,c("nulls")))
     view <- .set(view, c("data","style", "hideNulls"), .get(style,c("hideNulls")))
     view <- .set(view, c("data","style", "includeUpperBoundInInterval"), .get(style,c("includeUpperBoundInInterval")))
+    view <- .set(view, c("data","style", "excludeMinMax"), .get(style,c("excludeMinMax")))
     view <- .set(view, c("data", "style", "titleLegend"), .get(style,c("titleLegend")))
     view <- .set(view, c("data", "style", "reverseLayer"), .get(style,c("reverseLayer")))
+
 
     switch(idEvent,
       "preview"= {

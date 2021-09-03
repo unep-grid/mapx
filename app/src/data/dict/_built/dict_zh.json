@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
-    "zh": "如果勾选，区间将包含上限。无论选定哪个选项，最小值和最大值总是包括在第一个和最后一个区间中"
+    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
+    "zh": "如果选中，间隔将包括上限。最后一个界限是统计数据或规则中定义的最大值，具体取决于选择的选项"
   },
   {
     "id": "schema_style_reverse_order",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "zh": "值"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "zh": "忽略下限/上限的最小/最大统计信息"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "zh": "忽略绝对下限/上限的源统计信息中的最小值/最大值。这些值将取自规则集。"
   },
   {
     "id": "self",

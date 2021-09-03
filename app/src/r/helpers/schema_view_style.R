@@ -57,10 +57,9 @@ mxSchemaViewStyle <- function(
   variableNames <- .get(data,c("attribute","names"))
   layerName <- .get(data,c("source","layerInfo","name"))
 
+
   #
-  # Get distinct available value in
-  # This is already done during view creation :  view.data.attribute.table
-  # NOTE: why do it here again ?
+  # Get distinct values for drop down select
   #
   values <- mxDbGetQuery(sprintf(
       "SELECT DISTINCT(\"%1$s\") 
@@ -97,18 +96,6 @@ mxSchemaViewStyle <- function(
   #
   spritesPrefix <-  .get(config, c('sprites_prefix'))
   sprites <- sprites[grepl(spritesPrefix[[geomType]],sprites)]
-  #
-  # Legend title
-  #
-  titleLegend = list(
-    titleLegend = mxSchemaMultiLingualInput(
-      language = l,
-      keyTitle="schema_style_title_legend",
-      default = list(en="Legend"),
-      type="string",
-      propertyOrder = 8
-      )
-    )
 
 
 
@@ -192,12 +179,81 @@ mxSchemaViewStyle <- function(
       )
     )
 
+
+  #
+  #  set rules list
+  # 
+
+  nullsValue <- list(
+    value = list(
+      title = tt("schema_style_value"),
+      type = "string",
+      minLength = 0
+      )
+    )
+
+  nulls <- list(
+    nulls = list(
+      propertyOrder = 1,
+      type = "array",
+      format = "table",
+      title = tt("schema_style_nulls"),
+      options = list(
+        disable_array_add = TRUE,
+        disable_array_delete = TRUE,
+        collapsed = TRUE
+        ),
+      items = list(
+        type = "object",
+        title = tt("schema_style_nulls"),
+        properties = c(
+          nullsValue,
+          labels,
+          color,
+          opacity,
+          size,
+          sprite
+        )
+        ),
+      default = list(
+        list(
+          value = NULL,
+          labels = list(
+            "en"  =   "NO DATA"
+            ),
+          color = "#000",
+          opacity = 0.7,
+          size = ifelse(isPoint,7,1),
+          sprite = ""
+        )
+      )
+    )
+  )
+
+
+  #
+  # hide nulls
+  #
+
+  hideNulls <- list(
+    hideNulls = list(
+      propertyOrder = 2,
+      title = tt("schema_style_hide_nulls"),
+      description = tt("schema_style_hide_nulls_desc"),
+      type = "boolean",
+      format = "checkbox"
+      )
+    )
+
+
+
+
   #
   #  set rules list
   # 
   rules <- list(
     rules = list(
-      propertyOrder = 1,
+      propertyOrder = 3,
       type = "array",
       format = "tableSourceAutoStyle",
       title = tt("schema_style_rules"),
@@ -227,7 +283,7 @@ mxSchemaViewStyle <- function(
   # >=a to < b
   includeUpperBoundInInterval <- list(
     includeUpperBoundInInterval = list(
-      propertyOrder = 2,
+      propertyOrder = 4,
       title = tt("schema_style_include_upper_bound"),
       description = tt("schema_style_include_upper_bound_desc"),
       type = "boolean",
@@ -237,11 +293,26 @@ mxSchemaViewStyle <- function(
     )
 
   #
+  # Exclude min / max as absolute bounds
+  # ( retrieved from source stat )
+  excludeMinMax <- list(
+    excludeMinMax = list(
+      propertyOrder = 4,
+      title = tt("schema_style_exclude_min_max"),
+      description = tt("schema_style_exclude_min_max_desc"),
+      type = "boolean",
+      format ="checkbox",
+      default = FALSE
+      )
+    )
+
+
+  #
   # Reverse layer order
   #
   reverseLayer <- list(
     reverseLayer = list(
-      propertyOrder = 2,
+      propertyOrder = 5,
       title = tt("schema_style_reverse_order"),
       description = tt("schema_style_reverse_order_desc"),
       type = "boolean",
@@ -254,7 +325,7 @@ mxSchemaViewStyle <- function(
   if(isPoint){
     showSymbolLabel <- list(
       showSymbolLabel = list(
-        propertyOrder = 3,
+        propertyOrder = 6,
         title = tt("schema_style_show_symbol_label"),
         description = tt("schema_style_show_symbol_label_desc"),
         type = "boolean",
@@ -316,7 +387,7 @@ mxSchemaViewStyle <- function(
   zoomConfig = list(
     zoomConfig = list (
       #type = "object",
-      propertyOrder = 4,
+      propertyOrder = 7,
       title = tt("schema_style_config_zoom"),
       options = list(
         collapsed = TRUE
@@ -331,71 +402,6 @@ mxSchemaViewStyle <- function(
       )
     )
 
-
-  #
-  #  set rules list
-  # 
-
-  nullsValue <- list(
-    value = list(
-      title = tt("schema_style_value"),
-      type = "string",
-      minLength = 0
-      )
-    )
-
-  nulls <- list(
-    nulls = list(
-      propertyOrder = 5,
-      type = "array",
-      format = "table",
-      title = tt("schema_style_nulls"),
-      options = list(
-        disable_array_add = TRUE,
-        disable_array_delete = TRUE,
-        collapsed = TRUE
-        ),
-      items = list(
-        type = "object",
-        title = tt("schema_style_nulls"),
-        properties = c(
-          nullsValue,
-          labels,
-          color,
-          opacity,
-          size,
-          sprite
-        )
-        ),
-      default = list(
-        list(
-          value = NULL,
-          labels = list(
-            "en"  =   "NO DATA"
-            ),
-          color = "#000",
-          opacity = 0.7,
-          size = ifelse(isPoint,7,1),
-          sprite = ""
-        )
-      )
-    )
-  )
-
-
-  #
-  # hide nulls
-  #
-
-  hideNulls <- list(
-    hideNulls = list(
-      propertyOrder = 6,
-      title = tt("schema_style_hide_nulls"),
-      description = tt("schema_style_hide_nulls_desc"),
-      type = "boolean",
-      format = "checkbox"
-      )
-    )
 
   #
   # set paint
@@ -419,7 +425,7 @@ mxSchemaViewStyle <- function(
   custom = list(
     custom = list (
       type = "object",
-      propertyOrder = 7,
+      propertyOrder = 8,
       title = tt("custom_style"),
       options = list(
         collapsed = TRUE
@@ -442,21 +448,34 @@ mxSchemaViewStyle <- function(
       )
     )
 
+  #
+  # Legend title
+  #
+  titleLegend = list(
+    titleLegend = mxSchemaMultiLingualInput(
+      language = l,
+      keyTitle="schema_style_title_legend",
+      default = list(en="Legend"),
+      type="string",
+      propertyOrder = 9
+      )
+    )
 
   #
   # main properties
   #
   properties <- c(
-    rules,
-    zoomConfig,
     nulls,
+    rules,
+    if(isPoint) zoomConfig,
     if(isNumeric) includeUpperBoundInInterval,
+    if(isNumeric) excludeMinMax,
     reverseLayer,
     showSymbolLabel,
     hideNulls,
     titleLegend,
     custom
-    )
+  )
   #
   # schema skeleton
   #

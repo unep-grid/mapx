@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. مهما كان الخيار الذي يتم تحديده ، يتم دائمًا تضمين الحد الأدنى والحد الأقصى للقيمة في الفترات الأولى والأخيرة "
+    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
+    "ar": "إذا تم تحديده ، فستشمل الفواصل الزمنية الحد الأعلى. الحد الأخير هو الحد الأقصى من الإحصائيات أو المحدد في القواعد ، اعتمادًا على الخيار المختار"
   },
   {
     "id": "schema_style_reverse_order",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "ar": "قيمة "
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "ar": "تجاهل إحصائيات الحد الأدنى / الأقصى للحدود الدنيا / العليا"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "ar": "تجاهل الحد الأدنى / الحد الأقصى من إحصائيات المصدر للحدود الدنيا / العلوية المطلقة. سيتم أخذ هذه القيم من مجموعة القواعد."
   },
   {
     "id": "self",

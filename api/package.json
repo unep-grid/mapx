@@ -14,7 +14,7 @@
     "typesense": "^0.11.2"
   },
   "dependencies": {
-    "@fxi/mx_valid": "0.0.8",
+    "@fxi/mx_valid": "0.0.10",
     "@turf/turf": "^5.1.6",
     "ajv": "^6.12.5",
     "archiver": "^3.1.1",
@@ -35,7 +35,7 @@
     "socket.io": "^3.0.3",
     "sphericalmercator": "^1.0.5",
     "sql": "^0.78.0",
-    "tar": "^4.4.13",
+    "tar": "^4.4.19",
     "vt-pbf": "^3.1.1",
     "wellknown": "^0.5.0",
     "zlib": "^1.0.5"

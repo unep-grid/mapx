@@ -1,21 +1,46 @@
 WITH
+attr_null_value as (
+  -- set nullValue as null if not a number
+  SELECT 
+  CASE 
+   WHEN  '{{nullValue}}' ~ '^[-+]?[0-9]*\.?[0-9]+$'
+   THEN  '{{nullValue}}'
+  ELSE
+    NULL 
+   END as val
+),
+attr_no_null as (
+  SELECT
+  s."{{idAttr}}"
+  FROM "{{idSource}}" s, attr_null_value n
+  WHERE NOT (
+    s."{{idAttr}}" IS NULL OR
+    CASE WHEN n.val IS NULL 
+      --- NOT false = true 
+      THEN false
+      -- convert to float the nullValue
+      ELSE
+        s."{{idAttr}}" = n.val::FLOAT 
+  END
+)
+),
 attr_max AS (
   SELECT
   MAX("{{idAttr}}")::NUMERIC
-  FROM "{{idSource}}"
+  FROM attr_no_null
 ),
 attr_min AS (
   SELECT
   MIN("{{idAttr}}")::NUMERIC
-  FROM "{{idSource}}"
+  FROM attr_no_null
 ),
 attr_array AS (
   SELECT array_agg("{{idAttr}}"::NUMERIC) AS agg
-  FROM "{{idSource}}"
+  FROM attr_no_null
 ),
 attr_distinct AS (
   SELECT COUNT(DISTINCT "{{idAttr}}") AS val_distinct
-  FROM "{{idSource}}"
+  FROM attr_no_null
 ),
 bins_valid AS (
   -- ensure that the number of bins is never greater than the distinct number of values
@@ -50,7 +75,7 @@ attr_bin_max AS (
 classes AS (
   -- return a table such as
   --        from         |         to
-  --- --------------------+---------------------
+  -- --------------------+---------------------
   --                   1 |  81742.142857142857
   --  81743.142857142857 | 163484.285714285714
   -- 163485.285714285714 | 245226.428571428571
@@ -116,6 +141,7 @@ SELECT json_build_object(
   'attribute_stat', json_build_object(
     'attribute', '{{idAttr}}',
     'type', 'continuous',
+    'nullValue', n.val,
     'min', amin.min,
     'max', amax.max,
     'bins', b.bins,
@@ -129,5 +155,6 @@ attr_min amin,
 attr_max amax,
 bins b,
 bins_valid v,
-freqtable_json ft
+freqtable_json ft,
+attr_null_value n
 

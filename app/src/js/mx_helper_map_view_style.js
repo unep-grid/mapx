@@ -7,14 +7,19 @@ export async function vtStyleBuilder(opt) {
   }
 
   /**
-   * Init
+   * Init : get type 
    */
 
   const summary = await h.getViewSourceSummary(opt.idView, {
+    useCache : false,
+    nullValue : opt.nullValue,
     stats: ['base', 'attributes']
   });
-  const aStat = summary.attribute_stat;
+  opt._type = summary.attribute_stat.type ;
 
+  /**
+  * set default
+  */ 
   opt = Object.assign(
     {},
     {
@@ -27,7 +32,6 @@ export async function vtStyleBuilder(opt) {
 
   opt._palette = null;
   opt._mergeLabelByRow = false;
-  opt._type = aStat.type;
   opt._elsParts = [];
   opt._elsInputs = [];
   opt._data = {};
@@ -310,12 +314,14 @@ export async function vtStyleBuilder(opt) {
   async function update() {
     let titleTable = 'Table';
     const summary = await h.getViewSourceSummary(opt.idView, {
+      useCache : false,
+      nullValue : opt.nullValue,
       stats: ['base', 'attributes'],
       binsNumber: opt.binsNumber,
       binsMethod: opt.binsMethod
     });
     const aStat = summary.attribute_stat;
-    const countTotal = summary.row_count;
+    //const countTotal = summary.row_count;
     const count = aStat.table.reduce((c, r) => {
       return c + r.count;
     }, 0);

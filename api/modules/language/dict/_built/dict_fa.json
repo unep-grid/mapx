@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
-    "fa": "در صورت علامت گذاری ، بازه ها شامل حد بالایی خواهد بود. هر گزینه ای که انتخاب شود ، حداقل و حداکثر مقدار همیشه در بازه های اول و آخر قرار می گیرند "
+    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
+    "fa": "در صورت بررسی ، فواصل شامل محدوده بالا می شود. آخرین محدوده حداکثر از آمار یا بسته به گزینه انتخاب شده در قوانین تعریف شده است"
   },
   {
     "id": "schema_style_reverse_order",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "fa": "قیمت"
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "fa": "از آمار حداقل / حداکثر برای محدوده های پایین / بالا چشم پوشی کنید"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "fa": "حداقل / حداکثر آمارهای منبع را برای محدوده های مطلق پایین / بالا نادیده بگیرید. این مقادیر از قوانین تعیین شده گرفته خواهند شد."
   },
   {
     "id": "self",

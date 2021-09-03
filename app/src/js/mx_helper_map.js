@@ -934,7 +934,7 @@ export async function initMapx(o) {
     });
 
     mx.events.on({
-      type: ['view_removed', 'view_added', 'view_deleted'],
+      type: ['view_ui_open', 'view_ui_close', 'view_deleted'],
       idGroup: 'search_index',
       callback: () => {
         mx.search._update_toggles_icons();
@@ -1220,7 +1220,6 @@ export async function initMapxStatic(o) {
      * Display views
      */
     for (const view of mapData.views) {
-
       await h.viewLayersAdd({
         view: view,
         elLegendContainer: btnLegend.elPanelContent,
@@ -2243,18 +2242,11 @@ export function makeSimpleLayer(o) {
  * @param {Array} o.order Array of layer base name. If empty, use `getViewsOrder`
  * @return {Promise}
  */
-let order_update_timeout;
+
 export function viewsLayersOrderUpdate(o) {
   const h = mx.helpers;
   o = o || {};
   return new Promise((resolve) => {
-    /**
-     * Simple debounce
-     */
-    if (order_update_timeout) {
-      clearTimeout(order_update_timeout);
-    }
-
     /**
      * Get order list by priority :
      * 1) Given order
@@ -2270,47 +2262,46 @@ export function viewsLayersOrderUpdate(o) {
       return;
     }
 
-    order_update_timeout = setTimeout(() => {
-      /**
-       * Get displayed layer
-       */
-      const layersDiplayed = h.getLayerByPrefix({
-        prefix: /^MX-/
-      });
-      /**
-       * For each group (view id) [a,b,c],
-       * 1) Get corresponding layers [a_1,a_0],
-       * 2) Set inner order [a_0,a_1]
-       * 3) Push result
-       */
-      let incView = 0;
-      let idPrevious;
-      const sorted = [];
-      for (let idView of order) {
-        const layersView = layersDiplayed.filter(
-          (d) => h.path(d, 'metadata.idView', d.id) === idView
-        );
+    /**
+     * Get displayed layer
+     */
+    const layersDiplayed = h.getLayerByPrefix({
+      prefix: /^MX-/
+    });
+    /**
+     * For each group (view id) [a,b,c],
+     * 1) Get corresponding layers [a_1,a_0],
+     * 2) Set inner order [a_0,a_1]
+     * 3) Push result
+     */
+    let incView = 0;
+    let idPrevious;
+    const sorted = [];
+    for (let idView of order) {
+      const layersView = layersDiplayed.filter(
+        (d) => h.path(d, 'metadata.idView', d.id) === idView
+      );
 
-        if (layersView.length > 0) {
-          sortLayers(layersView);
-          for (let layer of layersView) {
-            const firstOfAll = incView++ === 0;
-            const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
-            map.moveLayer(layer.id, idBefore);
-            idPrevious = layer.id;
-            sorted.push({id: layer.id, idBefore});
-          }
+      if (layersView.length > 0) {
+        sortLayers(layersView);
+        for (let layer of layersView) {
+          const firstOfAll = incView++ === 0;
+          const idBefore = firstOfAll ? mx.settings.layerBefore : idPrevious;
+          map.moveLayer(layer.id, idBefore);
+          idPrevious = layer.id;
+          sorted.push({id: layer.id, idBefore});
         }
       }
+    }
 
-      mx.events.fire({
-        type: 'layers_ordered',
-        data: {
-          layers: order
-        }
-      });
-      resolve(order);
-    }, 100);
+    mx.events.fire({
+      type: 'layers_ordered',
+      data: {
+        layers: order
+      }
+    });
+
+    resolve(order);
   });
 }
 
@@ -2577,11 +2568,10 @@ export async function makeNumericSlider(o) {
 export async function makeDashboard(o) {
   const h = mx.helpers;
   const view = o.view;
-  const config = h.isView(view) && h.path(view, 'data.dashboard', false);
+  const config = h.isView(view) && h.path(view, 'data.dashboard', {});
   const map = h.getMap();
-  const elMap = map.getContainer();
 
-  if (!config) {
+  if (h.isEmpty(config)) {
     return;
   }
 
@@ -2941,20 +2931,21 @@ export async function viewLayersRemove(o) {
  */
 function _viewUiOpen(view) {
   const h = mx.helpers;
-  return new Promise((resolve, reject) => {
-    view = h.getView(view);
-    if (!h.isView(view)) {
-      reject('viewAdd : no view given');
+  view = h.getView(view);
+  if (!h.isView(view)) {
+    return;
+  }
+  if (view._vb) {
+    view._vb.open();
+  }
+  view._open = true;
+  mx.events.fire({
+    type: 'view_ui_open',
+    data: {
+      idView: view.id
     }
-    const elView = getViewEl(view);
-
-    if (elView && elView._vb) {
-      elView._vb.open();
-    }
-
-    view._open = true;
-    resolve(true);
   });
+  return true;
 }
 
 /**
@@ -2964,10 +2955,19 @@ function _viewUiOpen(view) {
 async function _viewUiClose(view) {
   const h = mx.helpers;
   view = h.getView(view);
-  if (h.isView(view) && view._vb) {
+  if (!h.isView(view)) {
+    return;
+  }
+  if (view._vb) {
     view._vb.close();
   }
   view._open = false;
+  mx.events.fire({
+    type: 'view_ui_close',
+    data: {
+      idView: view.id
+    }
+  });
   return true;
 }
 
@@ -2983,12 +2983,19 @@ export async function viewAdd(view) {
     if (!h.isView(view)) {
       return;
     }
-    await _viewUiOpen(view);
-    await h.updateLanguageElements({
-      el: h.getViewEl(view)
-    });
+    /**
+     * Open ui before layers :
+     * - Layers can take a while
+     * - Search list need quickly an
+     *   event to trigger toggles
+     */
+
+    _viewUiOpen(view);
     await h.viewLayersAdd({
       view: view
+    });
+    await h.updateLanguageElements({
+      el: h.getViewEl(view)
     });
     return true;
   } catch (e) {
@@ -3009,7 +3016,7 @@ export async function viewRemove(view) {
     if (!h.isView(view)) {
       return;
     }
-    await _viewUiClose(view);
+    _viewUiClose(view);
     await h.viewLayersRemove({
       idView: view.id
     });
@@ -3026,12 +3033,14 @@ export async function viewRemove(view) {
  */
 export function getViewsOpen() {
   const h = mx.helpers;
-  return h.getViews().reduce((a, v) => {
-    if (v._open === true) {
-      a.push(v.id);
+  const open = [];
+  const views = h.getViews();
+  for (const view of views) {
+    if (h.isViewOpen(view)) {
+      open.push(view.id);
     }
-    return a;
-  }, []);
+  }
+  return open;
 }
 
 /**
@@ -3499,7 +3508,6 @@ export async function viewLayersAdd(o) {
    * Add views layers
    */
   await handleLayer(idType);
-
   /**
    * Dashboard
    */
@@ -3517,6 +3525,8 @@ export async function viewLayersAdd(o) {
       time: view._added_at
     }
   });
+
+  return true;
 
   /**
    * handler based on view type
@@ -4094,32 +4104,43 @@ export async function viewLayersAddVt(o) {
   const zConfig = p(style, 'zoomConfig', {});
   const showSymbolLabel = p(style, 'showSymbolLabel', false);
   const includeUpper = p(style, 'includeUpperBoundInInterval', false);
+  const excludeMinMax = p(style, 'excludeMinMax', false);
   const hideNulls = p(style, 'hideNulls', false);
   const ruleNulls = hideNulls ? null : p(style, 'nulls', [])[0];
   const geomType = p(viewData, 'geometry.type', 'point');
   const source = p(viewData, 'source', {});
   const idSourceLayer = p(source, 'layerInfo.name');
+
+  /**
+   * No layer id = stop;
+   */
+
+  if (!idSourceLayer) {
+    return false;
+  }
+
+  /**
+   * Init null value
+   */
+  let nullValue = 'null';
+  if (ruleNulls) {
+    nullValue = ruleNulls.value;
+  }
+
   /**
    * Source stat
    */
   const sourceSummary = await h.getViewSourceSummary(view, {
+    nullValue: nullValue,
     idAttr: attr,
     stats: ['attributes']
   });
 
   const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
   const isNumeric = statType === 'continuous';
-  const max = p(sourceSummary, 'attribute_stat.max');
-  const min = p(sourceSummary, 'attribute_stat.min');
-
-  var layers = [];
-  var num = 0;
-  var rules = p(style, 'rules', []);
-  var styleCustom;
-
-  if (!idSourceLayer) {
-    return false;
-  }
+  const rules = h.clone(p(style, 'rules', []));
+  const layers = [];
+  const styleCustom = JSON.parse(p(style, 'custom.json'));
 
   /**
    * Set zoom default
@@ -4136,24 +4157,59 @@ export async function viewLayersAddVt(o) {
   /**
    * Parse custom style
    */
-  styleCustom = JSON.parse(p(style, 'custom.json'));
 
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
    * Clean rules
    */
-  rules = h.isArray(rules) ? rules : [rules];
+  let nRules = rules.length;
+  while (nRules-- > 0) {
+    const rule = rules[nRules];
+    const valid = h.isObject(rule) && rule.value !== undefined;
+    if (!valid) {
+      rules.splice(nRules, 1);
+    }
+  }
 
-  rules = rules.filter((r) => {
-    return r && r.value !== undefined;
-  });
+  if (ruleNulls) {
+    /**
+     * Remove rules that share the same value as null rule
+     */
+    let nR = rules.length;
+    const nullIsNumeric = h.isNumeric(nullValue);
+    if (isNumeric && nullIsNumeric) {
+      nullValue *= 1;
+    }
+    while (nR--) {
+      const dup = rules[nR].value === nullValue;
+      if (dup) {
+        rules.splice(nR, 1);
+      }
+    }
+  }
 
-  rules = h.clone(rules);
-  rules.forEach((rule) => {
+  /**
+   * Handle option 'excludeMinMax' : set min/max values based on rules OR stats
+   */
+  const rulesValues = {};
+
+  if (isNumeric) {
+    const values = rules.map((r) => r.value);
+    const minRules = Math.min(...values);
+    const maxRules = Math.max(...values);
+    rulesValues.min = excludeMinMax
+      ? minRules
+      : p(sourceSummary, 'attribute_stat.min', minRules);
+    rulesValues.max = excludeMinMax
+      ? maxRules
+      : p(sourceSummary, 'attribute_stat.max', maxRules);
+  }
+
+  for (const rule of rules) {
     rule.rgba = h.colorToRgba(rule.color, rule.opacity);
     rule.rgb = h.colorToRgba(rule.color);
-  });
+  }
 
   /**
    * Check rules
@@ -4165,13 +4221,20 @@ export async function viewLayersAddVt(o) {
   /**
    * Set style type
    */
+  const useStyleNull = !!ruleNulls;
   const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
-  const useStyleDefault = !useStyleCustom && !hasStyleRules;
+  const useStyleDefault = !useStyleCustom && (!hasStyleRules && !useStyleNull);
   const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
   const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
 
-  if (!useStyleCustom && !useStyleDefault && !useStyleAll && !useStyleFull) {
-    console.warn('viewLayersAddVt: invalid settings', opt);
+  if (
+    !useStyleCustom &&
+    !useStyleDefault &&
+    !useStyleAll &&
+    !useStyleFull &&
+    !useStyleNull
+  ) {
+    console.warn('viewLayersAddVt: invalid settings', o);
     return;
   }
 
@@ -4288,9 +4351,43 @@ export async function viewLayersAddVt(o) {
       const isFirst = i === 0;
 
       const nextRule = rules[i + 1];
-      const nextVal = p(nextRule, 'value', max);
-      const fromValue = isNumeric ? (isFirst ? min : rule.value) : rule.value;
-      const toValue = isNumeric ? (isLast ? max : nextVal) : null;
+
+      /**
+       * If no next value use max or null (non numeric)
+       */
+
+      const nextVal = p(nextRule, 'value', rulesValues.max);
+
+      /**
+       * From = if numeric + first = min, else value
+       */
+
+      const fromValue = isNumeric
+        ? isFirst
+          ? rulesValues.min
+          : rule.value
+        : rule.value;
+      /**
+       * To = if numeric + last : max, else next value or null
+       */
+
+      const toValue = isNumeric ? (isLast ? rulesValues.max : nextVal) : null;
+
+      /**
+       * Case where use nulls === min or max;
+       */
+      const skip =
+        isNumeric &&
+        (isFirst || isLast) &&
+        useStyleNull &&
+        (ruleNulls.value === rulesValues.min ||
+          ruleNulls.value === rulesValues.max);
+
+      if (skip) {
+        rule.skip = true;
+        return;
+      }
+
       /**
        *  Symboles and pattern check
        */
@@ -4377,7 +4474,7 @@ export async function viewLayersAddVt(o) {
   /**
    * Handle layer for null values
    */
-  if (ruleNulls) {
+  if (useStyleNull) {
     const value = ruleNulls.value;
     const filter = ['all'];
 
@@ -4426,9 +4523,10 @@ export async function viewLayersAddVt(o) {
       rulesLegend.push(ruleNulls);
     }
 
+    let pos = 0;
     const idRulesToRemove = [];
-    rulesLegend.forEach((rule, i) => {
-      const ruleNext = rule[i + 1];
+    for (const rule of rulesLegend) {
+      const ruleNext = rulesLegend[++pos];
       const hasSprite = rule.sprite && rule.sprite !== 'none';
       const nextHasSprite =
         !!ruleNext && ruleNext.sprite && ruleNext.sprite !== 'none';
@@ -4436,7 +4534,7 @@ export async function viewLayersAddVt(o) {
       const isDuplicated =
         ruleNext &&
         ruleNext.value === rule.value &&
-        ruleNext.color === ruleNext.color;
+        ruleNext.color === rule.color;
 
       if (hasSprite) {
         rule.sprite = `url(sprites/svg/${rule.sprite}.svg)`;
@@ -4448,15 +4546,14 @@ export async function viewLayersAddVt(o) {
         if (nextHasSprite) {
           rule.sprite = `${rule.sprite},url(sprites/svg/${ruleNext.sprite}.svg`;
         }
-        idRulesToRemove.push(i + 1);
+        idRulesToRemove.push(pos);
       }
-    });
+    }
 
     while (idRulesToRemove.length) {
       const rulePos = idRulesToRemove.pop();
       rulesLegend.splice(rulePos, 1);
     }
-
     /*
      * Add legend using template
      */
@@ -5602,6 +5699,22 @@ export function getViewsList(o) {
 }
 
 /**
+ * Get list of views' id
+ * @return {Array} Ids of view
+ */
+export function getViewsListId() {
+  const h = mx.helpers;
+  return h.getViews().map((m) => m.id);
+}
+/**
+ * Check if view is local
+ * @return {Boolean} is local
+ */
+export function isViewLocal(id) {
+  const h = mx.helpers;
+  return !!h.getView(id);
+}
+/**
  * Get view list object
  * @return {Object} ViewList
  */
@@ -5854,4 +5967,51 @@ async function getSearchApiKey() {
     throw new Error(keyData.message);
   }
   return keyData.key;
+}
+
+export async function chaosTest(opt) {
+  const h = mx.helpers;
+  opt = Object.assign({}, {nBatch: 5, duration: 1000}, opt);
+  await h.viewsCloseAll();
+  const start = performance.now();
+  const views = h.getViews();
+  const curProject = mx.settings.project;
+  try {
+    while (!isCanceled()) {
+      const tt = [];
+      for (let i = 0; i < opt.nBatch; i++) {
+        tt.push(t());
+      }
+      await Promise.all(tt);
+      await wait();
+    }
+
+    await wait(1000);
+    const nViews = h.getViewsOpen().length;
+    const nLayers = h.getLayerNamesByPrefix().length;
+
+    return nViews === 0 && nLayers === 0;
+  } catch (e) {
+    console.warn(e);
+  }
+
+  async function t() {
+    const pos = Math.floor(Math.random() * views.length);
+    const view = views[pos];
+    await h.viewAdd(view);
+    await wait();
+    await h.viewRemove(view);
+  }
+  function wait(t) {
+    return new Promise((r) => setTimeout(r, t || rt()));
+  }
+  function rt() {
+    return Math.random() * 1000 + 100;
+  }
+  function isCanceled() {
+    return (
+      (performance.now() - start >= opt.duration) ||
+      curProject !== mx.settings.project
+    );
+  }
 }

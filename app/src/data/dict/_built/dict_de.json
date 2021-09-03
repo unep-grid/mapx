@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Whatever option is selected, the minimum and maximum value are always included in the first and last intervals",
-    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die Obergrenze. Unabhängig von der ausgewählten Option sind der minimale und der maximale Wert immer im ersten und letzten Intervall enthalten "
+    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
+    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die obere Grenze. Letzte Grenze ist das Maximum aus Statistiken oder in Regeln definiert, je nach gewählter Option"
   },
   {
     "id": "schema_style_reverse_order",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "de": "Wert "
+  },
+  {
+    "id": "schema_style_exclude_min_max",
+    "en": "Ignore min/max statistics for the lower / upper bounds",
+    "de": "Ignoriere Min/Max-Statistiken für die unteren/oberen Grenzen"
+  },
+  {
+    "id": "schema_style_exclude_min_max_desc",
+    "en": "Ignore min / max from source statistics for absolute lower / upper bounds. Those values will be taken from the rules set.",
+    "de": "Ignorieren Sie min / max aus den Quellstatistiken für absolute untere / obere Grenzen. Diese Werte werden aus dem Regelsatz übernommen."
   },
   {
     "id": "self",

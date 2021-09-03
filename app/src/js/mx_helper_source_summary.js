@@ -1,5 +1,17 @@
 import {miniCacheSet, miniCacheGet, miniCacheRemove} from './minicache';
 
+const def = {
+  idView: null,
+  idSource: null,
+  idAttr: null,
+  useCache: true,
+  binsMethod: 'jenks',
+  binsNumber: 5,
+  stats: ['base', 'attributes', 'temporal', 'spatial'],
+  timestamp: null,
+  nullValue : null
+};
+
 /**
  * Get source summary of a view source
  * @param {Object} view View to get source summary
@@ -61,16 +73,6 @@ export async function getViewSourceSummary(view, opt) {
   return out;
 }
 
-const def = {
-  idView: null,
-  idSource: null,
-  idAttr: null,
-  useCache: true,
-  binsMethod: 'jenks',
-  binsNumber: 5,
-  stats: ['base', 'attributes', 'temporal', 'spatial'],
-  timestamp: null
-};
 
 /**
  * Get vector source summary
@@ -101,19 +103,20 @@ export async function getSourceVtSummary(opt) {
   /*
    * Fetch summary or use cache
    */
-  const useCache = mx.settings.cacheIgnore === false && opt.useCache === true;
+  opt.useCache = mx.settings.cacheIgnore === false && opt.useCache === true;
   const urlSourceSummary = h.getApiUrl('getSourceSummary');
   const query = h.objToParams(opt);
   const url = `${urlSourceSummary}?${query}`;
   let summary;
 
-  if (useCache) {
+
+  if (opt.useCache) {
     summary = await miniCacheGet(url);
     if (summary) {
       origin = 'cache';
     }
   }
-  
+
   if (!summary) {
     origin = 'fetch';
     const resp = await fetch(url);
