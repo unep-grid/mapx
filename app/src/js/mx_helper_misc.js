@@ -10,19 +10,21 @@ import {IconFlash} from './icon_flash';
  */
 export function path(obj, path, def) {
   const h = mx.helpers;
-  const hasDefault = !!def;
-  let i, iL;
+  const isDefaultMissing = typeof def === 'undefined';
+  const isPathString = h.isString(path);
+  const isPathArray = h.isArrayOfString(path);
 
-  if (!hasDefault) {
+  if (isDefaultMissing) {
     def = null;
   }
-  if (!h.isString(path) && !h.isArrayOfString(path)) {
+
+  if (!isPathString && !isPathArray) {
     return out(def);
   }
-  if (h.isString(path)) {
+  if (isPathString) {
     path = path.split('.');
   }
-  for (i = 0, iL = path.length; i < iL; i++) {
+  for (let i = 0, iL = path.length; i < iL; i++) {
     if (!obj || !h.isObject(obj)) {
       return out(def);
     }
@@ -36,10 +38,14 @@ export function path(obj, path, def) {
   return out(obj);
 
   function out(obj) {
-    if (hasDefault) {
-      if (!obj || obj.constructor !== def.constructor) {
-        obj = def.constructor(obj);
-      }
+    if (
+      !isDefaultMissing &&
+      obj !== null &&
+      def !== null &&
+      typeof obj !== 'undefined' &&
+      obj.constructor !== def.constructor
+    ) {
+      obj = def.constructor(obj);
     }
     return obj;
   }
@@ -799,7 +805,6 @@ export function getXML(o) {
   });
 }
 
-
 /**
  * Create random asci strint of given length
  * @param {integer} length of the string
@@ -1244,20 +1249,21 @@ export function scrollFromTo(opt) {
   }
 
   return new Promise((resolve) => {
-    
     /*
-    * Cancel previous timeout
-    */ 
+     * Cancel previous timeout
+     */
+
     clearTimeout(scrollToBreaks.idTimeout);
 
     if (stop && stop()) {
       return resolve(true);
     }
-    
+
     /*
-    * Cancel previous frame request
-    */ 
-    h.cancelFrame(scrollToBreaks.idFrame)
+     * Cancel previous frame request
+     */
+
+    h.cancelFrame(scrollToBreaks.idFrame);
 
     scrollToBreaks.idTimeout = setTimeout(() => {
       if (axis === 'y') {
@@ -1268,7 +1274,7 @@ export function scrollFromTo(opt) {
       }
       if (!diff || diff === 0) {
         resolve(true);
-      } else if (opt.jump === true || Math.abs(diff) > bodyDim * 11) {
+      } else if (opt.jump === true || Math.abs(diff) > bodyDim * 11) {
         // instant scroll
         if (axis === 'y') {
           opt.el.scrollTop = opt.to;
@@ -1284,7 +1290,6 @@ export function scrollFromTo(opt) {
         scrollToBreaks.idFrame = h.onNextFrame(step);
 
         function step(timestamp) {
-          
           if (!start) {
             start = timestamp;
           }
