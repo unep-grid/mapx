@@ -1,5 +1,9 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.6' target='_blank'>1.9.6</a>
+  - SDK: 
+    - Fixed an issue when multiple instances were launched on the same page
+    - Added an example with 3 instances on the same page
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.5' target='_blank'>1.9.5</a>
   - APP
     - Accent: new firefox/chrome introduced accent-color: added to thèmes options + modified style sheet. This brings a more custom look to radio/checkbox input. 
