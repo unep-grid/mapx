@@ -30,9 +30,14 @@ class FrameWorker extends Events {
     super();
     const fw = this;
     fw.opt = Object.assign({}, settingsWorker, opt);
+    if(!opt.sdkToken){
+     console.warn('Missing sdkToken');
+     return;
+    }
     if (!fw.isNested()) {
       return;
     }
+    fw.handleMessageManager = fw.handleMessageManager.bind(fw);
     fw.init();
   }
 
@@ -43,6 +48,8 @@ class FrameWorker extends Events {
   init() {
     const fw = this;
     fw._emitter = 'worker';
+    fw._sdkToken = fw.opt.sdkToken;
+
     if (fw._init) {
       fw.postMessage({
         level: 'warning',
@@ -54,10 +61,9 @@ class FrameWorker extends Events {
     fw.initListener();
 
     fw.opt.resolvers._bind(fw);
-
     fw.postState({
       state: 'ready',
-      version : fw.version
+      version: fw.version
     });
 
     fw.postMessage({
@@ -106,6 +112,8 @@ class FrameWorker extends Events {
    * @private
    */
   _post(data) {
+    const fw = this;
+    data.sdkToken = fw._sdkToken;
     window.parent.postMessage(stringify(data), '*');
   }
 
@@ -133,15 +141,14 @@ class FrameWorker extends Events {
    */
   initListener() {
     const fw = this;
-    fw._msg_handler = fw.handleMessageManager.bind(fw);
-    window.addEventListener('message', fw._msg_handler, false);
+    window.addEventListener('message', fw.handleMessageManager, false);
   }
   /**
    * Remove message listener
    */
   removeListener() {
     const fw = this;
-    window.removeEventListener('message', fw._msg_handler);
+    window.removeEventListener('message', fw.handleMessageManager);
     if (fw._eventsStore) {
       fw._eventStore.destroy();
     }

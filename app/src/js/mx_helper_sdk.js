@@ -1,7 +1,9 @@
+import {getQueryParameter} from './mx_helper_url.js';
 import {Worker} from './sdk/src/index.js';
 import {MapxResolversApp, MapxResolversStatic} from './sdk/src/mapx_resolvers';
 
 window.addEventListener('load', () => {
+  
   mx.events.once({
     type: ['mapx_ready'],
     idGroup: 'sdk_binding',
@@ -16,9 +18,12 @@ window.addEventListener('load', () => {
           helpers: mx.helpers
         });
       }
+      const sdkToken = getQueryParameter('sdkToken')[0];
+
       window.mxsdkworker = new Worker({
         resolvers: resolvers,
-        eventStore: mx.events
+        eventStore: mx.events,
+        sdkToken: sdkToken
       });
     }
   });

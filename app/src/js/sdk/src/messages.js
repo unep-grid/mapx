@@ -1,14 +1,35 @@
 import {Translator} from './translate.js';
 const t = new Translator();
 
-class MessageFrameCom {
+class MessageBase {
+  constructor() {
+    Object.assign(this, {
+      // idPair worker <-> manager 
+      idPair: null,
+      // type is always replaced...
+      type: 'base'
+    });
+  }
+}
+
+class MessageFrameCom extends MessageBase {
   constructor(opt) {
+    super();
     Object.assign(
       this,
-      {level: 'log', text: '', key: '', emitter: null, vars: {}, lang: 'en'},
-      opt
+      {
+        level: 'log',
+        text: '',
+        key: '',
+        emitter: null,
+        vars: {},
+        lang: 'en'
+      },
+      opt,
+      {
+        type: 'message'
+      }
     );
-    this.type = 'message';
     if (this.key) {
       this.text = t.get(this.key, this.vars, this.lang);
     }
@@ -16,36 +37,82 @@ class MessageFrameCom {
   }
 }
 
-class StateFrameCom {
+class StateFrameCom extends MessageBase {
   constructor(opt) {
-    Object.assign(this, {state: null}, opt);
-    this.type = 'state';
+    super();
+    Object.assign(
+      this,
+      {
+        state: null
+      },
+      opt,
+      {
+        type: 'state'
+      }
+    );
     return this;
   }
 }
 
-class EventFrameCom {
+class EventFrameCom extends MessageBase {
   constructor(opt) {
-    Object.assign(this, {value: null}, opt);
-    this.type = 'event';
+    super();
+    Object.assign(
+      this,
+      {
+        value: null
+      },
+      opt,
+      {
+        type: 'event'
+      }
+    );
     return this;
   }
 }
 
-class ResponseFrameCom {
+class ResponseFrameCom extends MessageBase {
   constructor(opt) {
-    Object.assign(this, {idRequest: null, value: [], success: true}, opt);
-    this.type = 'response';
+    super();
+    Object.assign(
+      this,
+      {
+        idRequest: null,
+        value: [],
+        success: true
+      },
+      opt,
+      {
+        type: 'response'
+      }
+    );
     return this;
   }
 }
 
-class RequestFrameCom {
+class RequestFrameCom extends MessageBase {
   constructor(opt) {
-    Object.assign(this, {idRequest: null, idResolver: null, value: null}, opt);
-    this.type = 'request';
+    super();
+    Object.assign(
+      this,
+      {
+        idRequest: null,
+        idResolver: null,
+        value: null
+      },
+      opt,
+      {
+        type: 'request'
+      }
+    );
     return this;
   }
 }
 
-export {MessageFrameCom, ResponseFrameCom, StateFrameCom, RequestFrameCom, EventFrameCom};
+export {
+  MessageFrameCom,
+  ResponseFrameCom,
+  StateFrameCom,
+  RequestFrameCom,
+  EventFrameCom
+};

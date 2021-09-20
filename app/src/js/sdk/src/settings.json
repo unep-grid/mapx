@@ -19,7 +19,8 @@
     "lat": null,
     "lng": null,
     "zoom": null,
-    "language": null
+    "language": null,
+    "sdkToken": null
   },
   "container": "body",
   "style": {

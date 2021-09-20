@@ -1,0 +1,41 @@
+.mapx {
+  position: relative;
+  height: 250px;
+  border: 5px dashed pink;
+}
+
+.mapx .info {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 0.5em;
+  background-color: #eee;
+  border: 1px solid #ccc;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(192, 192, 192, 0.8);
+}
+
+.mapx.loaded .overlay {
+  display: none;
+}
+
+.overlay span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  font-size: xx-large;
+  opacity: 0.5;
+}
+
+.overlay span.enabled {
+  opacity: 1;
+}

@@ -8,6 +8,7 @@ import {version} from '../package.json';
  * Class to create a manager to build an iframe and post message to a worker inside
  * @extends Events
  */
+
 class FrameManager extends Events {
   /**
    * Create a manager
@@ -35,9 +36,11 @@ class FrameManager extends Events {
    * @param {Object} opt.style Style css object
    * @param {Element} opt.container Element that will hold the worker iframe
    */
+
   constructor(opt) {
     super();
     const fm = this;
+    fm._handleMessageWorker = fm._handleMessageWorker.bind(fm);
     fm._init(opt);
   }
 
@@ -45,6 +48,7 @@ class FrameManager extends Events {
    * Init manager
    * @private
    */
+
   _init(opt) {
     const fm = this;
 
@@ -55,6 +59,7 @@ class FrameManager extends Events {
       });
       return;
     }
+
     if (fm._init_done) {
       fm._message({
         level: 'warning',
@@ -64,10 +69,13 @@ class FrameManager extends Events {
     }
 
     fm.opt = Object.assign({}, settings, opt);
+
     if (typeof fm.opt.url === 'object') {
       fm.opt.url = Object.assign({}, settings.url, fm.opt.url);
     }
 
+    fm._sdkToken = Math.random().toString(32);
+    
     fm._emitter = 'manager';
     fm._url = null;
     fm._req = [];
@@ -76,6 +84,7 @@ class FrameManager extends Events {
     fm._build();
     fm.setUrl();
     fm.setParams();
+    fm.setParam('sdkToken',fm._sdkToken);
     fm.render();
     fm._initListener();
     fm._init_done = true;
@@ -88,6 +97,7 @@ class FrameManager extends Events {
   /**
    * Destroy manager
    */
+
   destroy() {
     const fm = this;
     const destroyWorker = new RequestFrameCom({
@@ -104,6 +114,7 @@ class FrameManager extends Events {
    * Build iframe and set its properties
    * @private
    */
+
   _build() {
     const fm = this;
     if (fm._init_done) {
@@ -122,6 +133,7 @@ class FrameManager extends Events {
   /**
    * Get bounding client rect of the iframe
    */
+
   get rect() {
     const fm = this;
     return fm._iframe.getBoundingClientRect();
@@ -129,7 +141,8 @@ class FrameManager extends Events {
   /**
    * Set iframe width
    * @param {number|string} w Width in px
-   */ set width(w) {
+   */
+  set width(w) {
     const fm = this;
     w = isFinite(w) ? w + 'px' : w || fm.rect.width + 'px';
     fm._iframe.style.width = w;
@@ -141,7 +154,8 @@ class FrameManager extends Events {
   /**
    * Set iframe height
    * @param {number|string} h height in px
-   */ set height(h) {
+   */
+  set height(h) {
     const fm = this;
     h = isFinite(h) ? h + 'px' : h || fm.rect.height + 'px';
     fm._iframe.style.height = h;
@@ -154,6 +168,7 @@ class FrameManager extends Events {
    * Set url
    * @param {String|Url|Object} Url to use when rendering
    */
+
   setUrl(url) {
     const fm = this;
     url = url ? url : fm.opt.url;
@@ -169,6 +184,7 @@ class FrameManager extends Events {
    * get url
    * @return url object
    */
+
   get url() {
     const fm = this;
     return fm._url;
@@ -176,6 +192,7 @@ class FrameManager extends Events {
   /**
    * Get version
    */
+
   get version() {
     return version;
   }
@@ -183,21 +200,26 @@ class FrameManager extends Events {
    * Set message languages
    * @param {String} Two letter string language. e.g. 'en', 'fr'
    */
+
   setLang(lang) {
     this.opt.lang = lang;
   }
+  
   /**
    * Render the iframe : set the selected url
    * @private
-   */ render() {
+   */
+  render() {
     const fm = this;
     fm._iframe.src = fm._url;
   }
+
   /**
    * Set url search params using an object
    * @param {Object} Object representing the worker url search params, as key value pair. ex. {views:["MX-T7PXA-39GK2-QIH5T","MX-0ISDC-GCFBK-VZ0F9"]}
    * @private
-   */ setParams(params) {
+   */
+  setParams(params) {
     const fm = this;
     if (params) {
       Object.assign(fm.opt.params, params);
@@ -206,25 +228,30 @@ class FrameManager extends Events {
       fm.setParam(i, fm.opt.params[i]);
     }
   }
+  
   /**
    * Set single url param by key value
    * @param {String} key Key of the param
    * @param {Any} value to set
    * @private
-   */ setParam(key, value) {
+   */
+  setParam(key, value) {
     const fm = this;
     if (key && value) {
       fm.url.searchParams.set(key, value);
     }
   }
+
   /**
    * Post data to the worker
    * @param {Object} request
    * @private
-   */ _post(request) {
+   */
+  _post(request) {
     const fm = this;
     fm._iframe.contentWindow.postMessage(stringify(request), '*');
   }
+
   /**
    * Fire event of type 'message'
    * @param {Object} opt Options
@@ -234,37 +261,46 @@ class FrameManager extends Events {
     opt.lang = this.opt.lang || 'en';
     this.fire('message', new MessageFrameCom(opt));
   }
+
   /**
    * Init message listener
    * @private
-   */ _initListener() {
+   */
+  _initListener() {
     const fm = this;
     if (fm._msg_handler) {
       return;
     }
-    fm._msg_handler = fm._handleMessageWorker.bind(fm);
-    window.addEventListener('message', fm._msg_handler);
+    window.addEventListener('message', fm._handleMessageWorker);
   }
+
   /**
    * Remove message listener
    * @private
    */
   _removeListener() {
     const fm = this;
-    window.removeEventListener('message', fm._msg_handler);
+    window.removeEventListener('message', fm._handleMessageWorker);
   }
+
   /**
    * Handle worker message, trigger callbacks
    * @param {MessageFrameCom} worker message
    * @private
    */
+
   _handleMessageWorker(msg) {
     const fm = this;
     try {
       const message = Object.assign({}, parse(msg.data));
+
+      if(message.sdkToken !== fm._sdkToken){
+        return;
+      }
       /**
        * Handle event
-       */ if (message.type === 'event') {
+       */
+      if (message.type === 'event') {
         const type = message.value.type;
         const data = message.value.data;
         if (type) {
@@ -281,13 +317,15 @@ class FrameManager extends Events {
       }
       /**
        * Redirect message to manager
-       */ if (message.type === 'message') {
+       */
+      if (message.type === 'message') {
         Object.assign(message, {emitter: 'worker'});
         return fm._message(message);
       }
       /**
        * Remove request from pool
-       */ if (message.type === 'response' && isFinite(message.idRequest)) {
+       */
+      if (message.type === 'response' && isFinite(message.idRequest)) {
         const req = fm._getAndRemoveRequestById(message.idRequest);
         if (message.success) {
           req.onResponse(message.value);
@@ -295,7 +333,8 @@ class FrameManager extends Events {
       }
       /**
        * Handle state
-       */ if (message.type === 'state') {
+       */
+      if (message.type === 'state') {
         fm.fire(message.state);
         if (message.version !== fm.version) {
           fm._message({
@@ -333,6 +372,7 @@ class FrameManager extends Events {
    * Enable or disable verbose mode
    * @param {Boolean} Enable verbose mode
    */
+
   setVerbose(enable) {
     const fm = this;
     const ignore =
@@ -357,6 +397,7 @@ class FrameManager extends Events {
    * @param {String} data Optional data to send to the resolver
    * @return {Promise} Promise that resolve to the resolver result
    */
+
   ask(idResolver, data) {
     const fm = this;
     const nR = fm._req.length;
@@ -369,7 +410,8 @@ class FrameManager extends Events {
       });
       /**
        * Reject if to many request
-       */ if (nR > mR) {
+       */
+      if (nR > mR) {
         fm._message({
           level: 'warning',
           key: 'warn_to_much_request',
@@ -397,7 +439,8 @@ class FrameManager extends Events {
    * Retrieve request by id and remove it
    * @param {Number} id Id of the request
    * @return {RequestFrameCom}
-   */ _getAndRemoveRequestById(id) {
+   */
+  _getAndRemoveRequestById(id) {
     const fm = this;
     let n = fm._req.length;
     while (n) {

@@ -52,10 +52,9 @@ class Events {
    */
   off(type, cb) {
     var cbs = this._on_cb;
-    var ncb = cbs.length ;
+    var ncb = cbs.length;
     while (ncb--) {
       var c = cbs[ncb];
-      console.log(c.type,type);
       if (c.type === type && c.cb === cb) {
         cbs.splice(ncb, 1);
       }
