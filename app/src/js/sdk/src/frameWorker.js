@@ -30,11 +30,11 @@ class FrameWorker extends Events {
     super();
     const fw = this;
     fw.opt = Object.assign({}, settingsWorker, opt);
-    if(!opt.sdkToken){
-     console.warn('Missing sdkToken');
-     return;
-    }
     if (!fw.isNested()) {
+      return;
+    }
+    if (!opt.sdkToken) {
+      console.warn('Missing sdkToken');
       return;
     }
     fw.handleMessageManager = fw.handleMessageManager.bind(fw);
