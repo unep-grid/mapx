@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "zh": "关键字列表"
+    "en": "Keywords",
+    "zh": "关键词"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "zh": "描述数据的用户定义关键字列表。必须至少定义一个关键字。"
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "zh": "关键字"
+    "en": "Keyword",
+    "zh": "关键词"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "zh": "地理M49关键字列表"
+    "en": "Geographic keywords",
+    "zh": "地理关键词"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "zh": "对于空间搜索，MapX可以根据其几何形状，范围和/或属性确定多个空间特征之间的关系。在某些情况下，最好将地理关键字与来源相关联，以改善文本搜索过程中的相关性。 M49关键字允许您执行此操作。至少需要一个关键字。 "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "zh": "描述数据空间范围的地理关键字列表。这些关键词来自联合国秘书处统计司编写的“统计使用的标准国家或地区代码（M49），1999（修订版4）”。至少需要一个关键字。"
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "zh": "从标准化的 GEMET 概念中搜索和选择关键字。例如，输入“环境”、“采矿”或“碳储量”"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "zh": "描述数据的 GEMET 关键字列表。 GEMET（通用多语言环境词库）是由欧洲环境署开发和出版的多语言文献词库。 GEMET 关键字是可选的。"
   },
   {
     "id": "textual_title",

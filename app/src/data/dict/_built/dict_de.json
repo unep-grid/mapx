@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "de": "Schlüsselwortliste "
+    "en": "Keywords",
+    "de": "Schlüsselwörter"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "de": "Liste der benutzerdefinierten Schlüsselwörter, die die Daten beschreiben. Mindestens ein Schlüsselwort muss definiert werden."
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "de": "Schlüsselwörter "
+    "en": "Keyword",
+    "de": "Stichwort"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "de": "Geografische M49-Schlüsselwortliste"
+    "en": "Geographic keywords",
+    "de": "Geografische Schlüsselwörter"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "de": "Für die räumliche Suche kann MapX die Beziehung zwischen mehreren räumlichen Merkmalen basierend auf ihrer Geometrie, Ausdehnung und / oder Attributen bestimmen. In einigen Fällen ist es vorzuziehen, der Quelle ein geografisches Schlüsselwort zuzuordnen, um die Relevanz bei der Textsuche zu verbessern. Mit den M49-Schlüsselwörtern können Sie dies tun. Es ist mindestens ein Schlüsselwort erforderlich. "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "de": "Liste geografischer Schlüsselwörter, die die räumliche Ausdehnung der Daten beschreiben. Diese Schlüsselwörter stammen aus den \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\", die von der Statistikabteilung des Sekretariats der Vereinten Nationen erstellt wurden. Mindestens ein Schlüsselwort ist erforderlich."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "de": "Suchen und wählen Sie Schlüsselwörter aus standardisierten GEMET-Konzepten. Geben Sie beispielsweise \"Umwelt\", \"Bergbau\" oder \"Kohlenstoffbestand\" ein"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "de": "Liste der GEMET-Schlüsselwörter, die die Daten beschreiben. GEMET (General Multilingual Environmental Thesaurus) ist ein mehrsprachiger Dokumentarthesaurus, der von der Europäischen Umweltagentur entwickelt und veröffentlicht wurde. GEMET-Schlüsselwörter sind optional."
   },
   {
     "id": "textual_title",

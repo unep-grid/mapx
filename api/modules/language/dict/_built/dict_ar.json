@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "ar": "قائمة الكلمات الرئيسية "
+    "en": "Keywords",
+    "ar": "الكلمات الدالة"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "ar": "قائمة الكلمات الأساسية المعرفة من قبل المستخدم التي تصف البيانات. يجب تحديد كلمة رئيسية واحدة على الأقل."
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "ar": "الكلمات الدالة "
+    "en": "Keyword",
+    "ar": "الكلمة الرئيسية"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "ar": "قائمة الكلمات الرئيسية الجغرافية M49"
+    "en": "Geographic keywords",
+    "ar": "الكلمات الرئيسية الجغرافية"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "ar": "للبحث المكاني ، يمكن لـ MapX تحديد العلاقة بين السمات المكانية المتعددة ، بناءً على هندستها ومدىها و / أو سماتها. في بعض الحالات ، يُفضل ربط كلمة رئيسية جغرافية بالمصدر لتحسين الصلة أثناء البحث عن النص. تتيح لك الكلمات الرئيسية M49 القيام بذلك. مطلوب كلمة رئيسية واحدة على الأقل. "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "ar": "قائمة الكلمات الرئيسية الجغرافية التي تصف المدى المكاني للبيانات. تأتي هذه الكلمات الرئيسية من \"الرموز الموحدة للبلد أو المنطقة للاستخدام الإحصائي (M49) ، 1999 (التنقيح 4)\" التي أعدتها الشعبة الإحصائية في الأمانة العامة للأمم المتحدة. مطلوب كلمة رئيسية واحدة على الأقل."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "ar": "ابحث عن الكلمات الرئيسية وحددها من مفاهيم GEMET الموحدة. على سبيل المثال ، اكتب \"البيئة\" أو \"التعدين\" أو \"مخزون الكربون\""
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "ar": "قائمة كلمات GEMET التي تصف البيانات. GEMET (GEneral Multilingual Environmental Thesaurus) هو قاموس وثائقي متعدد اللغات تم تطويره ونشره من قبل وكالة البيئة الأوروبية. الكلمات الرئيسية GEMET اختيارية."
   },
   {
     "id": "textual_title",

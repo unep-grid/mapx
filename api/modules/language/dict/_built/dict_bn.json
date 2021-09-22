@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "bn": "কীওয়ার্ড তালিকা "
+    "en": "Keywords",
+    "bn": "কীওয়ার্ড"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "bn": "ডেটা বর্ণনাকারী ব্যবহারকারী-সংজ্ঞায়িত কীওয়ার্ডের তালিকা। কমপক্ষে একটি কীওয়ার্ড সংজ্ঞায়িত করা আবশ্যক।"
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "bn": "কীওয়ার্ডস "
+    "en": "Keyword",
+    "bn": "কীওয়ার্ড"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "bn": "ভৌগলিক এম 49 কীওয়ার্ডের তালিকা"
+    "en": "Geographic keywords",
+    "bn": "ভৌগলিক কীওয়ার্ড"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "bn": "স্থানিক অনুসন্ধানের জন্য, ম্যাপএক্স তাদের জ্যামিতি, ব্যাপ্তি এবং / বা বৈশিষ্ট্যের উপর ভিত্তি করে একাধিক স্থানিক বৈশিষ্ট্যগুলির মধ্যে সম্পর্ক নির্ধারণ করতে পারে। কিছু ক্ষেত্রে, পাঠ্য অনুসন্ধানের সময় প্রাসঙ্গিকতা উন্নত করার জন্য, উত্সের সাথে কোনও ভৌগলিক কীওয়ার্ড সংযুক্ত করা ভাল। এম 49 কীওয়ার্ডগুলি আপনাকে এটি করার অনুমতি দেয়। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন। "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "bn": "ভৌগলিক কীওয়ার্ডের তালিকা যা ডেটার স্থানিক ব্যাপ্তি বর্ণনা করে। জাতিসংঘ সচিবালয়ের পরিসংখ্যান বিভাগ কর্তৃক প্রস্তুতকৃত \"স্ট্যান্ডার্ড কান্ট্রি বা এরিয়া কোডস ফর স্ট্যাটিস্টিকস ইউজ (এম 49), 1999 (রিভিশন 4)\" থেকে এই কীওয়ার্ডগুলি এসেছে। কমপক্ষে একটি কীওয়ার্ড প্রয়োজন।"
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "bn": "মানকযুক্ত গেমেট ধারণা থেকে কীওয়ার্ডগুলি অনুসন্ধান করুন এবং নির্বাচন করুন। উদাহরণস্বরূপ, 'পরিবেশ', 'খনন' বা 'কার্বন স্টক' টাইপ করুন"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "bn": "ডেটা বর্ণনাকারী GEMET কীওয়ার্ডের তালিকা। GEMET (GEneral Multilingual Environmental Thesaurus) হল ইউরোপিয়ান এনভায়রনমেন্ট এজেন্সি দ্বারা বিকশিত এবং প্রকাশিত একটি বহুভাষিক তথ্যচিত্র থিসরাস। GEMET কীওয়ার্ড optionচ্ছিক।"
   },
   {
     "id": "textual_title",

@@ -79,6 +79,7 @@ mxSchemaSourceMeta <- function(
             properties = list(
               keys = list(
                 title = t("textual_keywords_title"),
+                description = t("textual_keywords_desc"),
                 type = "array",
                 uniqueItems = TRUE,
                 minItems =  1,

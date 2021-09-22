@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "ru": "Список ключевых слов "
+    "en": "Keywords",
+    "ru": "Ключевые слова"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "ru": "Список определенных пользователем ключевых слов, описывающих данные. Должно быть определено хотя бы одно ключевое слово."
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "ru": "Ключевые слова "
+    "en": "Keyword",
+    "ru": "Ключевое слово"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "ru": "Список ключевых слов Geographic M49"
+    "en": "Geographic keywords",
+    "ru": "Географические ключевые слова"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "ru": "Для пространственного поиска MapX может определять взаимосвязь между несколькими пространственными объектами на основе их геометрии, экстента и / или атрибутов. В некоторых случаях предпочтительнее связать географическое ключевое слово с источником, чтобы повысить релевантность во время текстового поиска. Ключевые слова M49 позволяют вам это делать. Требуется хотя бы одно ключевое слово. "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "ru": "Список географических ключевых слов, описывающих пространственный экстент данных. Эти ключевые слова взяты из «Стандартных кодов стран или регионов для использования в статистике (M49), 1999 (редакция 4)», подготовленных Статистическим отделом Секретариата Организации Объединенных Наций. Требуется хотя бы одно ключевое слово."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "ru": "Найдите и выберите ключевые слова из стандартных концепций GEMET. Например, введите \"окружающая среда\", \"добыча полезных ископаемых\" или \"запас углерода\"."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "ru": "Список ключевых слов GEMET, описывающих данные. GEMET (Общий многоязычный экологический тезаурус) - это многоязычный документальный тезаурус, разработанный и опубликованный Европейским агентством по окружающей среде. Ключевые слова GEMET необязательны."
   },
   {
     "id": "textual_title",

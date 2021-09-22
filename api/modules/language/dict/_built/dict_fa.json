@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "fa": "لست کلید واژه ها"
-  },
-  {
-    "id": "textual_keyword_title",
     "en": "Keywords",
     "fa": "کلید واژه ها"
   },
   {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "fa": "لیست کلمات کلیدی تعریف شده توسط کاربر که داده ها را توصیف می کند. حداقل یک کلمه کلیدی باید تعریف شود."
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keyword",
+    "fa": "کلمه کلیدی"
+  },
+  {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "fa": "لیست کلمات کلیدی M49 جغرافیایی"
+    "en": "Geographic keywords",
+    "fa": "کلمات کلیدی جغرافیایی"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "fa": "برای جستجوی فضایی ، MapX می تواند رابطه بین چندین ویژگی فضایی را براساس هندسه ، میزان و / یا ویژگی های آنها تعیین کند. در برخی موارد ، بهتر است که یک کلمه کلیدی جغرافیایی را با منبع مرتبط کنید ، تا ارتباط را در هنگام جستجوی متن بهبود بخشد. کلمات کلیدی M49 این امکان را به شما می دهد. حداقل یک کلمه کلیدی لازم است. "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "fa": "فهرست کلمات کلیدی جغرافیایی که گستره فضایی داده ها را توصیف می کند. این کلمات کلیدی از \"استاندارد کشورها یا کدهای منطقه ای برای استفاده از آمار (M49) ، 1999 (ویرایش 4)\" تهیه شده توسط بخش آمار دبیرخانه سازمان ملل متحد آمده است. حداقل یک کلمه کلیدی مورد نیاز است."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "fa": "کلمات کلیدی را از مفاهیم استاندارد GEMET جستجو و انتخاب کنید. به عنوان مثال ، نوع \"محیط\" ، \"استخراج\" یا \"ذخیره کربن\""
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "fa": "لیست کلمات کلیدی GEMET که داده ها را توصیف می کند. GEMET (GEneral Multilingual Environmental Thesaurus) یک اصطلاحنامه مستند چند زبانه است که توسط آژانس محیط زیست اروپا توسعه و منتشر شده است. کلمات کلیدی GEMET اختیاری هستند."
   },
   {
     "id": "textual_title",

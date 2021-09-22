@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "ps": "د کلیمو لیست "
+    "en": "Keywords",
+    "ps": "کلیدونه"
+  },
+  {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "ps": "د کارونکي لخوا ټاکل شوي کلیمو لیست چې ډاټا تشریح کوي. لږترلږه یو کلیمه باید تعریف شي."
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keywords",
-    "ps": "کلیدي ټکي "
+    "en": "Keyword",
+    "ps": "کلیدي"
   },
   {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "ps": "د جغرافیه M49 کلیدي لیست"
+    "en": "Geographic keywords",
+    "ps": "جغرافیوي کلیدي کلمې"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "ps": "د ځایي لټون لپاره ، میپ ایکس کولی شي د ډیری جغرافیوي ب featuresو تر مینځ اړیکې وټاکي ، د دوی د جیومیٹری ، اندازې ، او / یا صفاتو پراساس. په ځینو مواردو کې ، غوره ده چې د سرچینې سره د جغرافیې کلیدي اړیکه ونیسئ ، ترڅو د متن لټونونو پرمهال مطابقت ښه کړئ. د M49 کلیدي ټکي تاسو ته اجازه درکوي. لږترلږه یوه کلیدي ټکي اړین دي. "
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "ps": "د جغرافیوي کلیمو لیست چې د معلوماتو ځایی حد بیانوي. دا کلیدي کلمې د \"احصایوي کارونې لپاره معیاري هیواد یا ساحې کوډونه (M49) ، 1999 (بیاکتنه 4)\" څخه راځي چې د ملګرو ملتونو سکریټریټ احصایوي څانګې لخوا چمتو شوي. لږترلږه یو کلیدي کلمې ته اړتیا ده."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "ps": "د معیاري GEMET مفاهیمو څخه کلیدي لټون وکړئ او غوره کړئ. د مثال په توګه ، 'چاپیریال' ، 'کان کیندنې' یا 'کاربن سټاک' ټایپ کړئ."
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "ps": "د GEMET کلیمو لیست چې ډاټا تشریح کوي. GEMET (د جینرل څو ژبني چاپیریال تساورس) یو څو ژبنی مستند کیسه ده چې د اروپا چاپیریال ادارې لخوا رامینځته او خپره شوې. د GEMET کلیدي کلمې اختیاري دي."
   },
   {
     "id": "textual_title",

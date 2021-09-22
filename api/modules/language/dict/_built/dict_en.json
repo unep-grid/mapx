@@ -4373,19 +4373,23 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list"
-  },
-  {
-    "id": "textual_keyword_title",
     "en": "Keywords"
   },
   {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined."
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keyword"
+  },
+  {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list"
+    "en": "Geographic keywords"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required."
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -4393,7 +4397,7 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional."
   },
   {
     "id": "textual_title",

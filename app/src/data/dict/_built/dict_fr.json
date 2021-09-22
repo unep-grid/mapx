@@ -5466,23 +5466,28 @@
   },
   {
     "id": "textual_keywords_title",
-    "en": "Keywords list",
-    "fr": "Liste de mots clés"
-  },
-  {
-    "id": "textual_keyword_title",
     "en": "Keywords",
     "fr": "Mots clés"
   },
   {
+    "id": "textual_keywords_desc",
+    "en": "List of user-defined keywords describing the data. At least one keyword must be defined.",
+    "fr": "Liste de mots-clés définis par l'utilisateur décrivant la donnée. Au moins un mot-clé est requis."
+  },
+  {
+    "id": "textual_keyword_title",
+    "en": "Keyword",
+    "fr": "Mot clé"
+  },
+  {
     "id": "textual_keywords_m49_title",
-    "en": "Geographic M49 Keywords list",
-    "fr": "Liste de mots clés géographiques M49"
+    "en": "Geographic keywords",
+    "fr": "Mots clés géographiques"
   },
   {
     "id": "textual_keywords_m49_desc",
-    "en": "For spatial searching, MapX can determine the relationship between multiple spatial features, based on their geometry, extent, and / or attributes. In some cases, it is preferable to associate a geographic keyword with the source, to improve the relevance during text searches. The M49 keywords allow you to do this. At least one keyword is required.",
-    "fr": "Pour une recherche spatiale, MapX peut déterminer la relation entre plusieurs entités spatiales, en fonction de leur géométrie, de leur étendue et / ou de leurs attributs. Dans certains cas, il est préférable d'associer un mot-clé géographique à la source, pour améliorer la pertinence lors des recherches textuelles. Les mots-clés M49 vous permettent de faire cela. Au moins un mot clé est requis."
+    "en": "List of geographic keywords describing the spatial extent of the data. These keywords come from the \"Standard Country or Area Codes for Statistics Use (M49), 1999 (Revision 4)\" prepared by the Statistics Division of the United Nations Secretariat. At least one keyword is required.",
+    "fr": "Liste de mots-clés géographiques décrivant l'étendue spatiale des données. Ces mots-clés proviennent des \"Codes Standard des Pays et des Zones à Usage Statistique (M49), 1999 (Révision 4)\" préparés par la Division de statistique du Secrétariat des Nations Unies. Au moins un mot-clé est requis."
   },
   {
     "id": "textual_keywords_gemet_title",
@@ -5491,8 +5496,8 @@
   },
   {
     "id": "textual_keywords_gemet_desc",
-    "en": "Search and select keywords from standardized GEMET concepts. For example, type 'environment', 'mining' or 'carbon stock'",
-    "fr": "Recherchez et sélectionnez des mots-clés parmi les concepts GEMET standardisés. Par example, tapez 'environment', 'industrie minière' ou 'stock de carbone'"
+    "en": "List of GEMET keywords describing the data. GEMET (GEneral Multilingual Environmental Thesaurus) is a multilingual documentary thesaurus developed and published by the European Environment Agency. GEMET keywords are optional.",
+    "fr": "Liste de mots-clés GEMET décrivant la donnée. GEMET (GEneral Multilingual Environmental Thesaurus) est un thésaurus documentaire multilingue développé et publié par l'Agence européenne pour l'environnement. Les mots-clés GEMET sont optionnels."
   },
   {
     "id": "textual_title",
