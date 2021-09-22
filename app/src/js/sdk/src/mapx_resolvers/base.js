@@ -81,16 +81,17 @@ class ResolversBase {
    * Promisify mapbox method
    * @param {String} type of event to listen to resolve the promise
    * @param {Function} cb Function to wrap
-   * @return {EventData}
+   * @param {Object} opt Object, e.g. for references
+   * @return {Promise<Object>} opt object
    * @ignore
    */
-  _map_resolve_when(type, cb) {
+  _map_resolve_when(type, cb, opt) {
     const rslv = this;
     const map = rslv._h.getMap();
     return new Promise((resolve) => {
       map.stop();
-      map.once(type, (data) => {
-        resolve(data);
+      map.once(type, () => {
+        resolve(opt);
       });
       cb();
     });

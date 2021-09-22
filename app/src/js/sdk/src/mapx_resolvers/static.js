@@ -704,28 +704,28 @@ class MapxResolversStatic extends ResolversBase {
    * Map flyTo position with flying animation
    * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#flyto
    * @example mapx.ask('map_fly_to',{center:[46,23], zoom:5});
-   * @return {Boolean} Move ended
+   * @return {Promise<Object>} When moveend, the options
    */
   map_fly_to(opt) {
     const rslv = this;
     const map = rslv._h.getMap();
     return rslv._map_resolve_when('moveend', () => {
       map.flyTo(opt);
-    });
+    },opt);
   }
 
   /**
    * Map jumpTo position, without animation
    * @param {Object} opt Options see https://docs.mapbox.com/mapbox-gl-js/api/map/#map#jumpto
    * @example mapx.ask('set_map_jump_to',{lat:46,lng:23, zoom:5});
-   * @return {Boolean} Move ended
+   * @return {Promise<Object>} When moveend, the options
    */
   map_jump_to(opt) {
     const rslv = this;
     const map = rslv._h.getMap();
     return rslv._map_resolve_when('moveend', () => {
       map.jumpTo(opt);
-    });
+    },opt);
   }
 
   /**
