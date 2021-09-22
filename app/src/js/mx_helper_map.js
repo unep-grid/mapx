@@ -4157,7 +4157,6 @@ export async function viewLayersAddVt(o) {
   /**
    * Parse custom style
    */
-
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
@@ -4361,12 +4360,12 @@ export async function viewLayersAddVt(o) {
       /**
        * From = if numeric + first = min, else value
        */
-
       const fromValue = isNumeric
         ? isFirst
           ? rulesValues.min
           : rule.value
         : rule.value;
+
       /**
        * To = if numeric + last : max, else next value or null
        */
@@ -4374,22 +4373,22 @@ export async function viewLayersAddVt(o) {
       const toValue = isNumeric ? (isLast ? rulesValues.max : nextVal) : null;
 
       /**
-       * Case where use nulls === min or max;
+       * First or last rule : skip when missing value === min or max;
        */
-      const skip =
+      const skipFirstLast =
         isNumeric &&
         (isFirst || isLast) &&
         useStyleNull &&
         (ruleNulls.value === rulesValues.min ||
           ruleNulls.value === rulesValues.max);
 
-      if (skip) {
+      if (skipFirstLast) {
         rule.skip = true;
         return;
       }
 
       /**
-       *  Symboles and pattern check
+       *  Symbols and pattern check
        */
       const hasSprite = rule.sprite && rule.sprite !== 'none';
       const hasSymbol = hasSprite && geomType === 'point';
@@ -4408,6 +4407,27 @@ export async function viewLayersAddVt(o) {
          * String and boolean
          */
         filter.push(['==', attr, fromValue]);
+      }
+
+      /**
+       * Always exclude missing value
+       * -> Should match rule nulls handler bellow, look next 'useStyleNull'
+       */
+      if (useStyleNull) {
+        const value = ruleNulls.value;
+        if (isNumeric) {
+          if (value) {
+            filter.push(['!=', attr, value * 1]);
+          } else {
+            filter.push(['!=', attr, '']);
+          }
+        } else {
+          if (value || value === false) {
+            filter.push(['!=', attr, value]);
+          } else {
+            filter.push(['!=', attr, '']);
+          }
+        }
       }
 
       rule.filter = filter;
@@ -6003,14 +6023,14 @@ export async function chaosTest(opt) {
     await h.viewRemove(view);
   }
   function wait(t) {
-    return new Promise((r) => setTimeout(r, t || rt()));
+    return new Promise((r) => setTimeout(r, t || rt()));
   }
   function rt() {
     return Math.random() * 1000 + 100;
   }
   function isCanceled() {
     return (
-      (performance.now() - start >= opt.duration) ||
+      performance.now() - start >= opt.duration ||
       curProject !== mx.settings.project
     );
   }
