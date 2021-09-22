@@ -609,8 +609,8 @@ MapX resolvers available in static and app
     * [.view_geojson_delete(opt)](#MapxResolversStatic+view_geojson_delete) ⇒ <code>Boolean</code>
     * [.set_features_click_sdk_only(opt)](#MapxResolversStatic+set_features_click_sdk_only) ⇒ <code>Array</code>
     * [.get_features_click_handlers()](#MapxResolversStatic+get_features_click_handlers) ⇒ <code>Array</code>
-    * [.map_fly_to(opt)](#MapxResolversStatic+map_fly_to) ⇒ <code>Boolean</code>
-    * [.map_jump_to(opt)](#MapxResolversStatic+map_jump_to) ⇒ <code>Boolean</code>
+    * [.map_fly_to(opt)](#MapxResolversStatic+map_fly_to) ⇒ <code>Promise.&lt;Object&gt;</code>
+    * [.map_jump_to(opt)](#MapxResolversStatic+map_jump_to) ⇒ <code>Promise.&lt;Object&gt;</code>
     * [.map_get_zoom()](#MapxResolversStatic+map_get_zoom) ⇒ <code>Float</code>
     * [.map_get_center()](#MapxResolversStatic+map_get_center) ⇒ <code>Object</code>
     * [.map_get_bounds_array()](#MapxResolversStatic+map_get_bounds_array) ⇒ <code>Array</code>
@@ -1240,11 +1240,11 @@ Get map feature click handlers id
 **Returns**: <code>Array</code> - Enabled modes  
 <a name="MapxResolversStatic+map_fly_to"></a>
 
-#### mapxResolversStatic.map\_fly\_to(opt) ⇒ <code>Boolean</code>
+#### mapxResolversStatic.map\_fly\_to(opt) ⇒ <code>Promise.&lt;Object&gt;</code>
 Map flyTo position with flying animation
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - Move ended  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - When moveend, the options  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -1256,11 +1256,11 @@ mapx.ask('map_fly_to',{center:[46,23], zoom:5});
 ```
 <a name="MapxResolversStatic+map_jump_to"></a>
 
-#### mapxResolversStatic.map\_jump\_to(opt) ⇒ <code>Boolean</code>
+#### mapxResolversStatic.map\_jump\_to(opt) ⇒ <code>Promise.&lt;Object&gt;</code>
 Map jumpTo position, without animation
 
 **Kind**: instance method of [<code>MapxResolversStatic</code>](#MapxResolversStatic)  
-**Returns**: <code>Boolean</code> - Move ended  
+**Returns**: <code>Promise.&lt;Object&gt;</code> - When moveend, the options  
 
 | Param | Type | Description |
 | --- | --- | --- |

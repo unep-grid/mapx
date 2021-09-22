@@ -1,5 +1,10 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.11' target='_blank'>1.9.11</a>
+    - APP: 
+      - Metadata editor : update description text #714
+      - Draw tool: update wiki link #733
+    - SDK: issue with 'map_fly_to': result not parsable (circular ref). Now, the method returns its options when moveend event occurs
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.10' target='_blank'>1.9.10</a>
   - SDK: 
     - Fixed undefined 'rslv' #741
