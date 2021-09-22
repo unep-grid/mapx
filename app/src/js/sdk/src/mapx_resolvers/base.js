@@ -47,9 +47,9 @@ class ResolversBase {
    * @ignore
    */
   async _apply_filter_layer_select(type, method, opt) {
+    const rslv = this;
     type = type || 'searchBox'; // selectize;
     opt = Object.assign({}, {idView: null, value: null}, opt);
-    const rslv = this;
     const view = rslv._h.getView(opt.idView);
     await rslv._h.viewFilterToolsInit(view);
     const valid =
@@ -85,6 +85,7 @@ class ResolversBase {
    * @ignore
    */
   _map_resolve_when(type, cb) {
+    const rslv = this;
     const map = rslv._h.getMap();
     return new Promise((resolve) => {
       map.stop();
