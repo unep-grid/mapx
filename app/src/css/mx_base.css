@@ -771,6 +771,8 @@ details > summary {
   max-width: 100%;
   display: block;
   width: 100%;
+  min-width: 50px;
+  padding: 4px;
 }
 
 .mx .mx-diff-item {

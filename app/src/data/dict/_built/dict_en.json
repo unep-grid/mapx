@@ -1677,7 +1677,7 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value"
   },
   {
     "id": "schema_style_reverse_order",
@@ -1697,11 +1697,11 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values"
+    "en": "Do not display missing values on the map or in the legend"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style"
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend"
   },
   {
     "id": "btn_opt_meta",
@@ -2622,6 +2622,14 @@
   {
     "id": "schema_style_value",
     "en": "Value"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To"
   },
   {
     "id": "schema_style_exclude_min_max",

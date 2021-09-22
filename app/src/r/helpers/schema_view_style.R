@@ -56,28 +56,26 @@ mxSchemaViewStyle <- function(
   variableName <- .get(data,c("attribute","name"))
   variableNames <- .get(data,c("attribute","names"))
   layerName <- .get(data,c("source","layerInfo","name"))
+  srcSummary <- mxApiGetSourceSummary(
+    idSource = layerName,
+    idAttr = variableName
+  )
 
+  isContinuous <- identical(
+    'continuous',
+    .get(srcSummary,
+    c(
+      'attribute_stat',
+      'type'
+      )
+    )
+  )
 
-  #
-  # Get distinct values for drop down select
-  #
-  values <- mxDbGetQuery(sprintf(
-      "SELECT DISTINCT(\"%1$s\") 
-      FROM %2$s 
-      WHERE \"%1$s\" 
-      IS NOT NULL 
-      ORDER BY \"%1$s\" ASC 
-      LIMIT 10000"
-      , variableName
-      , layerName
-  ))[,variableName[[1]]]
-
-  #
-  # If this not numeric, add "all" keyword for global styling
-  #
-  isNumeric <- is.numeric(values)
-  if(!isNumeric){
-    values <- c("all",values)
+  if(isContinuous){
+    values <- NULL
+  }else{
+    table <- .get(srcSummary,c('attribute_stat','table'))
+    values <- c('all',sapply(table,`[[`,c('value')))
   }
 
   #
@@ -121,15 +119,37 @@ mxSchemaViewStyle <- function(
   }
 
   # value
-  if(isNumeric){
+  if(isContinuous){
+    min <- .get(srcSummary,
+      c(
+        'attribute_stat',
+        'min'
+      )
+    )
+    
+    max <- .get(srcSummary,
+      c(
+        'attribute_stat',
+        'max'
+      )
+    )
 
     value <- list(
       value = list(
-        title = tt("schema_style_value"),
+        title = tt("schema_style_value_from"),
         type = "number",
-        minLength = 0
-        )
+        minLength = 0,
+        minimum = min,
+        maximum =  max
+      ),
+      value_to = list(
+        title = tt("schema_style_value_to"),
+        type = "number_na",
+        default = NA,
+        minimum = min,
+        maximum =  max
       )
+    )
 
   }else{
     value <- list(
@@ -292,19 +312,20 @@ mxSchemaViewStyle <- function(
       )
     )
 
-  #
-  # Exclude min / max as absolute bounds
-  # ( retrieved from source stat )
-  excludeMinMax <- list(
-    excludeMinMax = list(
-      propertyOrder = 4,
-      title = tt("schema_style_exclude_min_max"),
-      description = tt("schema_style_exclude_min_max_desc"),
-      type = "boolean",
-      format ="checkbox",
-      default = FALSE
-      )
-    )
+  ##
+  # NOTE: remove items from dictionnary
+  ## Exclude min / max as absolute bounds
+  ## ( retrieved from source stat )
+  #excludeMinMax <- list(
+    #excludeMinMax = list(
+      #propertyOrder = 4,
+      #title = tt("schema_style_exclude_min_max"),
+      #description = tt("schema_style_exclude_min_max_desc"),
+      #type = "boolean",
+      #format ="checkbox",
+      #default = FALSE
+      #)
+    #)
 
 
   #
@@ -468,8 +489,8 @@ mxSchemaViewStyle <- function(
     nulls,
     rules,
     if(isPoint) zoomConfig,
-    if(isNumeric) includeUpperBoundInInterval,
-    if(isNumeric) excludeMinMax,
+    if(isContinuous) includeUpperBoundInInterval,
+    #if(isContinuous) excludeMinMax,
     reverseLayer,
     showSymbolLabel,
     hideNulls,

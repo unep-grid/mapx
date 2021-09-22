@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "ps": "که چک شوی وي ، وقفو کې به پورتنی حد شامل وي. وروستی حد د احصایو څخه اعظمي دی یا په مقرراتو کې تعریف شوی ، د غوره شوي انتخاب پورې اړه لري"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "ps": "له لاسه وتلو ارزښتونو څخه سترګې پټې کړئ "
+    "en": "Do not display missing values on the map or in the legend",
+    "ps": "په نقشه یا افسانه کې ورک شوي ارزښتونه مه ښکاره کوئ"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "ps": "که چک شوی وي ، نایل یا ورک شوي ارزښتونه به په سټایل کې له پامه غورځول شي "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ps": "که چک شوی وي ، د ورک شوي ارزښت سره ب featuresې - یا یو ارزښت چې ورته ورته تعریف شوی - به په نقشه یا لیجنډ کې په یوه پرت کې ونه ښودل شي"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "ps": "ارزښت"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ps": "له"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ps": "ته"
   },
   {
     "id": "schema_style_exclude_min_max",

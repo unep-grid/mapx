@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "bn": "যদি চেক করা হয়, অন্তরগুলি উপরের আবদ্ধ অন্তর্ভুক্ত করবে। শেষ সীমা পরিসংখ্যান থেকে সর্বাধিক বা নিয়মে সংজ্ঞায়িত, নির্বাচিত বিকল্পের উপর নির্ভর করে"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "bn": "অনুপস্থিত মানগুলি উপেক্ষা করুন "
+    "en": "Do not display missing values on the map or in the legend",
+    "bn": "মানচিত্রে বা কিংবদন্তীতে অনুপস্থিত মান প্রদর্শন করবেন না"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "bn": "যদি চেক করা থাকে তবে শৈলীতে নাল বা অনুপস্থিত মানগুলি উপেক্ষা করা হবে "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "bn": "যদি চেক করা হয়, একটি অনুপস্থিত মান সহ বৈশিষ্ট্যগুলি - বা এর মতো সংজ্ঞায়িত মান - মানচিত্রে বা কিংবদন্তীতে একটি স্তরে প্রদর্শিত হবে না"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "bn": "মান "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "bn": "থেকে"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "bn": "প্রতি"
   },
   {
     "id": "schema_style_exclude_min_max",

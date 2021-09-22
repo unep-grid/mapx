@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die obere Grenze. Letzte Grenze ist das Maximum aus Statistiken oder in Regeln definiert, je nach gewählter Option"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die Obergrenze. Wenn es nicht definiert ist, ist die letzte Grenze der Maximalwert"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "de": "Fehlende Werte ignorieren "
+    "en": "Do not display missing values on the map or in the legend",
+    "de": "Fehlende Werte nicht auf der Karte oder in der Legende anzeigen"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "de": "Wenn diese Option aktiviert ist, werden null oder fehlende Werte im Stil ignoriert "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "de": "Wenn diese Option aktiviert ist, werden Features mit einem fehlenden Wert – oder einem als solchen definierten Wert – nicht in einem Layer auf der Karte oder in der Legende angezeigt"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "de": "Wert "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "de": "Von"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "de": "Zu"
   },
   {
     "id": "schema_style_exclude_min_max",

@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "zh": "如果选中，间隔将包括上限。最后一个界限是统计数据或规则中定义的最大值，具体取决于选择的选项"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "zh": "忽略缺失值"
+    "en": "Do not display missing values on the map or in the legend",
+    "zh": "不在地图或图例中显示缺失值"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "zh": "如果勾选，将忽略样式中的空值或缺失值"
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "zh": "如果选中，具有缺失值（或定义为此类值的值）的要素将不会显示在地图上的图层或图例中"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "zh": "值"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "zh": "从"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "zh": "到"
   },
   {
     "id": "schema_style_exclude_min_max",

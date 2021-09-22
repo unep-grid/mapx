@@ -53,7 +53,8 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
           const style = editor.parent.getValue();
           const idView = path(schema, 'options.idView');
           const lang = mx.settings.language;
-          const nullValue = style.hideNulls ? null : style?.nulls[0]?.value;
+          //const nullValue = style.hideNulls ? null : style?.nulls[0]?.value;
+          const nullValue = style?.nulls[0]?.value || null;
           
           vtStyleBuilder({
             idView: idView,
@@ -67,6 +68,9 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
                   value: modeNumeric ? r.from : r.value,
                   color: r.color
                 };
+                if(modeNumeric){
+                 newRule.value_to = r.to
+                }
 
                 /**
                  * Preserve label by merge

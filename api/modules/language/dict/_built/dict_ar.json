@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "ar": "إذا تم تحديده ، فستشمل الفواصل الزمنية الحد الأعلى. الحد الأخير هو الحد الأقصى من الإحصائيات أو المحدد في القواعد ، اعتمادًا على الخيار المختار"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "ar": "تجاهل القيم المفقودة "
+    "en": "Do not display missing values on the map or in the legend",
+    "ar": "لا تعرض القيم المفقودة على الخريطة أو في وسيلة الإيضاح"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "ar": "إذا تم تحديده ، فسيتم تجاهل القيم الخالية أو المفقودة في النمط "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ar": "إذا تم تحديده ، فلن يتم عرض المعالم ذات القيمة المفقودة - أو القيمة المحددة على هذا النحو - في طبقة على الخريطة أو في وسيلة الإيضاح"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "ar": "قيمة "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ar": "من عند"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ar": "إلى"
   },
   {
     "id": "schema_style_exclude_min_max",

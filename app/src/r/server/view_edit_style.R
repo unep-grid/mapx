@@ -115,7 +115,9 @@ observeEvent(input$styleEdit_values,{
   if(isEditable){
 
     time <- Sys.time()
-
+    #
+    # WARNING R jsonlite convert NULL to {}... why ?
+    #
     view <- .set(view, c("data", "style", "custom"), .get(style,c("custom")))
     view <- .set(view, c("data", "style", "rules"), .get(style,c("rules")))
     view <- .set(view, c("data", "style", "zoomConfig"), .get(style,c("zoomConfig")))

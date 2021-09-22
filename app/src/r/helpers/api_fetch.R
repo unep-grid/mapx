@@ -127,5 +127,19 @@ mxApiGetViews <-  function(
   return(res$views)
 }
 
+mxApiGetSourceSummary <-  function(
+  idView = NULL,
+  idSource = NULL,
+  idAttr = NULL
+  ){
+  route <- .get(config,c('api','routes','getSourceSummary'))
+  res <- mxApiFetch(route,list(
+      idSource = idSource,
+      idView = idView,
+      idAttr = idAttr
+  )
+  )
+  return(res)
+}
 
 

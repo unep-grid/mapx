@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "fa": "در صورت بررسی ، فواصل شامل محدوده بالا می شود. آخرین محدوده حداکثر از آمار یا بسته به گزینه انتخاب شده در قوانین تعریف شده است"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "fa": "در صورت بررسی ، فواصل شامل محدوده بالایی می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "fa": "مقادیر از دست رفته را نادیده بگیرید "
+    "en": "Do not display missing values on the map or in the legend",
+    "fa": "مقادیر گم شده را روی نقشه یا در افسانه نمایش ندهید"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "fa": "اگر علامت زده شود ، مقادیر پوچ یا از دست رفته در سبک نادیده گرفته می شوند "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "fa": "اگر علامت زده شود ، ویژگی های با مقدار مفقود - یا مقداری که به این صورت تعریف شده است - در یک لایه روی نقشه یا در افسانه نمایش داده نمی شود"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "fa": "قیمت"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "fa": "از جانب"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "fa": "به"
   },
   {
     "id": "schema_style_exclude_min_max",

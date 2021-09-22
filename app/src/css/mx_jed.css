@@ -8,6 +8,15 @@
   margin-left: 1px;
   border-left: 1px solid red !important;
 }
+.jed-container .form-group {
+  position: relative;
+}
+
+.jed-container .help-block.errormsg {
+  position: absolute;
+  margin: 2px;
+  width: 800px;
+}
 
 .jed-container .table > tbody > tr > td,
 .jed-container .table > tbody > tr > th,
@@ -81,8 +90,6 @@
   box-shadow: var(--mx_ui_box_shadow);
 }
 
-
-
 /**
 * Pickr modifier
 */
@@ -105,7 +112,3 @@
 .jed-container .color-picker > .color-picker-content {
   height: 22px;
 }
-
-
-
-

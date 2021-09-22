@@ -4105,7 +4105,7 @@ export async function viewLayersAddVt(o) {
   const zConfig = p(style, 'zoomConfig', {});
   const showSymbolLabel = p(style, 'showSymbolLabel', false);
   const includeUpper = p(style, 'includeUpperBoundInInterval', false);
-  const excludeMinMax = p(style, 'excludeMinMax', false);
+  //const excludeMinMax = p(style, 'excludeMinMax', false);
   const hideNulls = p(style, 'hideNulls', false);
   const ruleNulls = hideNulls ? null : p(style, 'nulls', [])[0];
   const geomType = p(viewData, 'geometry.type', 'point');
@@ -4190,20 +4190,13 @@ export async function viewLayersAddVt(o) {
   }
 
   /**
-   * Handle option 'excludeMinMax' : set min/max values based on rules OR stats
+   * Set default numeric min / max
    */
   const rulesValues = {};
 
   if (isNumeric) {
-    const values = rules.map((r) => r.value);
-    const minRules = Math.min(...values);
-    const maxRules = Math.max(...values);
-    rulesValues.min = excludeMinMax
-      ? minRules
-      : p(sourceSummary, 'attribute_stat.min', minRules);
-    rulesValues.max = excludeMinMax
-      ? maxRules
-      : p(sourceSummary, 'attribute_stat.max', maxRules);
+    rulesValues.min = p(sourceSummary, 'attribute_stat.min', -Infinity);
+    rulesValues.max = p(sourceSummary, 'attribute_stat.max', Infinity);
   }
 
   for (const rule of rules) {
@@ -4353,41 +4346,12 @@ export async function viewLayersAddVt(o) {
       const nextRule = rules[i + 1];
 
       /**
-       * If no next value use max or null (non numeric)
+       * If no value_to, use next value, or use max, or null (non numeric)
        */
-
-      const nextVal = p(nextRule, 'value', rulesValues.max);
-
-      /**
-       * From = if numeric + first = min, else value
-       */
-      const fromValue = isNumeric
-        ? isFirst
-          ? rulesValues.min
-          : rule.value
-        : rule.value;
-
-      /**
-       * To = if numeric + last : max, else next value or null
-       */
-
-      const toValue = isNumeric ? (isLast ? rulesValues.max : nextVal) : null;
-
-      /**
-       * First or last rule : skip when missing value === min or max;
-       */
-      const skipFirstLast =
-        isNumeric &&
-        (isFirst || isLast) &&
-        useStyleNull &&
-        (ruleNulls.value === rulesValues.min ||
-          ruleNulls.value === rulesValues.max);
-
-      if (skipFirstLast) {
-        rule.skip = true;
-        return;
-      }
-
+      rule.value_to = p(rule,'value_to',p(nextRule, 'value', rulesValues.max));
+      const fromValue = rule.value;
+      const toValue = isNumeric ? rule.value_to : null;
+      
       /**
        *  Symbols and pattern check
        */
@@ -4484,6 +4448,9 @@ export async function viewLayersAddVt(o) {
 
         layers.push(layerSprite);
       }
+      
+
+
     });
   }
 

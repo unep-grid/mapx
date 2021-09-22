@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "fr": "Si coché, les intervalles incluront la limite supérieure. La dernière borne est le max des statistiques ou défini dans les règles, selon l'option choisie"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "fr": "Si coché, les intervalles incluront la limite supérieure. Si elle n'est pas définie, la dernière borne sera la valeur maximale"
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "fr": "Ignorer les valeurs manquantes"
+    "en": "Do not display missing values on the map or in the legend",
+    "fr": "Ne pas afficher les valeurs manquantes sur la carte ou dans la légende"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "fr": "Si coché, les valeurs manquantes ou nulles ne seront pas utilisées dans le style"
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "fr": "Si coché, les entités avec une valeur manquante – ou une valeur définie comme telle – ne seront pas affichées dans une couche sur la carte ou dans la légende"
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "fr": "Valeur"
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "fr": "De"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "fr": "A"
   },
   {
     "id": "schema_style_exclude_min_max",

@@ -31,7 +31,7 @@ export function path(obj, path, def) {
     obj = obj[path[i]];
   }
 
-  if (typeof obj === 'undefined' || obj === null) {
+  if (h.isEmpty(obj)) {
     return out(def);
   }
 

@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper bound. Last bound is the max from statistics or defined in rules, depending of the option chosen",
-    "ru": "Если этот флажок установлен, интервалы будут включать верхнюю границу. Последняя граница - это максимум из статистики или определенный в правилах, в зависимости от выбранной опции."
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
+    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением."
   },
   {
     "id": "schema_style_reverse_order",
@@ -2121,13 +2121,13 @@
   },
   {
     "id": "schema_style_hide_nulls",
-    "en": "Ignore missing values",
-    "ru": "Игнорировать отсутствующие значения "
+    "en": "Do not display missing values on the map or in the legend",
+    "ru": "Не отображать отсутствующие значения на карте или в легенде"
   },
   {
     "id": "schema_style_hide_nulls_desc",
-    "en": "If checked, null or missing values will be ignored in the style",
-    "ru": "Если этот флажок установлен, нулевые или отсутствующие значения будут игнорироваться в стиле. "
+    "en": "If checked, features with a missing value – or a value defined as such – will not be displayed in a layer on the map or in the legend",
+    "ru": "Если этот флажок установлен, объекты с отсутствующим значением или значением, определенным как таковое, не будут отображаться в слое на карте или в легенде."
   },
   {
     "id": "btn_opt_meta",
@@ -3278,6 +3278,16 @@
     "id": "schema_style_value",
     "en": "Value",
     "ru": "Ценить "
+  },
+  {
+    "id": "schema_style_value_from",
+    "en": "From",
+    "ru": "Из"
+  },
+  {
+    "id": "schema_style_value_to",
+    "en": "To",
+    "ru": "К"
   },
   {
     "id": "schema_style_exclude_min_max",

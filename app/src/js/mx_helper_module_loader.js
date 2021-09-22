@@ -243,6 +243,7 @@ function loadJsonEditor() {
 
     return Promise.all([
       import('../css/mx_jed.css'),
+      import('./mx_extend_jed_number_na.js'),
       import('./mx_extend_jed_position.js'),
       import('./mx_extend_jed_array_confirm_delete'),
       import('./mx_extend_jed_ace.js'),
