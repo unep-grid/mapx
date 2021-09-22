@@ -1,5 +1,10 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.12' target='_blank'>1.9.12</a>
+    - SDK:
+      - Fixed a backward compatibility issue : if the sdkToken is not set when starting the manager, the more recent worker did not start. Now, a warning is shown, but the worker starts.
+    - APP
+      - (Preliminary version) Numeric style have now a lower and upper bound for each rule, with a fallback to the previous system if the upper bound is not set.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.11' target='_blank'>1.9.11</a>
     - APP: 
       - Metadata editor : update description text #714
