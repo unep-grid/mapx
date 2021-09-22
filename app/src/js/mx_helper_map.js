@@ -980,7 +980,8 @@ export async function initMapx(o) {
    */
   mx.draw = new MapxDraw({
     map: o.map,
-    panel_tools: mx.panel_tools
+    panel_tools: mx.panel_tools,
+    url_help: mx.settings.links.repositoryWikiDrawTool
   });
   mx.draw.on('enable', () => {
     mx.helpers.setClickHandler({

@@ -12,15 +12,14 @@ import {EventSimple} from '../listener_store/index.js';
 import './style.less';
 
 const def = {
-  url_help:
-    'https://github.com/unep-grid/map-x-mgl/wiki/Draw-:-how-to-create-a-new-vector-layer-from-scratch-in-MapX'
+  url_help: null
 };
 
 class MapxDraw extends EventSimple {
   constructor(opt) {
     super();
     const md = this;
-    md.opt = Object.assign({}, opt, def);
+    md.opt = Object.assign({}, def, opt);
     md._map = md.opt.map;
     md._panel_tools = md.opt.panel_tools;
     md.init();
