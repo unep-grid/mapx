@@ -1,5 +1,10 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.10' target='_blank'>1.9.10</a>
+  - SDK: 
+    - Fixed undefined 'rslv' #741
+  - APP
+    - Style manager : Fixed duplicated style if 'missing value' value was also included within rules bounds, partial #629;
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.6' target='_blank'>1.9.6</a>
   - SDK: 
     - Fixed an issue when multiple instances were launched on the same page
