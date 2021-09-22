@@ -4602,22 +4602,22 @@
   {
     "id": "validate_meta_keyword",
     "en": "Keywords",
-    "fr": "Mot-clefs"
+    "fr": "Mot-clés"
   },
   {
     "id": "validate_meta_keyword_m49",
     "en": "Geographic M49 Keywords list",
-    "fr": "Liste de mots clés géographiques M49"
+    "fr": "Liste de mots-clés géographiques M49"
   },
   {
     "id": "validate_meta_no_keyword",
     "en": "Missing keywords",
-    "fr": "Mots clefs manquants"
+    "fr": "Mots-clés manquants"
   },
   {
     "id": "validate_meta_invalid_keyword",
     "en": "Invalid keywords",
-    "fr": "Mots clefs invalides"
+    "fr": "Mots-clés invalides"
   },
   {
     "id": "validate_meta_contact",
@@ -5457,17 +5457,17 @@
   {
     "id": "textual_keyword_desc",
     "en": "Keywords (or tags) help users discover your dataset. Please include terms that would be used by technical and non-technical users.",
-    "fr": "Mots clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique."
+    "fr": "Mots-clés (ou tags) permettant aux utilisateurs de découvrir la donnée. Ajoutez des termes utilisés par des personnes ayant un profil technique ou non technique."
   },
   {
     "id": "textual_keyword_item_title",
-    "en": "Keyword",
-    "fr": "Mot clé"
+    "en": "Keywords",
+    "fr": "Mots-clés"
   },
   {
     "id": "textual_keywords_title",
     "en": "Keywords",
-    "fr": "Mots clés"
+    "fr": "Mots-clés"
   },
   {
     "id": "textual_keywords_desc",
@@ -5476,13 +5476,13 @@
   },
   {
     "id": "textual_keyword_title",
-    "en": "Keyword",
-    "fr": "Mot clé"
+    "en": "Keywords",
+    "fr": "Mots-clés"
   },
   {
     "id": "textual_keywords_m49_title",
     "en": "Geographic keywords",
-    "fr": "Mots clés géographiques"
+    "fr": "Mots-clés géographiques"
   },
   {
     "id": "textual_keywords_m49_desc",
@@ -5492,7 +5492,7 @@
   {
     "id": "textual_keywords_gemet_title",
     "en": "GEMET keywords",
-    "fr": "Mots clefs GEMET"
+    "fr": "Mots-clés GEMET"
   },
   {
     "id": "textual_keywords_gemet_desc",
@@ -5607,17 +5607,17 @@
   {
     "id": "meta_source_keywords",
     "en": "Keywords",
-    "fr": "Mots clefs"
+    "fr": "Mots-clés"
   },
   {
     "id": "meta_source_keywords_gemet",
     "en": "GEMET keywords",
-    "fr": "Mots clefs GEMET"
+    "fr": "Mots-clés GEMET"
   },
   {
     "id": "meta_source_keywords_m49",
     "en": "Geographic Keywords",
-    "fr": "Mots clés géographiques"
+    "fr": "Mots-clés géographiques"
   },
   {
     "id": "meta_source_languages",
