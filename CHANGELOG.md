@@ -1,5 +1,8 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.13' target='_blank'>1.9.13</a>
+    - APP:
+      - Various fixes and improvement for new style upper/lower bounds selection
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.12' target='_blank'>1.9.12</a>
     - SDK:
       - Fixed a backward compatibility issue : if the sdkToken is not set when starting the manager, the more recent worker did not start. Now, a warning is shown, but the worker starts.
