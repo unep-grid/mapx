@@ -87,11 +87,11 @@ classes AS (
   -- remove max bin class, add min as first 'from' class, unnest
   SELECT
   unnest(
-    array_remove(
-      array_prepend(amin.min, b.bins),
-      abinmax.max
+    array_prepend(
+      amin.min,
+      array_remove(b.bins, abinmax.max)
     )
-  ) AS "from" ,
+  ) AS "from",
   -- remove max bin class, add real max class as last 'to' class, unnest
   unnest(
     array_append(
@@ -113,7 +113,7 @@ freqtable AS (
   ("to" - "from") AS diff,
   (
     SELECT COUNT(*)
-    FROM "{{idSource}}" a
+    FROM attr_no_null a
     WHERE
     CASE
       WHEN b.from = b.to
