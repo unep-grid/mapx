@@ -2155,7 +2155,7 @@ export function makeSimpleLayer(o) {
         'icon-allow-overlap': true,
         'icon-ignore-placement': false,
         'icon-optional': true,
-        'text-field': opt.showSymbolLabel ? opt.label || '' : '',
+        'text-field': opt.showSymbolLabel ? opt.label + '' || '' : '',
         'text-variable-anchor': opt.showSymbolLabel
           ? ['bottom-left', 'bottom-right', 'top-right', 'top-left']
           : [],
@@ -2187,9 +2187,7 @@ export function makeSimpleLayer(o) {
     polygon: {
       type: 'fill',
       paint: {
-        //'fill-opacity': opt.opacity,
         'fill-color': colA,
-        //'fill-outline-color': mx.theme.get('mx_ui_text').color
         'fill-outline-color': colB
       }
     },
@@ -4105,9 +4103,8 @@ export async function viewLayersAddVt(o) {
   const zConfig = p(style, 'zoomConfig', {});
   const showSymbolLabel = p(style, 'showSymbolLabel', false);
   const includeUpper = p(style, 'includeUpperBoundInInterval', false);
-  //const excludeMinMax = p(style, 'excludeMinMax', false);
   const hideNulls = p(style, 'hideNulls', false);
-  const ruleNulls = hideNulls ? null : p(style, 'nulls', [])[0];
+  const ruleNulls = p(style, 'nulls', [])[0] || {};
   const geomType = p(viewData, 'geometry.type', 'point');
   const source = p(viewData, 'source', {});
   const idSourceLayer = p(source, 'layerInfo.name');
@@ -4123,8 +4120,8 @@ export async function viewLayersAddVt(o) {
   /**
    * Init null value
    */
-  let nullValue = 'null';
-  if (ruleNulls) {
+  let nullValue = '';
+  if (ruleNulls.value) {
     nullValue = ruleNulls.value;
   }
 
@@ -4140,8 +4137,10 @@ export async function viewLayersAddVt(o) {
   const statType = h.path(sourceSummary, 'attribute_stat.type', 'categorical');
   const isNumeric = statType === 'continuous';
   const rules = h.clone(p(style, 'rules', []));
+  const nRules = rules.length;
   const layers = [];
   const styleCustom = JSON.parse(p(style, 'custom.json'));
+  const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
    * Set zoom default
@@ -4156,36 +4155,23 @@ export async function viewLayersAddVt(o) {
   const zoomConfig = Object.assign(zDef, zConfig);
 
   /**
-   * Parse custom style
-   */
-  const sepLayer = p(mx, 'settings.separators.sublayer');
-
-  /**
    * Clean rules
    */
-  let nRules = rules.length;
-  while (nRules-- > 0) {
-    const rule = rules[nRules];
-    const valid = h.isObject(rule) && rule.value !== undefined;
-    if (!valid) {
-      rules.splice(nRules, 1);
-    }
+  if (isNumeric && nullValue !== '' && isFinite(nullValue)) {
+    // NOTE: ''*1 -> 0...
+    nullValue = nullValue * 1;
   }
 
-  if (ruleNulls) {
-    /**
-     * Remove rules that share the same value as null rule
-     */
-    let nR = rules.length;
-    const nullIsNumeric = h.isNumeric(nullValue);
-    if (isNumeric && nullIsNumeric) {
-      nullValue *= 1;
-    }
-    while (nR--) {
-      const dup = rules[nR].value === nullValue;
-      if (dup) {
-        rules.splice(nR, 1);
-      }
+  let rInc = nRules;
+  while (rInc-- > 0) {
+    const rule = rules[rInc];
+    const valid =
+      h.isObject(rule) &&
+      rule.value !== undefined &&
+      rule.value != nullValue &&
+      !h.isEmpty(rule.value);
+    if (!valid) {
+      rules.splice(rInc, 1);
     }
   }
 
@@ -4209,16 +4195,18 @@ export async function viewLayersAddVt(o) {
    */
   const ruleAll = rules.find((r) => r.value === 'all');
   const hasRuleAll = !!ruleAll;
-  const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
+  //const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
+  const hasStyleRules = nRules > 0 // && rules[0].value !== undefined;
 
   /**
    * Set style type
    */
-  const useStyleNull = !!ruleNulls;
+  const useStyleNull = !hideNulls;
   const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
   const useStyleDefault = !useStyleCustom && (!hasStyleRules && !useStyleNull);
   const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
   const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
+
 
   if (
     !useStyleCustom &&
@@ -4227,7 +4215,6 @@ export async function viewLayersAddVt(o) {
     !useStyleFull &&
     !useStyleNull
   ) {
-    console.warn('viewLayersAddVt: invalid settings', o);
     return;
   }
 
@@ -4344,14 +4331,14 @@ export async function viewLayersAddVt(o) {
       const isFirst = i === 0;
 
       const nextRule = rules[i + 1];
-
       /**
        * If no value_to, use next value, or use max, or null (non numeric)
        */
-      rule.value_to = p(rule,'value_to',p(nextRule, 'value', rulesValues.max));
+      const nextValue = p(nextRule, 'value', rulesValues.max);
+      rule.value_to = p(rule, 'value_to', nextValue);
+      
       const fromValue = rule.value;
       const toValue = isNumeric ? rule.value_to : null;
-      
       /**
        *  Symbols and pattern check
        */
@@ -4378,20 +4365,17 @@ export async function viewLayersAddVt(o) {
        * Always exclude missing value
        * -> Should match rule nulls handler bellow, look next 'useStyleNull'
        */
-      if (useStyleNull) {
-        const value = ruleNulls.value;
-        if (isNumeric) {
-          if (value) {
-            filter.push(['!=', attr, value * 1]);
-          } else {
-            filter.push(['!=', attr, '']);
-          }
+      if (isNumeric) {
+        if (h.isEmpty(nullValue)) {
+          filter.push(['!=', attr, '']);
         } else {
-          if (value || value === false) {
-            filter.push(['!=', attr, value]);
-          } else {
-            filter.push(['!=', attr, '']);
-          }
+          filter.push(['!=', attr, nullValue * 1]);
+        }
+      } else {
+        if (nullValue || nullValue === false) {
+          filter.push(['!=', attr, nullValue]);
+        } else {
+          filter.push(['!=', attr, '']);
         }
       }
 
@@ -4448,9 +4432,6 @@ export async function viewLayersAddVt(o) {
 
         layers.push(layerSprite);
       }
-      
-
-
     });
   }
 
@@ -4463,18 +4444,16 @@ export async function viewLayersAddVt(o) {
    * Handle layer for null values
    */
   if (useStyleNull) {
-    const value = ruleNulls.value;
     const filter = ['all'];
-
     if (isNumeric) {
-      if (value) {
-        filter.push(['==', attr, value * 1]);
-      } else {
+      if (h.isEmpty(nullValue)) {
         filter.push(['==', attr, '']);
+      } else {
+        filter.push(['==', attr, nullValue * 1]);
       }
     } else {
-      if (value || value === false) {
-        filter.push(['==', attr, value]);
+      if (nullValue || nullValue === false) {
+        filter.push(['==', attr, nullValue]);
       } else {
         filter.push(['==', attr, '']);
       }
@@ -4507,7 +4486,7 @@ export async function viewLayersAddVt(o) {
      * - Set sprite path
      */
     const rulesLegend = h.clone(rules);
-    if (ruleNulls) {
+    if (useStyleNull) {
       rulesLegend.push(ruleNulls);
     }
 

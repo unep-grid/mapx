@@ -138,16 +138,18 @@ mxSchemaViewStyle <- function(
       value = list(
         title = tt("schema_style_value_from"),
         type = "number",
-        minLength = 0,
-        minimum = min,
-        maximum =  max
+        minLength = 0
+        # Uncomment to show error message if out of range
+        # minimum = min,
+        # maximum =  max
       ),
       value_to = list(
         title = tt("schema_style_value_to"),
         type = "number_na",
-        default = NA,
-        minimum = min,
-        maximum =  max
+        default = NA
+        # Uncomment to show error message if out of range
+        # minimum = min,
+        # maximum =  max
       )
     )
 
