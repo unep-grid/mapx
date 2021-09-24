@@ -4167,12 +4167,28 @@ export async function viewLayersAddVt(o) {
   let rInc = nRules;
   while (rInc-- > 0) {
     const rule = rules[rInc];
-    const valid =
-      h.isObject(rule) &&
-      rule.value !== undefined &&
-      rule.value !== nullValue &&
-      !h.isEmpty(rule.value);
-    if (!valid) {
+
+    /**
+     * Check if it's a valid rule : it should be an object with
+     * at least a non-empty rule.value
+     */
+    let isValid = h.isObject(rule) && !h.isEmpty(rule.value);
+
+    /**
+     * In all case, a rule with a value equal to null value
+     * should not be valid
+     */
+    isValid = isValid && rule.value !== nullValue;
+
+    /**
+     * If it's numeric and include upper bound is requested,
+     * check that the value for missing value is not equal to
+     * upper bound
+     */
+    if (isValid && isNumeric && includeUpper) {
+      isValid = isValid && rule.value_to !== nullValue;
+    }
+    if (!isValid) {
       rules.splice(rInc, 1);
     }
   }
