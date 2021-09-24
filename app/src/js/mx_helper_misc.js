@@ -1,6 +1,37 @@
 import {IconFlash} from './icon_flash';
 
 /**
+ * Create new object with defaults
+ * NOTE: assign + handles "empty" values for each types ('',{},[],null,undefined, ...)
+ * @param {Object} def Defaults value
+ * @param {Object} src Source entries
+ * @return {Object} Filled new object
+ */
+export function fill(def, src) {
+  const h = mx.helpers;
+  const out = {};
+
+  /**
+   * Transfer missing default from src
+   */
+  for (const k in src) {
+    const notDef = h.isEmpty(def[k]);
+    if (notDef) {
+      def[k] = src[k];
+    }
+  }
+
+  /**
+   * Fill missing src value
+   */
+  for (const k in def) {
+    const notDef = h.isEmpty(src[k]);
+    out[k] = notDef ? def[k] : src[k];
+  }
+  return out;
+}
+
+/**
  * Retrieve nested item from object/array
  * @param {Object|Array} obj
  * @param {String|Array} path dot separated or array of string

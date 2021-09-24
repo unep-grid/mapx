@@ -2092,7 +2092,9 @@ export function makeSimpleLayer(o) {
     zoomMax: 22,
     opacity: 1
   };
-  const opt = Object.assign({}, def, o);
+  const opt = h.fill(def, o);
+
+  //const opt = Object.assign({}, def, o);
 
   if (!opt.id) {
     console.warn('makeSimpleLayer: layer with no ID');
@@ -4168,7 +4170,7 @@ export async function viewLayersAddVt(o) {
     const valid =
       h.isObject(rule) &&
       rule.value !== undefined &&
-      rule.value != nullValue &&
+      rule.value !== nullValue &&
       !h.isEmpty(rule.value);
     if (!valid) {
       rules.splice(rInc, 1);
@@ -4196,7 +4198,7 @@ export async function viewLayersAddVt(o) {
   const ruleAll = rules.find((r) => r.value === 'all');
   const hasRuleAll = !!ruleAll;
   //const hasStyleRules = rules.length > 0 && rules[0].value !== undefined;
-  const hasStyleRules = nRules > 0 // && rules[0].value !== undefined;
+  const hasStyleRules = nRules > 0; // && rules[0].value !== undefined;
 
   /**
    * Set style type
@@ -4206,7 +4208,6 @@ export async function viewLayersAddVt(o) {
   const useStyleDefault = !useStyleCustom && (!hasStyleRules && !useStyleNull);
   const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
   const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
-
 
   if (
     !useStyleCustom &&
@@ -4336,7 +4337,7 @@ export async function viewLayersAddVt(o) {
        */
       const nextValue = p(nextRule, 'value', rulesValues.max);
       rule.value_to = p(rule, 'value_to', nextValue);
-      
+
       const fromValue = rule.value;
       const toValue = isNumeric ? rule.value_to : null;
       /**
