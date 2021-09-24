@@ -1,5 +1,8 @@
 
 ## Changelog
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.14' target='_blank'>1.9.14</a>
+    - APP : 
+      - Added a basic helper to 'fill' options object with defaults, with a priority for default over item with undefined or null values. This solves an issue in vt layer creation with some rules used for null value, where opacity was undefined, instead of the expected '1' value returned by the schema.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.13' target='_blank'>1.9.13</a>
     - APP:
       - Various fixes and improvement for new style upper/lower bounds selection
