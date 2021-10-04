@@ -1,4 +1,7 @@
-
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.15' target='_blank'>1.9.15</a>
+    - APP
+      - Style editor : if numeric variable is identical in from / to bounds, it uses now the === operator.
+      - Default circle size when no radius is defined, set to 10. 
 ## Changelog
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.14' target='_blank'>1.9.14</a>
     - APP : 

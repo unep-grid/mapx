@@ -45,7 +45,7 @@ services:
       - frontend
     env_file: mapx.dev.env
     build: ./app/.
-    image: fredmoser/mx-app-shiny:1.9.14-debian
+    image: fredmoser/mx-app-shiny:1.9.15-debian
     restart: always
     ports:
       - 3838
@@ -73,7 +73,7 @@ services:
       - frontend
     env_file: mapx.dev.env
     build: ./api/.
-    image: fredmoser/mx-api-node:1.9.14-alpine
+    image: fredmoser/mx-api-node:1.9.15-alpine
     restart: always
     ports:
       - 3030
@@ -132,7 +132,7 @@ services:
     networks:
       - backend
     env_file: mapx.dev.env
-    image: fredmoser/mx-api-node:1.9.14-alpine
+    image: fredmoser/mx-api-node:1.9.15-alpine
     hostname: mx_routines
     depends_on:
       - pg
