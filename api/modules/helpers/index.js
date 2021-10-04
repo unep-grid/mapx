@@ -62,10 +62,14 @@ function sendJSON(res, data, opt) {
  * Simple send error wrapper
  * @param {Object} res Result object
  * @param {Error} error Error object
+ * @param {Number} code Code of the error
  * @return null
  */
-function sendError(res, error) {
-  res.send(
+function sendError(res, error, code) {
+  if(!code){
+    code = '200'
+  }
+  res.status(code).send(
     toRes({
       type: 'error',
       msg: error.message

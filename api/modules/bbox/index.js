@@ -3,7 +3,7 @@ const {getParamsValidator} = require('@mapx/route_validation');
 const {sendError, sendJSON} = require('@mapx/helpers');
 const crypto = require('crypto');
 const validateParamsHandlerBbox = getParamsValidator({
-  expected: ['name','code','srid', 'language']
+  expected: ['name', 'code', 'srid', 'language']
 });
 
 const mwGetBbox = [validateParamsHandlerBbox, handlerBbox];
@@ -15,12 +15,14 @@ module.exports = {
 async function handlerBbox(req, res) {
   const query = req.query;
   try {
+    query.code = query.code || query.name;
+
     const q = `
     SELECT
     json(
     ST_ASGeoJSON(
     mx_bbox_geocode(
-    '${query.name || query.code}',
+    '${query.code}',
     '${query.language}',
      ${query.srid}
   ))) bbox`;
@@ -31,7 +33,7 @@ async function handlerBbox(req, res) {
       .digest('hex');
 
     const cached = await redisGet(hash);
-    
+
     if (cached) {
       return sendJSON(res, JSON.parse(cached));
     } else {
@@ -39,26 +41,27 @@ async function handlerBbox(req, res) {
       const data = result.rows[0];
 
       if (!data || !data?.bbox) {
-        return res.status('404').send();
+        throw new Error(`No result found for ${query.code}`);
       }
       const coords = data?.bbox?.coordinates[0];
 
       /**
-      * Simple bounds
-      * see https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike
-      */ 
+       * Simple bounds
+       * see https://docs.mapbox.com/mapbox-gl-js/api/geography/#lnglatboundslike
+       */
+
       const bbox = [
-        coords[0][0],//west
-        coords[0][1],//south
-        coords[2][0],//east
-        coords[2][1]//north
+        coords[0][0], //west
+        coords[0][1], //south
+        coords[2][0], //east
+        coords[2][1] //north
       ];
-      
+
       await redisSet(hash, JSON.stringify(bbox));
 
       return sendJSON(res, bbox);
     }
   } catch (err) {
-    sendError(res, err);
+    sendError(res, err, 500);
   }
 }
