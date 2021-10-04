@@ -2090,11 +2090,15 @@ export function makeSimpleLayer(o) {
     sizeFactorZoomExponent: 1,
     zoomMin: 0,
     zoomMax: 22,
-    opacity: 1
+    opacity: 0.5
   };
+  
   const opt = h.fill(def, o);
 
-  //const opt = Object.assign({}, def, o);
+  if(o.geomType === 'point' && h.isEmpty(o.size)){
+    opt.size = 10;
+  }
+
 
   if (!opt.id) {
     console.warn('makeSimpleLayer: layer with no ID');
@@ -4174,20 +4178,6 @@ export async function viewLayersAddVt(o) {
      */
     let isValid = h.isObject(rule) && !h.isEmpty(rule.value);
 
-    /**
-     * In all case, a rule with a value equal to null value
-     * should not be valid
-     */
-    isValid = isValid && rule.value !== nullValue;
-
-    /**
-     * If it's numeric and include upper bound is requested,
-     * check that the value for missing value is not equal to
-     * upper bound
-     */
-    if (isValid && isNumeric && includeUpper) {
-      isValid = isValid && rule.value_to !== nullValue;
-    }
     if (!isValid) {
       rules.splice(rInc, 1);
     }
@@ -4221,7 +4211,7 @@ export async function viewLayersAddVt(o) {
    */
   const useStyleNull = !hideNulls;
   const useStyleCustom = h.isObject(styleCustom) && styleCustom.enable === true;
-  const useStyleDefault = !useStyleCustom && (!hasStyleRules && !useStyleNull);
+  const useStyleDefault = !useStyleCustom && !hasStyleRules;
   const useStyleAll = !useStyleCustom && !useStyleDefault && hasRuleAll;
   const useStyleFull = !useStyleCustom && !useStyleAll && hasStyleRules;
 
@@ -4356,6 +4346,7 @@ export async function viewLayersAddVt(o) {
 
       const fromValue = rule.value;
       const toValue = isNumeric ? rule.value_to : null;
+      const sameFromTo = isNumeric && toValue === fromValue;
       /**
        *  Symbols and pattern check
        */
@@ -4363,7 +4354,7 @@ export async function viewLayersAddVt(o) {
       const hasSymbol = hasSprite && geomType === 'point';
       const hasPattern = hasSprite && geomType === 'polygon';
 
-      if (isNumeric) {
+      if (isNumeric && !sameFromTo) {
         /**
          * Case where attr to filter is numeric
          */
