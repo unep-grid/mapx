@@ -39,7 +39,7 @@ async function handlerBbox(req, res) {
       const data = result.rows[0];
 
       if (!data || !data?.bbox) {
-        return res.status('204').send();
+        return res.status('404').send();
       }
       const coords = data?.bbox?.coordinates[0];
 
