@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار"
   },
   {
     "id": "schema_style_reverse_order",

@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项"
   },
   {
     "id": "schema_style_reverse_order",

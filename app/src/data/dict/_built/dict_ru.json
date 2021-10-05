@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением."
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен"
   },
   {
     "id": "schema_style_reverse_order",

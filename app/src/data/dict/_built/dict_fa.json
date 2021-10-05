@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "fa": "در صورت بررسی ، فواصل شامل محدوده بالایی می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "fa": "در صورت علامت گذاری ، فواصل حد بالا را شامل می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود. اگر سبک با استفاده از سبک خودکار ساخته شده است ، این گزینه باید علامت زده شود"
   },
   {
     "id": "schema_style_reverse_order",

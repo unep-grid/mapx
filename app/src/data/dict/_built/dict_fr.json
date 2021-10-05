@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "fr": "Si coché, les intervalles incluront la limite supérieure. Si elle n'est pas définie, la dernière borne sera la valeur maximale"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "fr": "Si coché, les intervalles incluront la limite supérieure. Si elle n'est pas définie, la dernière borne sera la valeur maximale. Si le style est construit en utilisant le style automatique, cette option doit être cochée"
   },
   {
     "id": "schema_style_reverse_order",

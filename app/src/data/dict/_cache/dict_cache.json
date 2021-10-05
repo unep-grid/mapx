@@ -5448,16 +5448,16 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "fr": "Si coché, les intervalles incluront la limite supérieure. Si elle n'est pas définie, la dernière borne sera la valeur maximale",
-    "es": "Si está marcado, los intervalos incluirán el límite superior. Si no está definido, el último límite será el valor máximo.",
-    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением.",
-    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值",
-    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة",
-    "fa": "در صورت بررسی ، فواصل شامل محدوده بالایی می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود",
-    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي",
-    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে",
-    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die Obergrenze. Wenn es nicht definiert ist, ist die letzte Grenze der Maximalwert"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "fr": "Si coché, les intervalles incluront la limite supérieure. Si elle n'est pas définie, la dernière borne sera la valeur maximale. Si le style est construit en utilisant le style automatique, cette option doit être cochée",
+    "es": "Si está marcado, los intervalos incluirán el límite superior. Si no está definido, el último límite será el valor máximo. Si el estilo se construye usando el estilo automático, esta opción debe estar marcada",
+    "ru": "Если этот флажок установлен, интервалы будут включать верхний предел. Если он не определен, последняя граница будет максимальным значением. Если стиль создается с использованием автоматического стиля, этот параметр должен быть отмечен",
+    "zh": "如果选中，间隔将包括上限。如果未定义，则最后一个界限将是最大值。如果样式是使用自动样式构建的，则应选中此选项",
+    "ar": "إذا تم تحديده ، فستتضمن الفواصل الزمنية الحد الأعلى. إذا لم يتم تعريفه ، فسيكون الحد الأخير هو الحد الأقصى للقيمة. إذا تم إنشاء النمط باستخدام النمط التلقائي ، فيجب تحديد هذا الخيار",
+    "fa": "در صورت علامت گذاری ، فواصل حد بالا را شامل می شود. اگر تعریف نشده باشد ، آخرین حد حداکثر مقدار خواهد بود. اگر سبک با استفاده از سبک خودکار ساخته شده است ، این گزینه باید علامت زده شود",
+    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي",
+    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত",
+    "de": "Wenn diese Option aktiviert ist, enthalten die Intervalle die Obergrenze. Wenn sie nicht definiert ist, ist die letzte Grenze der Maximalwert. Wenn der Stil mit dem Auto-Stil erstellt wurde, sollte diese Option aktiviert sein"
   },
   {
     "id": "schema_style_reverse_order",

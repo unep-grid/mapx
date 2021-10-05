@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "ps": "که چک شوی ، وقفو کې به لوړ حد شامل وي. که دا تعریف شوی نه وي ، وروستی حد به اعظمي ارزښت وي. که سټایل د آټو سټایل په کارولو سره جوړ شوی وي ، دا اختیار باید چیک شي"
   },
   {
     "id": "schema_style_reverse_order",

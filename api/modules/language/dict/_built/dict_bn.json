@@ -2096,8 +2096,8 @@
   },
   {
     "id": "schema_style_include_upper_bound_desc",
-    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value",
-    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে"
+    "en": "If checked, the intervals will include the upper limit. If it is not defined, the last bound will be the maximum value. If the style is build using the auto-style, this option should be checked",
+    "bn": "যদি চেক করা হয়, ব্যবধানগুলি উপরের সীমা অন্তর্ভুক্ত করবে। যদি এটি সংজ্ঞায়িত করা না হয়, শেষ সীমা সর্বোচ্চ মান হবে। যদি স্টাইলটি অটো-স্টাইল ব্যবহার করে তৈরি করা হয় তবে এই বিকল্পটি পরীক্ষা করা উচিত"
   },
   {
     "id": "schema_style_reverse_order",
