@@ -62,6 +62,6 @@ async function handlerBbox(req, res) {
       return sendJSON(res, bbox);
     }
   } catch (err) {
-    sendError(res, err, 500);
+    sendError(res, err);
   }
 }
