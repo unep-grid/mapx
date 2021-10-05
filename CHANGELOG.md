@@ -1,3 +1,11 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.16' target='_blank'>1.9.16</a>
+    - APP: 
+      -  Better UX when
+        - A guest user tries to launch a non-public project 
+        - A view is requested but not present in a project
+      - Fixed a bug where a race condition occurred for the project id : sometimes, the list of views did not match the current project.
+      - Vector views style : if the auto style is used, the upper bound option must be checked. It's done automatically when the style is applied.
+    - API : bbox route returns status 200 and a message if no extent found
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.15' target='_blank'>1.9.15</a>
     - APP
       - Style editor : if numeric variable is identical in from / to bounds, it uses now the === operator.
