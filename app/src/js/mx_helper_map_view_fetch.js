@@ -1,56 +1,58 @@
 let start;
 
-export async function fetchViews(opt) {
-  opt = opt || {};
+export async function fetchViews(o) {
   const h = mx.helpers;
-  const idProject = mx.settings.project.id;
-  const idUser = mx.settings.user.id;
-  const language = mx.settings.language || mx.settings.languages[0];
-  const token = mx.settings.user.token;
-
-  const idViewsOpen = h.getQueryParameterInit(['idViewsOpen', 'viewsOpen']);
-  const collections = h.getQueryParameterInit(['idCollections', 'collections']);
-  const idViews = h.getQueryParameterInit(['idViews', 'views']);
-
-  const collectionsSelectOperator = h.getQueryParameterInit(
-    'collectionsSelectOperator'
-  );
-  const roleMax =
-    h.getQueryParameterInit(['viewsRoleMax', 'filterViewsByRoleMax'])[0] || '';
-  const noViews = h.getQueryParameterInit('noViews')[0] || '';
-
+  const def = {
+    idProject: mx.settings.project.id,
+    idUser: mx.settings.user.id,
+    language: mx.settings.language || mx.settings.languages[0],
+    token: mx.settings.user.token,
+    idViewsOpen: h.getQueryParameterInit(['idViewsOpen', 'viewsOpen']),
+    collections: h.getQueryParameterInit(['idCollections', 'collections']),
+    idViews: h.getQueryParameterInit(['idViews', 'views']),
+    collectionsSelectOperator: h.getQueryParameterInit(
+      'collectionsSelectOperator',
+      ''
+    )[0],
+    noViews: h.getQueryParameterInit('noViews',false)[0],
+    roleMax: h.getQueryParameterInit([
+      'viewsRoleMax',
+      'filterViewsByRoleMax'
+    ],'')[0]
+  };
   const dataDefault = {
     views: [],
     states: [],
     timing: 0,
     noViews: false
   };
-
-  start = performance.now();
+  const opt = Object.assign({}, def, o);
   const host = h.getApiUrl('getViewsListByProject');
 
-  let idViewsRequested = idViews;
+  start = performance.now();
+  
+  const isModeNoViews = opt.noViews === true ||  h.isString(opt.noViews) ? opt.noViews.toLowerCase() === 'true' : false;
 
-  if (noViews === true || noViews.toLowerCase() === 'true') {
+  if ( isModeNoViews ) {
     dataDefault.noViews = true;
     return Promise.resolve(dataDefault);
   }
 
-  if (idViews.length > 0 && idViewsOpen.length > 0) {
-    idViews.push(...idViewsOpen);
-    idViewsRequested = h.getArrayDistinct(idViews);
+  if (opt.idViews.length > 0 && opt.idViewsOpen.length > 0) {
+    opt.idViews.push(...opt.idViewsOpen);
   }
 
+  opt.idViews = h.getArrayDistinct(opt.idViews);
+
   const queryString = h.objToParams({
-    idProject: opt.idProject || idProject,
-    idUser: opt.idUser || idUser,
-    language: language,
-    token: opt.token || token,
-    idViews: idViews,
-    collections: opt.collections || collections,
-    collectionsSelectOperator:
-      opt.collectionsSelectOperator || collectionsSelectOperator,
-    roleMax: roleMax
+    idProject: opt.idProject,
+    idUser: opt.idUser,
+    language: opt.language,
+    token: opt.token,
+    idViews: opt.idViews,
+    collections: opt.collections,
+    collectionsSelectOperator: opt.collectionsSelectOperator,
+    roleMax: opt.roleMax
   });
 
   const url = ` ${host}?${queryString}`;
@@ -60,16 +62,45 @@ export async function fetchViews(opt) {
     onError: opt.onError || onError,
     onComplete: opt.onComplete || onComplete
   });
-  if(data.type === 'error'){
-      throw new Error(data.message);
+  if (data.type === 'error') {
+    throw new Error(data.message);
   }
-  const out = Object.assign({}, dataDefault, data);
-  const diff = h.getArrayDiff(idViewsRequested, out.views.map((v) => v.id));
-  if (diff.length > 0) {
-    fetchDiffWarn(diff);
+  const dataOut = Object.assign({}, dataDefault, data);
+
+  /**
+   * Handle requested but missing views
+   */
+  const hasModalLogin = !!document.getElementById('loginCode');
+  const idViewsDiff = h.getArrayDiff(
+    opt.idViews,
+    dataOut.views.map((v) => v.id)
+  );
+  if (idViewsDiff.length > 0 && !hasModalLogin) {
+    const addViewTemp = await h.modalConfirm({
+      title: h.getDictItem('fetch_views_add_temp_modal_title'),
+      content:h.getDictItem('fetch_views_add_temp_confirm')
+    });
+    if (addViewTemp) {
+      const tmpViews = await h.getViewsRemote(idViewsDiff);
+      for(const view of tmpViews){
+        view._temp = true;
+      }
+      dataOut.views.unshift(...tmpViews);
+      const idViewsNotFound = h.getArrayDiff(
+        idViewsDiff,
+        dataOut.views.map((v) => v.id)
+      );
+      if (idViewsNotFound.length > 0) {
+        h.modal({
+          title: h.getDictItem('fetch_views_not_found_modal_title'),
+          content: h.getDictItem('fetch_views_not_found_message'),
+          addBackground: true
+        });
+      }
+    }
   }
 
-  return data;
+  return dataOut;
 }
 
 function onProgress(d) {
@@ -84,16 +115,4 @@ function onComplete() {
   console.log(
     `Views fetch + DB: ${Math.round(performance.now() - start)} [ms]`
   );
-}
-
-async function fetchDiffWarn(diff) {
-  const h = mx.helpers;
-  const title = await h.getDictItem('fetch_views_diff_modal_title');
-  const text = await h.getDictItem('fetch_views_diff_message');
-  console.warn('Views not available in this project:', diff);
-  h.modal({
-    title: title,
-    content: text,
-    addBackround: true
-  });
 }

@@ -5224,12 +5224,20 @@
     "en": "Controls panel"
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project."
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?"
   },
   {
     "id": "vt_desc",

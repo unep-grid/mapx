@@ -6530,14 +6530,24 @@
     "zh": "控制面板 "
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
-    "zh": "视图不可用 "
+    "zh": "视图不可用"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "zh": "您请求的视图在该项目中不可用。 "
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "zh": "某些请求的视图不可用"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "zh": "添加临时视图"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "zh": "此项目中不存在某些请求的视图。您想临时获取并添加它们吗？"
   },
   {
     "id": "vt_desc",

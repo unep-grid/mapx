@@ -6530,14 +6530,24 @@
     "bn": "প্যানেল নিয়ন্ত্রণ করে "
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
-    "bn": "দর্শন উপলভ্য নয় "
+    "bn": "ভিউ পাওয়া যায় না"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "bn": "আপনি এই প্রকল্পে উপলব্ধ নয় এমন মতামতের জন্য অনুরোধ করেছেন। "
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "bn": "কিছু অনুরোধ করা মতামত পাওয়া যায় না"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "bn": "অস্থায়ী ভিউ যোগ করুন"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "bn": "কিছু অনুরোধ করা মতামত এই প্রকল্পে উপস্থিত নেই। আপনি কি তাদের সাময়িকভাবে আনতে এবং যোগ করতে চান?"
   },
   {
     "id": "vt_desc",

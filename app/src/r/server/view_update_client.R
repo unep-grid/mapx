@@ -18,8 +18,6 @@ observe({
     if(!hasRole) return()
     if(!hasProject) return()
 
-    mxDebugMsg("Update views request ( autoFetchAll )")
-
     mglUpdateViewsList(
       id = .get(config,c("map","id")),
       project = project,

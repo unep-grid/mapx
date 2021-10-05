@@ -6530,14 +6530,24 @@
     "fr": "Panneau des contrôles"
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
     "fr": "Vues non disponible"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "fr": "Vous avez demandé des vues qui ne sont pas disponibles dans ce projet."
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "fr": "Certaines vues demandées ne sont pas disponibles"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "fr": "Ajouter des vues temporaires"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "fr": "Certaines vues demandées ne sont pas présentes dans ce projet. Voulez-vous les récupérer et les ajouter temporairement ?"
   },
   {
     "id": "vt_desc",

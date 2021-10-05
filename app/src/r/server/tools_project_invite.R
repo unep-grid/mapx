@@ -287,7 +287,7 @@ observeEvent(input$btnAddMemberEmail,{
       idUser = idUser,
       roles=c('members')
     )
-
+    reactData$updateRoleList <- runif(1)
     mxFlashIcon('envelope')
 
   })

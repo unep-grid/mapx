@@ -12727,7 +12727,7 @@
     "de": ""
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
     "fr": "Vues non disponible",
     "es": "",
@@ -12740,9 +12740,22 @@
     "de": ""
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "fr": "Vous avez demandé des vues qui ne sont pas disponibles dans ce projet.",
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }, 
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "fr": "",
     "es": "",
     "ru": "",
     "zh": "",
@@ -12752,6 +12765,19 @@
     "bn": "",
     "de": ""
   },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "fr": "",
+    "es": "",
+    "ru": "",
+    "zh": "",
+    "ar": "",
+    "fa": "",
+    "ps": "",
+    "bn": "",
+    "de": ""
+  }, 
   {
     "id": "vt_desc",
     "en": "Views featuring a vector layer. This type of layers displays geometries and the associated information contained in an attribute table. Many interactive features such as filtering, zooming or highlighting are enabled.",

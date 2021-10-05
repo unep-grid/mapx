@@ -6530,14 +6530,24 @@
     "ps": "د کنټرول پینل "
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
-    "ps": "لیدونه شتون نلري "
+    "ps": "لیدونه شتون نلري"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "ps": "تاسو د لیدونو غوښتنه کړې چې پدې پروژه کې شتون نلري. "
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "ps": "ځینې غوښتل شوي نظرونه شتون نلري"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "ps": "لنډمهاله نظریات اضافه کړئ"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "ps": "ځینې غوښتل شوي نظرونه پدې پروژه کې شتون نلري. ایا تاسو غواړئ دا په موقت ډول راوړئ او اضافه کړئ؟"
   },
   {
     "id": "vt_desc",

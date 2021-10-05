@@ -6530,14 +6530,24 @@
     "fa": "پانل کنترل "
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
-    "fa": "بازدیدها در دسترس نیست "
+    "fa": "بازدیدها در دسترس نیست"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "fa": "شما نماهایی را درخواست کرده اید که در این پروژه موجود نیست. "
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "fa": "برخی از نماهای درخواست شده در دسترس نیستند"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "fa": "اضافه کردن نمای موقت"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "fa": "برخی از نماهای درخواست شده در این پروژه وجود ندارد. آیا می خواهید آنها را موقتاً واکشی و اضافه کنید؟"
   },
   {
     "id": "vt_desc",

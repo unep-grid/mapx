@@ -41,7 +41,7 @@ export function getQueryParametersInit() {
  * @return {Array||Any}
  */
 
-export function getQueryParameterInit(idParam) {
+export function getQueryParameterInit(idParam, def) {
   const h = mx.helpers;
   let out = [];
   if (h.isArray(idParam)) {
@@ -49,16 +49,18 @@ export function getQueryParameterInit(idParam) {
   } else {
     add(idParam);
   }
+  
   return asArray(out);
 
   function add(id) {
-    const value = mx.initQueryParams[id];
-    if (value) {
-      if (h.isArray(value)) {
-        out = out.concat(value);
-      } else {
-        out.push(value);
-      }
+    const value = mx.initQueryParams[id] || def;
+    if (typeof value === 'undefined') {
+      return;
+    }
+    if (h.isArray(value)) {
+      out.push(...value);
+    } else {
+      out.push(value);
     }
   }
 }

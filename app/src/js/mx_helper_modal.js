@@ -144,7 +144,6 @@ export function modal(o) {
 
   if (o.addBackground) {
     elModal.classList.add('mx-modal-background');
-    //document.body.appendChild(elBackground);
   }
 
   /**

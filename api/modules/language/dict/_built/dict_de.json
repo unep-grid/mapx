@@ -6530,14 +6530,24 @@
     "de": "Bedienfeld "
   },
   {
-    "id": "fetch_views_diff_modal_title",
+    "id": "fetch_views_not_found_modal_title",
     "en": "Views not available",
-    "de": "Ansichten nicht verfügbar "
+    "de": "Ansichten nicht verfügbar"
   },
   {
-    "id": "fetch_views_diff_message",
-    "en": "You have requested views that are not available in this project.",
-    "de": "Sie haben Ansichten angefordert, die in diesem Projekt nicht verfügbar sind. "
+    "id": "fetch_views_not_found_message",
+    "en": "Some requested views are not available",
+    "de": "Einige angeforderte Ansichten sind nicht verfügbar"
+  },
+  {
+    "id": "fetch_views_add_temp_modal_title",
+    "en": "Add temporary views",
+    "de": "Temporäre Ansichten hinzufügen"
+  },
+  {
+    "id": "fetch_views_add_temp_confirm",
+    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
+    "de": "Einige angeforderte Ansichten sind in diesem Projekt nicht vorhanden. Möchten Sie sie vorübergehend abrufen und hinzufügen?"
   },
   {
     "id": "vt_desc",

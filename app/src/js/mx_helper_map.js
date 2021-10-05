@@ -1251,7 +1251,6 @@ export async function initMapxApp(o) {
   const isFlatMode = h.getQueryParameter('viewsListFlatMode')[0] === 'true';
   const isFilterActivated =
     h.getQueryParameter('viewsListFilterActivated')[0] === 'true';
-
   idViewsQuery.push(...idViewsQueryOpen);
   const idViews = h.getArrayDistinct(idViewsQuery);
 
@@ -1735,7 +1734,6 @@ export async function getViewsRemote(idViews) {
  * @param {Object} opt options
  * @param {String} opt.id ID of the map
  * @param {Array} opt.viewList views list
- * @param {Boolean} opt.viewsCompact The view list is in compact form (id and row only)
  * @param {String} opt.project code
  */
 export async function updateViewsList(opt) {
@@ -1759,7 +1757,7 @@ export async function updateViewsList(opt) {
     autoFetchAll: false,
     project: h.path(mx, 'settings.project.id'),
     resetViews: false
-  };
+  }
 
   opt = Object.assign({}, def, opt);
 
@@ -1830,7 +1828,8 @@ export async function updateViewsList(opt) {
      * Remote views
      */
     const data = await h.fetchViews({
-      onProgress: updateProgress
+      onProgress: updateProgress,
+      project : opt.project
     });
     views.push(...data.views);
     state.push(
