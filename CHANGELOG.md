@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.17' target='_blank'>1.9.17</a>
+    - APP:
+      - Serice Workers:  error when registering: waiting for an event already fired
+      - Auto style, only set 'include upper bound' option if editor exists; 
+      - Table class ( e.g. view's metadata ): break words to avoid glitch with long url visible in text
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.16' target='_blank'>1.9.16</a>
     - APP: 
       -  Better UX when
