@@ -62,7 +62,9 @@ import {path, vtStyleBuilder} from './mx_helpers.js';
             nullValue: nullValue,
             onDone: (data, mergeLabelByRow) => {
               const editor = self;
-              editorUpperBound.setValue(true);
+              if(editorUpperBound){
+                editorUpperBound.setValue(true);
+              }
               const origRules = editor.getValue();
               const modeNumeric = data.type === 'continuous';
               const rules = data.table.map((r, i) => {

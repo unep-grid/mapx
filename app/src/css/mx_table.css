@@ -6,3 +6,7 @@
 .mx .table > thead > tr > th {
   width: 1%;
 }
+
+.mx .table {
+  word-break: break-word;
+}
