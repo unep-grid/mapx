@@ -42,7 +42,11 @@ if (isCompatible) {
 }
 
 function addListener() {
-  window.addEventListener('load', handleInitSw);
+  if (document.readyState === 'complete') {
+    handleInitSw();
+  } else {
+    window.addEventListener('load', handleInitSw);
+  }
 }
 
 function toMib(b) {
@@ -78,6 +82,7 @@ function clearSwCache() {
 }
 
 function handleInitSw() {
+  log('SW - register !');
   navigator.serviceWorker
     .register('/service-worker.js')
     .then(handleRegistration);
@@ -145,7 +150,8 @@ function handleNewServiceWorker(registration, informUser) {
  * Display a modal window to inform the user to update
  */
 function showRefreshUI(registration) {
-  var skipWaiting = !window.mx || !window.mx.helpers.getDictItem || window.parent !== window;
+  var skipWaiting =
+    !window.mx || !window.mx.helpers.getDictItem || window.parent !== window;
 
   if (skipWaiting) {
     return update();
