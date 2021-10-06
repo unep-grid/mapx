@@ -39,7 +39,7 @@ module.exports = merge(common, {
       skipWaiting: false,
       clientsClaim: true,
       exclude : [
-        /^\.DS*/, 
+        /\.DS_Store/,
         /.*\.swp$/,
         /^fontstack/, 
         /^sprites/
