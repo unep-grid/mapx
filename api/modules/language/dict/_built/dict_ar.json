@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "ar": "أضف طرق عرض ليتم تفعيلها تلقائيًا عند بدء تشغيل التطبيق. سيؤدي هذا إلى تمكين الزر \"تصفية تنشيط العرض\" وإخفاء العرض غير المنشط. "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "ar": "أضف طرق عرض ليتم تفعيلها تلقائيًا عند بدء تشغيل التطبيق."
   },
   {
     "id": "share_collections_check_label",

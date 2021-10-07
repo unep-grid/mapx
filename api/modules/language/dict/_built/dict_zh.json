@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "zh": "添加在应用程序启动时自动激活的视图。将开启“筛选激活视图”功能并隐藏未激活的视图。"
+    "en": "Add views to be automatically activated when the application is launched.",
+    "zh": "添加要在应用程序启动时自动激活的视图。"
   },
   {
     "id": "share_collections_check_label",

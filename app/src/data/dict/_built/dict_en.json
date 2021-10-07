@@ -5041,7 +5041,7 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view."
+    "en": "Add views to be automatically activated when the application is launched."
   },
   {
     "id": "share_collections_check_label",

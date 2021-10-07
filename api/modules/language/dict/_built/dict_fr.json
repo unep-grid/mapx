@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "fr": "Ajouter des vues qui seront activées automatiquement lorsque l'application sera lancée. Cela entraînera l'activation du bouton 'filtrer les vues activées'"
+    "en": "Add views to be automatically activated when the application is launched.",
+    "fr": "Ajoutez des vues à activer automatiquement au lancement de l'application."
   },
   {
     "id": "share_collections_check_label",

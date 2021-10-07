@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "fa": "نمایش ها را اضافه کنید تا هنگام راه اندازی برنامه به طور خودکار فعال شوند. با این کار دکمه 'فیلتر فعال کردن نمایش' فعال شده و نمای غیر فعال شده پنهان می شود. "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "fa": "نماهایی را اضافه کنید تا هنگام راه اندازی برنامه به طور خودکار فعال شود."
   },
   {
     "id": "share_collections_check_label",

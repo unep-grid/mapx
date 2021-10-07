@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "de": "Fügen Sie Ansichten hinzu, die beim Start der Anwendung automatisch aktiviert werden. Dadurch wird die Schaltfläche \"Filteraktivierungsansicht\" aktiviert und die nicht aktivierte Ansicht ausgeblendet. "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "de": "Fügen Sie Ansichten hinzu, die beim Starten der Anwendung automatisch aktiviert werden sollen."
   },
   {
     "id": "share_collections_check_label",

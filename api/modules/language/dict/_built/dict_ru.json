@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "ru": "Добавьте представления, которые будут автоматически активироваться при запуске приложения. Это включит кнопку «фильтр активировать вид» и скроет неактивированный вид. "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "ru": "Добавьте представления, которые будут автоматически активироваться при запуске приложения."
   },
   {
     "id": "share_collections_check_label",

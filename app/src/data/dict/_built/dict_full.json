@@ -16381,16 +16381,16 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "fr": "Ajouter des vues qui seront activées automatiquement lorsque l'application sera lancée. Cela entraînera l'activation du bouton 'filtrer les vues activées'",
-    "es": "Agregue vistas para que se activen automáticamente cuando se inicia la aplicación. Esto habilitará el botón 'filtrar vista activada' y ocultará la vista no activada.",
-    "ru": "Добавьте представления, которые будут автоматически активироваться при запуске приложения. Это включит кнопку «фильтр активировать вид» и скроет неактивированный вид. ",
-    "zh": "添加在应用程序启动时自动激活的视图。将开启“筛选激活视图”功能并隐藏未激活的视图。",
-    "ar": "أضف طرق عرض ليتم تفعيلها تلقائيًا عند بدء تشغيل التطبيق. سيؤدي هذا إلى تمكين الزر \"تصفية تنشيط العرض\" وإخفاء العرض غير المنشط. ",
-    "fa": "نمایش ها را اضافه کنید تا هنگام راه اندازی برنامه به طور خودکار فعال شوند. با این کار دکمه 'فیلتر فعال کردن نمایش' فعال شده و نمای غیر فعال شده پنهان می شود. ",
-    "ps": "د لیدونو اضافه کول په اتوماتیکه توګه فعال شي کله چې غوښتنلیک په لاره واچول شي. دا به ت theۍ د 'فلټر فعال لید' وړ کړي او غیر فعال لید پټ کړي. ",
-    "bn": "অ্যাপ্লিকেশন চালু হওয়ার পরে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য দর্শন যুক্ত করুন। এটি বোতামটি 'ফিল্টার অ্যাক্টিভেট ভিউ' সক্ষম করবে এবং অ-অ্যাক্টিভেটেড ভিউটি লুকিয়ে রাখবে। ",
-    "de": "Fügen Sie Ansichten hinzu, die beim Start der Anwendung automatisch aktiviert werden. Dadurch wird die Schaltfläche \"Filteraktivierungsansicht\" aktiviert und die nicht aktivierte Ansicht ausgeblendet. "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "fr": "Ajoutez des vues à activer automatiquement au lancement de l'application.",
+    "es": "Agregue vistas para que se activen automáticamente cuando se inicie la aplicación.",
+    "ru": "Добавьте представления, которые будут автоматически активироваться при запуске приложения.",
+    "zh": "添加要在应用程序启动时自动激活的视图。",
+    "ar": "أضف طرق عرض ليتم تفعيلها تلقائيًا عند بدء تشغيل التطبيق.",
+    "fa": "نماهایی را اضافه کنید تا هنگام راه اندازی برنامه به طور خودکار فعال شود.",
+    "ps": "لیدونه اضافه کړئ ترڅو په اوتومات ډول فعال شي کله چې غوښتنلیک پیل کیږي.",
+    "bn": "অ্যাপ্লিকেশন চালু হলে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য ভিউ যোগ করুন।",
+    "de": "Fügen Sie Ansichten hinzu, die beim Starten der Anwendung automatisch aktiviert werden sollen."
   },
   {
     "id": "share_collections_check_label",

@@ -6301,8 +6301,8 @@
   },
   {
     "id": "share_views_open_check_desc",
-    "en": "Add views to be automatically activated when the application is launched. This will enable the button 'filter activate view' and hide non-activated view.",
-    "bn": "অ্যাপ্লিকেশন চালু হওয়ার পরে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য দর্শন যুক্ত করুন। এটি বোতামটি 'ফিল্টার অ্যাক্টিভেট ভিউ' সক্ষম করবে এবং অ-অ্যাক্টিভেটেড ভিউটি লুকিয়ে রাখবে। "
+    "en": "Add views to be automatically activated when the application is launched.",
+    "bn": "অ্যাপ্লিকেশন চালু হলে স্বয়ংক্রিয়ভাবে সক্রিয় হওয়ার জন্য ভিউ যোগ করুন।"
   },
   {
     "id": "share_collections_check_label",
