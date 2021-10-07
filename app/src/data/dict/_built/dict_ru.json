@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "ru": "Варианты обмена "
+    "en": "Show/hide settings",
+    "ru": "Показать / скрыть настройки"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "ru": "Используйте режим 'статический' (рекомендуется) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ru": "Любой, кто получил эту ссылку, мог видеть содержание выбранных представлений. Если вы хотите поделиться конфиденциальной информацией, пригласите пользователей в свой проект или частный проект и соответствующим образом установите права доступа и чтения. По умолчанию включен статический режим, который представляет собой облегченную версию MapX только для чтения. Больше информации в настройках."
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "ru": "Используйте «статический» режим, если вы хотите поделиться видом с помощью облегченной и более быстрой версии MapX с ограниченными функциями. Используя этот метод, любой, у кого есть общая ссылка, сможет прочитать выбранное представление без необходимости регистрироваться в MapX. Если вы добавите карту-историю, она запустится автоматически, все остальные виды будут удалены. "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "ru": "Используйте «статический» режим, если вы хотите поделиться представлением с помощью облегченной и более быстрой версии MapX с ограниченными функциями. Если вы добавите карту-историю, она запустится автоматически, все остальные виды будут удалены."
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "ru": "Просмотры недоступны"
+    "en": "Views not found",
+    "ru": "Просмотры не найдены"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "ru": "Некоторые запрошенные просмотры недоступны"
+    "en": "Some requested views are not found",
+    "ru": "Некоторые запрошенные просмотры не найдены"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "ru": "Некоторые запрошенные просмотры отсутствуют в этом проекте. Вы хотите получить и добавить их временно?"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "ru": "Некоторые запрошенные представления могут быть визуализированы в этом проекте только временно, вероятно, потому, что кто-то поделился с вами ссылкой. Вы хотите перечислить эти представления в этом сеансе в режиме только для чтения? Эти временные представления больше не будут отображаться при обновлении страницы или переходе в другой проект."
   },
   {
     "id": "vt_desc",

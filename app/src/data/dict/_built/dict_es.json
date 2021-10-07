@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "es": "Opciones para compartir"
+    "en": "Show/hide settings",
+    "es": "Mostrar / ocultar configuraciones"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "es": "Usar el modo 'estático' (recomendado)"
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "es": "Cualquiera que reciba este enlace podría ver el contenido de las vistas seleccionadas. Si desea compartir información confidencial, invite a los usuarios a su proyecto o proyecto privado y configure los derechos de acceso y lectura en consecuencia. De forma predeterminada, el modo estático está habilitado, que es una versión ligera y de solo lectura de MapX. Más información en la configuración."
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "es": "Use el modo 'estático' si desea compartir una vista usando una versión ligera y más rápida de MapX, con funcionalidades limitadas. Con este método, cualquier persona con el enlace compartido podrá leer la vista seleccionada, sin necesidad de estar registrado en MapX. Si agrega un mapa narrativo, se iniciará automáticamente, descartando cualquier otra vista."
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "es": "Utilice el modo \"estático\" si desea compartir una vista utilizando una versión ligera y más rápida de MapX, con funcionalidades limitadas. Si agrega un story map, se iniciará automáticamente, descartando cualquier otra vista."
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "es": "Vistas no disponibles"
+    "en": "Views not found",
+    "es": "Vistas no encontradas"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "es": "Algunas vistas solicitadas no están disponibles"
+    "en": "Some requested views are not found",
+    "es": "Algunas vistas solicitadas no se encuentran"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "es": "Algunas vistas solicitadas no están presentes en este proyecto. ¿Quieres recuperarlos y agregarlos temporalmente?"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "es": "Algunas vistas solicitadas solo se pueden visualizar temporalmente en este proyecto, probablemente porque alguien compartió un enlace contigo. ¿Desea enumerar esas vistas en esta sesión en modo de solo lectura? Estas vistas temporales ya no aparecerán en la lista cuando actualice la página o cambie a otro proyecto."
   },
   {
     "id": "vt_desc",

@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "ps": "اختیارونه شریک کړئ "
+    "en": "Show/hide settings",
+    "ps": "تنظیمات ښکاره کړئ/پټ کړئ"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "ps": "حالت 'مستحکم' وکاروئ (وړاندیز شوی) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ps": "هرڅوک چې دا لینک ترلاسه کوي کولی شي د ټاکل شوي نظریاتو مینځپانګه وګوري. که تاسو غواړئ حساس معلومات شریک کړئ ، کاروونکو ته خپلې پروژې یا شخصي پروژې ته بلنه ورکړئ او د دې مطابق د لاسرسي او لوستلو حقونه تنظیم کړئ. د ډیفالټ په واسطه ، سټاټیک حالت فعال شوی ، کوم چې د سپک وزن لرونکی ، یوازې د لوستلو لپاره د MapX نسخه ده. په ترتیباتو کې نور معلومات."
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "ps": "د 'جامد' حالت وکاروئ که تاسو غواړئ د نقشو سپک او ګړندی نسخه کارولو سره نظر شریک کړئ ، د محدود فعالیتونو سره. د دې میتود په کارولو سره ، هرڅوک چې شریک شوي لینک ولري د انتخاب شوي لید لوستلو ته اجازه ورکړل شي ، پرته لدې چې په MapX کې راجستر شي. که تاسو د کیسې نقشه اضافه کړئ ، نو دا به په اوتومات ډول پیل شي ، د نورو نظرونو په تخفیف سره. "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "ps": "د 'سټیټیک' حالت وکاروئ که تاسو غواړئ د محدود فعالیتونو سره د MapX سپک او ګړندي نسخې په کارولو سره نظر شریک کړئ. که تاسو د کیسې نقشه اضافه کړئ ، نو دا به په اوتومات ډول پیل شي ، د نورو لیدونو ردول"
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "ps": "لیدونه شتون نلري"
+    "en": "Views not found",
+    "ps": "لیدونه ونه موندل شول"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "ps": "ځینې غوښتل شوي نظرونه شتون نلري"
+    "en": "Some requested views are not found",
+    "ps": "ځینې غوښتل شوي نظرونه ندي موندل شوي"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "ps": "ځینې غوښتل شوي نظرونه پدې پروژه کې شتون نلري. ایا تاسو غواړئ دا په موقت ډول راوړئ او اضافه کړئ؟"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "ps": "ځینې غوښتل شوي نظریات یوازې په لنډمهاله توګه پدې پروژه کې لیدل کیدی شي ، شاید ځکه چې یو چا تاسو سره لینک شریک کړی. ایا تاسو غواړئ پدې لیدنه کې دا لیدونه یوازې د لوستلو حالت کې لیست کړئ؟ دا لنډمهاله لیدونه به نور لیست نشي کله چې تاسو پا refه تازه کړئ یا بلې پروژې ته لاړشئ."
   },
   {
     "id": "vt_desc",

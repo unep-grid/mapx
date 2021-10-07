@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "ar": "مشاركة الخيارات "
+    "en": "Show/hide settings",
+    "ar": "إظهار / إخفاء الإعدادات"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "ar": "استخدم الوضع \"ثابت\" (موصى به) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "ar": "يمكن لأي شخص يتلقى هذا الارتباط رؤية محتوى طرق العرض المحددة. إذا كنت ترغب في مشاركة معلومات حساسة ، فقم بدعوة المستخدمين إلى مشروعك أو مشروعك الخاص وقم بتعيين حقوق الوصول والقراءة وفقًا لذلك. افتراضيًا ، يتم تمكين الوضع الثابت ، وهو إصدار خفيف الوزن للقراءة فقط من MapX. مزيد من المعلومات في الإعدادات."
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "ar": "استخدم الوضع \"الثابت\" إذا كنت تريد مشاركة طريقة عرض باستخدام إصدار خفيف الوزن وأسرع من MapX ، مع وظائف محدودة. باستخدام هذه الطريقة ، سيتم السماح لأي شخص لديه الرابط المشترك بقراءة العرض المحدد ، دون الحاجة إلى التسجيل في MapX. إذا قمت بإضافة خريطة قصة ، فستبدأ تلقائيًا ، مع تجاهل أي طرق عرض أخرى. "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "ar": "استخدم الوضع \"الثابت\" إذا كنت ترغب في مشاركة طريقة عرض باستخدام إصدار خفيف الوزن وأسرع من MapX ، مع وظائف محدودة. إذا أضفت خريطة قصة ، فستبدأ تلقائيًا ، متجاهلة أي طرق عرض أخرى"
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "ar": "المشاهدات غير متوفرة"
+    "en": "Views not found",
+    "ar": "المشاهدات غير موجودة"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "ar": "بعض المشاهدات المطلوبة غير متوفرة"
+    "en": "Some requested views are not found",
+    "ar": "لم يتم العثور على بعض المشاهدات المطلوبة"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "ar": "بعض الآراء المطلوبة غير موجودة في هذا المشروع. هل تريد جلبها وإضافتها مؤقتًا؟"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "ar": "لا يمكن تصور بعض طرق العرض المطلوبة إلا بشكل مؤقت في هذا المشروع ، ربما لأن شخصًا ما شارك رابطًا معك. هل تريد سرد تلك الآراء في هذه الجلسة في وضع القراءة فقط؟ لن يتم سرد طرق العرض المؤقتة هذه بعد الآن عند تحديث الصفحة أو الانتقال إلى مشروع آخر."
   },
   {
     "id": "vt_desc",

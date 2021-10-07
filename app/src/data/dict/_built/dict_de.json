@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "de": "Optionen teilen "
+    "en": "Show/hide settings",
+    "de": "Einstellungen ein-/ausblenden"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "de": "Verwenden Sie den Modus 'statisch' (empfohlen) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "de": "Jeder, der diesen Link erhält, kann den Inhalt der ausgewählten Ansichten sehen. Wenn Sie sensible Informationen teilen möchten, laden Sie Benutzer zu Ihrem Projekt oder privaten Projekt ein und legen Sie die Zugriffs- und Leserechte entsprechend fest. Standardmäßig ist der statische Modus aktiviert, bei dem es sich um eine schlanke, schreibgeschützte Version von MapX handelt. Weitere Informationen in den Einstellungen."
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "de": "Verwenden Sie den statischen Modus, wenn Sie eine Ansicht mit einer leichtgewichtigen und schnelleren Version von MapX mit eingeschränkten Funktionen freigeben möchten. Mit dieser Methode kann jeder mit dem freigegebenen Link die ausgewählte Ansicht lesen, ohne in MapX registriert sein zu müssen. Wenn Sie eine Story Map hinzufügen, wird diese automatisch gestartet und alle anderen Ansichten werden verworfen. "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "de": "Verwenden Sie den 'statischen' Modus, wenn Sie eine Ansicht mit einer schlanken und schnelleren Version von MapX mit eingeschränkten Funktionen teilen möchten. Wenn Sie eine Story-Map hinzufügen, startet sie automatisch und verwirft alle anderen Ansichten"
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "de": "Ansichten nicht verfügbar"
+    "en": "Views not found",
+    "de": "Ansichten nicht gefunden"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "de": "Einige angeforderte Ansichten sind nicht verfügbar"
+    "en": "Some requested views are not found",
+    "de": "Einige angeforderte Ansichten wurden nicht gefunden"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "de": "Einige angeforderte Ansichten sind in diesem Projekt nicht vorhanden. Möchten Sie sie vorübergehend abrufen und hinzufügen?"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "de": "Einige angeforderte Ansichten können in diesem Projekt nur vorübergehend angezeigt werden, wahrscheinlich weil jemand einen Link mit Ihnen geteilt hat. Möchten Sie diese Ansichten in dieser Sitzung im schreibgeschützten Modus auflisten? Diese temporären Ansichten werden nicht mehr aufgelistet, wenn Sie die Seite aktualisieren oder zu einem anderen Projekt wechseln."
   },
   {
     "id": "vt_desc",

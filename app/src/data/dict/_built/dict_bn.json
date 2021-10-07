@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "bn": "ভাগ বিকল্প "
+    "en": "Show/hide settings",
+    "bn": "সেটিংস দেখান/লুকান"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন (প্রস্তাবিত) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "bn": "এই লিঙ্কটি গ্রহণকারী যে কেউ নির্বাচিত ভিউয়ের বিষয়বস্তু দেখতে পাবে। আপনি যদি সংবেদনশীল তথ্য শেয়ার করতে চান, ব্যবহারকারীদের আপনার প্রকল্প বা ব্যক্তিগত প্রকল্পে আমন্ত্রণ জানান এবং সে অনুযায়ী অ্যাক্সেস এবং পড়ার অধিকার নির্ধারণ করুন। ডিফল্টরূপে, স্ট্যাটিক মোড সক্ষম করা হয়, যা ম্যাপএক্সের একটি হালকা, পঠনযোগ্য সংস্করণ। সেটিংসে আরো তথ্য।"
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "bn": "'স্ট্যাটিক' মোডটি ব্যবহার করুন যদি আপনি সীমিত কার্যকারিতা সহ ম্যাপএক্সের লাইটওয়েট এবং দ্রুত সংস্করণ ব্যবহার করে কোনও মতামত ভাগ করতে চান। এই পদ্ধতিটি ব্যবহার করে, ভাগ করা লিঙ্কটি সহ যে কাউকে ম্যাপএক্সে নিবন্ধভুক্ত না করে নির্বাচিত ভিউটি পড়তে দেওয়া হবে। আপনি যদি কোনও গল্পের মানচিত্র যুক্ত করেন তবে এটি অন্য কোনও দর্শন বর্জন করে স্বয়ংক্রিয়ভাবে শুরু হবে। "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "bn": "সীমিত কার্যকারিতা সহ, ম্যাপএক্সের হালকা ও দ্রুততর সংস্করণ ব্যবহার করে আপনি যদি একটি দৃশ্য ভাগ করতে চান তবে 'স্ট্যাটিক' মোড ব্যবহার করুন। আপনি যদি একটি গল্পের মানচিত্র যোগ করেন, তাহলে এটি স্বয়ংক্রিয়ভাবে শুরু হবে, অন্য কোনো দৃশ্য বাতিল করে"
   },
   {
     "id": "share_views_check_label",
@@ -6531,12 +6536,12 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "bn": "ভিউ পাওয়া যায় না"
+    "en": "Views not found",
+    "bn": "ভিউ পাওয়া যায়নি"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
+    "en": "Some requested views are not found",
     "bn": "কিছু অনুরোধ করা মতামত পাওয়া যায় না"
   },
   {
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "bn": "কিছু অনুরোধ করা মতামত এই প্রকল্পে উপস্থিত নেই। আপনি কি তাদের সাময়িকভাবে আনতে এবং যোগ করতে চান?"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "bn": "কিছু অনুরোধ করা দৃষ্টিভঙ্গি শুধুমাত্র এই প্রকল্পে সাময়িকভাবে দৃশ্যমান করা যেতে পারে, সম্ভবত কারণ কেউ আপনার সাথে একটি লিঙ্ক ভাগ করেছে। আপনি কি এই সেশনে সেই মতামতগুলিকে শুধুমাত্র পঠনযোগ্য মোডে তালিকাভুক্ত করতে চান? আপনি যখন পৃষ্ঠাটি রিফ্রেশ করবেন বা অন্য প্রকল্পে চলে যাবেন তখন এই অস্থায়ী দৃশ্যগুলি আর তালিকাভুক্ত হবে না।"
   },
   {
     "id": "vt_desc",

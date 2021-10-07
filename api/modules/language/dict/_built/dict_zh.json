@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "zh": "分享选项"
+    "en": "Show/hide settings",
+    "zh": "显示/隐藏设置"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "zh": "使用“静态”模式（推荐）"
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "zh": "收到此链接的任何人都可以看到所选视图的内容。如果您想共享敏感信息，请邀请用户加入您的项目或私人项目，并相应地设置访问和阅读权限。默认情况下启用静态模式，这是 MapX 的轻量级只读版本。设置中的更多信息。"
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "zh": "如果你想使用轻量级、更快捷的、功能有限的MapX来分享视图，请使用“静态”模式。 使用此方法，将允许获得链接的任何人读取选定的视图，而无需在MapX中注册。 如果你添加了Story Map，它将自动启动，并丢弃任何其他视图。"
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "zh": "如果您想使用功能有限的轻量级和更快的 MapX 版本共享视图，请使用“静态”模式。如果您添加故事地图，它将自动启动，丢弃任何其他视图"
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "zh": "视图不可用"
+    "en": "Views not found",
+    "zh": "未找到视图"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "zh": "某些请求的视图不可用"
+    "en": "Some requested views are not found",
+    "zh": "未找到某些请求的视图"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "zh": "此项目中不存在某些请求的视图。您想临时获取并添加它们吗？"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "zh": "某些请求的视图只能在此项目中临时可视化，可能是因为有人与您共享了链接。您想以只读模式列出此会话中的这些视图吗？当您刷新页面或移动到另一个项目时，将不再列出这些临时视图。"
   },
   {
     "id": "vt_desc",

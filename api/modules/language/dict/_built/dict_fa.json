@@ -6256,8 +6256,8 @@
   },
   {
     "id": "share_options",
-    "en": "Share options",
-    "fa": "گزینه های اشتراک گذاری "
+    "en": "Show/hide settings",
+    "fa": "نمایش/مخفی کردن تنظیمات"
   },
   {
     "id": "share_mode_static_label",
@@ -6265,9 +6265,14 @@
     "fa": "از حالت \"ثابت\" استفاده کنید (توصیه می شود) "
   },
   {
+    "id": "share_mode_warn",
+    "en": "Anyone receiving this link could see the selected views' content. If you want to share sensitive information, invite users to your project or private project and set access and reading rights accordingly. By default, the static mode is enabled, which is a lightweight, read-only version of MapX. More info in settings.",
+    "fa": "هرکسی که این پیوند را دریافت می کند می تواند محتوای نماهای انتخاب شده را مشاهده کند. اگر می خواهید اطلاعات حساس را به اشتراک بگذارید ، کاربران را به پروژه یا پروژه خصوصی خود دعوت کنید و بر اساس آن حقوق دسترسی و خواندن را تعیین کنید. به طور پیش فرض ، حالت ایستا فعال است ، که یک نسخه سبک وزن و فقط خواندنی از MapX است. اطلاعات بیشتر در تنظیمات"
+  },
+  {
     "id": "share_mode_static_desc",
-    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. Using this method, anyone with the shared link will be allowed to read the selected view, without the need of being registered in MapX. If you add a story map, it will start automatically, discarding any other views.",
-    "fa": "اگر می خواهید با استفاده از یک نسخه سبک و سریعتر از MapX ، دارای ویژگی های محدود ، از حالت \"ثابت\" استفاده کنید ، از حالت \"ثابت\" استفاده کنید. با استفاده از این روش ، هرکسی که پیوند مشترک دارد مجاز به خواندن نمای انتخاب شده بدون نیاز به ثبت در MapX خواهد بود. اگر نقشه داستانی را اضافه کنید ، به طور خودکار شروع می شود و هرگونه نمایش دیگر را کنار می گذارد. "
+    "en": "Use the 'static' mode if you want to share a view using a lightweight and faster version of MapX, with limited functionalities. If you add a story map, it will start automatically, discarding any other views",
+    "fa": "اگر می خواهید نمای را با استفاده از نسخه سبک وزن و سریع MapX با قابلیت های محدود به اشتراک بگذارید ، از حالت \"استاتیک\" استفاده کنید. اگر یک نقشه داستان اضافه کنید ، به طور خودکار شروع می شود و هر نمای دیگری را کنار می گذارد"
   },
   {
     "id": "share_views_check_label",
@@ -6531,13 +6536,13 @@
   },
   {
     "id": "fetch_views_not_found_modal_title",
-    "en": "Views not available",
-    "fa": "بازدیدها در دسترس نیست"
+    "en": "Views not found",
+    "fa": "بازدیدها یافت نشد"
   },
   {
     "id": "fetch_views_not_found_message",
-    "en": "Some requested views are not available",
-    "fa": "برخی از نماهای درخواست شده در دسترس نیستند"
+    "en": "Some requested views are not found",
+    "fa": "برخی از نمایهای درخواستی یافت نشد"
   },
   {
     "id": "fetch_views_add_temp_modal_title",
@@ -6546,8 +6551,8 @@
   },
   {
     "id": "fetch_views_add_temp_confirm",
-    "en": "Some requested views are not present in this project. Do you want to fetch and add them temporarily?",
-    "fa": "برخی از نماهای درخواست شده در این پروژه وجود ندارد. آیا می خواهید آنها را موقتاً واکشی و اضافه کنید؟"
+    "en": "Some requested views can only be visualised temporarily in this project, probably because someone shared a link with you. Do you want to list those views in this session in read-only mode ? These temporary views will no longer be listed when you refresh the page or move to another project.",
+    "fa": "برخی از نماهای درخواستی فقط به طور موقت در این پروژه قابل مشاهده هستند ، احتمالاً به این دلیل که شخصی پیوندی را با شما به اشتراک گذاشته است. آیا می خواهید آن دیدگاه ها را در این جلسه در حالت فقط خواندنی لیست کنید؟ وقتی صفحه را تازه می کنید یا به پروژه دیگری منتقل می شوید ، این نمای موقت دیگر فهرست نمی شود."
   },
   {
     "id": "vt_desc",

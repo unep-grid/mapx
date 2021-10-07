@@ -33,6 +33,7 @@ observeEvent(reactData$showShareManager,{
     #
     ui <- tagList(
       tags$h3(tt("share_link_title")),
+      tags$small(tt("share_mode_warn")),
       #
       # URL string
       #
