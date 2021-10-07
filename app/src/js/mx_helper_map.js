@@ -1733,7 +1733,8 @@ export async function updateViewsList(opt) {
    * Set fetch mode
    */
   if (hasViewsList) {
-    views.push(...(await addLocal(viewsToAdd)));
+    views.push(viewsToAdd);
+    await addLocal(viewsToAdd);
   } else {
     views.push(...(await addAsyncAll()));
   }

@@ -3,7 +3,7 @@
  * @param {Any} item item to test
  */
 export function isEmpty(item) {
-  if (typeof item === 'undefined') {
+  if (typeof item === 'undefined' || item === null) {
     return true;
   } else if (isString(item)) {
     return isEqual(item, '');
