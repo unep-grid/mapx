@@ -728,6 +728,7 @@ export function updateBtnFilterActivated() {
  * @param {Boolean} o.mapPosition.fitToBounds fit map to bounds
  * @param {Object} o.colorScheme Color sheme object
  * @param {String} o.idTheme  Id of the theme to use
+ * @param {Boolean} o.useQueryFilters Use query filters for fetch views
  */
 export async function initMapx(o) {
   const h = mx.helpers;
@@ -1241,18 +1242,11 @@ export async function initMapxStatic(o) {
 /**
  * Init full app mode
  */
-export async function initMapxApp(o) {
+export async function initMapxApp(opt) {
   const h = mx.helpers;
-  const map = o.map;
+  const map = opt.map;
   const elMap = map.getContainer();
   const hasShiny = !!window.Shiny;
-  const idViewsQueryOpen = h.getQueryParameter('viewsOpen');
-  const idViewsQuery = h.getQueryParameter('views');
-  const isFlatMode = h.getQueryParameter('viewsListFlatMode')[0] === 'true';
-  const isFilterActivated =
-    h.getQueryParameter('viewsListFilterActivated')[0] === 'true';
-  idViewsQuery.push(...idViewsQueryOpen);
-  const idViews = h.getArrayDistinct(idViewsQuery);
 
   /**
    * Init app listeners: view add, language, project change, etc.
@@ -1260,46 +1254,11 @@ export async function initMapxApp(o) {
   h.initListenersApp();
 
   /*
-   * Fetch views and build ViewsList, ViewsFilter
-   *
+   * Fetch views
    */
   await h.updateViewsList({
-    id: o.id,
-    autoFetchAll: true
+    useQueryFilters: opt.useQueryFilters
   });
-
-  /**
-   * Set flat mode (hide categories)
-   */
-  if (isFlatMode) {
-    const viewsList = h.getViewsList();
-    viewsList.setModeFlat(true);
-  }
-
-  /**
-   * Add/open views
-   */
-  await Promise.all(idViewsQueryOpen.map(h.viewAdd));
-
-  /**
-   * If any view requested to be open, filter activated
-   */
-  if (isFilterActivated && idViewsQueryOpen.length > 0) {
-    const viewsFilter = h.getViewsFilter();
-    viewsFilter.filterActivated(true);
-  }
-
-  /**
-   * set order
-   */
-  if (idViews.length) {
-    const viewsList = h.getViewsList();
-    viewsList.sortGroup(null, {
-      mode: 'ids',
-      asc: true,
-      ids: idViewsQuery
-    });
-  }
 
   /**
    * Fire ready event
@@ -1733,13 +1692,16 @@ export async function getViewsRemote(idViews) {
  * Save view list to views
  * @param {Object} opt options
  * @param {String} opt.id ID of the map
+ * @param {String} opt.project ID of the project
  * @param {Array} opt.viewList views list
- * @param {String} opt.project code
+ * @param {Boolean} opt.render Render given view
+ * @param {Boolean} opt.resetView Reset given view
+ * @param {Boolean} opt.useQueryFilters In fetch all mode, use query filters
  */
 export async function updateViewsList(opt) {
   const h = mx.helpers;
+  const views = [];
   let elProgContainer;
-  let views = [];
   let nCache = 0,
     nNetwork = 0,
     nTot = 0,
@@ -1752,38 +1714,16 @@ export async function updateViewsList(opt) {
    */
   const def = {
     id: 'map_main',
+    project: h.path(mx, 'settings.project.id'),
     viewsList: [],
     render: false,
-    autoFetchAll: false,
-    project: h.path(mx, 'settings.project.id'),
-    resetViews: false
-  }
-
-  opt = Object.assign({}, def, opt);
+    resetViews: false,
+    useQueryFilters: true
+  };
+  opt = h.updateIfEmpty(opt, def);
 
   const viewsToAdd = opt.viewsList;
-  const autoFetchAll = opt.autoFetchAll === true;
   const hasViewsList = h.isArrayOfViews(viewsToAdd) && h.isNotEmpty(viewsToAdd);
-
-  if (!hasViewsList && !autoFetchAll) {
-    throw new Error(
-      'updateViewsList need a list of views or autoFetchAll set to true'
-    );
-  }
-
-  /**
-   * If update is requested server side, project is already set, and
-   * upadte views list is the last step here.
-   * Note: this should have been done in mxUpdateSettings,  app/src/r/server/project.R
-   */
-
-  //const updateproject =
-  //h.isprojectid(opt.project) &&
-  //opt.project !== h.path(mx, 'settings.project.id');
-
-  //if (updateproject) {
-  //mx.settings.project.id = opt.project;
-  //}
 
   if (hasViewsList) {
     nTot = viewsToAdd.length;
@@ -1793,9 +1733,9 @@ export async function updateViewsList(opt) {
    * Set fetch mode
    */
   if (hasViewsList) {
-    views = await addLocal(viewsToAdd);
+    views.push(...(await addLocal(viewsToAdd)));
   } else {
-    views = await addAsyncAll();
+    views.push(...(await addAsyncAll()));
   }
 
   /**
@@ -1829,7 +1769,8 @@ export async function updateViewsList(opt) {
      */
     const data = await h.fetchViews({
       onProgress: updateProgress,
-      project : opt.project
+      project: opt.project,
+      useQueryFilters: opt.useQueryFilters
     });
     views.push(...data.views);
     state.push(
@@ -1850,6 +1791,49 @@ export async function updateViewsList(opt) {
       views: views,
       state: state
     });
+   
+    /**
+    * Add additional logic if query param should be used
+    */ 
+    if (opt.useQueryFilters) {
+      const conf = h.getQueryInit();
+      const viewsList = h.getViewsList();
+
+      /**
+       * Set flat mode (hide categories)
+       */
+      if (conf.isFlatMode) {
+        viewsList.setModeFlat(true);
+      }
+      const idViewsOpen = conf.idViewsOpen;
+      const idViews = conf.idViews;
+      const isFilterActivated = conf.isFilterActivated;
+      /**
+       * Add/open views
+       */
+      for (const id of idViewsOpen) {
+        await h.viewAdd(id);
+      }
+
+      /**
+       * If any view requested to be open, filter activated
+       */
+      if (isFilterActivated && idViewsOpen.length > 0) {
+        const viewsFilter = h.getViewsFilter();
+        viewsFilter.filterActivated(true);
+      }
+
+      /**
+       * set order
+       */
+      if (idViews.length) {
+        viewsList.sortGroup(null, {
+          mode: 'ids',
+          asc: true,
+          ids: idViews
+        });
+      }
+    }
 
     mx.events.fire({
       type: 'views_list_updated'
@@ -2049,23 +2033,23 @@ export function viewLiAction(o) {
 
 /**
  * Create a simple layer
- * @param {object} o Options
- * @param {string} o.id Id of the layer
- * @param {string} o.idSuffix Suffix of the layer id
- * @param {number} o.priority Set inner priority in case of layer group. 0 important, > 0 less important
- * @param {string} o.idSourceLayer Id of the source layer / id of the view
- * @param {string} o.idView id of the view
- * @param {string} o.idAfter Id of the layer after
- * @param {string} o.idSource Id of the source
- * @param {string} o.geomType Geometry type (point, line, polygon)
- * @param {Boolean} o.showSymbolLabel Show symbol with label
- * @param {String} o.label Label text or expression
- * @param {string} o.hexColor Hex color. If not provided, random color will be generated
- * @param {array} o.filter
- * @param {Number} o.size
- * @param {string} o.sprite
+ * @param {object} opt Options
+ * @param {string} opt.id Id of the layer
+ * @param {string} opt.idSuffix Suffix of the layer id
+ * @param {number} opt.priority Set inner priority in case of layer group. 0 important, > 0 less important
+ * @param {string} opt.idSourceLayer Id of the source layer / id of the view
+ * @param {string} opt.idView id of the view
+ * @param {string} opt.idAfter Id of the layer after
+ * @param {string} opt.idSource Id of the source
+ * @param {string} opt.geomType Geometry type (point, line, polygon)
+ * @param {Boolean} opt.showSymbolLabel Show symbol with label
+ * @param {String} opt.label Label text or expression
+ * @param {string} opt.hexColor Hex color. If not provided, random color will be generated
+ * @param {array} opt.filter
+ * @param {Number} opt.size
+ * @param {string} opt.sprite
  */
-export function makeSimpleLayer(o) {
+export function makeSimpleLayer(opt) {
   const h = mx.helpers;
   let ran, colA, colB, layer;
 
@@ -2081,7 +2065,7 @@ export function makeSimpleLayer(o) {
     label: null,
     hexColor: null,
     filter: ['all'],
-    size: 1,
+    size: null,
     sprite: null,
     // to document
     sizeFactorZoomMax: 0,
@@ -2091,25 +2075,25 @@ export function makeSimpleLayer(o) {
     zoomMax: 22,
     opacity: 0.5
   };
-  
-  const opt = h.fill(def, o);
 
-  if(o.geomType === 'point' && h.isEmpty(o.size)){
-    opt.size = 10;
+  h.updateIfEmpty(opt, def);
+
+  if (h.isEmpty(opt.size)) {
+    switch (opt.geomType) {
+      case 'point':
+        opt.size = 10;
+        break;
+      case 'symbol':
+        opt.size = 1;
+        break;
+      default:
+        opt.size = 2;
+    }
   }
-
 
   if (!opt.id) {
     console.warn('makeSimpleLayer: layer with no ID');
     return;
-  }
-
-  if (!opt.size) {
-    opt.size = opt.geomType === 'point' || opt.geomType === 'symbol' ? 10 : 2;
-  }
-
-  if (opt.geomType === 'symbol') {
-    opt.size = opt.size / 10;
   }
 
   if (opt.sprite === 'none') {

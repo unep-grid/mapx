@@ -10,28 +10,23 @@ observe({
     project <- reactData$project
     language <- reactData$language
     isMapReady <- isTRUE(reactData$mapIsReady)
-
     if(isMapReady) return()
     if(noDataCheck(userRole)) return()
     if(noDataCheck(project)) return()
     if(noDataCheck(language)) return()
 
-
     timer <- mxTimeDiff("INIT MAP")
+    useQueryFilters <- !isTRUE(reactData$projectIgnoreQueryFilters)
     projectData <- mxDbGetProjectData(project)
     mapPos <- projectData$map_position
 
-
-    #
-    # Set map options
-    # 
-    mapConfig <- list(
-      mapPosition = mapPos, 
-      colorScheme =  query$style
-      )
-
     # init map
-    mglInit(mapConfig)
+    mglInit(list(
+        mapPosition = mapPos, 
+        colorScheme =  query$style,
+        useQueryFilters = useQueryFilters
+        ))
+
     mxTimeDiff(timer)
 })
 })

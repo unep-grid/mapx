@@ -161,7 +161,7 @@ mglRemoveView <- function( idView=NULL, session=shiny::getDefaultReactiveDomain(
 #' @param id {character} Id of the map to associate views
 #' @param viewsList {list} Optional list of views.
 #' @param render {logical} Render views lsit
-#' @param autoFetchAll {boolean} Auto fetch views client side based on user id and project
+#' @param useQueryFilters {boolean} Use views query filters
 #' @param project {character} Project code
 #' @param resetViews {boolean} Removes old views
 #' @export
@@ -169,7 +169,7 @@ mglUpdateViewsList <- function(
   id = NULL, 
   viewsList = NULL,
   render = TRUE,
-  autoFetchAll = FALSE,
+  useQueryFilters = TRUE,
   project = NULL,
   resetViews = FALSE,
   session = shiny::getDefaultReactiveDomain()) {
@@ -184,7 +184,7 @@ mglUpdateViewsList <- function(
       id = id,
       viewsList = viewsList,
       render = render,
-      autoFetchAll = autoFetchAll,
+      useQueryFilters = useQueryFilters,
       project = project,
       resetViews =resetViews
       )

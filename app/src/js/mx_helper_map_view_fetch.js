@@ -1,39 +1,51 @@
 let start;
 
+
+
 export async function fetchViews(o) {
   const h = mx.helpers;
+  o = o || {};
   const def = {
     idProject: mx.settings.project.id,
     idUser: mx.settings.user.id,
     language: mx.settings.language || mx.settings.languages[0],
     token: mx.settings.user.token,
-    idViewsOpen: h.getQueryParameterInit(['idViewsOpen', 'viewsOpen']),
-    collections: h.getQueryParameterInit(['idCollections', 'collections']),
-    idViews: h.getQueryParameterInit(['idViews', 'views']),
-    collectionsSelectOperator: h.getQueryParameterInit(
-      'collectionsSelectOperator',
-      ''
-    )[0],
-    noViews: h.getQueryParameterInit('noViews',false)[0],
-    roleMax: h.getQueryParameterInit([
-      'viewsRoleMax',
-      'filterViewsByRoleMax'
-    ],'')[0]
+    useQueryFilters: null,
+    idViewsOpen: [],
+    collections: [],
+    idViews: [],
+    collectionsSelectOperator: '',
+    noViews: null,
+    roleMax: ''
   };
+  const opt = Object.assign({}, def, o);
+
+  if (opt.useQueryFilters) {
+    const optQuery = h.getQueryViewsInit();
+    h.updateIfEmpty(opt, optQuery);
+  }
+
   const dataDefault = {
     views: [],
     states: [],
     timing: 0,
     noViews: false
   };
-  const opt = Object.assign({}, def, o);
+
   const host = h.getApiUrl('getViewsListByProject');
 
   start = performance.now();
-  
-  const isModeNoViews = opt.noViews === true ||  h.isString(opt.noViews) ? opt.noViews.toLowerCase() === 'true' : false;
 
-  if ( isModeNoViews ) {
+  const isModeNoViews =
+    opt.noViews === true || h.isString(opt.noViews)
+      ? opt.noViews.toLowerCase() === 'true'
+      : false;
+
+  if (isModeNoViews) {
+    /**
+     * This returns an empty list ( legacy option )
+     */
+
     dataDefault.noViews = true;
     return Promise.resolve(dataDefault);
   }
@@ -78,11 +90,11 @@ export async function fetchViews(o) {
   if (idViewsDiff.length > 0 && !hasModalLogin) {
     const addViewTemp = await h.modalConfirm({
       title: h.getDictItem('fetch_views_add_temp_modal_title'),
-      content:h.getDictItem('fetch_views_add_temp_confirm')
+      content: h.getDictItem('fetch_views_add_temp_confirm')
     });
     if (addViewTemp) {
       const tmpViews = await h.getViewsRemote(idViewsDiff);
-      for(const view of tmpViews){
+      for (const view of tmpViews) {
         view._temp = true;
       }
       dataOut.views.unshift(...tmpViews);

@@ -49,7 +49,7 @@ export function getQueryParameterInit(idParam, def) {
   } else {
     add(idParam);
   }
-  
+
   return asArray(out);
 
   function add(id) {
@@ -63,6 +63,37 @@ export function getQueryParameterInit(idParam, def) {
       out.push(value);
     }
   }
+}
+
+export function getQueryViewsInit() {
+  const h = mx.helpers;
+  return {
+    idViewsOpen: h.getQueryParameterInit(['idViewsOpen', 'viewsOpen']),
+    collections: h.getQueryParameterInit(['idCollections', 'collections']),
+    idViews: h.getQueryParameterInit(['idViews', 'views']),
+    collectionsSelectOperator: h.getQueryParameterInit(
+      'collectionsSelectOperator',
+      ''
+    )[0],
+    noViews: h.getQueryParameterInit('noViews', false)[0],
+    roleMax: h.getQueryParameterInit(
+      ['viewsRoleMax', 'filterViewsByRoleMax'],
+      ''
+    )[0]
+  };
+}
+export function getQueryInit() {
+  const h = mx.helpers;
+  const qViews = h.getQueryViewsInit();
+  const config = {
+    isFlatMode: h.getQueryParameterInit('viewsListFlatMode', false)[0],
+    isFilterActivated: h.getQueryParameterInit(
+      'viewsListFilterActivated',
+      false
+    )[0]
+  };
+  Object.assign(config, qViews);
+  return config;
 }
 
 /**

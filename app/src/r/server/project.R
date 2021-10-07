@@ -120,15 +120,13 @@ observe({
             type = "login_requested_project_access",
             callback = function(){
               #
-              # 'views' item is not used here
-              # Views id are taken from origin views query in autoFetchAll, which call 
+              # 'views' item is not used here. See useQueryFilters option 
               # src/js/mx_helper_map_view_fetch.js 
-              # Views ids from original query are invalidated after a project change only.
               #
               reactChainCallback('requestProject',
                 value = list(
                   views = query$views,
-                  project=query$project
+                  project = query$project
                 )
               )
             }
@@ -136,6 +134,7 @@ observe({
           #
           # Quit here, login should trigger reactChain$requestProject
           #
+          reactData$projectIgnoreQueryFilters <- TRUE
           reactData$project <- project_out
           return()
         }

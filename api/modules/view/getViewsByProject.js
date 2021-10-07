@@ -102,28 +102,30 @@ async function getViews(opt) {
    */
   const result = await pgRead.query(sql);
 
-  /**
-   * Patch... in case of filters and no views :
-   * --> Return default list.
-   */
-  const retry =
-    result.rowCount === 0 &&
-    (opt.hasFilterViews || opt.hasFilterTypes || opt.hasFilterCollections);
+  views.push(...result.rows);
 
-  if (retry) {
-    opt.hasFilterCollections = false;
-    opt.hasFilterViews = false;
-    opt.hasFilterType = false;
-    const sqlRetry = parseTemplate(template.getViewsByProject, opt);
-    const resultRetry = await pgRead.query(sqlRetry);
-    /**
-     * Return default views list with not filters
-     */
-    views.push(...resultRetry.rows);
-  } else {
-    views.push(...result.rows);
-  }
-  
   return views;
 
+  /**
+   * Patch... in case of filters and no views :
+   *   * --> Return default list.
+   *
+   *  const retry =
+   *    result.rowCount === 0 &&
+   *    (opt.hasFilterViews || opt.hasFilterTypes || opt.hasFilterCollections);
+   *
+   *  if (retry) {
+   *    opt.hasFilterCollections = false;
+   *    opt.hasFilterViews = false;
+   *    opt.hasFilterType = false;
+   *    const sqlRetry = parseTemplate(template.getViewsByProject, opt);
+   *    const resultRetry = await pgRead.query(sqlRetry);
+   *    views.push(...resultRetry.rows);
+   *  } else {
+   *    views.push(...result.rows);
+   *  }
+   *
+   *  return views;
+   *
+   */
 }

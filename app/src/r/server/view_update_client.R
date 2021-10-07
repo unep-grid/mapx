@@ -21,7 +21,6 @@ observe({
     mglUpdateViewsList(
       id = .get(config,c("map","id")),
       project = project,
-      autoFetchAll = TRUE,
       resetView = TRUE
       )
 

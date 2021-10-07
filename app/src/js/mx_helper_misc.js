@@ -1,34 +1,30 @@
 import {IconFlash} from './icon_flash';
 
 /**
- * Create new object with defaults
- * NOTE: assign + handles "empty" values for each types ('',{},[],null,undefined, ...)
- * @param {Object} def Defaults value
- * @param {Object} src Source entries
- * @return {Object} Filled new object
+ * Fill mising value of target with source object
+ * NOTE: Similar to Object.assign, with handling of  "empty" values for each types ('',{},[],null,undefined, ...)
+ * @param {Object} target Target object to update
+ * @param {Object} source Source entries
+ * @return {Object} Update target
  */
-export function fill(def, src) {
+export function updateIfEmpty(target, source) {
   const h = mx.helpers;
-  const out = {};
+
+  if(!target){
+    target = {};
+  }
 
   /**
-   * Transfer missing default from src
+   * Transfer values from source
    */
-  for (const k in src) {
-    const notDef = h.isEmpty(def[k]);
-    if (notDef) {
-      def[k] = src[k];
+  for (const k in source) {
+    const noTarget = h.isEmpty(target[k]);
+    if (noTarget) {
+      target[k] = source[k];
     }
   }
+  return target;
 
-  /**
-   * Fill missing src value
-   */
-  for (const k in def) {
-    const notDef = h.isEmpty(src[k]);
-    out[k] = notDef ? def[k] : src[k];
-  }
-  return out;
 }
 
 /**
