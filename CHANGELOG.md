@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.18' target='_blank'>1.9.18</a>
+   - APP
+      -  Updated sharing text / warning
+   - APP/API 
+      -  Refactor how views are filtered using URL query parameters: should handle properly case when loading private projects and displaying login box as fallback, then properly show initial query filters after login.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.17' target='_blank'>1.9.17</a>
     - APP:
       - Serice Workers:  error when registering: waiting for an event already fired
