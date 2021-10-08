@@ -28,7 +28,7 @@
     },
     "mx_ui_border": {
       "visibility": "visible",
-      "color": "rgba(156,156,156,0.3)"
+      "color": "rgba(156,156,156,0.2)"
     },
     "mx_ui_background": {
       "visibility": "visible",

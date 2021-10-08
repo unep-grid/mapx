@@ -339,7 +339,7 @@ function initMouseMoveListener(o) {
         if (!destroyed) {
           hide();
         }
-      }, 2000);
+      }, 5000);
     }
 
     function hide() {

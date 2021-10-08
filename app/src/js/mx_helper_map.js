@@ -1164,23 +1164,6 @@ export async function initMapxStatic(o) {
 
   const idViews = h.getArrayDistinct(idViewsQuery).reverse();
 
-  const btnLegend = new ButtonPanel({
-    id: 'button_legend',
-    elContainer: document.body,
-    panelFull: true,
-    position: 'top-left',
-    tooltip_position: 'right',
-    button_text: h.getDictItem('button_legend_button'),
-    button_lang_key: 'button_legend_button',
-    button_classes: ['fa', 'fa-list-ul'],
-    container_style: {
-      width: '300px',
-      height: '300px',
-      minWidth: '200px',
-      minHeight: '200px'
-    }
-  });
-
   /**
    * Update language
    */
@@ -1209,6 +1192,23 @@ export async function initMapxStatic(o) {
       });
       return;
     }
+
+    const btnLegend = new ButtonPanel({
+      id: 'button_legend',
+      elContainer: document.body,
+      panelFull: true,
+      position: 'top-left',
+      tooltip_position: 'right',
+      button_text: h.getDictItem('button_legend_button'),
+      button_lang_key: 'button_legend_button',
+      button_classes: ['fa', 'fa-list-ul'],
+      container_style: {
+        width: '300px',
+        height: '300px',
+        minWidth: '200px',
+        minHeight: '200px'
+      }
+    });
 
     /**
      * Extract all views bounds
@@ -1792,10 +1792,11 @@ export async function updateViewsList(opt) {
       views: views,
       state: state
     });
-   
+
     /**
-    * Add additional logic if query param should be used
-    */ 
+     * Add additional logic if query param should be used
+     */
+
     if (opt.useQueryFilters) {
       const conf = h.getQueryInit();
       const viewsList = h.getViewsList();
@@ -3652,25 +3653,31 @@ export function elLegend(view, opt) {
     h.el(
       'div',
       {
-        class: ['mx-legend-view-title-container', 'hint--bottom'],
-        dataset: {
-          view_action_key: 'btn_opt_meta',
-          view_action_target: view.id,
-          lang_key: 'btn_opt_meta',
-          lang_type: 'tooltip'
-        },
-        title: title
+        class: ['mx-legend-view-title-container'],
       },
       h.el(
         'span',
         {
-          class: ['mx-legend-view-title', 'text-muted']
+          class: ['mx-legend-view-title', 'text-muted','hint--bottom'],
+          'aria-label': `${title}`
         },
         opt.addTitle ? title : ''
       ),
-      h.el('i', {
-        class: ['fa', 'fa-info-circle', 'text-muted', 'mx-legend-btn-meta']
-      })
+      h.el(
+        'span',
+        {
+          class: 'hint--bottom',
+          dataset: {
+            view_action_key: 'btn_opt_meta',
+            view_action_target: view.id,
+            lang_key: 'btn_opt_meta',
+            lang_type: 'tooltip'
+          }
+        },
+        h.el('i', {
+          class: ['fa', 'fa-info-circle', 'text-muted', 'mx-legend-btn-meta']
+        })
+      )
     )
   ]);
 
@@ -3968,7 +3975,7 @@ async function viewLayersAddRt(o) {
   /* Legend title  */
   if (legendTitle) {
     const elLabel = h.el(
-      'label',
+      'span',
       {
         class: ['mx-legend-rt-title', 'text-muted']
       },
