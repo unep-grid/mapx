@@ -146,20 +146,6 @@
   user-select: none;
 }
 
-.mx-static .mx-legend-vt-title,
-.mx-static .mx-legend-rt-title,
-.mx-story-layout .mx-legend-rt-title,
-.mx-story-layout .mx-legend-rt-title {
-  opacity: 0;
-  transition: opacity 500ms ease-in-out;
-}
-.mx-static .mx-legend-vt-container:hover .mx-legend-vt-title,
-.mx-static .mx-view-legend-rt:hover .mx-legend-rt-title,
-.mx-story-layout .mx-legend-vt-container:hover .mx-legend-rt-title,
-.mx-story-layout .mx-legend-rt:hover .mx-legend-rt-title {
-  opacity: 1;
-}
-
 
 /**
 * For legend in button panel without wrapper
