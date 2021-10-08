@@ -1,3 +1,9 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.19' target='_blank'>1.9.19</a>
+   - APP
+      - Fixed issues
+        - #469 Removed popop when locking story map
+        - #488 Improved legend title in static map / story mode
+        - #749 Story Map Editor: fixed editing content that overlapped the tools button
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.18' target='_blank'>1.9.18</a>
    - APP
       -  Updated sharing text / warning
