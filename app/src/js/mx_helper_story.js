@@ -993,6 +993,7 @@ export function storyControlMapPan(cmd) {
       mx.helpers.iconFlash('unlock');
     }
   } else {
+    mx.events.fire('story_lock');
     elIcon.classList.add(classLock);
     elIcon.classList.remove(classUnlock);
     elStory.classList.remove(classNoEvent);

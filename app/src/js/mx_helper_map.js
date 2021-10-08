@@ -1357,7 +1357,7 @@ export async function handleClickEvent(e, idMap) {
         .addTo(map);
 
       mx.events.once({
-        type: ['view_remove', 'view_add', 'story_step'],
+        type: ['view_remove', 'view_add', 'story_step', 'story_lock'],
         idGroup: 'click_popup',
         callback: () => {
           popup.remove();
@@ -3653,12 +3653,12 @@ export function elLegend(view, opt) {
     h.el(
       'div',
       {
-        class: ['mx-legend-view-title-container'],
+        class: ['mx-legend-view-title-container']
       },
       h.el(
         'span',
         {
-          class: ['mx-legend-view-title', 'text-muted','hint--bottom'],
+          class: ['mx-legend-view-title', 'text-muted', 'hint--bottom'],
           'aria-label': `${title}`
         },
         opt.addTitle ? title : ''
