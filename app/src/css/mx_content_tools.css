@@ -24,10 +24,10 @@
   display: flex;
   position: absolute;
   top: 5px;
-  right: 5px;
+  left: 5px;
   flex-direction: row;
   justify-content: flex-end;
-  left: auto;
+  /*left: auto;*/
 }
 
 .mx .ct-widget .ct-ignition__button {
