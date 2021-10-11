@@ -1,3 +1,7 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.20' target='_blank'>1.9.20</a>
+   - APP
+      - Fixed security issue: in admin mode, project's invitation text field was not properly validated.
+      - #488: partial revert change: legend title should alway be visible
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.19' target='_blank'>1.9.19</a>
    - APP
       - Fixed issues
