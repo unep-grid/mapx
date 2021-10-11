@@ -1939,7 +1939,8 @@ mxDbGetSessionDurationHMS <- function(id=NULL){
 #' @export
 mxDbEmailIsKnown <- function(email=NULL,userTable="mx_users",active=TRUE,validated=TRUE){
 
-  if(is.null(email)) return()
+  if(noDataCheck(email)) return(FALSE)
+  if(!mxEmailIsValid(email)) return(FALSE)
 
   email <- trimws(tolower(email))
   filterHidden = isTRUE(!active)
