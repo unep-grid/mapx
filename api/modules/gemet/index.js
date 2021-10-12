@@ -12,12 +12,12 @@ const validateParamsHandlerConcept = getParamsValidator({
   required: ['idConcepts', 'language']
 });
 
-const mwSearchText = [validateParamsHandlerText, handlerSearchText];
-const mwSearchConcept = [validateParamsHandlerConcept, handlerSearchConcept];
+const mwGemetSearchText = [validateParamsHandlerText, handlerSearchText];
+const mwGemetSearchConcept = [validateParamsHandlerConcept, handlerSearchConcept];
 
 module.exports = {
-  mwSearchText,
-  mwSearchConcept
+  mwGemetSearchText,
+  mwGemetSearchConcept
 };
 
 async function handlerSearchText(req, res) {

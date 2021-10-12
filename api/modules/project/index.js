@@ -3,6 +3,7 @@ const {pgRead} = require('@mapx/db');
 const {project} = require('@mapx/db-models');
 const {validateTokenHandler} = require('@mapx/authentication');
 const {getParamsValidator} = require('@mapx/route_validation');
+const {mwProjectSearchText} = require('./search.js');
 
 const validateParamsHandler = getParamsValidator({
   expected: [
@@ -15,6 +16,8 @@ const validateParamsHandler = getParamsValidator({
     'idUser'
   ]
 });
+
+module.exports.mwProjectSearchText = mwProjectSearchText;
 
 module.exports.mwGetListByUser = [
   validateParamsHandler,
@@ -126,7 +129,7 @@ function getProjectsByUserHelper(
         )
     );
   }
-  sqlStr = `
+  const sqlStr = `
     WITH project_role AS (${pSql.toString()})
     SELECT * FROM project_role WHERE ${roleCondition}
     `;

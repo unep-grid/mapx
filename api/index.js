@@ -29,10 +29,9 @@ const log = require('@mapx/log');
 const {mwSetHeaders, mwGetConfigMap} = require('@mapx/helpers');
 const {mwIoConnect} = require('@mapx/io');
 const {mwNotify} = require('@mapx/notify');
-const {mwSearchText, mwSearchConcept} = require('@mapx/gemet');
+const {mwGemetSearchText, mwGemetSearchConcept} = require('@mapx/gemet');
 const {mwGetSearchKey} = require('@mapx/search');
 const {mwGetBbox} = require('@mapx/bbox');
-
 /**
  * If port argument is set, use this instead
  * e.g. node inspect index.js port=3333
@@ -88,10 +87,10 @@ app.get('/get/source/validate/geom', source.mwGetGeomValidate);
 app.get('/get/projects/list/user/', project.mwGetListByUser);
 app.get('/get/ip', ip.mwGet);
 app.get('/get/search/key', mwGetSearchKey);
-app.get('/get/gemet/search', mwSearchText);
-app.get('/get/gemet/concept', mwSearchConcept);
+app.get('/get/gemet/search', mwGemetSearchText);
+app.get('/get/gemet/concept', mwGemetSearchConcept);
 app.get('/get/bbox/',mwGetBbox);
-
+app.get('/get/project/search',project.mwProjectSearchText);
 
 app.post('/upload/image/', upload.mwImage);
 app.post('/upload/vector/', upload.mwVector);
