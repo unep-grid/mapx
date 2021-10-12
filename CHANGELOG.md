@@ -1,3 +1,9 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.21' target='_blank'>1.9.21</a>
+   - APP 
+     - Fixed a bug with the custom SQL query tool
+   - API
+     - New route to search public project by title or description: `get/project/search?searchText=<similarity expression>`
+     - View search : added `projects_id` ( all projects' id where the view is visible )  as filtering/faceting key
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.20' target='_blank'>1.9.20</a>
    - APP
       - Fixed security issue: in admin mode, project's invitation text field was not properly validated.
