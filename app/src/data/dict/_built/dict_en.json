@@ -5452,6 +5452,10 @@
     "en": "Text of the interface"
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links"
   },

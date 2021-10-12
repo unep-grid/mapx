@@ -17719,6 +17719,19 @@
     "de": "Text der Schnittstelle "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "fr": "Couleur d'accentuation d'entrée",
+    "es": "Entrada de color de acento",
+    "ru": "Цвет акцента ввода",
+    "zh": "输入强调色",
+    "ar": "لون تمييز الإدخال",
+    "fa": "رنگ لهجه ورودی",
+    "ps": "د تلفظ رنګ",
+    "bn": "ইনপুট অ্যাকসেন্ট রঙ",
+    "de": "Akzentfarbe eingeben"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "fr": "Liens",

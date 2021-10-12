@@ -6815,6 +6815,11 @@
     "zh": "界面文本"
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "zh": "输入强调色"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "zh": "链接"

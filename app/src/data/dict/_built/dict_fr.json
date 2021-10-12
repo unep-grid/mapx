@@ -6815,6 +6815,11 @@
     "fr": "Texte de l'interface"
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "fr": "Couleur d'accentuation d'entrée"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "fr": "Liens"

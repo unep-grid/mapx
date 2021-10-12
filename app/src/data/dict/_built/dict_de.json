@@ -6815,6 +6815,11 @@
     "de": "Text der Schnittstelle "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "de": "Akzentfarbe eingeben"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "de": "Links "

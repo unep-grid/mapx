@@ -6815,6 +6815,11 @@
     "ru": "Текст интерфейса "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "ru": "Цвет акцента ввода"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "ru": "Ссылки "

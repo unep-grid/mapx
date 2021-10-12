@@ -6815,6 +6815,11 @@
     "ps": "د انٹرفیس متن "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "ps": "د تلفظ رنګ"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "ps": "لینکونه "

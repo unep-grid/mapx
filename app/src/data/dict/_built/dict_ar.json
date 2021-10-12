@@ -6815,6 +6815,11 @@
     "ar": "نص الواجهة "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "ar": "لون تمييز الإدخال"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "ar": "الروابط "

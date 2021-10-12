@@ -6815,6 +6815,11 @@
     "bn": "ইন্টারফেসের পাঠ্য "
   },
   {
+    "id": "mx_ui_input_accent",
+    "en": "Input accent color",
+    "bn": "ইনপুট অ্যাকসেন্ট রঙ"
+  },
+  {
     "id": "mx_ui_link",
     "en": "Links",
     "bn": "লিঙ্কগুলি "
