@@ -9,11 +9,14 @@ WITH flat AS (
   public = true
 ),
 sim AS (
- SELECT id,
+ SELECT 
+ id,
  title,
  description,
- similarity(title,'{{text}}') s_t,
- similarity(description,'{{text}}') s_d
+ GREATEST(
+   similarity(title,'{{text}}'),
+   similarity(description,'{{text}}')
+ ) s
  FROM
  flat
 ),
@@ -23,7 +26,7 @@ sub AS (
   FROM
   sim
   WHERE
-  s_t > 0.05 OR s_d > 0.05 
+  s > 0.05
 ),
 count_sim  as (
   SELECT
@@ -38,13 +41,13 @@ count_all  as (
 hits as (
   SELECT
   json_build_object(
+    'id', id,
     'title',title,
     'description',description,
-    'score_description',s_d,
-    'score_title',s_t
+    'score', s
   ) hits
   FROM sub
-  ORDER BY s_t DESC
+  ORDER BY s DESC
   LIMIT {{limit}}
   OFFSET {{offset}}
 ),

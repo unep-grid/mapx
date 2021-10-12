@@ -132,6 +132,7 @@ tmp_views_public_loooong AS (
 tmp_views_public AS (
   SELECT
     id_view,
+    json_agg(id_project) as projects_id,
     json_agg(
       jsonb_build_object(
         'id_project',
@@ -249,6 +250,7 @@ views_built AS (
       )
     ) AS meta_multilingual,
     p.projects_data,
+    p.projects_id,
     m.meta #> '{text, keywords, keys}' AS source_keywords,
     m.meta #> '{text, keywords, keys_m49}' AS source_keywords_m49,
     m.meta #> '{text, keywords, keys_gemet}' AS source_keywords_gemet,
@@ -317,6 +319,7 @@ views_built_types AS (
     project_id,
     meta_multilingual,
     projects_data,
+    projects_id,
     view_type,
     COALESCE(source_keywords, '[]'::jsonb) AS source_keywords,
     COALESCE(source_keywords_m49, '[]'::jsonb) AS source_keywords_m49,

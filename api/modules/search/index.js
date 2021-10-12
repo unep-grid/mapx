@@ -159,6 +159,7 @@ function flatLanguageStrings(item, language) {
       g.push(k.label);
     }
   }
+  delete itemClone.source_keywords_gemet_multilingual
   /**
    * Extend document with itemClones from meta_multilingual
    */
@@ -183,6 +184,7 @@ function flatLanguageStrings(item, language) {
       itemClone[m] = htmlToText(itemClone[m], {wordwrap: false});
     }
   }
+  delete itemClone.meta_multilingual
 
   /**
    * Set language in project data. Object => string

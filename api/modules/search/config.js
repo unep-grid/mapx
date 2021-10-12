@@ -20,6 +20,7 @@ const config = {
       'source_keywords',
       'source_keywords_m49',
       'source_keywords_gemet',
+      'projects_id'
     ],
     /**
      * Ranking rules
@@ -64,7 +65,8 @@ const config = {
       'range_start_at_year',
       'range_end_at_year',
       'range_years',
-      'projects_data'
+      'projects_data',
+      'projects_id'
     ]
   }
 };
