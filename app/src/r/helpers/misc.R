@@ -1711,12 +1711,21 @@ mxScroll <- function(content){
 #' @param classContent {character} Name of the class for the fold content
 #' @param classLabel {character} Name of the class for the label
 #' @export
-#mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL, open=FALSE, classContainer="fold-container",classContent="fold-content",classLabel="fold-label"){
-mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL,type = 'caret', open=FALSE, classContainer="fold-container form-group shiny-input-container",classContent="fold-content",classLabel="fold-label",classScroll="mx-scroll-styled"){
+mxFoldOrig <- function(
+  content,
+  id=NULL,
+  labelDictKey=NULL,
+  labelText=NULL,
+  labelUi=NULL,
+  type = 'caret',
+  open=FALSE,
+  classContainer="fold-container form-group shiny-input-container",
+  classContent="fold-content",
+  classLabel="fold-label",
+  classScroll="mx-scroll-styled"){
   if(noDataCheck(id)) id <- randomString()
 
   foldType = ifelse( type == "caret",'fold-caret','fold-check' )
-
 
   elInput = tags$input(type="checkbox",id=id,class="fold-switch" + " " + foldType )
 
@@ -1730,42 +1739,72 @@ mxFold <- function(content,id=NULL,labelDictKey=NULL,labelText=NULL,labelUi=NULL
     label = tags$label(labelUi,class=classLabel,`for`=id)
   }
 
-  tags$div(class=classContainer + " " + foldType,
+  tags$div(
+    class = classContainer + " " + foldType,
     elInput,
     label,
-    tags$div(class= paste(classContent,classScroll),
+    tags$div(
+      class= paste(classContent,classScroll),
       content
       )
     )
 }
+mxFold <- function(
+  content,
+  labelDictKey=NULL,
+  labelText=NULL,
+  labelUi=NULL,
+  type = 'caret',
+  open = FALSE){
 
+  elDetails = tags$details()
+  
+  if(noDataCheck(labelUi)){
+    elSummary <- tags$summary(`data-lang_key`= labelDictKey,labelText)
+  }else{
+    elSummary <- tags$summary(labelUi)
+  }
+
+  elDetails <- tagAppendChild(elDetails,elSummary)
+  elDetails <- tagAppendChild(elDetails, content)
+
+  if(open){
+    elDetails$attribs$open=T
+  }
+
+  return(elDetails)
+
+}
 
 #' R list to html list
 #'
 #' Create a html list and apply a class for <ul> and <li>
 #'
 #' @param listInput list in input
-listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE,valReplace=NULL){
+listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,numberArray=FALSE,maxFold=2,unboxText=TRUE,valReplace=NULL,maxHeight=200){
 
   r = 0
-
   makeUL <- function(li){
     r <<- r + 1
     nL <- names(li)
     lL <- length(li)
-    content <- tagList()
+  
+    UL <- tags$ul(class="list-group mx-scroll-styled",style=sprintf("max-height:%spx",maxHeight))
+
     for( i in 1:lL){ 
-      n <-  nL[[i]]
-      if(noDataCheck(n)){ n <- ifelse(numberArray,i,"") }
-      content <- tagList(content, makeLi(li[[i]],n))
+      name <-  nL[[i]]
+      if(noDataCheck(name)){ name <- ifelse(numberArray,i,"") }
+      #content <- tagList(content, makeLi(li[[i]],name,i))
+      LI <- makeLi(li[[i]],name)
+      UL <- tagAppendChild(UL,LI)
     }
     r <<- r - 1
-    tags$ul(content,class="list-group")
+    return(UL)
   }
 
   makeLi <- function(it,ti){
-    #ti <- d(ti,lang=lang,dict=dict);
-    ti <- dd(ti,language=lang,dict=dict);
+    ti <- dd(ti,language=lang,dict=dict)
+
     if (is.list(it) && length(it)>0 && class(it) != "shiny.tag" ){
 
       classList <- "list-group-item"
@@ -1774,42 +1813,42 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,n
         content <- mxFold(
           content = makeUL(it),
           labelUi = ti
-          )
+        )
       }else{
         content <- tags$div(
           tags$b(class="list-group-title-big",ti),
           tags$div(makeUL(it))
-          )
+        )
       }
 
       return(
         tags$li(
           class = classList,
           content
-          )
         )
+      )
 
     }else{
 
-      if(!noDataCheck(valReplace)){
-        if(!noDataCheck(it)){
+      if(!noDataCheck(valReplace) && !noDataCheck(it)){
           it <- valReplace(it)
-        }
       }
+
       if(unboxText){
         return(
           tags$div(
             tags$span(class="list-group-title-small",ti),
             tags$span(it)
-            )
-          )}else{
-          return(
-            tags$li(
-              class = "list-group-item",
-              tags$span(class="list-group-title-small",ti),
-              tags$span(it)
-              )
-            )
+          )
+        )
+      }else{
+        return(
+          tags$li(
+            class = "list-group-item",
+            tags$span(class="list-group-title-small",ti),
+            tags$span(it)
+          )
+        )
 
       }
     }

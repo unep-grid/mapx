@@ -19,6 +19,8 @@ observeEvent(input$btnShowQueryMaker,{
   output$uiQueryEncrypted <- renderUI(tagList())
 
   if( isMember ){
+
+    sourcesList <- reactListReadSources()
     mxModal(
       id="test",
       buttons = btnList,
@@ -29,7 +31,7 @@ observeEvent(input$btnShowQueryMaker,{
         mxFold(
           labelUi=d("label_layer_available",language),
           content = listToHtmlSimple(
-            listInput = reactListReadSources(),
+            listInput = sourcesList,
             useFold = TRUE,
             unboxText = FALSE
             )
@@ -43,11 +45,11 @@ observeEvent(input$btnShowQueryMaker,{
 
 observeEvent(input$btnMakeQuery,{
 
-
   err <- logical(0)
   out <- tags$b("")
   sql <- input$txtQuery
   language <- reactData$language
+
   userRole <- getUserRole()
   isMember <- isTRUE("members" %in% userRole$groups)
   apiPort <- config$api$port_public

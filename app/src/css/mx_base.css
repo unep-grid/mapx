@@ -86,7 +86,6 @@ blockquote {
 
 details {
   padding: 10px;
-  cursor: pointer;
 }
 
 details > summary {
