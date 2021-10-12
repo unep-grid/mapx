@@ -304,13 +304,11 @@ class Theme {
         class: ['mx-theme--color-container']
       },
       el(
-        'label',
+        'span',
         {
           class: ['mx-theme--color-label', 'hint--right'],
           dataset: {lang_key: cid},
-          'aria-label': cid,
-          title: cid,
-          for: `${cid}_inputs_wrap`
+          'aria-label': cid
         },
         getDictItem(cid)
       ),
