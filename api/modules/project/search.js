@@ -1,11 +1,11 @@
 const {pgRead} = require('@mapx/db');
 const {getParamsValidator} = require('@mapx/route_validation');
 const {getProjectsPublicSearch} = require('@mapx/template');
-const {parseTemplate, sendJSON, sendError} = require('@mapx/helpers');
+const {parseTemplate, sendJSON, sendError, arrayToPgArray} = require('@mapx/helpers');
 
 const validateParamsHandler = getParamsValidator({
-  required: ['searchText', 'language'],
-  expected : ['pageNumber','maxByPage']
+  required: ['titleRegex', 'language'],
+  expected : ['idProjects','pageNumber','maxByPage']
 });
 
 const mwProjectSearchText = [validateParamsHandler, handlerSearchText];
@@ -18,7 +18,8 @@ async function handlerSearchText(req, res) {
   try {
     const q = parseTemplate(getProjectsPublicSearch, {
       language: req.query.language,
-      text: req.query.searchText,
+      titleRegex: req.query.titleRegex,
+      idProjects : arrayToPgArray(req.query.idProjects),
       limit : req.query.maxByPage,
       offset : (req.query.pageNumber-1) * req.query.maxByPage 
     });

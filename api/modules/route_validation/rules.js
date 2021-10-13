@@ -95,7 +95,7 @@ const rules = [
   {
     key: ['maxByPage'],
     test: (d) => {
-      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 100; // see mx_helper_map_view_style.js
+      isValid = mx_valid.isNumeric(d) && d > 0 && d <= 1000; 
       return {
         valid: isValid,
         value: isValid ? d * 1 : 20
@@ -175,6 +175,17 @@ const rules = [
     test: (d) => {
       return {
         valid: mx_valid.isProjectId(d),
+        value: d
+      };
+    }
+  },
+  {
+    key: ['idProjects'],
+    test: (d) => {
+      d = asArray(d);
+      isValid = d.reduce((a, id) => a && mx_valid.isProjectId(id), true);
+      return {
+        valid: isValid,
         value: d
       };
     }
@@ -319,6 +330,7 @@ const rules = [
       'title',
       'titlePrefix',
       'titleFuzzy',
+      'titleRegex',
       'subject',
       'subtitle',
       'subjectPrefix',
@@ -328,8 +340,10 @@ const rules = [
       'code'
     ],
     test: (d) => {
+      const notAllowed = new RegExp("[_;'\"]");
+      const isValid = !notAllowed.test(d) && mx_valid.isStringRange(d, 1, 200);
       return {
-        valid: mx_valid.isStringRange(d, 1, 200),
+        valid: isValid,
         value: d
       };
     }

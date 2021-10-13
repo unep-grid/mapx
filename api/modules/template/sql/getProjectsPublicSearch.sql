@@ -8,27 +8,16 @@ WITH flat AS (
   WHERE
   public = true
 ),
-sim AS (
- SELECT 
- id,
- title,
- description,
- GREATEST(
-   similarity(title,'{{text}}'),
-   similarity(description,'{{text}}')
- ) s
+sub AS (
+ SELECT
+ *
  FROM
  flat
+ WHERE
+ title ~ '{{titleRegex}}'
+ OR id IN {{idProjects}}
 ),
-sub AS (
-  SELECT
-  *
-  FROM
-  sim
-  WHERE
-  s > 0.05
-),
-count_sim  as (
+count_sub  as (
   SELECT
   count(*) n
   FROM
@@ -43,11 +32,10 @@ hits as (
   json_build_object(
     'id', id,
     'title',title,
-    'description',description,
-    'score', s
+    'description',description
   ) hits
   FROM sub
-  ORDER BY s DESC
+  ORDER BY title DESC
   LIMIT {{limit}}
   OFFSET {{offset}}
 ),
@@ -66,7 +54,7 @@ built as (
     'n_pages', ceiling(cs.n::float / {{limit}}),
     'page', {{offset}}/{{limit}} + 1
   ) res
-  FROM hits_agg h, count_all ca, count_sim cs
+  FROM hits_agg h, count_all ca, count_sub cs
 )
 
 SELECT * FROM built;
