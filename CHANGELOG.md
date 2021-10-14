@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.22' target='_blank'>1.9.22</a>
+   - APP 
+     - Controls panel refactoring: better support for small screen, keep all buttons visible + in full size for improved usability on touch devices, reworked the auto layout
+   - API
+     - Public project search -> use regex instead of similarity + better validation + add additional item by id  ex. `/get/project/search?titleRegex=^UN.*$&language=en&maxByPage=20&idProjects=MX-5Z8-45E-K4I-SKH-75H`
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.21' target='_blank'>1.9.21</a>
    - APP 
      - Fixed a bug with the custom SQL query tool
