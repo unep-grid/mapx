@@ -80,7 +80,7 @@ class ButtonsControls extends EventSimple {
     btnGrp.buttons.forEach((btn) => btn.destroy());
   }
 
-  getInnerRect() {
+  get rectGrid() {
     /**
      * Measure space taken by current
      * content. As it's flex based, only solution
@@ -88,7 +88,7 @@ class ButtonsControls extends EventSimple {
      * and measure once. But we don't want non-flex,
      * so... measure each ?
      */
-    let count = 0;
+    let first = true;
     let dim = {};
     /*
      * Flex should render a grid of buttons.
@@ -97,45 +97,68 @@ class ButtonsControls extends EventSimple {
      */
     const gridX = {};
     const gridY = {};
-    const stat = {btnMaxWidth: 0, btnMaxHeight: 0};
+    const stat = {itemMaxWidth: 0, itemMaxHeight: 0};
     const btnGrp = this;
+
     for (let key in btnGrp._btns) {
       const btn = btnGrp._btns[key];
-      //const dim = btnGrp.buttons.reduce((a, btn) => {
       const r = btn.rect;
-      const mX = r.x + r.width;
-      const mY = r.y + r.height;
-      if (r.y && r.x) {
-        gridX[Math.floor(r.x / r.width)] = true;
-        gridY[Math.floor(r.y / r.height)] = true;
-        count++;
-        if (count === 1) {
-          stat.btnMaxWidth = r.width;
-          stat.btnMaxHeight = r.height;
+      const s = window.getComputedStyle(btn.elButton);
+      const isHidden = s.display === 'none';
+      if (!isHidden) {
+        /**
+        * Get dimensions, including margin
+        */
+        const mL = parseFloat(s.marginLeft);
+        const mR = parseFloat(s.marginRight);
+        const mT = parseFloat(s.marginTop);
+        const mB = parseFloat(s.marginBottom);
+        const mH = mT + mB;
+        const mW = mL + mR;
+        const h = r.height + mH;
+        const w = r.width + mW;
+        const maxX = r.x + r.width + mR;
+        const maxY = r.y + r.height + mB;
+        const minX = r.x - mL;
+        const minY = r.y - mT;
+        const cX = Math.floor(minX / w) * w;
+        const cY = Math.floor(minY / h) * h;
+        gridX[cX] = true;
+        gridY[cY] = true;
+        if (first) {
+          first = false;
+          stat.itemMaxWidth = w;
+          stat.itemMaxHeight = h;
           dim = {
-            left: r.x,
-            top: r.y,
-            right: mX,
-            bottom: mY
+            left: minX,
+            top: minY,
+            right: maxX,
+            bottom: maxY,
+            marginTop: mT,
+            marginRight: mR,
+            marginLeft: mL,
+            marginBottom: mB,
+            marginHeight: mT + mB,
+            marginWidth: mL + mR
           };
         } else {
-          if (r.width > stat.btnMaxWidth) {
-            stat.btnMaxWidth = r.width;
+          if (w > stat.itemMaxWidth) {
+            stat.itemMaxWidth = w;
           }
-          if (r.height > stat.btnMaxHeight) {
-            stat.btnMaxHeight = r.height;
+          if (h > stat.itemMaxHeight) {
+            stat.itemMaxHeight = h;
           }
-          if (r.y < dim.top) {
-            dim.top = r.y;
+          if (minY < dim.top) {
+            dim.top = minY;
           }
-          if (mY > dim.bottom) {
-            dim.bottom = mY;
+          if (maxY > dim.bottom) {
+            dim.bottom = maxY;
           }
-          if (r.x < dim.left) {
-            dim.left = r.x;
+          if (minX < dim.left) {
+            dim.left = minX;
           }
-          if (mX > dim.right) {
-            dim.right = mX;
+          if (maxX > dim.right) {
+            dim.right = maxX;
           }
         }
       }

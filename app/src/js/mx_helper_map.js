@@ -956,20 +956,19 @@ export async function initMapx(o) {
       button_lang_key: 'btn_panel_controls',
       tooltip_position: 'bottom-left',
       handles: ['free'],
-      container_style: {
-        /**
-         * TODO : Set this as a class, same technique as no-ful-width/height
-         */
-
-        width: window.innerWidth < 800 ? '50px' : '120px',
-        height: window.innerHeight < 800 ? '100%' : '420px',
-        minWidth: '50px',
-        minHeight: '50px'
-      },
       container_classes: ['button-panel--container-no-full-width'],
       item_content_classes: [
         'button-panel--item-content-transparent-background'
-      ]
+      ],
+      panel_style: {
+        marginTop: '40px'
+      },
+      container_style: {
+        width: '100px',
+        height: '340px',
+        minWidth: '49px',
+        minHeight: '49px'
+      }
     }
   });
   if (!mx.settings.initClosedPanels) {

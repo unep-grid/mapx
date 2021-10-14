@@ -11,20 +11,3 @@
     display: flex;
   }
 }
-
-@media (max-width: 800px), (max-height: 800px) {
-  .btn-ctrl--group {
-    overflow: auto;
-    .btn-ctrl--item {
-      &.btn-ctrl--item-no-mobile {
-        display: none;
-      }
-    }
-  }
-}
-
-@media (max-height: 720px) {
-  .btn-ctrl--group {
-    padding-top: 70px; // avoid overlap with the pannel button in landscape
-  }
-}

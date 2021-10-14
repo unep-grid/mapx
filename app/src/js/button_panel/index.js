@@ -23,7 +23,8 @@ class ButtonPanel extends EventSimple {
       item_content_classes: [],
       panel_style: {},
       add: true,
-      handles: ['free', 'resize']
+      handles: ['free', 'resize'],
+      animateDurationMs: 350
     };
     panel.opt = Object.assign({}, options, opt);
     panel.ls = new ListenerStore();
@@ -34,6 +35,7 @@ class ButtonPanel extends EventSimple {
     const panel = this;
     _button_panels.push(panel);
     panel.build();
+    panel.setAnimateDuration();
     panel.setButtonLabel();
     panel.setExclusiveMode(); // close other panel automatically;
     panel.show();
@@ -63,6 +65,12 @@ class ButtonPanel extends EventSimple {
     panel.restoreSize();
     panel.on('resize', panel.saveSize.bind(panel));
     panel.on('resize-auto', panel.saveSize.bind(panel));
+  }
+
+  setAnimmateDuration(ms) {
+    const panel = this;
+    ms = typeof ms === 'undefined' ? panel.opt.animateDurationMs : ms;
+    panel.elMain.style.setProperty('--animate-transition-ms', `${ms}ms`);
   }
 
   saveSize() {
@@ -347,7 +355,8 @@ class ButtonPanel extends EventSimple {
     panel.elContainer.classList.add('button-panel--container-resize');
 
     panel._resize = {
-      rect: panel.elPanel.getBoundingClientRect(),
+      //rect: panel.elPanel.getBoundingClientRect(),
+      rect: panel.rect,
       x: e.clientX,
       y: e.clientY,
       corner: target.dataset.corner,
@@ -403,8 +412,16 @@ class ButtonPanel extends EventSimple {
     panel.fire('resize-button');
   }
 
-  get rectParent() {
-    return this.elContainer.parentElement.getBoundingClientRect();
+  getAnimateDuration() {
+    const panel = this;
+    return panel.opt.animateDurationMs;
+  }
+
+  setAnimateDuration(ms) {
+    const panel = this;
+    ms = typeof ms === 'undefined' ? panel.opt.animateDurationMs : ms;
+    panel.opt.animateDurationMs = ms;
+    panel.elContainer.style.setProperty('--animate-transition-ms', `${ms}ms`);
   }
 
   setAnimate(enable) {
@@ -415,19 +432,19 @@ class ButtonPanel extends EventSimple {
       clearTimeout(panel._to_set_animate);
       panel._to_set_animate = setTimeout(() => {
         panel.setAnimate(false);
-      }, 500);
+      }, panel.opt.animateDurationMs);
     } else {
       panel.elContainer.classList.remove('button-panel--container-animate');
       panel.elContainer.classList.remove('button-panel--container-resize');
     }
   }
 
-  shake(){
+  shake() {
     const panel = this;
     panel.elContainer.classList.add('button-panel--shake');
-    setTimeout(()=>{
+    setTimeout(() => {
       panel.elContainer.classList.remove('button-panel--shake');
-    },820)
+    }, 820);
   }
 
   resizeAuto(type) {
@@ -463,12 +480,23 @@ class ButtonPanel extends EventSimple {
     panel.fire('resize-auto', type);
     panel.fire('resize-button');
   }
-
+  get rectParent() {
+    return this.elContainer.parentElement.getBoundingClientRect();
+  }
+  get rectContent() {
+    return this.elPanel.getBoundingClientRect();
+  }
+  get rectButton() {
+    return this.elBtnPanel.getBoundingClientRect();
+  }
+  get rect() {
+    return this.elContainer.getBoundingClientRect();
+  }
   get width() {
-    return this.elContainer.getBoundingClientRect().width;
+    return this.rect.width;
   }
   get height() {
-    return this.elContainer.getBoundingClientRect().height;
+    return this.rect.height;
   }
   set width(w) {
     const panel = this;
@@ -479,7 +507,7 @@ class ButtonPanel extends EventSimple {
     panel._af_wifth = requestAnimationFrame(() => {
       const isNum = isNumeric(w);
       if (isNum) {
-        const width = Math.round(w / 10) * 10;
+        const width = Math.ceil(w / 10) * 10;
         panel.elContainer.style.width = width + 'px';
       } else {
         panel.elContainer.style.width = w;
@@ -499,7 +527,7 @@ class ButtonPanel extends EventSimple {
     panel._af_height = requestAnimationFrame(() => {
       const isNum = isNumeric(h);
       if (isNum) {
-        const height = Math.round(h / 10) * 10;
+        const height = Math.ceil(h / 10) * 10;
         panel.elContainer.style.height = height + 'px';
       } else {
         panel.elContainer.style.height = h;
@@ -588,15 +616,17 @@ class ButtonPanel extends EventSimple {
     return this.isSmallHeight() || this.isSmallWidth();
   }
   isSmallHeight() {
-    return window.innerHeight < 800;
+    // should match @media (max-height: 640px) {
+    return window.innerHeight <= 640;
   }
   isSmallWidth() {
-    return window.innerWidth < 800;
+    // should match @media (max-width: 640px) {
+    return window.innerWidth <= 640;
   }
   setExclusiveMode(enable) {
     const panel = this;
     panel.exclusiveMode =
-      typeof enable === 'boolean' ? enable : panel.isSmall();
+      typeof enable === 'boolean' ? enable : panel.isSmallWidth();
   }
 }
 

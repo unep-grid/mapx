@@ -37,14 +37,6 @@ export function generateButtons() {
       }
     }),
     new Button({
-      key: 'btn_north_arrow',
-      classesIcon: ['mx-north-arrow'],
-      action: () => {
-        const map = getMap();
-        map.easeTo({bearing: 0, pitch:0});
-      }
-    }),
-    new Button({
       key: 'btn_zoom_in',
       classesIcon: ['fa', 'fa-plus'],
       action: () => {
@@ -76,6 +68,14 @@ export function generateButtons() {
         const map = getMap();
         const b = map.getBearing();
         map.flyTo({bearing: b - 30});
+      }
+    }),
+    new Button({
+      key: 'btn_north_arrow',
+      classesIcon: ['mx-north-arrow'],
+      action: () => {
+        const map = getMap();
+        map.easeTo({bearing: 0, pitch:0});
       }
     }),
     new Button({

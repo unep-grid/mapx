@@ -27,6 +27,14 @@
   --mx_ui_font_size_base: 0.95em;
 
   /**
+  * Media size ( @media var(...) does not work, keeping this
+  * here as reference
+  */
+  --mx_media_small: 640px;
+  --mx_media_medium: 800px;
+  --mx_media_large: 1200px;
+
+  /**
   * Shadow
   */
   --mx_ui_box_shadow: 0px 0px 14px 0px var(--mx_ui_shadow);

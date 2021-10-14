@@ -7,6 +7,7 @@
   top: 10px;
   right: 10px;
   display: block;
+  --animate-transition-ms: 350ms;
   .button-panel--container {
     pointer-events: none;
     position: absolute;
@@ -52,7 +53,8 @@
     }
     &.button-panel--container-animate {
       pointer-events: none;
-      transition: 350ms ease-in-out, height 350ms ease-in-out;
+      transition: width var(--animate-transition-ms) ease-in-out,
+        height var(--animate-transition-ms) linear;
     }
     .button-panel--btn {
       width: 40px;
@@ -144,7 +146,7 @@
           opacity: 0;
           cursor: pointer;
           transition: opacity 500ms ease-in-out;
-          display:flex;
+          display: flex;
           &:hover {
             opacity: 1;
             margin: 30px;
@@ -251,7 +253,7 @@
 }
 
 /* responsive */
-@media (max-width: 700px), (max-height: 700px) {
+@media (max-width: 640px), (max-height: 640px) {
   .button-panel--main {
     left: 0px;
     bottom: 0px;
@@ -271,7 +273,6 @@
         height: 35px;
         width: 35px;
         margin: 2px;
-        /*border-radius: 3px;*/
         border-radius: 50%;
         opacity: 0.7;
         display: flex;
@@ -284,17 +285,29 @@
     }
   }
 }
-@media (max-width: 700px) {
+@media (max-width: 640px) {
   .button-panel--main {
     .button-panel--container:not(.button-panel--container-no-full-width) {
       min-width: 100vw !important;
+      .button-panel--item {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+      }
     }
   }
 }
-@media (max-height: 700px) {
+@media (max-height: 640px) {
   .button-panel--main {
     .button-panel--container:not(.button-panel--container-no-full-height) {
       min-height: 100vh !important;
+      .button-panel--item {
+        margin-left: 0px !important;
+        margin-right: 0px !important;
+        margin-top: 0px !important;
+        margin-bottom: 0px !important;
+      }
     }
   }
 }

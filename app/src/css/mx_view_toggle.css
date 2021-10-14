@@ -15,7 +15,7 @@
   transition: opacity ease-in-out 0.3s, filter ease-in-out 0.3s;
 }
 
-@media (max-width: 700px), (max-height: 700px) {
+@media (max-width: 800px), (max-height: 800px) {
   .mx-view-badges {
     display: none;
   }
@@ -111,7 +111,7 @@
   display: none !important;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .mx-view-item {
     margin: 1px;
   }
@@ -165,7 +165,7 @@
   cursor: pointer;
 }
 
-@media (max-width: 700px), (max-height: 700px) {
+@media (max-width: 800px), (max-height: 800px) {
   .mx-view-tgl-content {
     padding: 4px;
   }
