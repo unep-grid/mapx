@@ -1788,15 +1788,15 @@ listToHtmlSimple <- function(listInput,lang="en",dict=config$dict,useFold=TRUE,n
     r <<- r + 1
     nL <- names(li)
     lL <- length(li)
-  
     UL <- tags$ul(class="list-group mx-scroll-styled",style=sprintf("max-height:%spx",maxHeight))
-
-    for( i in 1:lL){ 
-      name <-  nL[[i]]
-      if(noDataCheck(name)){ name <- ifelse(numberArray,i,"") }
-      #content <- tagList(content, makeLi(li[[i]],name,i))
-      LI <- makeLi(li[[i]],name)
-      UL <- tagAppendChild(UL,LI)
+    if(lL > 0){
+      for( i in 1:lL){ 
+        name <-  nL[[i]]
+        if(noDataCheck(name)){ name <- ifelse(numberArray,i,"") }
+        #content <- tagList(content, makeLi(li[[i]],name,i))
+        LI <- makeLi(li[[i]],name)
+        UL <- tagAppendChild(UL,LI)
+      }
     }
     r <<- r - 1
     return(UL)
