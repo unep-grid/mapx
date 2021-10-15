@@ -50,8 +50,7 @@
   flex-direction: column;
 }
 
-@media screen and (max-width: 800px), (max-height: 800px) {
-  /* border and size are defined in mx_modifiers.css*/
+@media screen and (max-width: 640px), (max-height: 640px) {
   .mx-modal-container {
     top: 0px !important;
     left: 0px !important;
@@ -118,7 +117,7 @@
   padding: 20px;
 }
 
-@media screen and (max-width: 800px), (max-height: 800px) {
+@media screen and (max-width: 640px), (max-height: 640px) {
   .mx-modal-content {
     padding: 10px;
   }
