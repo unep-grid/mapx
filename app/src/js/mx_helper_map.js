@@ -4139,6 +4139,28 @@ export async function viewLayersAddVt(o) {
   const sepLayer = p(mx, 'settings.separators.sublayer');
 
   /**
+   * Updte filterNull ( after type is determined )
+   */
+  const filterIncludeNull = [];
+  const filterExcludeNull = [];
+  for (const op of ['==', '!=']) {
+    const f = op === '==' ? filterIncludeNull : filterExcludeNull;
+    if (isNumeric) {
+      if (h.isEmpty(nullValue)) {
+        f.push([op, attr, '']);
+      } else {
+        f.push([op, attr, nullValue * 1]);
+      }
+    } else {
+      if (nullValue || nullValue === false) {
+        f.push([op, attr, nullValue]);
+      } else {
+        f.push([op, attr, '']);
+      }
+    }
+  }
+
+  /**
    * Set zoom default
    */
   const zDef = {
@@ -4259,7 +4281,8 @@ export async function viewLayersAddVt(o) {
     const hasSprite = ruleAll.sprite && ruleAll.sprite !== 'none';
     const hasSymbol = hasSprite && geomType === 'point';
     const hasPattern = hasSprite && geomType === 'polygon';
-
+    const filter = ["all"];
+    filter.push(...filterExcludeNull);
     if (!hasSymbol) {
       /**
        * Base layer and pattern
@@ -4270,7 +4293,8 @@ export async function viewLayersAddVt(o) {
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
-        size: ruleAll.size
+        size: ruleAll.size,
+        filter: filter
       });
 
       layers.push(layerAll);
@@ -4282,7 +4306,8 @@ export async function viewLayersAddVt(o) {
           hexColor: ruleAll.color,
           sprite: ruleAll.sprite,
           opacity: ruleAll.opacity,
-          size: ruleAll.size
+          size: ruleAll.size,
+          filter: filter
         });
         layers.push(layerPattern);
       }
@@ -4303,7 +4328,8 @@ export async function viewLayersAddVt(o) {
         hexColor: ruleAll.color,
         sprite: ruleAll.sprite,
         opacity: ruleAll.opacity,
-        size: ruleAll.size
+        size: ruleAll.size,
+        filter: filter
       });
 
       layers.push(layerSprite);
@@ -4359,23 +4385,7 @@ export async function viewLayersAddVt(o) {
         filter.push(['==', attr, fromValue]);
       }
 
-      /**
-       * Always exclude missing value
-       * -> Should match rule nulls handler bellow, look next 'useStyleNull'
-       */
-      if (isNumeric) {
-        if (h.isEmpty(nullValue)) {
-          filter.push(['!=', attr, '']);
-        } else {
-          filter.push(['!=', attr, nullValue * 1]);
-        }
-      } else {
-        if (nullValue || nullValue === false) {
-          filter.push(['!=', attr, nullValue]);
-        } else {
-          filter.push(['!=', attr, '']);
-        }
-      }
+      filter.push(...filterExcludeNull);
 
       rule.filter = filter;
 
@@ -4443,19 +4453,8 @@ export async function viewLayersAddVt(o) {
    */
   if (useStyleNull) {
     const filter = ['all'];
-    if (isNumeric) {
-      if (h.isEmpty(nullValue)) {
-        filter.push(['==', attr, '']);
-      } else {
-        filter.push(['==', attr, nullValue * 1]);
-      }
-    } else {
-      if (nullValue || nullValue === false) {
-        filter.push(['==', attr, nullValue]);
-      } else {
-        filter.push(['==', attr, '']);
-      }
-    }
+
+    filter.push(...filterIncludeNull);
 
     const hasSprite = ruleNulls.sprite && ruleNulls.sprite !== 'none';
 
