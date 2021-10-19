@@ -4530,7 +4530,18 @@ export async function viewLayersAddVt(o) {
       addTitle: o.addTitle
     });
     if (h.isElement(elLegend)) {
-      elLegend.innerHTML = mx.templates.viewListLegend(view);
+      const elLegendContent = mx.helpers.buildLegendVt(view);
+      elLegend.appendChild(elLegendContent);
+      /**
+      * During a perf test, dot template was 40x slower than
+      * the version built with @fxi/el.
+      * However: latest performance test chown dot version
+      * was fastest.. 
+      * 1) el = 10ms, dot = 400ms
+      * 2) el = 90ms, dot = 34ms
+      * TODO Retest everything
+      */
+      //elLegend.innerHTML = mx.templates.viewListLegend(view);
     }
 
     /*
