@@ -1,4 +1,10 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.23' target='_blank'>1.9.23</a>
+   - APP/API: view metadata improvement. Added activation stats by user/country/distinct users + experimental support for static mode.
+   - APP: test rendering vt legend with el : potential improvement, but not consistant. See comments.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.22' target='_blank'>1.9.22</a>
+   - APP: Fix #748 ( Mini bug style configuration )
+   - APP: modal. Media query breakpoint at 640px for small screen mode
+   - APP: SQL query maker : wrap in tryCatch; List to html : skip if list is emtpy
    - APP 
      - Controls panel refactoring: better support for small screen, keep all buttons visible + in full size for improved usability on touch devices, reworked the auto layout
    - API

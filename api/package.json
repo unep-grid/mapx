@@ -1,6 +1,6 @@
 {
   "name": "mx-api",
-  "version": "1.9.22",
+  "version": "1.9.23",
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
