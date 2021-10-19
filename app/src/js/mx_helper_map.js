@@ -4281,7 +4281,7 @@ export async function viewLayersAddVt(o) {
     const hasSprite = ruleAll.sprite && ruleAll.sprite !== 'none';
     const hasSymbol = hasSprite && geomType === 'point';
     const hasPattern = hasSprite && geomType === 'polygon';
-    const filter = ["all"];
+    const filter = ['all'];
     filter.push(...filterExcludeNull);
     if (!hasSymbol) {
       /**
@@ -4530,17 +4530,24 @@ export async function viewLayersAddVt(o) {
       addTitle: o.addTitle
     });
     if (h.isElement(elLegend)) {
+      /**
+       * viewLayersAddVt rendering time [ms] with:
+       * el + ecoregion2017
+       * 606
+       * 534
+       * 504
+       * 403
+       *
+       * dot + ecoregion2017
+       * 517
+       * 725
+       * 928
+       * 660
+       */
+      // el
       const elLegendContent = mx.helpers.buildLegendVt(view);
       elLegend.appendChild(elLegendContent);
-      /**
-      * During a perf test, dot template was 40x slower than
-      * the version built with @fxi/el.
-      * However: latest performance test chown dot version
-      * was fastest.. 
-      * 1) el = 10ms, dot = 400ms
-      * 2) el = 90ms, dot = 34ms
-      * TODO Retest everything
-      */
+      // dot
       //elLegend.innerHTML = mx.templates.viewListLegend(view);
     }
 

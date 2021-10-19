@@ -5586,13 +5586,43 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
-    "ru": "Количество просмотров "
+    "en": "Number of activations",
+    "ru": "Количество активаций"
   },
   {
-    "id": "meta_view_stat_n_distinct_user",
-    "en": "Number of distinct users",
-    "ru": "Количество отдельных пользователей "
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "ru": "Количество активаций зарегистрированными пользователями"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of activations by distinct registered users",
+    "ru": "Количество активаций отдельными зарегистрированными пользователями"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "ru": "Количество активаций гостями"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Number of activations by country",
+    "ru": "Количество активаций по странам"
+  },
+  {
+    "id": "meta_view_table_n_add_by_country",
+    "en": "Activation per countries",
+    "ru": "Активация по странам"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_name",
+    "en": "Country",
+    "ru": "Страна"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_count",
+    "en": "Number of activations",
+    "ru": "Количество активаций"
   },
   {
     "id": "meta_source_title",

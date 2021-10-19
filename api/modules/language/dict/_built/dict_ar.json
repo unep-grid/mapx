@@ -5586,13 +5586,43 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
-    "ar": "عدد مرات المشاهدة "
+    "en": "Number of activations",
+    "ar": "عدد التفعيل"
   },
   {
-    "id": "meta_view_stat_n_distinct_user",
-    "en": "Number of distinct users",
-    "ar": "عدد المستخدمين المميزين "
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "ar": "عدد عمليات التنشيط من قبل المستخدمين المسجلين"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of activations by distinct registered users",
+    "ar": "عدد عمليات التنشيط بواسطة مستخدمين مسجلين متميزين"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "ar": "عدد عمليات التفعيل من قبل الضيوف"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Number of activations by country",
+    "ar": "عدد عمليات التنشيط حسب البلد"
+  },
+  {
+    "id": "meta_view_table_n_add_by_country",
+    "en": "Activation per countries",
+    "ar": "التنشيط لكل دولة"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_name",
+    "en": "Country",
+    "ar": "دولة"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_count",
+    "en": "Number of activations",
+    "ar": "عدد التنشيطات"
   },
   {
     "id": "meta_source_title",

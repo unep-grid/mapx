@@ -5586,13 +5586,43 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
-    "es": "Número de visualizaciones"
+    "en": "Number of activations",
+    "es": "Numero de activaciones"
   },
   {
-    "id": "meta_view_stat_n_distinct_user",
-    "en": "Number of distinct users",
-    "es": "Número de usuaros distintos"
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "es": "Número de activaciones por usuarios registrados"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of activations by distinct registered users",
+    "es": "Número de activaciones por distintos usuarios registrados"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "es": "Número de activaciones por invitados"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Number of activations by country",
+    "es": "Número de activaciones por país"
+  },
+  {
+    "id": "meta_view_table_n_add_by_country",
+    "en": "Activation per countries",
+    "es": "Activación por países"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_name",
+    "en": "Country",
+    "es": "País"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_count",
+    "en": "Number of activations",
+    "es": "Numero de activaciones"
   },
   {
     "id": "meta_source_title",

@@ -5586,13 +5586,43 @@
   },
   {
     "id": "meta_view_stat_n_add",
-    "en": "Number of viewing",
-    "zh": "观看次数"
+    "en": "Number of activations",
+    "zh": "激活次数"
   },
   {
-    "id": "meta_view_stat_n_distinct_user",
-    "en": "Number of distinct users",
-    "zh": "用户数量"
+    "id": "meta_view_stat_n_add_by_users",
+    "en": "Number of activations by registered users",
+    "zh": "注册用户激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_distinct_users",
+    "en": "Number of activations by distinct registered users",
+    "zh": "不同注册用户的激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_guests",
+    "en": "Number of activations by guests",
+    "zh": "客人激活次数"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country",
+    "en": "Number of activations by country",
+    "zh": "按国家/地区划分的激活次数"
+  },
+  {
+    "id": "meta_view_table_n_add_by_country",
+    "en": "Activation per countries",
+    "zh": "每个国家的激活"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_name",
+    "en": "Country",
+    "zh": "国家"
+  },
+  {
+    "id": "meta_view_stat_n_add_by_country_col_count",
+    "en": "Number of activations",
+    "zh": "激活次数"
   },
   {
     "id": "meta_source_title",

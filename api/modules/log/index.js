@@ -21,6 +21,7 @@ const tblLogs = sql.define({
     'id_user',
     'id_project',
     'is_guest',
+    'is_static',
     'data'
   ]
 });

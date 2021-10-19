@@ -17,7 +17,7 @@ let settings = {
   ],
   highlightedCountries: [],
   initClosedPanels: false,
-  project: '',
+  project: {},
   logs: {
     disabled: false, // set in cookies as preferences ?
     levels: ['ERROR', 'WARNING', 'MESSAGE', 'LOG', 'USER_ACTION'],

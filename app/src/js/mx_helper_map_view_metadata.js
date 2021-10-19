@@ -95,7 +95,10 @@ export async function viewToMetaModal(view) {
   const elModal = h.modal({
     title: elTitleModal,
     content: elContent,
-    addBackground: true
+    addBackground: true,
+    style: {
+      width: '640px'
+    }
   });
 
   h.updateLanguageElements({
@@ -134,17 +137,19 @@ function metaViewToUi(meta) {
   const prefixKey = 'meta_view_';
   const keys = [
     'title',
+    'id',
     'abstract',
+    'date_modified',
+    'date_created',
     'project_title',
     'projects_titles',
     'collections',
     'readers',
     'editors',
     'stat_n_add',
-    'stat_n_distinct_user',
-    'date_modified',
-    'date_created',
-    'id'
+    'stat_n_add_by_guests',
+    'stat_n_add_by_users',
+    'stat_n_add_by_distinct_users'
   ];
 
   let tblSummary = h.objectToArray(meta, true);
@@ -167,6 +172,15 @@ function metaViewToUi(meta) {
       tableTitle: 'meta_view_table_summary_title',
       tableTitleAsLanguageKey: true,
       stringAsLanguageKey: true
+    }),
+    elAuto('array_table', meta.stat_n_add_by_country, {
+      tableHeadersClasses: ['col-sm-9', 'col-sm-3'],
+      tableTitleAsLanguageKey: true,
+      tableHeadersLabels: [
+        'meta_view_stat_n_add_by_country_col_name',
+        'meta_view_stat_n_add_by_country_col_count'
+      ],
+      tableTitle: 'meta_view_table_n_add_by_country'
     }),
     elAuto('array_table', meta.table_editors, {
       booleanValues: ['✓', ''],

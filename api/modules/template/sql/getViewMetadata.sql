@@ -12,17 +12,50 @@ v_date_created AS (
   FROM mx_views WHERE id = '{{idView}}'
   ORDER BY date_modified ASC LIMIT 1
 ),
-v_stat_add_count AS (
-  SELECT COUNT(pid)
+v_log AS (
+ SELECT pid, ip_user,id_user, is_guest
   FROM mx_logs
-  WHERE id_log = 'view_add'
-  AND data #>> '{"id_view"}' = '{{idView}}'
+  WHERE data #>> '{"id_view"}' = '{{idView}}'
+  AND id_log = 'view_add'
 ),
-v_stat_add_distinct_user AS (
+ip_cntry AS (
+  SELECT DISTINCT ON (ip_user, data #>> '{country}')
+  l.ip_user,
+  l.data #>> '{country}'AS country 
+  FROM
+  mx_logs l,
+  v_log v
+  WHERE
+  l.id_log = 'session_start' 
+  AND v.ip_user = l.ip_user 
+),
+v_stat_add_count_by_country AS (
+  SELECT
+  coalesce(NULLIF(c.country,''),'?') AS country,
+  COUNT (*) 
+  FROM
+  v_log v LEFT JOIN ip_cntry c USING (ip_user)
+  GROUP BY
+  country
+),
+v_stat_add_count_by_country_json AS (
+ SELECT json_agg(row_to_json(t)) tbl 
+ FROM v_stat_add_count_by_country t
+),
+v_stat_add_count_by_users AS (
+  SELECT COUNT(pid)
+  FROM v_log
+  WHERE NOT is_guest
+),
+v_stat_add_count_by_guests AS (
+  SELECT COUNT(pid)
+  FROM v_log
+  WHERE is_guest 
+),
+v_stat_add_count_by_distinct_users AS (
   SELECT COUNT(DISTINCT id_user)
-  FROM mx_logs
-  WHERE id_log = 'view_add'
-  AND data #>> '{id_view}' = '{{idView}}'
+  FROM v_log
+  WHERE NOT is_guest
 ),
 v_editor AS (
   SELECT editor, COUNT(pid) FROM mx_views
@@ -30,8 +63,14 @@ v_editor AS (
   GROUP BY editor
 ),
 v_editor_email AS (
-  SELECT u.email AS editor_email, vt.count n_changes, vt.editor = vl.editor current_editor
-  FROM v_editor AS vt, v_last_editor vl, mx_users u
+  SELECT 
+  u.email AS editor_email, 
+  vt.count n_changes, 
+  vt.editor = vl.editor current_editor
+  FROM 
+  v_editor AS vt, 
+  v_last_editor vl, 
+  mx_users u
   WHERE u.id = vt.editor
 ),
 v_editor_json AS (
@@ -43,21 +82,41 @@ v_project_title AS (
   FROM mx_projects p, v_latest vl
   WHERE vl.project = p.id
 ),
-v_projects_titles_json_arrays AS (
+v_projects_id_json_arrays AS (
   SELECT
-    CASE WHEN jsonb_typeof(data->'projects') = 'array'
+    CASE WHEN 
+      jsonb_typeof(data->'projects') = 'array'
     THEN data->'projects'
     ELSE jsonb_build_array(data->'projects')
   END AS projects
   FROM v_latest
 ),
+v_projects_id AS (
+  SELECT jsonb_array_elements_text(projects) id
+  FROM v_projects_id_json_arrays
+),
+p_views_external AS (
+ SELECT id
+ FROM mx_projects
+ WHERE views_external ? '{{idView}}' 
+),
+v_projects_id_all as (
+  SELECT id
+  FROM
+  v_projects_id 
+  UNION
+  select id from 
+  p_views_external
+),
+v_projects_distinct AS (
+  SELECT DISTINCT id
+  FROM
+  v_projects_id_all 
+),
 v_projects_titles_json AS (
   SELECT json_agg(title) tbl
-  FROM mx_projects p, (
-    SELECT DISTINCT jsonb_array_elements_text(projects) id
-    FROM v_projects_titles_json_arrays
-  ) vps
-  WHERE p.id = vps.id
+  FROM mx_projects p, v_projects_distinct vpd 
+  WHERE p.id = vpd.id
 ),
 -- v_projects_titles_json as (
   -- select json_agg(row_to_json(v_projects_titles)) as tbl
@@ -67,8 +126,11 @@ v_projects_titles_json AS (
 v_meta AS (
   SELECT json_build_object(
     'id', to_json(vl.id),
-    'stat_n_add', to_json(vs_add.count),
-    'stat_n_distinct_user', to_json(vs_distinct_user.count),
+    'stat_n_add', to_json(vs_add_by_users.count + vs_add_by_guests.count),
+    'stat_n_add_by_guests', to_json(vs_add_by_guests.count),
+    'stat_n_add_by_users', to_json(vs_add_by_users.count),
+    'stat_n_add_by_distinct_users', to_json(vs_add_by_distinct_users.count),
+    'stat_n_add_by_country', to_json(vs_add_by_country.tbl),
     'editor', to_json(vl.editor),
     'project', to_json(vl.project),
     'projects', (vl.data #> '{"projects"}')::json,
@@ -87,8 +149,10 @@ v_meta AS (
   ) AS meta
   FROM v_latest vl,
   v_date_created vc,
-  v_stat_add_count vs_add,
-  v_stat_add_distinct_user vs_distinct_user,
+  v_stat_add_count_by_guests vs_add_by_guests,
+  v_stat_add_count_by_users vs_add_by_users,
+  v_stat_add_count_by_distinct_users vs_add_by_distinct_users,
+  v_stat_add_count_by_country_json vs_add_by_country,
   v_project_title vpt,
   v_projects_titles_json vpts,
   v_editor_json ve

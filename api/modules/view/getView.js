@@ -6,6 +6,7 @@ const helpers = require('@mapx/helpers');
 const template = require('@mapx/template');
 const valid = require('@fxi/mx_valid');
 
+
 module.exports = {mwGet, mwGetMetadata, getViewMetadata};
 /**
  * Get full view data
@@ -41,7 +42,9 @@ async function mwGet(req, res) {
 
 async function mwGetMetadata(req, res) {
   try {
+    const start = new Date();
     const data = await getViewMetadata({id: req.params.id});
+    data._timing = new Date() - start;
     helpers.sendJSON(res, data, {end: true});
   } catch (e) {
     helpers.sendError(res, e);
