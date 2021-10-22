@@ -52,7 +52,9 @@ export async function viewToMetaModal(view) {
     (view._meta || h.path(view, 'data.source.meta', false));
 
   const elContent = el('div');
-  const elTitleModal = el('span',h.getDictItem('meta_view_modal_title'));
+  const elTitleModal = el('span', {
+    dataset: {lang_key: 'meta_view_modal_title'}
+  });
 
   const elModal = h.modal({
     title: elTitleModal,
@@ -69,13 +71,13 @@ export async function viewToMetaModal(view) {
     Object.assign(meta, data.meta);
   }
   meta.id = id;
- 
+
   const elViewMeta = await metaViewToUi(meta);
 
-  if(elViewMeta){
-     elContent.appendChild(elViewMeta);
+  if (elViewMeta) {
+    elContent.appendChild(elViewMeta);
   }
- 
+
   if (metaRasterLink) {
     const elRasterMetaLink = metaSourceRasterToUi({
       url: metaRasterLink
@@ -93,6 +95,35 @@ export async function viewToMetaModal(view) {
       elContent.appendChild(elSourceMeta);
     }
   }
+  /**
+   * Build menu
+   */
+
+  const elFirst = elContent.firstElementChild;
+  const elsHeader = elContent.querySelectorAll('.panel-heading');
+  const idMenu = h.makeId();
+  const elMenu = h.el('div', {class: 'list-group', id: idMenu});
+  elContent.insertBefore(elMenu, elFirst);
+  for (const elHeader of elsHeader) {
+    const idItem = h.makeId();
+    elHeader.id = idItem;
+    const elBack = h.el('a', {
+      class: ['fa', 'fa-chevron-up'],
+      href: `#${idMenu}`
+    });
+    const elText = elHeader.querySelector('span');
+    const elItem = h.el('a', {
+      class: 'list-group-item',
+      href: `#${idItem}`,
+      dataset: elText.dataset
+    });
+    elHeader.appendChild(elBack);
+    elMenu.appendChild(elItem);
+  }
+
+  /**
+   * Update language element
+   */
 
   h.updateLanguageElements({
     el: elModal
@@ -169,6 +200,10 @@ async function metaViewToUi(meta) {
       maxWidth: '100%'
     }
   });
+  const elPiePanel = h.elPanel({
+    title: h.elSpanTranslate('meta_view_stat_n_add_by_country'),
+    content: elPie
+  });
   setTimeout(() => {
     metaCountByCountryToPie(meta.stat_n_add_by_country, elPie);
   }, 100);
@@ -193,7 +228,7 @@ async function metaViewToUi(meta) {
       tableTitleAsLanguageKey: true,
       stringAsLanguageKey: true
     }),
-    elPie,
+    elPiePanel,
     elAuto('array_table', meta.table_editors, {
       booleanValues: ['✓', ''],
       tableHeadersClasses: ['col-sm-6', 'col-sm-3', 'col-sm-3'],
