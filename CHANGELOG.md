@@ -1,3 +1,8 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.24' target='_blank'>1.9.24</a>
+   - APP/API :
+     - Improved geo matching by ip: instead of relying on large amount of data stored in memory and external library, periodically fetch raw data and update a table in mapx' db. For dev, this requires a free maxmind token + env variable modification, see `mapx.dev.EXAMPLE.env`. 
+     - Refactoring ip related query : view's stat, get/ip route, etc..
+     - Replaced view's activation per country table by a pie chart.
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.23' target='_blank'>1.9.23</a>
    - APP/API: view metadata improvement. Added activation stats by user/country/distinct users + experimental support for static mode.
    - APP: test rendering vt legend with el : potential improvement, but not consistant. See comments.
