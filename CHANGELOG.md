@@ -1,3 +1,6 @@
+- <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.25' target='_blank'>1.9.25</a>
+   - APP
+      - Added menu in view's metadata panel to quickly access sections and scroll back
 - <a href='https://github.com/unep-grid/map-x-mgl/tree/1.9.24' target='_blank'>1.9.24</a>
    - APP/API :
      - Improved geo matching by ip: instead of relying on large amount of data stored in memory and external library, periodically fetch raw data and update a table in mapx' db. For dev, this requires a free maxmind token + env variable modification, see `mapx.dev.EXAMPLE.env`. 
