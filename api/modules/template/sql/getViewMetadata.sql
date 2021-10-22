@@ -12,7 +12,7 @@ v_date_created AS (
   FROM mx_views WHERE id = '{{idView}}'
   ORDER BY date_modified ASC LIMIT 1
 ),
-v_log AS (
+v_log AS NOT MATERIALIZED (
  SELECT pid, ip_user, id_user, is_guest
   FROM mx_logs
   WHERE data #>> '{"id_view"}' = '{{idView}}'
