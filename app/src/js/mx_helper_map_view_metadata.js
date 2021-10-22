@@ -46,28 +46,36 @@ export async function viewToMetaModal(view) {
   }
 
   const meta = {};
-
   const metaRasterLink = h.path(view, 'data.source.urlMetadata');
   const hasSourceMeta =
     ['rt', 'vt', 'cc'].includes(view.type) &&
     (view._meta || h.path(view, 'data.source.meta', false));
 
-  const data = await fetchViewMetadata(id);
-
   const elContent = el('div');
+  const elTitleModal = el('span',h.getDictItem('meta_view_modal_title'));
+
+  const elModal = h.modal({
+    title: elTitleModal,
+    content: elContent,
+    addBackground: true,
+    style: {
+      width: '640px'
+    }
+  });
+
+  const data = await fetchViewMetadata(id);
 
   if (data.meta) {
     Object.assign(meta, data.meta);
   }
-
   meta.id = id;
-
+ 
   const elViewMeta = await metaViewToUi(meta);
 
-  if (elViewMeta) {
-    elContent.appendChild(elViewMeta);
+  if(elViewMeta){
+     elContent.appendChild(elViewMeta);
   }
-
+ 
   if (metaRasterLink) {
     const elRasterMetaLink = metaSourceRasterToUi({
       url: metaRasterLink
@@ -85,21 +93,6 @@ export async function viewToMetaModal(view) {
       elContent.appendChild(elSourceMeta);
     }
   }
-
-  const elTitleModal = el('span', {
-    dataset: {
-      lang_key: 'meta_view_modal_title'
-    }
-  });
-
-  const elModal = h.modal({
-    title: elTitleModal,
-    content: elContent,
-    addBackground: true,
-    style: {
-      width: '640px'
-    }
-  });
 
   h.updateLanguageElements({
     el: elModal
@@ -164,6 +157,11 @@ async function metaViewToUi(meta) {
       return row;
     });
 
+  /**
+   * highcharts needs the container to be rendered
+   * to find the size.. Create the container now,
+   * render later :
+   */
   const elPie = h.el('div', {
     class: ['panel', 'panel-default'],
     style: {
@@ -171,10 +169,9 @@ async function metaViewToUi(meta) {
       maxWidth: '100%'
     }
   });
-
-  h.onNextFrame(() => {
+  setTimeout(() => {
     metaCountByCountryToPie(meta.stat_n_add_by_country, elPie);
-  });
+  }, 100);
 
   /*elAuto('array_table', meta.stat_n_add_by_country, {*/
   /*tableHeadersClasses: ['col-sm-9', 'col-sm-3'],*/
