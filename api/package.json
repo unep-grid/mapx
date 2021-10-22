@@ -1,6 +1,6 @@
 {
   "name": "mx-api",
-  "version": "1.9.23",
+  "version": "1.9.24",
   "description": "MapX express api",
   "main": "index.js",
   "scripts": {
@@ -22,7 +22,6 @@
     "geojson-vt": "^3.2.1",
     "html-to-text": "^7.0.0",
     "martinez-polygon-clipping": "^0.5.0",
-    "maxmind": "^4.3.2",
     "md5-file": "^4.0.0",
     "meilisearch": "^0.18.1",
     "module-alias": "^2.2.2",
